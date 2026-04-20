@@ -108,7 +108,7 @@ final class JSBridge {
     /**
      * Send a POST request with a JSON body and return the parsed response.
      */
-    private static func postJSON(path: String, body: [String: Any]) -> [String: Any]? {
+    static func postJSON(path: String, body: [String: Any]) -> [String: Any]? {
         let url = URL(string: "\(baseURL)\(path)")!
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
