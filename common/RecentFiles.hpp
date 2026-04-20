@@ -12,9 +12,9 @@
 #pragma once
 
 #include <chrono>
+#include <set>
 #include <string>
 #include <vector>
-#include <set>
 
 class RecentFiles
 {
