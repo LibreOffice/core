@@ -22,6 +22,7 @@
 #include <comphelper/base64.hxx>
 #include <comphelper/kit.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <utility>
 #include <vcl/svapp.hxx>
 #include <sfx2/objsh.hxx>
@@ -57,6 +58,7 @@
 #include <svx/xdef.hxx>
 #include <svx/xflclit.hxx>
 
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 
@@ -607,6 +609,55 @@ OString StylesPreviewWindow_Base::GetCachedPreviewJson(const StylePreviewDescrip
 
 namespace
 {
+struct StylePaneFormatFilter
+{
+    bool bValid = false;
+    bool bAllStyles = false;
+    bool bCustomStyles = false;
+    bool bStylesInUse = false;
+};
+
+StylePaneFormatFilter lcl_GetStylePaneFormatFilter(SfxObjectShell* pDocShell)
+{
+    StylePaneFormatFilter aFilter;
+    if (!pDocShell)
+        return aFilter;
+
+    try
+    {
+        css::uno::Reference<css::beans::XPropertySet> xDocProps(pDocShell->GetModel(),
+                                                                css::uno::UNO_QUERY);
+        if (!xDocProps.is()
+            || !xDocProps->getPropertySetInfo()->hasPropertyByName(u"InteropGrabBag"_ustr))
+            return aFilter;
+
+        comphelper::SequenceAsHashMap aGrabBag(xDocProps->getPropertyValue(u"InteropGrabBag"_ustr));
+        auto it = aGrabBag.find(u"StylePaneFormatFilterProps"_ustr);
+        if (it == aGrabBag.end())
+            return aFilter;
+
+        css::uno::Sequence<css::beans::PropertyValue> aFilterProps;
+        it->second >>= aFilterProps;
+
+        for (const auto& rProp : aFilterProps)
+        {
+            if (rProp.Name == "allStyles")
+                rProp.Value >>= aFilter.bAllStyles;
+            else if (rProp.Name == "customStyles")
+                rProp.Value >>= aFilter.bCustomStyles;
+            else if (rProp.Name == "stylesInUse")
+                rProp.Value >>= aFilter.bStylesInUse;
+        }
+
+        aFilter.bValid = true;
+    }
+    catch (const css::uno::Exception&)
+    {
+    }
+
+    return aFilter;
+}
+
 inline void lcl_AppendParaStyles(StylePreviewList& rAllStyles, SfxStyleSheetBasePool* pPool,
                                  SfxStyleSearchBits eBits)
 {
@@ -648,8 +699,28 @@ void StylesPreviewWindow_Base::UpdateStylesList()
 
         if (pStyleSheetPool)
         {
-            lcl_AppendParaStyles(m_aAllStyles, pStyleSheetPool,
-                                 SfxStyleSearchBits::Favourite | SfxStyleSearchBits::UserDefined);
+            StylePaneFormatFilter aFilter = lcl_GetStylePaneFormatFilter(pDocShell);
+
+            if (aFilter.bValid)
+            {
+                // Always show favourite styles
+                lcl_AppendParaStyles(m_aAllStyles, pStyleSheetPool, SfxStyleSearchBits::Favourite);
+
+                if (aFilter.bAllStyles)
+                    lcl_AppendParaStyles(m_aAllStyles, pStyleSheetPool,
+                                         SfxStyleSearchBits::AllVisible);
+                if (aFilter.bCustomStyles)
+                    lcl_AppendParaStyles(m_aAllStyles, pStyleSheetPool,
+                                         SfxStyleSearchBits::UserDefined);
+                if (aFilter.bStylesInUse)
+                    lcl_AppendParaStyles(m_aAllStyles, pStyleSheetPool, SfxStyleSearchBits::Used);
+            }
+            else
+            {
+                lcl_AppendParaStyles(m_aAllStyles, pStyleSheetPool,
+                                     SfxStyleSearchBits::Favourite
+                                         | SfxStyleSearchBits::UserDefined);
+            }
         }
     }
 
