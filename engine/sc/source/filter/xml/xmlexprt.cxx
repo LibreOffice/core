@@ -3657,8 +3657,22 @@ void ScXMLExport::WriteShapes(const ScDocument& rDoc, const ScMyCell& rMyCell)
 
         if (bNeedsRestoreSize)
         {
-            double fScaleWidthInvers = 1.0 / fScaleWidth;
-            double fScaleHeightInvers = 1.0 / fScaleHeight;
+            double fScaleWidthInvers;
+            if (fScaleWidth == 0.0)
+            {
+                SAL_WARN("sc", "WriteShapes: zero scale width, skipping inverse resize");
+                fScaleWidthInvers = 1.0;
+            }
+            else
+                fScaleWidthInvers = 1.0 / fScaleWidth;
+            double fScaleHeightInvers;
+            if (fScaleHeight == 0.0)
+            {
+                SAL_WARN("sc", "WriteShapes: zero scale height, skipping inverse resize");
+                fScaleHeightInvers = 1.0;
+            }
+            else
+                fScaleHeightInvers = 1.0 / fScaleHeight;
             pObj->NbcResize(aFullTopPoint, fScaleWidthInvers, fScaleHeightInvers);
         }
         if (bNeedsRestorePosition)
