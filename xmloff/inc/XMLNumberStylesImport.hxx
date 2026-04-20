@@ -32,7 +32,6 @@ class SdXMLNumberFormatImportContext final : public SvXMLNumFormatContext
     friend class SdXMLNumberFormatMemberImportContext;
 
     bool    mbTimeStyle;
-    bool    mbAutomatic;
     DataStyleNumber mnElements[16];
     sal_Int16   mnIndex;
 

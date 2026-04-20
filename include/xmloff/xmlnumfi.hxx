@@ -188,6 +188,7 @@ public:
 
     bool HasLongDoW() const                     { return m_bHasLongDoW; }
     void SetHasLongDoW(bool bSet)               { m_bHasLongDoW = bSet; }
+    bool IsAutoOrder() const                    { return m_bAutoOrder; }
     void SetHasTrailingEmptyText(bool bSet)     { m_bHasTrailingEmptyText = bSet; }
 
     void UpdateCalendar( const OUString& rNewCalendar );
