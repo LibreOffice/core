@@ -18,6 +18,7 @@
 #include <refdata.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <scitems.hxx>
+#include <token.hxx>
 
 #include <formula/token.hxx>
 #include <vcl/bitmap.hxx>
@@ -56,8 +57,8 @@ void ScFormulaListener::startListening(const ScTokenArray* pArr, const ScRange& 
         {
             case formula::svSingleRef:
             {
-                ScAddress aCell = t->GetSingleRef()->toAbs(mrDoc, rRange.aStart);
-                ScAddress aCell2 = t->GetSingleRef()->toAbs(mrDoc, rRange.aEnd);
+                ScAddress aCell = static_cast<ScSingleRefToken*>(t)->GetSingleRef().toAbs(mrDoc, rRange.aStart);
+                ScAddress aCell2 = static_cast<ScSingleRefToken*>(t)->GetSingleRef().toAbs(mrDoc, rRange.aEnd);
                 ScRange aRange(aCell, aCell2);
                 if (aRange.IsValid())
                     mrDoc.StartListeningArea(aRange, false, this);
@@ -65,8 +66,8 @@ void ScFormulaListener::startListening(const ScTokenArray* pArr, const ScRange& 
             break;
             case formula::svDoubleRef:
             {
-                const ScSingleRefData& rRef1 = *t->GetSingleRef();
-                const ScSingleRefData& rRef2 = *t->GetSingleRef2();
+                const ScSingleRefData& rRef1 = static_cast<ScDoubleRefToken*>(t)->GetSingleRef();
+                const ScSingleRefData& rRef2 = static_cast<ScDoubleRefToken*>(t)->GetSingleRef2();
                 ScAddress aCell1 = rRef1.toAbs(mrDoc, rRange.aStart);
                 ScAddress aCell2 = rRef2.toAbs(mrDoc, rRange.aStart);
                 ScAddress aCell3 = rRef1.toAbs(mrDoc, rRange.aEnd);

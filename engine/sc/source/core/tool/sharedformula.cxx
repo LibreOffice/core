@@ -14,6 +14,7 @@
 #include <document.hxx>
 #include <grouparealistener.hxx>
 #include <refdata.hxx>
+#include <token.hxx>
 
 namespace sc {
 
@@ -378,8 +379,8 @@ void SharedFormulaUtil::startListeningAsGroup( sc::StartListeningContext& rCxt, 
         {
             case formula::svSingleRef:
             {
-                const ScSingleRefData* pRef = t->GetSingleRef();
-                ScAddress aPos = pRef->toAbs(rDoc, rTopCell.aPos);
+                const ScSingleRefData& rRef = static_cast<const ScSingleRefToken*>(t)->GetSingleRef();
+                ScAddress aPos = rRef.toAbs(rDoc, rTopCell.aPos);
                 ScFormulaCell** pp = ppSharedTop;
                 ScFormulaCell** ppEnd = ppSharedTop + xGroup->mnLength;
                 for (; pp != ppEnd; ++pp)
@@ -388,15 +389,15 @@ void SharedFormulaUtil::startListeningAsGroup( sc::StartListeningContext& rCxt, 
                         break;
 
                     rDoc.StartListeningCell(rCxt, aPos, **pp);
-                    if (pRef->IsRowRel())
+                    if (rRef.IsRowRel())
                         aPos.IncRow();
                 }
             }
             break;
             case formula::svDoubleRef:
             {
-                const ScSingleRefData& rRef1 = *t->GetSingleRef();
-                const ScSingleRefData& rRef2 = *t->GetSingleRef2();
+                const ScSingleRefData& rRef1 = static_cast<const ScDoubleRefToken*>(t)->GetSingleRef();
+                const ScSingleRefData& rRef2 = static_cast<const ScDoubleRefToken*>(t)->GetSingleRef2();
                 ScAddress aPos1 = rRef1.toAbs(rDoc, rTopCell.aPos);
                 ScAddress aPos2 = rRef2.toAbs(rDoc, rTopCell.aPos);
 

@@ -48,6 +48,7 @@
 #include <editutil.hxx>
 #include <chgtrack.hxx>
 #include <tokenarray.hxx>
+#include <reftokenhelper.hxx>
 
 #include <comphelper/threadpool.hxx>
 #include <editeng/editobj.hxx>
@@ -1000,7 +1001,7 @@ OUString ScFormulaCell::GetFormula( const FormulaGrammar::Grammar eGrammar, ScIn
              * GetEnglishFormula() omitted that test.
              * Can we live without in all cases? */
             ScFormulaCell* pCell = nullptr;
-            ScSingleRefData& rRef = *p->GetSingleRef();
+            ScSingleRefData& rRef = static_cast<ScSingleRefToken*>(p)->GetSingleRef();
             ScAddress aAbs = rRef.toAbs(rDocument, aPos);
             if (rDocument.ValidAddress(aAbs))
                 pCell = rDocument.GetFormulaCell(aAbs);
@@ -1058,7 +1059,7 @@ OUString ScFormulaCell::GetFormula( sc::CompileFormulaContext& rCxt, ScInterpret
              * GetEnglishFormula() omitted that test.
              * Can we live without in all cases? */
             ScFormulaCell* pCell = nullptr;
-            ScSingleRefData& rRef = *p->GetSingleRef();
+            ScSingleRefData& rRef = static_cast<ScSingleRefToken*>(p)->GetSingleRef();
             ScAddress aAbs = rRef.toAbs(rDocument, aPos);
             if (rDocument.ValidAddress(aAbs))
                 pCell = rDocument.GetFormulaCell(aAbs);
@@ -2877,7 +2878,7 @@ bool ScFormulaCell::GetMatrixOrigin( const ScDocument& rDoc, ScAddress& rPos ) c
             formula::FormulaToken* t = aIter.GetNextReferenceRPN();
             if( t )
             {
-                ScSingleRefData& rRef = *t->GetSingleRef();
+                ScSingleRefData& rRef = static_cast<ScSingleRefToken*>(t)->GetSingleRef();
                 ScAddress aAbs = rRef.toAbs(rDoc, aPos);
                 if (rDoc.ValidAddress(aAbs))
                 {
@@ -3132,7 +3133,7 @@ ScFormulaCell::RelNameRef ScFormulaCell::HasRelNameReference() const
         switch (t->GetType())
         {
             case formula::svSingleRef:
-                if (t->GetSingleRef()->IsRelName() && eRelNameRef == RelNameRef::NONE)
+                if (static_cast<ScSingleRefToken*>(t)->GetSingleRef().IsRelName() && eRelNameRef == RelNameRef::NONE)
                     eRelNameRef = RelNameRef::SINGLE;
             break;
             case formula::svDoubleRef:
@@ -3201,7 +3202,7 @@ bool checkCompileColRowName(
             ScRangePairList* pRowList = rDoc.GetRowNameRanges();
             while ((t = aIter.GetNextColRowName()) != nullptr)
             {
-                ScSingleRefData& rRef = *t->GetSingleRef();
+                ScSingleRefData& rRef = static_cast<ScSingleRefToken*>(t)->GetSingleRef();
                 if (rCxt.mnRowDelta > 0 && rRef.IsColRel())
                 {   // ColName
                     ScAddress aAdr = rRef.toAbs(rDoc, aPos);
@@ -3246,7 +3247,7 @@ bool checkCompileColRowName(
             const formula::FormulaToken* t = aIter.GetNextColRowName();
             for (; t; t = aIter.GetNextColRowName())
             {
-                const ScSingleRefData& rRef = *t->GetSingleRef();
+                const ScSingleRefData& rRef = static_cast<const ScSingleRefToken*>(t)->GetSingleRef();
                 ScAddress aAbs = rRef.toAbs(rDoc, aPos);
                 if (rDoc.ValidAddress(aAbs))
                 {
@@ -3729,9 +3730,9 @@ void ScFormulaCell::UpdateInsertTabAbs(SCTAB nTable)
     formula::FormulaToken* p = aIter.GetNextReferenceRPN();
     while (p)
     {
-        ScSingleRefData& rRef1 = *p->GetSingleRef();
-        if (!rRef1.IsTabRel() && nTable <= rRef1.Tab())
-            rRef1.IncTab(1);
+        ScSingleRefData* pRef1 = ScRefTokenHelper::getSingleRef(p);
+        if (!pRef1->IsTabRel() && nTable <= pRef1->Tab())
+            pRef1->IncTab(1);
         if (p->GetType() == formula::svDoubleRef)
         {
             ScSingleRefData& rRef2 = static_cast<ScDoubleRefToken*>(p)->GetDoubleRef().Ref2;
@@ -3768,7 +3769,7 @@ bool ScFormulaCell::TestTabRefAbs(SCTAB nTable)
     formula::FormulaToken* p = aIter.GetNextReferenceRPN();
     while (p)
     {
-        ScSingleRefData& rRef1 = *p->GetSingleRef();
+        ScSingleRefData& rRef1 = *ScRefTokenHelper::getSingleRef(p);
         if (!rRef1.IsTabRel())
         {
             if (nTable != rRef1.Tab())
@@ -3818,14 +3819,14 @@ void ScFormulaCell::TransposeReference()
     formula::FormulaToken* t;
     while ( ( t = aIter.GetNextReference() ) != nullptr )
     {
-        ScSingleRefData& rRef1 = *t->GetSingleRef();
-        if ( rRef1.IsColRel() && rRef1.IsRowRel() )
+        ScSingleRefData* pRef1 = ScRefTokenHelper::getSingleRef(t);
+        if ( pRef1->IsColRel() && pRef1->IsRowRel() )
         {
             bool bDouble = (t->GetType() == formula::svDoubleRef);
-            ScSingleRefData& rRef2 = (bDouble ? static_cast<ScDoubleRefToken*>(t)->GetDoubleRef().Ref2 : rRef1);
+            ScSingleRefData& rRef2 = (bDouble ? static_cast<ScDoubleRefToken*>(t)->GetDoubleRef().Ref2 : *pRef1);
             if ( !bDouble || (rRef2.IsColRel() && rRef2.IsRowRel()) )
             {
-                lcl_TransposeReference(rRef1);
+                lcl_TransposeReference(*pRef1);
 
                 if ( bDouble )
                     lcl_TransposeReference(rRef2);
@@ -4153,8 +4154,8 @@ ScFormulaCell::CompareState ScFormulaCell::CompareByTokenArray( const ScFormulaC
             case formula::svSingleRef:
             {
                 // Single cell reference.
-                const ScSingleRefData& rRef = *pThisTok->GetSingleRef();
-                if (rRef != *pOtherTok->GetSingleRef())
+                const ScSingleRefData& rRef = static_cast<ScSingleRefToken*>(pThisTok)->GetSingleRef();
+                if (rRef != static_cast<ScSingleRefToken*>(pOtherTok)->GetSingleRef())
                     return NotEqual;
 
                 if (rRef.IsRowRel())
@@ -4164,12 +4165,12 @@ ScFormulaCell::CompareState ScFormulaCell::CompareByTokenArray( const ScFormulaC
             case formula::svDoubleRef:
             {
                 // Range reference.
-                const ScSingleRefData& rRef1 = *pThisTok->GetSingleRef();
-                const ScSingleRefData& rRef2 = *pThisTok->GetSingleRef2();
-                if (rRef1 != *pOtherTok->GetSingleRef())
+                const ScSingleRefData& rRef1 = static_cast<ScDoubleRefToken*>(pThisTok)->GetSingleRef();
+                const ScSingleRefData& rRef2 = static_cast<ScDoubleRefToken*>(pThisTok)->GetSingleRef2();
+                if (rRef1 != static_cast<ScDoubleRefToken*>(pOtherTok)->GetSingleRef())
                     return NotEqual;
 
-                if (rRef2 != *pOtherTok->GetSingleRef2())
+                if (rRef2 != static_cast<ScDoubleRefToken*>(pOtherTok)->GetSingleRef2())
                     return NotEqual;
 
                 if (rRef1.IsRowRel())
@@ -4279,8 +4280,8 @@ ScFormulaCell::CompareState ScFormulaCell::CompareByTokenArray( const ScFormulaC
             case formula::svSingleRef:
             {
                 // Single cell reference.
-                const ScSingleRefData& rRef = *pThisTok->GetSingleRef();
-                if (rRef != *pOtherTok->GetSingleRef())
+                const ScSingleRefData& rRef = static_cast<ScSingleRefToken*>(pThisTok)->GetSingleRef();
+                if (rRef != static_cast<ScSingleRefToken*>(pOtherTok)->GetSingleRef())
                     return NotEqual;
 
                 if (rRef.IsRowRel())
@@ -4290,12 +4291,12 @@ ScFormulaCell::CompareState ScFormulaCell::CompareByTokenArray( const ScFormulaC
             case formula::svDoubleRef:
             {
                 // Range reference.
-                const ScSingleRefData& rRef1 = *pThisTok->GetSingleRef();
-                const ScSingleRefData& rRef2 = *pThisTok->GetSingleRef2();
-                if (rRef1 != *pOtherTok->GetSingleRef())
+                const ScSingleRefData& rRef1 = static_cast<ScDoubleRefToken*>(pThisTok)->GetSingleRef();
+                const ScSingleRefData& rRef2 = static_cast<ScDoubleRefToken*>(pThisTok)->GetSingleRef2();
+                if (rRef1 != static_cast<ScDoubleRefToken*>(pOtherTok)->GetSingleRef())
                     return NotEqual;
 
-                if (rRef2 != *pOtherTok->GetSingleRef2())
+                if (rRef2 != static_cast<ScDoubleRefToken*>(pOtherTok)->GetSingleRef2())
                     return NotEqual;
 
                 if (rRef1.IsRowRel())
@@ -4607,7 +4608,7 @@ struct ScDependantsCalculator
             {
             case svSingleRef:
                 {
-                    ScSingleRefData aRef = *p->GetSingleRef(); // =Sheet1!A1
+                    ScSingleRefData aRef = static_cast<ScSingleRefToken*>(p)->GetSingleRef(); // =Sheet1!A1
                     if( aRef.IsDeleted())
                         return false;
                     ScAddress aRefPos = aRef.toAbs(mrDoc, mrPos);
@@ -5342,7 +5343,7 @@ bool ScFormulaCell::InterpretInvariantFormulaGroup()
             {
                 case svSingleRef:
                 {
-                    ScSingleRefData aRef = *p->GetSingleRef();
+                    ScSingleRefData aRef = static_cast<const ScSingleRefToken*>(p)->GetSingleRef();
                     ScAddress aRefPos = aRef.toAbs(rDocument, aPos);
                     formula::FormulaTokenRef pNewToken = rDocument.ResolveStaticReference(aRefPos);
                     if (!pNewToken)
@@ -5408,8 +5409,8 @@ namespace {
 void startListeningArea(
     ScFormulaCell* pCell, ScDocument& rDoc, const ScAddress& rPos, const formula::FormulaToken& rToken)
 {
-    const ScSingleRefData& rRef1 = *rToken.GetSingleRef();
-    const ScSingleRefData& rRef2 = *rToken.GetSingleRef2();
+    const ScSingleRefData& rRef1 = static_cast<const ScDoubleRefToken&>(rToken).GetSingleRef();
+    const ScSingleRefData& rRef2 = static_cast<const ScDoubleRefToken&>(rToken).GetSingleRef2();
     ScAddress aCell1 = rRef1.toAbs(rDoc, rPos);
     ScAddress aCell2 = rRef2.toAbs(rDoc, rPos);
     if (!(aCell1.IsValid() && aCell2.IsValid()))
@@ -5457,7 +5458,7 @@ void ScFormulaCell::StartListeningTo( ScDocument& rDoc )
         {
             case svSingleRef:
             {
-                ScAddress aCell =  t->GetSingleRef()->toAbs(rDocument, aPos);
+                ScAddress aCell = static_cast<ScSingleRefToken*>(t)->GetSingleRef().toAbs(rDocument, aPos);
                 if (aCell.IsValid())
                     rDoc.StartListeningCell(aCell, this);
             }
@@ -5500,7 +5501,7 @@ void ScFormulaCell::StartListeningTo( sc::StartListeningContext& rCxt )
         {
             case svSingleRef:
             {
-                ScAddress aCell = t->GetSingleRef()->toAbs(rDocument, aPos);
+                ScAddress aCell = static_cast<ScSingleRefToken*>(t)->GetSingleRef().toAbs(rDocument, aPos);
                 if (aCell.IsValid())
                     rDoc.StartListeningCell(rCxt, aCell, *this);
             }
@@ -5520,8 +5521,8 @@ namespace {
 void endListeningArea(
     ScFormulaCell* pCell, ScDocument& rDoc, const ScAddress& rPos, const formula::FormulaToken& rToken)
 {
-    const ScSingleRefData& rRef1 = *rToken.GetSingleRef();
-    const ScSingleRefData& rRef2 = *rToken.GetSingleRef2();
+    const ScSingleRefData& rRef1 = static_cast<const ScDoubleRefToken&>(rToken).GetSingleRef();
+    const ScSingleRefData& rRef2 = static_cast<const ScDoubleRefToken&>(rToken).GetSingleRef2();
     ScAddress aCell1 = rRef1.toAbs(rDoc, rPos);
     ScAddress aCell2 = rRef2.toAbs(rDoc, rPos);
     if (!(aCell1.IsValid() && aCell2.IsValid()))
@@ -5577,7 +5578,7 @@ void ScFormulaCell::EndListeningTo( ScDocument& rDoc, ScTokenArray* pArr,
         {
             case svSingleRef:
             {
-                ScAddress aCell = t->GetSingleRef()->toAbs(rDocument, aCellPos);
+                ScAddress aCell = static_cast<ScSingleRefToken*>(t)->GetSingleRef().toAbs(rDocument, aCellPos);
                 if (aCell.IsValid())
                     rDoc.EndListeningCell(aCell, this);
             }
@@ -5624,7 +5625,7 @@ void ScFormulaCell::EndListeningTo( sc::EndListeningContext& rCxt )
         {
             case svSingleRef:
             {
-                ScAddress aCell = t->GetSingleRef()->toAbs(rDocument, aCellPos);
+                ScAddress aCell = static_cast<ScSingleRefToken*>(t)->GetSingleRef().toAbs(rDocument, aCellPos);
                 if (aCell.IsValid())
                     rDoc.EndListeningCell(rCxt, aCell, *this);
             }

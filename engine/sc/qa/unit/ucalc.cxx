@@ -1562,7 +1562,7 @@ bool broadcasterShifted(const ScDocument& rDoc, const ScAddress& rFrom, const Sc
     return true;
 }
 
-formula::FormulaToken* getSingleRefToken(ScDocument& rDoc, const ScAddress& rPos)
+ScSingleRefToken* getSingleRefToken(ScDocument& rDoc, const ScAddress& rPos)
 {
     ScFormulaCell* pFC = rDoc.GetFormulaCell(rPos);
     if (!pFC)
@@ -1585,16 +1585,16 @@ formula::FormulaToken* getSingleRefToken(ScDocument& rDoc, const ScAddress& rPos
         return nullptr;
     }
 
-    return pToken;
+    return static_cast<ScSingleRefToken*>(pToken);
 }
 
 bool checkRelativeRefToken(ScDocument& rDoc, const ScAddress& rPos, SCCOL nRelCol, SCROW nRelRow)
 {
-    formula::FormulaToken* pToken = getSingleRefToken(rDoc, rPos);
+    auto pToken = getSingleRefToken(rDoc, rPos);
     if (!pToken)
         return false;
 
-    ScSingleRefData& rRef = *pToken->GetSingleRef();
+    ScSingleRefData& rRef = pToken->GetSingleRef();
     if (!rRef.IsColRel() || rRef.Col() != nRelCol)
     {
         std::cerr << "Unexpected relative column address." << std::endl;
@@ -1612,11 +1612,11 @@ bool checkRelativeRefToken(ScDocument& rDoc, const ScAddress& rPos, SCCOL nRelCo
 
 bool checkDeletedRefToken(ScDocument& rDoc, const ScAddress& rPos)
 {
-    formula::FormulaToken* pToken = getSingleRefToken(rDoc, rPos);
+    auto pToken = getSingleRefToken(rDoc, rPos);
     if (!pToken)
         return false;
 
-    ScSingleRefData& rRef = *pToken->GetSingleRef();
+    ScSingleRefData& rRef = pToken->GetSingleRef();
     if (!rRef.IsDeleted())
     {
         std::cerr << "Deleted reference is expected, but it's still a valid reference." << std::endl;
@@ -4501,7 +4501,7 @@ bool hasRange(const ScDocument* pDoc, const std::vector<ScTokenRef>& rRefTokens,
         {
             case formula::svSingleRef:
             {
-                ScSingleRefData aData = *p->GetSingleRef();
+                ScSingleRefData aData = static_cast<ScSingleRefToken*>(p.get())->GetSingleRef();
                 if (rRange.aStart != rRange.aEnd)
                     break;
 

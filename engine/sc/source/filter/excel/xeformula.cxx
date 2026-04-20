@@ -1976,7 +1976,7 @@ void XclExpFmlaCompImpl::ProcessCellRef( const XclExpScToken& rTokData )
 {
     // get the Excel address components, adjust internal data in aRefData
     bool bNatLangRef = (meBiff == EXC_BIFF8) && mxData->mpScBasePos && (rTokData.GetOpCode() == ocColRowName);
-    ScSingleRefData aRefData = *rTokData.mpScToken->GetSingleRef();
+    ScSingleRefData aRefData = static_cast<const ScSingleRefToken*>(rTokData.mpScToken)->GetSingleRef();
     XclAddress aXclPos( ScAddress::UNINITIALIZED );
     ConvertRefData( aRefData, aXclPos, bNatLangRef, false, false );
 
@@ -2081,7 +2081,7 @@ void XclExpFmlaCompImpl::ProcessExternalCellRef( const XclExpScToken& rTokData )
     {
         auto pESRToken = static_cast<const ScExternalSingleRefToken*>(rTokData.mpScToken);
         // get the Excel address components, adjust internal data in aRefData
-        ScSingleRefData aRefData = *pESRToken->GetSingleRef();
+        ScSingleRefData aRefData = pESRToken->GetSingleRef();
         XclAddress aXclPos( ScAddress::UNINITIALIZED );
         ConvertRefData( aRefData, aXclPos, false, false, false );
 
@@ -2205,7 +2205,7 @@ void XclExpFmlaCompImpl::ProcessExternalName( const XclExpScToken& rTokData )
                         {
                             case svExternalSingleRef:
                             {
-                                ScSingleRefData aRefData = *pScToken->GetSingleRef();
+                                ScSingleRefData aRefData = static_cast<ScExternalSingleRefToken*>(pScToken)->GetSingleRef();
                                 mxData->mpLinkMgr->StoreCell(
                                     nFileId, static_cast<ScExternalSingleRefToken*>(pScToken)->GetTableName().getString(), aRefData.toAbs(GetRoot().GetDoc(), *mxData->mpScBasePos));
                             }

@@ -1788,19 +1788,19 @@ void ScExternalRefManager::storeRangeNameTokens(sal_uInt16 nFileId, const OUStri
             {
                 case svSingleRef:
                 {
-                    const ScSingleRefData& rRef = *pToken->GetSingleRef();
+                    const ScSingleRefData& rRef = static_cast<const ScSingleRefToken*>(pToken)->GetSingleRef();
                     OUString aTabName;
                     if (SCTAB nCacheId = rRef.Tab(); nCacheId >= 0)
                         aTabName = maRefCache.getTableName(nFileId, nCacheId);
                     ScExternalSingleRefToken aNewToken(nFileId, svl::SharedString(aTabName),   // string not interned
-                        *pToken->GetSingleRef());
+                        static_cast<const ScSingleRefToken*>(pToken)->GetSingleRef());
                     pNewArray->AddToken(aNewToken);
                     bTokenAdded = true;
                 }
                 break;
                 case svDoubleRef:
                 {
-                    const ScSingleRefData& rRef = *pToken->GetSingleRef();
+                    const ScSingleRefData& rRef = static_cast<const ScDoubleRefToken*>(pToken)->GetSingleRef();
                     OUString aTabName;
                     if (SCTAB nCacheId = rRef.Tab(); nCacheId >= 0)
                         aTabName = maRefCache.getTableName(nFileId, nCacheId);
@@ -2375,18 +2375,18 @@ ScExternalRefCache::TokenArrayRef ScExternalRefManager::getRangeNameTokensFromSr
         {
             case svSingleRef:
             {
-                const ScSingleRefData& rRef = *pToken->GetSingleRef();
+                const ScSingleRefData& rRef = static_cast<const ScSingleRefToken*>(pToken)->GetSingleRef();
                 OUString aTabName;
                 rSrcDoc.GetName(rRef.Tab(), aTabName);
                 ScExternalSingleRefToken aNewToken(nFileId, svl::SharedString( aTabName),   // string not interned
-                        *pToken->GetSingleRef());
+                        static_cast<const ScSingleRefToken*>(pToken)->GetSingleRef());
                 pNew->AddToken(aNewToken);
                 bTokenAdded = true;
             }
             break;
             case svDoubleRef:
             {
-                const ScSingleRefData& rRef = *pToken->GetSingleRef();
+                const ScSingleRefData& rRef = static_cast<const ScDoubleRefToken*>(pToken)->GetSingleRef();
                 OUString aTabName;
                 rSrcDoc.GetName(rRef.Tab(), aTabName);
                 ScExternalDoubleRefToken aNewToken(nFileId, svl::SharedString( aTabName),   // string not interned

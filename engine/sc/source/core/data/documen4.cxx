@@ -337,7 +337,7 @@ void ScDocument::InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
 
                 // Reference in each cell must point to the origin cell relative to the current cell.
                 aRefData.SetRelRow(nRow1 - nRow);
-                *t->GetSingleRef() = aRefData;
+                static_cast<ScSingleRefToken*>(t)->GetSingleRef() = aRefData;
                 // Token array must be cloned so that each formula cell receives its own copy.
                 ScTokenArray aTokArr(aArr.CloneValue());
                 aPos = ScAddress(nCol, nRow, nTab);

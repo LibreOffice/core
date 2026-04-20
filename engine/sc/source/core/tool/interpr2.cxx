@@ -2443,7 +2443,7 @@ void ScInterpreter::ScIntersect()
             if (sv[i] == svSingleRef)
             {
                 ScComplexRefData aRef;
-                aRef.Ref1 = aRef.Ref2 = *xt[i]->GetSingleRef();
+                aRef.Ref1 = aRef.Ref2 = static_cast<const ScSingleRefToken*>(xt[i])->GetSingleRef();
                 p.reset(new ScRefListToken);
                 p->GetRefList()->push_back( aRef);
                 xt[i] = p.get();
@@ -2511,27 +2511,23 @@ void ScInterpreter::ScIntersect()
             switch (sv[i])
             {
                 case svSingleRef:
+                {
+                    const ScAddress r = static_cast<const ScSingleRefToken*>(pt[i])->GetSingleRef().toAbs(mrDoc, aPos);
+                    nC1[i] = nC2[i] = r.Col();
+                    nR1[i] = nR2[i] = r.Row();
+                    nT1[i] = nT2[i] = r.Tab();
+                }
+                break;
                 case svDoubleRef:
                 {
-                    {
-                        const ScAddress r = pt[i]->GetSingleRef()->toAbs(mrDoc, aPos);
-                        nC1[i] = r.Col();
-                        nR1[i] = r.Row();
-                        nT1[i] = r.Tab();
-                    }
-                    if (sv[i] == svDoubleRef)
-                    {
-                        const ScAddress r = pt[i]->GetSingleRef2()->toAbs(mrDoc, aPos);
-                        nC2[i] = r.Col();
-                        nR2[i] = r.Row();
-                        nT2[i] = r.Tab();
-                    }
-                    else
-                    {
-                        nC2[i] = nC1[i];
-                        nR2[i] = nR1[i];
-                        nT2[i] = nT1[i];
-                    }
+                    const ScAddress r = static_cast<const ScDoubleRefToken*>(pt[i])->GetSingleRef().toAbs(mrDoc, aPos);
+                    nC1[i] = r.Col();
+                    nR1[i] = r.Row();
+                    nT1[i] = r.Tab();
+                    const ScAddress r2 = static_cast<const ScDoubleRefToken*>(pt[i])->GetSingleRef2().toAbs(mrDoc, aPos);
+                    nC2[i] = r2.Col();
+                    nR2[i] = r2.Row();
+                    nT2[i] = r2.Tab();
                 }
                 break;
                 default:
@@ -2622,7 +2618,7 @@ void ScInterpreter::ScUnionFunc()
             case svSingleRef:
                 {
                     ScComplexRefData aRef;
-                    aRef.Ref1 = aRef.Ref2 = *pt[i]->GetSingleRef();
+                    aRef.Ref1 = aRef.Ref2 = static_cast<const ScSingleRefToken*>(pt[i])->GetSingleRef();
                     pRes->push_back( aRef);
                 }
                 break;

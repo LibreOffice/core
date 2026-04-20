@@ -1124,8 +1124,8 @@ OUString ScDBData::GetSimpleSubTotalFunction(const ScTokenArray* pTokens, SCCOL 
             }
             else if (nIdx == 6) // { ocPush, formula::svSingleRef }
             {
-                const ScSingleRefData* pRef = t->GetSingleRef();
-                if (!(pRef && pRef->Col() == nCol && pRef->Row() == nHeaderRow))
+                const ScSingleRefData& rRef = static_cast<ScSingleRefToken*>(t)->GetSingleRef();
+                if (!(rRef.Col() == nCol && rRef.Row() == nHeaderRow))
                 {
                     return u"custom"_ustr;
                 }

@@ -39,6 +39,7 @@
 #include <tokenarray.hxx>
 #include <fillinfo.hxx>
 #include <refupdatecontext.hxx>
+#include <reftokenhelper.hxx>
 #include <formula/errorcodes.hxx>
 #include <svl/sharedstring.hxx>
 #include <svl/sharedstringpool.hxx>
@@ -93,12 +94,15 @@ static bool lcl_HasRelRef( ScDocument& rDoc, const ScTokenArray* pFormula, sal_u
                     ScSingleRefData& rRef2 = static_cast<ScDoubleRefToken*>(t)->GetDoubleRef().Ref2;
                     if ( rRef2.IsColRel() || rRef2.IsRowRel() || rRef2.IsTabRel() )
                         return true;
-                    [[fallthrough]];
+                    ScSingleRefData& rRef1 = static_cast<ScDoubleRefToken*>(t)->GetSingleRef();
+                    if ( rRef1.IsColRel() || rRef1.IsRowRel() || rRef1.IsTabRel() )
+                        return true;
                 }
+                break;
 
                 case svSingleRef:
                 {
-                    ScSingleRefData& rRef1 = *t->GetSingleRef();
+                    ScSingleRefData& rRef1 = static_cast<ScSingleRefToken*>(t)->GetSingleRef();
                     if ( rRef1.IsColRel() || rRef1.IsRowRel() || rRef1.IsTabRel() )
                         return true;
                 }
@@ -1423,9 +1427,9 @@ ScAddress ScConditionEntry::GetValidSrcPos() const
         {
             for ( auto t: pFormula->References() )
             {
-                ScSingleRefData& rRef1 = *t->GetSingleRef();
-                ScAddress aAbs = rRef1.toAbs(mrDoc, aSrcPos);
-                if (!rRef1.IsTabDeleted())
+                ScSingleRefData* pRef1 = ScRefTokenHelper::getSingleRef(t);
+                ScAddress aAbs = pRef1->toAbs(mrDoc, aSrcPos);
+                if (!pRef1->IsTabDeleted())
                 {
                     if (aAbs.Tab() < nMinTab)
                         nMinTab = aAbs.Tab();

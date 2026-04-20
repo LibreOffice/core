@@ -219,7 +219,7 @@ void ScFormulaReferenceHelper::ShowFormulaReference(const OUString& rStr)
             }
             else
             {
-                ScSingleRefData aRef( *pToken->GetSingleRef() );
+                ScSingleRefData aRef( static_cast<const ScSingleRefToken*>(pToken)->GetSingleRef() );
                 aRange.aStart = aRef.toAbs(rDoc, aPos);
                 aRange.aEnd = aRange.aStart;
             }

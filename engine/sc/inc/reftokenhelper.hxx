@@ -28,6 +28,7 @@
 class ScDocument;
 class ScRangeList;
 struct ScComplexRefData;
+struct ScSingleRefData;
 
 namespace ScRefTokenHelper
 {
@@ -62,6 +63,9 @@ namespace ScRefTokenHelper
 
     ScTokenRef createRefToken(const ScDocument& rDoc, const ScAddress& rAddr);
     ScTokenRef createRefToken(const ScDocument& rDoc, const ScRange& rRange);
+
+    SC_DLLPUBLIC ScSingleRefData* getSingleRef(formula::FormulaToken*);
+    SC_DLLPUBLIC const ScSingleRefData* getSingleRef(const formula::FormulaToken*);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

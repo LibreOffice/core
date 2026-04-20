@@ -1084,9 +1084,9 @@ CPPUNIT_TEST_FIXTURE(TestSharedFormula, testSharedFormulasDeleteColumns)
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), pCode->GetLen());
     const FormulaToken* pToken = pCode->GetArray()[0];
     CPPUNIT_ASSERT_EQUAL(svSingleRef, pToken->GetType());
-    const ScSingleRefData* pSRef = pToken->GetSingleRef();
-    CPPUNIT_ASSERT(pSRef->IsColDeleted());
-    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(0), pSRef->toAbs(*m_pDoc, ScAddress(1,0,0)).Row());
+    const ScSingleRefData& rSRef = static_cast<const ScSingleRefToken*>(pToken)->GetSingleRef();
+    CPPUNIT_ASSERT(rSRef.IsColDeleted());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(0), rSRef.toAbs(*m_pDoc, ScAddress(1,0,0)).Row());
 
     // The formula string should show #REF! in lieu of the column position (only for Calc A1 syntax).
     sc::CompileFormulaContext aCFCxt(*m_pDoc, FormulaGrammar::GRAM_ENGLISH);

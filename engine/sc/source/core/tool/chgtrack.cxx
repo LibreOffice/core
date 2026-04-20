@@ -1800,7 +1800,7 @@ void ScChangeActionContent::PutValueToDoc(
 
 static void lcl_InvalidateReference( const ScDocument& rDoc, formula::FormulaToken& rTok, const ScBigAddress& rPos )
 {
-    ScSingleRefData& rRef1 = *rTok.GetSingleRef();
+    ScSingleRefData& rRef1 = static_cast<ScSingleRefToken&>(rTok).GetSingleRef();
     if ( rPos.Col() < 0 || rDoc.MaxCol() < rPos.Col() )
     {
         rRef1.SetColDeleted( true );

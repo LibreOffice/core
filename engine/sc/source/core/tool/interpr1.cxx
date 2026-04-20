@@ -584,7 +584,7 @@ bool ScInterpreter::JumpMatrix( short nStackLevel )
                         /* TODO: What about error handling and do we actually
                          * need the result matrix above at all in this case? */
                         ScComplexRefData aRef;
-                        aRef.Ref1 = aRef.Ref2 = *(xRef->GetSingleRef());
+                        aRef.Ref1 = aRef.Ref2 = static_cast<const ScSingleRefToken*>(xRef.get())->GetSingleRef();
                         pJumpMatrix->GetRefList().push_back( aRef);
                     }
                 }
@@ -11521,7 +11521,7 @@ void ScInterpreter::ScAreas()
         case svSingleRef:
             {
                 FormulaConstTokenRef xT = PopToken();
-                ValidateRef( *xT->GetSingleRef());
+                ValidateRef( static_cast<const ScSingleRefToken*>(xT.get())->GetSingleRef());
                 ++nCount;
             }
             break;

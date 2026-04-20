@@ -169,7 +169,7 @@ XclExpArrayRef XclExpArrayBuffer::FindArray( const ScTokenArray& rScTokArr, cons
         // not a matrix reference token.
         return xRec;
 
-    const ScSingleRefData& rRef = *pToken->GetSingleRef();
+    const ScSingleRefData& rRef = static_cast<const ScSingleRefToken*>(pToken)->GetSingleRef();
     ScAddress aAbsPos = rRef.toAbs(GetRoot().GetDoc(), rBasePos);
     XclExpArrayMap::const_iterator it = maRecMap.find(aAbsPos);
 
@@ -227,7 +227,7 @@ bool XclExpShrfmlaBuffer::IsValidTokenArray( const ScTokenArray& rArray ) const
         {
             case svSingleRef:
             {
-                const ScSingleRefData& rRefData = *p->GetSingleRef();
+                const ScSingleRefData& rRefData = static_cast<const ScSingleRefToken*>(p)->GetSingleRef();
                 if (!GetFormulaCompiler().IsRef2D(rRefData))
                     // Excel's shared formula cannot include 3D reference.
                     return false;

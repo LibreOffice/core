@@ -119,7 +119,7 @@ bool ScGroupTokenConverter::convert( const ScTokenArray& rCode, sc::FormulaLogge
         {
             case svSingleRef:
             {
-                ScSingleRefData aRef = *p->GetSingleRef();
+                ScSingleRefData aRef = static_cast<const ScSingleRefToken*>(p)->GetSingleRef();
                 if( aRef.IsDeleted())
                     return false;
                 ScAddress aRefPos = aRef.toAbs(mrDoc, mrPos);

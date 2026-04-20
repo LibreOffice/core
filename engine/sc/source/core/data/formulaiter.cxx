@@ -23,6 +23,7 @@
 #include <tokenarray.hxx>
 #include <formula/token.hxx>
 #include <token.hxx>
+#include <reftokenhelper.hxx>
 
 using namespace formula;
 
@@ -35,10 +36,11 @@ ScDetectiveRefIter::ScDetectiveRefIter( const ScDocument& rDoc, ScFormulaCell* p
 
 static bool lcl_ScDetectiveRefIter_SkipRef( const ScDocument& rDoc, formula::FormulaToken* p, const ScAddress& rPos )
 {
-    ScSingleRefData& rRef1 = *p->GetSingleRef();
-    ScAddress aAbs1 = rRef1.toAbs(rDoc, rPos);
+    ScSingleRefData* pRef1 = ScRefTokenHelper::getSingleRef(p);
+    ScAddress aAbs1 = pRef1->toAbs(rDoc, rPos);
     if (!rDoc.ValidAddress(aAbs1))
         return true;
+
     if ( p->GetType() == svDoubleRef )
     {
         ScSingleRefData& rRef2 = static_cast<ScDoubleRefToken*>(p)->GetDoubleRef().Ref2;

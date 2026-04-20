@@ -94,8 +94,8 @@ void DepChainWriter::writeDependencies(ScTokenArray* pCode, const ScAddress& rPo
 
         if (pToken->GetType() == formula::svSingleRef)
         {
-            const ScSingleRefData* pRef = pToken->GetSingleRef();
-            ScAddress aAbs = pRef->toAbs(m_rDoc, rPos);
+            const ScSingleRefData& rRef = static_cast<ScSingleRefToken*>(pToken)->GetSingleRef();
+            ScAddress aAbs = rRef.toAbs(m_rDoc, rPos);
 
             if (aAbs.IsValid())
             {

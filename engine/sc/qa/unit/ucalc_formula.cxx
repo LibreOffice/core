@@ -1332,7 +1332,7 @@ CPPUNIT_TEST_FIXTURE(TestFormula, testFormulaCompilerImplicitIntersection1ParamW
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong type of RPN token(argument to COS)", svSingleRef, ppRPNTokens[0]->GetType());
 
-            ScSingleRefData aArgAddrRPN = *ppRPNTokens[0]->GetSingleRef();
+            ScSingleRefData aArgAddrRPN = static_cast<ScSingleRefToken*>(ppRPNTokens[0])->GetSingleRef();
             ScAddress aArgAddrActual = aArgAddrRPN.toAbs(*m_pDoc, rCase.aCellAddress);
             CPPUNIT_ASSERT_EQUAL_MESSAGE("Computed implicit intersection singleref is wrong", rCase.aArgAddr, aArgAddrActual);
         }

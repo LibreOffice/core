@@ -920,8 +920,8 @@ void ScInterpreter::PopSingleRef( ScAddress& rAdr )
                 break;
             case svSingleRef:
                 {
-                    const ScSingleRefData* pRefData = p->GetSingleRef();
-                    if (pRefData->IsDeleted())
+                    const ScSingleRefData& rRefData = static_cast<const ScSingleRefToken*>(p)->GetSingleRef();
+                    if (rRefData.IsDeleted())
                     {
                         SetError( FormulaError::NoRef);
                         break;
@@ -930,7 +930,7 @@ void ScInterpreter::PopSingleRef( ScAddress& rAdr )
                     SCCOL nCol;
                     SCROW nRow;
                     SCTAB nTab;
-                    SingleRefToVars( *pRefData, nCol, nRow, nTab);
+                    SingleRefToVars( rRefData, nCol, nRow, nTab);
                     rAdr.Set( nCol, nRow, nTab );
                     if (!mrDoc.m_TableOpList.empty())
                         ReplaceCell( rAdr );
@@ -1168,7 +1168,7 @@ void ScInterpreter::PopExternalSingleRef(sal_uInt16& rFileId, OUString& rTabName
 
     rFileId = static_cast<const ScExternalSingleRefToken*>(p)->GetFileId();
     rTabName = static_cast<const ScExternalSingleRefToken*>(p)->GetTableName().getString();
-    rRef = *p->GetSingleRef();
+    rRef = static_cast<const ScExternalSingleRefToken*>(p)->GetSingleRef();
 }
 
 void ScInterpreter::PopExternalSingleRef(ScExternalRefCache::TokenRef& rToken, ScExternalRefCache::CellFormat* pFmt)

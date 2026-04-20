@@ -194,30 +194,6 @@ void FormulaToken::SetInForceArray( ParamClass )
 
 const svl::SharedString INVALID_STRING;
 
-const ScSingleRefData* FormulaToken::GetSingleRef() const
-{
-    OSL_FAIL( "FormulaToken::GetSingleRef: virtual dummy called" );
-    return nullptr;
-}
-
-ScSingleRefData* FormulaToken::GetSingleRef()
-{
-    OSL_FAIL( "FormulaToken::GetSingleRef: virtual dummy called" );
-    return nullptr;
-}
-
-const ScSingleRefData* FormulaToken::GetSingleRef2() const
-{
-    OSL_FAIL( "FormulaToken::GetSingleRef2: virtual dummy called" );
-    return nullptr;
-}
-
-ScSingleRefData* FormulaToken::GetSingleRef2()
-{
-    OSL_FAIL( "FormulaToken::GetSingleRef2: virtual dummy called" );
-    return nullptr;
-}
-
 bool FormulaToken::TextEqual( const FormulaToken& rToken ) const
 {
     return *this == rToken;

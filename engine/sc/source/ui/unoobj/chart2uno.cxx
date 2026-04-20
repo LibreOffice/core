@@ -1103,7 +1103,7 @@ bool lcl_addUpperLeftCornerIfMissing(const ScDocument* pDoc, std::vector<ScToken
     {
         case svSingleRef:
         {
-            const ScSingleRefData& rData = *pToken->GetSingleRef();
+            const ScSingleRefData& rData = static_cast<ScSingleRefToken*>(pToken.get())->GetSingleRef();
             nMinCol = rData.Col();
             nMinRow = rData.Row();
             nMaxCol = rData.Col();
@@ -1124,7 +1124,7 @@ bool lcl_addUpperLeftCornerIfMissing(const ScDocument* pDoc, std::vector<ScToken
         case svExternalSingleRef:
         {
             auto pESRToken = static_cast<ScExternalSingleRefToken*>(pToken.get());
-            const ScSingleRefData& rData = *pToken->GetSingleRef();
+            const ScSingleRefData& rData = pESRToken->GetSingleRef();
             nMinCol = rData.Col();
             nMinRow = rData.Row();
             nMaxCol = rData.Col();
@@ -1163,7 +1163,7 @@ bool lcl_addUpperLeftCornerIfMissing(const ScDocument* pDoc, std::vector<ScToken
         {
             case svSingleRef:
             {
-                const ScSingleRefData& rData = *pToken->GetSingleRef();
+                const ScSingleRefData& rData = static_cast<ScSingleRefToken*>(pToken.get())->GetSingleRef();
 
                 nMinCol = std::min(nMinCol, rData.Col());
                 nMinRow = std::min(nMinRow, rData.Row());
@@ -1201,7 +1201,7 @@ bool lcl_addUpperLeftCornerIfMissing(const ScDocument* pDoc, std::vector<ScToken
                 if (nFileId != pESRToken->GetFileId() || aExtTabName != pESRToken->GetTableName())
                     return false;
 
-                const ScSingleRefData& rData = *pToken->GetSingleRef();
+                const ScSingleRefData& rData = pESRToken->GetSingleRef();
 
                 nMinCol = std::min(nMinCol, rData.Col());
                 nMinRow = std::min(nMinRow, rData.Row());
@@ -1259,18 +1259,22 @@ bool lcl_addUpperLeftCornerIfMissing(const ScDocument* pDoc, std::vector<ScToken
             case svSingleRef:
             case svExternalSingleRef:
             {
-                const ScSingleRefData& rData = *rxToken->GetSingleRef();
-                if (rData.Col() == nMinCol && rData.Row() == nMinRow)
+                const ScSingleRefData* pData;
+                if (rxToken->GetType() == svSingleRef)
+                    pData = &static_cast<ScSingleRefToken*>(rxToken.get())->GetSingleRef();
+                else
+                    pData = &static_cast<ScExternalSingleRefToken*>(rxToken.get())->GetSingleRef();
+                if (pData->Col() == nMinCol && pData->Row() == nMinRow)
                     // The corner cell is contained.
                     return false;
 
-                if (rData.Col() == nMinCol+nCornerColumnCount && rData.Row() == nMinRow)
+                if (pData->Col() == nMinCol+nCornerColumnCount && pData->Row() == nMinRow)
                     bRight = true;
 
-                if (rData.Col() == nMinCol && rData.Row() == nMinRow+nCornerRowCount)
+                if (pData->Col() == nMinCol && pData->Row() == nMinRow+nCornerRowCount)
                     bBottom = true;
 
-                if (rData.Col() == nMinCol+nCornerColumnCount && rData.Row() == nMinRow+nCornerRowCount)
+                if (pData->Col() == nMinCol+nCornerColumnCount && pData->Row() == nMinRow+nCornerRowCount)
                     bDiagonal = true;
             }
             break;
@@ -1611,8 +1615,12 @@ public:
         if (!ScRefTokenHelper::isRef(pToken))
             return;
 
-        const ScSingleRefData& r = *pToken->GetSingleRef();
-        mpTabNumVector->push_back(r.Tab());
+        SCTAB nTab;
+        if (pToken->GetType() == svSingleRef)
+            nTab = static_cast<ScSingleRefToken*>(pToken.get())->GetSingleRef().Tab();
+        else
+            nTab = static_cast<ScDoubleRefToken*>(pToken.get())->GetSingleRef().Tab();
+        mpTabNumVector->push_back(nTab);
     }
 
     void getVector(std::vector<SCTAB>& rVector)
@@ -1699,17 +1707,21 @@ void RangeAnalyzer::initRangeAnalyzer( const ScDocument* pDoc, const std::vector
         }
         else if (eVar == svSingleRef || eVar == svExternalSingleRef)
         {
-            const ScSingleRefData& r = *aRefToken->GetSingleRef();
+            const ScSingleRefData* p;
+            if (eVar == svSingleRef)
+                p = &static_cast<ScSingleRefToken*>(aRefToken.get())->GetSingleRef();
+            else
+                p = &static_cast<ScExternalSingleRefToken*>(aRefToken.get())->GetSingleRef();
             mnColumnCount = std::max<SCCOL>( mnColumnCount, 1);
             mnRowCount = std::max<SCROW>( mnRowCount, 1);
             if( mnStartColumn == -1 )
             {
-                mnStartColumn = r.Col();
-                mnStartRow = r.Row();
+                mnStartColumn = p->Col();
+                mnStartRow = p->Row();
             }
             else
             {
-                if (mnStartColumn != r.Col() && mnStartRow != r.Row())
+                if (mnStartColumn != p->Col() && mnStartRow != p->Row())
                     mbAmbiguous=true;
             }
         }

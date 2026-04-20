@@ -214,11 +214,6 @@ public:
     virtual ParamClass          GetInForceArray() const;
     virtual void                SetInForceArray( ParamClass c );
 
-    virtual const ScSingleRefData*  GetSingleRef() const;
-    virtual ScSingleRefData*        GetSingleRef();
-    virtual const ScSingleRefData*  GetSingleRef2() const;
-    virtual ScSingleRefData*        GetSingleRef2();
-
     virtual FormulaToken*       Clone() const { return new FormulaToken(*this); }
 
     virtual bool                TextEqual( const formula::FormulaToken& rToken ) const;

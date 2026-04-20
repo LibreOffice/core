@@ -1307,9 +1307,10 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testAbsNamedRangeHTML)
 
     ScDocument* pDoc = getScDoc();
     ScRangeData* pRangeData = pDoc->GetRangeName().findByUpperName(u"HTML_1"_ustr);
-    ScSingleRefData* pRef = pRangeData->GetCode()->FirstToken()->GetSingleRef();
+    ScSingleRefData& rRef
+        = static_cast<ScDoubleRefToken*>(pRangeData->GetCode()->FirstToken())->GetSingleRef();
     // see tdf#119141 for the reason why this isn't Sheet1.HTML_1
-    CPPUNIT_ASSERT_MESSAGE("HTML_1 is an absolute reference", !pRef->IsTabRel());
+    CPPUNIT_ASSERT_MESSAGE("HTML_1 is an absolute reference", !rRef.IsTabRel());
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest3, testTdf80149)
