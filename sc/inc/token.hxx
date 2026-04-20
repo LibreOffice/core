@@ -53,7 +53,7 @@ void DumpToken(formula::FormulaToken const & rToken);
 */
 formula::FormulaTokenRef extendRangeReference( ScSheetLimits& rLimits, formula::FormulaToken & rTok1, formula::FormulaToken & rTok2, const ScAddress & rPos, bool bReuseDoubleRef );
 
-class ScSingleRefToken final : public formula::FormulaToken
+class SAL_DLLPUBLIC_RTTI ScSingleRefToken final : public formula::FormulaToken
 {
 private:
     ScSheetLimits&    mrSheetLimits; // don't use rtl::Reference to avoid ref-counting traffic
@@ -61,8 +61,8 @@ private:
 public:
                                 ScSingleRefToken( ScSheetLimits& rLimits, const ScSingleRefData& r, OpCode e = ocPush ) :
                                     FormulaToken( formula::svSingleRef, e ), mrSheetLimits(rLimits), aSingleRef( r ) {}
-    virtual const ScSingleRefData*    GetSingleRef() const override;
-    virtual ScSingleRefData*      GetSingleRef() override;
+    const ScSingleRefData&      GetSingleRef() const { return aSingleRef; }
+    ScSingleRefData&            GetSingleRef() { return aSingleRef; }
     virtual bool                TextEqual( const formula::FormulaToken& rToken ) const override;
     virtual bool                operator==( const formula::FormulaToken& rToken ) const override;
     virtual FormulaToken*       Clone() const override { return new ScSingleRefToken(*this); }
@@ -76,12 +76,12 @@ private:
 public:
                                 ScDoubleRefToken( ScSheetLimits& rLimits, const ScComplexRefData& r, OpCode e = ocPush  ) :
                                     FormulaToken( formula::svDoubleRef, e ), mrSheetLimits(rLimits), aDoubleRef( r ) {}
-    virtual const ScSingleRefData*    GetSingleRef() const override;
-    virtual ScSingleRefData*      GetSingleRef() override;
+    const ScSingleRefData&      GetSingleRef() const { return aDoubleRef.Ref1; }
+    ScSingleRefData&            GetSingleRef() { return aDoubleRef.Ref1; }
     const ScComplexRefData&     GetDoubleRef() const { return aDoubleRef; }
     ScComplexRefData&           GetDoubleRef() { return aDoubleRef; }
-    virtual const ScSingleRefData*    GetSingleRef2() const override;
-    virtual ScSingleRefData*      GetSingleRef2() override;
+    const ScSingleRefData&      GetSingleRef2() const { return aDoubleRef.Ref2; }
+    ScSingleRefData&            GetSingleRef2() { return aDoubleRef.Ref2; }
     virtual bool                TextEqual( const formula::FormulaToken& rToken ) const override;
     virtual bool                operator==( const formula::FormulaToken& rToken ) const override;
     virtual FormulaToken*       Clone() const override { return new ScDoubleRefToken(*this); }
@@ -154,8 +154,8 @@ public:
     ScExternalSingleRefToken & operator =(ScExternalSingleRefToken &&) = delete; // due to FormulaToken
 
     const svl::SharedString & GetTableName() const { return maTabName; }
-    virtual const ScSingleRefData*  GetSingleRef() const override;
-    virtual ScSingleRefData*          GetSingleRef() override;
+    const ScSingleRefData&      GetSingleRef() const { return maSingleRef; }
+    ScSingleRefData&            GetSingleRef() { return maSingleRef; }
     virtual bool                operator==( const formula::FormulaToken& rToken ) const override;
     virtual FormulaToken*       Clone() const override { return new ScExternalSingleRefToken(*this); }
 };
@@ -176,10 +176,10 @@ public:
     ScExternalDoubleRefToken & operator =(ScExternalDoubleRefToken &&) = delete; // due to FormulaToken
 
     const svl::SharedString & GetTableName() const { return maTabName; }
-    virtual const ScSingleRefData* GetSingleRef() const override;
-    virtual ScSingleRefData*       GetSingleRef() override;
-    virtual const ScSingleRefData* GetSingleRef2() const override;
-    virtual ScSingleRefData*       GetSingleRef2() override;
+    const ScSingleRefData&      GetSingleRef() const { return maDoubleRef.Ref1; }
+    ScSingleRefData&            GetSingleRef() { return maDoubleRef.Ref1; }
+    const ScSingleRefData&      GetSingleRef2() const { return maDoubleRef.Ref2; }
+    ScSingleRefData&            GetSingleRef2() { return maDoubleRef.Ref2; }
     const ScComplexRefData&     GetDoubleRef() const { return maDoubleRef; }
     ScComplexRefData&           GetDoubleRef() { return maDoubleRef; }
     virtual bool                operator==( const formula::FormulaToken& rToken ) const override;
@@ -409,9 +409,15 @@ public:
         SingleDoubleRefModifier( formula::FormulaToken& rT )
                     {
                         formula::StackVar eType = rT.GetType();
-                        if ( eType == formula::svSingleRef || eType == formula::svExternalSingleRef )
+                        if ( eType == formula::svSingleRef )
                         {
-                            pS = rT.GetSingleRef();
+                            pS = &static_cast<ScSingleRefToken&>(rT).GetSingleRef();
+                            aDub.Ref1 = aDub.Ref2 = *pS;
+                            pD = &aDub;
+                        }
+                        else if ( eType == formula::svExternalSingleRef )
+                        {
+                            pS = &static_cast<ScExternalSingleRefToken&>(rT).GetSingleRef();
                             aDub.Ref1 = aDub.Ref2 = *pS;
                             pD = &aDub;
                         }
@@ -444,7 +450,14 @@ public:
     const ScSingleRefData&    Ref2;
 
                 SingleDoubleRefProvider( const formula::FormulaToken& r )
-                        : Ref1( *r.GetSingleRef() ),
+                        : Ref1( r.GetType() == formula::svSingleRef
+                                ? static_cast<const ScSingleRefToken&>(r).GetSingleRef()
+                                : r.GetType() == formula::svExternalSingleRef
+                                ? static_cast<const ScExternalSingleRefToken&>(r).GetSingleRef()
+                                : r.GetType() == formula::svDoubleRef
+                                ? static_cast<const ScDoubleRefToken&>(r).GetSingleRef()
+                                : static_cast<const ScExternalDoubleRefToken&>(r).GetSingleRef()
+                                ),
                           Ref2( r.GetType() == formula::svDoubleRef
                                 ? static_cast<const ScDoubleRefToken&>(r).GetDoubleRef().Ref2
                                 : r.GetType() == formula::svExternalDoubleRef

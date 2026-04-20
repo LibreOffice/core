@@ -153,12 +153,15 @@ static bool HasRelRefIgnoringSheet0Relative( ScDocument* pDoc, const ScTokenArra
                     ScSingleRefData& rRef2 = static_cast<ScDoubleRefToken*>(t)->GetDoubleRef().Ref2;
                     if ( rRef2.IsColRel() || rRef2.IsRowRel() || (rRef2.IsFlag3D() && rRef2.IsTabRel()) )
                         return true;
-                    [[fallthrough]];
+                    ScSingleRefData& rRef1 = static_cast<ScDoubleRefToken*>(t)->GetSingleRef();
+                    if ( rRef1.IsColRel() || rRef1.IsRowRel() || (rRef1.IsFlag3D() && rRef1.IsTabRel()) )
+                        return true;
                 }
+                break;
 
                 case formula::svSingleRef:
                 {
-                    ScSingleRefData& rRef1 = *t->GetSingleRef();
+                    ScSingleRefData& rRef1 = static_cast<ScSingleRefToken*>(t)->GetSingleRef();
                     if ( rRef1.IsColRel() || rRef1.IsRowRel() || (rRef1.IsFlag3D() && rRef1.IsTabRel()) )
                         return true;
                 }
@@ -213,7 +216,7 @@ static bool HasOneSingleFullyRelativeReference( const ScTokenArray* pTokens, ScS
             {
                 case formula::svSingleRef:
                 {
-                    ScSingleRefData& rRef1 = *t->GetSingleRef();
+                    ScSingleRefData& rRef1 = static_cast<ScSingleRefToken*>(t)->GetSingleRef();
                     if ( rRef1.IsColRel() && rRef1.IsRowRel() && !rRef1.IsFlag3D() && rRef1.IsTabRel() )
                     {
                         nCount++;

@@ -971,7 +971,7 @@ void XclExpExtName::WriteAddData( XclExpStream& rStrm )
         {
             case svExternalSingleRef:
             {
-                const ScSingleRefData& rRef = *p->GetSingleRef();
+                const ScSingleRefData& rRef = static_cast<const ScExternalSingleRefToken*>(p)->GetSingleRef();
                 if (rRef.IsTabRel())
                     break;
 

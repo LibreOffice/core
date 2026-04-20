@@ -77,6 +77,7 @@
 #include <officecfg/Office/Common.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <interpre.hxx>
+#include <reftokenhelper.hxx>
 
 using namespace formula;
 using namespace ::com::sun::star;
@@ -5521,9 +5522,9 @@ void ScCompiler::AdjustSheetLocalNameRelReferences( SCTAB nDelta )
 {
     for ( auto t: pArr->References() )
     {
-        ScSingleRefData& rRef1 = *t->GetSingleRef();
-        if (rRef1.IsTabRel())
-            rRef1.IncTab( nDelta);
+        ScSingleRefData* pRef1 = ScRefTokenHelper::getSingleRef(t);
+        if (pRef1->IsTabRel())
+            pRef1->IncTab( nDelta);
         if ( t->GetType() == svDoubleRef )
         {
             ScSingleRefData& rRef2 = static_cast<ScDoubleRefToken*>(t)->GetDoubleRef().Ref2;
@@ -5539,7 +5540,7 @@ void ScCompiler::SetRelNameReference()
 {
     for ( auto t: pArr->References() )
     {
-        ScSingleRefData& rRef1 = *t->GetSingleRef();
+        ScSingleRefData& rRef1 = *ScRefTokenHelper::getSingleRef(t);
         if ( rRef1.IsColRel() || rRef1.IsRowRel() || rRef1.IsTabRel() )
             rRef1.SetRelName( true );
         if ( t->GetType() == svDoubleRef )
@@ -5557,8 +5558,10 @@ void ScCompiler::MoveRelWrap()
 {
     for ( auto t: pArr->References() )
     {
-        if ( t->GetType() == svSingleRef || t->GetType() == svExternalSingleRef )
-            ScRefUpdate::MoveRelWrap( rDoc, aPos, rDoc.MaxCol(), rDoc.MaxRow(), SingleDoubleRefModifier( *t->GetSingleRef() ).Ref() );
+        if ( t->GetType() == svSingleRef )
+            ScRefUpdate::MoveRelWrap( rDoc, aPos, rDoc.MaxCol(), rDoc.MaxRow(), SingleDoubleRefModifier( static_cast<ScSingleRefToken*>(t)->GetSingleRef() ).Ref() );
+        else if ( t->GetType() == svExternalSingleRef )
+            ScRefUpdate::MoveRelWrap( rDoc, aPos, rDoc.MaxCol(), rDoc.MaxRow(), SingleDoubleRefModifier( static_cast<ScExternalSingleRefToken*>(t)->GetSingleRef() ).Ref() );
         else if (t->GetType() == svDoubleRef)
             ScRefUpdate::MoveRelWrap( rDoc, aPos, rDoc.MaxCol(), rDoc.MaxRow(), static_cast<ScDoubleRefToken*>(t)->GetDoubleRef() );
         else
@@ -5573,8 +5576,10 @@ void ScCompiler::MoveRelWrap( const ScTokenArray& rArr, const ScDocument& rDoc, 
 {
     for ( auto t: rArr.References() )
     {
-        if ( t->GetType() == svSingleRef || t->GetType() == svExternalSingleRef )
-            ScRefUpdate::MoveRelWrap( rDoc, rPos, nMaxCol, nMaxRow, SingleDoubleRefModifier( *t->GetSingleRef() ).Ref() );
+        if ( t->GetType() == svSingleRef )
+            ScRefUpdate::MoveRelWrap( rDoc, rPos, nMaxCol, nMaxRow, SingleDoubleRefModifier( static_cast<ScSingleRefToken*>(t)->GetSingleRef() ).Ref() );
+        else if ( t->GetType() == svExternalSingleRef )
+            ScRefUpdate::MoveRelWrap( rDoc, rPos, nMaxCol, nMaxRow, SingleDoubleRefModifier( static_cast<ScExternalSingleRefToken*>(t)->GetSingleRef() ).Ref() );
         else if ( t->GetType() == svDoubleRef )
             ScRefUpdate::MoveRelWrap( rDoc, rPos, nMaxCol, nMaxRow, static_cast<ScDoubleRefToken*>(t)->GetDoubleRef() );
         else
@@ -5689,7 +5694,7 @@ void ScCompiler::CreateStringFromExternal( OUStringBuffer& rBuffer, const Formul
         case svExternalSingleRef:
             pConv->makeExternalRefStr(rDoc.GetSheetLimits(),
                    rBuffer, GetPos(), nUsedFileId, *pFileName, static_cast<const ScExternalSingleRefToken*>(t)->GetTableName().getString(),
-                   *t->GetSingleRef());
+                   static_cast<const ScExternalSingleRefToken*>(t)->GetSingleRef());
         break;
         case svExternalDoubleRef:
         {
@@ -5793,7 +5798,7 @@ bool ScCompiler::GetRefColRowNames(const FormulaToken* pToken, ScComplexRefData&
                                    bool& bInList, FormulaError& nError,
                                    bool bLookUpColRowNames) const
 {
-    ScSingleRefData rSingleRef = *pToken->GetSingleRef();
+    ScSingleRefData rSingleRef = static_cast<const ScSingleRefToken*>(pToken)->GetSingleRef();
     const ScAddress aAbs = rSingleRef.toAbs(rDoc, aPos);
 
     if (!rDoc.ValidAddress(aAbs))
@@ -6021,7 +6026,7 @@ void ScCompiler::CreateStringFromSingleRef( OUStringBuffer& rBuffer, const Formu
     const FormulaToken* p;
     OUString aErrRef = GetCurrentOpCodeMap()->getSymbol(ocErrRef);
     const OpCode eOp = _pTokenP->GetOpCode();
-    const ScSingleRefData& rRef = *_pTokenP->GetSingleRef();
+    const ScSingleRefData& rRef = static_cast<const ScSingleRefToken*>(_pTokenP)->GetSingleRef();
     ScComplexRefData aRef;
     aRef.Ref1 = aRef.Ref2 = rRef;
     if ( eOp == ocColRowName )
@@ -6464,8 +6469,8 @@ bool ScCompiler::HandleTableRef()
                             if (eState == sOpen && p->GetType() == svSingleRef)
                             {
                                 bColumnRange = true;
-                                bCol1Rel = p->GetSingleRef()->IsColRel();
-                                bCol1RelName = p->GetSingleRef()->IsRelName();
+                                bCol1Rel = static_cast<const ScSingleRefToken*>(p)->GetSingleRef().IsColRel();
+                                bCol1RelName = static_cast<const ScSingleRefToken*>(p)->GetSingleRef().IsRelName();
                                 eState = sLast;
                             }
                             else
@@ -6503,7 +6508,7 @@ bool ScCompiler::HandleTableRef()
                 {
                     case svSingleRef:
                         {
-                            aColRange.aStart = aColRange.aEnd = mpToken->GetSingleRef()->toAbs(rDoc, aPos);
+                            aColRange.aStart = aColRange.aEnd = static_cast<ScSingleRefToken*>(mpToken.get())->GetSingleRef().toAbs(rDoc, aPos);
                             if (    GetTokenIfOpCode( ocTableRefClose) && (nLevel--) &&
                                     GetTokenIfOpCode( ocRange) &&
                                     GetTokenIfOpCode( ocTableRefOpen) && (++nLevel) &&
@@ -6513,10 +6518,10 @@ bool ScCompiler::HandleTableRef()
                                     aColRange = ScRange( ScAddress::INITIALIZE_INVALID);
                                 else
                                 {
-                                    aColRange.aEnd = mpToken->GetSingleRef()->toAbs(rDoc, aPos);
+                                    aColRange.aEnd = static_cast<ScSingleRefToken*>(mpToken.get())->GetSingleRef().toAbs(rDoc, aPos);
                                     aColRange.PutInOrder();
-                                    bCol2Rel = mpToken->GetSingleRef()->IsColRel();
-                                    bCol2RelName = mpToken->GetSingleRef()->IsRelName();
+                                    bCol2Rel = static_cast<ScSingleRefToken*>(mpToken.get())->GetSingleRef().IsColRel();
+                                    bCol2RelName = static_cast<ScSingleRefToken*>(mpToken.get())->GetSingleRef().IsRelName();
                                 }
                             }
                         }
@@ -6687,7 +6692,7 @@ bool ScCompiler::HandleIIOpCodeInternal(FormulaToken* token, FormulaToken*** ppp
         ScComplexRefData aSumRange;
         if (eSumRangeType == svSingleRef)
         {
-            aSumRange.Ref1 = *(*pppToken[2])->GetSingleRef();
+            aSumRange.Ref1 = static_cast<ScSingleRefToken*>(*pppToken[2])->GetSingleRef();
             aSumRange.Ref2 = aSumRange.Ref1;
         }
         else

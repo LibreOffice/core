@@ -31,6 +31,7 @@
 #include <xeformula.hxx>
 #include <xestring.hxx>
 #include <xltools.hxx>
+#include <reftokenhelper.hxx>
 
 #include <formula/grammar.hxx>
 #include <oox/export/utils.hxx>
@@ -396,7 +397,7 @@ void XclExpName::SaveXml( XclExpXmlStream& rStrm )
                                     auto pESRToken = static_cast<ScExternalSingleRefToken*>(t);
                                     pNewToken = new ScExternalSingleRefToken(
                                         nFileId, svl::SharedString(it->second),
-                                        *pESRToken->GetSingleRef());
+                                        pESRToken->GetSingleRef());
                                 }
                                 else if (eType == formula::svExternalDoubleRef)
                                 {
@@ -467,13 +468,13 @@ static bool lcl_EnsureAbs3DToken( const SCTAB nTab, formula::FormulaToken* pTok,
     if ( !pTok || ( pTok->GetType() != formula::svSingleRef && pTok->GetType() != formula::svDoubleRef ) )
         return bFixRequired;
 
-    ScSingleRefData* pRef1 = pTok->GetSingleRef();
+    ScSingleRefData* pRef1 = ScRefTokenHelper::getSingleRef(pTok);
     if ( !pRef1 )
         return bFixRequired;
 
     ScSingleRefData* pRef2 = nullptr;
     if ( pTok->GetType() == formula::svDoubleRef )
-        pRef2 = pTok->GetSingleRef2();
+        pRef2 = &static_cast<ScDoubleRefToken*>(pTok)->GetSingleRef2();
 
     if ( pRef1->IsTabRel() || !pRef1->IsFlag3D() )
     {

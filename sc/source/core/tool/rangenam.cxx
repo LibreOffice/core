@@ -33,6 +33,7 @@
 #include <refupdat.hxx>
 #include <document.hxx>
 #include <refupdatecontext.hxx>
+#include <reftokenhelper.hxx>
 #include <tokenstringcontext.hxx>
 
 #include <formula/errorcodes.hxx>
@@ -217,13 +218,13 @@ void ScRangeData::GuessPosition()
     formula::FormulaTokenArrayPlainIterator aIter(*pCode);
     while ( ( t = aIter.GetNextReference() ) != nullptr )
     {
-        ScSingleRefData& rRef1 = *t->GetSingleRef();
-        if ( rRef1.IsColRel() && rRef1.Col() < nMinCol )
-            nMinCol = rRef1.Col();
-        if ( rRef1.IsRowRel() && rRef1.Row() < nMinRow )
-            nMinRow = rRef1.Row();
-        if ( rRef1.IsTabRel() && rRef1.Tab() < nMinTab )
-            nMinTab = rRef1.Tab();
+        ScSingleRefData* pRef1 = ScRefTokenHelper::getSingleRef(t);
+        if ( pRef1->IsColRel() && pRef1->Col() < nMinCol )
+            nMinCol = pRef1->Col();
+        if ( pRef1->IsRowRel() && pRef1->Row() < nMinRow )
+            nMinRow = pRef1->Row();
+        if ( pRef1->IsTabRel() && pRef1->Tab() < nMinTab )
+            nMinTab = pRef1->Tab();
 
         if ( t->GetType() == svDoubleRef )
         {
@@ -548,9 +549,9 @@ void ScRangeData::ValidateTabRefs()
     formula::FormulaTokenArrayPlainIterator aIter(*pCode);
     while ( ( t = aIter.GetNextReference() ) != nullptr )
     {
-        ScSingleRefData& rRef1 = *t->GetSingleRef();
-        ScAddress aAbs = rRef1.toAbs(rDoc, aPos);
-        if ( rRef1.IsTabRel() && !rRef1.IsTabDeleted() )
+        ScSingleRefData* pRef1 = ScRefTokenHelper::getSingleRef(t);
+        ScAddress aAbs = pRef1->toAbs(rDoc, aPos);
+        if ( pRef1->IsTabRel() && !pRef1->IsTabDeleted() )
         {
             if (aAbs.Tab() < nMinTab)
                 nMinTab = aAbs.Tab();
@@ -589,7 +590,7 @@ void ScRangeData::ValidateTabRefs()
         {
             case svSingleRef:
             {
-                ScSingleRefData& rRef = *t->GetSingleRef();
+                ScSingleRefData& rRef = static_cast<ScSingleRefToken*>(t)->GetSingleRef();
                 if (!rRef.IsTabDeleted())
                 {
                     ScAddress aAbs = rRef.toAbs(rDoc, aOldPos);

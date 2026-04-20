@@ -24,6 +24,7 @@
 #include <bcaslot.hxx>
 #include <scopetools.hxx>
 #include <numformat.hxx>
+#include <reftokenhelper.hxx>
 
 #include <o3tl/safeint.hxx>
 #include <svl/sharedstringpool.hxx>
@@ -446,7 +447,7 @@ void ScDocumentImport::setMatrixCells(
         aPos.SetRow(nRow);
         // Reference in each cell must point to the origin cell relative to the current cell.
         aRefData.SetAddress(mpImpl->mrDoc.GetSheetLimits(), rBasePos, aPos);
-        *t->GetSingleRef() = aRefData;
+        *ScRefTokenHelper::getSingleRef(t) = aRefData;
         ScTokenArray aTokArr(aArr.CloneValue());
         pCell = new ScFormulaCell(mpImpl->mrDoc, aPos, aTokArr, eGram, ScMatrixMode::Reference);
         pBlockPos->miCellPos =
@@ -466,7 +467,7 @@ void ScDocumentImport::setMatrixCells(
         {
             aPos.SetRow(nRow);
             aRefData.SetAddress(mpImpl->mrDoc.GetSheetLimits(), rBasePos, aPos);
-            *t->GetSingleRef() = aRefData;
+            *ScRefTokenHelper::getSingleRef(t) = aRefData;
             ScTokenArray aTokArr(aArr.CloneValue());
             pCell = new ScFormulaCell(mpImpl->mrDoc, aPos, aTokArr, eGram, ScMatrixMode::Reference);
             pBlockPos->miCellPos =
