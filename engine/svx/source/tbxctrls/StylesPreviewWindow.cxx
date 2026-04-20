@@ -658,70 +658,77 @@ StylePaneFormatFilter lcl_GetStylePaneFormatFilter(SfxObjectShell* pDocShell)
     return aFilter;
 }
 
-inline void lcl_AppendParaStyles(StylePreviewList& rAllStyles, SfxStyleSheetBasePool* pPool,
-                                 SfxStyleSearchBits eBits)
+inline void lcl_AppendParaStyle(StylePreviewList& rAllStyles, const OUString& rName)
+{
+    const auto aFound = std::find_if(
+        rAllStyles.begin(), rAllStyles.end(), [&rName](const StylePreviewDescriptor& element) {
+            return element.commonName == rName || element.translatedName == rName;
+        });
+
+    if (aFound == rAllStyles.end())
+        rAllStyles.emplace_back<StylePreviewDescriptor>({ rName, rName });
+}
+
+void lcl_AppendParaStyles(StylePreviewList& rAllStyles, SfxStyleSheetBasePool* pPool,
+                          SfxStyleSearchBits eBits)
 {
     if (!pPool)
         return;
 
     auto xIter = pPool->CreateIterator(SfxStyleFamily::Para, eBits);
+    for (SfxStyleSheetBase* pStyle = xIter->First(); pStyle; pStyle = xIter->Next())
+        lcl_AppendParaStyle(rAllStyles, pStyle->GetName());
+}
 
-    SfxStyleSheetBase* pStyle = xIter->First();
+void lcl_AppendFilteredParaStyles(StylePreviewList& rAllStyles, SfxStyleSheetBasePool* pPool,
+                                  const StylePaneFormatFilter& rFilter)
+{
+    if (!pPool)
+        return;
 
-    while (pStyle)
+    lcl_AppendParaStyles(rAllStyles, pPool, SfxStyleSearchBits::Favourite);
+
+    auto xIter = pPool->CreateIterator(SfxStyleFamily::Para, SfxStyleSearchBits::AllVisible);
+    for (SfxStyleSheetBase* pStyle = xIter->First(); pStyle; pStyle = xIter->Next())
     {
-        const OUString sName(pStyle->GetName());
+        bool bInclude = false;
+        if (rFilter.bCustomStyles && pStyle->IsUserDefined())
+            bInclude = true;
+        if (rFilter.bStylesInUse && pStyle->IsUsed())
+            bInclude = true;
 
-        // do not duplicate
-        const auto aFound = std::find_if(
-            rAllStyles.begin(), rAllStyles.end(), [sName](const StylePreviewDescriptor& element) {
-                return element.commonName == sName || element.translatedName == sName;
-            });
-
-        if (aFound == rAllStyles.end())
-            rAllStyles.emplace_back<StylePreviewDescriptor>({ sName, sName });
-
-        pStyle = xIter->Next();
+        if (bInclude)
+            lcl_AppendParaStyle(rAllStyles, pStyle->GetName());
     }
 }
 }
 
 void StylesPreviewWindow_Base::UpdateStylesList()
 {
-    m_aAllStyles = m_aDefaultStyles;
-
     SfxObjectShell* pDocShell = SfxObjectShell::Current();
     SfxStyleSheetBasePool* pStyleSheetPool = nullptr;
+    StylePaneFormatFilter aFilter;
 
     if (pDocShell)
     {
         pStyleSheetPool = pDocShell->GetStyleSheetPool();
+        aFilter = lcl_GetStylePaneFormatFilter(pDocShell);
+    }
 
-        if (pStyleSheetPool)
-        {
-            StylePaneFormatFilter aFilter = lcl_GetStylePaneFormatFilter(pDocShell);
+    // When the document specifies a style pane filter, skip the hardcoded
+    // default styles and let the filter control what is shown.
+    if (aFilter.bValid)
+        m_aAllStyles.clear();
+    else
+        m_aAllStyles = m_aDefaultStyles;
 
-            if (aFilter.bValid)
-            {
-                // Always show favourite styles
-                lcl_AppendParaStyles(m_aAllStyles, pStyleSheetPool, SfxStyleSearchBits::Favourite);
-
-                if (aFilter.bAllStyles)
-                    lcl_AppendParaStyles(m_aAllStyles, pStyleSheetPool,
-                                         SfxStyleSearchBits::AllVisible);
-                if (aFilter.bCustomStyles)
-                    lcl_AppendParaStyles(m_aAllStyles, pStyleSheetPool,
-                                         SfxStyleSearchBits::UserDefined);
-                if (aFilter.bStylesInUse)
-                    lcl_AppendParaStyles(m_aAllStyles, pStyleSheetPool, SfxStyleSearchBits::Used);
-            }
-            else
-            {
-                lcl_AppendParaStyles(m_aAllStyles, pStyleSheetPool,
-                                     SfxStyleSearchBits::Favourite
-                                         | SfxStyleSearchBits::UserDefined);
-            }
-        }
+    if (pStyleSheetPool)
+    {
+        if (aFilter.bValid)
+            lcl_AppendFilteredParaStyles(m_aAllStyles, pStyleSheetPool, aFilter);
+        else
+            lcl_AppendParaStyles(m_aAllStyles, pStyleSheetPool,
+                                 SfxStyleSearchBits::Favourite | SfxStyleSearchBits::UserDefined);
     }
 
     m_xStylesView->freeze();
