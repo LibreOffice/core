@@ -172,6 +172,7 @@ public:
     void                            setDescription( const OUString& rDescr ) { msDescription = rDescr; }
     void                            setDecorative(bool const isDecorative) { m_isDecorative = isDecorative; }
     void                            setMacro(const OUString& rMacro) { msMacro = rMacro; }
+    void                            setMacroExtUrl(const OUString& rUrl) { msMacroExtUrl = rUrl; }
     void                            setTextLinkAttr(const OUString& rTextLink) { msTextLink = rTextLink; }
     void                            setFLocksText(bool bFLocksText) { mbFLocksText = bFLocksText; }
     void                            setFPublished(bool bFPublished) { mbFPublished = bFPublished; }
@@ -380,6 +381,8 @@ protected:
     /* specifies the custom function associated with the object.
        "macro" attribute for <sp> element */
     OUString                    msMacro;
+    /* If msMacro is an external reference this stores the absolute URL of the external workbook */
+    OUString                    msMacroExtUrl;
     /* specifies a formula linking to spreadsheet cell data.
        "textlink" attribute for <sp> element */
     OUString                    msTextLink;

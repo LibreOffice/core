@@ -56,6 +56,7 @@
 #include <rangelst.hxx>
 #include <docoptio.hxx>
 #include <tabprotection.hxx>
+#include <externalrefmgr.hxx>
 
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
@@ -1318,6 +1319,20 @@ OUString ScURLTransformer::getTransformedString(const OUString& rURL) const
 bool ScURLTransformer::isExternalURL(const OUString& rURL) const
 {
     return !rURL.startsWith("#");
+}
+
+sal_Int32 ScURLTransformer::getExternalLinkIndex(const OUString& rUrl) const
+{
+    if (!rUrl.isEmpty())
+    {
+        ScExternalRefManager* pRefMgr = mrDoc.GetExternalRefManager();
+        if (pRefMgr)
+        {
+            sal_uInt16 nFileId = pRefMgr->getExternalFileId(rUrl);
+            return static_cast<sal_Int32>(pRefMgr->convertFileIdToUsedFileId(nFileId)) + 1;
+        }
+    }
+    return 0;
 }
 
 void XclObjAny::SaveXml( XclExpXmlStream& rStrm )

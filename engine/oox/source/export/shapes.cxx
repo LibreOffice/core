@@ -873,16 +873,19 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
             rtl::Reference<sax_fastparser::FastAttributeList> pAttrListSp
                 = sax_fastparser::FastSerializerHelper::createAttrList();
 
+            OUString sMacroUrl, sMacro;
             for (auto const& it : aGrabBagProps)
             {
                 // export macro attribute of <sp> element
                 if (it.Name == u"mso-sp-macro"_ustr)
                 {
-                    OUString sMacro;
                     it.Value >>= sMacro;
 
-                    if (!sMacro.isEmpty())
-                        pAttrListSp->add(XML_macro, sMacro);
+                }
+                if (it.Name == u"mso-sp-macro-url"_ustr)
+                {
+                    it.Value >>= sMacroUrl;
+                    continue;
                 }
 
                 // export textlink attribute of <sp> element
@@ -910,6 +913,19 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
                     it.Value >>= bFPublished;
                     pAttrListSp->add(XML_fPublished, ToPsz10(bFPublished));
                 }
+            }
+
+            if (!sMacro.isEmpty())
+            {
+                if (sMacro.startsWith("[") && !sMacroUrl.isEmpty())
+                {
+                    sal_Int32 nClose = sMacro.indexOf(']');
+                    sal_Int32 nNewIdx = mpURLTransformer->getExternalLinkIndex(sMacroUrl);
+                    if (nClose > 0 && nNewIdx > 0)
+                        sMacro = "[" + OUString::number(nNewIdx) + sMacro.subView(nClose);
+                }
+
+                pAttrListSp->add(XML_macro, sMacro);
             }
 
             if (isDiagaramExport())

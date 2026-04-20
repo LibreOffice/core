@@ -2831,6 +2831,18 @@ sal_uInt16 ScExternalRefManager::convertFileIdToUsedFileId(sal_uInt16 nFileId)
         return maConvertFileIdToUsedFileId[nFileId];
 }
 
+void ScExternalRefManager::addDrawingMacros(sal_uInt16 nFileId, const OUString& rName)
+{
+    if (rName.isEmpty())
+        return;
+    maDrawingMacros[nFileId].insert(rName);
+}
+
+const std::map<sal_uInt16, std::set<OUString>>& ScExternalRefManager::getDrawingMacros() const
+{
+    return maDrawingMacros;
+}
+
 void ScExternalRefManager::setSkipUnusedFileIds(std::vector<sal_uInt16>& rExternFileIds)
 {
     mbSkipUnusedFileIds = true;

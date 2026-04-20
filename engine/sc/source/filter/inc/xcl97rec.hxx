@@ -45,6 +45,8 @@ public:
 
     virtual bool isExternalURL(const OUString& rURL) const override;
 
+    virtual sal_Int32 getExternalLinkIndex(const OUString& rUrl) const override;
+
 private:
     ScDocument& mrDoc;
 };

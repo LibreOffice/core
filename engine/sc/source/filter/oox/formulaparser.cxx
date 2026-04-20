@@ -1860,6 +1860,27 @@ OUString FormulaParser::importOleTargetLink( SequenceInputStream& rStrm )
     return aTargetLink;
 }
 
+bool FormulaParser::importMacroExternalRef(std::u16string_view aFormulaString, OUString& rUrl,
+                                           OUString& rName)
+{
+    sal_Int32 nRefId = -1;
+    OUString aRemainder;
+    if (lclExtractRefId(nRefId, aRemainder, aFormulaString) && aRemainder[0] == '!')
+    {
+        const ExternalLink* pExtLink = getExternalLinks().getExternalLink(nRefId, false).get();
+        if (pExtLink)
+        {
+            rUrl = pExtLink->getTargetUrl();
+            if (!rUrl.isEmpty())
+            {
+                rName = aRemainder.copy(1);
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
 OUString FormulaParser::importMacroName( std::u16string_view aFormulaString )
 {
     /*  Valid macros are either sheet macros or VBA macros. OOXML and all BIFF

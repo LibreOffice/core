@@ -682,6 +682,21 @@ CPPUNIT_TEST_FIXTURE(ScExportTest6, testXlStartupExternalXLSX)
     assertXPath(pExternalRel, "/rels:Relationships/rels:Relationship", "Target", u"personal.xls");
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest6, testShapeMacroExtRef)
+{
+    createScDoc("xlsx/shape-macro-ext-ref.xlsx");
+    save(TestFilter::XLSX);
+
+    xmlDocUniquePtr pDrawing = parseExport(u"xl/drawings/drawing1.xml"_ustr);
+    CPPUNIT_ASSERT(pDrawing);
+    assertXPath(pDrawing, "//xdr:sp", "macro", u"[1]!Importieren");
+
+    xmlDocUniquePtr pExtLink = parseExport(u"xl/externalLinks/externalLink1.xml"_ustr);
+    CPPUNIT_ASSERT(pExtLink);
+    assertXPath(pExtLink, "/x:externalLink/x:externalBook/x:definedNames/x:definedName", "name",
+                u"Importieren");
+}
+
 CPPUNIT_TEST_FIXTURE(ScExportTest6, testQueryTableHeaders)
 {
     createScDoc("xlsx/TableEmptyHeaders.xlsx");

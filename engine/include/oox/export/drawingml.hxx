@@ -115,6 +115,8 @@ public:
     virtual OUString getTransformedString(const OUString& rURL) const;
 
     virtual bool isExternalURL(const OUString& rURL) const;
+
+    virtual sal_Int32 getExternalLinkIndex(const OUString& rUrl) const;
 };
 
 // Our rotation is counter-clockwise and is in 100ths of a degree.

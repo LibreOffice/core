@@ -202,6 +202,11 @@ bool URLTransformer::isExternalURL(const OUString& rURL) const
     return bExternal;
 }
 
+sal_Int32 URLTransformer::getExternalLinkIndex(const OUString& /*rUrl*/) const
+{
+    return 0;
+}
+
 GraphicExportCache& GraphicExportCache::get()
 {
     static GraphicExportCache staticGraphicExportCache;

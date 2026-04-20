@@ -129,6 +129,10 @@ public:
     /** Converts the passed formula to a macro name for a drawing shape. */
     OUString     importMacroName( std::u16string_view aFormulaString );
 
+    /** Extracts the external link URL and defined-name of an external reference */
+    bool importMacroExternalRef(std::u16string_view aFormulaString, OUString& rUrl,
+                                OUString& rName);
+
 private:
     ::std::unique_ptr< FormulaParserImpl > mxImpl;
 };

@@ -37,6 +37,8 @@
 #include <rtl/strbuf.hxx>
 #include <svx/svdobj.hxx>
 #include <drwlayer.hxx>
+#include <document.hxx>
+#include <externalrefmgr.hxx>
 #include <oox/core/filterbase.hxx>
 #include <oox/drawingml/connectorshapecontext.hxx>
 #include <oox/drawingml/graphicshapecontext.hxx>
@@ -140,7 +142,20 @@ GroupShapeContext::GroupShapeContext( const FragmentHandler2& rParent,
             ShapePtr xShape = std::make_shared<Shape>( rHelper, rAttribs, u"com.sun.star.drawing.CustomShape"_ustr );
             if( pxShape ) *pxShape = xShape;
 
-            xShape->setMacro(rAttribs.getXString(XML_macro, OUString()));
+            OUString aMacro = rAttribs.getXString(XML_macro, OUString());
+            if (!aMacro.isEmpty())
+            {
+                xShape->setMacro(aMacro);
+
+                OUString aExtUrl, aExtName;
+                if (rHelper.getFormulaParser().importMacroExternalRef(aMacro, aExtUrl, aExtName))
+                {
+                    xShape->setMacroExtUrl(aExtUrl);
+                    ScExternalRefManager* pRefMgr = rHelper.getScDocument().GetExternalRefManager();
+                    sal_uInt16 nFileId = pRefMgr->getExternalFileId(aExtUrl);
+                    pRefMgr->addDrawingMacros(nFileId, aExtName);
+                }
+            }
             xShape->setTextLinkAttr(rAttribs.getXString(XML_textlink, OUString()));
             xShape->setFLocksText(rAttribs.getBool(XML_fLocksText, true));  // default="true"
             xShape->setFPublished(rAttribs.getBool(XML_fPublished, false)); // default="false"

@@ -2597,6 +2597,21 @@ void XclExpLinkManagerImpl8::Save( XclExpStream& rStrm )
 
 void XclExpLinkManagerImpl8::SaveXml( XclExpXmlStream& rStrm )
 {
+    // Export external defined names used in drawing-shape macros
+    ScExternalRefManager* pRefMgr = GetRoot().GetDoc().GetExternalRefManager();
+    for (const auto& [nFileId, rNames] : pRefMgr->getDrawingMacros())
+    {
+        const OUString* pUrl = pRefMgr->getExternalFileName(nFileId);
+        if (!pUrl || pUrl->isEmpty())
+            continue;
+        for (const OUString& rName : rNames)
+        {
+            ScExternalRefCache::TokenArrayRef xEmpty
+                = std::make_shared<ScTokenArray>(GetRoot().GetDoc());
+            maSBBuffer.InsertExtName(*pUrl, rName, xEmpty);
+        }
+    }
+
     if (maSBBuffer.HasExternalReferences())
     {
         sax_fastparser::FSHelperPtr pWorkbook = rStrm.GetCurrentStream();
