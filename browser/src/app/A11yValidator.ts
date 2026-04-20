@@ -377,6 +377,43 @@ class A11yValidator {
 		return 0;
 	}
 
+	private checkVisibleLabelsForFormControls(container: HTMLElement): number {
+		const elements = container.querySelectorAll('input, select');
+		const excludedInputTypes = new Set([
+			'hidden',
+			'button',
+			'submit',
+			'reset',
+			'image',
+		]);
+		let errorCount = 0;
+
+		elements.forEach((el) => {
+			const htmlEl = el as HTMLElement;
+
+			if (!this.isVisible(htmlEl)) return;
+
+			if (el.tagName === 'INPUT') {
+				const inputType = (el as HTMLInputElement).type?.toLowerCase();
+				if (excludedInputTypes.has(inputType)) return;
+			}
+
+			const hasLabelFor = !!document.querySelector(`label[for="${htmlEl.id}"]`);
+			const hasAriaLabelledBy = htmlEl.hasAttribute('aria-labelledby');
+
+			if (!hasLabelFor && !hasAriaLabelledBy) {
+				console.error(
+					new A11yValidatorException(
+						`In sidebar at '${this.getElementPath(htmlEl)}': ${el.tagName.toLowerCase()} element '${htmlEl.id}' is missing a visible label. Sidebar form controls should have a <label> or aria-labelledby association, not just aria-label.`,
+					),
+				);
+				errorCount++;
+			}
+		});
+
+		return errorCount;
+	}
+
 	private checkDuplicateButtonLabels(container: HTMLElement): number {
 		const buttons = container.querySelectorAll('button[aria-labelledby]');
 		const labelMap = new Map<string, HTMLElement[]>();
@@ -545,7 +582,8 @@ class A11yValidator {
 
 		const container = currentSidebar.getContainer();
 		Util.ensureValue(container);
-		const errorCount = this.validateContainer(container);
+		let errorCount = this.validateContainer(container);
+		errorCount += this.checkVisibleLabelsForFormControls(container);
 
 		if (errorCount === 0) {
 			console.error('A11yValidator: sidebar passed all checks');
