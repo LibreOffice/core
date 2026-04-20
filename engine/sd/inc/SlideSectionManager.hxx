@@ -47,9 +47,6 @@ public:
     void
     SetSectionsFromPropertyValues(const css::uno::Sequence<css::beans::PropertyValue>& rSections);
 
-    /// Save sections to the document's "SlideSections" UNO property.
-    void SaveToDocument();
-
     sal_Int32 GetSectionCount() const;
     const SlideSection& GetSection(sal_Int32 nIndex) const;
 

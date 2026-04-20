@@ -9,18 +9,13 @@
 
 #include <SlideSectionManager.hxx>
 #include <drawdoc.hxx>
-#include <DrawDocShell.hxx>
 #include <sdpage.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/beans/XPropertySetInfo.hpp>
-#include <com/sun/star/frame/XModel.hpp>
 
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/xmltools.hxx>
-#include <sal/log.hxx>
 #include <svx/svdmodel.hxx>
 
 using namespace ::com::sun::star;
@@ -134,35 +129,6 @@ uno::Sequence<beans::PropertyValue> SlideSectionManager::GetSectionsAsPropertyVa
     return comphelper::containerToSequence(aSectionsList);
 }
 
-void SlideSectionManager::SaveToDocument()
-{
-    try
-    {
-        ::sd::DrawDocShell* pDocSh = mrDoc.GetDocSh();
-        if (!pDocSh)
-            return;
-
-        uno::Reference<frame::XModel> xModel(pDocSh->GetModel());
-        uno::Reference<beans::XPropertySet> xDocProps(xModel, uno::UNO_QUERY);
-        if (!xDocProps.is())
-            return;
-
-        uno::Reference<beans::XPropertySetInfo> xPropsInfo = xDocProps->getPropertySetInfo();
-        if (!xPropsInfo.is())
-            return;
-
-        uno::Sequence<beans::PropertyValue> aSections = GetSectionsAsPropertyValues();
-
-        // Write to the native "SlideSections" property
-        if (xPropsInfo->hasPropertyByName(u"SlideSections"_ustr))
-            xDocProps->setPropertyValue(u"SlideSections"_ustr, uno::Any(aSections));
-    }
-    catch (const uno::Exception&)
-    {
-        SAL_WARN("sd", "SlideSectionManager::SaveToDocument failed");
-    }
-}
-
 sal_Int32 SlideSectionManager::GetSectionCount() const { return maSections.size(); }
 
 const SlideSection& SlideSectionManager::GetSection(sal_Int32 nIndex) const
@@ -219,8 +185,6 @@ void SlideSectionManager::AddSection(sal_Int32 nStartSlideIndex, const OUString&
               [](const SlideSection& a, const SlideSection& b) {
                   return a.mnStartIndex < b.mnStartIndex;
               });
-
-    SaveToDocument();
 }
 
 void SlideSectionManager::RemoveSection(sal_Int32 nSectionIndex)
@@ -229,7 +193,6 @@ void SlideSectionManager::RemoveSection(sal_Int32 nSectionIndex)
         return;
 
     maSections.erase(maSections.begin() + nSectionIndex);
-    SaveToDocument();
 }
 
 void SlideSectionManager::RenameSection(sal_Int32 nSectionIndex, const OUString& rNewName)
@@ -238,7 +201,6 @@ void SlideSectionManager::RenameSection(sal_Int32 nSectionIndex, const OUString&
         return;
 
     maSections[nSectionIndex].maName = rNewName;
-    SaveToDocument();
 }
 
 void SlideSectionManager::MoveSection(sal_Int32 nOldIndex, sal_Int32 nNewIndex)
@@ -324,8 +286,6 @@ void SlideSectionManager::MoveSection(sal_Int32 nOldIndex, sal_Int32 nNewIndex)
         maSections[i].mnStartIndex = nCurrentIdx;
         nCurrentIdx += aSlideCounts[i];
     }
-
-    SaveToDocument();
 }
 
 std::vector<SlideSection> SlideSectionManager::GetSectionsSnapshot() const { return maSections; }
@@ -333,7 +293,6 @@ std::vector<SlideSection> SlideSectionManager::GetSectionsSnapshot() const { ret
 void SlideSectionManager::RestoreSectionsSnapshot(const std::vector<SlideSection>& rSections)
 {
     maSections = rSections;
-    SaveToDocument();
 
     // Broadcast so listeners (e.g. the slide sorter) repaint section headers.
     SdrPage* pPage = mrDoc.GetSdPage(0, PageKind::Standard);
