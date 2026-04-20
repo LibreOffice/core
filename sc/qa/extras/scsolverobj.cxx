@@ -35,8 +35,10 @@ public:
 
     virtual void setUp() override;
     void testXSolverSettings();
+#ifdef ENABLE_LPSOLVE
     void testCellAddress(const table::CellAddress& rExpected, const uno::Any& rActual);
     void testCellRangeAddress(const uno::Any& rExpected, const uno::Any& rActual);
+#endif
 
     CPPUNIT_TEST_SUITE(ScSolverSettingsObj);
     CPPUNIT_TEST(testXSolverSettings);
@@ -48,6 +50,7 @@ ScSolverSettingsObj::ScSolverSettingsObj()
 {
 }
 
+#ifdef ENABLE_LPSOLVE
 void ScSolverSettingsObj::testCellAddress(const table::CellAddress& rExpected,
                                           const uno::Any& rActual)
 {
@@ -70,6 +73,7 @@ void ScSolverSettingsObj::testCellRangeAddress(const uno::Any& rExpected, const 
     CPPUNIT_ASSERT_EQUAL(aExpectedAddress.EndRow, aActualAddress.EndRow);
     CPPUNIT_ASSERT_EQUAL(aExpectedAddress.EndColumn, aActualAddress.EndColumn);
 }
+#endif
 
 // Creates a model using the XSolverSettings API checks if it is accessible via the API
 void ScSolverSettingsObj::testXSolverSettings()
