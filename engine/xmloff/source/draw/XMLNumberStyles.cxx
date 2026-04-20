@@ -580,20 +580,11 @@ void SdXMLNumberFormatMemberImportContext::characters( const OUString& rChars )
 
 SdXMLNumberFormatImportContext::SdXMLNumberFormatImportContext( SdXMLImport& rImport, sal_Int32 nElement, SvXMLNumImpData* pNewData, SvXMLStylesTokens nNewType, const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList, SvXMLStylesContext& rStyles)
 :   SvXMLNumFormatContext(rImport, nElement, pNewData, nNewType, xAttrList, rStyles),
-    mbAutomatic( false ),
     mnElements{},
     mnIndex(0),
     mnKey( -1 )
 {
     mbTimeStyle = (nElement & TOKEN_MASK) == XML_TIME_STYLE;
-
-    for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
-    {
-        if( aIter.getToken() == XML_ELEMENT(NUMBER, XML_AUTOMATIC_ORDER) )
-                mbAutomatic = IsXMLToken( aIter, XML_TRUE );
-        else
-            XMLOFF_WARN_UNKNOWN("xmloff", aIter);
-    }
 }
 
 SdXMLNumberFormatImportContext::~SdXMLNumberFormatImportContext()
@@ -623,7 +614,7 @@ void SdXMLNumberFormatImportContext::add( std::u16string_view rNumberStyle, bool
 
 bool SdXMLNumberFormatImportContext::compareStyle( const SdXMLFixedDataStyle* pStyle, sal_Int16& nIndex ) const
 {
-    if( (pStyle->mbAutomatic != mbAutomatic) && (nIndex == 0))
+    if( (pStyle->mbAutomatic != IsAutoOrder()) && (nIndex == 0))
         return false;
 
     sal_Int16 nCompareIndex;
