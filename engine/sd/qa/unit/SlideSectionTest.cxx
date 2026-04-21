@@ -16,8 +16,18 @@
 #include <DrawDocShell.hxx>
 #include <sfx2/objsh.hxx>
 #include <svl/undo.hxx>
+#include <sdpage.hxx>
 
 using namespace css;
+
+// Size + membership implies set equality, and avoids needing an ostream
+// overload for std::set<SdPage*> purely to satisfy CPPUNIT_ASSERT_EQUAL.
+static void assertSameSlides(const std::set<SdPage*>& rExpected, const std::set<SdPage*>& rActual)
+{
+    CPPUNIT_ASSERT_EQUAL(rExpected.size(), rActual.size());
+    for (SdPage* p : rExpected)
+        CPPUNIT_ASSERT(rActual.contains(p));
+}
 
 class SlideSectionTest : public SdModelTestBase
 {
@@ -49,6 +59,31 @@ public:
     }
 
     sd::SlideSectionManager& getSectionManager() { return getDoc()->GetSectionManager(); }
+
+    // Collect pointers to the slides currently belonging to a section
+    // (i.e. the pages between this section's start and the next section's start).
+    // Pointers are stable across MoveSection — MovePages() reorders the page
+    // vector in place — so they are a reliable identity check for "the same
+    // slides are still in this section."
+    //
+    // Returned as std::set because MovePages() iterates selected pages one by
+    // one and does not guarantee their relative order is preserved across the
+    // move. What we care about is membership: the same *set* of pages must be
+    // under the section after the move.
+    std::set<SdPage*> getSectionSlides(sal_Int32 nSectionIndex)
+    {
+        SdDrawDocument* pDoc = getDoc();
+        sd::SlideSectionManager& rMgr = pDoc->GetSectionManager();
+        const sal_Int32 nStart = rMgr.GetSection(nSectionIndex).mnStartIndex;
+        const sal_Int32 nEnd
+            = (nSectionIndex + 1 < rMgr.GetSectionCount())
+                  ? rMgr.GetSection(nSectionIndex + 1).mnStartIndex
+                  : static_cast<sal_Int32>(pDoc->GetSdPageCount(PageKind::Standard));
+        std::set<SdPage*> aPages;
+        for (sal_Int32 i = nStart; i < nEnd; ++i)
+            aPages.insert(pDoc->GetSdPage(static_cast<sal_uInt16>(i), PageKind::Standard));
+        return aPages;
+    }
 };
 
 // Verify adding a section mid-deck splits the slide distribution correctly in PPTX
@@ -159,13 +194,25 @@ CPPUNIT_TEST_FIXTURE(SlideSectionTest, testRenameSectionODP)
     assertXPath(pXmlDoc, sPath + "/loext:section[3]", "name", u"Section-3");
 }
 
-// Verify moving a section up reorders both names and slide counts in PPTX
+// Verify moving a section up reorders names and slide counts, and that the
+// individual slides travel with their section (the exact set of pages in
+// Section-2 before the move is exactly the set in Section-2 after the move).
 CPPUNIT_TEST_FIXTURE(SlideSectionTest, testMoveSectionUpPPTX)
 {
     createSdImpressDoc("pptx/slide-section-test.pptx");
 
+    // Capture which slides each section owns before the move.
+    const auto aSection1Before = getSectionSlides(0);
+    const auto aSection2Before = getSectionSlides(1);
+    const auto aSection3Before = getSectionSlides(2);
+
     sd::SlideSectionManager& rMgr = getSectionManager();
     rMgr.MoveSection(1, 0);
+
+    // Section-2 is now at index 0 but must contain the same slides as before.
+    assertSameSlides(aSection2Before, getSectionSlides(0));
+    assertSameSlides(aSection1Before, getSectionSlides(1));
+    assertSameSlides(aSection3Before, getSectionSlides(2));
 
     save(TestFilter::PPTX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/presentation.xml"_ustr);
@@ -180,15 +227,25 @@ CPPUNIT_TEST_FIXTURE(SlideSectionTest, testMoveSectionUpPPTX)
     assertXPath(pXmlDoc, sPath + "/p14:section[3]/p14:sldIdLst/p14:sldId", 2);
 }
 
-// Verify moving a section up reorders both names and slide counts in ODP
+// Verify moving a section up reorders names and slide counts, and that the
+// individual slides travel with their section in ODP.
 CPPUNIT_TEST_FIXTURE(SlideSectionTest, testMoveSectionUpODP)
 {
     createSdImpressDoc("pptx/slide-section-test.pptx");
     skipValidation();
     saveAndReload(TestFilter::ODP);
 
+    const auto aSection1Before = getSectionSlides(0);
+    const auto aSection2Before = getSectionSlides(1);
+    const auto aSection3Before = getSectionSlides(2);
+
     sd::SlideSectionManager& rMgr = getSectionManager();
     rMgr.MoveSection(2, 1);
+
+    // Section-3 is now at index 1 but must contain the same slides.
+    assertSameSlides(aSection1Before, getSectionSlides(0));
+    assertSameSlides(aSection3Before, getSectionSlides(1));
+    assertSameSlides(aSection2Before, getSectionSlides(2));
 
     save(TestFilter::ODP);
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
@@ -204,13 +261,23 @@ CPPUNIT_TEST_FIXTURE(SlideSectionTest, testMoveSectionUpODP)
     assertXPath(pXmlDoc, sPath + "/loext:section[3]/loext:section-slide", 7);
 }
 
-// Verify moving a section down reorders both names and slide counts in PPTX
+// Verify moving a section down reorders names and slide counts, and that
+// the individual slides travel with their section in PPTX.
 CPPUNIT_TEST_FIXTURE(SlideSectionTest, testMoveSectionDownPPTX)
 {
     createSdImpressDoc("pptx/slide-section-test.pptx");
 
+    const auto aSection1Before = getSectionSlides(0);
+    const auto aSection2Before = getSectionSlides(1);
+    const auto aSection3Before = getSectionSlides(2);
+
     sd::SlideSectionManager& rMgr = getSectionManager();
     rMgr.MoveSection(0, 1);
+
+    // Section-1 is now at index 1 with the same slides; Section-2 at index 0.
+    assertSameSlides(aSection2Before, getSectionSlides(0));
+    assertSameSlides(aSection1Before, getSectionSlides(1));
+    assertSameSlides(aSection3Before, getSectionSlides(2));
 
     save(TestFilter::PPTX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/presentation.xml"_ustr);
@@ -225,15 +292,24 @@ CPPUNIT_TEST_FIXTURE(SlideSectionTest, testMoveSectionDownPPTX)
     assertXPath(pXmlDoc, sPath + "/p14:section[3]/p14:sldIdLst/p14:sldId", 2);
 }
 
-// Verify moving a section down reorders both names and slide counts in ODP
+// Verify moving a section down reorders names and slide counts, and that
+// the individual slides travel with their section in ODP.
 CPPUNIT_TEST_FIXTURE(SlideSectionTest, testMoveSectionDownODP)
 {
     createSdImpressDoc("pptx/slide-section-test.pptx");
     skipValidation();
     saveAndReload(TestFilter::ODP);
 
+    const auto aSection1Before = getSectionSlides(0);
+    const auto aSection2Before = getSectionSlides(1);
+    const auto aSection3Before = getSectionSlides(2);
+
     sd::SlideSectionManager& rMgr = getSectionManager();
     rMgr.MoveSection(0, 1);
+
+    assertSameSlides(aSection2Before, getSectionSlides(0));
+    assertSameSlides(aSection1Before, getSectionSlides(1));
+    assertSameSlides(aSection3Before, getSectionSlides(2));
 
     save(TestFilter::ODP);
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);

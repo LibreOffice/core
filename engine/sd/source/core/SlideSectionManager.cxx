@@ -253,11 +253,11 @@ void SlideSectionManager::MoveSection(sal_Int32 nOldIndex, sal_Int32 nNewIndex)
     else
     {
         // Moving down: place after the target section's last slide
+        // MovePages() interprets nTargetPage as a 0-based standard-page index
+        // in the current ordering (it does NOT pre-remove the selected pages),
+        // so we pass the index of the target section's last slide directly.
         sal_Int32 nTargetEnd = maSections[nNewIndex].mnStartIndex + aSlideCounts[nNewIndex];
-        // MoveSelectedPages removes the selected pages first, then inserts.
-        // So the target index shifts down by the number of source pages
-        // that were before the target position.
-        nTargetPage = static_cast<sal_uInt16>(nTargetEnd - nSrcCount - 1);
+        nTargetPage = static_cast<sal_uInt16>(nTargetEnd - 1);
     }
 
     // 5. Move the pages in the document
