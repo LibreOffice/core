@@ -6182,34 +6182,6 @@
           </info>
           <value>0</value>
         </prop>
-        <prop oor:name="WWWR" oor:type="xs:long" oor:nillable="false">
-          <info>
-            <desc>Specifies several flags for exporting (for debugging).</desc>
-          </info>
-          <constraints>
-            <enumeration oor:value="0">
-              <info>
-                <desc>Off</desc>
-              </info>
-            </enumeration>
-            <enumeration oor:value="1">
-              <info>
-                <desc>WWFL_ULSPACE_LIKE_SWG</desc>
-              </info>
-            </enumeration>
-            <enumeration oor:value="128">
-              <info>
-                <desc>WWFL_NO_GRAF</desc>
-              </info>
-            </enumeration>
-            <enumeration oor:value="131072">
-              <info>
-                <desc>WWFL_NO_OLE</desc>
-              </info>
-            </enumeration>
-          </constraints>
-          <value>0</value>
-        </prop>
         <prop oor:name="RegardHindiDigits" oor:type="xs:long" oor:nillable="false">
           <info>
             <desc>If true yields to digits marked as CTL script to be imported as Hindi digits.</desc>
