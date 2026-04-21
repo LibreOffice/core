@@ -350,7 +350,6 @@ bool includeProject(std::string_view rProject) {
         "sysui",
         "uui",
         "vcl",
-        "wizards",
         "writerperfect",
         "xmlsecurity" };
     return std::find(std::begin(projects), std::end(projects), rProject) != std::end(projects);
