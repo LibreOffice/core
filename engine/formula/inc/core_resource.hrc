@@ -479,6 +479,7 @@ const std::pair<const char *, int> RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF[] =
     { "#NAME?" , SC_OPCODE_ERROR_NAME },
     { "#NUM!" , SC_OPCODE_ERROR_NUM },
     { "#N/A" , SC_OPCODE_ERROR_NA },
+    { "#SPILL!" , SC_OPCODE_ERROR_SPILL },
     /* END defined ERROR.TYPE() values. */
     { "COM.MICROSOFT.FILTERXML" , SC_OPCODE_FILTERXML },
     { "COM.MICROSOFT.WEBSERVICE" , SC_OPCODE_WEBSERVICE },
@@ -949,6 +950,7 @@ const std::pair<const char *, int> RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML[] =
     { "#NAME?" , SC_OPCODE_ERROR_NAME },
     { "#NUM!" , SC_OPCODE_ERROR_NUM },
     { "#N/A" , SC_OPCODE_ERROR_NA },
+    { "#SPILL!" , SC_OPCODE_ERROR_SPILL },
     /* END defined ERROR.TYPE() values. */
     { "_xlfn.FILTERXML" , SC_OPCODE_FILTERXML },
     { "_xlfn.WEBSERVICE" , SC_OPCODE_WEBSERVICE },
@@ -1425,6 +1427,7 @@ const std::pair<const char *, int> RID_STRLIST_FUNCTION_NAMES_ENGLISH_PODF[] =
     { "#NAME?" , SC_OPCODE_ERROR_NAME },
     { "#NUM!" , SC_OPCODE_ERROR_NUM },
     { "#N/A" , SC_OPCODE_ERROR_NA },
+    { "#SPILL!" , SC_OPCODE_ERROR_SPILL },
     /* END defined ERROR.TYPE() values. */
     { "FILTERXML" , SC_OPCODE_FILTERXML },
     { "WEBSERVICE" , SC_OPCODE_WEBSERVICE },
@@ -1898,6 +1901,7 @@ const std::pair<const char *, int> RID_STRLIST_FUNCTION_NAMES_ENGLISH_API[] =
     { "#NAME?" , SC_OPCODE_ERROR_NAME },
     { "#NUM!" , SC_OPCODE_ERROR_NUM },
     { "#N/A" , SC_OPCODE_ERROR_NA },
+    { "#SPILL!" , SC_OPCODE_ERROR_SPILL },
     /* END defined ERROR.TYPE() values. */
     { "FILTERXML" , SC_OPCODE_FILTERXML },
     { "WEBSERVICE" , SC_OPCODE_WEBSERVICE },
@@ -2370,6 +2374,7 @@ const std::pair<const char *, int> RID_STRLIST_FUNCTION_NAMES_ENGLISH[] =
     { "#NAME?" , SC_OPCODE_ERROR_NAME },
     { "#NUM!" , SC_OPCODE_ERROR_NUM },
     { "#N/A" , SC_OPCODE_ERROR_NA },
+    { "#SPILL!" , SC_OPCODE_ERROR_SPILL },
     /* END defined ERROR.TYPE() values. */
     { "FILTERXML" , SC_OPCODE_FILTERXML },
     { "WEBSERVICE" , SC_OPCODE_WEBSERVICE },
@@ -2836,6 +2841,8 @@ const std::pair<TranslateId, int> RID_STRLIST_FUNCTION_NAMES[] =
     /* ERROR.TYPE( #N/A ) == 7 */
     /* L10n: preserve the leading '#' hash character in translations. */
     { NC_("RID_STRLIST_FUNCTION_NAMES", "#N/A") , SC_OPCODE_ERROR_NA },
+    /* L10n: preserve the leading '#' hash character and trailing '!' in translations. */
+    { NC_("RID_STRLIST_FUNCTION_NAMES", "#SPILL!") , SC_OPCODE_ERROR_SPILL },
     /* END defined ERROR.TYPE() values. */
 
     { NC_("RID_STRLIST_FUNCTION_NAMES", "FILTERXML") , SC_OPCODE_FILTERXML },

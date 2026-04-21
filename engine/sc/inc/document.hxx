@@ -1275,7 +1275,8 @@ public:
                                         const ScMarkData& rMark,
                                         const OUString& rFormula,
                                         const ScTokenArray* p = nullptr,
-                                        const formula::FormulaGrammar::Grammar = formula::FormulaGrammar::GRAM_DEFAULT );
+                                        const formula::FormulaGrammar::Grammar = formula::FormulaGrammar::GRAM_DEFAULT,
+                                        bool bCheckForSpill = false);
     SC_DLLPUBLIC void InsertTableOp(const ScTabOpParam& rParam,   // multi-operation
                                     SCCOL nCol1, SCROW nRow1,
                                     SCCOL nCol2, SCROW nRow2, const ScMarkData& rMark);

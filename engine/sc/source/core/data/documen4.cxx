@@ -256,7 +256,8 @@ void ScDocument::InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
                                      const ScMarkData& rMark,
                                      const OUString& rFormula,
                                      const ScTokenArray* pArr,
-                                     const formula::FormulaGrammar::Grammar eGram )
+                                     const formula::FormulaGrammar::Grammar eGram,
+                                     bool bCheckForSpill)
 {
     PutInOrder(nCol1, nCol2);
     PutInOrder(nRow1, nRow2);
@@ -306,6 +307,38 @@ void ScDocument::InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
                 nCol1, nRow1,
                 new ScFormulaCell(
                     *pCell, *this, ScAddress(nCol1, nRow1, rTab), ScCloneFlags::StartListening));
+    }
+
+    // Check for spill: if any non-origin cell in the target range is non-empty,
+    // set the spill error on the master cell and don't create reference cells.
+    if (bCheckForSpill && (nCol2 > nCol1 || nRow2 > nRow1))
+    {
+        bool bSpillBlocked = false;
+        for (const SCTAB& nTab : rMark)
+        {
+            if (nTab >= nMax)
+                break;
+            if (!FetchTable(nTab))
+                continue;
+            for (SCCOL nCol = nCol1; nCol <= nCol2 && !bSpillBlocked; ++nCol)
+            {
+                for (SCROW nRow = nRow1; nRow <= nRow2 && !bSpillBlocked; ++nRow)
+                {
+                    if (nCol == nCol1 && nRow == nRow1)
+                        continue; // skip the origin cell
+                    if (HasData(nCol, nRow, nTab))
+                        bSpillBlocked = true;
+                }
+            }
+        }
+        if (bSpillBlocked)
+        {
+            // Set spill error on the master cell; don't create reference cells.
+            // The master cell keeps its intended dimensions so the spill range
+            // can be resolved if the blocking cells are later cleared.
+            pCell->SetErrCode(FormulaError::Spill);
+            return;
+        }
     }
 
     ScSingleRefData aRefData;

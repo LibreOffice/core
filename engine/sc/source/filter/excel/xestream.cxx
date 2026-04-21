@@ -662,6 +662,7 @@ static const char* lcl_GetErrorString( FormulaError nScErrCode )
         case EXC_ERR_REF:   return "#REF!";
         case EXC_ERR_NAME:  return "#NAME?";
         case EXC_ERR_NUM:   return "#NUM!";
+        case EXC_ERR_SPILL: return "#SPILL!";
         case EXC_ERR_NA:
         default:            return "#N/A";
     }

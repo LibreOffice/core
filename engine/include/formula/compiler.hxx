@@ -73,7 +73,8 @@
 #define SC_OPCODE_ERROR_NAME         45
 #define SC_OPCODE_ERROR_NUM          46
 #define SC_OPCODE_ERROR_NA           47
-#define SC_OPCODE_STOP_ERRORS        48
+#define SC_OPCODE_ERROR_SPILL        48
+#define SC_OPCODE_STOP_ERRORS        49
 
 /*** Binary operators ***/
 #define SC_OPCODE_START_BIN_OP       50

@@ -79,6 +79,7 @@ enum OpCode : sal_uInt16
         ocErrName           = SC_OPCODE_ERROR_NAME,
         ocErrNum            = SC_OPCODE_ERROR_NUM,
         ocErrNA             = SC_OPCODE_ERROR_NA,
+        ocErrSpill          = SC_OPCODE_ERROR_SPILL,
     // Binary operators
         ocAdd               = SC_OPCODE_ADD,
         ocSub               = SC_OPCODE_SUB,
@@ -593,6 +594,7 @@ inline std::string OpCodeEnumToString(OpCode eCode)
     case ocErrName: return "ErrName";
     case ocErrNum: return "ErrNum";
     case ocErrNA: return "ErrNA";
+    case ocErrSpill: return "ErrSpill";
     case ocAdd: return "Add";
     case ocSub: return "Sub";
     case ocMul: return "Mul";

@@ -11,6 +11,7 @@
 #include <clipparam.hxx>
 #include <scopetools.hxx>
 #include <formulacell.hxx>
+#include <global.hxx>
 #include <docfunc.hxx>
 #include <tokenstringcontext.hxx>
 #include <dbdata.hxx>
@@ -4753,6 +4754,305 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testVertQueryEmptyCell)
     m_pDoc->SetFormula(ScAddress(3, 1, 0), "=COUNTIFS($B1:$B10;\">0\";A1:A10;\"=\")",
                        formula::FormulaGrammar::GRAM_NATIVE_UI);
     CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(3, 1, 0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TestFormula2, testSpillErrorBasic)
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
+    aMark.SelectOneTable(0);
+
+    // Put data in A2 that will block the spill range of a matrix formula.
+    m_pDoc->SetValue(ScAddress(0, 1, 0), 99.0);
+
+    // Insert a matrix formula in A1:A3 with spill check enabled.
+    // A2 contains data, so this should produce a spill error on the origin cell A1.
+    m_pDoc->InsertMatrixFormula(0, 0, 0, 2, aMark, u"=LEN(B1:B3)"_ustr, nullptr,
+                                formula::FormulaGrammar::GRAM_DEFAULT, true);
+
+    ScFormulaCell* pFormulaCell = m_pDoc->GetFormulaCell(ScAddress(0, 0, 0));
+    CPPUNIT_ASSERT_MESSAGE("A1 should contain a formula cell.", pFormulaCell != nullptr);
+
+    // The origin cell should have the spill error.
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("A1 should have a spill error.", sal_Int32(FormulaError::Spill),
+                                 sal_Int32(pFormulaCell->GetErrCode()));
+
+    // Cell should display a spill error.
+    CPPUNIT_ASSERT_EQUAL(u"#SPILL!"_ustr, m_pDoc->GetString(ScAddress(0, 0, 0)));
+
+    // The master cell retains its intended dimensions (for future spill resolution).
+    SCCOL nCols = -1;
+    SCROW nRows = -1;
+    pFormulaCell->GetMatColsRows(nCols, nRows);
+    CPPUNIT_ASSERT_EQUAL(SCCOL(1), nCols);
+    CPPUNIT_ASSERT_EQUAL(SCROW(3), nRows);
+
+    // The blocking cell A2 should still contain its original value.
+    CPPUNIT_ASSERT_EQUAL(99.0, m_pDoc->GetValue(ScAddress(0, 1, 0)));
+
+    // A3 should remain empty
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_NONE, m_pDoc->GetCellType(ScAddress(0, 2, 0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TestFormula2, testSpillErrorNoBlockingData)
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
+    aMark.SelectOneTable(0);
+
+    // The target range A1:A3 is completely empty - no spill error should occur.
+    m_pDoc->InsertMatrixFormula(0, 0, 0, 2, aMark, u"=LEN(B1:B3)"_ustr, nullptr,
+                                formula::FormulaGrammar::GRAM_DEFAULT, true);
+
+    ScFormulaCell* pFormulaCell = m_pDoc->GetFormulaCell(ScAddress(0, 0, 0));
+    CPPUNIT_ASSERT_MESSAGE("A1 should contain a formula cell.", pFormulaCell != nullptr);
+
+    // No error - range was empty, so the matrix expanded normally.
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("A1 should have no error.", sal_Int32(FormulaError::NONE),
+                                 sal_Int32(pFormulaCell->GetErrCode()));
+
+    // Should be a 1x3 matrix.
+    SCCOL nCols = -1;
+    SCROW nRows = -1;
+    pFormulaCell->GetMatColsRows(nCols, nRows);
+    CPPUNIT_ASSERT_EQUAL(SCCOL(1), nCols);
+    CPPUNIT_ASSERT_EQUAL(SCROW(3), nRows);
+
+    // A2 and A3 should be matrix reference cells.
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_FORMULA, m_pDoc->GetCellType(ScAddress(0, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_FORMULA, m_pDoc->GetCellType(ScAddress(0, 2, 0)));
+
+    const ScFormulaCell* pRef = m_pDoc->GetFormulaCell(ScAddress(0, 1, 0));
+    CPPUNIT_ASSERT_MESSAGE("A2 should contain a formula cell.", pRef != nullptr);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("A2 should be a matrix reference cell.", ScMatrixMode::Reference,
+                                 pRef->GetMatrixFlag());
+
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TestFormula2, testSpillErrorMultiColumn)
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
+    aMark.SelectOneTable(0);
+
+    // Place blocking data at B2 (inside a 2x2 matrix range A1:B2).
+    m_pDoc->SetString(ScAddress(1, 1, 0), u"blocker"_ustr);
+
+    // Insert a 2x2 matrix formula in A1:B2 with spill check.
+    m_pDoc->InsertMatrixFormula(0, 0, 1, 1, aMark, u"=LEN(C1:D2)"_ustr, nullptr,
+                                formula::FormulaGrammar::GRAM_DEFAULT, true);
+
+    ScFormulaCell* pFormulaCell = m_pDoc->GetFormulaCell(ScAddress(0, 0, 0));
+    CPPUNIT_ASSERT_MESSAGE("A1 should contain a formula cell.", pFormulaCell != nullptr);
+
+    // Should be a spill error because B2 has data.
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("A1 should have a spill error.", sal_Int32(FormulaError::Spill),
+                                 sal_Int32(pFormulaCell->GetErrCode()));
+
+    // The blocking cell B2 should still contain its original string.
+    CPPUNIT_ASSERT_EQUAL(u"blocker"_ustr, m_pDoc->GetString(ScAddress(1, 1, 0)));
+
+    // A2, B1 should remain empty - no reference cells created.
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_NONE, m_pDoc->GetCellType(ScAddress(0, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_NONE, m_pDoc->GetCellType(ScAddress(1, 0, 0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TestFormula2, testSpillErrorDisabledByDefault)
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
+    aMark.SelectOneTable(0);
+
+    // Place data in A2 that would block a spill.
+    m_pDoc->SetValue(ScAddress(0, 1, 0), 42.0);
+
+    // Insert a matrix formula without spill check.
+    // This should succeed and overwrite A2.
+    m_pDoc->InsertMatrixFormula(0, 0, 0, 2, aMark, u"=LEN(B1:B3)"_ustr);
+
+    ScFormulaCell* pFormulaCell = m_pDoc->GetFormulaCell(ScAddress(0, 0, 0));
+    CPPUNIT_ASSERT_MESSAGE("A1 should contain a formula cell.", pFormulaCell != nullptr);
+
+    // No spill error - overwrites existing cells.
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("A1 should have no error.", sal_Int32(FormulaError::NONE),
+                                 sal_Int32(pFormulaCell->GetErrCode()));
+
+    // Should be a 1x3 matrix.
+    SCCOL nCols = -1;
+    SCROW nRows = -1;
+    pFormulaCell->GetMatColsRows(nCols, nRows);
+    CPPUNIT_ASSERT_EQUAL(SCCOL(1), nCols);
+    CPPUNIT_ASSERT_EQUAL(SCROW(3), nRows);
+
+    // A2 should now be a matrix reference cell - old value was overwritten.
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_FORMULA, m_pDoc->GetCellType(ScAddress(0, 1, 0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TestFormula2, testSpillErrorSingleCell)
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
+    aMark.SelectOneTable(0);
+
+    // A single-cell matrix formula should never produce a spill error,
+    // because there's nothing to spill into.
+    m_pDoc->SetValue(ScAddress(0, 1, 0), 99.0); // A2 has data, but range is only A1.
+    m_pDoc->InsertMatrixFormula(0, 0, 0, 0, aMark, u"=SUM(B1:B3)"_ustr, nullptr,
+                                formula::FormulaGrammar::GRAM_DEFAULT, true);
+
+    ScFormulaCell* pFormulaCell = m_pDoc->GetFormulaCell(ScAddress(0, 0, 0));
+    CPPUNIT_ASSERT_MESSAGE("A1 should contain a formula cell.", pFormulaCell != nullptr);
+
+    // No spill error for a 1x1 matrix.
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Single-cell matrix should not produce a spill error.",
+                                 sal_Int32(FormulaError::NONE),
+                                 sal_Int32(pFormulaCell->GetErrCode()));
+
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TestFormula2, testSpillErrorAutoExpand)
+{
+    // Test that auto-expanding array formulas produce a spill error
+    // when the target range has non-empty cells.
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+
+    // Source data in B1:B3.
+    m_pDoc->SetValue(ScAddress(1, 0, 0), 10.0);
+    m_pDoc->SetValue(ScAddress(1, 1, 0), 20.0);
+    m_pDoc->SetValue(ScAddress(1, 2, 0), 30.0);
+
+    // Place a blocker in A2
+    m_pDoc->SetString(ScAddress(0, 1, 0), u"blocker"_ustr);
+
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
+    aMark.SelectOneTable(0);
+
+    // Enter a formula via ScDocFunc::EnterMatrix simulating the auto-expand path
+    ScRange aRange(0, 0, 0, 0, 2, 0); // A1:A3
+    ScDocFunc& rDocFunc = m_xDocShell->GetDocFunc();
+    rDocFunc.EnterMatrix(aRange, &aMark, nullptr, u"=B1:B3"_ustr, true, false, OUString(),
+                         formula::FormulaGrammar::GRAM_DEFAULT, true);
+
+    ScFormulaCell* pFormulaCell = m_pDoc->GetFormulaCell(ScAddress(0, 0, 0));
+    CPPUNIT_ASSERT_MESSAGE("A1 should contain a formula cell.", pFormulaCell != nullptr);
+
+    // Should be a spill error - blocker in A2.
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("A1 should have a spill error.", sal_Int32(FormulaError::Spill),
+                                 sal_Int32(pFormulaCell->GetErrCode()));
+    CPPUNIT_ASSERT_EQUAL(u"#SPILL!"_ustr, m_pDoc->GetString(ScAddress(0, 0, 0)));
+
+    // Blocker should still be there.
+    CPPUNIT_ASSERT_EQUAL(u"blocker"_ustr, m_pDoc->GetString(ScAddress(0, 1, 0)));
+
+    // A3 should remain empty.
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_NONE, m_pDoc->GetCellType(ScAddress(0, 2, 0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TestFormula2, testSpillErrorAutoExpandEmpty)
+{
+    // Test that auto-expanding array formulas succeed when the range is empty.
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+
+    // Source data in B1:B3.
+    m_pDoc->SetValue(ScAddress(1, 0, 0), 10.0);
+    m_pDoc->SetValue(ScAddress(1, 1, 0), 20.0);
+    m_pDoc->SetValue(ScAddress(1, 2, 0), 30.0);
+
+    // A1:A3 is empty - auto-expand should work.
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
+    aMark.SelectOneTable(0);
+
+    ScRange aRange(0, 0, 0, 0, 2, 0); // A1:A3
+    ScDocFunc& rDocFunc = m_xDocShell->GetDocFunc();
+    rDocFunc.EnterMatrix(aRange, &aMark, nullptr, u"=B1:B3"_ustr, true, false, OUString(),
+                         formula::FormulaGrammar::GRAM_DEFAULT, true);
+
+    ScFormulaCell* pFormulaCell = m_pDoc->GetFormulaCell(ScAddress(0, 0, 0));
+    CPPUNIT_ASSERT_MESSAGE("A1 should contain a formula cell.", pFormulaCell != nullptr);
+
+    // No spill error - range was empty.
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("A1 should have no error.", sal_Int32(FormulaError::NONE),
+                                 sal_Int32(pFormulaCell->GetErrCode()));
+
+    // The formula should have spilled into A2 and A3.
+    CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(20.0, m_pDoc->GetValue(ScAddress(0, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(30.0, m_pDoc->GetValue(ScAddress(0, 2, 0)));
+
+    // A2 should be a matrix reference cell.
+    const ScFormulaCell* pRef = m_pDoc->GetFormulaCell(ScAddress(0, 1, 0));
+    CPPUNIT_ASSERT_MESSAGE("A2 should be a formula cell.", pRef != nullptr);
+    CPPUNIT_ASSERT_EQUAL(ScMatrixMode::Reference, pRef->GetMatrixFlag());
+
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TestFormula2, testSpillErrorOverwrites)
+{
+    // Test that no check for spill still overwrites
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+
+    m_pDoc->SetValue(ScAddress(1, 0, 0), 10.0);
+    m_pDoc->SetValue(ScAddress(1, 1, 0), 20.0);
+    m_pDoc->SetValue(ScAddress(1, 2, 0), 30.0);
+
+    // Place a blocker.
+    m_pDoc->SetString(ScAddress(0, 1, 0), u"blocker"_ustr);
+
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
+    aMark.SelectOneTable(0);
+
+    ScRange aRange(0, 0, 0, 0, 2, 0); // A1:A3
+    ScDocFunc& rDocFunc = m_xDocShell->GetDocFunc();
+    // bCheckForSpill=false
+    rDocFunc.EnterMatrix(aRange, &aMark, nullptr, u"=B1:B3"_ustr, true, false, OUString(),
+                         formula::FormulaGrammar::GRAM_DEFAULT, false);
+
+    ScFormulaCell* pFormulaCell = m_pDoc->GetFormulaCell(ScAddress(0, 0, 0));
+    CPPUNIT_ASSERT_MESSAGE("A1 should contain a formula cell.", pFormulaCell != nullptr);
+
+    // No spill error
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("CSE should not produce a spill error.",
+                                 sal_Int32(FormulaError::NONE),
+                                 sal_Int32(pFormulaCell->GetErrCode()));
+
+    // The blocker should have been overwritten.
+    CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(20.0, m_pDoc->GetValue(ScAddress(0, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(30.0, m_pDoc->GetValue(ScAddress(0, 2, 0)));
 
     m_pDoc->DeleteTab(0);
 }

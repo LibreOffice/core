@@ -87,6 +87,8 @@ enum class FormulaError : sal_uInt16
 // Interpreter: signal result not available because updating links is not
 // allowed (yet) and tell to try hybrid string as result.
     LinkFormulaNeedingCheck = 540,
+// Array/matrix formula result can't spill because target cells are not empty.
+    Spill                = 541,
 
 // Interpreter: NA() not available condition, not a real error
     NotAvailable         = 0x7fff
@@ -176,6 +178,7 @@ inline bool isPublishedFormulaError( FormulaError nErr )
 
         case FormulaError::MatrixSize:
         case FormulaError::LinkFormulaNeedingCheck:
+        case FormulaError::Spill:
             return true;
 
         case FormulaError::NotAvailable:

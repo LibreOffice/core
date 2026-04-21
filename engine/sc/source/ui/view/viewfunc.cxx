@@ -1002,7 +1002,8 @@ void ScViewFunc::EnterMatrix( const OUString& rString, ::formula::FormulaGrammar
     const SCCOL nCol = rData.GetCurX();
     const SCROW nRow = rData.GetCurY();
     const ScMarkData& rMark = rData.GetMarkData();
-    if ( !rMark.IsMarked() && !rMark.IsMultiMarked() )
+    bool bAutoExpand = !rMark.IsMarked() && !rMark.IsMultiMarked();
+    if (bAutoExpand)
     {
         //  nothing marked -> temporarily calculate block
         //  with size of result formula to get the size
@@ -1029,8 +1030,10 @@ void ScViewFunc::EnterMatrix( const OUString& rString, ::formula::FormulaGrammar
     if (rData.GetSimpleArea(aRange) == SC_MARK_SIMPLE)
     {
         ScDocShell* pDocSh = rData.GetDocShell();
+        // Auto expanded formulas (no explicit range selection) use spill checking
+        // to avoid overwriting non-empty cells.
         bool bSuccess = pDocSh->GetDocFunc().EnterMatrix(
-            aRange, &rMark, nullptr, rString, false, false, OUString(), eGram );
+            aRange, &rMark, nullptr, rString, false, false, OUString(), eGram, bAutoExpand);
         if (bSuccess)
             pDocSh->UpdateOle(GetViewData());
         else

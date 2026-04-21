@@ -1427,6 +1427,9 @@ FormulaError FormulaCompiler::GetErrorConstant( const OUString& rName ) const
             case ocErrNA:
                 nError = FormulaError::NotAvailable;
                 break;
+            case ocErrSpill:
+                nError = FormulaError::Spill;
+                break;
             default:
                 ;   // nothing
         }
@@ -1481,6 +1484,9 @@ void FormulaCompiler::AppendErrorConstant( OUStringBuffer& rBuffer, FormulaError
             break;
         case FormulaError::NotAvailable:
             eOp = ocErrNA;
+            break;
+        case FormulaError::Spill:
+            eOp = ocErrSpill;
             break;
         default:
             {

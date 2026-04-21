@@ -2064,10 +2064,12 @@ bool ScDocFunc::AutoFormat( const ScRange& rRange, const ScMarkData* pTabMark,
 
 bool ScDocFunc::EnterMatrix( const ScRange& rRange, const ScMarkData* pTabMark,
         const ScTokenArray* pTokenArray, const OUString& rString, bool bApi, bool bEnglish,
-        const OUString& rFormulaNmsp, const formula::FormulaGrammar::Grammar eGrammar )
+        const OUString& rFormulaNmsp, const formula::FormulaGrammar::Grammar eGrammar,
+        bool bCheckForSpill)
 {
     sc::EnterMatrixOperation aOperation(rDocShell, rRange, pTabMark, pTokenArray,
-                                        rString, bApi, bEnglish, rFormulaNmsp, eGrammar);
+                                        rString, bApi, bEnglish, rFormulaNmsp, eGrammar,
+                                        bCheckForSpill);
     return aOperation.run();
 }
 

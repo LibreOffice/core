@@ -213,6 +213,7 @@ sal_uInt8 XclTools::GetXclErrorCode( FormulaError nScError )
         case FormulaError::NoAddin:                return EXC_ERR_NAME;
         case FormulaError::NoMacro:                return EXC_ERR_NAME;
         case FormulaError::NotAvailable:           return EXC_ERR_NA;
+        case FormulaError::Spill:                  return EXC_ERR_SPILL;
         default: break;
     }
     return EXC_ERR_NA;
@@ -229,6 +230,7 @@ FormulaError XclTools::GetScErrorCode( sal_uInt8 nXclError )
         case EXC_ERR_NAME:  return FormulaError::NoName;
         case EXC_ERR_NUM:   return FormulaError::IllegalFPOperation;
         case EXC_ERR_NA:    return FormulaError::NotAvailable;
+        case EXC_ERR_SPILL: return FormulaError::Spill;
         default:            OSL_FAIL( "XclTools::GetScErrorCode - unknown error code" );
     }
     return FormulaError::NotAvailable;

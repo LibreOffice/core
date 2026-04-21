@@ -27,7 +27,8 @@ EnterMatrixOperation::EnterMatrixOperation(ScDocShell& rDocShell, const ScRange&
                                            const ScMarkData* pTabMark,
                                            const ScTokenArray* pTokenArray, const OUString& rString,
                                            bool bApi, bool bEnglish, const OUString& rFormulaNmsp,
-                                           formula::FormulaGrammar::Grammar eGrammar)
+                                           formula::FormulaGrammar::Grammar eGrammar,
+                                           bool bCheckForSpill)
     : Operation(OperationType::EnterMatrix, true, bApi)
     , mrDocShell(rDocShell)
     , maRange(rRange)
@@ -37,6 +38,7 @@ EnterMatrixOperation::EnterMatrixOperation(ScDocShell& rDocShell, const ScRange&
     , mbEnglish(bEnglish)
     , maFormulaNmsp(rFormulaNmsp)
     , meGrammar(eGrammar)
+    , mbCheckForSpill(bCheckForSpill)
 {
 }
 
@@ -92,7 +94,7 @@ bool EnterMatrixOperation::runImplementation()
         if (mpTokenArray)
         {
             rDoc.InsertMatrixFormula(nStartCol, nStartRow, nEndCol, nEndRow, aMark, OUString(),
-                                     mpTokenArray, meGrammar);
+                                     mpTokenArray, meGrammar, mbCheckForSpill);
         }
         else if (rDoc.IsImportingXML())
         {
@@ -109,11 +111,11 @@ bool EnterMatrixOperation::runImplementation()
             ScCompiler aComp(rDoc, aRange.aStart, meGrammar);
             std::unique_ptr<ScTokenArray> pCode = aComp.CompileString(maString);
             rDoc.InsertMatrixFormula(nStartCol, nStartRow, nEndCol, nEndRow, aMark, OUString(),
-                                     pCode.get(), meGrammar);
+                                     pCode.get(), meGrammar, mbCheckForSpill);
         }
         else
             rDoc.InsertMatrixFormula(nStartCol, nStartRow, nEndCol, nEndRow, aMark, maString,
-                                     nullptr, meGrammar);
+                                     nullptr, meGrammar, mbCheckForSpill);
 
         if (mbRecord)
         {
