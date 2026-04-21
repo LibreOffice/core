@@ -124,6 +124,7 @@ export class Comment extends CanvasSectionObject {
 		this.sectionProperties.acceptButton = null;
 		this.sectionProperties.rejectButton = null;
 		this.sectionProperties.menu = null;
+		this.sectionProperties.menuBarCell = null;
 		this.sectionProperties.captionNode = null;
 		this.sectionProperties.captionText = null;
 
@@ -229,7 +230,11 @@ export class Comment extends CanvasSectionObject {
 			this.createTrackChangeButtons();
 		}
 
-		if (this.sectionProperties.noMenu !== true && app.isCommentEditingAllowed()) {
+		// Always create the menu if allowed; its visibility is kept in sync with
+		// the current edit permission by updateEditability() so the Viewing/
+		// Editing toggle can show or hide the Edit/Reply/Delete affordances
+		// without re-rendering the comment.
+		if (this.sectionProperties.noMenu !== true) {
 			this.createMenu();
 		}
 
@@ -275,6 +280,35 @@ export class Comment extends CanvasSectionObject {
 
 		if (!(<any>window).mode.isSmallScreenDevice())
 			document.getElementById('document-container').appendChild(this.sectionProperties.container);
+
+		this.updateEditability();
+		this.sectionProperties.onUpdatePermissionBound = this.updateEditability.bind(this);
+		app.events.on('updatepermission', this.sectionProperties.onUpdatePermissionBound);
+	}
+
+	// Syncs visible edit affordances with the current comment-editing
+	// permission. The editable=true branch only re-shows the menubar
+	// cell: nodeModify/nodeReply remain hidden until the user explicitly
+	// triggers edit()/reply(), so we deliberately do NOT auto-reopen a
+	// previously open edit/reply pane when permission is restored.
+	private makeEditable (editable: boolean): void {
+		const props = this.sectionProperties;
+		if (props.menuBarCell?.style)
+			props.menuBarCell.style.display = editable ? '' : 'none';
+		if (editable) return;
+		if (props.nodeModify?.style) props.nodeModify.style.display = 'none';
+		if (props.nodeReply?.style) props.nodeReply.style.display = 'none';
+		if (props.contentNode?.style) props.contentNode.style.display = '';
+		props.container.classList.remove('modify-annotation-container');
+		props.container.classList.remove('reply-annotation-container');
+		this.cachedIsEdit = false;
+	}
+
+	// Invoked at init and on every updatepermission event, so toggling
+	// between Viewing and Editing mode immediately hides or restores the
+	// per-comment controls.
+	private updateEditability (): void {
+		this.makeEditable(app.isCommentEditingAllowed());
 	}
 
 	private createContainerAndWrapper (): void {
@@ -333,6 +367,7 @@ export class Comment extends CanvasSectionObject {
 
 	private createMenu (): void {
 		var tdMenu = window.L.DomUtil.create('td', 'cool-annotation-menubar', this.sectionProperties.authorRow);
+		this.sectionProperties.menuBarCell = tdMenu;
 		const edit = window.L.DomUtil.create('div', 'cool-annotation-menu-edit', tdMenu);
 		edit.id = 'comment-annotation-menu-edit-' + this.sectionProperties.data.id;
 		edit.tabIndex = 0;
@@ -1869,6 +1904,11 @@ export class Comment extends CanvasSectionObject {
 
 	public onRemove (): void {
 		this.sectionProperties.commentContainerRemoved = true;
+
+		if (this.sectionProperties.onUpdatePermissionBound) {
+			app.events.off('updatepermission', this.sectionProperties.onUpdatePermissionBound);
+			this.sectionProperties.onUpdatePermissionBound = null;
+		}
 
 		if (this.sectionProperties.commentListSection.sectionProperties.selectedComment === this)
 			this.sectionProperties.commentListSection.sectionProperties.selectedComment = null;

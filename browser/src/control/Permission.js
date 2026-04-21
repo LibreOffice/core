@@ -212,6 +212,22 @@ window.L.Map.include({
 		}
 	},
 
+	// Tell core whether this view is read-only, and flip the client-side
+	// comment/redline gates the UI checks via isCommentEditingAllowed()/
+	// isRedlineManagementAllowed(). Only meaningful for users that actually
+	// have WOPI write permission: users without write permission already
+	// get read-only set up server-side at session start, and their
+	// app.file.editComment / allowManageRedlines flags already reflect the
+	// real doc state (e.g. comment-only PDFs) and must not be touched.
+	_applyViewReadOnly: function (readOnly) {
+		if (!this['wopi'] || !this['wopi'].UserCanWrite)
+			return;
+		if (app.socket)
+			app.socket.sendMessage('setviewreadonly value=' + readOnly);
+		app.file.editComment = !readOnly;
+		app.file.allowManageRedlines = !readOnly;
+	},
+
 	_enterEditMode: function (perm) {
 		this._permission = perm;
 
@@ -221,6 +237,11 @@ window.L.Map.include({
 
 		if (app.map['stateChangeHandler'].getItemValue('EditDoc') === 'false')
 			app.map.sendUnoCommand('.uno:EditDoc?Editable:bool=true');
+
+		// Re-enable direct-canvas interactions (shape drag, arrow-key
+		// shape move) that the matching _enterReadOnlyMode branch
+		// disabled.
+		this._applyViewReadOnly(false);
 
 		app.events.fire('updatepermission', {perm : perm});
 
@@ -243,6 +264,12 @@ window.L.Map.include({
 			this._docLayer._onUpdateCursor();
 			this._docLayer._clearSelections();
 		}
+
+		// Block direct-canvas interactions (shape drag, arrow-key shape
+		// move) server-side and hide per-comment edit/redline controls
+		// in the UI.
+		this._applyViewReadOnly(true);
+
 		app.events.fire('updatepermission', {perm : perm});
 		this.fire('closemobilewizard');
 		this.fire('closealldialogs');

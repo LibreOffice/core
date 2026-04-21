@@ -599,6 +599,7 @@ bool ChildSession::_handleInput(const char *buffer, int length)
                tokens.equals(0, "formfieldevent") ||
                tokens.equals(0, "traceeventrecording") ||
                tokens.equals(0, "sallogoverride") ||
+               tokens.equals(0, "setviewreadonly") ||
                tokens.equals(0, "rendersearchresult") ||
                tokens.equals(0, "contentcontrolevent") ||
                tokens.equals(0, "a11ystate") ||
@@ -875,6 +876,33 @@ bool ChildSession::_handleInput(const char *buffer, int length)
             else if (tokens.size() > 0)
             {
                 getLOKit()->setOption("sallogoverride", tokens[1].c_str());
+            }
+        }
+        else if (tokens.equals(0, "setviewreadonly"))
+        {
+            // Propagate the browser-side Viewing/Editing toggle to core so it can
+            // block direct-canvas interactions (shape drag, arrow-key move) and
+            // gate comment/redline commands via the dispatch filter.
+            bool readOnly = false;
+            std::string value;
+            if (tokens.size() > 1 && getTokenString(tokens[1], "value", value))
+                readOnly = (value == "true");
+
+            if (getLOKitDocument())
+            {
+                getLOKitDocument()->setView(_viewId);
+                getLOKitDocument()->setViewReadOnly(_viewId, readOnly);
+
+                // Browser only sends setviewreadonly when the user has WOPI
+                // write permission, so this path is the Viewing/Editing toggle
+                // on a fully editable doc. Block comments and redline management
+                // in Viewing mode too - comment-only docs (e.g. PDFs) are set
+                // up separately at session start and never reach this branch.
+                getLOKitDocument()->setAllowChangeComments(_viewId, !readOnly);
+                getLOKitDocument()->setAllowManageRedlines(_viewId, !readOnly);
+
+                LOG_DBG("setviewreadonly: viewId=" << _viewId
+                        << " readOnly=" << readOnly);
             }
         }
         else if (tokens.equals(0, "rendersearchresult"))
