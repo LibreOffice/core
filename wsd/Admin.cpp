@@ -1264,12 +1264,12 @@ void Admin::getMetrics(std::ostream& metrics) const
     const size_t memAvail = getTotalAvailableMemory();
     const size_t memUsed = getTotalMemoryUsage();
 
-    metrics << "global_host_system_memory_bytes " << _totalSysMemKb * 1024 << std::endl;
-    metrics << "global_host_tcp_connections " << net::Defaults.maxExtConnections << std::endl;
-    metrics << "global_memory_available_bytes " << memAvail * 1024 << std::endl;
-    metrics << "global_memory_used_bytes " << memUsed * 1024 << std::endl;
-    metrics << "global_memory_free_bytes " << (memAvail - memUsed) * 1024 << std::endl;
-    metrics << std::endl;
+    metrics << "global_host_system_memory_bytes " << _totalSysMemKb * 1024 << '\n';
+    metrics << "global_host_tcp_connections " << net::Defaults.maxExtConnections << '\n';
+    metrics << "global_memory_available_bytes " << memAvail * 1024 << '\n';
+    metrics << "global_memory_used_bytes " << memUsed * 1024 << '\n';
+    metrics << "global_memory_free_bytes " << (memAvail - memUsed) * 1024 << '\n';
+    metrics << '\n';
 
     _model.getMetrics(metrics);
 }
