@@ -193,6 +193,18 @@ final class WebDriverServer {
                 return
             }
 
+            // GET /session/{id}/source
+            if request.method == "GET" && subpath == ["source"] {
+                jsExecutor("document.documentElement.outerHTML") { [weak self] result, error in
+                    if let html = result as? String {
+                        self?.sendW3C(connection: connection, value: html)
+                    } else {
+                        self?.sendW3C(connection: connection, value: "")
+                    }
+                }
+                return
+            }
+
             // GET /session/{id}/window/handles
             if request.method == "GET" && subpath == ["window", "handles"] {
                 sendW3C(connection: connection, value: ["main"])
