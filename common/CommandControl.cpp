@@ -66,7 +66,7 @@ const std::unordered_set<std::string>& LockManager::getLockedCommandList()
     return LockedCommandList;
 }
 
-const std::string LockManager::getLockedCommandListString()
+std::string LockManager::getLockedCommandListString()
 {
     if (LockedCommandListString.empty())
         generateLockedCommandList();
@@ -192,7 +192,7 @@ const std::unordered_set<std::string>& RestrictionManager::getRestrictedCommandL
     return RestrictedCommandList;
 }
 
-const std::string RestrictionManager::getRestrictedCommandListString()
+std::string RestrictionManager::getRestrictedCommandListString()
 {
 #ifdef ENABLE_FEATURE_RESTRICTION
     if (RestrictedCommandListString.empty())

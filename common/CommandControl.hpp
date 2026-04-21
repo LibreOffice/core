@@ -38,7 +38,7 @@ class LockManager
 public:
     LockManager() = delete;
     static const std::unordered_set<std::string>& getLockedCommandList();
-    static const std::string getLockedCommandListString();
+    static std::string getLockedCommandListString();
 
     // Allow/deny Locked hosts
     static RegexUtil::RegexListMatcher readOnlyWopiHosts;
@@ -141,7 +141,7 @@ public:
     RestrictionManager();
     static void setRestrictedCommandList(const std::string& commandListString);
     static const std::unordered_set<std::string>& getRestrictedCommandList();
-    static const std::string getRestrictedCommandListString();
+    static std::string getRestrictedCommandListString();
 
     static bool isRestrictedUser() { return _isRestrictedUser; }
 

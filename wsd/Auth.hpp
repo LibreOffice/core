@@ -27,7 +27,7 @@ class AuthBase
 public:
     virtual ~AuthBase() = default;
     /// Called to acquire an access token.
-    virtual const std::string getAccessToken() = 0;
+    virtual std::string getAccessToken() = 0;
 
     /// Used to verify the validity of an access token.
     virtual bool verify(const std::string& token) = 0;
@@ -47,16 +47,16 @@ public:
     {
     }
 
-    const std::string getAccessToken() override;
+    std::string getAccessToken() override;
 
     bool verify(const std::string& accessToken) override;
 
     static void cleanup();
 
 private:
-    const std::string createHeader();
+    std::string createHeader();
 
-    const std::string createPayload();
+    std::string createPayload();
 
 private:
     const std::string _alg = "RS256";

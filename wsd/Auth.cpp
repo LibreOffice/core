@@ -45,7 +45,7 @@ void JWTAuth::cleanup()
     _key.reset();
 }
 
-const std::string JWTAuth::getAccessToken()
+std::string JWTAuth::getAccessToken()
 {
     std::string encodedHeader = createHeader();
     std::string encodedPayload = createPayload();
@@ -160,7 +160,7 @@ bool JWTAuth::verify(const std::string& accessToken)
     return true;
 }
 
-const std::string JWTAuth::createHeader()
+std::string JWTAuth::createHeader()
 {
     // TODO: Some sane code to represent JSON objects
     const std::string header = R"({"alg":")" + _alg + R"(","typ":")" + _typ + "\"}";
@@ -169,7 +169,7 @@ const std::string JWTAuth::createHeader()
     return Util::base64Encode(header);
 }
 
-const std::string JWTAuth::createPayload()
+std::string JWTAuth::createPayload()
 {
     std::chrono::system_clock::time_point now = std::chrono::system_clock::now();
     std::time_t curtime = std::chrono::system_clock::to_time_t(now);
