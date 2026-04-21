@@ -187,7 +187,8 @@ final class WebDriverServer {
             let subpath = Array(segments.dropFirst(2))
 
             // POST /session/{id}/execute/sync
-            if request.method == "POST" && subpath == ["execute", "sync"] {
+            // POST /session/{id}/execute (WebDriverIO may use either)
+            if request.method == "POST" && (subpath == ["execute", "sync"] || subpath == ["execute"]) {
                 handleExecuteSync(request, connection: connection)
                 return
             }
