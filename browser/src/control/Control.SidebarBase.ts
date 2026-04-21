@@ -25,6 +25,7 @@ enum SidebarType {
 
 abstract class SidebarBase extends JSDialogComponent {
 	type: SidebarType;
+	resizeTaskId: TaskId | null = null;
 
 	documentContainer: HTMLDivElement;
 	wrapper: HTMLElement;
@@ -170,13 +171,17 @@ abstract class SidebarBase extends JSDialogComponent {
 		return false;
 	}
 	onResize() {
-		app.layoutingService.appendLayoutingTask(() => {
+		if (this.resizeTaskId)
+			app.layoutingService.cancelLayoutingTask(this.resizeTaskId);
+
+		this.resizeTaskId = app.layoutingService.appendLayoutingTask(() => {
 			this.wrapper.style.maxHeight =
 				this.documentContainer.getBoundingClientRect().height + 'px';
 			if (this.container) {
 				(this.container as HTMLElement).style.height =
 					this.documentContainer.getBoundingClientRect().height + 'px';
 			}
+			this.resizeTaskId = null;
 		});
 	}
 
