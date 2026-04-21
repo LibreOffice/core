@@ -1558,7 +1558,7 @@ UnxSocketPath LocalServerSocket::bind()
     return std::string();
 }
 
-bool LocalServerSocket::linkTo([[maybe_unused]] std::string toPath)
+bool LocalServerSocket::linkTo([[maybe_unused]] const std::string& toPath)
 {
 #ifndef HAVE_ABSTRACT_UNIX_SOCKETS
     _linkName = toPath + "/" + _id.getName();

@@ -193,7 +193,7 @@ public:
     UnxSocketPath bind();
 
     /// Links the socket to the location 'toPath', in case it is not an abstract socket. For abstract sockets, it return 'true' right away.
-    bool linkTo(std::string toPath);
+    bool linkTo(const std::string& toPath);
 
 private:
     UnxSocketPath _id;
