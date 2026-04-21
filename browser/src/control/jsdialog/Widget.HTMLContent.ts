@@ -67,6 +67,16 @@ function getStatusbarItemMetadata(id: string): StatusbarItemMetadata {
 				cooltip: _('Choice of functions'),
 				configLabel: _('Table Cell Functions'),
 			};
+		case 'prevpage': {
+			const docType = app.map && app.map.getDocType ? app.map.getDocType() : '';
+			const label =
+				docType === 'spreadsheet'
+					? _('Sheet Navigation')
+					: docType === 'presentation'
+						? _('Slide Navigation')
+						: _('Page Navigation');
+			return { cooltip: '', configLabel: label };
+		}
 		case 'permissionmode':
 			return { cooltip: _('Permission Mode') };
 		case 'documentstatus':
