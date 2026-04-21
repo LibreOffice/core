@@ -37,6 +37,18 @@ class ServerConnectionService {
 		app.tableStyles = new TableStylesService();
 	}
 
+	public onWopiProps(props: { AIConfigured: boolean; AIModelName: string }) {
+		app.console.debug('ServerConnectionService: onWopiProps');
+
+		if (!app.map) {
+			app.console.error('ServerConnectionService: missing map reference');
+			return;
+		}
+
+		app.map.isAIConfigured = !!props.AIConfigured;
+		app.map.aiModelName = props.AIModelName || '';
+	}
+
 	public onViewSetting(viewSetting: ViewSetting) {
 		app.console.debug('ServerConnectionService: onViewSetting');
 

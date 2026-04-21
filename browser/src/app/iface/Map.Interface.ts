@@ -88,6 +88,8 @@ interface MapInterface extends Evented {
 		BaseFileName: string;
 		HideExportOption: boolean;
 		DisableAISettings: boolean;
+		AIConfigured: boolean;
+		AIModelName: string;
 		UserCanWrite: boolean;
 		HideChangeTrackingControls: boolean;
 		EnableRemoteLinkPicker: boolean;

@@ -202,6 +202,12 @@ public:
     /// Set WOPI fileinfo object
     void setWopiFileInfo(std::unique_ptr<WopiStorage::WOPIFileInfo> wopiFileInfo) { _wopiFileInfo = std::move(wopiFileInfo); }
 
+    /// True if the WOPI host asked for AI UI / features to be disabled for this document.
+    bool isDisableAISettings() const
+    {
+        return _wopiFileInfo && _wopiFileInfo->getDisableAISettings();
+    }
+
     /// Get requested tiles waiting for sending to the client
     std::deque<TileDesc>& getRequestedTiles() { return _requestedTiles; }
 
@@ -326,6 +332,23 @@ public:
     }
 
     void uploadViewSettingsToWopiHost();
+
+    /// Resolve AI credentials with precedence:
+    ///   viewSettings[aiProviderAPIKey|Model|URL]
+    ///   -> userPrivateInfoObj[AIProviderAPIKey|Model|URL]
+    ///   -> coolwsd.xml ai.api_key / ai.model / ai.api_url
+    /// Applies the resolved values to this session. If viewSettings is non-null
+    /// and a field is filled from userPrivateInfoObj, viewSettings is mutated
+    /// (and viewSettingsMutated set to true) so callers can persist the
+    /// migration. outModel receives the resolved model name when aiConfigured,
+    /// otherwise an empty string.
+    /// Returns aiConfigured: ai.enabled AND all three fields non-empty.
+    bool resolveAndApplyAICredentials(
+        Poco::JSON::Object::Ptr viewSettings,
+        const Poco::JSON::Object::Ptr& userPrivateInfoObj,
+        bool disableAISettings,
+        bool& viewSettingsMutated,
+        std::string& outModel);
 
     /// Override parsedDocOption values we get from browser setting json
     /// Because when client sends `load url` it doesn't have information about browser setting json

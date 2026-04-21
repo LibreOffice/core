@@ -433,6 +433,12 @@ bool AIChatSession::handleAction(const std::string& firstLine)
         return true;
     }
 
+    if (_session.isDisableAISettings())
+    {
+        sendChatResult(false, "AI features are disabled for this document", requestId);
+        return true;
+    }
+
     if (apiKey.empty() || model.empty() || baseUrl.empty())
     {
         sendChatResult(false, "AI settings not configured", requestId);

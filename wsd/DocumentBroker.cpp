@@ -1494,6 +1494,23 @@ DocumentBroker::updateSessionWithWopiInfo(const std::shared_ptr<ClientSession>& 
     wopiInfo->set("DisableAISettings",
                   !ConfigUtil::getConfigValue<bool>("ai.enabled", false) ||
                       wopiFileInfo->getDisableAISettings());
+
+    // Resolve default AI credentials from UserPrivateInfo, falling back to
+    // coolwsd.xml. This makes AI usable on integrations that don't implement
+    // the UserSettings preset storage (where viewsetting.json would never
+    // exist). User View Settings, if present, override these later via
+    // extractViewSettings / handleUpdateViewSettings.
+    Object::Ptr userPrivateInfoObj;
+    if (!userPrivateInfo.empty())
+        JsonUtil::parseJSON(userPrivateInfo, userPrivateInfoObj);
+    bool unusedMutated = false;
+    std::string resolvedAIModel;
+    const bool aiConfigured = session->resolveAndApplyAICredentials(
+        /*viewSettings=*/nullptr, userPrivateInfoObj,
+        wopiFileInfo->getDisableAISettings(), unusedMutated, resolvedAIModel);
+    wopiInfo->set("AIConfigured", aiConfigured);
+    if (aiConfigured)
+        wopiInfo->set("AIModelName", resolvedAIModel);
     wopiInfo->set("EnableShare", wopiFileInfo->getEnableShare());
     wopiInfo->set("HideUserList", wopiFileInfo->getHideUserList());
     wopiInfo->set("SupportsRename", wopiFileInfo->getSupportsRename());
@@ -1764,9 +1781,8 @@ static std::string extractViewSettings(const std::string& viewSettingsPath,
             }
         }
 
-        std::string zoteroAPIKey, signatureCertificate, signatureKey, signatureCa, aiProviderAPIKey,
-            aiProviderModel, aiProviderURL, aiImageProviderAPIKey, aiImageProviderURL, aiImageModel,
-            aiImageSize;
+        std::string zoteroAPIKey, signatureCertificate, signatureKey, signatureCa,
+            aiImageProviderAPIKey, aiImageProviderURL, aiImageModel, aiImageSize;
 
         bool viewSettingsNeedUpdate = false;
 
@@ -1804,25 +1820,16 @@ static std::string extractViewSettings(const std::string& viewSettingsPath,
 
         _isViewSettingsUpdated = true;
 
-        viewSettingsNeedUpdate |= migrateViewSettingsField("aiProviderAPIKey", "AIProviderAPIKey", aiProviderAPIKey);
-        viewSettingsNeedUpdate |= migrateViewSettingsField("aiProviderModel", "AIProviderModel", aiProviderModel);
-        viewSettingsNeedUpdate |= migrateViewSettingsField("aiProviderURL", "AIProviderURL", aiProviderURL);
+        std::string resolvedAIModel;
+        const bool aiConfigured = session->resolveAndApplyAICredentials(
+            viewSettings, userPrivateInfoObj, session->isDisableAISettings(),
+            viewSettingsNeedUpdate, resolvedAIModel);
+
         JsonUtil::findJSONValue(viewSettings, "aiImageProviderAPIKey", aiImageProviderAPIKey);
         JsonUtil::findJSONValue(viewSettings, "aiImageProviderURL", aiImageProviderURL);
         JsonUtil::findJSONValue(viewSettings, "aiImageModel", aiImageModel);
         JsonUtil::findJSONValue(viewSettings, "aiImageSize", aiImageSize);
 
-        // coolwsd.xml AI defaults as final fallback
-        if (aiProviderAPIKey.empty())
-            aiProviderAPIKey = ConfigUtil::getConfigValue<std::string>("ai.api_key", "");
-        if (aiProviderModel.empty())
-            aiProviderModel = ConfigUtil::getConfigValue<std::string>("ai.model", "");
-        if (aiProviderURL.empty())
-            aiProviderURL = ConfigUtil::getConfigValue<std::string>("ai.api_url", "");
-
-        session->setAIProviderAPIKey(aiProviderAPIKey);
-        session->setAIProviderModel(aiProviderModel);
-        session->setAIProviderURL(aiProviderURL);
         session->setAIImageProviderAPIKey(aiImageProviderAPIKey);
         session->setAIImageProviderURL(aiImageProviderURL);
         session->setAIImageModel(aiImageModel);
@@ -1845,14 +1852,9 @@ static std::string extractViewSettings(const std::string& viewSettingsPath,
         viewSettings->remove("aiImageProviderURL");
         viewSettings->remove("aiImageModel");
 
-        // Let client know whether AI features are enabled based on the global kill switch
-        // and the presence of necessary fields, so client can decide to show/hide AI related UI
-        const bool aiConfigured = ConfigUtil::getConfigValue<bool>("ai.enabled", false) &&
-                                  !aiProviderAPIKey.empty() && !aiProviderModel.empty() &&
-                                  !aiProviderURL.empty();
         viewSettings->set("aiConfigured", aiConfigured);
         if (aiConfigured)
-            viewSettings->set("aiModelName", aiProviderModel);
+            viewSettings->set("aiModelName", resolvedAIModel);
         viewSettingsString = JsonUtil::jsonToString(viewSettings);
     }
     catch (const std::exception& exc)

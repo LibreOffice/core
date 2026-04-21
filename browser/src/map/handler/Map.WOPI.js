@@ -38,6 +38,8 @@ window.L.Map.WOPI = window.L.Handler.extend({
 	EnableInsertRemoteLink: false,
 	EnableRemoteAIContent: false,
 	DisableAISettings: false,
+	AIConfigured: false,
+	AIModelName: '',
 	EnableShare: false,
 	HideUserList: null,
 	CallPythonScriptSource: null,
@@ -161,6 +163,12 @@ window.L.Map.WOPI = window.L.Handler.extend({
 		this.EnableRemoteLinkPicker = !!wopiInfo['EnableRemoteLinkPicker'];
 		this.EnableRemoteAIContent = !!wopiInfo['EnableRemoteAIContent'];
 		this.DisableAISettings = !!wopiInfo['DisableAISettings'];
+		this.AIConfigured = !!wopiInfo['AIConfigured'];
+		this.AIModelName = wopiInfo['AIModelName'] || '';
+		app.serverConnectionService.onWopiProps({
+			AIConfigured: this.AIConfigured,
+			AIModelName: this.AIModelName,
+		});
 		this.SupportsRename = !!wopiInfo['SupportsRename'];
 		this.UserCanRename = !!wopiInfo['UserCanRename'];
 		this.EnableShare = !!wopiInfo['EnableShare'];

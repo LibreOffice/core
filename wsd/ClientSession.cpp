@@ -1613,6 +1613,46 @@ void ClientSession::uploadViewSettingsToWopiHost()
     }
 }
 
+bool ClientSession::resolveAndApplyAICredentials(Poco::JSON::Object::Ptr viewSettings,
+                                                 const Poco::JSON::Object::Ptr& userPrivateInfoObj,
+                                                 bool disableAISettings, bool& viewSettingsMutated,
+                                                 std::string& outModel)
+{
+    auto resolveField = [&](const std::string& vsKey, const std::string& upiKey,
+                            const std::string& cfgKey) -> std::string
+    {
+        std::string value;
+        if (viewSettings)
+            JsonUtil::findJSONValue(viewSettings, vsKey, value);
+        if (value.empty() && userPrivateInfoObj)
+        {
+            JsonUtil::findJSONValue(userPrivateInfoObj, upiKey, value);
+            if (!value.empty() && viewSettings)
+            {
+                LOG_INF("Migrating field [" << vsKey << "] from user private info");
+                viewSettings->set(vsKey, value);
+                viewSettingsMutated = true;
+            }
+        }
+        if (value.empty())
+            value = ConfigUtil::getConfigValue<std::string>(cfgKey, "");
+        return value;
+    };
+
+    const std::string apiKey = resolveField("aiProviderAPIKey", "AIProviderAPIKey", "ai.api_key");
+    const std::string model = resolveField("aiProviderModel", "AIProviderModel", "ai.model");
+    const std::string url = resolveField("aiProviderURL", "AIProviderURL", "ai.api_url");
+
+    setAIProviderAPIKey(apiKey);
+    setAIProviderModel(model);
+    setAIProviderURL(url);
+
+    const bool configured = ConfigUtil::getConfigValue<bool>("ai.enabled", false) &&
+                            !disableAISettings && !apiKey.empty() && !model.empty() && !url.empty();
+    outModel = configured ? model : std::string{};
+    return configured;
+}
+
 bool ClientSession::handleUpdateViewSettings(const std::string& firstLine)
 {
     const std::string jsonPayload = firstLine.substr(strlen("updateviewsettings "));
@@ -1624,30 +1664,19 @@ bool ClientSession::handleUpdateViewSettings(const std::string& firstLine)
         return true;
     }
 
-    std::string aiProviderAPIKey, aiProviderModel, aiProviderURL;
+    bool viewSettingsMutated = false;
+    std::string resolvedModel;
+    const bool aiConfigured =
+        resolveAndApplyAICredentials(viewSettings, /*userPrivateInfoObj=*/nullptr,
+                                     isDisableAISettings(), viewSettingsMutated, resolvedModel);
+
     std::string aiImageProviderAPIKey, aiImageProviderURL, aiImageModel, aiImageSize;
     std::string aiRequestTimeout;
-
-    JsonUtil::findJSONValue(viewSettings, "aiProviderAPIKey", aiProviderAPIKey);
-    JsonUtil::findJSONValue(viewSettings, "aiProviderModel", aiProviderModel);
-    JsonUtil::findJSONValue(viewSettings, "aiProviderURL", aiProviderURL);
     JsonUtil::findJSONValue(viewSettings, "aiImageProviderAPIKey", aiImageProviderAPIKey);
     JsonUtil::findJSONValue(viewSettings, "aiImageProviderURL", aiImageProviderURL);
     JsonUtil::findJSONValue(viewSettings, "aiImageModel", aiImageModel);
     JsonUtil::findJSONValue(viewSettings, "aiImageSize", aiImageSize);
     JsonUtil::findJSONValue(viewSettings, "aiRequestTimeout", aiRequestTimeout);
-
-    // coolwsd.xml AI defaults as final fallback
-    if (aiProviderAPIKey.empty())
-        aiProviderAPIKey = ConfigUtil::getConfigValue<std::string>("ai.api_key", "");
-    if (aiProviderModel.empty())
-        aiProviderModel = ConfigUtil::getConfigValue<std::string>("ai.model", "");
-    if (aiProviderURL.empty())
-        aiProviderURL = ConfigUtil::getConfigValue<std::string>("ai.api_url", "");
-
-    setAIProviderAPIKey(aiProviderAPIKey);
-    setAIProviderModel(aiProviderModel);
-    setAIProviderURL(aiProviderURL);
     setAIImageProviderAPIKey(aiImageProviderAPIKey);
     setAIImageProviderURL(aiImageProviderURL);
     setAIImageModel(aiImageModel);
@@ -1672,18 +1701,13 @@ bool ClientSession::handleUpdateViewSettings(const std::string& firstLine)
     viewSettings->remove("aiImageProviderURL");
     viewSettings->remove("aiImageModel");
 
-    const bool aiConfigured = ConfigUtil::getConfigValue<bool>("ai.enabled", false) &&
-                              !aiProviderAPIKey.empty() &&
-                              !aiProviderModel.empty() &&
-                              !aiProviderURL.empty();
     viewSettings->set("aiConfigured", aiConfigured);
     if (aiConfigured)
-        viewSettings->set("aiModelName", aiProviderModel);
+        viewSettings->set("aiModelName", resolvedModel);
 
     sendTextFrame("viewsetting: " + JsonUtil::jsonToString(viewSettings));
 
-    LOG_DBG("Updated view settings for session [" << getId()
-            << "], aiConfigured=" << aiConfigured);
+    LOG_DBG("Updated view settings for session [" << getId() << "], aiConfigured=" << aiConfigured);
     return true;
 }
 
