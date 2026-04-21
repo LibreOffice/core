@@ -987,12 +987,14 @@ int AdminModel::getPidsFromProcName(const std::regex& procNameRegEx, std::vector
 
 int AdminModel::getAssignedKitPids(std::vector<int> *pids)
 {
-    return getPidsFromProcName(std::regex("kitbroker_.*"), pids);
+    static const std::regex re("kitbroker_.*");
+    return getPidsFromProcName(re, pids);
 }
 
 int AdminModel::getUnassignedKitPids(std::vector<int> *pids)
 {
-    return getPidsFromProcName(std::regex("kit_spare_.*"), pids);
+    static const std::regex re("kit_spare_.*");
+    return getPidsFromProcName(re, pids);
 }
 
 void AdminModel::getKitPidsFromSystem(std::vector<int> *pids)
@@ -1200,7 +1202,10 @@ void AdminModel::getMetrics(std::ostream& oss) const
 {
     ASSERT_CORRECT_THREAD_OWNER(_owner);
 
-    oss << "coolwsd_count " << getPidsFromProcName(std::regex("coolwsd"), nullptr) << '\n';
+    static const std::regex coolwsdRe("coolwsd");
+    static const std::regex forkitRe("forkit");
+
+    oss << "coolwsd_count " << getPidsFromProcName(coolwsdRe, nullptr) << '\n';
     oss << "coolwsd_thread_count " << ProcUtil::getStatFromPid(ProcUtil::getProcessId(), 19)
         << '\n';
     oss << "coolwsd_cpu_time_seconds "
@@ -1210,7 +1215,7 @@ void AdminModel::getMetrics(std::ostream& oss) const
     oss << "coolwsd_tcp_connections_used " << StreamSocket::getExternalConnectionCount() << '\n';
     oss << '\n';
 
-    oss << "forkit_count " << getPidsFromProcName(std::regex("forkit"), nullptr) << '\n';
+    oss << "forkit_count " << getPidsFromProcName(forkitRe, nullptr) << '\n';
     oss << "forkit_thread_count " << ProcUtil::getStatFromPid(_forKitPid, 19) << '\n';
     oss << "forkit_cpu_time_seconds " << ProcUtil::getCpuUsage(_forKitPid) / sysconf (_SC_CLK_TCK) << '\n';
     oss << "forkit_memory_used_bytes " << ProcUtil::getMemoryUsageRSS(_forKitPid) * 1024 << '\n';

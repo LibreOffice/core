@@ -91,7 +91,7 @@ std::string HostUtil::parseAlias(const std::string& aliasPattern)
     // check if it is plain uri, then convert to a strict regex for this uri if needed
     // Must be a full match.
     // Group 2 captures the hostname.
-    std::regex re(
+    static const std::regex re(
         "^(https?://)?(([a-z0-9\\-]+)(\\.[a-z0-9\\-]+)*)(:[0-9]{1,5})?(/[a-z0-9\\-&?_]*)*$",
         std::regex_constants::icase);
 
