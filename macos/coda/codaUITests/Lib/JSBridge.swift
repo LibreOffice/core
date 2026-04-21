@@ -41,7 +41,7 @@ final class JSBridge {
     @discardableResult
     static func execute(js: String) -> Any? {
         let body: [String: Any] = [
-            "script": "return (\(js))",
+            "script": js,
             "args": [] as [Any]
         ]
         guard let json = postJSON(path: "/session/\(sessionId)/execute/sync", body: body) else {

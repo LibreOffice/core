@@ -227,7 +227,19 @@ final class WebDriverServer {
             return
         }
 
-        jsExecutor(script) { [weak self] result, error in
+        // WKWebView.evaluateJavaScript expects an expression, not a
+        // program with "return".  WebDriverIO sends scripts like
+        // "return (function(){...}).apply(null,arguments)" so we need
+        // to strip the leading "return " and let evaluateJavaScript
+        // evaluate the expression directly.
+        let expression: String
+        if script.hasPrefix("return ") {
+            expression = String(script.dropFirst("return ".count))
+        } else {
+            expression = script
+        }
+
+        jsExecutor(expression) { [weak self] result, error in
             if let error = error {
                 self?.sendW3CError(connection: connection, error: "javascript error",
                                    message: error.localizedDescription)
