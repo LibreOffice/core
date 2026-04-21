@@ -590,7 +590,7 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             m_aStates.top().getParagraphSprms() = m_aDefaultState.getParagraphSprms();
             m_aStates.top().getParagraphAttributes() = m_aDefaultState.getParagraphAttributes();
 
-            if (m_nTopLevelCells != 0 || m_nNestedCells != 0)
+            if (m_TopLevelTableRow.getCells() != 0 || m_nNestedCells != 0)
             {
                 // Ideally getDefaultSPRM() would take care of this, but it would not when we're buffering.
                 // TODO: is this the right place to do this?

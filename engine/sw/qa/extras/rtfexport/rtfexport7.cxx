@@ -888,6 +888,46 @@ CPPUNIT_TEST_FIXTURE(Test, testItapIntblCell)
     verify("reload");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testIgnoreTableDefinitionBorders)
+{
+    createSwDoc("FWDP90_min.rtf");
+
+    auto verify = [this]() {
+        uno::Reference<text::XTextTable> xTable{ getParagraphOrTable(3), uno::UNO_QUERY };
+        uno::Reference<text::XTextRange> xA1(xTable->getCellByName(u"A1"_ustr), uno::UNO_QUERY);
+        // problem was that the cells had borders from an unused table definition
+        CPPUNIT_ASSERT_BORDER_EQUAL(
+            table::BorderLine2(0x000000, 0, 0, 0, table::BorderLineStyle::NONE, 0),
+            getProperty<table::BorderLine2>(xA1, u"TopBorder"_ustr));
+        CPPUNIT_ASSERT_BORDER_EQUAL(
+            table::BorderLine2(0x000000, 0, 0, 0, table::BorderLineStyle::NONE, 0),
+            getProperty<table::BorderLine2>(xA1, u"BottomBorder"_ustr));
+        CPPUNIT_ASSERT_BORDER_EQUAL(
+            table::BorderLine2(0x000000, 0, 0, 0, table::BorderLineStyle::NONE, 0),
+            getProperty<table::BorderLine2>(xA1, u"LeftBorder"_ustr));
+        CPPUNIT_ASSERT_BORDER_EQUAL(
+            table::BorderLine2(0x000000, 0, 0, 0, table::BorderLineStyle::NONE, 0),
+            getProperty<table::BorderLine2>(xA1, u"RightBorder"_ustr));
+        uno::Reference<text::XTextRange> xB1(xTable->getCellByName(u"B1"_ustr), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_BORDER_EQUAL(
+            table::BorderLine2(0x000000, 0, 0, 0, table::BorderLineStyle::NONE, 0),
+            getProperty<table::BorderLine2>(xB1, u"TopBorder"_ustr));
+        CPPUNIT_ASSERT_BORDER_EQUAL(
+            table::BorderLine2(0x000000, 0, 0, 0, table::BorderLineStyle::NONE, 0),
+            getProperty<table::BorderLine2>(xB1, u"BottomBorder"_ustr));
+        CPPUNIT_ASSERT_BORDER_EQUAL(
+            table::BorderLine2(0x000000, 0, 0, 0, table::BorderLineStyle::NONE, 0),
+            getProperty<table::BorderLine2>(xB1, u"LeftBorder"_ustr));
+        CPPUNIT_ASSERT_BORDER_EQUAL(
+            table::BorderLine2(0x000000, 0, 0, 0, table::BorderLineStyle::NONE, 0),
+            getProperty<table::BorderLine2>(xB1, u"RightBorder"_ustr));
+    };
+
+    verify();
+    saveAndReload(TestFilter::RTF);
+    verify();
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf113550)
 {
     auto verify = [this]() {
