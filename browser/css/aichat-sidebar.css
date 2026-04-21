@@ -203,14 +203,50 @@
 	opacity: 0.8;
 }
 
+#aichat-eu-wrapper {
+	display: flex;
+	flex-direction: row;
+	align-items: flex-start;
+	gap: 8px;
+	padding: 6px 8px 4px;
+	cursor: help;
+}
+
 #aichat-eu-notice {
 	color: var(--color-text-lighter);
-	text-align: center;
-	padding: 6px 8px 4px;
+	text-align: start;
 	font-size: 11px;
 	line-height: 1.4;
 	letter-spacing: 0.01em;
+	flex: 1;
+	margin: 0;
+	padding: 0;
 }
+
+/* -- Ethical AI rating badge -- */
+
+#aichat-rating-badge {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding: 0;
+	width: 14px;
+	height: 14px;
+	min-width: 14px;
+	border-radius: 50%;
+	font-size: 10px;
+	font-weight: 700;
+	color: transparent;
+	background: #888;
+	flex-shrink: 0;
+	line-height: 1;
+}
+
+#aichat-rating-badge[data-rating='A'] { background: #2a7a2a; }
+#aichat-rating-badge[data-rating='B'] { background: #7a8a00; }
+#aichat-rating-badge[data-rating='C'] { background: #b56a00; }
+#aichat-rating-badge[data-rating='D'] { background: #a33; }
+#aichat-rating-badge[data-rating='U'] { background: #888; }
 
 /* -- Hint (transient inline warning) -- */
 
