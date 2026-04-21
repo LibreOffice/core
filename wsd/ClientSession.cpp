@@ -2241,11 +2241,6 @@ bool ClientSession::attemptLock(const std::shared_ptr<DocumentBroker>& docBroker
     return result;
 }
 
-bool ClientSession::hasQueuedMessages() const
-{
-    return _senderQueue.size() > 0;
-}
-
 void ClientSession::writeQueuedMessages(std::size_t capacity)
 {
     LOG_TRC("performing writes, up to " << capacity << " bytes");
@@ -3470,11 +3465,10 @@ void ClientSession::enqueueSendMessage(const std::shared_ptr<Message>& data)
     }
 
     LOG_TRC("Enqueueing client message " << data->id());
-    const std::size_t sizeBefore = _senderQueue.size();
-    const std::size_t newSize = _senderQueue.enqueue(data);
+    const bool enqueued = _senderQueue.enqueue(data);
 
     // Track sent tile
-    if (haveWireId && sizeBefore != newSize)
+    if (haveWireId && enqueued)
         addTileOnFly(wireId);
 }
 

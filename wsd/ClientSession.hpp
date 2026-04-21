@@ -368,7 +368,7 @@ private:
     void onDisconnect() override;
 
     /// Does SocketHandler: have messages to send ?
-    bool hasQueuedMessages() const override;
+    bool hasQueuedMessages() const override { return !_senderQueue.empty(); }
 
     /// SocketHandler: send those messages
     void writeQueuedMessages(std::size_t capacity) override;

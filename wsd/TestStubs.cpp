@@ -34,8 +34,6 @@ ClientSession::~ClientSession() = default;
 
 void ClientSession::onDisconnect() {}
 
-bool ClientSession::hasQueuedMessages() const { return false; }
-
 void ClientSession::writeQueuedMessages(std::size_t) {}
 
 void ClientSession::dumpState(std::ostream& /*os*/) {}

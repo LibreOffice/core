@@ -34,14 +34,21 @@ class SenderQueue final
 public:
     SenderQueue() = default;
 
-    size_t enqueue(const Item& item)
+    /// Enqueues an item, if not a duplicate and not shutting down.
+    /// Returns true if enqueued.
+    bool enqueue(const Item& item)
     {
-        std::unique_lock<std::mutex> lock(_mutex);
+        if (!SigUtil::getTerminationFlag())
+        {
+            std::unique_lock<std::mutex> lock(_mutex);
+            if (deduplicate(item))
+            {
+                _queue.push_back(item);
+                return true;
+            }
+        }
 
-        if (!SigUtil::getTerminationFlag() && deduplicate(item))
-            _queue.push_back(item);
-
-        return _queue.size();
+        return false;
     }
 
     /// Dequeue an item if we have one - @returns true if we do, else false.
@@ -70,6 +77,12 @@ public:
     {
         std::lock_guard<std::mutex> lock(_mutex);
         return _queue.size();
+    }
+
+    bool empty() const
+    {
+        std::lock_guard<std::mutex> lock(_mutex);
+        return _queue.empty();
     }
 
     void dumpState(std::ostream& os)
