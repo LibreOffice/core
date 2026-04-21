@@ -481,6 +481,10 @@ struct PDFNoteEntry : public PDFAnnotation
 
     sal_Int32 m_nStructParent;
 
+    /// PDF object id of the hidden state-change annotation referencing this note.
+    /// 0 means the note has no state-change (i.e. m_aContents.mbResolved is false).
+    sal_Int32 m_nStateChangeObject = 0;
+
     PDFNoteEntry()
         : m_nStructParent(-1)
     {}
@@ -992,7 +996,9 @@ private:
     // Write all screen annotations.
     bool emitScreenAnnotations();
 
-    void emitTextAnnotationLine(OStringBuffer & aLine, PDFNoteEntry const & rNote);
+    void emitTextAnnotationLine(OStringBuffer & aLine, PDFNoteEntry const & rNote,
+                                std::map<sal_uInt64, sal_Int32> const & rAnnotIdToObject);
+    static void emitStateChangeAnnotationLine(OStringBuffer & aLine, PDFNoteEntry const & rNote);
     static void emitPopupAnnotationLine(OStringBuffer & aLine, PDFPopupAnnotation const & rPopUp);
     // write all notes
     bool emitNoteAnnotations();

@@ -32,6 +32,17 @@ struct PDFNote
     Color maAnnotationColor;
     Color maInteriorColor;
     float mfWidth = 0.0;
+
+    /// Threaded-comment hints set by the caller. 0 disables both linking and state-change emit.
+    /// mnAnnotationId - identity of this note within the export; referenced by other notes'
+    ///   mnParentId to form a reply thread.
+    /// mnParentId     - when non-zero, the writer emits /IRT pointing to the note carrying
+    ///   mnAnnotationId == this mnParentId.
+    /// mbResolved     - when true, the writer emits an additional hidden state-change annotation
+    ///   targeting this note.
+    sal_uInt64 mnAnnotationId = 0;
+    sal_uInt64 mnParentId = 0;
+    bool mbResolved = false;
 };
 }
 

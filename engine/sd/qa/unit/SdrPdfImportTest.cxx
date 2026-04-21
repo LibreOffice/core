@@ -292,14 +292,14 @@ CPPUNIT_TEST_FIXTURE(SdrPdfImportTest, testAnnotationsImportExport)
 CPPUNIT_TEST_FIXTURE(SdrPdfImportTest, testImportThreadedComments)
 {
     // Sample PDF threaded_comments.pdf carries five Text annotations on page 0:
-    //   4 — Alice,   root
-    //   5 — Bob,     reply to Alice
-    //   6 — Charlie, state-change targeting Alice:
+    //   4 - Alice,   root
+    //   5 - Bob,     reply to Alice
+    //   6 - Charlie, state-change targeting Alice:
     //                /IRT 4 /State (Completed) /StateModel (Review) /F 30
-    //   7 — Dave,    has /State (Completed) /StateModel (Review) but no /IRT — Acrobat
+    //   7 - Dave,    has /State (Completed) /StateModel (Review) but no /IRT - Acrobat
     //                ignores /State on a non-state-change annotation, and so do we;
     //                Dave imports as a regular comment with no state.
-    //   8 — Eve,     /IRT 4 + /State + /StateModel but missing the Hidden flag —
+    //   8 - Eve,     /IRT 4 + /State + /StateModel but missing the Hidden flag -
     //                structurally a state-change but the flags disqualify it.
     //                Acrobat treats such an annotation as malformed and skips it;
     //                we do the same: no sd::Annotation is produced for Eve.
@@ -350,9 +350,81 @@ CPPUNIT_TEST_FIXTURE(SdrPdfImportTest, testImportThreadedComments)
     CPPUNIT_ASSERT_EQUAL(xRoot->GetId(), xReply->GetParentId());
     CPPUNIT_ASSERT(!xReply->IsResolved());
 
-    // Dave has /State but no /IRT — not a state-change; /State is discarded.
+    // Dave has /State but no /IRT - not a state-change; /State is discarded.
     CPPUNIT_ASSERT_EQUAL(sal_uInt64(0), xDave->GetParentId());
     CPPUNIT_ASSERT(!xDave->IsResolved());
+
+    // Round-trip: re-export the loaded doc to PDF and verify the reply's /IRT and the
+    // resolved-root's state-change sibling are preserved. Charlie's original state-change
+    // was collapsed on import; on export a fresh one is written, targeting Alice with
+    // /State (Completed) /StateModel (Review) and /F = Hidden | Print | NoZoom | NoRotate.
+    EnvVarGuard DisablePDFCompressionGuard("VCL_DEBUG_DISABLE_PDFCOMPRESSION", "1");
+
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    comphelper::SequenceAsHashMap aMediaDescriptor;
+    aMediaDescriptor[u"FilterName"_ustr] <<= u"draw_pdf_Export"_ustr;
+    // ExportNotes defaults to false.
+    uno::Sequence<beans::PropertyValue> aFilterData(
+        comphelper::InitPropertySequence({ { "ExportNotes", uno::Any(true) } }));
+    aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
+    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+
+    auto pPDFDocument = parsePDFExport();
+    CPPUNIT_ASSERT(pPDFDocument);
+    CPPUNIT_ASSERT_EQUAL(1, pPDFDocument->getPageCount());
+    auto pPDFPage = pPDFDocument->openPage(0);
+    CPPUNIT_ASSERT(pPDFPage);
+
+    // Three visible sd::Annotations (Alice, Bob, Dave) -> 3 Text + 3 Popup + 1 hidden
+    // state-change (for Alice's resolved flag) = 7 annotations.
+    CPPUNIT_ASSERT_EQUAL(7, pPDFPage->getAnnotationCount());
+
+    std::unique_ptr<vcl::pdf::PDFiumAnnotation> xPdfAlice, xPdfBob, xPdfDave, xStateChange;
+    for (int i = 0; i < pPDFPage->getAnnotationCount(); ++i)
+    {
+        auto xAnnot = pPDFPage->getAnnotation(i);
+        if (xAnnot->getSubType() != vcl::pdf::PDFAnnotationSubType::Text)
+            continue;
+        // The state-change we emit carries /F = Hidden | Print | NoZoom | NoRotate = 30.
+        if (xAnnot->getFlags() == 30)
+        {
+            xStateChange = std::move(xAnnot);
+            continue;
+        }
+        const OUString sAuthor = xAnnot->getString(vcl::pdf::constDictionaryKeyTitle);
+        if (sAuthor == u"Alice")
+            xPdfAlice = std::move(xAnnot);
+        else if (sAuthor == u"Bob")
+            xPdfBob = std::move(xAnnot);
+        else if (sAuthor == u"Dave")
+            xPdfDave = std::move(xAnnot);
+    }
+    CPPUNIT_ASSERT(xPdfAlice);
+    CPPUNIT_ASSERT(xPdfBob);
+    CPPUNIT_ASSERT(xPdfDave);
+    CPPUNIT_ASSERT(xStateChange);
+
+    // Alice and Dave have no /IRT (thread roots, no parent).
+    CPPUNIT_ASSERT(!xPdfAlice->hasKey(vcl::pdf::constDictionaryKey_InReplyTo));
+    CPPUNIT_ASSERT(!xPdfDave->hasKey(vcl::pdf::constDictionaryKey_InReplyTo));
+
+    // Bob's /IRT resolves to Alice.
+    CPPUNIT_ASSERT(xPdfBob->hasKey(vcl::pdf::constDictionaryKey_InReplyTo));
+    auto xBobParent = xPdfBob->getLinked(vcl::pdf::constDictionaryKey_InReplyTo);
+    CPPUNIT_ASSERT(xBobParent);
+    CPPUNIT_ASSERT_EQUAL(pPDFPage->getAnnotationIndex(xPdfAlice),
+                         pPDFPage->getAnnotationIndex(xBobParent));
+
+    // The state-change points at Alice and carries the Review/Completed values.
+    CPPUNIT_ASSERT(xStateChange->hasKey(vcl::pdf::constDictionaryKey_InReplyTo));
+    auto xStateTarget = xStateChange->getLinked(vcl::pdf::constDictionaryKey_InReplyTo);
+    CPPUNIT_ASSERT(xStateTarget);
+    CPPUNIT_ASSERT_EQUAL(pPDFPage->getAnnotationIndex(xPdfAlice),
+                         pPDFPage->getAnnotationIndex(xStateTarget));
+    CPPUNIT_ASSERT_EQUAL(u"Completed"_ustr,
+                         xStateChange->getString(vcl::pdf::constDictionaryKey_State));
+    CPPUNIT_ASSERT_EQUAL(u"Review"_ustr,
+                         xStateChange->getString(vcl::pdf::constDictionaryKey_StateModel));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

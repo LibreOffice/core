@@ -3397,6 +3397,13 @@ static void ImplPDFExportComments( const uno::Reference< drawing::XDrawPage >& x
             aNote.maModificationDate = xAnnotation->getDateTime();
             auto* pAnnotation = dynamic_cast<sd::Annotation*>(xAnnotation.get());
 
+            if (pAnnotation && pAnnotation->IsThreaded())
+            {
+                aNote.mnAnnotationId = pAnnotation->GetId();
+                aNote.mnParentId = pAnnotation->GetParentId();
+                aNote.mbResolved = pAnnotation->IsResolved();
+            }
+
             if (pAnnotation && pAnnotation->getCreationInfo().meType != sdr::annotation::AnnotationType::None)
             {
                 sdr::annotation::CreationInfo const& rCreation = pAnnotation->getCreationInfo();

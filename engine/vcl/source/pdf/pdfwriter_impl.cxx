@@ -2977,7 +2977,8 @@ void appendAnnotationBorder(float fBorderWidth, OStringBuffer & aLine)
 
 } // end anonymous namespace
 
-void PDFWriterImpl::emitTextAnnotationLine(OStringBuffer & aLine, PDFNoteEntry const & rNote)
+void PDFWriterImpl::emitTextAnnotationLine(OStringBuffer & aLine, PDFNoteEntry const & rNote,
+                                           std::map<sal_uInt64, sal_Int32> const & rAnnotIdToObject)
 {
     COSWriter aWriter(aLine, m_aContext.Encryption.getParams(), m_pPDFEncryptor);
 
@@ -3081,6 +3082,48 @@ void PDFWriterImpl::emitTextAnnotationLine(OStringBuffer & aLine, PDFNoteEntry c
         aLine.append("\n");
     }
 
+    // Reply-thread parent link: /IRT points at the note carrying mnParentId as its own
+    // mnAnnotationId. Parents that aren't in the map (out-of-order emit, or the parent was
+    // dropped) silently lose the link - the annotation falls back to a root.
+    if (rNote.m_aContents.mnParentId != 0)
+    {
+        auto it = rAnnotIdToObject.find(rNote.m_aContents.mnParentId);
+        if (it != rAnnotIdToObject.end())
+        {
+            aLine.append("/IRT ");
+            appendObjectReference(it->second, aLine);
+            aLine.append("\n");
+        }
+    }
+
+    aLine.append(">>\n");
+    aLine.append("endobj\n\n");
+}
+
+void PDFWriterImpl::emitStateChangeAnnotationLine(OStringBuffer& aLine, PDFNoteEntry const& rNote)
+{
+    appendObjectID(rNote.m_nStateChangeObject, aLine);
+
+    aLine.append("<</Type /Annot /Subtype /Text ");
+    // Share the target's rect. /F Hidden hides it visually, so the exact rect is immaterial.
+    appendAnnotationRect(rNote.m_aRect, aLine);
+
+    // /F = Hidden | Print | NoZoom | NoRotate. Acrobat only needs Hidden | NoZoom | NoRotate
+    // to recognize state-change annotation, but emits Print as well.
+    aLine.append("/F 30 ");
+
+    // State-change references its target via /IRT.
+    aLine.append("/IRT ");
+    appendObjectReference(rNote.m_nObject, aLine);
+
+    aLine.append(" /State (Completed) /StateModel (Review) ");
+
+    auto const& rDateTime = rNote.m_aContents.maModificationDate;
+    aLine.append("/M (");
+    appendPdfTimeDate(aLine, rDateTime.Year, rDateTime.Month, rDateTime.Day,
+                      rDateTime.Hours, rDateTime.Minutes, rDateTime.Seconds, 0);
+    aLine.append(") ");
+
     aLine.append(">>\n");
     aLine.append("endobj\n\n");
 }
@@ -3106,7 +3149,13 @@ void PDFWriterImpl::emitPopupAnnotationLine(OStringBuffer & aLine, PDFPopupAnnot
 
 bool PDFWriterImpl::emitNoteAnnotations()
 {
-    // emit note annotations
+    // Map annotation ids supplied by the caller (PDFNote::mnAnnotationId) to the PDF object id
+    // each ended up on. /IRT references are resolved against this map during per-note emit.
+    std::map<sal_uInt64, sal_Int32> aAnnotIdToObject;
+    for (const auto& rNote : m_aNotes)
+        if (rNote.m_aContents.mnAnnotationId != 0)
+            aAnnotIdToObject[rNote.m_aContents.mnAnnotationId] = rNote.m_nObject;
+
     int nAnnots = m_aNotes.size();
     for( int i = 0; i < nAnnots; i++ )
     {
@@ -3119,7 +3168,7 @@ bool PDFWriterImpl::emitNoteAnnotations()
 
             OStringBuffer aLine(1024);
 
-            emitTextAnnotationLine(aLine, rNote);
+            emitTextAnnotationLine(aLine, rNote, aAnnotIdToObject);
 
             if (!writeBuffer(aLine))
                 return false;
@@ -3133,6 +3182,19 @@ bool PDFWriterImpl::emitNoteAnnotations()
             OStringBuffer aLine(1024);
 
             emitPopupAnnotationLine(aLine, rPopUp);
+
+            if (!writeBuffer(aLine))
+                return false;
+        }
+
+        // Resolved notes get a companion hidden state-change annotation.
+        if (rNote.m_nStateChangeObject != 0)
+        {
+            if (!updateObject(rNote.m_nStateChangeObject))
+                return false;
+
+            OStringBuffer aLine(1024);
+            emitStateChangeAnnotationLine(aLine, rNote);
 
             if (!writeBuffer(aLine))
                 return false;
@@ -9745,6 +9807,14 @@ sal_Int32 PDFWriterImpl::createNote(const tools::Rectangle& rRect,
     // insert note to page's annotation list
     m_aPages[nPageNr].m_aAnnotations.push_back(rNoteEntry.m_nObject);
     m_aPages[nPageNr].m_aAnnotations.push_back(rNoteEntry.m_aPopUpAnnotation.m_nObject);
+
+    // Resolved notes carry a hidden state-change annotation as a sibling. Allocate its
+    // object id up front so it participates in the page's /Annots list in insertion order.
+    if (rNote.mbResolved)
+    {
+        rNoteEntry.m_nStateChangeObject = createObject();
+        m_aPages[nPageNr].m_aAnnotations.push_back(rNoteEntry.m_nStateChangeObject);
+    }
 
     return nRet;
 }
