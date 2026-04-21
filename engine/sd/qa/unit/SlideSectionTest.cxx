@@ -12,6 +12,10 @@
 #include <unomodel.hxx>
 #include <drawdoc.hxx>
 #include <SlideSectionManager.hxx>
+#include <UndoSlideSection.hxx>
+#include <DrawDocShell.hxx>
+#include <sfx2/objsh.hxx>
+#include <svl/undo.hxx>
 
 using namespace css;
 
@@ -23,14 +27,28 @@ public:
     {
     }
 
-    sd::SlideSectionManager& getSectionManager()
+    SdDrawDocument* getDoc()
     {
         auto* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
         CPPUNIT_ASSERT(pXImpressDocument);
         SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
         CPPUNIT_ASSERT(pDoc);
-        return pDoc->GetSectionManager();
+        return pDoc;
     }
+
+    // Go through the docshell for Undo/Redo: sd::UndoManager deliberately hides
+    // its Undo/Redo overloads; SfxObjectShell::GetUndoManager() returns an
+    // SfxUndoManager* on which they are public.
+    SfxUndoManager& getUndoManager()
+    {
+        auto* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+        CPPUNIT_ASSERT(pXImpressDocument);
+        SfxUndoManager* pMgr = pXImpressDocument->GetDocShell()->GetUndoManager();
+        CPPUNIT_ASSERT(pMgr);
+        return *pMgr;
+    }
+
+    sd::SlideSectionManager& getSectionManager() { return getDoc()->GetSectionManager(); }
 };
 
 // Verify adding a section mid-deck splits the slide distribution correctly in PPTX
@@ -229,6 +247,123 @@ CPPUNIT_TEST_FIXTURE(SlideSectionTest, testMoveSectionDownODP)
     assertXPath(pXmlDoc, sPath + "/loext:section[1]/loext:section-slide", 7);
     assertXPath(pXmlDoc, sPath + "/loext:section[2]/loext:section-slide", 4);
     assertXPath(pXmlDoc, sPath + "/loext:section[3]/loext:section-slide", 2);
+}
+
+// Undo/redo of AddSection restores the original section layout.
+CPPUNIT_TEST_FIXTURE(SlideSectionTest, testUndoRedoAddSection)
+{
+    createSdImpressDoc("pptx/slide-section-test.pptx");
+
+    SdDrawDocument* pDoc = getDoc();
+    CPPUNIT_ASSERT(pDoc->IsUndoEnabled());
+    sd::SlideSectionManager& rMgr = pDoc->GetSectionManager();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), rMgr.GetSectionCount());
+
+    auto pUndo = std::make_unique<sd::UndoSlideSection>(*pDoc, u"Add section"_ustr);
+    rMgr.AddSection(5, u"New Section"_ustr);
+    pDoc->AddUndo(std::move(pUndo));
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), rMgr.GetSectionCount());
+    CPPUNIT_ASSERT_EQUAL(u"New Section"_ustr, rMgr.GetSection(2).maName);
+
+    getUndoManager().Undo();
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), rMgr.GetSectionCount());
+    CPPUNIT_ASSERT_EQUAL(u"Section-1"_ustr, rMgr.GetSection(0).maName);
+    CPPUNIT_ASSERT_EQUAL(u"Section-2"_ustr, rMgr.GetSection(1).maName);
+    CPPUNIT_ASSERT_EQUAL(u"Section-3"_ustr, rMgr.GetSection(2).maName);
+
+    getUndoManager().Redo();
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), rMgr.GetSectionCount());
+    CPPUNIT_ASSERT_EQUAL(u"New Section"_ustr, rMgr.GetSection(2).maName);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), rMgr.GetSection(2).mnStartIndex);
+}
+
+// Undo/redo of RemoveSection brings a removed section back with its original name and start.
+CPPUNIT_TEST_FIXTURE(SlideSectionTest, testUndoRedoRemoveSection)
+{
+    createSdImpressDoc("pptx/slide-section-test.pptx");
+
+    SdDrawDocument* pDoc = getDoc();
+    sd::SlideSectionManager& rMgr = pDoc->GetSectionManager();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), rMgr.GetSectionCount());
+    const OUString aRemovedName = rMgr.GetSection(1).maName;
+    const sal_Int32 nRemovedStart = rMgr.GetSection(1).mnStartIndex;
+
+    auto pUndo = std::make_unique<sd::UndoSlideSection>(*pDoc, u"Remove section"_ustr);
+    rMgr.RemoveSection(1);
+    pDoc->AddUndo(std::move(pUndo));
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), rMgr.GetSectionCount());
+
+    getUndoManager().Undo();
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), rMgr.GetSectionCount());
+    CPPUNIT_ASSERT_EQUAL(aRemovedName, rMgr.GetSection(1).maName);
+    CPPUNIT_ASSERT_EQUAL(nRemovedStart, rMgr.GetSection(1).mnStartIndex);
+
+    getUndoManager().Redo();
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), rMgr.GetSectionCount());
+}
+
+// Undo/redo of RenameSection round-trips the name.
+CPPUNIT_TEST_FIXTURE(SlideSectionTest, testUndoRedoRenameSection)
+{
+    createSdImpressDoc("pptx/slide-section-test.pptx");
+
+    SdDrawDocument* pDoc = getDoc();
+    sd::SlideSectionManager& rMgr = pDoc->GetSectionManager();
+    const OUString aOldName = rMgr.GetSection(1).maName;
+
+    auto pUndo = std::make_unique<sd::UndoSlideSection>(*pDoc, u"Rename section"_ustr);
+    rMgr.RenameSection(1, u"Renamed"_ustr);
+    pDoc->AddUndo(std::move(pUndo));
+
+    CPPUNIT_ASSERT_EQUAL(u"Renamed"_ustr, rMgr.GetSection(1).maName);
+
+    getUndoManager().Undo();
+    CPPUNIT_ASSERT_EQUAL(aOldName, rMgr.GetSection(1).maName);
+
+    getUndoManager().Redo();
+    CPPUNIT_ASSERT_EQUAL(u"Renamed"_ustr, rMgr.GetSection(1).maName);
+}
+
+// Undo/redo of MoveSection reverts both the section order and the underlying page
+// order. Mirrors the production grouping (BegUndo/EndUndo) so the page-reorder undo
+// recorded by MovePages() is atomic with the section-metadata undo.
+CPPUNIT_TEST_FIXTURE(SlideSectionTest, testUndoRedoMoveSection)
+{
+    createSdImpressDoc("pptx/slide-section-test.pptx");
+
+    SdDrawDocument* pDoc = getDoc();
+    sd::SlideSectionManager& rMgr = pDoc->GetSectionManager();
+    CPPUNIT_ASSERT_EQUAL(u"Section-1"_ustr, rMgr.GetSection(0).maName);
+    CPPUNIT_ASSERT_EQUAL(u"Section-2"_ustr, rMgr.GetSection(1).maName);
+    CPPUNIT_ASSERT_EQUAL(u"Section-3"_ustr, rMgr.GetSection(2).maName);
+
+    pDoc->BegUndo(u"Move section"_ustr);
+    auto pUndo = std::make_unique<sd::UndoSlideSection>(*pDoc, u"Move section"_ustr);
+    rMgr.MoveSection(0, 1);
+    pDoc->AddUndo(std::move(pUndo));
+    pDoc->EndUndo();
+
+    CPPUNIT_ASSERT_EQUAL(u"Section-2"_ustr, rMgr.GetSection(0).maName);
+    CPPUNIT_ASSERT_EQUAL(u"Section-1"_ustr, rMgr.GetSection(1).maName);
+    CPPUNIT_ASSERT_EQUAL(u"Section-3"_ustr, rMgr.GetSection(2).maName);
+
+    getUndoManager().Undo();
+
+    CPPUNIT_ASSERT_EQUAL(u"Section-1"_ustr, rMgr.GetSection(0).maName);
+    CPPUNIT_ASSERT_EQUAL(u"Section-2"_ustr, rMgr.GetSection(1).maName);
+    CPPUNIT_ASSERT_EQUAL(u"Section-3"_ustr, rMgr.GetSection(2).maName);
+
+    getUndoManager().Redo();
+
+    CPPUNIT_ASSERT_EQUAL(u"Section-2"_ustr, rMgr.GetSection(0).maName);
+    CPPUNIT_ASSERT_EQUAL(u"Section-1"_ustr, rMgr.GetSection(1).maName);
+    CPPUNIT_ASSERT_EQUAL(u"Section-3"_ustr, rMgr.GetSection(2).maName);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

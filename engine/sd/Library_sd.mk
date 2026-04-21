@@ -164,6 +164,7 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
 	sd/source/core/annotations/Annotation \
 	sd/source/core/cusshow \
 	sd/source/core/SlideSectionManager \
+	sd/source/core/UndoSlideSection \
 	sd/source/core/drawdoc \
 	sd/source/core/drawdoc2 \
 	sd/source/core/drawdoc3 \

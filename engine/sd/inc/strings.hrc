@@ -486,5 +486,6 @@
 #define STR_UNDO_ADD_SLIDE_SECTION                      NC_("STR_UNDO_ADD_SLIDE_SECTION", "Add section")
 #define STR_UNDO_REMOVE_SLIDE_SECTION                   NC_("STR_UNDO_REMOVE_SLIDE_SECTION", "Remove section")
 #define STR_UNDO_RENAME_SLIDE_SECTION                   NC_("STR_UNDO_RENAME_SLIDE_SECTION", "Rename section")
+#define STR_UNDO_MOVE_SLIDE_SECTION                     NC_("STR_UNDO_MOVE_SLIDE_SECTION", "Move section")
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
