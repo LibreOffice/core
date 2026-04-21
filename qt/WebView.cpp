@@ -644,7 +644,8 @@ WebView::WebView(QWebEngineProfile* profile, bool isWelcome, QMainWindow* parent
     page->settings()->setAttribute(QWebEngineSettings::JavascriptCanAccessClipboard, true);
     page->settings()->setAttribute(QWebEngineSettings::JavascriptCanPaste, true);
     // cool.html is loaded over file://; without this, JS fetch() to https:// is
-    // blocked (Zotero queries api.zotero.org directly from the page).
+    // blocked (Zotero queries api.zotero.org directly from the page; the
+    // COOL server's /co/collab/avatar endpoint is fetched for user avatars).
     page->settings()->setAttribute(QWebEngineSettings::LocalContentCanAccessRemoteUrls, true);
 
     QObject::connect(page, &QWebEnginePage::fullScreenRequested,
@@ -872,8 +873,20 @@ void WebView::loadRemote(const QString& localPath,
     {
         auto* ws = _document._remoteInfo->collabWs.get();
         auto* bridge = _bridge;
+        QString coolServer = _document._remoteInfo->coolServer;
         QObject::connect(ws, &QWebSocket::textMessageReceived,
-            [bridge](const QString& msg) {
+            [bridge, coolServer](const QString& msgIn) {
+                // Rewrite any relative /co/collab/avatar URLs to
+                // absolute URLs on the COOL server.  The WebView
+                // loads cool.html from CODA's local file server
+                // origin, so relative URLs would 404 there.
+                QString msg = msgIn;
+                // JSON escapes slashes as \/ on the wire.
+                QString escapedServer = coolServer;
+                escapedServer.replace("/", "\\/");
+                msg.replace("\"avatar\":\"\\/co\\/collab\\/avatar",
+                            "\"avatar\":\"" + escapedServer
+                                + "\\/co\\/collab\\/avatar");
                 LOG_TRC("Collab WS -> JS: " << msg.toStdString().substr(0, 100));
                 bridge->evalJS(
                     "if (window._codaCollabMessage) {"

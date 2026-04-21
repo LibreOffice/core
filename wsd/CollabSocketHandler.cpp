@@ -131,6 +131,17 @@ void CollabSocketHandler::onCheckFileInfoFinished(CheckFileInfo& cfi)
                 _userId = _wopiInfo->optValue<std::string>("UserId", std::string());
                 _username = _wopiInfo->optValue<std::string>("UserFriendlyName", std::string());
                 _userCanWrite = _wopiInfo->optValue<bool>("UserCanWrite", false);
+
+                // WOPI's UserExtraInfo.avatar is a URL to the user's
+                // avatar image, forwarded to collab peers via user
+                // notifications (user_list, user_joined, ...).
+                if (_wopiInfo->isObject("UserExtraInfo"))
+                {
+                    auto extra = _wopiInfo->getObject("UserExtraInfo");
+                    if (extra)
+                        _avatar = extra->optValue<std::string>(
+                            "avatar", std::string());
+                }
             }
 
             // Find or create the CollabBroker for this document
@@ -155,6 +166,13 @@ void CollabSocketHandler::onCheckFileInfoFinished(CheckFileInfo& cfi)
 
                     // Notify other users that this user joined
                     broker->notifyUserJoined(self);
+
+                    // Register the user's avatar URL + token on
+                    // the broker, so /co/collab/avatar can proxy
+                    // it for peers.
+                    if (!_avatar.empty())
+                        broker->registerAvatar(
+                            _userId, _avatar, _accessToken);
                 }
             }
 

@@ -4018,3 +4018,112 @@ div [id^='themeview'].ui-iconview-entry, div [id^='themeview1col'].ui-iconview-e
 	text-overflow: ellipsis;
 	display: block;
 }
+
+/* Two-card choice dialog (collab editing scenarios) */
+#collab-choice-dialog {
+	display: flex;
+	flex-direction: column;
+	padding: 32px 24px 24px;
+	gap: 8px;
+	max-width: 720px;
+}
+
+#collab-choice-title-row {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+	gap: 12px;
+}
+
+/* Avatar + user name wrapped in a rounded pill; the rest of the title text
+ * (e.g. "started editing") stays outside. */
+#collab-choice-pill {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	gap: 8px;
+	border: 1px solid var(--color-border, #cecece);
+	border-radius: 999px;
+	padding: 3px 14px 3px 3px;
+}
+
+#collab-choice-title {
+	font-size: 22px;
+	font-weight: 700;
+	text-align: center;
+}
+
+#collab-choice-name {
+	font-size: 14px;
+	font-weight: 500;
+}
+
+img#collab-choice-avatar {
+	width: 28px;
+	height: 28px;
+	border-radius: 50%;
+	object-fit: cover;
+}
+
+#collab-choice-subtitle {
+	font-size: 14px;
+	color: var(--color-text-lighter, #666);
+	text-align: center;
+	margin-bottom: 24px;
+	max-width: 460px;
+	align-self: center;
+}
+
+#collab-choice-cards {
+	display: flex;
+	flex-direction: row;
+	align-items: stretch;
+	gap: 16px;
+}
+
+#collab-choice-cards > * {
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+	padding: 24px 24px 20px;
+	gap: 6px;
+	min-width: 240px;
+	text-align: center;
+	align-items: center;
+	border: 1px solid var(--color-border, #cecece);
+	border-radius: 8px;
+	cursor: pointer;
+	background: transparent;
+	transition: background 0.15s, border-color 0.15s;
+}
+
+#collab-choice-cards > *:hover {
+	background: var(--color-background-hover, #f0f0f0);
+}
+
+#collab-choice-cards > *:focus {
+	outline: none;
+	border-color: var(--color-primary, #1951a4);
+	box-shadow: 0 0 0 2px var(--color-primary-lighter, #b9d2f5);
+}
+
+#collab-choice-cards [id$='-card-icon'] {
+	width: 100%;
+	max-width: 200px;
+	height: auto;
+	margin-bottom: 16px;
+}
+
+#collab-choice-cards [id$='-card-heading'] {
+	font-size: 15px;
+	font-weight: 700;
+	white-space: normal;
+}
+
+#collab-choice-cards [id$='-card-description'] {
+	font-size: 13px;
+	color: var(--color-text-lighter, #666);
+	flex-grow: 1;
+	white-space: normal;
+}

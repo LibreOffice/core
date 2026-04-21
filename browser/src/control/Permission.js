@@ -43,7 +43,8 @@ window.L.Map.include({
 
 			if (msg.type === 'editing_started' && msg.user) {
 				that._onOtherUserEditingStarted(
-					msg.user.name || msg.user.id);
+					msg.user.name || msg.user.id,
+					msg.user.avatar);
 			} else if (msg.type === 'switch_to_collab') {
 				that._onSwitchToCollabRequest();
 			} else if (msg.type === 'saved_and_switching') {
@@ -250,57 +251,251 @@ window.L.Map.include({
 
 	// Show dialog when in WASM mode asking user to choose between
 	// editing locally (WASM) or joining collaborative editing (server).
+	// Show a two-column "card" dialog with a title, a subtitle,
+	// and two side-by-side options each with a heading, a short
+	// description, and a button.  If @p titleAvatar is a non-empty
+	// URL, it is rendered as a circular image to the left of the
+	// title (used for "X started editing").  Styling is applied by
+	// CSS via the #collab-choice-dialog id.
+	// @p title may be either a plain string or an object
+	//   { name: '...', rest: '...' }
+	// In the latter case, and when @p titleAvatar is set,
+	// the avatar + name are wrapped in a pill and the rest
+	// of the title text follows outside the pill.
+	_showTwoCardDialog: function (id, title, subtitle, cards, titleAvatar) {
+		var dialogId = this.uiManager.generateModalId(id);
+		var that = this;
+
+		var titleChildren = [];
+		if (typeof title === 'object' && titleAvatar) {
+			titleChildren.push({
+				id: 'collab-choice-pill',
+				type: 'container',
+				vertical: false,
+				children: [
+					{
+						id: 'collab-choice-avatar',
+						type: 'image',
+						image: titleAvatar,
+						text: ''
+					},
+					{
+						id: 'collab-choice-name',
+						type: 'fixedtext',
+						text: title.name
+					}
+				]
+			});
+			titleChildren.push({
+				id: 'collab-choice-title',
+				type: 'fixedtext',
+				text: title.rest
+			});
+		}
+		else {
+			if (titleAvatar) {
+				titleChildren.push({
+					id: 'collab-choice-avatar',
+					type: 'image',
+					image: titleAvatar,
+					text: ''
+				});
+			}
+			titleChildren.push({
+				id: 'collab-choice-title',
+				type: 'fixedtext',
+				text: (typeof title === 'object' ?
+					(title.name + ' ' + title.rest) : title)
+			});
+		}
+
+		// Icon paths in c.icon are theme-agnostic stems
+		// ('images/coda-collab-<name>'); pick the dark or light
+		// variant once, here at build time, based on the current
+		// dark-theme pref.  The dialog is modal and short-lived, so
+		// a theme change mid-decision (which would leave the icon
+		// stale) is not worth optimising for.
+		var darkTheme = window.prefs.getBoolean('darkTheme');
+		var iconSuffix = darkTheme ? '-dark.svg' : '-light.svg';
+
+		var cardWidgets = cards.map(function (c) {
+			return {
+				id: c.id + '-card',
+				type: 'container',
+				vertical: true,
+				children: [
+					{
+						id: c.id + '-card-icon',
+						type: 'image',
+						image: c.icon + iconSuffix,
+						text: ''
+					},
+					{
+						id: c.id + '-card-heading',
+						type: 'fixedtext',
+						text: c.heading
+					},
+					{
+						id: c.id + '-card-description',
+						type: 'fixedtext',
+						text: c.description
+					}
+				]
+			};
+		});
+
+		var json = {
+			id: dialogId,
+			dialogid: id,
+			type: 'modalpopup',
+			title: '',
+			hasClose: false,
+			hasOverlay: true,
+			cancellable: false,
+			jsontype: 'dialog',
+			'init_focus_id': 'response',
+			children: [{
+				id: 'collab-choice-dialog',
+				type: 'container',
+				vertical: true,
+				children: [
+					{
+						id: 'collab-choice-title-row',
+						type: 'container',
+						vertical: false,
+						children: titleChildren
+					},
+					{
+						id: 'collab-choice-subtitle',
+						type: 'fixedtext',
+						text: subtitle
+					},
+					{
+						id: 'collab-choice-cards',
+						type: 'container',
+						vertical: false,
+						children: cardWidgets
+					}
+				]
+			}]
+		};
+
+		this.uiManager.showModal(json);
+
+		// The jsdialog builder renders the dialog asynchronously, so the card containers (and
+		// the avatar <img>, if any) only exist some short time after showModal returns; poll
+		// briefly for them and wire up the click and image-error handlers once present.
+		var tries = 0;
+		var wire = function () {
+			var anyMissing = false;
+			cards.forEach(function (c) {
+				var card = document.getElementById(c.id + '-card');
+				if (!card) {
+					anyMissing = true;
+					return;
+				}
+				if (card.dataset.codaCollabCardWired) return;
+				card.dataset.codaCollabCardWired = '1';
+				card.setAttribute('role', 'button');
+				card.setAttribute('tabindex', '0');
+				card.addEventListener('click', function () {
+					that.uiManager.closeModal(dialogId);
+					c.onClick();
+				});
+				card.addEventListener('keydown', function (e) {
+					if (e.key === 'Enter' || e.key === ' ') {
+						e.preventDefault();
+						that.uiManager.closeModal(dialogId);
+						c.onClick();
+					}
+				});
+			});
+			if (titleAvatar) {
+				var img = document.getElementById('collab-choice-avatar');
+				if (!img) {
+					anyMissing = true;
+				} else if (!img.dataset.codaCollabAvatarWired) {
+					img.dataset.codaCollabAvatarWired = '1';
+					img.onerror = function () { img.style.display = 'none'; };
+					if (img.complete && img.naturalWidth === 0)
+						img.style.display = 'none';
+				}
+			}
+			if (anyMissing && ++tries < 50)
+				setTimeout(wire, 50);
+		};
+		setTimeout(wire, 0);
+	},
+
+	// The user wants to start editing while other users are
+	// viewing.  Offer the choice between editing locally
+	// (changes sync on save) or starting a collaborative
+	// session (all users edit together in real-time).
 	_showWasmEditChoice: function () {
 		var that = this;
-		this.uiManager.showYesNoButton(
+		this._showTwoCardDialog(
 			'wasm-edit-choice-modal',
-			undefined,
-			_('Other users are viewing this document. How would you like to edit?'),
-			_('Collaborative editing'),
-			_('Edit locally'),
-			function () {
-				// Save local changes and switch to the
-				// server-served page for collaborative editing.
-				that._saveAndSwitchToServerMode();
-			},
-			function () {
-				// Edit locally in WASM.
-				that._proceedEditMode();
-			},
-			false
+			_('How would you like to edit?'),
+			_('Other users are viewing this document. Choose how you\'d like to continue:'),
+			[
+				{
+					id: 'edit-locally',
+					icon: 'images/coda-collab-local-editing',
+					heading: _('Edit locally'),
+					description: _('Changes sync when you save'),
+					onClick: function () { that._proceedEditMode(); }
+				},
+				{
+					id: 'start-collaborative',
+					icon: 'images/coda-collab-collaborative-editing',
+					heading: _('Collaborative editing'),
+					description: _('Edit together in real-time'),
+					onClick: function () { that._saveAndSwitchToServerMode(); }
+				}
+			]
 		);
 	},
 
-	// Show a dialog asking whether to keep viewing locally or join
-	// collaborative editing.  Uses a fixed modal ID so that a
-	// second call replaces the previous dialog rather than stacking.
-	_showCollabJoinDialog: function (message) {
+	// Show a "keep viewing vs. join collab editing" choice using
+	// the two-card layout.  Used both when another user has just
+	// started editing and when a collaborative session is already
+	// active - only the title/subtitle (and optional avatar image
+	// shown next to the title) differ.
+	_showCollabJoinDialog: function (title, subtitle, avatar) {
 		var that = this;
-		this.uiManager.showModalWithCustomButtons(
+		this._showTwoCardDialog(
 			'collab-join-modal',
-			undefined,
-			message,
-			false,
+			title,
+			subtitle,
 			[
-				{id: 'collab-keep-viewing', text: _('Keep viewing local copy')},
-				{id: 'collab-join', text: _('Join collaborative editing')}
-			],
-			[
-				{id: 'collab-keep-viewing', func_: function () {
-					// Stay in current WASM read-only mode
-				}},
-				{id: 'collab-join', func_: function () {
-					if (window.collabEditingActive) {
-						// Someone is editing locally - ask them to
-						// save and switch, then wait.
-						that._waitForCollabSave();
-						window.collabSendMessage({type: 'switch_to_collab'});
-					} else {
-						// No active editor - just switch directly.
-						window.switchToServerMode();
+				{
+					id: 'collab-keep-viewing',
+					icon: 'images/coda-collab-local-viewing',
+					heading: _('Keep viewing local copy'),
+					description: _('Continue with your version'),
+					onClick: function () {
+						// Stay in current WASM read-only mode.
 					}
-				}}
-			]
+				},
+				{
+					id: 'collab-join',
+					icon: 'images/coda-collab-collaborative-editing',
+					heading: _('Join collaborative editing'),
+					description: _('Edit together in real-time'),
+					onClick: function () {
+						if (window.collabEditingActive) {
+							// Someone is editing locally - ask them to
+							// save and switch, then wait.
+							that._waitForCollabSave();
+							window.collabSendMessage({type: 'switch_to_collab'});
+						} else {
+							// No active editor - just switch directly.
+							window.switchToServerMode();
+						}
+					}
+				}
+			],
+			avatar
 		);
 	},
 
@@ -382,16 +577,24 @@ window.L.Map.include({
 		this._saveAndSwitchToServerMode();
 	},
 
-	// Handle joining when a collaborative editing session is already active.
+	// A newly-joining user opens a document where a
+	// collaborative editing session is already active.
 	_onCollabEditingActive: function () {
 		this._showCollabJoinDialog(
-			_('A collaborative editing session is active for this document.'));
+			_('How would you like to edit?'),
+			_('Other users are editing this document. Choose how you\'d like to continue:'));
 	},
 
-	// Handle notification that another user started editing.
-	_onOtherUserEditingStarted: function (userName) {
+	// Another user has just started editing while we were
+	// viewing.  Offer to keep viewing locally or join the
+	// collaborative session.
+	_onOtherUserEditingStarted: function (userName, avatar) {
 		this._showCollabJoinDialog(
-			_('User %0 has started editing this document.').replace('%0', userName));
+			avatar
+				? { name: userName, rest: _('started editing') }
+				: _('%0 started editing').replace('%0', userName),
+			_('Someone else is now editing this document. Choose how you\'d like to continue:'),
+			avatar);
 	},
 
 	// from read-only to edit mode

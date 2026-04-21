@@ -45,6 +45,7 @@ class CollabSocketHandler : public WebSocketHandler
     std::string _docKey;
     std::string _userId;
     std::string _username;
+    std::string _avatar;
     bool _userCanWrite = false;
     Poco::JSON::Object::Ptr _wopiInfo;
 
@@ -77,6 +78,10 @@ public:
 
     /// Returns whether the user can write (available after successful authentication)
     bool getUserCanWrite() const { return _userCanWrite; }
+
+    /// Returns the user's avatar URL from WOPI UserExtraInfo
+    /// (may be empty)
+    const std::string& getAvatar() const { return _avatar; }
 
     /// Returns the raw WOPI info JSON (available after successful authentication)
     Poco::JSON::Object::Ptr getWopiInfo() const { return _wopiInfo; }

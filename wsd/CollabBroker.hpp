@@ -87,6 +87,18 @@ class CollabBroker : public std::enable_shared_from_this<CollabBroker>
     /// Rotating access tokens for secure download URLs
     RotatingToken _accessToken;
 
+    /// Per-user avatar info registered by handlers when they
+    /// authenticate.  The broker rewrites `avatar` URLs in
+    /// outgoing user messages to a /co/collab/avatar proxy URL,
+    /// which proxies the fetch on-demand using the stored
+    /// upstream URL and access_token.
+    struct UserAvatar
+    {
+        std::string url;          ///< WOPI avatar URL
+        std::string accessToken;  ///< token for the integrator
+    };
+    std::map<std::string, UserAvatar> _avatars;
+
 public:
     CollabBroker(const std::string& docKey, const std::string& wopiSrc);
     ~CollabBroker();
@@ -149,6 +161,16 @@ public:
     /// Check if a tag matches either the current or previous access token
     bool matchesAccessToken(const std::string& tag) const;
 
+    /// Register a user's avatar URL + access_token for later
+    /// proxying via /co/collab/avatar.
+    void registerAvatar(const std::string& userId,
+                        const std::string& url,
+                        const std::string& accessToken);
+
+    /// Look up registered avatar for a user.  Returns
+    /// (url, accessToken) or empty if not registered.
+    UserAvatar lookupAvatar(const std::string& userId) const;
+
 private:
     /// Generate a unique ID for a handler
     static std::string generateHandlerId();
@@ -186,6 +208,11 @@ std::string createCollabFetchRequest(const std::string& streamUrl,
 
 /// Find an existing CollabBroker by docKey (returns nullptr if not found or empty)
 std::shared_ptr<CollabBroker> findCollabBroker(const std::string& docKey);
+
+/// Find an existing CollabBroker by its WOPI source URL.
+/// Returns nullptr if none exists for the URL.
+std::shared_ptr<CollabBroker>
+findCollabBrokerByWopiSrc(const std::string& wopiSrc);
 
 /// Look up and consume a fetch request by token.
 /// Returns true if found and valid, fills in the request details.

@@ -1509,6 +1509,62 @@ ClientRequestDispatcher::MessageResult ClientRequestDispatcher::handleMessage(Po
         }
         else if (requestDetails.equals(0, "co") &&
                  requestDetails.equals(1, "collab") &&
+                 requestDetails.equals(2, "avatar"))
+        {
+            // /co/collab/avatar?WOPISrc=...&userId=...&token=...
+            // Proxies the per-user avatar image from the
+            // integrator (authenticated with the user's
+            // access_token) so peers can load it without
+            // needing the integrator's cookies.
+            LOG_INF("CollabAvatar request: " << request.getURI());
+
+            Poco::URI requestUri(request.getURI());
+            std::string wopiSrc, userId, token;
+            for (const auto& param : requestUri.getQueryParameters())
+            {
+                if (param.first == "WOPISrc") wopiSrc = param.second;
+                else if (param.first == "userId") userId = param.second;
+                else if (param.first == "token") token = param.second;
+            }
+
+            if (wopiSrc.empty() || userId.empty() || token.empty())
+            {
+                HttpHelper::sendErrorAndShutdown(
+                    http::StatusCode::BadRequest, socket);
+                return MessageResult::Ignore;
+            }
+
+            auto broker = findCollabBrokerByWopiSrc(wopiSrc);
+            if (!broker)
+            {
+                HttpHelper::sendErrorAndShutdown(
+                    http::StatusCode::Gone, socket);
+                return MessageResult::Ignore;
+            }
+            if (!broker->matchesAccessToken(token))
+            {
+                HttpHelper::sendErrorAndShutdown(
+                    http::StatusCode::Unauthorized, socket);
+                return MessageResult::Ignore;
+            }
+
+            auto avatar = broker->lookupAvatar(userId);
+            if (avatar.url.empty())
+            {
+                HttpHelper::sendErrorAndShutdown(
+                    http::StatusCode::NotFound, socket);
+                return MessageResult::Ignore;
+            }
+
+            // Proxy the download via CollabFileProxy.
+            auto proxy = std::make_shared<CollabFileProxy>(
+                _id, requestDetails, socket, wopiSrc,
+                avatar.accessToken);
+            proxy->handleFetchRequest(avatar.url,
+                COOLWSD::getWebServerPoll(), disposition);
+        }
+        else if (requestDetails.equals(0, "co") &&
+                 requestDetails.equals(1, "collab") &&
                  requestDetails.isWebSocket())
         {
             // /co/collab WebSocket endpoint

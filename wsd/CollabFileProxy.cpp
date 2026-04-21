@@ -185,9 +185,14 @@ void CollabFileProxy::doDownload(const std::shared_ptr<TerminatingPoll>& poll,
         LOG_INF("CollabFileProxy: downloaded " << httpResponse->getBody().size()
                 << " bytes from [" << uriAnonym << "] in " << duration);
 
-        // Send the file to the client
+        // Send the file to the client.  Preserve the upstream's
+        // Content-Type so images etc. are rendered correctly
+        // (avatars need image/*).
         http::Response response(http::StatusCode::OK);
-        response.setBody(httpResponse->getBody(), "application/octet-stream");
+        std::string contentType = httpResponse->header().get("Content-Type");
+        if (contentType.empty())
+            contentType = "application/octet-stream";
+        response.setBody(httpResponse->getBody(), contentType);
         socket->sendAndShutdown(response);
     };
 
