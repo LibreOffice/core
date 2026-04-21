@@ -241,8 +241,13 @@ final class WebDriverServer {
 
         jsExecutor(expression) { [weak self] result, error in
             if let error = error {
+                // Extract the actual JS exception message from the
+                // NSError userInfo, not the generic localizedDescription.
+                let nsError = error as NSError
+                let jsMessage = nsError.userInfo["WKJavaScriptExceptionMessage"] as? String
+                    ?? nsError.localizedDescription
                 self?.sendW3CError(connection: connection, error: "javascript error",
-                                   message: error.localizedDescription)
+                                   message: jsMessage)
             } else {
                 self?.sendW3C(connection: connection, value: result ?? NSNull())
             }
