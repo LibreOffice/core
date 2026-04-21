@@ -13,11 +13,34 @@
 
 #include <QString>
 
+#include <memory>
+
 class QWidget;
 class QWebEngineProfile;
 
 namespace coda
 {
+struct RemoteDocInfo;
+
+/// Result of downloading a document via /co/collab.
+struct RemoteDownload
+{
+    /// Path to the downloaded temp file on disk.  Empty on failure.
+    QString localPath;
+    /// Populated RemoteDocInfo (wopiSrc, accessToken, coolServer/path,
+    /// and the live collab WebSocket).  Null on failure.
+    std::shared_ptr<RemoteDocInfo> remoteInfo;
+};
+
+/// Open a /co/collab WebSocket against coolServer, authenticate with
+/// accessToken, request a fetch URL for the document identified by
+/// wopiSrc, and download it to a temp file.  Runs a local event loop
+/// (the caller's event loop is expected to be active).  Returns an
+/// empty RemoteDownload on any step's failure.
+RemoteDownload downloadRemoteDocument(const QString& wopiSrc,
+                                      const QString& accessToken,
+                                      const QString& coolServer,
+                                      const QString& coolPath);
 
 /// Show the remote file picker, extract WOPI parameters, download the
 /// file via the COOL server's /co/collab endpoint, and open it in a

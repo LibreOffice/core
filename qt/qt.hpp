@@ -8,6 +8,8 @@
 #pragma once
 
 #include <QApplication>
+#include <QSslCertificate>
+#include <QSslKey>
 #include <QWebEngineProfile>
 #include "common/RecentFiles.hpp"
 
@@ -32,11 +34,20 @@ class Application
 private:
     static QWebEngineProfile* globalProfile;
     static RecentFiles recentFiles;
+    static QSslKey embedKey;
+    static QSslCertificate embedCert;
 
 public:
     static void initialize();
     static QWebEngineProfile* getProfile();
     static RecentFiles& getRecentFiles();
+    /// Self-signed cert/key for the embed-mode HTTPS server.  Both
+    /// freshly generated at process start, valid for localhost /
+    /// 127.0.0.1 / ::1.  Trusted programmatically by the picker
+    /// page's certificateError handler; never installed in any
+    /// system or browser trust store.
+    static const QSslKey& getEmbedKey();
+    static const QSslCertificate& getEmbedCert();
 };
 
 namespace

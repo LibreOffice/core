@@ -19,17 +19,22 @@
 #include <thread>
 #include "Document.hpp"
 
-class CODAWebEngineView;
-class QMainWindow;
+class QWidget;
 
-// Qt ⇄ JavaScript bridge
+// Qt ⇄ JavaScript bridge.  Bridge is attached to a QWebEnginePage
+// (via QWebChannel) and brokers messages between the page's JS and
+// the rest of CODA.  The host window/webview are taken as the base
+// Qt types so that Bridge can attach to any page (e.g., the
+// IntegratorFilePicker's QDialog + QWebEngineView); CODA-specific
+// methods (presentation full-screen, monitor exchange) are reached
+// via qobject_cast at their call sites.
 class Bridge : public QObject
 {
     Q_OBJECT
 
     coda::DocumentData& _document;
-    QMainWindow* _window;
-    CODAWebEngineView* _webView;
+    QWidget* _window;
+    QWebEngineView* _webView;
     int _closeNotificationPipeForForwardingThread[2];
     std::thread _app2js;
     // true between sending a copy/cut command and receiving its COMMANDRESULT
@@ -52,7 +57,7 @@ class Bridge : public QObject
     void closeSnackbar();
 
 public:
-    explicit Bridge(QObject* parent, coda::DocumentData& document, QMainWindow* window, CODAWebEngineView* webView)
+    explicit Bridge(QObject* parent, coda::DocumentData& document, QWidget* window, QWebEngineView* webView)
         : QObject(parent)
         , _document(document)
         , _window(window)

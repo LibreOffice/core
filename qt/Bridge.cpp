@@ -211,7 +211,7 @@ void Bridge::retryLoadAfterUnloading()
 
     // Reloading the page re-runs the startup script, which reconnects the fake
     // socket through the HULLO handler and sends the load request again.
-    QPointer<CODAWebEngineView> webView(_webView);
+    QPointer<QWebEngineView> webView(_webView);
     QTimer::singleShot(delayMs, this,
                        [webView]
                        {
@@ -515,7 +515,7 @@ QVariant Bridge::cool(const QString& messageStr)
         if (FileUtil::getStatOfFile(welcomePath, st) == 0)
         {
             Poco::URI fileURL{Poco::Path(welcomePath)};
-            QMainWindow* window = _window;
+            QMainWindow* window = qobject_cast<QMainWindow*>(_window);
             QTimer::singleShot(0, [fileURL, window]() {
                 WebView* webViewInstance = new WebView(Application::getProfile(), /*isWelcome*/ true, window);
                 webViewInstance->load(fileURL);
@@ -863,8 +863,8 @@ QVariant Bridge::cool(const QString& messageStr)
     }
     else if (tokens.equals(0, "EXCHANGEMONITORS"))
     {
-        if (_webView)
-            _webView->exchangeMonitors();
+        if (auto* coda = dynamic_cast<CODAWebEngineView*>(_webView))
+            coda->exchangeMonitors();
     }
     else if (tokens.equals(0, "downloadas"))
     {

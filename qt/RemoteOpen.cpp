@@ -33,34 +33,12 @@
 namespace coda
 {
 
-void openRemoteFile(const QString& serverUrl, QWidget* parent,
-                    QWebEngineProfile* profile)
+RemoteDownload downloadRemoteDocument(const QString& wopiSrc,
+                                      const QString& accessToken,
+                                      const QString& coolServer,
+                                      const QString& coolPath)
 {
-    // Show the Nextcloud web UI.  When the user clicks a document,
-    // richdocuments creates a COOL iframe whose URL contains the
-    // WOPISrc and access_token.  NextcloudFilePicker intercepts that.
-    IntegratorFilePicker picker(serverUrl, parent);
-    if (picker.exec() != QDialog::Accepted)
-        return;
-
-    QString wopiSrc = picker.wopiSrc();
-    QString accessToken = picker.accessToken();
-    QString coolServer = picker.coolServer();
-    QString coolPath = picker.coolPath();
-
-    if (wopiSrc.isEmpty())
-    {
-        LOG_ERR("openRemoteFile: no WOPISrc from picker");
-        return;
-    }
-
-    LOG_TRC("openRemoteFile: WOPISrc=" << wopiSrc.toStdString()
-            << " coolServer=" << coolServer.toStdString());
-
-    // Download the file via the COOL server's /co/collab endpoint.
-    QNetworkAccessManager nam;
-    QEventLoop loop;
-
+    // Open a collab WebSocket to the COOL server and authenticate.
     QString wsUrl = coolServer;
     wsUrl.replace("http://", "ws://");
     wsUrl.replace("https://", "wss://");
@@ -70,7 +48,6 @@ void openRemoteFile(const QString& serverUrl, QWidget* parent,
     auto* collabWs = new QWebSocket;
     auto* downloadUrl = new QString;
     auto* downloadFilename = new QString;
-    auto* downloadDone = new bool(false);
     auto* collabLoop = new QEventLoop;
     auto* pendingMessages = new QStringList;
 
@@ -79,7 +56,8 @@ void openRemoteFile(const QString& serverUrl, QWidget* parent,
             collabWs->sendTextMessage("access_token " + accessToken);
         });
     QObject::connect(collabWs, &QWebSocket::textMessageReceived,
-        [downloadUrl, downloadFilename, downloadDone, collabWs, collabLoop, pendingMessages]
+        [downloadUrl, downloadFilename, collabWs, collabLoop,
+         pendingMessages]
         (const QString& msg) {
             QJsonDocument jdoc = QJsonDocument::fromJson(msg.toUtf8());
             QJsonObject jobj = jdoc.object();
@@ -97,18 +75,17 @@ void openRemoteFile(const QString& serverUrl, QWidget* parent,
             {
                 *downloadUrl = jobj["url"].toString();
                 *downloadFilename = jobj["filename"].toString();
-                *downloadDone = true;
                 collabLoop->quit();
             }
             else if (type == "error" || type == "fetch_error")
             {
-                LOG_ERR("openRemoteFile: collab error: "
+                LOG_ERR("downloadRemoteDocument: collab error: "
                         << msg.toStdString());
                 collabWs->close();
             }
             else
             {
-                LOG_TRC("openRemoteFile: buffering collab msg: "
+                LOG_TRC("downloadRemoteDocument: buffering collab msg: "
                         << msg.toStdString().substr(0, 100));
                 pendingMessages->append(msg);
             }
@@ -123,7 +100,7 @@ void openRemoteFile(const QString& serverUrl, QWidget* parent,
     collabTimeout.setSingleShot(true);
     QObject::connect(&collabTimeout, &QTimer::timeout,
         [collabWs]() {
-            LOG_ERR("openRemoteFile: collab WebSocket timeout");
+            LOG_ERR("downloadRemoteDocument: collab WebSocket timeout");
             collabWs->close();
         });
     collabTimeout.start(30000);
@@ -133,14 +110,13 @@ void openRemoteFile(const QString& serverUrl, QWidget* parent,
 
     if (downloadUrl->isEmpty())
     {
-        LOG_ERR("openRemoteFile: failed to get download URL");
-        delete downloadDone;
+        LOG_ERR("downloadRemoteDocument: failed to get download URL");
         delete downloadFilename;
         delete downloadUrl;
         delete collabLoop;
         delete pendingMessages;
         delete collabWs;
-        return;
+        return {};
     }
 
     QString dlUrlStr = *downloadUrl;
@@ -148,16 +124,15 @@ void openRemoteFile(const QString& serverUrl, QWidget* parent,
         dlUrlStr = coolServer + dlUrlStr;
 
     QString filename = *downloadFilename;
-    delete downloadDone;
     delete downloadFilename;
     delete downloadUrl;
     delete collabLoop;
     QStringList bufferedMessages = *pendingMessages;
     delete pendingMessages;
 
-    // Download the file
-    QUrl dlUrl(dlUrlStr);
-    QNetworkRequest dlReq(dlUrl);
+    QNetworkAccessManager nam;
+    QEventLoop loop;
+    QNetworkRequest dlReq{QUrl(dlUrlStr)};
     QNetworkReply* dlReply = nam.get(dlReq);
     QObject::connect(dlReply, &QNetworkReply::finished,
                      &loop, &QEventLoop::quit);
@@ -165,14 +140,14 @@ void openRemoteFile(const QString& serverUrl, QWidget* parent,
 
     if (dlReply->error() != QNetworkReply::NoError)
     {
-        LOG_ERR("openRemoteFile: download error: "
+        LOG_ERR("downloadRemoteDocument: download error: "
                 << dlReply->errorString().toStdString());
         dlReply->deleteLater();
         delete collabWs;
-        return;
+        return {};
     }
 
-    // Preserve file extension for filter detection
+    // Preserve file extension for filter detection.
     QString ext;
     int dot = filename.lastIndexOf('.');
     if (dot >= 0)
@@ -198,8 +173,46 @@ void openRemoteFile(const QString& serverUrl, QWidget* parent,
     remoteInfo->collabWs.reset(collabWs);
     remoteInfo->pendingCollabMessages = std::move(bufferedMessages);
 
-    WebView* webViewInstance = new WebView(profile);
-    webViewInstance->loadRemote(localPath, std::move(remoteInfo));
+    return {localPath, std::move(remoteInfo)};
+}
+
+void openRemoteFile(const QString& serverUrl, QWidget* parent,
+                    QWebEngineProfile* profile)
+{
+    // Show the integrator's web UI.  In embed mode the picker morphs
+    // into the document editor in place; in the non-embed flow it
+    // emits wopiSelected() once the user picks a document, at which
+    // point we read the WOPI params off it, close it, download the
+    // document, and open a separate WebView for the editor.
+    auto* picker = new IntegratorFilePicker(serverUrl, parent);
+    picker->setAttribute(Qt::WA_DeleteOnClose);
+    QObject::connect(picker, &IntegratorFilePicker::wopiSelected, picker,
+        [picker, profile]() {
+            const QString wopiSrc = picker->wopiSrc();
+            const QString accessToken = picker->accessToken();
+            const QString coolServer = picker->coolServer();
+            const QString coolPath = picker->coolPath();
+            picker->close();
+
+            if (wopiSrc.isEmpty())
+            {
+                LOG_ERR("openRemoteFile: no WOPISrc from picker");
+                return;
+            }
+
+            LOG_TRC("openRemoteFile: WOPISrc=" << wopiSrc.toStdString()
+                    << " coolServer=" << coolServer.toStdString());
+
+            RemoteDownload dl = downloadRemoteDocument(
+                wopiSrc, accessToken, coolServer, coolPath);
+            if (dl.localPath.isEmpty())
+                return;
+
+            WebView* webViewInstance = new WebView(profile);
+            webViewInstance->loadRemote(
+                dl.localPath, std::move(dl.remoteInfo));
+        });
+    picker->show();
 }
 
 } // namespace coda

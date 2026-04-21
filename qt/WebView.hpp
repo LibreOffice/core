@@ -22,12 +22,43 @@
 #include <memory>
 
 class Bridge;
+class QWebEnginePage;
 class WebView;
 class QDragEnterEvent;
 class QDragMoveEvent;
 class QDragLeaveEvent;
 class QDropEvent;
 class QUrl;
+
+namespace coda
+{
+/// Create a QWebChannel on page, construct a Bridge bound to document
+/// (with host window/webview), register the Bridge as "bridge" on
+/// the channel, and attach the channel to the page.  Shared between
+/// the normal open-in-new-window flow and the embed-mode flow.
+/// Ownership: Bridge is parented on the channel (which is parented on
+/// the page), so everything lives as long as the page.
+Bridge* attachRemoteBridge(QWebEnginePage* page,
+                           coda::DocumentData& document,
+                           QWidget* window, QWebEngineView* webView);
+
+/// Wire collab WebSocket textMessageReceived to Bridge::evalJS so
+/// user_joined/user_left/editing_started flow into the page JS.
+/// Rewrites relative /co/collab/avatar URLs to absolute URLs on the
+/// coolServer origin, since the embedded page is not hosted there.
+void wireCollabMessagesToBridge(Bridge* bridge,
+                                coda::RemoteDocInfo* remoteInfo);
+
+/// Add the CODA-local query parameters the Qt-flavored cool.html
+/// expects (file_path, permission, appdocid, userinterfacemode,
+/// darkTheme) to `url`.
+void addRemoteCoolParams(QUrl& url, const coda::DocumentData& document);
+
+/// Preferred window size for document viewing (full viewport) or for
+/// the welcome/starter screen (~40% viewport, clamped to 800x450
+/// .. 1280x720).
+std::pair<int, int> documentWindowSize(bool isWelcomeOrStarter);
+} // namespace coda
 
 class CODAWebEngineView : public QWebEngineView
 {

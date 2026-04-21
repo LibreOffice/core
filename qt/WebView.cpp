@@ -13,6 +13,8 @@
 
 #include "WebView.hpp"
 
+#include <QUrlQuery>
+
 #include <qt/bridge.hpp>
 #include <qt/CodaConfig.hpp>
 #include <qt/DBusService.hpp>
@@ -673,13 +675,13 @@ WebView::~WebView() {
     }
 }
 
-std::pair<int, int> getWindowSize(bool isWelcome)
+std::pair<int, int> coda::documentWindowSize(bool isWelcomeOrStarter)
 {
     QScreen* screen = QGuiApplication::primaryScreen();
     const int viewportWidth = screen->availableGeometry().width();
     const int viewportHeight = screen->availableGeometry().height();
 
-    if (!isWelcome)
+    if (!isWelcomeOrStarter)
         return { viewportWidth, viewportHeight };
 
     const int maxWidth = 1280;
@@ -694,6 +696,11 @@ std::pair<int, int> getWindowSize(bool isWelcome)
     height = std::min(std::max(height, minHeight), maxHeight);
 
     return { width, height };
+}
+
+static std::pair<int, int> getWindowSize(bool isWelcome)
+{
+    return coda::documentWindowSize(isWelcome);
 }
 
 std::optional<bool> portalPrefersDark() {
@@ -817,6 +824,75 @@ void WebView::load(const Poco::URI& fileURL, bool newFile, bool isStarterMode)
     _mainWindow->show();
 }
 
+Bridge* coda::attachRemoteBridge(QWebEnginePage* page,
+                                 coda::DocumentData& document,
+                                 QWidget* window, QWebEngineView* webView)
+{
+    QWebChannel* channel = new QWebChannel(page);
+    Bridge* bridge = new Bridge(channel, document, window, webView);
+    channel->registerObject("bridge", bridge);
+    page->setWebChannel(channel);
+    return bridge;
+}
+
+void coda::wireCollabMessagesToBridge(Bridge* bridge,
+                                      coda::RemoteDocInfo* remoteInfo)
+{
+    if (!remoteInfo || !remoteInfo->collabWs)
+        return;
+    auto* ws = remoteInfo->collabWs.get();
+    QString coolServer = remoteInfo->coolServer;
+    QObject::connect(ws, &QWebSocket::textMessageReceived,
+        [bridge, coolServer](const QString& msgIn) {
+            // Rewrite any relative /co/collab/avatar URLs to
+            // absolute URLs on the COOL server.  The embedded page
+            // is not hosted at the COOL origin, so relative URLs
+            // would 404 there.
+            QString msg = msgIn;
+            QString escapedServer = coolServer;
+            escapedServer.replace("/", "\\/");
+            msg.replace("\"avatar\":\"\\/co\\/collab\\/avatar",
+                        "\"avatar\":\"" + escapedServer
+                            + "\\/co\\/collab\\/avatar");
+            LOG_TRC("Collab WS -> JS: "
+                    << msg.toStdString().substr(0, 100));
+            bridge->evalJS(
+                "if (window._codaCollabMessage) {"
+                "  window._codaCollabMessage("
+                + msg.toStdString() + ");"
+                "} else {"
+                "  window._codaCollabQueue = window._codaCollabQueue || [];"
+                "  window._codaCollabQueue.push("
+                + msg.toStdString() + ");"
+                "}");
+        });
+    QObject::connect(ws, &QWebSocket::disconnected,
+        []() { LOG_DBG("Collab WS disconnected"); });
+    // Buffered collab messages (user_list etc.) are replayed when
+    // JS sends 'replayCollabMessages' after _codaCollabMessage is
+    // defined (see Bridge.cpp).
+}
+
+void coda::addRemoteCoolParams(QUrl& url,
+                               const coda::DocumentData& document)
+{
+    QUrlQuery q(url);
+    std::string uiLanguage = getUILanguage();
+    q.addQueryItem("lang", QString::fromStdString(uiLanguage));
+    q.addQueryItem("dir",
+        LangUtil::isRtlLanguage(uiLanguage) ? "rtl" : "");
+    q.addQueryItem("file_path",
+        QString::fromStdString(document._fileURL.toString()));
+    q.addQueryItem("permission", "edit");
+    q.addQueryItem("startreadonly", "true");
+    q.addQueryItem("appdocid",
+        QString::number(document._appDocId));
+    q.addQueryItem("userinterfacemode", "notebookbar");
+    if (portalPrefersDark())
+        q.addQueryItem("darkTheme", "true");
+    url.setQuery(q);
+}
+
 void WebView::loadRemote(const QString& localPath,
                          std::shared_ptr<coda::RemoteDocInfo> remoteInfo)
 {
@@ -829,31 +905,18 @@ void WebView::loadRemote(const QString& localPath,
         ._remoteInfo = std::move(remoteInfo),
     };
 
-    QWebChannel* channel = new QWebChannel(_webView->page());
     queryGnomeFontScalingUpdateZoom();
-
     assert(_bridge == nullptr);
-    _bridge = new Bridge(channel, _document, _mainWindow, _webView.get());
-    channel->registerObject("bridge", _bridge);
-    _webView->page()->setWebChannel(channel);
+    _bridge = coda::attachRemoteBridge(
+        _webView->page(), _document, _mainWindow, _webView.get());
 
     Poco::Path coolHtmlPath(getDataDir());
     coolHtmlPath.append("/browser/dist/cool.html");
-    Poco::URI urlAndQuery(coolHtmlPath);
-    urlAndQuery.setScheme("file");
-    std::string uiLanguage = getUILanguage();
-    urlAndQuery.addQueryParameter("lang", uiLanguage);
-    urlAndQuery.addQueryParameter("dir", LangUtil::isRtlLanguage(uiLanguage) ? "rtl" : "");
-    urlAndQuery.addQueryParameter("file_path", _document._fileURL.toString());
-    urlAndQuery.addQueryParameter("permission", "edit");
-    urlAndQuery.addQueryParameter("appdocid", std::to_string(_document._appDocId));
-    urlAndQuery.addQueryParameter("userinterfacemode", "notebookbar");
+    QUrl urlAndQuery = QUrl::fromLocalFile(
+        QString::fromStdString(coolHtmlPath.toString()));
+    coda::addRemoteCoolParams(urlAndQuery, _document);
 
-    if (portalPrefersDark())
-        urlAndQuery.addQueryParameter("darkTheme", "true");
-
-    const std::string urlAndQueryStr = urlAndQuery.toString();
-    LOG_TRC("Open remote URL: " << urlAndQueryStr);
+    LOG_TRC("Open remote URL: " << urlAndQuery.toString().toStdString());
 
     Poco::Path uriPath(_document._fileURL.getPath());
     QString fileName = QString::fromStdString(uriPath.getFileName());
@@ -861,50 +924,14 @@ void WebView::loadRemote(const QString& localPath,
     if (_webView->window())
         _webView->window()->setWindowTitle(applicationTitle);
 
-    _webView->load(QUrl(QString::fromStdString(urlAndQueryStr)));
+    _webView->load(urlAndQuery);
 
     auto size = getWindowSize(false);
     _mainWindow->resize(size.first, size.second);
     _mainWindow->show();
 
-    // Wire up collab WebSocket notifications to the Bridge so JS can
-    // handle them (user_joined, user_left, etc.).
-    if (_document._remoteInfo && _document._remoteInfo->collabWs)
-    {
-        auto* ws = _document._remoteInfo->collabWs.get();
-        auto* bridge = _bridge;
-        QString coolServer = _document._remoteInfo->coolServer;
-        QObject::connect(ws, &QWebSocket::textMessageReceived,
-            [bridge, coolServer](const QString& msgIn) {
-                // Rewrite any relative /co/collab/avatar URLs to
-                // absolute URLs on the COOL server.  The WebView
-                // loads cool.html from CODA's local file server
-                // origin, so relative URLs would 404 there.
-                QString msg = msgIn;
-                // JSON escapes slashes as \/ on the wire.
-                QString escapedServer = coolServer;
-                escapedServer.replace("/", "\\/");
-                msg.replace("\"avatar\":\"\\/co\\/collab\\/avatar",
-                            "\"avatar\":\"" + escapedServer
-                                + "\\/co\\/collab\\/avatar");
-                LOG_TRC("Collab WS -> JS: " << msg.toStdString().substr(0, 100));
-                bridge->evalJS(
-                    "if (window._codaCollabMessage) {"
-                    "  window._codaCollabMessage("
-                    + msg.toStdString() + ");"
-                    "} else {"
-                    "  window._codaCollabQueue = window._codaCollabQueue || [];"
-                    "  window._codaCollabQueue.push("
-                    + msg.toStdString() + ");"
-                    "}");
-            });
-        QObject::connect(ws, &QWebSocket::disconnected,
-            []() { LOG_DBG("Collab WS disconnected"); });
-
-        // Buffered collab messages (user_list etc.) are replayed
-        // when JS sends 'replayCollabMessages' after
-        // _codaCollabMessage is defined (see Bridge.cpp).
-    }
+    coda::wireCollabMessagesToBridge(
+        _bridge, _document._remoteInfo.get());
 }
 
 WebView* WebView::createNewDocument(QWebEngineProfile* profile, const std::string& templateType, const std::string& templatePath, const std::string& basename)
