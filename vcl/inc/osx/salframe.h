@@ -237,6 +237,17 @@ private: // data
 
     AquaSalFrame( const AquaSalFrame& ) = delete;
     AquaSalFrame& operator=(const AquaSalFrame&) = delete;
+
+    // Headless-mode support stuff
+    bool isHeadlessMode();
+    void headlessShow(bool bVisible, bool bNoActivate);
+    void headlessGetFocus();
+    void headlessLoseFocus();
+    void headlessToTop(SalFrameToTop nFlags);
+
+    // Pointer to top/focused headless frame
+    static AquaSalFrame*  s_pHeadlessFocusFrame;
+    const bool            mbHeadlessMode;
 };
 
 inline bool AquaSalFrame::isAlive( const AquaSalFrame* pFrame )
