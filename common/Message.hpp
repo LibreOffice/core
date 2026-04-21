@@ -154,7 +154,7 @@ private:
                 return Type::Binary;
             }
 
-        if (_data.size() > 0 && (_data[_data.size() - 1] == '}' || _data[_data.size() - 1] == ']'))
+        if (!_data.empty() && (_data.back() == '}' || _data.back() == ']'))
         {
             return Type::JSON;
         }
