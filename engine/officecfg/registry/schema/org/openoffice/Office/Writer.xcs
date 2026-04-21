@@ -5831,12 +5831,6 @@
           </info>
           <value>0</value>
         </prop>
-        <prop oor:name="WWFT" oor:type="xs:long" oor:nillable="false">
-          <info>
-            <desc>Specifies the distance between the footnote and the main text [UNIT=1/100 mm].</desc>
-          </info>
-          <value>0</value>
-        </prop>
         <prop oor:name="RegardHindiDigits" oor:type="xs:long" oor:nillable="false">
           <info>
             <desc>If true yields to digits marked as CTL script to be imported as Hindi digits.</desc>
