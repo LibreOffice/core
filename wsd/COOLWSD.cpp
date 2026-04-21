@@ -2486,7 +2486,7 @@ void COOLWSD::defineOptions(Poco::Util::OptionSet& optionSet)
                                 .repeatable(false)
                                 .argument("seconds"));
 
-        optionSet.addOption(Option("singlekit", "", "Spawn one libreoffice kit.")
+        optionSet.addOption(Option("singlekit", "", "Spawn one CollaboraOffice kit.")
                                 .required(false)
                                 .repeatable(false));
 

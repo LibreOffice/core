@@ -297,15 +297,15 @@ AC_ARG_WITH([lo-path],
 AC_ARG_WITH([lo-sourcedir],
             AS_HELP_STRING([--with-lo-sourcedir=<path>],
                            [Mandatory, and relevant, only for a Wasm build.
-                            Path to a LibreOffice core source tree.]))
+                            Path to a CollaboraOffice core source tree.]))
 
 AC_ARG_WITH([lo-builddir],
             AS_HELP_STRING([--with-lo-builddir=<path>],
                            [Mandatory, and relevant, in a tree where building the iOS or Android app, or CODA.
-                            Path to a the build directory of the LibreOffice core source tree you want to use.
+                            Path to a the build directory of the CollaboraOffice core source tree you want to use.
                             In case of macOS, you MUST manually edit the ios/Mobile.xcodeproj/project.pbxproj
                             file and change the references to "../ios-device" to refer to the corresponding
-                            LibreOffice core source directory (which typically would be the same as the build
+                            CollaboraOffice core source directory (which typically would be the same as the build
                             directory you specify with this option).
 
                             For Android, if building for multiple ABIs, you should specify multiple trees in the
@@ -459,7 +459,7 @@ AC_ARG_ENABLE([wasm-embind-uno],
 
 AC_ARG_ENABLE([wasm-embindtest],
               AS_HELP_STRING([--enable-wasm-embindtest],
-                             [Run the LibreOffice embindtest as part of running the app. Requires
+                             [Run the CollaboraOffice embindtest as part of running the app. Requires
                               --enable-wasm-embind-uno. Relevant only for a Wasm build.]))
 
 AC_ARG_WITH([wasm-zetajs],
@@ -711,14 +711,14 @@ if test \( "$enable_iosapp" = "yes" -a `uname -s` = "Darwin" \) -o \( "$enable_w
    fi
 
    if test "$host_os" = emscripten; then
-      AC_MSG_CHECKING([for LibreOffice source tree to build against])
+      AC_MSG_CHECKING([for CollaboraOffice source tree to build against])
       if test -z "$with_lo_sourcedir"; then
          AC_MSG_ERROR([You MUST use the --with-lo-sourcedir option when configuring a Wasm build.])
       fi
       LOSOURCEDIR=$(readlink -f "$with_lo_sourcedir")
    fi
 
-   AC_MSG_CHECKING([for LibreOffice build tree to build against])
+   AC_MSG_CHECKING([for CollaboraOffice build tree to build against])
    if test -z "$with_lo_builddir"; then
       AC_MSG_ERROR([You MUST use the --with-lo-builddir option when configuring the mobile or Windows app build tree.])
    fi
@@ -760,7 +760,7 @@ if test \( "$enable_iosapp" = "yes" -a `uname -s` = "Darwin" \) -o \( "$enable_w
    if test -f "$LOBUILDDIR/instdir/program/$setuprc"; then
       AC_MSG_RESULT([$LOBUILDDIR])
    else
-      AC_MSG_ERROR([This is not a LibreOffice core build directory: $LOBUILDDIR])
+      AC_MSG_ERROR([This is not a CollaboraOffice core build directory: $LOBUILDDIR])
    fi
 
    CORE_VERSION_HASH=`grep buildid $LOBUILDDIR/instdir/program/$setuprc | sed -e 's/buildid=//' -e 's/............................$//'`
@@ -769,7 +769,7 @@ if test \( "$enable_iosapp" = "yes" -a `uname -s` = "Darwin" \) -o \( "$enable_w
       if test -f "$LOBUILDDIR_ARM64_V8A/workdir/LinkTarget/StaticLibrary/liblibpng.a" ; then
          AC_MSG_RESULT([$LOBUILDDIR_ARM64_V8A])
       else
-         AC_MSG_ERROR([This is not a LibreOffice ARM64 core build directory: $LOBUILDDIR_ARM64_V8A])
+         AC_MSG_ERROR([This is not a CollaboraOffice ARM64 core build directory: $LOBUILDDIR_ARM64_V8A])
       fi
    fi
 
@@ -777,7 +777,7 @@ if test \( "$enable_iosapp" = "yes" -a `uname -s` = "Darwin" \) -o \( "$enable_w
       if test -f "$LOBUILDDIR_X86/workdir/LinkTarget/StaticLibrary/liblibpng.a" ; then
          AC_MSG_RESULT([$LOBUILDDIR_X86])
       else
-         AC_MSG_ERROR([This is not a LibreOffice x86 core build directory: $LOBUILDDIR_X86])
+         AC_MSG_ERROR([This is not a CollaboraOffice x86 core build directory: $LOBUILDDIR_X86])
       fi
    fi
 
@@ -785,7 +785,7 @@ if test \( "$enable_iosapp" = "yes" -a `uname -s` = "Darwin" \) -o \( "$enable_w
       if test -f "$LOBUILDDIR_X86_64/workdir/LinkTarget/StaticLibrary/liblibpng.a" ; then
          AC_MSG_RESULT([$LOBUILDDIR_X86_64])
       else
-         AC_MSG_ERROR([This is not a LibreOffice x86-64 core build directory: $LOBUILDDIR_X86_64])
+         AC_MSG_ERROR([This is not a CollaboraOffice x86-64 core build directory: $LOBUILDDIR_X86_64])
       fi
    fi
 
@@ -979,7 +979,7 @@ AC_SUBST(ZSTDLIB_X86_64)
 AC_SUBST(ZSTDLIB_WINDOWS)
 AC_SUBST([CORE_VERSION_HASH])
 
-AC_DEFINE_UNQUOTED([CORE_VERSION_HASH],[["$CORE_VERSION_HASH"]],[LibreOffice core git hash if present])
+AC_DEFINE_UNQUOTED([CORE_VERSION_HASH],[["$CORE_VERSION_HASH"]],[CollaboraOffice core git hash if present])
 
 LIBPNG_INCLUDES="$with_libpng_includes"
 LIBPNG_LIBS="$with_libpng_libs"
@@ -989,7 +989,7 @@ if test "$enable_macosapp" = "yes"; then
    AC_MSG_CHECKING([for libpng include directory to build against])
    CHK_FILE_VAR(LIBPNG_INCLUDES,png.h,png.h include)
    AC_MSG_CHECKING([for static libpng lib to build against])
-   CHK_FILE_VAR(LIBPNG_LIBS,libpng.a liblibpng.a,libpng,,LIBPNG_STATIC_LIB) dnl LibreOffice wrongly builds libpng as liblibpng.a
+   CHK_FILE_VAR(LIBPNG_LIBS,libpng.a liblibpng.a,libpng,,LIBPNG_STATIC_LIB) dnl CollaboraOffice wrongly builds libpng as liblibpng.a
 fi
 
 if test "$enable_windowsapp" = "yes" ; then
@@ -1562,14 +1562,14 @@ AS_IF([test -n "$LOKIT_PATH"],
 lokit_msg="$LOKIT_PATH"
 
 AS_IF([test "$ENABLE_IOSAPP" != "true" -a "$ENABLE_ANDROIDAPP" != "true"],
-      [AC_MSG_CHECKING([for LibreOffice path])
+      [AC_MSG_CHECKING([for CollaboraOffice path])
       if test -n "$with_lo_path"; then
           # strip trailing '/' from LO_PATH, 'ln -s' with such path will otherwise fail
           if test "$ENABLE_WINDOWSAPP" != "true"; then
               LO_PATH=`readlink -f ${with_lo_path%/}`
           else
               # LO_PATH is the path used at run-time to find the
-              # LibreOffice shared libraries. When running configure
+              # CollaboraOffice shared libraries. When running configure
               # for CODA-W, LO_PATH will be used only at compilation
               # time. Thus it should be a Windows path and not a WSL
               # one. Additionally, because it is used by the Visual
@@ -1581,14 +1581,14 @@ AS_IF([test "$ENABLE_IOSAPP" != "true" -a "$ENABLE_ANDROIDAPP" != "true"],
       else
           AC_MSG_RESULT([not found])
           AS_IF([test "$LIBFUZZER" != "1"],
-                [AC_MSG_ERROR([LibreOffice path must be configured: --with-lo-path])])
+                [AC_MSG_ERROR([CollaboraOffice path must be configured: --with-lo-path])])
       fi
       ])
 
 JAIL_PATH=not-set
 SYSTEMPLATE_PATH=not-set
 have_lo_path=false
-AC_MSG_CHECKING([whether to run tests against a LibreOffice])
+AC_MSG_CHECKING([whether to run tests against a CollaboraOffice])
 version_file="$with_lo_path/program/versionrc"
 version_file_macos="$with_lo_path/Contents/Resources/versionrc"
 if test -f $version_file; then
@@ -1617,7 +1617,7 @@ if test "$enable_macosapp" = "yes" ; then
 fi
 
 AC_SUBST(LO_PATH)
-AC_DEFINE_UNQUOTED([LO_PATH],["$LO_PATH"],[Path to LibreOffice installation])
+AC_DEFINE_UNQUOTED([LO_PATH],["$LO_PATH"],[Path to CollaboraOffice installation])
 AC_SUBST(JAILS_PATH)
 AC_SUBST(CACHE_PATH)
 AC_SUBST(SYSTEMPLATE_PATH)
@@ -2283,7 +2283,7 @@ if test "$host_os" = emscripten; then
     AC_MSG_CHECKING([whether to enable the Embind-based UNO support])
     if test "$enable_wasm_embind_uno" = yes; then
         AC_MSG_RESULT([yes])
-        AC_MSG_CHECKING([whether the LibreOffice installation includes the Embind-base UNO support])
+        AC_MSG_CHECKING([whether the CollaboraOffice installation includes the Embind-base UNO support])
         if test ! -f "$LOBUILDDIR"/workdir/CustomTarget/static/unoembind/bindings_uno.js; then
             AC_MSG_ERROR(
                 [cannot find $LOBUILDDIR/workdir/CustomTarget/static/unoembind/bindings_uno.js])
@@ -2299,13 +2299,13 @@ AM_CONDITIONAL([ENABLE_WASM_EMBIND_UNO], [test "$ENABLE_WASM_EMBIND_UNO" = true]
 
 ENABLE_WASM_EMBINDTEST=
 if test "$host_os" = emscripten; then
-    AC_MSG_CHECKING([whether to run the LibreOffice embindtest])
+    AC_MSG_CHECKING([whether to run the CollaboraOffice embindtest])
     if test "$enable_wasm_embindtest" = yes; then
         if test "$ENABLE_WASM_EMBIND_UNO" != true; then
             AC_MSG_ERROR([requires --enable-wasm-embind-uno])
         else
             AC_MSG_RESULT([yes])
-            AC_MSG_CHECKING([whether the LibreOffice installation includes embindtest])
+            AC_MSG_CHECKING([whether the CollaboraOffice installation includes embindtest])
             if test ! -f "$LOBUILDDIR"/instdir/program/soffice.js.linkdeps; then
                 AC_MSG_ERROR([cannot find $LOBUILDDIR/instdir/program/soffice.js.linkdeps])
             elif ! LC_ALL=POSIX grep -E -q -e '(^|[[[:space:]]])-ltestunolo($|[[[:space:]]])' \
@@ -2440,7 +2440,7 @@ AS_IF([test "$ENABLE_IOSAPP" = "true"],
        if test `uname -s` = "Darwin"; then
           # Sadly I can't figure out any better way to avoid having to
           # edit the Xcode project file manually. Create symlinks to the
-          # LibreOffice core source and build trees, and to the Poco
+          # CollaboraOffice core source and build trees, and to the Poco
           # installation.
 
           AC_MSG_NOTICE([creating symbolic links for the Xcode project to use])

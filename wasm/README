@@ -23,7 +23,7 @@ required build tools.
 
 == Build LO core ==
 
-First you need to build LibreOffice core with emscripten.
+First you need to build CollaboraOffice core with emscripten.
 Currently best to use "feature/wasm" branch.
 
 It can be good to create an environment file you can source in new shells eg.
@@ -89,4 +89,3 @@ containing absolute paths.
 
     podman run -v /data/lo/zstd-1.5.2:/data/lo/zstd-1.5.2:ro -v /data/lo/poco-1.12.4-all:/data/lo/poco-1.12.4-all:ro -v $GITREPO:$GITREPO:ro -v $BUILDDIR:$BUILDDIR:ro -v $ONLINEGITREPO:$ONLINEGITREPO:rw -v $ONLINEBUILDDIR:$ONLINEBUILDDIR:rw --security-opt=label=disable -ti public.ecr.aws/allotropia/libo-builders/wasm /bin/bash -c "source /home/builder/emsdk/emsdk_env.sh && cd $ONLINEBUILDDIR/ && $ONLINEGITREPO/autogen.sh && emconfigure $ONLINEGITREPO/configure --with-lokit-path=$GITREPO/include --with-lo-path=$BUILDDIR/instdir --with-lo-builddir=$BUILDDIR --with-zstd-includes=/data/lo/zstd-1.5.2/lib --with-zstd-libs=/data/lo/zstd-1.5.2/lib --with-poco-includes=/data/lo/poco-1.12.4-all/install/include --with-poco-libs=/data/lo/poco-1.12.4-all/install/lib --host=wasm32-local-emscripten"
     podman run -v /data/lo/zstd-1.5.2:/data/lo/zstd-1.5.2:ro -v /data/lo/poco-1.12.4-all:/data/lo/poco-1.12.4-all:ro -v $GITREPO:$GITREPO:ro -v $BUILDDIR:$BUILDDIR:ro -v $ONLINEGITREPO:$ONLINEGITREPO:rw -v $ONLINEBUILDDIR:$ONLINEBUILDDIR:rw --security-opt=label=disable -ti public.ecr.aws/allotropia/libo-builders/wasm /bin/bash -c "source /home/builder/emsdk/emsdk_env.sh && cd $ONLINEBUILDDIR/ && emmake make"
-

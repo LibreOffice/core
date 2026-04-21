@@ -103,7 +103,7 @@
 /* Enable logging of test assertions */
 #undef LOK_LOG_ASSERTIONS
 
-/* Path to LibreOffice installation */
+/* Path to CollaboraOffice installation */
 #define LO_PATH "/should/not/be/used"
 
 /* Limit the maximum number of open connections */

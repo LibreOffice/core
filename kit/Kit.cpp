@@ -359,7 +359,7 @@ namespace
         switch (type)
         {
             case LinkOrCopyType::LO:
-                return "LibreOffice";
+                return "CollaboraOffice";
             case LinkOrCopyType::All:
                 return "all";
             default:
@@ -2527,7 +2527,7 @@ void Document::drainCallbacks()
         const int type = cb._type;
         const std::string &payload = cb._payload;
 
-        // Forward the callback to the same view, demultiplexing is done by the LibreOffice core.
+        // Forward the callback to the same view, demultiplexing is done by the CollaboraOffice core.
         bool isFound = false;
         for (const auto& it : _sessions)
         {

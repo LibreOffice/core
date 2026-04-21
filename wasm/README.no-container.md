@@ -6,21 +6,21 @@ without using the Allotropia container.
 # Collabora Online as WASM (COWASM)
 
 Before building Collabora Online as WASM you need to build three
-dependencies: LibreOffice core, Poco, and zstd.
+dependencies: CollaboraOffice core, Poco, and zstd.
 
 The toolchain used is Emscripten. Versions >= 3.1.58 should generally work.
 
 Below we assume that the Emscripten environment is already set up,
 that you have sourced the emsdk_env.sh file in your shell.
 
-## Build LibreOffice core
+## Build CollaboraOffice core
 
-Use the master branch of LibreOffice core. The feature/wasm branch is
+Use the master branch of CollaboraOffice core. The feature/wasm branch is
 not needed any longer, all commits to that branch are currently also
 present in the master branch.
 
-See the static/README.wasm.md file in LibreOffice core, especially the
-section "Building headless LibreOffice as WASM for use in another
+See the static/README.wasm.md file in CollaboraOffice core, especially the
+section "Building headless CollaboraOffice as WASM for use in another
 product".
 
 ## Build other Online dependencies
@@ -53,7 +53,7 @@ adapt as necessary.
     mv XML/src/xmlparse.cpp XML/src/xmlparse.c
     patch -p0 < $HOME/lo/online/wasm/poco-no-special-expat-sauce.diff
     emconfigure ./configure --static --no-samples --no-tests --omit=Crypto,NetSSL_OpenSSL,JWT,Data,Data/SQLite,Data/ODBC,Data/MySQL,Data/PostgreSQL,Zip,PageCompiler,PageCompiler/File2Page,MongoDB,Redis,ActiveRecord,ActiveRecord/Compiler,Prometheus
-	emmake make CC=emcc CXX=em++  CXXFLAGS="-DPOCO_NO_LINUX_IF_PACKET_H -DPOCO_NO_INOTIFY -pthread -s USE_PTHREADS=1 -fwasm-exceptions"
+    emmake make CC=emcc CXX=em++  CXXFLAGS="-DPOCO_NO_LINUX_IF_PACKET_H -DPOCO_NO_INOTIFY -pthread -s USE_PTHREADS=1 -fwasm-exceptions"
     make install INSTALLDIR=/opt/poco.emsc.3.1.30
 
 This will install into `/opt/poco.emsc.3.1.30`.
@@ -63,7 +63,7 @@ This will install into `/opt/poco.emsc.3.1.30`.
     # Update the directories in the command below to match your system.
 
     ./autogen.sh
-	emconfigure ./configure --disable-werror --with-lokit-path=/home/tml/lo/core-cool-wasm/include --with-lo-path=/home/tml/lo/core-cool-wasm/instdir --with-lo-builddir=/home/tml/lo/core-cool-wasm --with-zstd-includes=/opt/zstd.emsc.3.1.30/include --with-zstd-libs=/opt/zstd.emsc.3.1.30/lib --with-poco-includes=/opt/poco.emsc.3.1.30/include --with-poco-libs=/opt/poco.emsc.3.1.30/lib --host=wasm32-local-emscripten
+    emconfigure ./configure --disable-werror --with-lokit-path=/home/tml/lo/core-cool-wasm/include --with-lo-path=/home/tml/lo/core-cool-wasm/instdir --with-lo-builddir=/home/tml/lo/core-cool-wasm --with-zstd-includes=/opt/zstd.emsc.3.1.30/include --with-zstd-libs=/opt/zstd.emsc.3.1.30/lib --with-poco-includes=/opt/poco.emsc.3.1.30/include --with-poco-libs=/opt/poco.emsc.3.1.30/lib --host=wasm32-local-emscripten
     emmake make CC=emcc CXX=em++
 
 ## Running WASM Online
