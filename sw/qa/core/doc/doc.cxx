@@ -233,7 +233,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testIMEGrouping)
 {
 // TODO figure out why the ext text input in this test code reaches the wrong window on
 // non-headless.
-#if !defined MACOSX && !defined _WIN32
+#if !defined _WIN32
     // Given an empty document:
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
