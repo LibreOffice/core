@@ -33,7 +33,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Test rendering of a cell o
 		cy.cGet('#document-container').compareSnapshot(expected, 0.02);
 	}
 
-	it.only('Redraw after undo', function() {
+	it('Redraw after undo', function() {
 		// setup initial state
 		desktopHelper.assertScrollbarPosition('horizontal', 325, 355);
 		desktopHelper.assertScrollbarPosition('vertical', 235, 300);
