@@ -1731,6 +1731,13 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 				'accessibility': { focusBack: false, combination: 'UI', de: null }
 			},
 			{
+				'id': 'multipageview',
+				'type': 'bigcustomtoolitem',
+				'command': 'multipageview',
+				'text': _('Multi Page View'),
+				'accessibility': { focusBack: true, combination: 'MV', de: null }
+			},
+			{
 				'type': 'container',
 				'children': [
 					{

@@ -169,6 +169,7 @@ class Menubar extends window.L.Control {
 				] as MenuItem[]).concat([
 					{type: 'separator'},
 					{name: _('Toggle UI Mode'), id: 'toggleuimode', type: 'action'},
+					{name: _('Multi Page View'), id: 'multipageview', type: 'action'},
 					{name: _('Show Ruler'), id: 'showruler', type: 'action'},
 					{name: _('Show Status Bar'), id: 'showstatusbar', type: 'action'},
 					{name: _('Hide Menu Bar'), id: 'togglemenubar', type: 'action'},
@@ -2422,6 +2423,8 @@ class Menubar extends window.L.Control {
 			app.dispatcher.dispatch('columnrowhighlight');
 		} else if (id === 'comparechanges') {
 			app.dispatcher.dispatch('comparechanges');
+		} else if (id === 'multipageview') {
+			app.dispatcher.dispatch('multipageview');
 		} else {
 			// not found
 			app.console.warn('Menubar: unknown action for id: ' + id);
