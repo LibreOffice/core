@@ -21,6 +21,8 @@
 
 #include <sal/config.h>
 
+#include <vclpluginapi.h>
+
 #include <tools/long.hxx>
 #include <o3tl/unit_conversion.hxx>
 
@@ -32,7 +34,7 @@
 
 class AquaSalGraphics;
 
-class AquaSalInfoPrinter : public SalInfoPrinter
+class VCLPLUG_OSX_PUBLIC AquaSalInfoPrinter : public SalInfoPrinter
 {
     /// Printer graphics
     AquaSalGraphics*        mpGraphics;
@@ -119,7 +121,7 @@ class AquaSalInfoPrinter : public SalInfoPrinter
 };
 
 
-class AquaSalPrinter : public SalPrinter
+class VCLPLUG_OSX_PUBLIC AquaSalPrinter : public SalPrinter
 {
     AquaSalInfoPrinter*         mpInfoPrinter;          // pointer to the compatible InfoPrinter
     public:

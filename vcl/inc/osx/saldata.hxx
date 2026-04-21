@@ -28,6 +28,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 
 #include <vcl/ptrstyle.hxx>
+#include <vclpluginapi.h>
 
 #include <svdata.hxx>
 #include <salwtype.hxx>
@@ -59,7 +60,7 @@ class SystemFontList;
 // Singleton, instantiated from Application::Application() in
 // vcl/source/app/svapp.cxx.
 
-class SalData
+class VCLPLUG_OSX_PUBLIC SalData
 {
 public:
     SALTIMERPROC                                  mpTimerProc;      // timer callback proc

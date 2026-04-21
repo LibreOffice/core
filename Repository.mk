@@ -534,7 +534,9 @@ $(eval $(call gb_Helper_register_plugins_for_install,OOOLIBS,ooo, \
     sdui \
     $(if $(ENABLE_GEN),vclplug_gen) \
     $(if $(ENABLE_WIN),vclplug_win) \
-    $(if $(filter $(OS),MACOSX),vclplug_osx) \
+    $(if $(filter $(OS),MACOSX), \
+        vclplug_osx \
+	) \
 ))
 
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,postgresqlsdbc, \

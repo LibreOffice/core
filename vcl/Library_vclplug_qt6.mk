@@ -173,6 +173,23 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_qt6,\
     ) \
 ))
 
+ifeq ($(OS),MACOSX)
+$(eval $(call gb_Library_use_system_darwin_frameworks,vclplug_qt6,\
+    ApplicationServices \
+    Cocoa \
+    Carbon \
+    CoreFoundation \
+))
+
+$(eval $(call gb_Library_add_cxxflags,vclplug_qt6,\
+    $(gb_OBJCXXFLAGS) \
+))
+
+$(eval $(call gb_Library_use_libraries,vclplug_qt6,\
+    vclplug_osx \
+))
+endif
+
 ifeq ($(OS),LINUX)
 $(eval $(call gb_Library_add_libs,vclplug_qt6,\
 	-lm \

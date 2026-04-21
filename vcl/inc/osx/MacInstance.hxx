@@ -22,12 +22,14 @@
 
 #include <sal/config.h>
 
+#include <vclpluginapi.h>
+#include <svdata.hxx>
 #include <osx/osxvcltypes.h>
 #include <salinst.hxx>
 
 #include <salusereventlist.hxx>
 
-class MacInstance : public SalInstance
+class VCLPLUG_OSX_PUBLIC MacInstance : public SalInstance
 {
 public:
     OUString maDefaultPrinter;

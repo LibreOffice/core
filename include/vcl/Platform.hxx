@@ -15,6 +15,7 @@ enum class Platform
     Xcb,
     WASM,
     Windows,
+    Mac,
     Other
 };
 
