@@ -41,6 +41,7 @@ final class Launch {
             path,
         ]
         app.launch()
+        JSBridge.createSession()
     }
 
     /**

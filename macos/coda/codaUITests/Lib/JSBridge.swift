@@ -18,16 +18,25 @@ final class JSBridge {
     /// Base URL for the WebDriver server.
     private static let baseURL = "http://localhost:4567"
 
-    /// Session ID, created lazily on first use.
-    private static var sessionId: String = {
+    /// Session ID for the current app instance.  Reset by calling
+    /// createSession() after each app launch.
+    private static var sessionId: String?
+
+    /**
+     * Create a new WebDriver session.
+     *
+     * Must be called after each app launch since a new app instance
+     * has a new server with no session.
+     */
+    static func createSession() {
         guard let json = postJSON(path: "/session", body: [:]),
               let value = json["value"] as? [String: Any],
               let id = value["sessionId"] as? String else {
             XCTFail("JSBridge: failed to create WebDriver session")
-            return "unknown"
+            return
         }
-        return id
-    }()
+        sessionId = id
+    }
 
     /**
      * Execute JavaScript in the WKWebView via the W3C WebDriver protocol.
@@ -44,7 +53,11 @@ final class JSBridge {
             "script": js,
             "args": [] as [Any]
         ]
-        guard let json = postJSON(path: "/session/\(sessionId)/execute/sync", body: body) else {
+        guard let sid = sessionId else {
+            XCTFail("JSBridge: no active session - call createSession() first")
+            return nil
+        }
+        guard let json = postJSON(path: "/session/\(sid)/execute/sync", body: body) else {
             return nil
         }
 
