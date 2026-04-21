@@ -373,7 +373,6 @@ public:
             "SwEnhancedPDFExportHelper",
             "SwEnterLeave",
             "SwFieldSlot",
-            "SwFilterOptions",
             "SwFntAccess",
             "SwFontSave",
             "SwFootnoteSave",

@@ -97,7 +97,6 @@
 #include <IDocumentExternalData.hxx>
 #include <../../core/inc/DocumentRedlineManager.hxx>
 #include <docufld.hxx>
-#include <swfltopt.hxx>
 #include <utility>
 #include <viewsh.hxx>
 #include <shellres.hxx>
@@ -157,6 +156,7 @@
 #include <sfx2/DocumentMetadataAccess.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <officecfg/Office/Writer.hxx>
 #include <unotxdoc.hxx>
 
 using namespace ::com::sun::star;
@@ -6092,32 +6092,20 @@ ErrCode SwWW8ImplReader::LoadDoc(WW8Glossary *pGloss)
     ErrCode nErrRet = ERRCODE_NONE;
 
     {
-        static constexpr OUString aNames[ 13 ] = {
-            u"WinWord/WW"_ustr, u"WinWord/WW8"_ustr, u"WinWord/WWFT"_ustr,
-            u"WinWord/WWFLX"_ustr, u"WinWord/WWFLY"_ustr,
-            u"WinWord/WWF"_ustr,
-            u"WinWord/WWFA0"_ustr, u"WinWord/WWFA1"_ustr, u"WinWord/WWFA2"_ustr,
-            u"WinWord/WWFB0"_ustr, u"WinWord/WWFB1"_ustr, u"WinWord/WWFB2"_ustr,
-            u"WinWord/RegardHindiDigits"_ustr
-        };
-        sal_uInt64 aVal[ 13 ];
-
-        SwFilterOptions aOpt( 13, aNames, aVal );
-
-        m_nIniFlags = aVal[ 0 ];
-        m_nIniFlags1= aVal[ 1 ];
+        m_nIniFlags = officecfg::Office::Writer::FilterFlags::WinWord::WW::get();
+        m_nIniFlags1= officecfg::Office::Writer::FilterFlags::WinWord::WW8::get();
         // Moves Flys by x twips to the right or left
-        m_nIniFlyDx = aVal[ 3 ];
-        m_nIniFlyDy = aVal[ 4 ];
+        m_nIniFlyDx = officecfg::Office::Writer::FilterFlags::WinWord::WWFLX::get();
+        m_nIniFlyDy = officecfg::Office::Writer::FilterFlags::WinWord::WWFLY::get();
 
-        m_nFieldFlags = aVal[ 5 ];
-        m_nFieldTagAlways[0] = aVal[ 6 ];
-        m_nFieldTagAlways[1] = aVal[ 7 ];
-        m_nFieldTagAlways[2] = aVal[ 8 ];
-        m_nFieldTagBad[0] = aVal[ 9 ];
-        m_nFieldTagBad[1] = aVal[ 10 ];
-        m_nFieldTagBad[2] = aVal[ 11 ];
-        m_bRegardHindiDigits = aVal[ 12 ] > 0;
+        m_nFieldFlags = officecfg::Office::Writer::FilterFlags::WinWord::WWF::get();
+        m_nFieldTagAlways[0] = officecfg::Office::Writer::FilterFlags::WinWord::WWFA0::get();
+        m_nFieldTagAlways[1] = officecfg::Office::Writer::FilterFlags::WinWord::WWFA1::get();
+        m_nFieldTagAlways[2] = officecfg::Office::Writer::FilterFlags::WinWord::WWFA2::get();
+        m_nFieldTagBad[0] = officecfg::Office::Writer::FilterFlags::WinWord::WWFB0::get();
+        m_nFieldTagBad[1] = officecfg::Office::Writer::FilterFlags::WinWord::WWFB1::get();
+        m_nFieldTagBad[2] = officecfg::Office::Writer::FilterFlags::WinWord::WWFB2::get();
+        m_bRegardHindiDigits = officecfg::Office::Writer::FilterFlags::WinWord::RegardHindiDigits::get() > 0;
     }
 
     sal_uInt16 nMagic(0);

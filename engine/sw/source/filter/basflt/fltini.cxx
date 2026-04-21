@@ -31,7 +31,6 @@
 #include <fmtcntnt.hxx>
 #include <editeng/boxitem.hxx>
 #include <ndtxt.hxx>
-#include <swfltopt.hxx>
 #include <swdll.hxx>
 #include <iodetect.hxx>
 #include <osl/module.hxx>
@@ -186,65 +185,6 @@ Reader* GetReader( const OUString& rFltName )
 bool Writer::IsStgWriter() const { return false; }
 
 bool StgWriter::IsStgWriter() const { return true; }
-
-// Read Filter Flags; used by WW8 / W4W / EXCEL / LOTUS
-
-/*
-<FilterFlags>
-        <WinWord>
-                <WW1F cfg:type="long">0</WW1F>
-                <WW cfg:type="long">0</WW>
-                <WW8 cfg:type="long">0</WW8>
-                <WWF cfg:type="long">0</WWF>
-                <WWFA0 cfg:type="long">0</WWFA0>
-                <WWFA1 cfg:type="long">0</WWFA1>
-                <WWFA2 cfg:type="long">0</WWFA2>
-                <WWFB0 cfg:type="long">0</WWFB0>
-                <WWFB1 cfg:type="long">0</WWFB1>
-                <WWFB2 cfg:type="long">0</WWFB2>
-                <WWFLX cfg:type="long">0</WWFLX>
-                <WWFLY cfg:type="long">0</WWFLY>
-                <WWFT cfg:type="long">0</WWFT>
-                <WWWR cfg:type="long">0</WWWR>
-        </WinWord>
-</FilterFlags>
-*/
-
-SwFilterOptions::SwFilterOptions( sal_uInt16 nCnt, const OUString* ppNames,
-                                                                sal_uInt64* pValues )
-    : ConfigItem( u"Office.Writer/FilterFlags"_ustr )
-{
-    GetValues( nCnt, ppNames, pValues );
-}
-
-void SwFilterOptions::GetValues( sal_uInt16 nCnt, const OUString* ppNames,
-                                                                        sal_uInt64* pValues )
-{
-    Sequence<OUString> aNames( nCnt );
-    OUString* pNames = aNames.getArray();
-    sal_uInt16 n;
-
-    for( n = 0; n < nCnt; ++n )
-        pNames[ n ] = ppNames[ n ];
-    Sequence<Any> aValues = GetProperties( aNames );
-
-    if( nCnt == aValues.getLength() )
-    {
-        const Any* pAnyValues = aValues.getConstArray();
-        for( n = 0; n < nCnt; ++n )
-            pValues[ n ] = pAnyValues[ n ].hasValue()
-                                            ? *o3tl::doAccess<sal_uInt64>(pAnyValues[ n ])
-                                            : 0;
-    }
-    else
-    {
-        for( n = 0; n < nCnt; ++n )
-            pValues[ n ] = 0;
-    }
-}
-
-void SwFilterOptions::ImplCommit() {}
-void SwFilterOptions::Notify( const css::uno::Sequence< OUString >& ) {}
 
 void StgReader::SetFltName( const OUString& rFltNm )
 {

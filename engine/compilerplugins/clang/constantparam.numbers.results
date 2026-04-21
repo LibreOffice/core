@@ -2890,10 +2890,6 @@ sw/inc/ndtxt.hxx:465
     class SwTextAttr * SwTextNode::GetTextAttrForEndCharAt(int,unsigned short) const
     unsigned short nWhich
     56
-sw/inc/swfltopt.hxx:31
-    void SwFilterOptions::SwFilterOptions(unsigned short,const class rtl::OUString *,unsigned long *)
-    unsigned short nCnt
-    13
 sw/inc/swregion.hxx:46
     void SwRegionRects::SwRegionRects(unsigned short)
     unsigned short nInit

@@ -11782,7 +11782,6 @@ sw/inc/swcrsr.hxx
 sw/inc/swdbdata.hxx
 sw/inc/swerror.h
 sw/inc/swevent.hxx
-sw/inc/swfltopt.hxx
 sw/inc/swmodule.hxx
 sw/inc/swrect.hxx
 sw/inc/swregion.hxx
