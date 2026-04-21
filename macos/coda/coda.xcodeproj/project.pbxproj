@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5C02902E606BD6410CA7B24A /* ProcUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EC95AFDE75BD0C4A66FE4558 /* ProcUtil.cpp */; };
 		BE16C9F02CD51F58005E5960 /* hello.odt in Resources */ = {isa = PBXBuildFile; fileRef = BE16C9EF2CD51F58005E5960 /* hello.odt */; };
 		BE178EEA2E5C756000A1FCBF /* Log-common.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE178EE92E5C756000A1FCBF /* Log-common.cpp */; };
 		BE22492C2CC79AD700385A9C /* cool.html in Resources */ = {isa = PBXBuildFile; fileRef = BE22492B2CC79AD700385A9C /* cool.html */; };
@@ -33,7 +34,6 @@
 		BE862C4D2EB9066E0061664E /* templates in Resources */ = {isa = PBXBuildFile; fileRef = BE862C4C2EB9066E0061664E /* templates */; };
 		BE9115AE2CECBD3100C597B2 /* FileUtil-unix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE9115AD2CECBD3100C597B2 /* FileUtil-unix.cpp */; };
 		BE9115B02CECBECF00C597B2 /* Util-unix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE9115AF2CECBECF00C597B2 /* Util-unix.cpp */; };
-		5C02902E606BD6410CA7B24A /* ProcUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EC95AFDE75BD0C4A66FE4558 /* ProcUtil.cpp */; };
 		BEA2636D2CBE38E20007435A /* Uri.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BEA2636A2CBE38E20007435A /* Uri.cpp */; };
 		BEA2636E2CBE38E20007435A /* Util.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BEA2636C2CBE38E20007435A /* Util.cpp */; };
 		BEA2636F2CBE38E20007435A /* Unit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BEA263682CBE38E20007435A /* Unit.cpp */; };
@@ -85,6 +85,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		6EC5603A58ED809E2702789D /* ProcUtil.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = ProcUtil.hpp; path = ../../../../common/ProcUtil.hpp; sourceTree = "<group>"; };
 		BE16C9EF2CD51F58005E5960 /* hello.odt */ = {isa = PBXFileReference; lastKnownFileType = file; name = hello.odt; path = ../../../test/data/hello.odt; sourceTree = "<group>"; };
 		BE178EE92E5C756000A1FCBF /* Log-common.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "Log-common.cpp"; path = "../../../../common/Log-common.cpp"; sourceTree = "<group>"; };
 		BE22492B2CC79AD700385A9C /* cool.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = cool.html; path = ../../../browser/dist/cool.html; sourceTree = "<group>"; };
@@ -125,8 +126,6 @@
 		BE862C4C2EB9066E0061664E /* templates */ = {isa = PBXFileReference; lastKnownFileType = folder; name = templates; path = ../../../browser/dist/templates; sourceTree = "<group>"; };
 		BE9115AD2CECBD3100C597B2 /* FileUtil-unix.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "FileUtil-unix.cpp"; path = "../../../../common/FileUtil-unix.cpp"; sourceTree = "<group>"; };
 		BE9115AF2CECBECF00C597B2 /* Util-unix.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "Util-unix.cpp"; path = "../../../../common/Util-unix.cpp"; sourceTree = "<group>"; };
-		EC95AFDE75BD0C4A66FE4558 /* ProcUtil.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ProcUtil.cpp; path = ../../../../common/ProcUtil.cpp; sourceTree = "<group>"; };
-		6EC5603A58ED809E2702789D /* ProcUtil.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = ProcUtil.hpp; path = ../../../../common/ProcUtil.hpp; sourceTree = "<group>"; };
 		BEA263522CBE38E20007435A /* Authorization.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Authorization.hpp; path = ../../../../common/Authorization.hpp; sourceTree = "<group>"; };
 		BEA263532CBE38E20007435A /* Authorization.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Authorization.cpp; path = ../../../../common/Authorization.cpp; sourceTree = "<group>"; };
 		BEA263542CBE38E20007435A /* ConfigUtil.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = ConfigUtil.hpp; path = ../../../../common/ConfigUtil.hpp; sourceTree = "<group>"; };
@@ -186,6 +185,7 @@
 		BEF6F02C2DD1EC0200EA06BF /* RegexUtil.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = RegexUtil.cpp; path = ../../../../common/RegexUtil.cpp; sourceTree = "<group>"; };
 		BEF881382EA62DBF0080A631 /* dumpWsdState.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dumpWsdState.cpp; path = ../../../../wsd/dumpWsdState.cpp; sourceTree = "<group>"; };
 		BEFC03182D64986E009FF7B8 /* Kit.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Kit.hpp; path = ../../../../kit/Kit.hpp; sourceTree = "<group>"; };
+		EC95AFDE75BD0C4A66FE4558 /* ProcUtil.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ProcUtil.cpp; path = ../../../../common/ProcUtil.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
