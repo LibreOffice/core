@@ -811,6 +811,8 @@ private:
     void checkUnicode(bool bUnicode, bool bHex);
     /// If we need a final section break at the end of the document.
     void setNeedSect(bool bNeedSect);
+    void checkTableStart();
+    void checkTableEnd();
     void resetTableRowProperties();
     void backupTableRowProperties();
     void restoreTableRowProperties();
@@ -877,6 +879,60 @@ private:
 
     std::shared_ptr<oox::GraphicHelper> m_pGraphicHelper;
 
+    struct TableRowDef
+    {
+        /// cell props
+        std::deque<RTFSprms> cellSprms;
+        std::deque<RTFSprms> cellAttributes;
+
+        /// Left row margin
+        int nTRLeft{ 0 };
+
+        /// Current cellx value (top-level table)
+        int nCurrentCellX{ 0 };
+
+        /// Max width of the rows in the current table.
+        int nCellXMax{ 0 };
+        bool isStartTable{ false };
+
+        void reset()
+        {
+            cellSprms.clear();
+            cellAttributes.clear();
+            nTRLeft = 0;
+            nCurrentCellX = 0;
+            // leave nCellXMax / isStartTable alone - very special handling!
+        }
+
+        void setCellXMax()
+        {
+            if (nCellXMax == 0)
+            {
+                isStartTable = true;
+            }
+            nCellXMax = ::std::max(nCurrentCellX, nCellXMax);
+        }
+        bool checkTableStart()
+        {
+            bool const ret{ isStartTable };
+            isStartTable = false;
+            return ret;
+        }
+        bool checkTableEnd()
+        {
+            bool const ret{ nCellXMax != 0 };
+            nCellXMax = 0;
+            return ret;
+        }
+
+        size_t getCells() { return cellSprms.size(); }
+    };
+
+    /// cell props buffer for top-level table, reset by \row or \trowd
+    TableRowDef m_TopLevelTableRow;
+    /// backup of top-level props, to support inheriting cell props
+    TableRowDef m_PreviousTopLevelTableRow;
+
     /// cell props buffer for nested tables, reset by \nestrow
     /// the \nesttableprops is a destination and must follow the
     /// nested cells, so it should be sufficient to store the
@@ -884,28 +940,18 @@ private:
     int m_nNestedCells;
     std::deque<RTFSprms> m_aNestedTableCellsSprms;
     std::deque<RTFSprms> m_aNestedTableCellsAttributes;
-    /// cell props buffer for top-level table, reset by \row
-    int m_nTopLevelCells;
-    std::deque<RTFSprms> m_aTopLevelTableCellsSprms;
-    std::deque<RTFSprms> m_aTopLevelTableCellsAttributes;
-    /// backup of top-level props, to support inheriting cell props
-    int m_nInheritingCells;
-    std::deque<RTFSprms> m_aTableInheritingCellsSprms;
-    std::deque<RTFSprms> m_aTableInheritingCellsAttributes;
 
-    // Left row margin (for nested and top-level rows)
+    // Left row margin (for nested rows)
     int m_nNestedTRLeft;
-    int m_nTopLevelTRLeft;
 
     /// Current cellx value (nested table)
     int m_nNestedCurrentCellX;
-    /// Current cellx value (top-level table)
-    int m_nTopLevelCurrentCellX;
 
-    // Backup of what \trowd clears, to work around invalid input.
+    // Backup of what \trowd clears, purely to work around input that Word
+    // considers invalid but which OpenOffice.org was able to import as table.
     RTFSprms m_aBackupTableRowSprms;
     RTFSprms m_aBackupTableRowAttributes;
-    int m_nBackupTopLevelCurrentCellX;
+    TableRowDef m_BackupTopLevelTableRow;
 
     /// Buffered table cells, till cell definitions are not reached.
     /// for nested table, one buffer per table level
@@ -978,8 +1024,6 @@ private:
     bool m_bHadPicture;
     /// The document has multiple sections.
     bool m_bHadSect;
-    /// Max width of the rows in the current table.
-    int m_nCellxMax;
     /// ID of the next \listlevel picture.
     int m_nListPictureId;
 
