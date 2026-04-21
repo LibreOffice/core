@@ -1272,6 +1272,11 @@ void SwEditWin::ChangeFly( sal_uInt8 nDir, bool bWeb )
 
 void SwEditWin::ChangeDrawing( sal_uInt8 nDir )
 {
+    // Don't move shapes when the view is read-only (e.g. Viewing mode,
+    // COKit readonly view). Guard here covers all ChangeDrawing call sites.
+    if (IsViewReadonly())
+        return;
+
     // start undo action in order to get only one
     // undo action for this change.
     SwWrtShell &rSh = m_rView.GetWrtShell();
@@ -3194,7 +3199,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
     CurrShell aCurr( &rSh );
 
     SdrView *pSdrView = rSh.GetDrawView();
-    if ( pSdrView )
+    if ( pSdrView && !bIsViewReadOnly )
     {
         if (pSdrView->MouseButtonDown(aMEvt, GetOutDev()))
         {

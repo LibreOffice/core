@@ -99,7 +99,10 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
     {
         SdrHdl* pHdl = pView->PickHandle(aMDPos);
 
-        if ( pHdl!=nullptr || pView->IsMarkedHit(aMDPos) )
+        // Don't allow drag/move of shapes in read-only view mode.
+        const bool bKitReadOnly = rViewShell.IsKitReadOnlyView();
+
+        if ( !bKitReadOnly && (pHdl!=nullptr || pView->IsMarkedHit(aMDPos)) )
         {
             // Determine if this is the tail of a SdrCaptionObj i.e.
             // we need to disable the drag option on the tail of a note
@@ -264,7 +267,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
 
                     // move object
 
-                    if (pView->IsMarkedHit(aMDPos))
+                    if (pView->IsMarkedHit(aMDPos) && !bKitReadOnly)
                     {
                         //  Don't start drag timer if inplace editing of an OLE object
                         //  was just ended with this mouse click - the view will be moved

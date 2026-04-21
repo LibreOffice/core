@@ -205,9 +205,11 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
         if (!bTextEdit && eHit == SdrHitKind::UrlField && !rMEvt.IsMod2() && !lcl_followHyperlinkAllowed(rMEvt))
             bTextEdit = true;
 
-        bool bPreventModify = mpDocSh->IsReadOnly();
         SfxViewShell* pViewShell = mrViewShell.GetViewShell();
-        if (bPreventModify && pViewShell && pViewShell->GetSignPDFCertificate().Is())
+        bool bPreventModify = mpDocSh->IsReadOnly()
+            || (pViewShell && pViewShell->IsKitReadOnlyView());
+        if (bPreventModify && pViewShell && pViewShell->GetSignPDFCertificate().Is()
+            && !pViewShell->IsKitReadOnlyView())
         {
             // If the just added signature line shape is selected, allow moving / resizing it.
             bPreventModify = false;

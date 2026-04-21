@@ -43,6 +43,7 @@
 #include <com/sun/star/embed/EmbedVerbs.hpp>
 
 #include <sfx2/viewfrm.hxx>
+#include <sfx2/viewsh.hxx>
 
 #include <svx/svditer.hxx>
 
@@ -594,8 +595,10 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                 }
 
                 const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
+                SfxViewShell* pSfxViewShell = mrViewShell.GetViewShell();
+                const bool bKitReadOnly = pSfxViewShell && pSfxViewShell->IsKitReadOnlyView();
                 if (rMarkList.GetMarkCount() != 0 && !rKEvt.GetKeyCode().IsMod1() &&
-                    !mpDocSh->IsReadOnly())
+                    !mpDocSh->IsReadOnly() && !bKitReadOnly)
                 {
                     const SdrHdlList& rHdlList = mpView->GetHdlList();
                     SdrHdl* pHdl = rHdlList.GetFocusHdl();

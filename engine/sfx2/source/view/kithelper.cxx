@@ -36,6 +36,7 @@
 #include <vcl/window.hxx>
 #include <sal/log.hxx>
 #include <sfx2/app.hxx>
+#include <sfx2/bindings.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/msg.hxx>
 #include <sfx2/viewsh.hxx>
@@ -419,8 +420,13 @@ void KitHelper::setViewReadOnly(int nId, bool readOnly)
 {
     if (SfxViewShell* pViewShell = getViewOfId(nId))
     {
+        const bool bChanged = (pViewShell->IsKitReadOnlyView() != readOnly);
         KIT_INFO("kit.readonlyview", "KitHelper::setViewReadOnly: view id: " << nId << ", readOnly: " << readOnly);
         pViewShell->SetKitReadOnlyView(readOnly);
+        // SfxBindings caches slot states; flip needs an invalidate or
+        // disabled-during-readonly slots stay stale once editable again.
+        if (bChanged)
+            pViewShell->GetViewFrame().GetBindings().InvalidateAll(true);
     }
 }
 
