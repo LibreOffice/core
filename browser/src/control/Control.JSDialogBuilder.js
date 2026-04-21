@@ -2107,6 +2107,7 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 		}
 
 		var scrollTop = control.scrollTop;
+		var userHidden = control.classList.contains('user-hidden');
 		var focusedElement = document.activeElement;
 		var focusedElementInDialog = focusedElement ? container.querySelector('[id=\'' + focusedElement.id + '\']') : null;
 		var focusedId = focusedElementInDialog ? focusedElementInDialog.id : null;
@@ -2135,6 +2136,8 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 			newControl.scrollTop = scrollTop;
 			newControl.style.gridColumn = backupGridColSpan;
 			newControl.style.gridRow = backupGridRowSpan;
+			if (userHidden)
+				window.L.DomUtil.addClass(newControl, 'user-hidden');
 
 			// todo: is that needed? should be in widget impl?
 			if (data.has_default === true && (data.type === 'pushbutton' || data.type === 'okbutton')) {

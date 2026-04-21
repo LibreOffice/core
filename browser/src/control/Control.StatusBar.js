@@ -372,14 +372,43 @@ class StatusBar extends JSDialog.Toolbar {
 				return;
 
 			const newHidden = !this.isItemUserHidden(entry.itemId);
-			this.userHideItem(entry.itemId, newHidden);
-			if (entry.targetId !== entry.itemId)
-				this.userHideItem(entry.targetId, newHidden);
-			for (const peer of entry.peers)
-				this.userHideItem(peer, newHidden);
+			this._applyUserHidden(entry.itemId, entry.targetId, entry.peers, newHidden);
+			this.map.uiManager.setDocTypePref('StatusbarUserHidden.' + entry.id, newHidden);
 		};
 
 		JSDialog.OpenDropdown('statusbar-context-menu', anchor, menuEntries, callback, 'top', false);
+	}
+
+	_applyUserHidden(itemId, targetId, peers, hide) {
+		this.userHideItem(itemId, hide);
+		if (targetId && targetId !== itemId)
+			this.userHideItem(targetId, hide);
+		if (peers) {
+			for (const peer of peers)
+				this.userHideItem(peer, hide);
+		}
+	}
+
+	_restoreUserHiddenState() {
+		const items = this.getToolItems();
+		const visible = {};
+		for (let i = 0; i < items.length; i++) {
+			const item = items[i];
+			if (!item.configLabel)
+				continue;
+
+			const configId = item.configId || item.id;
+			if (visible[configId])
+				continue;
+			visible[configId] = true;
+
+			const hide = this.map.uiManager.getBooleanDocTypePref(
+				'StatusbarUserHidden.' + configId, false);
+			if (!hide)
+				continue;
+
+			this._applyUserHidden(item.id, item.configTargetId, item.configPeers, true);
+		}
 	}
 
 	initialize() {
@@ -467,6 +496,7 @@ class StatusBar extends JSDialog.Toolbar {
 			this.updateLanguageItem(this.extractLanguageFromStatus(language));
 
 		this._updateToolbarsVisibility();
+		this._restoreUserHiddenState();
 		JSDialog.RefreshScrollables();
 	}
 
