@@ -342,10 +342,33 @@ void AnnotationManagerImpl::ExecuteAnnotation(SfxRequest const & rReq )
     case SID_REPLYTO_POSTIT:
         ExecuteReplyToAnnotation( rReq );
         break;
+    case SID_RESOLVE_POSTIT:
+        ExecuteResolveAnnotation( rReq );
+        break;
     case SID_TOGGLE_NOTES:
         ShowAnnotations( !mbShowAnnotations );
         break;
     }
+}
+
+void AnnotationManagerImpl::ExecuteResolveAnnotation(SfxRequest const& rReq)
+{
+    const SfxItemSet* pArgs = rReq.GetArgs();
+    if (!pArgs)
+        return;
+    const SvxPostItIdItem* pIdItem = pArgs->GetItemIfSet(SID_ATTR_POSTIT_ID);
+    if (!pIdItem || pIdItem->GetValue().isEmpty())
+        return;
+    sal_uInt32 nId = pIdItem->GetValue().toUInt32();
+    auto xAnnotation = GetAnnotationById(nId);
+    // Only threaded annotations carry a meaningful resolved state. For Draw/Impress the
+    // threaded flag is set by the PDF filter; non-PDF docs leave it false and this slot
+    // is a no-op.
+    if (!xAnnotation || !xAnnotation->IsThreaded())
+        return;
+    xAnnotation->SetResolved(!xAnnotation->IsResolved());
+    sdr::annotation::KitCommentNotifyAll(sdr::annotation::CommentNotificationType::Modify,
+                                         *xAnnotation);
 }
 
 void AnnotationManagerImpl::ExecuteInsertAnnotation(SfxRequest const & rReq)

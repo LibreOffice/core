@@ -70,6 +70,7 @@ public:
     void ExecuteDeleteAnnotation(SfxRequest const & rReq);
     void ExecuteEditAnnotation(SfxRequest const & rReq);
     void ExecuteReplyToAnnotation(SfxRequest const & rReq);
+    void ExecuteResolveAnnotation(SfxRequest const & rReq);
 
     void SelectNextAnnotation(bool bForward);
 

@@ -354,10 +354,19 @@ CPPUNIT_TEST_FIXTURE(SdrPdfImportTest, testImportThreadedComments)
     CPPUNIT_ASSERT_EQUAL(sal_uInt64(0), xDave->GetParentId());
     CPPUNIT_ASSERT(!xDave->IsResolved());
 
-    // Round-trip: re-export the loaded doc to PDF and verify the reply's /IRT and the
-    // resolved-root's state-change sibling are preserved. Charlie's original state-change
-    // was collapsed on import; on export a fresh one is written, targeting Alice with
-    // /State (Completed) /StateModel (Review) and /F = Hidden | Print | NoZoom | NoRotate.
+    // Dispatch .uno:ResolveComment on Dave (a root, unresolved on import) and check the
+    // model flipped.
+    uno::Sequence<beans::PropertyValue> aResolveArgs(comphelper::InitPropertySequence({
+        { "Id", uno::Any(OUString::number(xDave->GetId())) },
+    }));
+    dispatchCommand(mxComponent, u".uno:ResolveComment"_ustr, aResolveArgs);
+    CPPUNIT_ASSERT(xDave->IsResolved());
+
+    // Round-trip: re-export the loaded doc to PDF and verify the reply's /IRT, Alice's
+    // surviving state-change, and the newly-added state-change from the slot dispatch are
+    // all written. Charlie's original state-change was collapsed on import; on export a
+    // fresh one is written for each resolved annotation with /State (Completed)
+    // /StateModel (Review) and /F = Hidden | Print | NoZoom | NoRotate.
     EnvVarGuard DisablePDFCompressionGuard("VCL_DEBUG_DISABLE_PDFCOMPRESSION", "1");
 
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
@@ -375,11 +384,13 @@ CPPUNIT_TEST_FIXTURE(SdrPdfImportTest, testImportThreadedComments)
     auto pPDFPage = pPDFDocument->openPage(0);
     CPPUNIT_ASSERT(pPDFPage);
 
-    // Three visible sd::Annotations (Alice, Bob, Dave) -> 3 Text + 3 Popup + 1 hidden
-    // state-change (for Alice's resolved flag) = 7 annotations.
-    CPPUNIT_ASSERT_EQUAL(7, pPDFPage->getAnnotationCount());
+    // Three visible sd::Annotations (Alice, Bob, Dave) -> 3 Text + 3 Popup + 2 hidden
+    // state-changes (one for Alice's resolved flag carried over from the import, one for
+    // Dave's resolved flag stamped by the .uno:ResolveComment dispatch above) = 8 annotations.
+    CPPUNIT_ASSERT_EQUAL(8, pPDFPage->getAnnotationCount());
 
-    std::unique_ptr<vcl::pdf::PDFiumAnnotation> xPdfAlice, xPdfBob, xPdfDave, xStateChange;
+    std::unique_ptr<vcl::pdf::PDFiumAnnotation> xPdfAlice, xPdfBob, xPdfDave;
+    std::vector<std::unique_ptr<vcl::pdf::PDFiumAnnotation>> aStateChanges;
     for (int i = 0; i < pPDFPage->getAnnotationCount(); ++i)
     {
         auto xAnnot = pPDFPage->getAnnotation(i);
@@ -388,7 +399,7 @@ CPPUNIT_TEST_FIXTURE(SdrPdfImportTest, testImportThreadedComments)
         // The state-change we emit carries /F = Hidden | Print | NoZoom | NoRotate = 30.
         if (xAnnot->getFlags() == 30)
         {
-            xStateChange = std::move(xAnnot);
+            aStateChanges.push_back(std::move(xAnnot));
             continue;
         }
         const OUString sAuthor = xAnnot->getString(vcl::pdf::constDictionaryKeyTitle);
@@ -402,7 +413,7 @@ CPPUNIT_TEST_FIXTURE(SdrPdfImportTest, testImportThreadedComments)
     CPPUNIT_ASSERT(xPdfAlice);
     CPPUNIT_ASSERT(xPdfBob);
     CPPUNIT_ASSERT(xPdfDave);
-    CPPUNIT_ASSERT(xStateChange);
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aStateChanges.size());
 
     // Alice and Dave have no /IRT (thread roots, no parent).
     CPPUNIT_ASSERT(!xPdfAlice->hasKey(vcl::pdf::constDictionaryKey_InReplyTo));
@@ -415,16 +426,25 @@ CPPUNIT_TEST_FIXTURE(SdrPdfImportTest, testImportThreadedComments)
     CPPUNIT_ASSERT_EQUAL(pPDFPage->getAnnotationIndex(xPdfAlice),
                          pPDFPage->getAnnotationIndex(xBobParent));
 
-    // The state-change points at Alice and carries the Review/Completed values.
-    CPPUNIT_ASSERT(xStateChange->hasKey(vcl::pdf::constDictionaryKey_InReplyTo));
-    auto xStateTarget = xStateChange->getLinked(vcl::pdf::constDictionaryKey_InReplyTo);
-    CPPUNIT_ASSERT(xStateTarget);
-    CPPUNIT_ASSERT_EQUAL(pPDFPage->getAnnotationIndex(xPdfAlice),
-                         pPDFPage->getAnnotationIndex(xStateTarget));
-    CPPUNIT_ASSERT_EQUAL(u"Completed"_ustr,
-                         xStateChange->getString(vcl::pdf::constDictionaryKey_State));
-    CPPUNIT_ASSERT_EQUAL(u"Review"_ustr,
-                         xStateChange->getString(vcl::pdf::constDictionaryKey_StateModel));
+    // One state-change targets Alice, one targets Dave; both carry Review/Completed.
+    bool bAliceResolved = false;
+    bool bDaveResolved = false;
+    for (auto const& xSC : aStateChanges)
+    {
+        CPPUNIT_ASSERT(xSC->hasKey(vcl::pdf::constDictionaryKey_InReplyTo));
+        auto xTarget = xSC->getLinked(vcl::pdf::constDictionaryKey_InReplyTo);
+        CPPUNIT_ASSERT(xTarget);
+        CPPUNIT_ASSERT_EQUAL(u"Completed"_ustr, xSC->getString(vcl::pdf::constDictionaryKey_State));
+        CPPUNIT_ASSERT_EQUAL(u"Review"_ustr,
+                             xSC->getString(vcl::pdf::constDictionaryKey_StateModel));
+        const int nTargetIdx = pPDFPage->getAnnotationIndex(xTarget);
+        if (nTargetIdx == pPDFPage->getAnnotationIndex(xPdfAlice))
+            bAliceResolved = true;
+        else if (nTargetIdx == pPDFPage->getAnnotationIndex(xPdfDave))
+            bDaveResolved = true;
+    }
+    CPPUNIT_ASSERT(bAliceResolved);
+    CPPUNIT_ASSERT(bDaveResolved);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

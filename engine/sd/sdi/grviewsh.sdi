@@ -54,6 +54,11 @@ shell GraphicViewShell
         ExecMethod = ExecuteAnnotation;
         StateMethod = GetAnnotationState;
     ]
+    SID_RESOLVE_POSTIT
+    [
+        ExecMethod = ExecuteAnnotation;
+        StateMethod = GetAnnotationState;
+    ]
     SID_DELETE_POSTIT
     [
         ExecMethod = ExecuteAnnotation;
