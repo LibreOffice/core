@@ -240,16 +240,27 @@ final class WebDriverServer {
             return
         }
 
+        let args = json["args"] as? [Any] ?? []
+
         // WKWebView.evaluateJavaScript expects an expression, not a
         // program with "return".  WebDriverIO sends scripts like
         // "return (function(){...}).apply(null,arguments)" so we need
         // to strip the leading "return " and let evaluateJavaScript
         // evaluate the expression directly.
-        let expression: String
+        var expression: String
         if script.hasPrefix("return ") {
             expression = String(script.dropFirst("return ".count))
         } else {
             expression = script
+        }
+
+        // WebDriverIO uses "arguments" to reference the args array.
+        // Since evaluateJavaScript runs at the top level where
+        // "arguments" is not defined, replace it with the actual
+        // serialized args array.
+        if let argsData = try? JSONSerialization.data(withJSONObject: args),
+           let argsJSON = String(data: argsData, encoding: .utf8) {
+            expression = expression.replacingOccurrences(of: "arguments", with: argsJSON)
         }
 
         jsExecutor(expression) { [weak self] result, error in
