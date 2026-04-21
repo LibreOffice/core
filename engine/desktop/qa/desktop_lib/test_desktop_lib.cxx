@@ -205,7 +205,9 @@ public:
     void testInsertCertificate_PEM_ODT();
     void testInsertCertificate_PEM_DOCX();
 #endif
+#if !MPL_HAVE_SUBSET
     void testSignDocument_PEM_PDF();
+#endif
     void testTextSelectionHandles();
     void testComplexSelection();
     void testSpellcheckerMultiView();
@@ -3560,6 +3562,7 @@ void DesktopKitTest::testInsertCertificate_PEM_DOCX()
 }
 #endif
 
+#if !MPL_HAVE_SUBSET
 void DesktopKitTest::testSignDocument_PEM_PDF()
 {
     // Load the document, save it into a temp file and load that file again
@@ -3612,6 +3615,7 @@ void DesktopKitTest::testSignDocument_PEM_PDF()
 
     CPPUNIT_ASSERT(bResult);
 }
+#endif
 
 void DesktopKitTest::testTextSelectionHandles()
 {
