@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "Node16",
+    "moduleResolution": "Node16",
+    "lib": ["ES2022", "DOM"],
+    "types": [
+      "node",
+      "@wdio/globals/types",
+      "@wdio/mocha-framework"
+    ],
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true
+  },
+  "ts-node": {
+    "esm": true,
+    "transpileOnly": true
+  },
+  "include": [
+    "wdio.d.ts",
+    "wdio.conf.ts",
+    "../../../qt/test/lib/**/*.ts",
+    "../../../qt/test/specs/**/*.ts"
+  ]
+}
