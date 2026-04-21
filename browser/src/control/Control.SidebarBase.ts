@@ -170,12 +170,14 @@ abstract class SidebarBase extends JSDialogComponent {
 		return false;
 	}
 	onResize() {
-		this.wrapper.style.maxHeight =
-			this.documentContainer.getBoundingClientRect().height + 'px';
-		if (this.container) {
-			(this.container as HTMLElement).style.height =
+		app.layoutingService.appendLayoutingTask(() => {
+			this.wrapper.style.maxHeight =
 				this.documentContainer.getBoundingClientRect().height + 'px';
-		}
+			if (this.container) {
+				(this.container as HTMLElement).style.height =
+					this.documentContainer.getBoundingClientRect().height + 'px';
+			}
+		});
 	}
 
 	callback(

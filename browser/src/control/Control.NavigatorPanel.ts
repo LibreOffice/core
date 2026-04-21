@@ -343,12 +343,14 @@ class NavigatorPanel extends SidebarBase {
 
 			this.markNavigatorTreeView(navigatorData);
 
-			this.builder.build(this.container, [navigatorData], false);
+			app.layoutingService.appendLayoutingTask(() => {
+				this.builder.build(this.container, [navigatorData], false);
+			});
+
 			// There is case where user can directly click navigator from notebookbar view option
 			// in that case we first show the navigation panel and then switch to tab view
 			this.showNavigationPanel(false);
-			// TODO: remove jQuery animation
-			$('#navigator-dock-wrapper').show(200);
+			this.navigatorDockWrapper.style.display = '';
 			app.showNavigator = true;
 			if (
 				app.map.isPresentationOrDrawing() &&
