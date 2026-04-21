@@ -1018,19 +1018,44 @@ ScRange ScDPObject::GetNewOutputRange( bool& rOverflow )
     }
 }
 
-void ScDPObject::Output( const ScAddress& rPos )
+bool ScDPObject::Output(const ScAddress& rPos, bool bCheckForSpill)
 {
-    //  clear old output area
-    mpDocument->DeleteAreaTab(maOutputRange.aStart.Col(), maOutputRange.aStart.Row(),
-                         maOutputRange.aEnd.Col(), maOutputRange.aEnd.Row(),
-                         maOutputRange.aStart.Tab(), InsertDeleteFlags::ALL );
-    mpDocument->RemoveFlagsTab( maOutputRange.aStart.Col(), maOutputRange.aStart.Row(),
-                          maOutputRange.aEnd.Col(), maOutputRange.aEnd.Row(),
-                          maOutputRange.aStart.Tab(), ScMF::Auto );
-
     CreateOutput(); // create mxSource and mpOutput if not already done
 
-    mpOutput->SetPosition( rPos );
+    mpOutput->SetPosition(rPos);
+
+    if (bCheckForSpill)
+    {
+        // Pass the old output range so cells belonging to this pivot table
+        // are excluded from the non-empty check.
+        mpOutput->Output(maOutputRange, true);
+        if (mpOutput->HasSpillError())
+        {
+            // Clear the old output area and write #SPILL! into the origin cell.
+            mpDocument->DeleteAreaTab(
+                maOutputRange.aStart.Col(), maOutputRange.aStart.Row(),
+                maOutputRange.aEnd.Col(), maOutputRange.aEnd.Row(),
+                maOutputRange.aStart.Tab(), InsertDeleteFlags::ALL);
+            mpDocument->RemoveFlagsTab(
+                maOutputRange.aStart.Col(), maOutputRange.aStart.Row(),
+                maOutputRange.aEnd.Col(), maOutputRange.aEnd.Row(),
+                maOutputRange.aStart.Tab(), ScMF::Auto);
+            mpDocument->SetError(rPos.Col(), rPos.Row(), rPos.Tab(),
+                                 FormulaError::Spill);
+            maOutputRange = ScRange(rPos);
+            mbSpillError = true;
+            return false;
+        }
+        mbSpillError = false;
+    }
+
+    // Clear the old output area before rendering.
+    mpDocument->DeleteAreaTab(maOutputRange.aStart.Col(), maOutputRange.aStart.Row(),
+                              maOutputRange.aEnd.Col(), maOutputRange.aEnd.Row(),
+                              maOutputRange.aStart.Tab(), InsertDeleteFlags::ALL);
+    mpDocument->RemoveFlagsTab(maOutputRange.aStart.Col(), maOutputRange.aStart.Row(),
+                               maOutputRange.aEnd.Col(), maOutputRange.aEnd.Row(),
+                               maOutputRange.aStart.Tab(), ScMF::Auto);
 
     mpOutput->Output();
 
@@ -1039,6 +1064,12 @@ void ScDPObject::Output( const ScAddress& rPos )
     const ScAddress& s = maOutputRange.aStart;
     const ScAddress& e = maOutputRange.aEnd;
     mpDocument->ApplyFlagsTab(s.Col(), s.Row(), e.Col(), e.Row(), s.Tab(), ScMF::DpTable);
+    return true;
+}
+
+bool ScDPObject::HasSpillError() const
+{
+    return mbSpillError;
 }
 
 ScRange ScDPObject::GetOutputRangeByType( sal_Int32 nType )

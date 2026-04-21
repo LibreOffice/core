@@ -40,6 +40,7 @@
 #include <undodat.hxx>
 #include <undotab.hxx>
 #include <undoblk.hxx>
+#include <undo/UndoSpillPivotTable.hxx>
 #include <dpobject.hxx>
 #include <dpshttab.hxx>
 #include <dbdocfun.hxx>
@@ -488,6 +489,51 @@ void ScDocShell::RefreshPivotTables( const ScRange& rSource )
         if (pSheetDesc && pSheetDesc->GetSourceRange().Intersects(rSource))
             aFunc.UpdatePivotTable(rOld, true, false);
     }
+}
+
+void ScDocShell::ResolveSpillPivotTables()
+{
+    ScDPCollection* pCollection = m_pDocument->GetDPCollection();
+    if (!pCollection)
+        return;
+
+    bool bUndoEnabled = m_pDocument->IsUndoEnabled();
+    bool bEnteredList = false;
+    bool bAnyResolved = false;
+    size_t nCount = pCollection->GetCount();
+    for (size_t i = 0; i < nCount; ++i)
+    {
+        ScDPObject& rDPObject = (*pCollection)[i];
+        if (!rDPObject.HasSpillError())
+            continue;
+
+        // Try to re-output with spill check. If the blocking cells have been
+        // cleared, Output() will succeed and the pivot table will be rendered.
+        ScAddress aPosition = rDPObject.GetOutRange().aStart;
+        rDPObject.InvalidateData();
+        if (rDPObject.Output(aPosition, true))
+        {
+            bAnyResolved = true;
+
+            if (bUndoEnabled)
+            {
+                if (!bEnteredList)
+                {
+                    GetUndoManager()->EnterListAction(u""_ustr, u""_ustr, 0, ViewShellId(-1));
+                    bEnteredList = true;
+                }
+                GetUndoManager()->AddUndoAction(
+                    std::make_unique<sc::UndoSpillPivotTable>(
+                        *this, rDPObject.GetName(), rDPObject.GetOutRange()));
+            }
+        }
+    }
+
+    if (bEnteredList)
+        GetUndoManager()->LeaveAndMergeListAction();
+
+    if (bAnyResolved)
+        PostPaintGridAll();
 }
 
 static OUString lcl_GetAreaName( ScDocument* pDoc, const ScArea* pArea )

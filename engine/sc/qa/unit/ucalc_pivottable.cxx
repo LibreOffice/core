@@ -27,6 +27,7 @@
 #include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
 #include <com/sun/star/sheet/DataPilotFieldReferenceType.hpp>
 #include <com/sun/star/sheet/DataPilotFieldReferenceItemType.hpp>
+#include <array>
 
 template<> std::string CppUnit::assertion_traits<ScDPItemData>::toString(ScDPItemData const &)
 { return "ScDPItemData"; } //TODO: combine with ScDPItemData::Dump?
@@ -136,6 +137,14 @@ ScDPObject* createDPFromRange(
     return createDPFromSourceDesc(pDoc, aSheetDesc, aFields, nFieldCount, bFilterButton);
 }
 
+template<size_t FieldCount>
+ScDPObject* createDPFromRange(
+    ScDocument* pDoc, const ScRange& rRange,
+    const std::array<DPFieldDef, FieldCount>& aFields, bool bFilterButton)
+{
+    return createDPFromRange(pDoc, rRange, aFields.data(), aFields.size(), bFilterButton);
+}
+
 ScRange refresh(ScDPObject* pDPObj)
 {
     bool bOverflow = false;
@@ -190,6 +199,11 @@ class TestPivottable : public ScUcalcTestBase
 protected:
     template<size_t Size>
     ScRange insertDPSourceData(ScDocument* pDoc, DPFieldDef const aFields[], size_t nFieldCount, const char* aData[][Size], size_t nDataCount);
+
+    template<size_t FieldCount, size_t Cols, size_t Rows>
+    ScRange insertDPSourceData(ScDocument* pDoc,
+                               const std::array<DPFieldDef, FieldCount>& aFields,
+                               const std::array<std::array<const char*, Cols>, Rows>& aData);
 };
 
 template<size_t Size>
@@ -220,6 +234,42 @@ ScRange TestPivottable::insertDPSourceData(ScDocument* pDoc, DPFieldDef const aF
                            static_cast<SCCOL>(nFieldCount - 1), nCol2);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unexpected data range.",
                            static_cast<SCROW>(nDataCount), nRow2);
+
+    ScRange aSrcRange(nCol1, nRow1, 0, nCol2, nRow2, 0);
+    printRange(pDoc, aSrcRange, "Data sheet content");
+    return aSrcRange;
+}
+
+template<size_t FieldCount, size_t Cols, size_t Rows>
+ScRange TestPivottable::insertDPSourceData(ScDocument* pDoc,
+                                           const std::array<DPFieldDef, FieldCount>& aFields,
+                                           const std::array<std::array<const char*, Cols>, Rows>& aData)
+{
+    // Insert field names in row 0.
+    for (size_t i = 0; i < FieldCount; ++i)
+        pDoc->SetString(static_cast<SCCOL>(i), 0, 0, OUString(aFields[i].aName));
+
+    // Insert data into row 1 and downward.
+    for (size_t i = 0; i < Rows; ++i)
+    {
+        SCROW nRow = static_cast<SCROW>(i) + 1;
+        for (size_t j = 0; j < FieldCount; ++j)
+        {
+            SCCOL nCol = static_cast<SCCOL>(j);
+            pDoc->SetString(
+                nCol, nRow, 0, OUString(aData[i][j], strlen(aData[i][j]), RTL_TEXTENCODING_UTF8));
+        }
+    }
+
+    SCROW nRow1 = 0, nRow2 = 0;
+    SCCOL nCol1 = 0, nCol2 = 0;
+    pDoc->GetDataArea(0, nCol1, nRow1, nCol2, nRow2, true, false);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Data is expected to start from (col=0,row=0).", SCCOL(0), nCol1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Data is expected to start from (col=0,row=0).", SCROW(0), nRow1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unexpected data range.",
+                           static_cast<SCCOL>(FieldCount - 1), nCol2);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unexpected data range.",
+                           static_cast<SCROW>(Rows), nRow2);
 
     ScRange aSrcRange(nCol1, nRow1, 0, nCol2, nRow2, 0);
     printRange(pDoc, aSrcRange, "Data sheet content");
@@ -3082,6 +3132,328 @@ CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableCalculatedField)
     CPPUNIT_ASSERT_EQUAL_MESSAGE("There shouldn't be any more cache stored.",
                            size_t(0), pDPs->GetSheetCaches().size());
 
+    m_pDoc->DeleteTab(1);
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableSpillError)
+{
+    // Test that a pivot table detects non-empty cells in the output range
+    // and writes #SPILL! into the origin cell.
+
+    m_pDoc->InsertTab(0, u"Data"_ustr);
+    m_pDoc->InsertTab(1, u"Table"_ustr);
+
+    static constexpr auto aFields = std::to_array<DPFieldDef>({
+        { u"Name",  sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
+        { u"Group", sheet::DataPilotFieldOrientation_COLUMN, ScGeneralFunction::NONE, false },
+        { u"Score", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::NONE, false }
+    });
+
+    static constexpr auto aData = std::to_array<std::array<const char*, 3>>({
+        { "Andy",    "A", "30" },
+        { "Bruce",   "A", "20" },
+        { "Charlie", "B", "45" },
+    });
+
+    ScRange aSrcRange = insertDPSourceData(m_pDoc, aFields, aData);
+    SCROW nRow1 = aSrcRange.aStart.Row(), nRow2 = aSrcRange.aEnd.Row();
+    SCCOL nCol1 = aSrcRange.aStart.Col(), nCol2 = aSrcRange.aEnd.Col();
+
+    ScDPObject* pDPObject = createDPFromRange(
+        m_pDoc, ScRange(nCol1, nRow1, 0, nCol2, nRow2, 0), aFields, false);
+
+    ScDPCollection* pDPs = m_pDoc->GetDPCollection();
+    pDPs->InsertNewTable(std::unique_ptr<ScDPObject>(pDPObject));
+    pDPObject->SetName(pDPs->CreateNewName());
+
+    // Place blocking data in the output area on Sheet 2.
+    m_pDoc->SetString(ScAddress(2, 3, 1), u"blocker"_ustr);
+
+    bool bOverflow = false;
+    ScRange aOutRange = pDPObject->GetNewOutputRange(bOverflow);
+    CPPUNIT_ASSERT_MESSAGE("Table overflow!?", !bOverflow);
+
+    // Use spill-checking Output - should fail because of the blocker cell.
+    bool bSuccess = pDPObject->Output(aOutRange.aStart, true);
+    CPPUNIT_ASSERT_MESSAGE("Output should fail due to spill error.", !bSuccess);
+    CPPUNIT_ASSERT_MESSAGE("HasSpillError should be true.", pDPObject->HasSpillError());
+
+    // The origin cell should display #SPILL!.
+    CPPUNIT_ASSERT_EQUAL(u"#SPILL!"_ustr, m_pDoc->GetString(aOutRange.aStart));
+
+    // The blocker cell should still contain its original value.
+    CPPUNIT_ASSERT_EQUAL(u"blocker"_ustr, m_pDoc->GetString(ScAddress(2, 3, 1)));
+
+    pDPs->FreeTable(pDPObject);
+    m_pDoc->DeleteTab(1);
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableSpillResolution)
+{
+    // Test that clearing a blocking cell and calling ResolveSpillPivotTables()
+    // causes the spilled pivot table to write an output in the output range.
+
+    m_pDoc->InsertTab(0, u"Data"_ustr);
+    m_pDoc->InsertTab(1, u"Table"_ustr);
+
+    static constexpr auto aFields = std::to_array<DPFieldDef>({
+        { u"Name",  sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
+        { u"Group", sheet::DataPilotFieldOrientation_COLUMN, ScGeneralFunction::NONE, false },
+        { u"Score", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::NONE, false }
+    });
+
+    static constexpr auto aData = std::to_array<std::array<const char*, 3>>({
+        { "Andy",    "A", "30" },
+        { "Bruce",   "A", "20" },
+        { "Charlie", "B", "45" },
+    });
+
+    ScRange aSrcRange = insertDPSourceData(m_pDoc, aFields, aData);
+    SCROW nRow1 = aSrcRange.aStart.Row(), nRow2 = aSrcRange.aEnd.Row();
+    SCCOL nCol1 = aSrcRange.aStart.Col(), nCol2 = aSrcRange.aEnd.Col();
+
+    ScDPObject* pDPObject = createDPFromRange(
+        m_pDoc, ScRange(nCol1, nRow1, 0, nCol2, nRow2, 0), aFields, false);
+
+    ScDPCollection* pDPs = m_pDoc->GetDPCollection();
+    pDPs->InsertNewTable(std::unique_ptr<ScDPObject>(pDPObject));
+    pDPObject->SetName(pDPs->CreateNewName());
+
+    // Place blocking data in the output area on Sheet 2.
+    ScAddress aBlocker(2, 3, 1);
+    m_pDoc->SetString(aBlocker, u"blocker"_ustr);
+
+    bool bOverflow = false;
+    ScRange aOutRange = pDPObject->GetNewOutputRange(bOverflow);
+    CPPUNIT_ASSERT_MESSAGE("Table overflow!?", !bOverflow);
+
+    // Output with spill check - should produce #SPILL!.
+    pDPObject->Output(aOutRange.aStart, true);
+    CPPUNIT_ASSERT_MESSAGE("Should be spilled.", pDPObject->HasSpillError());
+    CPPUNIT_ASSERT_EQUAL(u"#SPILL!"_ustr, m_pDoc->GetString(aOutRange.aStart));
+
+    // Now clear the blocking cell.
+    m_pDoc->SetString(aBlocker, u""_ustr);
+
+    // Call ResolveSpillPivotTables - should auto-output the pivot table.
+    m_xDocShell->ResolveSpillPivotTables();
+
+    // The spill should be resolved.
+    CPPUNIT_ASSERT(!pDPObject->HasSpillError());
+
+    // The origin cell should no longer show #SPILL! but actual pivot data.
+    OUString aOriginValue = m_pDoc->GetString(aOutRange.aStart);
+    CPPUNIT_ASSERT_MESSAGE("Origin cell should have pivot table content, not #SPILL!.",
+                           aOriginValue != "#SPILL!");
+    CPPUNIT_ASSERT_MESSAGE("Origin cell should not be empty.", !aOriginValue.isEmpty());
+
+    pDPs->FreeTable(pDPObject);
+    m_pDoc->DeleteTab(1);
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableSpillResolutionNotReady)
+{
+    // Test that ResolveSpillPivotTables() does NOT resolve a spill when
+    // the blocking cell is still present.
+
+    m_pDoc->InsertTab(0, u"Data"_ustr);
+    m_pDoc->InsertTab(1, u"Table"_ustr);
+
+    static constexpr auto aFields = std::to_array<DPFieldDef>({
+        { u"Name",  sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
+        { u"Group", sheet::DataPilotFieldOrientation_COLUMN, ScGeneralFunction::NONE, false },
+        { u"Score", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::NONE, false }
+    });
+
+    static constexpr auto aData = std::to_array<std::array<const char*, 3>>({
+        { "Andy",    "A", "30" },
+        { "Bruce",   "A", "20" },
+        { "Charlie", "B", "45" },
+    });
+
+    ScRange aSrcRange = insertDPSourceData(m_pDoc, aFields, aData);
+    SCROW nRow1 = aSrcRange.aStart.Row(), nRow2 = aSrcRange.aEnd.Row();
+    SCCOL nCol1 = aSrcRange.aStart.Col(), nCol2 = aSrcRange.aEnd.Col();
+
+    ScDPObject* pDPObject = createDPFromRange(
+        m_pDoc, ScRange(nCol1, nRow1, 0, nCol2, nRow2, 0), aFields, false);
+
+    ScDPCollection* pDPs = m_pDoc->GetDPCollection();
+    pDPs->InsertNewTable(std::unique_ptr<ScDPObject>(pDPObject));
+    pDPObject->SetName(pDPs->CreateNewName());
+
+    // Place blocking data.
+    m_pDoc->SetString(ScAddress(2, 3, 1), u"blocker"_ustr);
+
+    bool bOverflow = false;
+    ScRange aOutRange = pDPObject->GetNewOutputRange(bOverflow);
+    CPPUNIT_ASSERT_MESSAGE("Table overflow!?", !bOverflow);
+
+    pDPObject->Output(aOutRange.aStart, true);
+    CPPUNIT_ASSERT_MESSAGE("Should be spilled.", pDPObject->HasSpillError());
+
+    // Call resolve without clearing the blocker.
+    m_xDocShell->ResolveSpillPivotTables();
+
+    CPPUNIT_ASSERT_MESSAGE("Spill should NOT be resolved (blocker still present).",
+                           pDPObject->HasSpillError());
+
+    CPPUNIT_ASSERT_EQUAL(u"#SPILL!"_ustr, m_pDoc->GetString(aOutRange.aStart));
+
+    pDPs->FreeTable(pDPObject);
+    m_pDoc->DeleteTab(1);
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableUndoRechecksSpill)
+{
+    // Test that undoing a pivot table change re-outputs the restored pivot table
+    // with a spill check. Place the blocker before creating the pivot table so
+    // undo/redo properly preserves it.
+
+    m_pDoc->InsertTab(0, u"Data"_ustr);
+    m_pDoc->InsertTab(1, u"Table"_ustr);
+
+    // Raw data
+    const std::vector<std::vector<const char*>> aData = {
+        { "Name",      "Value" },
+        { "Sun",       "1" },
+        { "Oracle",    "2" },
+    };
+
+    static constexpr auto aFields = std::to_array<DPFieldDef>({
+        { u"Name", sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
+        { u"Value", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::SUM, false },
+    });
+
+    ScAddress aPos(1, 1, 0);
+    ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData);
+
+    // Place a blocker on Sheet 2 before creating the pivot table.
+    ScAddress aBlocker(1, 2, 1);
+    m_pDoc->SetString(aBlocker, u"blocker"_ustr);
+
+    std::unique_ptr<ScDPObject> pDPObject(createDPFromRange(
+        m_pDoc, aDataRange, aFields, false));
+
+    // Create pivot table doc function.
+    ScDBDocFunc aFunction(*m_xDocShell);
+    bool bSuccess = aFunction.CreatePivotTable(*pDPObject, true, true);
+    CPPUNIT_ASSERT_MESSAGE("Failed to create pivot table.", bSuccess);
+
+    ScDPCollection* pDPs = m_pDoc->GetDPCollection();
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pDPs->GetCount());
+    ScDPObject* pDocDPObject = &(*pDPs)[0];
+
+    // The pivot table should be spilled because the blocker was present.
+    CPPUNIT_ASSERT_MESSAGE("Should be spilled.", pDocDPObject->HasSpillError());
+    CPPUNIT_ASSERT_EQUAL(u"#SPILL!"_ustr, m_pDoc->GetString(pDocDPObject->GetOutRange().aStart));
+
+    // The blocker should still be there.
+    CPPUNIT_ASSERT_EQUAL(u"blocker"_ustr, m_pDoc->GetString(aBlocker));
+
+    // Undo the pivot table creation.
+    m_pDoc->GetUndoManager()->Undo();
+
+    // After undo, the pivot table is deleted.
+    CPPUNIT_ASSERT_EQUAL(size_t(0), pDPs->GetCount());
+    // The blocker should be there.
+    CPPUNIT_ASSERT_EQUAL(u"blocker"_ustr, m_pDoc->GetString(aBlocker));
+
+    // Redo the creation: blocker is still present, should spill again.
+    m_pDoc->GetUndoManager()->Redo();
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pDPs->GetCount());
+    pDocDPObject = &(*pDPs)[0];
+    CPPUNIT_ASSERT_MESSAGE("Should be spilled after redo.", pDocDPObject->HasSpillError());
+    CPPUNIT_ASSERT_EQUAL(u"#SPILL!"_ustr, m_pDoc->GetString(pDocDPObject->GetOutRange().aStart));
+    CPPUNIT_ASSERT_EQUAL(u"blocker"_ustr, m_pDoc->GetString(aBlocker));
+
+    // Now clear the blocker and resolve.
+    m_pDoc->SetString(aBlocker, u""_ustr);
+    m_xDocShell->ResolveSpillPivotTables();
+
+    // The pivot table should now be rendered.
+    CPPUNIT_ASSERT_MESSAGE("Spill should be resolved.", !pDocDPObject->HasSpillError());
+    OUString aOriginValue = m_pDoc->GetString(pDocDPObject->GetOutRange().aStart);
+    CPPUNIT_ASSERT_MESSAGE("Should have real content now.", aOriginValue != "#SPILL!");
+    CPPUNIT_ASSERT_MESSAGE("Should not be empty.", !aOriginValue.isEmpty());
+
+    pDPs->FreeTable(pDocDPObject);
+    m_pDoc->DeleteTab(1);
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableSpillUndoRestore)
+{
+    // Test that resolving a spill pushes an undo action.
+    // Undoing that action should restore the #SPILL! state.
+    // Redoing should re-render the pivot table.
+
+    m_pDoc->InsertTab(0, u"Data"_ustr);
+    m_pDoc->InsertTab(1, u"Table"_ustr);
+
+    static constexpr auto aFields = std::to_array<DPFieldDef>({
+        { u"Name",  sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
+        { u"Group", sheet::DataPilotFieldOrientation_COLUMN, ScGeneralFunction::NONE, false },
+        { u"Score", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::NONE, false }
+    });
+
+    static constexpr auto aData = std::to_array<std::array<const char*, 3>>({
+        { "Andy",    "A", "30" },
+        { "Bruce",   "A", "20" },
+        { "Charlie", "B", "45" },
+    });
+
+    ScRange aSrcRange = insertDPSourceData(m_pDoc, aFields, aData);
+    SCROW nRow1 = aSrcRange.aStart.Row(), nRow2 = aSrcRange.aEnd.Row();
+    SCCOL nCol1 = aSrcRange.aStart.Col(), nCol2 = aSrcRange.aEnd.Col();
+
+    ScDPObject* pDPObject = createDPFromRange(
+        m_pDoc, ScRange(nCol1, nRow1, 0, nCol2, nRow2, 0), aFields, false);
+
+    ScDPCollection* pDPs = m_pDoc->GetDPCollection();
+    pDPs->InsertNewTable(std::unique_ptr<ScDPObject>(pDPObject));
+    pDPObject->SetName(pDPs->CreateNewName());
+
+    // Place blocker and trigger spill.
+    ScAddress aBlocker(2, 3, 1);
+    m_pDoc->SetString(aBlocker, u"blocker"_ustr);
+
+    bool bOverflow = false;
+    ScRange aOutRange = pDPObject->GetNewOutputRange(bOverflow);
+    CPPUNIT_ASSERT_MESSAGE("Table overflow!?", !bOverflow);
+
+    pDPObject->Output(aOutRange.aStart, true);
+    CPPUNIT_ASSERT_MESSAGE("Should be spilled.", pDPObject->HasSpillError());
+    CPPUNIT_ASSERT_EQUAL(u"#SPILL!"_ustr, m_pDoc->GetString(aOutRange.aStart));
+
+    // Clear the blocker and resolve the spill.
+    m_pDoc->SetString(aBlocker, u""_ustr);
+    m_xDocShell->ResolveSpillPivotTables();
+
+    // Spill should be resolved - pivot table rendered.
+    CPPUNIT_ASSERT_MESSAGE("Spill should be resolved.", !pDPObject->HasSpillError());
+    ScRange aRenderedRange = pDPObject->GetOutRange();
+    OUString aRenderedValue = m_pDoc->GetString(aRenderedRange.aStart);
+    CPPUNIT_ASSERT_MESSAGE("Should have pivot content.", !aRenderedValue.isEmpty());
+    CPPUNIT_ASSERT_MESSAGE("Should not show #SPILL!.", aRenderedValue != "#SPILL!");
+
+    // Undo - should go back to #SPILL!.
+    m_pDoc->GetUndoManager()->Undo();
+    CPPUNIT_ASSERT_MESSAGE("Should be spilled again after undo.", pDPObject->HasSpillError());
+    CPPUNIT_ASSERT_EQUAL(u"#SPILL!"_ustr, m_pDoc->GetString(aOutRange.aStart));
+
+    // Redo - should render the pivot table again.
+    m_pDoc->GetUndoManager()->Redo();
+    CPPUNIT_ASSERT_MESSAGE("Should be resolved after redo.", !pDPObject->HasSpillError());
+    aRenderedValue = m_pDoc->GetString(pDPObject->GetOutRange().aStart);
+    CPPUNIT_ASSERT_MESSAGE("Should have pivot content after redo.", !aRenderedValue.isEmpty());
+    CPPUNIT_ASSERT_MESSAGE("Should not show #SPILL! after redo.", aRenderedValue != "#SPILL!");
+
+    pDPs->FreeTable(pDPObject);
     m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
 }

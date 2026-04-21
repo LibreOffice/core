@@ -76,28 +76,14 @@ bool UpdatePivotTableOperation::runImplementation()
         return false;
     }
 
-    //  test if new output area is empty except for old area
-    if (!mbApi)
-    {
-        if (!sc::pivot::lcl_EmptyExcept(rDoc, aNewOut, pDPObject->GetOutRange()))
-        {
-            std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(
-                ScDocShell::GetActiveDialogParent(), VclMessageType::Question,
-                VclButtonsType::YesNo, ScResId(STR_PIVOT_NOTEMPTY)));
-            xQueryBox->set_default_response(RET_YES);
-            if (xQueryBox->run() == RET_NO)
-            {
-                *pDPObject = aUndoDPObject;
-                return false;
-            }
-        }
-    }
-
     if (mbRecord)
         sc::pivot::createUndoDoc(pNewUndoDoc, rDoc, aNewOut);
 
-    pDPObject->Output(aNewOut.aStart);
-    mrDocShell.PostPaintGridAll(); //! only necessary parts
+    // Use spill checking output if the destination range has non-empty cells,
+    // write #SPILL! into the origin cell instead of overwriting.
+    // Skip the spill check during XML import
+    pDPObject->Output(aNewOut.aStart, !rDoc.IsImportingXML());
+    mrDocShell.PostPaintGridAll();
 
     if (mbRecord)
     {

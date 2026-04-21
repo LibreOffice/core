@@ -137,6 +137,7 @@ private:
     bool mbSettingsChanged : 1;
     bool mbEnableGetPivotData : 1;
     bool mbHideHeader : 1 = false;
+    bool mbSpillError : 1 = false;
 
     sc::PivotTableStyleInfo maStyleInfo;
 
@@ -165,7 +166,13 @@ public:
 
     SC_DLLPUBLIC void ReloadGroupTableData();
 
-    SC_DLLPUBLIC void   Output( const ScAddress& rPos );
+    /** Render the pivot table at input position. When bCheckForSpill is true,
+        first verify the output range is unblocked. If bolcked, write #SPILL!
+        into input position, mark the object's spill state, and return false.
+        Otherwise write the table and return true. */
+    SC_DLLPUBLIC bool Output(const ScAddress& rPos, bool bCheckForSpill = false);
+    bool HasSpillError() const;
+    void SetSpillError(bool bSpillError) { mbSpillError = bSpillError; }
     ScRange             GetNewOutputRange( bool& rOverflow );
 
     SC_DLLPUBLIC ScRange GetOutputRangeByType( sal_Int32 nType );

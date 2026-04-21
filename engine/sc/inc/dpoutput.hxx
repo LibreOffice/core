@@ -89,6 +89,7 @@ private:
     bool mbHasCompactRowField:1; // true: at least one of the row fields has compact layout.
     bool mbExpandCollapse:1; // true: show expand/collapse buttons
     bool mbHideHeader : 1;
+    bool mbSpillError : 1 = false;  // true: output range blocked by non-empty cells
 
     void            DataCell( SCCOL nCol, SCROW nRow, SCTAB nTab,
                                 const css::sheet::DataResult& rData );
@@ -127,9 +128,11 @@ public:
     void            SetPosition( const ScAddress& rPos );
 
     void            Output();           //! Refresh?
+    void Output(const ScRange& rOldRange, bool bCheckForSpill);
     ScRange GetOutputRange( sal_Int32 nRegionType = css::sheet::DataPilotOutputRangeType::WHOLE );
     sal_Int32       GetHeaderRows() const;
     bool            HasError();         // range overflow or exception from source
+    bool HasSpillError() const { return mbSpillError; }
 
     void            GetPositionData(const ScAddress& rPos, css::sheet::DataPilotTablePositionData& rPosData);
 
