@@ -29,8 +29,8 @@ final class WebDriverServer {
     private let jsExecutor: (String, @escaping (Any?, Error?) -> Void) -> Void
     private let focusHandler: (@escaping () -> Void) -> Void
 
-    /// The session ID, created on first POST /session.
-    private var sessionId: String?
+    /// All session IDs created via POST /session.
+    private var sessionIds = Set<String>()
 
     /**
      * Create a WebDriver server.
@@ -160,11 +160,10 @@ final class WebDriverServer {
 
         // POST /session
         if request.method == "POST" && segments == ["session"] {
-            if sessionId == nil {
-                sessionId = UUID().uuidString.lowercased()
-            }
+            let newId = UUID().uuidString.lowercased()
+            sessionIds.insert(newId)
             sendW3C(connection: connection, value: [
-                "sessionId": sessionId!,
+                "sessionId": newId,
                 "capabilities": [String: Any]()
             ] as [String: Any])
             return
@@ -172,13 +171,14 @@ final class WebDriverServer {
 
         // DELETE /session/{id}
         if request.method == "DELETE" && segments.count == 2 && segments[0] == "session" {
+            sessionIds.remove(segments[1])
             sendW3C(connection: connection, value: NSNull())
             return
         }
 
         // Routes that require a valid session: /session/{id}/...
         if segments.count >= 3 && segments[0] == "session" {
-            guard segments[1] == sessionId else {
+            guard sessionIds.contains(segments[1]) else {
                 sendW3CError(connection: connection, error: "invalid session id",
                              message: "No active session with id '\(segments[1])'")
                 return
