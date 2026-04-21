@@ -568,7 +568,15 @@ void SwMarkdownParser::StartNumberedBulletListItem(MD_BLOCK_LI_DETAIL aDetail)
 void SwMarkdownParser::EndNumberedBulletListItem()
 {
     if (m_pPam->GetPoint()->GetContentIndex())
-        AppendTextNode(AM_SPACE);
+    {
+        SwMdAppendMode eMode = AM_SPACE;
+        if (!m_bNewDoc)
+        {
+            // Don't touch paragraph margins when pasting.
+            eMode = AM_NORMAL;
+        }
+        AppendTextNode(eMode);
+    }
 }
 
 void SwMarkdownParser::BeginHtmlBlock()
@@ -920,7 +928,11 @@ ErrCode SwMarkdownParser::CallParser()
 
     SwTextFormatColl* pColl
         = m_xDoc->getIDocumentStylePoolAccess().GetTextCollFromPool(SwPoolFormatId::COLL_TEXT);
-    m_xDoc->SetTextFormatColl(*m_pPam, pColl);
+    if (m_bNewDoc)
+    {
+        // Don't touch the paragraph style when pasting.
+        m_xDoc->SetTextFormatColl(*m_pPam, pColl);
+    }
 
     ErrCode nRet;
 

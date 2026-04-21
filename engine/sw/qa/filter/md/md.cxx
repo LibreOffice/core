@@ -1017,6 +1017,21 @@ CPPUNIT_TEST_FIXTURE(Test, testPaste)
     // - Actual  : WWNum2
     // i.e. List 1 & 2 had a non-named list style instead of being consistent with "A".
     CPPUNIT_ASSERT_EQUAL(aList2Style, aAStyle);
+
+    // Also check that paragraph style and margins are preserved from the insertion point:
+    OUString aList2ParaStyle = getProperty<OUString>(getParagraph(3), u"ParaStyleName"_ustr);
+    OUString aAParaStyle = getProperty<OUString>(getParagraph(4), u"ParaStyleName"_ustr);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: Standard
+    // - Actual  : Text body
+    // i.e. the pasted paragraphs lost paragraph style from the insertion point.
+    CPPUNIT_ASSERT_EQUAL(aAParaStyle, aList2ParaStyle);
+    sal_Int32 aList2Top = getProperty<sal_Int32>(getParagraph(3), u"ParaTopMargin"_ustr);
+    sal_Int32 aATop = getProperty<sal_Int32>(getParagraph(4), u"ParaTopMargin"_ustr);
+    CPPUNIT_ASSERT_EQUAL(aATop, aList2Top);
+    sal_Int32 aList2Bottom = getProperty<sal_Int32>(getParagraph(3), u"ParaBottomMargin"_ustr);
+    sal_Int32 aABottom = getProperty<sal_Int32>(getParagraph(4), u"ParaBottomMargin"_ustr);
+    CPPUNIT_ASSERT_EQUAL(aABottom, aList2Bottom);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

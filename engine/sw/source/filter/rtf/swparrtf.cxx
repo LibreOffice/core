@@ -65,6 +65,9 @@ ErrCodeMsg SwRTFReader::Read(SwDoc& rDoc, const OUString& /*rBaseURL*/, SwPaM& r
 
     SwPasteInfo aPasteInfo(rDoc, rPam);
     StartPaste(aPasteInfo);
+    // Reset paragraph style to Body Text.
+    rDoc.SetTextFormatColl(rPam, rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(
+                                     SwPoolFormatId::COLL_STANDARD, false));
 
     auto ret = ERRCODE_NONE;
     SwDocShell* pDocShell(rDoc.GetDocShell());

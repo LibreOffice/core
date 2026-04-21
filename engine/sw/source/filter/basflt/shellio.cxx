@@ -672,9 +672,6 @@ void Reader::StartPaste(SwPasteInfo& rPasteInfo)
 
     // Step 4: Insert all content into the new node
     rPasteInfo.m_rPam.Move(fnMoveBackward);
-    rPasteInfo.m_rDoc.SetTextFormatColl(rPasteInfo.m_rPam, rPasteInfo.m_rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(
-                                        SwPoolFormatId::COLL_STANDARD, false));
-
 }
 
 void Reader::EndPaste(SwPasteInfo& rPasteInfo)
