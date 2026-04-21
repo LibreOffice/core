@@ -30,6 +30,7 @@
 
 #include <dpoutput.hxx>
 #include <dpobject.hxx>
+#include <dociter.hxx>
 #include <document.hxx>
 #include <attrib.hxx>
 #include <formula/errorcodes.hxx>
@@ -1250,6 +1251,38 @@ void ScDPOutput::Output()
     outputDataResults(nTab);
 
     aOutputImpl.OutputDataArea();
+}
+
+void ScDPOutput::Output(const ScRange& rOldRange, bool bCheckForSpill)
+{
+    mbSpillError = false;
+
+    if (!bCheckForSpill)
+    {
+        Output();
+        return;
+    }
+
+    SCTAB nTab = maStartPos.Tab();
+
+    CalcSizes();
+
+    if (mbSizeOverflow || mbResultsError)
+        return;
+
+    // Check if the new output range has non-empty cells outside the old pivot table area.
+    ScRange aNewRange(maStartPos.Col(), maStartPos.Row(), nTab, mnTabEndCol, mnTabEndRow, nTab);
+    ScCellIterator aIterator(*mpDocument, aNewRange);
+    for (bool bHasCell = aIterator.first(); bHasCell; bHasCell = aIterator.next())
+    {
+        if (!aIterator.isEmpty() && !rOldRange.Contains(aIterator.GetPos()))
+        {
+            mbSpillError = true;
+            return;
+        }
+    }
+
+    // No spill detected
 }
 
 ScRange ScDPOutput::GetOutputRange( sal_Int32 nRegionType )

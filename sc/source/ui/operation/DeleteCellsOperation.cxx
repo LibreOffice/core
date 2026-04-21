@@ -797,6 +797,8 @@ bool DeleteCellsOperation::runImplementation()
 
     SfxGetpApp()->Broadcast(SfxHint(SfxHintId::ScAreaLinksChanged));
 
+    mrDocShell.ResolveSpillPivotTables();
+
     return true;
 }
 

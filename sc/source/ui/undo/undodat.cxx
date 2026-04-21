@@ -1740,6 +1740,7 @@ void ScUndoDataPilot::Undo()
     }
 
     //  update objects in collection
+    ScDPObject* pRestoredObject = nullptr;
     if (xNewDPObject)
     {
         //  find updated object
@@ -1754,6 +1755,7 @@ void ScUndoDataPilot::Undo()
             {
                 //  restore old settings
                 *pDocObj = *xOldDPObject;
+                pRestoredObject = pDocObj;
             }
             else
             {
@@ -1766,6 +1768,18 @@ void ScUndoDataPilot::Undo()
     {
         //  re-insert deleted object
         rDoc.GetDPCollection()->InsertNewTable(std::make_unique<ScDPObject>(*xOldDPObject));
+        aOldRange = xOldDPObject->GetOutRange();
+        pRestoredObject = rDoc.GetDPAtCursor(
+                        aOldRange.aStart.Col(), aOldRange.aStart.Row(), aOldRange.aStart.Tab());
+    }
+
+    // Re-output the restored pivot table with spill checking.
+    // The old output area may now contain blocking cells that weren't there before.
+    if (pRestoredObject)
+    {
+        ScAddress aOutputPosition = pRestoredObject->GetOutRange().aStart;
+        pRestoredObject->InvalidateData();
+        pRestoredObject->Output(aOutputPosition, true);
     }
 
     if (xNewUndoDoc)

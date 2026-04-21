@@ -106,6 +106,8 @@ bool DeleteCellOperation::runImplementation()
 
     aModificator.SetDocumentModified();
 
+    mrDocShell.ResolveSpillPivotTables();
+
     return true;
 }
 } // end sc namespace
