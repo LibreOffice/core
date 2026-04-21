@@ -106,6 +106,28 @@ findAnnotations(const std::unique_ptr<vcl::pdf::PDFiumPage>& pPage, basegfx::B2D
                 rPDFGraphicAnnotation.maDateTime = aDateTime;
                 rPDFGraphicAnnotation.meSubType = eSubtype;
                 rPDFGraphicAnnotation.maColor = aColor;
+                rPDFGraphicAnnotation.mnFlags = pAnnotation->getFlags();
+                rPDFGraphicAnnotation.mnPdfiumIndex = nAnnotation;
+
+                if (pAnnotation->hasKey(vcl::pdf::constDictionaryKey_InReplyTo))
+                {
+                    // PDF spec requires /IRT parent and child to live on the same page, so we
+                    // only query the current page here. A malformed cross-page /IRT returns -1.
+                    auto pParent = pAnnotation->getLinked(vcl::pdf::constDictionaryKey_InReplyTo);
+                    if (pParent)
+                        rPDFGraphicAnnotation.mnParentPdfiumIndex
+                            = pPage->getAnnotationIndex(pParent);
+                }
+
+                if (pAnnotation->hasKey(vcl::pdf::constDictionaryKey_ReplyType))
+                    rPDFGraphicAnnotation.maReplyType
+                        = pAnnotation->getString(vcl::pdf::constDictionaryKey_ReplyType);
+                if (pAnnotation->hasKey(vcl::pdf::constDictionaryKey_State))
+                    rPDFGraphicAnnotation.maState
+                        = pAnnotation->getString(vcl::pdf::constDictionaryKey_State);
+                if (pAnnotation->hasKey(vcl::pdf::constDictionaryKey_StateModel))
+                    rPDFGraphicAnnotation.maStateModel
+                        = pAnnotation->getString(vcl::pdf::constDictionaryKey_StateModel);
 
                 if (eSubtype == vcl::pdf::PDFAnnotationSubType::Polygon)
                 {

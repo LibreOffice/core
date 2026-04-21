@@ -50,6 +50,13 @@ inline constexpr OString constDictionaryKeyModificationDate = "M"_ostr;
 inline constexpr OString constDictionaryKeyInteriorColor = "IC"_ostr;
 inline constexpr OString constDictionaryKey_DefaultStyle = "DS"_ostr;
 inline constexpr OString constDictionaryKey_RichContent = "RC"_ostr;
+// PDF markup-annotation keys: /IRT links a reply to its parent annotation;
+// /RT says whether /IRT is a reply ("R", default) or a grouping ("Group");
+// /State + /StateModel describe the annotation's review/marked state.
+inline constexpr OString constDictionaryKey_InReplyTo = "IRT"_ostr;
+inline constexpr OString constDictionaryKey_ReplyType = "RT"_ostr;
+inline constexpr OString constDictionaryKey_State = "State"_ostr;
+inline constexpr OString constDictionaryKey_StateModel = "StateModel"_ostr;
 
 class PDFiumBitmap;
 class PDFiumDocument;
@@ -142,6 +149,8 @@ public:
     virtual ~PDFiumAnnotation() = default;
     virtual PDFAnnotationSubType getSubType() = 0;
     virtual basegfx::B2DRectangle getRectangle() = 0;
+    /// Value of the /F (annotation flags) entry; 0 if absent.
+    virtual int getFlags() = 0;
     virtual bool hasKey(OString const& rKey) = 0;
     virtual PDFObjectType getValueType(OString const& rKey) = 0;
     virtual OUString getString(OString const& rKey) = 0;

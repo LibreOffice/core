@@ -47,6 +47,7 @@
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <tools/datetime.hxx>
 #include <unotools/streamwrap.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/ucbstreamhelper.hxx>
@@ -117,8 +118,73 @@ static bool ImportPDF(SvStream& rStream, SdDrawDocument& rDocument)
 
         pPage->InsertObject(pSdrGrafObj.get());
 
+        // Per-page bookkeeping for threaded-comment resolution. Pdfium annotation indices and
+        // /IRT parent links are page-scoped, so these structures live inside the page loop; a
+        // cross-page /IRT has already been dropped to -1 by findAnnotations.
+        std::map<int, rtl::Reference<sdr::annotation::Annotation>> aPdfiumIndexToAnnot;
+        std::vector<std::pair<rtl::Reference<sdr::annotation::Annotation>, int>> aAnnotToParent;
+        // Per PDF spec, the "state" of a comment lives in a separate annotation that carries
+        // /IRT + /State + /StateModel and points at the target. Acrobat models this as independent
+        // per-user state: each reviewer maintains their own state (identified by the state-change
+        // annotation's /T author). A target comment is shown with a resolved checkmark as long as
+        // *any* reviewer's current state is "Completed"; its tooltip then lists every reviewer
+        // who has marked it.
+        //
+        // We currently collapse all of that into a single per-comment boolean
+        // (sd::Annotation::IsResolved). The lossy mapping we pick is:
+        //   - each reviewer's state = the latest state-change they authored for that target
+        //     (by /M);
+        //   - the target is considered resolved if any reviewer's latest state is "Completed".
+        // On export we will only be able to encode a single reviewer's state (the current editing
+        // user), so other reviewers' per-user states that we observed on import are not
+        // round-tripped.
+        struct StateChange
+        {
+            int mnTargetPdfiumIndex;
+            OUString maAuthor;
+            OUString maState;
+            OUString maStateModel;
+            DateTime maDateTime{ DateTime::EMPTY };
+        };
+        std::vector<StateChange> aStateChanges;
+
+        // We only honour the "Review" state (the "Marked" model is defined by the spec, but it's
+        // unclear how to treat it correctly: Acrobat doesn't show anything for "Marked/Marked").
+        // "Review/Completed" is the value that represents "resolved"; other states are not
+        // currently modelled. Acrobat stamps state-change annotations with /F = Hidden | NoZoom |
+        // NoRotate = 2|8|16 = 26, so they don't appear as visible replies. /State on annotations
+        // that lack those flag bits isn't recognised by Acrobat as a state-change, so we match
+        // its rule: don't collapse unless all three flag bits are present. (Print, value 4, is
+        // often also set alongside but is not required.)
+        constexpr int kStateChangeFlagMask = 2 | 8 | 16;
+
         for (auto const& rPDFAnnotation : rPDFGraphicResult.GetAnnotations())
         {
+            const bool bHasParent = rPDFAnnotation.mnParentPdfiumIndex != -1;
+            const bool bHasState
+                = !rPDFAnnotation.maState.isEmpty() && !rPDFAnnotation.maStateModel.isEmpty();
+            // /RT = "Group" means /IRT is a grouping relationship, not a reply. State-changes
+            // and reply-parent links only apply when /RT = "R" (the spec's implicit default).
+            const bool bIsReplyRelation = rPDFAnnotation.maReplyType == u"R";
+
+            // /IRT + /State + /StateModel on a reply-relation is structurally a state-change
+            // annotation. If the flag bits also match Acrobat's gate, collapse it into the
+            // target's resolved state. If the flags don't match, Acrobat treats the combination
+            // as malformed and skips the annotation entirely — we do the same.
+            if (bHasParent && bHasState && bIsReplyRelation)
+            {
+                // Only /StateModel = "Review" contributes to our resolved boolean; state-changes
+                // in the "Marked" model are valid per spec but not representable in our model
+                // and are discarded.
+                if ((rPDFAnnotation.mnFlags & kStateChangeFlagMask) == kStateChangeFlagMask
+                    && rPDFAnnotation.maStateModel == u"Review")
+                    aStateChanges.push_back({ rPDFAnnotation.mnParentPdfiumIndex,
+                                              rPDFAnnotation.maAuthor, rPDFAnnotation.maState,
+                                              rPDFAnnotation.maStateModel,
+                                              DateTime(rPDFAnnotation.maDateTime) });
+                continue;
+            }
+
             rtl::Reference<sdr::annotation::Annotation> xAnnotation = pPage->createAnnotation();
 
             xAnnotation->setAuthor(rPDFAnnotation.maAuthor);
@@ -133,6 +199,18 @@ static bool ImportPDF(SvStream& rStream, SdDrawDocument& rDocument)
             xAnnotation->setPosition(aUnoPosition);
             xAnnotation->setSize(aUnoSize);
             xAnnotation->setDateTime(rPDFAnnotation.maDateTime);
+
+            // Every imported PDF comment supports reply / resolve.
+            xAnnotation->SetThreaded(true);
+
+            // /State on an annotation that isn't a recognised state-change (missing /IRT, or
+            // missing the Hidden/NoZoom/NoRotate flag bits) is silently ignored here; Acrobat
+            // ignores it the same way, so matching that behaviour keeps round-trips consistent.
+
+            if (bHasParent && bIsReplyRelation)
+                aAnnotToParent.emplace_back(xAnnotation, rPDFAnnotation.mnParentPdfiumIndex);
+
+            aPdfiumIndexToAnnot[rPDFAnnotation.mnPdfiumIndex] = xAnnotation;
 
             if (rPDFAnnotation.mpMarker)
             {
@@ -248,6 +326,44 @@ static bool ImportPDF(SvStream& rStream, SdDrawDocument& rDocument)
 
             pPage->addAnnotation(xAnnotation, -1);
         }
+
+        // Resolve reply parent links now that every (non-state-change) annotation on this page
+        // has been created and its GetId() is known.
+        for (auto const & [ xChild, nParentPdfiumIndex ] : aAnnotToParent)
+        {
+            auto it = aPdfiumIndexToAnnot.find(nParentPdfiumIndex);
+            if (it != aPdfiumIndexToAnnot.end())
+                xChild->SetParentId(it->second->GetId());
+        }
+
+        // Collapse per-user states to one boolean per target: target's latest state per reviewer
+        // (by /M) -> resolved if any of those latest states is "Completed". /StateModel was
+        // already constrained to "Review" at insertion, so here we only compare /State values.
+        struct LatestPerUser
+        {
+            DateTime maDateTime{ DateTime::EMPTY };
+            OUString maState;
+        };
+        std::map<int, std::map<OUString, LatestPerUser>> aLatestPerUser;
+        for (auto const& rStateChange : aStateChanges)
+        {
+            auto& rSlot = aLatestPerUser[rStateChange.mnTargetPdfiumIndex][rStateChange.maAuthor];
+            if (rSlot.maState.isEmpty() || rSlot.maDateTime < rStateChange.maDateTime)
+                rSlot = { rStateChange.maDateTime, rStateChange.maState };
+        }
+        for (auto const & [ nTarget, rPerUser ] : aLatestPerUser)
+        {
+            auto it = aPdfiumIndexToAnnot.find(nTarget);
+            if (it == aPdfiumIndexToAnnot.end())
+                continue;
+            const bool bAnyCompleted
+                = std::any_of(rPerUser.begin(), rPerUser.end(), [](auto const& rEntry) {
+                      return rEntry.second.maState == u"Completed";
+                  });
+            if (bAnyCompleted)
+                it->second->SetResolved(true);
+        }
+
         pPage->setLinkAnnotations(rPDFGraphicResult.GetLinksInfo());
     }
 

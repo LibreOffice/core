@@ -46,6 +46,8 @@
 
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
+#include <sfx2/docfile.hxx>
+#include <sfx2/docfilt.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>
 
@@ -533,6 +535,23 @@ void AnnotationManagerImpl::InsertAnnotation(const OUString& rText)
     }
 
     rtl::Reference<sdr::annotation::Annotation> xAnnotation = pPage->createAnnotation();
+
+    // When editing a document loaded from PDF, new annotations take part
+    // in the PDF threading model (round-tripped via /IRT on export), so
+    // default the threaded flag on. The PDF import filter does the same
+    // for every imported annotation.
+    if (DrawDocShell* pDocShell = mrBase.GetDocShell())
+    {
+        if (SfxMedium* pMedium = pDocShell->GetMedium())
+        {
+            if (const std::shared_ptr<const SfxFilter>& pFilter = pMedium->GetFilter())
+            {
+                const OUString& rName = pFilter->GetFilterName();
+                if (rName == u"draw_pdf_import" || rName == u"impress_pdf_import")
+                    xAnnotation->SetThreaded(true);
+            }
+        }
+    }
 
     OUString sAuthor;
     if (comphelper::COKit::isActive())

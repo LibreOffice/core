@@ -289,6 +289,72 @@ CPPUNIT_TEST_FIXTURE(SdrPdfImportTest, testAnnotationsImportExport)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SdrPdfImportTest, testImportThreadedComments)
+{
+    // Sample PDF threaded_comments.pdf carries five Text annotations on page 0:
+    //   4 — Alice,   root
+    //   5 — Bob,     reply to Alice
+    //   6 — Charlie, state-change targeting Alice:
+    //                /IRT 4 /State (Completed) /StateModel (Review) /F 30
+    //   7 — Dave,    has /State (Completed) /StateModel (Review) but no /IRT — Acrobat
+    //                ignores /State on a non-state-change annotation, and so do we;
+    //                Dave imports as a regular comment with no state.
+    //   8 — Eve,     /IRT 4 + /State + /StateModel but missing the Hidden flag —
+    //                structurally a state-change but the flags disqualify it.
+    //                Acrobat treats such an annotation as malformed and skips it;
+    //                we do the same: no sd::Annotation is produced for Eve.
+    // After import we expect three sd::Annotations: Alice, Bob, Dave.
+    // Charlie's state-change is collapsed into Alice's m_Resolved.
+    auto pPdfium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPdfium)
+        return;
+
+    EnvVarGuard UsePDFiumGuard("LO_IMPORT_USE_PDFIUM", "1");
+
+    loadFromFile(u"pdf/threaded_comments.pdf");
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    sd::ViewShell* pViewShell = pImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+
+    SdPage* pPage = pViewShell->GetActualPage();
+    CPPUNIT_ASSERT(pPage);
+
+    CPPUNIT_ASSERT_EQUAL(size_t(3), pPage->getAnnotations().size());
+
+    rtl::Reference<sdr::annotation::Annotation> xRoot, xReply, xDave;
+    for (auto const& x : pPage->getAnnotations())
+    {
+        if (x->getAuthor() == u"Alice"_ustr)
+            xRoot = x;
+        else if (x->getAuthor() == u"Bob"_ustr)
+            xReply = x;
+        else if (x->getAuthor() == u"Dave"_ustr)
+            xDave = x;
+        // Eve was skipped as malformed.
+        CPPUNIT_ASSERT(x->getAuthor() != u"Eve"_ustr);
+    }
+    CPPUNIT_ASSERT(xRoot);
+    CPPUNIT_ASSERT(xReply);
+    CPPUNIT_ASSERT(xDave);
+
+    // Every imported PDF annotation is threaded.
+    CPPUNIT_ASSERT(xRoot->IsThreaded());
+    CPPUNIT_ASSERT(xReply->IsThreaded());
+    CPPUNIT_ASSERT(xDave->IsThreaded());
+
+    // Alice is the root; Charlie's Review/Completed state-change was collapsed onto her.
+    CPPUNIT_ASSERT_EQUAL(sal_uInt64(0), xRoot->GetParentId());
+    CPPUNIT_ASSERT(xRoot->IsResolved());
+
+    // Bob replies to Alice; no state of his own.
+    CPPUNIT_ASSERT_EQUAL(xRoot->GetId(), xReply->GetParentId());
+    CPPUNIT_ASSERT(!xReply->IsResolved());
+
+    // Dave has /State but no /IRT — not a state-change; /State is discarded.
+    CPPUNIT_ASSERT_EQUAL(sal_uInt64(0), xDave->GetParentId());
+    CPPUNIT_ASSERT(!xDave->IsResolved());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
