@@ -8195,9 +8195,6 @@ SwFileNameField::Copy() const
 SwFileNameField::ExpandImpl(SwRootFrame const*) const
 SwFileNameField::PutValue(com::sun::star::uno::Any const&, unsigned short)
 SwFileNameField::QueryValue(com::sun::star::uno::Any&, unsigned short) const
-SwFilterOptions::GetValues(unsigned short, char const**, unsigned long*)
-SwFilterOptions::ImplCommit()
-SwFilterOptions::Notify(com::sun::star::uno::Sequence<rtl::OUString> const&)
 SwFltAnchor::Clone(SfxItemPool*) const
 SwFltAnchor::SetFrameFormat(SwFrameFormat*)
 SwFltAnchor::SwFltAnchor(SwFltAnchor const&)
