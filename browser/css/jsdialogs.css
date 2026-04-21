@@ -1450,6 +1450,12 @@ img.context-menu-icon {
 	background-color: var(--color-background-hover);
 }
 
+[id^='comment-menu-'][id$='-entries'] .ui-combobox-entry:hover,
+#jsd-context-menu-entries .ui-combobox-entry:hover {
+	background-color: var(--color-background-darker) !important;
+	color: var(--color-text-darker) !important;
+}
+
 .ui-combobox-entry.selected:not(:hover) span,
 .margin-item.selected {
 	background-color: var(--color-background-darker);
