@@ -165,6 +165,10 @@ endef
 $(dir $(call gb_UnpackedTarball_get_target,%)).dir :
 	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
 
+$(call gb_UnpackedTarball_get_version_target,%) : $(gb_Helper_PHONY)
+	$(if $(and $(wildcard $@),$(filter $(UNPACKED_TARBALL),$(file < $@))),,\
+		printf $(UNPACKED_TARBALL) > $@)
+
 $(call gb_UnpackedTarball_get_preparation_target,%) :
 	touch $@
 
@@ -185,6 +189,7 @@ $(call gb_UnpackedTarball_get_clean_target,%) :
 			$(call gb_UnpackedTarball_get_final_target,$*) \
 			$(call gb_UnpackedTarball_get_target,$*) \
 			$(call gb_UnpackedTarball_get_preparation_target,$*) \
+			$(call gb_UnpackedTarball_get_version_target,$*) \
 			$(gb_UnpackedTarball_workdir)/$* \
 			$(call gb_UnpackedTarball_get_pristine_dir,$*) \
 	)
@@ -201,9 +206,9 @@ $(call gb_UnpackedTarball_get_target,$(1)) : UNPACKED_POST_ACTION :=
 $(call gb_UnpackedTarball_get_target,$(1)) : UNPACKED_PRE_ACTION :=
 $(call gb_UnpackedTarball_get_target,$(1)) : UNPACKED_CONFIG_DIRS :=
 
-$(call gb_UnpackedTarball_get_preparation_target,$(1)) : $(gb_Module_CURRENTMAKEFILE)
+$(call gb_UnpackedTarball_get_preparation_target,$(1)) : $(gb_Module_CURRENTMAKEFILE) \
+	$(call gb_UnpackedTarball_get_version_target,$(1))
 $(call gb_UnpackedTarball_get_preparation_target,$(1)) :| $(dir $(call gb_UnpackedTarball_get_target,$(1))).dir
-$(call gb_UnpackedTarball_get_target,$(1)) : $(call gb_UnpackedTarball_get_preparation_target,$(1))
 $(call gb_UnpackedTarball_get_target,$(1)) :| $(dir $(call gb_UnpackedTarball_get_target,$(1))).dir
 $(call gb_UnpackedTarball_get_final_target,$(1)) : $(call gb_UnpackedTarball_get_target,$(1))
 
