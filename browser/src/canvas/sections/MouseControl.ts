@@ -377,6 +377,9 @@ class MouseControl extends CanvasSectionObject {
 
 	// Shows unselected shapes drag preview
 	private showShapeDragPreview(dragDistance: number[]): void {
+		// Do not show in edit mode of inner edit engine
+		if (app.file.textCursor.visible || TextSelections.isActive()) return;
+
 		const handles = GraphicSelection.handlesSection;
 		if (!handles?.sectionProperties?.svg) return;
 		if (!GraphicSelection.extraInfo?.isDraggable) return;
