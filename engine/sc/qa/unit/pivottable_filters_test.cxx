@@ -2666,6 +2666,9 @@ static void verifyCalcFields(ScDocument* pDoc, bool bBIFF12 = false)
     // "SUM - Field4"
     CPPUNIT_ASSERT_EQUAL(u"#VALUE!"_ustr, pDoc->GetString(ScAddress(6, 2, 1)));
     CPPUNIT_ASSERT_EQUAL(u"#VALUE!"_ustr, pDoc->GetString(ScAddress(6, 5, 1)));
+    // "SUM - Field5"  (Field5 = 'Field4'/1 — must propagate #VALUE!, not give 0)
+    CPPUNIT_ASSERT_EQUAL(u"#VALUE!"_ustr, pDoc->GetString(ScAddress(7, 2, 1)));
+    CPPUNIT_ASSERT_EQUAL(u"#VALUE!"_ustr, pDoc->GetString(ScAddress(7, 5, 1)));
 
     // Verify calculated field definitions
     ScDPCollection* pDPs = pDoc->GetDPCollection();
@@ -2676,7 +2679,7 @@ static void verifyCalcFields(ScDocument* pDoc, bool bBIFF12 = false)
     const ScDPDimCalcSaveData* pCalcData = pSaveData->GetExistingDimCalcData();
     CPPUNIT_ASSERT(pCalcData);
     const auto& rCalcFields = pCalcData->GetCalculatedFields();
-    CPPUNIT_ASSERT_EQUAL(size_t(4), rCalcFields.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(5), rCalcFields.size());
     // Field1 = 'Field A' * 20
     CPPUNIT_ASSERT_EQUAL(u"Field1"_ustr, rCalcFields[0]->maFieldName);
     CPPUNIT_ASSERT_EQUAL(u"='Field A'*20"_ustr, rCalcFields[0]->maCalculation);
@@ -2693,6 +2696,9 @@ static void verifyCalcFields(ScDocument* pDoc, bool bBIFF12 = false)
     // BIFF12 formula decompilation adds space before number literal
     CPPUNIT_ASSERT_EQUAL(u"Field4"_ustr, rCalcFields[3]->maFieldName);
     CPPUNIT_ASSERT_EQUAL(bBIFF12 ? u"= 2/0"_ustr : u"=2/0"_ustr, rCalcFields[3]->maCalculation);
+    // Field5 = 'Field4'/1 — error-propagation regression guard
+    CPPUNIT_ASSERT_EQUAL(u"Field5"_ustr, rCalcFields[4]->maFieldName);
+    CPPUNIT_ASSERT_EQUAL(u"='Field4'/1"_ustr, rCalcFields[4]->maCalculation);
 }
 
 CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testCalcFields1XLSX)
@@ -2724,7 +2730,7 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testCalcFields1XLSX)
     assertXPath(pDocXml, "/x:pivotTableDefinition/x:dataFields/x:dataField[6]", "numFmtId", u"164");
     // cacheFields
     pDocXml = parseExport(u"xl/pivotCache/pivotCacheDefinition1.xml"_ustr);
-    assertXPath(pDocXml, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField", 7);
+    assertXPath(pDocXml, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField", 8);
     // cacheField - 1st calculated field
     assertXPath(pDocXml, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[4]", "name",
                 u"Field1");
@@ -2752,6 +2758,13 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testCalcFields1XLSX)
     assertXPath(pDocXml, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[7]", "formula",
                 u"2/0");
     assertXPath(pDocXml, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[7]", "databaseField",
+                u"0");
+    // cacheField - 5th calculated field (Field5 = 'Field4'/1)
+    assertXPath(pDocXml, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[8]", "name",
+                u"Field5");
+    assertXPath(pDocXml, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[8]", "formula",
+                u"'Field4'/1");
+    assertXPath(pDocXml, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[8]", "databaseField",
                 u"0");
 }
 
@@ -2787,6 +2800,9 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testCalcFields1ODS)
     // 4th calculated field: Field4 = 2/0
     assertXPath(pDocXml, aFieldPath + "[8]", "source-field-name", u"Field4");
     assertXPath(pDocXml, aFieldPath + "[8]", "formula", u"of:=2/0");
+    // 5th calculated field: Field5 = 'Field4'/1
+    assertXPath(pDocXml, aFieldPath + "[9]", "source-field-name", u"Field5");
+    assertXPath(pDocXml, aFieldPath + "[9]", "formula", u"of:='Field4'/1");
 }
 
 CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testCalcFields2XLSX)

@@ -2786,8 +2786,12 @@ std::unique_ptr<ScTokenArray> ScDPDataMember::ReplaceTokenMeasuresWithValues(con
                 // replace token with value if calculation was successful
                 if (pAggData->IsCalculated())
                 {
-                    formula::FormulaToken* pValToken = new formula::FormulaDoubleToken(pAggData->GetResult());
-                    pNewArray->ReplaceRPNToken(aIterResult.GetIndex() - 1, pValToken);
+                    formula::FormulaToken* pNewToken;
+                    if (pAggData->HasError())
+                        pNewToken = new formula::FormulaErrorToken(FormulaError::NoValue);
+                    else
+                        pNewToken = new formula::FormulaDoubleToken(pAggData->GetResult());
+                    pNewArray->ReplaceRPNToken(aIterResult.GetIndex() - 1, pNewToken);
                 }
             }
             // remove from recursion stack after processing
