@@ -309,7 +309,7 @@
               <object class="GtkLabel" id="aboveparaspacinglabel">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="sidebarparagraph|aboveparaspacinglabel">_Above Paragraph Spacing</property>
+                <property name="label" translatable="yes" context="sidebarparagraph|aboveparaspacinglabel">Above:</property>
                 <property name="use-underline">True</property>
                 <property name="mnemonic-widget">aboveparaspacing</property>
                 <property name="xalign">0</property>
@@ -368,7 +368,7 @@
               <object class="GtkLabel" id="belowparaspacinglabel">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="sidebarparagraph|belowparaspacinglabel">_Below Paragraph Spacing</property>
+                <property name="label" translatable="yes" context="sidebarparagraph|belowparaspacinglabel">Below:</property>
                 <property name="use-underline">True</property>
                 <property name="mnemonic-widget">belowparaspacing</property>
                 <property name="xalign">0</property>
@@ -424,6 +424,21 @@
               </packing>
             </child>
             <child>
+              <object class="GtkLabel" id="linespacinglabel">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="label" translatable="yes" context="sidebarparagraph|linespacinglabel">Line Spacing:</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">linespacing</property>
+                <property name="xalign">0</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">6</property>
+              </packing>
+            </child>
+            <child>
               <object class="GtkToolbar" id="linespacing">
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
@@ -446,7 +461,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">6</property>
+                <property name="position">7</property>
               </packing>
             </child>
           </object>
@@ -534,7 +549,7 @@
               <object class="GtkLabel" id="beforetextindentlabel">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="sidebarparagraph|beforetextindentlabel">B_efore Text Indent</property>
+                <property name="label" translatable="yes" context="sidebarparagraph|beforetextindentlabel">Before:</property>
                 <property name="use-underline">True</property>
                 <property name="mnemonic-widget">beforetextindent</property>
                 <property name="xalign">0</property>
@@ -593,7 +608,7 @@
               <object class="GtkLabel" id="aftertextindentlabel">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="sidebarparagraph|aftertextindentlabel">A_fter Text Indent</property>
+                <property name="label" translatable="yes" context="sidebarparagraph|aftertextindentlabel">After:</property>
                 <property name="use-underline">True</property>
                 <property name="mnemonic-widget">aftertextindent</property>
                 <property name="xalign">0</property>
@@ -652,7 +667,7 @@
               <object class="GtkLabel" id="firstlineindentlabel">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="sidebarparagraph|firstlineindentlabel">_First Line Indent</property>
+                <property name="label" translatable="yes" context="sidebarparagraph|firstlineindentlabel">First:</property>
                 <property name="use-underline">True</property>
                 <property name="mnemonic-widget">firstlineindent</property>
                 <property name="xalign">0</property>

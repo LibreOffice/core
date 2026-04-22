@@ -31,7 +31,6 @@
 #include <svtools/unitconv.hxx>
 #include <sal/log.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <spacing.hrc>
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <utility>
@@ -569,14 +568,6 @@ FieldUnit ParaPropertyPanel::GetCurrentUnit( SfxItemState eState, const SfxPoolI
     return eUnit;
 }
 
-namespace {
-    OUString MakeCustomProperty(std::u16string_view sCustomLabel, std::u16string_view sCustomLabelFor)
-    {
-        return OUString::Concat(u"\"custom-label\":\"") + sCustomLabel + "\", \"custom-label-for\":\"" +
-            sCustomLabelFor + "\"";
-    }
-}
-
 ParaPropertyPanel::ParaPropertyPanel(weld::Widget* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings,
@@ -644,17 +635,6 @@ ParaPropertyPanel::ParaPropertyPanel(weld::Widget* pParent,
       mpBindings(pBindings),
       mxSidebar(std::move(xSidebar))
 {
-    std::unique_ptr<weld::Widget> xBox = m_xBuilder->weld_widget(u"aboveparaspacingbox"_ustr);
-    xBox->set_cargo_text(MakeCustomProperty(SvxResId(RID_ABOVE), u"aboveparaspacing"));
-    xBox = m_xBuilder->weld_widget(u"belowparaspacingbox"_ustr);
-    xBox->set_cargo_text(MakeCustomProperty(SvxResId(RID_BELOW), u"beforetextindent"));
-    xBox = m_xBuilder->weld_widget(u"beforetextindentbox"_ustr);
-    xBox->set_cargo_text(MakeCustomProperty(SvxResId(RID_BEFORE), u"beforetextindent"));
-    xBox = m_xBuilder->weld_widget(u"aftertextindentbox"_ustr);
-    xBox->set_cargo_text(MakeCustomProperty(SvxResId(RID_AFTER), u"aftertextindent"));
-    xBox = m_xBuilder->weld_widget(u"firstlineindentbox"_ustr);
-    xBox->set_cargo_text(MakeCustomProperty(SvxResId(RID_FIRST), u"firstlineindent"));
-
     mxTBxHyphenation->connect_clicked(LINK( this, ParaPropertyPanel, HyphenationToggleButtonHdl_Impl));
     // tdf#130197 We want to give this toolbar a width as if it had 5 entries
     // (the parent grid has homogeneous width set so both columns will have the
