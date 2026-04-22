@@ -433,10 +433,14 @@ void DomainMapper::lcl_attribute(Id nName, const Value & val)
 
                 // Set the matching font family if we have one.
                 FontEntry::Pointer_t pFontEntry = m_pImpl->GetFontTable()->getFontEntryByName(sStringValue);
-                if (pFontEntry && pFontEntry->m_nFontFamily != awt::FontFamily::DONTKNOW)
+                if (pFontEntry)
                 {
-                    m_pImpl->GetTopContext()->Insert(PROP_CHAR_FONT_FAMILY,
-                                                     uno::Any(pFontEntry->m_nFontFamily));
+                    if (pFontEntry->m_nFontFamily != awt::FontFamily::DONTKNOW)
+                        m_pImpl->GetTopContext()->Insert(PROP_CHAR_FONT_FAMILY,
+                                                         uno::Any(pFontEntry->m_nFontFamily));
+                    if (pFontEntry->nTextEncoding == RTL_TEXTENCODING_SYMBOL)
+                        m_pImpl->GetTopContext()->Insert(PROP_CHAR_FONT_CHAR_SET,
+                                                         uno::Any(awt::CharSet::SYMBOL));
                 }
             }
             break;
@@ -461,7 +465,15 @@ void DomainMapper::lcl_attribute(Id nName, const Value & val)
             break;
         case NS_ooxml::LN_CT_Fonts_eastAsia:
             if (m_pImpl->GetTopContext())
+            {
                 m_pImpl->GetTopContext()->Insert(PROP_CHAR_FONT_NAME_ASIAN, uno::Any( sStringValue ));
+
+                FontEntry::Pointer_t pFontEntry
+                    = m_pImpl->GetFontTable()->getFontEntryByName(sStringValue);
+                if (pFontEntry && pFontEntry->nTextEncoding == RTL_TEXTENCODING_SYMBOL)
+                    m_pImpl->GetTopContext()->Insert(PROP_CHAR_FONT_CHAR_SET_ASIAN,
+                                                     uno::Any(awt::CharSet::SYMBOL));
+            }
             break;
         case NS_ooxml::LN_CT_Fonts_eastAsiaTheme:
             m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, u"eastAsiaTheme"_ustr, ThemeHandler::getStringForTheme(nIntValue));
@@ -475,7 +487,15 @@ void DomainMapper::lcl_attribute(Id nName, const Value & val)
             break;
         case NS_ooxml::LN_CT_Fonts_cs:
             if (m_pImpl->GetTopContext())
+            {
                 m_pImpl->GetTopContext()->Insert(PROP_CHAR_FONT_NAME_COMPLEX, uno::Any( sStringValue ));
+
+                FontEntry::Pointer_t pFontEntry
+                    = m_pImpl->GetFontTable()->getFontEntryByName(sStringValue);
+                if (pFontEntry && pFontEntry->nTextEncoding == RTL_TEXTENCODING_SYMBOL)
+                    m_pImpl->GetTopContext()->Insert(PROP_CHAR_FONT_CHAR_SET_COMPLEX,
+                                                     uno::Any(awt::CharSet::SYMBOL));
+            }
             break;
         case NS_ooxml::LN_CT_Fonts_cstheme:
             m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, u"cstheme"_ustr, ThemeHandler::getStringForTheme(nIntValue));
