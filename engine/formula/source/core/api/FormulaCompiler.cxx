@@ -765,20 +765,20 @@ void FormulaCompiler::OpCodeMap::putOpCode( const OUString & rStr, const OpCode 
 
 FormulaCompiler::FormulaCompiler( FormulaTokenArray& rArr, bool bComputeII, bool bMatrixFlag )
         :
-        nCurrentFactorParam(0),
-        pArr( &rArr ),
+        mnCurrentFactorParam(0),
+        mpArr( &rArr ),
         maArrIterator( rArr ),
-        pCode( nullptr ),
-        pStack( nullptr ),
-        eLastOp( ocPush ),
-        nRecursion( 0 ),
-        nNumFmt( SvNumFormatType::UNDEFINED ),
+        mpCode( nullptr ),
+        mpStack( nullptr ),
+        meLastOp( ocPush ),
+        mnRecursion( 0 ),
+        mnNumFmt( SvNumFormatType::UNDEFINED ),
         pc( 0 ),
         meGrammar( formula::FormulaGrammar::GRAM_UNSPECIFIED ),
-        bAutoCorrect( false ),
-        bCorrected( false ),
-        glSubTotal( false ),
-        needsRPNTokenCheck( false ),
+        mbAutoCorrect( false ),
+        mbCorrected( false ),
+        mbGlSubTotal( false ),
+        mbNeedsRPNTokenCheck( false ),
         mbJumpCommandReorder(true),
         mbStopOnError(true),
         mbComputeII(bComputeII),
@@ -790,20 +790,20 @@ FormulaTokenArray FormulaCompiler::smDummyTokenArray;
 
 FormulaCompiler::FormulaCompiler(bool bComputeII, bool bMatrixFlag)
         :
-        nCurrentFactorParam(0),
-        pArr( nullptr ),
+        mnCurrentFactorParam(0),
+        mpArr( nullptr ),
         maArrIterator( smDummyTokenArray ),
-        pCode( nullptr ),
-        pStack( nullptr ),
-        eLastOp( ocPush ),
-        nRecursion(0),
-        nNumFmt( SvNumFormatType::UNDEFINED ),
+        mpCode( nullptr ),
+        mpStack( nullptr ),
+        meLastOp( ocPush ),
+        mnRecursion(0),
+        mnNumFmt( SvNumFormatType::UNDEFINED ),
         pc( 0 ),
         meGrammar( formula::FormulaGrammar::GRAM_UNSPECIFIED ),
-        bAutoCorrect( false ),
-        bCorrected( false ),
-        glSubTotal( false ),
-        needsRPNTokenCheck( false ),
+        mbAutoCorrect( false ),
+        mbCorrected( false ),
+        mbGlSubTotal( false ),
+        mbNeedsRPNTokenCheck( false ),
         mbJumpCommandReorder(true),
         mbStopOnError(true),
         mbComputeII(bComputeII),
@@ -1499,26 +1499,26 @@ constexpr short nRecursionMax = 100;
 
 bool FormulaCompiler::GetToken()
 {
-    FormulaCompilerRecursionGuard aRecursionGuard( nRecursion );
-    if ( nRecursion > nRecursionMax )
+    FormulaCompilerRecursionGuard aRecursionGuard( mnRecursion );
+    if ( mnRecursion > nRecursionMax )
     {
         SetError( FormulaError::StackOverflow );
         mpLastToken = mpToken = new FormulaByteToken( ocStop );
         return false;
     }
-    if ( bAutoCorrect && !pStack )
+    if ( mbAutoCorrect && !mpStack )
     {   // don't merge stacked subroutine code into entered formula
-        aCorrectedFormula += aCorrectedSymbol;
-        aCorrectedSymbol.clear();
+        maCorrectedFormula += maCorrectedSymbol;
+        maCorrectedSymbol.clear();
     }
     bool bStop = false;
-    if (pArr->GetCodeError() != FormulaError::NONE && mbStopOnError)
+    if (mpArr->GetCodeError() != FormulaError::NONE && mbStopOnError)
         bStop = true;
     else
     {
         FormulaTokenRef pSpacesToken;
         short nWasColRowName;
-        if ( pArr->OpCodeBefore( maArrIterator.GetIndex() ) == ocColRowName )
+        if ( mpArr->OpCodeBefore( maArrIterator.GetIndex() ) == ocColRowName )
              nWasColRowName = 1;
         else
              nWasColRowName = 0;
@@ -1534,15 +1534,15 @@ bool FormulaCompiler::GetToken()
                 if ( nWasColRowName )
                     nWasColRowName++;
             }
-            if ( bAutoCorrect && !pStack )
-                CreateStringFromToken( aCorrectedFormula, mpToken.get() );
+            if ( mbAutoCorrect && !mpStack )
+                CreateStringFromToken( maCorrectedFormula, mpToken.get() );
             mpToken = maArrIterator.Next();
         }
-        if ( bAutoCorrect && !pStack && mpToken )
-            CreateStringFromToken( aCorrectedSymbol, mpToken.get() );
+        if ( mbAutoCorrect && !mpStack && mpToken )
+            CreateStringFromToken( maCorrectedSymbol, mpToken.get() );
         if( !mpToken )
         {
-            if( pStack )
+            if( mpStack )
             {
                 PopTokenArray();
                 // mpLastToken was popped as well and corresponds to the
@@ -1593,7 +1593,7 @@ bool FormulaCompiler::GetToken()
         {
             case ocSubTotal:
             case ocAggregate:
-                glSubTotal = true;
+                mbGlSubTotal = true;
                 break;
             case ocStringName:
                 if( HandleStringName())
@@ -1610,7 +1610,7 @@ bool FormulaCompiler::GetToken()
                 {
                     // Expanding ocName might have introduced tokens such as ocStyle that prevent formula threading,
                     // but those wouldn't be present in the raw tokens array, so ensure RPN tokens will be checked too.
-                    needsRPNTokenCheck = true;
+                    mbNeedsRPNTokenCheck = true;
                     return true;
                 }
                 return false;
@@ -1635,7 +1635,7 @@ bool FormulaCompiler::GetToken()
 // RPN creation by recursion
 void FormulaCompiler::Factor()
 {
-    if (pArr->GetCodeError() != FormulaError::NONE && mbStopOnError)
+    if (mpArr->GetCodeError() != FormulaError::NONE && mbStopOnError)
         return;
 
     CurrentFactor pFacToken( this );
@@ -1655,10 +1655,10 @@ void FormulaCompiler::Factor()
                 ( mpToken->GetType() == svString
                || mpToken->GetType() == svSingleRef )
                ? FormulaError::NoName : FormulaError::OperatorExpected );
-            if ( bAutoCorrect && !pStack )
+            if ( mbAutoCorrect && !mpStack )
             {   // assume multiplication
-                aCorrectedFormula += mxSymbols->getSymbol( ocMul);
-                bCorrected = true;
+                maCorrectedFormula += mxSymbols->getSymbol( ocMul);
+                mbCorrected = true;
                 NextToken();
                 eOp = Expression();
                 if( eOp != ocClose )
@@ -1672,7 +1672,7 @@ void FormulaCompiler::Factor()
     {
         NextToken();
         eOp = Expression();
-        while ((eOp == ocSep) && (pArr->GetCodeError() == FormulaError::NONE || !mbStopOnError))
+        while ((eOp == ocSep) && (mpArr->GetCodeError() == FormulaError::NONE || !mbStopOnError))
         {   // range list  (A1;A2)  converted to  (A1~A2)
             pFacToken = mpToken;
             NextToken();
@@ -1680,14 +1680,14 @@ void FormulaCompiler::Factor()
             eOp = Expression();
             // Do not ignore error here, regardless of mbStopOnError, to not
             // change the formula expression in case of an unexpected state.
-            if (pArr->GetCodeError() == FormulaError::NONE && pc >= 2)
+            if (mpArr->GetCodeError() == FormulaError::NONE && pc >= 2)
             {
                 // Left and right operands must be reference or function
                 // returning reference to form a range list.
-                const FormulaToken* p = pCode[-2];
+                const FormulaToken* p = mpCode[-2];
                 if (p && isPotentialRangeType( p, true, false))
                 {
-                    p = pCode[-1];
+                    p = mpCode[-1];
                     if (p && isPotentialRangeType( p, true, true))
                     {
                         pFacToken->NewOpCode( ocUnion, FormulaToken::PrivateAccess());
@@ -1715,11 +1715,11 @@ void FormulaCompiler::Factor()
     }
     else
     {
-        if( nNumFmt == SvNumFormatType::UNDEFINED )
-            nNumFmt = lcl_GetRetFormat( eOp );
+        if( mnNumFmt == SvNumFormatType::UNDEFINED )
+            mnNumFmt = lcl_GetRetFormat( eOp );
 
         if ( IsOpCodeVolatile( eOp) )
-            pArr->SetExclusiveRecalcModeAlways();
+            mpArr->SetExclusiveRecalcModeAlways();
         else
         {
             switch( eOp )
@@ -1733,7 +1733,7 @@ void FormulaCompiler::Factor()
                 case ocDde:
                 case ocMacro:
                 case ocWebservice:
-                    pArr->AddRecalcMode( ScRecalcMode::ONLOAD_LENIENT );
+                    mpArr->AddRecalcMode( ScRecalcMode::ONLOAD_LENIENT );
                 break;
                     // RANDBETWEEN() is volatile like RAND(). Other Add-In
                     // functions may have to be recalculated or not, we don't
@@ -1741,26 +1741,26 @@ void FormulaCompiler::Factor()
                 case ocExternal:
                 case ocUDExternal:
                     if (static_cast<FormulaExternalToken*>(mpToken.get())->GetExternal() == "com.sun.star.sheet.addin.Analysis.getRandbetween")
-                        pArr->SetExclusiveRecalcModeAlways();
+                        mpArr->SetExclusiveRecalcModeAlways();
                     else
-                        pArr->AddRecalcMode( ScRecalcMode::ONLOAD_LENIENT );
+                        mpArr->AddRecalcMode( ScRecalcMode::ONLOAD_LENIENT );
                 break;
                     // If the referred cell is moved the value changes.
                 case ocColumn :
                 case ocRow :
-                    pArr->SetRecalcModeOnRefMove();
+                    mpArr->SetRecalcModeOnRefMove();
                 break;
                     // ocCell needs recalc on move for some possible type values.
                     // And recalc mode on load, tdf#60645
                 case ocCell :
-                    pArr->SetRecalcModeOnRefMove();
-                    pArr->AddRecalcMode( ScRecalcMode::ONLOAD_MUST );
+                    mpArr->SetRecalcModeOnRefMove();
+                    mpArr->AddRecalcMode( ScRecalcMode::ONLOAD_MUST );
                 break;
                 case ocHyperLink :
                     // Cell with hyperlink needs to be calculated on load to
                     // get its matrix result generated.
-                    pArr->AddRecalcMode( ScRecalcMode::ONLOAD_MUST );
-                    pArr->SetHyperLink( true);
+                    mpArr->AddRecalcMode( ScRecalcMode::ONLOAD_MUST );
+                    mpArr->SetHyperLink( true);
                 break;
                 default:
                     ;   // nothing
@@ -1811,7 +1811,7 @@ void FormulaCompiler::Factor()
                 if( !bNoParam )
                 {
                     nSepCount++;
-                    while ((eOp == ocSep) && (pArr->GetCodeError() == FormulaError::NONE || !mbStopOnError))
+                    while ((eOp == ocSep) && (mpArr->GetCodeError() == FormulaError::NONE || !mbStopOnError))
                     {
                         NextToken();
                         CheckSetForceArrayParameter( mpToken, nSepCount);
@@ -1837,16 +1837,16 @@ void FormulaCompiler::Factor()
                     // nSepPos+4 if expression continues after the call because
                     // we just called NextToken() to move away from it.
                     if (pc >= 2 && (maArrIterator.GetIndex() == nSepPos + 3 || maArrIterator.GetIndex() == nSepPos + 4) &&
-                            pArr->TokenAt(nSepPos+1)->GetType() == svDouble &&
-                            static_cast<FormulaDoubleToken*>(pArr->TokenAt(nSepPos+1))->GetDouble() != 1.0 &&
-                            pArr->TokenAt(nSepPos+2)->GetOpCode() == ocClose &&
-                            pArr->RemoveToken( nSepPos, 2) == 2)
+                            mpArr->TokenAt(nSepPos+1)->GetType() == svDouble &&
+                            static_cast<FormulaDoubleToken*>(mpArr->TokenAt(nSepPos+1))->GetDouble() != 1.0 &&
+                            mpArr->TokenAt(nSepPos+2)->GetOpCode() == ocClose &&
+                            mpArr->RemoveToken( nSepPos, 2) == 2)
                     {
                         maArrIterator.AfterRemoveToken( nSepPos, 2);
                         // Remove the ocPush/svDouble just removed also from
                         // the compiler local RPN array.
-                        --pCode; --pc;
-                        (*pCode)->DecRef(); // may be dead now
+                        --mpCode; --pc;
+                        (*mpCode)->DecRef(); // may be dead now
                         pFacToken->SetByte( nSepCount - 1 );
                     }
                     else
@@ -1863,8 +1863,8 @@ void FormulaCompiler::Factor()
                 // standard handling of 1-parameter opcodes
                 pFacToken = mpToken;
                 eOp = NextToken();
-                if( nNumFmt == SvNumFormatType::UNDEFINED && eOp == ocNot )
-                    nNumFmt = SvNumFormatType::LOGICAL;
+                if( mnNumFmt == SvNumFormatType::UNDEFINED && eOp == ocNot )
+                    mnNumFmt = SvNumFormatType::LOGICAL;
                 if (eOp == ocOpen)
                 {
                     NextToken();
@@ -1875,12 +1875,12 @@ void FormulaCompiler::Factor()
                     SetError( FormulaError::PairExpected);
                 if (eOp != ocClose)
                     SetError( FormulaError::PairExpected);
-                else if ( pArr->GetCodeError() == FormulaError::NONE )
+                else if ( mpArr->GetCodeError() == FormulaError::NONE )
                 {
                     pFacToken->SetByte( 1 );
                     if (mbComputeII)
                     {
-                        FormulaToken** pArg = pCode - 1;
+                        FormulaToken** pArg = mpCode - 1;
                         HandleIIOpCode(pFacToken, &pArg, 1);
                     }
                 }
@@ -1939,9 +1939,9 @@ void FormulaCompiler::Factor()
                 nSepCount++;
 
                 if (bDoIICompute)
-                    pArgArray[nSepCount-1] = pCode - 1; // Add first argument
+                    pArgArray[nSepCount-1] = mpCode - 1; // Add first argument
 
-                while ((eOp == ocSep) && (pArr->GetCodeError() == FormulaError::NONE || !mbStopOnError))
+                while ((eOp == ocSep) && (mpArr->GetCodeError() == FormulaError::NONE || !mbStopOnError))
                 {
                     NextToken();
                     CheckSetForceArrayParameter( mpToken, nSepCount);
@@ -1950,7 +1950,7 @@ void FormulaCompiler::Factor()
                         SetError( FormulaError::CodeOverflow);
                     eOp = Expression();
                     if (bDoIICompute && nSepCount <= FORMULA_MAXPARAMSII)
-                        pArgArray[nSepCount - 1] = pCode - 1; // Add rest of the arguments
+                        pArgArray[nSepCount - 1] = mpCode - 1; // Add rest of the arguments
                 }
                 if (bDoIICompute)
                     HandleIIOpCode(pFacToken, pArgArray,
@@ -2034,7 +2034,7 @@ void FormulaCompiler::Factor()
                 case ocStop:
                     // May happen only if PutCode(pFacToken) ran into overflow.
                     nJumpMax = 0;
-                    assert(pc == FORMULA_MAXTOKENS && pArr->GetCodeError() != FormulaError::NONE);
+                    assert(pc == FORMULA_MAXTOKENS && mpArr->GetCodeError() != FormulaError::NONE);
                     break;
                 default:
                     nJumpMax = 0;
@@ -2043,7 +2043,7 @@ void FormulaCompiler::Factor()
             }
             short nJumpCount = 0;
             while ( (nJumpCount < (FORMULA_MAXPARAMS - 1)) && (eOp == ocSep)
-                    && (pArr->GetCodeError() == FormulaError::NONE || !mbStopOnError))
+                    && (mpArr->GetCodeError() == FormulaError::NONE || !mbStopOnError))
             {
                 if ( ++nJumpCount <= nJumpMax )
                     static_cast<FormulaJumpToken*>(&*pFacToken)->GetJump()[nJumpCount] = pc-1;
@@ -2109,10 +2109,10 @@ void FormulaCompiler::Factor()
         else if ( eOp == ocSep )
         {   // Subsequent ocSep
             SetError( FormulaError::ParameterExpected );
-            if ( bAutoCorrect && !pStack )
+            if ( mbAutoCorrect && !mpStack )
             {
-                aCorrectedSymbol.clear();
-                bCorrected = true;
+                maCorrectedSymbol.clear();
+                mbCorrected = true;
             }
         }
         else if ( mpToken->IsExternalRef() )
@@ -2123,15 +2123,15 @@ void FormulaCompiler::Factor()
         else
         {
             SetError( FormulaError::UnknownToken );
-            if ( bAutoCorrect && !pStack )
+            if ( mbAutoCorrect && !mpStack )
             {
                 if ( eOp == ocStop )
                 {   // trailing operator w/o operand
-                    sal_Int32 nLen = aCorrectedFormula.getLength();
+                    sal_Int32 nLen = maCorrectedFormula.getLength();
                     if ( nLen )
-                        aCorrectedFormula = aCorrectedFormula.copy( 0, nLen - 1 );
-                    aCorrectedSymbol.clear();
-                    bCorrected = true;
+                        maCorrectedFormula = maCorrectedFormula.copy( 0, nLen - 1 );
+                    maCorrectedSymbol.clear();
+                    mbCorrected = true;
                 }
             }
         }
@@ -2143,11 +2143,11 @@ void FormulaCompiler::RangeLine()
     Factor();
     while (mpToken->GetOpCode() == ocRange)
     {
-        FormulaToken** pCode1 = pCode - 1;
+        FormulaToken** pCode1 = mpCode - 1;
         FormulaTokenRef p = mpToken;
         NextToken();
         Factor();
-        FormulaToken** pCode2 = pCode - 1;
+        FormulaToken** pCode2 = mpCode - 1;
         if (!MergeRangeReference( pCode1, pCode2))
             PutCode(p);
     }
@@ -2159,23 +2159,23 @@ void FormulaCompiler::IntersectionLine()
     while (mpToken->GetOpCode() == ocIntersect || mpToken->GetOpCode() == ocSpaces)
     {
         sal_uInt16 nCodeIndex = maArrIterator.GetIndex() - 1;
-        FormulaToken** pCode1 = pCode - 1;
+        FormulaToken** pCode1 = mpCode - 1;
         FormulaTokenRef p = mpToken;
         NextToken();
         RangeLine();
-        FormulaToken** pCode2 = pCode - 1;
+        FormulaToken** pCode2 = mpCode - 1;
         if (p->GetOpCode() == ocSpaces)
         {
             // Convert to intersection if both left and right are references or
             // functions (potentially returning references, if not then a space
             // or no space would be a syntax error anyway), not other operators
             // or operands. Else discard.
-            if (isAdjacentOrGapRpnEnd( pc, pCode, pCode1, pCode2) && isIntersectable( pCode1, pCode2))
+            if (isAdjacentOrGapRpnEnd( pc, mpCode, pCode1, pCode2) && isIntersectable( pCode1, pCode2))
             {
                 FormulaTokenRef pIntersect( new FormulaByteToken( ocIntersect));
                 // Replace ocSpaces with ocIntersect so that when switching
                 // formula syntax the correct operator string is created.
-                pArr->ReplaceToken( nCodeIndex, pIntersect.get(), FormulaTokenArray::ReplaceMode::CODE_ONLY);
+                mpArr->ReplaceToken( nCodeIndex, pIntersect.get(), FormulaTokenArray::ReplaceMode::CODE_ONLY);
                 PutCode( pIntersect);
             }
         }
@@ -2210,7 +2210,7 @@ void FormulaCompiler::UnaryLine()
         UnaryLine();
         if (mbComputeII)
         {
-            FormulaToken** pArg = pCode - 1;
+            FormulaToken** pArg = mpCode - 1;
             HandleIIOpCode(p.get(), &pArg, 1);
         }
         PutCode( p );
@@ -2226,7 +2226,7 @@ void FormulaCompiler::PostOpLine()
     {   // this operator _follows_ its operand
         if (mbComputeII)
         {
-            FormulaToken** pArg = pCode - 1;
+            FormulaToken** pArg = mpCode - 1;
             HandleIIOpCode(mpToken.get(), &pArg, 1);
         }
         PutCode( mpToken );
@@ -2242,12 +2242,12 @@ void FormulaCompiler::PowLine()
         FormulaTokenRef p = mpToken;
         FormulaToken** pArgArray[2];
         if (mbComputeII)
-            pArgArray[0] = pCode - 1; // Add first argument
+            pArgArray[0] = mpCode - 1; // Add first argument
         NextToken();
         PostOpLine();
         if (mbComputeII)
         {
-            pArgArray[1] = pCode - 1; // Add second argument
+            pArgArray[1] = mpCode - 1; // Add second argument
             HandleIIOpCode(p.get(), pArgArray, 2);
         }
         PutCode(p);
@@ -2262,12 +2262,12 @@ void FormulaCompiler::MulDivLine()
         FormulaTokenRef p = mpToken;
         FormulaToken** pArgArray[2];
         if (mbComputeII)
-            pArgArray[0] = pCode - 1; // Add first argument
+            pArgArray[0] = mpCode - 1; // Add first argument
         NextToken();
         PowLine();
         if (mbComputeII)
         {
-            pArgArray[1] = pCode - 1; // Add second argument
+            pArgArray[1] = mpCode - 1; // Add second argument
             HandleIIOpCode(p.get(), pArgArray, 2);
         }
         PutCode(p);
@@ -2282,12 +2282,12 @@ void FormulaCompiler::AddSubLine()
         FormulaTokenRef p = mpToken;
         FormulaToken** pArgArray[2];
         if (mbComputeII)
-            pArgArray[0] = pCode - 1; // Add first argument
+            pArgArray[0] = mpCode - 1; // Add first argument
         NextToken();
         MulDivLine();
         if (mbComputeII)
         {
-            pArgArray[1] = pCode - 1; // Add second argument
+            pArgArray[1] = mpCode - 1; // Add second argument
             HandleIIOpCode(p.get(), pArgArray, 2);
         }
         PutCode(p);
@@ -2302,12 +2302,12 @@ void FormulaCompiler::ConcatLine()
         FormulaTokenRef p = mpToken;
         FormulaToken** pArgArray[2];
         if (mbComputeII)
-            pArgArray[0] = pCode - 1; // Add first argument
+            pArgArray[0] = mpCode - 1; // Add first argument
         NextToken();
         AddSubLine();
         if (mbComputeII)
         {
-            pArgArray[1] = pCode - 1; // Add second argument
+            pArgArray[1] = mpCode - 1; // Add second argument
             HandleIIOpCode(p.get(), pArgArray, 2);
         }
         PutCode(p);
@@ -2322,12 +2322,12 @@ void FormulaCompiler::CompareLine()
         FormulaTokenRef p = mpToken;
         FormulaToken** pArgArray[2];
         if (mbComputeII)
-            pArgArray[0] = pCode - 1; // Add first argument
+            pArgArray[0] = mpCode - 1; // Add first argument
         NextToken();
         ConcatLine();
         if (mbComputeII)
         {
-            pArgArray[1] = pCode - 1; // Add second argument
+            pArgArray[1] = mpCode - 1; // Add second argument
             HandleIIOpCode(p.get(), pArgArray, 2);
         }
         PutCode(p);
@@ -2336,8 +2336,8 @@ void FormulaCompiler::CompareLine()
 
 OpCode FormulaCompiler::Expression()
 {
-    FormulaCompilerRecursionGuard aRecursionGuard( nRecursion );
-    if ( nRecursion > nRecursionMax )
+    FormulaCompilerRecursionGuard aRecursionGuard( mnRecursion );
+    if ( mnRecursion > nRecursionMax )
     {
         SetError( FormulaError::StackOverflow );
         return ocStop;      //! generate token instead?
@@ -2349,12 +2349,12 @@ OpCode FormulaCompiler::Expression()
         mpToken->SetByte( 2 );       // 2 parameters!
         FormulaToken** pArgArray[2];
         if (mbComputeII)
-            pArgArray[0] = pCode - 1; // Add first argument
+            pArgArray[0] = mpCode - 1; // Add first argument
         NextToken();
         CompareLine();
         if (mbComputeII)
         {
-            pArgArray[1] = pCode - 1; // Add second argument
+            pArgArray[1] = mpCode - 1; // Add second argument
             HandleIIOpCode(p.get(), pArgArray, 2);
         }
         PutCode(p);
@@ -2374,7 +2374,7 @@ FormulaTokenRef FormulaCompiler::ExtendRangeReference( FormulaToken & /*rTok1*/,
 
 bool FormulaCompiler::MergeRangeReference( FormulaToken * * const pCode1, FormulaToken * const * const pCode2 )
 {
-    if (!isAdjacentRpnEnd( pc, pCode, pCode1, pCode2))
+    if (!isAdjacentRpnEnd( pc, mpCode, pCode1, pCode2))
         return false;
 
     FormulaToken *p1 = *pCode1, *p2 = *pCode2;
@@ -2386,7 +2386,7 @@ bool FormulaCompiler::MergeRangeReference( FormulaToken * * const pCode1, Formul
     p1->DecRef();
     p2->DecRef();
     *pCode1 = p.get();
-    --pCode;
+    --mpCode;
     --pc;
 
     return true;
@@ -2394,32 +2394,32 @@ bool FormulaCompiler::MergeRangeReference( FormulaToken * * const pCode1, Formul
 
 bool FormulaCompiler::CompileTokenArray()
 {
-    glSubTotal = false;
-    bCorrected = false;
-    needsRPNTokenCheck = false;
-    if (pArr->GetCodeError() == FormulaError::NONE || !mbStopOnError)
+    mbGlSubTotal = false;
+    mbCorrected = false;
+    mbNeedsRPNTokenCheck = false;
+    if (mpArr->GetCodeError() == FormulaError::NONE || !mbStopOnError)
     {
-        if ( bAutoCorrect )
+        if ( mbAutoCorrect )
         {
-            aCorrectedFormula.clear();
-            aCorrectedSymbol.clear();
+            maCorrectedFormula.clear();
+            maCorrectedSymbol.clear();
         }
-        pArr->DelRPN();
+        mpArr->DelRPN();
         maArrIterator.Reset();
-        pStack = nullptr;
+        mpStack = nullptr;
         FormulaToken* pDataArray[ FORMULA_MAXTOKENS + 1 ];
         // Code in some places refers to the last token as 'pCode - 1', which may
         // point before the first element if the expression is bad. So insert a dummy
         // node in that place which will make that token be nullptr.
         pDataArray[ 0 ] = nullptr;
         FormulaToken** pData = pDataArray + 1;
-        pCode = pData;
-        bool bWasForced = pArr->IsRecalcModeForced();
-        if ( bWasForced && bAutoCorrect )
-            aCorrectedFormula = "=";
-        pArr->ClearRecalcMode();
+        mpCode = pData;
+        bool bWasForced = mpArr->IsRecalcModeForced();
+        if ( bWasForced && mbAutoCorrect )
+            maCorrectedFormula = "=";
+        mpArr->ClearRecalcMode();
         maArrIterator.Reset();
-        eLastOp = ocOpen;
+        meLastOp = ocOpen;
         pc = 0;
         NextToken();
         OpCode eOp = Expression();
@@ -2428,55 +2428,55 @@ bool FormulaCompiler::CompileTokenArray()
             SetError( FormulaError::OperatorExpected);
         PostProcessCode();
 
-        FormulaError nErrorBeforePop = pArr->GetCodeError();
+        FormulaError nErrorBeforePop = mpArr->GetCodeError();
 
-        while( pStack )
+        while( mpStack )
             PopTokenArray();
         if( pc )
         {
-            pArr->CreateNewRPNArrayFromData( pData, pc );
-            if( needsRPNTokenCheck )
-                pArr->CheckAllRPNTokens();
+            mpArr->CreateNewRPNArrayFromData( pData, pc );
+            if( mbNeedsRPNTokenCheck )
+                mpArr->CheckAllRPNTokens();
         }
 
         // once an error, always an error
-        if( pArr->GetCodeError() == FormulaError::NONE && nErrorBeforePop != FormulaError::NONE )
-            pArr->SetCodeError( nErrorBeforePop);
+        if( mpArr->GetCodeError() == FormulaError::NONE && nErrorBeforePop != FormulaError::NONE )
+            mpArr->SetCodeError( nErrorBeforePop);
 
-        if (pArr->GetCodeError() != FormulaError::NONE && mbStopOnError)
+        if (mpArr->GetCodeError() != FormulaError::NONE && mbStopOnError)
         {
-            pArr->DelRPN();
+            mpArr->DelRPN();
             maArrIterator.Reset();
-            pArr->SetHyperLink( false);
+            mpArr->SetHyperLink( false);
         }
 
         if ( bWasForced )
-            pArr->SetRecalcModeForced();
+            mpArr->SetRecalcModeForced();
     }
-    if( nNumFmt == SvNumFormatType::UNDEFINED )
-        nNumFmt = SvNumFormatType::NUMBER;
-    return glSubTotal;
+    if( mnNumFmt == SvNumFormatType::UNDEFINED )
+        mnNumFmt = SvNumFormatType::NUMBER;
+    return mbGlSubTotal;
 }
 
 void FormulaCompiler::PopTokenArray()
 {
-    if( !pStack )
+    if( !mpStack )
         return;
 
-    FormulaArrayStack* p = pStack;
-    pStack = p->pNext;
+    FormulaArrayStack* p = mpStack;
+    mpStack = p->pNext;
     // obtain special RecalcMode from SharedFormula
-    if ( pArr->IsRecalcModeAlways() )
+    if ( mpArr->IsRecalcModeAlways() )
         p->pArr->SetExclusiveRecalcModeAlways();
-    else if ( !pArr->IsRecalcModeNormal() && p->pArr->IsRecalcModeNormal() )
-        p->pArr->SetMaskedRecalcMode( pArr->GetRecalcMode() );
-    p->pArr->SetCombinedBitsRecalcMode( pArr->GetRecalcMode() );
-    if ( pArr->IsHyperLink() )  // fdo 87534
+    else if ( !mpArr->IsRecalcModeNormal() && p->pArr->IsRecalcModeNormal() )
+        p->pArr->SetMaskedRecalcMode( mpArr->GetRecalcMode() );
+    p->pArr->SetCombinedBitsRecalcMode( mpArr->GetRecalcMode() );
+    if ( mpArr->IsHyperLink() )  // fdo 87534
         p->pArr->SetHyperLink( true );
     if( p->bTemp )
-        delete pArr;
-    pArr = p->pArr;
-    maArrIterator = FormulaTokenArrayPlainIterator(*pArr);
+        delete mpArr;
+    mpArr = p->pArr;
+    maArrIterator = FormulaTokenArrayPlainIterator(*mpArr);
     maArrIterator.Jump(p->nIndex);
     mpLastToken = p->mpLastToken;
     delete p;
@@ -2484,7 +2484,7 @@ void FormulaCompiler::PopTokenArray()
 
 void FormulaCompiler::CreateStringFromTokenArray( OUString& rFormula )
 {
-    OUStringBuffer aBuffer( pArr->GetLen() * 5 );
+    OUStringBuffer aBuffer( mpArr->GetLen() * 5 );
     CreateStringFromTokenArray( aBuffer );
     rFormula = aBuffer.makeStringAndClear();
 }
@@ -2492,38 +2492,38 @@ void FormulaCompiler::CreateStringFromTokenArray( OUString& rFormula )
 void FormulaCompiler::CreateStringFromTokenArray( OUStringBuffer& rBuffer )
 {
     rBuffer.setLength(0);
-    if( !pArr->GetLen() )
+    if( !mpArr->GetLen() )
         return;
 
-    FormulaTokenArray* pSaveArr = pArr;
+    FormulaTokenArray* pSaveArr = mpArr;
     int nSaveIndex = maArrIterator.GetIndex();
     bool bODFF = FormulaGrammar::isODFF( meGrammar);
     if (bODFF || FormulaGrammar::isPODF( meGrammar) )
     {
         // Scan token array for missing args and re-write if present.
         MissingConventionODF aConv( bODFF);
-        if (pArr->NeedsPodfRewrite( aConv))
+        if (mpArr->NeedsPodfRewrite( aConv))
         {
-            pArr = pArr->RewriteMissing( aConv );
-            maArrIterator = FormulaTokenArrayPlainIterator( *pArr );
+            mpArr = mpArr->RewriteMissing( aConv );
+            maArrIterator = FormulaTokenArrayPlainIterator( *mpArr );
         }
     }
     else if ( FormulaGrammar::isOOXML( meGrammar ) )
     {
         // Scan token array for missing args and rewrite if present.
-        if (pArr->NeedsOoxmlRewrite())
+        if (mpArr->NeedsOoxmlRewrite())
         {
             MissingConventionOOXML aConv;
-            pArr = pArr->RewriteMissing( aConv );
-            maArrIterator = FormulaTokenArrayPlainIterator( *pArr );
+            mpArr = mpArr->RewriteMissing( aConv );
+            maArrIterator = FormulaTokenArrayPlainIterator( *mpArr );
         }
     }
 
     // At least one character per token, plus some are references, some are
     // function names, some are numbers, ...
-    rBuffer.ensureCapacity( pArr->GetLen() * 5 );
+    rBuffer.ensureCapacity( mpArr->GetLen() * 5 );
 
-    if ( pArr->IsRecalcModeForced() )
+    if ( mpArr->IsRecalcModeForced() )
         rBuffer.append( '=');
     const FormulaToken* t = maArrIterator.First();
     while( t )
@@ -2552,7 +2552,7 @@ void FormulaCompiler::CreateStringFromTokenArray( OUStringBuffer& rBuffer )
         if (FormulaGrammar::isOOXML(meGrammar) && t->GetOpCode() == ocOffset
             && t->GetType() == svByte)
         {
-            FormulaTokenArrayPlainIterator aTempIter(*pArr);
+            FormulaTokenArrayPlainIterator aTempIter(*mpArr);
             aTempIter.Jump(maArrIterator.GetIndex());
             FormulaToken* pNext = aTempIter.Next();
             if (pNext && pNext->GetOpCode() == ocOpen
@@ -2584,11 +2584,11 @@ void FormulaCompiler::CreateStringFromTokenArray( OUStringBuffer& rBuffer )
         t = CreateStringFromToken(rBuffer, t, true);
     }
 
-    if (pSaveArr != pArr)
+    if (pSaveArr != mpArr)
     {
-        delete pArr;
-        pArr = pSaveArr;
-        maArrIterator = FormulaTokenArrayPlainIterator( *pArr );
+        delete mpArr;
+        mpArr = pSaveArr;
+        maArrIterator = FormulaTokenArrayPlainIterator( *mpArr );
         maArrIterator.Jump(nSaveIndex);
     }
 }
@@ -2928,14 +2928,14 @@ OpCode FormulaCompiler::NextToken()
     OpCode eOp = mpToken->GetOpCode();
     // There must be an operator before a push
     if ( (eOp == ocPush || eOp == ocColRowNameAuto) &&
-            !( (eLastOp == ocOpen) || (eLastOp == ocSep) ||
-                (SC_OPCODE_START_BIN_OP <= eLastOp && eLastOp < SC_OPCODE_STOP_UN_OP)) )
+            !( (meLastOp == ocOpen) || (meLastOp == ocSep) ||
+                (SC_OPCODE_START_BIN_OP <= meLastOp && meLastOp < SC_OPCODE_STOP_UN_OP)) )
         SetError( FormulaError::OperatorExpected);
     // Operator and Plus => operator
-    if (eOp == ocAdd && (eLastOp == ocOpen || eLastOp == ocSep ||
-                (SC_OPCODE_START_BIN_OP <= eLastOp && eLastOp < SC_OPCODE_STOP_UN_OP)))
+    if (eOp == ocAdd && (meLastOp == ocOpen || meLastOp == ocSep ||
+                (SC_OPCODE_START_BIN_OP <= meLastOp && meLastOp < SC_OPCODE_STOP_UN_OP)))
     {
-        FormulaCompilerRecursionGuard aRecursionGuard( nRecursion );
+        FormulaCompilerRecursionGuard aRecursionGuard( mnRecursion );
         eOp = NextToken();
     }
     else
@@ -2944,67 +2944,67 @@ OpCode FormulaCompiler::NextToken()
         // exception of AND and OR.
         if ( eOp != ocAnd && eOp != ocOr &&
                 (SC_OPCODE_START_BIN_OP <= eOp && eOp < SC_OPCODE_STOP_BIN_OP )
-                && (eLastOp == ocOpen || eLastOp == ocSep ||
-                    (SC_OPCODE_START_BIN_OP <= eLastOp && eLastOp < SC_OPCODE_STOP_UN_OP)))
+                && (meLastOp == ocOpen || meLastOp == ocSep ||
+                    (SC_OPCODE_START_BIN_OP <= meLastOp && meLastOp < SC_OPCODE_STOP_UN_OP)))
         {
             SetError( FormulaError::VariableExpected);
-            if ( bAutoCorrect && !pStack )
+            if ( mbAutoCorrect && !mpStack )
             {
-                if ( eOp == eLastOp || eLastOp == ocOpen )
+                if ( eOp == meLastOp || meLastOp == ocOpen )
                 {   // throw away duplicated operator
-                    aCorrectedSymbol.clear();
-                    bCorrected = true;
+                    maCorrectedSymbol.clear();
+                    mbCorrected = true;
                 }
                 else
                 {
-                    sal_Int32 nPos = aCorrectedFormula.getLength();
+                    sal_Int32 nPos = maCorrectedFormula.getLength();
                     if ( nPos )
                     {
                         nPos--;
-                        sal_Unicode c = aCorrectedFormula[ nPos ];
+                        sal_Unicode c = maCorrectedFormula[ nPos ];
                         switch ( eOp )
                         {   // swap operators
                             case ocGreater:
                                 if ( c == mxSymbols->getSymbolChar( ocEqual) )
                                 {   // >= instead of =>
-                                    aCorrectedFormula = aCorrectedFormula.replaceAt( nPos, 1,
+                                    maCorrectedFormula = maCorrectedFormula.replaceAt( nPos, 1,
                                         rtl::OUStringChar( mxSymbols->getSymbolChar(ocGreater) ) );
-                                    aCorrectedSymbol = OUString(c);
-                                    bCorrected = true;
+                                    maCorrectedSymbol = OUString(c);
+                                    mbCorrected = true;
                                 }
                             break;
                             case ocLess:
                                 if ( c == mxSymbols->getSymbolChar( ocEqual) )
                                 {   // <= instead of =<
-                                    aCorrectedFormula = aCorrectedFormula.replaceAt( nPos, 1,
+                                    maCorrectedFormula = maCorrectedFormula.replaceAt( nPos, 1,
                                         rtl::OUStringChar( mxSymbols->getSymbolChar(ocLess) ) );
-                                    aCorrectedSymbol = OUString(c);
-                                    bCorrected = true;
+                                    maCorrectedSymbol = OUString(c);
+                                    mbCorrected = true;
                                 }
                                 else if ( c == mxSymbols->getSymbolChar( ocGreater) )
                                 {   // <> instead of ><
-                                    aCorrectedFormula = aCorrectedFormula.replaceAt( nPos, 1,
+                                    maCorrectedFormula = maCorrectedFormula.replaceAt( nPos, 1,
                                         rtl::OUStringChar( mxSymbols->getSymbolChar(ocLess) ) );
-                                    aCorrectedSymbol = OUString(c);
-                                    bCorrected = true;
+                                    maCorrectedSymbol = OUString(c);
+                                    mbCorrected = true;
                                 }
                             break;
                             case ocMul:
                                 if ( c == mxSymbols->getSymbolChar( ocSub) )
                                 {   // *- instead of -*
-                                    aCorrectedFormula = aCorrectedFormula.replaceAt( nPos, 1,
+                                    maCorrectedFormula = maCorrectedFormula.replaceAt( nPos, 1,
                                         rtl::OUStringChar( mxSymbols->getSymbolChar(ocMul) ) );
-                                    aCorrectedSymbol = OUString(c);
-                                    bCorrected = true;
+                                    maCorrectedSymbol = OUString(c);
+                                    mbCorrected = true;
                                 }
                             break;
                             case ocDiv:
                                 if ( c == mxSymbols->getSymbolChar( ocSub) )
                                 {   // /- instead of -/
-                                    aCorrectedFormula = aCorrectedFormula.replaceAt( nPos, 1,
+                                    maCorrectedFormula = maCorrectedFormula.replaceAt( nPos, 1,
                                         rtl::OUStringChar( mxSymbols->getSymbolChar(ocDiv) ) );
-                                    aCorrectedSymbol = OUString(c);
-                                    bCorrected = true;
+                                    maCorrectedSymbol = OUString(c);
+                                    mbCorrected = true;
                                 }
                             break;
                             default:
@@ -3024,15 +3024,15 @@ OpCode FormulaCompiler::NextToken()
             {
                 FormulaToken* pNext = maArrIterator.PeekNextNoSpaces();
                 if (pNext && isPotentialRangeType( pNext, false, true))
-                    eLastOp = ocIntersect;
+                    meLastOp = ocIntersect;
                 else
-                    eLastOp = eOp;
+                    meLastOp = eOp;
             }
             else
-                eLastOp = eOp;
+                meLastOp = eOp;
         }
         else
-            eLastOp = eOp;
+            meLastOp = eOp;
     }
     return eOp;
 }
@@ -3046,17 +3046,17 @@ void FormulaCompiler::PutCode( FormulaTokenRef& p )
             SAL_WARN("formula.core", "FormulaCompiler::PutCode - CodeOverflow with OpCode " << +p->GetOpCode());
             p = new FormulaByteToken( ocStop );
             p->IncRef();
-            *pCode++ = p.get();
+            *mpCode++ = p.get();
             ++pc;
         }
         SetError( FormulaError::CodeOverflow);
         return;
     }
-    if (pArr->GetCodeError() != FormulaError::NONE && mbJumpCommandReorder)
+    if (mpArr->GetCodeError() != FormulaError::NONE && mbJumpCommandReorder)
         return;
     ForceArrayOperator( p);
     p->IncRef();
-    *pCode++ = p.get();
+    *mpCode++ = p.get();
     pc++;
 }
 
@@ -3136,7 +3136,7 @@ formula::ParamClass FormulaCompiler::GetForceArrayParameter( const FormulaToken*
 
 void FormulaCompiler::ForceArrayOperator( FormulaTokenRef const & rCurr )
 {
-    if (pCurrentFactorToken.get() == rCurr.get())
+    if (mpCurrentFactorToken.get() == rCurr.get())
         return;
 
     const OpCode eOp = rCurr->GetOpCode();
@@ -3176,19 +3176,19 @@ void FormulaCompiler::ForceArrayOperator( FormulaTokenRef const & rCurr )
     {
         // rCurr->SetInForceArray() can not be used with ocPush, but ocPush
         // with svMatrix has an implicit ParamClass::ForceArrayReturn.
-        if (nCurrentFactorParam > 0 && pCurrentFactorToken
-                && pCurrentFactorToken->GetInForceArray() == ParamClass::Unknown
-                && GetForceArrayParameter( pCurrentFactorToken.get(), static_cast<sal_uInt16>(nCurrentFactorParam - 1))
+        if (mnCurrentFactorParam > 0 && mpCurrentFactorToken
+                && mpCurrentFactorToken->GetInForceArray() == ParamClass::Unknown
+                && GetForceArrayParameter( mpCurrentFactorToken.get(), static_cast<sal_uInt16>(mnCurrentFactorParam - 1))
                 == ParamClass::Value)
         {
             // Propagate to caller as if a function returning an array/matrix
             // was called (see also below).
-            pCurrentFactorToken->SetInForceArray( eArrayReturn);
+            mpCurrentFactorToken->SetInForceArray( eArrayReturn);
         }
         return;
     }
 
-    if (!pCurrentFactorToken)
+    if (!mpCurrentFactorToken)
     {
         if (mbMatrixFlag)
         {
@@ -3213,13 +3213,13 @@ void FormulaCompiler::ForceArrayOperator( FormulaTokenRef const & rCurr )
             // functions returning matrix have ForceArrayReturn (yet?), see
             // OOXML comment above.
 
-            const OpCode eOp1 = pCode[-1]->GetOpCode();
-            const OpCode eOp2 = pCode[-2]->GetOpCode();
-            const bool b1 = (pCode[-1]->GetInForceArray() != ParamClass::Unknown || IsMatrixFunction(eOp1));
-            const bool b2 = (pCode[-2]->GetInForceArray() != ParamClass::Unknown || IsMatrixFunction(eOp2));
+            const OpCode eOp1 = mpCode[-1]->GetOpCode();
+            const OpCode eOp2 = mpCode[-2]->GetOpCode();
+            const bool b1 = (mpCode[-1]->GetInForceArray() != ParamClass::Unknown || IsMatrixFunction(eOp1));
+            const bool b2 = (mpCode[-2]->GetInForceArray() != ParamClass::Unknown || IsMatrixFunction(eOp2));
             if ((b1 && b2)
-                    || (b1 && eOp2 == ocPush && pCode[-2]->GetType() != svDoubleRef)
-                    || (b2 && eOp1 == ocPush && pCode[-1]->GetType() != svDoubleRef))
+                    || (b1 && eOp2 == ocPush && mpCode[-2]->GetType() != svDoubleRef)
+                    || (b2 && eOp1 == ocPush && mpCode[-1]->GetType() != svDoubleRef))
             {
                 rCurr->SetInForceArray( eArrayReturn);
             }
@@ -3227,7 +3227,7 @@ void FormulaCompiler::ForceArrayOperator( FormulaTokenRef const & rCurr )
         else if (pc >= 1 && SC_OPCODE_START_UN_OP <= eOp && eOp < SC_OPCODE_STOP_UN_OP)
         {
             // Similar for unary operators.
-            if (pCode[-1]->GetInForceArray() != ParamClass::Unknown || IsMatrixFunction(pCode[-1]->GetOpCode()))
+            if (mpCode[-1]->GetInForceArray() != ParamClass::Unknown || IsMatrixFunction(mpCode[-1]->GetOpCode()))
             {
                 rCurr->SetInForceArray( eArrayReturn);
             }
@@ -3236,15 +3236,15 @@ void FormulaCompiler::ForceArrayOperator( FormulaTokenRef const & rCurr )
     }
 
     // Inherited parameter class.
-    const formula::ParamClass eForceType = pCurrentFactorToken->GetInForceArray();
+    const formula::ParamClass eForceType = mpCurrentFactorToken->GetInForceArray();
     if (eForceType == ParamClass::ForceArray || eForceType == ParamClass::ReferenceOrRefArray)
     {
         // ReferenceOrRefArray was set only if in ForceArray context already,
         // it is valid for the one function only to indicate the preferred
         // return type. Propagate as ForceArray if not another parameter
         // handling ReferenceOrRefArray.
-        if (nCurrentFactorParam > 0
-                && (GetForceArrayParameter( pCurrentFactorToken.get(), static_cast<sal_uInt16>(nCurrentFactorParam - 1))
+        if (mnCurrentFactorParam > 0
+                && (GetForceArrayParameter( mpCurrentFactorToken.get(), static_cast<sal_uInt16>(mnCurrentFactorParam - 1))
                     == ParamClass::ReferenceOrRefArray))
             rCurr->SetInForceArray( ParamClass::ReferenceOrRefArray);
         else
@@ -3262,12 +3262,12 @@ void FormulaCompiler::ForceArrayOperator( FormulaTokenRef const & rCurr )
         return;
     }
 
-    if (nCurrentFactorParam <= 0)
+    if (mnCurrentFactorParam <= 0)
         return;
 
     // Actual current parameter's class.
     const formula::ParamClass eParamType = GetForceArrayParameter(
-            pCurrentFactorToken.get(), static_cast<sal_uInt16>(nCurrentFactorParam - 1));
+            mpCurrentFactorToken.get(), static_cast<sal_uInt16>(mnCurrentFactorParam - 1));
     if (eParamType == ParamClass::ForceArray)
         rCurr->SetInForceArray( eParamType);
     else if (eParamType == ParamClass::ReferenceOrForceArray)
@@ -3281,41 +3281,41 @@ void FormulaCompiler::ForceArrayOperator( FormulaTokenRef const & rCurr )
     // Propagate a ForceArrayReturn to caller if the called function
     // returns one and the caller so far does not have a stronger array
     // mode set and expects a scalar value for this parameter.
-    if (eParamType == ParamClass::Value && pCurrentFactorToken->GetInForceArray() == ParamClass::Unknown)
+    if (eParamType == ParamClass::Value && mpCurrentFactorToken->GetInForceArray() == ParamClass::Unknown)
     {
         if (IsMatrixFunction( eOp))
-            pCurrentFactorToken->SetInForceArray( eArrayReturn);
+            mpCurrentFactorToken->SetInForceArray( eArrayReturn);
         else if (GetForceArrayParameter( rCurr.get(), SAL_MAX_UINT16) == ParamClass::ForceArrayReturn)
-            pCurrentFactorToken->SetInForceArray( ParamClass::ForceArrayReturn);
+            mpCurrentFactorToken->SetInForceArray( ParamClass::ForceArrayReturn);
     }
 }
 
 void FormulaCompiler::CheckSetForceArrayParameter( FormulaTokenRef const & rCurr, sal_uInt8 nParam )
 {
-    if (!pCurrentFactorToken)
+    if (!mpCurrentFactorToken)
         return;
 
-    nCurrentFactorParam = nParam + 1;
+    mnCurrentFactorParam = nParam + 1;
 
     ForceArrayOperator( rCurr);
 }
 
 void FormulaCompiler::PushTokenArray( FormulaTokenArray* pa, bool bTemp )
 {
-    if ( bAutoCorrect && !pStack )
+    if ( mbAutoCorrect && !mpStack )
     {   // don't merge stacked subroutine code into entered formula
-        aCorrectedFormula += aCorrectedSymbol;
-        aCorrectedSymbol.clear();
+        maCorrectedFormula += maCorrectedSymbol;
+        maCorrectedSymbol.clear();
     }
     FormulaArrayStack* p = new FormulaArrayStack;
-    p->pNext      = pStack;
-    p->pArr       = pArr;
+    p->pNext      = mpStack;
+    p->pArr       = mpArr;
     p->nIndex     = maArrIterator.GetIndex();
     p->mpLastToken = mpLastToken;
     p->bTemp      = bTemp;
-    pStack        = p;
-    pArr          = pa;
-    maArrIterator = FormulaTokenArrayPlainIterator( *pArr );
+    mpStack       = p;
+    mpArr         = pa;
+    maArrIterator = FormulaTokenArrayPlainIterator( *mpArr );
 }
 
 } // namespace formula
