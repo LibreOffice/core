@@ -107,6 +107,7 @@ UnitConverter::UnitConverter( const WorkbookHelper& rHelper ) :
     addErrorCode( BIFF_ERR_NAME,  u"#NAME?"_ustr );
     addErrorCode( BIFF_ERR_NUM,   u"#NUM!"_ustr );
     addErrorCode( BIFF_ERR_NA,    u"#N/A"_ustr );
+    addErrorCode( BIFF_ERR_SPILL, u"#SPILL!"_ustr );
 }
 
 void UnitConverter::finalizeImport()

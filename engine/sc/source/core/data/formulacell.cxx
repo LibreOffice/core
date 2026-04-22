@@ -2289,8 +2289,10 @@ void ScFormulaCell::InterpretTail( ScInterpreterContext& rContext, ScInterpretTa
         {
             // If the formula wasn't entered as a matrix formula, live on with
             // the upper left corner and let reference counting delete the matrix.
-            if( cMatrixFlag != ScMatrixMode::Formula && !pCode->IsHyperLink() )
+            if (cMatrixFlag != ScMatrixMode::Formula && !pCode->IsHyperLink())
+            {
                 aResult.SetToken( aResult.GetCellResultToken().get());
+            }
         }
         if ( aResult.IsValue() && !std::isfinite( aResult.GetDouble() ) )
         {

@@ -566,6 +566,7 @@ const sal_uInt8 BIFF_ERR_REF                = 0x17;
 const sal_uInt8 BIFF_ERR_NAME               = 0x1D;
 const sal_uInt8 BIFF_ERR_NUM                = 0x24;
 const sal_uInt8 BIFF_ERR_NA                 = 0x2A;
+const sal_uInt8 BIFF_ERR_SPILL              = 0x2B;
 
 const sal_uInt16 BIFF_BOF_BIFF2             = 0x0200;
 const sal_uInt16 BIFF_BOF_BIFF3             = 0x0300;

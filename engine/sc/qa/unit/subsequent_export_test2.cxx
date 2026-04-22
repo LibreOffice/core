@@ -14,6 +14,8 @@
 #include <dpcache.hxx>
 #include <dpobject.hxx>
 #include <clipparam.hxx>
+#include <formulacell.hxx>
+#include <formula/errorcodes.hxx>
 
 #include <editeng/editobj.hxx>
 #include <editeng/flditem.hxx>
@@ -1697,6 +1699,54 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testOffsetIllegalParam)
                        u"OFFSET(#REF!,0,2)");
     assertXPathContent(pWorkbook, "/x:workbook/x:definedNames/x:definedName[3]",
                        u"OFFSET(#REF!,0,1)");
+}
+
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testSpillErrorRoundtripXLSX)
+{
+    // Place a #SPILL! error in A1 via formula and verify it round-trips through XLSX.
+    createScDoc();
+    ScDocument* pDocument = getScDoc();
+    pDocument->SetString(ScAddress(0, 0, 0), u"=#SPILL!"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"#SPILL!"_ustr, pDocument->GetString(ScAddress(0, 0, 0)));
+
+    saveAndReload(TestFilter::XLSX);
+
+    // Verify the XLSX export wrote "#SPILL!" with cell type "e".
+    xmlDocUniquePtr pSheet = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
+    CPPUNIT_ASSERT(pSheet);
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row/x:c", "t", u"e");
+    assertXPathContent(pSheet, "/x:worksheet/x:sheetData/x:row/x:c/x:v", u"#SPILL!");
+
+    pDocument = getScDoc();
+    CPPUNIT_ASSERT_EQUAL(u"#SPILL!"_ustr, pDocument->GetString(ScAddress(0, 0, 0)));
+    ScFormulaCell* pFormulaCell = pDocument->GetFormulaCell(ScAddress(0, 0, 0));
+    CPPUNIT_ASSERT_MESSAGE("Expected a formula cell after reload.", pFormulaCell != nullptr);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(FormulaError::Spill), sal_Int32(pFormulaCell->GetErrCode()));
+}
+
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testSpillErrorRoundtripODS)
+{
+    // Place a #SPILL! error in A1 via formula and verify it round-trips through ODS.
+    createScDoc();
+    ScDocument* pDocument = getScDoc();
+    pDocument->SetString(ScAddress(0, 0, 0), u"=#SPILL!"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"#SPILL!"_ustr, pDocument->GetString(ScAddress(0, 0, 0)));
+
+    saveAndReload(TestFilter::ODS);
+
+    // Verify the ODS export wrote the error correctly.
+    xmlDocUniquePtr pContent = parseExport(u"content.xml"_ustr);
+    CPPUNIT_ASSERT(pContent);
+    OString aCellPath = "//table:table[1]/table:table-row[1]/table:table-cell[1]"_ostr;
+    assertXPath(pContent, aCellPath, "value-type", u"string");
+    assertXPath(pContent, aCellPath, "formula", u"of:=#SPILL!");
+    assertXPath(pContent, aCellPath + "[@calcext:value-type='error']");
+
+    pDocument = getScDoc();
+    CPPUNIT_ASSERT_EQUAL(u"#SPILL!"_ustr, pDocument->GetString(ScAddress(0, 0, 0)));
+    ScFormulaCell* pFormulaCell = pDocument->GetFormulaCell(ScAddress(0, 0, 0));
+    CPPUNIT_ASSERT_MESSAGE("Expected a formula cell after reload.", pFormulaCell != nullptr);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(FormulaError::Spill), sal_Int32(pFormulaCell->GetErrCode()));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
