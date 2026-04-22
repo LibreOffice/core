@@ -754,14 +754,19 @@ window.L.Map.WOPI = window.L.Handler.extend({
 						const data = commentList[i].sectionProperties.data;
 						if (data.trackchange)
 							continue;
-						commentsResp.push({
+						const entry = {
 							Id: data.id,
 							Author: data.author,
 							DateTime: data.dateTime,
 							Text: commentList[i].sectionProperties.contentText.textContent,
 							Resolved: data.resolved,
 							Parent: data.parent,
-						});
+						};
+						// Flag threaded comments so consumers can tell which ones support resolve.
+						// Writer comments don't set data.threaded; Draw PDF comments do.
+						if (data.threaded)
+							entry.Threaded = 'true';
+						commentsResp.push(entry);
 					}
 				}
 			}
@@ -824,10 +829,11 @@ window.L.Map.WOPI = window.L.Handler.extend({
 		}
 		else if (msg.MessageId === 'Action_ResolveComment') {
 			var docType = this._map._docLayer._docType;
-			if (msg.Values && (docType === 'text' || docType === 'spreadsheet')) {
+			if (msg.Values && ['text', 'spreadsheet', 'drawing'].includes(docType)) {
 				const commentSection = app.sectionContainer.getSectionWithName(app.CSections.CommentList.name);
 				if (commentSection) {
 					const comment = commentSection.getComment(msg.Values.Id);
+					// Writer allows resolve on every comment; Calc and Draw only on threaded ones.
 					if (comment && comment.sectionProperties.data.resolved !== 'true'
 						&& (docType === 'text' || comment.sectionProperties.data.threaded)) {
 						commentSection.resolve(comment);
@@ -847,8 +853,10 @@ window.L.Map.WOPI = window.L.Handler.extend({
 					this._goToCalcComment(commentSection, msg.Values.Id);
 				else if (docType === 'text')
 					this._goToComment(commentSection, msg.Values.Id);
+				else if (['drawing', 'presentation'].includes(docType))
+					this._goToDrawComment(commentSection, msg.Values.Id);
 				else
-					this._sendGoToCommentResp(msg.Values.Id, false, 'Unsupported document type'); // TODO: support Draw/Impress
+					this._sendGoToCommentResp(msg.Values.Id, false, 'Unsupported document type');
 			}
 		}
 		else if (msg.sender === 'EIDEASY_SINGLE_METHOD_SIGNATURE') {
@@ -964,6 +972,69 @@ window.L.Map.WOPI = window.L.Handler.extend({
 
 		map.once('sheetgeometrychanged', onGeometry);
 		map.setPart(targetTab);
+	},
+
+	_goToDrawComment: function(commentSection, commentId) {
+		// Draw and Impress share Writer's per-page annotation shape, but comments
+		// live on specific parts (slides or pages). If the target is on a different
+		// part than the current one, switch parts first so the annotation becomes
+		// reachable.
+		const comment = commentSection.getComment(commentId)
+			|| commentSection.getComment(parseInt(commentId));
+		if (!comment) {
+			this._sendGoToCommentResp(commentId, false, 'Comment not found');
+			return;
+		}
+
+		const map = this._map;
+		const self = this;
+
+		function finish() {
+			// _goToComment -> navigateAndFocusComment -> scrollCommentIntoView
+			// scrolls the anchor into view for every docType.
+			self._goToComment(commentSection, commentId);
+			// Guard the freshly-selected comment against async events that
+			// would otherwise cancel it during the settling window. Calc uses
+			// this same flag to keep the comment visible across
+			// _onSetPartMsg / onNewDocumentTopLeft / onCellAddressChanged;
+			// for Draw/Impress on a cross-part navigation, a status-msg-driven
+			// 'updateparts' fires right after setPart and would hit
+			// onPartChange which cancels selectedComment, and an annotations
+			// refresh rebuilds the comment list and drops the selection too.
+			const props = commentSection.sectionProperties;
+			if (props.doNotHideCommentTimer)
+				clearTimeout(props.doNotHideCommentTimer);
+			props.doNotHideCommentTimer = setTimeout(function() {
+				props.doNotHideCommentTimer = null;
+			}, 2000);
+		}
+
+		const targetPart = comment.sectionProperties.partIndex;
+		if (targetPart < 0 || targetPart === map._docLayer._selectedPart) {
+			finish();
+			return;
+		}
+
+		// Cross-part: setPart triggers an async round-trip with the server.
+		// ImpressTileLayer._onSetPartMsg fires 'setpart' after
+		// _scrollViewToPartPosition has settled the viewport. Wait for that,
+		// then run finish() - the doNotHideCommentTimer set there prevents a
+		// later status-msg-driven 'updateparts' from canceling the selection.
+		let safetyTimer = null;
+		function cleanup() {
+			clearTimeout(safetyTimer);
+			map.off('setpart', onPart);
+		}
+		function onPart() {
+			cleanup();
+			finish();
+		}
+		safetyTimer = setTimeout(function() {
+			cleanup();
+			self._sendGoToCommentResp(commentId, false, 'Timed out waiting for server');
+		}, 10000);
+		map.once('setpart', onPart);
+		map.setPart(targetPart);
 	},
 
 	_sendGoToCommentResp: function(commentId, success, errorMsg) {

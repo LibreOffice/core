@@ -1046,18 +1046,26 @@ export class CommentSection extends CanvasSectionObject {
 				.getPrintTwipsPointFromTile(new cool.Point(0, topTwips)).y;
 		}
 		const topVisible = app.isYVisibleInTheDisplayedArea(topTwips);
+		const commentHeight = this.cssToCorePixels(rootComment.getCommentHeight());
 		const bottomVisible = app.isYVisibleInTheDisplayedArea(
-			topTwips + Math.round(rootComment.getCommentHeight() * app.pixelsToTwips)
+			topTwips + Math.round(commentHeight * app.pixelsToTwips)
 		);
-
-		const topBottom = this.getScreenTopBottom();
 
 		if (!topVisible || !bottomVisible) {
 			const topPixels = topTwips * app.twipsToPixels;
-			if (!topVisible)
-				app.activeDocument.activeLayout.scroll(0, topBottom[0] - topPixels);
-			else if (!bottomVisible)
-				app.activeDocument.activeLayout.scroll(0, (topPixels + rootComment.getCommentHeight() - topBottom[1]));
+			const topBottom = this.getScreenTopBottom();
+			const viewHeight = topBottom[1] - topBottom[0];
+			const needsScrollDown = topPixels > topBottom[0];
+			// Have a margin of 5% of view height, to avoid edge effects
+			// (e.g. when top of comment aligned with anchor will not fit to view)
+			let scrollPos = topPixels - viewHeight * 0.05;
+			if (needsScrollDown) {
+				// Only consider when the comment can fit into view
+				const bottomViewPos = topPixels + commentHeight - viewHeight * 0.95;
+				if (bottomViewPos < scrollPos)
+					scrollPos = bottomViewPos;
+			}
+			app.activeDocument.activeLayout.scrollTo(0, scrollPos);
 
 			if (app.map._docLayer._docType === 'spreadsheet' && rootComment) {
 				rootComment.positionCalcComment();
@@ -1825,7 +1833,11 @@ export class CommentSection extends CanvasSectionObject {
 		for (var i: number = 0; i < this.sectionProperties.commentList.length; i++) {
 			this.showHideComment(this.sectionProperties.commentList[i]);
 		}
-		if (this.sectionProperties.selectedComment)
+		// Honor the doNotHideCommentTimer guard: when Action_GoToComment has
+		// just navigated to a comment on another part, a status-msg-triggered
+		// 'updateparts' can fire right after the select() and would otherwise
+		// cancel the freshly-selected comment.
+		if (this.sectionProperties.selectedComment && !this.sectionProperties.doNotHideCommentTimer)
 			this.sectionProperties.selectedComment.onCancelClick(null);
 
 		this.checkSize();
@@ -1864,6 +1876,9 @@ export class CommentSection extends CanvasSectionObject {
 		comment.anchorSPoint = new cool.SimplePoint(comment.anchorPos[0], comment.anchorPos[1]);
 
 		comment.parthash = comment.parthash ? comment.parthash: null;
+
+		if (comment.parentId)
+			comment.parent = String(comment.parentId);
 
 		var viewId = this.map.getViewId(comment.author);
 		var color = viewId >= 0 ? app.LOUtil.rgbToHex(this.map.getViewColor(viewId)) : '#43ACE8';
@@ -2556,6 +2571,16 @@ export class CommentSection extends CanvasSectionObject {
 			return;
 		}
 
+		// If a navigation (e.g. Action_GoToComment) just selected a comment
+		// and set the doNotHideCommentTimer guard, remember the id so we can
+		// re-select the rebuilt comment at the end of the import. Without
+		// this, a status-msg-triggered annotations refresh arriving right
+		// after the navigation would silently drop the selection.
+		const preserveSelectedId = this.sectionProperties.doNotHideCommentTimer
+				&& this.sectionProperties.selectedComment
+			? this.sectionProperties.selectedComment.sectionProperties.data.id
+			: null;
+
 		CommentSection.importingComments = true;
 		let drawPaused = false;
 		if (app.map._docLayer._docType === 'spreadsheet') {
@@ -2617,6 +2642,8 @@ export class CommentSection extends CanvasSectionObject {
 		if (drawPaused) {
 			this.containerObject.resumeDrawing();
 		}
+		if (preserveSelectedId !== null)
+			this.selectById(preserveSelectedId);
 	}
 
 	// Accepts redlines/changes comments.
