@@ -896,7 +896,7 @@ function showWelcomeSVG() {
 		},
 
 		get: function(key, defaultValue = undefined) {
-			if (key in global.prefs._localStorageCache) {
+			if (global.prefs._localStorageCache[key] !== undefined) {
 				return global.prefs._localStorageCache[key];
 			}
 
@@ -996,7 +996,7 @@ function showWelcomeSVG() {
 			if (global.prefs.canPersist) {
 				global.localStorage.removeItem(key);
 			}
-			global.prefs._localStorageCache[key] = undefined;
+			delete global.prefs._localStorageCache[key];
 		},
 
 		getBoolean: function(key, defaultValue = false) {
