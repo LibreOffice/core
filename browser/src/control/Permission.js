@@ -34,7 +34,8 @@ window.L.Map.include({
 		//
 		// For mobile we need to display the edit button for all the cases except for PDF
 		// we offer save-as to another place where the user can edit the document
-		var isPDF = app.file.fileBasedView && app.file.editComment;
+		var fileName = (this['wopi'].BaseFileName || '').toLowerCase();
+		var isPDF = fileName.endsWith('.pdf');
 		if (!isPDF && (window.mode.isSmallScreenDevice() || window.mode.isTablet())) {
 			button.css('display', 'flex');
 		} else {

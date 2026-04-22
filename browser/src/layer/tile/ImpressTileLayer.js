@@ -38,10 +38,13 @@ window.L.ImpressTileLayer = window.L.CanvasTileLayer.extend({
 		// Before this instance is created, app.file.readOnly and app.file.editComments variables are set.
 		// If document is on read only mode, we will draw all parts at once.
 		// Let's call default view the "part based view" and new view the "file based view".
-		if (app.file.readOnly)
-			app.file.fileBasedView = true;
-		else
-			app.file.partBasedView = true; // For Writer and Calc, this one should always be "true".
+		// On small-screen devices and tablets, Permission.js sets the UI in read-only mode
+		// until the user taps #mobile-edit-button. Start in fileBasedView so the user gets
+		// endless slide scrolling while viewing.
+		var mobileViewing =
+			window.mode.isSmallScreenDevice() || window.mode.isTablet();
+		if (app.file.readOnly || mobileViewing) app.file.fileBasedView = true;
+		else app.file.partBasedView = true;
 
 		this._partHeightTwips = 0; // Single part's height.
 		this._partWidthTwips = 0; // Single part's width. These values are equal to app.activeDocument.fileSize.x & app.activeDocument.fileSize.y when app.file.partBasedView is true.
@@ -213,6 +216,59 @@ window.L.ImpressTileLayer = window.L.CanvasTileLayer.extend({
 				this._addButton.remove();
 			}
 		}
+
+		// Mobile Impress starts in fileBasedView for endless slide scrolling
+		// during the read-only UI phase. Flip back to partBasedView when the user enters
+		// edit mode
+		if (app.file.readOnly) return;
+		var mobile = window.mode.isSmallScreenDevice() || window.mode.isTablet();
+		if (!mobile) return;
+
+		if (e.detail.perm === 'edit' && app.file.fileBasedView)
+			this._switchToPartBasedView();
+		else if (
+			(e.detail.perm === 'readonly' || e.detail.perm === 'view') &&
+			app.file.partBasedView
+		)
+			this._switchToFileBasedView();
+	},
+
+	_switchToPartBasedView: function () {
+		app.file.fileBasedView = false;
+		app.file.partBasedView = true;
+
+		// Collapse the stacked canvas back to a single slide
+		app.activeDocument.fileSize = new cool.SimplePoint(
+			this._partWidthTwips,
+			this._partHeightTwips,
+		);
+		app.activeDocument.activeLayout.viewSize =
+			app.activeDocument.fileSize.clone();
+		this._updateMaxBounds(true, true);
+	},
+
+	_switchToFileBasedView: function () {
+		app.file.partBasedView = false;
+		app.file.fileBasedView = true;
+
+		// Rebuild the stacked-slide total height (mirrors _onStatusMsg).
+		var totalHeight = 0;
+		if (this._partDimensions.length === this._parts) {
+			for (var i = 0; i < this._parts; i++)
+				totalHeight += this.getPartHeight(i);
+		} else {
+			totalHeight = this._parts * this._partHeightTwips;
+		}
+		totalHeight += this._parts * this._spaceBetweenParts;
+
+		app.activeDocument.fileSize = new cool.SimplePoint(
+			this._partWidthTwips,
+			totalHeight,
+		);
+		app.activeDocument.activeLayout.viewSize =
+			app.activeDocument.fileSize.clone();
+		this._updateMaxBounds(true, true);
+		TileManager.updateFileBasedView();
 	},
 
 	_onCommandValuesMsg: function (textMsg) {
