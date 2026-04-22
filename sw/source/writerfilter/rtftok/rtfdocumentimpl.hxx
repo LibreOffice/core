@@ -879,6 +879,7 @@ private:
 
     std::shared_ptr<oox::GraphicHelper> m_pGraphicHelper;
 
+    /// table row definition, store state of table cells, see <tbldef>/<celldef>
     struct TableRowDef
     {
         /// cell props
