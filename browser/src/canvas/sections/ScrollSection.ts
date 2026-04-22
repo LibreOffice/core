@@ -338,16 +338,14 @@ export class ScrollSection extends CanvasSectionObject {
 	private doMove() {
 		const scrollProps: ScrollProperties = (app.activeDocument as DocumentBase).activeLayout.scrollProperties;
 
-		app.layoutingService.appendLayoutingTask(() => {
-			this.map.panBy(new cool.Point(scrollProps.moveBy[0] / app.dpiScale, scrollProps.moveBy[1] / app.dpiScale));
-			scrollProps.moveBy = null;
-			this.onUpdateScrollOffset();
+		this.map.panBy(new cool.Point(scrollProps.moveBy[0] / app.dpiScale, scrollProps.moveBy[1] / app.dpiScale));
+		scrollProps.moveBy = null;
+		this.onUpdateScrollOffset();
 
-			if (app && app.file.fileBasedView === true)
-				app.map._docLayer._checkSelectedPart();
+		if (app && app.file.fileBasedView === true)
+			app.map._docLayer._checkSelectedPart();
 
-			app.activeDocument.activeLayout.refreshScrollProperties();
-		});
+		app.activeDocument.activeLayout.refreshScrollProperties();
 	}
 
 	public onDraw(frameCount: number, elapsedTime: number): void {
