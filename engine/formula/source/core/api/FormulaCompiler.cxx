@@ -773,7 +773,7 @@ FormulaCompiler::FormulaCompiler( FormulaTokenArray& rArr, bool bComputeII, bool
         meLastOp( ocPush ),
         mnRecursion( 0 ),
         mnNumFmt( SvNumFormatType::UNDEFINED ),
-        pc( 0 ),
+        mnPC( 0 ),
         meGrammar( formula::FormulaGrammar::GRAM_UNSPECIFIED ),
         mbAutoCorrect( false ),
         mbCorrected( false ),
@@ -798,7 +798,7 @@ FormulaCompiler::FormulaCompiler(bool bComputeII, bool bMatrixFlag)
         meLastOp( ocPush ),
         mnRecursion(0),
         mnNumFmt( SvNumFormatType::UNDEFINED ),
-        pc( 0 ),
+        mnPC( 0 ),
         meGrammar( formula::FormulaGrammar::GRAM_UNSPECIFIED ),
         mbAutoCorrect( false ),
         mbCorrected( false ),
@@ -1680,7 +1680,7 @@ void FormulaCompiler::Factor()
             eOp = Expression();
             // Do not ignore error here, regardless of mbStopOnError, to not
             // change the formula expression in case of an unexpected state.
-            if (mpArr->GetCodeError() == FormulaError::NONE && pc >= 2)
+            if (mpArr->GetCodeError() == FormulaError::NONE && mnPC >= 2)
             {
                 // Left and right operands must be reference or function
                 // returning reference to form a range list.
@@ -1836,7 +1836,7 @@ void FormulaCompiler::Factor()
                     // Current index is nSepPos+3 if expression stops, or
                     // nSepPos+4 if expression continues after the call because
                     // we just called NextToken() to move away from it.
-                    if (pc >= 2 && (maArrIterator.GetIndex() == nSepPos + 3 || maArrIterator.GetIndex() == nSepPos + 4) &&
+                    if (mnPC >= 2 && (maArrIterator.GetIndex() == nSepPos + 3 || maArrIterator.GetIndex() == nSepPos + 4) &&
                             mpArr->TokenAt(nSepPos+1)->GetType() == svDouble &&
                             static_cast<FormulaDoubleToken*>(mpArr->TokenAt(nSepPos+1))->GetDouble() != 1.0 &&
                             mpArr->TokenAt(nSepPos+2)->GetOpCode() == ocClose &&
@@ -1845,7 +1845,7 @@ void FormulaCompiler::Factor()
                         maArrIterator.AfterRemoveToken( nSepPos, 2);
                         // Remove the ocPush/svDouble just removed also from
                         // the compiler local RPN array.
-                        --mpCode; --pc;
+                        --mpCode; --mnPC;
                         (*mpCode)->DecRef(); // may be dead now
                         pFacToken->SetByte( nSepCount - 1 );
                     }
@@ -2034,7 +2034,7 @@ void FormulaCompiler::Factor()
                 case ocStop:
                     // May happen only if PutCode(pFacToken) ran into overflow.
                     nJumpMax = 0;
-                    assert(pc == FORMULA_MAXTOKENS && mpArr->GetCodeError() != FormulaError::NONE);
+                    assert(mnPC == FORMULA_MAXTOKENS && mpArr->GetCodeError() != FormulaError::NONE);
                     break;
                 default:
                     nJumpMax = 0;
@@ -2046,7 +2046,7 @@ void FormulaCompiler::Factor()
                     && (mpArr->GetCodeError() == FormulaError::NONE || !mbStopOnError))
             {
                 if ( ++nJumpCount <= nJumpMax )
-                    static_cast<FormulaJumpToken*>(&*pFacToken)->GetJump()[nJumpCount] = pc-1;
+                    static_cast<FormulaJumpToken*>(&*pFacToken)->GetJump()[nJumpCount] = mnPC-1;
                 NextToken();
                 CheckSetForceArrayParameter( mpToken, nJumpCount - 1);
                 eOp = Expression();
@@ -2060,7 +2060,7 @@ void FormulaCompiler::Factor()
                 NextToken();
                 // always limit to nJumpMax, no arbitrary overwrites
                 if ( ++nJumpCount <= nJumpMax )
-                    static_cast<FormulaJumpToken*>(&*pFacToken)->GetJump()[ nJumpCount ] = pc-1;
+                    static_cast<FormulaJumpToken*>(&*pFacToken)->GetJump()[ nJumpCount ] = mnPC-1;
                 eFacOpCode = pFacToken->GetOpCode();
                 bool bLimitOk;
                 switch (eFacOpCode)
@@ -2084,7 +2084,7 @@ void FormulaCompiler::Factor()
                         // error wasn't propagated so assert only the program
                         // counter.
                         bLimitOk = false;
-                        assert(pc == FORMULA_MAXTOKENS);
+                        assert(mnPC == FORMULA_MAXTOKENS);
                         break;
                     default:
                         bLimitOk = false;
@@ -2170,7 +2170,7 @@ void FormulaCompiler::IntersectionLine()
             // functions (potentially returning references, if not then a space
             // or no space would be a syntax error anyway), not other operators
             // or operands. Else discard.
-            if (isAdjacentOrGapRpnEnd( pc, mpCode, pCode1, pCode2) && isIntersectable( pCode1, pCode2))
+            if (isAdjacentOrGapRpnEnd( mnPC, mpCode, pCode1, pCode2) && isIntersectable( pCode1, pCode2))
             {
                 FormulaTokenRef pIntersect( new FormulaByteToken( ocIntersect));
                 // Replace ocSpaces with ocIntersect so that when switching
@@ -2374,7 +2374,7 @@ FormulaTokenRef FormulaCompiler::ExtendRangeReference( FormulaToken & /*rTok1*/,
 
 bool FormulaCompiler::MergeRangeReference( FormulaToken * * const pCode1, FormulaToken * const * const pCode2 )
 {
-    if (!isAdjacentRpnEnd( pc, mpCode, pCode1, pCode2))
+    if (!isAdjacentRpnEnd( mnPC, mpCode, pCode1, pCode2))
         return false;
 
     FormulaToken *p1 = *pCode1, *p2 = *pCode2;
@@ -2387,7 +2387,7 @@ bool FormulaCompiler::MergeRangeReference( FormulaToken * * const pCode1, Formul
     p2->DecRef();
     *pCode1 = p.get();
     --mpCode;
-    --pc;
+    --mnPC;
 
     return true;
 }
@@ -2420,7 +2420,7 @@ bool FormulaCompiler::CompileTokenArray()
         mpArr->ClearRecalcMode();
         maArrIterator.Reset();
         meLastOp = ocOpen;
-        pc = 0;
+        mnPC = 0;
         NextToken();
         OpCode eOp = Expression();
         // Some trailing garbage that doesn't form an expression?
@@ -2432,9 +2432,9 @@ bool FormulaCompiler::CompileTokenArray()
 
         while( mpStack )
             PopTokenArray();
-        if( pc )
+        if( mnPC )
         {
-            mpArr->CreateNewRPNArrayFromData( pData, pc );
+            mpArr->CreateNewRPNArrayFromData( pData, mnPC );
             if( mbNeedsRPNTokenCheck )
                 mpArr->CheckAllRPNTokens();
         }
@@ -3039,15 +3039,15 @@ OpCode FormulaCompiler::NextToken()
 
 void FormulaCompiler::PutCode( FormulaTokenRef& p )
 {
-    if( pc >= FORMULA_MAXTOKENS - 1 )
+    if( mnPC >= FORMULA_MAXTOKENS - 1 )
     {
-        if ( pc == FORMULA_MAXTOKENS - 1 )
+        if ( mnPC == FORMULA_MAXTOKENS - 1 )
         {
             SAL_WARN("formula.core", "FormulaCompiler::PutCode - CodeOverflow with OpCode " << +p->GetOpCode());
             p = new FormulaByteToken( ocStop );
             p->IncRef();
             *mpCode++ = p.get();
-            ++pc;
+            ++mnPC;
         }
         SetError( FormulaError::CodeOverflow);
         return;
@@ -3057,7 +3057,7 @@ void FormulaCompiler::PutCode( FormulaTokenRef& p )
     ForceArrayOperator( p);
     p->IncRef();
     *mpCode++ = p.get();
-    pc++;
+    mnPC++;
 }
 
 
@@ -3197,7 +3197,7 @@ void FormulaCompiler::ForceArrayOperator( FormulaTokenRef const & rCurr )
             // below.
             rCurr->SetInForceArray( ParamClass::ForceArray);
         }
-        else if (pc >= 2 && SC_OPCODE_START_BIN_OP <= eOp && eOp < SC_OPCODE_STOP_BIN_OP)
+        else if (mnPC >= 2 && SC_OPCODE_START_BIN_OP <= eOp && eOp < SC_OPCODE_STOP_BIN_OP)
         {
             // Binary operators are not functions followed by arguments
             // and need some peeking into RPN to inspect their operands.
@@ -3224,7 +3224,7 @@ void FormulaCompiler::ForceArrayOperator( FormulaTokenRef const & rCurr )
                 rCurr->SetInForceArray( eArrayReturn);
             }
         }
-        else if (pc >= 1 && SC_OPCODE_START_UN_OP <= eOp && eOp < SC_OPCODE_STOP_UN_OP)
+        else if (mnPC >= 1 && SC_OPCODE_START_UN_OP <= eOp && eOp < SC_OPCODE_STOP_UN_OP)
         {
             // Similar for unary operators.
             if (mpCode[-1]->GetInForceArray() != ParamClass::Unknown || IsMatrixFunction(mpCode[-1]->GetOpCode()))
