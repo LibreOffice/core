@@ -287,7 +287,7 @@ public:
     static sal_Unicode      GetNativeSymbolChar( OpCode eOp );
     static  bool            IsMatrixFunction(OpCode _eOpCode);   // if a function _always_ returns a Matrix
 
-    SvNumFormatType GetNumFormatType() const { return nNumFmt; }
+    SvNumFormatType GetNumFormatType() const { return mnNumFmt; }
     bool  CompileTokenArray();
 
     void CreateStringFromTokenArray( OUString& rFormula );
@@ -392,32 +392,32 @@ protected:
 
     virtual void AnnotateOperands() {}
 
-    OUString            aCorrectedFormula;      // autocorrected Formula
-    OUString            aCorrectedSymbol;       // autocorrected Symbol
+    OUString            maCorrectedFormula;     // autocorrected Formula
+    OUString            maCorrectedSymbol;      // autocorrected Symbol
 
     OpCodeMapPtr        mxSymbols;              // which symbols are used
 
     FormulaTokenRef     mpToken;                // current token
-    FormulaTokenRef     pCurrentFactorToken;    // current factor token (of Factor() method)
-    sal_uInt16          nCurrentFactorParam;    // current factor token's parameter, 1-based
-    FormulaTokenArray*  pArr;
+    FormulaTokenRef     mpCurrentFactorToken;   // current factor token (of Factor() method)
+    sal_uInt16          mnCurrentFactorParam;   // current factor token's parameter, 1-based
+    FormulaTokenArray*  mpArr;
     FormulaTokenArrayPlainIterator maArrIterator;
     FormulaTokenRef     mpLastToken;            // last token
 
-    FormulaToken**      pCode;
-    FormulaArrayStack*  pStack;
+    FormulaToken**      mpCode;
+    FormulaArrayStack*  mpStack;
 
-    OpCode              eLastOp;
-    short               nRecursion;             // GetToken() recursions
-    SvNumFormatType     nNumFmt;                // set during CompileTokenArray()
+    OpCode              meLastOp;
+    short               mnRecursion;            // GetToken() recursions
+    SvNumFormatType     mnNumFmt;               // set during CompileTokenArray()
     sal_uInt16          pc;                     // program counter
 
     FormulaGrammar::Grammar meGrammar;          // The grammar used, language plus convention.
 
-    bool                bAutoCorrect;           // whether to apply AutoCorrection
-    bool                bCorrected;             // AutoCorrection was applied
-    bool                glSubTotal;             // if code contains one or more subtotal functions
-    bool                needsRPNTokenCheck;     // whether to make FormulaTokenArray check all tokens at the end
+    bool                mbAutoCorrect;          // whether to apply AutoCorrection
+    bool                mbCorrected;            // AutoCorrection was applied
+    bool                mbGlSubTotal;           // if code contains one or more subtotal functions
+    bool                mbNeedsRPNTokenCheck;   // whether to make FormulaTokenArray check all tokens at the end
 
     bool mbJumpCommandReorder; /// Whether or not to reorder RPN for jump commands.
     bool mbStopOnError;        /// Whether to stop compilation on first encountered error.
@@ -474,21 +474,21 @@ private:
         CurrentFactor& operator=( const CurrentFactor& ) = delete;
     public:
         explicit CurrentFactor( FormulaCompiler* pComp )
-            : pPrevFac( pComp->pCurrentFactorToken )
-            , nPrevParam( pComp->nCurrentFactorParam )
+            : pPrevFac( pComp->mpCurrentFactorToken )
+            , nPrevParam( pComp->mnCurrentFactorParam )
             , pCompiler( pComp )
             {}
         ~CurrentFactor()
             {
-                pCompiler->pCurrentFactorToken = pPrevFac;
-                pCompiler->nCurrentFactorParam = nPrevParam;
+                pCompiler->mpCurrentFactorToken = pPrevFac;
+                pCompiler->mnCurrentFactorParam = nPrevParam;
             }
         // yes, this operator= may modify the RValue
         void operator=( FormulaTokenRef const & r )
             {
                 pCompiler->ForceArrayOperator( r );
-                pCompiler->pCurrentFactorToken = r;
-                pCompiler->nCurrentFactorParam = 0;
+                pCompiler->mpCurrentFactorToken = r;
+                pCompiler->mnCurrentFactorParam = 0;
             }
         void operator=( FormulaToken* p )
             {
@@ -496,9 +496,9 @@ private:
                 *this = xTemp;
             }
         operator FormulaTokenRef&()
-            { return pCompiler->pCurrentFactorToken; }
+            { return pCompiler->mpCurrentFactorToken; }
         FormulaToken* operator->()
-            { return pCompiler->pCurrentFactorToken.operator->(); }
+            { return pCompiler->mpCurrentFactorToken.operator->(); }
         operator FormulaToken*()
             { return operator->(); }
     };

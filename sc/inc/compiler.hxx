@@ -494,8 +494,8 @@ public:
 
     void            SetExtendedErrorDetection( ExtendedErrorDetection eVal ) { meExtendedErrorDetection = eVal; }
 
-    bool            IsCorrected() const { return bCorrected; }
-    const OUString& GetCorrectedFormula() const { return aCorrectedFormula; }
+    bool            IsCorrected() const { return mbCorrected; }
+    const OUString& GetCorrectedFormula() const { return maCorrectedFormula; }
 
     /**
      * Tokenize formula expression string into an array of tokens.
