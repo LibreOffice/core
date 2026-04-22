@@ -449,6 +449,22 @@ describe(['tagdesktop'], 'Annotation Tests', function() {
 		});
 	});
 
+	it('Reply focuses the reply textbox', function () {
+		desktopHelper.insertComment();
+		cy.cGet('.cool-annotation-content-wrapper').should('exist');
+		cy.cGet('#comment-annotation-menu-1').click();
+		cy.cGet('body').contains('.ui-combobox-entry.jsdialog.ui-grid-cell', 'Reply').click();
+		cy.cGet('#annotation-reply-textarea-1').should('have.focus');
+	});
+
+	it('Modify focuses the modify textbox', function () {
+		desktopHelper.insertComment();
+		cy.cGet('.cool-annotation-content-wrapper').should('exist');
+		cy.cGet('#comment-annotation-menu-1').click();
+		cy.cGet('body').contains('.ui-combobox-entry.jsdialog.ui-grid-cell', 'Modify').click();
+		cy.cGet('#annotation-modify-textarea-1').should('have.focus');
+	});
+
 });
 
 describe(['tagdesktop'], 'Collapsed Annotation Tests', function() {

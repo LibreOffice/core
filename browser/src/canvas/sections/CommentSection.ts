@@ -1155,16 +1155,20 @@ export class Comment extends CanvasSectionObject {
 			return;
 		}
 
+		const dropdownId = 'comment-menu-' + data.id;
 		const callback = function (_objectType: string, eventType: string, _object: any, _data: any, entry: any) {
 			if (eventType !== 'selected')
 				return false;
+			// reply and modify set focus on the comment textbox
+			// tell the dropdown not to restore focus in those cases
+			const focusHandled = entry?.id === 'reply' || entry?.id === 'modify';
+			JSDialog.CloseDropdown(dropdownId, focusHandled);
 			this.handleMenuAction(entry?.id);
-			JSDialog.CloseAllDropdowns();
 			return true;
 		}.bind(this);
 
 		JSDialog.OpenDropdown(
-			'comment-menu-' + data.id,
+			dropdownId,
 			menuEl,
 			entries,
 			callback,
