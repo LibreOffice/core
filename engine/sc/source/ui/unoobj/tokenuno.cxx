@@ -539,8 +539,35 @@ void ScTokenConversion::ConvertToTokenSequence( const ScDocument& rDoc,
                 default:
                     SAL_WARN("sc",  "ScTokenConversion::ConvertToTokenSequence: unhandled token type " << StackVarEnumToString(rToken.GetType()));
                     [[fallthrough]];
+                case svError:
+                    switch (static_cast<const FormulaErrorToken&>(rToken).GetError())
+                    {
+                        case FormulaError::NoCode:
+                            eOpCode = ocErrNull;
+                            break;
+                        case FormulaError::DivisionByZero:
+                            eOpCode = ocErrDivZero;
+                            break;
+                        case FormulaError::NoValue:
+                            eOpCode = ocErrValue;
+                            break;
+                        case FormulaError::NoRef:
+                            eOpCode = ocErrRef;
+                            break;
+                        case FormulaError::NoName:
+                            eOpCode = ocErrName;
+                            break;
+                        case FormulaError::IllegalFPOperation:
+                            eOpCode = ocErrNum;
+                            break;
+                        case FormulaError::NotAvailable:
+                            eOpCode = ocErrNA;
+                            break;
+                        default:
+                            break;
+                    }
+                    [[fallthrough]];
                 case svJump:    // occurs with ocIf, ocChoose
-                case svError:   // seems to be fairly common, and probably not exceptional and not worth a warning?
                 case svMissing: // occurs with ocMissing
                 case svSep:     // occurs with ocSep, ocOpen, ocClose, ocArray*
                     rAPI.Data.clear();      // no data

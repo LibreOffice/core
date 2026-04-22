@@ -268,8 +268,34 @@ bool FormulaTokenArray::AddFormulaToken(
     switch ( eClass )
     {
         case uno::TypeClass_VOID:
-            // empty data -> use AddOpCode (does some special cases)
-            AddOpCode( eOpCode );
+            switch (eOpCode)
+            {
+                case ocErrNull:
+                    AddError(FormulaError::NoCode);
+                    break;
+                case ocErrDivZero:
+                    AddError(FormulaError::DivisionByZero);
+                    break;
+                case ocErrValue:
+                    AddError(FormulaError::NoValue);
+                    break;
+                case ocErrRef:
+                    AddError(FormulaError::NoRef);
+                    break;
+                case ocErrName:
+                    AddError(FormulaError::NoName);
+                    break;
+                case ocErrNum:
+                    AddError(FormulaError::IllegalFPOperation);
+                    break;
+                case ocErrNA:
+                    AddError(FormulaError::NotAvailable);
+                    break;
+                default:
+                    // empty data -> use AddOpCode (does some special cases)
+                    AddOpCode(eOpCode);
+                    break;
+            }
             break;
         case uno::TypeClass_DOUBLE:
             // double is only used for "push"
