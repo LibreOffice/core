@@ -139,6 +139,18 @@ if test "$MODE" = "update"; then
     echo "=== Updating corpus ==="
     find "$CORPUS" -maxdepth 1 -type f -delete
     find "$RESULT_DIR" -maxdepth 1 -type f -exec cp -t "$CORPUS" {} +
+
+    # AFL++ names files like "id:000000,time:0,execs:0,orig:...". The ':' is
+    # forbidden on Windows (NTFS/FAT), which breaks anyone who clones this
+    # repo on Windows or unpacks a tarball there. Rewrite ':' to '_'; the
+    # remaining filename is still unique because AFL IDs are unique.
+    find "$CORPUS" -maxdepth 1 -type f -name '*:*' -print0 | \
+        while IFS= read -r -d '' f; do
+            dir=$(dirname "$f")
+            newbase=$(basename "$f" | tr ':' '_')
+            mv -n -- "$f" "$dir/$newbase"
+        done
+
     FINAL=$(fcount "$CORPUS")
     echo "Done: $BEFORE -> $FINAL files in $CORPUS"
 
