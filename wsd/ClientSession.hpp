@@ -203,10 +203,7 @@ public:
     void setWopiFileInfo(std::unique_ptr<WopiStorage::WOPIFileInfo> wopiFileInfo) { _wopiFileInfo = std::move(wopiFileInfo); }
 
     /// True if the WOPI host asked for AI UI / features to be disabled for this document.
-    bool isDisableAISettings() const
-    {
-        return _wopiFileInfo && _wopiFileInfo->getDisableAISettings();
-    }
+    bool isDisableAISettings() const;
 
     /// Get requested tiles waiting for sending to the client
     std::deque<TileDesc>& getRequestedTiles() { return _requestedTiles; }

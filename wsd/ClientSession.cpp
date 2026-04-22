@@ -1613,6 +1613,11 @@ void ClientSession::uploadViewSettingsToWopiHost()
     }
 }
 
+bool ClientSession::isDisableAISettings() const
+{
+    return _wopiFileInfo && _wopiFileInfo->getDisableAISettings();
+}
+
 bool ClientSession::resolveAndApplyAICredentials(Poco::JSON::Object::Ptr viewSettings,
                                                  const Poco::JSON::Object::Ptr& userPrivateInfoObj,
                                                  bool disableAISettings, bool& viewSettingsMutated,
