@@ -663,6 +663,7 @@ label.notebookbar.ui-checkbox-label {
 	width: 100%;
 	position: relative;
 	justify-content: start;
+	color: var(--color-main-text);
 }
 
 #stylesview-dropdown hr {
