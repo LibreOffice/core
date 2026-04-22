@@ -117,6 +117,24 @@ class UIManager extends window.L.Control {
 		this.map['stateChangeHandler'].setItemValue('toggledarktheme', 'false');
 		this.map['stateChangeHandler'].setItemValue('invertbackground', 'false');
 		this.map['stateChangeHandler'].setItemValue('showannotations', 'true');
+
+		// View Changes menu: default to Hidden, sync with core state.
+		this.map['stateChangeHandler'].setItemValue('viewchanges-hidden', 'true');
+		this.map['stateChangeHandler'].setItemValue('viewchanges-inline', 'false');
+		this.map['stateChangeHandler'].setItemValue('viewchanges-sidebyside', 'false');
+		this.map['stateChangeHandler'].setItemValue('viewchanges', 'false');
+		this.map.on('commandstatechanged', (e: any) => {
+			if (e.commandName === '.uno:ShowTrackedChanges') {
+				const isSideBySide =
+					app.activeDocument?.activeLayout?.type === 'ViewLayoutCompareChanges';
+				if (isSideBySide) return; // side-by-side mode manages its own state
+
+				const isInline = e.state === 'true';
+				this.map['stateChangeHandler'].setItemValue('viewchanges-inline', isInline ? 'true' : 'false');
+				this.map['stateChangeHandler'].setItemValue('viewchanges-hidden', isInline ? 'false' : 'true');
+				this.map['stateChangeHandler'].setItemValue('viewchanges', isInline ? 'true' : 'false');
+			}
+		});
 		window.addEventListener('browsersettingchanged', () => {
 			this.initDarkModeFromSettings();
 		});
@@ -671,7 +689,7 @@ class UIManager extends window.L.Control {
 					if (e.statusType !== 'initializationcomplete') {
 						return;
 					}
-					app.dispatcher.dispatch('comparechanges');
+					app.dispatcher.dispatch('viewchanges-sidebyside');
 					this.map.off('statusindicator', enterCompareChanges);
 				};
 				this.map.on('statusindicator', enterCompareChanges);

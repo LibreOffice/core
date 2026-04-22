@@ -70,7 +70,7 @@ function getToggleButtons() {
 		'.uno:TrackChangesInAllViews',
 		'.uno:TrackChangesInThisView',
 		'.uno:Underline',
-		'comparechanges',
+		'viewchanges',
 		'showannotations',
 		'toggledarktheme',
 	];

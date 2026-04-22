@@ -820,6 +820,81 @@ class Dispatcher {
 				}
 			}
 		};
+
+		// View Changes menu: radio-style actions (Inline / Side by Side / Hidden).
+		// Each action activates its mode and deactivates the others.
+
+		const updateViewChangesState = function (mode: string) {
+			const states: Record<string, boolean> = {
+				'viewchanges-inline': mode === 'inline',
+				'viewchanges-sidebyside': mode === 'sidebyside',
+				'viewchanges-hidden': mode === 'hidden',
+				viewchanges: mode !== 'hidden',
+			};
+
+			for (const key in states) {
+				const val = states[key] ? 'true' : 'false';
+				app.map['stateChangeHandler'].setItemValue(key, val);
+				app.map.fire('commandstatechanged', {
+					commandName: key,
+					state: val,
+				});
+			}
+		};
+
+		const switchToWriterLayout = function () {
+			if (
+				app.activeDocument?.activeLayout?.type === 'ViewLayoutCompareChanges'
+			) {
+				app.activeDocument.activeLayout = new ViewLayoutWriter();
+				TileManager.redraw();
+				app.map._docLayer._fitWidthZoom(null, null, true);
+				app.activeDocument.activeLayout.sendClientVisibleArea();
+				app.sectionContainer.requestReDraw();
+			}
+		};
+
+		this.actionsMap['viewchanges-inline'] = function () {
+			if (!app.activeDocument?.activeLayout) return;
+
+			switchToWriterLayout();
+
+			// Ensure inline tracked changes are visible.
+			const showState = app.map['stateChangeHandler'].getItemValue(
+				'.uno:ShowTrackedChanges',
+			);
+			if (showState !== 'true')
+				app.map.sendUnoCommand('.uno:ShowTrackedChanges');
+
+			updateViewChangesState('inline');
+		};
+
+		this.actionsMap['viewchanges-sidebyside'] = function () {
+			if (!app.activeDocument?.activeLayout) return;
+
+			Util.ensureValue(app.activeDocument);
+			app.socket.sendMessage('uno .uno:RedlineRenderMode');
+
+			if (app.activeDocument.activeLayout.type !== 'ViewLayoutCompareChanges')
+				app.activeDocument.activeLayout = new ViewLayoutCompareChanges();
+
+			updateViewChangesState('sidebyside');
+		};
+
+		this.actionsMap['viewchanges-hidden'] = function () {
+			if (!app.activeDocument?.activeLayout) return;
+
+			switchToWriterLayout();
+
+			// Ensure inline tracked changes are hidden.
+			const showState = app.map['stateChangeHandler'].getItemValue(
+				'.uno:ShowTrackedChanges',
+			);
+			if (showState === 'true')
+				app.map.sendUnoCommand('.uno:ShowTrackedChanges');
+
+			updateViewChangesState('hidden');
+		};
 	}
 
 	private addMobileCommands() {

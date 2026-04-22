@@ -1469,7 +1469,7 @@ img.context-menu-icon {
 	color: var(--color-text-darker) !important;
 }
 
-.ui-combobox-entry.selected:not(:hover) span,
+.ui-combobox-entry.selected:not(:hover):not(.checked):not(.notchecked) span,
 .margin-item.selected {
 	background-color: var(--color-background-darker);
 }
@@ -1515,7 +1515,7 @@ img.context-menu-icon {
 	filter: contrast(0.5);
 }
 
-.ui-combobox-entry.selected img:not(:hover) {
+.ui-combobox-entry.selected:not(.checked):not(.notchecked) img:not(:hover) {
 	border: 1px solid var(--color-primary);
 }
 

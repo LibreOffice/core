@@ -2375,8 +2375,8 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 						'id': 'compare-tracked-change:ViewChangesMenu',
 						'type': 'menubutton',
 						'text': _('View Changes'),
-						'applyCallback': 'comparechanges',
-						'command': 'comparechanges',
+						'icon': 'lc_comparechanges.svg',
+						'command': 'viewchanges',
 						'accessibility': { focusBack: true, combination: 'CC' }
 					},
 					{

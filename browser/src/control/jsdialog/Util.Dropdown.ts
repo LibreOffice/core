@@ -97,7 +97,8 @@ JSDialog.OpenDropdown = function (
 		const checkedValue =
 			entries[i].checked === undefined
 				? undefined
-				: entries[i].uno && isChecked('.uno' + entries[i].uno);
+				: (entries[i].uno ? isChecked('.uno' + entries[i].uno) : false) ||
+					(entries[i].action ? isChecked(String(entries[i].action)) : false);
 
 		let entry:
 			| WidgetJSON
