@@ -759,6 +759,37 @@ sal_Int64 SystemDependentData_CairoSurface::estimateUsageInBytes() const
 
 std::shared_ptr<CairoSurfaceHelper> getOrCreateCairoSurfaceHelper(const Bitmap& rBitmap)
 {
+    cairo_surface_t* pSurface(static_cast<cairo_surface_t*>(rBitmap.tryToGetCairoSurface()));
+    if (nullptr != pSurface)
+    {
+        // in this case we get a cairo_surface_t directly from the underlying
+        // Bitmap (this is the future and the case if built using --without-system-cairo
+        // and --enable-cairo-rgba). The created CairoSurfaceHelper will just wrap it
+        // and will not have to create a cairo-compatible local clone, BUT it also
+        // supports the Mip-Mapping. Thus, for smaller Bitmaps, it is OK to just
+        // use this without the need to add data to the SystemDependentDataHolder
+        // mechanism since there is no real need to hold MipMapped data.
+        // The key here is to balance the effort for that against evtl. needed (!)
+        // Mip-Mapping, and that depends on the Bitmap's size (in square pixels).
+        // Thus, add a shortcut here - but ONLY for small enough Bitmpaps that
+        // do not cost too much to be painted in cairo with good quality. Remember
+        // that cairo *is* a software-renderer after all (!). This value may be adapted as
+        // needed. Note that below there is also 'isTrivial' used which already uses
+        // nMinimalDiscreteSquareSizeToBuffer which is 15x15 (e.g. handles), but also
+        // for !isCairoCompatible cases.
+        const tools::Long aSmallBitmapSquareSize(160 * 100);
+
+        if (cairo_image_surface_get_stride(pSurface) * cairo_image_surface_get_height(pSurface)
+            <= aSmallBitmapSquareSize)
+        {
+            // take the shortcut: For this small directly accessible size
+            // we do not urgently need Mip-Mapping and spare the
+            // SystemDependentData buffering mechanism
+            std::cout << "BailOut SMALL Bitmap" << std::endl;
+            return std::make_shared<CairoSurfaceHelper>(rBitmap);
+        }
+    }
+
     const basegfx::SystemDependentDataHolder* pHolder(rBitmap.accessSystemDependentDataHolder());
     std::shared_ptr<SystemDependentData_CairoSurface> pSystemDependentData_CairoSurface;
 
