@@ -181,6 +181,7 @@ class CanvasSectionContainer {
 	private documentBackgroundColor = '#ffffff'; // This is the background color of the document
 	private useCSSForBackgroundColor = true;
 	private touchEventInProgress: boolean = false; // This prevents multiple calling of mouse down and up events.
+	private activePointerId: number | null = null;
 	public testing: boolean = false; // If this set to true, container will create a div element for every section. So, cypress tests can find where to click etc.
 	public lowestPropagatedBoundSection: string = null; // Event propagating to bound sections. The first section which stops propagating and the sections those are on top of that section, get the event.
 	public targetSection: string = null;
@@ -226,6 +227,11 @@ class CanvasSectionContainer {
 		this.canvas.onwheel = this.onMouseWheel.bind(this);
 		this.canvas.onmouseleave = this.onMouseLeave.bind(this);
 		this.canvas.onmouseenter = this.onMouseEnter.bind(this);
+		this.canvas.addEventListener('pointerdown', (e: PointerEvent) => {
+			if (e.button === 0 && e.isPrimary) this.activePointerId = e.pointerId;
+		});
+		this.canvas.addEventListener('pointerup', () => { this.activePointerId = null; });
+		this.canvas.addEventListener('pointercancel', () => { this.activePointerId = null; });
 		this.canvas.ontouchstart = this.onTouchStart.bind(this);
 		this.canvas.ontouchmove = this.onTouchMove.bind(this);
 		this.canvas.ontouchend = this.onTouchEnd.bind(this);
@@ -506,6 +512,20 @@ class CanvasSectionContainer {
 
 	public isDraggingSomething(): boolean {
 		return this.draggingSomething;
+	}
+
+	// Capture/release can throw if the pointer is gone or was never captured;
+	// we ignore that and carry on.
+	public capturePointerForDrag(): void {
+		if (this.activePointerId !== null) {
+			try { this.canvas.setPointerCapture(this.activePointerId); } catch (_) { /* ignore */ }
+		}
+	}
+
+	public releasePointerForDrag(): void {
+		if (this.activePointerId !== null) {
+			try { this.canvas.releasePointerCapture(this.activePointerId); } catch (_) { /* ignore */ }
+		}
 	}
 
 	public getDragDistance(): number[] {

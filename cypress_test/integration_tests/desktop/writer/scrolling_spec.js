@@ -85,4 +85,48 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Scroll through document', 
 		cy.cGet('.notebookbar #View-container .unoControlCodes').should('have.class', 'selected');
 		desktopHelper.assertScrollbarPosition('vertical', 0, 10);
 	});
+
+	it('Drag vertical scrollbar while mouse moves into sidebar area', function() {
+		desktopHelper.assertScrollbarPosition('vertical', 0, 10);
+
+		cy.getFrameWindow().then(function(win) {
+			helper.processToIdle(win);
+
+			var canvas = win.document.getElementById('document-canvas');
+			var rect = canvas.getBoundingClientRect();
+			var scrollProps = win.app.activeDocument.activeLayout.scrollProperties;
+			var dpi = win.app.dpiScale;
+
+			var barX = Math.floor(rect.right - 10);
+			var barY = Math.floor(
+				rect.top + (scrollProps.startY + scrollProps.verticalScrollSize / 2) / dpi);
+			var sidebarX = Math.floor(rect.right + 80);
+
+			// Hover the canvas so mouseIsInside is true on mousedown.
+			cy.cGet('body').realMouseMove(barX, barY);
+
+			cy.cGet('body').realMouseDown({
+				pointer: 'mouse', button: 'left',
+				x: barX, y: barY,
+				scrollBehavior: false
+			});
+
+			cy.cGet('body').realMouseMove(barX, barY + 30);
+			helper.processToIdle(win);
+
+			// Drag continues while the cursor is over the sidebar.
+			cy.cGet('body').realMouseMove(sidebarX, barY + 100);
+			helper.processToIdle(win);
+			cy.cGet('body').realMouseMove(sidebarX, barY + 200);
+			helper.processToIdle(win);
+			cy.cGet('body').realMouseMove(sidebarX, barY + 300);
+			helper.processToIdle(win);
+
+			cy.cGet('body').realMouseUp({ pointer: 'mouse', button: 'left' });
+			helper.processToIdle(win);
+		});
+
+		desktopHelper.assertScrollbarPosition('vertical', 200, 900);
+	});
+
 });
