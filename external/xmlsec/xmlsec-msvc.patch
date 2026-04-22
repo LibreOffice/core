@@ -1,0 +1,13 @@
+--- xmlsec/win32/Makefile.msvc	2026-03-30 14:53:44.477606963 +0200
++++ xmlsec/win32/Makefile.msvc	2026-03-30 14:54:59.101302260 +0200
+@@ -516,8 +516,8 @@
+ # Optimisation and debug symbols.
+ !if "$(DEBUG)" == "1"
+ LDFLAGS 		= $(LDFLAGS) /DEBUG /OPT:ICF
+-SOLIBS 		    = libxml2d.lib $(LIBS)
+-ALIBS 		    = libxml2ds.lib $(LIBS)
++SOLIBS 		    = libxml2.lib $(LIBS)
++ALIBS 		    = libxml2s.lib $(LIBS)
+ !else
+ LDFLAGS 		= $(LDFLAGS) /OPT:REF,ICF
+ SOLIBS 		    = libxml2.lib $(LIBS)
