@@ -260,3 +260,6 @@ windows/coda/config.props
 qt/flatpak/build-dir/
 qt/flatpak/repo/
 qt/translations/*.qm
+
+# coplugin
+/clang/plugin.so
