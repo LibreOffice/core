@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 GERRITHOST="cogerrit"
-GERRITURL="ssh://$GERRITHOST/core"
+GERRITURL="ssh://$GERRITHOST/online"
 GERRITREPO="gerrit.collaboraoffice.com"
 
 get_SHA_for_change() {
