@@ -410,7 +410,7 @@ protected:
     OpCode              meLastOp;
     short               mnRecursion;            // GetToken() recursions
     SvNumFormatType     mnNumFmt;               // set during CompileTokenArray()
-    sal_uInt16          pc;                     // program counter
+    sal_uInt16          mnPC;                   // program counter
 
     FormulaGrammar::Grammar meGrammar;          // The grammar used, language plus convention.
 
