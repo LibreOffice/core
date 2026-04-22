@@ -1558,6 +1558,15 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf103664)
     CPPUNIT_ASSERT_EQUAL(awt::CharSet::SYMBOL, getProperty<sal_Int16>(xRun, u"CharFontCharSet"_ustr));
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf171762)
+{
+    createSwDoc("tdf171762.docx");
+    uno::Reference<text::XTextRange> xPara(getParagraph(1));
+    uno::Reference<beans::XPropertySet> xRun(getRun(xPara, 2), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(u"Wingdings 2"_ustr, getProperty<OUString>(xRun, u"CharFontName"_ustr));
+    CPPUNIT_ASSERT_EQUAL(awt::CharSet::SYMBOL, getProperty<sal_Int16>(xRun, u"CharFontCharSet"_ustr));
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf82824)
 {
     createSwDoc("tdf82824.docx");

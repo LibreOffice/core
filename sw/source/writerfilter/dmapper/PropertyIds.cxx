@@ -55,6 +55,8 @@ const OUString & getPropertyName( PropertyIds eId )
         { PROP_CHAR_STYLE_NAME, u"CharStyleName"_ustr},
         { PROP_CHAR_FONT_NAME, u"CharFontName"_ustr},
         { PROP_CHAR_FONT_CHAR_SET, u"CharFontCharSet"_ustr},
+        { PROP_CHAR_FONT_CHAR_SET_ASIAN, u"CharFontCharSetAsian"_ustr},
+        { PROP_CHAR_FONT_CHAR_SET_COMPLEX, u"CharFontCharSetComplex"_ustr},
         { PROP_CHAR_FONT_NAME_ASIAN, u"CharFontNameAsian"_ustr},
         { PROP_CHAR_HEIGHT_ASIAN, u"CharHeightAsian"_ustr},
         { PROP_CHAR_FONT_NAME_COMPLEX, u"CharFontNameComplex"_ustr},
