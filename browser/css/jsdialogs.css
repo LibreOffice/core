@@ -210,7 +210,7 @@ div#autoFillPreviewTooltip .lokdialog.ui-dialog-content.ui-widget-content {
 	overflow: hidden;
 }
 
-.jsdialog.vertical label, .ui-frame-label, #ui-color-picker-recent-label {
+.jsdialog.vertical label, .ui-frame-label, #ui-color-picker-recent-label, #ui-color-picker-custom-label {
 	margin: auto 0px;
 	color: var(--color-main-text);
 	font-size: var(--default-font-size);
