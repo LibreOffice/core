@@ -1514,10 +1514,6 @@ img.context-menu-icon {
 	border: 1px solid var(--color-primary);
 }
 
-[data-theme='dark'] .ui-combobox-entry img:not() {
-	filter: invert(1);
-}
-
 /* Combobox entry with menu and thus arrow/chevron */
 .ui-combobox-entry.ui-has-menu {
 	display: grid;
