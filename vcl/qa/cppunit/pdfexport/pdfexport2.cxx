@@ -5873,8 +5873,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf140767SyriacJustification)
     }
 
     CPPUNIT_ASSERT_EQUAL(u"ܝ"_ustr, aText.at(0).trim());
-    CPPUNIT_ASSERT_EQUAL(u""_ustr, aText.at(1).trim());
-    CPPUNIT_ASSERT_EQUAL(u"ܺܛ"_ustr, aText.at(2).trim());
+    CPPUNIT_ASSERT_EQUAL(u"ܺܛ"_ustr, aText.at(1).trim());
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, aText.at(2).trim());
     CPPUNIT_ASSERT_EQUAL(u""_ustr, aText.at(3).trim());
     CPPUNIT_ASSERT_EQUAL(u"ܰܚ"_ustr, aText.at(4).trim());
     CPPUNIT_ASSERT_EQUAL(u"ܕ"_ustr, aText.at(5).trim()); // This span is whitespace justified

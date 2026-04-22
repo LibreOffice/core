@@ -330,6 +330,47 @@ GetWordKashidaPositionArabic(const OUString& rWord, const std::vector<bool>& pVa
     return std::nullopt;
 }
 
+sal_Int32 GetSyriacWordMidpoint(const OUString& rWord)
+{
+    sal_Int32 nLowIndex = 0;
+    sal_Int32 nHighIndex = rWord.getLength() - 1;
+
+    sal_Int32 nLowCount = 0;
+    sal_Int32 nHighCount = 0;
+    while (nLowIndex < nHighIndex)
+    {
+        if (nHighCount <= nLowCount)
+        {
+            if (!isTransparentChar(rWord[nHighIndex--]))
+            {
+                ++nHighCount;
+            }
+        }
+        else
+        {
+            if (!isTransparentChar(rWord[nLowIndex++]))
+            {
+                ++nLowCount;
+            }
+        }
+    }
+
+    return nLowIndex;
+}
+
+sal_Int32 GetSyriacWordEndpoint(const OUString& rWord)
+{
+    for (sal_Int32 nPos = rWord.getLength() - 1; nPos >= 0; --nPos)
+    {
+        if (!isTransparentChar(rWord[nPos]))
+        {
+            return nPos;
+        }
+    }
+
+    return 0;
+}
+
 std::optional<i18nutil::KashidaPosition>
 GetWordKashidaPositionSyriac(const OUString& rWord, const std::vector<bool>& pValidPositions)
 {
@@ -348,7 +389,8 @@ GetWordKashidaPositionSyriac(const OUString& rWord, const std::vector<bool>& pVa
     // - First, work from the end of the word toward the midpoint
     // - Then, work from the beginning of the word toward the midpoint
 
-    sal_Int32 nWordMidpoint = nWordLen / 2;
+    sal_Int32 nWordMidpoint = GetSyriacWordMidpoint(rWord);
+    sal_Int32 nWordEndpoint = GetSyriacWordEndpoint(rWord);
 
     auto fnPositionValid = [&pValidPositions, &rWord](sal_Int32 nIdx) {
         // Exclusions:
@@ -360,11 +402,11 @@ GetWordKashidaPositionSyriac(const OUString& rWord, const std::vector<bool>& pVa
         }
 
         sal_Unicode cCh = rWord[nIdx];
-        return isSyriacChar(cCh);
+        return isSyriacChar(cCh) && !isTransparentChar(cCh);
     };
 
     // End to midpoint
-    for (sal_Int32 i = nWordLen - 2; i > nWordMidpoint; --i)
+    for (sal_Int32 i = nWordEndpoint - 1; i >= nWordMidpoint; --i)
     {
         if (fnPositionValid(i))
         {
@@ -373,7 +415,7 @@ GetWordKashidaPositionSyriac(const OUString& rWord, const std::vector<bool>& pVa
     }
 
     // Beginning to midpoint
-    for (sal_Int32 i = 0; i <= nWordMidpoint; ++i)
+    for (sal_Int32 i = 0; i < nWordMidpoint; ++i)
     {
         if (fnPositionValid(i))
         {

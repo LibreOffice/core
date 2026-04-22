@@ -27,6 +27,7 @@ public:
     void testNoZwnjExpansion();
     void testExcludeInvalid();
     void testSyriac();
+    void testSyriacVowelMarks();
 
     CPPUNIT_TEST_SUITE(KashidaTest);
     CPPUNIT_TEST(testCharacteristic);
@@ -35,6 +36,7 @@ public:
     CPPUNIT_TEST(testNoZwnjExpansion);
     CPPUNIT_TEST(testExcludeInvalid);
     CPPUNIT_TEST(testSyriac);
+    CPPUNIT_TEST(testSyriacVowelMarks);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -125,31 +127,56 @@ void KashidaTest::testSyriac()
     aValid.resize(7, true);
 
     // - Start from end and work toward midpoint, then reverse direction
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(5),
-                         GetWordKashidaPosition(u"ܥܥܥܥܥܥܥ"_ustr, aValid).value().nIndex);
+    OUString aStr = u"ܥܥܥܥܥܥܥ"_ustr;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), GetWordKashidaPosition(aStr, aValid).value().nIndex);
     aValid[5] = false;
 
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(4),
-                         GetWordKashidaPosition(u"ܥܥܥܥܥܥܥ"_ustr, aValid).value().nIndex);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), GetWordKashidaPosition(aStr, aValid).value().nIndex);
     aValid[4] = false;
 
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0),
-                         GetWordKashidaPosition(u"ܥܥܥܥܥܥܥ"_ustr, aValid).value().nIndex);
-    aValid[0] = false;
-
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1),
-                         GetWordKashidaPosition(u"ܥܥܥܥܥܥܥ"_ustr, aValid).value().nIndex);
-    aValid[1] = false;
-
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(2),
-                         GetWordKashidaPosition(u"ܥܥܥܥܥܥܥ"_ustr, aValid).value().nIndex);
-    aValid[2] = false;
-
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(3),
-                         GetWordKashidaPosition(u"ܥܥܥܥܥܥܥ"_ustr, aValid).value().nIndex);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), GetWordKashidaPosition(aStr, aValid).value().nIndex);
     aValid[3] = false;
 
-    CPPUNIT_ASSERT(!GetWordKashidaPosition(u"ܥܥܥܥܥܥܥ"_ustr, aValid).has_value());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), GetWordKashidaPosition(aStr, aValid).value().nIndex);
+    aValid[0] = false;
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), GetWordKashidaPosition(aStr, aValid).value().nIndex);
+    aValid[1] = false;
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), GetWordKashidaPosition(aStr, aValid).value().nIndex);
+    aValid[2] = false;
+
+    CPPUNIT_ASSERT(!GetWordKashidaPosition(aStr, aValid).has_value());
+}
+
+void KashidaTest::testSyriacVowelMarks()
+{
+    std::vector<bool> aValid;
+    aValid.resize(13, true);
+
+    // - Start from end and work toward midpoint, then reverse direction
+    // - Ignoring vowel marks
+    OUString aStr = u"ܥܥܥܥܥ\u073F\u073Eܥ\u073F\u073Eܥ\u073F\u073E"_ustr;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(7), GetWordKashidaPosition(aStr, aValid).value().nIndex);
+    aValid[7] = false;
+
+    // Without ignoring vowel marks, this would be 0
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), GetWordKashidaPosition(aStr, aValid).value().nIndex);
+    aValid[4] = false;
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), GetWordKashidaPosition(aStr, aValid).value().nIndex);
+    aValid[3] = false;
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), GetWordKashidaPosition(aStr, aValid).value().nIndex);
+    aValid[0] = false;
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), GetWordKashidaPosition(aStr, aValid).value().nIndex);
+    aValid[1] = false;
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), GetWordKashidaPosition(aStr, aValid).value().nIndex);
+    aValid[2] = false;
+
+    CPPUNIT_ASSERT(!GetWordKashidaPosition(aStr, aValid).has_value());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(KashidaTest);
