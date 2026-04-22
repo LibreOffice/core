@@ -260,6 +260,83 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testIMEGrouping)
 #endif
 }
 
+// tdf#168832 ensure internal hint characters don't get through text input
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testExtTextInputInvalidChars)
+{
+// TODO figure out why the ext text input in this test code reaches the wrong window on
+// non-headless.
+#if !defined _WIN32
+    sal_uInt32 i;
+
+    // Given an empty document:
+    createSwDoc();
+    // Make sure no idle is in action, so the ExtTextInput events go to SwEditWin.
+    Scheduler::ProcessEventsToIdle();
+
+    SwDocShell* pDocShell = getSwDocShell();
+    SwEditWin& rEditWin = pDocShell->GetView()->GetEditWin();
+
+    typedef struct
+    {
+        const char* detail;
+        OUString input;
+        OUString expected;
+    } TestCase;
+
+    static const TestCase tests[] = {
+        {
+            .detail = "test: mixed",
+            // When valid and invalid characters exist in the input data
+            .input = u"asdr"_ustr + OUStringChar(CH_TXTATR_BREAKWORD)
+                     + OUStringChar(CH_TXT_ATR_FIELDSEP) + OUStringChar(CH_TXT_ATR_INPUTFIELDSTART)
+                     + u"zxcv"_ustr + OUStringChar(CH_TXT_ATR_INPUTFIELDEND)
+                     + OUStringChar(CH_TXT_ATR_FORMELEMENT) + OUStringChar(CH_TXT_ATR_FIELDSTART)
+                     + OUStringChar(CH_TXT_ATR_FIELDEND) + u"qwer"_ustr,
+            // The invalid characters are removed
+            .expected = u"asdrzxcvqwer"_ustr,
+        },
+        {
+            .detail = "test: only invalid",
+            // When only invalid characters existing in the input data
+            .input = OUStringChar(CH_TXTATR_BREAKWORD) + OUStringChar(CH_TXT_ATR_FIELDSEP)
+                     + OUStringChar(CH_TXT_ATR_INPUTFIELDSTART),
+            // The result is an empty string
+            .expected = u""_ustr,
+        },
+        {
+            .detail = "test: first invalid",
+            // When the first input character is invalid
+            .input = OUStringChar(CH_TXTATR_BREAKWORD) + OUStringChar(CH_TXT_ATR_FIELDSEP)
+                     + OUStringChar(CH_TXT_ATR_INPUTFIELDSTART) + u"foobar"_ustr,
+            // The remaining characters are allowed
+            .expected = u"foobar"_ustr,
+        },
+        {
+            .detail = "test: last invalid",
+            // When the first input character is invalid
+            .input = u"foobar"_ustr + OUStringChar(CH_TXTATR_BREAKWORD)
+                     + OUStringChar(CH_TXT_ATR_FIELDSEP) + OUStringChar(CH_TXT_ATR_INPUTFIELDSTART),
+            // The remaining characters are allowed
+            .expected = u"foobar"_ustr,
+        },
+    };
+
+    for (i = 0; i < sizeof(tests) / sizeof(TestCase); i++)
+    {
+        rEditWin.PostExtTextInputEvent(VclEventId::ExtTextInput, tests[i].input);
+        rEditWin.PostExtTextInputEvent(VclEventId::EndExtTextInput, u""_ustr);
+
+        SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+        SwTextNode* pTextNode = pWrtShell->GetCursor()->GetPointNode().GetTextNode();
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(tests[i].detail, tests[i].expected, pTextNode->GetText());
+
+        // Remove all text to set up for next test
+        dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
+        dispatchCommand(mxComponent, u".uno:Delete"_ustr, {});
+    }
+#endif
+}
+
 CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testImageHyperlinkStyle)
 {
     // Given a document with an image with a hyperlink:

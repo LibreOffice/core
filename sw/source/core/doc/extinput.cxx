@@ -25,6 +25,7 @@
 #include <osl/diagnose.h>
 #include <svl/languageoptions.hxx>
 #include <vcl/commandevent.hxx>
+#include <rtl/ustrbuf.hxx>
 
 #include <hintids.hxx>
 #include <extinput.hxx>
@@ -140,6 +141,36 @@ SwExtTextInput::~SwExtTextInput()
     }
 }
 
+static bool lcl_sanitizeExtTextInput( const OUString& rSrcText, OUString& rSanitized )
+{
+    sal_Int32 i, nStartGood = 0;
+    rtl::OUStringBuffer aBuf(0); // Assume bad input characters are rare
+
+    // If the source string includes any CH_TXT_ATR_* forbidden characters return a new
+    // string that is a copy of the source string but with the forbidden characters
+    // removed.
+    for ( i = 0; i < rSrcText.getLength(); i++ )
+    {
+        if ( rSrcText[i] <= 0x8 /* CH_TXT_ATR_FIELDEND */ )
+        {
+            // Add everything before this first bad character to the sanitized buffer
+            if (nStartGood < i)
+                aBuf.append(rSrcText.subView(nStartGood, i - nStartGood));
+            nStartGood = i + 1;
+        }
+    }
+
+    if ( nStartGood > 0 ) {
+        // Gather remaining good characters
+        if ( nStartGood < i )
+            aBuf.append(rSrcText.subView(nStartGood, i - nStartGood));
+        rSanitized = aBuf.makeStringAndClear();
+        return true;
+    }
+
+    return false;
+}
+
 void SwExtTextInput::SetInputData( const CommandExtTextInputData& rData )
 {
     SwTextNode* pTNd = GetPoint()->GetNode().GetTextNode();
@@ -150,12 +181,19 @@ void SwExtTextInput::SetInputData( const CommandExtTextInputData& rData )
     sal_Int32 nEndCnt = End()->GetContentIndex();
 
     SwContentIndex aIdx( pTNd, nSttCnt );
-    const OUString& rNewStr = rData.GetText();
+
+    const OUString* pText = &rData.GetText();
+    OUString  sSanitizedText;
+
+    // tdf#168832 ensure special CH_TXTATR_* characters cannot be entered via text input
+    // and confuse internal engine state
+    if ( lcl_sanitizeExtTextInput( rData.GetText(), sSanitizedText ) )
+        pText = &sSanitizedText;
 
     if( m_bIsOverwriteCursor && !m_sOverwriteText.isEmpty() )
     {
         sal_Int32 nReplace = nEndCnt - nSttCnt;
-        const sal_Int32 nNewLen = rNewStr.getLength();
+        const sal_Int32 nNewLen = pText->getLength();
         if( nNewLen < nReplace )
         {
             // We have to insert some characters from the saved original text
@@ -191,7 +229,7 @@ void SwExtTextInput::SetInputData( const CommandExtTextInputData& rData )
             }
         }
 
-        pTNd->ReplaceText( aIdx, nReplace, rNewStr );
+        pTNd->ReplaceText( aIdx, nReplace, *pText );
         if( !HasMark() )
             SetMark();
         GetMark()->Assign(*aIdx.GetContentNode(), aIdx.GetIndex());
@@ -203,7 +241,7 @@ void SwExtTextInput::SetInputData( const CommandExtTextInputData& rData )
             pTNd->EraseText( aIdx, nEndCnt - nSttCnt );
         }
 
-        pTNd->InsertText(rNewStr, aIdx);
+        pTNd->InsertText(*pText, aIdx);
         if( !HasMark() )
             SetMark();
     }
