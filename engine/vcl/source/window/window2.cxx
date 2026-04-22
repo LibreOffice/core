@@ -1318,19 +1318,6 @@ const OUString& Window::GetQuickHelpText() const
     return mpWindowImpl->maQuickHelpText;
 }
 
-void Window::SetCargoText( const OUString& rCargoText )
-{
-    if (mpWindowImpl)
-        mpWindowImpl->maCargoText = rCargoText;
-}
-
-const OUString& Window::GetCargoText() const
-{
-    if (mpWindowImpl)
-        return mpWindowImpl->maCargoText;
-
-    return EMPTY_OUSTRING;
-}
 
 bool Window::IsCreatedWithToolkit() const
 {

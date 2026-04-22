@@ -283,7 +283,6 @@ public:
     OUString            maHelpText;
     OUString            maQuickHelpText;
     OUString            maID;
-    OUString            maCargoText;
     InputContext        maInputContext;
     css::uno::Reference< css::awt::XVclWindowPeer > mxWindowPeer;
     rtl::Reference<comphelper::OAccessible> mpAccessible;
