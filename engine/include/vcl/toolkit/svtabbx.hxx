@@ -97,15 +97,12 @@ public:
     bool             HasColumnTitles() const { return !m_aColumnTitles.empty(); }
 
     void             SetColumnHeaderName( sal_uInt16 nCol, const OUString& rName );
-    const OUString & GetColumnHeaderName( sal_uInt16 nCol ) const;
 
     void             SetColumnColor( sal_uInt16 nCol, const Color& rColor );
-    Color            GetColumnColor( sal_uInt16 nCol ) const;
 
     void             SetColumnCount( sal_uInt16 nCount );
 
     void             SetRole(SvTabListBoxRole e) { m_eRole = e; }
-    SvTabListBoxRole GetRole() const { return m_eRole; }
 
     virtual void     DumpAsPropertyTree(tools::JsonWriter& rJsonWriter) override;
 };
