@@ -50,11 +50,12 @@ typedef std::map< OUString, rtl::Reference< SdStyleSheet > > PresStyleMap;
 
 struct SdStyleFamilyImpl
 {
+    SfxStyleFamily mnFamily;
+    rtl::Reference< SfxStyleSheetPool > mxPool;
     unotools::WeakReference<SdPage> mxMasterPage;
     OUString maLayoutName;
 
     PresStyleMap& getStyleSheets();
-    rtl::Reference< SfxStyleSheetPool > mxPool;
 
 private:
     PresStyleMap maStyleSheets;
@@ -96,29 +97,29 @@ PresStyleMap& SdStyleFamilyImpl::getStyleSheets()
     return maStyleSheets;
 }
 
-SdStyleFamily::SdStyleFamily( rtl::Reference< SfxStyleSheetPool > xPool, SfxStyleFamily nFamily )
-: mnFamily( nFamily )
-, mxPool(std::move( xPool ))
+SdStyleFamily::SdStyleFamily( const rtl::Reference< SfxStyleSheetPool >& xPool, SfxStyleFamily nFamily )
+: mpImpl( new SdStyleFamilyImpl )
 {
+    mpImpl->mnFamily = nFamily;
+    mpImpl->mxPool = xPool;
 }
 
 SdStyleFamily::SdStyleFamily( const rtl::Reference< SfxStyleSheetPool >& xPool, const SdPage* pMasterPage )
-: mnFamily( SfxStyleFamily::Page )
-, mxPool( xPool )
-, mpImpl( new SdStyleFamilyImpl )
+: mpImpl( new SdStyleFamilyImpl )
 {
-    mpImpl->mxMasterPage = const_cast< SdPage* >( pMasterPage );
+    mpImpl->mnFamily = SfxStyleFamily::Page;
     mpImpl->mxPool = xPool;
+    mpImpl->mxMasterPage = const_cast< SdPage* >( pMasterPage );
 }
 
 SdStyleFamily::~SdStyleFamily()
 {
-    DBG_ASSERT( !mxPool.is(), "SdStyleFamily::~SdStyleFamily(), dispose me first!" );
+    DBG_ASSERT( !mpImpl->mxPool.is(), "SdStyleFamily::~SdStyleFamily(), dispose me first!" );
 }
 
 void SdStyleFamily::throwIfDisposed() const
 {
-    if( !mxPool.is() )
+    if( !mpImpl->mxPool.is() )
         throw DisposedException();
 }
 
@@ -127,7 +128,10 @@ SdStyleSheet* SdStyleFamily::GetValidNewSheet( const Any& rElement )
     Reference< XStyle > xStyle( rElement, UNO_QUERY );
     SdStyleSheet* pStyle = static_cast< SdStyleSheet* >( xStyle.get() );
 
-    if( pStyle == nullptr || (pStyle->GetFamily() != mnFamily) || (pStyle->GetPool() != mxPool.get()) || (mxPool->Find( pStyle->GetName(), mnFamily) != nullptr) )
+    if( pStyle == nullptr
+       || (pStyle->GetFamily() != mpImpl->mnFamily)
+       || (pStyle->GetPool() != mpImpl->mxPool.get())
+       || (mpImpl->mxPool->Find( pStyle->GetName(), mpImpl->mnFamily) != nullptr) )
         throw IllegalArgumentException();
 
     return pStyle;
@@ -138,7 +142,7 @@ SdStyleSheet* SdStyleFamily::GetSheetByName( const OUString& rName )
     SdStyleSheet* pRet = nullptr;
     if( !rName.isEmpty() )
     {
-        if( mnFamily == SfxStyleFamily::Page )
+        if( mpImpl->mnFamily == SfxStyleFamily::Page )
         {
             PresStyleMap& rStyleMap = mpImpl->getStyleSheets();
             PresStyleMap::iterator iter( rStyleMap.find(rName) );
@@ -147,7 +151,7 @@ SdStyleSheet* SdStyleFamily::GetSheetByName( const OUString& rName )
         }
         else
         {
-            SfxStyleSheetIterator aSSSIterator(mxPool.get(), mnFamily);
+            SfxStyleSheetIterator aSSSIterator(mpImpl->mxPool.get(), mpImpl->mnFamily);
             for ( SfxStyleSheetBase* pStyle = aSSSIterator.First(); pStyle;
                                      pStyle = aSSSIterator.Next() )
             {
@@ -186,7 +190,7 @@ Sequence< OUString > SAL_CALL SdStyleFamily::getSupportedServiceNames()
 // XNamed
 OUString SAL_CALL SdStyleFamily::getName()
 {
-    if( mnFamily == SfxStyleFamily::Page )
+    if( mpImpl->mnFamily == SfxStyleFamily::Page )
     {
         rtl::Reference<SdPage> pPage = mpImpl->mxMasterPage.get();
         if( pPage == nullptr )
@@ -200,7 +204,7 @@ OUString SAL_CALL SdStyleFamily::getName()
     }
     else
     {
-        return SdStyleSheet::GetFamilyString( mnFamily );
+        return SdStyleSheet::GetFamilyString( mpImpl->mnFamily );
     }
 }
 
@@ -223,7 +227,7 @@ Sequence< OUString > SAL_CALL SdStyleFamily::getElementNames()
 
     throwIfDisposed();
 
-    if( mnFamily == SfxStyleFamily::Page )
+    if( mpImpl->mnFamily == SfxStyleFamily::Page )
     {
         PresStyleMap& rStyleMap = mpImpl->getStyleSheets();
         Sequence< OUString > aNames( rStyleMap.size() );
@@ -243,7 +247,7 @@ Sequence< OUString > SAL_CALL SdStyleFamily::getElementNames()
     else
     {
         std::vector< OUString > aNames;
-        SfxStyleSheetIterator aSSSIterator(mxPool.get(), mnFamily);
+        SfxStyleSheetIterator aSSSIterator(mpImpl->mxPool.get(), mpImpl->mnFamily);
         for ( SfxStyleSheetBase* pStyle = aSSSIterator.First(); pStyle;
                                  pStyle = aSSSIterator.Next() )
         {
@@ -262,7 +266,7 @@ sal_Bool SAL_CALL SdStyleFamily::hasByName( const OUString& aName )
 
     if( !aName.isEmpty() )
     {
-        if( mnFamily == SfxStyleFamily::Page )
+        if( mpImpl->mnFamily == SfxStyleFamily::Page )
         {
             PresStyleMap& rStyleSheets = mpImpl->getStyleSheets();
             PresStyleMap::iterator iter( rStyleSheets.find(aName) );
@@ -270,7 +274,7 @@ sal_Bool SAL_CALL SdStyleFamily::hasByName( const OUString& aName )
         }
         else
         {
-            SfxStyleSheetIterator aSSSIterator(mxPool.get(), mnFamily);
+            SfxStyleSheetIterator aSSSIterator(mpImpl->mxPool.get(), mpImpl->mnFamily);
             for ( SfxStyleSheetBase* pStyle = aSSSIterator.First(); pStyle;
                                      pStyle = aSSSIterator.Next() )
             {
@@ -299,13 +303,13 @@ sal_Bool SAL_CALL SdStyleFamily::hasElements()
     SolarMutexGuard aGuard;
     throwIfDisposed();
 
-    if( mnFamily == SfxStyleFamily::Page )
+    if( mpImpl->mnFamily == SfxStyleFamily::Page )
     {
         return true;
     }
     else
     {
-        SfxStyleSheetIterator aSSSIterator(mxPool.get(), mnFamily);
+        SfxStyleSheetIterator aSSSIterator(mpImpl->mxPool.get(), mpImpl->mnFamily);
         if (aSSSIterator.First())
         {
             return true;
@@ -323,13 +327,13 @@ sal_Int32 SAL_CALL SdStyleFamily::getCount()
     throwIfDisposed();
 
     sal_Int32 nCount = 0;
-    if( mnFamily == SfxStyleFamily::Page )
+    if( mpImpl->mnFamily == SfxStyleFamily::Page )
     {
         return mpImpl->getStyleSheets().size();
     }
     else
     {
-        SfxStyleSheetIterator aSSSIterator(mxPool.get(), mnFamily);
+        SfxStyleSheetIterator aSSSIterator(mpImpl->mxPool.get(), mpImpl->mnFamily);
         for ( SfxStyleSheetBase* pStyle = aSSSIterator.First(); pStyle;
                                  pStyle = aSSSIterator.Next() )
         {
@@ -347,7 +351,7 @@ Any SAL_CALL SdStyleFamily::getByIndex( sal_Int32 Index )
 
     if( Index >= 0 )
     {
-        if( mnFamily == SfxStyleFamily::Page )
+        if( mpImpl->mnFamily == SfxStyleFamily::Page )
         {
             PresStyleMap& rStyleSheets = mpImpl->getStyleSheets();
             if( Index < static_cast<sal_Int32>(rStyleSheets.size()) )
@@ -359,7 +363,7 @@ Any SAL_CALL SdStyleFamily::getByIndex( sal_Int32 Index )
         }
         else
         {
-            SfxStyleSheetIterator aSSSIterator(mxPool.get(), mnFamily);
+            SfxStyleSheetIterator aSSSIterator(mpImpl->mxPool.get(), mpImpl->mnFamily);
             for ( SfxStyleSheetBase* pStyle = aSSSIterator.First(); pStyle;
                                      pStyle = aSSSIterator.Next() )
             {
@@ -391,7 +395,7 @@ void SAL_CALL SdStyleFamily::insertByName( const OUString& rName, const Any& rEl
         throw ElementExistException();
 
     pStyle->SetApiName( rName );
-    mxPool->Insert( pStyle );
+    mpImpl->mxPool->Insert( pStyle );
 }
 
 void SAL_CALL SdStyleFamily::removeByName( const OUString& rName )
@@ -404,7 +408,7 @@ void SAL_CALL SdStyleFamily::removeByName( const OUString& rName )
     if( !pStyle->IsUserDefined() )
         throw WrappedTargetException();
 
-    mxPool->Remove( pStyle );
+    mpImpl->mxPool->Remove( pStyle );
 }
 
 // XNameReplace
@@ -417,8 +421,8 @@ void SAL_CALL SdStyleFamily::replaceByName( const OUString& rName, const Any& aE
     SdStyleSheet* pOldStyle = GetSheetByName( rName );
     SdStyleSheet* pNewStyle = GetValidNewSheet( aElement );
 
-    mxPool->Remove( pOldStyle );
-    mxPool->Insert( pNewStyle );
+    mpImpl->mxPool->Remove( pOldStyle );
+    mpImpl->mxPool->Insert( pNewStyle );
 }
 
 // XSingleServiceFactory
@@ -428,12 +432,12 @@ Reference< XInterface > SAL_CALL SdStyleFamily::createInstance()
     SolarMutexGuard aGuard;
     throwIfDisposed();
 
-    if( mnFamily == SfxStyleFamily::Page )
+    if( mpImpl->mnFamily == SfxStyleFamily::Page )
     {
         throw IllegalAccessException();
     }
     return Reference<XInterface>(
-        static_cast<XStyle*>(SdStyleSheet::CreateEmptyUserStyle(*mxPool, mnFamily).get()));
+        static_cast<XStyle*>(SdStyleSheet::CreateEmptyUserStyle(*mpImpl->mxPool, mpImpl->mnFamily).get()));
 }
 
 Reference< XInterface > SAL_CALL SdStyleFamily::createInstanceWithArguments( const Sequence< Any >&  )
@@ -445,10 +449,8 @@ Reference< XInterface > SAL_CALL SdStyleFamily::createInstanceWithArguments( con
 
 void SAL_CALL SdStyleFamily::dispose(  )
 {
-    if( mxPool.is() )
-        mxPool.clear();
-
-    mpImpl.reset();
+    if( mpImpl->mxPool.is() )
+        mpImpl->mxPool.clear();
 }
 
 void SAL_CALL SdStyleFamily::addEventListener( const Reference< XEventListener >&  )
@@ -481,7 +483,7 @@ Any SdStyleFamily::getPropertyValue( const OUString& PropertyName )
 
     SolarMutexGuard aGuard;
     OUString sDisplayName;
-    switch( mnFamily )
+    switch( mpImpl->mnFamily )
     {
         case SfxStyleFamily::Page:    sDisplayName = getName(); break;
         case SfxStyleFamily::Frame:          sDisplayName = SdResId(STR_CELL_STYLE_FAMILY); break;

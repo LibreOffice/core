@@ -43,7 +43,7 @@ class SdStyleFamily final : public ::cppu::WeakImplHelper< css::container::XName
 {
 public:
     /// creates the style family for the given SfxStyleFamily
-    SdStyleFamily( rtl::Reference< SfxStyleSheetPool > xPool, SfxStyleFamily nFamily );
+    SdStyleFamily( const rtl::Reference< SfxStyleSheetPool >& xPool, SfxStyleFamily nFamily );
 
     /// creates the presentation family for the given masterpage
     SdStyleFamily( const rtl::Reference< SfxStyleSheetPool >& xPool, const SdPage* pMasterPage );
@@ -106,8 +106,6 @@ private:
     /// @throws css::lang::WrappedTargetException
     SdStyleSheet* GetSheetByName( const OUString& rName );
 
-    SfxStyleFamily mnFamily;
-    rtl::Reference< SfxStyleSheetPool > mxPool;
     std::unique_ptr<SdStyleFamilyImpl>  mpImpl;
 };
 
