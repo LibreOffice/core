@@ -595,6 +595,7 @@ var unoCommandsArray = {
 	'ShowSlide':{presentation:{menu:_('Sho~w Slide'),},},
 	'ShowTrackedChanges':{text:{menu:_('Show'),},},
 	'Shrink':{global:{context:_('Decrease Font Size'),menu:_('Decrease Size'),},},
+	'Shuffle':{spreadsheet:{menu:_('Shuffle'),},},
 	'Sidebar':{global:{menu:_('Sidebar'),},},
 	'SidebarDeck.A11yCheckDeck':{text:{menu:_('Open the Accessibility Check Deck'),},},
 	'SidebarDeck.ElementsDeck':{global:{menu:_('Open the Elements Deck'),},},

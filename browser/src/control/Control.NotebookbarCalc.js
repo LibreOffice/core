@@ -2343,10 +2343,15 @@ window.L.Control.NotebookbarCalc = window.L.Control.NotebookbarWriter.extend({
 				'children' : [
 					{
 						'id': 'data-data-sort',
-						'type': 'bigtoolitem',
+						'type': 'menubutton',
 						'text': _UNO('.uno:DataSort', 'spreadsheet'),
 						'command': '.uno:DataSort',
-						'accessibility': { focusBack: true,	combination: 'SS', de: null }
+						'applyCallback': '.uno:DataSort',
+						'accessibility': { focusBack: true,	combination: 'SS', de: null },
+						'menu': [
+							{ type: 'comboboxentry', id: 'data-sort-custom', text: _UNO('.uno:DataSort', 'spreadsheet'), uno: '.uno:DataSort' },
+							{ type: 'comboboxentry', id: 'data-sort-shuffle', text: _UNO('.uno:Shuffle', 'spreadsheet'), uno: '.uno:Shuffle' },
+						]
 					},
 					{
 						'type': 'container',
