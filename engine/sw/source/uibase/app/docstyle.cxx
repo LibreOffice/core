@@ -3059,7 +3059,7 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
                     if ( tmpMask & SfxStyleSearchBits::Favourite )
                     {
                         SwFormat* pFormat = rDoc.FindTextFormatCollByName( pColl->GetName() );
-                        if (!(pFormat && pFormat->IsFavourite())) continue;
+                        if (!(pFormat && pFormat->IsFavourite().value_or(false))) continue;
                     }
 
                     // searched for used and found none
@@ -3349,7 +3349,7 @@ void SwStyleSheetIterator::AppendStyleList(const std::vector<OUString>& rList,
                     bUsed = rDoc.getIDocumentStylePoolAccess().IsPoolTextCollUsed( nId );
                     SwFormat* pFormat = rDoc.FindTextFormatCollByName( i );
                     bHidden = pFormat && pFormat->IsHidden( );
-                    bFavourite = pFormat && pFormat->IsFavourite();
+                    bFavourite = pFormat && pFormat->IsFavourite().value_or(false);
                 }
                 break;
             case SwGetPoolIdFromName::ChrFmt:
@@ -3357,7 +3357,7 @@ void SwStyleSheetIterator::AppendStyleList(const std::vector<OUString>& rList,
                     bUsed = rDoc.getIDocumentStylePoolAccess().IsPoolFormatUsed( nId );
                     SwFormat* pFormat = rDoc.FindCharFormatByName( i );
                     bHidden = pFormat && pFormat->IsHidden( );
-                    bFavourite = pFormat && pFormat->IsFavourite();
+                    bFavourite = pFormat && pFormat->IsFavourite().value_or(false);
                 }
                 break;
             case SwGetPoolIdFromName::FrmFmt:

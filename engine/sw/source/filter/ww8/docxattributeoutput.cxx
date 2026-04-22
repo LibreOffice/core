@@ -7145,12 +7145,30 @@ static bool lcl_guessQFormat(const OUString& rName, sal_uInt16 nWwId)
     return aAllowlist.find(rName) != aAllowlist.end();
 }
 
+/// Detect whether the source document was loaded from DOCX. The writerfilter
+/// import populates the document-level InteropGrabBag (latentStyles, default
+/// tab stops, etc.) on every DOCX it loads; new documents and ODT imports
+/// leave it empty. A non-empty bag is therefore a reliable "DOCX origin"
+/// signal we can use to suppress the lcl_guessQFormat fallback for styles
+/// that were auto-created (e.g. the Heading pool style spawned as parent of
+/// Heading 1) rather than imported from the source.
+static bool lcl_sourceWasDocx(const MSWordExportBase& rExport)
+{
+    if (!rExport.m_xTextDoc.is())
+        return false;
+    uno::Sequence<beans::PropertyValue> aDocGrabBag;
+    rExport.m_xTextDoc->getPropertyValue(u"InteropGrabBag"_ustr) >>= aDocGrabBag;
+    return aDocGrabBag.hasElements();
+}
+
 void DocxAttributeOutput::StartStyle( const OUString& rName, StyleType eType,
         sal_uInt16 nBase, sal_uInt16 nNext, sal_uInt16 nLink, sal_uInt16 nWwId, sal_uInt16 nSlot, bool bAutoUpdate )
 {
     bool bUnhideWhenUsed = false, bSemiHidden = false, bLocked = false, bDefault = false, bCustomStyle = false;
-    bool bQFormat = false; // DEPRECATED: from grab-bag
-    bool bRealQFormat = true; // from SwFormat
+    // unset means we have no information from import: fall back to lcl_guessQFormat.
+    // Set means the format was imported from a DOCX (via ParseFavourites) and the
+    // import-time qFormat state must be preserved on export.
+    std::optional<bool> oQFormat;
 
     OUString aRsid, aUiPriority;
     rtl::Reference<FastAttributeList> pStyleAttributeList = FastSerializerHelper::createAttrList();
@@ -7159,7 +7177,7 @@ void DocxAttributeOutput::StartStyle( const OUString& rName, StyleType eType,
     {
         const SwFormat* pFormat = m_rExport.m_pStyles->GetSwFormat(nSlot);
         pFormat->GetGrabBagItem(aAny);
-        bRealQFormat = pFormat->IsFavourite();
+        oQFormat = pFormat->IsFavourite();
     }
     else
     {
@@ -7173,7 +7191,14 @@ void DocxAttributeOutput::StartStyle( const OUString& rName, StyleType eType,
         if (rProp.Name == "uiPriority")
             aUiPriority = rProp.Value.get<OUString>();
         else if (rProp.Name == "qFormat")
-            bQFormat = true;
+        {
+            // For paragraph and character styles SwFormat::IsFavourite already
+            // carries the import-time decision (set by ParseFavourites). Only
+            // honor the grab-bag value when we have no SwFormat-level state,
+            // which today only happens for numbering styles.
+            if (!oQFormat.has_value())
+                oQFormat = rProp.Value.get<sal_Int32>() != 0;
+        }
         else if (rProp.Name == "rsid")
             aRsid = rProp.Value.get<OUString>();
         else if (rProp.Name == "unhideWhenUsed")
@@ -7237,8 +7262,19 @@ void DocxAttributeOutput::StartStyle( const OUString& rName, StyleType eType,
         m_pSerializer->singleElementNS(XML_w, XML_semiHidden);
     if (bUnhideWhenUsed)
         m_pSerializer->singleElementNS(XML_w, XML_unhideWhenUsed);
-    // by default we use old guess, if user marks style as non-favourite -> do not export qFormat
-    if (bRealQFormat && (bQFormat || lcl_guessQFormat(rName, nWwId)))
+    // Honor the explicit qFormat value from import. Otherwise: for DOCX-sourced
+    // documents the absence of qFormat means the style was auto-created and
+    // wasn't in the source - preserve that silence. For new or ODT-imported
+    // documents fall back to guessing so well-known built-in styles still get
+    // qFormat in their first DOCX export.
+    bool bEmitQFormat;
+    if (oQFormat.has_value())
+        bEmitQFormat = oQFormat.value();
+    else if (lcl_sourceWasDocx(m_rExport))
+        bEmitQFormat = false;
+    else
+        bEmitQFormat = lcl_guessQFormat(rName, nWwId);
+    if (bEmitQFormat)
         m_pSerializer->singleElementNS(XML_w, XML_qFormat);
     if (bLocked)
         m_pSerializer->singleElementNS(XML_w, XML_locked);

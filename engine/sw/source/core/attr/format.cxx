@@ -50,13 +50,17 @@ SwFormat::SwFormat( SwAttrPool& rPool, const UIName& rFormatNm,
     m_bAutoUpdateOnDirectFormat = false; // LAYER_IMPL
     m_bAutoFormat = true;
     m_bFormatInDTOR = m_bHidden = false;
-    m_bIsFavourite = true;
 
     if( pDrvdFrame )
     {
         pDrvdFrame->Add(*this);
         m_aSet.SetParent( &pDrvdFrame->m_aSet );
     }
+
+    // m_bIsFavourite left as std::nullopt: unknown until the format is
+    // imported from DOCX (SetGrabBagItem -> ParseFavourites). For non-DOCX
+    // sources (new documents, ODT import) the optional stays unset so the
+    // DOCX exporter falls back to lcl_guessQFormat for well-known styles.
 }
 
 SwFormat::SwFormat( const SwFormat& rFormat ) :
@@ -745,14 +749,14 @@ void SwFormat::ParseFavourites()
         if (aIt->second >>= nVal)
         {
             if (nVal == 0)
-                SetFavourite(false);
+                SetFavourite(std::optional<bool>(false));
             else
-                SetFavourite(true);
+                SetFavourite(std::optional<bool>(true));
         }
     }
     else
     {
-        SetFavourite(false);
+        SetFavourite(std::optional<bool>(false));
     }
 }
 

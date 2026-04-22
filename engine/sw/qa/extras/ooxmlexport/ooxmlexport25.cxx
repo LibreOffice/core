@@ -698,8 +698,12 @@ CPPUNIT_TEST_FIXTURE(Test, testQFormatPreservation)
 
     xmlDocUniquePtr pXmlStyles = parseExport(u"word/styles.xml"_ustr);
 
-    assertXPath(pXmlStyles, "//w:style[@w:styleId='Heading']/w:qFormat", 1);
-    // not used currently and had qFormat = 0 on import
+    // "Heading" is the LO pool style auto-created as parent of Heading 1-9.
+    // The source DOCX has no such style, so the export must not invent qFormat
+    // for it via the lcl_guessQFormat fallback - import silence is preserved.
+    assertXPath(pXmlStyles, "//w:style[@w:styleId='Heading']/w:qFormat", 0);
+    // "No spacing" had w:qFormat w:val="0" in the source - that explicit
+    // "no qFormat" must round-trip as no qFormat element on export.
     assertXPath(pXmlStyles, "//w:style[@w:styleId='No spacing']/w:qFormat", 0);
 }
 

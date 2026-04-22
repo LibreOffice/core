@@ -24,9 +24,11 @@
 #include "BorderCacheOwner.hxx"
 #include "calbck.hxx"
 #include "hintids.hxx"
+#include "poolfmt.hxx"
 #include "swatrset.hxx"
 #include "names.hxx"
 #include <memory>
+#include <optional>
 
 class IDocumentSettingAccess;
 class IDocumentDrawModelAccess;
@@ -64,7 +66,7 @@ class SW_DLLPUBLIC SwFormat : public sw::BorderCacheOwner, public sw::Broadcasti
     bool   m_bAutoUpdateOnDirectFormat : 1;/**< TRUE: Set attributes of a whole paragraph
                                        at format (UI-side!). */
     bool m_bHidden : 1;
-    bool m_bIsFavourite : 1;        ///< Show in the basic UI
+    std::optional<bool> m_bIsFavourite;        ///< Show in the basic UI; unset means unknown
     std::shared_ptr<SfxGrabBagItem> m_pGrabBagItem; ///< Style InteropGrabBag.
     virtual void InvalidateInSwFntCache(sal_uInt16) {};
     virtual void InvalidateInSwFntCache() {};
@@ -165,7 +167,15 @@ public:
 
     /// Get and set Pool style IDs.
     SwPoolFormatId GetPoolFormatId() const { return m_nPoolFormatId; }
-    void SetPoolFormatId( SwPoolFormatId nId ) { m_nPoolFormatId = nId; }
+    void SetPoolFormatId( SwPoolFormatId nId )
+    {
+        m_nPoolFormatId = nId;
+        if (nId == SwPoolFormatId::UNKNOWN)
+        {
+            // it's non-default style
+            m_bIsFavourite = std::optional<bool>(true);
+        }
+    }
 
     /// Get and set Help-IDs for document templates.
     sal_uInt32 GetPoolHelpId() const { return m_nPoolHelpId; }
@@ -182,8 +192,8 @@ public:
     bool IsAuto() const                 { return m_bAutoFormat; }
     void SetAuto( bool bNew )           { m_bAutoFormat = bNew; }
 
-    bool IsFavourite() const            { return m_bIsFavourite; }
-    void SetFavourite(bool bValue)      { m_bIsFavourite = bValue; }
+    std::optional<bool> IsFavourite() const            { return m_bIsFavourite; }
+    void SetFavourite(std::optional<bool> oValue)       { m_bIsFavourite = oValue; }
 
     bool IsHidden() const               { return m_bHidden; }
     void SetHidden( bool bValue )       { m_bHidden = bValue; }
