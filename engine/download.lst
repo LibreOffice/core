@@ -523,8 +523,8 @@ LIBWEBP_TARBALL := libwebp-1.6.0.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-XMLSEC_SHA256SUM := a631c8cd7a6b86e6adb9f5b935d45a9cf9768b3cb090d461e8eb9d043cf9b62f
-XMLSEC_TARBALL := xmlsec1-1.3.9.tar.gz
+XMLSEC_SHA256SUM := 5915590780566dae4b5d13d51a42fc0e34b30b26fda6f2c5f744ec31b363ee1a
+XMLSEC_TARBALL := xmlsec1-1.3.10.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
