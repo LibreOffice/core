@@ -20,6 +20,7 @@
 #include <osl/diagnose.h>
 #include <osl/file.hxx>
 #include <utility>
+#include <typeindex>
 #include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <tools/urlobj.hxx>
@@ -31,6 +32,7 @@
 
 #include <tools/debug.hxx>
 #include <libxml/xmlwriter.h>
+#include <o3tl/hash_combine.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/text/XTextContent.hpp>
@@ -264,6 +266,11 @@ bool SvxFieldData::operator==( const SvxFieldData& rFld ) const
     return true;    // Basic class is always the same.
 }
 
+size_t SvxFieldData::hashCode() const
+{
+    // Extremely basic hash-code, just splits things up by SvxFieldData sub-type.
+    return std::type_index(typeid(*this)).hash_code();
+}
 
 void SvxFieldData::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
@@ -312,6 +319,13 @@ bool SvxFieldItem::operator==( const SfxPoolItem& rItem ) const
         return false;
     return ( typeid(*mpField) == typeid(*pOtherFld) )
             && ( *mpField == *pOtherFld );
+}
+
+size_t SvxFieldItem::hashCode() const
+{
+    if (mpField)
+      return mpField->hashCode();
+    return 0;
 }
 
 void SvxFieldItem::dumpAsXml(xmlTextWriterPtr pWriter) const
@@ -463,6 +477,15 @@ bool SvxURLField::operator==( const SvxFieldData& rOther ) const
                 ( aTargetFrame == rOtherFld.aTargetFrame ) );
 }
 
+size_t SvxURLField::hashCode() const
+{
+    std::size_t seed(0);
+    o3tl::hash_combine(seed, eFormat);
+    o3tl::hash_combine(seed, aURL);
+    o3tl::hash_combine(seed, aRepresentation);
+    o3tl::hash_combine(seed, aTargetFrame);
+    return seed;
+}
 
 void SvxURLField::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
