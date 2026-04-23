@@ -236,8 +236,8 @@ class Socket {
 	}
 
 	private getWebSocketBaseURI(map: MapInterface): string {
-		if (window.enableExperimentalFeatures) {
-			// Use the new Cool WS URL.
+		if (window.enableExperimentalFeatures && map.options.wopiSrc) {
+			// Use the new Cool WS URL for WOPI documents.
 			return window.makeWopiCoolWsUrl(
 				window.makeWsUrl('/cool'),
 				$.param(map.options.docParams),

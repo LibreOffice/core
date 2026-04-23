@@ -2042,7 +2042,7 @@ function showWelcomeSVG() {
 		global.socket = new global.FakeWebSocket();
 		global.TheFakeWebSocket = global.socket;
 	} else {
-		if (global.enableExperimentalFeatures) {
+		if (global.enableExperimentalFeatures && global.wopiSrc) {
 			var websocketURI = global.makeWopiCoolWsUrl(global.makeWsUrl('/cool'), docParams);
 		} else {
 			// The URL may already contain a query (e.g., 'http://server.tld/foo/wopi/files/bar?desktop=baz') - then just append more params
