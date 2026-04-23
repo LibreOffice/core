@@ -351,6 +351,36 @@ void Operation::syncCellToSheetViews(const ScAddress& rDefaultViewAddress,
     }
 }
 
+void Operation::syncCellPatternToSheetViews(const ScAddress& rDefaultViewAddress,
+                                            const ScPatternAttr& rPattern)
+{
+    if (!mpViewData)
+        return;
+
+    auto& rDocument = mpViewData->GetDocument();
+    SCTAB nDefaultViewTab = mpViewData->GetDefaultViewTab();
+
+    std::shared_ptr<SheetViewManager> pManager = rDocument.GetSheetViewManager(nDefaultViewTab);
+    if (!pManager || pManager->isEmpty())
+        return;
+
+    SCCOL nColumn = rDefaultViewAddress.Col();
+    SCROW nDefaultRow = rDefaultViewAddress.Row();
+
+    for (auto& rSheetView : pManager->iterateValidSheetViews())
+    {
+        SCTAB nSheetViewTab = rSheetView.getTableNumber();
+        SCROW nSheetViewRow = rSheetView.reverseDefaultViewToSheetView(nDefaultRow, nColumn);
+        ScAddress aSheetViewAddress(nColumn, nSheetViewRow, nSheetViewTab);
+
+        ScRefCellValue aCell(rDocument, aSheetViewAddress);
+        if (aCell.getType() == CELLTYPE_EDIT)
+            rDocument.RemoveEditTextCharAttribs(aSheetViewAddress, rPattern);
+
+        rDocument.ApplyPattern(nColumn, nSheetViewRow, nSheetViewTab, rPattern);
+    }
+}
+
 bool Operation::isInputOnSheetView() const { return getCurrentSheetView(mpViewData) != nullptr; }
 
 bool Operation::isInputOnSheetViewAutoFilter(ScRange const& rRange) const

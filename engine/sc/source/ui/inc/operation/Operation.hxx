@@ -18,6 +18,7 @@ class ScAddress;
 class ScRange;
 class ScRangeList;
 class ScViewData;
+class ScPatternAttr;
 
 namespace sc
 {
@@ -70,6 +71,10 @@ protected:
      * sheet views, but can fall back to the slow sync in certain situations.*/
     void syncCellToSheetViews(const ScAddress& rDefaultViewAddress,
                               UndoSheetViewSortData* pUndoSortData = nullptr);
+
+    /** Propagates a single-cell pattern change to all sheet views. */
+    void syncCellPatternToSheetViews(const ScAddress& rDefaultViewAddress,
+                                     const ScPatternAttr& rPattern);
 
     /** Check if the input is on a sheet view tab */
     bool isInputOnSheetView() const;
