@@ -368,13 +368,15 @@ export class Comment extends CanvasSectionObject {
 	private createMenu (): void {
 		var tdMenu = window.L.DomUtil.create('td', 'cool-annotation-menubar', this.sectionProperties.authorRow);
 		this.sectionProperties.menuBarCell = tdMenu;
-		const edit = window.L.DomUtil.create('div', 'cool-annotation-menu-edit', tdMenu);
-		edit.id = 'comment-annotation-menu-edit-' + this.sectionProperties.data.id;
-		edit.tabIndex = 0;
-		edit.onclick = this.onEditComment.bind(this);
-		edit.onkeypress = this.editOnKeyPress.bind(this);
-		edit.dataset.title = Comment.editCommentLabel;
-		edit.setAttribute('aria-label', Comment.editCommentLabel);
+		if (this.isAuthor()) {
+			const edit = window.L.DomUtil.create('div', 'cool-annotation-menu-edit', tdMenu);
+			edit.id = 'comment-annotation-menu-edit-' + this.sectionProperties.data.id;
+			edit.tabIndex = 0;
+			edit.onclick = this.onEditComment.bind(this);
+			edit.onkeypress = this.editOnKeyPress.bind(this);
+			edit.dataset.title = Comment.editCommentLabel;
+			edit.setAttribute('aria-label', Comment.editCommentLabel);
+		}
 
 		this.sectionProperties.menu = window.L.DomUtil.create('div', this.sectionProperties.data.trackchange ? 'cool-annotation-menu-redline' : 'cool-annotation-menu', tdMenu);
 		this.sectionProperties.menu.id = 'comment-annotation-menu-' + this.sectionProperties.data.id;
@@ -1089,6 +1091,18 @@ export class Comment extends CanvasSectionObject {
 		this.hidden = true;
 	}
 
+	public isAuthor(): boolean {
+		return this.map.getViewName(app.map._docLayer._viewId) === this.sectionProperties.data.author;
+	}
+
+	public canRemove(): boolean {
+		return this.isAuthor() || !this.map.isReadOnlyMode();
+	}
+
+	public canModerate(): boolean {
+		return this.isAuthor() || app.isCommentEditingAllowed();
+	}
+
 	// check if this is "our" autosaved comment
 	// core is not aware it's autosaved one so use this simplified detection based on content
 	public isAutoSaved (): boolean {
@@ -1096,8 +1110,7 @@ export class Comment extends CanvasSectionObject {
 		if (!autoSavedComment)
 			return false;
 
-		var authorMatch = this.sectionProperties.data.author === this.map.getViewName(app.map._docLayer._viewId);
-		return authorMatch;
+		return this.isAuthor();
 	}
 
 	public hide (): void {
@@ -1159,36 +1172,37 @@ export class Comment extends CanvasSectionObject {
 		if (data.trackchange) {
 			entries.push({ text: _('Comment'), type: 'action', id: 'modify', pos: String(pos++) });
 		} else {
-			const blockChangeFromDifferentAuthor = this.map.isReadOnlyMode()
-				&& docLayer._docType === 'text'
-				&& this.map.getViewName(docLayer._viewId) !== data.author;
+			const isAuthor = this.isAuthor();
+			const canRemove = this.canRemove();
+			const canModerate = this.canModerate();
 
-			if (!blockChangeFromDifferentAuthor)
+			if (isAuthor)
 				entries.push({ text: _('Modify'), type: 'action', id: 'modify', pos: String(pos++) });
 
 			if (docLayer._docType === 'text')
 				entries.push({ text: _('Reply'), type: 'action', id: 'reply', pos: String(pos++) });
 
-			if (!blockChangeFromDifferentAuthor)
+			if (canRemove)
 				entries.push({ text: _('Remove'), type: 'action', id: 'remove', pos: String(pos++) });
 
-			if (docLayer._docType === 'text' && this.isRootComment() && !blockChangeFromDifferentAuthor)
+			if (docLayer._docType === 'text' && this.isRootComment() && canRemove)
 				entries.push({ text: _('Remove Thread'), type: 'action', id: 'removeThread', pos: String(pos++) });
 
 			const isNonWriterComponent = ['spreadsheet', 'drawing', 'presentation'].includes(docLayer._docType);
-			if (docLayer._docType === 'text' || (isNonWriterComponent && data.threaded))
+			if (canModerate
+				&& (docLayer._docType === 'text' || (isNonWriterComponent && data.threaded)))
 				entries.push({
 					text: data.resolved === 'false' ? _('Resolve') : _('Unresolve'),
 					type: 'action', id: 'resolve', pos: String(pos++),
 				});
 
-			if (docLayer._docType === 'text' && this.isRootComment())
+			if (docLayer._docType === 'text' && this.isRootComment() && canModerate)
 				entries.push({
 					text: listSection.isThreadResolved(this) ? _('Unresolve Thread') : _('Resolve Thread'),
 					type: 'action', id: 'resolveThread', pos: String(pos++),
 				});
 
-			if (docLayer._docType === 'text' && !this.isRootComment() && !blockChangeFromDifferentAuthor)
+			if (docLayer._docType === 'text' && !this.isRootComment() && isAuthor)
 				entries.push({ text: _('Promote to top comment'), type: 'action', id: 'promote', pos: String(pos++) });
 
 			if (docLayer._docType === 'text' && !window.mode.isSmallScreenDevice()) {

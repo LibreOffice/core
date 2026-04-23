@@ -80,6 +80,24 @@ describe(['tagmultiuser'], 'Multiuser Annotation Tests', function () {
 		cy.cSetActiveFrame('#iframe2');
 		cy.cGet('.cool-annotation-content-wrapper').should('not.exist');
 	});
+
+	it('Only author sees Modify', function() {
+		cy.cSetActiveFrame('#iframe1');
+		desktopHelper.insertComment();
+		cy.cGet('.cool-annotation-content-wrapper').should('exist');
+		cy.cGet('#comment-annotation-menu-edit-1').should('exist');
+		cy.cGet('#comment-annotation-menu-1').click();
+		cy.cGet('body').contains('.ui-combobox-entry.jsdialog.ui-grid-cell', 'Modify').should('exist');
+		cy.cGet('body').contains('.ui-combobox-entry.jsdialog.ui-grid-cell', 'Reply').should('exist');
+		cy.cGet('body').type('{esc}');
+
+		cy.cSetActiveFrame('#iframe2');
+		cy.cGet('.cool-annotation-content-wrapper').should('exist');
+		cy.cGet('#comment-annotation-menu-edit-1').should('not.exist');
+		cy.cGet('#comment-annotation-menu-1').click();
+		cy.cGet('body').contains('.ui-combobox-entry.jsdialog.ui-grid-cell', 'Modify').should('not.exist');
+		cy.cGet('body').contains('.ui-combobox-entry.jsdialog.ui-grid-cell', 'Reply').should('exist');
+	});
 	});
 
 	describe(['tagmultiuser'], 'Collapsed Annotation Tests', function() {

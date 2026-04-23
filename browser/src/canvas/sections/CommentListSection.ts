@@ -1137,6 +1137,8 @@ export class CommentSection extends CanvasSectionObject {
 	}
 
 	public modify (annotation: any): void {
+		if (!annotation.isAuthor())
+			return;
 		if (cool.Comment.isAnyEdit()) {
 			this.navigateAndFocusComment(cool.Comment.isAnyEdit());
 			return;
@@ -1453,6 +1455,10 @@ export class CommentSection extends CanvasSectionObject {
 	}
 
 	public remove (id: any): void {
+		var removedComment = this.getComment(id);
+		if (removedComment && !removedComment.canRemove())
+			return;
+
 		const comment = {
 			Id: {
 				type: 'string',
@@ -1460,7 +1466,6 @@ export class CommentSection extends CanvasSectionObject {
 			}
 		};
 
-		var removedComment = this.getComment(id);
 		if (removedComment) {
 			removedComment.sectionProperties.selfRemoved = true;
 		}
@@ -1482,6 +1487,10 @@ export class CommentSection extends CanvasSectionObject {
 	}
 
 	public removeThread (id: any): void {
+		const rootComment = this.getComment(id);
+		if (rootComment && !rootComment.canRemove())
+			return;
+
 		const comment = {
 			Id: {
 				type: 'string',
@@ -1494,6 +1503,8 @@ export class CommentSection extends CanvasSectionObject {
 	}
 
 	public resolve (annotation: any): void {
+		if (!annotation.canModerate())
+			return;
 		const comment = {
 			Id: {
 				type: 'string',
@@ -1504,6 +1515,8 @@ export class CommentSection extends CanvasSectionObject {
 	}
 
 	public resolveThread (annotation: any): void {
+		if (!annotation.canModerate())
+			return;
 		const comment = {
 			Id: {
 				type: 'string',
@@ -1514,6 +1527,8 @@ export class CommentSection extends CanvasSectionObject {
 	}
 
 	public promote(annotation: any): void {
+		if (!annotation.isAuthor())
+			return;
 		const comment = {
 			Id: {
 				type: 'string',
