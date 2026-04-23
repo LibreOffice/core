@@ -6180,7 +6180,7 @@ SfxVoidItem SelectSheetView FID_SELECT_SHEET_VIEW
     /* flags */
     AutoUpdate = FALSE,
     FastCall = TRUE,
-    ReadOnlyDoc = FALSE,
+    ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,

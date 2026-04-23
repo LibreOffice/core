@@ -67,11 +67,6 @@ struct ScDataFormFragment
     ScDataFormFragment(weld::Grid* pGrid, int nLine);
 };
 
-namespace sc
-{
-
-}
-
 class ScViewFunc : public ScTabView
 {
 private:

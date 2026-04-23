@@ -671,21 +671,21 @@ OUString ScModelObj::getPartInfo( int nPart )
     const sc::SheetViewID nSheetViewID = pViewData->GetSheetViewIDForSheet(nPart);
     if (nSheetViewID != sc::DefaultSheetViewID)
     {
-        SCTAB nDefaultViewTableNumber = rDocument.GetDefaultViewTableNumber(nPart);
-        sal_Int64 nDefaultViewHashCode;
-        rDocument.GetHashCode(nDefaultViewTableNumber, nDefaultViewHashCode);
-
         jsonWriter.put("sheetviewid", int32_t(nSheetViewID));
-        jsonWriter.put("defaultviewhash", int64_t(nDefaultViewHashCode));
+
+        SCTAB nDefaultViewTableNumber = rDocument.GetDefaultViewTableNumber(nPart);
+        sal_Int64 nDefaultViewHashCode = 0;
+        if (rDocument.GetHashCode(nDefaultViewTableNumber, nDefaultViewHashCode))
+            jsonWriter.put("defaultviewhash", int64_t(nDefaultViewHashCode));
     }
 
     OUString tabName;
     pViewData->GetDocument().GetName(nPart, tabName);
     jsonWriter.put("name", tabName);
 
-    sal_Int64 hashCode;
-    pViewData->GetDocument().GetHashCode(nPart, hashCode);
-    jsonWriter.put("hash", hashCode);
+    sal_Int64 hashCode = 0;
+    if (pViewData->GetDocument().GetHashCode(nPart, hashCode))
+        jsonWriter.put("hash", hashCode);
 
     Size lastColRow = getDataArea(nPart);
     jsonWriter.put("lastcolumn", lastColRow.getWidth());
