@@ -1,0 +1,17 @@
+#!/bin/bash
+
+COMMIT_MSG_FILE=$1
+COMMIT_SOURCE=$2
+
+if [ "$COMMIT_SOURCE" = "merge" ] && [ -f "$COMMIT_MSG_FILE" ]; then
+    # We want to uncomment the "# Conflicts:" line and lines after that if they start with "#<tab>".
+    # Stop modifying after we hit the first line that doesn't start with "#<tab>".
+    awk '
+        /^# Conflicts:/ { in_conflicts=1; sub(/^# /, ""); print; next }
+        in_conflicts && /^#\t/ { sub(/^#\t/, "\t"); print; next }
+        in_conflicts { in_conflicts=0 }
+        { print }
+    ' "$COMMIT_MSG_FILE" > "$COMMIT_MSG_FILE.tmp" && mv "$COMMIT_MSG_FILE.tmp" "$COMMIT_MSG_FILE"
+fi
+
+# vim:set shiftwidth=4 expandtab:
