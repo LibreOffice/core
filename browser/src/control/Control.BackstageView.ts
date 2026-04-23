@@ -111,8 +111,8 @@ class BackstageView extends window.L.Class {
 			{
 				id: 'open',
 				label: _('Open'),
-				type: 'action',
-				actionType: 'open',
+				type: 'view',
+				viewType: 'open',
 				icon: 'lc_open.svg',
 				visible: true,
 			},
@@ -207,6 +207,7 @@ class BackstageView extends window.L.Class {
 		const viewRenderers: Record<string, () => void> = {
 			home: () => this.renderHomeView(),
 			templates: () => this.renderNewView(),
+			open: () => this.renderOpenView(),
 			info: () => this.renderInfoView(),
 			export: () => this.renderExportView(),
 		};
@@ -453,6 +454,215 @@ class BackstageView extends window.L.Class {
 			default:
 				return 'backstage-doc-icon-writer';
 		}
+	}
+
+	private renderOpenView(): void {
+		this.setActiveTab('backstage-open');
+		this.clearContent();
+		this.contentArea.appendChild(
+			BackstageTemplates.openView({
+				onOpenLocal: () => this.executeOpen(),
+				cloudTiles: this.getRegisteredCloudProviders().map((p) => ({
+					id: p.id,
+					typeName: this.getCloudProviderDisplayName(p.kind),
+					iconName: this.getCloudProviderIcon(p.kind),
+					userName: p.name,
+					onClick: () => this.openCloudProvider(p),
+					onEdit: () => this.showAddCloudDialog(p),
+				})),
+				onAddCloudClick: () => this.showAddCloudDialog(),
+			}),
+		);
+	}
+
+	private mountDialog(build: (close: () => void) => HTMLElement): void {
+		const ref: { overlay?: HTMLElement } = {};
+		const close = () => ref.overlay?.remove();
+		ref.overlay = build(close);
+		this.container.appendChild(ref.overlay);
+	}
+
+	private showAddCloudDialog(provider?: CloudProvider): void {
+		this.mountDialog((close) =>
+			BackstageTemplates.addCloudDialog({
+				isEdit: !!provider,
+				initialKind: provider?.kind ?? 'nextcloud',
+				initialDomain: provider?.url ?? '',
+				initialName: provider?.name ?? '',
+				onCancel: close,
+				onSubmit: (kind, name, domain) => {
+					if (provider) {
+						this.updateCloudProvider(provider.id, kind, name, domain);
+						close();
+						this.renderOpenView();
+					} else {
+						const added = this.saveCloudProvider(kind, name, domain);
+						close();
+						this.renderOpenView();
+						this.showCloudAddedDialog(added);
+					}
+				},
+				onDelete: provider
+					? () =>
+							this.showRemoveConfirmDialog(provider, () => {
+								this.removeCloudProvider(provider.id);
+								close();
+								this.renderOpenView();
+							})
+					: undefined,
+			}),
+		);
+	}
+
+	private showCloudAddedDialog(provider: CloudProvider): void {
+		this.mountDialog((close) =>
+			BackstageTemplates.cloudAddedDialog({
+				typeName: this.getCloudProviderDisplayName(provider.kind),
+				iconName: this.getCloudProviderIcon(provider.kind),
+				userName: provider.name,
+				onClose: close,
+				onOpen: () => {
+					close();
+					this.openCloudProvider(provider);
+				},
+			}),
+		);
+	}
+
+	private showRemoveConfirmDialog(
+		provider: CloudProvider,
+		onConfirm: () => void,
+	): void {
+		this.mountDialog((close) =>
+			BackstageTemplates.removeConfirmDialog({
+				typeName: this.getCloudProviderDisplayName(provider.kind),
+				iconName: this.getCloudProviderIcon(provider.kind),
+				userName: provider.name,
+				onCancel: close,
+				onConfirm: () => {
+					close();
+					onConfirm();
+				},
+			}),
+		);
+	}
+
+	// Interim per-user persistence via localStorage. When the native
+	// per-user cloud provider config bridge lands, swap the three methods
+	// below over to it; callers are UI-only and stay unchanged.
+	private static readonly CLOUD_PROVIDERS_KEY = 'coda.cloudProviders';
+
+	private getRegisteredCloudProviders(): CloudProvider[] {
+		try {
+			const raw = localStorage.getItem(BackstageView.CLOUD_PROVIDERS_KEY);
+			if (!raw) return [];
+			const parsed = JSON.parse(raw);
+			if (!Array.isArray(parsed)) return [];
+			const validKinds: CloudProviderKind[] = [
+				'nextcloud',
+				'opencloud',
+				'seafile',
+				'other',
+			];
+			return parsed.filter(
+				(p: any): p is CloudProvider =>
+					p &&
+					typeof p.id === 'string' &&
+					typeof p.name === 'string' &&
+					typeof p.url === 'string' &&
+					validKinds.includes(p.kind),
+			);
+		} catch (e) {
+			console.error('Failed to read cloud providers:', e);
+			return [];
+		}
+	}
+
+	private saveCloudProvider(
+		kind: CloudProviderKind,
+		name: string,
+		domain: string,
+	): CloudProvider {
+		const newProvider: CloudProvider = {
+			id: `${kind}-${Date.now()}`,
+			kind,
+			name,
+			url: domain,
+		};
+		const providers = this.getRegisteredCloudProviders();
+		providers.push(newProvider);
+		try {
+			localStorage.setItem(
+				BackstageView.CLOUD_PROVIDERS_KEY,
+				JSON.stringify(providers),
+			);
+		} catch (e) {
+			console.error('Failed to persist cloud provider:', e);
+		}
+		return newProvider;
+	}
+
+	private updateCloudProvider(
+		id: string,
+		kind: CloudProviderKind,
+		name: string,
+		domain: string,
+	): void {
+		const providers = this.getRegisteredCloudProviders().map((p) =>
+			p.id === id ? { ...p, kind, name, url: domain } : p,
+		);
+		try {
+			localStorage.setItem(
+				BackstageView.CLOUD_PROVIDERS_KEY,
+				JSON.stringify(providers),
+			);
+		} catch (e) {
+			console.error('Failed to update cloud provider:', e);
+		}
+	}
+
+	private removeCloudProvider(id: string): void {
+		const providers = this.getRegisteredCloudProviders().filter(
+			(p) => p.id !== id,
+		);
+		try {
+			localStorage.setItem(
+				BackstageView.CLOUD_PROVIDERS_KEY,
+				JSON.stringify(providers),
+			);
+		} catch (e) {
+			console.error('Failed to remove cloud provider:', e);
+		}
+	}
+
+	private getCloudProviderDisplayName(kind: CloudProviderKind): string {
+		switch (kind) {
+			case 'nextcloud':
+				return 'Nextcloud';
+			case 'opencloud':
+				return 'OpenCloud';
+			case 'seafile':
+				return 'Seafile';
+			case 'other':
+				return _('Other');
+		}
+	}
+
+	private getCloudProviderIcon(kind: CloudProviderKind): string {
+		switch (kind) {
+			case 'nextcloud':
+				return 'nextcloud.svg';
+			case 'opencloud':
+				return 'opencloud.svg';
+			case 'seafile':
+				return 'seafile.svg';
+			case 'other':
+				return 'generic.svg';
+		}
+	}
+
+	private openCloudProvider(provider: CloudProvider): void {
+		console.warn('openCloudProvider not wired up yet:', provider);
 	}
 
 	private renderNewView(): void {
