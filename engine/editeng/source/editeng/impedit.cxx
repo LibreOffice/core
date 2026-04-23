@@ -900,11 +900,11 @@ void ImpEditView::InvalidateAtWindow(const tools::Rectangle& rRect)
         // be used to visualize the active edit text in an OverlayObject
         pCallbacks->EditViewInvalidate(mbNegativeX ? lcl_negateRectX(rRect) : rRect);
     }
-    else
+    else if (mpOutputWindow && !mpOutputWindow->isDisposed())
     {
         // classic mode: invalidate and trigger full repaint
         // of the changed area
-        GetWindow()->Invalidate(mbNegativeX ? lcl_negateRectX(rRect) : rRect);
+        mpOutputWindow->Invalidate(mbNegativeX ? lcl_negateRectX(rRect) : rRect);
     }
 }
 
@@ -1336,6 +1336,13 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
     if (!getImpEditEngine().IsUpdateLayout())
         return;
     if (getImpEditEngine().IsInUndo())
+        return;
+
+    // In multi-view LOK sessions a secondary view's window can be disposed
+    // while the EditView is still registered in the EditEngine.  Without
+    // EditViewCallbacks the rest of this function relies on GetOutputDevice()
+    // which dereferences the window's mpWindowImpl — null after dispose.
+    if (!getEditViewCallbacks() && (!mpOutputWindow || mpOutputWindow->isDisposed()))
         return;
 
     if (mpOutputWindow && !mpOutputWindow->isDisposed()
