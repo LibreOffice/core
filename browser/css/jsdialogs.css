@@ -2390,6 +2390,16 @@ button.has-img img {
 	filter: invert(.9)
 }
 
+/* Position and Size dialog - drawing area images */
+[data-theme='dark'] #CTL_POSRECT img.ui-drawing-area,
+[data-theme='dark'] #CTL_SIZERECT img.ui-drawing-area,
+[data-theme='dark'] #CTL_RECT img.ui-drawing-area,
+[data-theme='dark'] #CTL_ANGLE img.ui-drawing-area,
+[data-theme='dark'] #daRatioTop img.ui-drawing-area,
+[data-theme='dark'] #daRatioBottom img.ui-drawing-area {
+	filter: invert(.95)
+}
+
 /* scrollable content */
 .ui-scrollable-content {
 	overflow-x: scroll;
