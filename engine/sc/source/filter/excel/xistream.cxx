@@ -894,6 +894,18 @@ OUString XclImpStream::ReadUniString( sal_uInt16 nChars, sal_uInt8 nFlags )
     std::size_t nExtSize = ReadUniStringExtHeader( b16Bit, nFlags );
     OUString aRet( ReadRawUniString( nChars, b16Bit ) );
     Ignore( nExtSize );
+
+    OString aUtf8Check;
+    if (!aRet.convertToString(
+                    &aUtf8Check, RTL_TEXTENCODING_UTF8,
+                    RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR
+                        | RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR))
+    {
+        SAL_WARN("sc", "invalid utf8 string, doing best-effort fix");
+        aRet.convertToString(&aUtf8Check, RTL_TEXTENCODING_UTF8, OUSTRING_TO_OSTRING_CVTFLAGS);
+        aRet = OStringToOUString(aUtf8Check, RTL_TEXTENCODING_UTF8);
+    }
+
     return aRet;
 }
 
@@ -953,6 +965,17 @@ OUString XclImpStream::ReadRawByteString( sal_uInt16 nChars )
     sal_uInt16 nCharsRead = ReadRawData( pcBuffer.get(), nChars );
     pcBuffer[ nCharsRead ] = '\0';
     OUString aRet( pcBuffer.get(), strlen(pcBuffer.get()), mrRoot.GetTextEncoding() );
+
+    OString aUtf8Check;
+    if (!aRet.convertToString(
+                    &aUtf8Check, RTL_TEXTENCODING_UTF8,
+                    RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR
+                        | RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR))
+    {
+        SAL_WARN("sc", "invalid utf8 string, doing best-effort fix");
+        aRet.convertToString(&aUtf8Check, RTL_TEXTENCODING_UTF8, OUSTRING_TO_OSTRING_CVTFLAGS);
+        aRet = OStringToOUString(aUtf8Check, RTL_TEXTENCODING_UTF8);
+    }
     return aRet;
 }
 
