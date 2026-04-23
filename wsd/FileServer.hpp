@@ -227,11 +227,10 @@ public:
         {
             if (ConfigUtil::isSslEnabled() || ConfigUtil::isSSLTermination())
             {
-                if (ConfigUtil::getConfigValue<bool>("ssl.sts.enabled", false))
+                if (ConfigUtil::getBool("ssl.sts.enabled", false))
                 {
-                    // Only for release, which doesn't support tests. No CONFIG_STATIC, therefore.
-                    static const auto maxAge = ConfigUtil::getConfigValue<int>(
-                        "ssl.sts.max_age", 31536000); // Default 1 year.
+                    static const auto maxAge =
+                        ConfigUtil::getInt("ssl.sts.max_age", 31536000); // Default 1 year.
                     response.add("Strict-Transport-Security",
                                  "max-age=" + std::to_string(maxAge) + "; includeSubDomains");
                 }
