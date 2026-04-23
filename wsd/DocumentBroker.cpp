@@ -1501,13 +1501,15 @@ DocumentBroker::updateSessionWithWopiInfo(const std::shared_ptr<ClientSession>& 
     if (!userPrivateInfo.empty())
         JsonUtil::parseJSON(userPrivateInfo, userPrivateInfoObj);
     bool unusedMutated = false;
-    std::string resolvedAIModel;
+    std::string resolvedAIModel, resolvedAIRating;
     const bool aiConfigured = session->resolveAndApplyAICredentials(
         /*viewSettings=*/nullptr, userPrivateInfoObj,
-        wopiFileInfo->getDisableAISettings(), unusedMutated, resolvedAIModel);
+        wopiFileInfo->getDisableAISettings(), unusedMutated,
+        resolvedAIModel, resolvedAIRating);
     wopiInfo->set("AIConfigured", aiConfigured);
     if (aiConfigured)
         wopiInfo->set("AIModelName", resolvedAIModel);
+    wopiInfo->set("AIEthicalRating", resolvedAIRating);
     wopiInfo->set("EnableShare", wopiFileInfo->getEnableShare());
     wopiInfo->set("HideUserList", wopiFileInfo->getHideUserList());
     wopiInfo->set("SupportsRename", wopiFileInfo->getSupportsRename());
@@ -1817,10 +1819,10 @@ static std::string extractViewSettings(const std::string& viewSettingsPath,
 
         _isViewSettingsUpdated = true;
 
-        std::string resolvedAIModel;
+        std::string resolvedAIModel, resolvedAIRating;
         const bool aiConfigured = session->resolveAndApplyAICredentials(
             viewSettings, userPrivateInfoObj, session->isDisableAISettings(),
-            viewSettingsNeedUpdate, resolvedAIModel);
+            viewSettingsNeedUpdate, resolvedAIModel, resolvedAIRating);
 
         JsonUtil::findJSONValue(viewSettings, "aiImageProviderAPIKey", aiImageProviderAPIKey);
         JsonUtil::findJSONValue(viewSettings, "aiImageProviderURL", aiImageProviderURL);
@@ -1852,6 +1854,7 @@ static std::string extractViewSettings(const std::string& viewSettingsPath,
         viewSettings->set("aiConfigured", aiConfigured);
         if (aiConfigured)
             viewSettings->set("aiModelName", resolvedAIModel);
+        viewSettings->set("aiEthicalRating", resolvedAIRating);
         viewSettingsString = JsonUtil::jsonToString(viewSettings);
     }
     catch (const std::exception& exc)

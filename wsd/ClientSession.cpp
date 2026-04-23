@@ -1626,10 +1626,76 @@ bool ClientSession::isDisableAISettings() const
     return _wopiFileInfo && _wopiFileInfo->getDisableAISettings();
 }
 
+namespace
+{
+
+bool isProprietaryModel(const std::string& model)
+{
+    if (model.empty())
+        return false;
+
+    if (model.starts_with("gpt-") && !model.starts_with("gpt-oss"))
+        return true;
+    // OpenAI o-series reasoning models
+    if (model.starts_with("o1") || model.starts_with("o3") || model.starts_with("o4"))
+        return true;
+    if (model.starts_with("claude-"))
+        return true;
+    if (model.starts_with("gemini-"))
+        return true;
+    return false;
+}
+
+bool isKnownCloudProvider(const std::string& url)
+{
+    if (url.empty())
+        return false;
+
+    std::string host;
+    try
+    {
+        host = Poco::URI(url).getHost();
+    }
+    catch (const std::exception&)
+    {
+        return false;
+    }
+
+    // Convert to lowercase for comparison.
+    std::transform(host.begin(), host.end(), host.begin(),
+                   [](unsigned char c) { return std::tolower(c); });
+
+    static const std::string cloudDomains[] = {
+        "api.openai.com",   "api.anthropic.com", "generativelanguage.googleapis.com",
+        "api.mistral.ai",   "openrouter.ai",     "api.deepseek.com",
+        "api.together.xyz", "api.fireworks.ai",
+    };
+
+    for (const auto& domain : cloudDomains)
+        if (host == domain)
+            return true;
+
+    return false;
+}
+
+// Ethical AI rating: A (open+self-hosted), B (open+cloud), C (proprietary), U (unknown).
+std::string computeEthicalRating(const std::string& model, const std::string& url)
+{
+    if (model.empty())
+        return "U";
+
+    if (isProprietaryModel(model))
+        return "C";
+
+    return isKnownCloudProvider(url) ? "B" : "A";
+}
+
+} // anonymous namespace
+
 bool ClientSession::resolveAndApplyAICredentials(Poco::JSON::Object::Ptr viewSettings,
                                                  const Poco::JSON::Object::Ptr& userPrivateInfoObj,
                                                  bool disableAISettings, bool& viewSettingsMutated,
-                                                 std::string& outModel)
+                                                 std::string& outModel, std::string& outRating)
 {
     auto resolveField = [&](const std::string& vsKey, const std::string& upiKey,
                             const std::string& cfgKey) -> std::string
@@ -1663,6 +1729,7 @@ bool ClientSession::resolveAndApplyAICredentials(Poco::JSON::Object::Ptr viewSet
     const bool configured = ConfigUtil::getConfigValue<bool>("ai.enabled", false) &&
                             !disableAISettings && !apiKey.empty() && !model.empty() && !url.empty();
     outModel = configured ? model : std::string{};
+    outRating = configured ? computeEthicalRating(model, url) : "U";
     return configured;
 }
 
@@ -1678,10 +1745,11 @@ bool ClientSession::handleUpdateViewSettings(const std::string& firstLine)
     }
 
     bool viewSettingsMutated = false;
-    std::string resolvedModel;
+    std::string resolvedModel, resolvedRating;
     const bool aiConfigured =
         resolveAndApplyAICredentials(viewSettings, /*userPrivateInfoObj=*/nullptr,
-                                     isDisableAISettings(), viewSettingsMutated, resolvedModel);
+                                     isDisableAISettings(), viewSettingsMutated,
+                                     resolvedModel, resolvedRating);
 
     std::string aiImageProviderAPIKey, aiImageProviderURL, aiImageModel, aiImageSize;
     std::string aiRequestTimeout;
@@ -1717,6 +1785,7 @@ bool ClientSession::handleUpdateViewSettings(const std::string& firstLine)
     viewSettings->set("aiConfigured", aiConfigured);
     if (aiConfigured)
         viewSettings->set("aiModelName", resolvedModel);
+    viewSettings->set("aiEthicalRating", resolvedRating);
 
     sendTextFrame("viewsetting: " + JsonUtil::jsonToString(viewSettings));
 

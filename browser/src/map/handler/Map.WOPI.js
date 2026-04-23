@@ -165,9 +165,11 @@ window.L.Map.WOPI = window.L.Handler.extend({
 		this.DisableAISettings = !!wopiInfo['DisableAISettings'];
 		this.AIConfigured = !!wopiInfo['AIConfigured'];
 		this.AIModelName = wopiInfo['AIModelName'] || '';
+		this.AIEthicalRating = wopiInfo['AIEthicalRating'] || 'U';
 		app.serverConnectionService.onWopiProps({
 			AIConfigured: this.AIConfigured,
 			AIModelName: this.AIModelName,
+			AIEthicalRating: this.AIEthicalRating,
 		});
 		this.SupportsRename = !!wopiInfo['SupportsRename'];
 		this.UserCanRename = !!wopiInfo['UserCanRename'];

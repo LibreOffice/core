@@ -243,9 +243,8 @@
 }
 
 #aichat-rating-badge[data-rating='A'] { background: #2a7a2a; }
-#aichat-rating-badge[data-rating='B'] { background: #7a8a00; }
-#aichat-rating-badge[data-rating='C'] { background: #b56a00; }
-#aichat-rating-badge[data-rating='D'] { background: #a33; }
+#aichat-rating-badge[data-rating='B'] { background: #b56a00; }
+#aichat-rating-badge[data-rating='C'] { background: #a33; }
 #aichat-rating-badge[data-rating='U'] { background: #888; }
 
 /* -- Hint (transient inline warning) -- */

@@ -338,14 +338,16 @@ public:
     /// and a field is filled from userPrivateInfoObj, viewSettings is mutated
     /// (and viewSettingsMutated set to true) so callers can persist the
     /// migration. outModel receives the resolved model name when aiConfigured,
-    /// otherwise an empty string.
+    /// otherwise an empty string. outRating receives the ethical AI rating
+    /// (A/B/C/U).
     /// Returns aiConfigured: ai.enabled AND all three fields non-empty.
     bool resolveAndApplyAICredentials(
         Poco::JSON::Object::Ptr viewSettings,
         const Poco::JSON::Object::Ptr& userPrivateInfoObj,
         bool disableAISettings,
         bool& viewSettingsMutated,
-        std::string& outModel);
+        std::string& outModel,
+        std::string& outRating);
 
     /// Override parsedDocOption values we get from browser setting json
     /// Because when client sends `load url` it doesn't have information about browser setting json

@@ -22,6 +22,7 @@ interface ViewSetting {
 	aiConfigured?: boolean;
 	aiRequestTimeout?: string;
 	aiModelName?: string;
+	aiEthicalRating?: string;
 }
 
 class ServerConnectionService {
@@ -37,7 +38,11 @@ class ServerConnectionService {
 		app.tableStyles = new TableStylesService();
 	}
 
-	public onWopiProps(props: { AIConfigured: boolean; AIModelName: string }) {
+	public onWopiProps(props: {
+		AIConfigured: boolean;
+		AIModelName: string;
+		AIEthicalRating: string;
+	}) {
 		app.console.debug('ServerConnectionService: onWopiProps');
 
 		if (!app.map) {
@@ -47,6 +52,7 @@ class ServerConnectionService {
 
 		app.map.isAIConfigured = !!props.AIConfigured;
 		app.map.aiModelName = props.AIModelName || '';
+		app.map.aiEthicalRating = props.AIEthicalRating || 'U';
 	}
 
 	public onViewSetting(viewSetting: ViewSetting) {
@@ -62,6 +68,7 @@ class ServerConnectionService {
 			? Math.max(10, Number(viewSetting.aiRequestTimeout))
 			: 120;
 		app.map.aiModelName = viewSetting.aiModelName || '';
+		app.map.aiEthicalRating = viewSetting.aiEthicalRating || 'U';
 
 		let zoteroPlugin = app.map.zotero;
 		const zoteroAPIKey = viewSetting.zoteroAPIKey;

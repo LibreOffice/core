@@ -238,6 +238,7 @@ interface MapInterface extends Evented {
 	isAIConfigured?: boolean;
 	aiRequestTimeout?: number;
 	aiModelName?: string;
+	aiEthicalRating?: string;
 
 	_controlCorners: Record<string, Node>;
 	_contextMenu: ContextMenuControl;
