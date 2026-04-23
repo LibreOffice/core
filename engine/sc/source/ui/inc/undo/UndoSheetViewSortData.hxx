@@ -37,8 +37,8 @@ class UndoSheetViewSortData
     std::shared_ptr<DefaultViewSortData> mpDefaultViewSortDataAfter;
 
     // Auto-filter DB range before/after
-    std::optional<ScRange> maAutoFilterRangeBefore;
-    std::optional<ScRange> maAutoFilterRangeAfter;
+    std::optional<ScRange> moAutoFilterRangeBefore;
+    std::optional<ScRange> moAutoFilterRangeAfter;
 
 public:
     /** Set context for operations on a sheet view tab. */
