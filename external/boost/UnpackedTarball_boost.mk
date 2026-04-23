@@ -34,6 +34,10 @@ boost_patches += Wundef.patch.0
 
 boost_patches += boost.spirit.noreturn.patch
 
+boost_patches += 0001-Allow-fallthrough-of-Android-to-128-bit-float.patch.1
+
+boost_patches += unreachable_code.patch.1
+
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,boost))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,boost,$(BOOST_TARBALL)))

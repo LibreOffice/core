@@ -1,0 +1,31 @@
+From 2c4580c119cc40ca5341d634bb579a77f6d88ce6 Mon Sep 17 00:00:00 2001
+From: Matt Borland <matt@mattborland.com>
+Date: Tue, 28 Apr 2026 11:27:23 -0400
+Subject: [PATCH] Allow fallthrough of Android to 128-bit float
+
+---
+ include/boost/math/special_functions/detail/fp_traits.hpp | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/include/boost/math/special_functions/detail/fp_traits.hpp b/include/boost/math/special_functions/detail/fp_traits.hpp
+index 7cdb12b18..368df69f3 100644
+--- a/boost/math/special_functions/detail/fp_traits.hpp
++++ b/boost/math/special_functions/detail/fp_traits.hpp
+@@ -305,9 +305,12 @@ private:
+ 
+ // long double (>64 bits), x86 and x64 -----------------------------------------
+ 
+-#elif defined(__i386) || defined(__i386__) || defined(_M_IX86) \
++// Andorid is a known exception because on x64 it reports LDBL_MANT_DIG == 113
++// See: https://github.com/boostorg/math/issues/1389
++
++#elif (defined(__i386) || defined(__i386__) || defined(_M_IX86) \
+     || defined(__amd64) || defined(__amd64__)  || defined(_M_AMD64) \
+-    || defined(__x86_64) || defined(__x86_64__) || defined(_M_X64)
++    || defined(__x86_64) || defined(__x86_64__) || defined(_M_X64)) && !defined(__ANDROID__)
+ 
+ // Intel extended double precision format (80 bits)
+ 
+-- 
+2.47.3
+
