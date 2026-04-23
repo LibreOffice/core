@@ -32,6 +32,25 @@ function onStateChange(element: Element, callback: StateChangeCallback) {
 	enableObserver.observe(element, { attributeFilter: ['disabled'], attributeOldValue: true });
 }
 
+function moveFocusFromDisabledElement(widget: Element) {
+	const dialog = widget.closest('.jsdialog-window');
+	if (!dialog) return;
+	const next = JSDialog.FindFocusableElement(widget.nextElementSibling, 'next');
+	if (next) {
+		next.focus();
+		return;
+	}
+	const prev = JSDialog.FindFocusableElement(widget.previousElementSibling, 'prev');
+	if (prev) {
+		prev.focus();
+		return;
+	}
+	const focusable = JSDialog.GetFocusableElements(dialog);
+	if (focusable && focusable.length) {
+		focusable[0].focus();
+	}
+}
+
 function synchronizeDisabledState(source: Element, targets: Array<Element>) {
 	const enabledCallback = function (enable: boolean) {
 		app.layoutingService.appendLayoutingTask(() => {
@@ -40,8 +59,11 @@ function synchronizeDisabledState(source: Element, targets: Array<Element>) {
 					targets[i].removeAttribute('disabled');
 					targets[i].removeAttribute('aria-disabled');
 				} else {
+					const hadFocus = targets[i].contains(document.activeElement);
 					targets[i].setAttribute('disabled', 'true');
 					targets[i].setAttribute('aria-disabled', 'true');
+					if (hadFocus)
+						moveFocusFromDisabledElement(source);
 				}
 			}
 		});
