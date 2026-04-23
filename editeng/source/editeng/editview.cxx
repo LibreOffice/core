@@ -225,7 +225,9 @@ void EditView::InvalidateWindow(const tools::Rectangle& rClipRect)
     {
         // classic mode: invalidate and trigger full repaint
         // of the changed area
-        GetWindow()->Invalidate(bNegativeX ? lcl_negateRectX(rClipRect) : rClipRect);
+        vcl::Window* pWin = GetWindow();
+        if (pWin && !pWin->isDisposed())
+            pWin->Invalidate(bNegativeX ? lcl_negateRectX(rClipRect) : rClipRect);
     }
 }
 
@@ -596,7 +598,7 @@ void EditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor, bool bActivat
 
     if (getImpl().mpViewShell && !bActivate)
     {
-        if (!getImpl().mpOutputWindow)
+        if (!getImpl().mpOutputWindow || getImpl().mpOutputWindow->isDisposed())
             return;
         VclPtr<vcl::Window> pParent = getImpl().mpOutputWindow->GetParentWithLOKNotifier();
         if (pParent && pParent->GetLOKWindowId() != 0)
@@ -614,7 +616,7 @@ void EditView::HideCursor(bool bDeactivate)
 
     if (getImpl().mpViewShell && !bDeactivate)
     {
-        if (!getImpl().mpOutputWindow)
+        if (!getImpl().mpOutputWindow || getImpl().mpOutputWindow->isDisposed())
             return;
         VclPtr<vcl::Window> pParent = getImpl().mpOutputWindow->GetParentWithLOKNotifier();
         if (pParent && pParent->GetLOKWindowId() != 0)
