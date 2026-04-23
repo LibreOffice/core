@@ -11,6 +11,7 @@
 #include <table.hxx>
 #include <globstr.hrc>
 #include <scresid.hxx>
+#include <comphelper/xmltools.hxx>
 
 namespace sc
 {
@@ -19,7 +20,10 @@ SheetViewManager::SheetViewManager() {}
 SheetViewID SheetViewManager::create(ScTable* pSheetViewTable)
 {
     SheetViewID nID(maViews.size());
-    maViews.emplace_back(std::make_shared<SheetView>(pSheetViewTable, generateName(), nID));
+    auto pView = std::make_shared<SheetView>(pSheetViewTable, generateName(), nID);
+    pView->SetGUID(comphelper::xml::generateGUIDString());
+    pView->SetFilterGUID(comphelper::xml::generateGUIDString());
+    maViews.emplace_back(std::move(pView));
     mnSheetViewCount++;
     return nID;
 }

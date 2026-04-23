@@ -57,7 +57,12 @@ void NamedSheetViewImporter::finalizeImport()
 
         auto pSheetView = pSheetViewManager->get(nSheetViewID);
         if (pSheetView)
+        {
             pSheetView->SetName(rViewData.maName);
+            pSheetView->SetGUID(rViewData.maID.toUtf8());
+            if (!rViewData.maNsvFilters.empty())
+                pSheetView->SetFilterGUID(rViewData.maNsvFilters.front().maFilterID.toUtf8());
+        }
 
         // Apply filters and sort for each nsvFilter
         for (const auto& rNsvFilter : rViewData.maNsvFilters)

@@ -175,6 +175,66 @@ CPPUNIT_TEST_FIXTURE(NamedSheetViewsImportExportTest, testRoundtripModelState)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(NamedSheetViewsImportExportTest, testRoundtripGUIDs)
+{
+    loadFromFile(u"xlsx/NamedSheetViews.xlsx");
+
+    OString aView1GUID;
+    OString aView1FilterGUID;
+    OString aView2GUID;
+    OString aView2FilterGUID;
+    {
+        ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
+        CPPUNIT_ASSERT(pModelObj);
+        ScDocument* pDocument = pModelObj->GetDocument();
+        CPPUNIT_ASSERT(pDocument);
+
+        auto pManager = pDocument->GetSheetViewManager(SCTAB(0));
+        CPPUNIT_ASSERT(pManager);
+
+        for (auto& rSheetView : pManager->iterateValidSheetViews())
+        {
+            if (rSheetView.GetName() == u"View1")
+            {
+                aView1GUID = rSheetView.GetGUID();
+                aView1FilterGUID = rSheetView.GetFilterGUID();
+            }
+            else if (rSheetView.GetName() == u"View2")
+            {
+                aView2GUID = rSheetView.GetGUID();
+                aView2FilterGUID = rSheetView.GetFilterGUID();
+            }
+        }
+
+        // Imported GUIDs must not be empty.
+        CPPUNIT_ASSERT(!aView1GUID.isEmpty());
+        CPPUNIT_ASSERT(!aView1FilterGUID.isEmpty());
+        CPPUNIT_ASSERT(!aView2GUID.isEmpty());
+        CPPUNIT_ASSERT(!aView2FilterGUID.isEmpty());
+    }
+
+    save(TestFilter::XLSX);
+
+    xmlDocUniquePtr pNsv = parseExport(u"xl/namedSheetViews/namedSheetView1.xml"_ustr);
+    CPPUNIT_ASSERT(pNsv);
+
+    // Exported @id / @filterId must match the GUIDs held on the runtime SheetView
+    CPPUNIT_ASSERT_EQUAL(
+        aView1GUID,
+        getXPath(pNsv, "/xnsv:namedSheetViews/xnsv:namedSheetView[1]", "id").toUtf8());
+    CPPUNIT_ASSERT_EQUAL(
+        aView1FilterGUID,
+        getXPath(pNsv, "/xnsv:namedSheetViews/xnsv:namedSheetView[1]/xnsv:nsvFilter", "filterId")
+            .toUtf8());
+    CPPUNIT_ASSERT_EQUAL(
+        aView2GUID,
+        getXPath(pNsv, "/xnsv:namedSheetViews/xnsv:namedSheetView[2]", "id").toUtf8());
+    CPPUNIT_ASSERT_EQUAL(
+        aView2FilterGUID,
+        getXPath(pNsv, "/xnsv:namedSheetViews/xnsv:namedSheetView[2]/xnsv:nsvFilter", "filterId")
+            .toUtf8());
+}
+
 CPPUNIT_TEST_FIXTURE(NamedSheetViewsImportExportTest, testMultiSheetRoundtripVisibility)
 {
     loadFromFile(u"xlsx/NamedSheetViews.xlsx");
