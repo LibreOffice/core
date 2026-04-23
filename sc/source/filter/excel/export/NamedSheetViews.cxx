@@ -281,10 +281,8 @@ void xcl::exp::NamedSheetViews::saveSortRules(const sax_fastparser::FSHelperPtr&
 void xcl::exp::NamedSheetViews::saveSheetView(const sax_fastparser::FSHelperPtr& pStream,
                                               const sc::SheetView& rSheetView)
 {
-    OString aGUID = comphelper::xml::generateGUIDString();
-
     pStream->startElement(XML_namedSheetView, XML_name, rSheetView.GetName().toUtf8(), XML_id,
-                          aGUID);
+                          rSheetView.GetGUID());
 
     // Get the view tab to access its filter/sort data
     SCTAB nViewTab = rSheetView.getTableNumber();
@@ -298,10 +296,9 @@ void xcl::exp::NamedSheetViews::saveSheetView(const sax_fastparser::FSHelperPtr&
         aRange.aEnd.SetTab(nViewTab);
 
         OString aRangeString = XclXmlUtils::ToOString(GetDoc(), aRange);
-        OString aFilterGUID = comphelper::xml::generateGUIDString();
-
-        // TODO: emit XML_tableId when the filter is bound to a real table, not an anonymous DB range.
-        pStream->startElement(XML_nsvFilter, XML_filterId, aFilterGUID, XML_ref, aRangeString);
+        // TODO: emit XML_tableId when the filter is bound to a real table
+        pStream->startElement(XML_nsvFilter, XML_filterId, rSheetView.GetFilterGUID(), XML_ref,
+                              aRangeString);
 
         ScQueryParam aQueryParam;
         pDBData->GetQueryParam(aQueryParam);

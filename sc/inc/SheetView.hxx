@@ -11,6 +11,7 @@
 
 #include "scdllapi.h"
 #include "types.hxx"
+#include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
 #include "SheetViewTypes.hxx"
 #include "sortparam.hxx"
@@ -87,6 +88,10 @@ private:
     OUString maName;
     SheetViewID mnID;
 
+    // GUIDs
+    OString maGUID;
+    OString maFilterGUID;
+
     /** Sort data - nullptr when no sort has been performed. */
     std::shared_ptr<SheetViewSortData> mpSortData;
 
@@ -113,6 +118,12 @@ public:
 
     OUString const& GetName() const { return maName; }
     void SetName(OUString const& rName) { maName = rName; }
+
+    OString const& GetGUID() const { return maGUID; }
+    void SetGUID(OString const& rGUID) { maGUID = rGUID; }
+
+    OString const& GetFilterGUID() const { return maFilterGUID; }
+    void SetFilterGUID(OString const& rGUID) { maFilterGUID = rGUID; }
 
     /** A sheet view is valid if the pointer to the table is set */
     bool isValid() const;
