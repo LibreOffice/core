@@ -247,7 +247,7 @@ bool ApplyAttributesToCellOperation::runImplementation()
     }
     pOldPat.reset(); // is copied in undo (Pool)
 
-    syncSheetViews();
+    syncCellPatternToSheetViews(aPosition, mrPattern);
 
     mrDocShell.PostPaint(nCol, nRow, nTab, nCol, nRow, nTab, PaintPartFlags::Grid,
                          mnExtFlags | SC_PF_TESTMERGE);
