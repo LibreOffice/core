@@ -298,6 +298,7 @@ private:
     bool                mbScrollHor;    /// Scrollbar: true = horizontal.
     bool                mbPrint;
     bool                mbVisible;
+    bool                mbStroked;
     OUString            msCtrlName;
     OUString            msLabel;
     sal_Int32           mnShapeId;

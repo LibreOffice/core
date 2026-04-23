@@ -739,6 +739,25 @@ Reference< XShape > VmlDrawing::createAndInsertClientXShape( const ::oox::vml::S
             sal_Int32 nCtrlIndex = -1;
             Reference< XShape > xShape = createAndInsertXControlShape( aControl, rxShapes, aShapeRect, nCtrlIndex );
 
+            if (xShape.is())
+            {
+                Reference<css::beans::XPropertySet> xShapeProps(xShape, UNO_QUERY);
+                if (xShapeProps.is()
+                    && xShapeProps->getPropertySetInfo()->hasPropertyByName(
+                        u"InteropGrabBag"_ustr))
+                {
+                    Sequence<css::beans::PropertyValue> aGrabBag;
+                    xShapeProps->getPropertyValue(u"InteropGrabBag"_ustr) >>= aGrabBag;
+                    sal_Int32 length = aGrabBag.getLength();
+                    aGrabBag.realloc(length + 1);
+                    auto pGrabBag = aGrabBag.getArray();
+                    pGrabBag[length].Name = "VMLStroked";
+                    pGrabBag[length].Value
+                        <<= rShape.getTypeModel().maStrokeModel.moStroked.value_or(true);
+                    xShapeProps->setPropertyValue(u"InteropGrabBag"_ustr, Any(aGrabBag));
+                }
+            }
+
             // control shape macro
             if( xShape.is() && (nCtrlIndex >= 0) && !pClientData->maFmlaMacro.isEmpty() )
             {

@@ -1084,6 +1084,16 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testCheckboxFormControlXlsxExport)
     CPPUNIT_ASSERT_EQUAL(COL_TRANSPARENT, aColor);
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest4, testVMLShapeStroke)
+{
+    createScDoc("xlsx/checkbox-form-control.xlsx");
+    saveAndReload(TestFilter::XLSX);
+
+    xmlDocUniquePtr pDoc = parseExport(u"xl/drawings/vmlDrawing1.vml"_ustr);
+    CPPUNIT_ASSERT(pDoc);
+    assertXPath(pDoc, "/xml/v:shape", "stroked", u"f");
+}
+
 CPPUNIT_TEST_FIXTURE(ScExportTest4, testButtonFormControlXlsxExport)
 {
     // Given a document that has a checkbox form control:
