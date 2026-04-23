@@ -40,8 +40,7 @@ bool InsertSheetViewOperation::runImplementation()
     if (mbRecord && !rDoc.IsUndoEnabled())
         mbRecord = false;
 
-    if (mbRecord)
-        rDoc.BeginDrawUndo();
+    DrawUndoGuard aDrawUndoGuard(rDoc, mbRecord);
 
     auto[nSheetViewID, nSheetViewTab] = rDoc.CreateNewSheetView(mnTab);
     if (nSheetViewID == InvalidSheetViewID)
