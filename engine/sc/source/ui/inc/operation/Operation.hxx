@@ -76,6 +76,10 @@ protected:
     void syncCellPatternToSheetViews(const ScAddress& rDefaultViewAddress,
                                      const ScPatternAttr& rPattern);
 
+    /** Propagates a multi-range pattern change to all sheet views. */
+    void syncMarkPatternToSheetViews(const ScMarkData& rDefaultViewMark,
+                                     const ScPatternAttr& rPattern);
+
     /** Check if the input is on a sheet view tab */
     bool isInputOnSheetView() const;
 
