@@ -27,8 +27,8 @@ public:
     }
 
     void testTdf150832_dump_chart_shapes_from_xls();
-    void testTdf149204();
-    void testTdf151424();
+    void testTdf149204_chart_shape_size_from_pptx_import();
+    void testTdf151424_radar_chart_shape_position_from_ods();
     void testFdo75075();
     void testPropertyMappingBarChart();
     void testPieChartLabels1();
@@ -41,8 +41,8 @@ public:
 
     CPPUNIT_TEST_SUITE(Chart2XShapeTest);
     CPPUNIT_TEST(testTdf150832_dump_chart_shapes_from_xls);
-    CPPUNIT_TEST(testTdf149204);
-    CPPUNIT_TEST(testTdf151424);
+    CPPUNIT_TEST(testTdf149204_chart_shape_size_from_pptx_import);
+    CPPUNIT_TEST(testTdf151424_radar_chart_shape_position_from_ods);
     CPPUNIT_TEST(testFdo75075);
     CPPUNIT_TEST(testPropertyMappingBarChart);
     CPPUNIT_TEST(testPieChartLabels1);
@@ -122,7 +122,7 @@ void Chart2XShapeTest::testTdf150832_dump_chart_shapes_from_xls()
     compareAgainstReference(getXShapeDumpString(), u"tdf150832.xml");
 }
 
-void Chart2XShapeTest::testTdf149204()
+void Chart2XShapeTest::testTdf149204_chart_shape_size_from_pptx_import()
 {
     // FIXME: the DPI check should be removed when either (1) the test is fixed to work with
     // non-default DPI; or (2) unit tests on Windows are made to use svp VCL plugin.
@@ -139,7 +139,7 @@ void Chart2XShapeTest::testTdf149204()
     compareAgainstReference(getShapeDump(xChartDoc), u"tdf149204.xml");
 }
 
-void Chart2XShapeTest::testTdf151424()
+void Chart2XShapeTest::testTdf151424_radar_chart_shape_position_from_ods()
 {
     // FIXME: the DPI check should be removed when either (1) the test is fixed to work with
     // non-default DPI; or (2) unit tests on Windows are made to use svp VCL plugin.
