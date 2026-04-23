@@ -121,9 +121,6 @@ void setClipboard(unsigned appDocId)
     if (!data)
         return;
 
-    if (!selectDocViewAsCurrent(loKitDoc))
-        return;
-
     // Limit MIME types that LOKit can consume. Keeping this set small also avoids IPC round-trips
     // to clipboard owners for formats they won't provide usefully (e.g. Emacs advertises many X11
     // atoms and app-specific types alongside text/plain).
@@ -167,8 +164,12 @@ void setClipboard(unsigned appDocId)
     }
 
     if (!mimeTypePtrs.empty())
+    {
+        if (!selectDocViewAsCurrent(loKitDoc))
+            return;
         loKitDoc->setClipboard(mimeTypePtrs.size(), mimeTypePtrs.data(), sizes.data(),
                                streams.data());
+    }
 }
 
 void setLazyClipboard(unsigned appDocId, QStringList mimeTypes)
