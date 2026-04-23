@@ -192,7 +192,7 @@ CPPUNIT_TEST_FIXTURE(Test, testRTFStyleExportFollowRecursive)
     CPPUNIT_ASSERT_GREATER(static_cast<sal_uInt64>(0), rStream.remainingSize());
 }
 
-CPPUNIT_TEST_FIXTURE(Test, testTdf119192)
+CPPUNIT_TEST_FIXTURE(Test, testTdf119192RTFFontAttributesInParagraphScope)
 {
     // Tests that font changes due to a script type change are placed in paragraph scope
     EditEngine aEditEngine(mpItemPool.get());
