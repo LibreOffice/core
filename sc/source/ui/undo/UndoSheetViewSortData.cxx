@@ -35,8 +35,8 @@ void UndoSheetViewSortData::setDefaultViewContext(SCTAB nDefaultViewTab,
 
 void UndoSheetViewSortData::setAutoFilterRange(ScRange const& rBefore, ScRange const& rAfter)
 {
-    maAutoFilterRangeBefore = rBefore;
-    maAutoFilterRangeAfter = rAfter;
+    moAutoFilterRangeBefore = rBefore;
+    moAutoFilterRangeAfter = rAfter;
 }
 
 void UndoSheetViewSortData::restore(ScDocShell& rDocShell, bool bUndo) const
@@ -71,12 +71,12 @@ void UndoSheetViewSortData::restore(ScDocShell& rDocShell, bool bUndo) const
     }
 
     // Restore auto-filter DB range
-    if (maAutoFilterRangeBefore || maAutoFilterRangeAfter)
+    if (moAutoFilterRangeBefore || moAutoFilterRangeAfter)
     {
         ScDBData* pDBData = rDocument.GetAnonymousDBData(mnDefaultViewTab);
         if (pDBData)
         {
-            ScRange const& rRange = bUndo ? *maAutoFilterRangeBefore : *maAutoFilterRangeAfter;
+            ScRange const& rRange = bUndo ? *moAutoFilterRangeBefore : *moAutoFilterRangeAfter;
             pDBData->SetArea(rRange);
         }
     }

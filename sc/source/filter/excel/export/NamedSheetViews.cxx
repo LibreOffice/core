@@ -300,8 +300,8 @@ void xcl::exp::NamedSheetViews::saveSheetView(const sax_fastparser::FSHelperPtr&
         OString aRangeString = XclXmlUtils::ToOString(GetDoc(), aRange);
         OString aFilterGUID = comphelper::xml::generateGUIDString();
 
-        pStream->startElement(XML_nsvFilter, XML_filterId, aFilterGUID, XML_ref, aRangeString,
-                              XML_tableId, "0");
+        // TODO: emit XML_tableId when the filter is bound to a real table, not an anonymous DB range.
+        pStream->startElement(XML_nsvFilter, XML_filterId, aFilterGUID, XML_ref, aRangeString);
 
         ScQueryParam aQueryParam;
         pDBData->GetQueryParam(aQueryParam);
