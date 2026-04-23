@@ -3468,6 +3468,21 @@ bool SwTabFrame::CalcFlyOffsets( SwTwips& rUpper,
 
     bool bAddVerticalFlyOffsets = rIDSA.get(DocumentSettingId::ADD_VERTICAL_FLY_OFFSETS);
 
+    // A fly inside a split-table can cause the table to shift down because of
+    // IsAnLower(). A split-table contains a master SwTabFrame and its follows,
+    // IsAnLower() only walks GetUpper() chains, which skips checking follows
+    // of split-table.
+    auto isLowerOfTable = [this](const SwFrame* pFrame) -> bool
+    {
+        const SwTabFrame* pThisMaster = IsFollow() ? FindMaster() : this;
+        for (const SwTabFrame* pTab = pThisMaster; pTab; pTab = pTab->GetFollow())
+        {
+            if (pTab->IsAnLower(pFrame))
+                return true;
+        }
+        return false;
+    };
+
     for (size_t i = 0; i < pPage->GetSortedObjs()->size(); ++i)
     {
         SwAnchoredObject* pAnchoredObj = (*pPage->GetSortedObjs())[i];
@@ -3494,13 +3509,8 @@ bool SwTabFrame::CalcFlyOffsets( SwTwips& rUpper,
         //   text frame has already changed its page.
         const SwTextFrame* pAnchorCharFrame = pFly->FindAnchorCharFrame();
         const SwFormatHoriOrient& rHori= pFly->GetFormat()->GetHoriOrient();
-        // TODO: why not just ignore HoriOrient?
-        bool isHoriOrientShiftDown =
-               rHori.GetHoriOrient() == text::HoriOrientation::NONE
-            || rHori.GetHoriOrient() == text::HoriOrientation::LEFT
-            || rHori.GetHoriOrient() == text::HoriOrientation::RIGHT;
         // Only consider invalid Writer fly frames if they'll be shifted down.
-        bool bIgnoreFlyValidity = bAddVerticalFlyOffsets && isHoriOrientShiftDown;
+        bool bIgnoreFlyValidity = bAddVerticalFlyOffsets;
         bool bConsiderFly =
             // #i46807# - do not consider invalid
             // Writer fly frames.
@@ -3512,7 +3522,8 @@ bool SwTabFrame::CalcFlyOffsets( SwTwips& rUpper,
             // fly isn't lower of table and
             // anchor character frame of fly isn't lower of table
             && (pSpaceBelowBottom // not if in ShouldBwdMoved
-                || (!IsAnLower(pFly) && (!pAnchorCharFrame || !IsAnLower(pAnchorCharFrame))))
+                || (!isLowerOfTable(pFly)
+                    && (!pAnchorCharFrame || !isLowerOfTable(pAnchorCharFrame))))
             // table isn't lower of fly
             && !pFly->IsAnLower(this)
             // fly is lower of fly, the table is in
@@ -3560,7 +3571,7 @@ bool SwTabFrame::CalcFlyOffsets( SwTwips& rUpper,
         const SwRect aFlyRectWithoutSpaces = pFly->GetObjRect();
         if (!bShiftDown && bAddVerticalFlyOffsets)
         {
-            if (nSurround == text::WrapTextMode_PARALLEL && isHoriOrientShiftDown)
+            if (nSurround == text::WrapTextMode_PARALLEL)
             {
                 // We know that wrapping was requested and the table frame overlaps with
                 // the fly frame. Check if the print area overlaps with the fly frame as

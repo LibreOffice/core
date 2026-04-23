@@ -2252,6 +2252,19 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testTdf170846_2)
     assertXPath(pXmlDoc, "//page[2]//tab", 3); // Three tables on page 2
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testInlineTableShiftDown)
+{
+    createSwDoc("floattable-center-shift-down.docx");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    // The floating table is on page 1.
+    assertXPath(pXmlDoc, "//page[1]/body/txt/anchored/fly", 1);
+    // Without the fix, an inline table was laid out at its natural position on
+    // page 1 and overlapped the floating table. With the fix, the inline tables
+    // are shifted to subsequent pages.
+    assertXPath(pXmlDoc, "//page[1]/body/tab", 0);
+}
+
 } // end of anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();
