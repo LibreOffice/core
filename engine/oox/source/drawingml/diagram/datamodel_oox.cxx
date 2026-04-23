@@ -87,6 +87,13 @@ void DiagramData_oox::writeDiagramReplacement(DrawingML& rOriginalDrawingML, sax
         FSNS(XML_xmlns, XML_a), aNsDml);
     rTarget->startElementNS(XML_dsp, XML_spTree);
 
+    // nvGrpSpPr and grpSpPr elements are mandatory even if empty.
+    rTarget->startElementNS(XML_dsp, XML_nvGrpSpPr);
+    rTarget->singleElementNS(XML_dsp, XML_cNvPr, XML_id, "0", XML_name, "");
+    rTarget->singleElementNS(XML_dsp, XML_cNvGrpSpPr);
+    rTarget->endElementNS(XML_dsp, XML_nvGrpSpPr);
+    rTarget->singleElementNS(XML_dsp, XML_grpSpPr);
+
     for ( sal_Int32 i = 0; i < nCount; ++i )
     {
         uno::Reference< drawing::XShape > xShape;
@@ -186,6 +193,20 @@ void DiagramData_oox::writeDiagramData(DrawingML& rOriginalDrawingML, sax_fastpa
             }
         }
 
+        // <spPr> element is before <t> element
+        if (bWriteFill)
+        {
+            rTarget->startElementNS(XML_dgm, XML_spPr);
+            aShapeExport.WriteFill( xProps, xAssociatedShape->getSize());
+
+            rTarget->endElementNS(XML_dgm, XML_spPr);
+        }
+        else
+        {
+            // write empty fill
+            rTarget->singleElementNS(XML_dgm, XML_spPr);
+        }
+
         if (bWriteText)
         {
             rTarget->startElementNS(XML_dgm, XML_t);
@@ -212,19 +233,6 @@ void DiagramData_oox::writeDiagramData(DrawingML& rOriginalDrawingML, sax_fastpa
                 rTarget->endElementNS(XML_a, XML_p);
                 rTarget->endElementNS(XML_dgm, XML_t);
             }
-        }
-
-        if (bWriteFill)
-        {
-            rTarget->startElementNS(XML_dgm, XML_spPr);
-            aShapeExport.WriteFill( xProps, xAssociatedShape->getSize());
-
-            rTarget->endElementNS(XML_dgm, XML_spPr);
-        }
-        else
-        {
-            // write empty fill
-            rTarget->singleElementNS(XML_dgm, XML_spPr);
         }
 
         rTarget->endElementNS(XML_dgm, XML_pt);

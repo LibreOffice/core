@@ -6899,7 +6899,7 @@ void DrawingML::WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rX
         // sub-content
         uno::Reference<io::XOutputStream> xOutputStream = mpFB->openFragmentStream(
             sDir + "/" + drawingFileName,
-            u"application/vnd.openxmlformats-officedocument.drawingml.diagramData+xml"_ustr);
+            u"application/vnd.ms-office.drawingml.diagramDrawing+xml"_ustr);
 
         if (xOutputStream)
             pAdvancedDiagramHelper->writeDiagramOOXDrawing(*this, xOutputStream);
