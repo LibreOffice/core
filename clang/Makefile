@@ -11,10 +11,10 @@ plugin.so: plugin.o Makefile
 plugin.o: plugin.cpp Makefile
 	$(CXX) -O2 -g $(CLANG_CXXFLAGS) -Wall -Werror plugin.cpp -fPIC -c -o plugin.o
 
-run:
+run: | plugin.so
 	$(CXX) -Werror -Xclang -load -Xclang ./plugin.so -Xclang -add-plugin -Xclang coplugin -c -o test/capture.o test/capture.cpp
 
-check:
+check: | plugin.so
 	$(CXX) -Werror -Xclang -verify -Xclang -load -Xclang ./plugin.so -Xclang -add-plugin -Xclang coplugin -c test/capture.cpp
 	$(CXX) -Werror -Xclang -verify -Xclang -load -Xclang ./plugin.so -Xclang -add-plugin -Xclang coplugin -c test/refcounting.cpp
 
