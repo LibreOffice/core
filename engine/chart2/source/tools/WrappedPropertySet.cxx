@@ -89,7 +89,7 @@ void SAL_CALL WrappedPropertySet::setPropertyValue( const OUString& rPropertyNam
             xInnerPropertySet->setPropertyValue( rPropertyName, rValue );
         else
         {
-            SAL_WARN("chart2.tools", "found no inner property set to map to");
+            SAL_INFO("chart2.tools", "found no inner property set to map to");
         }
     }
     catch( const beans::UnknownPropertyException& )
@@ -134,7 +134,7 @@ Any SAL_CALL WrappedPropertySet::getPropertyValue( const OUString& rPropertyName
             aRet = xInnerPropertySet->getPropertyValue( rPropertyName );
         else
         {
-            SAL_WARN("chart2.tools", "found no inner property set to map to");
+            SAL_INFO("chart2.tools", "found no inner property set to map to");
         }
     }
     catch( const beans::UnknownPropertyException& )
