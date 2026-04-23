@@ -602,7 +602,7 @@ Dialog::~Dialog()
 
 void Dialog::dispose()
 {
-    bool bTunnelingEnabled = mpDialogImpl->m_bLOKTunneling;
+    bool bTunnelingEnabled = mpDialogImpl && mpDialogImpl->m_bLOKTunneling;
 
     mpDialogImpl->disposeAndClear();
     RemoveFromDlgList();
@@ -727,7 +727,7 @@ void Dialog::SetInstallLOKNotifierHdl(const Link<void*, vcl::ILibreOfficeKitNoti
 
 void Dialog::StateChanged( StateChangedType nType )
 {
-    bool bTunnelingEnabled = mpDialogImpl->m_bLOKTunneling;
+    bool bTunnelingEnabled = mpDialogImpl && mpDialogImpl->m_bLOKTunneling;
 
     if (nType == StateChangedType::InitShow)
     {
@@ -1406,6 +1406,9 @@ void Dialog::Resize()
     SystemWindow::Resize();
 
     if (comphelper::LibreOfficeKit::isDialogPainting())
+        return;
+
+    if (!mpDialogImpl)
         return;
 
     bool bTunnelingEnabled = mpDialogImpl->m_bLOKTunneling;
