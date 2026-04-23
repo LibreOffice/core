@@ -1067,7 +1067,16 @@ typedef enum
      *
      * Here all aproperties are same as described in svxruler.
      */
-    KIT_CALLBACK_VERTICAL_RULER_UPDATE = 73
+    KIT_CALLBACK_VERTICAL_RULER_UPDATE = 73,
+
+    /**
+     * Advertises the MIME types currently held by the kit clipboard,
+     * without any serialised content.
+     *
+     * Payload format is JSON.
+     * Example: { "mimeTypes": ["text/plain;charset=utf-8", "image/png"] }
+     */
+    KIT_CALLBACK_CLIPBOARD_MIMETYPES = 74
 
 }
 COKitCallbackType;
@@ -1245,6 +1254,8 @@ static inline const char* kitCallbackTypeToString(int nType)
         return "KIT_CALLBACK_TOOLTIP";
     case KIT_CALLBACK_SHAPE_INNER_TEXT:
         return "KIT_CALLBACK_SHAPE_INNER_TEXT";
+    case KIT_CALLBACK_CLIPBOARD_MIMETYPES:
+        return "KIT_CALLBACK_CLIPBOARD_MIMETYPES";
     }
 
     assert(!"Unknown COKitCallbackType type.");

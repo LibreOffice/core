@@ -1500,6 +1500,7 @@ callback (gpointer pData)
     case KIT_CALLBACK_CORE_LOG:
     case KIT_CALLBACK_TOOLTIP:
     case KIT_CALLBACK_SHAPE_INNER_TEXT:
+    case KIT_CALLBACK_CLIPBOARD_MIMETYPES:
     {
         // TODO: Implement me
         break;

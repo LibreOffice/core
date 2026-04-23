@@ -9,9 +9,12 @@
 
 #include "kitclipboard.hxx"
 #include <unordered_map>
+#include <comphelper/kit.hxx>
+#include <tools/json_writer.hxx>
 #include <tools/lazydelete.hxx>
 #include <vcl/svapp.hxx>
 #include <sfx2/kit/helper.hxx>
+#include <COKit/COKitEnums.h>
 #include <sal/log.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -42,6 +45,7 @@ rtl::Reference<KitClipboard> KitClipboardFactory::getClipboardForCurView()
         return it->second;
     }
     rtl::Reference<KitClipboard> xClip(new KitClipboard());
+    xClip->setViewId(nViewId);
     (*gClipboards.get())[nViewId] = xClip;
     SAL_INFO("kit", "Created clip: " << xClip.get() << " for viewId " << nViewId);
     return xClip;
@@ -135,6 +139,43 @@ void KitClipboard::setContents(
     {
         listener->changedContents(aEv);
     }
+
+    // Emit here rather than from SfxClipboardChangeListener: the listener can
+    // attach to the pre-Kit default clipboard before the per-view Kit clipboard
+    // lands on the window frame, and then miss every real copy.
+    if (!xTrans.is() || !comphelper::COKit::isActive() || m_nViewId < 0)
+        return;
+
+    std::vector<OString> aMimeTypes;
+    try
+    {
+        const auto aFlavors = xTrans->getTransferDataFlavors();
+        aMimeTypes.reserve(aFlavors.getLength());
+        for (const auto& rFlavor : aFlavors)
+        {
+            OString aMime = OUStringToOString(rFlavor.MimeType, RTL_TEXTENCODING_UTF8);
+            // Match doc_getClipboard() behaviour: advertise utf-8 not utf-16
+            if (aMime.startsWith("text/plain"))
+                aMime = "text/plain;charset=utf-8"_ostr;
+            aMimeTypes.push_back(aMime);
+        }
+    }
+    catch (const uno::Exception&)
+    {
+        return;
+    }
+
+    if (aMimeTypes.empty())
+        return;
+
+    tools::JsonWriter aWriter;
+    {
+        auto aArr = aWriter.startArray("mimeTypes");
+        for (const auto& rMime : aMimeTypes)
+            aWriter.putSimpleValue(OUString::fromUtf8(rMime));
+    }
+    KitHelper::notifyView(m_nViewId, KIT_CALLBACK_CLIPBOARD_MIMETYPES,
+                          aWriter.finishAndGetAsOString());
 }
 
 void KitClipboard::addClipboardListener(

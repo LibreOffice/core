@@ -29,9 +29,12 @@ class KitClipboard final
     css::uno::Reference<css::datatransfer::XTransferable> m_xTransferable;
     css::uno::Reference<css::datatransfer::clipboard::XClipboardOwner> m_aOwner;
     std::vector<css::uno::Reference<css::datatransfer::clipboard::XClipboardListener>> m_aListeners;
+    int m_nViewId = -1;
 
 public:
     KitClipboard();
+
+    void setViewId(int nViewId) { m_nViewId = nViewId; }
 
     /// get an XInterface easily.
     css::uno::Reference<css::uno::XInterface> getXI()

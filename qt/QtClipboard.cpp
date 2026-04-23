@@ -16,7 +16,6 @@
 #define KIT_USE_UNSTABLE_API
 #include <COKit/COKit.hxx>
 
-#include <common/Log.hpp>
 #include <common/MobileApp.hpp>
 
 #include <QApplication>
@@ -27,42 +26,46 @@
 #include <QMimeData>
 #include <QString>
 
-#include <QMetaObject>
-#include <QThreadPool>
-
 #include <atomic>
 #include <cstdlib>
-#include <functional>
 #include <memory>
 #include <vector>
 
 std::atomic<unsigned> sClipboardSourceDocId{0};
 
-static std::unique_ptr<QMimeData> fetchClipboardData(unsigned appDocId)
+namespace
+{
+/// Make the doc's view current before any clipboard API call: doc_getClipboard
+/// and doc_setClipboard both route by the kit's current view.
+bool selectDocViewAsCurrent(kit::Document* loKitDoc)
+{
+    int nViewId = -1;
+    if (!loKitDoc->getViewIds(&nViewId, 1) || nViewId < 0)
+        return false;
+    loKitDoc->setView(nViewId);
+    return true;
+}
+
+std::unique_ptr<QMimeData> fetchClipboardData(unsigned appDocId,
+                                              const char** pMimeTypes = nullptr)
 {
     kit::Document* loKitDoc = DocumentData::get(appDocId).loKitDocument;
-    if (!loKitDoc)
-    {
-        LOG_DBG("getClipboard: no loKitDocument");
+    if (!loKitDoc || !selectDocViewAsCurrent(loKitDoc))
         return nullptr;
-    }
 
     size_t outCount = 0;
     char** outMimeTypes = nullptr;
     size_t* outSizes = nullptr;
     char** outStreams = nullptr;
 
-    if (!loKitDoc->getClipboard(nullptr, &outCount, &outMimeTypes, &outSizes, &outStreams)
+    if (!loKitDoc->getClipboard(pMimeTypes, &outCount, &outMimeTypes, &outSizes, &outStreams)
         || outCount == 0)
-    {
-        LOG_DBG("getClipboard: empty or failed");
         return nullptr;
-    }
 
     auto mimeData = std::make_unique<QMimeData>();
     for (size_t i = 0; i < outCount; ++i)
     {
-        if (outStreams[i] != nullptr && outSizes[i] > 0)
+        if (outStreams[i] && outSizes[i] > 0)
             mimeData->setData(QString::fromUtf8(outMimeTypes[i]),
                               QByteArray(outStreams[i], static_cast<int>(outSizes[i])));
         free(outMimeTypes[i]);
@@ -74,29 +77,39 @@ static std::unique_ptr<QMimeData> fetchClipboardData(unsigned appDocId)
 
     return mimeData;
 }
-
-void getClipboard(unsigned appDocId, std::function<void()> onDone)
-{
-    QThreadPool::globalInstance()->start(
-        [appDocId, onDone = std::move(onDone)]()
-        {
-            auto mimeData = fetchClipboardData(appDocId);
-
-            QMetaObject::invokeMethod(
-                qApp,
-                [appDocId, mimeData = std::move(mimeData), onDone = std::move(onDone)]() mutable
-                {
-                    if (mimeData)
-                    {
-                        QGuiApplication::clipboard()->setMimeData(mimeData.release());
-                        sClipboardSourceDocId.store(appDocId);
-                    }
-                    if (onDone)
-                        onDone();
-                },
-                Qt::QueuedConnection);
-        });
 }
+
+/// QMimeData subclass that advertises MIME types without serializing data.
+/// Data is fetched on demand from LOKit when an external app (or cross-document
+/// paste) actually requests it via retrieveData().
+class LazyClipboardMimeData : public QMimeData
+{
+    unsigned _appDocId;
+    QStringList _mimeTypes;
+
+public:
+    LazyClipboardMimeData(unsigned appDocId, QStringList mimeTypes)
+        : _appDocId(appDocId)
+        , _mimeTypes(std::move(mimeTypes))
+    {
+    }
+
+    QStringList formats() const override { return _mimeTypes; }
+
+    bool hasFormat(const QString& mimeType) const override
+    {
+        return _mimeTypes.contains(mimeType);
+    }
+
+protected:
+    QVariant retrieveData(const QString& mimeType, QMetaType /*type*/) const override
+    {
+        std::string mimeStr = mimeType.toStdString();
+        const char* pMimeTypes[] = { mimeStr.c_str(), nullptr };
+        auto data = fetchClipboardData(_appDocId, pMimeTypes);
+        return data ? data->data(mimeType) : QVariant{};
+    }
+};
 
 void setClipboard(unsigned appDocId)
 {
@@ -106,6 +119,9 @@ void setClipboard(unsigned appDocId)
 
     const QMimeData* data = QApplication::clipboard()->mimeData();
     if (!data)
+        return;
+
+    if (!selectDocViewAsCurrent(loKitDoc))
         return;
 
     // Limit MIME types that LOKit can consume. Keeping this set small also avoids IPC round-trips
@@ -153,6 +169,22 @@ void setClipboard(unsigned appDocId)
     if (!mimeTypePtrs.empty())
         loKitDoc->setClipboard(mimeTypePtrs.size(), mimeTypePtrs.data(), sizes.data(),
                                streams.data());
+}
+
+void setLazyClipboard(unsigned appDocId, QStringList mimeTypes)
+{
+    QGuiApplication::clipboard()->setMimeData(
+        new LazyClipboardMimeData(appDocId, std::move(mimeTypes)));
+    sClipboardSourceDocId.store(appDocId);
+}
+
+void materializeClipboard(unsigned appDocId)
+{
+    auto mimeData = fetchClipboardData(appDocId);
+    if (!mimeData)
+        return;
+    QGuiApplication::clipboard()->setMimeData(mimeData.release());
+    sClipboardSourceDocId.store(appDocId);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

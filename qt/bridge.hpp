@@ -13,6 +13,7 @@
 
 #include <QWebEngineView>
 #include <QObject>
+#include <QStringList>
 #include <QVariant>
 #include <string>
 #include <thread>

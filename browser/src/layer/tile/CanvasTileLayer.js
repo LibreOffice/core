@@ -956,8 +956,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 			}
 	}
 		else if (textMsg.startsWith('clipboardchanged')) {
-			var jMessage = textMsg.substr(17);
-			jMessage = JSON.parse(jMessage);
+			var jMessage = JSON.parse(textMsg.substr(17));
 
 			if (jMessage.mimeType === 'text/plain') {
 				this._map._clip.setTextSelectionHTML(jMessage.content);
@@ -968,6 +967,10 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 				else // Or use previous method.
 					this._map._clip._execCopyCutPaste('copy');
 			}
+		}
+		else if (textMsg.startsWith('clipboardmimetypes:')) {
+			if (window.ThisIsTheQtApp)
+				window.postMobileMessage('CLIPBOARDMIMETYPES' + textMsg.substr(19));
 		}
 		else if (textMsg.startsWith('textselectionend:')) {
 			this._onTextSelectionEndMsg(textMsg);

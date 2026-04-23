@@ -199,6 +199,9 @@ public:
     /// Notifies all views with the given type and payload.
     static void notifyAllViews(int nType, const OString& rPayload);
 
+    /// Dispatches a callback to a single view identified by its view id.
+    static void notifyView(int nViewId, int nType, const OString& rPayload);
+
     /// Notify about the editing context change.
     static void notifyContextChange(const css::ui::ContextChangeEventObject& rEvent);
 

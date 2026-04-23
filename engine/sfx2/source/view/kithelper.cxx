@@ -858,6 +858,24 @@ void KitHelper::notifyAllViews(int nType, const OString& rPayload)
     }
 }
 
+void KitHelper::notifyView(int nViewId, int nType, const OString& rPayload)
+{
+    if (DisableCallbacks::disabled() || nViewId < 0)
+        return;
+
+    const auto payload = rPayload.getStr();
+    SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+    while (pViewShell)
+    {
+        if (pViewShell->GetViewShellId().get() == nViewId)
+        {
+            pViewShell->viewCallback(nType, payload);
+            return;
+        }
+        pViewShell = SfxViewShell::GetNext(*pViewShell);
+    }
+}
+
 void KitHelper::notifyContextChange(const css::ui::ContextChangeEventObject& rEvent)
 {
     if (DisableCallbacks::disabled())

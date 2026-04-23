@@ -441,6 +441,19 @@ QVariant Bridge::cool(const QString& messageStr)
         const bool modified = (object->get("state").toString() == "true");
         LOG_TRC_NOFILE("Document modified status changed: " << (modified ? "modified" : "unmodified"));
     }
+    else if (tokens.equals(0, "CLIPBOARDMIMETYPES"))
+    {
+        Poco::JSON::Object::Ptr object;
+        if (!JsonUtil::parseJSON(tokens.substrFromToken(1), object)
+            || !object->has("mimeTypes"))
+            return {};
+
+        QStringList types;
+        for (const auto& type : *object->getArray("mimeTypes"))
+            types.append(QString::fromStdString(type.convert<std::string>()));
+        setLazyClipboard(_document._appDocId, std::move(types));
+        return {};
+    }
     else if (tokens.equals(0, "COMMANDRESULT"))
     {
         Poco::JSON::Object::Ptr object;
@@ -464,11 +477,9 @@ QVariant Bridge::cool(const QString& messageStr)
         if (commandName == ".uno:Copy" || commandName == ".uno:Cut"
             || commandName == ".uno:CopySlide")
         {
-            getClipboard(_document._appDocId, [this]() {
-                evalJS("if (window.app && window.app.map && window.app.map.uiManager) "
-                              "window.app.map.uiManager.closeSnackbar();");
-                _copyInProgress = false;
-            });
+            evalJS("if (window.app && window.app.map && window.app.map.uiManager) "
+                          "window.app.map.uiManager.closeSnackbar();");
+            _copyInProgress = false;
         }
 
         // only handle successful .uno:Save commands
@@ -513,6 +524,15 @@ QVariant Bridge::cool(const QString& messageStr)
     else if (tokens.equals(0, "BYE"))
     {
         LOG_TRC_NOFILE("Document window terminating on JavaScript side → closing fake socket");
+
+        // Materialise lazy clipboard before destroying the document so that
+        // an external paste after the document closes still works.
+        if (QApplication::clipboard()->ownsClipboard()
+            && sClipboardSourceDocId.load() == _document._appDocId)
+        {
+            materializeClipboard(_document._appDocId);
+        }
+
         fakeSocketClose(_closeNotificationPipeForForwardingThread[0]);
 
         QTimer::singleShot(0, [this]() {

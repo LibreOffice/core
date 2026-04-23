@@ -12,11 +12,13 @@
 #pragma once
 
 #include <atomic>
-#include <functional>
+
+#include <QStringList>
 
 extern std::atomic<unsigned> sClipboardSourceDocId;
 
-void getClipboard(unsigned appDocId, std::function<void()> onDone);
 void setClipboard(unsigned appDocId);
+void setLazyClipboard(unsigned appDocId, QStringList mimeTypes);
+void materializeClipboard(unsigned appDocId);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

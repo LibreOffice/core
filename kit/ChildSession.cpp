@@ -2428,7 +2428,8 @@ bool ChildSession::unoCommand(const StringVector& tokens)
 
     getLOKitDocument()->setView(_viewId);
 
-    if (tokens.equals(1, ".uno:Copy") || tokens.equals(1, ".uno:CopyHyperlinkLocation"))
+    if (tokens.equals(1, ".uno:Copy") || tokens.equals(1, ".uno:CopyHyperlinkLocation")
+        || tokens.equals(1, ".uno:Cut") || tokens.equals(1, ".uno:CopySlide"))
         _copyToClipboard = true;
 
     if (tokens.size() == 2 && tokens.equals(1, ".uno:fakeDiskFull"))
@@ -4035,6 +4036,15 @@ void ChildSession::loKitCallback(const int type, const std::string& payload)
                 getTextSelectionInternal("");
             else
                 sendTextFrame("clipboardchanged: " + payload);
+        }
+
+        break;
+    }
+    case KIT_CALLBACK_CLIPBOARD_MIMETYPES:
+    {
+        if (_copyToClipboard)
+        {
+            sendTextFrame("clipboardmimetypes: " + payload);
         }
 
         break;
