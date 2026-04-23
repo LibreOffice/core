@@ -56,6 +56,7 @@ public:
 
     virtual std::unique_ptr<SvxFieldData> Clone() const;
     virtual bool            operator==( const SvxFieldData& ) const;
+    virtual size_t hashCode() const;
     virtual void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };
 
@@ -77,6 +78,8 @@ public:
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual SvxFieldItem*   Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual void dumpAsXml(xmlTextWriterPtr pWriter) const override;
+    virtual bool supportsHashCode() const override { return true; }
+    virtual size_t hashCode() const override;
 
     const SvxFieldData*     GetField() const    { return mpField.get(); }
 };
@@ -172,6 +175,7 @@ public:
 
     virtual std::unique_ptr<SvxFieldData> Clone() const override;
     virtual bool            operator==( const SvxFieldData& ) const override;
+    virtual size_t          hashCode() const override;
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
