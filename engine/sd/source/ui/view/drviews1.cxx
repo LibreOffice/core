@@ -987,10 +987,13 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage, bool bAllowChangeFocus,
             }
         }
 
-        for (sal_uInt16 i = 0; i < GetDoc()->GetSdPageCount(mePageKind); i++)
+        if (bAllowChangeFocus)
         {
-            // deselect all pages
-            GetDoc()->SetSelected( GetDoc()->GetSdPage(i, mePageKind), false);
+            for (sal_uInt16 i = 0; i < GetDoc()->GetSdPageCount(mePageKind); i++)
+            {
+                // deselect all pages
+                GetDoc()->SetSelected( GetDoc()->GetSdPage(i, mePageKind), false);
+            }
         }
 
         if (!mpActualPage)
@@ -999,9 +1002,12 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage, bool bAllowChangeFocus,
             mpActualPage = GetDoc()->GetSdPage(0, mePageKind);
         }
 
-        // also select this page (mpActualPage always points at a drawing page,
-        // never at a masterpage)
-        GetDoc()->SetSelected(mpActualPage, true);
+        if (bAllowChangeFocus)
+        {
+            // also select this page (mpActualPage always points at a drawing page,
+            // never at a masterpage)
+            GetDoc()->SetSelected(mpActualPage, true);
+        }
 
         if (comphelper::COKit::isActive())
         {
@@ -1085,7 +1091,8 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage, bool bAllowChangeFocus,
                     }
                 }
             }
-            GetDoc()->SetSelected(mpActualPage, true);
+            if (bAllowChangeFocus)
+                GetDoc()->SetSelected(mpActualPage, true);
 
             SdrPageView* pPageView = mpDrawView->GetSdrPageView();
 
@@ -1112,7 +1119,8 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage, bool bAllowChangeFocus,
             mpDrawView->HideSdrPage();
             maTabControl->SetCurPageId(maTabControl->GetPageId(nSelectedPage));
             mpDrawView->ShowSdrPage(mpActualPage);
-            GetViewShellBase().GetDrawController()->FireSwitchCurrentPage(mpActualPage);
+            if (bAllowChangeFocus)
+                GetViewShellBase().GetDrawController()->FireSwitchCurrentPage(mpActualPage);
 
             if (comphelper::COKit::isActive())
             {
@@ -1228,7 +1236,8 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage, bool bAllowChangeFocus,
             sal_uInt16 nNum = pMaster->GetPageNum();
             mpDrawView->ShowSdrPage(mpDrawView->GetModel().GetMasterPage(nNum));
 
-            GetViewShellBase().GetDrawController()->FireSwitchCurrentPage(pMaster);
+            if (bAllowChangeFocus)
+                GetViewShellBase().GetDrawController()->FireSwitchCurrentPage(pMaster);
 
             SdrPageView* pNewPageView = mpDrawView->GetSdrPageView();
 
