@@ -2876,6 +2876,36 @@ private:
 
 typedef std::unique_ptr<ScDocument, o3tl::default_delete<ScDocument>> ScDocumentUniquePtr;
 
+namespace sc
+{
+/** Guard for a BeginDrawUndo() capture window.
+ *  Opens on construction, drains on destruction. If an undo action
+ *  consumes the window in between, the destructor's drain is
+ *  a harmless no-op. */
+class DrawUndoGuard
+{
+    ScDocument* mpDoc;
+
+public:
+    DrawUndoGuard(ScDocument& rDoc, bool bEnabled)
+        : mpDoc(bEnabled ? &rDoc : nullptr)
+    {
+        if (mpDoc)
+            mpDoc->BeginDrawUndo();
+    }
+    ~DrawUndoGuard()
+    {
+        if (mpDoc)
+        {
+            if (auto* pLayer = mpDoc->GetDrawLayer())
+                (void)pLayer->GetCalcUndo();
+        }
+    }
+    DrawUndoGuard(const DrawUndoGuard&) = delete;
+    DrawUndoGuard& operator=(const DrawUndoGuard&) = delete;
+};
+} // end sc namespace
+
 /**
  * Instantiate this to ensure that subsequent modification of
  * the document will cause an assertion failure while this is
