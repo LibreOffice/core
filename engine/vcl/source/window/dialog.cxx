@@ -619,7 +619,7 @@ Dialog::~Dialog()
 
 void Dialog::dispose()
 {
-    bool bTunnelingEnabled = mpDialogImpl->m_bLOKTunneling;
+    bool bTunnelingEnabled = mpDialogImpl && mpDialogImpl->m_bLOKTunneling;
 
     mpDialogImpl->disposeAndClear();
     RemoveFromDlgList();
@@ -754,7 +754,7 @@ void Dialog::SetKitTunnelingState(bool bEnabled)
 
 void Dialog::StateChanged( StateChangedType nType )
 {
-    bool bTunnelingEnabled = mpDialogImpl->m_bLOKTunneling;
+    bool bTunnelingEnabled = mpDialogImpl && mpDialogImpl->m_bLOKTunneling;
 
     if (nType == StateChangedType::InitShow)
     {
@@ -1433,6 +1433,9 @@ void Dialog::Resize()
     SystemWindow::Resize();
 
     if (comphelper::COKit::isDialogPainting())
+        return;
+
+    if (!mpDialogImpl)
         return;
 
     bool bTunnelingEnabled = mpDialogImpl->m_bLOKTunneling;
