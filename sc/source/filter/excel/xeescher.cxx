@@ -651,6 +651,7 @@ XclExpTbxControlObj::XclExpTbxControlObj( XclExpObjectManager& rRoot, Reference<
     mbScrollHor( false ),
     mbPrint( false ),
     mbVisible( false ),
+    mbStroked( false ),
     mnShapeId( 0 ),
     mrRoot(rRoot)
 {
@@ -661,6 +662,22 @@ XclExpTbxControlObj::XclExpTbxControlObj( XclExpObjectManager& rRoot, Reference<
     ScfPropertySet aCtrlProp( XclControlHelper::GetControlModel( xShape ) );
     if( !xShape.is() || !aCtrlProp.Is() )
         return;
+
+    Reference<css::beans::XPropertySet> xShapeProps(xShape, UNO_QUERY);
+    if (xShapeProps.is()
+        && xShapeProps->getPropertySetInfo()->hasPropertyByName(u"InteropGrabBag"_ustr))
+    {
+        Sequence<css::beans::PropertyValue> aGrabBag;
+        xShapeProps->getPropertyValue(u"InteropGrabBag"_ustr) >>= aGrabBag;
+        for (auto& aProp : aGrabBag)
+        {
+            if (aProp.Name == "VMLStroked")
+            {
+                aProp.Value >>= mbStroked;
+                break;
+            }
+        }
+    }
 
     mnHeight = xShape->getSize().Height;
     if( mnHeight <= 0 )
@@ -1109,6 +1126,7 @@ public:
                            const OUString& sControlName, const OUString& sFmlaLink,
                            OUString aLabel, OUString aMacroName, sal_Int16 nState);
     bool m_bLook3d = true;
+    bool m_bStroked = false;
     std::optional<Color> m_oBackgroundFill;
 
 protected:
@@ -1150,6 +1168,9 @@ sal_Int32 VmlFormControlExporter::StartShape()
                           OUString("#" + m_oBackgroundFill->AsRGBHexString()).toUtf8());
     else
         AddShapeAttribute(XML_filled, "f");
+
+    if (!m_bStroked)
+        AddShapeAttribute(XML_stroked, "f");
 
     return VMLExport::StartShape();
 }
@@ -1234,6 +1255,7 @@ void XclExpTbxControlObj::SaveVml(XclExpXmlStream& rStrm)
     aFormControlExporter.SetSkipwzName(true);  // use XML_id for legacyid, not XML_ID
     aFormControlExporter.OverrideShapeIDGen(true, "_x0000_s"_ostr);
     aFormControlExporter.m_bLook3d = !mbFlatButton;
+    aFormControlExporter.m_bStroked = mbStroked;
     aFormControlExporter.m_oBackgroundFill = moBackgroundFill;
     aFormControlExporter.AddSdrObject(*pObj, /*bIsFollowingTextFlow=*/false, /*eHOri=*/-1,
                                       /*eVOri=*/-1, /*eHRel=*/-1, /*eVRel=*/-1,
