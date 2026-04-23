@@ -29,6 +29,7 @@
 #include <init.hxx>
 #include <dobjfac.hxx>
 
+#include <com/sun/star/datatransfer/clipboard/SystemClipboard.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <comphelper/configuration.hxx>
 #include <unotools/moduleoptions.hxx>
@@ -143,6 +144,18 @@ SwDLL::SwDLL()
 
 SwDLL::~SwDLL() COVERITY_NOEXCEPT_FALSE
 {
+    // Mostly here to prevent leaks during shutdown when running unit tests
+    // Need to clear this early in the shutdown process, because it might hold references
+    // to large complex things like ScDocument.
+    try {
+        css::uno::Reference<css::datatransfer::clipboard::XClipboard> xClipboard =
+            css::datatransfer::clipboard::SystemClipboard::create(
+                comphelper::getProcessComponentContext());
+        xClipboard->setContents( nullptr, nullptr );
+    } catch (css::uno::DeploymentException const&) {
+        // ignore, sometimes happens that UNO is already shutdown by now
+    }
+
     if (m_pAutoCorrCfg)
     {
         // fdo#86494 SwAutoCorrect must be deleted before FinitCore
