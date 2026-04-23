@@ -231,4 +231,45 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Compare Changes view.', fu
 			});
 		});
 	});
+
+	it('Comment does not overlap when sidebar is enabled in compare mode.', function() {
+		// Given a document with a comment, sidebar hidden, in doc compare mode:
+		loadDocument('track_changes_comment.docx');
+		desktopHelper.sidebarToggle();
+		cy.cGet('#sidebar-dock-wrapper').should('not.be.visible');
+		enterCompareChangesMode();
+		cy.getFrameWindow().then(function(win) {
+			helper.processToIdle(win);
+		});
+		cy.cGet('#comment-container-1').should('exist');
+
+		// And then turning the sidebar on:
+		desktopHelper.sidebarToggle();
+		cy.cGet('#sidebar-dock-wrapper').should('be.visible');
+		cy.getFrameWindow().then(function(win) {
+			helper.processToIdle(win);
+		});
+
+		// Then make sure that pages, comment and sidebar don't overlap:
+		cy.getFrameWindow().then(function(win) {
+			var layout = win.app.activeDocument.activeLayout;
+			var rightEdgePoint = new win.cool.SimplePoint(win.app.activeDocument.fileSize.pX, 0);
+			rightEdgePoint.mode = 2; // TileMode.RightSide
+			var rightPageEdge = layout.documentToViewX(rightEdgePoint) / win.app.dpiScale;
+
+			cy.cGet('#comment-container-1').should(function($el) {
+				expect($el.position().left, 'comment left vs right page edge').to.be.at.least(rightPageEdge);
+			});
+		});
+		cy.cGet('#sidebar-dock-wrapper').then(function($sidebar) {
+			var sidebarLeft = $sidebar[0].getBoundingClientRect().left;
+
+			cy.cGet('#comment-container-1').should(function($el) {
+				var commentRight = $el[0].getBoundingClientRect().right;
+				// Without the accompanying fix in place, this test would have failed with:
+				// comment right vs sidebar left: expected 1335 to be at most 1174.8583984375
+				expect(commentRight, 'comment right vs sidebar left').to.be.at.most(sidebarLeft);
+			});
+		});
+	});
 });

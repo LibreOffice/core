@@ -45,8 +45,12 @@ class ViewLayoutCompareChanges extends ViewLayoutNewBase {
 	}
 
 	private onResize(): void {
-		this.adjustViewZoomLevel();
-		this.refreshView();
+		// Defer so that the document anchor section picks up its new size
+		// first.
+		app.layoutingService.appendLayoutingTask(() => {
+			this.adjustViewZoomLevel();
+			this.refreshView();
+		});
 	}
 
 	private onZoomEnd(): void {
