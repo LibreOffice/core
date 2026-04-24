@@ -260,10 +260,12 @@ class LayerRendererGl implements LayerRenderer {
 			// app.console.debug(`LayerDrawing.drawBitmap: cache hit: key: ${textureKey}`);
 		} else {
 			if (imageInfo instanceof ImageBitmap) {
-				texture = this.glContext.loadTexture(imageInfo);
+				texture = this.glContext.loadTexture(imageInfo, false, true);
 			} else {
 				texture = this.glContext.loadTexture(
 					imageInfo.data as HTMLImageElement,
+					false,
+					true,
 				);
 			}
 			this.textureCache.set(textureKey, texture);

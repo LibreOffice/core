@@ -67,6 +67,7 @@ abstract class RenderContext {
 	public abstract loadTexture(
 		image: HTMLImageElement,
 		isMipMapEnable?: boolean,
+		nearestFiltering?: boolean,
 	): WebGLTexture | ImageBitmap;
 
 	public abstract deleteTexture(texture: WebGLTexture | ImageBitmap): void;
@@ -109,6 +110,7 @@ class RenderContextGl extends RenderContext {
 	public loadTexture(
 		image: HTMLImageElement | ImageBitmap,
 		isMipMapEnable: boolean = false,
+		nearestFiltering: boolean = false,
 	): WebGLTexture | ImageBitmap {
 		if (this.isDisposed()) return null;
 
@@ -128,6 +130,7 @@ class RenderContextGl extends RenderContext {
 		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
 		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 
+		const filter = nearestFiltering ? gl.NEAREST : gl.LINEAR;
 		if (isMipMapEnable) {
 			gl.generateMipmap(gl.TEXTURE_2D);
 			gl.texParameteri(
@@ -136,10 +139,10 @@ class RenderContextGl extends RenderContext {
 				gl.LINEAR_MIPMAP_LINEAR,
 			);
 		} else {
-			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, filter);
 		}
 
-		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, filter);
 
 		if (image instanceof HTMLImageElement)
 			app.console.debug(`Texture loaded successfully`);
@@ -277,6 +280,7 @@ class RenderContext2d extends RenderContext {
 	public loadTexture(
 		image: HTMLImageElement,
 		isMipMapEnable: boolean = false,
+		nearestFiltering: boolean = false,
 	): WebGLTexture | ImageBitmap {
 		return image;
 	}

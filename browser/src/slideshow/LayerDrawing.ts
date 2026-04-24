@@ -947,8 +947,12 @@ class LayerDrawing {
 	}
 
 	private computeInitialResolution() {
-		const viewWidth = window.screen.width;
-		const viewHeight = window.screen.height;
+		// window.screen dimensions are in CSS pixels; multiply by DPR so the
+		// tier selection matches the display's physical pixels and the canvas
+		// backing store isn't upscaled by CSS on HiDPI screens.
+		const dpr = window.devicePixelRatio || 1;
+		const viewWidth = window.screen.width * dpr;
+		const viewHeight = window.screen.height * dpr;
 		this.computeResolution(viewWidth, viewHeight);
 	}
 

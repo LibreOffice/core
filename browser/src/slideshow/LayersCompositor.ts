@@ -133,7 +133,7 @@ class LayersCompositor extends SlideCompositor {
 		if (slideRatio > resolutionRatio) {
 			height = Math.trunc((width * slideHeight) / slideWidth);
 		} else if (slideRatio < resolutionRatio) {
-			width = Math.trunc((height * slideWidth) / slideHeight);
+			width = Math.ceil((height * slideWidth) / slideHeight);
 		}
 		return [width, height];
 	}
