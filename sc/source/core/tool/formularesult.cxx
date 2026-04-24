@@ -647,8 +647,11 @@ void ScFormulaResult::SetMatrix( SCCOL nCols, SCROW nRows, const ScConstMatrixRe
 
 const ScMatrixFormulaCellToken* ScFormulaResult::GetMatrixFormulaCellToken() const
 {
-    return (GetType() == formula::svMatrixCell ?
-            static_cast<const ScMatrixFormulaCellToken*>(mpToken) : nullptr);
+    // Inspect mpToken directly: GetType() would report svError when mnError is
+    // set, hiding the still-valid matrix token from callers that only need the
+    // declared dimensions.
+    return (mbToken && mpToken && mpToken->GetType() == formula::svMatrixCell
+            ? static_cast<const ScMatrixFormulaCellToken*>(mpToken) : nullptr);
 }
 
 ScMatrixFormulaCellToken* ScFormulaResult::GetMatrixFormulaCellTokenNonConst()

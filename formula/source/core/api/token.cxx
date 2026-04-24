@@ -475,7 +475,8 @@ FormulaTokenArray::FormulaTokenArray() :
     bHyperLink(false),
     mbFromRangeName(false),
     mbShareable(true),
-    mbFinalized(false)
+    mbFinalized(false),
+    mbDynamicArrayFunction(false)
 {
 }
 
@@ -609,6 +610,7 @@ void FormulaTokenArray::Clear()
     mbFromRangeName = false;
     mbShareable = true;
     mbFinalized = false;
+    mbDynamicArrayFunction = false;
     ClearRecalcMode();
 }
 
