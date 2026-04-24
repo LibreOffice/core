@@ -14,6 +14,7 @@
 #include <vcl/scheduler.hxx>
 
 #include <comphelper/propertyvalue.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/configuration.hxx>
@@ -22,6 +23,9 @@
 #include <cmdid.h>
 #include <docufld.hxx>
 #include <edtwin.hxx>
+#include <fmtfsize.hxx>
+#include <i18nutil/paper.hxx>
+#include <pagedesc.hxx>
 #include <PostItMgr.hxx>
 #include <view.hxx>
 #include <wrtsh.hxx>
@@ -559,6 +563,36 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest11, testTdf163194)
         CPPUNIT_ASSERT_EQUAL(tools::Long(400), aSize.Width());
         CPPUNIT_ASSERT_EQUAL(aOriginalHeights[i], aSize.Height());
     }
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest11, testPageSizeKeepsOrientation)
+{
+    createSwDoc();
+
+    dispatchCommand(mxComponent, u".uno:Orientation"_ustr,
+                    comphelper::InitPropertySequence({ { "isLandscape", uno::Any(true) } }));
+
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    const size_t nPageDesc = pWrtShell->GetCurPageDesc();
+
+    CPPUNIT_ASSERT(pWrtShell->GetPageDesc(nPageDesc).GetLandscape());
+    const Size aLandscapeA4
+        = pWrtShell->GetPageDesc(nPageDesc).GetMaster().GetFrameSize().GetSize();
+    CPPUNIT_ASSERT_GREATER(aLandscapeA4.Height(), aLandscapeA4.Width());
+
+    dispatchCommand(
+        mxComponent, u".uno:AttributePageSize"_ustr,
+        comphelper::InitPropertySequence({ { "PaperFormat", uno::Any(sal_uInt16(PAPER_A3)) } }));
+
+    const SwPageDesc& rPageDesc = pWrtShell->GetPageDesc(nPageDesc);
+    CPPUNIT_ASSERT(rPageDesc.GetLandscape());
+    const Size aNewSize = rPageDesc.GetMaster().GetFrameSize().GetSize();
+    // Without the fix in place, this test would have failed with
+    // - Expected greater than: 23811
+    // - Actual  : 16838
+    // i.e. the paper size change flipped the page to portrait.
+    CPPUNIT_ASSERT_GREATER(aNewSize.Height(), aNewSize.Width());
+    CPPUNIT_ASSERT_GREATER(aLandscapeA4.Width(), aNewSize.Width());
 }
 
 } // end of anonymous namespace

@@ -344,7 +344,11 @@ void ItemSetToPageDesc(const SfxItemSet& rSet, SwPageDesc& rPageDesc, bool bAppl
     {
         const sal_uInt16 nSizeItem = rSet.GetItem<SfxUInt16Item>(FN_PARAM_1)->GetValue();
         SwFormatFrameSize aSize(SwFrameSize::Fixed);
-        aSize.SetSize(SvxPaperInfo::GetPaperSize(static_cast<Paper>(nSizeItem)));
+        Size aPaperSize = SvxPaperInfo::GetPaperSize(static_cast<Paper>(nSizeItem));
+        // GetPaperSize returns portrait-oriented dimensions
+        if (rPageDesc.GetLandscape())
+            Swap(aPaperSize);
+        aSize.SetSize(aPaperSize);
         rMaster.SetFormatAttr(aSize);
     }
 
