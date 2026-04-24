@@ -80,7 +80,7 @@ void SAL_CALL AreaWrapper::dispose()
     Reference< uno::XInterface > xSource( static_cast< ::cppu::OWeakObject* >( this ) );
     m_aEventListenerContainer.disposeAndClear( g, lang::EventObject( xSource ) );
 
-    clearWrappedPropertySet();
+    clearWrappedPropertySet(g);
 }
 
 void SAL_CALL AreaWrapper::addEventListener(
