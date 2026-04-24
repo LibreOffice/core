@@ -1768,6 +1768,30 @@ void FormulaCompiler::Factor()
                     mpArr->AddRecalcMode( ScRecalcMode::ONLOAD_MUST );
                     mpArr->SetHyperLink( true);
                 break;
+                    // Functions whose natural output is a dynamic array. A
+                    // 1 by 1 declared matrix formula wrapping one of these is
+                    // treated as a dynamic array. Other matrix formulas keep
+                    // their declared dimensions.
+                case ocUnique:
+                case ocFilter:
+                case ocSort:
+                case ocSortBy:
+                case ocMatSequence:
+                case ocRandArray:
+                case ocChooseCols:
+                case ocChooseRows:
+                case ocDrop:
+                case ocExpand:
+                case ocHStack:
+                case ocVStack:
+                case ocTake:
+                case ocTextSplit:
+                case ocToCol:
+                case ocToRow:
+                case ocWrapCols:
+                case ocWrapRows:
+                    mpArr->SetDynamicArrayFunction( true);
+                break;
                 default:
                     ;   // nothing
             }

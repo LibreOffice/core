@@ -242,6 +242,7 @@ protected:
     bool            mbFromRangeName :1;     // If this array originates from a named expression
     bool            mbShareable     :1;     // Whether or not it can be shared with adjacent cells.
     bool            mbFinalized     :1;     // Whether code arrays have their final used size and no more tokens can be added.
+    bool mbDynamicArrayFunction :1; // If a dynamic-array function occurs in the formula.(i.e. UNIQUE, FILTER, SORT)
 
 protected:
     void                    Assign( const FormulaTokenArray& );
@@ -389,6 +390,9 @@ public:
     void      SetCodeError( FormulaError n )  { nError = n; }
     void      SetHyperLink( bool bVal ) { bHyperLink = bVal; }
     bool      IsHyperLink() const       { return bHyperLink; }
+
+    void SetDynamicArrayFunction(bool bValue) { mbDynamicArrayFunction = bValue; }
+    bool HasDynamicArrayFunction() const { return mbDynamicArrayFunction; }
 
     ScRecalcMode    GetRecalcMode() const { return nMode; }
 
