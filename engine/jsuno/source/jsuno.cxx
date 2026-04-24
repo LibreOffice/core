@@ -26,6 +26,7 @@
 
 #include <quickjs.h>
 
+#include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/reflection/InvocationTargetException.hpp>
 #include <com/sun/star/reflection/XCompoundTypeDescription.hpp>
@@ -68,13 +69,26 @@ struct JsException
 class AtomRef
 {
 public:
+    AtomRef(JSRuntime* rt)
+        : rt_(rt)
+        , atom_(JS_ATOM_NULL)
+    {
+    }
+
     AtomRef(JSContext* ctx, JSAtom atom)
-        : ctx_(ctx)
+        : rt_(JS_GetRuntime(ctx))
         , atom_(atom)
     {
     }
 
-    ~AtomRef() { JS_FreeAtom(ctx_, atom_); }
+    ~AtomRef() { JS_FreeAtomRT(rt_, atom_); }
+
+    AtomRef& operator=(JSAtom atom)
+    {
+        std::swap(atom_, atom);
+        JS_FreeAtomRT(rt_, atom);
+        return *this;
+    }
 
     operator JSAtom() const { return atom_; }
 
@@ -84,7 +98,7 @@ private:
     void operator=(AtomRef const&) = delete;
     void operator=(AtomRef&&) = delete;
 
-    JSContext* ctx_;
+    JSRuntime* rt_;
     JSAtom atom_;
 };
 
@@ -221,6 +235,13 @@ private:
 
 struct RuntimeData
 {
+    RuntimeData(JSRuntime* rt)
+        : symbolIteratorAtom(rt)
+    {
+    }
+
+    void clear() { symbolIteratorAtom = JS_ATOM_NULL; }
+
     JSClassID pointerClassId = 0;
     JSClassID wrapperClassId = 0;
     JSClassID enumeratorClassId = 0;
@@ -233,6 +254,8 @@ struct RuntimeData
     JSClassID ctorClassId = 0;
     JSClassID singletonClassId = 0;
     JSClassID moduleClassId = 0;
+
+    AtomRef symbolIteratorAtom;
 
 #if defined DBG_UTIL
     Counter toFinalize;
@@ -334,9 +357,57 @@ void pointerFinalizer(JSRuntime* rt, JSValueConst val)
         JS_GetOpaque(val, getRuntimeData(rt)->pointerClassId));
 }
 
+JSValue enumerationIteratorNext(JSContext* ctx, JSValueConst, int, JSValueConst*, int,
+                                JSValueConst* func_data)
+{
+    return callFromJs(ctx, [ctx, func_data] {
+        css::uno::Reference<css::container::XEnumeration> en(
+            static_cast<css::uno::XInterface*>(
+                JS_GetOpaque(func_data[0], getRuntimeData(ctx)->wrapperClassId)),
+            css::uno::UNO_QUERY_THROW);
+        ValueRef val(ctx, JS_NewObject(ctx));
+        if (en->hasMoreElements())
+        {
+            JS_SetPropertyStr(ctx, val, "value", toJs(ctx, en->nextElement()).release());
+            JS_SetPropertyStr(ctx, val, "done", JS_FALSE);
+        }
+        else
+        {
+            JS_SetPropertyStr(ctx, val, "value", JS_UNDEFINED);
+            JS_SetPropertyStr(ctx, val, "done", JS_TRUE);
+        }
+        return val.release();
+    });
+}
+
+JSValue enumerationIterator(JSContext* ctx, JSValueConst this_val, int, JSValueConst*)
+{
+    return callFromJs(ctx, [ctx, this_val] {
+        ValueRef iter(ctx, JS_NewObject(ctx));
+        JS_SetPropertyStr(ctx, iter, "next",
+                          JS_NewCFunctionData(ctx, enumerationIteratorNext, 0, 0, 1,
+                                              const_cast<JSValueConst*>(&this_val)));
+        return iter.release();
+    });
+}
+
 JSValue wrapperGetProperty(JSContext* ctx, JSValueConst obj, JSAtom atom, JSValueConst receiver)
 {
     return callFromJs(ctx, [ctx, obj, atom, receiver] {
+        if (atom == getRuntimeData(ctx)->symbolIteratorAtom)
+        {
+            css::uno::Reference<css::container::XEnumeration> en(
+                static_cast<css::uno::XInterface*>(
+                    JS_GetOpaque(obj, getRuntimeData(ctx)->wrapperClassId)),
+                css::uno::UNO_QUERY);
+            if (!en.is())
+            {
+                return JS_UNDEFINED;
+            }
+            ValueRef val(ctx, JS_NewCFunction(ctx, enumerationIterator, "[Symbol.iterator]", 0));
+            JS_SetProperty(ctx, receiver, atom, val.dup());
+            return val.release();
+        }
         ValueRef const v(ctx, JS_AtomToString(ctx, atom));
         if (!JS_IsString(v))
         {
@@ -2361,7 +2432,7 @@ JSValue invokeUno(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst*
 void jsuno::execute(OUString const& script)
 {
     auto const rt = JS_NewRuntime();
-    JS_SetRuntimeOpaque(rt, new RuntimeData);
+    JS_SetRuntimeOpaque(rt, new RuntimeData(rt));
     JS_NewClassID(rt, &getRuntimeData(rt)->pointerClassId);
     JSClassDef pointerClass{ "InternalPointer", pointerFinalizer, nullptr, nullptr, nullptr };
     [[maybe_unused]] auto e = JS_NewClass(rt, getRuntimeData(rt)->pointerClassId, &pointerClass);
@@ -2418,6 +2489,10 @@ void jsuno::execute(OUString const& script)
     std::optional<OUString> exc;
     {
         ValueRef const global(ctx, JS_GetGlobalObject(ctx));
+        getRuntimeData(ctx)->symbolIteratorAtom = JS_ValueToAtom(
+            ctx, ValueRef(ctx, JS_GetPropertyStr(
+                                   ctx, ValueRef(ctx, JS_GetPropertyStr(ctx, global, "Symbol")),
+                                   "iterator")));
         ValueRef console(ctx, JS_NewObject(ctx));
         JS_SetPropertyStr(ctx, console, "assert", JS_NewCFunction(ctx, consoleAssert, "assert", 1));
         JS_SetPropertyStr(ctx, console, "log", JS_NewCFunction(ctx, consoleLog, "log", 0));
@@ -2490,6 +2565,7 @@ void jsuno::execute(OUString const& script)
     }
     JS_FreeContext(ctx);
     std::unique_ptr<RuntimeData> data(getRuntimeData(rt));
+    data->clear();
     JS_FreeRuntime(rt);
     if (exc)
     {
