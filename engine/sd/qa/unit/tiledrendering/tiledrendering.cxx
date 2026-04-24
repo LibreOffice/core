@@ -752,6 +752,39 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCursorVisibility_DoubleClick)
     CPPUNIT_ASSERT(aView1.m_bCursorVisible);
 }
 
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testEmptyGraphicBulletParagraphClick)
+{
+    // Clicking an empty graphic-bullet paragraph must enter text-edit mode.
+    SdXImpressDocument* pXImpressDocument = createDoc("empty-paragraph-click.odp");
+    SdTestViewCallback aView1;
+
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdPage* pActualPage = pViewShell->GetActualPage();
+    SdrObject* pObject = pActualPage->GetObj(0);
+    CPPUNIT_ASSERT(pObject);
+    CPPUNIT_ASSERT_EQUAL(SdrObjKind::OutlineText, pObject->GetObjIdentifier());
+    SdrTextObj* pTextObject = static_cast<SdrTextObj*>(pObject);
+
+    // X: 2 cm from left (near the bullet — hit-test X-tolerance is 2 cm).
+    // Y: vertical middle of the 3-paragraph box — lands on the empty row.
+    const ::tools::Rectangle aRect = pTextObject->GetCurrentBoundRect();
+    const auto nX = o3tl::toTwips(aRect.Left() + 2000, o3tl::Length::mm100);
+    const auto nY
+        = o3tl::toTwips(aRect.Top() + aRect.getOpenHeight() / 2, o3tl::Length::mm100);
+
+    pXImpressDocument->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONDOWN, nX, nY, 1, MOUSE_LEFT, 0);
+    pXImpressDocument->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONUP, nX, nY, 1, MOUSE_LEFT, 0);
+    Scheduler::ProcessEventsToIdle();
+
+    // Must be in text-edit mode with cursor visible.
+    CPPUNIT_ASSERT(pViewShell->GetView()->IsTextEdit());
+    CPPUNIT_ASSERT(aView1.m_bCursorVisible);
+
+    // Cursor must be on the middle empty paragraph (index 1), not a neighbour.
+    EditView& rEditView = pViewShell->GetView()->GetTextEditOutlinerView()->GetEditView();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), rEditView.GetSelection().start.nPara);
+}
+
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCursorVisibility_MultiView)
 {
     // Create the first view.

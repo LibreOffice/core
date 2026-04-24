@@ -124,6 +124,11 @@ namespace drawinglayer::processor2d
 void VclProcessor2D::RenderTextSimpleOrDecoratedPortionPrimitive2D(
     const primitive2d::TextSimplePortionPrimitive2D& rTextCandidate)
 {
+    // Nothing to render for empty text (e.g. end-of-paragraph markers whose
+    // primitive exists only to carry a hit-test range for empty paragraphs).
+    if (!rTextCandidate.getTextLength())
+        return;
+
     // decompose matrix to have position and size of text
     basegfx::B2DHomMatrix aLocalTransform(maCurrentTransformation
                                           * rTextCandidate.getTextTransform());

@@ -285,9 +285,8 @@ bool TextSimplePortionPrimitive2D::operator==(const BasePrimitive2D& rPrimitive)
 basegfx::B2DRange TextSimplePortionPrimitive2D::getB2DRange(
     const geometry::ViewInformation2D& /*rViewInformation*/) const
 {
-    if (maB2DRange.isEmpty() && getTextLength())
+    if (maB2DRange.isEmpty())
     {
-        // get TextBoundRect as base size
         // decompose object transformation to single values
         basegfx::B2DVector aScale, aTranslate;
         double fRotate, fShearX;
@@ -305,9 +304,23 @@ basegfx::B2DRange TextSimplePortionPrimitive2D::getB2DRange(
             aTextLayouter.setFontAttribute(getFontAttribute(), aFontScale.getX(), aFontScale.getY(),
                                            getLocale());
 
-            // get basic text range
-            basegfx::B2DRange aNewRange(
-                aTextLayouter.getTextBoundRect(getText(), getTextPosition(), getTextLength()));
+            basegfx::B2DRange aNewRange;
+
+            if (getTextLength())
+            {
+                // get basic text range from glyphs
+                aNewRange
+                    = aTextLayouter.getTextBoundRect(getText(), getTextPosition(), getTextLength());
+            }
+            else
+            {
+                // Empty text (e.g. EOP marker for an empty paragraph): derive a zero-width
+                // range at the insertion position with font ascent/descent so that the
+                // primitive still represents a meaningful hit target (caret location).
+                const double fAscent(aTextLayouter.getFontAscent());
+                const double fHeight(aTextLayouter.getTextHeight());
+                aNewRange = basegfx::B2DRange(0.0, -fAscent, 0.0, fHeight - fAscent);
+            }
 
             // #i104432#, #i102556# take empty results into account
             if (!aNewRange.isEmpty())

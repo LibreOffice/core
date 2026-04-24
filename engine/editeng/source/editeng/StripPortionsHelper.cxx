@@ -262,7 +262,11 @@ void CreateTextPortionPrimitivesFromDrawPortionInfo(
     const basegfx::B2DHomMatrix& rNewTransformA, const basegfx::B2DHomMatrix& rNewTransformB,
     const DrawPortionInfo& rInfo)
 {
-    if (rInfo.maText.isEmpty() || !rInfo.mnTextLen)
+    // Let end-of-paragraph markers through even if they carry no text, so empty
+    // paragraphs still produce a primitive whose getB2DRange() gives a font-height
+    // caret-like hit target (needed e.g. for empty graphic-bullet paragraphs which
+    // otherwise would have no text-only hit target between surrounding text rows).
+    if ((rInfo.maText.isEmpty() || !rInfo.mnTextLen) && !rInfo.mbEndOfParagraph)
         return;
 
     basegfx::B2DVector aFontScaling;
