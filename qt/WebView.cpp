@@ -36,10 +36,12 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QGuiApplication>
+#include <QKeySequence>
 #include <QLabel>
 #include <QMainWindow>
 #include <QObject>
 #include <QScreen>
+#include <QShortcut>
 #include <QStandardPaths>
 #include <QUrl>
 #include <QVariant>
@@ -215,7 +217,11 @@ QString findNextAvailableDocumentName(const QString& documentsDir, const QString
 
 class Window: public QMainWindow {
 public:
-    Window(QWidget * parent, WebView * owner): QMainWindow(parent), owner_(owner) {}
+    Window(QWidget * parent, WebView * owner): QMainWindow(parent), owner_(owner) {
+        auto* closeWindowShortcut = new QShortcut(QKeySequence::Quit, this);
+        closeWindowShortcut->setContext(Qt::WindowShortcut);
+        QObject::connect(closeWindowShortcut, &QShortcut::activated, this, &QMainWindow::close);
+    }
     void setCloseCallback(const std::function<void()>& closeCallback)
     {
         closeCallback_ = closeCallback;
