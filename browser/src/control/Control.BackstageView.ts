@@ -1487,18 +1487,25 @@ class BackstageView extends window.L.Class {
 		}
 	}
 
-	public show(): void {
-		if (this.isVisible) {
+	public show(tab: 'home' | 'new' = 'home'): void {
+		if (this.isVisible && tab === 'home') {
 			return;
 		}
 
-		this.isVisible = true;
-		$(this.container).removeClass('hidden');
-		this.hideDocumentContainer();
-		this.renderHomeView();
-		this.updateSaveButtonState();
-		this.container.focus();
-		this.fireMapEvent('backstageshow');
+		if (!this.isVisible) {
+			this.isVisible = true;
+			$(this.container).removeClass('hidden');
+			this.hideDocumentContainer();
+			this.updateSaveButtonState();
+			this.container.focus();
+			this.fireMapEvent('backstageshow');
+		}
+
+		if (tab === 'new') {
+			this.renderNewView();
+		} else {
+			this.renderHomeView();
+		}
 	}
 
 	public hide(): void {

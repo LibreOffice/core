@@ -161,6 +161,11 @@ class Dispatcher {
 		this.actionsMap['home-search'] = function () {
 			app.map.uiManager.focusSearch();
 		};
+		this.actionsMap['backstage-new'] = function () {
+			if (app.map.backstageView) {
+				app.map.backstageView.show('new');
+			}
+		};
 		this.actionsMap['renamedocument'] = function () {
 			app.map.uiManager.renameDocument();
 		};
