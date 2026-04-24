@@ -733,7 +733,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
         }
     }
 
-    if (bRectangle && !bPermanent)
+    if ((bCreateDirectly || bRectangle) && !bPermanent)
     {
         GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SfxCallMode::ASYNCHRON);
     }
