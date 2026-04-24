@@ -1921,6 +1921,15 @@ bool ScFormulaCell::Interpret(SCROW nStartOffset, SCROW nEndOffset)
         aDC.storeResult( aResult.GetString());
 #endif
 
+    // A lazy Interpret() may have queued a dynamic-array resize. The
+    // TrackFormulas and CalcFormulaTree hooks don't fire on this path,
+    // so drain the queue once the outermost interpret has unwound.
+    if (rDocument.HasPendingMatrixResizes()
+        && !rDocument.IsInInterpreter() && !rDocument.IsInDtorClear())
+    {
+        rDocument.ProcessPendingMatrixResizes();
+    }
+
     return bGroupInterpreted;
 }
 
@@ -2352,6 +2361,36 @@ void ScFormulaCell::InterpretTail( ScInterpreterContext& rContext, ScInterpretTa
                     rDocument.MarkFormulaSpilled(aPos);
                 else
                     rDocument.UnmarkFormulaSpilled(aPos);
+
+                // Collapse to 1x1 on spill so previously materialised reference
+                // cells are cleared, leaving only the origin to show #SPILL!.
+                // Deferred - deleting cells inline would invalidate the caller's
+                // cell-store iterator.
+                if (bSpillBlocked && (nDeclCols > 1 || nDeclRows > 1)
+                    && !rDocument.IsThreadedGroupCalcInProgress())
+                {
+                    rDocument.MarkPendingMatrixResize(aPos);
+                }
+
+                if (!bSpillBlocked && nDeclCols > 0 && nDeclRows > 0
+                    && bIsDynamic
+                    && !rDocument.IsThreadedGroupCalcInProgress())
+                {
+                    if (o3tl::make_unsigned(nDeclCols) > nResCols
+                        || o3tl::make_unsigned(nDeclRows) > nResRows)
+                    {
+                        // Contract inline: removing cells can't recurse into
+                        // Interpret.
+                        rDocument.ResizeMatrixFormula(aPos, SCCOL(nResCols), SCROW(nResRows));
+                    }
+                    else if (o3tl::make_unsigned(nDeclCols) < nResCols
+                             || o3tl::make_unsigned(nDeclRows) < nResRows)
+                    {
+                        // Expand is deferred: freshly created reference cells
+                        // would otherwise recurse through Interpret.
+                        rDocument.MarkPendingMatrixResize(aPos);
+                    }
+                }
             }
         }
         if ( aResult.IsValue() && !std::isfinite( aResult.GetDouble() ) )

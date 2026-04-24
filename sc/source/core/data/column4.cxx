@@ -12,6 +12,7 @@
 #include <cellvalue.hxx>
 #include <attarray.hxx>
 #include <document.hxx>
+#include <MatrixResizeGuard.hxx>
 #include <cellvalues.hxx>
 #include <columnspanset.hxx>
 #include <columniterator.hxx>
@@ -2001,6 +2002,10 @@ bool ScColumn::EnsureFormulaCellResults( SCROW nRow1, SCROW nRow2, bool bSkipRun
     if (!HasFormulaCell(nRow1, nRow2))
         return false;
 
+    // Guard against mid-iteration cell-store mutations that would invalidate
+    // lcl_EvalDirty's iterator. Pending resizes are drained when the guard goes
+    // out of scope.
+    sc::MatrixResizeGuard aGuard(GetDoc());
     bool bAnyDirty = false, bTmp = false;
     lcl_EvalDirty(maCells, nRow1, nRow2, GetDoc(), nullptr, false, bSkipRunning, bAnyDirty, bTmp, nullptr);
     return bAnyDirty;
@@ -2011,6 +2016,7 @@ bool ScColumn::HandleRefArrayForParallelism( SCROW nRow1, SCROW nRow2, const ScF
     if (nRow1 > nRow2)
         return false;
 
+    sc::MatrixResizeGuard aGuard(GetDoc());
     bool bAllowThreading = true, bTmp = false;
     lcl_EvalDirty(maCells, nRow1, nRow2, GetDoc(), mxGroup, true, false, bTmp, bAllowThreading, pDirtiedAddress);
 

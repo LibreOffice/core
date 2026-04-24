@@ -48,6 +48,7 @@
 #include <externalrefmgr.hxx>
 #include <attrib.hxx>
 #include <formulacell.hxx>
+#include <scmatrix.hxx>
 #include <tablestyle.hxx>
 #include <tokenarray.hxx>
 #include <tokenstringcontext.hxx>
@@ -378,6 +379,147 @@ void ScDocument::InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
                 pTab->SetFormulaCell(nCol, nRow, pCell);
             }
         }
+    }
+}
+
+// Resize a dynamic-array matrix formula at rOrigin to nNewCols x nNewRows,
+// adding or removing reference cells to match.
+// Must not run while an iterator over the cell store is live (see sc::MatrixResizeGuard).
+void ScDocument::ResizeMatrixFormula(const ScAddress& rOrigin, SCCOL nNewCols, SCROW nNewRows)
+{
+    ScFormulaCell* pOrigin = GetFormulaCell(rOrigin);
+    if (!pOrigin || pOrigin->GetMatrixFlag() != ScMatrixMode::Formula)
+        return;
+    if (nNewCols <= 0 || nNewRows <= 0)
+        return;
+
+    SCCOL nOldCols = 0;
+    SCROW nOldRows = 0;
+    pOrigin->GetMatColsRows(nOldCols, nOldRows);
+    if (nNewCols == nOldCols && nNewRows == nOldRows)
+        return; // nothing to do
+
+    SCTAB nTab = rOrigin.Tab();
+    SCCOL nOriginColumn = rOrigin.Col();
+    SCROW nOriginRow = rOrigin.Row();
+
+    ScTable* pTab = FetchTable(nTab);
+    if (!pTab)
+        return;
+
+    // Update the matrix dimensions on the origin cell.
+    pOrigin->SetMatColsRows(nNewCols, nNewRows);
+
+    // Clear reference cells that now fall outside the new matrix area.
+    if (nNewCols < nOldCols || nNewRows < nOldRows)
+    {
+        SCCOL nOldEndColumn = nOriginColumn + nOldCols - 1;
+        SCROW nOldEndRow = nOriginRow + nOldRows - 1;
+        for (SCCOL nColumn = nOriginColumn; nColumn <= nOldEndColumn; ++nColumn)
+        {
+            for (SCROW nRow = nOriginRow; nRow <= nOldEndRow; ++nRow)
+            {
+                if (nColumn < nOriginColumn + nNewCols && nRow < nOriginRow + nNewRows)
+                    continue; // still inside the new matrix area
+                DeleteAreaTab(nColumn, nRow, nColumn, nRow, nTab, InsertDeleteFlags::ALL);
+            }
+        }
+    }
+
+    // Create reference cells for newly covered positions.
+    if (nNewCols > nOldCols || nNewRows > nOldRows)
+    {
+        SCCOL nNewEndColumn = nOriginColumn + nNewCols - 1;
+        SCROW nNewEndRow = nOriginRow + nNewRows - 1;
+
+        ScSingleRefData aRefData;
+        aRefData.InitFlags();
+        aRefData.SetRelCol(0);
+        aRefData.SetRelRow(0);
+        aRefData.SetRelTab(0);
+
+        ScTokenArray aArr(*this);
+        auto* pToken = static_cast<ScSingleRefToken*>(aArr.AddMatrixSingleReference(aRefData));
+
+        for (SCCOL nColumn = nOriginColumn; nColumn <= nNewEndColumn; ++nColumn)
+        {
+            aRefData.SetRelCol(nOriginColumn - nColumn);
+            for (SCROW nRow = nOriginRow; nRow <= nNewEndRow; ++nRow)
+            {
+                // Skip the origin cell and positions already covered by the old matrix.
+                if (nColumn < nOriginColumn + nOldCols && nRow < nOriginRow + nOldRows)
+                    continue;
+                aRefData.SetRelRow(nOriginRow - nRow);
+                pToken->GetSingleRef() = aRefData;
+                ScTokenArray aTokArr(aArr.CloneValue());
+                ScAddress aPos(nColumn, nRow, nTab);
+                ScFormulaCell* pNewCell = new ScFormulaCell(
+                    *this, aPos, aTokArr, formula::FormulaGrammar::GRAM_DEFAULT,
+                    ScMatrixMode::Reference);
+                pTab->SetFormulaCell(nColumn, nRow, pNewCell);
+            }
+        }
+    }
+
+    // Broadcast the affected area so listeners pick up the change and the
+    // grid repaints the previously occupied / newly occupied cells.
+    SCCOL nMaxColumn = std::max(nOldCols, nNewCols);
+    SCROW nMaxRow = std::max(nOldRows, nNewRows);
+    ScRange aAffected(nOriginColumn, nOriginRow, nTab,
+                      nOriginColumn + nMaxColumn - 1, nOriginRow + nMaxRow - 1, nTab);
+    BroadcastCells(aAffected, SfxHintId::ScDataChanged);
+
+    ScDocShell* pDocShell = GetDocumentShell();
+    if (pDocShell)
+        pDocShell->PostPaint(aAffected, PaintPartFlags::Grid);
+}
+
+// Drain the queue of dynamic-array formulas marked for a deferred resize
+// (expand, contract, or collapse-on-#SPILL!).
+void ScDocument::ProcessPendingMatrixResizes()
+{
+    if (maPendingMatrixResizes.empty())
+        return;
+
+    // A caller is iterating the cell store. Deleting or inserting cells now
+    // would invalidate that iterator - defer until the guard is popped.
+    if (IsMatrixResizeGuarded())
+        return;
+
+    // Take a snapshot - ResizeMatrixFormula may broadcast and reenter.
+    std::unordered_set<ScAddress> aPending;
+    aPending.swap(maPendingMatrixResizes);
+
+    for (const ScAddress& rPos : aPending)
+    {
+        ScFormulaCell* pFormulaCell = GetFormulaCell(rPos);
+        if (!pFormulaCell || pFormulaCell->GetMatrixFlag() != ScMatrixMode::Formula)
+            continue;
+
+        if (pFormulaCell->GetErrCode() == FormulaError::Spill)
+        {
+            // Collapse to 1x1: remove materialised reference cells, leaving
+            // only the origin to show #SPILL!.
+            ResizeMatrixFormula(rPos, SCCOL(1), SCROW(1));
+            continue;
+        }
+
+        SCCOL nDeclCols = 0;
+        SCROW nDeclRows = 0;
+        pFormulaCell->GetMatColsRows(nDeclCols, nDeclRows);
+
+        const ScMatrix* pMatrix = pFormulaCell->GetMatrix();
+        if (!pMatrix)
+            continue;
+
+        SCSIZE nResCols = 0;
+        SCSIZE nResRows = 0;
+        pMatrix->GetDimensions(nResCols, nResRows);
+
+        if (SCSIZE(nDeclCols) == nResCols && SCSIZE(nDeclRows) == nResRows)
+            continue; // already matches
+
+        ResizeMatrixFormula(rPos, static_cast<SCCOL>(nResCols), static_cast<SCROW>(nResRows));
     }
 }
 

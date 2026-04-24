@@ -435,6 +435,9 @@ void ScDocument::CalcFormulaTree( bool bOnlyForced, bool bProgressBar, bool bSet
     bCalculatingFormulaTree = false;
 
     mpFormulaGroupCxt.reset();
+
+    // Process any dynamic-array expansions queued during interpretation.
+    ProcessPendingMatrixResizes();
 }
 
 void ScDocument::ClearFormulaTree()
@@ -577,6 +580,12 @@ void ScDocument::TrackFormulas( SfxHintId nHintId )
         }
     }
     OSL_ENSURE( nFormulaTrackCount==0, "TrackFormulas: nFormulaTrackCount!=0" );
+
+    // Process any pending dynamic-array expansions queued.
+    // We're outside any active interpreter here, so creating reference cells
+    // is safe.
+    if (!IsInInterpreter())
+        ProcessPendingMatrixResizes();
 }
 
 void ScDocument::StartAllListeners()

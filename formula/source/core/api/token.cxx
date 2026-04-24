@@ -517,6 +517,7 @@ void FormulaTokenArray::Assign( const FormulaTokenArray& r )
     mbFromRangeName = r.mbFromRangeName;
     mbShareable = r.mbShareable;
     mbFinalized = r.mbFinalized;
+    mbDynamicArrayFunction = r.mbDynamicArrayFunction;
     pCode  = nullptr;
     pRPN   = nullptr;
     FormulaToken** pp;
@@ -553,6 +554,7 @@ void FormulaTokenArray::Move( FormulaTokenArray&& r )
     mbFromRangeName = r.mbFromRangeName;
     mbShareable = r.mbShareable;
     mbFinalized = r.mbFinalized;
+    mbDynamicArrayFunction = r.mbDynamicArrayFunction;
 }
 
 /// Optimisation for efficiently creating StringXML placeholders

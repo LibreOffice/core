@@ -22,6 +22,7 @@
 #include <scitems.hxx>
 #include <formulacell.hxx>
 #include <document.hxx>
+#include <MatrixResizeGuard.hxx>
 #include <attarray.hxx>
 #include <patattr.hxx>
 #include <cellform.hxx>
@@ -185,6 +186,7 @@ void ScColumn::InterpretDirtyCells( SCROW nRow1, SCROW nRow2 )
     if (!GetDoc().ValidRow(nRow1) || !GetDoc().ValidRow(nRow2) || nRow1 > nRow2)
         return;
 
+    sc::MatrixResizeGuard aGuard(GetDoc());
     DirtyCellInterpreter aFunc;
     sc::ProcessFormula(maCells.begin(), maCells, nRow1, nRow2, aFunc);
 }
@@ -194,6 +196,7 @@ bool ScColumn::InterpretCellsIfNeeded( SCROW nRow1, SCROW nRow2 )
     if (!GetDoc().ValidRow(nRow1) || !GetDoc().ValidRow(nRow2) || nRow1 > nRow2)
         return false;
 
+    sc::MatrixResizeGuard aGuard(GetDoc());
     NeedsInterpretCellInterpreter aFunc;
     sc::ProcessFormula(maCells.begin(), maCells, nRow1, nRow2, aFunc);
     return aFunc.allInterpreted;
