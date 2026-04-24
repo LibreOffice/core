@@ -276,7 +276,7 @@ public:
     void            UpdatePendingRowHeights( SCTAB nUpdateTab, bool bBefore = false );
 
     void            RefreshPivotTables( const ScRange& rSource );
-    void ResolveSpillPivotTables();
+    SC_DLLPUBLIC void ResolveSpilledOutputs();
     void            DoConsolidate( const ScConsolidateParam& rParam, bool bRecord = true );
     void            UseScenario( SCTAB nTab, const OUString& rName, bool bRecord = true );
     SCTAB           MakeScenario(SCTAB nTab, const OUString& rName, const OUString& rComment,

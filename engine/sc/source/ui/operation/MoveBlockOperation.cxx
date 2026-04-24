@@ -371,7 +371,7 @@ bool MoveBlockOperation::runImplementation()
 
     SfxGetpApp()->Broadcast(SfxHint(SfxHintId::ScAreaLinksChanged));
 
-    mrDocShell.ResolveSpillPivotTables();
+    mrDocShell.ResolveSpilledOutputs();
 
     return true;
 }

@@ -88,6 +88,8 @@ bool SetFormulaOperation::runImplementation()
     if (mbApi)
         mrDocFunc.NotifyInputHandler(aPosition);
 
+    mrDocShell.ResolveSpilledOutputs();
+
     return true;
 }
 

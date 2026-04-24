@@ -257,7 +257,7 @@ void ScViewFunc::CutToClip()
 
         CellContentChanged();
 
-        pDocSh->ResolveSpillPivotTables();
+        pDocSh->ResolveSpilledOutputs();
 
         OUString aStartAddress =  aRange.aStart.GetColRowString();
         OUString aEndAddress = aRange.aEnd.GetColRowString();
@@ -2032,7 +2032,7 @@ void ScViewFunc::PostPasteFromClip(const ScRangeList& rPasteRanges, const ScMark
     else if (pModelObj)
         HelperNotifyChanges::Notify(*pModelObj, aChangeRanges, u"data-area-invalidate"_ustr);
 
-    pDocSh->ResolveSpillPivotTables();
+    pDocSh->ResolveSpilledOutputs();
 }
 
 //      D R A G   A N D   D R O P

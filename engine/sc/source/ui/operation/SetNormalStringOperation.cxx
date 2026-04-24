@@ -110,6 +110,8 @@ bool SetNormalStringOperation::runImplementation()
                 .DeleteCirclesAt(aPosition.Col(), aPosition.Row());
     }
 
+    mrDocShell.ResolveSpilledOutputs();
+
     return true;
 }
 } // end sc namespace

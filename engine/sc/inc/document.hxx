@@ -53,6 +53,7 @@
 #include <optional>
 #include <set>
 #include <unordered_map>
+#include <unordered_set>
 #include <vector>
 
 #include "markdata.hxx"
@@ -600,6 +601,10 @@ private:
 
     std::set<ScFormulaCell*> maSubTotalCells;
 
+    // Addresses of array formula origins currently in #SPILL! state.
+    // Used to efficiently re-check those formulas after cell content changes.
+    std::unordered_set<ScAddress> maSpilledFormulaCells;
+
 
     bool mbEmbedFonts : 1;
     bool mbEmbedUsedFontsOnly : 1;
@@ -914,6 +919,11 @@ public:
 
     SC_DLLPUBLIC const ScRangeData* GetRangeAtBlock( const ScRange& rBlock, OUString& rName,
                                                      bool* pSheetLocal = nullptr ) const;
+
+    // Spilled array formula tracking.
+    void MarkFormulaSpilled(const ScAddress& rPos) { maSpilledFormulaCells.insert(rPos); }
+    void UnmarkFormulaSpilled(const ScAddress& rPos) { maSpilledFormulaCells.erase(rPos); }
+    const std::unordered_set<ScAddress>& GetSpilledFormulaCells() const { return maSpilledFormulaCells; }
 
     SC_DLLPUBLIC bool                  HasPivotTable() const;
     SC_DLLPUBLIC ScDPCollection*       GetDPCollection();
@@ -1277,6 +1287,11 @@ public:
                                         const ScTokenArray* p = nullptr,
                                         const formula::FormulaGrammar::Grammar = formula::FormulaGrammar::GRAM_DEFAULT,
                                         bool bCheckForSpill = false);
+    /** Resize an existing matrix formula at input position to the given dimensions.
+        Updates the matrix cell token, creates reference cells in newly covered
+        positions, and clears cells that fall outside the new range. */
+    SC_DLLPUBLIC void ResizeMatrixFormula(const ScAddress& rOrigin, SCCOL nNewCols,
+                                          SCROW nNewRows);
     SC_DLLPUBLIC void InsertTableOp(const ScTabOpParam& rParam,   // multi-operation
                                     SCCOL nCol1, SCROW nRow1,
                                     SCCOL nCol2, SCROW nRow2, const ScMarkData& rMark);

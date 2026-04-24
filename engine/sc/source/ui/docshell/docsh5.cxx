@@ -41,6 +41,8 @@
 #include <undotab.hxx>
 #include <undoblk.hxx>
 #include <undo/UndoSpillPivotTable.hxx>
+#include <formulacell.hxx>
+#include <scmatrix.hxx>
 #include <dpobject.hxx>
 #include <dpshttab.hxx>
 #include <dbdocfun.hxx>
@@ -491,46 +493,66 @@ void ScDocShell::RefreshPivotTables( const ScRange& rSource )
     }
 }
 
-void ScDocShell::ResolveSpillPivotTables()
+// Re-check outputs that were previously blocked by #SPILL! (array formula
+// cells and pivot tables). Called after cell-change operations that might
+// have freed blocking cells.
+void ScDocShell::ResolveSpilledOutputs()
 {
-    ScDPCollection* pCollection = m_pDocument->GetDPCollection();
-    if (!pCollection)
-        return;
-
-    bool bUndoEnabled = m_pDocument->IsUndoEnabled();
-    bool bEnteredList = false;
     bool bAnyResolved = false;
-    size_t nCount = pCollection->GetCount();
-    for (size_t i = 0; i < nCount; ++i)
+
+    // Re-interpret array formula cells currently in #SPILL! state; the error
+    // will clear if the blocker is gone.
+    const std::unordered_set<ScAddress> aSpilledCells = m_pDocument->GetSpilledFormulaCells();
+    for (const ScAddress& rPosition : aSpilledCells)
     {
-        ScDPObject& rDPObject = (*pCollection)[i];
-        if (!rDPObject.HasSpillError())
-            continue;
-
-        // Try to re-output with spill check. If the blocking cells have been
-        // cleared, Output() will succeed and the pivot table will be rendered.
-        ScAddress aPosition = rDPObject.GetOutRange().aStart;
-        rDPObject.InvalidateData();
-        if (rDPObject.Output(aPosition, true))
+        ScFormulaCell* pFormulaCell = m_pDocument->GetFormulaCell(rPosition);
+        if (pFormulaCell && pFormulaCell->GetErrCode() == FormulaError::Spill)
         {
-            bAnyResolved = true;
-
-            if (bUndoEnabled)
-            {
-                if (!bEnteredList)
-                {
-                    GetUndoManager()->EnterListAction(u""_ustr, u""_ustr, 0, ViewShellId(-1));
-                    bEnteredList = true;
-                }
-                GetUndoManager()->AddUndoAction(
-                    std::make_unique<sc::UndoSpillPivotTable>(
-                        *this, rDPObject.GetName(), rDPObject.GetOutRange()));
-            }
+            pFormulaCell->SetDirty();
+            pFormulaCell->Interpret();
+            if (pFormulaCell->GetErrCode() != FormulaError::Spill)
+                bAnyResolved = true;
         }
     }
 
-    if (bEnteredList)
-        GetUndoManager()->LeaveAndMergeListAction();
+    // Re-check spilled pivot tables.
+    ScDPCollection* pCollection = m_pDocument->GetDPCollection();
+    if (pCollection)
+    {
+        bool bUndoEnabled = m_pDocument->IsUndoEnabled();
+        bool bEnteredList = false;
+        size_t nCount = pCollection->GetCount();
+        for (size_t i = 0; i < nCount; ++i)
+        {
+            ScDPObject& rDPObject = (*pCollection)[i];
+            if (!rDPObject.HasSpillError())
+                continue;
+
+            // Try to re-output with spill check. If the blocking cells have been
+            // cleared, Output() will succeed and the pivot table will be rendered.
+            ScAddress aPosition = rDPObject.GetOutRange().aStart;
+            rDPObject.InvalidateData();
+            if (rDPObject.Output(aPosition, true))
+            {
+                bAnyResolved = true;
+
+                if (bUndoEnabled)
+                {
+                    if (!bEnteredList)
+                    {
+                        GetUndoManager()->EnterListAction(u""_ustr, u""_ustr, 0, ViewShellId(-1));
+                        bEnteredList = true;
+                    }
+                    GetUndoManager()->AddUndoAction(
+                        std::make_unique<sc::UndoSpillPivotTable>(
+                            *this, rDPObject.GetName(), rDPObject.GetOutRange()));
+                }
+            }
+        }
+
+        if (bEnteredList)
+            GetUndoManager()->LeaveAndMergeListAction();
+    }
 
     if (bAnyResolved)
         PostPaintGridAll();

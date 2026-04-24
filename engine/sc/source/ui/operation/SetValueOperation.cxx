@@ -69,6 +69,8 @@ bool SetValueOperation::runImplementation()
     if (mbApi)
         mrDocFunc.NotifyInputHandler(aPosition);
 
+    mrDocShell.ResolveSpilledOutputs();
+
     return true;
 }
 } // end sc namespace

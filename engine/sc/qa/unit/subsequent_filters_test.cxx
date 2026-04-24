@@ -24,6 +24,8 @@
 #include <cellmergeoption.hxx>
 #include <postit.hxx>
 #include <undomanager.hxx>
+#include <formulacell.hxx>
+#include <formula/errorcodes.hxx>
 
 #include <com/sun/star/sheet/NamedRangeFlag.hdl>
 #include "helper/qahelper.hxx"
@@ -1598,6 +1600,28 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest, testNonAsciiWithDotXLSX)
     pDoc->CalcAll();
     double aValue = pDoc->GetValue(ScAddress(0, 0, 0));
     CPPUNIT_ASSERT_EQUAL(5.0, aValue);
+}
+
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testArrayFormulaSpillXLSX)
+{
+    // Load the test document and verify that the UNIQUE array formula at C2
+    // shows #SPILL! because "r" at C5 blocks the output, and that clearing
+    // the blocker resolves the error.
+    createScDoc("xlsx/Spill.xlsx");
+    ScDocument* pDocument = getScDoc();
+
+    ScFormulaCell* pFormulaCell = pDocument->GetFormulaCell(ScAddress(2, 1, 0));
+    CPPUNIT_ASSERT_MESSAGE("Expected a formula cell at C2.", pFormulaCell != nullptr);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(FormulaError::Spill), sal_Int32(pFormulaCell->GetErrCode()));
+    CPPUNIT_ASSERT_EQUAL(u"#SPILL!"_ustr, pDocument->GetString(ScAddress(2, 1, 0)));
+    // The blocking cell must not have been overwritten.
+    CPPUNIT_ASSERT_EQUAL(u"r"_ustr, pDocument->GetString(ScAddress(2, 4, 0)));
+
+    // Clear the blocker at C5 and trigger spill resolution.
+    pDocument->SetString(ScAddress(2, 4, 0), u""_ustr);
+    getScDocShell()->ResolveSpilledOutputs();
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(FormulaError::NONE), sal_Int32(pFormulaCell->GetErrCode()));
 }
 
 ScFiltersTest::ScFiltersTest()

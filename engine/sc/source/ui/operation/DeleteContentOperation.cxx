@@ -120,7 +120,7 @@ bool DeleteContentOperation::runImplementation()
 
     aModificator.SetDocumentModified();
 
-    mrDocShell.ResolveSpillPivotTables();
+    mrDocShell.ResolveSpilledOutputs();
 
     return true;
 }

@@ -3192,7 +3192,7 @@ CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableSpillError)
 
 CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableSpillResolution)
 {
-    // Test that clearing a blocking cell and calling ResolveSpillPivotTables()
+    // Test that clearing a blocking cell and calling ResolveSpilledOutputs()
     // causes the spilled pivot table to write an output in the output range.
 
     m_pDoc->InsertTab(0, u"Data"_ustr);
@@ -3237,8 +3237,8 @@ CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableSpillResolution)
     // Now clear the blocking cell.
     m_pDoc->SetString(aBlocker, u""_ustr);
 
-    // Call ResolveSpillPivotTables - should auto-output the pivot table.
-    m_xDocShell->ResolveSpillPivotTables();
+    // Call ResolveSpilledOutputs - should auto-output the pivot table.
+    m_xDocShell->ResolveSpilledOutputs();
 
     // The spill should be resolved.
     CPPUNIT_ASSERT(!pDPObject->HasSpillError());
@@ -3256,7 +3256,7 @@ CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableSpillResolution)
 
 CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableSpillResolutionNotReady)
 {
-    // Test that ResolveSpillPivotTables() does NOT resolve a spill when
+    // Test that ResolveSpilledOutputs() does NOT resolve a spill when
     // the blocking cell is still present.
 
     m_pDoc->InsertTab(0, u"Data"_ustr);
@@ -3296,7 +3296,7 @@ CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableSpillResolutionNotReady)
     CPPUNIT_ASSERT_MESSAGE("Should be spilled.", pDPObject->HasSpillError());
 
     // Call resolve without clearing the blocker.
-    m_xDocShell->ResolveSpillPivotTables();
+    m_xDocShell->ResolveSpilledOutputs();
 
     CPPUNIT_ASSERT_MESSAGE("Spill should NOT be resolved (blocker still present).",
                            pDPObject->HasSpillError());
@@ -3373,7 +3373,7 @@ CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableUndoRechecksSpill)
 
     // Now clear the blocker and resolve.
     m_pDoc->SetString(aBlocker, u""_ustr);
-    m_xDocShell->ResolveSpillPivotTables();
+    m_xDocShell->ResolveSpilledOutputs();
 
     // The pivot table should now be rendered.
     CPPUNIT_ASSERT_MESSAGE("Spill should be resolved.", !pDocDPObject->HasSpillError());
@@ -3432,7 +3432,7 @@ CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableSpillUndoRestore)
 
     // Clear the blocker and resolve the spill.
     m_pDoc->SetString(aBlocker, u""_ustr);
-    m_xDocShell->ResolveSpillPivotTables();
+    m_xDocShell->ResolveSpilledOutputs();
 
     // Spill should be resolved - pivot table rendered.
     CPPUNIT_ASSERT_MESSAGE("Spill should be resolved.", !pDPObject->HasSpillError());

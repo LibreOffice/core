@@ -106,7 +106,7 @@ bool DeleteCellOperation::runImplementation()
 
     aModificator.SetDocumentModified();
 
-    mrDocShell.ResolveSpillPivotTables();
+    mrDocShell.ResolveSpilledOutputs();
 
     return true;
 }
