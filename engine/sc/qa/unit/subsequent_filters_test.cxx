@@ -1604,9 +1604,8 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest, testNonAsciiWithDotXLSX)
 
 CPPUNIT_TEST_FIXTURE(ScFiltersTest, testArrayFormulaSpillXLSX)
 {
-    // Load the test document and verify that the UNIQUE array formula at C2
-    // shows #SPILL! because "r" at C5 blocks the output, and that clearing
-    // the blocker resolves the error.
+    // Load the test document and verify that clearing the blocking cell resolves
+    // the #SPILL! error on import and the UNIQUE(A2:A5) values spill into C2:C5.
     createScDoc("xlsx/Spill.xlsx");
     ScDocument* pDocument = getScDoc();
 
@@ -1622,6 +1621,11 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest, testArrayFormulaSpillXLSX)
     getScDocShell()->ResolveSpilledOutputs();
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(FormulaError::NONE), sal_Int32(pFormulaCell->GetErrCode()));
+    // UNIQUE(A2:A5)
+    CPPUNIT_ASSERT_EQUAL(1.0, pDocument->GetValue(ScAddress(2, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(2.0, pDocument->GetValue(ScAddress(2, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(3.0, pDocument->GetValue(ScAddress(2, 3, 0)));
+    CPPUNIT_ASSERT_EQUAL(6.0, pDocument->GetValue(ScAddress(2, 4, 0)));
 }
 
 ScFiltersTest::ScFiltersTest()

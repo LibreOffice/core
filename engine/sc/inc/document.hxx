@@ -605,6 +605,14 @@ private:
     // Used to efficiently re-check those formulas after cell content changes.
     std::unordered_set<ScAddress> maSpilledFormulaCells;
 
+    // Origins of matrix formulas queued for a deferred resize (expand,
+    // contract, or collapse-on-#SPILL!).
+    std::unordered_set<ScAddress> maPendingMatrixResizes;
+
+    // Non-zero while a caller is iterating the cell store in a way that
+    // cannot tolerate insertions/removals; guards ProcessPendingMatrixResizes.
+    int mnMatrixResizeGuard = 0;
+
 
     bool mbEmbedFonts : 1;
     bool mbEmbedUsedFontsOnly : 1;
@@ -924,6 +932,17 @@ public:
     void MarkFormulaSpilled(const ScAddress& rPos) { maSpilledFormulaCells.insert(rPos); }
     void UnmarkFormulaSpilled(const ScAddress& rPos) { maSpilledFormulaCells.erase(rPos); }
     const std::unordered_set<ScAddress>& GetSpilledFormulaCells() const { return maSpilledFormulaCells; }
+
+    // Pending matrix resize tracking (expand, contract, or collapse-on-spill).
+    void MarkPendingMatrixResize(const ScAddress& rPos) { maPendingMatrixResizes.insert(rPos); }
+    bool HasPendingMatrixResizes() const { return !maPendingMatrixResizes.empty(); }
+    void ProcessPendingMatrixResizes();
+
+    // Guards ProcessPendingMatrixResizes from mutating the cell store during
+    // an active iteration. Use sc::MatrixResizeGuard at the iteration scope.
+    void PushMatrixResizeGuard() { ++mnMatrixResizeGuard; }
+    void PopMatrixResizeGuard() { --mnMatrixResizeGuard; }
+    bool IsMatrixResizeGuarded() const { return mnMatrixResizeGuard > 0; }
 
     SC_DLLPUBLIC bool                  HasPivotTable() const;
     SC_DLLPUBLIC ScDPCollection*       GetDPCollection();

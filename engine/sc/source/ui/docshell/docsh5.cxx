@@ -500,8 +500,8 @@ void ScDocShell::ResolveSpilledOutputs()
 {
     bool bAnyResolved = false;
 
-    // Re-interpret array formula cells currently in #SPILL! state; the error
-    // will clear if the blocker is gone.
+    // Array formula cells currently in #SPILL! state: re-interpretation will
+    // clear the error if the blocker is gone and then expand to result dimensions.
     const std::unordered_set<ScAddress> aSpilledCells = m_pDocument->GetSpilledFormulaCells();
     for (const ScAddress& rPosition : aSpilledCells)
     {
@@ -511,7 +511,20 @@ void ScDocShell::ResolveSpilledOutputs()
             pFormulaCell->SetDirty();
             pFormulaCell->Interpret();
             if (pFormulaCell->GetErrCode() != FormulaError::Spill)
+            {
                 bAnyResolved = true;
+                // Expand the matrix to the result dimensions.
+                const ScMatrix* pMatrix = pFormulaCell->GetMatrix();
+                if (pMatrix)
+                {
+                    SCSIZE nResCols = 0;
+                    SCSIZE nResRows = 0;
+                    pMatrix->GetDimensions(nResCols, nResRows);
+                    m_pDocument->ResizeMatrixFormula(rPosition,
+                                                     SCCOL(nResCols),
+                                                     SCROW(nResRows));
+                }
+            }
         }
     }
 
