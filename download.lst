@@ -400,8 +400,8 @@ LANGTAGREG_TARBALL := language-subtag-registry-2026-04-21.tar.bz2
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-LCMS2_SHA256SUM := ee67be3566f459362c1ee094fde2c159d33fa0390aa4ed5f5af676f9e5004347
-LCMS2_TARBALL := lcms2-2.18.tar.gz
+LCMS2_SHA256SUM := 49e7e134e4299733dd0eda434fa468997a28ab3d33fa397c642b03644f552216
+LCMS2_TARBALL := lcms2-2.19.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
