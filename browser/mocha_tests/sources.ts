@@ -194,6 +194,7 @@
 /// <reference path="../src/control/jsdialog/Definitions.MenuCommands.ts" />
 /// <reference path="../src/control/jsdialog/Control.ts" />
 /// <reference path="../src/control/jsdialog/Control.ContextMenu.ts" />
+/// <reference path="../src/control/CalcNotifications.ts" />
 /// <reference path="../src/control/Control.UIManager.ts" />
 /// <reference path="../src/control/Notebookbar.WriterReferencesTab.ts" />
 /// <reference path="../src/control/Control.ContextToolbar.ts" />

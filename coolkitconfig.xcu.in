@@ -21,6 +21,12 @@
 
 <item oor:path="/org.openoffice.Office.Writer/AutoFunction/Format/ByInput/ApplyNumbering"><prop oor:name="Enable" oor:op="fuse"><value>true</value></prop></item>
 
+<!-- Enable #REF! warning snackbar on cell/row/col/sheet deletion in Calc.
+     TODO: expose this to end users (coolwsd.xml option, .uno command, or
+     File > Settings entry) instead of only being toggleable via this
+     static override / Expert Configuration. -->
+<item oor:path="/org.openoffice.Office.Calc/Input"><prop oor:name="WarnOnDeleteCellReferences" oor:op="fuse"><value>true</value></prop></item>
+
 <!-- Set a work path which is valid in chroot -->
 <item oor:path="/org.openoffice.Office.Paths/Variables"><prop oor:name="Work" oor:op="fuse"><value>file:///tmp</value></prop></item>
 

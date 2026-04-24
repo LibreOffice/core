@@ -726,7 +726,7 @@
           <desc>Specifies whether a warning infobar will appear when deleting cells breaks references in other cells.</desc>
           <label>Warn when deletion breaks cell references</label>
         </info>
-        <value>false</value>
+        <value>true</value>
       </prop>
       <prop oor:name="UseScrollLock" oor:type="xs:boolean" oor:nillable="false">
         <info>
