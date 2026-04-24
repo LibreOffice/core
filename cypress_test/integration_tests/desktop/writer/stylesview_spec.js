@@ -13,11 +13,11 @@ describe(['tagdesktop'], 'Stylesview Iconview Tests', function() {
 	}
 
 	beforeEach(function() {
-		cy.viewport(1920, 1080);
+		cy.viewport(1280, 720);
 		helper.setupAndLoadDocument('writer/styles.odt');
 		desktopHelper.switchUIToNotebookbar();
 		desktopHelper.sidebarToggle();
-		cy.cGet('.notebookbar #stylesview').should('exist').should('be.visible');
+		cy.cGet('.notebookbar #stylesview').should('exist').should('be.visible').should('not.be.empty');
 	});
 
 	it('Scroll Up/Down Buttons', function() {
@@ -32,9 +32,9 @@ describe(['tagdesktop'], 'Stylesview Iconview Tests', function() {
 	});
 
 	it('Expander Button', function() {
+		cy.cGet('.jsdialog #stylesview_9').should('not.exist');
 		openExpander();
-		cy.cGet('.jsdialog #stylesview_59').should('exist').should('be.visible'); // Contents 9
-		cy.cGet('.jsdialog #stylesview_60').should('exist').should('not.be.visible');
+		cy.cGet('.jsdialog #stylesview_9').should('exist').should('be.visible');
 	});
 
 	it('Open Styles Sidebar Button', function() {
@@ -50,7 +50,7 @@ describe(['tagdesktop'], 'Stylesview Iconview Tests', function() {
 		cy.cGet('#StyleListDeck').should('exist').should('be.visible');
 	});
 
-	it.only('Resize', function() {
+	it('Resize', function() {
 		// the dropdown should close on resize
 		openExpander();
 		cy.cGet('#stylesview-iconview-list-dropdown').should('exist').should('be.visible');
