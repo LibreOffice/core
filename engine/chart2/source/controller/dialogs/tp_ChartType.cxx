@@ -31,6 +31,7 @@
 #include <vcl/weld.hxx>
 #include <vcl/outdev.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <officecfg/Office/Common.hxx>
 
 namespace chart
 {
@@ -89,7 +90,8 @@ ChartTypeTabPage::ChartTypeTabPage(weld::Container* pPage, weld::DialogControlle
 
     m_aChartTypeDialogControllerList.push_back(std::make_unique<ColumnChartDialogController>());
     m_aChartTypeDialogControllerList.push_back(std::make_unique<BarChartDialogController>());
-    m_aChartTypeDialogControllerList.push_back(std::make_unique<HistogramChartDialogController>());
+    if (officecfg::Office::Common::Misc::ExperimentalMode::get())
+        m_aChartTypeDialogControllerList.push_back(std::make_unique<HistogramChartDialogController>());
     m_aChartTypeDialogControllerList.push_back(std::make_unique<PieChartDialogController>());
     m_aChartTypeDialogControllerList.push_back(std::make_unique<OfPieChartDialogController>());
     m_aChartTypeDialogControllerList.push_back(std::make_unique<AreaChartDialogController>());
