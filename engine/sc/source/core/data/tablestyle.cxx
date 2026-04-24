@@ -889,8 +889,8 @@ sal_Int32 ScTableStyle::GetFirstColumnStripeSize() const { return mnFirstColStri
 
 sal_Int32 ScTableStyle::GetSecondColumnStripeSize() const { return mnSecondColStripeSize; }
 
-ScTableStyles::ScTableStyles(SfxBindings* pBindings)
-    : mpBindings(pBindings)
+ScTableStyles::ScTableStyles(ScDocument* pDoc)
+    : mpDoc(pDoc)
 {
 }
 
@@ -901,23 +901,28 @@ void ScTableStyles::AddTableStyle(std::unique_ptr<ScTableStyle> pTableStyle)
     // either reject duplicates (with UI validation) or use insert_or_assign
     // to replace the existing style.
     maTableStyles.insert({ pTableStyle->GetName(), std::move(pTableStyle) });
-    if (mpBindings)
-        mpBindings->Invalidate(SID_TABLE_STYLES);
+    InvalidateBindings();
 }
 
 void ScTableStyles::DeleteTableStyle(const OUString& rName)
 {
     maTableStyles.erase(rName);
-    if (mpBindings)
-        mpBindings->Invalidate(SID_TABLE_STYLES);
+    InvalidateBindings();
 }
 
 void ScTableStyles::ClearOOXMLDefaultStyles()
 {
     std::erase_if(maTableStyles,
                   [](const auto& rEntry) { return rEntry.second->IsOOXMLDefault(); });
-    if (mpBindings)
-        mpBindings->Invalidate(SID_TABLE_STYLES);
+    InvalidateBindings();
+}
+
+void ScTableStyles::InvalidateBindings()
+{
+    if (!mpDoc)
+        return;
+    if (SfxBindings* pBindings = mpDoc->GetViewBindings())
+        pBindings->Invalidate(SID_TABLE_STYLES);
 }
 
 namespace
