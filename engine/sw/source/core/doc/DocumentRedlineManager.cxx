@@ -2342,8 +2342,20 @@ void DocumentRedlineManager::PreAppendFormatRedline(AppendRedlineContext& rCtx)
     case RedlineType::Format:
         switch( rCtx.eCmpPos )
         {
-        case SwComparePosition::Outside:
         case SwComparePosition::Equal:
+            if (rCtx.pRedl->GetRedlineData(0).Next())
+            {
+                // rCtx.pRedl already has an underlying redline data entry (insert/delete) and
+                // rCtx.pRedl already records the old format to be restored on reject, so just leave
+                // the redline table unchanged.
+                delete rCtx.pNewRedl;
+                rCtx.pNewRedl = nullptr;
+
+                MaybeNotifyRedlineModification(*rCtx.pRedl, m_rDoc);
+                break;
+            }
+            [[fallthrough]];
+        case SwComparePosition::Outside:
             {
                 // Overlaps the current one completely or has the
                 // same dimension, delete the old one

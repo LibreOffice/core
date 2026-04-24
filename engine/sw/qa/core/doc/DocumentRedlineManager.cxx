@@ -10,6 +10,7 @@
 #include <swmodeltestbase.hxx>
 
 #include <editeng/wghtitem.hxx>
+#include <editeng/postitem.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/propertyvalue.hxx>
 
@@ -436,6 +437,51 @@ CPPUNIT_TEST_FIXTURE(Test, testFormatThenDel)
         CPPUNIT_ASSERT_EQUAL(RedlineType::Format, rRedlineData.GetType());
         CPPUNIT_ASSERT(!rRedlineData.Next());
     }
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testDelThenFormatFormat)
+{
+    // Given a document with "test" that has a delete redline and a bold
+    // format redline applied on top of it:
+    createSwDoc();
+    SwDocShell* pDocShell = getSwDocShell();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    pWrtShell->Insert(u"test"_ustr);
+    pDocShell->SetChangeRecording(true);
+    SwView& rView = pWrtShell->GetView();
+    pWrtShell->SelAll();
+    pWrtShell->DelLeft();
+    pWrtShell->SelAll();
+    {
+        SvxWeightItem aWeightItem(WEIGHT_BOLD, RES_CHRATR_WEIGHT);
+        SfxItemSetFixed<RES_CHRATR_BEGIN, RES_CHRATR_END> aSet(rView.GetPool());
+        aSet.Put(aWeightItem);
+        pWrtShell->SetAttrSet(aSet);
+    }
+
+    // When applying an additional italic format on the same range:
+    {
+        SvxPostureItem aPostureItem(ITALIC_NORMAL, RES_CHRATR_POSTURE);
+        SfxItemSetFixed<RES_CHRATR_BEGIN, RES_CHRATR_END> aSet(rView.GetPool());
+        aSet.Put(aPostureItem);
+        pWrtShell->SetAttrSet(aSet);
+    }
+
+    // Then make sure the delete-then-format stack is kept unchanged, instead
+    // of being replaced with a single plain format redline:
+    SwDoc* pDoc = pDocShell->GetDoc();
+    IDocumentRedlineAccess& rIDRA = pDoc->getIDocumentRedlineAccess();
+    SwRedlineTable& rRedlines = rIDRA.GetRedlineTable();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rRedlines.size());
+    const SwRedlineData& rRedlineData = rRedlines[0]->GetRedlineData(0);
+    CPPUNIT_ASSERT_EQUAL(RedlineType::Format, rRedlineData.GetType());
+    // Without the accompanying fix in place, this test would have failed here,
+    // i.e. the new italic redline destroyed the existing format-on-delete
+    // redline, losing the underlying delete redline.
+    CPPUNIT_ASSERT(rRedlineData.Next());
+    const SwRedlineData& rRedlineData2 = *rRedlineData.Next();
+    CPPUNIT_ASSERT_EQUAL(RedlineType::Delete, rRedlineData2.GetType());
+    CPPUNIT_ASSERT(!rRedlineData2.Next());
 }
 }
 
