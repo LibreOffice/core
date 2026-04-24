@@ -16,7 +16,8 @@ $(eval $(call gb_ExternalProject_register_targets,expat,\
 $(call gb_ExternalProject_get_state_target,expat,configure) :
 	$(call gb_Trace_StartRange,expat,EXTERNAL)
 	$(call gb_ExternalProject_run,configure,\
-		$(gb_RUN_CONFIGURE) ./configure --without-docbook \
+		$(gb_RUN_CONFIGURE) ./configure --without-docbook --without-getentropy \
+				--without-arc4random --without-arc4random-buf \
 			$(gb_CONFIGURE_PLATFORMS) \
 			$(if $(CROSS_COMPILING),$(if $(filter INTEL ARM,$(CPUNAME)),ac_cv_c_bigendian=no)) \
 	,,expat_configure.log)
