@@ -72,6 +72,8 @@ bool SetEditTextOperation::runImplementation()
     if (mbApi)
         mrDocFunc.NotifyInputHandler(aPosition);
 
+    mrDocShell.ResolveSpilledOutputs();
+
     return true;
 }
 

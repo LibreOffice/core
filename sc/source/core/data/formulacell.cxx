@@ -22,6 +22,7 @@
 #include <sal/config.h>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
+#include <o3tl/safeint.hxx>
 
 #include <cassert>
 #include <cstdlib>
@@ -2292,6 +2293,65 @@ void ScFormulaCell::InterpretTail( ScInterpreterContext& rContext, ScInterpretTa
             if (cMatrixFlag != ScMatrixMode::Formula && !pCode->IsHyperLink())
             {
                 aResult.SetToken( aResult.GetCellResultToken().get());
+            }
+            else
+            {
+                // If the result is larger than the declared matrix, check the
+                // expansion area for blocking cells and report #SPILL! if any.
+                SCCOL nDeclCols = 0;
+                SCROW nDeclRows = 0;
+                GetMatColsRows(nDeclCols, nDeclRows);
+                SCSIZE nResCols = 0;
+                SCSIZE nResRows = 0;
+                aResult.GetMatrix()->GetDimensions(nResCols, nResRows);
+                bool bSpillBlocked = false;
+                // Only spill/auto-resize when the formula uses a dynamic-array
+                // function (UNIQUE/FILTER/SORT/...); legacy array-returning
+                // functions like TRANSPOSE/MMULT and HYPERLINK keep their
+                // declared dimensions.
+                bool bIsDynamic = pCode->HasDynamicArrayFunction();
+                if (bIsDynamic && nDeclCols > 0 && nDeclRows > 0
+                    && (o3tl::make_unsigned(nDeclCols) < nResCols
+                        || o3tl::make_unsigned(nDeclRows) < nResRows))
+                {
+                    SCCOL nSpillEndCol = aPos.Col() + static_cast<SCCOL>(nResCols) - 1;
+                    SCROW nSpillEndRow = aPos.Row() + static_cast<SCROW>(nResRows) - 1;
+                    if (nSpillEndCol > rDocument.MaxCol() || nSpillEndRow > rDocument.MaxRow())
+                    {
+                        bSpillBlocked = true; // spill would go out of bounds
+                    }
+                    else
+                    {
+                        for (SCCOL nColumn = aPos.Col();
+                             nColumn <= nSpillEndCol && !bSpillBlocked; ++nColumn)
+                        {
+                            for (SCROW nRow = aPos.Row();
+                                 nRow <= nSpillEndRow && !bSpillBlocked; ++nRow)
+                            {
+                                if (nColumn < aPos.Col() + nDeclCols
+                                    && nRow < aPos.Row() + nDeclRows)
+                                {
+                                    continue; // inside declared area
+                                }
+                                if (rDocument.HasData(nColumn, nRow, aPos.Tab()))
+                                    bSpillBlocked = true;
+                            }
+                        }
+                    }
+                    if (bSpillBlocked)
+                    {
+                        // Set only the result error, not a code error. Code
+                        // errors are sticky and would prevent re-evaluation
+                        // when the blocking cells are later cleared.
+                        aResult.SetResultError(FormulaError::Spill);
+                        bChanged = bContentChanged = true;
+                    }
+                }
+                // Track spill state so cell-change operations can re-evaluate.
+                if (bSpillBlocked)
+                    rDocument.MarkFormulaSpilled(aPos);
+                else
+                    rDocument.UnmarkFormulaSpilled(aPos);
             }
         }
         if ( aResult.IsValue() && !std::isfinite( aResult.GetDouble() ) )
