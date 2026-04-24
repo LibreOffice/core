@@ -523,7 +523,7 @@ void SAL_CALL AxisWrapper::dispose()
     DisposeHelper::DisposeAndClear( m_xMajorGrid );
     DisposeHelper::DisposeAndClear( m_xMinorGrid );
 
-    clearWrappedPropertySet();
+    clearWrappedPropertySet(g);
 }
 
 void SAL_CALL AxisWrapper::addEventListener(
