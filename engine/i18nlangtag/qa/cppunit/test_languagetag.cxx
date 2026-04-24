@@ -19,6 +19,7 @@
 #include <i18nlangtag/languagetagicu.hxx>
 
 #include <rtl/ustring.hxx>
+#include <rtl/ustrbuf.hxx>
 
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
@@ -37,6 +38,8 @@ public:
     void testDisplayNames();
     void testLanguagesWithoutHyphenation();
     void testLongBcp47ToStackString();
+    void testLongLanguageToStackString();
+    void testLongLanguageCountryToStackString();
 
     CPPUNIT_TEST_SUITE(TestLanguageTag);
     CPPUNIT_TEST(testAllTags);
@@ -44,6 +47,8 @@ public:
     CPPUNIT_TEST(testDisplayNames);
     CPPUNIT_TEST(testLanguagesWithoutHyphenation);
     CPPUNIT_TEST(testLongBcp47ToStackString);
+    CPPUNIT_TEST(testLongLanguageToStackString);
+    CPPUNIT_TEST(testLongLanguageCountryToStackString);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -1104,6 +1109,37 @@ void TestLanguageTag::testLongBcp47ToStackString()
     aLocale.Country = u"US"_ustr;
     aLocale.Variant = u"en-US-x-aaaa-bbbb-cccc-dddd-eeee-ffff-gggg-hhhh-"
                       "iiii-jjjj-kkkk-llll-mmmm-nnnn-oooo-pppp-qqqq-rrrr"_ustr;
+    StackString64 aBuf;
+    LanguageTag::convertToBcp47(aBuf, aLocale, false);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aBuf.getLength());
+}
+
+OUString makeRepeated(sal_Unicode c, sal_Int32 n)
+{
+    OUStringBuffer aBuf(n);
+    for (sal_Int32 i = 0; i < n; ++i)
+        aBuf.append(c);
+    return aBuf.makeStringAndClear();
+}
+
+void TestLanguageTag::testLongLanguageToStackString()
+{
+    // A non-qlt locale with an overlong Language field and no Country
+    // must not overflow the StackString64 buffer.
+    lang::Locale aLocale;
+    aLocale.Language = makeRepeated(u'a', 80);
+    StackString64 aBuf;
+    LanguageTag::convertToBcp47(aBuf, aLocale, false);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aBuf.getLength());
+}
+
+void TestLanguageTag::testLongLanguageCountryToStackString()
+{
+    // A non-qlt locale whose Language + "-" + Country exceeds the
+    // StackString64 buffer must not overflow.
+    lang::Locale aLocale;
+    aLocale.Language = makeRepeated(u'a', 40);
+    aLocale.Country = makeRepeated(u'B', 40);
     StackString64 aBuf;
     LanguageTag::convertToBcp47(aBuf, aLocale, false);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aBuf.getLength());

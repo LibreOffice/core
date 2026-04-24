@@ -2893,6 +2893,7 @@ static void appendAscii(StackString64& rBuf, const OUString& s)
 // static
 void LanguageTagImpl::convertToBcp47( StackString64& rBuf, const css::lang::Locale& rLocale )
 {
+    assert(rBuf.getLength() == 0);
     if (rLocale.Language.isEmpty())
     {
         // aBcp47 stays empty
@@ -2908,8 +2909,11 @@ void LanguageTagImpl::convertToBcp47( StackString64& rBuf, const css::lang::Loca
          * now just concatenate language and country. In case we stumbled over
          * variant aware code we'd have to take care of that. */
         if (rLocale.Country.isEmpty())
-            appendAscii(rBuf, rLocale.Language);
-        else
+        {
+            if (rLocale.Language.getLength() < 64)
+                appendAscii(rBuf, rLocale.Language);
+        }
+        else if (rLocale.Language.getLength() + 1 + rLocale.Country.getLength() < 64)
         {
             appendAscii(rBuf, rLocale.Language);
             rBuf.append("-");
