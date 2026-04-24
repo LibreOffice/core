@@ -3284,7 +3284,8 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 			else if (this.isWriter()) maxZoom = 13;
 		}
 
-		if (this._invalidateZoomFirstFit) {
+		const smartZoomEnabled = window.prefs.getBoolean('smartZoom') === true;
+		if (this._invalidateZoomFirstFit && smartZoomEnabled) {
 			recalcFirstFit = true;
 			this._invalidateZoomFirstFit = false;
 		}
@@ -3299,7 +3300,11 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		oldSize.y *= app.dpiScale;
 
 		let bringCommentsIntoView = false;
-		if (this.isWriter() && app.activeDocument.partHasComments && (recalcFirstFit || !this._includedCommentsInFirstFit)) {
+		// `recalcFirstFit` is passed by the UI dispatches like the 'Zoom to Fit Page Width' button
+		// in order to reset the zoom. Therefore the 'smartZoom' option should not block fit-width-zoom
+		// if recalcFirstFit is set to `true` (when smartZoom is set to 'false').
+		const changeZoom = smartZoomEnabled || recalcFirstFit;
+		if (changeZoom && this.isWriter() && app.activeDocument.partHasComments && (recalcFirstFit || !this._includedCommentsInFirstFit)) {
 			bringCommentsIntoView = true;
 			this._includedCommentsInFirstFit = true;
 			this._firstFitDone = false;
@@ -3316,15 +3321,31 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		if (this._firstFitDone && newSize.x - oldSize.x === 0)
 			return;
 
-		const commentWidth = app.sectionContainer.getSectionWithName(app.CSections.CommentList.name).sectionProperties.commentWidth;
-		let documentWidth = app.activeDocument.fileSize.pX;
-		if (bringCommentsIntoView) documentWidth += commentWidth;
+		var zoom;
+		if (this.isImpress() || changeZoom /* writer */) {
+			const commentWidth = app.sectionContainer.getSectionWithName(app.CSections.CommentList.name).sectionProperties.commentWidth;
+			let documentWidth = app.activeDocument.fileSize.pX;
+			if (bringCommentsIntoView) documentWidth += commentWidth;
 
-		var ratio = newSize.x / documentWidth;
-		var zoom = this._map.getScaleZoom(ratio);
+			var ratio = newSize.x / documentWidth;
+			zoom = this._map.getScaleZoom(ratio);
 
-		if (maxZoom)
-			zoom = Math.min(maxZoom, Math.max(0.1, zoom));
+			if (maxZoom)
+				zoom = Math.min(maxZoom, Math.max(0.1, zoom));
+		} else {
+			const ZOOM_LEVEL_20 = 1;
+			const ZOOM_LEVEL_400 = 18;
+			const ZOOM_LEVEL_100 = 10;
+
+			let defaultZoom = parseInt(window.prefs.get('defaultZoom'));
+			defaultZoom = defaultZoom ? defaultZoom + 1 : ZOOM_LEVEL_100;
+
+			if (ZOOM_LEVEL_20 <= defaultZoom && defaultZoom <= ZOOM_LEVEL_400) {
+				zoom = defaultZoom;
+			} else {
+				zoom = ZOOM_LEVEL_100;
+			}
+		}
 
 		// Not clear why we wanted to zoom in the past.
 		// This resets the view & scroll area and does a 'panTo'
