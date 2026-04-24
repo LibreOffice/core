@@ -15,6 +15,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,libtiff,\
     external/libtiff/libtiff.linknolibs.patch \
     external/libtiff/0001-ofz-54685-Timeout.patch \
     external/libtiff/ofz68840.patch \
+	external/libtiff/0001-TIFFReadRGBAImage-prevent-integer-overflow-and-later.patch \
 ))
 
 # vim: set noet sw=4 ts=4:
