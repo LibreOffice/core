@@ -10787,9 +10787,12 @@ void ScInterpreter::ScIndirect()
 
     svl::SharedString sSharedRefStr = GetString();
     const OUString & sRefStr = sSharedRefStr.getString();
-    if (sRefStr.isEmpty())
+    if (sRefStr.isEmpty() || sRefStr.indexOf(u'\0') >= 0)
     {
         // Bail out early for empty cells, rely on "we do have a string" below.
+        // Also reject strings with embedded NULs: the formula compiler's state
+        // machine cannot advance past a NUL and would otherwise leave input
+        // unconsumed without setting an error.
         PushError( FormulaError::NoRef);
         return;
     }
