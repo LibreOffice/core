@@ -17,7 +17,7 @@ $(gb_CustomTarget_workdir)/rust_uno/rustmaker/cpp: \
         $(call gb_Executable_get_runtime_dependencies,rustmaker) \
         $(call gb_UnoApi_get_target,offapi) \
         $(call gb_UnoApi_get_target,udkapi) \
-        $(gb_CustomTarget_workdir)/rust_uno/rustmaker/.dir
+        | $(gb_CustomTarget_workdir)/rust_uno/rustmaker/.dir
 	rm -fr $(SRCDIR)/rust_uno/src/generated
 	mkdir $(SRCDIR)/rust_uno/src/generated
 	rm -fr $(gb_CustomTarget_workdir)/rust_uno/rustmaker/cpp
