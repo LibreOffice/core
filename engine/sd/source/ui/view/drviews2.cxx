@@ -1766,6 +1766,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 rMgr.AddSection(nPage, SdResId(STR_DEFAULT_SLIDE_SECTION_NAME));
                 if (pUndo)
                     GetDoc()->AddUndo(std::move(pUndo));
+                GetDocSh()->SetModified();
             }
         }
         break;
@@ -1787,6 +1788,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     rMgr.RemoveSection(nSectionIdx);
                     if (pUndo)
                         GetDoc()->AddUndo(std::move(pUndo));
+                    GetDocSh()->SetModified();
                 }
             }
         }
@@ -1815,6 +1817,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                         rMgr.RenameSection(nSectionIndex, aNewName);
                         if (pUndo)
                             GetDoc()->AddUndo(std::move(pUndo));
+                        GetDocSh()->SetModified();
                     }
                 }
             }
@@ -1846,6 +1849,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                         GetDoc()->AddUndo(std::move(pUndo));
                         GetDoc()->EndUndo();
                     }
+                    GetDocSh()->SetModified();
                 }
             }
         }
@@ -1874,6 +1878,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                         GetDoc()->AddUndo(std::move(pUndo));
                         GetDoc()->EndUndo();
                     }
+                    GetDocSh()->SetModified();
                 }
             }
         }
