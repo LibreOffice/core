@@ -44,10 +44,8 @@
 #include <QEventLoop>
 #include <QFileDialog>
 #include <QFileInfo>
-#include <QInputDialog>
 #include <QJsonDocument>
 #include <QJsonObject>
-#include <QLineEdit>
 #include <QMainWindow>
 #include <QMetaObject>
 #include <QNetworkAccessManager>
@@ -757,42 +755,19 @@ QVariant Bridge::cool(const QString& messageStr)
         LOG_TRC_NOFILE("GETRECENTDOCS: returning recent documents");
         return result;
     }
-    else if (message == "openremote")
+    else if (tokens.equals(0, "openremote"))
     {
-        // Read last-used server URL from config
-        Poco::Path configFile = Desktop::getConfigPath();
-        configFile.append("RemoteServer.conf");
-        QString lastUrl;
-        QFile conf(QString::fromStdString(configFile.toString()));
-        if (conf.open(QIODevice::ReadOnly))
+        // The remote server URL is configured on the JS side
+        // (backstage "Open" tab, cloud-provider tile) and passed
+        // along with the message so we can go straight to the
+        // integrator picker, no URL prompt needed.
+        if (tokens.size() < 2)
         {
-            lastUrl = QString::fromUtf8(conf.readAll()).trimmed();
-            conf.close();
-        }
-
-        auto* inputDialog = new QInputDialog(_webView);
-        inputDialog->setWindowTitle(QObject::tr("Open Remote"));
-        inputDialog->setLabelText(QObject::tr("Server URL:"));
-        inputDialog->setTextEchoMode(QLineEdit::Normal);
-        inputDialog->setTextValue(lastUrl);
-        inputDialog->resize(400, 150);
-        if (inputDialog->exec() != QDialog::Accepted)
-        {
-            delete inputDialog;
+            LOG_WRN("openremote: missing server URL");
             return {};
         }
-        QString serverUrl = inputDialog->textValue();
-        delete inputDialog;
-        if (serverUrl.isEmpty())
-            return {};
-
-        // Save for next time
-        if (conf.open(QIODevice::WriteOnly | QIODevice::Truncate))
-        {
-            conf.write(serverUrl.toUtf8());
-            conf.close();
-        }
-
+        QString serverUrl = QString::fromStdString(
+            std::string(tokens[1]));
         auto* webView = _webView;
         QTimer::singleShot(0, [serverUrl, webView]() {
             coda::openRemoteFile(serverUrl, webView,
