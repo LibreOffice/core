@@ -8,14 +8,19 @@ if [ -n "${abs_srcdir}" ]; then
 fi
 
 if [ ! -d "${srcdir}/.git" ]; then
-    exit 0
+    gitdir=$(git rev-parse --git-common-dir)
+    if [ ! -d "${gitdir}" ]; then
+        exit 0
+    fi
+else
+    gitdir="${srcdir}/.git"
 fi
 
-mkdir -p ${srcdir}/.git/hooks
+mkdir -p "${gitdir}"/hooks
 
 for hook_name in ${srcdir}/.git-hooks/*
 do
-    hook="${srcdir}/.git/hooks/${hook_name##*/}"
+    hook="${gitdir}/hooks/${hook_name##*/}"
     if [ ! -e "${hook}" ]; then
         rm -f "${hook}"
         ln -sf "${hook_name}" "${hook}"
