@@ -5,6 +5,9 @@
   "sdk": "org.kde.Sdk",
   "base": "io.qt.qtwebengine.BaseApp",
   "base-version": "6.10",
+  "base-extensions": [
+    "io.qt.qtwebengine.BaseApp.Debug"
+  ],
   "separate-locales": false,
   "sdk-extensions": [
     "org.freedesktop.Sdk.Extension.node20"
