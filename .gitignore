@@ -49,6 +49,7 @@ compile_commands.json
 macos/coolwsd/gmake-wrapper.sh
 macos/coda/coda/Assets.xcassets
 /qt/run-from-build
+scripts/__pycache__
 
 # Test stuff
 systemplate
