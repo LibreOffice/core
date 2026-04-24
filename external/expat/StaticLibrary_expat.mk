@@ -42,6 +42,21 @@ $(eval $(call gb_StaticLibrary_add_defs,expat,\
 ))
 endif
 
+ifeq ($(OS), $(filter LINUX ANDROID, $(OS)))
+$(eval $(call gb_StaticLibrary_add_generated_cobjects,expat,\
+	UnpackedTarball/expat/lib/random_dev_urandom \
+	UnpackedTarball/expat/lib/random_getrandom \
+))
+else ifeq ($(OS),MACOSX)
+$(eval $(call gb_StaticLibrary_add_generated_cobjects,expat,\
+	UnpackedTarball/expat/lib/random_dev_urandom \
+))
+else
+$(eval $(call gb_StaticLibrary_add_generated_cobjects,expat,\
+	UnpackedTarball/expat/lib/random_rand_s \
+))
+endif
+
 $(eval $(call gb_StaticLibrary_add_generated_cobjects,expat,\
 	UnpackedTarball/expat/lib/xmlparse \
 	UnpackedTarball/expat/lib/xmlrole \

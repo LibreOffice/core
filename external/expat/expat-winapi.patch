@@ -13,13 +13,15 @@
  
 --- misc/expat-2.5.0/lib/xmlparse.c	2022-10-26 00:09:08.000000000 +0900
 +++ misc/build/expat-2.5.0/lib/xmlparse.c	2022-10-30 23:09:01.843006341 +0900
-@@ -67,6 +67,9 @@
- #endif
+@@ -98,6 +98,10 @@
+ #include <errno.h>
  
  #ifdef _WIN32
++#  undef HAVE_ARC4RANDOM
 +#  undef HAVE_ARC4RANDOM_BUF
 +#  undef HAVE_GETRANDOM
 +#  undef HAVE_SYSCALL_GETRANDOM
- /* force stdlib to define rand_s() */
- #  if ! defined(_CRT_RAND_S)
- #    define _CRT_RAND_S
+ #  define getpid GetCurrentProcessId
+ #else
+ #  include <sys/time.h>  /* gettimeofday() */
+
