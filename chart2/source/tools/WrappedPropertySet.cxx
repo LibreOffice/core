@@ -21,6 +21,7 @@
 #include <cppuhelper/propshlp.hxx>
 
 #include <comphelper/diagnose_ex.hxx>
+#include <o3tl/temporary.hxx>
 #include <sal/log.hxx>
 
 namespace chart
@@ -36,7 +37,7 @@ WrappedPropertySet::WrappedPropertySet()
 }
 WrappedPropertySet::~WrappedPropertySet()
 {
-    clearWrappedPropertySet();
+    clearWrappedPropertySet(o3tl::temporary(std::unique_lock(m_aMutex)));
 }
 
 Reference< beans::XPropertyState > WrappedPropertySet::getInnerPropertyState()
@@ -44,14 +45,20 @@ Reference< beans::XPropertyState > WrappedPropertySet::getInnerPropertyState()
     return Reference< beans::XPropertyState >( getInnerPropertySet(), uno::UNO_QUERY );
 }
 
-void WrappedPropertySet::clearWrappedPropertySet()
+void WrappedPropertySet::clearWrappedPropertySet(std::unique_lock<std::mutex>& rGuard)
 {
-    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );//do not use different mutex than is already used for static property sequence
-
-    m_pPropertyArrayHelper.reset();
-    m_pWrappedPropertyMap.reset();
-
-    m_xInfo = nullptr;
+    assert(rGuard.owns_lock());
+    // Take the members out under the lock and destroy them after releasing
+    // it: the destructors may release UNO references that require SolarMutex,
+    // and we must not hold m_aMutex across that. Re-lock before returning so
+    // the caller's guard stays in the state it was in on entry.
+    {
+        auto pArr = std::move(m_pPropertyArrayHelper);
+        auto pMap = std::move(m_pWrappedPropertyMap);
+        auto xInfo = std::move(m_xInfo);
+        rGuard.unlock();
+    }
+    rGuard.lock();
 }
 
 //XPropertySet
@@ -60,11 +67,11 @@ Reference< beans::XPropertySetInfo > SAL_CALL WrappedPropertySet::getPropertySet
     Reference< beans::XPropertySetInfo > xInfo = m_xInfo;
     if( !xInfo.is() )
     {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );//do not use different mutex than is already used for static property sequence
+        std::unique_lock aGuard(m_aMutex);
         xInfo = m_xInfo;
         if( !xInfo.is() )
         {
-            xInfo = ::cppu::OPropertySetHelper::createPropertySetInfo( getInfoHelper() );
+            xInfo = ::cppu::OPropertySetHelper::createPropertySetInfo( getInfoHelper(aGuard) );
             OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
             m_xInfo = xInfo;
         }
@@ -78,13 +85,24 @@ Reference< beans::XPropertySetInfo > SAL_CALL WrappedPropertySet::getPropertySet
 
 void SAL_CALL WrappedPropertySet::setPropertyValue( const OUString& rPropertyName, const Any& rValue )
 {
+    std::unique_lock aGuard(m_aMutex);
+    setPropertyValue(aGuard, rPropertyName, rValue);
+}
+
+void WrappedPropertySet::setPropertyValue( std::unique_lock<std::mutex>& rGuard, const OUString& rPropertyName, const Any& rValue )
+{
     try
     {
-        sal_Int32 nHandle = getInfoHelper().getHandleByName( rPropertyName );
-        const WrappedProperty* pWrappedProperty = getWrappedProperty( nHandle );
+        sal_Int32 nHandle = getInfoHelper(rGuard).getHandleByName( rPropertyName );
+        const WrappedProperty* pWrappedProperty = getWrappedProperty( rGuard, nHandle );
         Reference< beans::XPropertySet > xInnerPropertySet( getInnerPropertySet() );
         if( pWrappedProperty )
+        {
+            // some of these call into things that take the solarmutex
+            rGuard.unlock();
             pWrappedProperty->setPropertyValue( rValue, xInnerPropertySet );
+            rGuard.lock();
+        }
         else if( xInnerPropertySet.is() )
             xInnerPropertySet->setPropertyValue( rPropertyName, rValue );
         else
@@ -119,14 +137,21 @@ void SAL_CALL WrappedPropertySet::setPropertyValue( const OUString& rPropertyNam
         throw lang::WrappedTargetException( ex.Message, nullptr, anyEx );
     }
 }
+
 Any SAL_CALL WrappedPropertySet::getPropertyValue( const OUString& rPropertyName )
+{
+    std::unique_lock aGuard(m_aMutex);
+    return getPropertyValue(aGuard, rPropertyName);
+}
+
+Any WrappedPropertySet::getPropertyValue( std::unique_lock<std::mutex>& rGuard, const OUString& rPropertyName )
 {
     Any aRet;
 
     try
     {
-        sal_Int32 nHandle = getInfoHelper().getHandleByName( rPropertyName );
-        const WrappedProperty* pWrappedProperty = getWrappedProperty( nHandle );
+        sal_Int32 nHandle = getInfoHelper(rGuard).getHandleByName( rPropertyName );
+        const WrappedProperty* pWrappedProperty = getWrappedProperty( rGuard, nHandle );
         Reference< beans::XPropertySet > xInnerPropertySet( getInnerPropertySet() );
         if( pWrappedProperty )
             aRet = pWrappedProperty->getPropertyValue( xInnerPropertySet );
@@ -161,22 +186,35 @@ Any SAL_CALL WrappedPropertySet::getPropertyValue( const OUString& rPropertyName
 
 void SAL_CALL WrappedPropertySet::addPropertyChangeListener( const OUString& rPropertyName, const Reference< beans::XPropertyChangeListener >& xListener )
 {
+    std::unique_lock aGuard(m_aMutex);
+    addPropertyChangeListener(aGuard, rPropertyName, xListener);
+}
+
+void WrappedPropertySet::addPropertyChangeListener( std::unique_lock<std::mutex>& rGuard, const OUString& rPropertyName, const Reference< beans::XPropertyChangeListener >& xListener )
+{
     Reference< beans::XPropertySet > xInnerPropertySet( getInnerPropertySet() );
     if( xInnerPropertySet.is() )
     {
-        const WrappedProperty* pWrappedProperty = getWrappedProperty( rPropertyName );
+        const WrappedProperty* pWrappedProperty = getWrappedProperty( rGuard, rPropertyName );
         if( pWrappedProperty )
             xInnerPropertySet->addPropertyChangeListener( pWrappedProperty->getInnerName(), xListener );
         else
             xInnerPropertySet->addPropertyChangeListener( rPropertyName, xListener );
     }
 }
+
 void SAL_CALL WrappedPropertySet::removePropertyChangeListener( const OUString& rPropertyName, const Reference< beans::XPropertyChangeListener >& aListener )
+{
+    std::unique_lock aGuard(m_aMutex);
+    removePropertyChangeListener(aGuard, rPropertyName, aListener);
+}
+
+void WrappedPropertySet::removePropertyChangeListener( std::unique_lock<std::mutex>& rGuard, const OUString& rPropertyName, const Reference< beans::XPropertyChangeListener >& aListener )
 {
     Reference< beans::XPropertySet > xInnerPropertySet( getInnerPropertySet() );
     if( xInnerPropertySet.is() )
     {
-        const WrappedProperty* pWrappedProperty = getWrappedProperty( rPropertyName );
+        const WrappedProperty* pWrappedProperty = getWrappedProperty( rGuard, rPropertyName );
         if( pWrappedProperty )
             xInnerPropertySet->removePropertyChangeListener( pWrappedProperty->getInnerName(), aListener );
         else
@@ -185,10 +223,11 @@ void SAL_CALL WrappedPropertySet::removePropertyChangeListener( const OUString& 
 }
 void SAL_CALL WrappedPropertySet::addVetoableChangeListener( const OUString& rPropertyName, const Reference< beans::XVetoableChangeListener >& aListener )
 {
+    std::unique_lock aGuard(m_aMutex);
     Reference< beans::XPropertySet > xInnerPropertySet( getInnerPropertySet() );
     if( xInnerPropertySet.is() )
     {
-        const WrappedProperty* pWrappedProperty = getWrappedProperty( rPropertyName );
+        const WrappedProperty* pWrappedProperty = getWrappedProperty( aGuard, rPropertyName );
         if( pWrappedProperty )
             xInnerPropertySet->addVetoableChangeListener( pWrappedProperty->getInnerName(), aListener );
         else
@@ -197,10 +236,11 @@ void SAL_CALL WrappedPropertySet::addVetoableChangeListener( const OUString& rPr
 }
 void SAL_CALL WrappedPropertySet::removeVetoableChangeListener( const OUString& rPropertyName, const Reference< beans::XVetoableChangeListener >& aListener )
 {
+    std::unique_lock aGuard(m_aMutex);
     Reference< beans::XPropertySet > xInnerPropertySet( getInnerPropertySet() );
     if( xInnerPropertySet.is() )
     {
-        const WrappedProperty* pWrappedProperty = getWrappedProperty( rPropertyName );
+        const WrappedProperty* pWrappedProperty = getWrappedProperty( aGuard, rPropertyName );
         if( pWrappedProperty )
             xInnerPropertySet->removeVetoableChangeListener( pWrappedProperty->getInnerName(), aListener );
         else
@@ -276,12 +316,18 @@ void SAL_CALL WrappedPropertySet::firePropertiesChangeEvent( const Sequence< OUS
 //XPropertyState
 beans::PropertyState SAL_CALL WrappedPropertySet::getPropertyState( const OUString& rPropertyName )
 {
+    std::unique_lock aGuard(m_aMutex);
+    return getPropertyState(aGuard, rPropertyName);
+}
+
+beans::PropertyState WrappedPropertySet::getPropertyState( std::unique_lock<std::mutex>& rGuard, const OUString& rPropertyName )
+{
     beans::PropertyState aState( beans::PropertyState_DIRECT_VALUE );
 
     Reference< beans::XPropertyState > xInnerPropertyState( getInnerPropertyState() );
     if( xInnerPropertyState.is() )
     {
-        const WrappedProperty* pWrappedProperty = getWrappedProperty( rPropertyName );
+        const WrappedProperty* pWrappedProperty = getWrappedProperty( rGuard, rPropertyName );
         if( pWrappedProperty )
             aState = pWrappedProperty->getPropertyState( xInnerPropertyState );
         else
@@ -290,16 +336,16 @@ beans::PropertyState SAL_CALL WrappedPropertySet::getPropertyState( const OUStri
     return aState;
 }
 
-const WrappedProperty* WrappedPropertySet::getWrappedProperty( const OUString& rOuterName )
+const WrappedProperty* WrappedPropertySet::getWrappedProperty( std::unique_lock<std::mutex>& rGuard, const OUString& rOuterName )
 {
-    sal_Int32 nHandle = getInfoHelper().getHandleByName( rOuterName );
-    return getWrappedProperty( nHandle );
+    sal_Int32 nHandle = getInfoHelper(rGuard).getHandleByName( rOuterName );
+    return getWrappedProperty( rGuard, nHandle );
 }
 
-const WrappedProperty* WrappedPropertySet::getWrappedProperty( sal_Int32 nHandle )
+const WrappedProperty* WrappedPropertySet::getWrappedProperty( std::unique_lock<std::mutex>& rGuard, sal_Int32 nHandle )
 {
-    tWrappedPropertyMap::const_iterator aFound( getWrappedPropertyMap().find( nHandle ) );
-    if( aFound != getWrappedPropertyMap().end() )
+    tWrappedPropertyMap::const_iterator aFound( getWrappedPropertyMap(rGuard).find( nHandle ) );
+    if( aFound != getWrappedPropertyMap(rGuard).end() )
         return (*aFound).second.get();
     return nullptr;
 }
@@ -322,10 +368,11 @@ Sequence< beans::PropertyState > SAL_CALL WrappedPropertySet::getPropertyStates(
 
 void SAL_CALL WrappedPropertySet::setPropertyToDefault( const OUString& rPropertyName )
 {
+    std::unique_lock aGuard(m_aMutex);
     Reference< beans::XPropertyState > xInnerPropertyState( getInnerPropertyState() );
     if( xInnerPropertyState.is() )
     {
-        const WrappedProperty* pWrappedProperty = getWrappedProperty( rPropertyName );
+        const WrappedProperty* pWrappedProperty = getWrappedProperty( aGuard, rPropertyName );
         if( pWrappedProperty )
             pWrappedProperty->setPropertyToDefault( xInnerPropertyState );
         else
@@ -334,11 +381,12 @@ void SAL_CALL WrappedPropertySet::setPropertyToDefault( const OUString& rPropert
 }
 Any SAL_CALL WrappedPropertySet::getPropertyDefault( const OUString& rPropertyName )
 {
+    std::unique_lock aGuard(m_aMutex);
     Any aRet;
     Reference< beans::XPropertyState > xInnerPropertyState( getInnerPropertyState() );
     if( xInnerPropertyState.is() )
     {
-        const WrappedProperty* pWrappedProperty = getWrappedProperty( rPropertyName );
+        const WrappedProperty* pWrappedProperty = getWrappedProperty( aGuard, rPropertyName );
         if( pWrappedProperty )
             aRet = pWrappedProperty->getPropertyDefault(xInnerPropertyState);
         else
@@ -379,63 +427,40 @@ Sequence< Any > SAL_CALL WrappedPropertySet::getPropertyDefaults( const Sequence
     return aRetSeq;
 }
 
-::cppu::IPropertyArrayHelper& WrappedPropertySet::getInfoHelper()
+::cppu::IPropertyArrayHelper& WrappedPropertySet::getInfoHelper(std::unique_lock<std::mutex>& /*rGuard*/)
 {
-    ::cppu::OPropertyArrayHelper* p = m_pPropertyArrayHelper.get();
-    if(!p)
+    if(!m_pPropertyArrayHelper)
     {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );//do not use different mutex than is already used for static property sequence
-        p = m_pPropertyArrayHelper.get();
-        if(!p)
-        {
-            p = new ::cppu::OPropertyArrayHelper( getPropertySequence(), true );
-            OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
-            m_pPropertyArrayHelper.reset(p);
-        }
-    }
-    else
-    {
-        OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
+        m_pPropertyArrayHelper = std::make_unique<::cppu::OPropertyArrayHelper>( getPropertySequence(), true );
     }
     return *m_pPropertyArrayHelper;
 }
 
-tWrappedPropertyMap& WrappedPropertySet::getWrappedPropertyMap()
+tWrappedPropertyMap& WrappedPropertySet::getWrappedPropertyMap(std::unique_lock<std::mutex>& rGuard)
 {
-    tWrappedPropertyMap* p = m_pWrappedPropertyMap.get();
-    if(!p)
+    if(!m_pWrappedPropertyMap)
     {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );//do not use different mutex than is already used for static property sequence
-        p = m_pWrappedPropertyMap.get();
-        if(!p)
+        std::vector< std::unique_ptr<WrappedProperty> > aPropList( createWrappedProperties() );
+        auto p = new tWrappedPropertyMap;
+
+        for (auto & elem : aPropList)
         {
-            std::vector< std::unique_ptr<WrappedProperty> > aPropList( createWrappedProperties() );
-            p = new tWrappedPropertyMap;
+            sal_Int32 nHandle = getInfoHelper(rGuard).getHandleByName( elem->getOuterName() );
 
-            for (auto & elem : aPropList)
+            if( nHandle == -1 )
             {
-                sal_Int32 nHandle = getInfoHelper().getHandleByName( elem->getOuterName() );
-
-                if( nHandle == -1 )
-                {
-                    OSL_FAIL( "missing property in property list" );
-                }
-                else if( p->find( nHandle ) != p->end() )
-                {
-                    //duplicate Wrapped property
-                    OSL_FAIL( "duplicate Wrapped property" );
-                }
-                else
-                    (*p)[ nHandle ] = std::move(elem);
+                OSL_FAIL( "missing property in property list" );
             }
-
-            OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
-            m_pWrappedPropertyMap.reset(p);
+            else if( p->find( nHandle ) != p->end() )
+            {
+                //duplicate Wrapped property
+                OSL_FAIL( "duplicate Wrapped property" );
+            }
+            else
+                (*p)[ nHandle ] = std::move(elem);
         }
-    }
-    else
-    {
-        OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
+
+        m_pWrappedPropertyMap.reset(p);
     }
     return *m_pWrappedPropertyMap;
 }

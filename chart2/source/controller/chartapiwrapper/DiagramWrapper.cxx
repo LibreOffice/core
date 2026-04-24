@@ -1059,7 +1059,7 @@ void SAL_CALL DiagramWrapper::dispose()
     DisposeHelper::DisposeAndClear( m_xUpBarWrapper );
     DisposeHelper::DisposeAndClear( m_xDownBarWrapper );
 
-    clearWrappedPropertySet();
+    clearWrappedPropertySet(g);
 }
 
 void SAL_CALL DiagramWrapper::addEventListener(

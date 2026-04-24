@@ -54,6 +54,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <o3tl/temporary.hxx>
 #include <utility>
 #include <vcl/settings.hxx>
 
@@ -873,7 +874,7 @@ void SAL_CALL ChartDocumentWrapper::dispose()
         m_xShapeFactory.clear();
         m_xDelegator.clear();
 
-        clearWrappedPropertySet();
+        clearWrappedPropertySet(o3tl::temporary(std::unique_lock(m_aMutex)));
         m_spChart2ModelContact->clear();
         impl_resetAddIn();
 

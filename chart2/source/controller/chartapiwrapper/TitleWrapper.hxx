@@ -74,9 +74,9 @@ private:
     virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
     // character properties have to be handled differently (via the XFormattedString elements)
-    void getFastCharacterPropertyValue( sal_Int32 nHandle, css::uno::Any& rValue );
+    void getFastCharacterPropertyValue( std::unique_lock<std::mutex>& rGuard, sal_Int32 nHandle, css::uno::Any& rValue );
     /// @throws css::uno::Exception
-    void setFastCharacterPropertyValue( sal_Int32 nHandle, const css::uno::Any& rValue );
+    void setFastCharacterPropertyValue( std::unique_lock<std::mutex>& rGuard, sal_Int32 nHandle, const css::uno::Any& rValue );
 
     // ____ WrappedPropertySet ____
     virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const css::uno::Any& aValue ) override;

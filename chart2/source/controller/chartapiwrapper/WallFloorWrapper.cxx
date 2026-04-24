@@ -59,7 +59,7 @@ void SAL_CALL WallFloorWrapper::dispose()
     Reference< uno::XInterface > xSource( static_cast< ::cppu::OWeakObject* >( this ) );
     m_aEventListenerContainer.disposeAndClear( g, lang::EventObject( xSource ) );
 
-    clearWrappedPropertySet();
+    clearWrappedPropertySet(g);
 }
 
 void SAL_CALL WallFloorWrapper::addEventListener(
