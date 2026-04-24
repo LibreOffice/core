@@ -790,6 +790,11 @@ body button:not(.ui-corner-all):not(.button-primary):not(.unobutton):not(.form-f
 	white-space: normal;
 }
 
+#ServerAuditDialog .ui-treeview-entry .ui-treeview-rowheader {
+	min-width: 0;
+	background-color: transparent;
+}
+
 .ui-treeview-expanded-content {
 	display: grid;
 }
