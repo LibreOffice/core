@@ -104,13 +104,29 @@ window.L.Control.Notebookbar = window.L.Control.extend({
 			docLogo.setAttribute('id', 'document-logo');
 			docLogo.setAttribute('type', 'action');
 			docLogo.setAttribute('target', '_blank');
-			docLogo.setAttribute('aria-label', _('file type icon'));
 			docLogo.setAttribute('tabIndex', 0);
-			docLogo.setAttribute('aria-label', _('file type icon'));
 
 			if (iconTooltip) {
 				docLogo.setAttribute('data-cooltip', iconTooltip);
 			}
+			// Mirror data-cooltip onto aria-label so the accessible name
+			// matches the visible tooltip, even when branding overrides
+			// data-cooltip after load (e.g. to "Collabora Online"). When
+			// branding also sets an href, target="_blank" takes effect and
+			// the link opens a new tab, so announce that to screen readers.
+			const syncAriaLabel = () => {
+				const cooltip = docLogo.getAttribute('data-cooltip');
+				if (!cooltip) return;
+				const label = docLogo.getAttribute('href')
+					? _('{0} website, opens in new tab').replace('{0}', cooltip)
+					: cooltip;
+				docLogo.setAttribute('aria-label', label);
+			};
+			syncAriaLabel();
+			new MutationObserver(syncAriaLabel).observe(docLogo, {
+				attributes: true,
+				attributeFilter: ['data-cooltip', 'href'],
+			});
 			window.L.control.attachTooltipEventListener(docLogo, this.map);
 			$('.main-nav').prepend(docLogoHeader);
 
