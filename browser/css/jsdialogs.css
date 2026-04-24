@@ -2973,34 +2973,34 @@ kbd,
 /* Calc - Format - Format Cells - Background - Color */
 /* Format -> Character -> Font Effects -> Font color */
 
-#ColorPage.jsdialog :is(#iconview_colors, #iconview_recent_colors).ui-iconview,
-:is(#colorwindow_iv_colors, #colorwindow_iv_recentcolors).ui-iconview {
+[id^='ColorPage'].jsdialog :is([id^='iconview_colors'], [id^='iconview_recent_colors']).ui-iconview,
+:is([id^='colorwindow_iv_colors'], [id^='colorwindow_iv_recentcolors']).ui-iconview {
 	grid-template-columns: repeat(12, 1fr);
 	width: max-content;
 	line-height: 0;
 	padding: 5px;
 }
 
-#ColorPage.jsdialog #iconview_colors.ui-iconview,
-#colorwindow_iv_colors.ui-iconview {
+[id^='ColorPage'].jsdialog [id^='iconview_colors'].ui-iconview,
+[id^='colorwindow_iv_colors'].ui-iconview {
 	max-height: 19vh;
 }
 
-#ColorPage.jsdialog :is(#iconview_colors, #iconview_recent_colors).ui-iconview .ui-iconview-entry :is(img, span),
-:is(#colorwindow_iv_colors, #colorwindow_iv_recentcolors) .ui-iconview-entry img {
+[id^='ColorPage'].jsdialog :is([id^='iconview_colors'], [id^='iconview_recent_colors']).ui-iconview .ui-iconview-entry :is(img, span),
+:is([id^='colorwindow_iv_colors'], [id^='colorwindow_iv_recentcolors']) .ui-iconview-entry img {
 	padding: 1px;
 }
 
-#ColorPage.jsdialog :is(#iconview_colors, #iconview_recent_colors).ui-iconview .ui-iconview-entry:is(:hover, .selected),
-:is(#colorwindow_iv_colors, #colorwindow_iv_recentcolors) .ui-iconview-entry:is(:hover, .selected) {
+[id^='ColorPage'].jsdialog :is([id^='iconview_colors'], [id^='iconview_recent_colors']).ui-iconview .ui-iconview-entry:is(:hover, .selected),
+:is([id^='colorwindow_iv_colors'], [id^='colorwindow_iv_recentcolors']) .ui-iconview-entry:is(:hover, .selected) {
 	outline: 2px solid var(--color-primary);
 	border: 1px solid transparent;
 	background-color: transparent;
 	border-radius: 0;
 }
 
-#ColorPage.jsdialog :is(#iconview_colors, #iconview_recent_colors).ui-iconview .ui-iconview-entry span,
-:is(#colorwindow_iv_colors, #colorwindow_iv_recentcolors) .ui-iconview-entry span {
+[id^='ColorPage'].jsdialog :is([id^='iconview_colors'], [id^='iconview_recent_colors']).ui-iconview .ui-iconview-entry span,
+:is([id^='colorwindow_iv_colors'], [id^='colorwindow_iv_recentcolors']) .ui-iconview-entry span {
 	font-size: 0; /* Hide placeholder text to prevent layout shifts in color palette iconview widgets due to lazy loading */
 }
 
@@ -3041,13 +3041,13 @@ kbd,
 /* Writer - Format - Paragraph - Area - Color */
 #ParagraphPropertiesDialog #labelTP_TABULATOR #entryED_TABTYPE_DECCHAR-input,
 #ParagraphPropertiesDialog #labelTP_TABULATOR #entryED_FILLCHAR_OTHER-input,
-#ColorPage.jsdialog #rgbpreset input,
-#ColorPage.jsdialog #rgbcustom input {
+[id^='ColorPage'].jsdialog [id^='rgbpreset'] input,
+[id^='ColorPage'].jsdialog [id^='rgbcustom'] input {
 	max-width: 100px;
 }
 
 /* Writer - Format - Paragraph - Area - Color */
-#ColorPage.jsdialog #rgbpreset {
+[id^='ColorPage'].jsdialog [id^='rgbpreset'] {
 	width: max-content;
 }
 
