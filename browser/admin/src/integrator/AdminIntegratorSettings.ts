@@ -126,6 +126,10 @@ const onMessage = (e) => {
 	}
 };
 
+/* 
+	`defaultZoom` - index of the default zoom level in ZOOM_LEVELS (when smartZoom is set to false).
+				  - used as `index+1` internally as the fist zoom level in the list has the zoom value of 1)
+*/
 const defaultBrowserSetting: Record<string, any> = {
 	compactMode: {
 		value: false,
@@ -135,6 +139,12 @@ const defaultBrowserSetting: Record<string, any> = {
 	darkTheme: false,
 	accessibilityState: false,
 	lockAccessibilityOn: false,
+	smartZoom: true,
+	defaultZoom: {
+		value: 9,
+		label: 'Default Zoom',
+		customType: 'zoomDropdown',
+	},
 	spreadsheet: {
 		ShowStatusbar: false,
 		A11yCheckDeck: false,
@@ -386,6 +396,11 @@ const AI_PROVIDERS: Array<AIProvider> = [
 	},
 ];
 
+const ZOOM_LEVELS: Array<number> = [
+	20, 25, 30, 35, 40, 50, 60, 70, 85, 100, 120, 150, 170, 200, 235, 280, 335,
+	400,
+];
+
 const AI_ERROR_MESSAGES: Record<number, string> = {
 	400: 'Invalid request',
 	401: 'Invalid API key',
@@ -428,6 +443,8 @@ class SettingIframe {
 	private readonly settingLabels: Record<string, string> = {
 		lockAccessibilityOn: _('In-document Screen Reader'),
 		darkTheme: _('Dark Mode'),
+		smartZoom: _('Smart Zoom'),
+		defaultZoom: _('Default Zoom'),
 		compactMode: _('Compact layout'),
 		ShowStatusbar: _('Show status bar'),
 		ShowRuler: _('Show Ruler'),
@@ -920,7 +937,7 @@ class SettingIframe {
 		for (const [key, value] of Object.entries(this.browserSettingOptions)) {
 			// Include:
 			// - plain booleans
-			// - objects that have a customType (like compactToggle)
+			// - objects that have a customType (like compactToggle and defaultZoom)
 			if (
 				typeof value === 'boolean' ||
 				(typeof value === 'object' && value !== null && 'customType' in value)
@@ -1354,18 +1371,29 @@ class SettingIframe {
 		browserSettingSection: HTMLElement,
 	): void {
 		const inputs = browserSettingSection.querySelectorAll<HTMLInputElement>(
-			'input.checkbox-radio-switch-input',
+			'input.checkbox-radio-switch-input,select.dic-input-container',
 		);
 
 		inputs.forEach((input) => {
 			// Expected ID: section-setting-input (e.g., "writer-ShowSidebar-input")
 			const parts = input.id.split('-');
-			if (parts.length !== 3 || parts[2] !== 'input') return;
+			const controls = ['input', 'select'];
+			if (parts.length !== 3 || !controls.includes(parts[2])) return;
 
 			const [sectionRaw, settingKey] = parts;
-			const value = input.checked;
+			let value: any = undefined;
+			switch (parts[2]) {
+				case 'input':
+					value = input.checked;
+					break;
+				case 'select':
+					value = input.value;
+					break;
+			}
 
 			if (sectionRaw === 'common') {
+				if (settingKey === 'defaultZoom') value = parseInt(value);
+
 				this.browserSettingOptions[settingKey] = value;
 
 				if (settingKey === 'lockAccessibilityOn')
@@ -1383,6 +1411,7 @@ class SettingIframe {
 		(key: string, value: any, uniqueId: string) => HTMLElement
 	> = {
 		compactToggle: this.renderCompactModeToggle.bind(this),
+		zoomDropdown: this.renderZoomDropdown.bind(this),
 	};
 
 	private renderCompactModeToggle(
@@ -1437,6 +1466,57 @@ class SettingIframe {
 		options.appendChild(compactOption);
 		container.appendChild(options);
 
+		return container;
+	}
+
+	/*
+		This seems to be the only way to render a widget which is not checkbox,
+		atleast for the browser settings. `renderSettingsOption` adds a prefix to
+		the widget's id based on which section of browser settings the widget is.
+		`collectBrowserSettingsFromUI` then uses the id to get the value from the
+		html widget and then updates the values in `browserSettingOptions` which are
+		then written to the browsersetting.json file.
+
+		it's tempting to use just number for defaultZoom, but then in `renderSettingsOption`,
+		it's uncertain what to do with that number. with booleans it's clear that we need
+		a toggle. with numbers, it can be either of spinfield, dropdown, textinput...
+		`customType` handles that well by allowing us to handle these custom types separately.
+	*/
+	private renderZoomDropdown(
+		key: string,
+		setting: any,
+		uniqueId: string,
+	): HTMLElement {
+		const container: HTMLDivElement = document.createElement('div');
+		container.id = uniqueId;
+		container.classList.add('view-input-container');
+
+		const heading = this.createHeading(this.settingLabels.defaultZoom);
+		heading.classList.add('view-setting-small-label');
+		container.appendChild(heading);
+
+		const zoomOptions = ZOOM_LEVELS.map((zoom, index) => ({
+			value: index.toString(),
+			label: zoom.toString(),
+		}));
+
+		const getDefaultZoomValueId = function (zoom: number | undefined): string {
+			if (!zoom || zoom < 0 || zoom >= ZOOM_LEVELS.length)
+				return defaultBrowserSetting.defaultZoom.toString();
+			return zoom.toString();
+		};
+
+		const zoomDropdown = this.createSelectInput(
+			uniqueId + '-select',
+			zoomOptions,
+			getDefaultZoomValueId(setting.value),
+			(selected) => {
+				const zoomLevel = selected.value;
+				if (zoomLevel) setting.value = parseInt(zoomLevel);
+			},
+		);
+
+		container.appendChild(zoomDropdown);
 		return container;
 	}
 
@@ -2751,7 +2831,7 @@ class SettingIframe {
 			) {
 				// Use override directly for booleans or objects with customType (set value)
 				result[key] =
-					typeof override === 'boolean'
+					typeof override === 'boolean' || typeof override === 'number'
 						? typeof value === 'object'
 							? { ...value, value: override }
 							: override
