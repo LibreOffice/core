@@ -1,0 +1,62 @@
+#!/usr/bin/env python3
+"""
+Fetch the latest patchset of a Gerrit change via `git fetch`. This allows reading the patch locally
+via e.g. `git show FETCH_HEAD`, even if it's not cherry-picked anywhere.
+
+Usage: git-review-fetch <gerrit-change-url>
+
+Example:
+    git-review-fetch https://gerrit.collaboraoffice.com/c/online/+/1389
+"""
+
+import json
+import re
+import subprocess
+import sys
+import urllib.request
+
+
+def parse_url(url):
+    """Return (host_base, project, change_number) parsed from a Gerrit URL."""
+    m = re.match(r"^(https?://[^/]+)/c/(.+?)/\+/(\d+)", url)
+    if not m:
+        sys.exit("Cannot parse Gerrit URL: " + url)
+    return m.group(1), m.group(2), int(m.group(3))
+
+
+def get_current_patchset(host_base, change_number):
+    """Query Gerrit REST API for the current patchset number."""
+    api_url = "%s/changes/%d?o=CURRENT_REVISION" % (host_base, change_number)
+    req = urllib.request.Request(api_url, headers={"User-Agent": "git-review-fetch"})
+    with urllib.request.urlopen(req) as resp:
+        raw = resp.read().decode("utf-8")
+    # Gerrit prefixes JSON responses with )]}'.
+    if raw.startswith(")]}'"):
+        raw = raw.split("\n", 1)[1]
+    data = json.loads(raw)
+    current_rev = data["current_revision"]
+    return data["revisions"][current_rev]["_number"]
+
+
+def build_ref(change_number, patchset):
+    """refs/changes/XX/YYYY/N where XX is the last two digits of YYYY."""
+    last_two = "%02d" % (change_number % 100)
+    return "refs/changes/%s/%d/%d" % (last_two, change_number, patchset)
+
+
+def main(argv):
+    if len(argv) != 2:
+        print(__doc__.strip(), file=sys.stderr)
+        return 2
+    host_base, project, change_number = parse_url(argv[1])
+    patchset = get_current_patchset(host_base, change_number)
+    remote = "%s/%s" % (host_base, project)
+    ref = build_ref(change_number, patchset)
+    print("Fetching patchset %d of change %d: %s %s" % (patchset, change_number, remote, ref))
+    return subprocess.call(["git", "fetch", remote, ref])
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv))
+
+# vim:set shiftwidth=4 softtabstop=4 expandtab:
