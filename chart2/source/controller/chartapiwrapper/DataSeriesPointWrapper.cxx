@@ -509,7 +509,7 @@ void SAL_CALL DataSeriesPointWrapper::dispose()
     m_aEventListenerContainer.disposeAndClear( g, lang::EventObject( xSource ) );
 
     m_xDataSeries.clear();
-    clearWrappedPropertySet();
+    clearWrappedPropertySet(g);
 }
 
 void SAL_CALL DataSeriesPointWrapper::addEventListener(
@@ -674,17 +674,18 @@ void SAL_CALL DataSeriesPointWrapper::setPropertyToDefault( const OUString& rPro
 }
 Any SAL_CALL DataSeriesPointWrapper::getPropertyDefault( const OUString& rPropertyName )
 {
+    std::unique_lock aGuard(m_aMutex);
     Any aRet;
     try
     {
-        sal_Int32 nHandle = getInfoHelper().getHandleByName( rPropertyName );
+        sal_Int32 nHandle = getInfoHelper(aGuard).getHandleByName( rPropertyName );
         if( nHandle > 0 )
         {
             //always take the series current value as default for points
             rtl::Reference< DataSeries > xInnerPropertySet = getDataSeries();
             if( xInnerPropertySet.is() )
             {
-                const WrappedProperty* pWrappedProperty = getWrappedProperty( rPropertyName );
+                const WrappedProperty* pWrappedProperty = getWrappedProperty( aGuard, rPropertyName );
                 if( pWrappedProperty )
                     aRet = pWrappedProperty->getPropertyValue(xInnerPropertySet);
                 else
@@ -775,14 +776,15 @@ std::vector< std::unique_ptr<WrappedProperty> > DataSeriesPointWrapper::createWr
 
 void SAL_CALL DataSeriesPointWrapper::setPropertyValue( const OUString& rPropertyName, const Any& rValue )
 {
+    std::unique_lock aGuard(m_aMutex);
     if(rPropertyName == "Lines")
     {
         if( ! (rValue >>= m_bLinesAllowed) )
             throw lang::IllegalArgumentException("Property Lines requires value of type sal_Bool", nullptr, 0 );
     }
 
-    sal_Int32 nHandle = getInfoHelper().getHandleByName( rPropertyName );
-    static const sal_Int32 nErrorCategoryHandle = getInfoHelper().getHandleByName("ErrorCategory");
+    sal_Int32 nHandle = getInfoHelper(aGuard).getHandleByName( rPropertyName );
+    static const sal_Int32 nErrorCategoryHandle = getInfoHelper(aGuard).getHandleByName("ErrorCategory");
     if( nErrorCategoryHandle == nHandle )
     {
         css::chart::ChartErrorCategory aNewValue = css::chart::ChartErrorCategory_NONE;
@@ -830,7 +832,7 @@ void SAL_CALL DataSeriesPointWrapper::setPropertyValue( const OUString& rPropert
         }
     }
     else
-        WrappedPropertySet::setPropertyValue( rPropertyName, rValue );
+        WrappedPropertySet::setPropertyValue( aGuard, rPropertyName, rValue );
 }
 
 Any SAL_CALL DataSeriesPointWrapper::getPropertyValue( const OUString& rPropertyName )
