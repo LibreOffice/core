@@ -89,6 +89,18 @@ public slots: // called from JavaScript
     * the JavaScript value **undefined**.
     */
     QVariant cool(const QString& msg);
+
+    /// Return all persistent prefs as a single flat JSON object
+    /// (string keys, string values).  The JS side calls this once
+    /// at WebChannel connect to populate its pref cache in one
+    /// synchronous-from-JS'-view shot; subsequent get() reads hit
+    /// the cache instead of round-tripping here.
+    QString getAllPrefs();
+
+    /// Persist @key = @value across CODA invocations.  Writes
+    /// through to the prefs file so the next getAllPrefs() (on any
+    /// webview) sees it.
+    void setPref(const QString& key, const QString& value);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

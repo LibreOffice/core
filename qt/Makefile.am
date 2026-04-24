@@ -38,6 +38,7 @@ cmake_list= \
             ../common/Log-common.cpp \
             ../common/Log-poco.cpp \
             ../common/MobileApp.cpp \
+            ../common/Prefs.cpp \
             ../common/TraceEvent.cpp \
             ../common/ProcUtil.cpp \
             ../common/Protocol.cpp \

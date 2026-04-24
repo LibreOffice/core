@@ -7,10 +7,13 @@
 
 #pragma once
 
+#include <memory>
+
 #include <QApplication>
 #include <QSslCertificate>
 #include <QSslKey>
 #include <QWebEngineProfile>
+#include "common/Prefs.hpp"
 #include "common/RecentFiles.hpp"
 
 #include <Poco/File.h>
@@ -34,6 +37,7 @@ class Application
 private:
     static QWebEngineProfile* globalProfile;
     static RecentFiles recentFiles;
+    static std::unique_ptr<Prefs> prefs;
     static QSslKey embedKey;
     static QSslCertificate embedCert;
 
@@ -41,6 +45,7 @@ public:
     static void initialize();
     static QWebEngineProfile* getProfile();
     static RecentFiles& getRecentFiles();
+    static Prefs& getPrefs();
     /// Self-signed cert/key for the embed-mode HTTPS server.  Both
     /// freshly generated at process start, valid for localhost /
     /// 127.0.0.1 / ::1.  Trusted programmatically by the picker

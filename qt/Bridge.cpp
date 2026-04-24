@@ -282,6 +282,16 @@ void Bridge::debug(const QString& msg) { LOG_TRC_NOFILE("From JS: debug: " << ms
 
 void Bridge::error(const QString& msg) { LOG_TRC_NOFILE("From JS: error: " << msg.toStdString()); }
 
+QString Bridge::getAllPrefs()
+{
+    return QString::fromStdString(Application::getPrefs().serialize());
+}
+
+void Bridge::setPref(const QString& key, const QString& value)
+{
+    Application::getPrefs().set(key.toStdString(), value.toStdString());
+}
+
 void Bridge::promptSaveLocation(std::function<void(const std::string&, const std::string&)> callback)
 {
     // Prompt user to pick a save location and format

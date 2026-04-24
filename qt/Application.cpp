@@ -16,6 +16,7 @@
 #include <qt/qt.hpp>
 
 #include <common/Log.hpp>
+#include <common/Prefs.hpp>
 #include <common/RecentFiles.hpp>
 #include <common/SettingsStorage.hpp>
 
@@ -42,6 +43,7 @@
 
 QWebEngineProfile* Application::globalProfile = nullptr;
 RecentFiles Application::recentFiles;
+std::unique_ptr<Prefs> Application::prefs;
 QSslKey Application::embedKey;
 QSslCertificate Application::embedCert;
 
@@ -160,6 +162,10 @@ void Application::initialize()
     Poco::Path configDir = Desktop::getConfigPath();
     recentFiles.load(configDir.append("RecentDocuments.conf").toString(), 15);
 
+    // Initialize persistent prefs
+    prefs = std::make_unique<Prefs>(
+        Poco::Path(configDir).append("coda-prefs.json").toString());
+
     // Provide AIChatSession with an HTTP transport (the COOL http::Session stack
     // isn't available here).
     registerAIHttpTransport();
@@ -243,6 +249,8 @@ std::string Desktop::fetchAIModels(const std::string& payload)
 QWebEngineProfile* Application::getProfile() { return globalProfile; }
 
 RecentFiles& Application::getRecentFiles() { return recentFiles; }
+
+Prefs& Application::getPrefs() { return *prefs; }
 
 const QSslKey& Application::getEmbedKey() { return embedKey; }
 
