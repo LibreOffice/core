@@ -1642,6 +1642,89 @@ bool PDFWriterImpl::emitType3Font(const vcl::font::PhysicalFontFace* pFace,
         double fScaleX = (GetDPIX() / 72.) * fScale;
         double fScaleY = (GetDPIY() / 72.) * fScale;
 
+        // First pass: create Form XObjects for COLRv1 glyphs.
+        // Must be done before writing CharProcs to avoid interleaving
+        // PDF objects (which would corrupt the xref table).
+        std::map<sal_uInt32, sal_Int32> aColorPaintFormObjects;
+        for (auto i = 1u; i < nGlyphs; i++)
+        {
+            const auto& rGlyph = rSubset.m_aMapping.find(pGlyphIds[i])->second;
+            if (!rGlyph.hasColorPaint())
+                continue;
+
+            auto aPdfData = pFace->RenderGlyphColorPaintPdf(pGlyphIds[i]);
+            if (aPdfData.empty())
+                continue;
+
+            SvMemoryStream aPdfStream(const_cast<uint8_t*>(aPdfData.data()),
+                                      aPdfData.size(), StreamMode::READ);
+            auto pPdfDoc = std::make_shared<filter::PDFDocument>();
+            if (!pPdfDoc->ReadWithPossibleFixup(aPdfStream))
+                continue;
+
+            auto aPages = pPdfDoc->GetPages();
+            if (aPages.empty())
+                continue;
+
+            auto* pPage = aPages[0];
+
+            // Get MediaBox.  HarfBuzz emits MediaBox values that are
+            // Y-flipped relative to the content stream's Y-up font
+            // coordinates.  Un-flip Y so the Form XObject BBox matches
+            // the content's actual coordinate range.
+            double aMediaBox[4] = { 0, 0, 0, 0 };
+            if (auto* pMediaBox = dynamic_cast<filter::PDFArrayElement*>(
+                    pPage->Lookup("MediaBox"_ostr)))
+            {
+                const auto& rElems = pMediaBox->GetElements();
+                for (size_t bi = 0; bi < 4 && bi < rElems.size(); ++bi)
+                    if (auto* pNum = dynamic_cast<filter::PDFNumberElement*>(rElems[bi]))
+                        aMediaBox[bi] = pNum->GetValue();
+            }
+            double aBBox[4] = { aMediaBox[0], -aMediaBox[3], aMediaBox[2], -aMediaBox[1] };
+
+            // Copy resources and content stream into a Form XObject.
+            sal_Int32 nFormObject = createObject();
+            OStringBuffer aFormLine;
+            aFormLine.append(OString::number(nFormObject)
+                + " 0 obj\n<< /Type /XObject /Subtype /Form");
+
+            std::map<sal_Int32, sal_Int32> aCopiedResources;
+            PDFObjectCopier aCopier(*this);
+            aCopier.copyPageResources(pPage, aFormLine, aCopiedResources);
+
+            aFormLine.append(" /BBox ["
+                + OString::number(aBBox[0]) + " "
+                + OString::number(aBBox[1]) + " "
+                + OString::number(aBBox[2]) + " "
+                + OString::number(aBBox[3]) + "]");
+
+            std::vector<filter::PDFObjectElement*> aContentStreams;
+            if (auto* pCS = pPage->LookupObject("Contents"_ostr))
+                aContentStreams.push_back(pCS);
+            SvMemoryStream aContentStream;
+            bool bCompressed = false;
+            sal_Int32 nLen = PDFObjectCopier::copyPageStreams(
+                aContentStreams, aContentStream, bCompressed, false);
+
+            if (bCompressed)
+                aFormLine.append(" /Filter /FlateDecode");
+            aFormLine.append(" /Length " + OString::number(nLen) + " >>\nstream\n");
+            if (updateObject(nFormObject) && writeBuffer(aFormLine))
+            {
+                checkAndEnableStreamEncryption(nFormObject);
+                writeBufferBytes(static_cast<const char*>(aContentStream.GetData()),
+                                 aContentStream.Tell());
+                disableStreamEncryption();
+                writeBuffer("endstream\nendobj\n\n"_ostr);
+
+                OString aXObjName = "Fm" + OString::number(nFormObject);
+                pushResource(ResourceKind::XObject, aXObjName,
+                             nFormObject, aResourceDict, aOutputStreams);
+                aColorPaintFormObjects[i] = nFormObject;
+            }
+        }
+
         for (auto i = 1u; i < nGlyphs; i++)
         {
             auto nStream = pGlyphStreams[i];
@@ -1736,6 +1819,19 @@ bool PDFWriterImpl::emitType3Font(const vcl::font::PhysicalFontFace* pFace,
                 m_aPages.back().appendPolyPolygon(rOutline, aContents);
                 aContents.append("f\n"
                                  "Q\n");
+            }
+
+            if (auto it = aColorPaintFormObjects.find(i);
+                it != aColorPaintFormObjects.end())
+            {
+                OString aXObjName = "Fm" + OString::number(it->second);
+                aContents.append("q ");
+                appendDouble(fScale, aContents);
+                aContents.append(" 0 0 ");
+                appendDouble(fScale, aContents);
+                aContents.append(" 0 0 cm\n/");
+                aContents.append(aXObjName);
+                aContents.append(" Do\nQ\n");
             }
 
             aLine.setLength(0);
@@ -5484,11 +5580,14 @@ void PDFWriterImpl::registerGlyph(const sal_GlyphId nFontGlyphId,
 
     if (pFace->IsColorFont() || bCFF2)
     {
-        // Font has colors, check if this glyph has color layers or bitmap.
+        // Font has colors, check if this glyph has color layers, bitmap, or COLRv1 paint.
         tools::Rectangle aRect;
         auto aLayers = pFace->GetGlyphColorLayers(nFontGlyphId);
         auto aBitmap = pFace->GetGlyphColorBitmap(nFontGlyphId, aRect);
-        if (!aLayers.empty() || !aBitmap.empty() || bCFF2)
+        bool bHasPaint = false;
+        if (aLayers.empty() && aBitmap.empty() && !bCFF2)
+            bHasPaint = pFace->HasGlyphColorPaint(nFontGlyphId);
+        if (!aLayers.empty() || !aBitmap.empty() || bCFF2 || bHasPaint)
         {
             auto& rSubset = m_aType3Fonts[pFace];
             auto it = rSubset.m_aMapping.find(nFontGlyphId);
@@ -5536,6 +5635,8 @@ void PDFWriterImpl::registerGlyph(const sal_GlyphId nFontGlyphId,
                 }
                 else if (!aBitmap.empty())
                     rNewGlyphEmit.setColorBitmap(aBitmap, aRect);
+                else if (bHasPaint)
+                    rNewGlyphEmit.setHasColorPaint();
                 else if (bCFF2)
                     rNewGlyphEmit.setOutline(pFont->GetGlyphOutlineUntransformed(nFontGlyphId));
 

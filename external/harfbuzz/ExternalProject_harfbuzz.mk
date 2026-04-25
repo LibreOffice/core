@@ -60,7 +60,7 @@ $(call gb_ExternalProject_get_state_target,harfbuzz,build) : | $(call gb_Externa
 			-Dutilities=disabled \
 			-Dsubset=enabled \
 			-Draster=disabled \
-			-Dvector=disabled \
+			-Dvector=enabled \
 			-Dicu=enabled \
 			-Dicu_builtin=true \
 			-Dgraphite2=enabled \

@@ -41,6 +41,7 @@
 
 #include <hb-ot.h>
 #include <hb-subset.h>
+#include <hb-vector.h>
 
 namespace vcl::font
 {
@@ -745,6 +746,32 @@ RawFontData PhysicalFontFace::GetGlyphColorBitmap(sal_GlyphId nGlyphIndex,
     }
 
     return aData;
+}
+
+bool PhysicalFontFace::HasColorPaint() const { return hb_ot_color_has_paint(GetHbFace()); }
+
+bool PhysicalFontFace::HasGlyphColorPaint(sal_GlyphId nGlyphIndex) const
+{
+    return hb_ot_color_glyph_has_paint(GetHbFace(), nGlyphIndex);
+}
+
+RawFontData PhysicalFontFace::RenderGlyphColorPaintPdf(sal_GlyphId nGlyphIndex) const
+{
+    if (!HasColorPaint())
+        return {};
+
+    hb_font_t* pHbFont = GetHbUnscaledFont();
+
+    hb_vector_paint_t* pPaint = hb_vector_paint_create_or_fail(HB_VECTOR_FORMAT_PDF);
+    if (!pPaint)
+        return {};
+
+    comphelper::ScopeGuard aPaintGuard([&]() { hb_vector_paint_destroy(pPaint); });
+
+    if (!hb_vector_paint_glyph_or_fail(pPaint, pHbFont, nGlyphIndex, HB_VECTOR_EXTENTS_MODE_EXPAND))
+        return {};
+
+    return RawFontData(hb_vector_paint_render(pPaint));
 }
 
 OString PhysicalFontFace::GetGlyphName(sal_GlyphId nGlyphIndex, bool bValidate) const

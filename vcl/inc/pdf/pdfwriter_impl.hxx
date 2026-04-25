@@ -284,6 +284,7 @@ class GlyphEmit
     font::RawFontData               m_aColorBitmap;
     tools::Rectangle                m_aRect;
     basegfx::B2DPolyPolygon         m_aOutline;
+    bool                            m_bHasColorPaint = false;
 
 public:
     GlyphEmit() : m_nSubsetGlyphID(0), m_nGlyphWidth(0)
@@ -312,6 +313,9 @@ public:
 
     void setOutline(const basegfx::B2DPolyPolygon& rOutline) { m_aOutline = rOutline; }
     const basegfx::B2DPolyPolygon& getOutline() const { return m_aOutline; }
+
+    void setHasColorPaint() { m_bHasColorPaint = true; }
+    bool hasColorPaint() const { return m_bHasColorPaint; }
 
     void addCode( sal_Ucs i_cCode )
     {

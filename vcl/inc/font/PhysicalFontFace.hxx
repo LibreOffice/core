@@ -166,7 +166,7 @@ public:
                                          const std::vector<vcl::font::Variation>& rVariations
                                          = {}) const;
 
-    bool IsColorFont() const { return HasColorLayers() || HasColorBitmaps(); }
+    bool IsColorFont() const { return HasColorLayers() || HasColorBitmaps() || HasColorPaint(); }
 
     bool HasColorLayers() const;
     SAL_DLLPRIVATE std::vector<ColorLayer> GetGlyphColorLayers(sal_GlyphId) const;
@@ -175,6 +175,12 @@ public:
 
     bool HasColorBitmaps() const;
     SAL_DLLPRIVATE RawFontData GetGlyphColorBitmap(sal_GlyphId, tools::Rectangle&) const;
+
+    bool HasColorPaint() const;
+    SAL_DLLPRIVATE bool HasGlyphColorPaint(sal_GlyphId) const;
+
+    // Render a COLRv1 glyph to a complete PDF document.
+    SAL_DLLPRIVATE RawFontData RenderGlyphColorPaintPdf(sal_GlyphId nGlyphId) const;
 
     OString GetGlyphName(sal_GlyphId, bool = false) const;
 

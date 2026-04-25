@@ -6472,6 +6472,64 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, tdf150076BackgroundPdf)
     CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFPageObjectType::Form, pPageObject->getType());
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest2, testCOLRv1)
+{
+    // Test that COLRv1 color font glyphs are exported as Type 3 fonts with
+    // shading (gradient) operators. The test document uses the Nabla font
+    // (COLRv1, embedded in the ODT) with the text "Hello".
+    vcl::filter::PDFDocument aDocument;
+    loadFromFile(u"COLRv1Test.odt");
+    save(TestFilter::PDF_WRITER);
+
+    // Parse the export result.
+    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
+    CPPUNIT_ASSERT(aDocument.Read(aStream));
+
+    // Find Type 3 font(s) — COLRv1 glyphs are emitted as Type 3 CharProcs.
+    bool bFoundType3 = false;
+    for (const auto& aElement : aDocument.GetElements())
+    {
+        auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(aElement.get());
+        if (!pObject)
+            continue;
+        auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Type"_ostr));
+        if (!pType || pType->GetValue() != "Font")
+            continue;
+        auto pSubtype = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Subtype"_ostr));
+        if (pSubtype && pSubtype->GetValue() == "Type3")
+        {
+            bFoundType3 = true;
+            break;
+        }
+    }
+    CPPUNIT_ASSERT_MESSAGE("Expected a Type 3 font for COLRv1 glyphs", bFoundType3);
+
+    // Verify that CharProc streams reference Form XObjects via "Do" operator.
+    // COLRv1 glyphs are rendered as full PDFs and embedded as Form XObjects.
+    // "Hello" has 4 unique glyphs (H, e, l, o).
+    int nFormXObjectCharProcs = 0;
+    for (const auto& aElement : aDocument.GetElements())
+    {
+        auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(aElement.get());
+        if (!pObject)
+            continue;
+        auto pStream = pObject->GetStream();
+        if (!pStream)
+            continue;
+        auto& rMemory = pStream->GetMemory();
+        auto nSize = rMemory.GetSize();
+        if (nSize == 0)
+            continue;
+        rMemory.Seek(0);
+        OString aContent(static_cast<const char*>(rMemory.GetData()), nSize);
+        if (aContent.indexOf(" d0\n") >= 0 && aContent.indexOf(" Do\n") >= 0)
+            nFormXObjectCharProcs++;
+    }
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected 4 CharProc streams with Form XObject references"
+                                 " (one per unique glyph in 'Hello')",
+                                 4, nFormXObjectCharProcs);
+}
+
 } // end anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();
