@@ -65,7 +65,19 @@
 	overflow: visible;
 	position: static;
 	width: auto;
+	flex: 0 0 auto;
+	font-size: var(--default-font-size);
 	color: var(--color-text-lighter);
+}
+
+.main-nav.hasnotebookbar .document-title:focus-within > label[for='document-name-input'] {
+	font-size: clamp(var(--tb-min-fs), var(--tb-fs-s), var(--tb-max-fs));
+}
+
+.document-title:focus-within > #document-name-input.editable {
+	width: auto !important;
+	min-width: 0;
+	flex: 1 1 auto;
 }
 
 .readonly .document-title {
