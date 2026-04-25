@@ -43,6 +43,7 @@
 #include <xlcontent.hxx>
 #include <xltools.hxx>
 #include <tokenarray.hxx>
+#include <table.hxx>
 #include <formula/errorcodes.hxx>
 #include <comphelper/threadpool.hxx>
 #include <oox/token/tokens.hxx>
@@ -2623,6 +2624,10 @@ XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
     if( (31871 <= nLastUsedScRow) && (nLastUsedScRow <= 32127) && (nFirstUnflaggedScRow < nLastUsedScRow) && (nFirstUngroupedScRow <= nLastUsedScRow) )
         nMaxScRow = nLastUsedScRow;
     maColInfoBfr.Initialize( nMaxScRow );
+
+    // We have to force everything to calculate, or we might end up triggering recalc while
+    // we walk the data, and then we get stale ScPatternAttr pointers.
+    rDoc.FetchTable(nScTab)->CalcAll();
 
     // range for cell iterator
     SCCOL nLastIterScCol = nMaxScCol;
