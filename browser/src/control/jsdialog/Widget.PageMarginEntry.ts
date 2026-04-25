@@ -187,7 +187,9 @@ JSDialog.PageMarginEntry = function (
 	custom.setAttribute('tabindex', '-1');
 
 	const customClickEventHdl = () => {
-		map.sendUnoCommand(isCalc ? '.uno:PageFormatDialog' : '.uno:PageDialog');
+		map.sendUnoCommand(
+			isCalc ? '.uno:PageFormatDialog' : '.uno:PageSettingDialog',
+		);
 		builder.callback('dialog', 'close', { id: data.id }, null);
 	};
 
