@@ -41,6 +41,7 @@ class Socket {
 	private _inLayerTransaction: boolean;
 	private _slurpDuringTransaction: boolean;
 	private _accessTokenExpireTimeout: TimeoutHdl | undefined;
+	private _accessTokenExpireWarningCount: number = 0;
 	private _reconnecting: boolean;
 	private _slurpTimer: TimeoutHdl | undefined;
 	private _renderEventTimer: TimeoutHdl | undefined;
@@ -304,6 +305,7 @@ class Socket {
 
 	public resetTokenExpiryTimer(): void {
 		clearTimeout(this._accessTokenExpireTimeout); // Always clear the old timer.
+		this._accessTokenExpireWarningCount = 0;
 		const ttl = parseInt(
 			this._map.options.docParams.access_token_ttl as string,
 		);
@@ -667,11 +669,16 @@ class Socket {
 			},
 		});
 
-		// If user still doesn't refresh the session, warn again periodically
-		this._accessTokenExpireTimeout = setTimeout(
-			this._sessionExpiredWarning.bind(this),
-			120 * 1000,
-		);
+		// If user still doesn't refresh the session, warn again periodically.
+		// Cap at 10 retries (~20 minutes, i.e. ~5 minutes after the access_token
+		// expires) so we don't spam the host indefinitely.
+		this._accessTokenExpireWarningCount++;
+		if (this._accessTokenExpireWarningCount < 10) {
+			this._accessTokenExpireTimeout = setTimeout(
+				this._sessionExpiredWarning.bind(this),
+				120 * 1000,
+			);
+		}
 	}
 
 	public setUnloading(): void {
