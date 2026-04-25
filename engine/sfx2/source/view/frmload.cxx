@@ -54,6 +54,7 @@
 
 #include <comphelper/getexpandeduri.hxx>
 #include <comphelper/interaction.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -562,8 +563,17 @@ SfxInterfaceId SfxFrameLoader_Impl::impl_determineEffectiveViewId_nothrow( const
                 // a view name. In the document load descriptor, the ViewId is in fact the numeric ID.
 
                 SfxViewFactory* pViewFactory = i_rDocument.GetFactory().GetViewFactoryByViewName( sViewId );
-                if ( pViewFactory )
-                    nViewId = pViewFactory->GetOrdinal();
+                if (!pViewFactory)
+                    break;
+
+                nViewId = pViewFactory->GetOrdinal();
+                // Online cannot handle print preview view, switch to normal view
+                if ( comphelper::COKit::isActive() && i_rDocument.GetFactory().GetFactoryName() == u"scalc"_ustr )
+                {
+                    const OUString sViewName( pViewFactory->GetAPIViewName() );
+                    if ( sViewName == u"PrintPreview"_ustr )
+                        nViewId = i_rDocument.GetFactory().GetViewFactory().GetOrdinal();
+                }
             }
             while ( false );
     }
