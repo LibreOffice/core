@@ -387,6 +387,9 @@ class TreeViewControl {
 				builder.options.cssClass + ' ui-treeview-header-button',
 				th,
 			);
+			if (data && columnIndex !== undefined) {
+				button.id = data.id + '-header-' + columnIndex + '-button';
+			}
 			button.textContent = header.text;
 			if (header.arrow) {
 				th.setAttribute(

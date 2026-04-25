@@ -245,6 +245,33 @@ describe(['tagdesktop'], 'Accessibility Writer Dialog Tests', { testIsolation: f
             });
     });
 
+    it('Sorting via Enter on column header keeps focus on the header', function () {
+        helper.clearAllText();
+        helper.typeIntoDocument('bookmark');
+        helper.selectAllText();
+        cy.then(() => {
+            win.app.map.sendUnoCommand('.uno:InsertBookmark?Bookmark:string=bookmark1');
+            win.app.map.sendUnoCommand('.uno:InsertBookmark?Bookmark:string=bookmark2');
+            win.app.map.sendUnoCommand('.uno:InsertBookmark');
+        });
+
+        a11yHelper.getActiveDialog(1)
+            .then(() => helper.processToIdle(win))
+            .then(() => {
+                cy.cGet('.ui-treeview-header-button').first().focus();
+                cy.cGet('.ui-treeview-header-button').first().should('have.focus');
+
+                helper.realPressInDialog('Enter');
+                return helper.processToIdle(win);
+            })
+            .then(() => {
+                cy.cGet('.ui-treeview-header[role="columnheader"]').first()
+                    .should('have.attr', 'aria-sort');
+                cy.cGet('.ui-treeview-header-button').first().should('have.focus');
+                a11yHelper.closeActiveDialog(1);
+            });
+    });
+
     it('Treeview Enter key keeps focus in dialog', function () {
         cy.then(function () {
             win.app.map.sendUnoCommand('.uno:ChapterNumberingDialog');
