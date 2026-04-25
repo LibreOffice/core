@@ -99,6 +99,7 @@ ClientSession::ClientSession(const std::shared_ptr<ProtocolHandlerInterface>& ws
     , _additionalFileUrisPublic(additionalFileUrisPublic)
     , _serverURL(requestDetails)
     , _auth(Authorization::create(uriPublic))
+    , _tokenRefreshAttempts(0)
     , _docBroker(docBroker)
     , _lastStateTime(std::chrono::steady_clock::now())
     , _clientVisibleArea(0, 0, 0, 0)

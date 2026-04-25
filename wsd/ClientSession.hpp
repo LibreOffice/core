@@ -202,9 +202,17 @@ public:
     /// Start waiting for a token refresh from the host.
     void startTokenRefresh(const std::chrono::seconds timeout = std::chrono::seconds(30))
     {
-        LOG_DBG("Session [" << getId() << "] starting token refresh wait");
+        LOG_DBG("Session [" << getId() << "] starting token refresh wait (attempt #"
+                            << (_tokenRefreshAttempts + 1) << ')');
+        ++_tokenRefreshAttempts;
         _auth.startTokenRefresh(timeout);
     }
+
+    /// Returns the number of consecutive refresh attempts since the last successful upload.
+    int tokenRefreshAttempts() const { return _tokenRefreshAttempts; }
+
+    /// Reset the consecutive token-refresh attempt counter. Call on successful upload.
+    void resetTokenRefreshAttempts() { _tokenRefreshAttempts = 0; }
 
     /// Returns true iff this session is waiting for a token refresh.
     bool isRefreshingToken() const { return _auth.isRefreshingToken(); }
@@ -462,6 +470,10 @@ private:
 
     /// Authorization data - either access_token or access_header.
     Authorization _auth;
+
+    /// Number of consecutive token-refresh attempts triggered by upload 401s
+    /// since the last successful upload. Bounds the refresh-on-unauthorize retry loop.
+    int _tokenRefreshAttempts;
 
     /// Rotating clipboard remote access identifiers - protected by GlobalSessionMapMutex
     std::string _clipboardKeys[2];

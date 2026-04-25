@@ -3046,6 +3046,11 @@ void DocumentBroker::handleUploadToStorageSuccessful(const StorageBase::UploadRe
     assert(_uploadRequest && "Expected to have a valid UploadRequest instance");
     LOG_DBG("Last upload result: OK");
 
+    if (const auto session = _uploadRequest->session())
+    {
+        session->resetTokenRefreshAttempts();
+    }
+
 #if !MOBILEAPP
     WopiStorage* wopiStorage = dynamic_cast<WopiStorage*>(_storage.get());
     if (wopiStorage != nullptr)
@@ -3329,14 +3334,20 @@ void DocumentBroker::handleUploadToStorageFailed(const StorageBase::UploadResult
     {
         LOG_DBG("Last upload result: UNAUTHORIZED");
         const auto session = _uploadRequest->session();
-        if (session && !session->isRefreshingToken())
+
+        // Bound the refresh-on-unauthorized retry loop: a successful resetaccesstoken
+        // flips state back to Token, so isRefreshingToken() alone can't gate further attempts.
+        constexpr int MaxTokenRefreshAttempts = 3;
+        if (session && !session->isRefreshingToken() &&
+            session->tokenRefreshAttempts() < MaxTokenRefreshAttempts)
         {
-            // First attempt: ask the host for a fresh token before giving up.
+            // Ask the host for a fresh token before giving up.
             LOG_WRN("Cannot upload docKey ["
                     << _docKey << "] to storage URI [" << _uploadRequest->uriAnonym()
                     << "]. Invalid or expired access token. "
                        "Requesting token refresh from session ["
-                    << session->getId() << ']');
+                    << session->getId() << "] (attempt " << (session->tokenRefreshAttempts() + 1)
+                    << " of " << MaxTokenRefreshAttempts << ')');
             session->sendTextFrame("tokenexpired");
 
             CONFIG_STATIC const auto refreshTimeout =
@@ -3346,7 +3357,8 @@ void DocumentBroker::handleUploadToStorageFailed(const StorageBase::UploadResult
         }
         else
         {
-            // No session, or already retried once.
+            // No session, mid-refresh (refresh arrived but upload failed again),
+            // or hit the retry cap.
             if (session)
             {
                 LOG_ERR("Cannot upload docKey ["
