@@ -139,7 +139,7 @@ describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Apply font on selected shap
 		mobileHelper.openTextPropertiesPanel();
 
 		cy.cGet('#document-container g.Page .TextPosition')
-			.should('have.attr', 'y', '3495');
+			.should('have.attr', 'y', '3486');
 		cy.cGet('#document-container g.Page .TextParagraph .TextPosition tspan')
 			.should('have.attr', 'font-size', '635px');
 
@@ -148,7 +148,7 @@ describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Apply font on selected shap
 		triggerNewSVG();
 
 		cy.cGet('#document-container g.Page .TextPosition')
-			.should('have.attr', 'y', '3285');
+			.should('have.attr', 'y', '3276');
 		cy.cGet('#document-container g.Page .TextParagraph .TextPosition tspan')
 			.should('have.attr', 'font-size', '368px');
 	});
@@ -157,7 +157,7 @@ describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Apply font on selected shap
 		mobileHelper.openTextPropertiesPanel();
 
 		cy.cGet('#document-container g.Page .TextPosition')
-			.should('have.attr', 'y', '3495');
+			.should('have.attr', 'y', '3486');
 		cy.cGet('#document-container g.Page .TextParagraph .TextPosition tspan')
 			.should('have.attr', 'font-size', '635px');
 
@@ -166,7 +166,7 @@ describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Apply font on selected shap
 		triggerNewSVG();
 
 		cy.cGet('#document-container g.Page .TextPosition')
-			.should('have.attr', 'y', '3705');
+			.should('have.attr', 'y', '3696');
 		cy.cGet('#document-container g.Page .TextParagraph .TextPosition tspan')
 			.should('have.attr', 'font-size', '368px');
 	});

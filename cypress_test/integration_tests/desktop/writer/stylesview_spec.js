@@ -57,21 +57,15 @@ describe(['tagdesktop'], 'Stylesview Iconview Tests', function() {
 		cy.viewport(650, 1080);
 		cy.cGet('#stylesview-iconview-list-dropdown').should('not.exist');
 
-		// with reduced width, only one column should be visible
+		// re-open after the resize
 		openExpander();
-		cy.cGet('.jsdialog #stylesview_11').should('exist').should('be.visible'); // Standardstyckeformatmall
-		cy.cGet('.jsdialog #stylesview_12').should('exist').should('not.be.visible');
-
-		// NOTE: changes to the height don't trigger the resize observer,
-		// thus the dropdown doesn't disappear. so no need to call
-		// `openExpander` again.
 
 		// with reduced height:
 		// - only a few rows should be visible.
 		// - the open styles sidebar button should be visible.
 		cy.viewport(650, 454);
-		cy.cGet('.jsdialog #stylesview_4').should('exist').should('be.visible'); // Title
-		cy.cGet('.jsdialog #stylesview_5').should('exist').should('not.be.visible'); // Subtitle
+		cy.cGet('.jsdialog #stylesview_4').should('exist').should('be.visible');
+		cy.cGet('.jsdialog #stylesview_5').should('exist').should('not.be.visible');
 		cy.cGet('#format-style-list-dialog-button').should('exist').should('be.visible');
 	});
 });

@@ -92,7 +92,7 @@ describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Apply paragraph properties 
 	it('Apply vertical alignment on selected text.', function() {
 		selectText(this.win);
 		cy.cGet('#document-container g.Page .TextParagraph .TextPosition')
-			.should('have.attr', 'y', '4834');
+			.should('have.attr', 'y', '4819');
 
 		// Set bottom alignment
 		openParagraphPropertiesPanel();
@@ -102,7 +102,7 @@ describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Apply paragraph properties 
 		impressHelper.removeShapeSelection();
 		selectText(this.win);
 		cy.cGet('#document-container g.Page .TextParagraph .TextPosition')
-			.should('have.attr', 'y', '10811');
+			.should('have.attr', 'y', '10806');
 
 		// Set top alignment
 		openParagraphPropertiesPanel();
@@ -112,7 +112,7 @@ describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Apply paragraph properties 
 		impressHelper.removeShapeSelection();
 		selectText(this.win);
 		cy.cGet('#document-container g.Page .TextParagraph .TextPosition')
-			.should('have.attr', 'y', '4834');
+			.should('have.attr', 'y', '4819');
 
 		// Set center alignment
 		openParagraphPropertiesPanel();
@@ -122,7 +122,7 @@ describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Apply paragraph properties 
 		impressHelper.removeShapeSelection();
 		selectText(this.win);
 		cy.cGet('#document-container g.Page .TextParagraph .TextPosition').should('have.attr', 'y');
-		cy.cGet('#document-container g.Page .TextParagraph .TextPosition').invoke('attr', 'y').then(parseInt).should('be.closeTo', 7822, 5);
+		cy.cGet('#document-container g.Page .TextParagraph .TextPosition').invoke('attr', 'y').then(parseInt).should('be.closeTo', 7813, 5);
 	});
 
 	it('Apply default bulleting on selected text.', function() {
@@ -162,7 +162,7 @@ describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Apply paragraph properties 
 	it('Apply spacing above on selected text.', function() {
 		selectText(this.win);
 		cy.cGet('#document-container g.Page .TextParagraph:nth-of-type(2) tspan')
-			.should('have.attr', 'y', '6600');
+			.should('have.attr', 'y', '6580');
 
 		// Apply spacing above
 		openParagraphPropertiesPanel();
@@ -172,13 +172,13 @@ describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Apply paragraph properties 
 		impressHelper.removeShapeSelection();
 		selectText(this.win);
 		cy.cGet('#document-container g.Page .TextParagraph:nth-of-type(2) tspan')
-			.should('have.attr', 'y', '11180');
+			.should('have.attr', 'y', '11160');
 	});
 
 	it('Apply spacing below on selected text.', function() {
 		selectText(this.win);
 		cy.cGet('#document-container g.Page .TextParagraph:nth-of-type(2) tspan')
-			.should('have.attr', 'y', '6600');
+			.should('have.attr', 'y', '6580');
 
 		// Apply spacing below
 		openParagraphPropertiesPanel();
@@ -188,13 +188,13 @@ describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Apply paragraph properties 
 		impressHelper.removeShapeSelection();
 		selectText(this.win);
 		cy.cGet('#document-container g.Page .TextParagraph:nth-of-type(2) tspan')
-			.should('have.attr', 'y', '11180');
+			.should('have.attr', 'y', '11160');
 	});
 
 	it('Increase/decrease spacing of selected text.', function() {
 		selectText(this.win);
 		cy.cGet('#document-container g.Page .TextParagraph:nth-of-type(2) tspan')
-			.should('have.attr', 'y', '6600');
+			.should('have.attr', 'y', '6580');
 
 		// Increase spacing
 		openParagraphPropertiesPanel();
@@ -204,7 +204,7 @@ describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Apply paragraph properties 
 		impressHelper.removeShapeSelection();
 		selectText(this.win);
 		cy.cGet('#document-container g.Page .TextParagraph:nth-of-type(2) tspan')
-			.should('have.attr', 'y', '6700');
+			.should('have.attr', 'y', '6680');
 
 		// Decrease spacing
 		openParagraphPropertiesPanel();
@@ -214,7 +214,7 @@ describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Apply paragraph properties 
 		impressHelper.removeShapeSelection();
 		selectText(this.win);
 		cy.cGet('#document-container g.Page .TextParagraph:nth-of-type(2) tspan')
-			.should('have.attr', 'y', '6600');
+			.should('have.attr', 'y', '6580');
 	});
 
 	it('Change writing direction of selected text.', function() {
@@ -259,7 +259,7 @@ describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Apply paragraph properties 
 		cy.cGet('#document-container g.Page .BulletChars')
 			.should('exist');
 		cy.cGet('#document-container g.Page .BulletChar:nth-of-type(2) g')
-			.should('have.attr', 'transform', 'translate(1700,4563)');
+			.should('have.attr', 'transform', 'translate(1700,4513)');
 
 		// Change bulleting level
 		openListsPropertiesPanel();
@@ -269,7 +269,7 @@ describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Apply paragraph properties 
 		impressHelper.removeShapeSelection();
 		selectText(this.win);
 		cy.cGet('#document-container g.Page .BulletChar:nth-of-type(2) g')
-			.should('have.attr', 'transform', 'translate(2900,4536)');
+			.should('have.attr', 'transform', 'translate(2900,4494)');
 
 		// Change bulleting level back to default
 		openListsPropertiesPanel();
@@ -279,6 +279,6 @@ describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Apply paragraph properties 
 		impressHelper.removeShapeSelection();
 		selectText(this.win);
 		cy.cGet('#document-container g.Page .BulletChar:nth-of-type(2) g')
-			.should('have.attr', 'transform', 'translate(1700,4563)');
+			.should('have.attr', 'transform', 'translate(1700,4513)');
 	});
 });

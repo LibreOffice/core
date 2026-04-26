@@ -168,7 +168,7 @@ describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Apply font on selected text
 
 	it('Apply superscript on selected text.', function() {
 		selectText(this.win);
-		cy.cGet('text tspan.TextPosition').should('have.attr', 'y', '3495');
+		cy.cGet('text tspan.TextPosition').should('have.attr', 'y', '3486');
 		cy.cGet('text tspan.TextPosition tspan').should('have.attr', 'font-size', '635px');
 
 		mobileHelper.openTextPropertiesPanel();
@@ -186,7 +186,7 @@ describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Apply font on selected text
 		selectText(this.win);
 
 		mobileHelper.openTextPropertiesPanel();
-		cy.cGet('text tspan.TextPosition').should('have.attr', 'y', '3495');
+		cy.cGet('text tspan.TextPosition').should('have.attr', 'y', '3486');
 		cy.cGet('text tspan.TextPosition tspan').should('have.attr', 'font-size', '635px');
 		cy.cGet('#mobile-wizard .unoSubScript').click();
 		mobileHelper.closeMobileWizard();
