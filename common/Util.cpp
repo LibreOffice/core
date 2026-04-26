@@ -187,7 +187,6 @@ namespace Util
 
     bool kitInProcess = false;
     void setKitInProcess(bool value) { kitInProcess = value; }
-    bool isKitInProcess() { return isFuzzing() || isMobileApp() || kitInProcess; }
 
     std::string replace(std::string result, const std::string_view from, const std::string_view to)
     {

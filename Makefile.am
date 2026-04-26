@@ -331,6 +331,7 @@ coolwsd_inproc_SOURCES = $(coolwsd_sources) \
                          $(coolforkit_sources) \
                          wsd/coolwsd-inproc.cpp
 
+coolwsd_inproc_CPPFLAGS = $(AM_CPPFLAGS) -DENABLE_INPROC=1
 coolwsd_inproc_LDADD = libsimd.a libkitwsdglobals.a
 
 if !ENABLE_SSL

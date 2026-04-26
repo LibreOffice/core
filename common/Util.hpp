@@ -1109,7 +1109,14 @@ int main(int argc, char**argv)
     }
 
     void setKitInProcess(bool value);
-    bool isKitInProcess();
+    constexpr bool isKitInProcess()
+    {
+#if defined(ENABLE_INPROC) && ENABLE_INPROC
+        return true;
+#else
+        return isFuzzing() || isMobileApp();
+#endif // ENABLE_INPROC
+    }
 
     /**
      * Splits string into vector<string>. Does not accept referenced variables for easy
