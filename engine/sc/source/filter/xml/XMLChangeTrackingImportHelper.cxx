@@ -719,8 +719,10 @@ void ScXMLChangeTrackingImportHelper::CreateChangeTrack(ScDocument* pDoc)
     // old files didn't store nanoseconds, disable until encountered
     pTrack->SetTimeNanoSeconds( false );
 
-    for (const auto & rAction : aActions)
+    auto aItr = aActions.begin();
+    while (aItr != aActions.end())
     {
+        const auto& rAction = *aItr;
         std::unique_ptr<ScChangeAction> pAction;
 
         switch (rAction->nActionType)
@@ -764,17 +766,20 @@ void ScXMLChangeTrackingImportHelper::CreateChangeTrack(ScDocument* pDoc)
             }
         }
 
-        if (pAction)
-            pTrack->AppendLoaded(std::move(pAction));
+        // Malformed documents can repeat the same XML id across actions. If
+        // this happens drop entries whose action number is already in the track.
+        if (pAction && pTrack->AppendLoaded(std::move(pAction)))
+            ++aItr;
         else
         {
-            OSL_FAIL("no action");
+            SAL_WARN("sc.filter", "Dropping malformed change track entry");
+            aItr = aActions.erase(aItr);
         }
     }
     if (pTrack->GetLast())
         pTrack->SetActionMax(pTrack->GetLast()->GetActionNumber());
 
-    auto aItr = aActions.begin();
+    aItr = aActions.begin();
     while (aItr != aActions.end())
     {
         SetDependencies(aItr->get(), *pDoc);
