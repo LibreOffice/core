@@ -633,25 +633,18 @@ void SdrEscherImport::RecolorGraphic( SvStream& rSt, sal_uInt32 nRecLen, Graphic
                 sal_uInt32 OriginalGlobalColors[ 64 ];
                 sal_uInt32 NewGlobalColors[ 64 ];
 
-                sal_uInt32 i, j, nGlobalColorsChanged, nFillColorsChanged;
-                nGlobalColorsChanged = nFillColorsChanged = 0;
+                sal_uInt32 nGlobalColorsChanged = 0;
 
-                sal_uInt32* pCurrentOriginal = OriginalGlobalColors;
-                sal_uInt32* pCurrentNew = NewGlobalColors;
-                sal_uInt32* pCount = &nGlobalColorsChanged;
-                i = nGlobalColorsCount;
-
-                for ( j = 0; j < 2; j++ )
+                for ( sal_uInt32 i = 0; i < nGlobalColorsCount; i++ )
                 {
-                    for ( ; i > 0; i-- )
-                    {
-                        sal_uInt32 nIndex, nPos = rSt.Tell();
-                        sal_uInt8  nDummy, nRed, nGreen, nBlue;
-                        sal_uInt16 nChanged;
+                        sal_uInt64 nPos = rSt.Tell();
+                        sal_uInt16 nChanged(0);
                         rSt.ReadUInt16( nChanged );
                         if ( nChanged & 1 )
                         {
-                            sal_uInt32 nColor = 0;
+                            sal_uInt8  nDummy, nRed, nGreen, nBlue;
+                            sal_uInt32 nColor(0);
+                            sal_uInt32 nIndex(0);
                             rSt.ReadUChar( nDummy )
                                .ReadUChar( nRed )
                                .ReadUChar( nDummy )
@@ -668,7 +661,7 @@ void SdrEscherImport::RecolorGraphic( SvStream& rSt, sal_uInt32 nRecLen, Graphic
                                 nBlue = aColor.GetBlue();
                             }
                             nColor = nRed | ( nGreen << 8 ) | ( nBlue << 16 );
-                            *pCurrentNew++ = nColor;
+                            NewGlobalColors[ nGlobalColorsChanged ] = nColor;
                             rSt.ReadUChar( nDummy )
                                .ReadUChar( nRed )
                                .ReadUChar( nDummy )
@@ -676,20 +669,17 @@ void SdrEscherImport::RecolorGraphic( SvStream& rSt, sal_uInt32 nRecLen, Graphic
                                .ReadUChar( nDummy )
                                .ReadUChar( nBlue );
                             nColor = nRed | ( nGreen << 8 ) | ( nBlue << 16 );
-                            *pCurrentOriginal++ = nColor;
-                            (*pCount)++;
+                            OriginalGlobalColors[ nGlobalColorsChanged ] = nColor;
+                            nGlobalColorsChanged++;
                         }
                         rSt.Seek( nPos + 44 );
-                    }
-                    pCount = &nFillColorsChanged;
-                    i = nFillColorsCount;
                 }
-                if ( nGlobalColorsChanged || nFillColorsChanged )
+                if ( nGlobalColorsChanged )
                 {
                     std::unique_ptr<Color[]> pSearchColors(new Color[ nGlobalColorsChanged ]);
                     std::unique_ptr<Color[]> pReplaceColors(new Color[ nGlobalColorsChanged ]);
 
-                    for ( j = 0; j < nGlobalColorsChanged; j++ )
+                    for ( sal_uInt32 j = 0; j < nGlobalColorsChanged; j++ )
                     {
                         sal_uInt32 nSearch = OriginalGlobalColors[ j ];
                         sal_uInt32 nReplace = NewGlobalColors[ j ];
