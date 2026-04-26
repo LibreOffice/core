@@ -163,7 +163,7 @@ void TipOfTheDayDialog::UpdateTip()
 #ifdef MACOSX
     const OUString aMOD1 = CuiResId(STR_CMD);
     const OUString aMOD2 = CuiResId(STR_Option);
-    const OUString aMOD3 = CuiResId(STR_CTRL);
+    const OUString aMOD3 = CuiResId(STR_CARET);
 #else
     const OUString aMOD1 = CuiResId(STR_CTRL);
     const OUString aMOD2 = CuiResId(STR_Alt);

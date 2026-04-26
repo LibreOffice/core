@@ -284,6 +284,7 @@ const std::tuple<TranslateId, OUString, OUString, tipModule> TIPOFTHEDAY_STRINGA
 #define STR_UNO_LINK                    NC_("STR_UNO_LINK", "Run this action now...")
 #define STR_TITLE                       NC_("STR_TITLE", "Tip of the Day: %CURRENT/%TOTAL")
 #define STR_CMD                         NC_("STR_CMD", "⌘ Cmd") //use narrow no-break space U+202F here
+#define STR_CARET                      NC_("STR_CARET", "⌃ Ctrl")
 #define STR_CTRL                        NC_("STR_CTRL", "Ctrl")
 #define STR_Alt                         NC_("STR_CMD", "Alt")
 #define STR_Option                      NC_("STR_CTRL", "⌥ Opt") //use narrow no-break space U+202F here
