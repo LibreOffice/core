@@ -1428,8 +1428,6 @@ case "$enable_fuzzers" in
         fi
         AFL_CC=$(echo "$AFL_CXX" | sed 's/++$//')
         AC_MSG_NOTICE([using AFL++ compiler: CXX=$AFL_CXX CC=$AFL_CC])
-        CXX="$AFL_CXX"
-        CC="$AFL_CC"
         if test "x$with_sanitizer" != "x"; then
             AC_MSG_WARN([--with-sanitizer ignored for AFL++ builds (sanitizer variant is built automatically)])
             with_sanitizer=""
@@ -1477,6 +1475,8 @@ AM_CONDITIONAL([ENABLE_FUZZERS], [test "$LIBFUZZER" = "1"])
 AM_CONDITIONAL([ENABLE_AFL], [test "$FUZZER_ENGINE" = "afl"])
 AC_SUBST([FUZZER_ENGINE])
 AC_SUBST([AFL_DRIVER_LIB])
+AC_SUBST([AFL_CXX])
+AC_SUBST([AFL_CC])
 AC_SUBST([AFL_CLANG_FAST_CXX])
 AC_SUBST([AFL_CLANG_FAST_CC])
 

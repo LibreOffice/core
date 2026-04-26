@@ -366,20 +366,20 @@ AFL_LDFLAGS_COMMON = $(AM_LDFLAGS) $(LIBS)
 
 # Variant configurations: ENV_<variant>, CXX_<variant>, CC_<variant>
 ENV_native =
-CXX_native = $(CXX)
-CC_native = $(CC)
+CXX_native = $(AFL_CXX)
+CC_native = $(AFL_CC)
 
 ENV_san = AFL_LLVM_ONLY_FSRV=1 AFL_USE_ASAN=1 AFL_USE_UBSAN=1 AFL_USE_CFISAN=1
 CXX_san = $(AFL_CLANG_FAST_CXX)
 CC_san = $(AFL_CLANG_FAST_CC)
 
 ENV_cmpcov = AFL_LLVM_LAF_ALL=1
-CXX_cmpcov = $(CXX)
-CC_cmpcov = $(CC)
+CXX_cmpcov = $(AFL_CXX)
+CC_cmpcov = $(AFL_CC)
 
 ENV_cmplog = AFL_LLVM_CMPLOG=1
-CXX_cmplog = $(CXX)
-CC_cmplog = $(CC)
+CXX_cmplog = $(AFL_CXX)
+CC_cmplog = $(AFL_CC)
 
 AFL_VARIANTS = native san cmpcov cmplog
 
