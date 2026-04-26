@@ -47,6 +47,10 @@ if ENABLE_CYPRESS
 SUBDIRS += cypress_test
 endif
 
+if ENABLE_FUZZERS
+SUBDIRS += fuzzer
+endif
+
 export ENABLE_DEBUG
 
 QUIET_MKDIRP = $(QUIET_MKDIRP_$(V))
@@ -241,15 +245,6 @@ noinst_PROGRAMS = \
                   lokitclient
 endif
 
-if ENABLE_FUZZERS
-noinst_PROGRAMS += \
-		   admin_fuzzer \
-		   clientrequest_fuzzer \
-		   clientsession_fuzzer \
-		   httpresponse_fuzzer \
-		   httpecho_fuzzer
-endif
-
 connect_SOURCES = \
                   $(util_platform_cpp) \
                   common/DummyTraceEventEmitter.cpp \
@@ -340,155 +335,7 @@ coolforkit_caps_SOURCES += \
 		       common/DummyTraceEventEmitter.cpp
 coolforkit_ns_SOURCES += \
 		       common/DummyTraceEventEmitter.cpp
-
-common_fuzzer_sources = \
-		       fuzzer/Common.cpp \
-		       common/DummyTraceEventEmitter.cpp \
-		       $(coolwsd_sources) \
-		       wsd/coolwsd-inproc.cpp \
-		       wsd/KitWSDGlobals.cpp \
-		       $(coolforkit_sources) \
-		       $(shared_sources)
-
-LIBFUZZER_LDFLAGS = -fsanitize=fuzzer
-
-admin_fuzzer_CPPFLAGS = \
-			$(AM_CPPFLAGS)
-admin_fuzzer_SOURCES = \
-		       $(common_fuzzer_sources) \
-		       fuzzer/Admin.cpp
-admin_fuzzer_LDFLAGS = $(LIBFUZZER_LDFLAGS) $(AM_LDFLAGS)
-admin_fuzzer_LDADD = libsimd.a
-
-clientrequest_fuzzer_CPPFLAGS = \
-				$(AM_CPPFLAGS)
-clientrequest_fuzzer_SOURCES = \
-			       $(common_fuzzer_sources) \
-			       fuzzer/ClientRequestDispatcherFuzz.cpp
-clientrequest_fuzzer_LDFLAGS = $(LIBFUZZER_LDFLAGS) $(AM_LDFLAGS)
-clientrequest_fuzzer_LDADD = libsimd.a
-
-clientsession_fuzzer_CPPFLAGS = \
-				$(AM_CPPFLAGS)
-clientsession_fuzzer_SOURCES = \
-			       $(common_fuzzer_sources) \
-			       fuzzer/ClientSession.cpp
-clientsession_fuzzer_LDFLAGS = $(LIBFUZZER_LDFLAGS) $(AM_LDFLAGS)
-clientsession_fuzzer_LDADD = libsimd.a
-
-httpresponse_fuzzer_CPPFLAGS = \
-				$(AM_CPPFLAGS)
-httpresponse_fuzzer_SOURCES = \
-			       $(common_fuzzer_sources) \
-			       fuzzer/HttpResponse.cpp
-httpresponse_fuzzer_LDFLAGS = $(LIBFUZZER_LDFLAGS) $(AM_LDFLAGS)
-httpresponse_fuzzer_LDADD = libsimd.a
-
-httpecho_fuzzer_CPPFLAGS = \
-				$(AM_CPPFLAGS) \
-        -I${top_srcdir}/test
-httpecho_fuzzer_SOURCES = \
-			       $(common_fuzzer_sources) \
-			       fuzzer/HttpEcho.cpp
-httpecho_fuzzer_LDFLAGS = $(LIBFUZZER_LDFLAGS) $(AM_LDFLAGS)
-httpecho_fuzzer_LDADD = libsimd.a
-
-if ENABLE_AFL
-# AFL++ multi-variant fuzzer build.
-# 4 static libraries (one per variant) from common sources,
-# then 5 fuzzers x 4 variants. To add a new fuzzer, just add to AFL_FUZZERS.
-
-AFL_CPPFLAGS = $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) -I${top_srcdir}/test
-# AFL variants use afl-clang-* instrumentation; strip libFuzzer's -fsanitize=fuzzer-no-link
-# (otherwise SanitizerCoverage refs like __sancov_lowest_stack are unresolved at link, since
-# AFL links libAFLDriver.a, not libclang_rt.fuzzer.a)
-AFL_CXXFLAGS = $(AFL_CPPFLAGS) $(AM_CXXFLAGS) $(filter-out -fsanitize=fuzzer-no-link,$(CXXFLAGS))
-AFL_CFLAGS = $(AFL_CPPFLAGS) $(AM_CFLAGS) $(filter-out -fsanitize=fuzzer-no-link,$(CFLAGS))
-AFL_LDFLAGS_COMMON = $(AM_LDFLAGS) $(LIBS)
-
-# Variant configurations: ENV_<variant>, CXX_<variant>, CC_<variant>
-ENV_native =
-CXX_native = $(AFL_CXX)
-CC_native = $(AFL_CC)
-
-ENV_san = AFL_LLVM_ONLY_FSRV=1 AFL_USE_ASAN=1 AFL_USE_UBSAN=1 AFL_USE_CFISAN=1
-CXX_san = $(AFL_CLANG_FAST_CXX)
-CC_san = $(AFL_CLANG_FAST_CC)
-
-ENV_cmpcov = AFL_LLVM_LAF_ALL=1
-CXX_cmpcov = $(AFL_CXX)
-CC_cmpcov = $(AFL_CC)
-
-ENV_cmplog = AFL_LLVM_CMPLOG=1
-CXX_cmplog = $(AFL_CXX)
-CC_cmplog = $(AFL_CC)
-
-AFL_VARIANTS = native san cmpcov cmplog
-
-# Common sources split by language
-common_fuzzer_cpp = $(common_fuzzer_sources)
-common_fuzzer_c = kit/DeltaSimd.c
-
-# Fuzzer registry: name=source (add new fuzzers here)
-AFL_FUZZERS = \
-	admin=fuzzer/Admin.cpp \
-	clientrequest=fuzzer/ClientRequestDispatcherFuzz.cpp \
-	clientsession=fuzzer/ClientSession.cpp \
-	httpresponse=fuzzer/HttpResponse.cpp \
-	httpecho=fuzzer/HttpEcho.cpp
-
-# Extract just the names
-AFL_FUZZER_NAMES = $(foreach f,$(AFL_FUZZERS),$(word 1,$(subst =, ,$f)))
-
-# Generate all target names: <name>_fuzzer_<variant>.afl
-AFL_FUZZER_TARGETS = $(foreach v,$(AFL_VARIANTS),$(foreach n,$(AFL_FUZZER_NAMES),$(n)_fuzzer_$(v).afl))
-
-clean-fuzzers:
-	rm -f $(AFL_FUZZER_TARGETS)
-
-# Per-variant common object files
-afl_common_objs = $(common_fuzzer_cpp:%.cpp=.afl-$(1)/%.o) $(common_fuzzer_c:%.c=.afl-$(1)/%.o)
-
-# Per-variant static library names
-AFL_LIBS = $(foreach v,$(AFL_VARIANTS),aflfuzz_$(v).a)
-
-# Pattern rules for compiling each variant's objects
-define AFL_VARIANT_RULES
-.afl-$(1)/%.o: %.cpp
-	@mkdir -p $$(dir $$@)
-	$(ENV_$(1)) $$(CXX_$(1)) $$(AFL_CXXFLAGS) -c -o $$@ $$<
-
-.afl-$(1)/%.o: %.c
-	@mkdir -p $$(dir $$@)
-	$(ENV_$(1)) $$(CC_$(1)) $$(AFL_CFLAGS) @SIMD_CFLAGS@ -c -o $$@ $$<
-
-aflfuzz_$(1).a: $$(call afl_common_objs,$(1))
-	$$(AR) crs $$@ $$^
-endef
-
-$(foreach v,$(AFL_VARIANTS),$(eval $(call AFL_VARIANT_RULES,$(v))))
-
-# Link rule: <name>_fuzzer_<variant>.afl from variant-compiled fuzzer source + static lib
-define AFL_FUZZER_LINK
-$(1)_fuzzer_$(2).afl: .afl-$(2)/$(3:.cpp=.o) aflfuzz_$(2).a
-	$(ENV_$(2)) $$(CXX_$(2)) -o $$@ $$< aflfuzz_$(2).a $$(AFL_DRIVER_LIB) $$(AFL_LDFLAGS_COMMON)
-endef
-
-$(foreach f,$(AFL_FUZZERS),\
-  $(foreach v,$(AFL_VARIANTS),\
-    $(eval $(call AFL_FUZZER_LINK,$(word 1,$(subst =, ,$f)),$(v),$(word 2,$(subst =, ,$f))))))
-
-clean-afl:
-	rm -rf $(foreach v,$(AFL_VARIANTS),.afl-$(v)) $(AFL_LIBS) $(AFL_FUZZER_TARGETS)
-
-else # !ENABLE_AFL (libFuzzer-only build)
-
-clean-fuzzers: ;
-
-endif # !ENABLE_AFL
-else # !ENABLE_FUZZERS
-clean-fuzzers: ;
-endif # !ENABLE_FUZZERS
+endif # ENABLE_FUZZERS
 
 clientnb_SOURCES = \
                    $(util_platform_cpp) \
@@ -795,9 +642,9 @@ cleanup:
 
 # Always cleanup before removing the binaries.
 # Note: this can break with -j option!
-clean-am: cleanup clean-binPROGRAMS clean-generic clean-libtool clean-local clean-noinstPROGRAMS mostlyclean-am clean-afl
+clean-am: cleanup clean-binPROGRAMS clean-generic clean-libtool clean-local clean-noinstPROGRAMS mostlyclean-am
 
-clean-local: clean-fuzzers
+clean-local:
 	$(CLEANUP_COMMAND)
 	if test "z@SYSTEMPLATE_PATH@" != "z"; then rm -rf "@SYSTEMPLATE_PATH@" || echo "WARNING: failed to remove the systemplate"; fi
 	if test "z@JAILS_PATH@" != "z"; then rm -rf "@JAILS_PATH@" || echo "WARNING: failed to remove all jails cleanly"; fi
@@ -943,16 +790,12 @@ SYSTEM_STAMP =
 
 endif
 
-.PHONY: cleanup setup-wsd clean-afl
+.PHONY: cleanup setup-wsd
 
-if ENABLE_AFL
-ALL_LOCAL_DEPS=$(AFL_FUZZER_TARGETS)
-else
 if ENABLE_FUZZERS
 ALL_LOCAL_DEPS=
 else
 ALL_LOCAL_DEPS=coolwsd
-endif
 endif
 
 all-local: $(ALL_LOCAL_DEPS) @JAILS_PATH@ @CACHE_PATH@ $(SYSTEM_STAMP)

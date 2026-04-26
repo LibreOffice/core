@@ -135,6 +135,8 @@ coolbench
 
 # Fuzzer
 *_fuzzer
+*.afl
+fuzzer/.*
 fuzz*.log
 slow-unit-*
 crash-*

@@ -44,31 +44,31 @@ shift
 
 case "$TARGET" in
     admin)
-        BINARY=./admin_fuzzer
+        BINARY="${SCRIPT_DIR}/admin_fuzzer"
         CORPUS="${SCRIPT_DIR}/admin-data"
         DICT="${SCRIPT_DIR}/kit_fuzzer.dict"
         TIMEOUT=1000
         ;;
     clientsession)
-        BINARY=./clientsession_fuzzer
+        BINARY="${SCRIPT_DIR}/clientsession_fuzzer"
         CORPUS="${SCRIPT_DIR}/data"
         DICT="${SCRIPT_DIR}/kit_fuzzer.dict"
         TIMEOUT=1000
         ;;
     clientrequest)
-        BINARY=./clientrequest_fuzzer
+        BINARY="${SCRIPT_DIR}/clientrequest_fuzzer"
         CORPUS="${SCRIPT_DIR}/clientrequest-data/corpus"
         DICT="${SCRIPT_DIR}/httpecho-data/http.dict"
         TIMEOUT=1000
         ;;
     httpresponse)
-        BINARY=./httpresponse_fuzzer
+        BINARY="${SCRIPT_DIR}/httpresponse_fuzzer"
         CORPUS="${SCRIPT_DIR}/httpresponse-data"
         DICT="${SCRIPT_DIR}/httpecho-data/http.dict"
         TIMEOUT=1000
         ;;
     httpecho)
-        BINARY=./httpecho_fuzzer
+        BINARY="${SCRIPT_DIR}/httpecho_fuzzer"
         CORPUS="${SCRIPT_DIR}/httpecho-data/corpus"
         DICT="${SCRIPT_DIR}/httpecho-data/http.dict"
         TIMEOUT=3000

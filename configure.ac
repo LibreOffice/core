@@ -2393,6 +2393,7 @@ AM_CONDITIONAL([ENABLE_WASM_ZETAJS_EXAMPLE], [test "$ENABLE_WASM_ZETAJS_EXAMPLE"
 
 AC_CONFIG_FILES([Makefile
                  cypress_test/Makefile
+                 fuzzer/Makefile
                  macos/Makefile
                  qt/Makefile
                  qt/run-from-build
