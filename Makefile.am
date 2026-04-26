@@ -242,16 +242,12 @@ noinst_PROGRAMS = \
 endif
 
 if ENABLE_FUZZERS
-if ENABLE_AFL
-# AFL++ builds 4 variants per fuzzer target
-else
 noinst_PROGRAMS += \
 		   admin_fuzzer \
 		   clientrequest_fuzzer \
 		   clientsession_fuzzer \
 		   httpresponse_fuzzer \
 		   httpecho_fuzzer
-endif
 endif
 
 connect_SOURCES = \
@@ -354,14 +350,60 @@ common_fuzzer_sources = \
 		       $(coolforkit_sources) \
 		       $(shared_sources)
 
+LIBFUZZER_LDFLAGS = -fsanitize=fuzzer
+
+admin_fuzzer_CPPFLAGS = \
+			$(AM_CPPFLAGS)
+admin_fuzzer_SOURCES = \
+		       $(common_fuzzer_sources) \
+		       fuzzer/Admin.cpp
+admin_fuzzer_LDFLAGS = $(LIBFUZZER_LDFLAGS) $(AM_LDFLAGS)
+admin_fuzzer_LDADD = libsimd.a
+
+clientrequest_fuzzer_CPPFLAGS = \
+				$(AM_CPPFLAGS)
+clientrequest_fuzzer_SOURCES = \
+			       $(common_fuzzer_sources) \
+			       fuzzer/ClientRequestDispatcherFuzz.cpp
+clientrequest_fuzzer_LDFLAGS = $(LIBFUZZER_LDFLAGS) $(AM_LDFLAGS)
+clientrequest_fuzzer_LDADD = libsimd.a
+
+clientsession_fuzzer_CPPFLAGS = \
+				$(AM_CPPFLAGS)
+clientsession_fuzzer_SOURCES = \
+			       $(common_fuzzer_sources) \
+			       fuzzer/ClientSession.cpp
+clientsession_fuzzer_LDFLAGS = $(LIBFUZZER_LDFLAGS) $(AM_LDFLAGS)
+clientsession_fuzzer_LDADD = libsimd.a
+
+httpresponse_fuzzer_CPPFLAGS = \
+				$(AM_CPPFLAGS)
+httpresponse_fuzzer_SOURCES = \
+			       $(common_fuzzer_sources) \
+			       fuzzer/HttpResponse.cpp
+httpresponse_fuzzer_LDFLAGS = $(LIBFUZZER_LDFLAGS) $(AM_LDFLAGS)
+httpresponse_fuzzer_LDADD = libsimd.a
+
+httpecho_fuzzer_CPPFLAGS = \
+				$(AM_CPPFLAGS) \
+        -I${top_srcdir}/test
+httpecho_fuzzer_SOURCES = \
+			       $(common_fuzzer_sources) \
+			       fuzzer/HttpEcho.cpp
+httpecho_fuzzer_LDFLAGS = $(LIBFUZZER_LDFLAGS) $(AM_LDFLAGS)
+httpecho_fuzzer_LDADD = libsimd.a
+
 if ENABLE_AFL
 # AFL++ multi-variant fuzzer build.
 # 4 static libraries (one per variant) from common sources,
 # then 5 fuzzers x 4 variants. To add a new fuzzer, just add to AFL_FUZZERS.
 
 AFL_CPPFLAGS = $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) -I${top_srcdir}/test
-AFL_CXXFLAGS = $(AFL_CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
-AFL_CFLAGS = $(AFL_CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+# AFL variants use afl-clang-* instrumentation; strip libFuzzer's -fsanitize=fuzzer-no-link
+# (otherwise SanitizerCoverage refs like __sancov_lowest_stack are unresolved at link, since
+# AFL links libAFLDriver.a, not libclang_rt.fuzzer.a)
+AFL_CXXFLAGS = $(AFL_CPPFLAGS) $(AM_CXXFLAGS) $(filter-out -fsanitize=fuzzer-no-link,$(CXXFLAGS))
+AFL_CFLAGS = $(AFL_CPPFLAGS) $(AM_CFLAGS) $(filter-out -fsanitize=fuzzer-no-link,$(CFLAGS))
 AFL_LDFLAGS_COMMON = $(AM_LDFLAGS) $(LIBS)
 
 # Variant configurations: ENV_<variant>, CXX_<variant>, CC_<variant>
@@ -439,50 +481,7 @@ $(foreach f,$(AFL_FUZZERS),\
 clean-afl:
 	rm -rf $(foreach v,$(AFL_VARIANTS),.afl-$(v)) $(AFL_LIBS) $(AFL_FUZZER_TARGETS)
 
-else # !ENABLE_AFL (libFuzzer build)
-
-LIBFUZZER_LDFLAGS = -fsanitize=fuzzer
-
-admin_fuzzer_CPPFLAGS = \
-			$(AM_CPPFLAGS)
-admin_fuzzer_SOURCES = \
-		       $(common_fuzzer_sources) \
-		       fuzzer/Admin.cpp
-admin_fuzzer_LDFLAGS = $(LIBFUZZER_LDFLAGS) $(AM_LDFLAGS)
-admin_fuzzer_LDADD = libsimd.a
-
-clientrequest_fuzzer_CPPFLAGS = \
-				$(AM_CPPFLAGS)
-clientrequest_fuzzer_SOURCES = \
-			       $(common_fuzzer_sources) \
-			       fuzzer/ClientRequestDispatcherFuzz.cpp
-clientrequest_fuzzer_LDFLAGS = $(LIBFUZZER_LDFLAGS) $(AM_LDFLAGS)
-clientrequest_fuzzer_LDADD = libsimd.a
-
-clientsession_fuzzer_CPPFLAGS = \
-				$(AM_CPPFLAGS)
-clientsession_fuzzer_SOURCES = \
-			       $(common_fuzzer_sources) \
-			       fuzzer/ClientSession.cpp
-clientsession_fuzzer_LDFLAGS = $(LIBFUZZER_LDFLAGS) $(AM_LDFLAGS)
-clientsession_fuzzer_LDADD = libsimd.a
-
-httpresponse_fuzzer_CPPFLAGS = \
-				$(AM_CPPFLAGS)
-httpresponse_fuzzer_SOURCES = \
-			       $(common_fuzzer_sources) \
-			       fuzzer/HttpResponse.cpp
-httpresponse_fuzzer_LDFLAGS = $(LIBFUZZER_LDFLAGS) $(AM_LDFLAGS)
-httpresponse_fuzzer_LDADD = libsimd.a
-
-httpecho_fuzzer_CPPFLAGS = \
-				$(AM_CPPFLAGS) \
-        -I${top_srcdir}/test
-httpecho_fuzzer_SOURCES = \
-			       $(common_fuzzer_sources) \
-			       fuzzer/HttpEcho.cpp
-httpecho_fuzzer_LDFLAGS = $(LIBFUZZER_LDFLAGS) $(AM_LDFLAGS)
-httpecho_fuzzer_LDADD = libsimd.a
+else # !ENABLE_AFL (libFuzzer-only build)
 
 clean-fuzzers: ;
 

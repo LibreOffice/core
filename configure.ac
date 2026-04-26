@@ -1429,8 +1429,9 @@ case "$enable_fuzzers" in
         AFL_CC=$(echo "$AFL_CXX" | sed 's/++$//')
         AC_MSG_NOTICE([using AFL++ compiler: CXX=$AFL_CXX CC=$AFL_CC])
         if test "x$with_sanitizer" != "x"; then
-            AC_MSG_WARN([--with-sanitizer ignored for AFL++ builds (sanitizer variant is built automatically)])
-            with_sanitizer=""
+            with_sanitizer="$with_sanitizer,fuzzer-no-link"
+        else
+            with_sanitizer="fuzzer-no-link"
         fi
         # The _san variant must use afl-clang-fast++, find it explicitly
         AFL_CLANG_FAST_CXX=""
