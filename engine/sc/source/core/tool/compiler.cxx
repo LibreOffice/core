@@ -5058,8 +5058,9 @@ std::unique_ptr<ScTokenArray> ScCompiler::CompileString( const OUString& rFormul
     bool bUseFunctionStack = (bPODF || bOOXML);
     const size_t nAlloc = 512;
     FunctionStack aFuncs[ nAlloc ];
-    FunctionStack* pFunctionStack = (bUseFunctionStack && o3tl::make_unsigned(rFormula.getLength()) > nAlloc ?
-         new FunctionStack[rFormula.getLength()] : &aFuncs[0]);
+    // A formula of length L composed entirely of open tokens needs L+1 slots,
+    FunctionStack* pFunctionStack = (bUseFunctionStack && o3tl::make_unsigned(rFormula.getLength()) >= nAlloc ?
+         new FunctionStack[rFormula.getLength() + 1] : &aFuncs[0]);
     pFunctionStack[0].eOp = ocNone;
     pFunctionStack[0].nSep = 0;
     size_t nFunction = 0;
