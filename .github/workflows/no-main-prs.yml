@@ -1,0 +1,27 @@
+name: Block PRs to main
+on:
+  pull_request_target:
+    types: [opened]
+    branches: [main]
+
+jobs:
+  close:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.pull_request.number,
+              body: `Thank you for your contribution! However, the main branch on GitHub is not used for this project. Please submit patches to the main branch of the online repo at https://gerrit.collaboraoffice.com.\n\nSee [CONTRIBUTING.md](https://github.com/CollaboraOnline/online/blob/main/CONTRIBUTING.md) for details. This PR has been automatically closed.`
+            });
+            await github.rest.pulls.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.payload.pull_request.number,
+              state: 'closed'
+            });
