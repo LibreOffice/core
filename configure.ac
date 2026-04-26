@@ -1412,6 +1412,7 @@ case "$enable_fuzzers" in
             with_sanitizer="fuzzer-no-link"
         fi
         LIBFUZZER=1
+        CXXFLAGS="$CXXFLAGS -O3"
         ;;
     afl)
         FUZZER_ENGINE=afl
@@ -1460,6 +1461,7 @@ case "$enable_fuzzers" in
         fi
         AC_MSG_NOTICE([AFL++ driver: $AFL_DRIVER_LIB])
         LIBFUZZER=1
+        CXXFLAGS="$CXXFLAGS -O3"
         ;;
     no|"")
         FUZZER_ENGINE=""
@@ -1471,6 +1473,27 @@ case "$enable_fuzzers" in
         AC_MSG_ERROR([unknown fuzzer engine '$enable_fuzzers' (use 'libfuzzer' or 'afl')])
         ;;
 esac
+if test "$LIBFUZZER" = "1"; then
+    # We require LTO for both libFuzzer and AFL. Unfortunately, with ThinLTO,
+    # via either ld.bfd's LLVMgold plugin or lld's native ThinLTO, crash on
+    # this codebase under clang/lld 18, but full -flto via lld links cleanly.
+    # -Wl,--no-gc-sections works around a clang/lld LTO+ASan bug where
+    # .text.asan.module_dtor.* sections are GC'd while still referenced from
+    # .fini_array, breaking the link.
+    # Verify the toolchain supports the link recipe up-front, then add it to
+    # LDFLAGS so both the libFuzzer and AFL Makefile rules inherit it from
+    # one source of truth.
+    AC_MSG_CHECKING([for working -flto -fuse-ld=lld -Wl,--no-gc-sections (required by fuzzer build)])
+    fuzzer_check_saved_LDFLAGS=$LDFLAGS
+    LDFLAGS="$LDFLAGS -flto -fuse-ld=lld -Wl,--no-gc-sections"
+    AC_LANG_PUSH([C++])
+    AC_LINK_IFELSE([AC_LANG_PROGRAM([], [])],
+        [AC_MSG_RESULT([yes])],
+        [LDFLAGS=$fuzzer_check_saved_LDFLAGS
+         AC_MSG_RESULT([no])
+         AC_MSG_ERROR([the fuzzer build requires a C++ toolchain that links with '-flto -fuse-ld=lld -Wl,--no-gc-sections'; install lld (e.g. apt install lld) and a clang/gcc that supports -flto, or omit --enable-fuzzers])])
+    AC_LANG_POP([C++])
+fi
 AC_DEFINE_UNQUOTED([LIBFUZZER],[$LIBFUZZER],[Define to 1 if this is a fuzzer build.])
 AM_CONDITIONAL([ENABLE_FUZZERS], [test "$LIBFUZZER" = "1"])
 AM_CONDITIONAL([ENABLE_AFL], [test "$FUZZER_ENGINE" = "afl"])
@@ -1487,10 +1510,16 @@ AC_MSG_CHECKING([whether to turn sanitizers on])
 if test "x$with_sanitizer" != "x"; then
     AC_MSG_RESULT([yes ($with_sanitizer)])
     LIBSAN=-static-libasan
+    if test "x$enable_fuzzers" != "x"; then
+        # With the fuzzers, keep the -O3 set in the engine branch.
+        OPT_FLAGS=""
+    else
+        OPT_FLAGS="-O1 -fno-omit-frame-pointer"
+    fi
     for flag in -static-libasan -static-libsan ; do
         AC_MSG_CHECKING([whether to use $flag])
         save_CXXFLAGS=$CXXFLAGS
-        CXXFLAGS="$CXXFLAGS -O1 -fno-omit-frame-pointer -fsanitize=$with_sanitizer -frtti $flag"
+        CXXFLAGS="$CXXFLAGS $OPT_FLAGS -fsanitize=$with_sanitizer -frtti $flag"
         AC_LANG_PUSH([C++])
         AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
             ]])],[CXXFLAGS_CXXSTD=$flag])
@@ -1504,7 +1533,7 @@ if test "x$with_sanitizer" != "x"; then
             AC_MSG_RESULT([no])
         fi
     done
-    SANITIZER_FLAGS="-O1 -fno-omit-frame-pointer -fsanitize=$with_sanitizer $LIBSAN"
+    SANITIZER_FLAGS="$OPT_FLAGS -fsanitize=$with_sanitizer $LIBSAN"
     CXXFLAGS="$CXXFLAGS -frtti $SANITIZER_FLAGS"
     CFLAGS="$CFLAGS $SANITIZER_FLAGS"
 else
