@@ -2772,7 +2772,7 @@ void Document::flushAndExit(int code)
 {
     flushTraceEventRecordings();
     _deltaPool.stop();
-    if (!Util::isKitInProcess())
+    if constexpr (!Util::isKitInProcess())
         Util::forcedExit(code);
     else
         SigUtil::setTerminationFlag();
@@ -3442,7 +3442,7 @@ void lokit_main(
 {
 #if !MOBILEAPP
 
-    if (!Util::isKitInProcess())
+    if constexpr (!Util::isKitInProcess())
     {
         // Already set by COOLWSD.cpp
         SigUtil::setFatalSignals("kit startup of " + Util::getCoolVersion() + ' ' +
@@ -3925,7 +3925,7 @@ void lokit_main(
             if (!initFunction)
                 initFunction = cok_init_2;
 
-            if (!Util::isKitInProcess())
+            if constexpr (!Util::isKitInProcess())
                 kit = UnitKit::get().cok_init(instdir, userdir, initFunction);
             if (!kit)
                 kit = initFunction(instdir, userdir);
@@ -4183,7 +4183,7 @@ void lokit_main(
 
     LOG_INF("Kit process for Jail [" << jailId << "] finished.");
     flushTraceEventRecordings();
-    if (!Util::isKitInProcess())
+    if constexpr (!Util::isKitInProcess())
         Util::forcedExit(EX_OK);
 
 #endif

@@ -1107,7 +1107,7 @@ void Admin::cleanupResourceConsumingDocs()
 
 void Admin::cleanupLostKits()
 {
-    if (Util::isKitInProcess())
+    if constexpr (Util::isKitInProcess())
         return; // we might look lost ourselves.
 
     static std::map<pid_t, std::time_t> mapKitsLost;

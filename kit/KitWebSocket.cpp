@@ -126,7 +126,7 @@ void KitWebSocketHandler::handleMessage(const std::vector<char>& data)
             if (_document)
                 _document->joinThreads();
             _document.reset();
-            if (!Util::isKitInProcess())
+            if constexpr (!Util::isKitInProcess())
                 Util::forcedExit(EX_OK);
             else
                 SigUtil::setTerminationFlag();
