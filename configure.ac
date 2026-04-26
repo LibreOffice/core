@@ -1473,7 +1473,7 @@ case "$enable_fuzzers" in
         ;;
 esac
 AC_DEFINE_UNQUOTED([LIBFUZZER],[$LIBFUZZER],[Define to 1 if this is a fuzzer build.])
-AM_CONDITIONAL([ENABLE_LIBFUZZER], [test "$LIBFUZZER" = "1"])
+AM_CONDITIONAL([ENABLE_FUZZERS], [test "$LIBFUZZER" = "1"])
 AM_CONDITIONAL([ENABLE_AFL], [test "$FUZZER_ENGINE" = "afl"])
 AC_SUBST([FUZZER_ENGINE])
 AC_SUBST([AFL_DRIVER_LIB])

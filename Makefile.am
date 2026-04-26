@@ -53,7 +53,7 @@ QUIET_MKDIRP = $(QUIET_MKDIRP_$(V))
 QUIET_MKDIRP_ = $(QUIET_MKDIRP_$(AM_DEFAULT_VERBOSITY))
 QUIET_MKDIRP_0 = @echo "  MKDIRP  " $@;
 
-if ENABLE_LIBFUZZER
+if ENABLE_FUZZERS
 bin_PROGRAMS =
 else
 bin_PROGRAMS = \
@@ -229,7 +229,7 @@ coolwsd_SOURCES = $(coolwsd_sources) \
 
 EXTRA_coolwsd_DEPENDENCIES = browser/node_modules
 
-if ENABLE_LIBFUZZER
+if ENABLE_FUZZERS
 noinst_PROGRAMS =
 else
 noinst_PROGRAMS = \
@@ -241,7 +241,7 @@ noinst_PROGRAMS = \
                   lokitclient
 endif
 
-if ENABLE_LIBFUZZER
+if ENABLE_FUZZERS
 if ENABLE_AFL
 # AFL++ builds 4 variants per fuzzer target
 else
@@ -339,7 +339,7 @@ endif
 
 endif
 
-if ENABLE_LIBFUZZER
+if ENABLE_FUZZERS
 coolforkit_caps_SOURCES += \
 		       common/DummyTraceEventEmitter.cpp
 coolforkit_ns_SOURCES += \
@@ -487,9 +487,9 @@ httpecho_fuzzer_LDADD = libsimd.a
 clean-fuzzers: ;
 
 endif # !ENABLE_AFL
-else # !ENABLE_LIBFUZZER
+else # !ENABLE_FUZZERS
 clean-fuzzers: ;
-endif # !ENABLE_LIBFUZZER
+endif # !ENABLE_FUZZERS
 
 clientnb_SOURCES = \
                    $(util_platform_cpp) \
@@ -743,7 +743,7 @@ EXTRA_DIST = \
              scripts/unocommands.py \
              scripts/unoshortcuts.py
 
-if ENABLE_LIBFUZZER
+if ENABLE_FUZZERS
 CLEANUP_COMMAND=true
 else
 # Use coolwsd to cleanup jails, if any. If it fails, we may have a broken/old coolwsd binary, remove it to rebuild.
@@ -761,7 +761,7 @@ RUN_GDB = $(if $(GDB_FRONTEND),$(GDB_FRONTEND),gdb --tui --args)
 TEST_APPARMOR=$(shell if test 1 -eq `cat /proc/sys/kernel/apparmor_restrict_unprivileged_userns 2> /dev/null || echo 0`; then echo "enabled"; fi)
 ENABLE_NAMESPACE = $(if $(TEST_APPARMOR),podman unshare,)
 
-if ENABLE_LIBFUZZER
+if ENABLE_FUZZERS
 CLEANUP_DEPS=
 else
 CLEANUP_DEPS=coolwsd coolmount coolforkit-caps coolforkit-ns
@@ -949,7 +949,7 @@ endif
 if ENABLE_AFL
 ALL_LOCAL_DEPS=$(AFL_FUZZER_TARGETS)
 else
-if ENABLE_LIBFUZZER
+if ENABLE_FUZZERS
 ALL_LOCAL_DEPS=
 else
 ALL_LOCAL_DEPS=coolwsd

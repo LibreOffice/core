@@ -14,7 +14,7 @@ AUTOMAKE_OPTION = serial-tests
 DIST_FOLDER ?= $(abs_top_builddir)/browser/dist
 
 # unittest: tests that run a captive coolwsd as part of themselves.
-if ENABLE_LIBFUZZER
+if ENABLE_FUZZERS
 check_PROGRAMS =
 noinst_PROGRAMS =
 else
@@ -39,7 +39,7 @@ AM_CXXFLAGS = $(CPPUNIT_CFLAGS) -DTDOC=\"$(abs_top_srcdir)/test/data\" -DTDIST=\
 	-I${top_srcdir} -I${top_srcdir}/test \
 	${include_paths}
 
-if !ENABLE_LIBFUZZER
+if !ENABLE_FUZZERS
 # These are ordered by how long each takes to run.
 # The longest-running tests are put first, the
 # fastest tests are last. This reduces the
@@ -274,7 +274,7 @@ unittest_LDADD += -lssl -lcrypto
 unithttplib_LDADD += -lssl -lcrypto
 clienttest_LDADD += -lssl -lcrypto
 endif
-if ENABLE_LIBFUZZER
+if ENABLE_FUZZERS
 unit_fuzz_la_SOURCES = UnitFuzz.cpp
 unit_fuzz_la_LIBADD = $(CPPUNIT_LIBS)
 else
@@ -426,7 +426,7 @@ endif
 CLEANUP_COMMAND=if test -s ../coolwsd; then echo "Cleaning up..." && ../coolwsd --disable-cool-user-checking --cleanup --o:logging.level=trace; fi
 
 if HAVE_LO_PATH
-if !ENABLE_LIBFUZZER
+if !ENABLE_FUZZERS
 check-local:
 	@$(CLEANUP_COMMAND)
 	@UNITTEST=1 ./fakesockettest 2> test.log || (cat test.log && /bin/false)
