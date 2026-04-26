@@ -319,8 +319,6 @@ private:
     std::unordered_map<std::string, std::string> _overrideSettings;
 };
 
-void setKitInProcess();
-
 int createForkit(const std::string& forKitPath, const StringVector& args);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

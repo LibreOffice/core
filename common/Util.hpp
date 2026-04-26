@@ -1108,7 +1108,6 @@ int main(int argc, char**argv)
 #endif
     }
 
-    void setKitInProcess(bool value);
     constexpr bool isKitInProcess()
     {
 #if defined(ENABLE_INPROC) && ENABLE_INPROC

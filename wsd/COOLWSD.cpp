@@ -4515,7 +4515,6 @@ int main(int argc, char** argv)
 {
     SigUtil::setUserSignals();
     SigUtil::setFatalSignals("wsd " + Util::getCoolVersion() + ' ' + Util::getCoolVersionHash());
-    setKitInProcess();
 
     try
     {

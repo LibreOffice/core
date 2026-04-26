@@ -21,8 +21,6 @@
 #include <common/Util.hpp>
 #include <wsd/COOLWSD.hpp>
 
-void setKitInProcess() { Util::setKitInProcess(false); }
-
 int createForkit(const std::string& forKitPath, const StringVector& args)
 {
     // create forkit in a process

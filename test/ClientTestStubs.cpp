@@ -23,8 +23,6 @@
 #include <wsd/RequestDetails.hpp>
 
 // ----- Kit stubs -----
-void setKitInProcess() {}
-
 #include <kit/ChildSession.hpp>
 bool ChildSession::NoCapsForKit = true;
 
