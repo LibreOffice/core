@@ -2315,10 +2315,12 @@ void ScChangeTrack::MasterLinks( ScChangeAction* pAppend )
     }
 }
 
-void ScChangeTrack::AppendLoaded( std::unique_ptr<ScChangeAction> pActionParam )
+bool ScChangeTrack::AppendLoaded( std::unique_ptr<ScChangeAction> pActionParam )
 {
+    auto [it, inserted] = aMap.insert(std::make_pair(pActionParam->GetActionNumber(), pActionParam.get()));
+    if (!inserted)
+        return false;
     ScChangeAction* pAppend = pActionParam.release();
-    aMap.insert( ::std::make_pair( pAppend->GetActionNumber(), pAppend ) );
     if ( !pLast )
         pFirst = pLast = pAppend;
     else
@@ -2328,6 +2330,7 @@ void ScChangeTrack::AppendLoaded( std::unique_ptr<ScChangeAction> pActionParam )
         pLast = pAppend;
     }
     MasterLinks( pAppend );
+    return true;
 }
 
 void ScChangeTrack::Append( ScChangeAction* pAppend, sal_uLong nAction )
