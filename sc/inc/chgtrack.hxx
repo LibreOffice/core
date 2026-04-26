@@ -1115,7 +1115,8 @@ public:
 
     sal_uLong           AddLoadedGenerated( const ScCellValue& rNewCell,
                             const ScBigRange& aBigRange, const OUString& sNewValue ); // only to use in the XML import
-    void                AppendLoaded( std::unique_ptr<ScChangeAction> pAppend ); // this is only for the XML import public, it should be protected
+    // returns false if the action number is already in use, in which case the new duplicate is dropped
+    bool                AppendLoaded( std::unique_ptr<ScChangeAction> pAppend ); // this is only for the XML import public, it should be protected
     void                SetActionMax(sal_uLong nTempActionMax)
                             { nActionMax = nTempActionMax; } // only to use in the XML import
 
