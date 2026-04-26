@@ -63,6 +63,7 @@ SheetDataContext::SheetDataContext( WorksheetFragmentBase& rFragment ) :
     mnSheet( rFragment.getSheetIndex() ),
     mbHasFormula( false ),
     mbValidRange( false ),
+    mbCalcAlways( false ),
     mnRow( -1 ),
     mnCol( -1 )
 {
@@ -134,7 +135,13 @@ void SheetDataContext::onEndElement()
         // a) need to set format first
         // :/
         case XML_normal:
-            if (!maFormulaStr.isEmpty())
+            // An empty <f/> without ca is a standalone broken formula and
+            // should be skipped to avoid creating a formula cell with no
+            // tokens.
+            // An empty <f/> with ca="1" is a matrix-reference placeholder
+            // for an array formula whose master is a different cell; the
+            // master will create the matrix cells via setMatrixCells.
+            if (!maFormulaStr.isEmpty() || mbCalcAlways)
             {
                 setCellFormula(maCellData.maCellAddr, maFormulaStr);
                 mrSheetData.setCellFormat(maCellData);
@@ -370,6 +377,7 @@ void SheetDataContext::importFormula( const AttributeList& rAttribs )
 
     maFmlaData.mnFormulaType = rAttribs.getToken( XML_t, XML_normal );
     maFmlaData.mnSharedId    = rAttribs.getInteger( XML_si, -1 );
+    mbCalcAlways = rAttribs.getBool( XML_ca, false );
 
     if( maFmlaData.mnFormulaType == XML_dataTable )
     {
