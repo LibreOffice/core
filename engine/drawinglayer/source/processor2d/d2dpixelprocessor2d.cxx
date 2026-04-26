@@ -2092,7 +2092,7 @@ void D2DPixelProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimitiv
         case PRIMITIVE2D_ID_UNIFIEDTRANSPARENCEPRIMITIVE2D:
         {
             // transparence with a fixed alpha for all content, can be done
-            // significally faster
+            // significantly faster
             processUnifiedTransparencePrimitive2D(
                 static_cast<const primitive2d::UnifiedTransparencePrimitive2D&>(rCandidate));
             break;

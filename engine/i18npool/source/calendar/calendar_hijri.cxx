@@ -36,7 +36,7 @@ constexpr double SynPeriod = 29.53058868;
 // Julian day on Jan 1, 1900
 constexpr double jd1900 = 2415020.75933;
 
-// Reference point: March 26, 2001 == 1422 Hijri == 1252 Synodial month from 1900
+// Reference point: March 26, 2001 == 1422 Hijri == 1252 Synodic month from 1900
 constexpr sal_Int32 SynRef = 1252;
 constexpr sal_Int32 GregRef = 1422;
 

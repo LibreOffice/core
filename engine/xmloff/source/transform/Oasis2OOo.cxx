@@ -543,7 +543,7 @@ XMLTransformerActionInit const aActionTable[] =
     ENTRY1( XML_NAMESPACE_PRESENTATION, XML_SETTINGS, XML_ETACTION_PROC_ATTRS,
                     OASIS_DATETIME_ACTIONS ),
 
-    // fix <text:alphabatical-index-mark text:main-etry>
+    // fix <text:alphabetical-index-mark text:main-entry>
     ENTRY1( XML_NAMESPACE_TEXT, XML_ALPHABETICAL_INDEX_MARK, XML_ETACTION_PROC_ATTRS,
             OASIS_ALPHABETICAL_INDEX_MARK_ACTIONS ),
     ENTRY1( XML_NAMESPACE_TEXT, XML_ALPHABETICAL_INDEX_MARK_START, XML_ETACTION_PROC_ATTRS,

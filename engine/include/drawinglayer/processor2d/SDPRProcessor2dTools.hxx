@@ -89,7 +89,7 @@ bool prepareBitmapForDirectRender(
 
         This is old but hard to remove stuff that allows hor/ver offset when
         tiled fill is used. To solve that, create pixel data that doubles
-        resp. in width/height and copies the off-setted version of the bitmap
+        resp. in width/height and copies the offset version of the bitmap
         information to the extra space, so rendering does not need to do that.
 
         Since this doubles the geometry, an adaption of the used fill range

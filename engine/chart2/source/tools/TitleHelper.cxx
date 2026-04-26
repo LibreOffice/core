@@ -375,14 +375,14 @@ void TitleHelper::setCompleteString( const OUString& rNewText
         const OUString aFullString = getCompleteString(xTitle);
         if (bDialogTitle && aNewText.equals(getUnstackedStr(aFullString)))
         {
-            // If the new title setted from a dialog window to a new string
+            // If the new title is set from a dialog window to a new string
             // the first old text portion will be maintained if it's a new string,
             // otherwise we use the original one.
             aNewStringList = std::move(aOldStringList);
         }
         else
         {
-            // If the new title setted from a dialog to a new string the first
+            // If the new title is set from a dialog to a new string the first
             // old text portion will be maintained if there was any. Also in case of ODF
             // import which still not support non-uniform formatted titles
             aNewStringList = { aOldStringList[0] };

@@ -1153,7 +1153,7 @@ void SwSectionFrame::CollectEndnotes( SwLayouter* pLayouter )
     bool bEmpty = false;
     // pSect is the last sectionfrm without endnotes or the this-pointer
     // the first sectionfrm with endnotes may be destroyed, when the endnotes
-    // is cutted
+    // is cut
     while( nullptr != (pFootnote = lcl_FindEndnote( pSect, bEmpty, pLayouter )) )
         pLayouter->CollectEndnote( pFootnote );
     if( pLayouter->HasEndnotes() )
@@ -2416,7 +2416,7 @@ SwTwips SwSectionFrame::Grow_(SwTwips nDist, SwResizeLimitReason& reason, bool b
         // #i28701# - Due to the new object positioning
         // the frame on the next page/column can flow backward (e.g. it
         // was moved forward due to the positioning of its objects ).
-        // Thus, invalivate this next frame, if document compatibility
+        // Thus, invalidate this next frame, if document compatibility
         // option 'Consider wrapping style influence on object positioning' is ON.
         else if ( GetFormat()->getIDocumentSettingAccess().get(DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION) )
         {

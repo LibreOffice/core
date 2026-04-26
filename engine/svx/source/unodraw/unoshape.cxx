@@ -2180,13 +2180,13 @@ bool SvxShape::setPropertyValueImpl( const OUString&, const SfxItemPropertyMapEn
                     // #123616# be a little bit more flexible regarding the data type used
                     if( auto s = o3tl::tryAccess<drawing::PointSequenceSequence>(rValue) )
                     {
-                        // get polygpon data from PointSequenceSequence
+                        // get polygon data from PointSequenceSequence
                         aNewPolyPolygon = basegfx::utils::UnoPointSequenceSequenceToB2DPolyPolygon(
                             *s);
                     }
                     else if( auto cs = o3tl::tryAccess<drawing::PolyPolygonBezierCoords>(rValue) )
                     {
-                        // get polygpon data from PolyPolygonBezierCoords
+                        // get polygon data from PolyPolygonBezierCoords
                         aNewPolyPolygon = basegfx::utils::UnoPolyPolygonBezierCoordsToB2DPolyPolygon(
                             *cs);
                     }

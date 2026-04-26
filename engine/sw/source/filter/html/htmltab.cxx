@@ -3179,7 +3179,7 @@ std::unique_ptr<HTMLTableCnts> SwHTMLParser::InsertTableContents(
         SetNodeNum( nLvl );
     }
 
-    // Reset attributation start
+    // Reset attribution start
     const SwNode& rSttPara = m_pPam->GetPoint()->GetNode();
     sal_Int32 nSttCnt = m_pPam->GetPoint()->GetContentIndex();
 

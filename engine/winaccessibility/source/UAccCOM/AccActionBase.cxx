@@ -190,7 +190,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccActionBase::get_keyBinding(
  */
 COM_DECLSPEC_NOTHROW STDMETHODIMP CAccActionBase::put_XInterface(hyper pXInterface)
 {
-    // internal IUNOXWrapper - no mutex meeded
+    // internal IUNOXWrapper - no mutex needed
 
     try {
 

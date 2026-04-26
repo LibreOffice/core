@@ -38,7 +38,7 @@ namespace framework
 {
 
 // Wrapper class to notify controller about events from edit.
-// Unfortunaltly the events are notified through virtual methods instead
+// Unfortunately the events are notified through virtual methods instead
 // of Listeners.
 
 class EditControl final : public InterimItemWindow

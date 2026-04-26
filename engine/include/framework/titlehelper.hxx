@@ -64,7 +64,7 @@ class UNLESS_MERGELIBS_MORE(FWK_DLLPUBLIC) TitleHelper final :
         /** set an outside component which uses this container and must be set
             as source of all broadcasted messages, exceptions.
 
-            It's holded weak only so we do not need any complex dispose sessions.
+            It's held weak only so we do not need any complex dispose sessions.
 
             Note: Passing NULL as parameter will be allowed. It will reset the internal
             member reference only.

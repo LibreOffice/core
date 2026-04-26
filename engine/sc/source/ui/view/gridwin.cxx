@@ -1947,7 +1947,7 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
         return;
     }
 
-    if ( bDetective )               // Detectiv fill mode
+    if ( bDetective )               // Detective fill mode
     {
         if ( rMEvt.IsLeft() && !rMEvt.GetModifier() )
         {

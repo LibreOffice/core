@@ -217,7 +217,7 @@ void SwHHCWrapper::ChangeText( const OUString &rNewText,
     if (rNewText.isEmpty())
         return;
 
-    if (pOffsets && pCursor)  // try to keep as much attributation as possible ?
+    if (pOffsets && pCursor)  // try to keep as much attribution as possible ?
     {
         // remember cursor start position for later setting of the cursor
         const SwPosition *pStart = pCursor->Start();

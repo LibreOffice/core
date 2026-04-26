@@ -845,7 +845,7 @@ window.L.Map = window.L.Evented.extend({
 	},
 
 	// If map size has already been updated, invalidateSize needs the oldSize to work properly
-	// (e.g. if getSize() has already been called whith _sizeChanged === true)
+	// (e.g. if getSize() has already been called with _sizeChanged === true)
 	invalidateSize: function (debounceMoveend, oldSize) {
 		if (!this._loaded) { return this; }
 

@@ -1659,7 +1659,7 @@ function showWelcomeSVG() {
 			delete this.send;
 			delete this._setPollInterval;
 			delete this.close;
-			// HACK: We need this to complete the override because ProxySocket messed up the protoype chain... evenually I want to convert it to a Real Class which will fix it
+			// HACK: We need this to complete the override because ProxySocket messed up the prototype chain... eventually I want to convert it to a Real Class which will fix it
 		}
 
 		send(data) {

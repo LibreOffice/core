@@ -805,9 +805,9 @@ namespace osl_Thread
 
                 StopWatch aStopWatch;
                 aStopWatch.start();
-                // TimeValue aTimeVal_befor;
-                // osl_getSystemTime( &aTimeVal_befor );
-                //t_print("#join:the system time is %d,%d\n", pTimeVal_befor->Seconds,pTimeVal_befor->Nanosec);
+                // TimeValue aTimeVal_before;
+                // osl_getSystemTime( &aTimeVal_before );
+                //t_print("#join:the system time is %d,%d\n", pTimeVal_before->Seconds,pTimeVal_before->Nanosec);
 
                 aCountThread->join();
 
@@ -815,7 +815,7 @@ namespace osl_Thread
                 // TimeValue aTimeVal_after;
                 // osl_getSystemTime( &aTimeVal_after );
                 aStopWatch.stop();
-                // sal_uInt32 nSec  = aTimeVal_after.Seconds - aTimeVal_befor.Seconds;
+                // sal_uInt32 nSec  = aTimeVal_after.Seconds - aTimeVal_before.Seconds;
                 double nSec = aStopWatch.getSeconds();
                 t_print("join_001 nSec=%f\n", nSec);
                 delete aCountThread;
@@ -839,8 +839,8 @@ namespace osl_Thread
                 CPPUNIT_ASSERT_MESSAGE ( "Can't start thread!", bRes );
 
                 //record the time when the running begin
-                // TimeValue aTimeVal_befor;
-                // osl_getSystemTime( &aTimeVal_befor );
+                // TimeValue aTimeVal_before;
+                // osl_getSystemTime( &aTimeVal_before );
                 StopWatch aStopWatch;
                 aStopWatch.start();
 
@@ -850,7 +850,7 @@ namespace osl_Thread
                 //the below line will be executed after aCountThread terminate
                 // TimeValue aTimeVal_after;
                 // osl_getSystemTime( &aTimeVal_after );
-                // sal_uInt32 nSec  = aTimeVal_after.Seconds - aTimeVal_befor.Seconds;
+                // sal_uInt32 nSec  = aTimeVal_after.Seconds - aTimeVal_before.Seconds;
                 aStopWatch.stop();
                 double nSec = aStopWatch.getSeconds();
                 t_print("join_002 nSec=%f\n", nSec);
@@ -1506,7 +1506,7 @@ namespace osl_Thread
 
                 aStopWatch.stop();
 
-                // sal_uInt32 nSec  = aTimeVal_after.Seconds - aTimeVal_befor.Seconds;
+                // sal_uInt32 nSec  = aTimeVal_after.Seconds - aTimeVal_before.Seconds;
                 double nTenthSec = aStopWatch.getTenthSec();
                 double nSec = aStopWatch.getSeconds();
                 delete aCountThread;

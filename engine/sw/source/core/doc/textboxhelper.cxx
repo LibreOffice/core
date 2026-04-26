@@ -241,7 +241,7 @@ void SwTextBoxHelper::set(SwFrameFormat* pShapeFormat, SdrObject* pObj,
     // If there is a format, check if the shape already has a textbox assigned to.
     if (auto& pTextBoxNode = pShapeFormat->GetOtherTextBoxFormats())
     {
-        // If it has a texbox, destroy it.
+        // If it has a textbox, destroy it.
         if (pTextBoxNode->GetTextBox(pObj))
             pTextBoxNode->DelTextBox(pObj, true);
         // And set the new one.
@@ -250,7 +250,7 @@ void SwTextBoxHelper::set(SwFrameFormat* pShapeFormat, SdrObject* pObj,
     }
     else
     {
-        // If the shape do not have a texbox node and textbox,
+        // If the shape do not have a textbox node and textbox,
         // create that for the shape.
         auto pTextBox = std::make_shared<SwTextBoxNode>(SwTextBoxNode(pShapeFormat));
         pTextBox->AddTextBox(pObj, pFormat);

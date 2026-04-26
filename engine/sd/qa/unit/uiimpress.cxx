@@ -889,7 +889,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf45617_Double_Copy)
     OUString aMasterPageName = pMasterPage->GetName();
     CPPUNIT_ASSERT_EQUAL(u"master"_ustr, aMasterPageName);
 
-    // Reslect the master page
+    // Reselect the master page
     rSSController.GetPageSelector().DeselectAllPages();
     rSSController.GetPageSelector().SelectPage(pMasterPage);
 
@@ -904,7 +904,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf45617_Double_Copy)
     OUString aNewMasterPageName = pNewMasterPage->GetName();
     CPPUNIT_ASSERT_EQUAL(u"1_master"_ustr, aNewMasterPageName);
 
-    // Reslect the master page
+    // Reselect the master page
     rSSController.GetPageSelector().DeselectAllPages();
     rSSController.GetPageSelector().SelectPage(pMasterPage);
 
@@ -917,7 +917,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf45617_Double_Copy)
     OUString aNewMasterPageName2 = pNewMasterPage2->GetName();
     CPPUNIT_ASSERT_EQUAL(u"2_master"_ustr, aNewMasterPageName2);
 
-    // Reslect the master page
+    // Reselect the master page
     rSSController.GetPageSelector().DeselectAllPages();
     rSSController.GetPageSelector().SelectPage(pMasterPage);
 
@@ -954,7 +954,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf45617_Double_Copy_Default)
     OUString aMasterPageName = pMasterPage->GetName();
     CPPUNIT_ASSERT_EQUAL(u"Default"_ustr, aMasterPageName);
 
-    // Reslect the master page
+    // Reselect the master page
     rSSController.GetPageSelector().DeselectAllPages();
     rSSController.GetPageSelector().SelectPage(pMasterPage);
 
@@ -969,7 +969,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf45617_Double_Copy_Default)
     OUString aNewMasterPageName = pNewMasterPage->GetName();
     CPPUNIT_ASSERT_EQUAL(u"1_Default"_ustr, aNewMasterPageName);
 
-    // Reslect the master page
+    // Reselect the master page
     rSSController.GetPageSelector().DeselectAllPages();
     rSSController.GetPageSelector().SelectPage(pMasterPage);
     // Copy again
@@ -981,7 +981,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf45617_Double_Copy_Default)
     OUString aNewMasterPageName2 = pNewMasterPage2->GetName();
     CPPUNIT_ASSERT_EQUAL(u"2_Default"_ustr, aNewMasterPageName2);
 
-    // Reslect the master page
+    // Reselect the master page
     rSSController.GetPageSelector().DeselectAllPages();
     rSSController.GetPageSelector().SelectPage(pMasterPage);
     // Copy again
@@ -1010,7 +1010,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf45617_Double_Copy_CopiedPage)
     OUString aMasterPageName = pMasterPage->GetName();
     CPPUNIT_ASSERT_EQUAL(u"Master3"_ustr, aMasterPageName);
 
-    // Reslect the master page
+    // Reselect the master page
     rSSController.GetPageSelector().DeselectAllPages();
     rSSController.GetPageSelector().SelectPage(pMasterPage);
     // Copy and paste the master page
@@ -1023,7 +1023,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf45617_Double_Copy_CopiedPage)
     OUString aNewMasterPageName = pNewMasterPage->GetName();
     CPPUNIT_ASSERT_EQUAL(u"1_Master3"_ustr, aNewMasterPageName);
 
-    // Reslect the master page
+    // Reselect the master page
     rSSController.GetPageSelector().DeselectAllPages();
     rSSController.GetPageSelector().SelectPage(pNewMasterPage);
     // Copy again
@@ -1036,7 +1036,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf45617_Double_Copy_CopiedPage)
     OUString aNewMasterPageName2 = pNewMasterPage2->GetName();
     CPPUNIT_ASSERT_EQUAL(u"2_Master3"_ustr, aNewMasterPageName2);
 
-    // Reslect the master page
+    // Reselect the master page
     rSSController.GetPageSelector().DeselectAllPages();
     rSSController.GetPageSelector().SelectPage(pNewMasterPage2);
     // Copy again
@@ -1049,7 +1049,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf45617_Double_Copy_CopiedPage)
     OUString aNewMasterPageName3 = pNewMasterPage3->GetName();
     CPPUNIT_ASSERT_EQUAL(u"3_Master3"_ustr, aNewMasterPageName3);
 
-    // Reslect the master page
+    // Reselect the master page
     rSSController.GetPageSelector().DeselectAllPages();
     rSSController.GetPageSelector().SelectPage(pNewMasterPage);
     // Copy again

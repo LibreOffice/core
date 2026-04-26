@@ -958,12 +958,12 @@ class ShapeHandlesSection extends CanvasSectionObject {
 				if (diffX < minX) {
 					minX = diffX;
 					this.sectionProperties.closestX = innerRectangle.x1 + (countX * gapX);
-					this.sectionProperties.pickedIndexX = [1, 3].includes(i) ? 0 : 1; // Do we substract width or not.
+					this.sectionProperties.pickedIndexX = [1, 3].includes(i) ? 0 : 1; // Do we subtract width or not.
 				}
 				if (diffY < minY) {
 					minY = diffY;
 					this.sectionProperties.closestY = innerRectangle.y1 + (countY * gapY);
-					this.sectionProperties.pickedIndexY = [2, 3].includes(i) ? 0 : 1; // Do we substract height or not.
+					this.sectionProperties.pickedIndexY = [2, 3].includes(i) ? 0 : 1; // Do we subtract height or not.
 				}
 			}
 		}

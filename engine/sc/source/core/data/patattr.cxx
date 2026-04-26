@@ -583,7 +583,7 @@ static const T* lcl_populateresult( TypedWhichId<T> nWhich, const SfxItemSet& rS
         if (rSrcSet.GetItemState(nWhich, false, &pThisItem) == SfxItemState::SET
             && *pThisItem != rSrcSet.GetPool()->GetUserOrPoolDefaultItem(nWhich))
         {
-            // use the direct cell format value againts the Table style format
+            // use the direct cell format value against the Table style format
             // if it not a default one (COL_BLACK is the default in case of Table Styles)
             // on the cell level
             if (sal_uInt16(nWhich) == ATTR_FONT_COLOR
@@ -1004,7 +1004,7 @@ static void lcl_populate( std::optional<T>& rxItem, TypedWhichId<T> nWhich, cons
         if (rSrcSet.GetItemState(nWhich, false, &pThisItem) == SfxItemState::SET
             && *pThisItem != rSrcSet.GetPool()->GetUserOrPoolDefaultItem(nWhich))
         {
-            // use the direct cell format value againts the Table style format
+            // use the direct cell format value against the Table style format
             // if it not a default one (COL_BLACK is the default in case of Table Styles)
             // on the cell level
             if (sal_uInt16(nWhich) == ATTR_FONT_COLOR

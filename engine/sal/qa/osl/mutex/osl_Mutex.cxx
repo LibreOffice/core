@@ -699,8 +699,8 @@ namespace osl_ClearableGuard
             ClearGuardThread myThread(&aMutex);
             myThread.create();
 
-            TimeValue aTimeVal_befor;
-            osl_getSystemTime( &aTimeVal_befor );
+            TimeValue aTimeVal_before;
+            osl_getSystemTime( &aTimeVal_before );
             // wait 1 second to assure the child thread has begun
             ThreadHelper::thread_sleep(1);
 
@@ -714,7 +714,7 @@ namespace osl_ClearableGuard
             }
             TimeValue aTimeVal_after;
             osl_getSystemTime( &aTimeVal_after );
-            sal_Int32 nSec = aTimeVal_after.Seconds - aTimeVal_befor.Seconds;
+            sal_Int32 nSec = aTimeVal_after.Seconds - aTimeVal_before.Seconds;
             printf("nSec is %" SAL_PRIdINT32 "\n", nSec);
 
             myThread.join();

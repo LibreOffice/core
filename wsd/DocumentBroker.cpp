@@ -2391,7 +2391,7 @@ bool DocumentBroker::updateStorageLockStateAsync(const std::shared_ptr<ClientSes
     }
 
     // Do *not* capture the session shared_ptr, to let it close if necessary.
-    // Instead, we capture a weak_ptr, which allows for graceful cleanup of closed sesssions.
+    // Instead, we capture a weak_ptr, which allows for graceful cleanup of closed sessions.
     StorageBase::AsyncLockStateCallback asyncLockCallback =
         [this](const StorageBase::AsyncLockUpdate& asyncLock)
     {

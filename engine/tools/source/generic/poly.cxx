@@ -45,7 +45,7 @@
 #include <limits.h>
 #include <cmath>
 
-// Best approximation of circle with Bazier curve.
+// Best approximation of circle with Bezier curve.
 // Euclidean error between two curves is 0.00735
 constexpr double fKappa = 4.0 / 3.0 * (M_SQRT2 - 1);
 

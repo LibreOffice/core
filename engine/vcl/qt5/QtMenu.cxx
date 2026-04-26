@@ -51,7 +51,7 @@ static inline void lcl_force_menubar_layout_update(QMenuBar& rMenuBar)
 {
     // just exists as a function to not comment it everywhere: forces reposition of the
     // corner widget after its layout changes, which will otherwise just happen on resize.
-    // it unfortunatly has additional side effects; see QtMenu::GetMenuBarButtonRectPixel.
+    // it unfortunately has additional side effects; see QtMenu::GetMenuBarButtonRectPixel.
     rMenuBar.adjustSize();
 }
 
@@ -888,7 +888,7 @@ tools::Rectangle QtMenu::GetMenuBarButtonRectPixel(sal_uInt16 nId, SalFrame* pFr
     auto* pButton = static_cast<QPushButton*>(m_pButtonGroup->button(nId));
     assert(pButton);
 
-    // unfortunatly, calling lcl_force_menubar_layout_update results in a temporary wrong menubar size,
+    // unfortunately, calling lcl_force_menubar_layout_update results in a temporary wrong menubar size,
     // but it's the correct minimal size AFAIK and the layout seems correct, so just adjust the width.
     QPoint aPos = pButton->mapTo(mpFrame->asChild(), QPoint());
     aPos.rx() += (mpFrame->asChild()->width() - mpQMenuBar->width());

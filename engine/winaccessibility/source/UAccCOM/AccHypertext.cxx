@@ -369,7 +369,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHypertext::get_hyperlinkIndex(long charInd
 */
 COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHypertext::put_XInterface(hyper pXInterface)
 {
-    // internal IUNOXWrapper - no mutex meeded
+    // internal IUNOXWrapper - no mutex needed
 
     try
     {

@@ -61,7 +61,7 @@ struct SwFieldGroupRgn
     sal_uInt16 nEnd;
 };
 
-// the field manager handles the insertation of fields
+// the field manager handles the insertion of fields
 // with command strings
 struct SwInsertField_Data
 {
@@ -191,7 +191,7 @@ public:
     sal_uInt16          GetFormatId(SwFieldTypesEnum nTypeId, sal_uInt32 nFormatId) const;
     sal_uInt32          GetDefaultFormat(SwFieldTypesEnum nTypeId, bool bIsText, SvNumberFormatter* pFormatter);
 
-    // turn off evaluation of expression fields for insertation
+    // turn off evaluation of expression fields for insertion
     // of many expression fields (see labels)
 
     inline void     SetEvalExpFields(bool bEval);

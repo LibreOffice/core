@@ -186,7 +186,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccRelation::get_targets(long, IUnknown** tar
 */
 COM_DECLSPEC_NOTHROW STDMETHODIMP CAccRelation::put_XSubInterface(hyper pXSubInterface)
 {
-    // internal IUNOXWrapper - no mutex meeded
+    // internal IUNOXWrapper - no mutex needed
 
     relation = *reinterpret_cast<AccessibleRelation*>(pXSubInterface);
     return S_OK;

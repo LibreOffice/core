@@ -557,7 +557,7 @@ static bool isControlList(const SdrMarkList& rMarkList)
         // E3dObject's do not contain any 2D-objects (by definition)
         // we need this extra check here : an E3dObject->IsGroupObject says "YES", but an SdrObjListIter working
         // with an E3dObject doesn't give me any Nodes (E3dObject has a sub list, but no members in that list,
-        // cause there implementation differs from the one of "normal" SdrObject's. Unfortunally SdrObject::IsGroupObject
+        // cause there implementation differs from the one of "normal" SdrObject's. Unfortunately SdrObject::IsGroupObject
         // doesn't check the element count of the sub list, which is simply a bug in IsGroupObject we can't fix at the moment).
         // So at the end of this function bControlList would have the same value it was initialized with above : sal_True
         // And this would be wrong :)

@@ -736,7 +736,7 @@ XclExpCFImpl::XclExpCFImpl( const XclExpRoot& rRoot, const ScCondFormatEntry& rF
 
     XclExpFormulaCompiler& rFmlaComp = GetFormulaCompiler();
 
-    // Explicity registers external references if the formula contains any
+    // Explicitly registers external references if the formula contains any
     std::unique_ptr< ScTokenArray > xScTokArr( mrFormatEntry.CreateFlatCopiedTokenArray( 0 ) );
     mxTokArr1 = rFmlaComp.CreateFormula( EXC_FMLATYPE_CONDFMT, *xScTokArr );
 

@@ -1653,7 +1653,7 @@ void XclExpChartObj::SaveXml( XclExpXmlStream& rStrm )
         sal_Int32 nChartCount = rStrm.getNewChartUniqueId();
         sal_Int32 nID = rStrm.GetUniqueId();
         aChartExport.WriteChartObj( mxShape, nID, nChartCount );
-        // TODO: get the correcto chart number
+        // TODO: get the correct chart number
     }
 
     pDrawing->singleElement( FSNS( XML_xdr, XML_clientData)

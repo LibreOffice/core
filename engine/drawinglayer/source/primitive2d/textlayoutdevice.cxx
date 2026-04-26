@@ -188,7 +188,7 @@ void TextLayouterDevice::setFontAttribute(const attribute::FontAttribute& rFontA
     if (aFontSize.Height())
     {
         mnFontScalingFixY = fFontScaleY / aFontSize.Height();
-        // aFontSize.Width() is 0 for uninformly scaled fonts: see getVclFontFromFontAttribute
+        // aFontSize.Width() is 0 for uniformly scaled fonts: see getVclFontFromFontAttribute
         mnFontScalingFixX
             = fFontScaleX / (aFontSize.Width() ? aFontSize.Width() : aFontSize.Height());
     }

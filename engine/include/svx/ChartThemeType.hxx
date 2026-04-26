@@ -60,7 +60,7 @@ public:
 
 // It is a list of themes for charts.
 // All of them contains separete properties for different chart elements.
-// TODO: it is a singleton .. probably we shoul find a new place to store it.
+// TODO: it is a singleton .. probably we should find a new place to store it.
 class ChartThemesType
 {
 public:
@@ -73,7 +73,7 @@ public:
 
     static ChartThemesType* m_aInstance;
 
-    // the first FixedCount Themes are not customiyable, they are pre-defined
+    // the first FixedCount Themes are not customizable, they are pre-defined
     static constexpr sal_Int32 FixedCount = 4;
     sal_uInt32 getThemesCount() { return m_aThemes.size(); }
     static sal_uInt32 getThemesPreDefCount() { return FixedCount; }

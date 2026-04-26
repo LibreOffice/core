@@ -2088,7 +2088,7 @@ class UIManager extends window.L.Control {
 			}}
 		], cancelButtonId);
 		if (!buttonText && !withCancel) {
-			// if no buttons better to set tabIndex to negative so the element is not reachable via sequential keyboard navigation but can be focused programatically
+			// if no buttons better to set tabIndex to negative so the element is not reachable via sequential keyboard navigation but can be focused programmatically
 			const dialogElement = document.getElementById(dialogId);
 			if (dialogElement != null) {
 				dialogElement.tabIndex = -1;

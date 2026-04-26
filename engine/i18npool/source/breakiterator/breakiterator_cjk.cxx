@@ -64,7 +64,7 @@ LineBreakResults SAL_CALL BreakIterator_CJK::getLineBreak(
             case 0x00A0: // No-break Space
             case 0x2011: // Non-breaking Hyphen
             case 0x202F: // Narrow No-break Space
-            case 0x2060: // Word Joinner
+            case 0x2060: // Word Joiner
             case 0xFEFF: // NWNBSP
                 return true;
             default:

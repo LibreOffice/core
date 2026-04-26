@@ -482,7 +482,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest11, testTdf163194)
         CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
         auto pPage = pPdfDocument->openPage(0);
         CPPUNIT_ASSERT(pPage);
-        // 595 pt corresponts to 210 mm (withh of A4)
+        // 595 pt corresponds to 210 mm (width of A4)
         CPPUNIT_ASSERT_DOUBLES_EQUAL(595, pPage->getWidth(), 1.0);
         auto pTextPage = pPage->getTextPage();
         CPPUNIT_ASSERT(pTextPage);

@@ -26,7 +26,7 @@ RTFEncoding const aRTFEncodings[] = {
     { 79, 10003 }, // Mac Hangul
     { 80, 10008 }, // Mac GB2312
     { 81, 10002 }, // Mac Big5
-    { 83, 10005 }, // Mac Herbrew
+    { 83, 10005 }, // Mac Hebrew
     { 84, 10004 }, // Mac Arabic
     { 85, 10006 }, // Mac Greek
     { 86, 10081 }, // Mac Turkish
@@ -41,7 +41,7 @@ RTFEncoding const aRTFEncodings[] = {
     { 161, 1253 }, // Greek
     { 162, 1254 }, // Turkish
     { 163, 1258 }, // Vietnamese
-    { 177, 1255 }, // Herbrew
+    { 177, 1255 }, // Hebrew
     { 178, 1256 }, // Arabic
     { 186, 1257 }, // Baltic
     { 204, 1251 }, // Russian

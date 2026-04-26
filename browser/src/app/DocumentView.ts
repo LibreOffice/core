@@ -67,7 +67,7 @@ class DocumentViewBase {
 				const rectangle = group[group.length - 1];
 
 				// Max y of current group. We will check if next rectangle can join this group.
-				// If it can not, then it will start a new, seperate polygon.
+				// If it can not, then it will start a new, separate polygon.
 				const yMaxOfGroup = rectangle[1] + rectangle[3];
 
 				if (Math.abs(yMaxOfGroup - rectangles[0][1]) < 5)

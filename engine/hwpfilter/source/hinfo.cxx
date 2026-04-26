@@ -71,7 +71,7 @@ HWPInfo::~HWPInfo()
  */
 void HWPInfo::Read(HWPFile & hwpf)
 {
-    hwpf.Read2b(&cur_col, 1);                     /* When a document is saving, the paragraph number where the coursor is */
+    hwpf.Read2b(&cur_col, 1);                     /* When a document is saving, the paragraph number where the cursor is */
     hwpf.Read2b(&cur_row, 1);                     /* Paragraphs rows */
 
     hwpf.Read1b(paper.paper_kind);                /* Paper Type */

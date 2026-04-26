@@ -127,7 +127,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccComponent::get_background(IA2Color* backgr
  */
 COM_DECLSPEC_NOTHROW STDMETHODIMP CAccComponent::put_XInterface(hyper pXInterface)
 {
-    // internal IUNOXWrapper - no mutex meeded
+    // internal IUNOXWrapper - no mutex needed
 
     try
     {

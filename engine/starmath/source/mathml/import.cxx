@@ -688,7 +688,7 @@ void SmMLImportContext::inheritStyle()
             break;
     }
 
-    // Parent inheritation
+    // Parent inheritance
     // Mathcolor, mathsize, dir and displaystyle are inherited from parent
     SmMlElement* pParent = *m_pParent;
     m_pElement->setAttribute(pParent->getAttribute(SmMlAttributeValueType::MlMathcolor));

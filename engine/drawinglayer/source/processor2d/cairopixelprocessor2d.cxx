@@ -1440,7 +1440,7 @@ void CairoPixelProcessor2D::paintBitmapAlpha(const Bitmap& rBitmap,
     cairo_matrix_scale(&aMatrix, cairo_image_surface_get_width(pTarget),
                        cairo_image_surface_get_height(pTarget));
 
-    // The alternative wpuld be: resize/scale it SLIGHTLY to force
+    // The alternative would be: resize/scale it SLIGHTLY to force
     // that half pixel overlap to be inside the unit range.
     // That makes the error disappear, so no clip needed, but
     // SLIGHTLY smaller. Keeping this code if someone might have

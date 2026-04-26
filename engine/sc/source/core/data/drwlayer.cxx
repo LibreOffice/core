@@ -1564,7 +1564,7 @@ void ScDrawLayer::MoveArea( SCTAB nTab, SCCOL nCol1,SCROW nRow1, SCCOL nCol2,SCR
             aTopLeft.AdjustY(aMove.Y() );
     }
 
-        //      Detectiv arrows: Adjust cell position
+        //      Detective arrows: Adjust cell position
 
     MoveCells( nTab, nCol1,nRow1, nCol2,nRow2, nDx,nDy, bUpdateNoteCaptionPos );
 }

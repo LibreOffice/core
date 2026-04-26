@@ -208,7 +208,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccValue::get_minimumValue(VARIANT* minimumVa
    */
 COM_DECLSPEC_NOTHROW STDMETHODIMP CAccValue::put_XInterface(hyper pXInterface)
 {
-    // internal IUNOXWrapper - no mutex meeded
+    // internal IUNOXWrapper - no mutex needed
 
     try
     {

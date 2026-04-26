@@ -877,7 +877,7 @@ window.L.Control.JSDialog = window.L.Control.extend({
 			|| (instance.title && instance.title !== '');
 		instance.nonModal = !instance.isModalPopUp && !instance.isDocumentAreaPopup && !instance.isSnackbar;
 
-		// Make a better seperation between popups and modals.
+		// Make a better separation between popups and modals.
 		if (instance.isDocumentAreaPopup)
 			instance.isModalPopUp = false;
 

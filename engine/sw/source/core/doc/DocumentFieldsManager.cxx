@@ -217,7 +217,7 @@ SwFieldType* DocumentFieldsManager::InsertFieldType(const SwFieldType &rFieldTyp
     {
     case SwFieldIds::SetExp:
             //JP 29.01.96: SequenceFields start at INIT_FLDTYPES - 3!!
-            //             Or we get doubble number circles!!
+            //             Or we get double number circles!!
             //MIB 14.03.95: From now on also the SW3-Reader relies on this, when
             //constructing string pools and when reading SetExp fields
             if( SwGetSetExpType::Sequence & static_cast<const SwSetExpFieldType&>(rFieldTyp).GetType() )
@@ -304,7 +304,7 @@ SwFieldType* DocumentFieldsManager::GetFieldType(
     {
     case SwFieldIds::SetExp:
             //JP 29.01.96: SequenceFields start at INIT_FLDTYPES - 3!!
-            //             Or we get doubble number circles!!
+            //             Or we get double number circles!!
             //MIB 14.03.95: From now on also the SW3-Reader relies on this, when
             //constructing string pools and when reading SetExp fields
         i = INIT_FLDTYPES - INIT_SEQ_FLDTYPES;

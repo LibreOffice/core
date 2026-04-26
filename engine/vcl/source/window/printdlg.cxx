@@ -354,7 +354,7 @@ void PrintDialog::PrintPreviewWindow::preparePreviewBitmap()
     // tdf#141761
     // The display quality of the Preview is pretty ugly when
     // FormControls are used. I made a deep-dive why this happens,
-    // and in principle the reason is the Mteafile::Scale used
+    // and in principle the reason is the Metafile::Scale used
     // below. Since Metafile actions are integer, that floating point
     // scale leads to rounding errors that make the lines painting
     // the FormControls disappear in the surrounding ClipRegions.

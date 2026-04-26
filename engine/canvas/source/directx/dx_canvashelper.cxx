@@ -754,7 +754,7 @@ namespace dxcanvas
         {
             GraphicsPathSharedPtr aClipPath( dxcanvastools::graphicsPathFromXPolyPolygon2D( viewState.Clip ) );
 
-            // TODO(P3): Cache clip. SetClip( GraphicsPath ) performs abyssmally on GDI+.
+            // TODO(P3): Cache clip. SetClip( GraphicsPath ) performs abysmally on GDI+.
             // Try SetClip( Rect ) or similar for simple clip paths (need some support in
             // LinePolyPolygon, then)
             ENSURE_OR_THROW(
@@ -787,7 +787,7 @@ namespace dxcanvas
         {
             GraphicsPathSharedPtr aClipPath( dxcanvastools::graphicsPathFromXPolyPolygon2D( renderState.Clip ) );
 
-            // TODO(P3): Cache clip. SetClip( GraphicsPath ) performs abyssmally on GDI+.
+            // TODO(P3): Cache clip. SetClip( GraphicsPath ) performs abysmally on GDI+.
             // Try SetClip( Rect ) or similar for simple clip paths (need some support in
             // LinePolyPolygon, then)
             ENSURE_OR_THROW(

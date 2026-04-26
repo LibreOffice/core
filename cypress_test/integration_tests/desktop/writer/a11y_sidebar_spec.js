@@ -144,7 +144,7 @@ describe(['tagdesktop'], 'Accessibility Writer Sidebar Tests', { testIsolation: 
 		helper.processToIdle(win);
 		runA11yValidation(win);
 
-		// Exit the math edit code, which conviently for testing gives
+		// Exit the math edit code, which conveniently for testing gives
 		// the 'empty' placeholder sidebar
 		helper.typeIntoDocument('{esc}');
 

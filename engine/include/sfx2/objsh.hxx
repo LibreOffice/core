@@ -691,7 +691,7 @@ public:
                                sal_Int32 nVersion,
                                bool bTemplate = false) const = 0;
 
-    // change recording and respective passwword protection for Writer and Calc
+    // change recording and respective password protection for Writer and Calc
     // slots available for Writer:  FN_REDLINE_ON, FN_REDLINE_ON
     // slots used for Calc:         FID_CHG_RECORD, SID_CHG_PROTECT
     virtual bool    IsChangeRecording(SfxViewShell* pViewShell = nullptr, bool bRecordAllViews = true) const;

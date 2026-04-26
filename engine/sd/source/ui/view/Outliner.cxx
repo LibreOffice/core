@@ -1656,7 +1656,7 @@ void SdOutliner::SetViewMode (PageKind ePageKind)
     if (xFuSearch.is() && pNewViewShell->GetView())
         pNewViewShell->GetView()->getSearchContext().setSearchFunction(xFuSearch);
 
-    // Switching to another view shell has intermediatly called
+    // Switching to another view shell has intermediately called
     // EndSpelling().  A PrepareSpelling() is pending, so call that now.
     PrepareSpelling();
 

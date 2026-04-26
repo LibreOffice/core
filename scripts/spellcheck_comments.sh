@@ -9,8 +9,8 @@ SCRIPT_DIR="$(dirname "$(realpath "$0")")"
 # sort and uniqify the list
 # filter out whitelist entries (manually checked)
 
-git ls-files '*.css' '*.js' '*.ts' '*.*pp' | xargs grep -Eho "//.*|/\*.*?\*/" | \
+git ls-files '*.css' '*.js' '*.ts' '*.*pp' '*.*xx' | xargs grep -Eho "//.*|/\*.*?\*/" | \
 hunspell -l | \
 grep -E '^[A-Z]?[a-z]*$' | \
 sort | uniq | \
-grep -F -v -f $SCRIPT_DIR/spelling_whitelist.txt
+grep -F -v -w -f $SCRIPT_DIR/spelling_whitelist.txt

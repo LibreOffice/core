@@ -44,7 +44,7 @@ namespace framework
 {
 
 // Wrapper class to notify controller about events from combobox.
-// Unfortunaltly the events are notified through virtual methods instead
+// Unfortunately the events are notified through virtual methods instead
 // of Listeners.
 
 class SpinfieldControl final : public InterimItemWindow

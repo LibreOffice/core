@@ -170,7 +170,7 @@ ScVbaCommandBar::Type()
 uno::Any SAL_CALL
 ScVbaCommandBar::FindControl( const uno::Any& /*aType*/, const uno::Any& /*aId*/, const uno::Any& /*aTag*/, const uno::Any& /*aVisible*/, const uno::Any& /*aRecursive*/ )
 {
-    // alwayse fail to find control
+    // always fail to find control
     return uno::Any( uno::Reference< XCommandBarControl > () );
 }
 

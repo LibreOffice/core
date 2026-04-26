@@ -799,7 +799,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::unselectColumn(long column)
  */
 COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::put_XInterface(hyper pXInterface)
 {
-    // internal IUNOXWrapper - no mutex meeded
+    // internal IUNOXWrapper - no mutex needed
 
     try {
 

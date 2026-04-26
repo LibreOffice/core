@@ -565,7 +565,7 @@ export class Comment extends CanvasSectionObject {
 
 	private handleKeyDownForPopup (ev: any, id: string): void {
 		var popup = this.map._textInput._handleKeyDownForPopup(ev, id);
-		// Block Esc from propogating if it closes the comment mention Popup
+		// Block Esc from propagating if it closes the comment mention Popup
 		if (popup && id === 'mentionPopup' && ev.key === 'Escape') {
 			ev.preventDefault();
 			ev.stopPropagation();

@@ -460,7 +460,7 @@ static void do_hullo_handling_things(WindowData& data)
 
     // First we must send the URL. This corresponds to the GET request with Upgrade to WebSocket.
     // This *must* be the first message written to the "client" thread. We don't need to do this
-    // write in a separate thread, and we can't, because if we do that, we will occasionaly run into
+    // write in a separate thread, and we can't, because if we do that, we will occasionally run into
     // a bug when the "coolclient" message sent by the JS is received and gets forwarded to the
     // "client" thread before we have written the URL to it.
 

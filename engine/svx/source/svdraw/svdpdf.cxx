@@ -1402,7 +1402,7 @@ static void buildCMapAndFeatures(const OUString& CMapUrl, SvFileStream& Features
             if (usedCodes.insert(sChars).second == false)
             {
                 // This can happen with e.g. unicode '1' mapped to from two variants of that glyph,
-                // in the absense of a better idea, prefer the first one seen
+                // in the absence of a better idea, prefer the first one seen
                 SAL_INFO("sd.filter", "code: " << sChars << " for glyph " << nGlyphIndex
                                                << " already used earlier");
                 continue;

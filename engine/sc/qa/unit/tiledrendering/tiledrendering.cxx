@@ -1653,7 +1653,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testJumpToLastRowInvalidation)
     CPPUNIT_ASSERT_EQUAL(tools::Rectangle(0, 13005, 26775, 261375), aView1.m_aInvalidations[0]);
 }
 
-// We need to ensure that views are not perterbed by rendering (!?) hmm ...
+// We need to ensure that views are not perturbed by rendering (!?) hmm ...
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testRowColumnHeaders)
 {
     ScModelObj* pModelObj = createDoc("empty.ods");

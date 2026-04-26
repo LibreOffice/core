@@ -77,7 +77,7 @@ window.L.Control.Zotero = window.L.Control.extend({
 				continue;
 			}
 
-			// Reset citations only once but avoid resetting it if we only recieved bib fields
+			// Reset citations only once but avoid resetting it if we only received bib fields
 			if (resetCitations) {
 				resetCitations = false;
 				this.resetCitation();

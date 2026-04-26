@@ -212,7 +212,7 @@ ScVbaWSFunction::invoke(const OUString& FunctionName, const uno::Sequence< uno::
     }
 
 #if 0
-    // MATCH function should alwayse return a double value, but currently if the first argument is XCellRange, MATCH function returns an array instead of a double value. Don't know why?
+    // MATCH function should always return a double value, but currently if the first argument is XCellRange, MATCH function returns an array instead of a double value. Don't know why?
     // To fix this issue in safe, current solution is to convert this array to a double value just for MATCH function.
     OUString aUpper( FunctionName.toAsciiUpperCase() );
     ScCompiler aCompiler( NULL, ScAddress() );
@@ -251,7 +251,7 @@ ScVbaWSFunction::hasMethod(const OUString& Name)
     bool bIsFound = false;
     try
     {
-        // the function name contained in the com.sun.star.sheet.FunctionDescription service is alwayse localized.
+        // the function name contained in the com.sun.star.sheet.FunctionDescription service is always localized.
         // but the function name used in WorksheetFunction is a programmatic name (seems English).
         // So m_xNameAccess->hasByName( Name ) may fail to find name when a function name has a localized name.
         if( ScCompiler::IsEnglishSymbol( Name ) )

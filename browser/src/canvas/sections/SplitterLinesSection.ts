@@ -62,7 +62,7 @@ class SplitterLinesSection extends CanvasSectionObject {
 		let selectionBackgroundGradient = null;
 
 		Util.ensureValue(app.map._docLayer.sheetGeometry);
-		// last row geometry data will be a good for setting deafult raw height
+		// last row geometry data will be a good for setting default raw height
 		const spanlist = app.map._docLayer.sheetGeometry
 			.getRowsGeometry()
 			.getVisibleSizes()._spanlist;

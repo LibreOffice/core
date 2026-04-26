@@ -438,7 +438,7 @@ CPPUNIT_TEST_FIXTURE(Test, testMathVerticalstacks)
 CPPUNIT_TEST_FIXTURE(Test, testTdf49073)
 {
     auto verify = [this]() {
-        // test case for Asian phontic guide (ruby text.)
+        // test case for Asian phonetic guide (ruby text.)
         sal_Unicode aRuby[3] = { 0x304D, 0x3082, 0x3093 };
         OUString sRuby(aRuby, SAL_N_ELEMENTS(aRuby));
         CPPUNIT_ASSERT_EQUAL(sRuby,

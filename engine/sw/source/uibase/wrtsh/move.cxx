@@ -448,7 +448,7 @@ bool SwWrtShell::PushCursor(SwTwips lOffset, bool bSelect)
     bool bDiff = false;
     SwRect aOldRect( GetCharRect() ), aTmpArea( VisArea() );
 
-    // m_bDestOnStack indicates if I could not set the coursor at the current
+    // m_bDestOnStack indicates if I could not set the cursor at the current
     // position, because in this region is no content.
     if( !m_bDestOnStack )
     {

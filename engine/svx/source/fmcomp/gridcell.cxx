@@ -1289,7 +1289,7 @@ void DbFormattedField::Init( BrowserDataWin& rParent, const Reference< XRowSet >
             {
                 SAL_INFO("svx.fmcomp", "DbFormattedField::Init : my uno-model has no format-key, but a formats supplier !");
                 // the OFormattedModel which we usually are working with ensures that the model has a format key
-                // as soon as the form is loaded. Unfortunally this method here is called from within loaded, too.
+                // as soon as the form is loaded. Unfortunately this method here is called from within loaded, too.
                 // So if our LoadListener is called before the LoadListener of the model, this "else case" is
                 // allowed.
                 // Of course our property listener for the FormatKey property will notify us if the prop is changed,

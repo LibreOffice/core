@@ -2085,7 +2085,7 @@ static void lcl_SetOrGetThemeToOrFromElement(bool bSet, ChartThemeType& aTheme,
                     uno::Any aValue;
                     if (aPropSeq.getLength() > 0)
                     {
-                        // clear the theme properties, and reserve enought for the current style
+                        // clear the theme properties, and reserve enough for the current style
                         // TODO: we may want to keep some that cannot be overwritten?
                         aProperties.clear();
                         aProperties.reserve(aPropSeq.getLength());

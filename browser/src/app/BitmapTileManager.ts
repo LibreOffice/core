@@ -505,7 +505,7 @@ class BitmapTileManager {
 			(app.sectionContainer.getHeight() + tileSize - 1) / tileSize,
 		);
 
-		// Read-only views can much more agressively pre-load
+		// Read-only views can much more aggressively pre-load
 		return (
 			Math.ceil((viewTileWidth * viewTileHeight) / 4) *
 			(!this._hasEditPerm ? 4 : 1)

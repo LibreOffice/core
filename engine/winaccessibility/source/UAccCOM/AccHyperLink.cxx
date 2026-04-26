@@ -260,7 +260,7 @@ CAccHyperLink::get_valid(/* [retval][out] */ boolean __RPC_FAR* valid)
 */
 COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHyperLink::put_XInterface(hyper pXInterface)
 {
-    // internal IUNOXWrapper - no mutex meeded
+    // internal IUNOXWrapper - no mutex needed
 
     try
     {
@@ -291,7 +291,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHyperLink::put_XInterface(hyper pXInterfac
 */
 COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHyperLink::put_XSubInterface(hyper pXSubInterface)
 {
-    // internal IUNOXWrapper - no mutex meeded
+    // internal IUNOXWrapper - no mutex needed
 
     m_xHyperlink = reinterpret_cast<XAccessibleHyperlink*>(pXSubInterface);
     pRXAct = reinterpret_cast<XAccessibleAction*>(pXSubInterface);

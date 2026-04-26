@@ -715,7 +715,7 @@ namespace
             assertXPath(pXmlDoc, xpath, "font-family", u"SimSun");
             assertXPath(pXmlDoc, xpath, "font-weight", u"normal");
             // FIXME and remove the below comment:
-            // the chinese chars are shown in pdf as faux italic (fake italic). It is currencly imported wrongly as normal font style.
+            // the chinese chars are shown in pdf as faux italic (fake italic). It is currently imported wrongly as normal font style.
             // See tdf#78427 for how the faux bold problem was handled. Faux italic may be handled using the transformation pattern.
             // assertXPath(pXmlDoc, xpath, "font-style", "italic");
 

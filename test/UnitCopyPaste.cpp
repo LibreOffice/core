@@ -276,7 +276,7 @@ public:
         // This suffers a very interesting race, which is
         // that the getClipboard command may end up
         // anywhere within the Kit queue, even before the
-        // other commands preceeding it in this test!
+        // other commands preceding it in this test!
         // As an example: in the 'Inject content' case we
         // send .uno:Deselect, paste, .uno:SelectAll,
         // .uno:Copy (all through the WebSocket), and an

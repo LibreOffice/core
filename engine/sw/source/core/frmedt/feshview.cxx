@@ -284,7 +284,7 @@ bool SwFEShell::SelectObj( const Point& rPt, sal_uInt8 nFlag, SdrObject *pObj )
 
     // for Diagrams force to the svx MarkObj version below that will handle
     // SubSelection correctly. CAUTION: Keyboard travel calls the same method
-    // so make sure to only do that on mouseklick and if we got a position
+    // so make sure to only do that on mouseclick and if we got a position
     if (pObj && 0 != rPt.getX() && 0 != rPt.getY() && (SW_FROM_KLICK & nFlag) && pObj->isDiagram())
         pObj = nullptr;
 

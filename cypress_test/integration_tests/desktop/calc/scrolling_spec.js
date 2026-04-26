@@ -96,7 +96,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Scroll through document', 
 		helper.waitForTimers(this.win, 'autoscroll');
 		cy.cGet('#document-container').realMouseUp({ pointer: 'mouse', button: 'left' });
 
-		// Allow the change to propogate to core and it to update the addressInputSelector
+		// Allow the change to propagate to core and it to update the addressInputSelector
 		helper.processToIdle(this.win);
 		// Without the fix, the selected range is of the form A17:A22, instead of A17:D22
 		// It's better not to check the exact range because it can easily change in different executions

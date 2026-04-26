@@ -238,8 +238,8 @@ struct ImplSVGDIData
     lru_scale_cache         maScaleCache = lru_scale_cache(10); // Cache for scaled images
     vcl::font::DirectFontSubstitution* mpDirectFontSubst = nullptr; // Font-Substitutions defined in Tools->Options->Fonts
     std::unique_ptr<GraphicConverter> mxGrfConverter;       // Converter for graphics
-    tools::Long                    mnAppFontX = 0;                 // AppFont X-Numenator for 40/tel Width
-    tools::Long                    mnAppFontY = 0;                 // AppFont Y-Numenator for 80/tel Height
+    tools::Long                    mnAppFontX = 0;                 // AppFont X-Numerator for 40/tel Width
+    tools::Long                    mnAppFontY = 0;                 // AppFont Y-Numerator for 80/tel Height
     bool                    mbFontSubChanged = false;       // true: FontSubstitution was changed between Begin/End
 
     o3tl::lru_map<OUString, Bitmap> maThemeImageCache = o3tl::lru_map<OUString, Bitmap>(10);

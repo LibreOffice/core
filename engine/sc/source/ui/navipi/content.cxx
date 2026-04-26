@@ -393,7 +393,7 @@ IMPL_LINK_NOARG(ScContentTree, ContentDoubleClickHdl, weld::TreeView&, bool)
                     if (ScPostIt* pNote = pSrcDoc ? pSrcDoc->GetNote(aPos.Col(), aPos.Row(), aPos.Tab()) : nullptr)
                     {
                         bool bVisible = pNote->IsCaptionShown();
-                        // Effectivelly set the visibility of the comment
+                        // Effectively set the visibility of the comment
                         GetManualOrCurrent()->GetDocFunc().ShowNote(aPos, !bVisible);
                         // Put the note in edit mode
                         ScTabViewShell* pScTabViewShell = ScNavigatorDlg::GetTabViewShell();

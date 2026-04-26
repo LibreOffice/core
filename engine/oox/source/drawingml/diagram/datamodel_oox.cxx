@@ -269,7 +269,7 @@ void DiagramData_oox::writeDiagramData(DrawingML& rOriginalDrawingML, sax_fastpa
 
     // write ExtList & it's contents
     // Note: I *tried* to use XML_dsp and xmlns:dsp, but these are not defined, thus
-    // for this case where the only relevant data is the 'relId' entzry I will allow
+    // for this case where the only relevant data is the 'relId' entry I will allow
     // to construct the XML statement by own string concatenation
     rTarget->startElementNS(XML_dgm, XML_extLst);
     const OUString rNsDsp(pOriginalFB->getNamespaceURL(OOX_NS(dsp)));

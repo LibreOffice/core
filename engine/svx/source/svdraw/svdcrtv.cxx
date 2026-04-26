@@ -637,7 +637,7 @@ bool SdrCreateView::EndCreateObj(SdrCreateCmd eCmd)
                     // model coordinates. If we have e.g. a GirdOffset, this is a
                     // little bit tricky - we have an object in model coordinates,
                     // so the fetched offset is at the wrong point in principle
-                    // since we need to 'substract' the offset here to get to
+                    // since we need to 'subtract' the offset here to get to
                     // 'real' model coordinates. But we have nothing better here,
                     // so go for it.
                     // The 2nd a little tricky thing is that this will early-create

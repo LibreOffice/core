@@ -312,7 +312,7 @@ static uno::Any createPolyPolygon_Cone( double fHeight, double fRadius, double f
     OSL_PRECOND(fRadius>0, "The radius of a cone needs to be > 0");
 
     //for stacked charts we need cones without top -> fTopHeight != 0 resp. bTopless == true
-    //fTopHeight indicates the high of the cutted top only (not the full height)
+    //fTopHeight indicates the high of the cut top only (not the full height)
     bool bTopless = !::rtl::math::approxEqual( fHeight, fHeight + fTopHeight );
 
     double r1= 0.0, r2 = fRadius;

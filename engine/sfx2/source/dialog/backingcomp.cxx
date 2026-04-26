@@ -577,7 +577,7 @@ void SAL_CALL BackingComp::dispose()
                 not used.
 
     @throw  css::uno::RuntimeException
-                because the listener expect to be holded alive by this container.
+                because the listener expect to be held alive by this container.
                 We must inform it about this unsupported feature.
  */
 

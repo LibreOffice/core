@@ -395,7 +395,7 @@ XMLTransformerActionInit const aActionTable[] =
     // process table::conversion-mode
     ENTRY1( XML_NAMESPACE_TABLE, XML_CONVERSION_MODE, XML_ETACTION_PROC_ATTRS, OOO_DDE_CONV_MODE_ACTIONS ),
 
-    // fix <text:alphabatical-index-mark text:main-etry>
+    // fix <text:alphabetical-index-mark text:main-entry>
     ENTRY1( XML_NAMESPACE_TEXT, XML_ALPHABETICAL_INDEX_MARK,       XML_ETACTION_PROC_ATTRS, OOO_ALPHABETICAL_INDEX_MARK_ACTIONS ),
     ENTRY1( XML_NAMESPACE_TEXT, XML_ALPHABETICAL_INDEX_MARK_START, XML_ETACTION_PROC_ATTRS, OOO_ALPHABETICAL_INDEX_MARK_ACTIONS ),
 

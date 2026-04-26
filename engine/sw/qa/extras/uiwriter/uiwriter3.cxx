@@ -2134,7 +2134,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, TestAsCharTextBox)
     auto pExportDump = parseLayoutDump();
     CPPUNIT_ASSERT(pExportDump);
 
-    // Check if the texbox fallen apart due to the tabs
+    // Check if the textbox fallen apart due to the tabs
     const double nLeftSideOfShape1
         = getXPath(pExportDump, "/root/page/body/txt/anchored/SwAnchoredDrawObject/bounds", "left")
               .toDouble();
@@ -2163,7 +2163,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, TestAsCharTextBox)
               .toDouble();
 
     CPPUNIT_ASSERT(nTopSideOfShape2 < nTopSideOfTxBx2);
-    // Without the fix in place the two texboxes has been fallen apart, and  asserts will broken.
+    // Without the fix in place the two textboxes has been fallen apart, and  asserts will broken.
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf155028)

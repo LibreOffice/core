@@ -2616,7 +2616,7 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
                             pFly->GetAttrSet()->GetBackground();
                         //     #GetTransChg#
                         //     following condition determines, if the fly frame
-                        //     "inherites" the background color of text frame.
+                        //     "inherits" the background color of text frame.
                         //     This is the case, if fly frame background
                         //     color is "no fill"/"auto fill" and if the fly frame
                         //     has no background graphic.

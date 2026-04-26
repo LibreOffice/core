@@ -88,7 +88,7 @@ void LwpFribNote::RegisterNewStyle()
     {
         //register font style
         LwpFrib::RegisterStyle(m_pPara->GetFoundry());
-        //register foonote style
+        //register footnote style
         pLayout->SetFoundry(m_pPara->GetFoundry());
         pLayout->DoRegisterStyle();
     }

@@ -148,7 +148,7 @@ class SlideShowNavigator {
 			'SlideShowNavigator.skipAllEffects: current index: ' + this.currentSlide,
 		);
 		if (this.presenter.isFollower()) {
-			// skip only upto leader's current effect
+			// skip only up to leader's current effect
 			const nToSkip =
 				this.currentLeaderEffect - this.slideShowHandler.getCurrentEffect();
 			if (nToSkip > 0) this.slideShowHandler.skipNEffects(nToSkip);

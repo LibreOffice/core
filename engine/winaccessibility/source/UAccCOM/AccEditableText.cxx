@@ -483,7 +483,7 @@ void CAccEditableText::get_AnyFromOLECHAR(std::u16string_view ouName, const OUSt
  */
 COM_DECLSPEC_NOTHROW STDMETHODIMP CAccEditableText::put_XInterface(hyper pXInterface)
 {
-    // internal IUNOXWrapper - no mutex meeded
+    // internal IUNOXWrapper - no mutex needed
 
     try
     {

@@ -46,7 +46,7 @@ private:
     css::uno::Reference< css::container::XNameAccess > getFormControls() const;
 
 protected:
-    // this should be SwXTextDocument, but the inheritance hierarchy makes that impossoble
+    // this should be SwXTextDocument, but the inheritance hierarchy makes that impossible
     virtual SfxBaseModel* getModel() const override;
 
 public:

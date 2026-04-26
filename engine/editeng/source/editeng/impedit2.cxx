@@ -3404,7 +3404,7 @@ void ImpEditEngine::IterateLineAreas(const IterateLinesAreasFunc& f, IterFlag eO
                             const sal_uInt16 nMaxAscent(rLine.GetMaxAscent());
                             nUrlYJump = nMaxAscent * (pExtraInfo->lineBreaksList.size() - 1);
                             // if this is not the end of the line ..
-                            // if some caracters (even a soft-break) follows the link
+                            // if some characters (even a soft-break) follows the link
                             if (nLine + 1 < nLines)
                             {
                                 bUrlYSkipLine = true;

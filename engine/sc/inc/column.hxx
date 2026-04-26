@@ -668,7 +668,7 @@ public:
     void BroadcastCells( const std::vector<SCROW>& rRows, SfxHintId nHint );
     void BroadcastRows( SCROW nStartRow, SCROW nEndRow, SfxHintId nHint );
 
-    // Spaklines
+    // Sparklines
     sc::SparklineCell* GetSparklineCell(SCROW nRow);
     void CreateSparklineCell(SCROW nRow, std::shared_ptr<sc::Sparkline> const& pSparkline);
     void DeleteSparklineCells(sc::ColumnBlockPosition& rBlockPos, SCROW nRow1, SCROW nRow2);

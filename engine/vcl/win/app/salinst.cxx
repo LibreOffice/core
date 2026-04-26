@@ -816,7 +816,7 @@ int WinSalInstance::WorkaroundExceptionHandlingInUSER32Lib(int, LPEXCEPTION_POIN
 {
     // Decide if an exception is a c++ (mostly UNO) exception or a process violation.
     // Depending on this information we pass process violations directly to our signal handler ...
-    // and c++ (UNO) exceptions are sended to the following code on the current stack.
+    // and c++ (UNO) exceptions are sent to the following code on the current stack.
     // Problem behind: user32.dll sometime consumes exceptions/process violations .-)
     // see also #112221#
 

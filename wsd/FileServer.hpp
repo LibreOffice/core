@@ -115,7 +115,7 @@ public:
         const std::string& accessToken() const { return _accessToken; }
         const std::string& noAuthHeader() const { return _noAuthHeader; }
         const std::string& permission() const { return _permission; }
-        // only exists in debugging mode, so built-in wopi debuging server
+        // only exists in debugging mode, so built-in wopi debugging server
         // can support multiple 'shared' configs depending on configid=something
         const std::string& wopiConfigId() const { return _wopiConfigId; }
 

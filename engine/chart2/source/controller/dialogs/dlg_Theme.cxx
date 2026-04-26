@@ -148,8 +148,8 @@ IMPL_LINK_NOARG(SchThemeDlg, ClickSaveHdl, weld::Button&, void)
     mpController->saveTheme(nIndex);
 
     //update the image of the list
-    // TODO: we could gain a bit of performance by not cloneing the chart
-    // because the new theme was creayed from the selected chart.
+    // TODO: we could gain a bit of performance by not cloning the chart
+    // because the new theme was created from the selected chart.
     ScopedVclPtr<VirtualDevice> device1 = makeImage(nIndex);
 
     mxThemeIconView->set_image(nIndex, *device1);

@@ -1471,12 +1471,12 @@ static void lcl_SubtractFlys( const SwFrame *pFrame, const SwPageFrame *pPage,
             // have not to be subtracted from given region.
             // But, if method is called for a fly frame and
             // <pFly> is a direct lower of this fly frame and
-            // <pFly> inherites its transparent background brush from its parent,
+            // <pFly> inherits its transparent background brush from its parent,
             // then <pFly> frame area have to be subtracted from given region.
             // NOTE: Because in Status Quo transparent backgrounds can only be
             //     assigned to fly frames, the handle of this special case
             //     avoids drawing of transparent areas more than once, if
-            //     a fly frame inherites a transparent background from its
+            //     a fly frame inherits a transparent background from its
             //     parent fly frame.
             if (pFrame->IsFlyFrame() &&
                 (pFly->GetAnchorFrame()->FindFlyFrame() == pFrame) &&

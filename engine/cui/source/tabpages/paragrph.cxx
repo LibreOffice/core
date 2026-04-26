@@ -542,7 +542,7 @@ bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
         if ( MapUnit::Map100thMM != eUnit )
         {
 
-            // negative first line indent -> set null default tabstob if applicable
+            // negative first line indent -> set null default tabstop if applicable
             sal_uInt16 _nWhich = GetWhich( SID_ATTR_TABSTOP );
             const SfxItemSet& rInSet = GetItemSet();
 

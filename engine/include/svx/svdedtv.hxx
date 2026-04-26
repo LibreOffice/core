@@ -89,7 +89,7 @@ protected:
     bool m_bOrthoDesiredOnMarked : 1;
     bool m_bOneOrMoreMovable : 1;        // at least one object is moveable
     bool m_bMoreThanOneNoMovRot : 1;     // more than one object is not movable nor turnable (Crook)
-    bool m_bContortionPossible : 1;      // all polygones (grouped if necessary)
+    bool m_bContortionPossible : 1;      // all polygons (grouped if necessary)
     bool m_bMoveAllowed : 1;
     bool m_bResizeFreeAllowed : 1;
     bool m_bResizePropAllowed : 1;
@@ -270,7 +270,7 @@ public:
 
     // Unite several objects to a polygon:
     // - rectangles/circles/text... are implicitly converted.
-    // - polygones are closed automatically
+    // - polygons are closed automatically
     // - attributes and layer are taken from the first object marked
     //   (thus from lowest Z-order).
     // - group objects are included when all (!) member objects of
@@ -293,7 +293,7 @@ public:
 
     // Decompose marked polypolygon objects into polygons.
     // Grouped objects are searched and decomposed, if all member objects are PathObjs.
-    // bMakeLines=TRUE:  all polygones are decomposed into single lines resp. bezier segments
+    // bMakeLines=TRUE:  all polygons are decomposed into single lines resp. bezier segments
     void DismantleMarkedObjects(bool bMakeLines=false);
     bool IsCombinePossible(bool bNoPolyPoly=false) const;
     bool IsDismantlePossible(bool bMakeLines=false) const;
@@ -363,7 +363,7 @@ public:
     bool IsUnGroupPossible() const { ForcePossibilities(); return m_bUnGroupPossible; }
     bool IsGroupEnterPossible() const { ForcePossibilities(); return m_bGrpEnterPossible; }
 
-    // Convert marked objects to polygones/Beziercurves. The bool-functions
+    // Convert marked objects to polygons/Beziercurves. The bool-functions
     // return sal_True, if at least one marked object could be converted.
     // Also member objects of group objects are converted.
     // For a better description see: SdrObj.HXX

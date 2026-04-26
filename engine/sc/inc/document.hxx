@@ -1343,7 +1343,7 @@ public:
      */
     sc::MultiDataCellState HasMultipleDataCells( const ScRange& rRange ) const;
 
-    // Spaklines
+    // Sparklines
     /** Returns sparkline at the address if it exists */
     SC_DLLPUBLIC std::shared_ptr<sc::Sparkline> GetSparkline(ScAddress const & rPosition);
     SC_DLLPUBLIC bool HasSparkline(ScAddress const & rPosition);

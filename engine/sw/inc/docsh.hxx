@@ -322,7 +322,7 @@ public:
 
     virtual const ::sfx2::IXmlIdRegistry* GetXmlIdRegistry() const override;
 
-    /** passwword protection for Writer (derived from SfxObjectShell)
+    /** password protection for Writer (derived from SfxObjectShell)
      see also:    FN_REDLINE_ON, FN_REDLINE_ON */
     virtual bool    IsChangeRecording(SfxViewShell* pViewShell = nullptr, bool bRecordAllViews = true) const override;
     virtual bool    HasChangeRecordProtection() const override;

@@ -210,7 +210,7 @@ void LoggingTests::testLogPrefix()
     }
 #endif
 
-    ::setenv("TZ", timezoneName.data(), 1); // Restore the timeezone.
+    ::setenv("TZ", timezoneName.data(), 1); // Restore the timezone.
 }
 
 void LoggingTests::testGetTimeForLog()

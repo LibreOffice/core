@@ -286,7 +286,7 @@ sal_Int16 WorkbookSettings::getApiShowObjectMode() const
 
 css::util::Date const & WorkbookSettings::getNullDate() const
 {
-    // Excel (inacurrately) treats Feb 29, 1900 as a valid date (for compatibility with Lotus).
+    // Excel (inaccurately) treats Feb 29, 1900 as a valid date (for compatibility with Lotus).
     // AFAICS, only Strict .xlsx treats that date as invalid
     // (regardless of whether dateCompatibility="0" or "1").
     // Thus the only purpose of dateCompatibility="1" is to determine the oldest recognizable date

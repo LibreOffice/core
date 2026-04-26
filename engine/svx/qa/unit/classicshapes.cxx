@@ -193,7 +193,7 @@ CPPUNIT_TEST_FIXTURE(ClassicshapesTest, testTdf130076Flip)
 
 CPPUNIT_TEST_FIXTURE(ClassicshapesTest, testTdf139968ShearRotateArcFlip)
 {
-    // The document contains an arc that is rotated and sheared. When horizonally flipped, start and
+    // The document contains an arc that is rotated and sheared. When horizontally flipped, start and
     // end angles had got wrong values.
     loadFromFile(u"tdf139968_shear45_rot30.odg");
 

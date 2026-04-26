@@ -1883,7 +1883,7 @@ namespace wmfemfhelper
                             {
                                 rTargetHolders.Push();
 
-                                // for sub-Mteafile contents, do start with new, default render state
+                                // for sub-Metafile contents, do start with new, default render state
                                 // #i124686# ...but copy font, this is already set accordingly
                                 vcl::Font aTargetFont = rPropertyHolders.Current().getFont();
                                 rPropertyHolders.PushDefault();
@@ -2710,7 +2710,7 @@ namespace wmfemfhelper
                             drawinglayer::primitive2d::Primitive2DContainer xSubContent;
                             {
                                 rTargetHolders.Push();
-                                // #i# for sub-Mteafile contents, do start with new, default render state
+                                // #i# for sub-Metafile contents, do start with new, default render state
                                 rPropertyHolders.PushDefault();
                                 implInterpretMetafile(rContent, rTargetHolders, rPropertyHolders, rViewInformation);
                                 xSubContent = rTargetHolders.Current().getPrimitive2DSequence(rPropertyHolders.Current());

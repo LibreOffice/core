@@ -406,7 +406,7 @@ public:
     }
 };
 
-/// Constructs ConvertToBroker implamentation based on request type
+/// Constructs ConvertToBroker implementation based on request type
 static std::shared_ptr<ConvertToBroker>
 getConvertToBrokerImplementation(const std::string& requestType, const std::string& fromPath,
                                  const Poco::URI& uriPublic, const std::string& docKey,

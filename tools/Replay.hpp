@@ -321,11 +321,11 @@ struct Stats {
         return PerfMetricInfo(std::move(testPhase), "CPU Usage (us)", cpuUsage);
     }
 
-    std::vector<PerfMetricInfo> getNetworkStats(size_t recievedKb, size_t sentKb, const std::string& testPhase)
+    std::vector<PerfMetricInfo> getNetworkStats(size_t receivedKb, size_t sentKb, const std::string& testPhase)
     {
         std::vector<PerfMetricInfo> networkStatsList;
 
-        networkStatsList.emplace_back(testPhase, "Bytes recieved (kB)", recievedKb);
+        networkStatsList.emplace_back(testPhase, "Bytes received (kB)", receivedKb);
         networkStatsList.emplace_back(testPhase, "Bytes sent (kB)", sentKb);
 
         return networkStatsList;

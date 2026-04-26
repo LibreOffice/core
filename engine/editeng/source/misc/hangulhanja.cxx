@@ -742,7 +742,7 @@ namespace editeng
         //
         // aOffsets is needed in ReplaceUnit below in order to find out
         // exactly which characters are really changed in order to keep as much
-        // from attributation for the text as possible.
+        // from attribution for the text as possible.
         Sequence< sal_Int32 > aOffsets;
         if (m_eConvType == HHC::eConvSimplifiedTraditional && m_xConverter.is())
         {

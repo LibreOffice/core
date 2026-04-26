@@ -41,7 +41,7 @@ abstract class SidebarBase extends JSDialogComponent {
 			mobileWizard: this,
 			map: this.map,
 			windowId: WindowId.Sidebar,
-			cssClass: `jsdialog sidebar`, // use sidebar css for now, maybe have seperate css for navigator later
+			cssClass: `jsdialog sidebar`, // use sidebar css for now, maybe have separate css for navigator later
 			useScrollAnimation: false, // icon views cause jump on sidebar open
 			suffix: 'sidebar',
 			callback: this.callback.bind(this),

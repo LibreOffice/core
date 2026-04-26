@@ -202,7 +202,7 @@ void AquaGraphicsBackend::setClipRegion(vcl::Region const& rRegion)
     mrShared.unsetClipPath();
     mrShared.mxClipPath = CGPathCreateMutable();
 
-    // set current path, either as polypolgon or sequence of rectangles
+    // set current path, either as polypolygon or sequence of rectangles
     RectangleVector aRectangles;
     rRegion.GetRegionRectangles(aRectangles);
 
