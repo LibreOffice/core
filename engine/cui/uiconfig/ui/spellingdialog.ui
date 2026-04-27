@@ -296,7 +296,7 @@
                         <child internal-child="accessible">
                           <object class="AtkObject" id="errorsentence-atkobject">
                             <property name="AtkObject::accessible-role">text</property>
-                            <property name="AtkObject::accessible-description" translatable="yes" context="spellingdialog|extended_tip|sentence">Displays the sentence with the misspelled word highlighted. Edit the word or the sentence, or click one of the suggestions in the text box below.</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="spellingdialog|extended_tip|sentence">Displays the sentence with the misspelled word highlighted. Edit the word or the sentence, or click one of the suggestions in the Suggestions list.</property>
                           </object>
                         </child>
                       </object>
