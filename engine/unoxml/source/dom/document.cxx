@@ -85,7 +85,7 @@ namespace DOM
         return cur;
     }
 
-#if defined __GNUC__ && !defined __clang__ && __GNUC__ == 16
+#if defined __GNUC__ && !defined __clang__ && __GNUC__ >= 16 && __GNUC__ <= 17
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
 #endif
@@ -96,7 +96,7 @@ namespace DOM
         , m_pEventDispatcher(new events::CEventDispatcher)
     {
     }
-#if defined __GNUC__ && !defined __clang__ && __GNUC__ == 16
+#if defined __GNUC__ && !defined __clang__ && __GNUC__ >= 16 && __GNUC__ <= 17
 #pragma GCC diagnostic pop
 #endif
 

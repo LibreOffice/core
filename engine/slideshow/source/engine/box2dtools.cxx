@@ -728,12 +728,12 @@ Box2DBodySharedPtr box2DWorld::createStaticBody(const slideshow::internal::Shape
     }
 
     return std::make_shared<box2DBody>(pBody, mfScaleFactor);
-#if defined __GNUC__ && !defined __clang__ && __GNUC__ == 16
+#if defined __GNUC__ && !defined __clang__ && __GNUC__ >= 16 && __GNUC__ <= 17
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Warray-bounds"
 #endif
 }
-#if defined __GNUC__ && !defined __clang__ && __GNUC__ == 16
+#if defined __GNUC__ && !defined __clang__ && __GNUC__ >= 16 && __GNUC__ <= 17
 #pragma GCC diagnostic pop
 #endif
 
