@@ -8,7 +8,7 @@ if [ -n "${abs_srcdir}" ]; then
 fi
 
 if [ ! -d "${srcdir}/.git" ]; then
-    gitdir=$(git rev-parse --git-common-dir)
+    gitdir=$(git -C ${srcdir} rev-parse --git-common-dir)
     if [ ! -d "${gitdir}" ]; then
         exit 0
     fi

@@ -958,7 +958,7 @@ endif
 endif
 
 all-local: $(ALL_LOCAL_DEPS) @JAILS_PATH@ @CACHE_PATH@ $(SYSTEM_STAMP)
-	@$(abs_top_srcdir)/scripts/refresh-git-hooks
+	@abs_srcdir='$(abs_top_srcdir)' $(abs_top_srcdir)/scripts/refresh-git-hooks
 
 # just run the build without any tests
 build-nocheck: all-am
