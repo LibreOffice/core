@@ -3,7 +3,8 @@
 
 #online-help-content-box,
 #keyboard-shortcuts-content-box {
-	h1 {
+	h1,
+	.help-dialog-header {
 		text-align: center;
 	}
 
