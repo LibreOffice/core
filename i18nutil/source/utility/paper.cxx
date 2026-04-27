@@ -19,11 +19,12 @@
 
 #include <sal/config.h>
 
+#include <iterator>
+
 #include <o3tl/unit_conversion.hxx>
 #include <o3tl/string_view.hxx>
 #include <officecfg/Setup.hxx>
 #include <officecfg/System.hxx>
-#include <sal/macros.h>
 #include <rtl/ustring.hxx>
 #include <rtl/string.hxx>
 #include <tools/long.hxx>
@@ -159,7 +160,7 @@ constexpr PageDesc aDinTab[] =
 
 };
 
-const size_t nTabSize = SAL_N_ELEMENTS(aDinTab);
+const size_t nTabSize = std::size(aDinTab);
 
 // tdf#151107 make this not just large enough for rounding errors on our side
 // but also large enough to match where the ppd side rounded up to the next
@@ -277,7 +278,7 @@ PaperInfo PaperInfo::getSystemDefaultPaper()
 
                 bool bHalve = false;
 
-                size_t const nExtraTabSize = SAL_N_ELEMENTS(aCustoms);
+                size_t const nExtraTabSize = std::size(aCustoms);
                 for (size_t i = 0; i < nExtraTabSize; ++i)
                 {
                     if (o3tl::equalsIgnoreAsciiCase(aCustoms[i].aName, aPaper))
@@ -369,7 +370,7 @@ PaperInfo PaperInfo::getSystemDefaultPaper()
 
 PaperInfo::PaperInfo(Paper eType) : m_eType(eType)
 {
-    static_assert( SAL_N_ELEMENTS(aDinTab) == NUM_PAPER_ENTRIES,
+    static_assert( std::size(aDinTab) == NUM_PAPER_ENTRIES,
             "mismatch between array entries and enum values" );
 
     m_nPaperWidth = aDinTab[m_eType].m_nWidth;
