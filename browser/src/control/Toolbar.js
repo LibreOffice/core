@@ -550,13 +550,22 @@ window.L.Map.include({
 		const buttons = onlineHelpContent.querySelectorAll('.scroll-button');
 
 		buttons.forEach((button) => {
-			button.addEventListener('click', () => {
-				const targetId = button.dataset.target;
-				if (targetId) {
-					const targetElement = document.getElementById(`${targetId}`);
-					if (targetElement) {
-						targetElement.scrollIntoView();
-					}
+			button.addEventListener('click', (e) => {
+				const href = button.getAttribute('href');
+				if (!href || !href.startsWith('#')) return;
+				const targetElement = document.getElementById(href.substring(1));
+				if (!targetElement) return;
+				// Scroll only the help content area. The browser's default anchor
+				// navigation can scroll the modal popup itself, pushing the
+				// titlebar (and its close button) out of view.
+				e.preventDefault();
+				const scrollContainer = targetElement.closest('.ui-dialog-content');
+				if (scrollContainer) {
+					const containerRect = scrollContainer.getBoundingClientRect();
+					const targetRect = targetElement.getBoundingClientRect();
+					scrollContainer.scrollTop += targetRect.top - containerRect.top;
+				} else {
+					targetElement.scrollIntoView({ block: 'start' });
 				}
 			});
 		});
