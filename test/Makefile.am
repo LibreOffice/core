@@ -112,9 +112,11 @@ all_la_unit_tests = \
 	unit-convert-to-password-protected.la \
 	unit-bad-doc-load.la \
 	unit-hosting.la
-# 	unit-fuzz.la
 #	unit-admin.la
 #	unit-tilecache.la # Empty test.
+else
+all_la_unit_tests = \
+	unit-fuzz.la
 endif
 
 check_LTLIBRARIES = ${all_la_unit_tests}
