@@ -22,14 +22,14 @@
 #include <utility>
 
 SvxGraphicItem::SvxGraphicItem( Graphic _aGraphic )
-    : SfxPoolItem( SID_GRAPHIC ), aGraphic(std::move( _aGraphic ))
+    : SfxPoolItem( SID_GRAPHIC ), m_aGraphic(std::move( _aGraphic ))
 {
 
 }
 
 bool SvxGraphicItem::operator==( const SfxPoolItem& rItem) const
 {
-    return SfxPoolItem::operator==(rItem) && static_cast<const SvxGraphicItem&>(rItem).aGraphic == aGraphic;
+    return SfxPoolItem::operator==(rItem) && static_cast<const SvxGraphicItem&>(rItem).m_aGraphic == m_aGraphic;
 }
 
 SvxGraphicItem* SvxGraphicItem::Clone( SfxItemPool * ) const
