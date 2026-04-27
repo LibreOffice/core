@@ -40,7 +40,7 @@ sub check_whitespaces($)
             print STDERR "$filename:$lineno:$line\n";
         }
     }
-    open( FILES, "git diff-index -p -M --cached $h |" ) ||  die "Cannot run git diff-index.";
+    open( FILES, "git diff-index -p -M --cached $h -- ':(top,exclude)engine/' |" ) ||  die "Cannot run git diff-index.";
     while (<FILES>)
     {
         if (m|^diff --git a/(.*) b/\1$|)
@@ -161,6 +161,11 @@ sub check_prettier()
 
 # Do the work :-)
 
+my $rc = system("cd engine && exec ./.git-hooks/pre-commit");
+if ($rc != 0) {
+    exit($rc >> 8 || 1);
+}
+
 # Initial commit: diff against an empty tree object
 my $against="4b825dc642cb6eb9a060e54bf8d69288fbee4904";
 if ( system( "git rev-parse --verify HEAD >/dev/null 2>&1" ) == 0 )
@@ -178,7 +183,7 @@ if ( $allownonascii ne "true" &&
     # Note that the use of brackets around a tr range is ok here, (it's
     # even required, for portability to Solaris 10's /usr/bin/tr), since
     # the square bracket bytes happen to fall in the designated range.
-    `git diff --cached --name-only --diff-filter=A -z $against | \
+    `git diff --cached --name-only --diff-filter=A -z $against -- ':(top,exclude)engine/' | \
      LC_ALL=C tr -d '[ -~]\\0'` ne "" )
 {
     print <<EOM;
@@ -199,7 +204,7 @@ EOM
 }
 
 # Block large files.
-open( FILES, "git diff --cached --name-only --diff-filter=A -z $against |" ) ||  die "Cannot run git diff.";
+open( FILES, "git diff --cached --name-only --diff-filter=A -z $against -- ':(top,exclude)engine/' |" ) ||  die "Cannot run git diff.";
 while (<FILES>)
 {
     if (/\.ui$/) # .ui files can get large

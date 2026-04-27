@@ -41,14 +41,14 @@ sub check_whitespaces($)
             }
             if ($reported_filename ne $filename)
             {
-                print STDERR "* In $filename\n";
+                print STDERR "* In engine/$filename\n";
                 $reported_filename = $filename;
             }
             print STDERR "* $why (line $lineno)\n";
-            print STDERR "$filename:$lineno:$line\n";
+            print STDERR "engine/$filename:$lineno:$line\n";
         }
     }
-    open( FILES, "git diff-index -p -M --cached $h |" ) ||  die "Cannot run git diff-index.";
+    open( FILES, "git diff-index -p -M --cached --relative $h |" ) ||  die "Cannot run git diff-index.";
     while (<FILES>)
     {
         if (m|^diff --git a/(.*) b/\1$|)
@@ -200,7 +200,7 @@ sub check_style($)
 
     # Get a list of renamed files.
     my %renames; # key is target pathname, value is source pathname
-    open (IN, "git diff-index --cached --find-renames --diff-filter=R --name-status $h |")
+    open (IN, "git diff-index --cached --find-renames --diff-filter=R --name-status --relative $h |")
         || die "Cannot run git diff.";
     while (my $line = <IN>)
     {
@@ -210,7 +210,7 @@ sub check_style($)
     }
 
     # Get a list of non-deleted changed files.
-    open (FILES, "git diff-index --cached --diff-filter=AM --name-only $h |") ||  die "Cannot run git diff.";
+    open (FILES, "git diff-index --cached --diff-filter=AM --name-only --relative $h |") ||  die "Cannot run git diff.";
     while (my $filename = <FILES>)
     {
         chomp $filename;
@@ -247,7 +247,10 @@ sub check_style($)
                 print("(Or read solenv/clang-format/README on how to build it yourself.\n");
                 return;
             }
-            if (!ClangFormat::check_style($clang_format, $filename))
+            chdir("..") or die "Cannot chdir to repo root: $!";
+            my $ok = ClangFormat::check_style($clang_format, "engine/$filename");
+            chdir("engine") or die "Cannot chdir back to engine: $!";
+            if (!$ok)
             {
                 if (defined($renames{$filename}))
                 {
@@ -273,7 +276,7 @@ sub check_style($)
             if (scalar @bad_names)
             {
                 print("You can apply these changes with:\n");
-                print("\n$clang_format -i " . join(" ", @bad_names) . "\n\n");
+                print("\n$clang_format -i " . join(" ", map { "engine/$_" } @bad_names) . "\n\n");
             }
             if (scalar @bad_renames)
             {
@@ -285,12 +288,12 @@ sub check_style($)
                 {
                     if (exists($excluded_list_names->{$renames{$name}}))
                     {
-                        print("* $name got renamed from $renames{$name},\n");
+                        print("* engine/$name got renamed from engine/$renames{$name},\n");
                         print("    which is even still listed in the excludelist!\n");
                     }
                     else
                     {
-                        print("* $name\n");
+                        print("* engine/$name\n");
                     }
                 }
                 print("\n");
@@ -305,11 +308,13 @@ sub check_style($)
             # clang-format automatically.
             print("\nThe above differences were found between the code to commit \n");
             print("and the clang-format rules. Fixing these now automatically.\n");
-            print("Running '$clang_format -i " . join(" ", @bad_names) . "' for you...\n");
-            system("$clang_format -i " . join(" ", @bad_names));
+            print("Running '$clang_format -i " . join(" ", map { "engine/$_" } @bad_names) . "' for you...\n");
+            chdir("..") or die "Cannot chdir to repo root: $!";
+            system("$clang_format -i " . join(" ", map { "engine/$_" } @bad_names));
             # TODO this stages all local modifications, staging originally
             # unstaged hunks.
-            system("git add " . join(" ", @bad_names));
+            system("git add " . join(" ", map { "engine/$_" } @bad_names));
+            chdir("engine") or die "Cannot chdir back to engine: $!";
             print("Done.\n");
         }
     }
@@ -335,7 +340,7 @@ if ( $allownonascii ne "true" &&
     # Note that the use of brackets around a tr range is ok here, (it's
     # even required, for portability to Solaris 10's /usr/bin/tr), since
     # the square bracket bytes happen to fall in the designated range.
-    `git diff --cached --name-only --diff-filter=A -z $against | \
+    `git diff --cached --name-only --diff-filter=A -z --relative $against | \
      LC_ALL=C tr -d '[ -~]\\0'` ne "" )
 {
     print <<EOM;
@@ -356,7 +361,7 @@ EOM
 }
 
 # Block large files.
-open( FILES, "git diff --cached --name-only --diff-filter=A -z $against |" ) ||  die "Cannot run git diff-index.";
+open( FILES, "git diff --cached --name-only --diff-filter=A -z --relative $against |" ) ||  die "Cannot run git diff-index.";
 while (<FILES>)
 {
     if (/\.ui$/) # .ui files can get large
@@ -367,7 +372,7 @@ while (<FILES>)
     {
         continue;
     }
-    my $size = `git cat-file -s :$_`;
+    my $size = `git cat-file -s :./$_`;
     # For now let's say large is 500KB
     my $limit = 500;
     if ($size > $limit * 1024)

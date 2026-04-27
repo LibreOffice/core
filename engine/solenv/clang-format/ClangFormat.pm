@@ -100,7 +100,7 @@ sub check_style($$)
     # Make sure that not staged changes are not considered when diffing.
     my ($clang_format, $filename) = @_;
     my $index = $filename . ".index";
-    system("git show :$filename > $index");
+    system("git show :./$filename > $index");
     my $format = $index . ".format";
     system("'$clang_format' -assume-filename=$filename $index > $format");
     my $ret = system("git --no-pager diff --no-index --exit-code $index $format") == 0;
