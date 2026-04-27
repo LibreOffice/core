@@ -80,6 +80,17 @@
 		/* Adjust margin bottom */
 	}
 
+	/* Strip default browser styling from the TOC list */
+	.toc-list {
+		list-style: none;
+		padding-left: 0;
+		margin: 0;
+	}
+
+	.toc-list .toc-list {
+		padding-left: 1.5em;
+	}
+
 	.screenshot {
 		text-align: center;
 		margin: 0.1in;

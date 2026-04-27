@@ -667,7 +667,7 @@ window.L.Map.include({
 		}.bind(this));
 
 		// select all event scroll elements, main-header elements, product header elements and make visible to user if search term is empty
-		document.querySelectorAll('.m-v-0, .product-header, .help-dialog-header').forEach(function(element) {
+		document.querySelectorAll('.m-v-0, .product-header, .help-dialog-header, .help-toc').forEach(function(element) {
 			this.show(element);
 			element.style.backgroundColor = '';
 		}.bind(this));
