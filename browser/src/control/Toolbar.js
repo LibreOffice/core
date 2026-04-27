@@ -676,7 +676,8 @@ window.L.Map.include({
 		}.bind(this));
 
 		// select all event scroll elements, main-header elements, product header elements and make visible to user if search term is empty
-		document.querySelectorAll('.m-v-0, .product-header, .help-dialog-header, .help-toc').forEach(function(element) {
+		// Exclude doctype-tagged TOC entries so non-current-doctype items stay hidden after search clear
+		document.querySelectorAll('.m-v-0:not(.text):not(.spreadsheet):not(.presentation), .product-header, .help-dialog-header, .help-toc').forEach(function(element) {
 			this.show(element);
 			element.style.backgroundColor = '';
 		}.bind(this));
