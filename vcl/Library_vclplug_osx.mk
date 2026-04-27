@@ -126,6 +126,8 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_osx,\
     vcl/osx/salframe \
     vcl/osx/salgdiutils \
     vcl/osx/salinst \
+    vcl/osx/MacInstance \
+    vcl/osx/salmutex \
     vcl/osx/salmacos \
     vcl/osx/salmenu \
     vcl/osx/salnativewidgets \

@@ -44,26 +44,8 @@
 #include <osl/thread.h>
 
 #include "saltimer.h"
-#include <salframe.hxx>
 #include <tools/debug.hxx>
-
-union RuninmainResult
-{
-    void*                            pointer;
-    bool                             boolean;
-    struct SalFrame::SalPointerState state;
-
-    RuninmainResult() {}
-};
-
-#define OSX_RUNINMAIN_MEMBERS \
-    std::mutex              m_runInMainMutex; \
-    std::condition_variable m_aInMainCondition; \
-    std::condition_variable m_aResultCondition; \
-    bool                    m_wakeUpMain = false; \
-    bool                    m_resultReady = false; \
-    RuninmainBlock          m_aCodeBlock; \
-    RuninmainResult         m_aResult;
+#include <osx/salmutex.hxx>
 
 #define OSX_RUNINMAIN( instance, command ) \
     if ( !instance->IsMainThread() ) \

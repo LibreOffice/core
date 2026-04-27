@@ -50,6 +50,7 @@
 #include <vcl/event.hxx>
 
 #include <osx/saldata.hxx>
+#include <osx/MacInstance.hxx>
 #include <osx/salinst.h>
 #include <osx/salframe.h>
 #include <osx/salobj.h>
@@ -57,13 +58,9 @@
 #include <quartz/salvd.h>
 #include <quartz/salbmp.h>
 #include <quartz/utils.h>
-#include <osx/salprn.h>
 #include <osx/saltimer.h>
 #include <osx/vclnsapp.h>
 #include <osx/runinmain.hxx>
-
-#include <print.h>
-#include <strings.hrc>
 
 #include <comphelper/processfactory.hxx>
 
@@ -131,20 +128,6 @@ public:
     }
 };
 
-}
-
-static OUString& getFallbackPrinterName()
-{
-    static OUString aFallbackPrinter;
-
-    if ( aFallbackPrinter.isEmpty() )
-    {
-        aFallbackPrinter = VclResId( SV_PRINT_DEFPRT_TXT );
-        if ( aFallbackPrinter.isEmpty() )
-            aFallbackPrinter = "Printer";
-    }
-
-    return aFallbackPrinter;
 }
 
 void AquaSalInstance::delayedSettingsChanged( bool bInvalidate )
@@ -216,86 +199,6 @@ void AquaSalInstance::AfterAppInit()
     SalInstance::MacStartupWorkarounds();
 }
 
-AquaSalYieldMutex::AquaSalYieldMutex()
-    : m_aCodeBlock( nullptr )
-{
-}
-
-AquaSalYieldMutex::~AquaSalYieldMutex()
-{
-}
-
-void AquaSalYieldMutex::doAcquire( sal_uInt32 nLockCount )
-{
-    AquaSalInstance *pInst = GetSalData()->mpInstance;
-    if ( pInst && pInst->IsMainThread() )
-    {
-        if ( pInst->mbNoYieldLock )
-            return;
-        do {
-            RuninmainBlock block = nullptr;
-            {
-                std::unique_lock<std::mutex> g(m_runInMainMutex);
-                if (m_aMutex.tryToAcquire()) {
-                    assert(m_aCodeBlock == nullptr);
-                    m_wakeUpMain = false;
-                    break;
-                }
-                // wait for doRelease() or RUNINMAIN_* to set the condition
-                m_aInMainCondition.wait(g, [this]() { return m_wakeUpMain; });
-                m_wakeUpMain = false;
-                std::swap(block, m_aCodeBlock);
-            }
-            if ( block )
-            {
-                assert( !pInst->mbNoYieldLock );
-                pInst->mbNoYieldLock = true;
-                block();
-                pInst->mbNoYieldLock = false;
-                Block_release( block );
-                std::scoped_lock<std::mutex> g(m_runInMainMutex);
-                assert(!m_resultReady);
-                m_resultReady = true;
-                m_aResultCondition.notify_all();
-            }
-        }
-        while ( true );
-    }
-    else
-        m_aMutex.acquire();
-    ++m_nCount;
-    --nLockCount;
-
-    comphelper::SolarMutex::doAcquire( nLockCount );
-}
-
-sal_uInt32 AquaSalYieldMutex::doRelease( const bool bUnlockAll )
-{
-    AquaSalInstance *pInst = GetSalData()->mpInstance;
-    if ( pInst->mbNoYieldLock && pInst->IsMainThread() )
-        return 1;
-    sal_uInt32 nCount;
-    {
-        std::scoped_lock<std::mutex> g(m_runInMainMutex);
-        // read m_nCount before doRelease
-        bool const isReleased(bUnlockAll || m_nCount == 1);
-        nCount = comphelper::SolarMutex::doRelease( bUnlockAll );
-        if (isReleased && !pInst->IsMainThread()) {
-            m_wakeUpMain = true;
-            m_aInMainCondition.notify_all();
-        }
-    }
-    return nCount;
-}
-
-bool AquaSalYieldMutex::IsCurrentThread() const
-{
-    if ( !GetSalData()->mpInstance->mbNoYieldLock )
-        return comphelper::SolarMutex::IsCurrentThread();
-    else
-        return GetSalData()->mpInstance->IsMainThread();
-}
-
 extern "C" {
 VCLPLUG_OSX_PUBLIC SalInstance* create_SalInstance()
 {
@@ -334,13 +237,9 @@ VCLPLUG_OSX_PUBLIC SalInstance* create_SalInstance()
 }
 
 AquaSalInstance::AquaSalInstance()
-    : SalInstance(std::make_unique<AquaSalYieldMutex>(), new SalData)
-    , mnActivePrintJobs( 0 )
-    , mbNoYieldLock( false )
+    : MacInstance()
     , mbTimerProcessed( false )
 {
-    maMainThread = osl::Thread::getCurrentIdentifier();
-
     m_bSupportsOpenGL = true;
 
     mpButtonCell = [[NSButtonCell alloc] init];
@@ -400,7 +299,10 @@ void AquaSalInstance::ProcessEvent( SalUserEvent aEvent )
 
 bool AquaSalInstance::IsMainThread() const
 {
-    return osl::Thread::getCurrentIdentifier() == maMainThread;
+    AquaSalInstance *pInst = GetSalData()->mpInstance;
+    AquaSalYieldMutex *aMutex = static_cast<AquaSalYieldMutex*>(pInst->GetYieldMutex());
+
+    return aMutex->IsMainThread();
 }
 
 void AquaSalInstance::handleAppDefinedEvent( NSEvent* pEvent )
@@ -540,7 +442,7 @@ bool AquaSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents)
 
     // handle cocoa event queue
     // cocoa events may be only handled in the thread the NSApp was created
-    if( IsMainThread() && mnActivePrintJobs == 0 )
+    if( IsMainThread() && HaveActivePrintJobs() == 0 )
     {
         // handle available events
         NSEvent* pEvent = nil;
@@ -813,103 +715,6 @@ void AquaSalInstance::DestroyObject( SalObject* pObject )
 {
     OSX_INST_RUNINMAIN( DestroyObject( pObject ) )
     delete pObject;
-}
-
-std::unique_ptr<SalPrinter> AquaSalInstance::CreatePrinter( SalInfoPrinter* pInfoPrinter )
-{
-    return std::unique_ptr<SalPrinter>(new AquaSalPrinter( dynamic_cast<AquaSalInfoPrinter*>(pInfoPrinter) ));
-}
-
-void AquaSalInstance::GetPrinterQueueInfo(ImplPrnQueueList& rList)
-{
-    NSArray* pNames = [NSPrinter printerNames];
-    NSArray* pTypes = [NSPrinter printerTypes];
-    unsigned int nNameCount = pNames ? [pNames count] : 0;
-    unsigned int nTypeCount = pTypes ? [pTypes count] : 0;
-    SAL_WARN_IF( nTypeCount != nNameCount, "vcl", "type count not equal to printer count" );
-    for( unsigned int i = 0; i < nNameCount; i++ )
-    {
-        NSString* pName = [pNames objectAtIndex: i];
-        NSString* pType = i < nTypeCount ? [pTypes objectAtIndex: i] : nil;
-        if( pName )
-        {
-            std::unique_ptr<SalPrinterQueueInfo> pInfo(new SalPrinterQueueInfo);
-            pInfo->maPrinterName    = GetOUString( pName );
-            if( pType )
-                pInfo->maDriver     = GetOUString( pType );
-            pInfo->mnStatus         = PrintQueueFlags::NONE;
-            pInfo->mnJobs           = 0;
-
-            rList.Add(std::move(pInfo));
-        }
-    }
-
-    // tdf#151700 Prevent the non-native LibreOffice PrintDialog from
-    // displaying by creating a fake printer if there are no printers. This
-    // will allow the LibreOffice printing code to proceed with native
-    // NSPrintOperation which will display the native print panel.
-    if ( !nNameCount )
-    {
-        std::unique_ptr<SalPrinterQueueInfo> pInfo(new SalPrinterQueueInfo);
-        pInfo->maPrinterName    = getFallbackPrinterName();
-        pInfo->mnStatus         = PrintQueueFlags::NONE;
-        pInfo->mnJobs           = 0;
-
-        rList.Add(std::move(pInfo));
-    }
-}
-
-OUString AquaSalInstance::GetDefaultPrinter()
-{
-    // #i113170# may not be the main thread if called from UNO API
-    SalData::ensureThreadAutoreleasePool();
-
-    // WinSalInstance::GetDefaultPrinter() fetches current default printer
-    // on every call so do the same here
-    OUString aDefaultPrinter;
-    {
-        NSPrintInfo* pPI = [NSPrintInfo sharedPrintInfo];
-        SAL_WARN_IF( !pPI, "vcl", "no print info" );
-        if( pPI )
-        {
-            NSPrinter* pPr = [pPI printer];
-            SAL_WARN_IF( !pPr, "vcl", "no printer in default info" );
-            if( pPr )
-            {
-                // Related: tdf#151700 Return the name of the fake printer if
-                // there are no printers so that the LibreOffice printing code
-                // will be able to find the fake printer returned by
-                // AquaSalInstance::GetPrinterQueueInfo()
-                NSString* pDefName = [pPr name];
-                SAL_WARN_IF( !pDefName, "vcl", "printer has no name" );
-                if ( pDefName && [pDefName length])
-                    aDefaultPrinter = GetOUString( pDefName );
-                else
-                    aDefaultPrinter = getFallbackPrinterName();
-            }
-        }
-    }
-    return aDefaultPrinter;
-}
-
-SalInfoPrinter* AquaSalInstance::CreateInfoPrinter(SalPrinterQueueInfo& rQueueInfo,
-                                                   ImplJobSetup& rSetupData)
-{
-    // #i113170# may not be the main thread if called from UNO API
-    SalData::ensureThreadAutoreleasePool();
-
-    SalInfoPrinter* pNewInfoPrinter = new AquaSalInfoPrinter(rQueueInfo);
-    pNewInfoPrinter->SetPrinterData(rSetupData);
-
-    return pNewInfoPrinter;
-}
-
-void AquaSalInstance::DestroyInfoPrinter( SalInfoPrinter* pPrinter )
-{
-    // #i113170# may not be the main thread if called from UNO API
-    SalData::ensureThreadAutoreleasePool();
-
-    SalInstance::DestroyInfoPrinter(pPrinter);
 }
 
 // We need to re-encode file urls because osl_getFileURLFromSystemPath converts
