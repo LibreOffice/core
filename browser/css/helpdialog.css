@@ -67,11 +67,11 @@
 		/* Darker text color when clicked */
 	}
 
-	/* Style for toc-h2 and toc-h3 button text when focused */
+	/* Visible keyboard focus indicator for TOC jump links */
 	.toc-h2 a:focus,
 	.toc-h3 a:focus {
-		outline: none;
-		/* Remove outline when focused */
+		outline: 2px solid var(--color-primary);
+		outline-offset: 2px;
 	}
 
 	/* Add margin to the paragraph to separate each item */
