@@ -139,10 +139,15 @@ noinst_PROGRAMS = \
                   httpresponse_fuzzer \
                   httpecho_fuzzer
 
-LIBFUZZER_LDFLAGS_COMMON = -fsanitize=fuzzer
+# CFI for the libFuzzer build (see comment near ENV_san for details).
+LIBFUZZER_CFI_FLAGS = -fsanitize=cfi -fno-sanitize=cfi-derived-cast,cfi-unrelated-cast \
+                      -flto -fvisibility=hidden -fno-sanitize-trap=cfi
+LIBFUZZER_CXXFLAGS_COMMON = $(AM_CXXFLAGS) $(LIBFUZZER_CFI_FLAGS)
+LIBFUZZER_LDFLAGS_COMMON = -fsanitize=fuzzer @FUZZER_LDFLAGS@ $(LIBFUZZER_CFI_FLAGS)
 
 admin_fuzzer_CPPFLAGS = \
 			$(AM_CPPFLAGS)
+admin_fuzzer_CXXFLAGS = $(LIBFUZZER_CXXFLAGS_COMMON)
 admin_fuzzer_SOURCES = \
 		       $(common_fuzzer_sources) \
 		       Admin.cpp
@@ -151,6 +156,7 @@ admin_fuzzer_LDADD = ../libsimd.a
 
 clientrequest_fuzzer_CPPFLAGS = \
 				$(AM_CPPFLAGS)
+clientrequest_fuzzer_CXXFLAGS = $(LIBFUZZER_CXXFLAGS_COMMON)
 clientrequest_fuzzer_SOURCES = \
 			       $(common_fuzzer_sources) \
 			       ClientRequestDispatcherFuzz.cpp
@@ -159,6 +165,7 @@ clientrequest_fuzzer_LDADD = ../libsimd.a
 
 clientsession_fuzzer_CPPFLAGS = \
 				$(AM_CPPFLAGS)
+clientsession_fuzzer_CXXFLAGS = $(LIBFUZZER_CXXFLAGS_COMMON)
 clientsession_fuzzer_SOURCES = \
 			       $(common_fuzzer_sources) \
 			       ClientSession.cpp
@@ -167,6 +174,7 @@ clientsession_fuzzer_LDADD = ../libsimd.a
 
 httpresponse_fuzzer_CPPFLAGS = \
 				$(AM_CPPFLAGS)
+httpresponse_fuzzer_CXXFLAGS = $(LIBFUZZER_CXXFLAGS_COMMON)
 httpresponse_fuzzer_SOURCES = \
 			       $(common_fuzzer_sources) \
 			       HttpResponse.cpp
@@ -176,6 +184,7 @@ httpresponse_fuzzer_LDADD = ../libsimd.a
 httpecho_fuzzer_CPPFLAGS = \
 				$(AM_CPPFLAGS) \
         -I${top_srcdir}/test
+httpecho_fuzzer_CXXFLAGS = $(LIBFUZZER_CXXFLAGS_COMMON)
 httpecho_fuzzer_SOURCES = \
 			       $(common_fuzzer_sources) \
 			       HttpEcho.cpp
@@ -188,21 +197,44 @@ if ENABLE_AFL
 # then 5 fuzzers x 4 variants. To add a new fuzzer, just add to AFL_FUZZERS.
 
 AFL_CPPFLAGS = $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) -I${top_srcdir}/test
-# AFL variants use afl-clang-* instrumentation; strip libFuzzer's -fsanitize=fuzzer-no-link
-# (otherwise SanitizerCoverage refs like __sancov_lowest_stack are unresolved at link, since
-# AFL links libAFLDriver.a, not libclang_rt.fuzzer.a)
-AFL_CXXFLAGS = $(AFL_CPPFLAGS) $(AM_CXXFLAGS) $(filter-out -fsanitize=fuzzer-no-link,$(CXXFLAGS))
-AFL_CFLAGS = $(AFL_CPPFLAGS) $(AM_CFLAGS) $(filter-out -fsanitize=fuzzer-no-link,$(CFLAGS))
-AFL_LDFLAGS_COMMON = $(AM_LDFLAGS) $(LIBS)
+# AFL variants use afl-clang-* instrumentation; strip flags incompatible with
+# the AFL toolchain that may have leaked into CXXFLAGS:
+#  -fsanitize=fuzzer-no-link: AFL links libAFLDriver.a, not libclang_rt.fuzzer.a,
+#     so SanitizerCoverage refs like __sancov_lowest_stack would be unresolved.
+#  CFI flags (-fsanitize=cfi, -fno-sanitize-trap=cfi, -fsanitize-recover=cfi,
+#     -fvisibility=hidden): CFI is intentionally off for AFL (afl-clang-fast's
+#     instrumentation pass false-positives under CFI metadata).
+AFL_FILTER_OUT = -fsanitize=fuzzer-no-link \
+                 -fsanitize=cfi \
+                 -fno-sanitize-trap=cfi \
+                 -fsanitize-recover=cfi \
+                 -fvisibility=hidden
+AFL_CXXFLAGS = $(AFL_CPPFLAGS) $(AM_CXXFLAGS) $(filter-out $(AFL_FILTER_OUT),$(CXXFLAGS))
+AFL_CFLAGS = $(AFL_CPPFLAGS) $(AM_CFLAGS) $(filter-out $(AFL_FILTER_OUT),$(CFLAGS))
+# @FUZZER_LDFLAGS@ carries -flto -fuse-ld=lld -Wl,--no-gc-sections, needed
+# because afl-clang-fast emits bitcode .o under SAND mode. It comes from
+# configure (validated there) and is applied here, not in global LDFLAGS,
+# so test/ binaries built alongside the fuzzers don't pay the LTO link cost.
+AFL_LDFLAGS_COMMON = $(AM_LDFLAGS) $(LIBS) @FUZZER_LDFLAGS@
 
 # Variant configurations: ENV_<variant>, CXX_<variant>, CC_<variant>
 ENV_native =
 CXX_native = $(AFL_CXX)
 CC_native = $(AFL_CC)
 
+# CFI is enabled on the san variant for parity with the libFuzzer build, so
+# CFI findings can be compared between the two engines on the same input.
+# AFL_USE_CFISAN=1 makes afl-clang-fast add -fsanitize=cfi -flto
+# -fvisibility=hidden; we layer CXXFLAGS_san on top to:
+#  - subtract cfi-derived-cast and cfi-unrelated-cast (false positives on
+#    libstdc++'s _Sp_counted_ptr_inplace::_M_ptr() static_cast;
+#  - swap the silent ud1 trap for a runtime diagnostic that prints the
+#    offending type before aborting (-fno-sanitize-trap=cfi).
 ENV_san = AFL_LLVM_ONLY_FSRV=1 AFL_USE_ASAN=1 AFL_USE_UBSAN=1 AFL_USE_CFISAN=1
 CXX_san = $(AFL_CLANG_FAST_CXX)
 CC_san = $(AFL_CLANG_FAST_CC)
+CXXFLAGS_san = -fno-sanitize=cfi-derived-cast,cfi-unrelated-cast \
+               -fno-sanitize-trap=cfi
 
 ENV_cmpcov = AFL_LLVM_LAF_ALL=1
 CXX_cmpcov = $(AFL_CXX)
@@ -255,11 +287,11 @@ AFL_LIBS = $(foreach v,$(AFL_VARIANTS),aflfuzz_$(v).a)
 define AFL_VARIANT_RULES
 .afl-$(1)/%.o: ../%.cpp
 	@mkdir -p $$(dir $$@)
-	$(ENV_$(1)) $$(CXX_$(1)) $$(AFL_CXXFLAGS) -c -o $$@ $$<
+	$(ENV_$(1)) $$(CXX_$(1)) $$(AFL_CXXFLAGS) $$(CXXFLAGS_$(1)) -c -o $$@ $$<
 
 .afl-$(1)/fuzzer/%.o: %.cpp
 	@mkdir -p $$(dir $$@)
-	$(ENV_$(1)) $$(CXX_$(1)) $$(AFL_CXXFLAGS) -c -o $$@ $$<
+	$(ENV_$(1)) $$(CXX_$(1)) $$(AFL_CXXFLAGS) $$(CXXFLAGS_$(1)) -c -o $$@ $$<
 
 .afl-$(1)/%.o: ../%.c
 	@mkdir -p $$(dir $$@)

@@ -1480,24 +1480,27 @@ if test "$LIBFUZZER" = "1"; then
     # -Wl,--no-gc-sections works around a clang/lld LTO+ASan bug where
     # .text.asan.module_dtor.* sections are GC'd while still referenced from
     # .fini_array, breaking the link.
-    # Verify the toolchain supports the link recipe up-front, then add it to
-    # LDFLAGS so both the libFuzzer and AFL Makefile rules inherit it from
-    # one source of truth.
+    # Verify the toolchain supports the link recipe up-front. The flags are
+    # NOT added to global LDFLAGS, rather they are exported as @FUZZER_LDFLAGS@
+    # for fuzzer/Makefile.am to apply per-target, so test/ binaries built under
+    # --enable-fuzzers don't pay the LTO link cost (we want them for sanity checks).
     AC_MSG_CHECKING([for working -flto -fuse-ld=lld -Wl,--no-gc-sections (required by fuzzer build)])
     fuzzer_check_saved_LDFLAGS=$LDFLAGS
     LDFLAGS="$LDFLAGS -flto -fuse-ld=lld -Wl,--no-gc-sections"
     AC_LANG_PUSH([C++])
     AC_LINK_IFELSE([AC_LANG_PROGRAM([], [])],
-        [AC_MSG_RESULT([yes])],
-        [LDFLAGS=$fuzzer_check_saved_LDFLAGS
-         AC_MSG_RESULT([no])
+        [AC_MSG_RESULT([yes])
+         FUZZER_LDFLAGS="-flto -fuse-ld=lld -Wl,--no-gc-sections"],
+        [AC_MSG_RESULT([no])
          AC_MSG_ERROR([the fuzzer build requires a C++ toolchain that links with '-flto -fuse-ld=lld -Wl,--no-gc-sections'; install lld (e.g. apt install lld) and a clang/gcc that supports -flto, or omit --enable-fuzzers])])
     AC_LANG_POP([C++])
+    LDFLAGS=$fuzzer_check_saved_LDFLAGS
 fi
 AC_DEFINE_UNQUOTED([LIBFUZZER],[$LIBFUZZER],[Define to 1 if this is a fuzzer build.])
 AM_CONDITIONAL([ENABLE_FUZZERS], [test "$LIBFUZZER" = "1"])
 AM_CONDITIONAL([ENABLE_AFL], [test "$FUZZER_ENGINE" = "afl"])
 AC_SUBST([FUZZER_ENGINE])
+AC_SUBST([FUZZER_LDFLAGS])
 AC_SUBST([AFL_DRIVER_LIB])
 AC_SUBST([AFL_CXX])
 AC_SUBST([AFL_CC])
