@@ -483,6 +483,59 @@ CPPUNIT_TEST_FIXTURE(Test, testDelThenFormatFormat)
     CPPUNIT_ASSERT_EQUAL(RedlineType::Delete, rRedlineData2.GetType());
     CPPUNIT_ASSERT(!rRedlineData2.Next());
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testDelThenFormatFormatInside)
+{
+    // Given "AAA BBB CCC" with a delete redline and a bold format redline
+    // applied on top of the full range:
+    createSwDoc();
+    SwDocShell* pDocShell = getSwDocShell();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    pWrtShell->Insert(u"AAA BBB CCC"_ustr);
+    pDocShell->SetChangeRecording(true);
+    SwView& rView = pWrtShell->GetView();
+    pWrtShell->SelAll();
+    pWrtShell->DelLeft();
+    pWrtShell->SelAll();
+    {
+        SvxWeightItem aWeightItem(WEIGHT_BOLD, RES_CHRATR_WEIGHT);
+        SfxItemSetFixed<RES_CHRATR_BEGIN, RES_CHRATR_END> aSet(rView.GetPool());
+        aSet.Put(aWeightItem);
+        pWrtShell->SetAttrSet(aSet);
+    }
+
+    // When applying an additional italic format on only the middle word:
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    // Skip "AAA ".
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 4, /*bBasicCall=*/false);
+    // Select "BBB".
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 3, /*bBasicCall=*/false);
+    {
+        SvxPostureItem aPostureItem(ITALIC_NORMAL, RES_CHRATR_POSTURE);
+        SfxItemSetFixed<RES_CHRATR_BEGIN, RES_CHRATR_END> aSet(rView.GetPool());
+        aSet.Put(aPostureItem);
+        pWrtShell->SetAttrSet(aSet);
+    }
+
+    // Then make sure the delete-then-format redline is kept unchanged, instead
+    // of being replaced with a single plain format redline for BBB:
+    SwDoc* pDoc = pDocShell->GetDoc();
+    IDocumentRedlineAccess& rIDRA = pDoc->getIDocumentRedlineAccess();
+    SwRedlineTable& rRedlines = rIDRA.GetRedlineTable();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 3
+    // i.e. we got a format-then-delete, a format and a format-on-delete redline instead of a single
+    // format-on-delete redline.
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rRedlines.size());
+    CPPUNIT_ASSERT_EQUAL(u"AAA BBB CCC"_ustr, rRedlines[0]->GetText());
+    const SwRedlineData& rRedlineData = rRedlines[0]->GetRedlineData(0);
+    CPPUNIT_ASSERT_EQUAL(RedlineType::Format, rRedlineData.GetType());
+    CPPUNIT_ASSERT(rRedlineData.Next());
+    const SwRedlineData& rRedlineData2 = *rRedlineData.Next();
+    CPPUNIT_ASSERT_EQUAL(RedlineType::Delete, rRedlineData2.GetType());
+    CPPUNIT_ASSERT(!rRedlineData2.Next());
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

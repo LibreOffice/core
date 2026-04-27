@@ -2340,10 +2340,12 @@ void DocumentRedlineManager::PreAppendFormatRedline(AppendRedlineContext& rCtx)
         break;
     }
     case RedlineType::Format:
+    {
+        bool bHierarchical = rCtx.pRedl->GetRedlineData(0).Next() != nullptr;
         switch( rCtx.eCmpPos )
         {
         case SwComparePosition::Equal:
-            if (rCtx.pRedl->GetRedlineData(0).Next())
+            if (bHierarchical)
             {
                 // rCtx.pRedl already has an underlying redline data entry (insert/delete) and
                 // rCtx.pRedl already records the old format to be restored on reject, so just leave
@@ -2365,8 +2367,10 @@ void DocumentRedlineManager::PreAppendFormatRedline(AppendRedlineContext& rCtx)
             break;
 
         case SwComparePosition::Inside:
-            if( rCtx.pRedl->IsOwnRedline( *rCtx.pNewRedl ) &&
-                rCtx.pRedl->CanCombine( *rCtx.pNewRedl ))
+        {
+            bool bOwnRedlineToCombine = rCtx.pRedl->IsOwnRedline(*rCtx.pNewRedl)
+                                        && rCtx.pRedl->CanCombine(*rCtx.pNewRedl);
+            if (bOwnRedlineToCombine || bHierarchical)
             {
                 // own one can be ignored completely
                 delete rCtx.pNewRedl;
@@ -2398,6 +2402,7 @@ void DocumentRedlineManager::PreAppendFormatRedline(AppendRedlineContext& rCtx)
                 rCtx.bDec = true;
             }
             break;
+        }
 
         case SwComparePosition::OverlapBefore:
         case SwComparePosition::OverlapBehind:
@@ -2449,6 +2454,7 @@ void DocumentRedlineManager::PreAppendFormatRedline(AppendRedlineContext& rCtx)
             break;
         }
         break;
+    }
     default:
         break;
     }
