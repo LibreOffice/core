@@ -2865,35 +2865,33 @@ void SbRtl_EOF(StarBASIC *, SbxArray & rPar, bool)
     // No changes for UCB
     if (rPar.Count() != 2)
     {
-        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+        return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+    }
+
+    sal_Int16 nChannel = rPar.Get(1)->GetInteger();
+    SbiIoSystem* pIO = GetSbData()->pInst->GetIoSystem();
+    SbiStream* pSbStrm = pIO->GetStream( nChannel );
+    if ( !pSbStrm )
+    {
+        return StarBASIC::Error( ERRCODE_BASIC_BAD_CHANNEL );
+    }
+    bool beof;
+    SvStream* pSvStrm = pSbStrm->GetStrm();
+    if ( pSbStrm->IsText() )
+    {
+        char cBla;
+        (*pSvStrm).ReadChar( cBla ); // can we read another character?
+        beof = pSvStrm->eof();
+        if ( !beof )
+        {
+            pSvStrm->SeekRel( -1 );
+        }
     }
     else
     {
-        sal_Int16 nChannel = rPar.Get(1)->GetInteger();
-        SbiIoSystem* pIO = GetSbData()->pInst->GetIoSystem();
-        SbiStream* pSbStrm = pIO->GetStream( nChannel );
-        if ( !pSbStrm )
-        {
-            return StarBASIC::Error( ERRCODE_BASIC_BAD_CHANNEL );
-        }
-        bool beof;
-        SvStream* pSvStrm = pSbStrm->GetStrm();
-        if ( pSbStrm->IsText() )
-        {
-            char cBla;
-            (*pSvStrm).ReadChar( cBla ); // can we read another character?
-            beof = pSvStrm->eof();
-            if ( !beof )
-            {
-                pSvStrm->SeekRel( -1 );
-            }
-        }
-        else
-        {
-            beof = pSvStrm->eof();  // for binary data!
-        }
-        rPar.Get(0)->PutBool(beof);
+        beof = pSvStrm->eof();  // for binary data!
     }
+    rPar.Get(0)->PutBool(beof);
 }
 
 void SbRtl_FileAttr(StarBASIC *, SbxArray & rPar, bool)
@@ -2904,29 +2902,25 @@ void SbRtl_FileAttr(StarBASIC *, SbxArray & rPar, bool)
     // already opened files and the name doesn't matter there.
 
     if (rPar.Count() != 3)
+        return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+
+    sal_Int16 nChannel = rPar.Get(1)->GetInteger();
+    SbiIoSystem* pIO = GetSbData()->pInst->GetIoSystem();
+    SbiStream* pSbStrm = pIO->GetStream( nChannel );
+    if ( !pSbStrm )
     {
-        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+        return StarBASIC::Error( ERRCODE_BASIC_BAD_CHANNEL );
+    }
+    sal_Int16 nRet;
+    if (rPar.Get(2)->GetInteger() == 1)
+    {
+        nRet = static_cast<sal_Int16>(pSbStrm->GetMode());
     }
     else
     {
-        sal_Int16 nChannel = rPar.Get(1)->GetInteger();
-        SbiIoSystem* pIO = GetSbData()->pInst->GetIoSystem();
-        SbiStream* pSbStrm = pIO->GetStream( nChannel );
-        if ( !pSbStrm )
-        {
-            return StarBASIC::Error( ERRCODE_BASIC_BAD_CHANNEL );
-        }
-        sal_Int16 nRet;
-        if (rPar.Get(2)->GetInteger() == 1)
-        {
-            nRet = static_cast<sal_Int16>(pSbStrm->GetMode());
-        }
-        else
-        {
-            nRet = 0; // System file handle not supported
-        }
-        rPar.Get(0)->PutInteger(nRet);
+        nRet = 0; // System file handle not supported
     }
+    rPar.Get(0)->PutInteger(nRet);
 }
 void SbRtl_Loc(StarBASIC *, SbxArray & rPar, bool)
 {
@@ -3289,163 +3283,158 @@ void SbRtl_Shell(StarBASIC *, SbxArray & rPar, bool)
     if ( nArgCount < 2 || nArgCount > 5 )
     {
         rPar.Get(0)->PutLong(0);
-        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+        return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
     }
-    else
+
+    // Just go straight to error in this case
+    if (comphelper::COKit::isActive())
     {
-        // Just go straight to error in this case
-        if (comphelper::COKit::isActive())
+        return StarBASIC::Error(ERRCODE_BASIC_FILE_NOT_FOUND);
+    }
+
+    oslProcessOption nOptions = osl_Process_SEARCHPATH | osl_Process_DETACHED;
+
+    OUString aCmdLine = rPar.Get(1)->GetOUString();
+    // attach additional parameters - everything must be parsed anyway
+    if( nArgCount >= 4 )
+    {
+        OUString tmp = rPar.Get(3)->GetOUString().trim();
+        if (!tmp.isEmpty())
         {
-            StarBASIC::Error(ERRCODE_BASIC_FILE_NOT_FOUND);
-            return;
+            aCmdLine += " " + tmp;
+        }
+    }
+    sal_Int32 nLen = aCmdLine.getLength();
+
+    // #55735 if there are parameters, they have to be separated
+    // #72471 also separate the single parameters
+    std::vector<OUString> aTokenVector;
+    for (sal_Int32 i = 0; i < nLen;)
+    {
+        sal_Unicode c = aCmdLine[i];
+        if (c == ' ' || c == '\t')
+        {
+            ++i;
+            continue;
         }
 
-        oslProcessOption nOptions = osl_Process_SEARCHPATH | osl_Process_DETACHED;
-
-        OUString aCmdLine = rPar.Get(1)->GetOUString();
-        // attach additional parameters - everything must be parsed anyway
-        if( nArgCount >= 4 )
+        OUString aToken;
+        if( c == '\"' || c == '\'' )
         {
-            OUString tmp = rPar.Get(3)->GetOUString().trim();
-            if (!tmp.isEmpty())
-            {
-                aCmdLine += " " + tmp;
-            }
-        }
-        sal_Int32 nLen = aCmdLine.getLength();
+            sal_Int32 iFoundPos = aCmdLine.indexOf( c, i + 1 );
 
-        // #55735 if there are parameters, they have to be separated
-        // #72471 also separate the single parameters
-        std::vector<OUString> aTokenVector;
-        for (sal_Int32 i = 0; i < nLen;)
-        {
-            sal_Unicode c = aCmdLine[i];
-            if (c == ' ' || c == '\t')
+            if( iFoundPos < 0 )
             {
-                ++i;
-                continue;
-            }
-
-            OUString aToken;
-            if( c == '\"' || c == '\'' )
-            {
-                sal_Int32 iFoundPos = aCmdLine.indexOf( c, i + 1 );
-
-                if( iFoundPos < 0 )
-                {
-                    aToken = aCmdLine.copy( i);
-                    i = nLen;
-                }
-                else
-                {
-                    aToken = aCmdLine.copy( i + 1, (iFoundPos - i - 1) );
-                    i = iFoundPos + 1;
-                }
+                aToken = aCmdLine.copy( i);
+                i = nLen;
             }
             else
             {
-                sal_Int32 iFoundSpacePos = aCmdLine.indexOf( ' ', i );
-                sal_Int32 iFoundTabPos = aCmdLine.indexOf( '\t', i );
-                sal_Int32 iFoundPos = iFoundSpacePos >= 0 ? iFoundTabPos >= 0 ? std::min( iFoundSpacePos, iFoundTabPos ) : iFoundSpacePos : -1;
-
-                if( iFoundPos < 0 )
-                {
-                    aToken = aCmdLine.copy( i );
-                    i = nLen;
-                }
-                else
-                {
-                    aToken = aCmdLine.copy( i, (iFoundPos - i) );
-                    i = iFoundPos;
-                }
+                aToken = aCmdLine.copy( i + 1, (iFoundPos - i - 1) );
+                i = iFoundPos + 1;
             }
-
-            // insert into the list
-            aTokenVector.push_back( aToken );
-        }
-        // #55735 / #72471 end
-
-        if (aTokenVector.empty())
-            return StarBASIC::Error(ERRCODE_BASIC_BAD_ARGUMENT);
-
-        sal_Int16 nWinStyle = 0;
-        if( nArgCount >= 3 )
-        {
-            nWinStyle = rPar.Get(2)->GetInteger();
-            switch( nWinStyle )
-            {
-            case 2:
-                nOptions |= osl_Process_MINIMIZED;
-                break;
-            case 3:
-                nOptions |= osl_Process_MAXIMIZED;
-                break;
-            case 10:
-                nOptions |= osl_Process_FULLSCREEN;
-                break;
-            }
-
-            bool bSync = false;
-            if( nArgCount >= 5 )
-            {
-                bSync = rPar.Get(4)->GetBool();
-            }
-            if( bSync )
-            {
-                nOptions |= osl_Process_WAIT;
-            }
-        }
-
-        // #72471 work parameter(s) up
-        std::vector<OUString>::const_iterator iter = aTokenVector.begin();
-        OUString aOUStrProgURL = getFullPath( *iter );
-
-        ++iter;
-
-        sal_uInt16 nParamCount = sal::static_int_cast< sal_uInt16 >(aTokenVector.size() - 1 );
-        std::unique_ptr<rtl_uString*[]> pParamList;
-        if( nParamCount )
-        {
-            pParamList.reset( new rtl_uString*[nParamCount]);
-            for(int iVector = 0; iter != aTokenVector.end(); ++iVector, ++iter)
-            {
-                const OUString& rParamStr = *iter;
-                pParamList[iVector] = nullptr;
-                rtl_uString_assign(&(pParamList[iVector]), rParamStr.pData);
-            }
-        }
-
-        oslProcess pApp;
-        bool bSucc = osl_executeProcess(
-                    aOUStrProgURL.pData,
-                    pParamList.get(),
-                    nParamCount,
-                    nOptions,
-                    nullptr,
-                    nullptr,
-                    nullptr, 0,
-                    &pApp ) == osl_Process_E_None;
-
-        // 53521 only free process handle on success
-        if (bSucc)
-        {
-            osl_freeProcessHandle( pApp );
-        }
-
-        for(int j = 0; j < nParamCount; ++j)
-        {
-            rtl_uString_release(pParamList[j]);
-        }
-
-        if( !bSucc )
-        {
-            StarBASIC::Error( ERRCODE_BASIC_FILE_NOT_FOUND );
         }
         else
         {
-            rPar.Get(0)->PutLong(0);
+            sal_Int32 iFoundSpacePos = aCmdLine.indexOf( ' ', i );
+            sal_Int32 iFoundTabPos = aCmdLine.indexOf( '\t', i );
+            sal_Int32 iFoundPos = iFoundSpacePos >= 0 ? iFoundTabPos >= 0 ? std::min( iFoundSpacePos, iFoundTabPos ) : iFoundSpacePos : -1;
+
+            if( iFoundPos < 0 )
+            {
+                aToken = aCmdLine.copy( i );
+                i = nLen;
+            }
+            else
+            {
+                aToken = aCmdLine.copy( i, (iFoundPos - i) );
+                i = iFoundPos;
+            }
+        }
+
+        // insert into the list
+        aTokenVector.push_back( aToken );
+    }
+    // #55735 / #72471 end
+
+    if (aTokenVector.empty())
+        return StarBASIC::Error(ERRCODE_BASIC_BAD_ARGUMENT);
+
+    sal_Int16 nWinStyle = 0;
+    if( nArgCount >= 3 )
+    {
+        nWinStyle = rPar.Get(2)->GetInteger();
+        switch( nWinStyle )
+        {
+        case 2:
+            nOptions |= osl_Process_MINIMIZED;
+            break;
+        case 3:
+            nOptions |= osl_Process_MAXIMIZED;
+            break;
+        case 10:
+            nOptions |= osl_Process_FULLSCREEN;
+            break;
+        }
+
+        bool bSync = false;
+        if( nArgCount >= 5 )
+        {
+            bSync = rPar.Get(4)->GetBool();
+        }
+        if( bSync )
+        {
+            nOptions |= osl_Process_WAIT;
         }
     }
+
+    // #72471 work parameter(s) up
+    std::vector<OUString>::const_iterator iter = aTokenVector.begin();
+    OUString aOUStrProgURL = getFullPath( *iter );
+
+    ++iter;
+
+    sal_uInt16 nParamCount = sal::static_int_cast< sal_uInt16 >(aTokenVector.size() - 1 );
+    std::unique_ptr<rtl_uString*[]> pParamList;
+    if( nParamCount )
+    {
+        pParamList.reset( new rtl_uString*[nParamCount]);
+        for(int iVector = 0; iter != aTokenVector.end(); ++iVector, ++iter)
+        {
+            const OUString& rParamStr = *iter;
+            pParamList[iVector] = nullptr;
+            rtl_uString_assign(&(pParamList[iVector]), rParamStr.pData);
+        }
+    }
+
+    oslProcess pApp;
+    bool bSucc = osl_executeProcess(
+                aOUStrProgURL.pData,
+                pParamList.get(),
+                nParamCount,
+                nOptions,
+                nullptr,
+                nullptr,
+                nullptr, 0,
+                &pApp ) == osl_Process_E_None;
+
+    // 53521 only free process handle on success
+    if (bSucc)
+    {
+        osl_freeProcessHandle( pApp );
+    }
+
+    for(int j = 0; j < nParamCount; ++j)
+    {
+        rtl_uString_release(pParamList[j]);
+    }
+
+    if( !bSucc )
+    {
+        return StarBASIC::Error( ERRCODE_BASIC_FILE_NOT_FOUND );
+    }
+
+    rPar.Get(0)->PutLong(0);
 }
 
 void SbRtl_VarType(StarBASIC *, SbxArray & rPar, bool)
@@ -3629,12 +3618,10 @@ void SbRtl_DDEInitiate(StarBASIC *, SbxArray & rPar, bool)
     ErrCode nDdeErr = pDDE->Initiate( aApp, aTopic, nChannel );
     if( nDdeErr )
     {
-        StarBASIC::Error( nDdeErr );
+        return StarBASIC::Error( nDdeErr );
     }
-    else
-    {
-        rPar.Get(0)->PutInteger(static_cast<sal_Int16>(nChannel));
-    }
+
+    rPar.Get(0)->PutInteger(static_cast<sal_Int16>(nChannel));
 }
 
 void SbRtl_DDETerminate(StarBASIC *, SbxArray & rPar, bool)
@@ -4198,33 +4185,31 @@ void SbRtl_MsgBox(StarBASIC *, SbxArray & rPar, bool)
 void SbRtl_SetAttr(StarBASIC *, SbxArray & rPar, bool)
 {
     rPar.Get(0)->PutEmpty();
-    if (rPar.Count() == 3)
+    if(rPar.Count() != 3)
     {
-        OUString aStr = rPar.Get(1)->GetOUString();
-        sal_Int16 nFlags = rPar.Get(2)->GetInteger();
+        return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+    }
 
-        if( hasUno() )
+    OUString aStr = rPar.Get(1)->GetOUString();
+    sal_Int16 nFlags = rPar.Get(2)->GetInteger();
+
+    if( hasUno() )
+    {
+        const uno::Reference< ucb::XSimpleFileAccess3 >& xSFI = getFileAccess();
+        if( xSFI.is() )
         {
-            const uno::Reference< ucb::XSimpleFileAccess3 >& xSFI = getFileAccess();
-            if( xSFI.is() )
+            try
             {
-                try
-                {
-                    bool bReadOnly = bool(nFlags & SbAttributes::READONLY);
-                    xSFI->setReadOnly( aStr, bReadOnly );
-                    bool bHidden = bool(nFlags & SbAttributes::HIDDEN);
-                    xSFI->setHidden( aStr, bHidden );
-                }
-                catch(const Exception & )
-                {
-                    StarBASIC::Error( ERRCODE_IO_GENERAL );
-                }
+                bool bReadOnly = bool(nFlags & SbAttributes::READONLY);
+                xSFI->setReadOnly( aStr, bReadOnly );
+                bool bHidden = bool(nFlags & SbAttributes::HIDDEN);
+                xSFI->setHidden( aStr, bHidden );
+            }
+            catch(const Exception & )
+            {
+                StarBASIC::Error( ERRCODE_IO_GENERAL );
             }
         }
-    }
-    else
-    {
-        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
     }
 }
 
@@ -4242,27 +4227,25 @@ void SbRtl_DumpAllObjects(StarBASIC * pBasic, SbxArray & rPar, bool)
     const sal_uInt32 nArgCount = rPar.Count();
     if( nArgCount < 2 || nArgCount > 3 )
     {
-        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+        return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
     }
-    else if( !pBasic )
+    if( !pBasic )
     {
-        StarBASIC::Error( ERRCODE_BASIC_INTERNAL_ERROR );
+        return StarBASIC::Error( ERRCODE_BASIC_INTERNAL_ERROR );
     }
-    else
+
+    SbxObject* p = pBasic;
+    while( p->GetParent() )
     {
-        SbxObject* p = pBasic;
-        while( p->GetParent() )
-        {
-            p = p->GetParent();
-        }
-        SvFileStream aStrm(rPar.Get(1)->GetOUString(),
-                            StreamMode::WRITE | StreamMode::TRUNC );
-        p->Dump(aStrm, rPar.Get(2)->GetBool());
-        aStrm.Close();
-        if( aStrm.GetError() != ERRCODE_NONE )
-        {
-            StarBASIC::Error( ERRCODE_BASIC_IO_ERROR );
-        }
+        p = p->GetParent();
+    }
+    SvFileStream aStrm(rPar.Get(1)->GetOUString(),
+                        StreamMode::WRITE | StreamMode::TRUNC );
+    p->Dump(aStrm, rPar.Get(2)->GetBool());
+    aStrm.Close();
+    if( aStrm.GetError() != ERRCODE_NONE )
+    {
+        StarBASIC::Error( ERRCODE_BASIC_IO_ERROR );
     }
 }
 
