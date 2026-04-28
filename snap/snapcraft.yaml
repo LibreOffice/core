@@ -93,7 +93,6 @@ parts:
         --disable-lotuswordpro \
         --disable-lpsolve \
         --disable-noto-font \
-        --disable-odk \
         --disable-online-update \
         --disable-poppler \
         --disable-postgresql-sdbc \
