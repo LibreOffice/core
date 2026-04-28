@@ -475,6 +475,47 @@ CPPUNIT_TEST_FIXTURE(SdrPdfImportTest, testInsertAnnotationAtPosition)
     CPPUNIT_ASSERT_EQUAL(u"Click-to-place"_ustr, xNew->getTextRange()->getString());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(25.4, xNew->getPosition().X, 0.01);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(50.8, xNew->getPosition().Y, 0.01);
+    // Without explicit Width/Height args the marker auto-grows to fit the
+    // author initials, so the size lands somewhere around a few mm rather
+    // than the 5x5 mm default - just sanity-check it's small.
+    CPPUNIT_ASSERT(xNew->getSize().Width > 0.0);
+    CPPUNIT_ASSERT(xNew->getSize().Width < 10.0);
+    CPPUNIT_ASSERT(xNew->getSize().Height > 0.0);
+    CPPUNIT_ASSERT(xNew->getSize().Height < 10.0);
+}
+
+CPPUNIT_TEST_FIXTURE(SdrPdfImportTest, testInsertAnnotationOverArea)
+{
+    auto pPdfium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPdfium)
+        return;
+    EnvVarGuard UsePDFiumGuard("LO_IMPORT_USE_PDFIUM", "1");
+
+    loadFromFile(u"pdf/threaded_comments.pdf");
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    sd::ViewShell* pViewShell = pImpressDocument->GetDocShell()->GetViewShell();
+    SdPage* pPage = pViewShell->GetActualPage();
+    CPPUNIT_ASSERT(pPage);
+
+    const size_t nBefore = pPage->getAnnotations().size();
+
+    // Position+Size in mm/100. 30 mm anchor, 40x20 mm area.
+    uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
+        { "Text", uno::Any(u"Drag-to-area"_ustr) },
+        { "PositionX", uno::Any(sal_Int32(3000)) },
+        { "PositionY", uno::Any(sal_Int32(3000)) },
+        { "Width",     uno::Any(sal_Int32(4000)) },
+        { "Height",    uno::Any(sal_Int32(2000)) },
+    }));
+    dispatchCommand(mxComponent, u".uno:InsertAnnotation"_ustr, aArgs);
+
+    CPPUNIT_ASSERT_EQUAL(nBefore + 1, pPage->getAnnotations().size());
+    const auto& xNew = pPage->getAnnotations().back();
+    CPPUNIT_ASSERT_EQUAL(u"Drag-to-area"_ustr, xNew->getTextRange()->getString());
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(30.0, xNew->getPosition().X, 0.01);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(30.0, xNew->getPosition().Y, 0.01);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(40.0, xNew->getSize().Width, 0.01);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(20.0, xNew->getSize().Height, 0.01);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

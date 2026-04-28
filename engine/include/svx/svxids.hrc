@@ -1125,8 +1125,11 @@ class XFillGradientItem;
 
 #define SID_RESOLVE_POSTIT                              ( SID_SVX_START + 1258 )
 
+#define SID_ATTR_POSTIT_WIDTH                           TypedWhichId<SfxInt32Item>( SID_SVX_START + 1259 )
+#define SID_ATTR_POSTIT_HEIGHT                          TypedWhichId<SfxInt32Item>( SID_SVX_START + 1260 )
+
 // IMPORTANT NOTE: adjust SID_SVX_FIRSTFREE, when adding new slot id
-#define SID_SVX_FIRSTFREE                               ( SID_SVX_START + 1258 + 1 )
+#define SID_SVX_FIRSTFREE                               ( SID_SVX_START + 1260 + 1 )
 
 // Overflow check for slot IDs
 #if SID_SVX_FIRSTFREE > SID_SVX_END

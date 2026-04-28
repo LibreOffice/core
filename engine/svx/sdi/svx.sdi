@@ -4725,7 +4725,9 @@ SfxVoidItem InsertAnnotation SID_INSERT_POSTIT
  SvxPostItTextItem Text SID_ATTR_POSTIT_TEXT,
  SvxPostItTextItem Html SID_ATTR_POSTIT_HTML,
  SfxInt32Item PositionX SID_ATTR_POSTIT_POSITION_X,
- SfxInt32Item PositionY SID_ATTR_POSTIT_POSITION_Y)
+ SfxInt32Item PositionY SID_ATTR_POSTIT_POSITION_Y,
+ SfxInt32Item Width SID_ATTR_POSTIT_WIDTH,
+ SfxInt32Item Height SID_ATTR_POSTIT_HEIGHT)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,

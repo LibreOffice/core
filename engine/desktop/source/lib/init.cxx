@@ -5643,9 +5643,9 @@ static void doc_postUnoCommand(COKitDocument* pThis, const char* pCommand, const
     }
     else if (gImpl && aCommand == ".uno:InsertAnnotation")
     {
-        // Online sends PositionX/PositionY in twips. The slot's native unit
-        // matches the doc's map mode; convert twip -> mm/100 for mm/100 docs
-        // (Draw/Impress) and leave the values as-is otherwise.
+        // Online sends PositionX/PositionY/Width/Height in twips. The slot's
+        // native unit matches the doc's map mode; convert twip -> mm/100 for
+        // mm/100 docs (Draw/Impress) and leave the values as-is otherwise.
         bool bNeedConversion = false;
         if (const SdrView* pView = pViewShell->GetDrawView())
         {
@@ -5660,7 +5660,8 @@ static void doc_postUnoCommand(COKitDocument* pThis, const char* pCommand, const
             sal_Int32 value;
             for (beans::PropertyValue& rPropValue: aPropertyValuesVector)
             {
-                if (rPropValue.Name == "PositionX" || rPropValue.Name == "PositionY")
+                if (rPropValue.Name == "PositionX" || rPropValue.Name == "PositionY"
+                    || rPropValue.Name == "Width" || rPropValue.Name == "Height")
                 {
                     rPropValue.Value >>= value;
                     value = o3tl::convert(value, o3tl::Length::twip, o3tl::Length::mm100);

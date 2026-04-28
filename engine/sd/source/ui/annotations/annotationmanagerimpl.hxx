@@ -84,8 +84,13 @@ public:
      * Insert a new annotation on the current page. When oPosition holds a
      * value, the annotation is placed at that point (mm/100, top-left origin);
      * otherwise the next free spot is found by scanning the page from (0, 0).
+     * When oSize holds a value (mm100), the annotation marker spans that
+     * area; otherwise a small fixed marker is used. The explicit-position /
+     * explicit-size paths are used by Online for click-to-place and
+     * drag-to-area insertion on PDFs.
      */
-    void InsertAnnotation(const OUString& rText, std::optional<Point> oPosition = {});
+    void InsertAnnotation(const OUString& rText, std::optional<Point> oPosition = {},
+                          std::optional<Size> oSize = {});
     void DeleteAnnotation(rtl::Reference<sdr::annotation::Annotation> const& xAnnotation);
     void DeleteAnnotationsByAuthor( std::u16string_view sAuthor );
     void DeleteAllAnnotations();

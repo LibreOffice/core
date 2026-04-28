@@ -198,6 +198,12 @@ static bool ImportPDF(SvStream& rStream, SdDrawDocument& rDocument)
                                           rPDFAnnotation.maRectangle.getHeight() / 100.0);
             xAnnotation->setPosition(aUnoPosition);
             xAnnotation->setSize(aUnoSize);
+            // Size from PDF /Rect is the comment's anchor area on the page,
+            // not the marker icon's auto-grown bounds. Tag it so the
+            // AnnotationObject's auto-grow back-sync leaves it alone -
+            // otherwise round-tripping a PDF would shrink /Rect to fit the
+            // author initials on every save.
+            xAnnotation->SetSizeExplicit(true);
             xAnnotation->setDateTime(rPDFAnnotation.maDateTime);
 
             // Every imported PDF comment supports reply / resolve.

@@ -94,6 +94,7 @@ void Annotation::toData(AnnotationData& rData)
     rData.m_Threaded = m_Threaded;
     rData.m_Resolved = m_Resolved;
     rData.m_ParentId = m_ParentId;
+    rData.m_SizeExplicit = m_SizeExplicit;
 }
 
 void Annotation::fromData(const AnnotationData& rData)
@@ -108,6 +109,7 @@ void Annotation::fromData(const AnnotationData& rData)
     m_Threaded = rData.m_Threaded;
     m_Resolved = rData.m_Resolved;
     m_ParentId = rData.m_ParentId;
+    m_SizeExplicit = rData.m_SizeExplicit;
 }
 
 Annotation::Annotation(const css::uno::Reference<css::uno::XComponentContext>& rxContext,
@@ -255,6 +257,14 @@ OString Annotation::ToJSON(CommentNotificationType nType)
                 Size(std::round(o3tl::toTwips(m_Size.Width, o3tl::Length::mm)),
                      std::round(o3tl::toTwips(m_Size.Height, o3tl::Length::mm))));
             aJsonWriter.put("rectangle", aRectangle.toString());
+            // Online uses hasArea to decide whether to render an outlined
+            // anchor box around the comment in addition to the small marker
+            // icon: PDF /Rect from import or the Width/Height args of
+            // .uno:InsertAnnotation produce a rectangle that's worth showing,
+            // whereas the auto-grown text-frame size of a fresh ODP/PPTX
+            // comment isn't.
+            if (m_SizeExplicit)
+                aJsonWriter.put("hasArea", "true");
             if (m_Threaded)
             {
                 aJsonWriter.put("threaded", "true");

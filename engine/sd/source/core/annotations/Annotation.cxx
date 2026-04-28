@@ -248,6 +248,7 @@ rtl::Reference<sdr::annotation::Annotation> Annotation::clone(SdrPage* pTargetPa
     aNewAnnotation->SetThreaded(IsThreaded());
     aNewAnnotation->SetResolved(IsResolved());
     aNewAnnotation->SetParentId(GetParentId());
+    aNewAnnotation->SetSizeExplicit(IsSizeExplicit());
 
     uno::Reference<css::text::XTextCopy> xSourceRange (getTextRange(), uno::UNO_QUERY);
     uno::Reference<css::text::XTextCopy> xRange (aNewAnnotation->getTextRange(), uno::UNO_QUERY);

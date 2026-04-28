@@ -97,6 +97,10 @@ struct SVXCORE_DLLPUBLIC AnnotationData
     /// GetId() of the parent annotation; 0 means "thread root".
     /// Only meaningful when m_Threaded is true.
     sal_uInt64 m_ParentId = 0;
+
+    /// True when m_Size is the user/import-supplied anchor area; see
+    /// Annotation::m_SizeExplicit.
+    bool m_SizeExplicit = false;
 };
 
 /** Annotation object, responsible for handling of the annotation.
@@ -130,6 +134,12 @@ protected:
     bool m_Threaded = false;
     bool m_Resolved = false;
     sal_uInt64 m_ParentId = 0;
+
+    // True when m_Size carries the user/import-supplied anchor area (e.g.
+    // PDF /Rect or the Width/Height args of .uno:InsertAnnotation) and
+    // must not be overwritten by AnnotationObject's auto-grown text-frame
+    // size. Default false preserves tdf#161911.
+    bool m_SizeExplicit = false;
 
     std::unique_ptr<SdrUndoAction> createUndoAnnotation();
 
@@ -192,6 +202,11 @@ public:
     /// Only meaningful if IsThreaded().
     sal_uInt64 GetParentId() const { return m_ParentId; }
     void SetParentId(sal_uInt64 nParentId);
+
+    /// True when m_Size was set explicitly to the comment's anchor area
+    /// and AnnotationObject's auto-grow back-sync should leave it alone.
+    bool IsSizeExplicit() const { return m_SizeExplicit; }
+    void SetSizeExplicit(bool bExplicit) { m_SizeExplicit = bExplicit; }
 
     SdrObject* findAnnotationObject();
 

@@ -379,6 +379,7 @@ void AnnotationManagerImpl::ExecuteInsertAnnotation(SfxRequest const & rReq)
     const SfxItemSet* pArgs = rReq.GetArgs();
     OUString sText;
     std::optional<Point> oPosition;
+    std::optional<Size> oSize;
     if (pArgs)
     {
         if (const SfxStringItem* pPoolItem = pArgs->GetItemIfSet(SID_ATTR_POSTIT_TEXT))
@@ -390,9 +391,14 @@ void AnnotationManagerImpl::ExecuteInsertAnnotation(SfxRequest const & rReq)
         const SfxInt32Item* pY = pArgs->GetItemIfSet(SID_ATTR_POSTIT_POSITION_Y);
         if (pX && pY && pX->GetValue() >= 0 && pY->GetValue() >= 0)
             oPosition.emplace(pX->GetValue(), pY->GetValue());
+
+        const SfxInt32Item* pW = pArgs->GetItemIfSet(SID_ATTR_POSTIT_WIDTH);
+        const SfxInt32Item* pH = pArgs->GetItemIfSet(SID_ATTR_POSTIT_HEIGHT);
+        if (pW && pH && pW->GetValue() > 0 && pH->GetValue() > 0)
+            oSize.emplace(pW->GetValue(), pH->GetValue());
     }
 
-    InsertAnnotation(sText, oPosition);
+    InsertAnnotation(sText, oPosition, oSize);
 }
 
 void AnnotationManagerImpl::ExecuteDeleteAnnotation(SfxRequest const & rReq)
@@ -510,7 +516,8 @@ void AnnotationManagerImpl::ExecuteEditAnnotation(SfxRequest const & rReq)
 }
 
 void AnnotationManagerImpl::InsertAnnotation(const OUString& rText,
-                                             std::optional<Point> oPosition)
+                                             std::optional<Point> oPosition,
+                                             std::optional<Size> oSize)
 {
     SdPage* pPage = GetCurrentPage();
     if (!pPage)
@@ -616,7 +623,12 @@ void AnnotationManagerImpl::InsertAnnotation(const OUString& rText,
     // set position
     geometry::RealPoint2D aPosition(x / 100.0, y / 100.0);
     xAnnotation->setPosition(aPosition);
-    xAnnotation->setSize({5.0, 5.0});
+    const bool bExplicitSize = oSize.has_value();
+    if (!oSize)
+        oSize.emplace(500, 500);
+    xAnnotation->setSize({ oSize->Width() / 100.0, oSize->Height() / 100.0 });
+    if (bExplicitSize)
+        xAnnotation->SetSizeExplicit(true);
 
     pPage->addAnnotation(xAnnotation, -1);
 

@@ -186,11 +186,18 @@ void AnnotationObject::ApplyAnnotationName()
 
     SetMergedItemSet(aItemSet);
 
-    // Update the annotation size after the auto-sizing the frame to content does its magic
+    // Pull the auto-grown text-frame size back onto the annotation, so the
+    // tile JSON reports the visual marker dimensions (tdf#161911). Skip
+    // when the annotation already carries an explicit anchor area (PDF
+    // /Rect, the Width/Height args of .uno:InsertAnnotation) - those must
+    // survive the auto-grow so PDF round-trip preserves the area.
     auto& xAnnotationData = getAnnotationData();
-    css::geometry::RealSize2D aRealSize2D{ GetLogicRect().GetWidth() / 100.0,
-                                           GetLogicRect().GetHeight() / 100.0 };
-    xAnnotationData->mxAnnotation->SetSize(aRealSize2D);
+    if (!xAnnotationData->mxAnnotation->IsSizeExplicit())
+    {
+        css::geometry::RealSize2D aRealSize2D{ GetLogicRect().GetWidth() / 100.0,
+                                               GetLogicRect().GetHeight() / 100.0 };
+        xAnnotationData->mxAnnotation->SetSize(aRealSize2D);
+    }
 }
 
 AnnotationObject::~AnnotationObject() {}
