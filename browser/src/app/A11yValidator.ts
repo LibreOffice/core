@@ -35,6 +35,85 @@ class A11yValidator {
 		this.checks.push(this.checkElementHasLabel.bind(this));
 		this.checks.push(this.checkAriaControls.bind(this));
 		this.checks.push(this.checkFrameOnlyDecorativeImages.bind(this));
+		this.checks.push(this.checkNoSpatialReferences.bind(this));
+	}
+
+	// Spatial words in accessible text are useless to blind users who
+	// cannot perceive layout (see commit 1f1bafcbfd9), unless they sit
+	// next to a document-structure noun ("Insert Rows Above") where
+	// they describe the action's effect on content rather than the
+	// on-screen position of a UI element.
+	private static readonly SPATIAL_RE =
+		/\b(below|above|to the (?:left|right)(?: of)?)\b/gi;
+	private static readonly CONTENT_NOUNS: Set<string> = new Set([
+		'row',
+		'rows',
+		'paragraph',
+		'paragraphs',
+		'column',
+		'columns',
+		'cell',
+		'cells',
+		'page',
+		'pages',
+		'line',
+		'lines',
+		'section',
+		'sections',
+		'heading',
+		'headings',
+		'sheet',
+		'sheets',
+		'slide',
+		'slides',
+	]);
+
+	private findSpatialMatch(text: string | null | undefined): string | null {
+		if (!text) return null;
+		const re = A11yValidator.SPATIAL_RE;
+		re.lastIndex = 0;
+		let m: RegExpExecArray | null;
+		while ((m = re.exec(text)) !== null) {
+			const before = text.slice(0, m.index).match(/(\w+)\W*$/)?.[1];
+			const after = text.slice(m.index + m[0].length).match(/^\W*(\w+)/)?.[1];
+			const neighbours = [before, after]
+				.filter((w): w is string => !!w)
+				.map((w) => w.toLowerCase());
+			if (!neighbours.some((w) => A11yValidator.CONTENT_NOUNS.has(w)))
+				return m[0];
+		}
+		return null;
+	}
+
+	private checkNoSpatialReferences(type: string, element: HTMLElement): void {
+		const sources: Array<[string, string | null]> = [
+			['aria-label', element.getAttribute('aria-label')],
+			['aria-description', element.getAttribute('aria-description')],
+			['alt', element.tagName === 'IMG' ? element.getAttribute('alt') : null],
+		];
+		const describedBy = element.getAttribute('aria-describedby') || '';
+		for (const id of describedBy.trim().split(/\s+/).filter(Boolean)) {
+			const ref = document.getElementById(id);
+			if (!ref) continue;
+			sources.push([
+				`aria-describedby="${id}"`,
+				(ref.textContent || '').trim(),
+			]);
+		}
+
+		for (const [source, text] of sources) {
+			const match = this.findSpatialMatch(text);
+			if (match)
+				throw new A11yValidatorException(
+					`In '${this.getDialogTitle(element)}' at '${this.getElementPath(element)}': widget of type '${type}' has spatial reference '${match}' in ${source} ('${(text as string).trim()}'). Spatial words like "above"/"below" are useless to screen-reader users; refer to widgets by name instead.`,
+				);
+		}
+
+		for (let i = 0; i < element.children.length; i++) {
+			const child = element.children[i];
+			if (this.shouldCheckChild(child))
+				this.checkNoSpatialReferences(type, child as HTMLElement);
+		}
 	}
 
 	checkWidget(type: string, element: HTMLElement): void {
