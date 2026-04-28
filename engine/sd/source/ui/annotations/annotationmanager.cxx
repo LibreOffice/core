@@ -378,15 +378,21 @@ void AnnotationManagerImpl::ExecuteInsertAnnotation(SfxRequest const & rReq)
 
     const SfxItemSet* pArgs = rReq.GetArgs();
     OUString sText;
+    std::optional<Point> oPosition;
     if (pArgs)
     {
         if (const SfxStringItem* pPoolItem = pArgs->GetItemIfSet(SID_ATTR_POSTIT_TEXT))
         {
             sText = pPoolItem->GetValue();
         }
+
+        const SfxInt32Item* pX = pArgs->GetItemIfSet(SID_ATTR_POSTIT_POSITION_X);
+        const SfxInt32Item* pY = pArgs->GetItemIfSet(SID_ATTR_POSTIT_POSITION_Y);
+        if (pX && pY && pX->GetValue() >= 0 && pY->GetValue() >= 0)
+            oPosition.emplace(pX->GetValue(), pY->GetValue());
     }
 
-    InsertAnnotation(sText);
+    InsertAnnotation(sText, oPosition);
 }
 
 void AnnotationManagerImpl::ExecuteDeleteAnnotation(SfxRequest const & rReq)
@@ -503,7 +509,8 @@ void AnnotationManagerImpl::ExecuteEditAnnotation(SfxRequest const & rReq)
     UpdateTags(true);
 }
 
-void AnnotationManagerImpl::InsertAnnotation(const OUString& rText)
+void AnnotationManagerImpl::InsertAnnotation(const OUString& rText,
+                                             std::optional<Point> oPosition)
 {
     SdPage* pPage = GetCurrentPage();
     if (!pPage)
@@ -512,47 +519,56 @@ void AnnotationManagerImpl::InsertAnnotation(const OUString& rText)
     if (mpDoc->IsUndoEnabled())
         mpDoc->BegUndo(SdResId(STR_ANNOTATION_UNDO_INSERT));
 
-    // find free space for new annotation
     int y = 0;
     int x = 0;
 
-    sdr::annotation::AnnotationVector aAnnotations(pPage->getAnnotations());
-    if (!aAnnotations.empty())
+    if (oPosition)
     {
-        const int fPageWidth = pPage->GetSize().Width();
-        const int fWidth = 1000;
-        const int fHeight = 800;
-
-        while (true)
+        // Caller-supplied position.
+        x = oPosition->X();
+        y = oPosition->Y();
+    }
+    else
+    {
+        // For everything else, scan the page for the first free spot starting at (0, 0).
+        sdr::annotation::AnnotationVector aAnnotations(pPage->getAnnotations());
+        if (!aAnnotations.empty())
         {
-            ::tools::Rectangle aNewRect(Point(x, y), Size(fWidth, fHeight));
-            bool bFree = true;
+            const int fPageWidth = pPage->GetSize().Width();
+            const int fWidth = 1000;
+            const int fHeight = 800;
 
-            for (const auto& rxAnnotation : aAnnotations)
+            while (true)
             {
-                geometry::RealPoint2D aRealPoint2D(rxAnnotation->getPosition());
-                Point aPoint(::tools::Long(aRealPoint2D.X * 100.0), ::tools::Long(aRealPoint2D.Y * 100.0));
-                Size aSize(fWidth, fHeight);
+                ::tools::Rectangle aNewRect(Point(x, y), Size(fWidth, fHeight));
+                bool bFree = true;
 
-                if (aNewRect.Overlaps(::tools::Rectangle(aPoint, aSize)))
+                for (const auto& rxAnnotation : aAnnotations)
                 {
-                    bFree = false;
+                    geometry::RealPoint2D aRealPoint2D(rxAnnotation->getPosition());
+                    Point aPoint(::tools::Long(aRealPoint2D.X * 100.0), ::tools::Long(aRealPoint2D.Y * 100.0));
+                    Size aSize(fWidth, fHeight);
+
+                    if (aNewRect.Overlaps(::tools::Rectangle(aPoint, aSize)))
+                    {
+                        bFree = false;
+                        break;
+                    }
+                }
+
+                if (!bFree)
+                {
+                    x += fWidth;
+                    if (x > fPageWidth)
+                    {
+                        x = 0;
+                        y += fHeight;
+                    }
+                }
+                else
+                {
                     break;
                 }
-            }
-
-            if (!bFree)
-            {
-                x += fWidth;
-                if (x > fPageWidth)
-                {
-                    x = 0;
-                    y += fHeight;
-                }
-            }
-            else
-            {
-                break;
             }
         }
     }

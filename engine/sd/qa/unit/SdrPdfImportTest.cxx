@@ -447,6 +447,36 @@ CPPUNIT_TEST_FIXTURE(SdrPdfImportTest, testImportThreadedComments)
     CPPUNIT_ASSERT(bDaveResolved);
 }
 
+CPPUNIT_TEST_FIXTURE(SdrPdfImportTest, testInsertAnnotationAtPosition)
+{
+    auto pPdfium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPdfium)
+        return;
+    EnvVarGuard UsePDFiumGuard("LO_IMPORT_USE_PDFIUM", "1");
+
+    loadFromFile(u"pdf/threaded_comments.pdf");
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    sd::ViewShell* pViewShell = pImpressDocument->GetDocShell()->GetViewShell();
+    SdPage* pPage = pViewShell->GetActualPage();
+    CPPUNIT_ASSERT(pPage);
+
+    const size_t nBefore = pPage->getAnnotations().size();
+
+    // PositionX/PositionY are in mm/100. 2540 mm/100 = 1 inch; 5080 mm/100 = 2 inches.
+    uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
+        { "Text", uno::Any(u"Click-to-place"_ustr) },
+        { "PositionX", uno::Any(sal_Int32(2540)) },
+        { "PositionY", uno::Any(sal_Int32(5080)) },
+    }));
+    dispatchCommand(mxComponent, u".uno:InsertAnnotation"_ustr, aArgs);
+
+    CPPUNIT_ASSERT_EQUAL(nBefore + 1, pPage->getAnnotations().size());
+    const auto& xNew = pPage->getAnnotations().back();
+    CPPUNIT_ASSERT_EQUAL(u"Click-to-place"_ustr, xNew->getTextRange()->getString());
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(25.4, xNew->getPosition().X, 0.01);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(50.8, xNew->getPosition().Y, 0.01);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

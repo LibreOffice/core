@@ -22,8 +22,11 @@
 #include <com/sun/star/document/XEventListener.hpp>
 
 #include <rtl/ustring.hxx>
+#include <tools/gen.hxx>
 
 #include <comphelper/compbase.hxx>
+
+#include <optional>
 
 namespace com::sun::star::drawing { class XDrawView; }
 namespace com::sun::star::office { class XAnnotationAccess; }
@@ -77,7 +80,12 @@ public:
     void SelectAnnotation(rtl::Reference<sdr::annotation::Annotation> const& xAnnotation, bool bEdit = false);
     void GetSelectedAnnotation(rtl::Reference<sdr::annotation::Annotation>& xAnnotation);
 
-    void InsertAnnotation(const OUString& rText);
+    /**
+     * Insert a new annotation on the current page. When oPosition holds a
+     * value, the annotation is placed at that point (mm/100, top-left origin);
+     * otherwise the next free spot is found by scanning the page from (0, 0).
+     */
+    void InsertAnnotation(const OUString& rText, std::optional<Point> oPosition = {});
     void DeleteAnnotation(rtl::Reference<sdr::annotation::Annotation> const& xAnnotation);
     void DeleteAnnotationsByAuthor( std::u16string_view sAuthor );
     void DeleteAllAnnotations();

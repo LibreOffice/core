@@ -5641,6 +5641,34 @@ static void doc_postUnoCommand(COKitDocument* pThis, const char* pCommand, const
             return;
         }
     }
+    else if (gImpl && aCommand == ".uno:InsertAnnotation")
+    {
+        // Online sends PositionX/PositionY in twips. The slot's native unit
+        // matches the doc's map mode; convert twip -> mm/100 for mm/100 docs
+        // (Draw/Impress) and leave the values as-is otherwise.
+        bool bNeedConversion = false;
+        if (const SdrView* pView = pViewShell->GetDrawView())
+        {
+            if (OutputDevice* pOutputDevice = pView->GetFirstOutputDevice())
+            {
+                bNeedConversion = (pOutputDevice->GetMapMode().GetMapUnit() == MapUnit::Map100thMM);
+            }
+        }
+
+        if (bNeedConversion)
+        {
+            sal_Int32 value;
+            for (beans::PropertyValue& rPropValue: aPropertyValuesVector)
+            {
+                if (rPropValue.Name == "PositionX" || rPropValue.Name == "PositionY")
+                {
+                    rPropValue.Value >>= value;
+                    value = o3tl::convert(value, o3tl::Length::twip, o3tl::Length::mm100);
+                    rPropValue.Value <<= value;
+                }
+            }
+        }
+    }
     else if (gImpl && aCommand == ".uno:KitSidebarWriterPage")
     {
         if (!sfx2::sidebar::Sidebar::Setup(u"WriterPageDeck"))
