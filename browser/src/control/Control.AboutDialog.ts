@@ -17,7 +17,6 @@
 
 declare var JSDialog: any;
 declare var brandProductName: any;
-declare var brandProductURL: any;
 declare var sanitizeUrl: any;
 
 interface AboutDialogElements {
@@ -105,7 +104,7 @@ class AboutDialog {
 			return;
 		}
 
-		// fill product-name and product-string
+		// fill product-name
 		let productName;
 		if (window.ThisIsAMobileApp) {
 			productName = window.MobileAppName;
@@ -115,11 +114,6 @@ class AboutDialog {
 					? brandProductName
 					: 'Collabora Online Development Edition (unbranded)';
 		}
-
-		const productURL =
-			typeof brandProductURL === 'string' && brandProductURL.length > 0
-				? brandProductURL
-				: 'https://collaboraonline.github.io/';
 
 		const productNameElement = content.querySelector(
 			'#product-name',
@@ -132,27 +126,6 @@ class AboutDialog {
 					.join('-')
 					.toLowerCase(),
 		);
-
-		const productStringText = _('This version of {productname} is powered by');
-		let productNameWithURL;
-		if (!window.ThisIsAMobileApp)
-			productNameWithURL =
-				'<a href="' +
-				sanitizeUrl(productURL) +
-				'" target="_blank">' +
-				productName +
-				'</a>';
-		else productNameWithURL = productName;
-
-		const productStringElement = content.querySelector(
-			'#product-string',
-		) as HTMLElement;
-		if (productStringElement) {
-			productStringElement.innerText = productStringText.replace(
-				'{productname}',
-				productNameWithURL,
-			);
-		}
 
 		// COOLWSD version
 		elements.coolwsdVersion.textContent = info.coolwsdVersion;
