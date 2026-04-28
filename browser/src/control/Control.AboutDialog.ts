@@ -83,6 +83,11 @@ class AboutDialog {
 		a.href = linkHref;
 		a.target = '_blank';
 		a.textContent = linkText;
+		// WCAG 3.2.5: without altering what sighted users see.
+		const srOnly = document.createElement('span');
+		srOnly.className = 'visuallyhidden';
+		srOnly.textContent = ' ' + _('(opens in new tab)');
+		a.appendChild(srOnly);
 
 		span.appendChild(a);
 		if (extraText) {
