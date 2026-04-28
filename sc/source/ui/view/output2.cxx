@@ -1721,7 +1721,7 @@ void ScOutputData::LayoutStringsImpl(bool const bPixelToLogic, RowInfo* const pT
         if ( nCellY == nY && nCellX >= mnX1 && nCellX <= mnX2 )
         {
             ScCellInfo& rCellInfo = pThisRowInfo->cellInfo(nCellX);
-            pPattern = rCellInfo.pPatternAttr;
+            pPattern = rCellInfo.getPatternAttr();
             pCondSet = rCellInfo.pConditionSet;
             pTableSet = rCellInfo.pTableFormatSet;
 
@@ -4601,7 +4601,7 @@ void ScOutputData::DrawEdit(bool bPixelToLogic)
                              !mpDoc->ColHidden(nCellX, mnTab) )
                         {
                             ScCellInfo& rCellInfo = pThisRowInfo->cellInfo(nCellX);
-                            pPattern = rCellInfo.pPatternAttr;
+                            pPattern = rCellInfo.getPatternAttr();
                             pCondSet = rCellInfo.pConditionSet;
                             pTableSet = rCellInfo.pTableFormatSet;
                             aCell = rCellInfo.maCell;
@@ -4762,7 +4762,7 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                         //! rest from merged cells further up do not work!
 
                         bool bFromDoc = false;
-                        pPattern = pInfo->pPatternAttr;
+                        pPattern = pInfo->getPatternAttr();
                         pCondSet = pInfo->pConditionSet;
                         if (!pPattern)
                         {
