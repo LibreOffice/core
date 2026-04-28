@@ -781,6 +781,9 @@ class TreeViewControl {
 		link.innerText = entry.columns[index].text || entry.text;
 		link.target = '_blank';
 		link.rel = 'noopener';
+		// WCAG 3.2.5: without altering what sighted users see.
+		const srOnly = window.L.DomUtil.create('span', 'visuallyhidden', link);
+		srOnly.innerText = ' ' + _('(opens in new tab)');
 	}
 
 	fillCells(
