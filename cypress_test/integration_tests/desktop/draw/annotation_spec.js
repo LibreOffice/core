@@ -90,7 +90,7 @@ describe(['tagdesktop'], 'PDF Threaded Comments', function() {
 				.click({ force: true });
 		});
 
-		cy.getFrameWindow().then(function(win) {
+		cy.getFrameWindow().should(function(win) {
 			const dave = findCommentByAuthor(win, 'Dave');
 			expect(dave.sectionProperties.data.resolved).to.equal('true');
 		});
