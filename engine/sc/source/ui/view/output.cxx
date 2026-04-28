@@ -681,7 +681,7 @@ void ScOutputData::SetCellRotations()
             for (SCCOL nX=0; nX<=nRotMax; nX++)
             {
                 ScCellInfo* pInfo = &pThisRowInfo->cellInfo(nX);
-                const ScPatternAttr* pPattern = pInfo->pPatternAttr;
+                const ScPatternAttr* pPattern = pInfo->getPatternAttr();
                 const SfxItemSet* pCondSet = pInfo->pConditionSet;
 
                 if ( !pPattern && !mpDoc->ColHidden(nX, mnTab) )
@@ -805,8 +805,8 @@ static bool lcl_EqualBack( const RowInfo& rFirst, const RowInfo& rOther,
     {
         for ( nX=mnX1; nX<=mnX2; nX++ )
         {
-            const ScPatternAttr* pPat1 = rFirst.cellInfo(nX).pPatternAttr;
-            const ScPatternAttr* pPat2 = rOther.cellInfo(nX).pPatternAttr;
+            const ScPatternAttr* pPat1 = rFirst.cellInfo(nX).getPatternAttr();
+            const ScPatternAttr* pPat2 = rOther.cellInfo(nX).getPatternAttr();
             if ( !pPat1 || !pPat2 ||
                     !SfxPoolItem::areSame(pPat1->GetItem(ATTR_PROTECTION), pPat2->GetItem(ATTR_PROTECTION) ) )
                 return false;
@@ -1154,7 +1154,7 @@ void ScOutputData::DrawBackground(vcl::RenderContext& rRenderContext)
                     if (pInfo->bMerged && pInfo->pPatternAttr)
                     {
                             const ScMergeAttr* pMerge =
-                                    &pInfo->pPatternAttr->GetItem(ATTR_MERGE);
+                                    &pInfo->getPatternAttr()->GetItem(ATTR_MERGE);
                             nMergedCols = std::max<SCCOL>(1, pMerge->GetColMerge());
                     }
 
@@ -1176,7 +1176,7 @@ void ScOutputData::DrawBackground(vcl::RenderContext& rRenderContext)
                     }
                     else if (bShowProt)         // show cell protection in syntax mode
                     {
-                        const ScPatternAttr* pP = pInfo->pPatternAttr;
+                        const ScPatternAttr* pP = pInfo->getPatternAttr();
                         if (pP)
                         {
                             const ScProtectionAttr& rProt = pP->GetItem(ATTR_PROTECTION);
@@ -1642,7 +1642,7 @@ void ScOutputData::DrawRotatedFrame(vcl::RenderContext& rRenderContext)
                 if ( pInfo->nRotateDir > ScRotateDir::Standard &&
                         !pInfo->bHOverlapped && !pInfo->bVOverlapped )
                 {
-                    pPattern = pInfo->pPatternAttr;
+                    pPattern = pInfo->getPatternAttr();
                     pCondSet = pInfo->pConditionSet;
                     if (!pPattern)
                     {
@@ -2894,7 +2894,7 @@ void ScOutputData::DrawClipMarks()
                             SCCOL nOverX = nX;
                             SCROW nOverY = nY;
                             const ScMergeAttr* pMerge =
-                                    &pInfo->pPatternAttr->GetItem(ATTR_MERGE);
+                                    &pInfo->getPatternAttr()->GetItem(ATTR_MERGE);
                             SCCOL nCountX = pMerge->GetColMerge();
                             for (SCCOL i=1; i<nCountX; i++)
                                 nOutWidth += mpDoc->GetColWidth(nOverX+i,mnTab) * mnPPTX;
