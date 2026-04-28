@@ -66,6 +66,7 @@
 /// <reference path="../src/app/ViewLayoutCompareChanges.ts" />
 /// <reference path="../src/canvas/sections/HTMLObjectSection.ts" />
 /// <reference path="../src/canvas/sections/CommentMarkerSubSection.ts" />
+/// <reference path="../src/canvas/sections/CommentAnchorAreaSubSection.ts" />
 /// <reference path="../src/canvas/sections/CommentSection.ts" />
 /// <reference path="../src/canvas/sections/CommentListSection.ts" />
 /// <reference path="../src/canvas/sections/CalcGridSection.ts" />

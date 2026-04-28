@@ -240,15 +240,25 @@ describe(['tagdesktop'], 'PDF Threaded Comments', function() {
 			expectedX = docPoint.x;
 			expectedY = docPoint.y;
 
-			// Capture-phase mousedown listener inside startCommentPlacement
-			// consumes this; bubbles:true is needed so the capture path runs.
-			const ev = new win.MouseEvent('mousedown', {
+			// Capture-phase listeners inside startCommentPlacement consume
+			// these; bubbles:true is needed so the capture path runs. A
+			// mouseup at the same point with no mousemove between keeps the
+			// gesture below DRAG_THRESHOLD_PX, so finishCommentPlacement
+			// treats it as a point placement (no Width/Height arg).
+			const downEv = new win.MouseEvent('mousedown', {
 				clientX: rect.left + canvasClickX,
 				clientY: rect.top + canvasClickY,
 				button: 0,
 				bubbles: true,
 			});
-			canvas.dispatchEvent(ev);
+			canvas.dispatchEvent(downEv);
+			const upEv = new win.MouseEvent('mouseup', {
+				clientX: rect.left + canvasClickX,
+				clientY: rect.top + canvasClickY,
+				button: 0,
+				bubbles: true,
+			});
+			canvas.dispatchEvent(upEv);
 		});
 
 		// Local 'new' comment exists with the expected on-screen anchor.
@@ -333,20 +343,29 @@ describe(['tagdesktop'], 'PDF Threaded Comments', function() {
 
 		// Off-page click. Compute an X past the page's right edge from
 		// _partWidthTwips so it's guaranteed off-page regardless of zoom or
-		// scroll.
+		// scroll. mousedown+mouseup at the same point keeps the gesture
+		// below DRAG_THRESHOLD_PX so finishCommentPlacement runs and
+		// rejects the off-page point.
 		cy.getFrameWindow().then(function(win) {
 			const canvas = win.document.getElementById('document-canvas');
 			const rect = canvas.getBoundingClientRect();
 			const docLayer = win.app.map._docLayer;
 			const offPageCssX = (docLayer._partWidthTwips
 				* win.app.twipsToPixels) / win.app.dpiScale + 50;
-			const ev = new win.MouseEvent('mousedown', {
+			const downEv = new win.MouseEvent('mousedown', {
 				clientX: rect.left + offPageCssX,
 				clientY: rect.top + 200,
 				button: 0,
 				bubbles: true,
 			});
-			canvas.dispatchEvent(ev);
+			canvas.dispatchEvent(downEv);
+			const upEv = new win.MouseEvent('mouseup', {
+				clientX: rect.left + offPageCssX,
+				clientY: rect.top + 200,
+				button: 0,
+				bubbles: true,
+			});
+			canvas.dispatchEvent(upEv);
 		});
 
 		cy.getFrameWindow().then(function(win) { return helper.processToIdle(win); });
@@ -384,13 +403,20 @@ describe(['tagdesktop'], 'PDF Threaded Comments', function() {
 			expectedX = docPoint.x;
 			expectedY = docPoint.y;
 
-			const ev = new win.MouseEvent('mousedown', {
+			const downEv = new win.MouseEvent('mousedown', {
 				clientX: rect.left + canvasClickX,
 				clientY: rect.top + canvasClickY,
 				button: 0,
 				bubbles: true,
 			});
-			canvas.dispatchEvent(ev);
+			canvas.dispatchEvent(downEv);
+			const upEv = new win.MouseEvent('mouseup', {
+				clientX: rect.left + canvasClickX,
+				clientY: rect.top + canvasClickY,
+				button: 0,
+				bubbles: true,
+			});
+			canvas.dispatchEvent(upEv);
 		});
 
 		cy.getFrameWindow().should(function(win) {
@@ -424,6 +450,194 @@ describe(['tagdesktop'], 'PDF Threaded Comments', function() {
 			expect(section.sectionProperties.commentList.length,
 				'no comment should remain after cancelling the editor')
 				.to.equal(initialCount);
+		});
+	});
+
+	// Drag-to-area placement: while in placement mode, the user clicks and
+	// drags a rectangle on the page. The anchor lands at the top-left of the
+	// rectangle and the dragged Width/Height reach core, so the new comment's
+	// marker spans the dragged area instead of the default 5x5 mm marker.
+	it('Insert Comment in PDF supports drag-to-area selection', { env: { 'pdf-view': true } }, function() {
+		const commentText = 'drag-to-area-test ' + Date.now();
+		let initialCount = 0;
+
+		cy.getFrameWindow().then(function(win) {
+			const section = win.app.sectionContainer.getSectionWithName(
+				win.app.CSections.CommentList.name);
+			initialCount = section.sectionProperties.commentList.length;
+			win.app.map.insertComment();
+		});
+
+		cy.getFrameWindow().should(function(win) {
+			expect(win.document.getElementById('document-canvas').style.cursor,
+				'placement mode must switch the canvas cursor to crosshair')
+				.to.equal('crosshair');
+		});
+
+		// Drag a rectangle from ~25%/25% to ~50%/40% of page 1. Compute the
+		// CSS-pixel positions from twips so the test is zoom-independent.
+		let expectedTLX = 0, expectedTLY = 0;
+		let expectedW = 0, expectedH = 0;
+		cy.getFrameWindow().then(function(win) {
+			const canvas = win.document.getElementById('document-canvas');
+			const rect = canvas.getBoundingClientRect();
+			const docLayer = win.app.map._docLayer;
+
+			const startTwipsX = docLayer._partWidthTwips / 4;
+			const startTwipsY = docLayer._partHeightTwips / 4;
+			const endTwipsX = docLayer._partWidthTwips / 2;
+			const endTwipsY = docLayer._partHeightTwips * 0.4;
+
+			const startCssX = (startTwipsX * win.app.twipsToPixels) / win.app.dpiScale;
+			const startCssY = (startTwipsY * win.app.twipsToPixels) / win.app.dpiScale;
+			const endCssX = (endTwipsX * win.app.twipsToPixels) / win.app.dpiScale;
+			const endCssY = (endTwipsY * win.app.twipsToPixels) / win.app.dpiScale;
+
+			// Top-left of the dragged rectangle (= the anchor).
+			const tlPoint = new win.cool.SimplePoint(0, 0);
+			tlPoint.cX = Math.min(startCssX, endCssX);
+			tlPoint.cY = Math.min(startCssY, endCssY);
+			const docTL = win.app.activeDocument.activeLayout.canvasToDocumentPoint(tlPoint);
+			expectedTLX = docTL.x;
+			expectedTLY = docTL.y;
+			// Bottom-right; canvasToDocumentPoint mutates so build a fresh point.
+			const brPoint = new win.cool.SimplePoint(0, 0);
+			brPoint.cX = Math.max(startCssX, endCssX);
+			brPoint.cY = Math.max(startCssY, endCssY);
+			const docBR = win.app.activeDocument.activeLayout.canvasToDocumentPoint(brPoint);
+			expectedW = docBR.x - expectedTLX;
+			expectedH = docBR.y - expectedTLY;
+
+			const downEv = new win.MouseEvent('mousedown', {
+				clientX: rect.left + startCssX,
+				clientY: rect.top + startCssY,
+				button: 0,
+				bubbles: true,
+			});
+			canvas.dispatchEvent(downEv);
+			const moveEv = new win.MouseEvent('mousemove', {
+				clientX: rect.left + endCssX,
+				clientY: rect.top + endCssY,
+				button: 0,
+				bubbles: true,
+			});
+			canvas.dispatchEvent(moveEv);
+			const upEv = new win.MouseEvent('mouseup', {
+				clientX: rect.left + endCssX,
+				clientY: rect.top + endCssY,
+				button: 0,
+				bubbles: true,
+			});
+			canvas.dispatchEvent(upEv);
+		});
+
+		// Local 'new' comment exists with anchor at the rectangle's top-left
+		// and a marker rectangle that reflects the dragged size.
+		cy.getFrameWindow().should(function(win) {
+			expect(win.document.getElementById('document-canvas').style.cursor,
+				'cursor must be restored after placement finishes')
+				.to.not.equal('crosshair');
+
+			const section = win.app.sectionContainer.getSectionWithName(
+				win.app.CSections.CommentList.name);
+			const newComment = section.sectionProperties.commentList.find(
+				function(c) { return c.sectionProperties.data.id === 'new'; });
+			expect(newComment, 'new comment was not created after drag').to.exist;
+			const data = newComment.sectionProperties.data;
+			expect(data.size, 'drag must capture a size').to.exist;
+			expect(data.size[0], 'captured width must match dragged width')
+				.to.be.closeTo(expectedW, 1);
+			expect(data.size[1], 'captured height must match dragged height')
+				.to.be.closeTo(expectedH, 1);
+			expect(data.anchorPos[0],
+				'anchor X must be the rectangle top-left').to.be.closeTo(expectedTLX, 1);
+			expect(data.anchorPos[1],
+				'anchor Y must be the rectangle top-left').to.be.closeTo(expectedTLY, 1);
+			// rectangle = [x, y, width, height] in twips; width/height come from data.size.
+			expect(data.rectangle[2], 'marker rectangle width must reflect drag')
+				.to.be.closeTo(expectedW, 1);
+			expect(data.rectangle[3], 'marker rectangle height must reflect drag')
+				.to.be.closeTo(expectedH, 1);
+		});
+
+		// Type and save - core stores the area as PDF /Rect.
+		cy.cGet('.cool-annotation').last({log: false})
+			.find('#annotation-modify-textarea-new').should('exist');
+		cy.getFrameWindow().then(function(win) { return helper.processToIdle(win); });
+		cy.cGet('.cool-annotation').last({log: false})
+			.find('.modify-annotation .cool-annotation-textarea')
+			.should('not.have.attr', 'disabled');
+		cy.cGet('.cool-annotation').last({log: false})
+			.find('.modify-annotation .cool-annotation-textarea')
+			.type(commentText);
+		cy.cGet('.cool-annotation').last({log: false})
+			.find('[value="Save"]').click();
+
+		// After core's acknowledgement: the area survived twips -> mm/100 -> twips.
+		cy.getFrameWindow().should(function(win) {
+			const section = win.app.sectionContainer.getSectionWithName(
+				win.app.CSections.CommentList.name);
+			expect(section.sectionProperties.commentList.length,
+				'commentList must have one more entry after save')
+				.to.equal(initialCount + 1);
+
+			const acked = section.sectionProperties.commentList.find(function(c) {
+				return c.sectionProperties.data.text === commentText;
+			});
+			expect(acked, 'a comment with the typed text must be present').to.exist;
+			expect(acked.sectionProperties.data.id,
+				'core must assign a real (non-\'new\') id').to.not.equal('new');
+
+			const ackRect = acked.sectionProperties.data.rectangle;
+			// Round-trip goes twips -> mm/100 (core) -> twips, so allow a few
+			// twips of rounding slack.
+			expect(ackRect[2],
+				'round-tripped marker width must match the dragged area').to.be.closeTo(expectedW, 5);
+			expect(ackRect[3],
+				'round-tripped marker height must match the dragged area').to.be.closeTo(expectedH, 5);
+			// Core flagged the size as explicit, so Online creates the
+			// anchor-area sub-section underneath the comment marker.
+			expect(acked.sectionProperties.data.hasArea,
+				'core must report hasArea for an explicit-size comment').to.equal('true');
+			expect(acked.sectionProperties.commentAnchorAreaSubSection,
+				'comment must own an anchor-area sub-section').to.exist;
+		});
+
+		// Click on the anchor-area div and verify the comment becomes
+		// the selected one - the area's div has pointer-events:auto and
+		// listens for click directly, no canvas section routing involved.
+		cy.getFrameWindow().then(function(win) {
+			const section = win.app.sectionContainer.getSectionWithName(
+				win.app.CSections.CommentList.name);
+			const acked = section.sectionProperties.commentList.find(function(c) {
+				return c.sectionProperties.data.text === commentText;
+			});
+			// Deselect first so the click below has something observable to
+			// flip; selectedComment may already point at our comment after
+			// save.
+			if (section.sectionProperties.selectedComment === acked)
+				acked.onCancelClick(null);
+			const div = acked.sectionProperties.commentAnchorAreaSubSection
+				.sectionProperties.objectDiv;
+			const rect = div.getBoundingClientRect();
+			const cx = rect.left + rect.width / 2;
+			const cy = rect.top + rect.height / 2;
+			['mousedown', 'mouseup', 'click'].forEach(function(t) {
+				div.dispatchEvent(new win.MouseEvent(t, {
+					clientX: cx, clientY: cy, button: 0, bubbles: true,
+				}));
+			});
+		});
+
+		cy.getFrameWindow().should(function(win) {
+			const section = win.app.sectionContainer.getSectionWithName(
+				win.app.CSections.CommentList.name);
+			const acked = section.sectionProperties.commentList.find(function(c) {
+				return c.sectionProperties.data.text === commentText;
+			});
+			expect(section.sectionProperties.selectedComment,
+				'clicking on the anchor-area must select the comment')
+				.to.equal(acked);
 		});
 	});
 });

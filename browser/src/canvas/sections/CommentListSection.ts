@@ -169,9 +169,14 @@ export class CommentSection extends CanvasSectionObject {
 
 	// Active "click anywhere on the page to place a new comment" mode for PDF.
 	// When non-null, the next document mousedown is consumed to position a new
-	// comment at that point instead of being forwarded to core.
+	// comment at that point instead of being forwarded to core. A click+drag
+	// instead of a plain click captures an anchor area; if the drag stays
+	// below DRAG_THRESHOLD_PX the click is treated as a point placement.
 	private placementCommentData: any = null;
 	private placementSavedCursor: string | null = null;
+	private placementStart: { cX: number; cY: number } | null = null;
+	private placementOverlay: HTMLDivElement | null = null;
+	private static readonly DRAG_THRESHOLD_PX = 5;
 
 	constructor () {
 		super(app.CSections.CommentList.name);
@@ -212,6 +217,8 @@ export class CommentSection extends CanvasSectionObject {
 		// addEventListener/removeEventListener; bind once here so the same
 		// reference is used for both calls.
 		this.onPlacementMouseDown = this.onPlacementMouseDown.bind(this);
+		this.onPlacementMouseMove = this.onPlacementMouseMove.bind(this);
+		this.onPlacementMouseUp = this.onPlacementMouseUp.bind(this);
 		this.onPlacementKeyDown = this.onPlacementKeyDown.bind(this);
 	}
 
@@ -829,19 +836,84 @@ export class CommentSection extends CanvasSectionObject {
 		const canvas = document.getElementById('document-canvas') as HTMLCanvasElement | null;
 		if (canvas) {
 			canvas.removeEventListener('mousedown', this.onPlacementMouseDown, true);
+			canvas.removeEventListener('mousemove', this.onPlacementMouseMove, true);
+			canvas.removeEventListener('mouseup', this.onPlacementMouseUp, true);
 			if (this.placementSavedCursor !== null)
 				canvas.style.cursor = this.placementSavedCursor;
 		}
 		document.removeEventListener('keydown', this.onPlacementKeyDown, true);
+		this.removePlacementOverlay();
 		this.placementCommentData = null;
 		this.placementSavedCursor = null;
+		this.placementStart = null;
 	}
 
 	private onPlacementMouseDown(e: MouseEvent): void {
 		if (e.button !== 0) return; // ignore right/middle clicks
 		e.stopImmediatePropagation();
 		e.preventDefault();
-		this.finishCommentPlacement(e, e.currentTarget as HTMLCanvasElement);
+		const canvas = e.currentTarget as HTMLCanvasElement;
+		const rect = canvas.getBoundingClientRect();
+		this.placementStart = {
+			cX: e.clientX - rect.left,
+			cY: e.clientY - rect.top,
+		};
+		// Track move/up on the canvas so a click-and-drag draws a rectangle.
+		// A plain click without movement is handled by mouseup with the same
+		// start/end point and falls through to point placement.
+		canvas.addEventListener('mousemove', this.onPlacementMouseMove, true);
+		canvas.addEventListener('mouseup', this.onPlacementMouseUp, true);
+	}
+
+	private onPlacementMouseMove(e: MouseEvent): void {
+		if (!this.placementStart) return;
+		e.stopImmediatePropagation();
+		e.preventDefault();
+		const canvas = e.currentTarget as HTMLCanvasElement;
+		const rect = canvas.getBoundingClientRect();
+		const cur = { cX: e.clientX - rect.left, cY: e.clientY - rect.top };
+		const dx = cur.cX - this.placementStart.cX;
+		const dy = cur.cY - this.placementStart.cY;
+		if (!this.placementOverlay
+			&& Math.hypot(dx, dy) < CommentSection.DRAG_THRESHOLD_PX)
+			return;
+		this.updatePlacementOverlay(canvas, rect, cur);
+	}
+
+	private onPlacementMouseUp(e: MouseEvent): void {
+		if (e.button !== 0 || !this.placementStart) return;
+		e.stopImmediatePropagation();
+		e.preventDefault();
+		const canvas = e.currentTarget as HTMLCanvasElement;
+		const rect = canvas.getBoundingClientRect();
+		const end = { cX: e.clientX - rect.left, cY: e.clientY - rect.top };
+		this.finishCommentPlacement(canvas, end);
+	}
+
+	private updatePlacementOverlay(canvas: HTMLCanvasElement, rect: DOMRect,
+		cur: { cX: number; cY: number }): void {
+		if (!this.placementOverlay) {
+			this.placementOverlay = document.createElement('div');
+			this.placementOverlay.className = 'comment-placement-overlay';
+			canvas.parentElement.appendChild(this.placementOverlay);
+		}
+		const x1 = Math.min(this.placementStart.cX, cur.cX);
+		const y1 = Math.min(this.placementStart.cY, cur.cY);
+		const w = Math.abs(cur.cX - this.placementStart.cX);
+		const h = Math.abs(cur.cY - this.placementStart.cY);
+		// rect.left/top are viewport-relative; the overlay is parented to the
+		// canvas's parent, which uses the same offset, so add canvas.offsetLeft
+		// /Top to align with the canvas position inside that parent.
+		this.placementOverlay.style.left = (canvas.offsetLeft + x1) + 'px';
+		this.placementOverlay.style.top = (canvas.offsetTop + y1) + 'px';
+		this.placementOverlay.style.width = w + 'px';
+		this.placementOverlay.style.height = h + 'px';
+	}
+
+	private removePlacementOverlay(): void {
+		if (this.placementOverlay && this.placementOverlay.parentNode)
+			this.placementOverlay.parentNode.removeChild(this.placementOverlay);
+		this.placementOverlay = null;
 	}
 
 	private onPlacementKeyDown(e: KeyboardEvent): void {
@@ -851,33 +923,58 @@ export class CommentSection extends CanvasSectionObject {
 		this.exitCommentPlacement();
 	}
 
-	private finishCommentPlacement(e: MouseEvent, canvas: HTMLCanvasElement): void {
+	private finishCommentPlacement(canvas: HTMLCanvasElement,
+		end: { cX: number; cY: number }): void {
 		const commentData = this.placementCommentData;
+		const start = this.placementStart;
+		// Treat the gesture as a drag-to-area when the user moved past the
+		// threshold; otherwise it's a plain click and we anchor a 5x5 mm
+		// marker at the click point (current behaviour, preserved by the
+		// engine when no Width/Height args reach .uno:InsertAnnotation).
+		const isDrag = Math.hypot(end.cX - start.cX, end.cY - start.cY)
+			>= CommentSection.DRAG_THRESHOLD_PX;
 		// canvasToDocumentPoint expects coordinates relative to the canvas DOM
-		// element.
-		const rect = canvas.getBoundingClientRect();
-		const point = new cool.SimplePoint(0, 0);
-		point.cX = e.clientX - rect.left;
-		point.cY = e.clientY - rect.top;
-
+		// element. Use the top-left corner of the dragged box as the anchor;
+		// cap the bottom-right at the canvas in case the drag escaped it.
 		const layout = app.activeDocument.activeLayout;
-		const docPoint = layout.canvasToDocumentPoint(point);
-		if (Number.isNaN(docPoint.x) || Number.isNaN(docPoint.y))
+		const tlPoint = new cool.SimplePoint(0, 0);
+		tlPoint.cX = isDrag ? Math.min(start.cX, end.cX) : end.cX;
+		tlPoint.cY = isDrag ? Math.min(start.cY, end.cY) : end.cY;
+		const docTL = layout.canvasToDocumentPoint(tlPoint);
+		if (Number.isNaN(docTL.x) || Number.isNaN(docTL.y))
 			return;
 
-		// docPoint.x/.y are stacked-document twips. fileBasedView lays pages
+		let docBR = null;
+		if (isDrag) {
+			const brPoint = new cool.SimplePoint(0, 0);
+			brPoint.cX = Math.max(start.cX, end.cX);
+			brPoint.cY = Math.max(start.cY, end.cY);
+			docBR = layout.canvasToDocumentPoint(brPoint);
+			if (Number.isNaN(docBR.x) || Number.isNaN(docBR.y))
+				return;
+		}
+
+		// docTL.x/.y are stacked-document twips. fileBasedView lays pages
 		// out vertically with a fixed _spaceBetweenParts gap. Compute the
 		// containing page and reject clicks that fell in a horizontal margin,
 		// in an inter-page gap, or past the last page - the user should stay
 		// in placement mode and try again on a real page.
 		const docLayer = app.map._docLayer;
 		const additionPerPart = docLayer._partHeightTwips + docLayer._spaceBetweenParts;
-		const partIndex = Math.floor(docPoint.y / additionPerPart);
-		const yInPart = docPoint.y - partIndex * additionPerPart;
+		const partIndex = Math.floor(docTL.y / additionPerPart);
+		const yInPart = docTL.y - partIndex * additionPerPart;
 		if (partIndex < 0 || partIndex >= docLayer._parts
-			|| docPoint.x < 0 || docPoint.x > docLayer._partWidthTwips
+			|| docTL.x < 0 || docTL.x > docLayer._partWidthTwips
 			|| yInPart > docLayer._partHeightTwips)
 			return;
+
+		// For a drag, clamp the bottom-right to the same page so a comment
+		// that overshot the page boundary still produces a valid in-page area.
+		if (docBR) {
+			const partTop = partIndex * additionPerPart;
+			docBR.x = Math.min(docBR.x, docLayer._partWidthTwips);
+			docBR.y = Math.min(docBR.y, partTop + docLayer._partHeightTwips);
+		}
 
 		// Switching the active part keeps save()'s setPart wrapper consistent
 		// and lets newAnnotation pick up the correct parthash; yAddition lets
@@ -885,7 +982,9 @@ export class CommentSection extends CanvasSectionObject {
 		commentData.yAddition = partIndex * additionPerPart;
 		this.map.setPart(partIndex, false);
 
-		commentData.position = [docPoint.x, docPoint.y];
+		commentData.position = [docTL.x, docTL.y];
+		if (docBR)
+			commentData.size = [docBR.x - docTL.x, docBR.y - docTL.y];
 		this.exitCommentPlacement();
 		this.sectionProperties.docLayer.newAnnotation(commentData);
 	}
@@ -905,6 +1004,8 @@ export class CommentSection extends CanvasSectionObject {
 			// opening the editor, ship it as twips so core can place the
 			// annotation there instead of (0, 0). Mirrors the EditAnnotation
 			// pattern in CommentMarkerSubSection.sendAnnotationPositionChange.
+			// PDF drag-to-area: when the user dragged out a rectangle,
+			// also ship Width/Height so core stores the area as the PDF /Rect.
 			let positionArgs: any = {};
 			if (annotation.sectionProperties.data.position) {
 				const pos = annotation.sectionProperties.data.position;
@@ -915,6 +1016,11 @@ export class CommentSection extends CanvasSectionObject {
 					PositionX: { type: 'int32', value: pos[0] },
 					PositionY: { type: 'int32', value: py },
 				};
+				const size = annotation.sectionProperties.data.size;
+				if (size) {
+					positionArgs.Width = { type: 'int32', value: size[0] };
+					positionArgs.Height = { type: 'int32', value: size[1] };
+				}
 			}
 			comment = {
 				Author: {

@@ -543,6 +543,14 @@ body {
 	outline: none;
 }
 
+.annotation-anchor-area {
+	margin-left: 0px;
+	margin-top: 0px;
+	border: 1px solid var(--color-primary, #0078d4);
+	background: rgba(0, 120, 212, 0.08);
+	box-sizing: border-box;
+}
+
 .cool-scrolled {
 	overflow: auto;
 }
@@ -617,6 +625,14 @@ body {
 	width: min-content;
 	min-width: 250px;
 	transition: left .25s;
+}
+
+.comment-placement-overlay {
+	position: absolute;
+	pointer-events: none;
+	border: 1px dashed var(--color-primary, #0078d4);
+	background: rgba(0, 120, 212, 0.10);
+	z-index: 11;
 }
 
 .cool-annotation.annotation-pop-up {

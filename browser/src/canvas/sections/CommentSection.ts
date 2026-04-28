@@ -156,6 +156,7 @@ export class Comment extends CanvasSectionObject {
 		this.sectionProperties.childLines = [];
 		this.sectionProperties.childCommentOffset = 8;
 		this.sectionProperties.commentMarkerSubSection = null; // For Impress and Draw documents.
+		this.sectionProperties.commentAnchorAreaSubSection = null; // For comments with an explicit anchor area (PDF /Rect, drag-to-area).
 		this.sectionProperties.calcCommentAreaWidth = 40; // Calc comment area doesn't cover the whole cell, in order to allow multi-cell selections.
 
 		app.map.on('sheetgeometrychanged', this.setPositionAndSize.bind(this));
@@ -814,6 +815,21 @@ export class Comment extends CanvasSectionObject {
 					this.sectionProperties.data.anchorPos[1] * app.twipsToPixels
 				);
 			}
+			if (this.sectionProperties.commentAnchorAreaSubSection !== null) {
+				const data = this.sectionProperties.data;
+				this.sectionProperties.commentAnchorAreaSubSection.sectionProperties.data = data;
+				this.sectionProperties.commentAnchorAreaSubSection.setPosition(
+					data.anchorPos[0] * app.twipsToPixels,
+					data.anchorPos[1] * app.twipsToPixels
+				);
+				// rectangle = [x, y, width, height] in twips (ImpressTileLayer.newAnnotation
+				// builds it from the data; the JSON form coming back from core uses the
+				// same shape via tools::Rectangle::toString()).
+				this.sectionProperties.commentAnchorAreaSubSection.resize(
+					data.rectangle[2] * app.twipsToPixels / app.dpiScale,
+					data.rectangle[3] * app.twipsToPixels / app.dpiScale
+				);
+			}
 		}
 	}
 
@@ -823,6 +839,30 @@ export class Comment extends CanvasSectionObject {
 
 		const showMarker = app.impress.partList[app.map._docLayer._selectedPart].hash === this.sectionProperties.data.parthash ||
 							app.file.fileBasedView;
+
+		// Anchor-area outline: only when the comment carries an explicit
+		// area (set by core via the hasArea JSON field for PDF /Rect or
+		// the Width/Height args of .uno:InsertAnnotation). Added before
+		// the marker sub-section so findSectionContainingPoint, which
+		// iterates last-to-first, lets the smaller marker icon take a
+		// click at the rectangle's top-left while the area catches
+		// clicks elsewhere inside the rectangle.
+		if (this.sectionProperties.data.hasArea) {
+			const widthCssPx = this.sectionProperties.data.rectangle[2]
+				* app.twipsToPixels / app.dpiScale;
+			const heightCssPx = this.sectionProperties.data.rectangle[3]
+				* app.twipsToPixels / app.dpiScale;
+			this.sectionProperties.commentAnchorAreaSubSection = new CommentAnchorAreaSubSection(
+				this.name + this.sectionProperties.data.id + '-area' + String(Math.random()),
+				widthCssPx,
+				heightCssPx,
+				new SimplePoint(this.sectionProperties.data.anchorPos[0], this.sectionProperties.data.anchorPos[1]),
+				showMarker,
+				this,
+				this.sectionProperties.data
+			);
+			app.sectionContainer.addSection(this.sectionProperties.commentAnchorAreaSubSection);
+		}
 
 		this.sectionProperties.commentMarkerSubSection = new CommentMarkerSubSection(
 			this.name + this.sectionProperties.data.id + String(Math.random()), // Section name - only as a placeholder.
@@ -857,12 +897,20 @@ export class Comment extends CanvasSectionObject {
 			this.sectionProperties.commentMarkerSubSection.showSection = true;
 			this.sectionProperties.commentMarkerSubSection.onSectionShowStatusChange();
 		}
+		if (this.sectionProperties.commentAnchorAreaSubSection != null) {
+			this.sectionProperties.commentAnchorAreaSubSection.showSection = true;
+			this.sectionProperties.commentAnchorAreaSubSection.onSectionShowStatusChange();
+		}
 	}
 
 	private hideMarker (): void {
 		if (this.sectionProperties.commentMarkerSubSection != null) {
 			this.sectionProperties.commentMarkerSubSection.showSection = false;
 			this.sectionProperties.commentMarkerSubSection.onSectionShowStatusChange();
+		}
+		if (this.sectionProperties.commentAnchorAreaSubSection != null) {
+			this.sectionProperties.commentAnchorAreaSubSection.showSection = false;
+			this.sectionProperties.commentAnchorAreaSubSection.onSectionShowStatusChange();
 		}
 	}
 
@@ -1806,6 +1854,9 @@ export class Comment extends CanvasSectionObject {
 
 		if (this.sectionProperties.commentMarkerSubSection !== null)
 			app.sectionContainer.removeSection(this.sectionProperties.commentMarkerSubSection.name);
+
+		if (this.sectionProperties.commentAnchorAreaSubSection !== null)
+			app.sectionContainer.removeSection(this.sectionProperties.commentAnchorAreaSubSection.name);
 
 		if (container && container.parentElement) {
 			var c: number = 0;

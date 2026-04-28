@@ -356,6 +356,7 @@ COOL_JS_LST =\
 	src/canvas/sections/RulerSpacerSection.ts \
 	src/canvas/sections/CompareChangesLabelSection.ts \
 	src/canvas/sections/CommentMarkerSubSection.ts \
+	src/canvas/sections/CommentAnchorAreaSubSection.ts \
 	src/canvas/sections/CommentSection.ts \
 	src/canvas/sections/CommentListSection.ts \
 	src/canvas/sections/CalcGridSection.ts \

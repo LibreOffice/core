@@ -128,14 +128,19 @@ window.L.ImpressTileLayer = window.L.CanvasTileLayer.extend({
 		// commentData.position (twips, top-left) lets the caller pin the new
 		// comment to a specific document point; used by the PDF click-to-place
 		// flow. Without it the marker lands at the current viewport top-left.
+		// commentData.size (twips, [w,h]) further pins the marker rectangle
+		// to a user-dragged area; without it the marker stays at the default
+		// 566x566 twips placeholder.
 		const anchorX = commentData.position
 			? commentData.position[0]
 			: app.activeDocument.activeLayout.viewedRectangle.x1;
 		const anchorY = commentData.position
 			? commentData.position[1]
 			: app.activeDocument.activeLayout.viewedRectangle.y1;
+		const w = commentData.size ? commentData.size[0] : 566;
+		const h = commentData.size ? commentData.size[1] : 566;
 		commentData.anchorPos = [anchorX, anchorY];
-		commentData.rectangle = [anchorX, anchorY, 566, 566];
+		commentData.rectangle = [anchorX, anchorY, w, h];
 
 		commentData.parthash = app.impress.partList[this._selectedPart].hash;
 
