@@ -2500,7 +2500,6 @@ class Menubar extends window.L.Control {
 			$(aItem).data('id', 'document-logo');
 			$(aItem).data('type', 'action');
 			aItem.setAttribute('role', 'img');
-			aItem.setAttribute('aria-label', _('file type icon'));
 			aItem.target = '_blank';
 
 			if (window.logoURL) {
@@ -2511,6 +2510,7 @@ class Menubar extends window.L.Control {
 				aItem.classList.add(iconClass);
 				aItem.setAttribute('data-cooltip', iconTooltip);
 			}
+			app.LOUtil.syncDocumentLogoAriaLabel(aItem);
 
 			if (this._menubarCont != null)
 				this._menubarCont.insertBefore(liItem, this._menubarCont.firstChild);

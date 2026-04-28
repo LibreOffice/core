@@ -935,6 +935,31 @@ class LOUtil {
 		return '';
 	}
 
+	// Mirror data-cooltip onto aria-label so the accessible name
+	// matches the visible tooltip, even when branding overrides
+	// data-cooltip after load (e.g. to "Collabora Online"). When
+	// branding also sets an href, target="_blank" takes effect and
+	// the link opens a new tab, so announce that to screen readers.
+	public static syncDocumentLogoAriaLabel(docLogo: HTMLElement): void {
+		const syncAriaLabel = () => {
+			const cooltip = docLogo.getAttribute('data-cooltip');
+			let label;
+			if (cooltip) {
+				label = docLogo.getAttribute('href')
+					? _('{0} website, opens in new tab').replace('{0}', cooltip)
+					: cooltip;
+			} else {
+				label = _('file type icon');
+			}
+			docLogo.setAttribute('aria-label', label);
+		};
+		syncAriaLabel();
+		new MutationObserver(syncAriaLabel).observe(docLogo, {
+			attributes: true,
+			attributeFilter: ['data-cooltip', 'href'],
+		});
+	}
+
 	public static getDocumentLogoClass(docType: string) {
 		let iconClass: string;
 		let iconTooltip: string;
