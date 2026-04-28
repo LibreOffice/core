@@ -47,14 +47,20 @@ window.L.Map.include({
 		if (author in this._viewInfoByUserName) {
 			avatar = this._viewInfoByUserName[author].userextrainfo.avatar;
 		}
-		this._docLayer.newAnnotation({
+		const commentData = {
 			text: '',
 			textrange: '',
 			author: author,
 			dateTime: new Date().toISOString(),
 			id: 'new', // 'new' only when added by us
 			avatar: avatar
-		});
+		};
+		// In PDF, enter a click-to-place mode and let the user pick the spot.
+		if (app.file.fileBasedView && commentSection) {
+			commentSection.startCommentPlacement(commentData);
+			return;
+		}
+		this._docLayer.newAnnotation(commentData);
 	},
 
 	insertThreadedComment: function() {
@@ -161,6 +167,12 @@ export class CommentSection extends CanvasSectionObject {
 	private annotationMaxSize: number;
 	escapeListener: (e: KeyboardEvent) => void;
 
+	// Active "click anywhere on the page to place a new comment" mode for PDF.
+	// When non-null, the next document mousedown is consumed to position a new
+	// comment at that point instead of being forwarded to core.
+	private placementCommentData: any = null;
+	private placementSavedCursor: string | null = null;
+
 	constructor () {
 		super(app.CSections.CommentList.name);
 
@@ -195,6 +207,12 @@ export class CommentSection extends CanvasSectionObject {
 		this.mobileCommentModalId = this.map.uiManager.generateModalId(this.mobileCommentId);
 		this.annotationMinSize = Number(getComputedStyle(document.documentElement).getPropertyValue('--annotation-min-size'));
 		this.annotationMaxSize = Number(getComputedStyle(document.documentElement).getPropertyValue('--annotation-max-size'));
+
+		// PDF placement-mode handlers are added to / removed from the DOM via
+		// addEventListener/removeEventListener; bind once here so the same
+		// reference is used for both calls.
+		this.onPlacementMouseDown = this.onPlacementMouseDown.bind(this);
+		this.onPlacementKeyDown = this.onPlacementKeyDown.bind(this);
 	}
 
 	public onInitialize (): void {
@@ -787,6 +805,91 @@ export class CommentSection extends CanvasSectionObject {
 		app.map.fire('deleteannotation');
 	}
 
+	public startCommentPlacement(commentData: any): void {
+		// An additional Insert Comment trigger while placement is already
+		// pending is a no-op.
+		if (this.placementCommentData)
+			return;
+
+		const canvas = document.getElementById('document-canvas') as HTMLCanvasElement | null;
+		if (!canvas)
+			return;
+
+		this.placementCommentData = commentData;
+		this.placementSavedCursor = canvas.style.cursor;
+		canvas.style.cursor = 'crosshair';
+
+		// Capture phase, before CanvasSectionContainer's onmousedown property
+		// handler dispatches to MouseControl/etc.
+		canvas.addEventListener('mousedown', this.onPlacementMouseDown, true);
+		document.addEventListener('keydown', this.onPlacementKeyDown, true);
+	}
+
+	private exitCommentPlacement(): void {
+		const canvas = document.getElementById('document-canvas') as HTMLCanvasElement | null;
+		if (canvas) {
+			canvas.removeEventListener('mousedown', this.onPlacementMouseDown, true);
+			if (this.placementSavedCursor !== null)
+				canvas.style.cursor = this.placementSavedCursor;
+		}
+		document.removeEventListener('keydown', this.onPlacementKeyDown, true);
+		this.placementCommentData = null;
+		this.placementSavedCursor = null;
+	}
+
+	private onPlacementMouseDown(e: MouseEvent): void {
+		if (e.button !== 0) return; // ignore right/middle clicks
+		e.stopImmediatePropagation();
+		e.preventDefault();
+		this.finishCommentPlacement(e, e.currentTarget as HTMLCanvasElement);
+	}
+
+	private onPlacementKeyDown(e: KeyboardEvent): void {
+		if (e.key !== 'Escape') return;
+		e.stopImmediatePropagation();
+		e.preventDefault();
+		this.exitCommentPlacement();
+	}
+
+	private finishCommentPlacement(e: MouseEvent, canvas: HTMLCanvasElement): void {
+		const commentData = this.placementCommentData;
+		// canvasToDocumentPoint expects coordinates relative to the canvas DOM
+		// element.
+		const rect = canvas.getBoundingClientRect();
+		const point = new cool.SimplePoint(0, 0);
+		point.cX = e.clientX - rect.left;
+		point.cY = e.clientY - rect.top;
+
+		const layout = app.activeDocument.activeLayout;
+		const docPoint = layout.canvasToDocumentPoint(point);
+		if (Number.isNaN(docPoint.x) || Number.isNaN(docPoint.y))
+			return;
+
+		// docPoint.x/.y are stacked-document twips. fileBasedView lays pages
+		// out vertically with a fixed _spaceBetweenParts gap. Compute the
+		// containing page and reject clicks that fell in a horizontal margin,
+		// in an inter-page gap, or past the last page - the user should stay
+		// in placement mode and try again on a real page.
+		const docLayer = app.map._docLayer;
+		const additionPerPart = docLayer._partHeightTwips + docLayer._spaceBetweenParts;
+		const partIndex = Math.floor(docPoint.y / additionPerPart);
+		const yInPart = docPoint.y - partIndex * additionPerPart;
+		if (partIndex < 0 || partIndex >= docLayer._parts
+			|| docPoint.x < 0 || docPoint.x > docLayer._partWidthTwips
+			|| yInPart > docLayer._partHeightTwips)
+			return;
+
+		// Switching the active part keeps save()'s setPart wrapper consistent
+		// and lets newAnnotation pick up the correct parthash; yAddition lets
+		// save() back the per-page offset out before sending PositionY.
+		commentData.yAddition = partIndex * additionPerPart;
+		this.map.setPart(partIndex, false);
+
+		commentData.position = [docPoint.x, docPoint.y];
+		this.exitCommentPlacement();
+		this.sectionProperties.docLayer.newAnnotation(commentData);
+	}
+
 	public click (annotation: any): void {
 		this.select(annotation);
 		app.map.fire('postMessage', {
@@ -798,6 +901,21 @@ export class CommentSection extends CanvasSectionObject {
 	public save (annotation: any): void {
 		var comment;
 		if (annotation.sectionProperties.data.id === 'new') {
+			// PDF click-to-place: when the user picked a position before
+			// opening the editor, ship it as twips so core can place the
+			// annotation there instead of (0, 0). Mirrors the EditAnnotation
+			// pattern in CommentMarkerSubSection.sendAnnotationPositionChange.
+			let positionArgs: any = {};
+			if (annotation.sectionProperties.data.position) {
+				const pos = annotation.sectionProperties.data.position;
+				let py = pos[1];
+				if (app.file.fileBasedView)
+					py -= annotation.sectionProperties.data.yAddition || 0;
+				positionArgs = {
+					PositionX: { type: 'int32', value: pos[0] },
+					PositionY: { type: 'int32', value: py },
+				};
+			}
 			comment = {
 				Author: {
 					type: 'string',
@@ -813,7 +931,8 @@ export class CommentSection extends CanvasSectionObject {
 					{ Text: {
 						type: 'string',
 						value: annotation.sectionProperties.data.text
-					} }
+					} },
+				...positionArgs
 			};
 			var unoCommand = annotation.sectionProperties.data.threaded
 				? '.uno:InsertThreadedComment' : '.uno:InsertAnnotation';

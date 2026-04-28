@@ -189,4 +189,241 @@ describe(['tagdesktop'], 'PDF Threaded Comments', function() {
 			assertCommentShownAndAnchorVisible(win, 'Zoe');
 		});
 	});
+
+	// Insert Comment on a PDF defers comment creation until the user clicks
+	// on the page: the toolbar/menu action enters a placement mode (crosshair
+	// cursor, capture-phase mousedown listener) and the captured click is
+	// converted to document twips for both the on-screen anchor and the
+	// .uno:InsertAnnotation PositionX/Y args.
+	it('Insert Comment in PDF enters placement mode, pins the anchor to the click, and round-trips through core', { env: { 'pdf-view': true } }, function() {
+		const commentText = 'placement-mode-test ' + Date.now();
+		let initialCount = 0;
+
+		cy.getFrameWindow().then(function(win) {
+			const section = win.app.sectionContainer.getSectionWithName(
+				win.app.CSections.CommentList.name);
+			initialCount = section.sectionProperties.commentList.length;
+			win.app.map.insertComment();
+		});
+
+		cy.getFrameWindow().should(function(win) {
+			expect(win.document.getElementById('document-canvas').style.cursor,
+				'placement mode must switch the canvas cursor to crosshair')
+				.to.equal('crosshair');
+
+			const section = win.app.sectionContainer.getSectionWithName(
+				win.app.CSections.CommentList.name);
+			expect(section.sectionProperties.commentList.length,
+				'no comment should be created until the user picks a position')
+				.to.equal(initialCount);
+		});
+
+		let expectedX = 0, expectedY = 0;
+		cy.getFrameWindow().then(function(win) {
+			const canvas = win.document.getElementById('document-canvas');
+			const rect = canvas.getBoundingClientRect();
+
+			// Aim for ~25% across page 1 in document twips, then map back to
+			// canvas-relative CSS pixels.
+			const docLayer = win.app.map._docLayer;
+			const targetTwipsX = docLayer._partWidthTwips / 4;
+			const targetTwipsY = docLayer._partHeightTwips / 4;
+			const canvasClickX = (targetTwipsX * win.app.twipsToPixels) / win.app.dpiScale;
+			const canvasClickY = (targetTwipsY * win.app.twipsToPixels) / win.app.dpiScale;
+
+			// canvasToDocumentPoint mutates its input, so build a fresh
+			// SimplePoint here that matches finishCommentPlacement's local point.
+			const expectedPoint = new win.cool.SimplePoint(0, 0);
+			expectedPoint.cX = canvasClickX;
+			expectedPoint.cY = canvasClickY;
+			const docPoint = win.app.activeDocument.activeLayout.canvasToDocumentPoint(expectedPoint);
+			expectedX = docPoint.x;
+			expectedY = docPoint.y;
+
+			// Capture-phase mousedown listener inside startCommentPlacement
+			// consumes this; bubbles:true is needed so the capture path runs.
+			const ev = new win.MouseEvent('mousedown', {
+				clientX: rect.left + canvasClickX,
+				clientY: rect.top + canvasClickY,
+				button: 0,
+				bubbles: true,
+			});
+			canvas.dispatchEvent(ev);
+		});
+
+		// Local 'new' comment exists with the expected on-screen anchor.
+		cy.getFrameWindow().should(function(win) {
+			expect(win.document.getElementById('document-canvas').style.cursor,
+				'cursor must be restored after placement finishes')
+				.to.not.equal('crosshair');
+
+			const section = win.app.sectionContainer.getSectionWithName(
+				win.app.CSections.CommentList.name);
+			const newComment = section.sectionProperties.commentList.find(
+				function(c) { return c.sectionProperties.data.id === 'new'; });
+			expect(newComment, 'new comment was not created after the click').to.exist;
+
+			const anchorPos = newComment.sectionProperties.data.anchorPos;
+			expect(anchorPos[0],
+				'on-screen anchor X must match canvasToDocumentPoint of the click').to.be.closeTo(expectedX, 1);
+			expect(anchorPos[1],
+				'on-screen anchor Y must match canvasToDocumentPoint of the click').to.be.closeTo(expectedY, 1);
+		});
+
+		// Wait for the editor to render with a textarea, then settle so its
+		// id has flipped from 'new' to the final value.
+		cy.cGet('.cool-annotation').last({log: false})
+			.find('#annotation-modify-textarea-new').should('exist');
+		cy.getFrameWindow().then(function(win) { return helper.processToIdle(win); });
+		cy.cGet('.cool-annotation').last({log: false})
+			.find('.modify-annotation .cool-annotation-textarea')
+			.should('not.have.attr', 'disabled');
+		cy.cGet('.cool-annotation').last({log: false})
+			.find('.modify-annotation .cool-annotation-textarea')
+			.type(commentText);
+		cy.cGet('.cool-annotation').last({log: false})
+			.find('[value="Save"]').click();
+
+		// After core's acknowledgement: the commentList grew by one, the new
+		// comment carries a non-'new' id assigned by core, and its anchor
+		// survived the round-trip - the position core stored matches the
+		// position the placement-mode click captured.
+		cy.getFrameWindow().should(function(win) {
+			const section = win.app.sectionContainer.getSectionWithName(
+				win.app.CSections.CommentList.name);
+			expect(section.sectionProperties.commentList.length,
+				'commentList must have one more entry after save')
+				.to.equal(initialCount + 1);
+
+			const acked = section.sectionProperties.commentList.find(function(c) {
+				return c.sectionProperties.data.text === commentText;
+			});
+			expect(acked, 'a comment with the typed text must be present').to.exist;
+			expect(acked.sectionProperties.data.id,
+				'core must assign a real (non-\'new\') id').to.not.equal('new');
+
+			// Round-trip goes twips -> mm/100 (core) -> twips, so allow a few
+			// twips of rounding slack rather than asserting exact equality.
+			const anchorPos = acked.sectionProperties.data.anchorPos;
+			expect(anchorPos[0],
+				'round-tripped anchor X must match the captured click').to.be.closeTo(expectedX, 5);
+			expect(anchorPos[1],
+				'round-tripped anchor Y must match the captured click').to.be.closeTo(expectedY, 5);
+		});
+	});
+
+	// Negative path through placement mode: enter placement, miss the page
+	// (no comment), then click on the page (anchor visible at the click
+	// point), then cancel the editor before saving (no comment ends up in
+	// the document at all).
+	it('Insert Comment placement mode: off-page miss, on-page anchor, cancel', { env: { 'pdf-view': true } }, function() {
+		let initialCount = 0;
+
+		cy.getFrameWindow().then(function(win) {
+			const section = win.app.sectionContainer.getSectionWithName(
+				win.app.CSections.CommentList.name);
+			initialCount = section.sectionProperties.commentList.length;
+			win.app.map.insertComment();
+		});
+
+		cy.getFrameWindow().should(function(win) {
+			expect(win.document.getElementById('document-canvas').style.cursor)
+				.to.equal('crosshair');
+		});
+
+		// Off-page click. Compute an X past the page's right edge from
+		// _partWidthTwips so it's guaranteed off-page regardless of zoom or
+		// scroll.
+		cy.getFrameWindow().then(function(win) {
+			const canvas = win.document.getElementById('document-canvas');
+			const rect = canvas.getBoundingClientRect();
+			const docLayer = win.app.map._docLayer;
+			const offPageCssX = (docLayer._partWidthTwips
+				* win.app.twipsToPixels) / win.app.dpiScale + 50;
+			const ev = new win.MouseEvent('mousedown', {
+				clientX: rect.left + offPageCssX,
+				clientY: rect.top + 200,
+				button: 0,
+				bubbles: true,
+			});
+			canvas.dispatchEvent(ev);
+		});
+
+		cy.getFrameWindow().then(function(win) { return helper.processToIdle(win); });
+		cy.getFrameWindow().should(function(win) {
+			expect(win.document.getElementById('document-canvas').style.cursor,
+				'placement mode should remain active after an off-page click')
+				.to.equal('crosshair');
+
+			const section = win.app.sectionContainer.getSectionWithName(
+				win.app.CSections.CommentList.name);
+			expect(section.sectionProperties.commentList.length,
+				'no comment should be added on an off-page click')
+				.to.equal(initialCount);
+		});
+
+		// On-page click - placement mode exits, a 'new' comment gets the
+		// expected anchor and the editor opens.
+		let expectedX = 0, expectedY = 0;
+		cy.getFrameWindow().then(function(win) {
+			const canvas = win.document.getElementById('document-canvas');
+			const rect = canvas.getBoundingClientRect();
+
+			// Same target-twips-back-to-CSS-pixels strategy as the happy-path
+			// test - aims for ~25% across page 1 regardless of zoom.
+			const docLayer = win.app.map._docLayer;
+			const targetTwipsX = docLayer._partWidthTwips / 4;
+			const targetTwipsY = docLayer._partHeightTwips / 4;
+			const canvasClickX = (targetTwipsX * win.app.twipsToPixels) / win.app.dpiScale;
+			const canvasClickY = (targetTwipsY * win.app.twipsToPixels) / win.app.dpiScale;
+
+			const expectedPoint = new win.cool.SimplePoint(0, 0);
+			expectedPoint.cX = canvasClickX;
+			expectedPoint.cY = canvasClickY;
+			const docPoint = win.app.activeDocument.activeLayout.canvasToDocumentPoint(expectedPoint);
+			expectedX = docPoint.x;
+			expectedY = docPoint.y;
+
+			const ev = new win.MouseEvent('mousedown', {
+				clientX: rect.left + canvasClickX,
+				clientY: rect.top + canvasClickY,
+				button: 0,
+				bubbles: true,
+			});
+			canvas.dispatchEvent(ev);
+		});
+
+		cy.getFrameWindow().should(function(win) {
+			expect(win.document.getElementById('document-canvas').style.cursor,
+				'cursor must be restored after the on-page click')
+				.to.not.equal('crosshair');
+
+			const section = win.app.sectionContainer.getSectionWithName(
+				win.app.CSections.CommentList.name);
+			const newComment = section.sectionProperties.commentList.find(
+				function(c) { return c.sectionProperties.data.id === 'new'; });
+			expect(newComment, 'new comment must be created at the click').to.exist;
+			const anchorPos = newComment.sectionProperties.data.anchorPos;
+			expect(anchorPos[0],
+				'temporary anchor X must match the click').to.be.closeTo(expectedX, 1);
+			expect(anchorPos[1],
+				'temporary anchor Y must match the click').to.be.closeTo(expectedY, 1);
+		});
+
+		// Cancel the editor before typing/saving.
+		cy.cGet('.cool-annotation').last({log: false})
+			.find('#annotation-modify-textarea-new').should('exist');
+		cy.cGet('.cool-annotation').last({log: false})
+			.find('#annotation-cancel-new').click();
+
+		// Settle and verify the document carries no extra comment.
+		cy.getFrameWindow().then(function(win) { return helper.processToIdle(win); });
+		cy.getFrameWindow().should(function(win) {
+			const section = win.app.sectionContainer.getSectionWithName(
+				win.app.CSections.CommentList.name);
+			expect(section.sectionProperties.commentList.length,
+				'no comment should remain after cancelling the editor')
+				.to.equal(initialCount);
+		});
+	});
 });
