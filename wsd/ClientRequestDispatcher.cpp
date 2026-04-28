@@ -831,12 +831,14 @@ void ClientRequestDispatcher::handleIncomingMessage(SocketDisposition& dispositi
     // start streaming condition
     const bool canStreamToFile =
         request.getMethod() == Poco::Net::HTTPRequest::HTTP_POST &&
-        request.getContentLength() != Poco::Net::HTTPMessage::UNKNOWN_CONTENT_LENGTH &&
+        request.getContentLength() > MaxInMemoryHttpRequestSize && // avoid disk I/O for small data
         !request.getChunkedTransferEncoding() && // ignore chunked transfer for now
-        request.find("ProxyPrefix") == request.end(); // proxy mode assumes nothing consumed
+        !request.has("ProxyPrefix"); // proxy mode assumes nothing consumed
 
-    if (canStreamToFile && request.getContentLength() > 0)
+    if (canStreamToFile)
     {
+        assert(request.getContentLength() != Poco::Net::HTTPMessage::UNKNOWN_CONTENT_LENGTH &&
+               "Expected a known Content-Length");
         _postFileDir = std::make_unique<FileUtil::OwnedFile>(FileUtil::createRandomTmpDir(
                     COOLWSD::ChildRoot + JailUtil::CHILDROOT_TMP_INCOMING_PATH) + '/', true);
         std::string postFilename = _postFileDir->_file + "poststream";

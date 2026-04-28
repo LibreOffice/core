@@ -30,6 +30,8 @@
 /// Handles incoming connections and dispatches to the appropriate handler.
 class ClientRequestDispatcher final : public SimpleSocketHandler
 {
+    static constexpr int MaxInMemoryHttpRequestSize = 16 * 1024;
+
 public:
     static void InitStaticFileContentCache()
     {
