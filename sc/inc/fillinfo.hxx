@@ -114,8 +114,7 @@ struct ScBasicCellInfo
 struct ScCellInfo
 {
     ScCellInfo()
-        : pPatternAttr(nullptr)
-        , pConditionSet(nullptr)
+        : pConditionSet(nullptr)
         , pDataBar(nullptr)
         , pIconSet(nullptr)
         , maBackground()
@@ -149,7 +148,13 @@ struct ScCellInfo
 
     ScRefCellValue              maCell;
 
-    const ScPatternAttr*        pPatternAttr;
+    // This is not ideal, both for efficiency and correctness.
+    // (a) It costs cycles to ref-count the underlying ScPatternAttr here.
+    // (b) We can also end up pointing at an incorrect ScPatternAttr.
+    // This is because, during painting, calculation side-effects can end up mutating the underlying cell
+    // attributes. Rather than pay the cost of fetching the right thing repeatedly during painting, we
+    // tolerate a little bit of (hopefully) temporary incorrectness.
+    CellAttributeHolder         pPatternAttr;
     const SfxItemSet*           pConditionSet;
     std::optional<Color>        mxColorScale;
     const ScDataBarInfo*        pDataBar;
@@ -183,6 +188,8 @@ struct ScCellInfo
     bool                        bPivotCollapseButton : 1;   // dp compact layout collapse button
     bool                        bPivotExpandButton : 1;     // dp compact layout expand button
     bool                        bPivotPopupButtonMulti : 1; // dp button with popup arrow for multiple fields
+
+    const ScPatternAttr* getPatternAttr() const { return pPatternAttr.getScPatternAttr(); }
 };
 
 const SCCOL SC_ROTMAX_NONE = SCCOL_MAX;

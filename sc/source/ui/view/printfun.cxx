@@ -417,7 +417,7 @@ static void lcl_HidePrint( const ScTableInfo& rTabInfo, SCCOL nX1, SCCOL nX2 )
             ScCellInfo& rCellInfo = pThisRowInfo->cellInfo(nX);
             ScBasicCellInfo& rBasicCellInfo = pThisRowInfo->basicCellInfo(nX);
             if (!rBasicCellInfo.bEmptyCellText)
-                if (rCellInfo.pPatternAttr->
+                if (rCellInfo.getPatternAttr()->
                             GetItem(ATTR_PROTECTION, rCellInfo.pConditionSet).GetHidePrint())
                 {
                     rCellInfo.maCell.clear();

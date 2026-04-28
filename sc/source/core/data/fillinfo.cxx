@@ -106,7 +106,7 @@ static void lcl_GetMergeRange( SCCOL nX, SCROW nY, SCSIZE nArrY,
         !pDoc->RowHidden(rStartY, nTab, nullptr, &nLastRow) &&
         pRowInfo[nArrY].nRowNo == rStartY)
     {
-        pMerge = &pRowInfo[nArrY].cellInfo(rStartX).pPatternAttr->
+        pMerge = &pRowInfo[nArrY].cellInfo(rStartX).getPatternAttr()->
                                         GetItem(ATTR_MERGE);
     }
     else
@@ -651,7 +651,7 @@ void ScDocument::FillInfo(
                 {
                     if ( ScStyleSheet* pPreviewStyle = GetPreviewCellStyle( nCol, pRowInfo[nArrRow].nRowNo, nTab ) )
                     {
-                        aAltPatterns.push_back( std::make_unique<ScPatternAttr>( *pInfo->pPatternAttr ) );
+                        aAltPatterns.push_back( std::make_unique<ScPatternAttr>( *pInfo->getPatternAttr() ) );
                         pModifiedPatt = aAltPatterns.back().get();
                         pModifiedPatt->SetStyleSheet( pPreviewStyle );
                     }
