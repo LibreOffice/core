@@ -131,6 +131,7 @@ enum class SfxHintId {
     ScUnoRefUndo,
     ScBulkData,
     ScRefErrorCreated,
+    ScExpandRefsSkipped,
 
 // SC accessibility hints
     ScAccTableChanged,

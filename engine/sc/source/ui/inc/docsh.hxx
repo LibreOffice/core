@@ -94,9 +94,9 @@ class SAL_DLLPUBLIC_RTTI ScDocShell final: public SfxObjectShell, public SfxList
     bool                m_bDocumentModifiedPending:1;
     bool                m_bUpdateEnabled:1;
     bool                m_bAreasChangedNeedBroadcast:1;
+    bool mbExpandRefsWarningShown:1 = false;
     sal_uInt16          m_nDocumentLock;
     sal_Int16           m_nCanUpdate;  // stores the UpdateDocMode from loading a document till update links
-
     std::unique_ptr<ScDBData> m_pOldAutoDBRange;
 
     std::unique_ptr<ScAutoStyleList>    m_pAutoStyleList;
@@ -446,6 +446,9 @@ public:
     void AddDelayedInfobarEntry(const OUString& sId, const OUString& sPrimaryMessage,
                                 const OUString& sSecondaryMessage, InfobarType aInfobarType,
                                 bool bShowCloseButton);
+
+    bool IsExpandRefsWarningShown() const { return mbExpandRefsWarningShown; }
+    void SetExpandRefsWarningShown() { mbExpandRefsWarningShown = true; }
 
 private:
     void ExecuteChartSource(SfxRequest& rReq);

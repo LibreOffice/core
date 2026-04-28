@@ -454,4 +454,9 @@
 #define STR_REF_ERROR_MSG                           NC_("STR_REF_ERROR_MSG", "Deletion created #REF! errors in other formulas. Undo to restore.")
 #define STR_REF_ERROR_GOTO                          NC_("STR_REF_ERROR_GOTO", "Find First")
 
+/* Expand References Infobar */
+#define STR_REF_EXPAND_TITLE                        NC_("STR_REF_EXPAND_TITLE", "Formula Range Not Updated")
+#define STR_REF_EXPAND_MSG                          NC_("STR_REF_EXPAND_MSG", "You may automate formula extension in Collabora Office Calc / General settings")
+#define STR_REF_EXPAND_SETTINGS                     NC_("STR_REF_EXPAND_SETTINGS", "Change Settings")
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -80,6 +80,7 @@
 #include <sfx2/kit/helper.hxx>
 #include <config_fuzzers.h>
 #include <memory>
+#include <brdcst.hxx>
 
 using namespace com::sun::star;
 
@@ -1153,6 +1154,13 @@ void ScDocument::UpdateReference(
         ScDocument* pClipDoc = ScModule::GetClipDoc();
         if (pClipDoc)
             pClipDoc->GetClipParam().mbCutMode = false;
+    }
+    // A formula range would have grown to include the inserted cells, but
+    // automatic range extension is off. Let the view warn the user.
+    if (rCxt.mbExpandSkipped)
+    {
+        if (ScDocShell* pDocSh = GetDocumentShell())
+            pDocSh->Broadcast(ScHint(SfxHintId::ScExpandRefsSkipped, ScAddress{}));
     }
 }
 

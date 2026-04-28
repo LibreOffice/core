@@ -100,6 +100,10 @@ struct RefUpdateContext
     /// not part of the logical input configuration.
     mutable RefErrorContext maRefErrors;
 
+    /// True when an edge expansion was skipped because automatic range
+    /// extension is off.
+    mutable bool mbExpandSkipped = false;
+
     RefUpdateContext(ScDocument& rDoc, ScDocument* pClipdoc = nullptr);
 
     bool isInserted() const;

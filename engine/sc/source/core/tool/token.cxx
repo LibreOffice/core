@@ -3053,8 +3053,16 @@ bool expandRangeByEdge( const sc::RefUpdateContext& rCxt, ScRange& rRefRange, co
         const ScComplexRefData& rRef )
 {
     if (!rCxt.mrDoc.IsExpandRefs())
-        // Edge-expansion is turned off.
+    {
+        // Edge-expansion is turned off. Note when the inserted range sits
+        // immediately after the reference end, so the formula would have
+        // grown had the setting been on.
+        bool bAfterRow = (rSelectedRange.aStart.Row() == rRefRange.aEnd.Row() + 1);
+        bool bAfterCol = (rSelectedRange.aStart.Col() == rRefRange.aEnd.Col() + 1);
+        if (bAfterRow || bAfterCol)
+            rCxt.mbExpandSkipped = true;
         return false;
+    }
 
     if (rSelectedRange.aStart.Tab() > rRefRange.aStart.Tab() || rRefRange.aEnd.Tab() > rSelectedRange.aEnd.Tab())
         // Sheet references not within selected range.

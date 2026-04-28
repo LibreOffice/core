@@ -31,7 +31,15 @@ class CalcNotifications {
 			this.onCalcRefError(e.state);
 		} else if (e.commandName === 'CalcRefErrorDismiss') {
 			this.map.uiManager.closeSnackbar();
+		} else if (e.commandName === 'CalcExpandRefsSkipped') {
+			this.onCalcExpandRefsSkipped();
 		}
+	}
+
+	private onCalcExpandRefsSkipped(): void {
+		this.map.uiManager.showSnackbar(
+			_('A formula range was not extended to include the inserted cells.'),
+		);
 	}
 
 	private onCalcRefError(state: CalcRefErrorState): void {

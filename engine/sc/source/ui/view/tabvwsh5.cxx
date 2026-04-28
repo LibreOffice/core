@@ -45,6 +45,9 @@
 #include <brdcst.hxx>
 #include <tools/json_writer.hxx>
 #include <COKit/COKitEnums.h>
+#include <sfx2/sfxsids.hrc>
+#include <svl/stritem.hxx>
+#include <inputopt.hxx>
 
 void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
@@ -225,6 +228,10 @@ void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         assert(dynamic_cast<const ScHint*>(&rHint));
         const ScHint& rScHint = static_cast<const ScHint&>(rHint);
         ShowRefErrorInfoBar(rScHint.GetStartAddress());
+    }
+    else if (rHint.GetId() == SfxHintId::ScExpandRefsSkipped)
+    {
+        NotifyExpandRefsSkipped();
     }
     else                       // without parameter
     {
@@ -464,5 +471,70 @@ IMPL_LINK_NOARG(ScTabViewShell, GoToRefErrorHdl, weld::Button&, void)
     SetCursor(m_aRefErrorCell.Col(), m_aRefErrorCell.Row());
     GetViewFrame().RemoveInfoBar(u"ref_logic_error");
 }
+
+void ScTabViewShell::NotifyExpandRefsSkipped()
+{
+    ScDocShell* pDocSh = GetViewData().GetDocShell();
+
+    if (!pDocSh || pDocSh->IsExpandRefsWarningShown())
+        return;
+
+    pDocSh->SetExpandRefsWarningShown();
+
+    // In COOL there is no native info bar in the browser, so emit a
+    // state-change that the browser turns into a snackbar. This mirrors
+    // the #REF! warning split used by ShowRefErrorInfoBar.
+    if (comphelper::COKit::isActive())
+    {
+        tools::JsonWriter aJson;
+        aJson.put("commandName", "CalcExpandRefsSkipped");
+        { const auto aState = aJson.startNode("state"); }
+        viewCallback(KIT_CALLBACK_STATE_CHANGED, aJson.finishAndGetAsOString());
+        return;
+    }
+
+    auto pInfoBar = GetViewFrame().AppendInfoBar(
+        u"expand_refs_skipped"_ustr,
+        ScResId(STR_REF_EXPAND_TITLE),
+        ScResId(STR_REF_EXPAND_MSG),
+        InfobarType::INFO,
+        true);
+
+    if (pInfoBar)
+    {
+        weld::Button& rBtn = pInfoBar->addButton();
+        rBtn.set_label(ScResId(STR_REF_EXPAND_SETTINGS));
+        rBtn.connect_clicked(LINK(this, ScTabViewShell, InfoBarSettingsHandler));
+    }
+}
+
+IMPL_LINK_NOARG(ScTabViewShell, InfoBarSettingsHandler, weld::Button&, void)
+{
+    SfxDispatcher* pDisp = GetViewFrame().GetDispatcher();
+    if (!pDisp)
+        return;
+
+    // Open the options dialog at Calc - General. Run it synchronously so we
+    // can react once the user has confirmed or cancelled it. 10024 is the
+    // page id of that options page.
+    SfxStringItem aItem(SID_OPTIONS_TREEDIALOG, u"10024"_ustr);
+    pDisp->ExecuteList(SID_OPTIONS_TREEDIALOG, SfxCallMode::SYNCHRON, { &aItem });
+
+    ScModule* pScMod = ScModule::get();
+
+    // Only when the user actually turned automatic range extension on do we
+    // replay the insertion so the formula grows. Undo reverts the original
+    // insertion and redo reapplies it with the setting now active. This
+    // assumes the insertion that raised the warning is still the most recent
+    // undo action.
+    if (pScMod && pScMod->GetInputOptions().GetExpandRefs())
+    {
+        pDisp->Execute(SID_UNDO, SfxCallMode::SYNCHRON);
+        pDisp->Execute(SID_REDO, SfxCallMode::SYNCHRON);
+    }
+
+    GetViewFrame().RemoveInfoBar(u"expand_refs_skipped");
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
