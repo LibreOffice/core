@@ -1221,11 +1221,11 @@ window.L.Control.NotebookbarCalc = window.L.Control.NotebookbarWriter.extend({
 										'accessibility': { focusBack: true,	combination: 'RB', de: null }
 									},
 									{
-										'id': 'layout-insert-columns-before',
+										'id': 'layout-insert-rows-after',
 										'type': 'toolitem',
-										'text': _('Insert Columns Before'),
-										'command': '.uno:InsertColumnsBefore',
-										'accessibility': { focusBack: true,	combination: 'CB', de: null }
+										'text': _('Insert Rows Below'),
+										'command': '.uno:InsertRowsAfter',
+										'accessibility': { focusBack: true,	combination: 'RA', de: null }
 									},
 									{
 										'id': 'layout-delete-rows',
@@ -1240,11 +1240,11 @@ window.L.Control.NotebookbarCalc = window.L.Control.NotebookbarWriter.extend({
 								'type': 'toolbox',
 								'children': [
 									{
-										'id': 'layout-insert-rows-after',
+										'id': 'layout-insert-columns-before',
 										'type': 'toolitem',
-										'text': _('Insert Rows Below'),
-										'command': '.uno:InsertRowsAfter',
-										'accessibility': { focusBack: true,	combination: 'RA', de: null }
+										'text': _('Insert Columns Before'),
+										'command': '.uno:InsertColumnsBefore',
+										'accessibility': { focusBack: true,	combination: 'CB', de: null }
 									},
 									{
 										'id': 'layout-insert-columns-after',
