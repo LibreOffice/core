@@ -4949,7 +4949,7 @@ void ScInterpreter::ScMatch()
         return;
 
     VectorSearchArguments vsa;
-    vsa.nSearchOpCode = SC_OPCODE_MATCH;
+    vsa.nSearchOpCode = ocMatch;
 
     // get match mode
     double fType = ( nParamCount == 3 ? GetDouble() : 1.0 );
@@ -5111,7 +5111,7 @@ void ScInterpreter::ScXMatch()
         return;
 
     VectorSearchArguments vsa;
-    vsa.nSearchOpCode = SC_OPCODE_X_MATCH;
+    vsa.nSearchOpCode = ocXMatch;
 
     // get search mode
     if (nParamCount == 4)
@@ -7781,7 +7781,7 @@ void ScInterpreter::CalculateLookup(bool bHLookup)
         else
         {
             ScAddress aResultPos( nCol1, nRow1, nTab1);
-            bFound = LookupQueryWithCache( aResultPos, aParam, refData, LookupSearchMode::Forward, SC_OPCODE_V_LOOKUP );
+            bFound = LookupQueryWithCache( aResultPos, aParam, refData, LookupSearchMode::Forward, ocVLookup );
             nRow = aResultPos.Row();
             nCol = nSpIndex;
         }
@@ -7874,7 +7874,7 @@ void ScInterpreter::ScXLookup()
         return;
 
     VectorSearchArguments vsa;
-    vsa.nSearchOpCode = SC_OPCODE_X_LOOKUP;
+    vsa.nSearchOpCode = ocXLookup;
 
     if ( nParamCount == 6 )
     {
@@ -12882,7 +12882,7 @@ bool ScInterpreter::SearchRangeForValue( VectorSearchArguments& vsa, ScQueryPara
                 {
                     rParam.bByRow = false;
                     bool bBinarySearch = vsa.eSearchMode == LookupSearchMode::BinaryAscending || vsa.eSearchMode == LookupSearchMode::BinaryDescending;
-                    if (bBinarySearch && (vsa.nSearchOpCode == SC_OPCODE_X_LOOKUP || vsa.nSearchOpCode == SC_OPCODE_X_MATCH))
+                    if (bBinarySearch && (vsa.nSearchOpCode == ocXLookup || vsa.nSearchOpCode == ocXMatch))
                     {
                         ScQueryCellIteratorSortedCache aCellIter(mrDoc, mrContext, rParam.nTab, rParam, false, false);
                         // Advance Entry.nField in Iterator if column changed
@@ -12967,7 +12967,7 @@ bool ScInterpreter::SearchVectorForValue( VectorSearchArguments& vsa )
         case wildcard :
         case regex :
             // this mode can only used with XLOOKUP/XMATCH
-            if ( vsa.nSearchOpCode == SC_OPCODE_X_LOOKUP || vsa.nSearchOpCode == SC_OPCODE_X_MATCH )
+            if ( vsa.nSearchOpCode == ocXLookup || vsa.nSearchOpCode == ocXMatch )
             {
                 // Wildcard/Regex search mode with binary search is not allowed
                 if (vsa.eSearchMode == LookupSearchMode::BinaryAscending || vsa.eSearchMode == LookupSearchMode::BinaryDescending)
@@ -13002,15 +13002,15 @@ bool ScInterpreter::SearchVectorForValue( VectorSearchArguments& vsa )
     ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
     // allow to match empty cells as result if we are looking for the next smaller
     // or larger values in case of the new lookup functions
-    if (rEntry.eOp != SC_EQUAL && (vsa.nSearchOpCode == SC_OPCODE_X_LOOKUP ||
-        vsa.nSearchOpCode == SC_OPCODE_X_MATCH))
+    if (rEntry.eOp != SC_EQUAL && (vsa.nSearchOpCode == ocXLookup ||
+        vsa.nSearchOpCode == ocXMatch))
         rItem.mbMatchEmpty = true;
 
     if ( vsa.isStringSearch )
     {
         rItem.meType   = ScQueryEntry::ByString;
         rItem.maString = vsa.sSearchStr;
-        if ( vsa.nSearchOpCode == SC_OPCODE_MATCH )
+        if ( vsa.nSearchOpCode == ocMatch )
         {
             if ( mrDoc.IsInVBAMode() )
                 rParam.eSearchType = utl::SearchParam::SearchType::Wildcard;
@@ -13018,8 +13018,8 @@ bool ScInterpreter::SearchVectorForValue( VectorSearchArguments& vsa )
                 rParam.eSearchType = DetectSearchType(rEntry.GetQueryItem().maString.getString(), mrDoc);
         }
     }
-    else if ( vsa.isEmptySearch && (vsa.nSearchOpCode == SC_OPCODE_X_LOOKUP ||
-        vsa.nSearchOpCode == SC_OPCODE_X_MATCH) )
+    else if ( vsa.isEmptySearch && (vsa.nSearchOpCode == ocXLookup ||
+        vsa.nSearchOpCode == ocXMatch) )
     {
         rEntry.SetQueryByEmpty();
         rItem.mbMatchEmpty = true;
@@ -13047,12 +13047,12 @@ bool ScInterpreter::SearchVectorForValue( VectorSearchArguments& vsa )
     // MATCH expects index starting with 1, XLOOKUP expects index starting with 0
     if ( vsa.nHitIndex > 0 )
     {
-        vsa.nIndex = ( vsa.nSearchOpCode == SC_OPCODE_X_LOOKUP ? --vsa.nHitIndex : vsa.nHitIndex );
+        vsa.nIndex = ( vsa.nSearchOpCode == ocXLookup ? --vsa.nHitIndex : vsa.nHitIndex );
         return true;
     }
     else  if ( vsa.nHitIndex == 0 && vsa.nBestFit != SCSIZE_MAX )
     {
-        if ( vsa.nSearchOpCode == SC_OPCODE_X_LOOKUP )
+        if ( vsa.nSearchOpCode == ocXLookup )
         {
             vsa.nIndex = vsa.nBestFit;
             if ( !vsa.pMatSrc )
@@ -13082,7 +13082,7 @@ static bool lcl_LookupQuery( ScAddress & o_rResultPos, ScDocument& rDoc, ScInter
         SCCOL nCol;
         SCROW nRow;
         bool bBinarySearch = nSearchMode == LookupSearchMode::BinaryAscending || nSearchMode == LookupSearchMode::BinaryDescending;
-        if ((bBinarySearch && (nOpCode == SC_OPCODE_X_LOOKUP || nOpCode == SC_OPCODE_X_MATCH)) ||
+        if ((bBinarySearch && (nOpCode == ocXLookup || nOpCode == ocXMatch)) ||
             ScQueryCellIteratorSortedCache::CanBeUsed(rDoc, rParam, rParam.nTab, cell, refData, rContext))
         {
             ScQueryCellIteratorSortedCache aCellIter(rDoc, rContext, rParam.nTab, rParam, false, false);

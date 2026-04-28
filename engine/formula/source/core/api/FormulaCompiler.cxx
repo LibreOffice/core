@@ -180,14 +180,14 @@ OpCodeList::OpCodeList(const std::pair<const char*, int>* pSymbols, const Formul
     const CharClass* pCharClass = xCharClass.get();
     if (meSepType == FormulaCompiler::SeparatorType::RESOURCE_BASE)
     {
-        for (sal_uInt16 i = 0; i <= SC_OPCODE_LAST_OPCODE_ID; ++i)
+        for (sal_uInt16 i = 0; i <= ocLastOpcodeId; ++i)
         {
             putDefaultOpCode( xMap, i, pCharClass);
         }
     }
     else
     {
-        for (sal_uInt16 i = 0; i <= SC_OPCODE_LAST_OPCODE_ID; ++i)
+        for (sal_uInt16 i = 0; i <= ocLastOpcodeId; ++i)
         {
             OUString aOpStr;
             if ( getOpCodeString( aOpStr, i) )
@@ -208,14 +208,14 @@ OpCodeList::OpCodeList(const std::pair<TranslateId, int>* pSymbols, const Formul
     const CharClass* pCharClass = xCharClass.get();
     if (meSepType == FormulaCompiler::SeparatorType::RESOURCE_BASE)
     {
-        for (sal_uInt16 i = 0; i <= SC_OPCODE_LAST_OPCODE_ID; ++i)
+        for (sal_uInt16 i = 0; i <= ocLastOpcodeId; ++i)
         {
             putDefaultOpCode( xMap, i, pCharClass);
         }
     }
     else
     {
-        for (sal_uInt16 i = 0; i <= SC_OPCODE_LAST_OPCODE_ID; ++i)
+        for (sal_uInt16 i = 0; i <= ocLastOpcodeId; ++i)
         {
             OUString aOpStr;
             if ( getOpCodeString( aOpStr, i) )
@@ -230,7 +230,7 @@ bool OpCodeList::getOpCodeString( OUString& rStr, sal_uInt16 nOp )
 {
     switch (nOp)
     {
-        case SC_OPCODE_SEP:
+        case ocSep:
         {
             if (meSepType == FormulaCompiler::SeparatorType::SEMICOLON_BASE)
             {
@@ -239,7 +239,7 @@ bool OpCodeList::getOpCodeString( OUString& rStr, sal_uInt16 nOp )
             }
         }
         break;
-        case SC_OPCODE_ARRAY_COL_SEP:
+        case ocArrayColSep:
         {
             if (meSepType == FormulaCompiler::SeparatorType::SEMICOLON_BASE)
             {
@@ -248,7 +248,7 @@ bool OpCodeList::getOpCodeString( OUString& rStr, sal_uInt16 nOp )
             }
         }
         break;
-        case SC_OPCODE_ARRAY_ROW_SEP:
+        case ocArrayRowSep:
         {
             if (meSepType == FormulaCompiler::SeparatorType::SEMICOLON_BASE)
             {
@@ -560,19 +560,19 @@ uno::Sequence< sheet::FormulaOpCodeMapEntry > FormulaCompiler::OpCodeMap::create
         if ((nGroups & FormulaMapGroup::SEPARATORS) != 0)
         {
             static const sal_uInt16 aOpCodes[] = {
-                SC_OPCODE_OPEN,
-                SC_OPCODE_CLOSE,
-                SC_OPCODE_SEP,
+                ocOpen,
+                ocClose,
+                ocSep,
             };
             lclPushOpCodeMapEntries( aVec, mpTable.get(), aOpCodes, SAL_N_ELEMENTS(aOpCodes) );
         }
         if ((nGroups & FormulaMapGroup::ARRAY_SEPARATORS) != 0)
         {
             static const sal_uInt16 aOpCodes[] = {
-                SC_OPCODE_ARRAY_OPEN,
-                SC_OPCODE_ARRAY_CLOSE,
-                SC_OPCODE_ARRAY_ROW_SEP,
-                SC_OPCODE_ARRAY_COL_SEP
+                ocArrayOpen,
+                ocArrayClose,
+                ocArrayRowSep,
+                ocArrayColSep
             };
             lclPushOpCodeMapEntries( aVec, mpTable.get(), aOpCodes, SAL_N_ELEMENTS(aOpCodes) );
         }
@@ -585,21 +585,21 @@ uno::Sequence< sheet::FormulaOpCodeMapEntry > FormulaCompiler::OpCodeMap::create
             if ((nGroups & FormulaMapGroup::BINARY_OPERATORS) == 0)
                 lclPushOpCodeMapEntry( aVec, mpTable.get(), ocAdd );
             // regular unary operators
-            for (sal_uInt16 nOp = SC_OPCODE_START_UN_OP; nOp < SC_OPCODE_STOP_UN_OP && nOp < mnSymbols; ++nOp)
+            for (sal_uInt16 nOp = ocStartUnaryOperators; nOp < ocStopUnaryOperators && nOp < mnSymbols; ++nOp)
             {
                 lclPushOpCodeMapEntry( aVec, mpTable.get(), nOp );
             }
         }
         if ((nGroups & FormulaMapGroup::BINARY_OPERATORS) != 0)
         {
-            for (sal_uInt16 nOp = SC_OPCODE_START_BIN_OP; nOp < SC_OPCODE_STOP_BIN_OP && nOp < mnSymbols; ++nOp)
+            for (sal_uInt16 nOp = ocStartBinaryOperators; nOp < ocStopBinaryOperators && nOp < mnSymbols; ++nOp)
             {
                 switch (nOp)
                 {
                     // AND and OR in fact are functions but for legacy reasons
                     // are sorted into binary operators for compiler interna.
-                    case SC_OPCODE_AND :
-                    case SC_OPCODE_OR :
+                    case ocAnd :
+                    case ocOr :
                         break;   // nothing,
                     default:
                         lclPushOpCodeMapEntry( aVec, mpTable.get(), nOp );
@@ -610,28 +610,28 @@ uno::Sequence< sheet::FormulaOpCodeMapEntry > FormulaCompiler::OpCodeMap::create
         {
             // Function names are not consecutive, skip the gaps between
             // functions with no parameter, functions with 1 parameter
-            lclPushOpCodeMapEntries( aVec, mpTable.get(), SC_OPCODE_START_NO_PAR,
-                    ::std::min< sal_uInt16 >( SC_OPCODE_STOP_NO_PAR, mnSymbols ) );
-            lclPushOpCodeMapEntries( aVec, mpTable.get(), SC_OPCODE_START_1_PAR,
-                    ::std::min< sal_uInt16 >( SC_OPCODE_STOP_1_PAR, mnSymbols ) );
+            lclPushOpCodeMapEntries( aVec, mpTable.get(), ocStartNoParameters,
+                    ::std::min< sal_uInt16 >( ocStopNoParameters, mnSymbols ) );
+            lclPushOpCodeMapEntries( aVec, mpTable.get(), ocStartOneParameter,
+                    ::std::min< sal_uInt16 >( ocStopOneParameter, mnSymbols ) );
             // Additional functions not within range of functions.
             static const sal_uInt16 aOpCodes[] = {
-                SC_OPCODE_IF,
-                SC_OPCODE_IF_ERROR,
-                SC_OPCODE_IF_NA,
-                SC_OPCODE_CHOOSE,
-                SC_OPCODE_LET,
-                SC_OPCODE_AND,
-                SC_OPCODE_OR
+                ocIf,
+                ocIfError,
+                ocIfNA,
+                ocChoose,
+                ocLet,
+                ocAnd,
+                ocOr
             };
             lclPushOpCodeMapEntries( aVec, mpTable.get(), aOpCodes, SAL_N_ELEMENTS(aOpCodes) );
             // functions with 2 or more parameters.
-            for (sal_uInt16 nOp = SC_OPCODE_START_2_PAR; nOp < SC_OPCODE_STOP_2_PAR && nOp < mnSymbols; ++nOp)
+            for (sal_uInt16 nOp = ocStartTwoParameters; nOp < ocStopTwoParameters && nOp < mnSymbols; ++nOp)
             {
                 switch (nOp)
                 {
                     // NO_NAME is in SPECIAL.
-                    case SC_OPCODE_NO_NAME :
+                    case ocNoName :
                         break;   // nothing,
                     default:
                         lclPushOpCodeMapEntry( aVec, mpTable.get(), nOp );
@@ -656,8 +656,8 @@ uno::Sequence< sheet::FormulaOpCodeMapEntry > FormulaCompiler::OpCodeMap::create
         }
         if ((nGroups & FormulaMapGroup::ERROR_CONSTANTS) != 0)
         {
-            lclPushOpCodeMapEntries( aVec, mpTable.get(), SC_OPCODE_START_ERRORS,
-                    ::std::min< sal_uInt16 >( SC_OPCODE_STOP_ERRORS, mnSymbols ) );
+            lclPushOpCodeMapEntries( aVec, mpTable.get(), ocStartErrors,
+                    ::std::min< sal_uInt16 >( ocStopErrors, mnSymbols ) );
         }
     }
     return uno::Sequence< FormulaOpCodeMapEntry >(aVec.data(), aVec.size());
@@ -939,7 +939,7 @@ FormulaCompiler::OpCodeMapPtr FormulaCompiler::CreateOpCodeMap(
 {
     using sheet::FormulaOpCodeMapEntry;
     // Filter / API maps are never Core
-    NonConstOpCodeMapPtr xMap = std::make_shared<OpCodeMap>( SC_OPCODE_LAST_OPCODE_ID + 1, false,
+    NonConstOpCodeMapPtr xMap = std::make_shared<OpCodeMap>( ocLastOpcodeId + 1, false,
                 FormulaGrammar::mergeToGrammar( FormulaGrammar::setEnglishBit(
                         FormulaGrammar::GRAM_EXTERNAL, bEnglish), FormulaGrammar::CONV_UNSPECIFIED));
     std::unique_ptr<CharClass> xCharClass( xMap->isEnglish() ? nullptr : createCharClassIfNonEnglishUI());
@@ -985,7 +985,7 @@ static bool lcl_fillNativeSymbols( FormulaCompiler::NonConstOpCodeMapPtr& xMap, 
         {
             // Core
             aLocaleSymbolMap[language].mxSymbolMap = std::make_shared<FormulaCompiler::OpCodeMap>(
-                SC_OPCODE_LAST_OPCODE_ID + 1, true, FormulaGrammar::GRAM_NATIVE_UI);
+                ocLastOpcodeId + 1, true, FormulaGrammar::GRAM_NATIVE_UI);
             OpCodeList aOpCodeListSymbols(RID_STRLIST_FUNCTION_NAMES_SYMBOLS,
                                           aLocaleSymbolMap[language].mxSymbolMap);
             OpCodeList aOpCodeListNative(RID_STRLIST_FUNCTION_NAMES,
@@ -1009,7 +1009,7 @@ static bool lcl_fillNativeSymbols( FormulaCompiler::NonConstOpCodeMapPtr& xMap, 
         {
             // Core
             aSymbolMap.mxSymbolMap = std::make_shared<FormulaCompiler::OpCodeMap>(
-                SC_OPCODE_LAST_OPCODE_ID + 1, true, FormulaGrammar::GRAM_NATIVE_UI);
+                ocLastOpcodeId + 1, true, FormulaGrammar::GRAM_NATIVE_UI);
             OpCodeList aOpCodeListSymbols(RID_STRLIST_FUNCTION_NAMES_SYMBOLS,
                                           aSymbolMap.mxSymbolMap);
             OpCodeList aOpCodeListNative(RID_STRLIST_FUNCTION_NAMES, aSymbolMap.mxSymbolMap);
@@ -1141,7 +1141,7 @@ void FormulaCompiler::loadSymbols(const std::pair<const char*, int>* pSymbols, F
         return;
 
     // not Core
-    rxMap = std::make_shared<OpCodeMap>( SC_OPCODE_LAST_OPCODE_ID + 1, eGrammar != FormulaGrammar::GRAM_ODFF, eGrammar );
+    rxMap = std::make_shared<OpCodeMap>( ocLastOpcodeId + 1, eGrammar != FormulaGrammar::GRAM_ODFF, eGrammar );
     OpCodeList aOpCodeList(pSymbols, rxMap, eSepType);
 
     fillFromAddInMap( rxMap, eGrammar);
@@ -1772,7 +1772,7 @@ void FormulaCompiler::Factor()
                     ;   // nothing
             }
         }
-        if (SC_OPCODE_START_NO_PAR <= eOp && eOp < SC_OPCODE_STOP_NO_PAR)
+        if (ocStartNoParameters <= eOp && eOp < ocStopNoParameters)
         {
             pFacToken = mpToken;
             eOp = NextToken();
@@ -1790,7 +1790,7 @@ void FormulaCompiler::Factor()
                 NextToken();
             }
         }
-        else if (SC_OPCODE_START_1_PAR <= eOp && eOp < SC_OPCODE_STOP_1_PAR)
+        else if (ocStartOneParameter <= eOp && eOp < ocStopOneParameter)
         {
             if (eOp == ocIsoWeeknum && FormulaGrammar::isODFF( meGrammar ))
             {
@@ -1894,7 +1894,7 @@ void FormulaCompiler::Factor()
                 NextToken();
             }
         }
-        else if ((SC_OPCODE_START_2_PAR <= eOp && eOp < SC_OPCODE_STOP_2_PAR)
+        else if ((ocStartTwoParameters <= eOp && eOp < ocStopTwoParameters)
                 || eOp == ocExternal
                 || eOp == ocUDExternal
                 || eOp == ocMacro
@@ -2212,8 +2212,8 @@ void FormulaCompiler::UnaryLine()
 {
     if( mpToken->GetOpCode() == ocAdd )
         GetToken();
-    else if (SC_OPCODE_START_UN_OP <= mpToken->GetOpCode() &&
-            mpToken->GetOpCode() < SC_OPCODE_STOP_UN_OP)
+    else if (ocStartUnaryOperators <= mpToken->GetOpCode() &&
+            mpToken->GetOpCode() < ocStopUnaryOperators)
     {
         FormulaTokenRef p = mpToken;
         NextToken();
@@ -2945,11 +2945,11 @@ OpCode FormulaCompiler::NextToken()
     // There must be an operator before a push
     if ( (eOp == ocPush || eOp == ocColRowNameAuto) &&
             !( (meLastOp == ocOpen) || (meLastOp == ocSep) ||
-                (SC_OPCODE_START_BIN_OP <= meLastOp && meLastOp < SC_OPCODE_STOP_UN_OP)) )
+                (ocStartBinaryOperators <= meLastOp && meLastOp < ocStopUnaryOperators)) )
         SetError( FormulaError::OperatorExpected);
     // Operator and Plus => operator
     if (eOp == ocAdd && (meLastOp == ocOpen || meLastOp == ocSep ||
-                (SC_OPCODE_START_BIN_OP <= meLastOp && meLastOp < SC_OPCODE_STOP_UN_OP)))
+                (ocStartBinaryOperators <= meLastOp && meLastOp < ocStopUnaryOperators)))
     {
         FormulaCompilerRecursionGuard aRecursionGuard( mnRecursion );
         eOp = NextToken();
@@ -2959,9 +2959,9 @@ OpCode FormulaCompiler::NextToken()
         // Before an operator there must not be another operator, with the
         // exception of AND and OR.
         if ( eOp != ocAnd && eOp != ocOr &&
-                (SC_OPCODE_START_BIN_OP <= eOp && eOp < SC_OPCODE_STOP_BIN_OP )
+                (ocStartBinaryOperators <= eOp && eOp < ocStopBinaryOperators )
                 && (meLastOp == ocOpen || meLastOp == ocSep ||
-                    (SC_OPCODE_START_BIN_OP <= meLastOp && meLastOp < SC_OPCODE_STOP_UN_OP)))
+                    (ocStartBinaryOperators <= meLastOp && meLastOp < ocStopUnaryOperators)))
         {
             SetError( FormulaError::VariableExpected);
             if ( mbAutoCorrect && !mpStack )
@@ -3213,7 +3213,7 @@ void FormulaCompiler::ForceArrayOperator( FormulaTokenRef const & rCurr )
             // below.
             rCurr->SetInForceArray( ParamClass::ForceArray);
         }
-        else if (mnPC >= 2 && SC_OPCODE_START_BIN_OP <= eOp && eOp < SC_OPCODE_STOP_BIN_OP)
+        else if (mnPC >= 2 && ocStartBinaryOperators <= eOp && eOp < ocStopBinaryOperators)
         {
             // Binary operators are not functions followed by arguments
             // and need some peeking into RPN to inspect their operands.
@@ -3240,7 +3240,7 @@ void FormulaCompiler::ForceArrayOperator( FormulaTokenRef const & rCurr )
                 rCurr->SetInForceArray( eArrayReturn);
             }
         }
-        else if (mnPC >= 1 && SC_OPCODE_START_UN_OP <= eOp && eOp < SC_OPCODE_STOP_UN_OP)
+        else if (mnPC >= 1 && ocStartUnaryOperators <= eOp && eOp < ocStopUnaryOperators)
         {
             // Similar for unary operators.
             if (mpCode[-1]->GetInForceArray() != ParamClass::Unknown || IsMatrixFunction(mpCode[-1]->GetOpCode()))

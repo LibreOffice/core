@@ -311,14 +311,14 @@ void ScParameterClassification::Init()
 {
     if ( pData )
         return;
-    pData = new RunData[ SC_OPCODE_LAST_OPCODE_ID + 1 ];
-    memset( pData, 0, sizeof(RunData) * (SC_OPCODE_LAST_OPCODE_ID + 1));
+    pData = new RunData[ ocLastOpcodeId + 1 ];
+    memset( pData, 0, sizeof(RunData) * (ocLastOpcodeId + 1));
 
     // init from specified static data above
     for (const auto & i : pRawData)
     {
         const RawData* pRaw = &i;
-        if ( pRaw->eOp > SC_OPCODE_LAST_OPCODE_ID )
+        if ( pRaw->eOp > ocLastOpcodeId )
         {
             OSL_ENSURE( pRaw->eOp == ocNone, "RawData OpCode error");
         }
@@ -400,7 +400,7 @@ formula::ParamClass ScParameterClassification::GetParameterType(
             // added to avoid warnings
         }
     }
-    if ( 0 <= static_cast<short>(eOp) && eOp <= SC_OPCODE_LAST_OPCODE_ID )
+    if ( 0 <= static_cast<short>(eOp) && eOp <= ocLastOpcodeId )
     {
         sal_uInt8 nRepeat;
         formula::ParamClass eType;
@@ -511,7 +511,7 @@ void ScParameterClassification::MergeArgumentsFromFunctionResource()
     for ( const ScFuncDesc* pDesc = pFuncList->First(); pDesc;
             pDesc = pFuncList->Next() )
     {
-        if ( pDesc->nFIndex > SC_OPCODE_LAST_OPCODE_ID ||
+        if ( pDesc->nFIndex > ocLAST_OPCODE_ID ||
                 pData[pDesc->nFIndex].aData.nParam[0] != Unknown )
             continue;   // not an internal opcode or already done
 
@@ -581,7 +581,7 @@ void ScParameterClassification::GenerateDocumentation()
             // preset parameter count according to opcode value, with some
             // special handling
             bool bAddParentheses = true;
-            if ( eOp < SC_OPCODE_STOP_DIV )
+            if ( eOp < ocSTOP_DIV )
             {
                 bAddParentheses = false;    // will be overridden below if parameters
                 switch ( eOp )
@@ -601,12 +601,12 @@ void ScParameterClassification::GenerateDocumentation()
                     default:;
                 }
             }
-            else if ( eOp < SC_OPCODE_STOP_ERRORS )
+            else if ( eOp < ocSTOP_ERRORS )
             {
                 bAddParentheses = false;
                 aToken.SetByte(0);
             }
-            else if ( eOp < SC_OPCODE_STOP_BIN_OP )
+            else if ( eOp < ocSTOP_BIN_OP )
             {
                 switch ( eOp )
                 {
@@ -618,11 +618,11 @@ void ScParameterClassification::GenerateDocumentation()
                         aToken.SetByte(2);
                 }
             }
-            else if ( eOp < SC_OPCODE_STOP_UN_OP )
+            else if ( eOp < ocSTOP_UN_OP )
                 aToken.SetByte(1);
-            else if ( eOp < SC_OPCODE_STOP_NO_PAR )
+            else if ( eOp < ocSTOP_NO_PAR )
                 aToken.SetByte(0);
-            else if ( eOp < SC_OPCODE_STOP_1_PAR )
+            else if ( eOp < ocSTOP_1_PAR )
                 aToken.SetByte(1);
             else
                 aToken.SetByte( nParams);

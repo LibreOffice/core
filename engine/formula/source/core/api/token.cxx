@@ -75,10 +75,10 @@ bool FormulaToken::IsFunction() const
             eOp != ocTableRef &&
             eOp != ocSep && eOp != ocDPFieldName && eOp != ocClose && eOp != ocOpen))
         return false;
-    if ((SC_OPCODE_START_NO_PAR <= eOp && eOp < SC_OPCODE_STOP_NO_PAR)   // no parameter
+    if ((ocStartNoParameters <= eOp && eOp < ocStopNoParameters)   // no parameter
         || FormulaCompiler::IsOpCodeJumpCommand( eOp )                      // @ jump commands
-        || (SC_OPCODE_START_1_PAR <= eOp && eOp < SC_OPCODE_STOP_1_PAR)     // one parameter
-        || (SC_OPCODE_START_2_PAR <= eOp && eOp < SC_OPCODE_STOP_2_PAR)     // x parameters (cByte==0 in
+        || (ocStartOneParameter <= eOp && eOp < ocStopOneParameter)     // one parameter
+        || (ocStartTwoParameters <= eOp && eOp < ocStopTwoParameters)     // x parameters (cByte==0 in
                                                                             // FuncAutoPilot)
         || eOp == ocMacro || eOp == ocExternal || eOp == ocUDExternal       // macros, AddIns
         || eOp == ocAnd || eOp == ocOr                          // former binary, now x parameters
@@ -93,15 +93,15 @@ bool FormulaToken::IsFunction() const
 
 sal_uInt8 FormulaToken::GetParamCount() const
 {
-    if (eOp < SC_OPCODE_STOP_DIV && eOp != ocExternal && eOp != ocMacro && eOp != ocUDExternal
+    if (eOp < ocStopDiv && eOp != ocExternal && eOp != ocMacro && eOp != ocUDExternal
         && !FormulaCompiler::IsOpCodeJumpCommand(eOp) && eOp != ocPercentSign)
         return 0;       // parameters and specials
                         // ocIf... jump commands not for FAP, have cByte then
-    else if (SC_OPCODE_START_BIN_OP <= eOp && eOp < SC_OPCODE_STOP_BIN_OP && eOp != ocAnd && eOp != ocOr)
+    else if (ocStartBinaryOperators <= eOp && eOp < ocStopBinaryOperators && eOp != ocAnd && eOp != ocOr)
         return 2;           // binary operators, compiler checked; OR and AND legacy but are functions
-    else if ((SC_OPCODE_START_UN_OP <= eOp && eOp < SC_OPCODE_STOP_UN_OP) || eOp == ocPercentSign)
+    else if ((ocStartUnaryOperators <= eOp && eOp < ocStopUnaryOperators) || eOp == ocPercentSign)
         return 1;           // unary operators, compiler checked
-    else if (SC_OPCODE_START_NO_PAR <= eOp && eOp < SC_OPCODE_STOP_NO_PAR)
+    else if (ocStartNoParameters <= eOp && eOp < ocStopNoParameters)
         return 0;           // no parameter
     else if (FormulaCompiler::IsOpCodeJumpCommand( eOp ))
         return 1;           // only the condition counts as parameter
@@ -1527,9 +1527,9 @@ bool FormulaTokenArray::MayReferenceFollow()
     if (i > 0 || !isWhitespace( pCode[i]->GetOpCode()))
     {
         OpCode eOp = pCode[i]->GetOpCode();
-        if ( (SC_OPCODE_START_BIN_OP <= eOp && eOp < SC_OPCODE_STOP_BIN_OP ) ||
-             (SC_OPCODE_START_UN_OP <= eOp && eOp < SC_OPCODE_STOP_UN_OP ) ||
-             eOp == SC_OPCODE_OPEN || eOp == SC_OPCODE_SEP )
+        if ( (ocStartBinaryOperators <= eOp && eOp < ocStopBinaryOperators ) ||
+             (ocStartUnaryOperators <= eOp && eOp < ocStopUnaryOperators ) ||
+             eOp == ocOpen || eOp == ocSep )
         {
             return true;
         }

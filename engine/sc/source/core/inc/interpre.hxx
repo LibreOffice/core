@@ -65,7 +65,7 @@ struct VectorSearchArguments
 {
     // struct contains the contents of the function arguments
     // OpCode of struct owner
-    sal_uInt16 nSearchOpCode = SC_OPCODE_NONE;
+    sal_uInt16 nSearchOpCode = ocNone;
 
     // match mode (common, enum values are from XLOOKUP)
     // optional 5th argument to set match mode

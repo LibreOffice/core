@@ -52,7 +52,7 @@ ScQueryCellIteratorBase< accessType, queryType >::ScQueryCellIteratorBase(ScDocu
     , nSortedBinarySearch( nBinarySearchDisabled )
     , bAdvanceQuery( false )
     , bIgnoreMismatchOnLeadingStrings( false )
-    , nSearchOpCode( SC_OPCODE_NONE )
+    , nSearchOpCode( ocNone )
     , nBestFitCol(SCCOL_MAX)
     , nBestFitRow(SCROW_MAX)
 {
@@ -91,7 +91,7 @@ void ScQueryCellIteratorBase< accessType, queryType >::PerformQuery()
         ((maParam.bByRow && nRow == maParam.nRow1) ||
          (!maParam.bByRow && nCol == maParam.nCol1));
     bool bTestEqualCondition = false;
-    const bool bNewSearchFunction = nSearchOpCode == SC_OPCODE_X_LOOKUP || nSearchOpCode == SC_OPCODE_X_MATCH;
+    const bool bNewSearchFunction = nSearchOpCode == ocXLookup || nSearchOpCode == ocXMatch;
     ScQueryEvaluator queryEvaluator(rDoc, *rDoc.maTabs[nTab], maParam, &mrContext,
         (nTestEqualCondition ? &bTestEqualCondition : nullptr), bNewSearchFunction);
     if( queryType == ScQueryCellIteratorType::CountIf )
@@ -294,7 +294,7 @@ void ScQueryCellIteratorBase< accessType, queryType >::InitPos()
     {
         // This should be all in AccessBase::InitPos(), but that one can't call
         // BinarySearch(), so do it this way instead.
-        bool bNewSearchFunction = nSearchOpCode == SC_OPCODE_X_LOOKUP || nSearchOpCode == SC_OPCODE_X_MATCH;
+        bool bNewSearchFunction = nSearchOpCode == ocXLookup || nSearchOpCode == ocXMatch;
         AccessBase::InitPosStart(bNewSearchFunction, nSortedBinarySearch);
         ScQueryOp& op = maParam.GetEntry(0).eOp;
         SCCOLROW beforeColRow = -1;
@@ -334,7 +334,7 @@ void ScQueryCellIteratorBase< accessType, queryType >::InitPos()
             if( BinarySearch( maParam.bByRow ? nCol : nRow) )
             {
                 lastColRow = maParam.bByRow ? nRow : nCol;
-                if (nSearchOpCode == SC_OPCODE_X_LOOKUP || nSearchOpCode == SC_OPCODE_X_MATCH)
+                if (nSearchOpCode == ocXLookup || nSearchOpCode == ocXMatch)
                 {
                     ScQueryOp saveOp = op;
                     op = SC_LESS;
@@ -343,7 +343,7 @@ void ScQueryCellIteratorBase< accessType, queryType >::InitPos()
                     op = saveOp;
                 }
             }
-            if ((nSearchOpCode == SC_OPCODE_X_LOOKUP || nSearchOpCode == SC_OPCODE_X_MATCH) &&
+            if ((nSearchOpCode == ocXLookup || nSearchOpCode == ocXMatch) &&
                 (lastColRow == beforeColRow || beforeColRow == -1))
             {
                 beforeColRow = -1;
@@ -878,7 +878,7 @@ bool ScQueryCellIterator< accessType >::FindEqualOrSortedLastInRange( SCCOL& nFo
     nFoundCol = rDoc.MaxCol()+1;
     nFoundRow = rDoc.MaxRow()+1;
 
-    if ((nSearchOpCode == SC_OPCODE_X_LOOKUP || nSearchOpCode == SC_OPCODE_X_MATCH) &&
+    if ((nSearchOpCode == ocXLookup || nSearchOpCode == ocXMatch) &&
         nSortedBinarySearch == nBinarySearchDisabled)
         SetStopOnMismatch( false ); // assume not sorted keys for XLookup/XMatch
     else
@@ -894,7 +894,7 @@ bool ScQueryCellIterator< accessType >::FindEqualOrSortedLastInRange( SCCOL& nFo
         (maParam.GetEntry(0).eOp == SC_LESS_EQUAL || maParam.GetEntry(0).eOp == SC_GREATER_EQUAL);
 
     // assume not sorted properly if we are using XLookup/XMatch with forward or backward search
-    if (bBinary && (nSearchOpCode == SC_OPCODE_X_LOOKUP || nSearchOpCode == SC_OPCODE_X_MATCH) &&
+    if (bBinary && (nSearchOpCode == ocXLookup || nSearchOpCode == ocXMatch) &&
         nSortedBinarySearch == nBinarySearchDisabled)
         bBinary = false;
 
@@ -988,8 +988,8 @@ bool ScQueryCellIterator< accessType >::FindEqualOrSortedLastInRange( SCCOL& nFo
             }
         }
     }
-    if (IsEqualConditionFulfilled() && (nSearchOpCode != SC_OPCODE_X_LOOKUP &&
-        nSearchOpCode != SC_OPCODE_X_MATCH))
+    if (IsEqualConditionFulfilled() && (nSearchOpCode != ocXLookup &&
+        nSearchOpCode != ocXMatch))
     {
         // Position on last equal entry, except for XLOOKUP,
         // which looking for the first equal entry
@@ -1621,7 +1621,7 @@ static bool CanBeUsedForSorterCache(ScDocument& /*rDoc*/, const ScQueryParam& /*
         return false;
     if(rParam.mbRangeLookup)
         return false;
-    const bool bNewSearchFunction = nSearchOpCode == SC_OPCODE_X_LOOKUP || nSearchOpCode == SC_OPCODE_X_MATCH;
+    const bool bNewSearchFunction = nSearchOpCode == ocX_LOOKUP || nSearchOpCode == ocX_MATCH;
     if(rParam.GetEntry(0).GetQueryItem().meType == ScQueryEntry::ByString && !bNewSearchFunction
         && !ScQueryEvaluator::isMatchWholeCell(rDoc, rParam.GetEntry(0).eOp))
         return false; // substring matching cannot be sorted
@@ -1783,7 +1783,7 @@ sal_uInt64 ScCountIfCellIterator< ScQueryCellIteratorAccess::SortedCache >::GetC
         nRow = maParam.nRow1;
         ScRange aSortedRangeRange( col, maParam.nRow1, nTab, col, maParam.nRow2, nTab);
         ScQueryOp& op = maParam.GetEntry(0).eOp;
-        bool bNewSearchFunction = nSearchOpCode == SC_OPCODE_X_LOOKUP || nSearchOpCode == SC_OPCODE_X_MATCH;
+        bool bNewSearchFunction = nSearchOpCode == ocXLookup || nSearchOpCode == ocXMatch;
         SetSortedRangeCache( rDoc.GetSortedRangeCache( aSortedRangeRange, maParam, &mrContext, bNewSearchFunction, nSearchOpCode ));
         if( op == SC_EQUAL )
         {
