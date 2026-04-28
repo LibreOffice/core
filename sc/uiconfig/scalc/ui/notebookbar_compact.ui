@@ -7367,7 +7367,7 @@
                             <child>
                               <object class="GtkToolButton" id="Review-SpellingAndGrammarDialog">
                                 <property name="visible">True</property>
-                                <property name="action_name">.uno:SpellingAndGrammarDialog</property>
+                                <property name="action_name">.uno:SpellDialog</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
