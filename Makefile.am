@@ -17,7 +17,7 @@ if ENABLE_MOBILEAPP
 
 if ENABLE_MACOS
 SUBDIRS = macos browser
-else
+else !ENABLE_MACOS
 if ENABLE_QTAPP
 SUBDIRS = qt browser
 
@@ -26,7 +26,7 @@ check-qtapp:
 	$(MAKE) $(AM_MAKEFLAGS) -C qt check-qtapp
 endif ENABLE_QTAPP_TESTS
 
-else
+else !ENABLE_QTAPP
 if ENABLE_WASM
 SUBDIRS = wasm browser
 else !ENABLE_WASM
@@ -35,7 +35,15 @@ endif !ENABLE_WASM
 endif
 endif
 
-else
+else !ENABLE_MOBILEAPP
+
+if ENABLE_FUZZERS
+# With fuzzers, we only need the unit-test
+# (for sanity checks) and the fuzzers themselves.
+SUBDIRS = test fuzzer
+bin_PROGRAMS =
+
+else !ENABLE_FUZZERS
 
 SUBDIRS = browser .
 
@@ -47,19 +55,6 @@ if ENABLE_CYPRESS
 SUBDIRS += cypress_test
 endif
 
-if ENABLE_FUZZERS
-SUBDIRS += fuzzer
-endif
-
-export ENABLE_DEBUG
-
-QUIET_MKDIRP = $(QUIET_MKDIRP_$(V))
-QUIET_MKDIRP_ = $(QUIET_MKDIRP_$(AM_DEFAULT_VERBOSITY))
-QUIET_MKDIRP_0 = @echo "  MKDIRP  " $@;
-
-if ENABLE_FUZZERS
-bin_PROGRAMS =
-else
 bin_PROGRAMS = \
 	coolconvert \
 	coolforkit-caps \
@@ -71,7 +66,14 @@ bin_PROGRAMS = \
 if ENABLE_DEBUG
 bin_PROGRAMS += coolwsd-inproc
 endif
-endif
+
+endif !ENABLE_FUZZERS
+
+export ENABLE_DEBUG
+
+QUIET_MKDIRP = $(QUIET_MKDIRP_$(V))
+QUIET_MKDIRP_ = $(QUIET_MKDIRP_$(AM_DEFAULT_VERBOSITY))
+QUIET_MKDIRP_0 = @echo "  MKDIRP  " $@;
 
 dist_bin_SCRIPTS = coolwsd-systemplate-setup
 
@@ -90,7 +92,12 @@ dist_doc_DATA = wsd/README.vars \
                 wsd/metrics.txt \
                 THIRDPARTYLICENSES
 
+if !ENABLE_FUZZERS
+# The SBOM rule pulls in coolforkit-ns (via collabora-online-sbom.spdx.json:
+# coolforkit-ns), so gate it out of fuzzer builds where the binary is not
+# wanted.
 doc_DATA = collabora-online-sbom.spdx.json
+endif
 
 coolwsddatadir = @COOLWSD_DATADIR@
 
@@ -329,13 +336,6 @@ coolwsd_inproc_LDADD += ${OPENSSL_LIBS}
 endif
 
 endif
-
-if ENABLE_FUZZERS
-coolforkit_caps_SOURCES += \
-		       common/DummyTraceEventEmitter.cpp
-coolforkit_ns_SOURCES += \
-		       common/DummyTraceEventEmitter.cpp
-endif # ENABLE_FUZZERS
 
 clientnb_SOURCES = \
                    $(util_platform_cpp) \
