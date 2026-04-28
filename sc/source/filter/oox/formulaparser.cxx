@@ -1458,7 +1458,7 @@ bool OoxFormulaParserImpl::importPivotToken( SequenceInputStream& rStrm )
     }
     if( aFieldName.isEmpty() )
         return pushBiffErrorOperand( BIFF_ERR_REF );
-    return pushValueOperand( aFieldName, SC_OPCODE_DP_FIELD );
+    return pushValueOperand( aFieldName, ocDPFieldName );
 }
 
 bool OoxFormulaParserImpl::importTableToken( SequenceInputStream& rStrm )

@@ -64,7 +64,7 @@ public:
     static  bool        HasForceArray( OpCode eOp)
                                     {
                                         return 0 <= static_cast<short>(eOp) &&
-                                            eOp <= SC_OPCODE_LAST_OPCODE_ID &&
+                                            eOp <= ocLastOpcodeId &&
                                             pData[eOp].bHasForceArray;
                                     }
 
@@ -126,7 +126,7 @@ private:
                                     of parameters is significant. */
     static  inline  sal_uInt8        GetMinimumParameters( OpCode eOp)
                                     {
-                                        if ( eOp <= SC_OPCODE_LAST_OPCODE_ID )
+                                        if ( eOp <= ocLAST_OPCODE_ID )
                                             return pData[eOp].aData.nParam[0]
                                                 == formula::ParamClass::Unknown ? 1 :
                                                 pData[eOp].nMinParams;
@@ -136,7 +136,7 @@ private:
                                 /** Whether last parameter types are repeated. */
     static  inline  bool        HasRepeatParameters( OpCode eOp)
                                     {
-                                        return eOp <= SC_OPCODE_LAST_OPCODE_ID
+                                        return eOp <= ocLAST_OPCODE_ID
                                             && pData[eOp].aData.nRepeatLast > 0;
                                     }
 #endif // DEBUG_SC_PARCLASSDOC

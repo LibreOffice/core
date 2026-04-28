@@ -22,7 +22,7 @@
 #include <appoptio.hxx>
 #include <global.hxx>
 #include <userlist.hxx>
-#include <formula/compiler.hxx>
+#include <formula/opcode.hxx>
 #include <miscuno.hxx>
 #include <vector>
 #include <osl/diagnose.h>
@@ -62,11 +62,11 @@ void ScAppOptions::SetDefaults()
     bDetectiveAuto  = true;
 
     pLRUList.reset( new sal_uInt16[5] );               // sensible initialization
-    pLRUList[0] = SC_OPCODE_SUM;
-    pLRUList[1] = SC_OPCODE_AVERAGE;
-    pLRUList[2] = SC_OPCODE_MIN;
-    pLRUList[3] = SC_OPCODE_MAX;
-    pLRUList[4] = SC_OPCODE_IF;
+    pLRUList[0] = ocSum;
+    pLRUList[1] = ocAverage;
+    pLRUList[2] = ocMin;
+    pLRUList[3] = ocMax;
+    pLRUList[4] = ocIf;
     nLRUFuncCount = 5;
 
     nTrackContentColor = COL_TRANSPARENT;

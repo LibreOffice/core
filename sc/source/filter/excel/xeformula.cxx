@@ -1395,7 +1395,7 @@ void XclExpFmlaCompImpl::ProcessFunction( const XclExpScToken& rTokData )
     XclExpExtFuncData aExtFuncData;
 
     // no exportable function found - try to create an external macro call
-    if( !pFuncInfo && (eOpCode >= SC_OPCODE_START_NO_PAR) )
+    if( !pFuncInfo && (eOpCode >= ocStartNoParameters) )
     {
         const OUString& rFuncName = ScCompiler::GetNativeSymbol( eOpCode );
         if( !rFuncName.isEmpty() )

@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <cassert>
 #include <sstream>
 
 #include <formula/compiler.hxx>
@@ -69,11 +70,13 @@ enum OpCode : sal_uInt16
         ocTableRefItemData    = SC_OPCODE_TABLE_REF_ITEM_DATA,
         ocTableRefItemTotals  = SC_OPCODE_TABLE_REF_ITEM_TOTALS,
         ocTableRefItemThisRow = SC_OPCODE_TABLE_REF_ITEM_THIS_ROW,
+        ocStopDiv           = SC_OPCODE_STOP_DIV,
         ocSkip              = SC_OPCODE_SKIP,
         ocStringName        = SC_OPCODE_STRINGNAME,
         ocLet               = SC_OPCODE_LET,
         ocDPFieldName       = SC_OPCODE_DP_FIELD,
     // Error constants
+        ocStartErrors       = SC_OPCODE_START_ERRORS,
         ocErrNull           = SC_OPCODE_ERROR_NULL,
         ocErrDivZero        = SC_OPCODE_ERROR_DIVZERO,
         ocErrValue          = SC_OPCODE_ERROR_VALUE,
@@ -82,7 +85,9 @@ enum OpCode : sal_uInt16
         ocErrNum            = SC_OPCODE_ERROR_NUM,
         ocErrNA             = SC_OPCODE_ERROR_NA,
         ocErrSpill          = SC_OPCODE_ERROR_SPILL,
+        ocStopErrors        = SC_OPCODE_STOP_ERRORS,
     // Binary operators
+        ocStartBinaryOperators = SC_OPCODE_START_BIN_OP,
         ocAdd               = SC_OPCODE_ADD,
         ocSub               = SC_OPCODE_SUB,
         ocMul               = SC_OPCODE_MUL,
@@ -100,9 +105,16 @@ enum OpCode : sal_uInt16
         ocIntersect         = SC_OPCODE_INTERSECT,
         ocUnion             = SC_OPCODE_UNION,
         ocRange             = SC_OPCODE_RANGE,
+        ocStopBinaryOperators = SC_OPCODE_STOP_BIN_OP,
     // Unary operators
+        ocStartUnaryOperators = SC_OPCODE_START_UN_OP,
         ocNegSub            = SC_OPCODE_NEG_SUB,
+        ocStopUnaryOperators = SC_OPCODE_STOP_UN_OP,
+
+        ocStartFunction     = SC_OPCODE_START_FUNCTION,
+
     // Functions with no parameters
+        ocStartNoParameters = SC_OPCODE_START_NO_PAR,
         ocPi                = SC_OPCODE_PI,
         ocRandom            = SC_OPCODE_RANDOM,
         ocTrue              = SC_OPCODE_TRUE,
@@ -112,7 +124,9 @@ enum OpCode : sal_uInt16
         ocNotAvail          = SC_OPCODE_NO_VALUE,
         ocCurrent           = SC_OPCODE_CURRENT,
         ocRandomNV          = SC_OPCODE_RANDOM_NV,
+        ocStopNoParameters  = SC_OPCODE_STOP_NO_PAR,
     // Functions with one parameter
+        ocStartOneParameter = SC_OPCODE_START_1_PAR,
         ocDeg               = SC_OPCODE_DEG,
         ocRad               = SC_OPCODE_RAD,
         ocSin               = SC_OPCODE_SIN,
@@ -203,7 +217,9 @@ enum OpCode : sal_uInt16
         ocIsoWeeknum        = SC_OPCODE_ISOWEEKNUM,
         ocNot               = SC_OPCODE_NOT,
         ocNeg               = SC_OPCODE_NEG,
+        ocStopOneParameter  = SC_OPCODE_STOP_1_PAR,
     // Functions with more than one parameters
+        ocStartTwoParameters = SC_OPCODE_START_2_PAR,
         ocArcTan2           = SC_OPCODE_ARC_TAN_2,
         ocCeil              = SC_OPCODE_CEIL,
         ocFloor             = SC_OPCODE_FLOOR,
@@ -532,6 +548,10 @@ enum OpCode : sal_uInt16
         ocWrapCols          = SC_OPCODE_WRAPCOLS,
         ocWrapRows          = SC_OPCODE_WRAPROWS,
         ocUDExternal        = SC_OPCODE_UD_EXTERNAL,
+        ocStopTwoParameters = SC_OPCODE_STOP_2_PAR, /* last function with two or more parameters' OpCode + 1 */
+
+        ocStopFunction      = SC_OPCODE_STOP_FUNCTION,  /* last function's OpCode + 1 */
+        ocLastOpcodeId      = SC_OPCODE_LAST_OPCODE_ID, /* last OpCode */
 
     // internal stuff
         ocInternalBegin     = SC_OPCODE_INTERNAL_BEGIN,
@@ -1039,6 +1059,7 @@ inline std::string OpCodeEnumToString(OpCode eCode)
     case ocDebugVar: return "DebugVar";
     case ocDataToken1: return "DataToken1";
     case ocNone: return "None";
+    default: assert(false); return "???";
     }
     std::ostringstream os;
     os << static_cast<int>(eCode);
