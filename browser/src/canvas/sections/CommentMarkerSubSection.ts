@@ -22,7 +22,7 @@ class CommentMarkerSubSection extends HTMLObjectSection {
 		documentPosition: cool.SimplePoint,
 		extraClass: string = '',
 		showSection: boolean = false,
-		parentSection: any, // Parent section.
+		parentSection: cool.Comment,
 		data: any, // Parent section's data.
 	) {
 		super(

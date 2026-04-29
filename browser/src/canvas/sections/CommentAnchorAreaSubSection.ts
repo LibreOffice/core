@@ -25,7 +25,7 @@ class CommentAnchorAreaSubSection extends HTMLObjectSection {
 		objectHeight: number,
 		documentPosition: cool.SimplePoint,
 		showSection: boolean,
-		parentSection: any,
+		parentSection: cool.Comment,
 		data: any,
 	) {
 		super(
