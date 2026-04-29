@@ -30,7 +30,7 @@
 .margin-item {
 	display: flex;
 	align-items: center;
-	padding: 8px;
+	padding: var(--spacing-m);
 	cursor: pointer;
 	border-radius: 3px;
 	border: 1px solid transparent;
@@ -74,7 +74,7 @@
 
 .custom-margins-link {
 	justify-content: center;
-	padding: 4px;
+	padding: var(--spacing-s);
 	font-size: var(--default-font-size);
 }
 
@@ -134,7 +134,7 @@
 	border: 1px solid var(--color-toolbar-border);
 	align-items: center;
 	border-radius: 4px;
-	padding: 4px;
+	padding: var(--spacing-s);
 	box-shadow: 0 2px 6px 2px rgba(60, 64, 67, .15);
 }
 
@@ -512,7 +512,7 @@ button.leaflet-control-search-next
 	border-radius: var(--border-radius);
 	box-sizing: border-box;
 	position: relative;
-	padding: 2px;
+	padding: var(--spacing-xs);
 	overflow: auto; /* child margins otherwise don't expand *this* element (parent) */
 }
 
@@ -1387,7 +1387,7 @@ button.leaflet-control-search-next
 .inserttable-grid {
 	box-sizing: border-box;
 	position: relative;
-	padding: 2px;
+	padding: var(--spacing-xs);
 	display: block;
 }
 
@@ -1399,7 +1399,7 @@ button.leaflet-control-search-next
 .inserttable-grid .col {
 	height: 100%;
 	float: left;
-	padding: 2px;
+	padding: var(--spacing-xs);
 	width: 20px;
 	border: 1px;
 	border-style: solid;
@@ -1417,7 +1417,7 @@ button.leaflet-control-search-next
 .insertshape-grid {
 	box-sizing: border-box;
 	position: static;
-	padding: 2px;
+	padding: var(--spacing-xs);
 	display: block;
 	min-width: 350px;
 	width: 100%;
@@ -1445,7 +1445,7 @@ button.leaflet-control-search-next
 
 .insertshape-grid .col {
 	height: 30px;
-	padding: 2px;
+	padding: var(--spacing-xs);
 	width: 30px;
 	border: 1px solid transparent;
 }
@@ -1561,7 +1561,7 @@ menu-entry-with-icon.padding-left + menu-entry-icon.width */
 #followingChipBackground,
 #userListSummaryBackground {
 	border-radius: var(--btn-img-size); /* We expect the height to be --btn-img-size, give a bit for a border. To fully round the corners, this needs to be at least 50% of the height so --btn-img-size should do */
-	padding: 2px; /* This will become the grey border around the inner elements */
+	padding: var(--spacing-xs); /* This will become the grey border around the inner elements */
 
 	display: none;
 }
@@ -1681,7 +1681,7 @@ menu-entry-with-icon.padding-left + menu-entry-icon.width */
 }
 
 #follow-editor {
-	padding: 8px;
+	padding: var(--spacing-m);
 	display: flex;
 	align-items: center;
 }
@@ -1765,7 +1765,7 @@ menu-entry-with-icon.padding-left + menu-entry-icon.width */
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	padding: 8px;
+	padding: var(--spacing-m);
 	cursor: pointer;
 	border-radius: 3px;
 	border: 1px solid transparent;

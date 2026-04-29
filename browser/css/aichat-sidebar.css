@@ -99,7 +99,7 @@
 }
 
 #aichat-header button.ui-pushbutton {
-	padding: 4px;
+	padding: var(--spacing-s);
 	width: 28px;
 	height: 28px;
 	border: 1px solid transparent;
@@ -136,7 +136,7 @@
 	display: flex !important;
 	grid-auto-flow: unset !important;
 	flex-direction: column;
-	gap: 12px;
+	gap: var(--spacing-l);
 	scrollbar-width: var(--scrollbar-width);
 	scrollbar-color: var(--scrollbar-color);
 	user-select: text;
@@ -160,7 +160,7 @@
 	display: flex !important;
 	grid-auto-flow: unset !important;
 	flex-direction: column;
-	gap: 12px;
+	gap: var(--spacing-l);
 }
 
 #aichat-messages-list:has(#aichat-empty-state) {
@@ -351,7 +351,7 @@
 #aichat-loading-dots {
 	display: flex;
 	align-items: center;
-	gap: 2px;
+	gap: var(--spacing-xs);
 	padding: 12px 16px;
 	align-self: flex-start;
 	background: var(--color-background-lighter);
@@ -419,7 +419,7 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	gap: 4px;
+	gap: var(--spacing-s);
 	font-size: 11px;
 	font-family: var(--cool-font);
 	color: var(--color-text-lighter);
@@ -738,7 +738,7 @@
 
 .aichat-approval-buttons {
 	display: flex;
-	gap: 8px;
+	gap: var(--spacing-m);
 	margin-top: 2px;
 }
 
@@ -860,7 +860,7 @@
 	width: 100%;
 	display: flex;
 	align-items: center;
-	gap: 8px;
+	gap: var(--spacing-m);
 	text-align: left;
 	padding: 11px 14px;
 	border: 1px solid var(--color-border);
@@ -913,7 +913,7 @@
 	transition: background 0.15s ease;
 	display: inline-flex;
 	align-items: center;
-	gap: 4px;
+	gap: var(--spacing-s);
 }
 
 #aichat-chips > #aichat-see-more > button.ui-pushbutton:hover {

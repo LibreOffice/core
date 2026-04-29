@@ -205,7 +205,7 @@ html[data-theme='dark'] .savemodified.unotoolbutton:not(.notebookbar) .unobutton
 .hasnotebookbar .notebookbar-shortcuts-bar #Menubar > li > a {
 	cursor: pointer;
 	border: none;
-	padding: 4px;
+	padding: var(--spacing-s);
 }
 
 .hasnotebookbar #shortcuts-menubar-icon {
@@ -256,7 +256,7 @@ html[data-theme='dark'] .savemodified.unotoolbutton:not(.notebookbar) .unobutton
 	width: max-content;
 	display: grid;
 	grid-auto-flow: row;
-	grid-gap: 4px;
+	grid-gap: var(--spacing-s);
 }
 
 .notebookbar.ui-separator.vertical {
@@ -270,7 +270,7 @@ html[data-theme='dark'] .savemodified.unotoolbutton:not(.notebookbar) .unobutton
 .horizontal.notebookbar {
 	display: grid;
 	grid-auto-flow: column;
-	grid-gap: 4px;
+	grid-gap: var(--spacing-s);
 	align-items: center;
 	justify-items: center;
 	width: max-content;
@@ -392,7 +392,7 @@ label.notebookbar.ui-checkbox-label {
 #table-HomeTab .unospan-uptoolbar img, #table-HomeTab .unospan-downtoolbar img {
 	width: 18px !important;
 	height: 18px !important;
-	padding: 4px;
+	padding: var(--spacing-s);
 }
 
 .unotoolbutton.notebookbar.disabled:not(.unospan-shortcutstoolbox),

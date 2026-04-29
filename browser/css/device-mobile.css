@@ -617,7 +617,7 @@ div#fontstyletoolbox + div#style.mobile-wizard {
 }
 
 #product-name {
-	margin: 2px;
+	margin: var(--spacing-xs);
 	font-size: 29px;
 }
 

@@ -64,7 +64,7 @@ div.ui-treeview-icon-column {
 #AcceptRejectChangesDialog #RedlineViewPage.jsdialog.ui-grid-cell {
 	display: flex;
 	flex-direction: column;
-	gap: 8px;
+	gap: var(--spacing-m);
 }
 #AcceptRejectChangesDialog #RedlineFilterPage .ui-timefield {
 	margin: 5px;
@@ -222,7 +222,7 @@ div#autoFillPreviewTooltip .lokdialog.ui-dialog-content.ui-widget-content {
 	color: var(--color-main-text);
 	font-size: var(--header-font-size);
 	line-height: var(--header-height);
-	margin: 4px;
+	margin: var(--spacing-s);
 }
 
 #accessibilityCheckBox .jsdialog.ui-text {
@@ -277,13 +277,13 @@ td.jsdialog > [id^='table-box']:not(.sidebar) {
 	border-spacing: 0px;
 	width: 100%;
 	display: grid;
-	grid-gap: 4px;
+	grid-gap: var(--spacing-s);
 }
 
 /* Special Characters dialog */
 #SpecialCharactersDialog #viewgrid,
 #SpecialCharactersDialog #favgrid {
-	grid-gap: 4px;
+	grid-gap: var(--spacing-s);
 	width: fit-content;
 }
 
@@ -653,7 +653,7 @@ body button:not(.ui-corner-all):not(.button-primary):not(.unobutton):not(.form-f
 }
 
 .ui-expander-content > .root-container.jsdialog {
-	margin: 4px;
+	margin: var(--spacing-s);
 }
 
 /* Link Button*/
@@ -1444,7 +1444,7 @@ img.context-menu-icon {
 	top: 0;
 	z-index: 1;
 	background-color: var(--color-background-lighter);
-	padding: 4px;
+	padding: var(--spacing-s);
 }
 
 .ui-combobox-search-input {
@@ -1620,8 +1620,8 @@ img.context-menu-icon {
 	display: grid;
 	grid-template-columns: 1fr 1fr 1fr;
 	max-height: 40vh;
-	gap: 2px;
-	padding: 2px;
+	gap: var(--spacing-xs);
+	padding: var(--spacing-xs);
 }
 
 .ui-iconview.mobile-wizard {
@@ -1689,7 +1689,7 @@ img.context-menu-icon {
 .autofilter.cell {
 	display: table-cell;
 	vertical-align: middle;
-	padding: 2px;
+	padding: var(--spacing-xs);
 }
 
 .autofilter-container {
@@ -1739,7 +1739,7 @@ img.context-menu-icon {
 	/* Same size as #toggle_all.checkbutton > input */
 	height: 18px;
 	width: 18px;
-	margin: 8px;
+	margin: var(--spacing-m);
 	border: none;
 }
 
@@ -2052,27 +2052,27 @@ button.has-img img {
 
 /* color picker */
 .ui-color-picker {
-	padding: 4px;
+	padding: var(--spacing-s);
 }
 
 .ui-color-picker-header {
 	display: grid;
 	grid-template-columns: auto 1fr;
 	align-items: center;
-	gap: 8px;
+	gap: var(--spacing-m);
 }
 
 .ui-color-picker,
 #ui-color-picker-custom,
 #ui-color-picker-recent {
 	display: grid;
-	grid-gap: 4px;
+	grid-gap: var(--spacing-s);
 	align-items: center;
 }
 
 .ui-color-picker-palette {
 	display: grid;
-	grid-gap: 4px;
+	grid-gap: var(--spacing-s);
 	margin-top: 3px;
 }
 
@@ -2216,7 +2216,7 @@ button.has-img img {
 .snackbar #snackbar-container-progress {
 	align-items: center;
 	max-width: calc(80vw);
-	row-gap: 4px;
+	row-gap: var(--spacing-s);
 }
 
 .snackbar .ui-progressbar progress {
@@ -2273,7 +2273,7 @@ button.has-img img {
 }
 
 .snackbar.jsdialog-container [id$='button'].ui-pushbutton.jsdialog {
-	padding: 8px;
+	padding: var(--spacing-m);
 }
 
 #snackbar-container-progress .ui-progressbar {
@@ -2287,7 +2287,7 @@ button.has-img img {
 }
 
 #mobile-wizard.popup.snackbar [id$='button'] {
-	padding: 8px;
+	padding: var(--spacing-m);
 }
 
 #mobile-wizard.popup.snackbar [id$='button'],
@@ -2445,7 +2445,7 @@ button.has-img img {
 .ui-custom-textarea-cursor-layer,
 .ui-custom-textarea-handle-layer,
 .ui-custom-textarea-text-layer {
-	padding: 4px;
+	padding: var(--spacing-s);
 	grid-column: 1;
 	grid-row: 1;
 	white-space: pre-wrap;
@@ -2483,7 +2483,7 @@ button.has-img img {
 	display: grid;
 	grid-auto-flow: column;
 	align-items: center;
-	grid-column-gap: 4px;
+	grid-column-gap: var(--spacing-s);
 	grid-template-columns: repeat(3, 30px);
 }
 
@@ -2601,7 +2601,7 @@ button.has-img img {
 #FormulaDialog #StructPage {
 	display: grid;
 	grid-template-rows: auto 1fr;
-	grid-row-gap: 4px;
+	grid-row-gap: var(--spacing-s);
 }
 #FormulaDialog #StructPage .ui-treeview-entry div {
 	background-color: transparent;
@@ -2619,7 +2619,7 @@ button.has-img img {
 
 #FormulaDialog > [id^='dialog-vbox'] > [id^='box'] > [id^='box'] {
 	grid-auto-columns: max-content;
-	grid-column-gap: 8px;
+	grid-column-gap: var(--spacing-m);
 }
 
 #FormulaDialog label {
@@ -2690,7 +2690,7 @@ kbd,
 	font-family: monospace;
 	font-size: .85em;
 	line-height: 1;
-	padding: 4px;
+	padding: var(--spacing-s);
 	white-space: nowrap;
 }
 
@@ -2827,7 +2827,7 @@ kbd,
 
 /* Calc -> Insert -> Pivot Table */
 #PivotTableLayout #box2 {
-	grid-gap: 12px; /* make space for vertical separator */
+	grid-gap: var(--spacing-l); /* make space for vertical separator */
 }
 
 /* Modal info with 2 line message*/
@@ -2845,7 +2845,7 @@ kbd,
 
 #DocumentPropertiesDialog #properties > .jsdialog.ui-grid > .ui-grid-cell > .ui-grid-cell {
 	align-items: center;
-	grid-column-gap: 4px;
+	grid-column-gap: var(--spacing-s);
 }
 
 #DocumentPropertiesDialog #customprops button {
@@ -2883,7 +2883,7 @@ kbd,
 #ServerAuditDialog #ServerAuditDialog-mainbox label {
 	display: flex;
 	align-items: center;
-	gap: 4px;
+	gap: var(--spacing-s);
 	color: #000;
 	border-radius: 30px;
 	width: fit-content;
@@ -2957,7 +2957,7 @@ kbd,
 /* Writer - Format - Page Style - Area - Image */
 #ImageTabPage #frame1 .ui-grid-cell {
 	display: grid;
-	grid-gap: 4px;
+	grid-gap: var(--spacing-s);
 }
 
 /* Calc - Format - Format Cells - Background - Color */
@@ -3289,7 +3289,7 @@ div [id^='themeview'].ui-iconview-entry, div [id^='themeview1col'].ui-iconview-e
 	height: 100%;
 	box-sizing: border-box;
 	font: inherit;
-	padding: 2px;
+	padding: var(--spacing-xs);
 	margin: 0;
 	border: 1px solid var(--color-primary, #005da0);
 	border-radius: 2px;

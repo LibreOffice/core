@@ -332,7 +332,7 @@
 	display: grid;
 	grid-template-columns: 120px auto;
 	align-items: center;
-	padding: 4px;
+	padding: var(--spacing-s);
 	background-color: var(--color-main-background);
 	border-top: 1px solid var(--color-border);
 }

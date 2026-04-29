@@ -22,6 +22,13 @@
 	--border-radius: 4px; /* buttons, widgets */
 	--border-radius-large: 10px; /* dialog */
 
+	/* Spacing scale for gap/padding/margin */
+	--spacing-xs: 2px;
+	--spacing-s: 4px;
+	--spacing-m: 8px;
+	--spacing-l: 12px;
+	--spacing-xl: 16px;
+
 	--tooltip-font-size: 0.875rem;
 	--default-font-size: 0.75rem;
 	--overflow-group-font-size: 8.5pt; /* do not scale labels of groups */
@@ -673,7 +680,7 @@ body {
 	width: auto;
 	display: flex;
 	flex-direction: column;
-	row-gap: 8px;
+	row-gap: var(--spacing-m);
 }
 
 .annotation-active.annotation-pop-up .cool-annotation-content-wrapper {
@@ -801,7 +808,7 @@ body {
 	background-color: var(--color-background-dark);
 	color: var(--color-main-text);
 	overflow-x: hidden;
-	padding: 2px;
+	padding: var(--spacing-xs);
 	max-height: var(--annotation-input-size);
 	min-height: calc(var(--default-font-size) * 4);
 	width: 100%;
@@ -982,7 +989,7 @@ body {
 	display: flex;
 	justify-content: flex-end;
 	align-items: center;
-	column-gap: 4px;
+	column-gap: var(--spacing-s);
 	cursor: pointer;
 	padding: 0 !important;
 }

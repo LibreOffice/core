@@ -31,7 +31,7 @@ img.sidebar.ui-image {
 }
 
 .sidebar.ui-grid {
-	row-gap: 8px;
+	row-gap: var(--spacing-m);
 }
 
 .sidebar .ui-content .unobutton {
@@ -96,7 +96,7 @@ img.sidebar.ui-image {
 	width: 10px;
 	height: 10px;
 	padding: 0;
-	margin: 4px;
+	margin: var(--spacing-s);
 }
 
 .ui-expander-icon-right.jsdialog.sidebar .ui-overflow-group-more.unotoolbutton,
@@ -130,7 +130,7 @@ img.sidebar.ui-image {
 #ParaPropertyPanel.sidebar.ui-grid #box1.sidebar.ui-grid-cell,
 #NumberFormatPropertyPanel.sidebar.ui-grid #grid1 {
 	justify-content: space-between !important;
-	row-gap: 8px;
+	row-gap: var(--spacing-m);
 	grid-auto-flow: revert !important;
 	grid-template-columns: repeat(2, auto);
 }
@@ -262,7 +262,7 @@ div.sidebar.ui-grid .checkbutton.sidebar,
 #ParaPropertyPanel.sidebar #box3 {
 	display: grid;
 	justify-content: start;
-	row-gap: 4px;
+	row-gap: var(--spacing-s);
 }
 
 #ParaPropertyPanel .sidebar.ui-grid-cell {
@@ -279,7 +279,7 @@ div.sidebar.ui-grid .checkbutton.sidebar,
 
 button#button2.ui-pushbutton.jsdialog.sidebar {
 	width: 151px;
-	padding: 4px;
+	padding: var(--spacing-s);
 	position: relative;
 	left: -10px;
 }
@@ -474,7 +474,7 @@ span.jsdialog.sidebar.ui-treeview-notexpandable {
 .navigator-btn-wrapper {
 	background-color: var(--color-background-lighter);
 	border-radius: var(--border-radius);
-	padding: 4px;
+	padding: var(--spacing-s);
 	box-shadow: 0px 1px 3px var(--color-box-shadow);
 }
 
@@ -512,12 +512,12 @@ span.jsdialog.sidebar.ui-treeview-notexpandable {
 	font-family: var(--cool-font);
 	color: var(--color-main-text);
 	height: 54px;
-	padding: 16px;
+	padding: var(--spacing-xl);
 	box-sizing: border-box;
 }
 
 .navigator-container .ui-treeview-placeholder {
-	padding: 16px;
+	padding: var(--spacing-xl);
 }
 
 .close-navigation-wrapper {

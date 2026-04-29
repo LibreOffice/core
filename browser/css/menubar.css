@@ -47,7 +47,7 @@
 	flex-direction: row;
 	flex-wrap: wrap;
 	flex: 1 1 auto;
-	gap: 4px;
+	gap: var(--spacing-s);
 	position: relative;
 }
 
@@ -250,7 +250,7 @@ nav.hasnotebookbar [id^='save'].saved::after {
 }
 
 .lo-menu > li > a, .lo-menu > li > a.has-submenu {
-	padding: 8px;
+	padding: var(--spacing-m);
 	z-index: 400;
 	border: 1px solid transparent;
 }
