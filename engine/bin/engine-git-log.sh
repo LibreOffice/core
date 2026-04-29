@@ -27,4 +27,4 @@ if [ -t 1 ]; then pager=$(git var GIT_PAGER); else pager=cat; fi
 {
     git -P log "$@" --follow merge-engine..HEAD -- "$new"
     git -P log "$@" --follow merge-engine^2     -- "$old"
-} | $pager
+} | LESS=${LESS-FRX} LV=${LV--c} $pager
