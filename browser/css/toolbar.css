@@ -463,8 +463,8 @@ button.leaflet-control-search-next
 	width: 55px !important;
 }
 #toolbar-up #fontnamecombobox {
-	width: 150px;
-	max-width: 150px;
+	min-width: 150px;
+	max-width: 181px;
 	margin: auto 5px;
 }
 #toolbar-up #fontsizecombobox {
