@@ -2716,7 +2716,7 @@ class Menubar extends window.L.Control {
 				aItem.replaceChildren();
 			}
 			if (menu[i].uno && (JSDialog.ShortcutsUtil.hasShortcut(menu[i].uno) || JSDialog.ShortcutsUtil.hasShortcut(menu[i].id))) {
-				aItem.innerHTML = JSDialog.ShortcutsUtil.getShortcut(aItem.innerHTML, menu[i].uno ? menu[i].uno : menu[i].id);
+				aItem.innerHTML = JSDialog.ShortcutsUtil.getMenuLabel(aItem.innerHTML, menu[i].uno ? menu[i].uno : menu[i].id);
 			}
 
 			if (menu[i].type === 'menu') {

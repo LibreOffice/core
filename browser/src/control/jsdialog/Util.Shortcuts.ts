@@ -104,7 +104,7 @@ class ShortcutsUtil {
 		return text;
 	}
 
-	public getShortcut(text: string, command: string): string {
+	public getTooltipLabel(text: string, command: string): string {
 		let shortcut = this.shortcutMap.get(command);
 		if (!shortcut) return text;
 
@@ -115,6 +115,21 @@ class ShortcutsUtil {
 			' (' +
 			app.util.replaceCtrlAltInMac(shortcut) +
 			')';
+
+		return newText;
+	}
+
+	public getMenuLabel(text: string, command: string): string {
+		let shortcut = this.shortcutMap.get(command);
+		if (!shortcut) return text;
+
+		shortcut = this.localizeModifiers(shortcut);
+
+		var newText =
+			_(text).replace('~', '') +
+			' <span class="shortcut">' +
+			app.util.replaceCtrlAltInMac(shortcut) +
+			'</span>';
 
 		return newText;
 	}

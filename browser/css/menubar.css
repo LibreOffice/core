@@ -309,6 +309,15 @@ nav.hasnotebookbar [id^='save'].saved::after {
 	-webkit-filter: brightness(100);
 	filter: brightness(100);
 }
+.lo-menu ul a:has(> span.shortcut) {
+	display: flex;
+	align-items: center;
+}
+.lo-menu ul a > span.shortcut {
+	margin-inline-start: auto;
+	padding-inline-start: 16px;
+	color: var(--color-text-lighter);
+}
 .lo-menu ul > li {
 	border-left: 0;
 	border-top: none;

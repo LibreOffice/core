@@ -1780,7 +1780,7 @@ menuDefinitions.set('PasteMenu', [
 	{
 		text: _UNO('.uno:Paste', 'text'),
 		action: '.uno:Paste',
-		hint: JSDialog.ShortcutsUtil.getShortcut(
+		hint: JSDialog.ShortcutsUtil.getTooltipLabel(
 			_UNO('.uno:Paste', 'text'),
 			'.uno:Paste',
 		),
@@ -1788,7 +1788,7 @@ menuDefinitions.set('PasteMenu', [
 	{
 		text: _UNO('.uno:PasteSpecial', 'text'),
 		action: '.uno:PasteSpecial',
-		hint: JSDialog.ShortcutsUtil.getShortcut(
+		hint: JSDialog.ShortcutsUtil.getTooltipLabel(
 			_UNO('.uno:PasteSpecial', 'text'),
 			'.uno:PasteSpecial',
 		),

@@ -41,4 +41,5 @@
 /// <reference path="./ViewLayout.test.ts" />
 /// <reference path="./ServerCommand.test.ts" />
 /// <reference path="./DomUtil.test.ts" />
+/// <reference path="./Shortcuts.test.ts" />
 // NOTE: reference new tests here ...

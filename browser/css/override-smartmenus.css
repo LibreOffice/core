@@ -6,7 +6,7 @@
 	/* Switch to desktop layout */
 	.sm-simple ul {
 		position: absolute;
-		width: 12em;
+		min-width: 12em;
 		background: var(--color-main-background);
 		box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
 	}
