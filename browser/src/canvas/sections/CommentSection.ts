@@ -201,7 +201,7 @@ export class Comment extends CanvasSectionObject {
 
 		var events = ['click', 'dblclick', 'mousedown', 'mouseup', 'mouseover', 'mouseout', 'keydown', 'keypress', 'keyup', 'touchstart', 'touchmove', 'touchend'];
 		window.L.DomEvent.on(this.sectionProperties.container, 'click', this.onMouseClick, this);
-		window.L.DomEvent.on(this.sectionProperties.container, 'keydown', this.onEscKey, this);
+		window.L.DomEvent.on(this.sectionProperties.container, 'keydown', this.onCommentKeyDown, this);
 
 		for (var it = 0; it < events.length; it++) {
 			window.L.DomEvent.on(this.sectionProperties.container, events[it], window.L.DomEvent.stopPropagation, this);
@@ -573,22 +573,24 @@ export class Comment extends CanvasSectionObject {
 		}
 	}
 
-	private textAreaKeyDown (ev: any): void {
+	private isCtrlEnter(ev: KeyboardEvent): boolean {
+		return !!ev && ev.ctrlKey && ev.key === "Enter";
+	}
+
+	private handleCommentCtrlEnter(ev: KeyboardEvent): void {
+		this.map.mention?.closeMentionPopup(false);
+		const targetId = (ev.target as HTMLElement).id;
+		if (this.sectionProperties.nodeReplyText.id === targetId) {
+			this.handleReplyCommentButton(ev);
+		} else {
+			this.handleSaveCommentButton(ev);
+		}
+	}
+
+	private textAreaKeyDown(ev: KeyboardEvent): void {
 		if (window.KeyboardShortcuts.processEvent(app.UI.language.fromURL, ev)) {
 			return;
 		}
-
-		if (ev && ev.ctrlKey && ev.key === "Enter") {
-			this.map.mention?.closeMentionPopup(false);
-
-			if (this.sectionProperties.nodeReplyText.id == ev.srcElement.id) {
-				this.handleReplyCommentButton(ev);
-			} else {
-				this.handleSaveCommentButton(ev);
-			}
-			return;
-		}
-
 		this.handleKeyDownForPopup(ev, 'mentionPopup');
 	}
 
@@ -1249,30 +1251,57 @@ export class Comment extends CanvasSectionObject {
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-	private onEscKey (e: any): void {
-		if ((<any>window).mode.isDesktop()) {
-			// When a comment is being edited and focus is in comment textbox,
-			// Esc should not close the comment being edited, but should just mark it with an attention.
-			if (e.keyCode === 27) {
-				const editingComment = Comment.isAnyEdit();
-				if (editingComment) {
-					this.sectionProperties.commentListSection.addCommentAttention(editingComment);
-					return;
-				}
-			} else if (e.keyCode === 33 /*PageUp*/ || e.keyCode === 34 /*PageDown*/) {
-				// work around for a chrome issue https://issues.chromium.org/issues/41417806
-				window.L.DomEvent.preventDefault(e);
-				var pos = e.keyCode === 33 ? 0 : e.target.textLength;
-				var currentPos = e.target.selectionStart;
-				if (e.shiftKey) {
-					var [start, end] = currentPos <= pos ? [currentPos, pos] : [pos, currentPos];
-					e.target.setSelectionRange(start, end, currentPos > pos ? 'backward' : 'forward');
-				} else {
-					e.target.setSelectionRange(pos, pos);
-				}
-			}
+	private onCommentKeyDown(e: KeyboardEvent): void {
+		if (!(<any>window).mode.isDesktop()) {
+			return;
 		}
 
+		if (this.isCtrlEnter(e)) {
+			e.preventDefault();
+			e.stopPropagation();
+			this.handleCommentCtrlEnter(e);
+			return;
+		}
+
+		if (e.keyCode === 27 /* Esc */) {
+			// When a comment is being edited and focus is in the textbox,
+			// Esc should not close it but mark it with attention.
+			const editingComment = Comment.isAnyEdit();
+			if (editingComment) {
+				e.preventDefault();
+				e.stopPropagation();
+				this.sectionProperties.commentListSection
+					.addCommentAttention(editingComment);
+			}
+			return;
+		}
+
+		if (e.keyCode === 33 || e.keyCode === 34) {
+			this.handleCommentPageNav(e);
+			return;
+		}
+	}
+
+	/**
+	 * Workaround for Chrome desktop bug where PageUp/PageDown in a textarea
+	 * scrolls the page instead of moving the caret.
+	 * https://issues.chromium.org/issues/41417806
+	 */
+	private handleCommentPageNav(e: KeyboardEvent): void {
+		window.L.DomEvent.preventDefault(e);
+		const target = e.target as HTMLTextAreaElement;
+		const pos = e.keyCode === 33 ? 0 : target.textLength;
+		const currentPos = target.selectionStart;
+		if (e.shiftKey) {
+			const [start, end] = currentPos <= pos
+				? [currentPos, pos]
+				: [pos, currentPos];
+			target.setSelectionRange(
+				start, end,
+				currentPos > pos ? 'backward' : 'forward');
+		} else {
+			target.setSelectionRange(pos, pos);
+		}
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
