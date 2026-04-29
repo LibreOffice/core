@@ -517,9 +517,12 @@ std::shared_ptr<SalBitmap> QtGraphicsBackend::getBitmap(tools::Long nX, tools::L
                                                         tools::Long nWidth, tools::Long nHeight,
                                                         bool bWithoutAlpha)
 {
-    assert(!bWithoutAlpha && "not supported here");
-    (void)bWithoutAlpha;
-    return std::make_shared<QtBitmap>(m_pQImage->copy(nX, nY, nWidth, nHeight));
+    QImage aImage = m_pQImage->copy(nX, nY, nWidth, nHeight);
+
+    if (bWithoutAlpha && aImage.hasAlphaChannel())
+        aImage.convertTo(QImage::Format_RGB888);
+
+    return std::make_shared<QtBitmap>(aImage);
 }
 
 Color QtGraphicsBackend::getPixel(tools::Long nX, tools::Long nY)

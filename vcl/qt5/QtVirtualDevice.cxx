@@ -46,9 +46,6 @@ void QtVirtualDevice::ReleaseGraphics(SalGraphics* pGraphics)
 
 bool QtVirtualDevice::SetSize(tools::Long nNewDX, tools::Long nNewDY, bool bAlphaMaskTransparent)
 {
-    assert(!bAlphaMaskTransparent && "TODO");
-    (void)bAlphaMaskTransparent;
-
     if (nNewDX == 0)
         nNewDX = 1;
     if (nNewDY == 0)
@@ -64,7 +61,11 @@ bool QtVirtualDevice::SetSize(tools::Long nNewDX, tools::Long nNewDY, bool bAlph
 
     m_pImage.reset(new QImage(nNewDX, nNewDY, Qt_DefaultFormat32));
 
-    m_pImage->fill(Qt::transparent);
+    if (bAlphaMaskTransparent)
+        m_pImage->fill(Qt::transparent);
+    else
+        m_pImage->fill(Qt::white);
+
     m_pImage->setDevicePixelRatio(m_fScale);
 
     // update device in existing graphics
