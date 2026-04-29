@@ -1765,39 +1765,6 @@
             <value>false</value>
           </prop>
         </group>
-        <group oor:name="MS_Excel">
-          <info>
-            <desc>Contains settings for MS Excel import.</desc>
-          </info>
-          <prop oor:name="ColScale" oor:type="xs:double" oor:nillable="false">
-            <info>
-              <desc>Specifies the factor for multiplying the column width when importing Excel documents from Biff 5 format.</desc>
-              <label>Excel Column Width Scale</label>
-            </info>
-            <constraints>
-              <minExclusive oor:value="0.1">
-                <info>
-                  <desc>Specifies the minimum allowed value.</desc>
-                </info>
-              </minExclusive>
-            </constraints>
-            <value>1.0</value>
-          </prop>
-          <prop oor:name="RowScale" oor:type="xs:double" oor:nillable="false">
-            <info>
-              <desc>Specifies the factor for multiplying the row height when importing Excel documents from Biff 5 format.</desc>
-              <label>Excel Row Height Scale</label>
-            </info>
-            <constraints>
-              <minExclusive oor:value="0.1">
-                <info>
-                  <desc>Specifies the minimum allowed value.</desc>
-                </info>
-              </minExclusive>
-            </constraints>
-            <value>1.0</value>
-          </prop>
-        </group>
       </group>
       <group oor:name="Export">
         <info>
