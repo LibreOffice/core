@@ -538,7 +538,6 @@
 #include <externalrefmgr.hxx>
 #include <fillinfo.hxx>
 #include <formula/IControlReferenceHandler.hxx>
-#include <formula/compiler.hxx>
 #include <formula/errorcodes.hxx>
 #include <formula/formuladllapi.h>
 #include <formula/funcutl.hxx>

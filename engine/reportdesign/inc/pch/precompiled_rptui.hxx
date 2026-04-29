@@ -340,7 +340,6 @@
 #include <editeng/svxenum.hxx>
 #include <editeng/svxfont.hxx>
 #include <formula/IFunctionDescription.hxx>
-#include <formula/compiler.hxx>
 #include <formula/formuladllapi.h>
 #include <formula/opcode.hxx>
 #include <formula/paramclass.hxx>

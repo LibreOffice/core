@@ -34,7 +34,7 @@
 #include <defnamesbuffer.hxx>
 #include <externallinkbuffer.hxx>
 #include <tablebuffer.hxx>
-#include <formula/compiler.hxx>
+#include <formula/opcode.hxx>
 #include <o3tl/string_view.hxx>
 
 namespace oox::xls {

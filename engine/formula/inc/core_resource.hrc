@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <formula/compiler.hxx>
+#include <formula/opcode.hxx>
 #include <utility>
 #include <unotools/resmgr.hxx>
 

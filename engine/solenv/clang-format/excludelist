@@ -5067,7 +5067,6 @@ include/formula/FormulaCompiler.hxx
 include/formula/FormulaOpCodeMapperObj.hxx
 include/formula/IControlReferenceHandler.hxx
 include/formula/IFunctionDescription.hxx
-include/formula/compiler.hxx
 include/formula/errorcodes.hxx
 include/formula/formdata.hxx
 include/formula/formula.hxx

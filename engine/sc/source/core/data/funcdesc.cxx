@@ -44,9 +44,9 @@ namespace {
 struct ScFuncDescCore
 {
     /*
-     * An opcode from include/formula/compiler.hxx
+     * An opcode from include/formula/opcode.hxx
      */
-    sal_uInt16 nOpCode;
+    OpCode nOpCode;
     /*
      * Pointer to list of strings
      */
