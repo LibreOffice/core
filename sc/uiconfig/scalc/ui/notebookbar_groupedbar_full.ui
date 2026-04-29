@@ -5180,7 +5180,7 @@
                                         <child>
                                           <object class="GtkToolButton" id="SpellingAndGrammarDialog">
                                             <property name="visible">True</property>
-                                            <property name="action_name">.uno:SpellingAndGrammarDialog</property>
+                                            <property name="action_name">.uno:SpellDialog</property>
                                           </object>
                                           <packing>
                                             <property name="expand">False</property>
@@ -6407,7 +6407,7 @@
                                     <child>
                                       <object class="GtkToolButton" id="SpellingAndGrammarDialog2">
                                         <property name="visible">True</property>
-                                        <property name="action_name">.uno:SpellingAndGrammarDialog</property>
+                                        <property name="action_name">.uno:SpellDialog</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
