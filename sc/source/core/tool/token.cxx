@@ -30,7 +30,6 @@
 #include <compiler.hxx>
 #include <interpre.hxx>
 #include <formula/FormulaCompiler.hxx>
-#include <formula/compiler.hxx>
 #include <formula/opcode.hxx>
 #include <jumpmatrix.hxx>
 #include <rangeseq.hxx>

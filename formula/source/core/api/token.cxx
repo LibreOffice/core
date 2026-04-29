@@ -30,7 +30,7 @@
 #include <formula/token.hxx>
 #include <formula/tokenarray.hxx>
 #include <formula/FormulaCompiler.hxx>
-#include <formula/compiler.hxx>
+#include <formula/opcode.hxx>
 #include <svl/sharedstringpool.hxx>
 #include <memory>
 #include <utility>
