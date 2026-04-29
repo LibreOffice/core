@@ -638,4 +638,109 @@ describe(['tagdesktop'], 'PDF Threaded Comments', function() {
 				.to.equal(acked);
 		});
 	});
+
+	// Starting a drag-to-area gesture on top of an existing area-anchored
+	// comment must not create a new comment: the area sub-section catches
+	// mousedown and stops propagation, so the canvas placement gesture is
+	// never armed. Note: this tests the status quo; if you decide to change
+	// the behavior, just change the test.
+	it('Insert Comment starting over an existing area does not create a new one', { env: { 'pdf-view': true } }, function() {
+		const existingText = 'over-existing-area ' + Date.now();
+		let countWithExisting = 0;
+
+		// Create an existing area-anchored comment in the upper-left of page 1.
+		cy.getFrameWindow().then(function(win) {
+			win.app.map.insertComment();
+		});
+
+		cy.getFrameWindow().then(function(win) {
+			const canvas = win.document.getElementById('document-canvas');
+			const rect = canvas.getBoundingClientRect();
+			const docLayer = win.app.map._docLayer;
+			const sx = (docLayer._partWidthTwips * 0.10 * win.app.twipsToPixels) / win.app.dpiScale;
+			const sy = (docLayer._partHeightTwips * 0.10 * win.app.twipsToPixels) / win.app.dpiScale;
+			const ex = (docLayer._partWidthTwips * 0.30 * win.app.twipsToPixels) / win.app.dpiScale;
+			const ey = (docLayer._partHeightTwips * 0.20 * win.app.twipsToPixels) / win.app.dpiScale;
+			canvas.dispatchEvent(new win.MouseEvent('mousedown', {
+				clientX: rect.left + sx, clientY: rect.top + sy, button: 0, bubbles: true,
+			}));
+			canvas.dispatchEvent(new win.MouseEvent('mousemove', {
+				clientX: rect.left + ex, clientY: rect.top + ey, button: 0, bubbles: true,
+			}));
+			canvas.dispatchEvent(new win.MouseEvent('mouseup', {
+				clientX: rect.left + ex, clientY: rect.top + ey, button: 0, bubbles: true,
+			}));
+		});
+
+		cy.cGet('.cool-annotation').last({log: false})
+			.find('#annotation-modify-textarea-new').should('exist');
+		cy.getFrameWindow().then(function(win) { return helper.processToIdle(win); });
+		cy.cGet('.cool-annotation').last({log: false})
+			.find('.modify-annotation .cool-annotation-textarea')
+			.should('not.have.attr', 'disabled');
+		cy.cGet('.cool-annotation').last({log: false})
+			.find('.modify-annotation .cool-annotation-textarea')
+			.type(existingText);
+		cy.cGet('.cool-annotation').last({log: false})
+			.find('[value="Save"]').click();
+
+		cy.getFrameWindow().should(function(win) {
+			const section = win.app.sectionContainer.getSectionWithName(
+				win.app.CSections.CommentList.name);
+			const acked = section.sectionProperties.commentList.find(function(c) {
+				return c.sectionProperties.data.text === existingText;
+			});
+			expect(acked, 'first comment must be saved').to.exist;
+			expect(acked.sectionProperties.commentAnchorAreaSubSection,
+				'first comment must own an anchor-area sub-section').to.exist;
+			countWithExisting = section.sectionProperties.commentList.length;
+		});
+
+		// Re-enter placement mode and start a drag whose mousedown lands on
+		// the existing area. mousemove and mouseup are dispatched on the
+		// canvas to mimic a real drag - the area's mousedown stopPropagation
+		// should keep this from arming the gesture.
+		cy.getFrameWindow().then(function(win) {
+			win.app.map.insertComment();
+		});
+
+		cy.getFrameWindow().should(function(win) {
+			expect(win.document.getElementById('document-canvas').style.cursor,
+				'placement mode must be active').to.equal('crosshair');
+		});
+
+		cy.getFrameWindow().then(function(win) {
+			const section = win.app.sectionContainer.getSectionWithName(
+				win.app.CSections.CommentList.name);
+			const acked = section.sectionProperties.commentList.find(function(c) {
+				return c.sectionProperties.data.text === existingText;
+			});
+			const div = acked.sectionProperties.commentAnchorAreaSubSection
+				.sectionProperties.objectDiv;
+			const r = div.getBoundingClientRect();
+			const canvas = win.document.getElementById('document-canvas');
+			const downX = r.left + r.width / 2;
+			const downY = r.top + r.height / 2;
+			const upX = r.right + 100;
+			const upY = r.bottom + 100;
+			div.dispatchEvent(new win.MouseEvent('mousedown', {
+				clientX: downX, clientY: downY, button: 0, bubbles: true,
+			}));
+			canvas.dispatchEvent(new win.MouseEvent('mousemove', {
+				clientX: upX, clientY: upY, button: 0, bubbles: true,
+			}));
+			canvas.dispatchEvent(new win.MouseEvent('mouseup', {
+				clientX: upX, clientY: upY, button: 0, bubbles: true,
+			}));
+			return helper.processToIdle(win);
+		});
+
+		cy.getFrameWindow().should(function(win) {
+			const section = win.app.sectionContainer.getSectionWithName(
+				win.app.CSections.CommentList.name);
+			expect(section.sectionProperties.commentList.length,
+				'starting drag-to-area on an existing area must not add a comment')
+				.to.equal(countWithExisting);
+		});
+	});
 });
