@@ -234,12 +234,15 @@ window.L.ImpressTileLayer = window.L.CanvasTileLayer.extend({
 		if (part !== this._selectedPart) {
 			this._map.deselectAll(); // Deselect all first. This is a single selection.
 			this._map.setPart(part, true);
-			this._map.fire('setpart', {
-				selectedPart: this._selectedPart,
-				parts: this._parts,
-				docType: this._docType
-			});
 		}
+		// Fire 'setpart' even when the local _selectedPart was already updated
+		// synchronously by Parts.js setPart (fileBasedView path), so listeners
+		// waiting on server confirmation are not stuck.
+		this._map.fire('setpart', {
+			selectedPart: this._selectedPart,
+			parts: this._parts,
+			docType: this._docType
+		});
 	},
 
 	_onStatusMsg: function (textMsg) {

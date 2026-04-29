@@ -89,10 +89,12 @@ window.L.Map.include({
 		};
 
 		if (app.file.fileBasedView) {
-			if (!external) {
-				this._docLayer._checkSelectedPart();
-			}
 			docLayer._preview._scrollViewToPartPosition(docLayer._selectedPart);
+			// _checkSelectedPart's "most visible part" reconciliation is for
+			// free scroll; calling it after an explicit setPart would race
+			// notifyServer with a stale guess. Run only its UI side effects.
+			docLayer._preview._scrollToPart(docLayer._selectedPart);
+			docLayer.highlightCurrentPart(docLayer._selectedPart);
 			notifyServer(part);
 			return;
 		}
