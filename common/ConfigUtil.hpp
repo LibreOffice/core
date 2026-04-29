@@ -144,15 +144,19 @@ int getInt(const std::string& key, int def);
 inline bool isSslEnabled()
 {
 #if defined(ENABLE_SSL) && ENABLE_SSL
+    if constexpr (!Util::isFuzzing())
+    {
 #if ENABLE_DEBUG
-    // Unit-tests enable/disable SSL at will.
-    return !Util::isFuzzing() && getBool("ssl.enable", true);
+        // Unit-tests enable/disable SSL at will.
+        CONFIG_STATIC const bool isSslEnabled = getBool("ssl.enable", true);
+        return isSslEnabled;
 #else
-    return !Util::isFuzzing() && SslEnabled.get();
+        return SslEnabled.get();
 #endif
-#else
+    }
+#endif
+
     return false;
-#endif
 }
 
 /// Returns true if SSL Termination is enabled in the config and no fuzzing is enabled.
