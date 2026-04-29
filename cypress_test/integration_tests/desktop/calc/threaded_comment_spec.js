@@ -1,3 +1,4 @@
+/* -*- js-indent-level: 8 -*- */
 /* global describe it require cy beforeEach expect */
 
 var helper = require('../../common/helper');
@@ -144,5 +145,44 @@ describe(['tagdesktop'], 'Threaded Comment', function() {
 
 		// Verify the comment is gone.
 		cy.cGet('#comment-container-1').should('not.exist');
+	});
+
+	it('saves a new comment when Ctrl+Enter is pressed', function() {
+		// Click the "Insert Comment" button on the Insert tab.
+		cy.cGet('#Insert-tab-label').click();
+		cy.cGet('#insert-insert-threaded-comment').click();
+
+		// Wait for the annotation to be created.
+		cy.cGet('#comment-container-new').should('exist');
+		cy.cGet('.cool-annotation').last().find('#annotation-modify-textarea-new')
+			.should('exist');
+		cy.getFrameWindow().then((win) => { helper.processToIdle(win); });
+
+		// Make the annotation and its container visible.
+		cy.cGet('#comment-container-new').then(function (el) {
+			el[0].style.visibility = '';
+			el[0].style.display = '';
+		});
+
+		// Type text and submit with Ctrl+Enter (instead of clicking Save).
+		cy.cGet('.cool-annotation').last().find('.modify-annotation .cool-annotation-textarea')
+			.should('not.have.attr', 'disabled');
+		cy.cGet('.cool-annotation').last().find('.modify-annotation .cool-annotation-textarea')
+			.type('comment saved with ctrl+enter{ctrl}{enter}', {force: true});
+
+		// Wait for the comment to arrive from core with a real ID.
+		cy.cGet('#comment-container-1').should('exist');
+		cy.getFrameWindow().then((win) => { helper.processToIdle(win); });
+
+		// Verify the comment was saved with the typed text.
+		cy.getFrameWindow().then((win) => {
+			var commentSection = win.app.sectionContainer.getSectionWithName(
+				win.app.CSections.CommentList.name
+			);
+			var comments = commentSection.sectionProperties.commentList;
+			expect(comments.length).to.equal(1);
+			expect(comments[0].sectionProperties.data.text)
+				.to.contain('comment saved with ctrl+enter');
+		});
 	});
 });
