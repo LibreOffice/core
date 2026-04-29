@@ -606,8 +606,7 @@ bool ClientRequestDispatcher::allowPostFrom(const std::string& address)
 
 bool ClientRequestDispatcher::allowConvertTo(const std::string& address,
                                              const Poco::Net::HTTPRequest& request,
-                                             bool capabilityQuery,
-                                             AsyncFn asyncCb)
+                                             bool capabilityQuery, const AsyncFn& asyncCb)
 {
     const bool allow = allowPostFrom(address) || HostUtil::allowedWopiHost(request.getHost());
     if (!allow)
@@ -1199,7 +1198,7 @@ ClientRequestDispatcher::MessageResult ClientRequestDispatcher::handleMessage(Po
             // File server
             assert(socket && "Must have a valid socket");
             constexpr std::string_view ProxyRemoteStatic = "/remote/static/";
-            const auto uri = requestDetails.getURI();
+            const auto& uri = requestDetails.getURI();
             const auto pos = uri.find(ProxyRemoteStatic);
             if (pos != std::string::npos)
             {

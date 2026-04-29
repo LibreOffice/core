@@ -77,7 +77,7 @@ private:
     static bool allowPostFrom(const std::string& address);
 
     static bool allowConvertTo(const std::string& address, const Poco::Net::HTTPRequest& request,
-                               bool capabilityQuery, AsyncFn asyncCb);
+                               bool capabilityQuery, const AsyncFn& asyncCb);
 
     /// @return true if request has been handled synchronously and response sent, otherwise false
     bool handleRootRequest(const RequestDetails& requestDetails,
