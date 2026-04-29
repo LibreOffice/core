@@ -4684,7 +4684,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPaintVectorTile)
     auto oMaster = aTree.get_child_optional("masterPage");
     CPPUNIT_ASSERT(oMaster);
     auto& aMasterPrimitives = oMaster->get_child("primitives");
-    // Master page: white fill + gradient background + 4 placeholder sdrRectangles
+    // Master page: white fill + gradient background + 2 placeholder SdrRects.
     size_t nNumberOfMasterPrimitives = 0;
     bool bHasWhiteFill = false;
     bool bHasGradient = false;
@@ -4707,7 +4707,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPaintVectorTile)
             CPPUNIT_ASSERT(rGradient.get_child_optional("colorStops"));
         }
     }
-    CPPUNIT_ASSERT_EQUAL(size_t(6), nNumberOfMasterPrimitives);
+    CPPUNIT_ASSERT_EQUAL(size_t(4), nNumberOfMasterPrimitives);
     CPPUNIT_ASSERT_MESSAGE("Expecting white page fill", bHasWhiteFill);
     CPPUNIT_ASSERT_MESSAGE("Expecting gradient background", bHasGradient);
 
@@ -4748,6 +4748,44 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPaintVectorTile)
         CPPUNIT_ASSERT_EQUAL_MESSAGE("<footer> was not replaced", std::string::npos, rText.find("<footer>"));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("<header> was not replaced", std::string::npos, rText.find("<header>"));
     }
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPaintVectorTileMasterPagePlaceholderFilter)
+{
+    // Verify that Title and Outline placeholder text boxes on the master page
+    // are filtered out when rendering a normal slide.
+
+    SdXImpressDocument* pXImpressDocument = createDoc("MasterPagePlaceholderTest.fodp");
+    CPPUNIT_ASSERT(pXImpressDocument);
+
+    tools::JsonWriter aJsonWriter;
+    pXImpressDocument->getCommandValues(aJsonWriter, ".uno:VectorTile");
+    OString aResult = aJsonWriter.finishAndGetAsOString();
+    CPPUNIT_ASSERT(!aResult.isEmpty());
+
+    std::stringstream aStream(std::string(aResult.getStr(), aResult.getLength()));
+    boost::property_tree::ptree aTree;
+    boost::property_tree::read_json(aStream, aTree);
+
+    // The master page of the test document has only two presentation
+    // placeholders (title + outline) which must be filtered out.
+    auto oMaster = aTree.get_child_optional("masterPage");
+    CPPUNIT_ASSERT(oMaster);
+
+    std::vector<std::string> aMasterTexts;
+    forEachPrimitive(*oMaster, [&aMasterTexts](const boost::property_tree::ptree& rNode)
+    {
+        auto oText = rNode.get_optional<std::string>("text");
+        if (oText)
+            aMasterTexts.push_back(*oText);
+    });
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        "Master page title/outline placeholder text must be filtered out",
+        size_t(0), aMasterTexts.size());
+
+    // The slide itself should still contain its rectangle.
+    auto& aObjects = aTree.get_child("objects");
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aObjects.size());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

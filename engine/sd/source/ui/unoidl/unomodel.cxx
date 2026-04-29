@@ -2174,7 +2174,17 @@ private:
             if (!pObject)
                 continue;
 
-            // Filter hidden header/footer placeholders
+            // Filter objects not visible as master page objects (Title, Outline,
+            // Notes placeholders).
+            if (pObject->IsNotVisibleAsMaster())
+                continue;
+
+            // Filter empty presentation objects.
+            if (pObject->IsEmptyPresObj()
+                && !(pObject->HasFillStyle() || pObject->HasLineStyle()))
+                continue;
+
+            // Filter hidden header/footer placeholders based on per-slide settings.
             PresObjKind eKind = pMasterPage->GetPresObjKind(pObject);
             if ((eKind == PresObjKind::Header && !rSettings.mbHeaderVisible)
                 || (eKind == PresObjKind::Footer && !rSettings.mbFooterVisible)
