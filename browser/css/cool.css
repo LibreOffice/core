@@ -546,8 +546,8 @@ body {
 .annotation-anchor-area {
 	margin-left: 0px;
 	margin-top: 0px;
-	border: 1px solid var(--color-primary, #0078d4);
-	background: rgba(0, 120, 212, 0.08);
+	border: 1px solid var(--color-primary);
+	background: color-mix(in srgb, var(--color-primary) 8%, transparent);
 	box-sizing: border-box;
 }
 
