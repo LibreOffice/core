@@ -101,6 +101,7 @@ $(eval $(call gb_CppunitTest_use_components,sc_filters_test,\
     scaddins/source/datefunc/date \
     sc/util/sc \
     sc/util/scfilt \
+	scripting/source/vbaevents/vbaevents \
     sfx2/util/sfx \
     sot/util/sot \
     svl/util/svl \
