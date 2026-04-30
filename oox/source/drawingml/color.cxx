@@ -496,7 +496,8 @@ void Color::addChartTintTransformation( double fTint )
 
 void Color::addExcelTintTransformation(double fTint)
 {
-    sal_Int32 nValue = std::round(std::abs(fTint) * 100'000.0);
+    sal_Int32 nValue = getLimitedValue<sal_Int32, double>(
+        std::round(std::abs(fTint) * 100'000.0), 0, MAX_PERCENT);
     if (fTint > 0.0)
     {
         maTransforms.emplace_back(model::TransformationType::LumMod, 100'000 - nValue);
