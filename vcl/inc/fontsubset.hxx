@@ -32,9 +32,10 @@ enum class FontType {
     NO_FONT     = 0,
     SFNT_TTF    = 1<<1,                     ///< SFNT container with TrueType glyphs
     TYPE1_PFB   = 1<<3,                     ///< PSType1 Postscript Font Binary
+    CFF_FONT    = 1<<4,                     ///< Bare CFF, embedded as CIDFontType0 composite
 };
 namespace o3tl {
-    template<> struct typed_flags<FontType> : is_typed_flags<FontType, 0x0a> {};
+    template<> struct typed_flags<FontType> : is_typed_flags<FontType, 0x1a> {};
 }
 
 class VCL_DLLPUBLIC FontSubsetInfo final

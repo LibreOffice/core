@@ -481,6 +481,13 @@ bool PhysicalFontFace::CreateFontSubset(std::vector<sal_uInt8>& rOutBuffer,
     flags |= HB_SUBSET_FLAGS_DOWNGRADE_CFF2;
 #endif
 
+#if HB_VERSION_ATLEAST(14, 3, 0)
+    // Make HarfBuzz emit an identity charset for CID-keyed CFF subsets so
+    // we can embed the bare CFF as a CIDFontType0 composite without parsing
+    // the CFF table ourselves.
+    flags |= HB_SUBSET_FLAGS_CFF_IDENTITY_CHARSET;
+#endif
+
 #if !HB_VERSION_ATLEAST(13, 0, 2)
     // tdf#171202: Work around HarfBuzz bug where setting old_to_new_glyph_mapping would result in
     // invalid local subr indices. De-subroutinize the font if we are building against old HarfBuzz.
@@ -650,23 +657,27 @@ bool PhysicalFontFace::CreateFontSubset(std::vector<sal_uInt8>& rOutBuffer,
     }
     else
     {
-        // Ideally we should be outputting a CFF (Type1C) font here, but I couldn’t get it to work.
-        // So we oconvert it to Type1 font instead.
-        // TODO: simplify CreateCFFfontSubset() to only do the conversion, since we already
-        // have the subsetted font.
-        rInfo.m_nFontType = FontType::TYPE1_PFB;
-
         unsigned int nCffLen;
         const char* pCffData = hb_blob_get_data(pCFFBlob, &nCffLen);
         if (!pCffData || !nCffLen)
             return false;
 
+#if HB_VERSION_ATLEAST(14, 3, 0)
+        // HarfBuzz wrote an identity charset, so we can embed the bare CFF
+        // as a CIDFontType0 composite without parsing the CFF ourselves.
+        rInfo.m_nFontType = FontType::CFF_FONT;
+        rOutBuffer.assign(reinterpret_cast<const sal_uInt8*>(pCffData),
+                          reinterpret_cast<const sal_uInt8*>(pCffData) + nCffLen);
+#else
+        // Old HarfBuzz: convert the bare CFF to a Type 1 PFB.
+        rInfo.m_nFontType = FontType::TYPE1_PFB;
         if (!ConvertCFFfontToType1(reinterpret_cast<const unsigned char*>(pCffData), nCffLen,
                                    rOutBuffer, rInfo))
         {
             SAL_WARN("vcl.fonts.cff", "Failed to convert CFF data to Type 1 font");
             return false;
         }
+#endif
     }
 
     return true;

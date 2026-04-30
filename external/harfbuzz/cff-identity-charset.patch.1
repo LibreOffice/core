@@ -1,0 +1,210 @@
+From 72376c125300b719ff5ee896bff05d3391258b67 Mon Sep 17 00:00:00 2001
+From: Khaled Hosny <khaled@aliftype.com>
+Date: Thu, 30 Apr 2026 03:34:49 +0300
+Subject: [PATCH] [subset] Add HB_SUBSET_FLAGS_CFF_IDENTITY_CHARSET
+
+When set and subsetting a CID-keyed CFF font, the output charset is
+written as identity: CID i = new GID i. CIDCount in the Top DICT is
+also overridden to num_output_glyphs.
+
+This is useful for embedders (e.g. PDF writers) that want predictable
+CIDs in the subset output without parsing the CFF charset themselves.
+The PDF spec requires the embedder to know CIDs to compose CIDFontType0
+font dictionaries; with this flag the embedder can use sequential CIDs
+matching the new GID space.
+
+Has no effect on non-CID-keyed CFF fonts.
+
+Bumps version to 14.3.0.
+---
+ meson.build           |  2 +-
+ src/hb-subset-cff1.cc | 45 +++++++++++++++++++++++++++++++++----------
+ src/hb-subset.h       |  6 ++++++
+ src/hb-version.h      |  4 ++--
+ util/hb-subset.cc     |  1 +
+ 5 files changed, 45 insertions(+), 13 deletions(-)
+
+diff --git a/meson.build b/meson.build
+index bc72451cf..a5d33d424 100644
+--- a/meson.build
++++ b/meson.build
+@@ -1,6 +1,6 @@
+ project('harfbuzz', ['c', 'cpp'],
+   meson_version: '>= 0.60.0',
+-  version: '14.2.0',
++  version: '14.3.0',
+   default_options: [
+     'cpp_eh=none',          # Just to support msvc, we are passing -fno-exceptions also anyway
+     # 'cpp_rtti=false',     # Do NOT enable, wraps inherit it and ICU needs RTTI
+diff --git a/src/hb-subset-cff1.cc b/src/hb-subset-cff1.cc
+index ba71e4cc8..54886e8a2 100644
+--- a/src/hb-subset-cff1.cc
++++ b/src/hb-subset-cff1.cc
+@@ -137,13 +137,18 @@ struct cff1_top_dict_values_mod_t : cff1_top_dict_values_t
+ struct top_dict_modifiers_t
+ {
+   top_dict_modifiers_t (const cff1_sub_table_info_t &info_,
+-			const unsigned int (&nameSIDs_)[name_dict_values_t::ValCount])
++			const unsigned int (&nameSIDs_)[name_dict_values_t::ValCount],
++			unsigned identity_cid_count_ = 0)
+     : info (info_),
+-      nameSIDs (nameSIDs_)
++      nameSIDs (nameSIDs_),
++      identity_cid_count (identity_cid_count_)
+   {}
+ 
+   const cff1_sub_table_info_t &info;
+   const unsigned int	(&nameSIDs)[name_dict_values_t::ValCount];
++  /* If non-zero, override the CIDCount Top DICT operand with this value
++   * (used when emitting an identity charset). */
++  unsigned int identity_cid_count;
+ };
+ 
+ struct cff1_top_dict_op_serializer_t : cff_top_dict_op_serializer_t<cff1_top_dict_val_t>
+@@ -198,6 +203,13 @@ struct cff1_top_dict_op_serializer_t : cff_top_dict_op_serializer_t<cff1_top_dic
+ 			UnsizedByteStr::serialize_int2 (c, mod.nameSIDs[name_dict_values_t::ordering]) &&
+ 			copy_opstr (c, supp_op));
+ 	}
++
++      case OpCode_CIDCount:
++	if (mod.identity_cid_count)
++	  return_trace (FontDict::serialize_int4_op (c, op, mod.identity_cid_count));
++	else
++	  goto fall_back;
++
+       fall_back:
+       default:
+ 	return_trace (cff_top_dict_op_serializer_t<cff1_top_dict_val_t>::serialize (c, opstr, mod.info));
+@@ -529,7 +541,9 @@ struct cff1_subset_plan
+     if (it->first == 0) it++;
+     auto _ = *it;
+     bool not_is_cid = !acc.is_CID ();
+-    bool skip = !not_is_cid && glyph_to_sid_map;
++    /* When emitting an identity charset (CID = new GID), the per-glyph SID
++     * lookup is unnecessary, and the skip optimization does not apply. */
++    bool skip = !not_is_cid && glyph_to_sid_map && !identity_charset;
+     if (not_is_cid)
+       sidmap.alloc (num_glyphs);
+     for (hb_codepoint_t glyph = 1; glyph < num_glyphs; glyph++)
+@@ -545,12 +559,20 @@ struct cff1_subset_plan
+ 	/* Retain the SID for the old missing glyph ID */
+ 	old_glyph = glyph;
+       }
+-      unsigned sid = glyph_to_sid_map ?
+-		     glyph_to_sid_map->arrayZ[old_glyph].code :
+-		     acc.glyph_to_sid (old_glyph, &glyph_to_sid_cache);
++      unsigned sid;
++      if (identity_charset)
++      {
++	sid = glyph;
++      }
++      else
++      {
++	sid = glyph_to_sid_map ?
++		       glyph_to_sid_map->arrayZ[old_glyph].code :
++		       acc.glyph_to_sid (old_glyph, &glyph_to_sid_cache);
+ 
+-      if (not_is_cid)
+-	sid = sidmap.add (sid);
++	if (not_is_cid)
++	  sid = sidmap.add (sid);
++      }
+ 
+       if (sid != last_sid + 1)
+ 	subset_charset_ranges.push (code_pair_t {sid, glyph});
+@@ -621,6 +643,7 @@ struct cff1_subset_plan
+     orig_fdcount = acc.fdCount;
+     drop_hints = plan->flags & HB_SUBSET_FLAGS_NO_HINTING;
+     desubroutinize = plan->flags & HB_SUBSET_FLAGS_DESUBROUTINIZE;
++    identity_charset = (plan->flags & HB_SUBSET_FLAGS_CFF_IDENTITY_CHARSET) && acc.is_CID ();
+ 
+  #ifdef HB_EXPERIMENTAL_API
+     min_charstrings_off_size = (plan->flags & HB_SUBSET_FLAGS_IFTB_REQUIREMENTS) ? 4 : 0;
+@@ -628,7 +651,7 @@ struct cff1_subset_plan
+     min_charstrings_off_size = 0;
+  #endif
+ 
+-    subset_charset = !acc.is_predef_charset ();
++    subset_charset = !acc.is_predef_charset () || identity_charset;
+     if (!subset_charset)
+       /* check whether the subset renumbers any glyph IDs */
+       for (const auto &_ : plan->new_to_old_gid_list)
+@@ -786,6 +809,7 @@ struct cff1_subset_plan
+   unsigned int	topDictModSIDs[name_dict_values_t::ValCount];
+ 
+   bool		desubroutinize = false;
++  bool		identity_charset = false;
+ 
+   unsigned	min_charstrings_off_size = 0;
+ };
+@@ -968,7 +992,8 @@ OT::cff1::accelerator_subset_t::serialize (hb_serialize_context_t *c,
+     auto *top = c->push<TopDict> ();
+     cff1_top_dict_op_serializer_t topSzr;
+     unsigned top_size = 0;
+-    top_dict_modifiers_t  modifier (plan.info, plan.topDictModSIDs);
++    top_dict_modifiers_t  modifier (plan.info, plan.topDictModSIDs,
++				    plan.identity_charset ? plan.num_glyphs : 0);
+     if (likely (top->serialize (c, plan.topdict_mod, topSzr, modifier)))
+     {
+       top_size = c->length ();
+diff --git a/src/hb-subset.h b/src/hb-subset.h
+index 49cd12763..81fc2733f 100644
+--- a/src/hb-subset.h
++++ b/src/hb-subset.h
+@@ -87,6 +87,11 @@ typedef struct hb_subset_plan_t hb_subset_plan_t;
+  * @HB_SUBSET_FLAGS_DOWNGRADE_CFF2: If set and instantiating a variable font,
+  * convert the output CFF2 table to CFF1. This enables compatibility with older
+  * renderers that don't support CFF2. Since: 13.0.0
++ * @HB_SUBSET_FLAGS_CFF_IDENTITY_CHARSET: If set and subsetting a CID-keyed CFF
++ * font, the output CFF charset will use sequential identity CIDs (CID i = new
++ * GID i) rather than preserving the original CIDs. Useful for embedders that
++ * want a predictable CID mapping without parsing the output CFF charset
++ * themselves. Has no effect on non-CID-keyed CFF fonts. Since: 14.3.0
+  *
+  * List of boolean properties that can be configured on the subset input.
+  *
+@@ -111,6 +116,7 @@ typedef enum { /*< flags >*/
+   HB_SUBSET_FLAGS_RETAIN_NUM_GLYPHS  =  0x00002000u,
+ #endif
+   HB_SUBSET_FLAGS_DOWNGRADE_CFF2          =  0x00004000u,
++  HB_SUBSET_FLAGS_CFF_IDENTITY_CHARSET    =  0x00008000u,
+ } hb_subset_flags_t;
+ 
+ /**
+diff --git a/src/hb-version.h b/src/hb-version.h
+index f44973e60..16442f81a 100644
+--- a/src/hb-version.h
++++ b/src/hb-version.h
+@@ -47,7 +47,7 @@ HB_BEGIN_DECLS
+  *
+  * The minor component of the library version available at compile-time.
+  */
+-#define HB_VERSION_MINOR 2
++#define HB_VERSION_MINOR 3
+ /**
+  * HB_VERSION_MICRO:
+  *
+@@ -60,7 +60,7 @@ HB_BEGIN_DECLS
+  *
+  * A string literal containing the library version available at compile-time.
+  */
+-#define HB_VERSION_STRING "14.2.0"
++#define HB_VERSION_STRING "14.3.0"
+ 
+ /**
+  * HB_VERSION_ATLEAST:
+diff --git a/util/hb-subset.cc b/util/hb-subset.cc
+index 8c6058de5..97c0bee32 100644
+--- a/util/hb-subset.cc
++++ b/util/hb-subset.cc
+@@ -981,6 +981,7 @@ subset_main_t::add_options ()
+     {"retain-gids",		0, G_OPTION_FLAG_NO_ARG, G_OPTION_ARG_CALLBACK, (gpointer) &set_flag<HB_SUBSET_FLAGS_RETAIN_GIDS>,		"If set don't renumber glyph ids in the subset.", nullptr},
+     {"desubroutinize",		0, G_OPTION_FLAG_NO_ARG, G_OPTION_ARG_CALLBACK, (gpointer) &set_flag<HB_SUBSET_FLAGS_DESUBROUTINIZE>,		"Remove CFF/CFF2 use of subroutines", nullptr},
+     {"downgrade-cff2",		0, G_OPTION_FLAG_NO_ARG, G_OPTION_ARG_CALLBACK, (gpointer) &set_flag<HB_SUBSET_FLAGS_DOWNGRADE_CFF2>,		"Convert instantiated variable fonts from CFF2 to CFF1", nullptr},
++    {"cff-identity-charset",	0, G_OPTION_FLAG_NO_ARG, G_OPTION_ARG_CALLBACK, (gpointer) &set_flag<HB_SUBSET_FLAGS_CFF_IDENTITY_CHARSET>,	"Emit identity CFF charset (CID = new GID) for CID-keyed CFF", nullptr},
+     {"name-legacy",		0, G_OPTION_FLAG_NO_ARG, G_OPTION_ARG_CALLBACK, (gpointer) &set_flag<HB_SUBSET_FLAGS_NAME_LEGACY>,		"Keep legacy (non-Unicode) 'name' table entries", nullptr},
+     {"set-overlaps-flag",	0, G_OPTION_FLAG_NO_ARG, G_OPTION_ARG_CALLBACK, (gpointer) &set_flag<HB_SUBSET_FLAGS_SET_OVERLAPS_FLAG>,	"Set the overlaps flag on each glyph.", nullptr},
+     {"notdef-outline",		0, G_OPTION_FLAG_NO_ARG, G_OPTION_ARG_CALLBACK, (gpointer) &set_flag<HB_SUBSET_FLAGS_NOTDEF_OUTLINE>,		"Keep the outline of \'.notdef\' glyph", nullptr},
+-- 
+2.54.0
+

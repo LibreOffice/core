@@ -5149,7 +5149,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf155161)
     SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
     CPPUNIT_ASSERT(aDocument.Read(aStream));
 
-    // Check that all fonts in the document are Type 3 fonts
+    // CFF fonts are embedded as composite Type 0 wrappers + CIDFontType0
+    // descendants, so we only count the Type 0 wrappers here.
     std::set<OString> aFontNames;
     for (const auto& aElement : aDocument.GetElements())
     {
@@ -5162,7 +5163,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf155161)
             auto pSubtype
                 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Subtype"_ostr));
             CPPUNIT_ASSERT(pSubtype);
-            CPPUNIT_ASSERT_EQUAL("Type1"_ostr, pSubtype->GetValue());
+            if (pSubtype->GetValue() != "Type0")
+                continue;
             auto pName
                 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("BaseFont"_ostr));
             CPPUNIT_ASSERT(pName);

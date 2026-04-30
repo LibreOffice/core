@@ -952,6 +952,9 @@ private:
     /* writes a ToUnicode cmap, returns the corresponding stream object */
     sal_Int32 createToUnicodeCMap( sal_uInt8 const * pEncoding, const std::vector<sal_Ucs>& CodeUnits, const sal_Int32* pCodeUnitsPerGlyph,
                                    const sal_Int32* pEncToUnicodeIndex, uint32_t nGlyphs );
+    /* writes an identity 1-byte CMap for composite CFF fonts; returns the
+       stream object id (or 0 on failure) */
+    sal_Int32 emitCIDCMap(sal_Int32 nSubsetID);
 
     /* get resource dict object number */
     sal_Int32 getResourceDictObj()
