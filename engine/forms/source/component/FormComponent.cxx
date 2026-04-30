@@ -1354,6 +1354,7 @@ void OBoundControlModel::disposing()
     // notify all our listeners
     css::lang::EventObject aEvt( static_cast< XWeak* >( this ) );
     m_aUpdateListeners.disposeAndClear( aEvt );
+    m_aFormComponentListeners.disposeAndClear( aEvt );
     m_aResetHelper.disposing();
 
     // disconnect from our database column
@@ -1366,10 +1367,21 @@ void OBoundControlModel::disposing()
         resetField();
     }
 
+    if ( m_xAmbientForm )
+    {
+        m_xAmbientForm->removeLoadListener( this );
+        m_xAmbientForm.clear();
+    }
     m_xCursor = nullptr;
-    Reference< XComponent > xComp( m_xLabelControl, UNO_QUERY );
-    if ( xComp.is() )
-        xComp->removeEventListener(static_cast< XEventListener* >( static_cast< XPropertyChangeListener* >( this ) ) );
+    m_xColumnUpdate = nullptr;
+    m_xColumn = nullptr;
+    if (m_xLabelControl)
+    {
+        Reference< XComponent > xComp( m_xLabelControl, UNO_QUERY );
+        if ( xComp.is() )
+            xComp->removeEventListener(static_cast< XEventListener* >( static_cast< XPropertyChangeListener* >( this ) ) );
+        m_xLabelControl.clear();
+    }
     // disconnect from our external value binding
     if ( hasExternalValueBinding() )
         disconnectExternalValueBinding();
