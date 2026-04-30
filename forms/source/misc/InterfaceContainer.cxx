@@ -105,45 +105,41 @@ void OInterfaceContainer::impl_addVbEvents_nolck_nothrow(  const sal_Int32 i_nIn
     // we are dealing with form controls
     try
     {
-        do
-        {
-            Reference< XModel > xDoc( getXModel( static_cast< XContainer *> ( this ) ) );
-            if ( !xDoc.is() )
-                break;
+        Reference< XModel > xDoc( getXModel( static_cast< XContainer *> ( this ) ) );
+        if ( !xDoc.is() )
+            return;
 
-            Reference< XMultiServiceFactory > xDocFac( xDoc, UNO_QUERY_THROW );
-            Reference< XCodeNameQuery > xNameQuery( xDocFac->createInstance(u"ooo.vba.VBACodeNameProvider"_ustr), UNO_QUERY );
-            if ( !xNameQuery.is() )
-                break;
+        Reference< XMultiServiceFactory > xDocFac( xDoc, UNO_QUERY_THROW );
+        Reference< XCodeNameQuery > xNameQuery( xDocFac->createInstance(u"ooo.vba.VBACodeNameProvider"_ustr), UNO_QUERY );
+        if ( !xNameQuery.is() )
+            return;
 
-            ::osl::MutexGuard aGuard( m_rMutex );
-            bool hasVBABindings = lcl_hasVbaEvents( m_xEventAttacher->getScriptEvents( i_nIndex ) );
-            if ( hasVBABindings )
-                break;
+        ::osl::MutexGuard aGuard( m_rMutex );
+        bool hasVBABindings = lcl_hasVbaEvents( m_xEventAttacher->getScriptEvents( i_nIndex ) );
+        if ( hasVBABindings )
+            return;
 
-            Reference< XInterface > xElement( getByIndex( i_nIndex ) , UNO_QUERY_THROW );
-            Reference< XForm > xElementAsForm( xElement, UNO_QUERY );
-            if ( xElementAsForm.is() )
-                break;
+        Reference< XInterface > xElement( getByIndex( i_nIndex ) , UNO_QUERY_THROW );
+        Reference< XForm > xElementAsForm( xElement, UNO_QUERY );
+        if ( xElementAsForm.is() )
+            return;
 
-            // Try getting the code name from the container first (faster),
-            // then from the element if that fails (slower).
-            Reference<XInterface> xThis = static_cast<XContainer*>(this);
-            OUString sCodeName = xNameQuery->getCodeNameForContainer(xThis);
-            if (sCodeName.isEmpty())
-                sCodeName = xNameQuery->getCodeNameForObject(xElement);
+        // Try getting the code name from the container first (faster),
+        // then from the element if that fails (slower).
+        Reference<XInterface> xThis = static_cast<XContainer*>(this);
+        OUString sCodeName = xNameQuery->getCodeNameForContainer(xThis);
+        if (sCodeName.isEmpty())
+            sCodeName = xNameQuery->getCodeNameForObject(xElement);
 
-            Reference< XPropertySet > xProps( xElement, UNO_QUERY_THROW );
-            OUString sServiceName;
-            xProps->getPropertyValue(u"DefaultControl"_ustr) >>= sServiceName;
+        Reference< XPropertySet > xProps( xElement, UNO_QUERY_THROW );
+        OUString sServiceName;
+        xProps->getPropertyValue(u"DefaultControl"_ustr) >>= sServiceName;
 
-            Reference< ooo::vba::XVBAToOOEventDescGen > xDescSupplier( m_xContext->getServiceManager()->createInstanceWithContext(u"ooo.vba.VBAToOOEventDesc"_ustr, m_xContext), UNO_QUERY_THROW );
-            Sequence< ScriptEventDescriptor > vbaEvents = xDescSupplier->getEventDescriptions( sServiceName , sCodeName );
+        Reference< ooo::vba::XVBAToOOEventDescGen > xDescSupplier( m_xContext->getServiceManager()->createInstanceWithContext(u"ooo.vba.VBAToOOEventDesc"_ustr, m_xContext), UNO_QUERY_THROW );
+        Sequence< ScriptEventDescriptor > vbaEvents = xDescSupplier->getEventDescriptions( sServiceName , sCodeName );
 
-            // register the vba script events
-            m_xEventAttacher->registerScriptEvents( i_nIndex, vbaEvents );
-        }
-        while ( false );
+        // register the vba script events
+        m_xEventAttacher->registerScriptEvents( i_nIndex, vbaEvents );
     }
     catch ( const ServiceNotRegisteredException& )
     {
