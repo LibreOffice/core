@@ -29,6 +29,19 @@ var NotebookbarAccessibilityDefinitions = function() {
 					var arrow = document.querySelector('#' + id + ' .arrowbackground');
 					var element = document.getElementById(id + '-button');
 
+					// If standard lookups failed and item has a UNO command, try
+					// finding by modelid. This handles WeldedToolbar items where
+					// core assigns command-based ids (e.g. NumberFormatCurrency)
+					// instead of the JS definition ids (e.g. home-number-format-currency).
+					if (!overflow && !arrow && !element && rawList[i].command) {
+						var commandId = rawList[i].command.replace('.uno:', '');
+						var byModelId = document.querySelector('[modelid="' + commandId + '"]');
+						if (byModelId) {
+							id = commandId;
+							arrow = byModelId.querySelector('.arrowbackground');
+						}
+					}
+
 					if (overflow) {
 						// overflow button
 						if (typeof overflow.isCollapsed === 'function' && overflow.isCollapsed()) {
