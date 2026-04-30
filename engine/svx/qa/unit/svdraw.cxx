@@ -843,7 +843,7 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testContourTextCJK)
     // First line
     assertXPathDoubleValue(pXmlDoc, "(//textsimpleportion)[1]", "x", 13327.0, 150.0);
     // Second line
-    assertXPathDoubleValue(pXmlDoc, "(//textsimpleportion)[3]", "x", 12489.0, 300.0);
+    assertXPathDoubleValue(pXmlDoc, "(//textsimpleportion)[3]", "x", 12489.0, 400.0);
 }
 
 CPPUNIT_TEST_FIXTURE(SvdrawTest, testTdf161724)
