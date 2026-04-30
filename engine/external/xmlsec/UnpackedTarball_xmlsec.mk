@@ -7,7 +7,8 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-xmlsec_patches :=
+xmlsec_patches := \
+	xmlsec-win32-libxml2-no-d-suffix.patch.0
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,xmlsec))
 

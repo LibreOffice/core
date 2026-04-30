@@ -1,0 +1,19 @@
+-*- Mode: Diff -*-
+
+For some reason xmlsec thinks we produce a libxml2d.lib when building
+for debugging, but we don't, it's called just libxml2.lib.
+
+
+--- win32/Makefile.msvc
++++ win32/Makefile.msvc
+@@ -516,7 +516,7 @@
+ # Optimisation and debug symbols.
+ !if "$(DEBUG)" == "1"
+ LDFLAGS 		= $(LDFLAGS) /DEBUG /OPT:ICF
+-SOLIBS 		    = libxml2d.lib $(LIBS)
++SOLIBS 		    = libxml2.lib $(LIBS)
+ ALIBS 		    = libxml2ds.lib $(LIBS)
+ !else
+ LDFLAGS 		= $(LDFLAGS) /OPT:REF,ICF
+
+
