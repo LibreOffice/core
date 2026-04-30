@@ -38,6 +38,75 @@ typedef std::pair< double, double >   tPointType;
 typedef std::vector< tPointType >     tPointVecType;
 typedef tPointVecType::size_type        lcl_tSizeType;
 
+bool lcl_CalculateUpperTriangularForm(
+            tPointVecType& rPointsIn
+            , std::vector<std::vector<double>>& rMatN
+            , std::vector<lcl_tSizeType>& rShift )
+{
+    lcl_tSizeType r = 0; // true row index
+    lcl_tSizeType c = 0; // true column index
+    double fDivisor = 1.0; // used for diagonal element
+    double fEliminate = 1.0; // used for the element, that will become zero
+    bool bIsSuccessful = true;
+    const lcl_tSizeType n = rPointsIn.size() - 1;
+    for (c = 0 ; c <= n && bIsSuccessful; ++c)
+    {
+        // search for first non-zero downwards
+        r = c;
+        while ( r < n && rMatN[r][c-rShift[r]] == 0 )
+        {
+            ++r;
+        }
+        if (rMatN[r][c-rShift[r]] == 0.0)
+        {
+            // Matrix N is singular, although this is mathematically impossible
+            bIsSuccessful = false;
+        }
+        else
+        {
+            // exchange total row r with total row c if necessary
+            if (r != c)
+            {
+                std::swap( rMatN[r], rMatN[c] );
+                std::swap( rPointsIn[r], rPointsIn[c] );
+                std::swap( rShift[r], rShift[c] );
+            }
+
+            sal_uInt32 p = rMatN[c].size() - 1;
+
+            // divide row c, so that element(c,c) becomes 1
+            fDivisor = rMatN[c][c-rShift[c]]; // not zero, see above
+            for (sal_uInt32 i = 0; i <= p; ++i)
+            {
+                rMatN[c][i] /= fDivisor;
+            }
+            rPointsIn[c].first /= fDivisor;
+            rPointsIn[c].second /= fDivisor;
+
+            // eliminate forward, examine row c+1 to n-1 (worst case)
+            // stop if first non-zero element in row has an higher column as c
+            // look at nShift for that, elements in nShift are equal or increasing
+            for ( r = c+1; r < n && rShift[r]<=c ; ++r)
+            {
+                fEliminate = rMatN[r][0];
+                if (fEliminate != 0.0) // else accidentally zero, nothing to do
+                {
+                    for (sal_uInt32 i = 1; i <= p; ++i)
+                    {
+                        rMatN[r][i-1] = rMatN[r][i] - fEliminate * rMatN[c][i];
+                    }
+                    rMatN[r][p]=0;
+                    rPointsIn[r].first -= fEliminate * rPointsIn[c].first;
+                    rPointsIn[r].second -= fEliminate * rPointsIn[c].second;
+                    ++rShift[r];
+                }
+            }
+        }
+    }
+
+    return bIsSuccessful;
+}
+
 class lcl_SplineCalculation
 {
 public:
@@ -719,63 +788,9 @@ void SplineCalculator::CalculateBSplines(
         // Get matrix C of control points from the matrix equation aMatN * C = aPointsIn
         // aPointsIn is overwritten with C.
         // Gaussian elimination is possible without pivoting, see reference
-        lcl_tSizeType r = 0; // true row index
-        lcl_tSizeType c = 0; // true column index
-        double fDivisor = 1.0; // used for diagonal element
-        double fEliminate = 1.0; // used for the element, that will become zero
-        bool bIsSuccessful = true;
-        for (c = 0 ; c <= n && bIsSuccessful; ++c)
-        {
-            // search for first non-zero downwards
-            r = c;
-            while ( r < n && aMatN[r][c-aShift[r]] == 0 )
-            {
-                ++r;
-            }
-            if (aMatN[r][c-aShift[r]] == 0.0)
-            {
-                // Matrix N is singular, although this is mathematically impossible
-                bIsSuccessful = false;
-            }
-            else
-            {
-                // exchange total row r with total row c if necessary
-                if (r != c)
-                {
-                    std::swap( aMatN[r], aMatN[c] );
-                    std::swap( aPointsIn[r], aPointsIn[c] );
-                    std::swap( aShift[r], aShift[c] );
-                }
 
-                // divide row c, so that element(c,c) becomes 1
-                fDivisor = aMatN[c][c-aShift[c]]; // not zero, see above
-                for (sal_uInt32 i = 0; i <= p; ++i)
-                {
-                    aMatN[c][i] /= fDivisor;
-                }
-                aPointsIn[c].first /= fDivisor;
-                aPointsIn[c].second /= fDivisor;
+        bool bIsSuccessful = lcl_CalculateUpperTriangularForm(aPointsIn, aMatN, aShift);
 
-                // eliminate forward, examine row c+1 to n-1 (worst case)
-                // stop if first non-zero element in row has an higher column as c
-                // look at nShift for that, elements in nShift are equal or increasing
-                for ( r = c+1; r < n && aShift[r]<=c ; ++r)
-                {
-                    fEliminate = aMatN[r][0];
-                    if (fEliminate != 0.0) // else accidentally zero, nothing to do
-                    {
-                        for (sal_uInt32 i = 1; i <= p; ++i)
-                        {
-                            aMatN[r][i-1] = aMatN[r][i] - fEliminate * aMatN[c][i];
-                        }
-                        aMatN[r][p]=0;
-                        aPointsIn[r].first -= fEliminate * aPointsIn[c].first;
-                        aPointsIn[r].second -= fEliminate * aPointsIn[c].second;
-                        ++aShift[r];
-                    }
-                }
-            }
-        }// upper triangle form is reached
         if( bIsSuccessful)
         {
             // eliminate backwards, begin with last column
@@ -785,10 +800,11 @@ void SplineCalculator::CalculateBSplines(
                 // diagonal are zero and do not influence other rows.
                 // Full matrix N has semibandwidth < p, therefore element(r,c) is
                 // zero, if abs(r-cc)>=p.  abs(r-cc)=cc-r, because r<cc.
-                r = cc - 1;
+
+                lcl_tSizeType r = cc - 1; // true row index
                 while ( r !=0 && cc-r < p )
                 {
-                    fEliminate = aMatN[r][ cc - aShift[r] ];
+                    double fEliminate = aMatN[r][ cc - aShift[r] ]; // used for the element, that will become zero
                     if ( fEliminate != 0.0) // else element is accidentally zero, no action needed
                     {
                         // row r -= fEliminate * row cc only relevant for right side
