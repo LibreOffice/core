@@ -6439,6 +6439,45 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf118350StartEndParaAlign)
     CPPUNIT_ASSERT_DOUBLES_EQUAL(99.0, aRect.at(23).getMinX(), /*delta*/ 10.0);
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf155557UnderlineKashidaPortion)
+{
+    loadFromFile(u"tdf155557-underline-kashida-portion.fodt");
+    save(TestFilter::PDF_WRITER);
+
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+
+    CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
+
+    auto pPdfPage = pPdfDocument->openPage(0);
+    CPPUNIT_ASSERT(pPdfPage);
+
+    std::vector<basegfx::B2DRectangle> aStrokeRect;
+
+    int nPageObjectCount = pPdfPage->getObjectCount();
+    for (int i = 0; i < nPageObjectCount; ++i)
+    {
+        auto pPageObject = pPdfPage->getObject(i);
+        CPPUNIT_ASSERT_MESSAGE("no object", pPageObject != nullptr);
+        if (pPageObject->getType() == vcl::pdf::PDFPageObjectType::Path)
+        {
+            aStrokeRect.push_back(pPageObject->getBounds());
+        }
+    }
+
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aStrokeRect.size());
+
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(547.8, aStrokeRect.at(0).getMinX(), /*delta*/ 1.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(555.9, aStrokeRect.at(0).getMaxX(), /*delta*/ 1.0);
+
+    // Without the fix in place, this fails with:
+    // double equality assertion failed
+    // - Expected: 56.1
+    // - Actual  : 534.2
+    // - Delta   : 1
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(56.1, aStrokeRect.at(1).getMinX(), /*delta*/ 1.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(548.9, aStrokeRect.at(1).getMaxX(), /*delta*/ 1.0);
+}
+
 } // end anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();

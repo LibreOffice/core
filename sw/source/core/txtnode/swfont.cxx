@@ -1226,14 +1226,30 @@ void SwSubFont::DrawText_( SwDrawTextInfo &rInf, const bool bGrey )
 
             const SwScriptInfo* pSI = rInf.GetScriptInfo();
 
+            auto pKashida = pSI ? pSI->GetKashidaPositions() : std::span<TextFrameIndex const>{};
+            auto fnIsKashida = [&](TextFrameIndex nIdx) -> bool
+            {
+                while (!pKashida.empty())
+                {
+                    if (pKashida[0] >= nIdx)
+                    {
+                        return pKashida[0] == nIdx;
+                    }
+
+                    pKashida = pKashida.subspan(1);
+                }
+
+                return false;
+            };
+
             const bool bAsianFont =
                 ( rInf.GetFont() && SwFontScript::CJK == rInf.GetFont()->GetActual() );
             for (TextFrameIndex nTmp = nOldIdx; nTmp < nTmpEnd; ++nTmp)
             {
-                if (CH_BLANK == oldStr[sal_Int32(nTmp)] || bAsianFont ||
-                    (nTmp + TextFrameIndex(1) < TextFrameIndex(oldStr.getLength())
-                     && pSI
-                     && i18n::ScriptType::ASIAN == pSI->ScriptType(nTmp + TextFrameIndex(1))))
+                if (CH_BLANK == oldStr[sal_Int32(nTmp)] || bAsianFont
+                    || (nTmp + TextFrameIndex(1) < TextFrameIndex(oldStr.getLength()) && pSI
+                        && i18n::ScriptType::ASIAN == pSI->ScriptType(nTmp + TextFrameIndex(1)))
+                    || fnIsKashida(nTmp))
                 {
                     ++nSpace;
                 }
