@@ -337,7 +337,7 @@ JSValue consoleLog(JSContext* ctx, JSValueConst, int argc, JSValueConst* argv)
             buf.append(OUString::Concat(" ") + std::u16string_view(s.get(), n));
         }
         buf.append('\n');
-        std::cout << buf.makeStringAndClear();
+        std::cout << buf.makeStringAndClear() << std::flush;
         return JS_UNDEFINED;
     });
 }
