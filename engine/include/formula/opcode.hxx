@@ -1059,7 +1059,7 @@ inline std::string OpCodeEnumToString(OpCode eCode)
     case ocDebugVar: return "DebugVar";
     case ocDataToken1: return "DataToken1";
     case ocNone: return "None";
-    default: assert(false); return "???";
+    default: assert(false); break; // should never happen
     }
     std::ostringstream os;
     os << static_cast<int>(eCode);

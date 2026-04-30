@@ -126,7 +126,7 @@ private:
                                     of parameters is significant. */
     static  inline  sal_uInt8        GetMinimumParameters( OpCode eOp)
                                     {
-                                        if ( eOp <= ocLAST_OPCODE_ID )
+                                        if ( eOp <= ocLastOpcodeId )
                                             return pData[eOp].aData.nParam[0]
                                                 == formula::ParamClass::Unknown ? 1 :
                                                 pData[eOp].nMinParams;
