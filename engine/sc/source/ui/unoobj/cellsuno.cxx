@@ -3270,8 +3270,6 @@ void SAL_CALL ScCellRangesBase::addModifyListener(const uno::Reference<util::XMo
         ScDocument& rDoc = pDocShell->GetDocument();
         for ( size_t i = 0, nCount = aRanges.size(); i < nCount; i++)
             rDoc.StartListeningArea( aRanges[ i ], false, pValueListener.get() );
-
-        acquire();  // don't lose this object (one ref for all listeners)
     }
 }
 
@@ -3296,8 +3294,6 @@ void SAL_CALL ScCellRangesBase::removeModifyListener( const uno::Reference<util:
             {
                 if (pValueListener)
                     pValueListener->EndListeningAll();
-
-                release();      // release the ref for the listeners
             }
 
             break;
