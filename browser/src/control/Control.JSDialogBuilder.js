@@ -143,6 +143,7 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 		this._controlHandlers['iconview'] = JSDialog.iconView;
 		this._controlHandlers['iconviewlist'] = JSDialog.notebookbarIconViewList;
 		this._controlHandlers['drawingarea'] = JSDialog.drawingArea;
+		this._controlHandlers['customwidget'] = JSDialog.customWidget;
 		this._controlHandlers['rootcomment'] = JSDialog.rootCommentControl;
 		this._controlHandlers['comment'] = JSDialog.commentControl;
 		this._controlHandlers['emptyCommentWizard'] = JSDialog.rootCommentControl;
@@ -2238,6 +2239,7 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 			&& data.type !== 'tabpage'
 			&& data.type !== 'tabcontrol'
 			&& data.type !== 'drawingarea'
+			&& data.type !== 'customwidget'
 			&& data.type !== 'grid'
 			&& data.type !== 'image'
 			&& data.type !== 'toolbox'

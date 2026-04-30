@@ -2834,6 +2834,126 @@ kbd,
 	margin-inline-start: 0.5em;
 }
 
+/* Text Import dialog - CSV grid (Widget.CsvGrid.ts) */
+.ui-csv-grid-container {
+	max-width: 700px;
+	max-height: 280px;
+	overflow: auto;
+	border: 1px solid var(--color-border);
+	background: var(--color-main-background);
+	color: var(--color-main-text);
+	font-family: monospace;
+	font-size: 12px;
+}
+
+.ui-csv-ruler-wrapper {
+	position: sticky;
+	top: 0;
+	left: 0;
+	z-index: 2;
+	border-bottom: 1px solid var(--color-border);
+}
+
+.ui-csv-ruler-wrapper.fixed-mode {
+	cursor: pointer;
+}
+
+.ui-csv-ruler-canvas {
+	display: block;
+}
+
+.ui-csv-grid {
+	border-collapse: collapse;
+	table-layout: fixed;
+}
+
+.ui-csv-grid tr {
+	height: var(--csv-row-height);
+}
+
+.ui-csv-grid tr.import-start {
+	border-top: 2px solid var(--color-primary);
+}
+
+.ui-csv-grid th {
+	padding: 2px 4px;
+	border-right: 1px solid var(--color-calc-grid);
+	border-bottom: 1px solid var(--color-border);
+	background: var(--color-calc-header);
+	font-weight: normal;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	position: sticky;
+	top: 0;
+	user-select: none;
+}
+
+.ui-csv-grid-container.fixed-mode .ui-csv-grid th {
+	top: var(--csv-ruler-height);
+}
+
+.ui-csv-grid th.selected {
+	background: var(--color-calc-header-selected);
+}
+
+.ui-csv-grid-row-header {
+	left: 0;
+	z-index: 1;
+}
+
+.ui-csv-grid-row-number {
+	padding: 1px 4px;
+	border-right: 1px solid var(--color-calc-grid);
+	background: var(--color-calc-header);
+	color: var(--color-text-lighter);
+	text-align: right;
+	user-select: none;
+	position: sticky;
+	left: 0;
+}
+
+.ui-csv-grid-cell {
+	padding: 1px 4px;
+	border-right: 1px solid var(--color-calc-grid);
+	overflow: hidden;
+	white-space: nowrap;
+}
+
+.ui-csv-grid-cell.selected {
+	background: var(--color-calc-header-selected);
+}
+
+.ui-csv-grid-cell.dimmed {
+	color: var(--color-text-lighter);
+}
+
+/* Column-type popup menu (positioned in JS via inline left/top) */
+.ui-csv-context-menu {
+	position: fixed;
+	z-index: 10000;
+	background: var(--color-main-background);
+	color: var(--color-main-text);
+	border: 1px solid var(--color-border);
+	border-radius: 3px;
+	box-shadow: 0 2px 8px var(--color-box-shadow, rgba(0, 0, 0, 0.25));
+	padding: 4px 0;
+	min-width: 140px;
+	font-family: sans-serif;
+	font-size: 13px;
+}
+
+.ui-csv-menu-item {
+	padding: 4px 14px;
+	cursor: pointer;
+	white-space: nowrap;
+	user-select: none;
+}
+
+.ui-csv-menu-item:hover {
+	background: var(--color-background-hover, var(--color-background-lighter));
+}
+
 /* clipboard warning dialog */
 #modal-dialog-copy_paste_download_progress .ui-dialog-content {
 	width: 450px;
