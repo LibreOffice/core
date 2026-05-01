@@ -8,7 +8,7 @@
 		position: absolute;
 		min-width: 12em;
 		background: var(--color-main-background);
-		box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+		box-shadow: 0 1px 1px var(--color-black-20);
 	}
 
 	.sm-simple li {

@@ -609,7 +609,7 @@
 }
 
 .aichat-msg-assistant pre {
-	background: rgba(0, 0, 0, 0.05);
+	background: var(--color-black-5);
 	border: 1px solid var(--color-border);
 	border-radius: var(--border-radius);
 	padding: 8px 10px;
@@ -763,7 +763,7 @@
 
 .aichat-approve-btn:hover {
 	box-shadow: 0 2px 8px rgba(var(--aichat-accent), 0.3);
-	background: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)),
+	background: linear-gradient(var(--color-black-10), var(--color-black-10)),
 		rgb(var(--aichat-accent));
 }
 

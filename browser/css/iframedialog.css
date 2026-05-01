@@ -18,9 +18,7 @@
 	height: 424px;
 	width: 448px;
 	border: 1px solid var(--color-border);
-	box-shadow: 0 -1px 2px 0 rgba(0, 0, 0, 0.15), 0 2px 2px 0 rgba(0, 0, 0, 0.1);
-	-moz-box-shadow: 0 -1px 2px 0 rgba(0, 0, 0, 0.15), 0 2px 2px 0 rgba(0, 0, 0, 0.1);
-	-webkit-box-shadow: 0 -1px 2px 0 rgba(0, 0, 0, 0.15), 0 2px 2px 0 rgba(0, 0, 0, 0.1);
+	box-shadow: var(--shadow-elevated);
 	border-radius: var(--border-radius);
 	background: var(--color-background-lighter);
 }

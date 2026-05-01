@@ -29,6 +29,16 @@
 	--spacing-l: 12px;
 	--spacing-xl: 16px;
 
+	/* Black overlay tints for borders, scrims and shadow components */
+	--color-black-5: rgba(0, 0, 0, 0.05);
+	--color-black-10: rgba(0, 0, 0, 0.1);
+	--color-black-15: rgba(0, 0, 0, 0.15);
+	--color-black-20: rgba(0, 0, 0, 0.2);
+
+	/* Box-shadow tokens */
+	--shadow-subtle: 0 0 3px var(--color-box-shadow);
+	--shadow-elevated: 0 -1px 2px 0 var(--color-black-15), 0 2px 2px 0 var(--color-black-10);
+
 	--tooltip-font-size: 0.875rem;
 	--default-font-size: 0.75rem;
 	--overflow-group-font-size: 8.5pt; /* do not scale labels of groups */
@@ -470,7 +480,7 @@ body {
 	bottom: 16px;
 	background-color: var(--color-primary);
 	border-radius: 50%;
-	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+	box-shadow: 0 4px 8px 0 var(--color-black-20), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 	z-index: 1001;
 	transform: scale(1);
 	transition: transform 0.5s;
@@ -673,7 +683,7 @@ body {
 	font-size: var(--default-font-size);
 	text-align: left;
 	background-color: var(--color-background-lighter);
-	box-shadow: 0 0 3px var(--color-box-shadow);
+	box-shadow: var(--shadow-subtle);
 	color: var(--color-main-text);
 	border: none;
 	border-radius: var(--border-radius);
@@ -1572,7 +1582,7 @@ body {
 	z-index: 1000;
 	background: rgba(255, 255, 255, 0.8);
 	border-radius: 6px;
-	box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+	box-shadow: 0 2px 12px var(--color-black-15);
 	padding: 8px 12px;
 	font: 12px/1.25 sans-serif;
 	color: #333;
