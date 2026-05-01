@@ -1041,7 +1041,7 @@ void DesktopKitTest::testWriterComments()
     // loop grabs the focus, so characters end up in the annotation window.
     TimeValue const aTimeValue = {2 , 0}; // 2 seconds max
     m_aCommandResultCondition.reset();
-    pDocument->pClass->postUnoCommand(pDocument, ".uno:InsertAnnotation", nullptr, true);
+    pDocument->pClass->postUnoCommand(pDocument, ".uno:InsertAnnotation", R"({"Author":{"type":"string","value":"LocalUser#0"},"Html":{"type":"string","value":"test"}})", true);
     Scheduler::ProcessEventsToIdle();
     m_aCommandResultCondition.wait(aTimeValue);
     CPPUNIT_ASSERT(!m_aCommandResult.isEmpty());
@@ -1055,14 +1055,6 @@ void DesktopKitTest::testWriterComments()
     uno::Reference<container::XEnumeration> xTextPortionEnumeration = xParagraph->createEnumeration();
     uno::Reference<beans::XPropertySet> xTextPortion(xTextPortionEnumeration->nextElement(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(u"Annotation"_ustr, xTextPortion->getPropertyValue(u"TextPortionType"_ustr).get<OUString>());
-
-    // Type "test" and finish editing.
-    pDocument->pClass->postKeyEvent(pDocument, KIT_KEYEVENT_KEYINPUT, 't', 0);
-    pDocument->pClass->postKeyEvent(pDocument, KIT_KEYEVENT_KEYINPUT, 'e', 0);
-    pDocument->pClass->postKeyEvent(pDocument, KIT_KEYEVENT_KEYINPUT, 's', 0);
-    pDocument->pClass->postKeyEvent(pDocument, KIT_KEYEVENT_KEYINPUT, 't', 0);
-    pDocument->pClass->postKeyEvent(pDocument, KIT_KEYEVENT_KEYINPUT, 0, css::awt::Key::ESCAPE);
-    Scheduler::ProcessEventsToIdle();
 
     // Test that the typed characters ended up in the right window.
     auto xTextField = xTextPortion->getPropertyValue(u"TextField"_ustr).get< uno::Reference<beans::XPropertySet> >();

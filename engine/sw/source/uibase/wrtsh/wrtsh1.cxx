@@ -2487,7 +2487,7 @@ void SwWrtShell::InsertPostIt(SwFieldMgr& rFieldMgr, const SfxRequest& rReq)
 
     // Client has disabled annotations rendering, no need to
     // focus the postit field
-    if (comphelper::COKit::isActive() && !comphelper::COKit::isTiledAnnotations())
+    if (comphelper::COKit::isActive())
         return;
 
     if (pPostIt)
