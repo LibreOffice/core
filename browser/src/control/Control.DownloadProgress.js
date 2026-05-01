@@ -11,7 +11,7 @@
 /*
  * window.L.Control.DownloadProgress.
  */
-/* global _ $ JSDialog app */
+/* global _ JSDialog app */
 window.L.Control.DownloadProgress = window.L.Control.extend({
 	options: {
 		snackbarTimeout: 20000,
@@ -216,11 +216,11 @@ window.L.Control.DownloadProgress = window.L.Control.extend({
 	},
 
 	_setProgressCursor: function() {
-		$('#map').css('cursor', 'progress');
+		this._map.getContainer().style.cursor = 'progress';
 	},
 
 	_setNormalCursor: function() {
-		$('#map').css('cursor', 'default');
+		this._map.getContainer().style.cursor = 'default';
 	},
 
 	startProgressMode: function() {
