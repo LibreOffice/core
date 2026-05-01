@@ -74,6 +74,18 @@ class FocusCellSection extends CanvasSectionObject {
 	}
 
 	public onDraw() {
+		const cursor = app.calc.cellCursorRectangle;
+		const adjusted = CellCursorSection.adjustSizePos([
+			cursor.pX1,
+			cursor.pY1,
+			cursor.pWidth,
+			cursor.pHeight,
+		]);
+		const drawColumn = adjusted[2] > 0;
+		const drawRow = adjusted[3] > 0;
+
+		if (!drawColumn && !drawRow) return;
+
 		const style = getComputedStyle(document.documentElement).getPropertyValue(
 			'--column-row-highlight',
 		);
@@ -81,37 +93,50 @@ class FocusCellSection extends CanvasSectionObject {
 		this.context.fillStyle = style;
 		this.context.strokeStyle = style;
 
+		const colX = adjusted[0] - cursor.pX1;
+		const colWidth = adjusted[2];
+		const rowY = adjusted[1] - cursor.pY1;
+		const rowHeight = adjusted[3];
+
 		this.context.globalAlpha = 0.3;
 
-		this.context.fillRect(
-			0,
-			-app.calc.cellCursorRectangle.pY1,
-			app.calc.cellCursorRectangle.pWidth,
-			this.sectionProperties.maxCol,
-		);
+		if (drawColumn) {
+			this.context.fillRect(
+				colX,
+				-cursor.pY1,
+				colWidth,
+				this.sectionProperties.maxCol,
+			);
+		}
 
-		this.context.fillRect(
-			-app.calc.cellCursorRectangle.pX1,
-			0,
-			this.sectionProperties.maxRow,
-			app.calc.cellCursorRectangle.pHeight,
-		);
+		if (drawRow) {
+			this.context.fillRect(
+				-cursor.pX1,
+				rowY,
+				this.sectionProperties.maxRow,
+				rowHeight,
+			);
+		}
 
 		this.context.globalAlpha = 1;
 		this.context.lineWidth = 2 * app.dpiScale;
 
-		this.context.strokeRect(
-			0,
-			-app.calc.cellCursorRectangle.pY1,
-			app.calc.cellCursorRectangle.pWidth,
-			this.sectionProperties.maxCol,
-		);
+		if (drawColumn) {
+			this.context.strokeRect(
+				colX,
+				-cursor.pY1,
+				colWidth,
+				this.sectionProperties.maxCol,
+			);
+		}
 
-		this.context.strokeRect(
-			-app.calc.cellCursorRectangle.pX1,
-			0,
-			this.sectionProperties.maxRow,
-			app.calc.cellCursorRectangle.pHeight,
-		);
+		if (drawRow) {
+			this.context.strokeRect(
+				-cursor.pX1,
+				rowY,
+				this.sectionProperties.maxRow,
+				rowHeight,
+			);
+		}
 	}
 }
