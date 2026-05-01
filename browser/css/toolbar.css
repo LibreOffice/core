@@ -738,11 +738,6 @@ button.leaflet-control-search-next
 	background-size: 16px 16px, 16px 16px, 16px 16px !important;
 	background-position: 2px center, 20px center, 38px center !important;
 	width: 94px !important; }
-/* Avoid the iconset07, the core renders it the same as iconset06, no need to support it in the online.
-.w2ui-icon.iconset07 { background: url('images/icon-set-symbols1-cross.svg') no-repeat, url('images/icon-set-symbols1-exclamation-mark.svg') no-repeat, url('images/icon-set-symbols1-check.svg') no-repeat;
-											 background-size: 16px 16px, 16px 16px, 16px 16px !important;
-											 background-position: 2px center, 20px center, 38px center !important;
-																			width: 94px !important; }*/
 .w2ui-icon.iconset08 { background: url('images/icon-set-positive-yellow-smilie.svg') no-repeat, url('images/icon-set-neutral-yellow-smilie.svg') no-repeat, url('images/icon-set-negative-yellow-smilie.svg') no-repeat;
 	background-size: 16px 16px, 16px 16px, 16px 16px !important;
 	background-position: 2px center, 20px center, 38px center !important;

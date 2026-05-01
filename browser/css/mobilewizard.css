@@ -979,10 +979,6 @@ label[disabled] {
 .ui-edit.mobile-wizard,
 .ui-textarea.mobile-wizard,
 #mobile-wizard-content .cool-annotation-table {
-	/*
-	, textarea was also here assign but it was messing up with all textareas (annotations on desktop and mobile):
-	- added 93038: jsdialog: style dialogs; a5016d547c6242f6f9b28748b5724b0bc10cdb67
-	*/
 	width: stretch;
 	margin: 10px 5% !important;
 }

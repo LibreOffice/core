@@ -297,7 +297,6 @@ nav.hasnotebookbar [id^='save'].saved::after {
 	margin-right: 5px;
 	background: transparent url('images/lc_menu_chevron.svg') no-repeat center right; /* we want them to be transparent always whether mobile or desktop */
 	color: transparent;
-	/*transform: rotate(180deg);*/
 }
 .lo-menu ul a:hover > span.sub-arrow {
 	filter: brightness(100);
