@@ -298,6 +298,7 @@ COOL_LIBS_JS_DST = $(patsubst %.js,$(DIST_FOLDER)/%.js,$(COOL_LIBS_JS))
 # this list includes both Javascript and Typescript generated files
 # in a rather precise order.
 COOL_JS_LST =\
+	src/dom/JSX.ts \
 	src/app/DocUtil.ts \
 	src/app/LocaleService.ts \
 	src/app/LayoutingService.ts \
@@ -589,6 +590,13 @@ COOL_JS_LST =\
 	src/control/Control.NotebookbarDraw.js \
 	src/control/Control.NotebookbarBuilder.js \
 	$(icons_js) \
+	src/control/backstage/Types.ts \
+	src/control/backstage/Common.tsx \
+	src/control/backstage/Sidebar.tsx \
+	src/control/backstage/TemplatesView.tsx \
+	src/control/backstage/HomeView.tsx \
+	src/control/backstage/InfoView.tsx \
+	src/control/backstage/ExportView.tsx \
 	src/control/Control.BackstageView.ts \
 	src/control/Control.ContextToolbar.ts \
 	src/control/Control.SidebarBase.ts \
@@ -733,12 +741,14 @@ COOL_JS_LST =\
 
 COOL_JS_SRC = $(filter %.js,$(COOL_JS_LST))
 COOL_TS_SRC = $(filter %.ts,$(COOL_JS_LST))
+COOL_TSX_SRC = $(filter %.tsx,$(COOL_JS_LST))
 
 # beware these are not helpfully ordered
-COOL_TS_JS_DST = $(patsubst src/%.ts,$(DIST_FOLDER)/src/%.js,$(COOL_TS_SRC))
+COOL_TS_JS_DST = $(patsubst src/%.ts,$(DIST_FOLDER)/src/%.js,$(COOL_TS_SRC)) \
+                 $(patsubst src/%.tsx,$(DIST_FOLDER)/src/%.js,$(COOL_TSX_SRC))
 COOL_JS_DST = $(patsubst src/%.js,$(DIST_FOLDER)/src/%.js,$(COOL_JS_SRC)) $(COOL_TS_JS_DST) $(DIST_FOLDER)/src/app/TaskWorker.js
 # should be no lingering / obsolete files:
-COOL_ASSERT_INTERSECT = $(filter $(COOL_JS_SRC), $(patsubst %.ts,%.js,$(COOL_TS_SRC)))
+COOL_ASSERT_INTERSECT = $(filter $(COOL_JS_SRC), $(patsubst %.ts,%.js,$(COOL_TS_SRC)) $(patsubst %.tsx,%.js,$(COOL_TSX_SRC)))
 
 COMMA := ,
 EMPTY :=
@@ -763,7 +773,7 @@ dist-hook:
 
 SUBDIRS = l10n images
 
-COOL_JS_BUNDLE = $(patsubst %.ts,%.js,$(COOL_JS_LST))
+COOL_JS_BUNDLE = $(patsubst %.tsx,%.js,$(patsubst %.ts,%.js,$(COOL_JS_LST)))
 
 define bundle_cool
 	$(if $(IS_SEPARATE),\
@@ -1005,7 +1015,7 @@ $(INTERMEDIATE_DIR)/COOL_JS.m4.jslist: $(COOL_JS_DST)
 	$(QUIET_CMP) if cmp -s $@.tmp $@; then rm $@.tmp; else mv $@.tmp $@; fi
 
 $(INTERMEDIATE_DIR)/COOL_JS.m4: $(INTERMEDIATE_DIR)/COOL_JS.m4.jslist
-	$(foreach file,$(L10N_ALL_JS_ENTRY) $(NODE_MODULES_JS) $(COOL_LIBS_JS) $(patsubst %.ts,%.js,$(patsubst $(DIST_FOLDER)/src/%,src/%,$(COOL_JS_LST))), $(shell echo -n $(file), >> $(INTERMEDIATE_DIR)/COOL_JS.m4.tmp))
+	$(foreach file,$(L10N_ALL_JS_ENTRY) $(NODE_MODULES_JS) $(COOL_LIBS_JS) $(patsubst %.tsx,%.js,$(patsubst %.ts,%.js,$(patsubst $(DIST_FOLDER)/src/%,src/%,$(COOL_JS_LST)))), $(shell echo -n $(file), >> $(INTERMEDIATE_DIR)/COOL_JS.m4.tmp))
 	@truncate $(if $(filter Darwin FreeBSD,$(shell uname -s)),-s -1,--size=-1) $(INTERMEDIATE_DIR)/COOL_JS.m4.tmp
 	@mv $(INTERMEDIATE_DIR)/COOL_JS.m4.tmp $(INTERMEDIATE_DIR)/COOL_JS.m4
 
@@ -1114,7 +1124,7 @@ if ENABLE_DEBUG
 SourceMap=--allowJs true --sourceMap true --inlineSources true
 endif
 
-tscompile.done: $(COOL_JS_SRC) $(COOL_TS_SRC)
+tscompile.done: $(COOL_JS_SRC) $(COOL_TS_SRC) $(COOL_TSX_SRC)
 	$(QUIET_TSC) $(builddir)/node_modules/typescript/bin/tsc --typeRoots $(builddir)/node_modules/@types --outDir $(DIST_FOLDER)/src --rootDir $(srcdir)/src --checkJs false --project $(srcdir)/tsconfig.json $(SourceMap)
 	$(QUIET_TSC) $(builddir)/node_modules/.bin/tsc-strict --typeRoots $(builddir)/node_modules/@types --outDir $(DIST_FOLDER)/src --rootDir $(srcdir)/src --checkJs false --project $(srcdir)/tsconfig.json $(SourceMap)
 	@touch $@
@@ -1248,6 +1258,11 @@ pot:
 		src/control/Control.AddressInputField.ts \
 		src/control/Control.AlertDialog.js \
 		src/control/Control.BackstageView.ts \
+		src/control/backstage/Common.tsx \
+		src/control/backstage/Sidebar.tsx \
+		src/control/backstage/HomeView.tsx \
+		src/control/backstage/TemplatesView.tsx \
+		src/control/backstage/InfoView.tsx \
 		src/control/Control.Command.js \
 		src/control/Control.DocumentNameInput.js \
 		src/control/Control.DocumentRepair.js \

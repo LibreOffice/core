@@ -11,88 +11,12 @@
  */
 /* global $ _ */
 
-interface BackstageTabConfig {
-	id: string;
-	label: string;
-	type: 'view' | 'action' | 'separator';
-	icon?: string;
-	visible?: boolean;
-	viewType?: 'home' | 'templates' | 'info' | 'export';
-	actionType?:
-		| 'open'
-		| 'save'
-		| 'saveas'
-		| 'print'
-		| 'share'
-		| 'repair'
-		| 'properties'
-		| 'history'
-		| 'options'
-		| 'about';
-}
-
-interface TemplateTypeMap {
-	writer: 'writer';
-	calc: 'calc';
-	impress: 'impress';
-}
-
-type TemplateType = TemplateTypeMap[keyof TemplateTypeMap];
-
-interface TemplateData {
-	id: string;
-	name: string;
-	type: TemplateType;
-	path?: string;
-	basename?: string;
-	preview?: string;
-	featured?: boolean;
-	searchText: string;
-}
-
-interface TemplateManifestEntry {
-	id?: string;
-	name?: string;
-	type?: string;
-	category?: string;
-	path: string;
-	basename?: string | null;
-	preview?: string | null;
-	featured?: boolean;
-}
-
-interface TemplateManifest {
-	templates?: TemplateManifestEntry[];
-}
-
-interface ExportFormatData {
-	id: string;
-	name: string;
-	description: string;
-}
-
-interface ExportOptionItem {
-	action: string;
-	text: string;
-	command?: string;
-}
-
-// todo: currently export as and downloadAs with pdf as not working, skipping for moment
-interface ExportSections {
-	exportAs: ExportOptionItem[];
-	downloadAs: ExportOptionItem[];
-}
-
-/**
- * BackstageSVGIcons is a generated map of the form 'icon_name' -> 'SVG content'.
- *
- * It is created as generated JS directly, and bundled, so that things work
- * together.
- *
- * We need to do it this way, because it is very complicated to combine a
- * compiled TS with generated TS in out-of-tree builds.
+/*
+ * Backstage view: state, event wiring, view transitions, and data
+ * preparation. The DOM structure for each view lives in the .tsx files
+ * under control/backstage/, which export pure render functions that this
+ * class composes.
  */
-declare const BackstageSVGIcons: Record<string, string>;
 
 class BackstageView extends window.L.Class {
 	private readonly container: HTMLElement;
@@ -141,128 +65,27 @@ class BackstageView extends window.L.Class {
 	}
 
 	private createContainer(): HTMLElement {
-		const container = this.createElement(
-			'div',
-			'backstage-view hidden',
-			'backstage-view',
-		);
-
-		if (this.isStarterMode) {
-			container.classList.add('is-starter-mode');
-		}
-
-		const header = this.createHeader();
-		container.appendChild(header);
-
-		const mainWrapper = this.createElement('div', 'backstage-main-wrapper');
-		const sidebar = this.createSidebar();
-		this.contentArea = this.createElement('div', 'backstage-content');
-
-		mainWrapper.appendChild(sidebar);
-		mainWrapper.appendChild(this.contentArea);
-		container.appendChild(mainWrapper);
+		const container = BackstageTemplates.shell({
+			isStarterMode: this.isStarterMode,
+			tabs: this.getTabsConfig(),
+			onTabClick: (cfg) => this.onTabClick(cfg),
+			onClose: () => this.hide(),
+			onBackClick: () => this.hide(),
+			saveTabRef: (el) => {
+				this.saveTabElement = el;
+			},
+			contentAreaRef: (el) => {
+				this.contentArea = el;
+			},
+		});
 
 		this.renderHomeView();
 		return container;
 	}
 
-	private createHeader(): HTMLElement {
-		const header = this.createElement('div', 'backstage-header');
-		const title = this.createElement('span', 'backstage-header-title');
-		title.textContent = 'Collabora Office';
-
-		header.appendChild(title);
-
-		// Only show close button if not in starter screen mode
-		if (!this.isStarterMode) {
-			const closeButton = this.createElement('div', 'backstage-header-close');
-			closeButton.setAttribute('aria-label', _('Close backstage'));
-			closeButton.title = _('Close backstage');
-
-			const closeBtn = this.createElement(
-				'span',
-				'backstage-header-close-icon',
-			);
-			closeBtn.setAttribute('aria-hidden', 'true');
-			closeButton.appendChild(closeBtn);
-
-			window.L.DomEvent.on(closeButton, 'click', () => this.hide(), this);
-
-			header.appendChild(closeButton);
-		}
-
-		return header;
-	}
-
-	private createSidebar(): HTMLElement {
-		const sidebar = this.createElement('div', 'backstage-sidebar');
-
-		// Only show back button if not in starter screen mode
-		if (!this.isStarterMode) {
-			const backButton = this.createSidebarBackBtn();
-			sidebar.appendChild(backButton);
-		}
-
-		const tabsContainer = this.createElement('div', 'backstage-sidebar-tabs');
-		const tabConfigs = this.getTabsConfig();
-
-		tabConfigs.forEach((config) => {
-			if (config.visible === false) return;
-
-			const tabElement = this.createTabElement(config);
-			tabsContainer.appendChild(tabElement);
-		});
-
-		sidebar.appendChild(tabsContainer);
-		return sidebar;
-	}
-
-	private createSidebarBackBtn(): HTMLElement {
-		const backButton = this.createElement('div', 'backstage-sidebar-back');
-
-		backButton.setAttribute('aria-label', _('Back to document'));
-		backButton.title = _('Back to document');
-
-		const icon = this.createElement('span', 'backstage-sidebar-back-icon');
-		icon.setAttribute('aria-hidden', 'true');
-		backButton.appendChild(icon);
-
-		window.L.DomEvent.on(backButton, 'click', () => this.hide(), this);
-
-		return backButton;
-	}
-
-	private createTabElement(config: BackstageTabConfig): HTMLElement {
-		const element = this.createElement('div', 'backstage-sidebar-item');
-		element.id = `backstage-${config.id}`;
-
-		if (config.id === 'save') this.saveTabElement = element;
-
-		if (config.icon) {
-			const iconContainer = this.createElement(
-				'span',
-				'backstage-sidebar-icon',
-			);
-			iconContainer.setAttribute('aria-hidden', 'true');
-
-			const svgContent = BackstageSVGIcons[config.icon];
-			if (svgContent) {
-				iconContainer.innerHTML = svgContent;
-			}
-			element.insertBefore(iconContainer, element.firstChild);
-		}
-
-		const label = this.createElement('span');
-		label.textContent = config.label;
-		element.appendChild(label);
-
-		const action =
-			config.type === 'view'
-				? () => this.handleViewTab(config)
-				: () => this.handleActionTab(config);
-
-		window.L.DomEvent.on(element, 'click', action, this);
-		return element;
+	private onTabClick(config: BackstageTabConfig): void {
+		if (config.type === 'view') this.handleViewTab(config);
+		else this.handleActionTab(config);
 	}
 
 	private getTabsConfig(): BackstageTabConfig[] {
@@ -402,13 +225,15 @@ class BackstageView extends window.L.Class {
 		this.setActiveTab('backstage-home');
 		this.clearContent();
 
-		this.addSectionHeader(
-			_('Home'),
-			_('Start a new document from one of the following templates.'),
+		this.contentArea.appendChild(
+			BackstageTemplates.sectionHeader(
+				_('Home'),
+				_('Start a new document from one of the following templates.'),
+			),
 		);
 
 		if (!this.templates) {
-			this.renderTemplatesLoadingState();
+			this.contentArea.appendChild(BackstageTemplates.templatesLoading());
 			this.loadTemplatesData().then(() => {
 				if (this.isVisible) this.renderHomeView();
 			});
@@ -426,58 +251,22 @@ class BackstageView extends window.L.Class {
 
 		const blankTemplate = this.getBlankTemplate(templateType);
 		const templatesForHome: TemplateData[] = [];
-
-		if (blankTemplate) {
-			templatesForHome.push(blankTemplate);
-		}
-
+		if (blankTemplate) templatesForHome.push(blankTemplate);
 		templatesForHome.push(...appSpecificTemplates);
 
-		const templatesRow = this.createTemplateRow(
-			templatesForHome,
-			'backstage-home-templates-row',
+		this.contentArea.appendChild(
+			BackstageTemplates.homeTemplatesSection({
+				templates: templatesForHome,
+				onTemplateClick: (t) => this.triggerNewDocument(t),
+				onMoreTemplatesClick: () => {
+					const newTabElement = document.getElementById('backstage-new');
+					if (newTabElement) newTabElement.click();
+					else this.renderNewView();
+				},
+			}),
 		);
 
-		const moreTemplatesContainer = this.createElement(
-			'div',
-			'backstage-home-more-templates',
-		);
-		const divider = this.createElement('div', 'backstage-home-divider');
-		const moreTemplatesButton = this.createElement(
-			'div',
-			'backstage-home-more-button',
-		);
-		moreTemplatesButton.textContent = _('More Templates');
-		moreTemplatesButton.setAttribute('role', 'button');
-		moreTemplatesButton.setAttribute('tabindex', '0');
-		moreTemplatesButton.setAttribute('aria-label', _('More Templates'));
-
-		const handleMoreTemplatesClick = () => {
-			const newTabElement = document.getElementById('backstage-new');
-			if (newTabElement) {
-				newTabElement.click();
-			} else {
-				this.renderNewView();
-			}
-		};
-
-		window.L.DomEvent.on(
-			moreTemplatesButton,
-			'click',
-			handleMoreTemplatesClick,
-			this,
-		);
-
-		moreTemplatesContainer.appendChild(divider);
-		moreTemplatesContainer.appendChild(moreTemplatesButton);
-
-		if (templatesRow) {
-			this.contentArea.appendChild(templatesRow);
-		}
-		this.contentArea.appendChild(moreTemplatesContainer);
-
-		this.addSectionHeader(_('Recent'), '');
-
+		this.contentArea.appendChild(BackstageTemplates.sectionHeader(_('Recent')));
 		this.renderRecentDocuments();
 	}
 
@@ -485,165 +274,38 @@ class BackstageView extends window.L.Class {
 		try {
 			const result = await window.postMobileCall('GETRECENTDOCS');
 			if (!result || typeof result !== 'string') {
-				this.showEmptyMessage();
+				this.contentArea.appendChild(BackstageTemplates.emptyRecentDocs());
 				return;
 			}
 
 			const docs = JSON.parse(result);
 			if (!Array.isArray(docs) || docs.length === 0) {
-				this.showEmptyMessage();
+				this.contentArea.appendChild(BackstageTemplates.emptyRecentDocs());
 				return;
 			}
 
-			const table = this.createRecentDocumentsTable(docs);
-			this.contentArea.appendChild(table);
+			const rows: BackstageTemplates.RecentDocRowData[] = docs.map((doc, i) => {
+				const { fileName, filePath, timestamp, uri } =
+					this.parseDocumentData(doc);
+				return {
+					index: i,
+					fileName,
+					filePath,
+					formattedTime: this.formatTimestamp(timestamp),
+					uri,
+					iconClass: this.getDocumentIconClass(doc.doctype || 'writer'),
+				};
+			});
+
+			this.contentArea.appendChild(
+				BackstageTemplates.recentDocsTable(rows, (uri) =>
+					this.openRecentDocument(uri),
+				),
+			);
 		} catch (e) {
 			console.error('Failed to get recent documents:', e);
-			this.showEmptyMessage();
+			this.contentArea.appendChild(BackstageTemplates.emptyRecentDocs());
 		}
-	}
-
-	private showEmptyMessage(): void {
-		const description = this.createElement(
-			'p',
-			'backstage-content-description',
-		);
-		description.textContent = _('Recently opened documents will appear here');
-		this.contentArea.appendChild(description);
-	}
-
-	private createRecentDocumentsTable(docs: any[]): HTMLElement {
-		const table = this.createElement(
-			'table',
-			'backstage-recent-documents-table',
-		);
-		const thead = this.createRecentDocumentsTableHeader();
-		const tbody = this.createElement(
-			'tbody',
-			'backstage-recent-documents-body',
-		);
-
-		let i: number = 0;
-		docs.forEach((doc) => {
-			const rows = this.createRecentDocumentRows(doc, i++);
-			rows.forEach((row) => tbody.appendChild(row));
-		});
-
-		table.appendChild(thead);
-		table.appendChild(tbody);
-		return table;
-	}
-
-	private createRecentDocumentsTableHeader(): HTMLElement {
-		const thead = this.createElement(
-			'thead',
-			'backstage-recent-documents-header',
-		);
-		const row = this.createElement(
-			'tr',
-			'backstage-recent-documents-header-row',
-		);
-
-		const nameHeader = this.createElement(
-			'th',
-			'backstage-recent-documents-header-cell',
-		);
-		nameHeader.textContent = _('Name');
-
-		const dateHeader = this.createElement(
-			'th',
-			'backstage-recent-documents-header-cell',
-		);
-		dateHeader.textContent = _('Modified Date');
-
-		row.appendChild(nameHeader);
-		row.appendChild(dateHeader);
-		thead.appendChild(row);
-		return thead;
-	}
-
-	private createRecentDocumentRows(doc: any, i: number): HTMLElement[] {
-		const { fileName, filePath, timestamp, uri } = this.parseDocumentData(doc);
-		const docType = doc.doctype || 'writer';
-		const formattedTime = this.formatTimestamp(timestamp);
-
-		const row = this.createRecentDocumentRow(
-			fileName,
-			filePath,
-			formattedTime,
-			uri,
-			docType,
-			i,
-		);
-		return [row];
-	}
-
-	private createRecentDocumentRow(
-		fileName: string,
-		filePath: string,
-		formattedTime: string,
-		uri: string,
-		docType: string,
-		i: number,
-	): HTMLElement {
-		const row = this.createElement('tr', 'backstage-recent-document-row');
-
-		const nameCell = this.createElement(
-			'td',
-			'backstage-recent-document-name-cell',
-			'backstage-recent-document-' + i,
-		);
-		const nameText = this.createElement(
-			'div',
-			'backstage-recent-document-name-text',
-		);
-		nameText.textContent = fileName;
-
-		const pathText = this.createElement(
-			'div',
-			'backstage-recent-document-path-text',
-		);
-		pathText.textContent = filePath;
-
-		const textWrapper = this.createElement(
-			'div',
-			'backstage-recent-document-text-wrapper',
-		);
-		textWrapper.appendChild(nameText);
-		textWrapper.appendChild(pathText);
-
-		const iconClass = this.getDocumentIconClass(docType);
-		const icon = this.createElement(
-			'span',
-			`backstage-recent-document-icon ${iconClass}`,
-		);
-
-		const contentWrapper = this.createElement(
-			'div',
-			'backstage-recent-document-content-wrapper',
-		);
-		contentWrapper.appendChild(icon);
-		contentWrapper.appendChild(textWrapper);
-
-		nameCell.appendChild(contentWrapper);
-
-		const timeCell = this.createElement(
-			'td',
-			'backstage-recent-document-time-cell',
-		);
-		timeCell.textContent = formattedTime;
-
-		row.appendChild(nameCell);
-		row.appendChild(timeCell);
-
-		window.L.DomEvent.on(
-			row,
-			'click',
-			() => this.openRecentDocument(uri),
-			this,
-		);
-
-		return row;
 	}
 
 	private parseDocumentData(doc: any): {
@@ -760,32 +422,76 @@ class BackstageView extends window.L.Class {
 		this.templateFeaturedRowContainer = null;
 		this.templateSearchContainer = null;
 
-		this.addSectionHeader(_('New'));
+		this.contentArea.appendChild(BackstageTemplates.sectionHeader(_('New')));
 
 		if (!this.templates) {
-			this.renderTemplatesLoadingState();
+			this.contentArea.appendChild(BackstageTemplates.templatesLoading());
 			this.loadTemplatesData().then(() => {
 				if (this.isVisible) this.renderNewView();
 			});
 			return;
 		}
 
-		const templates = this.getTemplatesData();
-		const explorer = this.renderTemplateExplorer(templates);
-		this.contentArea.appendChild(explorer);
+		const allTemplates = this.getTemplatesData();
+		this.activeTemplateType = this.detectTemplateTypeFromDoc();
+
+		this.contentArea.appendChild(this.buildTemplateExplorer(allTemplates));
+	}
+
+	private buildTemplateExplorer(allTemplates: TemplateData[]): HTMLElement {
+		const filteredTemplates = this.getFilteredTemplates(allTemplates);
+		return BackstageTemplates.templateExplorer({
+			featuredTemplates: this.getFeaturedTemplates(),
+			gridTemplates: filteredTemplates,
+			searchQuery: this.templateSearchQuery,
+			showSearch: allTemplates.length > 0,
+			onTemplateClick: (t) => this.triggerNewDocument(t),
+			onSearchInput: (value) => {
+				this.templateSearchQuery = value;
+				this.updateTemplateGrid();
+			},
+			featuredRowRef: (el) => {
+				this.templateFeaturedRowContainer = el;
+			},
+			searchContainerRef: (el) => {
+				this.templateSearchContainer = el;
+			},
+			gridContainerRef: (el) => {
+				this.templateGridContainer = el;
+			},
+		});
+	}
+
+	private getFeaturedTemplates(): TemplateData[] {
+		const blankTemplates = [
+			this.getBlankTemplate('writer'),
+			this.getBlankTemplate('calc'),
+			this.getBlankTemplate('impress'),
+		].filter((t): t is TemplateData => t !== null);
+
+		const query = this.templateSearchQuery.trim().toLowerCase();
+		return query
+			? blankTemplates.filter((t) => t.searchText.includes(query))
+			: blankTemplates;
 	}
 
 	private renderInfoView(): void {
 		this.setActiveTab('backstage-info');
 		this.clearContent();
 
-		this.addSectionHeader(
-			_('Document Info'),
-			_('View document properties and information'),
+		this.contentArea.appendChild(
+			BackstageTemplates.sectionHeader(
+				_('Document Info'),
+				_('View document properties and information'),
+			),
 		);
 
-		const propertiesColumn = this.createInfoPropertiesColumn();
-		this.contentArea.appendChild(propertiesColumn);
+		this.contentArea.appendChild(
+			BackstageTemplates.infoPropertiesColumn(
+				this.getDocumentProperties(),
+				() => this.executeDocumentProperties(),
+			),
+		);
 	}
 
 	private renderExportView(): void {
@@ -796,126 +502,20 @@ class BackstageView extends window.L.Class {
 		const exportOptions = this.getExportOptionsFromNotebookbar();
 
 		if (exportOptions.downloadAs.length > 0) {
-			this.addSectionHeader(
-				_('Export Document'),
-				_('export your documents in different formats'),
+			this.contentArea.appendChild(
+				BackstageTemplates.sectionHeader(
+					_('Export Document'),
+					_('export your documents in different formats'),
+				),
 			);
 
-			const downloadAsGrid = this.createExportGridFromOptions(
-				exportOptions.downloadAs,
+			this.contentArea.appendChild(
+				BackstageTemplates.exportGrid(
+					exportOptions.downloadAs,
+					(action, command) => this.dispatchExportAction(action, command),
+				),
 			);
-			this.contentArea.appendChild(downloadAsGrid);
 		}
-	}
-
-	private createExportGridFromOptions(
-		options: ExportOptionItem[],
-	): HTMLElement {
-		const grid = this.createElement('div', 'backstage-formats-grid');
-
-		options.forEach((option) => {
-			const card = this.createExportCardFromOption(option);
-			grid.appendChild(card);
-		});
-
-		return grid;
-	}
-
-	private createExportCardFromOption(option: ExportOptionItem): HTMLElement {
-		const card = this.createElement('div', 'backstage-format-card');
-
-		const format = option.action.startsWith('downloadas-')
-			? option.action.substring('downloadas-'.length)
-			: option.action.startsWith('export')
-				? option.action.substring('export'.length)
-				: '';
-		const extension = format ? `.${format}` : '';
-
-		const icon = this.createElement('div', 'format-icon');
-		icon.textContent = extension.toUpperCase().replace('.', '');
-		card.appendChild(icon);
-
-		const description = this.createElement('div', 'format-description');
-		description.textContent = option.text;
-		card.appendChild(description);
-
-		window.L.DomEvent.on(
-			card,
-			'click',
-			() => this.dispatchExportAction(option.action, option.command),
-			this,
-		);
-		return card;
-	}
-
-	private createInfoPropertiesColumn(): HTMLElement {
-		const column = this.createElement('div', 'backstage-info-properties');
-
-		const header = this.createElement('h3', 'backstage-section-header');
-		header.textContent = _('Properties');
-		column.appendChild(header);
-
-		const propertiesList = this.createPropertiesList();
-		column.appendChild(propertiesList);
-
-		const button = this.createPrimaryButton(_('More Property Info'), () =>
-			this.executeDocumentProperties(),
-		);
-		column.appendChild(button);
-
-		return column;
-	}
-
-	private createElement(
-		tag: string,
-		className?: string,
-		id?: string,
-	): HTMLElement {
-		const element = window.L.DomUtil.create(tag, className || '');
-		if (id) element.id = id;
-		return element;
-	}
-
-	private createPrimaryButton(
-		label: string,
-		onClick: () => void,
-	): HTMLButtonElement {
-		const button = this.createElement(
-			'button',
-			'backstage-property-button',
-		) as HTMLButtonElement;
-		button.textContent = label;
-		window.L.DomEvent.on(button, 'click', onClick, this);
-		return button;
-	}
-
-	private createPropertiesList(): HTMLElement {
-		const list = this.createElement('div', 'backstage-properties-list');
-
-		const properties = this.getDocumentProperties();
-
-		properties.forEach((prop) => {
-			if (prop.value) {
-				const item = this.createPropertyItem(prop.label, prop.value);
-				list.appendChild(item);
-			}
-		});
-
-		return list;
-	}
-
-	private createPropertyItem(label: string, value: string): HTMLElement {
-		const item = this.createElement('div', 'backstage-property-item');
-
-		const labelEl = this.createElement('div', 'property-label');
-		labelEl.textContent = label;
-		item.appendChild(labelEl);
-
-		const valueEl = this.createElement('div', 'property-value');
-		valueEl.textContent = value;
-		item.appendChild(valueEl);
-
-		return item;
 	}
 
 	private getFileName = (wopi: any): string => {
@@ -931,7 +531,7 @@ class BackstageView extends window.L.Class {
 		return '';
 	};
 
-	private getDocumentProperties(): Array<{ label: string; value: string }> {
+	private getDocumentProperties(): BackstageTemplates.DocumentProperty[] {
 		const docType = this.getDocTypeString();
 		const docLayer = this.map?._docLayer;
 		const wopi = this.map?.['wopi'];
@@ -948,7 +548,7 @@ class BackstageView extends window.L.Class {
 			parts: _('Parts'),
 		};
 
-		const properties = [
+		const properties: BackstageTemplates.DocumentProperty[] = [
 			{ label: _('Type'), value: config.type },
 			{
 				label: config.parts,
@@ -971,30 +571,15 @@ class BackstageView extends window.L.Class {
 		return properties;
 	}
 
-	private addSectionHeader(title: string, description: string = ''): void {
-		const titleElement = this.createElement('h2', 'backstage-content-title');
-		titleElement.textContent = title;
-		this.contentArea.appendChild(titleElement);
-
-		if (description !== '') {
-			const descElement = this.createElement(
-				'p',
-				'backstage-content-description',
-			);
-			descElement.textContent = description;
-			this.contentArea.appendChild(descElement);
-		}
-	}
-
 	private clearContent(): void {
-		while (this.contentArea.firstChild) {
-			this.contentArea.removeChild(this.contentArea.firstChild);
-		}
+		this.contentArea.replaceChildren();
 	}
 
 	private setActiveTab(tabId: string): void {
-		$('.backstage-sidebar-item').removeClass('active');
-		$('#' + tabId).addClass('active');
+		document
+			.querySelectorAll('.backstage-sidebar-item')
+			.forEach((el) => el.classList.remove('active'));
+		document.getElementById(tabId)?.classList.add('active');
 	}
 
 	private getTemplatesData(): TemplateData[] {
@@ -1067,72 +652,6 @@ class BackstageView extends window.L.Class {
 		return this.templatesPromise;
 	}
 
-	private renderTemplatesLoadingState(): void {
-		const wrapper = this.createElement('div', 'backstage-templates-empty');
-		const info = this.createElement('p', 'backstage-content-description');
-		info.textContent = _('Loading templates…');
-		wrapper.appendChild(info);
-		this.contentArea.appendChild(wrapper);
-	}
-
-	private renderTemplateExplorer(allTemplates: TemplateData[]): HTMLElement {
-		const previousType = this.activeTemplateType;
-		const detectedType = this.detectTemplateTypeFromDoc();
-		if (detectedType !== previousType) this.templateSearchQuery = '';
-		this.activeTemplateType = detectedType;
-
-		const container = this.createElement('div', 'backstage-template-explorer');
-
-		const filteredTemplates = this.getFilteredTemplates(allTemplates);
-
-		const featuredRow = this.renderFeaturedRow();
-		if (featuredRow) {
-			container.appendChild(featuredRow);
-			this.templateFeaturedRowContainer = featuredRow;
-		} else {
-			this.templateFeaturedRowContainer = null;
-		}
-
-		// Only show search bar if there are custom templates to search through
-		if (allTemplates.length > 0) {
-			const search = this.renderTemplateSearch();
-			this.templateSearchContainer = search;
-			container.appendChild(search);
-		} else {
-			this.templateSearchContainer = null;
-		}
-
-		const grid = this.renderTemplateGrid(filteredTemplates);
-		this.templateGridContainer = grid;
-		container.appendChild(grid);
-
-		return container;
-	}
-
-	private renderTemplateSearch(): HTMLElement {
-		const container = this.createElement('div', 'template-search');
-		const input = this.createElement(
-			'input',
-			'template-search-input',
-		) as HTMLInputElement;
-		input.type = 'search';
-		input.placeholder = _('Search templates');
-		input.value = this.templateSearchQuery;
-
-		window.L.DomEvent.on(
-			input,
-			'input',
-			() => {
-				this.templateSearchQuery = input.value || '';
-				this.updateTemplateGrid();
-			},
-			this,
-		);
-
-		container.appendChild(input);
-		return container;
-	}
-
 	private getFilteredTemplates(allTemplates: TemplateData[]): TemplateData[] {
 		const query = this.templateSearchQuery.trim().toLowerCase();
 		return allTemplates.filter((template) => {
@@ -1141,72 +660,26 @@ class BackstageView extends window.L.Class {
 		});
 	}
 
-	private createTemplateRow(
-		templates: TemplateData[],
-		className: string = 'template-featured-row',
-		cardOptions: { variant?: 'featured'; isBlank?: boolean } = {},
-	): HTMLElement | null {
-		if (templates.length === 0) return null;
-
-		const row = this.createElement('div', className);
-		templates.forEach((template) => {
-			row.appendChild(this.createTemplateCard(template, cardOptions));
-		});
-		return row;
-	}
-
-	private renderFeaturedRow(): HTMLElement | null {
-		const blankTemplates = [
-			this.getBlankTemplate('writer'),
-			this.getBlankTemplate('calc'),
-			this.getBlankTemplate('impress'),
-		].filter((t): t is TemplateData => t !== null);
-
-		const query = this.templateSearchQuery.trim().toLowerCase();
-		const filteredBlankTemplates = query
-			? blankTemplates.filter((t) => t.searchText.includes(query))
-			: blankTemplates;
-
-		return this.createTemplateRow(
-			filteredBlankTemplates,
-			'template-featured-row',
-			{
-				variant: 'featured',
-				isBlank: true,
-			},
-		);
-	}
-
-	private renderTemplateGrid(templates: TemplateData[]): HTMLElement {
-		const grid = this.createElement('div', 'backstage-templates-grid');
-
-		if (!templates.length) {
-			// Only show "no match" message if user is actively searching
-			if (this.templateSearchQuery.trim()) {
-				const empty = this.createElement('div', 'template-grid-empty');
-				empty.textContent = _('No templates match your search.');
-				grid.appendChild(empty);
-			}
-			return grid;
-		}
-
-		templates.forEach((template) => {
-			grid.appendChild(this.createTemplateCard(template));
-		});
-
-		return grid;
-	}
-
 	private updateTemplateGrid(): void {
 		if (!this.templates || !this.templateGridContainer) return;
 
 		const allTemplates = this.getTemplatesData();
 		const filteredTemplates = this.getFilteredTemplates(allTemplates);
-		const newGrid = this.renderTemplateGrid(filteredTemplates);
+		const newGrid = BackstageTemplates.templateGrid(
+			filteredTemplates,
+			this.templateSearchQuery,
+			(t) => this.triggerNewDocument(t),
+		);
 		this.templateGridContainer.replaceWith(newGrid);
 		this.templateGridContainer = newGrid;
 
-		const newFeaturedRow = this.renderFeaturedRow();
+		const featured = this.getFeaturedTemplates();
+		const newFeaturedRow = featured.length
+			? BackstageTemplates.featuredTemplatesRow(featured, (t) =>
+					this.triggerNewDocument(t),
+				)
+			: null;
+
 		if (this.templateFeaturedRowContainer) {
 			if (newFeaturedRow) {
 				this.templateFeaturedRowContainer.replaceWith(newFeaturedRow);
@@ -1215,65 +688,19 @@ class BackstageView extends window.L.Class {
 				this.templateFeaturedRowContainer.remove();
 				this.templateFeaturedRowContainer = null;
 			}
-		} else if (newFeaturedRow && this.templateSearchContainer) {
-			// Only try to insert if search container exists
-			if (this.templateSearchContainer.parentElement) {
-				this.templateSearchContainer.parentElement.insertBefore(
-					newFeaturedRow,
-					this.templateSearchContainer,
-				);
-				this.templateFeaturedRowContainer = newFeaturedRow;
-			}
+		} else if (newFeaturedRow && this.templateSearchContainer?.parentElement) {
+			this.templateSearchContainer.parentElement.insertBefore(
+				newFeaturedRow,
+				this.templateSearchContainer,
+			);
+			this.templateFeaturedRowContainer = newFeaturedRow;
 		} else if (newFeaturedRow && this.templateGridContainer.parentElement) {
-			// If no search container, insert before grid
 			this.templateGridContainer.parentElement.insertBefore(
 				newFeaturedRow,
 				this.templateGridContainer,
 			);
 			this.templateFeaturedRowContainer = newFeaturedRow;
 		}
-	}
-
-	private createTemplateCard(
-		template: TemplateData,
-		options: { variant?: 'featured'; isBlank?: boolean } = {},
-	): HTMLElement {
-		const card = this.createElement(
-			'div',
-			'backstage-template-card',
-			template.id,
-		);
-		if (options.variant === 'featured') card.classList.add('is-featured');
-		if (options.isBlank) card.classList.add('is-blank');
-
-		const previewWrapper = this.createElement('div', 'template-thumbnail');
-		const preview = this.createElement('img') as HTMLImageElement;
-		preview.alt = template.name;
-		if (template.preview) preview.src = template.preview;
-		else preview.src = this.getDefaultPreview(template.type);
-		previewWrapper.appendChild(preview);
-		card.appendChild(previewWrapper);
-
-		const name = this.createElement('div', 'template-name');
-		name.textContent = template.name;
-		card.appendChild(name);
-
-		window.L.DomEvent.on(
-			card,
-			'click',
-			() => this.triggerNewDocument(template),
-			this,
-		);
-		return card;
-	}
-
-	private getDefaultPreview(type: TemplateType): string {
-		const previews: Record<TemplateType, string> = {
-			writer: 'images/filetype/writer.svg',
-			calc: 'images/filetype/calc.svg',
-			impress: 'images/filetype/impress.svg',
-		};
-		return previews[type] || 'images/filetype/document.svg';
 	}
 
 	private getBlankTemplate(type: TemplateType): TemplateData | null {
