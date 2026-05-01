@@ -96,6 +96,13 @@ class   SalBitmap;
 
 namespace basegfx { class SystemDependentDataHolder; }
 
+#if USE_HEADLESS_CODE
+typedef struct _cairo_surface cairo_surface_t;
+namespace cairo {
+    typedef std::shared_ptr<cairo_surface_t> CairoSurfaceSharedPtr;
+}
+#endif
+
 struct BitmapSystemData
 {
     #if defined(_WIN32)
@@ -718,7 +725,7 @@ public:
     void DumpAsPng(const char* pFileName = nullptr) const;
 
 #if USE_HEADLESS_CODE
-    void* tryToGetCairoSurface() const;
+    cairo::CairoSurfaceSharedPtr tryToGetCairoSurface() const;
 #endif
 
 private:

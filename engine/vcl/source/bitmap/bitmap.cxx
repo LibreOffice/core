@@ -386,7 +386,7 @@ Bitmap& Bitmap::operator=( const Bitmap& rBitmap )
 }
 
 #if USE_HEADLESS_CODE
-void* Bitmap::tryToGetCairoSurface() const
+cairo::CairoSurfaceSharedPtr Bitmap::tryToGetCairoSurface() const
 {
     SvpSalBitmap* pSvpSalBitmap(dynamic_cast<SvpSalBitmap*>(ImplGetSalBitmap().get()));
     if (nullptr == pSvpSalBitmap)
@@ -396,7 +396,9 @@ void* Bitmap::tryToGetCairoSurface() const
     if (nullptr == pBitmapBuffer)
         return nullptr;
 
-    return CairoCommon::createCairoSurface(pBitmapBuffer);
+    return cairo::CairoSurfaceSharedPtr(
+        CairoCommon::createCairoSurface(pBitmapBuffer),
+        &cairo_surface_destroy);
 }
 #endif
 
