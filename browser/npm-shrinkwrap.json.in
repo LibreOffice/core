@@ -23,6 +23,7 @@
         "@typescript-eslint/eslint-plugin": "^4.21.0",
         "@typescript-eslint/parser": "^4.21.0",
         "autolinker": "3.14.1",
+        "autoprefixer": "^10.4.20",
         "browserify": "16.5.1",
         "browserify-css": "0.15.0",
         "d3": "6.7.0",
@@ -38,6 +39,8 @@
         "l10n-for-node": "0.0.1",
         "marked": "15.0.6",
         "mocha": "8.2.1",
+        "postcss": "^8.4.49",
+        "postcss-cli": "^11.0.0",
         "prettier": "^3.1.1",
         "shrinkpack": "0.20.0",
         "smartmenus": "1.0.0",
@@ -1290,34 +1293,41 @@
       }
     },
     "node_modules/autoprefixer": {
-      "version": "9.8.8",
-      "resolved": "file:node_shrinkpack/autoprefixer-9.8.8.tar",
-      "integrity": "sha512-eM9d/swFopRt5gdJ7jrpCwgvEMIayITpojhkkSMRsFHYuH5bkSQ4p/9qTEHtmNudUZh22Tehu7I6CxAW0IXTKA== sha512-MmI74g75OpBC04QgiZup01CHgL6BWR+X9qrlZLuUeOMmDduq0IvfV/iR9daKIraekbDEsbYt6cfHJHf8N/Xx2Q==",
+      "version": "10.5.0",
+      "resolved": "file:node_shrinkpack/autoprefixer-10.5.0.tar",
+      "integrity": "sha512-FMhOoZV4+qR6aTUALKX2rEqGG+oyATvwBt9IIzVR5rMa2HRWPkxf+P+PAJLD1I/H5/II+HuZcBJYEFBpq39ong== sha512-gGQuE2/64bvfcP9fLeKfzsAzq1oQqFTLypQMi9LRw27Qv+onBDvv7CZ3Z9q1ZeGOBRUUEslFLjJfMAUgqOcvPw==",
       "dev": true,
+      "funding": [
+        {
+          "type": "opencollective",
+          "url": "https://opencollective.com/postcss/"
+        },
+        {
+          "type": "tidelift",
+          "url": "https://tidelift.com/funding/github/npm/autoprefixer"
+        },
+        {
+          "type": "github",
+          "url": "https://github.com/sponsors/ai"
+        }
+      ],
       "license": "MIT",
       "dependencies": {
-        "browserslist": "^4.12.0",
-        "caniuse-lite": "^1.0.30001109",
-        "normalize-range": "^0.1.2",
-        "num2fraction": "^1.2.2",
-        "picocolors": "^0.2.1",
-        "postcss": "^7.0.32",
-        "postcss-value-parser": "^4.1.0"
+        "browserslist": "^4.28.2",
+        "caniuse-lite": "^1.0.30001787",
+        "fraction.js": "^5.3.4",
+        "picocolors": "^1.1.1",
+        "postcss-value-parser": "^4.2.0"
       },
       "bin": {
         "autoprefixer": "bin/autoprefixer"
       },
-      "funding": {
-        "type": "tidelift",
-        "url": "https://tidelift.com/funding/github/npm/autoprefixer"
+      "engines": {
+        "node": "^10 || ^12 || >=14"
+      },
+      "peerDependencies": {
+        "postcss": "^8.1.0"
       }
-    },
-    "node_modules/autoprefixer/node_modules/picocolors": {
-      "version": "0.2.1",
-      "resolved": "file:node_shrinkpack/picocolors-0.2.1.tar",
-      "integrity": "sha512-cMlDqaLEqfSaW8Z7N5Jw+lyIW869EzT73/F5lhtY9cLGoVxSXznfgfXMO0Z5K0o0Q2TkTXq+0KFsdnSe3jDViA== sha512-7ZN7rrVNzKwu9zcoNxYKO4WbkdiSjYvBSLlNfPcA1u0b3zqZVa8k6/l+FBIZJu8tN81OJMLeboOzonEGVcyZHQ==",
-      "dev": true,
-      "license": "ISC"
     },
     "node_modules/available-typed-arrays": {
       "version": "1.0.7",
@@ -2432,6 +2442,16 @@
         "node": ">=10"
       }
     },
+    "node_modules/cosmiconfig/node_modules/yaml": {
+      "version": "1.10.3",
+      "resolved": "file:node_shrinkpack/yaml-1.10.3.tar",
+      "integrity": "sha512-vIYeF1u3CjlhAFekPPAk2h/Kv4T3mAkMox5OymRiJQB0spDP10LHvt+K7G9Ny6NuuMAb25/6n1qyUjAcGNf/AA== sha512-L/6f+rlwPF2CiA23xjjfXYyYALf1H8N8GoHAZ6r2nRilT+PqpUljcZQw2df8OouSKSexPLBniZ91Lu3KtkRwRA==",
+      "dev": true,
+      "license": "ISC",
+      "engines": {
+        "node": ">= 6"
+      }
+    },
     "node_modules/create-ecdh": {
       "version": "4.0.4",
       "resolved": "file:node_shrinkpack/create-ecdh-4.0.4.tar",
@@ -3089,6 +3109,16 @@
       "integrity": "sha512-bd2L678uiWATM6m5Z1VzNCErI3jiGzt6HGY8OVICs40JQq/HALfbyNJmp0UDakEY4pMMaN0Ly5om/B1VI/+xfQ== sha512-Oa4AlGIxNarMN6c2b3I7Yf1+ObfN7DZMQTeaTgDpYtLe7XTrNa+OavA1NAOLkmsMNk2idGKNcOfCzdXeJkWa1g==",
       "dev": true,
       "license": "MIT"
+    },
+    "node_modules/dependency-graph": {
+      "version": "1.0.0",
+      "resolved": "file:node_shrinkpack/dependency-graph-1.0.0.tar",
+      "integrity": "sha512-cW3gggJ28HZ/LExwxP2B++aiKxhJXMSIt9K48FOXQkm+vuG5gyatXnLsONRJdzO/7VfjDIiaOOa/bs4l464Lwg== sha512-zEfCRUgqv+Il5QKt3l4N8Bs9811Q71hF2SAJ3QsCheLcAh3+g486HBrXrsLT8YjtWvcjt7aJsAK5EWgYnracKg==",
+      "dev": true,
+      "license": "MIT",
+      "engines": {
+        "node": ">=4"
+      }
     },
     "node_modules/deps-sort": {
       "version": "2.0.1",
@@ -4146,6 +4176,20 @@
       },
       "engines": {
         "node": ">= 6"
+      }
+    },
+    "node_modules/fraction.js": {
+      "version": "5.3.4",
+      "resolved": "file:node_shrinkpack/fraction.js-5.3.4.tar",
+      "integrity": "sha512-1X1NTtiJphryn/uLQz3whtY6jK3fTqoE3ohKs0tT+Ujr1W59oopxmoEh7Lu5p6vBaPbgoM0bzveAW4Qi5RyWDQ== sha512-LLaA9Bm8ONsJTshqSI1keLzSjTcdSav+yr6Xx20g3+HtEf17LRouKsCIv962AI5kRIZpHUjQlyAfh58BWswsyA==",
+      "dev": true,
+      "license": "MIT",
+      "engines": {
+        "node": "*"
+      },
+      "funding": {
+        "type": "github",
+        "url": "https://github.com/sponsors/rawify"
       }
     },
     "node_modules/fs-extra": {
@@ -5700,6 +5744,19 @@
       },
       "engines": {
         "node": ">= 0.8.0"
+      }
+    },
+    "node_modules/lilconfig": {
+      "version": "3.1.3",
+      "resolved": "file:node_shrinkpack/lilconfig-3.1.3.tar",
+      "integrity": "sha512-/vlFKAoH5Cgt3Ie+JLhRbwOsCQePABiU3tJ1egGvyQ+33R/vcwM2Zl2QR/LzjsBeItPt3oSVXapn+m4nQDvpzw== sha512-uTtzaHUV4DwvBLC45XSWg++1WEqvPoOw3SPeRCrW13OuZQyh8RuvunfcSPdvR/Eq9DfrfGZxsEi6zWhtqpDzsQ==",
+      "dev": true,
+      "license": "MIT",
+      "engines": {
+        "node": ">=14"
+      },
+      "funding": {
+        "url": "https://github.com/sponsors/antonk52"
       }
     },
     "node_modules/lines-and-columns": {
@@ -7259,6 +7316,16 @@
         "url": "https://github.com/sponsors/jonschlinkert"
       }
     },
+    "node_modules/pify": {
+      "version": "2.3.0",
+      "resolved": "file:node_shrinkpack/pify-2.3.0.tar",
+      "integrity": "sha512-udgsAY+fTnvv7kI7aaxbqwWNb0AHiB0qBO89PZKPkoTmGOgdbrHDKD+0B2X4uTfJ/FT1R09r9gTsjUjNJotuog== sha512-OVPl7jVTKknpgAmeiufRMZkuBCrpko1EQtbms9NoFVBe9oZAre0eBIqzfIyvGt5abesTiR8b3L05Q4xdQ9j5Sw==",
+      "dev": true,
+      "license": "MIT",
+      "engines": {
+        "node": ">=0.10.0"
+      }
+    },
     "node_modules/possible-typed-array-names": {
       "version": "1.1.0",
       "resolved": "file:node_shrinkpack/possible-typed-array-names-1.1.0.tar",
@@ -7270,21 +7337,161 @@
       }
     },
     "node_modules/postcss": {
-      "version": "7.0.39",
-      "resolved": "file:node_shrinkpack/postcss-7.0.39.tar",
-      "integrity": "sha512-yioayjNbHn6z1/Bywyb2Y4s3yvDAeXGOyxqD+LnVOinq6Mdmd++SW2wUNVzavyyHxd6+DxzWGIuosg6P1Rj8uA== sha512-mVqTVzYKNbuMgoQA5tyPRegPKUTNOLYe4U6MVFJLnD0ZKhTxaW4yb1rEb7KC6R0yP086zEdcWNzVe99OWjcv7w==",
+      "version": "8.5.14",
+      "resolved": "file:node_shrinkpack/postcss-8.5.14.tar",
+      "integrity": "sha512-SoSL4+OSEtR99LHFZQiJLkT59C5B1amGO1NzTwj7TT1qCUgUO6hxOvzkOYxD+vMrXBM3XJIKzokoERdqQq/Zmg== sha512-l0j7/ZzBsnMNoy7DVspob7dbdR0JzYctS46BQyGR6YWxmsubVm28NI95Y6SDvUm43fbMDFFvmtlVe0Yrvl0qgg==",
+      "dev": true,
+      "funding": [
+        {
+          "type": "opencollective",
+          "url": "https://opencollective.com/postcss/"
+        },
+        {
+          "type": "tidelift",
+          "url": "https://tidelift.com/funding/github/npm/postcss"
+        },
+        {
+          "type": "github",
+          "url": "https://github.com/sponsors/ai"
+        }
+      ],
+      "license": "MIT",
+      "dependencies": {
+        "nanoid": "^3.3.11",
+        "picocolors": "^1.1.1",
+        "source-map-js": "^1.2.1"
+      },
+      "engines": {
+        "node": "^10 || ^12 || >=14"
+      }
+    },
+    "node_modules/postcss-cli": {
+      "version": "11.0.1",
+      "resolved": "file:node_shrinkpack/postcss-cli-11.0.1.tar",
+      "integrity": "sha512-0UnkNPSayHKRe/tc2YGW6XnSqqOA9eqpiRMgRlV1S6HdGi16vwJBx7lviARzbV1HpQHqLLRH3o8vTcB0cLc+5g== sha512-BDO4Ww784RcVemsScF3AeQJ7rhqniLr+21U9UJFf4BliBxM6NBU8ww3izRPR8NJZ8e5CC3ZWCzkfDIf///uKsQ==",
       "dev": true,
       "license": "MIT",
       "dependencies": {
-        "picocolors": "^0.2.1",
-        "source-map": "^0.6.1"
+        "chokidar": "^3.3.0",
+        "dependency-graph": "^1.0.0",
+        "fs-extra": "^11.0.0",
+        "picocolors": "^1.0.0",
+        "postcss-load-config": "^5.0.0",
+        "postcss-reporter": "^7.0.0",
+        "pretty-hrtime": "^1.0.3",
+        "read-cache": "^1.0.0",
+        "slash": "^5.0.0",
+        "tinyglobby": "^0.2.12",
+        "yargs": "^17.0.0"
+      },
+      "bin": {
+        "postcss": "index.js"
       },
       "engines": {
-        "node": ">=6.0.0"
+        "node": ">=18"
+      },
+      "peerDependencies": {
+        "postcss": "^8.0.0"
+      }
+    },
+    "node_modules/postcss-cli/node_modules/cliui": {
+      "version": "8.0.1",
+      "resolved": "file:node_shrinkpack/cliui-8.0.1.tar",
+      "integrity": "sha512-BSeNnyus75C4//NQ9gQt1/csTXyo/8Sb+afLAkzAptFuMsod9HFokGNudZpi/oQV73hnVK+sR+5PVRMd+Dr7YQ== sha512-GC7/Eqi9xzROVEh7dGlFd33A2DWMuvSxWwDiGbpkswW3GdHxnslm9hRqLET/luvz9D3Kr1VtjoRL0RdAgy0FSg==",
+      "dev": true,
+      "license": "ISC",
+      "dependencies": {
+        "string-width": "^4.2.0",
+        "strip-ansi": "^6.0.1",
+        "wrap-ansi": "^7.0.0"
+      },
+      "engines": {
+        "node": ">=12"
+      }
+    },
+    "node_modules/postcss-cli/node_modules/fs-extra": {
+      "version": "11.3.5",
+      "resolved": "file:node_shrinkpack/fs-extra-11.3.5.tar",
+      "integrity": "sha512-eKpRKAovdpZtR1WopLHxlBWvAgPny3c4gX1G5Jhwmmw4XJj0ifSD5qB5TOo8hmA0wlRKDAOAhEE1yVPgs6Fgcg== sha512-OWEiD1S9dc10h5lpYrxgEwO6MMcGcoOtyFxfKCtEUdJQxUYq5B8shL4fLMbVFTFgiIJVMswCiaOROpC9lha0ww==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "graceful-fs": "^4.2.0",
+        "jsonfile": "^6.0.1",
+        "universalify": "^2.0.0"
+      },
+      "engines": {
+        "node": ">=14.14"
+      }
+    },
+    "node_modules/postcss-cli/node_modules/slash": {
+      "version": "5.1.0",
+      "resolved": "file:node_shrinkpack/slash-5.1.0.tar",
+      "integrity": "sha512-ZA6oR3T/pEyuqwMgAKT0/hAv8oAXckzbkmR0UkUosQ+Mc4RxGoJkRmwHgHufaenlyAgE1Mxgpdcrf75y6XcnDg== sha512-PRe+f+9uw8Ld8jHsvQLwXDjwjUV6+UqWgHSHCaLkYloyvYA5BXx8sE7qOTZGOtL49ipddWv4C5jQP42dKeYhHg==",
+      "dev": true,
+      "license": "MIT",
+      "engines": {
+        "node": ">=14.16"
       },
       "funding": {
-        "type": "opencollective",
-        "url": "https://opencollective.com/postcss/"
+        "url": "https://github.com/sponsors/sindresorhus"
+      }
+    },
+    "node_modules/postcss-cli/node_modules/wrap-ansi": {
+      "version": "7.0.0",
+      "resolved": "file:node_shrinkpack/wrap-ansi-7.0.0.tar",
+      "integrity": "sha512-YVGIj2kamLSTxw6NsZjoBxfSwsn0ycdesmc4p+Q21c5zPuZ1pl+NfxVdxPtdHvmNVOQ6XSYG4AUtyt/Fi7D16Q== sha512-BNTrOyZOskBmngnbt9tumz5p0kGB+G4k/+an5GNeVEHK1HrGZdpINdFkuG/PZpTsO4cgcPoyWGoH1PrB0eWP+Q==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "ansi-styles": "^4.0.0",
+        "string-width": "^4.1.0",
+        "strip-ansi": "^6.0.0"
+      },
+      "engines": {
+        "node": ">=10"
+      },
+      "funding": {
+        "url": "https://github.com/chalk/wrap-ansi?sponsor=1"
+      }
+    },
+    "node_modules/postcss-cli/node_modules/y18n": {
+      "version": "5.0.8",
+      "resolved": "file:node_shrinkpack/y18n-5.0.8.tar",
+      "integrity": "sha512-0pfFzegeDWJHJIAmTLRP2DwHjdF5s7jo9tuztdQxAhINCdvS+3nGINqPd00AphqJR/0LhANUS6/+7SCb98YOfA== sha512-sAHIXT2L9weW2vj6ytGy6YNVy0tQexoC4pLpYrXnZJi00aXQAfXx6ugRE9UqwDEkIoSIJUGDgZoWcO6GQFIpvw==",
+      "dev": true,
+      "license": "ISC",
+      "engines": {
+        "node": ">=10"
+      }
+    },
+    "node_modules/postcss-cli/node_modules/yargs": {
+      "version": "17.7.2",
+      "resolved": "file:node_shrinkpack/yargs-17.7.2.tar",
+      "integrity": "sha512-7dSzzRQ++CKnNI/krKnYRV7JKKPUXMEh61soaHKg9mrWEhzFWhFnxPxGl+69cD1Ou63C13NUPCnmIcrvqCuM6w== sha512-l73MV0ohoad3wCjqtrErTFD/4G0Oq2sFMMoiPoRbzDk/wuT9R66Alk7w2YDxEAW0ZPS5jVhG/x2iKmhjFtZb2A==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "cliui": "^8.0.1",
+        "escalade": "^3.1.1",
+        "get-caller-file": "^2.0.5",
+        "require-directory": "^2.1.1",
+        "string-width": "^4.2.3",
+        "y18n": "^5.0.5",
+        "yargs-parser": "^21.1.1"
+      },
+      "engines": {
+        "node": ">=12"
+      }
+    },
+    "node_modules/postcss-cli/node_modules/yargs-parser": {
+      "version": "21.1.1",
+      "resolved": "file:node_shrinkpack/yargs-parser-21.1.1.tar",
+      "integrity": "sha512-tVpsJW7DdjecAiFpbIB1e3qxIQsE6NoPc5/eTdrbbIC4h0LVsWhnoa3g+m2HclBIujHzsxZ4VJVA+GUuc2/LBw== sha512-qrnazRd/WWPumh6wl1AJEtfg/8v+3XjgfCCBh4fNSmYb2+IFM/cDlwQRZ/twl8Zco6fC+bm+fSzNQR7UG+m8qw==",
+      "dev": true,
+      "license": "ISC",
+      "engines": {
+        "node": ">=12"
       }
     },
     "node_modules/postcss-html": {
@@ -7314,12 +7521,104 @@
         "node": ">=6.14.4"
       }
     },
+    "node_modules/postcss-less/node_modules/picocolors": {
+      "version": "0.2.1",
+      "resolved": "file:node_shrinkpack/picocolors-0.2.1.tar",
+      "integrity": "sha512-cMlDqaLEqfSaW8Z7N5Jw+lyIW869EzT73/F5lhtY9cLGoVxSXznfgfXMO0Z5K0o0Q2TkTXq+0KFsdnSe3jDViA== sha512-7ZN7rrVNzKwu9zcoNxYKO4WbkdiSjYvBSLlNfPcA1u0b3zqZVa8k6/l+FBIZJu8tN81OJMLeboOzonEGVcyZHQ==",
+      "dev": true,
+      "license": "ISC"
+    },
+    "node_modules/postcss-less/node_modules/postcss": {
+      "version": "7.0.39",
+      "resolved": "file:node_shrinkpack/postcss-7.0.39.tar",
+      "integrity": "sha512-yioayjNbHn6z1/Bywyb2Y4s3yvDAeXGOyxqD+LnVOinq6Mdmd++SW2wUNVzavyyHxd6+DxzWGIuosg6P1Rj8uA== sha512-mVqTVzYKNbuMgoQA5tyPRegPKUTNOLYe4U6MVFJLnD0ZKhTxaW4yb1rEb7KC6R0yP086zEdcWNzVe99OWjcv7w==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "picocolors": "^0.2.1",
+        "source-map": "^0.6.1"
+      },
+      "engines": {
+        "node": ">=6.0.0"
+      },
+      "funding": {
+        "type": "opencollective",
+        "url": "https://opencollective.com/postcss/"
+      }
+    },
+    "node_modules/postcss-load-config": {
+      "version": "5.1.0",
+      "resolved": "file:node_shrinkpack/postcss-load-config-5.1.0.tar",
+      "integrity": "sha512-G5AJ+IX0aD0dygOE0yFZQ/huFFMSNneyfp0e3/bT05a8OfPC5FUoZRPfGijUdGOJNMewJiwzcHJXFafFzeKFVA== sha512-xR/On2o9QTknaSMutXc4Ty08VSHrukyJ6B0E/BzvIt11tk2UPGfQcVIS6veMmed2imqGQ5OlkiHkB6RsPPNGeQ==",
+      "dev": true,
+      "funding": [
+        {
+          "type": "opencollective",
+          "url": "https://opencollective.com/postcss/"
+        },
+        {
+          "type": "github",
+          "url": "https://github.com/sponsors/ai"
+        }
+      ],
+      "license": "MIT",
+      "dependencies": {
+        "lilconfig": "^3.1.1",
+        "yaml": "^2.4.2"
+      },
+      "engines": {
+        "node": ">= 18"
+      },
+      "peerDependencies": {
+        "jiti": ">=1.21.0",
+        "postcss": ">=8.0.9",
+        "tsx": "^4.8.1"
+      },
+      "peerDependenciesMeta": {
+        "jiti": {
+          "optional": true
+        },
+        "postcss": {
+          "optional": true
+        },
+        "tsx": {
+          "optional": true
+        }
+      }
+    },
     "node_modules/postcss-media-query-parser": {
       "version": "0.2.3",
       "resolved": "file:node_shrinkpack/postcss-media-query-parser-0.2.3.tar",
       "integrity": "sha512-3sOlxmbKcSHMjlUXQZKQ06jOswE7oVkXPxmZdoB1r5l0q6gTFTQSHxNxOrCccElbW7dxNytifNEo8qidX2Vsig== sha512-gxD654VlVX+bDxwWlPa3/N0A/Utq/1MYotKPQuGf+SmiWBKqxGRNPgqkJz4GyyQltyEKYyeSdQQfM1o+52ukjQ==",
       "dev": true,
       "license": "MIT"
+    },
+    "node_modules/postcss-reporter": {
+      "version": "7.1.0",
+      "resolved": "file:node_shrinkpack/postcss-reporter-7.1.0.tar",
+      "integrity": "sha512-/eoEylGWyy6/DOiMP5lmFRdmDKThqgn7D6hP2dXKJI/0rJSO1ADFNngZfDzxL0YAxFvws+Rtpuji1YIHj4mySA== sha512-M4Ei6aGfBOX9d8ONyLJ+YZ/z6eDP2ZWzhtZo1sfaz5N59spq6p8QkDoxtqqg9ePGG0qRKP0Ngj3Lgsk8xgwVtA==",
+      "dev": true,
+      "funding": [
+        {
+          "type": "opencollective",
+          "url": "https://opencollective.com/postcss/"
+        },
+        {
+          "type": "github",
+          "url": "https://github.com/sponsors/ai"
+        }
+      ],
+      "license": "MIT",
+      "dependencies": {
+        "picocolors": "^1.0.0",
+        "thenby": "^1.3.4"
+      },
+      "engines": {
+        "node": ">=10"
+      },
+      "peerDependencies": {
+        "postcss": "^8.1.0"
+      }
     },
     "node_modules/postcss-resolve-nested-selector": {
       "version": "0.1.6",
@@ -7341,6 +7640,31 @@
         "node": ">=6.0.0"
       }
     },
+    "node_modules/postcss-safe-parser/node_modules/picocolors": {
+      "version": "0.2.1",
+      "resolved": "file:node_shrinkpack/picocolors-0.2.1.tar",
+      "integrity": "sha512-cMlDqaLEqfSaW8Z7N5Jw+lyIW869EzT73/F5lhtY9cLGoVxSXznfgfXMO0Z5K0o0Q2TkTXq+0KFsdnSe3jDViA== sha512-7ZN7rrVNzKwu9zcoNxYKO4WbkdiSjYvBSLlNfPcA1u0b3zqZVa8k6/l+FBIZJu8tN81OJMLeboOzonEGVcyZHQ==",
+      "dev": true,
+      "license": "ISC"
+    },
+    "node_modules/postcss-safe-parser/node_modules/postcss": {
+      "version": "7.0.39",
+      "resolved": "file:node_shrinkpack/postcss-7.0.39.tar",
+      "integrity": "sha512-yioayjNbHn6z1/Bywyb2Y4s3yvDAeXGOyxqD+LnVOinq6Mdmd++SW2wUNVzavyyHxd6+DxzWGIuosg6P1Rj8uA== sha512-mVqTVzYKNbuMgoQA5tyPRegPKUTNOLYe4U6MVFJLnD0ZKhTxaW4yb1rEb7KC6R0yP086zEdcWNzVe99OWjcv7w==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "picocolors": "^0.2.1",
+        "source-map": "^0.6.1"
+      },
+      "engines": {
+        "node": ">=6.0.0"
+      },
+      "funding": {
+        "type": "opencollective",
+        "url": "https://opencollective.com/postcss/"
+      }
+    },
     "node_modules/postcss-sass": {
       "version": "0.4.4",
       "resolved": "file:node_shrinkpack/postcss-sass-0.4.4.tar",
@@ -7350,6 +7674,31 @@
       "dependencies": {
         "gonzales-pe": "^4.3.0",
         "postcss": "^7.0.21"
+      }
+    },
+    "node_modules/postcss-sass/node_modules/picocolors": {
+      "version": "0.2.1",
+      "resolved": "file:node_shrinkpack/picocolors-0.2.1.tar",
+      "integrity": "sha512-cMlDqaLEqfSaW8Z7N5Jw+lyIW869EzT73/F5lhtY9cLGoVxSXznfgfXMO0Z5K0o0Q2TkTXq+0KFsdnSe3jDViA== sha512-7ZN7rrVNzKwu9zcoNxYKO4WbkdiSjYvBSLlNfPcA1u0b3zqZVa8k6/l+FBIZJu8tN81OJMLeboOzonEGVcyZHQ==",
+      "dev": true,
+      "license": "ISC"
+    },
+    "node_modules/postcss-sass/node_modules/postcss": {
+      "version": "7.0.39",
+      "resolved": "file:node_shrinkpack/postcss-7.0.39.tar",
+      "integrity": "sha512-yioayjNbHn6z1/Bywyb2Y4s3yvDAeXGOyxqD+LnVOinq6Mdmd++SW2wUNVzavyyHxd6+DxzWGIuosg6P1Rj8uA== sha512-mVqTVzYKNbuMgoQA5tyPRegPKUTNOLYe4U6MVFJLnD0ZKhTxaW4yb1rEb7KC6R0yP086zEdcWNzVe99OWjcv7w==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "picocolors": "^0.2.1",
+        "source-map": "^0.6.1"
+      },
+      "engines": {
+        "node": ">=6.0.0"
+      },
+      "funding": {
+        "type": "opencollective",
+        "url": "https://opencollective.com/postcss/"
       }
     },
     "node_modules/postcss-scss": {
@@ -7363,6 +7712,31 @@
       },
       "engines": {
         "node": ">=6.0.0"
+      }
+    },
+    "node_modules/postcss-scss/node_modules/picocolors": {
+      "version": "0.2.1",
+      "resolved": "file:node_shrinkpack/picocolors-0.2.1.tar",
+      "integrity": "sha512-cMlDqaLEqfSaW8Z7N5Jw+lyIW869EzT73/F5lhtY9cLGoVxSXznfgfXMO0Z5K0o0Q2TkTXq+0KFsdnSe3jDViA== sha512-7ZN7rrVNzKwu9zcoNxYKO4WbkdiSjYvBSLlNfPcA1u0b3zqZVa8k6/l+FBIZJu8tN81OJMLeboOzonEGVcyZHQ==",
+      "dev": true,
+      "license": "ISC"
+    },
+    "node_modules/postcss-scss/node_modules/postcss": {
+      "version": "7.0.39",
+      "resolved": "file:node_shrinkpack/postcss-7.0.39.tar",
+      "integrity": "sha512-yioayjNbHn6z1/Bywyb2Y4s3yvDAeXGOyxqD+LnVOinq6Mdmd++SW2wUNVzavyyHxd6+DxzWGIuosg6P1Rj8uA== sha512-mVqTVzYKNbuMgoQA5tyPRegPKUTNOLYe4U6MVFJLnD0ZKhTxaW4yb1rEb7KC6R0yP086zEdcWNzVe99OWjcv7w==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "picocolors": "^0.2.1",
+        "source-map": "^0.6.1"
+      },
+      "engines": {
+        "node": ">=6.0.0"
+      },
+      "funding": {
+        "type": "opencollective",
+        "url": "https://opencollective.com/postcss/"
       }
     },
     "node_modules/postcss-selector-parser": {
@@ -7396,12 +7770,24 @@
       "dev": true,
       "license": "MIT"
     },
-    "node_modules/postcss/node_modules/picocolors": {
-      "version": "0.2.1",
-      "resolved": "file:node_shrinkpack/picocolors-0.2.1.tar",
-      "integrity": "sha512-cMlDqaLEqfSaW8Z7N5Jw+lyIW869EzT73/F5lhtY9cLGoVxSXznfgfXMO0Z5K0o0Q2TkTXq+0KFsdnSe3jDViA== sha512-7ZN7rrVNzKwu9zcoNxYKO4WbkdiSjYvBSLlNfPcA1u0b3zqZVa8k6/l+FBIZJu8tN81OJMLeboOzonEGVcyZHQ==",
+    "node_modules/postcss/node_modules/nanoid": {
+      "version": "3.3.12",
+      "resolved": "file:node_shrinkpack/nanoid-3.3.12.tar",
+      "integrity": "sha512-ZB9RH/39qpq5Vu6Y+NmUaFhQR6pp+M2Xt76XBnEwDaGcVAqhlvxrl3B2bKS5D3NH3QR76v3aSrKaF/Kiy7lEtQ== sha512-48s+bk3fx7YWoUYrV12JaDCfD08sjMCeBVlXm2Nsu6mjBty+Tc7t/9z4X962DGtzBF8P2f73zzyQjmPxMmtApA==",
       "dev": true,
-      "license": "ISC"
+      "funding": [
+        {
+          "type": "github",
+          "url": "https://github.com/sponsors/ai"
+        }
+      ],
+      "license": "MIT",
+      "bin": {
+        "nanoid": "bin/nanoid.cjs"
+      },
+      "engines": {
+        "node": "^10 || ^12 || ^13.7 || ^14 || >=15.0.1"
+      }
     },
     "node_modules/prelude-ls": {
       "version": "1.2.1",
@@ -7427,6 +7813,16 @@
       },
       "funding": {
         "url": "https://github.com/prettier/prettier?sponsor=1"
+      }
+    },
+    "node_modules/pretty-hrtime": {
+      "version": "1.0.3",
+      "resolved": "file:node_shrinkpack/pretty-hrtime-1.0.3.tar",
+      "integrity": "sha512-66hKPCr+72mlfiSjlEB1+45IjXSqvVAIy6mocupoww4tBFE9R9IhwwUGoI4G++Tc9Aq+2rxOt0RFU6gPcrte0A== sha512-l9KHflJlWJ20+xy5sXbIr3mmUkgocuZvrl258cO3jHdCrBGMHWkWlt80ZBU8pItdGbCsK0F6WiL0j6MOvnbL8A==",
+      "dev": true,
+      "license": "MIT",
+      "engines": {
+        "node": ">= 0.8"
       }
     },
     "node_modules/process": {
@@ -7788,6 +8184,16 @@
       "dependencies": {
         "randombytes": "^2.0.5",
         "safe-buffer": "^5.1.0"
+      }
+    },
+    "node_modules/read-cache": {
+      "version": "1.0.0",
+      "resolved": "file:node_shrinkpack/read-cache-1.0.0.tar",
+      "integrity": "sha512-Owdv/Ft7IjOgm/i0xvNDZ1LrRANRfew4b2prF3OWMQLxLfu3bS8FVhCsrSCMK4lR56Y9ya+AThoTpDCTxCmpRA== sha512-vupHBVp4pCL+pOkn0g0AYMzQ48h1w3PeZ2Dlli3obAgmeonhs2enehGYZ5mXJ0avIjzByfXqdJH2gJC+RuqXOQ==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "pify": "^2.3.0"
       }
     },
     "node_modules/read-only-stream": {
@@ -8704,6 +9110,16 @@
         "node": ">=0.10.0"
       }
     },
+    "node_modules/source-map-js": {
+      "version": "1.2.1",
+      "resolved": "file:node_shrinkpack/source-map-js-1.2.1.tar",
+      "integrity": "sha512-UXWMKhLOwVKb728IUtQPXxfYU+usdybtUrK/8uGE8CQMvrhOpwvzDBwj0QhSL7MQc7vIsISBG8VQ8+IDQxpfQA== sha512-AWZTyV+7TRcUyamqNG3S1oPEqUaMjPW0KMDuTcQ07qIjXKw6XOzg9ioSq1A/vwAeRZ/9PnnH45y3SGCdrk8b/A==",
+      "dev": true,
+      "license": "BSD-3-Clause",
+      "engines": {
+        "node": ">=0.10.0"
+      }
+    },
     "node_modules/source-map-resolve": {
       "version": "0.5.3",
       "resolved": "file:node_shrinkpack/source-map-resolve-0.5.3.tar",
@@ -9067,6 +9483,29 @@
         "node": ">=8"
       }
     },
+    "node_modules/stylelint/node_modules/autoprefixer": {
+      "version": "9.8.8",
+      "resolved": "file:node_shrinkpack/autoprefixer-9.8.8.tar",
+      "integrity": "sha512-eM9d/swFopRt5gdJ7jrpCwgvEMIayITpojhkkSMRsFHYuH5bkSQ4p/9qTEHtmNudUZh22Tehu7I6CxAW0IXTKA== sha512-MmI74g75OpBC04QgiZup01CHgL6BWR+X9qrlZLuUeOMmDduq0IvfV/iR9daKIraekbDEsbYt6cfHJHf8N/Xx2Q==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "browserslist": "^4.12.0",
+        "caniuse-lite": "^1.0.30001109",
+        "normalize-range": "^0.1.2",
+        "num2fraction": "^1.2.2",
+        "picocolors": "^0.2.1",
+        "postcss": "^7.0.32",
+        "postcss-value-parser": "^4.1.0"
+      },
+      "bin": {
+        "autoprefixer": "bin/autoprefixer"
+      },
+      "funding": {
+        "type": "tidelift",
+        "url": "https://tidelift.com/funding/github/npm/autoprefixer"
+      }
+    },
     "node_modules/stylelint/node_modules/global-modules": {
       "version": "2.0.0",
       "resolved": "file:node_shrinkpack/global-modules-2.0.0.tar",
@@ -9101,6 +9540,31 @@
       "integrity": "sha512-NM8/P9n3XjXhIZn1lLhkFaACTOURQXjWhV4BA/RnOv8xvgqtqpAX9IO4mRQxSx1Rlo4tqzeqb0sOlruaOy3dug== sha512-yhe1VrWLyExSg8YHek0Y0d+1X5dtrZCuFRss8OiyvIjiU18faYUQv69Qj1LP+eG8oH71SXm6jRgf/tKLVlfO0w==",
       "dev": true,
       "license": "MIT"
+    },
+    "node_modules/stylelint/node_modules/picocolors": {
+      "version": "0.2.1",
+      "resolved": "file:node_shrinkpack/picocolors-0.2.1.tar",
+      "integrity": "sha512-cMlDqaLEqfSaW8Z7N5Jw+lyIW869EzT73/F5lhtY9cLGoVxSXznfgfXMO0Z5K0o0Q2TkTXq+0KFsdnSe3jDViA== sha512-7ZN7rrVNzKwu9zcoNxYKO4WbkdiSjYvBSLlNfPcA1u0b3zqZVa8k6/l+FBIZJu8tN81OJMLeboOzonEGVcyZHQ==",
+      "dev": true,
+      "license": "ISC"
+    },
+    "node_modules/stylelint/node_modules/postcss": {
+      "version": "7.0.39",
+      "resolved": "file:node_shrinkpack/postcss-7.0.39.tar",
+      "integrity": "sha512-yioayjNbHn6z1/Bywyb2Y4s3yvDAeXGOyxqD+LnVOinq6Mdmd++SW2wUNVzavyyHxd6+DxzWGIuosg6P1Rj8uA== sha512-mVqTVzYKNbuMgoQA5tyPRegPKUTNOLYe4U6MVFJLnD0ZKhTxaW4yb1rEb7KC6R0yP086zEdcWNzVe99OWjcv7w==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "picocolors": "^0.2.1",
+        "source-map": "^0.6.1"
+      },
+      "engines": {
+        "node": ">=6.0.0"
+      },
+      "funding": {
+        "type": "opencollective",
+        "url": "https://opencollective.com/postcss/"
+      }
     },
     "node_modules/stylelint/node_modules/resolve-from": {
       "version": "5.0.0",
@@ -9178,6 +9642,31 @@
       "license": "MIT",
       "dependencies": {
         "postcss": "^7.0.2"
+      }
+    },
+    "node_modules/sugarss/node_modules/picocolors": {
+      "version": "0.2.1",
+      "resolved": "file:node_shrinkpack/picocolors-0.2.1.tar",
+      "integrity": "sha512-cMlDqaLEqfSaW8Z7N5Jw+lyIW869EzT73/F5lhtY9cLGoVxSXznfgfXMO0Z5K0o0Q2TkTXq+0KFsdnSe3jDViA== sha512-7ZN7rrVNzKwu9zcoNxYKO4WbkdiSjYvBSLlNfPcA1u0b3zqZVa8k6/l+FBIZJu8tN81OJMLeboOzonEGVcyZHQ==",
+      "dev": true,
+      "license": "ISC"
+    },
+    "node_modules/sugarss/node_modules/postcss": {
+      "version": "7.0.39",
+      "resolved": "file:node_shrinkpack/postcss-7.0.39.tar",
+      "integrity": "sha512-yioayjNbHn6z1/Bywyb2Y4s3yvDAeXGOyxqD+LnVOinq6Mdmd++SW2wUNVzavyyHxd6+DxzWGIuosg6P1Rj8uA== sha512-mVqTVzYKNbuMgoQA5tyPRegPKUTNOLYe4U6MVFJLnD0ZKhTxaW4yb1rEb7KC6R0yP086zEdcWNzVe99OWjcv7w==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "picocolors": "^0.2.1",
+        "source-map": "^0.6.1"
+      },
+      "engines": {
+        "node": ">=6.0.0"
+      },
+      "funding": {
+        "type": "opencollective",
+        "url": "https://opencollective.com/postcss/"
       }
     },
     "node_modules/supports-color": {
@@ -9353,6 +9842,13 @@
       "dev": true,
       "license": "MIT"
     },
+    "node_modules/thenby": {
+      "version": "1.4.1",
+      "resolved": "file:node_shrinkpack/thenby-1.4.1.tar",
+      "integrity": "sha512-D5a/bO0KdalOE3q8MlrRmSxjbKZHT3MQmXkJP+r97Vw8MMwOZKOwUSEyTtK7eSMj2y0kyAjpYMRMZmmLw1FtNQ== sha512-l4cGZHfkAeAwSCjccb9Mf3QC7nEcBGrJ8G2OjcJINxZ6+LbWK/t0T/Iu87aODoIOQreKcKmW/If8FXDWzfvQ0w==",
+      "dev": true,
+      "license": "Apache-2.0"
+    },
     "node_modules/through": {
       "version": "2.3.8",
       "resolved": "file:node_shrinkpack/through-2.3.8.tar",
@@ -9381,6 +9877,54 @@
       },
       "engines": {
         "node": ">=0.6.0"
+      }
+    },
+    "node_modules/tinyglobby": {
+      "version": "0.2.16",
+      "resolved": "file:node_shrinkpack/tinyglobby-0.2.16.tar",
+      "integrity": "sha512-pn99VhoACYR8nFHhxqix+uvsbXineAasWm5ojXoN8xEwK5Kd3/TrhNn1wByuD52UxWRLy8pu+kRMniEi6Eq9Zg== sha512-3ppOD0D1MkKNfMvtLXaoXn/E2lyhre2sR1wVDTaW2QPa5aB+nAhJI2a1a4WTjiNapN56RNCcozYT2sQRIdbt2w==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "fdir": "^6.5.0",
+        "picomatch": "^4.0.4"
+      },
+      "engines": {
+        "node": ">=12.0.0"
+      },
+      "funding": {
+        "url": "https://github.com/sponsors/SuperchupuDev"
+      }
+    },
+    "node_modules/tinyglobby/node_modules/fdir": {
+      "version": "6.5.0",
+      "resolved": "file:node_shrinkpack/fdir-6.5.0.tar",
+      "integrity": "sha512-tIbYtZbucOs0BRGqPJkshJUYdL+SDH7dVM8gjy+ERp3WAUjLEFJE+02kanyHtwjWOnwrKYBiwAmM0p4kLJAnXg== sha512-m1vuYIw+LGVMwI5aSdfXd8jpUU4h9TAZ7TbyjTNdUvnrFvzspmsBTLRb0LMcQIOY5Qex9KxJv+9CHe0b4EX+uw==",
+      "dev": true,
+      "license": "MIT",
+      "engines": {
+        "node": ">=12.0.0"
+      },
+      "peerDependencies": {
+        "picomatch": "^3 || ^4"
+      },
+      "peerDependenciesMeta": {
+        "picomatch": {
+          "optional": true
+        }
+      }
+    },
+    "node_modules/tinyglobby/node_modules/picomatch": {
+      "version": "4.0.4",
+      "resolved": "file:node_shrinkpack/picomatch-4.0.4.tar",
+      "integrity": "sha512-QP88BAKvMam/3NxH6vj2o21R6MjxZUAd6nlwAS/pnGvN9IVLocLHxGYIzFhg6fUQ+5th6P4dv4eW9jX3DSIj7A== sha512-d0dOf3LAXvt3Rr1/2nn2OOjgsbmSafng1u/4+s0rM9s759Lmareun1WB3a1RVj70yDPMmg+oWWgvNM2VReoQ6A==",
+      "dev": true,
+      "license": "MIT",
+      "engines": {
+        "node": ">=12"
+      },
+      "funding": {
+        "url": "https://github.com/sponsors/jonschlinkert"
       }
     },
     "node_modules/tmp": {
@@ -10543,13 +11087,19 @@
       "license": "ISC"
     },
     "node_modules/yaml": {
-      "version": "1.10.3",
-      "resolved": "file:node_shrinkpack/yaml-1.10.3.tar",
-      "integrity": "sha512-vIYeF1u3CjlhAFekPPAk2h/Kv4T3mAkMox5OymRiJQB0spDP10LHvt+K7G9Ny6NuuMAb25/6n1qyUjAcGNf/AA== sha512-L/6f+rlwPF2CiA23xjjfXYyYALf1H8N8GoHAZ6r2nRilT+PqpUljcZQw2df8OouSKSexPLBniZ91Lu3KtkRwRA==",
+      "version": "2.8.4",
+      "resolved": "file:node_shrinkpack/yaml-2.8.4.tar",
+      "integrity": "sha512-ml/JPOj9fOQK8RNnWojA67GbZ0ApXAUlN2UQclwv2eVgTgn7O9gg9o7paZWKMp4g0H3nTLtS9LVzhkpOFIKzog== sha512-cHCic+3RQ+N/8qqm4pVb+7vFSUnok5PexbWmLiFcXjlE+/1jFMsizw4DykK9R6TfZcYtVHLgqJS2Mh4Vc6OVBQ==",
       "dev": true,
       "license": "ISC",
+      "bin": {
+        "yaml": "bin.mjs"
+      },
       "engines": {
-        "node": ">= 6"
+        "node": ">= 14.6"
+      },
+      "funding": {
+        "url": "https://github.com/sponsors/eemeli"
       }
     },
     "node_modules/yargs": {

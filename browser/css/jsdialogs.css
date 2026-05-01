@@ -14,7 +14,6 @@
 }
 
 .jsdialog-overlay.cancellable {
-	-webkit-animation: none;
 	animation: none;
 }
 
@@ -235,7 +234,6 @@ div#autoFillPreviewTooltip .lokdialog.ui-dialog-content.ui-widget-content {
 
 *:not(.modalpopup) > .lokdialog_container.ui-dialog.ui-widget-content, .autofilter-container {
 	border: 1px solid var(--color-border-darker);
-	-webkit-box-shadow: 0 0 3px var(--color-border-darker);
 	box-shadow: 0 0 3px var(--color-border-darker);
 	border-radius: var(--border-radius);
 	background: var(--color-background-darker);
@@ -893,8 +891,6 @@ body button:not(.ui-corner-all):not(.button-primary):not(.unobutton):not(.form-f
 }
 
 input[type='checkbox'].autofilter, .jsdialog input[type='checkbox'] {
-	-webkit-appearance: none;
-	-moz-appearance: none;
 	-o-appearance: none;
 	appearance: none;
 	width: 20px;
@@ -1004,7 +1000,6 @@ input[type='checkbox']:checked.autofilter, .jsdialog input[type='checkbox']:chec
 	background: var(--color-background-lighter);
 	border: 1px solid var(--color-border-dark);
 	border-radius: var(--border-radius);
-	-webkit-box-shadow: 0 0 3px var(--color-box-shadow);
 	box-shadow: 0 0 3px var(--color-box-shadow);
 }
 
@@ -1090,8 +1085,7 @@ img.context-menu-icon {
 	line-height: 28px;
 	max-height: 32px;
 	width: auto;
-	width: -webkit-fill-available;
-	width: -moz-available;
+	width: stretch;
 	border: 1px solid var(--color-border-dark);
 	border-radius: var(--border-radius);
 	overflow: hidden;
@@ -1105,9 +1099,7 @@ img.context-menu-icon {
 .autofilter .ui-treeview-search-input.jsdialog.ui-edit,
 .autofilter .ui-treeview-search-input.jsdialog.ui-edit:hover {
 	width: 100%;
-	width: -moz-available;
-	width: -webkit-fill-available;
-	width: fill-available;
+	width: stretch;
 	margin-top: 8px;
 	border-radius: 0;
 	border-left: none;
@@ -1313,8 +1305,6 @@ img.context-menu-icon {
 .ui-combobox,
 .ui-timefield {
 	box-sizing: border-box;
-	-webkit-appearance: none;
-	-moz-appearance: none;
 	appearance: none;
 	height: 1.5rem;
 	line-height: normal;
@@ -1565,8 +1555,7 @@ img.context-menu-icon {
 	border: 1px solid var(--color-border-dark);
 	border-radius: var(--border-radius);
 	vertical-align: top;
-	width: -webkit-fill-available;
-	width: -moz-available;
+	width: stretch;
 }
 
 /* buttons: btns.css */
@@ -2143,25 +2132,14 @@ button.has-img img {
 
 #busypopup #spinner-paper-g,
 .popup #spinner-paper-g {
-	-webkit-animation-iteration-count: infinite;
 	animation-iteration-count: infinite;
-	animation-direction: normal;
-	-webkit-animation-play-state: running; /* Safari 4.0 - 8.0 */
+	animation-direction: normal; /* Safari 4.0 - 8.0 */
 	animation-play-state: running;
-	-webkit-animation-name: spinner-saving-anim;
 	animation-name: spinner-saving-anim;
-	-webkit-animation-duration: 2s;
 	animation-duration: 2s;
-	-webkit-animation-timing-function: ease-in-out;
 	animation-timing-function: ease-in-out;
 }
 @keyframes spinner-saving-anim {
-	0% {transform: translateY(-20px) translateX(0px); opacity: 0;}
-	20% {transform: translateY(5px) translateX(15px); opacity: 1;}
-	45% {transform: translateY(22px) translateX(-10px); opacity: 1;}
-	100% {transform: translateY(60px) translateX(15px); opacity: 0;}
-}
-@-webkit-keyframes spinner-saving-anim {
 	0% {transform: translateY(-20px) translateX(0px); opacity: 0;}
 	20% {transform: translateY(5px) translateX(15px); opacity: 1;}
 	45% {transform: translateY(22px) translateX(-10px); opacity: 1;}

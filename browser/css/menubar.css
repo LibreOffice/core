@@ -222,15 +222,9 @@ nav.hasnotebookbar [id^='save'].saved::after {
 /* Customizations to sm-simple theme to make it look like LO menu, lo-menu class */
 .lo-menu {
 	border: none;
-	-webkit-box-shadow: none;
-	-moz-box-shadow: none;
 	box-shadow: none;
 	background: var(--color-main-background);
-	-webkit-touch-callout: none; /* iOS Safari */
-	-webkit-user-select: none;   /* Chrome/Safari/Opera */
-	-khtml-user-select: none;    /* Konqueror */
-	-moz-user-select: none;      /* Firefox */
-	-ms-user-select: none;       /* Internet Explorer/Edge */
+	-webkit-touch-callout: none; /* iOS long-press callout */
 	user-select: none;
 	cursor: default;
 }
@@ -306,7 +300,6 @@ nav.hasnotebookbar [id^='save'].saved::after {
 	/*transform: rotate(180deg);*/
 }
 .lo-menu ul a:hover > span.sub-arrow {
-	-webkit-filter: brightness(100);
 	filter: brightness(100);
 }
 .lo-menu ul a:has(> span.shortcut) {
@@ -367,7 +360,6 @@ nav.hasnotebookbar [id^='save'].saved::after {
 	height: 2px;
 	width: 17px;
 	background: #555;
-	-webkit-transition: all 0.25s;
 	transition: all 0.25s;
 }
 
@@ -420,7 +412,6 @@ nav.hasnotebookbar [id^='save'].saved::after {
 
 .lo-menu-item-checked:hover::before {
 	color: var(--color-text-dark);
-	-webkit-filter: brightness(100);
 	filter: brightness(100);
 }
 
@@ -529,24 +520,14 @@ nav.hasnotebookbar [id^='save'].saved::after {
 #mobile-wizard.menuwizard .locking-overlay-lock {
 	width: 20px;
 	filter: brightness(0.8) contrast(1.8);
-	-webkit-animation-iteration-count: 1;
 	animation-iteration-count: 1;
-	animation-direction: normal;
-	-webkit-animation-play-state: running; /* Safari 4.0 - 8.0 */
+	animation-direction: normal; /* Safari 4.0 - 8.0 */
 	animation-play-state: running;
-	-webkit-animation-name: up-n-down-anim;
 	animation-name: up-n-down-anim;
-	-webkit-animation-duration: 2s;
 	animation-duration: 2s;
-	-webkit-animation-timing-function: ease-in-out;
 	animation-timing-function: ease-in-out;
 }
 @keyframes up-n-down-anim {
-	0% {margin-top: 0;}
-	50% {margin-top: -20px;}
-	100% {margin-top: 0;}
-}
-@-webkit-keyframes up-n-down-anim {
 	0% {margin-top: 0;}
 	50% {margin-top: -20px;}
 	100% {margin-top: 0;}

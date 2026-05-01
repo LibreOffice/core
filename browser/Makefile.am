@@ -124,6 +124,19 @@ $(foreach file,$(1),$(call file_target,\
 	$(file)))
 endef
 
+define css_file_target
+$(1): $(2) $(srcdir)/package.json
+	@mkdir -p $$(dir $$@)
+	@$(NODE) node_modules/postcss-cli/index.js --use autoprefixer --no-map -o $$@ $$<
+
+endef
+
+define css_file_targets
+$(foreach file,$(1),$(call css_file_target,\
+	$(DIST_FOLDER)/$(notdir $(file)),\
+	$(file)))
+endef
+
 define npm_source
 	for package in $(1); do \
 		npm pack $${package}; \
@@ -236,7 +249,7 @@ COOL_CSS =\
 COOL_CSS_DST = $(foreach file,$(COOL_CSS),$(DIST_FOLDER)/$(notdir $(file)))
 COOL_CSS_M4 = $(strip $(foreach file,$(COOL_CSS),$(notdir $(file))))
 
-$(eval $(call file_targets,$(COOL_CSS)))
+$(eval $(call css_file_targets,$(COOL_CSS)))
 
 WORKER_NODE_MODULES_JS =\
 	node_modules/fzstd/umd/index.js
@@ -772,11 +785,11 @@ define bundle_css
 	$(if $(IS_SEPARATE),\
 		@touch $@,\
 		@echo "Uglify cool css files..."
-		@$(NODE) node_modules/uglifycss/uglifycss $(COOL_CSS) > $@)
+		@$(NODE) node_modules/uglifycss/uglifycss $(COOL_CSS_DST) > $@)
 endef
 
 define prereq_css
-	$(if $(IS_SEPARATE),$(COOL_CSS_DST),$(COOL_CSS))
+	$(COOL_CSS_DST)
 endef
 
 define bundle_all

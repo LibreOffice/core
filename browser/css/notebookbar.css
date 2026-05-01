@@ -214,7 +214,6 @@ html[data-theme='dark'] .savemodified.unotoolbutton:not(.notebookbar) .unobutton
 	left: 6px;
 	height: 2px;
 	width: 16px;
-	-webkit-transition: all 0.25s;
 	transition: all 0.25s;
 }
 
@@ -414,7 +413,6 @@ label.notebookbar.ui-checkbox-label {
 .unotoolbutton.notebookbar.disabled img,
 .mobile-wizard-widebutton.disabled img,
 .unotoolbutton[disabled] img {
-	-webkit-filter: grayscale(100%) brightness(100%);
 	filter: grayscale(100%) brightness(100%);
 }
 
@@ -651,7 +649,6 @@ label.notebookbar.ui-checkbox-label {
 
 [id^='stylesview'] .ui-iconview-entry:not(.selected):hover {
 	border: 1px solid var(--color-border-dark);
-	-webkit-box-shadow: 0 0 2px 0 var(--color-background-darker);
 	box-shadow: 0 0 2px 0 var(--color-background-darker);
 	cursor: pointer;
 	background-color: transparent;
@@ -899,7 +896,6 @@ label.notebookbar.ui-checkbox-label {
 	margin: 0;
 	position: absolute;
 	top: 50%;
-	-ms-transform: translateY(-50%);
 	transform: translateY(-50%);
 	width: 100%;
 	text-align: center;

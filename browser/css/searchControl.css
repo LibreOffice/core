@@ -1,8 +1,5 @@
 .search-not-found {
 	background-color: var(--color-error);
-	-webkit-transition: background-color 0.8s linear;
-	-moz-transition: background-color 0.8s linear;
-	-o-transition: background-color 0.8s linear;
 	transition: background-color 0.8s linear;
 
 }

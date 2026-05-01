@@ -18,7 +18,6 @@
 	max-height: 512px;
 	justify-content: center;
 	align-items: center;
-	-webkit-box-shadow: 0 0 3px var(--color-box-shadow);
 	box-shadow: 0 0 3px var(--color-box-shadow);
 	border-width: 0;
 	border-radius: var(--border-radius-large);

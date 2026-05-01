@@ -770,9 +770,6 @@ body {
 	white-space: pre-wrap;
 
 	/* Adds a hyphen where the word breaks, if supported (No Blink) */
-	-ms-hyphens: auto;
-	-moz-hyphens: auto;
-	-webkit-hyphens: auto;
 	hyphens: auto;
 }
 
@@ -872,7 +869,6 @@ body {
 }
 .cool-annotation-img > .avatar-img {
 	display: block;
-	-moz-box-sizing: border-box;
 	box-sizing: border-box;
 	width: var(--default-width); /* Width of new image */
 	height: var(--default-height); /* Height of new image */
@@ -1469,13 +1465,10 @@ body {
 }
 
 .prevent-select {
-	-webkit-user-select: none;
-	-ms-user-select: none;
 	user-select: none;
 }
 
 [contenteditable] { /* in old Safari, omitting this prevents editing */
-	-webkit-user-select: text;
 	user-select: text;
 }
 

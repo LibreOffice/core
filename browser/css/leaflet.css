@@ -28,8 +28,6 @@
 .leaflet-tile,
 .leaflet-marker-icon,
 .leaflet-marker-shadow {
-	-webkit-user-select: none;
-	-moz-user-select: none;
 	user-select: none;
 	-webkit-user-drag: none;
 }
@@ -68,7 +66,6 @@
 .leaflet-zoom-box {
 	width: 0;
 	height: 0;
-	-moz-box-sizing: border-box;
 	box-sizing: border-box;
 	z-index: 8;
 	/* visual tweaks */
@@ -156,9 +153,6 @@
 }
 .leaflet-fade-anim .leaflet-popup {
 	opacity: 0;
-	-webkit-transition: opacity 0.2s linear;
-	-moz-transition: opacity 0.2s linear;
-	-o-transition: opacity 0.2s linear;
 	transition: opacity 0.2s linear;
 }
 .leaflet-fade-anim .leaflet-map-pane .leaflet-popup {
@@ -181,7 +175,6 @@
 .leaflet-dragging .leaflet-container,
 .leaflet-dragging .leaflet-interactive {
 	cursor: move;
-	cursor: -webkit-grabbing;
 	cursor: -moz-grabbing;
 }
 
@@ -309,10 +302,6 @@
 /* View / Edit mode control */
 .leaflet-control-editviewswitch {
 	-webkit-touch-callout: none;
-	-webkit-user-select: none;
-	-khtml-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
 	user-select: none;
 }
 
@@ -377,7 +366,6 @@ a.leaflet-control-buttons:hover:first-child {
 	font-size: 0.6875rem;
 	white-space: nowrap;
 	overflow: hidden;
-	-moz-box-sizing: content-box;
 	box-sizing: content-box;
 	color: #000;
 	background: #fff;
@@ -444,18 +432,12 @@ a.leaflet-control-buttons:hover:first-child {
 	padding: 1px;
 
 	margin: -10px auto 0;
-
-	-webkit-transform: rotate(45deg);
-	-moz-transform: rotate(45deg);
-	-ms-transform: rotate(45deg);
-	-o-transform: rotate(45deg);
 	transform: rotate(45deg);
 }
 .leaflet-popup-content-wrapper,
 .leaflet-popup-tip {
 	background: var(--color-background-lighter);
 	color: var(--color-main-text);
-	-webkit-box-shadow: 0 0 2px 0 rgba(0,0,0,0.4);
 	box-shadow: 0 0 2px 0 rgba(0,0,0,0.4);
 }
 .leaflet-container a.leaflet-popup-close-button {
@@ -579,67 +561,19 @@ div.leaflet-cursor-container:hover > .leaflet-cursor-header {
 }
 
 .blinking-cursor {
-	-webkit-animation: 1s blink step-end 0s infinite;
-	-moz-animation: 1s blink step-end 0s infinite;
-	-ms-animation: 1s blink step-end 0s infinite;
-	-o-animation: 1s blink step-end 0s infinite;
 	animation: 1s blink step-end 0s infinite;
 }
 
 .blinking-cursor.blinking-suspended {
-	-webkit-animation: none;
-	-moz-animation: none;
-	-ms-animation: none;
-	-o-animation: none;
 	animation: none;
 }
 
 .blinking-cursor-hidden {
-	-webkit-animation: none !important;
-	-moz-animation: none !important;
-	-ms-animation: none !important;
-	-o-animation: none !important;
 	animation: none !important;
 	display: none !important;
 }
 
 @keyframes blink {
-	from, to {
-		background: var(--color-cursor-blink-background);
-	}
-	50% {
-		background: transparent;
-	}
-}
-
-@-moz-keyframes blink {
-	from, to {
-		background: var(--color-cursor-blink-background);
-	}
-	50% {
-		background: transparent;
-	}
-}
-
-@-webkit-keyframes blink {
-	from, to {
-		background: var(--color-cursor-blink-background);
-	}
-	50% {
-		background: transparent;
-	}
-}
-
-@-ms-keyframes blink {
-	from, to {
-		background: var(--color-cursor-blink-background);
-	}
-	50% {
-		background: transparent;
-	}
-}
-
-@-o-keyframes blink {
 	from, to {
 		background: var(--color-cursor-blink-background);
 	}
@@ -721,11 +655,7 @@ input.clipboard {
 	border: 1px solid;
 	border-color: #4422bf #5435c4;
 	border-radius: var(--border-radius);
-	background-image: -webkit-linear-gradient(top, #745dc6, #6549cc 70%, #5c3dcc);
-	background-image: -moz-linear-gradient(top, #745dc6, #6549cc 70%, #5c3dcc);
-	background-image: -o-linear-gradient(top, #745dc6, #6549cc 70%, #5c3dcc);
 	background-image: linear-gradient(to bottom, #745dc6, #6549cc 70%, #5c3dcc);
-	-webkit-box-shadow: inset 0 1px rgba(255, 255, 255, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);
 	box-shadow: inset 0 1px rgba(255, 255, 255, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
@@ -756,11 +686,7 @@ input.clipboard {
 	border: 1px solid;
 	border-color: #4422bf #5435c4;
 	border-radius: 10px;
-	background-image: -webkit-linear-gradient(top, #745dc6, #6549cc 70%, #5c3dcc);
-	background-image: -moz-linear-gradient(top, #745dc6, #6549cc 70%, #5c3dcc);
-	background-image: -o-linear-gradient(top, #745dc6, #6549cc 70%, #5c3dcc);
 	background-image: linear-gradient(to bottom, #745dc6, #6549cc 70%, #5c3dcc);
-	-webkit-box-shadow: inset 0 1px rgba(255, 255, 255, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);
 	box-shadow: inset 0 1px rgba(255, 255, 255, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 

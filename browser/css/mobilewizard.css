@@ -231,15 +231,10 @@ p.mobile-wizard.ui-combobox-text.selected {
 .ui-tabs-content > div[title='Layouts'] {
 	justify-content: center;
 	-ms-box-orient: horizontal !important;
-	display: -webkit-box;
-	display: -moz-box;
-	display: -ms-flexbox;
 	display: -moz-flex;
-	display: -webkit-flex;
 	display: flex;
 	align-self: center !important;
 	align-items: center !important;
-	-webkit-flex-wrap: wrap !important;
 	flex-wrap: wrap !important;
 	margin-top: 25px;
 }
@@ -324,11 +319,9 @@ p.mobile-wizard.ui-combobox-text.selected {
 	width: 42px;
 	padding: 1px;
 	background-color: #eeeeee;
-	-webkit-box-shadow: inset 0px 0px 0px 2px #fff;
 	box-shadow: inset 0px 0px 0px 2px #fff;
 }
 #mobile-wizard-content > #ScCellAppearancePropertyPanel + .ui-content.level-0.mobile-wizard .borderbutton.selected {
-	-webkit-box-shadow: inset 0px 0px 0px 2px #0867af !important;
 	box-shadow: inset 0px 0px 0px 2px #0867af !important;
 }
 .ui-header.mobile-wizard {
@@ -383,7 +376,6 @@ p.mobile-wizard.ui-combobox-text.selected {
 }
 
 .unotoolbutton.disabled img, .mobile-wizard-widebutton.disabled img {
-	-webkit-filter: grayscale(90%) brightness(120%);
 	filter: grayscale(90%) brightness(120%);
 	opacity: 0.75;
 }
@@ -409,10 +401,6 @@ p.mobile-wizard.ui-combobox-text.selected {
 	padding-left: 4%;
 }
 .sub-menu-arrow {
-	-webkit-transform: rotate(180deg);
-	-moz-transform: rotate(180deg);
-	-ms-transform: rotate(180deg);
-	-o-transform: rotate(180deg);
 	transform: rotate(180deg);
 	display: table-cell;
 	padding-left: 10px;
@@ -765,8 +753,7 @@ div#mobile-wizard-content input[type='number'] {
 }
 div#mobile-wizard-content .spinfieldcontainer {
 	height: 48px;
-	width: -moz-available;
-	width: -webkit-fill-available;
+	width: stretch;
 	margin: 0px 4% 8px !important;
 	border: 1px solid var(--color-border-dark);
 	background-color: var(--color-background-dark);
@@ -786,8 +773,6 @@ div#mobile-wizard-content .spinfieldcontainer .spinfieldimage.disabled {
 }
 #mobile-wizard #Bold, #mobile-wizard #Italic, #mobile-wizard #Underline, #mobile-wizard #Strikeout {
 	margin: 0;
-	-webkit-appearance: none;
-	-moz-appearance: none;
 	appearance: none;
 	padding: 24px 32px;
 	background-size: 24px !important;
@@ -795,8 +780,6 @@ div#mobile-wizard-content .spinfieldcontainer .spinfieldimage.disabled {
 #mobile-wizard #buttonbefore, #mobile-wizard #buttonafter, #mobile-wizard #buttonoptimal,
 #mobile-wizard #buttonparallel, #mobile-wizard #buttonnone, #mobile-wizard #buttonthrough,
 #mobile-wizard #bottom, #mobile-wizard #top, #mobile-wizard #standard {
-	-webkit-appearance: none;
-	-moz-appearance: none;
 	appearance: none;
 	padding: 4% !important;
 	margin: 0px !important;
@@ -851,8 +834,6 @@ div#mobile-wizard-content .spinfieldcontainer .spinfieldimage.disabled {
 	height: var(--btn-size);
 	margin: 10px 10px 10px auto !important;
 	float: right;
-	-webkit-appearance: none;
-	-moz-appearance: none;
 	-o-appearance: none;
 	appearance: none;
 	border-radius: var(--border-radius);
@@ -886,8 +867,6 @@ div#mobile-wizard-content .spinfieldcontainer .spinfieldimage.disabled {
 	width: var(--btn-size);
 	height: var(--btn-size);
 	margin: 10px 10px 10px auto !important;
-	-webkit-appearance: none;
-	-moz-appearance: none;
 	-o-appearance: none;
 	appearance: none;
 	border: 2px solid var(--color-border);
@@ -994,8 +973,7 @@ label[disabled] {
 }
 
 .combobox {
-	width: -moz-available !important;
-	width: -webkit-fill-available !important;
+	width: stretch !important;
 }
 
 .ui-edit.mobile-wizard,
@@ -1005,8 +983,7 @@ label[disabled] {
 	, textarea was also here assign but it was messing up with all textareas (annotations on desktop and mobile):
 	- added 93038: jsdialog: style dialogs; a5016d547c6242f6f9b28748b5724b0bc10cdb67
 	*/
-	width: -moz-available;
-	width: -webkit-fill-available;
+	width: stretch;
 	margin: 10px 5% !important;
 }
 
@@ -1050,14 +1027,13 @@ label[disabled] {
 	padding: 5px 10px 10px !important;
 	display: table !important;
 	width: 100% !important;
-	width: -webkit-fill-available !important;
-	width: -moz-available !important;
+	width: stretch !important;
 }
 
 #mobile-wizard .ui-header[id^='comment'] {
 	padding: 5px 10px 10px !important;
 	display: table;
-	width: -moz-available !important;
+	width: stretch !important;
 	box-sizing: border-box !important;
 }
 

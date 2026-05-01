@@ -4,7 +4,6 @@
 html[dir='rtl'] .w2ui-icon.closemobile,
 html[dir='rtl'] #toolbar-hamburger.menuwizard-opened,
 html[dir='rtl'] .mobile-wizard-back {
-	-webkit-transform: scaleX(-1);
 	transform: scaleX(-1);
 }
 html[dir='rtl'] .sub-menu-arrow {
@@ -141,9 +140,7 @@ html[dir='rtl'] .sub-menu-arrow {
 }
 
 textarea.cool-annotation-textarea {
-	min-width: -moz-available !important;
-	min-width: -webkit-fill-available !important;
-	min-width: fill-available !important;
+	min-width: stretch !important;
 }
 
 /* Related to toolbar.css */
@@ -231,10 +228,6 @@ textarea.cool-annotation-textarea {
 .ui-scroll-right {
 	display: block !important;
 	right: 0;
-	-webkit-transform: rotate(180deg);
-	-moz-transform: rotate(180deg);
-	-ms-transform: rotate(180deg);
-	-o-transform: rotate(180deg);
 	transform: rotate(180deg);
 }
 .w2ui-icon.equal, .w2ui-icon.autosum {width: 38px !important;}
@@ -245,7 +238,6 @@ textarea.cool-annotation-textarea {
 	box-shadow: none;
 }
 #toolbar-up .checked .w2ui-tb-image, #toolbar-up .w2ui-tb-image:hover, #toolbar-up .w2ui-tb-image:focus, #toolbar-up .w2ui-tb-image:active, #toolbar-hamburger.menuwizard-closed:active {
-	-webkit-filter: drop-shadow(0px 0px 4px var(--color-primary-darker));
 	filter: drop-shadow(0px 0px 4px var(--color-primary-darker));
 }
 #toolbar-up .over {
@@ -253,7 +245,6 @@ textarea.cool-annotation-textarea {
 	box-shadow: none !important;
 }
 #toolbar-up .over:hover .w2ui-tb-image, #toolbar-up .over:active .w2ui-tb-image {
-	-webkit-filter: drop-shadow(0px 0px 4px var(--color-primary-darker));
 	filter: drop-shadow(0px 0px 4px var(--color-primary-darker));
 	border-color: transparent;
 }
