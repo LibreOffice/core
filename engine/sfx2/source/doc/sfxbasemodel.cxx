@@ -3295,8 +3295,16 @@ void SfxBaseModel::impl_store(  const   OUString&                   sURL        
         SfxGetpApp()->NotifyEvent( SfxEventHint( bSaveTo ? SfxEventHintId::SaveToDocFailed : SfxEventHintId::SaveAsDocFailed, GlobalEventConfig::GetEventName( bSaveTo ? GlobalEventId::SAVETODOCFAILED : GlobalEventId::SAVEASDOCFAILED),
                                                 m_pData->m_pObjectShell.get() ) );
 
-        if (SfxViewShell* pNotifyView = comphelper::COKit::isActive() ? SfxViewShell::Current() : nullptr)
-            pNotifyView->viewCallback(KIT_CALLBACK_EXPORT_FILE, "ERROR"_ostr);
+        // KIT_CALLBACK_EXPORT_FILE drives the user-visible "save / export
+        // failed" dialog in COOL.  Internal in-memory renders (URL
+        // "private:stream", e.g. doc_renderShapeSelection's drag-preview
+        // SVG) reuse the same storeTo plumbing; their failures must not
+        // surface to the end user.
+        if (!sURL.startsWith("private:stream"))
+        {
+            if (SfxViewShell* pNotifyView = comphelper::COKit::isActive() ? SfxViewShell::Current() : nullptr)
+                pNotifyView->viewCallback(KIT_CALLBACK_EXPORT_FILE, "ERROR"_ostr);
+        }
 
         std::stringstream aErrCode;
         aErrCode << nErrCode;

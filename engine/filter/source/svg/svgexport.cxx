@@ -26,6 +26,7 @@
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/animations/XAnimationNodeSupplier.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
+#include <com/sun/star/document/XEmbeddedObjectSupplier2.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/XMasterPageTarget.hpp>
 #include <com/sun/star/drawing/GraphicExportFilter.hpp>
@@ -833,27 +834,62 @@ bool SVGFilter::implExportWriterTextGraphic( const Reference< view::XSelectionSu
     Any selection = xSelectionSupplier->getSelection();
     uno::Reference<lang::XServiceInfo> xSelection;
     selection >>= xSelection;
-    if (!xSelection || !xSelection->supportsService(u"com.sun.star.text.TextGraphicObject"_ustr))
+    if (!xSelection)
         return true;
 
-    uno::Reference<beans::XPropertySet> xPropertySet(xSelection, uno::UNO_QUERY);
+    const bool bIsGraphic
+        = xSelection->supportsService(u"com.sun.star.text.TextGraphicObject"_ustr);
+    const bool bIsEmbedded
+        = !bIsGraphic
+          && xSelection->supportsService(u"com.sun.star.text.TextEmbeddedObject"_ustr);
+    if (!bIsGraphic && !bIsEmbedded)
+        return true;
 
     uno::Reference<graphic::XGraphic> xOriginalGraphic;
-    xPropertySet->getPropertyValue(u"Graphic"_ustr) >>= xOriginalGraphic;
+
+    if (bIsGraphic)
+    {
+        // Graphic frames (images) expose the source bitmap on the "Graphic"
+        // property.
+        uno::Reference<beans::XPropertySet> xGraphicPropertySet(xSelection, uno::UNO_QUERY);
+        xGraphicPropertySet->getPropertyValue(u"Graphic"_ustr) >>= xOriginalGraphic;
+    }
+    else
+    {
+        // Embedded objects (charts, formulas, embedded spreadsheets) expose
+        // their replacement metafile through XEmbeddedObjectSupplier2.
+        // Reading "Graphic" via XPropertySet on a non-graphic fly throws
+        // because that path is implemented only for SwGrfNode.
+        uno::Reference<document::XEmbeddedObjectSupplier2> xEmbedSupplier(
+            xSelection, uno::UNO_QUERY);
+        if (xEmbedSupplier.is())
+            xOriginalGraphic = xEmbedSupplier->getReplacementGraphic();
+    }
+
+    if (!xOriginalGraphic.is())
+        return false;
     const Graphic aOriginalGraphic(xOriginalGraphic);
 
-    uno::Reference<graphic::XGraphic> xTransformedGraphic;
-    xPropertySet->getPropertyValue(
-        mbIsPreview ? u"GraphicPreview"_ustr : u"TransformedGraphic"_ustr)
-            >>= xTransformedGraphic;
+    Graphic aGraphic = aOriginalGraphic;
+    uno::Reference<graphic::XGraphic> xGraphic = xOriginalGraphic;
 
-    if (!xTransformedGraphic.is())
-        return false;
-    const Graphic aTransformedGraphic(xTransformedGraphic);
-    bool bSameGraphic = aTransformedGraphic == aOriginalGraphic ||
-        aOriginalGraphic.GetChecksum() == aTransformedGraphic.GetChecksum();
-    const Graphic aGraphic = bSameGraphic ? aOriginalGraphic : aTransformedGraphic;
-    uno::Reference<graphic::XGraphic> xGraphic = bSameGraphic ? xOriginalGraphic : xTransformedGraphic;
+    if (bIsGraphic)
+    {
+        // TransformedGraphic / GraphicPreview are graphic-shape only.
+        uno::Reference<beans::XPropertySet> xGraphicPropertySet(xSelection, uno::UNO_QUERY);
+        uno::Reference<graphic::XGraphic> xTransformedGraphic;
+        xGraphicPropertySet->getPropertyValue(
+            mbIsPreview ? u"GraphicPreview"_ustr : u"TransformedGraphic"_ustr)
+                >>= xTransformedGraphic;
+
+        if (!xTransformedGraphic.is())
+            return false;
+        const Graphic aTransformedGraphic(xTransformedGraphic);
+        const bool bSameGraphic = aTransformedGraphic == aOriginalGraphic ||
+            aOriginalGraphic.GetChecksum() == aTransformedGraphic.GetChecksum();
+        aGraphic = bSameGraphic ? aOriginalGraphic : aTransformedGraphic;
+        xGraphic = bSameGraphic ? xOriginalGraphic : xTransformedGraphic;
+    }
 
     // Calculate size from Graphic
     Point aPos( OutputDevice::LogicToLogic(aGraphic.GetPrefMapMode().GetOrigin(), aGraphic.GetPrefMapMode(), MapMode(MapUnit::Map100thMM)) );

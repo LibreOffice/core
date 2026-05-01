@@ -390,16 +390,10 @@ class GraphicSelection {
 			// Workaround for tdf#123874. For some reason the handling of the
 			// shapeselectioncontent messages that we get back causes the WebKit process
 			// to crash on iOS.
-
-			// Note2: scroll to frame in writer would result an error:
-			//   svgexport.cxx:810: ...UnknownPropertyException message: "Background
-			var isFrame = extraInfo.type == 601 && !extraInfo.isWriterGraphic;
-
 			if (
 				!window.ThisIsTheiOSApp &&
 				this.extraInfo.isDraggable &&
-				!this.extraInfo.svg &&
-				!isFrame
+				!this.extraInfo.svg
 			) {
 				app.socket.sendMessage('rendershapeselection mimetype=image/svg+xml');
 			}
