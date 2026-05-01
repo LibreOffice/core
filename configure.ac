@@ -333,12 +333,14 @@ AC_ARG_WITH([poco-includes],
 AC_ARG_WITH([zstd-libs],
             AS_HELP_STRING([--with-zstd-libs=<path>],
                            [Path to the directory containing libzstd.a
-                            libraries. For Android, this has the same format as --with-lo-builddir]))
+                            libraries. For Android, this has the same format as --with-lo-builddir.
+                            Not needed or allowed for Windows, we always use the zstd built in engine.]))
 
 AC_ARG_WITH([zstd-includes],
             AS_HELP_STRING([--with-zstd-includes=<path>],
                            [Path to the "include" directory with the zstd
-                            headers. For Android, this has the same format as --with-lo-builddir]))
+                            headers. For Android, this has the same format as --with-lo-builddir.
+                            Not needed or allowed for Windows, we always use the zstd unpacked in engine.]))
 
 AC_ARG_WITH([poco-libs],
             AS_HELP_STRING([--with-poco-libs=<path>],
@@ -873,78 +875,75 @@ if test \( "$enable_iosapp" = "yes" -a `uname -s` = "Darwin" \) -o \( "$enable_m
        POCODEBUG=d
    fi
 
-   AC_MSG_CHECKING([for zstd include directory to build against])
-   if test -z "$with_zstd_includes"; then
-      AC_MSG_ERROR([You MUST use the --with-zstd-includes option when configuring the mobile or Windows app build tree.])
-   fi
-
-   if test -z "$with_zstd_libs"; then
-      AC_MSG_ERROR([You MUST use the --with-zstd-libs option when configuring the mobile or Windows app build tree.])
-   fi
-
-   ZSTDINCLUDE="$with_zstd_includes"
-   if test "$enable_androidapp" = "yes" ; then
-      if echo "$ZSTDINCLUDE" | grep -qs ':' ; then
-         ZSTDINCLUDE=`echo $with_zstd_includes | cut -d: -f1`
-         ZSTDINCLUDE_ARM64_V8A=`echo $with_zstd_includes | cut -d: -f2`
-         ZSTDINCLUDE_X86=`echo $with_zstd_includes | cut -d: -f3`
-         ZSTDINCLUDE_X86_64=`echo $with_zstd_includes | cut -d: -f4`
+   if test "$enable_windowsapp" = "yes"; then
+      # We know that zstd has been unpacked and built in engine; no need to look for it.
+      if test -n "$with_zstd_includes"; then
+         AC_MSG_ERROR([You MUST NOT use --with-zstd-includes when configuring the Windows app.])
       fi
-
-      if test -z "$ZSTDINCLUDE_ARM64_V8A" ; then
-         ZSTDINCLUDE_ARM64_V8A="$ZSTDINCLUDE"
+      if test -n "$with_zstd_libs"; then
+         AC_MSG_ERROR([You MUST NOT use --with-zstd-libs when configuring the Windows app.])
       fi
-      if test -z "$ZSTDINCLUDE_X86" ; then
-         ZSTDINCLUDE_X86="$ZSTDINCLUDE"
-      fi
-      if test -z "$ZSTDINCLUDE_X86_64" ; then
-         ZSTDINCLUDE_X86_64="$ZSTDINCLUDE"
-      fi
-   fi
-
-   # Sanity checks
-   CHK_FILE_VAR(ZSTDINCLUDE,zstd.h,Zstd include)
-   CHK_FILE_VAR(ZSTDINCLUDE,zstd.h,Zstd include,_ARM64_V8A)
-   CHK_FILE_VAR(ZSTDINCLUDE,zstd.h,Zstd include,_X86)
-   CHK_FILE_VAR(ZSTDINCLUDE,zstd.h,Zstd include,_X86_64)
-
-   if test "$enable_windowsapp" = "yes" ; then
-      ZSTDINCLUDE_WINDOWS=`cd "$ZSTDINCLUDE" && cmd.exe /c cd | tr '\\\\' '/' | tr -d '\r'`
-   fi
-
-   AC_MSG_CHECKING([for zstd lib directory to build against])
-
-   ZSTDLIB="$with_zstd_libs"
-   if test "$enable_androidapp" = "yes" ; then
-      if echo "$ZSTDLIB" | grep -qs ':' ; then
-         ZSTDLIB=`echo $with_zstd_libs | cut -d: -f1`
-         ZSTDLIB_ARM64_V8A=`echo $with_zstd_libs | cut -d: -f2`
-         ZSTDLIB_X86=`echo $with_zstd_libs | cut -d: -f3`
-         ZSTDLIB_X86_64=`echo $with_zstd_libs | cut -d: -f4`
-      fi
-
-      if test -z "$ZSTDLIB_ARM64_V8A" ; then
-         ZSTDLIB_ARM64_V8A="$ZSTDLIB"
-      fi
-      if test -z "$ZSTDLIB_X86" ; then
-         ZSTDLIB_X86="$ZSTDLIB"
-      fi
-      if test -z "$ZSTDLIB_X86_64" ; then
-         ZSTDLIB_X86_64="$ZSTDLIB"
-      fi
-   fi
-
-   if test "$enable_windowsapp"; then
-      CHK_FILE_VAR(ZSTDLIB,libzstd_static.lib,Zstd lib)
    else
+      AC_MSG_CHECKING([for zstd include directory to build against])
+      if test -z "$with_zstd_includes"; then
+         AC_MSG_ERROR([You MUST use the --with-zstd-includes option when configuring the mobile app build tree.])
+      fi
+
+      if test -z "$with_zstd_libs"; then
+         AC_MSG_ERROR([You MUST use the --with-zstd-libs option when configuring the mobile app build tree.])
+      fi
+      ZSTDINCLUDE="$with_zstd_includes"
+      if test "$enable_androidapp" = "yes" ; then
+         if echo "$ZSTDINCLUDE" | grep -qs ':' ; then
+            ZSTDINCLUDE=`echo $with_zstd_includes | cut -d: -f1`
+            ZSTDINCLUDE_ARM64_V8A=`echo $with_zstd_includes | cut -d: -f2`
+            ZSTDINCLUDE_X86=`echo $with_zstd_includes | cut -d: -f3`
+            ZSTDINCLUDE_X86_64=`echo $with_zstd_includes | cut -d: -f4`
+         fi
+
+         if test -z "$ZSTDINCLUDE_ARM64_V8A" ; then
+            ZSTDINCLUDE_ARM64_V8A="$ZSTDINCLUDE"
+         fi
+         if test -z "$ZSTDINCLUDE_X86" ; then
+            ZSTDINCLUDE_X86="$ZSTDINCLUDE"
+         fi
+         if test -z "$ZSTDINCLUDE_X86_64" ; then
+            ZSTDINCLUDE_X86_64="$ZSTDINCLUDE"
+         fi
+      fi
+
+      # Sanity checks
+      CHK_FILE_VAR(ZSTDINCLUDE,zstd.h,Zstd include)
+      CHK_FILE_VAR(ZSTDINCLUDE,zstd.h,Zstd include,_ARM64_V8A)
+      CHK_FILE_VAR(ZSTDINCLUDE,zstd.h,Zstd include,_X86)
+      CHK_FILE_VAR(ZSTDINCLUDE,zstd.h,Zstd include,_X86_64)
+
+      AC_MSG_CHECKING([for zstd lib directory to build against])
+
+      ZSTDLIB="$with_zstd_libs"
+      if test "$enable_androidapp" = "yes" ; then
+         if echo "$ZSTDLIB" | grep -qs ':' ; then
+            ZSTDLIB=`echo $with_zstd_libs | cut -d: -f1`
+            ZSTDLIB_ARM64_V8A=`echo $with_zstd_libs | cut -d: -f2`
+            ZSTDLIB_X86=`echo $with_zstd_libs | cut -d: -f3`
+            ZSTDLIB_X86_64=`echo $with_zstd_libs | cut -d: -f4`
+         fi
+
+         if test -z "$ZSTDLIB_ARM64_V8A" ; then
+            ZSTDLIB_ARM64_V8A="$ZSTDLIB"
+         fi
+         if test -z "$ZSTDLIB_X86" ; then
+            ZSTDLIB_X86="$ZSTDLIB"
+         fi
+         if test -z "$ZSTDLIB_X86_64" ; then
+            ZSTDLIB_X86_64="$ZSTDLIB"
+         fi
+      fi
+
       CHK_FILE_VAR(ZSTDLIB,libzstd.a,Zstd lib)
       CHK_FILE_VAR(ZSTDLIB,libzstd.a,Zstd lib,_ARM64_V8A)
       CHK_FILE_VAR(ZSTDLIB,libzstd.a,Zstd lib,_X86)
       CHK_FILE_VAR(ZSTDLIB,libzstd.a,Zstd lib,_X86_64)
-   fi
-
-   if test "$enable_windowsapp" = "yes" ; then
-     ZSTDLIB_WINDOWS=`cd "$ZSTDLIB" && cmd.exe /c cd | tr '\\\\' '/' | tr -d '\r'`
    fi
 fi
 
@@ -971,12 +970,10 @@ AC_SUBST(ZSTDINCLUDE)
 AC_SUBST(ZSTDINCLUDE_ARM64_V8A)
 AC_SUBST(ZSTDINCLUDE_X86)
 AC_SUBST(ZSTDINCLUDE_X86_64)
-AC_SUBST(ZSTDINCLUDE_WINDOWS)
 AC_SUBST(ZSTDLIB)
 AC_SUBST(ZSTDLIB_ARM64_V8A)
 AC_SUBST(ZSTDLIB_X86)
 AC_SUBST(ZSTDLIB_X86_64)
-AC_SUBST(ZSTDLIB_WINDOWS)
 AC_SUBST([CORE_VERSION_HASH])
 
 AC_DEFINE_UNQUOTED([CORE_VERSION_HASH],[["$CORE_VERSION_HASH"]],[CollaboraOffice core git hash if present])

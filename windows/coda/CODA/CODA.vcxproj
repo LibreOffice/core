@@ -94,7 +94,7 @@
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;POCO_STATIC;NOMINMAX;_CRT_SECURE_NO_WARNINGS;COOLWSD_LOGLEVEL="debug";APP_VENDOR="$(APP_VENDOR)";%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..;..\..\..;..\..\..\common;..\..\..\net;..\..\..\kit;..\..\..\wsd;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..;..\..\..;..\..\..\common;..\..\..\net;..\..\..\kit;..\..\..\wsd;..\..\..\engine\workdir\UnpackedTarball\zstd\lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc11</LanguageStandard_C>
@@ -104,7 +104,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>libpng.lib;zlib.lib;libzstd_static.lib;ws2_32.lib;iphlpapi.lib;crypt32.lib;shlwapi.lib;secur32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libpng.lib;zlib.lib;..\..\..\engine\workdir\LinkTarget\StaticLibrary\zstd.lib;ws2_32.lib;iphlpapi.lib;crypt32.lib;shlwapi.lib;secur32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
@@ -112,7 +112,7 @@
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;POCO_STATIC;NOMINMAX;_CRT_SECURE_NO_WARNINGS;COOLWSD_LOGLEVEL="debug";APP_VENDOR="$(APP_VENDOR)";%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..;..\..\..;..\..\..\common;..\..\..\net;..\..\..\kit;..\..\..\wsd;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..;..\..\..;..\..\..\common;..\..\..\net;..\..\..\kit;..\..\..\wsd;..\..\..\engine\workdir\UnpackedTarball\zstd\lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc11</LanguageStandard_C>
@@ -121,7 +121,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>libpng.lib;zlib.lib;libzstd_static.lib;ws2_32.lib;iphlpapi.lib;crypt32.lib;shlwapi.lib;secur32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libpng.lib;zlib.lib;..\..\..\engine\workdir\LinkTarget\StaticLibrary\zstd.lib;ws2_32.lib;iphlpapi.lib;crypt32.lib;shlwapi.lib;secur32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -131,7 +131,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;POCO_STATIC;NOMINMAX;_CRT_SECURE_NO_WARNINGS;COOLWSD_LOGLEVEL="warning";APP_VENDOR="$(APP_VENDOR)";%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..;..\..\..;..\..\..\common;..\..\..\net;..\..\..\kit;..\..\..\wsd;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..;..\..\..;..\..\..\common;..\..\..\net;..\..\..\kit;..\..\..\wsd;..\..\..\engine\workdir\UnpackedTarball\zstd\lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc11</LanguageStandard_C>
@@ -141,7 +141,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>libpng.lib;zlib.lib;libzstd_static.lib;ws2_32.lib;iphlpapi.lib;crypt32.lib;shlwapi.lib;secur32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libpng.lib;zlib.lib;..\..\..\engine\workdir\LinkTarget\StaticLibrary\zstd.lib;ws2_32.lib;iphlpapi.lib;crypt32.lib;shlwapi.lib;secur32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
@@ -151,7 +151,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;POCO_STATIC;NOMINMAX;_CRT_SECURE_NO_WARNINGS;COOLWSD_LOGLEVEL="warning";APP_VENDOR="$(APP_VENDOR)";%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..;..\..\..;..\..\..\common;..\..\..\net;..\..\..\kit;..\..\..\wsd;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..;..\..\..;..\..\..\common;..\..\..\net;..\..\..\kit;..\..\..\wsd;..\..\..\engine\workdir\UnpackedTarball\zstd\lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc11</LanguageStandard_C>
@@ -160,7 +160,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>libpng.lib;zlib.lib;libzstd_static.lib;ws2_32.lib;iphlpapi.lib;crypt32.lib;shlwapi.lib;secur32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libpng.lib;zlib.lib;..\..\..\engine\workdir\LinkTarget\StaticLibrary\zstd.lib;ws2_32.lib;iphlpapi.lib;crypt32.lib;shlwapi.lib;secur32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup>
