@@ -1242,14 +1242,17 @@ namespace vcl
     void EndAllDialogs( vcl::Window const * pParent )
     {
         ImplSVData* pSVData = ImplGetSVData();
-        auto& rExecuteDialogs = pSVData->mpWinData->mpExecuteDialogs;
+        // take a copy of vector because it might be modified while we iterate over it
+        auto aExecuteDialogs = pSVData->mpWinData->mpExecuteDialogs;
 
-        for (auto it = rExecuteDialogs.rbegin(); it != rExecuteDialogs.rend(); ++it)
+        for (auto it = aExecuteDialogs.rbegin(); it != aExecuteDialogs.rend(); ++it)
         {
-            if (!pParent || pParent->IsWindowOrChild(*it, true))
+            auto pDialog = *it;
+            if ((!pParent || pParent->IsWindowOrChild(pDialog, true)) && !pDialog->isDisposed())
             {
-                (*it)->EndDialog();
-                (*it)->PostUserEvent(Link<void*, void>());
+                pDialog->EndDialog();
+                if (!pDialog->isDisposed())
+                    pDialog->PostUserEvent(Link<void*, void>());
             }
         }
     }
