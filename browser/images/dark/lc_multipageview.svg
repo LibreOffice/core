@@ -1,11 +1,10 @@
-<svg viewBox="0 0 27 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-<g clip-path="url(#clip0_6_142)">
-<path d="M0 0V16H13V5L8 0H0ZM1 1H7V6H12V15H1V1Z" fill="#FAFAFA"/>
-<path d="M14 0V16H27V5L22 0H14ZM15 1H21V6H26V15H15V1Z" fill="#FAFAFA"/>
-</g>
-<defs>
-<clipPath id="clip0_6_142">
-<rect width="27" height="16" fill="white"/>
-</clipPath>
-</defs>
+<svg viewBox="0 0 28 16" xmlns="http://www.w3.org/2000/svg">
+  <path
+     d="m 17,0 c -1.554,0 -2,0.446 -2,1 v 14 c 0,0.554 0.446,1 1,1 h 11 c 0.554,0 1,-0.446 1,-1 V 8.9 5.25 5.0410156 C 28,4.6 28.1,4.615 27.4,4 L 24.087891,0.73632812 C 23.378366,0 23.377722,0 22.994141,0 H 22.662109 22 16 Z m -1,1 h 6 v 4 c 0,0.554 0.446,1 1,1 h 4 v 9 H 16 Z m 7,0 4,4 h -4 z"
+     style="fill:#fafafa"
+     id="path1" />
+  <path
+     d="M 2,0 C 0.446,0 0,0.446 0,1 v 14 c 0,0.554 0.446,1 1,1 h 11 c 0.554,0 1,-0.446 1,-1 V 8.9 5.25 5.0410156 C 13,4.6 13.1,4.615 12.4,4 L 9.087891,0.73632812 C 8.378366,0 8.377722,0 7.994141,0 H 7.662109 7 1 Z M 1,1 h 6 v 4 c 0,0.554 0.446,1 1,1 h 4 v 9 H 1 Z m 7,0 4,4 H 8 Z"
+     style="fill:#fafafa"
+     id="path1-6" />
 </svg>
