@@ -139,15 +139,20 @@ window.L.Map.StateChangeHandler = window.L.Handler.extend({
 			app.impress.hasOverviewPage = e.state === "true";
 		}
 
-		$('#document-container').removeClass('slide-master-mode');
-		$('#document-container').addClass('slide-normal-mode');
+		const docContainer = document.getElementById('document-container');
+		if (!docContainer) {
+			window.app.console.warn('HTML element with ID document-container doesn\'t exist.');
+			return;
+		}
+		docContainer.classList.remove('slide-master-mode');
+		docContainer.classList.add('slide-normal-mode');
 		if (slideMasterPageItem) {
-			$('#document-container').removeClass('slide-normal-mode');
-			$('#document-container').addClass('slide-master-mode');
+			docContainer.classList.remove('slide-normal-mode');
+			docContainer.classList.add('slide-master-mode');
 		}
 		if (!slideMasterPageItem || slideMasterPageItem == 'false' || slideMasterPageItem == 'undefined') {
-			$('#document-container').removeClass('slide-master-mode');
-			$('#document-container').addClass('slide-normal-mode');
+			docContainer.classList.remove('slide-master-mode');
+			docContainer.classList.add('slide-normal-mode');
 		}
 	},
 
