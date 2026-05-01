@@ -100,7 +100,8 @@ class MobileTopBar extends JSDialog.Toolbar {
 				this.showItem(id, false);
 			});
 			this.showItem('comment_wizard', true);
-			if ($('#mobile-edit-button').is(':hidden')) {
+			const mobileEditButton = document.getElementById('mobile-edit-button');
+			if (!mobileEditButton || getComputedStyle(mobileEditButton).display === 'none') {
 				this.showItem('permissionmode-container', true);
 			}
 		}
