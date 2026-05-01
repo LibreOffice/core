@@ -171,7 +171,7 @@
 	margin-top: 3px;
 }
 #toolbar-down #zoom {
-	min-width: 43px;
+	min-width: 56px;
 }
 #toolbar-down #zoom .unolabel::after {
 	content: '%';
