@@ -107,6 +107,18 @@ window.L.WriterTileLayer = window.L.CanvasTileLayer.extend({
 		}
 	},
 
+	_setNewSize: function (/*cool.SimplePoint*/ size) {
+		app.activeDocument.fileSize = size;
+		app.activeDocument.activeLayout.viewSize = app.activeDocument.fileSize.clone();
+		this._updateMaxBounds(true);
+	},
+
+	_releaseReconnectFileSize: function () {
+		this._setNewSize(this._reconnectFileSize);
+		this._reconnectFileSize = null;
+		this._reconnectFileSizeTimer = null;
+	},
+
 	_onStatusMsg: function (textMsg) {
 		const statusJSON = JSON.parse(textMsg.replace('status:', '').replace('statusupdate:', ''));
 
@@ -128,6 +140,19 @@ window.L.WriterTileLayer = window.L.CanvasTileLayer.extend({
 			this._map.setPermission('readonly');
 
 		var sizeChanged = statusJSON.width !== app.activeDocument.fileSize.x || statusJSON.height !== app.activeDocument.fileSize.y;
+		if (sizeChanged && (app.socket._reconnecting || this._reconnectFileSize)) {
+			if (this._reconnectFileSizeTimer)
+				clearTimeout(this._reconnectFileSizeTimer);
+			if (statusJSON.width >= app.activeDocument.fileSize.x && statusJSON.height >= app.activeDocument.fileSize.y) {
+				this._reconnectFileSize = null;
+			} else {
+				// Suppress shrinking sizes during reconnection incremental reload
+				// The timer avoids this supression being permanent
+				sizeChanged = false;
+				this._reconnectFileSize = new cool.SimplePoint(statusJSON.width, statusJSON.height);
+				this._reconnectFileSizeTimer = setTimeout(this._releaseReconnectFileSize.bind(this), 5000);
+			}
+		}
 
 		if (statusJSON.viewid !== undefined) {
 			this._viewId = statusJSON.viewid;
@@ -147,11 +172,8 @@ window.L.WriterTileLayer = window.L.CanvasTileLayer.extend({
 		console.assert(this._viewId >= 0, 'Incorrect viewId received: ' + this._viewId);
 
 		if (sizeChanged) {
-			app.activeDocument.fileSize = new cool.SimplePoint(statusJSON.width, statusJSON.height);
-			app.activeDocument.activeLayout.viewSize = app.activeDocument.fileSize.clone();
-
 			this._docType = statusJSON.type;
-			this._updateMaxBounds(true);
+			this._setNewSize(new cool.SimplePoint(statusJSON.width, statusJSON.height));
 		}
 
 		this._documentInfo = textMsg;
@@ -181,7 +203,7 @@ window.L.WriterTileLayer = window.L.CanvasTileLayer.extend({
 		});
 		TileManager.resetPreFetching(true);
 
-		if (this._savedCursorPos && this._savedCursorPos.center[0] <= app.activeDocument.fileSize.x && this._savedCursorPos.center[1] <= app.activeDocument.fileSize.y) {
+		if (this._savedCursorPos && this._savedCursorPos.center[0] <= statusJSON.width && this._savedCursorPos.center[1] <= statusJSON.height) {
 			this._postMouseEvent('buttondown', this._savedCursorPos.center[0], this._savedCursorPos.center[1], 1, 1, 0);
 			this._postMouseEvent('buttonup', this._savedCursorPos.center[0], this._savedCursorPos.center[1], 1, 1, 0);
 			this._savedCursorPos = null;
