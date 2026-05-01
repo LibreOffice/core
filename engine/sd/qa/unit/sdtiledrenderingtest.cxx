@@ -11,6 +11,7 @@
 
 #include <comphelper/kit.hxx>
 #include <comphelper/string.hxx>
+#include <desktop/kitclipboard.hxx>
 #include <sfx2/kit/helper.hxx>
 #include <COKit/COKitEnums.h>
 #include <o3tl/string_view.hxx>
@@ -46,6 +47,8 @@ void SdTiledRenderingTest::setUp()
 
 void SdTiledRenderingTest::tearDown()
 {
+    clearAllKitClipboardsContents();
+
     if (m_pXmlBuffer)
         xmlBufferFree(m_pXmlBuffer);
 

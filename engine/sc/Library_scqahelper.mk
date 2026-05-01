@@ -51,6 +51,7 @@ $(eval $(call gb_Library_use_libraries,scqahelper,\
 	sal \
 	sc \
 	sfx \
+	sofficeapp \
 	sot \
 	subsequenttest \
 	svl \

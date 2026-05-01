@@ -45,6 +45,7 @@ $(eval $(call gb_Library_use_libraries,sdqahelper,\
 	svxcore \
 	sd \
 	sfx \
+	sofficeapp \
 	tl \
 	utl \
 	vcl \

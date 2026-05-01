@@ -15,6 +15,7 @@
 #include <sal/log.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <desktop/kitclipboard.hxx>
 
 using namespace css;
 using namespace css::uno;
@@ -71,6 +72,12 @@ uno::Reference<uno::XInterface>
     SAL_CALL KitClipboardFactory::createInstanceWithArguments(const Sequence<Any>& /* rArgs */)
 {
     return { static_cast<cppu::OWeakObject*>(getClipboardForCurView().get()) };
+}
+
+void clearAllKitClipboardsContents()
+{
+    for (const auto & pair : *getClipboards().get())
+        pair.second->setContents(nullptr, nullptr);
 }
 
 KitClipboard::KitClipboard()
