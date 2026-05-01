@@ -14,17 +14,23 @@
 
 /* global $ _ */
 window.L.Control.DocumentNameInput = window.L.Control.extend({
-
 	onAdd: function (map) {
 		this.map = map;
 		if (window.mode.isSmallScreenDevice())
 			this.progressBar = document.getElementById('mobile-progress-bar');
 		else
-			this.progressBar = document.getElementById('document-name-input-progress-bar');
+			this.progressBar = document.getElementById(
+				'document-name-input-progress-bar',
+			);
+
+		this.nameInput = document.getElementById('document-name-input');
+		this.loadingBar = document.getElementById(
+			'document-name-input-loading-bar',
+		);
+		this.titlebar = document.getElementById('document-titlebar');
 
 		var label = document.querySelector('label[for="document-name-input"]');
-		if (label)
-			label.textContent = _('Document name');
+		if (label) label.textContent = _('Document name');
 
 		map.on('doclayerinit', this.onDocLayerInit, this);
 		map.on('wopiprops', this.onWopiProps, this);
@@ -63,9 +69,9 @@ window.L.Control.DocumentNameInput = window.L.Control.extend({
 			if (this.map['wopi'].UserCanRename && this.map['wopi'].SupportsRename) {
 				if (value.lastIndexOf('.') > 0) {
 					var fname = this.map['wopi'].BaseFileName;
-					var ext = fname.substr(fname.lastIndexOf('.')+1, fname.length);
+					var ext = fname.substr(fname.lastIndexOf('.') + 1, fname.length);
 					// check format conversion
-					if (ext != value.substr(value.lastIndexOf('.')+1, value.length)) {
+					if (ext != value.substr(value.lastIndexOf('.') + 1, value.length)) {
 						this.map.saveAs(value);
 					} else {
 						// same extension, just rename the file
@@ -73,8 +79,7 @@ window.L.Control.DocumentNameInput = window.L.Control.extend({
 						value = value.substr(0, value.lastIndexOf('.'));
 						this.map.renameFile(value);
 					}
-				}
-				else {
+				} else {
 					// when user doesn't specify any extension
 					this.map.renameFile(value);
 				}
@@ -86,92 +91,104 @@ window.L.Control.DocumentNameInput = window.L.Control.extend({
 		this.map._onGotFocus();
 	},
 
-	documentNameCancel: function(blur) {
-		if (this._renaming)
-			return;
+	documentNameCancel: function (blur) {
+		if (this._renaming) return;
 
-		$('#document-name-input').val(this.map['wopi'].BreadcrumbDocName);
+		this.nameInput.value = this.map['wopi'].BreadcrumbDocName;
 		if (blur !== true) {
 			this.map._onGotFocus();
 		}
 	},
 
-	_canEditDocumentName: function() {
-		return !this.map['wopi'].UserCanNotWriteRelative && !this.map.isReadOnlyMode();
+	_canEditDocumentName: function () {
+		return (
+			!this.map['wopi'].UserCanNotWriteRelative && !this.map.isReadOnlyMode()
+		);
 	},
 
 	// Put the name field back to the state the current permissions allow, after a
 	// progress bar or a loading animation took it over.
-	restoreDocumentNameInput : function() {
-		if (this._canEditDocumentName())
-			this.enableDocumentNameInput();
-		else
-			this.disableDocumentNameInput();
+	restoreDocumentNameInput: function () {
+		if (this._canEditDocumentName()) this.enableDocumentNameInput();
+		else this.disableDocumentNameInput();
 	},
 
-	disableDocumentNameInput : function() {
-		$('#document-name-input').prop('disabled', true);
-		$('#document-name-input').removeClass('editable');
-		$('#document-name-input').off('keypress', this.onDocumentNameKeyPress);
+	disableDocumentNameInput: function () {
+		this.nameInput.disabled = true;
+		this.nameInput.classList.remove('editable');
+		this.nameInput.removeEventListener('keypress', this.onDocumentNameKeyPress);
 	},
 
-	enableDocumentNameInput : function() {
-		$('#document-name-input').prop('disabled', false);
-		$('#document-name-input').addClass('editable');
-		$('#document-name-input').off('keypress', this.onDocumentNameKeyPress).on('keypress', this.onDocumentNameKeyPress.bind(this));
-		$('#document-name-input').off('focus', this.onDocumentNameFocus).on('focus', this.onDocumentNameFocus.bind(this));
-		$('#document-name-input').off('blur', this.documentNameCancel).on('blur', this.documentNameCancel.bind(this, true));
+	enableDocumentNameInput: function () {
+		this.nameInput.disabled = false;
+		this.nameInput.classList.add('editable');
+		this.nameInput.removeEventListener('keypress', this.onDocumentNameKeyPress);
+		this.nameInput.addEventListener(
+			'keypress',
+			this.onDocumentNameKeyPress.bind(this),
+		);
+		this.nameInput.removeEventListener('focus', this.onDocumentNameFocus);
+		this.nameInput.addEventListener(
+			'focus',
+			this.onDocumentNameFocus.bind(this),
+		);
+		this.nameInput.removeEventListener('blur', this.documentNameCancel);
+		this.nameInput.addEventListener('blur', this.documentNameCancel.bind(this, true));
 	},
 
-	onDocumentNameKeyPress: function(e) {
-		if (e.keyCode === 13) { // Enter key
-			var value = $('#document-name-input').val();
-			this.documentNameConfirm(value);
-		} else if (e.keyCode === 27) { // Escape key
+	onDocumentNameKeyPress: function (e) {
+		if (e.keyCode === 13) {
+			// Enter key
+			this.documentNameConfirm(this.nameInput.value);
+		} else if (e.keyCode === 27) {
+			// Escape key
 			this.documentNameCancel();
 		}
 	},
 
-	onDocumentNameFocus: function() {
+	onDocumentNameFocus: function () {
 		// hide the caret in the main document
 		delete this._renaming;
 		this.map._onLostFocus();
 		var name = this.map['wopi'].BaseFileName;
 		var extn = name.lastIndexOf('.');
-		if (extn < 0)
-			extn = name.length;
-		$('#document-name-input').val(name);
-		$('#document-name-input')[0].setSelectionRange(0, extn);
+		if (extn < 0) extn = name.length;
+		this.nameInput.value = name;
+		this.nameInput.setSelectionRange(0, extn);
 	},
 
-	onDocLayerInit: function() {
-
-		var el = $('#document-name-input');
+	onDocLayerInit: function () {
+		var el = this.nameInput;
 
 		// WOPISrc's path segment is an opaque file identifier on a real WOPI
 		// host, not a folder path, so showing it as a "Path" tooltip would just
 		// display technical noise to the user; only the filename is meaningful.
-		el.prop('title', this.map['wopi'].BaseFileName);
+		el.title = this.map['wopi'].BaseFileName;
 
 		// FIXME: Android app would display a temporary filename, not the actual filename
 		if (window.ThisIsTheAndroidApp) {
-			el.hide();
+			el.style.display = 'none';
 		} else {
-			el.show();
+			el.style.display = '';
 		}
 
 		if (window.ThisIsAMobileApp) {
 			// We can now set the document name in the menu bar
-			el.prop('disabled', false);
-			el.removeClass('editable');
-			el.focus(function() { $(this).blur(); });
+			el.disabled = false;
+			el.classList.remove('editable');
+			el.addEventListener('focus', function () {
+				this.blur();
+			});
 			// Call decodeURIComponent twice: Reverse both our encoding and the encoding of
 			// the name in the file system.
-			el.val(window.ThisIsTheEmscriptenApp ? this.map['wopi'].BaseFileName : decodeURIComponent(decodeURIComponent(this.map.options.doc.replace(/.*\//, '')))
-							  // To conveniently see the initial visualViewport scale and size, un-comment the following line.
-							  // + ' (' + window.visualViewport.scale + '*' + window.visualViewport.width + 'x' + window.visualViewport.height + ')'
-							  // TODO: Yes, it would be better to see it change as you rotate the device or invoke Split View.
-							 );
+			el.value = window.ThisIsTheEmscriptenApp
+				? this.map['wopi'].BaseFileName
+				: decodeURIComponent(
+						decodeURIComponent(this.map.options.doc.replace(/.*\//, '')),
+					);
+			// To conveniently see the initial visualViewport scale and size, un-comment the following line.
+			// + ' (' + window.visualViewport.scale + '*' + window.visualViewport.width + 'x' + window.visualViewport.height + ')'
+			// TODO: Yes, it would be better to see it change as you rotate the device or invoke Split View.
 		}
 
 		if (this.map.isReadOnlyMode()) {
@@ -179,54 +196,59 @@ window.L.Control.DocumentNameInput = window.L.Control.extend({
 		}
 	},
 
-	onWopiProps: function(e) {
+	onWopiProps: function (e) {
 		if (e.BaseFileName !== null) {
 			// set the document name into the name field
-			$('#document-name-input').val(e.BreadcrumbDocName !== undefined ? e.BreadcrumbDocName : e.BaseFileName);
-			var input = window.L.DomUtil.get('document-name-input');
+			var input = this.nameInput;
+			input.value =
+				e.BreadcrumbDocName !== undefined
+					? e.BreadcrumbDocName
+					: e.BaseFileName;
 			input.setAttribute('data-cooltip', input.value);
 			window.L.control.attachTooltipEventListener(input, this.map);
 		}
 
 		// A rename ends with the renamed document loading, and that load brings these
 		// properties along, so the loading bar has nothing left to report.
-		$('#document-name-input-loading-bar').css('display', 'none');
+		this.loadingBar.style.display = 'none';
 
 		this.restoreDocumentNameInput();
 	},
 
-	showProgressBar: function() {
+	showProgressBar: function () {
 		this.disableDocumentNameInput();
 		this.progressBar.style.display = 'block';
 	},
 
-	hideProgressBar: function() {
+	hideProgressBar: function () {
 		this.restoreDocumentNameInput();
 		this.progressBar.style.display = 'none';
 	},
 
-	setProgressBarValue: function(value) {
+	setProgressBarValue: function (value) {
 		this.progressBar.value = value;
 	},
 
-	showLoadingAnimation : function() {
+	showLoadingAnimation: function () {
 		this.disableDocumentNameInput();
-		$('#document-name-input-loading-bar').css('display', 'block');
+		this.loadingBar.style.display = 'block';
 	},
 
-	hideLoadingAnimation : function() {
+	hideLoadingAnimation: function () {
 		this.restoreDocumentNameInput();
-		$('#document-name-input-loading-bar').css('display', 'none');
+		this.loadingBar.style.display = 'none';
 	},
 
-	_getMaxAvailableWidth: function() {
-		var x = $('#document-titlebar').prop('offsetLeft') + $('.document-title').prop('offsetLeft') + $('#document-name-input').prop('offsetLeft');
+	_getMaxAvailableWidth: function () {
+		var x =
+			this.titlebar.offsetLeft +
+			$('.document-title').prop('offsetLeft') +
+			this.nameInput.offsetLeft;
 		var containerWidth = parseInt($('.main-nav').css('width'));
 		var maxWidth = Math.max(containerWidth - x - 30, 0);
 		maxWidth = Math.max(maxWidth, 300); // input field at least 300px
 		return maxWidth;
 	},
-
 });
 
 window.L.control.documentNameInput = function () {
