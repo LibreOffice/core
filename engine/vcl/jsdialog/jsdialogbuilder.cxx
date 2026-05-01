@@ -926,7 +926,7 @@ std::unique_ptr<weld::Calendar> JSInstanceBuilder::weld_calendar(const OUString&
     return pWeldWidget;
 }
 
-weld::MessageDialog* JSInstanceBuilder::CreateMessageDialog(weld::Widget* pParent,
+std::unique_ptr<weld::MessageDialog> JSInstanceBuilder::CreateMessageDialog(weld::Widget* pParent,
                                                             VclMessageType eMessageType,
                                                             VclButtonsType eButtonType,
                                                             const OUString& rPrimaryMessage,
@@ -954,12 +954,12 @@ weld::MessageDialog* JSInstanceBuilder::CreateMessageDialog(weld::Widget* pParen
         InsertWindowToMap(sWindowId);
         xMessageDialog->SetKitTunnelingState(false);
 
-        return new JSMessageDialog(xMessageDialog, nullptr, true);
+        return std::make_unique<JSMessageDialog>(xMessageDialog, nullptr, true);
     }
     else
         SAL_WARN("vcl", "No notifier in JSInstanceBuilder::CreateMessageDialog");
 
-    return new JSMessageDialog(xMessageDialog, nullptr, true);
+    return std::make_unique<JSMessageDialog>(xMessageDialog, nullptr, true);
 }
 
 JSDialog::JSDialog(JSDialogSender* pSender, ::Dialog* pDialog, SalInstanceBuilder* pBuilder,

@@ -1312,12 +1312,12 @@ IMPL_STATIC_LINK( SvxScriptErrorDialog, ShowDialog, void*, p, void )
     if ( message.isEmpty() )
         message = CuiResId( RID_CUISTR_ERROR_TITLE );
 
-    std::shared_ptr<weld::MessageDialog> xBox;
-    xBox.reset(Application::CreateMessageDialog(
+    std::shared_ptr<weld::MessageDialog> xBox
+        = Application::CreateMessageDialog(
             xData->pParent,
             VclMessageType::Warning,
             VclButtonsType::Ok,
-            message));
+            message);
 
     xBox->set_title(CuiResId(RID_CUISTR_ERROR_TITLE));
 

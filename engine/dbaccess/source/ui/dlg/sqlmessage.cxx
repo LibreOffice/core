@@ -552,7 +552,7 @@ void OSQLMessageBox::Construct(weld::Window* pParent, MessBoxStyle _nStyle, Mess
             break;
     }
 
-    m_xDialog.reset(Application::CreateMessageDialog(pParent, eMessageType, VclButtonsType::NONE, u""_ustr));
+    m_xDialog = Application::CreateMessageDialog(pParent, eMessageType, VclButtonsType::NONE, u""_ustr);
     m_xDialog->set_title(utl::ConfigManager::getProductName() + " Base");
 
     impl_fillMessages();

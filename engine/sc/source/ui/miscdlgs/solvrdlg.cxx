@@ -176,9 +176,9 @@ void ScSolverDlg::RaiseError( ScSolverErr eError )
             break;
     }
 
-    m_xMessageBox.reset(Application::CreateMessageDialog(m_xDialog.get(),
+    m_xMessageBox = Application::CreateMessageDialog(m_xDialog.get(),
                                                          VclMessageType::Warning, VclButtonsType::Ok,
-                                                         sMessage));
+                                                         sMessage);
     m_xMessageBox->runAsync(m_xMessageBox, [this](sal_Int32 /*nResult*/) {
         m_xEdTargetVal->grab_focus();
         m_xMessageBox.reset();

@@ -74,20 +74,20 @@ executeErrorDialog(
     switch (eClassification)
     {
         case task::InteractionClassification_ERROR:
-            xBox.reset(Application::CreateMessageDialog(pParent,
-                        VclMessageType::Error, VclButtonsType::NONE, aText.makeStringAndClear(), GetpApp()));
+            xBox = Application::CreateMessageDialog(pParent,
+                        VclMessageType::Error, VclButtonsType::NONE, aText.makeStringAndClear(), GetpApp());
             break;
         case task::InteractionClassification_WARNING:
-            xBox.reset(Application::CreateMessageDialog(pParent,
-                        VclMessageType::Warning, VclButtonsType::NONE, aText.makeStringAndClear(), GetpApp()));
+            xBox = Application::CreateMessageDialog(pParent,
+                        VclMessageType::Warning, VclButtonsType::NONE, aText.makeStringAndClear(), GetpApp());
             break;
         case task::InteractionClassification_INFO:
-            xBox.reset(Application::CreateMessageDialog(pParent,
-                        VclMessageType::Info, VclButtonsType::NONE, aText.makeStringAndClear(), GetpApp()));
+            xBox = Application::CreateMessageDialog(pParent,
+                        VclMessageType::Info, VclButtonsType::NONE, aText.makeStringAndClear(), GetpApp());
             break;
         case task::InteractionClassification_QUERY:
-            xBox.reset(Application::CreateMessageDialog(pParent,
-                        VclMessageType::Question, VclButtonsType::NONE, aText.makeStringAndClear(), GetpApp()));
+            xBox = Application::CreateMessageDialog(pParent,
+                        VclMessageType::Question, VclButtonsType::NONE, aText.makeStringAndClear(), GetpApp());
             break;
         default:
             assert(false);

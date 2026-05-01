@@ -2003,8 +2003,8 @@ bool SfxObjectShell::PrepareForSigning(weld::Window* pDialogParent)
 
             if (!bRememberSignature)
             {
-                xQuestion = std::unique_ptr<weld::MessageDialog>(Application::CreateMessageDialog(pDialogParent,
-                                                           VclMessageType::Question, VclButtonsType::YesNo, sQuestion));
+                xQuestion = Application::CreateMessageDialog(pDialogParent,
+                                                           VclMessageType::Question, VclButtonsType::YesNo, sQuestion);
             }
 
             if ( bRememberSignature || ( xQuestion != nullptr && xQuestion->run() == RET_YES ) )

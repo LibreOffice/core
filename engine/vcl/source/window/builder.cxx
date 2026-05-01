@@ -322,7 +322,7 @@ std::unique_ptr<weld::Builder> Application::CreateInterimBuilder(vcl::Window* pP
     return pSVData->mpDefInst->CreateInterimBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile, bAllowCycleFocusOut, nKitWindowId);
 }
 
-weld::MessageDialog* Application::CreateMessageDialog(weld::Widget* pParent, VclMessageType eMessageType,
+std::unique_ptr<weld::MessageDialog> Application::CreateMessageDialog(weld::Widget* pParent, VclMessageType eMessageType,
                                                       VclButtonsType eButtonType, const OUString& rPrimaryMessage,
                                                       const ICOKitNotifier* pNotifier)
 {

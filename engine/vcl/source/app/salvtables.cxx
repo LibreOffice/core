@@ -7378,7 +7378,7 @@ void SalInstanceWidget::help_hierarchy_foreach(const std::function<bool(const OU
     }
 }
 
-weld::MessageDialog* SalInstance::CreateMessageDialog(weld::Widget* pParent,
+std::unique_ptr<weld::MessageDialog> SalInstance::CreateMessageDialog(weld::Widget* pParent,
                                                       VclMessageType eMessageType,
                                                       VclButtonsType eButtonsType,
                                                       const OUString& rPrimaryMessage)
@@ -7387,7 +7387,7 @@ weld::MessageDialog* SalInstance::CreateMessageDialog(weld::Widget* pParent,
     SystemWindow* pParentWidget = pParentInstance ? pParentInstance->getSystemWindow() : nullptr;
     VclPtrInstance<MessageDialog> xMessageDialog(pParentWidget, rPrimaryMessage, eMessageType,
                                                  eButtonsType);
-    return new SalInstanceMessageDialog(xMessageDialog, nullptr, true);
+    return std::make_unique<SalInstanceMessageDialog>(xMessageDialog, nullptr, true);
 }
 
 std::unique_ptr<weld::ColorChooserDialog>

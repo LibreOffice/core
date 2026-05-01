@@ -33,9 +33,9 @@ IMPL_LINK_NOARG(PasswordToOpenModifyDialog, OkBtnClickHdl, weld::Button&, void)
             m_xPasswdToModifyED->get_text().isEmpty();
     if (bInvalidState)
     {
-        m_xErrorBox.reset(Application::CreateMessageDialog(m_xDialog.get(),
+        m_xErrorBox = Application::CreateMessageDialog(m_xDialog.get(),
                                                        VclMessageType::Warning, VclButtonsType::Ok,
-                                                       m_bIsPasswordToModify? m_aInvalidStateForOkButton : m_aInvalidStateForOkButton_v2));
+                                                       m_bIsPasswordToModify? m_aInvalidStateForOkButton : m_aInvalidStateForOkButton_v2);
         m_xErrorBox->runAsync(m_xErrorBox, [](sal_Int32 /*nResult*/) {});
     }
     else // check for mismatched passwords and password policy
@@ -63,9 +63,9 @@ IMPL_LINK_NOARG(PasswordToOpenModifyDialog, OkBtnClickHdl, weld::Button&, void)
         const int nMismatch = (bToOpenMatch? 0 : 1) + (bToModifyMatch? 0 : 1);
         if (nMismatch > 0)
         {
-            m_xErrorBox.reset(Application::CreateMessageDialog(m_xDialog.get(),
+            m_xErrorBox = Application::CreateMessageDialog(m_xDialog.get(),
                                                            VclMessageType::Warning, VclButtonsType::Ok,
-                                                           nMismatch == 1 ? m_aOneMismatch : m_aTwoMismatch));
+                                                           nMismatch == 1 ? m_aOneMismatch : m_aTwoMismatch);
             m_xErrorBox->runAsync(m_xErrorBox, [this, bToOpenMatch, nMismatch](sal_Int32 /*nResult*/)
             {
                 weld::Entry* pEdit = !bToOpenMatch ? m_xPasswdToOpenED.get() : m_xPasswdToModifyED.get();

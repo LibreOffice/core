@@ -1660,9 +1660,9 @@ void ScTabView::ErrorMessage(TranslateId pGlobStrId)
         }
     }
 
-    m_xMessageBox.reset(Application::CreateMessageDialog(pParent,
+    m_xMessageBox = Application::CreateMessageDialog(pParent,
                                                          VclMessageType::Info, VclButtonsType::Ok,
-                                                         ScResId(pGlobStrId)));
+                                                         ScResId(pGlobStrId));
 
     if (comphelper::COKit::isActive())
         m_xMessageBox->SetInstallKitNotifierHdl(LINK(this, ScTabView, InstallKitNotifierHdl));

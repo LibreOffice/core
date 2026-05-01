@@ -1326,7 +1326,7 @@ public:
     // For the duration of vcl parent windows
     static std::unique_ptr<weld::Builder> CreateInterimBuilder(vcl::Window* pParent, const OUString &rUIFile, bool bAllowCycleFocusOut, sal_uInt64 nKitWindowId = 0);
 
-    static weld::MessageDialog* CreateMessageDialog(weld::Widget* pParent, VclMessageType eMessageType,
+    static std::unique_ptr<weld::MessageDialog> CreateMessageDialog(weld::Widget* pParent, VclMessageType eMessageType,
                                                     VclButtonsType eButtonType, const OUString& rPrimaryMessage,
                                                     const ICOKitNotifier* pNotifier = nullptr);
 

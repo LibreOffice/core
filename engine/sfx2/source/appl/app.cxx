@@ -372,13 +372,13 @@ IMPL_STATIC_LINK( SfxApplication, GlobalBasicErrorHdl_Impl, StarBASIC*, pStarBas
         if (ErrorStringFactory::CreateString(nErr, aError))
         {
             const SfxViewFrame* pViewFrame = SfxViewFrame::Current();
-            std::shared_ptr<weld::MessageDialog> xBox;
-            xBox.reset(Application::CreateMessageDialog(
+            std::shared_ptr<weld::MessageDialog> xBox
+                = Application::CreateMessageDialog(
                            pViewFrame ? pViewFrame->GetFrameWeld() : nullptr,
                            VclMessageType::Error,
                            VclButtonsType::Ok,
                            aError,
-                           GetpApp()));
+                           GetpApp());
 
             xBox->runAsync(xBox, [](sal_Int32 /*nResult*/) {});
         }

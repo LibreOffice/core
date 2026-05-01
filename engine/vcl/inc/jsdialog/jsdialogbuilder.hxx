@@ -210,7 +210,7 @@ public:
     virtual std::unique_ptr<weld::LevelBar> weld_level_bar(const OUString& id) override;
     virtual std::unique_ptr<weld::Calendar> weld_calendar(const OUString& id) override;
 
-    static weld::MessageDialog* CreateMessageDialog(weld::Widget* pParent,
+    static std::unique_ptr<weld::MessageDialog> CreateMessageDialog(weld::Widget* pParent,
                                                     VclMessageType eMessageType,
                                                     VclButtonsType eButtonType,
                                                     const OUString& rPrimaryMessage,

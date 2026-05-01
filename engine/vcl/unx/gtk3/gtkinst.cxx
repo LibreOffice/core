@@ -24813,14 +24813,14 @@ std::unique_ptr<weld::Builder> GtkInstance::CreateInterimBuilder(vcl::Window* pP
     return std::make_unique<GtkInstanceBuilder>(pWindow, rUIRoot, rUIFile, xEmbedWindow.get(), bAllowCycleFocusOut);
 }
 
-weld::MessageDialog* GtkInstance::CreateMessageDialog(weld::Widget* pParent, VclMessageType eMessageType, VclButtonsType eButtonsType, const OUString &rPrimaryMessage)
+std::unique_ptr<weld::MessageDialog> GtkInstance::CreateMessageDialog(weld::Widget* pParent, VclMessageType eMessageType, VclButtonsType eButtonsType, const OUString &rPrimaryMessage)
 {
     GtkInstanceWidget* pParentInstance = dynamic_cast<GtkInstanceWidget*>(pParent);
     GtkWindow* pParentWindow = pParentInstance ? pParentInstance->getWindow() : nullptr;
     GtkMessageDialog* pMessageDialog = GTK_MESSAGE_DIALOG(gtk_message_dialog_new(pParentWindow, GTK_DIALOG_MODAL,
                                                           VclToGtk(eMessageType), VclToGtk(eButtonsType), "%s",
                                                           OUStringToOString(rPrimaryMessage, RTL_TEXTENCODING_UTF8).getStr()));
-    return new GtkInstanceMessageDialog(pMessageDialog, nullptr, true);
+    return std::make_unique<GtkInstanceMessageDialog>(pMessageDialog, nullptr, true);
 }
 
 std::unique_ptr<weld::ColorChooserDialog>
