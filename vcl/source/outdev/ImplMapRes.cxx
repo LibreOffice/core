@@ -112,7 +112,10 @@ void ImplMapRes::CalcMapResolution(const MapMode& rMapMode, tools::Long nDPIX, t
     {
         auto funcCalcOffset = [](double fScale, tools::Long& rnMapOffset, tools::Long nOrigin) {
             assert(fScale != 0);
-            rnMapOffset = std::llround(double(rnMapOffset) / fScale) + nOrigin;
+            // clamp so + nOrigin can't overflow tools::Long
+            constexpr double fLimit = static_cast<double>(std::numeric_limits<sal_Int32>::max());
+            const double fOffset = std::clamp(double(rnMapOffset) / fScale, -fLimit, fLimit);
+            rnMapOffset = std::llround(fOffset) + nOrigin;
         };
 
         funcCalcOffset(fScaleX, mnMapOfsX, aOrigin.X());
