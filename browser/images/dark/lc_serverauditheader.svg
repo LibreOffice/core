@@ -1,11 +1,11 @@
 <svg version="1.1" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
     <circle
-        fill="#219735"
+        fill="#949494"
         cx="8"
         cy="8"
         r="7" />
     <circle
-        fill="#2bc545"
+        fill="#787878"
         cx="8"
         cy="8"
         r="6" />

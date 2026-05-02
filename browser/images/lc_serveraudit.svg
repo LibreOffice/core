@@ -1,1 +1,28 @@
-<svg version="1.1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><rect x="4.5" y="2.5" width="15" height="5" rx=".5" ry=".5" fill="#797774" stroke="#3a3a38" stroke-linecap="round" stroke-linejoin="round" style="paint-order:markers fill stroke"/><rect x="4.5" y="16.5" width="15" height="5" rx=".5" ry=".5" fill="#1e8bcd" stroke="#3a3a38" stroke-linecap="round" stroke-linejoin="round" style="paint-order:markers fill stroke"/><rect x="4.5" y="9.5" width="15" height="5" rx=".5" ry=".5" fill="#fb983b" stroke="#3a3a38" stroke-linecap="round" stroke-linejoin="round" style="paint-order:markers fill stroke"/><path d="m7.3813 10.5c0.831 0 1.5 0.669 1.5 1.5s-0.669 1.5-1.5 1.5-1.5-0.669-1.5-1.5 0.669-1.5 1.5-1.5z" fill="#fff"/><path d="m7.3813 17.5c0.831 0 1.5 0.669 1.5 1.5s-0.669 1.5-1.5 1.5-1.5-0.669-1.5-1.5 0.669-1.5 1.5-1.5z" fill="#fff"/><path d="m7.3813 3.5c0.831 0 1.5 0.669 1.5 1.5s-0.669 1.5-1.5 1.5-1.5-0.669-1.5-1.5 0.669-1.5 1.5-1.5z" fill="#fff"/></svg>
+<svg version="1.1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <path
+        style="fill:#fafafa"
+        d="M 5 3 L 5 7 L 19 7 L 19 3 L 5 3 z M 5 10 L 5 14 L 19 14 L 19 10 L 5 10 z M 5 17 L 5 21 L 19 21 L 19 17 L 5 17 z " />
+    <path
+        style="fill:#3a3a38"
+        d="M 5 2 C 4.455 2 4 2.455 4 3 L 4 7 C 4 7.5454 4.455 8 5 8 L 19 8 C 19.545 8 20 7.5454 20 7 L 20 3 C 20 2.455 19.545 2 19 2 L 5 2 z M 5 3 L 19 3 L 19 7 L 5 7 L 5 3 z M 5 9 C 4.455 9 4 9.455 4 10 L 4 14 C 4 14.545 4.455 15 5 15 L 19 15 C 19.545 15 20 14.545 20 14 L 20 10 C 20 9.455 19.545 9 19 9 L 5 9 z M 5 10 L 19 10 L 19 14 L 5 14 L 5 10 z M 5 16 C 4.455 16 4 16.454649 4 17 L 4 21 C 4 21.545 4.455 22 5 22 L 19 22 C 19.545 22 20 21.545 20 21 L 20 17 C 20 16.454649 19.545 16 19 16 L 5 16 z M 5 17 L 19 17 L 19 21 L 5 21 L 5 17 z " />
+    <rect
+        style="fill:#c5a62b"
+        width="4"
+        height="2"
+        x="6"
+        y="11"
+        rx="0"
+        ry="0" />
+    <rect
+        style="fill:#c52b2b"
+        width="4"
+        height="2"
+        x="6"
+        y="4" />
+    <rect
+        style="fill:#2bc545"
+        width="4"
+        height="2"
+        x="6"
+        y="18" />
+    </svg>

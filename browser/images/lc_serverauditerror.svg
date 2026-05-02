@@ -1,1 +1,12 @@
-<svg version="1.1" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="8" r="6" fill="#c52b2b"/></svg>
+<svg version="1.1" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <circle
+        fill="#972020"
+        cx="8"
+        cy="8"
+        r="7" />
+    <circle
+        fill="#c52b2b"
+        cx="8"
+        cy="8"
+        r="6" />
+    </svg>
