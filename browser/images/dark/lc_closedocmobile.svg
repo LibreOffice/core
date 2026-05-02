@@ -1,1 +1,16 @@
-<svg height="20" viewBox="0 0 12 20" width="12" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><path d="m-6.02-2.03h24.02v24.03h-24.02z"/><path style="fill:none;stroke:#fafafa;stroke-width:2;stroke-linecap:round;stroke-linejoin:round" d="M 11,1 2,10 11,19" height="100%" width="100%"/></g></svg>
+<svg height="20" viewBox="0 0 12 20" width="12" xmlns="http://www.w3.org/2000/svg">
+  <g
+     fill="none"
+     fill-rule="evenodd"
+     >
+    <path
+       d="M -6.02,-2.03 H 18 V 22 H -6.02 Z"
+       />
+    <path
+       style="fill:none;stroke:#fafafa;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       d="m 10.5,0.5 -10,9.5 10,9.5"
+       height="100%"
+       width="100%"
+       />
+  </g>
+</svg>

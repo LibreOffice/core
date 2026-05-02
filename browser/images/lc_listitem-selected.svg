@@ -1,1 +1,10 @@
-<svg height="20" viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg"><g stroke-width=".83333"><path d="m0 0h20v20h-20z" fill="none"/><path d="m7.7417 13.575-2.9917-2.9917c-.325-.325-.325-.85 0-1.175s.85-.325 1.175 0l2.4083 2.4 5.7333-5.7333c.325-.325.85-.325 1.175 0s.325.85 0 1.175l-6.325 6.325c-.31667.325-.85.325-1.175 0z" fill="#0b87e7"/></g></svg>
+<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+  <path
+     d="M 0,0 H 20 V 20 H 0 Z"
+     fill="none"
+     style="stroke-width:1" />
+  <path
+     style="fill:none;stroke:#0b87e7;stroke-linecap:round;stroke-linejoin:round"
+     d="M 2.5,12.499728 7,16.5 17.5,4.5"
+     />
+</svg>

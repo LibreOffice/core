@@ -60,7 +60,7 @@ class MobileTopBar extends JSDialog.Toolbar {
 				{type: 'customtoolitem',  id: 'mobile_wizard', command: 'mobile_wizard'},
 				{type: 'customtoolitem',  id: 'insertion_mobile_wizard', command: 'insertion_mobile_wizard'},
 				{type: 'customtoolitem',  id: 'comment_wizard', command: 'comment_wizard', w2icon: 'viewcomments'},
-				{type: 'customtoolitem', id: 'fullscreen-' + this.docType, text: _UNO('.uno:FullScreen', this.docType)},
+				{type: 'customtoolitem', id: 'fullscreen-' + this.docType + '-toolbar-mobile', text: _UNO('.uno:FullScreen', this.docType)},
 				{type: 'menubutton', id: 'userlist:UsersListMenu', visible: false},
 			];
 		} else if (this.docType == 'drawing') {
