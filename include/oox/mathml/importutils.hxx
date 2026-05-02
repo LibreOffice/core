@@ -6,8 +6,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#ifndef INCLUDED_OOX_MATHML_IMPORTUTILS_HXX
-#define INCLUDED_OOX_MATHML_IMPORTUTILS_HXX
+
+#pragma once
 
 #include <map>
 #include <string_view>
@@ -249,7 +249,5 @@ inline sal_Unicode XmlStream::Tag::attribute(int t, sal_Unicode def) const
 }
 
 } // namespace
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
