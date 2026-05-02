@@ -50,6 +50,7 @@ public:
 
 private:
     bool                mbEmbedShapesInChart;
+    OUString            maName;
     ::oox::core::ContextHandler2Helper* mpParent;
 };
 
@@ -71,7 +72,7 @@ class DiagramGraphicDataContext final
     : public ShapeContext
 {
 public:
-    DiagramGraphicDataContext( ::oox::core::ContextHandler2Helper const & rParent, const ShapePtr& pShapePtr );
+    DiagramGraphicDataContext( ::oox::core::ContextHandler2Helper const & rParent, const ShapePtr& pShapePtr, const OUString& rName );
     virtual ~DiagramGraphicDataContext() override;
     virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) override;
 

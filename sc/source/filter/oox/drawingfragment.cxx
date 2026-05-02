@@ -354,16 +354,32 @@ void DrawingFragment::onEndElement()
                         && mxShape->getChildren().size() == 1
                         && mxShape->getExtDrawings().size() != 0)
                     {
+                        // this is a diagram with content and has external graphics, that
+                        // means a GraphicalReplacement. Import & use that if it exists
                         mxShape->getChildren()[0]->setSize(mxShape->getSize());
                         OUString sFragmentPath(
                             getFragmentPathFromRelId(mxShape->getExtDrawings()[0]));
+
                         // Don't know why importFragment looses shape name and id. Rescue them.
-                        OUString sBackupName(mxShape->getName());
-                        OUString sBackupId(mxShape->getId());
-                        getOoxFilter().importFragment(new oox::shape::ShapeDrawingFragmentHandler(
-                            getOoxFilter(), sFragmentPath, mxShape));
+                        const OUString sBackupName(mxShape->getName());
+                        const OUString sBackupId(mxShape->getId());
+
+                        // take care of possibility to ignore GraphicalReplacement
+                        // to 'force' a ReLayout at import time
+                        static bool bIgnoreExtDrawings(nullptr != std::getenv("DIAGRAM_IGNORE_EXTDRAWINGS"));
+                        if (!bIgnoreExtDrawings)
+                        {
+                            getOoxFilter().importFragment(new oox::shape::ShapeDrawingFragmentHandler(
+                                getOoxFilter(), sFragmentPath, mxShape));
+                        }
+
                         mxShape->setName(sBackupName);
                         mxShape->setId(sBackupId);
+
+                        // need to rescue/set DomTrees of DomMapFlag::OOXDrawing
+                        // and DomMapFlag::OOXDrawing(Image|Hlink)Rels to be able
+                        // to export original if not changed
+                        mxShape->keepDiagramDrawing(getOoxFilter(), sFragmentPath);
                     }
 
                     if (mxShape->getFontRefColorForNodes().isUsed())
