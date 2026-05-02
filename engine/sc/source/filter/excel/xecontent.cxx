@@ -1770,17 +1770,24 @@ XclExpDV::XclExpDV( const XclExpRoot& rRoot, sal_uInt32 nScHandle ) :
         // formulas
         XclExpFormulaCompiler& rFmlaComp = GetFormulaCompiler();
 
-        auto checkFormula = [&](std::unique_ptr<ScTokenArray> pTokArr)
+        auto isValidList = [](const ScTokenArray& rTokArr)
         {
-            ScFormulaCell aCell(GetDoc(), pValData->GetSrcPos(), std::move(pTokArr));
-            aCell.SetFreeFlying(true);
-            aCell.Interpret();
-            sc::FormulaResultValue aResult = aCell.GetResult();
-            if (aResult.meType == sc::FormulaResultValue::Error
-                && (aResult.mnError == FormulaError::NoValue
-                    || aResult.mnError == FormulaError::NoRef))
+            formula::FormulaTokenArrayPlainIterator aIter(rTokArr);
+            const formula::FormulaToken* pScToken = aIter.First();
+
+            if (!pScToken || aIter.Next() || pScToken->GetOpCode() == ocErrRef)
+                return false;
+
+            switch (pScToken->GetType())
             {
-                mbValidFormula = false;
+                case formula::svSingleRef:
+                case formula::svDoubleRef:
+                case formula::svExternalSingleRef:
+                case formula::svExternalDoubleRef:
+                case formula::svIndex:
+                    return true;
+                default:
+                    return false;
             }
         };
 
@@ -1861,14 +1868,13 @@ XclExpDV::XclExpDV( const XclExpRoot& rRoot, sal_uInt32 nScHandle ) :
                         Formula compiler supports this by offering two different functions
                         CreateDataValFormula() and CreateListValFormula(). */
                     mxTokArr1 = rFmlaComp.CreateFormula(EXC_FMLATYPE_LISTVAL, *xScTokArr);
-                    checkFormula(std::move(xScTokArr));
+                    mbValidFormula = isValidList(*xScTokArr);
                 }
             }
             else
             {
                 // no list validation -> convert the formula
                 mxTokArr1 = rFmlaComp.CreateFormula(EXC_FMLATYPE_DATAVAL, *xScTokArr);
-                checkFormula(std::move(xScTokArr));
             }
         }
 
@@ -1877,7 +1883,6 @@ XclExpDV::XclExpDV( const XclExpRoot& rRoot, sal_uInt32 nScHandle ) :
         if (xScTokArr)
         {
             mxTokArr2 = rFmlaComp.CreateFormula(EXC_FMLATYPE_DATAVAL, *xScTokArr);
-            checkFormula(std::move(xScTokArr));
         }
     }
     else
