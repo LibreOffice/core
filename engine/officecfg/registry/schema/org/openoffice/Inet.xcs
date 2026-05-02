@@ -57,34 +57,6 @@
           </enumeration>
         </constraints>
       </prop>
-      <prop oor:name="ooInetFTPProxyName" oor:type="xs:string" oor:nillable="false">
-        <!-- UIHints: Tools  Options  Internet  Proxy -->
-        <info>
-          <desc>Specifies the name of the FTP proxy server.</desc>
-          <deprecated>Not used anymore</deprecated>
-        </info>
-        <value/>
-        <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
-      </prop>
-      <prop oor:name="ooInetFTPProxyPort" oor:type="xs:int">
-        <!-- UIHints: Tools  Options  Internet  Proxy -->
-        <info>
-          <desc>Specifies the port of the FTP proxy server.</desc>
-          <deprecated>Not used anymore</deprecated>
-        </info>
-        <constraints>
-          <minInclusive oor:value="0">
-            <info>
-              <desc>Specifies the minimum allowed port number.</desc>
-            </info>
-          </minInclusive>
-          <maxInclusive oor:value="65535">
-            <info>
-              <desc>Specifies the maximum allowed port number.</desc>
-            </info>
-          </maxInclusive>
-        </constraints>
-      </prop>
       <prop oor:name="ooInetHTTPProxyName" oor:type="xs:string" oor:nillable="false">
         <!-- UIHints: Tools  Options  Internet  Proxy -->
         <info>
