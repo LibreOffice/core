@@ -99,6 +99,11 @@ using ::com::sun::star::uno::Reference;
 namespace chart
 {
 
+constexpr int DEFAULT_CHART_VIEW_WIDTH = 1000;
+constexpr int DEFAULT_CHART_VIEW_HEIGHT = 1000;
+constexpr int DEFAULT_CAPTION_WIDTH = 2268;
+constexpr int DEFAULT_CAPTION_HEIGHT = 1134;
+
 namespace
 {
 bool lcl_GrowAndShiftLogic(
@@ -417,7 +422,7 @@ void ChartController::execute_Paint(vcl::RenderContext& rRenderContext, const to
         //better performance for big data
         if (m_xChartView.is())
         {
-            awt::Size aResolution(1000, 1000);
+            awt::Size aResolution( DEFAULT_CHART_VIEW_WIDTH, DEFAULT_CHART_VIEW_HEIGHT );
             {
                 SolarMutexGuard aGuard;
                 auto pChartWindow(GetChartWindow());
@@ -586,7 +591,7 @@ void ChartController::execute_MouseButtonDown( const MouseEvent& rMEvt )
             {
                 if ( pDrawViewWrapper->GetCurrentObjIdentifier() == SdrObjKind::Caption )
                 {
-                    Size aCaptionSize( 2268, 1134 );
+                    Size aCaptionSize( DEFAULT_CAPTION_WIDTH, DEFAULT_CAPTION_HEIGHT );
                     pDrawViewWrapper->BegCreateCaptionObj( aMPos, aCaptionSize );
                 }
                 else
