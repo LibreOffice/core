@@ -809,7 +809,7 @@ body button:not(.ui-corner-all):not(.button-primary):not(.unobutton):not(.form-f
 
 #ServerAuditDialog .ui-treeview-entry {
 	display: grid;
-	grid-template-columns: var(--btn-img-size-m) 6fr 3fr;
+	grid-template-columns: var(--btn-img-size) 6fr 3fr;
 	white-space: normal;
 }
 
