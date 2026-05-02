@@ -414,6 +414,19 @@ ScModelObj::ScModelObj( ScDocShell* pDocSh ) :
     }
 }
 
+void ScModelObj::dispose()
+{
+    {
+        SolarMutexGuard g;
+
+        xObjProvider.clear();
+
+        lang::EventObject aEvent( *this );
+        maChangesListeners.disposeAndClear(aEvent); // disposeAndClear
+    }
+    SfxBaseModel::dispose();
+}
+
 ScModelObj::~ScModelObj()
 {
     SolarMutexGuard g;
