@@ -149,6 +149,7 @@ certain functionality.
 @li @c sc.core.formulacell - ScFormulaCell and group
 @li @c sc.core.formulagroup
 @li @c sc.core.grouparealistener - sc::FormulaGroupAreaListener
+@li @c sc.eppt - SmartArt/Diagram export
 @li @c sc.filter - Calc filter
 @li @c sc.kit.docsize
 @li @c sc.kit.header

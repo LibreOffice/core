@@ -221,7 +221,7 @@ ShapeContextHandler::getDiagramShapeContext()
         auto pFragmentHandler = std::make_shared<ShapeFragmentHandler>(*mxShapeFilterBase, msRelationFragmentPath);
         mpShape = std::make_shared<Shape>();
         mpShape->setSize(maSize);
-        mxDiagramShapeContext.set(new DiagramGraphicDataContext(*pFragmentHandler, mpShape));
+        mxDiagramShapeContext.set(new DiagramGraphicDataContext(*pFragmentHandler, mpShape, EMPTY_OUSTRING));
     }
 
     return mxDiagramShapeContext;

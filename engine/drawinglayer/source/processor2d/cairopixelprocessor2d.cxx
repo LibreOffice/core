@@ -740,7 +740,7 @@ std::shared_ptr<CairoSurfaceHelper> getOrCreateCairoSurfaceHelper(const Bitmap& 
             // take the shortcut: For this small directly accessible size
             // we do not urgently need Mip-Mapping and spare the
             // SystemDependentData buffering mechanism
-            std::cout << "BailOut SMALL Bitmap" << std::endl;
+            SAL_INFO("drawinglayer", "BailOut SMALL Bitmap");
             return std::make_shared<CairoSurfaceHelper>(rBitmap);
         }
     }

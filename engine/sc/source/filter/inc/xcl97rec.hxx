@@ -263,8 +263,7 @@ protected:
 
 public:
                                 XclObjAny( XclExpObjectManager& rObjMgr,
-                                    const css::uno::Reference< css::drawing::XShape >& rShape,
-                                    ScDocument* pDoc);
+                                    const css::uno::Reference< css::drawing::XShape >& rShape);
     virtual                     ~XclObjAny() override;
 
     const css::uno::Reference< css::drawing::XShape >&
@@ -278,7 +277,6 @@ public:
 private:
     css::uno::Reference< css::drawing::XShape >
                                 mxShape;
-    ScDocument* mpDoc;
 };
 
 // --- class ExcBof8_Base --------------------------------------------

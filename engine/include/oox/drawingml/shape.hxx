@@ -266,7 +266,7 @@ public:
     /// Changes reference semantics to value semantics for fill properties.
     SAL_DLLPRIVATE void cloneFillProperties();
 
-    SAL_DLLPRIVATE void keepDiagramDrawing(::oox::core::XmlFilterBase& rFilterBase, const OUString& rFragmentPath);
+    void keepDiagramDrawing(::oox::core::XmlFilterBase& rFilterBase, const OUString& rFragmentPath);
 
     // Allows preparation of a local Diagram helper && propagate an eventually
     // existing one to the data holder object later

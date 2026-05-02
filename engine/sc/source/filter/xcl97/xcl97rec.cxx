@@ -27,6 +27,7 @@
 #include <svx/svdocapt.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/unoapi.hxx>
+#include <svx/diagram/DiagramHelper_svx.hxx>
 #include <editeng/writingmodeitem.hxx>
 #include <tools/urlobj.hxx>
 
@@ -1098,10 +1099,9 @@ void XclObjOle::Save( XclExpStream& rStrm )
 
 // --- class XclObjAny -------------------------------------------
 
-XclObjAny::XclObjAny( XclExpObjectManager& rObjMgr, const Reference< XShape >& rShape, ScDocument* pDoc )
+XclObjAny::XclObjAny( XclExpObjectManager& rObjMgr, const Reference< XShape >& rShape)
     : XclObj( rObjMgr, EXC_OBJTYPE_UNKNOWN )
     , mxShape( rShape )
-    , mpDoc(pDoc)
 {
 }
 
@@ -1368,18 +1368,43 @@ void XclObjAny::SaveXml( XclExpXmlStream& rStrm )
     }
 
     sax_fastparser::FSHelperPtr pDrawing = rStrm.GetCurrentStream();
-
-    ShapeExport aDML(XML_xdr, pDrawing, nullptr, &rStrm, drawingml::DOCUMENT_XLSX);
-    auto pURLTransformer = std::make_shared<ScURLTransformer>(*mpDoc);
-    aDML.SetURLTranslator(pURLTransformer);
-
     pDrawing->startElement( FSNS( XML_xdr, XML_twoCellAnchor ), // OOXTODO: oneCellAnchor, absoluteAnchor
             XML_editAs, GetEditAs( *this ) );
     Reference< XPropertySet > xPropSet( mxShape, UNO_QUERY );
     if (xPropSet.is())
     {
         WriteFromTo( rStrm, *this );
-        aDML.WriteShape( mxShape );
+        bool bWriteAsShape(true);
+        ShapeExport& rDML(rStrm.getOrCreateShapeExport());
+
+        if (pObject->isDiagram())
+        {
+            bool bSaveAsDiagram(false);
+            const std::shared_ptr<svx::diagram::DiagramHelper_svx>& rIDiagramHelper(pObject->getDiagramHelper());
+
+            if (rIDiagramHelper)
+            {
+                // check if all needed data exists to either write unchanged/untouched
+                // Diagram or with re-creation of some DataDoms
+                bSaveAsDiagram = rIDiagramHelper->checkMinimalDataDoms();
+            }
+
+            if (bSaveAsDiagram)
+            {
+                const sal_Int32 nDiagramId(rStrm.getAndIncrementDiagramId());
+                const sal_Int32 nShapeId = rDML.GetNewShapeID(mxShape);
+                SAL_INFO("sc.eppt", "writing Diagram " + OUString::number(nDiagramId) + " with Shape Id " + OUString::number(nShapeId));
+                pDrawing->startElementNS(XML_xdr, XML_graphicFrame);
+                rDML.WriteDiagram(mxShape, nDiagramId, nShapeId);
+                pDrawing->endElementNS(XML_xdr, XML_graphicFrame);
+                bWriteAsShape = false;
+            }
+        }
+
+        if (bWriteAsShape)
+        {
+            rDML.WriteShape( mxShape );
+        }
     }
 
     pDrawing->singleElement( FSNS( XML_xdr, XML_clientData)

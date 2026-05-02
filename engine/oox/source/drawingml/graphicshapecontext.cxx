@@ -140,6 +140,7 @@ ContextHandlerRef GraphicShapeContext::onCreateContext( sal_Int32 aElementToken,
 GraphicalObjectFrameContext::GraphicalObjectFrameContext( ContextHandler2Helper& rParent, const ShapePtr& pMasterShapePtr, const ShapePtr& pShapePtr, bool bEmbedShapesInChart ) :
     ShapeContext( rParent, pMasterShapePtr, pShapePtr ),
     mbEmbedShapesInChart( bEmbedShapesInChart ),
+    maName(),
     mpParent(&rParent)
 {
 }
@@ -150,7 +151,13 @@ ContextHandlerRef GraphicalObjectFrameContext::onCreateContext( sal_Int32 aEleme
     {
     // CT_ShapeProperties
     case XML_nvGraphicFramePr:      // CT_GraphicalObjectFrameNonVisual
+        return this;
+    case XML_cNvPr:
+    {
+        // read Diagram's name
+        maName = rAttribs.getStringDefaulted(XML_name);
         break;
+    }
     case XML_xfrm:                  // CT_Transform2D
         return new Transform2DContext( *this, rAttribs, *mpShapePtr );
     case XML_graphic:               // CT_GraphicalObject
@@ -164,7 +171,7 @@ ContextHandlerRef GraphicalObjectFrameContext::onCreateContext( sal_Int32 aEleme
                 return new OleObjectGraphicDataContext( *this, mpShapePtr );
             else if ( sUri == "http://schemas.openxmlformats.org/drawingml/2006/diagram" ||
                     sUri == "http://purl.oclc.org/ooxml/drawingml/diagram" )
-                return new DiagramGraphicDataContext( *this, mpShapePtr );
+                return new DiagramGraphicDataContext( *this, mpShapePtr, maName );
             else if ( sUri == "http://schemas.openxmlformats.org/drawingml/2006/chart" ||
                     sUri == "http://purl.oclc.org/ooxml/drawingml/chart" )
                 return new ChartGraphicDataContext( *this, mpShapePtr, mbEmbedShapesInChart );
@@ -277,9 +284,11 @@ void OleObjectGraphicDataContext::onEndElement()
     }
 }
 
-DiagramGraphicDataContext::DiagramGraphicDataContext( ContextHandler2Helper const & rParent, const ShapePtr& pShapePtr )
+DiagramGraphicDataContext::DiagramGraphicDataContext( ContextHandler2Helper const & rParent, const ShapePtr& pShapePtr, const OUString& rName )
 : ShapeContext( rParent, ShapePtr(), pShapePtr )
 {
+    if (!rName.isEmpty())
+        pShapePtr->setName(rName);
     pShapePtr->setDiagramType();
 }
 

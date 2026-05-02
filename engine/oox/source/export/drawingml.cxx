@@ -6954,24 +6954,30 @@ void DrawingML::WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rX
     }
     else
     {
-        mpFS->startElementNS(XML_p, XML_nvGraphicFramePr);
+        // use correct XmlNamespace, other DocumentType is DOCUMENT_XLSX
+        const bool isPPTX(DOCUMENT_PPTX == GetDocumentType());
+        const sal_Int32 nXmlNamespace(isPPTX ? XML_p : XML_xdr);
+        mpFS->startElementNS(nXmlNamespace, XML_nvGraphicFramePr);
 
-        mpFS->singleElementNS(XML_p, XML_cNvPr, pDocPrAttrList);
-        mpFS->singleElementNS(XML_p, XML_cNvGraphicFramePr);
+        mpFS->singleElementNS(nXmlNamespace, XML_cNvPr, pDocPrAttrList);
+        mpFS->singleElementNS(nXmlNamespace, XML_cNvGraphicFramePr);
 
-        mpFS->startElementNS(XML_p, XML_nvPr);
-        mpFS->startElementNS(XML_p, XML_extLst);
-        // change tracking extension - required in PPTX
-        mpFS->startElementNS(XML_p, XML_ext, XML_uri, "{D42A27DB-BD31-4B8C-83A1-F6EECF244321}");
-        mpFS->singleElementNS(XML_p14, XML_modId,
-            FSNS(XML_xmlns, XML_p14), mpFB->getNamespaceURL(OOX_NS(p14)),
-            XML_val,
-            OString::number(comphelper::rng::uniform_uint_distribution(1, SAL_MAX_UINT32)));
-        mpFS->endElementNS(XML_p, XML_ext);
-        mpFS->endElementNS(XML_p, XML_extLst);
-        mpFS->endElementNS(XML_p, XML_nvPr);
+        if (isPPTX)
+        {
+            mpFS->startElementNS(nXmlNamespace, XML_nvPr);
+            mpFS->startElementNS(nXmlNamespace, XML_extLst);
+            // change tracking extension - required in PPTX
+            mpFS->startElementNS(nXmlNamespace, XML_ext, XML_uri, "{D42A27DB-BD31-4B8C-83A1-F6EECF244321}");
+            mpFS->singleElementNS(XML_p14, XML_modId,
+                FSNS(XML_xmlns, XML_p14), mpFB->getNamespaceURL(OOX_NS(p14)),
+                XML_val,
+                OString::number(comphelper::rng::uniform_uint_distribution(1, SAL_MAX_UINT32)));
+            mpFS->endElementNS(nXmlNamespace, XML_ext);
+            mpFS->endElementNS(nXmlNamespace, XML_extLst);
+            mpFS->endElementNS(nXmlNamespace, XML_nvPr);
+        }
 
-        mpFS->endElementNS(XML_p, XML_nvGraphicFramePr);
+        mpFS->endElementNS(nXmlNamespace, XML_nvGraphicFramePr);
 
         // store size and position of background shape instead of group shape
         // as some shapes may be outside
@@ -6984,7 +6990,7 @@ void DrawingML::WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rX
             awt::Size aSize = xShapeBg->getSize();
             WriteTransformation(
                 xShapeBg, tools::Rectangle(Point(aPos.X, aPos.Y), Size(aSize.Width, aSize.Height)),
-                XML_p, false, false, 0, false);
+                nXmlNamespace, false, false, 0, false);
         }
 
         mpFS->startElementNS(XML_a, XML_graphic);

@@ -68,6 +68,8 @@
 #include <formula/grammar.hxx>
 #include <oox/ole/vbaexport.hxx>
 #include <excelvbaproject.hxx>
+#include <oox/export/shapes.hxx>
+#include <xcl97rec.hxx>
 
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <memory>
@@ -935,9 +937,26 @@ sax_fastparser::FSHelperPtr XclXmlUtils::WriteFontData( sax_fastparser::FSHelper
 XclExpXmlStream::XclExpXmlStream( const uno::Reference< XComponentContext >& rCC, bool bExportVBA, bool bExportTemplate )
     : XmlFilterBase( rCC ),
       mpRoot( nullptr ),
+      mpShapeExport(),
+      maDiagramId(0),
       mbExportVBA(bExportVBA),
       mbExportTemplate(bExportTemplate)
 {
+}
+
+oox::drawingml::ShapeExport& XclExpXmlStream::getOrCreateShapeExport()
+{
+    if (!mpShapeExport)
+    {
+        mpShapeExport.reset(new oox::drawingml::ShapeExport(
+            XML_xdr, GetCurrentStream(), nullptr, this, drawingml::DOCUMENT_XLSX));
+        ScDocShell* pShell = getDocShell();
+        ScDocument& rDoc = pShell->GetDocument();
+        auto pURLTransformer = std::make_shared<ScURLTransformer>(rDoc);
+        mpShapeExport->SetURLTranslator(pURLTransformer);
+    }
+
+    return *mpShapeExport;
 }
 
 XclExpXmlStream::~XclExpXmlStream()
