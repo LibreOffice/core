@@ -2861,7 +2861,7 @@ void DomainMapper_Impl::finishParagraph( const ParagraphPropertyMapPtr& pParaCon
                         //select paragraph
                         xParaCursor->gotoStartOfParagraph( true );
 
-                        xTextRange = xTextAppend->finishParagraph( comphelper::containerToSequence(aProperties) );
+                        xTextAppend->finishParagraph( comphelper::containerToSequence(aProperties) );
 
                         uno::Reference< text::XTextRange > xRangeStart, xRangeEnd;
                         xRangeStart = xParaCursor->getStart();
