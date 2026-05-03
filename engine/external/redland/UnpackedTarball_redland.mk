@@ -34,6 +34,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,redland,\
 	external/redland/redland/clang-cl.patch \
 	external/redland/redland/libtool.patch \
 	external/redland/redland/ubsan.patch \
+	external/redland/redland/hash-memory-key-deref.patch \
 ))
 
 # vim: set noet sw=4 ts=4:

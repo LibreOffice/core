@@ -1,0 +1,11 @@
+--- src/rdf_hash_memory.c
++++ src/rdf_hash_memory.c
+@@ -910,7 +910,7 @@
+     
+     node=next;
+     while(node) {
+-      if(key->size == node->key_len && !memcmp(key, node->key, key->size)){
++      if(key->size == node->key_len && !memcmp(key->data, node->key, key->size)){
+         found=1;
+         break;
+       }
