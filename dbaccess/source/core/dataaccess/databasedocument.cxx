@@ -78,6 +78,9 @@
 #include <vcl/GraphicObject.hxx>
 #include <tools/urlobj.hxx>
 
+#include <algorithm>
+#include <ranges>
+
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
@@ -546,22 +549,10 @@ namespace
 
         const Sequence< Reference< XComponent > > aComponents( xDatabaseUI->getSubComponents() );
 
-        bool isAnyModified = false;
-        for ( auto const & xComponent : aComponents )
-        {
-            Reference< XModifiable > xModify( xComponent, UNO_QUERY );
-            if ( xModify.is() )
-            {
-                isAnyModified = xModify->isModified();
-                continue;
-            }
-
-            // TODO: clarify: anything else to care for? Both the sub components with and without model
-            // should support the XModifiable interface, so I think nothing more is needed here.
-            OSL_FAIL( "lcl_hasAnyModifiedSubComponent_throw: anything left to do here?" );
-        }
-
-        return isAnyModified;
+        return std::ranges::any_of(aComponents, [](const Reference<XComponent>& xComp) {
+            Reference< XModifiable > xModify( xComp, UNO_QUERY );
+            return xModify.is() && xModify->isModified();
+        });
     }
 }
 
@@ -586,11 +577,8 @@ sal_Bool SAL_CALL ODatabaseDocument::wasModifiedSinceLastSave()
 
     try
     {
-        for (auto const& controller : m_aControllers)
-        {
-            if ( lcl_hasAnyModifiedSubComponent_throw(controller) )
-                return true;
-        }
+        if (std::ranges::any_of(m_aControllers, lcl_hasAnyModifiedSubComponent_throw))
+            return true;
     }
     catch( const Exception& )
     {
@@ -1596,8 +1584,7 @@ void ODatabaseDocument::WriteThroughComponent( const Reference< XOutputStream >&
     Sequence<Any> aArgs( 1 + _rArguments.getLength() );
     auto pArgs = aArgs.getArray();
     pArgs[0] <<= xSaxWriter;
-    for ( sal_Int32 i = 0; i < _rArguments.getLength(); ++i )
-        pArgs[ i+1 ] = _rArguments[i];
+    std::ranges::copy(_rArguments, pArgs + 1);
 
     // get filter component
     Reference< XExporter > xExporter( m_pImpl->m_aContext->getServiceManager()->createInstanceWithArgumentsAndContext(rServiceName, aArgs, m_pImpl->m_aContext), UNO_QUERY_THROW );
