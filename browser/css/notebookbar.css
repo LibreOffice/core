@@ -713,6 +713,10 @@ label.notebookbar.ui-checkbox-label {
 	flex: 1 0;
 }
 
+.notebookbar.unoAlignBottom {
+	width: calc((var(--btn-size) + var(--btn-padding)) * 2);
+}
+
 /* Review Tab */
 
 /* Sheet Tab */

@@ -675,25 +675,18 @@ window.L.Control.NotebookbarCalc = window.L.Control.NotebookbarWriter.extend({
 											'accessibility': { focusBack: true,	combination: 'AB', de: null }
 										},
 										{
-											'id': 'home-increment-indent',
-											'type': 'toolitem',
-											'text': _UNO('.uno:IncrementIndent'),
-											'command': '.uno:IncrementIndent',
-											'accessibility': { focusBack: true,	combination: '7', de: null }
-										},
-										{
-											'id': 'home-decrement-indent',
-											'type': 'toolitem',
-											'text': _UNO('.uno:DecrementIndent'),
-											'command': '.uno:DecrementIndent',
-											'accessibility': { focusBack: true,	combination: '8', de: null }
-										},
-										{
 											'id': 'home-para-left-to-right',
 											'type': 'toolitem',
 											'text': _UNO('.uno:ParaLeftToRight'),
 											'command': '.uno:ParaLeftToRight',
 											'accessibility': { focusBack: true,	combination: 'RL', de: null }
+										},
+										{
+											'id': 'home-para-right-to-left',
+											'type': 'toolitem',
+											'text': _UNO('.uno:ParaRightToLeft'),
+											'command': '.uno:ParaRightToLeft',
+											'accessibility': { focusBack: true,	combination: 'RR', de: null }
 										}
 									]
 								}
@@ -737,18 +730,18 @@ window.L.Control.NotebookbarCalc = window.L.Control.NotebookbarWriter.extend({
 											'accessibility': { focusBack: true,	combination: 'AO', de: null }
 										},
 										{
-											'id': 'home-wrap-text',
+											'id': 'home-increment-indent',
 											'type': 'toolitem',
-											'text': _UNO('.uno:WrapText', 'spreadsheet'),
-											'command': '.uno:WrapText',
-											'accessibility': { focusBack: true,	combination: 'W', de: null }
+											'text': _UNO('.uno:IncrementIndent'),
+											'command': '.uno:IncrementIndent',
+											'accessibility': { focusBack: true,	combination: '7', de: null }
 										},
 										{
-											'id': 'home-para-right-to-left',
+											'id': 'home-decrement-indent',
 											'type': 'toolitem',
-											'text': _UNO('.uno:ParaRightToLeft'),
-											'command': '.uno:ParaRightToLeft',
-											'accessibility': { focusBack: true,	combination: 'RR', de: null }
+											'text': _UNO('.uno:DecrementIndent'),
+											'command': '.uno:DecrementIndent',
+											'accessibility': { focusBack: true,	combination: '8', de: null }
 										}
 									]
 								}
@@ -758,12 +751,36 @@ window.L.Control.NotebookbarCalc = window.L.Control.NotebookbarWriter.extend({
 					],
 					'vertical': 'true'
 				},
+				{ type: 'separator', id: 'home-wrap-merge-break', orientation: 'vertical' },
 				{
-					'id': 'home-merge-cells',
-					'type': 'bigtoolitem',
-					'text': _('Merge & Center'),
-					'command': '.uno:ToggleMergeCells',
-					'accessibility': { focusBack: true, combination: 'MC', de: null }
+				'type': 'container',
+				'children': [
+					{
+						'type': 'toolbox',
+						'children': [
+							{
+								'id': 'home-wrap-text',
+								'type': 'toolitem',
+								'text': _UNO('.uno:WrapText', 'spreadsheet'),
+								'command': '.uno:WrapText',
+								'accessibility': { focusBack: true,	combination: 'W', de: null }
+							}
+						]
+					},
+					{
+						'type': 'toolbox',
+						'children': [
+							{
+								'id': 'home-merge-cells',
+								'type': 'toolitem',
+								'text': _('Merge & Center'),
+								'command': '.uno:ToggleMergeCells',
+								'accessibility': { focusBack: true, combination: 'MC', de: null }
+							}
+						]
+					}
+				],
+				'vertical': 'true'
 				}
 			]
 		},
