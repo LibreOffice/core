@@ -18,6 +18,7 @@ $(call gb_ExternalProject_get_state_target,expat,configure) :
 	$(call gb_ExternalProject_run,configure,\
 		$(gb_RUN_CONFIGURE) ./configure --without-docbook --without-getentropy \
 				--without-arc4random --without-arc4random-buf \
+				--without-getrandom --without-sys-getrandom \
 			$(gb_CONFIGURE_PLATFORMS) \
 			$(if $(CROSS_COMPILING),$(if $(filter INTEL ARM,$(CPUNAME)),ac_cv_c_bigendian=no)) \
 	,,expat_configure.log)
