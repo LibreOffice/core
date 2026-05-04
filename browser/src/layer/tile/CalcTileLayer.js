@@ -427,12 +427,13 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 		if (statusJSON.width && statusJSON.height && this._documentInfo !== textMsg) {
 			const previousStatusJSON = this._lastStatusJSON ? Object.assign({}, this._lastStatusJSON): null;
 			this._lastStatusJSON = statusJSON;
-			this._documentInfo = textMsg;
-
-			var firstSelectedPart = (typeof this._selectedPart !== 'number');
 
 			if (statusJSON.readonly && !this._documentInfo)
 				this._map.setPermission('readonly');
+
+			this._documentInfo = textMsg;
+
+			var firstSelectedPart = (typeof this._selectedPart !== 'number');
 
 			app.activeDocument.fileSize = new cool.SimplePoint(statusJSON.width, statusJSON.height);
 			app.activeDocument.activeLayout.viewSize = app.activeDocument.fileSize.clone();
