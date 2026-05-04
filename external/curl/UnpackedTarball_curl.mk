@@ -31,6 +31,9 @@ $(eval $(call gb_UnpackedTarball_add_patches,curl,\
 	external/curl/0001-url-fix-copy-and-paste-url_match_auth_nego-mistake.patch \
 	external/curl/0001-http-only-send-bearer-if-auth-is-allowed.patch \
 	external/curl/0001-proxy-auth-additional-tests.patch \
+	external/curl/0001-url-improve-connection-reuse-on-negotiate.patch \
+	external/curl/0001-setopt-clear-proxy-auth-properties-when-switching.patch \
+	external/curl/0001-http-clear-the-proxy-credentials-as-well-on-port-or-.patch \
 ))
 
 ifeq ($(OS)-$(COM_IS_CLANG),WNT-TRUE)
