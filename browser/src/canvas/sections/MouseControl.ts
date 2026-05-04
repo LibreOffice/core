@@ -85,6 +85,16 @@ class MouseControl extends CanvasSectionObject {
 			-app.activeDocument.activeLayout.viewedRectangle.pY1 +
 			app.sectionContainer.getDocumentAnchor()[1];
 
+		// In Calc RTL, the grid is rendered mirrored around the tile section's
+		// right edge, so the canvas x the user clicked corresponds to the
+		// mirrored document x. Flip it back before converting to document
+		// coords so core receives the LTR document x of the intended cell.
+		if (app.calc.isRTL()) {
+			const anchorX = app.sectionContainer.getDocumentAnchor()[0];
+			const tileWidth = app.sectionContainer.getDocumentAnchorSection().size[0];
+			viewToDocumentPos.pX = 2 * anchorX + tileWidth - viewToDocumentPos.pX;
+		}
+
 		viewToDocumentPos =
 			app.activeDocument.activeLayout.canvasToDocumentPoint(viewToDocumentPos);
 
