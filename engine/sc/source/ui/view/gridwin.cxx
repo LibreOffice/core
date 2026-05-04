@@ -7334,7 +7334,11 @@ void ScGridWindow::UpdateDragRectOverlay()
         SCCOLROW i;
 
         bool bLayoutRTL = rDoc.IsLayoutRTL( nTab );
-        tools::Long nLayoutSign = bLayoutRTL ? -1 : 1;
+        // COKit clients need exact document coordinates and apply their own
+        // RTL flip browser-side; don't horizontally mirror here, matching
+        // GetRectsAnyFor's convention so the regular selection and the
+        // drag indicator agree on coordinate space.
+        tools::Long nLayoutSign = (!comphelper::COKit::isActive() && bLayoutRTL) ? -1 : 1;
         tools::Long nAdjust = comphelper::COKit::isActive() ? 0 : 2;
 
         if (rDoc.ValidCol(nX2) && nX2>=nX1)
@@ -7371,7 +7375,7 @@ void ScGridWindow::UpdateDragRectOverlay()
         aScrPos.AdjustY( -1 * nAdjust );
         tools::Rectangle aRect( aScrPos.X(), aScrPos.Y(),
                          aScrPos.X() + ( nSizeXPix + nAdjust ) * nLayoutSign, aScrPos.Y() + nSizeYPix + nAdjust );
-        if ( bLayoutRTL )
+        if ( bLayoutRTL && !comphelper::COKit::isActive() )
         {
             aRect.SetLeft( aRect.Right() );   // end position is left
             aRect.SetRight( aScrPos.X() );
