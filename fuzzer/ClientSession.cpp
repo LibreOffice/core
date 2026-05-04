@@ -27,6 +27,7 @@ bool DoInitialization()
     UnitBase::init(UnitBase::UnitType::Wsd, std::string());
 
     fuzzer::DoInitialization();
+    Admin::initialize();
     return true;
 }
 

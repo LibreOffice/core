@@ -1155,7 +1155,7 @@ bool ClientSession::_handleInput(const char *buffer, int length)
             // Be forgiving and log instead of disconnecting.
             // sendTextFrameAndLogError("error: cmd=tileprocessed kind=syntax");
             logSyntaxErrorDetails(tokens, firstLine);
-            assert(!"Invalid syntax for tileprocessed");
+            LOG_WRN("Invalid syntax for tileprocessed");
             return true;
         }
 
