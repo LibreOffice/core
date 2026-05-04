@@ -406,6 +406,9 @@ window.L.Control.JSDialog = window.L.Control.extend({
 		if (instance.isModalPopUp || instance.isDocumentAreaPopup || instance.isSnackbar)
 			window.L.DomUtil.addClass(instance.container, 'modalpopup');
 
+		if (instance.isAutofilter && !this.isChildAutoFilter(instance))
+			window.L.DomUtil.addClass(instance.container, 'autofilter-popup');
+
 		if (instance.isModalPopUp && !instance.popupParent) // Special case for menu popups (they are also modal dialogues).
 			instance.overlay.classList.add('dimmed');
 
