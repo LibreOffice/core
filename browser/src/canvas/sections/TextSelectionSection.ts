@@ -77,18 +77,29 @@ class TextSelectionSection extends CanvasSectionObject {
 				deflectionY = app.activeDocument.activeLayout.viewedRectangle.pY1;
 		}
 
+		// In Calc RTL, polygons come from core in LTR document coords; mirror
+		// each x around the tile section's right edge so the rectangle lands
+		// on the visible cells that the user actually selected.
+		const mirrorX = app.calc.isRTL();
+		const mirrorAxis = mirrorX
+			? 2 * app.sectionContainer.getDocumentAnchor()[0] +
+				app.sectionContainer.getDocumentAnchorSection().size[0]
+			: 0;
+		const toCanvasX = (vX: number) =>
+			mirrorX ? mirrorAxis - (vX + deflectionX) : vX + deflectionX;
+
 		for (let i = 0; i < this.polygons.length; i++) {
 			const polygon = this.polygons[i];
 
 			this.context.beginPath();
 			this.context.moveTo(
-				polygon[0].vX + deflectionX,
+				toCanvasX(polygon[0].vX),
 				polygon[0].vY + deflectionY,
 			);
 
 			for (let i = 1; i < polygon.length; i++) {
 				this.context.lineTo(
-					polygon[i].vX + deflectionX,
+					toCanvasX(polygon[i].vX),
 					polygon[i].vY + deflectionY,
 				);
 			}
