@@ -37,27 +37,27 @@ class SVX_DLLPUBLIC SwFrameExample final : public weld::CustomWidgetController
     Color       m_aBlankCol;        ///< area of symbol for blank
     Color       m_aBlankFrameCol;   ///< frame of symbol for blank
 
-    tools::Rectangle   aPage;
-    tools::Rectangle   aPagePrtArea;
-    tools::Rectangle   aTextLine;
-    tools::Rectangle   aPara;
-    tools::Rectangle   aParaPrtArea;
-    tools::Rectangle   aFrameAtFrame;
-    tools::Rectangle   aDrawObj;
-    tools::Rectangle   aAutoCharFrame;
-    Size        aFrmSize;
+    tools::Rectangle   m_aPage;
+    tools::Rectangle   m_aPagePrtArea;
+    tools::Rectangle   m_aTextLine;
+    tools::Rectangle   m_aPara;
+    tools::Rectangle   m_aParaPrtArea;
+    tools::Rectangle   m_aFrameAtFrame;
+    tools::Rectangle   m_aDrawObj;
+    tools::Rectangle   m_aAutoCharFrame;
+    Size        m_aFrmSize;
 
-    short       nHAlign;
-    short       nHRel;
+    short       m_nHAlign;
+    short       m_nHRel;
 
-    short       nVAlign;
-    short       nVRel;
+    short       m_nVAlign;
+    short       m_nVRel;
 
-    css::text::WrapTextMode nWrap;
-    RndStdIds   nAnchor;
-    bool        bTrans;
+    css::text::WrapTextMode m_nWrap;
+    RndStdIds   m_nAnchor;
+    bool        m_bTrans;
 
-    Point       aRelPos;
+    Point       m_aRelPos;
 
     void InitColors_Impl();
     void InitAllRects_Impl(vcl::RenderContext& rRenderContext);
@@ -73,16 +73,16 @@ public:
 
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
 
-    void SetWrap(css::text::WrapTextMode nW) { nWrap     = nW; }
+    void SetWrap(css::text::WrapTextMode nW) { m_nWrap     = nW; }
 
-    void SetHAlign(short nH)          { nHAlign   = nH; }
-    void SetHoriRel(short nR)         { nHRel     = nR; }
+    void SetHAlign(short nH)          { m_nHAlign   = nH; }
+    void SetHoriRel(short nR)         { m_nHRel     = nR; }
 
-    void SetVAlign(short nV)          { nVAlign   = nV; }
-    void SetVertRel(short nR)         { nVRel     = nR; }
+    void SetVAlign(short nV)          { m_nVAlign   = nV; }
+    void SetVertRel(short nR)         { m_nVRel     = nR; }
 
-    void SetTransparent(bool bT)      { bTrans    = bT; }
-    void SetAnchor(RndStdIds nA) { nAnchor   = nA; }
+    void SetTransparent(bool bT)      { m_bTrans    = bT; }
+    void SetAnchor(RndStdIds nA) { m_nAnchor   = nA; }
 
     void SetRelPos(const Point& rP);
 };

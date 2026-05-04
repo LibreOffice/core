@@ -52,14 +52,14 @@ void DrawRect_Impl(vcl::RenderContext& rRenderContext, const tools::Rectangle &r
 }
 
 SwFrameExample::SwFrameExample()
-    : nHAlign(HoriOrientation::CENTER)
-    , nHRel(RelOrientation::FRAME)
-    , nVAlign(VertOrientation::TOP)
-    , nVRel(RelOrientation::PRINT_AREA)
-    , nWrap(WrapTextMode_NONE)
-    , nAnchor(RndStdIds::FLY_AT_PAGE)
-    , bTrans(false)
-    , aRelPos(Point(0,0))
+    : m_nHAlign(HoriOrientation::CENTER)
+    , m_nHRel(RelOrientation::FRAME)
+    , m_nVAlign(VertOrientation::TOP)
+    , m_nVRel(RelOrientation::PRINT_AREA)
+    , m_nWrap(WrapTextMode_NONE)
+    , m_nAnchor(RndStdIds::FLY_AT_PAGE)
+    , m_bTrans(false)
+    , m_aRelPos(Point(0,0))
 {
     InitColors_Impl();
 }
@@ -98,14 +98,14 @@ void SwFrameExample::StyleUpdated()
 
 void SwFrameExample::InitAllRects_Impl(vcl::RenderContext& rRenderContext)
 {
-    aPage.SetSize(GetOutputSizePixel());
+    m_aPage.SetSize(GetOutputSizePixel());
 
-    sal_uInt32 nOutWPix = aPage.GetWidth();
+    sal_uInt32 nOutWPix = m_aPage.GetWidth();
     if (!nOutWPix)
     {
         nOutWPix = 1;
     }
-    sal_uInt32 nOutHPix = aPage.GetHeight();
+    sal_uInt32 nOutHPix = m_aPage.GetHeight();
     if (!nOutHPix)
     {
         nOutHPix = 1;
@@ -122,7 +122,7 @@ void SwFrameExample::InitAllRects_Impl(vcl::RenderContext& rRenderContext)
     sal_uInt32 nTTxtBorder;
     sal_uInt32 nBTxtBorder;
 
-    if (nAnchor != RndStdIds::FLY_AS_CHAR)
+    if (m_nAnchor != RndStdIds::FLY_AS_CHAR)
     {
         nLBorder = 14;
         nRBorder = 10;
@@ -146,31 +146,31 @@ void SwFrameExample::InitAllRects_Impl(vcl::RenderContext& rRenderContext)
         nTTxtBorder = 2;
         nBTxtBorder = 2;
     }
-    aPagePrtArea = tools::Rectangle(Point(nLBorder, nTBorder), Point((nOutWPix - 1) - nRBorder, (nOutHPix - 1) - nBBorder));
+    m_aPagePrtArea = tools::Rectangle(Point(nLBorder, nTBorder), Point((nOutWPix - 1) - nRBorder, (nOutHPix - 1) - nBBorder));
 
     // Example text: Preparing for the text output
     // A line of text
-    aTextLine = aPagePrtArea;
-    aTextLine.SetSize(Size(aTextLine.GetWidth(), 2));
-    aTextLine.AdjustLeft(nLTxtBorder );
-    aTextLine.AdjustRight( -sal_Int32(nRTxtBorder) );
-    aTextLine.Move(0, nTTxtBorder);
+    m_aTextLine = m_aPagePrtArea;
+    m_aTextLine.SetSize(Size(m_aTextLine.GetWidth(), 2));
+    m_aTextLine.AdjustLeft(nLTxtBorder );
+    m_aTextLine.AdjustRight( -sal_Int32(nRTxtBorder) );
+    m_aTextLine.Move(0, nTTxtBorder);
 
     // Rectangle to edges including paragraph
-    sal_uInt16 nLines = static_cast<sal_uInt16>((aPagePrtArea.GetHeight() / 2 - nTTxtBorder - nBTxtBorder)
-             / (aTextLine.GetHeight() + 2));
-    aPara = aPagePrtArea;
-    aPara.SetSize(Size(aPara.GetWidth(),
-        (aTextLine.GetHeight() + 2) * nLines + nTTxtBorder + nBTxtBorder));
+    sal_uInt16 nLines = static_cast<sal_uInt16>((m_aPagePrtArea.GetHeight() / 2 - nTTxtBorder - nBTxtBorder)
+             / (m_aTextLine.GetHeight() + 2));
+    m_aPara = m_aPagePrtArea;
+    m_aPara.SetSize(Size(m_aPara.GetWidth(),
+        (m_aTextLine.GetHeight() + 2) * nLines + nTTxtBorder + nBTxtBorder));
 
     // Rectangle around paragraph without borders
-    aParaPrtArea = aPara;
-    aParaPrtArea.AdjustLeft(nLTxtBorder );
-    aParaPrtArea.AdjustRight( -sal_Int32(nRTxtBorder) );
-    aParaPrtArea.AdjustTop(nTTxtBorder );
-    aParaPrtArea.AdjustBottom( -sal_Int32(nBTxtBorder) );
+    m_aParaPrtArea = m_aPara;
+    m_aParaPrtArea.AdjustLeft(nLTxtBorder );
+    m_aParaPrtArea.AdjustRight( -sal_Int32(nRTxtBorder) );
+    m_aParaPrtArea.AdjustTop(nTTxtBorder );
+    m_aParaPrtArea.AdjustBottom( -sal_Int32(nBTxtBorder) );
 
-    if (nAnchor == RndStdIds::FLY_AS_CHAR || nAnchor == RndStdIds::FLY_AT_CHAR)
+    if (m_nAnchor == RndStdIds::FLY_AS_CHAR || m_nAnchor == RndStdIds::FLY_AT_CHAR)
     {
         vcl::Font aFont = OutputDevice::GetDefaultFont(
                                 DefaultFontType::LATIN_TEXT, Application::GetSettings().GetLanguageTag().getLanguageType(),
@@ -179,108 +179,108 @@ void SwFrameExample::InitAllRects_Impl(vcl::RenderContext& rRenderContext)
         aFont.SetFillColor( m_aBgCol );
         aFont.SetWeight(WEIGHT_NORMAL);
 
-        if (nAnchor == RndStdIds::FLY_AS_CHAR)
+        if (m_nAnchor == RndStdIds::FLY_AS_CHAR)
         {
-            aFont.SetFontSize(Size(0, aParaPrtArea.GetHeight() - 2));
+            aFont.SetFontSize(Size(0, m_aParaPrtArea.GetHeight() - 2));
             rRenderContext.SetFont(aFont);
-            aParaPrtArea.SetSize(Size(rRenderContext.GetTextWidth(DEMOTEXT), rRenderContext.GetTextHeight()));
+            m_aParaPrtArea.SetSize(Size(rRenderContext.GetTextWidth(DEMOTEXT), rRenderContext.GetTextHeight()));
         }
         else
         {
-            aFont.SetFontSize(Size(0, aParaPrtArea.GetHeight() / 2));
+            aFont.SetFontSize(Size(0, m_aParaPrtArea.GetHeight() / 2));
             rRenderContext.SetFont(aFont);
-            aAutoCharFrame.SetSize(Size(rRenderContext.GetTextWidth(OUString('A')), GetTextHeight()));
-            aAutoCharFrame.SetPos(Point(aParaPrtArea.Left() + (aParaPrtArea.GetWidth() - aAutoCharFrame.GetWidth()) / 2,
-                aParaPrtArea.Top() + (aParaPrtArea.GetHeight() - aAutoCharFrame.GetHeight()) / 2));
+            m_aAutoCharFrame.SetSize(Size(rRenderContext.GetTextWidth(OUString('A')), GetTextHeight()));
+            m_aAutoCharFrame.SetPos(Point(m_aParaPrtArea.Left() + (m_aParaPrtArea.GetWidth() - m_aAutoCharFrame.GetWidth()) / 2,
+                m_aParaPrtArea.Top() + (m_aParaPrtArea.GetHeight() - m_aAutoCharFrame.GetHeight()) / 2));
         }
     }
 
     // Inner Frame anchored at the Frame
-    aFrameAtFrame = aPara;
-    aFrameAtFrame.AdjustLeft(9 );
-    aFrameAtFrame.AdjustRight( -5 );
-    aFrameAtFrame.AdjustBottom(5 );
-    aFrameAtFrame.SetPos(Point(aFrameAtFrame.Left() + 2, (aPagePrtArea.Bottom() - aFrameAtFrame.GetHeight()) / 2 + 5));
+    m_aFrameAtFrame = m_aPara;
+    m_aFrameAtFrame.AdjustLeft(9 );
+    m_aFrameAtFrame.AdjustRight( -5 );
+    m_aFrameAtFrame.AdjustBottom(5 );
+    m_aFrameAtFrame.SetPos(Point(m_aFrameAtFrame.Left() + 2, (m_aPagePrtArea.Bottom() - m_aFrameAtFrame.GetHeight()) / 2 + 5));
 
     // Size of the frame to be positioned
-    if (nAnchor != RndStdIds::FLY_AS_CHAR)
+    if (m_nAnchor != RndStdIds::FLY_AS_CHAR)
     {
-        sal_uInt32 nLFBorder = nAnchor == RndStdIds::FLY_AT_PAGE ? nLBorder : nLTxtBorder;
-        sal_uInt32 nRFBorder = nAnchor == RndStdIds::FLY_AT_PAGE ? nRBorder : nRTxtBorder;
+        sal_uInt32 nLFBorder = m_nAnchor == RndStdIds::FLY_AT_PAGE ? nLBorder : nLTxtBorder;
+        sal_uInt32 nRFBorder = m_nAnchor == RndStdIds::FLY_AT_PAGE ? nRBorder : nRTxtBorder;
 
-        switch (nHRel)
+        switch (m_nHRel)
         {
             case RelOrientation::PAGE_LEFT:
             case RelOrientation::FRAME_LEFT:
-                aFrmSize = Size(nLFBorder - 4, (aTextLine.GetHeight() + 2) * 3);
+                m_aFrmSize = Size(nLFBorder - 4, (m_aTextLine.GetHeight() + 2) * 3);
                 break;
 
             case RelOrientation::PAGE_RIGHT:
             case RelOrientation::FRAME_RIGHT:
-                aFrmSize = Size(nRFBorder - 4, (aTextLine.GetHeight() + 2) * 3);
+                m_aFrmSize = Size(nRFBorder - 4, (m_aTextLine.GetHeight() + 2) * 3);
                 break;
 
             default:
-                aFrmSize = Size(nLBorder - 3, (aTextLine.GetHeight() + 2) * 3);
+                m_aFrmSize = Size(nLBorder - 3, (m_aTextLine.GetHeight() + 2) * 3);
                 break;
         }
-        aFrmSize.setWidth( std::max(tools::Long(5), aFrmSize.Width()) );
-        aFrmSize.setHeight( std::max(tools::Long(5), aFrmSize.Height()) );
+        m_aFrmSize.setWidth( std::max(tools::Long(5), m_aFrmSize.Width()) );
+        m_aFrmSize.setHeight( std::max(tools::Long(5), m_aFrmSize.Height()) );
     }
     else
     {
-        sal_uInt32 nFreeWidth = aPagePrtArea.GetWidth() - rRenderContext.GetTextWidth(DEMOTEXT);
+        sal_uInt32 nFreeWidth = m_aPagePrtArea.GetWidth() - rRenderContext.GetTextWidth(DEMOTEXT);
 
-        aFrmSize = Size(nFreeWidth / 2, (aTextLine.GetHeight() + 2) * 3);
-        aDrawObj.SetSize(Size(std::max(tools::Long(5), tools::Long(nFreeWidth / 3)), std::max(tools::Long(5), aFrmSize.Height() * 3)));
-        aDrawObj.SetPos(Point(aParaPrtArea.Right() + 1, aParaPrtArea.Bottom() / 2));
-        aParaPrtArea.SetRight( aDrawObj.Right() );
+        m_aFrmSize = Size(nFreeWidth / 2, (m_aTextLine.GetHeight() + 2) * 3);
+        m_aDrawObj.SetSize(Size(std::max(tools::Long(5), tools::Long(nFreeWidth / 3)), std::max(tools::Long(5), m_aFrmSize.Height() * 3)));
+        m_aDrawObj.SetPos(Point(m_aParaPrtArea.Right() + 1, m_aParaPrtArea.Bottom() / 2));
+        m_aParaPrtArea.SetRight( m_aDrawObj.Right() );
     }
 }
 
 void SwFrameExample::CalcBoundRect_Impl(const vcl::RenderContext& rRenderContext, tools::Rectangle &rRect)
 {
-    switch (nAnchor)
+    switch (m_nAnchor)
     {
         case RndStdIds::FLY_AT_PAGE:
         {
-            switch (nHRel)
+            switch (m_nHRel)
             {
                 case RelOrientation::FRAME:
                 case RelOrientation::PAGE_FRAME:
-                    rRect.SetLeft( aPage.Left() );
-                    rRect.SetRight( aPage.Right() );
+                    rRect.SetLeft( m_aPage.Left() );
+                    rRect.SetRight( m_aPage.Right() );
                     break;
 
                 case RelOrientation::PRINT_AREA:
                 case RelOrientation::PAGE_PRINT_AREA:
-                    rRect.SetLeft( aPagePrtArea.Left() );
-                    rRect.SetRight( aPagePrtArea.Right() );
+                    rRect.SetLeft( m_aPagePrtArea.Left() );
+                    rRect.SetRight( m_aPagePrtArea.Right() );
                     break;
 
                 case RelOrientation::PAGE_LEFT:
-                    rRect.SetLeft( aPage.Left() );
-                    rRect.SetRight( aPagePrtArea.Left() );
+                    rRect.SetLeft( m_aPage.Left() );
+                    rRect.SetRight( m_aPagePrtArea.Left() );
                     break;
 
                 case RelOrientation::PAGE_RIGHT:
-                    rRect.SetLeft( aPagePrtArea.Right() );
-                    rRect.SetRight( aPage.Right() );
+                    rRect.SetLeft( m_aPagePrtArea.Right() );
+                    rRect.SetRight( m_aPage.Right() );
                     break;
             }
 
-            switch (nVRel)
+            switch (m_nVRel)
             {
                 case RelOrientation::PRINT_AREA:
                 case RelOrientation::PAGE_PRINT_AREA:
-                    rRect.SetTop( aPagePrtArea.Top() );
-                    rRect.SetBottom( aPagePrtArea.Bottom() );
+                    rRect.SetTop( m_aPagePrtArea.Top() );
+                    rRect.SetBottom( m_aPagePrtArea.Bottom() );
                     break;
 
                 case RelOrientation::FRAME:
                 case RelOrientation::PAGE_FRAME:
-                    rRect.SetTop( aPage.Top() );
-                    rRect.SetBottom( aPage.Bottom() );
+                    rRect.SetTop( m_aPage.Top() );
+                    rRect.SetBottom( m_aPage.Bottom() );
                     break;
             }
         }
@@ -288,43 +288,43 @@ void SwFrameExample::CalcBoundRect_Impl(const vcl::RenderContext& rRenderContext
 
         case RndStdIds::FLY_AT_FLY:
         {
-            switch (nHRel)
+            switch (m_nHRel)
             {
                 case RelOrientation::FRAME:
                 case RelOrientation::PAGE_FRAME:
-                    rRect.SetLeft( aFrameAtFrame.Left() );
-                    rRect.SetRight( aFrameAtFrame.Right() );
+                    rRect.SetLeft( m_aFrameAtFrame.Left() );
+                    rRect.SetRight( m_aFrameAtFrame.Right() );
                     break;
 
                 case RelOrientation::PRINT_AREA:
                 case RelOrientation::PAGE_PRINT_AREA:
-                    rRect.SetLeft( aFrameAtFrame.Left() + FLYINFLY_BORDER );
-                    rRect.SetRight( aFrameAtFrame.Right() - FLYINFLY_BORDER );
+                    rRect.SetLeft( m_aFrameAtFrame.Left() + FLYINFLY_BORDER );
+                    rRect.SetRight( m_aFrameAtFrame.Right() - FLYINFLY_BORDER );
                     break;
 
                 case RelOrientation::PAGE_LEFT:
-                    rRect.SetLeft( aFrameAtFrame.Left() );
-                    rRect.SetRight( aFrameAtFrame.Left() + FLYINFLY_BORDER );
+                    rRect.SetLeft( m_aFrameAtFrame.Left() );
+                    rRect.SetRight( m_aFrameAtFrame.Left() + FLYINFLY_BORDER );
                     break;
 
                 case RelOrientation::PAGE_RIGHT:
-                    rRect.SetLeft( aFrameAtFrame.Right() );
-                    rRect.SetRight( aFrameAtFrame.Right() - FLYINFLY_BORDER );
+                    rRect.SetLeft( m_aFrameAtFrame.Right() );
+                    rRect.SetRight( m_aFrameAtFrame.Right() - FLYINFLY_BORDER );
                     break;
             }
 
-            switch (nVRel)
+            switch (m_nVRel)
             {
                 case RelOrientation::FRAME:
                 case RelOrientation::PAGE_FRAME:
-                    rRect.SetTop( aFrameAtFrame.Top() );
-                    rRect.SetBottom( aFrameAtFrame.Bottom() );
+                    rRect.SetTop( m_aFrameAtFrame.Top() );
+                    rRect.SetBottom( m_aFrameAtFrame.Bottom() );
                     break;
 
                 case RelOrientation::PRINT_AREA:
                 case RelOrientation::PAGE_PRINT_AREA:
-                    rRect.SetTop( aFrameAtFrame.Top() + FLYINFLY_BORDER );
-                    rRect.SetBottom( aFrameAtFrame.Bottom() - FLYINFLY_BORDER );
+                    rRect.SetTop( m_aFrameAtFrame.Top() + FLYINFLY_BORDER );
+                    rRect.SetBottom( m_aFrameAtFrame.Bottom() - FLYINFLY_BORDER );
                     break;
             }
         }
@@ -332,88 +332,88 @@ void SwFrameExample::CalcBoundRect_Impl(const vcl::RenderContext& rRenderContext
         case RndStdIds::FLY_AT_PARA:
         case RndStdIds::FLY_AT_CHAR:
         {
-            switch (nHRel)
+            switch (m_nHRel)
             {
                 case RelOrientation::FRAME:
-                    rRect.SetLeft( aPara.Left() );
-                    rRect.SetRight( aPara.Right() );
+                    rRect.SetLeft( m_aPara.Left() );
+                    rRect.SetRight( m_aPara.Right() );
                     break;
 
                 case RelOrientation::PRINT_AREA:
-                    rRect.SetLeft( aParaPrtArea.Left() );
-                    rRect.SetRight( aParaPrtArea.Right() );
+                    rRect.SetLeft( m_aParaPrtArea.Left() );
+                    rRect.SetRight( m_aParaPrtArea.Right() );
                     break;
 
                 case RelOrientation::PAGE_LEFT:
-                    rRect.SetLeft( aPage.Left() );
-                    rRect.SetRight( aPagePrtArea.Left() );
+                    rRect.SetLeft( m_aPage.Left() );
+                    rRect.SetRight( m_aPagePrtArea.Left() );
                     break;
 
                 case RelOrientation::PAGE_RIGHT:
-                    rRect.SetLeft( aPagePrtArea.Right() );
-                    rRect.SetRight( aPage.Right() );
+                    rRect.SetLeft( m_aPagePrtArea.Right() );
+                    rRect.SetRight( m_aPage.Right() );
                     break;
 
                 case RelOrientation::PAGE_FRAME:
-                    rRect.SetLeft( aPage.Left() );
-                    rRect.SetRight( aPage.Right() );
+                    rRect.SetLeft( m_aPage.Left() );
+                    rRect.SetRight( m_aPage.Right() );
                     break;
 
                 case RelOrientation::PAGE_PRINT_AREA:
-                    rRect.SetLeft( aPagePrtArea.Left() );
-                    rRect.SetRight( aPagePrtArea.Right() );
+                    rRect.SetLeft( m_aPagePrtArea.Left() );
+                    rRect.SetRight( m_aPagePrtArea.Right() );
                     break;
 
                 case RelOrientation::FRAME_LEFT:
-                    rRect.SetLeft( aPara.Left() );
-                    rRect.SetRight( aParaPrtArea.Left() );
+                    rRect.SetLeft( m_aPara.Left() );
+                    rRect.SetRight( m_aParaPrtArea.Left() );
                     break;
 
                 case RelOrientation::FRAME_RIGHT:
-                    rRect.SetLeft( aParaPrtArea.Right() );
-                    rRect.SetRight( aPara.Right() );
+                    rRect.SetLeft( m_aParaPrtArea.Right() );
+                    rRect.SetRight( m_aPara.Right() );
                     break;
 
                 case RelOrientation::CHAR:
-                    rRect.SetLeft( aAutoCharFrame.Left() );
-                    rRect.SetRight( aAutoCharFrame.Left() );
+                    rRect.SetLeft( m_aAutoCharFrame.Left() );
+                    rRect.SetRight( m_aAutoCharFrame.Left() );
                     break;
             }
 
-            switch (nVRel)
+            switch (m_nVRel)
             {
                 case RelOrientation::FRAME:
-                    rRect.SetTop( aPara.Top() );
-                    rRect.SetBottom( aPara.Bottom() );
+                    rRect.SetTop( m_aPara.Top() );
+                    rRect.SetBottom( m_aPara.Bottom() );
                     break;
 
                 case RelOrientation::PRINT_AREA:
-                    rRect.SetTop( aParaPrtArea.Top() );
-                    rRect.SetBottom( aParaPrtArea.Bottom() );
+                    rRect.SetTop( m_aParaPrtArea.Top() );
+                    rRect.SetBottom( m_aParaPrtArea.Bottom() );
                     break;
 
                 case RelOrientation::CHAR:
-                    if (nVAlign != VertOrientation::NONE &&
-                                nVAlign != VertOrientation::CHAR_BOTTOM)
-                        rRect.SetTop( aAutoCharFrame.Top() );
+                    if (m_nVAlign != VertOrientation::NONE &&
+                                m_nVAlign != VertOrientation::CHAR_BOTTOM)
+                        rRect.SetTop( m_aAutoCharFrame.Top() );
                     else
-                        rRect.SetTop( aAutoCharFrame.Bottom() );
-                    rRect.SetBottom( aAutoCharFrame.Bottom() );
+                        rRect.SetTop( m_aAutoCharFrame.Bottom() );
+                    rRect.SetBottom( m_aAutoCharFrame.Bottom() );
                     break;
                 // OD 12.11.2003 #i22341#
                 case RelOrientation::TEXT_LINE:
-                    rRect.SetTop( aAutoCharFrame.Top() );
-                    rRect.SetBottom( aAutoCharFrame.Top() );
+                    rRect.SetTop( m_aAutoCharFrame.Top() );
+                    rRect.SetBottom( m_aAutoCharFrame.Top() );
                 break;
             }
         }
         break;
 
         case RndStdIds::FLY_AS_CHAR:
-            rRect.SetLeft( aParaPrtArea.Left() );
-            rRect.SetRight( aParaPrtArea.Right() );
+            rRect.SetLeft( m_aParaPrtArea.Left() );
+            rRect.SetRight( m_aParaPrtArea.Right() );
 
-            switch (nVAlign)
+            switch (m_nVAlign)
             {
                 case VertOrientation::NONE:
                 case VertOrientation::TOP:
@@ -422,7 +422,7 @@ void SwFrameExample::CalcBoundRect_Impl(const vcl::RenderContext& rRenderContext
                 {
                     FontMetric aMetric(rRenderContext.GetFontMetric());
 
-                    rRect.SetTop( aParaPrtArea.Bottom() - aMetric.GetDescent() );
+                    rRect.SetTop( m_aParaPrtArea.Bottom() - aMetric.GetDescent() );
                     rRect.SetBottom( rRect.Top() );
                 }
                 break;
@@ -432,15 +432,15 @@ void SwFrameExample::CalcBoundRect_Impl(const vcl::RenderContext& rRenderContext
                 case VertOrientation::LINE_TOP:
                 case VertOrientation::LINE_CENTER:
                 case VertOrientation::LINE_BOTTOM:
-                    rRect.SetTop( aParaPrtArea.Top() );
-                    rRect.SetBottom( aDrawObj.Bottom() );
+                    rRect.SetTop( m_aParaPrtArea.Top() );
+                    rRect.SetBottom( m_aDrawObj.Bottom() );
                     break;
 
                 case VertOrientation::CHAR_TOP:
                 case VertOrientation::CHAR_CENTER:
                 case VertOrientation::CHAR_BOTTOM:
-                    rRect.SetTop( aParaPrtArea.Top() );
-                    rRect.SetBottom( aParaPrtArea.Bottom() );
+                    rRect.SetTop( m_aParaPrtArea.Top() );
+                    rRect.SetBottom( m_aParaPrtArea.Bottom() );
                     break;
             }
             break;
@@ -459,12 +459,12 @@ tools::Rectangle SwFrameExample::DrawInnerFrame_Impl(vcl::RenderContext& rRender
     tools::Rectangle aRect(rRect); // aPagePrtArea = Default
     CalcBoundRect_Impl(rRenderContext, aRect);
 
-    if (nAnchor == RndStdIds::FLY_AT_FLY && &rRect == &aPagePrtArea)
+    if (m_nAnchor == RndStdIds::FLY_AT_FLY && &rRect == &m_aPagePrtArea)
     {
         // draw text paragraph
-        tools::Rectangle aTxt(aTextLine);
+        tools::Rectangle aTxt(m_aTextLine);
         sal_Int32 nStep = aTxt.GetHeight() + 2;
-        sal_uInt16 nLines = static_cast<sal_uInt16>(aParaPrtArea.GetHeight() / (aTextLine.GetHeight() + 2));
+        sal_uInt16 nLines = static_cast<sal_uInt16>(m_aParaPrtArea.GetHeight() / (m_aTextLine.GetHeight() + 2));
 
         for (sal_uInt16 i = 0; i < nLines; i++)
         {
@@ -485,35 +485,35 @@ void SwFrameExample::Paint(vcl::RenderContext& rRenderContext, const tools::Rect
     InitAllRects_Impl(rRenderContext);
 
     // Draw page
-    DrawRect_Impl(rRenderContext, aPage, m_aBgCol, m_aBorderCol);
+    DrawRect_Impl(rRenderContext, m_aPage, m_aBgCol, m_aBorderCol);
 
     // Draw PrintArea
-    tools::Rectangle aRect = DrawInnerFrame_Impl(rRenderContext, aPagePrtArea, std::nullopt, m_aPrintAreaCol);
+    tools::Rectangle aRect = DrawInnerFrame_Impl(rRenderContext, m_aPagePrtArea, std::nullopt, m_aPrintAreaCol);
 
-    if (nAnchor == RndStdIds::FLY_AT_FLY)
-        aRect = DrawInnerFrame_Impl(rRenderContext, aFrameAtFrame, m_aBgCol, m_aBorderCol);
+    if (m_nAnchor == RndStdIds::FLY_AT_FLY)
+        aRect = DrawInnerFrame_Impl(rRenderContext, m_aFrameAtFrame, m_aBgCol, m_aBorderCol);
 
     tools::Long lXPos = 0;
     tools::Long lYPos = 0;
 
     // Horizontal alignment
-    if (nAnchor != RndStdIds::FLY_AS_CHAR)
+    if (m_nAnchor != RndStdIds::FLY_AS_CHAR)
     {
-        switch (nHAlign)
+        switch (m_nHAlign)
         {
             case HoriOrientation::RIGHT:
             {
-                lXPos = aRect.Right() - aFrmSize.Width() + 1;
+                lXPos = aRect.Right() - m_aFrmSize.Width() + 1;
                 break;
             }
             case HoriOrientation::CENTER:
             {
-                lXPos = aRect.Left() + (aRect.GetWidth() - aFrmSize.Width()) / 2;
+                lXPos = aRect.Left() + (aRect.GetWidth() - m_aFrmSize.Width()) / 2;
                 break;
             }
             case HoriOrientation::NONE:
             {
-                lXPos = aRect.Left() + aRelPos.X();
+                lXPos = aRect.Left() + m_aRelPos.X();
                 break;
             }
 
@@ -528,17 +528,17 @@ void SwFrameExample::Paint(vcl::RenderContext& rRenderContext, const tools::Rect
     }
 
     // Vertical Alignment
-    if (nAnchor != RndStdIds::FLY_AS_CHAR)
+    if (m_nAnchor != RndStdIds::FLY_AS_CHAR)
     {
-        switch (nVAlign)
+        switch (m_nVAlign)
         {
             case VertOrientation::BOTTOM:
             case VertOrientation::LINE_BOTTOM:
             {
                 // #i22341#
-                if ( nVRel != RelOrientation::TEXT_LINE )
+                if ( m_nVRel != RelOrientation::TEXT_LINE )
                 {
-                    lYPos = aRect.Bottom() - aFrmSize.Height() + 1;
+                    lYPos = aRect.Bottom() - m_aFrmSize.Height() + 1;
                 }
                 else
                 {
@@ -549,59 +549,59 @@ void SwFrameExample::Paint(vcl::RenderContext& rRenderContext, const tools::Rect
             case VertOrientation::CENTER:
             case VertOrientation::LINE_CENTER:
             {
-                lYPos = aRect.Top() + (aRect.GetHeight() - aFrmSize.Height()) / 2;
+                lYPos = aRect.Top() + (aRect.GetHeight() - m_aFrmSize.Height()) / 2;
                 break;
             }
             case VertOrientation::NONE:
             {
                 // #i22341#
-                if ( nVRel != RelOrientation::CHAR && nVRel != RelOrientation::TEXT_LINE )
-                    lYPos = aRect.Top() + aRelPos.Y();
+                if ( m_nVRel != RelOrientation::CHAR && m_nVRel != RelOrientation::TEXT_LINE )
+                    lYPos = aRect.Top() + m_aRelPos.Y();
                 else
-                    lYPos = aRect.Top() - aRelPos.Y();
+                    lYPos = aRect.Top() - m_aRelPos.Y();
                 break;
             }
             default:
                 // #i22341#
-                if ( nVRel != RelOrientation::TEXT_LINE )
+                if ( m_nVRel != RelOrientation::TEXT_LINE )
                 {
                     lYPos = aRect.Top();
                 }
                 else
                 {
-                    lYPos = aRect.Bottom() - aFrmSize.Height() + 1;
+                    lYPos = aRect.Bottom() - m_aFrmSize.Height() + 1;
                 }
                 break;
         }
     }
     else
     {
-        switch(nVAlign)
+        switch(m_nVAlign)
         {
             case VertOrientation::CENTER:
             case VertOrientation::CHAR_CENTER:
             case VertOrientation::LINE_CENTER:
-                lYPos = aRect.Top() + (aRect.GetHeight() - aFrmSize.Height()) / 2;
+                lYPos = aRect.Top() + (aRect.GetHeight() - m_aFrmSize.Height()) / 2;
                 break;
 
             case VertOrientation::TOP:
             case VertOrientation::CHAR_BOTTOM:
             case VertOrientation::LINE_BOTTOM:
-                lYPos = aRect.Bottom() - aFrmSize.Height() + 1;
+                lYPos = aRect.Bottom() - m_aFrmSize.Height() + 1;
                 break;
 
             default:
-                lYPos = aRect.Top() - aRelPos.Y();
+                lYPos = aRect.Top() - m_aRelPos.Y();
                 break;
         }
     }
 
-    tools::Rectangle aFrmRect(Point(lXPos, lYPos), aFrmSize);
+    tools::Rectangle aFrmRect(Point(lXPos, lYPos), m_aFrmSize);
 
-    tools::Rectangle* pOuterFrame = &aPage;
+    tools::Rectangle* pOuterFrame = &m_aPage;
 
-    if (nAnchor == RndStdIds::FLY_AT_FLY)
-        pOuterFrame = &aFrameAtFrame;
+    if (m_nAnchor == RndStdIds::FLY_AT_FLY)
+        pOuterFrame = &m_aFrameAtFrame;
 
     if (aFrmRect.Left() < pOuterFrame->Left())
         aFrmRect.Move(pOuterFrame->Left() - aFrmRect.Left(), 0);
@@ -614,47 +614,47 @@ void SwFrameExample::Paint(vcl::RenderContext& rRenderContext, const tools::Rect
         aFrmRect.Move(0, pOuterFrame->Bottom() - aFrmRect.Bottom());
 
     // Draw Test paragraph
-    const tools::Long nTxtLineHeight = aTextLine.GetHeight();
-    tools::Rectangle aTxt(aTextLine);
+    const tools::Long nTxtLineHeight = m_aTextLine.GetHeight();
+    tools::Rectangle aTxt(m_aTextLine);
     sal_Int32 nStep;
     sal_uInt16 nLines;
 
-    if (nAnchor == RndStdIds::FLY_AT_FLY)
+    if (m_nAnchor == RndStdIds::FLY_AT_FLY)
     {
-        aTxt.SetLeft( aFrameAtFrame.Left() + FLYINFLY_BORDER );
-        aTxt.SetRight( aFrameAtFrame.Right() - FLYINFLY_BORDER );
-        aTxt.SetTop( aFrameAtFrame.Top() + FLYINFLY_BORDER );
-        aTxt.SetBottom( aTxt.Top() + aTextLine.GetHeight() - 1 );
+        aTxt.SetLeft( m_aFrameAtFrame.Left() + FLYINFLY_BORDER );
+        aTxt.SetRight( m_aFrameAtFrame.Right() - FLYINFLY_BORDER );
+        aTxt.SetTop( m_aFrameAtFrame.Top() + FLYINFLY_BORDER );
+        aTxt.SetBottom( aTxt.Top() + m_aTextLine.GetHeight() - 1 );
 
         nStep = aTxt.GetHeight() + 2;
-        nLines = static_cast<sal_uInt16>(((aFrameAtFrame.GetHeight() - 2 * FLYINFLY_BORDER) * 2 / 3)
+        nLines = static_cast<sal_uInt16>(((m_aFrameAtFrame.GetHeight() - 2 * FLYINFLY_BORDER) * 2 / 3)
                  / (aTxt.GetHeight() + 2));
     }
     else
     {
         nStep = aTxt.GetHeight() + 2;
-        nLines = static_cast<sal_uInt16>(aParaPrtArea.GetHeight() / (aTextLine.GetHeight() + 2));
+        nLines = static_cast<sal_uInt16>(m_aParaPrtArea.GetHeight() / (m_aTextLine.GetHeight() + 2));
     }
 
-    if (nAnchor != RndStdIds::FLY_AS_CHAR)
+    if (m_nAnchor != RndStdIds::FLY_AS_CHAR)
     {
         // Simulate text
         const tools::Long nOldR = aTxt.Right();
         const tools::Long nOldL = aTxt.Left();
 
         // #i22341#
-        const bool bIgnoreWrap = nAnchor == RndStdIds::FLY_AT_CHAR &&
-                           ( nHRel == RelOrientation::CHAR || nVRel == RelOrientation::CHAR ||
-                             nVRel == RelOrientation::TEXT_LINE );
+        const bool bIgnoreWrap = m_nAnchor == RndStdIds::FLY_AT_CHAR &&
+                           ( m_nHRel == RelOrientation::CHAR || m_nVRel == RelOrientation::CHAR ||
+                             m_nVRel == RelOrientation::TEXT_LINE );
 
         for (sal_uInt16 i = 0; i < nLines; ++i)
         {
             if (i == (nLines - 1))
                 aTxt.SetSize(Size(aTxt.GetWidth() / 2, aTxt.GetHeight()));
 
-            if (aTxt.Overlaps(aFrmRect) && nAnchor != RndStdIds::FLY_AS_CHAR && !bIgnoreWrap)
+            if (aTxt.Overlaps(aFrmRect) && m_nAnchor != RndStdIds::FLY_AS_CHAR && !bIgnoreWrap)
             {
-                switch(nWrap)
+                switch(m_nWrap)
                 {
                     case WrapTextMode_NONE:
                         aTxt.SetTop( aFrmRect.Bottom() + nTxtLineHeight );
@@ -680,48 +680,48 @@ void SwFrameExample::Paint(vcl::RenderContext& rRenderContext, const tools::Rect
         }
         aTxt.Move(0, -nStep);
 
-        if (nAnchor != RndStdIds::FLY_AT_FLY && aTxt.Bottom() > aParaPrtArea.Bottom())
+        if (m_nAnchor != RndStdIds::FLY_AT_FLY && aTxt.Bottom() > m_aParaPrtArea.Bottom())
         {
             // Text has been replaced by frame, so adjust parameters height
-            sal_Int32 nDiff = aTxt.Bottom() - aParaPrtArea.Bottom();
-            aParaPrtArea.AdjustBottom(nDiff );
-            aPara.AdjustBottom(nDiff );
+            sal_Int32 nDiff = aTxt.Bottom() - m_aParaPrtArea.Bottom();
+            m_aParaPrtArea.AdjustBottom(nDiff );
+            m_aPara.AdjustBottom(nDiff );
 
             CalcBoundRect_Impl(rRenderContext, aRect);
 
-            aParaPrtArea.AdjustBottom( -nDiff );
-            aPara.AdjustBottom( -nDiff );
+            m_aParaPrtArea.AdjustBottom( -nDiff );
+            m_aPara.AdjustBottom( -nDiff );
         }
-        if (nAnchor == RndStdIds::FLY_AT_CHAR && bIgnoreWrap)
-            rRenderContext.DrawText(aAutoCharFrame, OUString('A'));
+        if (m_nAnchor == RndStdIds::FLY_AT_CHAR && bIgnoreWrap)
+            rRenderContext.DrawText(m_aAutoCharFrame, OUString('A'));
     }
     else
     {
-        rRenderContext.DrawText(aParaPrtArea, DEMOTEXT);
-        DrawRect_Impl(rRenderContext, aDrawObj, m_aBlankCol, m_aBlankFrameCol );
+        rRenderContext.DrawText(m_aParaPrtArea, DEMOTEXT);
+        DrawRect_Impl(rRenderContext, m_aDrawObj, m_aBlankCol, m_aBlankFrameCol );
     }
 
     // Draw rectangle on which the frame is aligned:
     DrawRect_Impl(rRenderContext, aRect, std::nullopt, m_aAlignColor);
 
     // Frame View
-    bool bDontFill = (nAnchor == RndStdIds::FLY_AT_CHAR && aFrmRect.Overlaps(aAutoCharFrame)) || bTrans;
+    bool bDontFill = (m_nAnchor == RndStdIds::FLY_AT_CHAR && aFrmRect.Overlaps(m_aAutoCharFrame)) || m_bTrans;
     DrawRect_Impl(rRenderContext, aFrmRect, bDontFill ? std::nullopt : std::optional { m_aBgCol }, m_aFrameColor);
 }
 
 void SwFrameExample::SetRelPos(const Point& rP)
 {
-    aRelPos = rP;
+    m_aRelPos = rP;
 
-    if (aRelPos.X() > 0)
-        aRelPos.setX( 5 );
-    if (aRelPos.X() < 0)
-        aRelPos.setX( -5 );
+    if (m_aRelPos.X() > 0)
+        m_aRelPos.setX( 5 );
+    if (m_aRelPos.X() < 0)
+        m_aRelPos.setX( -5 );
 
-    if (aRelPos.Y() > 0)
-        aRelPos.setY( 5 );
-    if (aRelPos.Y() < 0)
-        aRelPos.setY( -5 );
+    if (m_aRelPos.Y() > 0)
+        m_aRelPos.setY( 5 );
+    if (m_aRelPos.Y() < 0)
+        m_aRelPos.setY( -5 );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
