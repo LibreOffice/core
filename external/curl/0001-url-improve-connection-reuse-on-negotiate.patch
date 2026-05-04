@@ -1,0 +1,40 @@
+From 33e43985b8f3b9e66691d06e70be0395849856cd Mon Sep 17 00:00:00 2001
+From: Stefan Eissing <stefan@eissing.org>
+Date: Thu, 2 Apr 2026 11:33:39 +0200
+Subject: [PATCH] url: improve connection reuse on negotiate
+
+Check state of negotiate to allow proper connection reuse.
+
+Closes #21203
+---
+ lib/url.c | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
+
+diff --git a/lib/url.c b/lib/url.c
+index c377f0733b..c61c89c39d 100644
+--- a/lib/url.c
++++ b/lib/url.c
+@@ -1085,11 +1085,17 @@ static bool url_match_auth_ntlm(struct connectdata *conn,
+         if(wantNTLMhttp) {
+           if(Curl_timestrcmp(needle->user, check->user) ||
+              Curl_timestrcmp(needle->passwd, check->passwd)) {
+-
+             /* we prefer a credential match, but this is at least a connection
+-               that can be reused and "upgraded" to NTLM */
+-            if(check->http_ntlm_state == NTLMSTATE_NONE)
++               that can be reused and "upgraded" to NTLM if it does
++               not have any auth ongoing. */
++#ifdef USE_SPNEGO
++            if((check->http_ntlm_state == NTLMSTATE_NONE)
++               && (check->http_negotiate_state == GSS_AUTHNONE)) {
++#else
++            if(check->http_ntlm_state == NTLMSTATE_NONE) {
++#endif
+               chosen = check;
++            }
+             continue;
+           }
+         }
+-- 
+2.54.0
+
