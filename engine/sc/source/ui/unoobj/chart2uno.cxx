@@ -3330,8 +3330,6 @@ void SAL_CALL ScChart2DataSequence::addModifyListener( const uno::Reference< uti
                 pCLC->StartListeningHiddenRange(aRange, m_pHiddenListener.get());
         }
     }
-
-    acquire();  // don't lose this object (one ref for all listeners)
 }
 
 void SAL_CALL ScChart2DataSequence::removeModifyListener( const uno::Reference< util::XModifyListener >& aListener )
@@ -3363,8 +3361,6 @@ void SAL_CALL ScChart2DataSequence::removeModifyListener( const uno::Reference< 
                     if (pCLC)
                         pCLC->EndListeningHiddenRange(m_pHiddenListener.get());
                 }
-
-                release();      // release the ref for the listeners
             }
 
             break;
