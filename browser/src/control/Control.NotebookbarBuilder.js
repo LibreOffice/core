@@ -404,12 +404,12 @@ window.L.Control.NotebookbarBuilder = window.L.Control.JSDialogBuilder.extend({
 					'action': 'exportpdf' ,
 					'text': _('PDF Document (.pdf) with options'),
 					'command': 'exportpdf'
+				},
+				{
+					'action': 'downloadas-html',
+					'text': _('HTML File (.html)')
 				}
 			];
-			submenuOpts.push({
-				'action': 'downloadas-html',
-				'text': _('HTML File (.html)')
-			});
 		} else if (docType === 'spreadsheet') {
 			submenuOpts = [
 				{
