@@ -152,6 +152,9 @@ bool ShouldFallbackToStandard(const uno::Reference<task::XInteractionRequest>& x
     if (document::BrokenPackageRequest aStruct; request >>= aStruct)
         return true;
 
+    if (document::FilterOptionsRequest aStruct; request >>= aStruct)
+        return true;
+
     if (document::FontsDisallowEditingRequest aStruct; request >>= aStruct)
         return true;
 
@@ -377,9 +380,14 @@ bool KitInteractionHandler::handleFilterOptionsRequest(
     if (!(rRequest >>= aFilterOptionsRequest))
         return false;
 
-    // Accept the provided/default filter options without showing a dialog,
-    // same as QuietInteraction did. This lets CSV files (and other formats
-    // that need import filter options) load in batch/silent mode.
+    // Only auto-accept the default filter options in batch/silent mode (e.g.
+    // convertTo, where the dialog can't be shown anyway and would just be
+    // cancelled by DialogCancelMode::KitSilent, aborting the load). In
+    // interactive mode hand the request to the standard VCL handler so the
+    // user sees the CSV import dialog and can choose the separator etc.
+    if (Application::GetDialogCancelMode() != DialogCancelMode::KitSilent)
+        return false;
+
     for (auto const& cont : rContinuations)
     {
         uno::Reference<document::XInteractionFilterOptions> xFOptions(cont, uno::UNO_QUERY);
