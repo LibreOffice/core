@@ -1,0 +1,18 @@
+-*- Mode: Diff -*-
+
+xmlsec 1.3.11 dropped the --disable-apps and --disable-docs configure
+options.  We don't need apps/, man/ or docs/ in our build, and on iOS
+linking the apps/xmlsec1 binary fails because NSS produces empty
+placeholder dylibs.  Restrict the top-level SUBDIRS to what we need.
+
+--- Makefile.am
++++ Makefile.am
+@@ -5,7 +5,7 @@
+ # make tar-release  : builds distribution tar.gz (including docs)
+ #
+ NULL =
+-SUBDIRS 	    = include src apps man docs
++SUBDIRS 	    = include src
+
+ SAFE_VERSION	= @XMLSEC_VERSION_SAFE@
+

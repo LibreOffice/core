@@ -8,7 +8,8 @@
 #
 
 xmlsec_patches := \
-	xmlsec-win32-libxml2-no-d-suffix.patch.0
+	xmlsec-win32-libxml2-no-d-suffix.patch.0 \
+	xmlsec-no-apps-no-docs.patch.0
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,xmlsec))
 
