@@ -23,6 +23,7 @@ $(eval $(call gb_UnpackedTarball_update_autoconf_configs,libodfgen))
 $(eval $(call gb_UnpackedTarball_add_patches,libodfgen, \
     external/libodfgen/ellipticalarc.patch \
     external/libodfgen/0001-const-up-libodfgen.patch.1 \
+    external/libodfgen/0001-Missing-include.patch.1 \
 ))
 
 ifeq ($(SYSTEM_REVENGE),)
