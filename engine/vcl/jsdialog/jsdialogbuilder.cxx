@@ -10,6 +10,7 @@
 #include <jsdialog/jsdialogbuilder.hxx>
 #include <sal/log.hxx>
 #include <iconview.hxx>
+#include <vcl/customwidget.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
@@ -869,6 +870,18 @@ std::unique_ptr<weld::Box> JSInstanceBuilder::weld_box(const OUString& id)
     VclBox* pContainer = m_xBuilder->get<VclBox>(id);
     auto pWeldWidget
         = pContainer ? std::make_unique<JSBox>(this, pContainer, this, false) : nullptr;
+
+    if (pWeldWidget)
+        RememberWidget(id, pWeldWidget.get());
+
+    return pWeldWidget;
+}
+
+std::unique_ptr<weld::CustomWidget> JSInstanceBuilder::weld_custom_widget(const OUString& id)
+{
+    VclCustomWidget* pWidget = m_xBuilder->get<VclCustomWidget>(id);
+    auto pWeldWidget
+        = pWidget ? std::make_unique<JSCustomWidget>(this, pWidget, this, false) : nullptr;
 
     if (pWeldWidget)
         RememberWidget(id, pWeldWidget.get());
@@ -2198,6 +2211,14 @@ void JSBox::reorder_child(weld::Widget* pWidget, int nNewPosition)
     SalInstanceBox::reorder_child(pWidget, nNewPosition);
     sendFullUpdate();
 }
+
+JSCustomWidget::JSCustomWidget(JSDialogSender* pSender, VclCustomWidget* pWidget,
+                               SalInstanceBuilder* pBuilder, bool bTakeOwnership)
+    : JSWidget<SalInstanceCustomWidget, VclCustomWidget>(pSender, pWidget, pBuilder, bTakeOwnership)
+{
+}
+
+void JSCustomWidget::send_update() { sendUpdate(); }
 
 JSImage::JSImage(JSDialogSender* pSender, FixedImage* pImage, SalInstanceBuilder* pBuilder,
                  bool bTakeOwnership)

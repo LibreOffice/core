@@ -422,11 +422,6 @@ excludelist:
     sc/source/ui/inc/AccessibleCell.hxx:
     # base class has to be a complete type
     - com/sun/star/accessibility/XAccessibleExtendedAttributes.hpp
-    sc/source/ui/inc/AccessibleCsvControl.hxx:
-    # base class has to be a complete type
-    - com/sun/star/accessibility/XAccessibleSelection.hpp
-    - com/sun/star/accessibility/XAccessibleTable.hpp
-    - com/sun/star/accessibility/XAccessibleText.hpp
     sc/source/ui/inc/AccessibleDocument.hxx:
     # base class has to be a complete type
     - com/sun/star/accessibility/XAccessibleSelection.hpp
@@ -472,9 +467,6 @@ excludelist:
     # Needed for typedef
     - editutil.hxx
     # Needed for VclPtr type
-    - vcl/virdev.hxx
-    sc/source/ui/inc/csvruler.hxx:
-    # Needed for ScopedVclPtrInstance type
     - vcl/virdev.hxx
     sc/source/ui/inc/dataprovider.hxx:
     # Don't replace with an implementation detail

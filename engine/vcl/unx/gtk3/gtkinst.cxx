@@ -23651,11 +23651,37 @@ void silence_gwarning(const gchar* /*log_domain*/,
 }
 #endif
 
+// VclCustomWidget is used by the jsdialog (online) for client-rendered
+// widgets; on the desktop GTK path it has no rendering, so register an empty
+// GtkLabel-derived GType under that name as a placeholder for gtk_builder.
+static GType vcl_custom_widget_get_type()
+{
+    static GType type = 0;
+    if (!type)
+    {
+        GTypeQuery query;
+        g_type_query(gtk_label_get_type(), &query);
+
+        static const GTypeInfo tinfo =
+        {
+            static_cast<guint16>(query.class_size),
+            nullptr, nullptr, nullptr, nullptr, nullptr,
+            static_cast<guint16>(query.instance_size),
+            0, nullptr, nullptr
+        };
+
+        type = g_type_register_static(GTK_TYPE_LABEL, "VclCustomWidget",
+                                      &tinfo, GTypeFlags(0));
+    }
+    return type;
+}
+
 void load_ui_file(GtkBuilder* pBuilder, const OUString& rUri)
 {
 #if GTK_CHECK_VERSION(4, 0, 0)
     builder_add_from_gtk3_file(pBuilder, rUri);
 #else
+    vcl_custom_widget_get_type();
     guint nLogHandlerId = 0;
     GLogLevelFlags nFatalMask(static_cast<GLogLevelFlags>(G_LOG_FLAG_RECURSION|G_LOG_LEVEL_ERROR));
     if (rUri.endsWith("sfx/ui/tabbarcontents.ui"))
@@ -24294,6 +24320,11 @@ public:
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pGrid));
         return std::make_unique<GtkInstanceGrid>(pGrid, this, false);
+    }
+
+    virtual std::unique_ptr<weld::CustomWidget> weld_custom_widget(const OUString &) override
+    {
+        return nullptr;
     }
 
     virtual std::unique_ptr<weld::Paned> weld_paned(const OUString &id) override

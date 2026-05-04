@@ -400,6 +400,12 @@ std::unique_ptr<weld::Grid> QtInstanceBuilder::weld_grid(const OUString& rId)
     return xRet;
 }
 
+std::unique_ptr<weld::CustomWidget> QtInstanceBuilder::weld_custom_widget(const OUString&)
+{
+    assert(false && "Not implemented yet");
+    return nullptr;
+}
+
 std::unique_ptr<weld::Paned> QtInstanceBuilder::weld_paned(const OUString&)
 {
     assert(false && "Not implemented yet");

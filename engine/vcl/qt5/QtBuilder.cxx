@@ -453,6 +453,13 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, std:
         // inside QScrollArea - just create a simple QWidget
         pObject = new QWidget(pParentWidget);
     }
+    else if (sName == u"VclCustomWidget")
+    {
+        // VclCustomWidget is used by the jsdialog (online) for
+        // client-rendered widgets; on the desktop Qt path it has no rendering,
+        // so place a plain QWidget as an empty placeholder.
+        pObject = new QWidget(pParentWidget);
+    }
     else
     {
         SAL_WARN("vcl.qt", "Widget type not supported yet: "

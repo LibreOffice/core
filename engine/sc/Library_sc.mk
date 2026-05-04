@@ -374,7 +374,6 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/ui/Accessibility/AccessibleCell \
     sc/source/ui/Accessibility/AccessibleCellBase \
     sc/source/ui/Accessibility/AccessibleContextBase \
-    sc/source/ui/Accessibility/AccessibleCsvControl \
     sc/source/ui/Accessibility/AccessibleDocument \
     sc/source/ui/Accessibility/AccessibleDocumentBase \
     sc/source/ui/Accessibility/AccessibleDocumentPagePreview \
@@ -426,7 +425,6 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/ui/dbgui/consdlg \
     sc/source/ui/dbgui/csvcontrol \
     sc/source/ui/dbgui/csvgrid \
-    sc/source/ui/dbgui/csvruler \
     sc/source/ui/dbgui/csvsplits \
     sc/source/ui/dbgui/csvtablebox \
     sc/source/ui/dbgui/dbnamdlg \

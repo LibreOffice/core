@@ -59,6 +59,7 @@
 #include <vcl/headbar.hxx>
 #include <vcl/toolkit/ivctrl.hxx>
 #include <vcl/layout.hxx>
+#include <vcl/customwidget.hxx>
 #include <vcl/toolkit/MenuButton.hxx>
 #include <vcl/ptrstyle.hxx>
 #include <slider.hxx>
@@ -1546,6 +1547,25 @@ int SalInstanceGrid::get_child_top_attach(weld::Widget& rWidget) const
     vcl::Window* pChild = dynamic_cast<SalInstanceWidget&>(rWidget).getWidget();
     assert(pChild && pChild->GetParent() == getWidget() && "widget is not a grid child");
     return pChild->get_grid_top_attach();
+}
+
+SalInstanceCustomWidget::SalInstanceCustomWidget(VclCustomWidget* pWidget,
+                                                 SalInstanceBuilder* pBuilder, bool bTakeOwnership)
+    : SalInstanceWidget(pWidget, pBuilder, bTakeOwnership)
+    , m_xCustomWidget(pWidget)
+{
+}
+
+void SalInstanceCustomWidget::send_update() { m_xCustomWidget->Invalidate(); }
+
+void SalInstanceCustomWidget::set_custom_client_controller(weld::CustomClientWidgetController* p)
+{
+    m_pController = p;
+}
+
+weld::CustomClientWidgetController* SalInstanceCustomWidget::get_custom_client_controller()
+{
+    return m_pController;
 }
 
 namespace
@@ -7016,6 +7036,12 @@ std::unique_ptr<weld::Grid> SalInstanceBuilder::weld_grid(const OUString& id)
 {
     VclGrid* pGrid = m_xBuilder->get<VclGrid>(id);
     return pGrid ? std::make_unique<SalInstanceGrid>(pGrid, this, false) : nullptr;
+}
+
+std::unique_ptr<weld::CustomWidget> SalInstanceBuilder::weld_custom_widget(const OUString& id)
+{
+    VclCustomWidget* pWidget = m_xBuilder->get<VclCustomWidget>(id);
+    return pWidget ? std::make_unique<SalInstanceCustomWidget>(pWidget, this, false) : nullptr;
 }
 
 std::unique_ptr<weld::Paned> SalInstanceBuilder::weld_paned(const OUString& id)

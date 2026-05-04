@@ -412,6 +412,8 @@ public:
     virtual void child_grab_focus() = 0;
 };
 
+class CustomClientWidgetController;
+
 class VCL_DLLPUBLIC Box : virtual public Container
 {
 public:
@@ -429,6 +431,15 @@ public:
     virtual void set_child_column_span(weld::Widget& rWidget, int nCols) = 0;
     virtual void set_child_top_attach(weld::Widget& rWidget, int nAttach) = 0;
     virtual int get_child_top_attach(weld::Widget& rWidget) const = 0;
+};
+
+/// Weld wrapper for VclCustomWidget
+class VCL_DLLPUBLIC CustomWidget : virtual public Widget
+{
+public:
+    virtual void send_update() = 0;
+    virtual void set_custom_client_controller(CustomClientWidgetController* /*p*/) = 0;
+    virtual CustomClientWidgetController* get_custom_client_controller() = 0;
 };
 
 class VCL_DLLPUBLIC Paned : virtual public Widget
@@ -2917,6 +2928,8 @@ public:
     void connect_expanded(const Link<Expander&, void>& rLink) { m_aExpandedHdl = rLink; }
 };
 
+class CustomClientWidgetController;
+
 class VCL_DLLPUBLIC DrawingArea : virtual public Widget
 {
 public:
@@ -3230,6 +3243,7 @@ public:
     virtual std::unique_ptr<Container> weld_container(const OUString& id) = 0;
     virtual std::unique_ptr<Box> weld_box(const OUString& id) = 0;
     virtual std::unique_ptr<Grid> weld_grid(const OUString& id) = 0;
+    virtual std::unique_ptr<CustomWidget> weld_custom_widget(const OUString& id) = 0;
     virtual std::unique_ptr<Paned> weld_paned(const OUString& id) = 0;
     virtual std::unique_ptr<Button> weld_button(const OUString& id) = 0;
     virtual std::unique_ptr<MenuButton> weld_menu_button(const OUString& id) = 0;

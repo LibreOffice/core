@@ -43,6 +43,7 @@
 #include <vcl/notebookbar/NotebookBarAddonsMerger.hxx>
 #include <vcl/toolkit/ivctrl.hxx>
 #include <vcl/layout.hxx>
+#include <vcl/customwidget.hxx>
 #include <vcl/toolkit/lstbox.hxx>
 #include <vcl/toolkit/MenuButton.hxx>
 #include <vcl/mnemonic.hxx>
@@ -1745,6 +1746,10 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OUString 
             xListBox->EnableAutoSize(true);
             xWindow = xListBox;
         }
+    }
+    else if (name == "VclCustomWidget")
+    {
+        xWindow = VclPtr<VclCustomWidget>::Create(pParent);
     }
     else if (name == "VclOptionalBox" || name == "sfxlo-OptionalBox")
     {

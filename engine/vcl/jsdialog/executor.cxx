@@ -16,6 +16,7 @@
 #include <rtl/uri.hxx>
 #include <sal/log.hxx>
 #include <string_view>
+#include <vcl/customweld.hxx>
 #include <vcl/jsdialog/executor.hxx>
 #include <vcl/toolkit/treelistentry.hxx>
 #include <vcl/weld.hxx>
@@ -888,6 +889,22 @@ bool ExecuteAction(const OUString& nWindowId, const OUString& rWidget, const Str
                 KitTrigger::trigger_selected(*pCalendar);
                 KitTrigger::trigger_activated(*pCalendar);
                 return true;
+            }
+        }
+        else
+        {
+            auto pCustomWidget = dynamic_cast<weld::CustomWidget*>(pWidget);
+            if (pCustomWidget)
+            {
+                weld::CustomClientWidgetController* pController
+                    = pCustomWidget->get_custom_client_controller();
+                if (pController)
+                {
+                    OUString sEventData;
+                    if (rData.count(u"data"_ustr))
+                        sEventData = rData.at(u"data"_ustr);
+                    return pController->HandleCustomEvent(sAction, sEventData);
+                }
             }
         }
     }

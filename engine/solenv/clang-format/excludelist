@@ -8294,7 +8294,6 @@ sc/source/ui/Accessibility/AccessibilityHints.cxx
 sc/source/ui/Accessibility/AccessibleCell.cxx
 sc/source/ui/Accessibility/AccessibleCellBase.cxx
 sc/source/ui/Accessibility/AccessibleContextBase.cxx
-sc/source/ui/Accessibility/AccessibleCsvControl.cxx
 sc/source/ui/Accessibility/AccessibleDocument.cxx
 sc/source/ui/Accessibility/AccessibleDocumentPagePreview.cxx
 sc/source/ui/Accessibility/AccessibleEditObject.cxx
@@ -8447,7 +8446,6 @@ sc/source/ui/inc/AccessibilityHints.hxx
 sc/source/ui/inc/AccessibleCell.hxx
 sc/source/ui/inc/AccessibleCellBase.hxx
 sc/source/ui/inc/AccessibleContextBase.hxx
-sc/source/ui/inc/AccessibleCsvControl.hxx
 sc/source/ui/inc/AccessibleDocument.hxx
 sc/source/ui/inc/AccessibleDocumentPagePreview.hxx
 sc/source/ui/inc/AccessibleEditObject.hxx

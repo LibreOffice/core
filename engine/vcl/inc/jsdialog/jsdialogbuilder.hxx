@@ -205,6 +205,7 @@ public:
     virtual std::unique_ptr<weld::Menu> weld_menu(const OUString& id) override;
     virtual std::unique_ptr<weld::Popover> weld_popover(const OUString& id) override;
     virtual std::unique_ptr<weld::Box> weld_box(const OUString& id) override;
+    virtual std::unique_ptr<weld::CustomWidget> weld_custom_widget(const OUString& id) override;
     virtual std::unique_ptr<weld::Widget> weld_widget(const OUString& id) override;
     virtual std::unique_ptr<weld::Image> weld_image(const OUString& id) override;
     virtual std::unique_ptr<weld::LevelBar> weld_level_bar(const OUString& id) override;
@@ -879,6 +880,17 @@ public:
     JSBox(JSDialogSender* pSender, VclBox* pBox, SalInstanceBuilder* pBuilder, bool bTakeOwnership);
 
     void reorder_child(weld::Widget* pWidget, int nNewPosition) override;
+};
+
+class VclCustomWidget;
+
+class JSCustomWidget : public JSWidget<SalInstanceCustomWidget, VclCustomWidget>
+{
+public:
+    JSCustomWidget(JSDialogSender* pSender, VclCustomWidget* pWidget, SalInstanceBuilder* pBuilder,
+                   bool bTakeOwnership);
+
+    virtual void send_update() override;
 };
 
 class JSWidgetInstance : public JSWidget<SalInstanceWidget, vcl::Window>

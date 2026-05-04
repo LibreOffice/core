@@ -67,6 +67,8 @@ public:
 
     virtual std::unique_ptr<weld::Grid> weld_grid(const OUString& id) override;
 
+    virtual std::unique_ptr<weld::CustomWidget> weld_custom_widget(const OUString& id) override;
+
     virtual std::unique_ptr<weld::Paned> weld_paned(const OUString& id) override;
 
     virtual std::unique_ptr<weld::Frame> weld_frame(const OUString& id) override;
@@ -2112,6 +2114,23 @@ public:
     virtual void set_child_column_span(weld::Widget& rWidget, int nCols) override;
     virtual void set_child_top_attach(weld::Widget& rWidget, int nAttach) override;
     virtual int get_child_top_attach(weld::Widget& rWidget) const override;
+};
+
+class VclCustomWidget;
+
+class SalInstanceCustomWidget : public SalInstanceWidget, public virtual weld::CustomWidget
+{
+private:
+    VclPtr<VclCustomWidget> m_xCustomWidget;
+    weld::CustomClientWidgetController* m_pController = nullptr;
+
+public:
+    SalInstanceCustomWidget(VclCustomWidget* pWidget, SalInstanceBuilder* pBuilder,
+                            bool bTakeOwnership);
+    virtual void send_update() override;
+    virtual void set_custom_client_controller(weld::CustomClientWidgetController* p) override;
+    virtual weld::CustomClientWidgetController* get_custom_client_controller() override;
+    VclCustomWidget* getVclCustomWidget() { return m_xCustomWidget.get(); }
 };
 
 class SalInstanceImage : public SalInstanceWidget, public virtual weld::Image

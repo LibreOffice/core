@@ -93,10 +93,6 @@
 // Select tables dialog listbox
 #define STR_DLG_SELECTTABLES_LBNAME                 NC_("STR_DLG_SELECTTABLES_LBNAME", "~Selected sheets")
 #define STR_DLG_SELECTTABLE_LBNAME                  NC_("STR_DLG_SELECTTABLE_LBNAME", "~Sheets")
-#define STR_ACC_CSVRULER_NAME                       NC_("STR_ACC_CSVRULER_NAME", "Ruler")
-#define STR_ACC_CSVRULER_DESCR                      NC_("STR_ACC_CSVRULER_DESCR", "This ruler manages objects at fixed positions.")
-#define STR_ACC_CSVGRID_NAME                        NC_("STR_ACC_CSVGRID_NAME", "Preview")
-#define STR_ACC_CSVGRID_DESCR                       NC_("STR_ACC_CSVGRID_DESCR", "This sheet shows how the data will be arranged in the document.")
 #define STR_ACC_DOC_NAME                            NC_("STR_ACC_DOC_NAME", "Document view")
 #define STR_ACC_TABLE_NAME                          NC_("STR_ACC_TABLE_NAME", "Sheet %1")
 #define STR_ACC_CELL_NAME                           NC_("STR_ACC_CELL_NAME", "Cell %1")

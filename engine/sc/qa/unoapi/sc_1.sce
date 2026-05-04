@@ -19,9 +19,6 @@
 # i88241 -o sc.AccessibleEditableTextPara_HeaderFooter
 -o sc.AccessibleEditableTextPara_PreviewCell
 -o sc.ScAccessibleCell
-# i91044 -o sc.ScAccessibleCsvCell
-# i91044 -o sc.ScAccessibleCsvGrid
-# i84641 -o sc.ScAccessibleCsvRuler
 # i88330 -o sc.ScAccessibleDocument
 # i91045 -o sc.ScAccessibleDocumentPagePreview
 -o sc.ScAccessiblePageHeader

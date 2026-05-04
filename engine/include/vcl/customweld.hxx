@@ -188,6 +188,58 @@ public:
     void set_help_id(const OUString& rHelpId) { m_xDrawingArea->set_help_id(rHelpId); }
     void set_tooltip_text(const OUString& rTip) { m_xDrawingArea->set_tooltip_text(rTip); }
 };
+
+} // namespace weld
+
+namespace tools
+{
+class JsonWriter;
+}
+
+namespace weld
+{
+/** Controller for widgets that render entirely on the client side.
+    DumpWidgetData() serializes data as JSON for the client to render natively. */
+class VCL_DLLPUBLIC CustomClientWidgetController
+{
+private:
+    weld::CustomWidget* m_pWidget = nullptr;
+
+public:
+    virtual void DumpWidgetData(tools::JsonWriter& rWriter) = 0;
+
+    virtual OUString GetCustomWidgetType() const = 0;
+
+    virtual bool HandleCustomEvent(const OUString& /*rCmd*/, const OUString& /*rData*/)
+    {
+        return false;
+    }
+
+    virtual void SetWidget(weld::CustomWidget* pWidget) { m_pWidget = pWidget; }
+
+    void Invalidate()
+    {
+        if (m_pWidget)
+            m_pWidget->send_update();
+    }
+
+    virtual ~CustomClientWidgetController();
+};
+
+/** Connects a VclCustomWidget (from the .ui file) to a CustomClientWidgetController.
+    The widget serves as a placeholder in the layout; in the jsdialog (online) path its
+    DumpAsPropertyTree() outputs JSON instead of rendering pixels. */
+class VCL_DLLPUBLIC CustomClientWeld final
+{
+private:
+    CustomClientWidgetController& m_rWidgetController;
+    std::unique_ptr<weld::CustomWidget> m_xWidget;
+
+public:
+    CustomClientWeld(weld::Builder& rBuilder, const OUString& rWidgetId,
+                     CustomClientWidgetController& rWidgetController);
+    ~CustomClientWeld();
+};
 }
 #endif
 

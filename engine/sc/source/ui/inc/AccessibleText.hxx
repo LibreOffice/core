@@ -34,7 +34,6 @@ class ScPreviewViewForwarder;
 class ScEditViewForwarder;
 class ScPreviewShell;
 class EditTextObject;
-class ScCsvViewForwarder;
 class ScAccessibleCell;
 class ScTextWnd;
 
@@ -253,38 +252,6 @@ private:
     ScAddress               maCellPos;
     bool                    mbMarkNote;
     bool                    mbDataValid;
-};
-
-class ScAccessibleCsvTextData : public ScAccessibleTextData
-{
-private:
-    typedef ::std::unique_ptr< SvxTextForwarder > TextForwarderPtr;
-    typedef ::std::unique_ptr< ScCsvViewForwarder > ViewForwarderPtr;
-
-    VclPtr<OutputDevice>        mpWindow;
-    EditEngine*                 mpEditEngine;
-    TextForwarderPtr            mpTextForwarder;
-    ViewForwarderPtr            mpViewForwarder;
-    OUString                    maCellText;
-    Size                        maCellSize;
-
-public:
-    explicit                    ScAccessibleCsvTextData(
-                                    OutputDevice* pWindow,
-                                    EditEngine* pEditEngine,
-                                    OUString aCellText,
-                                    const Size& rCellSize );
-    virtual                     ~ScAccessibleCsvTextData() override;
-
-    virtual ScAccessibleTextData* Clone() const override;
-
-    virtual void                Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
-
-    virtual SvxTextForwarder*   GetTextForwarder() override;
-    virtual SvxViewForwarder*   GetViewForwarder() override;
-    virtual SvxEditViewForwarder* GetEditViewForwarder( bool bCreate ) override;
-
-    virtual void                UpdateData() override {}
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

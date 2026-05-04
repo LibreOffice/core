@@ -8,6 +8,8 @@
  */
 
 #include <vcl/customweld.hxx>
+#include <vcl/customwidget.hxx>
+#include <salvtables.hxx>
 
 namespace weld
 {
@@ -115,6 +117,48 @@ IMPL_LINK(CustomWeld, DoGetSurrounding, OUString&, rSurrounding, int)
 IMPL_LINK(CustomWeld, DoDeleteSurrounding, const Selection&, rSelection, bool)
 {
     return m_rWidgetController.DeleteSurroundingText(rSelection);
+}
+
+CustomClientWidgetController::~CustomClientWidgetController() {}
+
+CustomClientWeld::CustomClientWeld(weld::Builder& rBuilder, const OUString& rWidgetId,
+                                   CustomClientWidgetController& rWidgetController)
+    : m_rWidgetController(rWidgetController)
+    , m_xWidget(rBuilder.weld_custom_widget(rWidgetId))
+{
+    if (!m_xWidget)
+        return;
+
+    m_xWidget->set_custom_client_controller(&m_rWidgetController);
+    m_rWidgetController.SetWidget(m_xWidget.get());
+
+    if (auto* pSal = dynamic_cast<SalInstanceCustomWidget*>(m_xWidget.get()))
+    {
+        if (VclCustomWidget* pVcl = pSal->getVclCustomWidget())
+        {
+            pVcl->SetCustomType(m_rWidgetController.GetCustomWidgetType());
+            CustomClientWidgetController* pCtrl = &m_rWidgetController;
+            pVcl->SetDumpCallback(
+                [pCtrl](tools::JsonWriter& rWriter) { pCtrl->DumpWidgetData(rWriter); });
+        }
+    }
+}
+
+CustomClientWeld::~CustomClientWeld()
+{
+    if (m_xWidget)
+    {
+        m_xWidget->set_custom_client_controller(nullptr);
+        if (auto* pSal = dynamic_cast<SalInstanceCustomWidget*>(m_xWidget.get()))
+        {
+            if (VclCustomWidget* pVcl = pSal->getVclCustomWidget())
+            {
+                pVcl->SetDumpCallback({});
+                pVcl->SetCustomType(OUString());
+            }
+        }
+    }
+    m_rWidgetController.SetWidget(nullptr);
 }
 }
 

@@ -448,7 +448,6 @@ ScImportAsciiDlg::ScImportAsciiDlg(weld::Window* pParent, std::u16string_view aD
     mxLbType->set_sensitive(false);
 
     // *** table box preview ***
-    mxTableBox->Init();
     mxTableBox->SetUpdateTextHdl( LINK( this, ScImportAsciiDlg, UpdateTextHdl ) );
     mxTableBox->InitTypes( *mxLbType );
     mxTableBox->SetColTypeHdl( LINK( this, ScImportAsciiDlg, ColTypeHdl ) );
@@ -874,7 +873,10 @@ IMPL_LINK_NOARG(ScImportAsciiDlg, CharSetHdl, weld::ComboBox&, void)
         SetSelectedCharSet();
         // switching char-set invalidates 8bit -> String conversions
         if (eOldCharSet != meCharSet)
+        {
             UpdateVertical();
+            maPreviewLines.clear();
+        }
 
         mxTableBox->GetGrid().Execute( CSVCMD_NEWCELLTEXTS );
     }
@@ -893,31 +895,22 @@ IMPL_LINK(ScImportAsciiDlg, LbColTypeHdl, weld::ComboBox&, rListBox, void)
 
 IMPL_LINK_NOARG(ScImportAsciiDlg, UpdateTextHdl, ScCsvTableBox&, void)
 {
-    sal_Unicode cDetectSep = 0xffff;
-
-    sal_Int32 nBaseLine = mxTableBox->GetGrid().GetFirstVisLine();
-    sal_Int32 nRead = mxTableBox->GetGrid().GetVisLineCount();
-    // If mnRowPosCount==0, this is an initializing call, read ahead for row
-    // count and resulting scroll bar size and position to be able to scroll at
-    // all. When adding lines, read only the amount of next lines to be
-    // displayed.
-    if (!mnRowPosCount || nRead > CSV_PREVIEW_LINES)
-        nRead = CSV_PREVIEW_LINES;
-
-    sal_Int32 i;
-    for (i = 0; i < nRead; i++)
+    if (maPreviewLines.empty())
     {
-        if (!GetLine( nBaseLine + i, maPreviewLine[i], cDetectSep))
-            break;
+        sal_Unicode cDetectSep = 0xffff;
+        OUString aLine;
+        static constexpr sal_Int32 nMaxPreviewLines = 50;
+        for (sal_Int32 i = 0; i < nMaxPreviewLines; ++i)
+        {
+            if (!GetLine(i, aLine, cDetectSep))
+                break;
+            maPreviewLines.push_back(aLine);
+        }
     }
-    for (; i < CSV_PREVIEW_LINES; i++)
-        maPreviewLine[i].clear();
 
-
-    mxTableBox->GetGrid().Execute( CSVCMD_SETLINECOUNT, mnRowPosCount);
     bool bMergeSep = mxCkbMergeDelimiters->get_active();
     bool bRemoveSpace = mxCkbRemoveSpace->get_active();
-    mxTableBox->SetUniStrings( maPreviewLine, maFieldSeparators, mcTextSep, bMergeSep, bRemoveSpace );
+    mxTableBox->SetUniStrings( maPreviewLines, maFieldSeparators, mcTextSep, bMergeSep, bRemoveSpace );
 }
 
 IMPL_LINK( ScImportAsciiDlg, ColTypeHdl, ScCsvTableBox&, rTableBox, void )

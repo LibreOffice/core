@@ -19,11 +19,9 @@
 
 #pragma once
 
-#include <vcl/idle.hxx>
 #include <vcl/weld.hxx>
 #include <scdllapi.h>
 #include "csvcontrol.hxx"
-#include "csvruler.hxx"
 #include "csvgrid.hxx"
 
 class ScAsciiOptions;
@@ -45,19 +43,15 @@ class SC_DLLPUBLIC ScCsvTableBox
 private:
     ScCsvLayoutData             maData;             /// Current layout data of the controls.
 
-    std::unique_ptr<ScCsvRuler> mxRuler;            /// The ruler for fixed width mode.
     std::unique_ptr<ScCsvGrid> mxGrid;              /// Calc-like data table for fixed width mode.
-    std::unique_ptr<weld::ScrolledWindow> mxScroll; /// Scrolled Window
-    std::unique_ptr<weld::CustomWeld> mxRulerWeld;  /// Connect the ruler to its drawingarea
-    std::unique_ptr<weld::CustomWeld> mxGridWeld;   /// connect the grid to its drawingarea
+    std::unique_ptr<weld::CustomClientWeld> mxGridWeld;  /// Connect the grid to its box
 
     Link<ScCsvTableBox&,void>   maUpdateTextHdl;    /// Updates all cell texts.
     Link<ScCsvTableBox&,void>   maColTypeHdl;       /// Handler for exporting the column type.
 
-    Idle maEndScrollIdle;                           /// Called when horizontal scrolling has ended
-
     ScCsvColStateVec            maFixColStates;     /// Column states in fixed width mode.
     ScCsvColStateVec            maSepColStates;     /// Column states in separators mode.
+    ScCsvSplits                 maFixedSplits;      /// Cached splits for fixed width mode.
 
     sal_Int32                   mnFixedWidth;       /// Cached total width for fixed width mode.
 
@@ -66,9 +60,6 @@ private:
 public:
     explicit ScCsvTableBox(weld::Builder& rBuilder);
     ~ScCsvTableBox();
-
-    /** Finishes initialization. Must be called after constructing a new object. */
-    void Init();
 
     // common table box handling ----------------------------------------------
 public:
@@ -79,32 +70,13 @@ public:
     void                        SetFixedWidthMode();
     bool                        IsFixedWidthMode(){ return mbFixedMode; }
 
-    ScCsvRuler& GetRuler() { return *mxRuler; }
     ScCsvGrid& GetGrid() { return *mxGrid; }
-
-    /** Initializes the children controls (pos/size, scroll bars, ...). */
-    SAL_DLLPRIVATE void                        InitControls();
-
-private:
-    /** Initializes size and position data of horizontal scrollbar. */
-    SAL_DLLPRIVATE void                        InitHScrollBar();
-    /** Initializes size and position data of vertical scrollbar. */
-    SAL_DLLPRIVATE void                        InitVScrollBar();
-
-    /** Calculates and sets valid position offset nearest to nPos. */
-    SAL_DLLPRIVATE void                 ImplSetPosOffset( sal_Int32 nPos )
-                                    { maData.mnPosOffset = std::clamp( nPos, sal_Int32(0), mxGrid->GetMaxPosOffset() ); }
-    /** Calculates and sets valid line offset nearest to nLine. */
-    SAL_DLLPRIVATE void                 ImplSetLineOffset( sal_Int32 nLine )
-                                    { maData.mnLineOffset = std::clamp( nLine, sal_Int32(0), mxGrid->GetMaxLineOffset() ); }
-    /** Moves controls (not cursors!) so that nPos becomes visible. */
-    SAL_DLLPRIVATE void                        MakePosVisible( sal_Int32 nPos );
 
     // cell contents ----------------------------------------------------------
 public:
     /** Fills all cells of all lines with the passed texts (Unicode strings). */
     void                        SetUniStrings(
-                                    const OUString* pTextLines, const OUString& rSepChars,
+                                    const std::vector<OUString>& rTextLines, const OUString& rSepChars,
                                     sal_Unicode cTextSep, bool bMergeSep, bool bRemoveSpace );
 
     // column settings --------------------------------------------------------
@@ -126,9 +98,6 @@ public:
 
 private:
     DECL_DLLPRIVATE_LINK( CsvCmdHdl, ScCsvControl&, void );
-    DECL_DLLPRIVATE_LINK( HScrollHdl, weld::ScrolledWindow&, void );
-    DECL_DLLPRIVATE_LINK( VScrollHdl, weld::ScrolledWindow&, void );
-    DECL_DLLPRIVATE_LINK( ScrollEndHdl, Timer*, void );
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

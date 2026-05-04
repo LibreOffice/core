@@ -204,6 +204,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     $(if $(ENABLE_WASM_STRIP_SPLASH),,vcl/source/window/introwin) \
     vcl/source/window/keycod \
     vcl/source/window/keyevent \
+    vcl/source/window/customwidget \
     vcl/source/window/layout \
     vcl/source/window/menu \
     vcl/source/window/menubarwindow \

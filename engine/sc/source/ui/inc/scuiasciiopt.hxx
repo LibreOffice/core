@@ -37,7 +37,7 @@ class ScImportAsciiDlg : public weld::GenericDialogController
     std::unique_ptr<sal_uLong[]>    mpRowPosArray;
     sal_uLong                       mnRowPosCount;
 
-    OUString               maPreviewLine[ CSV_PREVIEW_LINES ];
+    std::vector<OUString>           maPreviewLines;
 
     OUString                    maFieldSeparators;  // selected field separators
     OUString                    maDetectedFieldSeps; // detected field seps

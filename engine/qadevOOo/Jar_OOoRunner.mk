@@ -921,9 +921,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/mod/_sch/ChXDataRow \
     qadevOOo/tests/java/mod/_sch/ChXDiagram \
     qadevOOo/tests/java/mod/_sc/ScAccessibleCell \
-    qadevOOo/tests/java/mod/_sc/ScAccessibleCsvCell \
-    qadevOOo/tests/java/mod/_sc/ScAccessibleCsvGrid \
-    qadevOOo/tests/java/mod/_sc/ScAccessibleCsvRuler \
     qadevOOo/tests/java/mod/_sc/ScAccessibleDocument \
     qadevOOo/tests/java/mod/_sc/ScAccessibleDocumentPagePreview \
     qadevOOo/tests/java/mod/_sc/ScAccessiblePageHeader \
