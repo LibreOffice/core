@@ -605,7 +605,8 @@ bool ChildSession::_handleInput(const char *buffer, int length)
                tokens.equals(0, "geta11yfocusedparagraph") ||
                tokens.equals(0, "geta11ycaretposition") ||
                tokens.equals(0, "toggletiledumping") ||
-               tokens.equals(0, "getpresentationinfo"));
+               tokens.equals(0, "getpresentationinfo") ||
+               tokens.equals(0, "executescript"));
 
         ProfileZone pz("ChildSession::_handleInput:" + tokens[0]);
         if (tokens.equals(0, "clientzoom"))
@@ -898,6 +899,10 @@ bool ChildSession::_handleInput(const char *buffer, int length)
         else if (tokens.equals(0, "getpresentationinfo"))
         {
             return getPresentationInfo();
+        }
+        else if (tokens.equals(0, "executescript"))
+        {
+            return executeScript(buffer, length, tokens);
         }
         else
         {
@@ -3332,6 +3337,54 @@ bool ChildSession::getPresentationInfo()
     LOKitHelper::ScopedString info(getLOKitDocument()->getPresentationInfo());
     std::string data(info.get());
     sendTextFrame("presentationinfo: " + data);
+    return true;
+}
+
+bool ChildSession::executeScript(char const * buffer, int length, StringVector const & tokens) {
+    // Wire format: "executescript <id> <script source>".  The id is opaque to us; the iframe uses
+    // it to correlate the result with the originating call.  The script source can contain
+    // arbitrary characters including spaces, so we extract it as the substring after the second
+    // space.
+    if (tokens.size() < 2) {
+        sendTextFrameAndLogError("error: cmd=executescript kind=syntax");
+        return false;
+    }
+    std::string_view const full(buffer, length);
+    constexpr std::string_view prefix("executescript ");
+    auto const idEnd = full.find(' ', prefix.size());
+    if (idEnd == std::string_view::npos) {
+        sendTextFrameAndLogError("error: cmd=executescript kind=syntax");
+        return false;
+    }
+    std::string const callId(full.substr(prefix.size(), idEnd - prefix.size()));
+    std::string const script(full.substr(idEnd + 1));
+
+    char * result = nullptr;
+    char * error = nullptr;
+    _docManager->getLOKit()->executeScript(script.c_str(), &result, &error);
+
+    // Build the response by string concatenation rather than via Poco JSON,
+    // because @c result is already a JSON value (whatever JSON.stringify
+    // produced for the script's last expression) and feeding it through a
+    // JSON parser/serializer would either re-quote scalars or fail.
+    std::string body = "{\"id\":\"" + JsonUtil::escapeJSONValue(callId) + "\"";
+    if (error)
+    {
+        body += ",\"err\":\"" + JsonUtil::escapeJSONValue(error) + "\"";
+        std::free(error);
+    }
+    else if (result)
+    {
+        body += ",\"ok\":";
+        body += result;
+        std::free(result);
+    }
+    // else: the script ran but its value was something JSON.stringify drops
+    // (undefined, a function, a symbol).  Emit neither "ok" nor "err" so the
+    // iframe-side Promise resolves to undefined, preserving the original JS
+    // semantics (rather than collapsing it to JSON null).
+    body += '}';
+    sendTextFrame("executescriptresult: " + body);
     return true;
 }
 

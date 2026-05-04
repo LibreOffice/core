@@ -1529,6 +1529,10 @@ bool ClientSession::_handleInput(const char *buffer, int length)
         }
     }
 #endif
+    else if (tokens.equals(0, "executescript"))
+    {
+        return forwardToChild(std::string(buffer, length), docBroker);
+    }
     else
     {
         LOG_ERR("Session [" << getId() << "] got unknown command [" << tokens[0] << ']');

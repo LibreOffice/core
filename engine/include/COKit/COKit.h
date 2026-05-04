@@ -166,6 +166,9 @@ struct COKitClassStruct
     /// @see kit::Office::registerFileSaveDialogCallback()
     void (*registerFileSaveDialogCallback)(COKit* pThis,
             COKitFileSaveDialogCallback pCallback);
+
+    /// @see kit::Office::executeScript().
+    void (*executeScript) (char const * script, char ** result, char ** error);
 };
 
 #define COKIT_DOCUMENT_HAS(pDoc,member) COKIT_HAS_MEMBER(COKitDocumentClass,member,(pDoc)->pClass->nSize)

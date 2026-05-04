@@ -34,6 +34,7 @@
       "debug",
       "welcome",
       "util",
-      "templates"
+      "templates",
+      "extensions"
     ]
   }

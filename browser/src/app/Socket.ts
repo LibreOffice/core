@@ -1153,6 +1153,16 @@ class Socket {
 			this._onOsInfoMsg(textMsg);
 		} else if (textMsg.startsWith('clipboardkey: ')) {
 			this._onClipboardKeyMsg(textMsg);
+		} else if (textMsg.startsWith('executescriptresult: ')) {
+			try {
+				const result = JSON.parse(
+					textMsg.substring('executescriptresult: '.length),
+				);
+				this._map.fire('executescriptresult', result);
+			} catch (e) {
+				app.console.error('Failed to parse executescriptresult: ' + e);
+			}
+			return;
 		} else if (textMsg.startsWith('perm:')) {
 			this._onPermMsg(textMsg);
 			return;

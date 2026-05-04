@@ -100,6 +100,9 @@ COOL_WELCOME_SRC = $(shell find $(srcdir)/welcome -name '*')
 COOL_WELCOME_DST = $(patsubst $(srcdir)/welcome/%,$(DIST_FOLDER)/welcome/%,$(COOL_WELCOME_SRC))
 endif
 
+COOL_EXTENSIONS_SRC = $(shell find $(srcdir)/extensions -name '*.html' -or -name '*.js')
+COOL_EXTENSIONS_DST = $(patsubst $(srcdir)/extensions/%,$(DIST_FOLDER)/extensions/%,$(COOL_EXTENSIONS_SRC))
+
 COOL_ADMIN_SRC = $(shell find $(srcdir)/admin -name '*.html' -or -name '*.css' -or -name '*.ttf' -or -name 'OFL.txt' -or -name '*.svg')
 COOL_ADMIN_ALL = $(shell find $(srcdir)/admin -name '*')
 COOL_ADMIN_DST = $(patsubst $(srcdir)/admin/%,$(DIST_FOLDER)/admin/%,$(COOL_ADMIN_SRC))
@@ -993,6 +996,7 @@ $(INTERMEDIATE_DIR)/COOL_JS.m4: $(INTERMEDIATE_DIR)/COOL_JS.m4.jslist
 $(DIST_FOLDER)/cool.html: $(srcdir)/html/cool.html.m4 \
 	$(COOL_HTML_DST) \
 	$(COOL_WELCOME_DST) \
+	$(COOL_EXTENSIONS_DST) \
 	$(DIST_FOLDER)/bundle.css \
 	$(DIST_FOLDER)/global.js \
 	$(INTERMEDIATE_DIR)/COOL_JS.m4 \
@@ -1081,6 +1085,14 @@ $(DIST_FOLDER)/welcome/%: $(srcdir)/welcome/%
 		`ln -sf $(abs_srcdir)/$< $@`; \
 	fi
 endif
+
+$(DIST_FOLDER)/extensions/%: $(srcdir)/extensions/%
+	@mkdir -p $(dir $@)
+	@if test -z '$(ENABLE_BROWSERSYNC)'; then \
+		`cp $< $@`; \
+	else \
+		`ln -sf $(abs_srcdir)/$< $@`; \
+	fi
 
 if ENABLE_DEBUG
 SourceMap=--allowJs true --sourceMap true --inlineSources true

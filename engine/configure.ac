@@ -5929,6 +5929,7 @@ AC_MSG_CHECKING([whether to enable QuickJS-based JS UNO support])
 if test "$enable_quickjs" = "yes"; then
     ENABLE_QUICKJS=TRUE
     BUILD_TYPE="$BUILD_TYPE QUICKJS"
+    AC_DEFINE(HAVE_FEATURE_QUICKJS)
     AC_MSG_RESULT([yes])
 else
     ENABLE_QUICKJS=

@@ -18,6 +18,10 @@
 #include <config_vclplug.h>
 #include <editeng/unolingu.hxx>
 
+#if HAVE_FEATURE_QUICKJS
+#include <jsuno/jsuno.hxx>
+#endif
+
 #include <stdio.h>
 
 #ifdef IOS
@@ -2778,6 +2782,8 @@ static char* lo_extractDocumentStructureRequest(COKit* pThis, const char* pFileP
 
 static int lo_getDocsCount(COKit* pThis);
 
+static void lo_executeScript(char const * script, char ** result, char ** error);
+
 LibCO_Impl::LibCO_Impl()
     : m_pOfficeClass( gOfficeClass.lock() )
     , maThread(nullptr)
@@ -2816,6 +2822,7 @@ LibCO_Impl::LibCO_Impl()
         m_pOfficeClass->registerAnyInputCallback = lo_registerAnyInputCallback;
         m_pOfficeClass->registerFileSaveDialogCallback = lo_registerFileSaveDialogCallback;
         m_pOfficeClass->getDocsCount = lo_getDocsCount;
+        m_pOfficeClass->executeScript = lo_executeScript;
 
         gOfficeClass = m_pOfficeClass;
     }
@@ -7872,6 +7879,30 @@ static void doc_setColorPreviewState(SAL_UNUSED_PARAMETER COKitDocument* /*pThis
 {
     SolarMutexGuard aGuard;
     KitHelper::setColorPreviewState(nId, bEnabled);
+}
+
+static void lo_executeScript(char const * script, char ** result, char ** error) {
+    comphelper::ProfileZone zone("lo_executeScript");
+    SolarMutexGuard guard;
+    SetLastExceptionMsg();
+    *result = nullptr;
+    *error = nullptr;
+#if HAVE_FEATURE_QUICKJS
+    try {
+        OUString value = jsuno::execute(OUString::fromUtf8(script));
+        if (!value.isEmpty()) {
+            *result = convertOUString(value);
+        }
+    } catch (css::uno::Exception const & exception) {
+        SetLastExceptionMsg(exception.Message);
+        *error = convertOUString(exception.Message);
+    }
+#else
+    (void) script;
+    static constexpr auto msg = u"executeScript: QuickJS support is not enabled in this build"_ustr;
+    SetLastExceptionMsg(msg);
+    *error = convertOUString(msg);
+#endif
 }
 
 static char* lo_getError (COKit *pThis)

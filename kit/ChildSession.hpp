@@ -229,6 +229,7 @@ private:
     bool getA11yFocusedParagraph();
     bool getA11yCaretPosition();
     bool getPresentationInfo();
+    bool executeScript(char const * buffer, int length, StringVector const & tokens);
 
     void rememberEventsForInactiveUser(int type, const std::string& payload);
 

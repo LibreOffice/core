@@ -67,6 +67,7 @@ $(eval $(call gb_Library_use_libraries,sofficeapp,\
     editeng \
     fwk \
     i18nlangtag \
+    $(call gb_Helper_optional,QUICKJS,jsuno) \
     $(if $(filter OPENCL,$(BUILD_TYPE)),opencl) \
     sal \
     salhelper \

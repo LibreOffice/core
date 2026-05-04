@@ -1239,6 +1239,27 @@ public:
     }
 
     /**
+     * Execute a JavaScript snippet via the embedded JS UNO support.
+     *
+     * On success, @c *result is set to the script's last expression result, JSON-stringified (or
+     * null if it stringifies to nothing, e.g. `undefined`), and @c *error is set to null.  On
+     * error, @c *result is null and @c *error holds the JS exception message.
+     *
+     * The caller takes ownership of @c *result and @c *error and must @c free() them.
+     *
+     * The @c script, @c *result and @c *error strings are NUL-terminated C strings, thus cannot
+     * contain embedded NUL characters.
+     *
+     * @param script the script source.
+     * @param result out-param for the result.
+     * @param error out-param for the error message.
+     */
+    void executeScript(char const * script, char ** result, char ** error)
+    {
+        mpThis->pClass->executeScript(script, result, error);
+    }
+
+    /**
      * Start a UNO acceptor using the function pointers provides to read and write data to/from the acceptor.
      *
      * @param pReceiveURPFromLOContext A pointer that will be passed to your fnRecieveURPFromLO function

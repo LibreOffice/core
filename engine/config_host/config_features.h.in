@@ -156,4 +156,6 @@
  */
 #define HAVE_FEATURE_JUMBO_SHEETS 0
 
+#define HAVE_FEATURE_QUICKJS 0
+
 #endif

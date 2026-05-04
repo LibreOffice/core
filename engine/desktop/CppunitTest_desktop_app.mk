@@ -34,6 +34,7 @@ $(eval $(call gb_CppunitTest_use_libraries,desktop_app, \
     editeng \
     fwk \
     i18nlangtag \
+    $(call gb_Helper_optional,QUICKJS,jsuno) \
     $(if $(filter OPENCL,$(BUILD_TYPE)),opencl) \
     sal \
     salhelper \
