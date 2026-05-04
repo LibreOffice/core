@@ -3084,6 +3084,7 @@ drawinglayer/source/geometry/viewinformation3d.cxx
 drawinglayer/source/primitive2d/animatedprimitive2d.cxx
 drawinglayer/source/primitive2d/backgroundcolorprimitive2d.cxx
 drawinglayer/source/primitive2d/borderlineprimitive2d.cxx
+drawinglayer/source/processor2d/cairopixelprocessor2d.cxx
 drawinglayer/source/primitive2d/controlprimitive2d.cxx
 drawinglayer/source/primitive2d/cropprimitive2d.cxx
 drawinglayer/source/primitive2d/discretebitmapprimitive2d.cxx
@@ -9136,6 +9137,7 @@ sd/inc/undo/undomanager.hxx
 sd/inc/unolayer.hxx
 sd/inc/unomodel.hxx
 sd/qa/unit/SVGExportTests.cxx
+sd/qa/unit/SdrPdfImportTest.cxx
 sd/qa/unit/activex-controls-tests.cxx
 sd/qa/unit/dialogs-test.cxx
 sd/qa/unit/filters-test.cxx
