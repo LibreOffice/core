@@ -3001,6 +3001,10 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
                 ScDocShell::KitCommentNotify(KitCommentNotificationType::Add, rDoc, aPos, pNote);
             }
+
+            rBindings.Invalidate( SID_INSERT_THREADED_COMMENT );
+            rBindings.Invalidate( SID_INSERT_POSTIT );
+            rBindings.Invalidate( SID_DELETE_NOTE );
             rReq.Done();
         }
         break;

@@ -643,6 +643,7 @@ void ScTabView::SelectionChanged(bool bFromPaste)
     rBindings.Invalidate( FID_DELETE_CELL );
     rBindings.Invalidate( FID_CELL_FORMAT );
     rBindings.Invalidate( SID_ENABLE_HYPHENATION );
+    rBindings.Invalidate( SID_INSERT_THREADED_COMMENT );
     rBindings.Invalidate( SID_INSERT_POSTIT );
     rBindings.Invalidate( SID_CHARMAP );
     rBindings.Invalidate( SID_OPENDLG_FUNCTION );
