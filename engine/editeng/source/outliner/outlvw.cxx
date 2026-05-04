@@ -201,6 +201,7 @@ bool OutlinerView::PostKeyEvent( const KeyEvent& rKEvt, vcl::Window const * pFra
                             rOwner.pEditEngine->GetTextLen( aSel.end.nPara ) == 0)
                         {
                             ToggleBullets();
+                            pEditView->ShowCursor();
                             return true;
                         }
                         // ImpGetCursor again???
