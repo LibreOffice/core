@@ -506,11 +506,15 @@ ShapeExport& ShapeExport::WriteGroupShape(const uno::Reference<drawing::XShape>&
     // non visual properties
     if (GetDocumentType() != DOCUMENT_DOCX || mbUserShapes)
     {
-        pFS->startElementNS(mnXmlNamespace, XML_nvGrpSpPr);
-        pFS->startElementNS(mnXmlNamespace, XML_cNvPr,
-                XML_id, OString::number(GetNewShapeID(xShape)),
-                XML_name, GetShapeName(xShape));
         uno::Reference<beans::XPropertySet> const xShapeProps(xShape, uno::UNO_QUERY_THROW);
+        bool isVisible = true ;
+        if( GetProperty(xShapeProps, u"Visible"_ustr))
+            mAny >>= isVisible;
+
+        pFS->startElementNS(mnXmlNamespace, XML_nvGrpSpPr);
+        pFS->startElementNS(mnXmlNamespace, XML_cNvPr, XML_id,
+                            OString::number(GetNewShapeID(xShape)), XML_name, GetShapeName(xShape),
+                            XML_hidden, sax_fastparser::UseIf("1", !isVisible));
         AddExtLst(pFS, xShapeProps);
         pFS->endElementNS(mnXmlNamespace, XML_cNvPr);
         pFS->singleElementNS(mnXmlNamespace, XML_cNvGrpSpPr);

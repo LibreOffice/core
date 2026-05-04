@@ -1737,6 +1737,15 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testtdf169496_hidden_graphic)
         CPPUNIT_FAIL("Names of graphics is incorrect");
 }
 
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testHiddenGroupShape)
+{
+    createSdImpressDoc("pptx/hidden_group_shape.pptx");
+    save(TestFilter::PPTX);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    assertXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:grpSp/p:nvGrpSpPr/p:cNvPr", "hidden", u"1");
+}
+
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testtdf169825_vertical_layouts)
 {
     createSdImpressDoc("pptx/tdf169825_vertical_layouts.pptx");
