@@ -39,6 +39,7 @@
 #include <com/sun/star/script/Invocation.hpp>
 #include <com/sun/star/script/InvocationInfo.hpp>
 #include <com/sun/star/script/XInvocation2.hpp>
+#include <com/sun/star/script/provider/ScriptExceptionRaisedException.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
@@ -2427,6 +2428,56 @@ JSValue invokeUno(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst*
         return ret.release();
     });
 }
+
+struct ExceptionData
+{
+    OUString type;
+    OUString message;
+};
+
+ExceptionData extractExceptionData(JSContext* ctx, ValueRef const& err)
+{
+    ExceptionData exc;
+    bool haveMessage = false;
+    if (JS_IsObject(err))
+    {
+        ValueRef const nameVal(ctx, JS_GetPropertyStr(ctx, err, "name"));
+        if (JS_IsString(nameVal))
+        {
+            std::size_t n;
+            UniqueCString16 const p(ctx, JS_ToCStringLenUTF16(ctx, &n, nameVal));
+            if (p.get() != nullptr)
+            {
+                exc.type = OUString(p.get(), n);
+            }
+        }
+        ValueRef const msgVal(ctx, JS_GetPropertyStr(ctx, err, "message"));
+        if (JS_IsString(msgVal))
+        {
+            std::size_t n;
+            UniqueCString16 const p(ctx, JS_ToCStringLenUTF16(ctx, &n, msgVal));
+            if (p.get() != nullptr)
+            {
+                exc.message = OUString(p.get(), n);
+                haveMessage = true;
+            }
+        }
+    }
+    if (!haveMessage)
+    {
+        ValueRef const str(ctx, JS_ToString(ctx, err));
+        if (!JS_IsException(str))
+        {
+            std::size_t n;
+            UniqueCString16 const p(ctx, JS_ToCStringLenUTF16(ctx, &n, str));
+            if (p.get() != nullptr)
+            {
+                exc.message = OUString(p.get(), n);
+            }
+        }
+    }
+    return exc;
+}
 }
 
 void jsuno::execute(OUString const& script)
@@ -2486,7 +2537,7 @@ void jsuno::execute(OUString const& script)
     e = JS_NewClass(rt, getRuntimeData(rt)->moduleClassId, &moduleClass);
     assert(e == 0); //TODO
     auto const ctx = JS_NewContext(rt);
-    std::optional<OUString> exc;
+    std::optional<ExceptionData> exc;
     {
         ValueRef const global(ctx, JS_GetGlobalObject(ctx));
         getRuntimeData(ctx)->symbolIteratorAtom = JS_ValueToAtom(
@@ -2549,18 +2600,7 @@ void jsuno::execute(OUString const& script)
             //TODO: reconstruct UNO exceptions
             ValueRef const err(ctx, JS_GetException(ctx));
             assert(!JS_IsException(err)); //TODO?
-            ValueRef const str(ctx, JS_ToString(ctx, err));
-            assert(!JS_IsException(str)); //TODO?
-            std::size_t n1;
-            UniqueCString16 const p1(ctx, JS_ToCStringLenUTF16(ctx, &n1, str));
-            assert(p1.get() != nullptr); //TODO?
-            ValueRef const stack(ctx, JS_GetPropertyStr(ctx, err, "stack"));
-            assert(!JS_IsException(stack)); //TODO?
-            std::size_t n2;
-            UniqueCString16 const p2(ctx, JS_ToCStringLenUTF16(ctx, &n2, stack));
-            assert(p2.get() != nullptr); //TODO?
-            exc = OUString::Concat(std::u16string_view(p1.get(), n1)) + ": "
-                  + std::u16string_view(p2.get(), n2);
+            exc = extractExceptionData(ctx, err);
         }
     }
     JS_FreeContext(ctx);
@@ -2569,7 +2609,8 @@ void jsuno::execute(OUString const& script)
     JS_FreeRuntime(rt);
     if (exc)
     {
-        throw css::uno::RuntimeException("JS exception: " + *exc);
+        throw css::script::provider::ScriptExceptionRaisedException(
+            exc->message, {}, u"<input>"_ustr, u"JavaScript"_ustr, -1, exc->type);
     }
 }
 

@@ -16,6 +16,7 @@
 
 namespace jsuno
 {
+// @throws css.script.provider.ScriptExceptionRaisedException
 LO_DLLPUBLIC_JSUNO void execute(OUString const& script);
 }
 
