@@ -657,6 +657,44 @@ def generateShortcuts(onlinePath, corePath):
     return shortcuts, l10nShortcuts, l10nKeyBindings, modifierL10N
 
 
+_IDENT_RE = re.compile(r'^[A-Za-z_$][A-Za-z0-9_$]*$')
+
+
+def _jsKey(key):
+    """Render a JS object key prettier-style (quoteProps: as-needed).
+
+    Identifier-like keys come out unquoted; everything else stays
+    single-quoted.  This matches what `make prettier-write` produces
+    for unoshortcuts.js.
+    """
+    if _IDENT_RE.match(key):
+        return key
+    return "'%s'" % key.replace("'", "\\'")
+
+
+# Prettier's default print width and tab width.
+_PRINT_WIDTH = 80
+_TAB_WIDTH = 2
+
+
+def _renderObject(props, indent, trailing=','):
+    """Render a list of (key, value) pairs as a JS object literal.
+
+    Tries a single-line form `{ k: v, k: v }`; falls back to a
+    multi-line form when the single-line version (including trailing
+    punctuation) exceeds prettier's print width.  Tabs in `indent` are
+    counted as `_TAB_WIDTH` columns to match prettier's measurement.
+    """
+    inline = "{ %s }" % ', '.join(
+        '%s: %s' % (k, v) for k, v in props)
+    width = len(indent.expandtabs(_TAB_WIDTH)) + len(inline) + len(trailing)
+    if width <= _PRINT_WIDTH:
+        return inline
+    inner = indent + '\t'
+    body = ''.join('%s%s: %s,\n' % (inner, k, v) for k, v in props)
+    return '{\n%s%s}' % (body, indent)
+
+
 def writeUnoshortcutsJS(onlinePath, shortcuts, l10nShortcuts,
                         l10nKeyBindings, modifierL10N):
     """Write the generated unoshortcuts.js file."""
@@ -668,17 +706,17 @@ def writeUnoshortcutsJS(onlinePath, shortcuts, l10nShortcuts,
         # en-US command -> display string (for tooltips).
         f.write("var unoShortcutsMap = {\n")
         for cmd in sorted(shortcuts.keys()):
-            f.write("\t'%s': '%s',\n" % (cmd, shortcuts[cmd]))
+            f.write("\t%s: '%s',\n" % (_jsKey(cmd), shortcuts[cmd]))
         f.write("};\n\n")
 
         # Per-language tooltip overrides: command -> display string
         # where the shortcut differs from en-US.
         f.write("var unoShortcutsL10N = {\n")
         for lang in sorted(l10nShortcuts.keys()):
-            f.write("\t'%s': {\n" % lang)
+            f.write("\t%s: {\n" % _jsKey(lang))
             for cmd in sorted(l10nShortcuts[lang].keys()):
-                f.write("\t\t'%s': '%s',\n"
-                        % (cmd, l10nShortcuts[lang][cmd]))
+                f.write("\t\t%s: '%s',\n"
+                        % (_jsKey(cmd), l10nShortcuts[lang][cmd]))
             f.write("\t},\n")
         f.write("};\n\n")
 
@@ -687,17 +725,32 @@ def writeUnoshortcutsJS(onlinePath, shortcuts, l10nShortcuts,
         # Map.KeyboardShortcuts.ts to register ShortcutDescriptors.
         f.write("var unoShortcutsL10NKeyBindings = {\n")
         for lang in sorted(l10nKeyBindings.keys()):
-            f.write("\t'%s': [\n" % lang)
             # Sort for stable output.
             entries = sorted(l10nKeyBindings[lang],
                              key=lambda e: (e[2], e[1], e[0]))
+            renderedEntries = []
             for eventKey, modBitmask, command, docType in entries:
                 # Escape single quotes in key names.
                 safeKey = eventKey.replace("'", "\\'")
-                docTypePart = (", docType: '%s'" % docType) if docType else ''
-                f.write("\t\t{key: '%s', modifier: %d, "
-                        "unoAction: '%s'%s},\n"
-                        % (safeKey, modBitmask, command, docTypePart))
+                props = [('key', "'%s'" % safeKey),
+                         ('modifier', '%d' % modBitmask),
+                         ('unoAction', "'%s'" % command)]
+                if docType:
+                    props.append(('docType', "'%s'" % docType))
+                renderedEntries.append(_renderObject(props, '\t\t'))
+
+            # Single-entry arrays collapse to one line if they fit,
+            # matching prettier's behaviour.
+            if len(renderedEntries) == 1 and '\n' not in renderedEntries[0]:
+                inline = "%s: [%s]" % (_jsKey(lang), renderedEntries[0])
+                width = len('\t'.expandtabs(_TAB_WIDTH)) + len(inline) + 1
+                if width <= _PRINT_WIDTH:
+                    f.write("\t%s,\n" % inline)
+                    continue
+
+            f.write("\t%s: [\n" % _jsKey(lang))
+            for r in renderedEntries:
+                f.write("\t\t%s,\n" % r)
             f.write("\t],\n")
         f.write("};\n\n")
 
@@ -705,12 +758,13 @@ def writeUnoshortcutsJS(onlinePath, shortcuts, l10nShortcuts,
         # vcl/unx/generic/app/keysymnames.cxx in core.
         f.write("var unoShortcutsModifierL10N = {\n")
         for lang in sorted(modifierL10N.keys()):
-            parts = []
+            props = []
             for eng in ('Ctrl', 'Shift', 'Alt'):
                 if eng in modifierL10N[lang]:
-                    parts.append("'%s': '%s'" % (eng, modifierL10N[lang][eng]))
-            if parts:
-                f.write("\t'%s': {%s},\n" % (lang, ', '.join(parts)))
+                    props.append((eng, "'%s'" % modifierL10N[lang][eng]))
+            if props:
+                f.write("\t%s: %s,\n"
+                        % (_jsKey(lang), _renderObject(props, '\t')))
         f.write("};\n")
 
 
