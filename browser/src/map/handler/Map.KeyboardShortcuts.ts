@@ -150,6 +150,18 @@ class ShortcutDescriptor {
     }) {
         app.console.assert(keyCode !== null || key !== null, 'registering a keyboard shortcut without specifying either a key or a keyCode - this will result in an untriggerable shortcut');
 
+        // Layout independence: a single letter or digit key always has a
+        // fixed keyCode (the US-layout ASCII value), even though event.key
+        // changes by layout (physical F is event.key === 'а' on Russian).
+        // Auto-deriving keyCode from key here means a binding with just
+        // key:'f' still fires on the physical F key everywhere.
+        if (keyCode === null && key !== null && key.length === 1) {
+            const code = key.charCodeAt(0);
+            if (code >= 0x41 && code <= 0x5A) keyCode = code;            // A-Z
+            else if (code >= 0x61 && code <= 0x7A) keyCode = code - 0x20; // a-z
+            else if (code >= 0x30 && code <= 0x39) keyCode = code;        // 0-9
+        }
+
         this.docType = docType;
         this.eventType = eventType;
         this.modifier = modifier;
