@@ -2480,7 +2480,7 @@ ExceptionData extractExceptionData(JSContext* ctx, ValueRef const& err)
 }
 }
 
-void jsuno::execute(OUString const& script)
+OUString jsuno::execute(OUString const& script)
 {
     auto const rt = JS_NewRuntime();
     JS_SetRuntimeOpaque(rt, new RuntimeData(rt));
@@ -2538,6 +2538,7 @@ void jsuno::execute(OUString const& script)
     assert(e == 0); //TODO
     auto const ctx = JS_NewContext(rt);
     std::optional<ExceptionData> exc;
+    OUString result;
     {
         ValueRef const global(ctx, JS_GetGlobalObject(ctx));
         getRuntimeData(ctx)->symbolIteratorAtom = JS_ValueToAtom(
@@ -2602,6 +2603,28 @@ void jsuno::execute(OUString const& script)
             assert(!JS_IsException(err)); //TODO?
             exc = extractExceptionData(ctx, err);
         }
+        else
+        {
+            ValueRef const json(ctx, JS_JSONStringify(ctx, evalRes, JS_UNDEFINED, JS_UNDEFINED));
+            if (JS_IsException(json))
+            {
+                // JSON.stringify itself can throw, e.g. on BigInt values or circular references:
+                ValueRef const err(ctx, JS_GetException(ctx));
+                assert(!JS_IsException(err)); //TODO?
+                exc = extractExceptionData(ctx, err);
+            }
+            else if (!JS_IsUndefined(json))
+            {
+                // Values that JSON.stringify drops (undefined, functions, symbols) come back as
+                // JS_UNDEFINED, for which we use an empty OUString:
+                std::size_t n;
+                UniqueCString16 const p(ctx, JS_ToCStringLenUTF16(ctx, &n, json));
+                if (p.get() != nullptr)
+                {
+                    result = OUString(p.get(), n);
+                }
+            }
+        }
     }
     JS_FreeContext(ctx);
     std::unique_ptr<RuntimeData> data(getRuntimeData(rt));
@@ -2612,6 +2635,7 @@ void jsuno::execute(OUString const& script)
         throw css::script::provider::ScriptExceptionRaisedException(
             exc->message, {}, u"<input>"_ustr, u"JavaScript"_ustr, -1, exc->type);
     }
+    return result;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

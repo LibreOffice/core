@@ -24,6 +24,30 @@ namespace
 class Execute : public CppUnit::TestFixture
 {
 public:
+    void testReturnValue()
+    {
+        CPPUNIT_ASSERT_EQUAL(u"42"_ustr, jsuno::execute(u"42"_ustr));
+        CPPUNIT_ASSERT_EQUAL(u"true"_ustr, jsuno::execute(u"true"_ustr));
+        CPPUNIT_ASSERT_EQUAL(u"\"hello\""_ustr, jsuno::execute(u"'hello'"_ustr));
+        CPPUNIT_ASSERT_EQUAL(u"null"_ustr, jsuno::execute(u"null"_ustr));
+        CPPUNIT_ASSERT_EQUAL(u"[1,2,3]"_ustr, jsuno::execute(u"[1, 2, 3]"_ustr));
+        CPPUNIT_ASSERT_EQUAL(u"{\"a\":1,\"b\":\"two\"}"_ustr,
+                             jsuno::execute(u"({a: 1, b: 'two'})"_ustr));
+        CPPUNIT_ASSERT_EQUAL(u""_ustr, jsuno::execute(u"undefined"_ustr));
+        CPPUNIT_ASSERT_EQUAL(u""_ustr, jsuno::execute(u"(function () {})"_ustr));
+        CPPUNIT_ASSERT_EQUAL(u"42"_ustr,
+                             jsuno::execute(u"(function () { return 42; }).apply(null, [])"_ustr));
+        try
+        {
+            jsuno::execute(u"1n"_ustr);
+            CPPUNIT_FAIL("expected ScriptExceptionRaisedException");
+        }
+        catch (css::script::provider::ScriptExceptionRaisedException const& e)
+        {
+            CPPUNIT_ASSERT_EQUAL(u"TypeError"_ustr, e.exceptionType);
+        }
+    }
+
     void testThrows()
     {
         try
@@ -71,6 +95,7 @@ public:
     }
 
     CPPUNIT_TEST_SUITE(Execute);
+    CPPUNIT_TEST(testReturnValue);
     CPPUNIT_TEST(testThrows);
     CPPUNIT_TEST_SUITE_END();
 };

@@ -16,8 +16,11 @@
 
 namespace jsuno
 {
+// @return JSON-stringified result (empty string for a value that JSON.stringify drops: `undefined`,
+// a function, or a symbol)
+//
 // @throws css.script.provider.ScriptExceptionRaisedException
-LO_DLLPUBLIC_JSUNO void execute(OUString const& script);
+LO_DLLPUBLIC_JSUNO OUString execute(OUString const& script);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
