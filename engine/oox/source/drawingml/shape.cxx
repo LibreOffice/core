@@ -2906,23 +2906,19 @@ uno::Sequence< uno::Sequence< uno::Any > >  Shape::resolveRelationshipsOfTypeFro
                 auto pxRelListTemp = xRelListTemp.getArray();
                 for (auto const& imageRel : *xImageRels)
                 {
-                    uno::Sequence<uno::Any> diagramRelTuple(3);
+                    uno::Sequence<uno::Any> diagramRelTuple(2);
                     auto pdiagramRelTuple = diagramRelTuple.getArray();
-                    // [0] => RID, [1] => InputStream [2] => extension
+                    // diagramDataRelTuple[0] => RID,
+                    // diagramDataRelTuple[1] => XGraphic
                     OUString sRelId = imageRel.second.maId;
 
                     pdiagramRelTuple[0] <<= sRelId;
                     OUString sTarget = xImageRels->getFragmentPathFromRelId(sRelId);
 
-                    uno::Reference<io::XInputStream> xImageInputStrm(
-                        rFilter.openInputStream(sTarget), uno::UNO_SET_THROW);
-                    StreamDataSequence dataSeq;
-                    if (rFilter.importBinaryData(dataSeq, sTarget))
-                    {
-                        pdiagramRelTuple[1] <<= dataSeq;
-                    }
-
-                    pdiagramRelTuple[2] <<= sTarget.copy(sTarget.lastIndexOf("."));
+                    // changed to no longer hold binary data of graphic, but XGraphic directly
+                    uno::Reference<graphic::XGraphic> xGraphic = rFilter.getGraphicHelper().importEmbeddedGraphic(sTarget);
+                    if (xGraphic)
+                        pdiagramRelTuple[1] <<= xGraphic;
 
                     pxRelListTemp[counter] = std::move(diagramRelTuple);
                     ++counter;

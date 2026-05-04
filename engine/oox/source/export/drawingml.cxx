@@ -1620,7 +1620,7 @@ OUString GraphicExport::writeNewSvgEntryToStorage(const Graphic& rGraphic, bool 
     return sPath;
 }
 
-OUString GraphicExport::writeToStorage(const Graphic& rGraphic, bool bRelPathToMedia, TypeHint eHint)
+OUString GraphicExport::writeToStorage(const Graphic& rGraphic, bool bRelPathToMedia, TypeHint eHint, bool bReturnPath)
 {
     OUString sPath;
 
@@ -1642,14 +1642,25 @@ OUString GraphicExport::writeToStorage(const Graphic& rGraphic, bool bRelPathToM
             return OUString(); // couldn't store
     }
 
-    OUString sRelId = mpFilterBase->addRelation(mpFS->getOutputStream(), oox::getRelationship(Relationship::IMAGE), sPath);
+    if (bReturnPath)
+        return sPath;
 
+    OUString sRelId = mpFilterBase->addRelation(mpFS->getOutputStream(), oox::getRelationship(Relationship::IMAGE), sPath);
     return sRelId;
 }
 
 std::shared_ptr<GraphicExport> DrawingML::createGraphicExport()
 {
     return std::make_shared<GraphicExport>(mpFS, mpFB, meDocumentType);
+}
+
+OUString DrawingML::writeImageRelToStorage(const Graphic &rGraphic)
+{
+    const auto& pVectorGraphicDataPtr = rGraphic.getVectorGraphicData();
+    const bool bIsSVG(pVectorGraphicDataPtr && pVectorGraphicDataPtr->getType() == VectorGraphicDataType::Svg);
+    GraphicExport aExporter(mpFS, mpFB, meDocumentType);
+
+    return aExporter.writeToStorage(rGraphic, isDiagaramExport(), bIsSVG ? GraphicExport::TypeHint::SVG : GraphicExport::TypeHint::Detect, true);
 }
 
 OUString DrawingML::writeGraphicToStorage(const Graphic& rGraphic , bool bRelPathToMedia, GraphicExport::TypeHint eHint)
@@ -7075,7 +7086,7 @@ void DrawingML::WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rX
             >>= xDataHlinkRelSeq;
 
         // write the associated Images and rels for data file
-        writeDiagramImageRels(xDataImageRelSeq, xDataOutputStream, u"OOXDiagramDataRels", nDiagramId);
+        writeDiagramImageRels(xDataImageRelSeq, xDataOutputStream);
         writeDiagramHlinkRels(xDataHlinkRelSeq, xDataOutputStream);
     }
 
@@ -7125,14 +7136,13 @@ void DrawingML::WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rX
             >>= xDrawingHlinkRelSeq;
 
         // write the associated Images and rels for data file
-        writeDiagramImageRels(xDrawingImageRelSeq, xDrawingOutputStream, u"OOXDiagramDrawingRels", nDiagramId);
+        writeDiagramImageRels(xDrawingImageRelSeq, xDrawingOutputStream);
         writeDiagramHlinkRels(xDrawingHlinkRelSeq, xDrawingOutputStream);
     }
 }
 
 void DrawingML::writeDiagramImageRels(const uno::Sequence<uno::Sequence<uno::Any>>& xRelSeq,
-                                      const uno::Reference<io::XOutputStream>& xOutStream,
-                                      std::u16string_view sGrabBagProperyName, int nDiagramId)
+                                      const uno::Reference<io::XOutputStream>& xOutStream)
 {
     // add image relationships of OOXData, SmartArtDiagram
     OUString sType(oox::getRelationship(Relationship::IMAGE));
@@ -7144,49 +7154,31 @@ void DrawingML::writeDiagramImageRels(const uno::Sequence<uno::Sequence<uno::Any
     for (sal_Int32 j = 0; j < xRelSeq.getLength(); j++)
     {
         // diagramDataRelTuple[0] => RID,
-        // diagramDataRelTuple[1] => xInputStream
-        // diagramDataRelTuple[2] => extension
+        // diagramDataRelTuple[1] => XGraphic
         const uno::Sequence<uno::Any>& diagramDataRelTuple = xRelSeq[j];
 
         OUString sRelId;
-        OUString sExtension;
         diagramDataRelTuple[0] >>= sRelId;
-        diagramDataRelTuple[2] >>= sExtension;
-        OUString sContentType;
-        if (sExtension.equalsIgnoreAsciiCase(".WMF"))
-            sContentType = "image/x-wmf";
-        else
-            sContentType = OUString::Concat("image/") + sExtension.subView(1);
         sRelId = sRelId.copy(3);
 
-        StreamDataSequence dataSeq;
-        diagramDataRelTuple[1] >>= dataSeq;
-        uno::Reference<io::XInputStream> dataImagebin(
-            new ::comphelper::SequenceInputStream(dataSeq));
+        // get XGraphic
+        uno::Reference<graphic::XGraphic> xGraphic;
+        diagramDataRelTuple[1] >>= xGraphic;
 
-        //nDiagramId is used to make the name unique irrespective of the number of smart arts.
-        OUString sFragment = OUString::Concat("media/") + sGrabBagProperyName
-                             + OUString::number(nDiagramId) + "_"
-                             + OUString::number(j) + sExtension;
-
-        PropertySet aProps(xOutStream);
-        aProps.setAnyProperty(PROP_RelId, uno::Any(sRelId.toInt32()));
-
-        mpFB->addRelation(xOutStream, sType, Concat2View("../" + sFragment));
-
-        OUString sDir = GetComponentDir();
-        uno::Reference<io::XOutputStream> xBinOutStream
-            = mpFB->openFragmentStream(sDir + "/" + sFragment, sContentType);
-
-        try
+        if (xGraphic)
         {
-            comphelper::OStorageHelper::CopyInputToOutput(dataImagebin, xBinOutStream);
+            // write to Storage and get relative path back
+            ::Graphic aGraphic(xGraphic);
+            const OUString sFragment = writeImageRelToStorage(aGraphic);
+
+            PropertySet aProps(xOutStream);
+            aProps.setAnyProperty(PROP_RelId, uno::Any(sRelId.toInt32()));
+
+            if (GetDocumentType() == DOCUMENT_DOCX)
+                mpFB->addRelation(xOutStream, sType, Concat2View("../" + sFragment));
+            else
+                mpFB->addRelation(xOutStream, sType, sFragment);
         }
-        catch (const uno::Exception&)
-        {
-            TOOLS_WARN_EXCEPTION("oox.drawingml", "DrawingML::writeDiagramRels Failed to copy grabbaged Image");
-        }
-        dataImagebin->closeInput();
     }
 }
 

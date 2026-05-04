@@ -647,8 +647,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo74792)
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(
                          comphelper::getComponentContext(m_xSFactory), maTempFile.GetURL());
 
-    //check that images are also saved
-    uno::Reference<io::XInputStream> xInputStream(xNameAccess->getByName( u"word/media/OOXDiagramDataRels1_0.jpeg"_ustr /*added anchor id to form a unique name*/ ), uno::UNO_QUERY);
+    //check that images are also saved (formally OOXDiagramDataRels1_0.jpeg, DogWatchingMice, fill of 1st Node)
+    uno::Reference<io::XInputStream> xInputStream(xNameAccess->getByName( u"word/media/image1.jpeg"_ustr /*added anchor id to form a unique name*/ ), uno::UNO_QUERY);
     CPPUNIT_ASSERT( xInputStream.is() );
 }
 
@@ -670,12 +670,12 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo77718)
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(
                          comphelper::getComponentContext(m_xSFactory), maTempFile.GetURL());
 
-    //check that images are also saved
-    uno::Reference<io::XInputStream> xInputStream1(xNameAccess->getByName( u"word/media/OOXDiagramDataRels1_0.jpeg"_ustr /*added anchor id to form a unique name*/ ), uno::UNO_QUERY);
+    //check that images are also saved (formally OOXDiagramDataRels1_0.jpeg, lighthouse, fill of BGImage)
+    uno::Reference<io::XInputStream> xInputStream1(xNameAccess->getByName( u"word/media/image1.jpeg"_ustr /*added anchor id to form a unique name*/ ), uno::UNO_QUERY);
     CPPUNIT_ASSERT( xInputStream1.is() );
 
-    //check that images are saved for other smart-arts as well.
-    uno::Reference<io::XInputStream> xInputStream2(xNameAccess->getByName( u"word/media/OOXDiagramDataRels2_0.jpeg"_ustr /*added anchor id to form a unique name*/ ), uno::UNO_QUERY);
+    //check that images are saved for other smart-arts as well. (formally OOXDiagramDataRels2_0, Utah, fill of BGImage)
+    uno::Reference<io::XInputStream> xInputStream2(xNameAccess->getByName( u"word/media/image5.jpeg"_ustr /*added anchor id to form a unique name*/ ), uno::UNO_QUERY);
     CPPUNIT_ASSERT( xInputStream2.is() );
 }
 

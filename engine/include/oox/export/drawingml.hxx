@@ -275,7 +275,11 @@ public:
         , meDocumentType(eDocumentType)
     {}
 
-    OUString writeToStorage(Graphic const& rGraphic, bool bRelPathToMedia = false, TypeHint eHint = TypeHint::Detect);
+    // bReturnPath:
+    //   false: it calls addRelation and returns the new RelationID.
+    //   true: it writes no relation and returns the relativePath of the Image
+    // version using true can be used to export existing DiagramImageRels
+    OUString writeToStorage(Graphic const& rGraphic, bool bRelPathToMedia = false, TypeHint eHint = TypeHint::Detect, bool bReturnPath = false);
 
     void writeBlip(Graphic const& rGraphic, std::vector<model::BlipEffect> const& rEffects);
     void writeSvgExtension(OUString const& rSvgRelId);
@@ -389,8 +393,15 @@ public:
     bool isDiagaramExport() const { return mbDiagaramExport;}
 
     void SetBackgroundDark(bool bIsDark) { mbIsBackgroundDark = bIsDark; }
+
     /// If bRelPathToMedia is true add "../" to image folder path while adding the image relationship
     OOX_DLLPUBLIC OUString writeGraphicToStorage(const Graphic &rGraphic , bool bRelPathToMedia = false, GraphicExport::TypeHint eHint = GraphicExport::TypeHint::Detect);
+
+    /// specialized version of writeGraphicToStorage for writing existing DiagramImageRels, look for
+    // DomMapFlag::OOXDrawingImageRels and DomMapFlag::OOXDataImageRels. It writes data for *existing*
+    // relations that were imported and not touched. It returns the path of the image, *not* a new
+    // relation ID. That way already existing images can be re-used and shared.
+    OOX_DLLPUBLIC OUString writeImageRelToStorage(const Graphic &rGraphic);
 
     void WriteColor( ::Color nColor, sal_Int32 nAlpha = MAX_PERCENT );
     void WriteColor( const OUString& sColorSchemeName, const css::uno::Sequence< css::beans::PropertyValue >& aTransformations, sal_Int32 nAlpha = MAX_PERCENT );
@@ -533,8 +544,7 @@ public:
     OOX_DLLPUBLIC void WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rXShape,
                                     sal_Int32 nDiagramId, sal_Int32 nShapeId = -1);
     void writeDiagramImageRels(const css::uno::Sequence<css::uno::Sequence<css::uno::Any>>& xRelSeq,
-                               const css::uno::Reference<css::io::XOutputStream>& xOutStream,
-                               std::u16string_view sGrabBagProperyName, int nDiagramId);
+                               const css::uno::Reference<css::io::XOutputStream>& xOutStream);
     void writeDiagramHlinkRels(const css::uno::Sequence<css::uno::Sequence<css::uno::Any>>& xRelSeq,
                                const css::uno::Reference<css::io::XOutputStream>& xOutStream);
 
