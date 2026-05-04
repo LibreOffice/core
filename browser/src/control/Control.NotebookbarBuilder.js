@@ -476,11 +476,6 @@ window.L.Control.NotebookbarBuilder = window.L.Control.JSDialogBuilder.extend({
 					'command': 'exportpdf'
 				}
 			];
-			if (window.extraExportFormats.includes('impress_swf'))
-				submenuOpts.push({
-					'action': 'downloadas-swf',
-					'text': _('Shockwave Flash (.swf)')
-				});
 			if (window.extraExportFormats.includes('impress_svg'))
 				submenuOpts.push({
 					'action': 'downloadas-svg',

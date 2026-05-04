@@ -453,7 +453,6 @@ class Menubar extends window.L.Control {
 					{name: _('PowerPoint 2003 Presentation (.ppt)'), id: 'downloadas-ppt', type: 'action'},
 					{name: _('PowerPoint Presentation (.pptx)'), id: 'downloadas-pptx', type: 'action'},
 					{name: _('HTML Document (.html)'), id: 'downloadas-html', type: 'action'},
-					{name: _('Shockwave Flash (.swf)'), id: 'downloadas-swf', type: 'action'},
 					{name: _('Scalable Vector Graphics (.svg)'), id: 'downloadas-svg', type: 'action'},
 					{name: _('Current slide as Bitmap (.bmp)'), id: 'downloadas-bmp', type: 'action'},
 					{name: _('Current slide as Graphics Interchange Format (.gif)'), id: 'downloadas-gif', type: 'action'},
@@ -2634,7 +2633,7 @@ class Menubar extends window.L.Control {
 			var format = menuItem.id.substring('downloadas-'.length);
 
 			const docType: string = this._map.getDocType();
-			const extraFormats = docType === 'presentation' ? ['swf', 'svg', 'bmp', 'gif', 'png', 'tiff']
+			const extraFormats = docType === 'presentation' ? ['svg', 'bmp', 'gif', 'png', 'tiff']
 				: [];
 
 			const appNames: Record<string, string> = {
