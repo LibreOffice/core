@@ -1904,6 +1904,30 @@ CPPUNIT_TEST_FIXTURE(Test, testCreatePen)
     assertXPath(pDocument, aXPathPrefix + "mask/pointarray[1]/point", "y", u"8918");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testPdfInEmfVersion0)
+{
+    // tdf#167641 EMF with EMR_COMMENT_MULTIFORMATS carrying a PDF, where the
+    // EmrFormat.Version field is 0 (as written by current MS Office) and the
+    // OutputRect is empty (0,0,0,0). [MS-EMF] 2.3.3.4.2 says Version must be
+    // ignored unless Signature == EPS_SIGNATURE; an empty OutputRect must fall
+    // back to the EMF's logical bounds. Without the fix, the embedded PDF was
+    // not rendered at all.
+    if (!vcl::pdf::PDFiumLibrary::get())
+    {
+        return;
+    }
+
+    Primitive2DSequence aSequence
+        = parseEmf(u"/emfio/qa/cppunit/emf/data/TestPdfInEmfVersion0.emf");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
+    drawinglayer::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
+    CPPUNIT_ASSERT(pDocument);
+
+    // Without the fix the metafile was empty (no bitmap was drawn).
+    assertXPath(pDocument, "//bitmap"_ostr, 1);
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testPdfInEmf)
 {
     if (!vcl::pdf::PDFiumLibrary::get())

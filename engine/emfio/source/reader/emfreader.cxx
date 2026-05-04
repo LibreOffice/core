@@ -476,6 +476,14 @@ namespace emfio
     {
         tools::Rectangle aOutputRect = EmfReader::ReadRectangle();
 
+        // [MS-EMF] 2.3.3.4.3 EMR_COMMENT_MULTIFORMATS: OutputRect is in logical
+        // coordinates. MS Office sometimes writes (0,0,0,0); fall back to the
+        // EMF's logical bounds so the embedded PDF actually gets drawn.
+        if (aOutputRect.GetWidth() <= 1 && aOutputRect.GetHeight() <= 1)
+        {
+            aOutputRect = mrclBounds;
+        }
+
         sal_uInt32 nCountFormats(0);
         mpInputStream->ReadUInt32(nCountFormats);
         if (nCountFormats < 1)
@@ -491,12 +499,11 @@ namespace emfio
             return;
         }
 
-        sal_uInt32 nVersion(0);
-        mpInputStream->ReadUInt32(nVersion);
-        if (nVersion != 1)
-        {
-            return;
-        }
+        // [MS-EMF] 2.3.3.4.2 EmrFormat: Version MUST be 0x00000001 only when
+        // Signature == EPS_SIGNATURE; for any other signature it MUST be ignored.
+        // MS Office writes Version=0 with Signature="PDF "; older code rejected that.
+        // Skip the Version field without reading it, since its value is irrelevant here.
+        mpInputStream->SeekRel(sizeof(sal_uInt32));
 
         sal_uInt32 nSizeData(0);
         mpInputStream->ReadUInt32(nSizeData);
