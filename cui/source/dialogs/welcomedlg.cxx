@@ -81,7 +81,7 @@ void WelcomeDialog::PageCreated(const OUString& rId, SfxTabPage& rPage)
     }
     else if (rId == sAppearanceTab)
     {
-        rPage.getAdditionalProperties().emplace(u"HideAdvancedControls"_ustr, css::uno::Any(true));
+        rPage.getAdditionalProperties().emplace(u"IsWelcomeDialog"_ustr, css::uno::Any(true));
     }
 }
 
