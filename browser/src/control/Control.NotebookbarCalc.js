@@ -453,7 +453,7 @@ window.L.Control.NotebookbarCalc = window.L.Control.NotebookbarWriter.extend({
 									'type': 'toolitem',
 									'text': _UNO('.uno:FormatPaintbrush'),
 									'tooltip': _('Clone Formatting (double click to keep active)'),
-									'activeTooltip': _('Clone Formatting is active (click again or press Esc to exit)'),
+									'activeTooltip': _('Clone Formatting is active (press Enter on a cell to apply, click again or press Esc to exit)'),
 									'command': '.uno:FormatPaintbrush',
 									'doubleClickCommand': '.uno:FormatPaintbrush',
 									'doubleClickCommandArgs': { PersistentCopy: { type: 'boolean', value: true } },

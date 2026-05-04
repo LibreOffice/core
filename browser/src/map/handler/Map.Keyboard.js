@@ -614,6 +614,11 @@ window.L.Map.Keyboard = window.L.Handler.extend({
 				// key ignored
 			}
 			else if (ev.type === 'keydown') {
+				if (window.mode.isDesktop()
+					&& keyCode === this.keyCodes.enter
+					&& this._isFormatPaintbrushActiveOnCalcCell()) {
+					this._clickCellCursor();
+				}
 				if (this.handleOnKeyDownKeys[keyCode] && charCode === 0) {
 					if (keyEventFn) {
 						keyEventFn('input', charCode, unoKeyCode);
@@ -688,6 +693,25 @@ window.L.Map.Keyboard = window.L.Handler.extend({
 			return e.metaKey;
 		else
 			return e.ctrlKey;
+	},
+
+	_isFormatPaintbrushActiveOnCalcCell: function () {
+		if (this._map.getDocType() !== 'spreadsheet')
+			return false;
+		if (this._map._docLayer.insertMode)
+			return false;
+		return this._map.stateChangeHandler.getItemValue('.uno:FormatPaintbrush') === 'true';
+	},
+
+	// Simulates a click on the cell cursor, which is needed to apply
+	// the format paintbrush in calc when pressing enter on a cell
+	// with the paintbrush active.
+	_clickCellCursor: function () {
+		var center = app.calc.cellCursorRectangle.center;
+		var x = Math.round(center[0]);
+		var y = Math.round(center[1]);
+		this._map._docLayer._postMouseEvent('buttondown', x, y, 1, 1, 0);
+		this._map._docLayer._postMouseEvent('buttonup', x, y, 1, 1, 0);
 	},
 
 	// Keys that should still be sent to core with modifiers in read-only mode.
