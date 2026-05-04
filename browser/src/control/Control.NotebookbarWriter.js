@@ -2482,11 +2482,65 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 	getTableTab: function() {
 		var content = [
 			{
-				'type': 'bigtoolitem',
-				'text': _UNO('.uno:TableDialog', 'text', true),
-				'command': '.uno:TableDialog'
+				'type': 'overflowgroup',
+				'id': 'table-select',
+				'name':_('Select'),
+				'accessibility': { focusBack: false, combination: 'SE', de: null },
+				'children' : [
+					{
+						'type': 'bigtoolitem',
+						'id': 'table-entire-cell',
+						'text': _UNO('.uno:EntireCell', 'text', true),
+						'command': '.uno:EntireCell',
+						'accessibility': { focusBack: true,	combination: 'EC', de: null }
+					},
+					{
+						'type': 'container',
+						'children': [
+							{
+								'type': 'toolbox',
+								'children': [
+									{
+										'type': 'toolitem',
+										'id': 'table-entire-column',
+										'text': _UNO('.uno:EntireColumn', 'text'),
+										'command': '.uno:EntireColumn',
+										'accessibility': { focusBack: true,	combination: 'CE', de: null }
+									},
+									{
+										'type': 'toolitem',
+										'id': 'table-select-table',
+										'text': _UNO('.uno:SelectTable', 'text', true),
+										'command': '.uno:SelectTable',
+										'accessibility': { focusBack: true,	combination: 'ST', de: null }
+									},
+								]
+							},
+							{
+								'type': 'toolbox',
+								'children': [
+									{
+										'type': 'toolitem',
+										'id': 'table-entire-row',
+										'text': _UNO('.uno:EntireRow', 'text'),
+										'command': '.uno:EntireRow',
+										'accessibility': { focusBack: true,	combination: 'ER', de: null }
+									},
+									{
+										'type': 'toolitem',
+										'id': 'table-delete-table',
+										'text': _UNO('.uno:DeleteTable', 'text', true),
+										'command': '.uno:DeleteTable',
+										'accessibility': { focusBack: true,	combination: 'DT', de: null }
+									},
+								]
+							}
+						],
+						'vertical': 'true'
+					},
+				]
 			},
-			{ type: 'separator', id: 'table-bigtoolitem-break', orientation: 'vertical' },
+			{ type: 'separator', id: 'table-deletetable-break', orientation: 'vertical' },
 			{
 				'type': 'overflowgroup',
 				'id': 'table-insert',
@@ -2501,18 +2555,24 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 								'children': [
 									{
 										'type': 'toolitem',
+										'id': 'table-insert-columns-before',
 										'text': _UNO('.uno:InsertColumnsBefore', 'text', true),
-										'command': '.uno:InsertColumnsBefore'
+										'command': '.uno:InsertColumnsBefore',
+										'accessibility': { focusBack: true, combination: 'CB', de: null }
 									},
 									{
 										'type': 'toolitem',
+										'id': 'table-insert-columns-after',
 										'text': _UNO('.uno:InsertColumnsAfter', 'text', true),
-										'command': '.uno:InsertColumnsAfter'
+										'command': '.uno:InsertColumnsAfter',
+										'accessibility': { focusBack: true, combination: 'CA', de: null }
 									},
 									{
 										'type': 'toolitem',
+										'id': 'table-insert-delete-columns',
 										'text': _UNO('.uno:DeleteColumns', 'text', true),
-										'command': '.uno:DeleteColumns'
+										'command': '.uno:DeleteColumns',
+										'accessibility': { focusBack: true, combination: 'CD', de: null }
 									}
 								]
 							},
@@ -2521,18 +2581,24 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 								'children': [
 									{
 										'type': 'toolitem',
+										'id': 'table-insert-rows-before',
 										'text': _UNO('.uno:InsertRowsBefore', 'text', true),
-										'command': '.uno:InsertRowsBefore'
+										'command': '.uno:InsertRowsBefore',
+										'accessibility': { focusBack: true, combination: 'RB', de: null }
 									},
 									{
 										'type': 'toolitem',
+										'id': 'table-insert-rows-after',
 										'text': _UNO('.uno:InsertRowsAfter', 'text', true),
-										'command': '.uno:InsertRowsAfter'
+										'command': '.uno:InsertRowsAfter',
+										'accessibility': { focusBack: true, combination: 'RA', de: null }
 									},
 									{
 										'type': 'toolitem',
+										'id': 'table-insert-delete-rows',
 										'text': _UNO('.uno:DeleteRows', 'text', true),
-										'command': '.uno:DeleteRows'
+										'command': '.uno:DeleteRows',
+										'accessibility': { focusBack: true, combination: 'RD', de: null }
 									}
 								]
 							}
@@ -2543,17 +2609,17 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 			},
 			{ type: 'separator', id: 'table-deleterows-break', orientation: 'vertical' },
 			{
-				'type': 'bigtoolitem',
-				'text': _UNO('.uno:MergeCells', 'text'),
-				'command': '.uno:MergeCells'
-			},
-			{ type: 'separator', id: 'table-mergecells-break', orientation: 'vertical' },
-			{
 				'type': 'overflowgroup',
 				'id': 'table-split',
-				'name':_('Split'),
-				'accessibility': { focusBack: false, combination: 'TS', de: null },
+				'name':_('Merge & Split'),
 				'children' : [
+					{
+						'type': 'bigtoolitem',
+						'id': 'table-insert-merge-cells',
+						'text': _UNO('.uno:MergeCells', 'text'),
+						'command': '.uno:MergeCells',
+						'accessibility': { focusBack: true, combination: 'MC', de: null },
+					},
 					{
 						'type': 'container',
 						'children': [
@@ -2562,8 +2628,10 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 								'children': [
 									{
 										'type': 'toolitem',
+										'id': 'table-insert-split-cell',
 										'text': _UNO('.uno:SplitCell', 'text'),
-										'command': '.uno:SplitCell'
+										'command': '.uno:SplitCell',
+										'accessibility': { focusBack: true, combination: 'SC', de: null }
 									}
 								]
 							},
@@ -2572,8 +2640,10 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 								'children': [
 									{
 										'type': 'toolitem',
+										'id': 'table-insert-split-table',
 										'text': _UNO('.uno:SplitTable', 'text'),
-										'command': '.uno:SplitTable'
+										'command': '.uno:SplitTable',
+										'accessibility': { focusBack: true, combination: 'TS', de: null }
 									}
 								]
 							}
@@ -2584,87 +2654,10 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 			},
 			{ type: 'separator', id: 'table-splittable-break', orientation: 'vertical' },
 			{
-				'type': 'container',
-				'children': [
-					{
-						'type': 'toolbox',
-						'children': [
-							{
-								'type': 'toolitem',
-								'text': _UNO('.uno:Protect', 'text'),
-								'command': '.uno:Protect'
-							}
-						]
-					},
-					{
-						'type': 'toolbox',
-						'children': [
-							{
-								'type': 'toolitem',
-								'text': _UNO('.uno:UnsetCellsReadOnly', 'text'),
-								'command': '.uno:UnsetCellsReadOnly'
-							}
-						]
-					}
-				],
-				'vertical': 'true'
-			},
-			{ type: 'separator', id: 'table-unsetcellsreadonly-break', orientation: 'vertical' },
-			{
 				'type': 'overflowgroup',
-				'id': 'table-select',
-				'name':_('Select'),
-				'accessibility': { focusBack: false, combination: 'TC', de: null },
-				'children' : [
-					{
-						'type': 'bigtoolitem',
-						'text': _UNO('.uno:EntireCell', 'text', true),
-						'command': '.uno:EntireCell'
-					},
-					{
-						'type': 'container',
-						'children': [
-							{
-								'type': 'toolbox',
-								'children': [
-									{
-										'type': 'toolitem',
-										'text': _UNO('.uno:EntireColumn', 'presentation'),
-										'command': '.uno:EntireColumn'
-									},
-									{
-										'type': 'toolitem',
-										'text': _UNO('.uno:SelectTable', 'text', true),
-										'command': '.uno:SelectTable'
-									},
-								]
-							},
-							{
-								'type': 'toolbox',
-								'children': [
-									{
-										'type': 'toolitem',
-										'text': _UNO('.uno:EntireRow', 'presentation'),
-										'command': '.uno:EntireRow'
-									},
-									{
-										'type': 'toolitem',
-										'text': _UNO('.uno:DeleteTable', 'text', true),
-										'command': '.uno:DeleteTable'
-									},
-								]
-							}
-						],
-						'vertical': 'true'
-					},
-				]
-			},
-			{ type: 'separator', id: 'table-deletetable-break', orientation: 'vertical' },
-			{
-				'type': 'overflowgroup',
-				'id': 'table-paragraph-table',// id-should be unique for overflowgroup options
-				'name':_('Paragraph'),
-				'accessibility': { focusBack: false, combination: 'TB', de: null },
+				'id': 'table-alignment',
+				'name':_('Alignment'),
+				'accessibility': { focusBack: true, combination: 'CT', de: null },
 				'children' : [
 					{
 						'type': 'container',
@@ -2674,18 +2667,24 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 								'children': [
 									{
 										'type': 'toolitem',
+										'id': 'table-cell-vert-top',
 										'text': _UNO('.uno:CellVertTop'),
-										'command': '.uno:CellVertTop'
+										'command': '.uno:CellVertTop',
+										'accessibility': { focusBack: true, combination: 'CT', de: null }
 									},
 									{
 										'type': 'toolitem',
+										'id': 'table-cell-vert-center',
 										'text': _UNO('.uno:CellVertCenter'),
-										'command': '.uno:CellVertCenter'
+										'command': '.uno:CellVertCenter',
+										'accessibility': { focusBack: true, combination: 'CC', de: null }
 									},
 									{
 										'type': 'toolitem',
+										'id': 'table-cell-vert-bottom',
 										'text': _UNO('.uno:CellVertBottom'),
-										'command': '.uno:CellVertBottom'
+										'command': '.uno:CellVertBottom',
+										'accessibility': { focusBack: true, combination: 'CM', de: null }
 									}
 								]
 							},
@@ -2694,23 +2693,31 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 								'children': [
 									{
 										'type': 'toolitem',
+										'id': 'table-left-para',
 										'text': _UNO('.uno:LeftPara'),
-										'command': '.uno:LeftPara'
+										'command': '.uno:LeftPara',
+										'accessibility': { focusBack: true, combination: 'PL', de: null }
 									},
 									{
 										'type': 'toolitem',
+										'id': 'table-center-para',
 										'text': _UNO('.uno:CenterPara'),
-										'command': '.uno:CenterPara'
+										'command': '.uno:CenterPara',
+										'accessibility': { focusBack: true, combination: 'PC', de: null }
 									},
 									{
 										'type': 'toolitem',
+										'id': 'table-right-para',
 										'text': _UNO('.uno:RightPara'),
-										'command': '.uno:RightPara'
+										'command': '.uno:RightPara',
+										'accessibility': { focusBack: true, combination: 'PR', de: null }
 									},
 									{
 										'type': 'toolitem',
+										'id': 'table-justify-para',
 										'text': _UNO('.uno:JustifyPara'),
-										'command': '.uno:JustifyPara'
+										'command': '.uno:JustifyPara',
+										'accessibility': { focusBack: true, combination: 'PJ', de: null }
 									}
 								]
 							}
@@ -2721,22 +2728,130 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 			},
 			{ type: 'separator', id: 'table-justifypara-break', orientation: 'vertical' },
 			{
-				'type': 'bigtoolitem',
-				'text': _UNO('.uno:TableSort', 'text'),
-				'command': '.uno:TableSort'
+				'type': 'overflowgroup',
+				'id': 'table-design',
+				'name':_('Design'),
+				'accessibility': { focusBack: true, combination: 'SD', de: null },
+						'more': {
+							'command':'.uno:TableDialog',
+							'accessibility': { focusBack: true,	combination: 'MT', de: null },
+						},
+				'children' : [
+					{
+						'id': 'table-table-dialog',
+						'type': 'bigtoolitem',
+						'text': _UNO('.uno:TableDialog', 'text', true),
+						'command': '.uno:TableDialog',
+						'accessibility': { focusBack: false, combination: 'SD', de: null }
+					},
+					{
+						'type': 'container',
+						'children': [
+							{
+								'type': 'toolbox',
+								'children': [
+									{
+										'type': 'menubutton',
+										'id': 'set-border-style:BorderStyleMenuWriter',
+										'noLabel': true,
+										'text': _('Borders'),
+										'command': '.uno:SetBorderStyle',
+										'accessibility': { focusBack: true, combination: 'BL', de: null }
+									}
+								]
+							},
+							{
+								'type': 'toolbox',
+								'children': [
+									{
+										'type': 'menubutton',
+										'id': 'table-xline-color:ColorPickerMenu',
+										'noLabel': true,
+										'text': _('Cell Background'),
+										'command': '.uno:TableCellBackgroundColor',
+										'accessibility': { focusBack: true, combination: 'BC', de: null }
+									}
+								]
+							}
+						],
+						'vertical': 'true'
+					},
+				]
 			},
-			{ type: 'separator', id: 'table-tablesort-break', orientation: 'vertical' },
-			{
-				'type': 'bigtoolitem',
-				'text': _UNO('.uno:TableNumberFormatDialog', 'text'),
-				'command': '.uno:TableNumberFormatDialog'
-			},
-			{ type: 'separator', id: 'table-tablenumberformatdialog-break', orientation: 'vertical' },
+			{ type: 'separator', id: 'table-bigtoolitem-break', orientation: 'vertical' },
 			{
 				'type': 'overflowgroup',
 				'id': 'table-number-format',
-				'name':_('Number Format'),
-				'accessibility': { focusBack: false, combination: 'TN', de: null },
+				'name':_('Format'),
+				'accessibility': { focusBack: true,	combination: 'FO', de: null },
+				'more': {
+					'command':'.uno:TableNumberFormatDialog',
+					'accessibility': { focusBack: true,	combination: 'MN', de: null },
+				},
+				'children' : [
+					{
+						'type': 'bigtoolitem',
+						'id': 'table-number-format-dialog',
+						'text': _UNO('.uno:TableNumberFormatDialog', 'text'),
+						'command': '.uno:TableNumberFormatDialog',
+						'accessibility': { focusBack: true,	combination: 'NF', de: null }
+					},
+					{
+						'type': 'container',
+						'children': [
+							{
+								'type': 'toolbox',
+								'children': [
+									{
+										'type': 'toolitem',
+										'id': 'table-number-format-currency',
+										'text': _UNO('.uno:NumberFormatCurrency', 'text'),
+										'command': '.uno:NumberFormatCurrency',
+										'accessibility': { focusBack: true,	combination: 'FC', de: null }
+									},
+									{
+										'type': 'toolitem',
+										'id': 'table-number-format-percent',
+										'text': _UNO('.uno:NumberFormatPercent', 'text', true),
+										'command': '.uno:NumberFormatPercent',
+										'accessibility': { focusBack: true,	combination: 'NP', de: null }
+									},
+								]
+							},
+							{
+								'type': 'toolitem',
+								'id': 'table-number-format-date',
+								'text': _UNO('.uno:NumberFormatDate', 'text', false),
+								'command': '.uno:NumberFormatDate',
+							'accessibility': { focusBack: true,	combination: 'DA', de: null }
+							}
+						],
+						'vertical': 'true'
+					},
+				]
+			},
+			{ type: 'separator', id: 'table-unsetcellsreadonly-break', orientation: 'vertical' },
+			{
+				'type': 'overflowgroup',
+				'id': 'table-sort-group',
+				'name':_('Sort'),
+				'accessibility': { focusBack: true,	combination: 'SO', de: null },
+				'children' : [
+					{
+						'type': 'bigtoolitem',
+						'id': 'table-table-sort',
+						'text': _UNO('.uno:TableSort', 'text'),
+						'command': '.uno:TableSort',
+						'accessibility': { focusBack: true,	combination: 'SO', de: null }
+					}
+				]
+			},
+			{ type: 'separator', id: 'table-sort-break', orientation: 'vertical' },
+			{
+				'type': 'overflowgroup',
+				'id': 'table-protect-group',
+				'name':_('Protect'),
+				'accessibility': { focusBack: true,	combination: 'PR', de: null },
 				'children' : [
 					{
 						'type': 'container',
@@ -2746,49 +2861,37 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 								'children': [
 									{
 										'type': 'toolitem',
-										'text': _UNO('.uno:NumberFormatCurrency', 'text'),
-										'command': '.uno:NumberFormatCurrency'
-									},
-									{
-										'type': 'toolitem',
-										'text': _UNO('.uno:NumberFormatDate', 'text'),
-										'command': '.uno:NumberFormatDate'
-									},
-									{
-										'type': 'toolitem',
-										'text': _UNO('.uno:NumberFormatPercent', 'text'),
-										'command': '.uno:NumberFormatPercent'
+										'id': 'table-protect-cell',
+										'text': _UNO('.uno:Protect', 'text'),
+										'command': '.uno:Protect',
+										'accessibility': { focusBack: true,	combination: 'PP', de: null }
 									}
 								]
 							},
+							{
+								'type': 'toolbox',
+								'children': [
+									{
+										'type': 'toolitem',
+										'id': 'table-unset-cells-read-only',
+										'text': _UNO('.uno:UnsetCellsReadOnly', 'text'),
+										'command': '.uno:UnsetCellsReadOnly',
+										'accessibility': { focusBack: true,	combination: 'UP', de: null }
+									}
+								]
+							}
 						],
 						'vertical': 'true'
 					},
-					{
-						'type': 'toolbox',
-						'children': [
-							{
-								'type': 'toolitem',
-								'text': _UNO('.uno:TableCellBackgroundColor', 'text'),
-								'command': '.uno:TableCellBackgroundColor',
-							},
-							{
-								'id': 'set-border-style:BorderStyleMenuWriter',
-								'type': 'menubutton',
-								'noLabel': true,
-								'text': _UNO('.uno:SetBorderStyle', 'text'),
-								'command': '.uno:SetBorderStyle'
-							}
-						]
-					}
-				],
-				'vertical': 'true'
+				]
 			},
 			{ type: 'separator', id: 'table-numberformatpercent-break', orientation: 'vertical' },
 			{
 				'type': 'bigtoolitem',
+				'id': 'table-insert-caption-dialog',
 				'text': _UNO('.uno:InsertCaptionDialog', 'text'),
-				'command': '.uno:InsertCaptionDialog'
+				'command': '.uno:InsertCaptionDialog',
+				'accessibility': { focusBack: true,	combination: 'IC', de: null }
 			},
 		];
 

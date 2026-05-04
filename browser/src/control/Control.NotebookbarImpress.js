@@ -2096,14 +2096,66 @@ window.L.Control.NotebookbarImpress = window.L.Control.NotebookbarWriter.extend(
 	getTableTab: function() {
 		var content = [
 			{
-				'id': 'table-table-dialog',
-				'type': 'bigtoolitem',
-				'text': _UNO('.uno:TableDialog', 'presentation', true),
-				'command': '.uno:TableDialog',
-				'accessibility': { focusBack: false, combination: 'SD', de: null }
+				'type': 'overflowgroup',
+				'id': 'table-select',
+				'name':_('Select'),
+				'accessibility': { focusBack: true, combination: 'SE', de: null },
+				'children' : [
+					{
+						'type': 'bigtoolitem',
+						'id': 'table-select-cell',
+						'text': _UNO('.uno:EntireCell', 'presentation', true),
+						'command': '.uno:EntireCell',
+						'accessibility': { focusBack: true,	combination: 'EC', de: null }
+					},
+					{
+						'type': 'container',
+						'children': [
+							{
+								'type': 'toolbox',
+								'children': [
+									{
+										'type': 'toolitem',
+										'id': 'table-entire-column',
+										'text': _UNO('.uno:EntireColumn', 'presentation'),
+										'command': '.uno:EntireColumn',
+										'accessibility': { focusBack: true, combination: 'CE', de: null }
+									},
+									{
+										'type': 'toolitem',
+										'id': 'table-select-table',
+										'text': _UNO('.uno:SelectTable', 'presentation', true),
+										'command': '.uno:SelectTable',
+										'accessibility': { focusBack: true, combination: 'ST', de: null }
+									},
+								]
+							},
+							{
+								'type': 'toolbox',
+								'children': [
+									{
+										'type': 'toolitem',
+										'id': 'table-entire-row',
+										'text': _UNO('.uno:EntireRow', 'presentation'),
+										'command': '.uno:EntireRow',
+										'accessibility': { focusBack: true, combination: 'ER', de: null }
+									},
+									{
+										'type': 'toolitem',
+										'id': 'table-delete-table',
+										'text': _UNO('.uno:DeleteTable', 'presentation', true),
+										'command': '.uno:DeleteTable',
+										'accessibility': { focusBack: true, combination: 'DT', de: null }
+									},
+								]
+							}
+						],
+						'vertical': 'true'
+					},
+				]
 			},
-			{ type: 'separator', id: 'table-bigtoolitem-break', orientation: 'vertical' },
-						{
+			{ type: 'separator', id: 'table-select-break', orientation: 'vertical' },
+			{
 				'type': 'overflowgroup',
 				'id': 'table-insert',
 				'name':_('Insert'),
@@ -2211,77 +2263,8 @@ window.L.Control.NotebookbarImpress = window.L.Control.NotebookbarWriter.extend(
 			{ type: 'separator', id: 'table-merge-split-table-break', orientation: 'vertical' },
 			{
 				'type': 'overflowgroup',
-				'id': 'table-select',
-				'name':_('Select'),
-				'accessibility': { focusBack: true, combination: 'ST', de: null },
-				'children' : [
-					{
-						'type': 'container',
-						'children': [
-							{
-								'type': 'toolbox',
-								'children': [
-									{
-										'id': 'table-select-table',
-										'type': 'toolitem',
-										'text': _UNO('.uno:SelectTable', 'presentation'),
-										'command': '.uno:SelectTable',
-										'accessibility': { focusBack: true, combination: 'ST', de: null }
-									}
-								]
-							},
-							{
-								'type': 'toolbox',
-								'children': [
-									{
-										'id': 'table-delete-table',
-										'type': 'toolitem',
-										'text': _UNO('.uno:DeleteTable', 'presentation'),
-										'command': '.uno:DeleteTable',
-										'accessibility': { focusBack: true, combination: 'TD', de: null }
-									}
-								]
-							}
-						],
-						'vertical': 'true',
-					},
-					{
-						'type': 'container',
-						'children': [
-							{
-								'type': 'toolbox',
-								'children': [
-									{
-										'id': 'table-entire-column',
-										'type': 'toolitem',
-										'text': _UNO('.uno:EntireColumn', 'presentation'),
-										'command': '.uno:EntireColumn',
-										'accessibility': { focusBack: true, combination: 'CE', de: null }
-									}
-								]
-							},
-							{
-								'type': 'toolbox',
-								'children': [
-									{
-										'id': 'table-entire-row',
-										'type': 'toolitem',
-										'text': _UNO('.uno:EntireRow', 'presentation'),
-										'command': '.uno:EntireRow',
-										'accessibility': { focusBack: true, combination: 'RE', de: null }
-									}
-								]
-							}
-						],
-						'vertical': 'true'
-					},
-				]
-			},
-			{ type: 'separator', id: 'table-select-break', orientation: 'vertical' },
-			{
-				'type': 'overflowgroup',
 				'id': 'table-paragraph',
-				'name':_('Paragraph'),
+				'name':_('Alignment'),
 				'accessibility': { focusBack: true, combination: 'CT', de: null },
 				'children' : [
 					{
@@ -2366,38 +2349,57 @@ window.L.Control.NotebookbarImpress = window.L.Control.NotebookbarWriter.extend(
 			},
 			{ type: 'separator', id: 'table-justifypara-break', orientation: 'vertical' },
 			{
-				'type': 'container',
-				'children': [
+				'type': 'overflowgroup',
+				'id': 'table-properties',
+				'name':_('Design'),
+				'accessibility': { focusBack: true, combination: 'SD', de: null },
+				'more': {
+					'command':'.uno:TableDialog',
+					'accessibility': { focusBack: true,	combination: 'MT', de: null },
+				},
+				'children' : [
 					{
-						'type': 'toolbox',
-						'children': [
-							{
-								'id': 'table-xline-color:ColorPickerMenu',
-								'noLabel': true,
-								'type': 'toolitem',
-								'text': _UNO('.uno:XLineColor'),
-								'command': '.uno:XLineColor',
-								'accessibility': { focusBack: true, combination: 'LC', de: null }
-							}
-						]
+						'id': 'table-table-dialog',
+						'type': 'bigtoolitem',
+						'text': _UNO('.uno:TableDialog', 'presentation', true),
+						'command': '.uno:TableDialog',
+						'accessibility': { focusBack: false, combination: 'SD', de: null }
 					},
 					{
-						'type': 'toolbox',
+						'type': 'container',
 						'children': [
 							{
-								'id': 'table-fill-color:ColorPickerMenu',
-								'noLabel': true,
-								'type': 'toolitem',
-								'text': _UNO('.uno:FillColor'),
-								'command': '.uno:FillColor',
-								'accessibility': { focusBack: true, combination: 'FC', de: null }
+								'type': 'toolbox',
+								'children': [
+									{
+										'id': 'table-xline-color:ColorPickerMenu',
+										'type': 'menubutton',
+										'text': _UNO('.uno:XLineColor'),
+										'command': '.uno:XLineColor',
+										'noLabel': true,
+										'accessibility': { focusBack: true, combination: 'LC', de: null }
+									}
+								]
+							},
+							{
+								'type': 'toolbox',
+								'children': [
+									{
+										'id': 'table-fill-color:ColorPickerMenu',
+										'type': 'menubutton',
+										'text': _UNO('.uno:FillColor'),
+										'command': '.uno:FillColor',
+										'noLabel': true,
+										'accessibility': { focusBack: true, combination: 'FC', de: null }
+									}
+								]
 							}
-						]
-					}
-				],
-				'vertical': 'true'
+						],
+						'vertical': 'true'
+					},
+				]
 			},
-			{ type: 'separator', id: 'table-color-fill-break', orientation: 'vertical' },
+			{ type: 'separator', id: 'table-bigtoolitem-break', orientation: 'vertical' },
 			{
 				'type': 'overflowgroup',
 				'id': 'table-align',
