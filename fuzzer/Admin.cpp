@@ -22,9 +22,16 @@
 
 #include <sstream>
 
+static bool DoInitialization()
+{
+    fuzzer::DoInitialization();
+    Admin::initialize();
+    return true;
+}
+
 extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size)
 {
-    static bool initialized = fuzzer::DoInitialization();
+    static bool initialized = DoInitialization();
     (void)initialized;
 
     Admin& admin = Admin::instance();
