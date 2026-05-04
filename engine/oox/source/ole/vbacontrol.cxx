@@ -27,6 +27,7 @@
 #include <com/sun/star/io/XInputStreamProvider.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <comphelper/types.hxx>
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
@@ -861,6 +862,7 @@ void VbaUserForm::importForm( const Reference< XNameContainer >& rxDialogLib,
             OSL_ENSURE( !rxDialogLib->hasByName( aFormName ), "VbaUserForm::importForm - multiple dialogs with equal name" );
             ContainerHelper::insertByName( rxDialogLib, aFormName, Any( xDialogSource ) );
         }
+        comphelper::disposeComponent(xDialogModel);
     }
     catch(const Exception& )
     {
