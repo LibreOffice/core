@@ -68,6 +68,24 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf160591)
     assertXPath(pXmlDoc2, "/p:sldMaster/p:cSld/p:bg/p:bgPr/a:solidFill/a:schemeClr", "val", u"dk1");
 }
 
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testMasterBackgroundColor)
+{
+    createSdImpressDoc("pptx/master-bg-color.pptx");
+    save(TestFilter::PPTX);
+
+    xmlDocUniquePtr pMaster = parseExport(u"ppt/slideMasters/slideMaster1.xml"_ustr);
+    assertXPath(pMaster, "/p:sldMaster/p:clrMap", "bg1", u"dk2");
+    assertXPath(pMaster, "/p:sldMaster/p:clrMap", "tx1", u"lt2");
+    assertXPath(pMaster, "/p:sldMaster/p:clrMap", "bg2", u"lt1");
+    assertXPath(pMaster, "/p:sldMaster/p:clrMap", "tx2", u"dk1");
+
+    // Full slide shape uses placeholder scheme color bg1 with the master's clrMap
+    // preserved this resolves to theme dk2
+    xmlDocUniquePtr pLayout1 = parseExport(u"ppt/slideLayouts/slideLayout1.xml"_ustr);
+    assertXPath(pLayout1, "/p:sldLayout/p:cSld/p:spTree/p:sp/p:spPr/a:solidFill/a:schemeClr", "val",
+                u"bg1");
+}
+
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testSmartArtPreserve)
 {
     createSdImpressDoc("pptx/smartart-preserve.pptx");
