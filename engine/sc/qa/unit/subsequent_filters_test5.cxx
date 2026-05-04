@@ -16,11 +16,16 @@
 #include <dbdocfun.hxx>
 #include <docsh.hxx>
 #include <document.hxx>
+#include <patattr.hxx>
 #include <sc.hrc>
+#include <scitems.hxx>
 #include <sortparam.hxx>
 #include <tabvwsh.hxx>
 #include <types.hxx>
 #include <undomanager.hxx>
+
+#include <docmodel/color/ComplexColor.hxx>
+#include <editeng/brushitem.hxx>
 
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -426,6 +431,37 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testFullColumnRefs)
     CPPUNIT_ASSERT_EQUAL(u"Total # Of Companies"_ustr, pDoc->GetString(ScAddress(0, 0, 0)));
     // For K2 cell cached value is 1
     CPPUNIT_ASSERT_EQUAL(1.0, pDoc->GetValue(ScAddress(10, 1, 0)));
+}
+
+CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testAutoFontColorTransparentInheritedBg)
+{
+    // A cell whose style sets fo:background-color="transparent" while the
+    // parent style supplies a non-transparent color (here "Default" with
+    // #ff3333) ends up with a brush that has alpha=0 but inherits the parent
+    // RGB. The auto-font-color path used to compare against COL_TRANSPARENT
+    // by full mValue equality and miss this case, then call IsDark() on the
+    // inherited red and return COL_WHITE - white text on a still-white-painted
+    // cell.
+    createScDoc("fods/auto-font-color-transparent-cell.fods");
+
+    ScDocument* pDoc = getScDoc();
+    const ScPatternAttr* pPattern = pDoc->GetPattern(0, 0, 0);
+    CPPUNIT_ASSERT(pPattern);
+
+    // Sanity-check the brush we built up: alpha=0 (fully transparent) but
+    // RGB inherited from "Default".
+    const SvxBrushItem& rBrush = pPattern->GetItem(ATTR_BACKGROUND);
+    CPPUNIT_ASSERT(rBrush.GetColor().IsFullyTransparent());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt8(0xff), rBrush.GetColor().GetRed());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt8(0x33), rBrush.GetColor().GetGreen());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt8(0x33), rBrush.GetColor().GetBlue());
+
+    // Print mode forces the transparent-bg fallback to COL_WHITE, so the
+    // resolved auto font color must be COL_BLACK. Without the fix it was
+    // COL_WHITE because the inherited red was treated as the cell bg.
+    model::ComplexColor aComplexColor;
+    pPattern->fillColor(aComplexColor, ScAutoFontColorMode::Print);
+    CPPUNIT_ASSERT_EQUAL(COL_BLACK, aComplexColor.getFinalColor());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

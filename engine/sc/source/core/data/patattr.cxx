@@ -801,7 +801,7 @@ void ScPatternAttr::fillColor(model::ComplexColor& rComplexColor, const SfxItemS
             aBackColor = pItem->GetColor();
 
         //  if background color attribute is transparent, use window color for brightness comparisons
-        if (aBackColor == COL_TRANSPARENT
+        if (aBackColor.IsFullyTransparent()
             || eAutoMode == ScAutoFontColorMode::IgnoreBack
             || eAutoMode == ScAutoFontColorMode::IgnoreAll)
         {
@@ -875,7 +875,7 @@ void ScPatternAttr::fillColor(model::ComplexColor& rComplexColor, const SfxItemS
         if (pItem)
             aBackColor = pItem->GetColor();
 
-        if (aBackColor == COL_TRANSPARENT)
+        if (aBackColor.IsFullyTransparent())
         {
             if (pBackConfigColor)
                 aBackColor = *pBackConfigColor;
