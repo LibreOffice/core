@@ -48,6 +48,16 @@ namespace FileUtil
         return name;
     }
 
+    DownloadJailPath createDownloadJailPath(const std::string& jailDocRoot,
+                                            const std::string& filename)
+    {
+        DownloadJailPath result;
+        result.tmpDir = createRandomDir(jailDocRoot);
+        result.urlInJail = result.tmpDir + '/' + filename;
+        result.absolutePath = jailDocRoot + result.urlInJail;
+        return result;
+    }
+
     namespace
     {
     // Handle short writes and EINTR

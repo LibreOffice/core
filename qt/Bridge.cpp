@@ -747,6 +747,9 @@ QVariant Bridge::cool(const QString& messageStr)
     }
     else if (tokens.equals(0, "exportfile"))
     {
+        // Used by both .uno:SaveGraphic (Save Image) and .uno:ExportToPDF
+        // (PDF with options) — take the suggested filename from the source URL
+        // so the dialog title and default name match what was actually written.
         std::string fileUrl;
         if (!COOLProtocol::getTokenString(tokens, "url", fileUrl))
         {
@@ -762,13 +765,17 @@ QVariant Bridge::cool(const QString& messageStr)
             return {};
         }
 
-        const QString ext = QFileInfo(srcPath).suffix();
-        const QString suggestedName =
-            QStringLiteral("image.") + (ext.isEmpty() ? QStringLiteral("png") : ext);
+        const QFileInfo srcInfo(srcPath);
+        QString suggestedName = srcInfo.fileName();
+        if (suggestedName.isEmpty())
+        {
+            const QString ext = srcInfo.suffix();
+            suggestedName = QStringLiteral("export.") + (ext.isEmpty() ? QStringLiteral("bin") : ext);
+        }
 
         QFileDialog* dialog = new QFileDialog(
             _webView,
-            QObject::tr("Save Image"),
+            QObject::tr("Save File"),
             QDir::home().filePath(suggestedName),
             QObject::tr("All Files (*)"));
 
@@ -784,7 +791,8 @@ QVariant Bridge::cool(const QString& messageStr)
                 LOG_ERR("exportfile: failed to copy to '" << destPath.toStdString() << "'");
                 return;
             }
-            LOG_INF("exportfile: saved image to " << destPath.toStdString());
+            LOG_INF("exportfile: saved to " << destPath.toStdString());
+            QFile::remove(srcPath);
         });
 
         dialog->open();

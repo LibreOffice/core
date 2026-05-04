@@ -447,6 +447,43 @@ class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavig
                     document.saveAs(nil)
                     return (nil, nil)
                 }
+                else if body.hasPrefix("exportfile ") {
+                    // The kit's KIT_CALLBACK_EXPORT_FILE branch sends this for
+                    // export flows like .uno:ExportToPDF (PDF with options).
+                    // The file has already been written to a tmp URL; show a
+                    // native NSSavePanel and copy it to the user's choice.
+                    var fileUrlString: String?
+                    for item in body.dropFirst("exportfile ".count).components(separatedBy: " ") {
+                        if item.hasPrefix("url=") {
+                            fileUrlString = String(item.dropFirst("url=".count))
+                        }
+                    }
+                    guard let urlString = fileUrlString,
+                          let srcURL = URL(string: urlString),
+                          FileManager.default.fileExists(atPath: srcURL.path) else {
+                        COWrapper.LOG_ERR("exportfile: source file missing: \(fileUrlString ?? "(no url)")")
+                        return (nil, nil)
+                    }
+
+                    let suggestedName = srcURL.lastPathComponent
+                    let savePanel = NSSavePanel()
+                    savePanel.directoryURL = FileManager.default.homeDirectoryForCurrentUser
+                    savePanel.nameFieldStringValue = suggestedName
+                    savePanel.begin { result in
+                        if result == .OK, let dstURL = savePanel.url {
+                            do {
+                                if FileManager.default.fileExists(atPath: dstURL.path) {
+                                    try FileManager.default.removeItem(at: dstURL)
+                                }
+                                try FileManager.default.copyItem(at: srcURL, to: dstURL)
+                            } catch {
+                                COWrapper.LOG_ERR("exportfile: copy failed: \(error)")
+                            }
+                        }
+                        try? FileManager.default.removeItem(at: srcURL)
+                    }
+                    return (nil, nil)
+                }
                 else if body.hasPrefix("TEXTCLIPBOARD ") {
                     let text = String(body.dropFirst("TEXTCLIPBOARD ".count))
                     NSPasteboard.general.clearContents()

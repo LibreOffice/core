@@ -106,6 +106,22 @@ namespace FileUtil
     /// Create a secure, random directory path.
     std::string createRandomDir(const std::string& path);
 
+    // Components of a per-download tmp path under the kit jail's document root.
+    // WSD recovers the file from a downloadId by looking up the registered URL
+    // (a path relative to the jail doc root) and joining it back with the jail
+    // (see ClientRequestDispatcher's GET handler under /cool/.../<downloadId>).
+    struct DownloadJailPath
+    {
+        std::string tmpDir;       // the random dir name; doubles as downloadId
+        std::string urlInJail;    // tmpDir + "/" + filename - relative to jailDocRoot
+        std::string absolutePath; // jailDocRoot + urlInJail - the path inside the jail
+    };
+
+    // Create a fresh random tmp dir under jailDocRoot and return path components
+    // for delivering a saveAs/export to that location plus its subsequent download.
+    DownloadJailPath createDownloadJailPath(const std::string& jailDocRoot,
+                                            const std::string& filename);
+
     /// return the local path to the jailPath under localJailRoot
     /// localJailRoot /chroot/jailId
     /// jailPath /tmp/user/doc/childId

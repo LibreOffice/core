@@ -97,6 +97,7 @@
 #include <condition_variable>
 #include <cstdlib>
 #include <cstring>
+#include <filesystem>
 #include <iostream>
 #include <memory>
 #include <mutex>
@@ -3284,6 +3285,80 @@ void wakeCallback(void* data)
     return reinterpret_cast<KitSocketPoll*>(data)->kitWakeup();
 }
 
+#if !defined(_WIN32)
+// "Where to save?" callback used by every kit variant except CODA-W.
+//
+// When the engine runs an export flow that would normally pop a file picker
+// (.uno:ExportToPDF after the PDF Options dialog, etc.), it asks the embedder
+// via this callback for an output URL. CODA-W answers synchronously with a
+// Win32 native picker (output_file_dialog_from_core, registered below). Every
+// other build hands back a fresh path under a tmp dir, lets the engine write
+// there, and then defers picker / delivery to the platform's existing
+// KIT_CALLBACK_EXPORT_FILE handler:
+//   - browser COOL (!MOBILEAPP): the path is under JAILED_DOCUMENT_ROOT so
+//     WSD's downloadId-to-file mapping picks it up; the browser's own save
+//     dialog appears when the resulting downloadas: triggers a download.
+//   - mobile/desktop apps (MOBILEAPP without _WIN32): the path is under the
+//     system tmp dir, accessible to the same process; the platform's
+//     exportfile: / iOS UIViewController handler shows its own native picker.
+void downloadAsFileSaveDialogCallback(const char* suggestedURI, char* result, size_t resultLen)
+{
+    if (resultLen == 0)
+        return;
+    result[0] = '\0';
+
+    if (suggestedURI == nullptr || *suggestedURI == '\0')
+        return;
+
+    std::string filename;
+    try
+    {
+        const Poco::URI uri{ std::string(suggestedURI) };
+        filename = Poco::Path(uri.getPath()).getFileName();
+    }
+    catch (const std::exception& exc)
+    {
+        LOG_ERR("File-save callback got bad URI [" << suggestedURI << "]: " << exc.what());
+        return;
+    }
+    if (filename.empty())
+    {
+        LOG_ERR("File-save callback URI [" << suggestedURI << "] has empty filename");
+        return;
+    }
+
+#if MOBILEAPP
+    // No chroot, no jail. Use a tmp dir that the embedding app process can
+    // read for the deferred picker step.
+    std::error_code ec;
+    const std::string baseDir = std::filesystem::temp_directory_path(ec).string() + "/cool-export/";
+    std::filesystem::create_directories(baseDir, ec);
+    if (ec)
+    {
+        LOG_ERR("File-save callback could not create tmp dir [" << baseDir
+                << "]: " << ec.message());
+        return;
+    }
+#else
+    // Browser COOL: the kit is chroot'd; this path is jail-doc-root-relative
+    // so WSD's GET handler under /cool/.../<downloadId> can read it back via
+    // FileUtil::buildLocalPathToJail.
+    const std::string baseDir = JAILED_DOCUMENT_ROOT;
+#endif
+
+    const auto download = FileUtil::createDownloadJailPath(baseDir, filename);
+    const std::string outURI = "file://" + download.absolutePath;
+
+    if (outURI.size() + 1 > resultLen)
+    {
+        LOG_WRN("File-save callback result buffer too small (" << resultLen
+                << " < " << outURI.size() + 1 << ')');
+        return;
+    }
+    std::memcpy(result, outURI.c_str(), outURI.size() + 1);
+}
+#endif
+
 } // namespace
 
 void KitSocketPoll::kitWakeup() {
@@ -3323,6 +3398,8 @@ void startMainLoop(const COKit* kit, const std::shared_ptr<kit::Office>& loKit, 
     loKit->registerAnyInputCallback(anyInputCallback, mainKit.get());
 #if defined(_WIN32)
     loKit->registerFileSaveDialogCallback(output_file_dialog_from_core);
+#else
+    loKit->registerFileSaveDialogCallback(downloadAsFileSaveDialogCallback);
 #endif
 
     LOG_INF("Kit unipoll loop run");

@@ -147,6 +147,9 @@ public class LOActivity extends AppCompatActivity {
 
     private ValueCallback<Uri[]> valueCallback;
 
+    /// Source file path remembered while a REQUEST_EXPORT_FILE intent is in flight.
+    private String mPendingExportSourcePath = null;
+
     public static final int REQUEST_SELECT_IMAGE_FILE = 500;
     public static final int REQUEST_SAVEAS_PDF = 501;
     public static final int REQUEST_SAVEAS_RTF = 502;
@@ -160,6 +163,7 @@ public class LOActivity extends AppCompatActivity {
     public static final int REQUEST_SAVEAS_PPT = 510;
     public static final int REQUEST_SAVEAS_XLS = 511;
     public static final int REQUEST_SAVEAS_EPUB = 512;
+    public static final int REQUEST_EXPORT_FILE = 513;
     public static final int REQUEST_COPY = 600;
 
     /** Broadcasting event for passing info back to the shell. */
@@ -702,6 +706,9 @@ public class LOActivity extends AppCompatActivity {
             if (requestCode == REQUEST_SELECT_IMAGE_FILE) {
                 valueCallback.onReceiveValue(null);
                 valueCallback = null;
+            } else if (requestCode == REQUEST_EXPORT_FILE && mPendingExportSourcePath != null) {
+                new File(mPendingExportSourcePath).delete();
+                mPendingExportSourcePath = null;
             }
             return;
         }
@@ -734,6 +741,44 @@ public class LOActivity extends AppCompatActivity {
                 valueCallback.onReceiveValue(WebChromeClient.FileChooserParams.parseResult(resultCode, intent));
                 valueCallback = null;
                 return;
+            case REQUEST_EXPORT_FILE: {
+                if (intent == null || mPendingExportSourcePath == null) {
+                    mPendingExportSourcePath = null;
+                    return;
+                }
+                File srcFile = new File(mPendingExportSourcePath);
+                mPendingExportSourcePath = null;
+                InputStream inputStream = null;
+                OutputStream outputStream = null;
+                try {
+                    inputStream = new FileInputStream(srcFile);
+                    try {
+                        outputStream = getContentResolver().openOutputStream(intent.getData(), "wt");
+                    } catch (FileNotFoundException e) {
+                        Log.i(TAG, "failed with the 'wt' mode, trying without: " + e.getMessage());
+                        outputStream = getContentResolver().openOutputStream(intent.getData());
+                    }
+                    byte[] buffer = new byte[4096];
+                    int len;
+                    while ((len = inputStream.read(buffer)) != -1) {
+                        outputStream.write(buffer, 0, len);
+                    }
+                    outputStream.flush();
+                } catch (Exception e) {
+                    Toast.makeText(this, "Something went wrong while exporting: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    e.printStackTrace();
+                } finally {
+                    try {
+                        if (inputStream != null)
+                            inputStream.close();
+                        if (outputStream != null)
+                            outputStream.close();
+                    } catch (Exception e) {
+                    }
+                    srcFile.delete();
+                }
+                return;
+            }
             case REQUEST_SAVEAS_PDF:
             case REQUEST_SAVEAS_RTF:
             case REQUEST_SAVEAS_ODT:
@@ -1099,6 +1144,9 @@ public class LOActivity extends AppCompatActivity {
             case "downloadas":
                 initiateSaveAs(messageAndParam[1]);
                 return false;
+            case "exportfile":
+                initiateExportFile(messageAndParam[1]);
+                return false;
             case "uno":
                 switch (messageAndParam[1]) {
                     case ".uno:Paste":
@@ -1272,6 +1320,52 @@ public class LOActivity extends AppCompatActivity {
                 createNewFileInputDialog(mActivity, getFileName(false) + "." + ext, getMimeForFormat(ext), REQUEST_COPY);
             }
         }).show();
+    }
+
+    private void initiateExportFile(String optionsString) {
+        // The kit's KIT_CALLBACK_EXPORT_FILE branch sends "exportfile url=file:///..."
+        // for export flows like .uno:ExportToPDF. The file is already at a tmp
+        // path; show ACTION_CREATE_DOCUMENT and copy on result.
+        Map<String, String> optionsMap = new HashMap<>();
+        for (String option : optionsString.split(" ")) {
+            String[] keyValue = option.split("=", 2);
+            if (keyValue.length == 2)
+                optionsMap.put(keyValue[0], keyValue[1]);
+        }
+        String urlString = optionsMap.get("url");
+        if (urlString == null) {
+            Log.e(TAG, "exportfile: missing url=");
+            return;
+        }
+        Uri srcUri = Uri.parse(urlString);
+        String srcPath = srcUri.getPath();
+        if (srcPath == null) {
+            Log.e(TAG, "exportfile: bad url=" + urlString);
+            return;
+        }
+        File srcFile = new File(srcPath);
+        if (!srcFile.exists()) {
+            Log.e(TAG, "exportfile: source file missing: " + srcPath);
+            return;
+        }
+
+        String filename = srcFile.getName();
+        int dot = filename.lastIndexOf('.');
+        String extension = dot > 0 ? filename.substring(dot + 1).toLowerCase() : "";
+        String mime = getMimeForFormat(extension);
+        if (mime == null)
+            mime = "application/octet-stream";
+
+        mPendingExportSourcePath = srcPath;
+
+        Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+        intent.setType(mime);
+        intent.putExtra(Intent.EXTRA_TITLE, filename);
+        intent.putExtra(Intent.EXTRA_LOCAL_ONLY, false);
+        File folder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
+        intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, Uri.fromFile(folder).toString());
+        intent.putExtra("android.content.extra.SHOW_ADVANCED", true);
+        startActivityForResult(intent, REQUEST_EXPORT_FILE);
     }
 
     private void initiateSaveAs(String optionsString) {

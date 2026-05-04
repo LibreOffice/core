@@ -399,20 +399,17 @@ window.L.Control.NotebookbarBuilder = window.L.Control.JSDialogBuilder.extend({
 					'action': !window.ThisIsAMobileApp ? 'exportdirectpdf' : 'downloadas-pdf',
 					'text': _('PDF Document (.pdf)'),
 					'command': !window.ThisIsAMobileApp ? 'exportdirectpdf' : 'downloadas-pdf'
+				},
+				{
+					'action': 'exportpdf' ,
+					'text': _('PDF Document (.pdf) with options'),
+					'command': 'exportpdf'
 				}
 			];
 			submenuOpts.push({
 				'action': 'downloadas-html',
 				'text': _('HTML File (.html)')
 			});
-			if (!window.ThisIsTheAndroidApp)
-				submenuOpts.push({
-					'action': 'exportpdf' ,
-					'text': !window.mode.isCODesktop ?
-						_('PDF Document (.pdf) as...') :
-						_('PDF Document (.pdf) with options'),
-					'command': 'exportpdf'
-				});
 		} else if (docType === 'spreadsheet') {
 			submenuOpts = [
 				{
@@ -439,16 +436,13 @@ window.L.Control.NotebookbarBuilder = window.L.Control.JSDialogBuilder.extend({
 					'action': !window.ThisIsAMobileApp ? 'exportdirectpdf' : 'downloadas-pdf',
 					'text': _('PDF Document (.pdf)'),
 					'command': !window.ThisIsAMobileApp ? 'exportdirectpdf' : 'downloadas-pdf'
+				},
+				{
+					'action': 'exportpdf' ,
+					'text': _('PDF Document (.pdf) with options'),
+					'command': 'exportpdf'
 				}
 			];
-			if (!window.ThisIsTheAndroidApp)
-				submenuOpts.push({
-					'action': 'exportpdf' ,
-					'text': !window.mode.isCODesktop ?
-						_('PDF Document (.pdf) as...') :
-						_('PDF Document (.pdf) with options'),
-					'command': 'exportpdf'
-				});
 		} else if (docType === 'presentation') {
 			submenuOpts = [
 				{
@@ -475,16 +469,13 @@ window.L.Control.NotebookbarBuilder = window.L.Control.JSDialogBuilder.extend({
 					'action': !window.ThisIsAMobileApp ? 'exportdirectpdf' : 'downloadas-pdf',
 					'text': _('PDF Document (.pdf)'),
 					'command': !window.ThisIsAMobileApp ? 'exportdirectpdf' : 'downloadas-pdf',
+				},
+				{
+					'action': 'exportpdf',
+					'text': _('PDF Document (.pdf) with options'),
+					'command': 'exportpdf'
 				}
 			];
-			if (!window.ThisIsTheAndroidApp)
-				submenuOpts.push({
-					'action': 'exportpdf',
-					'text': !window.mode.isCODesktop ?
-						_('PDF Document (.pdf) as...') :
-						_('PDF Document (.pdf) with options'),
-					'command': 'exportpdf'
-				});
 			if (window.extraExportFormats.includes('impress_swf'))
 				submenuOpts.push({
 					'action': 'downloadas-swf',

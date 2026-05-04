@@ -1378,42 +1378,42 @@ bool ChildSession::downloadAs(const StringVector& tokens)
     const Poco::Path filenameParam(name);
     const std::string nameAnonym = anonymizeUrl(name);
 
-    std::string jailDoc = getJailDocRoot();
+    const std::string jailDoc = getJailDocRoot();
 
     if constexpr (!Util::isMobileApp())
         consistencyCheckJail();
 
     // The file is removed upon downloading.
-    const std::string tmpDir = FileUtil::createRandomDir(jailDoc);
-    const std::string urlToSend = tmpDir + '/' + filenameParam.getFileName();
-    const std::string url = jailDoc + urlToSend;
+    const auto download = FileUtil::createDownloadJailPath(jailDoc, filenameParam.getFileName());
     const std::string filename = Poco::Path(nameAnonym).getFileName();
-    const std::string urlAnonym = jailDoc + tmpDir + '/' + filename;
+    const std::string urlAnonym = jailDoc + download.tmpDir + '/' + filename;
 
     LOG_DBG("Calling COKit's saveAs with URL: ["
             << urlAnonym << "], Format: [" << (format.empty() ? "(nullptr)" : format.c_str())
             << "], Filter Options: ["
             << (filterOptions.empty() ? "(nullptr)" : filterOptions.c_str()) << ']');
 
-    bool success = getLOKitDocument()->saveAs(url.c_str(),
+    bool success = getLOKitDocument()->saveAs(download.absolutePath.c_str(),
                                format.empty() ? nullptr : format.c_str(),
                                filterOptions.empty() ? nullptr : filterOptions.c_str());
 
     if (!success)
     {
-        LOG_ERR("SaveAs Failed for id=" << id << " [" << url << "]. error= " << getLOKitLastError());
+        LOG_ERR("SaveAs Failed for id=" << id << " [" << download.absolutePath
+                << "]. error= " << getLOKitLastError());
         sendTextFrameAndLogError("error: cmd=downloadas kind=saveasfailed");
         return false;
     }
 
     // Register download id -> URL mapping in the DocumentBroker
-    const std::string docBrokerMessage =
-        "registerdownload: downloadid=" + tmpDir + " url=" + urlToSend + " clientid=" + getId();
+    const std::string docBrokerMessage = "registerdownload: downloadid=" + download.tmpDir
+                                         + " url=" + download.urlInJail + " clientid=" + getId();
     _docManager->sendFrame(docBrokerMessage);
 
     // Send download id to the client
-    sendTextFrame("downloadas: downloadid=" + tmpDir + " port=" + std::to_string(ClientPortNumber) +
-                  " id=" + id + " filename=" + filename);
+    sendTextFrame("downloadas: downloadid=" + download.tmpDir
+                  + " port=" + std::to_string(ClientPortNumber) + " id=" + id
+                  + " filename=" + filename);
 #endif
     return true;
 }
@@ -3995,20 +3995,54 @@ void ChildSession::loKitCallback(const int type, const std::string& payload)
             CODocument *document = DocumentData::get(_docManager->getMobileAppDocId()).coDocument;
             [[document viewController] exportFileURL:payloadURL];
         });
-#elif defined(_WIN32) || defined(QTAPP)
-        // We don't need the registerdownload approach used by the browser.
-        // Send the exported file URL to JS, which forwards it to the native
-        // message handler for presenting a save dialog to the user.
-        sendTextFrame("exportfile: url=" + payload);
-#else
+#elif !MOBILEAPP
+        // Browser COOL: kit/Kit.cpp's downloadAsFileSaveDialogCallback wrote the
+        // export under getJailDocRoot() + <random>/<filename>. Recover the
+        // <random> dir (= downloadId) and the WSD-side relative URL from the
+        // payload, then drive the standard browser download flow.
+        std::string filePath;
+        try
+        {
+            filePath = Poco::URI(payload).getPath();
+        }
+        catch (const std::exception& exc)
+        {
+            LOG_ERR("Bad export payload [" << payload << "]: " << exc.what());
+            sendTextFrameAndLogError("error: cmd=exportas kind=saveasfailed");
+            return;
+        }
+        const std::string jailDoc = getJailDocRoot();
+        if (filePath.compare(0, jailDoc.size(), jailDoc) != 0)
+        {
+            LOG_ERR("Export payload [" << payload << "] not under jail doc root ["
+                                       << jailDoc << ']');
+            sendTextFrameAndLogError("error: cmd=exportas kind=saveasfailed");
+            return;
+        }
+        const std::string urlInJail = filePath.substr(jailDoc.size());
+        const auto sep = urlInJail.find('/');
+        if (sep == std::string::npos)
+        {
+            LOG_ERR("Export payload [" << payload << "] missing tmp dir component");
+            sendTextFrameAndLogError("error: cmd=exportas kind=saveasfailed");
+            return;
+        }
+        const std::string downloadId = urlInJail.substr(0, sep);
+        const std::string filename = urlInJail.substr(sep + 1);
+
         // Register download id -> URL mapping in the DocumentBroker
-        auto url = std::string("../../") + payload.substr(payload.find_last_of('/'));
-        auto downloadId = Util::rng::getFilename(64);
-        const std::string docBrokerMessage =
-            "registerdownload: downloadid=" + downloadId + " url=" + url + " clientid=" + getId();
+        const std::string docBrokerMessage = "registerdownload: downloadid=" + downloadId
+                                             + " url=" + urlInJail + " clientid=" + getId();
         _docManager->sendFrame(docBrokerMessage);
-        std::string message = "downloadas: downloadid=" + downloadId + " port=" + std::to_string(ClientPortNumber) + " id=export";
-        sendTextFrame(message);
+        sendTextFrame("downloadas: downloadid=" + downloadId
+                      + " port=" + std::to_string(ClientPortNumber) + " id=export filename="
+                      + filename);
+#else
+        // CODA-W / CODA-Q / CODA-M / Android: hand the exported file URL to JS,
+        // which forwards it to the platform's native message handler for
+        // presenting a save dialog to the user (Win32 IFileSaveDialog,
+        // QFileDialog, NSSavePanel, Android SAF).
+        sendTextFrame("exportfile: url=" + payload);
 #endif
         break;
     }
