@@ -1353,7 +1353,7 @@ namespace emfio
                         mpInputStream->ReadUInt32( nIndex );
                         if ( ( nIndex & ENHMETA_STOCK_OBJECT ) == 0 )
                         {
-                            sal_uInt32 nStyle;
+                            sal_uInt32 nStyle(0);
                             mpInputStream->ReadUInt32( nStyle );
                             BrushStyle eStyle = static_cast<BrushStyle>(nStyle);
                             Color aColor = ReadColor();
