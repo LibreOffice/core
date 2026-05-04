@@ -29,6 +29,7 @@
 #include <doc.hxx>
 #include <proofreadingiterator.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/script/vba/XVBAEventProcessor.hpp>
 #include <com/sun/star/text/XFlatParagraphIteratorProvider.hpp>
 #include <com/sun/star/linguistic2/XProofreadingIterator.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
@@ -36,6 +37,7 @@
 #include <comphelper/configuration.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/random.hxx>
+#include <comphelper/types.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/XmlIdRegistry.hxx>
 #include <sal/log.hxx>
@@ -424,6 +426,8 @@ SwDoc::~SwDoc()
     getIDocumentTimerAccess().StopIdling();   // stop idle timer
 
     mpURLStateChgd.reset();
+
+    ::comphelper::disposeComponent(mxVbaEvents);
 
     // Deactivate Undo notification from Draw
     if( GetDocumentDrawModelManager().GetDrawModel() )

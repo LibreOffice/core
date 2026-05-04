@@ -32,7 +32,8 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/util/XChangesListener.hpp>
-#include <cppuhelper/implbase.hxx>
+#include <cppuhelper/basemutex.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <vbahelper/vbadllapi.h>
@@ -44,13 +45,13 @@ namespace com::sun::star {
 
 class SfxObjectShell;
 
-typedef ::cppu::WeakImplHelper<
+typedef ::cppu::WeakComponentImplHelper<
     css::script::vba::XVBAEventProcessor,
     css::document::XEventListener,
     css::util::XChangesListener,
     css::lang::XServiceInfo > VbaEventsHelperBase_BASE;
 
-class VBAHELPER_DLLPUBLIC VbaEventsHelperBase : public VbaEventsHelperBase_BASE
+class VBAHELPER_DLLPUBLIC VbaEventsHelperBase : public cppu::BaseMutex, public VbaEventsHelperBase_BASE
 {
 public:
     VbaEventsHelperBase(
@@ -69,8 +70,12 @@ public:
 
     // lang::XEventListener
     virtual void SAL_CALL disposing( const css::lang::EventObject& rEvent ) override;
+    using WeakComponentImplHelperBase::disposing;
 
     sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override;
+
+    // ::cppu::OComponentHelper
+    virtual void SAL_CALL disposing() override;
 
     // little helpers ---------------------------------------------------------
 
@@ -217,7 +222,6 @@ private:
     EventHandlerPathMap maEventPaths;
     css::uno::Reference< css::script::vba::XVBAModuleInfo > mxModuleInfos;
     OUString maLibraryName;
-    bool mbDisposed;
 };
 
 

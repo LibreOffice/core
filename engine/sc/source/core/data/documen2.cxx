@@ -40,6 +40,8 @@
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <comphelper/configuration.hxx>
+#include <comphelper/types.hxx>
+#include <com/sun/star/script/vba/XVBAEventProcessor.hpp>
 
 #include <scmod.hxx>
 #include <scresid.hxx>
@@ -414,6 +416,7 @@ ScDocument::~ScDocument()
 
     Clear( true );              // true = from destructor (needed for SdrModel::ClearModel)
 
+    ::comphelper::disposeComponent(mxVbaEvents);
     pValidationList.reset();
     pRangeName.reset();
     pDBCollection.reset();

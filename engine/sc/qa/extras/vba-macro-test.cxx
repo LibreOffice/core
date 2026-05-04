@@ -440,6 +440,8 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testVba)
             if (!sFileUrl.isEmpty())
                 osl::File::remove(sFileUrl);
         }
+
+        Scheduler::ProcessEventsToIdle();
     }
 }
 

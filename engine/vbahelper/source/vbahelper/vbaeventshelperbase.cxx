@@ -38,8 +38,8 @@ using namespace ::ooo::vba;
 
 
 VbaEventsHelperBase::VbaEventsHelperBase( const uno::Sequence< uno::Any >& rArgs ) :
-    mpShell( nullptr ),
-    mbDisposed( true )
+    VbaEventsHelperBase_BASE(m_aMutex),
+    mpShell( nullptr )
 {
     try
     {
@@ -49,13 +49,11 @@ VbaEventsHelperBase::VbaEventsHelperBase( const uno::Sequence< uno::Any >& rArgs
     catch( uno::Exception& )
     {
     }
-    mbDisposed = mpShell == nullptr;
     startListening();
 }
 
 VbaEventsHelperBase::~VbaEventsHelperBase()
 {
-    SAL_WARN_IF( !mbDisposed, "vbahelper", "VbaEventsHelperBase::~VbaEventsHelperBase - missing disposing notification" );
 }
 
 sal_Bool SAL_CALL VbaEventsHelperBase::processVbaEvent( sal_Int32 nEventId, const uno::Sequence< uno::Any >& rArgs )
@@ -83,7 +81,7 @@ sal_Bool SAL_CALL VbaEventsHelperBase::processVbaEvent( sal_Int32 nEventId, cons
         /*  Check that all class members are available, and that we are not
             disposed (this may have happened at any time during execution of
             the last event handler). */
-        if( mbDisposed || !mxModel.is() || !mpShell )
+        if( !mxModel.is() || !mpShell )
             throw uno::RuntimeException();
 
         // get info for next event
@@ -186,6 +184,15 @@ void SAL_CALL VbaEventsHelperBase::disposing( const lang::EventObject& rEvent )
         stopListening();
 }
 
+void SAL_CALL VbaEventsHelperBase::disposing()
+{
+    stopListening();
+    mxModel.clear();
+    maEventInfos.clear();
+    maEventPaths.clear();
+    mxModuleInfos.clear();
+}
+
 sal_Bool VbaEventsHelperBase::supportsService(OUString const & ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
@@ -219,7 +226,7 @@ void VbaEventsHelperBase::registerEventHandler( sal_Int32 nEventId, sal_Int32 nM
 
 void VbaEventsHelperBase::startListening()
 {
-    if( mbDisposed )
+    if(!mpShell)
         return;
 
     uno::Reference< document::XEventBroadcaster > xEventBroadcaster( mxModel, uno::UNO_QUERY );
@@ -229,7 +236,7 @@ void VbaEventsHelperBase::startListening()
 
 void VbaEventsHelperBase::stopListening()
 {
-    if( mbDisposed )
+    if( !mpShell )
         return;
 
     uno::Reference< document::XEventBroadcaster > xEventBroadcaster( mxModel, uno::UNO_QUERY );
@@ -239,7 +246,6 @@ void VbaEventsHelperBase::stopListening()
     mxModel.clear();
     mpShell = nullptr;
     maEventInfos.clear();
-    mbDisposed = true;
 }
 
 sal_Bool SAL_CALL VbaEventsHelperBase::hasVbaEventHandler( sal_Int32 nEventId, const uno::Sequence< uno::Any >& rArgs )
