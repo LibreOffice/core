@@ -399,6 +399,7 @@ void ScCellShell::GetCellState( SfxItemSet& rSet )
                 }
                 break;
             case SID_INSERT_POSTIT:
+            case SID_INSERT_THREADED_COMMENT:
                 {
                     ScAddress aPos( GetViewData().GetCurX(), GetViewData().GetCurY(), GetViewData().CurrentTabForData() );
                     if( rDoc.GetNote(aPos) )
