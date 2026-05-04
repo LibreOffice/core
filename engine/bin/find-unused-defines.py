@@ -109,10 +109,16 @@ codecs.register_error("strict", strict_handler)
 
 # don't search in directories with non C++ source files
 excludeDirs = {
+    ".config",
+    ".cspell",
+    ".git-hooks",
+    ".github",
+    ".vscode",
     "android",
     "animations",
     "bean",
     "bin",
+    "config_host",
     "compilerplugins",
     "cpputools",
     "distro-configs",
@@ -166,7 +172,8 @@ for subdir in sorted(os.listdir(".")):
         findGlobally=True
 
     # find defines in the subdirectory, e.g. in include/, sw/, sc/ etc.
-    a = subprocess.Popen(f"git grep -hP '^#define\\s+\\w\\w\\w\\w+\\s*' -- {subdir} | sort -u", stdout=subprocess.PIPE, shell=True, encoding='UTF-8')
+    # but only look in header files to speed things up
+    a = subprocess.Popen(f"git grep -hP '^#define\\s+\\w\\w\\w\\w+\\s*' -- '{subdir}/*.h' '{subdir}/*.hxx' '{subdir}/*.hpp' '{subdir}/*.hrc' | sort -u", stdout=subprocess.PIPE, shell=True, encoding='UTF-8')
 
     name_re = re.compile(r"#define\s+(\w+)")
     with a.stdout as txt:
@@ -190,10 +197,11 @@ for subdir in sorted(os.listdir(".")):
             if in_exclusion_set(idName):
                 continue
             # search for the constant
+            # only in relevant C/C++ files and headers
             if findGlobally:
-                b = subprocess.Popen(["git", "grep", "-w", idName], stdout=subprocess.PIPE, encoding='UTF-8')
+                b = subprocess.Popen(["git", "grep", "-w", idName, "--", "*.h", "*.hxx", "*.hpp", "*.hrc", "*.cpp", "*.cxx", "*.c", "*.mm", "*.sdi"], stdout=subprocess.PIPE, encoding='UTF-8')
             else:
-                b = subprocess.Popen(["git", "grep", "-w", idName, subdir ], stdout=subprocess.PIPE, encoding='UTF-8')
+                b = subprocess.Popen(["git", "grep", "-w", idName, "--", f"{subdir}/*.h", f"{subdir}/*.hxx", f"{subdir}/*.hpp" f"{subdir}/*.hrc", f"{subdir}/*.cpp", f"{subdir}/*.cxx", f"{subdir}/*.c", f"{subdir}/*.mm", f"{subdir}/*.sdi"], stdout=subprocess.PIPE, encoding='UTF-8')
             found_reason_to_exclude = False
             with b.stdout as txt2:
                 cnt = 0
