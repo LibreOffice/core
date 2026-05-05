@@ -1747,7 +1747,8 @@ void FormulaCompiler::Factor()
                     // know, classify as ONLOAD_LENIENT.
                 case ocExternal:
                 case ocUDExternal:
-                    if (static_cast<FormulaExternalToken*>(mpToken.get())->GetExternal() == "com.sun.star.sheet.addin.Analysis.getRandbetween")
+                    if (mpToken->GetType() == svExternal
+                        && static_cast<FormulaExternalToken*>(mpToken.get())->GetExternal() == "com.sun.star.sheet.addin.Analysis.getRandbetween")
                         mpArr->SetExclusiveRecalcModeAlways();
                     else
                         mpArr->AddRecalcMode( ScRecalcMode::ONLOAD_LENIENT );
