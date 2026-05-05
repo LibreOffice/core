@@ -311,10 +311,23 @@ class Socket {
 		);
 		if (this._map.options.docParams.access_token && ttl) {
 			const tokenExpiryWarning = 900 * 1000; // Warn when 15 minutes remain
-			this._accessTokenExpireTimeout = setTimeout(
-				this._sessionExpiredWarning.bind(this),
-				ttl - Date.now() - tokenExpiryWarning,
-			);
+			const delayMs = ttl - Date.now() - tokenExpiryWarning;
+			if (delayMs > 0) {
+				this._accessTokenExpireTimeout = setTimeout(
+					this._sessionExpiredWarning.bind(this),
+					delayMs,
+				);
+			} else {
+				// Token is already inside the 15-minute warning window (or has
+				// expired). Fire immediately; _sessionExpiredWarning picks the
+				// right "expiring" vs "expired" message based on ttl - now().
+				this._sessionExpiredWarning();
+				// Retrigger every 2 minutes, as a reminder.
+				this._accessTokenExpireTimeout = setTimeout(
+					this.resetTokenExpiryTimer.bind(this),
+					2 * 60 * 1000,
+				);
+			}
 		}
 	}
 
