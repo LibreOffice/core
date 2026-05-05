@@ -9959,7 +9959,7 @@ ScTokenArray ScInterpreter::checkPushTokens(const ScTokenArray& rTokens, short n
         if (aIterResult.GetIndex() > nEndPos)
             break;
 
-        aTempTokens.AddToken(*t->Clone());
+        aTempTokens.AddToken(*t);
     }
     return aTempTokens;
 }
