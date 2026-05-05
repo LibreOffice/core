@@ -65,8 +65,8 @@ struct TextPortion
 
 }
 
-#define MAX_SYNTAX_HIGHLIGHT 20
-#define MAX_HIGHLIGHTTIME 200
+constexpr sal_uInt16 MAX_SYNTAX_HIGHLIGHT = 20;
+constexpr sal_Int64 MAX_HIGHLIGHTTIME = 200;
 
 typedef std::vector<TextPortion> TextPortions;
 

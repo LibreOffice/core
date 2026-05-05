@@ -55,9 +55,9 @@
 #include <vcl/weld/Toggleable.hxx>
 #include <memory>
 
-#define BUTTON_WIDTH 30
-#define BUTTON_HEIGHT 19
-#define ARROW_WIDTH 9
+constexpr tools::Long BUTTON_WIDTH = 30;
+constexpr tools::Long BUTTON_HEIGHT = 19;
+constexpr tools::Long ARROW_WIDTH = 9;
 
 using namespace basegfx;
 using namespace basegfx::utils;
