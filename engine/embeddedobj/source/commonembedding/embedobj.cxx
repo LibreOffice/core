@@ -28,10 +28,14 @@
 #include <com/sun/star/embed/StateChangeInProgressException.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
 
+#include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/awt/XWindowPeer.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 
@@ -39,10 +43,19 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <comphelper/multicontainer2.hxx>
 #include <comphelper/kit.hxx>
+#include <osl/file.hxx>
 #include <sal/log.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <svl/documentlockfile.hxx>
+#include <svl/msodocumentlockfile.hxx>
+#include <tools/urlobj.hxx>
+#include <unotools/resmgr.hxx>
+#include <unotools/ucbhelper.hxx>
 
+#include <strings.hrc>
 #include <vcl/svapp.hxx>
+#include <vcl/vclenum.hxx>
+#include <vcl/weld.hxx>
 
 #include <targetstatecontrol.hxx>
 
@@ -50,6 +63,178 @@
 #include "embedobj.hxx"
 #include <specialobject.hxx>
 #include <array>
+
+namespace {
+
+// tdf#157943 / tdf#126742: locate the visible top-level frame loaded from
+// sLinkURL, or null. Hidden frames are skipped (caller routes them to the
+// warn path). Comparison mirrors LoadEnv::impl_searchAlreadyLoaded.
+css::uno::Reference< css::frame::XFrame > findLinkSourceFrame(
+    const css::uno::Reference< css::uno::XComponentContext >& xContext,
+    const OUString& sLinkURL )
+{
+    if ( sLinkURL.isEmpty() || INetURLObject( sLinkURL ).IsExoticProtocol() )
+        return nullptr;
+
+    try
+    {
+        css::uno::Reference< css::frame::XDesktop2 > xDesktop = css::frame::Desktop::create( xContext );
+        css::uno::Reference< css::container::XIndexAccess > xFrames = xDesktop->getFrames();
+        if ( !xFrames.is() )
+            return nullptr;
+
+        const sal_Int32 nCount = xFrames->getCount();
+        for ( sal_Int32 i = 0; i < nCount; ++i )
+        {
+            try
+            {
+                css::uno::Reference< css::frame::XFrame > xFrame;
+                xFrames->getByIndex( i ) >>= xFrame;
+                if ( !xFrame.is() )
+                    continue;
+
+                OUString sFrameURL;
+                css::uno::Reference< css::frame::XController > xController = xFrame->getController();
+                if ( xController.is() )
+                {
+                    css::uno::Reference< css::frame::XModel > xModel = xController->getModel();
+                    if ( xModel.is() )
+                    {
+                        // Skip hidden frames. Calling activate() / toFront()
+                        // on one would either silently no-op or unexpectedly
+                        // reveal a frame meant to stay invisible.
+                        bool bHidden = false;
+                        for ( const auto& rProp : xModel->getArgs() )
+                        {
+                            if ( rProp.Name == "Hidden" )
+                            {
+                                rProp.Value >>= bHidden;
+                                break;
+                            }
+                        }
+                        if ( bHidden )
+                            continue;
+
+                        sFrameURL = xModel->getURL();
+                    }
+                }
+                else
+                {
+                    // load may be in progress - URL lives on the frame itself
+                    css::uno::Reference< css::beans::XPropertySet > xFrameProps( xFrame, css::uno::UNO_QUERY );
+                    if ( xFrameProps.is() )
+                        xFrameProps->getPropertyValue( u"URL"_ustr ) >>= sFrameURL;
+                }
+
+                if ( sFrameURL.isEmpty() )
+                    continue;
+
+                if ( ::utl::UCBContentHelper::EqualURLs( sLinkURL, sFrameURL ) )
+                    return xFrame;
+            }
+            catch ( const css::uno::Exception& )
+            {
+                // ignore individual frame errors and keep iterating
+            }
+        }
+    }
+    catch ( const css::uno::Exception& )
+    {
+    }
+    return nullptr;
+}
+
+// Bring an already-loaded source document's frame to the front. Best-effort:
+// failure here is harmless because the caller refuses the OLE activation
+// regardless, which is the safe outcome.
+void switchToExistingFrame( const css::uno::Reference< css::frame::XFrame >& xFrame )
+{
+    if ( !xFrame.is() )
+        return;
+
+    try
+    {
+        xFrame->activate();
+        css::uno::Reference< css::awt::XTopWindow > xTopWindow( xFrame->getContainerWindow(), css::uno::UNO_QUERY );
+        if ( xTopWindow.is() )
+            xTopWindow->toFront();
+    }
+    catch ( const css::uno::Exception& )
+    {
+    }
+}
+
+// tdf#157943: any lock - foreign, hidden own frame, or stale own lock -
+// would fail the OLE writeback at save time, so the caller refuses on
+// any non-empty result. Visible-own-frame is filtered out earlier.
+OUString getSourceLockOwner( std::u16string_view sLinkURL )
+{
+    if ( sLinkURL.empty() || INetURLObject( sLinkURL ).IsExoticProtocol() )
+        return u""_ustr;
+
+    auto formatOwner = []( const LockFileEntry& aData, bool bMSO )
+    {
+        OUString sOwner = aData[LockFileComponent::OOOUSERNAME];
+        if ( sOwner.isEmpty() )
+            sOwner = aData[LockFileComponent::SYSUSERNAME];
+        if ( sOwner.isEmpty() )
+            return u""_ustr; // empty/corrupt lock data - treat as no lock
+        if ( bMSO )
+            sOwner += " (MS Office)";
+        return sOwner;
+    };
+
+    // LO format (.~lock.*#)
+    try
+    {
+        svt::DocumentLockFile aLockFile( sLinkURL );
+        if ( OUString sOwner = formatOwner( aLockFile.GetLockData(), false );
+             !sOwner.isEmpty() )
+            return sOwner;
+    }
+    catch ( const css::uno::Exception& )
+    {
+    }
+
+    // MSO format (~$*) - LO understands these via tdf#34171
+    if ( svt::MSODocumentLockFile::IsMSOSupportedFileFormat( sLinkURL ) )
+    {
+        try
+        {
+            svt::MSODocumentLockFile aMSOLockFile( sLinkURL );
+            if ( OUString sOwner = formatOwner( aMSOLockFile.GetLockData(), true );
+                 !sOwner.isEmpty() )
+                return sOwner;
+        }
+        catch ( const css::uno::Exception& )
+        {
+        }
+    }
+
+    return u""_ustr;
+}
+
+void showLinkSourceLockedDialog( const css::uno::Reference< css::awt::XWindow >& xClientWindow,
+                                 std::u16string_view sLinkURL,
+                                 std::u16string_view sOwner )
+{
+    std::locale aResLocale = Translate::Create( "emo" );
+    OUString aMsg = Translate::get( STR_LINK_SOURCE_LOCKED, aResLocale );
+
+    OUString aLinkURL( sLinkURL );
+    OUString aSysPath = aLinkURL;
+    osl::FileBase::getSystemPathFromFileURL( aLinkURL, aSysPath );
+    aMsg = aMsg.replaceFirst( "%{filename}", aSysPath );
+    aMsg = aMsg.replaceFirst( "%{owner}", sOwner );
+
+    weld::Window* pParent = Application::GetFrameWeld( xClientWindow );
+    std::shared_ptr< weld::MessageDialog > xQueryBox(
+        Application::CreateMessageDialog( pParent,
+            VclMessageType::Warning, VclButtonsType::Ok, aMsg ) );
+    xQueryBox->runAsync( xQueryBox, []( sal_Int32 ) {} );
+}
+
+} // anonymous namespace
 
 using namespace ::com::sun::star;
 
@@ -609,7 +794,47 @@ void SAL_CALL OCommonEmbeddedObject::doVerb( sal_Int32 nVerbID )
     }
     else
     {
-        aGuard.clear();
+        // tdf#157943 / tdf#126742: refuse user-initiated activation of an
+        // OLE link whose source is in use - either navigate to the visible
+        // frame (matches MSO) or warn on any lock (foreign, hidden own
+        // frame, or stale). Gated to visible-state verbs so internal
+        // RUNNING transitions aren't redirected. Skipped in headless.
+        if ( m_bIsLinkURL
+             && ( nNewState == embed::EmbedStates::INPLACE_ACTIVE
+                  || nNewState == embed::EmbedStates::UI_ACTIVE
+                  || nNewState == embed::EmbedStates::ACTIVE )
+             && !Application::IsHeadlessModeEnabled() )
+        {
+            // snapshot under m_aMutex so the framework calls below run on
+            // stable values even if breakLink/reload races on another thread
+            const OUString aLinkURL = m_aLinkURL;
+            const auto xClientWindow = m_xClientWindow;
+            const auto xContext = m_xContext;
+            aGuard.clear();
+
+            // 1. Source loaded as a visible frame here: bring it to front.
+            // Matches MSO's "navigate to existing editor" behaviour.
+            if ( auto xExistingFrame = findLinkSourceFrame( xContext, aLinkURL );
+                 xExistingFrame.is() )
+            {
+                switchToExistingFrame( xExistingFrame );
+                return;
+            }
+
+            // 2. Lock file present (foreign, hidden own frame, or stale
+            // own lock from a crash) - all fail writeback at save time.
+            if ( OUString sLockOwner = getSourceLockOwner( aLinkURL );
+                 !sLockOwner.isEmpty() )
+            {
+                showLinkSourceLockedDialog( xClientWindow, aLinkURL, sLockOwner );
+                return;
+            }
+        }
+        else
+        {
+            aGuard.clear();
+        }
+
         changeState( nNewState );
     }
 }

@@ -14,6 +14,7 @@
 #define BTN_OVERWRITE_TEXT           NC_("BTN_OVERWRITE_TEXT", "Overwrite")
 #define STR_OVERWRITE_LINK           NC_("STR_OVERWRITE_LINK", "You have made changes to the %{filename}, saving will overwrite the data from the inserted object.\n\nDo you still want to overwrite this data?")
 #define STR_OVERWRITE_TEMP           NC_("STR_OVERWRITE_TEMP", "You have changed the data in the inserted object which will be overwritten by updating the %{filename}.\n\nDo you still want to overwrite this data?")
+#define STR_LINK_SOURCE_LOCKED       NC_("STR_LINK_SOURCE_LOCKED", "The source of this OLE link, %{filename}, is currently locked by %{owner}.\n\nSaving changes through this link will fail. Please close the file before editing.")
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
