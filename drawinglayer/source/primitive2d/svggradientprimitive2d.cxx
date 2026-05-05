@@ -32,6 +32,7 @@
 #include <cmath>
 #include <utility>
 #include <vcl/skia/SkiaHelper.hxx>
+#include <ranges>
 
 using namespace com::sun::star;
 
@@ -379,14 +380,12 @@ namespace drawinglayer::primitive2d
             if(!maMirroredGradientEntries.empty() || getGradientEntries().empty())
                 return;
 
-            const sal_uInt32 nCount(getGradientEntries().size());
             maMirroredGradientEntries.clear();
-            maMirroredGradientEntries.reserve(nCount);
+            maMirroredGradientEntries.reserve(getGradientEntries().size());
 
-            for(sal_uInt32 a(0); a < nCount; a++)
+            const SvgGradientEntryVector& rEntries(getGradientEntries());
+            for(const SvgGradientEntry& rCandidate : std::views::reverse(rEntries))
             {
-                const SvgGradientEntry& rCandidate = getGradientEntries()[nCount - 1 - a];
-
                 maMirroredGradientEntries.emplace_back(
                         1.0 - rCandidate.getOffset(),
                         rCandidate.getColor(),
