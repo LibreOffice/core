@@ -44,7 +44,6 @@ window.L.ImpressTileLayer = window.L.CanvasTileLayer.extend({
 		var mobileViewing =
 			window.mode.isSmallScreenDevice() || window.mode.isTablet();
 		if (app.file.readOnly || mobileViewing) app.file.fileBasedView = true;
-		else app.file.partBasedView = true;
 
 		this._partHeightTwips = 0; // Single part's height.
 		this._partWidthTwips = 0; // Single part's width. These values are equal to app.activeDocument.fileSize.x & app.activeDocument.fileSize.y when app.file.partBasedView is true.
@@ -228,14 +227,13 @@ window.L.ImpressTileLayer = window.L.CanvasTileLayer.extend({
 			this._switchToPartBasedView();
 		else if (
 			(e.detail.perm === 'readonly' || e.detail.perm === 'view') &&
-			app.file.partBasedView
+			!app.file.fileBasedView
 		)
 			this._switchToFileBasedView();
 	},
 
 	_switchToPartBasedView: function () {
 		app.file.fileBasedView = false;
-		app.file.partBasedView = true;
 
 		// Collapse the stacked canvas back to a single slide
 		app.activeDocument.fileSize = new cool.SimplePoint(
@@ -248,7 +246,6 @@ window.L.ImpressTileLayer = window.L.CanvasTileLayer.extend({
 	},
 
 	_switchToFileBasedView: function () {
-		app.file.partBasedView = false;
 		app.file.fileBasedView = true;
 
 		// Rebuild the stacked-slide total height (mirrors _onStatusMsg).

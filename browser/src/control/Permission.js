@@ -32,11 +32,9 @@ window.L.Map.include({
 		// we warn the user about loosing the rich formatting and offer an option to
 		// save as ODF instead of the current format
 		//
-		// For mobile we need to display the edit button for all the cases except for PDF
+		// For mobile we need to display the edit button for all the cases except for PDF (which is read-only)
 		// we offer save-as to another place where the user can edit the document
-		var fileName = (this['wopi'].BaseFileName || '').toLowerCase();
-		var isPDF = fileName.endsWith('.pdf');
-		if (!isPDF && (window.mode.isSmallScreenDevice() || window.mode.isTablet())) {
+		if (!app.file.readOnly && (window.mode.isSmallScreenDevice() || window.mode.isTablet())) {
 			button.css('display', 'flex');
 		} else {
 			button.hide();
