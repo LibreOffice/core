@@ -6,6 +6,9 @@
   "rules": {
     "no-mixed-spaces-and-tabs": [2, "smart-tabs"],
     "no-lonely-if": 2,
+    "no-eval": 2,
+    "no-implied-eval": 2,
+    "no-new-func": 2,
     "no-underscore-dangle": 0,
     "no-constant-condition": 0,
     "strict": 0,
