@@ -212,45 +212,30 @@ void SbRtl_CallByName(StarBASIC *, SbxArray & rPar, bool)
 void SbRtl_CBool(StarBASIC *, SbxArray & rPar, bool) // JSM
 {
     bool bVal = false;
-    if (rPar.Count() == 2)
-    {
-        SbxVariable* pSbxVariable = rPar.Get(1);
-        bVal = pSbxVariable->GetBool();
-    }
-    else
-    {
-        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
-    }
+    if (rPar.Count() != 2)
+        return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+    SbxVariable* pSbxVariable = rPar.Get(1);
+    bVal = pSbxVariable->GetBool();
     rPar.Get(0)->PutBool(bVal);
 }
 
 void SbRtl_CByte(StarBASIC *, SbxArray & rPar, bool) // JSM
 {
     sal_uInt8 nByte = 0;
-    if (rPar.Count() == 2)
-    {
-        SbxVariable* pSbxVariable = rPar.Get(1);
-        nByte = pSbxVariable->GetByte();
-    }
-    else
-    {
-        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
-    }
+    if (rPar.Count() != 2)
+        return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+    SbxVariable* pSbxVariable = rPar.Get(1);
+    nByte = pSbxVariable->GetByte();
     rPar.Get(0)->PutByte(nByte);
 }
 
 void SbRtl_CCur(StarBASIC *, SbxArray & rPar, bool)
 {
     sal_Int64 nCur = 0;
-    if (rPar.Count() == 2)
-    {
-        SbxVariable* pSbxVariable = rPar.Get(1);
-        nCur = pSbxVariable->GetCurrency();
-    }
-    else
-    {
-        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
-    }
+    if (rPar.Count() != 2)
+        return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+    SbxVariable* pSbxVariable = rPar.Get(1);
+    nCur = pSbxVariable->GetCurrency();
     rPar.Get(0)->PutCurrency(nCur);
 }
 
