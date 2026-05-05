@@ -1959,7 +1959,7 @@ void CairoPixelProcessor2D::processMaskPrimitive2D(
 
     cairo_save(mpRT);
 
-    if (isCairoCoordinateLimitWorkaroundActive())
+    if (isCairoCoordinateLimitWorkaroundActive(rMask.getB2DRange()))
     {
         // need to fallback to paint in view coordinates, unfortunately
         // need to transform self (cairo will do it wrong in this coordinate
@@ -4465,6 +4465,32 @@ void CairoPixelProcessor2D::evaluateCairoCoordinateLimitWorkaround()
         // 24.8 cairo format, thus workaround is needed, set flag
         mbCairoCoordinateLimitWorkaroundActive = true;
     }
+}
+
+bool CairoPixelProcessor2D::isCairoCoordinateLimitWorkaroundActive(
+    const basegfx::B2DRange& rObjectSpaceRange) const
+{
+    // The office-wide flag is set in the constructor based on the view
+    // range alone, on the assumption that view transform is fixed and
+    // object transforms are small (see tdf#164403). That assumption can
+    // break for individual primitives whose object-space coordinates sit
+    // far from the origin even when the view itself is well within
+    // cairo's 24.8 limits, e.g. Calc cells thousands of rows down the
+    // sheet. Cairo's path build/copy/append pipeline then collapses such
+    // coordinates and produces an empty fill/clip extent. To stay on the
+    // safe side, also report the workaround as active when the given
+    // object-space range is far enough from the origin that multiplying
+    // it by a typical object-to-view transform would cross the 24.8
+    // limit. The threshold is conservative so we do not need to inspect
+    // the actual transform's scale at every callsite.
+    if (mbCairoCoordinateLimitWorkaroundActive)
+        return true;
+
+    constexpr double fObjectSpaceSafetyLimit(1 << 17); // 131072
+    return std::abs(rObjectSpaceRange.getMinX()) > fObjectSpaceSafetyLimit
+           || std::abs(rObjectSpaceRange.getMaxX()) > fObjectSpaceSafetyLimit
+           || std::abs(rObjectSpaceRange.getMinY()) > fObjectSpaceSafetyLimit
+           || std::abs(rObjectSpaceRange.getMaxY()) > fObjectSpaceSafetyLimit;
 }
 
 basegfx::BColor CairoPixelProcessor2D::getLineColor(const basegfx::BColor& rColor) const

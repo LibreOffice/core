@@ -55,6 +55,7 @@ class PatternFillPrimitive2D;
 namespace basegfx
 {
 class B2DPolyPolygon;
+class B2DRange;
 }
 
 namespace basegfx::utils
@@ -229,6 +230,12 @@ public:
     {
         return mbCairoCoordinateLimitWorkaroundActive;
     }
+
+    // overload for per-primitive checks: also returns true if the given
+    // object-space range alone would push cairo's 24.8 fixed-point format
+    // past its limit, even when the office-wide flag is off (e.g. Calc
+    // cells far down the sheet).
+    bool isCairoCoordinateLimitWorkaroundActive(const basegfx::B2DRange& rObjectSpaceRange) const;
 
     // constructor to create a CairoPixelProcessor2D which
     // allocates and owns a cairo surface of given size. You
