@@ -72,7 +72,7 @@ namespace basegfx
         // getHoldCyclesInSeconds and estimateUsageInBytes, executed
         // using getHoldCyclesInSeconds. StartValue is 0 to detect
         // not-yet-calculated state
-        sal_uInt32                      mnCalculatedCycles;
+        mutable sal_uInt32              mnCalculatedCycles;
 
     public:
         SystemDependentData(
@@ -91,7 +91,7 @@ namespace basegfx
         // getHoldCyclesInSeconds and estimateUsageInBytes, the
         // result is created once on-demand and buffered in
         // mnCalculatedCycles
-        virtual sal_uInt32 calculateCombinedHoldCyclesInSeconds() const;
+        sal_uInt32 calculateCombinedHoldCyclesInSeconds() const;
 
         // Allow read access to the calculated cycles in seconds, this
         // can be e.g. used to determine if this instance got added
