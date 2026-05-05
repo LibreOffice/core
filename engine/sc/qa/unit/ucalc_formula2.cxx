@@ -5263,6 +5263,54 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testSpillMatrixComplexScenario)
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(TestFormula2, testDynamicArrayFlagCopy)
+{
+    // The mbDynamicArrayFunction flag on FormulaTokenArray is set by the
+    // compiler when it sees UNIQUE, FILTER, SORT... (dynamic array formula).
+    // The flag must survive copy, move, clone operations otherwise a cloned
+    // formula silently loses its dynamic array behaviour.
+
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+
+    m_pDoc->SetValue(ScAddress(1, 0, 0), 10.0);
+    m_pDoc->SetValue(ScAddress(1, 1, 0), 20.0);
+
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
+    aMark.SelectOneTable(0);
+    m_pDoc->InsertMatrixFormula(0, 0, 0, 0, aMark, u"=UNIQUE(B1:B2)"_ustr, nullptr,
+                                formula::FormulaGrammar::GRAM_DEFAULT, true);
+
+    const ScFormulaCell* pCell = m_pDoc->GetFormulaCell(ScAddress(0, 0, 0));
+    CPPUNIT_ASSERT(pCell);
+    const ScTokenArray* pCode = pCell->GetCode();
+    CPPUNIT_ASSERT(pCode);
+    CPPUNIT_ASSERT_MESSAGE("dynamic array flag should be true for UNIQUE",
+                           pCode->HasDynamicArrayFunction());
+
+    // Copy
+    ScTokenArray aCopy(*pCode);
+    CPPUNIT_ASSERT_MESSAGE("dynamic array flag should survive copy",
+                           aCopy.HasDynamicArrayFunction());
+
+    // Move
+    ScTokenArray aSource(*pCode);
+    ScTokenArray aMoved(std::move(aSource));
+    CPPUNIT_ASSERT_MESSAGE("dynamic array flag should survive move",
+                           aMoved.HasDynamicArrayFunction());
+
+    // Clone
+    std::unique_ptr<ScTokenArray> pClone = pCode->Clone();
+    CPPUNIT_ASSERT_MESSAGE("dynamic array flag should survive Clone",
+                           pClone->HasDynamicArrayFunction());
+
+    // CloneValue
+    ScTokenArray aCloneValue = pCode->CloneValue();
+    CPPUNIT_ASSERT_MESSAGE("dynamic array flag should survive CloneValue",
+                           aCloneValue.HasDynamicArrayFunction());
+
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

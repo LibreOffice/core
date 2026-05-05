@@ -1898,6 +1898,7 @@ std::unique_ptr<ScTokenArray> ScTokenArray::Clone() const
     p->mbThreadingEnabled = mbThreadingEnabled;
     p->mbFromRangeName = mbFromRangeName;
     p->mbShareable = mbShareable;
+    p->mbDynamicArrayFunction = mbDynamicArrayFunction;
 
     FormulaToken** pp;
     if( nLen )
@@ -1957,6 +1958,7 @@ ScTokenArray ScTokenArray::CloneValue() const
     aNew.mbThreadingEnabled = mbThreadingEnabled;
     aNew.mbFromRangeName = mbFromRangeName;
     aNew.mbShareable = mbShareable;
+    aNew.mbDynamicArrayFunction = mbDynamicArrayFunction;
 
     FormulaToken** pp;
     if( nLen )
