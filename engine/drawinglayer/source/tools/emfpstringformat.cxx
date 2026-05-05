@@ -185,7 +185,6 @@ namespace emfplushelper
                     "drawinglayer.emf", "EMF+\t TODO EMFPStringFormat:digitSubstitution");
         SAL_WARN_IF(firstTabOffset != 0.0, "drawinglayer.emf", "EMF+\t TODO EMFPStringFormat:firstTabOffset");
         SAL_WARN_IF(hotkeyPrefix != HotkeyPrefix::HotkeyPrefixNone, "drawinglayer.emf", "EMF+\t TODO EMFPStringFormat:hotkeyPrefix");
-        SAL_WARN_IF(tracking != 1.0, "drawinglayer.emf", "EMF+\t TODO EMFPStringFormat:tracking");
         SAL_WARN_IF(trimming != StringTrimming::StringTrimmingNone, "drawinglayer.emf", "EMF+\t TODO EMFPStringFormat:trimming");
         SAL_WARN_IF(tabStopCount, "drawinglayer.emf", "EMF+\t TODO EMFPStringFormat:tabStopCount");
         SAL_WARN_IF(rangeCount != 0, "drawinglayer.emf", "EMF+\t TODO EMFPStringFormat:StringFormatData");

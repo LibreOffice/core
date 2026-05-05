@@ -298,17 +298,18 @@ CPPUNIT_TEST_FIXTURE(Test, testDrawStringAlign)
 
     assertXPath(pDocument, aXPathPrefix + "mask/transform[2]/textsimpleportion", "width", u"12");
     assertXPath(pDocument, aXPathPrefix + "mask/transform[2]/textsimpleportion", "height", u"12");
+    // The file uses tracking == 1.03, so the centered text width includes the
+    // 3% character-spacing stretch and the centered position shifts left.
     assertXPathDoubleValue(pDocument, aXPathPrefix + "mask/transform[2]/textsimpleportion", "x",
-                           143.666, 0.001);
+                           143.177, 0.001);
     assertXPath(pDocument, aXPathPrefix + "mask/transform[2]/textsimpleportion", "y", u"22");
     assertXPath(pDocument, aXPathPrefix + "mask/transform[2]/textsimpleportion", "text", u"HCVT");
 
     // TODO Make the position of the text the same across the platforms (Arial vs Liberation Sans).
-    // This is usually 276, but can be 275 as well; depends on what fonts are installed?
     sal_Int32 nX
         = getXPath(pDocument, aXPathPrefix + "mask/transform[3]/textsimpleportion", "x").toInt32();
-    CPPUNIT_ASSERT(nX >= 275);
-    CPPUNIT_ASSERT(nX <= 276);
+    CPPUNIT_ASSERT(nX >= 274);
+    CPPUNIT_ASSERT(nX <= 275);
     assertXPath(pDocument, aXPathPrefix + "mask/transform[3]/textsimpleportion", "y", u"22");
     assertXPath(pDocument, aXPathPrefix + "mask/transform[3]/textsimpleportion", "text", u"HRVT");
 
@@ -317,13 +318,12 @@ CPPUNIT_TEST_FIXTURE(Test, testDrawStringAlign)
     assertXPath(pDocument, aXPathPrefix + "mask/transform[4]/textsimpleportion", "text", u"HLVC");
 
     assertXPathDoubleValue(pDocument, aXPathPrefix + "mask/transform[5]/textsimpleportion", "x",
-                           143.0, 0.001);
+                           142.489, 0.001);
     assertXPath(pDocument, aXPathPrefix + "mask/transform[5]/textsimpleportion", "y", u"66");
     assertXPath(pDocument, aXPathPrefix + "mask/transform[5]/textsimpleportion", "text", u"HCVC");
 
-    // This is usually 274, but can be 273 as well; depends on what fonts are installed?
     nX = getXPath(pDocument, aXPathPrefix + "mask/transform[6]/textsimpleportion", "x").toInt32();
-    CPPUNIT_ASSERT(nX >= 273);
+    CPPUNIT_ASSERT(nX >= 272);
     CPPUNIT_ASSERT(nX <= 274);
     assertXPath(pDocument, aXPathPrefix + "mask/transform[6]/textsimpleportion", "y", u"66");
     assertXPath(pDocument, aXPathPrefix + "mask/transform[6]/textsimpleportion", "text", u"HRVC");
@@ -333,14 +333,13 @@ CPPUNIT_TEST_FIXTURE(Test, testDrawStringAlign)
     assertXPath(pDocument, aXPathPrefix + "mask/transform[7]/textsimpleportion", "text", u"HLVB");
 
     assertXPathDoubleValue(pDocument, aXPathPrefix + "mask/transform[8]/textsimpleportion", "x",
-                           143.330, 0.001);
+                           142.830, 0.001);
     assertXPath(pDocument, aXPathPrefix + "mask/transform[8]/textsimpleportion", "y", u"110");
     assertXPath(pDocument, aXPathPrefix + "mask/transform[8]/textsimpleportion", "text", u"HCVB");
 
-    // This is usually 275, but can be 274 as well; depends on what fonts are installed?
     nX = getXPath(pDocument, aXPathPrefix + "mask/transform[9]/textsimpleportion", "x").toInt32();
-    CPPUNIT_ASSERT(nX >= 274);
-    CPPUNIT_ASSERT(nX <= 275);
+    CPPUNIT_ASSERT(nX >= 273);
+    CPPUNIT_ASSERT(nX <= 274);
     assertXPath(pDocument, aXPathPrefix + "mask/transform[9]/textsimpleportion", "y", u"110");
     assertXPath(pDocument, aXPathPrefix + "mask/transform[9]/textsimpleportion", "text", u"HRVB");
 #endif
@@ -394,6 +393,37 @@ CPPUNIT_TEST_FIXTURE(Test, testDrawStringWithBrush)
                 u"#a50021");
     assertXPath(pDocument, aXPathPrefix + "transform/textdecoratedportion", "familyname",
                 u"TIMES NEW ROMAN");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testDrawStringTracking)
+{
+#if HAVE_MORE_FONTS
+    // tdf#143056 EMF+ DrawString with StringFormat tracking != 1.0
+    // (here tracking == 1.5 applied to "HLVT" rendered at em size 24 in
+    // Courier New).  The fix populates the text primitive's DX-array with
+    // tracking-stretched cumulative advances so the characters spread out.
+    Primitive2DSequence aSequence
+        = parseEmf(u"/emfio/qa/cppunit/emf/data/TestDrawStringTracking.emf");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
+    drawinglayer::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
+    CPPUNIT_ASSERT(pDocument);
+
+    // Three text portions ("HLVT", "HCVT", "HRVT"), each must carry a
+    // populated DX-array with strictly-increasing positions.
+    for (int i = 1; i <= 3; ++i)
+    {
+        const OString aTextPath
+            = aXPathPrefix + "mask/transform[" + OString::number(i) + "]/textsimpleportion";
+        // dx0..dx3 must exist (4-char string, tracking != 1.0 -> non-empty DX-array)
+        assertXPath(pDocument, aTextPath + "[@dx0 and @dx1 and @dx2 and @dx3]");
+        // For Courier New at em 24, natural advance is ~14.4; tracking 1.5
+        // stretches each cumulative position by the same factor.  Allow a
+        // generous tolerance to absorb font-substitution variance.
+        assertXPathDoubleValue(pDocument, aTextPath, "dx0", 21.6, 1.5);
+        assertXPathDoubleValue(pDocument, aTextPath, "dx3", 86.4, 6.0);
+    }
+#endif
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testEmfPlusDrawBeziers)
