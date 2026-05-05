@@ -727,11 +727,6 @@ export class Comment extends CanvasSectionObject {
 			var y: number = Math.round(this.position[1] / app.dpiScale);
 			(this.containerObject.getSectionWithName(app.CSections.Scroll.name) as any as cool.ScrollSection).onScrollTo({x: x, y: y});
 		}
-		else if (app.map._docLayer._docType === 'presentation' || app.map._docLayer._docType === 'drawing') {
-			var x: number = Math.round(this.position[0] / app.dpiScale);
-			var y: number = Math.round(this.position[1] / app.dpiScale);
-			(this.containerObject.getSectionWithName(app.CSections.Scroll.name) as any as cool.ScrollSection).onScrollTo({x: x, y: y});
-		}
 
 		this.containerObject.requestReDraw();
 		this.sectionProperties.isHighlighted = true;
