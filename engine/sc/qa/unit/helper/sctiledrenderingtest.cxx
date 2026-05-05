@@ -12,7 +12,6 @@
 #include <COKit/COKitEnums.h>
 #include <comphelper/kit.hxx>
 #include <comphelper/servicehelper.hxx>
-#include <desktop/kitclipboard.hxx>
 #include <sfx2/kit/helper.hxx>
 #include <vcl/dialoghelper.hxx>
 #include <vcl/scheduler.hxx>
@@ -40,8 +39,6 @@ void ScTiledRenderingTest::setUp()
 void ScTiledRenderingTest::tearDown()
 {
     vcl::EndAllDialogs(nullptr);
-
-    clearAllKitClipboardsContents();
 
     m_callbackWrapper.clear();
 

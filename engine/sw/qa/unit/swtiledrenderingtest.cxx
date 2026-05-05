@@ -14,7 +14,6 @@
 #include <COKit/COKitEnums.h>
 #include <comphelper/kit.hxx>
 #include <comphelper/string.hxx>
-#include <desktop/kitclipboard.hxx>
 #include <sfx2/kit/helper.hxx>
 
 #include <docsh.hxx>
@@ -51,8 +50,6 @@ void SwTiledRenderingTest::setUp()
 
 void SwTiledRenderingTest::tearDown()
 {
-    clearAllKitClipboardsContents();
-
     if (mxComponent.is())
     {
         SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();

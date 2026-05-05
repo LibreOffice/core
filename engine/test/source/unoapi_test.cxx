@@ -19,6 +19,7 @@
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+#include <desktop/kitclipboard.hxx>
 #include <o3tl/string_view.hxx>
 #include <osl/file.hxx>
 #include <osl/process.h>
@@ -52,6 +53,8 @@ void UnoApiTest::setUp()
 
 void UnoApiTest::tearDown()
 {
+    clearAllKitClipboardsContents();
+
     if (mxComponent2.is())
     {
         mxComponent2->dispose();

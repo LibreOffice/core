@@ -28,6 +28,7 @@ $(eval $(call gb_Library_use_libraries,subsequenttest,\
 	i18nlangtag \
 	sal \
 	sfx \
+	sofficeapp \
 	test \
 	tk \
 	tl \
