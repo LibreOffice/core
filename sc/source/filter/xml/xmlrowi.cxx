@@ -264,7 +264,8 @@ ScXMLTableRowsContext::ScXMLTableRowsContext( ScXMLImport& rImport,
     }
     else if (bGroup)
     {
-        nGroupStartRow = rImport.GetTables().GetCurrentRow();
+        ScAddress aAddr = rImport.GetTables().GetCurrentCellPos();
+        nGroupStartRow = aAddr.Row();
         ++nGroupStartRow;
         if ( rAttrList.is() )
         {

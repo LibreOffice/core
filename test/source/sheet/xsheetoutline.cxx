@@ -35,6 +35,8 @@ constexpr OUStringLiteral colLevel4 = u"OutlineSheet.G1:S1";
 
 constexpr OUString rowLevel1 = u"OutlineSheet.A1:A30"_ustr;
 constexpr OUString rowLevel2 = u"OutlineSheet.A3:A27"_ustr;
+constexpr OUString rowLevel3 = u"OutlineSheet.A5:A24"_ustr;
+constexpr OUString rowLevel4 = u"OutlineSheet.A7:A21"_ustr;
 
 static OUString getVisibleAddress(
     uno::Reference<sheet::XSpreadsheet> const& xSheet,
@@ -142,44 +144,40 @@ void XSheetOutline::testShowLevel()
     // verify that level 2 and level 1 are shown --> column 0..3 & column 22..26
     // level 3 & 4 are hidden --> column 4..19
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("testShowLevel Column", u"OutlineSheet.A1:D1"_ustr, getVisibleAddress(aSheet, u"OutlineSheet.A1:D1"_ustr));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("testShowLevel Column", u"OutlineSheet.V1:Z1"_ustr, getVisibleAddress(aSheet, u"OutlineSheet.V1:Z1"_ustr));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("testShowLevel Column", u"OutlineSheet.A31:D31"_ustr, getVisibleAddress(aSheet, u"OutlineSheet.A31:D31"_ustr));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("testShowLevel Column", u"OutlineSheet.V31:Z31"_ustr, getVisibleAddress(aSheet, u"OutlineSheet.V31:Z31"_ustr));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("testShowLevel Column", OUString(), getVisibleAddress(aSheet, colLevel3));
-
-/* FIXME !!
 
     // test Rows
 
-    aLevel1 = getAddressFromRangeString(rowLevel1);
-    aLevel2 = getAddressFromRangeString(rowLevel2);
-    aLevel3 = getAddressFromRangeString(rowLevel3);
-    aLevel4 = getAddressFromRangeString(rowLevel4);
+    aLevel1 = getAddressFromRangeString(aSheet, rowLevel1);
+    aLevel2 = getAddressFromRangeString(aSheet, rowLevel2);
+    aLevel3 = getAddressFromRangeString(aSheet, rowLevel3);
+    aLevel4 = getAddressFromRangeString(aSheet, rowLevel4);
 
-    aSheetOutline->showDetail(getAddressFromRangeString(colLevel1));
-    aSheetOutline->showDetail(getAddressFromRangeString(rowLevel1));
-    aSheetOutline->showDetail(getAddressFromRangeString(rowLevel2));
+    aSheetOutline->showDetail(getAddressFromRangeString(aSheet, colLevel1));
+    aSheetOutline->showDetail(getAddressFromRangeString(aSheet, rowLevel1));
+    aSheetOutline->showDetail(getAddressFromRangeString(aSheet, rowLevel2));
 
-    std::cout << " verify showLevel row before" << OUStringToOString(getVisibleAddress("OutlineSheet.A1:Z30"), RTL_TEXTENCODING_UTF8).getStr() << std::endl;
+    std::cout << " verify showLevel row before" << getVisibleAddress(aSheet, u"OutlineSheet.A1:Z30"_ustr) << std::endl;
 
     aSheetOutline->hideDetail(aLevel1);
     aSheetOutline->hideDetail(aLevel2);
     aSheetOutline->hideDetail(aLevel3);
     aSheetOutline->hideDetail(aLevel4);
 
-    std::cout << " verify showLevel row just before" << OUStringToOString(getVisibleAddress("OutlineSheet.A1:Z30"), RTL_TEXTENCODING_UTF8).getStr() << std::endl;
+    std::cout << " verify showLevel row just before" << getVisibleAddress(aSheet, u"OutlineSheet.A1:Z30"_ustr) << std::endl;
 
     aSheetOutline->showLevel(2, table::TableOrientation_ROWS);
 
-    std::cout << " verify showLevel row after" << OUStringToOString(getVisibleAddress("OutlineSheet.A1:Z30"), RTL_TEXTENCODING_UTF8).getStr() << std::endl;
+    std::cout << " verify showLevel row after" << getVisibleAddress(aSheet, u"OutlineSheet.A1:Z30"_ustr) << std::endl;
 
     // verify rows visible 0..3 & 24..29
     // verify rows hidden 4..23
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("testShowLevel Row", OUString("OutlineSheet.A1:A4"), getVisibleAddress("OutlineSheet.A1:A4"));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("testShowLevel Row", OUString("OutlineSheet.A25:A30"), getVisibleAddress("OutlineSheet.A25:A30"));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("testShowLevel Row", OUString(), getVisibleAddress(rowLevel3));
-
-*/
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("testShowLevel Row", u"OutlineSheet.AA1:AA4"_ustr, getVisibleAddress(aSheet, u"OutlineSheet.AA1:AA4"_ustr));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("testShowLevel Row", u"OutlineSheet.AA25:AA30"_ustr, getVisibleAddress(aSheet, u"OutlineSheet.AA25:AA30"_ustr));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("testShowLevel Row", OUString(), getVisibleAddress(aSheet, rowLevel3));
 
 }
 
