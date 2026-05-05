@@ -2604,11 +2604,15 @@ void XclExpLinkManagerImpl8::SaveXml( XclExpXmlStream& rStrm )
         const OUString* pUrl = pRefMgr->getExternalFileName(nFileId);
         if (!pUrl || pUrl->isEmpty())
             continue;
+        // InsertExtName may push_back via getExternalFileId and pUrl then
+        // becomes invalidated, which is ok on first loop, but on the next
+        // its a potential crash
+        const OUString aUrl = *pUrl;
         for (const OUString& rName : rNames)
         {
             ScExternalRefCache::TokenArrayRef xEmpty
                 = std::make_shared<ScTokenArray>(GetRoot().GetDoc());
-            maSBBuffer.InsertExtName(*pUrl, rName, xEmpty);
+            maSBBuffer.InsertExtName(aUrl, rName, xEmpty);
         }
     }
 
