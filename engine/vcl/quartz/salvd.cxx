@@ -48,7 +48,7 @@ std::unique_ptr<SalVirtualDevice> AquaSalInstance::CreateVirtualDevice( SalGraph
 #ifdef IOS
     (void)rGraphics;
     std::unique_ptr<SalVirtualDevice> pNew(new AquaSalVirtualDevice( nullptr, nDX, nDY, eFormat, bAlphaMaskTransparent ));
-    pNew->SetSize( nDX, nDY );
+    pNew->SetSize( nDX, nDY, bAlphaMaskTransparent );
     return pNew;
 #else
     return std::unique_ptr<SalVirtualDevice>(new AquaSalVirtualDevice( static_cast< AquaSalGraphics* >(&rGraphics),

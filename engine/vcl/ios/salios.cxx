@@ -181,9 +181,9 @@ void AquaGraphicsBackend::copyBits(const SalTwoRect& rPosAry, SalGraphics *pSrcG
     {
         std::shared_ptr<SalBitmap> pBitmap;
         if (pSrcGraphics)
-            pBitmap = pSrcGraphics->GetImpl()->getBitmap(rPosAry.mnSrcX, rPosAry.mnSrcY, rPosAry.mnSrcWidth, rPosAry.mnSrcHeight);
+            pBitmap = pSrcGraphics->GetImpl()->getBitmap(rPosAry.mnSrcX, rPosAry.mnSrcY, rPosAry.mnSrcWidth, rPosAry.mnSrcHeight, /*bWithoutAlpha*/ false);
         else
-            pBitmap = getBitmap(rPosAry.mnSrcX, rPosAry.mnSrcY, rPosAry.mnSrcWidth, rPosAry.mnSrcHeight);
+            pBitmap = getBitmap(rPosAry.mnSrcX, rPosAry.mnSrcY, rPosAry.mnSrcWidth, rPosAry.mnSrcHeight, /*bWithoutAlpha*/ false);
 
         if (pBitmap)
         {
@@ -507,7 +507,7 @@ void AquaSalVirtualDevice::Destroy()
     }
 }
 
-bool AquaSalVirtualDevice::SetSize( tools::Long nDX, tools::Long nDY )
+bool AquaSalVirtualDevice::SetSize( tools::Long nDX, tools::Long nDY, bool /*bAlphaMaskTransparent*/ )
 {
     SAL_INFO( "vcl.virdev", "AquaSalVirtualDevice::SetSize() this=" << this <<
               " (" << nDX << "x" << nDY << ") mbForeignContext=" << (mbForeignContext ? "YES" : "NO"));

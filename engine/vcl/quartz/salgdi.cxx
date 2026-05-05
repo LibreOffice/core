@@ -60,10 +60,12 @@
 
 #include <config_features.h>
 #include <vcl/skia/SkiaHelper.hxx>
+#ifndef IOS
 #if !HAVE_FEATURE_SKIA
 static_assert(false, "skia is required on macOS");
 #endif
 #include <skia/osx/gdiimpl.hxx>
+#endif
 
 #include <quartz/SystemFontList.hxx>
 #include <quartz/CoreTextFont.hxx>
@@ -146,8 +148,13 @@ AquaSalGraphics::AquaSalGraphics(bool bPrinter)
         mpBackend.reset(new AquaGraphicsBackend(maShared));
     else
     {
+#ifdef IOS
+        // Skia is not built for iOS; use the plain Quartz backend.
+        mpBackend.reset(new AquaGraphicsBackend(maShared));
+#else
         assert(SkiaHelper::isVCLSkiaEnabled() && "skia is required on macOS");
         mpBackend.reset(new AquaSkiaSalGraphicsImpl(*this, maShared));
+#endif
     }
 
     for (int i = 0; i < MAX_FALLBACK; ++i)

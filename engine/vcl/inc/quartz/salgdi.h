@@ -55,6 +55,7 @@
 #include <quartz/CGHelpers.hxx>
 
 class AquaSalFrame;
+class SalVirtualDevice;
 class XorEmulation;
 class CoreTextFont;
 
