@@ -19,6 +19,8 @@
 
 #include <libxml/xmlwriter.h>
 
+#include <set>
+
 #include "PageListWatcher.hxx"
 #include <ViewShellBase.hxx>
 #include <com/sun/star/document/PrinterIndependentLayout.hpp>
@@ -780,13 +782,41 @@ SdDrawDocument* SdDrawDocument::AllocSdDrawDocument() const
         pNewStylePool->CopyCellSheets(*pOldStylePool);
         pNewStylePool->CopyTableStyles(*pOldStylePool);
 
+        std::set<OUString> aLayoutsCopied;
+        auto copyLayoutOnce = [&](OUString aLayoutName) {
+            const sal_Int32 nSep = aLayoutName.indexOf(SD_LT_SEPARATOR);
+            if (nSep != -1)
+                aLayoutName = aLayoutName.copy(0, nSep);
+            if (aLayoutName.isEmpty())
+                return;
+            if (!aLayoutsCopied.insert(aLayoutName).second)
+                return;
+            StyleSheetCopyResultVector aCreatedSheets;
+            pNewStylePool->CopyLayoutSheets(aLayoutName, *pOldStylePool,
+                                            aCreatedSheets);
+        };
+
         for (sal_uInt16 i = 0; i < GetMasterSdPageCount(PageKind::Standard); i++)
         {
             // Move with all of the master page's layouts
-            OUString aOldLayoutName(const_cast<SdDrawDocument*>(this)->GetMasterSdPage(i, PageKind::Standard)->GetLayoutName());
-            aOldLayoutName = aOldLayoutName.copy( 0, aOldLayoutName.indexOf( SD_LT_SEPARATOR ) );
-            StyleSheetCopyResultVector aCreatedSheets;
-            pNewStylePool->CopyLayoutSheets(aOldLayoutName, *pOldStylePool, aCreatedSheets );
+            copyLayoutOnce(const_cast<SdDrawDocument*>(this)
+                               ->GetMasterSdPage(i, PageKind::Standard)
+                               ->GetLayoutName());
+        }
+
+        // Standard pages can carry a layout name that does not correspond to
+        // any of this model's master pages - this happens for the
+        // SdTransferable's intermediate model, whose master pages are the
+        // default ones but whose standard page has had SetLayoutName() called
+        // with the original source's layout. Without this loop the second-
+        // level AllocSdDrawDocument call (driven by SdTransferable::GetData
+        // for the DRAWING flavor) would lose the original layout's sheets,
+        // so the textbox we are about to clone would no longer find its
+        // layout-specific parent style and the inherited fill (e.g.
+        // draw:fill="none") would be replaced by the destination default.
+        for (sal_uInt16 i = 0; i < GetSdPageCount(PageKind::Standard); i++)
+        {
+            copyLayoutOnce(GetSdPage(i, PageKind::Standard)->GetLayoutName());
         }
 
         lcl_copyUserDefinedProperties(GetDocSh(), pNewDocSh);

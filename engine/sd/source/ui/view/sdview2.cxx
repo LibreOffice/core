@@ -30,6 +30,7 @@
 #include <sfx2/kit/helper.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/svdpagv.hxx>
+#include <svl/style.hxx>
 #include <svl/urlbmk.hxx>
 #include <editeng/outliner.hxx>
 #include <svx/xflclit.hxx>
@@ -64,6 +65,8 @@
 #include <vcl/svapp.hxx>
 
 #include <slideshow.hxx>
+#include <stlpool.hxx>
+#include <glob.hxx>
 #include <memory>
 
 namespace sd {
@@ -282,6 +285,47 @@ void View::DoCopy(bool /*bMergeMasterPagesOnly*/)
         BrkAction();
         CreateClipboardDataObject();
     }
+}
+
+bool View::Paste(const SdrModel& rMod, const Point& rPos, SdrObjList* pLst,
+                 SdrInsertFlags nOptions)
+{
+    // Cross-document paste: copy the source's layout style sheets into our
+    // pool so that pasted shapes whose style chain reaches a layout-specific
+    // parent (e.g. the outline templates of the source's master page) keep
+    // that parent. Without this, AttributeProperties::AttributeProperties
+    // cannot find the source style by name in the destination's pool, the
+    // clone falls back to applyDefaultStyleSheetFromSdrModel(), and any fill
+    // inherited via the parent (most visibly draw:fill="none") is replaced
+    // by the destination default - giving the pasted shape a different
+    // background.
+    SdDrawDocument& rDstDoc = GetDoc();
+    if (auto* pSrcDoc = dynamic_cast<const SdDrawDocument*>(&rMod);
+        pSrcDoc && pSrcDoc != &rDstDoc)
+    {
+        auto* pSrcPool
+            = static_cast<SdStyleSheetPool*>(pSrcDoc->GetStyleSheetPool());
+        auto* pDstPool
+            = static_cast<SdStyleSheetPool*>(rDstDoc.GetStyleSheetPool());
+        if (pSrcPool && pDstPool)
+        {
+            const sal_uInt16 nPages = pSrcDoc->GetSdPageCount(PageKind::Standard);
+            for (sal_uInt16 i = 0; i < nPages; ++i)
+            {
+                OUString aLayoutName
+                    = pSrcDoc->GetSdPage(i, PageKind::Standard)->GetLayoutName();
+                const sal_Int32 nSep = aLayoutName.indexOf(SD_LT_SEPARATOR);
+                if (nSep != -1)
+                    aLayoutName = aLayoutName.copy(0, nSep);
+                if (aLayoutName.isEmpty())
+                    continue;
+                StyleSheetCopyResultVector aCreated;
+                pDstPool->CopyLayoutSheets(aLayoutName, *pSrcPool, aCreated);
+            }
+        }
+    }
+
+    return FmFormView::Paste(rMod, rPos, pLst, nOptions);
 }
 
 void View::DoPaste (::sd::Window* pWindow,bool /*bMergeMasterPagesOnly*/)

@@ -67,6 +67,9 @@
 #include <sdresid.hxx>
 #include <strings.hrc>
 #include <unopage.hxx>
+#include <editeng/outlobj.hxx>
+#include <sdmod.hxx>
+#include <svx/svdotext.hxx>
 
 using namespace ::com::sun::star;
 
@@ -570,6 +573,135 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf162455)
       - Expected: 7.5
       - Actual  : 0.300000011920929 */
     CPPUNIT_ASSERT_DOUBLES_EQUAL(7.5, fFontSize1, 0.01);
+}
+
+static SdrObject* lcl_findTextBoxByText(const SdPage* pPage, std::u16string_view rText)
+{
+    for (size_t i = 0; i < pPage->GetObjCount(); ++i)
+    {
+        SdrObject* pObj = pPage->GetObj(i);
+        const SdrTextObj* pTextObj = DynCastSdrTextObj(pObj);
+        if (!pTextObj || !pTextObj->HasText())
+            continue;
+        const OutlinerParaObject* pOPO = pTextObj->GetOutlinerParaObject();
+        if (pOPO && pOPO->GetTextObject().GetText(0) == rText)
+            return pObj;
+    }
+    return nullptr;
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testPasteTextboxBackground)
+{
+    // The textbox 'xxx' in the source has draw:fill="none" inherited from a
+    // layout-specific named style ("Content_Outline_Normal-outline1") on its
+    // master page, not from the auto-style on the frame itself. Copying it
+    // into a different document used to drop the inherited fill: the
+    // destination's style pool had no "Content_Outline_Normal-outline1", so
+    // AttributeProperties' by-name lookup returned null and the clone fell
+    // through to applyDefaultStyleSheetFromSdrModel(), giving the pasted
+    // shape a solid (white) background.
+    //
+    // Hold the source via mxComponent2 so it stays alive while we open the
+    // destination via mxComponent.
+    mxComponent2 = loadFromDesktop(createFileURL(u"odp/paste-textbox-background.odp"),
+                                   u"com.sun.star.presentation.PresentationDocument"_ustr);
+    CPPUNIT_ASSERT(mxComponent2.is());
+
+    auto* pSrcImpress = dynamic_cast<SdXImpressDocument*>(mxComponent2.get());
+    CPPUNIT_ASSERT(pSrcImpress);
+    sd::ViewShell* pSrcViewShell = pSrcImpress->GetDocShell()->GetViewShell();
+    SdPage* pSrcPage = pSrcViewShell->GetActualPage();
+
+    SdrObject* pSrcTextBox = lcl_findTextBoxByText(pSrcPage, u"xxx");
+    CPPUNIT_ASSERT_MESSAGE("source textbox 'xxx' not found", pSrcTextBox);
+
+    // The source's effective fill is none, courtesy of the layout parent.
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE,
+                         pSrcTextBox->GetMergedItem(XATTR_FILLSTYLE).GetValue());
+
+    // Mark the textbox and copy via .uno:Copy. This goes through the
+    // standard same-process clipboard path: View::DoCopy ->
+    // CreateClipboardDataObject sets SdModule::pTransferClip and puts the
+    // data on the system clipboard.
+    SdrView* pSrcView = pSrcViewShell->GetView();
+    pSrcView->UnmarkAllObj();
+    pSrcView->MarkObj(pSrcTextBox, pSrcView->GetSdrPageView());
+    dispatchCommand(mxComponent2, u".uno:Copy"_ustr, {});
+
+    // Open a fresh destination - mxComponent2 stays untouched.
+    createSdImpressDoc();
+    auto* pDstImpress = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pDstImpress);
+    sd::ViewShell* pDstViewShell = pDstImpress->GetDocShell()->GetViewShell();
+    SdPage* pDstPage = pDstViewShell->GetActualPage();
+    const size_t nDstObjsBefore = pDstPage->GetObjCount();
+
+    // Paste in the destination. The destination's InsertData recognises
+    // SdModule::pTransferClip as own data and goes through the same-process
+    // branch, calling our View::Paste(SdrModel) override on the source's
+    // intermediate model.
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
+
+    CPPUNIT_ASSERT_EQUAL(nDstObjsBefore + 1, pDstPage->GetObjCount());
+    SdrObject* pDstShape = pDstPage->GetObj(nDstObjsBefore);
+
+    // Without the fix in sd::View::Paste(const SdrModel&, ...) this would
+    // be FillStyle_SOLID and the pasted shape would have a different
+    // background.
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE,
+                         pDstShape->GetMergedItem(XATTR_FILLSTYLE).GetValue());
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testPasteTextboxBackgroundCrossProcess)
+{
+    // Same scenario as testPasteTextboxBackground, but exercising the
+    // cross-process path that online (coolwsd) uses. There the source kit
+    // and the destination kit are different processes, so the destination
+    // sees the clipboard data as a generic non-SdTransferable and goes
+    // through InsertData's DRAWING import branch: SvxDrawingLayerImport
+    // into a fresh SdDrawDocument, then Paste(rMod).
+    //
+    // Simulate that here by clearing SdModule::pTransferClip after the
+    // copy, so the destination's InsertData no longer recognises the
+    // transferable as own data.
+    mxComponent2 = loadFromDesktop(createFileURL(u"odp/paste-textbox-background.odp"),
+                                   u"com.sun.star.presentation.PresentationDocument"_ustr);
+    CPPUNIT_ASSERT(mxComponent2.is());
+
+    auto* pSrcImpress = dynamic_cast<SdXImpressDocument*>(mxComponent2.get());
+    CPPUNIT_ASSERT(pSrcImpress);
+    sd::ViewShell* pSrcViewShell = pSrcImpress->GetDocShell()->GetViewShell();
+    SdPage* pSrcPage = pSrcViewShell->GetActualPage();
+
+    SdrObject* pSrcTextBox = lcl_findTextBoxByText(pSrcPage, u"xxx");
+    CPPUNIT_ASSERT_MESSAGE("source textbox 'xxx' not found", pSrcTextBox);
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE,
+                         pSrcTextBox->GetMergedItem(XATTR_FILLSTYLE).GetValue());
+
+    SdrView* pSrcView = pSrcViewShell->GetView();
+    pSrcView->UnmarkAllObj();
+    pSrcView->MarkObj(pSrcTextBox, pSrcView->GetSdrPageView());
+    dispatchCommand(mxComponent2, u".uno:Copy"_ustr, {});
+
+    // Make the destination see the transferable as foreign: this drops it
+    // into the DRAWING-import branch of InsertData, the same one online
+    // takes when the source kit is a different process.
+    SdModule::get()->pTransferClip = nullptr;
+
+    createSdImpressDoc();
+    auto* pDstImpress = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pDstImpress);
+    sd::ViewShell* pDstViewShell = pDstImpress->GetDocShell()->GetViewShell();
+    SdPage* pDstPage = pDstViewShell->GetActualPage();
+    const size_t nDstObjsBefore = pDstPage->GetObjCount();
+
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
+
+    CPPUNIT_ASSERT_EQUAL(nDstObjsBefore + 1, pDstPage->GetObjCount());
+    SdrObject* pDstShape = pDstPage->GetObj(nDstObjsBefore);
+
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE,
+                         pDstShape->GetMergedItem(XATTR_FILLSTYLE).GetValue());
 }
 
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf96206)

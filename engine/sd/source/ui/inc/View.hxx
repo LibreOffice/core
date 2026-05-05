@@ -180,6 +180,10 @@ public:
     bool PasteHTMLTable( SvStream& rOStm, SdrPage* pPage, SdrInsertFlags nPasteOptions );
     bool InsertImagesFromHtml( SvStream& rStream, const Point& rPos );
 
+    using FmFormView::Paste;
+    virtual bool Paste(const SdrModel& rMod, const Point& rPos, SdrObjList* pLst,
+                       SdrInsertFlags nOptions) override;
+
     bool                    IsPresObjSelected(bool bOnPage = true, bool bOnMasterPage = true, bool bCheckPresObjListOnly = false, bool bCheckLayoutOnly = false) const;
 
     void                    SetMarkedOriginalSize();
