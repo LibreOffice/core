@@ -108,8 +108,11 @@ std::string RecentFiles::serialiseFiltered(std::set<std::string> dropTheseURIs)
         // Verify that the file still exists
         std::string path = uri.getPath();
 #ifdef _WIN32
+        // Handle the URIs for drive letter paths and for UNC paths
         if (path.length() > 4 && path[0] == '/' && path[2] == ':' && path[3] == '/')
             path = path.substr(1);
+        else if (uri.getHost() != "")
+            path = "//" + uri.getHost() + path;
 #endif
         std::ifstream stream;
         FileUtil::openFileToIFStream(path, stream);
