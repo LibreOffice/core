@@ -9934,7 +9934,7 @@ void ScInterpreter::ScUnique()
     PushMatrix(pResMat);
 }
 
-void ScInterpreter::replaceNamesToResult( const std::unordered_map<OUString, formula::FormulaToken*>& rResultIndexes,
+void ScInterpreter::replaceNamesToResult( const std::unordered_map<OUString, formula::FormulaTokenRef>& rResultIndexes,
     ScTokenArray& rTokens, short nStartPos, short nEndPos )
 {
     formula::FormulaTokenArrayPlainIterator aIterResult(rTokens);
@@ -9978,7 +9978,7 @@ void ScInterpreter::ScLet()
     }
 
     OUString aStrName;
-    std::unordered_map<OUString, formula::FormulaToken*> nResultIndexes;
+    std::unordered_map<OUString, formula::FormulaTokenRef> nResultIndexes;
     formula::FormulaTokenArrayPlainIterator aIter(*pArr);
     // clone tokens for replacing string name tokens
     ScTokenArray aValueTokens = pArr->CloneValue();
@@ -10021,7 +10021,7 @@ void ScInterpreter::ScLet()
         }
         else if (aTempTokens.GetLen() == 1 && aTempTokens.GetArray()[0]->GetOpCode() == ocPush)
         {
-            if (!nResultIndexes.insert(std::make_pair(aStrName, aTempTokens.GetArray()[0]->Clone())).second)
+            if (!nResultIndexes.insert(std::make_pair(aStrName, aTempTokens.GetArray()[0])).second)
             {
                 PushIllegalParameter();
                 aCode.Jump(pJump[nOrgJumpCount], pJump[nOrgJumpCount]);
@@ -10053,8 +10053,8 @@ void ScInterpreter::ScLet()
             }
             else
             {
-                const FormulaConstTokenRef& xTok(aInt.GetResultToken());
-                if (!nResultIndexes.insert(std::make_pair(aStrName, xTok->Clone())).second)
+                FormulaToken* pResultTok = const_cast<FormulaToken*>(aInt.GetResultToken().get());
+                if (!nResultIndexes.insert(std::make_pair(aStrName, FormulaTokenRef(pResultTok))).second)
                 {
                     PushIllegalParameter();
                     aCode.Jump(pJump[nOrgJumpCount], pJump[nOrgJumpCount]);
