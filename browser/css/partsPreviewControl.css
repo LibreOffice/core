@@ -66,7 +66,7 @@
 .slide-section-header {
 	display: flex;
 	align-items: center;
-	padding-inline: 8px;
+	margin-inline: 16px;
 	line-height: var(--sidebar-header-height, 34px);
 	cursor: pointer;
 	user-select: none;
@@ -109,8 +109,8 @@
 
 .slide-section-name {
 	color: var(--color-main-text);
+	font-family: var(--cool-font);
 	font-size: var(--header-font-size, 12px);
-	font-weight: 600;
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
@@ -119,4 +119,9 @@
 
 .preview-frame.section-collapsed {
 	display: none;
+}
+
+.slide-section-name.selected {
+	color: rgb(var(--doc-type));
+	font-weight: 600;
 }

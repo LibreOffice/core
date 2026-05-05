@@ -567,7 +567,7 @@ span.jsdialog.sidebar.ui-treeview-notexpandable {
 	border: 1px solid transparent;
 	background: transparent;
 	padding: 6px 8px;
-	margin-block: 0 4px;
+	margin: 0 4px 0 0;
 	cursor: pointer;
 	font-size: 0.83rem;
 	border-bottom: none;
