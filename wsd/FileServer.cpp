@@ -1206,7 +1206,7 @@ void FileServerRequestHandler::replaceServiceRoot(const HTTPRequest& request,
                                                   const std::shared_ptr<StreamSocket>& socket)
 {
     const ServerURL cnxDetails(requestDetails);
-    const std::string responseRoot = cnxDetails.getResponseRoot();
+    const std::string& responseRoot = cnxDetails.getResponseRoot();
     const std::string relPath = getRequestPathname(request, requestDetails);
     LOG_DBG("Preprocessing file: " << relPath);
     std::string preprocess = *getUncompressedFile(relPath);
@@ -1255,7 +1255,7 @@ FileServerRequestHandler::ResourceAccessDetails FileServerRequestHandler::prepro
         socketProxy = "true";
     Poco::replaceInPlace(preprocess, std::string("%SOCKET_PROXY%"), socketProxy);
 
-    const std::string responseRoot = cnxDetails.getResponseRoot();
+    const std::string& responseRoot = cnxDetails.getResponseRoot();
     std::string userInterfaceMode;
     std::string userInterfaceTheme;
     std::string savedUIState = "true";
@@ -2167,7 +2167,7 @@ void FileServerRequestHandler::preprocessIntegratorAdminFile(const HTTPRequest& 
                                                             const std::shared_ptr<StreamSocket>& socket)
 {
     const ServerURL cnxDetails(requestDetails);
-    const std::string responseRoot = cnxDetails.getResponseRoot();
+    const std::string& responseRoot = cnxDetails.getResponseRoot();
     const auto& config = Application::instance().config();
 
     static const std::string scriptJS("<script src=\"%s/browser/" COOLWSD_VERSION_HASH "/%s.js\"></script>");
@@ -2266,7 +2266,7 @@ void FileServerRequestHandler::preprocessAdminFile(const HTTPRequest& request,
     }
 
     const ServerURL cnxDetails(requestDetails);
-    const std::string responseRoot = cnxDetails.getResponseRoot();
+    const std::string& responseRoot = cnxDetails.getResponseRoot();
 
     const std::string relPath = getRequestPathname(request, requestDetails);
     LOG_DBG("Preprocessing file: " << relPath);
