@@ -201,7 +201,11 @@ WorksheetBuffer::IndexNamePair WorksheetBuffer::createSheet( const OUString& rPr
             Reference< XNamed > xSheetName( xSheetsIA->getByIndex( nSheetPos ), UNO_QUERY_THROW );
             if( xSheetName->getName() != aSheetName )
             {
-                aSheetName = ContainerHelper::getUnusedName( xSheets, aSheetName, ' ' );
+                // no name clash when renaming a single sheet
+                // otherwise eg. sheet1 name would get a suffix for clashing with default Sheet1
+                if ( xSheetsIA->getCount() != 1 )
+                    aSheetName = ContainerHelper::getUnusedName( xSheets, aSheetName, ' ' );
+
                 xSheetName->setName( aSheetName );
             }
         }
