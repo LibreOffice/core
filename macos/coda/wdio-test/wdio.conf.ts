@@ -12,16 +12,17 @@ import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 
 import { CodaMacOSServiceLauncher } from './lib/coda-macos.service.js';
+import { findCodaApp } from './lib/xcode.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const WEBDRIVER_PORT = Number(process.env.WEBDRIVER_PORT || 4567);
 
-// Default to the Xcode Debug build location
+// Locate the Xcode Debug build by querying DerivedData (or take an
+// override via CODA_APP).
 const CODA_APP = process.env.CODA_APP
-	|| join(__dirname, '..', '..', '..', 'tmp', 'DerivedData',
-		'Build', 'Products', 'Debug', 'Collabora Office.app');
+	|| findCodaApp(join(__dirname, '..', 'coda.xcodeproj'));
 
 // Test documents
 const FIXTURES_DIR = process.env.FIXTURES_DIR

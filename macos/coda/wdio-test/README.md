@@ -16,11 +16,17 @@ before tests start.
 
 ## Running the tests
 
+Build the macOS app once in Xcode (Cmd+B), then:
+
     cd macos/coda/wdio-test
     npm install             # This is needed just once
-
-    export CODA_APP='/Users/<you>/Library/Developer/Xcode/DerivedData/coda-<hash>/Build/Products/Debug/Collabora Office.app'
     npm test
+
+The setup auto-detects the app from Xcode's DerivedData. You can
+override the location of Collabora Office by setting `CODA_APP`
+before running `npm test`:
+
+    export CODA_APP='/<path>/Collabora Office.app'
 
 ## NOTE
 
