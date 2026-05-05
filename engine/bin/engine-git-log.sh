@@ -23,8 +23,14 @@ for arg do
 done
 new=${prefix}$path
 old=${new#engine/}
-if [ -t 1 ]; then pager=$(git var GIT_PAGER); else pager=cat; fi
+if [ -t 1 ]; then
+    pager=$(git var GIT_PAGER)
+    color=--color=always
+else
+    pager=cat
+    color=
+fi
 {
-    git -P log "$@" --follow merge-engine..HEAD -- "$new"
-    git -P log "$@" --follow merge-engine^2     -- "$old"
+    git -P log $color "$@" --follow merge-engine..HEAD -- "$new"
+    git -P log $color "$@" --follow merge-engine^2     -- "$old"
 } | LESS=${LESS-FRX} LV=${LV--c} $pager
