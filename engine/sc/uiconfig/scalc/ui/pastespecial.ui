@@ -130,6 +130,7 @@
                             <property name="label" translatable="yes" context="pastespecial|paste_values_only|label">Values Only</property>
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
+                            <property name="has-focus">True</property>
                             <property name="receives-default">True</property>
                             <property name="tooltip-text" translatable="yes" context="pastespecial|paste_values_only|tooltip_text">Values Only</property>
                             <property name="image">img_paste_values_only</property>
@@ -290,7 +291,6 @@
                             <property name="label" translatable="yes" context="pastespecial|paste_all">All</property>
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
-                            <property name="has-focus">True</property>
                             <property name="receives-default">False</property>
                             <property name="use-underline">True</property>
                             <property name="draw-indicator">True</property>
