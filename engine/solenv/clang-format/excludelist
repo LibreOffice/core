@@ -3003,6 +3003,7 @@ desktop/source/deployment/registry/sfwk/dp_sfwk.cxx
 desktop/source/inc/helpids.h
 desktop/source/lib/init.cxx
 desktop/source/lib/kitandroid.cxx
+desktop/source/lib/kitclipboard.cxx
 desktop/source/lib/kitinteractionhandler.cxx
 desktop/source/lib/kitinteractionhandler.hxx
 desktop/source/migration/migration.cxx
@@ -14014,6 +14015,7 @@ vcl/inc/impgraph.hxx
 vcl/inc/implimagetree.hxx
 vcl/inc/jobdata.hxx
 vcl/inc/jobset.h
+vcl/inc/jsdialog/jsdialogbuilder.hxx
 vcl/inc/listbox.hxx
 vcl/inc/opengl/win/WinDeviceInfo.hxx
 vcl/inc/osx/a11yfactory.h
@@ -14259,6 +14261,7 @@ vcl/ios/dummies.cxx
 vcl/ios/iosinst.cxx
 vcl/ios/salios.cxx
 vcl/jsdialog/enabled.cxx
+vcl/jsdialog/jsdialogbuilder.cxx
 vcl/null/printerinfomanager.cxx
 vcl/osx/DataFlavorMapping.cxx
 vcl/osx/DataFlavorMapping.hxx
@@ -14383,6 +14386,7 @@ vcl/source/app/i18nhelp.cxx
 vcl/source/app/idle.cxx
 vcl/source/app/salplug.cxx
 vcl/source/app/salusereventlist.cxx
+vcl/source/app/salvtables.cxx
 vcl/source/app/scheduler.cxx
 vcl/source/app/session.cxx
 vcl/source/app/settings.cxx
