@@ -219,7 +219,13 @@ void SvXMLImportItemMapper::importXMLUnknownAttributes( SfxItemSet& rSet,
         if( pUnknownItem )
         {
             if( rAttribute.NamespaceURL.isEmpty() )
-                pUnknownItem->AddAttr( rAttribute.Name, rAttribute.Value );
+            {
+                // the sax parser doesn't reject these, strangely
+                if (rAttribute.Name.indexOf(':') == -1)
+                    pUnknownItem->AddAttr( rAttribute.Name, rAttribute.Value );
+                else
+                    SAL_WARN("sw", "ignoring dodgy attribute: " + rAttribute.Name);
+            }
             else
             {
                 OUString sPrefix;
