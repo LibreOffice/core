@@ -43,53 +43,48 @@ namespace basegfx
         return 0;
 #endif
 
-        if(0 == mnCalculatedCycles)
-        {
-            const sal_Int64 nBytes(estimateUsageInBytes());
+        // already set, use it
+        if(0 != mnCalculatedCycles)
+            return mnCalculatedCycles;
 
-            // tdf#129845 as indicator for no need to buffer trivial data, stay at and
-            // return zero. As border, use 450 bytes. For polygons, this means to buffer
-            // starting with ca. 50 points (GDIPLUS uses 9 bytes per coordinate). For
-            // Bitmap data this means to more or less always buffer (as it was before).
-            // For the future, a more sophisticated differentiation may be added
-            if(nBytes > 450)
-            {
-                // HoldCyclesInSeconds
-                const sal_uInt32 nSeconds = 60;
+        // get size in bytes as base for estimation
+        const sal_Int64 nBytes(estimateUsageInBytes());
 
-                // default is Seconds (minimal is one)
-                sal_uInt32 nResult(0 == nSeconds ? 1 : nSeconds);
+        // tdf#129845 as indicator for no need to buffer trivial data, stay at and
+        // return zero. As border, use 450 bytes. For polygons, this means to buffer
+        // starting with ca. 50 points (GDIPLUS uses 9 bytes per coordinate). For
+        // Bitmap data this means to more or less always buffer (as it was before).
+        // Note that this is the method for all Buffered data, independent of
+        // graphic target, so it is possible to refine that if needed in the
+        // system-dependent parts of impl (see getOrCreateCairoSurfaceHelper). It
+        // is also possible to make calculateCombinedHoldCyclesInSeconds virtual
+        // and override for your needs.
+        if (nBytes < 450)
+            return mnCalculatedCycles;
 
-                if(0 != nBytes)
-                {
-                    // use sqrt to get some curved shape. With a default of 60s we get
-                    // a single second at 3600 byte. To get close to 10mb, multiply by
-                    // a corresponding scaling factor
-                    const double fScaleToMB(3600.0 / (1024.0 * 1024.0 * 10.0));
+        // We have seen that for very huge images the hold time was too short, e.g.
+        // for a very huge bitmap (see fHugeDataInBytes below) it was about 20s. This
+        // is not enough, we have learned that we need to hold huge data longer.
+        // In the impl before I took the memory aspect more into account, so I used
+        // sqrt() to have less HoldTime the bigger the nBytes gets by using a flattening
+        // curve. With having identified that remain time is important for those cases,
+        // we can go back to linear. This means that we can explicitely choose a
+        // HoldTime, get a factor and simply apply that to all buffered data.
+        // Setup:
+        //  fHugeDataInBytes -> 300000000
+        //  fHugeTimeToHoldInSeconds -> 1200
+        //  fTimeToHoldInSecondsPerByte -> 0.000004
+        // Example outcome (for implied raw BitmapData):
+        //  320x200 -> 1.024s
+        //  800x600 -> 7.68s
+        //  1600x1200 -> 30.72s
+        //  15000x5000 -> 1200s (as targeted)
+        constexpr double fHugeDataInBytes(15000*5000*4);
+        constexpr double fHugeTimeToHoldInSeconds(20 * 60);
+        constexpr double fTimeToHoldInSecondsPerByte(fHugeTimeToHoldInSeconds/fHugeDataInBytes);
 
-                    // also use a multiplier to move the start point higher
-                    const double fMultiplierSeconds(10.0);
-
-                    // calculate
-                    nResult = static_cast<sal_uInt32>((fMultiplierSeconds * nSeconds) / sqrt(nBytes * fScaleToMB));
-
-                    // minimal value is 1
-                    if(nResult < 1)
-                    {
-                        nResult = 1;
-                    }
-
-                    // maximal value is nSeconds
-                    if(nResult > nSeconds)
-                    {
-                        nResult = nSeconds;
-                    }
-                }
-
-                // set locally (once, on-demand created, non-zero)
-                const_cast<SystemDependentData*>(this)->mnCalculatedCycles = nResult;
-            }
-        }
+        // set locally (once, on-demand created, non-zero)
+        mnCalculatedCycles = static_cast<sal_uInt32>(1.0 + nBytes * fTimeToHoldInSecondsPerByte);
 
         return mnCalculatedCycles;
     }
