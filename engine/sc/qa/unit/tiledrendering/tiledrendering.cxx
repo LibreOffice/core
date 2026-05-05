@@ -567,6 +567,86 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testTextEditViewInvalidations)
     CPPUNIT_ASSERT(aView3.m_bInvalidateTiles);
 }
 
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testNoRedundantSpellInvalidations)
+{
+    // Regression test: typing a long, mixed-language cell text/comment must
+    // not cause idle spell-check to emit extra tile-invalidation messages on
+    // either view.
+
+    // Turn online spell-checking on for the document and current view #1.
+    uno::Sequence<beans::PropertyValue> aSpellOnArgs = {
+        comphelper::makePropertyValue(u".uno:SpellOnline"_ustr, uno::Any(true)),
+    };
+    ScModelObj* pModelObj = createDoc("small.ods");
+    CPPUNIT_ASSERT(pModelObj);
+    pModelObj->initializeForTiledRendering(aSpellOnArgs);
+    ScViewData* pViewData = ScDocShell::GetViewData();
+    CPPUNIT_ASSERT(pViewData);
+
+    ScTabViewShell* pView1Sh = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    CPPUNIT_ASSERT(pView1Sh);
+    CPPUNIT_ASSERT(pView1Sh->IsAutoSpell());
+
+    int nView1 = KitHelper::getCurrentView();
+    ScTestViewCallback aView1;
+
+    // view #2 - also auto-spell enabled via the same render parameter.
+    KitHelper::createView();
+    pModelObj->initializeForTiledRendering(aSpellOnArgs);
+    ScTabViewShell* pView2Sh = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    CPPUNIT_ASSERT(pView2Sh);
+    CPPUNIT_ASSERT(pView2Sh->IsAutoSpell());
+    ScTestViewCallback aView2;
+
+    KitHelper::setView(nView1);
+
+    // Type a long, mixed-language sequence into the active cell. Lots of
+    // misspellings + language guesses are exactly what would have made
+    // the old idle handler fire repeatedly and emit a stream of
+    // invalidations after every batch of keystrokes.
+    static const char* const kTypedText =
+        "Thiss is ein kompliziertes exemple avec plusieurs languages "
+        "und wronglyspeltwords throughout-the-text to ensure the "
+        "spellcheker keepps rechecking stuff while we type.";
+    for (const char* p = kTypedText; *p; ++p)
+    {
+        pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, *p, 0);
+        Scheduler::ProcessEventsToIdle();
+        pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, *p, 0);
+        Scheduler::ProcessEventsToIdle();
+    }
+
+    // Now the typing has settled. From here on, no spell-check work
+    // should produce any new tile invalidation on either view.
+    aView1.ClearAllInvalids();
+    aView2.ClearAllInvalids();
+
+    // Pump idle several times. The editeng spell timer has a 100ms
+    // timeout and could re-arm itself. Before this fix each fire would
+    // produce a fresh InvalidateAtWindow / UpdateViews call.
+    for (int i = 0; i < 5; ++i)
+        Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        "Idle spell-check must not invalidate tiles in the typing view",
+        size_t(0), aView1.m_aInvalidations.size());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        "Idle spell-check must not invalidate tiles in the spectator view",
+        size_t(0), aView2.m_aInvalidations.size());
+    CPPUNIT_ASSERT_MESSAGE(
+        "Idle spell-check must not flag a full-tile invalidation in the typing view",
+        !aView1.m_bFullInvalidateTiles);
+    CPPUNIT_ASSERT_MESSAGE(
+        "Idle spell-check must not flag a full-tile invalidation in the spectator view",
+        !aView2.m_bFullInvalidateTiles);
+    CPPUNIT_ASSERT_MESSAGE(
+        "Idle spell-check must not raise the tile-invalidate flag in the typing view",
+        !aView1.m_bInvalidateTiles);
+    CPPUNIT_ASSERT_MESSAGE(
+        "Idle spell-check must not raise the tile-invalidate flag in the spectator view",
+        !aView2.m_bInvalidateTiles);
+}
+
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCreateViewGraphicSelection)
 {
     // Load a document that has a shape and create two views.

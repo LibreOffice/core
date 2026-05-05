@@ -189,6 +189,10 @@ void ImpEditEngine::UpdateViews( EditView* pCurView )
 
 IMPL_LINK_NOARG(ImpEditEngine, OnlineSpellHdl, Timer *, void)
 {
+    // Under COKit the idle-driven spell-check causes invalidation thrash.
+    if (comphelper::COKit::isActive())
+        return;
+
     if ( !Application::AnyInput( VclInputFlags::KEYBOARD ) && IsUpdateLayout() && IsFormatted() )
         DoOnlineSpelling();
     else
@@ -344,10 +348,6 @@ void ImpEditEngine::FormatDoc()
         return;
 
     mbIsFormatting = true;
-
-    // Then I can also start the spell-timer...
-    if (GetStatus().DoOnlineSpelling())
-        StartOnlineSpellTimer();
 
     // Reserve, as it should match the current number of paragraphs
     o3tl::sorted_vector<sal_Int32> aRepaintParagraphList;
@@ -3901,6 +3901,10 @@ void ImpEditEngine::StripAllPortions( OutputDevice& rOutDev, tools::Rectangle aC
 
                                 if(GetStatus().DoOnlineSpelling() && rTextPortion.GetLen())
                                 {
+                                    // In COKit we drive spell checking from the paint path instead.
+                                    if (comphelper::COKit::isActive())
+                                        EnsureWrongListForPaint(rParaPortion.GetNode());
+
                                     WrongList* pWrongs = rParaPortion.GetNode()->GetWrongList();
 
                                     if(pWrongs && !pWrongs->empty())

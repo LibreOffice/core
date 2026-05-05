@@ -2441,7 +2441,7 @@ void ImpEditEngine::PutSpellingToSentenceStart( EditView const & rEditView )
 }
 
 
-void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, bool bSpellAtCursorPos, bool bInterruptible )
+void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, bool bSpellAtCursorPos, bool bInterruptible, bool bInvalidate)
 {
     /*
      It will iterate over all the paragraphs, paragraphs with only
@@ -2452,6 +2452,11 @@ void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, bool bSpellAtC
      invalidated
      (no Invalidate, but if only transitions wrong from right =>, simple Paint,
       even out properly with VDev on transitions from wrong => right)
+
+     bInvalidate=false suppresses the post-check view invalidation (squiggle
+     repaint), that is used when this is invoked from the paint path itself so the
+     up-to-date WrongList is consumed by the in-progress paint, with no extra
+     invalidation message emitted to clients.
     */
 
     if (!mxSpeller.is())
@@ -2583,7 +2588,16 @@ void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, bool bSpellAtC
                 maStatus.GetStatusWord() |= EditStatusFlags::WRONGWORDCHANGED;
                 CallStatusHdl();
 
-                if (!maEditViews.empty())
+                if (!bInvalidate)
+                {
+                    // Called from the paint path: the WrongList we just
+                    // updated will be consumed by the in-flight paint, so
+                    // emit no further invalidation. This avoids the
+                    // idle-spell-check -> invalidate -> re-render storm that
+                    // ruins remote performance on long mixed-language
+                    // comments.
+                }
+                else if (!maEditViews.empty())
                 {
                     // For SimpleRepaint one was painted over a range without
                     // reaching VDEV, but then one would have to intersect, c
@@ -2637,6 +2651,20 @@ void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, bool bSpellAtC
     }
     if ( bRestartTimer )
         maOnlineSpellTimer.Start();
+}
+
+void ImpEditEngine::EnsureWrongListForPaint(ContentNode* pNode)
+{
+    if (!pNode || !mxSpeller.is())
+        return;
+    pNode->EnsureWrongList();
+    WrongList* pWrongs = pNode->GetWrongList();
+    if (!pWrongs || pWrongs->IsValid())
+        return;
+    // Synchronous, non-interruptible spell-check of just this paragraph,
+    // with no view invalidation. We are inside Paint() and the squiggles
+    // will be drawn from the freshly-updated WrongList in the same pass.
+    DoOnlineSpelling(pNode, /*bSpellAtCursorPos*/true, /*bInterruptible*/false, /*bInvalidate*/false);
 }
 
 

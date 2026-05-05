@@ -1222,10 +1222,12 @@ public:
     editeng::LanguageSpan GetLanguage( const EditPaM& rPaM, sal_Int32* pEndPos = nullptr ) const;
     css::lang::Locale   GetLocale( const EditPaM& rPaM ) const;
 
-    void DoOnlineSpelling( ContentNode* pThisNodeOnly = nullptr, bool bSpellAtCursorPos = false, bool bInterruptible = true );
+    void DoOnlineSpelling(ContentNode* pThisNodeOnly = nullptr, bool bSpellAtCursorPos = false, bool bInterruptible = true, bool bInvalidate = true);
     EESpellState        Spell(EditView* pEditView, weld::Widget* pDialogParent, bool bMultipleDoc);
     EESpellState        HasSpellErrors();
     void                ClearSpellErrors();
+    /// Bring the WrongList of the input content node up to date synchronously, skipping view invalidation.
+    void EnsureWrongListForPaint(ContentNode* pNode);
     EESpellState        StartThesaurus(EditView* pEditView, weld::Widget* pDialogParent);
     css::uno::Reference< css::linguistic2::XSpellAlternatives >
                         ImpSpell( EditView* pEditView );
