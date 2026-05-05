@@ -571,7 +571,13 @@ void DataTableView::initializeValues(
             for (int i = 0; i < pSeries->getTotalPointCount(); i++)
             {
                 double nValue = pSeries->getYValue(i);
-                rValues.push_back(rSeriesPlotter->getLabelTextForValue(*pSeries, i, nValue, false));
+                // Skip missing/error data points (NaN, +/-Inf); a date or time number format would
+                // otherwise propagate the bizarre value into the formatter and trigger an assert
+                if (!std::isfinite(nValue))
+                    rValues.push_back(OUString());
+                else
+                    rValues.push_back(
+                        rSeriesPlotter->getLabelTextForValue(*pSeries, i, nValue, false));
             }
         }
     }
