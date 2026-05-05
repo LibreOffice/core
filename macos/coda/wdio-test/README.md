@@ -27,10 +27,3 @@ override the location of Collabora Office by setting `CODA_APP`
 before running `npm test`:
 
     export CODA_APP='/<path>/Collabora Office.app'
-
-## NOTE
-
-The Collabora Online that is started will complain that it cannot
-open the document; just click 'hello.odt' in the backstage before
-the actual test attempts to run (so that it opens), and the test
-will pass. This is a bug that will be fixed in follow-up work.

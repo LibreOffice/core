@@ -76,13 +76,18 @@ export class CodaMacOSServiceLauncher {
 		const testFile = join(this.#testDocDir, 'Documents', 'hello.odt');
 
 		console.log('Starting coda-macos...');
+		// Pass the file before --args so `open` treats it as a document
+		// to open via Apple Events.  This grants the sandboxed app a
+		// security-scoped read for the file.  Putting the path inside
+		// --args would make it a plain argument that the app cannot
+		// access from its sandbox.
 		this.#appProcess = spawn('open', [
 			'-a', appPath,
+			testFile,
 			'--args',
 			'--uitesting',
 			`--testDriverPort=${webDriverPort}`,
 			'-ApplePersistenceIgnoreState', 'YES',
-			testFile,
 		], {
 			stdio: ['ignore', 'pipe', 'pipe'],
 		});
