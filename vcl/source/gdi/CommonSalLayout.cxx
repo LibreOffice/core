@@ -588,9 +588,11 @@ bool GenericSalLayout::LayoutText(vcl::text::ImplLayoutArgs& rArgs, const SalLay
             // The shapers that we want HarfBuzz to use, in the order of
             // preference.
             const char*const pHbShapers[] = { "graphite2", "ot", "fallback", nullptr };
-            bool ok = hb_shape_full(pHbFont, pHbBuffer, maFeatures.data(), maFeatures.size(), pHbShapers);
-            assert(ok);
-            (void) ok;
+            if (!hb_shape_full(pHbFont, pHbBuffer, maFeatures.data(), maFeatures.size(), pHbShapers))
+            {
+                SAL_WARN("vcl.harfbuzz", "hb_shape_full failed");
+                hb_buffer_set_length(pHbBuffer, 0);
+            }
 
             // Populate glyph cluster remapping data
             stClusterMapper.ShapeSubRun(pStr, nLength, aSubRun, pHbFont, maFeatures, oHbLanguage);
