@@ -117,7 +117,7 @@ constexpr auto CuiDialogList
         { u"cui/ui/slantcornertabpage.ui" },
         { u"cui/ui/spinbox.ui" },
         { u"cui/ui/queryduplicatedialog.ui" },
-        { u"cui/ui/querysetinsmodedialog.ui" },
+        { u"cui/ui/querydialog.ui" },
         { u"cui/ui/searchattrdialog.ui" },
         { u"cui/ui/searchformatdialog.ui" },
         { u"cui/ui/similaritysearchdialog.ui" },
