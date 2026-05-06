@@ -147,6 +147,7 @@ void XSheetOutline::testShowLevel()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("testShowLevel Column", u"OutlineSheet.A31:D31"_ustr, getVisibleAddress(aSheet, u"OutlineSheet.A31:D31"_ustr));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("testShowLevel Column", u"OutlineSheet.V31:Z31"_ustr, getVisibleAddress(aSheet, u"OutlineSheet.V31:Z31"_ustr));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("testShowLevel Column", OUString(), getVisibleAddress(aSheet, colLevel3));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("testShowLevel Column", OUString(), getVisibleAddress(aSheet, u"OutlineSheet.A1:D1"_ustr));
 
     // test Rows
 
