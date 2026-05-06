@@ -629,8 +629,16 @@ window.L.Control.JSDialog = window.L.Control.extend({
 				var matchingElements;
 				if ((matchingElements = parent.querySelectorAll('span.ui-treeview-cell-text')).length) {// treeview entry for context menu
 					parent = Array.from(matchingElements).find(
-						(value) => (value.innerText === instance.clickToCloseText) // text entry
-											|| (value.firstChild && value.firstChild.alt === instance.clickToCloseText)); // custom render
+						(value) => {
+							if (value.innerText === instance.clickToCloseText) // text entry
+								return true;
+							// custom render: the rendered <img> may sit either as
+							// firstChild of the cell span, or - once OnDemandRenderer
+							// has replaced the placeholder - as a sibling inside the
+							// outer cell span. Match either case.
+							const img = value.querySelector('img');
+							return img && img.alt === instance.clickToCloseText;
+						});
 				} else if ((matchingElements = parent.querySelectorAll('div.ui-iconview-entry > img')).length) {// iconview entry for context menu
 					parent = Array.from(matchingElements).find((img) => img.title === instance.clickToCloseText);
 				}
