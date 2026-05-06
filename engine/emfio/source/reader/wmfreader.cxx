@@ -37,6 +37,7 @@
 #include <vcl/wmfexternal.hxx>
 #include <tools/fract.hxx>
 #include <vcl/BitmapReadAccess.hxx>
+#include <vcl/BitmapWriteAccess.hxx>
 #include <vcl/BitmapTools.hxx>
 #include <osl/thread.h>
 
@@ -245,6 +246,62 @@ namespace
     #endif
     }
 
+    // Reads a Bitmap16 from rStream and returns it as a Bitmap. nHeaderSize
+    // is the on-wire size of the header before the Bits field: per
+    // [MS-WMF] 2.2.2.1 the structure is 10 bytes; META_CREATEPATTERNBRUSH
+    // [MS-WMF] 2.3.4.4 instead wraps it in a 14-byte legacy BITMAP struct
+    // (with a 4-byte bmBits placeholder) plus 18 bytes of padding, for a
+    // total of 32. Only the 1bpp form actually seen in BS_PATTERN /
+    // META_CREATEPATTERNBRUSH is supported; anything else returns an empty
+    // Bitmap.
+    Bitmap CreateBitmap16(SvStream& rStream, sal_uInt32 nHeaderSize)
+    {
+        const sal_uInt64 nHdrStart = rStream.Tell();
+        sal_Int16 nType(0), nWidth(0), nHeight(0), nWidthBytes(0);
+        sal_uInt8 nPlanes(0), nBitsPixel(0);
+        rStream.ReadInt16(nType).ReadInt16(nWidth).ReadInt16(nHeight)
+               .ReadInt16(nWidthBytes).ReadUChar(nPlanes).ReadUChar(nBitsPixel);
+        rStream.Seek(nHdrStart + nHeaderSize);
+
+        if (!rStream.good() || nType != 0 || nPlanes != 1 || nBitsPixel != 1
+            || nWidth <= 0 || nHeight <= 0 || nWidthBytes <= 0)
+        {
+            SAL_WARN("emfio", "\tUnsupported Bitmap16 (Type=" << nType
+                << ", Planes=" << int(nPlanes)
+                << ", BitsPixel=" << int(nBitsPixel)
+                << ", " << nWidth << "x" << nHeight << ")");
+            return Bitmap();
+        }
+
+        const sal_uInt32 nMinStride = (o3tl::make_unsigned(nWidth) + 7) / 8;
+        if (o3tl::make_unsigned(nWidthBytes) < nMinStride)
+            return Bitmap();
+
+        std::vector<sal_uInt8> aBits(o3tl::make_unsigned(nWidthBytes) * o3tl::make_unsigned(nHeight), 0);
+        if (rStream.ReadBytes(aBits.data(), aBits.size()) != aBits.size())
+            return Bitmap();
+
+        BitmapPalette aPalette(2);
+        aPalette[0] = BitmapColor(COL_WHITE);
+        aPalette[1] = BitmapColor(COL_BLACK);
+        Bitmap aBmp(Size(nWidth, nHeight), vcl::PixelFormat::N8_BPP, &aPalette);
+        BitmapScopedWriteAccess pAccess(aBmp);
+        if (!pAccess)
+            return Bitmap();
+
+        for (sal_Int16 y = 0; y < nHeight; ++y)
+        {
+            const sal_uInt8* pRow = aBits.data() + o3tl::make_unsigned(y) * o3tl::make_unsigned(nWidthBytes);
+            Scanline pScan = pAccess->GetScanline(y);
+            for (sal_Int16 x = 0; x < nWidth; ++x)
+            {
+                // Bit 7 of byte 0 is the leftmost pixel.
+                const sal_uInt8 nMask = sal_uInt8(0x80) >> (x & 7);
+                pAccess->SetPixelOnData(pScan, x, BitmapColor((pRow[x >> 3] & nMask) ? 1 : 0));
+            }
+        }
+        return aBmp;
+    }
 }
 
 namespace emfio
@@ -985,7 +1042,6 @@ namespace emfio
             case W_META_DIBCREATEPATTERNBRUSH:
             {
                 Bitmap  aBmp;
-                sal_uInt32 nRed(0), nGreen(0), nBlue(0), nCount(1);
                 sal_uInt16 nStyle(0), nColorUsage(0);
 
                 if (nRecordSize < 5)
@@ -993,34 +1049,41 @@ namespace emfio
                 mpInputStream->ReadUInt16( nStyle ).ReadUInt16( nColorUsage );
                 BrushStyle eStyle = static_cast<BrushStyle>(nStyle);
                 SAL_INFO( "emfio", "\t\t Style:" << nStyle << ", ColorUsage: " << nColorUsage );
-                if ( eStyle == BrushStyle::BS_PATTERN ) // TODO tdf#142625 Add support for pattern
+                // Per [MS-WMF] 2.3.4.8, BS_PATTERN means the Target is a
+                // Bitmap16 and other styles mean a DIB. In practice many
+                // generators write a DIB even with Style == BS_PATTERN, so
+                // peek at the leading DWORD: a known DIB header size means
+                // a DIB; otherwise fall back to Bitmap16.
+                bool bIsDib = true;
+                if ( eStyle == BrushStyle::BS_PATTERN )
                 {
-                    SAL_WARN( "emfio", "\tTODO: Pattern brush style is not supported." );
-                    CreateObject();
-                    break;
+                    // The leading DWORD of a DIB header is its own size,
+                    // and only a small set of values is valid:
+                    //   12  BITMAPCOREHEADER
+                    //   40  BITMAPINFOHEADER
+                    //   52  BITMAPV2INFOHEADER (Adobe extension)
+                    //   56  BITMAPV3INFOHEADER (Adobe extension)
+                    //   64  OS22XBITMAPHEADER (OS/2 2.x)
+                    //   108 BITMAPV4HEADER
+                    //   124 BITMAPV5HEADER
+                    // A leading DWORD outside this set means the Target is
+                    // a Bitmap16, not a DIB.
+                    sal_uInt32 nProbe(0);
+                    const sal_uInt64 nProbePos = mpInputStream->Tell();
+                    mpInputStream->ReadUInt32( nProbe );
+                    mpInputStream->Seek( nProbePos );
+                    bIsDib = (nProbe == 12 || nProbe == 40 || nProbe == 52
+                            || nProbe == 56 || nProbe == 64 || nProbe == 108
+                            || nProbe == 124);
                 }
-                if ( !ReadDIB( aBmp, *mpInputStream, false ) )
+                if ( !bIsDib )
+                    aBmp = CreateBitmap16( *mpInputStream, 10 );
+                else if ( !ReadDIB( aBmp, *mpInputStream, false ) )
                     SAL_WARN( "emfio", "\tTODO Read DIB failed. Interrupting processing whole image. Please report bug report." );
-                if ( !aBmp.IsEmpty() )
-                {
-                    BitmapScopedReadAccess pBmp(aBmp);
-                    for ( tools::Long y = 0, nHeight = pBmp->Height(); y < nHeight; y++ )
-                    {
-                        for ( tools::Long x = 0, nWidth = pBmp->Width(); x < nWidth; x++ )
-                        {
-                            const BitmapColor aColor( pBmp->GetColor( y, x ) );
-
-                            nRed += aColor.GetRed();
-                            nGreen += aColor.GetGreen();
-                            nBlue += aColor.GetBlue();
-                        }
-                    }
-                    nCount = pBmp->Height() * pBmp->Width();
-                    if ( !nCount )
-                        nCount++;
-                }
-                Color aColor( static_cast<sal_uInt8>( nRed / nCount ), static_cast<sal_uInt8>( nGreen / nCount ), static_cast<sal_uInt8>( nBlue / nCount ) );
-                CreateObject(std::make_unique<WinMtfFillStyle>( aColor, false ));
+                if ( aBmp.IsEmpty() )
+                    CreateObject();
+                else
+                    CreateObject(std::make_unique<WinMtfFillStyle>( aBmp ));
             }
             break;
 
@@ -1066,8 +1129,14 @@ namespace emfio
 
             case W_META_CREATEPATTERNBRUSH:
             {
-                SAL_WARN( "emfio", "TODO: Not implemented. Please fill the bug report" );
-                CreateObject(std::make_unique<WinMtfFillStyle>( COL_WHITE, false ));
+                // [MS-WMF] 2.3.4.4: Pattern is a 32-byte legacy BITMAP
+                // struct (with bmBits placeholder + reserved padding)
+                // followed by the actual bits.
+                Bitmap aBmp = CreateBitmap16( *mpInputStream, 32 );
+                if ( aBmp.IsEmpty() )
+                    CreateObject(std::make_unique<WinMtfFillStyle>( COL_WHITE, false ));
+                else
+                    CreateObject(std::make_unique<WinMtfFillStyle>( aBmp ));
             }
             break;
 

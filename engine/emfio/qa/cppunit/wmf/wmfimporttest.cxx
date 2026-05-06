@@ -62,6 +62,7 @@ public:
     void testETO_PDYWmf();
     void testETO_PDYEmf();
     void testStockObject();
+    void testPatternBrushWmf();
 
     CPPUNIT_TEST_SUITE(WmfTest);
     CPPUNIT_TEST(testEOFWmf);
@@ -81,6 +82,7 @@ public:
     CPPUNIT_TEST(testETO_PDYWmf);
     CPPUNIT_TEST(testETO_PDYEmf);
     CPPUNIT_TEST(testStockObject);
+    CPPUNIT_TEST(testPatternBrushWmf);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -569,6 +571,23 @@ void WmfTest::testStockObject()
     // - Actual  : 0
     // - In <>, XPath '/metafile/push[2]/fillcolor[2]' number of nodes is incorrect
     assertXPath(pDoc, "/metafile/push[2]/fillcolor[2]", "color", u"#000000");
+}
+
+void WmfTest::testPatternBrushWmf()
+{
+    // META_DIBCREATEPATTERNBRUSH must produce a tiled bitmap fill,
+    // not an averaged solid color (and not no fill at all).
+    SvFileStream aFileStream(getFullUrl(u"TestPatternBrush.wmf"), StreamMode::READ);
+    GDIMetaFile aGDIMetaFile;
+    ReadWindowMetafile(aFileStream, aGDIMetaFile);
+
+    xmlDocUniquePtr pDoc = dumpAndParse(aGDIMetaFile);
+    CPPUNIT_ASSERT(pDoc);
+
+    // The fill emits a clip-region wrapped tiled wallpaper of the 8x8 DIB.
+    assertXPath(pDoc, "//wallpaper/wallpaper", "style", u"Tile");
+    assertXPath(pDoc, "//wallpaper/wallpaper/bitmap", "width", u"00000008");
+    assertXPath(pDoc, "//wallpaper/wallpaper/bitmap", "height", u"00000008");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(WmfTest);

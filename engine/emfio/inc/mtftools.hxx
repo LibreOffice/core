@@ -444,7 +444,8 @@ namespace emfio
             return aFillColor == rStyle.aFillColor
                 && bTransparent == rStyle.bTransparent
                 && aType == rStyle.aType
-                && aHatch == rStyle.aHatch;
+                && aHatch == rStyle.aHatch
+                && aBmp == rStyle.aBmp;
         }
     };
 
@@ -742,6 +743,7 @@ namespace emfio
         void                ImplDrawClippedPolyPolygon(const tools::PolyPolygon& rPolyPoly);
         void                ImplDrawBitmap(const Point& rPos, const Size& rSize, const Bitmap& rBitmap);
         bool                ImplEmitLineHatch(const tools::Polygon& rPoly);
+        void                ImplEmitPatternFill(const tools::PolyPolygon& rPolyPoly);
 
     public:
 
