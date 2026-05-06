@@ -572,6 +572,8 @@ void SwSrcView::StartSearchAndReplace(const SvxSearchItem& rSearchItem,
     case SvxSearchCmd::REPLACE_ALL: bAll = true;
         [[fallthrough]];
     case SvxSearchCmd::REPLACE:
+        if (GetDocShell()->IsReadOnly() || IsCurrentKitViewReadOnly())
+            return;
         nFound = pTextView->Replace( aSearchOpt, bAll, bForward );
         break;
 

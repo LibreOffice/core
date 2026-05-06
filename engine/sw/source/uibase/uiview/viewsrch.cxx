@@ -304,6 +304,11 @@ void SwView::ExecSearch(SfxRequest& rReq)
             break;
             case SvxSearchCmd::REPLACE:
                 {
+                    if (GetDocShell()->IsReadOnly() || IsCurrentKitViewReadOnly())
+                    {
+                        rReq.SetReturnValue(SfxBoolItem(nSlot, false));
+                        break;
+                    }
 
                     // 1) Replace selection
 
@@ -343,6 +348,11 @@ void SwView::ExecSearch(SfxRequest& rReq)
 
             case SvxSearchCmd::REPLACE_ALL:
                 {
+                    if (GetDocShell()->IsReadOnly() || IsCurrentKitViewReadOnly())
+                    {
+                        rReq.SetReturnValue(SfxBoolItem(nSlot, false));
+                        break;
+                    }
                     SwSearchOptions aOpts( m_pWrtShell.get(), s_pSrchItem->GetBackward() );
                     s_bExtra = false;
                     sal_Int32 nFound;

@@ -240,6 +240,11 @@ void ScTabViewShell::ExecSearch( SfxRequest& rReq )
                 if ( pReqArgs &&
                      (pSearchItem = pReqArgs->GetItemIfSet(SID_SEARCH_ITEM, false)) )
                 {
+                    const SvxSearchCmd eCmd = pSearchItem->GetCommand();
+                    if ((eCmd == SvxSearchCmd::REPLACE || eCmd == SvxSearchCmd::REPLACE_ALL)
+                        && (GetViewData().GetDocShell()->IsReadOnly() || IsCurrentKitViewReadOnly()))
+                        break;
+
                     ScGlobal::SetSearchItem( *pSearchItem );
                     SearchAndReplace( pSearchItem, true, rReq.IsAPI() );
                     rReq.Done();
