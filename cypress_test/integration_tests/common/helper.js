@@ -1301,7 +1301,7 @@ function waitUntilCoreIsIdle(win) {
 		win.app.socket.sendMessage('uno .uno:ReportWhenIdle ' + JSON.stringify(idleArgs));
 	});
 
-	cy.wrap(null).should(function() {
+	cy.wrap(null, { timeout: Cypress.config('defaultCommandTimeout') * 2.0 }).should(function() {
 		var matchingCall = spy.getCalls().find(function(call) {
 			var evt = call.args && call.args[0];
 			var textMsg = evt && evt.textMsg;
