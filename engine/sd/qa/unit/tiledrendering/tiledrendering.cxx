@@ -4704,7 +4704,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPaintVectorTile)
     CPPUNIT_ASSERT_MESSAGE("Expecting polyPolygonAlphaGradient", aTypes.count("polyPolygonAlphaGradient") > 0);
 
     // No unknown primitives
-    CPPUNIT_ASSERT_MESSAGE("No 'unknown' primitive type expected", aTypes.count("unknown") == 0);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("No 'unknown' primitive type expected", std::size_t(0), aTypes.count("unknown"));
 
     // Verify that field placeholders have been replaced.
     std::vector<std::string> aTexts = collectPrimitiveTexts(aTree);
