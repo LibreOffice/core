@@ -3987,7 +3987,7 @@ void SwXTextDocument::initializeForTiledRendering(const css::uno::Sequence<css::
     // editing, see postMouseEvent and setGraphicSelection methods.
     aViewOption.SetZoom(1 * 100);
 
-    aViewOption.SetPostIts(comphelper::COKit::isTiledAnnotations());
+    aViewOption.SetPostIts(false);
     pViewShell->ApplyViewOptions(aViewOption);
 
     // position the pages again after setting view options. Eg: if postit
