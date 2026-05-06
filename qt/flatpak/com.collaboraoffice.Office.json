@@ -38,7 +38,8 @@
     "append-path": "/usr/lib/sdk/node20/bin:/usr/lib/libexec",
     "env": {
       "NINJA_STATUS": "[%p | %f/%t] "
-    }
+    },
+    "no-debuginfo-compression": true
   },
   "modules": [
     {
