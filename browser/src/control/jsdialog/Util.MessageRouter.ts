@@ -16,6 +16,9 @@
 declare var JSDialog: any;
 
 class JSDialogMessageRouter {
+	// Per-jsontype queues for messages with target component not yet ready
+	private pendingByJsontype: Map<string, Array<() => void>> = new Map();
+
 	// show labels instead of editable fields in message boxes
 	private _preProcessMessageDialog(msgData: WidgetJSON) {
 		if (!msgData.children) return;
@@ -25,6 +28,23 @@ class JSDialogMessageRouter {
 			if (child.type === 'multilineedit') child.type = 'fixedtext';
 			else if (child.children) this._preProcessMessageDialog(child);
 		}
+	}
+
+	private isReady(jsontype: string): boolean {
+		if (jsontype === 'notebookbar')
+			return !!(
+				app.socket._map.uiManager && app.socket._map.uiManager.notebookbar
+			);
+		if (jsontype === 'addressinputfield')
+			return !!app.socket._map.addressInputField;
+		return true;
+	}
+
+	public flushPending(jsontype: string): void {
+		const queue = this.pendingByJsontype.get(jsontype);
+		if (!queue) return;
+		this.pendingByJsontype.delete(jsontype);
+		for (const fire of queue) fire();
 	}
 
 	public processMessage(msgData: JSDialogJSON, callbackFn: JSDialogCallback) {
@@ -44,18 +64,14 @@ class JSDialogMessageRouter {
 				return false;
 			};
 
-			var isNotebookbarInitialized =
-				app.socket._map.uiManager && app.socket._map.uiManager.notebookbar;
-			if (
-				(msgData.jsontype === 'notebookbar' && !isNotebookbarInitialized) ||
-				(msgData.jsontype === 'addressinputfield' &&
-					!app.socket._map.addressInputField)
-			) {
-				app.timerRegistry.setTimeout(
-					'jsdialog-deferred',
-					fireJSDialogEvent,
-					1000,
-				);
+			const jsontype = msgData.jsontype;
+			const queue = this.pendingByJsontype.get(jsontype);
+			if (queue || !this.isReady(jsontype)) {
+				// target is not initialized yet or earlier messages
+				// of the same jsontype are still queued.
+				const q = queue || [];
+				q.push(fireJSDialogEvent);
+				if (!queue) this.pendingByJsontype.set(jsontype, q);
 				return;
 			} else if (fireJSDialogEvent() === true) {
 				return;

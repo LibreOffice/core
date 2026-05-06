@@ -631,6 +631,7 @@ class UIManager extends window.L.Control {
 			formulabarRow?.classList?.remove('hidden');
 			this.map.formulabar = JSDialog.FormulaBar(this.map);
 			this.map.addressInputField = JSDialog.AddressInputField(this.map);
+			JSDialog.MessageRouter.flushPending('addressinputfield');
 			this.map.calcNotifications = new CalcNotifications(this.map);
 			$('#toolbar-wrapper').addClass('spreadsheet');
 
@@ -913,6 +914,7 @@ class UIManager extends window.L.Control {
 		}
 
 		this.notebookbar = JSDialog.NotebookbarBase(this.map, notebookbar);
+		JSDialog.MessageRouter.flushPending('notebookbar');
 		if (showUI)
 			this.showNotebookbarControl();
 	}
