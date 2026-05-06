@@ -63,6 +63,7 @@ public:
     void testETO_PDYEmf();
     void testStockObject();
     void testPatternBrushWmf();
+    void testPatternBrushEllipseWmf();
     void testHatchBkModeWmf();
 
     CPPUNIT_TEST_SUITE(WmfTest);
@@ -84,6 +85,7 @@ public:
     CPPUNIT_TEST(testETO_PDYEmf);
     CPPUNIT_TEST(testStockObject);
     CPPUNIT_TEST(testPatternBrushWmf);
+    CPPUNIT_TEST(testPatternBrushEllipseWmf);
     CPPUNIT_TEST(testHatchBkModeWmf);
     CPPUNIT_TEST_SUITE_END();
 };
@@ -587,6 +589,23 @@ void WmfTest::testPatternBrushWmf()
     CPPUNIT_ASSERT(pDoc);
 
     // The fill emits a clip-region wrapped tiled wallpaper of the 8x8 DIB.
+    assertXPath(pDoc, "//wallpaper/wallpaper", "style", u"Tile");
+    assertXPath(pDoc, "//wallpaper/wallpaper/bitmap", "width", u"00000008");
+    assertXPath(pDoc, "//wallpaper/wallpaper/bitmap", "height", u"00000008");
+}
+
+void WmfTest::testPatternBrushEllipseWmf()
+{
+    // META_ELLIPSE drawn with a DIB pattern brush must produce a tiled
+    // bitmap fill, not a hollow ellipse. Same wallpaper sequence as
+    // testPatternBrushWmf, but exercising a non-rectangular shape.
+    SvFileStream aFileStream(getFullUrl(u"TestPatternBrushEllipse.wmf"), StreamMode::READ);
+    GDIMetaFile aGDIMetaFile;
+    ReadWindowMetafile(aFileStream, aGDIMetaFile);
+
+    xmlDocUniquePtr pDoc = dumpAndParse(aGDIMetaFile);
+    CPPUNIT_ASSERT(pDoc);
+
     assertXPath(pDoc, "//wallpaper/wallpaper", "style", u"Tile");
     assertXPath(pDoc, "//wallpaper/wallpaper/bitmap", "width", u"00000008");
     assertXPath(pDoc, "//wallpaper/wallpaper/bitmap", "height", u"00000008");
