@@ -222,7 +222,7 @@
   <LC_INDEX>
     <IndexKey unoid="alphanumeric" default="true" phonetic="false">ABCĈDEFGĜHĤIJĴKLMNOPRSŜTUŬVZ</IndexKey>
     <UnicodeScript>0</UnicodeScript>
-    <UnicodeScript>1</UnicodeScript>
+    <UnicodeScript>2</UnicodeScript>
     <FollowPageWord>p.</FollowPageWord>
     <FollowPageWord>pp.</FollowPageWord>
   </LC_INDEX>
