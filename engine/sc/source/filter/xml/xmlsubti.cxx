@@ -270,7 +270,13 @@ void ScMyTables::AddMatrixRange(
         nEndColumn, nEndRow, maCurrentCellPos.Tab()
     );
 
-    maMatrixRangeList.push_back(aScRange);
+    // When the saved file recorded #SPILL!, setMatrixCells will set the
+    // master's spill error and *not* materialise reference cells across the
+    // declared range - so cells inside the range need to be treated as
+    // regular non-matrix cells on import (they're either blockers or
+    // empty).
+    if (!bCachedSpill)
+        maMatrixRangeList.push_back(aScRange);
 
     ScDocumentImport& rDoc = rImport.GetDoc();
     ScTokenArray aCode(rDoc.getDoc());

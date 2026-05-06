@@ -1448,9 +1448,9 @@ void ScXMLTableRowCellContext::AddFormulaCell( const ScAddress& rCellPos )
                 // error result. Transport that through so any blocker cell still
                 // sitting in the matrix range is preserved instead of being
                 // replaced by a reference cell.
-                const bool bCachedSpill = (bFormulaTextResult && maStringValue
-                                           && GetScImport().GetFormulaErrorConstant(*maStringValue)
-                                              == FormulaError::Spill);
+                const bool bCachedSpill = mbErrorValue
+                    && GetScImport().GetFormulaErrorConstant(GetFirstParagraph())
+                       == FormulaError::Spill;
                 rXMLImport.GetTables().AddMatrixRange(
                         rCellPos.Col(), rCellPos.Row(),
                         std::min<SCCOL>(rCellPos.Col() + nMatrixCols - 1, pDoc->MaxCol()),
