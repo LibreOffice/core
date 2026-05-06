@@ -1326,6 +1326,12 @@ public:
                                         const ScTokenArray* p = nullptr,
                                         const formula::FormulaGrammar::Grammar = formula::FormulaGrammar::GRAM_DEFAULT,
                                         bool bCheckForSpill = false);
+    /** Returns true if any cell inside input range (rRange) other than the cells
+        already covered by the declared nDeclCols x nDeclRows sub-range holds any
+        data. */
+    SC_DLLPUBLIC bool IsMatrixSpillBlocked(const ScRange& rRange,
+                                           SCCOL nDeclCols = 1,
+                                           SCROW nDeclRows = 1) const;
     /** Resize an existing matrix formula at input position to the given dimensions.
         Updates the matrix cell token, creates reference cells in newly covered
         positions, and clears cells that fall outside the new range. */

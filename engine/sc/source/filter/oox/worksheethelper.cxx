@@ -1658,9 +1658,9 @@ void WorksheetHelper::setCellFormula(
     getFormulaBuffer().setCellFormula(rAddr, nSharedId, rCellValue, nValueType);
 }
 
-void WorksheetHelper::setCellArrayFormula( const ScRange& rRangeAddress, const ScAddress& rTokenAddress, const OUString& rTokenStr )
+void WorksheetHelper::setCellArrayFormula(const ScRange& rRangeAddress, const ScAddress& rTokenAddress, const OUString& rTokenStr, bool bCachedSpill)
 {
-    getFormulaBuffer().setCellArrayFormula( rRangeAddress,  rTokenAddress, rTokenStr );
+    getFormulaBuffer().setCellArrayFormula(rRangeAddress,  rTokenAddress, rTokenStr, bCachedSpill);
 }
 
 void WorksheetHelper::createSharedFormulaMapEntry(

@@ -252,6 +252,23 @@ bool ScDocument::Solver(SCCOL nFCol, SCROW nFRow, SCTAB nFTab,
     return bRet;
 }
 
+bool ScDocument::IsMatrixSpillBlocked(const ScRange& rRange,
+                                      SCCOL nDeclCols, SCROW nDeclRows) const
+{
+    const ScAddress& rOrigin = rRange.aStart;
+    for (SCCOL nCol = rRange.aStart.Col(); nCol <= rRange.aEnd.Col(); ++nCol)
+    {
+        for (SCROW nRow = rRange.aStart.Row(); nRow <= rRange.aEnd.Row(); ++nRow)
+        {
+            if (nCol < rOrigin.Col() + nDeclCols && nRow < rOrigin.Row() + nDeclRows)
+                continue; // inside the already-declared sub-range
+            if (const_cast<ScDocument*>(this)->HasData(nCol, nRow, rOrigin.Tab()))
+                return true;
+        }
+    }
+    return false;
+}
+
 void ScDocument::InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
                                      SCCOL nCol2, SCROW nRow2,
                                      const ScMarkData& rMark,
@@ -321,15 +338,10 @@ void ScDocument::InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
                 break;
             if (!FetchTable(nTab))
                 continue;
-            for (SCCOL nCol = nCol1; nCol <= nCol2 && !bSpillBlocked; ++nCol)
+            if (IsMatrixSpillBlocked(ScRange(nCol1, nRow1, nTab, nCol2, nRow2, nTab)))
             {
-                for (SCROW nRow = nRow1; nRow <= nRow2 && !bSpillBlocked; ++nRow)
-                {
-                    if (nCol == nCol1 && nRow == nRow1)
-                        continue; // skip the origin cell
-                    if (HasData(nCol, nRow, nTab))
-                        bSpillBlocked = true;
-                }
+                bSpillBlocked = true;
+                break;
             }
         }
         if (bSpillBlocked)

@@ -301,7 +301,11 @@ void applyArrayFormulas(
         aComp.SetExternalLinks(rExternalLinks);
         std::unique_ptr<ScTokenArray> pArray(aComp.CompileString(rAddressItem.maTokenAndAddress.maTokenStr));
         if (pArray)
-            rDoc.setMatrixCells(rAddressItem.maRange, *pArray, formula::FormulaGrammar::GRAM_OOXML);
+        {
+            rDoc.setMatrixCells(rAddressItem.maRange, *pArray,
+                                formula::FormulaGrammar::GRAM_OOXML,
+                                rAddressItem.mbCachedSpill);
+        }
     }
 }
 
@@ -509,12 +513,12 @@ void FormulaBuffer::setCellFormula(
     maSharedFormulaIds[rAddress.Tab()].emplace_back(rAddress, nSharedId, rCellValue, nValueType);
 }
 
-void FormulaBuffer::setCellArrayFormula( const ScRange& rRangeAddress, const ScAddress& rTokenAddress, const OUString& rTokenStr )
+void FormulaBuffer::setCellArrayFormula( const ScRange& rRangeAddress, const ScAddress& rTokenAddress, const OUString& rTokenStr, bool bCachedSpill)
 {
 
     TokenAddressItem tokenPair( rTokenStr, rTokenAddress );
     assert( rRangeAddress.aStart.Tab() >= 0 && o3tl::make_unsigned(rRangeAddress.aStart.Tab()) < maCellArrayFormulas.size() );
-    maCellArrayFormulas[ rRangeAddress.aStart.Tab() ].emplace_back( tokenPair, rRangeAddress );
+    maCellArrayFormulas[rRangeAddress.aStart.Tab()].emplace_back(tokenPair, rRangeAddress, bCachedSpill);
 }
 
 void FormulaBuffer::setCellFormulaValue(

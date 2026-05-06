@@ -1749,6 +1749,68 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testSpillErrorRoundtripODS)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(FormulaError::Spill), sal_Int32(pFormulaCell->GetErrCode()));
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testArrayFormulaSpillRoundtripXLSX)
+{
+    // UNIQUE formula blocked by another cell.
+    // The formula text, the #SPILL! error, and the blocker all need to be present 
+    // after round-trip. Clearing the blocker must expand the matrix result.
+
+    createScDoc();
+
+    // Source data
+    insertStringToCell(u"B1"_ustr, u"10");
+    insertStringToCell(u"B2"_ustr, u"20");
+    insertStringToCell(u"B3"_ustr, u"30");
+    insertStringToCell(u"B4"_ustr, u"40");
+
+    // Blocker at A2
+    insertStringToCell(u"A2"_ustr, u"blocker");
+
+    // UNIQUE formula entered 
+    insertArrayToCell(u"A1"_ustr, u"=UNIQUE(B1:B4)");
+
+    {
+        ScDocument* pDocument = getScDoc();
+        ScFormulaCell* pFormulaCell = pDocument->GetFormulaCell(ScAddress(0, 0, 0));
+        CPPUNIT_ASSERT_MESSAGE("UNIQUE result should be #SPILL!",
+                               pFormulaCell != nullptr);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(FormulaError::Spill),
+                             sal_Int32(pFormulaCell->GetErrCode()));
+    }
+
+    saveAndReload(TestFilter::XLSX);
+
+    ScDocument* pDocument = getScDoc();
+
+    // Blocker text must survive.
+    CPPUNIT_ASSERT_EQUAL(u"blocker"_ustr, pDocument->GetString(ScAddress(0, 1, 0)));
+
+    // The formula cell must still be a matrix formula carrying #SPILL!
+    ScFormulaCell* pFormulaCell = pDocument->GetFormulaCell(ScAddress(0, 0, 0));
+    CPPUNIT_ASSERT_MESSAGE("Expected a formula cell at A1",
+                           pFormulaCell != nullptr);
+    CPPUNIT_ASSERT_EQUAL(ScMatrixMode::Formula, pFormulaCell->GetMatrixFlag());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(FormulaError::Spill),
+                         sal_Int32(pFormulaCell->GetErrCode()));
+    CPPUNIT_ASSERT_MESSAGE("UNIQUE token array must keep its dynamic array flag",
+                           pFormulaCell->GetCode()->HasDynamicArrayFunction());
+
+    // Clear the blocker - dynamic array must expand.
+    clearCell(u"A2"_ustr);
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(FormulaError::NONE),
+                         sal_Int32(pFormulaCell->GetErrCode()));
+    SCCOL nCols = 0;
+    SCROW nRows = 0;
+    pFormulaCell->GetMatColsRows(nCols, nRows);
+    CPPUNIT_ASSERT_EQUAL(SCCOL(1), nCols);
+    CPPUNIT_ASSERT_EQUAL(SCROW(4), nRows);
+    CPPUNIT_ASSERT_EQUAL(10.0, pDocument->GetValue(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(20.0, pDocument->GetValue(ScAddress(0, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(30.0, pDocument->GetValue(ScAddress(0, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(40.0, pDocument->GetValue(ScAddress(0, 3, 0)));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

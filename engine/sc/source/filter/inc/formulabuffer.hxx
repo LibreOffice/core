@@ -59,7 +59,18 @@ public:
     {
         TokenAddressItem maTokenAndAddress;
         ScRange maRange;
-        TokenRangeAddressItem( TokenAddressItem aTokenAndAddress, const ScRange& rRange ) : maTokenAndAddress(std::move( aTokenAndAddress )), maRange( rRange ) {}
+
+        /// File was saved with a #SPILL! error on the master cell. Triggers
+        /// blocker preservation so reference cells aren't materialised over
+        /// real user data sitting in the matrix range.
+        bool mbCachedSpill;
+
+        TokenRangeAddressItem(TokenAddressItem aTokenAndAddress, const ScRange& rRange,
+                              bool bCachedSpill = false)
+            : maTokenAndAddress(std::move(aTokenAndAddress))
+            , maRange(rRange)
+            , mbCachedSpill(bCachedSpill) 
+        {}
     };
 
     struct FormulaValue
@@ -106,9 +117,10 @@ public:
     void setCellFormulaValue(
         const ScAddress& rAddress, const OUString& rValueStr, sal_Int32 nCellType );
 
-    void                setCellArrayFormula( const ScRange& rRangeAddress,
-                                             const ScAddress& rTokenAddress,
-                                             const OUString& );
+    void setCellArrayFormula(const ScRange& rRangeAddress,
+                             const ScAddress& rTokenAddress,
+                             const OUString&,
+                             bool bCachedSpill = false);
 
     void                createSharedFormulaMapEntry( const ScAddress& rAddress,
                                                      sal_Int32 nSharedId, const OUString& rTokens );

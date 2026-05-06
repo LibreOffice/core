@@ -97,13 +97,14 @@ public:
     void                                AddOLE(const css::uno::Reference <css::drawing::XShape>& rShape,
                                                const OUString &rRangeList);
 
-    void                                AddMatrixRange( const SCCOL nStartColumn,
-                                            const SCROW nStartRow,
-                                            const SCCOL nEndColumn,
-                                            const SCROW nEndRow,
-                                            const OUString& rFormula,
-                                            const OUString& rFormulaNmsp,
-                                            const formula::FormulaGrammar::Grammar );
+    void AddMatrixRange(const SCCOL nStartColumn,
+                        const SCROW nStartRow,
+                        const SCCOL nEndColumn,
+                        const SCROW nEndRow,
+                        const OUString& rFormula,
+                        const OUString& rFormulaNmsp,
+                        const formula::FormulaGrammar::Grammar,
+                        bool bCachedSpill = false);
     bool                                IsPartOfMatrix( const ScAddress& rScAddress) const;
 };
 
