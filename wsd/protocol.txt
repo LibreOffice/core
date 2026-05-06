@@ -994,6 +994,11 @@ procmemstats: pid=<pid> pss=<pss in kb> dirty=<private dirty in kb>
     Memory information sent periodically to parent process by each of
     the kit processes.
 
+loadtiming: <key>=<us> [<key>=<us> ...]
+
+    Kit-side debug-overlay load checkpoints; each value is microseconds
+    since the steady_clock epoch. Consumed by wsd, not forwarded.
+
 clipboardcontent: file=<file>
 
     in reply to a getclipboard: message.

@@ -984,6 +984,8 @@ namespace {
 
 bool ChildSession::loadDocument(const StringVector& tokens)
 {
+    KitLoadTimings.record("loadDocumentStart");
+
     int part = -1;
     if (tokens.size() < 2)
     {
@@ -1086,6 +1088,12 @@ bool ChildSession::loadDocument(const StringVector& tokens)
     // Respond by the document status
     LOG_DBG("Sending status after loading view " << _viewId);
     const std::string status = LOKitHelper::documentStatus(getLOKitDocument()->get());
+
+    KitLoadTimings.record("loadDocumentEnd");
+    const std::string loadTimingMsg = KitLoadTimings.format("loadtiming:");
+    if (!loadTimingMsg.empty())
+        sendTextFrame(loadTimingMsg);
+
     if (status.empty() || !sendTextFrame("status: " + status))
     {
         LOG_ERR("Failed to get/forward document status [" << status << ']');

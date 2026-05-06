@@ -734,6 +734,56 @@ namespace Util
         return decoded;
     }
 
+    void LoadTimings::parse(std::string_view payload)
+    {
+        std::size_t pos = payload.find(':');
+        if (pos == std::string_view::npos)
+            pos = 0;
+        else
+            ++pos;
+        while (pos < payload.size())
+        {
+            while (pos < payload.size() &&
+                   std::isspace(static_cast<unsigned char>(payload[pos])))
+                ++pos;
+            const std::size_t eq = payload.find('=', pos);
+            if (eq == std::string_view::npos)
+                break;
+            std::size_t end = payload.find_first_of(" \t", eq);
+            if (end == std::string_view::npos)
+                end = payload.size();
+            std::string key(payload.substr(pos, eq - pos));
+            const std::string val(payload.substr(eq + 1, end - eq - 1));
+            try
+            {
+                const long long us = std::stoll(val);
+                record(std::move(key),
+                       std::chrono::steady_clock::time_point(std::chrono::microseconds(us)));
+            }
+            catch (const std::exception&)
+            {
+            }
+            pos = end;
+        }
+    }
+
+    std::string LoadTimings::format(std::string_view prefix) const
+    {
+        if (_stamps.empty())
+            return std::string();
+
+        std::ostringstream oss;
+        oss << prefix;
+        for (const auto& s : _stamps)
+        {
+            const auto us = std::chrono::duration_cast<std::chrono::microseconds>(
+                                s.t.time_since_epoch())
+                                .count();
+            oss << ' ' << s.key << '=' << us;
+        }
+        return oss.str();
+    }
+
 } // namespace Util
 
 #if !MOBILEAPP

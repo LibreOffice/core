@@ -57,6 +57,8 @@
 #include <csignal>
 #include <limits>
 
+Util::LoadTimings KitLoadTimings;
+
 #if !MOBILEAPP
 #include <dlfcn.h>
 #endif
@@ -3584,6 +3586,8 @@ void lokit_main(
 
     LOG_INF("Kit process for Jail [" << jailId << "] started.");
 
+    KitLoadTimings.record("forkitSpawn");
+
     std::string userdir_url;
     std::string instdir_path;
     int ProcSMapsFile = -1;
@@ -3619,6 +3623,7 @@ void lokit_main(
         {
             std::chrono::time_point<std::chrono::steady_clock> jailSetupStartTime
                 = std::chrono::steady_clock::now();
+            KitLoadTimings.record("jailSetupStart");
 
             userdir_url = "file:///tmp/user";
 #ifndef __APPLE__
@@ -3907,6 +3912,7 @@ void lokit_main(
             jailSetupTime = std::chrono::duration_cast<std::chrono::milliseconds>(
                 std::chrono::steady_clock::now() - jailSetupStartTime);
             LOG_DBG("Initialized jail files in " << jailSetupTime);
+            KitLoadTimings.record("jailSetupEnd");
 
             // The bug is that rewinding and rereading /proc/self/smaps_rollup doubles the previous
             // values, so it only affects the case where we reuse the fd from opening smaps_rollup

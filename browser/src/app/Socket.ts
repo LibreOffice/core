@@ -1232,6 +1232,11 @@ class Socket {
 			this._map._debug.reportPong(
 				command.rendercount ? command.rendercount : 0,
 			);
+		} else if (textMsg.startsWith('serverloadtimings: ')) {
+			this._onServerLoadTimingsMsg(
+				textMsg.substring('serverloadtimings: '.length),
+			);
+			return;
 		} else if (
 			textMsg.startsWith('saveas:') ||
 			textMsg.startsWith('renamefile:')
@@ -1912,6 +1917,23 @@ class Socket {
 	private _onLastModTimeMsg(textMsg: string): void {
 		const time = textMsg.substring(textMsg.indexOf(' ') + 1);
 		this._map.updateModificationIndicator(time);
+	}
+
+	private _onServerLoadTimingsMsg(payload: string): void {
+		const parsed: { [k: string]: number } = {};
+		for (const tok of payload.split(/\s+/)) {
+			if (!tok) continue;
+			const eq = tok.indexOf('=');
+			if (eq < 0) continue;
+			const k = tok.substring(0, eq);
+			const v = Number(tok.substring(eq + 1));
+			if (!isFinite(v)) continue;
+			parsed[k] = v;
+		}
+		this._map._serverLoadTimings = parsed;
+		if (this._map._debug && this._map._debug.dumpServerLoadTimings) {
+			this._map._debug.dumpServerLoadTimings();
+		}
 	}
 
 	// 'commandresult: ' message.

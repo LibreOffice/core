@@ -283,6 +283,7 @@ class DebugManager {
 				self.overlayOn = true;
 				self._overlayData = {};
 				self._painter._addDebugOverlaySection();
+				if (self._map._serverLoadTimings) self.dumpServerLoadTimings();
 			},
 			onRemove: function () {
 				Util.ensureValue(self._painter);
@@ -1470,6 +1471,41 @@ class DebugManager {
 		this._pingQueue.push(+new Date());
 		app.socket.sendMessage('ping');
 		this._pingTimeoutId = setTimeout(this._pingTimeout.bind(this), 2000);
+	}
+
+	public dumpServerLoadTimings(): void {
+		const t = this._map._serverLoadTimings;
+		if (!t) return;
+		if (!this.overlayOn) return;
+
+		const entries = Object.keys(t)
+			.map((k) => ({ key: k, us: t[k] }))
+			.sort((a, b) => a.us - b.us);
+
+		window.app.console.group('Server load timings (steady_clock us)');
+		let prev = entries.length ? entries[0].us : 0;
+		for (const e of entries) {
+			const delta = e.us - prev;
+			window.app.console.log(
+				e.key.padEnd(24, ' ') +
+					' ' +
+					String(e.us).padStart(16, ' ') +
+					' us (+' +
+					(delta / 1000).toFixed(3) +
+					' ms)',
+			);
+			prev = e.us;
+		}
+		window.app.console.groupEnd();
+
+		const first = entries.length ? entries[0].us : 0;
+		const lines = entries.map(
+			(e) => e.key + '=' + ((e.us - first) / 1000).toFixed(1) + 'ms',
+		);
+		this.setOverlayMessage(
+			'serverLoadTimings',
+			'Server load: ' + lines.join(' '),
+		);
 	}
 
 	public reportPong(rendercount: number): void {

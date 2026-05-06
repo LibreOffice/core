@@ -570,6 +570,8 @@ extern COKit* loKitPtr;
 /// Check if URP is enabled
 bool isURPEnabled();
 
+extern Util::LoadTimings KitLoadTimings;
+
 /// Start a URP connection, checking if URP is enabled and there is not already an active URP session
 bool startURP(const std::shared_ptr<kit::Office>& LOKit, void** ppURPContext);
 

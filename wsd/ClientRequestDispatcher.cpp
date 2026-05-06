@@ -205,6 +205,7 @@ findOrCreateDocBroker(DocumentBroker::ChildType type, const std::string& uri,
         LOG_DBG("New DocumentBroker for docKey [" << docKey << ']');
         docBroker = std::make_shared<DocumentBroker>(type, uri, uriPublic, docKey,
                                                      configId, mobileAppDocId);
+        docBroker->loadTimings().record("docBrokerCreated");
         DocBrokers.emplace(docKey, docBroker);
         LOG_TRC("Have " << DocBrokers.size() << " DocBrokers after inserting [" << docKey << ']');
     }

@@ -60,6 +60,7 @@ interface MapInterface extends Evented {
 	_debug: DebugManager;
 	_fatal: boolean;
 	_docPassword: string;
+	_serverLoadTimings?: { [k: string]: number };
 
 	options: {
 		timestamp: number;

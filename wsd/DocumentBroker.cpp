@@ -302,6 +302,8 @@ void DocumentBroker::pollThread()
 
     LOG_INF("Starting docBroker polling thread for docKey [" << _docKey << ']' << " and configId [" << _configId << ']');
 
+    loadTimings().record("childRequested");
+
     // Request a kit process for this doc.
     do
     {
@@ -341,6 +343,7 @@ void DocumentBroker::pollThread()
 
     // We have a child process.
     _childProcess->setDocumentBroker(shared_from_this());
+    loadTimings().record("childAssigned");
     LOG_INF("Doc [" << _docKey << "] attached to child [" << _childProcess->getPid() << ']');
 
     setupPriorities();
@@ -1198,6 +1201,7 @@ bool DocumentBroker::download(
     std::chrono::milliseconds getFileCallDurationMs = std::chrono::milliseconds::zero();
     if (!_storage->isDownloaded())
     {
+        loadTimings().record("wopiDownloadStart");
         const Authorization auth =
             session ? session->getAuthorization() : Authorization::create(uriPublic);
         if (!doDownloadDocument(auth, templateSource, fileInfo.getFilename(),
@@ -1206,6 +1210,7 @@ bool DocumentBroker::download(
             LOG_DBG("Failed to download or process downloaded document");
             return false;
         }
+        loadTimings().record("wopiDownloadEnd");
     }
 
 #if !MOBILEAPP
@@ -1895,6 +1900,8 @@ void DocumentBroker::asyncInstallPresets(const std::shared_ptr<ClientSession>& s
         if (!selfLifecycle)
             return;
 
+        loadTimings().record("presetsInstallEnd");
+
         if (success)
         {
             std::string searchDir = presetsPath;
@@ -1934,6 +1941,7 @@ void DocumentBroker::asyncInstallPresets(const std::shared_ptr<ClientSession>& s
     };
 
     UNITWSD_CALL_INSTANCE(_unitWsd, onDocBrokerPresetsInstallStart());
+    loadTimings().record("presetsInstallStart");
     _asyncInstallTask = asyncInstallPresets(_poll, configId, userSettingsUri,
                                             presetsPath, session, installFinishedCB);
     _asyncInstallTask->appendCallback([selfWeak = weak_from_this(), this,
@@ -3465,6 +3473,22 @@ void DocumentBroker::broadcastSaveResult(bool success, const std::string_view re
     broadcastMessage(oss.str());
 }
 
+void DocumentBroker::recordFirstTileSent()
+{
+    if (_firstTileSent)
+        return;
+    _firstTileSent = true;
+    _loadTimings.record("firstTileSent");
+
+    if (_loadStampsSent || _loadTimings.empty())
+        return;
+    _loadStampsSent = true;
+
+    const std::string msg = _loadTimings.format("serverloadtimings:");
+    LOG_DBG("Broadcasting [" << msg << ']');
+    broadcastMessage(msg);
+}
+
 void DocumentBroker::setLoaded()
 {
     if (!isLoaded())
@@ -4559,7 +4583,11 @@ bool DocumentBroker::handleInput(const std::shared_ptr<Message>& message)
 
     if (COOLProtocol::getFirstToken(message->forwardToken(), '-') == "client")
     {
-        if (message->firstTokenMatches("slidelayer:") ||
+        if (message->firstTokenMatches("loadtiming:"))
+        {
+            loadTimings().parse(message->firstLine());
+        }
+        else if (message->firstTokenMatches("slidelayer:") ||
             message->firstTokenMatches("zstdslidelayer:") ||
             message->firstTokenMatches("sliderenderingcomplete:"))
         {
@@ -4700,6 +4728,7 @@ void DocumentBroker::handleTileRequest(const StringVector &tokens, bool forceKey
             tile.setWireId(cachedTile->_wids.back());
 
         session->sendTileNow(tile, cachedTile);
+        recordFirstTileSent();
         return;
     }
 
@@ -5063,6 +5092,7 @@ void DocumentBroker::sendRequestedTiles(const std::shared_ptr<ClientSession>& se
 
                 // TODO: Combine the response to reduce latency.
                 session->sendTileNow(tile, cachedTile);
+                recordFirstTileSent();
             }
             else
             {

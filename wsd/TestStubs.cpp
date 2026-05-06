@@ -23,6 +23,8 @@
 
 void DocumentBroker::assertCorrectThread(LOG_CAPTURE_CALLER) const {}
 
+void DocumentBroker::recordFirstTileSent() {}
+
 void ClientSession::enqueueSendMessage(const std::shared_ptr<Message>& /*data*/) {};
 
 #if !MOBILEAPP

@@ -396,6 +396,7 @@ void RequestVettingStation::checkFileInfo(const Poco::URI& uri, int redirectLimi
 {
     auto cfiContinuation = [this](CheckFileInfo& checkFileInfo)
     {
+        _checkFileInfoEnd = std::chrono::steady_clock::now();
         assert(&checkFileInfo == _checkFileInfo.get() && "Unknown CheckFileInfo instance");
         if (_checkFileInfo && _checkFileInfo->state() == CheckFileInfo::State::Pass &&
             _checkFileInfo->wopiInfo())
@@ -422,6 +423,7 @@ void RequestVettingStation::checkFileInfo(const Poco::URI& uri, int redirectLimi
     // CheckFileInfo asynchronously.
     assert(_checkFileInfo == nullptr);
     _checkFileInfo = std::make_shared<CheckFileInfo>(_poll, uri, std::move(cfiContinuation));
+    _checkFileInfoStart = std::chrono::steady_clock::now();
     _checkFileInfo->checkFileInfo(redirectLimit);
 }
 #endif //!MOBILEAPP
@@ -437,6 +439,12 @@ std::shared_ptr<DocumentBroker> RequestVettingStation::createDocBroker(
 
     if (docBroker)
     {
+        docBroker->loadTimings().record("wopiPostReceived", _wopiPostReceived);
+        if (_checkFileInfoStart.time_since_epoch().count() != 0)
+            docBroker->loadTimings().record("checkFileInfoStart", _checkFileInfoStart);
+        if (_checkFileInfoEnd.time_since_epoch().count() != 0)
+            docBroker->loadTimings().record("checkFileInfoEnd", _checkFileInfoEnd);
+
         // Indicate to the client that we're connecting to the docbroker.
         if (_ws)
         {

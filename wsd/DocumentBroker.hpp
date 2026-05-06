@@ -323,6 +323,11 @@ public:
     /// Returns an error message in case of failure, otherwise an empty string.
     std::string handleRenameFileCommand(std::string sessionId, std::string newFilename);
 
+    /// Server-side debug-overlay timing checkpoints; broadcast to all
+    /// clients as "serverloadtimings:" once the first tile flows.
+    Util::LoadTimings& loadTimings() { return _loadTimings; }
+    void recordFirstTileSent();
+
     /// Get whether the next save operation is an autosave.
     bool isNextSaveAutosave() const;
 
@@ -1851,6 +1856,10 @@ private:
     std::chrono::steady_clock::time_point _createTime;
     std::chrono::milliseconds _loadDuration;
     std::chrono::milliseconds _wopiDownloadDuration;
+
+    Util::LoadTimings _loadTimings;
+    bool _firstTileSent = false;
+    bool _loadStampsSent = false;
 
     /// Versioning is used to prevent races between
     /// painting and invalidation.

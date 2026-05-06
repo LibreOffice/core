@@ -219,7 +219,11 @@ void TileCache::saveTileAndNotify(const TileDesc& desc, const char *data, const 
                 auto& subscriber = tileBeingRendered->getSubscribers()[i];
                 std::shared_ptr<ClientSession> session = subscriber.lock();
                 if (session)
+                {
                     session->sendTileNow(desc, tile);
+                    if (auto db = session->getDocumentBroker())
+                        db->recordFirstTileSent();
+                }
             }
         }
         else if (subscriberCount == 0)

@@ -40,6 +40,7 @@
 #include <string>
 #include <string_view>
 #include <utility>
+#include <vector>
 
 #define STRINGIFY(X) #X
 
@@ -172,6 +173,37 @@ namespace Util
         static void readTime(uint64_t &cpu, uint64_t &sys);
         uint64_t _startCPU;
         uint64_t _startSys;
+    };
+
+    /// Simple class to log basic document bootstrap time-stamps
+    class LoadTimings
+    {
+    public:
+        void record(std::string key)
+        {
+            record(std::move(key), std::chrono::steady_clock::now());
+        }
+
+        void record(std::string key, std::chrono::steady_clock::time_point t)
+        {
+            _stamps.push_back({ std::move(key), t });
+        }
+
+        void parse(std::string_view payload);
+
+        /// Build "<prefix> key=us key=us ...". Empty if no stamps recorded.
+        /// `prefix` should include the trailing colon, for e.g. "loadtiming:".
+        std::string format(std::string_view prefix) const;
+
+        bool empty() const { return _stamps.empty(); }
+
+    private:
+        struct Stamp
+        {
+            std::string key;
+            std::chrono::steady_clock::time_point t;
+        };
+        std::vector<Stamp> _stamps;
     };
 
     class CounterImpl;
