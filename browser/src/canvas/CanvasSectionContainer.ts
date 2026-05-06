@@ -416,6 +416,12 @@ class CanvasSectionContainer {
 
 		if (this.drawingEnabled && wasNonZero && this.drawingPaused === 0) {
 			this.paintOnResumeOrEnable();
+		} else {
+			// This is unusual, make it visible in the logs
+			let log = 'Skipped paint on resume.';
+			log += '\nDrawing Enabled: ' + (this.drawingEnabled ? 'YES' : 'NO');
+			log += '\nDrawing Paused: ' + (this.drawingPaused > 0 ? 'YES' : 'NO');
+			app.console.debug(log);
 		}
 	}
 
