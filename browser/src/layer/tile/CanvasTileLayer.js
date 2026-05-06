@@ -3284,7 +3284,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 			else if (this.isWriter()) maxZoom = 13;
 		}
 
-		const smartZoomEnabled = window.prefs.getBoolean('smartZoom') === true;
+		const smartZoomEnabled = window.prefs.get('smartZoom') != 'false';
 		if (this._invalidateZoomFirstFit && smartZoomEnabled) {
 			recalcFirstFit = true;
 			this._invalidateZoomFirstFit = false;
