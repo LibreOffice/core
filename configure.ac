@@ -284,12 +284,14 @@ AC_ARG_ENABLE([seccomp],
                               Beware of the security consequences!]))
 AC_ARG_WITH([lokit-path],
             AS_HELP_STRING([--with-lokit-path=<path>],
-                           [Path to the "include" directory with the COKit headers]))
+                           [Path to the "include" directory with the COKit headers.
+                            Overrides the value derived from --with-lo-builddir.]))
 
 AC_ARG_WITH([lo-path],
             AS_HELP_STRING([--with-lo-path=<path>],
                            [For Collabora Online, the path to a working installation directory
                            or instdir of Collabora Office, to be used at run-time.
+                           Overrides the value derived from --with-lo-builddir.
 
                            For CODA-W, a *Windows* format path to the core build instdir, used at build-time.
                            All other configure script arguments that are paths are Unix (WSL) paths.]))
@@ -301,8 +303,12 @@ AC_ARG_WITH([lo-sourcedir],
 
 AC_ARG_WITH([lo-builddir],
             AS_HELP_STRING([--with-lo-builddir=<path>],
-                           [Mandatory, and relevant, in a tree where building the iOS or Android app, or CODA.
-                            Path to a the build directory of the CollaboraOffice core source tree you want to use.
+                           [Path to the CollaboraOffice (engine) build tree.
+                            For desktop/server builds, sets --with-lokit-path
+                            (to <path>/include) and --with-lo-path (to <path>/instdir)
+                            unless those are given explicitly.
+                            For mobile/CODA builds, this is the path to the build directory of
+                            the CollaboraOffice core source tree you want to use.
                             In case of macOS, you MUST manually edit the ios/Mobile.xcodeproj/project.pbxproj
                             file and change the references to "../ios-device" to refer to the corresponding
                             CollaboraOffice core source directory (which typically would be the same as the build
@@ -1012,6 +1018,16 @@ AC_SUBST(ZLIB_INCLUDES_WINDOWS)
 AC_SUBST(ZLIB_LIBS_WINDOWS)
 
 if test "$enable_iosapp" != yes -a "$enable_windowsapp" != yes -a "$enable_androidapp" != yes; then
+   if test -z "$with_lo_builddir"; then
+      with_lo_builddir="engine"
+   fi
+   if test -z "$with_lokit_path"; then
+      with_lokit_path="$with_lo_builddir/include"
+   fi
+   if test -z "$with_lo_path"; then
+      with_lo_path="$with_lo_builddir/instdir"
+   fi
+
    LOKIT_PATH=`readlink -f $with_lokit_path`
 fi
 
