@@ -721,7 +721,8 @@ void ScTabViewShell::SetPivotShell( bool bActive )
     //  SetPivotShell is called from CursorPosChanged every time
     //  -> don't change anything except switching between cell and pivot shell
 
-    if (eCurOST != OST_Pivot && eCurOST != OST_Cell && eCurOST != OST_Sparkline && eCurOST != OST_Table)
+    if (eCurOST != OST_Pivot && eCurOST != OST_Cell && eCurOST != OST_Sparkline && eCurOST != OST_Table
+        && eCurOST != OST_Editing)
         return;
 
     if ( bActive )
@@ -740,7 +741,8 @@ void ScTabViewShell::SetPivotShell( bool bActive )
 
 void ScTabViewShell::SetSparklineShell(bool bActive)
 {
-    if (eCurOST != OST_Sparkline && eCurOST != OST_Cell && eCurOST != OST_Pivot && eCurOST != OST_Table)
+    if (eCurOST != OST_Sparkline && eCurOST != OST_Cell && eCurOST != OST_Pivot && eCurOST != OST_Table
+        && eCurOST != OST_Editing)
         return;
 
     if (bActive)
@@ -759,7 +761,8 @@ void ScTabViewShell::SetSparklineShell(bool bActive)
 
 void ScTabViewShell::SetTableShell(bool bActive)
 {
-    if (eCurOST != OST_Table && eCurOST != OST_Cell && eCurOST != OST_Pivot && eCurOST != OST_Sparkline)
+    if (eCurOST != OST_Table && eCurOST != OST_Cell && eCurOST != OST_Pivot && eCurOST != OST_Sparkline
+        && eCurOST != OST_Editing)
         return;
 
     if (bActive)
@@ -876,7 +879,10 @@ void ScTabViewShell::SetEditShell(EditView* pView, bool bActive )
     }
     else if(bActiveEditSh)
     {
-        SetCurSubShell(OST_Cell);
+        // Restore the surrounding context (Pivot/Table/Sparkline/Cell) instead
+        // of always falling back to OST_Cell, so editing a cell inside a Table
+        // area does not produce a stray Cell broadcast on edit-exit.
+        UpdateContextShells();
         GetViewData().SetEditHighlight(false);
     }
     bActiveEditSh = bActive;

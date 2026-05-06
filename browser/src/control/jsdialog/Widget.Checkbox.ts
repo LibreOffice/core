@@ -11,6 +11,40 @@
 
 declare var JSDialog: any;
 
+// Map a JS value to a UNO type name for SDI dispatch. Add a case here
+// when a compound command introduces a field of a new type. Numerics
+// are intentionally absent: JS doesn't distinguish long/double, so a
+// command with numeric fields needs an explicit type hint elsewhere.
+function _unoType(value: any): string {
+	switch (typeof value) {
+		case 'boolean':
+			return 'boolean';
+		case 'string':
+			return 'string';
+		default:
+			app.console.warn(
+				'_unoType: unsupported field type "' +
+					typeof value +
+					'", falling back to "string" — PutValue decode will likely fail',
+			);
+			return 'string';
+	}
+}
+
+// Build SDI args for a compound command whose top-level parameter is a
+// Sequence<PropertyValue> (decoded by the core item's PutValue with
+// nMemberId=0). Parameter name == command without ".uno:".
+function _buildSequenceArgs(command: string, state: any): any {
+	const paramName = command.replace(/^\.uno:/, '');
+	const value: any = {};
+	for (const key of Object.keys(state)) {
+		value[key] = { type: _unoType(state[key]), value: state[key] };
+	}
+	return {
+		[paramName]: { type: '[]com.sun.star.beans.PropertyValue', value },
+	};
+}
+
 function _createCheckboxContainer(
 	parentContainer: HTMLElement,
 	data: CheckboxWidgetJSON,
@@ -78,6 +112,26 @@ JSDialog.Checkbox = function (
 		if (container.getAttribute('disabled') === 'true') return;
 
 		if (data.command) {
+			if (data.commandField) {
+				// Compound write: flip one field of the current multi-field
+				// state and send the whole object back. The id-side and
+				// value-side names match because we're echoing what arrived
+				// via commandstatechanged.
+				const current = app.map['stateChangeHandler'].getItemValue(
+					data.command,
+				);
+				if (current && typeof current === 'object') {
+					const updated = {
+						...current,
+						[data.commandField]: checkbox.checked,
+					};
+					app.map.sendUnoCommand(
+						data.command,
+						_buildSequenceArgs(data.command, updated),
+					);
+				}
+				return;
+			}
 			app.dispatcher.dispatch(data.command);
 			return;
 		}
@@ -115,14 +169,22 @@ JSDialog.Checkbox = function (
 	const toggleFunction = () => {
 		if (container.getAttribute('disabled') === 'true') return;
 
-		const items = app.map['stateChangeHandler'];
-		const state = data.command
-			? items.getItemValue(data.command) === 'true'
-			: data.checked;
-
-		if (state === true) {
+		// Compound command read: data.commandField names a property within
+		// the command's multi-field state object. Else legacy boolean-string
+		// state. Else the static `data.checked`.
+		if (data.command) {
+			const state = app.map['stateChangeHandler'].getItemValue(data.command);
+			if (data.commandField) {
+				if (state && typeof state === 'object')
+					$(checkbox).prop('checked', !!state[data.commandField]);
+			} else if (state === 'true') {
+				$(checkbox).prop('checked', true);
+			} else if (state === 'false') {
+				$(checkbox).prop('checked', false);
+			}
+		} else if (data.checked === true) {
 			$(checkbox).prop('checked', true);
-		} else if (state) {
+		} else if (data.checked) {
 			$(checkbox).prop('checked', false);
 		}
 	};

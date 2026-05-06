@@ -116,6 +116,47 @@ class TableStylesService {
 		app.map.on('commandstatechanged', this.onCommandState.bind(this));
 	}
 
+	/** Build the .uno:DatabaseSettings args from a TableStyleInfo, translating
+	 * state-side property names to the PoolItem MID names declared in
+	 * scslots.sdi (HeaderRow, TotalRow, ...) that the SDI parameter list
+	 * expects. */
+	private buildArgs(state: TableStyleInfo): any {
+		return {
+			'DatabaseSettings.HeaderRow': {
+				type: 'boolean',
+				value: state.ContainsHeader,
+			},
+			'DatabaseSettings.TotalRow': {
+				type: 'boolean',
+				value: state.TotalsRow,
+			},
+			'DatabaseSettings.FirstCol': {
+				type: 'boolean',
+				value: state.UseFirstColumnFormatting,
+			},
+			'DatabaseSettings.LastCol': {
+				type: 'boolean',
+				value: state.UseLastColumnFormatting,
+			},
+			'DatabaseSettings.StripedRows': {
+				type: 'boolean',
+				value: state.UseRowStripes,
+			},
+			'DatabaseSettings.StripedCols': {
+				type: 'boolean',
+				value: state.UseColStripes,
+			},
+			'DatabaseSettings.ShowFilters': {
+				type: 'boolean',
+				value: state.AutoFilter,
+			},
+			'DatabaseSettings.StyleID': {
+				type: 'string',
+				value: state.TableStyleName || '',
+			},
+		};
+	}
+
 	public onCommandState(e: any) {
 		if (e.commandName === '.uno:TableStyles') {
 			if (e.state === '') return;
@@ -275,41 +316,8 @@ class TableStylesService {
 			} as TableStyleInfo;
 		}
 
-		// PoolItem names are different than ones from state handler
-		const args = {} as any;
-		args['DatabaseSettings.HeaderRow'] = {
-			type: 'boolean',
-			value: tableStyle.ContainsHeader,
-		};
-		args['DatabaseSettings.TotalRow'] = {
-			type: 'boolean',
-			value: tableStyle.TotalsRow,
-		};
-		args['DatabaseSettings.FirstCol'] = {
-			type: 'boolean',
-			value: tableStyle.UseFirstColumnFormatting,
-		};
-		args['DatabaseSettings.LastCol'] = {
-			type: 'boolean',
-			value: tableStyle.UseLastColumnFormatting,
-		};
-		args['DatabaseSettings.StripedRows'] = {
-			type: 'boolean',
-			value: tableStyle.UseRowStripes,
-		};
-		args['DatabaseSettings.StripedCols'] = {
-			type: 'boolean',
-			value: tableStyle.UseColStripes,
-		};
-		args['DatabaseSettings.ShowFilters'] = {
-			type: 'boolean',
-			value: tableStyle.AutoFilter,
-		};
-
-		const newStyleId = tableStyleEntry.Name;
-		args['DatabaseSettings.StyleID'] = { type: 'string', value: newStyleId };
-
-		app.map.sendUnoCommand('.uno:DatabaseSettings', args);
+		const updated = { ...tableStyle, TableStyleName: tableStyleEntry.Name };
+		app.map.sendUnoCommand('.uno:DatabaseSettings', this.buildArgs(updated));
 	}
 
 	public generateIcon(style: TableStyleEntry): string {

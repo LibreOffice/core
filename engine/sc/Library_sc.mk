@@ -411,8 +411,6 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/ui/cctrl/tbzoomsliderctrl \
     sc/source/ui/cctrl/SheetViewBox \
     sc/source/ui/cctrl/SheetViewControl \
-    sc/source/ui/cctrl/TableStylesBox \
-    sc/source/ui/cctrl/TableStylesControl \
     sc/source/ui/condformat/condformatdlg \
     sc/source/ui/condformat/condformatdlgentry \
     sc/source/ui/condformat/condformatdlgdata \

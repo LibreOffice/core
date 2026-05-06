@@ -82,6 +82,7 @@ class CalcTableTab implements NotebookbarTab {
 										id: 'chk_header_row2',
 										type: 'checkbox',
 										command: '.uno:DatabaseSettings',
+										commandField: 'ContainsHeader',
 										text: _('Header Row'),
 										accessibility: {
 											focusBack: true,
@@ -97,6 +98,7 @@ class CalcTableTab implements NotebookbarTab {
 										id: 'chk_total_row2',
 										type: 'checkbox',
 										command: '.uno:DatabaseSettings',
+										commandField: 'TotalsRow',
 										text: _('Total Row'),
 										accessibility: {
 											focusBack: true,
@@ -118,6 +120,7 @@ class CalcTableTab implements NotebookbarTab {
 										id: 'chk_banded_rows2',
 										type: 'checkbox',
 										command: '.uno:DatabaseSettings',
+										commandField: 'UseRowStripes',
 										text: _('Banded Rows'),
 										accessibility: {
 											focusBack: true,
@@ -133,6 +136,7 @@ class CalcTableTab implements NotebookbarTab {
 										id: 'chk_banded_cols2',
 										type: 'checkbox',
 										command: '.uno:DatabaseSettings',
+										commandField: 'UseColStripes',
 										text: _('Banded Columns'),
 										accessibility: {
 											focusBack: true,
@@ -154,6 +158,7 @@ class CalcTableTab implements NotebookbarTab {
 										id: 'chk_first_column2',
 										type: 'checkbox',
 										command: '.uno:DatabaseSettings',
+										commandField: 'UseFirstColumnFormatting',
 										text: _('First Column'),
 										accessibility: {
 											focusBack: true,
@@ -169,6 +174,7 @@ class CalcTableTab implements NotebookbarTab {
 										id: 'chk_last_column2',
 										type: 'checkbox',
 										command: '.uno:DatabaseSettings',
+										commandField: 'UseLastColumnFormatting',
 										text: _('Last Column'),
 										accessibility: {
 											focusBack: true,
@@ -190,6 +196,7 @@ class CalcTableTab implements NotebookbarTab {
 										id: 'chk_filter_buttons2',
 										type: 'checkbox',
 										command: '.uno:DatabaseSettings',
+										commandField: 'AutoFilter',
 										text: _('Filter Buttons'),
 										accessibility: { focusBack: true, combination: 'SF' },
 									},

@@ -74,7 +74,6 @@
 #include <tbzoomsliderctrl.hxx>
 #include <svx/zoomsliderctrl.hxx>
 #include <SheetViewControl.hxx>
-#include <TableStylesControl.hxx>
 
 #include <svx/xmlsecctrl.hxx>
 // Child windows
@@ -153,7 +152,6 @@ void ScDLL::Init()
     svx::FormatPaintBrushToolBoxControl::RegisterControl(SID_FORMATPAINTBRUSH,  pMod );
     sc::ScNumberFormatControl       ::RegisterControl(SID_NUMBER_TYPE_FORMAT,   pMod );
     sc::SheetViewControl::RegisterControl(FID_SELECT_SHEET_VIEW, pMod);
-    sc::TableStylesControl          ::RegisterControl(SID_DATABASE_SETTINGS,    pMod);
 
     SvxGrafModeToolBoxControl       ::RegisterControl(SID_ATTR_GRAF_MODE,       pMod);
     SvxGrafRedToolBoxControl        ::RegisterControl(SID_ATTR_GRAF_RED,        pMod);

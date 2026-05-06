@@ -479,6 +479,7 @@ interface EditWidgetJSON extends WidgetJSON {
 interface CheckboxWidgetJSON extends WidgetJSON {
 	text: string;
 	command?: string; // used to just execute uno command or dispatch command instead of sending message
+	commandField?: string; // for commands whose state is a multi-field object: name of the field within that state to bind to
 	checked?: boolean; // checkbox state
 	hidden?: boolean;
 }
