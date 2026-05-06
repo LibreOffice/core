@@ -65,6 +65,7 @@
 #include <drawdoc.hxx>
 #include <ndtxt.hxx>
 #include <view.hxx>
+#include <viscrs.hxx>
 #include <UndoManager.hxx>
 #include <cmdid.h>
 #include <redline.hxx>
@@ -2550,7 +2551,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testVisCursorInvalidation)
 
     CPPUNIT_ASSERT(aView1.m_bViewCursorInvalidated);
     CPPUNIT_ASSERT(aView1.m_bOwnCursorInvalidated);
-    CPPUNIT_ASSERT_EQUAL(nView2, aView1.m_nOwnCursorInvalidatedBy);
+    CPPUNIT_ASSERT_EQUAL(nView1, aView1.m_nOwnCursorInvalidatedBy);
     CPPUNIT_ASSERT(aView2.m_bViewCursorInvalidated);
     CPPUNIT_ASSERT(aView2.m_bOwnCursorInvalidated);
     CPPUNIT_ASSERT_EQUAL(nView2, aView2.m_nOwnCursorInvalidatedBy);
@@ -2559,6 +2560,43 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testVisCursorInvalidation)
     // Their cursors should be on the same line, first view's more to the right.
     CPPUNIT_ASSERT_EQUAL(aView1.m_aOwnCursor.getY(), aView2.m_aOwnCursor.getY());
     CPPUNIT_ASSERT_GREATER(aView2.m_aOwnCursor.getX(), aView1.m_aOwnCursor.getX());
+
+    comphelper::COKit::setViewIdForVisCursorInvalidation(false);
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testVisCursorInvalidationViewIdNotCurrent)
+{
+    // With two views and view2 active, Hide/Show on view1's own SwVisibleCursor
+    // must invalidate view1 and carry view1's id (not the active view's).
+    createDoc("dummy.fodt");
+    SwTestViewCallback aView1;
+    SwView* pView1 = dynamic_cast<SwView*>(SfxViewShell::Current());
+    CPPUNIT_ASSERT(pView1);
+    int nView1 = KitHelper::getCurrentView();
+
+    KitHelper::createView();
+    SwTestViewCallback aView2;
+    int nView2 = KitHelper::getCurrentView();
+    CPPUNIT_ASSERT(nView1 != nView2);
+    Scheduler::ProcessEventsToIdle();
+
+    comphelper::COKit::setViewIdForVisCursorInvalidation(true);
+
+    KitHelper::setView(nView2);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(SfxViewShell::Current() != static_cast<SfxViewShell*>(pView1));
+
+    aView1.m_bOwnCursorInvalidated = false;
+    aView1.m_nOwnCursorInvalidatedBy = -1;
+
+    SwVisibleCursor* pVisCursor = pView1->GetWrtShell().GetVisibleCursor();
+    CPPUNIT_ASSERT(pVisCursor);
+    pVisCursor->Hide();
+    pVisCursor->Show();
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT(aView1.m_bOwnCursorInvalidated);
+    CPPUNIT_ASSERT_EQUAL(nView1, aView1.m_nOwnCursorInvalidatedBy);
 
     comphelper::COKit::setViewIdForVisCursorInvalidation(false);
 }

@@ -255,8 +255,7 @@ void SwVisibleCursor::SetPosAndShow(SfxViewShell const * pViewShell)
         }
         else
         {
-            KitHelper::notifyUpdatePerViewId(*pNotifyViewShell, SfxViewShell::Current(),
-                *pNotifyViewShell, KIT_CALLBACK_INVALIDATE_VISIBLE_CURSOR);
+            KitHelper::notifyUpdatePerViewId(*pNotifyViewShell, KIT_CALLBACK_INVALIDATE_VISIBLE_CURSOR);
             KitHelper::notifyOtherViewsUpdatePerViewId(pNotifyViewShell, KIT_CALLBACK_INVALIDATE_VIEW_CURSOR);
         }
     }
