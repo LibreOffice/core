@@ -134,6 +134,9 @@ bool ExecuteAction(const OUString& nWindowId, const OUString& rWidget, const Str
     auto aWidgetMap = JSInstanceBuilder::Widgets().Find(nWindowId);
     weld::Widget* pWidget = aWidgetMap ? aWidgetMap->Find(rWidget) : nullptr;
 
+    if (pWidget && !pWidget->get_sensitive())
+        return true;
+
     OUString sControlType = rData.at(u"type"_ustr);
     OUString sAction = rData.at(u"cmd"_ustr);
 
