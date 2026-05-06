@@ -517,7 +517,6 @@ class LOUtil {
 			insertcurrentdate: 'datefield',
 			insertdatefieldfix: 'datefield',
 			insertdatefield: 'datefield',
-			insertdatefieldvar: 'datefield',
 			setparagraphlanguagemenu: 'spelldialog',
 			spellingandgrammardialog: 'spelldialog',
 			styleapply3fstyle3astring3ddefault26familyname3astring3dcellstyles:
@@ -530,7 +529,6 @@ class LOUtil {
 			cellvertbottom: 'alignbottom',
 			insertcurrenttime: 'inserttimefield',
 			inserttimefieldfix: 'inserttimefield',
-			inserttimefieldvar: 'inserttimefield',
 			cancelformula: 'cancel',
 			resetattributes: 'setdefault',
 			tabledialog: 'tablemenu',
