@@ -842,6 +842,9 @@ IMPL_LINK( ScAcceptChgDlg, FilterHandle, SvxTPFilter*, pRef, void )
 
 IMPL_LINK( ScAcceptChgDlg, RejectHandle, SvxTPView*, pRef, void )
 {
+    if (IsRedlineMgmtBlocked())
+        return;
+
     m_xDialog->set_busy_cursor(true);
 
     bIgnoreMsg=true;
@@ -876,6 +879,9 @@ IMPL_LINK( ScAcceptChgDlg, RejectHandle, SvxTPView*, pRef, void )
 }
 IMPL_LINK( ScAcceptChgDlg, AcceptHandle, SvxTPView*, pRef, void )
 {
+    if (IsRedlineMgmtBlocked())
+        return;
+
     m_xDialog->set_busy_cursor(true);
 
     ScChangeTrack* pChanges=pDoc->GetChangeTrack();
@@ -910,6 +916,14 @@ IMPL_LINK( ScAcceptChgDlg, AcceptHandle, SvxTPView*, pRef, void )
     }
     m_xDialog->set_busy_cursor(false);
     bIgnoreMsg=false;
+}
+
+bool ScAcceptChgDlg::IsRedlineMgmtBlocked() const
+{
+    if (pViewData->GetDocShell()->IsReadOnly())
+        return true;
+    ScTabViewShell* pSh = pViewData->GetViewShell();
+    return pSh && pSh->IsKitReadOnlyView() && !pSh->IsAllowManageRedlines();
 }
 
 void ScAcceptChgDlg::RejectFiltered()
@@ -951,6 +965,9 @@ void ScAcceptChgDlg::AcceptFiltered()
 
 IMPL_LINK_NOARG(ScAcceptChgDlg, RejectAllHandle, SvxTPView*, void)
 {
+    if (IsRedlineMgmtBlocked())
+        return;
+
     m_xDialog->set_busy_cursor(true);
     bIgnoreMsg=true;
     ScChangeTrack* pChanges=pDoc->GetChangeTrack();
@@ -978,6 +995,9 @@ IMPL_LINK_NOARG(ScAcceptChgDlg, RejectAllHandle, SvxTPView*, void)
 
 IMPL_LINK_NOARG(ScAcceptChgDlg, AcceptAllHandle, SvxTPView*, void)
 {
+    if (IsRedlineMgmtBlocked())
+        return;
+
     m_xDialog->set_busy_cursor(true);
 
     bIgnoreMsg=true;

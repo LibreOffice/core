@@ -107,6 +107,8 @@ class ScAcceptChgDlg final : public SfxModelessDialogController
     void            RejectFiltered();
     void            AcceptFiltered();
 
+    bool            IsRedlineMgmtBlocked() const;
+
     bool            IsValidAction(const ScChangeAction* pScChangeAction);
 
     OUString* MakeTypeString(ScChangeActionType eType);

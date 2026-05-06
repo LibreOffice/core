@@ -1070,6 +1070,10 @@ void SwRedlineAcceptDlg::CallAcceptReject( bool bSelect, bool bAccept )
     if (!pView)
         return;
 
+    if (pView->GetDocShell()->IsReadOnly()
+        || (pView->IsKitReadOnlyView() && !pView->IsAllowManageRedlines()))
+        return;
+
     SwWrtShell* pSh = pView->GetWrtShellPtr();
     if (!pSh)
         return;
