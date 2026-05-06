@@ -1535,7 +1535,7 @@ window.L.Control.NotebookbarImpress = window.L.Control.NotebookbarWriter.extend(
 							{
 								'type': 'toolbox',
 								'children': [
-								!window.ThisIsAMobileApp ?
+								(!window.ThisIsAMobileApp || window.ThisIsTheWindowsApp) ?
 									{
 										'id': 'insert-insert-multimedia:InsertMultimediaMenu',
 										'type': 'menubutton',
