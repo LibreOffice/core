@@ -35,6 +35,7 @@
 #include <sal/macros.h>
 #include <systools/win32/uwinapi.h>
 #include <algorithm>
+#include <iterator>
 
 #include <spellchecker_selection.hxx>
 
@@ -163,11 +164,11 @@ langid_to_string( LANGID langid )
  * MAX_LANGUAGES is certainly enough for that
  */
 static const char *ui_langs[MAX_LANGUAGES];
-static int num_ui_langs = 0;
+static size_t num_ui_langs = 0;
 
 static void add_ui_lang(char const * lang)
 {
-    if (lang != nullptr && num_ui_langs != SAL_N_ELEMENTS(ui_langs)) {
+    if (lang != nullptr && num_ui_langs != std::size(ui_langs)) {
         ui_langs[num_ui_langs++] = lang;
     }
 }
@@ -179,7 +180,7 @@ enum_ui_lang_proc (LPTSTR language, LONG_PTR /* unused_lParam */)
     if (langid > 0xFFFF)
         return TRUE;
     add_ui_lang(langid_to_string(static_cast<LANGID>(langid)));
-    if (num_ui_langs == SAL_N_ELEMENTS(ui_langs) )
+    if (num_ui_langs == std::size(ui_langs) )
         return FALSE;
     return TRUE;
 }
@@ -212,13 +213,10 @@ struct InstallLocalized {
 void addMatchingDictionaries(
     char const * lang, InstallLocalized * dicts, int ndicts)
 {
-    for (int i = 0; i != SAL_N_ELEMENTS(setup_native::languageDictionaries);
-         ++i)
+    for (auto const &dictionary : setup_native::languageDictionaries)
     {
-        if (strcmp(lang, setup_native::languageDictionaries[i].language) == 0) {
-            for (char const * const * p = setup_native::languageDictionaries[i].
-                     dictionaries;
-                 *p != nullptr; ++p)
+        if (strcmp(lang, dictionary.language) == 0) {
+            for (char const * const * p = dictionary.dictionaries; *p != nullptr; ++p)
             {
                 for (int j = 0; j != ndicts; ++j) {
                     if (_stricmp(*p, dicts[j].lang) == 0) {

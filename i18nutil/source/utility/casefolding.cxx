@@ -28,6 +28,8 @@
 
 #include <unicode/uchar.h>
 
+#include <iterator>
+
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
 
@@ -106,7 +108,7 @@ Mapping casefolding::getValue(const sal_Unicode* str, sal_Int32 pos, sal_Int32 l
         c = str[pos];
 
     sal_Int16 address = -1;
-    if (c < SAL_N_ELEMENTS(CaseMappingIndex) * 256)
+    if (c < std::size(CaseMappingIndex) * 256)
         address = CaseMappingIndex[c >> 8];
 
     if (address >= 0) {

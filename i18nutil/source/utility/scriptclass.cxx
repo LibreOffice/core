@@ -30,6 +30,8 @@
 #include <com/sun/star/i18n/WordType.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
+#include <iterator>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::i18n;
@@ -77,8 +79,6 @@ const UBlock2Script scriptList[] = {
     { UBLOCK_LATIN_EXTENDED_C, UBLOCK_LATIN_EXTENDED_D, ScriptType::LATIN }
 };
 
-#define scriptListCount SAL_N_ELEMENTS(scriptList)
-
 //always sets rScriptType
 
 //returns true for characters historically explicitly assigned to
@@ -109,13 +109,13 @@ bool getCompatibilityScriptClassByBlock(sal_uInt32 currentChar, sal_Int16& rScri
     {
         UBlockCode block = ublock_getCode(currentChar);
         size_t i = 0;
-        while (i < scriptListCount)
+        while (i < std::size(scriptList))
         {
             if (block <= scriptList[i].to)
                 break;
             ++i;
         }
-        if (i < scriptListCount && block >= scriptList[i].from)
+        if (i < std::size(scriptList) && block >= scriptList[i].from)
             rScriptType = scriptList[i].script;
         else
         {
