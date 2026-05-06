@@ -908,7 +908,16 @@ namespace emfio
 
     void MtfTools::SetBkMode( BackgroundMode nMode )
     {
-        mnBkMode = nMode;
+        if (mnBkMode != nMode)
+        {
+            mnBkMode = nMode;
+            // The hatch fill background color emitted by UpdateFillStyle
+            // depends on bk mode: opaque -> bk color, transparent -> none.
+            // Invalidate maLatestFillStyle so UpdateFillStyle re-emits a
+            // fresh MetaFillColorAction even when the brush is otherwise
+            // unchanged.
+            maLatestFillStyle.aFillColor = Color(0x12, 0x34, 0x56);
+        }
     }
 
     void MtfTools::SetPolyFillMode( sal_uInt32 nPolyFillMode )

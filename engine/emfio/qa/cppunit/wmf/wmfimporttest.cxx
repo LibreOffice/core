@@ -63,6 +63,7 @@ public:
     void testETO_PDYEmf();
     void testStockObject();
     void testPatternBrushWmf();
+    void testHatchBkModeWmf();
 
     CPPUNIT_TEST_SUITE(WmfTest);
     CPPUNIT_TEST(testEOFWmf);
@@ -83,6 +84,7 @@ public:
     CPPUNIT_TEST(testETO_PDYEmf);
     CPPUNIT_TEST(testStockObject);
     CPPUNIT_TEST(testPatternBrushWmf);
+    CPPUNIT_TEST(testHatchBkModeWmf);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -588,6 +590,28 @@ void WmfTest::testPatternBrushWmf()
     assertXPath(pDoc, "//wallpaper/wallpaper", "style", u"Tile");
     assertXPath(pDoc, "//wallpaper/wallpaper/bitmap", "width", u"00000008");
     assertXPath(pDoc, "//wallpaper/wallpaper/bitmap", "height", u"00000008");
+}
+
+void WmfTest::testHatchBkModeWmf()
+{
+    // META_SETBKMODE between two rectangles drawn with the same hatched
+    // brush must trigger a fresh MetaFillColorAction. Otherwise the gap
+    // fill color from the previous OPAQUE rectangle leaks into the
+    // subsequent TRANSPARENT one.
+    SvFileStream aFileStream(getFullUrl(u"TestHatchBkMode.wmf"), StreamMode::READ);
+    GDIMetaFile aGDIMetaFile;
+    ReadWindowMetafile(aFileStream, aGDIMetaFile);
+
+    xmlDocUniquePtr pDoc = dumpAndParse(aGDIMetaFile);
+    CPPUNIT_ASSERT(pDoc);
+
+    // BkColor is red. Under OPAQUE the hatch background is filled with
+    // it; under TRANSPARENT it must be replaced with #000000 (unset).
+    // Without the fix UpdateFillStyle short-circuits and the second
+    // rectangle inherits the previous OPAQUE fillcolor, leaving the
+    // metafile with only one red fillcolor and no later transparent one.
+    assertXPath(pDoc, "//fillcolor[@color='#ff0000']", 1);
+    assertXPath(pDoc, "//fillcolor[@color='#000000']", 1);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(WmfTest);
