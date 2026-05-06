@@ -2,17 +2,18 @@
 #
 # './g pull -r' just forwards to 'git pull -r'.
 #
-# './g review' to submit changes for review on Collabora's Gerrit, assuming:
+# './g review [branch]' to submit changes for review on Collabora's Gerrit,
+# assuming:
 # 1) You have a remote pointing at ssh://<user>@gerrit.collaboraoffice.com:29418/online
 #    (typically named 'origin' or 'cogerrit').
 # 2) All commits but the topmost are pushed as WIP; the topmost commit is the
 #    actual review.
+# If [branch] is given (e.g. 'main' or 'distro/collabora/co-26-04'), the
+# current branch's upstream is set to <gerrit-remote>/<branch> first.
 #
 
 # e.g. co-4-2
 BRANCH=$(git symbolic-ref HEAD|sed 's|refs/heads/||')
-# e.g. origin
-REMOTE=$(git config branch.$BRANCH.remote)
 
 if [ "$1" == "review" ]; then
     # Find the remote that points at Collabora's Gerrit.  This is
@@ -28,6 +29,20 @@ if [ "$1" == "review" ]; then
         echo "Error: no remote pointing at gerrit.collaboraoffice.com found."
         echo "Add one with e.g.:"
         echo "  git remote add cogerrit ssh://\$USER@gerrit.collaboraoffice.com:29418/online"
+        exit 1
+    fi
+
+    # If a target branch was passed, set the upstream so the rest of the
+    # script can derive REMOTE/TRACKED_BRANCH from it normally.
+    if [ -n "$2" ]; then
+        git branch --set-upstream-to=$GERRIT_REMOTE/$2 $BRANCH
+    fi
+
+    # e.g. origin
+    REMOTE=$(git config branch.$BRANCH.remote || true)
+    if [ -z "$REMOTE" ]; then
+        echo "Error: no upstream configured for branch '$BRANCH'."
+        echo "Pass a target branch: ./g review <branch>"
         exit 1
     fi
 
