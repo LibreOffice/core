@@ -399,7 +399,8 @@ void ScDocumentImport::setFormulaCell(const ScAddress& rPos, ScFormulaCell* pCel
 }
 
 void ScDocumentImport::setMatrixCells(
-    const ScRange& rRange, const ScTokenArray& rArray, formula::FormulaGrammar::Grammar eGram)
+    const ScRange& rRange, const ScTokenArray& rArray, formula::FormulaGrammar::Grammar eGram,
+    bool bCheckForSpill)
 {
     const ScAddress& rBasePos = rRange.aStart;
 
@@ -428,6 +429,21 @@ void ScDocumentImport::setMatrixCells(
     // Matrix formulas currently need re-calculation on import.
     pCell->SetMatColsRows(
         rRange.aEnd.Col()-rRange.aStart.Col()+1, rRange.aEnd.Row()-rRange.aStart.Row()+1);
+
+    // The file was saved with a #SPILL! error. If the matrix range still has
+    // data in any non-origin cell those are real blockers from the saved
+    // state. Keep the blockers and the spill error rather than materialising
+    // reference cells over them.
+    if (bCheckForSpill && (rRange.aEnd.Col() > rRange.aStart.Col()
+                           || rRange.aEnd.Row() > rRange.aStart.Row())
+        && mpImpl->mrDoc.IsMatrixSpillBlocked(rRange))
+    {
+        // Collapse the declared dimensions back to 1x1
+        pCell->SetMatColsRows(1, 1);
+        pCell->SetResultError(FormulaError::Spill);
+        mpImpl->mrDoc.MarkFormulaSpilled(rBasePos);
+        return;
+    }
 
     // Set the reference cells.
     ScSingleRefData aRefData;

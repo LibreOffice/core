@@ -2331,21 +2331,10 @@ void ScFormulaCell::InterpretTail( ScInterpreterContext& rContext, ScInterpretTa
                     }
                     else
                     {
-                        for (SCCOL nColumn = aPos.Col();
-                             nColumn <= nSpillEndCol && !bSpillBlocked; ++nColumn)
-                        {
-                            for (SCROW nRow = aPos.Row();
-                                 nRow <= nSpillEndRow && !bSpillBlocked; ++nRow)
-                            {
-                                if (nColumn < aPos.Col() + nDeclCols
-                                    && nRow < aPos.Row() + nDeclRows)
-                                {
-                                    continue; // inside declared area
-                                }
-                                if (rDocument.HasData(nColumn, nRow, aPos.Tab()))
-                                    bSpillBlocked = true;
-                            }
-                        }
+                        bSpillBlocked = rDocument.IsMatrixSpillBlocked(
+                            ScRange(aPos.Col(), aPos.Row(), aPos.Tab(),
+                                    nSpillEndCol, nSpillEndRow, aPos.Tab()),
+                            nDeclCols, nDeclRows);
                     }
                     if (bSpillBlocked)
                     {

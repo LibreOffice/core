@@ -171,7 +171,14 @@ void SheetDataContext::onEndElement()
         case XML_array:
             if( mbValidRange && maFmlaData.isValidArrayRef( maCellData.maCellAddr ) )
             {
-                setCellArrayFormula( maFmlaData.maFormulaRef, maCellData.maCellAddr, maFormulaStr );
+                // The cached value #SPILL! on an XML_e cell signals
+                // that the file was saved while the array formula's spill
+                // range was blocked. Transport that through so the import path
+                // preserves any blocker cells in the matrix range instead of
+                // overwriting them with reference cells.
+                const bool bCachedSpill = (maCellData.mnCellType == XML_e
+                                           && maCellValue == u"#SPILL!");
+                setCellArrayFormula(maFmlaData.maFormulaRef, maCellData.maCellAddr, maFormulaStr, bCachedSpill);
             }
             // set cell formatting, but do not set result as cell value
             mrSheetData.setBlankCell( maCellData );

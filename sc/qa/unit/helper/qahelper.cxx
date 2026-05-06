@@ -330,6 +330,17 @@ void ScModelTestBase::insertArrayToCell(const OUString& rCell, std::u16string_vi
     Scheduler::ProcessEventsToIdle();
 }
 
+void ScModelTestBase::clearCell(const OUString& rCell)
+{
+    goToCell(rCell);
+
+    // Press DELETE on a selected cell
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::DELETE);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::DELETE);
+    Scheduler::ProcessEventsToIdle();
+}
+
 void ScModelTestBase::insertNewSheet(const ScDocument& rDoc)
 {
     sal_Int16 nTabs = rDoc.GetTableCount();

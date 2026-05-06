@@ -112,8 +112,11 @@ public:
     void setFormulaCell(const ScAddress& rPos, std::unique_ptr<ScTokenArray> pArray);
     void setFormulaCell(const ScAddress& rPos, ScFormulaCell* pCell);
 
+    /// When the saved file recorded the matrix in a #SPILL! state, pass
+    /// bCheckForSpill=true.
     void setMatrixCells(
-        const ScRange& rRange, const ScTokenArray& rArray, formula::FormulaGrammar::Grammar eGrammar);
+        const ScRange& rRange, const ScTokenArray& rArray, formula::FormulaGrammar::Grammar eGrammar,
+        bool bCheckForSpill = false);
 
     void setTableOpCells(const ScRange& rRange, const ScTabOpParam& rParam);
 

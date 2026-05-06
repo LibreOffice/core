@@ -1442,13 +1442,20 @@ void ScXMLTableRowCellContext::AddFormulaCell( const ScAddress& rCellPos )
         {
             if (nMatrixCols > 0 && nMatrixRows > 0)
             {
-                //matrix cells are put in the document, but we must set the
-                //value/text of each matrix cell later
+                // Matrix cells are put in the document, but we must set the
+                // value/text of each matrix cell later.
+                // The file recorded the array's master cell with a #SPILL!
+                // error result. Transport that through so any blocker cell still
+                // sitting in the matrix range is preserved instead of being
+                // replaced by a reference cell.
+                const bool bCachedSpill = (bFormulaTextResult && maStringValue
+                                           && GetScImport().GetFormulaErrorConstant(*maStringValue)
+                                              == FormulaError::Spill);
                 rXMLImport.GetTables().AddMatrixRange(
                         rCellPos.Col(), rCellPos.Row(),
                         std::min<SCCOL>(rCellPos.Col() + nMatrixCols - 1, pDoc->MaxCol()),
                         std::min<SCROW>(rCellPos.Row() + nMatrixRows - 1, pDoc->MaxRow()),
-                        maFormula->first, maFormula->second, eGrammar);
+                        maFormula->first, maFormula->second, eGrammar, bCachedSpill);
 
                 // Set the value/text of the top-left matrix position in its
                 // cached result.  For import, we only need to set the correct

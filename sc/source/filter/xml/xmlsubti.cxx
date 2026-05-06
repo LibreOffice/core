@@ -260,7 +260,8 @@ void ScMyTables::AddOLE(const uno::Reference <drawing::XShape>& rShape,
 
 void ScMyTables::AddMatrixRange(
         const SCCOL nStartColumn, const SCROW nStartRow, const SCCOL nEndColumn, const SCROW nEndRow,
-        const OUString& rFormula, const OUString& rFormulaNmsp, const formula::FormulaGrammar::Grammar eGrammar)
+        const OUString& rFormula, const OUString& rFormulaNmsp, const formula::FormulaGrammar::Grammar eGrammar,
+        bool bCachedSpill)
 {
     OSL_ENSURE(nEndRow >= nStartRow, "wrong row order");
     OSL_ENSURE(nEndColumn >= nStartColumn, "wrong column order");
@@ -275,7 +276,7 @@ void ScMyTables::AddMatrixRange(
     ScTokenArray aCode(rDoc.getDoc());
     aCode.AssignXMLString( rFormula,
             ((eGrammar == formula::FormulaGrammar::GRAM_EXTERNAL) ? rFormulaNmsp : OUString()));
-    rDoc.setMatrixCells(aScRange, aCode, eGrammar);
+    rDoc.setMatrixCells(aScRange, aCode, eGrammar, bCachedSpill);
     rDoc.getDoc().IncXMLImportedFormulaCount( rFormula.getLength() );
 }
 
