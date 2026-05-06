@@ -460,9 +460,11 @@ bool GenericSalLayout::LayoutText(ImplLayoutArgs& rArgs, const SalLayoutGlyphs* 
             // but there is no harm in always including it, HarfBuzz will
             // ignore unavailable shapers.
             const char*const pHbShapers[] = { "graphite2", "coretext_aat", "ot", "fallback", nullptr };
-            bool ok = hb_shape_full(pHbFont, pHbBuffer, maFeatures.data(), maFeatures.size(), pHbShapers);
-            assert(ok);
-            (void) ok;
+            if (!hb_shape_full(pHbFont, pHbBuffer, maFeatures.data(), maFeatures.size(), pHbShapers))
+            {
+                SAL_WARN("vcl.harfbuzz", "hb_shape_full failed");
+                hb_buffer_set_length(pHbBuffer, 0);
+            }
 
             int nRunGlyphCount = hb_buffer_get_length(pHbBuffer);
             hb_glyph_info_t *pHbGlyphInfos = hb_buffer_get_glyph_infos(pHbBuffer, nullptr);
