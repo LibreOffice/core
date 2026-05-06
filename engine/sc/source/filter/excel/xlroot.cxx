@@ -151,11 +151,17 @@ XclRootData::XclRootData( XclBiff eBiff, SfxMedium& rMedium,
     try
     {
         Reference< frame::XDesktop2 > xFramesSupp = frame::Desktop::create( ::comphelper::getProcessComponentContext() );
-        Reference< XFrame > xFrame( xFramesSupp->getActiveFrame(), UNO_SET_THROW );
-        Reference< XDevice > xDevice( xFrame->getContainerWindow(), UNO_QUERY_THROW );
-        DeviceInfo aDeviceInfo = xDevice->getInfo();
-        mfScreenPixelX = (aDeviceInfo.PixelPerMeterX > 0) ? (100000.0 / aDeviceInfo.PixelPerMeterX) : 50.0;
-        mfScreenPixelY = (aDeviceInfo.PixelPerMeterY > 0) ? (100000.0 / aDeviceInfo.PixelPerMeterY) : 50.0;
+        Reference< XFrame > xFrame( xFramesSupp->getActiveFrame(), uno::UNO_QUERY );
+        if (xFrame)
+        {
+            Reference< XDevice > xDevice( xFrame->getContainerWindow(), uno::UNO_QUERY );
+            if (xDevice)
+            {
+                DeviceInfo aDeviceInfo = xDevice->getInfo();
+                mfScreenPixelX = (aDeviceInfo.PixelPerMeterX > 0) ? (100000.0 / aDeviceInfo.PixelPerMeterX) : 50.0;
+                mfScreenPixelY = (aDeviceInfo.PixelPerMeterY > 0) ? (100000.0 / aDeviceInfo.PixelPerMeterY) : 50.0;
+            }
+        }
     }
     catch( const Exception&)
     {
