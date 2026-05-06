@@ -203,10 +203,11 @@ public:
         // The shapers that we want HarfBuzz to use, in the order of
         // preference.
         const char* const pHbShapers[] = { "graphite2", "ot", "fallback", nullptr };
-        bool ok
-            = hb_shape_full(pHbFont, m_pHbBuffer, maFeatures.data(), maFeatures.size(), pHbShapers);
-        assert(ok);
-        (void)ok;
+        if (!hb_shape_full(pHbFont, m_pHbBuffer, maFeatures.data(), maFeatures.size(), pHbShapers))
+        {
+            SAL_WARN("vcl.harfbuzz", "hb_shape_full failed");
+            hb_buffer_set_length(m_pHbBuffer, 0);
+        }
 
         int nRunGlyphCount = hb_buffer_get_length(m_pHbBuffer);
         hb_glyph_info_t* pHbGlyphInfos = hb_buffer_get_glyph_infos(m_pHbBuffer, nullptr);
@@ -603,9 +604,11 @@ bool GenericSalLayout::LayoutText(vcl::text::ImplLayoutArgs& rArgs, const SalLay
             // The shapers that we want HarfBuzz to use, in the order of
             // preference.
             const char*const pHbShapers[] = { "graphite2", "ot", "fallback", nullptr };
-            bool ok = hb_shape_full(pHbFont, pHbBuffer, maFeatures.data(), maFeatures.size(), pHbShapers);
-            assert(ok);
-            (void) ok;
+            if (!hb_shape_full(pHbFont, pHbBuffer, maFeatures.data(), maFeatures.size(), pHbShapers))
+            {
+                SAL_WARN("vcl.harfbuzz", "hb_shape_full failed");
+                hb_buffer_set_length(pHbBuffer, 0);
+            }
 
             // Populate glyph cluster remapping data
             stClusterMapper.ShapeSubRun(pStr, nLength, aSubRun, pHbFont, maFeatures, oHbLanguage);
