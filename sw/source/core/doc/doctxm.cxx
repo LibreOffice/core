@@ -70,6 +70,7 @@
 #include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 
+#include <algorithm>
 #include <memory>
 
 using namespace ::com::sun::star;
@@ -1930,10 +1931,7 @@ static bool lcl_HasMainEntry( const std::vector<sal_uInt16>* pMainEntryNums, sal
     if (!pMainEntryNums)
         return false;
 
-    for( auto nMainEntry : *pMainEntryNums )
-        if (nToFind == nMainEntry)
-            return true;
-    return false;
+    return std::ranges::find(*pMainEntryNums, nToFind) != pMainEntryNums->end();
 }
 
 void SwTOXBaseSection::UpdatePageNum_( SwTextNode* pNd,
