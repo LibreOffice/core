@@ -99,6 +99,20 @@ ScHFEditPage::ScHFEditPage(weld::Container* pPage, weld::DialogController* pCont
     m_xFtDefinedHF->show();
     m_xFtCustomHF->show();
 
+    // The same .ui file defines both labelFT_H_DEFINED/labelFT_F_DEFINED and
+    // labelFT_H_CUSTOM/labelFT_F_CUSTOM; weld and hide the ones that don't
+    // belong on this tab, and rename them with a -header/-footer suffix so
+    // their ids don't collide with the active labels on the other tab page
+    // in COKit.
+    OUString sSuffix(bHeader ? u"-header"_ustr : u"-footer"_ustr);
+    auto xInactiveDefinedHF = m_xBuilder->weld_label(bHeader ? u"labelFT_F_DEFINED"_ustr : u"labelFT_H_DEFINED"_ustr);
+    xInactiveDefinedHF->hide();
+    xInactiveDefinedHF->set_buildable_name(xInactiveDefinedHF->get_buildable_name() + sSuffix);
+
+    auto xInactiveCustomHF = m_xBuilder->weld_label(bHeader ? u"labelFT_F_CUSTOM"_ustr : u"labelFT_H_CUSTOM"_ustr);
+    xInactiveCustomHF->hide();
+    xInactiveCustomHF->set_buildable_name(xInactiveCustomHF->get_buildable_name() + sSuffix);
+
     //swap left/right areas and their labels in RTL mode
     if( AllSettings::GetLayoutRTL() )
     {
