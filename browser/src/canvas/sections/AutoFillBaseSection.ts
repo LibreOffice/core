@@ -210,6 +210,16 @@ class AutoFillBaseSection extends CanvasSectionObject {
 		return p2;
 	}
 
+	// On mobile, setMarkerPosition shifts the marker left by half the cell
+	// width so it sits visually under the cell. Core's autofill hit-test is at
+	// the cell's bottom-right corner, so undo that shift before posting events.
+	private adjustForMobileCenterOffset(p: cool.SimplePoint): void {
+		if (!(<any>window).mode.isDesktop()) {
+			Util.ensureValue(app.calc.cellCursorRectangle);
+			p.pX += app.calc.cellCursorRectangle.pWidth * 0.5;
+		}
+	}
+
 	protected autoScroll(point: cool.SimplePoint) {
 		Util.ensureValue(app.activeDocument);
 		const viewedRectangle = app.activeDocument.activeLayout.viewedRectangle;
@@ -237,6 +247,7 @@ class AutoFillBaseSection extends CanvasSectionObject {
 			return; // No dragging or no event handling or auto fill marker is not visible.
 
 		const p2 = this.getDocumentPositionFromLocal(point);
+		this.adjustForMobileCenterOffset(p2);
 		app.map._docLayer._postMouseEvent('move', p2.x, p2.y, 1, 1, 0);
 
 		if (
@@ -248,6 +259,7 @@ class AutoFillBaseSection extends CanvasSectionObject {
 
 	public onMouseUp(point: cool.SimplePoint, e: MouseEvent) {
 		const p2 = this.getDocumentPositionFromLocal(point);
+		this.adjustForMobileCenterOffset(p2);
 		app.map._docLayer._postMouseEvent('buttonup', p2.x, p2.y, 1, 1, 0);
 	}
 
@@ -255,6 +267,7 @@ class AutoFillBaseSection extends CanvasSectionObject {
 		// revert coordinates to global and fire event again with position in the center
 		// inverse of convertPositionToCanvasLocale
 		const p2 = this.getCenterRegardingDocument();
+		this.adjustForMobileCenterOffset(p2);
 
 		app.map._docLayer._postMouseEvent('buttondown', p2.x, p2.y, 1, 1, 0);
 	}
@@ -269,6 +282,7 @@ class AutoFillBaseSection extends CanvasSectionObject {
 
 	public onDoubleClick(point: cool.SimplePoint, e: MouseEvent) {
 		const pos = this.getCenterRegardingDocument();
+		this.adjustForMobileCenterOffset(pos);
 		this.sectionProperties.docLayer._postMouseEvent(
 			'buttondown',
 			pos.x,
