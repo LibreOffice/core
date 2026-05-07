@@ -479,6 +479,12 @@ void SAL_CALL OCommonEmbeddedObject::changeState( sal_Int32 nNewState )
     if ( officecfg::Office::Common::Security::Scripting::DisableActiveContent::get()
         && nNewState != embed::EmbedStates::LOADED )
         throw embed::UnreachableStateException();
+    // To avoid deadlock, take the SolarMutex before m_aMutex, as changeState's body eventually
+    // reaches VCL (e.g. toolbar disposal in DocumentHolder::ShowUI -> ToolbarController::disposing)
+    // which acquires SolarMutex, while VCL-side callers like SwView::SetVisArea ->
+    // SfxInPlaceClient::VisAreaChanged -> OCommonEmbeddedObject::setObjectRectangles already hold
+    // SolarMutex and then want m_aMutex:
+    SolarMutexGuard solarGuard;
     ::osl::ResettableMutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
