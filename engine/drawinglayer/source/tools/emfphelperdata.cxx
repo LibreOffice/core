@@ -53,6 +53,7 @@
 #include <sal/log.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/BitmapWriteAccess.hxx>
 #include <i18nlangtag/languagetag.hxx>
 
 #include <algorithm>
@@ -963,21 +964,507 @@ namespace emfplushelper
                             aSpreadMethod));
                 }
                 else // BrushTypePathGradient
-                { // TODO The PathGradient is not implemented, and Radial Gradient is used instead
-                    basegfx::B2DPoint aCenterPoint = Map(brush->firstPointX, brush->firstPointY);
-                    aCenterPoint = aPolygonTransformation * aCenterPoint;
+                {
+                    // Render the gradient pattern into a small bitmap and use
+                    // it as a (potentially tiled) texture fill. SvgRadialGradient
+                    // alone cannot reproduce path-gradient tiling because the
+                    // brush coordinate space and the fill-polygon space need
+                    // not overlap.
+                    if (!brush->path)
+                        return;
 
-                    // create the same one used for SVG
+                    basegfx::B2DRange aBrushBounds(
+                        (brush->additionalFlags & 0x01)
+                            ? brush->path->GetPolygon(*this, false).getB2DRange()
+                            : brush->path->GetRawPointsPolygon().getB2DRange());
+                    if (aBrushBounds.getWidth() <= 0 || aBrushBounds.getHeight() <= 0)
+                        return;
+
+                    constexpr sal_Int32 nMaxDim = 256;
+                    sal_Int32 nBmpW, nBmpH;
+                    if (aBrushBounds.getWidth() >= aBrushBounds.getHeight())
+                    {
+                        nBmpW = nMaxDim;
+                        nBmpH = std::max<sal_Int32>(
+                            1, std::lround(nMaxDim * aBrushBounds.getHeight()
+                                           / aBrushBounds.getWidth()));
+                    }
+                    else
+                    {
+                        nBmpH = nMaxDim;
+                        nBmpW = std::max<sal_Int32>(
+                            1, std::lround(nMaxDim * aBrushBounds.getWidth()
+                                           / aBrushBounds.getHeight()));
+                    }
+
+                    // Path-gradient sweep: GDI+ partitions the brush
+                    // boundary into triangles formed by (centre, V_i,
+                    // V_{i+1}) and Gouraud-shades each one with vertex
+                    // colours (centerColor, surround[i],
+                    // surround[(i+1) % nSurround]). Inside a triangle the
+                    // pixel colour is the barycentric blend of the three
+                    // vertex colours; this reproduces the colourful per-
+                    // segment rendering that GDI+ produces (red/green/blue
+                    // points on a star with multiple surround colours, and
+                    // smooth radial gradient on a uniform-surround brush).
+                    // For boundary-only brushes (no BrushDataPath flag) the
+                    // brush data stores raw EmfPlusPointF arrays without
+                    // point types - GetPolygon() misinterprets the trailing
+                    // bytes as Bezier point types and returns a degenerate
+                    // polygon. Use the raw-points accessor instead.
+                    basegfx::B2DPolygon aSweepPolygon
+                        = (brush->additionalFlags & 0x01)
+                              ? brush->path->GetPolygon(*this, false).getB2DPolygon(0)
+                              : brush->path->GetRawPointsPolygon();
+                    // Flatten Bezier control points into straight-line
+                    // segments so the triangulation has a fine-enough
+                    // boundary. Without this, a 4-cardinal-vertex Bezier
+                    // ellipse becomes 4 triangles meeting at the centre
+                    // (a diamond), which is visibly wrong.
+                    if (aSweepPolygon.areControlPointsUsed())
+                        aSweepPolygon = basegfx::utils::adaptiveSubdivideByDistance(
+                            aSweepPolygon,
+                            std::max(aBrushBounds.getWidth(),
+                                     aBrushBounds.getHeight()) / 512.0);
+                    while (aSweepPolygon.count() >= 2
+                           && aSweepPolygon.getB2DPoint(0)
+                                  == aSweepPolygon.getB2DPoint(aSweepPolygon.count() - 1))
+                        aSweepPolygon.remove(aSweepPolygon.count() - 1);
+
+                    const sal_uInt32 nVerts = aSweepPolygon.count();
+                    const basegfx::B2DPoint aCentre(
+                        brush->firstPointX, brush->firstPointY);
+
+                    // Per-vertex surround colour (one per boundary vertex).
+                    // surroundColors[i] is a sal_uInt8-channel Color; convert
+                    // to BColor (0..1 doubles) once.
+                    std::vector<basegfx::BColor> aVertColor(nVerts);
+                    std::vector<double> aVertAlpha(nVerts);
+                    {
+                        const sal_uInt32 nSurr
+                            = brush->surroundColorsNumber > 0
+                                  ? brush->surroundColorsNumber
+                                  : 1;
+                        for (sal_uInt32 i = 0; i < nVerts; ++i)
+                        {
+                            const Color& c
+                                = brush->surroundColorsNumber > 0
+                                      ? brush->surroundColors[i % nSurr]
+                                      : brush->secondColor;
+                            aVertColor[i] = c.getBColor();
+                            aVertAlpha[i] = c.GetAlpha() / 255.0;
+                        }
+                    }
+                    const basegfx::BColor aCentreColor
+                        = brush->solidColor.getBColor();
+                    const double fCentreAlpha
+                        = brush->solidColor.GetAlpha() / 255.0;
+
+                    // Optional centre->edge transition curves carried by the
+                    // brush. BlendFactors remap the gradient parameter t
+                    // (0 at centre, 1 at edge) before the centre/edge mix.
+                    // PresetColors (colorblend) replace the centre/edge mix
+                    // entirely with a sampled multi-stop colour curve. The
+                    // two are mutually exclusive in well-formed EMF+ data.
+                    struct FactorStop { double pos; double factor; };
+                    std::vector<FactorStop> aFactorCurve;
+                    if (brush->blendPositions && brush->blendPoints > 0)
+                    {
+                        aFactorCurve.reserve(brush->blendPoints);
+                        for (sal_uInt32 i = 0; i < brush->blendPoints; ++i)
+                            aFactorCurve.push_back({brush->blendPositions[i],
+                                                    brush->blendFactors[i]});
+                        std::sort(aFactorCurve.begin(), aFactorCurve.end(),
+                                  [](const FactorStop& a, const FactorStop& b)
+                                  { return a.pos < b.pos; });
+                    }
+
+                    struct ColorStop { double pos; basegfx::BColor color; double alpha; };
+                    std::vector<ColorStop> aColorCurve;
+                    if (brush->colorblendPositions && brush->colorblendPoints > 0)
+                    {
+                        aColorCurve.reserve(brush->colorblendPoints);
+                        for (sal_uInt32 i = 0; i < brush->colorblendPoints; ++i)
+                            aColorCurve.push_back(
+                                {brush->colorblendPositions[i],
+                                 brush->colorblendColors[i].getBColor(),
+                                 brush->colorblendColors[i].GetAlpha() / 255.0});
+                        std::sort(aColorCurve.begin(), aColorCurve.end(),
+                                  [](const ColorStop& a, const ColorStop& b)
+                                  { return a.pos < b.pos; });
+                    }
+
+                    auto sampleFactor = [&aFactorCurve](double t) -> double
+                    {
+                        if (aFactorCurve.empty()) return t;
+                        if (t <= aFactorCurve.front().pos)
+                            return aFactorCurve.front().factor;
+                        if (t >= aFactorCurve.back().pos)
+                            return aFactorCurve.back().factor;
+                        for (size_t i = 0; i + 1 < aFactorCurve.size(); ++i)
+                        {
+                            if (t <= aFactorCurve[i + 1].pos)
+                            {
+                                const double span
+                                    = aFactorCurve[i + 1].pos - aFactorCurve[i].pos;
+                                const double f
+                                    = span > 0.0 ? (t - aFactorCurve[i].pos) / span : 0.0;
+                                return aFactorCurve[i].factor
+                                       + f * (aFactorCurve[i + 1].factor
+                                              - aFactorCurve[i].factor);
+                            }
+                        }
+                        return aFactorCurve.back().factor;
+                    };
+
+                    auto sampleColor = [&aColorCurve](double t)
+                        -> std::pair<basegfx::BColor, double>
+                    {
+                        if (aColorCurve.empty()) return {basegfx::BColor(), 1.0};
+                        if (t <= aColorCurve.front().pos)
+                            return {aColorCurve.front().color,
+                                    aColorCurve.front().alpha};
+                        if (t >= aColorCurve.back().pos)
+                            return {aColorCurve.back().color,
+                                    aColorCurve.back().alpha};
+                        for (size_t i = 0; i + 1 < aColorCurve.size(); ++i)
+                        {
+                            if (t <= aColorCurve[i + 1].pos)
+                            {
+                                const double span
+                                    = aColorCurve[i + 1].pos - aColorCurve[i].pos;
+                                const double f
+                                    = span > 0.0 ? (t - aColorCurve[i].pos) / span : 0.0;
+                                basegfx::BColor c;
+                                c.setRed(aColorCurve[i].color.getRed()
+                                         + f * (aColorCurve[i + 1].color.getRed()
+                                                - aColorCurve[i].color.getRed()));
+                                c.setGreen(aColorCurve[i].color.getGreen()
+                                           + f * (aColorCurve[i + 1].color.getGreen()
+                                                  - aColorCurve[i].color.getGreen()));
+                                c.setBlue(aColorCurve[i].color.getBlue()
+                                          + f * (aColorCurve[i + 1].color.getBlue()
+                                                 - aColorCurve[i].color.getBlue()));
+                                return {c, aColorCurve[i].alpha
+                                              + f * (aColorCurve[i + 1].alpha
+                                                     - aColorCurve[i].alpha)};
+                            }
+                        }
+                        return {aColorCurve.back().color,
+                                aColorCurve.back().alpha};
+                    };
+
+                    auto signedCross = [](const basegfx::B2DPoint& a,
+                                          const basegfx::B2DPoint& b,
+                                          const basegfx::B2DPoint& c) -> double
+                    {
+                        return (b.getX() - a.getX()) * (c.getY() - a.getY())
+                               - (b.getY() - a.getY()) * (c.getX() - a.getX());
+                    };
+
+                    // Compose the final pixel colour given the active
+                    // boundary segment index i, the segment-edge weights
+                    // w0/w1 and the centre-edge parameter tRaw. Mixes the
+                    // per-segment surround colours (Gouraud) and applies
+                    // the brush's blend curve when present.
+                    auto composeColor
+                        = [&aVertColor, &aVertAlpha, &aCentreColor, &fCentreAlpha,
+                           &aColorCurve, &sampleColor, &sampleFactor, nVerts](
+                              sal_uInt32 i, double w0, double w1, double tRaw,
+                              basegfx::BColor& outColor, double& outAlpha)
+                    {
+                        basegfx::BColor aEdgeColor;
+                        double fEdgeAlpha = 0.0;
+                        const double fEdgeSum = w0 + w1;
+                        if (fEdgeSum > 1e-12)
+                        {
+                            const double f0 = w0 / fEdgeSum;
+                            const double f1 = w1 / fEdgeSum;
+                            aEdgeColor.setRed(
+                                f0 * aVertColor[i].getRed()
+                                + f1 * aVertColor[(i + 1) % nVerts].getRed());
+                            aEdgeColor.setGreen(
+                                f0 * aVertColor[i].getGreen()
+                                + f1 * aVertColor[(i + 1) % nVerts].getGreen());
+                            aEdgeColor.setBlue(
+                                f0 * aVertColor[i].getBlue()
+                                + f1 * aVertColor[(i + 1) % nVerts].getBlue());
+                            fEdgeAlpha
+                                = f0 * aVertAlpha[i]
+                                  + f1 * aVertAlpha[(i + 1) % nVerts];
+                        }
+                        else
+                        {
+                            aEdgeColor = aVertColor[i];
+                            fEdgeAlpha = aVertAlpha[i];
+                        }
+                        if (!aColorCurve.empty())
+                        {
+                            // PresetColors override the centre/edge mix.
+                            auto [presetColor, presetAlpha] = sampleColor(tRaw);
+                            outColor = presetColor;
+                            outAlpha = presetAlpha;
+                        }
+                        else
+                        {
+                            // BlendFactors remap tRaw before mixing centre
+                            // and (per-segment Gouraud) edge colour. With
+                            // an empty factor curve sampleFactor returns t
+                            // unchanged so the mix is linear.
+                            const double tCurve = sampleFactor(tRaw);
+                            outColor.setRed(
+                                (1.0 - tCurve) * aCentreColor.getRed()
+                                + tCurve * aEdgeColor.getRed());
+                            outColor.setGreen(
+                                (1.0 - tCurve) * aCentreColor.getGreen()
+                                + tCurve * aEdgeColor.getGreen());
+                            outColor.setBlue(
+                                (1.0 - tCurve) * aCentreColor.getBlue()
+                                + tCurve * aEdgeColor.getBlue());
+                            outAlpha = (1.0 - tCurve) * fCentreAlpha
+                                       + tCurve * fEdgeAlpha;
+                        }
+                    };
+
+                    Bitmap aBmp(Size(nBmpW, nBmpH), vcl::PixelFormat::N32_BPP);
+                    AlphaMask aAlpha(Size(nBmpW, nBmpH));
+                    aBmp.Erase(COL_BLACK);
+                    aAlpha.Erase(255);
+                    {
+                        BitmapScopedWriteAccess pBmpWrite(aBmp);
+                        BitmapScopedWriteAccess pAlphaWrite(aAlpha);
+                        if (!pBmpWrite || !pAlphaWrite)
+                            return;
+
+                        // Track which pixels Pass 1 has painted so the
+                        // Clamp-mode Pass 2 can find the rest. Alpha == 0
+                        // alone is not a reliable "uncovered" marker
+                        // because a translucent surround colour can
+                        // legitimately produce alpha == 0 inside a fan
+                        // triangle.
+                        std::vector<bool> aCovered(
+                            static_cast<size_t>(nBmpW) * nBmpH, false);
+
+                        auto writePixel
+                            = [&pBmpWrite, &pAlphaWrite, &aCovered, nBmpW](
+                                  sal_Int32 x, sal_Int32 y,
+                                  const basegfx::BColor& c, double a)
+                        {
+                            pBmpWrite->SetPixel(y, x, BitmapColor(
+                                static_cast<sal_uInt8>(std::lround(std::clamp(c.getRed(),   0.0, 1.0) * 255)),
+                                static_cast<sal_uInt8>(std::lround(std::clamp(c.getGreen(), 0.0, 1.0) * 255)),
+                                static_cast<sal_uInt8>(std::lround(std::clamp(c.getBlue(),  0.0, 1.0) * 255))));
+                            pAlphaWrite->SetPixelIndex(y, x, static_cast<sal_uInt8>(
+                                std::lround(std::clamp(a, 0.0, 1.0) * 255)));
+                            aCovered[static_cast<size_t>(y) * nBmpW + x] = true;
+                        };
+
+                        // Pixel <-> brush-coord helpers. A pixel at integer
+                        // (x,y) has its centre at world coord
+                        //   bb.minX + (x + 0.5) / nBmpW * bb.width
+                        // (and similarly for y).
+                        auto pixelToWorld
+                            = [&aBrushBounds, nBmpW, nBmpH](
+                                  sal_Int32 x, sal_Int32 y) -> basegfx::B2DPoint
+                        {
+                            return basegfx::B2DPoint(
+                                aBrushBounds.getMinX()
+                                    + (x + 0.5) / nBmpW * aBrushBounds.getWidth(),
+                                aBrushBounds.getMinY()
+                                    + (y + 0.5) / nBmpH * aBrushBounds.getHeight());
+                        };
+                        auto worldToPixelX
+                            = [&aBrushBounds, nBmpW](double wx) -> double
+                        {
+                            return (wx - aBrushBounds.getMinX()) * nBmpW
+                                       / aBrushBounds.getWidth() - 0.5;
+                        };
+                        auto worldToPixelY
+                            = [&aBrushBounds, nBmpH](double wy) -> double
+                        {
+                            return (wy - aBrushBounds.getMinY()) * nBmpH
+                                       / aBrushBounds.getHeight() - 0.5;
+                        };
+
+                        // Pass 1: rasterize each fan triangle (centre,
+                        // V_i, V_{i+1}) by iterating only the triangle's
+                        // pixel-space AABB. Cost is O(sum of triangle
+                        // areas), not O(bitmap area * triangle count).
+                        // Structurally this is what cairo's mesh-pattern
+                        // rasterizer does for PDF type-7 shadings: each
+                        // patch paints into its own pixel range, rather
+                        // than every pixel testing every patch.
+                        for (sal_uInt32 i = 0; i < nVerts; ++i)
+                        {
+                            const basegfx::B2DPoint aV0
+                                = aSweepPolygon.getB2DPoint(i);
+                            const basegfx::B2DPoint aV1
+                                = aSweepPolygon.getB2DPoint((i + 1) % nVerts);
+                            // Total triangle area (signed). Sign of
+                            // fTotal carries the polygon winding; a
+                            // point is inside the triangle when all
+                            // three sub-areas have that same sign.
+                            const double fTotal
+                                = signedCross(aCentre, aV0, aV1);
+                            if (std::abs(fTotal) < 1e-12)
+                                continue;
+                            const double s = fTotal > 0.0 ? 1.0 : -1.0;
+                            const double fInvAbsTotal = 1.0 / std::abs(fTotal);
+
+                            const double fMinX = std::min({aCentre.getX(), aV0.getX(), aV1.getX()});
+                            const double fMaxX = std::max({aCentre.getX(), aV0.getX(), aV1.getX()});
+                            const double fMinY = std::min({aCentre.getY(), aV0.getY(), aV1.getY()});
+                            const double fMaxY = std::max({aCentre.getY(), aV0.getY(), aV1.getY()});
+                            const sal_Int32 nXMin = std::clamp<sal_Int32>(
+                                static_cast<sal_Int32>(std::floor(worldToPixelX(fMinX))),
+                                0, nBmpW - 1);
+                            const sal_Int32 nXMax = std::clamp<sal_Int32>(
+                                static_cast<sal_Int32>(std::ceil(worldToPixelX(fMaxX))),
+                                0, nBmpW - 1);
+                            const sal_Int32 nYMin = std::clamp<sal_Int32>(
+                                static_cast<sal_Int32>(std::floor(worldToPixelY(fMinY))),
+                                0, nBmpH - 1);
+                            const sal_Int32 nYMax = std::clamp<sal_Int32>(
+                                static_cast<sal_Int32>(std::ceil(worldToPixelY(fMaxY))),
+                                0, nBmpH - 1);
+
+                            for (sal_Int32 y = nYMin; y <= nYMax; ++y)
+                            {
+                                for (sal_Int32 x = nXMin; x <= nXMax; ++x)
+                                {
+                                    const basegfx::B2DPoint aP = pixelToWorld(x, y);
+                                    // Barycentric weights via signed
+                                    // sub-triangle areas. wC = area(P,
+                                    // V0, V1) / area(C, V0, V1) etc.
+                                    const double wC
+                                        = s * signedCross(aP, aV0, aV1) * fInvAbsTotal;
+                                    const double w0
+                                        = s * signedCross(aCentre, aP, aV1) * fInvAbsTotal;
+                                    const double w1
+                                        = s * signedCross(aCentre, aV0, aP) * fInvAbsTotal;
+                                    constexpr double EPS = -1e-9;
+                                    if (wC < EPS || w0 < EPS || w1 < EPS)
+                                        continue;
+                                    // Centre/edge parameter (0 at centre,
+                                    // 1 at boundary segment).
+                                    const double tRaw
+                                        = std::clamp(1.0 - wC, 0.0, 1.0);
+                                    basegfx::BColor aColor;
+                                    double fAlpha = 0.0;
+                                    composeColor(i, w0, w1, tRaw, aColor, fAlpha);
+                                    writePixel(x, y, aColor, fAlpha);
+                                }
+                            }
+                        }
+
+                        // Pass 2 (Clamp wrap mode): for pixels that fell
+                        // outside every fan triangle, fill with the
+                        // closest triangle's edge colour. This
+                        // eliminates sub-pixel transparent jaggies along
+                        // smooth Bezier fill polygons that extend
+                        // slightly past the flattened boundary.
+                        //
+                        // For other wrap modes we leave uncovered pixels
+                        // transparent so that adjacent tiles in the fill
+                        // polygon stay visually separate.
+                        if (brush->wrapMode == WrapModeClamp)
+                        {
+                            for (sal_Int32 y = 0; y < nBmpH; ++y)
+                            {
+                                for (sal_Int32 x = 0; x < nBmpW; ++x)
+                                {
+                                    if (aCovered[static_cast<size_t>(y) * nBmpW + x])
+                                        continue;
+                                    const basegfx::B2DPoint aP = pixelToWorld(x, y);
+                                    sal_uInt32 nClosestI = 0;
+                                    double fClosestW0 = 0.0;
+                                    double fClosestW1 = 0.0;
+                                    double fMaxNegMargin
+                                        = std::numeric_limits<double>::lowest();
+                                    for (sal_uInt32 i = 0; i < nVerts; ++i)
+                                    {
+                                        const basegfx::B2DPoint aV0
+                                            = aSweepPolygon.getB2DPoint(i);
+                                        const basegfx::B2DPoint aV1
+                                            = aSweepPolygon.getB2DPoint((i + 1) % nVerts);
+                                        const double fTotal
+                                            = signedCross(aCentre, aV0, aV1);
+                                        if (std::abs(fTotal) < 1e-12)
+                                            continue;
+                                        const double s
+                                            = fTotal > 0.0 ? 1.0 : -1.0;
+                                        const double fInvAbsTotal
+                                            = 1.0 / std::abs(fTotal);
+                                        const double wC
+                                            = s * signedCross(aP, aV0, aV1) * fInvAbsTotal;
+                                        const double w0
+                                            = s * signedCross(aCentre, aP, aV1) * fInvAbsTotal;
+                                        const double w1
+                                            = s * signedCross(aCentre, aV0, aP) * fInvAbsTotal;
+                                        const double fMin
+                                            = std::min({wC, w0, w1});
+                                        if (fMin > fMaxNegMargin)
+                                        {
+                                            fMaxNegMargin = fMin;
+                                            nClosestI = i;
+                                            fClosestW0 = w0;
+                                            fClosestW1 = w1;
+                                        }
+                                    }
+                                    // The pixel is outside its closest
+                                    // triangle (wC < 0), so the centre/
+                                    // edge parameter clamps to 1 and the
+                                    // colour is the pure edge mix.
+                                    basegfx::BColor aColor;
+                                    double fAlpha = 0.0;
+                                    composeColor(nClosestI, fClosestW0,
+                                                 fClosestW1, 1.0,
+                                                 aColor, fAlpha);
+                                    writePixel(x, y, aColor, fAlpha);
+                                }
+                            }
+                        }
+                    }
+                    Graphic aGraphic(Bitmap(aBmp, aAlpha));
+
+                    // Map bitmap [0,1] to the brush's bounds in raw EMF
+                    // coords (with translation so the bitmap is anchored
+                    // where the brush actually lives, not at world origin).
+                    // maMapTransform then converts to world space, where
+                    // the fill polygon also lives - so the bitmap content
+                    // aligns with the fill polygon.
+                    const basegfx::B2DHomMatrix aBitmapToBrushSpace(
+                        aBrushBounds.getWidth(), 0.0, aBrushBounds.getMinX(),
+                        0.0, aBrushBounds.getHeight(), aBrushBounds.getMinY());
+
+                    basegfx::B2DHomMatrix aBrushMatrix;
+                    if (brush->hasTransformation)
+                        aBrushMatrix = brush->brush_transformation;
+
+                    const basegfx::B2DHomMatrix aTotalMatrix
+                        = maMapTransform * aBrushMatrix * aBitmapToBrushSpace;
+
+                    basegfx::B2DHomMatrix aInvTotalMatrix = aTotalMatrix;
+                    if (!aInvTotalMatrix.invert())
+                        return;
+                    basegfx::B2DPolyPolygon aLocalPolygon = polygon;
+                    aLocalPolygon.transform(aInvTotalMatrix);
+
+                    const bool bIsTiled = (brush->wrapMode != WrapModeClamp);
+
+                    const drawinglayer::attribute::FillGraphicAttribute aFillAttribute(
+                        aGraphic, basegfx::B2DRange(0.0, 0.0, 1.0, 1.0), bIsTiled);
+
+                    drawinglayer::primitive2d::Primitive2DReference xFillPrimitive
+                        = new drawinglayer::primitive2d::PolyPolygonGraphicPrimitive2D(
+                            aLocalPolygon,
+                            basegfx::B2DRange(0.0, 0.0, 1.0, 1.0),
+                            aFillAttribute);
+
                     mrTargetHolders.Current().append(
-                        new drawinglayer::primitive2d::SvgRadialGradientPrimitive2D(
-                            aTextureTransformation,
-                            polygon,
-                            std::move(aVector),
-                            aCenterPoint,
-                            0.7, // relative radius little bigger to cover all elements
-                            true, // use UnitCoordinates to stretch the gradient
-                            drawinglayer::primitive2d::SpreadMethod::Pad,
-                            nullptr));
+                        new drawinglayer::primitive2d::TransformPrimitive2D(
+                            aTotalMatrix,
+                            drawinglayer::primitive2d::Primitive2DContainer({ xFillPrimitive })));
                 }
             }
         }

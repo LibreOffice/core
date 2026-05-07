@@ -1084,12 +1084,67 @@ CPPUNIT_TEST_FIXTURE(Test, testEmfPlusBrushPathGradientWithBlendColors)
     xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
     CPPUNIT_ASSERT(pDocument);
 
-    assertXPath(pDocument, aXPathPrefix + "svgradialgradient", "radius", u"0.7");
-    assertXPath(pDocument, aXPathPrefix + "svgradialgradient/focalx", 0);
-    assertXPath(pDocument, aXPathPrefix + "svgradialgradient/focaly", 0);
-    assertXPathDoubleValue(pDocument, aXPathPrefix + "svgradialgradient", "startx", 0.5, 0.001);
-    assertXPathDoubleValue(pDocument, aXPathPrefix + "svgradialgradient", "starty", 0.5, 0.001);
-    assertXPath(pDocument, aXPathPrefix + "svgradialgradient", "spreadmethod", u"pad");
+    // Path gradient brushes are rendered as a bitmap fill
+    // (polypolygongraphic with embedded bitmap), not an svgradialgradient.
+    // The bitmap is anchored to the brush bounds so for a brush whose path
+    // covers the fill polygon a single bitmap copy appears.
+    assertXPath(pDocument, aXPathPrefix + "transform/polypolygongraphic", 1);
+    assertXPath(pDocument, aXPathPrefix + "transform/polypolygongraphic//bitmap", 1);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testEmfPlusBrushPathGradientMultiSurroundColor)
+{
+    // EMF+ PathGradient brushes can carry one surround colour per boundary
+    // vertex; per-triangle Gouraud shading then produces distinct colour
+    // at each vertex with smooth blends along the segments and toward the
+    // centre. The test EMF (extracted from the libUEMF v0.2.1 test file)
+    // contains four 5-point-star path-gradient fills:
+    //   - two with BrushDataPath (path-based brush, 10 boundary vertices)
+    //   - two boundary-only (no BrushDataPath, 10 raw boundary points)
+    // surround colours are blue/green/red/green/blue/green/red/green/
+    // magenta/green and the centre is black.
+    //
+    // Validates two things from the path-gradient rewrite:
+    //  - boundary-only brushes parse correctly via GetRawPointsPolygon()
+    //    instead of producing a degenerate single-vertex polygon (which
+    //    would yield no fill at all)
+    //  - all four fills emit a polypolygongraphic with a bitmap that
+    //    actually paints the shape (the bitmap is 256 px wide).
+    Primitive2DSequence aSequence
+        = parseEmf(u"emfio/qa/cppunit/emf/data/TestEmfPlusBrushPathGradientMultiSurroundColor.emf");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
+    drawinglayer::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
+    CPPUNIT_ASSERT(pDocument);
+
+    // Each star fill produces a polypolygongraphic with a bitmap.
+    assertXPath(pDocument, "//polypolygongraphic", 4);
+    assertXPath(pDocument, "//polypolygongraphic//bitmap", 4);
+    // Bitmap is 256 px on its longest side (path-gradient renderer's
+    // nMaxDim), so the rewrite did emit non-empty pixel content for the
+    // boundary-only brushes too (which previously collapsed to a
+    // degenerate single-vertex polygon and produced no fill at all).
+    assertXPath(pDocument, "(//polypolygongraphic//bitmap)[1]", "width", u"256");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testEmfPlusBrushPathGradientTiled)
+{
+    // tdf#143031 EMF+ PathGradient brush with WrapMode = Tile must produce
+    // a tiled bitmap fill. The test file uses a single FillPath where the
+    // brush's gradient path is far away in coordinate space from the fill
+    // polygon; without tiling, only a flat boundary colour shows up.
+    Primitive2DSequence aSequence
+        = parseEmf(u"emfio/qa/cppunit/emf/data/tdf143031_BrushPathGrad.emf");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
+    drawinglayer::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
+    CPPUNIT_ASSERT(pDocument);
+
+    // The brush should produce a polypolygongraphic with a tiled bitmap.
+    // Without the fix, an empty/flat-coloured fill primitive was emitted.
+    assertXPath(pDocument, aXPathPrefix + "transform/polypolygongraphic", 1);
+    assertXPath(pDocument, "(" + aXPathPrefix + "transform/polypolygongraphic//bitmap)[1]", "width",
+                u"256");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testEmfPlusDrawCurve)

@@ -129,6 +129,16 @@ namespace emfplushelper
         aPolygon.clear();
     }
 
+    ::basegfx::B2DPolygon EMFPPath::GetRawPointsPolygon() const
+    {
+        ::basegfx::B2DPolygon aOut;
+        for (sal_uInt32 i = 0; i < nPoints; ++i)
+            aOut.append(::basegfx::B2DPoint(xPoints[i], yPoints[i]));
+        if (nPoints >= 1)
+            aOut.setClosed(true);
+        return aOut;
+    }
+
     ::basegfx::B2DPolyPolygon& EMFPPath::GetPolygon (EmfPlusHelperData const & rR, bool bMapIt, bool bAddLineToCloseShape)
     {
         ::basegfx::B2DPolygon polygon;

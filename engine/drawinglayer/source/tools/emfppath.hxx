@@ -41,6 +41,10 @@ namespace emfplushelper
         ::basegfx::B2DPolyPolygon& GetCardinalSpline(EmfPlusHelperData const& rR, float fTension,
                                                      sal_uInt32 aOffset, sal_uInt32 aNumSegments);
         ::basegfx::B2DPolyPolygon& GetClosedCardinalSpline(EmfPlusHelperData const& rR, float fTension);
+        // Plain-vertex polygon (no Bezier-control / point-type
+        // interpretation). Useful for path-gradient boundary data which
+        // is stored as raw EmfPlusPointF arrays without point types.
+        ::basegfx::B2DPolygon GetRawPointsPolygon() const;
     };
 }
 
