@@ -500,6 +500,7 @@ class MobileAppInitializer extends InitializerBase {
 		window.idleTimeoutSecs = 1000000;
 
 		window.canvasSlideshowEnabled = true;
+		window.enableAccessibility = true;
 	}
 }
 

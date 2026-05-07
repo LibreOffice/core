@@ -1458,7 +1458,7 @@ void COOLWSD::innerInitialize(Poco::Util::Application& self)
     // Experimental features.
     EnableExperimental = ConfigUtil::getConfigValue<bool>(conf, "experimental_features", false);
 
-    EnableAccessibility = ConfigUtil::getConfigValue<bool>(conf, "accessibility.enable", false);
+    EnableAccessibility = ConfigUtil::getConfigValue<bool>(conf, "accessibility.enable", Util::isMobileApp());
 
     // Setup user interface mode
     UserInterface = ConfigUtil::getConfigValue<std::string>(conf, "user_interface.mode", "default");

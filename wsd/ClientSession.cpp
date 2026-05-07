@@ -1342,7 +1342,7 @@ bool ClientSession::_handleInput(const char *buffer, int length)
     }
     else if (tokens.equals(0, "a11ystate"))
     {
-        if (ConfigUtil::getConfigValue<bool>("accessibility.enable", false))
+        if (ConfigUtil::getConfigValue<bool>("accessibility.enable", Util::isMobileApp()))
         {
             return forwardToChild(std::string(buffer, length), docBroker);
         }
@@ -2061,7 +2061,7 @@ bool ClientSession::loadDocument(const char* /*buffer*/, int /*length*/,
             oss << " clientvisiblearea=" << getInitialClientVisibleArea();
         }
 
-        if (ConfigUtil::getConfigValue<bool>("accessibility.enable", false))
+        if (ConfigUtil::getConfigValue<bool>("accessibility.enable", Util::isMobileApp()))
         {
             oss << " accessibilityState=" << getAccessibilityState();
         }

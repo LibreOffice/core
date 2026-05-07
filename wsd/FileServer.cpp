@@ -1341,7 +1341,7 @@ FileServerRequestHandler::ResourceAccessDetails FileServerRequestHandler::prepro
     Poco::replaceInPlace(preprocess, std::string("%ENABLE_WELCOME_MSG%"), enableWelcomeMessage);
     Poco::replaceInPlace(preprocess, std::string("%AUTO_SHOW_WELCOME%"), autoShowWelcome);
 
-    std::string enableAccessibility = stringifyBoolFromConfig(config, "accessibility.enable", false);
+    std::string enableAccessibility = stringifyBoolFromConfig(config, "accessibility.enable", Util::isMobileApp());
     Poco::replaceInPlace(preprocess, std::string("%ENABLE_ACCESSIBILITY%"), enableAccessibility);
 
     // the config value of 'notebookbar/tabbed' or 'classic/compact' overrides the UIMode
@@ -2189,7 +2189,7 @@ void FileServerRequestHandler::preprocessIntegratorAdminFile(const HTTPRequest& 
     Poco::replaceInPlace(adminFile, std::string("%ENABLE_DEBUG%"),
                          std::string(Util::isDebugEnabled() ? "true" : "false"));
 
-    std::string enableAccessibility = stringifyBoolFromConfig(config, "accessibility.enable", false);
+    std::string enableAccessibility = stringifyBoolFromConfig(config, "accessibility.enable", Util::isMobileApp());
     Poco::replaceInPlace(adminFile, std::string("%ENABLE_ACCESSIBILITY%"), enableAccessibility);
 
     // AI settings are disabled if the WOPI integrator requests it
