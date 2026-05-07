@@ -781,6 +781,7 @@
         "--without-system-xmlsec",
         "--without-system-zxcvbn",
         "--without-system-zxing",
+        "--without-export-validation",
         "--without-templates"
       ],
       "install-rule": "distro-pack-install",

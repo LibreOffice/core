@@ -9587,13 +9587,7 @@ dnl Export file validation
 dnl ===================================================================
 AC_MSG_CHECKING([whether to enable export file validation])
 if test "$with_export_validation" != "no"; then
-    if test -z "$ENABLE_JAVA"; then
-        if test "$with_export_validation" = "yes"; then
-            AC_MSG_ERROR([requested, but Java is disabled])
-        else
-            AC_MSG_RESULT([no, as Java is disabled])
-        fi
-    elif ! test -d "${SRC_ROOT}/schema"; then
+    if ! test -d "${SRC_ROOT}/schema"; then
         if test "$with_export_validation" = "yes"; then
             AC_MSG_ERROR([requested, but schema directory is missing (it is excluded from tarballs)])
         else
@@ -9602,6 +9596,15 @@ if test "$with_export_validation" != "no"; then
     else
         AC_MSG_RESULT([yes])
         AC_DEFINE(HAVE_EXPORT_VALIDATION)
+
+        if test -z "$JAVAINTERPRETER"; then
+            dnl Java is disabled but a build-time Java interpreter is still
+            dnl needed to run the export validators.
+            AC_PATH_PROG(JAVAINTERPRETER, java)
+            if test -z "$JAVAINTERPRETER"; then
+                AC_MSG_ERROR([export validation requires a Java interpreter, none found (--with-export-validation)])
+            fi
+        fi
 
         AC_PATH_PROGS(ODFVALIDATOR, odfvalidator)
         if test -z "$ODFVALIDATOR"; then
