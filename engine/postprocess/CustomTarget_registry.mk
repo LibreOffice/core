@@ -92,12 +92,10 @@ postprocess_FILES_graphicfilter := \
 postprocess_DEPS_impress := main
 postprocess_FILES_impress := \
 	$(postprocess_XCS)/Office/PresentationMinimizer.xcs \
-	$(postprocess_XCS)/Office/PresenterScreen.xcs \
 	$(postprocess_XCS)/Office/UI/Effects.xcs \
 	$(postprocess_XCS)/Office/UI/ImpressWindowState.xcs \
 	$(if $(ENABLE_WASM_STRIP_BASIC_DRAW_MATH_IMPRESS),, \
 	    $(postprocess_XCU)/Office/PresentationMinimizer.xcu \
-	    $(postprocess_XCU)/Office/PresenterScreen.xcu \
 	    $(postprocess_XCU)/Office/UI/Effects.xcu \
 	    $(postprocess_XCU)/Office/UI/ImpressWindowState.xcu \
 	    $(call gb_XcuFilterFiltersTarget_get_target,fcfg_impress_filters.xcu) \

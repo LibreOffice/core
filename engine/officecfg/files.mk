@@ -39,7 +39,6 @@ officecfg_XCSFILES := \
     Office/OptionsDialog \
     Office/Paths \
     Office/PresentationMinimizer \
-    Office/PresenterScreen \
     Office/ProtocolHandler \
     Office/Recovery \
     Office/ReportDesign \

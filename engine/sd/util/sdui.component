@@ -9,12 +9,6 @@
 -->
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
         xmlns="http://openoffice.org/2010/uno-components">
-    <implementation name="org.libreoffice.comp.PresenterScreenJob"
-        constructor="sd_PresenterScreenJob_get_implementation" />
-    <implementation name="org.libreoffice.comp.PresenterScreenProtocolHandler"
-        constructor="sd_PresenterProtocolHandler_get_implementation">
-        <service name="com.sun.star.frame.ProtocolHandler"/>
-    </implementation>
     <implementation name="com.sun.star.presentation.comp.CreateDialogFactoryService"
         constructor="com_sun_star_presentation_CreateDialogFactoryService_get_implementation">
         <service name="com.sun.star.presentation.CreateDialogFactoryService"/>

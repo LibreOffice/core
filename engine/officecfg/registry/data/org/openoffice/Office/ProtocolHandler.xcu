@@ -59,11 +59,6 @@
         <value>vnd.sun.star.findbar:*</value>
       </prop>
     </node>
-    <node oor:name="org.libreoffice.comp.PresenterScreenProtocolHandler" oor:op="replace" install:module="impress">
-      <prop oor:name="Protocols">
-        <value>vnd.org.libreoffice.presenterscreen:*</value>
-      </prop>
-    </node>
     <node oor:name="com.sun.star.comp.PresentationMinimizerImp"
           oor:op="replace" install:module="impress">
       <prop oor:name="Protocols" oor:type="oor:string-list">

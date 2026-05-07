@@ -149,8 +149,7 @@ $(eval $(call gb_Configuration_add_localized_datas,registry,officecfg/registry/d
 	org/openoffice/Office/Common.xcu \
 	org/openoffice/Office/DataAccess.xcu \
 	$(if $(ENABLE_WASM_STRIP_BASIC_DRAW_MATH_IMPRESS),, \
-	    org/openoffice/Office/PresentationMinimizer.xcu \
-	    org/openoffice/Office/PresenterScreen.xcu) \
+	    org/openoffice/Office/PresentationMinimizer.xcu) \
 	org/openoffice/Office/UI.xcu \
 	org/openoffice/Office/Embedding.xcu \
 	$(call gb_Helper_optional,REPORTBUILDER, \

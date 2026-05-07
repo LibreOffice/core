@@ -711,7 +711,7 @@ draw_constructor_list = [
     ("sdext_PDFIRawAdaptor_Draw_get_implementation", "#if HAVE_FEATURE_PDFIMPORT"),
     ("sdext_PDFIRawAdaptor_Impress_get_implementation", "#if HAVE_FEATURE_PDFIMPORT"),
     ("sdext_PDFDetector_get_implementation", "#if HAVE_FEATURE_PDFIMPORT"),
-# sd/source/console/presenter.component
+# sd/util/sdui.component
     ("com_sun_star_presentation_CreateDialogFactoryService_get_implementation", "#if !ENABLE_FUZZERS"),
     ]
 
