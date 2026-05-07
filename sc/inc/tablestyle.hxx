@@ -10,6 +10,7 @@
 #pragma once
 
 #include <memory>
+#include <unordered_map>
 
 #include <editeng/boxitem.hxx>
 #include <editeng/brushitem.hxx>
@@ -29,6 +30,11 @@ namespace tools
 class JsonWriter;
 }
 
+// Mirrors the OOXML ST_TableStyleType enumeration (ECMA-376 §18.18.83). The
+// first 11 values are the regular-table-style elements; the rest are needed
+// for full pivot-table-style parity. Levels (first/second/third) for
+// subheadings and subtotals follow the row-axis or column-axis field index;
+// fields beyond level 2 wrap modulo 3 (Excel's documented behaviour).
 enum class ScTableStyleElement
 {
     WholeTable,
@@ -42,9 +48,28 @@ enum class ScTableStyleElement
     TotalRow,
     FirstHeaderCell,
     LastHeaderCell,
+    // Table-style-only additions
+    FirstTotalCell,
+    LastTotalCell,
+    // Pivot-style-only additions
+    PageFieldLabels,
+    PageFieldValues,
+    FirstSubtotalRow,
+    SecondSubtotalRow,
+    ThirdSubtotalRow,
+    FirstSubtotalColumn,
+    SecondSubtotalColumn,
+    ThirdSubtotalColumn,
+    FirstColumnSubheading,
+    SecondColumnSubheading,
+    ThirdColumnSubheading,
+    FirstRowSubheading,
+    SecondRowSubheading,
+    ThirdRowSubheading,
+    BlankRow,
 };
 
-template <class T> const T* GetItemFromPattern(ScPatternAttr* pPattern, TypedWhichId<T> nWhich)
+template <class T> const T* GetItemFromPattern(const ScPatternAttr* pPattern, TypedWhichId<T> nWhich)
 {
     return pPattern->GetItemSet().GetItemIfSet(nWhich);
 }
@@ -57,17 +82,13 @@ private:
     void operator=(ScTableStyle const&) = delete;
     void operator=(ScTableStyle&&) = delete;
 
-    std::unique_ptr<ScPatternAttr> mpTablePattern;
-    std::unique_ptr<ScPatternAttr> mpFirstColumnStripePattern;
-    std::unique_ptr<ScPatternAttr> mpSecondColumnStripePattern;
-    std::unique_ptr<ScPatternAttr> mpFirstRowStripePattern;
-    std::unique_ptr<ScPatternAttr> mpSecondRowStripePattern;
-    std::unique_ptr<ScPatternAttr> mpLastColumnPattern;
-    std::unique_ptr<ScPatternAttr> mpFirstColumnPattern;
-    std::unique_ptr<ScPatternAttr> mpHeaderRowPattern;
-    std::unique_ptr<ScPatternAttr> mpTotalRowPattern;
-    std::unique_ptr<ScPatternAttr> mpFirstHeaderCellPattern;
-    std::unique_ptr<ScPatternAttr> mpLastHeaderCellPattern;
+    // Element -> pattern map. Replaces a fixed set of named unique_ptr members so
+    // pivot-style elements (subtotals, subheadings, page-field cells, etc.) can be
+    // stored without ballooning the class with one member per element.
+    std::unordered_map<ScTableStyleElement, std::unique_ptr<ScPatternAttr>> maPatterns;
+
+    /// Returns the pattern for an element, or nullptr if not set.
+    const ScPatternAttr* lookupPattern(ScTableStyleElement eElement) const;
 
     sal_Int32 mnFirstRowStripeSize;
     sal_Int32 mnSecondRowStripeSize;

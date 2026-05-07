@@ -53,42 +53,42 @@ const SfxItemSet* ScTableStyle::GetFontItemSet(const ScDBData& rDBData, SCCOL nC
 
     bool bHasHeader = rDBData.HasHeader();
     bool bHasTotal = rDBData.HasTotals();
-    if (bHasHeader && mpLastHeaderCellPattern && nRow == aRange.aStart.Row()
+    if (bHasHeader && lookupPattern(ScTableStyleElement::LastHeaderCell) && nRow == aRange.aStart.Row()
         && nCol == aRange.aEnd.Col())
     {
-        if (HasFontAttrSet(mpLastHeaderCellPattern.get()))
-            return &mpLastHeaderCellPattern->GetItemSet();
+        if (HasFontAttrSet(lookupPattern(ScTableStyleElement::LastHeaderCell)))
+            return &lookupPattern(ScTableStyleElement::LastHeaderCell)->GetItemSet();
     }
 
-    if (bHasHeader && mpFirstHeaderCellPattern && nRow == aRange.aStart.Row()
+    if (bHasHeader && lookupPattern(ScTableStyleElement::FirstHeaderCell) && nRow == aRange.aStart.Row()
         && nCol == aRange.aStart.Col())
     {
-        if (HasFontAttrSet(mpFirstHeaderCellPattern.get()))
-            return &mpFirstHeaderCellPattern->GetItemSet();
+        if (HasFontAttrSet(lookupPattern(ScTableStyleElement::FirstHeaderCell)))
+            return &lookupPattern(ScTableStyleElement::FirstHeaderCell)->GetItemSet();
     }
 
-    if (bHasTotal && mpTotalRowPattern && nRow == aRange.aEnd.Row())
+    if (bHasTotal && lookupPattern(ScTableStyleElement::TotalRow) && nRow == aRange.aEnd.Row())
     {
-        if (HasFontAttrSet(mpTotalRowPattern.get()))
-            return &mpTotalRowPattern->GetItemSet();
+        if (HasFontAttrSet(lookupPattern(ScTableStyleElement::TotalRow)))
+            return &lookupPattern(ScTableStyleElement::TotalRow)->GetItemSet();
     }
 
-    if (bHasHeader && mpHeaderRowPattern && nRow == aRange.aStart.Row())
+    if (bHasHeader && lookupPattern(ScTableStyleElement::HeaderRow) && nRow == aRange.aStart.Row())
     {
-        if (HasFontAttrSet(mpHeaderRowPattern.get()))
-            return &mpHeaderRowPattern->GetItemSet();
+        if (HasFontAttrSet(lookupPattern(ScTableStyleElement::HeaderRow)))
+            return &lookupPattern(ScTableStyleElement::HeaderRow)->GetItemSet();
     }
 
-    if (pParam->mbFirstColumn && mpFirstColumnPattern && nCol == aRange.aStart.Col())
+    if (pParam->mbFirstColumn && lookupPattern(ScTableStyleElement::FirstColumn) && nCol == aRange.aStart.Col())
     {
-        if (HasFontAttrSet(mpFirstColumnPattern.get()))
-            return &mpFirstColumnPattern->GetItemSet();
+        if (HasFontAttrSet(lookupPattern(ScTableStyleElement::FirstColumn)))
+            return &lookupPattern(ScTableStyleElement::FirstColumn)->GetItemSet();
     }
 
-    if (pParam->mbLastColumn && mpLastColumnPattern && nCol == aRange.aEnd.Col())
+    if (pParam->mbLastColumn && lookupPattern(ScTableStyleElement::LastColumn) && nCol == aRange.aEnd.Col())
     {
-        if (HasFontAttrSet(mpLastColumnPattern.get()))
-            return &mpLastColumnPattern->GetItemSet();
+        if (HasFontAttrSet(lookupPattern(ScTableStyleElement::LastColumn)))
+            return &lookupPattern(ScTableStyleElement::LastColumn)->GetItemSet();
     }
 
     if (!bHasTotal || aRange.aEnd.Row() != nRow)
@@ -97,16 +97,16 @@ const SfxItemSet* ScTableStyle::GetFontItemSet(const ScDBData& rDBData, SCCOL nC
         {
             sal_Int32 nTotalRowStripPattern = mnFirstRowStripeSize + mnSecondRowStripeSize;
             bool bFirstRowStripe = (nRowIndex % nTotalRowStripPattern) < mnFirstRowStripeSize;
-            if (mpSecondRowStripePattern && !bFirstRowStripe)
+            if (lookupPattern(ScTableStyleElement::SecondRowStripe) && !bFirstRowStripe)
             {
-                if (HasFontAttrSet(mpSecondRowStripePattern.get()))
-                    return &mpSecondRowStripePattern->GetItemSet();
+                if (HasFontAttrSet(lookupPattern(ScTableStyleElement::SecondRowStripe)))
+                    return &lookupPattern(ScTableStyleElement::SecondRowStripe)->GetItemSet();
             }
 
-            if (mpFirstRowStripePattern && bFirstRowStripe)
+            if (lookupPattern(ScTableStyleElement::FirstRowStripe) && bFirstRowStripe)
             {
-                if (HasFontAttrSet(mpFirstRowStripePattern.get()))
-                    return &mpFirstRowStripePattern->GetItemSet();
+                if (HasFontAttrSet(lookupPattern(ScTableStyleElement::FirstRowStripe)))
+                    return &lookupPattern(ScTableStyleElement::FirstRowStripe)->GetItemSet();
             }
         }
 
@@ -115,24 +115,24 @@ const SfxItemSet* ScTableStyle::GetFontItemSet(const ScDBData& rDBData, SCCOL nC
             SCCOL nRelativeCol = nCol - aRange.aStart.Col();
             sal_Int32 nTotalColStripePattern = mnFirstColStripeSize + mnSecondColStripeSize;
             bool bFirstColStripe = (nRelativeCol % nTotalColStripePattern) < mnFirstColStripeSize;
-            if (mpSecondColumnStripePattern && !bFirstColStripe)
+            if (lookupPattern(ScTableStyleElement::SecondColumnStripe) && !bFirstColStripe)
             {
-                if (HasFontAttrSet(mpSecondColumnStripePattern.get()))
-                    return &mpSecondColumnStripePattern->GetItemSet();
+                if (HasFontAttrSet(lookupPattern(ScTableStyleElement::SecondColumnStripe)))
+                    return &lookupPattern(ScTableStyleElement::SecondColumnStripe)->GetItemSet();
             }
 
-            if (mpFirstColumnStripePattern && bFirstColStripe)
+            if (lookupPattern(ScTableStyleElement::FirstColumnStripe) && bFirstColStripe)
             {
-                if (HasFontAttrSet(mpFirstColumnStripePattern.get()))
-                    return &mpFirstColumnStripePattern->GetItemSet();
+                if (HasFontAttrSet(lookupPattern(ScTableStyleElement::FirstColumnStripe)))
+                    return &lookupPattern(ScTableStyleElement::FirstColumnStripe)->GetItemSet();
             }
         }
     }
 
-    if (mpTablePattern)
+    if (lookupPattern(ScTableStyleElement::WholeTable))
     {
-        if (HasFontAttrSet(mpTablePattern.get()))
-            return &mpTablePattern->GetItemSet();
+        if (HasFontAttrSet(lookupPattern(ScTableStyleElement::WholeTable)))
+            return &lookupPattern(ScTableStyleElement::WholeTable)->GetItemSet();
     }
 
     return nullptr;
@@ -147,52 +147,52 @@ const SvxBrushItem* ScTableStyle::GetFillItem(const ScDBData& rDBData, SCCOL nCo
 
     bool bHasHeader = rDBData.HasHeader();
     bool bHasTotal = rDBData.HasTotals();
-    if (bHasHeader && mpLastHeaderCellPattern && nRow == aRange.aStart.Row()
+    if (bHasHeader && lookupPattern(ScTableStyleElement::LastHeaderCell) && nRow == aRange.aStart.Row()
         && nCol == aRange.aEnd.Col())
     {
         const SvxBrushItem* pPoolItem
-            = GetItemFromPattern(mpLastHeaderCellPattern.get(), ATTR_BACKGROUND);
+            = GetItemFromPattern(lookupPattern(ScTableStyleElement::LastHeaderCell), ATTR_BACKGROUND);
         if (pPoolItem)
             return pPoolItem;
     }
 
-    if (bHasHeader && mpFirstHeaderCellPattern && nRow == aRange.aStart.Row()
+    if (bHasHeader && lookupPattern(ScTableStyleElement::FirstHeaderCell) && nRow == aRange.aStart.Row()
         && nCol == aRange.aStart.Col())
     {
         const SvxBrushItem* pPoolItem
-            = GetItemFromPattern(mpFirstHeaderCellPattern.get(), ATTR_BACKGROUND);
+            = GetItemFromPattern(lookupPattern(ScTableStyleElement::FirstHeaderCell), ATTR_BACKGROUND);
         if (pPoolItem)
             return pPoolItem;
     }
 
-    if (bHasHeader && mpHeaderRowPattern && nRow == aRange.aStart.Row())
+    if (bHasHeader && lookupPattern(ScTableStyleElement::HeaderRow) && nRow == aRange.aStart.Row())
     {
         const SvxBrushItem* pPoolItem
-            = GetItemFromPattern(mpHeaderRowPattern.get(), ATTR_BACKGROUND);
+            = GetItemFromPattern(lookupPattern(ScTableStyleElement::HeaderRow), ATTR_BACKGROUND);
         if (pPoolItem)
             return pPoolItem;
     }
 
-    if (bHasTotal && mpTotalRowPattern && nRow == aRange.aEnd.Row())
+    if (bHasTotal && lookupPattern(ScTableStyleElement::TotalRow) && nRow == aRange.aEnd.Row())
     {
         const SvxBrushItem* pPoolItem
-            = GetItemFromPattern(mpTotalRowPattern.get(), ATTR_BACKGROUND);
+            = GetItemFromPattern(lookupPattern(ScTableStyleElement::TotalRow), ATTR_BACKGROUND);
         if (pPoolItem)
             return pPoolItem;
     }
 
-    if (pParam->mbFirstColumn && mpFirstColumnPattern && nCol == aRange.aStart.Col())
+    if (pParam->mbFirstColumn && lookupPattern(ScTableStyleElement::FirstColumn) && nCol == aRange.aStart.Col())
     {
         const SvxBrushItem* pPoolItem
-            = GetItemFromPattern(mpFirstColumnPattern.get(), ATTR_BACKGROUND);
+            = GetItemFromPattern(lookupPattern(ScTableStyleElement::FirstColumn), ATTR_BACKGROUND);
         if (pPoolItem)
             return pPoolItem;
     }
 
-    if (pParam->mbLastColumn && mpLastColumnPattern && nCol == aRange.aEnd.Col())
+    if (pParam->mbLastColumn && lookupPattern(ScTableStyleElement::LastColumn) && nCol == aRange.aEnd.Col())
     {
         const SvxBrushItem* pPoolItem
-            = GetItemFromPattern(mpLastColumnPattern.get(), ATTR_BACKGROUND);
+            = GetItemFromPattern(lookupPattern(ScTableStyleElement::LastColumn), ATTR_BACKGROUND);
         if (pPoolItem)
             return pPoolItem;
     }
@@ -203,18 +203,18 @@ const SvxBrushItem* ScTableStyle::GetFillItem(const ScDBData& rDBData, SCCOL nCo
         {
             sal_Int32 nTotalRowStripPattern = mnFirstRowStripeSize + mnSecondRowStripeSize;
             bool bFirstRowStripe = (nRowIndex % nTotalRowStripPattern) < mnFirstRowStripeSize;
-            if (mpSecondRowStripePattern && !bFirstRowStripe)
+            if (lookupPattern(ScTableStyleElement::SecondRowStripe) && !bFirstRowStripe)
             {
                 const SvxBrushItem* pPoolItem
-                    = GetItemFromPattern(mpSecondRowStripePattern.get(), ATTR_BACKGROUND);
+                    = GetItemFromPattern(lookupPattern(ScTableStyleElement::SecondRowStripe), ATTR_BACKGROUND);
                 if (pPoolItem)
                     return pPoolItem;
             }
 
-            if (mpFirstRowStripePattern && bFirstRowStripe)
+            if (lookupPattern(ScTableStyleElement::FirstRowStripe) && bFirstRowStripe)
             {
                 const SvxBrushItem* pPoolItem
-                    = GetItemFromPattern(mpFirstRowStripePattern.get(), ATTR_BACKGROUND);
+                    = GetItemFromPattern(lookupPattern(ScTableStyleElement::FirstRowStripe), ATTR_BACKGROUND);
                 if (pPoolItem)
                     return pPoolItem;
             }
@@ -225,27 +225,27 @@ const SvxBrushItem* ScTableStyle::GetFillItem(const ScDBData& rDBData, SCCOL nCo
             SCCOL nRelativeCol = nCol - aRange.aStart.Col();
             sal_Int32 nTotalColStripePattern = mnFirstColStripeSize + mnSecondColStripeSize;
             bool bFirstColStripe = (nRelativeCol % nTotalColStripePattern) < mnFirstColStripeSize;
-            if (mpSecondColumnStripePattern && !bFirstColStripe)
+            if (lookupPattern(ScTableStyleElement::SecondColumnStripe) && !bFirstColStripe)
             {
                 const SvxBrushItem* pPoolItem
-                    = GetItemFromPattern(mpSecondColumnStripePattern.get(), ATTR_BACKGROUND);
+                    = GetItemFromPattern(lookupPattern(ScTableStyleElement::SecondColumnStripe), ATTR_BACKGROUND);
                 if (pPoolItem)
                     return pPoolItem;
             }
 
-            if (mpFirstColumnStripePattern && bFirstColStripe)
+            if (lookupPattern(ScTableStyleElement::FirstColumnStripe) && bFirstColStripe)
             {
                 const SvxBrushItem* pPoolItem
-                    = GetItemFromPattern(mpFirstColumnStripePattern.get(), ATTR_BACKGROUND);
+                    = GetItemFromPattern(lookupPattern(ScTableStyleElement::FirstColumnStripe), ATTR_BACKGROUND);
                 if (pPoolItem)
                     return pPoolItem;
             }
         }
     }
 
-    if (mpTablePattern)
+    if (lookupPattern(ScTableStyleElement::WholeTable))
     {
-        const SvxBrushItem* pPoolItem = GetItemFromPattern(mpTablePattern.get(), ATTR_BACKGROUND);
+        const SvxBrushItem* pPoolItem = GetItemFromPattern(lookupPattern(ScTableStyleElement::WholeTable), ATTR_BACKGROUND);
         if (pPoolItem)
             return pPoolItem;
     }
@@ -262,14 +262,14 @@ std::unique_ptr<SvxBoxItem> ScTableStyle::GetBoxItem(const ScDBData& rDBData, SC
 
     bool bHasHeader = rDBData.HasHeader();
     bool bHasTotal = rDBData.HasTotals();
-    if (bHasHeader && mpLastHeaderCellPattern && nRow == aRange.aStart.Row()
+    if (bHasHeader && lookupPattern(ScTableStyleElement::LastHeaderCell) && nRow == aRange.aStart.Row()
         && nCol == aRange.aEnd.Col())
     {
         const SvxBoxItem* pPoolItem
-            = GetItemFromPattern(mpLastHeaderCellPattern.get(), ATTR_BORDER);
-        if (mpTablePattern)
+            = GetItemFromPattern(lookupPattern(ScTableStyleElement::LastHeaderCell), ATTR_BORDER);
+        if (lookupPattern(ScTableStyleElement::WholeTable))
         {
-            if (const SvxBoxItem* pBoxItem = GetItemFromPattern(mpTablePattern.get(), ATTR_BORDER))
+            if (const SvxBoxItem* pBoxItem = GetItemFromPattern(lookupPattern(ScTableStyleElement::WholeTable), ATTR_BORDER))
             {
                 const ::editeng::SvxBorderLine* pTLine = pBoxItem->GetLine(SvxBoxItemLine::TOP);
                 const ::editeng::SvxBorderLine* pRLine = pBoxItem->GetLine(SvxBoxItemLine::RIGHT);
@@ -293,14 +293,14 @@ std::unique_ptr<SvxBoxItem> ScTableStyle::GetBoxItem(const ScDBData& rDBData, SC
             return std::make_unique<SvxBoxItem>(*pPoolItem);
     }
 
-    if (bHasHeader && mpFirstHeaderCellPattern && nRow == aRange.aStart.Row()
+    if (bHasHeader && lookupPattern(ScTableStyleElement::FirstHeaderCell) && nRow == aRange.aStart.Row()
         && nCol == aRange.aStart.Col())
     {
         const SvxBoxItem* pPoolItem
-            = GetItemFromPattern(mpFirstHeaderCellPattern.get(), ATTR_BORDER);
-        if (mpTablePattern)
+            = GetItemFromPattern(lookupPattern(ScTableStyleElement::FirstHeaderCell), ATTR_BORDER);
+        if (lookupPattern(ScTableStyleElement::WholeTable))
         {
-            if (const SvxBoxItem* pBoxItem = GetItemFromPattern(mpTablePattern.get(), ATTR_BORDER))
+            if (const SvxBoxItem* pBoxItem = GetItemFromPattern(lookupPattern(ScTableStyleElement::WholeTable), ATTR_BORDER))
             {
                 const ::editeng::SvxBorderLine* pTLine = pBoxItem->GetLine(SvxBoxItemLine::TOP);
                 const ::editeng::SvxBorderLine* pLLine = pBoxItem->GetLine(SvxBoxItemLine::LEFT);
@@ -324,14 +324,14 @@ std::unique_ptr<SvxBoxItem> ScTableStyle::GetBoxItem(const ScDBData& rDBData, SC
             return std::make_unique<SvxBoxItem>(*pPoolItem);
     }
 
-    if (bHasHeader && mpHeaderRowPattern && nRow == aRange.aStart.Row())
+    if (bHasHeader && lookupPattern(ScTableStyleElement::HeaderRow) && nRow == aRange.aStart.Row())
     {
-        const SvxBoxItem* pPoolItem = GetItemFromPattern(mpHeaderRowPattern.get(), ATTR_BORDER);
-        if (mpTablePattern)
+        const SvxBoxItem* pPoolItem = GetItemFromPattern(lookupPattern(ScTableStyleElement::HeaderRow), ATTR_BORDER);
+        if (lookupPattern(ScTableStyleElement::WholeTable))
         {
-            const SvxBoxItem* pBoxItem = GetItemFromPattern(mpTablePattern.get(), ATTR_BORDER);
+            const SvxBoxItem* pBoxItem = GetItemFromPattern(lookupPattern(ScTableStyleElement::WholeTable), ATTR_BORDER);
             const SvxBoxInfoItem* pBoxInfoItem
-                = GetItemFromPattern(mpTablePattern.get(), ATTR_BORDER_INNER);
+                = GetItemFromPattern(lookupPattern(ScTableStyleElement::WholeTable), ATTR_BORDER_INNER);
             if (pBoxItem || pBoxInfoItem)
             {
                 if (pBoxItem && nCol == aRange.aStart.Col())
@@ -406,14 +406,14 @@ std::unique_ptr<SvxBoxItem> ScTableStyle::GetBoxItem(const ScDBData& rDBData, SC
             return std::make_unique<SvxBoxItem>(*pPoolItem);
     }
 
-    if (bHasTotal && mpTotalRowPattern && nRow == aRange.aEnd.Row())
+    if (bHasTotal && lookupPattern(ScTableStyleElement::TotalRow) && nRow == aRange.aEnd.Row())
     {
-        const SvxBoxItem* pPoolItem = GetItemFromPattern(mpTotalRowPattern.get(), ATTR_BORDER);
-        if (mpTablePattern)
+        const SvxBoxItem* pPoolItem = GetItemFromPattern(lookupPattern(ScTableStyleElement::TotalRow), ATTR_BORDER);
+        if (lookupPattern(ScTableStyleElement::WholeTable))
         {
-            const SvxBoxItem* pBoxItem = GetItemFromPattern(mpTablePattern.get(), ATTR_BORDER);
+            const SvxBoxItem* pBoxItem = GetItemFromPattern(lookupPattern(ScTableStyleElement::WholeTable), ATTR_BORDER);
             const SvxBoxInfoItem* pBoxInfoItem
-                = GetItemFromPattern(mpTablePattern.get(), ATTR_BORDER_INNER);
+                = GetItemFromPattern(lookupPattern(ScTableStyleElement::WholeTable), ATTR_BORDER_INNER);
             if (pBoxItem || pBoxInfoItem)
             {
                 if (pBoxItem && nCol == aRange.aStart.Col())
@@ -490,16 +490,16 @@ std::unique_ptr<SvxBoxItem> ScTableStyle::GetBoxItem(const ScDBData& rDBData, SC
             return std::make_unique<SvxBoxItem>(*pPoolItem);
     }
 
-    if (pParam->mbFirstColumn && mpFirstColumnPattern && nCol == aRange.aStart.Col())
+    if (pParam->mbFirstColumn && lookupPattern(ScTableStyleElement::FirstColumn) && nCol == aRange.aStart.Col())
     {
-        const SvxBoxItem* pPoolItem = GetItemFromPattern(mpFirstColumnPattern.get(), ATTR_BORDER);
+        const SvxBoxItem* pPoolItem = GetItemFromPattern(lookupPattern(ScTableStyleElement::FirstColumn), ATTR_BORDER);
         if (pPoolItem)
             return std::make_unique<SvxBoxItem>(*pPoolItem);
     }
 
-    if (pParam->mbLastColumn && mpLastColumnPattern && nCol == aRange.aEnd.Col())
+    if (pParam->mbLastColumn && lookupPattern(ScTableStyleElement::LastColumn) && nCol == aRange.aEnd.Col())
     {
-        const SvxBoxItem* pPoolItem = GetItemFromPattern(mpLastColumnPattern.get(), ATTR_BORDER);
+        const SvxBoxItem* pPoolItem = GetItemFromPattern(lookupPattern(ScTableStyleElement::LastColumn), ATTR_BORDER);
         if (pPoolItem)
             return std::make_unique<SvxBoxItem>(*pPoolItem);
     }
@@ -512,16 +512,16 @@ std::unique_ptr<SvxBoxItem> ScTableStyle::GetBoxItem(const ScDBData& rDBData, SC
             bool bFirstRowStripe = (nRowIndex % nTotalRowStripPattern) < mnFirstRowStripeSize;
 
             const SvxBoxItem* pPoolItem = nullptr;
-            if (mpFirstRowStripePattern && bFirstRowStripe)
-                pPoolItem = GetItemFromPattern(mpFirstRowStripePattern.get(), ATTR_BORDER);
-            else if (mpSecondRowStripePattern && !bFirstRowStripe)
-                pPoolItem = GetItemFromPattern(mpSecondRowStripePattern.get(), ATTR_BORDER);
+            if (lookupPattern(ScTableStyleElement::FirstRowStripe) && bFirstRowStripe)
+                pPoolItem = GetItemFromPattern(lookupPattern(ScTableStyleElement::FirstRowStripe), ATTR_BORDER);
+            else if (lookupPattern(ScTableStyleElement::SecondRowStripe) && !bFirstRowStripe)
+                pPoolItem = GetItemFromPattern(lookupPattern(ScTableStyleElement::SecondRowStripe), ATTR_BORDER);
 
-            if (pPoolItem && mpTablePattern)
+            if (pPoolItem && lookupPattern(ScTableStyleElement::WholeTable))
             {
-                const SvxBoxItem* pBoxItem = GetItemFromPattern(mpTablePattern.get(), ATTR_BORDER);
+                const SvxBoxItem* pBoxItem = GetItemFromPattern(lookupPattern(ScTableStyleElement::WholeTable), ATTR_BORDER);
                 const SvxBoxInfoItem* pBoxInfoItem
-                    = GetItemFromPattern(mpTablePattern.get(), ATTR_BORDER_INNER);
+                    = GetItemFromPattern(lookupPattern(ScTableStyleElement::WholeTable), ATTR_BORDER_INNER);
                 if (pBoxItem || pBoxInfoItem)
                 {
                     if (pBoxItem && nCol == aRange.aStart.Col())
@@ -596,29 +596,29 @@ std::unique_ptr<SvxBoxItem> ScTableStyle::GetBoxItem(const ScDBData& rDBData, SC
             SCCOL nRelativeCol = nCol - aRange.aStart.Col();
             sal_Int32 nTotalColStripePattern = mnFirstColStripeSize + mnSecondColStripeSize;
             bool bFirstColStripe = (nRelativeCol % nTotalColStripePattern) < mnFirstColStripeSize;
-            if (mpSecondColumnStripePattern && !bFirstColStripe)
+            if (lookupPattern(ScTableStyleElement::SecondColumnStripe) && !bFirstColStripe)
             {
                 const SvxBoxItem* pPoolItem
-                    = GetItemFromPattern(mpSecondColumnStripePattern.get(), ATTR_BORDER);
+                    = GetItemFromPattern(lookupPattern(ScTableStyleElement::SecondColumnStripe), ATTR_BORDER);
                 if (pPoolItem)
                     return std::make_unique<SvxBoxItem>(*pPoolItem);
             }
 
-            if (mpFirstColumnStripePattern && bFirstColStripe)
+            if (lookupPattern(ScTableStyleElement::FirstColumnStripe) && bFirstColStripe)
             {
                 const SvxBoxItem* pPoolItem
-                    = GetItemFromPattern(mpFirstColumnStripePattern.get(), ATTR_BORDER);
+                    = GetItemFromPattern(lookupPattern(ScTableStyleElement::FirstColumnStripe), ATTR_BORDER);
                 if (pPoolItem)
                     return std::make_unique<SvxBoxItem>(*pPoolItem);
             }
         }
     }
 
-    if (mpTablePattern)
+    if (lookupPattern(ScTableStyleElement::WholeTable))
     {
-        const SvxBoxItem* pBoxItem = GetItemFromPattern(mpTablePattern.get(), ATTR_BORDER);
+        const SvxBoxItem* pBoxItem = GetItemFromPattern(lookupPattern(ScTableStyleElement::WholeTable), ATTR_BORDER);
         const SvxBoxInfoItem* pBoxInfoItem
-            = GetItemFromPattern(mpTablePattern.get(), ATTR_BORDER_INNER);
+            = GetItemFromPattern(lookupPattern(ScTableStyleElement::WholeTable), ATTR_BORDER_INNER);
 
         if (pBoxItem || pBoxInfoItem)
         {
@@ -714,161 +714,84 @@ const OUString& ScTableStyle::GetUIName() const
     return maStyleName;
 }
 
+const ScPatternAttr* ScTableStyle::lookupPattern(ScTableStyleElement eElement) const
+{
+    auto it = maPatterns.find(eElement);
+    return it == maPatterns.end() ? nullptr : it->second.get();
+}
+
 void ScTableStyle::SetPattern(ScTableStyleElement eTableStyleElement,
                               std::unique_ptr<ScPatternAttr> pPattern)
 {
-    switch (eTableStyleElement)
-    {
-        case ScTableStyleElement::WholeTable:
-            mpTablePattern = std::move(pPattern);
-            break;
-        case ScTableStyleElement::FirstColumnStripe:
-            mpFirstColumnStripePattern = std::move(pPattern);
-            break;
-        case ScTableStyleElement::SecondColumnStripe:
-            mpSecondColumnStripePattern = std::move(pPattern);
-            break;
-        case ScTableStyleElement::FirstRowStripe:
-            mpFirstRowStripePattern = std::move(pPattern);
-            break;
-        case ScTableStyleElement::SecondRowStripe:
-            mpSecondRowStripePattern = std::move(pPattern);
-            break;
-        case ScTableStyleElement::LastColumn:
-            mpLastColumnPattern = std::move(pPattern);
-            break;
-        case ScTableStyleElement::FirstColumn:
-            mpFirstColumnPattern = std::move(pPattern);
-            break;
-        case ScTableStyleElement::HeaderRow:
-            mpHeaderRowPattern = std::move(pPattern);
-            break;
-        case ScTableStyleElement::TotalRow:
-            mpTotalRowPattern = std::move(pPattern);
-            break;
-        case ScTableStyleElement::FirstHeaderCell:
-            mpFirstHeaderCellPattern = std::move(pPattern);
-            break;
-        case ScTableStyleElement::LastHeaderCell:
-            mpLastHeaderCellPattern = std::move(pPattern);
-            break;
-    }
+    if (pPattern)
+        maPatterns[eTableStyleElement] = std::move(pPattern);
+    else
+        maPatterns.erase(eTableStyleElement);
 }
 
 void ScTableStyle::SetTablePattern(std::unique_ptr<ScPatternAttr> pPattern)
 {
-    mpTablePattern = std::move(pPattern);
+    SetPattern(ScTableStyleElement::WholeTable, std::move(pPattern));
 }
 
 void ScTableStyle::SetFirstColumnStripePattern(std::unique_ptr<ScPatternAttr> pPattern)
 {
-    mpFirstColumnStripePattern = std::move(pPattern);
+    SetPattern(ScTableStyleElement::FirstColumnStripe, std::move(pPattern));
 }
 
 void ScTableStyle::SetSecondColumnStripePattern(std::unique_ptr<ScPatternAttr> pPattern)
 {
-    mpSecondColumnStripePattern = std::move(pPattern);
+    SetPattern(ScTableStyleElement::SecondColumnStripe, std::move(pPattern));
 }
 
 void ScTableStyle::SetFirstRowStripePattern(std::unique_ptr<ScPatternAttr> pPattern)
 {
-    mpFirstRowStripePattern = std::move(pPattern);
+    SetPattern(ScTableStyleElement::FirstRowStripe, std::move(pPattern));
 }
 
 void ScTableStyle::SetSecondRowStripePattern(std::unique_ptr<ScPatternAttr> pPattern)
 {
-    mpSecondRowStripePattern = std::move(pPattern);
+    SetPattern(ScTableStyleElement::SecondRowStripe, std::move(pPattern));
 }
 
 void ScTableStyle::SetLastColumnPattern(std::unique_ptr<ScPatternAttr> pPattern)
 {
-    mpLastColumnPattern = std::move(pPattern);
+    SetPattern(ScTableStyleElement::LastColumn, std::move(pPattern));
 }
 
 void ScTableStyle::SetFirstColumnPattern(std::unique_ptr<ScPatternAttr> pPattern)
 {
-    mpFirstColumnPattern = std::move(pPattern);
+    SetPattern(ScTableStyleElement::FirstColumn, std::move(pPattern));
 }
 
 void ScTableStyle::SetHeaderRowPattern(std::unique_ptr<ScPatternAttr> pPattern)
 {
-    mpHeaderRowPattern = std::move(pPattern);
+    SetPattern(ScTableStyleElement::HeaderRow, std::move(pPattern));
 }
 
 void ScTableStyle::SetTotalRowPattern(std::unique_ptr<ScPatternAttr> pPattern)
 {
-    mpTotalRowPattern = std::move(pPattern);
+    SetPattern(ScTableStyleElement::TotalRow, std::move(pPattern));
 }
 
 void ScTableStyle::SetFirstHeaderCellPattern(std::unique_ptr<ScPatternAttr> pPattern)
 {
-    mpFirstHeaderCellPattern = std::move(pPattern);
+    SetPattern(ScTableStyleElement::FirstHeaderCell, std::move(pPattern));
 }
 
 void ScTableStyle::SetLastHeaderCellPattern(std::unique_ptr<ScPatternAttr> pPattern)
 {
-    mpLastHeaderCellPattern = std::move(pPattern);
+    SetPattern(ScTableStyleElement::LastHeaderCell, std::move(pPattern));
 }
 
 std::map<ScTableStyleElement, const ScPatternAttr*> ScTableStyle::GetSetPatterns() const
 {
     std::map<ScTableStyleElement, const ScPatternAttr*> aPatterns;
-    if (mpTablePattern)
+    for (const auto& [eElement, pPattern] : maPatterns)
     {
-        aPatterns.emplace(ScTableStyleElement::WholeTable, mpTablePattern.get());
+        if (pPattern)
+            aPatterns.emplace(eElement, pPattern.get());
     }
-
-    if (mpFirstColumnStripePattern)
-    {
-        aPatterns.emplace(ScTableStyleElement::FirstColumnStripe, mpFirstColumnStripePattern.get());
-    }
-
-    if (mpSecondColumnStripePattern)
-    {
-        aPatterns.emplace(ScTableStyleElement::SecondColumnStripe,
-                          mpSecondColumnStripePattern.get());
-    }
-
-    if (mpFirstRowStripePattern)
-    {
-        aPatterns.emplace(ScTableStyleElement::FirstRowStripe, mpFirstRowStripePattern.get());
-    }
-
-    if (mpSecondRowStripePattern)
-    {
-        aPatterns.emplace(ScTableStyleElement::SecondRowStripe, mpSecondRowStripePattern.get());
-    }
-
-    if (mpLastColumnPattern)
-    {
-        aPatterns.emplace(ScTableStyleElement::LastColumn, mpLastColumnPattern.get());
-    }
-
-    if (mpFirstColumnPattern)
-    {
-        aPatterns.emplace(ScTableStyleElement::FirstColumn, mpFirstColumnPattern.get());
-    }
-
-    if (mpHeaderRowPattern)
-    {
-        aPatterns.emplace(ScTableStyleElement::HeaderRow, mpHeaderRowPattern.get());
-    }
-
-    if (mpTotalRowPattern)
-    {
-        aPatterns.emplace(ScTableStyleElement::TotalRow, mpTotalRowPattern.get());
-    }
-
-    if (mpFirstHeaderCellPattern)
-    {
-        aPatterns.emplace(ScTableStyleElement::FirstHeaderCell, mpFirstHeaderCellPattern.get());
-    }
-
-    if (mpLastHeaderCellPattern)
-    {
-        aPatterns.emplace(ScTableStyleElement::LastHeaderCell, mpLastHeaderCellPattern.get());
-    }
-
     return aPatterns;
 }
 
@@ -1009,16 +932,11 @@ void ScTableStyle::UpdateThemedColors(const model::ColorSet& rColorSet)
     if (mbIsOOXMLDefault)
         return; // defaults are fully regenerated, not updated in-place
 
-    std::unique_ptr<ScPatternAttr>* aPatterns[]
-        = { &mpTablePattern,           &mpFirstColumnStripePattern, &mpSecondColumnStripePattern,
-            &mpFirstRowStripePattern,  &mpSecondRowStripePattern,   &mpLastColumnPattern,
-            &mpFirstColumnPattern,     &mpHeaderRowPattern,         &mpTotalRowPattern,
-            &mpFirstHeaderCellPattern, &mpLastHeaderCellPattern };
-
-    for (auto* pPatternPtr : aPatterns)
+    for (auto& [eElement, pPattern] : maPatterns)
     {
-        if (*pPatternPtr)
-            updatePatternThemedColors(**pPatternPtr, rColorSet);
+        (void)eElement;
+        if (pPattern)
+            updatePatternThemedColors(*pPattern, rColorSet);
     }
 }
 
@@ -1067,6 +985,40 @@ std::string_view tableStyleElementName(ScTableStyleElement eElement)
             return "FirstHeaderCell";
         case ScTableStyleElement::LastHeaderCell:
             return "LastHeaderCell";
+        case ScTableStyleElement::FirstTotalCell:
+            return "FirstTotalCell";
+        case ScTableStyleElement::LastTotalCell:
+            return "LastTotalCell";
+        case ScTableStyleElement::PageFieldLabels:
+            return "PageFieldLabels";
+        case ScTableStyleElement::PageFieldValues:
+            return "PageFieldValues";
+        case ScTableStyleElement::FirstSubtotalRow:
+            return "FirstSubtotalRow";
+        case ScTableStyleElement::SecondSubtotalRow:
+            return "SecondSubtotalRow";
+        case ScTableStyleElement::ThirdSubtotalRow:
+            return "ThirdSubtotalRow";
+        case ScTableStyleElement::FirstSubtotalColumn:
+            return "FirstSubtotalColumn";
+        case ScTableStyleElement::SecondSubtotalColumn:
+            return "SecondSubtotalColumn";
+        case ScTableStyleElement::ThirdSubtotalColumn:
+            return "ThirdSubtotalColumn";
+        case ScTableStyleElement::FirstColumnSubheading:
+            return "FirstColumnSubheading";
+        case ScTableStyleElement::SecondColumnSubheading:
+            return "SecondColumnSubheading";
+        case ScTableStyleElement::ThirdColumnSubheading:
+            return "ThirdColumnSubheading";
+        case ScTableStyleElement::FirstRowSubheading:
+            return "FirstRowSubheading";
+        case ScTableStyleElement::SecondRowSubheading:
+            return "SecondRowSubheading";
+        case ScTableStyleElement::ThirdRowSubheading:
+            return "ThirdRowSubheading";
+        case ScTableStyleElement::BlankRow:
+            return "BlankRow";
     }
     return {};
 }

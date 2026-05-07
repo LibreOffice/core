@@ -3369,7 +3369,38 @@ XclExpXmlTableStyle::XclExpXmlTableStyle(const XclExpRoot& rRoot, const ScTableS
     }
 }
 
-const std::map<ScTableStyleElement, const char*> aTableStyleElementToOOXML = { {ScTableStyleElement::WholeTable, "wholeTable"}, {ScTableStyleElement::FirstColumnStripe, "firstColumnStripe"}, {ScTableStyleElement::SecondColumnStripe, "secondColumnStripe"}, {ScTableStyleElement::FirstRowStripe, "firstRowStripe"}, {ScTableStyleElement::SecondRowStripe, "secondRowStripe"}, {ScTableStyleElement::LastColumn, "lastColumn"}, {ScTableStyleElement::FirstColumn, "firstColumn"}, {ScTableStyleElement::HeaderRow, "headerRow"}, {ScTableStyleElement::TotalRow, "totalRow"}, {ScTableStyleElement::FirstHeaderCell, "firstHeaderCell"}, {ScTableStyleElement::LastHeaderCell, "lastHeaderCell"} };
+const std::map<ScTableStyleElement, const char*> aTableStyleElementToOOXML = {
+    { ScTableStyleElement::WholeTable, "wholeTable" },
+    { ScTableStyleElement::FirstColumnStripe, "firstColumnStripe" },
+    { ScTableStyleElement::SecondColumnStripe, "secondColumnStripe" },
+    { ScTableStyleElement::FirstRowStripe, "firstRowStripe" },
+    { ScTableStyleElement::SecondRowStripe, "secondRowStripe" },
+    { ScTableStyleElement::LastColumn, "lastColumn" },
+    { ScTableStyleElement::FirstColumn, "firstColumn" },
+    { ScTableStyleElement::HeaderRow, "headerRow" },
+    { ScTableStyleElement::TotalRow, "totalRow" },
+    { ScTableStyleElement::FirstHeaderCell, "firstHeaderCell" },
+    { ScTableStyleElement::LastHeaderCell, "lastHeaderCell" },
+    // Table-style additions
+    { ScTableStyleElement::FirstTotalCell, "firstTotalCell" },
+    { ScTableStyleElement::LastTotalCell, "lastTotalCell" },
+    // Pivot-style additions (ECMA-376 §18.18.83)
+    { ScTableStyleElement::PageFieldLabels, "pageFieldLabels" },
+    { ScTableStyleElement::PageFieldValues, "pageFieldValues" },
+    { ScTableStyleElement::FirstSubtotalRow, "firstSubtotalRow" },
+    { ScTableStyleElement::SecondSubtotalRow, "secondSubtotalRow" },
+    { ScTableStyleElement::ThirdSubtotalRow, "thirdSubtotalRow" },
+    { ScTableStyleElement::FirstSubtotalColumn, "firstSubtotalColumn" },
+    { ScTableStyleElement::SecondSubtotalColumn, "secondSubtotalColumn" },
+    { ScTableStyleElement::ThirdSubtotalColumn, "thirdSubtotalColumn" },
+    { ScTableStyleElement::FirstColumnSubheading, "firstColumnSubheading" },
+    { ScTableStyleElement::SecondColumnSubheading, "secondColumnSubheading" },
+    { ScTableStyleElement::ThirdColumnSubheading, "thirdColumnSubheading" },
+    { ScTableStyleElement::FirstRowSubheading, "firstRowSubheading" },
+    { ScTableStyleElement::SecondRowSubheading, "secondRowSubheading" },
+    { ScTableStyleElement::ThirdRowSubheading, "thirdRowSubheading" },
+    { ScTableStyleElement::BlankRow, "blankRow" }
+};
 
 void XclExpXmlTableStyle::SaveXml( XclExpXmlStream& rStrm )
 {
