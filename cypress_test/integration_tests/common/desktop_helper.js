@@ -49,6 +49,26 @@ function sidebarToggle() {
 	cy.cGet('#optionscontainer [id^="SidebarDeck.PropertyDeck"] button').click();
 }
 
+// Wait for the sidebar to reshow and grab focus to its first focusable
+// element via the 'sidebarstealfocus' timer scheduled in
+// Control.Sidebar.ts.
+function assertSidebarStealsFocus(win) {
+	cy.log('>> assertSidebarStealsFocus - start');
+
+	cy.cGet('#sidebar-dock-wrapper').should('be.visible').then(function(sidebar) {
+		// This first waitUntilLayoutingIsIdle ensures the sidebar
+		// update task has run and registered the timer.
+		helper.waitUntilLayoutingIsIdle(win);
+		// Wait for that timer to complete
+		helper.waitForTimers(win, 'sidebarstealfocus');
+		// Wait until dispatched tasks get done
+		helper.waitUntilLayoutingIsIdle(win);
+		helper.containsFocusElement(sidebar[0], true);
+	});
+
+	cy.log('<< assertSidebarStealsFocus - end');
+}
+
 // Make the status bar visible if it's hidden at the moment.
 // We use the menu option under 'View' menu to make it visible.
 function showStatusBarIfHidden() {
@@ -634,6 +654,7 @@ module.exports.updateFollowingUsers = updateFollowingUsers;
 module.exports.assertVisiblePage = assertVisiblePage;
 module.exports.closeNavigatorSidebar = closeNavigatorSidebar;
 module.exports.sidebarToggle = sidebarToggle;
+module.exports.assertSidebarStealsFocus = assertSidebarStealsFocus;
 module.exports.getCompactIcon = getCompactIcon;
 module.exports.getNbIcon = getNbIcon;
 module.exports.getCompactIconArrow = getCompactIconArrow;

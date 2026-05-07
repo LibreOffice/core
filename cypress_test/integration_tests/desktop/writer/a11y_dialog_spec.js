@@ -476,11 +476,7 @@ describe(['tagdesktop'], 'Accessibility Writer Dialog Tests', { testIsolation: f
         helper.processToIdle(win);
 
         // sidebar starts again, and grabs focus to itself
-        cy.cGet('#sidebar-dock-wrapper').should('be.visible').then(function(sidebar) {
-                helper.waitForTimers(win, 'sidebarstealfocus');
-                helper.waitUntilLayoutingIsIdle(win);
-                helper.containsFocusElement(sidebar[0], true);
-       });
+        desktopHelper.assertSidebarStealsFocus(win);
 
        // esc to send focus back to main document
        escLevel(win, 1);
