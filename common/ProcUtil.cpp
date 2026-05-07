@@ -17,6 +17,10 @@
 #include <config.h>
 #include <config_version.h>
 
+#ifdef IOS
+#import <Foundation/Foundation.h>
+#endif
+
 #include "ProcUtil.hpp"
 
 #include <common/Common.hpp>
