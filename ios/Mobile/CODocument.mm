@@ -20,7 +20,7 @@
 #include <sal/config.h>
 #include <sal/log.hxx>
 #include <rtl/ustring.hxx>
-#include <comphelper/lok.hxx>
+#include <comphelper/kit.hxx>
 #include <i18nlangtag/languagetag.hxx>
 
 #import "ios.h"

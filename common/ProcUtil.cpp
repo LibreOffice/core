@@ -73,6 +73,10 @@
 #include <processthreadsapi.h>
 #endif
 
+#if defined IOS
+#include <Foundation/Foundation.h>
+#endif
+
 namespace ThreadChecks
 {
     std::atomic<bool> Inhibit(false);
