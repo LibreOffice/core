@@ -352,11 +352,6 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
 	sd/source/ui/func/unmovss \
 	sd/source/ui/func/unoaprms \
 	sd/source/ui/func/unprlout \
-	sd/source/ui/presenter/CanvasUpdateRequester \
-	sd/source/ui/presenter/PresenterCanvas \
-	sd/source/ui/presenter/PresenterHelper \
-	sd/source/ui/presenter/PresenterPreviewCache \
-	sd/source/ui/presenter/SlideRenderer \
 	sd/source/ui/sidebar/AllMasterPagesSelector \
 	sd/source/ui/sidebar/CurrentMasterPagesSelector \
 	sd/source/ui/sidebar/DocumentHelper \

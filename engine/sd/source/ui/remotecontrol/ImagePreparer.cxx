@@ -175,7 +175,6 @@ void ImagePreparer::sendNotes( sal_uInt32 aSlideNumber )
         Transmitter::PRIORITY_LOW );
 }
 
-// Code copied from sdremote/source/presenter/PresenterNotesView.cxx
 OString ImagePreparer::prepareNotes( sal_uInt32 aSlideNumber )
 {
     OUStringBuffer aRet;
