@@ -1133,27 +1133,30 @@ void SvxBorderTabPage::HideShadowControls()
     m_xShadowFrame->hide();
 }
 
-#define IID_PRE_CELL_NONE       1
-#define IID_PRE_CELL_ALL        2
-#define IID_PRE_CELL_LR         3
-#define IID_PRE_CELL_TB         4
-#define IID_PRE_CELL_L          5
-#define IID_PRE_CELL_DIAG       6
-#define IID_PRE_HOR_NONE        7
-#define IID_PRE_HOR_OUTER       8
-#define IID_PRE_HOR_HOR         9
-#define IID_PRE_HOR_ALL         10
-#define IID_PRE_HOR_OUTER2      11
-#define IID_PRE_VER_NONE        12
-#define IID_PRE_VER_OUTER       13
-#define IID_PRE_VER_VER         14
-#define IID_PRE_VER_ALL         15
-#define IID_PRE_VER_OUTER2      16
-#define IID_PRE_TABLE_NONE      17
-#define IID_PRE_TABLE_OUTER     18
-#define IID_PRE_TABLE_OUTERH    19
-#define IID_PRE_TABLE_ALL       20
-#define IID_PRE_TABLE_OUTER2    21
+enum
+{
+    IID_PRE_CELL_NONE = 1,
+    IID_PRE_CELL_ALL = 2,
+    IID_PRE_CELL_LR = 3,
+    IID_PRE_CELL_TB = 4,
+    IID_PRE_CELL_L = 5,
+    IID_PRE_CELL_DIAG = 6,
+    IID_PRE_HOR_NONE = 7,
+    IID_PRE_HOR_OUTER= 8,
+    IID_PRE_HOR_HOR = 9,
+    IID_PRE_HOR_ALL = 10,
+    IID_PRE_HOR_OUTER2 = 11,
+    IID_PRE_VER_NONE = 12,
+    IID_PRE_VER_OUTER = 13,
+    IID_PRE_VER_VER = 14,
+    IID_PRE_VER_ALL = 15,
+    IID_PRE_VER_OUTER2 = 16,
+    IID_PRE_TABLE_NONE = 17,
+    IID_PRE_TABLE_OUTER = 18,
+    IID_PRE_TABLE_OUTERH = 19,
+    IID_PRE_TABLE_ALL = 20,
+    IID_PRE_TABLE_OUTER2 = 21
+};
 
 IMPL_LINK_NOARG(SvxBorderTabPage, SelPreHdl_Impl, weld::IconView&, void)
 {

@@ -37,19 +37,28 @@
 
 // define ----------------------------------------------------------------
 
-#define EXT_OPTIMAL     0
-#define EXT_FROM_TOP    1
-#define EXT_FROM_LEFT   2
-#define EXT_HORIZONTAL  3
-#define EXT_VERTICAL    4
+enum
+{
+    EXT_OPTIMAL = 0,
+    EXT_FROM_TOP = 1,
+    EXT_FROM_LEFT = 2,
+    EXT_HORIZONTAL = 3,
+    EXT_VERTICAL = 4
+};
 
-#define POS_TOP         0
-#define POS_MIDDLE      1
-#define POS_BOTTOM      2
+enum
+{
+    POS_TOP = 0,
+    POS_MIDDLE = 1,
+    POS_BOTTOM = 2
+};
 
-#define BMP_CAPTTYPE_1  1
-#define BMP_CAPTTYPE_2  2
-#define BMP_CAPTTYPE_3  3
+enum
+{
+    BMP_CAPTTYPE_1 = 1,
+    BMP_CAPTTYPE_2 = 2,
+    BMP_CAPTTYPE_3 = 3
+};
 
 // static ----------------------------------------------------------------
 

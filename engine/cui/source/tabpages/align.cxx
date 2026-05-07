@@ -33,9 +33,12 @@
 #include <svl/intitem.hxx>
 #include <vcl/image.hxx>
 
-#define IID_BOTTOMLOCK 1
-#define IID_TOPLOCK    2
-#define IID_CELLLOCK   3
+enum
+{
+    IID_BOTTOMLOCK = 1,
+    IID_TOPLOCK = 2,
+    IID_CELLLOCK = 3
+};
 
 namespace svx {
 

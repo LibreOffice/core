@@ -39,19 +39,22 @@ using namespace com::sun::star::util;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
 
-#define START_PAGE                      0
-#define CONNECTION_PAGE                 1
-#define ADDITIONAL_PAGE_DBASE           2
-#define ADDITIONAL_PAGE_FLAT            3
-#define ADDITIONAL_PAGE_LDAP            4
-//5 was ADDITIONAL_PAGE_ADABAS
-#define ADDITIONAL_PAGE_MYSQL_JDBC      6
-#define ADDITIONAL_PAGE_MYSQL_ODBC      7
-#define ADDITIONAL_PAGE_ORACLE_JDBC     8
-#define ADDITIONAL_PAGE_ADO             9
-#define ADDITIONAL_PAGE_ODBC           10
-#define ADDITIONAL_USERDEFINED         11
-#define ADDITIONAL_PAGE_MYSQL_NATIVE   12
+enum
+{
+    START_PAGE = 0,
+    CONNECTION_PAGE = 1,
+    ADDITIONAL_PAGE_DBASE = 2,
+    ADDITIONAL_PAGE_FLAT = 3,
+    ADDITIONAL_PAGE_LDAP = 4,
+    //5 was ADDITIONAL_PAGE_ADABAS
+    ADDITIONAL_PAGE_MYSQL_JDBC = 6,
+    ADDITIONAL_PAGE_MYSQL_ODBC = 7,
+    ADDITIONAL_PAGE_ORACLE_JDBC = 8,
+    ADDITIONAL_PAGE_ADO = 9,
+    ADDITIONAL_PAGE_ODBC = 10,
+    ADDITIONAL_USERDEFINED = 11,
+    ADDITIONAL_PAGE_MYSQL_NATIVE = 12
+};
 
 // ODbTypeWizDialog
 ODbTypeWizDialog::ODbTypeWizDialog(weld::Window* _pParent, SfxItemSet const * _pItems,
