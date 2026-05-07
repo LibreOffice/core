@@ -496,6 +496,30 @@ window.L.Map.include({
 			document.getElementById('online-help-content').innerHTML = app.util.replaceCtrlAltInMac(document.getElementById('online-help-content').innerHTML);
 		}
 		if (id === 'keyboard-shortcuts-content') {
+			// Fill tagged shortcut cells from the locale-aware lookup
+			// table (generated from core's Accelerators.xcu).
+			if (window.JSDialog && window.JSDialog.ShortcutsUtil) {
+				var rows = contentElement.querySelectorAll('tr[data-uno]');
+				for (i = 0; i < rows.length; i++) {
+					var unoCmd = rows[i].getAttribute('data-uno');
+					var shortcut = window.JSDialog.ShortcutsUtil.getShortcutText(unoCmd);
+					var cell = rows[i].querySelector('.shortcut');
+					if (!cell) continue;
+					if (!shortcut) {
+						console.warn('cool-help.html: no shortcut found for ' + unoCmd
+							+ ' — row will render empty. Either drop the data-uno attribute'
+							+ ' or add the binding to Accelerators.xcu / unoshortcuts.py.');
+						continue;
+					}
+					var html = '';
+					var parts = shortcut.split('+');
+					for (var j = 0; j < parts.length; j++) {
+						if (j > 0) html += '<span class="kbd--plus" aria-hidden="true">+</span>';
+						html += '<kbd>' + parts[j] + '</kbd>';
+					}
+					cell.innerHTML = html;
+				}
+			}
 			document.getElementById('keyboard-shortcuts-content').innerHTML = app.util.replaceCtrlAltInMac(document.getElementById('keyboard-shortcuts-content').innerHTML);
 		}
 		var searchInput = document.getElementById('online-help-search-input');

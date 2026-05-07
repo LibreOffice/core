@@ -93,6 +93,13 @@ SPECIAL_KEY_DISPLAY = {
     'DECIMAL': 'Decimal',
 }
 
+# Non-.uno: commands that Online still wants tooltip shortcuts for so
+# the JS-side aliases (search, home-search) can resolve through the
+# standard locale-aware lookup.
+EXTRA_NON_UNO_COMMANDS = {
+    'vnd.sun.star.findbar:FocusToFindbar',
+}
+
 # Commands not present in Accelerators.xcu that must be provided manually.
 MANUAL_FALLBACKS = {
     '.uno:InsertFootnote': 'Ctrl+Alt+F',
@@ -197,7 +204,12 @@ def extractAllOnlineCommands(onlinePath):
         for cmd in group:
             commands.add(cmd[5:])
 
-    return {'.uno:' + c for c in commands}
+    result = {'.uno:' + c for c in commands}
+    # Non-uno protocol commands that Online aliases (search, home-search,
+    # ...) to a shortcut.  Treat them as known so their xcu bindings are
+    # picked up like any other command.
+    result |= EXTRA_NON_UNO_COMMANDS
+    return result
 
 
 def extractShortcutsFromXCU(xcuPath, onlineCommands):
@@ -493,7 +505,10 @@ def extractAllLanguageBindings(xcuPath):
                     continue
 
                 text = ''.join(val.itertext()).strip()
-                if not text or not text.startswith('.uno:'):
+                if not text:
+                    continue
+                if (not text.startswith('.uno:')
+                        and text not in EXTRA_NON_UNO_COMMANDS):
                     continue
 
                 # Strip parameters.
@@ -551,8 +566,12 @@ def buildL10NData(xcuPath, enUSShortcuts):
             enUSCommand = enUSEntries[0][0] if enUSEntries else None
 
             # Only emit key binding override if this key does something
-            # different in this language compared to en-US.
-            if enUSCommand and command != enUSCommand:
+            # different in this language compared to en-US.  Skip non-uno
+            # protocol commands (e.g., vnd.sun.star.findbar:): the JS
+            # dispatcher cannot fire them; tooltip emission below still
+            # picks them up.
+            if (enUSCommand and command != enUSCommand
+                    and command.startswith('.uno:')):
                 baseKey, modifiers, display, modCount = parseKeyName(keyName)
 
                 if isBrowserIntercepted(baseKey, modifiers):
@@ -704,6 +723,10 @@ def writeUnoshortcutsJS(onlinePath, shortcuts, l10nShortcuts,
         f.write("/* eslint-disable no-unused-vars */\n\n")
 
         # en-US command -> display string (for tooltips).
+        # @type {any} so tsc accepts the shared declaration in
+        # Util.Shortcuts.ts (declare var unoShortcutsMap: any) when both
+        # files are compiled together (e.g. mocha_tests).
+        f.write("/** @type {any} */\n")
         f.write("var unoShortcutsMap = {\n")
         for cmd in sorted(shortcuts.keys()):
             f.write("\t%s: '%s',\n" % (_jsKey(cmd), shortcuts[cmd]))
@@ -711,6 +734,7 @@ def writeUnoshortcutsJS(onlinePath, shortcuts, l10nShortcuts,
 
         # Per-language tooltip overrides: command -> display string
         # where the shortcut differs from en-US.
+        f.write("/** @type {any} */\n")
         f.write("var unoShortcutsL10N = {\n")
         for lang in sorted(l10nShortcuts.keys()):
             f.write("\t%s: {\n" % _jsKey(lang))
@@ -723,6 +747,7 @@ def writeUnoshortcutsJS(onlinePath, shortcuts, l10nShortcuts,
         # Per-language key bindings: key combo -> command where the
         # command differs from en-US for that key.  Used by
         # Map.KeyboardShortcuts.ts to register ShortcutDescriptors.
+        f.write("/** @type {any} */\n")
         f.write("var unoShortcutsL10NKeyBindings = {\n")
         for lang in sorted(l10nKeyBindings.keys()):
             # Sort for stable output.
@@ -756,6 +781,7 @@ def writeUnoshortcutsJS(onlinePath, shortcuts, l10nShortcuts,
 
         # Localized modifier key names, extracted from
         # vcl/unx/generic/app/keysymnames.cxx in core.
+        f.write("/** @type {any} */\n")
         f.write("var unoShortcutsModifierL10N = {\n")
         for lang in sorted(modifierL10N.keys()):
             props = []

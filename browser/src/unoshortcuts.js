@@ -1,6 +1,7 @@
 // Don't modify, generated using scripts/unoshortcuts.py
 /* eslint-disable no-unused-vars */
 
+/** @type {any} */
 var unoShortcutsMap = {
 	'.uno:AlignBlock': 'Ctrl+J',
 	'.uno:AlignHorizontalCenter': 'Ctrl+E',
@@ -107,8 +108,10 @@ var unoShortcutsMap = {
 	'.uno:Ungroup': 'Ctrl+F12',
 	'.uno:ZoomMinus': 'Ctrl+Shift+PageDown',
 	'.uno:ZoomPlus': 'Ctrl+Shift+PageUp',
+	'vnd.sun.star.findbar:FocusToFindbar': 'Ctrl+F',
 };
 
+/** @type {any} */
 var unoShortcutsL10N = {
 	bs: {
 		'.uno:InsertCurrentDate': 'Ctrl+,',
@@ -120,7 +123,7 @@ var unoShortcutsL10N = {
 		'.uno:InsertCurrentDate': 'Ctrl+,',
 		'.uno:InsertCurrentTime': 'Ctrl+Shift+,',
 		'.uno:Italic': 'Ctrl+K',
-		'.uno:SearchDialog': 'Ctrl+B',
+		'vnd.sun.star.findbar:FocusToFindbar': 'Ctrl+B',
 	},
 	de: {
 		'.uno:AlignBlock': 'Ctrl+B',
@@ -145,6 +148,7 @@ var unoShortcutsL10N = {
 		'.uno:Underline': 'Ctrl+Shift+U',
 		'.uno:UnderlineDouble': 'Ctrl+Shift+D',
 		'.uno:Ungroup': 'Ctrl+Shift+F12',
+		'vnd.sun.star.findbar:FocusToFindbar': 'Shift+Alt+F',
 	},
 	es: {
 		'.uno:AlignHorizontalCenter': 'Ctrl+T',
@@ -157,6 +161,7 @@ var unoShortcutsL10N = {
 		'.uno:SearchDialog': 'Ctrl+Alt+B',
 		'.uno:SelectAll': 'Ctrl+E',
 		'.uno:Underline': 'Ctrl+S',
+		'vnd.sun.star.findbar:FocusToFindbar': 'Ctrl+B',
 	},
 	et: {
 		'.uno:InsertCurrentDate': 'Ctrl+,',
@@ -240,16 +245,11 @@ var unoShortcutsL10N = {
 	},
 };
 
+/** @type {any} */
 var unoShortcutsL10NKeyBindings = {
 	da: [
 		{ key: 'f', modifier: 1, unoAction: '.uno:Bold' },
 		{ key: 'k', modifier: 1, unoAction: '.uno:Italic' },
-		{
-			key: 'b',
-			modifier: 1,
-			unoAction: '.uno:SearchDialog',
-			docType: 'presentation',
-		},
 	],
 	de: [
 		{
@@ -391,6 +391,7 @@ var unoShortcutsL10NKeyBindings = {
 	],
 };
 
+/** @type {any} */
 var unoShortcutsModifierL10N = {
 	ca: { Shift: 'Maj' },
 	da: { Shift: 'Skift' },

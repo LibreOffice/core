@@ -21,19 +21,21 @@ declare var unoShortcutsMap: any;
 declare var unoShortcutsL10N: any;
 declare var unoShortcutsModifierL10N: any;
 
-// Non-UNO IDs that share a shortcut with a UNO command.
+// Non-UNO IDs that share a shortcut with a UNO (or findbar protocol)
+// command.  Routing them through the locale-aware shortcut table keeps
+// tooltips in sync with what the user actually has to press.
 const UNO_ALIASES: Record<string, string> = {
 	save: '.uno:Save',
 	print: '.uno:Print',
 	insertcomment: '.uno:InsertAnnotation',
 	hyperlinkdialog: '.uno:HyperlinkDialog',
 	inserthyperlink: '.uno:HyperlinkDialog',
+	search: 'vnd.sun.star.findbar:FocusToFindbar',
+	'home-search': 'vnd.sun.star.findbar:FocusToFindbar',
 };
 
 // Non-UNO IDs with explicit shortcuts not from Accelerators.xcu.
 const EXPLICIT_ALIASES: Record<string, string> = {
-	search: 'Ctrl+F',
-	'home-search': 'Ctrl+F',
 	'keyboard-shortcuts': 'Ctrl+Shift+?',
 };
 
@@ -132,6 +134,16 @@ class ShortcutsUtil {
 			'</span>';
 
 		return newText;
+	}
+
+	/**
+	 * Return the locale-aware shortcut display string for a UNO command,
+	 * or undefined if none is registered.
+	 */
+	public getShortcutText(command: string): string | undefined {
+		const shortcut = this.shortcutMap.get(command);
+		if (!shortcut) return undefined;
+		return this.localizeModifiers(shortcut);
 	}
 }
 

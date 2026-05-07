@@ -11,9 +11,9 @@
 
 describe('ShortcutsUtil', function () {
 
-	// 'search' is registered as an EXPLICIT_ALIAS in Util.Shortcuts.ts, so
-	// it always maps to Ctrl+F regardless of whether the generated
-	// unoShortcutsMap is loaded.
+	// 'search' is a UNO_ALIAS for vnd.sun.star.findbar:FocusToFindbar,
+	// resolved via the generated unoShortcutsMap (loaded by sources.ts
+	// from browser/src/unoshortcuts.js) — Ctrl+F by default.
 
 	describe('getTooltipLabel()', function () {
 

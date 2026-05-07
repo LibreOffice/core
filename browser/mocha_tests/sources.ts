@@ -150,6 +150,7 @@
 /// <reference path="../src/control/Control.ESignature.ts" />
 /// <reference path="../src/control/Control.ESignatureDialog.ts" />
 /// <reference path="../src/control/ColorPicker.ts" />
+/// <reference path="../src/unoshortcuts.js" />
 /// <reference path="../src/control/jsdialog/Util.Shortcuts.ts" />
 /// <reference path="../src/control/jsdialog/Util.ModelState.ts" />
 /// <reference path="../src/control/jsdialog/Component.Toolbar.ts" />
