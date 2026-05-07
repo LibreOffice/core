@@ -134,7 +134,9 @@ public:
     const VclPtr<SwContentControlButton>& GetContentControlButton() const;
 
     const SwCursorShell* GetShell() const { return m_pCursorShell; }
+#if HAVE_FEATURE_DESKTOP || defined(ANDROID)
     const sdr::overlay::OverlaySelection* GetCursorOverlay() const { return m_pCursorOverlay.get(); }
+#endif
     // check current MapMode of the shell and set possibly the static members.
     // Optional set the parameters pX, pY
     static void Get1PixelInLogic( const SwViewShell& rSh,
