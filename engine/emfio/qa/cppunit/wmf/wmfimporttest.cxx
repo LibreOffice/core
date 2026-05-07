@@ -315,7 +315,7 @@ void WmfTest::testSine()
 
     CPPUNIT_ASSERT(pDoc);
 
-    assertXPath(pDoc, "/metafile/sectrectclipregion", 0);
+    assertXPath(pDoc, "/metafile/sectrectclipregion", 2);
 }
 
 void WmfTest::testEmfProblem()
