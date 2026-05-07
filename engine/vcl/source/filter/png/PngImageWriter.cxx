@@ -237,6 +237,14 @@ static bool pngWrite(SvStream& rStream, const Graphic& rGraphic, int nCompressio
                 bCombineChannels = true;
                 break;
             }
+            case ScanlineFormat::N32BitTcArgb:
+            {
+                assert(aBitmap.HasAlpha());
+                colorType = PNG_COLOR_TYPE_RGB_ALPHA;
+                bitDepth = 8;
+                bCombineChannels = true;
+                break;
+            }
             default:
             {
                 assert(false);
