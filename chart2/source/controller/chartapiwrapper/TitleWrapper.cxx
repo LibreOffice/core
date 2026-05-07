@@ -244,7 +244,7 @@ void SAL_CALL TitleWrapper::dispose()
     Reference< uno::XInterface > xSource( static_cast< ::cppu::OWeakObject* >( this ) );
     m_aEventListenerContainer.disposeAndClear( g, lang::EventObject( xSource ) );
 
-    clearWrappedPropertySet(g);
+    clearWrappedPropertySet();
 }
 
 void SAL_CALL TitleWrapper::addEventListener(
@@ -276,7 +276,7 @@ Reference< beans::XPropertySet > TitleWrapper::getFirstCharacterPropertySet()
     return xProp;
 }
 
-void TitleWrapper::getFastCharacterPropertyValue( std::unique_lock<std::mutex>& rGuard, sal_Int32 nHandle, Any& rValue )
+void TitleWrapper::getFastCharacterPropertyValue( sal_Int32 nHandle, Any& rValue )
 {
     OSL_ASSERT( FAST_PROPERTY_ID_START_CHAR_PROP <= nHandle &&
                 nHandle < CharacterProperties::FAST_PROPERTY_ID_END_CHAR_PROP );
@@ -285,7 +285,7 @@ void TitleWrapper::getFastCharacterPropertyValue( std::unique_lock<std::mutex>& 
     Reference< beans::XFastPropertySet > xFastProp( xProp, uno::UNO_QUERY );
     if(xProp.is())
     {
-        const WrappedProperty* pWrappedProperty = getWrappedProperty( rGuard, nHandle );
+        const WrappedProperty* pWrappedProperty = getWrappedProperty( nHandle );
         if( pWrappedProperty )
         {
             rValue = pWrappedProperty->getPropertyValue( xProp );
@@ -299,7 +299,7 @@ void TitleWrapper::getFastCharacterPropertyValue( std::unique_lock<std::mutex>& 
 }
 
 void TitleWrapper::setFastCharacterPropertyValue(
-    std::unique_lock<std::mutex>& rGuard, sal_Int32 nHandle, const Any& rValue )
+    sal_Int32 nHandle, const Any& rValue )
 {
     OSL_ASSERT( FAST_PROPERTY_ID_START_CHAR_PROP <= nHandle &&
                 nHandle < CharacterProperties::FAST_PROPERTY_ID_END_CHAR_PROP );
@@ -309,7 +309,7 @@ void TitleWrapper::setFastCharacterPropertyValue(
         return;
 
     const Sequence< Reference< chart2::XFormattedString > > aStrings( xTitle->getText());
-    const WrappedProperty* pWrappedProperty = getWrappedProperty( rGuard, nHandle );
+    const WrappedProperty* pWrappedProperty = getWrappedProperty( nHandle );
 
     for( Reference< chart2::XFormattedString > const & formattedStr : aStrings )
     {
@@ -327,40 +327,37 @@ void TitleWrapper::setFastCharacterPropertyValue(
 
 void SAL_CALL TitleWrapper::setPropertyValue( const OUString& rPropertyName, const Any& rValue )
 {
-    std::unique_lock aGuard(m_aMutex);
-    sal_Int32 nHandle = getInfoHelper(aGuard).getHandleByName( rPropertyName );
+    sal_Int32 nHandle = getInfoHelper().getHandleByName( rPropertyName );
     if( CharacterProperties::IsCharacterPropertyHandle( nHandle ) )
     {
-        setFastCharacterPropertyValue( aGuard, nHandle, rValue );
+        setFastCharacterPropertyValue( nHandle, rValue );
     }
     else
-        WrappedPropertySet::setPropertyValue( aGuard, rPropertyName, rValue );
+        WrappedPropertySet::setPropertyValue( rPropertyName, rValue );
 }
 
 Any SAL_CALL TitleWrapper::getPropertyValue( const OUString& rPropertyName )
 {
-    std::unique_lock aGuard(m_aMutex);
     Any aRet;
-    sal_Int32 nHandle = getInfoHelper(aGuard).getHandleByName( rPropertyName );
+    sal_Int32 nHandle = getInfoHelper().getHandleByName( rPropertyName );
     if( CharacterProperties::IsCharacterPropertyHandle( nHandle ) )
-        getFastCharacterPropertyValue( aGuard, nHandle, aRet );
+        getFastCharacterPropertyValue( nHandle, aRet );
     else
-        aRet = WrappedPropertySet::getPropertyValue( aGuard, rPropertyName );
+        aRet = WrappedPropertySet::getPropertyValue( rPropertyName );
     return aRet;
 }
 
 beans::PropertyState SAL_CALL TitleWrapper::getPropertyState( const OUString& rPropertyName )
 {
-    std::unique_lock aGuard(m_aMutex);
     beans::PropertyState aState( beans::PropertyState_DIRECT_VALUE );
 
-    sal_Int32 nHandle = getInfoHelper(aGuard).getHandleByName( rPropertyName );
+    sal_Int32 nHandle = getInfoHelper().getHandleByName( rPropertyName );
     if( CharacterProperties::IsCharacterPropertyHandle( nHandle ) )
     {
         Reference< beans::XPropertyState > xPropState( getFirstCharacterPropertySet(), uno::UNO_QUERY );
         if( xPropState.is() )
         {
-            const WrappedProperty* pWrappedProperty = getWrappedProperty( aGuard, rPropertyName );
+            const WrappedProperty* pWrappedProperty = getWrappedProperty( rPropertyName );
             if( pWrappedProperty )
                 aState = pWrappedProperty->getPropertyState( xPropState );
             else
@@ -368,34 +365,32 @@ beans::PropertyState SAL_CALL TitleWrapper::getPropertyState( const OUString& rP
         }
     }
     else
-        aState = WrappedPropertySet::getPropertyState( aGuard, rPropertyName );
+        aState = WrappedPropertySet::getPropertyState( rPropertyName );
 
     return aState;
 }
 void SAL_CALL TitleWrapper::setPropertyToDefault( const OUString& rPropertyName )
 {
-    std::unique_lock aGuard(m_aMutex);
-    sal_Int32 nHandle = getInfoHelper(aGuard).getHandleByName( rPropertyName );
+    sal_Int32 nHandle = getInfoHelper().getHandleByName( rPropertyName );
     if( CharacterProperties::IsCharacterPropertyHandle( nHandle ) )
     {
         Any aDefault = getPropertyDefault( rPropertyName );
-        setFastCharacterPropertyValue( aGuard, nHandle, aDefault );
+        setFastCharacterPropertyValue( nHandle, aDefault );
     }
     else
         WrappedPropertySet::setPropertyToDefault( rPropertyName );
 }
 Any SAL_CALL TitleWrapper::getPropertyDefault( const OUString& rPropertyName )
 {
-    std::unique_lock aGuard(m_aMutex);
     Any aRet;
 
-    sal_Int32 nHandle = getInfoHelper(aGuard).getHandleByName( rPropertyName );
+    sal_Int32 nHandle = getInfoHelper().getHandleByName( rPropertyName );
     if( CharacterProperties::IsCharacterPropertyHandle( nHandle ) )
     {
         Reference< beans::XPropertyState > xPropState( getFirstCharacterPropertySet(), uno::UNO_QUERY );
         if( xPropState.is() )
         {
-            const WrappedProperty* pWrappedProperty = getWrappedProperty( aGuard, rPropertyName );
+            const WrappedProperty* pWrappedProperty = getWrappedProperty( rPropertyName );
             if( pWrappedProperty )
                 aRet = pWrappedProperty->getPropertyDefault(xPropState);
             else
@@ -410,8 +405,7 @@ Any SAL_CALL TitleWrapper::getPropertyDefault( const OUString& rPropertyName )
 
 void SAL_CALL TitleWrapper::addPropertyChangeListener( const OUString& rPropertyName, const Reference< beans::XPropertyChangeListener >& xListener )
 {
-    std::unique_lock aGuard(m_aMutex);
-    sal_Int32 nHandle = getInfoHelper(aGuard).getHandleByName( rPropertyName );
+    sal_Int32 nHandle = getInfoHelper().getHandleByName( rPropertyName );
     if( CharacterProperties::IsCharacterPropertyHandle( nHandle ) )
     {
         Reference< beans::XPropertySet > xPropSet = getFirstCharacterPropertySet();
@@ -419,12 +413,11 @@ void SAL_CALL TitleWrapper::addPropertyChangeListener( const OUString& rProperty
             xPropSet->addPropertyChangeListener( rPropertyName, xListener );
     }
     else
-        WrappedPropertySet::addPropertyChangeListener( aGuard, rPropertyName, xListener );
+        WrappedPropertySet::addPropertyChangeListener( rPropertyName, xListener );
 }
 void SAL_CALL TitleWrapper::removePropertyChangeListener( const OUString& rPropertyName, const Reference< beans::XPropertyChangeListener >& xListener )
 {
-    std::unique_lock aGuard(m_aMutex);
-    sal_Int32 nHandle = getInfoHelper(aGuard).getHandleByName( rPropertyName );
+    sal_Int32 nHandle = getInfoHelper().getHandleByName( rPropertyName );
     if( CharacterProperties::IsCharacterPropertyHandle( nHandle ) )
     {
         Reference< beans::XPropertySet > xPropSet = getFirstCharacterPropertySet();
@@ -432,7 +425,7 @@ void SAL_CALL TitleWrapper::removePropertyChangeListener( const OUString& rPrope
             xPropSet->removePropertyChangeListener( rPropertyName, xListener );
     }
     else
-        WrappedPropertySet::removePropertyChangeListener( aGuard, rPropertyName, xListener );
+        WrappedPropertySet::removePropertyChangeListener( rPropertyName, xListener );
 }
 
 //ReferenceSizePropertyProvider

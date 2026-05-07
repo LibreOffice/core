@@ -48,22 +48,17 @@ public:
     WrappedPropertySet();
     virtual ~WrappedPropertySet() override;
 
-    // rGuard must own m_aMutex on entry.
-    void clearWrappedPropertySet(std::unique_lock<std::mutex>& rGuard);
+    void clearWrappedPropertySet();
 
 public:
     //XPropertySet
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
 
     virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const css::uno::Any& aValue ) override;
-    void setPropertyValue( std::unique_lock<std::mutex>& rGuard, const OUString& aPropertyName, const css::uno::Any& aValue );
     virtual css::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) override;
-    css::uno::Any getPropertyValue( std::unique_lock<std::mutex>& rGuard, const OUString& PropertyName );
 
     virtual void SAL_CALL addPropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
-    void addPropertyChangeListener( std::unique_lock<std::mutex>& rGuard, const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener );
     virtual void SAL_CALL removePropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
-    void removePropertyChangeListener( std::unique_lock<std::mutex>& rGuard, const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener );
     virtual void SAL_CALL addVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
     virtual void SAL_CALL removeVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
 
@@ -77,7 +72,6 @@ public:
 
     //XPropertyState
     virtual css::beans::PropertyState SAL_CALL getPropertyState( const OUString& PropertyName ) override;
-    css::beans::PropertyState getPropertyState( std::unique_lock<std::mutex>& rGuard, const OUString& PropertyName );
     virtual css::uno::Sequence< css::beans::PropertyState > SAL_CALL getPropertyStates( const css::uno::Sequence< OUString >& aPropertyName ) override;
     virtual void SAL_CALL setPropertyToDefault( const OUString& PropertyName ) override;
     virtual css::uno::Any SAL_CALL getPropertyDefault( const OUString& aPropertyName ) override;
@@ -102,11 +96,11 @@ protected: //methods
     virtual css::uno::Reference< css::beans::XPropertySet > getInnerPropertySet() = 0;
     SAL_DLLPRIVATE css::uno::Reference< css::beans::XPropertyState > getInnerPropertyState();
 
-    ::cppu::IPropertyArrayHelper&   getInfoHelper(std::unique_lock<std::mutex>& rGuard);
-    SAL_DLLPRIVATE tWrappedPropertyMap&            getWrappedPropertyMap(std::unique_lock<std::mutex>& rGuard);
+    ::cppu::IPropertyArrayHelper&   getInfoHelper();
+    SAL_DLLPRIVATE tWrappedPropertyMap&            getWrappedPropertyMap();
 
-    const WrappedProperty*          getWrappedProperty( std::unique_lock<std::mutex>& rGuard, const OUString& rOuterName );
-    const WrappedProperty*          getWrappedProperty( std::unique_lock<std::mutex>& rGuard, sal_Int32 nHandle );
+    const WrappedProperty*          getWrappedProperty( const OUString& rOuterName );
+    const WrappedProperty*          getWrappedProperty( sal_Int32 nHandle );
 
     std::mutex m_aMutex;
 
