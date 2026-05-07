@@ -108,7 +108,7 @@ static void GetOldStyleDicsInDir(
             // liblangtag and stuff during startup, the result would be
             // !isValidBcp47() and the dictionary ignored.
             if (sChunk == "hu-HU-u8")
-                sChunk = "hu-HU";
+                sChunk = u"hu-HU"_ustr;
 
             LanguageTag aLangTag(sChunk, true);
             if (!aLangTag.isValidBcp47())
@@ -160,8 +160,8 @@ std::vector< SvtLinguConfigDictionaryEntry > GetOldStyleDics( const char *pDicTy
 #endif
     if (strcmp( pDicType, "DICT" ) == 0)
     {
-        aFormatName     = "DICT_SPELL";
-        aDicExtension   = ".dic";
+        aFormatName     = u"DICT_SPELL"_ustr;
+        aDicExtension   = u".dic"_ustr;
 #ifdef SYSTEM_DICTS
         aSystemDir      = DICT_SYSTEM_DIR;
         aSystemSuffix   = aDicExtension;
@@ -173,22 +173,22 @@ std::vector< SvtLinguConfigDictionaryEntry > GetOldStyleDics( const char *pDicTy
     }
     else if (strcmp( pDicType, "HYPH" ) == 0)
     {
-        aFormatName     = "DICT_HYPH";
-        aDicExtension   = ".dic";
+        aFormatName     = u"DICT_HYPH"_ustr;
+        aDicExtension   = u".dic"_ustr;
 #ifdef SYSTEM_DICTS
         aSystemDir      = HYPH_SYSTEM_DIR;
-        aSystemPrefix   = "hyph_";
+        aSystemPrefix   = u"hyph_"_ustr;
         aSystemSuffix   = aDicExtension;
 #endif
     }
     else if (strcmp( pDicType, "THES" ) == 0)
     {
-        aFormatName     = "DICT_THES";
-        aDicExtension   = ".dat";
+        aFormatName     = u"DICT_THES"_ustr;
+        aDicExtension   = u".dat"_ustr;
 #ifdef SYSTEM_DICTS
         aSystemDir      = THES_SYSTEM_DIR;
-        aSystemPrefix   = "th_";
-        aSystemSuffix   = "_v2.dat";
+        aSystemPrefix   = u"th_"_ustr;
+        aSystemSuffix   = u"_v2.dat"_ustr;
 #elif defined IOS
         aSystemDir      = "$BRAND_BASE_DIR/share/thes";
         rtl::Bootstrap::expandMacros(aSystemDir);

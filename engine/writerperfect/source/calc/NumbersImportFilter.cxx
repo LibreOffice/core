@@ -30,7 +30,7 @@ bool NumbersImportFilter::doDetectFormat(librevenge::RVNGInputStream& rInput, OU
     if ((confidence == EtonyekDocument::CONFIDENCE_EXCELLENT)
         && (type == EtonyekDocument::TYPE_NUMBERS))
     {
-        rTypeName = "calc_AppleNumbers";
+        rTypeName = u"calc_AppleNumbers"_ustr;
         return true;
     }
 

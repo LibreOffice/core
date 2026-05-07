@@ -213,28 +213,28 @@ bool MSWorksCalcImportFilter::doImportDocument(weld::Window* pParent,
             {
                 case libwps::WPS_MSWORKS:
                     title = WpResId(STR_ENCODING_DIALOG_TITLE_MSWORKS);
-                    encoding = "CP850";
+                    encoding = u"CP850"_ustr;
                     break;
                 case libwps::WPS_LOTUS:
                     title = WpResId(STR_ENCODING_DIALOG_TITLE_LOTUS);
-                    encoding = "CP437";
+                    encoding = u"CP437"_ustr;
                     break;
                 case libwps::WPS_SYMPHONY:
                     title = WpResId(STR_ENCODING_DIALOG_TITLE_SYMPHONY);
-                    encoding = "CP437";
+                    encoding = u"CP437"_ustr;
                     break;
                 case libwps::WPS_QUATTRO_PRO:
                     title = WpResId(STR_ENCODING_DIALOG_TITLE_QUATTROPRO);
-                    encoding = "CP437";
+                    encoding = u"CP437"_ustr;
                     break;
                 case libwps::WPS_RESERVED_2:
                     title = WpResId(STR_ENCODING_DIALOG_TITLE_MSMULTIPLAN);
-                    encoding = "CP437";
+                    encoding = u"CP437"_ustr;
                     break;
                 default:
                     SAL_INFO("writerperfect", "unexpected creator: " << creator);
                     title = WpResId(STR_ENCODING_DIALOG_TITLE);
-                    encoding = "CP437";
+                    encoding = u"CP437"_ustr;
                     break;
             }
 
@@ -432,17 +432,17 @@ bool MSWorksCalcImportFilter::doDetectFormat(librevenge::RVNGInputStream& rInput
         switch (creator)
         {
             case libwps::WPS_MSWORKS:
-                rTypeName = "calc_MS_Works_Document";
+                rTypeName = u"calc_MS_Works_Document"_ustr;
                 break;
             case libwps::WPS_LOTUS:
             case libwps::WPS_SYMPHONY:
-                rTypeName = "calc_WPS_Lotus_Document";
+                rTypeName = u"calc_WPS_Lotus_Document"_ustr;
                 break;
             case libwps::WPS_QUATTRO_PRO:
-                rTypeName = "calc_WPS_QPro_Document";
+                rTypeName = u"calc_WPS_QPro_Document"_ustr;
                 break;
             case libwps::WPS_RESERVED_2:
-                rTypeName = "calc_MS_Multiplan";
+                rTypeName = u"calc_MS_Multiplan"_ustr;
                 break;
             default:
                 break;

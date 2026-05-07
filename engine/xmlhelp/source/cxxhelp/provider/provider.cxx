@@ -154,7 +154,7 @@ void ContentProvider::init()
         officecfg::Office::Common::Path::Current::Help::get());
     if( instPath.isEmpty() )
         // try to determine path from default
-        instPath = "$(instpath)/" LIBO_SHARE_HELP_FOLDER;
+        instPath = u"$(instpath)/"_ustr LIBO_SHARE_HELP_FOLDER;
     // replace anything like $(instpath);
     subst( instPath );
 

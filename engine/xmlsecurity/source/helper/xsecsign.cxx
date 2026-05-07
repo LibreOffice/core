@@ -170,10 +170,10 @@ css::uno::Reference< css::xml::crypto::sax::XReferenceResolvedListener > XSecCon
     for(int i=0; i<size; ++i)
     {
         SignatureReferenceInformation& refInfor = vReferenceInfors[i];
-        refInfor.ouDigestValue = " ";
+        refInfor.ouDigestValue = u" "_ustr;
     }
 
-    internalSignatureInfor.signatureInfor.ouSignatureValue = " ";
+    internalSignatureInfor.signatureInfor.ouSignatureValue = u" "_ustr;
 
     return xSignatureCreator;
 }

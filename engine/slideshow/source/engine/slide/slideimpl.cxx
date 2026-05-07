@@ -711,7 +711,7 @@ class MainSequenceSearcher
 public:
     MainSequenceSearcher()
     {
-        maSearchKey.Name = "node-type";
+        maSearchKey.Name = u"node-type"_ustr;
         maSearchKey.Value <<= presentation::EffectNodeType::MAIN_SEQUENCE;
     }
 

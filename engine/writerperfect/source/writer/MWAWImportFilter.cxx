@@ -56,26 +56,26 @@ bool MWAWImportFilter::doDetectFormat(librevenge::RVNGInputStream& rInput, OUStr
             switch (docType)
             {
                 case MWAWDocument::MWAW_T_CLARISWORKS:
-                    rTypeName = "writer_ClarisWorks";
+                    rTypeName = u"writer_ClarisWorks"_ustr;
                     break;
                 case MWAWDocument::MWAW_T_MACWRITE:
                 case MWAWDocument::MWAW_T_MACWRITEPRO:
-                    rTypeName = "writer_MacWrite";
+                    rTypeName = u"writer_MacWrite"_ustr;
                     break;
                 case MWAWDocument::MWAW_T_MARINERWRITE:
-                    rTypeName = "writer_Mariner_Write";
+                    rTypeName = u"writer_Mariner_Write"_ustr;
                     break;
                 case MWAWDocument::MWAW_T_MICROSOFTWORD:
-                    rTypeName = "writer_Mac_Word";
+                    rTypeName = u"writer_Mac_Word"_ustr;
                     break;
                 case MWAWDocument::MWAW_T_MICROSOFTWORKS:
-                    rTypeName = "writer_Mac_Works";
+                    rTypeName = u"writer_Mac_Works"_ustr;
                     break;
                 case MWAWDocument::MWAW_T_WRITENOW:
-                    rTypeName = "writer_WriteNow";
+                    rTypeName = u"writer_WriteNow"_ustr;
                     break;
                 default:
-                    rTypeName = "MWAW_Text_Document";
+                    rTypeName = u"MWAW_Text_Document"_ustr;
                     break;
             }
         }

@@ -40,7 +40,7 @@ bool KeynoteImportFilter::doDetectFormat(librevenge::RVNGInputStream& rInput, OU
 {
     if (libetonyek::EtonyekDocument::isSupported(&rInput))
     {
-        rTypeName = "impress_Keynote_Document";
+        rTypeName = u"impress_Keynote_Document"_ustr;
         return true;
     }
 
@@ -176,14 +176,14 @@ KeynoteImportFilter::detect(css::uno::Sequence<css::beans::PropertyValue>& Descr
     {
         assert(nLength < nNewLength);
         nTypeNameLocation = nLength++;
-        pDescriptor[nTypeNameLocation].Name = "TypeName";
+        pDescriptor[nTypeNameLocation].Name = u"TypeName"_ustr;
     }
 
     if (bIsPackage && (nComponentDataLocation == -1))
     {
         assert(nLength < nNewLength);
         nComponentDataLocation = nLength++;
-        pDescriptor[nComponentDataLocation].Name = "ComponentData";
+        pDescriptor[nComponentDataLocation].Name = u"ComponentData"_ustr;
     }
 
     if (bIsPackage)
@@ -193,7 +193,7 @@ KeynoteImportFilter::detect(css::uno::Sequence<css::beans::PropertyValue>& Descr
             const sal_Int32 nCDSize = lComponentDataNV.getLength();
             lComponentDataNV.realloc(nCDSize + 1);
             beans::NamedValue aValue;
-            aValue.Name = "IsPackage";
+            aValue.Name = u"IsPackage"_ustr;
             aValue.Value <<= true;
             lComponentDataNV.getArray()[nCDSize] = std::move(aValue);
             pDescriptor[nComponentDataLocation].Value <<= lComponentDataNV;
@@ -203,7 +203,7 @@ KeynoteImportFilter::detect(css::uno::Sequence<css::beans::PropertyValue>& Descr
             const sal_Int32 nCDSize = lComponentDataPV.getLength();
             lComponentDataPV.realloc(nCDSize + 1);
             beans::PropertyValue aProp;
-            aProp.Name = "IsPackage";
+            aProp.Name = u"IsPackage"_ustr;
             aProp.Value <<= true;
             aProp.Handle = -1;
             aProp.State = beans::PropertyState_DIRECT_VALUE;

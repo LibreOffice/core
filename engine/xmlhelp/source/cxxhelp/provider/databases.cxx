@@ -181,7 +181,7 @@ OString Databases::getImageTheme()
 
     if ( aSymbolsStyleName.isEmpty() || aSymbolsStyleName == "auto" )
     {
-        aSymbolsStyleName = "colibre";
+        aSymbolsStyleName = u"colibre"_ustr;
     }
     return aSymbolsStyleName.toUtf8();
 }
@@ -492,21 +492,21 @@ Databases::getCollator(std::unique_lock<std::mutex>&, const OUString& Language)
         {
             const OUString langStr = aLanguageTag.getLanguage();
             if( langStr == "de" )
-                countryStr = "DE";
+                countryStr = u"DE"_ustr;
             else if( langStr == "en" )
-                countryStr = "US";
+                countryStr = u"US"_ustr;
             else if( langStr == "es" )
-                countryStr = "ES";
+                countryStr = u"ES"_ustr;
             else if( langStr == "it" )
-                countryStr = "IT";
+                countryStr = u"IT"_ustr;
             else if( langStr == "fr" )
-                countryStr = "FR";
+                countryStr = u"FR"_ustr;
             else if( langStr == "sv" )
-                countryStr = "SE";
+                countryStr = u"SE"_ustr;
             else if( langStr == "ja" )
-                countryStr = "JP";
+                countryStr = u"JP"_ustr;
             else if( langStr == "ko" )
-                countryStr = "KR";
+                countryStr = u"KR"_ustr;
 
             // XXX NOTE: there are no complex language tags involved in those
             // "add country" cases, only because of this we can use this
@@ -924,7 +924,7 @@ void Databases::cascadingStylesheet( const OUString& Language,
                     uno::Any aHCMode = xVclWindowPeer->getProperty( u"HighContrastMode"_ustr );
                     if ( ( aHCMode >>= bHighContrastMode ) && bHighContrastMode )
                     {
-                        aCSS = "highcontrastblack";
+                        aCSS = u"highcontrastblack"_ustr;
                         #ifdef _WIN32
                         HKEY hKey = nullptr;
                         LONG lResult = RegOpenKeyExW( HKEY_CURRENT_USER, L"Control Panel\\Accessibility\\HighContrast", 0, KEY_QUERY_VALUE, &hKey );
@@ -989,7 +989,7 @@ void Databases::cascadingStylesheet( const OUString& Language,
             if ( !retry && error && bHighContrastMode )
             {
                 // fall back to default css
-                aCSS = "default";
+                aCSS = u"default"_ustr;
                 retry = 2;
                 bHighContrastMode = false;
             }
@@ -1770,7 +1770,7 @@ OUString IndexFolderIterator::implGetIndexFolderFromPackage( bool& o_rbTemporary
                 if( nLastSlash != -1 )
                     aLang = aLangURL.copy( nLastSlash + 1 );
                 else
-                    aLang = "en";
+                    aLang = u"en"_ustr;
 
                 OUString aZipDir = aLangURL;
                 if( !bIsWriteAccess )

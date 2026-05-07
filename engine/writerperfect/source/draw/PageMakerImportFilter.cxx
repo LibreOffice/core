@@ -24,7 +24,7 @@ bool PageMakerImportFilter::doDetectFormat(librevenge::RVNGInputStream& rInput, 
 {
     if (libpagemaker::PMDocument::isSupported(&rInput))
     {
-        rTypeName = "draw_PageMaker_Document";
+        rTypeName = u"draw_PageMaker_Document"_ustr;
         return true;
     }
 

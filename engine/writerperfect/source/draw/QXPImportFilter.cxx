@@ -27,7 +27,7 @@ bool QXPImportFilter::doDetectFormat(librevenge::RVNGInputStream& rInput, OUStri
 {
     if (libqxp::QXPDocument::isSupported(&rInput))
     {
-        rTypeName = "draw_QXP_Document";
+        rTypeName = u"draw_QXP_Document"_ustr;
         return true;
     }
 

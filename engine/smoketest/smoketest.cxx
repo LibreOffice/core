@@ -151,7 +151,7 @@ void Test::test() {
           /* State  */ css::beans::PropertyState_DIRECT_VALUE }
     };
     css::util::URL url;
-    url.Complete = "vnd.sun.star.script:Standard.Global.StartTestWithDefaultOptions?"
+    url.Complete = u"vnd.sun.star.script:Standard.Global.StartTestWithDefaultOptions?"_ustr
             "language=Basic&location=document";
 
     css::uno::Reference< css::frame::XDesktop2 > xDesktop = css::frame::Desktop::create(connection_.getComponentContext());

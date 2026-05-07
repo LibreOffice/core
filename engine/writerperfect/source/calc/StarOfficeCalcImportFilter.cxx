@@ -57,7 +57,7 @@ bool StarOfficeCalcImportFilter::doDetectFormat(librevenge::RVNGInputStream& rIn
         {
             case STOFFDocument::STOFF_K_DATABASE:
             case STOFFDocument::STOFF_K_SPREADSHEET:
-                rTypeName = "StarOffice_Spreadsheet";
+                rTypeName = u"StarOffice_Spreadsheet"_ustr;
                 break;
             default:
                 break;

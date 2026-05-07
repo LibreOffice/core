@@ -191,10 +191,10 @@ WordPerfectImportFilter::detect(css::uno::Sequence<css::beans::PropertyValue>& D
         if (location == nLength)
         {
             Descriptor.realloc(nLength + 1);
-            Descriptor.getArray()[location].Name = "TypeName";
+            Descriptor.getArray()[location].Name = u"TypeName"_ustr;
         }
 
-        sTypeName = "writer_WordPerfect_Document";
+        sTypeName = u"writer_WordPerfect_Document"_ustr;
         Descriptor.getArray()[location].Value <<= sTypeName;
     }
 

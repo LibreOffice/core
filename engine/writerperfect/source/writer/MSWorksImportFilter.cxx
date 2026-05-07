@@ -56,19 +56,19 @@ bool MSWorksImportFilter::doImportDocument(weld::Window* pParent,
             {
                 case libwps::WPS_MSWORKS:
                     title = WpResId(STR_ENCODING_DIALOG_TITLE_MSWORKS);
-                    encoding = "CP850";
+                    encoding = u"CP850"_ustr;
                     break;
                 case libwps::WPS_RESERVED_0: // MS Write
                     title = WpResId(STR_ENCODING_DIALOG_TITLE_MSWRITE);
-                    encoding = "CP1252";
+                    encoding = u"CP1252"_ustr;
                     break;
                 case libwps::WPS_RESERVED_1: // DosWord
                     title = WpResId(STR_ENCODING_DIALOG_TITLE_DOSWORD);
-                    encoding = "CP850";
+                    encoding = u"CP850"_ustr;
                     break;
                 default:
                     title = WpResId(STR_ENCODING_DIALOG_TITLE);
-                    encoding = "CP850";
+                    encoding = u"CP850"_ustr;
                     break;
             }
 
@@ -108,16 +108,16 @@ bool MSWorksImportFilter::doDetectFormat(librevenge::RVNGInputStream& rInput, OU
         switch (creator)
         {
             case libwps::WPS_MSWORKS:
-                rTypeName = "writer_MS_Works_Document";
+                rTypeName = u"writer_MS_Works_Document"_ustr;
                 break;
             case libwps::WPS_RESERVED_0:
-                rTypeName = "writer_MS_Write";
+                rTypeName = u"writer_MS_Write"_ustr;
                 break;
             case libwps::WPS_RESERVED_1:
-                rTypeName = "writer_DosWord";
+                rTypeName = u"writer_DosWord"_ustr;
                 break;
             case libwps::WPS_RESERVED_4:
-                rTypeName = "writer_PocketWord_File";
+                rTypeName = u"writer_PocketWord_File"_ustr;
                 break;
             default:
                 break;

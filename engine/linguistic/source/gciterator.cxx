@@ -1137,7 +1137,7 @@ uno::Reference< util::XChangesBatch > const & GrammarCheckingIterator::GetUpdate
 
             // get configuration update access
             beans::PropertyValue aValue;
-            aValue.Name  = "nodepath";
+            aValue.Name  = u"nodepath"_ustr;
             aValue.Value <<= u"org.openoffice.Office.Linguistic/ServiceManager"_ustr;
             uno::Sequence< uno::Any > aProps{ uno::Any(aValue) };
             m_xUpdateAccess.set(

@@ -592,7 +592,7 @@ void XMLImport::HandlePageSpan(const librevenge::RVNGPropertyList& rPropertyList
         sMasterPageName = OStringToOUString(
             rPropertyList["style:master-page-name"]->getStr().cstr(), RTL_TEXTENCODING_UTF8);
     else if (!GetIsInPageSpan())
-        sMasterPageName = "Standard";
+        sMasterPageName = u"Standard"_ustr;
 
     if (sMasterPageName.getLength())
     {

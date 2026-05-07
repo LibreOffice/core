@@ -27,7 +27,7 @@ bool CMXImportFilter::doDetectFormat(librevenge::RVNGInputStream& rInput, OUStri
 {
     if (libcdr::CMXDocument::isSupported(&rInput))
     {
-        rTypeName = "draw_Corel_Presentation_Exchange";
+        rTypeName = u"draw_Corel_Presentation_Exchange"_ustr;
         return true;
     }
 

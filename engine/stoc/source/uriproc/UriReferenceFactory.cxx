@@ -490,7 +490,7 @@ css::uno::Reference< css::uri::XUriReference > Factory::makeAbsolute(
             auto path1 = baseUriReference->getPath();
             if (path1.isEmpty()) {
                 if (baseUriReference->hasAuthority()) {
-                    path1 = "/";
+                    path1 = u"/"_ustr;
                 }
             } else {
                 path1 = path1.copy(0, path1.lastIndexOf('/') + 1);

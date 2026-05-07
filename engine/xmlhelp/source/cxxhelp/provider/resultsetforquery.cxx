@@ -306,7 +306,7 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< uno::XComponentConte
     m_aIdents.resize( m_aPath.size() );
 
     Command aCommand;
-    aCommand.Name = "getPropertyValues";
+    aCommand.Name = u"getPropertyValues"_ustr;
     aCommand.Argument <<= m_sProperty;
 
     for( m_nRow = 0; sal::static_int_cast<sal_uInt32>( m_nRow ) < m_aPath.size(); ++m_nRow )

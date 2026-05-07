@@ -23,7 +23,7 @@ bool MSPUBImportFilter::doDetectFormat(librevenge::RVNGInputStream& rInput, OUSt
 {
     if (libmspub::MSPUBDocument::isSupported(&rInput))
     {
-        rTypeName = "draw_Publisher_Document";
+        rTypeName = u"draw_Publisher_Document"_ustr;
         return true;
     }
 

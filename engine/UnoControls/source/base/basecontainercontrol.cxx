@@ -304,7 +304,7 @@ WindowDescriptor BaseContainerControl::impl_getWindowDescriptor ( const Referenc
     WindowDescriptor aDescriptor;
 
     aDescriptor.Type               = WindowClass_CONTAINER;
-    aDescriptor.WindowServiceName  = "window";
+    aDescriptor.WindowServiceName  = u"window"_ustr;
     aDescriptor.ParentIndex        = -1;
     aDescriptor.Parent             = rParentPeer;
     aDescriptor.Bounds             = getPosSize ();

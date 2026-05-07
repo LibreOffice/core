@@ -70,7 +70,7 @@ public:
 void XmlScriptTest::setUp()
 {
     test::BootstrapFixture::setUp();
-    maDataPath = "/xmlscript/qa/cppunit/data/";
+    maDataPath = u"/xmlscript/qa/cppunit/data/"_ustr;
 
     mxDesktop.set(frame::Desktop::create(m_xContext));
 }

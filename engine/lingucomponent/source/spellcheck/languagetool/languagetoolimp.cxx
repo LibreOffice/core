@@ -401,9 +401,9 @@ uno::Sequence<Locale> SAL_CALL LanguageToolGrammarChecker::getLocales()
     if (LanguageToolCfg::RestProtocol::get().value_or("") == sDuden)
     {
         aLocaleList.realloc(3);
-        aLocaleList.getArray()[0] = "de-DE";
-        aLocaleList.getArray()[1] = "en-US";
-        aLocaleList.getArray()[2] = "en-GB";
+        aLocaleList.getArray()[0] = u"de-DE"_ustr;
+        aLocaleList.getArray()[1] = u"en-US"_ustr;
+        aLocaleList.getArray()[2] = u"en-GB"_ustr;
     }
     else
         aLinguCfg.GetLocaleListFor(u"GrammarCheckers"_ustr,
@@ -465,7 +465,7 @@ ProofreadingResult SAL_CALL LanguageToolGrammarChecker::doProofreading(
     if (aProperties.getLength() > 0 && aProperties[0].Name == "Update")
     {
         // locale changed
-        xRes.aText = "";
+        xRes.aText = u""_ustr;
         return xRes;
     }
 

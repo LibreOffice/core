@@ -60,7 +60,7 @@ bool DrawingImportFilter::doImportDocument(weld::Window*, librevenge::RVNGInputS
 
 bool DrawingImportFilter::doDetectFormat(librevenge::RVNGInputStream&, OUString& rTypeName)
 {
-    rTypeName = "WpftDummyDrawing";
+    rTypeName = u"WpftDummyDrawing"_ustr;
     return true;
 }
 

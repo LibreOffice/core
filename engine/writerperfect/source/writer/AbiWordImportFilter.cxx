@@ -25,7 +25,7 @@ bool AbiWordImportFilter::doDetectFormat(librevenge::RVNGInputStream& rInput, OU
 {
     if (libabw::AbiDocument::isFileFormatSupported(&rInput))
     {
-        rTypeName = "writer_AbiWord_Document";
+        rTypeName = u"writer_AbiWord_Document"_ustr;
         return true;
     }
 

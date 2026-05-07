@@ -57,13 +57,13 @@ bool MWAWCalcImportFilter::doDetectFormat(librevenge::RVNGInputStream& rInput, O
                 switch (docType)
                 {
                     case MWAWDocument::MWAW_T_CLARISWORKS:
-                        rTypeName = "calc_ClarisWorks";
+                        rTypeName = u"calc_ClarisWorks"_ustr;
                         break;
                     case MWAWDocument::MWAW_T_MICROSOFTWORKS:
-                        rTypeName = "calc_Mac_Works";
+                        rTypeName = u"calc_Mac_Works"_ustr;
                         break;
                     default:
-                        rTypeName = "MWAW_Database";
+                        rTypeName = u"MWAW_Database"_ustr;
                         break;
                 }
                 break;
@@ -71,16 +71,16 @@ bool MWAWCalcImportFilter::doDetectFormat(librevenge::RVNGInputStream& rInput, O
                 switch (docType)
                 {
                     case MWAWDocument::MWAW_T_CLARISRESOLVE:
-                        rTypeName = "calc_Claris_Resolve";
+                        rTypeName = u"calc_Claris_Resolve"_ustr;
                         break;
                     case MWAWDocument::MWAW_T_CLARISWORKS:
-                        rTypeName = "calc_ClarisWorks";
+                        rTypeName = u"calc_ClarisWorks"_ustr;
                         break;
                     case MWAWDocument::MWAW_T_MICROSOFTWORKS:
-                        rTypeName = "calc_Mac_Works";
+                        rTypeName = u"calc_Mac_Works"_ustr;
                         break;
                     default:
-                        rTypeName = "MWAW_Spreadsheet";
+                        rTypeName = u"MWAW_Spreadsheet"_ustr;
                         break;
                 }
                 break;

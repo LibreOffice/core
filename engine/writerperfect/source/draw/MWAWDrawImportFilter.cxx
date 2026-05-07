@@ -58,10 +58,10 @@ bool MWAWDrawImportFilter::doDetectFormat(librevenge::RVNGInputStream& rInput, O
                 switch (docType)
                 {
                     case MWAWDocument::MWAW_T_CLARISWORKS:
-                        rTypeName = "draw_ClarisWorks";
+                        rTypeName = u"draw_ClarisWorks"_ustr;
                         break;
                     default:
-                        rTypeName = "MWAW_Drawing";
+                        rTypeName = u"MWAW_Drawing"_ustr;
                         break;
                 }
                 break;
@@ -69,10 +69,10 @@ bool MWAWDrawImportFilter::doDetectFormat(librevenge::RVNGInputStream& rInput, O
                 switch (docType)
                 {
                     case MWAWDocument::MWAW_T_CLARISWORKS:
-                        rTypeName = "draw_ClarisWorks";
+                        rTypeName = u"draw_ClarisWorks"_ustr;
                         break;
                     default:
-                        rTypeName = "MWAW_Bitmap";
+                        rTypeName = u"MWAW_Bitmap"_ustr;
                         break;
                 }
                 break;

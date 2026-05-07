@@ -23,7 +23,7 @@ bool VisioImportFilter::doDetectFormat(librevenge::RVNGInputStream& rInput, OUSt
 {
     if (libvisio::VisioDocument::isSupported(&rInput))
     {
-        rTypeName = "draw_Visio_Document";
+        rTypeName = u"draw_Visio_Document"_ustr;
         return true;
     }
 

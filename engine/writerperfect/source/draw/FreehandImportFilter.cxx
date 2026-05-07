@@ -24,7 +24,7 @@ bool FreehandImportFilter::doDetectFormat(librevenge::RVNGInputStream& rInput, O
 {
     if (libfreehand::FreeHandDocument::isSupported(&rInput))
     {
-        rTypeName = "draw_Freehand_Document";
+        rTypeName = u"draw_Freehand_Document"_ustr;
         return true;
     }
 

@@ -931,31 +931,31 @@ void SAL_CALL JavaVirtualMachine::elementReplaced(
     }
     else if ( aAccessor == "ooInetHTTPProxyName" )
     {
-        aPropertyName = "http.proxyHost";
+        aPropertyName = u"http.proxyHost"_ustr;
         rEvent.Element >>= aPropertyValue;
     }
     else if ( aAccessor == "ooInetHTTPProxyPort" )
     {
-        aPropertyName = "http.proxyPort";
+        aPropertyName = u"http.proxyPort"_ustr;
         sal_Int32 n = 0;
         rEvent.Element >>= n;
         aPropertyValue = OUString::number(n);
     }
     else if ( aAccessor == "ooInetHTTPSProxyName" )
     {
-        aPropertyName = "https.proxyHost";
+        aPropertyName = u"https.proxyHost"_ustr;
         rEvent.Element >>= aPropertyValue;
     }
     else if ( aAccessor == "ooInetHTTPSProxyPort" )
     {
-        aPropertyName = "https.proxyPort";
+        aPropertyName = u"https.proxyPort"_ustr;
         sal_Int32 n = 0;
         rEvent.Element >>= n;
         aPropertyValue = OUString::number(n);
     }
     else if ( aAccessor == "ooInetNoProxy" )
     {
-        aPropertyName = "http.nonProxyHosts";
+        aPropertyName = u"http.nonProxyHosts"_ustr;
         rEvent.Element >>= aPropertyValue;
         aPropertyValue = aPropertyValue.replace(';', '|');
     }

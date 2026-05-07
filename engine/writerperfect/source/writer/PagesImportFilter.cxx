@@ -30,7 +30,7 @@ bool PagesImportFilter::doDetectFormat(librevenge::RVNGInputStream& rInput, OUSt
     if ((confidence == EtonyekDocument::CONFIDENCE_EXCELLENT)
         && (type == EtonyekDocument::TYPE_PAGES))
     {
-        rTypeName = "writer_ApplePages";
+        rTypeName = u"writer_ApplePages"_ustr;
         return true;
     }
 

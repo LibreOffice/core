@@ -2052,7 +2052,7 @@ CommitResult UCBStorage_Impl::Commit()
                         if ( pElement->m_xStream->m_bIsOLEStorage )
                         {
                             // OLE storage should be stored encrypted, if the storage uses encryption
-                            pElement->m_xStream->m_aContentType = "application/vnd.sun.star.oleobject";
+                            pElement->m_xStream->m_aContentType = u"application/vnd.sun.star.oleobject"_ustr;
                             Any aValue;
                             aValue <<= true;
                             pElement->m_xStream->m_pContent->setPropertyValue(u"Encrypted"_ustr, aValue );

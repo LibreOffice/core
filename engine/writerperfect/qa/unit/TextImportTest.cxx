@@ -58,7 +58,7 @@ bool TextImportFilter::doImportDocument(weld::Window*, librevenge::RVNGInputStre
 
 bool TextImportFilter::doDetectFormat(librevenge::RVNGInputStream&, OUString& rTypeName)
 {
-    rTypeName = "WpftDummyText";
+    rTypeName = u"WpftDummyText"_ustr;
     return true;
 }
 

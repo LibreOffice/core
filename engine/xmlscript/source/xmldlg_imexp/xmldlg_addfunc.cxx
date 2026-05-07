@@ -85,7 +85,7 @@ void importDialogModel(
 
     xml::sax::InputSource source;
     source.aInputStream = xInput;
-    source.sSystemId = "virtual file";
+    source.sSystemId = u"virtual file"_ustr;
 
     xParser->parseStream( source );
 }

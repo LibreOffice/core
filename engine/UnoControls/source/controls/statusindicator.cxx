@@ -268,7 +268,7 @@ WindowDescriptor StatusIndicator::impl_getWindowDescriptor( const css::uno::Refe
     WindowDescriptor aDescriptor;
 
     aDescriptor.Type               =   WindowClass_SIMPLE;
-    aDescriptor.WindowServiceName  =   "floatingwindow";
+    aDescriptor.WindowServiceName  =   u"floatingwindow"_ustr;
     aDescriptor.ParentIndex        =   -1;
     aDescriptor.Parent             =   xParentPeer;
     aDescriptor.Bounds             =   getPosSize ();

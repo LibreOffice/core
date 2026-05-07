@@ -124,20 +124,20 @@ bool WpftLoader::impl_load()
 
         uno::Sequence<beans::PropertyValue> aDescriptor(3);
         auto pDescriptor = aDescriptor.getArray();
-        pDescriptor[0].Name = "URL";
+        pDescriptor[0].Name = u"URL"_ustr;
         pDescriptor[0].Value <<= m_aURL;
         if (m_xInputStream.is())
         {
-            pDescriptor[1].Name = "InputStream";
+            pDescriptor[1].Name = u"InputStream"_ustr;
             pDescriptor[1].Value <<= m_xInputStream;
         }
         else
         {
             ucbhelper::Content aContent(m_aURL, uno::Reference<ucb::XCommandEnvironment>(),
                                         m_xContext);
-            pDescriptor[1].Name = "InputStream";
+            pDescriptor[1].Name = u"InputStream"_ustr;
             pDescriptor[1].Value <<= aContent.openStream();
-            pDescriptor[2].Name = "UCBContent";
+            pDescriptor[2].Name = u"UCBContent"_ustr;
             pDescriptor[2].Value <<= aContent.get();
         }
 
@@ -198,7 +198,7 @@ void WpftLoader::impl_detectFilterName(uno::Sequence<beans::PropertyValue>& rDes
                 const sal_Int32 nDescriptorLen = rDescriptor.getLength();
                 rDescriptor.realloc(nDescriptorLen + 1);
                 auto& el = rDescriptor.getArray()[nDescriptorLen];
-                el.Name = "FilterName";
+                el.Name = u"FilterName"_ustr;
                 el.Value <<= aFilterName;
                 return;
             }

@@ -59,7 +59,7 @@ bool StarOfficeDrawImportFilter::doDetectFormat(librevenge::RVNGInputStream& rIn
         switch (docKind)
         {
             case STOFFDocument::STOFF_K_DRAW:
-                rTypeName = "StarOffice_Drawing";
+                rTypeName = u"StarOffice_Drawing"_ustr;
                 break;
             default:
                 break;

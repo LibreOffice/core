@@ -59,7 +59,7 @@ bool StarOfficePresentationImportFilter::doDetectFormat(librevenge::RVNGInputStr
         switch (docKind)
         {
             case STOFFDocument::STOFF_K_PRESENTATION:
-                rTypeName = "StarOffice_Presentation";
+                rTypeName = u"StarOffice_Presentation"_ustr;
                 break;
             default:
                 break;

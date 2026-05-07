@@ -85,7 +85,7 @@ bool StarOfficeWriterImportFilter::doDetectFormat(librevenge::RVNGInputStream& r
         switch (docKind)
         {
             case STOFFDocument::STOFF_K_TEXT:
-                rTypeName = "StarOffice_Writer";
+                rTypeName = u"StarOffice_Writer"_ustr;
                 break;
             default:
                 break;

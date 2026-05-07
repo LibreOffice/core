@@ -71,10 +71,10 @@ static bool inited_juhx( JNIEnv * jni_env )
               u"Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1writeInfo"_ustr;
         s_writeInfo = reinterpret_cast<javaunohelper::detail::Func_writeInfo *>(aModule.getFunctionSymbol(symbol));
         symbol =
-            "Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1getFactory";
+            u"Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1getFactory"_ustr;
         s_getFactory = reinterpret_cast<javaunohelper::detail::Func_getFactory *>(aModule.getFunctionSymbol(symbol));
         symbol =
-            "Java_com_sun_star_comp_helper_Bootstrap_cppuhelper_1bootstrap";
+            u"Java_com_sun_star_comp_helper_Bootstrap_cppuhelper_1bootstrap"_ustr;
         s_bootstrap =
             reinterpret_cast<javaunohelper::detail::Func_bootstrap *>(aModule.getFunctionSymbol(symbol));
 

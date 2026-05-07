@@ -921,7 +921,7 @@ bool ImportContext::importDataAwareProperty(
                 xConvertor->setPropertyValue( u"PersistentRepresentation"_ustr , uno::Any( sLinkedCell ) );
                 xConvertor->getPropertyValue( u"Address"_ustr ) >>= aAddress;
                 beans::NamedValue aArg1;
-                aArg1.Name = "BoundCell";
+                aArg1.Name = u"BoundCell"_ustr;
                 aArg1.Value <<= aAddress;
 
                 uno::Reference< form::binding::XValueBinding > xBinding( xFac->createInstanceWithArguments( u"com.sun.star.table.CellValueBinding"_ustr , { uno::Any(aArg1) }), uno::UNO_QUERY );
@@ -940,7 +940,7 @@ bool ImportContext::importDataAwareProperty(
                 xConvertor->setPropertyValue( u"PersistentRepresentation"_ustr , uno::Any( sCellRange ) );
                 xConvertor->getPropertyValue( u"Address"_ustr ) >>= aAddress;
                 beans::NamedValue aArg1;
-                aArg1.Name = "CellRange";
+                aArg1.Name = u"CellRange"_ustr;
                 aArg1.Value <<= aAddress;
 
                 uno::Reference< form::binding::XListEntrySource > xSource( xFac->createInstanceWithArguments( u"com.sun.star.table.CellRangeListSource"_ustr , { uno::Any(aArg1) } ), uno::UNO_QUERY );

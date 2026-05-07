@@ -29,7 +29,7 @@ bool WPGImportFilter::doDetectFormat(librevenge::RVNGInputStream& rInput, OUStri
 {
     if (libwpg::WPGraphics::isSupported(&rInput))
     {
-        rTypeName = "draw_WordPerfect_Graphics";
+        rTypeName = u"draw_WordPerfect_Graphics"_ustr;
         return true;
     }
 

@@ -596,7 +596,7 @@ WindowDescriptor BaseControl::impl_getWindowDescriptor( const Reference< XWindow
     WindowDescriptor aDescriptor;
 
     aDescriptor.Type               = WindowClass_SIMPLE;
-    aDescriptor.WindowServiceName  = "window";
+    aDescriptor.WindowServiceName  = u"window"_ustr;
     aDescriptor.ParentIndex        = -1;
     aDescriptor.Parent             = xParentPeer;
     aDescriptor.Bounds             = getPosSize ();

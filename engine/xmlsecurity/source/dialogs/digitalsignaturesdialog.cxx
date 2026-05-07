@@ -707,20 +707,20 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
             {
                 // OpenPGP
                 if (!rInfo.ouGpgCertificate.isEmpty())
-                    aType = "OpenPGP";
+                    aType = u"OpenPGP"_ustr;
                 // XML based: XAdES or not.
                 else if (rInfo.GetSigningCertificate() && !rInfo.GetSigningCertificate()->CertDigest.isEmpty())
-                    aType = "XAdES";
+                    aType = u"XAdES"_ustr;
                 else
-                    aType = "XML-DSig";
+                    aType = u"XML-DSig"_ustr;
             }
             else
             {
                 // Assume PDF: PAdES or not.
                 if (rInfo.bHasSigningCertificate)
-                    aType = "PAdES";
+                    aType = u"PAdES"_ustr;
                 else
-                    aType = "PDF";
+                    aType = u"PDF"_ustr;
             }
 
             bool bSigValid = rInfo.nStatus == css::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED;

@@ -331,7 +331,7 @@ const css::uno::Reference<XImplementationLoader> & JavaComponentLoader::getJavaL
                 UNO_QUERY_THROW);
             assert(xLoader.is());
             m_javaLoader = xLoader;
-            rRemoteArg = "remote";
+            rRemoteArg = u"remote"_ustr;
             SAL_INFO("stoc.java", "JavaComponentLoader: remote proxy instance created: " << m_javaLoader.get());
             return m_javaLoader;
         }

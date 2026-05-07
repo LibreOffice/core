@@ -61,7 +61,7 @@ bool PresentationImportFilter::doImportDocument(weld::Window*, librevenge::RVNGI
 
 bool PresentationImportFilter::doDetectFormat(librevenge::RVNGInputStream&, OUString& rTypeName)
 {
-    rTypeName = "WpftDummyPresentation";
+    rTypeName = u"WpftDummyPresentation"_ustr;
     return true;
 }
 

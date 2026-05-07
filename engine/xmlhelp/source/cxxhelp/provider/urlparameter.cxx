@@ -142,7 +142,7 @@ const OUString & URLParameter::get_title()
             m_aTitle = inf->get_title();
     }
     else   // This must be the root
-        m_aTitle = "root";
+        m_aTitle = u"root"_ustr;
 
     return m_aTitle;
 }

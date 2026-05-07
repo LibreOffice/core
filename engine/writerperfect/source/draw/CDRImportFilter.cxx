@@ -27,7 +27,7 @@ bool CDRImportFilter::doDetectFormat(librevenge::RVNGInputStream& rInput, OUStri
 {
     if (libcdr::CDRDocument::isSupported(&rInput))
     {
-        rTypeName = "draw_CorelDraw_Document";
+        rTypeName = u"draw_CorelDraw_Document"_ustr;
         return true;
     }
 

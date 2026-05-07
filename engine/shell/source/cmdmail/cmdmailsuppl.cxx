@@ -144,7 +144,7 @@ void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailM
         // transparently by redirected to e.g. the corresponding GConf setting in GNOME.
 
         PropertyValue aProperty;
-        aProperty.Name = "nodepath";
+        aProperty.Name = u"nodepath"_ustr;
         aProperty.Value <<= u"org.openoffice.Office.Common/ExternalMailer"_ustr;
 
         Sequence< Any > aArgumentList{ Any(aProperty) };

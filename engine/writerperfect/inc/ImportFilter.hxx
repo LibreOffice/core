@@ -141,7 +141,7 @@ public:
             if (location == nLength)
             {
                 Descriptor.realloc(nLength + 1);
-                Descriptor.getArray()[location].Name = "TypeName";
+                Descriptor.getArray()[location].Name = u"TypeName"_ustr;
             }
 
             Descriptor.getArray()[location].Value <<= sTypeName;

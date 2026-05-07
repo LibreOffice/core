@@ -65,21 +65,21 @@ bool EBookImportFilter::doDetectFormat(librevenge::RVNGInputStream& rInput, OUSt
         switch (type)
         {
             case EBOOKDocument::TYPE_BBEB:
-                rTypeName = "writer_BroadBand_eBook";
+                rTypeName = u"writer_BroadBand_eBook"_ustr;
                 break;
             case EBOOKDocument::TYPE_FICTIONBOOK2:
-                rTypeName = "writer_FictionBook_2";
+                rTypeName = u"writer_FictionBook_2"_ustr;
                 break;
             case EBOOKDocument::TYPE_PALMDOC:
-                rTypeName = "writer_PalmDoc";
+                rTypeName = u"writer_PalmDoc"_ustr;
                 break;
             case EBOOKDocument::TYPE_PLUCKER:
-                rTypeName = "writer_Plucker_eBook";
+                rTypeName = u"writer_Plucker_eBook"_ustr;
                 break;
             case EBOOKDocument::TYPE_PEANUTPRESS:
             case EBOOKDocument::TYPE_TEALDOC:
             case EBOOKDocument::TYPE_ZTXT:
-                rTypeName = "Palm_Text_Document";
+                rTypeName = u"Palm_Text_Document"_ustr;
                 break;
             default:
                 SAL_WARN_IF(type != EBOOKDocument::TYPE_UNKNOWN, "writerperfect",

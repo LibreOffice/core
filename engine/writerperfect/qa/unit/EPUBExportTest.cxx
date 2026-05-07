@@ -207,7 +207,7 @@ CPPUNIT_TEST_FIXTURE(EPUBExportTest, testEPUBFixedLayout)
 CPPUNIT_TEST_FIXTURE(EPUBExportTest, testEPUBFixedLayoutOption)
 {
     // Explicitly request fixed layout, this time via FilterOptions.
-    maFilterOptions = "layout=fixed";
+    maFilterOptions = u"layout=fixed"_ustr;
     createDoc(u"hello.fodt", {});
 
     // This failed, fixed layout was only working via the FilterData map.

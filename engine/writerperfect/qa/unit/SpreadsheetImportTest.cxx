@@ -59,7 +59,7 @@ bool SpreadsheetImportFilter::doImportDocument(weld::Window*, librevenge::RVNGIn
 
 bool SpreadsheetImportFilter::doDetectFormat(librevenge::RVNGInputStream&, OUString& rTypeName)
 {
-    rTypeName = "WpftDummySpreadsheet";
+    rTypeName = u"WpftDummySpreadsheet"_ustr;
     return true;
 }
 

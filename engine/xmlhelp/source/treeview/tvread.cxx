@@ -587,7 +587,7 @@ ConfigData TVChildTarget::init()
     OUString instPath = officecfg::Office::Common::Path::Current::Help::get();
     if( instPath.isEmpty() )
       // try to determine path from default
-      instPath = "$(instpath)/help";
+      instPath = u"$(instpath)/help"_ustr;
 
     // replace anything like $(instpath);
     subst( instPath );
@@ -623,8 +623,8 @@ ConfigData TVChildTarget::init()
         ret = configData.locale.copy( 0,idx );
     else
     {
-        configData.locale= "en-US";
-        ret = "en";
+        configData.locale= u"en-US"_ustr;
+        ret = u"en"_ustr;
     }
     url += ret;
 

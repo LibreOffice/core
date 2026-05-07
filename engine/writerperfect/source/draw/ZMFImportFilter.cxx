@@ -27,7 +27,7 @@ bool ZMFImportFilter::doDetectFormat(librevenge::RVNGInputStream& rInput, OUStri
 {
     if (libzmf::ZMFDocument::isSupported(&rInput))
     {
-        rTypeName = "draw_ZMF_Document";
+        rTypeName = u"draw_ZMF_Document"_ustr;
         return true;
     }
 
