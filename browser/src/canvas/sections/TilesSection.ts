@@ -40,6 +40,11 @@ export class TilesSection extends CanvasSectionObject {
 		this.sectionProperties.pageBackgroundTextColor = 'grey';
 		this.sectionProperties.pageBackgroundFont = String(40 * app.roundedDpiScale) + 'px Arial';
 
+		// Loading-state skeleton: for a subtle hint of a heading / cell content
+		// drawn over a page's white background before tiles arrive.
+		this.sectionProperties.skeletonHeadingColor = '#c8d2dc';
+		this.sectionProperties.skeletonLineColor = '#dde3ea';
+
 		/*
 			Seems that this number is equal to 45 twips in core.
 			Page rectangles are sent from core side.
@@ -256,7 +261,7 @@ export class TilesSection extends CanvasSectionObject {
 
 	private drawPageBackgroundWriter (ctx: any) {
 		const viewRectangleTwips = app.activeDocument.activeLayout.viewedRectangle.toArray();
-		this.context.fillStyle = this.containerObject.getDocumentBackgroundColor();
+		const docBg = this.containerObject.getDocumentBackgroundColor();
 
 		for (let i: number = 0; i < app.file.writer.pageRectangleList.length; i++) {
 			const simpleRectangle = new cool.SimpleRectangle(
@@ -266,15 +271,86 @@ export class TilesSection extends CanvasSectionObject {
 				app.file.writer.pageRectangleList[i][3]
 			);
 
-			if (simpleRectangle.intersectsRectangle(viewRectangleTwips)) {
-				this.context.fillRect(
-					simpleRectangle.v1X + this.sectionProperties.pageBackgroundInnerMargin,
-					simpleRectangle.v1Y + this.sectionProperties.pageBackgroundInnerMargin,
-					simpleRectangle.v2X - simpleRectangle.v1X - this.sectionProperties.pageBackgroundInnerMargin,
-					simpleRectangle.v3Y - simpleRectangle.v1Y - this.sectionProperties.pageBackgroundInnerMargin
-				);
-			}
+			if (!simpleRectangle.intersectsRectangle(viewRectangleTwips))
+				continue;
+
+			const px = simpleRectangle.v1X + this.sectionProperties.pageBackgroundInnerMargin;
+			const py = simpleRectangle.v1Y + this.sectionProperties.pageBackgroundInnerMargin;
+			const pw = simpleRectangle.v2X - simpleRectangle.v1X - this.sectionProperties.pageBackgroundInnerMargin;
+			const ph = simpleRectangle.v3Y - simpleRectangle.v1Y - this.sectionProperties.pageBackgroundInnerMargin;
+
+			this.context.fillStyle = docBg;
+			this.context.fillRect(px, py, pw, ph);
+
+			this.drawWriterLoadingSkeleton(px, py, pw, ph);
 		}
+	}
+
+	// Paint a skeleton of a heading + a few paragraph lines on a Writer page
+	// before tiles arrive and over-paint that; FIXME: eventually writer tiles
+	// should be transparent, and we'll need to clip this.
+	private drawWriterLoadingSkeleton(px: number, py: number, pw: number, ph: number): void {
+		// Roughly mirror a 1" margin on so the skeleton sits inside
+		// the would-be text frame rather than against the page edge.
+		const marginX = Math.round(pw * 0.12);
+		const marginY = Math.round(ph * 0.12);
+		const textLeft = px + marginX;
+		const textTop = py + marginY;
+		const textWidth = pw - 2 * marginX;
+		if (textWidth <= 0)
+			return;
+
+		const headingHeight = Math.max(8, Math.round(ph * 0.035));
+		const headingWidth = Math.round(textWidth * 0.55);
+		const lineHeight = Math.max(4, Math.round(ph * 0.014));
+		const lineGap = Math.max(3, Math.round(ph * 0.014));
+		const paragraphGap = Math.max(6, Math.round(ph * 0.025));
+		const radius = Math.max(2, Math.round(lineHeight * 0.5));
+
+		// Heading.
+		this.context.fillStyle = this.sectionProperties.skeletonHeadingColor;
+		this.roundedFillRect(textLeft, textTop, headingWidth, headingHeight, Math.max(3, Math.round(headingHeight * 0.35)));
+
+		// Paragraph lines: two short paragraphs with a ragged last line, so it
+		// reads as prose rather than a UI placeholder.
+		this.context.fillStyle = this.sectionProperties.skeletonLineColor;
+		const lineWidths = [1.0, 0.97, 0.94, 0.62, /* gap */ 0.98, 0.95, 0.93, 0.45];
+		const gapAfter = 3; // index 3 is the last line of the first paragraph.
+
+		let y = textTop + headingHeight + paragraphGap;
+		for (let i = 0; i < lineWidths.length; i++) {
+			const w = Math.round(textWidth * lineWidths[i]);
+			if (y + lineHeight > py + ph - marginY)
+				break;
+			this.roundedFillRect(textLeft, y, w, lineHeight, radius);
+			y += lineHeight + lineGap;
+			if (i === gapAfter)
+				y += paragraphGap;
+		}
+	}
+
+	private roundedFillRect(x: number, y: number, w: number, h: number, r: number): void {
+		const ctx = this.context as any;
+		if (typeof ctx.roundRect === 'function') {
+			ctx.beginPath();
+			ctx.roundRect(x, y, w, h, r);
+			ctx.fill();
+			return;
+		}
+		// Fallback for older canvas implementations.
+		const rr = Math.min(r, w * 0.5, h * 0.5);
+		ctx.beginPath();
+		ctx.moveTo(x + rr, y);
+		ctx.lineTo(x + w - rr, y);
+		ctx.quadraticCurveTo(x + w, y, x + w, y + rr);
+		ctx.lineTo(x + w, y + h - rr);
+		ctx.quadraticCurveTo(x + w, y + h, x + w - rr, y + h);
+		ctx.lineTo(x + rr, y + h);
+		ctx.quadraticCurveTo(x, y + h, x, y + h - rr);
+		ctx.lineTo(x, y + rr);
+		ctx.quadraticCurveTo(x, y, x + rr, y);
+		ctx.closePath();
+		ctx.fill();
 	}
 
 	private drawPageBackgroundFileBasedView (ctx: any) {
