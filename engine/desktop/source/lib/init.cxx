@@ -5544,7 +5544,9 @@ static void doc_postUnoCommand(COKitDocument* pThis, const char* pCommand, const
             tools::JsonWriter aJson;
             aJson.put("commandName", pCommand);
             aJson.put("success", bResult);
-            pDocument->mpCallbackFlushHandlers[nView]->queue(KIT_CALLBACK_UNO_COMMAND_RESULT, aJson.finishAndGetAsOString());
+            auto handlerIt = pDocument->mpCallbackFlushHandlers.find(nView);
+            if (handlerIt != pDocument->mpCallbackFlushHandlers.end() && handlerIt->second)
+                handlerIt->second->queue(KIT_CALLBACK_UNO_COMMAND_RESULT, aJson.finishAndGetAsOString());
             return;
         }
 
@@ -5580,7 +5582,9 @@ static void doc_postUnoCommand(COKitDocument* pThis, const char* pCommand, const
                 aJson.put("type", "string");
                 aJson.put("value", "unmodified");
             }
-            pDocument->mpCallbackFlushHandlers[nView]->queue(KIT_CALLBACK_UNO_COMMAND_RESULT, aJson.finishAndGetAsOString());
+            auto handlerIt = pDocument->mpCallbackFlushHandlers.find(nView);
+            if (handlerIt != pDocument->mpCallbackFlushHandlers.end() && handlerIt->second)
+                handlerIt->second->queue(KIT_CALLBACK_UNO_COMMAND_RESULT, aJson.finishAndGetAsOString());
             return;
         }
     }
