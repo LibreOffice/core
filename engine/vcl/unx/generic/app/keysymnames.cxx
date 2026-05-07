@@ -211,6 +211,31 @@ namespace vcl_sal {
         { SunXK_Cut,   "Cut" },
     };
 
+    const struct KeysymNameReplacement aImplReplacements_Danish[] =
+    {
+        { XK_Shift_L, "Skift" },
+        { XK_Shift_R, "Skift" },
+        { XK_Page_Up, "PageUp" },
+        { XK_Page_Down, "PageDown" },
+        { XK_Escape, "Esc" },
+        { XK_Right, "H\303\270jre" },
+        { XK_Left, "Venstre" },
+        { XK_Up, "Op" },
+        { XK_Down, "Ned" },
+        { XK_BackSpace, "Tilbage" },
+        { XK_Return, "Enter" },
+        { SunXK_Stop,  "Stop" },
+        { SunXK_Again, "Gentag" },
+        { SunXK_Props, "Egenskaber" },
+        { SunXK_Undo,  "Fortryd" },
+        { SunXK_Front, "Front" },
+        { SunXK_Copy,  "Kopier" },
+        { SunXK_Open,  "\303\205bn" },
+        { SunXK_Paste, "Inds\303\246t" },
+        { SunXK_Find,  "S\303\270g" },
+        { SunXK_Cut,   "Klip" },
+    };
+
     const struct KeysymNameReplacement aImplReplacements_Norwegian[] =
     {
         { XK_Shift_L, "Skift" },
@@ -462,6 +487,7 @@ namespace vcl_sal {
     const struct KeyboardReplacements aKeyboards[] =
     {
         { "ca", aImplReplacements_Catalan, std::size(aImplReplacements_Catalan) },
+        { "da", aImplReplacements_Danish, std::size(aImplReplacements_Danish) },
         { "de", aImplReplacements_German, std::size(aImplReplacements_German) },
         { "sl", aImplReplacements_Slovenian, std::size(aImplReplacements_Slovenian) },
         { "es", aImplReplacements_Spanish, std::size(aImplReplacements_Spanish) },

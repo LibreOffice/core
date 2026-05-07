@@ -210,9 +210,18 @@ class LOUtil {
 		return rectangles;
 	}
 
+	// Locales whose icons live under another locale's directory because the
+	// localized glyph is identical (e.g. Danish "Fed"/"Kursiv" share the F/K
+	// drawn for German "Fett"/"Kursiv"). The key is the UI language code; the
+	// value is the directory under images/ that actually holds the SVGs.
+	private static localeIconAlias: Record<string, string> = {
+		da: 'de',
+	};
+
 	// Map of locale → icon filenames that have locale-specific variants.
 	private static localizedIcons: Record<string, string[]> = {
 		ar: ['lc_chapternumberingdialog.svg', 'lc_linenumberingdialog.svg'],
+		da: ['lc_bold.svg', 'lc_italic.svg'],
 		de: [
 			'lc_bold.svg',
 			'lc_italic.svg',
@@ -379,14 +388,16 @@ class LOUtil {
 
 		const lang = LOUtil.getUILanguageCode();
 		const hasLocalized = lang && LOUtil.localizedIcons[lang]?.includes(imgName);
+		const iconLang = LOUtil.localeIconAlias[lang] || lang;
 
 		if ((window as any).prefs.getBoolean('darkTheme')) {
 			if (hasLocalized)
-				return LOUtil.getURL('images/dark/' + lang + '/' + imgName);
+				return LOUtil.getURL('images/dark/' + iconLang + '/' + imgName);
 			return LOUtil.getURL('images/dark/' + imgName);
 		}
 
-		if (hasLocalized) return LOUtil.getURL('images/' + lang + '/' + imgName);
+		if (hasLocalized)
+			return LOUtil.getURL('images/' + iconLang + '/' + imgName);
 
 		const dummyEmptyImg =
 			'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=';

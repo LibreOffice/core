@@ -379,6 +379,7 @@ var unoShortcutsL10NKeyBindings = {
 
 var unoShortcutsModifierL10N = {
 	ca: { Shift: 'Maj' },
+	da: { Shift: 'Skift' },
 	de: { Ctrl: 'Strg', Shift: 'Umschalt' },
 	es: { Shift: 'Mayús' },
 	fr: { Shift: 'Maj' },
