@@ -62,6 +62,8 @@
 #include <dpsave.hxx>
 #include <dpdimsave.hxx>
 #include <document.hxx>
+#include <patattr.hxx>
+#include <scitems.hxx>
 #include <documentimport.hxx>
 #include <workbooksettings.hxx>
 #include <PivotTableFormat.hxx>
@@ -211,7 +213,8 @@ PTFieldModel::PTFieldModel() :
     mbInsertPageBreak( false ),
     mbAutoShow( false ),
     mbTopAutoShow( true ),
-    mbMultiPageItems( false )
+    mbMultiPageItems( false ),
+    mbFillDownLabels( false )
 {
 }
 
@@ -299,6 +302,12 @@ void PivotTableField::importPivotField( const AttributeList& rAttribs )
     maModel.mbAutoShow        = rAttribs.getBool( XML_autoShow, false );
     maModel.mbTopAutoShow     = rAttribs.getBool( XML_topAutoShow, true );
     maModel.mbMultiPageItems  = rAttribs.getBool( XML_multipleItemSelectionAllowed, false );
+    maModel.maName            = rAttribs.getXString( XML_name, OUString() );
+}
+
+void PivotTableField::importPivotFieldX14( const AttributeList& rAttribs )
+{
+    maModel.mbFillDownLabels = rAttribs.getBool( XML_fillDownLabels, false );
 }
 
 void PivotTableField::importItem( const AttributeList& rAttribs )
@@ -661,7 +670,7 @@ void PivotTableField::convertPageField( const PTPageFieldModel& rPageField )
     {
         if( const PivotCacheItem* pSharedItem = pCacheField->getCacheItem( nCacheItem ) )
         {
-            ScDPObject* pDPObj = mrPivotTable.getDPObject();
+            ScDPObject* pDPObj = const_cast<PivotTable&>(mrPivotTable).getDPObject();
             ScDPSaveData* pSaveData = pDPObj->GetSaveData();
             ScDPSaveDimension* pDim = pSaveData->GetDimensionByName(pCacheField->getName());
             OUString aSelectedPage = pSharedItem->getFormattedName(*pDim, pDPObj, Date( getWorkbookSettings().getNullDate()));
@@ -761,7 +770,7 @@ rtl::Reference< ScDataPilotFieldObj > PivotTableField::convertRowColPageField( s
     if( xDPField.is() )
     {
         // TODO: Use this to set properties directly, bypassing the slow uno layer.
-        ScDPObject* pDPObj = mrPivotTable.getDPObject();
+        ScDPObject* pDPObj = const_cast<PivotTable&>(mrPivotTable).getDPObject();
 
         PropertySet aPropSet(( css::uno::Reference< css::beans::XPropertySet >(xDPField) ));
 
@@ -806,6 +815,20 @@ rtl::Reference< ScDataPilotFieldObj > PivotTableField::convertRowColPageField( s
             if( aSubtotals.empty() && maModel.mbDefaultSubtotal )
                 aSubtotals.push_back( GeneralFunction_AUTO );
             aPropSet.setProperty( PROP_Subtotals, comphelper::containerToSequence( aSubtotals ) );
+
+            // Belt-and-suspenders: when the file declares defaultSubtotal="0"
+            // with no per-function override, the empty Sequence above does not
+            // reliably reach SetSubTotals via the UNO bridge.  Force the model
+            // flag directly so bSubTotalDefault=false (dpsave.cxx:341-345).
+            // Mirrors the BIFF importer's guard at xipivot.cxx:1163-1165.
+            if( !maModel.mbDefaultSubtotal && aSubtotals.empty() )
+            {
+                if( ScDPSaveData* pSaveData = pDPObj->GetSaveData() )
+                {
+                    if( ScDPSaveDimension* pSaveDim = pSaveData->GetExistingDimensionByName( maDPFieldName ) )
+                        pSaveDim->SetSubTotals( std::vector<ScGeneralFunction>{} );
+                }
+            }
 
             // layout settings
             DataPilotFieldLayoutInfo aLayoutInfo;
@@ -870,6 +893,16 @@ rtl::Reference< ScDataPilotFieldObj > PivotTableField::convertRowColPageField( s
                 ScDPSaveData* pSaveData = pDPObj->GetSaveData();
                 ScDPSaveDimension* pDim = pSaveData->GetDimensionByName(pCacheField->getName());
                 SAL_WARN_IF(!pDim, "sc.filter", "PivotTableField::convertRowColPageField - no Dimension found for: " << pCacheField->getName());
+
+                if (pDim) pDim->SetRepeatItemLabels( maModel.mbFillDownLabels );
+
+                // OOXML <x:pivotField name="..."> is the user-customised display caption
+                // (Excel's "Custom Name" — typically shorter than the underlying cache field).
+                // When set, propagate it as the dimension's LayoutName so that
+                // ScDPOutput uses it instead of the cache field name (BIFF importer does the
+                // same at xipivot.cxx:1157).
+                if (pDim && !maModel.maName.isEmpty())
+                    pDim->SetLayoutName( maModel.maName );
 
                 if (pDim) try
                 {
@@ -1003,20 +1036,43 @@ void PivotTableFilter::importTop10Filter( SequenceInputStream& rStrm )
 
 void PivotTableFilter::finalizeImport()
 {
-    // only simple top10 filter supported
-    if( maModel.mnType != XML_count )
-        return;
-
-    PropertySet aPropSet( css::uno::Reference< css::beans::XPropertySet >(mrPivotTable.getDataPilotField( maModel.mnField )) );
-    if( aPropSet.is() )
+    if( maModel.mnType == XML_count )
     {
-        DataPilotFieldAutoShowInfo aAutoShowInfo;
-        aAutoShowInfo.IsEnabled = true;
-        aAutoShowInfo.ShowItemsMode = maModel.mbTopFilter ? DataPilotFieldShowItemsMode::FROM_TOP : DataPilotFieldShowItemsMode::FROM_BOTTOM;
-        aAutoShowInfo.ItemCount = getLimitedValue< sal_Int32, double >( maModel.mfValue, 0, SAL_MAX_INT32 );
-        if( const PivotCacheField* pCacheField = mrPivotTable.getCacheFieldOfDataField( maModel.mnMeasureField ) )
-            aAutoShowInfo.DataField = pCacheField->getName();
-        aPropSet.setProperty( PROP_AutoShowInfo, aAutoShowInfo );
+        PropertySet aPropSet( css::uno::Reference< css::beans::XPropertySet >(mrPivotTable.getDataPilotField( maModel.mnField )) );
+        if( aPropSet.is() )
+        {
+            DataPilotFieldAutoShowInfo aAutoShowInfo;
+            aAutoShowInfo.IsEnabled = true;
+            aAutoShowInfo.ShowItemsMode = maModel.mbTopFilter ? DataPilotFieldShowItemsMode::FROM_TOP : DataPilotFieldShowItemsMode::FROM_BOTTOM;
+            aAutoShowInfo.ItemCount = getLimitedValue< sal_Int32, double >( maModel.mfValue, 0, SAL_MAX_INT32 );
+            if( const PivotCacheField* pCacheField = mrPivotTable.getCacheFieldOfDataField( maModel.mnMeasureField ) )
+                aAutoShowInfo.DataField = pCacheField->getName();
+            aPropSet.setProperty( PROP_AutoShowInfo, aAutoShowInfo );
+        }
+        return;
+    }
+
+    if( maModel.mnType == XML_captionNotEqual )
+    {
+        const PivotCacheField* pCacheField = mrPivotTable.getCacheField( maModel.mnField );
+        if( !pCacheField )
+            return;
+        ScDPObject* pDPObj = const_cast<PivotTable&>(mrPivotTable).getDPObject();
+        if( !pDPObj )
+            return;
+        ScDPSaveData* pSaveData = pDPObj->GetSaveData();
+        if( !pSaveData )
+            return;
+        ScDPSaveDimension* pDim = pSaveData->GetExistingDimensionByName( pCacheField->getName() );
+        if( !pDim )
+            return;
+
+        const OUString& rTarget = maModel.maStrValue1;
+        for( ScDPSaveMember* pMember : pDim->GetMembers() )
+        {
+            if( pMember && pMember->GetName() == rTarget )
+                pMember->SetIsVisible( false );
+        }
     }
 }
 
@@ -1327,6 +1383,31 @@ void PivotTable::finalizeImport()
     if( !mpPivotCache || !mpPivotCache->isValidDataSource() || maDefModel.maName.isEmpty() )
         return;
 
+    // OOXML <x:pivotTableDefinition preserveFormatting="1"> tells consumers to keep
+    // direct cell formatting (alignment, wrap, indent, ...) when refreshing the pivot
+    // output. clearContents below would destroy these. Snapshot the alignment items
+    // for cells in the pivot output range, then re-apply after the pivot rebuild.
+    struct PreservedAlignment { SCCOL nCol; SCROW nRow; SCTAB nTab;
+                                std::shared_ptr<ScPatternAttr> pPattern; };
+    std::vector<PreservedAlignment> aPreserved;
+    if (maDefModel.mbPreserveFormatting)
+    {
+        ScDocument& rSnapDoc = getDocImport().getDoc();
+        SCTAB nSnapTab = maLocationModel.maRange.aStart.Tab();
+        for (SCROW r = maLocationModel.maRange.aStart.Row();
+             r <= maLocationModel.maRange.aEnd.Row(); ++r)
+        {
+            for (SCCOL c = maLocationModel.maRange.aStart.Col();
+                 c <= maLocationModel.maRange.aEnd.Col(); ++c)
+            {
+                const ScPatternAttr* pSrc = rSnapDoc.GetPattern(c, r, nSnapTab);
+                if (!pSrc) continue;
+                aPreserved.push_back({c, r, nSnapTab,
+                    std::make_shared<ScPatternAttr>(*pSrc)});
+            }
+        }
+    }
+
     // clear destination area of the original pivot table
     try
     {
@@ -1364,7 +1445,16 @@ void PivotTable::finalizeImport()
             pSaveData->SetFilterButton(false);
             pSaveData->SetExpandCollapse(maDefModel.mbShowDrill);
         }
+        // OOXML rowHeaderCaption / colHeaderCaption overrides for the
+        // multi-field "Row Labels" / "Column Labels" header cells.
+        mpDPObject->SetRowHeaderCaption(maDefModel.maRowHeaderCaption);
+        mpDPObject->SetColHeaderCaption(maDefModel.maColHeaderCaption);
         mpDPObject->SetHideHeader(maLocationModel.mnFirstHeaderRow == 0);
+        // OOXML <x:location firstDataRow="2"> = two-row header zone (button row + caption row).
+        // BIFF importer does the equivalent at xipivot.cxx:1550. Without this, mnHeaderSize
+        // stays 1 and our caption row lands on the source's hidden row.
+        if (maLocationModel.mnFirstHeaderRow != 0 && maLocationModel.mnFirstDataRow >= 2)
+            mpDPObject->SetHeaderLayout(true);
         // finalize all fields, this finds field names and creates grouping fields
         finalizeFieldsImport();
 
@@ -1431,6 +1521,34 @@ void PivotTable::finalizeImport()
         rDoc.SetImportingXML(true);
         xDPTables->insertNewByName( maDefModel.maName, aPos, mxDPDescriptor );
         rDoc.SetImportingXML(false);
+
+        // Re-apply preserved alignment items on top of the freshly-written pivot output
+        // (mirrors Excel's preserveFormatting semantics — clearContents above wiped them
+        // along with everything else).
+        if (!aPreserved.empty())
+        {
+            static constexpr sal_uInt16 nAlignWhich[] = {
+                ATTR_HOR_JUSTIFY, ATTR_VER_JUSTIFY, ATTR_LINEBREAK,
+                ATTR_INDENT, ATTR_SHRINKTOFIT, ATTR_ROTATE_VALUE,
+                ATTR_WRITINGDIR
+            };
+            for (const auto& s : aPreserved)
+            {
+                const SfxItemSet& rSrcSet = s.pPattern->GetItemSet();
+                auto pOverlay = std::make_shared<ScPatternAttr>(rDoc.getCellAttributeHelper());
+                bool bAny = false;
+                for (sal_uInt16 nWhich : nAlignWhich)
+                {
+                    if (rSrcSet.GetItemState(nWhich, false) == SfxItemState::SET)
+                    {
+                        pOverlay->GetItemSetWritable().Put(rSrcSet.Get(nWhich));
+                        bAny = true;
+                    }
+                }
+                if (bAny)
+                    rDoc.ApplyPattern(s.nCol, s.nRow, s.nTab, *pOverlay);
+            }
+        }
     }
     catch( Exception& )
     {

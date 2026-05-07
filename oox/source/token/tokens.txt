@@ -2284,6 +2284,7 @@ filetime
 fill
 fillColor
 fillClrLst
+fillDownLabels
 fillFormulas
 fillId
 fillOverlay

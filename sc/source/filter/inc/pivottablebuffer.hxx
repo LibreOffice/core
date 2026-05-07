@@ -84,6 +84,8 @@ struct PTFieldModel
     bool                mbAutoShow;         /// True = auto show (top 10) filter enabled.
     bool                mbTopAutoShow;      /// True = auto show filter shows top entries, false = bottom.
     bool                mbMultiPageItems;   /// True = multiple items selectable in page dimension.
+    bool                mbFillDownLabels;   /// True = repeat parent label on every detail row (x14:pivotField extension).
+    OUString            maName;             /// User-customised display caption from <x:pivotField name="…">; falls back to cache field name when empty.
 
     explicit            PTFieldModel();
 
@@ -125,6 +127,8 @@ public:
 
     /** Imports pivot field settings from the pivotField element. */
     void                importPivotField( const AttributeList& rAttribs );
+    /** Imports x14:pivotField extension attributes (fillDownLabels, ...). */
+    void                importPivotFieldX14( const AttributeList& rAttribs );
     /** Imports settings of an item in this pivot field from the item element. */
     void                importItem( const AttributeList& rAttribs );
     /** Imports pivot field reference settings from the reference element. */

@@ -138,6 +138,9 @@ private:
     bool mbEnableGetPivotData : 1;
     bool mbHideHeader : 1 = false;
 
+    OUString maRowHeaderCaption;  // OOXML <x:pivotTableDefinition rowHeaderCaption="…">
+    OUString maColHeaderCaption;  // OOXML <x:pivotTableDefinition colHeaderCaption="…">
+
     sc::PivotTableStyleInfo maStyleInfo;
 
     void              CreateObjects();
@@ -182,6 +185,13 @@ public:
 
     SC_DLLPUBLIC void SetHideHeader(bool bHideHeader);
     bool GetHideHeader() const { return mbHideHeader; }
+
+    /// Override for the row-fields multi-field cell ("Row Labels" by default).
+    /// From OOXML <x:pivotTableDefinition rowHeaderCaption="…">.
+    void SetRowHeaderCaption(const OUString& rCaption) { maRowHeaderCaption = rCaption; }
+    const OUString& GetRowHeaderCaption() const { return maRowHeaderCaption; }
+    void SetColHeaderCaption(const OUString& rCaption) { maColHeaderCaption = rCaption; }
+    const OUString& GetColHeaderCaption() const { return maColHeaderCaption; }
 
     SC_DLLPUBLIC void   SetSheetDesc(const ScSheetSourceDesc& rDesc);
     void                SetImportDesc(const ScImportSourceDesc& rDesc);

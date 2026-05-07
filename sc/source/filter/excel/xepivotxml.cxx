@@ -870,12 +870,12 @@ OString GetSubtotalFuncName(ScGeneralFunction eFunc)
     switch (eFunc)
     {
         case ScGeneralFunction::SUM:       return "sum"_ostr;
-        case ScGeneralFunction::COUNT:     return "count"_ostr;
+        case ScGeneralFunction::COUNT:     return "countA"_ostr;
         case ScGeneralFunction::AVERAGE:   return "avg"_ostr;
         case ScGeneralFunction::MAX:       return "max"_ostr;
         case ScGeneralFunction::MIN:       return "min"_ostr;
         case ScGeneralFunction::PRODUCT:   return "product"_ostr;
-        case ScGeneralFunction::COUNTNUMS: return "countA"_ostr;
+        case ScGeneralFunction::COUNTNUMS: return "count"_ostr;
         case ScGeneralFunction::STDEV:     return "stdDev"_ostr;
         case ScGeneralFunction::STDEVP:    return "stdDevP"_ostr;
         case ScGeneralFunction::VAR:       return "var"_ostr;
@@ -890,12 +890,12 @@ sal_Int32 GetSubtotalAttrToken(ScGeneralFunction eFunc)
     switch (eFunc)
     {
         case ScGeneralFunction::SUM:       return XML_sumSubtotal;
-        case ScGeneralFunction::COUNT:     return XML_countSubtotal;
+        case ScGeneralFunction::COUNT:     return XML_countASubtotal;
         case ScGeneralFunction::AVERAGE:   return XML_avgSubtotal;
         case ScGeneralFunction::MAX:       return XML_maxSubtotal;
         case ScGeneralFunction::MIN:       return XML_minSubtotal;
         case ScGeneralFunction::PRODUCT:   return XML_productSubtotal;
-        case ScGeneralFunction::COUNTNUMS: return XML_countASubtotal;
+        case ScGeneralFunction::COUNTNUMS: return XML_countSubtotal;
         case ScGeneralFunction::STDEV:     return XML_stdDevSubtotal;
         case ScGeneralFunction::STDEVP:    return XML_stdDevPSubtotal;
         case ScGeneralFunction::VAR:       return XML_varSubtotal;

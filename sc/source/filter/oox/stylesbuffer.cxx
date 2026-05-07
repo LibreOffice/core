@@ -2518,6 +2518,13 @@ void Dxf::importNumFmt( const AttributeList& rAttribs )
     mxNumFmt = getStyles().createNumFmt( nNumFmtId, aFmtCode );
 }
 
+void Dxf::importAlignment( const AttributeList& rAttribs )
+{
+    if (!mxAlignment)
+        mxAlignment = std::make_shared<Alignment>(*this);
+    mxAlignment->importAlignment( rAttribs );
+}
+
 void Dxf::importDxf( SequenceInputStream& rStrm )
 {
     sal_Int32 nNumFmtId = -1;
@@ -2589,20 +2596,20 @@ void Dxf::finalizeImport()
         mxFill->finalizeImport();
 }
 
-void Dxf::fillToItemSet( SfxItemSet& rSet ) const
+void Dxf::fillToItemSet( SfxItemSet& rSet, bool bSkipPoolDefs ) const
 {
     if (mxFont)
-        mxFont->fillToItemSet(rSet, false);
+        mxFont->fillToItemSet(rSet, false, bSkipPoolDefs);
     if (mxNumFmt)
         mxNumFmt->fillToItemSet(rSet);
     if (mxAlignment)
-        mxAlignment->fillToItemSet(rSet);
+        mxAlignment->fillToItemSet(rSet, bSkipPoolDefs);
     if (mxProtection)
-        mxProtection->fillToItemSet(rSet);
+        mxProtection->fillToItemSet(rSet, bSkipPoolDefs);
     if (mxBorder)
-        mxBorder->fillToItemSet(rSet);
+        mxBorder->fillToItemSet(rSet, bSkipPoolDefs);
     if (mxFill)
-        mxFill->fillToItemSet(rSet);
+        mxFill->fillToItemSet(rSet, bSkipPoolDefs);
 }
 
 TableStyleElementInfo::TableStyleElementInfo():
@@ -2643,7 +2650,26 @@ void TableStyle::importTableStyleElement(const AttributeList& rAttribs)
             { u"headerRow"_ustr, ScTableStyleElement::HeaderRow },
             { u"totalRow"_ustr, ScTableStyleElement::TotalRow },
             { u"firstHeaderCell"_ustr, ScTableStyleElement::FirstHeaderCell },
-            { u"lastHeaderCell"_ustr, ScTableStyleElement::LastHeaderCell }
+            { u"lastHeaderCell"_ustr, ScTableStyleElement::LastHeaderCell },
+            // Table-style additions
+            { u"firstTotalCell"_ustr, ScTableStyleElement::FirstTotalCell },
+            { u"lastTotalCell"_ustr, ScTableStyleElement::LastTotalCell },
+            // Pivot-style additions (ECMA-376 §18.18.83)
+            { u"pageFieldLabels"_ustr, ScTableStyleElement::PageFieldLabels },
+            { u"pageFieldValues"_ustr, ScTableStyleElement::PageFieldValues },
+            { u"firstSubtotalRow"_ustr, ScTableStyleElement::FirstSubtotalRow },
+            { u"secondSubtotalRow"_ustr, ScTableStyleElement::SecondSubtotalRow },
+            { u"thirdSubtotalRow"_ustr, ScTableStyleElement::ThirdSubtotalRow },
+            { u"firstSubtotalColumn"_ustr, ScTableStyleElement::FirstSubtotalColumn },
+            { u"secondSubtotalColumn"_ustr, ScTableStyleElement::SecondSubtotalColumn },
+            { u"thirdSubtotalColumn"_ustr, ScTableStyleElement::ThirdSubtotalColumn },
+            { u"firstColumnSubheading"_ustr, ScTableStyleElement::FirstColumnSubheading },
+            { u"secondColumnSubheading"_ustr, ScTableStyleElement::SecondColumnSubheading },
+            { u"thirdColumnSubheading"_ustr, ScTableStyleElement::ThirdColumnSubheading },
+            { u"firstRowSubheading"_ustr, ScTableStyleElement::FirstRowSubheading },
+            { u"secondRowSubheading"_ustr, ScTableStyleElement::SecondRowSubheading },
+            { u"thirdRowSubheading"_ustr, ScTableStyleElement::ThirdRowSubheading },
+            { u"blankRow"_ustr, ScTableStyleElement::BlankRow }
         };
     auto aElementItr = aTableStyleElementMap.find(aTableStyleElementName);
     if (aElementItr == aTableStyleElementMap.end())
@@ -2698,7 +2724,7 @@ void TableStyle::finalizeImport(const DxfVector& rDxfs)
                 pTableStyle->SetColStripeSize(nStripeCount, -1);
                 break;
             case ScTableStyleElement::SecondColumnStripe:
-                pTableStyle->SetRowStripeSize(-1, nStripeCount);
+                pTableStyle->SetColStripeSize(-1, nStripeCount);
                 break;
             default:
                 SAL_WARN("sc", "the stripe count should only be set for row and column stripe elements");

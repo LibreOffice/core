@@ -80,7 +80,13 @@ void PivotTableFormat::finalizeImport()
 
     if (DxfRef pDxf = getStyles().getDxf(mnDxfId))
     {
-        pDxf->fillToItemSet(pPattern->GetItemSetWritable());
+        // bSkipPoolDefs=true so dxf items at pool default (e.g.
+        // ScLineBreakCell(false) for a dxf carrying alignment but no explicit
+        // wrapText) don't silently overwrite values set by an earlier dxf in
+        // the apply chain. Without this, multi-format buttons end up with
+        // wrap=false because the LAST applied alignment-bearing dxf with
+        // implicit-default wrap wins.
+        pDxf->fillToItemSet(pPattern->GetItemSetWritable(), true);
     }
 
     ScDPObject* pDPObj = mrPivotTable.getDPObject();
@@ -94,7 +100,18 @@ void PivotTableFormat::finalizeImport()
     // Resolve references - TODO
 
     sc::PivotTableFormat aFormat;
-    if (mbDataOnly)
+    // type='button' formats target a field's button cell — distinct from data-
+    // area or member-label cells. Currently, ECMA-376 says button formats
+    // typically have dataOnly=0 labelOnly=0; without this branch they would
+    // collapse to FormatType::None and silently drop. Classify them as
+    // FormatType::Button so the pivot output applies the dxf to the field-
+    // button cell explicitly.
+    if (meType == PivotAreaType::Button)
+    {
+        aFormat.eType = sc::FormatType::Button;
+        aFormat.oField = mnField;
+    }
+    else if (mbDataOnly)
         aFormat.eType = sc::FormatType::Data;
     else if (mbLabelOnly)
         aFormat.eType = sc::FormatType::Label;

@@ -42,6 +42,7 @@ ContextHandlerRef PivotTableFieldContext::onCreateContext( sal_Int32 nElement, c
             {
                 case XLS_TOKEN( items ):            return this;
                 case XLS_TOKEN( autoSortScope ):    return this;
+                case XLS_TOKEN( extLst ):           return this;
             }
         break;
         case XLS_TOKEN( items ):
@@ -58,6 +59,17 @@ ContextHandlerRef PivotTableFieldContext::onCreateContext( sal_Int32 nElement, c
         break;
         case XLS_TOKEN( reference ):
             if( nElement == XLS_TOKEN( x ) ) mrTableField.importReferenceItem( rAttribs );
+        break;
+
+        // <x:extLst> wraps Microsoft <x:ext>; descend into <x14:pivotField>.
+        case XLS_TOKEN( extLst ):
+            if( nElement == XLS_TOKEN( ext ) ) return this;
+        break;
+        case XLS_TOKEN( ext ):
+            if( nElement == XLS14_TOKEN( pivotField ) )
+            {
+                mrTableField.importPivotFieldX14( rAttribs );
+            }
         break;
     }
     return nullptr;
@@ -190,8 +202,11 @@ ContextHandlerRef PivotTableFragment::onCreateContext( sal_Int32 nElement, const
                     {
                         auto& rStyleInfo = mrPivotTable.getStyleInfo();
                         rStyleInfo.maName = aName;
-                        rStyleInfo.mbShowRowHeaders = rAttribs.getBool(XML_showRowHeaders, false);
-                        rStyleInfo.mbShowColHeaders = rAttribs.getBool(XML_showColHeaders, false);
+                        // ECMA-376 §18.10.1.78 (CT_PivotTableStyle): showRowHeaders /
+                        // showColHeaders default true; showRowStripes / showColStripes /
+                        // showLastColumn default false.
+                        rStyleInfo.mbShowRowHeaders = rAttribs.getBool(XML_showRowHeaders, true);
+                        rStyleInfo.mbShowColHeaders = rAttribs.getBool(XML_showColHeaders, true);
                         rStyleInfo.mbShowRowStripes = rAttribs.getBool(XML_showRowStripes, false);
                         rStyleInfo.mbShowColStripes = rAttribs.getBool(XML_showColStripes, false);
                         rStyleInfo.mbShowLastColumn = rAttribs.getBool(XML_showLastColumn, false);

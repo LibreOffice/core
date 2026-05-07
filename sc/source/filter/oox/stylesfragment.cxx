@@ -149,9 +149,7 @@ ContextHandlerRef DxfContext::onCreateContext( sal_Int32 nElement, const Attribu
                 case XLS_TOKEN( fill ):         return new FillContext( *this, mxDxf->createFill() );
 
                 case XLS_TOKEN( numFmt ):       mxDxf->importNumFmt( rAttribs );        break;
-#if 0
                 case XLS_TOKEN( alignment ):    mxDxf->importAlignment( rAttribs );     break;
-#endif
                 case XLS_TOKEN( protection ):   mxDxf->createProtection()->importProtection( rAttribs ); break;
             }
         break;
@@ -163,6 +161,7 @@ ContextHandlerRef DxfContext::onCreateContext( sal_Int32 nElement, const Attribu
                 case XLS_TOKEN( border ):       return new BorderContext( *this, mxDxf->createBorder() );
                 case XLS_TOKEN( fill ):         return new FillContext( *this, mxDxf->createFill() );
                 case XLS_TOKEN( numFmt ):       mxDxf->importNumFmt( rAttribs );     break;
+                case XLS_TOKEN( alignment ):    mxDxf->importAlignment( rAttribs );  break;
                 case XLS_TOKEN( protection ):   mxDxf->createProtection()->importProtection( rAttribs ); break;
             }
         break;
@@ -252,7 +251,12 @@ ContextHandlerRef StylesFragment::onCreateContext( sal_Int32 nElement, const Att
             if( nElement == XLS_TOKEN( dxf ) ) return new DxfContext( *this, getStyles().createDxf() );
         break;
         case XLS_TOKEN( tableStyles ):
-            if( nElement == XLS_TOKEN( tableStyle ) && rAttribs.getBool(XML_table, true)) return new TableStyleContext( *this, getStyles().createTableStyle() );
+            // Note: previously gated on rAttribs.getBool(XML_table, true) which
+            // skipped pivot-table styles (table="0"). Drop the filter so the
+            // ScTableStyles registry holds both regular and pivot styles; the
+            // applicator distinguishes by table="0|1" attribute via the
+            // pivotTableStyleInfo reference, not by exclusion at parse time.
+            if( nElement == XLS_TOKEN( tableStyle ) ) return new TableStyleContext( *this, getStyles().createTableStyle() );
         break;
         case XLS_TOKEN( cellStyles ):
             if( nElement == XLS_TOKEN( cellStyle ) ) getStyles().importCellStyle( rAttribs );

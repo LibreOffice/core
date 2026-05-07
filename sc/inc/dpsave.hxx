@@ -162,7 +162,7 @@ public:
     bool GetShowEmpty() const
         { return bool(nShowEmptyMode); }
 
-    void SetRepeatItemLabels(bool bSet);
+    SC_DLLPUBLIC void SetRepeatItemLabels(bool bSet);
     bool GetRepeatItemLabels() const
         { return bRepeatItemLabels; }
 

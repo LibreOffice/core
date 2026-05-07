@@ -723,6 +723,8 @@ public:
 
     /** Inserts a new number format code. */
     void                importNumFmt( const AttributeList& rAttribs );
+    /** Imports alignment attributes (horizontal, vertical, wrapText, ...) from a dxf alignment element. */
+    void                importAlignment( const AttributeList& rAttribs );
 
     /** Imports the DXF record from the passed stream. */
     void                importDxf( SequenceInputStream& rStrm );
@@ -730,7 +732,12 @@ public:
     /** Final processing after import of all style settings. */
     void                finalizeImport();
 
-    void fillToItemSet( SfxItemSet& rSet ) const;
+    /// Pour the dxf-derived items into rSet. With bSkipPoolDefs=true, items
+    /// whose value equals the pool default are NOT added — used by the pivot-
+    /// table format apply path so that a dxf with `<alignment>` (no wrapText
+    /// child) does not silently inject ScLineBreakCell(false) and overwrite
+    /// wrapText=true set by another dxf earlier in the apply chain.
+    void fillToItemSet( SfxItemSet& rSet, bool bSkipPoolDefs = false ) const;
 
 private:
     FontRef             mxFont;             /// Font data.
