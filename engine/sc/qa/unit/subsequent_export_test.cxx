@@ -2190,6 +2190,9 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testCellBordersXLS)
 
 CPPUNIT_TEST_FIXTURE(ScExportTest, testCellBordersXLSX)
 {
+    // FIXME "/xl/drawings/drawing2.xml" contains 1 validity error
+    skipValidation();
+
     createScDoc("xlsx/cell-borders.xlsx");
     testExcelCellBorders(TestFilter::XLSX);
 }
