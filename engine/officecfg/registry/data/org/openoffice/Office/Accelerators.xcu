@@ -131,6 +131,7 @@ Ctrl+Shift+u aka U_SHIFT_MOD1 under GTK/IBUS is for unicode key input
         <prop oor:name="Command">
           <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
           <value xml:lang="en-US">vnd.sun.star.findbar:FocusToFindbar</value>
+          <value xml:lang="da">.uno:Bold</value>
         </prop>
       </node>
       <node oor:name="F_MOD1_MOD2" oor:op="replace">
@@ -2313,6 +2314,7 @@ Ctrl+Shift+u aka U_SHIFT_MOD1 under GTK/IBUS is for unicode key input
             <value xml:lang="de">.uno:JustifyPara</value>
             <value xml:lang="en-US">.uno:Bold</value>
             <value xml:lang="es">vnd.sun.star.findbar:FocusToFindbar</value>
+            <value xml:lang="da">vnd.sun.star.findbar:FocusToFindbar</value>
           </prop>
         </node>
         <node oor:name="B_MOD1_MOD2" oor:op="replace">
@@ -2716,12 +2718,14 @@ Ctrl+Shift+u aka U_SHIFT_MOD1 under GTK/IBUS is for unicode key input
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="es">.uno:Italic</value>
+            <value xml:lang="da">.uno:Italic</value>
           </prop>
         </node>
         <node oor:name="K_MOD1_MOD2" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="es">.uno:HyperlinkDialog</value>
+            <value xml:lang="da">.uno:HyperlinkDialog</value>
           </prop>
         </node>
         <node oor:name="K_SHIFT_MOD1" oor:op="replace">
@@ -3161,6 +3165,7 @@ Ctrl+Shift+u aka U_SHIFT_MOD1 under GTK/IBUS is for unicode key input
             <value xml:lang="de">.uno:JustifyPara</value>
             <value xml:lang="en-US">.uno:Bold</value>
             <value xml:lang="es">vnd.sun.star.findbar:FocusToFindbar</value>
+            <value xml:lang="da">.uno:SearchDialog</value>
           </prop>
         </node>
         <node oor:name="B_MOD1_MOD2" oor:op="replace">

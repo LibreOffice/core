@@ -424,6 +424,11 @@ keyboardShortcuts.definitions.set('de', new Array<ShortcutDescriptor>(
     new ShortcutDescriptor({ eventType: 'keydown', modifier: Mod.CTRL | Mod.SHIFT, key: '`', preventDefault: false, platform: Platform.MAC }), // Cycle through windows
 ));
 
+// Danish shortcuts: same caveats as for german
+keyboardShortcuts.definitions.set('da', new Array<ShortcutDescriptor>(
+    new ShortcutDescriptor({ eventType: 'keydown', modifier: Mod.CTRL, key: 'b', dispatchAction: 'home-search' }),
+));
+
 // Register per-language keyboard shortcuts generated from core's
 // Accelerators.xcu by scripts/unoshortcuts.py.
 if (typeof unoShortcutsL10NKeyBindings !== 'undefined') {

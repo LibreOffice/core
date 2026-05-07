@@ -115,8 +115,12 @@ var unoShortcutsL10N = {
 		'.uno:InsertCurrentTime': 'Ctrl+Shift+,',
 	},
 	da: {
+		'.uno:Bold': 'Ctrl+F',
+		'.uno:HyperlinkDialog': 'Ctrl+Alt+K',
 		'.uno:InsertCurrentDate': 'Ctrl+,',
 		'.uno:InsertCurrentTime': 'Ctrl+Shift+,',
+		'.uno:Italic': 'Ctrl+K',
+		'.uno:SearchDialog': 'Ctrl+B',
 	},
 	de: {
 		'.uno:AlignBlock': 'Ctrl+B',
@@ -237,6 +241,16 @@ var unoShortcutsL10N = {
 };
 
 var unoShortcutsL10NKeyBindings = {
+	da: [
+		{ key: 'f', modifier: 1, unoAction: '.uno:Bold' },
+		{ key: 'k', modifier: 1, unoAction: '.uno:Italic' },
+		{
+			key: 'b',
+			modifier: 1,
+			unoAction: '.uno:SearchDialog',
+			docType: 'presentation',
+		},
+	],
 	de: [
 		{
 			key: 'b',
