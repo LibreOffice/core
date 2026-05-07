@@ -1700,8 +1700,9 @@ class CanvasSectionContainer {
 			this.createUpdateDivElements();
 		if (redraw && this.drawingAllowed())
 			this.requestReDraw();
-		else
-			this.resizeCanvas(); // Ensure canvas backing store is correctly sized even when drawing is disabled, to prevent blurriness on HiDPI displays
+		else if (!this.drawingEnabled)
+			// Size backing store before WebKit's first composite, else canvas stays blurry until a later resize (Skyler f69d2fd / Andras 8f67b845).
+			this.resizeCanvas();
 	}
 
 	private roundPositionAndSize(section: CanvasSectionObject) {
