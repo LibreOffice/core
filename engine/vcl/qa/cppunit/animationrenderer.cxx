@@ -61,13 +61,12 @@ CPPUNIT_TEST_FIXTURE(VclAnimationRendererTest, testMatching)
     Animation aTestAnim = createAnimation();
     ScopedVclPtrInstance<TestRenderingContext> pTestRC;
 
-    AnimationRenderer* pAnimationRenderer
-        = new AnimationRenderer(&aTestAnim, pTestRC, Point(0, 0), Size(10, 10), 5);
-    CPPUNIT_ASSERT(pAnimationRenderer->matches(pTestRC, 5));
-    CPPUNIT_ASSERT(!pAnimationRenderer->matches(pTestRC, 10));
+    AnimationRenderer aAnimationRenderer(&aTestAnim, pTestRC, Point(0, 0), Size(10, 10), 5);
+    CPPUNIT_ASSERT(aAnimationRenderer.matches(pTestRC, 5));
+    CPPUNIT_ASSERT(!aAnimationRenderer.matches(pTestRC, 10));
 
     // caller ID of 0 only matches the OutputDevice
-    CPPUNIT_ASSERT(pAnimationRenderer->matches(pTestRC, 0));
+    CPPUNIT_ASSERT(aAnimationRenderer.matches(pTestRC, 0));
 }
 
 CPPUNIT_TEST_FIXTURE(VclAnimationRendererTest, testDrawToPos)
@@ -75,12 +74,11 @@ CPPUNIT_TEST_FIXTURE(VclAnimationRendererTest, testDrawToPos)
     Animation aTestAnim = createAnimation();
     ScopedVclPtrInstance<VirtualDevice> pTestRC;
 
-    AnimationRenderer* pAnimationRenderer
-        = new AnimationRenderer(&aTestAnim, pTestRC.get(), Point(0, 0), Size(10, 10), 5);
-    pAnimationRenderer->drawToIndex(0);
-    pAnimationRenderer->drawToIndex(1);
-    pAnimationRenderer->drawToIndex(2);
-    pAnimationRenderer->drawToIndex(10);
+    AnimationRenderer aAnimationRenderer(&aTestAnim, pTestRC.get(), Point(0, 0), Size(10, 10), 5);
+    aAnimationRenderer.drawToIndex(0);
+    aAnimationRenderer.drawToIndex(1);
+    aAnimationRenderer.drawToIndex(2);
+    aAnimationRenderer.drawToIndex(10);
 
     CPPUNIT_ASSERT_EQUAL(Size(1, 1), pTestRC->GetOutputSizePixel());
 }
@@ -90,14 +88,13 @@ CPPUNIT_TEST_FIXTURE(VclAnimationRendererTest, testGetPosSizeWindow)
     Animation aTestAnim = createAnimation();
     ScopedVclPtrInstance<TestRenderingContext> pTestRC;
 
-    AnimationRenderer* pAnimationRenderer
-        = new AnimationRenderer(&aTestAnim, pTestRC, Point(0, 0), Size(10, 10), 5);
+    AnimationRenderer aAnimationRenderer(&aTestAnim, pTestRC, Point(0, 0), Size(10, 10), 5);
     AnimationFrame aAnimBmp(Bitmap(Size(3, 4), vcl::PixelFormat::N24_BPP), Point(0, 0),
                             Size(10, 10));
     Point aPos;
     Size aSize;
 
-    pAnimationRenderer->getPosSize(aAnimBmp, aPos, aSize);
+    aAnimationRenderer.getPosSize(aAnimBmp, aPos, aSize);
 
     CPPUNIT_ASSERT_EQUAL(Point(0, 0), aPos);
     CPPUNIT_ASSERT_EQUAL(Size(10, 10), aSize);

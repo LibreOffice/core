@@ -69,7 +69,7 @@ public:
                                   const Point& rPt, const Size& rSz, sal_uLong nRendererId,
                                   OutputDevice* pFirstFrameOutDev = nullptr );
                     AnimationRenderer(AnimationRenderer&&) = delete;
-     SAL_DLLPRIVATE ~AnimationRenderer();
+                    ~AnimationRenderer();
 
     bool            matches(const OutputDevice* pOut, tools::Long nRendererId) const;
     void            drawToIndex( sal_uLong nIndex );

@@ -333,26 +333,23 @@ void BitmapFilterTest::testMultiplyBlendFilter()
 
     // same color
     {
-        BitmapMultiplyBlendFilter* pArithmeticFilter
-            = new BitmapMultiplyBlendFilter(aRedBitmap, aRedBitmap);
-        Bitmap aResBitmap = pArithmeticFilter->execute();
+        BitmapMultiplyBlendFilter aArithmeticFilter(aRedBitmap, aRedBitmap);
+        Bitmap aResBitmap = aArithmeticFilter.execute();
         CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, aResBitmap.GetPixelColor(2, 2));
     }
 
     // different color
     {
-        BitmapMultiplyBlendFilter* pArithmeticFilter
-            = new BitmapMultiplyBlendFilter(aRedBitmap, aGreenBitmap);
-        Bitmap aResBitmap = pArithmeticFilter->execute();
+        BitmapMultiplyBlendFilter aArithmeticFilter(aRedBitmap, aGreenBitmap);
+        Bitmap aResBitmap = aArithmeticFilter.execute();
         CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0xFF, 0x00, 0x00, 0x00),
                              aResBitmap.GetPixelColor(2, 2));
     }
 
     // transparent
     {
-        BitmapMultiplyBlendFilter* pArithmeticFilter
-            = new BitmapMultiplyBlendFilter(aRedBitmap, aTransparentBitmap);
-        Bitmap aResBitmap = pArithmeticFilter->execute();
+        BitmapMultiplyBlendFilter aArithmeticFilter(aRedBitmap, aTransparentBitmap);
+        Bitmap aResBitmap = aArithmeticFilter.execute();
         CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0xFF, 0xFF, 0x00, 0x00),
                              aResBitmap.GetPixelColor(2, 2));
     }
@@ -383,26 +380,23 @@ void BitmapFilterTest::testNormalBlendFilter()
 
     // same color
     {
-        BitmapNormalBlendFilter* pArithmeticFilter
-            = new BitmapNormalBlendFilter(aRedBitmap, aRedBitmap);
-        Bitmap aResBitmap = pArithmeticFilter->execute();
+        BitmapNormalBlendFilter aArithmeticFilter(aRedBitmap, aRedBitmap);
+        Bitmap aResBitmap = aArithmeticFilter.execute();
         CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, aResBitmap.GetPixelColor(2, 2));
     }
 
     // different color
     {
-        BitmapNormalBlendFilter* pArithmeticFilter
-            = new BitmapNormalBlendFilter(aRedBitmap, aGreenBitmap);
-        Bitmap aResBitmap = pArithmeticFilter->execute();
+        BitmapNormalBlendFilter aArithmeticFilter(aRedBitmap, aGreenBitmap);
+        Bitmap aResBitmap = aArithmeticFilter.execute();
         CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0xFF, 0xFF, 0x00, 0x00),
                              aResBitmap.GetPixelColor(2, 2));
     }
 
     // transparent
     {
-        BitmapNormalBlendFilter* pArithmeticFilter
-            = new BitmapNormalBlendFilter(aRedBitmap, aTransparentBitmap);
-        Bitmap aResBitmap = pArithmeticFilter->execute();
+        BitmapNormalBlendFilter aArithmeticFilter(aRedBitmap, aTransparentBitmap);
+        Bitmap aResBitmap = aArithmeticFilter.execute();
         CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0xFF, 0xFF, 0x00, 0x00),
                              aResBitmap.GetPixelColor(2, 2));
     }
@@ -480,26 +474,23 @@ void BitmapFilterTest::testLightenBlendFilter()
 
     // same color
     {
-        BitmapLightenBlendFilter* pArithmeticFilter
-            = new BitmapLightenBlendFilter(aRedBitmap, aRedBitmap);
-        Bitmap aResBitmap = pArithmeticFilter->execute();
+        BitmapLightenBlendFilter aArithmeticFilter(aRedBitmap, aRedBitmap);
+        Bitmap aResBitmap = aArithmeticFilter.execute();
         CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, aResBitmap.GetPixelColor(2, 2));
     }
 
     // different color
     {
-        BitmapLightenBlendFilter* pArithmeticFilter
-            = new BitmapLightenBlendFilter(aRedBitmap, aGreenBitmap);
-        Bitmap aResBitmap = pArithmeticFilter->execute();
+        BitmapLightenBlendFilter aArithmeticFilter(aRedBitmap, aGreenBitmap);
+        Bitmap aResBitmap = aArithmeticFilter.execute();
         CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0xFF, 0xFF, 0x80, 0x00),
                              aResBitmap.GetPixelColor(2, 2));
     }
 
     // transparent
     {
-        BitmapLightenBlendFilter* pArithmeticFilter
-            = new BitmapLightenBlendFilter(aRedBitmap, aTransparentBitmap);
-        Bitmap aResBitmap = pArithmeticFilter->execute();
+        BitmapLightenBlendFilter aArithmeticFilter(aRedBitmap, aTransparentBitmap);
+        Bitmap aResBitmap = aArithmeticFilter.execute();
         CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0xFF, 0xFF, 0xFF, 0xFF),
                              aResBitmap.GetPixelColor(2, 2));
     }
@@ -530,26 +521,23 @@ void BitmapFilterTest::testScreenBlendFilter()
 
     // same color
     {
-        BitmapScreenBlendFilter* pArithmeticFilter
-            = new BitmapScreenBlendFilter(aRedBitmap, aRedBitmap);
-        Bitmap aResBitmap = pArithmeticFilter->execute();
+        BitmapScreenBlendFilter aArithmeticFilter(aRedBitmap, aRedBitmap);
+        Bitmap aResBitmap = aArithmeticFilter.execute();
         CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, aResBitmap.GetPixelColor(2, 2));
     }
 
     // different color
     {
-        BitmapScreenBlendFilter* pArithmeticFilter
-            = new BitmapScreenBlendFilter(aRedBitmap, aGreenBitmap);
-        Bitmap aResBitmap = pArithmeticFilter->execute();
+        BitmapScreenBlendFilter aArithmeticFilter(aRedBitmap, aGreenBitmap);
+        Bitmap aResBitmap = aArithmeticFilter.execute();
         CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0xFF, 0xFF, 0x80, 0x00),
                              aResBitmap.GetPixelColor(2, 2));
     }
 
     // transparent
     {
-        BitmapScreenBlendFilter* pArithmeticFilter
-            = new BitmapScreenBlendFilter(aRedBitmap, aTransparentBitmap);
-        Bitmap aResBitmap = pArithmeticFilter->execute();
+        BitmapScreenBlendFilter aArithmeticFilter(aRedBitmap, aTransparentBitmap);
+        Bitmap aResBitmap = aArithmeticFilter.execute();
         CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0xFF, 0xFF, 0xFF, 0xFF),
                              aResBitmap.GetPixelColor(2, 2));
     }
