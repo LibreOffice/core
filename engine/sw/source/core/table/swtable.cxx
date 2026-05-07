@@ -1628,10 +1628,10 @@ void SwTable::GatherFormulas(std::vector<SwTableBoxFormula*>& rvFormulas)
     GatherFormulas(GetFrameFormat()->GetDoc(), rvFormulas);
 }
 
-void SwTable::GatherFormulas(SwDoc& rDoc, std::vector<SwTableBoxFormula*>& rvFormulas)
+void SwTable::GatherFormulas(const SwDoc& rDoc, std::vector<SwTableBoxFormula*>& rvFormulas)
 {
     rvFormulas.clear();
-    sw::TableFrameFormats* pTableFrameFormats = rDoc.GetTableFrameFormats();
+    const sw::TableFrameFormats* pTableFrameFormats = rDoc.GetTableFrameFormats();
     for(SwTableFormat* pFormat : *pTableFrameFormats)
     {
         SwTable* pTable = FindTable(pFormat);

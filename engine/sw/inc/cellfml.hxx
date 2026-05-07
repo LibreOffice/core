@@ -141,6 +141,8 @@ public:
         m_eNmType = EXTRNL_NAME;
         m_bValidValue = false;
     }
+     /// Update table references in the formula. Example: "<Table1.A1>" -> "<NewTable.A1>".
+    void RenameTableReference(std::u16string_view rOldName, std::u16string_view rNewName);
 
     void GetBoxesOfFormula(const SwTable& rTable, SwSelBoxes& rBoxes);
     // are all boxes valid which this formula relies on?

@@ -123,6 +123,7 @@ public:
     void testGraphicAnchorDeletion();
     void testTransliterate();
     void testMarkMove();
+    void testRenameTableReference();
     void testFormulas();
     void testIntrusiveRing();
     void testClientModify();
@@ -162,6 +163,7 @@ public:
     CPPUNIT_TEST(testMergePortionsDeleteNotSorted);
     CPPUNIT_TEST(testGraphicAnchorDeletion);
     CPPUNIT_TEST(testMarkMove);
+    CPPUNIT_TEST(testRenameTableReference);
     CPPUNIT_TEST(testFormulas);
     CPPUNIT_TEST(testIntrusiveRing);
     CPPUNIT_TEST(testClientModify);
@@ -1441,6 +1443,26 @@ void SwDocTest::testFormulas()
     CPPUNIT_ASSERT(val.IsVoidValue());
     CPPUNIT_ASSERT(val.IsLong());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), val.GetLong());
+}
+
+// tdf#83196
+void SwDocTest::testRenameTableReference()
+{
+    SwInsertTableOptions aOpt(SwInsertTableFlags::DefaultBorder, 0);
+    SwNodeIndex aIdx(m_pDoc->GetNodes().GetEndOfContent(), -1);
+    SwPosition aPos(aIdx);
+    const SwTable* pTable1 = m_pDoc->InsertTable(aOpt, aPos, 1, 1, 0);
+
+    aIdx.Assign(m_pDoc->GetNodes().GetEndOfContent(), -1);
+    aPos.Assign(aIdx.GetNode(), 0);
+    m_pDoc->InsertTable(aOpt, aPos, 1, 2, 0);
+
+    SwTableFormulaTest aFormula("", pTable1->GetTableNode());
+    aFormula.SetFormula(u"=<Table2.A1> * <Table1.A1> + <Table2.B1>"_ustr);
+    aFormula.BoxNmToPtr(pTable1);
+
+    aFormula.RenameTableReference(u"Table2", u"NewTable");
+    CPPUNIT_ASSERT_EQUAL(u"=<NewTable.A1> * <Table1.A1> + <NewTable.B1>"_ustr, aFormula.GetFormula());
 }
 
 void SwDocTest::testMarkMove()

@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <cellatr.hxx>
 #include <doc.hxx>
 #include <IDocumentChartDataProviderAccess.hxx>
 #include <IDocumentState.hxx>
@@ -172,6 +173,17 @@ void SwDoc::SetTableName( SwFrameFormat& rTableFormat, const UIName &rInName )
     {
         aNewName = GetUniqueTableName();
     }
+
+    // Update all table formulas to reflect the table name change
+    OUString sOldName = aOldName.toString();
+    OUString sNewName = aNewName.toString();
+    std::vector<SwTableBoxFormula*> aTableBoxFormulas;
+    SwTable::GatherFormulas(*this, aTableBoxFormulas);
+    for (SwTableBoxFormula* pFormula : aTableBoxFormulas)
+    {
+        pFormula->RenameTableReference(sOldName, sNewName);
+    }
+
     rTableFormat.SetFormatName( aNewName, true );
 
     SwStartNode *pStNd;

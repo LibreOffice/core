@@ -367,7 +367,7 @@ public:
     void Merge(const SwTable& rTable, SwHistory* pHistory);
     void Split(const UIName& sNewTableName, sal_uInt16 nSplitLine, SwHistory* pHistory);
 
-    static void GatherFormulas(SwDoc& rDoc, std::vector<SwTableBoxFormula*>& rvFormulas);
+    static void GatherFormulas(const SwDoc& rDoc, std::vector<SwTableBoxFormula*>& rvFormulas);
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };
