@@ -1574,33 +1574,33 @@ AS_IF([test "$ENABLE_IOSAPP" != "true" -a "$ENABLE_ANDROIDAPP" != "true"],
               # backslashes as path separators.
               LO_PATH="$with_lo_path"
           fi
-          AC_MSG_RESULT([found])
+          AC_MSG_RESULT([given])
       else
-          AC_MSG_RESULT([not found])
+          AC_MSG_RESULT([not given])
           AS_IF([test "$LIBFUZZER" != "1"],
                 [AC_MSG_ERROR([CollaboraOffice path must be configured: --with-lo-path])])
       fi
       ])
 
-JAIL_PATH=not-set
 SYSTEMPLATE_PATH=not-set
 have_lo_path=false
 AC_MSG_CHECKING([whether to run tests against a CollaboraOffice])
-version_file="$with_lo_path/program/versionrc"
-version_file_macos="$with_lo_path/Contents/Resources/versionrc"
-if test -f $version_file; then
-    JAILS_PATH="\${abs_top_builddir}/jails"
-    CACHE_PATH="\${abs_top_builddir}/cache"
-    SYSTEMPLATE_PATH="\${abs_top_builddir}/systemplate"
-    have_lo_path=true
-    lo_msg="test against $LO_PATH"
-    AC_MSG_RESULT([yes])
-elif test `uname -s` = Darwin -a -f "$version_file_macos"; then
-    JAILS_PATH="\${abs_top_builddir}/jails"
-    SYSTEMPLATE_PATH="\${abs_top_builddir}/systemplate"
-    have_lo_path=true
-    lo_msg="test against $LO_PATH"
-    AC_MSG_RESULT([yes])
+if test -n "$with_lo_path"; then
+    if test `uname -s` = Darwin; then
+        version_file="$with_lo_path/Contents/Resources/versionrc"
+    else
+        version_file="$with_lo_path/program/versionrc"
+        CACHE_PATH="\${abs_top_builddir}/cache"
+    fi
+    if test -f $version_file; then
+        JAILS_PATH="\${abs_top_builddir}/jails"
+        SYSTEMPLATE_PATH="\${abs_top_builddir}/systemplate"
+        have_lo_path=true
+        lo_msg="test against $LO_PATH"
+        AC_MSG_RESULT([yes])
+    else
+        AC_MSG_ERROR([bad --with-lo-path; file does not exist: $version_file])
+    fi
 else
     lo_msg="no integration tests"
     AC_MSG_RESULT([no])
