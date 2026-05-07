@@ -6341,7 +6341,6 @@ if test "$cross_compiling" = "yes"; then
         LIBWEBP
         LIBXML2
         LIBXSLT
-        LZMA
         MDDS
         MESON
         NATIVE
@@ -14546,14 +14545,6 @@ fi
 AC_SUBST(SYSTEM_BZIP2)
 AC_SUBST(BZIP2_CFLAGS)
 AC_SUBST(BZIP2_LIBS)
-
-dnl ===================================================================
-dnl Test whether we need lzma for internal python
-dnl ===================================================================
-if test $enable_python = internal; then
-    BUILD_TYPE="$BUILD_TYPE LZMA"
-    libo_CHECK_SYSTEM_MODULE([lzma], [LZMA], [lzma])
-fi
 
 dnl ===================================================================
 dnl Test whether we need sqlite3 for internal python (no needed on macOS)

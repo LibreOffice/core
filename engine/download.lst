@@ -550,11 +550,6 @@ LXML_TARBALL := lxml-6.0.2.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-LZMA_SHA256SUM := ce09c50a5962786b83e5da389c90dd2c15ecd0980a258dd01f70f9e7ce58a8f1
-LZMA_TARBALL := xz-5.8.2.tar.gz
-# three static lines
-# so that git cherry-pick
-# will not run into conflicts
 MARIADB_CONNECTOR_C_SHA256SUM := 292c0f2e6ce5cb6f1217f3a53c72f792e55fb20393e00924b11943e2f9f6e9d5
 MARIADB_CONNECTOR_C_TARBALL := mariadb-connector-c-3.3.18-src.tar.gz
 # three static lines
