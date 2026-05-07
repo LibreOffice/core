@@ -135,6 +135,10 @@ FONT_CALADEA_TARBALL := 368f114c078f94214a308a74c7e991bc-crosextrafonts-20130214
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
+# There are sadly now two Carlito fonts with different metrics, see:
+#  https://github.com/google/fonts/issues/9720
+#  https://github.com/CollaboraOnline/online/issues/15578
+# be careful on potential upgrades
 FONT_CARLITO_SHA256SUM := 4bd12b6cbc321c1cf16da76e2c585c925ce956a08067ae6f6c64eff6ccfdaf5a
 FONT_CARLITO_TARBALL := c74b7223abe75949b4af367942d96c7a-crosextrafonts-carlito-20130920.tar.gz
 # three static lines

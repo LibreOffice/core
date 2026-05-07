@@ -614,6 +614,48 @@ namespace
     {
         return nEntryId >> 16;
     }
+
+    /*
+     Caladea 65601 is huertatipografica's redrawn 1.001, the canonical
+     Cambria-equivalent is the ChromeOS Croscore 1.002 build (65602)
+
+     Carlito 72352 is the upstream 1.104 with a different hhea than Calibri,
+     the canonical Calibri-equivalent is Carlito 1.103 (72286)
+
+     Warn once per family (and abort under SAL_NON_APPLICATION_FONT_USE=abort)
+     when a known-bad version is seen.
+    */
+    bool warnIfKnownBadFont(const char* pFamily, int nFontVersion, const char* pFile)
+    {
+        const char* pMsg = nullptr;
+        static bool bWarnedCaladea = false, bWarnedCarlito = false;
+        bool* pWarned = nullptr;
+        if (strcmp(pFamily, "Caladea") == 0 && nFontVersion == 65601)
+        {
+            pWarned = &bWarnedCaladea;
+            pMsg = "Caladea 1.001 (huertatipografica) is not metrically"
+                   " compatible with Cambria; install ChromeOS Croscore Caladea"
+                   " 1.002 build (https://github.com/huertatipografica/Caladea/issues/4)";
+        }
+        else if (strcmp(pFamily, "Carlito") == 0 && nFontVersion == 72352)
+        {
+            pWarned = &bWarnedCarlito;
+            pMsg = "Carlito 1.104 is not metrically compatible with Calibri;"
+                   " install Carlito 1.103 (crosextrafonts-carlito-20130920)"
+                   " (https://github.com/google/fonts/issues/9720)";
+        }
+        else
+            return false;
+        if (!*pWarned)
+        {
+            *pWarned = true;
+            std::cerr << "known-bad font version at " << pFile << ": " << pMsg << '\n';
+            const char* pEnv = getenv("SAL_NON_APPLICATION_FONT_USE");
+            if (pEnv && strcmp(pEnv, "abort") == 0)
+                std::abort();
+        }
+        return true;
+    }
 }
 
 void PrintFontManager::countFontconfigFonts()
@@ -658,6 +700,12 @@ void PrintFontManager::countFontconfigFonts()
             FcResult eFormatRes       = FcPatternGetString(pFSet->fonts[i], FC_FONTFORMAT, 0, &format);
 
             if( eFileRes != FcResultMatch || eFamilyRes != FcResultMatch || eScalableRes != FcResultMatch || eStyleRes != FcResultMatch )
+                continue;
+
+            int nFontVersion = 0;
+            FcPatternGetInteger(pFSet->fonts[i], FC_FONTVERSION, 0, &nFontVersion);
+            if (warnIfKnownBadFont(reinterpret_cast<const char*>(family), nFontVersion,
+                                   reinterpret_cast<const char*>(file)))
                 continue;
 
 #ifdef MACOSX
