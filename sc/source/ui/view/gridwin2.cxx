@@ -190,6 +190,7 @@ void ScGridWindow::DoPushPivotButton( SCCOL nCol, SCROW nRow, const MouseEvent& 
             if (bButton)
             {
                 bDPMouse = true;
+                maDPDragStart = rMEvt.GetPosPixel();
                 DPTestMouse( rMEvt, true );
                 StartTracking();
             }
@@ -357,6 +358,26 @@ void ScGridWindow::DPTestMouse( const MouseEvent& rMEvt, bool bMove )
     }
     else                // execute change
     {
+        // Click-vs-drag guard: if the mouse hasn't moved meaningfully since
+        // MouseDown, treat this as a plain click and skip the pivot rebuild.
+        // Without this, a click on a field-button cell triggers
+        // DataPilotUpdate -> ScDPOutput::Output(), which overwrites direct
+        // cell formatting (wrap, fills, borders) we applied during OOXML
+        // import. Threshold matches GetDragStartCodeOffset()-style hysteresis.
+        const Point aDragDelta = rMEvt.GetPosPixel() - maDPDragStart;
+        const tools::Long nDragThreshold = 4;
+        const bool bClickWithoutDrag =
+            std::abs(aDragDelta.X()) < nDragThreshold &&
+            std::abs(aDragDelta.Y()) < nDragThreshold;
+
+        // Restore cell selection feedback for plain clicks. The bDPMouse
+        // routing in MouseButtonDown bypasses the normal cell-selection path,
+        // and historically the selection visually appeared as a side-effect of
+        // the DataPilotUpdate rebuild we now skip — so set the cursor
+        // explicitly here to match expectations.
+        if (bClickWithoutDrag)
+            mrViewData.GetView()->SetCursor(aPos.Col(), aPos.Row());
+
         if (!bHasRange)
             nOrient = DataPilotFieldOrientation_HIDDEN;
 
@@ -364,9 +385,10 @@ void ScGridWindow::DPTestMouse( const MouseEvent& rMEvt, bool bMove )
                                 nOrient != DataPilotFieldOrientation_ROW ) )
         {
             //  removing data layout is not allowed
-            mrViewData.GetView()->ErrorMessage(STR_PIVOT_MOVENOTALLOWED);
+            if (!bClickWithoutDrag)
+                mrViewData.GetView()->ErrorMessage(STR_PIVOT_MOVENOTALLOWED);
         }
-        else if ( bAllowed )
+        else if ( bAllowed && !bClickWithoutDrag )
         {
             ScDPSaveData aSaveData( *pDragDPObj->GetSaveData() );
 
@@ -378,14 +400,19 @@ void ScGridWindow::DPTestMouse( const MouseEvent& rMEvt, bool bMove )
             pDim->SetOrientation( nOrient );
             aSaveData.SetPosition( pDim, nDimPos );
 
-            //! docfunc method with ScDPSaveData as argument?
+            // Secondary guard: skip the rebuild even on small drags when the
+            // resulting save data is identical to the existing one.
+            if ( !(aSaveData == *pDragDPObj->GetSaveData()) )
+            {
+                //! docfunc method with ScDPSaveData as argument?
 
-            ScDPObject aNewObj( *pDragDPObj );
-            aNewObj.SetSaveData( aSaveData );
-            ScDBDocFunc aFunc( *mrViewData.GetDocShell() );
-            // when dragging fields, allow re-positioning (bAllowMove)
-            aFunc.DataPilotUpdate( pDragDPObj, &aNewObj, true, false, true );
-            mrViewData.GetView()->CursorPosChanged();       // shells may be switched
+                ScDPObject aNewObj( *pDragDPObj );
+                aNewObj.SetSaveData( aSaveData );
+                ScDBDocFunc aFunc( *mrViewData.GetDocShell() );
+                // when dragging fields, allow re-positioning (bAllowMove)
+                aFunc.DataPilotUpdate( pDragDPObj, &aNewObj, true, false, true );
+                mrViewData.GetView()->CursorPosChanged();       // shells may be switched
+            }
         }
     }
 
@@ -620,13 +647,34 @@ void ScGridWindow::DPLaunchMultiFieldPopupMenu(const Point& rScreenPosition, con
     if (!lcl_FillDPFieldPopupData(nDimIndex, pDPObj, *pDPData, bDimOrientNotPage))
         return;
 
+    // Build a parallel vector marking which fields currently have an active
+    // filter (any invisible member). Drives the filter cue in the field-list
+    // combo so users can see at a glance which fields are filtered, matching
+    // Excel's "Select Field" dropdown behaviour.
+    std::vector<bool> aFieldHasFilter;
+    aFieldHasFilter.reserve(pDPData->maFieldIndices.size());
+    if (const ScDPSaveData* pSave = pDPObj->GetSaveData())
+    {
+        for (size_t i = 0; i < pDPData->maFieldIndices.size(); ++i)
+        {
+            bool bIsDataLayout = false;
+            const OUString aDimName = pDPObj->GetDimName(pDPData->maFieldIndices[i], bIsDataLayout);
+            const ScDPSaveDimension* pDim = pSave->GetExistingDimensionByName(aDimName);
+            aFieldHasFilter.push_back(pDim && pDim->HasInvisibleMember());
+        }
+    }
+    else
+    {
+        aFieldHasFilter.assign(pDPData->maFieldIndices.size(), false);
+    }
+
     mpDPFieldPopup.reset();
 
     weld::Window* pPopupParent = GetFrameWeld();
     mpDPFieldPopup.reset(new ScCheckListMenuControl(pPopupParent, mrViewData,
                                                     false, -1, true));
 
-    mpDPFieldPopup->addFields(pDPData->maFieldNames);
+    mpDPFieldPopup->addFields(pDPData->maFieldNames, aFieldHasFilter);
     DPSetupFieldPopup(std::move(pDPData), bDimOrientNotPage, pDPObj, true);
 
     DPConfigFieldPopup();

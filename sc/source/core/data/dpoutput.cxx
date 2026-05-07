@@ -605,8 +605,7 @@ ScDPOutput::ScDPOutput(ScDocument* pDocument, uno::Reference<sheet::XDimensionsS
                                             {
                                             }
                                             mpRowFields.emplace_back(nDim, nHierarchy, nLev, nDimPos, nNumFmt, aResult, aName,
-                                                                     aCaption, bHasHiddenMember, bIsDataLayout, false);
-                                            maRowCompactFlags.push_back(bFieldCompact);
+                                                                     aCaption, bHasHiddenMember, bIsDataLayout, false, bFieldCompact);
                                             mbHasCompactRowField |= bFieldCompact;
                                         }
 
@@ -792,7 +791,13 @@ void ScDPOutput::HeaderCell( SCCOL nCol, SCROW nRow, SCTAB nTab,
 
 void ScDPOutput::MultiFieldCell(SCCOL nCol, SCROW nRow, SCTAB nTab, bool bRowField)
 {
-    mpDocument->SetString(nCol, nRow, nTab, ScResId(bRowField ? STR_PIVOT_ROW_LABELS : STR_PIVOT_COL_LABELS));
+    // Honour OOXML rowHeaderCaption / colHeaderCaption overrides; fall back to the
+    // localized "Row Labels" / "Column Labels" defaults when no override was imported.
+    const OUString& rOverride = bRowField ? maRowHeaderCaption : maColHeaderCaption;
+    OUString aCaption = rOverride.isEmpty()
+        ? ScResId(bRowField ? STR_PIVOT_ROW_LABELS : STR_PIVOT_COL_LABELS)
+        : rOverride;
+    mpDocument->SetString(nCol, nRow, nTab, aCaption);
 
     ScMF nMergeFlag = ScMF::Button;
     for (auto& rData : mpRowFields)
@@ -857,14 +862,39 @@ SCCOL ScDPOutput::GetColumnsForRowFields() const
         return static_cast<SCCOL>(mpRowFields.size());
 
     SCCOL nNum = 0;
-    for (const auto bCompact: maRowCompactFlags)
-        if (!bCompact)
+    for (const auto& rField : mpRowFields)
+        if (!rField.mbCompact)
             ++nNum;
 
-    if (maRowCompactFlags.back())
+    if (mpRowFields.back().mbCompact)
         ++nNum;
 
     return nNum;
+}
+
+// Translate a row-header column offset (0-based, relative to mnTabStartCol)
+// to the corresponding mpRowFields array index. With compact row fields the
+// mapping is non-trivial: compact fields share their column with the
+// following non-compact field (or with each other if the run is all-compact),
+// so multiple array entries can map to the same column. For an ambiguous
+// shared column we return the LAST (visible/tabular) field whose data
+// occupies that column — that's what a click filter or a drag drop should
+// target. Returns -1 if no field maps to the given offset.
+tools::Long ScDPOutput::GetRowFieldArrayIndexForColOffset(SCCOL nClickColOff) const
+{
+    if (nClickColOff < 0)
+        return -1;
+
+    SCCOL nCumColOff = 0;
+    tools::Long nFoundIdx = -1;
+    for (size_t i = 0; i < mpRowFields.size(); ++i)
+    {
+        if (nCumColOff == nClickColOff)
+            nFoundIdx = static_cast<tools::Long>(i);
+        if (!mpRowFields[i].mbCompact)
+            ++nCumColOff;
+    }
+    return nFoundIdx;
 }
 
 void ScDPOutput::CalcSizes()
@@ -1012,6 +1042,12 @@ void ScDPOutput::outputColumnHeaders(SCTAB nTab, ScDPOutputImpl& rOutputImpl)
                 FieldCell(nHeaderCol, mnTabStartRow, nTab, mpColFields[nField], true);
             else if (!nField)
                 MultiFieldCell(nHeaderCol, mnTabStartRow, nTab, false /* bRowField */);
+
+            // Same as in outputRowHeader: apply <pivotArea type='button'>
+            // dxf-derived formats targeting this column-field's button cell.
+            maFormatOutput.applyButtonFormatToField(*mpDocument, nTab, nHeaderCol,
+                                                     mnTabStartRow,
+                                                     mpColFields[nField].mnDim);
         }
 
         SCROW nRowPos = mnMemberStartRow + SCROW(nField); //TODO: check for overflow
@@ -1027,6 +1063,25 @@ void ScDPOutput::outputColumnHeaders(SCTAB nTab, ScDPOutputImpl& rOutputImpl)
             SCCOL nColPos = mnDataStartCol + SCCOL(nColumn); //TODO: check for overflow
 
             HeaderCell(nColPos, nRowPos, nTab, rMember, true, nField);
+
+            // Track column-axis roles for pivot table style application.
+            // Subtotal level = first (outermost) column field carrying SUBTOTAL
+            // for this column; subsequent fields are ignored. Levels >2 wrap
+            // mod 3 to match Excel's first/second/third element semantics.
+            if (nColumn >= 0 && nColumn < static_cast<tools::Long>(maColSubtotalLevel.size()))
+            {
+                if (rMember.Flags & sheet::MemberResultFlags::GRANDTOTAL)
+                {
+                    maColIsGrandTotal[nColumn] = true;
+                    maColIsPureData[nColumn] = false;
+                }
+                if (rMember.Flags & sheet::MemberResultFlags::SUBTOTAL)
+                {
+                    if (maColSubtotalLevel[nColumn] < 0)
+                        maColSubtotalLevel[nColumn] = static_cast<sal_Int8>(nField % 3);
+                    maColIsPureData[nColumn] = false;
+                }
+            }
 
             if ((rMember.Flags & sheet::MemberResultFlags::HASMEMBER) &&
                !(rMember.Flags & sheet::MemberResultFlags::SUBTOTAL))
@@ -1080,13 +1135,46 @@ void ScDPOutput::outputRowHeader(SCTAB nTab, ScDPOutputImpl& rOutputImpl)
     size_t nNumRowFields = mpRowFields.size();
     for (size_t nField = 0; nField < nNumRowFields; nField++)
     {
-        const bool bCompactField = maRowCompactFlags[nField];
-        SCCOL nHdrCol = mnTabStartCol + SCCOL(nField); //TODO: check for overflow
+        const bool bCompactField = mpRowFields[nField].mbCompact;
+        const bool bPrevCompact = (nField > 0) && mpRowFields[nField - 1].mbCompact;
+        // Anchor the header to the same column as the field's data (nFieldColOffset).
+        // Using raw nField shifts every header right by 1 once a compact field has
+        // collapsed an earlier column.
+        SCCOL nHdrCol = mnTabStartCol + SCCOL(nFieldColOffset); //TODO: check for overflow
         SCROW nHdrRow = mnDataStartRow - 1;
         if (!mbHasCompactRowField || nNumRowFields == 1)
+        {
             FieldCell(nHdrCol, nHdrRow, nTab, mpRowFields[nField], true);
-        else if (!nField)
-            MultiFieldCell(nHdrCol, nHdrRow, nTab, true /* bRowField */);
+        }
+        else if (bCompactField)
+        {
+            // Compact fields share a column — emit the multi-field "Row Labels" button
+            // only on the first compact field; subsequent compact fields stay quiet.
+            if (!nField)
+                MultiFieldCell(nHdrCol, nHdrRow, nTab, true /* bRowField */);
+        }
+        else if (!bPrevCompact)
+        {
+            // Tabular fields mixed with compact ones still get their own per-field captions.
+            // Skip when the previous field was compact: that compact field's MultiFieldCell
+            // already labels this shared column, and a FieldCell here would overwrite it.
+            FieldCell(nHdrCol, nHdrRow, nTab, mpRowFields[nField], true);
+        }
+
+        // Apply any <pivotArea type='button'> dxf-derived formats whose
+        // <pivotArea field="N"> matches this row field's dim. Without this
+        // call, button-area formats from OOXML (which carry wrapText, fills,
+        // borders, font weight for field-button cells) silently disappear —
+        // FormatType::Button entries aren't part of the row/column line
+        // matching that drives FormatOutput::apply.
+        maFormatOutput.applyButtonFormatToField(*mpDocument, nTab, nHdrCol, nHdrRow,
+                                                 mpRowFields[nField].mnDim);
+
+        // Clear the "manual height" flag on the field-button row so wrap=true
+        // applied above can grow the row to fit. Without this, OOXML imports
+        // with customHeight=1 on row 6 keep the imported single-line height
+        // and clip wrapped headers regardless of the cell's wrap attribute.
+        mpDocument->SetManualHeight(nHdrRow, nHdrRow, nTab, false);
 
         SCCOL nColPos = mnMemberStartCol + SCCOL(nFieldColOffset); //TODO: check for overflow
         const uno::Sequence<sheet::MemberResult> rMemberSequence = mpRowFields[nField].maResult;
@@ -1101,6 +1189,24 @@ void ScDPOutput::outputRowHeader(SCTAB nTab, ScDPOutputImpl& rOutputImpl)
             const bool bSubtotal = rData.Flags & sheet::MemberResultFlags::SUBTOTAL;
             SCROW nRowPos = mnDataStartRow + SCROW(nRow); //TODO: check for overflow
             HeaderCell( nColPos, nRowPos, nTab, rData, false, nFieldColOffset );
+
+            // Track row-axis roles for pivot table style application.
+            // Subtotal level = outermost row field carrying SUBTOTAL for this
+            // row; subsequent fields ignored. Levels >2 wrap mod 3.
+            if (nRow >= 0 && nRow < static_cast<sal_Int32>(maRowSubtotalLevel.size()))
+            {
+                if (rData.Flags & sheet::MemberResultFlags::GRANDTOTAL)
+                {
+                    maRowIsGrandTotal[nRow] = true;
+                    maRowIsPureData[nRow] = false;
+                }
+                if (bSubtotal)
+                {
+                    if (maRowSubtotalLevel[nRow] < 0)
+                        maRowSubtotalLevel[nRow] = static_cast<sal_Int8>(nField % 3);
+                    maRowIsPureData[nRow] = false;
+                }
+            }
             if (bHasMember && !bSubtotal)
             {
                 if (nField + 1 < mpRowFields.size())
@@ -1169,6 +1275,67 @@ void ScDPOutput::outputRowHeader(SCTAB nTab, ScDPOutputImpl& rOutputImpl)
     }
 }
 
+void ScDPOutput::initStyleRoleVectors()
+{
+    // Sized to the data span; row indices are 0-based offsets from mnDataStartRow,
+    // col indices from mnDataStartCol. Defaults: not subtotal (-1), not grand,
+    // not blank, considered pure-data unless we mark otherwise during the
+    // header iteration loops.
+    if (mnRowCount > 0)
+    {
+        maRowSubtotalLevel.assign(static_cast<size_t>(mnRowCount), -1);
+        maRowIsGrandTotal.assign(static_cast<size_t>(mnRowCount), false);
+        maRowIsBlank.assign(static_cast<size_t>(mnRowCount), false);
+        maRowIsPureData.assign(static_cast<size_t>(mnRowCount), true);
+    }
+    else
+    {
+        maRowSubtotalLevel.clear();
+        maRowIsGrandTotal.clear();
+        maRowIsBlank.clear();
+        maRowIsPureData.clear();
+    }
+    if (mnColCount > 0)
+    {
+        maColSubtotalLevel.assign(static_cast<size_t>(mnColCount), -1);
+        maColIsGrandTotal.assign(static_cast<size_t>(mnColCount), false);
+        maColIsPureData.assign(static_cast<size_t>(mnColCount), true);
+    }
+    else
+    {
+        maColSubtotalLevel.clear();
+        maColIsGrandTotal.clear();
+        maColIsPureData.clear();
+    }
+}
+
+ScDPOutput::StyleRoles ScDPOutput::getStyleRoles() const
+{
+    StyleRoles r;
+    r.nTabStartRow = mnTabStartRow;
+    r.nTabStartCol = mnTabStartCol;
+    r.nMemberStartRow = mnMemberStartRow;
+    r.nDataStartRow = mnDataStartRow;
+    r.nDataStartCol = mnDataStartCol;
+    r.nTabEndRow = mnTabEndRow;
+    r.nTabEndCol = mnTabEndCol;
+    if (!mpPageFields.empty())
+    {
+        r.nPageFieldFirstRow = maStartPos.Row();
+        r.nPageFieldLastRow = mnTabStartRow - 1;
+    }
+    r.pRowSubtotalLevel = &maRowSubtotalLevel;
+    r.pColSubtotalLevel = &maColSubtotalLevel;
+    r.pRowIsGrandTotal = &maRowIsGrandTotal;
+    r.pColIsGrandTotal = &maColIsGrandTotal;
+    r.pRowIsBlank = &maRowIsBlank;
+    r.pRowIsPureData = &maRowIsPureData;
+    r.pColIsPureData = &maColIsPureData;
+    r.nNumRowFields = mpRowFields.size();
+    r.nNumColFields = mpColFields.size();
+    return r;
+}
+
 void ScDPOutput::outputDataResults(SCTAB nTab)
 {
     const uno::Sequence<sheet::DataResult>* pRowAry = maData.getConstArray();
@@ -1202,6 +1369,10 @@ void ScDPOutput::Output()
     // Prepare format output
     bool bColumnFieldIsDataOnly = mnColCount == 1 && mnRowCount > 0 && mpColFields.empty();
     maFormatOutput.prepare(nTab, mpColFields, mpRowFields, bColumnFieldIsDataOnly);
+
+    // Reset role-tracking vectors so the pivot style applicator (consumed via
+    // getStyleRoles()) sees clean state per Output() invocation.
+    initStyleRoleVectors();
 
     //  clear whole (new) output area
     // when modifying table, clear old area !
@@ -1421,7 +1592,7 @@ void ScDPOutput::GetRowFieldRange(SCCOL nCol, sal_Int32& nRowFieldStart, sal_Int
         return;
     }
 
-    if (nCol >= static_cast<SCCOL>(maRowCompactFlags.size()))
+    if (nCol >= static_cast<SCCOL>(mpRowFields.size()))
     {
         nRowFieldStart = nRowFieldEnd = 0;
         return;
@@ -1432,12 +1603,12 @@ void ScDPOutput::GetRowFieldRange(SCCOL nCol, sal_Int32& nRowFieldStart, sal_Int
     SCCOL nCurCol = 0;
     sal_Int32 nField = 0;
 
-    for (const auto bCompact: maRowCompactFlags)
+    for (const auto& rField : mpRowFields)
     {
         if (nCurCol == nCol && nRowFieldStart == -1)
             nRowFieldStart = nField;
 
-        if (!bCompact)
+        if (!rField.mbCompact)
             ++nCurCol;
 
         ++nField;
@@ -1450,7 +1621,7 @@ void ScDPOutput::GetRowFieldRange(SCCOL nCol, sal_Int32& nRowFieldStart, sal_Int
     }
 
     if (nRowFieldStart != -1 && nRowFieldEnd == -1 && nCurCol == nCol)
-        nRowFieldEnd = static_cast<sal_Int32>(maRowCompactFlags.size());
+        nRowFieldEnd = static_cast<sal_Int32>(mpRowFields.size());
 
     if (nRowFieldStart == -1 || nRowFieldEnd == -1)
     {
@@ -1777,10 +1948,12 @@ tools::Long ScDPOutput::GetHeaderDim( const ScAddress& rPos, sheet::DataPilotFie
 
     //  test for row header
 
-    if ( nRow+1 == mnDataStartRow && nCol >= mnTabStartCol && o3tl::make_unsigned(nCol) < mnTabStartCol + mpRowFields.size() )
+    if ( nRow+1 == mnDataStartRow && nCol >= mnTabStartCol && nCol < mnDataStartCol )
     {
         rOrient = sheet::DataPilotFieldOrientation_ROW;
-        tools::Long nField = nCol - mnTabStartCol;
+        tools::Long nField = GetRowFieldArrayIndexForColOffset(nCol - mnTabStartCol);
+        if (nField < 0)
+            return -1;
         return mpRowFields[nField].mnDim;
     }
 
@@ -1878,10 +2051,19 @@ bool ScDPOutput::GetHeaderDrag( const ScAddress& rPos, bool bMouseLeft, bool bMo
                         mpRowFields.empty() && nCol == mnTabStartCol && bMouseLeft );
 
     if ( bSpecial || ( nRow+1 >= mnDataStartRow && nRow <= mnTabEndRow &&
-                        nCol + 1 >= mnTabStartCol && o3tl::make_unsigned(nCol) < mnTabStartCol + mpRowFields.size() ) )
+                        nCol + 1 >= mnTabStartCol && nCol < mnDataStartCol ) )
     {
+        // nField is the COLUMN-SPACE offset (used for rPosRect display).
+        // nFieldArrayIdx is the ARRAY-SPACE index into mpRowFields (used for
+        // bBeforeDrag/bAfterDrag and as rDimPos passed to ScDPSaveData::
+        // SetPosition). With compact row fields these spaces diverge — a
+        // shared compact column corresponds to multiple array indices.
+        // Mixing the spaces (the original bug) caused drag drops to land at
+        // wrong array positions and confused downstream rebuild output.
         tools::Long nField = nCol - mnTabStartCol;
-        //TODO: find start of dimension
+        tools::Long nFieldArrayIdx = GetRowFieldArrayIndexForColOffset(nField);
+        if (nFieldArrayIdx < 0)
+            nFieldArrayIdx = static_cast<tools::Long>(mpRowFields.size());
 
         rPosRect = tools::Rectangle(mnTabStartCol + nField, mnDataStartRow - 1,
                               mnTabStartCol + nField - 1, mnTabEndRow);
@@ -1894,9 +2076,9 @@ bool ScDPOutput::GetHeaderDrag( const ScAddress& rPos, bool bMouseLeft, bool bMo
             if (mpRowFields[nPos].mnDim == nDragDim)
             {
                 bFound = true;
-                if ( nField < nPos )
+                if ( nFieldArrayIdx < nPos )
                     bBeforeDrag = true;
-                else if ( nField > nPos )
+                else if ( nFieldArrayIdx > nPos )
                     bAfterDrag = true;
             }
         }
@@ -1916,12 +2098,31 @@ bool ScDPOutput::GetHeaderDrag( const ScAddress& rPos, bool bMouseLeft, bool bMo
             {
                 rPosRect.AdjustLeft( 1 );
                 rPosRect.AdjustRight( 1 );
-                ++nField;
+                ++nFieldArrayIdx;
             }
         }
 
+        // Translate to ScDPSaveData::SetPosition's nNew, which is 1-indexed
+        // ("insert before the Nth ROW dim"). Three pieces:
+        //   1. bAfterDrag (dragged dim sat at LOWER array idx than drop) →
+        //      erase shifts the drop slot left by 1 → no +1 to convert array
+        //      idx to insert-before slot. bBeforeDrag → +1.
+        //   2. bMouseLeft (cursor on left half of cell) means "drop BEFORE
+        //      this column's content" — same as the column's slot. !bMouseLeft
+        //      means "drop AFTER" — bump by 1.
+        //   3. For cross-orientation drops (!bFound) the dragged dim isn't in
+        //      this orientation so the erase doesn't shift our index → +1
+        //      (and the existing ++nFieldArrayIdx above handles !bMouseLeft).
         rOrient = sheet::DataPilotFieldOrientation_ROW;
-        rDimPos = nField;                       //!...
+        if ( bFound )
+        {
+            tools::Long nBase = bAfterDrag ? nFieldArrayIdx : nFieldArrayIdx + 1;
+            rDimPos = bMouseLeft ? nBase : nBase + 1;
+        }
+        else
+        {
+            rDimPos = nFieldArrayIdx + 1;
+        }
         return true;
     }
 

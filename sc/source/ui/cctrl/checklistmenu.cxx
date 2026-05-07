@@ -427,15 +427,25 @@ void ScCheckListMenuControl::endSubMenu(ScListSubMenuControl& rSubMenu)
     }
 }
 
-void ScCheckListMenuControl::addFields(const std::vector<OUString>& aFields)
+void ScCheckListMenuControl::addFields(const std::vector<OUString>& aFields,
+                                       const std::vector<bool>& aFieldHasFilter)
 {
     if (!mbIsMultiField)
         return;
 
     mxFieldsCombo->clear();
 
-    for (auto& aField: aFields)
-        mxFieldsCombo->append_text(aField);
+    // Decorate filtered field names with a small filter cue (U+25BD) so the
+    // user can see at a glance which fields already have active filters,
+    // mirroring Excel's "Select Field" dropdown behaviour.
+    const OUString sCue
+        = u"  "_ustr + OUStringChar(static_cast<sal_Unicode>(0x25BD));
+
+    for (size_t i = 0; i < aFields.size(); ++i)
+    {
+        const bool bFilter = (i < aFieldHasFilter.size()) && aFieldHasFilter[i];
+        mxFieldsCombo->append_text(bFilter ? aFields[i] + sCue : aFields[i]);
+    }
 
     mxFieldsCombo->set_active(0);
 }

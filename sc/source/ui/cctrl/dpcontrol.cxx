@@ -112,13 +112,16 @@ void ScDPFieldButton::draw()
 
     if (mbBaseButton)
     {
-        // Background
-        tools::Rectangle aRect(maPos, maSize);
-        mpOutDev->SetLineColor(mrStyle.GetFaceColor());
-        mpOutDev->SetFillColor(mrStyle.GetFaceColor());
-        mpOutDev->DrawRect(aRect);
-
-        // Border lines
+        // For pivot field cells, the cell content is rendered by
+        // ScOutputData::DrawEditStandard / DrawStrings using the cell's
+        // pattern (font, color, background, alignment, wrap). Painting a
+        // button-face fill + single-line caption here would overwrite that
+        // and ignore wrap and vertical alignment from the pattern. Excel
+        // doesn't draw a 3D button-face for pivot fields either; it lets
+        // the cell-style framework (dxf / pivotTableStyleInfo) drive the
+        // appearance, and only overlays the dropdown arrow.
+        // Keep just the 3D border lines so the cell still reads as a
+        // clickable field button.
         mpOutDev->SetLineColor(mrStyle.GetLightColor());
         mpOutDev->DrawLine(maPos, Point(maPos.X(), maPos.Y()+maSize.Height()-1));
         mpOutDev->DrawLine(maPos, Point(maPos.X()+maSize.Width()-1, maPos.Y()));
@@ -128,25 +131,6 @@ void ScDPFieldButton::draw()
                            Point(maPos.X()+maSize.Width()-1, maPos.Y()+maSize.Height()-1));
         mpOutDev->DrawLine(Point(maPos.X()+maSize.Width()-1, maPos.Y()),
                            Point(maPos.X()+maSize.Width()-1, maPos.Y()+maSize.Height()-1));
-
-        // Field name.
-        // Get the font and size the same way as in scenario selection (lcl_DrawOneFrame in gridwin4.cxx)
-        vcl::Font aTextFont( mrStyle.GetAppFont() );
-        //  use ScPatternAttr::GetFont only for font size
-        vcl::Font aAttrFont;
-        mrDoc.getCellAttributeHelper().getDefaultCellAttribute().fillFontOnly(aAttrFont, mpOutDev, &mfZoomY);
-        aTextFont.SetFontSize(aAttrFont.GetFontSize());
-        mpOutDev->SetFont(aTextFont);
-        mpOutDev->SetTextColor(mrStyle.GetButtonTextColor());
-
-        Point aTextPos = maPos;
-        tools::Long nTHeight = mpOutDev->GetTextHeight();
-        aTextPos.setX(maPos.getX() + 2); // 2 = Margin
-        aTextPos.setY(maPos.getY() + (maSize.Height()-nTHeight)/2);
-
-        auto popIt = mpOutDev->ScopedPush(vcl::PushFlags::CLIPREGION);
-        mpOutDev->IntersectClipRegion(aRect);
-        mpOutDev->DrawText(aTextPos, maText);
     }
 
     if (mbPopupButton || mbPopupButtonMulti)
@@ -259,10 +243,25 @@ void ScDPFieldButton::drawPopupButton()
 
     if (mbHasHiddenMember)
     {
-        // tiny little box to display in presence of hidden member(s).
-        Point aBoxPos(aPos.X() + aSize.Width() - 5 * fScaleFactor, aPos.Y() + aSize.Height() - 5 * fScaleFactor);
-        Size aBoxSize(3 * fScaleFactor, 3 * fScaleFactor);
-        mpOutDev->DrawRect(tools::Rectangle(aBoxPos, aBoxSize));
+        // Visible filter-active indicator at the bottom-right of the popup
+        // button. Drawn as a Unicode outlined-triangle glyph (U+25BD ▽) in
+        // Excel-blue — fixed colour regardless of OS theme so users can spot
+        // filtered fields at a glance, matching Excel's pivot-button cue.
+        const OUString sFilterGlyph(static_cast<sal_Unicode>(0x25BD));
+        const Color aFilterCueColor(0x00, 0x70, 0xC0); // Excel filter blue
+        mpOutDev->Push(vcl::PushFlags::FONT | vcl::PushFlags::TEXTCOLOR);
+        vcl::Font aGlyphFont = mpOutDev->GetFont();
+        aGlyphFont.SetFontHeight(static_cast<tools::Long>(8 * fScaleFactor));
+        aGlyphFont.SetWeight(WEIGHT_BOLD);
+        mpOutDev->SetFont(aGlyphFont);
+        mpOutDev->SetTextColor(aFilterCueColor);
+        const Size aGlyphSize(mpOutDev->GetTextWidth(sFilterGlyph),
+                              mpOutDev->GetTextHeight());
+        const Point aGlyphPos(
+            aPos.X() + aSize.Width()  - aGlyphSize.Width()  - static_cast<tools::Long>(fScaleFactor),
+            aPos.Y() + aSize.Height() - aGlyphSize.Height());
+        mpOutDev->DrawText(aGlyphPos, sFilterGlyph);
+        mpOutDev->Pop();
     }
 }
 

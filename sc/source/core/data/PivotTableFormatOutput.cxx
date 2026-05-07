@@ -18,6 +18,12 @@
 
 #include <com/sun/star/sheet/MemberResultFlags.hpp>
 
+#include <attrib.hxx>
+#include <scitems.hxx>
+
+#include <cstdio>
+#include <string>
+
 namespace sc
 {
 namespace
@@ -93,6 +99,26 @@ void initLines(std::vector<LineData>& rLines, std::vector<ScDPOutLevelData> cons
         for (LineData& rLineData : rLines)
         {
             rLineData.maFields.resize(rFields.size());
+        }
+    }
+
+    // Pre-populate per-field dimensions so the dimension equality check in
+    // checkForMatchingLines doesn't silently abort for fields whose members
+    // are never iterated by insertFieldMember (e.g. hidden compact row fields
+    // with empty maResult). Without this, line.maFields[i].mnDimension stays at
+    // constDataDimension default, the (nDimension == rFormatEntry.nDimension)
+    // check at evaluateMatches fails, the early break at the bFieldMatch /
+    // bFieldMaybeMatch test fires, and any dxf-derived format gets dropped --
+    // wrap, fill, font, borders all lost on every pivot rebuild.
+    for (LineData& rLineData : rLines)
+    {
+        for (size_t i = 0; i < rFields.size() && i < rLineData.maFields.size(); ++i)
+        {
+            if (!rFields[i].mbDataLayout
+                && rLineData.maFields[i].mnDimension == constDataDimension)
+            {
+                rLineData.maFields[i].mnDimension = rFields[i].mnDim;
+            }
         }
     }
 }
@@ -336,6 +362,15 @@ void checkForMatchingLines(std::vector<LineData> const& rLines,
                 {
                     bFieldMatch = true;
                 }
+                else if (!rFormatEntry.bSet && eType == FormatType::Label)
+                {
+                    // ECMA-376: a <pivotArea> with no <reference> for a given field means
+                    // "any value for this field". For Label formats this is a wildcard match;
+                    // unreferenced row fields shouldn't drop the entry into the maybe-bucket
+                    // (where the !bMaybeExists guard at evaluateMatches() then silently
+                    // ignores it). Match Excel semantics by treating bSet=false as wildcard.
+                    bFieldMatch = true;
+                }
                 else
                 {
                     bFieldMaybeMatch = true;
@@ -458,6 +493,28 @@ void FormatOutput::apply(ScDocument& rDocument)
                 }
             }
         }
+    }
+}
+
+void FormatOutput::applyButtonFormatToField(ScDocument& rDocument, SCTAB nTab, SCCOL nCol,
+                                            SCROW nRow, sal_Int32 nFieldDim)
+{
+    // type='button' formats target a specific row/column field's button cell.
+    // Walk all imported pivot formats; for each Button-type entry whose oField
+    // matches nFieldDim, merge its dxf-derived ScPatternAttr onto the cell.
+    // No-op if no formats are present (mpFormats null).
+    if (!mpFormats)
+        return;
+
+    for (sc::PivotTableFormat const& rFormat : mpFormats->getVector())
+    {
+        if (rFormat.eType != sc::FormatType::Button)
+            continue;
+        if (!rFormat.oField || *rFormat.oField != nFieldDim)
+            continue;
+        if (!rFormat.pPattern)
+            continue;
+        rDocument.ApplyPattern(nCol, nRow, nTab, *rFormat.pPattern);
     }
 }
 

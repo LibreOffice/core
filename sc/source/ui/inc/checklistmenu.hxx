@@ -200,7 +200,11 @@ public:
 
     void endSubMenu(ScListSubMenuControl& rSubMenu);
 
-    void addFields(const std::vector<OUString>& aFields);
+    /// Populate the field-selector combo for multi-field popups. If
+    /// aFieldHasFilter is non-empty (parallel to aFields), filtered field
+    /// names are decorated with a U+25BD filter cue glyph.
+    void addFields(const std::vector<OUString>& aFields,
+                   const std::vector<bool>& aFieldHasFilter = {});
     tools::Long getField();
 
     void SetRestoreFocus(RestoreFocus eFocus)

@@ -116,6 +116,13 @@ public:
     void apply(ScDocument& rDocument);
     void prepare(SCTAB nTab, std::vector<ScDPOutLevelData> const& rColumnFields,
                  std::vector<ScDPOutLevelData> const& rRowFields, bool bColumnFieldIsDataOnly);
+
+    /// Apply any FormatType::Button formats whose oField matches nFieldDim to
+    /// the given cell. Called from outputRowHeader / outputColumnHeaders for
+    /// each field's button cell. Iterates mpFormats so it's a no-op if no
+    /// pivotTable formats are present.
+    void applyButtonFormatToField(ScDocument& rDocument, SCTAB nTab, SCCOL nCol,
+                                  SCROW nRow, sal_Int32 nFieldDim);
 };
 
 } // end sc

@@ -21,7 +21,10 @@ enum class FormatType
 {
     None,
     Data,
-    Label
+    Label,
+    /// type='button' — applies to a row/column field's button cell (the
+    /// in-pivot field caption rendered by FieldCell/MultiFieldCell).
+    Button
 };
 
 /** Information to make a selection in the pivot table. */
@@ -44,6 +47,10 @@ struct PivotTableFormat
     bool bSelected = false;
     bool bOutline = false;
     std::optional<sal_uInt32> oFieldPosition = std::nullopt;
+    /// For Button-type formats: the dim id (cache field index) the format
+    /// targets, copied from <pivotArea field="N">. Matched against
+    /// mpRowFields[i].mnDim / mpColFields[i].mnDim during apply.
+    std::optional<sal_Int32> oField = std::nullopt;
 
     std::vector<Selection> aSelections;
     std::shared_ptr<ScPatternAttr> pPattern;

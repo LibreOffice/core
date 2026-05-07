@@ -20,6 +20,7 @@
 #include <docsh.hxx>
 #include <dpcache.hxx>
 #include <dpobject.hxx>
+#include <dppivotstyle.hxx>
 #include <dptabsrc.hxx>
 #include <dpsave.hxx>
 #include <dpdimsave.hxx>
@@ -333,6 +334,8 @@ ScDPObject::ScDPObject(const ScDPObject& rOther)
     , mbSettingsChanged(false)
     , mbEnableGetPivotData(rOther.mbEnableGetPivotData)
     , mbHideHeader(rOther.mbHideHeader)
+    , maRowHeaderCaption(rOther.maRowHeaderCaption)
+    , maColHeaderCaption(rOther.maColHeaderCaption)
     , maStyleInfo(rOther.maStyleInfo)
 {
     if (rOther.mpSaveData)
@@ -367,6 +370,8 @@ ScDPObject& ScDPObject::operator= (const ScDPObject& rOther)
         mbSettingsChanged = false;
         mbEnableGetPivotData = rOther.mbEnableGetPivotData;
         mbHideHeader = rOther.mbHideHeader;
+        maRowHeaderCaption = rOther.maRowHeaderCaption;
+        maColHeaderCaption = rOther.maColHeaderCaption;
         maStyleInfo = rOther.maStyleInfo;
 
         if (rOther.mpSaveData)
@@ -534,6 +539,8 @@ void ScDPObject::CreateOutput()
 
     mpOutput.reset(new ScDPOutput(mpDocument, mxSource, maOutputRange.aStart, bFilterButton, bExpandCollapse, *this, mbHideHeader));
     mpOutput->SetHeaderLayout(mbHeaderLayout);
+    mpOutput->setRowHeaderCaption(maRowHeaderCaption);
+    mpOutput->setColHeaderCaption(maColHeaderCaption);
     if (mpSaveData->hasFormats())
         mpOutput->setFormats(mpSaveData->getFormats());
 
@@ -1023,6 +1030,30 @@ ScRange ScDPObject::GetNewOutputRange( bool& rOverflow )
 
 void ScDPObject::Output( const ScAddress& rPos )
 {
+    // Snapshot direct alignment items on cells in the current output range
+    // before the rebuild clears them. Excel preserves user cell-formatting
+    // (wrap, justify, indent, etc.) across pivot rebuilds — the equivalent of
+    // the OOXML <x:pivotTableDefinition preserveFormatting="1"> flag, default
+    // on. Without this, dragging a field or refreshing the pivot wipes attrs
+    // such as wrap=true imported from sheet1.xml direct cellXf references on
+    // data cells.
+    struct PreservedAlignment { SCCOL nCol; SCROW nRow;
+                                std::shared_ptr<ScPatternAttr> pPattern; };
+    std::vector<PreservedAlignment> aPreserved;
+    {
+        SCTAB nSnapTab = maOutputRange.aStart.Tab();
+        for (SCROW r = maOutputRange.aStart.Row(); r <= maOutputRange.aEnd.Row(); ++r)
+        {
+            for (SCCOL c = maOutputRange.aStart.Col(); c <= maOutputRange.aEnd.Col(); ++c)
+            {
+                const ScPatternAttr* pSrc = mpDocument->GetPattern(c, r, nSnapTab);
+                if (!pSrc) continue;
+                aPreserved.push_back({c, r,
+                    std::make_shared<ScPatternAttr>(*pSrc)});
+            }
+        }
+    }
+
     //  clear old output area
     mpDocument->DeleteAreaTab(maOutputRange.aStart.Col(), maOutputRange.aStart.Row(),
                          maOutputRange.aEnd.Col(), maOutputRange.aEnd.Row(),
@@ -1042,6 +1073,38 @@ void ScDPObject::Output( const ScAddress& rPos )
     const ScAddress& s = maOutputRange.aStart;
     const ScAddress& e = maOutputRange.aEnd;
     mpDocument->ApplyFlagsTab(s.Col(), s.Row(), e.Col(), e.Row(), s.Tab(), ScMF::DpTable);
+
+    // Apply the pivot's named tableStyle (referenced via pivotTableStyleInfo)
+    // before re-overlaying user alignment so user direct attrs still win.
+    sc::applyPivotTableStyle(*mpDocument, s.Tab(), maStyleInfo, mpOutput->getStyleRoles());
+
+    // Re-apply preserved alignment items on top of the freshly-rendered pivot.
+    // Items not in the alignment whitelist (font/fill/border) are owned by the
+    // pivot's dxf chain and not preserved here.
+    if (!aPreserved.empty())
+    {
+        static constexpr sal_uInt16 nAlignWhich[] = {
+            ATTR_HOR_JUSTIFY, ATTR_VER_JUSTIFY, ATTR_LINEBREAK,
+            ATTR_INDENT, ATTR_SHRINKTOFIT, ATTR_ROTATE_VALUE,
+            ATTR_WRITINGDIR
+        };
+        for (const auto& rPres : aPreserved)
+        {
+            const SfxItemSet& rSrcSet = rPres.pPattern->GetItemSet();
+            ScPatternAttr aOverlay(mpDocument->getCellAttributeHelper());
+            bool bAny = false;
+            for (sal_uInt16 nWhich : nAlignWhich)
+            {
+                if (rSrcSet.GetItemState(nWhich, false) == SfxItemState::SET)
+                {
+                    aOverlay.GetItemSetWritable().Put(rSrcSet.Get(nWhich));
+                    bAny = true;
+                }
+            }
+            if (bAny)
+                mpDocument->ApplyPattern(rPres.nCol, rPres.nRow, s.Tab(), aOverlay);
+        }
+    }
 }
 
 ScRange ScDPObject::GetOutputRangeByType( sal_Int32 nType )

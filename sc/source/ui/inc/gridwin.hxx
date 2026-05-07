@@ -185,6 +185,7 @@ class SAL_DLLPUBLIC_RTTI ScGridWindow : public vcl::DocWindow, public DropTarget
 
     tools::Long                    nDPField;
     ScDPObject*             pDragDPObj; //! name?
+    Point                   maDPDragStart;     // mouse-down pixel pos when bDPMouse becomes true
 
     sal_uInt16              nRFIndex;
     SCCOL                   nRFAddX;

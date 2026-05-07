@@ -40,11 +40,12 @@ struct ScDPOutLevelData
     bool mbHasHiddenMember : 1;
     bool mbDataLayout : 1;
     bool mbPageDim : 1;
+    bool mbCompact : 1; /// True = compact layout. Stored per-field so it survives sort by mnDimPos.
 
     ScDPOutLevelData(tools::Long nDim, tools::Long nHier, tools::Long nLevel, tools::Long nDimPos,
                      sal_uInt32 nSrcNumFmt, const uno::Sequence<sheet::MemberResult>& aResult,
                      OUString aName, OUString aCaption, bool bHasHiddenMember, bool bDataLayout,
-                     bool bPageDim)
+                     bool bPageDim, bool bCompact = false)
         : mnDim(nDim)
         , mnHier(nHier)
         , mnLevel(nLevel)
@@ -56,6 +57,7 @@ struct ScDPOutLevelData
         , mbHasHiddenMember(bHasHiddenMember)
         , mbDataLayout(bDataLayout)
         , mbPageDim(bPageDim)
+        , mbCompact(bCompact)
     {
     }
 

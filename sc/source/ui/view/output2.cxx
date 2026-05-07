@@ -1387,9 +1387,17 @@ void ScOutputData::GetOutputArea( SCCOL nX, SCSIZE nArrY, tools::Long nPosX, too
         // leave space for AutoFilter on screen
         // (for automatic line break: only if not formatting for printer, as in ScColumn::GetNeededSize)
 
-        if ( meType==OUTTYPE_WINDOW &&
-             ( rPattern.GetItem(ATTR_MERGE_FLAG).GetValue() & (ScMF::Auto|ScMF::Button|ScMF::ButtonPopup) ) &&
-             ( !bBreak || mpRefDevice == pFmtDevice ) )
+        // For break (wrap=true) cells, do NOT shrink the alignRect by the
+        // dropdown button width. Excel renders pivot/autofilter button cells
+        // with the wrap engine using the full cell width, and overlays the
+        // dropdown button in the bottom-right corner — text behind the button
+        // remains in place. Shrinking here would constrain the EditEngine to
+        // wrap inside `cell_width − button_width`, producing extra mid-word
+        // breaks and leaving an unused vertical strip directly above the
+        // dropdown. For non-break cells, the original LO behavior is kept:
+        // align text within the remaining area to avoid overlap.
+        if ( meType==OUTTYPE_WINDOW && !bBreak &&
+             ( rPattern.GetItem(ATTR_MERGE_FLAG).GetValue() & (ScMF::Auto|ScMF::Button|ScMF::ButtonPopup) ) )
         {
             // filter drop-down width depends on row height
             double fZoom = mpRefDevice ? mpRefDevice->GetMapMode().GetScaleY() : 1.0;
