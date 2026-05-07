@@ -5,6 +5,7 @@
 	--color-primary: rgb(var(--doc-type, 92, 41, 131));
 	--color-on-primary: #ffffff;
 	--color-primary-text: #ffffff;
+	--color-accent-background: var(--color-background-lighter);
 
 	user-select: none;
 	-webkit-user-select: none; /* Safari / WKWebView */
@@ -19,6 +20,10 @@
 	display: flex;
 	flex-direction: column;
 	font-family: var(--cool-font);
+}
+
+[data-theme='dark'] .backstage-view {
+	--color-accent-background: var(--color-primary);
 }
 
 .backstage-view.hidden {
@@ -146,14 +151,14 @@
 	--icon-secondary-color: var(--color-primary);
 }
 
-.backstage-sidebar-item:hover {
-	background-color: var(--color-background-dark);
-}
-
 .backstage-sidebar-item.active {
 	background-color: transparent;
-	color: var(--color-primary);
+	color: var(--color-main-text);
 	--icon-primary-color: var(--color-primary);
+}
+
+.backstage-sidebar-item:hover {
+	background-color: var(--color-background-dark);
 }
 
 .backstage-sidebar-item.disabled {
@@ -274,14 +279,14 @@
 }
 
 .backstage-home-more-button {
-	background: var(--color-background-lighter);
+	background: var(--color-accent-background);
 	border: 1px solid var(--color-border);
 	border-radius: 4px;
 	padding: 0 8px;
 	height: 24px;
 	font-size: 12px;
 	font-weight: 600;
-	color: var(--color-primary);
+	color: var(--color-main-text);
 	cursor: pointer;
 	transition: all 0.2s ease;
 	white-space: nowrap;
@@ -561,7 +566,7 @@
 
 .backstage-recent-documents-header-cell {
 	font-size: var(--medium-font-size);
-	color: var(--color-primary);
+	color: var(--color-main-text);
 	font-weight: 500;
 	text-align: left;
 	padding: 8px 16px;
