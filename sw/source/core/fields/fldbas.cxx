@@ -537,6 +537,8 @@ void SwField::SetUntypedSubType(sal_uInt16 n)
     case SwFieldIds::Database:
         static_cast<SwDBField*>(this)->SetSubType(static_cast<SwDBFieldSubType>(n));
         break;
+    case SwFieldIds::RefPageSet:
+        break;
     default:
         assert(n == 0 && "trying to set a subtype on something I don't know about");
         break;

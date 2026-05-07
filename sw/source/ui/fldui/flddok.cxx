@@ -608,6 +608,22 @@ bool SwFieldDokPage::FillItemSet(SfxItemSet* )
         case SwFieldTypesEnum::PageNumber:
         case SwFieldTypesEnum::GetRefPage:
         {
+            switch (nTypeId)
+            {
+                case SwFieldTypesEnum::NextPage:
+                    nSubType = static_cast<sal_uInt16>(SwPageNumSubType::Next);
+                    break;
+                case SwFieldTypesEnum::PreviousPage:
+                    nSubType = static_cast<sal_uInt16>(SwPageNumSubType::Previous);
+                    break;
+                case SwFieldTypesEnum::PageNumber:
+                    nSubType = static_cast<sal_uInt16>(SwPageNumSubType::Random);
+                    break;
+                default:
+                    break;
+            }
+
+
             if( SVX_NUM_CHAR_SPECIAL != nFormat &&
                 (SwFieldTypesEnum::PreviousPage == nTypeId || SwFieldTypesEnum::NextPage == nTypeId))
             {
