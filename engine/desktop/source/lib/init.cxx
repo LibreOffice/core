@@ -87,6 +87,7 @@
 #include <svl/cryptosign.hxx>
 #include <linguistic/misc.hxx>
 #include <salhelper/timer.hxx>
+#include <drawinglayer/primitive2d/BufferedDecompositionFlusher.hxx>
 #include <cppuhelper/bootstrap.hxx>
 #include <comphelper/random.hxx>
 #include <comphelper/base64.hxx>
@@ -3660,6 +3661,8 @@ static int joinThreads(JoinThreads eCategory)
         css::configuration::theDefaultProvider::get(
             comphelper::getProcessComponentContext()),
         css::uno::UNO_QUERY_THROW)->flush();
+
+    drawinglayer::primitive2d::BufferedDecompositionFlusher::shutdown();
 
     if (eCategory == JoinThreads::ALL)
         salhelper::Timer::joinThread();

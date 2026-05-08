@@ -44,44 +44,54 @@ namespace drawinglayer::primitive2d
     do not have access to vcl-level API here (like SolarMutexReleaser and vcl::Timer).
 */
 
-static BufferedDecompositionFlusher* getInstance()
+namespace
 {
-    static std::unique_ptr<BufferedDecompositionFlusher> gaTimer(new BufferedDecompositionFlusher);
-    return gaTimer.get();
+std::unique_ptr<BufferedDecompositionFlusher> g_pInstance;
+
+BufferedDecompositionFlusher* getOrCreateInstance()
+{
+    if (!g_pInstance)
+        g_pInstance.reset(new BufferedDecompositionFlusher);
+    return g_pInstance.get();
+}
 }
 
 // static
 void BufferedDecompositionFlusher::shutdown()
 {
-    BufferedDecompositionFlusher* pFlusher = getInstance();
-    pFlusher->onTeardown();
-    // We have to wait for the thread to exit, otherwise we might end up with the background thread
-    // trying to process stuff while it has things ripped out underneath it.
-    pFlusher->join();
+    if (!g_pInstance)
+        return;
+
+    g_pInstance->onTeardown();
+    g_pInstance->join();
+    g_pInstance->flushPending();
+    g_pInstance.reset();
 }
 
 // static
 void BufferedDecompositionFlusher::update(const BufferedDecompositionPrimitive2D* p)
 {
-    getInstance()->updateImpl(p);
+    getOrCreateInstance()->updateImpl(p);
 }
 
 // static
 void BufferedDecompositionFlusher::update(const BufferedDecompositionGroupPrimitive2D* p)
 {
-    getInstance()->updateImpl(p);
+    getOrCreateInstance()->updateImpl(p);
 }
 
 // static
 void BufferedDecompositionFlusher::remove(const BufferedDecompositionPrimitive2D* p)
 {
-    getInstance()->removeImpl(p);
+    if (g_pInstance)
+        g_pInstance->removeImpl(p);
 }
 
 // static
 void BufferedDecompositionFlusher::remove(const BufferedDecompositionGroupPrimitive2D* p)
 {
-    getInstance()->removeImpl(p);
+    if (g_pInstance)
+        g_pInstance->removeImpl(p);
 }
 
 BufferedDecompositionFlusher::BufferedDecompositionFlusher() { create(); }
@@ -122,96 +132,103 @@ void BufferedDecompositionFlusher::removeImpl(const BufferedDecompositionGroupPr
         maRegistered2.erase(p);
 }
 
+BufferedDecompositionFlusher::FlushBatch
+BufferedDecompositionFlusher::collectRemoved(std::chrono::steady_clock::duration aMinIdleAge)
+{
+    auto aNow = std::chrono::steady_clock::now();
+    FlushBatch aBatch;
+    std::vector<rtl::Reference<BasePrimitive2D>> aDelayRelease;
+    {
+        std::unique_lock l(maMutex);
+        for (auto it = maRegistered1.begin(); it != maRegistered1.end();)
+        {
+            rtl::Reference<BufferedDecompositionPrimitive2D> xPrim = it->second.get();
+            if (!xPrim)
+                it = maRegistered1.erase(it);
+            else if (aNow - xPrim->maLastAccess.load() >= aMinIdleAge)
+            {
+                aBatch.mRemoved1.push_back(std::move(xPrim));
+                it = maRegistered1.erase(it);
+            }
+            else
+            {
+                aDelayRelease.push_back(std::move(xPrim));
+                ++it;
+            }
+        }
+        for (auto it = maRegistered2.begin(); it != maRegistered2.end();)
+        {
+            rtl::Reference<BufferedDecompositionGroupPrimitive2D> xPrim = it->second.get();
+            if (!xPrim)
+                it = maRegistered2.erase(it);
+            else if (aNow - xPrim->maLastAccess.load() >= aMinIdleAge)
+            {
+                aBatch.mRemoved2.push_back(std::move(xPrim));
+                it = maRegistered2.erase(it);
+            }
+            else
+            {
+                aDelayRelease.push_back(std::move(xPrim));
+                ++it;
+            }
+        }
+    }
+    // There is a very very small window where, if :
+    // This-thread: we create a strong reference from a weak reference inside the loop
+    // Another-thread: releases the second last strong reference to the the object
+    // This-thread: we clear the reference, which triggers object destruction, which tries to call back
+    //  into BufferedDecompositionFlusher and then deadlocks because the mutex is already acquired.
+    aDelayRelease.clear();
+    return aBatch;
+}
+
+// static
+void BufferedDecompositionFlusher::flushRemoved(FlushBatch& rBatch)
+{
+    // some parts of skia do not take kindly to being accessed from multiple threads
+    osl::Guard<comphelper::SolarMutex> aGuard(comphelper::SolarMutex::get());
+    for (const auto& xPrim : rBatch.mRemoved1)
+        xPrim->setBuffered2DDecomposition(nullptr);
+    for (const auto& xPrim : rBatch.mRemoved2)
+        xPrim->setBuffered2DDecomposition(Primitive2DContainer{});
+    // Clear under SolarMutex, in case we are the sole surviving reference and
+    // destruction would touch vcl resources.
+    rBatch.mRemoved1.clear();
+    rBatch.mRemoved2.clear();
+}
+
 void SAL_CALL BufferedDecompositionFlusher::run()
 {
     setName("BufferedDecompositionFlusher");
-    for (;;)
+    while (true)
     {
-        auto aNow = std::chrono::steady_clock::now();
-        std::vector<rtl::Reference<BufferedDecompositionPrimitive2D>> aRemoved1;
-        std::vector<rtl::Reference<BufferedDecompositionGroupPrimitive2D>> aRemoved2;
-        std::vector<rtl::Reference<BasePrimitive2D>> aDelayRelease;
-        {
-            std::unique_lock l1(maMutex);
-            // exit if we have been shutdown
-            if (mbShutdown)
-                break;
-            for (auto it = maRegistered1.begin(); it != maRegistered1.end();)
-            {
-                rtl::Reference<BufferedDecompositionPrimitive2D> xPrimitive = it->second.get();
-                if (!xPrimitive)
-                    it = maRegistered1.erase(it);
-                else if (aNow - xPrimitive->maLastAccess.load() > std::chrono::seconds(10))
-                {
-                    aRemoved1.push_back(std::move(xPrimitive));
-                    it = maRegistered1.erase(it);
-                }
-                else
-                {
-                    aDelayRelease.push_back(std::move(xPrimitive));
-                    ++it;
-                }
-            }
-            for (auto it = maRegistered2.begin(); it != maRegistered2.end();)
-            {
-                rtl::Reference<BufferedDecompositionGroupPrimitive2D> xPrimitive = it->second.get();
-                if (!xPrimitive)
-                    it = maRegistered2.erase(it);
-                else if (aNow - xPrimitive->maLastAccess.load() > std::chrono::seconds(10))
-                {
-                    aRemoved2.push_back(std::move(xPrimitive));
-                    it = maRegistered2.erase(it);
-                }
-                else
-                {
-                    aDelayRelease.push_back(std::move(xPrimitive));
-                    ++it;
-                }
-            }
-        }
-        // There is a very very small window where, if :
-        // This-thread: we create a strong reference from a weak reference inside the loop
-        // Another-thread: releases the second last strong reference to the the object
-        // This-thread: we clear the reference, which triggers object destruction, which tries to call back
-        //  into BufferedDecompositionFlusher and then deadlocks because the mutex is already acquired.
-        aDelayRelease.clear();
+        FlushBatch aBatch = collectRemoved(std::chrono::seconds(10));
+        flushRemoved(aBatch);
 
-        {
-            // some parts of skia do not take kindly to being accessed from multiple threads
-            osl::Guard<comphelper::SolarMutex> aGuard(comphelper::SolarMutex::get());
-
-            for (const auto& xPrim : aRemoved1)
-            {
-                xPrim->setBuffered2DDecomposition(nullptr);
-            }
-            for (const auto& xPrim : aRemoved2)
-            {
-                xPrim->setBuffered2DDecomposition(Primitive2DContainer{});
-            }
-
-            // Clear these while under the SolarMutex, just in case we are the sole surviving reference,
-            // and we might trigger destruction of related vcl resources.
-            aRemoved1.clear();
-            aRemoved2.clear();
-        }
-
-        {
-            std::unique_lock l(maMutex);
-            maDelayOrTerminate.wait_for(l, std::chrono::seconds(2), [this] { return mbShutdown; });
-        }
+        std::unique_lock l(maMutex);
+        if (mbShutdown || maDelayOrTerminate.wait_for(l, std::chrono::seconds(2), [this] {
+                return mbShutdown;
+            }))
+            break;
     }
 }
 
-/// Only called by FlusherDeinit
 void BufferedDecompositionFlusher::onTeardown()
 {
     {
         std::unique_lock l2(maMutex);
         mbShutdown = true;
-        maRegistered1.clear();
-        maRegistered2.clear();
     }
     maDelayOrTerminate.notify_all();
+}
+
+/// Flush every registered entry. Must be called only after the run loop has
+/// exited (i.e. after join()), so we do not contend with it for SolarMutex
+/// or for the registration maps.
+void BufferedDecompositionFlusher::flushPending()
+{
+    FlushBatch aBatch = collectRemoved(std::chrono::steady_clock::duration::zero());
+    flushRemoved(aBatch);
 }
 
 } // end of namespace drawinglayer::primitive2d

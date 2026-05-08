@@ -64,6 +64,7 @@ $(eval $(call gb_Library_use_libraries,sofficeapp,\
         crashreport \
     ) \
     deploymentmisc \
+    drawinglayercore \
     editeng \
     fwk \
     i18nlangtag \
