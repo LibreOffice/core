@@ -1095,7 +1095,11 @@ darwin*) # macOS
         AC_MSG_NOTICE([sanitized the PATH to $PATH])
     fi
     _os=Darwin
-    INSTROOTBASESUFFIX=/$PRODUCTNAME_WITHOUT_SPACES.app
+    if test "$CROSS_COMPILING" = TRUE; then
+        INSTROOTBASESUFFIX=
+    else
+        INSTROOTBASESUFFIX=/$PRODUCTNAME_WITHOUT_SPACES.app
+    fi
     INSTROOTCONTENTSUFFIX=/Contents
     SDKDIRNAME=${PRODUCTNAME_WITHOUT_SPACES}${PRODUCTVERSION}_SDK
     # See "Default values, as such probably valid just for Linux" comment above the case "$host_os"
