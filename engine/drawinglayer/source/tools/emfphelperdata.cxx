@@ -671,6 +671,33 @@ namespace emfplushelper
         mrPropertyHolders.Current().setFillColorActive(false);
     }
 
+    // Convert a polypolygon so that nonzero/winding fill semantics produce
+    // the same visual result when rendered with the even-odd fill rule used
+    // by the primitive2d fill primitives. A self-intersecting single
+    // polygon is resolved by solveCrossovers + stripNeutralPolygons and the
+    // resulting sub-loops are merged. Multi-polygon inputs use
+    // createNonzeroConform which removes inner duplicates of nested
+    // same-orientation polygons.
+    static ::basegfx::B2DPolyPolygon convertWindingToEvenOdd(
+        const ::basegfx::B2DPolyPolygon& rIn)
+    {
+        if (rIn.count() == 1)
+        {
+            ::basegfx::B2DPolyPolygon aResolved
+                = ::basegfx::utils::solveCrossovers(rIn.getB2DPolygon(0));
+            aResolved = ::basegfx::utils::stripNeutralPolygons(aResolved);
+            if (aResolved.count() > 1)
+            {
+                ::basegfx::B2DPolyPolygonVector aInput;
+                for (sal_uInt32 i = 0; i < aResolved.count(); ++i)
+                    aInput.push_back(::basegfx::B2DPolyPolygon(aResolved.getB2DPolygon(i)));
+                return ::basegfx::utils::mergeToSinglePolyPolygon(aInput);
+            }
+            return aResolved;
+        }
+        return ::basegfx::utils::createNonzeroConform(rIn);
+    }
+
     void EmfPlusHelperData::EMFPPlusFillPolygonSolidColor(const ::basegfx::B2DPolyPolygon& polygon, Color const& color)
     {
         if (color.GetAlpha() == 0)
@@ -1485,8 +1512,13 @@ namespace emfplushelper
                         EMFPPath path(points, true);
                         path.Read(rMS, flags);
                         if (type == EmfPlusRecordTypeFillClosedCurve)
-                            EMFPPlusFillPolygon(path.GetClosedCardinalSpline(*this, aTension),
-                                                flags & 0x8000, brushIndexOrColor);
+                        {
+                            ::basegfx::B2DPolyPolygon aPoly
+                                = path.GetClosedCardinalSpline(*this, aTension);
+                            if (flags & 0x2000)
+                                aPoly = convertWindingToEvenOdd(aPoly);
+                            EMFPPlusFillPolygon(aPoly, flags & 0x8000, brushIndexOrColor);
+                        }
                         else
                             EMFPPlusDrawPolygon(path.GetClosedCardinalSpline(*this, aTension),
                                                 flags & 0xff);

@@ -2088,6 +2088,27 @@ CPPUNIT_TEST_FIXTURE(Test, testExcludeClipRect)
     assertXPath(pDocument, aXPathPrefix + "group/mask/polypolygoncolor", "color", u"#ff0000");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testEmfPlusFillClosedCurveWinding)
+{
+    // EMF+ EmfPlusFillClosedCurve record with the Winding flag (0x2000) set,
+    // tracing a self-intersecting pentagram (5 vertices in every-other-corner
+    // order, tension 0). With WINDING the inner pentagon is part of the fill;
+    // with ALTERNATE it would be a hole. The geometry is converted at parse
+    // time so even-odd rendering of the resulting polypolygon fills the
+    // entire star including the centre.
+    Primitive2DSequence aSequence
+        = parseEmf(u"/emfio/qa/cppunit/emf/data/TestEmfPlusFillClosedCurveWinding.emf");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
+    drawinglayer::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
+    CPPUNIT_ASSERT(pDocument);
+
+    // Single fill primitive in red, with the self-intersecting input
+    // collapsed to one polygon (the outer boundary of the filled star).
+    assertXPath(pDocument, aXPathPrefix + "polypolygoncolor", "color", u"#ff0000");
+    assertXPath(pDocument, aXPathPrefix + "polypolygoncolor/polypolygon/polygon", 1);
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testPolyFillModeWinding)
 {
     // EMR_SETPOLYFILLMODE sets WINDING mode, then draws a self-intersecting
