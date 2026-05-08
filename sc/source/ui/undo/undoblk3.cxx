@@ -180,6 +180,11 @@ void ScUndoDeleteContents::Undo()
     DoChange( true );
     EndUndo();
 
+    // Need to replay spill resolution so an undo that restored a blocker
+    // re-spills the affected dynamic array master, and an undo that cleared
+    // a blocker expands it.
+    rDocShell.ResolveSpilledOutputs();
+
     HelperNotifyChanges::NotifyIfChangesListeners(rDocShell, aRange, u"undo"_ustr);
 }
 
@@ -188,6 +193,8 @@ void ScUndoDeleteContents::Redo()
     BeginRedo();
     DoChange( false );
     EndRedo();
+
+    rDocShell.ResolveSpilledOutputs();
 
     HelperNotifyChanges::NotifyIfChangesListeners(rDocShell, aRange, u"redo"_ustr);
 }
