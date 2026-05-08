@@ -3281,6 +3281,20 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 			this._invalidateZoomFirstFit = true;
 	},
 
+	_getWriterDefaultZoom: function() {
+		const ZOOM_LEVEL_20 = 1;
+		const ZOOM_LEVEL_400 = 18;
+		const ZOOM_LEVEL_100 = 10;
+
+		let defaultZoom = parseInt(window.prefs.get('defaultZoom'));
+		defaultZoom = defaultZoom ? defaultZoom + 1 : ZOOM_LEVEL_100;
+		if (ZOOM_LEVEL_20 <= defaultZoom && defaultZoom <= ZOOM_LEVEL_400) {
+			return defaultZoom;
+		} else {
+			return ZOOM_LEVEL_100;
+		}
+	},
+
 	// This is really just called on zoomend
 	_fitWidthZoom: function (e, maxZoom, recalcFirstFit=false) {
 		if (this.isCalc() || this.isDraw())
@@ -3346,18 +3360,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 			if (maxZoom)
 				zoom = Math.min(maxZoom, Math.max(0.1, zoom));
 		} else {
-			const ZOOM_LEVEL_20 = 1;
-			const ZOOM_LEVEL_400 = 18;
-			const ZOOM_LEVEL_100 = 10;
-
-			let defaultZoom = parseInt(window.prefs.get('defaultZoom'));
-			defaultZoom = defaultZoom ? defaultZoom + 1 : ZOOM_LEVEL_100;
-
-			if (ZOOM_LEVEL_20 <= defaultZoom && defaultZoom <= ZOOM_LEVEL_400) {
-				zoom = defaultZoom;
-			} else {
-				zoom = ZOOM_LEVEL_100;
-			}
+			zoom = this._getWriterDefaultZoom();
 		}
 
 		// Not clear why we wanted to zoom in the past.
