@@ -269,6 +269,12 @@ clean-local:
 	rm -rf .nyc_output
 	rm -rf coverage
 
+# Used on jenkins to run all the tests in parallel as much as possible
+check-desktop-mobile-multi:
+	check-desktop
+	check-mobile
+	check-multi
+
 ###############
 # Mobile tests.
 ###############
