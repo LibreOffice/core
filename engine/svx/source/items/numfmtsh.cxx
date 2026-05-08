@@ -1016,12 +1016,13 @@ short SvxNumberFormatShell::FillEListWithUserCurrencys(std::vector<OUString>& rL
         }
     }
 
-    for (size_t i = nOldListCount; i < rList.size(); ++i)
-    {
-        aCurrencyFormatList.push_back(rList[i]);
+    aCurrencyFormatList.insert(aCurrencyFormatList.end(), rList.begin() + nOldListCount, rList.end());
 
-        if (nSelPos == SELPOS_NONE && bAdaptSelPos && aCurEntryList[i] == nCurFormatKey)
-            nSelPos = i;
+    if (nSelPos == SELPOS_NONE && bAdaptSelPos)
+    {
+        auto it = std::find(aCurEntryList.begin() + nOldListCount, aCurEntryList.end(), nCurFormatKey);
+        if (it != aCurEntryList.end())
+            nSelPos = static_cast<short>(std::distance(aCurEntryList.begin(), it));
     }
 
     if (nSelPos == SELPOS_NONE && nCurCategory != SvNumFormatType::ALL)
