@@ -520,7 +520,7 @@ void ClientSession::handleClipboardRequest(DocumentBroker::ClipboardRequest     
     }
 }
 
-void ClientSession::onTileProcessed(TileWireId wireId)
+bool ClientSession::removeTileOnFly(TileWireId wireId)
 {
     auto iter = std::find_if(_tilesOnFly.begin(), _tilesOnFly.end(),
     [wireId](const std::pair<TileWireId, std::chrono::steady_clock::time_point>& curTile)
@@ -528,9 +528,17 @@ void ClientSession::onTileProcessed(TileWireId wireId)
         return curTile.first == wireId;
     });
 
-    if(iter != _tilesOnFly.end())
+    if (iter != _tilesOnFly.end())
+    {
         _tilesOnFly.erase(iter);
-    else
+        return true;
+    }
+    return false;
+}
+
+void ClientSession::onTileProcessed(TileWireId wireId)
+{
+    if (!removeTileOnFly(wireId))
         LOG_INF("Tileprocessed message with an unknown wire-id '" << wireId << "' from session " << getId());
 }
 
@@ -3558,7 +3566,17 @@ void ClientSession::enqueueSendMessage(const std::shared_ptr<Message>& data)
     }
 
     LOG_TRC("Enqueueing client message " << data->id());
-    const bool enqueued = _senderQueue.enqueue(data);
+    TileWireId droppedTileWireId = 0;
+    const bool enqueued = _senderQueue.enqueue(data, &droppedTileWireId);
+
+    // If the new tile deduplicated a previously-queued tile, that older tile was
+    // counted in _tilesOnFly when first enqueued but will never reach the
+    // client (and thus never be acked via tileprocessed). Forget it now to
+    // keep the on-fly count accurate; otherwise it leaks until the 10s
+    // round-trip timeout and can push us over tilesOnFlyUpperLimit, stalling
+    // tile delivery on big screens where dedup happens often.
+    if (droppedTileWireId != 0)
+        removeTileOnFly(droppedTileWireId);
 
     // Track sent tile
     if (haveWireId && enqueued)

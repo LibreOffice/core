@@ -35,13 +35,18 @@ public:
     SenderQueue() = default;
 
     /// Enqueues an item, if not a duplicate and not shutting down.
-    /// Returns true if enqueued.
-    bool enqueue(const Item& item)
+    /// Returns true if enqueued. If a queued tile message is dropped by
+    /// deduplication, its wireId is written to *droppedTileWireId so the
+    /// caller can keep any per-tile tracking accurate.
+    bool enqueue(const Item& item, TileWireId* droppedTileWireId = nullptr)
     {
+        if (droppedTileWireId)
+            *droppedTileWireId = 0;
+
         if (!SigUtil::getTerminationFlag())
         {
             std::unique_lock<std::mutex> lock(_mutex);
-            if (deduplicate(item))
+            if (deduplicate(item, droppedTileWireId))
             {
                 _queue.push_back(item);
                 return true;
@@ -123,7 +128,10 @@ private:
     /// Deduplicate messages based on the new one.
     /// Returns true if the new message should be
     /// enqueued, otherwise false.
-    bool deduplicate(const Item& item)
+    /// If a queued tile message is dropped, its wireId is reported via
+    /// droppedTileWireId (when non-null) so the caller can update
+    /// any per-tile tracking it maintains.
+    bool deduplicate(const Item& item, TileWireId* droppedTileWireId)
     {
         // Deduplicate messages based on the incoming one.
         std::string command = item->firstToken();
@@ -152,7 +160,11 @@ private:
                 });
 
             if (pos != _queue.end())
+            {
+                if (droppedTileWireId)
+                    *droppedTileWireId = TileDesc::parse((*pos)->firstLine()).getWireId();
                 _queue.erase(pos);
+            }
         }
         else if (command == "invalidatecursor:" ||
                  command == "setpart:")

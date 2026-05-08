@@ -239,6 +239,9 @@ public:
     size_t getTilesOnFlyUpperLimit() const;
     void removeOutdatedTilesOnFly(std::chrono::steady_clock::time_point now);
     void onTileProcessed(TileWireId wireId);
+    /// Remove a tile from the on-fly tracking (no logging if absent).
+    /// Returns true if the wireId was found and removed.
+    bool removeTileOnFly(TileWireId wireId);
 
     const Util::Rectangle& getVisibleArea() const { return _clientVisibleArea; }
     /// Visible area can have negative value as position, but we have tiles only in the positive range

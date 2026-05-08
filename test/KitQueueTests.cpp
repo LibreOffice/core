@@ -24,6 +24,9 @@
 #include <SenderQueue.hpp>
 #include <common/Util.hpp>
 
+#include <algorithm>
+#include <sstream>
+
 #include <cppunit/extensions/HelperMacros.h>
 
 /// KitQueue unit-tests.
@@ -42,6 +45,7 @@ class KitQueueTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testSenderQueueLog);
     CPPUNIT_TEST(testSenderQueueProgress);
     CPPUNIT_TEST(testSenderQueueTileDeduplication);
+    CPPUNIT_TEST(testSenderQueueTileDedupReportsDroppedWireId);
     CPPUNIT_TEST(testInvalidateViewCursorDeduplication);
     CPPUNIT_TEST(testCallbackModifiedStatusIsSkipped);
     CPPUNIT_TEST(testCallbackInvalidation);
@@ -86,6 +90,7 @@ class KitQueueTests : public CPPUNIT_NS::TestFixture
     void testSenderQueueLog();
     void testSenderQueueProgress();
     void testSenderQueueTileDeduplication();
+    void testSenderQueueTileDedupReportsDroppedWireId();
     void testInvalidateViewCursorDeduplication();
     void testCallbackModifiedStatusIsSkipped();
     void testCallbackInvalidation();
@@ -592,6 +597,132 @@ void KitQueueTests::testSenderQueueTileDeduplication()
     LOK_ASSERT_EQUAL(dup_messages[2], msgStr(item));
 
     LOK_ASSERT_EQUAL(static_cast<size_t>(0), queue.size());
+}
+
+// Reproduces the lost-tile / on-fly-leak scenario.
+//
+// When a queued tile message is replaced by a newer one for the same position,
+// SenderQueue::deduplicate erases the older entry from the queue. The older
+// tile never reaches the client, so the client never sends tileprocessed for
+// its wireId. Without reporting which wireId was dropped, ClientSession's
+// _tilesOnFly tracking would leak: the dropped wireId would stay there until
+// the 10s round-trip timeout, eating slots in tilesOnFlyUpperLimit and
+// stalling tile delivery.
+void KitQueueTests::testSenderQueueTileDedupReportsDroppedWireId()
+{
+    constexpr std::string_view testname = __func__;
+
+    SenderQueue<std::shared_ptr<Message>> queue;
+
+    auto makeTile = [](TileWireId wid)
+    {
+        std::ostringstream oss;
+        oss << "tile: nviewid=0 part=0 width=256 height=256 tileposx=0 tileposy=0"
+               " tilewidth=3840 tileheight=3840 oldwid=1 wid=" << wid << " ver=-1";
+        return std::make_shared<Message>(oss.str(), Message::Dir::Out);
+    };
+
+    auto makeTileAt = [](int posX, int posY, TileWireId wid)
+    {
+        std::ostringstream oss;
+        oss << "tile: nviewid=0 part=0 width=256 height=256 tileposx=" << posX
+            << " tileposy=" << posY
+            << " tilewidth=3840 tileheight=3840 oldwid=1 wid=" << wid << " ver=-1";
+        return std::make_shared<Message>(oss.str(), Message::Dir::Out);
+    };
+
+    // 1. First enqueue: nothing to dedup. droppedTileWireId stays 0.
+    {
+        TileWireId dropped = 999; // sentinel: should be cleared by enqueue
+        const bool enqueued = queue.enqueue(makeTile(100), &dropped);
+        LOK_ASSERT_EQUAL_STR(true, enqueued);
+        LOK_ASSERT_EQUAL(static_cast<TileWireId>(0), dropped);
+        LOK_ASSERT_EQUAL(static_cast<size_t>(1), queue.size());
+    }
+
+    // 2. Same position, newer wireId: dedup happens, dropped wid is reported.
+    {
+        TileWireId dropped = 0;
+        const bool enqueued = queue.enqueue(makeTile(120), &dropped);
+        LOK_ASSERT_EQUAL_STR(true, enqueued);
+        LOK_ASSERT_EQUAL(static_cast<TileWireId>(100), dropped);
+        // queue still has just the newest one
+        LOK_ASSERT_EQUAL(static_cast<size_t>(1), queue.size());
+    }
+
+    // 3. Different position: no dedup, dropped stays 0.
+    {
+        TileWireId dropped = 999;
+        const bool enqueued = queue.enqueue(makeTileAt(3840, 0, 130), &dropped);
+        LOK_ASSERT_EQUAL_STR(true, enqueued);
+        LOK_ASSERT_EQUAL(static_cast<TileWireId>(0), dropped);
+        LOK_ASSERT_EQUAL(static_cast<size_t>(2), queue.size());
+    }
+
+    // Drain the queue, only the surviving wireIds (120 and 130) come out.
+    std::shared_ptr<Message> item;
+    LOK_ASSERT_EQUAL_STR(true, queue.dequeue(item));
+    LOK_ASSERT_EQUAL(static_cast<TileWireId>(120),
+                     TileDesc::parse(item->firstLine()).getWireId());
+
+    LOK_ASSERT_EQUAL_STR(true, queue.dequeue(item));
+    LOK_ASSERT_EQUAL(static_cast<TileWireId>(130),
+                     TileDesc::parse(item->firstLine()).getWireId());
+
+    LOK_ASSERT_EQUAL(static_cast<size_t>(0), queue.size());
+
+    // Reproduce the full scenario:
+    // a sender should end up tracking only the wireIds still in the queue,
+    // never the ones removed by dedup.
+    SenderQueue<std::shared_ptr<Message>> q2;
+    std::vector<TileWireId> tilesOnFly;
+
+    auto sendTile = [&](TileWireId wid, int posX = 0)
+    {
+        TileWireId dropped = 0;
+        if (q2.enqueue(makeTileAt(posX, 0, wid), &dropped))
+        {
+            if (dropped != 0)
+            {
+                auto it = std::find(tilesOnFly.begin(), tilesOnFly.end(), dropped);
+                LOK_ASSERT(it != tilesOnFly.end()); // the dropped wid was tracked
+                tilesOnFly.erase(it);
+            }
+            tilesOnFly.push_back(wid);
+        }
+    };
+
+    // Simulate fast re-enqueues at the same position before the websocket
+    // gets to drain the queue: each new wireId dedups the previous.
+    sendTile(200);
+    sendTile(201);
+    sendTile(202);
+    sendTile(203);
+
+    // And one tile at a different position which is not dedup'd.
+    sendTile(204, 3840);
+
+    // The tracker mirrors what is actually in the queue:
+    // { 203 (latest at posX=0), 204 (at posX=3840) }
+    // Without the dropped-wireId reporting, tilesOnFly would still contain
+    // 200, 201, 202
+    LOK_ASSERT_EQUAL(static_cast<size_t>(2), tilesOnFly.size());
+    LOK_ASSERT_EQUAL(static_cast<size_t>(2), q2.size());
+    LOK_ASSERT(std::find(tilesOnFly.begin(), tilesOnFly.end(),
+                         static_cast<TileWireId>(203)) != tilesOnFly.end());
+    LOK_ASSERT(std::find(tilesOnFly.begin(), tilesOnFly.end(),
+                         static_cast<TileWireId>(204)) != tilesOnFly.end());
+    for (TileWireId leakedWid : { 200, 201, 202 })
+    {
+        LOK_ASSERT(std::find(tilesOnFly.begin(), tilesOnFly.end(),
+                             static_cast<TileWireId>(leakedWid)) == tilesOnFly.end());
+    }
+
+    // The default-argument overload (no out-param) must keep working too.
+    SenderQueue<std::shared_ptr<Message>> q3;
+    LOK_ASSERT_EQUAL_STR(true, q3.enqueue(makeTile(300)));
+    LOK_ASSERT_EQUAL_STR(true, q3.enqueue(makeTile(301)));
+    LOK_ASSERT_EQUAL(static_cast<size_t>(1), q3.size());
 }
 
 void KitQueueTests::testInvalidateViewCursorDeduplication()
