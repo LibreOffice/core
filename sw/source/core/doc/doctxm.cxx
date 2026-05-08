@@ -71,6 +71,7 @@
 #include <osl/diagnose.h>
 
 #include <algorithm>
+#include <compare>
 #include <memory>
 
 using namespace ::com::sun::star;
@@ -231,22 +232,7 @@ public:
     CompareNodeContent( SwNodeOffset nNd, sal_Int32 nCnt )
         : m_nNode( nNd ), m_nContent( nCnt ) {}
 
-    bool operator==( const CompareNodeContent& rCmp ) const
-        { return m_nNode == rCmp.m_nNode && m_nContent == rCmp.m_nContent; }
-    bool operator!=( const CompareNodeContent& rCmp ) const
-        { return m_nNode != rCmp.m_nNode || m_nContent != rCmp.m_nContent; }
-    bool operator< ( const CompareNodeContent& rCmp ) const
-        { return m_nNode < rCmp.m_nNode ||
-            ( m_nNode == rCmp.m_nNode && m_nContent < rCmp.m_nContent); }
-    bool operator<=( const CompareNodeContent& rCmp ) const
-        { return m_nNode < rCmp.m_nNode ||
-            ( m_nNode == rCmp.m_nNode && m_nContent <= rCmp.m_nContent); }
-    bool operator> ( const CompareNodeContent& rCmp ) const
-        { return m_nNode > rCmp.m_nNode ||
-            ( m_nNode == rCmp.m_nNode && m_nContent > rCmp.m_nContent); }
-    bool operator>=( const CompareNodeContent& rCmp ) const
-        { return m_nNode > rCmp.m_nNode ||
-            ( m_nNode == rCmp.m_nNode && m_nContent >= rCmp.m_nContent); }
+    auto operator<=>( const CompareNodeContent& rCmp ) const = default;
 };
 
 }
