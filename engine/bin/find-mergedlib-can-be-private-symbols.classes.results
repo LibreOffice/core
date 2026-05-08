@@ -346,7 +346,6 @@
 15 ScAnnotationsObj
 15 QtInstance
 15 AccessibleBrowseBox
-14 sd::presenter::PresenterPreviewCache::PresenterCacheContext
 14 lucene::store::RAMOutputStream
 14 lucene::store::RAMInputStream
 14 lucene::search::Sort

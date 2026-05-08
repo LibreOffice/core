@@ -1189,9 +1189,6 @@ void UseUniquePtr::CheckDeleteParmVar(const CXXDeleteExpr* deleteExpr, const Par
     if (fn == SRCDIR "/sd/source/ui/framework/tools/FrameworkHelper.cxx")
         return;
     // actually held via shared_ptr, uses protected deleter object
-    if (fn == SRCDIR "/sd/source/ui/presenter/CanvasUpdateRequester.cxx")
-        return;
-    // actually held via shared_ptr, uses protected deleter object
     if (fn == SRCDIR "/sd/source/ui/slidesorter/cache/SlsPageCacheManager.cxx")
         return;
     // actually held via shared_ptr, uses protected deleter object

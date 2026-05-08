@@ -32,16 +32,6 @@
 
 using namespace ::com::sun::star::uno;
 
-namespace
-{
-enum PresenterConsoleMode
-{
-    FullScreen = 0,
-    Windowed = 1,
-    Disabled = 2
-};
-}
-
 SdStartPresentationDlg::SdStartPresentationDlg(weld::Window* pWindow, const SfxItemSet& rInAttrs,
                                   const std::vector<OUString> &rPageNames, SdCustomShowList* pCSList)
     : GenericDialogController(pWindow, u"modules/simpress/ui/presentationdialog.ui"_ustr, u"PresentationDialog"_ustr)
@@ -72,7 +62,6 @@ SdStartPresentationDlg::SdStartPresentationDlg(weld::Window* pWindow, const SfxI
     , m_xCbxEnableRemote(m_xBuilder->weld_check_button(u"enableremote"_ustr))
     , m_xCbxEnableRemoteInsecure(m_xBuilder->weld_check_button(u"enableremoteinsecure"_ustr))
     , m_xCbxInteractiveMode(m_xBuilder->weld_check_button(u"enableinteractivemode"_ustr))
-    , m_xLbConsole(m_xBuilder->weld_combo_box(u"console_cb"_ustr))
     , m_xFtMonitor(m_xBuilder->weld_label(u"presdisplay_label"_ustr))
     , m_xLBMonitor(m_xBuilder->weld_combo_box(u"presdisplay_cb"_ustr))
     , m_xMonitor(m_xBuilder->weld_label(u"monitor_str"_ustr))
@@ -161,13 +150,6 @@ SdStartPresentationDlg::SdStartPresentationDlg(weld::Window* pWindow, const SfxI
     if( bEndless )
         m_xCbxAuto->set_active(true);
 
-    if (!officecfg::Office::Impress::Misc::Start::EnablePresenterScreen::get())
-        m_xLbConsole->set_active(PresenterConsoleMode::Disabled);
-    else if (officecfg::Office::Impress::Misc::Start::PresenterScreenFullScreen::get())
-        m_xLbConsole->set_active(PresenterConsoleMode::FullScreen);
-    else
-        m_xLbConsole->set_active(PresenterConsoleMode::Windowed);
-
 #ifdef ENABLE_SDREMOTE
     m_xCbxEnableRemote->connect_toggled( LINK(this, SdStartPresentationDlg, ChangeRemoteHdl) );
     m_xCbxEnableRemote->set_active(officecfg::Office::Impress::Misc::Start::EnableSdremote::get());
@@ -199,14 +181,6 @@ short SdStartPresentationDlg::run()
     {
         std::shared_ptr<comphelper::ConfigurationChanges> batch(
             comphelper::ConfigurationChanges::create());
-        auto nActive = m_xLbConsole->get_active();
-        bool bEnabled = nActive != PresenterConsoleMode::Disabled;
-        officecfg::Office::Impress::Misc::Start::EnablePresenterScreen::set(bEnabled, batch);
-        if (bEnabled)
-        {
-            officecfg::Office::Impress::Misc::Start::PresenterScreenFullScreen::set(
-                nActive == PresenterConsoleMode::FullScreen, batch);
-        }
         officecfg::Office::Impress::Misc::Start::ShowNavigationPanel::set(
             m_xCbxShowNavigationButton->get_active(), batch);
         officecfg::Office::Impress::Layout::Display::NavigationBtnScale::set(

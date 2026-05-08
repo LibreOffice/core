@@ -62,8 +62,6 @@ private:
     std::unique_ptr<weld::CheckButton> m_xCbxEnableRemoteInsecure;
     std::unique_ptr<weld::CheckButton> m_xCbxInteractiveMode;
 
-    std::unique_ptr<weld::ComboBox> m_xLbConsole;
-
     std::unique_ptr<weld::Label> m_xFtMonitor;
     std::unique_ptr<weld::ComboBox> m_xLBMonitor;
 
