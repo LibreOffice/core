@@ -3295,16 +3295,23 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		}
 	},
 
-	// This is really just called on zoomend
+	/**
+	 * This is really just called on zoomend
+	 *
+	 * @param recalcFirstFit
+	 * 		Passed by the UI dispatches like 'Zoom to Fit Page Width' button
+	 *		in order to reset the zoom. It is used to recalculate/reset the
+	 *		document zoom level to the maximum possible value based on the
+	 *		window size (available canvas area).
+	 *
+	 * 		The `smartZoom` option should not block fit-width-zoom if this
+	 * 		parameter is set to `true`, in case smartZoom is disabled (== false).
+	 */
 	_fitWidthZoom: function (e, maxZoom, recalcFirstFit=false) {
 		if (this.isCalc() || this.isDraw())
 			return;
-
-		if (this._map.uiManager.getStartCompareChanges()) {
-			// comparechanges view, don't zoom in, to have space for two pages side by
-			// side.
+		if (this._map.uiManager.getStartCompareChanges()) // comparechanges view, don't zoom in, to have space for two pages side by side.
 			return;
-		}
 
 		if (!maxZoom) {
 			if (this.isImpress()) maxZoom = 10;
@@ -3327,9 +3334,6 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		oldSize.y *= app.dpiScale;
 
 		let bringCommentsIntoView = false;
-		// `recalcFirstFit` is passed by the UI dispatches like the 'Zoom to Fit Page Width' button
-		// in order to reset the zoom. Therefore the 'smartZoom' option should not block fit-width-zoom
-		// if recalcFirstFit is set to `true` (when smartZoom is set to 'false').
 		const changeZoom = smartZoomEnabled || recalcFirstFit;
 		if (changeZoom && this.isWriter() && app.activeDocument.partHasComments && (recalcFirstFit || !this._includedCommentsInFirstFit)) {
 			bringCommentsIntoView = true;
@@ -3337,14 +3341,9 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 			this._firstFitDone = false;
 		}
 
-		// `recalcFirstFit` is used to recalculate/reset the zoom levels to the
-		// maximum possible zoom level based on the window (canvas) size.
 		if (recalcFirstFit)
 			this._firstFitDone = false;
 
-		// if we are here then that means we have the document size
-		// therefore we should continue and do the firstFit zoom resize,
-		// or else it keeps waiting for a resize event.
 		if (this._firstFitDone && newSize.x - oldSize.x === 0)
 			return;
 
