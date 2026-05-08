@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <algorithm>
+#include <vector>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
 #include <basegfx/polygon/b2dlinegeometry.hxx>
@@ -90,7 +92,66 @@ namespace basegfx::utils
                 aArrowTransform.translate(0.0, -fArrowYLength * fDockingPosition + fShift);
 
                 // get the polygon vector we want to plant this arrow on
-                const double fConsumedLength(fArrowYLength * (1.0 - fDockingPosition) - fShift);
+                double fConsumedLength(fArrowYLength * (1.0 - fDockingPosition) - fShift);
+
+                // Detect arrow polygons with a concave back (e.g., notched arrowheads):
+                // the polygon's centerline along X=fCenterX may exit the polygon interior
+                // before reaching the polygon's full Y extent. In that case, shorten the
+                // consumed line length so the line stroke meets the polygon at the centerline
+                // rather than ending in a V-cut behind the notch.
+                {
+                    B2DPolyPolygon aTransformed(rArrow);
+                    aTransformed.transform(aArrowTransform);
+                    const double fCenterX(0.0);
+                    std::vector<double> aYCrossings;
+                    for (sal_uInt32 nP = 0; nP < aTransformed.count(); ++nP)
+                    {
+                        const B2DPolygon& aSub(aTransformed.getB2DPolygon(nP));
+                        const sal_uInt32 nN(aSub.count());
+                        if (nN < 2)
+                            continue;
+                        for (sal_uInt32 i = 0; i < nN; ++i)
+                        {
+                            const B2DPoint aP1(aSub.getB2DPoint(i));
+                            const B2DPoint aP2(aSub.getB2DPoint((i + 1) % nN));
+                            const double x1(aP1.getX() - fCenterX);
+                            const double x2(aP2.getX() - fCenterX);
+                            if ((x1 < 0.0 && x2 > 0.0) || (x1 > 0.0 && x2 < 0.0))
+                            {
+                                const double t(-x1 / (x2 - x1));
+                                aYCrossings.push_back(aP1.getY()
+                                                      + t * (aP2.getY() - aP1.getY()));
+                            }
+                            else if (x1 == 0.0 && x2 != 0.0)
+                            {
+                                const B2DPoint aPrev(aSub.getB2DPoint((i + nN - 1) % nN));
+                                const double xPrev(aPrev.getX() - fCenterX);
+                                if ((xPrev < 0.0 && x2 > 0.0) || (xPrev > 0.0 && x2 < 0.0))
+                                    aYCrossings.push_back(aP1.getY());
+                            }
+                        }
+                    }
+                    std::sort(aYCrossings.begin(), aYCrossings.end());
+                    constexpr double EPS(1e-9);
+                    sal_uInt32 nBelow(0);
+                    for (double y : aYCrossings)
+                        if (y < EPS)
+                            ++nBelow;
+                    if (nBelow % 2 != 0)
+                    {
+                        for (double y : aYCrossings)
+                        {
+                            if (y > EPS)
+                            {
+                                const double fAdjusted(y - fShift);
+                                if (fAdjusted < fConsumedLength)
+                                    fConsumedLength = fAdjusted;
+                                break;
+                            }
+                        }
+                    }
+                }
+
                 const B2DVector aHead(rCandidate.getB2DPoint(bStart ? 0 : rCandidate.count() - 1));
                 const B2DVector aTail(getPositionAbsolute(rCandidate,
                     bStart ? fConsumedLength : fCandidateLength - fConsumedLength, fCandidateLength));
