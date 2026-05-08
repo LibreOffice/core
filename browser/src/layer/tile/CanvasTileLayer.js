@@ -3295,6 +3295,16 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		}
 	},
 
+	_getMaxZoom: function() {
+		if (this.isImpress())
+			return 10; /* 100% */
+		if (this.isWriter())
+			return 13; /* 170% */
+
+		window.app.console.error('_getMaxZoom should only be called for Impress or Writer.');
+		return 10; /* failsafe 100% */
+	},
+
 	/**
 	 * This is really just called on zoomend
 	 *
@@ -3322,11 +3332,6 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		oldSize.x *= app.dpiScale;
 		oldSize.y *= app.dpiScale;
 
-		if (!maxZoom) {
-			if (this.isImpress()) maxZoom = 10;
-			else if (this.isWriter()) maxZoom = 13;
-		}
-
 		const smartZoomEnabled = window.prefs.get('smartZoom') != 'false';
 		if (this._invalidateZoomFirstFit && smartZoomEnabled) {
 			recalcFirstFit = true;
@@ -3346,6 +3351,8 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 
 		if (this._firstFitDone && newSize.x - oldSize.x === 0)
 			return;
+
+		maxZoom = maxZoom || this._getMaxZoom();
 
 		var zoom;
 		if (this.isImpress() || changeZoom /* writer */) {
