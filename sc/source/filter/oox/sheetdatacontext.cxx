@@ -171,13 +171,16 @@ void SheetDataContext::onEndElement()
         case XML_array:
             if( mbValidRange && maFmlaData.isValidArrayRef( maCellData.maCellAddr ) )
             {
-                // The cached value #SPILL! on an XML_e cell signals
-                // that the file was saved while the array formula's spill
-                // range was blocked. Transport that through so the import path
-                // preserves any blocker cells in the matrix range instead of
-                // overwriting them with reference cells.
-                const bool bCachedSpill = (maCellData.mnCellType == XML_e
-                                           && maCellValue == u"#SPILL!");
+                // A cached error on the array master signals that the file
+                // was saved while the dynamic array's spill range was blocked.
+                // The OOXML spec has no #SPILL! cell error literal, so write
+                // #VALUE! and reclassify via valueMetadata.
+                // Plumbing this through keeps the import path from writing
+                // reference cells over the blocker.
+                const bool bCachedSpill
+                    = maCellData.mnCellType == XML_e
+                      && mbCellMetadata
+                      && maCellValue == u"#VALUE!";
                 setCellArrayFormula(maFmlaData.maFormulaRef, maCellData.maCellAddr, maFormulaStr, bCachedSpill);
             }
             // set cell formatting, but do not set result as cell value
@@ -365,6 +368,11 @@ bool SheetDataContext::importCell( const AttributeList& rAttribs )
         maCellData.mnCellType     = rAttribs.getToken( XML_t, XML_n );
         maCellData.mnXfId         = rAttribs.getInteger( XML_s, -1 );
         maCellData.mbShowPhonetic = rAttribs.getBool( XML_ph, false );
+        // cm attributre marks a dynamic array master cell that points at a
+        // cellMetadata block in xl/metadata.xml. The actual metadata index
+        // is irrelevant for us currently - we only need to know it's a dynamic
+        //  array master.
+        mbCellMetadata = rAttribs.getInteger(XML_cm, 0) > 0;
 
         // reset cell value, formula settings, and inline string
         maCellValue.clear();

@@ -115,6 +115,7 @@ private:
     bool                mbHasFormula;       /// True = current cell has formula data (OOXML only).
     bool                mbValidRange;       /// True = maFmlaData.maFormulaRef is valid (OOXML only).
     bool                mbCalcAlways;       /// True = formula has ca="1" (often a matrix-reference placeholder).
+    bool mbCellMetadata = false; /// True = cell has cm="1" (dynamic array master).
 
     sal_Int32 mnRow; /// row index (0-based)
     sal_Int32 mnCol; /// column index (0-based)

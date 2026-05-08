@@ -1736,11 +1736,12 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testSpillErrorRoundtripXLSX)
 
     saveAndReload(TestFilter::XLSX);
 
-    // Verify the XLSX export wrote "#SPILL!" with cell type "e".
     xmlDocUniquePtr pSheet = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
     CPPUNIT_ASSERT(pSheet);
     assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row/x:c", "t", u"e");
-    assertXPathContent(pSheet, "/x:worksheet/x:sheetData/x:row/x:c/x:v", u"#SPILL!");
+    // The OOXML cell error vocabulary has no #SPILL! literal, so the cached
+    // result is written as #VALUE!.
+    assertXPathContent(pSheet, "/x:worksheet/x:sheetData/x:row/x:c/x:v", u"#VALUE!");
 
     pDocument = getScDoc();
     CPPUNIT_ASSERT_EQUAL(u"#SPILL!"_ustr, pDocument->GetString(ScAddress(0, 0, 0)));
@@ -1802,6 +1803,46 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testArrayFormulaSpillRoundtripXLSX)
     }
 
     saveAndReload(TestFilter::XLSX);
+
+    // Verify the dynamic array metadata is written according to the specs:
+    //  - the master cell carries cm="1" pointing at the cell metadata block.
+    //  - xl/metadata.xml declares the XLDAPR type with fDynamic="1".
+    //  - [Content_Types].xml registers metadata.xml.
+    //  - the workbook relationship file references metadata.xml.
+    xmlDocUniquePtr pSheet = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
+    CPPUNIT_ASSERT(pSheet);
+
+    // Master cell carries cm="1". The formula has the dynamic array
+    // attribute combination t="array", aca="1", ca="1".
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[1]/x:c[@r='A1']", "cm", u"1");
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[1]/x:c[@r='A1']/x:f", "t", u"array");
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[1]/x:c[@r='A1']/x:f", "aca", u"true");
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[1]/x:c[@r='A1']/x:f", "ca", u"1");
+
+    xmlDocUniquePtr pMetadata = parseExport(u"xl/metadata.xml"_ustr);
+    CPPUNIT_ASSERT_MESSAGE("xl/metadata.xml must be written", pMetadata);
+
+    assertXPath(pMetadata, "/x:metadata/x:metadataTypes/x:metadataType", "name", u"XLDAPR");
+    assertXPath(pMetadata,
+                "/x:metadata/x:futureMetadata[@name='XLDAPR']/x:bk/x:extLst/x:ext"
+                "/xda:dynamicArrayProperties",
+                "fDynamic", u"1");
+    assertXPath(pMetadata, "/x:metadata/x:cellMetadata/x:bk/x:rc", "t", u"1");
+    assertXPath(pMetadata, "/x:metadata/x:cellMetadata/x:bk/x:rc", "v", u"0");
+
+    xmlDocUniquePtr pContentTypes = parseExport(u"[Content_Types].xml"_ustr);
+    CPPUNIT_ASSERT(pContentTypes);
+
+    assertXPath(pContentTypes,
+                "/ContentType:Types/ContentType:Override[@PartName='/xl/metadata.xml']",
+                "ContentType",
+                u"application/vnd.openxmlformats-officedocument.spreadsheetml.sheetMetadata+xml");
+
+    xmlDocUniquePtr pWorkbookRels = parseExport(u"xl/_rels/workbook.xml.rels"_ustr);
+    CPPUNIT_ASSERT(pWorkbookRels);
+    assertXPath(
+        pWorkbookRels, "/rels:Relationships/rels:Relationship[@Target='metadata.xml']", "Type",
+        u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/sheetMetadata");
 
     ScDocument* pDocument = getScDoc();
 

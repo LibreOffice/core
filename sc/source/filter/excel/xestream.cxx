@@ -662,7 +662,10 @@ static const char* lcl_GetErrorString( FormulaError nScErrCode )
         case EXC_ERR_REF:   return "#REF!";
         case EXC_ERR_NAME:  return "#NAME?";
         case EXC_ERR_NUM:   return "#NUM!";
-        case EXC_ERR_SPILL: return "#SPILL!";
+        // OOXML cell error strings (ST_CellType="e") have no #SPILL! literal.
+        // Use #VALUE! instead, which is accepted and is reclassified to #SPILL!
+        // on recalc and reload (same as MSO does).
+        case EXC_ERR_SPILL: return "#VALUE!";
         case EXC_ERR_NA:
         default:            return "#N/A";
     }

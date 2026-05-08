@@ -61,6 +61,7 @@ enum class Relationship
     PRESPROPS,
     SETTINGS,
     SHAREDSTRINGS,
+    SHEETMETADATA,
     SLIDE,
     SLIDELAYOUT,
     SLIDEMASTER,

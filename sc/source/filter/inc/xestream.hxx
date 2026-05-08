@@ -329,6 +329,10 @@ public:
 
     static OUString GenerateUniqueTableName(const std::u16string_view& rOriginalName, const std::vector<OUString>& aNewTabNames, const std::vector<OUString>& aOriginalTabNames);
 
+    /// Set when a dynamic array master cell is emitted.
+    void NoteDynamicArrayFormula() { mbHasDynamicArrayFormula = true; }
+    bool HasDynamicArrayFormula() const { return mbHasDynamicArrayFormula; }
+
 private:
     virtual ::oox::ole::VbaProject* implCreateVbaProject() const override;
     virtual OUString SAL_CALL getImplementationName() override;
@@ -358,6 +362,7 @@ private:
 
     bool mbExportVBA;
     bool mbExportTemplate;
+    bool mbHasDynamicArrayFormula = false;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

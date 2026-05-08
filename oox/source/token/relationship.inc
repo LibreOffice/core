@@ -41,6 +41,7 @@
 {Relationship::PRESPROPS, u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/presProps"},
 {Relationship::SETTINGS, u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/settings"},
 {Relationship::SHAREDSTRINGS, u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/sharedStrings"},
+{Relationship::SHEETMETADATA, u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/sheetMetadata"},
 {Relationship::SLIDE, u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/slide"},
 {Relationship::SLIDELAYOUT, u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/slideLayout"},
 {Relationship::SLIDEMASTER, u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/slideMaster"},
