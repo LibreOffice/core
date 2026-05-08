@@ -264,3 +264,5 @@ qt/translations/*.qm
 
 # coplugin
 /clang/plugin.so
+
+/engine/translations
