@@ -121,15 +121,25 @@ class ShapeHandlesSection extends CanvasSectionObject {
 	}
 
 	private convertToTileTwipsIfNeeded() {
-		if (app.map._docLayer._docType === 'spreadsheet' && this.sectionProperties.info?.handles?.kinds?.rectangle) {
-			const kindList = ['1', '2', '3', '4', '5', '6', '7', '8', '16', '22', '9'];
+		if (app.map._docLayer._docType !== 'spreadsheet') return;
 
-			for (let i = 0; i < kindList.length; i++) {
-				if (this.sectionProperties.info.handles.kinds.rectangle[kindList[i]]) {
-					const point = new cool.SimplePoint(parseInt(this.sectionProperties.info.handles.kinds.rectangle[kindList[i]][0].point.x), parseInt(this.sectionProperties.info.handles.kinds.rectangle[kindList[i]][0].point.y));
+		const kinds = this.sectionProperties.info?.handles?.kinds;
+		if (!kinds) return;
+
+		// Core groups handles into rectangle / poly / custom / anchor / others
+		// (see SdrMarkView in svdmrkv.cxx). Convert positions for every group,
+		// not just rectangle, otherwise custom-shape adjustment handles (kind
+		// 22) and others render in print twips while the shape is in tile
+		// twips, leaving them visually detached from the shape.
+		for (const group of Object.values(kinds) as Record<string, any[]>[]) {
+			if (!group) continue;
+			for (const handles of Object.values(group)) {
+				if (!Array.isArray(handles)) continue;
+				for (const handle of handles) {
+					const point = new cool.SimplePoint(parseInt(handle.point.x), parseInt(handle.point.y));
 					app.map._docLayer.sheetGeometry.convertToTileTwips(point);
-					this.sectionProperties.info.handles.kinds.rectangle[kindList[i]][0].point.x = point.x;
-					this.sectionProperties.info.handles.kinds.rectangle[kindList[i]][0].point.y = point.y;
+					handle.point.x = point.x;
+					handle.point.y = point.y;
 				}
 			}
 		}
