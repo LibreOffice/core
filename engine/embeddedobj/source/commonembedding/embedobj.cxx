@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <com/sun/star/embed/EmbedUpdateModes.hpp>
 #include <com/sun/star/embed/ObjectSaveVetoException.hpp>
@@ -28,14 +30,10 @@
 #include <com/sun/star/embed/StateChangeInProgressException.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
 
-#include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/awt/XWindowPeer.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
-#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 
@@ -43,19 +41,25 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <comphelper/multicontainer2.hxx>
 #include <comphelper/kit.hxx>
-#include <osl/file.hxx>
 #include <sal/log.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <vcl/svapp.hxx>
+
+#if HAVE_FEATURE_MULTIUSER_ENVIRONMENT
+#include <com/sun/star/awt/XTopWindow.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/container/XIndexAccess.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
+#include <osl/file.hxx>
 #include <svl/documentlockfile.hxx>
 #include <svl/msodocumentlockfile.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/resmgr.hxx>
 #include <unotools/ucbhelper.hxx>
-
 #include <strings.hrc>
-#include <vcl/svapp.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/weld.hxx>
+#endif
 
 #include <targetstatecontrol.hxx>
 
@@ -64,6 +68,7 @@
 #include <specialobject.hxx>
 #include <array>
 
+#if HAVE_FEATURE_MULTIUSER_ENVIRONMENT
 namespace {
 
 // tdf#157943 / tdf#126742: locate the visible top-level frame loaded from
@@ -235,6 +240,7 @@ void showLinkSourceLockedDialog( const css::uno::Reference< css::awt::XWindow >&
 }
 
 } // anonymous namespace
+#endif
 
 using namespace ::com::sun::star;
 
@@ -794,6 +800,7 @@ void SAL_CALL OCommonEmbeddedObject::doVerb( sal_Int32 nVerbID )
     }
     else
     {
+#if HAVE_FEATURE_MULTIUSER_ENVIRONMENT
         // tdf#157943 / tdf#126742: refuse user-initiated activation of an
         // OLE link whose source is in use - either navigate to the visible
         // frame (matches MSO) or warn on any lock (foreign, hidden own
@@ -834,6 +841,9 @@ void SAL_CALL OCommonEmbeddedObject::doVerb( sal_Int32 nVerbID )
         {
             aGuard.clear();
         }
+#else
+        aGuard.clear();
+#endif
 
         changeState( nNewState );
     }
