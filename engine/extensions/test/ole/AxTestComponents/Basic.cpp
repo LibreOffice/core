@@ -20,7 +20,11 @@
 #include "stdafx.h"
 #include "Basic.h"
 
-
+namespace
+{
+constexpr std::size_t PrintArrayBufferSize = 1024;
+constexpr std::size_t PrintMultiArrayBufferSize = 4096;
+}
 
 // CBasic
 CBasic::CBasic():   m_cPrpByte(0),m_nPrpShort(0),m_lPrpLong(0),m_fPrpFloat(0), m_dPrpDouble(0),m_PrpArray(0),
@@ -518,12 +522,12 @@ void CBasic::printArray( LPSAFEARRAY val, BSTR message, VARTYPE type)
     long length= ubound - lbound +1;
 
     CComVariant varElement;
-    char buf[1024];
+    char buf[PrintArrayBufferSize];
     sprintf( buf,"%s", W2A(message));
 
     for( long i= 0; i < length ; i++)
     {
-        char tmp[1024];
+        char tmp[PrintArrayBufferSize];
         long data=0;
         CComVariant var;
         switch( type)
@@ -764,7 +768,7 @@ void CBasic::printMulArray( SAFEARRAY* val, VARTYPE type)
     long length1;
     long length2;
 
-    char buff[4096];
+    char buff[PrintMultiArrayBufferSize];
     buff[0]=0;
 
     if( dims == 2)
@@ -776,7 +780,7 @@ void CBasic::printMulArray( SAFEARRAY* val, VARTYPE type)
         hr= SafeArrayGetLBound( val, 2, &lbound2);
         hr= SafeArrayGetUBound( val, 2, &ubound2);
         length2= ubound2 - lbound2 + 1;
-        char tmpBuf[1024];
+        char tmpBuf[PrintArrayBufferSize];
         tmpBuf[0]=0;
         long index[2];
         for( long i= 0; i< length2; i++)
@@ -822,7 +826,7 @@ void CBasic::printMulArray( SAFEARRAY* val, VARTYPE type)
         hr= SafeArrayGetLBound( val, 3, &lbound3);
         hr= SafeArrayGetUBound( val, 3, &ubound3);
         long length3= ubound3 - lbound3 +1;
-        char tmpBuf[1024];
+        char tmpBuf[PrintArrayBufferSize];
         tmpBuf[0]=0;
         long index[3];
         for( long i= 0; i< length3; i++)

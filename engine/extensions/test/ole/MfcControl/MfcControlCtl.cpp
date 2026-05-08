@@ -23,6 +23,10 @@
 #include "MfcControlCtl.h"
 #include "MfcControlPpg.h"
 
+namespace
+{
+    constexpr int MFC_CTRL_MESSAGE_BUFFER_SIZE = 256;
+}
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -215,7 +219,7 @@ void CMfcControlCtrl::OnResetState()
 
 short CMfcControlCtrl::inShort(short val)
 {
-    char buf[256];
+    char buf[MFC_CTRL_MESSAGE_BUFFER_SIZE];
     sprintf( buf, "inByte: value= %d", val);
     ::MessageBoxA( NULL, buf, "MFCCONTROL.MfcControl", MB_OK);
     return val+1;
@@ -223,7 +227,7 @@ short CMfcControlCtrl::inShort(short val)
 
 long CMfcControlCtrl::inLong(long val)
 {
-    char buf[256];
+    char buf[MFC_CTRL_MESSAGE_BUFFER_SIZE];
     sprintf( buf, "inLong: value= %d", val);
     ::MessageBoxA( NULL, buf, "MFCCONTROL.MfcControl", MB_OK);
     return val+1;
@@ -233,7 +237,7 @@ BSTR CMfcControlCtrl::inString(BSTR* val)
 {
     CString strResult;
     strResult= *val;
-    char buf[256];
+    char buf[MFC_CTRL_MESSAGE_BUFFER_SIZE];
     sprintf( buf, "inString: value= %S", *val);
     ::MessageBoxA( NULL, buf, "MFCCONTROL.MfcControl", MB_OK);
     strResult += L" an appended string";
@@ -242,7 +246,7 @@ BSTR CMfcControlCtrl::inString(BSTR* val)
 
 float CMfcControlCtrl::inFloat(float val)
 {
-    char buf[256];
+    char buf[MFC_CTRL_MESSAGE_BUFFER_SIZE];
     sprintf( buf, "inFloat: value= %f", val);
     ::MessageBoxA( NULL, buf, "MFCCONTROL.MfcControl", MB_OK);
     return val+1;
@@ -250,7 +254,7 @@ float CMfcControlCtrl::inFloat(float val)
 
 double CMfcControlCtrl::inDouble(double val)
 {
-    char buf[256];
+    char buf[MFC_CTRL_MESSAGE_BUFFER_SIZE];
     sprintf( buf, "inDouble: value= %g", val);
     ::MessageBoxA( NULL, buf, "MFCCONTROL.MfcControl", MB_OK);
     return val+1;
@@ -263,7 +267,7 @@ VARIANT CMfcControlCtrl::inVariant(const VARIANT& val)
     VariantCopyInd( &vaResult, const_cast<VARIANT*>(&val));
     if( vaResult.vt == VT_BSTR)
     {
-        char buf[256];
+        char buf[MFC_CTRL_MESSAGE_BUFFER_SIZE];
         sprintf( buf, "inVariant: value= %S", vaResult.bstrVal);
         ::MessageBoxA( NULL, buf, "MFCCONTROL.MfcControl", MB_OK);
 
@@ -273,7 +277,7 @@ VARIANT CMfcControlCtrl::inVariant(const VARIANT& val)
 
 LPDISPATCH CMfcControlCtrl::inObject(LPDISPATCH val)
 {
-    char buf[256];
+    char buf[MFC_CTRL_MESSAGE_BUFFER_SIZE];
     _bstr_t bstr;
     HRESULT hr= S_OK;
     COleVariant var;
