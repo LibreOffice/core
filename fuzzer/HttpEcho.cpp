@@ -30,7 +30,6 @@
 #include <net/SslSocket.hpp>
 #endif
 #include <net/ServerSocket.hpp>
-#include <net/DelaySocket.hpp>
 #include <net/HttpRequest.hpp>
 #include <net/AsyncDNS.hpp>
 #include <common/FileUtil.hpp>

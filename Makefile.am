@@ -181,7 +181,6 @@ shared_sources = \
                  common/Util.cpp \
                  kit/KitQueue.cpp \
                  kit/LogUI.cpp \
-                 net/DelaySocket.cpp \
                  net/HttpHelper.cpp \
                  net/HttpRequest.cpp \
                  net/NetUtil.cpp \
@@ -654,7 +653,6 @@ shared_headers = \
                  kit/LogUI.hpp \
                  net/AsyncDNS.hpp \
                  net/Buffer.hpp \
-                 net/DelaySocket.hpp \
                  net/FakeSocket.hpp \
                  net/HttpHelper.hpp \
                  net/HttpRequest.hpp \

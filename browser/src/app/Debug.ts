@@ -85,6 +85,8 @@ class DebugManager {
 	private logKeyboardEvents: boolean;
 	private logTrace: boolean;
 
+	public messageDelayOn: boolean;
+
 	public eventDelayWatchdog: boolean;
 	private _eventDelayTimeout: TimeoutHdl | null;
 	private _lastEventDelayTime?: number;
@@ -620,6 +622,20 @@ class DebugManager {
 			},
 			onRemove: function () {
 				clearTimeout(self._typerTimeoutId);
+			},
+		});
+
+		this._addDebugTool({
+			name: 'Delay messages 100ms',
+			category: 'Functionality',
+			startsOn: false,
+			onAdd: function () {
+				self.messageDelayOn = true;
+				app.socket.enableMessageDelay(100);
+			},
+			onRemove: function () {
+				self.messageDelayOn = false;
+				app.socket.disableMessageDelay();
 			},
 		});
 

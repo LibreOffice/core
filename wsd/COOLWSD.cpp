@@ -60,7 +60,6 @@
 #include <common/Unit.hpp>
 #include <common/Util.hpp>
 #include <net/AsyncDNS.hpp>
-#include <net/DelaySocket.hpp>
 #include <net/ServerSocket.hpp>
 #include <wsd/COOLWSDServer.hpp>
 #include <wsd/ClientRequestDispatcher.hpp>
@@ -161,8 +160,6 @@ int PrisonerServerSocketFD;
 
 #else // MOBILEAPP
 
-/// Funky latency simulation basic delay (ms)
-std::size_t SimulatedLatencyMs = 0;
 std::shared_ptr<http::Session> FetchHttpSession;
 
 #if ENABLE_DEBUG
@@ -2563,10 +2560,6 @@ void COOLWSD::handleOption(const std::string& optionName,
     }
     else if (optionName == "forcecaching")
         ForceCaching = true;
-
-    static const char* latencyMs = std::getenv("COOL_DELAY_SOCKET_MS");
-    if (latencyMs)
-        SimulatedLatencyMs = NumUtil::stoi(latencyMs);
 #endif
 
 #else
@@ -3317,19 +3310,8 @@ class PlainSocketFactory final : public SocketFactory
 {
     std::shared_ptr<Socket> create(const int physicalFd, Socket::Type type) override
     {
-        int fd = physicalFd;
-#if !MOBILEAPP
-        if (SimulatedLatencyMs > 0)
-        {
-            int delayfd = Delay::create(SimulatedLatencyMs, physicalFd);
-            if (delayfd == -1)
-                LOG_ERR("DelaySocket creation failed, using physicalFd " << physicalFd << " instead.");
-            else
-                fd = delayfd;
-        }
-#endif
         return StreamSocket::create<StreamSocket>(
-            std::string(), fd, type, false, HostType::Other,
+            std::string(), physicalFd, type, false, HostType::Other,
             std::make_shared<ClientRequestDispatcher>());
     }
 };
@@ -3339,20 +3321,8 @@ class SslSocketFactory final : public SocketFactory
 {
     std::shared_ptr<Socket> create(const int physicalFd, Socket::Type type) override
     {
-        int fd = physicalFd;
-
-#if !MOBILEAPP
-        if (SimulatedLatencyMs > 0)
-        {
-            int delayFd = Delay::create(SimulatedLatencyMs, physicalFd);
-            if (delayFd == -1)
-                LOG_ERR("Delay creation failed, fallback to original fd");
-            else
-                fd = delayFd;
-        }
-#endif
-
-        return StreamSocket::create<SslStreamSocket>(std::string(), fd, type, false, HostType::Other,
+        return StreamSocket::create<SslStreamSocket>(std::string(), physicalFd, type, false,
+                                                     HostType::Other,
                                                      std::make_shared<ClientRequestDispatcher>());
     }
 };
@@ -3508,10 +3478,6 @@ void COOLWSDServer::dumpState(std::ostream& os) const
 
 #if !MOBILEAPP
     _admin.dumpMetrics(); // Dump the state from the Admin poll thread.
-
-    // If we have any delaying work going on.
-    os << '\n';
-    Delay::dumpState(os);
 
     // If we have any DNS work going on.
     os << '\n';
@@ -3769,9 +3735,6 @@ void COOLWSD::innerMain()
         FileServerRoot = Util::getApplicationPath();
     FileServerRoot = Poco::Path(FileServerRoot).absolute().toString();
     LOG_DBG("FileServerRoot: " << FileServerRoot);
-
-    LOG_DBG("Initializing DelaySocket with " << SimulatedLatencyMs << "ms.");
-    Delay delay(SimulatedLatencyMs);
 
     const auto fetchUpdateCheck = std::chrono::duration_cast<std::chrono::milliseconds>(
         std::chrono::hours(std::max(ConfigUtil::getConfigValue<int>("fetch_update_check", 10), 0)));

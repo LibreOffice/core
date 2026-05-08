@@ -149,6 +149,33 @@ class Socket {
 		this.onWorkerError(null);
 	}
 
+	// Wrap the active socket in a DelaySocket so all incoming and outgoing
+	// messages are delayed by delayMs (preserving FIFO order). No-op if
+	// already wrapped or no socket is connected.
+	public enableMessageDelay(delayMs: number): void {
+		if (!this.socket || this.socket instanceof DelaySocket) return;
+
+		const wrapper = new DelaySocket(this.socket, delayMs);
+		wrapper.onerror = this._onSocketError.bind(this);
+		wrapper.onclose = this._onSocketClose.bind(this);
+		wrapper.onopen = this._onSocketOpen.bind(this);
+		wrapper.onmessage = this._slurpMessage.bind(this);
+		this.socket = wrapper;
+	}
+
+	// Unwrap a previously-installed DelaySocket, restoring the raw socket.
+	// No-op if there is no wrapper.
+	public disableMessageDelay(): void {
+		if (!this.socket || !(this.socket instanceof DelaySocket)) return;
+
+		const inner = this.socket.unwrap();
+		inner.onerror = this._onSocketError.bind(this);
+		inner.onclose = this._onSocketClose.bind(this);
+		inner.onopen = this._onSocketOpen.bind(this);
+		inner.onmessage = this._slurpMessage.bind(this);
+		this.socket = inner;
+	}
+
 	public sendMessage(msg: MessageInterface): void {
 		if (!this.socket) {
 			console.error('sendMessage() called with non-existent socket!');

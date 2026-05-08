@@ -24,7 +24,6 @@
 #include <common/FileUtil.hpp>
 #include <common/Util.hpp>
 #include <net/AsyncDNS.hpp>
-#include <net/DelaySocket.hpp>
 #include <net/HttpRequest.hpp>
 #include <net/ServerSocket.hpp>
 #include <net/Socket.hpp>
@@ -96,8 +95,6 @@ class HttpRequestTests final : public CPPUNIT_NS::TestFixture
     std::shared_ptr<SocketPoll> _pollServerThread;
     int _port;
 
-    static const int SimulatedLatencyMs = 0;
-
 public:
     HttpRequestTests()
         : _pollServerThread(std::make_shared<SocketPoll>("HttpServerPoll"))
@@ -115,21 +112,18 @@ public:
     {
         std::shared_ptr<Socket> create(const int physicalFd, Socket::Type type) override
         {
-            int fd = physicalFd;
-
-#if !MOBILEAPP
-            if (HttpRequestTests::SimulatedLatencyMs > 0)
-                fd = Delay::create(HttpRequestTests::SimulatedLatencyMs, physicalFd);
-#endif
 #if ENABLE_SSL
             if (helpers::haveSsl())
                 return StreamSocket::create<SslStreamSocket>(
-                    std::string(), fd, type, false, HostType::Other, std::make_shared<ServerRequestHandler>());
+                    std::string(), physicalFd, type, false, HostType::Other,
+                    std::make_shared<ServerRequestHandler>());
             else
-                return StreamSocket::create<StreamSocket>(std::string(), fd, type, false, HostType::Other,
-                                                          std::make_shared<ServerRequestHandler>());
+                return StreamSocket::create<StreamSocket>(
+                    std::string(), physicalFd, type, false, HostType::Other,
+                    std::make_shared<ServerRequestHandler>());
 #else
-            return StreamSocket::create<StreamSocket>(std::string(), fd, type, false, HostType::Other,
+            return StreamSocket::create<StreamSocket>(std::string(), physicalFd, type, false,
+                                                      HostType::Other,
                                                       std::make_shared<ServerRequestHandler>());
 #endif
         }
