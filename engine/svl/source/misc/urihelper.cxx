@@ -131,8 +131,7 @@ bool isAbsoluteHierarchicalUriReference(
 // hierarchical URL either a UCB content cannot be created, or the UCB content
 // does not support the getCasePreservingURL command, then this will hold for
 // any other prefix URL of the given URL, too:
-enum Result { Success, GeneralFailure, SpecificFailure };
-
+enum class Result { Success, GeneralFailure, SpecificFailure };
 Result normalizePrefix( css::uno::Reference< css::ucb::XUniversalContentBroker > const & broker,
                         OUString const & uri, OUString * normalized)
 {
@@ -142,7 +141,7 @@ Result normalizePrefix( css::uno::Reference< css::ucb::XUniversalContentBroker >
         content = broker->queryContent(broker->createContentIdentifier(uri));
     } catch (css::ucb::IllegalIdentifierException &) {}
     if (!content.is()) {
-        return GeneralFailure;
+        return Result::GeneralFailure;
     }
     try {
         bool ok =
@@ -157,11 +156,11 @@ Result normalizePrefix( css::uno::Reference< css::ucb::XUniversalContentBroker >
     } catch (css::uno::RuntimeException &) {
         throw;
     } catch (css::ucb::UnsupportedCommandException &) {
-        return GeneralFailure;
+        return Result::GeneralFailure;
     } catch (css::uno::Exception &) {
-        return SpecificFailure;
+        return Result::SpecificFailure;
     }
-    return Success;
+    return Result::Success;
 }
 
 OUString normalize(
@@ -177,11 +176,11 @@ OUString normalize(
     sal_Int32 n = uriReference.indexOf('#');
     normalized = n == -1 ? uriReference : uriReference.copy(0, n);
     switch (normalizePrefix(broker, normalized, &normalized)) {
-    case Success:
+    case Result::Success:
         return n == -1 ? normalized : normalized + uriReference.subView(n);
-    case GeneralFailure:
+    case Result::GeneralFailure:
         return uriReference;
-    case SpecificFailure:
+    case Result::SpecificFailure:
     default:
         break;
     }
@@ -206,7 +205,7 @@ OUString normalize(
             buf.append(ref->getPathSegment(j));
         }
         normalized = buf.makeStringAndClear();
-        if (normalizePrefix(broker, normalized, &normalized) != SpecificFailure)
+        if (normalizePrefix(broker, normalized, &normalized) != Result::SpecificFailure)
         {
             buf.append(normalized);
             css::uno::Reference< css::uri::XUriReference > preRef(
