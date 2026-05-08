@@ -946,11 +946,22 @@ void XclExpFormulaCell::SaveXml( XclExpXmlStream& rStrm )
     OUString    sValue;
     XclXmlUtils::GetFormulaTypeAndValue( mrScFmlaCell, sType, sValue );
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
+
+    // Mark dynamic array masters with cm="1" so it is recognised as a
+    // dynamic array and reads the matching dynamicArrayProperties out of
+    // xl/metadata.xml.
+    const bool bDynamicArrayMaster
+        = mrScFmlaCell.GetMatrixFlag() == ScMatrixMode::Formula
+          && mrScFmlaCell.GetCode() && mrScFmlaCell.GetCode()->HasDynamicArrayFunction();
+    if (bDynamicArrayMaster)
+        rStrm.NoteDynamicArrayFormula();
+
     rWorksheet->startElement( XML_c,
             XML_r, XclXmlUtils::ToOString(rStrm.GetRoot().GetStringBuf(), GetXclPos()).getStr(),
             XML_s, lcl_GetStyleId(rStrm, *this),
-            XML_t, sType
-            // OOXTODO: XML_cm, XML_vm, XML_ph
+            XML_t, sType,
+            XML_cm, bDynamicArrayMaster ? "1" : nullptr
+            // OOXTODO: XML_vm, XML_ph
     );
 
     bool bWriteFormula = true;
@@ -982,29 +993,34 @@ void XclExpFormulaCell::SaveXml( XclExpXmlStream& rStrm )
                 OStringBuffer sFmlaCellRange;
                 if (rStrm.GetRoot().GetDoc().ValidRange(aMatScRange))
                 {
-                    // calculate the cell range.
-                    sFmlaCellRange.append( XclXmlUtils::ToOString(
-                                rStrm.GetRoot().GetStringBuf(), aMatScRange.aStart )
-                                + OString::Concat(":"));
-                    sFmlaCellRange.append( XclXmlUtils::ToOString(
-                                    rStrm.GetRoot().GetStringBuf(), aMatScRange.aEnd ));
+                    sFmlaCellRange.append(XclXmlUtils::ToOString(
+                        rStrm.GetRoot().GetStringBuf(), aMatScRange.aStart));
+                    // 1x1 masters (the collapsed dynamic array spill state)
+                    if (aMatScRange.aStart != aMatScRange.aEnd)
+                        sFmlaCellRange.append(":"
+                            + XclXmlUtils::ToOString(rStrm.GetRoot().GetStringBuf(),
+                                                     aMatScRange.aEnd));
                 }
 
                 if (    aMatScRange.aStart.Col() == GetXclPos().mnCol &&
                         aMatScRange.aStart.Row() == static_cast<SCROW>(GetXclPos().mnRow))
                 {
+                    // Dynamic array masters need aca="1" (always calc array)
+                    // and ca="1" (calculate always).
+                    const bool bAca = bDynamicArrayMaster
+                                      || (mxTokArr && mxTokArr->IsVolatile())
+                                      || (mxAddRec && mxAddRec->IsVolatile());
                     rWorksheet->startElement( XML_f,
-                            XML_aca, ToPsz( (mxTokArr && mxTokArr->IsVolatile()) ||
-                                (mxAddRec && mxAddRec->IsVolatile())),
-                            XML_t, mxAddRec ? "array" : nullptr,
-                            XML_ref, !sFmlaCellRange.isEmpty()? sFmlaCellRange.getStr() : nullptr
+                            XML_aca, ToPsz(bAca),
+                            XML_t, (bDynamicArrayMaster || mxAddRec) ? "array" : nullptr,
+                            XML_ref, !sFmlaCellRange.isEmpty()? sFmlaCellRange.getStr() : nullptr,
+                            XML_ca, bDynamicArrayMaster ? "1" : nullptr
                             // OOXTODO: XML_dt2D,   bool
                             // OOXTODO: XML_dtr,    bool
                             // OOXTODO: XML_del1,   bool
                             // OOXTODO: XML_del2,   bool
                             // OOXTODO: XML_r1,     ST_CellRef
                             // OOXTODO: XML_r2,     ST_CellRef
-                            // OOXTODO: XML_ca,     bool
                             // OOXTODO: XML_si,     uint
                             // OOXTODO: XML_bx      bool
                     );

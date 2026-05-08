@@ -917,6 +917,52 @@ void ExcDocument::WriteXml( XclExpXmlStream& rStrm )
             // write the table
             maTableList.GetRecord( nTab )->WriteXml( rStrm );
         }
+
+        // xl/metadata.xml: emit the dynamic array property metadata block.
+        if (rStrm.HasDynamicArrayFormula())
+        {
+            sax_fastparser::FSHelperPtr pMetadata = rStrm.CreateOutputStream(
+                u"xl/metadata.xml"_ustr,
+                u"metadata.xml",
+                rStrm.GetCurrentStream()->getOutputStream(),
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheetMetadata+xml",
+                oox::getRelationship(Relationship::SHEETMETADATA));
+
+            pMetadata->startElement(XML_metadata,
+                XML_xmlns, rStrm.getNamespaceURL(OOX_NS(xls)),
+                FSNS(XML_xmlns, XML_xda), rStrm.getNamespaceURL(OOX_NS(xda)));
+
+            pMetadata->startElement(XML_metadataTypes, XML_count, "1");
+            pMetadata->singleElement(XML_metadataType,
+                XML_name, "XLDAPR",
+                XML_minSupportedVersion, "120000",
+                XML_copy, "1", XML_pasteAll, "1", XML_pasteValues, "1",
+                XML_merge, "1", XML_splitFirst, "1", XML_rowColShift, "1",
+                XML_clearFormats, "1", XML_clearComments, "1",
+                XML_assign, "1", XML_coerce, "1", XML_cellMeta, "1");
+            pMetadata->endElement(XML_metadataTypes);
+
+            pMetadata->startElement(XML_futureMetadata,
+                XML_name, "XLDAPR", XML_count, "1");
+            pMetadata->startElement(XML_bk);
+            pMetadata->startElement(XML_extLst);
+            pMetadata->startElement(XML_ext,
+                XML_uri, "{bdbb8cdc-fa1e-496e-a857-3c3f30c029c3}");
+            pMetadata->singleElement(FSNS(XML_xda, XML_dynamicArrayProperties),
+                XML_fDynamic, "1", XML_fCollapsed, "0");
+            pMetadata->endElement(XML_ext);
+            pMetadata->endElement(XML_extLst);
+            pMetadata->endElement(XML_bk);
+            pMetadata->endElement(XML_futureMetadata);
+
+            pMetadata->startElement(XML_cellMetadata, XML_count, "1");
+            pMetadata->startElement(XML_bk);
+            pMetadata->singleElement(XML_rc, XML_t, "1", XML_v, "0");
+            pMetadata->endElement(XML_bk);
+            pMetadata->endElement(XML_cellMetadata);
+
+            pMetadata->endElement(XML_metadata);
+        }
     }
 
     if( m_xExpChangeTrack )

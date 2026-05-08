@@ -2068,6 +2068,7 @@ dxfs
 dy
 dyaOrig
 dynamicAddress
+dynamicArrayProperties
 dynamicFilter
 dz
 e
@@ -2246,6 +2247,8 @@ extrusionOk
 extrusioncolor
 extrusionok
 f
+fCollapsed
+fDynamic
 fHdr
 fLocksText
 fLocksWithSheet
@@ -6011,6 +6014,7 @@ xMode
 xSplit
 xVal
 xWindow
+xda
 xdr
 xf
 xfDxf
