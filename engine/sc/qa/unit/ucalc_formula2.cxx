@@ -5263,6 +5263,153 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testSpillMatrixComplexScenario)
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(TestFormula2, testSpillMatrixUndoRedoBlockerDelete)
+{
+    // UNIQUE blocked by a cell shows #SPILL!. Removing the blocker via
+    // expands the matrix. Undo must restore the blocker and the #SPILL!
+    // state. Redo must clear the blocker and expand the matrix again.
+
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+
+    // Source data and blocker.
+    insertRangeData(m_pDoc, ScAddress(0, 0, 0),
+                    {
+                        { nullptr, "10" },
+                        { "blocker", "20" },
+                        { nullptr, "30" },
+                        { nullptr, "40" },
+                    });
+
+    ScDocFunc& rFunc = m_xDocShell->GetDocFunc();
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
+    aMark.SelectOneTable(0);
+
+    // UNIQUE matrix at A1.
+    rFunc.EnterMatrix(ScRange(ScAddress(0, 0, 0)), &aMark, nullptr, u"=UNIQUE(B1:B4)"_ustr, true,
+                      false, OUString(), formula::FormulaGrammar::GRAM_DEFAULT,
+                      /*bCheckForSpill*/ true);
+
+    ScFormulaCell* pFormulaCell = m_pDoc->GetFormulaCell(ScAddress(0, 0, 0));
+    CPPUNIT_ASSERT(pFormulaCell);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(FormulaError::Spill), sal_Int32(pFormulaCell->GetErrCode()));
+
+    // Delete the blocker.
+    ScMarkData aBlockerMark(m_pDoc->GetSheetLimits());
+    aBlockerMark.SelectOneTable(0);
+    aBlockerMark.SetMarkArea(ScRange(ScAddress(0, 1, 0)));
+    rFunc.DeleteContents(aBlockerMark, InsertDeleteFlags::CONTENTS, true, true);
+
+    auto assertExpanded = [&](const char* label) {
+        SCCOL nCols = 0;
+        SCROW nRows = 0;
+        pFormulaCell->GetMatColsRows(nCols, nRows);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(label, sal_Int32(FormulaError::NONE),
+                                     sal_Int32(pFormulaCell->GetErrCode()));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(label, SCCOL(1), nCols);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(label, SCROW(4), nRows);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(label, 10.0, m_pDoc->GetValue(ScAddress(0, 0, 0)));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(label, 20.0, m_pDoc->GetValue(ScAddress(0, 1, 0)));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(label, 30.0, m_pDoc->GetValue(ScAddress(0, 2, 0)));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(label, 40.0, m_pDoc->GetValue(ScAddress(0, 3, 0)));
+    };
+
+    assertExpanded("After Delete");
+
+    // Undo - blocker should be back, matrix should re-spill.
+    SfxUndoManager* pUndoManager = m_pDoc->GetUndoManager();
+    CPPUNIT_ASSERT(pUndoManager);
+    pUndoManager->Undo();
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(FormulaError::Spill), sal_Int32(pFormulaCell->GetErrCode()));
+    CPPUNIT_ASSERT_EQUAL(u"#SPILL!"_ustr, m_pDoc->GetString(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"blocker"_ustr, m_pDoc->GetString(ScAddress(0, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString(), m_pDoc->GetString(ScAddress(0, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString(), m_pDoc->GetString(ScAddress(0, 3, 0)));
+
+    // Redo - blocker cleared, matrix expanded again.
+    pUndoManager->Redo();
+
+    assertExpanded("After Redo");
+
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TestFormula2, testSpillMatrixUndoRedoInputChange)
+{
+    // UNIQUE blocked by a cell shows #SPILL!. Changing the source data so
+    // the result no longer overflows the declared range resolves the
+    // spill. The matrix expands to fit. Undo of the source change must
+    // restore the spilled state and redo must resolve it again.
+
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+
+    // Source data and blocker.
+    insertRangeData(m_pDoc, ScAddress(0, 0, 0),
+                    {
+                        { nullptr, "10" },
+                        { nullptr, "20" },
+                        { nullptr, "30" },
+                        { "blocker", "40" },
+                    });
+
+    ScDocFunc& rFunc = m_xDocShell->GetDocFunc();
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
+    aMark.SelectOneTable(0);
+
+    // UNIQUE matrix at A1.
+    rFunc.EnterMatrix(ScRange(ScAddress(0, 0, 0)), &aMark, nullptr, u"=UNIQUE(B1:B4)"_ustr, true,
+                      false, OUString(), formula::FormulaGrammar::GRAM_DEFAULT,
+                      /*bCheckForSpill*/ true);
+
+    ScFormulaCell* pFormulaCell = m_pDoc->GetFormulaCell(ScAddress(0, 0, 0));
+    CPPUNIT_ASSERT(pFormulaCell);
+
+    auto assertSpilled = [&](const char* label) {
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(label, sal_Int32(FormulaError::Spill),
+                                     sal_Int32(pFormulaCell->GetErrCode()));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(label, u"#SPILL!"_ustr, m_pDoc->GetString(ScAddress(0, 0, 0)));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(label, OUString(), m_pDoc->GetString(ScAddress(0, 1, 0)));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(label, OUString(), m_pDoc->GetString(ScAddress(0, 2, 0)));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(label, u"blocker"_ustr, m_pDoc->GetString(ScAddress(0, 3, 0)));
+    };
+
+    auto assertResolved = [&](const char* label) {
+        // UNIQUE collapsed to three values, fits in A1:A3, blocker at A4
+        // is outside the matrix range and stays.
+        SCCOL nCols = 0;
+        SCROW nRows = 0;
+        pFormulaCell->GetMatColsRows(nCols, nRows);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(label, sal_Int32(FormulaError::NONE),
+                                     sal_Int32(pFormulaCell->GetErrCode()));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(label, SCCOL(1), nCols);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(label, SCROW(3), nRows);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(label, 10.0, m_pDoc->GetValue(ScAddress(0, 0, 0)));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(label, 20.0, m_pDoc->GetValue(ScAddress(0, 1, 0)));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(label, 30.0, m_pDoc->GetValue(ScAddress(0, 2, 0)));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(label, u"blocker"_ustr, m_pDoc->GetString(ScAddress(0, 3, 0)));
+    };
+
+    assertSpilled("Initial");
+
+    // Change value 40 to 10, which resolves the blockage as the data fits
+    // the available output range.
+    rFunc.SetValueCell(ScAddress(1, 3, 0), 10.0, /*bInteraction*/ false);
+    assertResolved("After value change");
+
+    SfxUndoManager* pUndoManager = m_pDoc->GetUndoManager();
+    CPPUNIT_ASSERT(pUndoManager);
+
+    pUndoManager->Undo();
+    assertSpilled("After Undo");
+
+    pUndoManager->Redo();
+    assertResolved("After Redo");
+
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_TEST_FIXTURE(TestFormula2, testDynamicArrayFlagCopy)
 {
     // The mbDynamicArrayFunction flag on FormulaTokenArray is set by the

@@ -415,6 +415,10 @@ void ScUndoSetCell::Undo()
 
     sc::UndoSheetViewSortData::restore(rDocShell, true);
 
+    // Replay the resolution so dynamic array masters that should re-spill
+    // or re-expand after the value change are reconciled.
+    rDocShell.ResolveSpilledOutputs();
+
     EndUndo();
 }
 
@@ -427,6 +431,8 @@ void ScUndoSetCell::Redo()
     SetChangeTrack();
 
     sc::UndoSheetViewSortData::restore(rDocShell, false);
+
+    rDocShell.ResolveSpilledOutputs();
 
     EndRedo();
 }

@@ -528,6 +528,59 @@ void ScDocShell::ResolveSpilledOutputs()
         }
     }
 
+    // Inverse direction: previously expanded dynamic array masters whose
+    // declared range now contains a foreign cell. The matrix master doesn't
+    // listen to its declared range, so we explicitly check. When a blocker
+    // is found, collapse the matrix back to 1x1 (preserving the blocker) and
+    // re-interpret.
+    const std::unordered_set<ScAddress> aExpandedMatrices = m_pDocument->GetExpandedDynamicArrays();
+    for (const ScAddress& rPosition : aExpandedMatrices)
+    {
+        ScFormulaCell* pFormulaCell = m_pDocument->GetFormulaCell(rPosition);
+        if (!pFormulaCell || pFormulaCell->GetMatrixFlag() != ScMatrixMode::Formula)
+        {
+            m_pDocument->UnmarkExpandedDynamicArray(rPosition);
+            continue;
+        }
+        SCCOL nDeclCols = 0;
+        SCROW nDeclRows = 0;
+        pFormulaCell->GetMatColsRows(nDeclCols, nDeclRows);
+        if (nDeclCols <= 1 && nDeclRows <= 1)
+        {
+            m_pDocument->UnmarkExpandedDynamicArray(rPosition);
+            continue;
+        }
+        ScRange aRange(rPosition.Col(), rPosition.Row(), rPosition.Tab(),
+                       rPosition.Col() + nDeclCols - 1, rPosition.Row() + nDeclRows - 1,
+                       rPosition.Tab());
+        if (!m_pDocument->HasMatrixBlocker(aRange))
+            continue;
+
+        // Collapse: drop our own reference cells from the declared range.
+        // Then SetMatColsRows on the master and re-interpret - the runtime
+        // spill check now sees res > declared and sets #SPILL!.
+        for (SCCOL nCol = aRange.aStart.Col(); nCol <= aRange.aEnd.Col(); ++nCol)
+        {
+            for (SCROW nRow = aRange.aStart.Row(); nRow <= aRange.aEnd.Row(); ++nRow)
+            {
+                if (nCol == rPosition.Col() && nRow == rPosition.Row())
+                    continue;
+                ScRefCellValue aCell(*m_pDocument, ScAddress(nCol, nRow, rPosition.Tab()));
+                if (aCell.getType() == CELLTYPE_FORMULA
+                    && aCell.getFormula()->GetMatrixFlag() == ScMatrixMode::Reference)
+                {
+                    m_pDocument->DeleteAreaTab(nCol, nRow, nCol, nRow, rPosition.Tab(),
+                                               InsertDeleteFlags::ALL);
+                }
+            }
+        }
+        pFormulaCell->SetMatColsRows(1, 1);
+        m_pDocument->UnmarkExpandedDynamicArray(rPosition);
+        pFormulaCell->SetDirty();
+        pFormulaCell->Interpret();
+        bAnyResolved = true;
+    }
+
     // Re-check spilled pivot tables.
     ScDPCollection* pCollection = m_pDocument->GetDPCollection();
     if (pCollection)

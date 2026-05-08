@@ -506,6 +506,7 @@ private:
 
     ConnectionVector maConnectionVector;
     std::map<SCTAB, QueryTableModelVector> maSheetQueryTables;
+
 public:
     /// list of ScInterpreterTableOpParams currently in use
     std::vector<ScInterpreterTableOpParams*> m_TableOpList;
@@ -625,6 +626,13 @@ private:
     // Used to efficiently re-check those formulas after cell content changes.
     std::unordered_set<ScAddress> maSpilledFormulaCells;
 
+    // Origins of dynamic array formulas that have auto expanded past 1x1.
+    // A blocker placed inside one of these matrix ranges via undo/redo or
+    // any other path that bypasses ResolveSpilledOutputs must re-collapse
+    // the matrix. The additional fix-up pass walks this set looking for
+    // foreign data sitting in the declared range.
+    std::unordered_set<ScAddress> maExpandedDynamicArrays;
+
     // Origins of matrix formulas queued for a deferred resize (expand,
     // contract, or collapse-on-#SPILL!).
     std::unordered_set<ScAddress> maPendingMatrixResizes;
@@ -632,7 +640,6 @@ private:
     // Non-zero while a caller is iterating the cell store in a way that
     // cannot tolerate insertions/removals; guards ProcessPendingMatrixResizes.
     int mnMatrixResizeGuard = 0;
-
 
     bool mbEmbedFonts : 1;
     bool mbEmbedUsedFontsOnly : 1;
@@ -952,6 +959,24 @@ public:
     void MarkFormulaSpilled(const ScAddress& rPos) { maSpilledFormulaCells.insert(rPos); }
     void UnmarkFormulaSpilled(const ScAddress& rPos) { maSpilledFormulaCells.erase(rPos); }
     const std::unordered_set<ScAddress>& GetSpilledFormulaCells() const { return maSpilledFormulaCells; }
+
+    // Expanded dynamic array tracking.
+    void MarkExpandedDynamicArray(const ScAddress& rPosition)
+    {
+        maExpandedDynamicArrays.insert(rPosition);
+    }
+    void UnmarkExpandedDynamicArray(const ScAddress& rPosition)
+    {
+        maExpandedDynamicArrays.erase(rPosition);
+    }
+    const std::unordered_set<ScAddress>& GetExpandedDynamicArrays() const
+    {
+        return maExpandedDynamicArrays;
+    }
+
+    /// Returns true if any non-origin cell in rRange holds data that isn't
+    /// one of its reference cells.
+    SC_DLLPUBLIC bool HasMatrixBlocker(const ScRange& rRange) const;
 
     // Pending matrix resize tracking (expand, contract, or collapse-on-spill).
     void MarkPendingMatrixResize(const ScAddress& rPos) { maPendingMatrixResizes.insert(rPos); }
@@ -2869,7 +2894,6 @@ public:
     SC_DLLPUBLIC bool HasTableStyles() const;
 
 private:
-
     /**
      * Use this class as a locale variable to merge number formatter from
      * another document, and set NULL pointer to pFormatExchangeList when
