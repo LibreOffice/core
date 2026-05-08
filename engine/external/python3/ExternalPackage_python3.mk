@@ -32,10 +32,8 @@ python3_EXTENSION_MODULES= \
 	PCbuild/$(python_arch_subdir)_asyncio$(if $(MSVC_USE_DEBUG_RUNTIME),_d).pyd \
 	PCbuild/$(python_arch_subdir)_bz2$(if $(MSVC_USE_DEBUG_RUNTIME),_d).pyd \
 	PCbuild/$(python_arch_subdir)_ctypes$(if $(MSVC_USE_DEBUG_RUNTIME),_d).pyd \
-	PCbuild/$(python_arch_subdir)_decimal$(if $(MSVC_USE_DEBUG_RUNTIME),_d).pyd \
 	PCbuild/$(python_arch_subdir)_elementtree$(if $(MSVC_USE_DEBUG_RUNTIME),_d).pyd \
 	PCbuild/$(python_arch_subdir)_hashlib$(if $(MSVC_USE_DEBUG_RUNTIME),_d).pyd \
-	PCbuild/$(python_arch_subdir)_msi$(if $(MSVC_USE_DEBUG_RUNTIME),_d).pyd \
 	PCbuild/$(python_arch_subdir)_multiprocessing$(if $(MSVC_USE_DEBUG_RUNTIME),_d).pyd \
 	PCbuild/$(python_arch_subdir)_overlapped$(if $(MSVC_USE_DEBUG_RUNTIME),_d).pyd \
 	PCbuild/$(python_arch_subdir)_queue$(if $(MSVC_USE_DEBUG_RUNTIME),_d).pyd \
@@ -72,7 +70,6 @@ python3_EXTENSION_MODULE_SUFFIX=cpython-$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_
 python3_EXTENSION_MODULES= \
 	Modules/array.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	Modules/_asyncio.$(python3_EXTENSION_MODULE_SUFFIX).so \
-	Modules/audioop.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	Modules/binascii.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	Modules/_bisect.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	Modules/_blake2.$(python3_EXTENSION_MODULE_SUFFIX).so \
@@ -84,11 +81,8 @@ python3_EXTENSION_MODULES= \
 	Modules/_codecs_jp.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	Modules/_codecs_kr.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	Modules/_codecs_tw.$(python3_EXTENSION_MODULE_SUFFIX).so \
-	Modules/_contextvars.$(python3_EXTENSION_MODULE_SUFFIX).so \
-	Modules/_crypt.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	Modules/_csv.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	Modules/_ctypes.$(python3_EXTENSION_MODULE_SUFFIX).so \
-	Modules/_datetime.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	Modules/_decimal.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	Modules/_elementtree.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	Modules/fcntl.$(python3_EXTENSION_MODULE_SUFFIX).so \
@@ -97,6 +91,9 @@ python3_EXTENSION_MODULES= \
 		Modules/_hashlib.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	) \
 	Modules/_heapq.$(python3_EXTENSION_MODULE_SUFFIX).so \
+	Modules/_interpchannels.$(python3_EXTENSION_MODULE_SUFFIX).so \
+	Modules/_interpqueues.$(python3_EXTENSION_MODULE_SUFFIX).so \
+	Modules/_interpreters.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	Modules/_json.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	Modules/_lsprof.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	Modules/math.$(python3_EXTENSION_MODULE_SUFFIX).so \
@@ -104,14 +101,13 @@ python3_EXTENSION_MODULES= \
 	Modules/mmap.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	Modules/_multibytecodec.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	Modules/_multiprocessing.$(python3_EXTENSION_MODULE_SUFFIX).so \
-	Modules/_opcode.$(python3_EXTENSION_MODULE_SUFFIX).so \
-	Modules/ossaudiodev.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	Modules/_pickle.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	Modules/_posixshmem.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	Modules/_posixsubprocess.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	Modules/pyexpat.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	Modules/_queue.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	Modules/_random.$(python3_EXTENSION_MODULE_SUFFIX).so \
+	Modules/_remote_debugging.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	Modules/resource.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	Modules/select.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	Modules/_sha1.$(python3_EXTENSION_MODULE_SUFFIX).so \
@@ -119,7 +115,6 @@ python3_EXTENSION_MODULES= \
 	Modules/_sha3.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	Modules/_socket.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	Modules/_sqlite3.$(python3_EXTENSION_MODULE_SUFFIX).so \
-	Modules/spwd.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	$(if $(ENABLE_OPENSSL), \
 		Modules/_ssl.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	) \
@@ -131,7 +126,6 @@ python3_EXTENSION_MODULES= \
 	Modules/_uuid.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	Modules/xxlimited_35.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	Modules/xxlimited.$(python3_EXTENSION_MODULE_SUFFIX).so \
-	Modules/_xxsubinterpreters.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	Modules/xxsubtype.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	Modules/_xxtestfuzz.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	Modules/zlib.$(python3_EXTENSION_MODULE_SUFFIX).so \
@@ -186,12 +180,18 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/__future__.py \
 	Lib/__hello__.py \
 	Lib/_aix_support.py \
+	Lib/_android_support.py \
+	Lib/_apple_support.py \
+	Lib/_ast_unparse.py \
 	Lib/_collections_abc.py \
+	Lib/_colorize.py \
 	Lib/_compat_pickle.py \
-	Lib/_compression.py \
+	Lib/_ios_support.py \
 	Lib/_markupbase.py \
+	Lib/_opcode_metadata.py \
 	Lib/_osx_support.py \
 	Lib/_py_abc.py \
+	Lib/_py_warnings.py \
 	Lib/_pydatetime.py \
 	Lib/_pydecimal.py \
 	Lib/_pyio.py \
@@ -201,7 +201,7 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/_threading_local.py \
 	Lib/_weakrefset.py \
 	Lib/abc.py \
-	Lib/aifc.py \
+	Lib/annotationlib.py \
 	Lib/antigravity.py \
 	Lib/argparse.py \
 	Lib/ast.py \
@@ -211,9 +211,6 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/bz2.py \
 	Lib/cProfile.py \
 	Lib/calendar.py \
-	Lib/cgi.py \
-	Lib/cgitb.py \
-	Lib/chunk.py \
 	Lib/cmd.py \
 	Lib/code.py \
 	Lib/codecs.py \
@@ -225,7 +222,6 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/contextvars.py \
 	Lib/copy.py \
 	Lib/copyreg.py \
-	Lib/crypt.py \
 	Lib/csv.py \
 	Lib/dataclasses.py \
 	Lib/datetime.py \
@@ -251,7 +247,6 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/heapq.py \
 	Lib/hmac.py \
 	Lib/imaplib.py \
-	Lib/imghdr.py \
 	Lib/inspect.py \
 	Lib/io.py \
 	Lib/ipaddress.py \
@@ -259,11 +254,9 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/linecache.py \
 	Lib/locale.py \
 	Lib/mailbox.py \
-	Lib/mailcap.py \
 	Lib/mimetypes.py \
 	Lib/modulefinder.py \
 	Lib/netrc.py \
-	Lib/nntplib.py \
 	Lib/ntpath.py \
 	Lib/nturl2path.py \
 	Lib/numbers.py \
@@ -271,11 +264,9 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/operator.py \
 	Lib/optparse.py \
 	Lib/os.py \
-	Lib/pathlib.py \
 	Lib/pdb.py \
 	Lib/pickle.py \
 	Lib/pickletools.py \
-	Lib/pipes.py \
 	Lib/pkgutil.py \
 	Lib/platform.py \
 	Lib/plistlib.py \
@@ -303,7 +294,6 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/signal.py \
 	Lib/site.py \
 	Lib/smtplib.py \
-	Lib/sndhdr.py \
 	Lib/socket.py \
 	Lib/socketserver.py \
 	Lib/sre_compile.py \
@@ -312,16 +302,12 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/ssl.py \
 	Lib/stat.py \
 	Lib/statistics.py \
-	Lib/string.py \
 	Lib/stringprep.py \
 	Lib/struct.py \
 	Lib/subprocess.py \
-	Lib/sunau.py \
 	Lib/symtable.py \
-	Lib/sysconfig.py \
 	Lib/tabnanny.py \
 	Lib/tarfile.py \
-	Lib/telnetlib.py \
 	Lib/tempfile.py \
 	Lib/textwrap.py \
 	Lib/this.py \
@@ -336,30 +322,46 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/turtle.py \
 	Lib/types.py \
 	Lib/typing.py \
-	Lib/uu.py \
 	Lib/uuid.py \
 	Lib/warnings.py \
 	Lib/wave.py \
 	Lib/weakref.py \
 	Lib/webbrowser.py \
-	Lib/xdrlib.py \
 	Lib/zipapp.py \
 	Lib/zipimport.py \
-))
-
-$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/__phello__,\
-	Lib/__phello__/__init__.py \
-	Lib/__phello__/spam.py \
-))
-
-$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/__phello__/ham,\
-	Lib/__phello__/ham/__init__.py \
-	Lib/__phello__/ham/eggs.py \
 ))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/_distutils_hack,\
 	Lib/_distutils_hack/__init__.py \
 	Lib/_distutils_hack/override.py \
+))
+
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/_pyrepl,\
+	Lib/_pyrepl/__init__.py \
+	Lib/_pyrepl/__main__.py \
+	Lib/_pyrepl/_module_completer.py \
+	Lib/_pyrepl/_threading_handler.py \
+	Lib/_pyrepl/base_eventqueue.py \
+	Lib/_pyrepl/commands.py \
+	Lib/_pyrepl/completing_reader.py \
+	Lib/_pyrepl/console.py \
+	Lib/_pyrepl/fancy_termios.py \
+	Lib/_pyrepl/historical_reader.py \
+	Lib/_pyrepl/input.py \
+	Lib/_pyrepl/keymap.py \
+	Lib/_pyrepl/main.py \
+	Lib/_pyrepl/pager.py \
+	Lib/_pyrepl/reader.py \
+	Lib/_pyrepl/readline.py \
+	Lib/_pyrepl/simple_interact.py \
+	Lib/_pyrepl/terminfo.py \
+	Lib/_pyrepl/trace.py \
+	Lib/_pyrepl/types.py \
+	Lib/_pyrepl/unix_console.py \
+	Lib/_pyrepl/unix_eventqueue.py \
+	Lib/_pyrepl/utils.py \
+	Lib/_pyrepl/windows_console.py \
+	Lib/_pyrepl/windows_eventqueue.py \
 ))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/asyncio,\
@@ -375,6 +377,7 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/asyncio/exceptions.py \
 	Lib/asyncio/format_helpers.py \
 	Lib/asyncio/futures.py \
+	Lib/asyncio/graph.py \
 	Lib/asyncio/locks.py \
 	Lib/asyncio/log.py \
 	Lib/asyncio/mixins.py \
@@ -391,6 +394,7 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/asyncio/tasks.py \
 	Lib/asyncio/threads.py \
 	Lib/asyncio/timeouts.py \
+	Lib/asyncio/tools.py \
 	Lib/asyncio/transports.py \
 	Lib/asyncio/trsock.py \
 	Lib/asyncio/unix_events.py \
@@ -400,7 +404,18 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/collections,\
 	Lib/collections/__init__.py \
-	Lib/collections/abc.py \
+))
+
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/compression,\
+	Lib/compression/__init__.py \
+	Lib/compression/bz2.py \
+	Lib/compression/gzip.py \
+	Lib/compression/zlib.py \
+))
+
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/compression/_common,\
+	Lib/compression/_common/__init__.py \
+	Lib/compression/_common/_streams.py \
 ))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/concurrent,\
@@ -410,14 +425,22 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/concurrent/futures,\
 	Lib/concurrent/futures/__init__.py \
 	Lib/concurrent/futures/_base.py \
+	Lib/concurrent/futures/interpreter.py \
 	Lib/concurrent/futures/process.py \
 	Lib/concurrent/futures/thread.py \
+))
+
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/concurrent/interpreters,\
+	Lib/concurrent/interpreters/__init__.py \
+	Lib/concurrent/interpreters/_crossinterp.py \
+	Lib/concurrent/interpreters/_queues.py \
 ))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/ctypes,\
 	Lib/ctypes/__init__.py \
 	Lib/ctypes/_aix.py \
 	Lib/ctypes/_endian.py \
+	Lib/ctypes/_layout.py \
 	Lib/ctypes/util.py \
 	Lib/ctypes/wintypes.py \
 ))
@@ -434,6 +457,7 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/dbm/dumb.py \
 	Lib/dbm/gnu.py \
 	Lib/dbm/ndbm.py \
+	Lib/dbm/sqlite3.py \
 ))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/email,\
@@ -473,6 +497,7 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/encodings,\
 	Lib/encodings/__init__.py \
+	Lib/encodings/_win_cp_codecs.py \
 	Lib/encodings/aliases.py \
 	Lib/encodings/ascii.py \
 	Lib/encodings/base64_codec.py \
@@ -636,14 +661,15 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/importlib/metadata/_itertools.py \
 	Lib/importlib/metadata/_meta.py \
 	Lib/importlib/metadata/_text.py \
+	Lib/importlib/metadata/diagnose.py \
 ))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/importlib/resources,\
 	Lib/importlib/resources/__init__.py \
 	Lib/importlib/resources/_adapters.py \
 	Lib/importlib/resources/_common.py \
+	Lib/importlib/resources/_functional.py \
 	Lib/importlib/resources/_itertools.py \
-	Lib/importlib/resources/_legacy.py \
 	Lib/importlib/resources/abc.py \
 	Lib/importlib/resources/readers.py \
 	Lib/importlib/resources/simple.py \
@@ -651,94 +677,11 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/json,\
 	Lib/json/__init__.py \
+	Lib/json/__main__.py \
 	Lib/json/decoder.py \
 	Lib/json/encoder.py \
 	Lib/json/scanner.py \
 	Lib/json/tool.py \
-))
-
-$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/lib2to3,\
-	Lib/lib2to3/Grammar.txt \
-	Lib/lib2to3/PatternGrammar.txt \
-	Lib/lib2to3/__init__.py \
-	Lib/lib2to3/__main__.py \
-	Lib/lib2to3/btm_matcher.py \
-	Lib/lib2to3/btm_utils.py \
-	Lib/lib2to3/fixer_base.py \
-	Lib/lib2to3/fixer_util.py \
-	Lib/lib2to3/main.py \
-	Lib/lib2to3/patcomp.py \
-	Lib/lib2to3/pygram.py \
-	Lib/lib2to3/pytree.py \
-	Lib/lib2to3/refactor.py \
-))
-
-$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/lib2to3/fixes,\
-	Lib/lib2to3/fixes/__init__.py \
-	Lib/lib2to3/fixes/fix_apply.py \
-	Lib/lib2to3/fixes/fix_asserts.py \
-	Lib/lib2to3/fixes/fix_basestring.py \
-	Lib/lib2to3/fixes/fix_buffer.py \
-	Lib/lib2to3/fixes/fix_dict.py \
-	Lib/lib2to3/fixes/fix_except.py \
-	Lib/lib2to3/fixes/fix_exec.py \
-	Lib/lib2to3/fixes/fix_execfile.py \
-	Lib/lib2to3/fixes/fix_exitfunc.py \
-	Lib/lib2to3/fixes/fix_filter.py \
-	Lib/lib2to3/fixes/fix_funcattrs.py \
-	Lib/lib2to3/fixes/fix_future.py \
-	Lib/lib2to3/fixes/fix_getcwdu.py \
-	Lib/lib2to3/fixes/fix_has_key.py \
-	Lib/lib2to3/fixes/fix_idioms.py \
-	Lib/lib2to3/fixes/fix_import.py \
-	Lib/lib2to3/fixes/fix_imports.py \
-	Lib/lib2to3/fixes/fix_imports2.py \
-	Lib/lib2to3/fixes/fix_input.py \
-	Lib/lib2to3/fixes/fix_intern.py \
-	Lib/lib2to3/fixes/fix_isinstance.py \
-	Lib/lib2to3/fixes/fix_itertools.py \
-	Lib/lib2to3/fixes/fix_itertools_imports.py \
-	Lib/lib2to3/fixes/fix_long.py \
-	Lib/lib2to3/fixes/fix_map.py \
-	Lib/lib2to3/fixes/fix_metaclass.py \
-	Lib/lib2to3/fixes/fix_methodattrs.py \
-	Lib/lib2to3/fixes/fix_ne.py \
-	Lib/lib2to3/fixes/fix_next.py \
-	Lib/lib2to3/fixes/fix_nonzero.py \
-	Lib/lib2to3/fixes/fix_numliterals.py \
-	Lib/lib2to3/fixes/fix_operator.py \
-	Lib/lib2to3/fixes/fix_paren.py \
-	Lib/lib2to3/fixes/fix_print.py \
-	Lib/lib2to3/fixes/fix_raise.py \
-	Lib/lib2to3/fixes/fix_raw_input.py \
-	Lib/lib2to3/fixes/fix_reduce.py \
-	Lib/lib2to3/fixes/fix_reload.py \
-	Lib/lib2to3/fixes/fix_renames.py \
-	Lib/lib2to3/fixes/fix_repr.py \
-	Lib/lib2to3/fixes/fix_set_literal.py \
-	Lib/lib2to3/fixes/fix_standarderror.py \
-	Lib/lib2to3/fixes/fix_sys_exc.py \
-	Lib/lib2to3/fixes/fix_throw.py \
-	Lib/lib2to3/fixes/fix_tuple_params.py \
-	Lib/lib2to3/fixes/fix_types.py \
-	Lib/lib2to3/fixes/fix_unicode.py \
-	Lib/lib2to3/fixes/fix_urllib.py \
-	Lib/lib2to3/fixes/fix_ws_comma.py \
-	Lib/lib2to3/fixes/fix_xrange.py \
-	Lib/lib2to3/fixes/fix_xreadlines.py \
-	Lib/lib2to3/fixes/fix_zip.py \
-))
-
-$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/lib2to3/pgen2,\
-	Lib/lib2to3/pgen2/__init__.py \
-	Lib/lib2to3/pgen2/conv.py \
-	Lib/lib2to3/pgen2/driver.py \
-	Lib/lib2to3/pgen2/grammar.py \
-	Lib/lib2to3/pgen2/literals.py \
-	Lib/lib2to3/pgen2/parse.py \
-	Lib/lib2to3/pgen2/pgen.py \
-	Lib/lib2to3/pgen2/token.py \
-	Lib/lib2to3/pgen2/tokenize.py \
 ))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/logging,\
@@ -746,15 +689,6 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/logging/config.py \
 	Lib/logging/handlers.py \
 ))
-
-ifeq (WNT,$(OS))
-$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/msilib,\
-	Lib/msilib/__init__.py \
-	Lib/msilib/schema.py \
-	Lib/msilib/sequence.py \
-	Lib/msilib/text.py \
-))
-endif
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/multiprocessing,\
 	Lib/multiprocessing/__init__.py \
@@ -783,6 +717,13 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/multiprocessing/dummy,\
 	Lib/multiprocessing/dummy/__init__.py \
 	Lib/multiprocessing/dummy/connection.py \
+))
+
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/pathlib,\
+	Lib/pathlib/__init__.py \
+	Lib/pathlib/_local.py \
+	Lib/pathlib/_os.py \
+	Lib/pathlib/types.py \
 ))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/pip,\
@@ -834,6 +775,7 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/pip/_internal/commands/inspect.py \
 	Lib/pip/_internal/commands/install.py \
 	Lib/pip/_internal/commands/list.py \
+	Lib/pip/_internal/commands/lock.py \
 	Lib/pip/_internal/commands/search.py \
 	Lib/pip/_internal/commands/show.py \
 	Lib/pip/_internal/commands/uninstall.py \
@@ -884,6 +826,7 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/pip/_internal/models/index.py \
 	Lib/pip/_internal/models/installation_report.py \
 	Lib/pip/_internal/models/link.py \
+	Lib/pip/_internal/models/release_control.py \
 	Lib/pip/_internal/models/scheme.py \
 	Lib/pip/_internal/models/search_scope.py \
 	Lib/pip/_internal/models/selection_prefs.py \
@@ -914,21 +857,20 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/pip/_internal/operations/build/build_tracker.py \
 	Lib/pip/_internal/operations/build/metadata.py \
 	Lib/pip/_internal/operations/build/metadata_editable.py \
-	Lib/pip/_internal/operations/build/metadata_legacy.py \
 	Lib/pip/_internal/operations/build/wheel.py \
 	Lib/pip/_internal/operations/build/wheel_editable.py \
-	Lib/pip/_internal/operations/build/wheel_legacy.py \
 ))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/pip/_internal/operations/install,\
 	Lib/pip/_internal/operations/install/__init__.py \
-	Lib/pip/_internal/operations/install/editable_legacy.py \
 	Lib/pip/_internal/operations/install/wheel.py \
 ))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/pip/_internal/req,\
 	Lib/pip/_internal/req/__init__.py \
 	Lib/pip/_internal/req/constructors.py \
+	Lib/pip/_internal/req/pep723.py \
+	Lib/pip/_internal/req/req_dependency_group.py \
 	Lib/pip/_internal/req/req_file.py \
 	Lib/pip/_internal/req/req_install.py \
 	Lib/pip/_internal/req/req_set.py \
@@ -976,8 +918,8 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/pip/_internal/utils/logging.py \
 	Lib/pip/_internal/utils/misc.py \
 	Lib/pip/_internal/utils/packaging.py \
+	Lib/pip/_internal/utils/pylock.py \
 	Lib/pip/_internal/utils/retry.py \
-	Lib/pip/_internal/utils/setuptools_build.py \
 	Lib/pip/_internal/utils/subprocess.py \
 	Lib/pip/_internal/utils/temp_dir.py \
 	Lib/pip/_internal/utils/unpacking.py \
@@ -997,11 +939,11 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/pip/_vendor,\
 	Lib/pip/_vendor/__init__.py \
-	Lib/pip/_vendor/typing_extensions.py \
 	Lib/pip/_vendor/vendor.txt \
 ))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/pip/_vendor/cachecontrol,\
+	Lib/pip/_vendor/cachecontrol/LICENSE.txt \
 	Lib/pip/_vendor/cachecontrol/__init__.py \
 	Lib/pip/_vendor/cachecontrol/_cmd.py \
 	Lib/pip/_vendor/cachecontrol/adapter.py \
@@ -1027,25 +969,18 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 ))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/pip/_vendor/distlib,\
+	Lib/pip/_vendor/distlib/LICENSE.txt \
 	Lib/pip/_vendor/distlib/__init__.py \
 	Lib/pip/_vendor/distlib/compat.py \
-	Lib/pip/_vendor/distlib/database.py \
-	Lib/pip/_vendor/distlib/index.py \
-	Lib/pip/_vendor/distlib/locators.py \
-	Lib/pip/_vendor/distlib/manifest.py \
-	Lib/pip/_vendor/distlib/markers.py \
-	Lib/pip/_vendor/distlib/metadata.py \
 	Lib/pip/_vendor/distlib/resources.py \
 	Lib/pip/_vendor/distlib/scripts.py \
 	Lib/pip/_vendor/distlib/t32.exe \
 	Lib/pip/_vendor/distlib/t64-arm.exe \
 	Lib/pip/_vendor/distlib/t64.exe \
 	Lib/pip/_vendor/distlib/util.py \
-	Lib/pip/_vendor/distlib/version.py \
 	Lib/pip/_vendor/distlib/w32.exe \
 	Lib/pip/_vendor/distlib/w64-arm.exe \
 	Lib/pip/_vendor/distlib/w64.exe \
-	Lib/pip/_vendor/distlib/wheel.py \
 ))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/pip/_vendor/distro,\
@@ -1080,8 +1015,12 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/pip/_vendor/packaging/_parser.py \
 	Lib/pip/_vendor/packaging/_structures.py \
 	Lib/pip/_vendor/packaging/_tokenizer.py \
+	Lib/pip/_vendor/packaging/dependency_groups.py \
+	Lib/pip/_vendor/packaging/direct_url.py \
+	Lib/pip/_vendor/packaging/errors.py \
 	Lib/pip/_vendor/packaging/markers.py \
 	Lib/pip/_vendor/packaging/metadata.py \
+	Lib/pip/_vendor/packaging/pylock.py \
 	Lib/pip/_vendor/packaging/requirements.py \
 	Lib/pip/_vendor/packaging/specifiers.py \
 	Lib/pip/_vendor/packaging/tags.py \
@@ -1112,7 +1051,6 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/pip/_vendor/pygments,\
 	Lib/pip/_vendor/pygments/__init__.py \
 	Lib/pip/_vendor/pygments/__main__.py \
-	Lib/pip/_vendor/pygments/cmdline.py \
 	Lib/pip/_vendor/pygments/console.py \
 	Lib/pip/_vendor/pygments/filter.py \
 	Lib/pip/_vendor/pygments/formatter.py \
@@ -1135,18 +1073,6 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/pip/_vendor/pygments/formatters,\
 	Lib/pip/_vendor/pygments/formatters/__init__.py \
 	Lib/pip/_vendor/pygments/formatters/_mapping.py \
-	Lib/pip/_vendor/pygments/formatters/bbcode.py \
-	Lib/pip/_vendor/pygments/formatters/groff.py \
-	Lib/pip/_vendor/pygments/formatters/html.py \
-	Lib/pip/_vendor/pygments/formatters/img.py \
-	Lib/pip/_vendor/pygments/formatters/irc.py \
-	Lib/pip/_vendor/pygments/formatters/latex.py \
-	Lib/pip/_vendor/pygments/formatters/other.py \
-	Lib/pip/_vendor/pygments/formatters/pangomarkup.py \
-	Lib/pip/_vendor/pygments/formatters/rtf.py \
-	Lib/pip/_vendor/pygments/formatters/svg.py \
-	Lib/pip/_vendor/pygments/formatters/terminal.py \
-	Lib/pip/_vendor/pygments/formatters/terminal256.py \
 ))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/pip/_vendor/pygments/lexers,\
@@ -1195,13 +1121,15 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/pip/_vendor/resolvelib/__init__.py \
 	Lib/pip/_vendor/resolvelib/providers.py \
 	Lib/pip/_vendor/resolvelib/reporters.py \
-	Lib/pip/_vendor/resolvelib/resolvers.py \
 	Lib/pip/_vendor/resolvelib/structs.py \
 ))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/pip/_vendor/resolvelib/compat,\
-	Lib/pip/_vendor/resolvelib/compat/__init__.py \
-	Lib/pip/_vendor/resolvelib/compat/collections_abc.py \
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/pip/_vendor/resolvelib/resolvers,\
+	Lib/pip/_vendor/resolvelib/resolvers/__init__.py \
+	Lib/pip/_vendor/resolvelib/resolvers/abstract.py \
+	Lib/pip/_vendor/resolvelib/resolvers/criterion.py \
+	Lib/pip/_vendor/resolvelib/resolvers/exceptions.py \
+	Lib/pip/_vendor/resolvelib/resolvers/resolution.py \
 ))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/pip/_vendor/rich,\
@@ -1291,6 +1219,11 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/pip/_vendor/tomli/_types.py \
 ))
 
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/pip/_vendor/tomli_w,\
+	Lib/pip/_vendor/tomli_w/__init__.py \
+	Lib/pip/_vendor/tomli_w/_writer.py \
+))
+
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/pip/_vendor/truststore,\
 	Lib/pip/_vendor/truststore/__init__.py \
 	Lib/pip/_vendor/truststore/_api.py \
@@ -1301,8 +1234,11 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 ))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/pip/_vendor/urllib3,\
+	Lib/pip/_vendor/urllib3/LICENSE.txt \
 	Lib/pip/_vendor/urllib3/__init__.py \
+	Lib/pip/_vendor/urllib3/_base_connection.py \
 	Lib/pip/_vendor/urllib3/_collections.py \
+	Lib/pip/_vendor/urllib3/_request_methods.py \
 	Lib/pip/_vendor/urllib3/_version.py \
 	Lib/pip/_vendor/urllib3/connection.py \
 	Lib/pip/_vendor/urllib3/connectionpool.py \
@@ -1310,42 +1246,33 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/pip/_vendor/urllib3/fields.py \
 	Lib/pip/_vendor/urllib3/filepost.py \
 	Lib/pip/_vendor/urllib3/poolmanager.py \
-	Lib/pip/_vendor/urllib3/request.py \
 	Lib/pip/_vendor/urllib3/response.py \
 ))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/pip/_vendor/urllib3/contrib,\
 	Lib/pip/_vendor/urllib3/contrib/__init__.py \
-	Lib/pip/_vendor/urllib3/contrib/_appengine_environ.py \
-	Lib/pip/_vendor/urllib3/contrib/appengine.py \
-	Lib/pip/_vendor/urllib3/contrib/ntlmpool.py \
 	Lib/pip/_vendor/urllib3/contrib/pyopenssl.py \
-	Lib/pip/_vendor/urllib3/contrib/securetransport.py \
 	Lib/pip/_vendor/urllib3/contrib/socks.py \
 ))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/pip/_vendor/urllib3/contrib/_securetransport,\
-	Lib/pip/_vendor/urllib3/contrib/_securetransport/__init__.py \
-	Lib/pip/_vendor/urllib3/contrib/_securetransport/bindings.py \
-	Lib/pip/_vendor/urllib3/contrib/_securetransport/low_level.py \
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/pip/_vendor/urllib3/contrib/emscripten,\
+	Lib/pip/_vendor/urllib3/contrib/emscripten/__init__.py \
+	Lib/pip/_vendor/urllib3/contrib/emscripten/connection.py \
+	Lib/pip/_vendor/urllib3/contrib/emscripten/fetch.py \
+	Lib/pip/_vendor/urllib3/contrib/emscripten/request.py \
+	Lib/pip/_vendor/urllib3/contrib/emscripten/response.py \
 ))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/pip/_vendor/urllib3/packages,\
-	Lib/pip/_vendor/urllib3/packages/__init__.py \
-	Lib/pip/_vendor/urllib3/packages/six.py \
-))
-
-$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/pip/_vendor/urllib3/packages/backports,\
-	Lib/pip/_vendor/urllib3/packages/backports/__init__.py \
-	Lib/pip/_vendor/urllib3/packages/backports/makefile.py \
-	Lib/pip/_vendor/urllib3/packages/backports/weakref_finalize.py \
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/pip/_vendor/urllib3/http2,\
+	Lib/pip/_vendor/urllib3/http2/__init__.py \
+	Lib/pip/_vendor/urllib3/http2/connection.py \
+	Lib/pip/_vendor/urllib3/http2/probe.py \
 ))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/pip/_vendor/urllib3/util,\
 	Lib/pip/_vendor/urllib3/util/__init__.py \
 	Lib/pip/_vendor/urllib3/util/connection.py \
 	Lib/pip/_vendor/urllib3/util/proxy.py \
-	Lib/pip/_vendor/urllib3/util/queue.py \
 	Lib/pip/_vendor/urllib3/util/request.py \
 	Lib/pip/_vendor/urllib3/util/response.py \
 	Lib/pip/_vendor/urllib3/util/retry.py \
@@ -1354,6 +1281,7 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/pip/_vendor/urllib3/util/ssltransport.py \
 	Lib/pip/_vendor/urllib3/util/timeout.py \
 	Lib/pip/_vendor/urllib3/util/url.py \
+	Lib/pip/_vendor/urllib3/util/util.py \
 	Lib/pip/_vendor/urllib3/util/wait.py \
 ))
 
@@ -1364,6 +1292,7 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/pydoc_data,\
 	Lib/pydoc_data/__init__.py \
+	Lib/pydoc_data/module_docs.py \
 	Lib/pydoc_data/topics.py \
 ))
 
@@ -1738,6 +1667,16 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/sqlite3/__main__.py \
 	Lib/sqlite3/dbapi2.py \
 	Lib/sqlite3/dump.py \
+))
+
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/string,\
+	Lib/string/__init__.py \
+	Lib/string/templatelib.py \
+))
+
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/sysconfig,\
+	Lib/sysconfig/__init__.py \
+	Lib/sysconfig/__main__.py \
 ))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/tomllib,\

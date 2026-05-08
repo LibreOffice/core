@@ -11,8 +11,8 @@
  if test ${ac_cv_lib_z_inflateCopy+y}
  then :
    printf %s "(cached) " >&6
- else $as_nop
-   ac_check_lib_save_LIBS=$LIBS
+ else case e in #(
+   e) ac_check_lib_save_LIBS=$LIBS
 -LIBS="-lz  $LIBS"
 +LIBS="-lzlib  $LIBS"
  cat confdefs.h - <<_ACEOF >conftest.$ac_ext

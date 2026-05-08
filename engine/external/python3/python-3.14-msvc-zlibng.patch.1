@@ -1,0 +1,24 @@
+--- python3/PCbuild/pythoncore.vcxproj.orig	2026-05-11 16:17:55.300450600 +0200
++++ python3/PCbuild/pythoncore.vcxproj	2026-05-11 16:17:49.352021500 +0200
+@@ -113,7 +113,7 @@
+     </ClCompile>
+     <Link>
+       <AdditionalDependencies>version.lib;ws2_32.lib;pathcch.lib;bcrypt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+-      <AdditionalDependencies Condition="$(IncludeExternals)">zlib-ng$(PyDebugExt).lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies Condition="$(IncludeExternals)">$(zlibLib);%(AdditionalDependencies)</AdditionalDependencies>
+     </Link>
+   </ItemDefinitionGroup>
+   <ItemGroup>
+@@ -681,12 +681,6 @@
+   <ItemGroup>
+     <ResourceCompile Include="..\PC\python_nt.rc" />
+   </ItemGroup>
+-  <ItemGroup>
+-    <ProjectReference Include="zlib-ng.vcxproj" Condition="$(IncludeExternals)">
+-      <Project>{fb91c8b2-6fbc-3a01-b644-1637111f902d}</Project>
+-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+-    </ProjectReference>
+-  </ItemGroup>
+   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+   <ImportGroup Label="ExtensionTargets">
+     <Import Project="regen.targets" />

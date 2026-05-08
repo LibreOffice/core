@@ -6,14 +6,14 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-from os import path, walk
+from os import path, walk, environ
 
 if __name__ == '__main__':
 
     ignoredPackages = ["curses", "test", "tkinter", "turtledemo", "idlelib"]
 
-    coreDir = path.dirname(path.dirname(path.dirname(path.abspath(__file__))))
-    pythonDir = path.join(coreDir, "workdir/UnpackedTarball/python3")
+    buildDir = environ["BUILDDIR"]
+    pythonDir = path.join(buildDir, "workdir/UnpackedTarball/python3")
     libDir = path.join(pythonDir, "Lib")
     subDirDict = {}
     for subdir, dirs, files in walk(libDir):
@@ -46,13 +46,9 @@ if __name__ == '__main__':
 
     for k,v in sorted(subDirDict.items()):
         print()
-        if k == "Lib/msilib":
-            print("ifeq (WNT,$(OS))")
         print("$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/{},\\".format(k.replace("Lib", "lib", 3)))
         for fileName in sorted(v):
             print("\t{} \\".format(fileName))
         print("))")
-        if k == "Lib/msilib":
-            print("endif")
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

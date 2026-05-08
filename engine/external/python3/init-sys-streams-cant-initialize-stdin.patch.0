@@ -1,8 +1,8 @@
 --- Python/pylifecycle.c	2024-03-27 14:34:43.905367358 +0000
 +++ Python/pylifecycle.c	2024-03-27 14:40:16.339134322 +0000
 @@ -1789,6 +1789,20 @@
-     if (!is_valid_fd(fd))
          Py_RETURN_NONE;
+     }
  
 +    /* Check that stdin, etc is not a directory
 +       Using shell redirection, you can redirect stdin to a directory,
@@ -38,6 +38,6 @@
 -    }
 -#endif
 -
-     if (!(iomod = PyImport_ImportModule("io"))) {
+     if (!(iomod = PyImport_ImportModule("_io"))) {
          goto error;
      }
