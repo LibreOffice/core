@@ -948,7 +948,13 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 					}
 					if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(key)) {
 						var currentElement = e.srcElement;
-						if (!(currentElement.tagName === 'INPUT' || currentElement.tagName === 'TEXTAREA') || isTab) {
+						// Inside a text-entry widget arrow keys move the cursor, so
+						// don't intercept. Checkbox/radio/button inputs don't use
+						// arrows internally, so let arrow keys move focus off them.
+						var tag = currentElement.tagName;
+						var arrowsConsumed = tag === 'TEXTAREA' ||
+							(tag === 'INPUT' && !['checkbox', 'radio', 'button', 'submit', 'reset'].includes(currentElement.type));
+						if (!arrowsConsumed || isTab) {
 							if (isTab)
 								e.preventDefault();
 							let container = document.getElementsByClassName('ui-tabs-content notebookbar');
