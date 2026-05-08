@@ -899,7 +899,7 @@ SfxVoidItem ConsolidateExec SID_CONSOLIDATE
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
+    ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
@@ -985,7 +985,7 @@ SfxVoidItem DataConsolidate SID_OPENDLG_CONSOLIDATE
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
+    ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
@@ -2088,7 +2088,7 @@ SfxVoidItem GoalSeek SID_SOLVE
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
+    ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
@@ -2106,7 +2106,7 @@ SfxVoidItem GoalSeekDialog SID_OPENDLG_SOLVE
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
+    ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
@@ -2376,7 +2376,7 @@ SfxVoidItem SolverDialog SID_OPENDLG_OPTSOLVER
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
+    ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
@@ -3601,7 +3601,7 @@ SfxVoidItem MergeCells FID_MERGE_ON
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
+    ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
@@ -3619,7 +3619,7 @@ SfxVoidItem ToggleMergeCells FID_MERGE_TOGGLE
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
+    ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
@@ -4972,7 +4972,7 @@ SfxVoidItem ManageXMLSource SID_MANAGE_XML_SOURCE
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
+    ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
@@ -5368,7 +5368,7 @@ SfxVoidItem SplitCell FID_MERGE_OFF
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
+    ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
