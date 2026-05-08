@@ -422,6 +422,34 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, testTdf168135)
                 "height", u"776");
 }
 
+CPPUNIT_TEST_FIXTURE(SvgFilterTest, testExportControllerFromModel)
+{
+    // Given a Writer, then a Draw document loaded, the Writer document is the current one:
+    uno::Sequence<beans::PropertyValue> aEmptyProps;
+    mxComponent2 = mxDesktop->loadComponentFromURL(u"private:factory/swriter"_ustr, u"_blank"_ustr,
+                                                   0, aEmptyProps);
+    CPPUNIT_ASSERT(mxComponent2);
+    uno::Sequence<beans::PropertyValue> aHiddenProps{ comphelper::makePropertyValue(u"Hidden"_ustr,
+                                                                                    true) };
+    mxComponent = mxDesktop->loadComponentFromURL(u"private:factory/sdraw"_ustr, u"_default"_ustr,
+                                                  0, aHiddenProps);
+    CPPUNIT_ASSERT(mxComponent);
+    uno::Reference<frame::XModel> xWriterModel(mxComponent2, uno::UNO_QUERY_THROW);
+    uno::Reference<frame::XFrame> xWriterFrame(xWriterModel->getCurrentController()->getFrame(),
+                                               uno::UNO_SET_THROW);
+    mxDesktop->setActiveFrame(xWriterFrame);
+    CPPUNIT_ASSERT_EQUAL(xWriterFrame, mxDesktop->getCurrentFrame());
+
+    // When exporting the Draw document to SVG:
+    // Then make sure storeToURL() doesn't fail:
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY_THROW);
+    comphelper::SequenceAsHashMap aMediaDescriptor;
+    aMediaDescriptor[u"FilterName"_ustr] <<= u"draw_svg_Export"_ustr;
+    // Without the accompanying fix in place, this test would have failed with an IOException, as it
+    // tried to export the current Writer document, not the Draw one.
+    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
