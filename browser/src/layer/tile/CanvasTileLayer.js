@@ -3310,8 +3310,17 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 	_fitWidthZoom: function (e, maxZoom, recalcFirstFit=false) {
 		if (this.isCalc() || this.isDraw())
 			return;
+		if (app.activeDocument.fileSize.x === 0)
+			return;
 		if (this._map.uiManager.getStartCompareChanges()) // comparechanges view, don't zoom in, to have space for two pages side by side.
 			return;
+
+		var oldSize = e && e.oldSize ? e.oldSize : this._map.getSize();
+		var newSize = e && e.newSize ? e.newSize : this._map.getSize();
+		newSize.x *= app.dpiScale;
+		newSize.y *= app.dpiScale;
+		oldSize.x *= app.dpiScale;
+		oldSize.y *= app.dpiScale;
 
 		if (!maxZoom) {
 			if (this.isImpress()) maxZoom = 10;
@@ -3323,15 +3332,6 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 			recalcFirstFit = true;
 			this._invalidateZoomFirstFit = false;
 		}
-
-		if (app.activeDocument.fileSize.x === 0) { return; }
-		var oldSize = e && e.oldSize ? e.oldSize : this._map.getSize();
-		var newSize = e && e.newSize ? e.newSize : this._map.getSize();
-
-		newSize.x *= app.dpiScale;
-		newSize.y *= app.dpiScale;
-		oldSize.x *= app.dpiScale;
-		oldSize.y *= app.dpiScale;
 
 		let bringCommentsIntoView = false;
 		const changeZoom = smartZoomEnabled || recalcFirstFit;
