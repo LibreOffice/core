@@ -751,7 +751,7 @@ static bool CanSkipOverRedline(
     {
         if (!isTheAnswerYes) return false;
     }
-    for (size_t i = 0; i < SAL_N_ELEMENTS(activeCharAttrsStart); ++i)
+    for (size_t i = 0; i < std::size(activeCharAttrsStart); ++i)
     {
         // all of these should be shareable (but we have no SfxItemPool to check it here)
         // assert(!activeCharAttrsStart[i] || activeCharAttrsStart[i]->GetItemPool()->Shareable(*activeCharAttrsStart[i]));
