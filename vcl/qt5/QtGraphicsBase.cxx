@@ -31,8 +31,8 @@ void QtGraphicsBase::ImplGetResolution(const QtFrame* pFrame, sal_Int32& rDPIX, 
     QScreen* pScreen = pFrame->GetQWidget().screen();
     qreal devicePixelRatio = GetQtInstance().EmscriptenLightweightRunInMainThread(
         [pScreen] { return pScreen->devicePixelRatio(); });
-    rDPIX = pScreen->logicalDotsPerInchX() * devicePixelRatio + 0.5;
-    rDPIY = pScreen->logicalDotsPerInchY() * devicePixelRatio + 0.5;
+    rDPIX = pScreen->physicalDotsPerInchX() * devicePixelRatio + 0.5;
+    rDPIY = pScreen->physicalDotsPerInchY() * devicePixelRatio + 0.5;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
