@@ -3287,7 +3287,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		const ZOOM_LEVEL_100 = 10;
 
 		let defaultZoom = parseInt(window.prefs.get('defaultZoom'));
-		defaultZoom = defaultZoom ? defaultZoom + 1 : ZOOM_LEVEL_100;
+		defaultZoom = isNaN(defaultZoom) ? ZOOM_LEVEL_100 : defaultZoom + 1;
 		if (ZOOM_LEVEL_20 <= defaultZoom && defaultZoom <= ZOOM_LEVEL_400) {
 			return defaultZoom;
 		} else {
