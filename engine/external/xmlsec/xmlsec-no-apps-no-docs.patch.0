@@ -1,18 +1,56 @@
--*- Mode: Diff -*-
+From 3b5b1c8ff12a6a767f1231224e7e7e30c87c8383 Mon Sep 17 00:00:00 2001
+From: lsh123 <aleksey@aleksey.com>
+Date: Wed, 6 May 2026 17:24:13 -0400
+Subject: [PATCH] Restore --enable-apps (#1158)
 
-xmlsec 1.3.11 dropped the --disable-apps and --disable-docs configure
-options.  We don't need apps/, man/ or docs/ in our build, and on iOS
-linking the apps/xmlsec1 binary fails because NSS produces empty
-placeholder dylibs.  Restrict the top-level SUBDIRS to what we need.
+---
+ Makefile.am  |  6 +++++-
+ configure.ac | 15 +++++++++++++++
+ 2 files changed, 20 insertions(+), 1 deletion(-)
 
+diff --git Makefile.am b/Makefile.am
+index f55b09bc..69af0131 100644
 --- Makefile.am
 +++ Makefile.am
-@@ -5,7 +5,7 @@
+@@ -5,7 +5,11 @@
  # make tar-release  : builds distribution tar.gz (including docs)
  #
  NULL =
 -SUBDIRS 	    = include src apps man docs
-+SUBDIRS 	    = include src
-
++SUBDIRS  = include src
++if XMLSEC_APPS
++SUBDIRS += apps
++endif
++SUBDIRS += man docs
+ 
  SAFE_VERSION	= @XMLSEC_VERSION_SAFE@
+ 
+diff --git configure.ac b/configure.ac
+index 0adaad6d..eb5071b4 100644
+--- configure.ac
++++ configure.ac
+@@ -2446,6 +2446,21 @@ fi
+ AM_CONDITIONAL(XMLSEC_NO_XMLENC, test "z$XMLSEC_NO_XMLENC" = "z1")
+ AC_SUBST(XMLSEC_NO_XMLENC)
+ 
++dnl ==========================================================================
++dnl See if we need apps
++dnl ==========================================================================
++AC_MSG_CHECKING(for apps)
++AC_ARG_ENABLE([apps], [AS_HELP_STRING([--enable-apps],[enable applications (yes)])])
++if test "z$enable_apps" = "zno" ; then
++    XMLSEC_APPS="0"
++    AC_MSG_RESULT([disabled])
++else
++    XMLSEC_APPS="1"
++    AC_MSG_RESULT([yes])
++fi
++AM_CONDITIONAL(XMLSEC_APPS, test "z$XMLSEC_APPS" = "z1")
++AC_SUBST(XMLSEC_APPS)
++
+ dnl ==========================================================================
+ dnl Static linking (implies enable_crypto_dl="no")
+ dnl ==========================================================================
+-- 
+2.51.0
 
