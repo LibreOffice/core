@@ -239,7 +239,7 @@ void SwTextMargin::CtorInitTextMargin( SwTextFrame *pNewFrame, SwTextSizeInfo *p
     {
         mnLeft = m_pFrame->getFramePrintArea().Left() + m_pFrame->getFrameArea().Left();
         if( mnLeft >= mnRight )   // e.g. with large paragraph indentations in slim table columns
-            mnRight = mnLeft + 1; // einen goennen wir uns immer
+            mnRight = mnLeft + 1; // always ensure a minimum width of one
     }
 
     if( m_pFrame->IsFollow() && m_pFrame->GetOffset() )

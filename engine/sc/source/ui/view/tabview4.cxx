@@ -32,7 +32,7 @@
 #include <tools/json_writer.hxx>
 #include <output.hxx>
 
-// ---  Referenz-Eingabe / Fill-Cursor
+// --- Reference input / Fill-Cursor
 
 void ScTabView::HideTip()
 {

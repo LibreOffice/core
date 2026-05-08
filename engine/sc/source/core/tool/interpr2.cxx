@@ -918,7 +918,7 @@ void ScInterpreter::ScGetDateDif()
 void ScInterpreter::ScGetTimeValue()
 {
     OUString aInputString = GetString().getString();
-    sal_uInt32 nFIndex = 0;                 // damit default Land/Spr.
+    sal_uInt32 nFIndex = 0;                 // for default country/language.
     double fVal;
     if (mrContext.NFIsNumberFormat(aInputString, nFIndex, fVal, SvNumInputOptions::LAX_TIME))
     {

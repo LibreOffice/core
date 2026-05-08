@@ -79,9 +79,9 @@ void SdFieldPopup::Fill( LanguageType eLanguage )
 
         aDateField.SetFormat( SvxDateFormat::D );    // 13.Februar 1996
         m_xPopup->append_radio(OUString::number(nID++), aDateField.GetFormatted(*pNumberFormatter, eLanguage));
-        aDateField.SetFormat( SvxDateFormat::E );    // Die, 13.Februar 1996
+        aDateField.SetFormat( SvxDateFormat::E );    // Tue, 13 February 1996
         m_xPopup->append_radio(OUString::number(nID++), aDateField.GetFormatted(*pNumberFormatter, eLanguage));
-        aDateField.SetFormat( SvxDateFormat::F );    // Dienstag, 13.Februar 1996
+        aDateField.SetFormat( SvxDateFormat::F );    // Tuesday, 13 February 1996
         m_xPopup->append_radio(OUString::number(nID++), aDateField.GetFormatted(*pNumberFormatter, eLanguage));
 
         m_xPopup->set_active(OUString::number(static_cast<sal_uInt16>( pDateField->GetFormat() ) + 1), true); // - 2 + 3 !

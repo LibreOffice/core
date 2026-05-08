@@ -26,7 +26,7 @@
 
 class SC_DLLPUBLIC ScDocOptions
 {
-    double     fIterEps;                // epsilon value dazu
+    double     fIterEps;                // epsilon value for iterations
     sal_uInt16 nIterCount;              ///< number
     sal_uInt16 nPrecStandardFormat;     ///< precision for standard format
     sal_uInt16 nDay;                    ///< Null date:
