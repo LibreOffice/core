@@ -1591,7 +1591,8 @@ if test -n "$with_lo_path"; then
     elif test "$ENABLE_WINDOWSAPP" = "true"; then
         # --with-lo-path is a Windows path (e.g. L:\...) used at run-time;
         # check via the WSL/Cygwin form of the same instdir under LOBUILDDIR.
-        version_file="$LOBUILDDIR/instdir/program/versionrc"
+        # On Windows the file is version.ini, not versionrc.
+        version_file="$LOBUILDDIR/instdir/program/version.ini"
         CACHE_PATH="\${abs_top_builddir}/cache"
     else
         version_file="$with_lo_path/program/versionrc"
