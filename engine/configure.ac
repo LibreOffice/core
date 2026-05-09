@@ -9593,99 +9593,109 @@ if test "$with_export_validation" != "no"; then
             AC_MSG_RESULT([no, schema directory is missing (it is excluded from tarballs)])
         fi
     else
-        AC_MSG_RESULT([yes])
-        AC_DEFINE(HAVE_EXPORT_VALIDATION)
-
         if test -z "$JAVAINTERPRETER"; then
             dnl Java is disabled but a build-time Java interpreter is still
             dnl needed to run the export validators.
             AC_PATH_PROG(JAVAINTERPRETER, java)
-            if test -z "$JAVAINTERPRETER"; then
-                AC_MSG_ERROR([export validation requires a Java interpreter, none found (--with-export-validation)])
-            fi
         fi
-
-        AC_PATH_PROGS(ODFVALIDATOR, odfvalidator)
-        if test -z "$ODFVALIDATOR"; then
-            # remember to download the ODF toolkit with validator later
-            AC_MSG_NOTICE([no odfvalidator found, will download it])
-            BUILD_TYPE="$BUILD_TYPE ODFVALIDATOR"
-            ODFVALIDATOR="$BUILDDIR/bin/odfvalidator.sh"
-
-            # and fetch name of odfvalidator jar name from download.lst
-            ODFVALIDATOR_JAR=`$SED -n -e "s/^ODFVALIDATOR_JAR *:= *\(.*\) */\1/p" $SRC_ROOT/download.lst`
-            AC_SUBST(ODFVALIDATOR_JAR)
-
-            if test -z "$ODFVALIDATOR_JAR"; then
-                AC_MSG_ERROR([cannot determine odfvalidator jar location (--with-export-validation)])
-            fi
+        dnl macOS ships a /usr/bin/java stub that exits non-zero with
+        dnl "Unable to locate a Java Runtime" when no JDK is installed,
+        dnl so verify the interpreter actually runs.
+        if test -n "$JAVAINTERPRETER" && ! "$JAVAINTERPRETER" -version >/dev/null 2>&1; then
+            JAVAINTERPRETER=
         fi
-        if test "$build_os" = "cygwin"; then
-            # In case of Cygwin it will be executed from Windows,
-            # so we need to run bash and absolute path to validator
-            # so instead of "odfvalidator" it will be
-            # something like "bash.exe C:\cygwin\opt\lo\bin\odfvalidator"
-            ODFVALIDATOR="bash.exe `cygpath -m "$ODFVALIDATOR"`"
+        if test -z "$JAVAINTERPRETER"; then
+            if test "$with_export_validation" = "yes"; then
+                AC_MSG_ERROR([export validation requires a working Java interpreter, none found (--with-export-validation)])
+            fi
+            AC_MSG_RESULT([no, no working Java interpreter found])
+            with_export_validation=no
         else
-            ODFVALIDATOR="sh $ODFVALIDATOR"
-        fi
-        AC_SUBST(ODFVALIDATOR)
+            AC_MSG_RESULT([yes])
+            AC_DEFINE(HAVE_EXPORT_VALIDATION)
 
+            AC_PATH_PROGS(ODFVALIDATOR, odfvalidator)
+            if test -z "$ODFVALIDATOR"; then
+                # remember to download the ODF toolkit with validator later
+                AC_MSG_NOTICE([no odfvalidator found, will download it])
+                BUILD_TYPE="$BUILD_TYPE ODFVALIDATOR"
+                ODFVALIDATOR="$BUILDDIR/bin/odfvalidator.sh"
 
-        AC_PATH_PROGS(OFFICEOTRON, officeotron)
-        if test -z "$OFFICEOTRON"; then
-            # remember to download the officeotron with validator later
-            AC_MSG_NOTICE([no officeotron found, will download it])
-            BUILD_TYPE="$BUILD_TYPE OFFICEOTRON"
-            OFFICEOTRON="$BUILDDIR/bin/officeotron.sh"
+                # and fetch name of odfvalidator jar name from download.lst
+                ODFVALIDATOR_JAR=`$SED -n -e "s/^ODFVALIDATOR_JAR *:= *\(.*\) */\1/p" $SRC_ROOT/download.lst`
+                AC_SUBST(ODFVALIDATOR_JAR)
 
-            # and fetch name of officeotron jar name from download.lst
-            OFFICEOTRON_JAR=`$SED -n -e "s/^OFFICEOTRON_JAR *:= *\(.*\) */\1/p" $SRC_ROOT/download.lst`
-            AC_SUBST(OFFICEOTRON_JAR)
-
-            if test -z "$OFFICEOTRON_JAR"; then
-                AC_MSG_ERROR([cannot determine officeotron jar location (--with-export-validation)])
+                if test -z "$ODFVALIDATOR_JAR"; then
+                    AC_MSG_ERROR([cannot determine odfvalidator jar location (--with-export-validation)])
+                fi
             fi
-        else
-            # check version of existing officeotron
-            OFFICEOTRON_VER=`$OFFICEOTRON --version | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
-            if test 0"$OFFICEOTRON_VER" -lt 704; then
-                AC_MSG_ERROR([officeotron too old])
+            if test "$build_os" = "cygwin"; then
+                # In case of Cygwin it will be executed from Windows,
+                # so we need to run bash and absolute path to validator
+                # so instead of "odfvalidator" it will be
+                # something like "bash.exe C:\cygwin\opt\lo\bin\odfvalidator"
+                ODFVALIDATOR="bash.exe `cygpath -m "$ODFVALIDATOR"`"
+            else
+                ODFVALIDATOR="sh $ODFVALIDATOR"
             fi
-        fi
-        if test "$build_os" = "cygwin"; then
-            # In case of Cygwin it will be executed from Windows,
-            # so we need to run bash and absolute path to validator
-            # so instead of "odfvalidator" it will be
-            # something like "bash.exe C:\cygwin\opt\lo\bin\odfvalidator"
-            OFFICEOTRON="bash.exe `cygpath -m "$OFFICEOTRON"`"
-        else
-            OFFICEOTRON="sh $OFFICEOTRON"
-        fi
+            AC_SUBST(ODFVALIDATOR)
 
-        AC_PATH_PROGS(VERAPDF, verapdf)
-        if test -z "$VERAPDF"; then
-            # remember to download the verapdf with validator later
-            AC_MSG_NOTICE([no verapdf found, will download it])
-            BUILD_TYPE="$BUILD_TYPE VERAPDF"
-            VERAPDF="$BUILDDIR/bin/verapdf.sh"
 
-            # and fetch name of verapdf jar name from download.lst
-            VERAPDF_JAR=`$SED -n -e "s/^VERAPDF_JAR *:= *\(.*\) */\1/p" $SRC_ROOT/download.lst`
-            AC_SUBST(VERAPDF_JAR)
+            AC_PATH_PROGS(OFFICEOTRON, officeotron)
+            if test -z "$OFFICEOTRON"; then
+                # remember to download the officeotron with validator later
+                AC_MSG_NOTICE([no officeotron found, will download it])
+                BUILD_TYPE="$BUILD_TYPE OFFICEOTRON"
+                OFFICEOTRON="$BUILDDIR/bin/officeotron.sh"
 
-            if test -z "$VERAPDF_JAR"; then
-                AC_MSG_ERROR([cannot determine verapdf jar location (--with-export-validation)])
+                # and fetch name of officeotron jar name from download.lst
+                OFFICEOTRON_JAR=`$SED -n -e "s/^OFFICEOTRON_JAR *:= *\(.*\) */\1/p" $SRC_ROOT/download.lst`
+                AC_SUBST(OFFICEOTRON_JAR)
+
+                if test -z "$OFFICEOTRON_JAR"; then
+                    AC_MSG_ERROR([cannot determine officeotron jar location (--with-export-validation)])
+                fi
+            else
+                # check version of existing officeotron
+                OFFICEOTRON_VER=`$OFFICEOTRON --version | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
+                if test 0"$OFFICEOTRON_VER" -lt 704; then
+                    AC_MSG_ERROR([officeotron too old])
+                fi
             fi
-        fi
-        if test "$build_os" = "cygwin"; then
-            # In case of Cygwin it will be executed from Windows,
-            # so we need to run bash and absolute path to validator
-            # so instead of "odfvalidator" it will be
-            # something like "bash.exe C:\cygwin\opt\lo\bin\odfvalidator"
-            VERAPDF="bash.exe `cygpath -m "$VERAPDF"`"
-        else
-            VERAPDF="sh $VERAPDF"
+            if test "$build_os" = "cygwin"; then
+                # In case of Cygwin it will be executed from Windows,
+                # so we need to run bash and absolute path to validator
+                # so instead of "odfvalidator" it will be
+                # something like "bash.exe C:\cygwin\opt\lo\bin\odfvalidator"
+                OFFICEOTRON="bash.exe `cygpath -m "$OFFICEOTRON"`"
+            else
+                OFFICEOTRON="sh $OFFICEOTRON"
+            fi
+
+            AC_PATH_PROGS(VERAPDF, verapdf)
+            if test -z "$VERAPDF"; then
+                # remember to download the verapdf with validator later
+                AC_MSG_NOTICE([no verapdf found, will download it])
+                BUILD_TYPE="$BUILD_TYPE VERAPDF"
+                VERAPDF="$BUILDDIR/bin/verapdf.sh"
+
+                # and fetch name of verapdf jar name from download.lst
+                VERAPDF_JAR=`$SED -n -e "s/^VERAPDF_JAR *:= *\(.*\) */\1/p" $SRC_ROOT/download.lst`
+                AC_SUBST(VERAPDF_JAR)
+
+                if test -z "$VERAPDF_JAR"; then
+                    AC_MSG_ERROR([cannot determine verapdf jar location (--with-export-validation)])
+                fi
+            fi
+            if test "$build_os" = "cygwin"; then
+                # In case of Cygwin it will be executed from Windows,
+                # so we need to run bash and absolute path to validator
+                # so instead of "odfvalidator" it will be
+                # something like "bash.exe C:\cygwin\opt\lo\bin\odfvalidator"
+                VERAPDF="bash.exe `cygpath -m "$VERAPDF"`"
+            else
+                VERAPDF="sh $VERAPDF"
+            fi
         fi
     fi
     AC_SUBST(OFFICEOTRON)
