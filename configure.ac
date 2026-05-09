@@ -1593,14 +1593,15 @@ if test -n "$with_lo_path"; then
         # check via the WSL/Cygwin form of the same instdir under LOBUILDDIR.
         # On Windows the file is version.ini, not versionrc.
         version_file="$LOBUILDDIR/instdir/program/version.ini"
-        CACHE_PATH="\${abs_top_builddir}/cache"
     else
         version_file="$with_lo_path/program/versionrc"
-        CACHE_PATH="\${abs_top_builddir}/cache"
     fi
     if test -f $version_file; then
         JAILS_PATH="\${abs_top_builddir}/jails"
         SYSTEMPLATE_PATH="\${abs_top_builddir}/systemplate"
+        if test `uname -s` != Darwin; then
+            CACHE_PATH="\${abs_top_builddir}/cache"
+        fi
         have_lo_path=true
         lo_msg="test against $LO_PATH"
         AC_MSG_RESULT([yes])
