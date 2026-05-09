@@ -9601,7 +9601,7 @@ if test "$with_export_validation" != "no"; then
         dnl macOS ships a /usr/bin/java stub that exits non-zero with
         dnl "Unable to locate a Java Runtime" when no JDK is installed,
         dnl so verify the interpreter actually runs.
-        if test -n "$JAVAINTERPRETER" && ! "$JAVAINTERPRETER" -version >/dev/null 2>&1; then
+        if test -n "$JAVAINTERPRETER" && ! $JAVAINTERPRETER -version >/dev/null 2>&1; then
             JAVAINTERPRETER=
         fi
         if test -z "$JAVAINTERPRETER"; then
