@@ -926,26 +926,12 @@ static OUString lcl_BoxNmToRel( const SwTable& rTable, const SwTableNode& rTable
 
 void SwTableFormula::RenameTableReference(std::u16string_view rOldName, std::u16string_view rNewName)
 {
-    const SwNode* pNode = GetNodeOfFormula();
-    if (!pNode)
+    if (m_sFormula.indexOf(rOldName) == -1)
         return;
-
-    const SwTableNode* pTableNode = pNode->FindTableNode();
-    if (!pTableNode)
-        return;
-
-    const SwTable* pTable = &pTableNode->GetTable();
-    // Convert internal pointers to text names before replacing the table name
-    PtrToBoxNm(pTable);
 
     OUString sOldPrefix = u"<"_ustr + rOldName + u"."_ustr;
-    OUString sFormulaText = GetFormula();
-    if (sFormulaText.indexOf(sOldPrefix) == -1)
-        return;
-
     OUString sNewPrefix = u"<"_ustr + rNewName + u"."_ustr;
-    sFormulaText = sFormulaText.replaceAll(sOldPrefix, sNewPrefix);
-    SetFormula(sFormulaText);
+    m_sFormula = m_sFormula.replaceAll(sOldPrefix, sNewPrefix);
 }
 
 void SwTableFormula::GetBoxesOfFormula( const SwTable& rTable,

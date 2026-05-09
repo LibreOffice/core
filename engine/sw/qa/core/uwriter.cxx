@@ -1455,13 +1455,16 @@ void SwDocTest::testRenameTableReference()
 
     aIdx.Assign(m_pDoc->GetNodes().GetEndOfContent(), -1);
     aPos.Assign(aIdx.GetNode(), 0);
-    m_pDoc->InsertTable(aOpt, aPos, 1, 2, 0);
+    const SwTable* pTable2 = m_pDoc->InsertTable(aOpt, aPos, 1, 2, 0);
 
     SwTableFormulaTest aFormula("", pTable1->GetTableNode());
     aFormula.SetFormula(u"=<Table2.A1> * <Table1.A1> + <Table2.B1>"_ustr);
     aFormula.BoxNmToPtr(pTable1);
 
     aFormula.RenameTableReference(u"Table2", u"NewTable");
+    // Rename the table so PtrToBoxNm can work correctly
+    pTable2->GetFrameFormat()->SetFormatName(UIName(u"NewTable"_ustr));
+    aFormula.PtrToBoxNm(pTable1);
     CPPUNIT_ASSERT_EQUAL(u"=<NewTable.A1> * <Table1.A1> + <NewTable.B1>"_ustr, aFormula.GetFormula());
 }
 
