@@ -38,7 +38,7 @@ if [ -f Makefile ]; then
 fi
 
 print_stamp 0 autogen.sh
-$SRC/libreoffice/autogen.sh --with-distro=LibreOfficeOssFuzz --with-external-tar=$SRC/external-tar
+$SRC/libreoffice/autogen.sh --with-distro=OssFuzz --with-external-tar=$SRC/external-tar
 
 print_stamp 1 make
 make

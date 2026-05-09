@@ -1,5 +1,0 @@
---host=i686-pc-cygwin
---enable-dbgutil
---disable-dependency-tracking
---disable-online-update
---without-export-validation

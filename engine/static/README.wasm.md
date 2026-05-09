@@ -126,7 +126,7 @@ final result is not depending on the build system at all.
 Recommended configure setup is thusly:
 
 * grab defaults
-    `--with-distro=LibreOfficeWASM32`
+    `--with-distro=CPWASM-LOKit`
 
 * local config
     `QT5DIR=/dir/of/qt5/install/prefix`
