@@ -1604,8 +1604,16 @@ if test -n "$with_lo_path"; then
         have_lo_path=true
         lo_msg="test against $LO_PATH"
         AC_MSG_RESULT([yes])
-    else
+    elif test "$ENABLE_DEBUG" = "true"; then
+        # In a debug build --with-lo-path is expected to point at a real
+        # build-time installation that "make run" can launch.  In a
+        # production/packaging build it is the run-time install path
+        # (e.g. /opt/collaboraoffice/) baked into coolwsd, which does
+        # not need to exist at configure time.
         AC_MSG_ERROR([bad --with-lo-path; file does not exist: $version_file])
+    else
+        lo_msg="no integration tests"
+        AC_MSG_RESULT([no])
     fi
 else
     lo_msg="no integration tests"
