@@ -478,38 +478,40 @@ void ScVbaEventListener::postWindowResizeEvent( vcl::Window* pWindow )
 IMPL_LINK( ScVbaEventListener, processWindowResizeEvent, void*, p, void )
 {
     vcl::Window* pWindow = static_cast<vcl::Window*>(p);
-    ::osl::MutexGuard aGuard( maMutex );
-
-    /*  Check that the passed window is still alive (it must be registered in
-        maControllers). While closing a document, postWindowResizeEvent() may
-        be called on the last window which posts a user event via
-        Application::PostUserEvent to call this event handler. VCL will trigger
-        the handler some time later. Sometimes, the window gets deleted before.
-        This is handled via the disposing() function which removes the window
-        pointer from the member maControllers. Thus, checking whether
-        maControllers contains pWindow ensures that the window is still alive. */
-    if( !mbDisposed && pWindow && !pWindow->isDisposed() && (maControllers.count(pWindow) > 0) )
     {
-        // do not fire event unless all mouse buttons have been released
-        vcl::Window::PointerState aPointerState = pWindow->GetPointerState();
-        if( (aPointerState.mnState & (MOUSE_LEFT | MOUSE_MIDDLE | MOUSE_RIGHT)) == 0 )
+        ::osl::MutexGuard aGuard( maMutex );
+
+        /*  Check that the passed window is still alive (it must be registered in
+            maControllers). While closing a document, postWindowResizeEvent() may
+            be called on the last window which posts a user event via
+            Application::PostUserEvent to call this event handler. VCL will trigger
+            the handler some time later. Sometimes, the window gets deleted before.
+            This is handled via the disposing() function which removes the window
+            pointer from the member maControllers. Thus, checking whether
+            maControllers contains pWindow ensures that the window is still alive. */
+        if( !mbDisposed && pWindow && !pWindow->isDisposed() && (maControllers.count(pWindow) > 0) )
         {
-            uno::Reference< frame::XController > xController = getControllerForWindow( pWindow );
-            if( xController.is() )
+            // do not fire event unless all mouse buttons have been released
+            vcl::Window::PointerState aPointerState = pWindow->GetPointerState();
+            if( (aPointerState.mnState & (MOUSE_LEFT | MOUSE_MIDDLE | MOUSE_RIGHT)) == 0 )
             {
-                uno::Sequence< uno::Any > aArgs{ uno::Any(xController) };
-                // #163419# do not throw exceptions into application core
-                mrVbaEvents.processVbaEventNoThrow( WORKBOOK_WINDOWRESIZE, aArgs );
+                uno::Reference< frame::XController > xController = getControllerForWindow( pWindow );
+                if( xController.is() )
+                {
+                    uno::Sequence< uno::Any > aArgs{ uno::Any(xController) };
+                    // #163419# do not throw exceptions into application core
+                    mrVbaEvents.processVbaEventNoThrow( WORKBOOK_WINDOWRESIZE, aArgs );
+                }
             }
         }
-    }
-    {
-        // note: there may be multiple processWindowResizeEvent outstanding
-        // for pWindow, so it may have been added to m_PostedWindows multiple
-        // times - so this must delete exactly one of these elements!
-        auto const iter(m_PostedWindows.find(pWindow));
-        assert(iter != m_PostedWindows.end());
-        m_PostedWindows.erase(iter);
+        {
+            // note: there may be multiple processWindowResizeEvent outstanding
+            // for pWindow, so it may have been added to m_PostedWindows multiple
+            // times - so this must delete exactly one of these elements!
+            auto const iter(m_PostedWindows.find(pWindow));
+            assert(iter != m_PostedWindows.end());
+            m_PostedWindows.erase(iter);
+        }
     }
     release();
 }
