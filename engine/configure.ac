@@ -15225,8 +15225,10 @@ if test "$WITH_LANG" = "no"; then
 fi
 
 if test -n "$WITH_LANG" -a "$WITH_LANG" != "en-US"; then
-    AC_MSG_WARN([--with-lang is not supported in this branch (translations is not part of the monorepo yet); falling back to en-US])
-    WITH_LANG=
+    if test ! -f "$SRC_ROOT/translations/README"; then
+        AC_MSG_WARN([--with-lang is not supported without the translations repo checked out at $SRC_ROOT/translations; falling back to en-US])
+        WITH_LANG=
+    fi
 fi
 
 if test -z "$WITH_LANG" -o "$WITH_LANG" = "en-US"; then
