@@ -1857,11 +1857,24 @@ namespace emfplushelper
                             polygon.setClosed(true);
 
                             SAL_INFO("drawinglayer.emf", "EMF+\t\t rectangle: " << x << ", "<< y << " " << width << "x" << height);
-                            polyPolygon.append(polygon);
+
+                            if (type == EmfPlusRecordTypeFillRects)
+                            {
+                                // Per MS-EMFPLUS each rect fills its
+                                // interior independently. Emitting them
+                                // as one polypolygon would cancel
+                                // pairwise overlaps under drawinglayer's
+                                // even-odd fill rule, leaving hollow
+                                // stripes where overlapping squares meet.
+                                EMFPPlusFillPolygon(::basegfx::B2DPolyPolygon(polygon),
+                                                    isColor, brushIndexOrColor);
+                            }
+                            else
+                            {
+                                polyPolygon.append(polygon);
+                            }
                         }
-                        if (type == EmfPlusRecordTypeFillRects)
-                            EMFPPlusFillPolygon(polyPolygon, isColor, brushIndexOrColor);
-                        else
+                        if (type == EmfPlusRecordTypeDrawRects)
                             EMFPPlusDrawPolygon(polyPolygon, flags & 0xff);
                         break;
                     }

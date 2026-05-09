@@ -249,6 +249,28 @@ CPPUNIT_TEST_FIXTURE(Test, testFillRectsWithTextureBrush)
     assertXPath(pDocument, aXPathPrefix + "polypolygonstroke/polypolygon", "miny", u"397");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testEmfPlusFillRectsOverlap)
+{
+    // Three south-east-shifted overlapping squares in a single
+    // EmfPlusFillRects record must each fill independently. Combining
+    // them into one polypolygon would cancel pairwise overlaps under
+    // drawinglayer's even-odd fill rule, producing hollow stripes
+    // where two of the three squares meet.
+    Primitive2DSequence aSequence
+        = parseEmf(u"/emfio/qa/cppunit/emf/data/TestEmfPlusFillRectsOverlap.emf");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
+    drawinglayer::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
+    CPPUNIT_ASSERT(pDocument);
+
+    // Three independent gray fills, one per rect (not one
+    // polypolygoncolor wrapping all three, which is the buggy form).
+    assertXPath(pDocument, "//polypolygoncolor", 3);
+    assertXPath(pDocument, "(//polypolygoncolor)[1]", "color", u"#808080");
+    assertXPath(pDocument, "(//polypolygoncolor)[2]", "color", u"#808080");
+    assertXPath(pDocument, "(//polypolygoncolor)[3]", "color", u"#808080");
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testDrawString)
 {
 #if HAVE_MORE_FONTS
