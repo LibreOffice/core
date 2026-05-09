@@ -66,47 +66,8 @@ class AutoFillBaseSection extends CanvasSectionObject {
 		);
 	}
 
-	// Base setPosition mirrors x around the full canvas width when
-	// isCalcRTL() is true, but the grid is mirrored around the tile
-	// section's width (which excludes the row header). Compute the canvas
-	// position from the LTR document pixel ourselves and, in RTL, mirror
-	// it around the tile section's right edge. Placing myTopLeft at the
-	// visual (mirrored) position keeps the section's hit area aligned
-	// with the drawn marker so the user can actually grab it.
 	setPosition(x: number, y: number): void {
-		if (this.documentObject !== true || !this.containerObject) return;
-
-		x = Math.round(x);
-		y = Math.round(y);
-
-		this.position[0] = x;
-		this.position[1] = y;
-		this.documentPosition = cool.SimplePoint.fromCorePixels([x, y]);
-
-		Util.ensureValue(app.activeDocument);
-		const positionAddition =
-			app.activeDocument.activeLayout.viewedRectangle.clone();
-		const documentAnchor = this.containerObject.getDocumentAnchor();
-
-		if (app.isXOrdinateInFrozenPane(x)) positionAddition.pX1 = 0;
-		if (app.isYOrdinateInFrozenPane(y)) positionAddition.pY1 = 0;
-
-		let canvasX = documentAnchor[0] + x - positionAddition.pX1;
-		if (app.calc.isRTL()) {
-			const tileWidth = this.containerObject.getDocumentAnchorSection().size[0];
-			canvasX = 2 * documentAnchor[0] + tileWidth - canvasX - this.size[0];
-		}
-		this.myTopLeft[0] = canvasX;
-		this.myTopLeft[1] = documentAnchor[1] + y - positionAddition.pY1;
-
-		const isVisible = this.containerObject.isDocumentObjectVisible(this);
-		if (isVisible !== this.isVisible) {
-			this.isVisible = isVisible;
-			this.onDocumentObjectVisibilityChange();
-		}
-
-		if (this.containerObject.testing)
-			this.containerObject.createUpdateSingleDivElement(this);
+		setCalcRTLAwareDocumentObjectPosition(this, x, y);
 	}
 
 	protected setMarkerPosition() {

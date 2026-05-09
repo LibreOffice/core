@@ -77,6 +77,7 @@
 /// <reference path="../src/canvas/sections/DebugOverlaySection.ts" />
 /// <reference path="../src/canvas/sections/PreloadMapSection.ts" />
 /// <reference path="../src/canvas/sections/TilesSection.ts" />
+/// <reference path="../src/canvas/sections/CalcRTLAwareDocumentPosition.ts" />
 /// <reference path="../src/canvas/sections/AutoFillBaseSection.ts" />
 /// <reference path="../src/canvas/sections/CellFillMarkerSection.ts" />
 /// <reference path="../src/canvas/sections/ImpressSelectionRectangle.ts" />
