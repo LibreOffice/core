@@ -707,7 +707,7 @@
         "--with-docrepair-fonts",
         "--with-fonts",
         "--with-galleries=no",
-        "--with-lang=ar ca cs cy da de el en-US en-GB es eu fi fr ga gl he hr hu hy id is it ja kk ko nl pl pt pt-BR ro ru sk sl sq sv tr uk zh-CN zh-TW",
+        "--with-lang=ar bg ca cs cy da de el en-US en-GB eo es eu fi fr ga gl he hr hu hy id is it ja kk ko lo nb nl oc pl pt pt-BR ro ru sk sl sq sv tr uk vi zh-CN zh-TW",
         "--with-linker-hash-style=both",
         "--with-system-altlinuxhyph",
         "--with-system-curl",
