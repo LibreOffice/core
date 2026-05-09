@@ -728,6 +728,7 @@ void XclImpPivotCache::ReadPivotCacheStream( const XclImpStream& rStrm )
         OUString aName = aDummyName.makeStringAndClear();
         rDoc.CreateValidTabName( aName );
         rDoc.RenameTab( nScTab, aName );
+        rDoc.SetVisible( nScTab, false );
         // set sheet index to source range
         maSrcRange.aStart.SetTab( nScTab );
         maSrcRange.aEnd.SetTab( nScTab );
