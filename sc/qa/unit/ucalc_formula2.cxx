@@ -4787,18 +4787,30 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testSpillErrorBasic)
     // Cell should display a spill error.
     CPPUNIT_ASSERT_EQUAL(u"#SPILL!"_ustr, m_pDoc->GetString(ScAddress(0, 0, 0)));
 
-    // The master cell retains its intended dimensions (for future spill resolution).
+    // The master is collapsed to 1x1 in spill state so the blocker is preserved.
     SCCOL nCols = -1;
     SCROW nRows = -1;
     pFormulaCell->GetMatColsRows(nCols, nRows);
     CPPUNIT_ASSERT_EQUAL(SCCOL(1), nCols);
-    CPPUNIT_ASSERT_EQUAL(SCROW(3), nRows);
+    CPPUNIT_ASSERT_EQUAL(SCROW(1), nRows);
 
     // The blocking cell A2 should still contain its original value.
     CPPUNIT_ASSERT_EQUAL(99.0, m_pDoc->GetValue(ScAddress(0, 1, 0)));
 
-    // A3 should remain empty
+    // A3 should remain empty.
     CPPUNIT_ASSERT_EQUAL(CELLTYPE_NONE, m_pDoc->GetCellType(ScAddress(0, 2, 0)));
+
+    // Delete the blocker and the matrix should auto resolve and expand to 1x3.
+    ScDocFunc& rFunc = m_xDocShell->GetDocFunc();
+    ScMarkData aBlockerMark(m_pDoc->GetSheetLimits());
+    aBlockerMark.SelectOneTable(0);
+    aBlockerMark.SetMarkArea(ScRange(ScAddress(0, 1, 0)));
+    rFunc.DeleteContents(aBlockerMark, InsertDeleteFlags::CONTENTS, true, true);
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(FormulaError::NONE), sal_Int32(pFormulaCell->GetErrCode()));
+    pFormulaCell->GetMatColsRows(nCols, nRows);
+    CPPUNIT_ASSERT_EQUAL(SCCOL(1), nCols);
+    CPPUNIT_ASSERT_EQUAL(SCROW(3), nRows);
 
     m_pDoc->DeleteTab(0);
 }

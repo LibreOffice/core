@@ -356,18 +356,14 @@ void ScDocument::InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
                     *pCell, *this, ScAddress(nCol1, nRow1, rTab), ScCloneFlags::StartListening));
     }
 
-    // Check for spill: if any non-origin cell in the target range is non-empty,
-    // mark the master with SPILL and don't create reference cells over the
-    // blocker.
-    // Two flavours:
-    //  - Dynamic array masters (UNIQUE, SEQUENCE, SORT, ...): collapse to 1x1
-    //    with a re-evaluable result error and track the cell, so a later
-    //    cell change operation can re-resolve via the runtime spill check and
-    //    expand the matrix back to the result dimensions.
-    //  - Conventional array formulas (LEN(B1:B3) etc.): keep the declared
-    //    dimensions and use a sticky code error. The user explicitly chose
-    //    that range, so the only way out is to clear the blocker and re-enter
-    //    the formula.
+    // Check for spill: if any non-origin cell in the auto expanded target
+    // range is non-empty, collapse the master to 1x1 with a re-evaluable
+    // #SPILL! error and don't create reference cells over the blocker. A
+    // later cell change operation can re-resolve via the runtime spill check
+    // and expand the matrix to the result dimensions. Applies the same way
+    // to dynamic array functions (UNIQUE, SEQUENCE, ...) and to functions returning
+    // an array (TRANSPOSE, MMULT, ...) whose result outgrew the auto-expanded
+    // selection.
     if (bCheckForSpill && (nCol2 > nCol1 || nRow2 > nRow1))
     {
         bool bSpillBlocked = false;
@@ -385,12 +381,7 @@ void ScDocument::InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
         }
         if (bSpillBlocked)
         {
-            const bool bIsDynamic
-                = pCell->GetCode() && pCell->GetCode()->HasDynamicArrayFunction();
-            if (bIsDynamic)
-                pCell->MarkAsSpilled();
-            else
-                pCell->SetErrCode(FormulaError::Spill);
+            pCell->MarkAsSpilled();
             return;
         }
     }
