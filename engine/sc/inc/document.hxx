@@ -958,6 +958,10 @@ public:
     // Spilled array formula tracking.
     void MarkFormulaSpilled(const ScAddress& rPos) { maSpilledFormulaCells.insert(rPos); }
     void UnmarkFormulaSpilled(const ScAddress& rPos) { maSpilledFormulaCells.erase(rPos); }
+    bool IsFormulaSpilled(const ScAddress& rPos) const
+    {
+        return maSpilledFormulaCells.contains(rPos);
+    }
     const std::unordered_set<ScAddress>& GetSpilledFormulaCells() const { return maSpilledFormulaCells; }
 
     // Expanded dynamic array tracking.

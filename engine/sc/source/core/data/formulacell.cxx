@@ -2314,12 +2314,18 @@ void ScFormulaCell::InterpretTail( ScInterpreterContext& rContext, ScInterpretTa
                 SCSIZE nResRows = 0;
                 aResult.GetMatrix()->GetDimensions(nResCols, nResRows);
                 bool bSpillBlocked = false;
-                // Only spill/auto-resize when the formula uses a dynamic-array
-                // function (UNIQUE/FILTER/SORT/...); legacy array-returning
-                // functions like TRANSPOSE/MMULT and HYPERLINK keep their
-                // declared dimensions.
-                bool bIsDynamic = pCode->HasDynamicArrayFunction();
-                if (bIsDynamic && nDeclCols > 0 && nDeclRows > 0
+                // Auto resize fires for matrix formulas whose result wants
+                // more cells than declared, in two situations:
+                //  - the formula uses a dynamic array function.
+                //  - the cell is currently in spill state. Re-checking lets
+                //    the matrix auto expand the next time the user clears
+                //    the blocking cell.
+                // Conventional matrix formulas where the user explicitly
+                // picked the range fall outside both cases - their declared
+                // dimensions are intentional.
+                const bool bShouldCheckSpill
+                    = pCode->HasDynamicArrayFunction() || rDocument.IsFormulaSpilled(aPos);
+                if (bShouldCheckSpill && nDeclCols > 0 && nDeclRows > 0
                     && (o3tl::make_unsigned(nDeclCols) < nResCols
                         || o3tl::make_unsigned(nDeclRows) < nResRows))
                 {
@@ -2362,7 +2368,7 @@ void ScFormulaCell::InterpretTail( ScInterpreterContext& rContext, ScInterpretTa
                 }
 
                 if (!bSpillBlocked && nDeclCols > 0 && nDeclRows > 0
-                    && bIsDynamic
+                    && bShouldCheckSpill
                     && !rDocument.IsThreadedGroupCalcInProgress())
                 {
                     if (o3tl::make_unsigned(nDeclCols) > nResCols
