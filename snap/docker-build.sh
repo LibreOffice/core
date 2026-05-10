@@ -69,6 +69,13 @@ $EXEC "$CONTAINER" rsync -a \
     --exclude='stage' \
     --exclude='prime' \
     --exclude='snap/output' \
+    --exclude='engine/workdir' \
+    --exclude='engine/instdir' \
+    --exclude='engine/inst' \
+    --exclude='engine/autom4te.cache' \
+    --exclude='engine/translations' \
+    --exclude='browser/dist' \
+    --exclude='browser/node_modules' \
     /src/ /build/
 
 echo "==> Building snap (this will take a long time)..."
