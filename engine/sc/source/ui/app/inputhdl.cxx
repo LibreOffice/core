@@ -2551,7 +2551,7 @@ bool ScInputHandler::StartTable(sal_Unicode cTyped, bool bFromCommand, bool bInp
         // protection only fires for multi cell or master cell edits.
         const bool bAllowMatrixRef
             = !rMark.IsMarked() && !rMark.IsMultiMarked()
-              && aTester.IsEditableOrMatrixRefCell(rDoc, aCursorPos);
+              && aTester.IsEditableOrMatrixCell(rDoc, aCursorPos);
 
         bool bStartInputMode = !(pActiveViewSh->GetViewShell() && pActiveViewSh->GetViewShell()->IsKitReadOnlyView());
 

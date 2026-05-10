@@ -18,7 +18,10 @@
  */
 
 #include <docfuncutil.hxx>
+#include <docfunc.hxx>
 #include <document.hxx>
+#include <formulacell.hxx>
+#include <markdata.hxx>
 #include <undobase.hxx>
 #include <global.hxx>
 #include <undoblk.hxx>
@@ -28,6 +31,26 @@
 #include <utility>
 
 namespace sc {
+
+bool DocFuncUtil::demolishMatrixMaster(ScDocFunc& rDocFunc, const ScDocument& rDoc,
+                                       const ScAddress& rPos, bool bApi)
+{
+    const ScFormulaCell* pCell = rDoc.GetFormulaCell(rPos);
+    if (!pCell || pCell->GetMatrixFlag() != ScMatrixMode::Formula)
+        return false;
+    SCCOL nCols = 0;
+    SCROW nRows = 0;
+    pCell->GetMatColsRows(nCols, nRows);
+    if (nCols <= 1 && nRows <= 1)
+        return false;
+
+    ScMarkData aMark(rDoc.GetSheetLimits());
+    aMark.SelectOneTable(rPos.Tab());
+    aMark.SetMarkArea(ScRange(rPos));
+    rDocFunc.DeleteContents(aMark, InsertDeleteFlags::CONTENTS,
+                            /*bRecord*/ true, bApi);
+    return true;
+}
 
 bool DocFuncUtil::hasProtectedTab( const ScDocument& rDoc, const ScMarkData& rMark )
 {

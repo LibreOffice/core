@@ -12,6 +12,7 @@
 #include <docfuncutil.hxx>
 #include <docfunc.hxx>
 #include <editable.hxx>
+#include <formulacell.hxx>
 #include <markdata.hxx>
 #include <SheetViewOperationsTester.hxx>
 
@@ -19,6 +20,34 @@
 
 namespace sc
 {
+namespace
+{
+// If the selection is a single cell that is the master of a multi-cell
+// matrix formula, expand the mark to cover the whole matrix range. Deleting
+// just the master would leave the reference cells orphaned, so this lets
+// the user delete the matrix by hitting Delete on the master cell.
+void expandSingleMasterToFullMatrix(ScMarkData& rMark, const ScDocument& rDoc)
+{
+    if (!rMark.IsMarked() || rMark.IsMultiMarked())
+        return;
+    const ScRange aRange = rMark.GetMarkArea();
+    if (aRange.aStart != aRange.aEnd)
+        return;
+    const ScFormulaCell* pCell = rDoc.GetFormulaCell(aRange.aStart);
+    if (!pCell || pCell->GetMatrixFlag() != ScMatrixMode::Formula)
+        return;
+    SCCOL nCols = 0;
+    SCROW nRows = 0;
+    pCell->GetMatColsRows(nCols, nRows);
+    if (nCols <= 1 && nRows <= 1)
+        return;
+    ScRange aFull(aRange.aStart);
+    aFull.aEnd.IncCol(nCols - 1);
+    aFull.aEnd.IncRow(nRows - 1);
+    rMark.SetMarkArea(aFull);
+}
+}
+
 DeleteContentOperation::DeleteContentOperation(ScDocFunc& rDocFunc, ScDocShell& rDocShell,
                                                const ScMarkData& rMark, InsertDeleteFlags nFlags,
                                                bool bRecord, bool bApi)
@@ -45,7 +74,10 @@ bool DeleteContentOperation::runImplementation()
     if (mbRecord && !rDoc.IsUndoEnabled())
         mbRecord = false;
 
-    ScEditableTester aTester = ScEditableTester::CreateAndTestSelection(rDoc, mrMark);
+    ScMarkData aWorkMark(mrMark);
+    expandSingleMasterToFullMatrix(aWorkMark, rDoc);
+
+    ScEditableTester aTester = ScEditableTester::CreateAndTestSelection(rDoc, aWorkMark);
     if (!aTester.IsEditable())
     {
         if (!mbApi)
@@ -53,7 +85,7 @@ bool DeleteContentOperation::runImplementation()
         return false;
     }
 
-    ScMarkData aMultiMark = convertMark(mrMark);
+    ScMarkData aMultiMark = convertMark(aWorkMark);
     aMultiMark.SetMarking(false); // for MarkToMulti
 
     ScDocumentUniquePtr pUndoDoc;
@@ -66,7 +98,7 @@ bool DeleteContentOperation::runImplementation()
 
     // no objects on protected tabs
     bool bObjects
-        = (mnFlags & InsertDeleteFlags::OBJECTS) && !sc::DocFuncUtil::hasProtectedTab(rDoc, mrMark);
+        = (mnFlags & InsertDeleteFlags::OBJECTS) && !sc::DocFuncUtil::hasProtectedTab(rDoc, aWorkMark);
 
     sal_uInt16 nExtFlags = 0; // extra flags are needed only if attributes are deleted
     if (mnFlags & InsertDeleteFlags::ATTRIB)
