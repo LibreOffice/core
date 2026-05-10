@@ -5168,6 +5168,50 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testSequenceFormulaResolveAfterBlockerIsDelet
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(TestFormula2, testSpillMatrixCollapsesOnRefCellEdit)
+{
+    // Writing into a reference cell of an expanded matrix master collapses
+    // the matrix to #SPILL!. The user visible UI flow is "type into a cell
+    // covered by TRANSPOSE, SEQUENCE, ...". Both conventional matrix formulas
+    // and dynamic array formulas behave the same way.
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+
+    // Source data A1:A4
+    m_pDoc->SetValue(ScAddress(0, 0, 0), 10.0);
+    m_pDoc->SetValue(ScAddress(0, 1, 0), 20.0);
+    m_pDoc->SetValue(ScAddress(0, 2, 0), 30.0);
+    m_pDoc->SetValue(ScAddress(0, 3, 0), 40.0);
+
+    ScDocFunc& rFunc = m_xDocShell->GetDocFunc();
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
+    aMark.SelectOneTable(0);
+
+    // Add TRANSPOSE formula to  C1
+    rFunc.EnterMatrix(ScRange(2, 0, 0, 5, 0, 0), &aMark, nullptr, u"=TRANSPOSE(A1:A4)"_ustr, true,
+                      false, OUString(), formula::FormulaGrammar::GRAM_DEFAULT, true);
+
+    ScFormulaCell* pFormulaCell = m_pDoc->GetFormulaCell(ScAddress(2, 0, 0));
+    CPPUNIT_ASSERT(pFormulaCell);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(FormulaError::NONE), sal_Int32(pFormulaCell->GetErrCode()));
+    CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(ScAddress(2, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(40.0, m_pDoc->GetValue(ScAddress(5, 0, 0)));
+
+    // User types into a reference cell. The master must collapse to #SPILL!
+    // and the typed value must remain.
+    rFunc.SetStringCell(ScAddress(4, 0, 0), u"blocker"_ustr, true);
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(FormulaError::Spill), sal_Int32(pFormulaCell->GetErrCode()));
+    SCCOL nCols = 0;
+    SCROW nRows = 0;
+    pFormulaCell->GetMatColsRows(nCols, nRows);
+    CPPUNIT_ASSERT_EQUAL(SCCOL(1), nCols);
+    CPPUNIT_ASSERT_EQUAL(SCROW(1), nRows);
+    CPPUNIT_ASSERT_EQUAL(u"blocker"_ustr, m_pDoc->GetString(ScAddress(4, 0, 0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_TEST_FIXTURE(TestFormula2, testSpillMatrixContractionOnValueChange)
 {
     // A dynamic array formula shrinks when its source data produces fewer

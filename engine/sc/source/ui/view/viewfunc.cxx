@@ -793,7 +793,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
         return;
 
     ScEditableTester aTester = ScEditableTester::CreateAndTestSelectedBlock(rDoc, nCol, nRow, nCol, nRow, aMark);
-    if (!aTester.IsEditable())
+    if (!aTester.IsEditableOrMatrixRefCell(rDoc, ScAddress(nCol, nRow, nTab)))
     {
         ErrorMessage(aTester.GetMessageId());
         PaintArea(nCol, nRow, nCol, nRow);        // possibly the edit-engine is still painted there
@@ -834,10 +834,10 @@ void ScViewFunc::EnterValue( SCCOL nCol, SCROW nRow, SCTAB nTab, const double& r
     bool bUndo(rDoc.IsUndoEnabled());
     ScDocShellModificator aModificator( *pDocSh );
 
+    const ScAddress aPos( nCol, nRow, nTab );
     ScEditableTester aTester = ScEditableTester::CreateAndTestBlock(rDoc, nTab, nCol, nRow, nCol, nRow);
-    if (aTester.IsEditable())
+    if (aTester.IsEditableOrMatrixRefCell(rDoc, aPos))
     {
-        ScAddress aPos( nCol, nRow, nTab );
         ScCellValue aUndoCell;
         if (bUndo)
             aUndoCell.assign(rDoc, aPos);
@@ -873,7 +873,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
         return;
 
     ScEditableTester aTester = ScEditableTester::CreateAndTestBlock(rDoc, nTab, nCol, nRow, nCol, nRow);
-    if (aTester.IsEditable())
+    if (aTester.IsEditableOrMatrixRefCell(rDoc, ScAddress(nCol, nRow, nTab)))
     {
 
         //      test for attribute

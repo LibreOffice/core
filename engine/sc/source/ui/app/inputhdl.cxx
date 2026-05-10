@@ -2545,9 +2545,17 @@ bool ScInputHandler::StartTable(sal_Unicode cTyped, bool bFromCommand, bool bInp
             aTester.TestSelectedBlock(
                 rDoc, aCursorPos.Col(), aCursorPos.Row(), aCursorPos.Col(), aCursorPos.Row(), rMark );
 
+        // Single cell input on a matrix reference cell is allowed. Writing
+        // turns the reference cell into a blocker, the matrix master detects
+        // it via spill resolution and collapses to #SPILL!. The matrix
+        // protection only fires for multi cell or master cell edits.
+        const bool bAllowMatrixRef
+            = !rMark.IsMarked() && !rMark.IsMultiMarked()
+              && aTester.IsEditableOrMatrixRefCell(rDoc, aCursorPos);
+
         bool bStartInputMode = !(pActiveViewSh->GetViewShell() && pActiveViewSh->GetViewShell()->IsKitReadOnlyView());
 
-        if (!aTester.IsEditable())
+        if (!aTester.IsEditable() && !bAllowMatrixRef)
         {
             bProtected = true;
             // We allow read-only input mode activation regardless

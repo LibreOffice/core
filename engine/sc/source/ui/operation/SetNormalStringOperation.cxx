@@ -43,7 +43,7 @@ bool SetNormalStringOperation::runImplementation()
 
     ScEditableTester aTester = ScEditableTester::CreateAndTestBlock(
         rDoc, aPosition.Tab(), aPosition.Col(), aPosition.Row(), aPosition.Col(), aPosition.Row());
-    if (!aTester.IsEditable())
+    if (!aTester.IsEditableOrMatrixRefCell(rDoc, aPosition))
     {
         if (!mbApi)
             mrDocShell.ErrorMessage(aTester.GetMessageId());

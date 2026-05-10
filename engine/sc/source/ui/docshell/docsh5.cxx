@@ -590,6 +590,10 @@ void ScDocShell::ResolveSpilledOutputs()
         }
         pFormulaCell->SetMatColsRows(1, 1);
         m_pDocument->UnmarkExpandedDynamicArray(rPosition);
+        // Conventional matrix formulas don't normally opt into the runtime
+        // spill check. Pre-marking the cell flips that bit so the next
+        // interpret recognises this as a spill-blocked master.
+        m_pDocument->MarkFormulaSpilled(rPosition);
         pFormulaCell->SetDirty();
         pFormulaCell->Interpret();
         bAnyResolved = true;
