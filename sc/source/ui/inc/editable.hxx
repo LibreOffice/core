@@ -89,8 +89,9 @@ public:
     bool IsEditable() const { return mbIsEditable; }
     bool IsFormatEditable() const { return mbIsEditable || mbOnlyMatrix; }
     /// True when the only obstacle is a matrix at the given single cell
-    /// position and that cell is a matrix reference cell.
-    bool IsEditableOrMatrixRefCell(const ScDocument& rDoc, const ScAddress& rPos) const;
+    /// position and that cell is part of a matrix. Direct single cell
+    /// input is allowed for both matrix masters and matrix reference cells.
+    bool IsEditableOrMatrixCell(const ScDocument& rDoc, const ScAddress& rPos) const;
     TranslateId GetMessageId() const;
 };
 

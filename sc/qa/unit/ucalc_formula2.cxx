@@ -5214,6 +5214,82 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testSpillMatrixCollapsesOnRefCellEdit)
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(TestFormula2, testWriteToMasterReplacesWholeMatrix)
+{
+    // Writing a value into the master cell of a multi-cell matrix replaces
+    // the whole matrix (master plus reference cells) with the new value.
+
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+
+    m_pDoc->SetValue(ScAddress(0, 0, 0), 10.0);
+    m_pDoc->SetValue(ScAddress(0, 1, 0), 20.0);
+    m_pDoc->SetValue(ScAddress(0, 2, 0), 30.0);
+    m_pDoc->SetValue(ScAddress(0, 3, 0), 40.0);
+
+    ScDocFunc& rFunc = m_xDocShell->GetDocFunc();
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
+    aMark.SelectOneTable(0);
+
+    // Enter TRANSPOSE formula
+    rFunc.EnterMatrix(ScRange(2, 0, 0, 5, 0, 0), &aMark, nullptr, u"=TRANSPOSE(A1:A4)"_ustr, true,
+                      false, OUString(), formula::FormulaGrammar::GRAM_DEFAULT, true);
+
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_FORMULA, m_pDoc->GetCellType(ScAddress(2, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_FORMULA, m_pDoc->GetCellType(ScAddress(5, 0, 0)));
+
+    // User selects only the master cell and types "hello".
+    bool bDummy = false;
+    rFunc.SetNormalString(bDummy, ScAddress(2, 0, 0), u"hello"_ustr, /*bApi*/ true);
+
+    // The whole matrix should be gone. The typed value sits at the master cell.
+    CPPUNIT_ASSERT_EQUAL(u"hello"_ustr, m_pDoc->GetString(ScAddress(2, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_NONE, m_pDoc->GetCellType(ScAddress(3, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_NONE, m_pDoc->GetCellType(ScAddress(4, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_NONE, m_pDoc->GetCellType(ScAddress(5, 0, 0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TestFormula2, testDeleteMasterDeletesWholeMatrix)
+{
+    // Pressing Delete on the master cell of a multi-cell matrix deletes
+    // the whole matrix (master plus reference cells), not just the master.
+    // Without this, the matrix-fragment protection refuses the operation.
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+
+    m_pDoc->SetValue(ScAddress(0, 0, 0), 10.0);
+    m_pDoc->SetValue(ScAddress(0, 1, 0), 20.0);
+    m_pDoc->SetValue(ScAddress(0, 2, 0), 30.0);
+    m_pDoc->SetValue(ScAddress(0, 3, 0), 40.0);
+
+    ScDocFunc& rFunc = m_xDocShell->GetDocFunc();
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
+    aMark.SelectOneTable(0);
+
+    // TRANSPOSE(A1:A4) at C1 expanded into 4x1.
+    rFunc.EnterMatrix(ScRange(2, 0, 0, 5, 0, 0), &aMark, nullptr, u"=TRANSPOSE(A1:A4)"_ustr, true,
+                      false, OUString(), formula::FormulaGrammar::GRAM_DEFAULT, true);
+
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_FORMULA, m_pDoc->GetCellType(ScAddress(2, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_FORMULA, m_pDoc->GetCellType(ScAddress(5, 0, 0)));
+
+    // User selects the master cell (single cell) and presses Delete.
+    ScMarkData aMasterMark(m_pDoc->GetSheetLimits());
+    aMasterMark.SelectOneTable(0);
+    aMasterMark.SetMarkArea(ScRange(ScAddress(2, 0, 0)));
+    rFunc.DeleteContents(aMasterMark, InsertDeleteFlags::CONTENTS, true, true);
+
+    // Master and all reference cells must be empty.
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_NONE, m_pDoc->GetCellType(ScAddress(2, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_NONE, m_pDoc->GetCellType(ScAddress(3, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_NONE, m_pDoc->GetCellType(ScAddress(4, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_NONE, m_pDoc->GetCellType(ScAddress(5, 0, 0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_TEST_FIXTURE(TestFormula2, testSpillMatrixContractionOnValueChange)
 {
     // A dynamic array formula shrinks when its source data produces fewer

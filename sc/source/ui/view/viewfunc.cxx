@@ -65,6 +65,7 @@
 #include <inputopt.hxx>
 #include <compiler.hxx>
 #include <docfunc.hxx>
+#include <docfuncutil.hxx>
 #include <appoptio.hxx>
 #include <sizedev.hxx>
 #include <editable.hxx>
@@ -795,7 +796,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
         return;
 
     ScEditableTester aTester = ScEditableTester::CreateAndTestSelectedBlock(rDoc, nCol, nRow, nCol, nRow, aMark);
-    if (!aTester.IsEditableOrMatrixRefCell(rDoc, ScAddress(nCol, nRow, nTab)))
+    if (!aTester.IsEditableOrMatrixCell(rDoc, ScAddress(nCol, nRow, nTab)))
     {
         ErrorMessage(aTester.GetMessageId());
         PaintArea(nCol, nRow, nCol, nRow);        // possibly the edit-engine is still painted there
@@ -804,6 +805,12 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
 
     if ( bRecord )
         rFunc.EnterListAction( STR_UNDO_ENTERDATA );
+
+    // If the user is typing into a multi-cell matrix master, tear the
+    // matrix down first so the new value doesn't leave reference cells
+    // orphaned. Both undos roll back together because of the list action.
+    sc::DocFuncUtil::demolishMatrixMaster(rFunc, rDoc, ScAddress(nCol, nRow, nTab),
+                                          /*bApi*/ false);
 
     bool bFormula = checkFormula(rDoc, nCol, nRow, nTab, rString);
     bool bNumFmtChanged = false;
@@ -838,8 +845,17 @@ void ScViewFunc::EnterValue( SCCOL nCol, SCROW nRow, SCTAB nTab, const double& r
 
     const ScAddress aPos( nCol, nRow, nTab );
     ScEditableTester aTester = ScEditableTester::CreateAndTestBlock(rDoc, nTab, nCol, nRow, nCol, nRow);
-    if (aTester.IsEditableOrMatrixRefCell(rDoc, aPos))
+    if (aTester.IsEditableOrMatrixCell(rDoc, aPos))
     {
+        ScDocFunc& rFunc = pDocSh->GetDocFunc();
+        if (bUndo)
+            rFunc.EnterListAction(STR_UNDO_ENTERDATA);
+
+        // If the user is replacing a multi-cell matrix master, tear the
+        // whole matrix down first so the new value doesn't leave reference
+        // cells orphaned. Both undos roll back together.
+        sc::DocFuncUtil::demolishMatrixMaster(rFunc, rDoc, aPos, /*bApi*/ false);
+
         ScCellValue aUndoCell;
         if (bUndo)
             aUndoCell.assign(rDoc, aPos);
@@ -851,6 +867,7 @@ void ScViewFunc::EnterValue( SCCOL nCol, SCROW nRow, SCTAB nTab, const double& r
         {
             pDocSh->GetUndoManager()->AddUndoAction(
                 std::make_unique<ScUndoEnterValue>(*pDocSh, aPos, aUndoCell, rValue));
+            rFunc.EndListAction();
         }
 
         pDocSh->PostPaintCell( aPos );
@@ -875,7 +892,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
         return;
 
     ScEditableTester aTester = ScEditableTester::CreateAndTestBlock(rDoc, nTab, nCol, nRow, nCol, nRow);
-    if (aTester.IsEditableOrMatrixRefCell(rDoc, ScAddress(nCol, nRow, nTab)))
+    if (aTester.IsEditableOrMatrixCell(rDoc, ScAddress(nCol, nRow, nTab)))
     {
 
         //      test for attribute
@@ -948,6 +965,19 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
         }
         else
         {
+            ScDocFunc& rFunc = pDocSh->GetDocFunc();
+            if (bRecord)
+                rFunc.EnterListAction(STR_UNDO_ENTERDATA);
+
+            // If the user is replacing a multi-cell matrix master, tear the
+            // whole matrix down first so the new value doesn't leave
+            // reference cells orphaned.
+            for (const auto& rTab : rMark)
+            {
+                sc::DocFuncUtil::demolishMatrixMaster(
+                    rFunc, rDoc, ScAddress(nCol, nRow, rTab), /*bApi*/ false);
+            }
+
             for (const auto& rTab : rMark)
             {
                 ScAddress aPos(nCol, nRow, rTab);
@@ -958,6 +988,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
             {   //  because of ChangeTrack current first
                 pDocSh->GetUndoManager()->AddUndoAction(
                     std::make_unique<ScUndoEnterData>(*pDocSh, ScAddress(nCol,nRow,nTab), aOldValues, aString, std::move(pUndoData)));
+                rFunc.EndListAction();
             }
 
             HideAllCursors();

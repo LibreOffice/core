@@ -11,6 +11,8 @@
 
 #include <memory>
 
+class ScAddress;
+class ScDocFunc;
 class ScMarkData;
 class ScRange;
 enum class InsertDeleteFlags : sal_Int32;
@@ -22,6 +24,14 @@ class DocFuncUtil
 public:
 
     static bool hasProtectedTab( const ScDocument& rDoc, const ScMarkData& rMark );
+
+    /// If the cell at rPosition is the master of a multi-cell matrix formula,
+    /// delete the master cell so the whole matrix (master plus reference cells) 
+    //  is removed.
+    /// Returns true if a demolition happened. Used before single-cell
+    /// writes so the new value doesn't leave reference cells orphaned.
+    static bool demolishMatrixMaster(
+        ScDocFunc& rDocFunc, const ScDocument& rDoc, const ScAddress& rPosition, bool bApi);
 
     static ScDocumentUniquePtr createDeleteContentsUndoDoc(
         ScDocument& rDoc, const ScMarkData& rMark, const ScRange& rRange,

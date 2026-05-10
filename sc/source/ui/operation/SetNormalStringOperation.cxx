@@ -43,12 +43,17 @@ bool SetNormalStringOperation::runImplementation()
 
     ScEditableTester aTester = ScEditableTester::CreateAndTestBlock(
         rDoc, aPosition.Tab(), aPosition.Col(), aPosition.Row(), aPosition.Col(), aPosition.Row());
-    if (!aTester.IsEditableOrMatrixRefCell(rDoc, aPosition))
+    if (!aTester.IsEditableOrMatrixCell(rDoc, aPosition))
     {
         if (!mbApi)
             mrDocShell.ErrorMessage(aTester.GetMessageId());
         return false;
     }
+
+    // If the target is a multi-cell matrix master, tear the whole matrix
+    // down before the write so the new value doesn't leave reference cells
+    // orphaned.
+    DocFuncUtil::demolishMatrixMaster(mrDocFunc, rDoc, aPosition, mbApi);
 
     bool bEditDeleted = (rDoc.GetCellType(aPosition) == CELLTYPE_EDIT);
     ScUndoEnterData::ValuesType aOldValues;
