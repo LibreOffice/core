@@ -354,11 +354,6 @@ bool ScSingleRefData::operator==( const ScSingleRefData& r ) const
     return mnFlagValue == r.mnFlagValue && mnCol == r.mnCol && mnRow == r.mnRow && mnTab == r.mnTab;
 }
 
-bool ScSingleRefData::operator!=( const ScSingleRefData& r ) const
-{
-    return !operator==(r);
-}
-
 #if DEBUG_FORMULA_COMPILER
 void ScSingleRefData::Dump( int nIndent ) const
 {

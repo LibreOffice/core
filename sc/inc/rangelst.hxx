@@ -71,7 +71,6 @@ public:
     const ScRange*  Find( const ScAddress& ) const;
     ScRange*        Find( const ScAddress& );
     bool            operator==( const ScRangeList& ) const;
-    bool            operator!=( const ScRangeList& r ) const;
     bool            Intersects( const ScRange& ) const;
     bool            Contains( const ScRange& ) const;
     sal_uInt64      GetCellCount() const;

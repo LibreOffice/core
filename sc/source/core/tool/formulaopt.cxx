@@ -121,11 +121,6 @@ bool ScFormulaOptions::operator==( const ScFormulaOptions& rOpt ) const
         && meReCalcOptiRowHeights == rOpt.meReCalcOptiRowHeights;
 }
 
-bool ScFormulaOptions::operator!=( const ScFormulaOptions& rOpt ) const
-{
-    return !(operator==(rOpt));
-}
-
 ScTpFormulaItem::ScTpFormulaItem( ScFormulaOptions aOpt ) :
     SfxPoolItem ( SID_SCFORMULAOPTIONS ),
     theOptions  (std::move( aOpt ))

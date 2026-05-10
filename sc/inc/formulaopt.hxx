@@ -73,7 +73,6 @@ public:
     static void GetDefaultFormulaSeparators(OUString& rSepArg, OUString& rSepArrayCol, OUString& rSepArrayRow);
 
     bool               operator== ( const ScFormulaOptions& rOpt ) const;
-    bool               operator!= ( const ScFormulaOptions& rOpt ) const;
 };
 
 // item for the dialog / options page

@@ -346,11 +346,6 @@ bool ScRangeList::operator==( const ScRangeList& r ) const
     return maRanges == r.maRanges;
 }
 
-bool ScRangeList::operator!=( const ScRangeList& r ) const
-{
-    return !operator==( r );
-}
-
 bool ScRangeList::UpdateReference(
     UpdateRefMode eUpdateRefMode,
     const ScDocument& rDoc,

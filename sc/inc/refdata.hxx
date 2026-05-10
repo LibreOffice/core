@@ -111,7 +111,6 @@ public:
     static void PutInOrder( ScSingleRefData& rRef1, ScSingleRefData& rRef2, const ScAddress& rPos );
 
     bool operator==( const ScSingleRefData& ) const;
-    bool operator!=( const ScSingleRefData& ) const;
 
 #if DEBUG_FORMULA_COMPILER
     void Dump( int nIndent = 0 ) const;
