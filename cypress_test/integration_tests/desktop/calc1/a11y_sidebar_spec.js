@@ -47,6 +47,47 @@ describe(['tagdesktop'], 'Accessibility Calc Sidebar Tests', { testIsolation: fa
 		runA11yValidation(win);
 	});
 
+	it('Detects sidebar form control missing visible label', function () {
+		helper.processToIdle(win);
+
+		cy.then(() => {
+			const container = win.app.map.sidebar.getContainer();
+			const allInputs = container.querySelectorAll('input, select');
+			const target = Array.prototype.find.call(allInputs, function (el) {
+				if (!el.id) return false;
+				if (el.hasAttribute('aria-labelledby')) return true;
+				return !!win.document.querySelector('label[for="' + el.id + '"]');
+			});
+			expect(target, 'a labelled sidebar form control').to.exist;
+
+			const originalLabelledBy = target.getAttribute('aria-labelledby');
+			const labelEl = win.document.querySelector('label[for="' + target.id + '"]');
+			const originalLabelFor = labelEl ? labelEl.getAttribute('for') : null;
+
+			if (originalLabelledBy !== null) target.removeAttribute('aria-labelledby');
+			if (labelEl) labelEl.removeAttribute('for');
+
+			let matchedCount = 0;
+			try {
+				const spy = Cypress.sinon.spy(win.console, 'error');
+				win.app.dispatcher.dispatch('validatesidebara11y');
+
+				const prefix = win.app.A11yValidatorException.PREFIX;
+				matchedCount = spy.getCalls().filter(function (call) {
+					const s = String(call.args[0]);
+					return s.includes(prefix) &&
+						s.includes("'" + target.id + "'") &&
+						s.includes('missing a visible label');
+				}).length;
+				spy.restore();
+			} finally {
+				if (originalLabelledBy !== null) target.setAttribute('aria-labelledby', originalLabelledBy);
+				if (labelEl && originalLabelFor !== null) labelEl.setAttribute('for', originalLabelFor);
+			}
+			expect(matchedCount, 'visible label violation for ' + target.id).to.be.greaterThan(0);
+		});
+	});
+
 	it('PropertyDeck: Graphic Context', function () {
 		cy.viewport(1920, 1080);
 
