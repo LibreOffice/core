@@ -72,10 +72,8 @@ Module gid_Module_Langpack_Brand_Template
     Description = "gid_Module_Langpack_Brand_Template";
     Styles = (TEMPLATEMODULE);
     InstallOrder = "1050";
-    Dirs = (gid_Brand_Dir_Program_Shell,
-            gid_Brand_Dir_Readme);
-    Files = (gid_Brand_File_Readme_Readme,
-             gid_Brand_File_Share_Registry_Cjk_Xcd);
+    Dirs = (gid_Brand_Dir_Program_Shell);
+    Files = (gid_Brand_File_Share_Registry_Cjk_Xcd);
 End
 
 // Directories
@@ -88,15 +86,6 @@ Directory gid_Brand_Dir_Program
     ParentID = gid_Dir_Brand_Root;
     DosName = "program";
 #endif
-End
-
-Directory gid_Brand_Dir_Readme
-#if defined MACOSX
-    ParentID = gid_Dir_Bundle_Contents_Resources;
-#else
-    ParentID = gid_Dir_Brand_Root;
-#endif
-    DosName = "readmes";
 End
 
 Directory gid_Brand_Dir_Share
@@ -168,18 +157,6 @@ File gid_Brand_File_Desktophelper_Txt
     ComponentCondition = "CREATEDESKTOPLINK=1";
 End
 #endif
-
-File gid_Brand_File_Readme_Readme
-  TXT_FILE_BODY;
-  Dir = gid_Brand_Dir_Readme;
-  #ifdef UNX
-    README_ALL_LANG(Name, README);
-  #endif
-  #ifdef WNT
-    README_TXT_ALL_LANG(Name, readme, txt);
-  #endif
-    Styles = (PACKED, SCPZIP_REPLACE);
-End
 
 File gid_Brand_File_Share_Registry_Cjk_Xcd
     TXT_FILE_BODY;

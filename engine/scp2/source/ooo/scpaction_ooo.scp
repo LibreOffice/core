@@ -18,24 +18,6 @@
 
 #include "macros.inc"
 
-#if !defined(WNT) && !defined(MACOSX)
-ScpAction scp_Copy_Readme_Txt
-  #ifdef UNX
-    README_ALL_LANG(Copy, README);
-    README_ALL_LANG(Name, README);
-  #else
-    README_TXT_ALL_LANG(Copy, readme, txt);
-    README_TXT_ALL_LANG(Name, readme, txt);
-  #endif
-    Styles = (SCPZIP_REPLACE);
-  #ifndef MACOSX
-    Subdir = "readmes";
-  #else
-    Subdir = "READMEs";
-  #endif
-End
-#endif
-
 #ifdef MACOSX
 ScpAction scp_Copy_Dmg_Background_Image
     Copy = "osxdndinstall.png";

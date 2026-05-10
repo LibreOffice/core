@@ -845,7 +845,6 @@ $(eval $(call gb_Helper_register_packages, \
 	instsetoo_native_setup \
 	$(if $(ENABLE_OOENV),instsetoo_native_ooenv) \
 	postprocess_registry \
-	readlicense_oo_readmes \
 	setup_native_misc \
 	sysui_share \
 	vcl_fontunxpsprint \

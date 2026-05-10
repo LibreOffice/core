@@ -52,8 +52,6 @@ write_EXTRA_ALL_LANG_BUT_EN_US();
 write_MO_ALL_LANG_EXCEPT_EN_US_AND_QTZ();
 write_EXTRA_ALL_GOOD_HELP_LOCALIZATIONS_LANG();
 write_RESFILE_ALL_LANG();
-write_README_ALL_LANG();
-write_README_TXT_ALL_LANG();
 write_FILE_ALL_LANG_LETTER();
 
 close OUTFILE;
@@ -181,26 +179,6 @@ sub write_RESFILE_ALL_LANG
     print OUTFILE "#define RESFILE_ALL_LANG(name) ";
     foreach $lang (@completelangiso) {
         print OUTFILE "\\\n\tName ($lang) = RESFILENAME(name,$lang)";
-        print OUTFILE "; " if ( $lang ne $completelangiso[$#completelangiso]);
-    }
-    print OUTFILE "\n\n";
-}
-
-sub write_README_ALL_LANG
-{
-    print OUTFILE "#define README_ALL_LANG(key, name) ";
-    foreach $lang (@completelangiso) {
-        print OUTFILE "\\\n\tkey ($lang) = READMEFILENAME(name,_$lang)";
-        print OUTFILE "; " if ( $lang ne $completelangiso[$#completelangiso]);
-    }
-    print OUTFILE "\n\n";
-}
-
-sub write_README_TXT_ALL_LANG
-{
-    print OUTFILE "#define README_TXT_ALL_LANG(key, name, ext) ";
-    foreach $lang (@completelangiso) {
-        print OUTFILE "\\\n\tkey ($lang) = READMETXTFILENAME(name,_$lang,ext)";
         print OUTFILE "; " if ( $lang ne $completelangiso[$#completelangiso]);
     }
     print OUTFILE "\n\n";

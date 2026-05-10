@@ -11,7 +11,6 @@
 export LO_LEAN_EXCEPTION=1
 
 gb_LICENSE := license.txt
-gb_README = readme_$(1).txt
 
 gb_Helper_get_rcfile = $(1).ini
 
