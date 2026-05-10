@@ -1132,9 +1132,26 @@ check-flatpak-langs:
 		exit 1; \
 	fi
 
+# Same idea for the snap manifest: the --with-lang= line in
+# snap/snapcraft.yaml must match Langs.conf.
+check-snap-langs:
+	@distro_lang=`grep -h '^--with-lang=' $(top_srcdir)/engine/distro-configs/Langs.conf | sed 's/^--with-lang=//'`; \
+	snap_lang=`grep -h '"--with-lang=' $(top_srcdir)/snap/snapcraft.yaml | sed 's/.*"--with-lang=//; s/".*//'`; \
+	if test -z "$$distro_lang" || test -z "$$snap_lang"; then \
+		echo "ERROR: failed to extract --with-lang= from Langs.conf or the snap manifest" >&2; \
+		exit 1; \
+	fi; \
+	if test "$$distro_lang" != "$$snap_lang"; then \
+		echo "ERROR: --with-lang= lists in Langs.conf and the snap manifest differ:" >&2; \
+		echo "  engine/distro-configs/Langs.conf: $$distro_lang" >&2; \
+		echo "  snap/snapcraft.yaml:              $$snap_lang" >&2; \
+		echo "Update one to match the other." >&2; \
+		exit 1; \
+	fi
+
 check-recursive: eslint
 
-check: all-local check-for-system-nss check-flatpak-langs prettier eslint presets-dir check-recursive
+check: all-local check-for-system-nss check-flatpak-langs check-snap-langs prettier eslint presets-dir check-recursive
 	$(GEN_COVERAGE_COMMAND)
 
 coverage-report:

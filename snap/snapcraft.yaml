@@ -65,16 +65,30 @@ layout:
     bind: $SNAP/usr/share/mythes
 
 parts:
-  core:
+  collabora-office:
     plugin: nil
-    source: https://gerrit.collaboraoffice.com/core
-    source-type: git
-    source-branch: main
-    source-depth: 1
-    source-submodules: []
+    source: .
+    source-type: local
+    after: [poco]
+    build-snaps:
+      - kde-qt6-core24-sdk
+    override-pull: |
+      craftctl default
+      # Translations live in their own gerrit repo and are gitignored in
+      # the monorepo; clone shallowly into engine/translations so the
+      # engine's --with-lang machinery can pick up .po files. Wipe any
+      # pre-existing checkout the developer may have left behind locally
+      # (and any stale state from a prior snapcraft run). Keep the
+      # language list below in sync with engine/distro-configs/Langs.conf
+      # (the top-level Makefile.am has a check-snap-langs rule).
+      rm -rf engine/translations
+      git clone --depth=1 --branch=main \
+        https://gerrit.collaboraoffice.com/translations engine/translations
     override-build: |
       set -e
-      git submodule update --init --depth 1
+
+      # 1. Build the engine.
+      pushd engine
       ./autogen.sh \
         --prefix=$(pwd)/inst \
         --disable-dbus \
@@ -114,7 +128,7 @@ parts:
         --with-docrepair-fonts \
         --with-fonts \
         --with-galleries=no \
-        "--with-lang=ar ca cs cy da de el en-US en-GB es eu fi fr ga gl he hr hu hy id is it ja kk ko nl pl pt pt-BR ro ru sk sl sq sv tr uk zh-CN zh-TW" \
+        "--with-lang=ar bg ca cs cy da de el en-US en-GB eo es eu fi fr ga gl he hr hu hy id is it ja kk ko lo nb nl oc pl pt pt-BR ro ru sk sl sq sv tr uk vi zh-CN zh-TW" \
         --with-linker-hash-style=both \
         --with-system-altlinuxhyph \
         --with-system-curl \
@@ -122,8 +136,8 @@ parts:
         --with-system-expat \
         --with-system-fontconfig \
         --with-system-freetype \
-        --with-system-graphite \
-        --with-system-harfbuzz \
+        --without-system-graphite \
+        --without-system-harfbuzz \
         --with-system-hunspell \
         --with-system-icu \
         --with-system-lcms2 \
@@ -192,36 +206,45 @@ parts:
 
       make
       make distro-pack-install
+      popd
 
       mkdir -p "$CRAFT_PART_INSTALL/usr/lib"
-      cp -a inst/lib/collaboraoffice "$CRAFT_PART_INSTALL/usr/lib/collaboraoffice"
-      mkdir -p "$CRAFT_PART_INSTALL/usr/include"
-      cp -a include/COKit "$CRAFT_PART_INSTALL/usr/include/COKit"
+      cp -a engine/inst/lib/collaboraoffice "$CRAFT_PART_INSTALL/usr/lib/collaboraoffice"
+
+      # 2. Build Collabora Online (the wsd/qtapp wrapper around the engine).
+      # Ubuntu 24.04 ships Node 18; COOL requires >= 20
+      if ! node --version 2>/dev/null | grep -qE '^v(2[0-9]|[3-9])'; then
+        curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
+        apt-get install -y nodejs
+      fi
+      autoreconf -vfi
+      ./configure \
+        --prefix=/usr \
+        --enable-qtapp \
+        --disable-ssl \
+        --with-lo-path=/usr/lib/collaboraoffice \
+        --with-lokit-path=$(pwd)/engine/include \
+        --with-poco-includes="$CRAFT_STAGE/usr/include" \
+        --with-poco-libs="$CRAFT_STAGE/usr/lib" \
+        --with-vendor="Collabora Productivity Limited" \
+        --with-app-name="Collabora Office" \
+        --with-info-url="https://collaboraoffice.com/"
+      craftctl set version="$(sed -n 's/^S\["PACKAGE_VERSION"\]="\(.*\)"/\1/p' config.status)"
+      make
+      make DESTDIR="$CRAFT_PART_INSTALL" install
     build-packages:
       - autoconf
       - automake
-      - libtool
-      - pkg-config
-      - make
-      - g++
       - bison
-      - flex
-      - gperf
-      - nasm
-      - rsync
-      - uuid-runtime
-      - wget
-      - xsltproc
-      - xz-utils
       - bzip2
-      - zip
-      - unzip
+      - ca-certificates
+      - curl
+      - flex
       - fontforge
+      - g++
+      - git
+      - gperf
       - libcppunit-dev
-      - python3-dev
-      - python3-setuptools
-      - python3-lxml
-      - python3-polib
       - libcurl4-openssl-dev
       - libexpat1-dev
       - libfontconfig-dev
@@ -229,20 +252,35 @@ parts:
       - libgraphite2-dev
       - libharfbuzz-dev
       - libhunspell-dev
+      - libhyphen-dev
       - libicu-dev
       - liblcms2-dev
+      - libmythes-dev
+      - libnspr4-dev
+      - libnss3-dev
       - libpng-dev
+      - libssl-dev
       - libtiff-dev
+      - libtool
       - libwebp-dev
       - libxml2-dev
       - libxslt1-dev
-      - libmythes-dev
-      - libnss3-dev
-      - libnspr4-dev
-      - libssl-dev
-      - zlib1g-dev
       - libzstd-dev
-      - libhyphen-dev
+      - make
+      - nasm
+      - pkg-config
+      - python3-dev
+      - python3-lxml
+      - python3-polib
+      - python3-setuptools
+      - rsync
+      - unzip
+      - uuid-runtime
+      - wget
+      - xsltproc
+      - xz-utils
+      - zip
+      - zlib1g-dev
     stage-packages:
       - libcurl4t64
       - libexpat1
@@ -266,9 +304,11 @@ parts:
       - zlib1g
       - libzstd1
       - libhyphen0
-      # Spelling dictionaries matching --with-lang (no hunspell packages
-      # exist for cy, fi, ga, hy, ja, sq, zh-CN, zh-TW)
+      # Spelling dictionaries matching --with-lang (no hunspell package
+      # in Ubuntu noble for cy, fi, ga, hy, ja, sq, zh-CN, zh-TW;
+      # nb is covered by the generic Norwegian *-no package).
       - hunspell-ar
+      - hunspell-bg
       - hunspell-ca
       - hunspell-cs
       - hunspell-da
@@ -276,6 +316,7 @@ parts:
       - hunspell-el
       - hunspell-en-us
       - hunspell-en-gb
+      - hunspell-eo
       - hunspell-es
       - hunspell-eu
       - hunspell-fr-classical
@@ -288,7 +329,10 @@ parts:
       - hunspell-it
       - hunspell-kk
       - hunspell-ko
+      - hunspell-lo
       - hunspell-nl
+      - hunspell-no
+      - hunspell-oc
       - hunspell-pl
       - hunspell-pt-pt
       - hunspell-pt-br
@@ -299,7 +343,9 @@ parts:
       - hunspell-sv
       - hunspell-tr
       - hunspell-uk
+      - hunspell-vi
       # Hyphenation patterns
+      - hyphen-bg
       - hyphen-ca
       - hyphen-cs
       - hyphen-da
@@ -307,6 +353,7 @@ parts:
       - hyphen-el
       - hyphen-en-us
       - hyphen-en-gb
+      - hyphen-eo
       - hyphen-es
       - hyphen-fi
       - hyphen-fr
@@ -318,6 +365,7 @@ parts:
       - hyphen-is
       - hyphen-it
       - hyphen-nl
+      - hyphen-no
       - hyphen-pl
       - hyphen-pt-br
       - hyphen-pt-pt
@@ -329,11 +377,13 @@ parts:
       - hyphen-uk
       # Thesauri
       - mythes-ar
+      - mythes-bg
       - mythes-ca
       - mythes-cs
       - mythes-da
       - mythes-de
       - mythes-en-us
+      - mythes-eo
       - mythes-es
       - mythes-fr
       - mythes-gl
@@ -341,6 +391,7 @@ parts:
       - mythes-id
       - mythes-is
       - mythes-it
+      - mythes-no
       - mythes-pl
       - mythes-pt-br
       - mythes-pt-pt
@@ -351,8 +402,9 @@ parts:
       - mythes-sv
       - mythes-uk
     prime:
-      # Dictionary stage-packages pull in system LibreOffice as a transitive
-      # dependency; exclude it to avoid conflicts with our custom-built core.
+      # Dictionary stage-packages pull in the system office stack from
+      # Ubuntu as a transitive dep; exclude its files to avoid conflicts
+      # with our own engine build.
       - -usr/lib/libreoffice
       - -usr/lib/x86_64-linux-gnu/libuno*
       - -usr/share/doc/libreoffice*
@@ -395,46 +447,11 @@ parts:
       - usr/lib
       - usr/include
 
-  collabora-office:
-    plugin: nil
-    source: .
-    source-type: local
-    after: [core, poco]
-    build-snaps:
-      - kde-qt6-core24-sdk
-    build-packages:
-      - libzstd-dev
-      - libpng-dev
-      - ca-certificates
-      - curl
-    override-build: |
-      set -e
-      # Ubuntu 24.04 ships Node 18; COOL requires >= 20
-      if ! node --version 2>/dev/null | grep -qE '^v(2[0-9]|[3-9])'; then
-        curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
-        apt-get install -y nodejs
-      fi
-      autoreconf -vfi
-      ./configure \
-        --prefix=/usr \
-        --enable-qtapp \
-        --disable-ssl \
-        --with-lo-path=/usr/lib/collaboraoffice \
-        --with-lokit-path="$CRAFT_STAGE/usr/include" \
-        --with-poco-includes="$CRAFT_STAGE/usr/include" \
-        --with-poco-libs="$CRAFT_STAGE/usr/lib" \
-        --with-vendor="Collabora Productivity Limited" \
-        --with-app-name="Collabora Office" \
-        --with-info-url="https://collaboraoffice.com/"
-      craftctl set version="$(sed -n 's/^S\["PACKAGE_VERSION"\]="\(.*\)"/\1/p' config.status)"
-      make
-      make DESTDIR="$CRAFT_PART_INSTALL" install
-
   branding:
     plugin: nil
-    source: https://www.collaboraoffice.com/downloads/collabora-office-brand/collabora-office-brand-25.04.7.3.tar.gz
-    source-checksum: sha256/c465ea66f09f6b0085eb5cc996ed5fc65c3c10c3c3141ac5b35d2291bc817069
-    after: [core, collabora-office]
+    source: https://www.collaboraoffice.com/downloads/collabora-office-brand/collabora-office-brand-25.04.9.3.tar.gz
+    source-checksum: sha256/c6eb6d1b05612653d261e0dbe4b9fe0fb8eff660cdf39f858c7d0723068d6fa7
+    after: [collabora-office]
     override-build: |
       set -e
       mkdir -p "$CRAFT_PART_INSTALL/usr/lib/collaboraoffice/share/theme_definitions"

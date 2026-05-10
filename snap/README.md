@@ -7,8 +7,8 @@ from the source copy of parts that use `source: .`, breaking the build.
 
 ## Files
 
-- `snapcraft.yaml` — snap package definition (4 parts: core (headless/LOKit),
-   Poco, Collabora Online + coda-qt, branding)
+- `snapcraft.yaml` — snap package definition (3 parts: Poco, the engine +
+   Collabora Online + coda-qt, branding)
 - `Dockerfile` — Ubuntu 24.04 build image with systemd for snapd support
 - `docker-build.sh` — local build script (interactive, reusable container)
 - `ci-build.sh` — CI build script (disposable container, Jenkins/other CI)
