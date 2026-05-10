@@ -436,10 +436,7 @@ void ScDocumentImport::setMatrixCells(
     if (bCheckForSpill && (rRange.aEnd.Col() > rRange.aStart.Col()
                            || rRange.aEnd.Row() > rRange.aStart.Row()))
     {
-        // Collapse the declared dimensions back to 1x1
-        pCell->SetMatColsRows(1, 1);
-        pCell->SetResultError(FormulaError::Spill);
-        mpImpl->mrDoc.MarkFormulaSpilled(rBasePos);
+        pCell->MarkAsSpilled();
         return;
     }
 

@@ -431,6 +431,11 @@ public:
     /* Sets just the result to error */
     void SetResultError( FormulaError n );
 
+    /** Mark this dynamic array master into #SPILL! state. This collapses
+        the declared dimensions to 1x1, sets a re-evaluable result error,
+        and registers the cell for later re-evaluation. */
+    void MarkAsSpilled();
+
     SC_DLLPUBLIC bool IsHyperLinkCell() const;
     std::unique_ptr<EditTextObject> CreateURLObject();
     SC_DLLPUBLIC void GetURLResult( OUString& rURL, OUString& rCellText );

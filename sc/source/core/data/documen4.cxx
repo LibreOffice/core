@@ -357,7 +357,17 @@ void ScDocument::InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
     }
 
     // Check for spill: if any non-origin cell in the target range is non-empty,
-    // set the spill error on the master cell and don't create reference cells.
+    // mark the master with SPILL and don't create reference cells over the
+    // blocker.
+    // Two flavours:
+    //  - Dynamic array masters (UNIQUE, SEQUENCE, SORT, ...): collapse to 1x1
+    //    with a re-evaluable result error and track the cell, so a later
+    //    cell change operation can re-resolve via the runtime spill check and
+    //    expand the matrix back to the result dimensions.
+    //  - Conventional array formulas (LEN(B1:B3) etc.): keep the declared
+    //    dimensions and use a sticky code error. The user explicitly chose
+    //    that range, so the only way out is to clear the blocker and re-enter
+    //    the formula.
     if (bCheckForSpill && (nCol2 > nCol1 || nRow2 > nRow1))
     {
         bool bSpillBlocked = false;
@@ -375,10 +385,12 @@ void ScDocument::InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
         }
         if (bSpillBlocked)
         {
-            // Set spill error on the master cell; don't create reference cells.
-            // The master cell keeps its intended dimensions so the spill range
-            // can be resolved if the blocking cells are later cleared.
-            pCell->SetErrCode(FormulaError::Spill);
+            const bool bIsDynamic
+                = pCell->GetCode() && pCell->GetCode()->HasDynamicArrayFunction();
+            if (bIsDynamic)
+                pCell->MarkAsSpilled();
+            else
+                pCell->SetErrCode(FormulaError::Spill);
             return;
         }
     }

@@ -2777,6 +2777,13 @@ void ScFormulaCell::SetResultError( FormulaError n )
     aResult.SetResultError( n );
 }
 
+void ScFormulaCell::MarkAsSpilled()
+{
+    SetMatColsRows(1, 1);
+    SetResultError(FormulaError::Spill);
+    rDocument.MarkFormulaSpilled(aPos);
+}
+
 void ScFormulaCell::AddRecalcMode( ScRecalcMode nBits )
 {
     if ( (nBits & ScRecalcMode::EMask) != ScRecalcMode::NORMAL )

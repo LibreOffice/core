@@ -5103,6 +5103,61 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testSpillMatrixResolveAfterBlockerDelete)
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(TestFormula2, testSequenceFormulaResolveAfterBlockerIsDeleted)
+{
+    // Insert a SEQUENCE formula that is blocked by a blocker cell, which causes
+    // a spill error, then remove the blocker and check the result was expanded.
+
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+
+    ScDocFunc& rFunc = m_xDocShell->GetDocFunc();
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
+    aMark.SelectOneTable(0);
+
+    // Blocker at A2
+    rFunc.SetStringCell(ScAddress(0, 1, 0), u"blocker"_ustr, true);
+
+    // SEQUENCE(4) entered, blocked by the bloker in A2
+    rFunc.EnterMatrix(ScRange(0, 0, 0, 0, 3, 0), &aMark, nullptr, u"=SEQUENCE(4)"_ustr, true, false,
+                      OUString(), formula::FormulaGrammar::GRAM_DEFAULT, true);
+
+    // Spill error is expected
+    ScFormulaCell* pFormulaCell = m_pDoc->GetFormulaCell(ScAddress(0, 0, 0));
+    CPPUNIT_ASSERT(pFormulaCell);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(FormulaError::Spill), sal_Int32(pFormulaCell->GetErrCode()));
+
+    // The master must be collapsed to 1x1 so the blocker is preserved.
+    SCCOL nCols = 0;
+    SCROW nRows = 0;
+    pFormulaCell->GetMatColsRows(nCols, nRows);
+    CPPUNIT_ASSERT_EQUAL(SCCOL(1), nCols);
+    CPPUNIT_ASSERT_EQUAL(SCROW(1), nRows);
+    CPPUNIT_ASSERT_EQUAL(u"blocker"_ustr, m_pDoc->GetString(ScAddress(0, 1, 0)));
+
+    // Delete the blocker - matrix must expand.
+    ScMarkData aBlockerMark(m_pDoc->GetSheetLimits());
+    aBlockerMark.SelectOneTable(0);
+    aBlockerMark.SetMarkArea(ScRange(ScAddress(0, 1, 0)));
+    rFunc.DeleteContents(aBlockerMark, InsertDeleteFlags::CONTENTS, true, true);
+
+    // No error expected
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(FormulaError::NONE), sal_Int32(pFormulaCell->GetErrCode()));
+
+    // Result size should be 1x4
+    pFormulaCell->GetMatColsRows(nCols, nRows);
+    CPPUNIT_ASSERT_EQUAL(SCCOL(1), nCols);
+    CPPUNIT_ASSERT_EQUAL(SCROW(4), nRows);
+
+    // Expected result for a sequence formula
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(0, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(0, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(ScAddress(0, 3, 0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_TEST_FIXTURE(TestFormula2, testSpillMatrixContractionOnValueChange)
 {
     // A dynamic array formula shrinks when its source data produces fewer
