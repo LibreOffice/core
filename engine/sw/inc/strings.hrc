@@ -461,6 +461,7 @@
 #define STR_INSTABLE_UNDO                       NC_("STR_INSTABLE_UNDO", "Insert table: $1$2$3")
 #define STR_TEXTTOTABLE_UNDO                    NC_("STR_TEXTTOTABLE_UNDO", "Convert text -> table")
 #define STR_TABLETOTEXT_UNDO                    NC_("STR_TABLETOTEXT_UNDO", "Convert table -> text")
+#define STR_RENAMETABLE_UNDO                    NC_("STR_RENAMETABLE_UNDO", "Rename table")
 #define STR_COPY_UNDO                           NC_("STR_COPY_UNDO", "Copy: $1")
 #define STR_REPLACE_UNDO                        NC_("STR_REPLACE_UNDO", "Replace $1 $2 $3")
 #define STR_INSERT_PAGE_BREAK_UNDO              NC_("STR_INSERT_PAGE_BREAK_UNDO", "Insert page break")

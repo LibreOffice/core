@@ -3211,4 +3211,24 @@ SwRewriter SwUndoTableStyleUpdate::GetRewriter() const
     return aResult;
 }
 
+SwUndoRenameTable::SwUndoRenameTable(const UIName& rOldName, const UIName& rNewName, const SwDoc& rDoc)
+    : SwUndo(SwUndoId::RENAME_TABLE, rDoc)
+    , m_sOldName(rOldName)
+    , m_sNewName(rNewName)
+{ }
+
+void SwUndoRenameTable::UndoImpl(sw::UndoRedoContext& rContext)
+{
+    SwDoc& rDoc = rContext.GetDoc();
+    if (SwFrameFormat* pFormat = rDoc.FindTableFormatByName(m_sNewName))
+        rDoc.SetTableName(*pFormat, m_sOldName);
+}
+
+void SwUndoRenameTable::RedoImpl(sw::UndoRedoContext& rContext)
+{
+    SwDoc& rDoc = rContext.GetDoc();
+    if (SwFrameFormat* pFormat = rDoc.FindTableFormatByName(m_sOldName))
+        rDoc.SetTableName(*pFormat, m_sNewName);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

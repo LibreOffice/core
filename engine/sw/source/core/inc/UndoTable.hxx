@@ -428,4 +428,15 @@ public:
     virtual SwRewriter GetRewriter() const override;
 };
 
+class SwUndoRenameTable final : public SwUndo
+{
+    UIName m_sOldName;
+    UIName m_sNewName;
+public:
+    SwUndoRenameTable(const UIName& rOldName, const UIName& rNewName, const SwDoc& rDoc);
+
+    void UndoImpl(sw::UndoRedoContext& rContext) override;
+    void RedoImpl(sw::UndoRedoContext& rContext) override;
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -21,6 +21,7 @@
 #include <doc.hxx>
 #include <IDocumentChartDataProviderAccess.hxx>
 #include <IDocumentState.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <ndindex.hxx>
 #include <swtable.hxx>
@@ -29,6 +30,7 @@
 #include <swtblfmt.hxx>
 #include <tblsel.hxx>
 #include <frameformats.hxx>
+#include <UndoTable.hxx>
 #include <unochart.hxx>
 #include <osl/diagnose.h>
 
@@ -153,6 +155,8 @@ void SwDoc::SetTableName( SwFrameFormat& rTableFormat, const UIName &rInName )
 {
     UIName aNewName = rInName;
     const UIName aOldName( rTableFormat.GetName() );
+    if (aOldName == aNewName)
+        return;
 
     bool bNameFound = aNewName.isEmpty();
     if( !bNameFound )
@@ -185,6 +189,9 @@ void SwDoc::SetTableName( SwFrameFormat& rTableFormat, const UIName &rInName )
     }
 
     rTableFormat.SetFormatName( aNewName, true );
+
+    if (GetIDocumentUndoRedo().DoesUndo())
+        GetIDocumentUndoRedo().AppendUndo(std::make_unique<SwUndoRenameTable>(aOldName, aNewName, *this));
 
     SwStartNode *pStNd;
     SwNodeIndex aIdx( *GetNodes().GetEndOfAutotext().StartOfSectionNode(), 1 );

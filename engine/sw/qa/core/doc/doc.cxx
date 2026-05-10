@@ -9,6 +9,7 @@
 
 #include <swmodeltestbase.hxx>
 
+#include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 
 #include <comphelper/classids.hxx>
@@ -642,6 +643,43 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testTableNameUpdatePropagatedToFormulas)
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
     assertXPath(pXmlDoc, "//table:table[@table:name='Table2']//table:table-cell", "formula",
                 u"ooow:<NewTableName.A1>");
+}
+
+// tdf#171784
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testTableNameUndo)
+{
+    createSwDoc("tdf83196.fodt");
+
+    // Table2.A1 contains a reference to Table1.A1.
+    // We assert that the formula updates correctly when the target table is renamed.
+    auto getFormula = [&] {
+        uno::Reference<text::XTextTablesSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
+        uno::Reference<text::XTextTable> xTable(xSupplier->getTextTables()->getByName("Table2"),
+                                                uno::UNO_QUERY);
+        return xTable->getCellByName("A1")->getFormula();
+    };
+
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    SwFrameFormat* pFrameFormat = getSwDoc()->FindTableFormatByName(UIName("Table1"));
+
+    pWrtShell->SetTableName(*pFrameFormat, UIName("Table1"));
+    bool bCreatedUndoAction = pWrtShell->GetLastUndoInfo(nullptr, nullptr);
+    CPPUNIT_ASSERT_MESSAGE("Renaming Table1 to Table1 should have no effect", !bCreatedUndoAction);
+
+    pWrtShell->SetTableName(*pFrameFormat, UIName("Table100"));
+    CPPUNIT_ASSERT_MESSAGE("Table1 name should be updated to Table100",
+                           pFrameFormat->HasName(u"Table100"));
+    CPPUNIT_ASSERT_EQUAL(OUString("<Table100.A1>"), getFormula());
+
+    pWrtShell->Undo();
+    CPPUNIT_ASSERT_MESSAGE("Table100 name should revert to Table1 after Undo",
+                           pFrameFormat->HasName(u"Table1"));
+    CPPUNIT_ASSERT_EQUAL(OUString("<Table1.A1>"), getFormula());
+
+    pWrtShell->Redo();
+    CPPUNIT_ASSERT_MESSAGE("Table1 name should change to Table100 after Redo",
+                           pFrameFormat->HasName(u"Table100"));
+    CPPUNIT_ASSERT_EQUAL(OUString("<Table100.A1>"), getFormula());
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testVirtPageNumReset)

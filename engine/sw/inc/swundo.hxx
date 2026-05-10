@@ -185,6 +185,7 @@ enum class SwUndoId
     CONVERT_FIELD_TO_TEXT = 153,
     REINSTATE_REDLINE = 154,
     COPY_HEADER_FOOTER = 155,
+    RENAME_TABLE = 156
 };
 
 OUString GetUndoComment(SwUndoId eId);
