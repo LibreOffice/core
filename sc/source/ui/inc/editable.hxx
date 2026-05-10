@@ -88,6 +88,9 @@ public:
 
     bool IsEditable() const { return mbIsEditable; }
     bool IsFormatEditable() const { return mbIsEditable || mbOnlyMatrix; }
+    /// True when the only obstacle is a matrix at the given single cell
+    /// position and that cell is a matrix reference cell.
+    bool IsEditableOrMatrixRefCell(const ScDocument& rDoc, const ScAddress& rPos) const;
     TranslateId GetMessageId() const;
 };
 

@@ -424,6 +424,17 @@ void ScDocument::InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
             }
         }
     }
+
+    // Track every multi cell matrix master, so spill resolution can find it
+    // again if a blocker is later placed inside its declared range.
+    for (const SCTAB& nTab : rMark)
+    {
+        if (nTab >= nMax)
+            break;
+        if (!FetchTable(nTab))
+            continue;
+        MarkExpandedDynamicArray(ScAddress(nCol1, nRow1, nTab));
+    }
 }
 
 // Resize a dynamic-array matrix formula at rOrigin to nNewCols x nNewRows,
