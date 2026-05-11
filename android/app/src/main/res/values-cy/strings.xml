@@ -95,7 +95,7 @@
     <string name="owncloud_settings">Gosodiadau gweinydd cwmwl</string>
     <string name="storage_provider_settings">Gosodiadau darparwyr storio</string>
     <string name="otg_missing_error">Ffeil gwraidd annilys. Gwiriwch eich dyfais OTG a/neu ffurfweddiad.</string>
-    <string name="ext_document_provider_error">Ffeil gwraidd annilys. Gwiriwch ffurfweddiad eich cerdyn sd.</string>
+    <string name="ext_document_provider_error">Ffeil gwraidd annilys. Gwiriwch ffurfweddiad eich cerdyn SD.</string>
     <string name="owncloud_unspecified_error">Gwall amhenodol wrth gysylltu i\'r gweinydd cwmwl. Gwiriwch eich ffurfweddiad a/neu geisiwch eto.</string>
     <string name="pref_enable_chrome_debugger_info">Galluogwch i ddefnyddio teclyn dadfygio Chrome yn y ddogfen</string>
     <string name="pref_enable_chrome_debugger">Dadfygio Chrome</string>

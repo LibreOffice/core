@@ -8,17 +8,17 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-20 12:14+0100\n"
-"PO-Revision-Date: 2025-12-13 18:47+0000\n"
+"PO-Revision-Date: 2026-05-05 14:11+0000\n"
 "Last-Translator: Rhoslyn Prys <rprys@posteo.net>\n"
 "Language-Team: Welsh <https://hosted.weblate.org/projects/collabora-online/"
 "ui/cy/>\n"
-"Language: \n"
+"Language: cy\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=(n==0) ? 0 : (n==1) ? 1 : (n==2) ? 2 : "
 "(n==3) ? 3 :(n==6) ? 4 : 5;\n"
-"X-Generator: Weblate 5.15-dev\n"
+"X-Generator: Weblate 5.17.1\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -947,7 +947,7 @@ msgstr "Bu oedi wrth drin y digwyddiad am gyfnod annisgwyl o hir: {0}ms"
 
 #: src/app/TableStylesService.ts:152 src/app/TableStylesService.ts:154
 msgid "Table Styles"
-msgstr ""
+msgstr "Arddulliau Tablau"
 
 #: src/canvas/sections/CommentListSection.ts:1267
 msgid "Modify"
@@ -1071,23 +1071,23 @@ msgstr "Cadwyd"
 
 #: src/canvas/sections/CompareChangesLabelSection.ts:118
 msgid "Last edited by %1 on %2"
-msgstr ""
+msgstr "Golygwyd diwethaf gan %1 ar %2"
 
 #: src/canvas/sections/CompareChangesLabelSection.ts:181
 msgid "%1: Initial Version"
-msgstr ""
+msgstr "%1: Y Fersiwn Cyntaf"
 
 #: src/canvas/sections/CompareChangesLabelSection.ts:185
 msgid "%1: Current Version"
-msgstr ""
+msgstr "%1: Y Fersiwn Cyfredol"
 
 #: src/canvas/sections/CompareChangesLabelSection.ts:194
 msgid "Initial Version"
-msgstr ""
+msgstr "Y Fersiwn Gyntaf"
 
 #: src/canvas/sections/CompareChangesLabelSection.ts:198
 msgid "Current Version"
-msgstr ""
+msgstr "Y Fersiwn Gyfredol"
 
 #: src/canvas/sections/ShapeHandlesSection.ts:478
 msgid "Document contains unsupported media"
@@ -1139,7 +1139,7 @@ msgstr "Copïo'r holl wybodaeth fersiwn yn Saesneg"
 
 #: src/control/Control.AboutDialog.ts:430
 msgid "Version information has been copied"
-msgstr ""
+msgstr "Mae manylion y fersiwn wedi'i chopïo"
 
 #: src/control/Control.AboutDialog.ts:470
 msgid "COOLWSD version:"
@@ -1232,7 +1232,7 @@ msgstr "Newydd"
 
 #: src/control/Control.BackstageView.ts:288
 msgid "Open"
-msgstr ""
+msgstr "Open"
 
 #: src/control/Control.BackstageView.ts:296
 #: src/control/Control.Notebookbar.js:637
@@ -1280,12 +1280,12 @@ msgstr "Dewisiadau"
 
 #: src/control/Control.BackstageView.ts:407
 msgid "Start a new document from one of the following templates."
-msgstr ""
+msgstr "Cychwynnwch ddogfen newydd o un o'r templedi canlynol."
 
 #: src/control/Control.BackstageView.ts:450
 #: src/control/Control.BackstageView.ts:453
 msgid "More Templates"
-msgstr ""
+msgstr "Rhagor o Dempledi"
 
 #: src/control/Control.BackstageView.ts:479
 #: src/control/jsdialog/Widget.ColorPicker.ts:426
@@ -1298,11 +1298,11 @@ msgstr "Bydd dogfennau a agorwyd yn ddiweddar yn ymddangos yma"
 
 #: src/control/Control.BackstageView.ts:550
 msgid "Name"
-msgstr ""
+msgstr "Enw"
 
 #: src/control/Control.BackstageView.ts:556
 msgid "Modified Date"
-msgstr ""
+msgstr "Dyddiad Newidiwyd"
 
 #: src/control/Control.BackstageView.ts:779
 msgid "Document Info"
@@ -1406,7 +1406,7 @@ msgstr "Dogfen Wag"
 
 #: src/control/Control.BackstageView.ts:1443
 msgid "Untitled"
-msgstr ""
+msgstr "Dideitl"
 
 #: src/control/Control.Command.js:90
 msgid "Unlock"
@@ -1426,7 +1426,7 @@ msgstr "Llanw Cyfres"
 
 #: src/control/Control.DocumentNameInput.js:27
 msgid "Document name"
-msgstr ""
+msgstr "Enw dogfen"
 
 #: src/control/Control.DocumentNameInput.js:119
 msgid "Path"
@@ -1873,11 +1873,11 @@ msgstr "Cau'r deialog"
 
 #: src/control/Control.JSDialogBuilder.js:496
 msgid "Increment value"
-msgstr ""
+msgstr "Gwerth cynyddiad"
 
 #: src/control/Control.JSDialogBuilder.js:500
 msgid "Decrement value"
-msgstr ""
+msgstr "Gwerth lleihad"
 
 #: src/control/Control.JSDialogBuilder.js:640
 msgid "Solid"
@@ -1959,11 +1959,11 @@ msgstr "Mewnosod Sylw"
 
 #: src/control/Control.JSDialogBuilder.js:2136
 msgid "Toggle dropdown"
-msgstr ""
+msgstr "Toglo'r gwymplen"
 
 #: src/control/Control.JSDialogBuilder.js:2138
 msgid "Dialog dropdown"
-msgstr ""
+msgstr "Cwymplen deialog"
 
 #: src/control/Control.JSDialogBuilder.js:2140
 #: src/control/Control.NotebookbarWriter.js:1608
@@ -1972,7 +1972,7 @@ msgstr "Cwymplen"
 
 #: src/control/Control.JSDialogBuilder.js:2142
 msgid "Apply action dropdown"
-msgstr ""
+msgstr "Gweithredu cwymplen gweithredu"
 
 #: src/control/Control.JSDialogBuilder.js:2168
 msgid "Open {name}"
@@ -2812,7 +2812,7 @@ msgstr "Ffeil HTML (.html)"
 #: src/control/Control.NotebookbarBuilder.js:449
 #: src/control/Control.NotebookbarBuilder.js:485
 msgid "PDF Document (.pdf) with options"
-msgstr ""
+msgstr "Dogfen PDF (.pdf) gyda dewisiadau"
 
 #: src/control/Control.NotebookbarBuilder.js:432
 msgid "CSV File (.csv)"
@@ -3199,15 +3199,15 @@ msgstr "Tabl"
 #: src/control/Control.NotebookbarCalc.js:1766
 #: src/control/Control.NotebookbarCalc.js:1769
 msgid "Table styles are only available in .xlsx files"
-msgstr ""
+msgstr "Arddulliau tablau dim ond ar gael mewn ffeiliau .xlsx"
 
 #: src/control/Control.NotebookbarCalc.js:1767
 msgid "Insert a styled table"
-msgstr ""
+msgstr "Mewnosod tabl arddulliwyd"
 
 #: src/control/Control.NotebookbarCalc.js:1770
 msgid "Select a cell range first to insert a styled table"
-msgstr ""
+msgstr "Dewis ystod celloedd yn gyntaf i mewnosod tabl arddulliwyd"
 
 #: src/control/Control.NotebookbarCalc.js:1779
 #: src/control/Control.NotebookbarDraw.js:1015
@@ -3351,7 +3351,7 @@ msgstr "O'r Cychwyn"
 
 #: src/control/Control.NotebookbarImpress.js:472
 msgid "Fullscreen, starting at slide 1"
-msgstr ""
+msgstr "Sgrin lawn, cychwyn ar sleid 1"
 
 #: src/control/Control.NotebookbarImpress.js:479
 msgid "From Current Slide"
@@ -3359,7 +3359,7 @@ msgstr "O'r Sleid Gyfredol"
 
 #: src/control/Control.NotebookbarImpress.js:480
 msgid "Fullscreen, starting at this slide"
-msgstr ""
+msgstr "Sgrin lawn, cychwyn gyda'r sleid yma"
 
 #: src/control/Control.NotebookbarImpress.js:494
 msgid "Present in Window"
@@ -3367,7 +3367,7 @@ msgstr "Presennol mewn Ffenest"
 
 #: src/control/Control.NotebookbarImpress.js:495
 msgid "Plays inside the document window. Starts at slide 1"
-msgstr ""
+msgstr "Yn chwarae o fewn ffenestr dogfen. Yn cychwyn ar sleid 1"
 
 #: src/control/Control.NotebookbarImpress.js:503
 msgid "Presenter View"
@@ -3375,7 +3375,7 @@ msgstr "Golwg Cyflwynydd"
 
 #: src/control/Control.NotebookbarImpress.js:504
 msgid "Shows your notes, next slide, and a timer"
-msgstr ""
+msgstr "Yn dangos eich nodiadau, sleid nesaf ac amserydd"
 
 #: src/control/Control.NotebookbarImpress.js:512
 msgid "Present to All"
@@ -3383,7 +3383,7 @@ msgstr "Cyflwyno i Bawb"
 
 #: src/control/Control.NotebookbarImpress.js:513
 msgid "Starts a slideshow on every viewer's screen"
-msgstr ""
+msgstr "Yn cychwyn sioe sleidiau ar sgrin pob gwyliwr"
 
 #: src/control/Control.NotebookbarImpress.js:521
 #: src/slideshow/SlideShowPresenter.ts:1517
@@ -3392,7 +3392,7 @@ msgstr "Dilyn y Cyflwynydd"
 
 #: src/control/Control.NotebookbarImpress.js:522
 msgid "View slides as the presenter advances them"
-msgstr ""
+msgstr "Gweld sleidiau wrth i'r cyflwynydd eu symud ymlaen"
 
 #: src/control/Control.NotebookbarImpress.js:650
 msgid "Slide Views"
@@ -3430,13 +3430,12 @@ msgid "Master Slide Templates"
 msgstr "Templedi Prif Sleidiau"
 
 #: src/control/Control.NotebookbarImpress.js:1824
-#, fuzzy
 msgid "This Presentation"
-msgstr "Cau Cyflwyniad"
+msgstr "Y Cyflwyniad Hwn"
 
 #: src/control/Control.NotebookbarImpress.js:1833
 msgid "Presentation Templates"
-msgstr ""
+msgstr "Templedi Cyflwyno"
 
 #: src/control/Control.NotebookbarImpress.js:1903
 msgid "Slide Size"
@@ -3514,15 +3513,15 @@ msgstr "Lled Tudalen"
 
 #: src/control/Control.NotebookbarWriter.js:2209
 msgid "Spellcheck"
-msgstr ""
+msgstr "Gwirio Sillafu"
 
 #: src/control/Control.NotebookbarWriter.js:2222
 msgid "Spelling Options"
-msgstr ""
+msgstr "Dewisiadau Sillafu"
 
 #: src/control/Control.NotebookbarWriter.js:2234
 msgid "Auto Spell Check"
-msgstr ""
+msgstr "Gwirio Awto Sillafu"
 
 #: src/control/Control.NotebookbarWriter.js:2262
 #: src/control/Control.NotebookbarWriter.js:2278
@@ -3761,6 +3760,7 @@ msgstr "Chwyddo i Ffitio Lled Tudalen"
 #: src/control/Control.StatusBar.js:417
 msgid "The document is probably locked and has been opened as view-only"
 msgstr ""
+"Mae'n debyg fod y ddogfen wedi'i chloi ac wedi ei hagor fel gweld-yn-unig"
 
 #: src/control/Control.StatusBar.js:426
 msgid ""
@@ -4061,9 +4061,8 @@ msgid "Updating citations"
 msgstr "Diweddaru dyfyniadau"
 
 #: src/control/Control.Zotero.js:1528
-#, fuzzy
 msgid "Unlinked citations"
-msgstr "Datgysylltu Dyfyniadau"
+msgstr "Dyfyniadau heb gysylltiadau"
 
 #: src/control/Control.Zotero.js:1533
 msgid ""
@@ -4398,11 +4397,11 @@ msgstr "Rhydd Iawn"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1788
 msgid "Inline"
-msgstr ""
+msgstr "Mewn-lin"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1794
 msgid "Side by Side"
-msgstr ""
+msgstr "Ochr yn Ochr"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1807
 msgid "All users"
@@ -5027,7 +5026,6 @@ msgid "Failed to load document."
 msgstr "Methwyd llwytho’r ddogfen."
 
 #: src/errormessages.js:45
-#, fuzzy
 msgid "Save failed due to no disk space left. Document will now be read-only."
 msgstr ""
 "Methodd cadw oherwydd nad oes lle ar ôl ar y ddisg. Bydd y ddogfen yn "
@@ -5234,10 +5232,12 @@ msgid ""
 "Your browser has very limited access to the clipboard, so use these "
 "keyboard shortcuts:"
 msgstr ""
+"Mynediad cyfyng iawn sydd gan eich porwr i'r clipfwrdd, felly defnyddiwch y "
+"llwybrau byr hyn:"
 
 #: src/map/Clipboard.js:1499
 msgid "Cut"
-msgstr ""
+msgstr "Torri"
 
 #: src/map/Clipboard.js:1515
 msgid ""
@@ -5310,11 +5310,11 @@ msgstr "Methodd llwytho ffeil i weinydd gyda statws: {0}"
 
 #: src/map/handler/Map.FileInserter.js:281
 msgid "Failed to read the selected file."
-msgstr ""
+msgstr "Wedi methu darllen y ffeil hon."
 
 #: src/map/handler/Map.Keyboard.js:653
 msgid "You are currently in View mode"
-msgstr ""
+msgstr "Rydych yn y modd Gweld ar hyn o bryd"
 
 #: src/map/handler/Map.Print.js:44
 msgid "Print dialog"
@@ -5328,7 +5328,7 @@ msgstr "Sioe Sleidiau Gwag"
 #: src/map/handler/Map.SlideShow.js:60
 #: src/slideshow/SlideShowPresenter.ts:1284
 msgid "All slides are hidden!"
-msgstr ""
+msgstr "Mae pob sleid wedi'u cuddio!"
 
 #: src/map/handler/Map.SlideShow.js:167
 #: src/slideshow/SlideShowPresenter.ts:1311
@@ -5429,7 +5429,7 @@ msgstr "Sleid Nesaf"
 #: src/slideshow/PresenterConsole.js:35
 #: src/slideshow/SlideShowPresenter.ts:908
 msgid "Exchange"
-msgstr ""
+msgstr "Exchange"
 
 #: src/slideshow/PresenterConsole.js:36
 msgid "Pause"
@@ -5444,9 +5444,8 @@ msgid "Resume"
 msgstr "Ail gychwyn"
 
 #: src/slideshow/PresenterConsole.js:39
-#, fuzzy
 msgid "Present to all"
-msgstr "Cyflwyno i Bawb"
+msgstr "Cyflwyno i bawb"
 
 #: src/slideshow/PresenterConsole.js:40
 msgid "Go Back"
@@ -5483,11 +5482,11 @@ msgstr "Cliciwch i adael y cyflwyniad..."
 
 #: src/slideshow/SlideShowPresenter.ts:805
 msgid "You are on the first slide"
-msgstr ""
+msgstr "Rydych ar y sleid gyntaf"
 
 #: src/slideshow/SlideShowPresenter.ts:813
 msgid "Waiting for presenter to advance"
-msgstr ""
+msgstr "Yn aros i'r cyflwynydd fynd yn ei flaen"
 
 #: src/slideshow/SlideShowPresenter.ts:842
 msgid "End Show"
@@ -5503,129 +5502,128 @@ msgid "Enable Animations"
 msgstr "Galluogi Animeiddiadau"
 
 #: src/slideshow/SlideShowPresenter.ts:1512
-#, fuzzy
 msgid "Stop Following"
-msgstr "Peidio â dilyn"
+msgstr "Peidio Dilyn"
 
 #: templates/templates.js:6
 msgid "Modern Business Letter (sans-serif)"
-msgstr ""
+msgstr "Modern Business Letter (sans-serif)"
 
 #: templates/templates.js:10 templates/templates.js:20
 msgid "Business Letter"
-msgstr ""
+msgstr "Llythyr Busnes"
 
 #: templates/templates.js:16
 msgid "Modern Business Letter (serif)"
-msgstr ""
+msgstr "Modern Business Letter (sans-serif)"
 
 #: templates/templates.js:26 templates/templates.js:30
 msgid "CV"
-msgstr ""
+msgstr "CV"
 
 #: templates/templates.js:36
 msgid "Resume (one-page)"
-msgstr ""
+msgstr "Crynodeb (un tudalen)"
 
 #: templates/templates.js:56
 msgid "Modern Style"
-msgstr ""
+msgstr "Arddull Fodern"
 
 #: templates/templates.js:66
 msgid "Simple Style"
-msgstr ""
+msgstr "Arddull Syml"
 
 #: templates/templates.js:76
 msgid "Beehive"
-msgstr ""
+msgstr "Cwch Gwenyn"
 
 #: templates/templates.js:86
 msgid "Blue Curve"
-msgstr ""
+msgstr "Cromlin Las"
 
 #: templates/templates.js:96
 msgid "Blueprint Plans"
-msgstr ""
+msgstr "Cynlluniau Glasbrint"
 
 #: templates/templates.js:106
 msgid "Candy"
-msgstr ""
+msgstr "Melysion"
 
 #: templates/templates.js:116
 msgid "DNA"
-msgstr ""
+msgstr "DNA"
 
 #: templates/templates.js:126
 msgid "Focus"
-msgstr ""
+msgstr "Ffocws"
 
 #: templates/templates.js:136
 msgid "Forestbird"
-msgstr ""
+msgstr "Deryn y Coed"
 
 #: templates/templates.js:146
 msgid "Freshes"
-msgstr ""
+msgstr "Ffresni"
 
 #: templates/templates.js:156
 msgid "Grey Elegant"
-msgstr ""
+msgstr "Cain Llwyd"
 
 #: templates/templates.js:166
 msgid "Growing Liberty"
-msgstr ""
+msgstr "Rhyddid Cynyddol"
 
 #: templates/templates.js:176
 msgid "Inspiration"
-msgstr ""
+msgstr "Ysbrydoliaeth"
 
 #: templates/templates.js:186
 msgid "Lights"
-msgstr ""
+msgstr "Goleuadau"
 
 #: templates/templates.js:196
 msgid "Metropolis"
-msgstr ""
+msgstr "Metropolis"
 
 #: templates/templates.js:206
 msgid "Midnight Blue"
-msgstr ""
+msgstr "Glas Ganol Nos"
 
 #: templates/templates.js:216
 msgid "Nature Illustration"
-msgstr ""
+msgstr "Darlun Natur"
 
 #: templates/templates.js:226
 msgid "Pencil"
-msgstr ""
+msgstr "Pensil"
 
 #: templates/templates.js:236
 msgid "Piano"
-msgstr ""
+msgstr "Piano"
 
 #: templates/templates.js:246
 msgid "Portfolio"
-msgstr ""
+msgstr "Portffolio"
 
 #: templates/templates.js:256
 msgid "Progress"
-msgstr ""
+msgstr "Cynnydd"
 
 #: templates/templates.js:266
 msgid "Sunset"
-msgstr ""
+msgstr "Machlud"
 
 #: templates/templates.js:276
 msgid "Vintage"
-msgstr ""
+msgstr "Hynafol"
 
 #: templates/templates.js:286
 msgid "Vivid"
-msgstr ""
+msgstr "Llachar"
 
 #: templates/templates.js:296
 msgid "Yellow Idea"
-msgstr ""
+msgstr "Syniad Melyn"
 
 #: welcome/welcome.html%2Bhtml.head.title:9-3
 msgid "Collabora Online Welcome"

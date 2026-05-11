@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-20 12:14+0200\n"
-"PO-Revision-Date: 2025-09-22 10:54+0000\n"
+"PO-Revision-Date: 2026-05-05 14:11+0000\n"
 "Last-Translator: Rhoslyn Prys <rprys@posteo.net>\n"
 "Language-Team: Welsh <https://hosted.weblate.org/projects/collabora-online/"
 "help/cy/>\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=(n==0) ? 0 : (n==1) ? 1 : (n==2) ? 2 : "
 "(n==3) ? 3 :(n==6) ? 4 : 5;\n"
-"X-Generator: Translate Toolkit 3.6.0\n"
+"X-Generator: Weblate 5.17.1\n"
 
 #: html/cool-help.html%2Bdiv.h1:9-5
 msgid "Keyboard Shortcuts"
@@ -3442,7 +3442,8 @@ msgstr "arddull tudalen"
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:728-5
 msgid "How do I change the page orientation to landscape inside my document?"
-msgstr "Sut ydw i'n newid cyfeiriadedd y dudalen i dirwedd y tu mewn i'm dogfen"
+msgstr ""
+"Sut ydw i'n newid cyfeiriadedd y dudalen i dirwedd y tu mewn i'm dogfen?"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:730-7
 msgid ""
