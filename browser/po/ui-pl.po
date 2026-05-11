@@ -13,17 +13,17 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-20 12:14+0100\n"
-"PO-Revision-Date: 2026-03-10 18:09+0000\n"
+"PO-Revision-Date: 2026-03-20 21:36+0000\n"
 "Last-Translator: Matthaiks <kitynska@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/collabora-online/"
 "ui/pl/>\n"
-"Language: \n"
+"Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n"
-"%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n"
-"%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);\n"
+"Plural-Forms: nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && "
+"(n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && "
+"n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);\n"
 "X-Generator: Weblate 5.17-dev\n"
 
 #: admin/admin.strings.js:15
@@ -1871,11 +1871,11 @@ msgstr "Zamknij okno dialogowe"
 
 #: src/control/Control.JSDialogBuilder.js:496
 msgid "Increment value"
-msgstr ""
+msgstr "Zwiększ wartość"
 
 #: src/control/Control.JSDialogBuilder.js:500
 msgid "Decrement value"
-msgstr ""
+msgstr "Zmniejsz wartość"
 
 #: src/control/Control.JSDialogBuilder.js:640
 msgid "Solid"
@@ -2810,7 +2810,7 @@ msgstr "Plik HTML (.html)"
 #: src/control/Control.NotebookbarBuilder.js:449
 #: src/control/Control.NotebookbarBuilder.js:485
 msgid "PDF Document (.pdf) with options"
-msgstr ""
+msgstr "Dokument PDF (.pdf) z opcjami"
 
 #: src/control/Control.NotebookbarBuilder.js:432
 msgid "CSV File (.csv)"
@@ -3197,15 +3197,15 @@ msgstr "Tabela"
 #: src/control/Control.NotebookbarCalc.js:1766
 #: src/control/Control.NotebookbarCalc.js:1769
 msgid "Table styles are only available in .xlsx files"
-msgstr ""
+msgstr "Style tabel są dostępne tylko w plikach .xlsx"
 
 #: src/control/Control.NotebookbarCalc.js:1767
 msgid "Insert a styled table"
-msgstr ""
+msgstr "Wstaw tabelę ze stylami"
 
 #: src/control/Control.NotebookbarCalc.js:1770
 msgid "Select a cell range first to insert a styled table"
-msgstr ""
+msgstr "Najpierw wybierz zakres komórek, aby wstawić tabelę ze stylami"
 
 #: src/control/Control.NotebookbarCalc.js:1779
 #: src/control/Control.NotebookbarDraw.js:1015
@@ -3349,7 +3349,7 @@ msgstr "Od początku"
 
 #: src/control/Control.NotebookbarImpress.js:472
 msgid "Fullscreen, starting at slide 1"
-msgstr ""
+msgstr "Pełny ekran, zaczynając od slajdu 1"
 
 #: src/control/Control.NotebookbarImpress.js:479
 msgid "From Current Slide"
@@ -3357,7 +3357,7 @@ msgstr "Od bieżącego slajdu"
 
 #: src/control/Control.NotebookbarImpress.js:480
 msgid "Fullscreen, starting at this slide"
-msgstr ""
+msgstr "Pełny ekran, zaczynając od tego slajdu"
 
 #: src/control/Control.NotebookbarImpress.js:494
 msgid "Present in Window"
@@ -3365,7 +3365,7 @@ msgstr "Wyświetl w oknie"
 
 #: src/control/Control.NotebookbarImpress.js:495
 msgid "Plays inside the document window. Starts at slide 1"
-msgstr ""
+msgstr "Odtwarza w oknie dokumentu. Zaczyna od slajdu 1"
 
 #: src/control/Control.NotebookbarImpress.js:503
 msgid "Presenter View"
@@ -3373,7 +3373,7 @@ msgstr "Widok prezentera"
 
 #: src/control/Control.NotebookbarImpress.js:504
 msgid "Shows your notes, next slide, and a timer"
-msgstr ""
+msgstr "Pokazuje notatki, następny slajd i minutnik"
 
 #: src/control/Control.NotebookbarImpress.js:512
 msgid "Present to All"
@@ -3381,7 +3381,7 @@ msgstr "Prezentuj wszystkim"
 
 #: src/control/Control.NotebookbarImpress.js:513
 msgid "Starts a slideshow on every viewer's screen"
-msgstr ""
+msgstr "Rozpoczyna pokaz slajdów na ekranie każdego widza"
 
 #: src/control/Control.NotebookbarImpress.js:521
 #: src/slideshow/SlideShowPresenter.ts:1517
@@ -3390,7 +3390,7 @@ msgstr "Obserwuj prezentera"
 
 #: src/control/Control.NotebookbarImpress.js:522
 msgid "View slides as the presenter advances them"
-msgstr ""
+msgstr "Przeglądaj slajdy w miarę ich wyświetlania przez prezentera"
 
 #: src/control/Control.NotebookbarImpress.js:650
 msgid "Slide Views"
@@ -3428,13 +3428,12 @@ msgid "Master Slide Templates"
 msgstr "Szablony slajdów wzorcowych"
 
 #: src/control/Control.NotebookbarImpress.js:1824
-#, fuzzy
 msgid "This Presentation"
-msgstr "Zamknij prezentację"
+msgstr "Ta prezentacja"
 
 #: src/control/Control.NotebookbarImpress.js:1833
 msgid "Presentation Templates"
-msgstr ""
+msgstr "Szablony prezentacji"
 
 #: src/control/Control.NotebookbarImpress.js:1903
 msgid "Slide Size"
@@ -3512,15 +3511,15 @@ msgstr "Szerokość strony"
 
 #: src/control/Control.NotebookbarWriter.js:2209
 msgid "Spellcheck"
-msgstr ""
+msgstr "Sprawdzanie pisowni"
 
 #: src/control/Control.NotebookbarWriter.js:2222
 msgid "Spelling Options"
-msgstr ""
+msgstr "Opcje pisowni"
 
 #: src/control/Control.NotebookbarWriter.js:2234
 msgid "Auto Spell Check"
-msgstr ""
+msgstr "Automatyczne sprawdzanie pisowni"
 
 #: src/control/Control.NotebookbarWriter.js:2262
 #: src/control/Control.NotebookbarWriter.js:2278
@@ -4400,11 +4399,11 @@ msgstr "Bardzo luźno"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1788
 msgid "Inline"
-msgstr ""
+msgstr "W tekście"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1794
 msgid "Side by Side"
-msgstr ""
+msgstr "Obok siebie"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1807
 msgid "All users"
@@ -5029,11 +5028,10 @@ msgid "Failed to load document."
 msgstr "Nie udało się załadować dokumentu."
 
 #: src/errormessages.js:45
-#, fuzzy
 msgid "Save failed due to no disk space left. Document will now be read-only."
 msgstr ""
-"Zapis nie powiódł się z powodu braku miejsca na dysku. Dokument będzie teraz "
-"tylko do odczytu."
+"Zapisanie nie powiodło się z powodu braku miejsca na dysku. Dokument będzie "
+"teraz dostępny tylko do odczytu."
 
 #: src/errormessages.js:46
 msgid ""
@@ -5485,7 +5483,6 @@ msgid "Click to exit presentation..."
 msgstr "Kliknij, aby wyjść z prezentacji..."
 
 #: src/slideshow/SlideShowPresenter.ts:805
-#, fuzzy
 msgid "You are on the first slide"
 msgstr "Jesteś na pierwszym slajdzie"
 
