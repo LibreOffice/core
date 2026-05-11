@@ -759,6 +759,15 @@ window.L.Clipboard = window.L.Class.extend({
 			return;
 		}
 
+		// execCommand('paste') may fire the paste event synchronously and
+		// return false; in that case paste() has already dispatched a
+		// .uno:Paste, so a second async navigator-clipboard read would
+		// duplicate the content.
+		if (operation == 'paste' && serial !== this._clipboardSerial) {
+			this._unoCommandForCopyCutPaste = null;
+			return;
+		}
+
 		if (operation == 'paste' && this._navigatorClipboardRead(false)) {
 			// execCommand(paste) failed, the new clipboard API is available, tried that
 			// way.

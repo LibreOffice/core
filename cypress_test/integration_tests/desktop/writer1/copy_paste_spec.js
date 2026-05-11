@@ -65,6 +65,51 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Clipboard operations.', fu
 		});
 	});
 
+	it('Right-click Paste does not duplicate when execCommand fires paste event synchronously but returns false.', function() {
+		helper.setupAndLoadDocument('writer/copy_paste.odt');
+
+		cy.getFrameWindow().then(function(win) {
+			const app = win.app;
+			const clip = app.map._clip;
+
+			// Spy on the async navigator-clipboard read path. With the
+			// bug it gets called even after execCommand has already
+			// synchronously dispatched a paste, producing a second
+			// .uno:Paste socket message and visually duplicating the
+			// pasted content.
+			cy.spy(clip, '_navigatorClipboardRead').as('navClipRead');
+
+			// Force the buggy browser behaviour: execCommand('paste')
+			// fires the paste event synchronously (so paste() runs and
+			// _clipboardSerial is incremented) but the call itself
+			// returns false. Real-world Chromium/Firefox can do this
+			// when the focused element is read-only or in certain
+			// permission states.
+			cy.stub(win.document, 'execCommand').callsFake(function(operation) {
+				if (operation !== 'paste') {
+					return false;
+				}
+				const html = clip._originWrapBody('<p>test</p>');
+				clip.paste({
+					clipboardData: {
+						getData: function(t) {
+							return t === 'text/html' ? html : '';
+						},
+						types: ['text/html'],
+					},
+					preventDefault: function() {},
+				});
+				return false;
+			});
+
+			// Drive the same entry point used by the right-click
+			// "Paste" context-menu item.
+			clip.filterExecCopyPaste('.uno:Paste');
+		});
+
+		cy.get('@navClipRead').should('not.have.been.called');
+	});
+
 	it('Copy and Paste text with DisableCopy', function () {
 		helper.setupAndLoadDocument('writer/copy_paste.odt', /* isMultiUser */ false, /* copy .wopi.json */ true);
 		// Select some text
