@@ -8,11 +8,11 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-20 12:14+0100\n"
-"PO-Revision-Date: 2026-03-09 17:10+0000\n"
+"PO-Revision-Date: 2026-03-22 10:09+0000\n"
 "Last-Translator: Tigran Zargaryan <tigranflib@gmail.com>\n"
-"Language-Team: Armenian <https://hosted.weblate.org/projects/"
-"collabora-online/ui/hy/>\n"
-"Language: \n"
+"Language-Team: Armenian <https://hosted.weblate.org/projects/collabora-"
+"online/ui/hy/>\n"
+"Language: hy\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1880,11 +1880,11 @@ msgstr "Փակել երկխոսությունը"
 
 #: src/control/Control.JSDialogBuilder.js:496
 msgid "Increment value"
-msgstr ""
+msgstr "Աճեցման արժեքը"
 
 #: src/control/Control.JSDialogBuilder.js:500
 msgid "Decrement value"
-msgstr ""
+msgstr "Նվազեցման արժեք"
 
 #: src/control/Control.JSDialogBuilder.js:640
 msgid "Solid"
@@ -2820,7 +2820,7 @@ msgstr "HTML նիշք (.html)"
 #: src/control/Control.NotebookbarBuilder.js:449
 #: src/control/Control.NotebookbarBuilder.js:485
 msgid "PDF Document (.pdf) with options"
-msgstr ""
+msgstr "PDF փաստաթուղթ (.pdf)՝ ընտրանքներով"
 
 #: src/control/Control.NotebookbarBuilder.js:432
 msgid "CSV File (.csv)"
@@ -3207,15 +3207,15 @@ msgstr "Աղյուսակ"
 #: src/control/Control.NotebookbarCalc.js:1766
 #: src/control/Control.NotebookbarCalc.js:1769
 msgid "Table styles are only available in .xlsx files"
-msgstr ""
+msgstr "Աղյուսակի ոճերը հասանելի են միայն .xlsx նիշքերում"
 
 #: src/control/Control.NotebookbarCalc.js:1767
 msgid "Insert a styled table"
-msgstr ""
+msgstr "Տեղադրեք ոճավորված աղյուսակ"
 
 #: src/control/Control.NotebookbarCalc.js:1770
 msgid "Select a cell range first to insert a styled table"
-msgstr ""
+msgstr "Նախ ընտրեք բջիջների միջակայք՝ ոճավորված աղյուսակ տեղադրելու համար"
 
 #: src/control/Control.NotebookbarCalc.js:1779
 #: src/control/Control.NotebookbarDraw.js:1015
@@ -3359,7 +3359,7 @@ msgstr "Սկզբից"
 
 #: src/control/Control.NotebookbarImpress.js:472
 msgid "Fullscreen, starting at slide 1"
-msgstr ""
+msgstr "Լիաէկրան, սկսած սահիկ 1-ից"
 
 #: src/control/Control.NotebookbarImpress.js:479
 msgid "From Current Slide"
@@ -3367,7 +3367,7 @@ msgstr "Ընթացիկ սահիկից"
 
 #: src/control/Control.NotebookbarImpress.js:480
 msgid "Fullscreen, starting at this slide"
-msgstr ""
+msgstr "Լիաէկրան, սկսած այս սահիկից"
 
 #: src/control/Control.NotebookbarImpress.js:494
 msgid "Present in Window"
@@ -3375,7 +3375,7 @@ msgstr "Ներկայացնել պատուհանում"
 
 #: src/control/Control.NotebookbarImpress.js:495
 msgid "Plays inside the document window. Starts at slide 1"
-msgstr ""
+msgstr "խաղարկվում է փաստաթղթի պատուհանի ներսում։ Սկսվում է 1-ին սահիկից"
 
 #: src/control/Control.NotebookbarImpress.js:503
 msgid "Presenter View"
@@ -3383,7 +3383,7 @@ msgstr "Ներկայացնողի տեսք"
 
 #: src/control/Control.NotebookbarImpress.js:504
 msgid "Shows your notes, next slide, and a timer"
-msgstr ""
+msgstr "Ցուցադրում է ձեր նշումները, հաջորդ սահիկը և ժամանակաչափը"
 
 #: src/control/Control.NotebookbarImpress.js:512
 msgid "Present to All"
@@ -3391,7 +3391,7 @@ msgstr "Ներկայացնել բոլորին"
 
 #: src/control/Control.NotebookbarImpress.js:513
 msgid "Starts a slideshow on every viewer's screen"
-msgstr ""
+msgstr "Սկսում է սահիկաներկայացումը յուրաքանչյուր դիտողի էկրանին"
 
 #: src/control/Control.NotebookbarImpress.js:521
 #: src/slideshow/SlideShowPresenter.ts:1517
@@ -3400,7 +3400,7 @@ msgstr "Հետևեք ներկայացնողին"
 
 #: src/control/Control.NotebookbarImpress.js:522
 msgid "View slides as the presenter advances them"
-msgstr ""
+msgstr "Դիտեք սահիկները, երբ ներկայացնողը դրանք առաջ է տանում"
 
 #: src/control/Control.NotebookbarImpress.js:650
 msgid "Slide Views"
@@ -3438,13 +3438,12 @@ msgid "Master Slide Templates"
 msgstr "Վարպետ սահիկի կաղապարներ"
 
 #: src/control/Control.NotebookbarImpress.js:1824
-#, fuzzy
 msgid "This Presentation"
-msgstr "Փակել շնորհանդեսը"
+msgstr "Այս շնորհանդեսը"
 
 #: src/control/Control.NotebookbarImpress.js:1833
 msgid "Presentation Templates"
-msgstr ""
+msgstr "Ներկայացման ձևանմուշներ"
 
 #: src/control/Control.NotebookbarImpress.js:1903
 msgid "Slide Size"
@@ -3522,15 +3521,15 @@ msgstr "Էջի լայնությունը"
 
 #: src/control/Control.NotebookbarWriter.js:2209
 msgid "Spellcheck"
-msgstr ""
+msgstr "Ուղղագրության ստուգիչ"
 
 #: src/control/Control.NotebookbarWriter.js:2222
 msgid "Spelling Options"
-msgstr ""
+msgstr "Ուղղագրության տարբերակներ"
 
 #: src/control/Control.NotebookbarWriter.js:2234
 msgid "Auto Spell Check"
-msgstr ""
+msgstr "Ուղղագրության ինքնաշխատ ստուգում"
 
 #: src/control/Control.NotebookbarWriter.js:2262
 #: src/control/Control.NotebookbarWriter.js:2278
@@ -4404,11 +4403,11 @@ msgstr "Շատ թույլ"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1788
 msgid "Inline"
-msgstr ""
+msgstr "Համահունչ"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1794
 msgid "Side by Side"
-msgstr ""
+msgstr "Կողք կողքի"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1807
 msgid "All users"
@@ -5037,7 +5036,6 @@ msgid "Failed to load document."
 msgstr "Չհաջողվեց բեռնել փաստաթուղթը։"
 
 #: src/errormessages.js:45
-#, fuzzy
 msgid "Save failed due to no disk space left. Document will now be read-only."
 msgstr ""
 "Պահպանումը ձախողվեց սկավառակի վրա տարածքի բացակայության պատճառով: "
@@ -5490,7 +5488,6 @@ msgid "Click to exit presentation..."
 msgstr "Սեղմեք՝ շնորհանդեսից դուրս գալու համար..."
 
 #: src/slideshow/SlideShowPresenter.ts:805
-#, fuzzy
 msgid "You are on the first slide"
 msgstr "Դուք առաջին սահիկի վրա եք"
 
