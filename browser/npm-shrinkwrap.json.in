@@ -1398,9 +1398,9 @@
       "license": "MIT"
     },
     "node_modules/baseline-browser-mapping": {
-      "version": "2.10.27",
-      "resolved": "file:node_shrinkpack/baseline-browser-mapping-2.10.27.tar",
-      "integrity": "sha512-zEs/ufmZoUd7WftKpKyXaT6RFxpQ5Qm9xytKRHvJfxFV9DFJkZph9RvJ1LcOUi0Z1ZVijMte65JbILeV+8QQEA== sha512-9fUhNSgkhfYVxNV9v4M6E7cRlnkQR6rbEP2yjj2ss/onnHZqB/68qNTA4u+SZV9TfgbFH98lcUxMdNOaY4h88Q==",
+      "version": "2.10.29",
+      "resolved": "file:node_shrinkpack/baseline-browser-mapping-2.10.29.tar",
+      "integrity": "sha512-Asa2krT+XTPZINCS+2QcyS8WTkObE77RwkydwF7h6DmnKqbvlalz93m/dnphUyCa6SWSP51VgtEUf2FN+gelFQ== sha512-A+MtFIkBoh/KbH6ytd0RgI0INd6O2LOnBfDONerR/Ih4CWbdhee/ohH1GU2yxnB2HOhOna69eS2Ldb6AUxDzAg==",
       "dev": true,
       "license": "Apache-2.0",
       "bin": {
@@ -3383,9 +3383,9 @@
       }
     },
     "node_modules/electron-to-chromium": {
-      "version": "1.5.352",
-      "resolved": "file:node_shrinkpack/electron-to-chromium-1.5.352.tar",
-      "integrity": "sha512-9wHk8x6dyuimoe18EdiDPWKExNdxYqo4fn4FwOVVper6RxT3cmpBwBkWWfSOCYJjQdIco/nPhJhNLmn4Ufg1Yg== sha512-jKv8k2fhS48N3ZtpRwoVzXBu1KsCUzuHSG64pT7fJPW3LROagnnwFz5/hAVwRyw6S7m9/j2xzcMWV6CNYbQI7Q==",
+      "version": "1.5.353",
+      "resolved": "file:node_shrinkpack/electron-to-chromium-1.5.353.tar",
+      "integrity": "sha512-kOrWphBi8TOZyiJZqsgqIle0lw+tzmnQK83pV9dZUd01Nm2POECSyFQMAuarzZdYqQW7FH9RaYOuaRo3h+bQ3w== sha512-/VSgUGIH/jDh74p46wECAQJFnHevZ7xxqMSN6UNcidJ1QbaoHH/TB6T87UCsSDM2grB6FrUJ0PKeMf0DsGXWCA==",
       "dev": true,
       "license": "ISC"
     },
@@ -8714,9 +8714,9 @@
       }
     },
     "node_modules/semver": {
-      "version": "7.7.4",
-      "resolved": "file:node_shrinkpack/semver-7.7.4.tar",
-      "integrity": "sha512-vFKC2IEtQnVhpT78h1Yp8wzwrf8CM+MzKMHGJZfBtzhZNycRFnXsHk6E5TxIkkMsgNS7mdX3AGB7x2QM2di4lA== sha512-yhENm8zeCRXydJMOmtKp54B2GpXPvAPiAMzIMrG9LzTGDHrRrYSzx+a1IYnVU6Vfz0Ibgb5+hiwpTQ1dOC1lnw==",
+      "version": "7.8.0",
+      "resolved": "file:node_shrinkpack/semver-7.8.0.tar",
+      "integrity": "sha512-AcM7dV/5ul4EekoQ29Agm5vri8JNqRyj39o0qpX6vDF2GZrtutZl5RwgD1XnZjiTAfncsJhMI48QQH3sN87YNA== sha512-6JkBB0MNq5DemngTxSOVunCJIOpYiAMdOz+xfyJsOALs0jefqk/teI+qB/2V7ZsvD/ZdWQfk7jQ95azSW+yPiA==",
       "dev": true,
       "license": "ISC",
       "bin": {
@@ -9071,9 +9071,9 @@
       }
     },
     "node_modules/socks": {
-      "version": "2.8.8",
-      "resolved": "file:node_shrinkpack/socks-2.8.8.tar",
-      "integrity": "sha512-NlGELfPrgX2f1TAAcz0WawlLn+0r3FyhhCRpFFK2CemXenPYvzMWWZINv3eDNo9ucdwme7oCHRY0Jnbs4aIkog== sha512-UnyyYhfDBwAvofPLlCgS/xRvHjIzUiMWsfGKf4sZt7EFMccJeyfK8qO0F47UQ5rRd5o0mGafR1aB0sCfKT8Wjw==",
+      "version": "2.8.9",
+      "resolved": "file:node_shrinkpack/socks-2.8.9.tar",
+      "integrity": "sha512-LJhUYUvItdQ0LkJTmPeaEObWXAqFyfmP85x0tch/ez9cahmhlBBLbIqDFnvBnUJGagb0JbIQrkBs1wJ+yRYpEw== sha512-pRyv/bMci0LoB1loH9tjJkwvshHaaAyjNVrRqdzPAnw/Nz30dr7m+oy+WnY5qXJSwBrO+YOiky/8MaEzT714rA==",
       "dev": true,
       "license": "MIT",
       "dependencies": {
