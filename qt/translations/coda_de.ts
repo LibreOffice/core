@@ -6,7 +6,7 @@
     <message>
         <location filename="../DocumentOperations.cpp" line="49"/>
         <source>ODF text document (.odt)</source>
-        <translation>ODF Dokument (.odt)</translation>
+        <translation>ODF-Textdokument (.odt)</translation>
     </message>
     <message>
         <location filename="../DocumentOperations.cpp" line="50"/>
@@ -16,32 +16,32 @@
     <message>
         <location filename="../DocumentOperations.cpp" line="51"/>
         <source>Word Document (.docx)</source>
-        <translation>Word Dokument (.docx)</translation>
+        <translation>Word-Dokument (.docx)</translation>
     </message>
     <message>
         <location filename="../DocumentOperations.cpp" line="52"/>
         <source>Word 2003 Document (.doc)</source>
-        <translation>Word 2003 Document (.doc)</translation>
+        <translation>Word 2003-Dokument (.doc)</translation>
     </message>
     <message>
         <location filename="../DocumentOperations.cpp" line="58"/>
         <source>ODF spreadsheet (.ods)</source>
-        <translation>ODF Arbeitsmappe (.ods)</translation>
+        <translation>ODF-Arbeitsmappe (.ods)</translation>
     </message>
     <message>
         <location filename="../DocumentOperations.cpp" line="59"/>
         <source>Excel Spreadsheet (.xlsx)</source>
-        <translation>Excel Arbeitsmappe (.xlsx)</translation>
+        <translation>Excel-Arbeitsmappe (.xlsx)</translation>
     </message>
     <message>
         <location filename="../DocumentOperations.cpp" line="60"/>
         <source>Excel 2003 Spreadsheet (.xls)</source>
-        <translation>Excel 2003 Arbeitsmappe (.xls)</translation>
+        <translation>Excel 2003-Arbeitsmappe (.xls)</translation>
     </message>
     <message>
         <location filename="../DocumentOperations.cpp" line="66"/>
         <source>ODF presentation (.odp)</source>
-        <translation>ODF Präsentation (.odp)</translation>
+        <translation>ODF-Präsentation (.odp)</translation>
     </message>
     <message>
         <location filename="../DocumentOperations.cpp" line="67"/>
@@ -51,12 +51,12 @@
     <message>
         <location filename="../DocumentOperations.cpp" line="68"/>
         <source>PowerPoint 2003 Presentation (.ppt)</source>
-        <translation>PowerPoint 2003 Präsentation (.ppt)</translation>
+        <translation>PowerPoint 2003-Präsentation (.ppt)</translation>
     </message>
     <message>
         <location filename="../DocumentOperations.cpp" line="74"/>
         <source>ODF drawing (.odg)</source>
-        <translation>ODF Zeichnung (.odg)</translation>
+        <translation>ODF-Zeichnung (.odg)</translation>
     </message>
     <message>
         <location filename="../DocumentOperations.cpp" line="106"/>
@@ -185,7 +185,7 @@
     <message>
         <location filename="../WebView.cpp" line="317"/>
         <source>Presenting</source>
-        <translation type="unfinished">Präsentation</translation>
+        <translation>Präsentation</translation>
     </message>
 </context>
 <context>

@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-20 12:14+0100\n"
-"PO-Revision-Date: 2026-04-05 01:12+0000\n"
-"Last-Translator: Ettore Atalan <atalanttore@googlemail.com>\n"
+"PO-Revision-Date: 2026-05-08 23:06+0000\n"
+"Last-Translator: Mr-Update <mr.update@yahoo.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/collabora-online/"
 "ui/de/>\n"
 "Language: de\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.17-dev\n"
+"X-Generator: Weblate 2026.5-dev\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -412,7 +412,7 @@ msgstr "Signatur-Zertifizierungsstelle"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:347
 msgid "In-document Screen Reader"
-msgstr ""
+msgstr "Bildschirmleser im Dokument"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:348
 #: src/control/Control.Menubar.ts:175 src/control/Control.Menubar.ts:504
@@ -725,7 +725,7 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:745
 msgid "Interface Settings"
-msgstr "Benutzeroberflächen-Einstellungen"
+msgstr "Einstellungen der Benutzeroberfläche"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:747
 msgid "Set default interface preferences."
@@ -1226,7 +1226,7 @@ msgstr ""
 #: src/control/Control.BackstageView.ts:179
 #: src/control/Control.BackstageView.ts:180
 msgid "Close backstage"
-msgstr ""
+msgstr "Backstage-Ansicht schließen"
 
 #: src/control/Control.BackstageView.ts:223
 #: src/control/Control.BackstageView.ts:224
@@ -1932,7 +1932,7 @@ msgstr "Rechteckig"
 
 #: src/control/Control.JSDialogBuilder.js:662
 msgid "Fixed size"
-msgstr "Festen Größe"
+msgstr "Feste Größe"
 
 #: src/control/Control.JSDialogBuilder.js:1370
 msgid "From"
@@ -1986,7 +1986,7 @@ msgstr "Aufklappmenü umschalten"
 
 #: src/control/Control.JSDialogBuilder.js:2138
 msgid "Dialog dropdown"
-msgstr ""
+msgstr "Aufklappdialog"
 
 #: src/control/Control.JSDialogBuilder.js:2140
 #: src/control/Control.NotebookbarWriter.js:1608
@@ -1995,7 +1995,7 @@ msgstr "Aufklappmenü"
 
 #: src/control/Control.JSDialogBuilder.js:2142
 msgid "Apply action dropdown"
-msgstr ""
+msgstr "Aktion aus Aufklappmenü anwenden"
 
 #: src/control/Control.JSDialogBuilder.js:2168
 msgid "Open {name}"
@@ -2426,12 +2426,12 @@ msgstr "Ganzseitige Folien"
 #: src/control/Control.Menubar.ts:468
 #: src/control/Control.NotebookbarBuilder.js:654
 msgid "Notes Pages"
-msgstr "Notizenseiten"
+msgstr "Notizseiten"
 
 #: src/control/Control.Menubar.ts:502
 #: src/control/Control.NotebookbarImpress.js:657
 msgid "Notes View"
-msgstr "Notizenansicht"
+msgstr "Notizansicht"
 
 #: src/control/Control.Menubar.ts:506
 #: src/control/Control.NotebookbarImpress.js:663
@@ -2550,22 +2550,22 @@ msgstr "Regeln oben/unten..."
 #: src/control/Control.Menubar.ts:938
 #: src/control/jsdialog/Definitions.Menu.ts:1889
 msgid "Top N elements..."
-msgstr "Obere N-Elemente..."
+msgstr "Obere N Elemente..."
 
 #: src/control/Control.Menubar.ts:939
 #: src/control/jsdialog/Definitions.Menu.ts:1893
 msgid "Top N percent..."
-msgstr "Obere N-Prozent..."
+msgstr "Obere N Prozent..."
 
 #: src/control/Control.Menubar.ts:940
 #: src/control/jsdialog/Definitions.Menu.ts:1897
 msgid "Bottom N elements..."
-msgstr "Untere N-Elemente..."
+msgstr "Untere N Elemente..."
 
 #: src/control/Control.Menubar.ts:941
 #: src/control/jsdialog/Definitions.Menu.ts:1901
 msgid "Bottom N percent..."
-msgstr "Untere N-Prozent..."
+msgstr "Untere N Prozent..."
 
 #: src/control/Control.Menubar.ts:942
 #: src/control/jsdialog/Definitions.Menu.ts:1905
@@ -2735,7 +2735,7 @@ msgstr "Letzte Spalte"
 
 #: src/control/Notebookbar.CalcTableTab.ts:190
 msgid "Filter Buttons"
-msgstr ""
+msgstr "Filter-Schaltflächen"
 
 #: src/control/Notebookbar.ImpressAnimationTab.ts:24
 msgid "Animation"
@@ -3147,7 +3147,7 @@ msgstr "Standardansicht"
 
 #: src/control/Control.NotebookbarCalc.js:1433
 msgid "Open Views List"
-msgstr ""
+msgstr "Ansichtenliste öffnen"
 
 #: src/control/Control.NotebookbarCalc.js:1440
 msgid "New Sheet View"
@@ -3399,7 +3399,7 @@ msgstr "Spielt innerhalb des Dokumentenfensters. Beginnt bei Folie 1"
 
 #: src/control/Control.NotebookbarImpress.js:503
 msgid "Presenter View"
-msgstr ""
+msgstr "Präsentatorenansicht"
 
 #: src/control/Control.NotebookbarImpress.js:504
 msgid "Shows your notes, next slide, and a timer"
@@ -3411,16 +3411,16 @@ msgstr "An alle präsentieren"
 
 #: src/control/Control.NotebookbarImpress.js:513
 msgid "Starts a slideshow on every viewer's screen"
-msgstr ""
+msgstr "Startet eine Diashow auf dem Bildschirm jedes Betrachters"
 
 #: src/control/Control.NotebookbarImpress.js:521
 #: src/slideshow/SlideShowPresenter.ts:1517
 msgid "Follow Presenter"
-msgstr ""
+msgstr "Dem Präsentator folgen"
 
 #: src/control/Control.NotebookbarImpress.js:522
 msgid "View slides as the presenter advances them"
-msgstr ""
+msgstr "Folien anzeigen, sobald der Präsentator sie weiterblättert"
 
 #: src/control/Control.NotebookbarImpress.js:650
 msgid "Slide Views"
@@ -3443,7 +3443,7 @@ msgstr "Layout ändern"
 #: src/control/Control.NotebookbarImpress.js:843
 #: src/control/Control.NotebookbarImpress.js:1891
 msgid "Reset Layout"
-msgstr "Reset layout"
+msgstr "Layout zurücksetzen"
 
 #: src/control/Control.NotebookbarImpress.js:857
 msgid "Character"
@@ -3545,7 +3545,7 @@ msgstr "Rechtschreibkorrektur"
 
 #: src/control/Control.NotebookbarWriter.js:2222
 msgid "Spelling Options"
-msgstr ""
+msgstr "Rechtschreiboptionen"
 
 #: src/control/Control.NotebookbarWriter.js:2234
 msgid "Auto Spell Check"
@@ -3648,7 +3648,7 @@ msgstr "Schnelle Kit-Jail-Bind-Montage aktiviert"
 
 #: src/control/Control.ServerAuditDialog.ts:119
 msgid "Fast kit jail bind mounting not configured"
-msgstr ""
+msgstr "Schnelle Kit-Jail-Bind-Montage nicht konfiguriert"
 
 #: src/control/Control.ServerAuditDialog.ts:127
 msgid "Poorly performing proxying of all network requests."
@@ -3797,8 +3797,8 @@ msgid ""
 "To prevent accidental changes, the author has set this file to open as view-"
 "only"
 msgstr ""
-"Um versehentliche Änderungen zu vermeiden, hat der Autor diese Datei "
-"schreibgeschützt geöffnet."
+"Um versehentliche Änderungen zu vermeiden, hat der Autor diese Datei so "
+"eingestellt, dass sie nur zur Ansicht geöffnet werden kann"
 
 #: src/control/Control.StatusBar.js:494
 msgid "Select multiple cells"
@@ -4239,7 +4239,7 @@ msgstr "Bearbeitungsmodus"
 #: src/control/PermissionMode.ts:141 src/control/PermissionMode.ts:213
 #: src/control/PermissionMode.ts:219 src/control/PermissionMode.ts:225
 msgid "Viewing"
-msgstr ""
+msgstr "Anzeigen"
 
 #: src/control/jsdialog/Definitions.Menu.ts:111
 #: src/control/jsdialog/Definitions.Menu.ts:1760
@@ -4428,11 +4428,11 @@ msgstr "sehr weit"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1788
 msgid "Inline"
-msgstr ""
+msgstr "Integriert"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1794
 msgid "Side by Side"
-msgstr ""
+msgstr "Nebeneinander"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1807
 msgid "All users"
@@ -4556,7 +4556,7 @@ msgstr "Leere Folie"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2197
 msgid "Title Slide"
-msgstr "Titel Folie"
+msgstr "Titelfolie"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2198
 msgid "Title, Content"
@@ -4608,7 +4608,7 @@ msgstr "Vertikaler Titel, vertikaler Text"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2210
 msgid "Title, Vertical Text"
-msgstr "Titel, Vertikaler Text"
+msgstr "Titel, vertikaler Text"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2211
 msgid "Title, Vertical Text, Clipart"
@@ -4677,7 +4677,7 @@ msgstr "Recht: {right}"
 
 #: src/control/jsdialog/Widget.PageMarginEntry.ts:183
 msgid "Custom Margins…"
-msgstr "Benutzerdefiniert Ränder…"
+msgstr "Benutzerdefinierte Ränder…"
 
 #: src/control/jsdialog/Widget.PageSizeEntry.ts:69
 msgid "More Paper Sizes..."
@@ -4690,7 +4690,7 @@ msgstr "Bearbeitungsmodus"
 #: src/control/jsdialog/Widget.HTMLContent.ts:72
 msgid "Number of Pages. Click to open the Go to Page dialog box."
 msgstr ""
-"Anzahl der Seiten. Klicken Sie auf, um das Dialogfeld „Wechseln zu Seite“ zu "
+"Anzahl der Seiten. Klicken Sie hier, um das Dialogfeld „Gehe zu Seite“ zu "
 "öffnen."
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:84
@@ -5071,7 +5071,6 @@ msgid "Failed to load document."
 msgstr "Dokument konnte nicht geladen werden."
 
 #: src/errormessages.js:45
-#, fuzzy
 msgid "Save failed due to no disk space left. Document will now be read-only."
 msgstr ""
 "Speichern fehlgeschlagen, da kein Speicherplatz mehr vorhanden ist. Das "
@@ -5317,7 +5316,7 @@ msgstr "Aus diesem Dokument einfügen"
 
 #: src/map/Clipboard.js:1543
 msgid "Cancel paste special"
-msgstr "Abbrechen Einfügen Spezial"
+msgstr "Einfügen spezieller Inhalte abbrechen"
 
 #: src/map/Clipboard.js:1565
 msgid "Your browser has very limited access to the clipboard"
@@ -5330,7 +5329,7 @@ msgstr ""
 
 #: src/map/Clipboard.js:1588
 msgid "Close popup to ignore paste special"
-msgstr "Schließen Sie das Popup, um das Einfügen von Inhalten zu ignorieren"
+msgstr "Pop-up schließen, um das Einfügen von Inhalten zu ignorieren"
 
 #: src/map/Map.js:204
 msgid "Initializing..."
@@ -5380,7 +5379,7 @@ msgstr "Ausgewählte Datei konnte nicht gelesen werden."
 
 #: src/map/handler/Map.Keyboard.js:653
 msgid "You are currently in View mode"
-msgstr ""
+msgstr "Sie befinden sich derzeit im Ansichtsmodus"
 
 #: src/map/handler/Map.Print.js:44
 msgid "Print dialog"
@@ -5415,7 +5414,7 @@ msgstr ""
 #: src/map/handler/Map.SlideShow.js:172
 #: src/slideshow/SlideShowPresenter.ts:1089
 msgid "Windowed Presentation: "
-msgstr "Fensterpräsentation "
+msgstr "Fensterpräsentation: "
 
 #: src/map/handler/Map.SlideShow.js:202
 #: src/slideshow/SlideShowPresenter.ts:1132
@@ -5496,7 +5495,7 @@ msgstr "Nächste Folie"
 #: src/slideshow/PresenterConsole.js:35
 #: src/slideshow/SlideShowPresenter.ts:908
 msgid "Exchange"
-msgstr ""
+msgstr "Austausch"
 
 #: src/slideshow/PresenterConsole.js:36
 msgid "Pause"
@@ -5528,7 +5527,7 @@ msgstr "Herauszoomen"
 
 #: src/slideshow/PresenterConsole.js:186
 msgid "Preview Slide {1}"
-msgstr "Vorschau Folie {1}"
+msgstr "Vorschau-Folie {1}"
 
 #: src/slideshow/PresenterConsole.js:1288
 msgid "Slide {0} of {1}"
@@ -5548,13 +5547,12 @@ msgid "Click to exit presentation..."
 msgstr "Klicken Sie hier, um die Präsentation zu beenden..."
 
 #: src/slideshow/SlideShowPresenter.ts:805
-#, fuzzy
 msgid "You are on the first slide"
-msgstr "Sie sind auf der ersten Folie"
+msgstr "Sie befinden sich auf der ersten Folie"
 
 #: src/slideshow/SlideShowPresenter.ts:813
 msgid "Waiting for presenter to advance"
-msgstr ""
+msgstr "Warten auf den Präsentator, bis er weitermacht"
 
 #: src/slideshow/SlideShowPresenter.ts:842
 msgid "End Show"
@@ -5591,7 +5589,7 @@ msgstr "Lebenslauf"
 
 #: templates/templates.js:36
 msgid "Resume (one-page)"
-msgstr ""
+msgstr "Lebenslauf (einseitig)"
 
 #: templates/templates.js:56
 msgid "Modern Style"
@@ -5603,7 +5601,7 @@ msgstr "Einfacher Stil"
 
 #: templates/templates.js:76
 msgid "Beehive"
-msgstr ""
+msgstr "Bienenstock"
 
 #: templates/templates.js:86
 msgid "Blue Curve"
@@ -5631,7 +5629,7 @@ msgstr "Waldvogel"
 
 #: templates/templates.js:146
 msgid "Freshes"
-msgstr ""
+msgstr "Frisch"
 
 #: templates/templates.js:156
 msgid "Grey Elegant"

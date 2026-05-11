@@ -3,7 +3,7 @@
     <!--string name="app_name" definition is deliberately missing here, it is filled in in build.gradle.-->
     <string name="app_name_settings">Einstellungen</string>
     <string name="app_version_and_hash">Version: %1$s \nOnline git-Hash: %2$s \nKern git-Hash: %3$s</string>
-    <string name="app_description">$APP_NAME ist eine moderne, benutzerfreundliche Open Source Office-Anwendung für Textverarbeitung, Tabellenkalkulationen, Präsentationen und mehr.</string>
+    <string name="app_description">$APP_NAME ist eine moderne, benutzerfreundliche Open-Source-Office-Suite für Textverarbeitung, Tabellenkalkulationen, Präsentationen und mehr.</string>
     <string name="app_vendor">Dieses Release wurde bereitgestellt durch $VENDOR.</string>
     <string name="no_recent_items">Öffnen Sie bitte eine Datei über das Ordnersymbol in der Symbolleiste.</string>
     <string name="no_items">Keine Elemente</string>
@@ -52,7 +52,7 @@
     <string name="action_settings">Einstellungen</string>
     <string name="open">Öffnen</string>
     <string name="share">Teilen</string>
-    <string name="remove_from_list">Von der Liste entfernen</string>
+    <string name="remove_from_list">Aus der Liste entfernen</string>
     <string name="share_via">Teilen via</string>
     <!-- Document browser filters -->
     <string name="filter_everything">Alles</string>
@@ -66,7 +66,7 @@
     <string name="local_file_system">Lokales Dateisystem</string>
     <string name="external_sd_file_system">Externe SD</string>
     <string name="otg_file_system">OTG-Gerät (experimentell)</string>
-    <string name="remote_server">Webserver</string>
+    <string name="remote_server">Remote-Server</string>
     <string name="usb_connected_configure">USB verbunden, konfigurieren Sie Ihr Gerät.</string>
     <string name="owncloud_wrong_connection">Es kann keine Verbindung zum Cloud-Server hergestellt werden. Überprüfen Sie Ihre Konfiguration.</string>
     <string name="owncloud_unauthorized">Anmeldung am Cloud-Server nicht möglich. Überprüfen Sie Ihre Konfiguration.</string>
@@ -87,7 +87,7 @@
     <string name="user_name">Benutzername</string>
     <string name="password">Passwort</string>
     <!-- Directory browser strings -->
-    <string name="up_description">Nach oben</string>
+    <string name="up_description">Zum übergeordneten Verzeichnis</string>
     <string name="confirm_label">Bestätigen</string>
     <string name="cancel_label">Abbrechen</string>
     <string name="search_label">Suchen</string>
@@ -103,12 +103,12 @@
     <!-- Save Alert dialog strings -->
     <string name="action_cancel">Abbrechen</string>
     <!-- Create New Document Dialog Strings -->
-    <string name="create_new_document_title">Neues Dokument Erstellen</string>
+    <string name="create_new_document_title">Neues Dokument erstellen</string>
     <string name="enter_filename">Bitte Dateinamen eingeben:</string>
     <string name="action_create">Erstellen</string>
     <string name="action_overwrite">Überschreiben</string>
     <!-- Loading SlideShow Dialog Strings -->
-    <string name="loading">Lade …</string>
+    <string name="loading">Wird geladen …</string>
     <string name="share_document">Dokument teilen</string>
     <!-- Presentation Mode Strings -->
     <!-- Calc Header Menu Strings -->
@@ -116,7 +116,7 @@
     <!-- Insert Image Strings -->
     <!-- Clipboard Actions -->
     <!-- UNO cmd controller Strings -->
-    <string name="unable_to_go_further">Weiter gehen nicht möglich.</string>
+    <string name="unable_to_go_further">Weiter geht es nicht.</string>
     <string name="bmp_null">Bmp ist null!</string>
     <string name="directory_not_saved">Verzeichnis nicht gespeichert.</string>
     <string name="title_activity_show_html">Über</string>
@@ -127,6 +127,6 @@
     <string name="theme_dark">Dunkel</string>
     <string name="theme_light">Hell</string>
     <string name="pref_user_name_guest">Gastnutzer</string>
-    <string name="pref_user_name_info">Benutzt, wenn ein Kommentar hinzugefügt wird</string>
-    <string name="pref_user_name">Nutzername</string>
+    <string name="pref_user_name_info">Wird beim Hinzufügen eines Kommentars verwendet</string>
+    <string name="pref_user_name">Benutzername</string>
 </resources>

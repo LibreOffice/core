@@ -2,13 +2,14 @@
 # J. Lavoie <j.lavoie@net-c.ca>, 2021.
 # Andras Timar <andras.timar@collabora.com>, 2021.
 # Ettore Atalan <atalanttore@googlemail.com>, 2024.
+# Mr-Update <mr.update@yahoo.de>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-20 12:14+0200\n"
-"PO-Revision-Date: 2024-08-31 06:09+0000\n"
-"Last-Translator: Ettore Atalan <atalanttore@googlemail.com>\n"
+"PO-Revision-Date: 2026-05-08 23:06+0000\n"
+"Last-Translator: Mr-Update <mr.update@yahoo.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/collabora-online/"
 "app-store-descriptions/de/>\n"
 "Language: de\n"
@@ -16,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Translate Toolkit 3.6.0\n"
+"X-Generator: Weblate 2026.5-dev\n"
 
 #. App name - 50 chars limit
 #: descriptions/google-play.html%2Bhtml.body.h3:5-1
@@ -29,8 +30,8 @@ msgid ""
 "LibreOffice based editor for Microsoft Office, LibreOffice and OpenOffice "
 "docs."
 msgstr ""
-"LibreOffice basierter Editor für Microsoft, LibreOffice & OpenOffice "
-"Dokumente."
+"LibreOffice-basiert für Microsoft Office-, LibreOffice- und OpenOffice-"
+"Dokumente"
 
 #. Long description
 #: descriptions/google-play.html%2Bhtml.body.p:13-1
@@ -40,10 +41,11 @@ msgid ""
 "and now it's on Android, enhancing your possibilities to work on mobile and "
 "for collaboration."
 msgstr ""
-"Collabora Office ist ein Texteditor, Tabellenkalkulations- und "
-"Präsentationsprogramm, das auf LibreOffice, der weltweit beliebtesten Open-"
-"Source-Office-Suite, basiert - und jetzt gibt es es auch auf Android, was "
-"Ihre Möglichkeiten für mobiles Arbeiten und Zusammenarbeit erweitert."
+"Collabora Office ist ein Textverarbeitungs-, Tabellenkalkulations- und "
+"Präsentationsprogramm, das auf LibreOffice basiert, der weltweit "
+"beliebtesten Open-Source-Office-Suite - und jetzt ist es auch für Android "
+"verfügbar, wodurch sich Ihre Möglichkeiten für mobiles Arbeiten und die "
+"Zusammenarbeit erweitern."
 
 #. Long description
 #: descriptions/google-play.html%2Bhtml.body.p:17-1
