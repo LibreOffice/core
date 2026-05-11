@@ -61,11 +61,11 @@ msgstr "Formát Open Document (.odt, .odp, .ods, .ots, .ott, .otp)"
 
 #: descriptions/google-play.html%2Bhtml.body.ul.li:27-5
 msgid ""
-"Microsoft Office 2007/2010/2013/2016/2019 (.docx, .pptx, .xlsx, .dotx, ."
-"xltx, .ppsx)"
+"Microsoft Office 2007/2010/2013/2016/2019 "
+"(.docx, .pptx, .xlsx, .dotx, .xltx, .ppsx)"
 msgstr ""
-"Microsoft Office 2007/2010/2013/2016/2019 (.docx, .pptx, .xlsx, .dotx, ."
-"xltx, .ppsx)"
+"Microsoft Office 2007/2010/2013/2016/2019 "
+"(.docx, .pptx, .xlsx, .dotx, .xltx, .ppsx)"
 
 #: descriptions/google-play.html%2Bhtml.body.ul.li:28-5
 msgid "Microsoft Office 97/2000/XP/2003 (.doc, .ppt, .xls, .dot, .xlt, .pps)"
@@ -79,9 +79,9 @@ msgstr "Nahlásiť problémy:"
 #. Long description
 #: descriptions/google-play.html%2Bhtml.body.p:35-1
 msgid ""
-"Use the bugtracker and attach any files that caused problems via <a href="
-"\"https://col.la/android\"> https://col.la/android</a>. Please note that "
-"anything you enter in the bugtracker will be public."
+"Use the bugtracker and attach any files that caused problems via <a "
+"href=\"https://col.la/android\"> https://col.la/android</a>. Please note "
+"that anything you enter in the bugtracker will be public."
 msgstr ""
 "Použite bugtracker a priložte všetky súbory, ktoré spôsobili problémy, cez "
 "<a href=\"https://col.la/android\"> https://col.la/android</a>. "
