@@ -4,39 +4,26 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 # -- Available env vars --
-# * CORE_ASSETS  - which prebuilt assets to build in core
-# * CORE_REPO    - which git repo to clone core from
-# * CORE_BRANCH  - which branch to build in core
-# * COLLABORA_ONLINE_REPO - which git repo to clone online from
-# * COLLABORA_ONLINE_BRANCH - which branch to build in online
-# * CORE_BUILD_TARGET - which make target to run (in core repo)
+# * COLLABORA_ONLINE_REPO - which git repo to clone the online monorepo from
+# * COLLABORA_ONLINE_BRANCH - which branch to build
+# * ENGINE_BUILD_TARGET - which make target to run for the engine
 # * ONLINE_EXTRA_BUILD_OPTIONS - extra build options for online
-
-if [ -z "$CORE_REPO" ]; then
-  CORE_REPO="https://gerrit.collaboraoffice.com/core"
-fi;
-
-if [ -z "$CORE_ASSETS" ]; then
-  if [ -z "$CORE_BRANCH" ]; then
-    CORE_BRANCH="main"
-  fi;
-  echo "Building core branch '$CORE_BRANCH' from '$CORE_REPO'"
-else
-  echo "Building from core assets $CORE_ASSETS"
-fi;
+#
+# Note: on Alpine the engine must be built from source -- prebuilt engine
+# assets are linked against glibc and won't work on musl.
 
 if [ -z "$COLLABORA_ONLINE_REPO" ]; then
-  COLLABORA_ONLINE_REPO="https://github.com/CollaboraOnline/online.git"
+  COLLABORA_ONLINE_REPO="https://gerrit.collaboraoffice.com/online"
 fi;
 if [ -z "$COLLABORA_ONLINE_BRANCH" ]; then
   COLLABORA_ONLINE_BRANCH="main"
 fi;
-echo "Building online branch '$COLLABORA_ONLINE_BRANCH' from '$COLLABORA_ONLINE_REPO'"
+echo "Building branch '$COLLABORA_ONLINE_BRANCH' from '$COLLABORA_ONLINE_REPO'"
 
-if [ -z "$CORE_BUILD_TARGET" ]; then
-  CORE_BUILD_TARGET=""
+if [ -z "$ENGINE_BUILD_TARGET" ]; then
+  ENGINE_BUILD_TARGET=""
 fi;
-echo "LOKit (core) build target: '$CORE_BUILD_TARGET'"
+echo "Engine build target: '$ENGINE_BUILD_TARGET'"
 
 SRCDIR=$(realpath `dirname $0`)
 INSTDIR="$SRCDIR/instdir"
@@ -61,39 +48,24 @@ cd ..
 
 ##### cloning & updating #####
 
-# core repo
-# only if CORE_ASSETS is not set
-if [ -z "$CORE_ASSETS" ]; then
-  git clone --depth=1 --branch "$CORE_BRANCH" "$CORE_REPO" core || exit 1
-else
-  mkdir -p core
-  ( cd core/ && wget "$CORE_ASSETS" -O core-assets.tar.xz && tar -xzf core-assets.tar.xz && rm core-assets.tar.xz) || exit 1
-fi
-
-
-# Clone online repo
+# Clone the online monorepo (engine/ contains the rendering engine)
 git clone --depth=1 --branch "$COLLABORA_ONLINE_BRANCH" "$COLLABORA_ONLINE_REPO" online || exit 1
 
-##### LOKit (core) #####
+##### engine #####
 
-# only if core assets are not set
-if [ -z "$CORE_ASSETS" ]; then
-  # build
-  ( cd core && ./autogen.sh --with-distro=CPLinux-LOKit --without-package-format --disable-symbols --with-lang=en-US ) || exit 1
-  ( cd core && make $CORE_BUILD_TARGET ) || exit 1
-else
-  echo "Using prebuilt core assets"
-fi
+# Build engine from source -- prebuilt assets are glibc and don't work on musl.
+( cd online/engine && ./autogen.sh --with-distro=CPLinux-LOKit --without-package-format --disable-symbols --with-lang=en-US ) || exit 1
+( cd online/engine && make $ENGINE_BUILD_TARGET ) || exit 1
 
 # copy stuff
 mkdir -p "$INSTDIR"/opt/
-cp -a core/instdir "$INSTDIR"/opt/lokit
+cp -a online/engine/instdir "$INSTDIR"/opt/collaboraoffice
 
 ##### coolwsd & cool #####
 
 # build
 ( cd online && ./autogen.sh ) || exit 1
-( cd online && ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var --enable-silent-rules --disable-tests --with-lokit-path="$BUILDDIR"/core/include --with-lo-path=/opt/lokit --with-poco-includes=$BUILDDIR/poco/include --with-poco-libs=$BUILDDIR/poco/lib $ONLINE_EXTRA_BUILD_OPTIONS) || exit 1
+( cd online && ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var --enable-silent-rules --disable-tests --with-lokit-path="$BUILDDIR"/online/engine/include --with-lo-path=/opt/collaboraoffice --with-poco-includes=$BUILDDIR/poco/include --with-poco-libs=$BUILDDIR/poco/lib $ONLINE_EXTRA_BUILD_OPTIONS) || exit 1
 ( cd online && make -j $(nproc)) || exit 1
 
 # copy stuff
@@ -103,7 +75,7 @@ cp -a core/instdir "$INSTDIR"/opt/lokit
 if test -d online-branding ; then
   if ! which sass &> /dev/null; then npm install -g sass; fi
   cd online-branding
-  ./brand.sh $INSTDIR/opt/lokit $INSTDIR/usr/share/coolwsd/browser/dist CODE # CODE
-  ./brand.sh $INSTDIR/opt/lokit $INSTDIR/usr/share/coolwsd/browser/dist NC-theme-community # Nextcloud Office
+  ./brand.sh $INSTDIR/opt/collaboraoffice $INSTDIR/usr/share/coolwsd/browser/dist CODE # CODE
+  ./brand.sh $INSTDIR/opt/collaboraoffice $INSTDIR/usr/share/coolwsd/browser/dist NC-theme-community # Nextcloud Office
   cd ..
 fi

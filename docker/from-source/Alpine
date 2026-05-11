@@ -1,8 +1,5 @@
 FROM alpine:3.21 AS builder
 
-# Do not use pre-built CORE_ASSETS -- they are built on glibc and won't work on musl.
-# Build core from source instead.
-ENV CORE_BRANCH=main
 ENV COLLABORA_ONLINE_BRANCH=main
 ENV BUILDDIR=/build
 ENV ONLINE_EXTRA_BUILD_OPTIONS=--enable-experimental
@@ -42,7 +39,7 @@ FROM alpine:3.21
 # UTF-8 locale -- musl has built-in UTF-8 support
 ENV LC_CTYPE=C.UTF-8
 
-# install LOKit run-time dependencies
+# install engine run-time dependencies
 # install findutils, openssl and cpio that we need later
 # install tzdata to accept the TZ environment variable
 # install an editor
@@ -54,7 +51,7 @@ RUN apk add --no-cache \
     libstdc++ libgcc linux-pam zstd-libs libintl \
     font-noto-cjk ca-certificates bash
 
-# copy freshly built LOKit and Collabora Online
+# copy freshly built engine and Collabora Online
 COPY --from=builder /build/instdir /
 
 # copy the start script from the cloned online repo (supports both musl and glibc)
@@ -72,8 +69,8 @@ RUN setcap cap_fowner,cap_chown,cap_sys_chroot=ep /usr/bin/coolforkit-caps && \
     chown cool: /opt/cool && \
     chown cool: /opt/cool/child-roots && \
     chown cool: /opt/cool/cache && \
-    fc-cache /opt/lokit/share/fonts/truetype && \
-    coolwsd-systemplate-setup /opt/cool/systemplate /opt/lokit >/dev/null 2>&1 && \
+    fc-cache /opt/collaboraoffice/share/fonts/truetype && \
+    coolwsd-systemplate-setup /opt/cool/systemplate /opt/collaboraoffice >/dev/null 2>&1 && \
     touch /var/log/coolwsd.log && \
     chown cool:cool /var/log/coolwsd.log && \
     chown -R cool:cool /etc/coolwsd && \
