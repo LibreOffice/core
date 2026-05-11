@@ -1,7 +1,8 @@
 FROM ubuntu:24.04 AS builder
 
-ENV CORE_ASSETS=https://github.com/CollaboraOnline/online/releases/download/for-code-assets/engine-main-assets.tar.gz
+ENV ENGINE_ASSETS=https://github.com/CollaboraOnline/online/releases/download/for-code-assets/engine-main-assets.tar.gz
 ENV BUILDDIR=/build
+ENV COLLABORA_ONLINE_REPO=https://gerrit.collaboraoffice.com/online
 ENV COLLABORA_ONLINE_BRANCH=main
 ENV ONLINE_EXTRA_BUILD_OPTIONS=--enable-experimental
 
@@ -19,7 +20,7 @@ RUN --mount=type=cache,target=/var/cache/apt apt-get update && \
     libcap2-bin python3-lxml libpng-dev libcppunit-dev \
     pkg-config fontconfig snapd chromium-browser \
     rsync curl \
-    # core build dependencies, only those that are needed for LOKit
+    # engine build dependencies
     git build-essential zip ccache autoconf gperf nasm xsltproc flex bison
 
 RUN curl -fsSL https://deb.nodesource.com/setup_20.x -o nodesource_setup.sh && bash nodesource_setup.sh && apt install -y nodejs
@@ -45,7 +46,7 @@ FROM ubuntu:24.04
 ENV LC_CTYPE=C.UTF-8
 
 # refresh repos otherwise installations later may fail
-# install LibreOffice run-time dependencies
+# install engine run-time dependencies
 # install adduser, findutils, openssl and cpio that we need later
 # install tzdata to accept the TZ environment variable
 # install an editor
@@ -60,7 +61,7 @@ RUN apt-get update \
     libnss-wrapper \
     && rm -rf /var/lib/apt/lists/*
 
-# copy freshly built LOKit and Collabora Online
+# copy freshly built engine and Collabora Online
 COPY --from=builder /build/instdir /
 
 # copy the shell script which can start Collabora Online (coolwsd)
@@ -77,8 +78,8 @@ RUN setcap cap_fowner,cap_chown,cap_sys_chroot=ep /usr/bin/coolforkit-caps && \
     chown cool: /opt/cool && \
     chown cool: /opt/cool/child-roots && \
     chown cool: /opt/cool/cache && \
-    fc-cache /opt/lokit/share/fonts/truetype && \
-    coolwsd-systemplate-setup /opt/cool/systemplate /opt/lokit >/dev/null 2>&1 && \
+    fc-cache /opt/collaboraoffice/share/fonts/truetype && \
+    coolwsd-systemplate-setup /opt/cool/systemplate /opt/collaboraoffice >/dev/null 2>&1 && \
     touch /var/log/coolwsd.log && \
     chown cool:cool /var/log/coolwsd.log && \
     chown -R cool:cool /etc/coolwsd && \
