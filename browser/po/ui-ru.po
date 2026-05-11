@@ -8,17 +8,17 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-20 12:14+0100\n"
-"PO-Revision-Date: 2025-07-23 00:05+0000\n"
-"Last-Translator: Mike Kaganski <mikekaganski@gmail.com>\n"
+"PO-Revision-Date: 2026-04-07 21:32+0000\n"
+"Last-Translator: Degdar Muhtarov <degdaar@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/collabora-online/"
 "ui/ru/>\n"
-"Language: \n"
+"Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.13-dev\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Weblate 5.17-dev\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -386,7 +386,7 @@ msgstr "В переменных инициализации отсутствуе�
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:215
 msgid "Access token is missing in initial variables."
-msgstr "В переменных инициализации отсутствует URL токена доступа."
+msgstr "Токен доступа отсутствует в начальных переменных."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:293
 msgid ""
@@ -398,12 +398,11 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:342
 msgid "Signature Certificate"
-msgstr ""
+msgstr "Сигнатура Сертификата"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:343
-#, fuzzy
 msgid "Signature Key"
-msgstr "Подпись"
+msgstr "Ключ подписи"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:344
 #, fuzzy
@@ -472,7 +471,7 @@ msgstr ""
 #: admin/src/integrator/AdminIntegratorSettings.ts:362
 #: src/control/Control.BackstageView.ts:328
 msgid "Print"
-msgstr ""
+msgstr "Печать"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:363
 msgid "Other"
@@ -531,7 +530,7 @@ msgstr ""
 #: src/control/Control.NotebookbarDraw.js:1426
 #: src/control/Control.NotebookbarWriter.js:1221
 msgid "Page"
-msgstr ""
+msgstr "Страница"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:376
 msgid "Fit to page"
@@ -613,10 +612,9 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:391
 msgid "Images"
-msgstr ""
+msgstr "Изображения"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:392
-#, fuzzy
 msgid "Tables"
 msgstr "Таблица"
 
@@ -626,7 +624,7 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:394
 msgid "Background"
-msgstr ""
+msgstr "Фон"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:395
 msgid "Print Black"
@@ -634,7 +632,7 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:396
 msgid "Hidden text"
-msgstr ""
+msgstr "Скрытый текст"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:397
 msgid "Placeholders"
@@ -642,11 +640,11 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:398
 msgid "Left pages"
-msgstr ""
+msgstr "Левая страница"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:399
 msgid "Right pages"
-msgstr ""
+msgstr "Правая страница"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:400
 msgid "Brochure"
@@ -2738,7 +2736,7 @@ msgstr ""
 
 #: src/control/Notebookbar.ImpressAnimationTab.ts:105
 msgid "Category"
-msgstr ""
+msgstr "Категория"
 
 #: src/control/Notebookbar.ImpressAnimationTab.ts:120
 msgid "Start"
@@ -3302,7 +3300,7 @@ msgstr "Примечание"
 
 #: src/control/Control.NotebookbarCalc.js:2711
 msgid "Format Cells"
-msgstr ""
+msgstr "Формат Ячеек"
 
 #: src/control/Control.NotebookbarCalc.js:2771
 #: src/control/Control.NotebookbarImpress.js:1847
@@ -5641,7 +5639,6 @@ msgid "Collabora Online Development Edition"
 msgstr "Collabora Online для разработчиков"
 
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.p:28-7
-#, fuzzy
 msgid ""
 "Enjoy the latest developments in online productivity, free for you to use, "
 "to explore and to use with others in the browser. Various <a "
@@ -5649,28 +5646,27 @@ msgid ""
 "solutions/collabora-office-android-ios/\">apps</a> are also available for "
 "mobile."
 msgstr ""
-"Наслаждайтесь последними достижениями в области онлайн-продуктивности, "
-"бесплатно для изучения и использования с другими в браузере. Различные <a "
-"target=\"_blank\" href=\"https://www.collaboraonline.com/solutions/"
-"collabora-office-android-ios/\"> приложения</a> также доступны для мобильных "
-"устройств."
+"Наслаждайтесь последними разработками в области онлайн-продуктивности — "
+"бесплатно для вас, для изучения и для совместной работы с другими прямо в "
+"браузере. Также доступны различные <a target=\"_blank\" rel=\"noopener\" "
+"href=\"https://www.collaboraonline.com/solutions/collabora-office-android-"
+"ios/\">приложения</a> для мобильных устройств."
 
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.h1:37-7
 msgid "Discover All The Changes"
 msgstr "Узнать обо всех изменениях"
 
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.p:39-7
-#, fuzzy
 msgid ""
 "Check the <a target=\"_blank\" rel=\"noopener\" href=\"https://www."
 "collaboraonline.com/code-25-04-release-notes/\">release notes</a> and learn "
 "all about: The latest Collabora Online Development Edition, aimed at home "
 "users and small teams."
 msgstr ""
-"Ознакомьтесь с <a target=\"_blank\" href=\"https://www.collaboraonline.com/"
-"code-25-04-release-notes/\">примечаниями к выпуску</a> и узнайте все о: "
-"новейшей версии Collabora Online Development Edition, предназначенной для "
-"домашних пользователей и небольших команд."
+"Ознакомьтесь с <a target=\"_blank\" rel=\"noopener\" href=\"https://"
+"www.collaboraonline.com/code-25-04-release-notes/\">примечаниями к выпуску</"
+"a> и узнайте всё о последней версии Collabora Online Development Edition, "
+"предназначенной для домашних пользователей и небольших команд."
 
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.h1:48-7
 msgid "Get Involved"
@@ -5681,7 +5677,6 @@ msgid "https://collaboraonline.github.io/"
 msgstr "https://collaboraonline.github.io/"
 
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.p:50-7
-#, fuzzy
 msgid ""
 "Are you interested in contributing but don’t know where to start? Head over "
 "to the <a target=\"_blank\" rel=\"noopener\" href=\"https://collaboraonline."
@@ -5692,13 +5687,14 @@ msgid ""
 "href=\"https://collaboraonline.github.io/post/filebugs/\">filing a bug "
 "report</a> with all the essential steps on how to reproduce it."
 msgstr ""
-"Вы хотите внести свой вклад, но не знаете, с чего начать? Перейдите к <a "
-"target=\"_blank\" href=\"https://collaboraonline.github.io/post/build-code/\""
-">пошаговым инструкциям</a> и соберите CODE с нуля. Вы также можете помочь с "
-"<a target=\"_blank\" href=\"https://collaboraonline.github.io/post/translate/"
-"\"> переводами</a> или <a target=\"_blank\" href=\"https://collaboraonline."
-"github.io/post/filebugs/\"> подачей сообщения об ошибке</a> со всеми "
-"необходимыми шагами по ее воспроизведению."
+"Хотите внести вклад, но не знаете, с чего начать? Перейдите к <a "
+"target=\"_blank\" rel=\"noopener\" href=\"https://collaboraonline.github.io/"
+"post/build-code/\">пошаговым инструкциям</a> и соберите CODE с нуля. Вы "
+"также можете помочь с <a target=\"_blank\" rel=\"noopener\" href=\"https://"
+"collaboraonline.github.io/post/translate/\">переводами</a> или <a "
+"target=\"_blank\" rel=\"noopener\" href=\"https://collaboraonline.github.io/"
+"post/filebugs/\">отправкой отчёта об ошибке</a> с подробным описанием шагов "
+"для её воспроизведения."
 
 #: welcome/welcome.html%2Bhtml.body.div.div:55-5
 msgid ""
