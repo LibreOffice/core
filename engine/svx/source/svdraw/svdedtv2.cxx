@@ -42,6 +42,7 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <svx/strings.hrc>
 #include <svx/svdoashp.hxx>
+#include <svx/diagram/DiagramHelper_svx.hxx>
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 #include <i18nutil/unicode.hxx>
 #include <sal/log.hxx>
@@ -1936,36 +1937,37 @@ void SdrEditView::UnGroupMarked()
             {
                 SdrObject* pObj(pSrcLst->GetObj(0));
 
-                if(nullptr != pObj && !pObj->IsGroupObject() &&
-                    !pObj->HasLineStyle() &&
-                    pObj->IsMoveProtect() && pObj->IsResizeProtect())
+                if(nullptr != pObj && !pObj->IsGroupObject() && pObj->IsMoveProtect() && pObj->IsResizeProtect())
                 {
-                    if(pObj->HasFillStyle())
+                    if(pObj->HasFillStyle() || pObj->HasLineStyle())
                     {
-                        // If it has FillStyle it is a useful object representing that possible
-                        // defined fill from oox import. In this case, we should remove the
-                        // Move/Resize protection to allow seamless further processing.
-
-                        // Undo of these is handled by SdrUndoGeoObj which holds a SdrObjGeoData,
-                        // create one
-                        if( bUndo )
-                            AddUndo(GetModel().GetSdrUndoFactory().CreateUndoGeoObject(*pObj));
-
-                        pObj->SetMoveProtect(false);
-                        pObj->SetResizeProtect(false);
+                        // If it has FillStyle or LineStyle it is a useful object representing
+                        // that possible defined fill from oox import. In this case, we should
+                        // keep the shape
                     }
                     else
                     {
-                        // If it has no FillStyle it is not useful for any further processing
-                        // but only was used as a placeholder, get directly rid of it
+                        // If it has no FillStyle or LineStyle it is not useful for any further processing
+                        // but only was used as a placeholder, directly get rid of it
                         if( bUndo )
                             AddUndo(GetModel().GetSdrUndoFactory().CreateUndoDeleteObject(*pObj));
 
-                        pSrcLst->RemoveObject(0);
+                        // necessary to reset, else pSrcLst->RemoveObject below will just
+                        // do nothing
+                        pObj->SetDeleteProtect(false);
 
+                        pSrcLst->RemoveObject(0);
                         nObjCount = pSrcLst->GetObjCount();
                     }
                 }
+
+                // clear diagram information, create UNDO fir it.
+                // That also uses applyLocksToDiagramObjects which removes the
+                // Move/Resize/DeleteProtect flags. Especially DeleteProtect is
+                // necessary, else the call below to pSrcLst->RemoveObject will fail
+                const std::shared_ptr< svx::diagram::DiagramHelper_svx >& rDiagramHelper(pGrp->getDiagramHelper());
+                assert(rDiagramHelper); // pGrp->isDiagram() is already true, so should not happen
+                rDiagramHelper->disconnectFromSdrObjGroup(bUndo);
             }
 
             // FIRST move contained objects to parent of group, so that
