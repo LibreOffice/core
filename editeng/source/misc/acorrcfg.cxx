@@ -307,7 +307,7 @@ void SvxBaseAutoCorrCfg::Load(bool bInit)
     }
     if( nFlags != ACFlags::NONE )
         rParent.pAutoCorrect->SetAutoCorrFlag( nFlags );
-    rParent.pAutoCorrect->SetAutoCorrFlag( ( static_cast<ACFlags>(0xffff) & ~nFlags ), false );
+    rParent.pAutoCorrect->SetAutoCorrFlag( static_cast<ACFlags>(AC_OPTION_MASK) & ~nFlags, false );
 }
 
 SvxBaseAutoCorrCfg::SvxBaseAutoCorrCfg(SvxAutoCorrCfg& rPar) :

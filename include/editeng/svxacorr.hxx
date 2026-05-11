@@ -82,8 +82,12 @@ enum class ACFlags : sal_uInt32 {
     CplSttLstLoad        = 0x40000000,   // Exception list for Capital letters Start loaded
     WordStartLstLoad        = 0x80000000,   // Exception list for Word Start loaded
 };
+constexpr sal_uInt32 AC_OPTION_MASK = 0x1ffff;
+constexpr sal_uInt32 AC_LOAD_MASK = 0xe0000000;
 namespace o3tl {
-    template<> struct typed_flags<ACFlags> : is_typed_flags<ACFlags, 0xe001ffff> {};
+    template<> struct typed_flags<ACFlags> : is_typed_flags<ACFlags, AC_LOAD_MASK | AC_OPTION_MASK>
+    {
+    };
 }
 
 enum class ACQuotes
