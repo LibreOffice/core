@@ -21,6 +21,7 @@ class FormulaAutoCompletePopup extends AutoCompletePopup {
 
 	constructor(map: any) {
 		super('formulaautocompletePopup', map);
+		this.newPopupData.serverSyncSelection = false;
 	}
 
 	onAdd() {

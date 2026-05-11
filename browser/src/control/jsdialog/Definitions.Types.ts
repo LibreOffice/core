@@ -167,6 +167,7 @@ interface PopupData extends JSDialogJSON {
 	popupParent?: string;
 	clickToClose?: string;
 	persistKeyboard?: boolean;
+	serverSyncSelection?: boolean;
 	posx: number;
 	posy: number;
 }
@@ -413,6 +414,7 @@ interface TreeWidgetJSON extends WidgetJSON {
 	singleclickactivate: boolean; // activates element on single click instead of just selection
 	fireKeyEvents?: boolean; // do we sent key events to core
 	hideIfEmpty?: boolean; // hide the widget if no entries available
+	serverSyncSelection?: boolean; // When false, suppresses sending the select message to the server.
 	checkboxtype: string; // radio or checkbox
 	draggable?: boolean; // indicates if we can drag entries to another treeview
 	entries: Array<TreeEntryJSON>;

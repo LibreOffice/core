@@ -152,6 +152,11 @@ abstract class AutoCompletePopup {
 
 		const cursorPos = this.getCursorPosition();
 		const control = this.getTreeJSON();
+
+		if (this.newPopupData.serverSyncSelection !== undefined) {
+			control.serverSyncSelection = this.newPopupData.serverSyncSelection;
+		}
+
 		if (window.L.DomUtil.get(this.popupId + 'List')) {
 			const data = this.getPopupJSON(control, cursorPos);
 			(data.control as TreeWidgetJSON).entries = entries;
