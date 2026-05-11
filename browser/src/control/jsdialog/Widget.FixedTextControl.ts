@@ -23,7 +23,7 @@ JSDialog.fixedtextControl = function (
 	// Check if this label should render as static content(i.e. span) instead of interactive label
 	if (
 		!data.labelFor ||
-		!JSDialog.GetFormControlTypesInLO().has(data.labelForType)
+		!JSDialog.GetFormControlTypesInEngine().has(data.labelForType)
 	) {
 		return JSDialog.StaticText(parentContainer, data, builder);
 	}
@@ -50,7 +50,7 @@ JSDialog.fixedtextControl = function (
 		label: HTMLLabelElement,
 		labelledControl: any,
 	) {
-		const isLabelable = JSDialog.GetFormControlTypesInCO().has(
+		const isLabelable = JSDialog.GetFormControlTypesInBrowser().has(
 			labelledControl.nodeName,
 		);
 		const isHiddenInput =

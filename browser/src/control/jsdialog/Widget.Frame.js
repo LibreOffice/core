@@ -86,7 +86,7 @@ function shouldUseFieldsetLegend(data) {
 
 		let count = 0;
 		for (const child of node.children) {
-			if (JSDialog.GetFormControlTypesInLO().has(child.type)) {
+			if (JSDialog.GetFormControlTypesInEngine().has(child.type)) {
 				count++;
 			} else if (JSDialog.TreeViewHasSearchField(child)) {
 				count++;

@@ -241,7 +241,7 @@ class A11yValidator {
 				const hasAriaLabel = ariaLabel.trim() !== '';
 
 				if (
-					JSDialog.GetFormControlTypesInCO().has(element.tagName) &&
+					JSDialog.GetFormControlTypesInBrowser().has(element.tagName) &&
 					!hasAriaLabel
 				) {
 					throw new A11yValidatorException(
@@ -269,7 +269,9 @@ class A11yValidator {
 						`In '${this.getDialogTitle(element)}' at '${this.getElementPath(element)}': label element in widget of type '${type}' has htmlFor attribute pointing to non-existing element with id '${htmlFor}'`,
 					);
 				} else if (
-					!JSDialog.GetFormControlTypesInCO().has(referencedElement.tagName)
+					!JSDialog.GetFormControlTypesInBrowser().has(
+						referencedElement.tagName,
+					)
 				) {
 					throw new A11yValidatorException(
 						`In '${this.getDialogTitle(element)}' at '${this.getElementPath(element)}': label element in widget of type '${type}' references non-labelable element <${referencedElement.tagName.toLowerCase()}> via htmlFor attribute. Try using aria-labelledby on the referenced element instead.`,
@@ -352,7 +354,7 @@ class A11yValidator {
 
 		// If there are any form controls (even disabled), the frame has
 		// real content rather than only decorative images
-		const formControlTags = JSDialog.GetFormControlTypesInCO();
+		const formControlTags = JSDialog.GetFormControlTypesInBrowser();
 		for (const tag of formControlTags) {
 			if (content.querySelector(tag)) return;
 		}

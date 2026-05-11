@@ -190,7 +190,7 @@ JSDialog.AddAltAttrOnFocusableImg = function (
 	}
 };
 
-JSDialog.GetFormControlTypesInLO = function () {
+JSDialog.GetFormControlTypesInEngine = function () {
 	return new Set([
 		'spinfield',
 		'edit',
@@ -204,7 +204,7 @@ JSDialog.GetFormControlTypesInLO = function () {
 	]);
 };
 
-JSDialog.GetFormControlTypesInCO = function () {
+JSDialog.GetFormControlTypesInBrowser = function () {
 	return new Set([
 		'INPUT',
 		'SELECT',
