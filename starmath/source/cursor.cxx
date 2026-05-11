@@ -222,7 +222,7 @@ void SmCursor::DeletePrev(OutputDevice* pDev){
             ++patchPoint;
             PosAfterDelete = PatchLineList(aLineList, patchPoint);
             //Parse the line
-            pLine = SmNodeListParser().Parse(aLineList);
+            pLine = SmNodeListParser().Parse(aLineList).release();
         }
         aLineList.clear();
         pLineParent->SetSubNode(nLineOffset-1, pLine);
@@ -590,7 +590,7 @@ void SmCursor::InsertSubSup(SmSubSup eSubSup) {
         PosAfterScript = SmCaretPos::GetPosAfter(aScriptLineList.back());
 
     //Parse pScriptLineList
-    pScriptLine = SmNodeListParser().Parse(aScriptLineList);
+    pScriptLine = SmNodeListParser().Parse(aScriptLineList).release();
     aScriptLineList.clear();
 
     //Insert pScriptLine back into the tree
@@ -638,7 +638,7 @@ void SmCursor::InsertBrackets(SmBracketType eBracketType) {
         pBodyNode.reset(new SmPlaceNode());
         PosAfterInsert = SmCaretPos(pBodyNode.get(), 1);
     } else
-        pBodyNode.reset(SmNodeListParser().Parse(aSelectedNodesList));
+        pBodyNode = SmNodeListParser().Parse(aSelectedNodesList);
 
     aSelectedNodesList.clear();
 
@@ -851,9 +851,11 @@ void SmCursor::InsertFraction() {
 
     //Create pNum, and pDenom
     bool bEmptyFraction = aSelectedNodesList.empty();
-    std::unique_ptr<SmNode> pNum( bEmptyFraction
-        ? new SmPlaceNode()
-        : SmNodeListParser().Parse(aSelectedNodesList) );
+    std::unique_ptr<SmNode> pNum;
+    if (bEmptyFraction)
+        pNum = std::make_unique<SmPlaceNode>();
+    else
+        pNum = SmNodeListParser().Parse(aSelectedNodesList);
     std::unique_ptr<SmNode> pDenom(new SmPlaceNode());
     aSelectedNodesList.clear();
 
@@ -1086,11 +1088,11 @@ void SmCursor::Copy(vcl::Window* pWindow)
     // Parse list of nodes to a tree
     SmNodeListParser parser;
     SmNodeList aClonedList = CloneList(aClipboard);
-    SmNode* pTree(parser.Parse(aClonedList));
+    std::unique_ptr<SmNode> pTree(parser.Parse(aClonedList));
 
     // Parse the tree to a string
     OUString aString;
-    SmNodeToTextVisitor(pTree, aString);
+    SmNodeToTextVisitor(pTree.get(), aString);
 
     //Set clipboard
     auto xClipboard(pWindow ? pWindow->GetClipboard() : GetSystemClipboard());
@@ -1440,7 +1442,7 @@ bool SmCursor::IsAtTailOfBracket(SmBracketType eBracketType) const
 
 /////////////////////////////////////// SmNodeListParser
 
-SmNode* SmNodeListParser::Parse(SmNodeList& list){
+std::unique_ptr<SmNode> SmNodeListParser::Parse(SmNodeList& list){
     pList = &list;
     //Delete error nodes
     SmNodeList::iterator it = pList->begin();
@@ -1452,24 +1454,24 @@ SmNode* SmNodeListParser::Parse(SmNodeList& list){
         }else
             ++it;
     }
-    SmNode* retval = Expression();
+    std::unique_ptr<SmNode> retval = Expression();
     pList = nullptr;
     return retval;
 }
 
-SmNode* SmNodeListParser::Expression(){
+std::unique_ptr<SmNode> SmNodeListParser::Expression(){
     SmNodeArray NodeArray;
     //Accept as many relations as there is
     while(Terminal())
-        NodeArray.push_back(Relation());
+        NodeArray.push_back(Relation().release());
 
     //Create SmExpressionNode, I hope SmToken() will do :)
-    SmStructureNode* pExpr = new SmExpressionNode(SmToken());
+    auto pExpr = std::make_unique<SmExpressionNode>(SmToken());
     pExpr->SetSubNodes(std::move(NodeArray));
     return pExpr;
 }
 
-SmNode* SmNodeListParser::Relation(){
+std::unique_ptr<SmNode> SmNodeListParser::Relation(){
     //Read a sum
     std::unique_ptr<SmNode> pLeft(Sum());
     //While we have tokens and the next is a relation
@@ -1483,10 +1485,10 @@ SmNode* SmNodeListParser::Relation(){
         pNewNode->SetSubNodes(std::move(pLeft), std::move(pOper), std::move(pRight));
         pLeft = std::move(pNewNode);
     }
-    return pLeft.release();
+    return pLeft;
 }
 
-SmNode* SmNodeListParser::Sum(){
+std::unique_ptr<SmNode> SmNodeListParser::Sum(){
     //Read a product
     std::unique_ptr<SmNode> pLeft(Product());
     //While we have tokens and the next is a sum
@@ -1500,10 +1502,10 @@ SmNode* SmNodeListParser::Sum(){
         pNewNode->SetSubNodes(std::move(pLeft), std::move(pOper), std::move(pRight));
         pLeft = std::move(pNewNode);
     }
-    return pLeft.release();
+    return pLeft;
 }
 
-SmNode* SmNodeListParser::Product(){
+std::unique_ptr<SmNode> SmNodeListParser::Product(){
     //Read a Factor
     std::unique_ptr<SmNode> pLeft(Factor());
     //While we have tokens and the next is a product
@@ -1517,24 +1519,24 @@ SmNode* SmNodeListParser::Product(){
         pNewNode->SetSubNodes(std::move(pLeft), std::move(pOper), std::move(pRight));
         pLeft = std::move(pNewNode);
     }
-    return pLeft.release();
+    return pLeft;
 }
 
-SmNode* SmNodeListParser::Factor(){
+std::unique_ptr<SmNode> SmNodeListParser::Factor(){
     //Read unary operations
     if(!Terminal())
         return Error();
     //Take care of unary operators
     else if(IsUnaryOperator(Terminal()->GetToken()))
     {
-        SmStructureNode *pUnary = new SmUnHorNode(SmToken());
+        auto pUnary = std::make_unique<SmUnHorNode>(SmToken());
         std::unique_ptr<SmNode> pOper(Terminal()),
                                 pArg;
 
         if(Next())
-            pArg.reset(Factor());
+            pArg = Factor();
         else
-            pArg.reset(Error());
+            pArg = Error();
 
         pUnary->SetSubNodes(std::move(pOper), std::move(pArg));
         return pUnary;
@@ -1542,12 +1544,12 @@ SmNode* SmNodeListParser::Factor(){
     return Postfix();
 }
 
-SmNode* SmNodeListParser::Postfix(){
+std::unique_ptr<SmNode> SmNodeListParser::Postfix(){
     if(!Terminal())
         return Error();
     std::unique_ptr<SmNode> pArg;
     if(IsPostfixOperator(Terminal()->GetToken()))
-        pArg.reset(Error());
+        pArg = Error();
     else if(IsOperator(Terminal()->GetToken()))
         return Error();
     else
@@ -1558,11 +1560,11 @@ SmNode* SmNodeListParser::Postfix(){
         pUnary->SetSubNodes(std::move(pArg), std::move(pOper));
         pArg = std::move(pUnary);
     }
-    return pArg.release();
+    return pArg;
 }
 
-SmNode* SmNodeListParser::Error(){
-    return new SmErrorNode(SmToken());
+std::unique_ptr<SmNode> SmNodeListParser::Error(){
+    return std::make_unique<SmErrorNode>(SmToken());
 }
 
 bool SmNodeListParser::IsOperator(const SmToken &token) {

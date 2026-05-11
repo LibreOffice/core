@@ -380,7 +380,7 @@ public:
      *
      * Old error nodes will be deleted.
      */
-    SmNode* Parse(SmNodeList& list);
+    std::unique_ptr<SmNode> Parse(SmNodeList& list);
     /** True, if the token is an operator */
     static bool IsOperator(const SmToken& token);
     /** True, if the token is a relation operator */
@@ -416,13 +416,13 @@ private:
         Next();
         return pRetVal;
     }
-    SmNode* Expression();
-    SmNode* Relation();
-    SmNode* Sum();
-    SmNode* Product();
-    SmNode* Factor();
-    SmNode* Postfix();
-    static SmNode* Error();
+    std::unique_ptr<SmNode> Expression();
+    std::unique_ptr<SmNode> Relation();
+    std::unique_ptr<SmNode> Sum();
+    std::unique_ptr<SmNode> Product();
+    std::unique_ptr<SmNode> Factor();
+    std::unique_ptr<SmNode> Postfix();
+    static std::unique_ptr<SmNode> Error();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
