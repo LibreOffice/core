@@ -12,11 +12,11 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-20 12:14+0100\n"
-"PO-Revision-Date: 2026-03-10 21:46+0000\n"
-"Last-Translator: Ettore Atalan <atalanttore@googlemail.com>\n"
+"PO-Revision-Date: 2026-03-23 14:07+0000\n"
+"Last-Translator: alxhu <hosted.weblate.org@alxhu.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/collabora-online/"
 "ui/de/>\n"
-"Language: \n"
+"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1896,11 +1896,11 @@ msgstr "Dialog schließen"
 
 #: src/control/Control.JSDialogBuilder.js:496
 msgid "Increment value"
-msgstr ""
+msgstr "Wert erhöhen"
 
 #: src/control/Control.JSDialogBuilder.js:500
 msgid "Decrement value"
-msgstr ""
+msgstr "Wert verringern"
 
 #: src/control/Control.JSDialogBuilder.js:640
 msgid "Solid"
@@ -2838,7 +2838,7 @@ msgstr "HTML-Datei (.html)"
 #: src/control/Control.NotebookbarBuilder.js:449
 #: src/control/Control.NotebookbarBuilder.js:485
 msgid "PDF Document (.pdf) with options"
-msgstr ""
+msgstr "PDF-Dokument (.pdf) mit Optionen"
 
 #: src/control/Control.NotebookbarBuilder.js:432
 msgid "CSV File (.csv)"
@@ -3225,15 +3225,17 @@ msgstr "Tabelle"
 #: src/control/Control.NotebookbarCalc.js:1766
 #: src/control/Control.NotebookbarCalc.js:1769
 msgid "Table styles are only available in .xlsx files"
-msgstr ""
+msgstr "Tabellenstile sind nur in .xlsx-Dateien verfügbar"
 
 #: src/control/Control.NotebookbarCalc.js:1767
 msgid "Insert a styled table"
-msgstr ""
+msgstr "Gestylte Tabelle einfügen"
 
 #: src/control/Control.NotebookbarCalc.js:1770
 msgid "Select a cell range first to insert a styled table"
 msgstr ""
+"Wählen Sie zunächst ein Zellenbereich aus, um eine gestylte Tabelle "
+"einzufügen"
 
 #: src/control/Control.NotebookbarCalc.js:1779
 #: src/control/Control.NotebookbarDraw.js:1015
@@ -3377,7 +3379,7 @@ msgstr "Start mit erster Folie"
 
 #: src/control/Control.NotebookbarImpress.js:472
 msgid "Fullscreen, starting at slide 1"
-msgstr ""
+msgstr "Vollbildschirm, beginnend mit Folie 1"
 
 #: src/control/Control.NotebookbarImpress.js:479
 msgid "From Current Slide"
@@ -3385,7 +3387,7 @@ msgstr "Start mit aktueller Folie"
 
 #: src/control/Control.NotebookbarImpress.js:480
 msgid "Fullscreen, starting at this slide"
-msgstr ""
+msgstr "Vollbildschirm, beginnend mit dieser Folie"
 
 #: src/control/Control.NotebookbarImpress.js:494
 msgid "Present in Window"
@@ -3393,7 +3395,7 @@ msgstr "Im Fenster anzeigen"
 
 #: src/control/Control.NotebookbarImpress.js:495
 msgid "Plays inside the document window. Starts at slide 1"
-msgstr ""
+msgstr "Spielt innerhalb des Dokumentenfensters. Beginnt bei Folie 1"
 
 #: src/control/Control.NotebookbarImpress.js:503
 msgid "Presenter View"
@@ -3401,7 +3403,7 @@ msgstr ""
 
 #: src/control/Control.NotebookbarImpress.js:504
 msgid "Shows your notes, next slide, and a timer"
-msgstr ""
+msgstr "Zeigt nächste Notizen, nächste Folie und eine Stoppuhr an"
 
 #: src/control/Control.NotebookbarImpress.js:512
 msgid "Present to All"
@@ -3456,13 +3458,12 @@ msgid "Master Slide Templates"
 msgstr "Masterfolievorlagen"
 
 #: src/control/Control.NotebookbarImpress.js:1824
-#, fuzzy
 msgid "This Presentation"
-msgstr "Präsentation schließen"
+msgstr "Diese Präsentation"
 
 #: src/control/Control.NotebookbarImpress.js:1833
 msgid "Presentation Templates"
-msgstr ""
+msgstr "Präsentationsvorlagen"
 
 #: src/control/Control.NotebookbarImpress.js:1903
 msgid "Slide Size"
@@ -3540,7 +3541,7 @@ msgstr "Seitenbreite"
 
 #: src/control/Control.NotebookbarWriter.js:2209
 msgid "Spellcheck"
-msgstr ""
+msgstr "Rechtschreibkorrektur"
 
 #: src/control/Control.NotebookbarWriter.js:2222
 msgid "Spelling Options"
@@ -3548,7 +3549,7 @@ msgstr ""
 
 #: src/control/Control.NotebookbarWriter.js:2234
 msgid "Auto Spell Check"
-msgstr ""
+msgstr "Automatische Rechtschreibkorrektur"
 
 #: src/control/Control.NotebookbarWriter.js:2262
 #: src/control/Control.NotebookbarWriter.js:2278
@@ -4091,9 +4092,8 @@ msgid "Updating citations"
 msgstr "Aktualisiere Zitate"
 
 #: src/control/Control.Zotero.js:1528
-#, fuzzy
 msgid "Unlinked citations"
-msgstr "Zitate entfernen"
+msgstr "Nicht-referenzierte Zitate"
 
 #: src/control/Control.Zotero.js:1533
 msgid ""
@@ -5295,6 +5295,8 @@ msgid ""
 "Your browser has very limited access to the clipboard, so use these "
 "keyboard shortcuts:"
 msgstr ""
+"Ihr Browser hat begrenzten Zugriff auf die Zwischenablage, sodass Sie diese "
+"Tastenkombinationen verwenden müssen:"
 
 #: src/map/Clipboard.js:1499
 msgid "Cut"
@@ -5638,7 +5640,7 @@ msgstr "Grau Elegant"
 
 #: templates/templates.js:166
 msgid "Growing Liberty"
-msgstr ""
+msgstr "Wachsende Freiheit"
 
 #: templates/templates.js:176
 msgid "Inspiration"
