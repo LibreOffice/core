@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-20 12:14+0100\n"
-"PO-Revision-Date: 2026-03-10 23:21+0100\n"
+"PO-Revision-Date: 2026-03-20 21:36+0000\n"
 "Last-Translator: Andras Timar <andras.timar@collabora.com>\n"
-"Language-Team: Hungarian <https://hosted.weblate.org/projects/"
-"collabora-online/ui/hu/>\n"
-"Language: \n"
+"Language-Team: Hungarian <https://hosted.weblate.org/projects/collabora-"
+"online/ui/hu/>\n"
+"Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Translate Toolkit 3.6.0\n"
+"X-Generator: Weblate 5.17-dev\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -1876,11 +1876,11 @@ msgstr "Párbeszédablak bezárása"
 
 #: src/control/Control.JSDialogBuilder.js:496
 msgid "Increment value"
-msgstr ""
+msgstr "Érték növelése"
 
 #: src/control/Control.JSDialogBuilder.js:500
 msgid "Decrement value"
-msgstr ""
+msgstr "Érték csökkentése"
 
 #: src/control/Control.JSDialogBuilder.js:640
 msgid "Solid"
@@ -2816,7 +2816,7 @@ msgstr "HTML-fájl (.html)"
 #: src/control/Control.NotebookbarBuilder.js:449
 #: src/control/Control.NotebookbarBuilder.js:485
 msgid "PDF Document (.pdf) with options"
-msgstr ""
+msgstr "PDF dokumentum (.pdf) opciókkal"
 
 #: src/control/Control.NotebookbarBuilder.js:432
 msgid "CSV File (.csv)"
@@ -3203,15 +3203,16 @@ msgstr "Táblázat"
 #: src/control/Control.NotebookbarCalc.js:1766
 #: src/control/Control.NotebookbarCalc.js:1769
 msgid "Table styles are only available in .xlsx files"
-msgstr ""
+msgstr "A táblázatstílusok csak .xlsx fájlokban érhetők el"
 
 #: src/control/Control.NotebookbarCalc.js:1767
 msgid "Insert a styled table"
-msgstr ""
+msgstr "Stílussal ellátott táblázat beszúrása"
 
 #: src/control/Control.NotebookbarCalc.js:1770
 msgid "Select a cell range first to insert a styled table"
 msgstr ""
+"Jelöljön ki egy cellatartományt a stílussal ellátott táblázat beszúrásához"
 
 #: src/control/Control.NotebookbarCalc.js:1779
 #: src/control/Control.NotebookbarDraw.js:1015
@@ -3355,7 +3356,7 @@ msgstr "Elölről"
 
 #: src/control/Control.NotebookbarImpress.js:472
 msgid "Fullscreen, starting at slide 1"
-msgstr ""
+msgstr "Teljes képernyős mód, az első diától kezdve"
 
 #: src/control/Control.NotebookbarImpress.js:479
 msgid "From Current Slide"
@@ -3363,7 +3364,7 @@ msgstr "Az aktuális diától"
 
 #: src/control/Control.NotebookbarImpress.js:480
 msgid "Fullscreen, starting at this slide"
-msgstr ""
+msgstr "Teljes képernyős mód, az aktuális diától kezdve"
 
 #: src/control/Control.NotebookbarImpress.js:494
 msgid "Present in Window"
@@ -3371,7 +3372,7 @@ msgstr "Diavetítés ablakban"
 
 #: src/control/Control.NotebookbarImpress.js:495
 msgid "Plays inside the document window. Starts at slide 1"
-msgstr ""
+msgstr "Lejátszás a dokumentumablakban. Kezdés az első diától"
 
 #: src/control/Control.NotebookbarImpress.js:503
 msgid "Presenter View"
@@ -3379,7 +3380,7 @@ msgstr "Előadói nézet"
 
 #: src/control/Control.NotebookbarImpress.js:504
 msgid "Shows your notes, next slide, and a timer"
-msgstr ""
+msgstr "A jegyzetek, a következő dia és az óra megjelenítése"
 
 #: src/control/Control.NotebookbarImpress.js:512
 msgid "Present to All"
@@ -3387,7 +3388,7 @@ msgstr "Prezentálás mindenkinek"
 
 #: src/control/Control.NotebookbarImpress.js:513
 msgid "Starts a slideshow on every viewer's screen"
-msgstr ""
+msgstr "A bemutató elindítása minden néző képernyőjén"
 
 #: src/control/Control.NotebookbarImpress.js:521
 #: src/slideshow/SlideShowPresenter.ts:1517
@@ -3396,7 +3397,7 @@ msgstr "Előadó követése"
 
 #: src/control/Control.NotebookbarImpress.js:522
 msgid "View slides as the presenter advances them"
-msgstr ""
+msgstr "A diák megtekintése az előadó által vezérelt módon"
 
 #: src/control/Control.NotebookbarImpress.js:650
 msgid "Slide Views"
@@ -3434,13 +3435,12 @@ msgid "Master Slide Templates"
 msgstr "Diasablonok"
 
 #: src/control/Control.NotebookbarImpress.js:1824
-#, fuzzy
 msgid "This Presentation"
-msgstr "Bemutató bezárása"
+msgstr "Ez a bemutató"
 
 #: src/control/Control.NotebookbarImpress.js:1833
 msgid "Presentation Templates"
-msgstr ""
+msgstr "Bemutatósablonok"
 
 #: src/control/Control.NotebookbarImpress.js:1903
 msgid "Slide Size"
@@ -3518,15 +3518,15 @@ msgstr "Oldal szélessége"
 
 #: src/control/Control.NotebookbarWriter.js:2209
 msgid "Spellcheck"
-msgstr ""
+msgstr "Helyesírás"
 
 #: src/control/Control.NotebookbarWriter.js:2222
 msgid "Spelling Options"
-msgstr ""
+msgstr "Helyesírási beállítások"
 
 #: src/control/Control.NotebookbarWriter.js:2234
 msgid "Auto Spell Check"
-msgstr ""
+msgstr "Automatikus ellenőrzés"
 
 #: src/control/Control.NotebookbarWriter.js:2262
 #: src/control/Control.NotebookbarWriter.js:2278
@@ -4401,11 +4401,11 @@ msgstr "Nagyon laza"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1788
 msgid "Inline"
-msgstr ""
+msgstr "Soron belül"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1794
 msgid "Side by Side"
-msgstr ""
+msgstr "Egymás mellett"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1807
 msgid "All users"
@@ -5034,7 +5034,6 @@ msgid "Failed to load document."
 msgstr "A dokumentum betöltése meghiúsult."
 
 #: src/errormessages.js:45
-#, fuzzy
 msgid "Save failed due to no disk space left. Document will now be read-only."
 msgstr ""
 "A mentés nem sikerült, mert nincs hely a lemezen. A dokumentum mostantól "
@@ -5490,7 +5489,6 @@ msgid "Click to exit presentation..."
 msgstr "Kattintson bárhova a bemutató befejezéséhez..."
 
 #: src/slideshow/SlideShowPresenter.ts:805
-#, fuzzy
 msgid "You are on the first slide"
 msgstr "Az első dián van"
 
