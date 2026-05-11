@@ -480,7 +480,9 @@ window.L.Map.Keyboard = window.L.Handler.extend({
 				app.map._clip.setTextSelectionType('slide');
 			}
 			else if (!ev.ctrlKey && !ev.shiftKey) {
-				if (ev.key === 'Meta' || ev.key === 'Alt')
+				if (ev.key === 'Meta' || ev.key === 'Alt' ||
+				    ev.key === 'AltGraph' || ev.key === 'CapsLock' ||
+				    ev.key === 'NumLock')
 					return;
 				this._map._docLayer._preview.partsFocused = false;
 				app.map._clip.clearSelection();
