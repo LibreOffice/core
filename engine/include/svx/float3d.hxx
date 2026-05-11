@@ -207,21 +207,21 @@ private:
     std::unique_ptr<TriStateToggleButton> m_xBtnPerspective;
 
 // the rest ...
-    bool                bUpdate;
-    ViewType3D          eViewType;
+    bool                m_bUpdate;
+    ViewType3D          m_eViewType;
 
     // Model, Page, View etc. for favourites
-    std::unique_ptr<FmFormModel>         pModel;
+    std::unique_ptr<FmFormModel>         m_pModel;
 
-    SfxBindings*                         pBindings;
-    std::unique_ptr<Svx3DCtrlItem>       pControllerItem;
+    SfxBindings*                         m_pBindings;
+    std::unique_ptr<Svx3DCtrlItem>       m_pControllerItem;
 
-    std::unique_ptr<SvxConvertTo3DItem>  pConvertTo3DItem;
-    std::unique_ptr<SvxConvertTo3DItem>  pConvertTo3DLatheItem;
+    std::unique_ptr<SvxConvertTo3DItem>  m_pConvertTo3DItem;
+    std::unique_ptr<SvxConvertTo3DItem>  m_pConvertTo3DLatheItem;
 
     std::unique_ptr<Svx3DWinImpl>        mpImpl;
-    MapUnit             ePoolUnit;
-    FieldUnit           eFUnit;
+    MapUnit             m_ePoolUnit;
+    FieldUnit           m_eFUnit;
 
     // ItemSet used to remember set 2d attributes
     std::unique_ptr<SfxItemSet> mpRemember2DAttributes;
@@ -256,7 +256,7 @@ public:
     virtual void dispose() override;
 
     void    InitColorLB();
-    bool    IsUpdateMode() const { return bUpdate; }
+    bool    IsUpdateMode() const { return m_bUpdate; }
 
     void    Update( SfxItemSet const & rSet );
     void    GetAttr( SfxItemSet& rSet );

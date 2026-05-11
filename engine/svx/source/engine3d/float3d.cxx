@@ -188,11 +188,11 @@ Svx3DWin::Svx3DWin(SfxBindings* pInBindings, SfxChildWindow *pCW, vcl::Window* p
     , m_xBtnLatheObject(m_xBuilder->weld_button(u"tolathe"_ustr))
     , m_xBtnPerspective(new TriStateToggleButton(m_xBuilder->weld_toggle_button(u"perspective"_ustr)))
 
-    , bUpdate(false)
-    , eViewType(ViewType3D::Geo)
-    , pBindings(pInBindings)
+    , m_bUpdate(false)
+    , m_eViewType(ViewType3D::Geo)
+    , m_pBindings(pInBindings)
     , mpImpl(new Svx3DWinImpl)
-    , ePoolUnit(MapUnit::MapMM)
+    , m_ePoolUnit(MapUnit::MapMM)
 {
     SetText(SvxResId(RID_SVXDLG_FLOAT3D_STR_TITLE));
 
@@ -208,15 +208,15 @@ Svx3DWin::Svx3DWin(SfxBindings* pInBindings, SfxChildWindow *pCW, vcl::Window* p
     mpImpl->pPool = nullptr;
 
     // Set Metric
-    eFUnit = pInBindings->GetDispatcher()->GetModule()->GetFieldUnit();
+    m_eFUnit = pInBindings->GetDispatcher()->GetModule()->GetFieldUnit();
 
-    m_xMtrDepth->set_unit( eFUnit );
-    m_xMtrDistance->set_unit( eFUnit );
-    m_xMtrFocalLength->set_unit( eFUnit );
+    m_xMtrDepth->set_unit( m_eFUnit );
+    m_xMtrDistance->set_unit( m_eFUnit );
+    m_xMtrFocalLength->set_unit( m_eFUnit );
 
-    pControllerItem.reset( new Svx3DCtrlItem(SID_3D_STATE, pBindings) );
-    pConvertTo3DItem.reset( new SvxConvertTo3DItem(SID_CONVERT_TO_3D, pBindings) );
-    pConvertTo3DLatheItem.reset( new SvxConvertTo3DItem(SID_CONVERT_TO_3D_LATHE_FAST, pBindings) );
+    m_pControllerItem.reset( new Svx3DCtrlItem(SID_3D_STATE, m_pBindings) );
+    m_pConvertTo3DItem.reset( new SvxConvertTo3DItem(SID_CONVERT_TO_3D, m_pBindings) );
+    m_pConvertTo3DLatheItem.reset( new SvxConvertTo3DItem(SID_CONVERT_TO_3D_LATHE_FAST, m_pBindings) );
 
     m_xBtnAssign->connect_clicked( LINK( this, Svx3DWin, ClickAssignHdl ) );
     m_xBtnUpdate->connect_toggled( LINK( this, Svx3DWin, ClickUpdateHdl ) );
@@ -309,7 +309,7 @@ Svx3DWin::Svx3DWin(SfxBindings* pInBindings, SfxChildWindow *pCW, vcl::Window* p
     Construct();
 
     // Initiation of the initialization of the ColorLBs
-    SfxDispatcher* pDispatcher = LocalGetDispatcher(pBindings);
+    SfxDispatcher* pDispatcher = LocalGetDispatcher(m_pBindings);
     if (pDispatcher != nullptr)
     {
         SfxBoolItem aItem( SID_3D_INIT, true );
@@ -332,11 +332,11 @@ Svx3DWin::~Svx3DWin()
 
 void Svx3DWin::dispose()
 {
-    pModel.reset();
+    m_pModel.reset();
 
-    pControllerItem.reset();
-    pConvertTo3DItem.reset();
-    pConvertTo3DLatheItem.reset();
+    m_pControllerItem.reset();
+    m_pConvertTo3DItem.reset();
+    m_pConvertTo3DLatheItem.reset();
 
     mpImpl.reset();
 
@@ -470,7 +470,7 @@ void Svx3DWin::UpdateLight(const SfxItemSet& rAttrs, TypedWhichId<SvxColorItem> 
         if (aColor != rColorListBox.GetSelectEntryColor())
         {
             LBSelectColor(rColorListBox, aColor);
-            bUpdate = true;
+            m_bUpdate = true;
         }
     }
     else
@@ -478,7 +478,7 @@ void Svx3DWin::UpdateLight(const SfxItemSet& rAttrs, TypedWhichId<SvxColorItem> 
         if (!rColorListBox.IsNoSelection())
         {
             rColorListBox.SetNoSelection();
-            bUpdate = true;
+            m_bUpdate = true;
         }
     }
     // on/off
@@ -489,7 +489,7 @@ void Svx3DWin::UpdateLight(const SfxItemSet& rAttrs, TypedWhichId<SvxColorItem> 
         if (bOn != rLightButton.isLightOn())
         {
             rLightButton.switchLightOn(bOn);
-            bUpdate = true;
+            m_bUpdate = true;
         }
         if (rLightButton.is_indeterminate())
             rLightButton.set_active(rLightButton.get_active());
@@ -499,14 +499,14 @@ void Svx3DWin::UpdateLight(const SfxItemSet& rAttrs, TypedWhichId<SvxColorItem> 
         if (!rLightButton.is_indeterminate())
         {
             rLightButton.set_indeterminate();
-            bUpdate = true;
+            m_bUpdate = true;
         }
     }
     // direction
     eState = rAttrs.GetItemState(nWhichLightDirection);
     if (eState != SfxItemState::INVALID)
     {
-        bUpdate = true;
+        m_bUpdate = true;
     }
 }
 
@@ -520,7 +520,7 @@ void Svx3DWin::UpdateToggleButton(const SfxItemSet& rAttrs, TypedWhichId<SfxBool
         if (bValue != rButton.get_active())
         {
             rButton.set_active(bValue);
-            bUpdate = true;
+            m_bUpdate = true;
         }
         else if (rButton.is_indeterminate())
             rButton.set_active(bValue);
@@ -530,7 +530,7 @@ void Svx3DWin::UpdateToggleButton(const SfxItemSet& rAttrs, TypedWhichId<SfxBool
         if (!rButton.is_indeterminate())
         {
             rButton.set_indeterminate();
-            bUpdate = true;
+            m_bUpdate = true;
         }
     }
 }
@@ -567,9 +567,9 @@ void Svx3DWin::Update( SfxItemSet const & rAttrs )
     {
         mpImpl->pPool = rAttrs.GetPool();
         DBG_ASSERT( mpImpl->pPool, "Where is the Pool? ");
-        ePoolUnit = mpImpl->pPool->GetMetric( SID_ATTR_LINE_WIDTH );
+        m_ePoolUnit = mpImpl->pPool->GetMetric( SID_ATTR_LINE_WIDTH );
     }
-    eFUnit = GetModuleFieldUnit( rAttrs );
+    m_eFUnit = GetModuleFieldUnit( rAttrs );
 
 
     // Segment Number Can be changed? and other states
@@ -659,7 +659,7 @@ void Svx3DWin::Update( SfxItemSet const & rAttrs )
             if (nValue != static_cast<sal_uInt32>(m_xNumHorizontal->get_value()))
             {
                 m_xNumHorizontal->set_value( nValue );
-                bUpdate = true;
+                m_bUpdate = true;
             }
             else if( m_xNumHorizontal->get_text().isEmpty() )
                 m_xNumHorizontal->set_value( nValue );
@@ -669,7 +669,7 @@ void Svx3DWin::Update( SfxItemSet const & rAttrs )
             if( !m_xNumHorizontal->get_text().isEmpty() )
             {
                 m_xNumHorizontal->set_text(u""_ustr);
-                bUpdate = true;
+                m_bUpdate = true;
             }
         }
     }
@@ -684,7 +684,7 @@ void Svx3DWin::Update( SfxItemSet const & rAttrs )
             if( nValue != static_cast<sal_uInt32>(m_xNumVertical->get_value()) )
             {
                 m_xNumVertical->set_value( nValue );
-                bUpdate = true;
+                m_bUpdate = true;
             }
             else if( m_xNumVertical->get_text().isEmpty() )
                 m_xNumVertical->set_value( nValue );
@@ -694,7 +694,7 @@ void Svx3DWin::Update( SfxItemSet const & rAttrs )
             if( !m_xNumVertical->get_text().isEmpty() )
             {
                 m_xNumVertical->set_text(u""_ustr);
-                bUpdate = true;
+                m_bUpdate = true;
             }
         }
     }
@@ -706,14 +706,14 @@ void Svx3DWin::Update( SfxItemSet const & rAttrs )
         if( eState != SfxItemState::INVALID )
         {
             sal_uInt32 nValue = rAttrs.Get(SDRATTR_3DOBJ_DEPTH).GetValue();
-            sal_uInt32 nValue2 = GetCoreValue(*m_xMtrDepth, ePoolUnit);
+            sal_uInt32 nValue2 = GetCoreValue(*m_xMtrDepth, m_ePoolUnit);
             if( nValue != nValue2 )
             {
-                if( eFUnit != m_xMtrDepth->get_unit() )
-                    SetFieldUnit(*m_xMtrDepth, eFUnit);
+                if( m_eFUnit != m_xMtrDepth->get_unit() )
+                    SetFieldUnit(*m_xMtrDepth, m_eFUnit);
 
-                SetMetricValue(*m_xMtrDepth, nValue, ePoolUnit);
-                bUpdate = true;
+                SetMetricValue(*m_xMtrDepth, nValue, m_ePoolUnit);
+                m_bUpdate = true;
             }
             else if( m_xMtrDepth->get_text().isEmpty() )
                 m_xMtrDepth->set_value(m_xMtrDepth->get_value(FieldUnit::NONE), FieldUnit::NONE);
@@ -723,7 +723,7 @@ void Svx3DWin::Update( SfxItemSet const & rAttrs )
             if( !m_xMtrDepth->get_text().isEmpty() )
             {
                 m_xMtrDepth->set_text(u""_ustr);
-                bUpdate = true;
+                m_bUpdate = true;
             }
         }
     }
@@ -741,7 +741,7 @@ void Svx3DWin::Update( SfxItemSet const & rAttrs )
             if( nValue != m_xMtrPercentDiagonal->get_value(FieldUnit::PERCENT) )
             {
                 m_xMtrPercentDiagonal->set_value(nValue, FieldUnit::PERCENT);
-                bUpdate = true;
+                m_bUpdate = true;
             }
             else if( m_xMtrPercentDiagonal->get_text().isEmpty() )
                 m_xMtrPercentDiagonal->set_value(nValue, FieldUnit::PERCENT);
@@ -751,7 +751,7 @@ void Svx3DWin::Update( SfxItemSet const & rAttrs )
             if( !m_xMtrPercentDiagonal->get_text().isEmpty() )
             {
                 m_xMtrPercentDiagonal->set_text(u""_ustr);
-                bUpdate = true;
+                m_bUpdate = true;
             }
         }
     }
@@ -766,7 +766,7 @@ void Svx3DWin::Update( SfxItemSet const & rAttrs )
             if( nValue != m_xMtrBackscale->get_value(FieldUnit::PERCENT) )
             {
                 m_xMtrBackscale->set_value(nValue, FieldUnit::PERCENT);
-                bUpdate = true;
+                m_bUpdate = true;
             }
             else if( m_xMtrBackscale->get_text().isEmpty() )
                 m_xMtrBackscale->set_value(nValue, FieldUnit::PERCENT);
@@ -776,7 +776,7 @@ void Svx3DWin::Update( SfxItemSet const & rAttrs )
             if( !m_xMtrBackscale->get_text().isEmpty() )
             {
                 m_xMtrBackscale->set_text(u""_ustr);
-                bUpdate = true;
+                m_bUpdate = true;
             }
         }
     }
@@ -791,7 +791,7 @@ void Svx3DWin::Update( SfxItemSet const & rAttrs )
             if( nValue != m_xMtrEndAngle->get_value(FieldUnit::DEGREE) )
             {
                 m_xMtrEndAngle->set_value(nValue, FieldUnit::DEGREE);
-                bUpdate = true;
+                m_bUpdate = true;
             }
         }
         else
@@ -799,7 +799,7 @@ void Svx3DWin::Update( SfxItemSet const & rAttrs )
             if( !m_xMtrEndAngle->get_text().isEmpty() )
             {
                 m_xMtrEndAngle->set_text(u""_ustr);
-                bUpdate = true;
+                m_bUpdate = true;
             }
         }
     }
@@ -817,7 +817,7 @@ void Svx3DWin::Update( SfxItemSet const & rAttrs )
             m_xBtnNormalsObj->set_active( nValue == 0 );
             m_xBtnNormalsFlat->set_active( nValue == 1 );
             m_xBtnNormalsSphere->set_active( nValue == 2 );
-            bUpdate = true;
+            m_bUpdate = true;
         }
     }
     else
@@ -829,7 +829,7 @@ void Svx3DWin::Update( SfxItemSet const & rAttrs )
             m_xBtnNormalsObj->set_active( false );
             m_xBtnNormalsFlat->set_active( false );
             m_xBtnNormalsSphere->set_active( false );
-            bUpdate = true;
+            m_bUpdate = true;
         }
     }
 
@@ -848,7 +848,7 @@ void Svx3DWin::Update( SfxItemSet const & rAttrs )
         if( nValue != m_xLbShademode->get_active() )
         {
             m_xLbShademode->set_active( nValue );
-            bUpdate = true;
+            m_bUpdate = true;
         }
     }
     else
@@ -856,7 +856,7 @@ void Svx3DWin::Update( SfxItemSet const & rAttrs )
         if( m_xLbShademode->get_active() != 0 )
         {
             m_xLbShademode->set_active(-1);
-            bUpdate = true;
+            m_bUpdate = true;
         }
     }
 
@@ -870,7 +870,7 @@ void Svx3DWin::Update( SfxItemSet const & rAttrs )
             m_xBtnShadow3d->set_active( bValue );
             m_xFtSlant->set_sensitive( bValue );
             m_xMtrSlant->set_sensitive( bValue );
-            bUpdate = true;
+            m_bUpdate = true;
         }
         else if (m_xBtnShadow3d->is_indeterminate())
             m_xBtnShadow3d->set_active( bValue );
@@ -880,7 +880,7 @@ void Svx3DWin::Update( SfxItemSet const & rAttrs )
         if (!m_xBtnShadow3d->is_indeterminate())
         {
             m_xBtnShadow3d->set_indeterminate();
-            bUpdate = true;
+            m_bUpdate = true;
         }
     }
 
@@ -892,7 +892,7 @@ void Svx3DWin::Update( SfxItemSet const & rAttrs )
         if( nValue != m_xMtrSlant->get_value(FieldUnit::DEGREE) )
         {
             m_xMtrSlant->set_value(nValue, FieldUnit::DEGREE);
-            bUpdate = true;
+            m_bUpdate = true;
         }
     }
     else
@@ -900,7 +900,7 @@ void Svx3DWin::Update( SfxItemSet const & rAttrs )
         if( !m_xMtrSlant->get_text().isEmpty() )
         {
             m_xMtrSlant->set_text(u""_ustr);
-            bUpdate = true;
+            m_bUpdate = true;
         }
     }
 
@@ -909,14 +909,14 @@ void Svx3DWin::Update( SfxItemSet const & rAttrs )
     if( eState != SfxItemState::INVALID )
     {
         sal_uInt32 nValue = rAttrs.Get(SDRATTR_3DSCENE_DISTANCE).GetValue();
-        sal_uInt32 nValue2 = GetCoreValue(*m_xMtrDistance, ePoolUnit);
+        sal_uInt32 nValue2 = GetCoreValue(*m_xMtrDistance, m_ePoolUnit);
         if( nValue != nValue2 )
         {
-            if( eFUnit != m_xMtrDistance->get_unit() )
-                SetFieldUnit(*m_xMtrDistance, eFUnit);
+            if( m_eFUnit != m_xMtrDistance->get_unit() )
+                SetFieldUnit(*m_xMtrDistance, m_eFUnit);
 
-            SetMetricValue(*m_xMtrDistance, nValue, ePoolUnit);
-            bUpdate = true;
+            SetMetricValue(*m_xMtrDistance, nValue, m_ePoolUnit);
+            m_bUpdate = true;
         }
     }
     else
@@ -924,7 +924,7 @@ void Svx3DWin::Update( SfxItemSet const & rAttrs )
         if( !m_xMtrDepth->get_text().isEmpty() )
         {
             m_xMtrDepth->set_text(u""_ustr);
-            bUpdate = true;
+            m_bUpdate = true;
         }
     }
 
@@ -933,14 +933,14 @@ void Svx3DWin::Update( SfxItemSet const & rAttrs )
     if( eState != SfxItemState::INVALID )
     {
         sal_uInt32 nValue = rAttrs.Get(SDRATTR_3DSCENE_FOCAL_LENGTH).GetValue();
-        sal_uInt32 nValue2 = GetCoreValue(*m_xMtrFocalLength, ePoolUnit);
+        sal_uInt32 nValue2 = GetCoreValue(*m_xMtrFocalLength, m_ePoolUnit);
         if( nValue != nValue2 )
         {
-            if( eFUnit != m_xMtrFocalLength->get_unit() )
-                SetFieldUnit(*m_xMtrFocalLength, eFUnit);
+            if( m_eFUnit != m_xMtrFocalLength->get_unit() )
+                SetFieldUnit(*m_xMtrFocalLength, m_eFUnit);
 
-            SetMetricValue(*m_xMtrFocalLength, nValue, ePoolUnit);
-            bUpdate = true;
+            SetMetricValue(*m_xMtrFocalLength, nValue, m_ePoolUnit);
+            m_bUpdate = true;
         }
     }
     else
@@ -948,7 +948,7 @@ void Svx3DWin::Update( SfxItemSet const & rAttrs )
         if( !m_xMtrFocalLength->get_text().isEmpty() )
         {
             m_xMtrFocalLength->set_text(u""_ustr);
-            bUpdate = true;
+            m_bUpdate = true;
         }
     }
 
@@ -988,7 +988,7 @@ void Svx3DWin::Update( SfxItemSet const & rAttrs )
         if (aColor != m_xLbAmbientlight->GetSelectEntryColor())
         {
             LBSelectColor(*m_xLbAmbientlight, aColor);
-            bUpdate = true;
+            m_bUpdate = true;
         }
     }
     else
@@ -996,7 +996,7 @@ void Svx3DWin::Update( SfxItemSet const & rAttrs )
         if (!m_xLbAmbientlight->IsNoSelection())
         {
             m_xLbAmbientlight->SetNoSelection();
-            bUpdate = true;
+            m_bUpdate = true;
         }
     }
 
@@ -1016,7 +1016,7 @@ void Svx3DWin::Update( SfxItemSet const & rAttrs )
             {
                 m_xBtnTexLuminance->set_active( objTextKind == css::drawing::TextureKind2_LUMINANCE );
                 m_xBtnTexColor->set_active( objTextKind == css::drawing::TextureKind2_COLOR );
-                bUpdate = true;
+                m_bUpdate = true;
             }
         }
         else
@@ -1026,7 +1026,7 @@ void Svx3DWin::Update( SfxItemSet const & rAttrs )
             {
                 m_xBtnTexLuminance->set_active( false );
                 m_xBtnTexColor->set_active( false );
-                bUpdate = true;
+                m_bUpdate = true;
             }
         }
 
@@ -1041,7 +1041,7 @@ void Svx3DWin::Update( SfxItemSet const & rAttrs )
             {
                 m_xBtnTexReplace->set_active( nValue == 1 );
                 m_xBtnTexModulate->set_active( nValue == 2 );
-                bUpdate = true;
+                m_bUpdate = true;
             }
         }
         else
@@ -1051,7 +1051,7 @@ void Svx3DWin::Update( SfxItemSet const & rAttrs )
             {
                 m_xBtnTexReplace->set_active( false );
                 m_xBtnTexModulate->set_active( false );
-                bUpdate = true;
+                m_bUpdate = true;
             }
         }
 
@@ -1068,7 +1068,7 @@ void Svx3DWin::Update( SfxItemSet const & rAttrs )
                 m_xBtnTexObjectX->set_active( nValue == 0 );
                 m_xBtnTexParallelX->set_active( nValue == 1 );
                 m_xBtnTexCircleX->set_active( nValue == 2 );
-                bUpdate = true;
+                m_bUpdate = true;
             }
         }
         else
@@ -1080,7 +1080,7 @@ void Svx3DWin::Update( SfxItemSet const & rAttrs )
                 m_xBtnTexObjectX->set_active( false );
                 m_xBtnTexParallelX->set_active( false );
                 m_xBtnTexCircleX->set_active( false );
-                bUpdate = true;
+                m_bUpdate = true;
             }
         }
 
@@ -1097,7 +1097,7 @@ void Svx3DWin::Update( SfxItemSet const & rAttrs )
                 m_xBtnTexObjectY->set_active( nValue == 0 );
                 m_xBtnTexParallelY->set_active( nValue == 1 );
                 m_xBtnTexCircleY->set_active( nValue == 2 );
-                bUpdate = true;
+                m_bUpdate = true;
             }
         }
         else
@@ -1109,7 +1109,7 @@ void Svx3DWin::Update( SfxItemSet const & rAttrs )
                 m_xBtnTexObjectY->set_active( false );
                 m_xBtnTexParallelY->set_active( false );
                 m_xBtnTexCircleY->set_active( false );
-                bUpdate = true;
+                m_bUpdate = true;
             }
         }
 
@@ -1129,7 +1129,7 @@ void Svx3DWin::Update( SfxItemSet const & rAttrs )
         if (aColor != m_xLbMatColor->GetSelectEntryColor())
         {
             LBSelectColor(*m_xLbMatColor, aColor);
-            bUpdate = true;
+            m_bUpdate = true;
         }
     }
     else
@@ -1137,7 +1137,7 @@ void Svx3DWin::Update( SfxItemSet const & rAttrs )
         if (!m_xLbMatColor->IsNoSelection())
         {
             m_xLbMatColor->SetNoSelection();
-            bUpdate = true;
+            m_bUpdate = true;
         }
     }
 
@@ -1149,7 +1149,7 @@ void Svx3DWin::Update( SfxItemSet const & rAttrs )
         if (aColor != m_xLbMatEmission->GetSelectEntryColor())
         {
             LBSelectColor(*m_xLbMatEmission, aColor);
-            bUpdate = true;
+            m_bUpdate = true;
         }
     }
     else
@@ -1157,7 +1157,7 @@ void Svx3DWin::Update( SfxItemSet const & rAttrs )
         if (!m_xLbMatEmission->IsNoSelection())
         {
             m_xLbMatEmission->SetNoSelection();
-            bUpdate = true;
+            m_bUpdate = true;
         }
     }
 
@@ -1169,7 +1169,7 @@ void Svx3DWin::Update( SfxItemSet const & rAttrs )
         if (aColor != m_xLbMatSpecular->GetSelectEntryColor())
         {
             LBSelectColor(*m_xLbMatSpecular, aColor);
-            bUpdate = true;
+            m_bUpdate = true;
         }
     }
     else
@@ -1177,7 +1177,7 @@ void Svx3DWin::Update( SfxItemSet const & rAttrs )
         if (!m_xLbMatSpecular->IsNoSelection())
         {
             m_xLbMatSpecular->SetNoSelection();
-            bUpdate = true;
+            m_bUpdate = true;
         }
     }
 
@@ -1189,7 +1189,7 @@ void Svx3DWin::Update( SfxItemSet const & rAttrs )
         if( nValue != m_xMtrMatSpecularIntensity->get_value(FieldUnit::PERCENT) )
         {
             m_xMtrMatSpecularIntensity->set_value(nValue, FieldUnit::PERCENT);
-            bUpdate = true;
+            m_bUpdate = true;
         }
     }
     else
@@ -1197,7 +1197,7 @@ void Svx3DWin::Update( SfxItemSet const & rAttrs )
         if( !m_xMtrMatSpecularIntensity->get_text().isEmpty() )
         {
             m_xMtrMatSpecularIntensity->set_text(u""_ustr);
-            bUpdate = true;
+            m_bUpdate = true;
         }
     }
 
@@ -1212,7 +1212,7 @@ void Svx3DWin::Update( SfxItemSet const & rAttrs )
             ( m_xBtnPerspective->get_active() && ePT == ProjectionType::Parallel ) )
         {
             m_xBtnPerspective->set_active( ePT == ProjectionType::Perspective );
-            bUpdate = true;
+            m_bUpdate = true;
         }
         if (m_xBtnPerspective->is_indeterminate())
             m_xBtnPerspective->set_active( ePT == ProjectionType::Perspective );
@@ -1222,15 +1222,15 @@ void Svx3DWin::Update( SfxItemSet const & rAttrs )
         if (!m_xBtnPerspective->is_indeterminate())
         {
             m_xBtnPerspective->set_indeterminate();
-            bUpdate = true;
+            m_bUpdate = true;
         }
     }
 
-    if( !bUpdate )
+    if( !m_bUpdate )
     {
         // however the 2D attributes may be different. Compare these and decide
 
-        bUpdate = true;
+        m_bUpdate = true;
     }
 
     // Update preview
@@ -1275,8 +1275,8 @@ void Svx3DWin::Update( SfxItemSet const & rAttrs )
     }
 
     // handle state of converts possible
-    m_xBtnConvertTo3D->set_sensitive(pConvertTo3DItem->GetState());
-    m_xBtnLatheObject->set_sensitive(pConvertTo3DLatheItem->GetState());
+    m_xBtnConvertTo3D->set_sensitive(m_pConvertTo3DItem->GetState());
+    m_xBtnLatheObject->set_sensitive(m_pConvertTo3DLatheItem->GetState());
 }
 
 
@@ -1321,9 +1321,9 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
         OSL_FAIL( "No Pool in GetAttr()! May be incompatible to drviewsi.cxx ?" );
         mpImpl->pPool = rAttrs.GetPool();
         DBG_ASSERT( mpImpl->pPool, "Where is the Pool?" );
-        ePoolUnit = mpImpl->pPool->GetMetric( SID_ATTR_LINE_WIDTH );
+        m_ePoolUnit = mpImpl->pPool->GetMetric( SID_ATTR_LINE_WIDTH );
 
-        eFUnit = GetModuleFieldUnit( rAttrs );
+        m_eFUnit = GetModuleFieldUnit( rAttrs );
     }
 
     // Number of segments (horizontal)
@@ -1347,7 +1347,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
     // Depth
     if( !m_xMtrDepth->get_text().isEmpty() )
     {
-        sal_uInt32 nValue = GetCoreValue(*m_xMtrDepth, ePoolUnit);
+        sal_uInt32 nValue = GetCoreValue(*m_xMtrDepth, m_ePoolUnit);
         rAttrs.Put(makeSvx3DDepthItem(nValue));
     }
     else
@@ -1447,7 +1447,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
     // Distance
     if( !m_xMtrDistance->get_text().isEmpty() )
     {
-        sal_uInt32 nValue2 = GetCoreValue(*m_xMtrDistance, ePoolUnit);
+        sal_uInt32 nValue2 = GetCoreValue(*m_xMtrDistance, m_ePoolUnit);
         rAttrs.Put(makeSvx3DDistanceItem(nValue2));
     }
     else
@@ -1456,7 +1456,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
     // Focal length
     if( !m_xMtrFocalLength->get_text().isEmpty() )
     {
-        sal_uInt32 nValue2 = GetCoreValue(*m_xMtrFocalLength, ePoolUnit);
+        sal_uInt32 nValue2 = GetCoreValue(*m_xMtrFocalLength, m_ePoolUnit);
         rAttrs.Put(makeSvx3DFocalLengthItem(nValue2));
     }
     else
@@ -1818,11 +1818,11 @@ void Svx3DWin::Resize()
 
 IMPL_LINK_NOARG(Svx3DWin, ClickUpdateHdl, weld::Toggleable&, void)
 {
-    bUpdate = m_xBtnUpdate->get_active();
+    m_bUpdate = m_xBtnUpdate->get_active();
 
-    if( bUpdate )
+    if( m_bUpdate )
     {
-        SfxDispatcher* pDispatcher = LocalGetDispatcher(pBindings);
+        SfxDispatcher* pDispatcher = LocalGetDispatcher(m_pBindings);
         if (pDispatcher != nullptr)
         {
             SfxBoolItem aItem( SID_3D_STATE, true );
@@ -1838,7 +1838,7 @@ IMPL_LINK_NOARG(Svx3DWin, ClickUpdateHdl, weld::Toggleable&, void)
 
 IMPL_LINK_NOARG(Svx3DWin, ClickAssignHdl, weld::Button&, void)
 {
-    SfxDispatcher* pDispatcher = LocalGetDispatcher(pBindings);
+    SfxDispatcher* pDispatcher = LocalGetDispatcher(m_pBindings);
     if (pDispatcher != nullptr)
     {
         SfxBoolItem aItem( SID_3D_ASSIGN, true );
@@ -1859,18 +1859,18 @@ IMPL_LINK( Svx3DWin, ClickViewTypeHdl, weld::Button&, rBtn, void )
     m_xBtnMaterial->set_active(m_xBtnMaterial.get() == &rBtn);
 
     if( m_xBtnGeo->get_active() )
-        eViewType = ViewType3D::Geo;
+        m_eViewType = ViewType3D::Geo;
     if( m_xBtnRepresentation->get_active() )
-        eViewType = ViewType3D::Representation;
+        m_eViewType = ViewType3D::Representation;
     if( m_xBtnLight->get_active() )
-        eViewType = ViewType3D::Light;
+        m_eViewType = ViewType3D::Light;
     if( m_xBtnTexture->get_active() )
-        eViewType = ViewType3D::Texture;
+        m_eViewType = ViewType3D::Texture;
     if( m_xBtnMaterial->get_active() )
-        eViewType = ViewType3D::Material;
+        m_eViewType = ViewType3D::Material;
 
     // Geometry
-    if( eViewType == ViewType3D::Geo )
+    if( m_eViewType == ViewType3D::Geo )
     {
         m_xFLSegments->show();
         m_xFLGeometrie->show();
@@ -1884,7 +1884,7 @@ IMPL_LINK( Svx3DWin, ClickViewTypeHdl, weld::Button&, rBtn, void )
     }
 
     // Representation
-    if( eViewType == ViewType3D::Representation )
+    if( m_eViewType == ViewType3D::Representation )
     {
         m_xFLShadow->show();
         m_xFLCamera->show();
@@ -1898,7 +1898,7 @@ IMPL_LINK( Svx3DWin, ClickViewTypeHdl, weld::Button&, rBtn, void )
     }
 
     // Lighting
-    if( eViewType == ViewType3D::Light )
+    if( m_eViewType == ViewType3D::Light )
     {
         m_xFLLight->show();
 
@@ -1921,13 +1921,13 @@ IMPL_LINK( Svx3DWin, ClickViewTypeHdl, weld::Button&, rBtn, void )
     }
 
     // Textures
-    if (eViewType == ViewType3D::Texture)
+    if (m_eViewType == ViewType3D::Texture)
         m_xFLTexture->show();
     else
         m_xFLTexture->hide();
 
     // Material
-    if( eViewType == ViewType3D::Material )
+    if( m_eViewType == ViewType3D::Material )
     {
         m_xFLMatSpecular->show();
         m_xFLMaterial->show();
@@ -2090,7 +2090,7 @@ IMPL_LINK( Svx3DWin, ClickHdl, weld::Button&, rBtn, void )
 
     if( nSId > 0 )
     {
-        SfxDispatcher* pDispatcher = LocalGetDispatcher(pBindings);
+        SfxDispatcher* pDispatcher = LocalGetDispatcher(m_pBindings);
         if (pDispatcher != nullptr)
         {
             SfxBoolItem aItem( nSId, true );
@@ -2362,13 +2362,13 @@ void Svx3DWin::LBSelectColor(ColorListBox& rLb, const Color& rColor)
 
 void Svx3DWin::UpdatePreview()
 {
-    if(!pModel)
+    if(!m_pModel)
     {
-        pModel.reset(new FmFormModel());
+        m_pModel.reset(new FmFormModel());
     }
 
     // Get Itemset
-    SfxItemSetFixed<SDRATTR_START, SDRATTR_END> aSet( pModel->GetItemPool() );
+    SfxItemSetFixed<SDRATTR_START, SDRATTR_END> aSet( m_pModel->GetItemPool() );
 
     // Get Attributes and set the preview
     GetAttr( aSet );
