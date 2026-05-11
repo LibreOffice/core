@@ -417,6 +417,31 @@ void Bridge::promptSaveLocation(std::function<void(const std::string&, const std
     dialog->open();
 }
 
+void Bridge::finishSave()
+{
+    _saveInFlight = false;
+    LOG_TRC_NOFILE("Bridge::finishSave: _saveInFlight=false");
+    if (_onSaveComplete)
+    {
+        // Move out before invoking so a handler that schedules a new
+        // close (which re-checks isSaveInFlight) sees a clean slate.
+        auto cb = std::move(_onSaveComplete);
+        _onSaveComplete = nullptr;
+        cb();
+    }
+}
+
+void Bridge::onSaveComplete(std::function<void()> callback)
+{
+    if (!_saveInFlight)
+    {
+        if (callback)
+            callback();
+        return;
+    }
+    _onSaveComplete = std::move(callback);
+}
+
 void Bridge::saveDocumentAs()
 {
     promptSaveLocation(
@@ -441,6 +466,85 @@ void Bridge::saveDocumentAs()
                 fakeSocketWriteQueue(fakeClientFd, saveasCmd.c_str(), saveasCmd.size());
             }
         });
+}
+
+void Bridge::uploadLocalFileToServer()
+{
+    if (!_document._remoteInfo || !_document._remoteInfo->collabWs)
+    {
+        finishSave();
+        return;
+    }
+
+    auto& ri = *_document._remoteInfo;
+
+    // Read the local file (already saved to disk by .uno:Save).
+    const std::string localPath = _document._fileURL.getPath();
+    QFile file(QString::fromStdString(localPath));
+    if (!file.open(QIODevice::ReadOnly))
+    {
+        LOG_ERR("uploadLocalFileToServer: cannot read " << localPath);
+        finishSave();
+        return;
+    }
+    const QByteArray fileBytes = file.readAll();
+    file.close();
+
+    // The collab protocol is: send {type:upload,...} on the WS, wait
+    // for an {type:upload_url,...} reply containing a one-shot POST
+    // URL, then POST the file bytes to that URL.
+    auto* ws = ri.collabWs.get();
+    const QString coolServer = ri.coolServer;
+    auto* bridge = this;
+
+    auto conn = std::make_shared<QMetaObject::Connection>();
+    *conn = QObject::connect(ws, &QWebSocket::textMessageReceived,
+        [conn, fileBytes, coolServer, bridge](const QString& msg) {
+            const QJsonObject jobj =
+                QJsonDocument::fromJson(msg.toUtf8()).object();
+            if (jobj["type"].toString() != "upload_url"
+                || jobj["requestId"].toString() != "coda-save")
+                return;
+            QObject::disconnect(*conn);
+
+            QString uploadUrl = jobj["url"].toString();
+            if (uploadUrl.startsWith('/'))
+                uploadUrl = coolServer + uploadUrl;
+
+            auto* nam = new QNetworkAccessManager;
+            QNetworkRequest req{QUrl(uploadUrl)};
+            req.setHeader(QNetworkRequest::ContentTypeHeader,
+                          "application/octet-stream");
+            QNetworkReply* reply = nam->post(req, fileBytes);
+            QObject::connect(reply, &QNetworkReply::finished,
+                [reply, nam, bridge]() {
+                    if (reply->error() != QNetworkReply::NoError)
+                        LOG_ERR("uploadLocalFileToServer: upload failed: "
+                                << reply->errorString().toStdString());
+                    reply->deleteLater();
+                    nam->deleteLater();
+
+                    // If Permission.js asked for a server-mode hand-off
+                    // after the save, run it now that the bytes are up.
+                    bridge->evalJS(
+                        "if (window._codaUploadAndSwitchAfterSave) {"
+                        "  window._codaUploadAndSwitchAfterSave = false;"
+                        "  window.collabSendMessage("
+                        "    {type:'saved_and_switching'});"
+                        "  window.switchToServerMode();"
+                        "}");
+
+                    // Upload round-trip done - the save is now truly
+                    // complete; release any close that has been
+                    // waiting on us.
+                    bridge->finishSave();
+                });
+        });
+
+    ws->sendTextMessage(
+        "{\"type\":\"upload\","
+        "\"stream\":\"contents\","
+        "\"requestId\":\"coda-save\"}");
 }
 
 QVariant Bridge::cool(const QString& messageStr)
@@ -642,10 +746,22 @@ QVariant Bridge::cool(const QString& messageStr)
             }
         }
 
-        // only handle successful .uno:Save commands
-        // let manually triggered saves through even if the document is not modified.
-        if (commandName != ".uno:Save" || !success || (!wasModified && isAutosave))
+        if (commandName != ".uno:Save")
             return {};
+
+        // For a remote document, a successful .uno:Save has only
+        // written the file to the local temp copy;
+        // uploadLocalFileToServer pushes the bytes back to the
+        // integrator via the collab WS, and also handles the
+        // optional server-mode hand-off triggered by the
+        // save-and-switch flow.  uploadLocalFileToServer is a no-op
+        // (and calls finishSave directly) for local-only docs and
+        // when the .uno:Save did not actually need to do anything
+        // (autosave on an unmodified doc, or a failure).
+        if (success && (wasModified || !isAutosave))
+            uploadLocalFileToServer();
+        else
+            finishSave();
     }
     else if (tokens.equals(0, "UPLOADSETTINGS"))
     {
@@ -684,6 +800,15 @@ QVariant Bridge::cool(const QString& messageStr)
     else if (tokens.equals(0, "FETCHAIMODELS"))
     {
         return QString::fromStdString(Desktop::fetchAIModels(tokens.substrFromToken(1)));
+    }
+    else if (tokens.equals(0, "SAVESTARTED"))
+    {
+        // JS-side hand-off raised from the save() entry-point in
+        // browser/src/control/Toolbar.js as the 'save' WS message
+        // goes out.  The COMMANDRESULT for .uno:Save will land in
+        // the handler above and call finishSave().
+        _saveInFlight = true;
+        LOG_TRC_NOFILE("Bridge::cool SAVESTARTED: _saveInFlight=true");
     }
     else if (tokens.equals(0, "BYE"))
     {
@@ -1107,78 +1232,6 @@ QVariant Bridge::cool(const QString& messageStr)
         QMetaObject::invokeMethod(_webView, [this, coolUrl]() {
             _webView->load(QUrl(coolUrl));
         }, Qt::QueuedConnection);
-    }
-    else if (tokens.equals(0, "uploadAndSwitch"))
-    {
-        // Upload the locally-saved file via collab, then switch to
-        // server mode.  The JS side has already triggered .uno:Save.
-        if (!_document._remoteInfo || !_document._remoteInfo->collabWs)
-            return {};
-
-        auto& ri = *_document._remoteInfo;
-
-        // Read the local file (already saved by .uno:Save)
-        std::string localPath = _document._fileURL.getPath();
-        QFile file(QString::fromStdString(localPath));
-        if (!file.open(QIODevice::ReadOnly))
-        {
-            LOG_ERR("saveUploadAndSwitch: cannot read " << localPath);
-            return {};
-        }
-        QByteArray fileBytes = file.readAll();
-        file.close();
-
-        // Upload via the collab WebSocket
-        auto* ws = ri.collabWs.get();
-        auto coolServer = ri.coolServer;
-        auto* bridge = this;
-
-        auto conn = std::make_shared<QMetaObject::Connection>();
-        *conn = QObject::connect(ws, &QWebSocket::textMessageReceived,
-            [conn, fileBytes, coolServer, bridge]
-            (const QString& msg) {
-                QJsonDocument jdoc = QJsonDocument::fromJson(msg.toUtf8());
-                QJsonObject jobj = jdoc.object();
-
-                if (jobj["type"].toString() == "upload_url"
-                    && jobj["requestId"].toString() == "coda-save")
-                {
-                    QObject::disconnect(*conn);
-
-                    QString uploadUrl = jobj["url"].toString();
-                    if (uploadUrl.startsWith('/'))
-                        uploadUrl = coolServer + uploadUrl;
-
-                    auto* nam = new QNetworkAccessManager;
-                    QUrl ulUrl(uploadUrl);
-                    QNetworkRequest req(ulUrl);
-                    req.setHeader(QNetworkRequest::ContentTypeHeader,
-                                  "application/octet-stream");
-                    QNetworkReply* reply = nam->post(req, fileBytes);
-                    QObject::connect(reply, &QNetworkReply::finished,
-                        [reply, nam, bridge]() {
-                            reply->deleteLater();
-                            nam->deleteLater();
-
-                            if (reply->error() != QNetworkReply::NoError)
-                            {
-                                LOG_ERR("saveUploadAndSwitch: upload failed: "
-                                        << reply->errorString().toStdString());
-                            }
-
-                            // Notify other collab users and switch
-                            bridge->evalJS(
-                                "window.collabSendMessage("
-                                "{type:'saved_and_switching'});"
-                                "window.switchToServerMode();");
-                        });
-                }
-            });
-
-        ws->sendTextMessage(
-            "{\"type\":\"upload\","
-            "\"stream\":\"contents\","
-            "\"requestId\":\"coda-save\"}");
     }
     else if (tokens.equals(0, "replayCollabMessages"))
     {

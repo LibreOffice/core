@@ -243,6 +243,45 @@ private:
         if (closeCallback_)
             closeCallback_();
 
+        // If the user clicked close while a save is still round-
+        // tripping (core's "Saving..." status indicator goes away
+        // before the .uno:Save COMMANDRESULT, and for remote docs
+        // also before the integrator upload completes), wait for
+        // that save to finish and then close - rather than asking
+        // about "unsaved changes" that are in fact already being
+        // saved.
+        if (owner_->isSaveInFlight())
+        {
+            LOG_TRC("Window::closeEvent: save in flight, deferring close");
+            // Acknowledge the close-click visually: busy cursor for
+            // immediate feedback (the in-page modal that we re-fire
+            // below has a 700ms paint delay - see
+            // Control.UIManager.ts openBusyPopup - so on a fast
+            // finish it might never appear, but the cursor change
+            // happens instantly).
+            QApplication::setOverrideCursor(Qt::WaitCursor);
+            owner_->evalJS(
+                "if (window.app && window.app.map)"
+                "  window.app.map.fire('showbusy',"
+                "    {label: window._('Saving...')});");
+            owner_->onSaveComplete([this]() {
+                QApplication::restoreOverrideCursor();
+                // Clear the busy modal we raised in the deferral
+                // branch.  If the close completes cleanly the page
+                // is torn down anyway, but if the second closeEvent
+                // ends up re-prompting (save failed, doc still
+                // modified) we don't want the busy popup hanging
+                // behind the prompt.
+                if (owner_)
+                    owner_->evalJS(
+                        "if (window.app && window.app.map)"
+                        "  window.app.map.fire('hidebusy');");
+                this->close();
+            });
+            ev->ignore();
+            return;
+        }
+
         auto const p = owner_;
         // Announce the orderly close to the per-document collab
         // broker (no-op for local-only docs) before the WebView is
@@ -1007,6 +1046,25 @@ void WebView::activateWindow()
         _mainWindow->raise();
         _mainWindow->activateWindow();
     }
+}
+
+bool WebView::isSaveInFlight() const
+{
+    return _bridge && _bridge->isSaveInFlight();
+}
+
+void WebView::onSaveComplete(std::function<void()> callback)
+{
+    if (_bridge)
+        _bridge->onSaveComplete(std::move(callback));
+    else if (callback)
+        callback();
+}
+
+void WebView::evalJS(const std::string& script)
+{
+    if (_bridge)
+        _bridge->evalJS(script);
 }
 
 void WebView::sendCollabBye()

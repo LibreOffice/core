@@ -250,6 +250,21 @@ window.L.Map.include({
 	save: function(dontTerminateEdit, dontSaveIfUnmodified, extendedData) {
 		this.fire('updatemodificationindicator', { status: 'SAVING' });
 
+		// Let the native host know a save round-trip has started so
+		// it can defer a close-clicked-mid-save until the round-trip
+		// finishes (rather than prompting about "unsaved changes"
+		// for a save that is already in flight).  CODA-only (any
+		// CODA variant's native bridge): the bridge's SAVESTARTED
+		// handler sets a save-in-flight flag that the window's close
+		// handler watches.  COWASM tracks save-in-flight purely in JS
+		// (the _switchToServerAfterSave flag), and its WASM kit's
+		// ClientSession would reject the unknown command with
+		// "error: cmd=SAVESTARTED kind=unknown" which surfaces as a
+		// stray "server encountered..." dialog.
+		if (window.bridge) {
+			window.postMobileMessage('SAVESTARTED');
+		}
+
 		var msg = 'save' +
 					' dontTerminateEdit=' + (dontTerminateEdit ? 1 : 0) +
 					' dontSaveIfUnmodified=' + (dontSaveIfUnmodified ? 1 : 0);

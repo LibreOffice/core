@@ -19,6 +19,7 @@
 #include <QObject>
 #include <QWebEngineView>
 
+#include <functional>
 #include <memory>
 
 class Bridge;
@@ -126,6 +127,20 @@ public:
     static WebView* findStarterScreen();
     static const std::vector<WebView*>& getAllInstances() { return s_instances; }
     void activateWindow();
+    /// True while a user-initiated save is in flight - see
+    /// Bridge::isSaveInFlight.  Used by the close handler so that
+    /// clicking the title-bar X while the save round-trip is not yet
+    /// done waits for the save rather than asking about "unsaved
+    /// changes" that are actually about to be saved.
+    bool isSaveInFlight() const;
+    /// Register a one-shot callback to run when the in-flight save
+    /// completes (success or failure).  Forwards to
+    /// Bridge::onSaveComplete; runs immediately if no save is in
+    /// flight.
+    void onSaveComplete(std::function<void()> callback);
+    /// Run @script in the page on the GUI thread.  Forwards to
+    /// Bridge::evalJS; no-op if no bridge is attached.
+    void evalJS(const std::string& script);
     /// Announce an orderly close to the per-document collab broker.
     /// Forwarded to Bridge::sendCollabBye() while _document is still
     /// valid - called from Window::closeEvent before owner_'s
