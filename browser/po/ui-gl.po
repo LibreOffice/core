@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-20 12:14+0100\n"
-"PO-Revision-Date: 2025-12-13 18:47+0000\n"
+"PO-Revision-Date: 2026-03-21 08:13+0000\n"
 "Last-Translator: \"Miguel A. Bouzada\" <mbouzada@gmail.com>\n"
-"Language-Team: Galician <https://hosted.weblate.org/projects/"
-"collabora-online/ui/gl/>\n"
-"Language: \n"
+"Language-Team: Galician <https://hosted.weblate.org/projects/collabora-"
+"online/ui/gl/>\n"
+"Language: gl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.15-dev\n"
+"X-Generator: Weblate 5.17-dev\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -952,7 +952,7 @@ msgstr ""
 
 #: src/app/TableStylesService.ts:152 src/app/TableStylesService.ts:154
 msgid "Table Styles"
-msgstr ""
+msgstr "Estilos de táboas"
 
 #: src/canvas/sections/CommentListSection.ts:1267
 msgid "Modify"
@@ -1074,23 +1074,23 @@ msgstr "Gardado"
 
 #: src/canvas/sections/CompareChangesLabelSection.ts:118
 msgid "Last edited by %1 on %2"
-msgstr ""
+msgstr "Última edición por %1 o %2"
 
 #: src/canvas/sections/CompareChangesLabelSection.ts:181
 msgid "%1: Initial Version"
-msgstr ""
+msgstr "%1: versión inicial"
 
 #: src/canvas/sections/CompareChangesLabelSection.ts:185
 msgid "%1: Current Version"
-msgstr ""
+msgstr "%1: versión actual"
 
 #: src/canvas/sections/CompareChangesLabelSection.ts:194
 msgid "Initial Version"
-msgstr ""
+msgstr "Versión inicial"
 
 #: src/canvas/sections/CompareChangesLabelSection.ts:198
 msgid "Current Version"
-msgstr ""
+msgstr "Versión actual"
 
 #: src/canvas/sections/ShapeHandlesSection.ts:478
 msgid "Document contains unsupported media"
@@ -1142,7 +1142,7 @@ msgstr "Copia toda a información da versión en inglés"
 
 #: src/control/Control.AboutDialog.ts:430
 msgid "Version information has been copied"
-msgstr ""
+msgstr "Copiouse a información da versión"
 
 #: src/control/Control.AboutDialog.ts:470
 msgid "COOLWSD version:"
@@ -1208,7 +1208,6 @@ msgstr "O servidor atopou un erro {0} ao procesar a orde {1}."
 
 #: src/control/Control.BackstageView.ts:179
 #: src/control/Control.BackstageView.ts:180
-#, fuzzy
 msgid "Close backstage"
 msgstr "Pechar o trascenio"
 
@@ -1235,7 +1234,7 @@ msgstr "Novo"
 
 #: src/control/Control.BackstageView.ts:288
 msgid "Open"
-msgstr ""
+msgstr "Abrir"
 
 #: src/control/Control.BackstageView.ts:296
 #: src/control/Control.Notebookbar.js:637
@@ -1283,12 +1282,12 @@ msgstr "Opcións"
 
 #: src/control/Control.BackstageView.ts:407
 msgid "Start a new document from one of the following templates."
-msgstr ""
+msgstr "Inicie un novo documento a partir dun dos seguintes modelos."
 
 #: src/control/Control.BackstageView.ts:450
 #: src/control/Control.BackstageView.ts:453
 msgid "More Templates"
-msgstr ""
+msgstr "Máis modelos"
 
 #: src/control/Control.BackstageView.ts:479
 #: src/control/jsdialog/Widget.ColorPicker.ts:426
@@ -1301,11 +1300,11 @@ msgstr "Os documentos abertos recentemente aparecerán aquí"
 
 #: src/control/Control.BackstageView.ts:550
 msgid "Name"
-msgstr ""
+msgstr "Nome"
 
 #: src/control/Control.BackstageView.ts:556
 msgid "Modified Date"
-msgstr ""
+msgstr "Data de modificación"
 
 #: src/control/Control.BackstageView.ts:779
 msgid "Document Info"
@@ -1409,7 +1408,7 @@ msgstr "Documento en branco"
 
 #: src/control/Control.BackstageView.ts:1443
 msgid "Untitled"
-msgstr ""
+msgstr "Sen título"
 
 #: src/control/Control.Command.js:90
 msgid "Unlock"
@@ -1429,7 +1428,7 @@ msgstr "Encher a serie"
 
 #: src/control/Control.DocumentNameInput.js:27
 msgid "Document name"
-msgstr ""
+msgstr "Nome do documento"
 
 #: src/control/Control.DocumentNameInput.js:119
 msgid "Path"
@@ -1876,11 +1875,11 @@ msgstr "Pechar o diálogo"
 
 #: src/control/Control.JSDialogBuilder.js:496
 msgid "Increment value"
-msgstr ""
+msgstr "Aumentar o valor"
 
 #: src/control/Control.JSDialogBuilder.js:500
 msgid "Decrement value"
-msgstr ""
+msgstr "Diminuír o valor"
 
 #: src/control/Control.JSDialogBuilder.js:640
 msgid "Solid"
@@ -1962,11 +1961,11 @@ msgstr "Inserir comentario"
 
 #: src/control/Control.JSDialogBuilder.js:2136
 msgid "Toggle dropdown"
-msgstr ""
+msgstr "Amosar/agochar o menú despregábel"
 
 #: src/control/Control.JSDialogBuilder.js:2138
 msgid "Dialog dropdown"
-msgstr ""
+msgstr "Menú de diálogo despregábel"
 
 #: src/control/Control.JSDialogBuilder.js:2140
 #: src/control/Control.NotebookbarWriter.js:1608
@@ -1975,7 +1974,7 @@ msgstr "Despregábel"
 
 #: src/control/Control.JSDialogBuilder.js:2142
 msgid "Apply action dropdown"
-msgstr ""
+msgstr "Aplicar o menú despregábel de accións"
 
 #: src/control/Control.JSDialogBuilder.js:2168
 msgid "Open {name}"
@@ -2816,7 +2815,7 @@ msgstr "Ficheiro HTML (.html)"
 #: src/control/Control.NotebookbarBuilder.js:449
 #: src/control/Control.NotebookbarBuilder.js:485
 msgid "PDF Document (.pdf) with options"
-msgstr ""
+msgstr "Documento PDF (.pdf) con opcións"
 
 #: src/control/Control.NotebookbarBuilder.js:432
 msgid "CSV File (.csv)"
@@ -3203,11 +3202,11 @@ msgstr "Táboa"
 #: src/control/Control.NotebookbarCalc.js:1766
 #: src/control/Control.NotebookbarCalc.js:1769
 msgid "Table styles are only available in .xlsx files"
-msgstr ""
+msgstr "Os estilos das táboas só están dispoñíbeis en ficheiros .xlsx"
 
 #: src/control/Control.NotebookbarCalc.js:1767
 msgid "Insert a styled table"
-msgstr ""
+msgstr "Inserir un estilo de táboa"
 
 #: src/control/Control.NotebookbarCalc.js:1770
 msgid "Select a cell range first to insert a styled table"
@@ -3434,9 +3433,8 @@ msgid "Master Slide Templates"
 msgstr "Modelos padrón de diapositivas"
 
 #: src/control/Control.NotebookbarImpress.js:1824
-#, fuzzy
 msgid "This Presentation"
-msgstr "Pechar a presentación"
+msgstr "Esta presentación"
 
 #: src/control/Control.NotebookbarImpress.js:1833
 msgid "Presentation Templates"
@@ -4066,9 +4064,8 @@ msgid "Updating citations"
 msgstr "Actualizando as citas"
 
 #: src/control/Control.Zotero.js:1528
-#, fuzzy
 msgid "Unlinked citations"
-msgstr "Desligar citas"
+msgstr "Citas sen ligar"
 
 #: src/control/Control.Zotero.js:1533
 msgid ""
@@ -5031,11 +5028,10 @@ msgid "Failed to load document."
 msgstr "Produciuse un erro ao cargar o documento."
 
 #: src/errormessages.js:45
-#, fuzzy
 msgid "Save failed due to no disk space left. Document will now be read-only."
 msgstr ""
 "Produciuse un fallo ao gardar por mor de que non queda espazo libre no "
-"disco. O documento será a gora de só lectura."
+"disco. O documento vai ser agora só de lectura."
 
 #: src/errormessages.js:46
 msgid ""
@@ -5454,7 +5450,6 @@ msgid "Resume"
 msgstr "Continuar"
 
 #: src/slideshow/PresenterConsole.js:39
-#, fuzzy
 msgid "Present to all"
 msgstr "Presentar para todos"
 
@@ -5493,11 +5488,11 @@ msgstr "Prema para saír da presentación…"
 
 #: src/slideshow/SlideShowPresenter.ts:805
 msgid "You are on the first slide"
-msgstr ""
+msgstr "Atópase na primeira diapositiva"
 
 #: src/slideshow/SlideShowPresenter.ts:813
 msgid "Waiting for presenter to advance"
-msgstr ""
+msgstr "Agardando a que o presentador avance"
 
 #: src/slideshow/SlideShowPresenter.ts:842
 msgid "End Show"
@@ -5513,129 +5508,128 @@ msgid "Enable Animations"
 msgstr "Activar as animacións"
 
 #: src/slideshow/SlideShowPresenter.ts:1512
-#, fuzzy
 msgid "Stop Following"
 msgstr "Deixar de seguir"
 
 #: templates/templates.js:6
 msgid "Modern Business Letter (sans-serif)"
-msgstr ""
+msgstr "Carta comercial moderna (sans-serif)"
 
 #: templates/templates.js:10 templates/templates.js:20
 msgid "Business Letter"
-msgstr ""
+msgstr "Carta comercial"
 
 #: templates/templates.js:16
 msgid "Modern Business Letter (serif)"
-msgstr ""
+msgstr "Carta comercial moderna (serif)"
 
 #: templates/templates.js:26 templates/templates.js:30
 msgid "CV"
-msgstr ""
+msgstr "CV"
 
 #: templates/templates.js:36
 msgid "Resume (one-page)"
-msgstr ""
+msgstr "Currículo (unha páxina)"
 
 #: templates/templates.js:56
 msgid "Modern Style"
-msgstr ""
+msgstr "Estilo moderno"
 
 #: templates/templates.js:66
 msgid "Simple Style"
-msgstr ""
+msgstr "Estilo sinxelo"
 
 #: templates/templates.js:76
 msgid "Beehive"
-msgstr ""
+msgstr "Colmea"
 
 #: templates/templates.js:86
 msgid "Blue Curve"
-msgstr ""
+msgstr "Curva azul"
 
 #: templates/templates.js:96
 msgid "Blueprint Plans"
-msgstr ""
+msgstr "Planos de construción"
 
 #: templates/templates.js:106
 msgid "Candy"
-msgstr ""
+msgstr "Caramelo"
 
 #: templates/templates.js:116
 msgid "DNA"
-msgstr ""
+msgstr "ADN"
 
 #: templates/templates.js:126
 msgid "Focus"
-msgstr ""
+msgstr "Foco"
 
 #: templates/templates.js:136
 msgid "Forestbird"
-msgstr ""
+msgstr "Ave forestal"
 
 #: templates/templates.js:146
 msgid "Freshes"
-msgstr ""
+msgstr "Frescos"
 
 #: templates/templates.js:156
 msgid "Grey Elegant"
-msgstr ""
+msgstr "Gris elegante"
 
 #: templates/templates.js:166
 msgid "Growing Liberty"
-msgstr ""
+msgstr "Crecente liberdade"
 
 #: templates/templates.js:176
 msgid "Inspiration"
-msgstr ""
+msgstr "Inspiración"
 
 #: templates/templates.js:186
 msgid "Lights"
-msgstr ""
+msgstr "Luces"
 
 #: templates/templates.js:196
 msgid "Metropolis"
-msgstr ""
+msgstr "Metrópole"
 
 #: templates/templates.js:206
 msgid "Midnight Blue"
-msgstr ""
+msgstr "Azul medianoite"
 
 #: templates/templates.js:216
 msgid "Nature Illustration"
-msgstr ""
+msgstr "Ilustración da natureza"
 
 #: templates/templates.js:226
 msgid "Pencil"
-msgstr ""
+msgstr "Lapis"
 
 #: templates/templates.js:236
 msgid "Piano"
-msgstr ""
+msgstr "Piano"
 
 #: templates/templates.js:246
 msgid "Portfolio"
-msgstr ""
+msgstr "Portafolios"
 
 #: templates/templates.js:256
 msgid "Progress"
-msgstr ""
+msgstr "Avances"
 
 #: templates/templates.js:266
 msgid "Sunset"
-msgstr ""
+msgstr "Solpor"
 
 #: templates/templates.js:276
 msgid "Vintage"
-msgstr ""
+msgstr "Retro"
 
 #: templates/templates.js:286
 msgid "Vivid"
-msgstr ""
+msgstr "Vívido"
 
 #: templates/templates.js:296
 msgid "Yellow Idea"
-msgstr ""
+msgstr "Idea amarela"
 
 #: welcome/welcome.html%2Bhtml.head.title:9-3
 msgid "Collabora Online Welcome"
