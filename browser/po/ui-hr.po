@@ -8,17 +8,17 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-20 12:14+0100\n"
-"PO-Revision-Date: 2026-03-17 12:06+0000\n"
+"PO-Revision-Date: 2026-05-06 21:11+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
-"Language-Team: Croatian <https://hosted.weblate.org/projects/"
-"collabora-online/ui/hr/>\n"
-"Language: \n"
+"Language-Team: Croatian <https://hosted.weblate.org/projects/collabora-"
+"online/ui/hr/>\n"
+"Language: hr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.17-dev\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Weblate 5.17.1\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -1878,11 +1878,11 @@ msgstr "Zatvori dijalog"
 
 #: src/control/Control.JSDialogBuilder.js:496
 msgid "Increment value"
-msgstr ""
+msgstr "Povećaj unos"
 
 #: src/control/Control.JSDialogBuilder.js:500
 msgid "Decrement value"
-msgstr ""
+msgstr "Smanji unos"
 
 #: src/control/Control.JSDialogBuilder.js:640
 msgid "Solid"
@@ -2818,7 +2818,7 @@ msgstr "HTML datoteka (.html)"
 #: src/control/Control.NotebookbarBuilder.js:449
 #: src/control/Control.NotebookbarBuilder.js:485
 msgid "PDF Document (.pdf) with options"
-msgstr ""
+msgstr "PDF dokument (.pdf) s opcijama"
 
 #: src/control/Control.NotebookbarBuilder.js:432
 msgid "CSV File (.csv)"
@@ -3205,15 +3205,15 @@ msgstr "Tablica"
 #: src/control/Control.NotebookbarCalc.js:1766
 #: src/control/Control.NotebookbarCalc.js:1769
 msgid "Table styles are only available in .xlsx files"
-msgstr ""
+msgstr "Stilovi tablica su dostupni samo u .xlsx datotekama"
 
 #: src/control/Control.NotebookbarCalc.js:1767
 msgid "Insert a styled table"
-msgstr ""
+msgstr "Umetnite stiliziranu tablicu"
 
 #: src/control/Control.NotebookbarCalc.js:1770
 msgid "Select a cell range first to insert a styled table"
-msgstr ""
+msgstr "Najprije odaberi raspon polja za umetnje stilizirane tablice"
 
 #: src/control/Control.NotebookbarCalc.js:1779
 #: src/control/Control.NotebookbarDraw.js:1015
@@ -3357,7 +3357,7 @@ msgstr "Od početka"
 
 #: src/control/Control.NotebookbarImpress.js:472
 msgid "Fullscreen, starting at slide 1"
-msgstr ""
+msgstr "Cjeloekranski prikaz, počevši od slajda 1"
 
 #: src/control/Control.NotebookbarImpress.js:479
 msgid "From Current Slide"
@@ -3365,7 +3365,7 @@ msgstr "Od trenutačnog slajda"
 
 #: src/control/Control.NotebookbarImpress.js:480
 msgid "Fullscreen, starting at this slide"
-msgstr ""
+msgstr "Cjeloekranski prikaz, počevši od ovog slajda"
 
 #: src/control/Control.NotebookbarImpress.js:494
 msgid "Present in Window"
@@ -3373,7 +3373,7 @@ msgstr "Prikaži u prozoru"
 
 #: src/control/Control.NotebookbarImpress.js:495
 msgid "Plays inside the document window. Starts at slide 1"
-msgstr ""
+msgstr "Izvodi se unutar prozora dokumenta. Počinje od slajda 1"
 
 #: src/control/Control.NotebookbarImpress.js:503
 msgid "Presenter View"
@@ -3381,7 +3381,7 @@ msgstr "Prikaz prezentanta"
 
 #: src/control/Control.NotebookbarImpress.js:504
 msgid "Shows your notes, next slide, and a timer"
-msgstr ""
+msgstr "Prikazuje tvoje bilješke, sljedeći slajd i timer"
 
 #: src/control/Control.NotebookbarImpress.js:512
 msgid "Present to All"
@@ -3389,7 +3389,7 @@ msgstr "Prezentiraj svima"
 
 #: src/control/Control.NotebookbarImpress.js:513
 msgid "Starts a slideshow on every viewer's screen"
-msgstr ""
+msgstr "Pokreće prezentaciju na ekranu svakog gledatelja"
 
 #: src/control/Control.NotebookbarImpress.js:521
 #: src/slideshow/SlideShowPresenter.ts:1517
@@ -3398,7 +3398,7 @@ msgstr "Prati prezentanta"
 
 #: src/control/Control.NotebookbarImpress.js:522
 msgid "View slides as the presenter advances them"
-msgstr ""
+msgstr "Pregledaj slajdove kako ih prezentant prikazuje"
 
 #: src/control/Control.NotebookbarImpress.js:650
 msgid "Slide Views"
@@ -3436,13 +3436,12 @@ msgid "Master Slide Templates"
 msgstr "Predlošci master slajda"
 
 #: src/control/Control.NotebookbarImpress.js:1824
-#, fuzzy
 msgid "This Presentation"
-msgstr "Zatvori prezentaciju"
+msgstr "Ova prezentacija"
 
 #: src/control/Control.NotebookbarImpress.js:1833
 msgid "Presentation Templates"
-msgstr ""
+msgstr "Predlošci prezentacija"
 
 #: src/control/Control.NotebookbarImpress.js:1903
 msgid "Slide Size"
@@ -3520,15 +3519,15 @@ msgstr "Širina stranice"
 
 #: src/control/Control.NotebookbarWriter.js:2209
 msgid "Spellcheck"
-msgstr ""
+msgstr "Provjera pravopisa"
 
 #: src/control/Control.NotebookbarWriter.js:2222
 msgid "Spelling Options"
-msgstr ""
+msgstr "Opcije pravopisa"
 
 #: src/control/Control.NotebookbarWriter.js:2234
 msgid "Auto Spell Check"
-msgstr ""
+msgstr "Automatska provjera pravopisa"
 
 #: src/control/Control.NotebookbarWriter.js:2262
 #: src/control/Control.NotebookbarWriter.js:2278
@@ -4405,11 +4404,11 @@ msgstr "Jako široko"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1788
 msgid "Inline"
-msgstr ""
+msgstr "Ugrađeno"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1794
 msgid "Side by Side"
-msgstr ""
+msgstr "Jedno pored drugog"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1807
 msgid "All users"
@@ -5032,11 +5031,10 @@ msgid "Failed to load document."
 msgstr "Neuspjelo učitavanje dokumenta."
 
 #: src/errormessages.js:45
-#, fuzzy
 msgid "Save failed due to no disk space left. Document will now be read-only."
 msgstr ""
-"Spremanje dokumenta nije uspjelo, jer više nema mjesta na disku. Dokument će "
-"se sada moći samo čitati."
+"Spremanje nije uspjelo jer više nema mjesta na disku. Dokument će se sada "
+"moći samo čitati."
 
 #: src/errormessages.js:46
 msgid ""
@@ -5484,7 +5482,6 @@ msgid "Click to exit presentation..."
 msgstr "Pritisni za izlaz iz prezentacije …"
 
 #: src/slideshow/SlideShowPresenter.ts:805
-#, fuzzy
 msgid "You are on the first slide"
 msgstr "Nalaziš se na prvom slajdu"
 
