@@ -2489,7 +2489,7 @@ namespace emfio
                         {
                             for (sal_uInt32 i = 0; i < nTri && mpInputStream->good(); ++i)
                             {
-                                sal_uInt32 nUpperLeft, nLowerRight;
+                                sal_uInt32 nUpperLeft(0), nLowerRight(0);
                                 mpInputStream->ReadUInt32( nUpperLeft ).ReadUInt32( nLowerRight );
 
                                 if (nUpperLeft >= nVer || nLowerRight >= nVer)
