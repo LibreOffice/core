@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-20 12:14+0100\n"
-"PO-Revision-Date: 2026-03-27 20:09+0000\n"
-"Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
+"PO-Revision-Date: 2026-03-30 10:02+0000\n"
+"Last-Translator: Stanislav Horáček <stanislav.horacek@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/collabora-online/"
 "ui/cs/>\n"
 "Language: cs\n"
@@ -1138,7 +1138,7 @@ msgstr "Zkopírovat informace o verzi v angličtině"
 
 #: src/control/Control.AboutDialog.ts:430
 msgid "Version information has been copied"
-msgstr ""
+msgstr "Informace o verzi byly zkopírovány"
 
 #: src/control/Control.AboutDialog.ts:470
 msgid "COOLWSD version:"
@@ -1875,11 +1875,11 @@ msgstr "Zavřít dialogové okno"
 
 #: src/control/Control.JSDialogBuilder.js:496
 msgid "Increment value"
-msgstr ""
+msgstr "Zvětšit hodnotu"
 
 #: src/control/Control.JSDialogBuilder.js:500
 msgid "Decrement value"
-msgstr ""
+msgstr "Zmenšit hodnotu"
 
 #: src/control/Control.JSDialogBuilder.js:640
 msgid "Solid"
@@ -1961,11 +1961,11 @@ msgstr "Vložit komentář"
 
 #: src/control/Control.JSDialogBuilder.js:2136
 msgid "Toggle dropdown"
-msgstr ""
+msgstr "Přepnout rozbalovací pole"
 
 #: src/control/Control.JSDialogBuilder.js:2138
 msgid "Dialog dropdown"
-msgstr ""
+msgstr "Rozbalovací dialogové okno"
 
 #: src/control/Control.JSDialogBuilder.js:2140
 #: src/control/Control.NotebookbarWriter.js:1608
@@ -1974,7 +1974,7 @@ msgstr "Rozbalovací pole"
 
 #: src/control/Control.JSDialogBuilder.js:2142
 msgid "Apply action dropdown"
-msgstr ""
+msgstr "Použít akci rozbalovacího pole"
 
 #: src/control/Control.JSDialogBuilder.js:2168
 msgid "Open {name}"
@@ -2814,7 +2814,7 @@ msgstr "HTML soubor (.html)"
 #: src/control/Control.NotebookbarBuilder.js:449
 #: src/control/Control.NotebookbarBuilder.js:485
 msgid "PDF Document (.pdf) with options"
-msgstr ""
+msgstr "Dokument PDF (.pdf) s možnostmi"
 
 #: src/control/Control.NotebookbarBuilder.js:432
 msgid "CSV File (.csv)"
@@ -3201,15 +3201,15 @@ msgstr "Tabulka"
 #: src/control/Control.NotebookbarCalc.js:1766
 #: src/control/Control.NotebookbarCalc.js:1769
 msgid "Table styles are only available in .xlsx files"
-msgstr ""
+msgstr "Styly tabulky jsou k dispozici pouze v souborech .xlsx"
 
 #: src/control/Control.NotebookbarCalc.js:1767
 msgid "Insert a styled table"
-msgstr ""
+msgstr "Vložit tabulku se stylem"
 
 #: src/control/Control.NotebookbarCalc.js:1770
 msgid "Select a cell range first to insert a styled table"
-msgstr ""
+msgstr "Chcete-li vložit tabulku se stylem, vyberte nejdříve oblast buněk"
 
 #: src/control/Control.NotebookbarCalc.js:1779
 #: src/control/Control.NotebookbarDraw.js:1015
@@ -3353,7 +3353,7 @@ msgstr "Od začátku"
 
 #: src/control/Control.NotebookbarImpress.js:472
 msgid "Fullscreen, starting at slide 1"
-msgstr ""
+msgstr "Celá obrazovka, začátek na snímku 1"
 
 #: src/control/Control.NotebookbarImpress.js:479
 msgid "From Current Slide"
@@ -3361,7 +3361,7 @@ msgstr "Od aktuálního snímku"
 
 #: src/control/Control.NotebookbarImpress.js:480
 msgid "Fullscreen, starting at this slide"
-msgstr ""
+msgstr "Celá obrazovka, začátek na tomto snímku"
 
 #: src/control/Control.NotebookbarImpress.js:494
 msgid "Present in Window"
@@ -3369,7 +3369,7 @@ msgstr "Prezentovat v okně"
 
 #: src/control/Control.NotebookbarImpress.js:495
 msgid "Plays inside the document window. Starts at slide 1"
-msgstr ""
+msgstr "Spustí se v okně dokumentu. Začátek na snímku 1"
 
 #: src/control/Control.NotebookbarImpress.js:503
 msgid "Presenter View"
@@ -3377,7 +3377,7 @@ msgstr "Zobrazení přednášejícího"
 
 #: src/control/Control.NotebookbarImpress.js:504
 msgid "Shows your notes, next slide, and a timer"
-msgstr ""
+msgstr "Zobrazí poznámky, další snímek a časovač"
 
 #: src/control/Control.NotebookbarImpress.js:512
 msgid "Present to All"
@@ -3385,7 +3385,7 @@ msgstr "Prezentovat všem"
 
 #: src/control/Control.NotebookbarImpress.js:513
 msgid "Starts a slideshow on every viewer's screen"
-msgstr ""
+msgstr "Spustí prezentaci na obrazovce každého sledujícího"
 
 #: src/control/Control.NotebookbarImpress.js:521
 #: src/slideshow/SlideShowPresenter.ts:1517
@@ -3394,7 +3394,7 @@ msgstr "Sledovat přednášejícího"
 
 #: src/control/Control.NotebookbarImpress.js:522
 msgid "View slides as the presenter advances them"
-msgstr ""
+msgstr "Zobrazí snímky tak, jak je bude měnit přednášející"
 
 #: src/control/Control.NotebookbarImpress.js:650
 msgid "Slide Views"
@@ -3437,7 +3437,7 @@ msgstr "Tato prezentace"
 
 #: src/control/Control.NotebookbarImpress.js:1833
 msgid "Presentation Templates"
-msgstr ""
+msgstr "Šablony prezentace"
 
 #: src/control/Control.NotebookbarImpress.js:1903
 msgid "Slide Size"
@@ -3515,15 +3515,15 @@ msgstr "Šířka stránky"
 
 #: src/control/Control.NotebookbarWriter.js:2209
 msgid "Spellcheck"
-msgstr ""
+msgstr "Kontrola pravopisu"
 
 #: src/control/Control.NotebookbarWriter.js:2222
 msgid "Spelling Options"
-msgstr ""
+msgstr "Možnosti kontroly pravopisu"
 
 #: src/control/Control.NotebookbarWriter.js:2234
 msgid "Auto Spell Check"
-msgstr ""
+msgstr "Automatická kontrola pravopisu"
 
 #: src/control/Control.NotebookbarWriter.js:2262
 #: src/control/Control.NotebookbarWriter.js:2278
@@ -4062,9 +4062,8 @@ msgid "Updating citations"
 msgstr "Aktualizace citací"
 
 #: src/control/Control.Zotero.js:1528
-#, fuzzy
 msgid "Unlinked citations"
-msgstr "Zrušit odkazy na citace"
+msgstr "Zrušené citace"
 
 #: src/control/Control.Zotero.js:1533
 msgid ""
@@ -4397,11 +4396,11 @@ msgstr "Velmi volné"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1788
 msgid "Inline"
-msgstr ""
+msgstr "Vložené"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1794
 msgid "Side by Side"
-msgstr ""
+msgstr "Vedle sebe"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1807
 msgid "All users"
@@ -5022,11 +5021,10 @@ msgid "Failed to load document."
 msgstr "Nepodařilo se načíst dokument."
 
 #: src/errormessages.js:45
-#, fuzzy
 msgid "Save failed due to no disk space left. Document will now be read-only."
 msgstr ""
 "Kvůli nedostatku místa na disku se dokument nepodařilo uložit. Dokument se "
-"zobrazí v režimu pouze pro čtení."
+"zobrazí pouze pro čtení."
 
 #: src/errormessages.js:46
 msgid ""
@@ -5231,10 +5229,12 @@ msgid ""
 "Your browser has very limited access to the clipboard, so use these "
 "keyboard shortcuts:"
 msgstr ""
+"Prohlížeč má velmi omezený přístup ke schránce, proto používejte tyto "
+"klávesové zkratky:"
 
 #: src/map/Clipboard.js:1499
 msgid "Cut"
-msgstr ""
+msgstr "Vyjmout"
 
 #: src/map/Clipboard.js:1515
 msgid ""
@@ -5310,7 +5310,7 @@ msgstr "Nepodařilo se načíst vybraný soubor."
 
 #: src/map/handler/Map.Keyboard.js:653
 msgid "You are currently in View mode"
-msgstr ""
+msgstr "Právě jste v režimu prohlížení"
 
 #: src/map/handler/Map.Print.js:44
 msgid "Print dialog"
@@ -5324,7 +5324,7 @@ msgstr "Prázdná prezentace"
 #: src/map/handler/Map.SlideShow.js:60
 #: src/slideshow/SlideShowPresenter.ts:1284
 msgid "All slides are hidden!"
-msgstr ""
+msgstr "Všechny snímky jsou skryté!"
 
 #: src/map/handler/Map.SlideShow.js:167
 #: src/slideshow/SlideShowPresenter.ts:1311
@@ -5424,7 +5424,7 @@ msgstr "Následující snímek"
 #: src/slideshow/PresenterConsole.js:35
 #: src/slideshow/SlideShowPresenter.ts:908
 msgid "Exchange"
-msgstr ""
+msgstr "Zaměnit"
 
 #: src/slideshow/PresenterConsole.js:36
 msgid "Pause"
@@ -5481,7 +5481,7 @@ msgstr "Nacházíte se na prvním snímku"
 
 #: src/slideshow/SlideShowPresenter.ts:813
 msgid "Waiting for presenter to advance"
-msgstr ""
+msgstr "Čeká se na změnu od přednášejícího"
 
 #: src/slideshow/SlideShowPresenter.ts:842
 msgid "End Show"
@@ -5518,7 +5518,7 @@ msgstr "Životopis"
 
 #: templates/templates.js:36
 msgid "Resume (one-page)"
-msgstr "Shrnutí (jednostránkové)"
+msgstr "Stručný životopis (jednostránkový)"
 
 #: templates/templates.js:56
 msgid "Modern Style"
@@ -5538,11 +5538,11 @@ msgstr "Modrá křivka"
 
 #: templates/templates.js:96
 msgid "Blueprint Plans"
-msgstr "Návrhové Plány"
+msgstr "Blueprint plánu"
 
 #: templates/templates.js:106
 msgid "Candy"
-msgstr "Cukrátka"
+msgstr "Sladkosti"
 
 #: templates/templates.js:116
 msgid "DNA"
@@ -5550,23 +5550,23 @@ msgstr "DNA"
 
 #: templates/templates.js:126
 msgid "Focus"
-msgstr "Zaměření"
+msgstr "Ohnisko"
 
 #: templates/templates.js:136
 msgid "Forestbird"
-msgstr ""
+msgstr "Lesní zátiší"
 
 #: templates/templates.js:146
 msgid "Freshes"
-msgstr ""
+msgstr "Svěží"
 
 #: templates/templates.js:156
 msgid "Grey Elegant"
-msgstr "Šedá elegantní"
+msgstr "Elegantní šedá"
 
 #: templates/templates.js:166
 msgid "Growing Liberty"
-msgstr ""
+msgstr "Vyrůstající svoboda"
 
 #: templates/templates.js:176
 msgid "Inspiration"
@@ -5582,11 +5582,11 @@ msgstr "Metropolis"
 
 #: templates/templates.js:206
 msgid "Midnight Blue"
-msgstr "Půlnoční modrá"
+msgstr "Půlnoční modř"
 
 #: templates/templates.js:216
 msgid "Nature Illustration"
-msgstr "Přírodní ilustrace"
+msgstr "Příroda"
 
 #: templates/templates.js:226
 msgid "Pencil"
@@ -5594,7 +5594,7 @@ msgstr "Tužka"
 
 #: templates/templates.js:236
 msgid "Piano"
-msgstr "Piano"
+msgstr "Klavír"
 
 #: templates/templates.js:246
 msgid "Portfolio"
@@ -5610,15 +5610,15 @@ msgstr "Západ slunce"
 
 #: templates/templates.js:276
 msgid "Vintage"
-msgstr "Retro"
+msgstr "Starožitnost"
 
 #: templates/templates.js:286
 msgid "Vivid"
-msgstr ""
+msgstr "Živé"
 
 #: templates/templates.js:296
 msgid "Yellow Idea"
-msgstr ""
+msgstr "Žlutý nápad"
 
 #: welcome/welcome.html%2Bhtml.head.title:9-3
 msgid "Collabora Online Welcome"

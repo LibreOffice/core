@@ -16,47 +16,47 @@
     <message>
         <location filename="../DocumentOperations.cpp" line="51"/>
         <source>Word Document (.docx)</source>
-        <translation>Word Dokument (.docx)</translation>
+        <translation>Dokument Word (.docx)</translation>
     </message>
     <message>
         <location filename="../DocumentOperations.cpp" line="52"/>
         <source>Word 2003 Document (.doc)</source>
-        <translation>Word 2003 Dokument (.doc)</translation>
+        <translation>Dokument Word 2003 (.doc)</translation>
     </message>
     <message>
         <location filename="../DocumentOperations.cpp" line="58"/>
         <source>ODF spreadsheet (.ods)</source>
-        <translation>ODF tabulka (.ods)</translation>
+        <translation>Sešit ODF (.ods)</translation>
     </message>
     <message>
         <location filename="../DocumentOperations.cpp" line="59"/>
         <source>Excel Spreadsheet (.xlsx)</source>
-        <translation>Excel tabulka(.xlsx)</translation>
+        <translation>Sešit Excel (.xlsx)</translation>
     </message>
     <message>
         <location filename="../DocumentOperations.cpp" line="60"/>
         <source>Excel 2003 Spreadsheet (.xls)</source>
-        <translation>Excel 2003 tabulka (.xls)</translation>
+        <translation>Sešit Excel 2003 (.xls)</translation>
     </message>
     <message>
         <location filename="../DocumentOperations.cpp" line="66"/>
         <source>ODF presentation (.odp)</source>
-        <translation>ODF prezentace (.odp)</translation>
+        <translation>Prezentace ODF (.odp)</translation>
     </message>
     <message>
         <location filename="../DocumentOperations.cpp" line="67"/>
         <source>PowerPoint Presentation (.pptx)</source>
-        <translation type="unfinished"></translation>
+        <translation>Prezentace PowerPoint (.pptx)</translation>
     </message>
     <message>
         <location filename="../DocumentOperations.cpp" line="68"/>
         <source>PowerPoint 2003 Presentation (.ppt)</source>
-        <translation type="unfinished"></translation>
+        <translation>Prezentace PowerPoint 2003 (.ppt)</translation>
     </message>
     <message>
         <location filename="../DocumentOperations.cpp" line="74"/>
         <source>ODF drawing (.odg)</source>
-        <translation type="unfinished"></translation>
+        <translation>Kresba ODF (.odg)</translation>
     </message>
     <message>
         <location filename="../DocumentOperations.cpp" line="106"/>
@@ -164,23 +164,23 @@
     <message>
         <location filename="../WebView.cpp" line="156"/>
         <source>Presentation</source>
-        <translation type="unfinished"></translation>
+        <translation>Prezentace</translation>
     </message>
     <message>
         <location filename="../WebView.cpp" line="161"/>
         <location filename="../WebView.cpp" line="177"/>
         <source>Text Document</source>
-        <translation type="unfinished"></translation>
+        <translation>Textový dokument</translation>
     </message>
     <message>
         <location filename="../WebView.cpp" line="166"/>
         <source>Spreadsheet</source>
-        <translation type="unfinished"></translation>
+        <translation>Sešit</translation>
     </message>
     <message>
         <location filename="../WebView.cpp" line="171"/>
         <source>Drawing</source>
-        <translation type="unfinished"></translation>
+        <translation>Kresba</translation>
     </message>
     <message>
         <location filename="../WebView.cpp" line="317"/>
