@@ -1104,10 +1104,35 @@ bool SdrOle2Obj::CompleteDeferredLink()
     if (!xObj.is())
         return false;
 
+    SyncObjVisualArea(xObj);
+
     SetObjRef(xObj);
     SetPersistName(aPersistName);
     SetChanged();
     return true;
+}
+
+void SdrOle2Obj::SyncObjVisualArea(const uno::Reference<embed::XEmbeddedObject>& xObj)
+{
+    tools::Rectangle aRect = GetLogicRect();
+    if (aRect.GetWidth() == 101 && aRect.GetHeight() == 101)
+    {
+        // default size, take it from the OLE
+        try
+        {
+            awt::Size aSz = xObj->getVisualAreaSize(GetAspect());
+            aRect.SetSize(Size(aSz.Width, aSz.Height));
+        }
+        catch (const uno::Exception&)
+        {}
+        SetLogicRect(aRect);
+    }
+    else
+    {
+        Size aSize = aRect.GetSize();
+        awt::Size aSz(aSize.Width(), aSize.Height());
+        xObj->setVisualAreaSize(GetAspect(), aSz);
+    }
 }
 
 bool SdrOle2Obj::HasDeferredLink() const
