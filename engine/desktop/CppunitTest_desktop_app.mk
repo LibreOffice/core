@@ -31,6 +31,7 @@ $(eval $(call gb_CppunitTest_use_libraries,desktop_app, \
     cppuhelper \
     $(if $(ENABLE_BREAKPAD),crashreport) \
     deploymentmisc \
+    drawinglayercore \
     editeng \
     fwk \
     i18nlangtag \
