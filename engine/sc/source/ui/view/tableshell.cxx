@@ -61,11 +61,10 @@ const ScDBData* ScTableShell::GetTableDBDataAtCursor()
 void ScTableShell::ExecuteDatabaseSettings(const SfxRequest& rReq)
 {
     const SfxItemSet* pSet = rReq.GetArgs();
-    sal_uInt16 nSlot = rReq.GetSlot();
     ScViewData& rViewData = m_pViewShell->GetViewData();
     SfxBindings& rBindings = rViewData.GetBindings();
 
-    switch (nSlot)
+    switch (rReq.GetSlot())
     {
         case SID_DATABASE_SETTINGS:
         {
@@ -74,71 +73,61 @@ void ScTableShell::ExecuteDatabaseSettings(const SfxRequest& rReq)
                 SAL_WARN("sc", "No arguments provided for ExecuteDatabaseSettings");
                 break;
             }
+            const SfxPoolItem* pItem = nullptr;
+            if (pSet->GetItemState(SCITEM_DATABASE_SETTING, true, &pItem) != SfxItemState::SET)
+                break;
+            const auto* pDBItem = dynamic_cast<const ScDatabaseSettingItem*>(pItem);
+            if (!pDBItem)
+                break;
+            const ScDBData* pDBData = GetTableDBDataAtCursor();
+            if (!pDBData)
+                break;
 
-            const SfxPoolItem* pItem;
-            SfxItemState eItemState = pSet->GetItemState(SCITEM_DATABASE_SETTING, true, &pItem);
-            if (eItemState == SfxItemState::SET
-                && dynamic_cast<const ScDatabaseSettingItem*>(pItem))
+            ScDBData aNewDBData(*pDBData);
+            aNewDBData.SetAutoFilter(pDBItem->HasShowFilters());
+            aNewDBData.SetHeader(pDBItem->HasHeaderRow());
+            aNewDBData.SetTotals(pDBItem->HasTotalRow());
+
+            ScTableStyleParam aNewParam(*pDBData->GetTableStyleInfo());
+            aNewParam.mbRowStripes = pDBItem->HasStripedRows();
+            aNewParam.mbColumnStripes = pDBItem->HasStripedCols();
+            aNewParam.mbFirstColumn = pDBItem->HasFirstCol();
+            aNewParam.mbLastColumn = pDBItem->HasLastCol();
+            aNewParam.maStyleID = pDBItem->GetStyleID();
+            aNewDBData.SetTableStyleInfo(aNewParam);
+
+            ScDBDocFunc aFunc(*rViewData.GetDocShell());
+            if (pDBData->HasTotals() == aNewDBData.HasTotals())
             {
-                const ScDatabaseSettingItem* pDBItem
-                    = static_cast<const ScDatabaseSettingItem*>(pItem);
-                if (const ScDBData* pDBData = GetTableDBDataAtCursor())
-                {
-                    ScDBData aNewDBData(*pDBData);
-                    aNewDBData.SetAutoFilter(pDBItem->HasShowFilters());
-                    aNewDBData.SetHeader(pDBItem->HasHeaderRow());
-                    aNewDBData.SetTotals(pDBItem->HasTotalRow());
-
-                    ScTableStyleParam aNewParam(*pDBData->GetTableStyleInfo());
-                    aNewParam.mbRowStripes = pDBItem->HasStripedRows();
-                    aNewParam.mbColumnStripes = pDBItem->HasStripedCols();
-                    aNewParam.mbFirstColumn = pDBItem->HasFirstCol();
-                    aNewParam.mbLastColumn = pDBItem->HasLastCol();
-                    aNewParam.maStyleID = pDBItem->GetStyleID();
-                    aNewDBData.SetTableStyleInfo(aNewParam);
-
-                    ScDBDocFunc aFunc(*rViewData.GetDocShell());
-                    // Set new area if size changed
-                    if (pDBData->HasTotals() != aNewDBData.HasTotals())
-                    {
-                        // Subtotals
-                        ScSubTotalParam aSubTotalParam;
-                        aNewDBData.GetSubTotalParam(aSubTotalParam);
-
-                        if (!aNewDBData.HasTotals())
-                        {
-                            // store current subtotal settings before removing total row
-                            pDBData->CreateTotalRowParam(aSubTotalParam);
-                            aNewDBData.SetSubTotalParam(aSubTotalParam);
-                            aSubTotalParam.bRemoveOnly = true;
-                            aSubTotalParam.bReplace = true;
-                            aFunc.DoTableSubTotals(aNewDBData.GetTab(), aNewDBData, aSubTotalParam,
-                                                   true, false);
-                        }
-                        else
-                        {
-                            // add/replace total row
-                            aSubTotalParam.bRemoveOnly = false;
-                            aSubTotalParam.bReplace = false;
-                            aFunc.DoTableSubTotals(aNewDBData.GetTab(), aNewDBData, aSubTotalParam,
-                                                   true, false);
-                        }
-                    }
-                    else
-                    {
-                        aFunc.ModifyDBData(aNewDBData);
-                    }
-                }
+                aFunc.ModifyDBData(aNewDBData);
+                break;
             }
+
+            // Total Row toggled — add or remove.
+            ScSubTotalParam aSubTotalParam;
+            aNewDBData.GetSubTotalParam(aSubTotalParam);
+            const bool bRemove = !aNewDBData.HasTotals();
+            if (bRemove)
+            {
+                // store current subtotal settings before removing total row
+                pDBData->CreateTotalRowParam(aSubTotalParam);
+                aNewDBData.SetSubTotalParam(aSubTotalParam);
+            }
+            aSubTotalParam.bRemoveOnly = bRemove;
+            aSubTotalParam.bReplace = bRemove;
+            aFunc.DoTableSubTotals(aNewDBData.GetTab(), aNewDBData, aSubTotalParam, true, false);
         }
         break;
         case SID_REMOVE_CALCTABLE:
-        {
             m_pViewShell->DeleteCalcTable();
-        }
-        break;
+            break;
     }
 
+    // TODO: when DoTableSubTotals refuses the toggle (tear-risk + blocked band), the
+    // underlying ScDBData state is unchanged, so this Invalidate produces an
+    // ScDatabaseSettingItem equal to the cached one. SfxBindings suppresses the
+    // resulting NotifyItemUpdate, no commandstatechanged echo is sent, and the Total
+    // Row checkbox in both the sidebar and the notebookbar stays visually flipped.
     rBindings.Invalidate(SID_DATABASE_SETTINGS);
 }
 

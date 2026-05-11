@@ -839,7 +839,8 @@ ScUndoTableTotals::ScUndoTableTotals(ScDocShell& rNewDocShell, SCTAB nNewTab,
                                      const ScSubTotalParam& rNewParam, SCROW nNewEndY,
                                      ScDocumentUniquePtr pNewUndoDoc,
                                      std::unique_ptr<ScDBCollection> pNewUndoDB,
-                                     std::unique_ptr<ScDBCollection> pNewRedoDB)
+                                     std::unique_ptr<ScDBCollection> pNewRedoDB,
+                                     bool bInPlace)
     : ScDBFuncUndo(rNewDocShell, ScRange(rNewParam.nCol1, rNewParam.nRow1, nNewTab,
                                          rNewParam.nCol2, rNewParam.nRow2, nNewTab))
     , nTab(nNewTab)
@@ -848,6 +849,7 @@ ScUndoTableTotals::ScUndoTableTotals(ScDocShell& rNewDocShell, SCTAB nNewTab,
     , xUndoDoc(std::move(pNewUndoDoc))
     , xUndoDB(std::move(pNewUndoDB))
     , xRedoDB(std::move(pNewRedoDB))
+    , mbInPlace(bInPlace)
 {
 }
 
@@ -866,12 +868,24 @@ void ScUndoTableTotals::Undo()
 
     ScDocument& rDoc = rDocShell.GetDocument();
 
-    if (nNewEndRow > aParam.nRow2)
+    if (!mbInPlace)
     {
-        rDoc.DeleteRow( aParam.nCol1, nTab, aParam.nCol2, nTab, nNewEndRow, static_cast<SCSIZE>(1) );
+        if (nNewEndRow > aParam.nRow2)
+        {
+            rDoc.DeleteRow( aParam.nCol1, nTab, aParam.nCol2, nTab, aParam.nRow2 + 1, static_cast<SCSIZE>(nNewEndRow - aParam.nRow2) );
+        }
+        else if (nNewEndRow < aParam.nRow2)
+        {
+            rDoc.InsertRow( aParam.nCol1, nTab, aParam.nCol2, nTab, nNewEndRow + 1, static_cast<SCSIZE>(aParam.nRow2 - nNewEndRow) );
+        }
     }
 
-    rDoc.DeleteAreaTab( aParam.nCol1, aParam.nRow1+1, aParam.nCol2, aParam.nRow2, nTab, InsertDeleteFlags::ALL );
+    // For an in-place ON, Do wrote total-row cells at nNewEndRow but no shift was
+    // performed; extend the clear so we also wipe those cells (xUndoDoc only covers up
+    // to aParam.nRow2, so the inserted total row would otherwise survive Undo).
+    const SCROW nClearEndRow
+        = (mbInPlace && nNewEndRow > aParam.nRow2) ? nNewEndRow : aParam.nRow2;
+    rDoc.DeleteAreaTab( aParam.nCol1, aParam.nRow1+1, aParam.nCol2, nClearEndRow, nTab, InsertDeleteFlags::ALL );
 
     xUndoDoc->CopyToDocument(aParam.nCol1, aParam.nRow1 + 1, nTab, aParam.nCol2, aParam.nRow2, nTab,
                                                             InsertDeleteFlags::NONE, false, rDoc);
@@ -903,16 +917,20 @@ void ScUndoTableTotals::Redo()
     if ( nVisTab != nTab )
         pViewShell->SetTabNo( nTab );
 
+    // xRedoDB is captured in DoTableSubTotals *before* the post-Do SetArea() runs, so
+    // the DBData stored in it still has the pre-Do bottom row (= aParam.nRow2). Use that
+    // for the lookup, otherwise it returns nullptr and Redo silently does nothing.
     const ScDBData* pDBData = nullptr;
     if (xRedoDB)
-    {
-        if (aParam.bReplace && !aParam.bRemoveOnly)
-            pDBData = xRedoDB->GetDBAtArea(nTab, aParam.nCol1, aParam.nRow1, aParam.nCol2, nNewEndRow);
-        else
-            pDBData = xRedoDB->GetDBAtArea(nTab, aParam.nCol1, aParam.nRow1, aParam.nCol2, aParam.nRow2);
-    }
+        pDBData = xRedoDB->GetDBAtArea(nTab, aParam.nCol1, aParam.nRow1, aParam.nCol2, aParam.nRow2);
     if (pDBData)
-        pViewShell->DoTableSubTotals(*pDBData, aParam, false);
+    {
+        // Route through the recording controller (with bRecord=false) so Redo also
+        // runs the tear-detection and in-place selection — keeping behaviour
+        // consistent with the original Do.
+        ScDBDocFunc aFunc(rDocShell);
+        aFunc.DoTableSubTotals(nTab, *pDBData, aParam, false /*bRecord*/, false /*bApi*/);
+    }
 
     EndRedo();
 }

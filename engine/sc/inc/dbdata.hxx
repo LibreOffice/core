@@ -293,6 +293,19 @@ public:
                                                 formula::FormulaGrammar::Grammar eGrammar) const;
     SC_DLLPUBLIC void       CreateTotalRowParam(ScSubTotalParam& rSubTotalParam) const;
 
+    /// Returns true if a column-bounded row shift in this table's column range starting
+    /// at nShiftRow would tear an adjacent fixed-range structure: a pivot table, another
+    /// ScDBData straddling the band boundary, or a merged cell that crosses it.
+    bool        HasTearRiskAtBand(const ScDocument& rDoc, SCROW nShiftRow) const;
+
+    /// Returns true if any cell in this table's column band at nShiftRow is non-empty.
+    bool        IsBandBlockedAtRow(const ScDocument& rDoc, SCROW nShiftRow) const;
+
+    /// Returns true if toggling Total Row on this table (bAddTotal = true to add, false
+    /// to remove) would be refused because of tear-risk at the row immediately below
+    /// the data combined with non-empty cells in the band.
+    SC_DLLPUBLIC bool       WouldTableTotalsBeRefused(bool bAddTotal) const;
+
     SC_DLLPUBLIC std::vector<TableColumnAttributes>
                             GetTotalRowAttributes(formula::FormulaGrammar::Grammar eGrammar) const;
 

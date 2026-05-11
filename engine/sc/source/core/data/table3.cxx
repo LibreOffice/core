@@ -2025,7 +2025,8 @@ void ScTable::RemoveSubTotals( ScSubTotalParam& rParam )
     rParam.nRow2 -= aRows.size();
 }
 
-void ScTable::RemoveSimpleSubTotals( ScSubTotalParam& rParam, const ScSubTotalParam& rOldParam )
+void ScTable::RemoveSimpleSubTotals( ScSubTotalParam& rParam, const ScSubTotalParam& rOldParam,
+                                     bool bInPlace )
 {
     const ScRange aOldRange(rOldParam.nCol1, rOldParam.nRow1, nTab, rOldParam.nCol2,
                             rOldParam.nRow2, nTab);
@@ -2034,7 +2035,10 @@ void ScTable::RemoveSimpleSubTotals( ScSubTotalParam& rParam, const ScSubTotalPa
     SCROW nEndRow = aOldRange.aEnd.Row();
 
     RemoveRowBreak(nEndRow + 1, false, true);
-    rDocument.DeleteRow(nStartCol, nTab, nEndCol, nTab, nEndRow, 1);
+    if (bInPlace)
+        rDocument.DeleteAreaTab(nStartCol, nEndRow, nEndCol, nEndRow, nTab, InsertDeleteFlags::ALL);
+    else
+        rDocument.DeleteRow(nStartCol, nTab, nEndCol, nTab, nEndRow, 1);
 
     rParam.nRow2--;
 }
@@ -2407,7 +2411,7 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
     return bSpaceLeft;
 }
 
-bool ScTable::DoSimpleSubTotals( ScSubTotalParam& rParam )
+bool ScTable::DoSimpleSubTotals( ScSubTotalParam& rParam, bool bInPlace )
 {
     RowEntry aRowEntry;
     aRowEntry.nGroupNo = 0; // only one group can have
@@ -2417,7 +2421,7 @@ bool ScTable::DoSimpleSubTotals( ScSubTotalParam& rParam )
     aRowEntry.nFuncEnd = rParam.nRow2;
 
     bool bRet = false;
-    if (rDocument.InsertRow(rParam.nCol1, nTab, rParam.nCol2, nTab, aRowEntry.nDestRow, 1))
+    if (bInPlace || rDocument.InsertRow(rParam.nCol1, nTab, rParam.nCol2, nTab, aRowEntry.nDestRow, 1))
     {
         rParam.nRow2++;
         DBShowRow(aRowEntry.nDestRow, true);

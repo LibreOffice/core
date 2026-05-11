@@ -30,6 +30,7 @@
 #include <globalnames.hxx>
 #include <refupdat.hxx>
 #include <document.hxx>
+#include <dpobject.hxx>
 #include <queryparam.hxx>
 #include <queryentry.hxx>
 #include <mid.h>
@@ -939,6 +940,67 @@ void ScDBData::CreateTotalRowParam(ScSubTotalParam& rSubTotalParam) const
         rSubTotalParam.SetCustFuncs(static_cast<sal_uInt16>(0), vColFuncs, vColFuncs.size());
         rSubTotalParam.SetNumFmts(static_cast<sal_uInt16>(0), vColNumFmts, vColNumFmts.size());
     }
+}
+
+bool ScDBData::HasTearRiskAtBand(const ScDocument& rDoc, SCROW nShiftRow) const
+{
+    // Pivot tables — reuse the existing helper from Insert Cells.
+    if (const ScDPCollection* pDPs = rDoc.GetDPCollection())
+    {
+        if (pDPs->IntersectsTableByColumns(nStartCol, nEndCol, nShiftRow, nTable))
+            return true;
+    }
+    // Other ScDBData (named or anonymous) whose horizontal extent straddles the band
+    // and whose vertical extent reaches into the rows that would be shifted.
+    auto bStraddlesBand = [&](const ScDBData& rOther) {
+        if (&rOther == this)
+            return false;
+        ScRange aOther;
+        rOther.GetArea(aOther);
+        if (aOther.aStart.Tab() != nTable)
+            return false;
+        const bool bHorizStraddle = (aOther.aStart.Col() < nStartCol) || (aOther.aEnd.Col() > nEndCol);
+        const bool bRowOverlap = aOther.aEnd.Row() >= nShiftRow;
+        return bHorizStraddle && bRowOverlap;
+    };
+    if (const ScDBCollection* pDBs = rDoc.GetDBCollection())
+    {
+        for (const auto& rOther : pDBs->getNamedDBs())
+        {
+            if (bStraddlesBand(*rOther))
+                return true;
+        }
+        for (const auto& rOther : pDBs->getAnonDBs())
+        {
+            if (bStraddlesBand(*rOther))
+                return true;
+        }
+    }
+    // Merged cells anywhere in the band rows below the table — conservative; matches
+    // the existing Insert-Cells precedent.
+    if (rDoc.HasAttrib(nStartCol, nShiftRow, nTable, nEndCol, rDoc.MaxRow(), nTable,
+                       HasAttrFlags::Merged | HasAttrFlags::Overlapped))
+        return true;
+
+    return false;
+}
+
+bool ScDBData::IsBandBlockedAtRow(const ScDocument& rDoc, SCROW nShiftRow) const
+{
+    return !rDoc.IsEmptyData(nStartCol, nShiftRow, nEndCol, nShiftRow, nTable);
+}
+
+bool ScDBData::WouldTableTotalsBeRefused(bool bAddTotal) const
+{
+    if (!mpContainer)
+        return false;
+    const ScDocument& rDoc = mpContainer->GetDocument();
+    const SCROW nShiftRow = nEndRow + 1;
+    if (!HasTearRiskAtBand(rDoc, nShiftRow))
+        return false;
+    if (!bAddTotal)
+        return false; // OFF case has no destination cells to clash with
+    return IsBandBlockedAtRow(rDoc, nShiftRow);
 }
 
 std::vector<TableColumnAttributes> ScDBData::GetTotalRowAttributes(formula::FormulaGrammar::Grammar eGrammar) const

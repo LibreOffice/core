@@ -655,7 +655,7 @@ void ScDBDocFunc::DoTableSubTotals( SCTAB nTab, const ScDBData& rNewData, const 
     if (!aTester.IsEditable())
     {
         if (!bApi)
-            rDocShell.ErrorMessage(aTester.GetMessageId());
+            rDocShell.ErrorMessageAsync(aTester.GetMessageId());
         return;
     }
 
@@ -663,8 +663,27 @@ void ScDBDocFunc::DoTableSubTotals( SCTAB nTab, const ScDBData& rNewData, const 
                        HasAttrFlags::Merged | HasAttrFlags::Overlapped))
     {
         if (!bApi)
-            rDocShell.ErrorMessage(STR_MSSG_INSERTCELLS_0); // don't insert into merged
+            rDocShell.ErrorMessageAsync(STR_MSSG_INSERTCELLS_0); // don't insert into merged
         return;
+    }
+
+    // Determine whether a column-bounded row shift starting at the would-be total row
+    // would tear an adjacent fixed-range structure. If so:
+    //   - if the band cells at that row are clear, take the in-place path (no row shift,
+    //     just write/clear the total-row cells; matches MSO/ONLYOFFICE behaviour);
+    //   - otherwise refuse with the existing warning, like Insert Cells does.
+    const SCROW nShiftRow = rParam.nRow2 + 1;
+    const bool bTearRisk = pDBData->HasTearRiskAtBand(rDoc, nShiftRow);
+    bool bInPlace = false;
+    if (bTearRisk)
+    {
+        if (bDo && pDBData->IsBandBlockedAtRow(rDoc, nShiftRow))
+        {
+            if (!bApi)
+                rDocShell.ErrorMessageAsync(STR_MSSG_DOSUBTOTALS_2);
+            return;
+        }
+        bInPlace = true;
     }
 
     weld::WaitObject aWait(ScDocShell::GetActiveDialogParent());
@@ -672,6 +691,14 @@ void ScDBDocFunc::DoTableSubTotals( SCTAB nTab, const ScDBData& rNewData, const 
 
     ScSubTotalParam aNewParam;
     rNewData.GetSubTotalParam(aNewParam); // end of range is being changed
+    // Pin the row/col window to the input rParam (which is always the pre-operation
+    // state). For the original Do this is a no-op; for Redo it overrides the post-Do
+    // values that would otherwise come from rNewData (taken from xRedoDB) and lead to
+    // an off-by-one shift on replay.
+    aNewParam.nCol1 = rParam.nCol1;
+    aNewParam.nRow1 = rParam.nRow1;
+    aNewParam.nCol2 = rParam.nCol2;
+    aNewParam.nRow2 = rParam.nRow2;
     ScDocumentUniquePtr pUndoDoc;
     std::unique_ptr<ScDBCollection> pUndoDB;
 
@@ -698,11 +725,11 @@ void ScDBDocFunc::DoTableSubTotals( SCTAB nTab, const ScDBData& rNewData, const 
     }
 
     if (rParam.bReplace)
-        rDoc.RemoveTableSubTotals(nTab, aNewParam, rParam);
+        rDoc.RemoveTableSubTotals(nTab, aNewParam, rParam, bInPlace);
     bool bSuccess = true;
     if (bDo)
     {
-        bSuccess = rDoc.DoTableSubTotals(nTab, aNewParam);
+        bSuccess = rDoc.DoTableSubTotals(nTab, aNewParam, bInPlace);
         rDoc.SetDrawPageSize(nTab);
     }
     ScRange aDirtyRange(aNewParam.nCol1, aNewParam.nRow1, nTab, aNewParam.nCol2, aNewParam.nRow2,
@@ -716,14 +743,14 @@ void ScDBDocFunc::DoTableSubTotals( SCTAB nTab, const ScDBData& rNewData, const 
         ScDBCollection* pDocDB = rDoc.GetDBCollection();
         rDocShell.GetUndoManager()->AddUndoAction(std::make_unique<ScUndoTableTotals>(
             rDocShell, nTab, rParam, aNewParam.nRow2, std::move(pUndoDoc),
-            std::move(pUndoDB), std::make_unique<ScDBCollection>(*pDocDB)));
+            std::move(pUndoDB), std::make_unique<ScDBCollection>(*pDocDB), bInPlace));
     }
 
     if (!bSuccess)
     {
         // "Cannot insert rows"
         if (!bApi)
-            rDocShell.ErrorMessage(STR_MSSG_DOSUBTOTALS_2);
+            rDocShell.ErrorMessageAsync(STR_MSSG_DOSUBTOTALS_2);
     }
 
     // store

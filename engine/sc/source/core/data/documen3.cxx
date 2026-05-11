@@ -816,16 +816,17 @@ bool ScDocument::DoSubTotals( SCTAB nTab, ScSubTotalParam& rParam )
     return pTable && pTable->DoSubTotals(rParam);
 }
 
-void ScDocument::RemoveTableSubTotals( SCTAB nTab, ScSubTotalParam& rParam, const ScSubTotalParam& rOldParam )
+void ScDocument::RemoveTableSubTotals( SCTAB nTab, ScSubTotalParam& rParam, const ScSubTotalParam& rOldParam,
+                                       bool bInPlace )
 {
     if (ScTable* pTable = FetchTable(nTab))
-        pTable->RemoveSimpleSubTotals( rParam, rOldParam );
+        pTable->RemoveSimpleSubTotals( rParam, rOldParam, bInPlace );
 }
 
-bool ScDocument::DoTableSubTotals( SCTAB nTab, ScSubTotalParam& rParam )
+bool ScDocument::DoTableSubTotals( SCTAB nTab, ScSubTotalParam& rParam, bool bInPlace )
 {
     ScTable* pTable = FetchTable(nTab);
-    return pTable && pTable->DoSimpleSubTotals(rParam);
+    return pTable && pTable->DoSimpleSubTotals(rParam, bInPlace);
 }
 
 bool ScDocument::HasSubTotalCells( const ScRange& rRange )

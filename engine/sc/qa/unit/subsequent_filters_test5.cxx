@@ -423,6 +423,125 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testTotalRowUndoRedo)
     CPPUNIT_ASSERT(!pDBData->HasTotals());
 }
 
+// Two tables stacked, the bottom (Table1) wider than the top (Table2). Toggling Total
+// Row ON on the top would, with a plain column-bounded shift, tear Table1 (its D/E
+// columns wouldn't move). The fix takes the in-place path: write the total-row cells
+// directly into the empty band above the bottom table, no row shift, bottom DBData
+// range untouched. Undo wipes the in-place cells and the totals flag; Redo re-applies.
+CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testTotalRowToggleInPlaceWiderNeighbor)
+{
+    // Fixture layout:
+    //   Table2 (top):    A3:C15  (3 cols), Total Row OFF
+    //   empty rows:      A16:E20
+    //   Table1 (bottom): A21:E30 (5 cols, straddles top's band), Total Row OFF
+    createScDoc("xlsx/toggleTotalTearDet.xlsx");
+    ScDocument* pDoc = getScDoc();
+    CPPUNIT_ASSERT(pDoc);
+
+    ScTabViewShell* pViewShell = getViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+
+    goToCell(u"A4"_ustr); // inside Table2
+
+    ScDBData* pTop = findDBData(pDoc, u"Table2"_ustr);
+    ScDBData* pBottom = findDBData(pDoc, u"Table1"_ustr);
+    CPPUNIT_ASSERT(pTop);
+    CPPUNIT_ASSERT(pBottom);
+    CPPUNIT_ASSERT(!pTop->HasTotals());
+    CPPUNIT_ASSERT(!pBottom->HasTotals());
+
+    ScRange aBottomBefore;
+    pBottom->GetArea(aBottomBefore);
+
+    // --- Toggle Total Row ON on the top table ---
+    dispatchDatabaseSettings(pViewShell, pTop, true);
+
+    pTop = findDBData(pDoc, u"Table2"_ustr);
+    pBottom = findDBData(pDoc, u"Table1"_ustr);
+    CPPUNIT_ASSERT(pTop);
+    CPPUNIT_ASSERT(pBottom);
+    CPPUNIT_ASSERT(pTop->HasTotals());
+
+    // Top range grew by one row (15 -> 16, i.e. 0-indexed nEndRow 14 -> 15)
+    ScRange aTopAfter;
+    pTop->GetArea(aTopAfter);
+    CPPUNIT_ASSERT_EQUAL(SCROW(15), aTopAfter.aEnd.Row());
+
+    // Bottom range MUST be unchanged (in-place path was taken — no row shift)
+    ScRange aBottomAfter;
+    pBottom->GetArea(aBottomAfter);
+    CPPUNIT_ASSERT_EQUAL(aBottomBefore.aStart.Row(), aBottomAfter.aStart.Row());
+    CPPUNIT_ASSERT_EQUAL(aBottomBefore.aEnd.Row(), aBottomAfter.aEnd.Row());
+
+    // Total label written at A16 (0-indexed row 15)
+    CPPUNIT_ASSERT_EQUAL(u"Total"_ustr, pDoc->GetString(ScAddress(0, 15, 0)));
+
+    // --- Undo: totals gone, in-place cells wiped, bottom still untouched ---
+    pDoc->GetUndoManager()->Undo();
+
+    pTop = findDBData(pDoc, u"Table2"_ustr);
+    pBottom = findDBData(pDoc, u"Table1"_ustr);
+    CPPUNIT_ASSERT(!pTop->HasTotals());
+    pTop->GetArea(aTopAfter);
+    CPPUNIT_ASSERT_EQUAL(SCROW(14), aTopAfter.aEnd.Row());
+    pBottom->GetArea(aBottomAfter);
+    CPPUNIT_ASSERT_EQUAL(aBottomBefore.aStart.Row(), aBottomAfter.aStart.Row());
+    CPPUNIT_ASSERT_EQUAL(aBottomBefore.aEnd.Row(), aBottomAfter.aEnd.Row());
+    CPPUNIT_ASSERT(!pDoc->HasData(0, 15, 0));
+
+    // --- Redo: totals back, still in-place ---
+    pDoc->GetUndoManager()->Redo();
+
+    pTop = findDBData(pDoc, u"Table2"_ustr);
+    pBottom = findDBData(pDoc, u"Table1"_ustr);
+    CPPUNIT_ASSERT(pTop->HasTotals());
+    pTop->GetArea(aTopAfter);
+    CPPUNIT_ASSERT_EQUAL(SCROW(15), aTopAfter.aEnd.Row());
+    pBottom->GetArea(aBottomAfter);
+    CPPUNIT_ASSERT_EQUAL(aBottomBefore.aStart.Row(), aBottomAfter.aStart.Row());
+    CPPUNIT_ASSERT_EQUAL(aBottomBefore.aEnd.Row(), aBottomAfter.aEnd.Row());
+    CPPUNIT_ASSERT_EQUAL(u"Total"_ustr, pDoc->GetString(ScAddress(0, 15, 0)));
+}
+
+// Same wider-neighbour layout, but with content in the in-place destination row before
+// the toggle. The operation must be refused (matches Excel) — the existing flag stays
+// off, the blocking value stays put, no undo step is recorded.
+CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testTotalRowToggleRefusedBlockedBand)
+{
+    createScDoc("xlsx/toggleTotalTearDet.xlsx");
+    ScDocument* pDoc = getScDoc();
+    CPPUNIT_ASSERT(pDoc);
+
+    ScTabViewShell* pViewShell = getViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+
+    goToCell(u"A4"_ustr);
+
+    // Block the in-place destination row (row 16, 0-indexed 15) in the band
+    pDoc->SetValue(ScAddress(1, 15, 0), 99.0);
+
+    ScDBData* pTop = findDBData(pDoc, u"Table2"_ustr);
+    CPPUNIT_ASSERT(pTop);
+    CPPUNIT_ASSERT(!pTop->HasTotals());
+
+    // Sanity check: the predicate reports refusal up-front (this is the path the
+    // sidebar uses to gate the toggle before dispatching).
+    CPPUNIT_ASSERT(pTop->WouldTableTotalsBeRefused(true));
+
+    // --- Attempt to toggle Total Row ON — must be refused ---
+    dispatchDatabaseSettings(pViewShell, pTop, true);
+
+    pTop = findDBData(pDoc, u"Table2"_ustr);
+    CPPUNIT_ASSERT(pTop);
+    CPPUNIT_ASSERT(!pTop->HasTotals()); // unchanged
+    ScRange aTop;
+    pTop->GetArea(aTop);
+    CPPUNIT_ASSERT_EQUAL(SCROW(14), aTop.aEnd.Row()); // unchanged
+
+    // Blocking value still where we put it
+    CPPUNIT_ASSERT_EQUAL(99.0, pDoc->GetValue(ScAddress(1, 15, 0)));
+}
+
 CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testFullColumnRefs)
 {
     createScDoc("xlsx/forum-mso-en4-134670.xlsx");

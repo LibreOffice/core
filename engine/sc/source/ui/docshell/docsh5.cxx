@@ -93,6 +93,20 @@ void ScDocShell::ErrorMessage(TranslateId pGlobStrId)
         pParent->grab_focus();
 }
 
+void ScDocShell::ErrorMessageAsync(TranslateId pGlobStrId)
+{
+    if (pGlobStrId && pGlobStrId == STR_PROTECTIONERR)
+    {
+        if (IsReadOnly())
+            pGlobStrId = STR_READONLYERR;
+    }
+
+    std::shared_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(
+        GetActiveDialogParent(), VclMessageType::Info, VclButtonsType::Ok,
+        ScResId(pGlobStrId)));
+    xInfoBox->runAsync(xInfoBox, [](sal_Int32) {});
+}
+
 bool ScDocShell::IsEditable() const
 {
     // import into read-only document is possible - must be extended if other filters use api

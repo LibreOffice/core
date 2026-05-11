@@ -236,7 +236,8 @@ public:
                       const ScSubTotalParam& rNewParam, SCROW nNewEndY,
                       ScDocumentUniquePtr pNewUndoDoc,
                       std::unique_ptr<ScDBCollection> pNewUndoDB,
-                      std::unique_ptr<ScDBCollection> pNewRedoDB);
+                      std::unique_ptr<ScDBCollection> pNewRedoDB,
+                      bool bInPlace = false);
 
     virtual void      Undo() override;
     virtual void      Redo() override;
@@ -252,6 +253,7 @@ private:
     ScDocumentUniquePtr xUndoDoc;
     std::unique_ptr<ScDBCollection> xUndoDB;
     std::unique_ptr<ScDBCollection> xRedoDB;
+    bool            mbInPlace;                      // Do was performed without row shift
 };
 
 class ScUndoQuery: public ScDBFuncUndo

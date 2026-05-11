@@ -266,6 +266,7 @@ public:
 
     SC_DLLPUBLIC static weld::Window*  GetActiveDialogParent();
     void            ErrorMessage(TranslateId pGlobStrId);
+    void            ErrorMessageAsync(TranslateId pGlobStrId);
     bool            IsEditable() const;
 
     /// check config if on file-open optimal row heights should run, or if the user should be asked
