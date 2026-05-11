@@ -138,6 +138,7 @@ public:
     void        SetAttrEntries(std::vector<ScAttrEntry> && vNewData);
 
     const ScPatternAttr*    GetPattern( SCROW nRow ) const;
+    const ScPatternAttr*    GetPatternRange( SCROW& rStartRow, SCROW& rEndRow, SCROW nRow ) const;
     const ScPatternAttr*    GetMostUsedPattern( SCROW nStartRow, SCROW nEndRow ) const;
     void        ApplySelectionStyle(const ScStyleSheet& rStyle, SCROW nTop, SCROW nBottom);
     void        ApplySelectionCache(ScItemPoolCache& rCache, SCROW nStartRow, SCROW nEndRow,
@@ -963,6 +964,11 @@ inline void ScColumn::ApplyBlockFrame(const SvxBoxItem& rLineOuter, const SvxBox
 inline const ScPatternAttr* ScColumnData::GetPattern( SCROW nRow ) const
 {
     return pAttrArray->GetPattern( nRow );
+}
+
+inline const ScPatternAttr* ScColumnData::GetPatternRange( SCROW& rStartRow, SCROW& rEndRow, SCROW nRow ) const
+{
+    return pAttrArray->GetPatternRange( rStartRow, rEndRow, nRow );
 }
 
 inline const SfxPoolItem& ScColumnData::GetAttr( SCROW nRow, sal_uInt16 nWhich ) const

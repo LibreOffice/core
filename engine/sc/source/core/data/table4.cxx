@@ -1302,34 +1302,40 @@ void  ScTable::FillSparkline(bool bVertical, SCCOLROW nFixed,
 void ScTable::GetBackColorArea(SCCOL& rStartCol, SCROW& /*rStartRow*/,
                                SCCOL& rEndCol, SCROW& rEndRow ) const
 {
-    bool bExtend;
     const SvxBrushItem* pDefBackground = &rDocument.GetPool()->GetUserOrPoolDefaultItem(ATTR_BACKGROUND);
 
     rStartCol = std::min<SCCOL>(rStartCol, aCol.size() - 1);
     rEndCol = std::min<SCCOL>(rEndCol, aCol.size() - 1);
 
-    do
+    const SCROW nMaxRow = rDocument.MaxRow();
+
+    while (rEndRow < nMaxRow)
     {
-        bExtend = false;
+        bool bExtend = false;
+        SCROW nMinRunEnd = nMaxRow;
 
-        if (rEndRow < rDocument.MaxRow())
+        for (SCCOL nCol = rStartCol; nCol <= rEndCol; ++nCol)
         {
-            for (SCCOL nCol = rStartCol; nCol <= rEndCol; ++nCol)
+            SCROW nTmpStartRow = 0, nTmpEndRow = nMaxRow;
+            const ScPatternAttr* pPattern =
+                GetColumnData(nCol).GetPatternRange(nTmpStartRow, nTmpEndRow, rEndRow + 1);
+            if (!pPattern)
+                continue;
+            const SvxBrushItem* pBackground = &pPattern->GetItem(ATTR_BACKGROUND);
+            if (!pPattern->GetItem(ATTR_CONDITIONAL).GetCondFormatData().empty() ||
+                (pBackground->GetColor() != COL_TRANSPARENT && pBackground != pDefBackground))
             {
-                const ScPatternAttr* pPattern = GetColumnData(nCol).GetPattern(rEndRow + 1);
-                const SvxBrushItem* pBackground = &pPattern->GetItem(ATTR_BACKGROUND);
-                if (!pPattern->GetItem(ATTR_CONDITIONAL).GetCondFormatData().empty() ||
-                    (pBackground->GetColor() != COL_TRANSPARENT && pBackground != pDefBackground))
-                {
-                    bExtend = true;
-                    break;
-                }
+                bExtend = true;
             }
-
-            if (bExtend)
-                ++rEndRow;
+            if (nTmpEndRow < nMinRunEnd)
+                nMinRunEnd = nTmpEndRow;
         }
-    } while (bExtend);
+
+        if (!bExtend)
+            break;
+
+        rEndRow = nMinRunEnd;
+    }
 }
 
 OUString ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW nEndY )
