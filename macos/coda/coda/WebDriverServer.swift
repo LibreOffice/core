@@ -223,11 +223,13 @@ final class WebDriverServer {
             }
 
             // POST /session/{id}/window  -- switch to window
+            //   W3C body:        {"handle": "<id>"}
+            //   JSON Wire body:  {"name":   "<id>"}
             if request.method == "POST" && subpath == ["window"] {
-                guard let json = try? JSONSerialization.jsonObject(with: request.body) as? [String: Any],
-                      let handle = json["handle"] as? String else {
+                let json = (try? JSONSerialization.jsonObject(with: request.body) as? [String: Any]) ?? [:]
+                guard let handle = (json["handle"] as? String) ?? (json["name"] as? String) else {
                     sendW3CError(connection: connection, error: "invalid argument",
-                                 message: "Missing 'handle' in body")
+                                 message: "Missing 'handle' or 'name' in body")
                     return
                 }
                 if switchHandler(handle) {
