@@ -10,7 +10,7 @@
  */
 
 // Parse the assembled JS bundle at a fixed ECMAScript version to
-// catch syntax newer than the minifier (uglify-js) can handle. Fails
+// catch syntax newer than the minifier (terser) can handle. Fails
 // with line/column on parse error.
 
 const fs = require('fs');
@@ -34,7 +34,7 @@ try {
 		`Bundle parse failed at line ${e.loc.line}, column ${e.loc.column}: ${e.message}`,
 	);
 	console.error(
-		`A dep or hand-written JS uses syntax newer than ES${ECMA_VERSION}, which uglify-js cannot parse. Check recent package.json updates.`,
+		`A dep or hand-written JS uses syntax newer than ES${ECMA_VERSION}, which terser cannot parse. Check recent package.json updates.`,
 	);
 	process.exit(1);
 }

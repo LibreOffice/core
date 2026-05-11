@@ -162,3 +162,5 @@ class TextSelections {
 		app.sectionContainer.removeSection(this.end.name);
 	}
 }
+
+(window as any).TextSelections = TextSelections;

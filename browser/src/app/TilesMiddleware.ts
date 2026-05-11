@@ -173,3 +173,5 @@ class TileManager {
 		TileManager.ensureInstance().touchImage(tile);
 	}
 }
+
+(window as any).TileManager = TileManager;

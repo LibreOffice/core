@@ -132,7 +132,7 @@ window.L.Map = window.L.Evented.extend({
 		this._addLayers(this.options.layers);
 		app.socket = new app.definitions.Socket(this);
 
-		this._progressBar = window.L.progressOverlay(new cool.Point.toPoint(150, 25));
+		this._progressBar = window.L.progressOverlay(cool.Point.toPoint(150, 25));
 
 		this._debug = new app.DebugManager(this);
 
