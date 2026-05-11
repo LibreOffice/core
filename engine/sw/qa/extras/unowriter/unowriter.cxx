@@ -1230,6 +1230,33 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTextConvertToTableLineSpacing)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(convertTwipToMm100(220)), aLineSpacing.Height);
 }
 
+CPPUNIT_TEST_FIXTURE(SwUnoWriter, testRenameTableCollision)
+{
+    // Create a new document and add two tables
+    createSwDoc();
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<lang::XMultiServiceFactory> xFac(xTextDocument, uno::UNO_QUERY_THROW);
+    auto xSimpleText = xTextDocument->getText();
+
+    auto addTable = [&]
+    {
+        uno::Reference<text::XTextTable> xTable(
+            xFac->createInstance(u"com.sun.star.text.TextTable"_ustr), uno::UNO_QUERY_THROW);
+        xSimpleText->insertTextContent(xSimpleText->getEnd(), xTable, true);
+        uno::Reference<container::XNamed> xNamed(xTable, uno::UNO_QUERY_THROW);
+        return xNamed;
+    };
+
+    auto xTable1 = addTable();
+    CPPUNIT_ASSERT_EQUAL(u"Table1"_ustr, xTable1->getName());
+    auto xTable2 = addTable();
+    CPPUNIT_ASSERT_EQUAL(u"Table2"_ustr, xTable2->getName());
+
+    // Without the accompanying change in place, this would have thrown an exception.
+    xTable1->setName(u"Table2"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"Table3"_ustr, xTable1->getName());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUnoWriter, testMultiSelect)
 {
     // Create a new document and add a text with several repeated sequences.

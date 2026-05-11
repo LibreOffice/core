@@ -3019,41 +3019,7 @@ void SwXTextTable::setName(const OUString& rName)
         throw uno::RuntimeException();
 
     if(pFormat)
-    {
-        const UIName aOldName( pFormat->GetName() );
-        const sw::TableFrameFormats* pFrameFormats = pFormat->GetDoc().GetTableFrameFormats();
-        for (size_t i = pFrameFormats->size(); i;)
-        {
-            const SwTableFormat* pTmpFormat = (*pFrameFormats)[--i];
-            if( !pTmpFormat->IsDefault() &&
-                pTmpFormat->GetName() == rName &&
-                            pFormat->GetDoc().IsUsed( *pTmpFormat ))
-            {
-                throw uno::RuntimeException();
-            }
-        }
-
-        pFormat->SetFormatName( UIName(rName) );
-
-        SwStartNode *pStNd;
-        SwNodeIndex aIdx( *pFormat->GetDoc().GetNodes().GetEndOfAutotext().StartOfSectionNode(), 1 );
-        while ( nullptr != (pStNd = aIdx.GetNode().GetStartNode()) )
-        {
-            ++aIdx;
-            SwNode *const pNd = & aIdx.GetNode();
-            if ( pNd->IsOLENode() &&
-                aOldName == static_cast<const SwOLENode*>(pNd)->GetChartTableName() )
-            {
-                static_cast<SwOLENode*>(pNd)->SetChartTableName( UIName(rName) );
-
-                SwTable* pTable = SwTable::FindTable( pFormat );
-                //TL_CHART2: chart needs to be notified about name changes
-                pFormat->GetDoc().UpdateCharts( pTable->GetFrameFormat()->GetName() );
-            }
-            aIdx.Assign( *pStNd->EndOfSectionNode(), + 1 );
-        }
-        pFormat->GetDoc().getIDocumentState().SetModified();
-    }
+        pFormat->GetDoc().SetTableName(*pFormat, UIName(rName));
     else
         m_pImpl->m_sTableName = rName;
 }

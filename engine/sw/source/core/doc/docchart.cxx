@@ -202,16 +202,10 @@ void SwDoc::SetTableName( SwFrameFormat& rTableFormat, const UIName &rInName )
         if( pNd && aOldName == pNd->GetChartTableName() )
         {
             pNd->SetChartTableName( aNewName );
-
-            SwTable* pTable = SwTable::FindTable( &rTableFormat );
-            SwChartDataProvider *pPCD = getIDocumentChartDataProviderAccess().GetChartDataProvider();
-            if (pPCD)
-                pPCD->InvalidateTable( pTable );
-            // following this the framework will now take care of repainting
-            // the chart or it's replacement image...
         }
         aIdx.Assign( *pStNd->EndOfSectionNode(), + 1 );
     }
+    UpdateCharts( aNewName );
     getIDocumentState().SetModified();
 }
 
