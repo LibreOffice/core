@@ -6,11 +6,11 @@
     <string name="app_vendor">ເວີຊັນນີ້ຖືກສະໜອງໃຫ້ໂດຍ $VENDOR.</string>
     <string name="no_recent_items">ກະລຸນາເປີດໄຟລ໌ໂດຍໃຊ້ໄອຄອນໂຟນເດີໃນແຖບເຄື່ອງມື.</string>
     <string name="no_items">ບໍ່ມີລາຍການ</string>
-    <string name="temp_file_saving_disabled">ໄຟລ໌ນີ້ແມ່ນສຳລັບອ່ານເທົ່ານັ້ນ, ການບັນທຶກຖືກປິດໃຊ້ງານ.</string>
+    <string name="temp_file_saving_disabled">ໄຟລ໌ນີ້ອ່ານໄດ້ຢ່າງດຽວ, ການບັນທຶກຖືກປິດໄວ້.</string>
     <string name="file_exists_warning">ມີໄຟລ໌ທີ່ມີຊື່ນີ້ຢູ່ແລ້ວ, ແລະ ຈະຖືກຂຽນທັບ.</string>
     <string name="file_creation_failed">ການສ້າງໄຟລ໌ຫຼົ້ມເຫຼວ</string>
     <string name="storage_permission_required">ຕ້ອງການການອະນຸຍາດເຂົ້າເຖິງບ່ອນເກັບຂໍ້ມູນ</string>
-    <string name="failed_to_load_file">ບໍ່ສາມາດກວດສອບໄຟລ໌ທີ່ຈະໂຫລດໄດ້</string>
+    <string name="failed_to_load_file">ບໍ່ສາມາດລະບຸໄຟລ໌ທີ່ຈະໂຫລດໄດ້</string>
     <string name="list_view">ລາຍການ</string>
     <string name="grid_view">ຕາຕະລາງ</string>
     <string name="pref_category_explorer">ການຕັ້ງຄ່າຕົວຈັດການໄຟລ໌</string>

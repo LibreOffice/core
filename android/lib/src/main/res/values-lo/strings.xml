@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="storage_permission_required">ຕ້ອງການການອະນຸຍາດເຂົ້າເຖິງບ່ອນເກັບຂໍ້ມູນ</string>
+    <string name="temp_file_saving_disabled">ໄຟລ໌ນີ້ອ່ານໄດ້ຢ່າງດຽວ, ການບັນທຶກຖືກປິດໄວ້.</string>
+    <string name="file_chromeos_read_only">ບໍ່ສາມາດບັນທຶກໄຟລ໌ນີ້ໄວ້ໃນບ່ອນນີ້ໄດ້, ກຳລັງເປີດແບບອ່ານໄດ້ຢ່າງດຽວ. ຍ້າຍໄຟລ໌ໄປໄວ້ໃນ Play files ເພື່ອໃຫ້ສາມາດອ່ານ ແລະ ຂຽນໄດ້ຢ່າງເຕັມທີ່.</string>
+    <string name="failed_to_load_file">ບໍ່ສາມາດລະບຸໄຟລ໌ທີ່ຈະໂຫລດໄດ້</string>
+    <string name="failed_to_insert_image">ບໍ່ສາມາດແຊກຮູບພາບໄດ້</string>
+    <string name="cannot_open_file_chooser">ບໍ່ສາມາດເປີດຕົວເລືອກໄຟລ໌ໄດ້</string>
+    <string name="preparing_for_the_first_start_after_an_update">ກຳລັງກຽມການເລີ່ມຕົ້ນຄັ້ງທຳອິດຫຼັງຈາກການອັບເດດ.</string>
+    <string name="rate_now">ໃຫ້ຄະແນນດຽວນີ້</string>
+    <string name="later">ພາຍຫຼັງ</string>
+    <string name="rate_our_app_title">ຂອບໃຈທີ່ນຳໃຊ້ %1$s!</string>
+    <string name="rate_our_app_text">ຖ້າເຈົ້າມັກ, ກະລຸນາໃຫ້ 5 ດາວແກ່ພວກເຮົາໃນ Google Play. ການຣີວິວທີ່ດີຂອງເຈົ້າຄືກຳລັງໃຈທີ່ດີທີ່ສຸດຂອງພວກເຮົາ.</string>
+    <string name="loading">ກຳລັງໂຫລດ...</string>
+    <string name="exiting">ກຳລັງອອກ...</string>
+    <string name="restarting">ກຳລັງເລີ່ມຕົ້ນໃໝ່...</string>
+    <string name="cant_open_the_document">ບໍ່ສາມາດເປີດເອກະສານໄດ້</string>
+    <string name="view_only">ເບິ່ງຢ່າງດຽວ</string>
+    <string name="edit_copy">ແກ້ໄຂສຳເນົາ</string>
+    <string name="ask_for_copy">ເອກະສານນີ້ອ່ານໄດ້ຢ່າງດຽວ. ເຈົ້າຕ້ອງການສ້າງສຳເນົາເພື່ອແກ້ໄຂບໍ່?</string>
+    <string name="use_text">ໃຊ້ຮູບແບບຂໍ້ຄວາມ</string>
+    <string name="use_odf">ໃຊ້ຮູບແບບ ODF</string>
+    <string name="ask_for_convert_odf">ຢືນຢັນຮູບແບບໄຟລ໌</string>
+    <string name="convert_odf_message">ເອກະສານນີ້ອາດມີການຈັດຮູບແບບ ຫຼື ເນື້ອໃນທີ່ບໍ່ສາມາດບັນທຶກໃນຮູບແບບໄຟລ໌ \"ຂໍ້ຄວາມ\" ທີ່ເລືອກໄວ້ໃນປະຈຸບັນໄດ້.</string>
+</resources>
