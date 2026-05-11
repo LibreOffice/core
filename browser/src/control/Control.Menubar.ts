@@ -1991,6 +1991,12 @@ class Menubar extends window.L.Control {
 						} else {
 							$(aItem).removeClass(constChecked);
 						}
+					} else if (id === 'multipageview') {
+						if (this._map.uiManager.isMultiPageView()) {
+							$(aItem).addClass(constChecked);
+						} else {
+							$(aItem).removeClass(constChecked);
+						}
 					} else if (id == 'toggledarktheme') {
 						if (window.prefs.getBoolean('darkTheme')) {
 							$(aItem).addClass(constChecked);

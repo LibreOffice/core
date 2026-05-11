@@ -1633,6 +1633,13 @@ class UIManager extends window.L.Control {
 		return document.getElementById('toolbar-down')?.style?.display !== 'none';
 	}
 
+	/**
+	 * Returns whether the multi-page view layout is active.
+	 */
+	isMultiPageView(): boolean {
+		return app.activeDocument?.activeLayout?.type === 'ViewLayoutMultiPage';
+	}
+
 	// Event handlers
 
 	/**
