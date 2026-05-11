@@ -27,6 +27,7 @@
       "./node_modules",
       "./node_modules/*",
       "js",
+      "scripts",
       "admin",
       "mocha_tests",
       "docs",

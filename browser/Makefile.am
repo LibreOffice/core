@@ -826,6 +826,8 @@ define bundle_all
 			-DCOOL_LIBS_JS=$(subst $(SPACE),$(COMMA),$(COOL_LIBS_JS_SRC)) \
 			-DCOOL_JS=$(INTERMEDIATE_DIR)/cool-src.js \
 			$(srcdir)/bundle.js.m4 > $(INTERMEDIATE_DIR)/bundle.js
+		@echo "Sanity-check: parsing bundle at ES2022..."
+		@$(NODE) $(srcdir)/scripts/check-bundle-syntax.js $(INTERMEDIATE_DIR)/bundle.js
 		@echo "Uglify cool js files..."
 		@$(NODE) node_modules/uglify-js/bin/uglifyjs \
 			-O max_line_len=100 \

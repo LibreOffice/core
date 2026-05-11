@@ -19,6 +19,7 @@
     "cypress-wait-until": "^3.0.1",
     "eslint": "7.19.0",
     "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-compat": "^4.2.0",
     "eslint-plugin-cypress-rules": "file:eslint_plugin",
     "get-port-cli": "2.0.0",
     "patch-package": "^8.0.1",
