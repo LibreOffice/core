@@ -174,6 +174,8 @@ public:
     bool CompleteDeferredLink();
     bool HasDeferredLink() const;
 
+    void SyncObjVisualArea(const css::uno::Reference<css::embed::XEmbeddedObject>& xObj);
+
     // allows to transfer the graphics to the object helper
     void SetGraphicToObj( const Graphic& aGraphic );
     void SetGraphicToObj( const css::uno::Reference< css::io::XInputStream >& xGrStream,
