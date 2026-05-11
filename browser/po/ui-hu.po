@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-11 14:06+0200\n"
-"PO-Revision-Date: 2026-03-20 21:36+0000\n"
+"PO-Revision-Date: 2026-05-11 13:37+0000\n"
 "Last-Translator: Andras Timar <andras.timar@collabora.com>\n"
-"Language-Team: Hungarian <https://hosted.weblate.org/projects/"
-"collabora-online/ui/hu/>\n"
-"Language: \n"
+"Language-Team: Hungarian <https://hosted.weblate.org/projects/collabora-"
+"online/collabora-ui/hu/>\n"
+"Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.17-dev\n"
+"X-Generator: Weblate 2026.5-dev\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -409,33 +409,31 @@ msgstr "Aláíró CA"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:432
 #: admin/src/integrator/AdminIntegratorSettings.ts:436
-#, fuzzy
 msgid "Provider"
-msgstr "Szolgáltató:"
+msgstr "Szolgáltató"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:433
 #: admin/src/integrator/AdminIntegratorSettings.ts:437
 msgid "API Key"
-msgstr ""
+msgstr "API-kulcs"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:434
 #: admin/src/integrator/AdminIntegratorSettings.ts:439
-#, fuzzy
 msgid "Model"
-msgstr "Mód"
+msgstr "Modell"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:435
 #: admin/src/integrator/AdminIntegratorSettings.ts:438
 msgid "Base URL"
-msgstr ""
+msgstr "Alap URL"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:440
 msgid "Image Size"
-msgstr ""
+msgstr "Képméret"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:441
 msgid "Request Timeout (seconds)"
-msgstr ""
+msgstr "Időtúllépés (másodperc)"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:444
 msgid "In-document Screen Reader"
@@ -455,11 +453,11 @@ msgstr "Sötét mód"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:446
 msgid "Smart Zoom"
-msgstr ""
+msgstr "Okos zoom"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:447
 msgid "Default Zoom"
-msgstr ""
+msgstr "Alapértelmezett zoom"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:448
 msgid "Compact layout"
@@ -860,68 +858,71 @@ msgid ""
 "Configure AI provider credentials and model. Models are fetched "
 "automatically when credentials change."
 msgstr ""
+"Állítsa be az AI-szolgáltató hozzáférési adatait és a modellt. A "
+"modellválasztékot automatikusan lehúzza a rendszer, amikor a hozzáférési "
+"adatok változnak."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1926
 msgid "Text Generation"
-msgstr ""
+msgstr "Szöveg létrehozása"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1976
 #: admin/src/integrator/AdminIntegratorSettings.ts:2082
 msgid "e.g."
-msgstr ""
+msgstr "pl."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1995
 #: admin/src/integrator/AdminIntegratorSettings.ts:2113
 #: admin/src/integrator/AdminIntegratorSettings.ts:2557
 #: admin/src/integrator/AdminIntegratorSettings.ts:2573
 msgid "Fetch models to select"
-msgstr ""
+msgstr "Választható modellek lehúzása"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2024
 msgid "Image Generation"
-msgstr ""
+msgstr "Kép létrehozása"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2029
 msgid "Same as Text AI"
-msgstr ""
+msgstr "Ugyanaz, mint a szöveghez"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2098
 msgid "Leave empty to use Text AI key"
-msgstr ""
+msgstr "Hagyja üresen a szöveges AI kulcsának használatához"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2360
 #: admin/src/integrator/AdminIntegratorSettings.ts:2447
 msgid "Fetching models..."
-msgstr ""
+msgstr "Modellek lehúzása..."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2389
 #: admin/src/integrator/AdminIntegratorSettings.ts:2399
 #: admin/src/integrator/AdminIntegratorSettings.ts:2476
 #: admin/src/integrator/AdminIntegratorSettings.ts:2486
 msgid "No models found"
-msgstr ""
+msgstr "Nem találhatóak modellek"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2409
 #: admin/src/integrator/AdminIntegratorSettings.ts:2496
 msgid "Models fetched successfully"
-msgstr ""
+msgstr "A modellek lehúzása sikerült"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2415
 #: admin/src/integrator/AdminIntegratorSettings.ts:2502
 msgid "Failed to fetch models"
-msgstr ""
+msgstr "A modellek lehúzása nem sikerült"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2425
 msgid "Invalid provider configuration"
-msgstr ""
+msgstr "Érvénytelen szolgáltatókonfiguráció"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2537
 msgid "None (disable image generation)"
-msgstr ""
+msgstr "Nincs (képgenerálás letiltva)"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2919
 msgid "Reset"
-msgstr ""
+msgstr "Alapállapot"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3038
 #: src/map/handler/Map.WOPI.js:793
@@ -1056,22 +1057,21 @@ msgid "Event handling has been delayed for an unexpectedly long time: {0}ms"
 msgstr "Az eseménykezelést váratlanul hosszú ideig késleltették: {0} ms"
 
 #: src/app/TableStylesService.ts:101
-#, fuzzy
 msgid "Light"
-msgstr "Fények"
+msgstr "Világos"
 
 #: src/app/TableStylesService.ts:103
 msgid "Medium"
-msgstr ""
+msgstr "Közepes"
 
 #: src/app/TableStylesService.ts:105
 msgid "Dark"
-msgstr ""
+msgstr "Sötét"
 
 #: src/app/TableStylesService.ts:107
 #: src/control/jsdialog/Widget.ColorPicker.ts:334
 msgid "Custom"
-msgstr ""
+msgstr "Egyéni"
 
 #: src/app/TableStylesService.ts:195 src/app/TableStylesService.ts:207
 #: src/app/TableStylesService.ts:209
@@ -1250,7 +1250,7 @@ msgstr "Automatikus szín"
 #: src/control/Control.AboutDialog.ts:89
 #: src/control/jsdialog/Widget.TreeView.ts:786
 msgid "(opens in new tab)"
-msgstr ""
+msgstr "(új lapon nyílik meg)"
 
 #: src/control/Control.AboutDialog.ts:148
 msgid "Served by: "
@@ -2768,7 +2768,7 @@ msgstr "Táblázattervező"
 
 #: src/control/Notebookbar.CalcTableTab.ts:72
 msgid "Table Options"
-msgstr ""
+msgstr "Táblázatbeállítások"
 
 #: src/control/Notebookbar.CalcTableTab.ts:85
 msgid "Header Row"
@@ -2975,7 +2975,7 @@ msgstr "Kép"
 #: src/control/Control.NotebookbarImpress.js:143
 #: src/control/Control.NotebookbarWriter.js:103
 msgid "Chart"
-msgstr ""
+msgstr "Diagram"
 
 #: src/control/Control.NotebookbarCalc.js:99
 #: src/control/Control.NotebookbarDraw.js:122
@@ -3044,7 +3044,7 @@ msgstr "Vágólap"
 #: src/control/Control.NotebookbarWriter.js:648
 #: src/control/Control.TopToolbar.js:148
 msgid "Clone Formatting (double click to keep active)"
-msgstr ""
+msgstr "Formátummásolás (dupla kattintással aktív marad)"
 
 #: src/control/Control.NotebookbarCalc.js:456
 #: src/control/Control.NotebookbarDraw.js:649
@@ -3053,6 +3053,8 @@ msgstr ""
 #: src/control/Control.TopToolbar.js:148
 msgid "Clone Formatting is active (click again or press Esc to exit)"
 msgstr ""
+"A formátummásolás aktív (a kilépéshez kattintson még egyszer vagy nyomja le "
+"az Esc billentyűt)"
 
 #: src/control/Control.NotebookbarCalc.js:492
 #: src/control/Control.NotebookbarDraw.js:685
@@ -3465,7 +3467,7 @@ msgstr "Diasablon"
 
 #: src/control/Control.NotebookbarImpress.js:479
 msgid "Start Slide Show"
-msgstr ""
+msgstr "Diavetítés indítása"
 
 #: src/control/Control.NotebookbarImpress.js:484
 msgid "From Beginning"
@@ -3485,7 +3487,7 @@ msgstr "Teljes képernyős mód, az aktuális diától kezdve"
 
 #: src/control/Control.NotebookbarImpress.js:508
 msgid "Present"
-msgstr ""
+msgstr "Vetítés"
 
 #: src/control/Control.NotebookbarImpress.js:514
 msgid "Present in Window"
@@ -3522,7 +3524,7 @@ msgstr "A diák megtekintése az előadó által vezérelt módon"
 
 #: src/control/Control.NotebookbarImpress.js:552
 msgid "Set Up"
-msgstr ""
+msgstr "Beállítás"
 
 #: src/control/Control.NotebookbarImpress.js:679
 msgid "Slide Views"
@@ -3682,28 +3684,28 @@ msgstr "Beillesztés"
 
 #: src/control/Control.PartsPreview.js:422
 msgid "Add Section"
-msgstr ""
+msgstr "Szakasz hozzáadása"
 
 #: src/control/Control.PartsPreview.js:564
 #: src/control/Control.PartsPreview.js:637
 msgid "Rename Section"
-msgstr ""
+msgstr "Szakasz átnevezése"
 
 #: src/control/Control.PartsPreview.js:571
 msgid "Move Section Up"
-msgstr ""
+msgstr "Szakasz felfelé mozgatása"
 
 #: src/control/Control.PartsPreview.js:579
 msgid "Move Section Down"
-msgstr ""
+msgstr "Szakasz lefelé mozgatása"
 
 #: src/control/Control.PartsPreview.js:586
 msgid "Remove Section"
-msgstr ""
+msgstr "Szakasz eltávolítása"
 
 #: src/control/Control.PartsPreview.js:638
 msgid "Enter new section name:"
-msgstr ""
+msgstr "Írja be az új szakasznevet:"
 
 #: src/control/Control.SaveState.ts:49
 msgid "Saving"
@@ -3902,11 +3904,11 @@ msgstr "Kijelöltek száma"
 
 #: src/control/Control.StatusBar.js:267
 msgid "Previous Page"
-msgstr ""
+msgstr "Előző oldal"
 
 #: src/control/Control.StatusBar.js:269
 msgid "Next Page"
-msgstr ""
+msgstr "Következő oldal"
 
 #: src/control/Control.StatusBar.js:275
 msgid "Zoom to Fit Page Width"
@@ -3914,7 +3916,7 @@ msgstr "Nagyítás az oldalszélességhez"
 
 #: src/control/Control.StatusBar.js:280
 msgid "Status Bar Menu"
-msgstr ""
+msgstr "Állapotsor menüje"
 
 #: src/control/Control.StatusBar.js:553
 msgid "The document is probably locked and has been opened as view-only"
@@ -4566,7 +4568,7 @@ msgstr "Egymás mellett"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1815
 msgid "Hidden"
-msgstr ""
+msgstr "Rejtett"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1829
 msgid "All users"
@@ -4798,7 +4800,7 @@ msgstr "Automatikus"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:253
 msgid "Palette"
-msgstr ""
+msgstr "Paletta"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:268
 msgid "Color palette"
@@ -4854,7 +4856,7 @@ msgstr "Kijelölt cellatartomány"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:44
 msgid "Cell Selection"
-msgstr ""
+msgstr "Cellakijelölés"
 
 # Mármint hogy insert vagy overwrite
 #: src/control/jsdialog/Widget.HTMLContent.ts:48
@@ -4863,7 +4865,7 @@ msgstr "Szövegbevitel módja"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:49
 msgid "Insert Mode"
-msgstr ""
+msgstr "Beszúrás mód"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:54
 msgid "Selection Mode"
@@ -4880,7 +4882,7 @@ msgstr "Függvények listája"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:68
 msgid "Table Cell Functions"
-msgstr ""
+msgstr "Táblázatcella-függvények"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:73
 msgid "Your changes have been saved"
@@ -5056,6 +5058,8 @@ msgstr "A kiszolgáló leáll"
 msgid ""
 "AI is not configured. Go to File > Options > View Settings to set it up."
 msgstr ""
+"Az AI nincs beállítva. Állítsa be a Fájl > Beállítások > Nézetbeállítások "
+"panelen."
 
 #: src/docdispatcher.ts:607
 msgid "Are you sure you want to delete this slide?"
