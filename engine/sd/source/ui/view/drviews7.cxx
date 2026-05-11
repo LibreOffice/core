@@ -819,7 +819,13 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         {
             rSet.DisableItem(SID_INSERTPAGE);
             rSet.DisableItem(SID_DUPLICATE_PAGE);
-            rSet.DisableItem(SID_MODIFYPAGE);
+            // SID_MODIFYPAGE intentionally not disabled here: in master view it
+            // still toggles the Slide Properties sidebar (PropertyDeck), which
+            // shows the Slide Background panel and (when an object is selected)
+            // position/size, area, line, shadow, text and other formatting
+            // panels. Only the layouts panel is filtered out, by its own
+            // context. Disabling the slot would silently drop the dispatch and
+            // hide the most discoverable entry point to those panels.
             rSet.ClearItem(SID_ANIMATION_OBJECTS);
             rSet.DisableItem(SID_ANIMATION_OBJECTS);
         }
