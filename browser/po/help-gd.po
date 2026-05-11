@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-20 12:14+0200\n"
-"PO-Revision-Date: 2020-10-08 12:25+0000\n"
-"Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
+"PO-Revision-Date: 2026-04-07 21:32+0000\n"
+"Last-Translator: Michael Bauer <teanga@igaidhlig.net>\n"
 "Language-Team: Gaelic <https://hosted.weblate.org/projects/collabora-online/"
 "help/gd/>\n"
 "Language: gd\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n==1 || n==11) ? 0 : (n==2 || n==12) ? 1 : "
 "(n > 2 && n < 20) ? 2 : 3;\n"
-"X-Generator: Translate Toolkit 3.6.0\n"
+"X-Generator: Weblate 5.17-dev\n"
 
 #: html/cool-help.html%2Bdiv.h1:9-5
 msgid "Keyboard Shortcuts"
@@ -2791,9 +2791,8 @@ msgid ""
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:683-5
-#, fuzzy
 msgid "How do I get a word count of my document?"
-msgstr "Rach gu toiseach sgrìobhainne"
+msgstr "Ciamar a gheibh mi cunntas nam faclan san sgrìobhainn agam?"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:684-5
 msgid ""
@@ -2918,9 +2917,8 @@ msgid "manage changes"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:718-5
-#, fuzzy
 msgid "How do I set the margins of the document?"
-msgstr "Rach gu toiseach sgrìobhainne"
+msgstr "Ciamar a shuidhicheas mi marghain na sgrìobhainne?"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:719-5
 msgid ""
@@ -3007,9 +3005,8 @@ msgid "Select the text you want to apply the new format."
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:748-5
-#, fuzzy
 msgid "Applying a paragraph style:"
-msgstr "Cuir an sàs an stoidhle paragraf “Ceann-sgrìobhadh 1”"
+msgstr "A’ cur an sàs stoidhle paragraf:"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:750-7
 msgid "Place the cursor at the paragraph to be formatted"
