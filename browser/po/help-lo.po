@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-20 12:14+0200\n"
+"POT-Creation-Date: 2026-05-11 14:06+0200\n"
 "PO-Revision-Date: 2026-04-22 06:09+0000\n"
 "Last-Translator: BoneNI <bounkirdni@gmail.com>\n"
 "Language-Team: Lao <https://hosted.weblate.org/projects/collabora-online/"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.17.1-dev\n"
+"X-Generator: Translate Toolkit 3.6.0\n"
 
 #: html/cool-help.html%2Bdiv.h1:9-5
 msgid "Keyboard Shortcuts"
@@ -1825,121 +1825,120 @@ msgstr "ຍ້າຍໄປທີ່ວັດຖຸຂໍ້ຄວາມຕໍ່
 msgid "Select all in drawing page"
 msgstr "ເລືອກທັງໝົດໃນໜ້າແຕ້ມຮູບ"
 
-#: html/cool-help.html%2Bdiv.h1:326-5
+#: html/cool-help.html%2Bdiv.h2:326-5
 msgid "<span class=\"productname\">{productname}</span> Help"
 msgstr "ໜ້າຊ່ວຍເຫຼືອ <span class=\"productname\">{productname}</span>"
 
-#: html/cool-help.html%2Bdiv.h2:327-5
-#: html/cool-help.html%2Bdiv.div.h3:362-5
+#: html/cool-help.html%2Bdiv.nav.ul.li:329-13
+#: html/cool-help.html%2Bdiv.div.h3:364-5
 msgid "Collaborative editing"
 msgstr "ການແກ້ໄຂຮ່ວມກັນ"
 
-#: html/cool-help.html%2Bdiv.h2:328-5
-#: html/cool-help.html%2Bdiv.div.h3:372-5
+#: html/cool-help.html%2Bdiv.nav.ul.li:330-13
+#: html/cool-help.html%2Bdiv.div.h3:374-5
 msgid "<span class=\"productname\">{productname}</span> user interface"
 msgstr "ສ່ວນຕິດຕໍ່ຜູ້ໃຊ້ <span class=\"productname\">{productname}</span>"
 
-#: html/cool-help.html%2Bdiv.h2:329-5
-#: html/cool-help.html%2Bdiv.div.h3:409-5
+#: html/cool-help.html%2Bdiv.nav.ul.li:331-13
+#: html/cool-help.html%2Bdiv.div.h3:411-5
 msgid "Opening, closing, saving, printing and downloading documents"
 msgstr "ການເປີດ, ປິດ, ບັນທຶກ, ພິມ ແລະ ດາວໂຫຼດເອກະສານ"
 
-#: html/cool-help.html%2Bdiv.h2:330-5
-#: html/cool-help.html%2Bdiv.div.h3:418-5
+#: html/cool-help.html%2Bdiv.nav.ul.li:332-13
+#: html/cool-help.html%2Bdiv.div.h3:420-5
 msgid "Editing documents"
 msgstr "ການແກ້ໄຂເອກະສານ"
 
-#: html/cool-help.html%2Bdiv.h2:331-5
-#: html/cool-help.html%2Bdiv.div.h2:337-9
-#: html/cool-help.html%2Bdiv.div.h2:352-9
-#: html/cool-help.html%2Bdiv.div.h3:448-3
-#: html/cool-help.html%2Bdiv.div.div.h3:508-5
-#: html/cool-help.html%2Bdiv.div.div.h3:619-5
+#: html/cool-help.html%2Bdiv.nav.ul.li:333-13
+#: html/cool-help.html%2Bdiv.nav.ul.li:339-13
+#: html/cool-help.html%2Bdiv.nav.ul.li:352-13
+#: html/cool-help.html%2Bdiv.div.h3:450-3
+#: html/cool-help.html%2Bdiv.div.div.h3:510-5
+#: html/cool-help.html%2Bdiv.div.div.h3:621-5
 msgid "Advanced features"
 msgstr "ຄຸນສົມບັດຂັ້ນສູງ"
 
-#: html/cool-help.html%2Bdiv.div.h2:333-9
-#: html/cool-help.html%2Bdiv.div.h3:486-5
+#: html/cool-help.html%2Bdiv.nav.ul.li:335-13
+#: html/cool-help.html%2Bdiv.div.h3:488-5
 msgid "<span class=\"productname\">{productname}</span> spreadsheets"
 msgstr "ສະເປຣດຊີດ <span class=\"productname\">{productname}</span>"
 
-#: html/cool-help.html%2Bdiv.div.h2:334-9
-#: html/cool-help.html%2Bdiv.div.div.h3:488-5
+#: html/cool-help.html%2Bdiv.nav.ul.li:336-13
+#: html/cool-help.html%2Bdiv.div.div.h3:490-5
 msgid "Editing spreadsheets"
 msgstr "ການແກ້ໄຂສະເປຣດຊີດ"
 
-#: html/cool-help.html%2Bdiv.div.h2:335-9
-#: html/cool-help.html%2Bdiv.div.div.h3:492-5
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:496-29
+#: html/cool-help.html%2Bdiv.nav.ul.li:337-13
+#: html/cool-help.html%2Bdiv.div.div.h3:494-5
 msgid "Formulas"
 msgstr "ສູດຄຳນວນ"
 
-#: html/cool-help.html%2Bdiv.div.h2:336-9
-#: html/cool-help.html%2Bdiv.div.div.h3:501-5
+#: html/cool-help.html%2Bdiv.nav.ul.li:338-13
+#: html/cool-help.html%2Bdiv.div.div.h3:503-5
 msgid "Formatting spreadsheets"
 msgstr "ການຈັດຮູບແບບສະເປຣດຊີດ"
 
-#: html/cool-help.html%2Bdiv.div.h2:338-9
-#: html/cool-help.html%2Bdiv.div.div.h3:762-5
+#: html/cool-help.html%2Bdiv.nav.ul.li:340-13
+#: html/cool-help.html%2Bdiv.div.div.h3:764-5
 msgid "Spreadsheets"
 msgstr "ສະເປຣດຊີດ"
 
-#: html/cool-help.html%2Bdiv.div.h2:341-9
-#: html/cool-help.html%2Bdiv.div.h3:550-5
+#: html/cool-help.html%2Bdiv.nav.ul.li:342-13
+#: html/cool-help.html%2Bdiv.div.h3:552-5
 msgid "<span class=\"productname\">{productname}</span> text documents"
 msgstr "ເອກະສານຂໍ້ຄວາມ <span class=\"productname\">{productname}</span>"
 
-#: html/cool-help.html%2Bdiv.div.h2:342-9
-#: html/cool-help.html%2Bdiv.div.div.h3:552-5
+#: html/cool-help.html%2Bdiv.nav.ul.li:343-13
+#: html/cool-help.html%2Bdiv.div.div.h3:554-5
 msgid "Editing text documents"
 msgstr "ການແກ້ໄຂເອກະສານຂໍ້ຄວາມ"
 
-#: html/cool-help.html%2Bdiv.div.h2:343-9
-#: html/cool-help.html%2Bdiv.div.div.h3:556-5
+#: html/cool-help.html%2Bdiv.nav.ul.li:344-13
+#: html/cool-help.html%2Bdiv.div.div.h3:558-5
 msgid "Context menus"
 msgstr "ເມນູບໍລິບົດ"
 
-#: html/cool-help.html%2Bdiv.div.h2:344-9
-#: html/cool-help.html%2Bdiv.div.div.h3:572-5
+#: html/cool-help.html%2Bdiv.nav.ul.li:345-13
+#: html/cool-help.html%2Bdiv.div.div.h3:574-5
 msgid "Advanced text document editor features"
 msgstr "ຄຸນສົມບັດຂັ້ນສູງຂອງຕົວແກ້ໄຂເອກະສານຂໍ້ຄວາມ"
 
-#: html/cool-help.html%2Bdiv.div.h2:345-9
-#: html/cool-help.html%2Bdiv.div.div.h3:681-5
+#: html/cool-help.html%2Bdiv.nav.ul.li:346-13
+#: html/cool-help.html%2Bdiv.div.div.h3:683-5
 msgid "Text documents"
 msgstr "ເອກະສານຂໍ້ຄວາມ"
 
-#: html/cool-help.html%2Bdiv.div.h2:348-9
-#: html/cool-help.html%2Bdiv.div.h3:599-5
+#: html/cool-help.html%2Bdiv.nav.ul.li:348-13
+#: html/cool-help.html%2Bdiv.div.h3:601-5
 msgid "<span class=\"productname\">{productname}</span> presentations"
 msgstr "ງານນຳສະເໜີ <span class=\"productname\">{productname}</span>"
 
-#: html/cool-help.html%2Bdiv.div.h2:349-9
-#: html/cool-help.html%2Bdiv.div.div.h3:601-5
+#: html/cool-help.html%2Bdiv.nav.ul.li:349-13
+#: html/cool-help.html%2Bdiv.div.div.h3:603-5
 msgid "Editing presentations"
 msgstr "ການແກ້ໄຂງານນຳສະເໜີ"
 
-#: html/cool-help.html%2Bdiv.div.h2:350-9
-#: html/cool-help.html%2Bdiv.div.div.h3:605-5
+#: html/cool-help.html%2Bdiv.nav.ul.li:350-13
+#: html/cool-help.html%2Bdiv.div.div.h3:607-5
 msgid "Slide show"
 msgstr "ການສະແດງສະໄລ້"
 
-#: html/cool-help.html%2Bdiv.div.h2:351-9
-#: html/cool-help.html%2Bdiv.div.div.h3:612-5
+#: html/cool-help.html%2Bdiv.nav.ul.li:351-13
+#: html/cool-help.html%2Bdiv.div.div.h3:614-5
 msgid "Slide pane"
 msgstr "ແຖບສະໄລ້"
 
-#: html/cool-help.html%2Bdiv.div.h2:353-9
-#: html/cool-help.html%2Bdiv.div.div.h3:801-5
+#: html/cool-help.html%2Bdiv.nav.ul.li:353-13
+#: html/cool-help.html%2Bdiv.div.div.h3:803-5
 msgid "Presentations"
 msgstr "ງານນຳສະເໜີ"
 
-#: html/cool-help.html%2Bdiv.h2:355-5
-#: html/cool-help.html%2Bdiv.div.h3:631-5
+#: html/cool-help.html%2Bdiv.nav.ul.li:355-13
+#: html/cool-help.html%2Bdiv.div.h3:633-5
 msgid "Frequently Asked Questions"
 msgstr "ຄຳຖາມທີ່ຖາມເລື້ອຍໆ"
 
-#: html/cool-help.html%2Bdiv.div.p:358-5
+#: html/cool-help.html%2Bdiv.div.p:360-5
 msgid ""
 "<span class=\"productname\">{productname}</span> allows you to create and "
 "edit office documents text documents, spreadsheets and presentations "
@@ -1951,7 +1950,7 @@ msgstr ""
 "ໄດ້ໂດຍກົງໃນບຣາວເຊີຂອງທ່ານ, ດ້ວຍວິທີທີ່ງ່າຍດາຍ ແລະ ຊັດເຈນ. ທ່ານສາມາດເຮັດວຽກຄົ"
 "ນດຽວໃນເອກະສານ, ຫຼື ຮ່ວມມືກັນເປັນທີມ."
 
-#: html/cool-help.html%2Bdiv.div.div.ul.li:365-7
+#: html/cool-help.html%2Bdiv.div.div.ul.li:367-7
 msgid ""
 "Each user gets assigned a color. The cursor of each user will be shown in "
 "the assigned color. Note: you will see your cursor as black, blinking "
@@ -1961,7 +1960,7 @@ msgstr ""
 "ເຄີເຊີຂອງຜູ້ໃຊ້ແຕ່ລະຄົນຈະສະແດງເປັນສີທີ່ກຳໜົດໄວ້. ໝາຍເຫດ: "
 "ທ່ານຈະເຫັນເຄີເຊີຂອງທ່ານເປັນສີດຳກະພິບ, ໃນຂະນະທີ່ຄົນອື່ນຈະເຫັນທ່ານເປັນສີອື່ນ."
 
-#: html/cool-help.html%2Bdiv.div.div.ul.li:366-7
+#: html/cool-help.html%2Bdiv.div.div.ul.li:368-7
 msgid ""
 "You can jump to the cursor of a user by clicking on the name (or avatar) of "
 "the user. It is possible to follow the editor."
@@ -1969,7 +1968,7 @@ msgstr ""
 "ທ່ານສາມາດກະໂດດໄປທີ່ເຄີເຊີຂອງຜູ້ໃຊ້ໄດ້ໂດຍການຄລິກໃສ່ຊື່ (ຫຼື ຮູບແທນຕົວ) "
 "ຂອງຜູ້ໃຊ້ນັ້ນ. ສາມາດຕິດຕາມຜູ້ແກ້ໄຂໄດ້."
 
-#: html/cool-help.html%2Bdiv.div.div.ul.li:367-7
+#: html/cool-help.html%2Bdiv.div.div.ul.li:369-7
 msgid ""
 "<span class=\"productname\">{productname}</span> notifies you with a small "
 "notification in the footer when a new user enters or when a user leaves."
@@ -1978,7 +1977,7 @@ msgstr ""
 "ຈະແຈ້ງເຕືອນທ່ານດ້ວຍການແຈ້ງເຕືອນນ້ອຍໆຢູ່ທ້າຍເອກະສານເມື່ອມີຜູ້ໃຊ້ໃໝ່ເຂົ້າມາ ຫຼື"
 " ເມື່ອມີຜູ້ໃຊ້ອອກໄປ."
 
-#: html/cool-help.html%2Bdiv.div.div.p:373-30
+#: html/cool-help.html%2Bdiv.div.div.p:375-30
 msgid ""
 "<span class=\"productname\">{productname}</span> uses modern browser "
 "resources to adapt the user interface to the size of the viewing area, "
@@ -1989,7 +1988,7 @@ msgstr ""
 "ໄໝເພື່ອປັບສ່ວນຕິດຕໍ່ຜູ້ໃຊ້ໃຫ້ເຂົ້າກັບຂະໜາດຂອງພື້ນທີ່ສະແດງຜົນ, "
 "ລວມທັງໜ້າຈໍຂະໜາດນ້ອຍທີ່ພົບໃນອຸປະກອນມືຖື. ສ່ວນຕິດຕໍ່ປະກອບດ້ວຍ:"
 
-#: html/cool-help.html%2Bdiv.div.div.p:375-5
+#: html/cool-help.html%2Bdiv.div.div.p:377-5
 msgid ""
 "<span class=\"def\">The document area:</span> The application area shows the "
 "document contents, either spreadsheets, presentations or text documents."
@@ -1997,7 +1996,7 @@ msgstr ""
 "<span class=\"def\">ພື້ນທີ່ເອກະສານ:</span> ພື້ນທີ່ຂອງແອັບພລິເຄຊັນສະແດງເນື້"
 "ອໃນຂອງເອກະສານ, ບໍ່ວ່າຈະເປັນສະເປຣດຊີດ, ງານນຳສະເໜີ ຫຼື ເອກະສານຂໍ້ຄວາມ."
 
-#: html/cool-help.html%2Bdiv.div.div.p:378-5
+#: html/cool-help.html%2Bdiv.div.div.p:380-5
 msgid ""
 "<span class=\"def\">The menu bar:</span> The main menu is at the top and "
 "includes many options, such as commands for printing, editing, viewing, and "
@@ -2007,14 +2006,15 @@ msgid ""
 "click the show icon <span class=\"w2ui-icon unfold icon-size\" role=\"img\" "
 "aria-label=\"show menu bar\" title=\"Show menu bar\"></span>."
 msgstr ""
-"<span class=\"def\">ແຖບເມນູ:</span> ເມນູຫຼັກຈະຢູ່ທາງດ້ານເທິງ ແລະ ປະກອບມີຫຼາຍຕົວເລືອກ, ເຊັ່"
-"ນ: ຄຳສັ່ງສຳລັບການພິມ, ການແກ້ໄຂ, ການເບິ່ງ, ແລະ ຄຳສັ່ງຂັ້ນສູງອື່ນໆ. ທ່ານສາມາດເຊື່ອງແຖບເມນູໄດ້ໂດຍກາ"
-"ນຄລິກໄອຄອນເຊື່ອງ <span class=\"w2ui-icon fold icon-size\" role=\"img\" aria-"
-"label=\"hide menu bar\" title=\"Hide menu bar\"></span> ຢູ່ເບື້ອງຂວາມືສຸດ. ເພື່ອໃຫ້ສະແ"
-"ດງຄືນໃໝ່, ໃຫ້ຄລິກໄອຄອນສະແດງ <span class=\"w2ui-icon unfold icon-size\" "
-"role=\"img\" aria-label=\"show menu bar\" title=\"Show menu bar\"></span>."
+"<span class=\"def\">ແຖບເມນູ:</span> ເມນູຫຼັກຈະຢູ່ທາງດ້ານເທິງ ແລະ "
+"ປະກອບມີຫຼາຍຕົວເລືອກ, ເຊັ່ນ: ຄຳສັ່ງສຳລັບການພິມ, ການແກ້ໄຂ, ການເບິ່ງ, ແລະ "
+"ຄຳສັ່ງຂັ້ນສູງອື່ນໆ. ທ່ານສາມາດເຊື່ອງແຖບເມນູໄດ້ໂດຍການຄລິກໄອຄອນເຊື່ອງ <span "
+"class=\"w2ui-icon fold icon-size\" role=\"img\" aria-label=\"hide menu bar\" "
+"title=\"Hide menu bar\"></span> ຢູ່ເບື້ອງຂວາມືສຸດ. ເພື່ອໃຫ້ສະແດງຄືນໃໝ່, "
+"ໃຫ້ຄລິກໄອຄອນສະແດງ <span class=\"w2ui-icon unfold icon-size\" role=\"img\" "
+"aria-label=\"show menu bar\" title=\"Show menu bar\"></span>."
 
-#: html/cool-help.html%2Bdiv.div.div.p:381-5
+#: html/cool-help.html%2Bdiv.div.div.p:383-5
 msgid ""
 "<span class=\"def\">Context menus:</span> On clicking with the right mouse "
 "button, a menu appears with commands associated with the underlying object."
@@ -2022,7 +2022,7 @@ msgstr ""
 "<span class=\"def\">ເມນູບໍລິບົດ:</span> ເມື່ອຄລິກຂວາ, "
 "ເມນູຈະປາກົດຂຶ້ນພ້ອມກັບຄຳສັ່ງທີ່ກ່ຽວຂ້ອງກັບວັດຖຸທີ່ຢູ່ດ້ານລຸ່ມ."
 
-#: html/cool-help.html%2Bdiv.div.div.p:384-5
+#: html/cool-help.html%2Bdiv.div.div.p:386-5
 msgid ""
 "<span class=\"def\">The toolbar:</span> The toolbar contains the most used "
 "options for daily editing. Toolbar buttons are dynamic, meaning that their "
@@ -2033,7 +2033,7 @@ msgstr ""
 "ປຸ່ມໃນແຖບເຄື່ອງມືແມ່ນແບບເຄື່ອນໄຫວ, ໝາຍຄວາມວ່າສະຖານະຂອງມັນ (ເປີດ ຫຼື ປິດ) "
 "ຂຶ້ນຢູ່ກັບປັດໄຈຕ່າງໆ."
 
-#: html/cool-help.html%2Bdiv.div.div.p:387-5
+#: html/cool-help.html%2Bdiv.div.div.p:389-5
 msgid ""
 "<span class=\"def\">The status bar:</span> The status bar is shown in the "
 "bottom, and contains several useful options and features."
@@ -2041,11 +2041,13 @@ msgstr ""
 "<span class=\"def\">ແຖບສະຖານະ:</span> ແຖບສະຖານະຈະສະແດງຢູ່ດ້ານລຸ່ມ, ແລະ "
 "ປະກອບດ້ວຍຕົວເລືອກ ແລະ ຄຸນສົມບັດທີ່ເປັນປະໂຫຍດຫຼາຍຢ່າງ."
 
-#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:388-29
-msgid "The status bar"
-msgstr "ແຖບສະຖານະ"
+#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:390-29
+msgid ""
+"Status bar showing page number, word count, insert mode, selection mode, "
+"language, edit mode, navigation, zoom, and search"
+msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.p:391-5
+#: html/cool-help.html%2Bdiv.div.div.p:393-5
 msgid ""
 "<span class=\"def\">The search bar:</span> Searching starts automatically "
 "when content is inserted in the search box, and the document window "
@@ -2057,19 +2059,20 @@ msgstr ""
 "ໜ້າຕ່າງເອກະສານຈະຍ້າຍໄປທີ່ຜົນການຄົ້ນພົບທຳອິດໂດຍອັດຕະໂນມັດ. "
 "ການຄົ້ນຫາບໍ່ໄດ້ຈຳແນກຕົວພິມໃຫຍ່-ນ້ອຍ. ມີສາມປຸ່ມຢູ່ຖັດຈາກກ່ອງຄົ້ນຫາ:"
 
-#: html/cool-help.html%2Bdiv.div.div.ul.li:393-7
-msgid "Search backwards>"
+#: html/cool-help.html%2Bdiv.div.div.ul.li:395-7
+#, fuzzy
+msgid "Search backwards"
 msgstr "ຄົ້ນຫາຍ້ອນຫຼັງ"
 
-#: html/cool-help.html%2Bdiv.div.div.ul.li:394-7
+#: html/cool-help.html%2Bdiv.div.div.ul.li:396-7
 msgid "Search forward"
 msgstr "ຄົ້ນຫາໄປໜ້າ"
 
-#: html/cool-help.html%2Bdiv.div.div.ul.li:395-7
+#: html/cool-help.html%2Bdiv.div.div.ul.li:397-7
 msgid "Cancel the search (appears only when a text has been searched)"
 msgstr "ຍົກເລີກການຄົ້ນຫາ (ຈະປາກົດຂຶ້ນເມື່ອມີການຄົ້ນຫາຂໍ້ຄວາມແລ້ວເທົ່ານັ້ນ)"
 
-#: html/cool-help.html%2Bdiv.div.div.p:399-5
+#: html/cool-help.html%2Bdiv.div.div.p:401-5
 msgid ""
 "<span class=\"def\">The zoom bar:</span> The zoom bar includes buttons to "
 "reset zoom to 100%, zoom out and zoom in. The zoom applies to the document "
@@ -2081,7 +2084,7 @@ msgstr ""
 "ການຊູມຈະນຳໃຊ້ກັບພື້ນທີ່ເອກະສານ, ສ່ວນຕິດຕໍ່ຜູ້ໃຊ້ຈະບໍ່ໄດ້ຮັບຜົນກະທົບ. "
 "ລະດັບການຊູມປັດຈຸບັນຈະສະແດງຢູ່ໃນພື້ນທີ່ນີ້."
 
-#: html/cool-help.html%2Bdiv.div.div.p:400-5
+#: html/cool-help.html%2Bdiv.div.div.p:402-5
 msgid ""
 "Text, charts, shapes and svg images will stay sharp, when zooming in, you "
 "will only see pixels appear at inserted images, such as jpg’s or png’s."
@@ -2089,12 +2092,12 @@ msgstr ""
 "ຂໍ້ຄວາມ, ແຜນວາດ, ຮູບຮ່າງ ແລະ ຮູບພາບ svg ຈະຍັງຄົງຄົມຊັດ, ເມື່ອຊູມເຂົ້າ, "
 "ທ່ານຈະເຫັນພຽງແຕ່ພິກເຊລທີ່ປາກົດໃນຮູບພາບທີ່ໃສ່, ເຊັ່ນ jpg ຫຼື png."
 
-#: html/cool-help.html%2Bdiv.div.div.p:401-5
+#: html/cool-help.html%2Bdiv.div.div.p:403-5
 msgid "Using the browser zoom affects the document and user interface areas."
 msgstr ""
 "ການໃຊ້ການຊູມຂອງບຣາວເຊີຈະມີຜົນກະທົບຕໍ່ພື້ນທີ່ເອກະສານ ແລະ ສ່ວນຕິດຕໍ່ຜູ້ໃຊ້."
 
-#: html/cool-help.html%2Bdiv.div.div.p:404-5
+#: html/cool-help.html%2Bdiv.div.div.p:406-5
 msgid ""
 "<span class=\"def\">The information bar:</span> The information bar displays "
 "details about the current document. The actual information depends on the "
@@ -2104,19 +2107,20 @@ msgstr ""
 "ແຖບຂໍ້ມູນສະແດງລາຍລະອຽດກ່ຽວກັບເອກະສານປັດຈຸບັນ. "
 "ຂໍ້ມູນຕົວຈິງແມ່ນຂຶ້ນກັບລັກສະນະຂອງເອກະສານ."
 
-#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:405-29
-msgid "The information bar"
-msgstr "ແຖບຂໍ້ມູນ"
+#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:407-29
+msgid ""
+"Information bar showing page navigation arrows, zoom controls, and zoom level"
+msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.p:410-5
+#: html/cool-help.html%2Bdiv.div.p:412-5
 msgid ""
 "Your documents are stored and managed in the cloud storage that is "
 "integrated with <span class=\"productname\">{productname}</span>."
 msgstr ""
-"ເອກະສານຂອງທ່ານຖືກເກັບຮັກສາ ແລະ ຈັດການຢູ່ໃນບ່ອນເກັບຂໍ້ມູນຄລາວທີ່ເຊື່ອມໂຍງກັບ <span "
-"class=\"productname\">{productname}</span>."
+"ເອກະສານຂອງທ່ານຖືກເກັບຮັກສາ ແລະ ຈັດການຢູ່ໃນບ່ອນເກັບຂໍ້ມູນຄລາວທີ່ເຊື່ອມໂຍງກັບ "
+"<span class=\"productname\">{productname}</span>."
 
-#: html/cool-help.html%2Bdiv.div.div.p:411-30
+#: html/cool-help.html%2Bdiv.div.div.p:413-30
 msgid ""
 "To download a document download it from the <span class=\"productname\""
 ">{productname}</span> application’s <span class=\"ui\">File</span> menu. The "
@@ -2128,7 +2132,7 @@ msgstr ""
 "ຮູບແບບການດາວໂຫຼດທີ່ມີຢູ່ຈະຂຶ້ນຢູ່ກັບແອັບພລິເຄຊັນ. "
 "ທຸກແອັບພລິເຄຊັນສາມາດສົ່ງອອກເອກະສານໃນຮູບແບບ PDF."
 
-#: html/cool-help.html%2Bdiv.div.div.p:412-30
+#: html/cool-help.html%2Bdiv.div.div.p:414-30
 msgid ""
 "To open document, click on the file to open the <span class=\"productname\""
 ">{productname}</span> module associated to the document format."
@@ -2136,7 +2140,7 @@ msgstr ""
 "ເພື່ອເປີດເອກະສານ, ຄລິກໃສ່ໄຟລ໌ເພື່ອເປີດໂມດູນ <span class=\"productname\""
 ">{productname}</span> ທີ່ກ່ຽວຂ້ອງກັບຮູບແບບເອກະສານ."
 
-#: html/cool-help.html%2Bdiv.div.div.p:413-30
+#: html/cool-help.html%2Bdiv.div.div.p:415-30
 msgid ""
 "Documents in <span class=\"productname\">{productname}</span> save "
 "automatically, but if you are concerned that a document is synchronized as "
@@ -2148,21 +2152,22 @@ msgstr ""
 "ທ່ານສາມາດບັງຄັບການບັນທຶກໂດຍໃຊ້ລາຍການ <span class=\"ui\">ບັນທຶກ</span> ໃນເມນູ "
 "<span class=\"ui\">ໄຟລ໌</span>."
 
-#: html/cool-help.html%2Bdiv.div.div.p:414-30
+#: html/cool-help.html%2Bdiv.div.div.p:416-30
 msgid ""
 "Depending on the capabilities of your browser, the print window may appear "
 "or a “Download PDF export?” popup appears. You can print this PDF in your "
 "favorite PDF reader."
 msgstr ""
-"ຂຶ້ນຢູ່ກັບຄວາມສາມາດຂອງບຣາວເຊີຂອງທ່ານ, ໜ້າຕ່າງການພິມອາດຈະປາກົດຂຶ້ນ ຫຼື ປັອບອັບ \"ດາວໂຫຼດການສົ່ງອອ"
-"ກ PDF?\" ຈະສະແດງ. ທ່ານສາມາດພິມ PDF ນີ້ໃນໂປຣແກຣມອ່ານ PDF ທີ່ທ່ານມັກ."
+"ຂຶ້ນຢູ່ກັບຄວາມສາມາດຂອງບຣາວເຊີຂອງທ່ານ, ໜ້າຕ່າງການພິມອາດຈະປາກົດຂຶ້ນ ຫຼື ປັອບອັ"
+"ບ \"ດາວໂຫຼດການສົ່ງອອກ PDF?\" ຈະສະແດງ. ທ່ານສາມາດພິມ PDF ນີ້ໃນໂປຣແກຣມອ່ານ PDF "
+"ທີ່ທ່ານມັກ."
 
-#: html/cool-help.html%2Bdiv.div.div.p:415-30
+#: html/cool-help.html%2Bdiv.div.div.p:417-30
 msgid ""
 "When closing a document, it is automatically saved if it has been changed."
 msgstr "ເມື່ອປິດເອກະສານ, ມັນຈະຖືກບັນທຶກໂດຍອັດຕະໂນມັດຖ້າມີການປ່ຽນແປງ."
 
-#: html/cool-help.html%2Bdiv.div.p:419-5
+#: html/cool-help.html%2Bdiv.div.p:421-5
 msgid ""
 "Document editing should be familiar to everyone that has used an office "
 "application before, but here are some distinctive features:"
@@ -2170,11 +2175,11 @@ msgstr ""
 "ການແກ້ໄຂເອກະສານຄວນຈະຄຸ້ນເຄີຍກັບທຸກຄົນທີ່ເຄີຍໃຊ້ແອັບພລິເຄຊັນສຳນັກງານມາກ່ອນ, "
 "ແຕ່ນີ້ແມ່ນຄຸນສົມບັດທີ່ໂດດເດັ່ນບາງຢ່າງ:"
 
-#: html/cool-help.html%2Bdiv.div.div.h4:421-5
+#: html/cool-help.html%2Bdiv.div.div.h4:423-5
 msgid "Copy and Paste"
 msgstr "ການສຳເນົາ ແລະ ວາງ"
 
-#: html/cool-help.html%2Bdiv.div.div.p:422-5
+#: html/cool-help.html%2Bdiv.div.div.p:424-5
 msgid ""
 "Rich content copy/cut and paste is supported, not only within a given "
 "document, but also across documents on the same or different <span class="
@@ -2190,19 +2195,20 @@ msgid ""
 "tapping, and using a long-tap to access copy/cut/paste via the context menu "
 "is required."
 msgstr ""
-"ຮອງຮັບການສຳເນົາ/ຕັດ ແລະ ວາງເນື້ອຫາທີ່ສົມບູນ, ບໍ່ພຽງແຕ່ພາຍໃນເອກະສານທີ່ກຳໜົດໃຫ້, ແຕ່ຍັງຂ້າມເອກະສານ"
-"ໃນ <span class=\"productname\">{productname}</span> ດຽວກັນ ຫຼື ຕ່າງກັນ. ສຳລັບການນຳໃ"
-"ຊ້ພາຍໃນເຫຼົ່ານີ້, ຜູ້ໃຊ້ສາມາດສຳເນົາ/ຕັດເນື້ອຫາ, ລວມທັງຮູບພາບ ແລະ ເນື້ອຫາປະສົມ, ໃນ PC ໂດຍການໃຊ້ປຸ່ມ"
-"ລັດແປ້ນພິມໂດຍກົງ (<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">"
-"+</span><kbd>X</kbd>, <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-"
-"hidden=\"true\">+</span><kbd>C</kbd>, <kbd>Ctrl</kbd><span class=\"kbd--"
-"plus\" aria-hidden=\"true\">+</span><kbd>V</kbd>). ເພື່ອຄວາມປອດໄພ, ຈຳເປັນຕ້ອງໃຊ້ "
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"V</kbd> ເພື່ອວາງໃນ PC, ແຕ່ສາມາດໃຊ້ເມນູບໍລິບົດສຳລັບການຕັດ ແລະ ສຳເນົາໄດ້. ໃນ Android ຫຼື "
-"iOS, ຈຳເປັນຕ້ອງເລືອກຂໍ້ຄວາມໂດຍການແຕະສອງຄັ້ງ, ແລະ ໃຊ້ການແຕະຄ້າງໄວ້ເພື່ອເຂົ້າເຖິງການສຳເນົາ/ຕັດ/ວ"
-"າງຜ່ານເມນູບໍລິບົດ."
+"ຮອງຮັບການສຳເນົາ/ຕັດ ແລະ ວາງເນື້ອຫາທີ່ສົມບູນ, ບໍ່ພຽງແຕ່ພາຍໃນເອກະສານທີ່ກຳໜົດໃຫ້"
+", ແຕ່ຍັງຂ້າມເອກະສານໃນ <span class=\"productname\">{productname}</span> ດຽວກັ"
+"ນ ຫຼື ຕ່າງກັນ. ສຳລັບການນຳໃຊ້ພາຍໃນເຫຼົ່ານີ້, ຜູ້ໃຊ້ສາມາດສຳເນົາ/ຕັດເນື້ອຫາ, "
+"ລວມທັງຮູບພາບ ແລະ ເນື້ອຫາປະສົມ, ໃນ PC ໂດຍການໃຊ້ປຸ່ມລັດແປ້ນພິມໂດຍກົງ "
+"(<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
+">+</span><kbd>X</kbd>, <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden="
+"\"true\">+</span><kbd>C</kbd>, <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-"
+"hidden=\"true\">+</span><kbd>V</kbd>). ເພື່ອຄວາມປອດໄພ, ຈຳເປັນຕ້ອງໃຊ້ "
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
+">+</span><kbd>V</kbd> ເພື່ອວາງໃນ PC, ແຕ່ສາມາດໃຊ້ເມນູບໍລິບົດສຳລັບການຕັດ ແລະ "
+"ສຳເນົາໄດ້. ໃນ Android ຫຼື iOS, ຈຳເປັນຕ້ອງເລືອກຂໍ້ຄວາມໂດຍການແຕະສອງຄັ້ງ, ແລະ "
+"ໃຊ້ການແຕະຄ້າງໄວ້ເພື່ອເຂົ້າເຖິງການສຳເນົາ/ຕັດ/ວາງຜ່ານເມນູບໍລິບົດ."
 
-#: html/cool-help.html%2Bdiv.div.div.p:423-5
+#: html/cool-help.html%2Bdiv.div.div.p:425-5
 msgid ""
 "To copy larger pieces of content to other applications on your device, users "
 "need to press the <span class=\"ui\">Start download</span> button, and then "
@@ -2219,11 +2225,11 @@ msgstr ""
 "ແລະ ຈຳເປັນພຽງແຕ່ເພື່ອສົ່ງອອກເນື້ອຫາສຳລັບການວາງໃນແອັບພລິເຄຊັນພາຍນອກ. "
 "ຂັ້ນຕອນນີ້ຍັງປ່ຽນປະເພດວັດຖຸທີ່ຊັບຊ້ອນໃຫ້ເປັນຮູບພາບຄົງທີ່."
 
-#: html/cool-help.html%2Bdiv.div.div.h4:426-5
+#: html/cool-help.html%2Bdiv.div.div.h4:428-5
 msgid "Document repair"
 msgstr "ການສ້ອມແປງເອກະສານ"
 
-#: html/cool-help.html%2Bdiv.div.div.p:427-5
+#: html/cool-help.html%2Bdiv.div.div.p:429-5
 msgid ""
 "When multiple people edit the same document concurrently, it is possible for "
 "their changes to conflict and this can cause some confusion. The Document "
@@ -2235,7 +2241,7 @@ msgstr ""
 "ສິ່ງນີ້ອາດເຮັດໃຫ້ເກີດຄວາມສັບສົນ. ຟັງຊັນການສ້ອມແປງເອກະສານຊ່ວຍໃຫ້ຜູ້ໃຊ້ສາມາດຍົກ"
 "ເລີກການປ່ຽນແປງຂອງຜູ້ແກ້ໄຂຄົນອື່ນໃນເອກະສານກັບໄປສູ່ສະຖານະກ່ອນໜ້າ."
 
-#: html/cool-help.html%2Bdiv.div.div.p:428-5
+#: html/cool-help.html%2Bdiv.div.div.p:430-5
 msgid ""
 "To jump back to the selected state, select it with the mouse and hit <span "
 "class=\"ui\">Jump to state</span>."
@@ -2243,11 +2249,13 @@ msgstr ""
 "ເພື່ອໂດດກັບໄປທີ່ສະຖານະທີ່ເລືອກ, ໃຫ້ເລືອກມັນດ້ວຍເມົາສ໌ ແລະ ກົດ <span class="
 "\"ui\">ໂດດໄປທີ່ສະຖານະ</span>."
 
-#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:429-29
-msgid "document repair"
-msgstr "ການສ້ອມແປງເອກະສານ"
+#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:431-29
+msgid ""
+"Repair Document dialog listing past document states with columns for action "
+"type, author, and timestamp"
+msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.p:430-5
+#: html/cool-help.html%2Bdiv.div.div.p:432-5
 msgid ""
 "This is particularly useful – say when a colleague inadvertently selected "
 "all text in the document with <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-"
@@ -2259,11 +2267,11 @@ msgstr ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>A</kbd> ແລະ ພິມທັບມັນທຳລາຍມັນ – ໃນຂະນະທີ່ທ່ານກຳລັງແກ້ໄຂພ້ອມກັນ."
 
-#: html/cool-help.html%2Bdiv.div.div.h4:433-5
+#: html/cool-help.html%2Bdiv.div.div.h4:435-5
 msgid "Inactive document"
 msgstr "ເອກະສານທີ່ບໍ່ເຄື່ອນໄຫວ"
 
-#: html/cool-help.html%2Bdiv.div.div.p:434-5
+#: html/cool-help.html%2Bdiv.div.div.p:436-5
 msgid ""
 "When <span class=\"productname\">{productname}</span> detects that there has "
 "not been any activity in the browser for a while, it puts the document in an "
@@ -2275,11 +2283,13 @@ msgstr ""
 "ໃນສະຖານະ \"ບໍ່ເຄື່ອນໄຫວ\". ເອກະສານຈະຖືກສະແດງດ້ວຍຊັ້ນສີເທົາໂປ່ງໃສ, ພ້ອມຂໍ້"
 "ຄວາມ \"ເອກະສານບໍ່ເຄື່ອນໄຫວ – ກະລຸນາຄລິກເພື່ອສືບຕໍ່ການແກ້ໄຂ\"."
 
-#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:435-29
-msgid "inactive document"
-msgstr "ເອກະສານທີ່ບໍ່ເຄື່ອນໄຫວ"
+#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:437-29
+msgid ""
+"Idle document overlay with the message: Idle document - please click to "
+"reload and resume editing"
+msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.p:436-5
+#: html/cool-help.html%2Bdiv.div.div.p:438-5
 msgid ""
 "To continue editing, click on the document and the layover and message "
 "disappear. Any changes that may have been made by other users – while "
@@ -2289,22 +2299,23 @@ msgstr ""
 "ການປ່ຽນແປງໃດໆທີ່ອາດຈະຖືກເຮັດໂດຍຜູ້ໃຊ້ອື່ນ – ໃນຂະນະທີ່ແກ້ໄຂເອກະສານຮ່ວມກັນ – "
 "ຈະຖືກໂຫຼດໃໝ່."
 
-#: html/cool-help.html%2Bdiv.div.div.h4:439-5
+#: html/cool-help.html%2Bdiv.div.div.h4:441-5
 msgid "Pasting"
 msgstr "ການວາງ"
 
-#: html/cool-help.html%2Bdiv.div.div.p:440-5
+#: html/cool-help.html%2Bdiv.div.div.p:442-5
 msgid ""
 "When you paste content copied from within the same document, the format and "
 "elements are maintained. If you copy from another document, in another tab "
 "or browser window, or from outside of the browser, the pasted content will "
 "preserve rich text."
 msgstr ""
-"ເມື່ອທ່ານວາງເນື້ອຫາທີ່ສຳເນົາມາຈາກພາຍໃນເອກະສານດຽວກັນ, ຮູບແບບ ແລະ ອົງປະກອບຈະຖືກຮັກສາໄວ້. ຖ້າທ່າ"
-"ນສຳເນົາມາຈາກເອກະສານອື່ນ, ໃນແຖບ ຫຼື ໜ້າຕ່າງບຣາວເຊີອື່ນ, ຫຼື ຈາກພາຍນອກບຣາວເຊີ, ເນື້ອຫາທີ່ວາງຈະຮັກ"
-"ສາຂໍ້ຄວາມທີ່ສົມບູນ."
+"ເມື່ອທ່ານວາງເນື້ອຫາທີ່ສຳເນົາມາຈາກພາຍໃນເອກະສານດຽວກັນ, ຮູບແບບ ແລະ "
+"ອົງປະກອບຈະຖືກຮັກສາໄວ້. ຖ້າທ່ານສຳເນົາມາຈາກເອກະສານອື່ນ, ໃນແຖບ ຫຼື "
+"ໜ້າຕ່າງບຣາວເຊີອື່ນ, ຫຼື ຈາກພາຍນອກບຣາວເຊີ, "
+"ເນື້ອຫາທີ່ວາງຈະຮັກສາຂໍ້ຄວາມທີ່ສົມບູນ."
 
-#: html/cool-help.html%2Bdiv.div.div.p:441-5
+#: html/cool-help.html%2Bdiv.div.div.p:443-5
 msgid ""
 "You can paste as unformatted text with the keyboard shortcut: <kbd>Ctrl</"
 "kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Shift</"
@@ -2314,24 +2325,25 @@ msgstr ""
 "kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Shift</"
 "kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>V</kbd>"
 
-#: html/cool-help.html%2Bdiv.div.div.p:442-5
+#: html/cool-help.html%2Bdiv.div.div.p:444-5
 msgid ""
 "When you paste text from within the document, formatting will be respected. "
 "You can also paste objects, such as images, if they are copied from the "
 "document you are working in."
 msgstr ""
-"ເມື່ອທ່ານວາງຂໍ້ຄວາມຈາກພາຍໃນເອກະສານ, ການຈັດຮູບແບບຈະຖືກນຳໃຊ້. ທ່ານຍັງສາມາດວາງວັດຖຸ, ເຊັ່ນ ຮູບພາ"
-"ບ, ຖ້າພວກມັນຖືກສຳເນົາມາຈາກເອກະສານທີ່ທ່ານກຳລັງເຮັດວຽກຢູ່."
+"ເມື່ອທ່ານວາງຂໍ້ຄວາມຈາກພາຍໃນເອກະສານ, ການຈັດຮູບແບບຈະຖືກນຳໃຊ້. "
+"ທ່ານຍັງສາມາດວາງວັດຖຸ, ເຊັ່ນ ຮູບພາບ, "
+"ຖ້າພວກມັນຖືກສຳເນົາມາຈາກເອກະສານທີ່ທ່ານກຳລັງເຮັດວຽກຢູ່."
 
-#: html/cool-help.html%2Bdiv.div.div.p:443-5
+#: html/cool-help.html%2Bdiv.div.div.p:445-5
 msgid ""
 "When you paste text from outside of the document (another browser window or "
 "a desktop application), it will be pasted as rich text."
 msgstr ""
-"ເມື່ອທ່ານວາງຂໍ້ຄວາມຈາກພາຍນອກເອກະສານ (ໜ້າຕ່າງບຣາວເຊີອື່ນ ຫຼື ແອັບພລິເຄຊັນເດັສທັອບ), ມັນຈະຖືກວາງເປັ"
-"ນຂໍ້ຄວາມທີ່ສົມບູນ."
+"ເມື່ອທ່ານວາງຂໍ້ຄວາມຈາກພາຍນອກເອກະສານ (ໜ້າຕ່າງບຣາວເຊີອື່ນ ຫຼື "
+"ແອັບພລິເຄຊັນເດັສທັອບ), ມັນຈະຖືກວາງເປັນຂໍ້ຄວາມທີ່ສົມບູນ."
 
-#: html/cool-help.html%2Bdiv.div.div.p:444-5
+#: html/cool-help.html%2Bdiv.div.div.p:446-5
 msgid ""
 "When you have internal cut or copied content, you can paste this content "
 "using the context menu."
@@ -2339,11 +2351,11 @@ msgstr ""
 "ເມື່ອທ່ານມີເນື້ອຫາທີ່ຕັດ ຫຼື ສຳເນົາພາຍໃນ, "
 "ທ່ານສາມາດວາງເນື້ອຫານີ້ໂດຍໃຊ້ເມນູບໍລິບົດ."
 
-#: html/cool-help.html%2Bdiv.div.div.h4:450-5
+#: html/cool-help.html%2Bdiv.div.div.h4:452-5
 msgid "Adding charts"
 msgstr "ການເພີ່ມແຜນວາດ"
 
-#: html/cool-help.html%2Bdiv.div.div.p:451-5
+#: html/cool-help.html%2Bdiv.div.div.p:453-5
 msgid ""
 "<span class=\"productname\">{productname}</span> supports inserting and "
 "visualization of charts in documents. To add a chart:"
@@ -2351,13 +2363,13 @@ msgstr ""
 "<span class=\"productname\">{productname}</span> ຮອງຮັບການແຊກ ແລະ "
 "ການສະແດງພາບຂອງແຜນວາດໃນເອກະສານ. ເພື່ອເພີ່ມແຜນວາດ:"
 
-#: html/cool-help.html%2Bdiv.div.div.ol.li:453-7
+#: html/cool-help.html%2Bdiv.div.div.ol.li:455-7
 msgid ""
 "Select a table in text document, a range in a spreadsheet or a table in a "
 "presentation."
 msgstr "ເລືອກຕາຕະລາງໃນເອກະສານຂໍ້ຄວາມ, ຊ່ວງໃນສະເປຣດຊີດ ຫຼື ຕາຕະລາງໃນງານນຳສະເໜີ."
 
-#: html/cool-help.html%2Bdiv.div.div.ol.li:454-7
+#: html/cool-help.html%2Bdiv.div.div.ol.li:456-7
 msgid ""
 "Choose <span class=\"ui\">Insert</span> → <span class=\"ui\">Charts</span>. "
 "Customize your chart on the sidebar:"
@@ -2365,16 +2377,23 @@ msgstr ""
 "ເລືອກ <span class=\"ui\">ແຊກ</span> → <span class=\"ui\">ແຜນວາດ</span>. "
 "ປັບແຕ່ງແຜນວາດຂອງທ່ານໃນແຖບດ້ານຂ້າງ:"
 
-#: html/cool-help.html%2Bdiv.div.div.ol.div.img[alt]:457-31
-#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:460-29
-msgid "chart"
-msgstr "ແຜນວາດ"
+#: html/cool-help.html%2Bdiv.div.div.ol.div.img[alt]:459-31
+msgid ""
+"Chart Wizard dialog with chart type list on the left, chart style previews, "
+"3D and shape options"
+msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.ol.li:458-7
+#: html/cool-help.html%2Bdiv.div.div.ol.li:460-7
 msgid "If no table or range was selected, a prototype chart is displayed."
 msgstr "ຖ້າບໍ່ມີຕາຕະລາງ ຫຼື ຊ່ວງຖືກເລືອກ, ແຜນວາດຕົ້ນແບບຈະຖືກສະແດງ."
 
-#: html/cool-help.html%2Bdiv.div.div.p:462-28
+#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:462-29
+msgid ""
+"Column chart with grouped bars showing data for four rows across three "
+"columns"
+msgstr ""
+
+#: html/cool-help.html%2Bdiv.div.div.p:464-28
 msgid ""
 "<span class=\"def\">Chart editing:</span> Double click the chart to select. "
 "Use context menus to add chart elements such as title, axis, and other. "
@@ -2386,7 +2405,7 @@ msgstr ""
 "<span class=\"ui\">ຊ່ວງຂໍ້ມູນ</span> ແລະ <span class=\"ui\">ປະເພດແຜນວາດ</"
 "span> ເພື່ອແກ້ໄຂຂໍ້ມູນແຜນວາດ ແລະ ເລືອກປະເພດແຜນວາດ."
 
-#: html/cool-help.html%2Bdiv.div.div.p:463-28
+#: html/cool-help.html%2Bdiv.div.div.p:465-28
 msgid ""
 "<span class=\"def\">Chart formatting:</span> The same context menu brings "
 "you to chart data table and chart type selection."
@@ -2394,7 +2413,7 @@ msgstr ""
 "<span class=\"def\">ການຈັດຮູບແບບແຜນວາດ:</span> "
 "ເມນູບໍລິບົດດຽວກັນຈະພາທ່ານໄປທີ່ຕາຕະລາງຂໍ້ມູນແຜນວາດ ແລະ ການເລືອກປະເພດແຜນວາດ."
 
-#: html/cool-help.html%2Bdiv.div.div.p:464-28
+#: html/cool-help.html%2Bdiv.div.div.p:466-28
 msgid ""
 "<span class=\"def\">Data series formatting:</span> Open the context menu and "
 "choose <span class=\"ui\">Format data series</span>."
@@ -2402,30 +2421,31 @@ msgstr ""
 "<span class=\"def\">ການຈັດຮູບແບບຊຸດຂໍ້ມູນ:</span> ເປີດເມນູບໍລິບົດ ແລະ ເລືອກ "
 "<span class=\"ui\">ຈັດຮູບແບບຊຸດຂໍ້ມູນ</span>."
 
-#: html/cool-help.html%2Bdiv.div.div.h4:466-5
+#: html/cool-help.html%2Bdiv.div.div.h4:468-5
 msgid "Handling images"
 msgstr "ການຈັດການຮູບພາບ"
 
-#: html/cool-help.html%2Bdiv.div.div.p:467-5
+#: html/cool-help.html%2Bdiv.div.div.p:469-5
 msgid ""
 "<span class=\"productname\">{productname}</span> inserts images in the text "
 "document from your local computer or from your cloud storage. Inserted "
 "images are always embedded in the document."
 msgstr ""
-"<span class=\"productname\">{productname}</span> ແຊກຮູບພາບເຂົ້າໃນເອກະສານຂໍ້ຄວາມຈາກ"
-"ຄອມພິວເຕີທ້ອງຖິ່ນຂອງທ່ານ ຫຼື ຈາກບ່ອນເກັບຂໍ້ມູນຄລາວຂອງທ່ານ. ຮູບພາບທີ່ແຊກເຂົ້າມາຈະຖືກຝັງຢູ່ໃນເອກະສານສະ"
-"ເໝີ."
+"<span class=\"productname\">{productname}</span> "
+"ແຊກຮູບພາບເຂົ້າໃນເອກະສານຂໍ້ຄວາມຈາກຄອມພິວເຕີທ້ອງຖິ່ນຂອງທ່ານ ຫຼື "
+"ຈາກບ່ອນເກັບຂໍ້ມູນຄລາວຂອງທ່ານ. ຮູບພາບທີ່ແຊກເຂົ້າມາຈະຖືກຝັງຢູ່ໃນເອກະສານສະເໝີ."
 
-#: html/cool-help.html%2Bdiv.div.div.p:468-5
+#: html/cool-help.html%2Bdiv.div.div.p:470-5
 msgid ""
 "<span class=\"def\">Insert image:</span> Clicking on the <span class=\"ui\""
 ">Insert image</span> icon allows you to choose an image from the cloud "
 "storage's folders and shares."
 msgstr ""
-"<span class=\"def\">ແຊກຮູບພາບ:</span> ການຄລິກໃສ່ໄອຄອນ <span class=\"ui\">ແຊກຮູບພາ"
-"ບ</span> ຊ່ວຍໃຫ້ທ່ານສາມາດເລືອກຮູບພາບຈາກໂຟນເດີ ແລະ ການແບ່ງປັນຂອງບ່ອນເກັບຂໍ້ມູນຄລາວ."
+"<span class=\"def\">ແຊກຮູບພາບ:</span> ການຄລິກໃສ່ໄອຄອນ <span class=\"ui\""
+">ແຊກຮູບພາບ</span> ຊ່ວຍໃຫ້ທ່ານສາມາດເລືອກຮູບພາບຈາກໂຟນເດີ ແລະ "
+"ການແບ່ງປັນຂອງບ່ອນເກັບຂໍ້ມູນຄລາວ."
 
-#: html/cool-help.html%2Bdiv.div.div.p:469-5
+#: html/cool-help.html%2Bdiv.div.div.p:471-5
 msgid ""
 "<span class=\"def\">Insert local image:</span> opens the browser file picker "
 "to upload the image from your local computer and insert it into the document."
@@ -2434,7 +2454,7 @@ msgstr ""
 "ເປີດຕົວເລືອກໄຟລ໌ຂອງບຣາວເຊີເພື່ອອັບໂຫຼດຮູບພາບຈາກຄອມພິວເຕີທ້ອງຖິ່ນຂອງທ່ານ ແລະ "
 "ແຊກມັນເຂົ້າໃນເອກະສານ."
 
-#: html/cool-help.html%2Bdiv.div.div.p:470-5
+#: html/cool-help.html%2Bdiv.div.div.p:472-5
 msgid ""
 "Images can be resized, rotated and anchored. Text can be wrapped around the "
 "image. Select the image and open the context menu. Use the images handles to "
@@ -2444,11 +2464,11 @@ msgstr ""
 "ເລືອກຮູບພາບ ແລະ ເປີດເມນູບໍລິບົດ. "
 "ໃຊ້ຈຸດຈັບຂອງຮູບພາບເພື່ອປັບຂະໜາດຮູບພາບດ້ວຍເມົາສ໌."
 
-#: html/cool-help.html%2Bdiv.div.div.h4:473-5
+#: html/cool-help.html%2Bdiv.div.div.h4:475-5
 msgid "Comments in documents"
 msgstr "ຄຳເຫັນໃນເອກະສານ"
 
-#: html/cool-help.html%2Bdiv.div.div.p:474-5
+#: html/cool-help.html%2Bdiv.div.div.p:476-5
 msgid ""
 "Insert comments in <span class=\"productname\">{productname}</span> in "
 "places that need special reader attention. Comments are displayed on the "
@@ -2458,11 +2478,13 @@ msgstr ""
 "ໃນບ່ອນທີ່ຕ້ອງການຄວາມສົນໃຈເປັນພິເສດຈາກຜູ້ອ່ານ. ຄຳເຫັນຈະຖືກສະແດງຢູ່ດ້ານຂວາ ແລະ "
 "ບັນຈຸຊື່ ແລະ ວັນທີຂອງຜູ້ອອກ."
 
-#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:475-29
-msgid "comment"
-msgstr "ຄຳເຫັນ"
+#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:477-29
+msgid ""
+"Comment box showing author name, date, and the comment text, displayed "
+"beside the document"
+msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.p:476-5
+#: html/cool-help.html%2Bdiv.div.div.p:478-5
 msgid ""
 "Click on the submenu (<span class=\"cool-annotation-menu icon-size\"></span>)"
 " icon to reply, move and delete comments."
@@ -2470,11 +2492,11 @@ msgstr ""
 "ຄລິກທີ່ໄອຄອນເມນູຍ່ອຍ (<span class=\"cool-annotation-menu icon-size\"></span>)"
 " ເພື່ອຕອບ, ຍ້າຍ ແລະ ລຶບຄຳເຫັນ."
 
-#: html/cool-help.html%2Bdiv.div.div.h4:479-5
+#: html/cool-help.html%2Bdiv.div.div.h4:481-5
 msgid "Spellchecking"
 msgstr "ການກວດສອບການສະກົດຄຳ"
 
-#: html/cool-help.html%2Bdiv.div.div.p:480-5
+#: html/cool-help.html%2Bdiv.div.div.p:482-5
 msgid ""
 "<span class=\"productname\">{productname}</span> can check spelling in text "
 "documents, spreadsheets and presentations. A red wavy underline indicates "
@@ -2486,11 +2508,11 @@ msgstr ""
 "ເສັ້ນລຸ່ມຄື້ນສີແດງບົ່ງບອກຄຳທີ່ສະກົດຜິດ. "
 "ຄລິກຂວາເພື່ອເປີດເມນູບໍລິບົດທີ່ມີຄຳແນະນຳການແກ້ໄຂການສະກົດຜິດ."
 
-#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:481-29
-msgid "spellchecking"
-msgstr "ການກວດສອບການສະກົດຄຳ"
+#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:483-29
+msgid "Text with a red wavy underline beneath a misspelled word"
+msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.p:482-5
+#: html/cool-help.html%2Bdiv.div.div.p:484-5
 msgid ""
 "To systematically spell-check the whole document use the <span class=\"ui\""
 ">Tools</span> menu’s <span class=\"ui\">Spelling</span> option."
@@ -2498,7 +2520,7 @@ msgstr ""
 "ເພື່ອການກວດສອບການສະກົດຄຳທັງໝົດເອກະສານຢ່າງເປັນລະບົບ, ໃຫ້ໃຊ້ຕົວເລືອກ <span "
 "class=\"ui\">ການສະກົດຄຳ</span> ໃນເມນູ <span class=\"ui\">ເຄື່ອງມື</span>."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:489-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:491-30
 msgid ""
 "You edit an online spreadsheet in the same way you edit a desktop "
 "spreadsheet. Operations like entering data, selecting ranges, columns, rows "
@@ -2517,16 +2539,22 @@ msgstr ""
 "ຈະຍ້າຍເຄີເຊີໄປທີ່ຊ່ອງຕໍ່ໄປທາງຂວາ, ແລະ ກົດ <kbd>Enter</kbd> "
 "ຈະຍ້າຍໄປທີ່ຊ່ອງດ້ານລຸ່ມເພື່ອການປ້ອນຂໍ້ມູນຕໍ່ໄປໄດ້ງ່າຍ."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:494-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:496-5
 msgid ""
 "Formulas are entered in the formula bar. Enter '=' and insert the formula."
 msgstr "ສູດຈະຖືກປ້ອນເຂົ້າໃນແຖບສູດ. ປ້ອນ '=' ແລະ ແຊກສູດ."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:495-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:497-5
 msgid "All spreadsheets functions and mathematical rules applies."
 msgstr "ທຸກຟັງຊັນຂອງສະເປຣດຊີດ ແລະ ກົດລະບຽບທາງຄະນິດສາດຈະຖືກນຳໃຊ້."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:497-5
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:498-29
+msgid ""
+"Formula bar showing cell reference B1, function wizard icon, and the formula "
+"=SIN(PI()*A1/10)"
+msgstr ""
+
+#: html/cool-help.html%2Bdiv.div.div.div.p:499-5
 msgid ""
 "The formula language should be extremely familiar to any spreadsheet user, "
 "and is specified in great detail in the <a href=\"https://www.oasis-open.org/"
@@ -2538,7 +2566,7 @@ msgstr ""
 "download.php/16826/openformula-spec-20060221.html\" target=\"_blank\" rel="
 "\"noopener noreferrer\">ຂໍ້ມູນສະເພາະຂອງ OASIS OpenFormula</a>."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:503-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:505-5
 msgid ""
 "<span class=\"def\">Direct formatting:</span> You can format spreadsheet "
 "cells, columns, rows and sheets by formatting directly from the menus, "
@@ -2548,18 +2576,21 @@ msgid ""
 "dialog allows complex and custom number formatting, as well as font, complex "
 "border, background, cell protection and other options."
 msgstr ""
-"<span class=\"def\">ການຈັດຮູບແບບໂດຍກົງ:</span> ທ່ານສາມາດຈັດຮູບແບບຊ່ອງ, ຖັນ, ແຖວ ແລະ ຊີ"
-"ດຂອງສະເປຣດຊີດໄດ້ໂດຍກົງຈາກເມນູ, ແຖບເຄື່ອງມື ຫຼື ເມນູບໍລິບົດ. ການຈັດຮູບແບບໂດຍກົງຈະນຳໃຊ້ກັບວັດຖຸທີ່ເລືອ"
-"ກໄວ້ປັດຈຸບັນເທົັ້ນນັ້ນ. ເພື່ອຈັດຮູບແບບຊ່ອງ, ໃຫ້ໃຊ້ເມນູ ຫຼື ກົດ <kbd>Ctrl</kbd><span class=\"kbd--"
-"plus\" aria-hidden=\"true\">+</span><kbd>1</kbd>. ກ່ອງໂຕ້ຕອບຈະຊ່ວຍໃຫ້ສາມາດຈັດຮູບແບບ"
-"ຕົວເລກທີ່ຊັບຊ້ອນ ແລະ ກຳໜົດເອງໄດ້, ລວມທັງຟອນ, ເສັ້ນຂອບທີ່ຊັບຊ້ອນ, ພື້ນຫຼັງ, ການປົກປ້ອງຊ່ອງ ແລະ ຕົວເລື"
-"ອກອື່ນໆ."
+"<span class=\"def\">ການຈັດຮູບແບບໂດຍກົງ:</span> ທ່ານສາມາດຈັດຮູບແບບຊ່ອງ, ຖັນ, "
+"ແຖວ ແລະ ຊີດຂອງສະເປຣດຊີດໄດ້ໂດຍກົງຈາກເມນູ, ແຖບເຄື່ອງມື ຫຼື ເມນູບໍລິບົດ. "
+"ການຈັດຮູບແບບໂດຍກົງຈະນຳໃຊ້ກັບວັດຖຸທີ່ເລືອກໄວ້ປັດຈຸບັນເທົັ້ນນັ້ນ. "
+"ເພື່ອຈັດຮູບແບບຊ່ອງ, ໃຫ້ໃຊ້ເມນູ ຫຼື ກົດ <kbd>Ctrl</kbd><span class=\"kbd--"
+"plus\" aria-hidden=\"true\">+</span><kbd>1</kbd>. "
+"ກ່ອງໂຕ້ຕອບຈະຊ່ວຍໃຫ້ສາມາດຈັດຮູບແບບຕົວເລກທີ່ຊັບຊ້ອນ ແລະ ກຳໜົດເອງໄດ້, ລວມທັ"
+"ງຟອນ, ເສັ້ນຂອບທີ່ຊັບຊ້ອນ, ພື້ນຫຼັງ, ການປົກປ້ອງຊ່ອງ ແລະ ຕົວເລືອກອື່ນໆ."
 
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:504-29
-msgid "format cells"
-msgstr "ຈັດຮູບແບບຊ່ອງ"
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:506-29
+msgid ""
+"Format Cells dialog on the Numbers tab with category list, format options, "
+"decimal places, and format code"
+msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:509-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:511-30
 msgid ""
 "<span class=\"def\">Sorting data:</span> You can sort a list of numbers or "
 "text ascending or descending. <span class=\"productname\">{productname}</"
@@ -2571,7 +2602,7 @@ msgstr ""
 ">{productname}</span> ຈະກວດຈັບຊ່ອງທີ່ເປັນຫົວຂໍ້ ແລະ ຖັນທີ່ຕິດກັນໂດຍອັດຕະໂນມັ"
 "ດ, ເພື່ອຂະຫຍາຍການເລືອກ."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:510-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:512-30
 msgid ""
 "<span class=\"def\">Filtering data:</span> Filters and advanced filters "
 "allow you to work on certain filtered rows (records) of a data range. In the "
@@ -2583,7 +2614,7 @@ msgstr ""
 "ທີ່ຖືກກັ່ນຕອງແລ້ວຂອງຊ່ວງຂໍ້ມູນ. ໃນສະເປຣດຊີດໃນ <span class=\"productname\""
 ">{productname}</span> ມີຄວາມເປັນໄປໄດ້ຫຼາຍຢ່າງໃນການນຳໃຊ້ໂຕກັ່ນຕອງ."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:512-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:514-7
 msgid ""
 "One use for the <span class=\"ui\">AutoFilter</span> function is to quickly "
 "restrict the display to records with identical entries in a data field."
@@ -2591,11 +2622,13 @@ msgstr ""
 "ການນຳໃຊ້ໜຶ່ງຂອງຟັງຊັນ <span class=\"ui\">ໂຕກັ່ນຕອງອັດຕະໂນມັດ</span> ແມ່ນເພື່ອ"
 "ຈຳກັດການສະແດງຜົນຢ່າງໄວວາໃຫ້ສະແດງສະເພາະເຣັກຄອດທີ່ມີລາຍການທີ່ຄືກັນໃນຊ່ອງຂໍ້ມູນ."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li.div.img[alt]:514-34
-msgid "filter"
-msgstr "ໂຕກັ່ນຕອງ"
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li.div.img[alt]:516-34
+msgid ""
+"AutoFilter dropdown menu on a spreadsheet column with sort, filter by color, "
+"filter by condition, and checkboxes for individual values"
+msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:516-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:518-7
 msgid ""
 "In the <span class=\"ui\">Standard Filter</span> dialog, you can also define "
 "ranges which contain the values in particular data fields. You can use the "
@@ -2607,7 +2640,7 @@ msgstr ""
 "ທ່ານສາມາດໃຊ້ໂຕກັ່ນຕອງມາດຕະຖານເພື່ອເຊື່ອມຕໍ່ເງື່ອນໄຂດ້ວຍຕົວດຳເນີນການ AND ຫຼື "
 "OR."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:517-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:519-7
 msgid ""
 "The <span class=\"ui\">Advanced Filter</span> allows up to a total of eight "
 "filter conditions. With advanced filters you enter the conditions directly "
@@ -2617,7 +2650,7 @@ msgstr ""
 "ອະນຸຍາດໃຫ້ມີເງື່ອນໄຂການກັ່ນຕອງທັງໝົດສູງສຸດແປດຢ່າງ. ດ້ວຍໂຕກັ່ນຕອງຂັ້ນສູງ, "
 "ທ່ານສາມາດປ້ອນເງື່ອນໄຂໂດຍກົງເຂົ້າໃນຊີດ."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:521-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:523-5
 msgid ""
 "<span class=\"def\">Outlining:</span> You can create an outline of your data "
 "and group rows and columns together so that you can collapse and expand the "
@@ -2627,11 +2660,13 @@ msgstr ""
 "ານ ແລະ ກຸ່ມແຖວ ແລະ ຖັນເຂົ້າກັນ ເພື່ອໃຫ້ທ່ານສາມາດຫຍໍ້ ແລະ "
 "ຂະຫຍາຍກຸ່ມໄດ້ດ້ວຍການຄລິກພຽງຄັ້ງດຽວ ເຮັດໃຫ້ງ່າຍຕໍ່ການສະແດງຂໍ້ມູນຕາມລຳດັບຊັ້ນ."
 
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:522-29
-msgid "outlining"
-msgstr "ການສ້າງໂຄງຮ່າງ"
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:524-29
+msgid ""
+"Spreadsheet with row and column grouping controls showing outline level "
+"buttons and collapse/expand toggles"
+msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:525-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:527-5
 msgid ""
 "<span class=\"def\">Data validation:</span> For each cell, you can define "
 "entries to be valid. Invalid entries to a cell will be rejected. To enable "
@@ -2641,7 +2676,7 @@ msgstr ""
 "ທ່ານສາມາດກຳໜົດລາຍການໃຫ້ຖືກຕ້ອງໄດ້. ລາຍການທີ່ບໍ່ຖືກຕ້ອງໃນຊ່ອງຈະຖືກປະຕິເສດ. "
 "ເພື່ອເປີດໃຊ້ການກວດສອບຄວາມຖືກຕ້ອງຂອງຂໍ້ມູນ:"
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:527-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:529-7
 msgid ""
 "Choose <span class=\"ui\">Validity</span> from the <span class=\"ui\">Data</"
 "span> menu. The <span class=\"ui\">Validity</span> dialog opens."
@@ -2649,12 +2684,13 @@ msgstr ""
 "ເລືອກ <span class=\"ui\">ຄວາມຖືກຕ້ອງ</span> ຈາກເມນູ <span class=\"ui\""
 ">ຂໍ້ມູນ</span>. ກ່ອງໂຕ້ຕອບ <span class=\"ui\">ຄວາມຖືກຕ້ອງ</span> ຈະເປີດຂຶ້ນ."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:530-31
-#: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:535-31
-msgid "data validate"
-msgstr "ການກວດສອບຄວາມຖືກຕ້ອງຂອງຂໍ້ມູນ"
+#: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:532-31
+msgid ""
+"Validity dialog on the Criteria tab with Allow set to List, showing options "
+"for empty cells, selection list, and entry values"
+msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:531-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:533-7
 msgid ""
 "Select the validity criterion in the <span class=\"ui\">Allow</span> drop-"
 "box list. Depending on the criterion, more options show. Fill the required "
@@ -2663,7 +2699,7 @@ msgstr ""
 "ເລືອກເກນຄວາມຖືກຕ້ອງໃນລາຍການແບບເລື່ອນລົງ <span class=\"ui\">ອະນຸຍາດ</span>. "
 "ຂຶ້ນຢູ່ກັບເກນ, ຕົວເລືອກເພີ່ມເຕີມຈະສະແດງຂຶ້ນ. ຕື່ມຂໍ້ມູນທີ່ຕ້ອງການ."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:532-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:534-7
 msgid ""
 "Use the <span class=\"ui\">Input Help</span> and <span class=\"ui\">Error "
 "Alert</span> tabs to enhance the user interactions. Click <span class=\"ui\""
@@ -2673,7 +2709,13 @@ msgstr ""
 "\"ui\">ການແຈ້ງເຕືອນຂໍ້ຜິດພາດ</span> ເພື່ອປັບປຸງການໂຕ້ຕອບຂອງຜູ້ໃຊ້. ຄລິກ "
 "<span class=\"ui\">ຕົກລົງ</span> ເພື່ອປິດກ່ອງໂຕ້ຕອບ."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:536-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:537-31
+msgid ""
+"Cell dropdown list showing validated entries such as Apple, Pear, Banana, "
+"Kiwi, and Lemon"
+msgstr ""
+
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:538-7
 msgid ""
 "To remove the validity of the cell, open the dialog and set the <span class="
 "\"ui\">Allow</span> list to “All values”."
@@ -2681,7 +2723,7 @@ msgstr ""
 "ເພື່ອລຶບຄວາມຖືກຕ້ອງຂອງຊ່ອງ, ໃຫ້ເປີດກ່ອງໂຕ້ຕອບ ແລະ ຕັ້ງຄ່າລາຍການ <span class="
 "\"ui\">ອະນຸຍາດ</span> ເປັນ “ຄ່າທັງໝົດ”."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:540-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:542-5
 msgid ""
 "<span class=\"def\">Comments:</span> In a spreadsheet you can insert one "
 "comment per cell. When you select <span class=\"ui\">Insert comment</span>, "
@@ -2696,11 +2738,13 @@ msgstr ""
 "ຈຸດສີແດງຈະສະແດງຢູ່ມຸມຂວາເທິງຂອງຊ່ອງເມື່ອມັນມີຄຳເຫັນ. "
 "ວາງເມົາສ໌ເທິງຊ່ອງເພື່ອສະແດງຄຳເຫັນ."
 
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:541-29
-msgid "cell comments"
-msgstr "ຄຳເຫັນໃນຊ່ອງ"
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:543-29
+msgid ""
+"Spreadsheet cell with a comment popup showing the author, date, comment "
+"text, and Save/Cancel buttons"
+msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:544-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:546-5
 msgid ""
 "<span class=\"def\">Conditional formatting:</span> <span class=\"productname"
 "\">{productname}</span> adds symbols to each cell of a range based on cells "
@@ -2714,11 +2758,13 @@ msgstr ""
 "ຄລິກໄອຄອນ <span class=\"ui\">ການຈັດຮູບແບບຕາມເງື່ອນໄຂ</span> ໃນແຖບເຄື່ອງມື. "
 "ເລືອກຊຸດສັນຍາລັກທີ່ຈະນຳໃຊ້ກັບຊ່ວງ."
 
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:545-29
-msgid "conditional formatting"
-msgstr "ການຈັດຮູບແບບຕາມເງື່ອນໄຂ"
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:547-29
+msgid ""
+"Conditional formatting icon set picker showing arrows, circles, traffic "
+"lights, stars, smiley faces, and bar chart symbol sets"
+msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:553-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:555-30
 msgid ""
 "<span class=\"productname\">{productname}</span> edits text documents in the "
 "same way you edit a desktop document. It provides a What You See Is What You "
@@ -2737,7 +2783,7 @@ msgstr ""
 "ແມ່ນຄ້າຍຄືກັນກັບໂປຣແກຣມປະມວນຜົນຄຳເທິງເດັສທັອບ. ໃຊ້ແປ້ນພິມ, ເມນູ ແລະ "
 "ແຖບເຄື່ອງມືເພື່ອໂຕ້ຕອບກັບເອກະສານຂອງທ່ານ."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:557-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:559-30
 msgid ""
 "Context menus are available on clicking the right mouse button. The commands "
 "available in the context menu are related - not extensively - to the "
@@ -2746,11 +2792,11 @@ msgstr ""
 "ເມນູບໍລິບົດມີໃຫ້ໃຊ້ງານໂດຍການຄລິກຂວາ. ຄຳສັ່ງທີ່ມີຢູ່ໃນເມນູບໍລິບົດແມ່ນກ່ຽວຂ້ອງ "
 "- ບໍ່ກວ້າງຂວາງ - ກັບວັດຖຸທີ່ຢູ່ດ້ານລຸ່ມໃນເອກະສານ."
 
-#: html/cool-help.html%2Bdiv.div.div.h3:560-5
+#: html/cool-help.html%2Bdiv.div.div.h3:562-5
 msgid "Formatting text"
 msgstr "ການຈັດຮູບແບບຂໍ້ຄວາມ"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:562-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:564-5
 msgid ""
 "<span class=\"productname\">{productname}</span> supports modern techniques "
 "for paragraph formatting through styles. A style is a set of text properties "
@@ -2771,7 +2817,7 @@ msgstr ""
 "ທຸກຫຍໍ້ໜ້າທີ່ມີຮູບແບບດຽວກັນກໍຈະປ່ຽນການຈັດຮູບແບບເຊັ່ນກັນ, "
 "ເຮັດໃຫ້ຄວາມພະຍາຍາມໃນການຈັດຮູບແບບຫຼາຍຫຍໍ້ໜ້າແຕ່ລະອັນງ່າຍຂຶ້ນ."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:563-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:565-5
 msgid ""
 "In contrast, direct formatting applies formatting to selected excerpts of "
 "the document contents. On a long document, direct formatting must be applied "
@@ -2784,7 +2830,7 @@ msgstr ""
 "ເຊິ່ງເຮັດໃຫ້ການຈັດຮູບແບບຂໍ້ຄວາມເປັນວຽກທີ່ໃຊ້ເວລາດົນ ແລະ ອາດເກີດມີຂໍ້ຜິດພາດ "
 "ແລະ ຄວາມຊັກຊ້າໄດ້."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:565-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:567-30
 msgid ""
 "<span class=\"def\">Direct formatting:</span> You can format text document "
 "objects by formatting directly from the menus, toolbar or context menus. "
@@ -2794,7 +2840,7 @@ msgstr ""
 "ທ່ານສາມາດຈັດຮູບແບບວັດຖຸໃນເອກະສານຂໍ້ຄວາມໄດ້ໂດຍກົງຈາກເມນູ, ແຖບເຄື່ອງມື ຫຼື "
 "ເມນູບໍລິບົດ. ການຈັດຮູບແບບໂດຍກົງຈະນຳໃຊ້ກັບວັດຖຸທີ່ເລືອກໄວ້ປັດຈຸບັນເທົ່ານັ້ນ."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:567-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:569-5
 msgid ""
 "<span class=\"def\">Style formatting:</span> <span class=\"productname\""
 ">{productname}</span> supports paragraph styles. You can apply an existing "
@@ -2807,15 +2853,17 @@ msgstr ""
 "class=\"ui\">ແກ້ໄຂ</span> → <span class=\"ui\">ແກ້ໄຂຮູບແບບ</span> "
 "ເພື່ອປ່ຽນຮູບແບບ."
 
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:568-29
-msgid "style formatting"
-msgstr "ການຈັດຮູບແບບສະໄຕລ໌"
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:570-29
+msgid ""
+"Paragraph dialog on the Indents and Spacing tab with settings for indent, "
+"spacing, and line spacing, and a preview on the right"
+msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.div.h4:574-5
+#: html/cool-help.html%2Bdiv.div.div.div.h4:576-5
 msgid "Handling Tables"
 msgstr "ການຈັດການຕາຕະລາງ"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:575-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:577-5
 msgid ""
 "Insert tables with proper icon in the toolbar. Select the initial number of "
 "rows and columns. Add rows and columns with the cell context menu. Merge "
@@ -2826,11 +2874,13 @@ msgstr ""
 "ເພີ່ມແຖວ ແລະ ຖັນດ້ວຍເມນູບໍລິບົດຂອງຊ່ອງ. ຮວມຊ່ອງດ້ວຍເມນູ <span class=\"ui\""
 ">ຕາຕະລາງ</span>. ຮູບແບບຫຍໍ້ໜ້າເລີ່ມຕົ້ນພາຍໃນຊ່ອງແມ່ນ “ເນື້ອໃນຕາຕະລາງ”."
 
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:576-29
-msgid "insert table"
-msgstr "ແຊກຕາຕະລາງ"
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:578-29
+msgid ""
+"Insert Table picker showing a grid to select the number of rows and columns, "
+"currently showing 5 by 3"
+msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:579-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:581-5
 msgid ""
 "<span class=\"def\">Formatting cells:</span> Click in the cell or range of "
 "cells and choose menu <span class=\"ui\">Table</span> → <span class=\"ui\""
@@ -2840,11 +2890,11 @@ msgstr ""
 "ເລືອກເມນູ <span class=\"ui\">ຕາຕະລາງ</span> → <span class=\"ui\">ຄຸນສົມບັດ</"
 "span>. ປັບແຕ່ງຕາຕະລາງຢ່າງລະອຽດດ້ວຍກ່ອງໂຕ້ຕອບຄຸນສົມບັດ."
 
-#: html/cool-help.html%2Bdiv.div.div.div.h4:582-5
+#: html/cool-help.html%2Bdiv.div.div.div.h4:584-5
 msgid "Track changes"
 msgstr "ຕິດຕາມການປ່ຽນແປງ"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:583-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:585-5
 msgid ""
 "When you turn on Track Changes, <span class=\"productname\">{productname}</"
 "span> marks up new changes made to the document. Select this option again to "
@@ -2853,12 +2903,14 @@ msgstr ""
 "ເມື່ອທ່ານເປີດການຕິດຕາມການປ່ຽນແປງ, <span class=\"productname\">{productname}</"
 "span> ຈະໝາຍການປ່ຽນແປງໃໝ່ທີ່ເຮັດໃນເອກະສານ. ເລືອກຕົວເລືອກນີ້ອີກຄັ້ງເພື່ອປິດມັນ."
 
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:584-29
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:711-29
-msgid "track changes"
-msgstr "ຕິດຕາມການປ່ຽນແປງ"
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:586-29
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:713-29
+msgid ""
+"Tracked change shown as a comment box beside the document with author name, "
+"date, and change description"
+msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:585-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:587-5
 msgid ""
 "Changes made by different people are shown in different colors and each "
 "tracked change can be accepted or rejected, using the box that appears on "
@@ -2868,11 +2920,11 @@ msgstr ""
 "ການປ່ຽນແປງທີ່ຕິດຕາມແຕ່ລະອັນສາມາດຍອມຮັບ ຫຼື ປະຕິເສດໄດ້, "
 "ໂດຍໃຊ້ກ່ອງທີ່ປາກົດຢູ່ດ້ານຂວາ. ທ່ານຍັງສາມາດເພີ່ມຄຳເຫັນຢູ່ທີ່ນັ້ນໄດ້."
 
-#: html/cool-help.html%2Bdiv.div.div.div.h4:588-5
+#: html/cool-help.html%2Bdiv.div.div.div.h4:590-5
 msgid "Other advanced features"
 msgstr "ຄຸນສົມບັດຂັ້ນສູງອື່ນໆ"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:589-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:591-5
 msgid ""
 "<span class=\"def\">Comments:</span> Comments are inserted in the text and "
 "displayed on the right side of the screen."
@@ -2880,7 +2932,7 @@ msgstr ""
 "<span class=\"def\">ຄຳເຫັນ:</span> ຄຳເຫັນຈະຖືກແຊກເຂົ້າໃນຂໍ້ຄວາມ ແລະ "
 "ສະແດງຢູ່ດ້ານຂວາຂອງໜ້າຈໍ."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:590-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:592-5
 msgid ""
 "<span class=\"def\">Formatting marks:</span> Paragraph, page and unbreakable "
 "spaces are shown as marks to assist text alignment, editing and formatting."
@@ -2889,13 +2941,13 @@ msgstr ""
 "ຍະຫວ່າງທີ່ບໍ່ຕັດຄຳຈະຖືກສະແດງເປັນເຄື່ອງໝາຍເພື່ອຊ່ວຍໃນການຈັດແນວຂໍ້ຄວາມ, ການແກ້"
 "ໄຂ ແລະ ການຈັດຮູບແບບ."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:591-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:593-5
 msgid ""
 "<span class=\"def\">Fields:</span> A basic set of fields is available to "
 "insert in the document."
 msgstr "<span class=\"def\">ຟິວ:</span> ຊຸດຟິວພື້ນຖານມີໃຫ້ແຊກເຂົ້າໃນເອກະສານ."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:592-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:594-5
 msgid ""
 "<span class=\"def\">Alphabetical index:</span> Existing alphabetical index "
 "can be updated with new entries."
@@ -2903,7 +2955,7 @@ msgstr ""
 "<span class=\"def\">ດັດຊະນີຕາມລຳດັບຕົວອັກສອນ:</span> "
 "ດັດຊະນີຕາມລຳດັບຕົວອັກສອນທີ່ມີຢູ່ແລ້ວສາມາດອັບເດດດ້ວຍລາຍການໃໝ່ໄດ້."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:593-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:595-5
 msgid ""
 "<span class=\"def\">Page header and footer:</span> Headers and footers are "
 "available for the existing page style applied in the document at the cursor "
@@ -2912,7 +2964,7 @@ msgstr ""
 "<span class=\"def\">ຫົວໜ້າ ແລະ ທ້າຍໜ້າ:</span> ຫົວໜ້າ ແລະ ທ້າຍໜ້າມີໃຫ້ໃຊ້ງານສ"
 "ຳລັບຮູບແບບໜ້າທີ່ມີຢູ່ແລ້ວທີ່ນຳໃຊ້ໃນເອກະສານທີ່ຕຳແໜ່ງຂອງເຄີເຊີ."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:594-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:596-5
 msgid ""
 "<span class=\"def\">Footnotes and endnotes:</span> Footnotes and endnotes "
 "are supported."
@@ -2920,7 +2972,7 @@ msgstr ""
 "<span class=\"def\">ອ້າງອີງທ້າຍໜ້າ ແລະ ອ້າງອີງທ້າຍເອກະສານ:</span> "
 "ອ້າງອີງທ້າຍໜ້າ ແລະ ອ້າງອີງທ້າຍເອກະສານຖືກຮອງຮັບ."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:602-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:604-30
 msgid ""
 "<span class=\"productname\">{productname}</span> Impress edits presentations "
 "in a way that should be familiar to people. Operations like typing text, "
@@ -2936,7 +2988,7 @@ msgstr ""
 "ແມ່ນຄ້າຍຄືກັນກັບແອັບພລິເຄຊັນການນຳສະເໜີເທິງເດັສທັອບ. ໃຊ້ແປ້ນພິມ, ເມນູ ແລະ "
 "ແຖບເຄື່ອງມືເພື່ອປະຕິບັດການກະທຳໃນເອກະສານຂອງທ່ານ."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:607-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:609-5
 msgid ""
 "<span class=\"productname\">{productname}</span> displays presentation slide "
 "shows, including a subset of slide transitions and object animations. Choose "
@@ -2948,7 +3000,7 @@ msgstr ""
 "ເລືອກການສະແດງສະໄລ້ຈາກເມນູ ຫຼື "
 "ຄລິກທີ່ໄອຄອນໃນແຖບເຄື່ອງມືດ້ານລຸ່ມຊ້າຍໃນແຖບສະໄລ້."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:608-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:610-5
 msgid ""
 "To exit a <span class=\"productname\">{productname}</span> slide show, press "
 "the <kbd>Esc</kbd> key to return to the presentation edit mode."
@@ -2956,7 +3008,7 @@ msgstr ""
 "ເພື່ອອອກຈາກການສະແດງສະໄລ້ຂອງ <span class=\"productname\">{productname}</"
 "span>, ໃຫ້ກົດປຸ່ມ <kbd>Esc</kbd> ເພື່ອກັບໄປທີ່ໂໝດແກ້ໄຂງານນຳສະເໜີ."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:614-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:616-5
 msgid ""
 "Click on any slide thumbnail in the pane to switch to this slide to view or "
 "edit it."
@@ -2964,7 +3016,7 @@ msgstr ""
 "ຄລິກທີ່ຮູບຕົວຢ່າງສະໄລ້ໃດໜຶ່ງໃນແຖບເພື່ອສະຫຼັບໄປທີ່ສະໄລ້ນີ້ເພື່ອເບິ່ງ ຫຼື "
 "ແກ້ໄຂມັນ."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:615-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:617-5
 msgid ""
 "Use the slide pane toolbar in the bottom to start the slideshow, add slide, "
 "duplicate or delete the current slide."
@@ -2972,21 +3024,23 @@ msgstr ""
 "ໃຊ້ແຖບເຄື່ອງມືຂອງແຖບສະໄລ້ຢູ່ດ້ານລຸ່ມເພື່ອເລີ່ມການສະແດງສະໄລ້, ເພີ່ມສະໄລ້, "
 "ເຮັດຊ້ຳ ຫຼື ລຶບສະໄລ້ປັດຈຸບັນ."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:621-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:623-5
 msgid ""
 "<span class=\"def\">Slide layouts:</span> <span class=\"productname\""
 ">{productname}</span> Impress lets you change the slide layout. Select the "
 "desired slide layout in the drop-down layout list."
 msgstr ""
-"<span class=\"def\">ໂໂຄງຮ່າງສະໄລ້:</span> <span class=\"productname\">"
-"{productname}</span> Impress ຊ່ວຍໃຫ້ທ່ານສາມາດປ່ຽນໂຄງຮ່າງສະໄລ້ໄດ້. ເລືອກໂຄງຮ່າງສະໄລ້ທີ່ຕ້ອງ"
-"ການໃນລາຍການໂຄງຮ່າງແບບເລື່ອນລົງ."
+"<span class=\"def\">ໂໂຄງຮ່າງສະໄລ້:</span> <span class=\"productname\""
+">{productname}</span> Impress ຊ່ວຍໃຫ້ທ່ານສາມາດປ່ຽນໂຄງຮ່າງສະໄລ້ໄດ້. "
+"ເລືອກໂຄງຮ່າງສະໄລ້ທີ່ຕ້ອງການໃນລາຍການໂຄງຮ່າງແບບເລື່ອນລົງ."
 
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:622-29
-msgid "slide layouts"
-msgstr "ໂຄງຮ່າງສະໄລ້"
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:624-29
+msgid ""
+"Slide properties panel showing format, orientation, background, and master "
+"slide settings, with a layout gallery of thumbnail options below"
+msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:624-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:626-30
 msgid ""
 "<span class=\"def\">Master slide:</span> Select the master slide associated "
 "to the current slide. Format and arrange slide elements in the master slide."
@@ -2995,7 +3049,7 @@ msgstr ""
 "ເລືອກສະໄລ້ແມ່ແບບທີ່ກ່ຽວຂ້ອງກັບສະໄລ້ປັດຈຸບັນ. ຈັດຮູບແບບ ແລະ "
 "ຈັດລຽງອົງປະກອບສະໄລ້ໃນສະໄລ້ແມ່ແບບ."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:625-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:627-30
 msgid ""
 "<span class=\"def\">Slide transitions:</span> <span class=\"productname\""
 ">{productname}</span> Impress provides visual effects when displaying a new "
@@ -3008,7 +3062,7 @@ msgstr ""
 "ການປ່ຽນສະໄລ້ແມ່ນຄຸນສົມບັດຂອງສະໄລ້, "
 "ໃຊ້ແຖບດ້ານຂ້າງເພື່ອຕັ້ງຄ່າການປ່ຽນສະໄລ້ເມື່ອຢູ່ໃນໂໝດແກ້ໄຂ."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:626-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:628-30
 msgid ""
 "<span class=\"def\">Object animation:</span> Individual objects in the slide "
 "can have animations. Use the side bar to configure the slide transition for "
@@ -3018,7 +3072,7 @@ msgstr ""
 "ວັດຖຸແຕ່ລະອັນໃນສະໄລ້ສາມາດມີການເຄື່ອນໄຫວໄດ້. "
 "ໃຊ້ແຖບດ້ານຂ້າງເພື່ອຕັ້ງຄ່າການປ່ຽນສະໄລ້ສຳລັບວັດຖຸທີ່ເລືອກ ຫຼື ຊຸດຂອງວັດຖຸ."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:627-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:629-30
 msgid ""
 "<span class=\"def\">Tables:</span> Insert tables in the presentation. Use "
 "the sidebar to select the table theme."
@@ -3026,7 +3080,7 @@ msgstr ""
 "<span class=\"def\">ຕາຕະລາງ:</span> ແຊກຕາຕະລາງໃນງານນຳສະເໜີ. "
 "ໃຊ້ແຖບດ້ານຂ້າງເພື່ອເລືອກທີມຂອງຕາຕະລາງ."
 
-#: html/cool-help.html%2Bdiv.div.div.h4:633-5
+#: html/cool-help.html%2Bdiv.div.div.h4:635-5
 msgid ""
 "What are the document file formats supported by <span class=\"productname\""
 ">{productname}</span>?"
@@ -3034,7 +3088,7 @@ msgstr ""
 "ຮູບແບບໄຟລ໌ເອກະສານທີ່ຮອງຮັບໂດຍ <span class=\"productname\">{productname}</"
 "span> ມີຫຍັງແດ່?"
 
-#: html/cool-help.html%2Bdiv.div.div.p:634-5
+#: html/cool-help.html%2Bdiv.div.div.p:636-5
 msgid ""
 "<span class=\"productname\">{productname}</span> supports both reading and "
 "writing for the following file formats:"
@@ -3042,37 +3096,37 @@ msgstr ""
 "<span class=\"productname\">{productname}</span> ຮອງຮັບທັງການອ່ານ ແລະ "
 "ການຂຽນສຳລັບຮູບແບບໄຟລ໌ຕໍ່ໄປນີ້:"
 
-#: html/cool-help.html%2Bdiv.div.div.ul.li:636-7
+#: html/cool-help.html%2Bdiv.div.div.ul.li:638-7
 msgid ""
 "Text documents: Microsoft formats DOC, DOCX, RTF. OpenDocument Format ODT"
 msgstr ""
 "ເອກະສານຂໍ້ຄວາມ: ຮູບແບບ Microsoft DOC, DOCX, RTF. OpenDocument Format ODT"
 
-#: html/cool-help.html%2Bdiv.div.div.ul.li:637-7
+#: html/cool-help.html%2Bdiv.div.div.ul.li:639-7
 msgid "Spreadsheets: Microsoft formats XLS, XLSX, OpenDocument Format ODS"
 msgstr "ສະເປຣດຊີດ: ຮູບແບບ Microsoft XLS, XLSX, OpenDocument Format ODS"
 
-#: html/cool-help.html%2Bdiv.div.div.ul.li:638-7
+#: html/cool-help.html%2Bdiv.div.div.ul.li:640-7
 msgid "Presentations: Microsoft formats PPT, PPTX, OpenDocument Format ODP"
 msgstr "ງານນຳສະເໜີ: ຮູບແບບ Microsoft PPT, PPTX, OpenDocument Format ODP"
 
-#: html/cool-help.html%2Bdiv.div.div.h4:642-5
+#: html/cool-help.html%2Bdiv.div.div.h4:644-5
 msgid "How do I save a document with another name?"
 msgstr "ຂ້ອຍຈະບັນທຶກເອກະສານດ້ວຍຊື່ອື່ນໄດ້ແນວໃດ?"
 
-#: html/cool-help.html%2Bdiv.div.div.ol.li:644-7
+#: html/cool-help.html%2Bdiv.div.div.ol.li:646-7
 msgid "Hover the mouse on the document name in the menu bar."
 msgstr "ວາງເມົາສ໌ເທິງຊື່ເອກະສານໃນແຖບເມນູ."
 
-#: html/cool-help.html%2Bdiv.div.div.ol.li:645-7
+#: html/cool-help.html%2Bdiv.div.div.ol.li:647-7
 msgid "Type the new file name in the text box and press <kbd>Enter</kbd>."
 msgstr "ພິມຊື່ໄຟລ໌ໃໝ່ໃນກ່ອງຂໍ້ຄວາມ ແລະ ກົດ <kbd>Enter</kbd>."
 
-#: html/cool-help.html%2Bdiv.div.div.p:647-5
+#: html/cool-help.html%2Bdiv.div.div.p:649-5
 msgid "A copy of the document is saved with the new name in the same folder."
 msgstr "ສຳເນົາຂອງເອກະສານຈະຖືກບັນທຶກດ້ວຍຊື່ໃໝ່ໃນໂຟນເດີດຽວກັນ."
 
-#: html/cool-help.html%2Bdiv.div.div.h3:650-5
+#: html/cool-help.html%2Bdiv.div.div.h3:652-5
 msgid ""
 "How can I quit <span class=\"productname\">{productname}</span> without "
 "saving my edits?"
@@ -3080,7 +3134,7 @@ msgstr ""
 "ຂ້ອຍຈະອອກຈາກ <span class=\"productname\">{productname}</span> "
 "ໂດຍບໍ່ບັນທຶກການແກ້ໄຂຂອງຂ້ອຍໄດ້ແນວໃດ?"
 
-#: html/cool-help.html%2Bdiv.div.div.p:651-5
+#: html/cool-help.html%2Bdiv.div.div.p:653-5
 msgid ""
 "<span class=\"productname\">{productname}</span> saves the document in the "
 "background regularly, you can't just close without saving it. To abandon "
@@ -3092,7 +3146,7 @@ msgstr ""
 "ທ່ານຕ້ອງຍົກເລີກພວກມັນ, ຫຼື ໃຊ້ <span class=\"ui\">ປະຫວັດການແກ້ໄຂ</span> "
 "ໃນເມນູ <span class=\"ui\">ໄຟລ໌</span>."
 
-#: html/cool-help.html%2Bdiv.div.div.h4:654-5
+#: html/cool-help.html%2Bdiv.div.div.h4:656-5
 msgid ""
 "Can <span class=\"productname\">{productname}</span> open a password-"
 "protected document?"
@@ -3100,7 +3154,7 @@ msgstr ""
 "<span class=\"productname\">{productname}</span> "
 "ສາມາດເປີດເອກະສານທີ່ປ້ອງກັນດ້ວຍລະຫັດຜ່ານໄດ້ບໍ່?"
 
-#: html/cool-help.html%2Bdiv.div.div.p:655-5
+#: html/cool-help.html%2Bdiv.div.div.p:657-5
 msgid ""
 "Yes. <span class=\"productname\">{productname}</span> opens password-"
 "protected documents, but it is necessary to supply the password in the “"
@@ -3110,11 +3164,11 @@ msgstr ""
 "ເປີດເອກະສານທີ່ປ້ອງກັນດ້ວຍລະຫັດຜ່ານ, ແຕ່ຈຳເປັນຕ້ອງໃສ່ລະຫັດຜ່ານໃນກ່ອງ \"ປ"
 "້ອນລະຫັດຜ່ານ\" ໃນເວລາໂຫຼດ."
 
-#: html/cool-help.html%2Bdiv.div.div.h4:658-5
+#: html/cool-help.html%2Bdiv.div.div.h4:660-5
 msgid "How can I check spelling in my language?"
 msgstr "ຂ້ອຍຈະກວດສອບການສະກົດຄຳໃນພາສາຂອງຂ້ອຍໄດ້ແນວໃດ?"
 
-#: html/cool-help.html%2Bdiv.div.div.p:659-5
+#: html/cool-help.html%2Bdiv.div.div.p:661-5
 msgid ""
 "Choose menu <span class=\"ui\">Tools</span> → <span class=\"ui\">Languages</"
 "span> and select the language for the whole document. Optionally you can set "
@@ -3124,11 +3178,11 @@ msgstr ""
 "span> ແລະ ເລືອກພາສາສຳລັບເອກະສານທັງໝົດ. ທາງເລືອກອື່ນ, "
 "ທ່ານສາມາດຕັ້ງຄ່າພາສາສຳລັບຂໍ້ຄວາມທີ່ເລືອກ ແລະ ສຳລັບຫຍໍ້ໜ້າປັດຈຸບັນ."
 
-#: html/cool-help.html%2Bdiv.div.div.h4:662-5
+#: html/cool-help.html%2Bdiv.div.div.h4:664-5
 msgid "How can I remove the red wavy lines in my document?"
 msgstr "ຂ້ອຍຈະລຶບເສັ້ນຄື້ນສີແດງໃນເອກະສານຂອງຂ້ອຍໄດ້ແນວໃດ?"
 
-#: html/cool-help.html%2Bdiv.div.div.p:663-5
+#: html/cool-help.html%2Bdiv.div.div.p:665-5
 msgid ""
 "Choose menu <span class=\"ui\">Tools</span> and uncheck <span class=\"ui\""
 ">Automatic Spell Checking</span>."
@@ -3136,11 +3190,11 @@ msgstr ""
 "ເລືອກເມນູ <span class=\"ui\">ເຄື່ອງມື</span> ແລະ ຍົກເລີກການເລືອກ <span class="
 "\"ui\">ການກວດສອບການສະກົດຄຳອັດຕະໂນມັດ</span>."
 
-#: html/cool-help.html%2Bdiv.div.div.h4:666-5
+#: html/cool-help.html%2Bdiv.div.div.h4:668-5
 msgid "What is the blue wavy underline in some words in the text?"
 msgstr "ເສັ້ນຄື້ນສີຟ້າຢູ່ໃຕ້ຄຳສັບບາງຄຳໃນຂໍ້ຄວາມແມ່ນຫຍັງ?"
 
-#: html/cool-help.html%2Bdiv.div.div.p:667-5
+#: html/cool-help.html%2Bdiv.div.div.p:669-5
 msgid ""
 "Grammar errors in the text are marked with the blue wavy underline. Click on "
 "the underlined text with the right mouse button to open a menu with "
@@ -3152,11 +3206,11 @@ msgstr ""
 "ດພາດທາງໄວຍາກອນ ແລະ ກົດລະບຽບໄວຍາກອນທີ່ລະເມີດ. "
 "ເລືອກຄຳແນະນຳທີ່ຖືກຕ້ອງເພື່ອປ່ຽນຂໍ້ຄວາມ."
 
-#: html/cool-help.html%2Bdiv.div.div.h4:670-5
+#: html/cool-help.html%2Bdiv.div.div.h4:672-5
 msgid "Is there a thesaurus?"
 msgstr "ມີພົດຈະນານຸກົມຄຳສັບຄ້າຍຄືກັນບໍ່?"
 
-#: html/cool-help.html%2Bdiv.div.div.p:671-5
+#: html/cool-help.html%2Bdiv.div.div.p:673-5
 msgid ""
 "Yes. Click in the word you want and choose <span class=\"ui\">Tools</span> → "
 "<span class=\"ui\">Thesaurus</span>. A dialog opens with many suggestions "
@@ -3166,11 +3220,13 @@ msgstr ""
 "span> → <span class=\"ui\">ພົດຈະນານຸກົມຄຳສັບຄ້າຍຄືກັນ</span>. "
 "ກ່ອງໂຕ້ຕອບຈະເປີດຂຶ້ນພ້ອມກັບຄຳແນະນຳຫຼາຍຢ່າງສຳລັບການທົດແທນ."
 
-#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:672-29
-msgid "thesaurus"
-msgstr "ພົດຈະນານຸກົມຄຳສັບຄ້າຍຄືກັນ"
+#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:674-29
+msgid ""
+"Thesaurus dialog for the word company, listing alternatives such as "
+"institution, establishment, and troupe, with a Replace with field"
+msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.h4:675-5
+#: html/cool-help.html%2Bdiv.div.div.h4:677-5
 msgid ""
 "What are the blue <span class=\"blue\">¶</span> symbols and how can I remove "
 "them from my text document?"
@@ -3178,7 +3234,7 @@ msgstr ""
 "ສັນຍາລັກສີຟ້າ <span class=\"blue\">¶</span> ແມ່ນຫຍັງ ແລະ "
 "ຂ້ອຍຈະລຶບມັນອອກຈາກເອກະສານຂໍ້ຄວາມຂອງຂ້ອຍໄດ້ແນວໃດ?"
 
-#: html/cool-help.html%2Bdiv.div.div.p:676-5
+#: html/cool-help.html%2Bdiv.div.div.p:678-5
 msgid ""
 "The <span class=\"blue\">¶</span> symbol is a formatting mark. It is used to "
 "help text alignment and editing and is not printed. To toggle it in the "
@@ -3190,11 +3246,11 @@ msgstr ""
 "ເພື່ອສະຫຼັບການສະແດງມັນໃນເອກະສານ, ໃຫ້ເລືອກເມນູ <span class=\"ui\">ມຸມມອງ</"
 "span> → <span class=\"ui\">ເຄື່ອງໝາຍການຈັດຮູບແບບ</span>."
 
-#: html/cool-help.html%2Bdiv.div.div.div.h4:683-5
+#: html/cool-help.html%2Bdiv.div.div.div.h4:685-5
 msgid "How do I get a word count of my document?"
 msgstr "ຂ້ອຍຈະນັບຈຳນວນຄຳໃນເອກະສານຂອງຂ້ອຍໄດ້ແນວໃດ?"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:684-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:686-5
 msgid ""
 "Word count is available in <span class=\"ui\">Tools</span> → <span class=\"ui"
 "\">Word count</span>. A dialog shows word counts for selection and for the "
@@ -3204,11 +3260,13 @@ msgstr ""
 ">ການນັບຄຳ</span>. ກ່ອງໂຕ້ຕອບຈະສະແດງຈຳນວນຄຳສຳລັບສ່ວນທີ່ເລືອກ ແລະ "
 "ສຳລັບເອກະສານທັງໝົດ."
 
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:685-29
-msgid "word count"
-msgstr "ການນັບຄຳ"
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:687-29
+msgid ""
+"Word Count dialog showing word and character counts for the current "
+"selection and for the whole document"
+msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:686-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:688-5
 msgid ""
 "Word count is also displayed in the status bar. If no text is selected the "
 "word count is for the whole document. Otherwise the word count is for the "
@@ -3218,13 +3276,13 @@ msgstr ""
 "ການນັບຄຳຈະເປັນສຳລັບເອກະສານທັງໝົດ. ຖ້າບໍ່ດັ່ງນັ້ນ, "
 "ການນັບຄຳຈະເປັນສຳລັບຂໍ້ຄວາມທີ່ເລືອກ."
 
-#: html/cool-help.html%2Bdiv.div.div.div.h4:689-5
+#: html/cool-help.html%2Bdiv.div.div.div.h4:691-5
 msgid ""
 "How can I insert a currency, copyright or trademark symbol in the document?"
 msgstr ""
 "ຂ້ອຍຈະແຊກສັນຍາລັກສະກຸນເງິນ, ລິຂະສິດ ຫຼື ເຄື່ອງໝາຍການຄ້າໃນເອກະສານໄດ້ແນວໃດ?"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:690-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:692-5
 msgid ""
 "You can insert these special characters in the document using the <span "
 "class=\"ui\">Special Character</span> dialog."
@@ -3232,24 +3290,27 @@ msgstr ""
 "ທ່ານສາມາດແຊກຕົວອັກສອນພິເສດເຫຼົ່ານີ້ໃນເອກະສານໂດຍໃຊ້ກ່ອງໂຕ້ຕອບ <span class=\"ui"
 "\">ຕົວອັກສອນພິເສດ</span>."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:692-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:694-7
 msgid "Place the cursor in the position to insert the character."
 msgstr "ວາງເຄີເຊີໃນຕຳແໜ່ງທີ່ຈະແຊກຕົວອັກສອນ."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:693-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:695-7
 msgid ""
 "Choose <span class=\"ui\">Insert</span> → <span class=\"ui\">Special "
 "Characters </span> or click the corresponding icon in the toolbar. A dialog "
 "opens."
 msgstr ""
-"ເລືອກ <span class=\"ui\">ແຊກ</span> -> <span class=\"ui\">ອັກຂະລະພິເສດ </span> "
-"ຫຼື ຄລິກໄອຄອນທີ່ກ່ຽວຂ້ອງໃນແຖບເຄື່ອງມື. ປ່ອງຢ້ຽມໂຕ້ຕອບຈະເປີດຂຶ້ນ."
+"ເລືອກ <span class=\"ui\">ແຊກ</span> -> <span class=\"ui\">ອັກຂະລະພິເສດ </"
+"span> ຫຼື ຄລິກໄອຄອນທີ່ກ່ຽວຂ້ອງໃນແຖບເຄື່ອງມື. ປ່ອງຢ້ຽມໂຕ້ຕອບຈະເປີດຂຶ້ນ."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:696-31
-msgid "Special Characters"
-msgstr "ຕົວອັກສອນພິເສດ"
+#: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:698-31
+msgid ""
+"Special Characters dialog with a character grid, search and font fields, "
+"hexadecimal and decimal code inputs, and recent and favorite characters at "
+"the bottom"
+msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:697-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:699-7
 msgid ""
 "You can either browse the characters displayed with the drop lists or type a "
 "search key in the <span class=\"ui\">Search</span> box. If you know the "
@@ -3260,7 +3321,7 @@ msgstr ""
 "<span class=\"ui\">ຄົ້ນຫາ</span>. ຖ້າທ່ານຮູ້ລະຫັດຕົວເລກ Unicode "
 "ຂອງຕົວອັກສອນພິເສດ, ໃຫ້ປ້ອນເຂົ້າໃນກ່ອງດ້ານຂວາ."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:698-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:700-7
 msgid ""
 "Press <span class=\"ui\">Insert</span> button. To close the dialog, press "
 "<span class=\"ui\">Cancel</span>."
@@ -3268,11 +3329,11 @@ msgstr ""
 "ກົດປຸ່ມ <span class=\"ui\">ແຊກ</span>. ເພື່ອປິດກ່ອງໂຕ້ຕອບ, ໃຫ້ກົດ <span "
 "class=\"ui\">ຍົກເລີກ</span>."
 
-#: html/cool-help.html%2Bdiv.div.div.div.h4:702-5
+#: html/cool-help.html%2Bdiv.div.div.div.h4:704-5
 msgid "Why can't I delete text? It just gets a strike-through?"
 msgstr "ເປັນຫຍັງຂ້ອຍຈຶ່ງບໍ່ສາມາດລຶບຂໍ້ຄວາມໄດ້? ມັນພຽງແຕ່ຖືກຂີດຂ້າ?"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:703-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:705-5
 msgid ""
 "You have the Track Changes feature enabled for the document. Track Changes "
 "records all changes in the text and shows the edits for later revision. "
@@ -3280,41 +3341,42 @@ msgid ""
 "enabled choosing <span class=\"ui\">Edit</span> → <span class=\"ui\">Track "
 "Changes </span> → <span class=\"ui\">Record</span>."
 msgstr ""
-"ທ່ານໄດ້ເປີດນຳໃຊ້ຄຸນສົມບັດການຕິດຕາມການປ່ຽນແປງສຳລັບເອກະສານນີ້. ການຕິດຕາມການປ່ຽນແປງຈະບັນທຶກທຸກການ"
-"ປ່ຽນແປງໃນຂໍ້ຄວາມ ແລະ ສະແດງການແກ້ໄຂເພື່ອການກວດກາຄືນໃນພາຍຫຼັງ. ມີປະໂຫຍດສຳລັບການໝາຍການປ່ຽນແປ"
-"ງໃນຂໍ້ຄວາມ ແລະ ສະເປຣດຊີດ. ການຕິດຕາມການປ່ຽນແປງສາມາດເປີດນຳໃຊ້ໄດ້ໂດຍການເລືອກ <span "
-"class=\"ui\">ແກ້ໄຂ</span> → <span class=\"ui\">ຕິດຕາມການປ່ຽນແປງ</span> → <span "
-"class=\"ui\">ບັນທຶກ</span>."
+"ທ່ານໄດ້ເປີດນຳໃຊ້ຄຸນສົມບັດການຕິດຕາມການປ່ຽນແປງສຳລັບເອກະສານນີ້. "
+"ການຕິດຕາມການປ່ຽນແປງຈະບັນທຶກທຸກການປ່ຽນແປງໃນຂໍ້ຄວາມ ແລະ "
+"ສະແດງການແກ້ໄຂເພື່ອການກວດກາຄືນໃນພາຍຫຼັງ. ມີປະໂຫຍດສຳລັບການໝາຍການປ່ຽນແປງໃນຂໍ້"
+"ຄວາມ ແລະ ສະເປຣດຊີດ. ການຕິດຕາມການປ່ຽນແປງສາມາດເປີດນຳໃຊ້ໄດ້ໂດຍການເລືອກ <span "
+"class=\"ui\">ແກ້ໄຂ</span> → <span class=\"ui\">ຕິດຕາມການປ່ຽນແປງ</span> → "
+"<span class=\"ui\">ບັນທຶກ</span>."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:704-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:706-5
 msgid ""
 "With track changes enabled your document is shown in the following manner:"
 msgstr ""
 "ເມື່ອເປີດໃຊ້ການຕິດຕາມການປ່ຽນແປງ, ເອກະສານຂອງທ່ານຈະຖືກສະແດງໃນລັກສະນະຕໍ່ໄປນີ້:"
 
-#: html/cool-help.html%2Bdiv.div.div.div.ul.li:706-7
+#: html/cool-help.html%2Bdiv.div.div.div.ul.li:708-7
 msgid "Deletions are marked with colored strike-through characters."
 msgstr "ການລຶບຈະຖືກໝາຍດ້ວຍຕົວອັກສອນຂີດຂ້າທີ່ມີສີ."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ul.li:707-7
+#: html/cool-help.html%2Bdiv.div.div.div.ul.li:709-7
 msgid "Additions are marked with colored underlined characters."
 msgstr "ການເພີ່ມຈະຖືກໝາຍດ້ວຍຕົວອັກສອນຂີດກ້ອງທີ່ມີສີ."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ul.li:708-7
+#: html/cool-help.html%2Bdiv.div.div.div.ul.li:710-7
 msgid "All changes are marked with a vertical bar in the right margin."
 msgstr "ການປ່ຽນແປງທັງໝົດຈະຖືກໝາຍດ້ວຍແຖບຕັ້ງຢູ່ໃນຂອບຂວາ."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ul.li:709-7
+#: html/cool-help.html%2Bdiv.div.div.div.ul.li:711-7
 msgid "Changes are displayed as comment in the right of the document area."
 msgstr "ການປ່ຽນແປງຈະຖືກສະແດງເປັນຄຳເຫັນຢູ່ດ້ານຂວາຂອງພື້ນທີ່ເອກະສານ."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:712-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:714-5
 msgid ""
 "The color assigned to the changes depends on the user that changes the "
 "document."
 msgstr "ສີທີ່ກຳໜົດໃຫ້ການປ່ຽນແປງຈະຂຶ້ນຢູ່ກັບຜູ້ໃຊ້ທີ່ປ່ຽນແປງເອກະສານ."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:713-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:715-5
 msgid ""
 "To display or hide track changes choose <span class=\"ui\">Edit</span> → "
 "<span class=\"ui\">Track Changes </span> → <span class=\"ui\">Show</span>. "
@@ -3327,7 +3389,7 @@ msgstr ""
 "ທ່ານຍັງຄົງບັນທຶກການປ່ຽນແປງ ແລະ "
 "ອາດຈະເກັບຂໍ້ຄວາມທີ່ບໍ່ຕ້ອງການໄວ້ໃນເອກະສານໂດຍບໍ່ຕັ້ງໃຈ."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:714-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:716-5
 msgid ""
 "Changes can be accepted or rejected. To accept or reject changes, click on "
 "the corresponding icons in the comment box on the right of the document. "
@@ -3348,15 +3410,17 @@ msgstr ""
 "ກ່ອງໂຕ້ຕອບຈະສະແດງລາຍການຂອງການປ່ຽນແປງທີ່ຕິດຕາມທັງໝົດ. "
 "ໃຊ້ປຸ່ມໃນກ່ອງໂຕ້ຕອບຕາມຄວາມເໝາະສົມ."
 
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:715-29
-msgid "manage changes"
-msgstr "ຈັດການການປ່ຽນແປງ"
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:717-29
+msgid ""
+"Manage Changes dialog with a list of tracked changes showing action, author, "
+"date, and comment columns, and Accept, Reject, Accept All, Reject All buttons"
+msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.div.h4:718-5
+#: html/cool-help.html%2Bdiv.div.div.div.h4:720-5
 msgid "How do I set the margins of the document?"
 msgstr "ຂ້ອຍຈະຕັ້ງຄ່າຂອບຂອງເອກະສານໄດ້ແນວໃດ?"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:719-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:721-5
 msgid ""
 "Using the ruler drag the leftmost edge of the ruler to adjust the left "
 "margin, or the rightmost for the right margin."
@@ -3364,37 +3428,39 @@ msgstr ""
 "ໃຊ້ໄມ້ບັນທັດລາກຂອບຊ້າຍສຸດຂອງໄມ້ບັນທັດເພື່ອປັບຂອບຊ້າຍ, ຫຼື "
 "ຂອບຂວາສຸດສຳລັບຂອບຂວາ."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:720-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:722-5
 msgid "Using the page style"
 msgstr "ການໃຊ້ຮູບແບບໜ້າ"
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:722-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:724-7
 msgid ""
 "Choose <span class=\"ui\">Format</span> → <span class=\"ui\">Page</span> and "
 "select the <span class=\"ui\">Page</span> tab"
 msgstr ""
-"ເລືອກ <span class=\"ui\">ຮູບແບບ</span> → <span class=\"ui\">ໜ້າ</span> ແລະ ເເລືອກ"
-"ແຖບ <span class=\"ui\">ໜ້າ</span>"
+"ເລືອກ <span class=\"ui\">ຮູບແບບ</span> → <span class=\"ui\">ໜ້າ</span> ແລະ "
+"ເເລືອກແຖບ <span class=\"ui\">ໜ້າ</span>"
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:723-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:725-7
 msgid "Set the page margins in the dialog."
 msgstr "ຕັ້ງຄ່າຂອບໜ້າໃນກ່ອງໂຕ້ຕອບ."
 
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:725-29
-msgid "page style"
-msgstr "ຮູບແບບໜ້າ"
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:727-29
+msgid ""
+"Page Style dialog on the Organizer tab showing style name, next style, "
+"inherit from, and category fields, with a summary of page properties"
+msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.div.h4:728-5
+#: html/cool-help.html%2Bdiv.div.div.div.h4:730-5
 msgid "How do I change the page orientation to landscape inside my document?"
 msgstr "ຂ້ອຍຈະປ່ຽນການວາງໜ້າເປັນແນວນອນພາຍໃນເອກະສານຂອງຂ້ອຍໄດ້ແນວໃດ?"
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:730-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:732-7
 msgid ""
 "Place the cursor at the place where the page orientation is to change. Add "
 "an empty paragraph."
 msgstr "ວາງເຄີເຊີໄວ້ບ່ອນທີ່ຈະປ່ຽນການວາງໜ້າ. ແລ້ວເພີ່ມຫຍໍ້ໜ້າຫວ່າງ."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:731-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:733-7
 msgid ""
 "Choose <span class=\"ui\">Format</span> → <span class=\"ui\">Paragraph</"
 "span>, <span class=\"ui\">Text Flow </span> tab"
@@ -3402,7 +3468,7 @@ msgstr ""
 "ເລືອກ <span class=\"ui\">ຮູບແບບ</span> → <span class=\"ui\">ຫຍໍ້ໜ້າ</span>, "
 "ແຖບ <span class=\"ui\">ການໄຫຼຂອງຂໍ້ຄວາມ</span>"
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:732-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:734-7
 msgid ""
 "In the <span class=\"ui\">Breaks</span> area, mark Insert, Type: Page Break, "
 "Position: Before."
@@ -3410,15 +3476,15 @@ msgstr ""
 "ໃນພື້ນທີ່ <span class=\"ui\">ການຕັດ</span>, ໝາຍ ແຊກ, ປະເພດ: ການຕັດໜ້າ, "
 "ຕຳແໜ່ງ: ກ່ອນໜ້າ."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:733-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:735-7
 msgid "Select Landscape in “With Page Style”"
 msgstr "ເລືອກ ແນວນອນ ໃນ “ດ້ວຍຮູບແບບໜ້າ”"
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:734-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:736-7
 msgid "Select if you want to change page numbering."
 msgstr "ເລືອກຖ້າທ່ານຕ້ອງການປ່ຽນເລກໜ້າ."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:736-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:738-5
 msgid ""
 "To return to portrait orientation, repeat the procedure, choosing Portrait "
 "in “With page style”."
@@ -3426,20 +3492,20 @@ msgstr ""
 "ເພື່ອກັບໄປທີ່ການວາງໜ້າແນວຕັ້ງ, ໃຫ້ເຮັດຂັ້ນຕອນຊ້ຳ, ເລືອກ ແນວຕັ້ງ ໃນ "
 "“ດ້ວຍຮູບແບບໜ້າ”."
 
-#: html/cool-help.html%2Bdiv.div.div.div.h4:739-5
+#: html/cool-help.html%2Bdiv.div.div.div.h4:741-5
 msgid "How can I make the new text look like other existing text?"
 msgstr "ຂ້ອຍຈະເຮັດໃຫ້ຂໍ້ຄວາມໃໝ່ເບິ່ງຄືກັບຂໍ້ຄວາມອື່ນທີ່ມີຢູ່ແລ້ວໄດ້ແນວໃດ?"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:740-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:742-5
 msgid "Directly:"
 msgstr "ໂດຍກົງ:"
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:742-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:744-7
 msgid "Select the text with the existing format"
 msgstr "ເລືອກຂໍ້ຄວາມທີ່ມີຮູບແບບທີ່ມີຢູ່ແລ້ວ"
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:743-7
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:785-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:745-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:787-7
 msgid ""
 "Click on the clone formatting icon <img alt=\"format paintbrush\" class"
 "=\"icon-size\" src=\"images/lc_formatpaintbrush.svg\" />. The mouse pointer "
@@ -3448,19 +3514,19 @@ msgstr ""
 "ຄລິກທີ່ໄອຄອນສຳເນົາຮູບແບບ <img alt=\"format paintbrush\" class=\"icon-size\" "
 "src=\"images/lc_formatpaintbrush.svg\" />. ຕົວຊີ້ເມົາສ໌ຈະປ່ຽນເປັນຖັງສີ."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:744-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:746-7
 msgid "Select the text you want to apply the new format."
 msgstr "ເລືອກຂໍ້ຄວາມທີ່ທ່ານຕ້ອງການນຳໃຊ້ຮູບແບບໃໝ່."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:748-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:750-5
 msgid "Applying a paragraph style:"
 msgstr "ການນຳໃຊ້ຮູບແບບຫຍໍ້ໜ້າ:"
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:750-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:752-7
 msgid "Place the cursor at the paragraph to be formatted"
 msgstr "ວາງເຄີເຊີຢູ່ທີ່ຫຍໍ້ໜ້າທີ່ຈະຈັດຮູບແບບ"
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:751-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:753-7
 msgid ""
 "Select the style to apply in the style dropdown list. The paragraph displays "
 "the styles attributes."
@@ -3468,13 +3534,13 @@ msgstr ""
 "ເລືອກຮູບແບບທີ່ຈະນຳໃຊ້ໃນລາຍການແບບເລື່ອນລົງຂອງຮູບແບບ. "
 "ຫຍໍ້ໜ້າຈະສະແດງຄຸນລັກສະນະຂອງຮູບແບບ."
 
-#: html/cool-help.html%2Bdiv.div.div.div.h4:755-5
+#: html/cool-help.html%2Bdiv.div.div.div.h4:757-5
 msgid ""
 "Why did the text I just typed change automatically? How can I revert it?"
 msgstr ""
 "ເປັນຫຍັງຂໍ້ຄວາມທີ່ຂ້ອຍພິມເມື່ອສັກຄູ່ຈຶ່ງປ່ຽນອັດຕະໂນມັດ? ຂ້ອຍຈະກັບຄືນໄດ້ແນວໃດ?"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:756-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:758-5
 msgid ""
 "You have the AutoCorrection enabled. AutoCorrection compares the text just "
 "typed to an internal table of text. In most cases, AutoCorrection corrects "
@@ -3482,16 +3548,18 @@ msgid ""
 "<span class=\"ui\">Tools</span> → <span class=\"ui\">AutoCorrection</span> → "
 "<span class=\"ui\">While typing</span>."
 msgstr ""
-"ທ່ານໄດ້ເປີດໃຊ້ງານການແກ້ໄຂອັດຕະໂນມັດ. ການແກ້ໄຂອັດຕະໂນມັດຈະປຽບທຽບຂໍ້ຄວາມທີ່ຫາລໍ່ພິມໃສ່ ກັບຕາຕະລາງຂໍ້"
-"ຄວາມພາຍໃນ. ໃນກໍລະນີສ່ວນໃຫຍ່, ການແກ້ໄຂອັດຕະໂນມັດຈະແກ້ໄຂຄຳຜິດ ໃນຂະນະທີ່ເຈົ້າກຳລັງພິມ. ຫາກການແກ້"
-"ໄຂອັດຕະໂນມັດບໍ່ຈຳເປັນ, ໃຫ້ປິດໃຊ້ງານມັນໃນ <span class=\"ui\">ເຄື່ອງມື</span> -> <span "
-"class=\"ui\">ການແກ້ໄຂອັດຕະໂນມັດ</span> -> <span class=\"ui\">ໃນຂະນະພິມ</span>."
+"ທ່ານໄດ້ເປີດໃຊ້ງານການແກ້ໄຂອັດຕະໂນມັດ. "
+"ການແກ້ໄຂອັດຕະໂນມັດຈະປຽບທຽບຂໍ້ຄວາມທີ່ຫາລໍ່ພິມໃສ່ ກັບຕາຕະລາງຂໍ້ຄວາມພາຍໃນ. "
+"ໃນກໍລະນີສ່ວນໃຫຍ່, ການແກ້ໄຂອັດຕະໂນມັດຈະແກ້ໄຂຄຳຜິດ ໃນຂະນະທີ່ເຈົ້າກຳລັງພິມ. "
+"ຫາກການແກ້ໄຂອັດຕະໂນມັດບໍ່ຈຳເປັນ, ໃຫ້ປິດໃຊ້ງານມັນໃນ <span class=\"ui\""
+">ເຄື່ອງມື</span> -> <span class=\"ui\">ການແກ້ໄຂອັດຕະໂນມັດ</span> -> <span "
+"class=\"ui\">ໃນຂະນະພິມ</span>."
 
-#: html/cool-help.html%2Bdiv.div.div.div.h4:764-5
+#: html/cool-help.html%2Bdiv.div.div.div.h4:766-5
 msgid "How can I select data to print?"
 msgstr "ຂ້ອຍຈະເລືອກຂໍ້ມູນເພື່ອພິມໄດ້ແນວໃດ?"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:765-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:767-5
 msgid ""
 "Insert column and row breaks in the spreadsheet to narrow the print range "
 "and print the document to download. On printing the PDF, select the pages of "
@@ -3500,25 +3568,26 @@ msgstr ""
 "ແຊກການຕັດຖັນ ແລະ ແຖວໃນສະເປຣດຊີດເພື່ອຈຳກັດຊ່ວງການພິມ ແລະ ພິມເອກະສານເພື່ອດາວໂຫຼ"
 "ດ. ໃນການພິມ PDF, ໃຫ້ເລືອກໜ້າທີ່ສົນໃຈ."
 
-#: html/cool-help.html%2Bdiv.div.div.div.h4:768-5
+#: html/cool-help.html%2Bdiv.div.div.div.h4:770-5
 msgid "How can I import CSV data?"
 msgstr "ຂ້ອຍຈະນຳເຂົ້າຂໍ້ມູນ CSV ໄດ້ແນວໃດ?"
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:770-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:772-7
 msgid ""
 "Load your CSV data in some native tool to your platform, select and copy it "
 "to the clipboard"
 msgstr ""
-"ໂຫຼດຂໍ້ມູນ CSV ຂອງທ່ານໃນເຄື່ອງມືພື້ນເມືອງຂອງແພລັດຟອມຂອງທ່ານ, ເເລືອກ ແລະ ສຳເນົາມັນໄປຍັງຄລິບບອດ"
+"ໂຫຼດຂໍ້ມູນ CSV ຂອງທ່ານໃນເຄື່ອງມືພື້ນເມືອງຂອງແພລັດຟອມຂອງທ່ານ, ເເລືອກ ແລະ "
+"ສຳເນົາມັນໄປຍັງຄລິບບອດ"
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:771-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:773-7
 msgid ""
 "Activate the <span class=\"productname\">{productname}</span> spreadsheet "
 "window."
 msgstr ""
 "ເປີດໃຊ້ງານໜ້າຕ່າງສະເປຣດຊີດ <span class=\"productname\">{productname}</span>."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:772-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:774-7
 msgid ""
 "Paste from the browser <span class=\"ui\">Edit</span> → <span class=\"ui\""
 ">Paste</span> or press <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden="
@@ -3530,43 +3599,45 @@ msgstr ""
 ">+</span><kbd>V</kbd>. ກ່ອງໂຕ້ຕອບ <span class=\"ui\">ການນຳເຂົ້າຂໍ້ຄວາມ</"
 "span> ຈະເປີດຂຶ້ນເພື່ອໃຫ້ທ່ານອະທິບາຍຮູບແບບທີ່ຊັດເຈນຂອງຂໍ້ມູນ CSV."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:775-31
-msgid "import"
-msgstr "ນຳເຂົ້າ"
+#: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:777-31
+msgid ""
+"Text Import dialog with character set, locale, separator options, and a "
+"preview of the imported CSV data"
+msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:776-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:778-7
 msgid ""
 "Select the character set, language and separator options for the CSV file."
 msgstr "ເລືອກຊຸດຕົວອັກສອນ, ພາສາ ແລະ ຕົວເລືອກຕົວຂັ້ນສຳລັບໄຟລ໌ CSV."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:778-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:780-5
 msgid ""
 "The CSV data is loaded into the selected cell where you pasted, according to "
 "these settings."
 msgstr ""
 "ຂໍ້ມູນ CSV ຈະຖືກໂຫຼດເຂົ້າໃນຊ່ອງທີ່ເລືອກໄວ້ທີ່ທ່ານວາງ, ຕາມການຕັ້ງຄ່າເຫຼົ່ານີ້."
 
-#: html/cool-help.html%2Bdiv.div.div.div.h4:781-5
+#: html/cool-help.html%2Bdiv.div.div.div.h4:783-5
 msgid "How can I copy the formatting of existing cells to new ones?"
 msgstr "ຂ້ອຍຈະສຳເນົາຮູບແບບຂອງຊ່ອງທີ່ມີຢູ່ແລ້ວໄປໃສ່ຊ່ອງໃໝ່ໄດ້ແນວໃດ?"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:782-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:784-5
 msgid "This is easy to do using the Paintbrush tool in the toolbar."
 msgstr "ສິ່ງນີ້ງ່າຍທີ່ຈະເຮັດໂດຍໃຊ້ເຄື່ອງມືແປງທາສີໃນແຖບເຄື່ອງມື."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:784-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:786-7
 msgid "Format the source cell with the font, color background and more."
 msgstr "ຈັດຮູບແບບຊ່ອງຕົ້ນທາງດ້ວຍຟອນ, ສີພື້ນຫຼັງ ແລະ ອື່ນໆ."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:786-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:788-7
 msgid "Select the cells you want to format. Release the mouse button."
 msgstr "ເລືອກຊ່ອງທີ່ທ່ານຕ້ອງການຈັດຮູບແບບ. ປ່ອຍປຸ່ມເມົາສ໌."
 
-#: html/cool-help.html%2Bdiv.div.div.div.h4:790-5
+#: html/cool-help.html%2Bdiv.div.div.div.h4:792-5
 msgid "What is “Clear Direct Formatting” icon?"
 msgstr "ໄອຄອນ “ລ້າງການຈັດຮູບແບບໂດຍກົງ” ແມ່ນຫຍັງ?"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:791-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:793-5
 msgid ""
 "Direct formatting is formatting applied directly to the selected contents of "
 "a paragraph or a spreadsheet cell, and overlaps its assigned style "
@@ -3580,11 +3651,11 @@ msgstr ""
 "ຫຼື ຊ່ອງສະເປຣດຊີດ ແລ້ວເລືອກ <span class=\"ui\">ຮູບແບບ</span> → <span class="
 "\"ui\">ລຶບການຈັດຮູບແບບໂດຍກົງ</span> ຫຼື ໃຊ້ປຸ່ມໃນແຖບເຄື່ອງມື."
 
-#: html/cool-help.html%2Bdiv.div.div.div.h4:794-5
+#: html/cool-help.html%2Bdiv.div.div.div.h4:796-5
 msgid "How do I rename a sheet?"
 msgstr "ຂ້ອຍຈະປ່ຽນຊື່ຊີດໄດ້ແນວໃດ?"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:795-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:797-5
 msgid ""
 "Rename a sheet in the spreadsheet document using the context menu (using the "
 "right mouse button) over the sheet tab in the bottom. Enter the new sheet "
@@ -3593,16 +3664,16 @@ msgstr ""
 "ປ່ຽນຊື່ຊີດໃນເອກະສານສະເປຣດຊີດໂດຍໃຊ້ເມນູບໍລິບົດ (ໃຊ້ປຸ່ມເມົາສ໌ຂວາ) "
 "ເທິງແຖບຊີດດ້ານລຸ່ມ. ປ້ອນຊື່ຊີດໃໝ່ໃນກ່ອງໂຕ້ຕອບທີ່ຕາມມາ."
 
-#: html/cool-help.html%2Bdiv.div.div.div.h4:803-5
+#: html/cool-help.html%2Bdiv.div.div.div.h4:805-5
 msgid "How can I run my slide show?"
 msgstr "ຂ້ອຍຈະເປີດການສະແດງສະໄລ້ຂອງຂ້ອຍໄດ້ແນວໃດ?"
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:805-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:807-7
 msgid ""
 "Open the presentation in <span class=\"productname\">{productname}</span>"
 msgstr "ເປີດງານນຳສະເໜີໃນ <span class=\"productname\">{productname}</span>"
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:806-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:808-7
 msgid ""
 "Either choose <span class=\"ui\">Slide Show</span> → <span class=\"ui\">Full "
 "Screen Presentation</span> or click on the left-most icon in the bottom of "
@@ -3611,19 +3682,19 @@ msgstr ""
 "ເລືອກ <span class=\"ui\">ການສະແດງສະໄລ້</span> → <span class=\"ui\""
 ">ການນຳສະເໜີເຕັມຈໍ</span> ຫຼື ຄລິກທີ່ໄອຄອນຊ້າຍສຸດຢູ່ດ້ານລຸ່ມຂອງແຖບສະໄລ້:"
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li.img[alt]:806-176
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li.img[alt]:808-176
 msgid "slide show"
 msgstr "ການສະແດງສະໄລ້"
 
-#: html/cool-help.html%2Bdiv.div.div.div.h4:810-5
+#: html/cool-help.html%2Bdiv.div.div.div.h4:812-5
 msgid "How can I change the line, area and position of a shape in my slides?"
 msgstr "ຂ້ອຍຈະປ່ຽນເສັ້ນ, ພື້ນທີ່ ແລະ ຕຳແໜ່ງຂອງຮູບຮ່າງໃນສະໄລ້ຂອງຂ້ອຍໄດ້ແນວໃດ?"
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:812-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:814-7
 msgid "Select the shape in your slide. A set of handles shows."
 msgstr "ເລືອກຮູບຮ່າງໃນສະໄລ້ຂອງທ່ານ. ຊຸດຂອງຈຸດຈັບຈະສະແດງຂຶ້ນ."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:813-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:815-7
 msgid ""
 "Choose <span class=\"ui\">Format</span> → <span class=\"ui\">Line</span> (or "
 "<span class=\"ui\">Area</span>, or <span class=\"ui\">Position and "
@@ -3633,13 +3704,87 @@ msgstr ""
 " <span class=\"ui\">ພື້ນທີ່</span>, ຫຼື <span class=\"ui\">ຕຳແໜ່ງ ແລະ "
 "ຂະໜາດ</span>). ກ່ອງໂຕ້ຕອບຈະເປີດຂຶ້ນ."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:816-31
-msgid "Position and Size"
-msgstr "ຕຳແໜ່ງ ແລະ ຂະໜາດ"
+#: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:818-31
+msgid ""
+"Area dialog on the Color tab with a color palette, active and new color "
+"previews, RGB value fields, and a custom palette section"
+msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:817-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:819-7
 msgid "Set the properties of the element of the object."
 msgstr "ຕັ້ງຄ່າຄຸນສົມບັດຂອງອົງປະກອບຂອງວັດຖຸ."
+
+#~ msgid "The status bar"
+#~ msgstr "ແຖບສະຖານະ"
+
+#~ msgid "The information bar"
+#~ msgstr "ແຖບຂໍ້ມູນ"
+
+#~ msgid "document repair"
+#~ msgstr "ການສ້ອມແປງເອກະສານ"
+
+#~ msgid "inactive document"
+#~ msgstr "ເອກະສານທີ່ບໍ່ເຄື່ອນໄຫວ"
+
+#~ msgid "chart"
+#~ msgstr "ແຜນວາດ"
+
+#~ msgid "comment"
+#~ msgstr "ຄຳເຫັນ"
+
+#~ msgid "spellchecking"
+#~ msgstr "ການກວດສອບການສະກົດຄຳ"
+
+#~ msgid "format cells"
+#~ msgstr "ຈັດຮູບແບບຊ່ອງ"
+
+#~ msgid "filter"
+#~ msgstr "ໂຕກັ່ນຕອງ"
+
+#~ msgid "outlining"
+#~ msgstr "ການສ້າງໂຄງຮ່າງ"
+
+#~ msgid "data validate"
+#~ msgstr "ການກວດສອບຄວາມຖືກຕ້ອງຂອງຂໍ້ມູນ"
+
+#~ msgid "cell comments"
+#~ msgstr "ຄຳເຫັນໃນຊ່ອງ"
+
+#~ msgid "conditional formatting"
+#~ msgstr "ການຈັດຮູບແບບຕາມເງື່ອນໄຂ"
+
+#~ msgid "style formatting"
+#~ msgstr "ການຈັດຮູບແບບສະໄຕລ໌"
+
+#~ msgid "insert table"
+#~ msgstr "ແຊກຕາຕະລາງ"
+
+#~ msgid "track changes"
+#~ msgstr "ຕິດຕາມການປ່ຽນແປງ"
+
+#~ msgid "slide layouts"
+#~ msgstr "ໂຄງຮ່າງສະໄລ້"
+
+#~ msgid "thesaurus"
+#~ msgstr "ພົດຈະນານຸກົມຄຳສັບຄ້າຍຄືກັນ"
+
+#~ msgid "word count"
+#~ msgstr "ການນັບຄຳ"
+
+#~ msgid "Special Characters"
+#~ msgstr "ຕົວອັກສອນພິເສດ"
+
+#~ msgid "manage changes"
+#~ msgstr "ຈັດການການປ່ຽນແປງ"
+
+#~ msgid "page style"
+#~ msgstr "ຮູບແບບໜ້າ"
+
+#~ msgid "import"
+#~ msgstr "ນຳເຂົ້າ"
+
+#~ msgid "Position and Size"
+#~ msgstr "ຕຳແໜ່ງ ແລະ ຂະໜາດ"
 
 #~ msgid ""
 #~ "<kbd>Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Shift</kbd><span "

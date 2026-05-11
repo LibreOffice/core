@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-20 12:14+0200\n"
+"POT-Creation-Date: 2026-05-11 14:06+0200\n"
 "PO-Revision-Date: 2026-03-11 14:40+0000\n"
 "Last-Translator: Leif-Jöran Olsson <info@friprogramvarusyndikatet.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/collabora-online/"
@@ -1835,121 +1835,120 @@ msgstr "Flytta till nästa textobjekt i bilden"
 msgid "Select all in drawing page"
 msgstr "Markera allt i bilden"
 
-#: html/cool-help.html%2Bdiv.h1:326-5
+#: html/cool-help.html%2Bdiv.h2:326-5
 msgid "<span class=\"productname\">{productname}</span> Help"
 msgstr "<span class=\"productname\">{productname}</span> Hjälp"
 
-#: html/cool-help.html%2Bdiv.h2:327-5
-#: html/cool-help.html%2Bdiv.div.h3:362-5
+#: html/cool-help.html%2Bdiv.nav.ul.li:329-13
+#: html/cool-help.html%2Bdiv.div.h3:364-5
 msgid "Collaborative editing"
 msgstr "Samarbetsredigering"
 
-#: html/cool-help.html%2Bdiv.h2:328-5
-#: html/cool-help.html%2Bdiv.div.h3:372-5
+#: html/cool-help.html%2Bdiv.nav.ul.li:330-13
+#: html/cool-help.html%2Bdiv.div.h3:374-5
 msgid "<span class=\"productname\">{productname}</span> user interface"
 msgstr "<span class=\"productname\">{productname}</span> användargränssnitt"
 
-#: html/cool-help.html%2Bdiv.h2:329-5
-#: html/cool-help.html%2Bdiv.div.h3:409-5
+#: html/cool-help.html%2Bdiv.nav.ul.li:331-13
+#: html/cool-help.html%2Bdiv.div.h3:411-5
 msgid "Opening, closing, saving, printing and downloading documents"
 msgstr "Öppna, stänga, spara, skriva ut och ladda ner dokument"
 
-#: html/cool-help.html%2Bdiv.h2:330-5
-#: html/cool-help.html%2Bdiv.div.h3:418-5
+#: html/cool-help.html%2Bdiv.nav.ul.li:332-13
+#: html/cool-help.html%2Bdiv.div.h3:420-5
 msgid "Editing documents"
 msgstr "Redigera dokument"
 
-#: html/cool-help.html%2Bdiv.h2:331-5
-#: html/cool-help.html%2Bdiv.div.h2:337-9
-#: html/cool-help.html%2Bdiv.div.h2:352-9
-#: html/cool-help.html%2Bdiv.div.h3:448-3
-#: html/cool-help.html%2Bdiv.div.div.h3:508-5
-#: html/cool-help.html%2Bdiv.div.div.h3:619-5
+#: html/cool-help.html%2Bdiv.nav.ul.li:333-13
+#: html/cool-help.html%2Bdiv.nav.ul.li:339-13
+#: html/cool-help.html%2Bdiv.nav.ul.li:352-13
+#: html/cool-help.html%2Bdiv.div.h3:450-3
+#: html/cool-help.html%2Bdiv.div.div.h3:510-5
+#: html/cool-help.html%2Bdiv.div.div.h3:621-5
 msgid "Advanced features"
 msgstr "Avancerade funktioner"
 
-#: html/cool-help.html%2Bdiv.div.h2:333-9
-#: html/cool-help.html%2Bdiv.div.h3:486-5
+#: html/cool-help.html%2Bdiv.nav.ul.li:335-13
+#: html/cool-help.html%2Bdiv.div.h3:488-5
 msgid "<span class=\"productname\">{productname}</span> spreadsheets"
 msgstr "<span class=\"productname\">{productname}</span> kalkylblad"
 
-#: html/cool-help.html%2Bdiv.div.h2:334-9
-#: html/cool-help.html%2Bdiv.div.div.h3:488-5
+#: html/cool-help.html%2Bdiv.nav.ul.li:336-13
+#: html/cool-help.html%2Bdiv.div.div.h3:490-5
 msgid "Editing spreadsheets"
 msgstr "Redigera kalkylblad"
 
-#: html/cool-help.html%2Bdiv.div.h2:335-9
-#: html/cool-help.html%2Bdiv.div.div.h3:492-5
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:496-29
+#: html/cool-help.html%2Bdiv.nav.ul.li:337-13
+#: html/cool-help.html%2Bdiv.div.div.h3:494-5
 msgid "Formulas"
 msgstr "Formler"
 
-#: html/cool-help.html%2Bdiv.div.h2:336-9
-#: html/cool-help.html%2Bdiv.div.div.h3:501-5
+#: html/cool-help.html%2Bdiv.nav.ul.li:338-13
+#: html/cool-help.html%2Bdiv.div.div.h3:503-5
 msgid "Formatting spreadsheets"
 msgstr "Formatera kalkylblad"
 
-#: html/cool-help.html%2Bdiv.div.h2:338-9
-#: html/cool-help.html%2Bdiv.div.div.h3:762-5
+#: html/cool-help.html%2Bdiv.nav.ul.li:340-13
+#: html/cool-help.html%2Bdiv.div.div.h3:764-5
 msgid "Spreadsheets"
 msgstr "Kalkylark"
 
-#: html/cool-help.html%2Bdiv.div.h2:341-9
-#: html/cool-help.html%2Bdiv.div.h3:550-5
+#: html/cool-help.html%2Bdiv.nav.ul.li:342-13
+#: html/cool-help.html%2Bdiv.div.h3:552-5
 msgid "<span class=\"productname\">{productname}</span> text documents"
 msgstr "<span class=\"productname\">{productname}</span> textdokument"
 
-#: html/cool-help.html%2Bdiv.div.h2:342-9
-#: html/cool-help.html%2Bdiv.div.div.h3:552-5
+#: html/cool-help.html%2Bdiv.nav.ul.li:343-13
+#: html/cool-help.html%2Bdiv.div.div.h3:554-5
 msgid "Editing text documents"
 msgstr "Redigera textdokument"
 
-#: html/cool-help.html%2Bdiv.div.h2:343-9
-#: html/cool-help.html%2Bdiv.div.div.h3:556-5
+#: html/cool-help.html%2Bdiv.nav.ul.li:344-13
+#: html/cool-help.html%2Bdiv.div.div.h3:558-5
 msgid "Context menus"
 msgstr "Kontextmenyer"
 
-#: html/cool-help.html%2Bdiv.div.h2:344-9
-#: html/cool-help.html%2Bdiv.div.div.h3:572-5
+#: html/cool-help.html%2Bdiv.nav.ul.li:345-13
+#: html/cool-help.html%2Bdiv.div.div.h3:574-5
 msgid "Advanced text document editor features"
 msgstr "Avancerade funktioner för redigering av textdokument"
 
-#: html/cool-help.html%2Bdiv.div.h2:345-9
-#: html/cool-help.html%2Bdiv.div.div.h3:681-5
+#: html/cool-help.html%2Bdiv.nav.ul.li:346-13
+#: html/cool-help.html%2Bdiv.div.div.h3:683-5
 msgid "Text documents"
 msgstr "Textdokument"
 
-#: html/cool-help.html%2Bdiv.div.h2:348-9
-#: html/cool-help.html%2Bdiv.div.h3:599-5
+#: html/cool-help.html%2Bdiv.nav.ul.li:348-13
+#: html/cool-help.html%2Bdiv.div.h3:601-5
 msgid "<span class=\"productname\">{productname}</span> presentations"
 msgstr "<span class=\"productname\">{productname}</span> presentationer"
 
-#: html/cool-help.html%2Bdiv.div.h2:349-9
-#: html/cool-help.html%2Bdiv.div.div.h3:601-5
+#: html/cool-help.html%2Bdiv.nav.ul.li:349-13
+#: html/cool-help.html%2Bdiv.div.div.h3:603-5
 msgid "Editing presentations"
 msgstr "Redigera presentationer"
 
-#: html/cool-help.html%2Bdiv.div.h2:350-9
-#: html/cool-help.html%2Bdiv.div.div.h3:605-5
+#: html/cool-help.html%2Bdiv.nav.ul.li:350-13
+#: html/cool-help.html%2Bdiv.div.div.h3:607-5
 msgid "Slide show"
 msgstr "Bildspel"
 
-#: html/cool-help.html%2Bdiv.div.h2:351-9
-#: html/cool-help.html%2Bdiv.div.div.h3:612-5
+#: html/cool-help.html%2Bdiv.nav.ul.li:351-13
+#: html/cool-help.html%2Bdiv.div.div.h3:614-5
 msgid "Slide pane"
 msgstr "Bildpanel"
 
-#: html/cool-help.html%2Bdiv.div.h2:353-9
-#: html/cool-help.html%2Bdiv.div.div.h3:801-5
+#: html/cool-help.html%2Bdiv.nav.ul.li:353-13
+#: html/cool-help.html%2Bdiv.div.div.h3:803-5
 msgid "Presentations"
 msgstr "Presentationer"
 
-#: html/cool-help.html%2Bdiv.h2:355-5
-#: html/cool-help.html%2Bdiv.div.h3:631-5
+#: html/cool-help.html%2Bdiv.nav.ul.li:355-13
+#: html/cool-help.html%2Bdiv.div.h3:633-5
 msgid "Frequently Asked Questions"
 msgstr "Vanliga frågor"
 
-#: html/cool-help.html%2Bdiv.div.p:358-5
+#: html/cool-help.html%2Bdiv.div.p:360-5
 msgid ""
 "<span class=\"productname\">{productname}</span> allows you to create and "
 "edit office documents text documents, spreadsheets and presentations "
@@ -1961,7 +1960,7 @@ msgstr ""
 "på ett enkelt och okomplicerat sätt. Du kan arbeta ensam med ett dokument "
 "eller tillsammans med andra som en del av ett team."
 
-#: html/cool-help.html%2Bdiv.div.div.ul.li:365-7
+#: html/cool-help.html%2Bdiv.div.div.ul.li:367-7
 msgid ""
 "Each user gets assigned a color. The cursor of each user will be shown in "
 "the assigned color. Note: you will see your cursor as black, blinking "
@@ -1971,7 +1970,7 @@ msgstr ""
 "tilldelade färgen. Observera: du kommer att se din markör som en svart, "
 "blinkande markör, även om andra kommer att se dig med en annan färg."
 
-#: html/cool-help.html%2Bdiv.div.div.ul.li:366-7
+#: html/cool-help.html%2Bdiv.div.div.ul.li:368-7
 msgid ""
 "You can jump to the cursor of a user by clicking on the name (or avatar) of "
 "the user. It is possible to follow the editor."
@@ -1979,7 +1978,7 @@ msgstr ""
 "Du kan hoppa till en användares markör genom att klicka på användarens namn ("
 "eller avatar). Det är möjligt att följa redaktören."
 
-#: html/cool-help.html%2Bdiv.div.div.ul.li:367-7
+#: html/cool-help.html%2Bdiv.div.div.ul.li:369-7
 msgid ""
 "<span class=\"productname\">{productname}</span> notifies you with a small "
 "notification in the footer when a new user enters or when a user leaves."
@@ -1988,7 +1987,7 @@ msgstr ""
 "meddelande i sidfoten när en ny användare kommer in i eller lämnar "
 "dokumentet."
 
-#: html/cool-help.html%2Bdiv.div.div.p:373-30
+#: html/cool-help.html%2Bdiv.div.div.p:375-30
 msgid ""
 "<span class=\"productname\">{productname}</span> uses modern browser "
 "resources to adapt the user interface to the size of the viewing area, "
@@ -2000,7 +1999,7 @@ msgstr ""
 "visningsområdet, inklusive små skärmar som finns på mobila enheter. "
 "Gränssnittet består av:"
 
-#: html/cool-help.html%2Bdiv.div.div.p:375-5
+#: html/cool-help.html%2Bdiv.div.div.p:377-5
 msgid ""
 "<span class=\"def\">The document area:</span> The application area shows the "
 "document contents, either spreadsheets, presentations or text documents."
@@ -2008,7 +2007,7 @@ msgstr ""
 "<span class=\"def\">Dokumentområdet:</span> Programområdet visar "
 "dokumentinnehållet, antingen kalkylblad, presentationer eller textdokument."
 
-#: html/cool-help.html%2Bdiv.div.div.p:378-5
+#: html/cool-help.html%2Bdiv.div.div.p:380-5
 msgid ""
 "<span class=\"def\">The menu bar:</span> The main menu is at the top and "
 "includes many options, such as commands for printing, editing, viewing, and "
@@ -2027,7 +2026,7 @@ msgstr ""
 "class=\"w2ui-icon unfold icon-size\" role=\"img\" aria-label=\"Visa "
 "menyfältet\" title=\"Visa menyfältet\"></span>."
 
-#: html/cool-help.html%2Bdiv.div.div.p:381-5
+#: html/cool-help.html%2Bdiv.div.div.p:383-5
 msgid ""
 "<span class=\"def\">Context menus:</span> On clicking with the right mouse "
 "button, a menu appears with commands associated with the underlying object."
@@ -2035,7 +2034,7 @@ msgstr ""
 "<span class=\"def\">Kontextmenyer:</span> När du klickar med höger musknapp "
 "visas en meny med kommandon som är kopplade till det underliggande objektet."
 
-#: html/cool-help.html%2Bdiv.div.div.p:384-5
+#: html/cool-help.html%2Bdiv.div.div.p:386-5
 msgid ""
 "<span class=\"def\">The toolbar:</span> The toolbar contains the most used "
 "options for daily editing. Toolbar buttons are dynamic, meaning that their "
@@ -2046,7 +2045,7 @@ msgstr ""
 "dynamiska, vilket innebär att deras tillstånd (på eller av) beror på olika "
 "faktorer."
 
-#: html/cool-help.html%2Bdiv.div.div.p:387-5
+#: html/cool-help.html%2Bdiv.div.div.p:389-5
 msgid ""
 "<span class=\"def\">The status bar:</span> The status bar is shown in the "
 "bottom, and contains several useful options and features."
@@ -2054,11 +2053,13 @@ msgstr ""
 "<span class=\"def\">Statusfältet:</span> Statusfältet visas längst ner och "
 "innehåller flera användbara alternativ och funktioner."
 
-#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:388-29
-msgid "The status bar"
-msgstr "Statusfältet"
+#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:390-29
+msgid ""
+"Status bar showing page number, word count, insert mode, selection mode, "
+"language, edit mode, navigation, zoom, and search"
+msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.p:391-5
+#: html/cool-help.html%2Bdiv.div.div.p:393-5
 msgid ""
 "<span class=\"def\">The search bar:</span> Searching starts automatically "
 "when content is inserted in the search box, and the document window "
@@ -2070,19 +2071,20 @@ msgstr ""
 "den första förekomsten som hittas. Sökningen är inte skiftlägeskänslig. Det "
 "finns tre knappar precis bredvid sökrutan:"
 
-#: html/cool-help.html%2Bdiv.div.div.ul.li:393-7
-msgid "Search backwards>"
+#: html/cool-help.html%2Bdiv.div.div.ul.li:395-7
+#, fuzzy
+msgid "Search backwards"
 msgstr "Sök bakåt"
 
-#: html/cool-help.html%2Bdiv.div.div.ul.li:394-7
+#: html/cool-help.html%2Bdiv.div.div.ul.li:396-7
 msgid "Search forward"
 msgstr "Sök framåt"
 
-#: html/cool-help.html%2Bdiv.div.div.ul.li:395-7
+#: html/cool-help.html%2Bdiv.div.div.ul.li:397-7
 msgid "Cancel the search (appears only when a text has been searched)"
 msgstr "Avbryta sökningen (visas endast när en text har sökts)"
 
-#: html/cool-help.html%2Bdiv.div.div.p:399-5
+#: html/cool-help.html%2Bdiv.div.div.p:401-5
 msgid ""
 "<span class=\"def\">The zoom bar:</span> The zoom bar includes buttons to "
 "reset zoom to 100%, zoom out and zoom in. The zoom applies to the document "
@@ -2094,7 +2096,7 @@ msgstr ""
 "ut. Zoomen gäller för dokumentområdet, användargränssnittet påverkas inte. "
 "Den aktuella graden zoom visas i det här området."
 
-#: html/cool-help.html%2Bdiv.div.div.p:400-5
+#: html/cool-help.html%2Bdiv.div.div.p:402-5
 msgid ""
 "Text, charts, shapes and svg images will stay sharp, when zooming in, you "
 "will only see pixels appear at inserted images, such as jpg’s or png’s."
@@ -2102,13 +2104,13 @@ msgstr ""
 "Text, diagram, figurer och svg-bilder förblir skarpa, när du zoomar in ser "
 "du bara pixlar på infogade bilder, t.ex. jpg- eller png-bilder."
 
-#: html/cool-help.html%2Bdiv.div.div.p:401-5
+#: html/cool-help.html%2Bdiv.div.div.p:403-5
 msgid "Using the browser zoom affects the document and user interface areas."
 msgstr ""
 "Om du använder zoom i webbläsaren påverkas dokumentet och "
 "användargränssnittet."
 
-#: html/cool-help.html%2Bdiv.div.div.p:404-5
+#: html/cool-help.html%2Bdiv.div.div.p:406-5
 msgid ""
 "<span class=\"def\">The information bar:</span> The information bar displays "
 "details about the current document. The actual information depends on the "
@@ -2118,11 +2120,12 @@ msgstr ""
 "detaljer om det aktuella dokumentet. Den faktiska informationen beror bland "
 "annat på typen av dokument."
 
-#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:405-29
-msgid "The information bar"
-msgstr "Informationsfältet"
+#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:407-29
+msgid ""
+"Information bar showing page navigation arrows, zoom controls, and zoom level"
+msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.p:410-5
+#: html/cool-help.html%2Bdiv.div.p:412-5
 msgid ""
 "Your documents are stored and managed in the cloud storage that is "
 "integrated with <span class=\"productname\">{productname}</span>."
@@ -2130,7 +2133,7 @@ msgstr ""
 "Dina dokument lagras och hanteras i molnlagret som är integrerat med <span "
 "class=\"productname\">{productname}</span>."
 
-#: html/cool-help.html%2Bdiv.div.div.p:411-30
+#: html/cool-help.html%2Bdiv.div.div.p:413-30
 msgid ""
 "To download a document download it from the <span class=\"productname\""
 ">{productname}</span> application’s <span class=\"ui\">File</span> menu. The "
@@ -2142,7 +2145,7 @@ msgstr ""
 ">Fil</span>-meny. Vilka nedladdningsformat som är tillgängliga beror på "
 "programmet. Alla program exporterar dokument i PDF-format."
 
-#: html/cool-help.html%2Bdiv.div.div.p:412-30
+#: html/cool-help.html%2Bdiv.div.div.p:414-30
 msgid ""
 "To open document, click on the file to open the <span class=\"productname\""
 ">{productname}</span> module associated to the document format."
@@ -2151,7 +2154,7 @@ msgstr ""
 "class=\"productname\">{productname}</span> som är kopplad till "
 "dokumentformatet."
 
-#: html/cool-help.html%2Bdiv.div.div.p:413-30
+#: html/cool-help.html%2Bdiv.div.div.p:415-30
 msgid ""
 "Documents in <span class=\"productname\">{productname}</span> save "
 "automatically, but if you are concerned that a document is synchronized as "
@@ -2163,7 +2166,7 @@ msgstr ""
 "snabbt som möjligt kan du också tvinga fram sparande med hjälp av <span "
 "class=\"ui\">Fil</span>-menyns <span class=\"ui\">Spara</span>-post."
 
-#: html/cool-help.html%2Bdiv.div.div.p:414-30
+#: html/cool-help.html%2Bdiv.div.div.p:416-30
 msgid ""
 "Depending on the capabilities of your browser, the print window may appear "
 "or a “Download PDF export?” popup appears. You can print this PDF in your "
@@ -2173,12 +2176,12 @@ msgstr ""
 "popup-fönsterruta \"Ladda ner PDF-export?\". Du kan skriva ut PDF-filen i "
 "din favorit-PDF-läsare."
 
-#: html/cool-help.html%2Bdiv.div.div.p:415-30
+#: html/cool-help.html%2Bdiv.div.div.p:417-30
 msgid ""
 "When closing a document, it is automatically saved if it has been changed."
 msgstr "När du stänger ett dokument sparas det automatiskt om det har ändrats."
 
-#: html/cool-help.html%2Bdiv.div.p:419-5
+#: html/cool-help.html%2Bdiv.div.p:421-5
 msgid ""
 "Document editing should be familiar to everyone that has used an office "
 "application before, but here are some distinctive features:"
@@ -2186,11 +2189,11 @@ msgstr ""
 "Dokumentredigering borde vara bekant för alla som har använt ett "
 "kontorsprogram tidigare, men här finns några utmärkande funktioner:"
 
-#: html/cool-help.html%2Bdiv.div.div.h4:421-5
+#: html/cool-help.html%2Bdiv.div.div.h4:423-5
 msgid "Copy and Paste"
 msgstr "Kopiera och klistra in"
 
-#: html/cool-help.html%2Bdiv.div.div.p:422-5
+#: html/cool-help.html%2Bdiv.div.div.p:424-5
 msgid ""
 "Rich content copy/cut and paste is supported, not only within a given "
 "document, but also across documents on the same or different <span class="
@@ -2221,7 +2224,7 @@ msgstr ""
 "väljer text genom att dubbeltrycka och använder ett långt tryck för att "
 "komma åt kopiera/klippa/klistra in via kontextmenyn."
 
-#: html/cool-help.html%2Bdiv.div.div.p:423-5
+#: html/cool-help.html%2Bdiv.div.div.p:425-5
 msgid ""
 "To copy larger pieces of content to other applications on your device, users "
 "need to press the <span class=\"ui\">Start download</span> button, and then "
@@ -2239,11 +2242,11 @@ msgstr ""
 "att exportera innehållet för att klistra in det i externa program. Detta "
 "steg omvandlar också komplexa objekttyper till statiska bilder."
 
-#: html/cool-help.html%2Bdiv.div.div.h4:426-5
+#: html/cool-help.html%2Bdiv.div.div.h4:428-5
 msgid "Document repair"
 msgstr "Dokumentreparation"
 
-#: html/cool-help.html%2Bdiv.div.div.p:427-5
+#: html/cool-help.html%2Bdiv.div.div.p:429-5
 msgid ""
 "When multiple people edit the same document concurrently, it is possible for "
 "their changes to conflict and this can cause some confusion. The Document "
@@ -2255,7 +2258,7 @@ msgstr ""
 "funktionen Dokumentreparation kan användare ångra andra redaktörers "
 "ändringar i dokumentet till ett tidigare tillstånd."
 
-#: html/cool-help.html%2Bdiv.div.div.p:428-5
+#: html/cool-help.html%2Bdiv.div.div.p:430-5
 msgid ""
 "To jump back to the selected state, select it with the mouse and hit <span "
 "class=\"ui\">Jump to state</span>."
@@ -2263,11 +2266,13 @@ msgstr ""
 "För att hoppa tillbaka till det valda tillståndet markerar du det med musen "
 "och trycker på <span class=\"ui\">Växla till tillstånd</span>."
 
-#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:429-29
-msgid "document repair"
-msgstr "dokumentreparation"
+#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:431-29
+msgid ""
+"Repair Document dialog listing past document states with columns for action "
+"type, author, and timestamp"
+msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.p:430-5
+#: html/cool-help.html%2Bdiv.div.div.p:432-5
 msgid ""
 "This is particularly useful – say when a colleague inadvertently selected "
 "all text in the document with <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-"
@@ -2279,11 +2284,11 @@ msgstr ""
 "aria-hidden=\"true\">+</span><kbd>A</kbd> och sedan skrivit över den och "
 "förstört den - medan du redigerar samtidigt."
 
-#: html/cool-help.html%2Bdiv.div.div.h4:433-5
+#: html/cool-help.html%2Bdiv.div.div.h4:435-5
 msgid "Inactive document"
 msgstr "Inaktivt dokument"
 
-#: html/cool-help.html%2Bdiv.div.div.p:434-5
+#: html/cool-help.html%2Bdiv.div.div.p:436-5
 msgid ""
 "When <span class=\"productname\">{productname}</span> detects that there has "
 "not been any activity in the browser for a while, it puts the document in an "
@@ -2296,11 +2301,13 @@ msgstr ""
 "och meddelandet \"Inaktivt dokument - klicka för att återuppta redigeringen\""
 "."
 
-#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:435-29
-msgid "inactive document"
-msgstr "inaktivt dokument"
+#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:437-29
+msgid ""
+"Idle document overlay with the message: Idle document - please click to "
+"reload and resume editing"
+msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.p:436-5
+#: html/cool-help.html%2Bdiv.div.div.p:438-5
 msgid ""
 "To continue editing, click on the document and the layover and message "
 "disappear. Any changes that may have been made by other users – while "
@@ -2310,11 +2317,11 @@ msgstr ""
 "och meddelandet försvinner. Alla ändringar som andra användare kan ha gjort -"
 " medan de redigerade dokumentet i samarbete - laddas på nytt."
 
-#: html/cool-help.html%2Bdiv.div.div.h4:439-5
+#: html/cool-help.html%2Bdiv.div.div.h4:441-5
 msgid "Pasting"
 msgstr "Klistrar in"
 
-#: html/cool-help.html%2Bdiv.div.div.p:440-5
+#: html/cool-help.html%2Bdiv.div.div.p:442-5
 msgid ""
 "When you paste content copied from within the same document, the format and "
 "elements are maintained. If you copy from another document, in another tab "
@@ -2327,7 +2334,7 @@ msgstr ""
 "utanför webbläsaren, kommer det innehåll som klistras in att bevara den rika "
 "texten."
 
-#: html/cool-help.html%2Bdiv.div.div.p:441-5
+#: html/cool-help.html%2Bdiv.div.div.p:443-5
 msgid ""
 "You can paste as unformatted text with the keyboard shortcut: <kbd>Ctrl</"
 "kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Shift</"
@@ -2338,7 +2345,7 @@ msgstr ""
 ">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>V</kbd>"
 
-#: html/cool-help.html%2Bdiv.div.div.p:442-5
+#: html/cool-help.html%2Bdiv.div.div.p:444-5
 msgid ""
 "When you paste text from within the document, formatting will be respected. "
 "You can also paste objects, such as images, if they are copied from the "
@@ -2348,7 +2355,7 @@ msgstr ""
 "också klistra in objekt, t.ex. bilder, om de har kopierats från det dokument "
 "du arbetar i."
 
-#: html/cool-help.html%2Bdiv.div.div.p:443-5
+#: html/cool-help.html%2Bdiv.div.div.p:445-5
 msgid ""
 "When you paste text from outside of the document (another browser window or "
 "a desktop application), it will be pasted as rich text."
@@ -2356,7 +2363,7 @@ msgstr ""
 "När du klistrar in text utanför dokumentet (ett annat webbläsarfönster eller "
 "ett skrivbordsprogram) klistras det in som rik text."
 
-#: html/cool-help.html%2Bdiv.div.div.p:444-5
+#: html/cool-help.html%2Bdiv.div.div.p:446-5
 msgid ""
 "When you have internal cut or copied content, you can paste this content "
 "using the context menu."
@@ -2364,11 +2371,11 @@ msgstr ""
 "När du har klippt eller kopierat innehåll internt kan du klistra in detta "
 "innehåll med hjälp av kontextmenyn."
 
-#: html/cool-help.html%2Bdiv.div.div.h4:450-5
+#: html/cool-help.html%2Bdiv.div.div.h4:452-5
 msgid "Adding charts"
 msgstr "Lägger till diagram"
 
-#: html/cool-help.html%2Bdiv.div.div.p:451-5
+#: html/cool-help.html%2Bdiv.div.div.p:453-5
 msgid ""
 "<span class=\"productname\">{productname}</span> supports inserting and "
 "visualization of charts in documents. To add a chart:"
@@ -2376,7 +2383,7 @@ msgstr ""
 "<span class=\"productname\">{productname}</span> har stöd för att infoga och "
 "visualisera diagram i dokument. Lägg till ett diagram:"
 
-#: html/cool-help.html%2Bdiv.div.div.ol.li:453-7
+#: html/cool-help.html%2Bdiv.div.div.ol.li:455-7
 msgid ""
 "Select a table in text document, a range in a spreadsheet or a table in a "
 "presentation."
@@ -2384,7 +2391,7 @@ msgstr ""
 "Välj en tabell i ett textdokument, ett intervall i ett kalkylblad eller en "
 "tabell i en presentation."
 
-#: html/cool-help.html%2Bdiv.div.div.ol.li:454-7
+#: html/cool-help.html%2Bdiv.div.div.ol.li:456-7
 msgid ""
 "Choose <span class=\"ui\">Insert</span> → <span class=\"ui\">Charts</span>. "
 "Customize your chart on the sidebar:"
@@ -2392,17 +2399,24 @@ msgstr ""
 "Välj <span class=\"ui\"> Infoga </span> → <span class=\"ui\">Diagram </"
 "span>. Anpassa ditt diagram i sidofältet:"
 
-#: html/cool-help.html%2Bdiv.div.div.ol.div.img[alt]:457-31
-#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:460-29
-msgid "chart"
-msgstr "diagram"
+#: html/cool-help.html%2Bdiv.div.div.ol.div.img[alt]:459-31
+msgid ""
+"Chart Wizard dialog with chart type list on the left, chart style previews, "
+"3D and shape options"
+msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.ol.li:458-7
+#: html/cool-help.html%2Bdiv.div.div.ol.li:460-7
 msgid "If no table or range was selected, a prototype chart is displayed."
 msgstr ""
 "Om ingen tabell eller inget intervall har valts visas ett prototypdiagram."
 
-#: html/cool-help.html%2Bdiv.div.div.p:462-28
+#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:462-29
+msgid ""
+"Column chart with grouped bars showing data for four rows across three "
+"columns"
+msgstr ""
+
+#: html/cool-help.html%2Bdiv.div.div.p:464-28
 msgid ""
 "<span class=\"def\">Chart editing:</span> Double click the chart to select. "
 "Use context menus to add chart elements such as title, axis, and other. "
@@ -2414,7 +2428,7 @@ msgstr ""
 "axel och annat. Välj <span class=\"ui\">Dataintervall</span> och <span class="
 "\"ui\">Diagramtyp</span> för att redigera diagramdata och välja diagramtyp."
 
-#: html/cool-help.html%2Bdiv.div.div.p:463-28
+#: html/cool-help.html%2Bdiv.div.div.p:465-28
 msgid ""
 "<span class=\"def\">Chart formatting:</span> The same context menu brings "
 "you to chart data table and chart type selection."
@@ -2422,7 +2436,7 @@ msgstr ""
 "<span class=\"def\">Diagramformatering:</span> Samma kontextmeny ger dig "
 "möjlighet att välja diagramdatatabell och diagramtyp."
 
-#: html/cool-help.html%2Bdiv.div.div.p:464-28
+#: html/cool-help.html%2Bdiv.div.div.p:466-28
 msgid ""
 "<span class=\"def\">Data series formatting:</span> Open the context menu and "
 "choose <span class=\"ui\">Format data series</span>."
@@ -2430,11 +2444,11 @@ msgstr ""
 "<span class=\"def\">Formatering av dataserier:</span> Öppna kontextmenyn och "
 "välj <span class=\"ui\">Formatera dataserier</span>."
 
-#: html/cool-help.html%2Bdiv.div.div.h4:466-5
+#: html/cool-help.html%2Bdiv.div.div.h4:468-5
 msgid "Handling images"
 msgstr "Hantera bilder"
 
-#: html/cool-help.html%2Bdiv.div.div.p:467-5
+#: html/cool-help.html%2Bdiv.div.div.p:469-5
 msgid ""
 "<span class=\"productname\">{productname}</span> inserts images in the text "
 "document from your local computer or from your cloud storage. Inserted "
@@ -2444,7 +2458,7 @@ msgstr ""
 "textdokumentet från din lokala dator eller från din molnlagring. Införda "
 "bilder är alltid inbäddade i dokumentet."
 
-#: html/cool-help.html%2Bdiv.div.div.p:468-5
+#: html/cool-help.html%2Bdiv.div.div.p:470-5
 msgid ""
 "<span class=\"def\">Insert image:</span> Clicking on the <span class=\"ui\""
 ">Insert image</span> icon allows you to choose an image from the cloud "
@@ -2454,7 +2468,7 @@ msgstr ""
 "\"ui\">Infoga bild</span> kan du välja en bild från molnlagrets mappar och "
 "delningar."
 
-#: html/cool-help.html%2Bdiv.div.div.p:469-5
+#: html/cool-help.html%2Bdiv.div.div.p:471-5
 msgid ""
 "<span class=\"def\">Insert local image:</span> opens the browser file picker "
 "to upload the image from your local computer and insert it into the document."
@@ -2463,7 +2477,7 @@ msgstr ""
 "filvalsknapp för att ladda upp bilden från din lokala dator och infoga den i "
 "dokumentet."
 
-#: html/cool-help.html%2Bdiv.div.div.p:470-5
+#: html/cool-help.html%2Bdiv.div.div.p:472-5
 msgid ""
 "Images can be resized, rotated and anchored. Text can be wrapped around the "
 "image. Select the image and open the context menu. Use the images handles to "
@@ -2473,11 +2487,11 @@ msgstr ""
 "bilden. Välj bilden och öppna kontextmenyn. Använd bildhandtagen för att "
 "ändra storlek på bilden med musen."
 
-#: html/cool-help.html%2Bdiv.div.div.h4:473-5
+#: html/cool-help.html%2Bdiv.div.div.h4:475-5
 msgid "Comments in documents"
 msgstr "Kommentarer i dokument"
 
-#: html/cool-help.html%2Bdiv.div.div.p:474-5
+#: html/cool-help.html%2Bdiv.div.div.p:476-5
 msgid ""
 "Insert comments in <span class=\"productname\">{productname}</span> in "
 "places that need special reader attention. Comments are displayed on the "
@@ -2487,11 +2501,13 @@ msgstr ""
 "ställen som kräver särskild uppmärksamhet från läsaren. Kommentarer visas "
 "till höger och innehåller utfärdarens namn och datum."
 
-#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:475-29
-msgid "comment"
-msgstr "kommentar"
+#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:477-29
+msgid ""
+"Comment box showing author name, date, and the comment text, displayed "
+"beside the document"
+msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.p:476-5
+#: html/cool-help.html%2Bdiv.div.div.p:478-5
 msgid ""
 "Click on the submenu (<span class=\"cool-annotation-menu icon-size\"></span>)"
 " icon to reply, move and delete comments."
@@ -2499,11 +2515,11 @@ msgstr ""
 "Klicka på undermenyn(<span class=\"cool-annotation-menu icon-size\"></span>) "
 "ikonen för att svara, flytta och ta bort kommentarer."
 
-#: html/cool-help.html%2Bdiv.div.div.h4:479-5
+#: html/cool-help.html%2Bdiv.div.div.h4:481-5
 msgid "Spellchecking"
 msgstr "Stavningskontroll"
 
-#: html/cool-help.html%2Bdiv.div.div.p:480-5
+#: html/cool-help.html%2Bdiv.div.div.p:482-5
 msgid ""
 "<span class=\"productname\">{productname}</span> can check spelling in text "
 "documents, spreadsheets and presentations. A red wavy underline indicates "
@@ -2515,11 +2531,11 @@ msgstr ""
 "visar felstavade ord. Klicka på höger musknapp för att öppna en kontextmeny "
 "med förslag till rättelser av felstavning."
 
-#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:481-29
-msgid "spellchecking"
-msgstr "stavningskontroll"
+#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:483-29
+msgid "Text with a red wavy underline beneath a misspelled word"
+msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.p:482-5
+#: html/cool-help.html%2Bdiv.div.div.p:484-5
 msgid ""
 "To systematically spell-check the whole document use the <span class=\"ui\""
 ">Tools</span> menu’s <span class=\"ui\">Spelling</span> option."
@@ -2528,7 +2544,7 @@ msgstr ""
 "<span class=\"ui\">Verktyg</span>-menyns <span class=\"ui\""
 ">Stavning</span>-alternativ."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:489-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:491-30
 msgid ""
 "You edit an online spreadsheet in the same way you edit a desktop "
 "spreadsheet. Operations like entering data, selecting ranges, columns, rows "
@@ -2549,16 +2565,22 @@ msgstr ""
 "markören till nästa cell till höger och med <kbd>Enter</kbd> till cellen "
 "nedanför så att du enkelt kan mata in ytterligare data."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:494-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:496-5
 msgid ""
 "Formulas are entered in the formula bar. Enter '=' and insert the formula."
 msgstr "Formler skrivs in i formelfältet. Skriv \"=\" och infoga formeln."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:495-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:497-5
 msgid "All spreadsheets functions and mathematical rules applies."
 msgstr "Alla funktioner och matematiska regler i kalkylblad är tillämpliga."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:497-5
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:498-29
+msgid ""
+"Formula bar showing cell reference B1, function wizard icon, and the formula "
+"=SIN(PI()*A1/10)"
+msgstr ""
+
+#: html/cool-help.html%2Bdiv.div.div.div.p:499-5
 msgid ""
 "The formula language should be extremely familiar to any spreadsheet user, "
 "and is specified in great detail in the <a href=\"https://www.oasis-open.org/"
@@ -2570,7 +2592,7 @@ msgstr ""
 "download.php/16826/openformula-spec-20060221.html\" target=\"_blank\" rel="
 "\"noopener noreferrer\">OASIS OpenFormula-specifikationen</a>."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:503-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:505-5
 msgid ""
 "<span class=\"def\">Direct formatting:</span> You can format spreadsheet "
 "cells, columns, rows and sheets by formatting directly from the menus, "
@@ -2589,11 +2611,13 @@ msgstr ""
 "anpassad nummerformatering, liksom teckensnitt, komplexa ramar, bakgrund, "
 "cellskydd och andra alternativ."
 
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:504-29
-msgid "format cells"
-msgstr "formatera celler"
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:506-29
+msgid ""
+"Format Cells dialog on the Numbers tab with category list, format options, "
+"decimal places, and format code"
+msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:509-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:511-30
 msgid ""
 "<span class=\"def\">Sorting data:</span> You can sort a list of numbers or "
 "text ascending or descending. <span class=\"productname\">{productname}</"
@@ -2605,7 +2629,7 @@ msgstr ""
 ">{productname}</span> upptäcker automatiskt celler som är rubriker och "
 "angränsande kolumner för att utöka urvalet."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:510-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:512-30
 msgid ""
 "<span class=\"def\">Filtering data:</span> Filters and advanced filters "
 "allow you to work on certain filtered rows (records) of a data range. In the "
@@ -2617,7 +2641,7 @@ msgstr ""
 "datafält. I kalkylbladen i <span class=\"productname\">{productname}</span> "
 "finns det olika möjligheter att tillämpa filter."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:512-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:514-7
 msgid ""
 "One use for the <span class=\"ui\">AutoFilter</span> function is to quickly "
 "restrict the display to records with identical entries in a data field."
@@ -2626,11 +2650,13 @@ msgstr ""
 "att snabbt begränsa visningen till poster med identiskt innehåll i ett "
 "datafält."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li.div.img[alt]:514-34
-msgid "filter"
-msgstr "filter"
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li.div.img[alt]:516-34
+msgid ""
+"AutoFilter dropdown menu on a spreadsheet column with sort, filter by color, "
+"filter by condition, and checkboxes for individual values"
+msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:516-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:518-7
 msgid ""
 "In the <span class=\"ui\">Standard Filter</span> dialog, you can also define "
 "ranges which contain the values in particular data fields. You can use the "
@@ -2642,7 +2668,7 @@ msgstr ""
 "standardfiltret för att koppla samman villkoren med antingen en logisk AND- "
 "eller en logisk OR-operator."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:517-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:519-7
 msgid ""
 "The <span class=\"ui\">Advanced Filter</span> allows up to a total of eight "
 "filter conditions. With advanced filters you enter the conditions directly "
@@ -2651,7 +2677,7 @@ msgstr ""
 "<span class=\"ui\">Avancerat filter</span> tillåter upp till totalt åtta "
 "filterförhållanden. Med avancerade filter anger du villkoren direkt i arket."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:521-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:523-5
 msgid ""
 "<span class=\"def\">Outlining:</span> You can create an outline of your data "
 "and group rows and columns together so that you can collapse and expand the "
@@ -2661,11 +2687,13 @@ msgstr ""
 "och gruppera rader och kolumner så att du kan krympa och expandera grupperna "
 "med ett enda klick, vilket gör det enkelt att representera hierarkiska data."
 
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:522-29
-msgid "outlining"
-msgstr "översikt"
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:524-29
+msgid ""
+"Spreadsheet with row and column grouping controls showing outline level "
+"buttons and collapse/expand toggles"
+msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:525-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:527-5
 msgid ""
 "<span class=\"def\">Data validation:</span> For each cell, you can define "
 "entries to be valid. Invalid entries to a cell will be rejected. To enable "
@@ -2675,7 +2703,7 @@ msgstr ""
 "vilka värden som ska vara giltiga. Ogiltiga värden i en cell kommer att "
 "avvisas. För att aktivera datavalidering:"
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:527-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:529-7
 msgid ""
 "Choose <span class=\"ui\">Validity</span> from the <span class=\"ui\">Data</"
 "span> menu. The <span class=\"ui\">Validity</span> dialog opens."
@@ -2683,12 +2711,13 @@ msgstr ""
 "Välj <span class=\"ui\">Validitet</span> från menyn <span class=\"ui\">Data</"
 "span>. Dialogrutan <span class=\"ui\">Validitet</span> öppnas."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:530-31
-#: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:535-31
-msgid "data validate"
-msgstr "data validera"
+#: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:532-31
+msgid ""
+"Validity dialog on the Criteria tab with Allow set to List, showing options "
+"for empty cells, selection list, and entry values"
+msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:531-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:533-7
 msgid ""
 "Select the validity criterion in the <span class=\"ui\">Allow</span> drop-"
 "box list. Depending on the criterion, more options show. Fill the required "
@@ -2698,7 +2727,7 @@ msgstr ""
 "span>. Beroende på kriteriet visas fler alternativ. Fyll i de uppgifter som "
 "krävs."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:532-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:534-7
 msgid ""
 "Use the <span class=\"ui\">Input Help</span> and <span class=\"ui\">Error "
 "Alert</span> tabs to enhance the user interactions. Click <span class=\"ui\""
@@ -2708,7 +2737,13 @@ msgstr ""
 "\"ui\">Felvarning</span> för att förbättra användarinteraktionerna. Klicka "
 "på <span class=\"ui\">OK</span> för att stänga dialogrutan."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:536-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:537-31
+msgid ""
+"Cell dropdown list showing validated entries such as Apple, Pear, Banana, "
+"Kiwi, and Lemon"
+msgstr ""
+
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:538-7
 msgid ""
 "To remove the validity of the cell, open the dialog and set the <span class="
 "\"ui\">Allow</span> list to “All values”."
@@ -2716,7 +2751,7 @@ msgstr ""
 "Om du vill ta bort cellens giltighet öppnar du dialogrutan och ställer in "
 "listan <span class=\"ui\">Tillåt</span> på \"Alla värden\"."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:540-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:542-5
 msgid ""
 "<span class=\"def\">Comments:</span> In a spreadsheet you can insert one "
 "comment per cell. When you select <span class=\"ui\">Insert comment</span>, "
@@ -2730,11 +2765,13 @@ msgstr ""
 "prick visas i det övre högra hörnet av cellen när den har en kommentar. För "
 "musen över cellen för att visa kommentaren."
 
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:541-29
-msgid "cell comments"
-msgstr "cellkommentarer"
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:543-29
+msgid ""
+"Spreadsheet cell with a comment popup showing the author, date, comment "
+"text, and Save/Cancel buttons"
+msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:544-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:546-5
 msgid ""
 "<span class=\"def\">Conditional formatting:</span> <span class=\"productname"
 "\">{productname}</span> adds symbols to each cell of a range based on cells "
@@ -2748,11 +2785,13 @@ msgstr ""
 "<span class=\"ui\">Villkorlig formatering</span> i verktygsfältet. Välj den "
 "symboluppsättning som ska tillämpas på intervallet."
 
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:545-29
-msgid "conditional formatting"
-msgstr "villkorlig formatering"
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:547-29
+msgid ""
+"Conditional formatting icon set picker showing arrows, circles, traffic "
+"lights, stars, smiley faces, and bar chart symbol sets"
+msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:553-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:555-30
 msgid ""
 "<span class=\"productname\">{productname}</span> edits text documents in the "
 "same way you edit a desktop document. It provides a What You See Is What You "
@@ -2771,7 +2810,7 @@ msgstr ""
 "ordbehandlare på skrivbordet. Använd tangentbordet, menyerna och "
 "verktygsfältet för att interagera med dokumentet."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:557-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:559-30
 msgid ""
 "Context menus are available on clicking the right mouse button. The commands "
 "available in the context menu are related - not extensively - to the "
@@ -2781,11 +2820,11 @@ msgstr ""
 "kommandon som finns tillgängliga i kontextmenyn är relaterade - inte helt "
 "och hållet - till det underliggande objektet i dokumentet."
 
-#: html/cool-help.html%2Bdiv.div.div.h3:560-5
+#: html/cool-help.html%2Bdiv.div.div.h3:562-5
 msgid "Formatting text"
 msgstr "Formatera text"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:562-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:564-5
 msgid ""
 "<span class=\"productname\">{productname}</span> supports modern techniques "
 "for paragraph formatting through styles. A style is a set of text properties "
@@ -2805,7 +2844,7 @@ msgstr ""
 "med samma stil också formateringen, vilket förenklar arbetet med att "
 "formatera många stycken individuellt."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:563-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:565-5
 msgid ""
 "In contrast, direct formatting applies formatting to selected excerpts of "
 "the document contents. On a long document, direct formatting must be applied "
@@ -2817,7 +2856,7 @@ msgstr ""
 "tillämpas på varje textutdrag, vilket gör textformatering till en lång "
 "uppgift med risk för fel och förseningar."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:565-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:567-30
 msgid ""
 "<span class=\"def\">Direct formatting:</span> You can format text document "
 "objects by formatting directly from the menus, toolbar or context menus. "
@@ -2828,7 +2867,7 @@ msgstr ""
 "eller kontextmenyerna. Direktformatering gäller endast för det aktuella "
 "objektet som valts."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:567-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:569-5
 msgid ""
 "<span class=\"def\">Style formatting:</span> <span class=\"productname\""
 ">{productname}</span> supports paragraph styles. You can apply an existing "
@@ -2840,15 +2879,17 @@ msgstr ""
 "styckeformat på ett stycke. Välj menyn <span class=\"ui\">Redigera</span> → "
 "<span class=\"ui\">Redigera stilar</span> för att ändra stil."
 
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:568-29
-msgid "style formatting"
-msgstr "stilformatering"
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:570-29
+msgid ""
+"Paragraph dialog on the Indents and Spacing tab with settings for indent, "
+"spacing, and line spacing, and a preview on the right"
+msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.div.h4:574-5
+#: html/cool-help.html%2Bdiv.div.div.div.h4:576-5
 msgid "Handling Tables"
 msgstr "Hantering av tabeller"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:575-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:577-5
 msgid ""
 "Insert tables with proper icon in the toolbar. Select the initial number of "
 "rows and columns. Add rows and columns with the cell context menu. Merge "
@@ -2860,11 +2901,13 @@ msgstr ""
 "cellkontextmenyn. Slå ihop celler med menyn <span class=\"ui\">Tabell</"
 "span>. Standardavsnittsstilen i cellerna är \"Tabellinnehåll\"."
 
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:576-29
-msgid "insert table"
-msgstr "infoga tabell"
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:578-29
+msgid ""
+"Insert Table picker showing a grid to select the number of rows and columns, "
+"currently showing 5 by 3"
+msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:579-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:581-5
 msgid ""
 "<span class=\"def\">Formatting cells:</span> Click in the cell or range of "
 "cells and choose menu <span class=\"ui\">Table</span> → <span class=\"ui\""
@@ -2875,11 +2918,11 @@ msgstr ""
 "class=\"ui\">Egenskaper</span>. Finjustera tabellen med dialogrutan "
 "Egenskaper."
 
-#: html/cool-help.html%2Bdiv.div.div.div.h4:582-5
+#: html/cool-help.html%2Bdiv.div.div.div.h4:584-5
 msgid "Track changes"
 msgstr "Spåra ändringar"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:583-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:585-5
 msgid ""
 "When you turn on Track Changes, <span class=\"productname\">{productname}</"
 "span> marks up new changes made to the document. Select this option again to "
@@ -2889,12 +2932,14 @@ msgstr ""
 ">%produktnamn</span> nya ändringar som gjorts i dokumentet. Välj det här "
 "alternativet igen för att stänga av spårningen."
 
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:584-29
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:711-29
-msgid "track changes"
-msgstr "spåra ändringar"
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:586-29
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:713-29
+msgid ""
+"Tracked change shown as a comment box beside the document with author name, "
+"date, and change description"
+msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:585-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:587-5
 msgid ""
 "Changes made by different people are shown in different colors and each "
 "tracked change can be accepted or rejected, using the box that appears on "
@@ -2904,11 +2949,11 @@ msgstr ""
 "ändring kan godkännas eller förkastas i rutan till höger. Du kan också lägga "
 "till en kommentar där."
 
-#: html/cool-help.html%2Bdiv.div.div.div.h4:588-5
+#: html/cool-help.html%2Bdiv.div.div.div.h4:590-5
 msgid "Other advanced features"
 msgstr "Andra avancerade funktioner"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:589-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:591-5
 msgid ""
 "<span class=\"def\">Comments:</span> Comments are inserted in the text and "
 "displayed on the right side of the screen."
@@ -2916,7 +2961,7 @@ msgstr ""
 "<span class=\"def\">Kommentarer:</span> Kommentarer infogas i texten och "
 "visas till höger på skärmen."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:590-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:592-5
 msgid ""
 "<span class=\"def\">Formatting marks:</span> Paragraph, page and unbreakable "
 "spaces are shown as marks to assist text alignment, editing and formatting."
@@ -2925,7 +2970,7 @@ msgstr ""
 "mellanslag visas som märken för att underlätta justering, redigering och "
 "formatering av text."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:591-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:593-5
 msgid ""
 "<span class=\"def\">Fields:</span> A basic set of fields is available to "
 "insert in the document."
@@ -2933,7 +2978,7 @@ msgstr ""
 "<span class=\"def\">Fält:</span> En grundläggande uppsättning fält är "
 "tillgängliga för att infoga i dokumentet."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:592-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:594-5
 msgid ""
 "<span class=\"def\">Alphabetical index:</span> Existing alphabetical index "
 "can be updated with new entries."
@@ -2941,7 +2986,7 @@ msgstr ""
 "<span class=\"def\">Alfabetiskt index:</span> Befintligt alfabetiskt index "
 "kan uppdateras med nya poster."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:593-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:595-5
 msgid ""
 "<span class=\"def\">Page header and footer:</span> Headers and footers are "
 "available for the existing page style applied in the document at the cursor "
@@ -2951,7 +2996,7 @@ msgstr ""
 "tillgängliga för den befintliga sidformat som tillämpas i dokumentet vid "
 "markörpositionen."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:594-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:596-5
 msgid ""
 "<span class=\"def\">Footnotes and endnotes:</span> Footnotes and endnotes "
 "are supported."
@@ -2959,7 +3004,7 @@ msgstr ""
 "<span class=\"def\">Fotnoter och slutnoter:</span> Fotnoter och slutnoter "
 "stöds."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:602-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:604-30
 msgid ""
 "<span class=\"productname\">{productname}</span> Impress edits presentations "
 "in a way that should be familiar to people. Operations like typing text, "
@@ -2975,7 +3020,7 @@ msgstr ""
 "skrivbordspresentationsprogram. Använd tangentbordet, menyerna och "
 "verktygsfälten för att utföra åtgärder i dokumentet."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:607-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:609-5
 msgid ""
 "<span class=\"productname\">{productname}</span> displays presentation slide "
 "shows, including a subset of slide transitions and object animations. Choose "
@@ -2987,7 +3032,7 @@ msgstr ""
 "objektanimationer. Välj bildspel från menyn eller klicka på ikonen i "
 "verktygsfältet längst ned till vänster i bildrutan."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:608-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:610-5
 msgid ""
 "To exit a <span class=\"productname\">{productname}</span> slide show, press "
 "the <kbd>Esc</kbd> key to return to the presentation edit mode."
@@ -2996,7 +3041,7 @@ msgstr ""
 "bildspel trycker du på <kbd>Esc</kbd>-tangenten för att återgå till "
 "redigeringsläget för presentationen."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:614-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:616-5
 msgid ""
 "Click on any slide thumbnail in the pane to switch to this slide to view or "
 "edit it."
@@ -3004,7 +3049,7 @@ msgstr ""
 "Klicka på en miniatyrbild av en bild i rutan för att växla till denna bild "
 "och visa eller redigera den."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:615-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:617-5
 msgid ""
 "Use the slide pane toolbar in the bottom to start the slideshow, add slide, "
 "duplicate or delete the current slide."
@@ -3012,7 +3057,7 @@ msgstr ""
 "Använd verktygsfältet för bildrutan längst ner för att starta bildspelet, "
 "lägga till bildrutan, duplicera eller ta bort den aktuella bildrutan."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:621-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:623-5
 msgid ""
 "<span class=\"def\">Slide layouts:</span> <span class=\"productname\""
 ">{productname}</span> Impress lets you change the slide layout. Select the "
@@ -3022,11 +3067,13 @@ msgstr ""
 ">{productname}</span> Impress låter dig ändra bildlayouten. Välj önskad "
 "bildlayout från rullgardinsmenyns layoutlista."
 
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:622-29
-msgid "slide layouts"
-msgstr "layouter för bildspelsbilder"
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:624-29
+msgid ""
+"Slide properties panel showing format, orientation, background, and master "
+"slide settings, with a layout gallery of thumbnail options below"
+msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:624-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:626-30
 msgid ""
 "<span class=\"def\">Master slide:</span> Select the master slide associated "
 "to the current slide. Format and arrange slide elements in the master slide."
@@ -3034,7 +3081,7 @@ msgstr ""
 "<span class=\"def\">Master-bild:</span> Välj den master-bild som är kopplad "
 "till den aktuella bilden. Formatera och ordna bildelement i master-bilden."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:625-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:627-30
 msgid ""
 "<span class=\"def\">Slide transitions:</span> <span class=\"productname\""
 ">{productname}</span> Impress provides visual effects when displaying a new "
@@ -3047,7 +3094,7 @@ msgstr ""
 "sidofältet för att ställa in övergången i bildrutan när du är i "
 "redigeringsläget."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:626-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:628-30
 msgid ""
 "<span class=\"def\">Object animation:</span> Individual objects in the slide "
 "can have animations. Use the side bar to configure the slide transition for "
@@ -3057,7 +3104,7 @@ msgstr ""
 "ha animationer. Använd sidofältet för att konfigurera bildövergången för ett "
 "valt objekt eller en uppsättning objekt."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:627-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:629-30
 msgid ""
 "<span class=\"def\">Tables:</span> Insert tables in the presentation. Use "
 "the sidebar to select the table theme."
@@ -3065,7 +3112,7 @@ msgstr ""
 "<span class=\"def\">Tabeller:</span> Infoga tabeller i presentationen. "
 "Använd sidofältet för att välja tabelltema."
 
-#: html/cool-help.html%2Bdiv.div.div.h4:633-5
+#: html/cool-help.html%2Bdiv.div.div.h4:635-5
 msgid ""
 "What are the document file formats supported by <span class=\"productname\""
 ">{productname}</span>?"
@@ -3073,7 +3120,7 @@ msgstr ""
 "Vilka är de filformat som stöds av <span class=\"productname\""
 ">{productname}</span>?"
 
-#: html/cool-help.html%2Bdiv.div.div.p:634-5
+#: html/cool-help.html%2Bdiv.div.div.p:636-5
 msgid ""
 "<span class=\"productname\">{productname}</span> supports both reading and "
 "writing for the following file formats:"
@@ -3081,36 +3128,36 @@ msgstr ""
 "<span class=\"productname\">{productname}</span> stöder både läsning och "
 "skrivning av följande filformat:"
 
-#: html/cool-help.html%2Bdiv.div.div.ul.li:636-7
+#: html/cool-help.html%2Bdiv.div.div.ul.li:638-7
 msgid ""
 "Text documents: Microsoft formats DOC, DOCX, RTF. OpenDocument Format ODT"
 msgstr "Textdokument: Microsoft format DOC, DOCX, RTF. OpenDocument Format ODT"
 
-#: html/cool-help.html%2Bdiv.div.div.ul.li:637-7
+#: html/cool-help.html%2Bdiv.div.div.ul.li:639-7
 msgid "Spreadsheets: Microsoft formats XLS, XLSX, OpenDocument Format ODS"
 msgstr "Kalkylark: Microsoft -format XLS, XLSX, OpenDocument Format ODS"
 
-#: html/cool-help.html%2Bdiv.div.div.ul.li:638-7
+#: html/cool-help.html%2Bdiv.div.div.ul.li:640-7
 msgid "Presentations: Microsoft formats PPT, PPTX, OpenDocument Format ODP"
 msgstr "Presentationer: Microsoft format PPT, PPTX, OpenDocument Format ODP"
 
-#: html/cool-help.html%2Bdiv.div.div.h4:642-5
+#: html/cool-help.html%2Bdiv.div.div.h4:644-5
 msgid "How do I save a document with another name?"
 msgstr "Hur sparar jag ett dokument med ett annat namn?"
 
-#: html/cool-help.html%2Bdiv.div.div.ol.li:644-7
+#: html/cool-help.html%2Bdiv.div.div.ol.li:646-7
 msgid "Hover the mouse on the document name in the menu bar."
 msgstr "Håll musen på dokumentnamnet i menyraden."
 
-#: html/cool-help.html%2Bdiv.div.div.ol.li:645-7
+#: html/cool-help.html%2Bdiv.div.div.ol.li:647-7
 msgid "Type the new file name in the text box and press <kbd>Enter</kbd>."
 msgstr "Skriv det nya filnamnet i textrutan och tryck på <kbd>Enter</kbd>."
 
-#: html/cool-help.html%2Bdiv.div.div.p:647-5
+#: html/cool-help.html%2Bdiv.div.div.p:649-5
 msgid "A copy of the document is saved with the new name in the same folder."
 msgstr "En kopia av dokumentet sparas med det nya namnet i samma mapp."
 
-#: html/cool-help.html%2Bdiv.div.div.h3:650-5
+#: html/cool-help.html%2Bdiv.div.div.h3:652-5
 msgid ""
 "How can I quit <span class=\"productname\">{productname}</span> without "
 "saving my edits?"
@@ -3118,7 +3165,7 @@ msgstr ""
 "Hur kan jag avsluta <span class=\"productname\">{productname}</span> utan "
 "att spara mina ändringar?"
 
-#: html/cool-help.html%2Bdiv.div.div.p:651-5
+#: html/cool-help.html%2Bdiv.div.div.p:653-5
 msgid ""
 "<span class=\"productname\">{productname}</span> saves the document in the "
 "background regularly, you can't just close without saving it. To abandon "
@@ -3131,7 +3178,7 @@ msgstr ""
 "class=\"ui\">Revideringshistorik</span> i menyn <span class=\"ui\""
 ">Arkiv</span>."
 
-#: html/cool-help.html%2Bdiv.div.div.h4:654-5
+#: html/cool-help.html%2Bdiv.div.div.h4:656-5
 msgid ""
 "Can <span class=\"productname\">{productname}</span> open a password-"
 "protected document?"
@@ -3139,7 +3186,7 @@ msgstr ""
 "Kan <span class=\"productname\">{productname}</span> öppna ett "
 "lösenordsskyddat dokument?"
 
-#: html/cool-help.html%2Bdiv.div.div.p:655-5
+#: html/cool-help.html%2Bdiv.div.div.p:657-5
 msgid ""
 "Yes. <span class=\"productname\">{productname}</span> opens password-"
 "protected documents, but it is necessary to supply the password in the “"
@@ -3149,11 +3196,11 @@ msgstr ""
 "lösenordsskyddade dokument, men det är nödvändigt att ange lösenordet i "
 "\"Ange lösenord\"-frågan vid öppnandet."
 
-#: html/cool-help.html%2Bdiv.div.div.h4:658-5
+#: html/cool-help.html%2Bdiv.div.div.h4:660-5
 msgid "How can I check spelling in my language?"
 msgstr "Hur kan jag kontrollera stavningen på mitt språk?"
 
-#: html/cool-help.html%2Bdiv.div.div.p:659-5
+#: html/cool-help.html%2Bdiv.div.div.p:661-5
 msgid ""
 "Choose menu <span class=\"ui\">Tools</span> → <span class=\"ui\">Languages</"
 "span> and select the language for the whole document. Optionally you can set "
@@ -3163,11 +3210,11 @@ msgstr ""
 "span> och välj språk för hela dokumentet. Som tillval kan du ställa in språk "
 "för den markerade texten och för det aktuella stycket."
 
-#: html/cool-help.html%2Bdiv.div.div.h4:662-5
+#: html/cool-help.html%2Bdiv.div.div.h4:664-5
 msgid "How can I remove the red wavy lines in my document?"
 msgstr "Hur kan jag ta bort de röda vågiga linjerna i mitt dokument?"
 
-#: html/cool-help.html%2Bdiv.div.div.p:663-5
+#: html/cool-help.html%2Bdiv.div.div.p:665-5
 msgid ""
 "Choose menu <span class=\"ui\">Tools</span> and uncheck <span class=\"ui\""
 ">Automatic Spell Checking</span>."
@@ -3175,11 +3222,11 @@ msgstr ""
 "Välj menyn <span class=\"ui\">Verktyg</span> och avmarkera <span class=\"ui\""
 ">Automatisk stavningskontroll</span>."
 
-#: html/cool-help.html%2Bdiv.div.div.h4:666-5
+#: html/cool-help.html%2Bdiv.div.div.h4:668-5
 msgid "What is the blue wavy underline in some words in the text?"
 msgstr "Vad är den blå vågiga understrykningen i vissa ord i texten?"
 
-#: html/cool-help.html%2Bdiv.div.div.p:667-5
+#: html/cool-help.html%2Bdiv.div.div.p:669-5
 msgid ""
 "Grammar errors in the text are marked with the blue wavy underline. Click on "
 "the underlined text with the right mouse button to open a menu with "
@@ -3191,11 +3238,11 @@ msgstr ""
 "på hur du kan korrigera grammatikfelet och de grammatikregler som används. "
 "Välj rätt förslag för att ändra texten."
 
-#: html/cool-help.html%2Bdiv.div.div.h4:670-5
+#: html/cool-help.html%2Bdiv.div.div.h4:672-5
 msgid "Is there a thesaurus?"
 msgstr "Finns det en synonymordbok?"
 
-#: html/cool-help.html%2Bdiv.div.div.p:671-5
+#: html/cool-help.html%2Bdiv.div.div.p:673-5
 msgid ""
 "Yes. Click in the word you want and choose <span class=\"ui\">Tools</span> → "
 "<span class=\"ui\">Thesaurus</span>. A dialog opens with many suggestions "
@@ -3205,11 +3252,13 @@ msgstr ""
 " <span class=\"ui\">Thesaurus</span>. En dialogruta öppnas med förslag på "
 "ersättningar."
 
-#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:672-29
-msgid "thesaurus"
-msgstr "tesaurus"
+#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:674-29
+msgid ""
+"Thesaurus dialog for the word company, listing alternatives such as "
+"institution, establishment, and troupe, with a Replace with field"
+msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.h4:675-5
+#: html/cool-help.html%2Bdiv.div.div.h4:677-5
 msgid ""
 "What are the blue <span class=\"blue\">¶</span> symbols and how can I remove "
 "them from my text document?"
@@ -3217,7 +3266,7 @@ msgstr ""
 "Vad är den blå symbolen <span class=\"blue\">¶</span> och hur kan jag ta "
 "bort den från mitt textdokument?"
 
-#: html/cool-help.html%2Bdiv.div.div.p:676-5
+#: html/cool-help.html%2Bdiv.div.div.p:678-5
 msgid ""
 "The <span class=\"blue\">¶</span> symbol is a formatting mark. It is used to "
 "help text alignment and editing and is not printed. To toggle it in the "
@@ -3229,11 +3278,11 @@ msgstr ""
 "vill växla den i dokumentdisplayen väljer du meny <span class=\"ui\">Visa</"
 "span> → <span class=\"ui\">Formateringsmarkering</span>."
 
-#: html/cool-help.html%2Bdiv.div.div.div.h4:683-5
+#: html/cool-help.html%2Bdiv.div.div.div.h4:685-5
 msgid "How do I get a word count of my document?"
 msgstr "Hur får jag ordräkning av mitt dokument?"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:684-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:686-5
 msgid ""
 "Word count is available in <span class=\"ui\">Tools</span> → <span class=\"ui"
 "\">Word count</span>. A dialog shows word counts for selection and for the "
@@ -3243,11 +3292,13 @@ msgstr ""
 ">Ordräkning</span>. En dialogruta visar ordräkningar för urvalet och för "
 "hela dokumentet."
 
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:685-29
-msgid "word count"
-msgstr "ordräkning"
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:687-29
+msgid ""
+"Word Count dialog showing word and character counts for the current "
+"selection and for the whole document"
+msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:686-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:688-5
 msgid ""
 "Word count is also displayed in the status bar. If no text is selected the "
 "word count is for the whole document. Otherwise the word count is for the "
@@ -3257,13 +3308,13 @@ msgstr ""
 "ordräkningen för hela dokumentet. I annat fall är ordräkningen för den valda "
 "texten."
 
-#: html/cool-help.html%2Bdiv.div.div.div.h4:689-5
+#: html/cool-help.html%2Bdiv.div.div.div.h4:691-5
 msgid ""
 "How can I insert a currency, copyright or trademark symbol in the document?"
 msgstr ""
 "Hur kan jag infoga en valuta, upphovsrätt eller varumärkesymbol i dokumentet?"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:690-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:692-5
 msgid ""
 "You can insert these special characters in the document using the <span "
 "class=\"ui\">Special Character</span> dialog."
@@ -3271,11 +3322,11 @@ msgstr ""
 "Du kan infoga dessa specialtecken i dokumentet med dialogrutan <span class="
 "\"ui\">Specialtecken</span>."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:692-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:694-7
 msgid "Place the cursor in the position to insert the character."
 msgstr "Placera markören på den plats där tecknet ska infogas."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:693-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:695-7
 msgid ""
 "Choose <span class=\"ui\">Insert</span> → <span class=\"ui\">Special "
 "Characters </span> or click the corresponding icon in the toolbar. A dialog "
@@ -3284,11 +3335,14 @@ msgstr ""
 "Välj <span class=\"ui\">Infoga</span> → <span class=\"ui\">Specialtecken</"
 "span> eller klicka på motsvarande ikon i verktygsfältet. En dialogruta visas."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:696-31
-msgid "Special Characters"
-msgstr "Specialtecken"
+#: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:698-31
+msgid ""
+"Special Characters dialog with a character grid, search and font fields, "
+"hexadecimal and decimal code inputs, and recent and favorite characters at "
+"the bottom"
+msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:697-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:699-7
 msgid ""
 "You can either browse the characters displayed with the drop lists or type a "
 "search key in the <span class=\"ui\">Search</span> box. If you know the "
@@ -3299,7 +3353,7 @@ msgstr ""
 "söknyckel i rutan <span class=\"ui\">Sök</span>. Om du känner till den "
 "numeriska Unicode-koden för specialtecknet anger du den i rutorna till höger."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:698-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:700-7
 msgid ""
 "Press <span class=\"ui\">Insert</span> button. To close the dialog, press "
 "<span class=\"ui\">Cancel</span>."
@@ -3307,11 +3361,11 @@ msgstr ""
 "Tryck på knappen <span class=\"ui\">Infoga</span>. Om du vill stänga "
 "dialogrutan trycker du på <span class=\"ui\">Avbryt</span>."
 
-#: html/cool-help.html%2Bdiv.div.div.div.h4:702-5
+#: html/cool-help.html%2Bdiv.div.div.div.h4:704-5
 msgid "Why can't I delete text? It just gets a strike-through?"
 msgstr "Varför kan jag inte radera text? Den blir bara genomstruken?"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:703-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:705-5
 msgid ""
 "You have the Track Changes feature enabled for the document. Track Changes "
 "records all changes in the text and shows the edits for later revision. "
@@ -3326,29 +3380,29 @@ msgstr ""
 "→ <span class=\"ui\">Spåra ändringar</span> → <span class=\"ui\""
 ">Registrera</span>."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:704-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:706-5
 msgid ""
 "With track changes enabled your document is shown in the following manner:"
 msgstr "Med Spåra ändringar aktiverat visas ditt dokument på följande sätt:"
 
-#: html/cool-help.html%2Bdiv.div.div.div.ul.li:706-7
+#: html/cool-help.html%2Bdiv.div.div.div.ul.li:708-7
 msgid "Deletions are marked with colored strike-through characters."
 msgstr "Strykningar markeras med färgade genomstrykningar."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ul.li:707-7
+#: html/cool-help.html%2Bdiv.div.div.div.ul.li:709-7
 msgid "Additions are marked with colored underlined characters."
 msgstr "Tillägg är markerade med färgade understrukna tecken."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ul.li:708-7
+#: html/cool-help.html%2Bdiv.div.div.div.ul.li:710-7
 msgid "All changes are marked with a vertical bar in the right margin."
 msgstr ""
 "Alla ändringar markeras med ett vertikalt streck i den högra marginalen."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ul.li:709-7
+#: html/cool-help.html%2Bdiv.div.div.div.ul.li:711-7
 msgid "Changes are displayed as comment in the right of the document area."
 msgstr "Ändringarna visas som kommentarer till höger i dokumentområdet."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:712-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:714-5
 msgid ""
 "The color assigned to the changes depends on the user that changes the "
 "document."
@@ -3356,7 +3410,7 @@ msgstr ""
 "Den färg som tilldelas ändringarna beror på vilken användare som ändrar "
 "dokumentet."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:713-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:715-5
 msgid ""
 "To display or hide track changes choose <span class=\"ui\">Edit</span> → "
 "<span class=\"ui\">Track Changes </span> → <span class=\"ui\">Show</span>. "
@@ -3369,7 +3423,7 @@ msgstr ""
 "registrerar du fortfarande ändringar och kan oavsiktligt lämna oönskad text "
 "tillgänglig i dokumentet."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:714-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:716-5
 msgid ""
 "Changes can be accepted or rejected. To accept or reject changes, click on "
 "the corresponding icons in the comment box on the right of the document. "
@@ -3390,15 +3444,17 @@ msgstr ""
 "\"ui\">Hantera</span>. En dialogruta visar en lista över alla spårade "
 "ändringar. Använd dialogrutans knappar i enlighet med detta."
 
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:715-29
-msgid "manage changes"
-msgstr "hantera ändringar"
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:717-29
+msgid ""
+"Manage Changes dialog with a list of tracked changes showing action, author, "
+"date, and comment columns, and Accept, Reject, Accept All, Reject All buttons"
+msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.div.h4:718-5
+#: html/cool-help.html%2Bdiv.div.div.div.h4:720-5
 msgid "How do I set the margins of the document?"
 msgstr "Hur ställer jag in marginalerna för dokumentet?"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:719-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:721-5
 msgid ""
 "Using the ruler drag the leftmost edge of the ruler to adjust the left "
 "margin, or the rightmost for the right margin."
@@ -3406,11 +3462,11 @@ msgstr ""
 "Dra i linjalen längst till vänster för att justera den vänstra marginalen, "
 "eller längst till höger för den högra marginalen."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:720-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:722-5
 msgid "Using the page style"
 msgstr "Använda sidformatet"
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:722-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:724-7
 msgid ""
 "Choose <span class=\"ui\">Format</span> → <span class=\"ui\">Page</span> and "
 "select the <span class=\"ui\">Page</span> tab"
@@ -3418,19 +3474,21 @@ msgstr ""
 "Välj <span class=\"ui\">Format</span> → <span class=\"ui\">Sida</span> och "
 "välj fliken <span class=\"ui\">Sida</span>"
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:723-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:725-7
 msgid "Set the page margins in the dialog."
 msgstr "Ställ in sidmarginalerna i dialogrutan."
 
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:725-29
-msgid "page style"
-msgstr "stil för sida"
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:727-29
+msgid ""
+"Page Style dialog on the Organizer tab showing style name, next style, "
+"inherit from, and category fields, with a summary of page properties"
+msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.div.h4:728-5
+#: html/cool-help.html%2Bdiv.div.div.div.h4:730-5
 msgid "How do I change the page orientation to landscape inside my document?"
 msgstr "Hur ändrar jag sidorienteringen till liggande i mitt dokument?"
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:730-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:732-7
 msgid ""
 "Place the cursor at the place where the page orientation is to change. Add "
 "an empty paragraph."
@@ -3438,7 +3496,7 @@ msgstr ""
 "Placera markören på den plats där sidriktningen ska ändras. Lägg till ett "
 "tomt stycke."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:731-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:733-7
 msgid ""
 "Choose <span class=\"ui\">Format</span> → <span class=\"ui\">Paragraph</"
 "span>, <span class=\"ui\">Text Flow </span> tab"
@@ -3446,7 +3504,7 @@ msgstr ""
 "Välj <span class=\"ui\">Format</span> → fliken <span class=\"ui\">Stycke</"
 "span>, <span class=\"ui\">Textflöde</span>"
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:732-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:734-7
 msgid ""
 "In the <span class=\"ui\">Breaks</span> area, mark Insert, Type: Page Break, "
 "Position: Before."
@@ -3454,15 +3512,15 @@ msgstr ""
 "I området <span class=\"ui\">Mellanrum</span> markerar du Infoga, Typ: "
 "Sidbrytning, Position: Före."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:733-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:735-7
 msgid "Select Landscape in “With Page Style”"
 msgstr "Välj Landskap i \"Med sidformat\""
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:734-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:736-7
 msgid "Select if you want to change page numbering."
 msgstr "Välj om du vill ändra sidnumreringen."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:736-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:738-5
 msgid ""
 "To return to portrait orientation, repeat the procedure, choosing Portrait "
 "in “With page style”."
@@ -3470,20 +3528,20 @@ msgstr ""
 "Om du vill återgå till porträttorientering upprepar du proceduren och väljer "
 "Porträtt i \"Med sidformat\"."
 
-#: html/cool-help.html%2Bdiv.div.div.div.h4:739-5
+#: html/cool-help.html%2Bdiv.div.div.div.h4:741-5
 msgid "How can I make the new text look like other existing text?"
 msgstr "Hur kan jag få den nya texten att se ut som annan befintlig text?"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:740-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:742-5
 msgid "Directly:"
 msgstr "Direkt:"
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:742-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:744-7
 msgid "Select the text with the existing format"
 msgstr "Markera texten med det befintliga formatet"
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:743-7
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:785-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:745-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:787-7
 msgid ""
 "Click on the clone formatting icon <img alt=\"format paintbrush\" class"
 "=\"icon-size\" src=\"images/lc_formatpaintbrush.svg\" />. The mouse pointer "
@@ -3493,19 +3551,19 @@ msgstr ""
 "size\" src=\"images/lc_formatpaintbrush.svg\" /> Muspekaren förvandlas till "
 "en målarhink."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:744-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:746-7
 msgid "Select the text you want to apply the new format."
 msgstr "Markera den text du vill använda det nya formatet."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:748-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:750-5
 msgid "Applying a paragraph style:"
 msgstr "Tillämpa ett styckeformat:"
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:750-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:752-7
 msgid "Place the cursor at the paragraph to be formatted"
 msgstr "Placera markören på det stycke som ska formateras"
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:751-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:753-7
 msgid ""
 "Select the style to apply in the style dropdown list. The paragraph displays "
 "the styles attributes."
@@ -3513,13 +3571,13 @@ msgstr ""
 "Välj den stil som ska tillämpas i rullgardinslistan för stilar. I stycket "
 "visas stilens attribut."
 
-#: html/cool-help.html%2Bdiv.div.div.div.h4:755-5
+#: html/cool-help.html%2Bdiv.div.div.div.h4:757-5
 msgid ""
 "Why did the text I just typed change automatically? How can I revert it?"
 msgstr ""
 "Varför ändrades texten som jag just skrev automatiskt? Hur kan jag ändra den?"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:756-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:758-5
 msgid ""
 "You have the AutoCorrection enabled. AutoCorrection compares the text just "
 "typed to an internal table of text. In most cases, AutoCorrection corrects "
@@ -3534,11 +3592,11 @@ msgstr ""
 "class=\"ui\">Autokorrigering</span> → <span class=\"ui\">Medan du "
 "skriver</span>."
 
-#: html/cool-help.html%2Bdiv.div.div.div.h4:764-5
+#: html/cool-help.html%2Bdiv.div.div.div.h4:766-5
 msgid "How can I select data to print?"
 msgstr "Hur kan jag välja data som ska skrivas ut?"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:765-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:767-5
 msgid ""
 "Insert column and row breaks in the spreadsheet to narrow the print range "
 "and print the document to download. On printing the PDF, select the pages of "
@@ -3548,11 +3606,11 @@ msgstr ""
 "utskriftsområdet och skriva ut dokumentet för nedladdning. När du skriver ut "
 "PDF-dokumentet väljer du de sidor som är intressanta."
 
-#: html/cool-help.html%2Bdiv.div.div.div.h4:768-5
+#: html/cool-help.html%2Bdiv.div.div.div.h4:770-5
 msgid "How can I import CSV data?"
 msgstr "Hur kan jag importera CSV-data?"
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:770-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:772-7
 msgid ""
 "Load your CSV data in some native tool to your platform, select and copy it "
 "to the clipboard"
@@ -3560,7 +3618,7 @@ msgstr ""
 "Ladda in CSV-data i ett verktyg för din plattform, välj och kopiera den till "
 "klippbordet"
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:771-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:773-7
 msgid ""
 "Activate the <span class=\"productname\">{productname}</span> spreadsheet "
 "window."
@@ -3568,7 +3626,7 @@ msgstr ""
 "Aktivera fönstret <span class=\"productname\">{productname}</span> för "
 "kalkylbladet."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:772-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:774-7
 msgid ""
 "Paste from the browser <span class=\"ui\">Edit</span> → <span class=\"ui\""
 ">Paste</span> or press <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden="
@@ -3581,16 +3639,18 @@ msgstr ""
 "\"ui\">Textimport</span> öppnas så att du kan beskriva det exakta formatet "
 "för CSV-data."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:775-31
-msgid "import"
-msgstr "importera"
+#: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:777-31
+msgid ""
+"Text Import dialog with character set, locale, separator options, and a "
+"preview of the imported CSV data"
+msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:776-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:778-7
 msgid ""
 "Select the character set, language and separator options for the CSV file."
 msgstr "Välj teckenuppsättning, språk och separatorer för CSV-filen."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:778-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:780-5
 msgid ""
 "The CSV data is loaded into the selected cell where you pasted, according to "
 "these settings."
@@ -3598,29 +3658,29 @@ msgstr ""
 "CSV-data laddas in i den valda cellen där du klistrade in, enligt dessa "
 "inställningar."
 
-#: html/cool-help.html%2Bdiv.div.div.div.h4:781-5
+#: html/cool-help.html%2Bdiv.div.div.div.h4:783-5
 msgid "How can I copy the formatting of existing cells to new ones?"
 msgstr ""
 "Hur kan jag kopiera formateringen från befintliga celler till nya celler?"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:782-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:784-5
 msgid "This is easy to do using the Paintbrush tool in the toolbar."
 msgstr ""
 "Det är lätt att göra med hjälp av verktyget Paintbrush i verktygsfältet."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:784-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:786-7
 msgid "Format the source cell with the font, color background and more."
 msgstr "Formatera källcellen med typsnitt, bakgrundsfärg med mera."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:786-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:788-7
 msgid "Select the cells you want to format. Release the mouse button."
 msgstr "Välj de celler som du vill formatera. Släpp musknappen."
 
-#: html/cool-help.html%2Bdiv.div.div.div.h4:790-5
+#: html/cool-help.html%2Bdiv.div.div.div.h4:792-5
 msgid "What is “Clear Direct Formatting” icon?"
 msgstr "Vad är ikonen \"Rensa Direktformatering\"?"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:791-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:793-5
 msgid ""
 "Direct formatting is formatting applied directly to the selected contents of "
 "a paragraph or a spreadsheet cell, and overlaps its assigned style "
@@ -3635,11 +3695,11 @@ msgstr ""
 "<span class=\"ui\">Format</span> → <span class=\"ui\">Resna "
 "Direktformatering</span> eller använder knappen i verktygsfältet."
 
-#: html/cool-help.html%2Bdiv.div.div.div.h4:794-5
+#: html/cool-help.html%2Bdiv.div.div.div.h4:796-5
 msgid "How do I rename a sheet?"
 msgstr "Hur byter jag namn på ett ark?"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:795-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:797-5
 msgid ""
 "Rename a sheet in the spreadsheet document using the context menu (using the "
 "right mouse button) over the sheet tab in the bottom. Enter the new sheet "
@@ -3648,16 +3708,16 @@ msgstr ""
 "Byt namn på ett ark i kalkylbladet genom att använda kontextmenyn (med höger "
 "musknapp) över fliken ark i botten. Ange det nya arknamnet i dialogrutan."
 
-#: html/cool-help.html%2Bdiv.div.div.div.h4:803-5
+#: html/cool-help.html%2Bdiv.div.div.div.h4:805-5
 msgid "How can I run my slide show?"
 msgstr "Hur kan jag köra mitt bildspel?"
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:805-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:807-7
 msgid ""
 "Open the presentation in <span class=\"productname\">{productname}</span>"
 msgstr "Öppna presentationen i <span class=\"productname\">{productname}</span>"
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:806-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:808-7
 msgid ""
 "Either choose <span class=\"ui\">Slide Show</span> → <span class=\"ui\">Full "
 "Screen Presentation</span> or click on the left-most icon in the bottom of "
@@ -3667,20 +3727,20 @@ msgstr ""
 ">Helskärmspresentation</span> eller klicka på ikonen längst till vänster "
 "längst ned på bildpanelen:"
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li.img[alt]:806-176
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li.img[alt]:808-176
 msgid "slide show"
 msgstr "bildspel"
 
-#: html/cool-help.html%2Bdiv.div.div.div.h4:810-5
+#: html/cool-help.html%2Bdiv.div.div.div.h4:812-5
 msgid "How can I change the line, area and position of a shape in my slides?"
 msgstr ""
 "Hur kan jag ändra linjen, området och positionen för en form i mina bilder?"
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:812-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:814-7
 msgid "Select the shape in your slide. A set of handles shows."
 msgstr "Välj formobjektet i bilden. En uppsättning handtag visas."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:813-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:815-7
 msgid ""
 "Choose <span class=\"ui\">Format</span> → <span class=\"ui\">Line</span> (or "
 "<span class=\"ui\">Area</span>, or <span class=\"ui\">Position and "
@@ -3690,13 +3750,87 @@ msgstr ""
 "eller <span class=\"ui\">Område</span>, eller <span class=\"ui\">Position "
 "och storlek</span>). En dialogruta öppnas."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:816-31
-msgid "Position and Size"
-msgstr "Position och storlek"
+#: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:818-31
+msgid ""
+"Area dialog on the Color tab with a color palette, active and new color "
+"previews, RGB value fields, and a custom palette section"
+msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:817-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:819-7
 msgid "Set the properties of the element of the object."
 msgstr "Ange egenskaperna för elementet i objektet."
+
+#~ msgid "The status bar"
+#~ msgstr "Statusfältet"
+
+#~ msgid "The information bar"
+#~ msgstr "Informationsfältet"
+
+#~ msgid "document repair"
+#~ msgstr "dokumentreparation"
+
+#~ msgid "inactive document"
+#~ msgstr "inaktivt dokument"
+
+#~ msgid "chart"
+#~ msgstr "diagram"
+
+#~ msgid "comment"
+#~ msgstr "kommentar"
+
+#~ msgid "spellchecking"
+#~ msgstr "stavningskontroll"
+
+#~ msgid "format cells"
+#~ msgstr "formatera celler"
+
+#~ msgid "filter"
+#~ msgstr "filter"
+
+#~ msgid "outlining"
+#~ msgstr "översikt"
+
+#~ msgid "data validate"
+#~ msgstr "data validera"
+
+#~ msgid "cell comments"
+#~ msgstr "cellkommentarer"
+
+#~ msgid "conditional formatting"
+#~ msgstr "villkorlig formatering"
+
+#~ msgid "style formatting"
+#~ msgstr "stilformatering"
+
+#~ msgid "insert table"
+#~ msgstr "infoga tabell"
+
+#~ msgid "track changes"
+#~ msgstr "spåra ändringar"
+
+#~ msgid "slide layouts"
+#~ msgstr "layouter för bildspelsbilder"
+
+#~ msgid "thesaurus"
+#~ msgstr "tesaurus"
+
+#~ msgid "word count"
+#~ msgstr "ordräkning"
+
+#~ msgid "Special Characters"
+#~ msgstr "Specialtecken"
+
+#~ msgid "manage changes"
+#~ msgstr "hantera ändringar"
+
+#~ msgid "page style"
+#~ msgstr "stil för sida"
+
+#~ msgid "import"
+#~ msgstr "importera"
+
+#~ msgid "Position and Size"
+#~ msgstr "Position och storlek"
 
 #~ msgid ""
 #~ "<kbd>Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Shift</kbd><span "

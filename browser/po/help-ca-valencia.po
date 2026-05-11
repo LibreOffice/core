@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-20 12:14+0200\n"
+"POT-Creation-Date: 2026-05-11 14:06+0200\n"
 "PO-Revision-Date: 2020-10-12 07:13+0000\n"
 "Last-Translator: Andras Timar <andras.timar@collabora.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/collabora-online/"
@@ -1742,122 +1742,121 @@ msgstr "Va al següent objecte de text de la diapositiva o pàgina de dibuix"
 msgid "Select all in drawing page"
 msgstr "Ho selecciona tot en la diapositiva o pàgina de dibuix"
 
-#: html/cool-help.html%2Bdiv.h1:326-5
+#: html/cool-help.html%2Bdiv.h2:326-5
 msgid "<span class=\"productname\">{productname}</span> Help"
 msgstr "Ajuda del <span class=\"productname\">{productname}</span>"
 
-#: html/cool-help.html%2Bdiv.h2:327-5
-#: html/cool-help.html%2Bdiv.div.h3:362-5
+#: html/cool-help.html%2Bdiv.nav.ul.li:329-13
+#: html/cool-help.html%2Bdiv.div.h3:364-5
 msgid "Collaborative editing"
 msgstr "Edició col·laborativa"
 
-#: html/cool-help.html%2Bdiv.h2:328-5
-#: html/cool-help.html%2Bdiv.div.h3:372-5
+#: html/cool-help.html%2Bdiv.nav.ul.li:330-13
+#: html/cool-help.html%2Bdiv.div.h3:374-5
 msgid "<span class=\"productname\">{productname}</span> user interface"
 msgstr ""
 "Interfície d'usuari del <span class=\"productname\">{productname}</span>"
 
-#: html/cool-help.html%2Bdiv.h2:329-5
-#: html/cool-help.html%2Bdiv.div.h3:409-5
+#: html/cool-help.html%2Bdiv.nav.ul.li:331-13
+#: html/cool-help.html%2Bdiv.div.h3:411-5
 msgid "Opening, closing, saving, printing and downloading documents"
 msgstr "Obertura, tancament, desament, impressió i baixada de documents"
 
-#: html/cool-help.html%2Bdiv.h2:330-5
-#: html/cool-help.html%2Bdiv.div.h3:418-5
+#: html/cool-help.html%2Bdiv.nav.ul.li:332-13
+#: html/cool-help.html%2Bdiv.div.h3:420-5
 msgid "Editing documents"
 msgstr "Edició de documents"
 
-#: html/cool-help.html%2Bdiv.h2:331-5
-#: html/cool-help.html%2Bdiv.div.h2:337-9
-#: html/cool-help.html%2Bdiv.div.h2:352-9
-#: html/cool-help.html%2Bdiv.div.h3:448-3
-#: html/cool-help.html%2Bdiv.div.div.h3:508-5
-#: html/cool-help.html%2Bdiv.div.div.h3:619-5
+#: html/cool-help.html%2Bdiv.nav.ul.li:333-13
+#: html/cool-help.html%2Bdiv.nav.ul.li:339-13
+#: html/cool-help.html%2Bdiv.nav.ul.li:352-13
+#: html/cool-help.html%2Bdiv.div.h3:450-3
+#: html/cool-help.html%2Bdiv.div.div.h3:510-5
+#: html/cool-help.html%2Bdiv.div.div.h3:621-5
 msgid "Advanced features"
 msgstr "Funcionalitats avançades"
 
-#: html/cool-help.html%2Bdiv.div.h2:333-9
-#: html/cool-help.html%2Bdiv.div.h3:486-5
+#: html/cool-help.html%2Bdiv.nav.ul.li:335-13
+#: html/cool-help.html%2Bdiv.div.h3:488-5
 msgid "<span class=\"productname\">{productname}</span> spreadsheets"
 msgstr "Fulls de càlcul del <span class=\"productname\">{productname}</span>"
 
-#: html/cool-help.html%2Bdiv.div.h2:334-9
-#: html/cool-help.html%2Bdiv.div.div.h3:488-5
+#: html/cool-help.html%2Bdiv.nav.ul.li:336-13
+#: html/cool-help.html%2Bdiv.div.div.h3:490-5
 msgid "Editing spreadsheets"
 msgstr "Edició de fulls de càlcul"
 
-#: html/cool-help.html%2Bdiv.div.h2:335-9
-#: html/cool-help.html%2Bdiv.div.div.h3:492-5
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:496-29
+#: html/cool-help.html%2Bdiv.nav.ul.li:337-13
+#: html/cool-help.html%2Bdiv.div.div.h3:494-5
 msgid "Formulas"
 msgstr "Fórmules"
 
-#: html/cool-help.html%2Bdiv.div.h2:336-9
-#: html/cool-help.html%2Bdiv.div.div.h3:501-5
+#: html/cool-help.html%2Bdiv.nav.ul.li:338-13
+#: html/cool-help.html%2Bdiv.div.div.h3:503-5
 msgid "Formatting spreadsheets"
 msgstr "Formatació de fulls de càlcul"
 
-#: html/cool-help.html%2Bdiv.div.h2:338-9
-#: html/cool-help.html%2Bdiv.div.div.h3:762-5
+#: html/cool-help.html%2Bdiv.nav.ul.li:340-13
+#: html/cool-help.html%2Bdiv.div.div.h3:764-5
 msgid "Spreadsheets"
 msgstr "Fulls de càlcul"
 
-#: html/cool-help.html%2Bdiv.div.h2:341-9
-#: html/cool-help.html%2Bdiv.div.h3:550-5
+#: html/cool-help.html%2Bdiv.nav.ul.li:342-13
+#: html/cool-help.html%2Bdiv.div.h3:552-5
 msgid "<span class=\"productname\">{productname}</span> text documents"
 msgstr "Documents de text del <span class=\"productname\">{productname}</span>"
 
-#: html/cool-help.html%2Bdiv.div.h2:342-9
-#: html/cool-help.html%2Bdiv.div.div.h3:552-5
+#: html/cool-help.html%2Bdiv.nav.ul.li:343-13
+#: html/cool-help.html%2Bdiv.div.div.h3:554-5
 msgid "Editing text documents"
 msgstr "Edició de documents de text"
 
-#: html/cool-help.html%2Bdiv.div.h2:343-9
-#: html/cool-help.html%2Bdiv.div.div.h3:556-5
+#: html/cool-help.html%2Bdiv.nav.ul.li:344-13
+#: html/cool-help.html%2Bdiv.div.div.h3:558-5
 msgid "Context menus"
 msgstr "Menús contextuals"
 
-#: html/cool-help.html%2Bdiv.div.h2:344-9
-#: html/cool-help.html%2Bdiv.div.div.h3:572-5
+#: html/cool-help.html%2Bdiv.nav.ul.li:345-13
+#: html/cool-help.html%2Bdiv.div.div.h3:574-5
 msgid "Advanced text document editor features"
 msgstr "Funcionalitats avançades de l'editor de documents de text"
 
-#: html/cool-help.html%2Bdiv.div.h2:345-9
-#: html/cool-help.html%2Bdiv.div.div.h3:681-5
+#: html/cool-help.html%2Bdiv.nav.ul.li:346-13
+#: html/cool-help.html%2Bdiv.div.div.h3:683-5
 msgid "Text documents"
 msgstr "Documents de text"
 
-#: html/cool-help.html%2Bdiv.div.h2:348-9
-#: html/cool-help.html%2Bdiv.div.h3:599-5
+#: html/cool-help.html%2Bdiv.nav.ul.li:348-13
+#: html/cool-help.html%2Bdiv.div.h3:601-5
 msgid "<span class=\"productname\">{productname}</span> presentations"
 msgstr "Presentacions del <span class=\"productname\">{productname}</span>"
 
-#: html/cool-help.html%2Bdiv.div.h2:349-9
-#: html/cool-help.html%2Bdiv.div.div.h3:601-5
+#: html/cool-help.html%2Bdiv.nav.ul.li:349-13
+#: html/cool-help.html%2Bdiv.div.div.h3:603-5
 msgid "Editing presentations"
 msgstr "Edició de presentacions"
 
-#: html/cool-help.html%2Bdiv.div.h2:350-9
-#: html/cool-help.html%2Bdiv.div.div.h3:605-5
+#: html/cool-help.html%2Bdiv.nav.ul.li:350-13
+#: html/cool-help.html%2Bdiv.div.div.h3:607-5
 msgid "Slide show"
 msgstr "Presentació de diapositives"
 
-#: html/cool-help.html%2Bdiv.div.h2:351-9
-#: html/cool-help.html%2Bdiv.div.div.h3:612-5
+#: html/cool-help.html%2Bdiv.nav.ul.li:351-13
+#: html/cool-help.html%2Bdiv.div.div.h3:614-5
 msgid "Slide pane"
 msgstr "Subfinestra de diapositives"
 
-#: html/cool-help.html%2Bdiv.div.h2:353-9
-#: html/cool-help.html%2Bdiv.div.div.h3:801-5
+#: html/cool-help.html%2Bdiv.nav.ul.li:353-13
+#: html/cool-help.html%2Bdiv.div.div.h3:803-5
 msgid "Presentations"
 msgstr "Presentacions"
 
-#: html/cool-help.html%2Bdiv.h2:355-5
-#: html/cool-help.html%2Bdiv.div.h3:631-5
+#: html/cool-help.html%2Bdiv.nav.ul.li:355-13
+#: html/cool-help.html%2Bdiv.div.h3:633-5
 msgid "Frequently Asked Questions"
 msgstr "Preguntes freqüents"
 
-#: html/cool-help.html%2Bdiv.div.p:358-5
+#: html/cool-help.html%2Bdiv.div.p:360-5
 msgid ""
 "<span class=\"productname\">{productname}</span> allows you to create and "
 "edit office documents text documents, spreadsheets and presentations "
@@ -1869,7 +1868,7 @@ msgstr ""
 "vostre navegador, d'una manera simple. Podeu treballar en un document "
 "individualment o col·laborativa."
 
-#: html/cool-help.html%2Bdiv.div.div.ul.li:365-7
+#: html/cool-help.html%2Bdiv.div.div.ul.li:367-7
 msgid ""
 "Each user gets assigned a color. The cursor of each user will be shown in "
 "the assigned color. Note: you will see your cursor as black, blinking "
@@ -1879,7 +1878,7 @@ msgstr ""
 "aquest color assignat. Nota: el vostre cursor sempre es mostra de color "
 "negre i intermitent per a vós; els altres usuaris el veuran d'un altre color."
 
-#: html/cool-help.html%2Bdiv.div.div.ul.li:366-7
+#: html/cool-help.html%2Bdiv.div.div.ul.li:368-7
 msgid ""
 "You can jump to the cursor of a user by clicking on the name (or avatar) of "
 "the user. It is possible to follow the editor."
@@ -1887,7 +1886,7 @@ msgstr ""
 "Podeu anar directament al cursor d'un usuari fent clic al seu nom o avatar. "
 "És possible seguir l'editor."
 
-#: html/cool-help.html%2Bdiv.div.div.ul.li:367-7
+#: html/cool-help.html%2Bdiv.div.div.ul.li:369-7
 msgid ""
 "<span class=\"productname\">{productname}</span> notifies you with a small "
 "notification in the footer when a new user enters or when a user leaves."
@@ -1895,7 +1894,7 @@ msgstr ""
 "El <span class=\"productname\">{productname}</span> vos indica amb una "
 "petita notificació en la part inferior si entra un nou usuari o en ix."
 
-#: html/cool-help.html%2Bdiv.div.div.p:373-30
+#: html/cool-help.html%2Bdiv.div.div.p:375-30
 msgid ""
 "<span class=\"productname\">{productname}</span> uses modern browser "
 "resources to adapt the user interface to the size of the viewing area, "
@@ -1906,7 +1905,7 @@ msgstr ""
 "modernes del navegador per a adaptar la interfície d'usuari a la mida de "
 "l'àrea de visualització, dispositius mòbils inclosos. La interfície comprèn:"
 
-#: html/cool-help.html%2Bdiv.div.div.p:375-5
+#: html/cool-help.html%2Bdiv.div.div.p:377-5
 msgid ""
 "<span class=\"def\">The document area:</span> The application area shows the "
 "document contents, either spreadsheets, presentations or text documents."
@@ -1915,7 +1914,7 @@ msgstr ""
 "el contingut del document, siga un full de càlcul, una presentació o un "
 "document de text."
 
-#: html/cool-help.html%2Bdiv.div.div.p:378-5
+#: html/cool-help.html%2Bdiv.div.div.p:380-5
 msgid ""
 "<span class=\"def\">The menu bar:</span> The main menu is at the top and "
 "includes many options, such as commands for printing, editing, viewing, and "
@@ -1926,7 +1925,7 @@ msgid ""
 "aria-label=\"show menu bar\" title=\"Show menu bar\"></span>."
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.p:381-5
+#: html/cool-help.html%2Bdiv.div.div.p:383-5
 msgid ""
 "<span class=\"def\">Context menus:</span> On clicking with the right mouse "
 "button, a menu appears with commands associated with the underlying object."
@@ -1935,7 +1934,7 @@ msgstr ""
 "del ratolí a un objecte, es mostra un menú que inclou ordres associades amb "
 "aquest objecte."
 
-#: html/cool-help.html%2Bdiv.div.div.p:384-5
+#: html/cool-help.html%2Bdiv.div.div.p:386-5
 msgid ""
 "<span class=\"def\">The toolbar:</span> The toolbar contains the most used "
 "options for daily editing. Toolbar buttons are dynamic, meaning that their "
@@ -1946,7 +1945,7 @@ msgstr ""
 "dinàmics; això vol dir que el seu estat (activat o desactivat) depèn de "
 "diferents factors."
 
-#: html/cool-help.html%2Bdiv.div.div.p:387-5
+#: html/cool-help.html%2Bdiv.div.div.p:389-5
 msgid ""
 "<span class=\"def\">The status bar:</span> The status bar is shown in the "
 "bottom, and contains several useful options and features."
@@ -1954,11 +1953,13 @@ msgstr ""
 "<span class=\"def\">La barra d'estat:</span> aquesta barra és a sota de la "
 "finestra i conté diverses opcions i funcionalitats útils."
 
-#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:388-29
-msgid "The status bar"
+#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:390-29
+msgid ""
+"Status bar showing page number, word count, insert mode, selection mode, "
+"language, edit mode, navigation, zoom, and search"
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.p:391-5
+#: html/cool-help.html%2Bdiv.div.div.p:393-5
 msgid ""
 "<span class=\"def\">The search bar:</span> Searching starts automatically "
 "when content is inserted in the search box, and the document window "
@@ -1971,20 +1972,20 @@ msgstr ""
 "trobada del terme. La cerca no distingeix majúscules i minúscules. A prop "
 "d'aquesta barra hi ha tres botons:"
 
-#: html/cool-help.html%2Bdiv.div.div.ul.li:393-7
+#: html/cool-help.html%2Bdiv.div.div.ul.li:395-7
 #, fuzzy
-msgid "Search backwards>"
+msgid "Search backwards"
 msgstr "Cerca cap arrere"
 
-#: html/cool-help.html%2Bdiv.div.div.ul.li:394-7
+#: html/cool-help.html%2Bdiv.div.div.ul.li:396-7
 msgid "Search forward"
 msgstr "Cerca cap avant"
 
-#: html/cool-help.html%2Bdiv.div.div.ul.li:395-7
+#: html/cool-help.html%2Bdiv.div.div.ul.li:397-7
 msgid "Cancel the search (appears only when a text has been searched)"
 msgstr "Cancel·la la cerca (apareix només quan s'ha cercat algun text)"
 
-#: html/cool-help.html%2Bdiv.div.div.p:399-5
+#: html/cool-help.html%2Bdiv.div.div.p:401-5
 #, fuzzy
 msgid ""
 "<span class=\"def\">The zoom bar:</span> The zoom bar includes buttons to "
@@ -1998,7 +1999,7 @@ msgstr ""
 "d'usuari no queda afectada. El nivell actual d'escala es mostra en aquesta "
 "àrea."
 
-#: html/cool-help.html%2Bdiv.div.div.p:400-5
+#: html/cool-help.html%2Bdiv.div.div.p:402-5
 msgid ""
 "Text, charts, shapes and svg images will stay sharp, when zooming in, you "
 "will only see pixels appear at inserted images, such as jpg’s or png’s."
@@ -2007,24 +2008,25 @@ msgstr ""
 "vos només veure els píxels que apareixen en les imatges inserides, com ara "
 "jpg o png."
 
-#: html/cool-help.html%2Bdiv.div.div.p:401-5
+#: html/cool-help.html%2Bdiv.div.div.p:403-5
 msgid "Using the browser zoom affects the document and user interface areas."
 msgstr ""
 "L'ús del zoom del navegador afecta les àrees del document i la interfície "
 "d'usuari."
 
-#: html/cool-help.html%2Bdiv.div.div.p:404-5
+#: html/cool-help.html%2Bdiv.div.div.p:406-5
 msgid ""
 "<span class=\"def\">The information bar:</span> The information bar displays "
 "details about the current document. The actual information depends on the "
 "nature of the document."
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:405-29
-msgid "The information bar"
+#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:407-29
+msgid ""
+"Information bar showing page navigation arrows, zoom controls, and zoom level"
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.p:410-5
+#: html/cool-help.html%2Bdiv.div.p:412-5
 msgid ""
 "Your documents are stored and managed in the cloud storage that is "
 "integrated with <span class=\"productname\">{productname}</span>."
@@ -2032,7 +2034,7 @@ msgstr ""
 "Els vostres documents s'emmagatzemen i es gestionen al magatzem al núvol que "
 "s'ha integrat amb el <span class=\"productname\">{productname}</span>."
 
-#: html/cool-help.html%2Bdiv.div.div.p:411-30
+#: html/cool-help.html%2Bdiv.div.div.p:413-30
 msgid ""
 "To download a document download it from the <span class=\"productname\""
 ">{productname}</span> application’s <span class=\"ui\">File</span> menu. The "
@@ -2044,7 +2046,7 @@ msgstr ""
 "span>. Els formats de baixada disponibles depenen de l'aplicació. Totes les "
 "aplicacions permeten baixar en el format PDF."
 
-#: html/cool-help.html%2Bdiv.div.div.p:412-30
+#: html/cool-help.html%2Bdiv.div.div.p:414-30
 msgid ""
 "To open document, click on the file to open the <span class=\"productname\""
 ">{productname}</span> module associated to the document format."
@@ -2052,7 +2054,7 @@ msgstr ""
 "Per a obrir el document, feu clic al fitxer per a obrir el mòdul del <span "
 "class=\"productname\">{productname}</span> associat al format del document."
 
-#: html/cool-help.html%2Bdiv.div.div.p:413-30
+#: html/cool-help.html%2Bdiv.div.div.p:415-30
 msgid ""
 "Documents in <span class=\"productname\">{productname}</span> save "
 "automatically, but if you are concerned that a document is synchronized as "
@@ -2064,7 +2066,7 @@ msgstr ""
 "ràpidament com siga possible, podeu forçar el desament fent servir l'entrada "
 "<span class=\"ui\">Guarda</span> del menú <span class=\"ui\">Fitxer</span>."
 
-#: html/cool-help.html%2Bdiv.div.div.p:414-30
+#: html/cool-help.html%2Bdiv.div.div.p:416-30
 msgid ""
 "Depending on the capabilities of your browser, the print window may appear "
 "or a “Download PDF export?” popup appears. You can print this PDF in your "
@@ -2075,14 +2077,14 @@ msgstr ""
 "l'exportació PDF?». Podeu imprimir aquest PDF amb el vostre visor de fitxer "
 "PDF preferit."
 
-#: html/cool-help.html%2Bdiv.div.div.p:415-30
+#: html/cool-help.html%2Bdiv.div.div.p:417-30
 msgid ""
 "When closing a document, it is automatically saved if it has been changed."
 msgstr ""
 "Si s'ha modificat el document en moment de tancar-lo es guardarà "
 "automàticament."
 
-#: html/cool-help.html%2Bdiv.div.p:419-5
+#: html/cool-help.html%2Bdiv.div.p:421-5
 msgid ""
 "Document editing should be familiar to everyone that has used an office "
 "application before, but here are some distinctive features:"
@@ -2091,11 +2093,11 @@ msgstr ""
 "utilitzat una aplicació d'oficina amb anterioritat; no obstant això, hi ha "
 "diferències importants:"
 
-#: html/cool-help.html%2Bdiv.div.div.h4:421-5
+#: html/cool-help.html%2Bdiv.div.div.h4:423-5
 msgid "Copy and Paste"
 msgstr "Còpia i enganxament"
 
-#: html/cool-help.html%2Bdiv.div.div.p:422-5
+#: html/cool-help.html%2Bdiv.div.div.p:424-5
 msgid ""
 "Rich content copy/cut and paste is supported, not only within a given "
 "document, but also across documents on the same or different <span class="
@@ -2123,7 +2125,7 @@ msgstr ""
 "seleccionar text fent-hi doble toc, i cal usar un toc llarg per a accedir a "
 "les ordres de copiar, retallar i enganxar via el menú contextual."
 
-#: html/cool-help.html%2Bdiv.div.div.p:423-5
+#: html/cool-help.html%2Bdiv.div.div.p:425-5
 msgid ""
 "To copy larger pieces of content to other applications on your device, users "
 "need to press the <span class=\"ui\">Start download</span> button, and then "
@@ -2141,11 +2143,11 @@ msgstr ""
 "és necessari per a exportar el contingut a enganxar en aplicacions externes. "
 "Aquest pas també converteix els tipus d'objectes en imatges estàtiques."
 
-#: html/cool-help.html%2Bdiv.div.div.h4:426-5
+#: html/cool-help.html%2Bdiv.div.div.h4:428-5
 msgid "Document repair"
 msgstr "Reparació del document"
 
-#: html/cool-help.html%2Bdiv.div.div.p:427-5
+#: html/cool-help.html%2Bdiv.div.div.p:429-5
 msgid ""
 "When multiple people edit the same document concurrently, it is possible for "
 "their changes to conflict and this can cause some confusion. The Document "
@@ -2157,7 +2159,7 @@ msgstr ""
 "Reparació del document permet als usuaris desfer les modificacions fetes per "
 "altres usuaris i restablir el document a un estat anterior."
 
-#: html/cool-help.html%2Bdiv.div.div.p:428-5
+#: html/cool-help.html%2Bdiv.div.div.p:430-5
 msgid ""
 "To jump back to the selected state, select it with the mouse and hit <span "
 "class=\"ui\">Jump to state</span>."
@@ -2165,12 +2167,13 @@ msgstr ""
 "Per a tornar a l'estat seleccionat, trieu-lo amb el ratolí i premeu el botó "
 "<span class=\"ui\">Salta a l'estat</span>."
 
-#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:429-29
-#, fuzzy
-msgid "document repair"
-msgstr "Reparació del document"
+#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:431-29
+msgid ""
+"Repair Document dialog listing past document states with columns for action "
+"type, author, and timestamp"
+msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.p:430-5
+#: html/cool-help.html%2Bdiv.div.div.p:432-5
 msgid ""
 "This is particularly useful – say when a colleague inadvertently selected "
 "all text in the document with <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-"
@@ -2181,11 +2184,11 @@ msgstr ""
 "el text del document amb <kbd>Ctrl</kbd>+<kbd>A</kbd> i tot seguit escriu i "
 "esborra tot el contingut mentre l'esteu editant."
 
-#: html/cool-help.html%2Bdiv.div.div.h4:433-5
+#: html/cool-help.html%2Bdiv.div.div.h4:435-5
 msgid "Inactive document"
 msgstr "Document inactiu"
 
-#: html/cool-help.html%2Bdiv.div.div.p:434-5
+#: html/cool-help.html%2Bdiv.div.div.p:436-5
 msgid ""
 "When <span class=\"productname\">{productname}</span> detects that there has "
 "not been any activity in the browser for a while, it puts the document in an "
@@ -2198,12 +2201,13 @@ msgstr ""
 "transparent, amb un missatge «Document inactiu - feu clic per a reprendre "
 "l'edició»."
 
-#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:435-29
-#, fuzzy
-msgid "inactive document"
-msgstr "Document inactiu"
+#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:437-29
+msgid ""
+"Idle document overlay with the message: Idle document - please click to "
+"reload and resume editing"
+msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.p:436-5
+#: html/cool-help.html%2Bdiv.div.div.p:438-5
 msgid ""
 "To continue editing, click on the document and the layover and message "
 "disappear. Any changes that may have been made by other users – while "
@@ -2213,11 +2217,11 @@ msgstr ""
 "desapareixerà. Qualsevol canvi que puga haver fet qualsevol altre usuari, si "
 "s'edita col·laborativament el document, es tornarà a carregar."
 
-#: html/cool-help.html%2Bdiv.div.div.h4:439-5
+#: html/cool-help.html%2Bdiv.div.div.h4:441-5
 msgid "Pasting"
 msgstr "Enganxament"
 
-#: html/cool-help.html%2Bdiv.div.div.p:440-5
+#: html/cool-help.html%2Bdiv.div.div.p:442-5
 msgid ""
 "When you paste content copied from within the same document, the format and "
 "elements are maintained. If you copy from another document, in another tab "
@@ -2229,7 +2233,7 @@ msgstr ""
 "finestra del navegador, o de fora del navegador, el contingut enganxat "
 "conservarà el text enriquit."
 
-#: html/cool-help.html%2Bdiv.div.div.p:441-5
+#: html/cool-help.html%2Bdiv.div.div.p:443-5
 msgid ""
 "You can paste as unformatted text with the keyboard shortcut: <kbd>Ctrl</"
 "kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Shift</"
@@ -2238,7 +2242,7 @@ msgstr ""
 "Podeu enganxar com a text sense format amb la drecera de teclat: "
 "<kbd>Ctrl</kbd>+<kbd>Maj</kbd>+<kbd>V</kbd>"
 
-#: html/cool-help.html%2Bdiv.div.div.p:442-5
+#: html/cool-help.html%2Bdiv.div.div.p:444-5
 msgid ""
 "When you paste text from within the document, formatting will be respected. "
 "You can also paste objects, such as images, if they are copied from the "
@@ -2248,7 +2252,7 @@ msgstr ""
 "podeu enganxar imatges i objectes similars si aquests es copien des de dins "
 "el document en què treballeu."
 
-#: html/cool-help.html%2Bdiv.div.div.p:443-5
+#: html/cool-help.html%2Bdiv.div.div.p:445-5
 #, fuzzy
 msgid ""
 "When you paste text from outside of the document (another browser window or "
@@ -2257,7 +2261,7 @@ msgstr ""
 "Si enganxeu text fora del document (en una altra finestra del navegador o en "
 "una aplicació d'escriptori), s'enganxarà com a text enriquit."
 
-#: html/cool-help.html%2Bdiv.div.div.p:444-5
+#: html/cool-help.html%2Bdiv.div.div.p:446-5
 msgid ""
 "When you have internal cut or copied content, you can paste this content "
 "using the context menu."
@@ -2265,11 +2269,11 @@ msgstr ""
 "Si retalleu o copieu contingut intern, podeu enganxar-lo usant el menú "
 "contextual."
 
-#: html/cool-help.html%2Bdiv.div.div.h4:450-5
+#: html/cool-help.html%2Bdiv.div.div.h4:452-5
 msgid "Adding charts"
 msgstr "Addició de diagrames"
 
-#: html/cool-help.html%2Bdiv.div.div.p:451-5
+#: html/cool-help.html%2Bdiv.div.div.p:453-5
 msgid ""
 "<span class=\"productname\">{productname}</span> supports inserting and "
 "visualization of charts in documents. To add a chart:"
@@ -2277,7 +2281,7 @@ msgstr ""
 "El <span class=\"productname\">{productname}</span> permet la inserció i la "
 "visualització de diagrames als documents. Per a afegir un diagrama:"
 
-#: html/cool-help.html%2Bdiv.div.div.ol.li:453-7
+#: html/cool-help.html%2Bdiv.div.div.ol.li:455-7
 msgid ""
 "Select a table in text document, a range in a spreadsheet or a table in a "
 "presentation."
@@ -2285,7 +2289,7 @@ msgstr ""
 "Seleccioneu una taula a un document de text o una presentació, o bé un "
 "interval de cel·les a un full de càlcul."
 
-#: html/cool-help.html%2Bdiv.div.div.ol.li:454-7
+#: html/cool-help.html%2Bdiv.div.div.ol.li:456-7
 msgid ""
 "Choose <span class=\"ui\">Insert</span> → <span class=\"ui\">Charts</span>. "
 "Customize your chart on the sidebar:"
@@ -2293,18 +2297,25 @@ msgstr ""
 "Trieu <span class=\"ui\">Insereix</span> ▸ <span class=\"ui\">Diagrames</"
 "span>. Personalitzeu el vostre diagrama mitjançant la barra lateral:"
 
-#: html/cool-help.html%2Bdiv.div.div.ol.div.img[alt]:457-31
-#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:460-29
-msgid "chart"
+#: html/cool-help.html%2Bdiv.div.div.ol.div.img[alt]:459-31
+msgid ""
+"Chart Wizard dialog with chart type list on the left, chart style previews, "
+"3D and shape options"
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.ol.li:458-7
+#: html/cool-help.html%2Bdiv.div.div.ol.li:460-7
 msgid "If no table or range was selected, a prototype chart is displayed."
 msgstr ""
 "Si no se selecciona cap taula o interval, es mostra el prototip d'un "
 "diagrama."
 
-#: html/cool-help.html%2Bdiv.div.div.p:462-28
+#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:462-29
+msgid ""
+"Column chart with grouped bars showing data for four rows across three "
+"columns"
+msgstr ""
+
+#: html/cool-help.html%2Bdiv.div.div.p:464-28
 msgid ""
 "<span class=\"def\">Chart editing:</span> Double click the chart to select. "
 "Use context menus to add chart elements such as title, axis, and other. "
@@ -2317,7 +2328,7 @@ msgstr ""
 "dades</span> i <span class=\"ui\">Tipus de diagrama</span> per a modificar "
 "les dades del diagrama i seleccionar-ne el tipus, respectivament."
 
-#: html/cool-help.html%2Bdiv.div.div.p:463-28
+#: html/cool-help.html%2Bdiv.div.div.p:465-28
 msgid ""
 "<span class=\"def\">Chart formatting:</span> The same context menu brings "
 "you to chart data table and chart type selection."
@@ -2326,7 +2337,7 @@ msgstr ""
 "contextual vos brinda ordres per a les taules de dades i la selecció del "
 "tipus de diagrama."
 
-#: html/cool-help.html%2Bdiv.div.div.p:464-28
+#: html/cool-help.html%2Bdiv.div.div.p:466-28
 msgid ""
 "<span class=\"def\">Data series formatting:</span> Open the context menu and "
 "choose <span class=\"ui\">Format data series</span>."
@@ -2334,11 +2345,11 @@ msgstr ""
 "<span class=\"def\">Formatació de sèries de dades:</span> obriu el menú "
 "contextual i trieu <span class=\"ui\">Formata sèries de dades</span>."
 
-#: html/cool-help.html%2Bdiv.div.div.h4:466-5
+#: html/cool-help.html%2Bdiv.div.div.h4:468-5
 msgid "Handling images"
 msgstr "Manipulació d'imatges"
 
-#: html/cool-help.html%2Bdiv.div.div.p:467-5
+#: html/cool-help.html%2Bdiv.div.div.p:469-5
 msgid ""
 "<span class=\"productname\">{productname}</span> inserts images in the text "
 "document from your local computer or from your cloud storage. Inserted "
@@ -2348,7 +2359,7 @@ msgstr ""
 "document de text des del vostre ordinador local o a partir del magatzem al "
 "núvol. Les imatges inserides són sempre incrustades al document."
 
-#: html/cool-help.html%2Bdiv.div.div.p:468-5
+#: html/cool-help.html%2Bdiv.div.div.p:470-5
 msgid ""
 "<span class=\"def\">Insert image:</span> Clicking on the <span class=\"ui\""
 ">Insert image</span> icon allows you to choose an image from the cloud "
@@ -2358,7 +2369,7 @@ msgstr ""
 "d'<span class=\"ui\">Insereix imatge</span> vos permet triar una imatge de "
 "les carpetes i espais compartits de l'emmagatzemament del núvol."
 
-#: html/cool-help.html%2Bdiv.div.div.p:469-5
+#: html/cool-help.html%2Bdiv.div.div.p:471-5
 msgid ""
 "<span class=\"def\">Insert local image:</span> opens the browser file picker "
 "to upload the image from your local computer and insert it into the document."
@@ -2367,7 +2378,7 @@ msgstr ""
 "fitxers del navegador per a pujar una imatge des del vostre ordinador i "
 "inserir-la en el document."
 
-#: html/cool-help.html%2Bdiv.div.div.p:470-5
+#: html/cool-help.html%2Bdiv.div.div.p:472-5
 msgid ""
 "Images can be resized, rotated and anchored. Text can be wrapped around the "
 "image. Select the image and open the context menu. Use the images handles to "
@@ -2377,11 +2388,11 @@ msgstr ""
 "al voltant d'aquestes. Seleccioneu una imatge i obriu el menú contextual. "
 "Feu servir les anses per a canviar la mida de la imatge amb el ratolí."
 
-#: html/cool-help.html%2Bdiv.div.div.h4:473-5
+#: html/cool-help.html%2Bdiv.div.div.h4:475-5
 msgid "Comments in documents"
 msgstr "Comentaris als documents"
 
-#: html/cool-help.html%2Bdiv.div.div.p:474-5
+#: html/cool-help.html%2Bdiv.div.div.p:476-5
 msgid ""
 "Insert comments in <span class=\"productname\">{productname}</span> in "
 "places that need special reader attention. Comments are displayed on the "
@@ -2391,21 +2402,23 @@ msgstr ""
 "llocs que necessitin atenció especial del lector. Els comentaris són al "
 "costat dret i inclouen la data i el nom de l'emissor."
 
-#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:475-29
-msgid "comment"
+#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:477-29
+msgid ""
+"Comment box showing author name, date, and the comment text, displayed "
+"beside the document"
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.p:476-5
+#: html/cool-help.html%2Bdiv.div.div.p:478-5
 msgid ""
 "Click on the submenu (<span class=\"cool-annotation-menu icon-size\"></span>)"
 " icon to reply, move and delete comments."
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.h4:479-5
+#: html/cool-help.html%2Bdiv.div.div.h4:481-5
 msgid "Spellchecking"
 msgstr "Verificació ortogràfica"
 
-#: html/cool-help.html%2Bdiv.div.div.p:480-5
+#: html/cool-help.html%2Bdiv.div.div.p:482-5
 msgid ""
 "<span class=\"productname\">{productname}</span> can check spelling in text "
 "documents, spreadsheets and presentations. A red wavy underline indicates "
@@ -2418,12 +2431,11 @@ msgstr ""
 "roig. Feu-hi clic amb el botó dret del ratolí per a obrir un menú amb "
 "suggeriments per a corregir l'error."
 
-#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:481-29
-#, fuzzy
-msgid "spellchecking"
-msgstr "Verificació ortogràfica"
+#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:483-29
+msgid "Text with a red wavy underline beneath a misspelled word"
+msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.p:482-5
+#: html/cool-help.html%2Bdiv.div.div.p:484-5
 msgid ""
 "To systematically spell-check the whole document use the <span class=\"ui\""
 ">Tools</span> menu’s <span class=\"ui\">Spelling</span> option."
@@ -2431,7 +2443,7 @@ msgstr ""
 "Per a comprovar sistemàticament l'ortografia de tot el document, trieu <span "
 "class=\"ui\">Eines</span> ▸ <span class=\"ui\">Ortografia</span>."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:489-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:491-30
 msgid ""
 "You edit an online spreadsheet in the same way you edit a desktop "
 "spreadsheet. Operations like entering data, selecting ranges, columns, rows "
@@ -2452,19 +2464,25 @@ msgstr ""
 "mou el cursor a la cel·la següent cap a la dreta, i amb <kbd>Retorn</kbd> es "
 "mou cap a la cel·la inferior, per a facilitar l'entrada de més dades."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:494-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:496-5
 msgid ""
 "Formulas are entered in the formula bar. Enter '=' and insert the formula."
 msgstr ""
 "Les fórmules s'insereixen a la barra de fórmules. Introduïu «=» i inseriu la "
 "fórmula."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:495-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:497-5
 msgid "All spreadsheets functions and mathematical rules applies."
 msgstr ""
 "S'hi apliquen totes les funcions de full de càlcul i regles matemàtiques."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:497-5
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:498-29
+msgid ""
+"Formula bar showing cell reference B1, function wizard icon, and the formula "
+"=SIN(PI()*A1/10)"
+msgstr ""
+
+#: html/cool-help.html%2Bdiv.div.div.div.p:499-5
 #, fuzzy
 msgid ""
 "The formula language should be extremely familiar to any spreadsheet user, "
@@ -2477,7 +2495,7 @@ msgstr ""
 "oasis-open.org/committees/download.php/16826/openformula-spec-20060221.html\""
 ">especificació OASIS OpenFormula</a>."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:503-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:505-5
 msgid ""
 "<span class=\"def\">Direct formatting:</span> You can format spreadsheet "
 "cells, columns, rows and sheets by formatting directly from the menus, "
@@ -2495,11 +2513,13 @@ msgstr ""
 "efectuar formatacions complexes i personalitzades de nombres, caràcters, "
 "vores i fons, i a més inclou altres opcions, com ara la protecció de cel·les."
 
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:504-29
-msgid "format cells"
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:506-29
+msgid ""
+"Format Cells dialog on the Numbers tab with category list, format options, "
+"decimal places, and format code"
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:509-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:511-30
 msgid ""
 "<span class=\"def\">Sorting data:</span> You can sort a list of numbers or "
 "text ascending or descending. <span class=\"productname\">{productname}</"
@@ -2512,7 +2532,7 @@ msgstr ""
 "són capçalera i les columnes adjacents per a ampliar la selecció i ordenar "
 "el conjunt."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:510-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:512-30
 msgid ""
 "<span class=\"def\">Filtering data:</span> Filters and advanced filters "
 "allow you to work on certain filtered rows (records) of a data range. In the "
@@ -2525,7 +2545,7 @@ msgstr ""
 ">{productname}</span> vos ofereixen diverses possibilitats d'aplicació de "
 "filtres."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:512-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:514-7
 msgid ""
 "One use for the <span class=\"ui\">AutoFilter</span> function is to quickly "
 "restrict the display to records with identical entries in a data field."
@@ -2534,11 +2554,13 @@ msgstr ""
 "per a veure ràpidament només els registres que contenen el mateix contingut "
 "en un camp de dades."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li.div.img[alt]:514-34
-msgid "filter"
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li.div.img[alt]:516-34
+msgid ""
+"AutoFilter dropdown menu on a spreadsheet column with sort, filter by color, "
+"filter by condition, and checkboxes for individual values"
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:516-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:518-7
 msgid ""
 "In the <span class=\"ui\">Standard Filter</span> dialog, you can also define "
 "ranges which contain the values in particular data fields. You can use the "
@@ -2550,7 +2572,7 @@ msgstr ""
 "usar el filtre estàndard per a connectar les condicions amb els operadors "
 "lògics I o O."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:517-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:519-7
 msgid ""
 "The <span class=\"ui\">Advanced Filter</span> allows up to a total of eight "
 "filter conditions. With advanced filters you enter the conditions directly "
@@ -2560,7 +2582,7 @@ msgstr ""
 "vuit condicions de filtratge. Amb els filtres avançats podeu introduir "
 "directament les condicions en el full."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:521-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:523-5
 msgid ""
 "<span class=\"def\">Outlining:</span> You can create an outline of your data "
 "and group rows and columns together so that you can collapse and expand the "
@@ -2570,11 +2592,13 @@ msgstr ""
 "agrupar les files i columnes perquè pugueu replegar i desplegar els grups "
 "amb un clic, fent fàcil de representar les dades jeràrquiques."
 
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:522-29
-msgid "outlining"
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:524-29
+msgid ""
+"Spreadsheet with row and column grouping controls showing outline level "
+"buttons and collapse/expand toggles"
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:525-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:527-5
 msgid ""
 "<span class=\"def\">Data validation:</span> For each cell, you can define "
 "entries to be valid. Invalid entries to a cell will be rejected. To enable "
@@ -2584,7 +2608,7 @@ msgstr ""
 "definir les entrades que seran vàlida. Les entrades vàlides d'una cel·la es "
 "rebutjaran. Per a activar la validació de dades:"
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:527-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:529-7
 msgid ""
 "Choose <span class=\"ui\">Validity</span> from the <span class=\"ui\">Data</"
 "span> menu. The <span class=\"ui\">Validity</span> dialog opens."
@@ -2592,12 +2616,13 @@ msgstr ""
 "Trieu <span class=\"ui\">Validesa</span> al menú <span class=\"ui\">Dades</"
 "span>. S'obri el diàleg <span class=\"ui\">Validesa</span>."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:530-31
-#: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:535-31
-msgid "data validate"
+#: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:532-31
+msgid ""
+"Validity dialog on the Criteria tab with Allow set to List, showing options "
+"for empty cells, selection list, and entry values"
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:531-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:533-7
 msgid ""
 "Select the validity criterion in the <span class=\"ui\">Allow</span> drop-"
 "box list. Depending on the criterion, more options show. Fill the required "
@@ -2607,7 +2632,7 @@ msgstr ""
 ">Permet</span>. Depenent dels criteris, poden aparèixer més opcions. Ompliu "
 "les dades sol·licitades."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:532-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:534-7
 msgid ""
 "Use the <span class=\"ui\">Input Help</span> and <span class=\"ui\">Error "
 "Alert</span> tabs to enhance the user interactions. Click <span class=\"ui\""
@@ -2618,7 +2643,13 @@ msgstr ""
 "l'usuari. Feu clic a <span class=\"ui\">D'acord</span> per a tancar el "
 "diàleg."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:536-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:537-31
+msgid ""
+"Cell dropdown list showing validated entries such as Apple, Pear, Banana, "
+"Kiwi, and Lemon"
+msgstr ""
+
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:538-7
 msgid ""
 "To remove the validity of the cell, open the dialog and set the <span class="
 "\"ui\">Allow</span> list to “All values”."
@@ -2626,7 +2657,7 @@ msgstr ""
 "Per a suprimir la validesa d'una cel·la, obriu el diàleg i definiu «Tots els "
 "valors» a la llista <span class=\"ui\">Permet</span>."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:540-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:542-5
 msgid ""
 "<span class=\"def\">Comments:</span> In a spreadsheet you can insert one "
 "comment per cell. When you select <span class=\"ui\">Insert comment</span>, "
@@ -2641,11 +2672,13 @@ msgstr ""
 "un punt roig a l'extrem superior dret. Passeu per sobre la cel·la amb el "
 "ratolí per a veure els comentaris."
 
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:541-29
-msgid "cell comments"
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:543-29
+msgid ""
+"Spreadsheet cell with a comment popup showing the author, date, comment "
+"text, and Save/Cancel buttons"
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:544-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:546-5
 msgid ""
 "<span class=\"def\">Conditional formatting:</span> <span class=\"productname"
 "\">{productname}</span> adds symbols to each cell of a range based on cells "
@@ -2659,11 +2692,13 @@ msgstr ""
 "les i feu clic a la icona <span class=\"ui\">Formatació condicionada</span> "
 "de la barra d'eines."
 
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:545-29
-msgid "conditional formatting"
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:547-29
+msgid ""
+"Conditional formatting icon set picker showing arrows, circles, traffic "
+"lights, stars, smiley faces, and bar chart symbol sets"
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:553-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:555-30
 msgid ""
 "<span class=\"productname\">{productname}</span> edits text documents in the "
 "same way you edit a desktop document. It provides a What You See Is What You "
@@ -2682,7 +2717,7 @@ msgstr ""
 "processador de text d'escriptori. Utilitzeu el teclat, menús i barres "
 "d'eines per a interactuar amb el document."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:557-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:559-30
 msgid ""
 "Context menus are available on clicking the right mouse button. The commands "
 "available in the context menu are related - not extensively - to the "
@@ -2692,11 +2727,11 @@ msgstr ""
 "ratolí. Les ordres disponibles en el menú contextual són relacionades, però "
 "no de manera extensiva, amb l'objecte seleccionat en el document."
 
-#: html/cool-help.html%2Bdiv.div.div.h3:560-5
+#: html/cool-help.html%2Bdiv.div.div.h3:562-5
 msgid "Formatting text"
 msgstr "Formatació del text"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:562-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:564-5
 msgid ""
 "<span class=\"productname\">{productname}</span> supports modern techniques "
 "for paragraph formatting through styles. A style is a set of text properties "
@@ -2717,7 +2752,7 @@ msgstr ""
 "amb el mateix estil, de manera que l'esforç de formatar molts paràgrafs "
 "individualment se simplifica."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:563-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:565-5
 msgid ""
 "In contrast, direct formatting applies formatting to selected excerpts of "
 "the document contents. On a long document, direct formatting must be applied "
@@ -2729,7 +2764,7 @@ msgstr ""
 "aplicar-la en tots els fragments de text, això fa la formatació de text una "
 "tasca pesada i subjecta a errors i endarreriments."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:565-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:567-30
 msgid ""
 "<span class=\"def\">Direct formatting:</span> You can format text document "
 "objects by formatting directly from the menus, toolbar or context menus. "
@@ -2740,7 +2775,7 @@ msgstr ""
 "contextuals. La formatació directa s'aplica únicament a l'objecte "
 "seleccionat actualment."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:567-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:569-5
 msgid ""
 "<span class=\"def\">Style formatting:</span> <span class=\"productname\""
 ">{productname}</span> supports paragraph styles. You can apply an existing "
@@ -2753,16 +2788,17 @@ msgstr ""
 ">Edita</span> ▸ <span class=\"ui\">Edita l'estil</span> per a canviar "
 "l'estil."
 
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:568-29
-#, fuzzy
-msgid "style formatting"
-msgstr "Formatació de cel·les"
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:570-29
+msgid ""
+"Paragraph dialog on the Indents and Spacing tab with settings for indent, "
+"spacing, and line spacing, and a preview on the right"
+msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.div.h4:574-5
+#: html/cool-help.html%2Bdiv.div.div.div.h4:576-5
 msgid "Handling Tables"
 msgstr "Manipulació de taules"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:575-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:577-5
 msgid ""
 "Insert tables with proper icon in the toolbar. Select the initial number of "
 "rows and columns. Add rows and columns with the cell context menu. Merge "
@@ -2775,11 +2811,13 @@ msgstr ""
 "\">Taula</span>. L'estil de paràgraf predeterminat de les cel·les és «"
 "Contingut de la taula»."
 
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:576-29
-msgid "insert table"
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:578-29
+msgid ""
+"Insert Table picker showing a grid to select the number of rows and columns, "
+"currently showing 5 by 3"
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:579-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:581-5
 msgid ""
 "<span class=\"def\">Formatting cells:</span> Click in the cell or range of "
 "cells and choose menu <span class=\"ui\">Table</span> → <span class=\"ui\""
@@ -2790,11 +2828,11 @@ msgstr ""
 "<span class=\"ui\">Propietats</span>. Ajusteu la taula amb el diàleg de "
 "propietats."
 
-#: html/cool-help.html%2Bdiv.div.div.div.h4:582-5
+#: html/cool-help.html%2Bdiv.div.div.div.h4:584-5
 msgid "Track changes"
 msgstr "Seguiment de canvis"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:583-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:585-5
 msgid ""
 "When you turn on Track Changes, <span class=\"productname\">{productname}</"
 "span> marks up new changes made to the document. Select this option again to "
@@ -2804,13 +2842,14 @@ msgstr ""
 ">{productname}</span> marca els canvis nous fets al document. Torneu a "
 "seleccionar aquesta opció per a desactivar-la."
 
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:584-29
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:711-29
-#, fuzzy
-msgid "track changes"
-msgstr "Seguiment de canvis"
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:586-29
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:713-29
+msgid ""
+"Tracked change shown as a comment box beside the document with author name, "
+"date, and change description"
+msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:585-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:587-5
 msgid ""
 "Changes made by different people are shown in different colors and each "
 "tracked change can be accepted or rejected, using the box that appears on "
@@ -2820,11 +2859,11 @@ msgstr ""
 "cada canvi detectat es pot acceptar o rebutjar a través del quadre que "
 "apareix a la dreta. També podeu afegir un comentari allà."
 
-#: html/cool-help.html%2Bdiv.div.div.div.h4:588-5
+#: html/cool-help.html%2Bdiv.div.div.div.h4:590-5
 msgid "Other advanced features"
 msgstr "Altres funcionalitats avançades"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:589-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:591-5
 msgid ""
 "<span class=\"def\">Comments:</span> Comments are inserted in the text and "
 "displayed on the right side of the screen."
@@ -2832,7 +2871,7 @@ msgstr ""
 "<span class=\"def\">Comentaris:</span> els comentaris s'insereixen dins el "
 "text i es mostren al costat dret de la pantalla."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:590-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:592-5
 msgid ""
 "<span class=\"def\">Formatting marks:</span> Paragraph, page and unbreakable "
 "spaces are shown as marks to assist text alignment, editing and formatting."
@@ -2841,7 +2880,7 @@ msgstr ""
 "i els espais no separables es mostren com a marques per a ajudar amb "
 "l'alineació, l'edició i la formatació."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:591-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:593-5
 msgid ""
 "<span class=\"def\">Fields:</span> A basic set of fields is available to "
 "insert in the document."
@@ -2849,7 +2888,7 @@ msgstr ""
 "<span class=\"def\">Camps:</span> un conjunt de camps bàsic està disponible "
 "per a inserir-lo al document."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:592-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:594-5
 msgid ""
 "<span class=\"def\">Alphabetical index:</span> Existing alphabetical index "
 "can be updated with new entries."
@@ -2857,7 +2896,7 @@ msgstr ""
 "<span class=\"def\">Índex alfabètic:</span> un índex alfabètic existent pot "
 "actualitzar-se amb les entrades noves."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:593-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:595-5
 msgid ""
 "<span class=\"def\">Page header and footer:</span> Headers and footers are "
 "available for the existing page style applied in the document at the cursor "
@@ -2867,7 +2906,7 @@ msgstr ""
 "i peus per a l'estil de pàgina existent aplicat en el document a la posició "
 "del cursor."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:594-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:596-5
 msgid ""
 "<span class=\"def\">Footnotes and endnotes:</span> Footnotes and endnotes "
 "are supported."
@@ -2875,7 +2914,7 @@ msgstr ""
 "<span class=\"def\">Notes al peu i finals:</span> s'admet l'ús de notes al "
 "peu i finals."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:602-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:604-30
 msgid ""
 "<span class=\"productname\">{productname}</span> Impress edits presentations "
 "in a way that should be familiar to people. Operations like typing text, "
@@ -2892,7 +2931,7 @@ msgstr ""
 "teclat, els menús i les barres d'eines per a efectuar accions al vostre "
 "document."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:607-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:609-5
 msgid ""
 "<span class=\"productname\">{productname}</span> displays presentation slide "
 "shows, including a subset of slide transitions and object animations. Choose "
@@ -2905,7 +2944,7 @@ msgstr ""
 "del menú o feu clic a la icona de la barra d'eines de la part inferior dreta "
 "del tauler de diapositives."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:608-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:610-5
 msgid ""
 "To exit a <span class=\"productname\">{productname}</span> slide show, press "
 "the <kbd>Esc</kbd> key to return to the presentation edit mode."
@@ -2914,7 +2953,7 @@ msgstr ""
 ">{productname}</span> i tornar al mode d'edició, premeu la tecla "
 "<kbd>Esc</kbd>."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:614-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:616-5
 msgid ""
 "Click on any slide thumbnail in the pane to switch to this slide to view or "
 "edit it."
@@ -2922,7 +2961,7 @@ msgstr ""
 "Feu clic a qualsevol miniatura de diapositiva per a canviar a aquesta i "
 "visualitzar-la o editar-la."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:615-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:617-5
 msgid ""
 "Use the slide pane toolbar in the bottom to start the slideshow, add slide, "
 "duplicate or delete the current slide."
@@ -2931,7 +2970,7 @@ msgstr ""
 "diapositives per a iniciar la presentació o afegir, duplicar o suprimir "
 "diapositives."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:621-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:623-5
 msgid ""
 "<span class=\"def\">Slide layouts:</span> <span class=\"productname\""
 ">{productname}</span> Impress lets you change the slide layout. Select the "
@@ -2942,11 +2981,13 @@ msgstr ""
 "les diapositives. Seleccioneu la disposició que vulgueu a la llista "
 "desplegable de disposicions."
 
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:622-29
-msgid "slide layouts"
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:624-29
+msgid ""
+"Slide properties panel showing format, orientation, background, and master "
+"slide settings, with a layout gallery of thumbnail options below"
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:624-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:626-30
 msgid ""
 "<span class=\"def\">Master slide:</span> Select the master slide associated "
 "to the current slide. Format and arrange slide elements in the master slide."
@@ -2955,7 +2996,7 @@ msgstr ""
 "mestra associada a la diapositiva actual. Formateu i organitzeu els elements "
 "de la diapositiva a la diapositiva mestra."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:625-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:627-30
 msgid ""
 "<span class=\"def\">Slide transitions:</span> <span class=\"productname\""
 ">{productname}</span> Impress provides visual effects when displaying a new "
@@ -2968,7 +3009,7 @@ msgstr ""
 "són una propietat de la diapositiva. En el mode edició, utilitzeu la barra "
 "lateral per a establir la transició de la diapositiva."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:626-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:628-30
 msgid ""
 "<span class=\"def\">Object animation:</span> Individual objects in the slide "
 "can have animations. Use the side bar to configure the slide transition for "
@@ -2978,7 +3019,7 @@ msgstr ""
 "diapositiva pot animar-se. Feu servir la barra lateral per a configurar "
 "l'animació de l'objecte o els objectes de la selecció."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:627-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:629-30
 msgid ""
 "<span class=\"def\">Tables:</span> Insert tables in the presentation. Use "
 "the sidebar to select the table theme."
@@ -2986,7 +3027,7 @@ msgstr ""
 "<span class=\"def\">Taules:</span> podeu inserir taules a la presentació. "
 "Utilitzeu la barra lateral per a seleccionar el tema de la taula."
 
-#: html/cool-help.html%2Bdiv.div.div.h4:633-5
+#: html/cool-help.html%2Bdiv.div.div.h4:635-5
 msgid ""
 "What are the document file formats supported by <span class=\"productname\""
 ">{productname}</span>?"
@@ -2994,7 +3035,7 @@ msgstr ""
 "Quins són els formats de fitxer compatibles amb el <span class=\"productname"
 "\">{productname}</span>?"
 
-#: html/cool-help.html%2Bdiv.div.div.p:634-5
+#: html/cool-help.html%2Bdiv.div.div.p:636-5
 msgid ""
 "<span class=\"productname\">{productname}</span> supports both reading and "
 "writing for the following file formats:"
@@ -3002,43 +3043,43 @@ msgstr ""
 "El <span class=\"productname\">{productname}</span> admet la lectura i "
 "l'escriptura dels formats de fitxer següents:"
 
-#: html/cool-help.html%2Bdiv.div.div.ul.li:636-7
+#: html/cool-help.html%2Bdiv.div.div.ul.li:638-7
 msgid ""
 "Text documents: Microsoft formats DOC, DOCX, RTF. OpenDocument Format ODT"
 msgstr ""
 "Documents de text.— Formats de Microsoft DOC, DOCX i RTF. Format "
 "OpenDocument ODT."
 
-#: html/cool-help.html%2Bdiv.div.div.ul.li:637-7
+#: html/cool-help.html%2Bdiv.div.div.ul.li:639-7
 msgid "Spreadsheets: Microsoft formats XLS, XLSX, OpenDocument Format ODS"
 msgstr ""
 "Fulls de càlcul.— Formats de Microsoft XLS i XLSX. Format OpenDocument ODS."
 
-#: html/cool-help.html%2Bdiv.div.div.ul.li:638-7
+#: html/cool-help.html%2Bdiv.div.div.ul.li:640-7
 msgid "Presentations: Microsoft formats PPT, PPTX, OpenDocument Format ODP"
 msgstr ""
 "Presentacions.— Formats de Microsoft PPT i PPTX. Format OpenDocument ODP."
 
-#: html/cool-help.html%2Bdiv.div.div.h4:642-5
+#: html/cool-help.html%2Bdiv.div.div.h4:644-5
 msgid "How do I save a document with another name?"
 msgstr "Com pot guardar un document amb un altre nom?"
 
-#: html/cool-help.html%2Bdiv.div.div.ol.li:644-7
+#: html/cool-help.html%2Bdiv.div.div.ol.li:646-7
 msgid "Hover the mouse on the document name in the menu bar."
 msgstr "Passeu el ratolí en el nom del document en la barra de menú."
 
-#: html/cool-help.html%2Bdiv.div.div.ol.li:645-7
+#: html/cool-help.html%2Bdiv.div.div.ol.li:647-7
 msgid "Type the new file name in the text box and press <kbd>Enter</kbd>."
 msgstr ""
 "Escriviu el nom de fitxer nou en el quadre de text i premeu "
 "<kbd>Retorn</kbd>."
 
-#: html/cool-help.html%2Bdiv.div.div.p:647-5
+#: html/cool-help.html%2Bdiv.div.div.p:649-5
 msgid "A copy of the document is saved with the new name in the same folder."
 msgstr ""
 "Es guarda una còpia del document amb el nom nou dins la mateixa carpeta."
 
-#: html/cool-help.html%2Bdiv.div.div.h3:650-5
+#: html/cool-help.html%2Bdiv.div.div.h3:652-5
 msgid ""
 "How can I quit <span class=\"productname\">{productname}</span> without "
 "saving my edits?"
@@ -3046,7 +3087,7 @@ msgstr ""
 "Com puc eixir del <span class=\"productname\">{productname}</span> sense "
 "guardar les modificacions que he fet?"
 
-#: html/cool-help.html%2Bdiv.div.div.p:651-5
+#: html/cool-help.html%2Bdiv.div.div.p:653-5
 msgid ""
 "<span class=\"productname\">{productname}</span> saves the document in the "
 "background regularly, you can't just close without saving it. To abandon "
@@ -3058,7 +3099,7 @@ msgstr ""
 "perdre els canvis, cal que els desfeu, o que useu l'<span class=\"ui\""
 ">Historial de versions</span> en el menú <span class=\"ui\">Fitxer</span>."
 
-#: html/cool-help.html%2Bdiv.div.div.h4:654-5
+#: html/cool-help.html%2Bdiv.div.div.h4:656-5
 msgid ""
 "Can <span class=\"productname\">{productname}</span> open a password-"
 "protected document?"
@@ -3066,7 +3107,7 @@ msgstr ""
 "Es pot obrir un document protegit per contrasenya al <span class="
 "\"productname\">{productname}</span>?"
 
-#: html/cool-help.html%2Bdiv.div.div.p:655-5
+#: html/cool-help.html%2Bdiv.div.div.p:657-5
 msgid ""
 "Yes. <span class=\"productname\">{productname}</span> opens password-"
 "protected documents, but it is necessary to supply the password in the “"
@@ -3076,11 +3117,11 @@ msgstr ""
 "protegits amb contrasenya, però abans cal introduir aquesta en el diàleg que "
 "s'obri en carregar el document."
 
-#: html/cool-help.html%2Bdiv.div.div.h4:658-5
+#: html/cool-help.html%2Bdiv.div.div.h4:660-5
 msgid "How can I check spelling in my language?"
 msgstr "Com verifico l'ortografia en la meua llengua?"
 
-#: html/cool-help.html%2Bdiv.div.div.p:659-5
+#: html/cool-help.html%2Bdiv.div.div.p:661-5
 msgid ""
 "Choose menu <span class=\"ui\">Tools</span> → <span class=\"ui\">Languages</"
 "span> and select the language for the whole document. Optionally you can set "
@@ -3091,11 +3132,11 @@ msgstr ""
 "document. Opcionalment, podeu definir llengües diferents per al text "
 "seleccionat i per al paràgraf actual."
 
-#: html/cool-help.html%2Bdiv.div.div.h4:662-5
+#: html/cool-help.html%2Bdiv.div.div.h4:664-5
 msgid "How can I remove the red wavy lines in my document?"
 msgstr "Com puc llevar les línies vermelles ondulades del document?"
 
-#: html/cool-help.html%2Bdiv.div.div.p:663-5
+#: html/cool-help.html%2Bdiv.div.div.p:665-5
 msgid ""
 "Choose menu <span class=\"ui\">Tools</span> and uncheck <span class=\"ui\""
 ">Automatic Spell Checking</span>."
@@ -3103,11 +3144,11 @@ msgstr ""
 "Trieu el menú <span class=\"ui\">Eines</span> i desactiveu <span class=\"ui\""
 ">Verificació ortogràfica automàtica</span>."
 
-#: html/cool-help.html%2Bdiv.div.div.h4:666-5
+#: html/cool-help.html%2Bdiv.div.div.h4:668-5
 msgid "What is the blue wavy underline in some words in the text?"
 msgstr "Què significa el subratllat ondulat blau en algunes paraules del text?"
 
-#: html/cool-help.html%2Bdiv.div.div.p:667-5
+#: html/cool-help.html%2Bdiv.div.div.p:669-5
 msgid ""
 "Grammar errors in the text are marked with the blue wavy underline. Click on "
 "the underlined text with the right mouse button to open a menu with "
@@ -3119,12 +3160,12 @@ msgstr ""
 "corregir l'error gramatical i conèixer la regla infringida. Seleccioneu el "
 "suggeriment més adient per a canviar el text."
 
-#: html/cool-help.html%2Bdiv.div.div.h4:670-5
+#: html/cool-help.html%2Bdiv.div.div.h4:672-5
 #, fuzzy
 msgid "Is there a thesaurus?"
 msgstr "Hi ha un tesaurus?"
 
-#: html/cool-help.html%2Bdiv.div.div.p:671-5
+#: html/cool-help.html%2Bdiv.div.div.p:673-5
 msgid ""
 "Yes. Click in the word you want and choose <span class=\"ui\">Tools</span> → "
 "<span class=\"ui\">Thesaurus</span>. A dialog opens with many suggestions "
@@ -3134,11 +3175,13 @@ msgstr ""
 "span> ▸ <span class=\"ui\">Tesaurus</span>. Es mostra un diàleg amb "
 "suggeriments de substitucions."
 
-#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:672-29
-msgid "thesaurus"
+#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:674-29
+msgid ""
+"Thesaurus dialog for the word company, listing alternatives such as "
+"institution, establishment, and troupe, with a Replace with field"
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.h4:675-5
+#: html/cool-help.html%2Bdiv.div.div.h4:677-5
 msgid ""
 "What are the blue <span class=\"blue\">¶</span> symbols and how can I remove "
 "them from my text document?"
@@ -3146,7 +3189,7 @@ msgstr ""
 "Què són els símbols <span class=\"blue\">¶</span> de color blau i com els "
 "puc eliminar del document de text?"
 
-#: html/cool-help.html%2Bdiv.div.div.p:676-5
+#: html/cool-help.html%2Bdiv.div.div.p:678-5
 msgid ""
 "The <span class=\"blue\">¶</span> symbol is a formatting mark. It is used to "
 "help text alignment and editing and is not printed. To toggle it in the "
@@ -3158,11 +3201,11 @@ msgstr ""
 "s'imprimeix. Per a desactivar-ne la visualització, trieu l'ordre <span class="
 "\"ui\">Visualitza</span> ▸ <span class=\"ui\">Marques de formatació</span>."
 
-#: html/cool-help.html%2Bdiv.div.div.div.h4:683-5
+#: html/cool-help.html%2Bdiv.div.div.div.h4:685-5
 msgid "How do I get a word count of my document?"
 msgstr "Com puc obtindre un recompte de les paraules del document?"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:684-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:686-5
 msgid ""
 "Word count is available in <span class=\"ui\">Tools</span> → <span class=\"ui"
 "\">Word count</span>. A dialog shows word counts for selection and for the "
@@ -3172,11 +3215,13 @@ msgstr ""
 "<span class=\"ui\">Comptador de paraules</span>. Es mostra el nombre de "
 "paraules de la selecció i del document sencer."
 
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:685-29
-msgid "word count"
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:687-29
+msgid ""
+"Word Count dialog showing word and character counts for the current "
+"selection and for the whole document"
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:686-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:688-5
 msgid ""
 "Word count is also displayed in the status bar. If no text is selected the "
 "word count is for the whole document. Otherwise the word count is for the "
@@ -3186,14 +3231,14 @@ msgstr ""
 "text seleccionat, el nombre de paraules és de tot el document. Altrament, el "
 "recompte de paraules és del text seleccionat."
 
-#: html/cool-help.html%2Bdiv.div.div.div.h4:689-5
+#: html/cool-help.html%2Bdiv.div.div.div.h4:691-5
 msgid ""
 "How can I insert a currency, copyright or trademark symbol in the document?"
 msgstr ""
 "Com insereixo un símbol de moneda, de drets d'autor o de marca registrada en "
 "el document?"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:690-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:692-5
 msgid ""
 "You can insert these special characters in the document using the <span "
 "class=\"ui\">Special Character</span> dialog."
@@ -3201,11 +3246,11 @@ msgstr ""
 "Podeu inserir aquests símbols fent servir el diàleg <span class=\"ui\""
 ">Caràcter especial</span>."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:692-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:694-7
 msgid "Place the cursor in the position to insert the character."
 msgstr "Col·loqueu el cursor a la posició on voleu inserir el caràcter."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:693-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:695-7
 msgid ""
 "Choose <span class=\"ui\">Insert</span> → <span class=\"ui\">Special "
 "Characters </span> or click the corresponding icon in the toolbar. A dialog "
@@ -3215,11 +3260,14 @@ msgstr ""
 "especials</span> o feu clic al botó corresponent de la barra d'eines. Es "
 "mostra un diàleg."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:696-31
-msgid "Special Characters"
+#: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:698-31
+msgid ""
+"Special Characters dialog with a character grid, search and font fields, "
+"hexadecimal and decimal code inputs, and recent and favorite characters at "
+"the bottom"
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:697-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:699-7
 msgid ""
 "You can either browse the characters displayed with the drop lists or type a "
 "search key in the <span class=\"ui\">Search</span> box. If you know the "
@@ -3230,7 +3278,7 @@ msgstr ""
 "cerca en el quadre <span class=\"ui\">Cerca</span>. Si sabeu el codi numèric "
 "Unicode d'un caràcter especial, introduïu-lo en els quadres de la dreta."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:698-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:700-7
 msgid ""
 "Press <span class=\"ui\">Insert</span> button. To close the dialog, press "
 "<span class=\"ui\">Cancel</span>."
@@ -3238,13 +3286,13 @@ msgstr ""
 "Pitgeu el botó <span class=\"ui\">Insereix</span>. Per a tancar el diàleg, "
 "pitgeu <span class=\"ui\">Cancel·la</span>."
 
-#: html/cool-help.html%2Bdiv.div.div.div.h4:702-5
+#: html/cool-help.html%2Bdiv.div.div.div.h4:704-5
 msgid "Why can't I delete text? It just gets a strike-through?"
 msgstr ""
 "Per què no puc suprimir text? Tot el que obtinc és una ratlla per sobre les "
 "paraules."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:703-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:705-5
 msgid ""
 "You have the Track Changes feature enabled for the document. Track Changes "
 "records all changes in the text and shows the edits for later revision. "
@@ -3259,38 +3307,38 @@ msgstr ""
 "triar <span class=\"ui\">Edita</span> ▸ <span class=\"ui\">Seguiment de "
 "canvis</span> ▸ <span class=\"ui\">Enregistra</span>."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:704-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:706-5
 msgid ""
 "With track changes enabled your document is shown in the following manner:"
 msgstr ""
 "Amb el seguiment de canvis activat, el document es mostra de la següent "
 "manera:"
 
-#: html/cool-help.html%2Bdiv.div.div.div.ul.li:706-7
+#: html/cool-help.html%2Bdiv.div.div.div.ul.li:708-7
 msgid "Deletions are marked with colored strike-through characters."
 msgstr "El text suprimit es marca amb caràcters ratllats de colors."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ul.li:707-7
+#: html/cool-help.html%2Bdiv.div.div.div.ul.li:709-7
 msgid "Additions are marked with colored underlined characters."
 msgstr "El text afegit es marca amb caràcters subratllats de colors."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ul.li:708-7
+#: html/cool-help.html%2Bdiv.div.div.div.ul.li:710-7
 msgid "All changes are marked with a vertical bar in the right margin."
 msgstr "Tots els canvis es marquen amb una barra vertical al marge dret."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ul.li:709-7
+#: html/cool-help.html%2Bdiv.div.div.div.ul.li:711-7
 msgid "Changes are displayed as comment in the right of the document area."
 msgstr ""
 "Els canvis es mostren com a comentari a la dreta de l'àrea del document."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:712-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:714-5
 msgid ""
 "The color assigned to the changes depends on the user that changes the "
 "document."
 msgstr ""
 "El color assignat als canvis depèn de l'usuari que ha canviat el document."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:713-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:715-5
 #, fuzzy
 msgid ""
 "To display or hide track changes choose <span class=\"ui\">Edit</span> → "
@@ -3304,7 +3352,7 @@ msgstr ""
 "encara s'enregistren els canvis i podeu deixar, sense voler-ho, text "
 "disponible en el document."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:714-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:716-5
 msgid ""
 "Changes can be accepted or rejected. To accept or reject changes, click on "
 "the corresponding icons in the comment box on the right of the document. "
@@ -3325,15 +3373,17 @@ msgstr ""
 ">Gestiona</span>. Es mostra una llista de tots els canvis  seguits. Useu els "
 "botons del diàleg corresponents."
 
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:715-29
-msgid "manage changes"
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:717-29
+msgid ""
+"Manage Changes dialog with a list of tracked changes showing action, author, "
+"date, and comment columns, and Accept, Reject, Accept All, Reject All buttons"
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.div.h4:718-5
+#: html/cool-help.html%2Bdiv.div.div.div.h4:720-5
 msgid "How do I set the margins of the document?"
 msgstr "Com es defineixen els marges del document?"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:719-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:721-5
 msgid ""
 "Using the ruler drag the leftmost edge of the ruler to adjust the left "
 "margin, or the rightmost for the right margin."
@@ -3341,11 +3391,11 @@ msgstr ""
 "Amb l'ajuda del regle, arrossegueu l'extrem de més a l'esquerra per a "
 "ajustar el marge esquerre, i viceversa amb el marge dret."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:720-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:722-5
 msgid "Using the page style"
 msgstr "Mitjançant l'estil de la pàgina"
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:722-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:724-7
 msgid ""
 "Choose <span class=\"ui\">Format</span> → <span class=\"ui\">Page</span> and "
 "select the <span class=\"ui\">Page</span> tab"
@@ -3353,19 +3403,21 @@ msgstr ""
 "Trieu <span class=\"ui\">Format</span> ▸ <span class=\"ui\">Pàgina</span> i "
 "seleccioneu la pestanya <span class=\"ui\">Pàgina</span>"
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:723-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:725-7
 msgid "Set the page margins in the dialog."
 msgstr "Ajusteu els marges en el diàleg."
 
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:725-29
-msgid "page style"
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:727-29
+msgid ""
+"Page Style dialog on the Organizer tab showing style name, next style, "
+"inherit from, and category fields, with a summary of page properties"
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.div.h4:728-5
+#: html/cool-help.html%2Bdiv.div.div.div.h4:730-5
 msgid "How do I change the page orientation to landscape inside my document?"
 msgstr "Com puc canviar en el document l'orientació de la pàgina a apaïsat?"
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:730-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:732-7
 msgid ""
 "Place the cursor at the place where the page orientation is to change. Add "
 "an empty paragraph."
@@ -3373,7 +3425,7 @@ msgstr ""
 "Situeu el cursor al lloc on voleu canviar l'orientació de la pàgina. Afegiu "
 "un paràgraf en blanc."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:731-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:733-7
 msgid ""
 "Choose <span class=\"ui\">Format</span> → <span class=\"ui\">Paragraph</"
 "span>, <span class=\"ui\">Text Flow </span> tab"
@@ -3381,7 +3433,7 @@ msgstr ""
 "Trieu <span class=\"ui\">Format</span> ▸ <span class=\"ui\">Paràgraf</span>, "
 "pestanya <span class=\"ui\">Flux de text</span>"
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:732-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:734-7
 msgid ""
 "In the <span class=\"ui\">Breaks</span> area, mark Insert, Type: Page Break, "
 "Position: Before."
@@ -3389,15 +3441,15 @@ msgstr ""
 "En l'àrea <span class=\"ui\">Salts</span>, marqueu Insereix, Tipus: salt de "
 "pàgina, Posició: abans."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:733-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:735-7
 msgid "Select Landscape in “With Page Style”"
 msgstr "Seleccioneu horitzontal a  «Amb estil de pàgina»"
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:734-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:736-7
 msgid "Select if you want to change page numbering."
 msgstr "Seleccioneu-ho si voleu canviar la numeració de pàgina."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:736-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:738-5
 msgid ""
 "To return to portrait orientation, repeat the procedure, choosing Portrait "
 "in “With page style”."
@@ -3405,21 +3457,21 @@ msgstr ""
 "Per a tornar a l'orientació vertical, repetiu el procediment triant vertical "
 "en «Amb estil de pàgina»."
 
-#: html/cool-help.html%2Bdiv.div.div.div.h4:739-5
+#: html/cool-help.html%2Bdiv.div.div.div.h4:741-5
 msgid "How can I make the new text look like other existing text?"
 msgstr ""
 "Com puc fer que el text tinga la mateixa aparença que un altre text existent?"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:740-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:742-5
 msgid "Directly:"
 msgstr "Directament:"
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:742-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:744-7
 msgid "Select the text with the existing format"
 msgstr "Seleccioneu el text amb la formatació desitjada"
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:743-7
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:785-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:745-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:787-7
 #, fuzzy
 msgid ""
 "Click on the clone formatting icon <img alt=\"format paintbrush\" class"
@@ -3430,19 +3482,19 @@ msgstr ""
 "6cm;\" alt=\"\" src=\"images/lc_formatpaintbrush.svg\">. El punter del "
 "ratolí es transforma en un pot de pintura."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:744-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:746-7
 msgid "Select the text you want to apply the new format."
 msgstr "Seleccioneu el text al qual voleu aplicar el format nou."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:748-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:750-5
 msgid "Applying a paragraph style:"
 msgstr "Mitjançant un estil de paràgraf:"
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:750-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:752-7
 msgid "Place the cursor at the paragraph to be formatted"
 msgstr "Situeu el cursor al paràgraf que voleu aplicar el format."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:751-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:753-7
 msgid ""
 "Select the style to apply in the style dropdown list. The paragraph displays "
 "the styles attributes."
@@ -3450,14 +3502,14 @@ msgstr ""
 "Seleccioneu l'estil a aplicar de la llista desplegable d'estils. El paràgraf "
 "mostra els atributs dels estils."
 
-#: html/cool-help.html%2Bdiv.div.div.div.h4:755-5
+#: html/cool-help.html%2Bdiv.div.div.div.h4:757-5
 msgid ""
 "Why did the text I just typed change automatically? How can I revert it?"
 msgstr ""
 "El text que acabo d'escriure ha canviat automàticament. Per què? Com puc "
 "desfer-ho?"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:756-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:758-5
 msgid ""
 "You have the AutoCorrection enabled. AutoCorrection compares the text just "
 "typed to an internal table of text. In most cases, AutoCorrection corrects "
@@ -3472,11 +3524,11 @@ msgstr ""
 "class=\"ui\">Eines</span> ▸ <span class=\"ui\">Correcció automàtica</span> ▸ "
 "<span class=\"ui\">En teclejar</span>."
 
-#: html/cool-help.html%2Bdiv.div.div.div.h4:764-5
+#: html/cool-help.html%2Bdiv.div.div.div.h4:766-5
 msgid "How can I select data to print?"
 msgstr "Com puc seleccionar les dades a imprimir?"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:765-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:767-5
 msgid ""
 "Insert column and row breaks in the spreadsheet to narrow the print range "
 "and print the document to download. On printing the PDF, select the pages of "
@@ -3486,11 +3538,11 @@ msgstr ""
 "l'interval d'impressió i imprimiu el document per baixar. En imprimir el "
 "PDF, seleccioneu les pàgines d'interés."
 
-#: html/cool-help.html%2Bdiv.div.div.div.h4:768-5
+#: html/cool-help.html%2Bdiv.div.div.div.h4:770-5
 msgid "How can I import CSV data?"
 msgstr "Com puc importar dades CSV?"
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:770-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:772-7
 msgid ""
 "Load your CSV data in some native tool to your platform, select and copy it "
 "to the clipboard"
@@ -3498,7 +3550,7 @@ msgstr ""
 "Carregueu les dades CSV en alguna eina nativa de la vostra plataforma, "
 "després seleccioneu i copieu-les al porta-retalls"
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:771-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:773-7
 msgid ""
 "Activate the <span class=\"productname\">{productname}</span> spreadsheet "
 "window."
@@ -3506,7 +3558,7 @@ msgstr ""
 "Activeu la finestra del full de càcul del <span class=\"productname\""
 ">{productname}</span>."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:772-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:774-7
 msgid ""
 "Paste from the browser <span class=\"ui\">Edit</span> → <span class=\"ui\""
 ">Paste</span> or press <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden="
@@ -3518,18 +3570,20 @@ msgstr ""
 "<span class=\"ui\">Importació de text</span>, on podeu indica el format "
 "precís de les dades CSV."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:775-31
-msgid "import"
+#: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:777-31
+msgid ""
+"Text Import dialog with character set, locale, separator options, and a "
+"preview of the imported CSV data"
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:776-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:778-7
 msgid ""
 "Select the character set, language and separator options for the CSV file."
 msgstr ""
 "Seleccioneu el joc de caràcters, la llengua i les opcions de separació del "
 "fitxer CSV."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:778-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:780-5
 msgid ""
 "The CSV data is loaded into the selected cell where you pasted, according to "
 "these settings."
@@ -3537,29 +3591,29 @@ msgstr ""
 "Les dades CSV es carreguen en la cel·la seleccionada on les heu enganxat, "
 "segons aquests paràmetres."
 
-#: html/cool-help.html%2Bdiv.div.div.div.h4:781-5
+#: html/cool-help.html%2Bdiv.div.div.div.h4:783-5
 msgid "How can I copy the formatting of existing cells to new ones?"
 msgstr "Com pot copiar la formatació de cel·les existents en cel·les noves?"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:782-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:784-5
 msgid "This is easy to do using the Paintbrush tool in the toolbar."
 msgstr "Això és fàcil de fer usant l'eina de clonació de la barra d'eines."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:784-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:786-7
 msgid "Format the source cell with the font, color background and more."
 msgstr ""
 "Formateu la cel·la font amb un tipus de lletra, un color de fons, etcètera."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:786-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:788-7
 msgid "Select the cells you want to format. Release the mouse button."
 msgstr ""
 "Seleccioneu les cel·les que voleu formatar. Deixeu anar el botó del ratolí."
 
-#: html/cool-help.html%2Bdiv.div.div.div.h4:790-5
+#: html/cool-help.html%2Bdiv.div.div.div.h4:792-5
 msgid "What is “Clear Direct Formatting” icon?"
 msgstr "Quina funció té el botó «Neteja la formatació directa»?"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:791-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:793-5
 msgid ""
 "Direct formatting is formatting applied directly to the selected contents of "
 "a paragraph or a spreadsheet cell, and overlaps its assigned style "
@@ -3574,11 +3628,11 @@ msgstr ""
 "\"ui\">Format</span> ▸ <span class=\"ui\">Neteja la formatació directa</"
 "span> o utilitzeu el botó de la barra d'eines."
 
-#: html/cool-help.html%2Bdiv.div.div.div.h4:794-5
+#: html/cool-help.html%2Bdiv.div.div.div.h4:796-5
 msgid "How do I rename a sheet?"
 msgstr "Com es canvia el nom d'un full?"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:795-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:797-5
 msgid ""
 "Rename a sheet in the spreadsheet document using the context menu (using the "
 "right mouse button) over the sheet tab in the bottom. Enter the new sheet "
@@ -3588,39 +3642,39 @@ msgstr ""
 "botó secundari del ratolí) de la pestanya del full que és a la part inferior "
 "de la pantalla. Escriviu el nom nou del full al diàleg que es mostrarà."
 
-#: html/cool-help.html%2Bdiv.div.div.div.h4:803-5
+#: html/cool-help.html%2Bdiv.div.div.div.h4:805-5
 msgid "How can I run my slide show?"
 msgstr "Com inicio la projecció de la meua presentació?"
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:805-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:807-7
 msgid ""
 "Open the presentation in <span class=\"productname\">{productname}</span>"
 msgstr ""
 "Obriu la presentació amb el <span class=\"productname\">{productname}</span>"
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:806-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:808-7
 msgid ""
 "Either choose <span class=\"ui\">Slide Show</span> → <span class=\"ui\">Full "
 "Screen Presentation</span> or click on the left-most icon in the bottom of "
 "the slide panel:"
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li.img[alt]:806-176
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li.img[alt]:808-176
 #, fuzzy
 msgid "slide show"
 msgstr "Presentació de diapositives"
 
-#: html/cool-help.html%2Bdiv.div.div.div.h4:810-5
+#: html/cool-help.html%2Bdiv.div.div.div.h4:812-5
 msgid "How can I change the line, area and position of a shape in my slides?"
 msgstr ""
 "Com pot canviar la línia, l'àrea i la posició d'una forma a una diapositiva "
 "meua?"
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:812-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:814-7
 msgid "Select the shape in your slide. A set of handles shows."
 msgstr "Seleccioneu la forma de la diapositiva. Es mostra un conjunt d'anses."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:813-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:815-7
 msgid ""
 "Choose <span class=\"ui\">Format</span> → <span class=\"ui\">Line</span> (or "
 "<span class=\"ui\">Area</span>, or <span class=\"ui\">Position and "
@@ -3630,13 +3684,35 @@ msgstr ""
 "bé <span class=\"ui\">Àrea</span> o <span class=\"ui\">Posició i mida</span>)"
 ". S'obri un diàleg."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:816-31
-msgid "Position and Size"
+#: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:818-31
+msgid ""
+"Area dialog on the Color tab with a color palette, active and new color "
+"previews, RGB value fields, and a custom palette section"
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:817-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:819-7
 msgid "Set the properties of the element of the object."
 msgstr "Definiu les propietats de l'element de l'objecte."
+
+#, fuzzy
+#~ msgid "document repair"
+#~ msgstr "Reparació del document"
+
+#, fuzzy
+#~ msgid "inactive document"
+#~ msgstr "Document inactiu"
+
+#, fuzzy
+#~ msgid "spellchecking"
+#~ msgstr "Verificació ortogràfica"
+
+#, fuzzy
+#~ msgid "style formatting"
+#~ msgstr "Formatació de cel·les"
+
+#, fuzzy
+#~ msgid "track changes"
+#~ msgstr "Seguiment de canvis"
 
 #, fuzzy
 #~ msgid ""
