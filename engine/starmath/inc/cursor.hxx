@@ -265,7 +265,7 @@ private:
     void BuildGraph();
 
     /** Insert new nodes in the tree after position */
-    void InsertNodes(std::unique_ptr<SmNodeList> pNewNodes);
+    void InsertNodes(SmNodeList&& pNewNodes);
 
     /** tries to set position to a specific SmCaretPos
      *
@@ -277,7 +277,7 @@ private:
     void AnnotateSelection() const;
 
     /** Clone list of nodes in a clipboard (creates a deep clone) */
-    static std::unique_ptr<SmNodeList> CloneList(SmClipboard& rClipboard);
+    static SmNodeList CloneList(SmClipboard& rClipboard);
 
     /** Find an iterator pointing to the node in pLineList following rCaretPos
      *
@@ -289,7 +289,7 @@ private:
      * reason you should beaware that iterators to elements in pLineList may be invalidated, and
      * that you should call PatchLineList() with this iterator if no action is taken.
      */
-    static SmNodeList::iterator FindPositionInLineList(SmNodeList* pLineList,
+    static SmNodeList::iterator FindPositionInLineList(SmNodeList& rLineList,
                                                        const SmCaretPos& rCaretPos);
 
     /** Patch a line list after modification, merge SmTextNode, remove SmPlaceNode etc.
@@ -304,7 +304,7 @@ private:
      * @returns A caret position equivalent to one selecting the node before aIter, the method returns
      *          an invalid SmCaretPos to indicate placement in front of the line.
      */
-    static SmCaretPos PatchLineList(SmNodeList* pLineList, SmNodeList::iterator aIter);
+    static SmCaretPos PatchLineList(SmNodeList& rLineList, SmNodeList::iterator aIter);
 
     /** Take selected nodes from a list
      *
@@ -316,7 +316,7 @@ private:
      *
      * @returns An iterator pointing to the element following the selection taken.
      */
-    static SmNodeList::iterator TakeSelectedNodesFromList(SmNodeList* pLineList,
+    static SmNodeList::iterator TakeSelectedNodesFromList(SmNodeList& rLineList,
                                                           SmNodeList* pSelectedNodes = nullptr);
 
     /** Create an instance of SmMathSymbolNode usable for brackets */
@@ -347,7 +347,7 @@ private:
      * @param pStartLine    Line to take first position in, if PosAfterEdit cannot be found,
      *                      leave it NULL for pLineList.
      */
-    void FinishEdit(std::unique_ptr<SmNodeList> pLineList, SmStructureNode* pParent,
+    void FinishEdit(SmNodeList&& pLineList, SmStructureNode* pParent,
                     int nParentIndex, SmCaretPos PosAfterEdit, SmNode* pStartLine = nullptr);
     /** Request the formula is repainted */
     void RequestRepaint();
@@ -380,7 +380,7 @@ public:
      *
      * Old error nodes will be deleted.
      */
-    SmNode* Parse(SmNodeList* list);
+    SmNode* Parse(SmNodeList& list);
     /** True, if the token is an operator */
     static bool IsOperator(const SmToken& token);
     /** True, if the token is a relation operator */

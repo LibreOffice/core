@@ -210,21 +210,21 @@ void SmCursor::DeletePrev(OutputDevice* pDev){
         OSL_ENSURE(pMergeLine, "pMergeLine cannot be NULL!");
         SmCaretPos PosAfterDelete;
         //Convert first line to list
-        std::unique_ptr<SmNodeList> pLineList(new SmNodeList);
-        NodeToList(pMergeLine, *pLineList);
-        if(!pLineList->empty()){
+        SmNodeList aLineList;
+        NodeToList(pMergeLine, aLineList);
+        if(!aLineList.empty()){
             //Find iterator to patch
-            SmNodeList::iterator patchPoint = pLineList->end();
+            SmNodeList::iterator patchPoint = aLineList.end();
             --patchPoint;
             //Convert second line to list
-            NodeToList(pLine, *pLineList);
+            NodeToList(pLine, aLineList);
             //Patch the line list
             ++patchPoint;
-            PosAfterDelete = PatchLineList(pLineList.get(), patchPoint);
+            PosAfterDelete = PatchLineList(aLineList, patchPoint);
             //Parse the line
-            pLine = SmNodeListParser().Parse(pLineList.get());
+            pLine = SmNodeListParser().Parse(aLineList);
         }
-        pLineList.reset();
+        aLineList.clear();
         pLineParent->SetSubNode(nLineOffset-1, pLine);
         //Delete the removed line slot
         SmNodeArray lines(pLineParent->GetNumSubNodes()-1);
@@ -293,21 +293,21 @@ void SmCursor::Delete(){
     //Position after delete
     SmCaretPos PosAfterDelete;
 
-    std::unique_ptr<SmNodeList> pLineList(new SmNodeList);
-    NodeToList(pLine, *pLineList);
+    SmNodeList aLineList;
+    NodeToList(pLine, aLineList);
 
     //Take the selected nodes and delete them...
-    SmNodeList::iterator patchIt = TakeSelectedNodesFromList(pLineList.get());
+    SmNodeList::iterator patchIt = TakeSelectedNodesFromList(aLineList);
 
     //Get the position to set after delete
-    PosAfterDelete = PatchLineList(pLineList.get(), patchIt);
+    PosAfterDelete = PatchLineList(aLineList, patchIt);
 
     //Finish editing
-    FinishEdit(std::move(pLineList), pLineParent, nLineOffset, PosAfterDelete);
+    FinishEdit(std::move(aLineList), pLineParent, nLineOffset, PosAfterDelete);
 }
 
-void SmCursor::InsertNodes(std::unique_ptr<SmNodeList> pNewNodes){
-    if(pNewNodes->empty()){
+void SmCursor::InsertNodes(SmNodeList&& rNewNodes){
+    if(rNewNodes.empty()){
         return;
     }
 
@@ -327,38 +327,38 @@ void SmCursor::InsertNodes(std::unique_ptr<SmNodeList> pNewNodes){
     assert(nParentIndex >= 0);
 
     //Convert line to list
-    std::unique_ptr<SmNodeList> pLineList(new SmNodeList);
-    NodeToList(pLine, *pLineList); // deletes pLine, potentially deleting pos.pSelectedNode
+    SmNodeList aLineList;
+    NodeToList(pLine, aLineList); // deletes pLine, potentially deleting pos.pSelectedNode
 
     //Find iterator for place to insert nodes
-    SmNodeList::iterator it = bSelectedIsTopMost ? pLineList->begin()
-                                                 : FindPositionInLineList(pLineList.get(), pos);
+    SmNodeList::iterator it = bSelectedIsTopMost ? aLineList.begin()
+                                                 : FindPositionInLineList(aLineList, pos);
 
     //Insert all new nodes
     SmNodeList::iterator newIt,
                          patchIt = it, // (pointless default value, fixes compiler warnings)
                          insIt;
-    for(newIt = pNewNodes->begin(); newIt != pNewNodes->end(); ++newIt){
-        insIt = pLineList->insert(it, *newIt);
-        if(newIt == pNewNodes->begin())
+    for(newIt = rNewNodes.begin(); newIt != rNewNodes.end(); ++newIt){
+        insIt = aLineList.insert(it, *newIt);
+        if(newIt == rNewNodes.begin())
             patchIt = insIt;
     }
     //Patch the places we've changed stuff
-    PatchLineList(pLineList.get(), patchIt);
-    SmCaretPos PosAfterInsert = PatchLineList(pLineList.get(), it);
+    PatchLineList(aLineList, patchIt);
+    SmCaretPos PosAfterInsert = PatchLineList(aLineList, it);
     //Release list, we've taken the nodes
-    pNewNodes.reset();
+    rNewNodes.clear();
 
     //Finish editing
-    FinishEdit(std::move(pLineList), pLineParent, nParentIndex, PosAfterInsert);
+    FinishEdit(std::move(aLineList), pLineParent, nParentIndex, PosAfterInsert);
 }
 
-SmNodeList::iterator SmCursor::FindPositionInLineList(SmNodeList* pLineList,
+SmNodeList::iterator SmCursor::FindPositionInLineList(SmNodeList& rLineList,
                                                       const SmCaretPos& rCaretPos)
 {
     //Find iterator for position
-    SmNodeList::iterator it = std::find(pLineList->begin(), pLineList->end(), rCaretPos.pSelectedNode);
-    if (it != pLineList->end())
+    SmNodeList::iterator it = std::find(rLineList.begin(), rLineList.end(), rCaretPos.pSelectedNode);
+    if (it != rLineList.end())
     {
         if((*it)->GetType() == SmNodeType::Text)
         {
@@ -376,7 +376,7 @@ SmNodeList::iterator SmCursor::FindPositionInLineList(SmNodeList* pLineList,
                 assert(!str2.isEmpty());
                 SmTextNode* pNewText = new SmTextNode(pText->GetToken(), pText->GetFontDesc());
                 pNewText->ChangeText(str2);
-                it = pLineList->insert(it, pNewText);
+                it = rLineList.insert(it, pNewText);
             }
         }else
             ++it;
@@ -384,16 +384,16 @@ SmNodeList::iterator SmCursor::FindPositionInLineList(SmNodeList* pLineList,
         return it;
     }
     //If we didn't find pSelectedNode, it must be because the caret is in front of the line
-    return pLineList->begin();
+    return rLineList.begin();
 }
 
-SmCaretPos SmCursor::PatchLineList(SmNodeList* pLineList, SmNodeList::iterator aIter) {
+SmCaretPos SmCursor::PatchLineList(SmNodeList& rLineList, SmNodeList::iterator aIter) {
     //The nodes we should consider merging
     SmNode *prev = nullptr,
            *next = nullptr;
-    if(aIter != pLineList->end())
+    if(aIter != rLineList.end())
         next = *aIter;
-    if(aIter != pLineList->begin()) {
+    if(aIter != rLineList.begin()) {
         --aIter;
         prev = *aIter;
         ++aIter;
@@ -412,24 +412,24 @@ SmCaretPos SmCursor::PatchLineList(SmNodeList* pLineList, SmNodeList::iterator a
         OUString newText = pText->GetText() + pOldN->GetText();
         pText->ChangeText(newText);
         delete pOldN;
-        pLineList->erase(aIter);
+        rLineList.erase(aIter);
         return retval;
     }
 
     //Check if there's a SmPlaceNode to remove:
     if(prev && next && prev->GetType() == SmNodeType::Place && !SmNodeListParser::IsOperator(next->GetToken())){
         --aIter;
-        aIter = pLineList->erase(aIter);
+        aIter = rLineList.erase(aIter);
         delete prev;
         //Return caret pos in front of aIter
-        if(aIter != pLineList->begin())
+        if(aIter != rLineList.begin())
             --aIter; //Thus find node before aIter
-        if(aIter == pLineList->begin())
+        if(aIter == rLineList.begin())
             return SmCaretPos();
         return SmCaretPos::GetPosAfter(*aIter);
     }
     if(prev && next && next->GetType() == SmNodeType::Place && !SmNodeListParser::IsOperator(prev->GetToken())){
-        aIter = pLineList->erase(aIter);
+        aIter = rLineList.erase(aIter);
         delete next;
         return SmCaretPos::GetPosAfter(prev);
     }
@@ -440,11 +440,11 @@ SmCaretPos SmCursor::PatchLineList(SmNodeList* pLineList, SmNodeList::iterator a
     return SmCaretPos::GetPosAfter(prev);
 }
 
-SmNodeList::iterator SmCursor::TakeSelectedNodesFromList(SmNodeList *pLineList,
+SmNodeList::iterator SmCursor::TakeSelectedNodesFromList(SmNodeList& rLineList,
                                                          SmNodeList *pSelectedNodes) {
     SmNodeList::iterator retval;
-    SmNodeList::iterator it = pLineList->begin();
-    while(it != pLineList->end()){
+    SmNodeList::iterator it = rLineList.begin();
+    while(it != rLineList.end()){
         if((*it)->IsSelected()){
             //Split text nodes
             if((*it)->GetType() == SmNodeType::Text) {
@@ -464,7 +464,7 @@ SmNodeList::iterator SmCursor::TakeSelectedNodesFromList(SmNodeList *pLineList,
                     pText->ChangeText(str);
                     ++it;
                 } else {//Remove it if not needed
-                    it = pLineList->erase(it);
+                    it = rLineList.erase(it);
                     delete pText;
                 }
                 //Set retval to be right after the selection
@@ -474,7 +474,7 @@ SmNodeList::iterator SmCursor::TakeSelectedNodesFromList(SmNodeList *pLineList,
                     OUString str = aText.copy(start3, len3);
                     SmTextNode* pSeg3 = new SmTextNode(aToken, eFontDesc);
                     pSeg3->ChangeText(str);
-                    retval = pLineList->insert(it, pSeg3);
+                    retval = rLineList.insert(it, pSeg3);
                 }
                 //If we need to save the selected text
                 if(pSelectedNodes && len2 > 0) {
@@ -485,7 +485,7 @@ SmNodeList::iterator SmCursor::TakeSelectedNodesFromList(SmNodeList *pLineList,
                 }
             } else { //if it's not textnode
                 SmNode* pNode = *it;
-                retval = it = pLineList->erase(it);
+                retval = it = rLineList.erase(it);
                 if(pSelectedNodes)
                     pSelectedNodes->push_back(pNode);
                 else
@@ -521,21 +521,21 @@ void SmCursor::InsertSubSup(SmSubSup eSubSup) {
     BeginEdit();
 
     //Convert line to list
-    std::unique_ptr<SmNodeList> pLineList(new SmNodeList);
-    NodeToList(pLine, *pLineList);
+    SmNodeList aLineList;
+    NodeToList(pLine, aLineList);
 
     //Take the selection, and/or find iterator for current position
-    std::unique_ptr<SmNodeList> pSelectedNodesList(new SmNodeList);
+    SmNodeList aSelectedNodesList;
     SmNodeList::iterator it;
     if(HasSelection())
-        it = TakeSelectedNodesFromList(pLineList.get(), pSelectedNodesList.get());
+        it = TakeSelectedNodesFromList(aLineList, &aSelectedNodesList);
     else
-        it = FindPositionInLineList(pLineList.get(), mpPosition->CaretPos);
+        it = FindPositionInLineList(aLineList, mpPosition->CaretPos);
 
     //Find node that this should be applied to
     SmNode* pSubject;
-    bool bPatchLine = !pSelectedNodesList->empty(); //If the line should be patched later
-    if(it != pLineList->begin()) {
+    bool bPatchLine = !aSelectedNodesList.empty(); //If the line should be patched later
+    if(it != aLineList.begin()) {
         --it;
         pSubject = *it;
         ++it;
@@ -543,7 +543,7 @@ void SmCursor::InsertSubSup(SmSubSup eSubSup) {
         //Create a new place node
         pSubject = new SmPlaceNode();
         pSubject->Prepare(mpDocShell->GetFormat(), *mpDocShell, 0);
-        it = pLineList->insert(it, pSubject);
+        it = aLineList.insert(it, pSubject);
         ++it;
         bPatchLine = true;  //We've modified the line it should be patched later.
     }
@@ -565,39 +565,39 @@ void SmCursor::InsertSubSup(SmSubSup eSubSup) {
 
     //Patch the line if we noted that was needed previously
     if(bPatchLine)
-        PatchLineList(pLineList.get(), it);
+        PatchLineList(aLineList, it);
 
     //Convert existing, if any, sub-/superscript line to list
     SmNode *pScriptLine = pSubSup->GetSubSup(eSubSup);
-    std::unique_ptr<SmNodeList> pScriptLineList(new SmNodeList);
-    NodeToList(pScriptLine, *pScriptLineList);
+    SmNodeList aScriptLineList;
+    NodeToList(pScriptLine, aScriptLineList);
 
     //Add selection to pScriptLineList
-    unsigned int nOldSize = pScriptLineList->size();
-    pScriptLineList->insert(pScriptLineList->end(), pSelectedNodesList->begin(), pSelectedNodesList->end());
-    pSelectedNodesList.reset();
+    unsigned int nOldSize = aScriptLineList.size();
+    aScriptLineList.insert(aScriptLineList.end(), aSelectedNodesList.begin(), aSelectedNodesList.end());
+    aSelectedNodesList.clear();
 
     //Patch pScriptLineList if needed
-    if(0 < nOldSize && nOldSize < pScriptLineList->size()) {
-        SmNodeList::iterator iPatchPoint = pScriptLineList->begin();
+    if(0 < nOldSize && nOldSize < aScriptLineList.size()) {
+        SmNodeList::iterator iPatchPoint = aScriptLineList.begin();
         std::advance(iPatchPoint, nOldSize);
-        PatchLineList(pScriptLineList.get(), iPatchPoint);
+        PatchLineList(aScriptLineList, iPatchPoint);
     }
 
     //Find caret pos, that should be used after sub-/superscription.
     SmCaretPos PosAfterScript; //Leave invalid for first position
-    if (!pScriptLineList->empty())
-        PosAfterScript = SmCaretPos::GetPosAfter(pScriptLineList->back());
+    if (!aScriptLineList.empty())
+        PosAfterScript = SmCaretPos::GetPosAfter(aScriptLineList.back());
 
     //Parse pScriptLineList
-    pScriptLine = SmNodeListParser().Parse(pScriptLineList.get());
-    pScriptLineList.reset();
+    pScriptLine = SmNodeListParser().Parse(aScriptLineList);
+    aScriptLineList.clear();
 
     //Insert pScriptLine back into the tree
     pSubSup->SetSubSup(eSubSup, pScriptLine);
 
     //Finish editing
-    FinishEdit(std::move(pLineList), pLineParent, nParentIndex, PosAfterScript, pScriptLine);
+    FinishEdit(std::move(aLineList), pLineParent, nParentIndex, PosAfterScript, pScriptLine);
 }
 
 void SmCursor::InsertBrackets(SmBracketType eBracketType) {
@@ -620,27 +620,27 @@ void SmCursor::InsertBrackets(SmBracketType eBracketType) {
     assert(nParentIndex >= 0);
 
     //Convert line to list
-    std::unique_ptr<SmNodeList> pLineList(new SmNodeList);
-    NodeToList(pLine, *pLineList);
+    SmNodeList aLineList;
+    NodeToList(pLine, aLineList);
 
     //Take the selection, and/or find iterator for current position
-    std::unique_ptr<SmNodeList> pSelectedNodesList(new SmNodeList);
+    SmNodeList aSelectedNodesList;
     SmNodeList::iterator it;
     if(HasSelection())
-        it = TakeSelectedNodesFromList(pLineList.get(), pSelectedNodesList.get());
+        it = TakeSelectedNodesFromList(aLineList, &aSelectedNodesList);
     else
-        it = FindPositionInLineList(pLineList.get(), mpPosition->CaretPos);
+        it = FindPositionInLineList(aLineList, mpPosition->CaretPos);
 
     //If there's no selected nodes, create a place node
     std::unique_ptr<SmNode> pBodyNode;
     SmCaretPos PosAfterInsert;
-    if(pSelectedNodesList->empty()) {
+    if(aSelectedNodesList.empty()) {
         pBodyNode.reset(new SmPlaceNode());
         PosAfterInsert = SmCaretPos(pBodyNode.get(), 1);
     } else
-        pBodyNode.reset(SmNodeListParser().Parse(pSelectedNodesList.get()));
+        pBodyNode.reset(SmNodeListParser().Parse(aSelectedNodesList));
 
-    pSelectedNodesList.reset();
+    aSelectedNodesList.clear();
 
     //Create SmBraceNode
     SmToken aTok(TLEFT, '\0', u"left"_ustr, TG::NONE, 5);
@@ -654,14 +654,14 @@ void SmCursor::InsertBrackets(SmBracketType eBracketType) {
     pBrace->Prepare(mpDocShell->GetFormat(), *mpDocShell, 0);
 
     //Insert into line
-    pLineList->insert(it, pBrace);
+    aLineList.insert(it, pBrace);
     //Patch line (I think this is good enough)
-    SmCaretPos aAfter = PatchLineList(pLineList.get(), it);
+    SmCaretPos aAfter = PatchLineList(aLineList, it);
     if( !PosAfterInsert.IsValid() )
         PosAfterInsert = aAfter;
 
     //Finish editing
-    FinishEdit(std::move(pLineList), pLineParent, nParentIndex, PosAfterInsert);
+    FinishEdit(std::move(aLineList), pLineParent, nParentIndex, PosAfterInsert);
 }
 
 SmNode *SmCursor::CreateBracket(SmBracketType eBracketType, bool bIsLeft) {
@@ -739,35 +739,35 @@ bool SmCursor::InsertRow() {
     BeginEdit();
 
     //Convert line to list
-    std::unique_ptr<SmNodeList> pLineList(new SmNodeList);
-    NodeToList(pLine, *pLineList);
+    SmNodeList aLineList;
+    NodeToList(pLine, aLineList);
 
     //Find position in line
     SmNodeList::iterator it;
     if(HasSelection()) {
         //Take the selected nodes and delete them...
-        it = TakeSelectedNodesFromList(pLineList.get());
+        it = TakeSelectedNodesFromList(aLineList);
     } else
-        it = FindPositionInLineList(pLineList.get(), mpPosition->CaretPos);
+        it = FindPositionInLineList(aLineList, mpPosition->CaretPos);
 
     //New caret position after inserting the newline/row in whatever context
     SmCaretPos PosAfterInsert;
 
     //If we're in the context of a table
     if(pTable) {
-        std::unique_ptr<SmNodeList> pNewLineList(new SmNodeList);
+        SmNodeList aNewLineList;
         //Move elements from pLineList to pNewLineList
-        SmNodeList& rLineList = *pLineList;
-        pNewLineList->splice(pNewLineList->begin(), rLineList, it, rLineList.end());
+        SmNodeList& rLineList = aLineList;
+        aNewLineList.splice(aNewLineList.begin(), rLineList, it, rLineList.end());
         //Make sure it is valid again
-        it = pLineList->end();
-        if(it != pLineList->begin())
+        it = aLineList.end();
+        if(it != aLineList.begin())
             --it;
-        if(pNewLineList->empty())
-            pNewLineList->push_front(new SmPlaceNode());
+        if(aNewLineList.empty())
+            aNewLineList.push_front(new SmPlaceNode());
         //Parse new line
-        std::unique_ptr<SmNode> pNewLine(SmNodeListParser().Parse(pNewLineList.get()));
-        pNewLineList.reset();
+        std::unique_ptr<SmNode> pNewLine(SmNodeListParser().Parse(aNewLineList));
+        aNewLineList.clear();
         //Wrap pNewLine in SmLineNode if needed
         if(pLineParent->GetType() == SmNodeType::Line) {
             std::unique_ptr<SmLineNode> pNewLineNode(new SmLineNode(SmToken(TNEWLINE, '\0', u"newline"_ustr)));
@@ -793,7 +793,7 @@ bool SmCursor::InsertRow() {
     //If we're in the context of a matrix
     else {
         //Find position after insert and patch the list
-        PosAfterInsert = PatchLineList(pLineList.get(), it);
+        PosAfterInsert = PatchLineList(aLineList, it);
         //Move other children
         sal_uInt16 rows = pMatrix->GetNumRows();
         sal_uInt16 cols = pMatrix->GetNumCols();
@@ -810,7 +810,7 @@ bool SmCursor::InsertRow() {
     }
 
     //Finish editing
-    FinishEdit(std::move(pLineList), pLineParent, nParentIndex, PosAfterInsert);
+    FinishEdit(std::move(aLineList), pLineParent, nParentIndex, PosAfterInsert);
     //FinishEdit is actually used to handle situations where parent is an instance of
     //SmSubSupNode. In this case parent should always be a table or matrix, however, for
     //code reuse we just use FinishEdit() here too.
@@ -838,24 +838,24 @@ void SmCursor::InsertFraction() {
     BeginEdit();
 
     //Convert line to list
-    std::unique_ptr<SmNodeList> pLineList(new SmNodeList);
-    NodeToList(pLine, *pLineList);
+    SmNodeList aLineList;
+    NodeToList(pLine, aLineList);
 
     //Take the selection, and/or find iterator for current position
-    std::unique_ptr<SmNodeList> pSelectedNodesList(new SmNodeList);
+    SmNodeList aSelectedNodesList;
     SmNodeList::iterator it;
     if(HasSelection())
-        it = TakeSelectedNodesFromList(pLineList.get(), pSelectedNodesList.get());
+        it = TakeSelectedNodesFromList(aLineList, &aSelectedNodesList);
     else
-        it = FindPositionInLineList(pLineList.get(), mpPosition->CaretPos);
+        it = FindPositionInLineList(aLineList, mpPosition->CaretPos);
 
     //Create pNum, and pDenom
-    bool bEmptyFraction = pSelectedNodesList->empty();
+    bool bEmptyFraction = aSelectedNodesList.empty();
     std::unique_ptr<SmNode> pNum( bEmptyFraction
         ? new SmPlaceNode()
-        : SmNodeListParser().Parse(pSelectedNodesList.get()) );
+        : SmNodeListParser().Parse(aSelectedNodesList) );
     std::unique_ptr<SmNode> pDenom(new SmPlaceNode());
-    pSelectedNodesList.reset();
+    aSelectedNodesList.clear();
 
     //Create new fraction
     SmBinVerNode *pFrac = new SmBinVerNode(SmToken(TOVER, '\0', u"over"_ustr, TG::Product, 0));
@@ -863,13 +863,13 @@ void SmCursor::InsertFraction() {
     pFrac->SetSubNodes(std::move(pNum), std::move(pRect), std::move(pDenom));
 
     //Insert in pLineList
-    SmNodeList::iterator patchIt = pLineList->insert(it, pFrac);
-    PatchLineList(pLineList.get(), patchIt);
-    PatchLineList(pLineList.get(), it);
+    SmNodeList::iterator patchIt = aLineList.insert(it, pFrac);
+    PatchLineList(aLineList, patchIt);
+    PatchLineList(aLineList, it);
 
     //Finish editing
     SmNode *pSelectedNode = bEmptyFraction ? pFrac->GetSubNode(0) : pFrac->GetSubNode(2);
-    FinishEdit(std::move(pLineList), pLineParent, nParentIndex, SmCaretPos(pSelectedNode, 1));
+    FinishEdit(std::move(aLineList), pLineParent, nParentIndex, SmCaretPos(pSelectedNode, 1));
 }
 
 void SmCursor::InsertText(const OUString& aString)
@@ -890,9 +890,9 @@ void SmCursor::InsertText(const OUString& aString)
     pText->AdjustFontDesc();
     pText->Prepare(mpDocShell->GetFormat(), *mpDocShell, 0);
 
-    std::unique_ptr<SmNodeList> pList(new SmNodeList);
-    pList->push_front(pText);
-    InsertNodes(std::move(pList));
+    SmNodeList aList;
+    aList.push_front(pText);
+    InsertNodes(std::move(aList));
 
     EndEdit();
 }
@@ -992,9 +992,9 @@ void SmCursor::InsertElement(SmFormulaElement element){
     pNewNode->Prepare(mpDocShell->GetFormat(), *mpDocShell, 0);
 
     //Insert new node
-    std::unique_ptr<SmNodeList> pList(new SmNodeList);
-    pList->push_front(pNewNode);
-    InsertNodes(std::move(pList));
+    SmNodeList aList;
+    aList.push_front(pNewNode);
+    InsertNodes(std::move(aList));
 
     EndEdit();
 }
@@ -1019,9 +1019,9 @@ void SmCursor::InsertSpecial(std::u16string_view _aString)
     pSpecial->Prepare(mpDocShell->GetFormat(), *mpDocShell, 0);
 
     //Insert the node
-    std::unique_ptr<SmNodeList> pList(new SmNodeList);
-    pList->push_front(pSpecial);
-    InsertNodes(std::move(pList));
+    SmNodeList aList;
+    aList.push_front(pSpecial);
+    InsertNodes(std::move(aList));
 
     EndEdit();
 }
@@ -1035,8 +1035,8 @@ void SmCursor::InsertCommandText(const OUString& aCommandText) {
 
     //Convert subtree to list
     SmNode* pSubExpr = xSubExpr.release();
-    std::unique_ptr<SmNodeList> pLineList(new SmNodeList);
-    NodeToList(pSubExpr, *pLineList);
+    SmNodeList aLineList;
+    NodeToList(pSubExpr, aLineList);
 
     BeginEdit();
 
@@ -1044,7 +1044,7 @@ void SmCursor::InsertCommandText(const OUString& aCommandText) {
     Delete();
 
     //Insert it
-    InsertNodes(std::move(pLineList));
+    InsertNodes(std::move(aLineList));
 
     EndEdit();
 }
@@ -1085,7 +1085,8 @@ void SmCursor::Copy(vcl::Window* pWindow)
 
     // Parse list of nodes to a tree
     SmNodeListParser parser;
-    SmNode* pTree(parser.Parse(CloneList(aClipboard).get()));
+    SmNodeList aClonedList = CloneList(aClipboard);
+    SmNode* pTree(parser.Parse(aClonedList));
 
     // Parse the tree to a string
     OUString aString;
@@ -1118,16 +1119,16 @@ void SmCursor::Paste(vcl::Window* pWindow)
     EndEdit();
 }
 
-std::unique_ptr<SmNodeList> SmCursor::CloneList(SmClipboard &rClipboard){
+SmNodeList SmCursor::CloneList(SmClipboard &rClipboard){
     SmCloningVisitor aCloneFactory;
-    std::unique_ptr<SmNodeList> pClones(new SmNodeList);
+    SmNodeList aClones;
 
     for(auto &xNode : rClipboard){
         SmNode *pClone = aCloneFactory.Clone(xNode.get());
-        pClones->push_back(pClone);
+        aClones.push_back(pClone);
     }
 
-    return pClones;
+    return aClones;
 }
 
 SmNode* SmCursor::FindTopMostNodeInLine(SmNode* pSNode, bool MoveUpIfSelected){
@@ -1251,18 +1252,18 @@ bool SmCursor::HasComplexSelection(){
     return CountSelectedNodes(mpTree) > 1;
 }
 
-void SmCursor::FinishEdit(std::unique_ptr<SmNodeList> pLineList,
+void SmCursor::FinishEdit(SmNodeList&& aLineList,
                           SmStructureNode* pParent,
                           int nParentIndex,
                           SmCaretPos PosAfterEdit,
                           SmNode* pStartLine) {
     //Store number of nodes in line for later
-    int entries = pLineList->size();
+    int entries = aLineList.size();
 
     //Parse list of nodes to a tree
     SmNodeListParser parser;
-    std::unique_ptr<SmNode> pLine(parser.Parse(pLineList.get()));
-    pLineList.reset();
+    std::unique_ptr<SmNode> pLine(parser.Parse(aLineList));
+    aLineList.clear();
 
     //Check if we're making the body of a subsup node bigger than one
     if(pParent->GetType() == SmNodeType::SubSup &&
@@ -1439,8 +1440,8 @@ bool SmCursor::IsAtTailOfBracket(SmBracketType eBracketType) const
 
 /////////////////////////////////////// SmNodeListParser
 
-SmNode* SmNodeListParser::Parse(SmNodeList* list){
-    pList = list;
+SmNode* SmNodeListParser::Parse(SmNodeList& list){
+    pList = &list;
     //Delete error nodes
     SmNodeList::iterator it = pList->begin();
     while(it != pList->end()) {
