@@ -481,27 +481,7 @@ void SvxOle2Shape::createLink( const OUString& aLinkURL )
     if( !xObj.is() )
         return;
 
-    tools::Rectangle aRect = pOle2Obj->GetLogicRect();
-    if ( aRect.GetWidth() == 101 && aRect.GetHeight() == 101 )
-    {
-        // default size
-        try
-        {
-            awt::Size aSz = xObj->getVisualAreaSize( pOle2Obj->GetAspect() );
-            aRect.SetSize( Size( aSz.Width, aSz.Height ) );
-        }
-        catch (const uno::Exception&)
-        {}
-        pOle2Obj->SetLogicRect( aRect );
-    }
-    else
-    {
-        awt::Size aSz;
-        Size aSize = pOle2Obj->GetLogicRect().GetSize();
-        aSz.Width = aSize.Width();
-        aSz.Height = aSize.Height();
-        xObj->setVisualAreaSize(  pOle2Obj->GetAspect(), aSz );
-    }
+    pOle2Obj->SyncObjVisualArea(xObj);
 
     // connect the object after the visual area is set
     SvxShape::setPropertyValue( UNO_NAME_OLE2_PERSISTNAME, uno::Any( aPersistName ) );
