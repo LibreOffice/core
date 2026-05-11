@@ -647,9 +647,6 @@ bool SdXMLFilter::Import( ErrCode& nError )
     if( mxModel.is() )
         mxModel->unlockControllers();
 
-    if( nRet == ERRCODE_NONE )
-        pDoc->UpdateAllLinks();
-
     if( nRet == ERRCODE_NONE || nRet == SD_XML_READERROR )
         ;
     else if( nRet == ERRCODE_IO_BROKENPACKAGE && xStorage.is() )
