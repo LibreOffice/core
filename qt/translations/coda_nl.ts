@@ -26,7 +26,7 @@
     <message>
         <location filename="../DocumentOperations.cpp" line="58"/>
         <source>ODF spreadsheet (.ods)</source>
-        <translation>ODF spreadsheet (.ods)</translation>
+        <translation>ODF werkblad (.ods)</translation>
     </message>
     <message>
         <location filename="../DocumentOperations.cpp" line="59"/>

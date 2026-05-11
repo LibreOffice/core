@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-20 12:14+0200\n"
-"PO-Revision-Date: 2026-05-03 21:09+0000\n"
-"Last-Translator: Sebastiaan Veld <notify@virtfields.nl>\n"
+"PO-Revision-Date: 2026-05-04 13:07+0000\n"
+"Last-Translator: Stephan Paternotte <stephan@paternottes.net>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/collabora-online/"
 "help/nl/>\n"
 "Language: nl\n"
@@ -3468,7 +3468,7 @@ msgstr "paginaopmaak"
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:728-5
 msgid "How do I change the page orientation to landscape inside my document?"
-msgstr "Hoe verander ik de paginarichting in liggend in mijn document"
+msgstr "Hoe verander ik de paginarichting in liggend in mijn document?"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:730-7
 msgid ""

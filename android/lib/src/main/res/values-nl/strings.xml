@@ -20,7 +20,7 @@
     <string name="file_chromeos_read_only">Het bestand kan op deze locatie niet worden bewaard; het wordt alleen-lezen geopend. Verplaats het naar Play-bestanden voor volledige lees- en schrijftoegang.</string>
     <string name="use_text">Gebruik Tekst-opmaak</string>
     <string name="convert_odf_message">Dit document bevat mogelijk opmaak of inhoud die niet kan worden bewaard in het nu gekozen formaat \'Tekst\'.</string>
-    <string name="ask_for_convert_odf">Bevestig bestandsformaat</string>
-    <string name="use_odf">Gebruik ODF formaat</string>
+    <string name="ask_for_convert_odf">Bestandsformaat bevestigen</string>
+    <string name="use_odf">ODF-formaat gebruiken</string>
     <string name="cant_open_the_document">Kon het document niet openen</string>
 </resources>
