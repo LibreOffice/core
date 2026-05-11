@@ -7,16 +7,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-20 12:14+0100\n"
-"PO-Revision-Date: 2025-12-05 23:54+0000\n"
+"PO-Revision-Date: 2026-05-04 13:07+0000\n"
 "Last-Translator: Rob Pearson <rob.dunedin@gmail.com>\n"
 "Language-Team: English (Australia) <https://hosted.weblate.org/projects/"
 "collabora-online/ui/en_AU/>\n"
-"Language: \n"
+"Language: en_AU\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.15-dev\n"
+"X-Generator: Weblate 5.17.1\n"
 "X-POOTLE-MTIME: 1463059003.000000\n"
 
 #: admin/admin.strings.js:15
@@ -941,7 +941,7 @@ msgstr "Event handling has been delayed for an unexpectedly long time: {0}ms"
 
 #: src/app/TableStylesService.ts:152 src/app/TableStylesService.ts:154
 msgid "Table Styles"
-msgstr ""
+msgstr "Table Styles"
 
 #: src/canvas/sections/CommentListSection.ts:1267
 msgid "Modify"
@@ -1065,23 +1065,23 @@ msgstr "Saved"
 
 #: src/canvas/sections/CompareChangesLabelSection.ts:118
 msgid "Last edited by %1 on %2"
-msgstr ""
+msgstr "Last edited by %1 on %2"
 
 #: src/canvas/sections/CompareChangesLabelSection.ts:181
 msgid "%1: Initial Version"
-msgstr ""
+msgstr "%1: Initial Version"
 
 #: src/canvas/sections/CompareChangesLabelSection.ts:185
 msgid "%1: Current Version"
-msgstr ""
+msgstr "%1: Current Version"
 
 #: src/canvas/sections/CompareChangesLabelSection.ts:194
 msgid "Initial Version"
-msgstr ""
+msgstr "Initial Version"
 
 #: src/canvas/sections/CompareChangesLabelSection.ts:198
 msgid "Current Version"
-msgstr ""
+msgstr "Current Version"
 
 #: src/canvas/sections/ShapeHandlesSection.ts:478
 msgid "Document contains unsupported media"
@@ -1133,7 +1133,7 @@ msgstr "Copy all version information in English"
 
 #: src/control/Control.AboutDialog.ts:430
 msgid "Version information has been copied"
-msgstr ""
+msgstr "Version information has been copied"
 
 #: src/control/Control.AboutDialog.ts:470
 msgid "COOLWSD version:"
@@ -1200,12 +1200,12 @@ msgstr "The server encountered a {0} error while parsing the {1} command."
 #: src/control/Control.BackstageView.ts:179
 #: src/control/Control.BackstageView.ts:180
 msgid "Close backstage"
-msgstr ""
+msgstr "Close backstage"
 
 #: src/control/Control.BackstageView.ts:223
 #: src/control/Control.BackstageView.ts:224
 msgid "Back to document"
-msgstr ""
+msgstr "Back to document"
 
 #: src/control/Control.BackstageView.ts:272
 #: src/control/Control.BackstageView.ts:406
@@ -1225,7 +1225,7 @@ msgstr "New"
 
 #: src/control/Control.BackstageView.ts:288
 msgid "Open"
-msgstr ""
+msgstr "Open"
 
 #: src/control/Control.BackstageView.ts:296
 #: src/control/Control.Notebookbar.js:637
@@ -1244,7 +1244,7 @@ msgstr "Share"
 
 #: src/control/Control.BackstageView.ts:304
 msgid "Info"
-msgstr ""
+msgstr "Info"
 
 #: src/control/Control.BackstageView.ts:320
 #: src/control/Control.NotebookbarCalc.js:165
@@ -1258,7 +1258,7 @@ msgstr "Save As"
 
 #: src/control/Control.BackstageView.ts:336
 msgid "Export"
-msgstr ""
+msgstr "Export"
 
 #: src/control/Control.BackstageView.ts:350 src/control/Control.Menubar.ts:123
 #: src/control/Control.Menubar.ts:464 src/control/Control.Menubar.ts:640
@@ -1273,12 +1273,12 @@ msgstr "Options"
 
 #: src/control/Control.BackstageView.ts:407
 msgid "Start a new document from one of the following templates."
-msgstr ""
+msgstr "Start a new document from one of the following templates."
 
 #: src/control/Control.BackstageView.ts:450
 #: src/control/Control.BackstageView.ts:453
 msgid "More Templates"
-msgstr ""
+msgstr "More Templates"
 
 #: src/control/Control.BackstageView.ts:479
 #: src/control/jsdialog/Widget.ColorPicker.ts:426
@@ -1287,31 +1287,31 @@ msgstr "Recent"
 
 #: src/control/Control.BackstageView.ts:511
 msgid "Recently opened documents will appear here"
-msgstr ""
+msgstr "Recently opened documents will appear here"
 
 #: src/control/Control.BackstageView.ts:550
 msgid "Name"
-msgstr ""
+msgstr "Name"
 
 #: src/control/Control.BackstageView.ts:556
 msgid "Modified Date"
-msgstr ""
+msgstr "Modified Date"
 
 #: src/control/Control.BackstageView.ts:779
 msgid "Document Info"
-msgstr ""
+msgstr "Document Info"
 
 #: src/control/Control.BackstageView.ts:780
 msgid "View document properties and information"
-msgstr ""
+msgstr "View document properties and information"
 
 #: src/control/Control.BackstageView.ts:796
 msgid "Export Document"
-msgstr ""
+msgstr "Export Document"
 
 #: src/control/Control.BackstageView.ts:797
 msgid "export your documents in different formats"
-msgstr ""
+msgstr "export your documents in different formats"
 
 #: src/control/Control.BackstageView.ts:851 src/control/Control.Menubar.ts:385
 #: src/control/Control.Menubar.ts:1379
@@ -1325,26 +1325,25 @@ msgstr "Properties"
 
 #: src/control/Control.BackstageView.ts:857
 msgid "More Property Info"
-msgstr ""
+msgstr "More Property Info"
 
 #: src/control/Control.BackstageView.ts:936 templates/templates.js:50
 #: templates/templates.js:60 templates/templates.js:70
 msgid "Text Document"
-msgstr ""
+msgstr "Text Document"
 
 #: src/control/Control.BackstageView.ts:936
 #: src/control/Control.BackstageView.ts:939
-#, fuzzy
 msgid "Pages"
-msgstr "Page"
+msgstr "Pages"
 
 #: src/control/Control.BackstageView.ts:937
 msgid "Spreadsheet"
-msgstr ""
+msgstr "Spreadsheet"
 
 #: src/control/Control.BackstageView.ts:937
 msgid "Sheets"
-msgstr ""
+msgstr "Sheets"
 
 #: src/control/Control.BackstageView.ts:938
 #: src/control/Control.NavigatorPanel.ts:188
@@ -1355,7 +1354,7 @@ msgstr "Slides"
 
 #: src/control/Control.BackstageView.ts:944
 msgid "Parts"
-msgstr ""
+msgstr "Parts"
 
 #: src/control/Control.BackstageView.ts:948
 #: src/control/Control.DocumentRepair.js:140
@@ -1364,44 +1363,43 @@ msgstr "Type"
 
 #: src/control/Control.BackstageView.ts:954
 msgid "Mode"
-msgstr ""
+msgstr "Mode"
 
 #: src/control/Control.BackstageView.ts:955
 msgid "View Only"
-msgstr ""
+msgstr "View Only"
 
 #: src/control/Control.BackstageView.ts:962
 msgid "File Name"
-msgstr ""
+msgstr "File Name"
 
 #: src/control/Control.BackstageView.ts:1067
 msgid "Loading templates…"
-msgstr ""
+msgstr "Loading templates…"
 
 #: src/control/Control.BackstageView.ts:1113
 msgid "Search templates"
-msgstr ""
+msgstr "Search templates"
 
 #: src/control/Control.BackstageView.ts:1181
 msgid "No templates match your search."
-msgstr ""
+msgstr "No templates match your search."
 
 #: src/control/Control.BackstageView.ts:1287
 msgid "Blank Spreadsheet"
-msgstr ""
+msgstr "Blank Spreadsheet"
 
 #: src/control/Control.BackstageView.ts:1291
-#, fuzzy
 msgid "Blank Presentation"
-msgstr "End Presentation"
+msgstr "Blank Presentation"
 
 #: src/control/Control.BackstageView.ts:1296
 msgid "Blank Document"
-msgstr ""
+msgstr "Blank Document"
 
 #: src/control/Control.BackstageView.ts:1443
 msgid "Untitled"
-msgstr ""
+msgstr "Untitled"
 
 #: src/control/Control.Command.js:90
 msgid "Unlock"
@@ -1421,7 +1419,7 @@ msgstr "Fill Series"
 
 #: src/control/Control.DocumentNameInput.js:27
 msgid "Document name"
-msgstr ""
+msgstr "Document name"
 
 #: src/control/Control.DocumentNameInput.js:119
 msgid "Path"
@@ -1867,11 +1865,11 @@ msgstr "Close dialogue"
 
 #: src/control/Control.JSDialogBuilder.js:496
 msgid "Increment value"
-msgstr ""
+msgstr "Increment value"
 
 #: src/control/Control.JSDialogBuilder.js:500
 msgid "Decrement value"
-msgstr ""
+msgstr "Decrement value"
 
 #: src/control/Control.JSDialogBuilder.js:640
 msgid "Solid"
@@ -1953,11 +1951,11 @@ msgstr "Insert Comment"
 
 #: src/control/Control.JSDialogBuilder.js:2136
 msgid "Toggle dropdown"
-msgstr ""
+msgstr "Toggle dropdown"
 
 #: src/control/Control.JSDialogBuilder.js:2138
 msgid "Dialog dropdown"
-msgstr ""
+msgstr "Dialog dropdown"
 
 #: src/control/Control.JSDialogBuilder.js:2140
 #: src/control/Control.NotebookbarWriter.js:1608
@@ -1966,7 +1964,7 @@ msgstr "Dropdown"
 
 #: src/control/Control.JSDialogBuilder.js:2142
 msgid "Apply action dropdown"
-msgstr ""
+msgstr "Apply action dropdown"
 
 #: src/control/Control.JSDialogBuilder.js:2168
 msgid "Open {name}"
@@ -2805,7 +2803,7 @@ msgstr "HTML File (.html)"
 #: src/control/Control.NotebookbarBuilder.js:449
 #: src/control/Control.NotebookbarBuilder.js:485
 msgid "PDF Document (.pdf) with options"
-msgstr ""
+msgstr "PDF Document (.pdf) with options"
 
 #: src/control/Control.NotebookbarBuilder.js:432
 msgid "CSV File (.csv)"
@@ -3192,15 +3190,15 @@ msgstr "Table"
 #: src/control/Control.NotebookbarCalc.js:1766
 #: src/control/Control.NotebookbarCalc.js:1769
 msgid "Table styles are only available in .xlsx files"
-msgstr ""
+msgstr "Table styles are only available in .xlsx files"
 
 #: src/control/Control.NotebookbarCalc.js:1767
 msgid "Insert a styled table"
-msgstr ""
+msgstr "Insert a styled table"
 
 #: src/control/Control.NotebookbarCalc.js:1770
 msgid "Select a cell range first to insert a styled table"
-msgstr ""
+msgstr "Select a cell range first to insert a styled table"
 
 #: src/control/Control.NotebookbarCalc.js:1779
 #: src/control/Control.NotebookbarDraw.js:1015
@@ -3344,7 +3342,7 @@ msgstr "From Beginning"
 
 #: src/control/Control.NotebookbarImpress.js:472
 msgid "Fullscreen, starting at slide 1"
-msgstr ""
+msgstr "Fullscreen, starting at slide 1"
 
 #: src/control/Control.NotebookbarImpress.js:479
 msgid "From Current Slide"
@@ -3352,7 +3350,7 @@ msgstr "From Current Slide"
 
 #: src/control/Control.NotebookbarImpress.js:480
 msgid "Fullscreen, starting at this slide"
-msgstr ""
+msgstr "Fullscreen, starting at this slide"
 
 #: src/control/Control.NotebookbarImpress.js:494
 msgid "Present in Window"
@@ -3360,7 +3358,7 @@ msgstr "Present in Window"
 
 #: src/control/Control.NotebookbarImpress.js:495
 msgid "Plays inside the document window. Starts at slide 1"
-msgstr ""
+msgstr "Plays inside the document window. Starts at slide 1"
 
 #: src/control/Control.NotebookbarImpress.js:503
 msgid "Presenter View"
@@ -3368,7 +3366,7 @@ msgstr "Presenter View"
 
 #: src/control/Control.NotebookbarImpress.js:504
 msgid "Shows your notes, next slide, and a timer"
-msgstr ""
+msgstr "Shows your notes, next slide, and a timer"
 
 #: src/control/Control.NotebookbarImpress.js:512
 msgid "Present to All"
@@ -3376,7 +3374,7 @@ msgstr "Present to All"
 
 #: src/control/Control.NotebookbarImpress.js:513
 msgid "Starts a slideshow on every viewer's screen"
-msgstr ""
+msgstr "Starts a slideshow on every viewer's screen"
 
 #: src/control/Control.NotebookbarImpress.js:521
 #: src/slideshow/SlideShowPresenter.ts:1517
@@ -3385,7 +3383,7 @@ msgstr "Follow Presenter"
 
 #: src/control/Control.NotebookbarImpress.js:522
 msgid "View slides as the presenter advances them"
-msgstr ""
+msgstr "View slides as the presenter advances them"
 
 #: src/control/Control.NotebookbarImpress.js:650
 msgid "Slide Views"
@@ -3423,13 +3421,12 @@ msgid "Master Slide Templates"
 msgstr "Master Slide Templates"
 
 #: src/control/Control.NotebookbarImpress.js:1824
-#, fuzzy
 msgid "This Presentation"
-msgstr "Close Presentation"
+msgstr "This Presentation"
 
 #: src/control/Control.NotebookbarImpress.js:1833
 msgid "Presentation Templates"
-msgstr ""
+msgstr "Presentation Templates"
 
 #: src/control/Control.NotebookbarImpress.js:1903
 msgid "Slide Size"
@@ -3507,15 +3504,15 @@ msgstr "Page Width"
 
 #: src/control/Control.NotebookbarWriter.js:2209
 msgid "Spellcheck"
-msgstr ""
+msgstr "Spellcheck"
 
 #: src/control/Control.NotebookbarWriter.js:2222
 msgid "Spelling Options"
-msgstr ""
+msgstr "Spelling Options"
 
 #: src/control/Control.NotebookbarWriter.js:2234
 msgid "Auto Spell Check"
-msgstr ""
+msgstr "Auto Spell Check"
 
 #: src/control/Control.NotebookbarWriter.js:2262
 #: src/control/Control.NotebookbarWriter.js:2278
@@ -3752,7 +3749,7 @@ msgstr "Zoom to Fit Page Width"
 
 #: src/control/Control.StatusBar.js:417
 msgid "The document is probably locked and has been opened as view-only"
-msgstr ""
+msgstr "The document is probably locked and has been opened as view-only"
 
 #: src/control/Control.StatusBar.js:426
 msgid ""
@@ -4051,9 +4048,8 @@ msgid "Updating citations"
 msgstr "Updating citations"
 
 #: src/control/Control.Zotero.js:1528
-#, fuzzy
 msgid "Unlinked citations"
-msgstr "Unlink Citations"
+msgstr "Unlinked citations"
 
 #: src/control/Control.Zotero.js:1533
 msgid ""
@@ -4386,11 +4382,11 @@ msgstr "Very Loose"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1788
 msgid "Inline"
-msgstr ""
+msgstr "Inline"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1794
 msgid "Side by Side"
-msgstr ""
+msgstr "Side by Side"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1807
 msgid "All users"
@@ -5010,10 +5006,8 @@ msgid "Failed to load document."
 msgstr "Failed to load document."
 
 #: src/errormessages.js:45
-#, fuzzy
 msgid "Save failed due to no disk space left. Document will now be read-only."
-msgstr ""
-"Save failed due to no disk space left. The document will now be read-only."
+msgstr "Save failed due to no disk space left. Document will now be read-only."
 
 #: src/errormessages.js:46
 msgid ""
@@ -5214,10 +5208,12 @@ msgid ""
 "Your browser has very limited access to the clipboard, so use these "
 "keyboard shortcuts:"
 msgstr ""
+"Your browser has very limited access to the clipboard, so use these keyboard "
+"shortcuts:"
 
 #: src/map/Clipboard.js:1499
 msgid "Cut"
-msgstr ""
+msgstr "Cut"
 
 #: src/map/Clipboard.js:1515
 msgid ""
@@ -5288,11 +5284,11 @@ msgstr "Uploading file to server failed with status: {0}"
 
 #: src/map/handler/Map.FileInserter.js:281
 msgid "Failed to read the selected file."
-msgstr ""
+msgstr "Failed to read the selected file."
 
 #: src/map/handler/Map.Keyboard.js:653
 msgid "You are currently in View mode"
-msgstr ""
+msgstr "You are currently in View mode"
 
 #: src/map/handler/Map.Print.js:44
 msgid "Print dialog"
@@ -5306,7 +5302,7 @@ msgstr "Empty Slide Show"
 #: src/map/handler/Map.SlideShow.js:60
 #: src/slideshow/SlideShowPresenter.ts:1284
 msgid "All slides are hidden!"
-msgstr ""
+msgstr "All slides are hidden!"
 
 #: src/map/handler/Map.SlideShow.js:167
 #: src/slideshow/SlideShowPresenter.ts:1311
@@ -5406,7 +5402,7 @@ msgstr "Next Slide"
 #: src/slideshow/PresenterConsole.js:35
 #: src/slideshow/SlideShowPresenter.ts:908
 msgid "Exchange"
-msgstr ""
+msgstr "Exchange"
 
 #: src/slideshow/PresenterConsole.js:36
 msgid "Pause"
@@ -5421,9 +5417,8 @@ msgid "Resume"
 msgstr "Resume"
 
 #: src/slideshow/PresenterConsole.js:39
-#, fuzzy
 msgid "Present to all"
-msgstr "Present to All"
+msgstr "Present to all"
 
 #: src/slideshow/PresenterConsole.js:40
 msgid "Go Back"
@@ -5460,11 +5455,11 @@ msgstr "Click to exit presentation..."
 
 #: src/slideshow/SlideShowPresenter.ts:805
 msgid "You are on the first slide"
-msgstr ""
+msgstr "You are on the first slide"
 
 #: src/slideshow/SlideShowPresenter.ts:813
 msgid "Waiting for presenter to advance"
-msgstr ""
+msgstr "Waiting for presenter to advance"
 
 #: src/slideshow/SlideShowPresenter.ts:842
 msgid "End Show"
@@ -5480,129 +5475,128 @@ msgid "Enable Animations"
 msgstr "Enable Animations"
 
 #: src/slideshow/SlideShowPresenter.ts:1512
-#, fuzzy
 msgid "Stop Following"
-msgstr "Stop following"
+msgstr "Stop Following"
 
 #: templates/templates.js:6
 msgid "Modern Business Letter (sans-serif)"
-msgstr ""
+msgstr "Modern Business Letter (sans-serif)"
 
 #: templates/templates.js:10 templates/templates.js:20
 msgid "Business Letter"
-msgstr ""
+msgstr "Business Letter"
 
 #: templates/templates.js:16
 msgid "Modern Business Letter (serif)"
-msgstr ""
+msgstr "Modern Business Letter (serif)"
 
 #: templates/templates.js:26 templates/templates.js:30
 msgid "CV"
-msgstr ""
+msgstr "CV"
 
 #: templates/templates.js:36
 msgid "Resume (one-page)"
-msgstr ""
+msgstr "Resume (one-page)"
 
 #: templates/templates.js:56
 msgid "Modern Style"
-msgstr ""
+msgstr "Modern Style"
 
 #: templates/templates.js:66
 msgid "Simple Style"
-msgstr ""
+msgstr "Simple Style"
 
 #: templates/templates.js:76
 msgid "Beehive"
-msgstr ""
+msgstr "Beehive"
 
 #: templates/templates.js:86
 msgid "Blue Curve"
-msgstr ""
+msgstr "Blue Curve"
 
 #: templates/templates.js:96
 msgid "Blueprint Plans"
-msgstr ""
+msgstr "Blueprint Plans"
 
 #: templates/templates.js:106
 msgid "Candy"
-msgstr ""
+msgstr "Candy"
 
 #: templates/templates.js:116
 msgid "DNA"
-msgstr ""
+msgstr "DNA"
 
 #: templates/templates.js:126
 msgid "Focus"
-msgstr ""
+msgstr "Focus"
 
 #: templates/templates.js:136
 msgid "Forestbird"
-msgstr ""
+msgstr "Forestbird"
 
 #: templates/templates.js:146
 msgid "Freshes"
-msgstr ""
+msgstr "Freshes"
 
 #: templates/templates.js:156
 msgid "Grey Elegant"
-msgstr ""
+msgstr "Grey Elegant"
 
 #: templates/templates.js:166
 msgid "Growing Liberty"
-msgstr ""
+msgstr "Growing Liberty"
 
 #: templates/templates.js:176
 msgid "Inspiration"
-msgstr ""
+msgstr "Inspiration"
 
 #: templates/templates.js:186
 msgid "Lights"
-msgstr ""
+msgstr "Lights"
 
 #: templates/templates.js:196
 msgid "Metropolis"
-msgstr ""
+msgstr "Metropolis"
 
 #: templates/templates.js:206
 msgid "Midnight Blue"
-msgstr ""
+msgstr "Midnight Blue"
 
 #: templates/templates.js:216
 msgid "Nature Illustration"
-msgstr ""
+msgstr "Nature Illustration"
 
 #: templates/templates.js:226
 msgid "Pencil"
-msgstr ""
+msgstr "Pencil"
 
 #: templates/templates.js:236
 msgid "Piano"
-msgstr ""
+msgstr "Piano"
 
 #: templates/templates.js:246
 msgid "Portfolio"
-msgstr ""
+msgstr "Portfolio"
 
 #: templates/templates.js:256
 msgid "Progress"
-msgstr ""
+msgstr "Progress"
 
 #: templates/templates.js:266
 msgid "Sunset"
-msgstr ""
+msgstr "Sunset"
 
 #: templates/templates.js:276
 msgid "Vintage"
-msgstr ""
+msgstr "Vintage"
 
 #: templates/templates.js:286
 msgid "Vivid"
-msgstr ""
+msgstr "Vivid"
 
 #: templates/templates.js:296
 msgid "Yellow Idea"
-msgstr ""
+msgstr "Yellow Idea"
 
 #: welcome/welcome.html%2Bhtml.head.title:9-3
 msgid "Collabora Online Welcome"
