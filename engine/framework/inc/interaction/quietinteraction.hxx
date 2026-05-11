@@ -103,6 +103,10 @@ class QuietInteraction final : public  ::cppu::WeakImplHelper<
             @threadsafe yes
         */
         bool wasUsed() const;
+
+        /* This needs to be cleared to avoid this class leaking, since the Any may contain a data structure
+           which in turn has a reference to this instance, which results in a circular ref-counting memory leak. */
+        void dispose() { m_aRequest = css::uno::Any(); }
 };
 
 } // namespace framework

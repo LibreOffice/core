@@ -145,6 +145,8 @@ LoadEnv::LoadEnv(css::uno::Reference< css::uno::XComponentContext >  xContext)
 
 LoadEnv::~LoadEnv()
 {
+    if (m_pQuietInteraction)
+        m_pQuietInteraction->dispose();
 }
 
 css::uno::Reference< css::lang::XComponent > LoadEnv::loadComponentFromURL(const css::uno::Reference< css::frame::XComponentLoader >&    xLoader,
@@ -1680,6 +1682,7 @@ void LoadEnv::impl_reactForLoadingState()
     if ( !m_bLoaded && m_pQuietInteraction.is() && m_pQuietInteraction->wasUsed() )
     {
         aRequest = m_pQuietInteraction->getRequest();
+        m_pQuietInteraction->dispose();
         m_pQuietInteraction.clear();
         bThrow = true;
     }
