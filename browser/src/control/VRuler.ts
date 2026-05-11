@@ -491,6 +491,8 @@ class VRuler extends Ruler {
 			this._indentationElementId,
 		);
 
+		if (!element) return;
+
 		// The halfWidth of the shape..
 		const halfWidth: number =
 			(element.getBoundingClientRect().bottom -
@@ -559,6 +561,18 @@ class VRuler extends Ruler {
 				this._rFace,
 				'mousemove',
 				this._moveIndentation,
+				this,
+			);
+			window.L.DomEvent.on(
+				this._rFace,
+				'click',
+				this._moveIndentationEnd,
+				this,
+			);
+			window.L.DomEvent.on(
+				this._rFace,
+				'mouseleave',
+				this._moveIndentationEnd,
 				this,
 			);
 			window.L.DomEvent.on(
