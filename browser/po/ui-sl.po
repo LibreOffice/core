@@ -5,16 +5,16 @@ msgstr ""
 "Project-Id-Version: Collabora Online UI\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-20 12:14+0100\n"
-"PO-Revision-Date: 2026-03-12 00:44+0000\n"
+"PO-Revision-Date: 2026-04-08 21:56+0000\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
-"Language-Team: Slovenian <https://hosted.weblate.org/projects/"
-"collabora-online/ui/sl/>\n"
-"Language: \n"
+"Language-Team: Slovenian <https://hosted.weblate.org/projects/collabora-"
+"online/ui/sl/>\n"
+"Language: sl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n"
-"%100==4 ? 2 : 3;\n"
+"Plural-Forms: nplurals=4; plural=n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || "
+"n%100==4 ? 2 : 3;\n"
 "X-Accelerator-Marker: ~\n"
 "X-Generator: Weblate 5.17-dev\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -1872,11 +1872,11 @@ msgstr "Zapri pogovorno okno"
 
 #: src/control/Control.JSDialogBuilder.js:496
 msgid "Increment value"
-msgstr ""
+msgstr "Povišaj vrednost"
 
 #: src/control/Control.JSDialogBuilder.js:500
 msgid "Decrement value"
-msgstr ""
+msgstr "Znižaj vrednost"
 
 #: src/control/Control.JSDialogBuilder.js:640
 msgid "Solid"
@@ -2811,7 +2811,7 @@ msgstr "Datoteka HTML (.html)"
 #: src/control/Control.NotebookbarBuilder.js:449
 #: src/control/Control.NotebookbarBuilder.js:485
 msgid "PDF Document (.pdf) with options"
-msgstr ""
+msgstr "Dokument PDF (.pdf) z možnostmi"
 
 #: src/control/Control.NotebookbarBuilder.js:432
 msgid "CSV File (.csv)"
@@ -3198,15 +3198,15 @@ msgstr "Tabela"
 #: src/control/Control.NotebookbarCalc.js:1766
 #: src/control/Control.NotebookbarCalc.js:1769
 msgid "Table styles are only available in .xlsx files"
-msgstr ""
+msgstr "Slogi tabel so na voljo le v datotekah .xlsx"
 
 #: src/control/Control.NotebookbarCalc.js:1767
 msgid "Insert a styled table"
-msgstr ""
+msgstr "Vstavi tabelo s slogom"
 
 #: src/control/Control.NotebookbarCalc.js:1770
 msgid "Select a cell range first to insert a styled table"
-msgstr ""
+msgstr "Najprej izberite obseg celic, da vstavite stilizirano tabelo"
 
 #: src/control/Control.NotebookbarCalc.js:1779
 #: src/control/Control.NotebookbarDraw.js:1015
@@ -3350,7 +3350,7 @@ msgstr "Od začetka"
 
 #: src/control/Control.NotebookbarImpress.js:472
 msgid "Fullscreen, starting at slide 1"
-msgstr ""
+msgstr "Celozaslonsko, s pričetkom na prosojnici 1"
 
 #: src/control/Control.NotebookbarImpress.js:479
 msgid "From Current Slide"
@@ -3358,7 +3358,7 @@ msgstr "Od trenutne prosojnice"
 
 #: src/control/Control.NotebookbarImpress.js:480
 msgid "Fullscreen, starting at this slide"
-msgstr ""
+msgstr "Celozaslonsko, s pričetkom na tej prosojnici"
 
 #: src/control/Control.NotebookbarImpress.js:494
 msgid "Present in Window"
@@ -3366,7 +3366,7 @@ msgstr "Predstavi v oknu"
 
 #: src/control/Control.NotebookbarImpress.js:495
 msgid "Plays inside the document window. Starts at slide 1"
-msgstr ""
+msgstr "Predvaja v okviru okna dokumenta. Začne pri prosojnici 1"
 
 #: src/control/Control.NotebookbarImpress.js:503
 msgid "Presenter View"
@@ -3374,7 +3374,7 @@ msgstr "Pogled govorca"
 
 #: src/control/Control.NotebookbarImpress.js:504
 msgid "Shows your notes, next slide, and a timer"
-msgstr ""
+msgstr "Pokaže vaše opombe, naslednjo prosojnico in časovnik"
 
 #: src/control/Control.NotebookbarImpress.js:512
 msgid "Present to All"
@@ -3382,7 +3382,7 @@ msgstr "Predstavljaj vsem"
 
 #: src/control/Control.NotebookbarImpress.js:513
 msgid "Starts a slideshow on every viewer's screen"
-msgstr ""
+msgstr "Začne projekcijo na zaslonih vseh gledalcev"
 
 #: src/control/Control.NotebookbarImpress.js:521
 #: src/slideshow/SlideShowPresenter.ts:1517
@@ -3391,7 +3391,7 @@ msgstr "Sledi govorcu"
 
 #: src/control/Control.NotebookbarImpress.js:522
 msgid "View slides as the presenter advances them"
-msgstr ""
+msgstr "Pokaži prosojnice, ko jih govorec zamenja"
 
 #: src/control/Control.NotebookbarImpress.js:650
 msgid "Slide Views"
@@ -3429,13 +3429,12 @@ msgid "Master Slide Templates"
 msgstr "Predloge matric prosojnice"
 
 #: src/control/Control.NotebookbarImpress.js:1824
-#, fuzzy
 msgid "This Presentation"
-msgstr "Zapri predstavitev"
+msgstr "Ta predstavitev"
 
 #: src/control/Control.NotebookbarImpress.js:1833
 msgid "Presentation Templates"
-msgstr ""
+msgstr "Predloge predstavitev"
 
 #: src/control/Control.NotebookbarImpress.js:1903
 msgid "Slide Size"
@@ -3513,15 +3512,15 @@ msgstr "Širina strani"
 
 #: src/control/Control.NotebookbarWriter.js:2209
 msgid "Spellcheck"
-msgstr ""
+msgstr "Preveri črkovanje"
 
 #: src/control/Control.NotebookbarWriter.js:2222
 msgid "Spelling Options"
-msgstr ""
+msgstr "Možnosti preverjanja črkovanja"
 
 #: src/control/Control.NotebookbarWriter.js:2234
 msgid "Auto Spell Check"
-msgstr ""
+msgstr "Samodejno preveri črkovanje"
 
 #: src/control/Control.NotebookbarWriter.js:2262
 #: src/control/Control.NotebookbarWriter.js:2278
@@ -4061,7 +4060,6 @@ msgid "Updating citations"
 msgstr "Posodabljanje citatov"
 
 #: src/control/Control.Zotero.js:1528
-#, fuzzy
 msgid "Unlinked citations"
 msgstr "Razvezani citati"
 
@@ -4396,11 +4394,11 @@ msgstr "Zelo široko"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1788
 msgid "Inline"
-msgstr ""
+msgstr "Znotraj vrstično"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1794
 msgid "Side by Side"
-msgstr ""
+msgstr "Drug ob drugem"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1807
 msgid "All users"
@@ -5023,7 +5021,6 @@ msgid "Failed to load document."
 msgstr "Napaka pri nalaganju dokumenta."
 
 #: src/errormessages.js:45
-#, fuzzy
 msgid "Save failed due to no disk space left. Document will now be read-only."
 msgstr ""
 "Shranjevanje je spodletelo zaradi pomanjkanja prostora na disku. Dokument bo "
@@ -5479,7 +5476,6 @@ msgid "Click to exit presentation..."
 msgstr "Kliknite za izhod iz predstavitve ..."
 
 #: src/slideshow/SlideShowPresenter.ts:805
-#, fuzzy
 msgid "You are on the first slide"
 msgstr "Ste na prvi prosojnici"
 
@@ -5649,9 +5645,9 @@ msgid ""
 msgstr ""
 "Uživajte v najnovejšem razvoju na področju spletne produktivnosti, ki vam je "
 "prosto na voljo, da jo raziščete in uporabljate skupaj z drugimi v "
-"brskalniku. Za mobilne naprave so na voljo različne<a target=\"_blank\" rel="
-"\"noopener\" href=\"https://www.collaboraonline.com/solutions/"
-"collabora-office-android-ios/\">aplikacije</a>."
+"brskalniku. Za mobilne naprave so na voljo različne <a target=\"_blank\" "
+"rel=\"noopener\" href=\"https://www.collaboraonline.com/solutions/collabora-"
+"office-android-ios/\">aplikacije</a>."
 
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.h1:37-7
 msgid "Discover All The Changes"
@@ -5688,9 +5684,9 @@ msgid ""
 "href=\"https://collaboraonline.github.io/post/filebugs/\">filing a bug "
 "report</a> with all the essential steps on how to reproduce it."
 msgstr ""
-"Želite prispevati, pa ne veste, kje začeti? Oglejte si<a target=\"_blank\" "
-"rel=\"noopener\" href=\"https://collaboraonline.github.io/post/build-code/\""
-">napotke po korakih</a> in sami zgradite CODE. Pomagate lahko tudi pri <a "
+"Želite prispevati, pa ne veste, kje začeti? Oglejte si <a target=\"_blank\" "
+"rel=\"noopener\" href=\"https://collaboraonline.github.io/post/build-code/\">"
+"napotke po korakih</a> in sami zgradite CODE. Pomagate lahko tudi pri <a "
 "target=\"_blank\" rel=\"noopener\" href=\"https://collaboraonline.github.io/"
 "post/translate/\">prevajanju</a> ali <a target=\"_blank\" rel=\"noopener\" "
 "href=\"https://collaboraonline.github.io/post/filebugs/\">poročanju o "
