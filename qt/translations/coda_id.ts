@@ -6,57 +6,57 @@
     <message>
         <location filename="../DocumentOperations.cpp" line="49"/>
         <source>ODF text document (.odt)</source>
-        <translation type="unfinished"></translation>
+        <translation>Dokumen teks ODF (.odt)</translation>
     </message>
     <message>
         <location filename="../DocumentOperations.cpp" line="50"/>
         <source>Rich Text (.rtf)</source>
-        <translation type="unfinished"></translation>
+        <translation>Teks Kaya (.rtf)</translation>
     </message>
     <message>
         <location filename="../DocumentOperations.cpp" line="51"/>
         <source>Word Document (.docx)</source>
-        <translation type="unfinished"></translation>
+        <translation>Dokumen Word (.docx)</translation>
     </message>
     <message>
         <location filename="../DocumentOperations.cpp" line="52"/>
         <source>Word 2003 Document (.doc)</source>
-        <translation type="unfinished"></translation>
+        <translation>Dokumen Word 2003 (.doc)</translation>
     </message>
     <message>
         <location filename="../DocumentOperations.cpp" line="58"/>
         <source>ODF spreadsheet (.ods)</source>
-        <translation type="unfinished"></translation>
+        <translation>Lembar kerja ODF (.ods)</translation>
     </message>
     <message>
         <location filename="../DocumentOperations.cpp" line="59"/>
         <source>Excel Spreadsheet (.xlsx)</source>
-        <translation type="unfinished"></translation>
+        <translation>Lembar Kerja Excel (.xlsx)</translation>
     </message>
     <message>
         <location filename="../DocumentOperations.cpp" line="60"/>
         <source>Excel 2003 Spreadsheet (.xls)</source>
-        <translation type="unfinished"></translation>
+        <translation>Lembar Kerja Excel 2003 (.xls)</translation>
     </message>
     <message>
         <location filename="../DocumentOperations.cpp" line="66"/>
         <source>ODF presentation (.odp)</source>
-        <translation type="unfinished"></translation>
+        <translation>Presentasi ODF (.odp)</translation>
     </message>
     <message>
         <location filename="../DocumentOperations.cpp" line="67"/>
         <source>PowerPoint Presentation (.pptx)</source>
-        <translation type="unfinished"></translation>
+        <translation>Presentasi PowerPoint (.pptx)</translation>
     </message>
     <message>
         <location filename="../DocumentOperations.cpp" line="68"/>
         <source>PowerPoint 2003 Presentation (.ppt)</source>
-        <translation type="unfinished"></translation>
+        <translation>Presentasi PowerPoint 2003 (.ppt)</translation>
     </message>
     <message>
         <location filename="../DocumentOperations.cpp" line="74"/>
         <source>ODF drawing (.odg)</source>
-        <translation type="unfinished"></translation>
+        <translation>Gambar ODF (.odg)</translation>
     </message>
     <message>
         <location filename="../DocumentOperations.cpp" line="106"/>
@@ -164,23 +164,23 @@
     <message>
         <location filename="../WebView.cpp" line="156"/>
         <source>Presentation</source>
-        <translation type="unfinished"></translation>
+        <translation>Presentasi</translation>
     </message>
     <message>
         <location filename="../WebView.cpp" line="161"/>
         <location filename="../WebView.cpp" line="177"/>
         <source>Text Document</source>
-        <translation type="unfinished"></translation>
+        <translation>Dokumen Teks</translation>
     </message>
     <message>
         <location filename="../WebView.cpp" line="166"/>
         <source>Spreadsheet</source>
-        <translation type="unfinished"></translation>
+        <translation>Lembar Kerja</translation>
     </message>
     <message>
         <location filename="../WebView.cpp" line="171"/>
         <source>Drawing</source>
-        <translation type="unfinished"></translation>
+        <translation>Gambar</translation>
     </message>
     <message>
         <location filename="../WebView.cpp" line="317"/>

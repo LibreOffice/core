@@ -3,16 +3,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-20 12:14+0200\n"
-"PO-Revision-Date: 2026-01-01 17:01+0000\n"
+"PO-Revision-Date: 2026-04-05 01:12+0000\n"
 "Last-Translator: Arif Budiman <arifpedia@gmail.com>\n"
-"Language-Team: Indonesian <https://hosted.weblate.org/projects/"
-"collabora-online/help/id/>\n"
+"Language-Team: Indonesian <https://hosted.weblate.org/projects/collabora-"
+"online/help/id/>\n"
 "Language: id\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Translate Toolkit 3.6.0\n"
+"X-Generator: Weblate 5.17-dev\n"
 
 #: html/cool-help.html%2Bdiv.h1:9-5
 msgid "Keyboard Shortcuts"
@@ -2015,6 +2015,14 @@ msgid ""
 "click the show icon <span class=\"w2ui-icon unfold icon-size\" role=\"img\" "
 "aria-label=\"show menu bar\" title=\"Show menu bar\"></span>."
 msgstr ""
+"<span class=\"def\">Bilah menu:</span> Menu utama terletak di bagian atas "
+"dan mencakup banyak pilihan, seperti perintah untuk mencetak, mengedit, "
+"melihat, dan perintah lanjutan lainnya. Anda dapat menyembunyikan bilah menu "
+"dengan mengklik ikon sembunyikan <span class=\"w2ui-icon fold icon-size\" "
+"role=\"img\" aria-label=“hide menu bar” title=\"Sembunyikan bilah menu\"></"
+"span> di ujung kanan. Untuk menampilkannya kembali, klik ikon tampil <span "
+"class=\"w2ui-icon unfold icon-size\" role=\"img\" aria-label=“show menu bar” "
+"title=\"Tampilkan bilah menu\"></span>."
 
 #: html/cool-help.html%2Bdiv.div.div.p:381-5
 msgid ""
@@ -2062,9 +2070,8 @@ msgstr ""
 "kotak pencarian:"
 
 #: html/cool-help.html%2Bdiv.div.div.ul.li:393-7
-#, fuzzy
 msgid "Search backwards>"
-msgstr "Cari mundur"
+msgstr "Cari ke belakang>"
 
 #: html/cool-help.html%2Bdiv.div.div.ul.li:394-7
 msgid "Search forward"
@@ -2075,17 +2082,16 @@ msgid "Cancel the search (appears only when a text has been searched)"
 msgstr "Batalkan pencarian (hanya muncul ketika teks telah dicari)"
 
 #: html/cool-help.html%2Bdiv.div.div.p:399-5
-#, fuzzy
 msgid ""
 "<span class=\"def\">The zoom bar:</span> The zoom bar includes buttons to "
 "reset zoom to 100%, zoom out and zoom in. The zoom applies to the document "
 "area, the user interface is not affected. The current level of zoom is shown "
 "in this area."
 msgstr ""
-"<span class=\"def\">Bilah zum:</span> Di sebelah kanan bilah status, "
-"terdapat serangkaian tombol yang memungkinkan Anda memperbesar hingga 100%, "
-"memperkecil, dan memperbesar. Zum berlaku untuk wilayah dokumen, antarmuka "
-"pengguna tidak terpengaruh. Tingkat zum saat ini ditampilkan di wilayah ini."
+"<span class=\"def\">Bilah zum:</span> Bilah zum ini dilengkapi tombol untuk "
+"mengembalikan zum ke 100%, memperkecil, dan memperbesar. Perubahan zum hanya "
+"berlaku pada area dokumen; antarmuka pengguna tidak terpengaruh. Tingkat zum "
+"saat ini ditampilkan di area ini."
 
 #: html/cool-help.html%2Bdiv.div.div.p:400-5
 msgid ""
@@ -2837,9 +2843,8 @@ msgstr ""
 "span> → <span class=\"ui\">Sunting gaya</span> untuk mengubah gaya."
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:568-29
-#, fuzzy
 msgid "style formatting"
-msgstr "Pemformatan sel"
+msgstr "pemformatan gaya"
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:574-5
 msgid "Handling Tables"
@@ -3491,14 +3496,14 @@ msgstr "Pilih teks dengan format yang sudah ada"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:743-7
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:785-7
-#, fuzzy
 msgid ""
 "Click on the clone formatting icon <img alt=\"format paintbrush\" class"
 "=\"icon-size\" src=\"images/lc_formatpaintbrush.svg\" />. The mouse pointer "
 "turns to a paint bucket."
 msgstr ""
-"Klik pada ikon pemformatan klon <img class=\"icon-size\" src=\"images"
-"/lc_formatpaintbrush.svg\" />. Penunjuk tetikus berubah menjadi ember cat."
+"Klik pada ikon pemformatan klon <img alt=\"format paintbrush\" class=\"icon-"
+"size\" src=\"images/lc_formatpaintbrush.svg\" />. Penunjuk tetikus berubah "
+"menjadi ember cat."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:744-7
 msgid "Select the text you want to apply the new format."
@@ -3674,9 +3679,8 @@ msgstr ""
 "panel salindia:"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li.img[alt]:806-176
-#, fuzzy
 msgid "slide show"
-msgstr "Pertunjukan salindia"
+msgstr "presentasi salindia"
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:810-5
 msgid "How can I change the line, area and position of a shape in my slides?"

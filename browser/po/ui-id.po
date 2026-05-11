@@ -12,11 +12,11 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-20 12:14+0100\n"
-"PO-Revision-Date: 2026-03-05 08:10+0000\n"
+"PO-Revision-Date: 2026-03-20 21:36+0000\n"
 "Last-Translator: Arif Budiman <arifpedia@gmail.com>\n"
-"Language-Team: Indonesian <https://hosted.weblate.org/projects/"
-"collabora-online/ui/id/>\n"
-"Language: \n"
+"Language-Team: Indonesian <https://hosted.weblate.org/projects/collabora-"
+"online/ui/id/>\n"
+"Language: id\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1142,7 +1142,7 @@ msgstr "Salin semua informasi versi dalam bahasa Inggris"
 
 #: src/control/Control.AboutDialog.ts:430
 msgid "Version information has been copied"
-msgstr ""
+msgstr "Informasi versi telah disalin"
 
 #: src/control/Control.AboutDialog.ts:470
 msgid "COOLWSD version:"
@@ -1878,11 +1878,11 @@ msgstr "Tutup dialog"
 
 #: src/control/Control.JSDialogBuilder.js:496
 msgid "Increment value"
-msgstr ""
+msgstr "Tingkatkan nilai"
 
 #: src/control/Control.JSDialogBuilder.js:500
 msgid "Decrement value"
-msgstr ""
+msgstr "Kurangi nilai"
 
 #: src/control/Control.JSDialogBuilder.js:640
 msgid "Solid"
@@ -2818,7 +2818,7 @@ msgstr "Berkas HTML (.html)"
 #: src/control/Control.NotebookbarBuilder.js:449
 #: src/control/Control.NotebookbarBuilder.js:485
 msgid "PDF Document (.pdf) with options"
-msgstr ""
+msgstr "Dokumen PDF (.pdf) dengan opsi"
 
 #: src/control/Control.NotebookbarBuilder.js:432
 msgid "CSV File (.csv)"
@@ -3205,15 +3205,15 @@ msgstr "Tabel"
 #: src/control/Control.NotebookbarCalc.js:1766
 #: src/control/Control.NotebookbarCalc.js:1769
 msgid "Table styles are only available in .xlsx files"
-msgstr ""
+msgstr "Gaya tabel hanya tersedia di file .xlsx"
 
 #: src/control/Control.NotebookbarCalc.js:1767
 msgid "Insert a styled table"
-msgstr ""
+msgstr "Sisipkan tabel bergaya"
 
 #: src/control/Control.NotebookbarCalc.js:1770
 msgid "Select a cell range first to insert a styled table"
-msgstr ""
+msgstr "Pilih rentang sel terlebih dahulu untuk menyisipkan tabel bergaya"
 
 #: src/control/Control.NotebookbarCalc.js:1779
 #: src/control/Control.NotebookbarDraw.js:1015
@@ -3357,7 +3357,7 @@ msgstr "Dari Awal"
 
 #: src/control/Control.NotebookbarImpress.js:472
 msgid "Fullscreen, starting at slide 1"
-msgstr ""
+msgstr "Layar penuh, dimulai dari slide 1"
 
 #: src/control/Control.NotebookbarImpress.js:479
 msgid "From Current Slide"
@@ -3365,7 +3365,7 @@ msgstr "Dari Salindia Kini"
 
 #: src/control/Control.NotebookbarImpress.js:480
 msgid "Fullscreen, starting at this slide"
-msgstr ""
+msgstr "Layar penuh, dimulai dari slide ini"
 
 #: src/control/Control.NotebookbarImpress.js:494
 msgid "Present in Window"
@@ -3373,7 +3373,7 @@ msgstr "Ada dalam Jendela"
 
 #: src/control/Control.NotebookbarImpress.js:495
 msgid "Plays inside the document window. Starts at slide 1"
-msgstr ""
+msgstr "Diputar di dalam jendela dokumen. Dimulai dari slide 1"
 
 #: src/control/Control.NotebookbarImpress.js:503
 msgid "Presenter View"
@@ -3381,7 +3381,7 @@ msgstr "Tampilan Penyaji"
 
 #: src/control/Control.NotebookbarImpress.js:504
 msgid "Shows your notes, next slide, and a timer"
-msgstr ""
+msgstr "Menampilkan catatan Anda, slide berikutnya, dan pengatur waktu"
 
 #: src/control/Control.NotebookbarImpress.js:512
 msgid "Present to All"
@@ -3389,7 +3389,7 @@ msgstr "Sajikan ke Semua"
 
 #: src/control/Control.NotebookbarImpress.js:513
 msgid "Starts a slideshow on every viewer's screen"
-msgstr ""
+msgstr "Memulai pertunjukan slide di layar setiap penonton"
 
 #: src/control/Control.NotebookbarImpress.js:521
 #: src/slideshow/SlideShowPresenter.ts:1517
@@ -3398,7 +3398,7 @@ msgstr "Ikuti Penyaji"
 
 #: src/control/Control.NotebookbarImpress.js:522
 msgid "View slides as the presenter advances them"
-msgstr ""
+msgstr "Lihat slide saat pembicara memajukannya"
 
 #: src/control/Control.NotebookbarImpress.js:650
 msgid "Slide Views"
@@ -3436,13 +3436,12 @@ msgid "Master Slide Templates"
 msgstr "Templat Salindia Induk"
 
 #: src/control/Control.NotebookbarImpress.js:1824
-#, fuzzy
 msgid "This Presentation"
-msgstr "Tutup Presentasi"
+msgstr "Presentasi Ini"
 
 #: src/control/Control.NotebookbarImpress.js:1833
 msgid "Presentation Templates"
-msgstr ""
+msgstr "Template Presentasi"
 
 #: src/control/Control.NotebookbarImpress.js:1903
 msgid "Slide Size"
@@ -3520,15 +3519,15 @@ msgstr "Lebar Halaman"
 
 #: src/control/Control.NotebookbarWriter.js:2209
 msgid "Spellcheck"
-msgstr ""
+msgstr "Pemeriksa Ejaan"
 
 #: src/control/Control.NotebookbarWriter.js:2222
 msgid "Spelling Options"
-msgstr ""
+msgstr "Opsi Ejaan"
 
 #: src/control/Control.NotebookbarWriter.js:2234
 msgid "Auto Spell Check"
-msgstr ""
+msgstr "Pemeriksaan Ejaan Otomatis"
 
 #: src/control/Control.NotebookbarWriter.js:2262
 #: src/control/Control.NotebookbarWriter.js:2278
@@ -4067,9 +4066,8 @@ msgid "Updating citations"
 msgstr "Memperbarui sitasi"
 
 #: src/control/Control.Zotero.js:1528
-#, fuzzy
 msgid "Unlinked citations"
-msgstr "Lepaskan Sitasi"
+msgstr "Sitasi tidak tertaut"
 
 #: src/control/Control.Zotero.js:1533
 msgid ""
@@ -4402,11 +4400,11 @@ msgstr "Sangat Longgar"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1788
 msgid "Inline"
-msgstr ""
+msgstr "Sebaris"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1794
 msgid "Side by Side"
-msgstr ""
+msgstr "Berdampingan"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1807
 msgid "All users"
@@ -5030,11 +5028,10 @@ msgid "Failed to load document."
 msgstr "Gagal memuat dokumen."
 
 #: src/errormessages.js:45
-#, fuzzy
 msgid "Save failed due to no disk space left. Document will now be read-only."
 msgstr ""
-"Gagal menyimpan karena tidak ada ruang diska tersisa. Dokumen saat ini hanya "
-"baca."
+"Penyimpanan gagal karena tidak ada ruang disk yang tersisa. Dokumen sekarang "
+"akan bersifat hanya-baca."
 
 #: src/errormessages.js:46
 msgid ""
@@ -5233,10 +5230,12 @@ msgid ""
 "Your browser has very limited access to the clipboard, so use these "
 "keyboard shortcuts:"
 msgstr ""
+"Peramban Anda memiliki akses sangat terbatas ke papan klip, jadi gunakan "
+"pintasan keyboard berikut:"
 
 #: src/map/Clipboard.js:1499
 msgid "Cut"
-msgstr ""
+msgstr "Potong"
 
 #: src/map/Clipboard.js:1515
 msgid ""
@@ -5311,7 +5310,7 @@ msgstr "Gagal membaca file yang dipilih."
 
 #: src/map/handler/Map.Keyboard.js:653
 msgid "You are currently in View mode"
-msgstr ""
+msgstr "Anda saat ini berada dalam mode Tampilan"
 
 #: src/map/handler/Map.Print.js:44
 msgid "Print dialog"
@@ -5325,7 +5324,7 @@ msgstr "Pertunjukan Salindia Kosong"
 #: src/map/handler/Map.SlideShow.js:60
 #: src/slideshow/SlideShowPresenter.ts:1284
 msgid "All slides are hidden!"
-msgstr ""
+msgstr "Semua slide disembunyikan!"
 
 #: src/map/handler/Map.SlideShow.js:167
 #: src/slideshow/SlideShowPresenter.ts:1311
@@ -5477,7 +5476,6 @@ msgid "Click to exit presentation..."
 msgstr "Klik untuk keluar presentasi..."
 
 #: src/slideshow/SlideShowPresenter.ts:805
-#, fuzzy
 msgid "You are on the first slide"
 msgstr "Anda berada di slide pertama"
 

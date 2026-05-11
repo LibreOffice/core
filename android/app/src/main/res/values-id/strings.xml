@@ -71,7 +71,7 @@
     <string name="owncloud_wrong_connection">Tidak dapat tersambung dengan cloud server. Periksa konfigurasi anda.</string>
     <string name="owncloud_unauthorized">Tidak dapat bergabung kedalam cloud server. Periksa konfigurasi anda.</string>
     <string name="owncloud_unspecified_error">Kesalahan yang tidak ditentukan menghubungkan ke cloud server. Periksa konfigurasi Anda dan / atau coba lagi nanti.</string>
-    <string name="ext_document_provider_error">Berkas root tidak valid. Periksa konfigurasi sd card anda.</string>
+    <string name="ext_document_provider_error">Berkas root tidak valid. Periksa konfigurasi kartu SD anda.</string>
     <string name="otg_missing_error">Berkas root tidak valid. Periksalah peranti OTG dan/atau konfigurasi Anda.</string>
     <!-- Edit action names -->
     <!-- Feedback messages -->
