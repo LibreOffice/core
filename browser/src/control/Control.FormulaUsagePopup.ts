@@ -17,7 +17,7 @@
 
 class FormulaUsagePopup extends AutoCompletePopup {
 	usageText: string;
-	newPopupData: PopupData;
+	declare newPopupData: PopupData;
 
 	constructor(map: any) {
 		super(AutoCompleteDialogId.FormulaUsagePopup, map);

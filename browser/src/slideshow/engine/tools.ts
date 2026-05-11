@@ -233,12 +233,7 @@ class RGBColor {
 	}
 
 	toString(bClamped: boolean = false): string {
-		let aRGBColor;
-		if (bClamped) {
-			aRGBColor = RGBColor.clamp(this);
-		} else {
-			aRGBColor = this;
-		}
+		const aRGBColor = bClamped ? RGBColor.clamp(this) : this;
 
 		const nRed = Math.round(aRGBColor.nRed * 255);
 		const nGreen = Math.round(aRGBColor.nGreen * 255);

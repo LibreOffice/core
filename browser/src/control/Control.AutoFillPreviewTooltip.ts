@@ -17,7 +17,7 @@
 
 class AutoFillPreviewTooltip extends AutoCompletePopup {
 	usageText: string;
-	newPopupData: PopupData;
+	declare newPopupData: PopupData;
 
 	constructor(map: any) {
 		super('autoFillPreviewTooltip', map);

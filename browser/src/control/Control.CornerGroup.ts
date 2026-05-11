@@ -25,7 +25,7 @@ export class CornerGroup extends GroupBase {
 	zIndex: number = app.CSections.CornerGroup.zIndex;
 	sectionProperties: any = { cursor: 'pointer' };
 
-	_map: any;
+	declare _map: any;
 
 	constructor() { super(app.CSections.CornerGroup.name); }
 

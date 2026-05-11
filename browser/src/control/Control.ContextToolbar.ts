@@ -15,7 +15,7 @@
  */
 
 class ContextToolbar extends JSDialogComponent {
-	container!: HTMLElement;
+	declare container: HTMLElement;
 	initialized: boolean = false;
 	lastIinputEvent?: any = {};
 	pendingTask: TaskId | null = null;

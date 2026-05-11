@@ -53,7 +53,7 @@ class HRuler extends Ruler {
 	currentTabStopIndex: number | null;
 	_map: ReturnType<typeof window.L.map>;
 
-	options: Options;
+	declare options: Options;
 
 	constructor(map: ReturnType<typeof window.L.map>, options: Partial<Options>) {
 		super(options);

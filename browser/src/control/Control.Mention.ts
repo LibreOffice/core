@@ -22,11 +22,11 @@ interface MentionUserData {
 }
 
 class Mention extends AutoCompletePopup {
-	map: any;
-	newPopupData: PopupData;
+	declare map: any;
+	declare newPopupData: PopupData;
 	users: Array<MentionUserData>;
 	filteredUsers: Array<MentionUserData>;
-	data: MessageEvent<any>;
+	declare data: MessageEvent<any>;
 	debouceTimeoutId: NodeJS.Timeout;
 	partialMention: Array<string>;
 	typingMention: boolean;

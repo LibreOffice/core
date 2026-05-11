@@ -118,7 +118,7 @@ export class CommentSection extends CanvasSectionObject {
 	drawingOrder: number = app.CSections.CommentList.drawingOrder;
 	zIndex: number = app.CSections.CommentList.zIndex;
 	interactable: boolean = false;
-	sectionProperties: {
+	declare sectionProperties: {
 		// remember the tab when importComments() was called.
 		calcLastTab: number;
 		// Keep a reference to the original set of comments received.
