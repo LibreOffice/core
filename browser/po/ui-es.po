@@ -7,16 +7,16 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-20 12:14+0100\n"
-"PO-Revision-Date: 2026-01-14 23:58+0000\n"
+"PO-Revision-Date: 2026-05-08 23:06+0000\n"
 "Last-Translator: Adolfo Jayme Barrientos <fitojb@ubuntu.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/collabora-online/"
 "ui/es/>\n"
-"Language: \n"
+"Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.15.2\n"
+"X-Generator: Weblate 2026.5-dev\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -951,7 +951,7 @@ msgstr ""
 
 #: src/app/TableStylesService.ts:152 src/app/TableStylesService.ts:154
 msgid "Table Styles"
-msgstr ""
+msgstr "Estilos de tabla"
 
 #: src/canvas/sections/CommentListSection.ts:1267
 msgid "Modify"
@@ -1078,19 +1078,19 @@ msgstr ""
 
 #: src/canvas/sections/CompareChangesLabelSection.ts:181
 msgid "%1: Initial Version"
-msgstr ""
+msgstr "%1: versión inicial"
 
 #: src/canvas/sections/CompareChangesLabelSection.ts:185
 msgid "%1: Current Version"
-msgstr ""
+msgstr "%1: versión actual"
 
 #: src/canvas/sections/CompareChangesLabelSection.ts:194
 msgid "Initial Version"
-msgstr ""
+msgstr "Versión inicial"
 
 #: src/canvas/sections/CompareChangesLabelSection.ts:198
 msgid "Current Version"
-msgstr ""
+msgstr "Versión actual"
 
 #: src/canvas/sections/ShapeHandlesSection.ts:478
 msgid "Document contains unsupported media"
@@ -1121,9 +1121,8 @@ msgid "This version of {productname} is powered by"
 msgstr "Esta versión de {productname} funciona con"
 
 #: src/control/Control.AboutDialog.ts:190
-#, fuzzy
 msgid "Served by: "
-msgstr "Servido por:"
+msgstr "Servido por: "
 
 #: src/control/Control.AboutDialog.ts:213
 msgid "View widgets"
@@ -1143,7 +1142,7 @@ msgstr "Copia toda la información de la versión en inglés"
 
 #: src/control/Control.AboutDialog.ts:430
 msgid "Version information has been copied"
-msgstr ""
+msgstr "Se copió la información sobre la versión"
 
 #: src/control/Control.AboutDialog.ts:470
 msgid "COOLWSD version:"
@@ -1216,7 +1215,7 @@ msgstr ""
 #: src/control/Control.BackstageView.ts:223
 #: src/control/Control.BackstageView.ts:224
 msgid "Back to document"
-msgstr ""
+msgstr "Volver al documento"
 
 #: src/control/Control.BackstageView.ts:272
 #: src/control/Control.BackstageView.ts:406
@@ -1236,7 +1235,7 @@ msgstr "Nuevo"
 
 #: src/control/Control.BackstageView.ts:288
 msgid "Open"
-msgstr ""
+msgstr "Abrir"
 
 #: src/control/Control.BackstageView.ts:296
 #: src/control/Control.Notebookbar.js:637
@@ -1255,7 +1254,7 @@ msgstr "Compartir"
 
 #: src/control/Control.BackstageView.ts:304
 msgid "Info"
-msgstr ""
+msgstr "Información"
 
 #: src/control/Control.BackstageView.ts:320
 #: src/control/Control.NotebookbarCalc.js:165
@@ -1269,7 +1268,7 @@ msgstr "Guardar como"
 
 #: src/control/Control.BackstageView.ts:336
 msgid "Export"
-msgstr ""
+msgstr "Exportar"
 
 #: src/control/Control.BackstageView.ts:350 src/control/Control.Menubar.ts:123
 #: src/control/Control.Menubar.ts:464 src/control/Control.Menubar.ts:640
@@ -1298,7 +1297,7 @@ msgstr "Recientes"
 
 #: src/control/Control.BackstageView.ts:511
 msgid "Recently opened documents will appear here"
-msgstr ""
+msgstr "Aquí aparecerán los documentos abiertos recientemente"
 
 #: src/control/Control.BackstageView.ts:550
 msgid "Name"
@@ -1314,7 +1313,7 @@ msgstr "Información del documento"
 
 #: src/control/Control.BackstageView.ts:780
 msgid "View document properties and information"
-msgstr ""
+msgstr "Ver propiedades e información del documento"
 
 #: src/control/Control.BackstageView.ts:796
 msgid "Export Document"
@@ -1430,7 +1429,7 @@ msgstr "Serie de relleno"
 
 #: src/control/Control.DocumentNameInput.js:27
 msgid "Document name"
-msgstr ""
+msgstr "Nombre del documento"
 
 #: src/control/Control.DocumentNameInput.js:119
 msgid "Path"
@@ -1963,11 +1962,11 @@ msgstr "Insertar comentario"
 
 #: src/control/Control.JSDialogBuilder.js:2136
 msgid "Toggle dropdown"
-msgstr ""
+msgstr "Alternar desplegable"
 
 #: src/control/Control.JSDialogBuilder.js:2138
 msgid "Dialog dropdown"
-msgstr ""
+msgstr "Desplegable del diálogo"
 
 #: src/control/Control.JSDialogBuilder.js:2140
 #: src/control/Control.NotebookbarWriter.js:1608
@@ -2141,7 +2140,7 @@ msgstr "Reparar"
 
 #: src/control/Control.Menubar.ts:143
 msgid "Compare Changes"
-msgstr ""
+msgstr "Comparar cambios"
 
 #: src/control/Control.Menubar.ts:162 src/control/Control.Menubar.ts:487
 #: src/control/Control.Menubar.ts:493 src/control/Control.Menubar.ts:659
@@ -2656,7 +2655,7 @@ msgstr "Fin de degradado"
 
 #: src/control/Control.NavigatorPanel.ts:38
 msgid "Navigation Panel"
-msgstr ""
+msgstr "Panel de navegación"
 
 #: src/control/Control.NavigatorPanel.ts:111
 msgid "Navigation"
@@ -2683,27 +2682,27 @@ msgstr ""
 
 #: src/control/Notebookbar.CalcTableTab.ts:43
 msgid "Table Design"
-msgstr ""
+msgstr "Diseño de tabla"
 
 #: src/control/Notebookbar.CalcTableTab.ts:72
 msgid "Table Style Options"
-msgstr ""
+msgstr "Opciones del estilo de tabla"
 
 #: src/control/Notebookbar.CalcTableTab.ts:85
 msgid "Header Row"
-msgstr ""
+msgstr "Fila de cabecera"
 
 #: src/control/Notebookbar.CalcTableTab.ts:100
 msgid "Total Row"
-msgstr ""
+msgstr "Fila de totales"
 
 #: src/control/Notebookbar.CalcTableTab.ts:121
 msgid "Banded Rows"
-msgstr ""
+msgstr "Filas con bandas"
 
 #: src/control/Notebookbar.CalcTableTab.ts:136
 msgid "Banded Columns"
-msgstr ""
+msgstr "Columnas con bandas"
 
 #: src/control/Notebookbar.CalcTableTab.ts:157
 msgid "First Column"
@@ -2715,7 +2714,7 @@ msgstr "Última columna"
 
 #: src/control/Notebookbar.CalcTableTab.ts:190
 msgid "Filter Buttons"
-msgstr ""
+msgstr "Botones de filtrado"
 
 #: src/control/Notebookbar.ImpressAnimationTab.ts:24
 msgid "Animation"
@@ -2772,7 +2771,7 @@ msgstr "Después"
 
 #: src/control/Notebookbar.ImpressTransitionTab.ts:145
 msgid "Apply to All Slides"
-msgstr ""
+msgstr "Aplicar a todas las diapositivas"
 
 #: src/control/Notebookbar.WriterReferencesTab.ts:41
 msgid "Table of content"
@@ -2794,7 +2793,7 @@ msgstr "Animaciones"
 
 #: src/control/Control.NotebookbarBuilder.js:238
 msgid "Click to expand"
-msgstr ""
+msgstr "Pulse para expandir"
 
 #: src/control/Control.NotebookbarBuilder.js:238
 msgid "Tap to expand"
@@ -2802,7 +2801,7 @@ msgstr "Toque para expandir"
 
 #: src/control/Control.NotebookbarBuilder.js:239
 msgid "Click to collapse"
-msgstr ""
+msgstr "Pulse para contraer"
 
 #: src/control/Control.NotebookbarBuilder.js:239
 #: src/control/Control.NotebookbarBuilder.js:313
@@ -2818,7 +2817,7 @@ msgstr "Archivo HTML (.html)"
 #: src/control/Control.NotebookbarBuilder.js:449
 #: src/control/Control.NotebookbarBuilder.js:485
 msgid "PDF Document (.pdf) with options"
-msgstr ""
+msgstr "Documento PDF (.pdf) con opciones"
 
 #: src/control/Control.NotebookbarBuilder.js:432
 msgid "CSV File (.csv)"
@@ -3205,7 +3204,7 @@ msgstr "Tabla"
 #: src/control/Control.NotebookbarCalc.js:1766
 #: src/control/Control.NotebookbarCalc.js:1769
 msgid "Table styles are only available in .xlsx files"
-msgstr ""
+msgstr "Los estilos de tabla solo están disponibles en archivos .xlsx"
 
 #: src/control/Control.NotebookbarCalc.js:1767
 msgid "Insert a styled table"
@@ -3300,7 +3299,7 @@ msgstr "Formato de celdas"
 #: src/control/Control.NotebookbarCalc.js:2771
 #: src/control/Control.NotebookbarImpress.js:1847
 msgid "Themes"
-msgstr ""
+msgstr "Temas"
 
 #: src/control/Control.NotebookbarCalc.js:2876
 #: src/control/Control.NotebookbarCalc.js:3233
@@ -3436,13 +3435,12 @@ msgid "Master Slide Templates"
 msgstr "Plantillas de patrón de diapositiva"
 
 #: src/control/Control.NotebookbarImpress.js:1824
-#, fuzzy
 msgid "This Presentation"
-msgstr "Cerrar presentación"
+msgstr "Esta presentación"
 
 #: src/control/Control.NotebookbarImpress.js:1833
 msgid "Presentation Templates"
-msgstr ""
+msgstr "Plantillas de presentación"
 
 #: src/control/Control.NotebookbarImpress.js:1903
 msgid "Slide Size"
@@ -3479,11 +3477,11 @@ msgstr "Desconectarse"
 
 #: src/control/Control.NotebookbarWriter.js:550
 msgid "Validate Sidebar"
-msgstr ""
+msgstr "Barra lateral Validar"
 
 #: src/control/Control.NotebookbarWriter.js:557
 msgid "Validate Dialog"
-msgstr ""
+msgstr "Diálogo Validar"
 
 #: src/control/Control.NotebookbarWriter.js:946
 #: src/control/Control.Zotero.js:828
@@ -3516,15 +3514,15 @@ msgstr "Casilla"
 
 #: src/control/Control.NotebookbarWriter.js:1676
 msgid "Page Width"
-msgstr ""
+msgstr "Anchura de página"
 
 #: src/control/Control.NotebookbarWriter.js:2209
 msgid "Spellcheck"
-msgstr ""
+msgstr "Ortografía"
 
 #: src/control/Control.NotebookbarWriter.js:2222
 msgid "Spelling Options"
-msgstr ""
+msgstr "Opciones de ortografía"
 
 #: src/control/Control.NotebookbarWriter.js:2234
 msgid "Auto Spell Check"
@@ -3542,7 +3540,7 @@ msgstr "Control de cambios"
 
 #: src/control/Control.NotebookbarWriter.js:2347
 msgid "View Changes"
-msgstr ""
+msgstr "Ver cambios"
 
 #: src/control/Control.NotebookbarWriter.js:2524
 msgid "Split"
@@ -3759,7 +3757,7 @@ msgstr "Recuento de selección"
 
 #: src/control/Control.StatusBar.js:252
 msgid "Multi Page View"
-msgstr ""
+msgstr "Vista multipágina"
 
 #: src/control/Control.StatusBar.js:259
 msgid "Zoom to Fit Page Width"
@@ -4071,9 +4069,8 @@ msgid "Updating citations"
 msgstr "Actualizando citas"
 
 #: src/control/Control.Zotero.js:1528
-#, fuzzy
 msgid "Unlinked citations"
-msgstr "Desenlazar citas"
+msgstr "Citas desenlazadas"
 
 #: src/control/Control.Zotero.js:1533
 msgid ""
@@ -4209,11 +4206,11 @@ msgstr "Solo lectura"
 
 #: src/control/PermissionMode.ts:125
 msgid "Viewing Mode"
-msgstr ""
+msgstr "Modo de vista"
 
 #: src/control/PermissionMode.ts:131
 msgid "Editing Mode"
-msgstr ""
+msgstr "Modo de edición"
 
 #: src/control/PermissionMode.ts:141 src/control/PermissionMode.ts:213
 #: src/control/PermissionMode.ts:219 src/control/PermissionMode.ts:225
@@ -4387,7 +4384,7 @@ msgstr "Insertar multimedia local"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1752
 msgid "Compare Local Document"
-msgstr ""
+msgstr "Comparar documento local"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1758
 msgid "Very Tight"
@@ -4407,11 +4404,11 @@ msgstr "Muy amplio"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1788
 msgid "Inline"
-msgstr ""
+msgstr "En renglón"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1794
 msgid "Side by Side"
-msgstr ""
+msgstr "Lado a lado"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1807
 msgid "All users"
@@ -4721,7 +4718,7 @@ msgstr "Los títulos y objetos que añada al documento aparecerán aquí"
 
 #: src/control/jsdialog/Widget.TreeView.ts:1702
 msgid "Search items"
-msgstr ""
+msgstr "Buscar elementos"
 
 #: src/app/Socket.ts:270
 msgid "Oops, there is a problem connecting to {productname}: "
@@ -5200,7 +5197,7 @@ msgstr "el menú Ver"
 
 #: src/layer/tile/CanvasTileLayer.js:461
 msgid "Online Editor"
-msgstr ""
+msgstr "Editor en línea"
 
 #: src/layer/tile/CanvasTileLayer.js:1459
 msgid "Functions"
@@ -5242,18 +5239,20 @@ msgid ""
 "Your browser has very limited access to the clipboard, so please use the "
 "paste buttons on your on-screen keyboard instead."
 msgstr ""
-"Su navegador tiene un acceso muy limitado al portapapeles. Por favor, use "
-"los botones del teclado en pantalla para pegar."
+"Su navegador no dispone de acceso pleno al portapapeles. Use los botones del "
+"teclado en pantalla para pegar."
 
 #: src/map/Clipboard.js:1465
 msgid ""
 "Your browser has very limited access to the clipboard, so use these "
 "keyboard shortcuts:"
 msgstr ""
+"Su navegador no dispone de acceso pleno al portapapeles, así que use estos "
+"atajos de teclado:"
 
 #: src/map/Clipboard.js:1499
 msgid "Cut"
-msgstr ""
+msgstr "Cortar"
 
 #: src/map/Clipboard.js:1515
 msgid ""
@@ -5326,7 +5325,7 @@ msgstr "Falló la carga del archivo en el servidor con el estado: {0}"
 
 #: src/map/handler/Map.FileInserter.js:281
 msgid "Failed to read the selected file."
-msgstr ""
+msgstr "No se pudo leer el archivo seleccionado."
 
 #: src/map/handler/Map.Keyboard.js:653
 msgid "You are currently in View mode"
@@ -5344,7 +5343,7 @@ msgstr "Pase de diapositivas vacío"
 #: src/map/handler/Map.SlideShow.js:60
 #: src/slideshow/SlideShowPresenter.ts:1284
 msgid "All slides are hidden!"
-msgstr ""
+msgstr "Todas las diapositivas están ocultas."
 
 #: src/map/handler/Map.SlideShow.js:167
 #: src/slideshow/SlideShowPresenter.ts:1311
@@ -5417,7 +5416,7 @@ msgstr "Creando un archivo nuevo a partir de una plantilla…"
 
 #: src/map/handler/Map.WOPI.js:232
 msgid "Compare Document..."
-msgstr ""
+msgstr "Comparar documento..."
 
 #: src/map/handler/Map.WOPI.js:746
 msgid "File name should contain an extension."
@@ -5446,7 +5445,7 @@ msgstr "Diapositiva siguiente"
 #: src/slideshow/PresenterConsole.js:35
 #: src/slideshow/SlideShowPresenter.ts:908
 msgid "Exchange"
-msgstr ""
+msgstr "Intercambiar"
 
 #: src/slideshow/PresenterConsole.js:36
 msgid "Pause"
@@ -5499,7 +5498,7 @@ msgstr "Pulse para salir de la presentación…"
 
 #: src/slideshow/SlideShowPresenter.ts:805
 msgid "You are on the first slide"
-msgstr ""
+msgstr "Está en la primera diapositiva"
 
 #: src/slideshow/SlideShowPresenter.ts:813
 msgid "Waiting for presenter to advance"
@@ -5519,7 +5518,6 @@ msgid "Enable Animations"
 msgstr "Activar animaciones"
 
 #: src/slideshow/SlideShowPresenter.ts:1512
-#, fuzzy
 msgid "Stop Following"
 msgstr "Dejar de seguir"
 
@@ -5537,7 +5535,7 @@ msgstr ""
 
 #: templates/templates.js:26 templates/templates.js:30
 msgid "CV"
-msgstr ""
+msgstr "CV"
 
 #: templates/templates.js:36
 msgid "Resume (one-page)"
@@ -5545,15 +5543,15 @@ msgstr ""
 
 #: templates/templates.js:56
 msgid "Modern Style"
-msgstr ""
+msgstr "Estilo moderno"
 
 #: templates/templates.js:66
 msgid "Simple Style"
-msgstr ""
+msgstr "Estilo simple"
 
 #: templates/templates.js:76
 msgid "Beehive"
-msgstr ""
+msgstr "Colmena"
 
 #: templates/templates.js:86
 msgid "Blue Curve"
@@ -5565,23 +5563,23 @@ msgstr ""
 
 #: templates/templates.js:106
 msgid "Candy"
-msgstr ""
+msgstr "Golosina"
 
 #: templates/templates.js:116
 msgid "DNA"
-msgstr ""
+msgstr "ADN"
 
 #: templates/templates.js:126
 msgid "Focus"
-msgstr ""
+msgstr "Foco"
 
 #: templates/templates.js:136
 msgid "Forestbird"
-msgstr ""
+msgstr "Ave forestal"
 
 #: templates/templates.js:146
 msgid "Freshes"
-msgstr ""
+msgstr "Frescura"
 
 #: templates/templates.js:156
 msgid "Grey Elegant"
@@ -5593,15 +5591,15 @@ msgstr ""
 
 #: templates/templates.js:176
 msgid "Inspiration"
-msgstr ""
+msgstr "Inspiración"
 
 #: templates/templates.js:186
 msgid "Lights"
-msgstr ""
+msgstr "Luces"
 
 #: templates/templates.js:196
 msgid "Metropolis"
-msgstr ""
+msgstr "Metrópoli"
 
 #: templates/templates.js:206
 msgid "Midnight Blue"
@@ -5613,31 +5611,31 @@ msgstr ""
 
 #: templates/templates.js:226
 msgid "Pencil"
-msgstr ""
+msgstr "Lápiz"
 
 #: templates/templates.js:236
 msgid "Piano"
-msgstr ""
+msgstr "Piano"
 
 #: templates/templates.js:246
 msgid "Portfolio"
-msgstr ""
+msgstr "Portafolio"
 
 #: templates/templates.js:256
 msgid "Progress"
-msgstr ""
+msgstr "Progreso"
 
 #: templates/templates.js:266
 msgid "Sunset"
-msgstr ""
+msgstr "Atardecer"
 
 #: templates/templates.js:276
 msgid "Vintage"
-msgstr ""
+msgstr "Retro"
 
 #: templates/templates.js:286
 msgid "Vivid"
-msgstr ""
+msgstr "Vívido"
 
 #: templates/templates.js:296
 msgid "Yellow Idea"

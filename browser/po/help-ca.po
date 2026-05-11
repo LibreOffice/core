@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-20 12:14+0200\n"
-"PO-Revision-Date: 2025-10-02 01:02+0000\n"
-"Last-Translator: Ecron <ecron_89@hotmail.com>\n"
+"PO-Revision-Date: 2026-05-02 04:09+0000\n"
+"Last-Translator: Adolfo Jayme Barrientos <fitojb@ubuntu.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/collabora-online/"
 "help/ca/>\n"
 "Language: ca\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Translate Toolkit 3.6.0\n"
+"X-Generator: Weblate 5.17.1\n"
 
 #: html/cool-help.html%2Bdiv.h1:9-5
 msgid "Keyboard Shortcuts"
@@ -2748,7 +2748,7 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:541-29
 msgid "cell comments"
-msgstr ""
+msgstr "comentaris de cel·la"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:544-5
 msgid ""
@@ -2766,7 +2766,7 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:545-29
 msgid "conditional formatting"
-msgstr ""
+msgstr "formatació condicional"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:553-30
 msgid ""
@@ -2882,7 +2882,7 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:576-29
 msgid "insert table"
-msgstr ""
+msgstr "insereix una taula"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:579-5
 msgid ""
@@ -3048,7 +3048,7 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:622-29
 msgid "slide layouts"
-msgstr ""
+msgstr "disposicions de diapositiva"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:624-30
 msgid ""
@@ -3237,7 +3237,7 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.img[alt]:672-29
 msgid "thesaurus"
-msgstr ""
+msgstr "tesaurus"
 
 #: html/cool-help.html%2Bdiv.div.div.h4:675-5
 msgid ""
@@ -3425,7 +3425,7 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:715-29
 msgid "manage changes"
-msgstr ""
+msgstr "gestiona els canvis"
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:718-5
 msgid "How do I set the margins of the document?"
@@ -3457,7 +3457,7 @@ msgstr "Ajusteu els marges en el diàleg."
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:725-29
 msgid "page style"
-msgstr ""
+msgstr "estil de pàgina"
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:728-5
 msgid "How do I change the page orientation to landscape inside my document?"

@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-20 12:14+0100\n"
-"PO-Revision-Date: 2025-08-11 14:01+0000\n"
+"PO-Revision-Date: 2026-04-23 22:09+0000\n"
 "Last-Translator: Adolfo Jayme Barrientos <fitojb@ubuntu.com>\n"
-"Language-Team: Aragonese <https://hosted.weblate.org/projects/"
-"collabora-online/ui/an/>\n"
-"Language: \n"
+"Language-Team: Aragonese <https://hosted.weblate.org/projects/collabora-"
+"online/ui/an/>\n"
+"Language: an\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.13-dev\n"
+"X-Generator: Weblate 5.17.1-dev\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -84,15 +84,15 @@ msgstr ""
 
 #: admin/admin.strings.js:30
 msgid "Bytes sent"
-msgstr ""
+msgstr "Bytes inviaus"
 
 #: admin/admin.strings.js:31
 msgid "Bytes received"
-msgstr ""
+msgstr "Bytes recibius"
 
 #: admin/admin.strings.js:32
 msgid "PID"
-msgstr ""
+msgstr "PID"
 
 #: admin/admin.strings.js:33 admin/src/AdminClusterOverview.js:352
 #: src/control/Control.BackstageView.ts:943
@@ -251,7 +251,7 @@ msgstr ""
 
 #: admin/admin.strings.js:66
 msgid "Version Information"
-msgstr ""
+msgstr "Información d'a versión"
 
 #: admin/admin.strings.js:67
 msgid "License"
@@ -363,7 +363,7 @@ msgstr ""
 
 #: admin/src/AdminSocketOverview.js:106 admin/src/AdminSocketSettings.js:45
 msgid "Confirmation"
-msgstr ""
+msgstr "Confirmación"
 
 #: admin/src/AdminSocketOverview.js:107
 msgid "Are you sure you want to terminate this session?"
@@ -481,7 +481,7 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:367
 msgid "Synchronize axes"
-msgstr ""
+msgstr "Sincronizar eixes"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:368
 msgid "Snap grid"
@@ -515,7 +515,7 @@ msgstr ""
 #: src/control/Control.NotebookbarDraw.js:1426
 #: src/control/Control.NotebookbarWriter.js:1221
 msgid "Page"
-msgstr ""
+msgstr "Pachina"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:376
 msgid "Fit to page"
@@ -546,7 +546,7 @@ msgstr ""
 #: src/control/Control.NotebookbarWriter.js:1624
 #: src/control/Control.Zotero.js:1153 src/control/Control.Zotero.js:1605
 msgid "Date"
-msgstr ""
+msgstr "Calendata"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:383
 #: src/control/Control.NotebookbarCalc.js:782
@@ -575,7 +575,7 @@ msgstr ""
 #: templates/templates.js:270 templates/templates.js:279
 #: templates/templates.js:290 templates/templates.js:300
 msgid "Presentation"
-msgstr ""
+msgstr "Presentación"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:387
 #: src/control/Control.Zotero.js:1341 src/slideshow/PresenterConsole.js:33
@@ -597,7 +597,7 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:391
 msgid "Images"
-msgstr ""
+msgstr "Imáchens"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:392
 msgid "Tables"
@@ -641,7 +641,7 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:402
 msgid "Images and Objects"
-msgstr ""
+msgstr "Imáchens y obchectos"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:499
 msgid "Invalid JSON file"
@@ -667,7 +667,7 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:528
 msgid "Custom dictionaries"
-msgstr ""
+msgstr "Diccionarios personalizaus"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:530
 msgid ""
@@ -754,7 +754,7 @@ msgstr ""
 #: src/canvas/sections/CommentSection.ts:1138
 #: src/control/Control.ContextMenu.js:176 src/docdispatcher.ts:581
 msgid "Delete"
-msgstr ""
+msgstr "Eliminar"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1400
 msgid ""
@@ -765,7 +765,7 @@ msgstr ""
 #: admin/src/integrator/AdminIntegratorSettings.ts:1415
 #: src/control/Control.BackstageView.ts:955
 msgid "Edit"
-msgstr ""
+msgstr "Editar"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1441
 msgid "View Settings"
@@ -891,15 +891,15 @@ msgstr "BB"
 
 #: admin/src/Util.js:86 admin/src/Util.js:88
 msgid " hrs"
-msgstr ""
+msgstr " h"
 
 #: admin/src/Util.js:92 admin/src/Util.js:94
 msgid " mins"
-msgstr ""
+msgstr " min"
 
 #: admin/src/Util.js:97
 msgid " s"
-msgstr ""
+msgstr " s"
 
 #: js/global.js:1762
 msgid ""
@@ -1136,7 +1136,7 @@ msgstr ""
 
 #: src/control/Control.AlertDialog.js:55
 msgid "External link"
-msgstr ""
+msgstr "Vinclo externo"
 
 #: src/control/Control.AlertDialog.js:56
 msgid "Open link"
@@ -1251,9 +1251,8 @@ msgstr ""
 #: src/control/Control.NotebookbarImpress.js:440
 #: src/control/Control.NotebookbarWriter.js:415
 #: src/map/handler/Map.Settings.ts:83
-#, fuzzy
 msgid "Options"
-msgstr "Opción"
+msgstr "Opcions"
 
 #: src/control/Control.BackstageView.ts:407
 msgid "Start a new document from one of the following templates."
@@ -1305,7 +1304,7 @@ msgstr ""
 #: src/control/Control.NotebookbarWriter.js:353
 #: src/control/Control.NotebookbarWriter.js:1632
 msgid "Properties"
-msgstr ""
+msgstr "Propiedaz"
 
 #: src/control/Control.BackstageView.ts:857
 msgid "More Property Info"
@@ -1417,7 +1416,7 @@ msgstr ""
 #: src/control/Control.DocumentRepair.js:124
 #: src/control/Control.UserList.ts:387
 msgid "You"
-msgstr ""
+msgstr "Vusté"
 
 #: src/control/Control.DocumentRepair.js:140
 msgid "What?"
@@ -1506,7 +1505,7 @@ msgstr ""
 
 #: src/control/Control.ESignature.ts:131
 msgid "Argentina"
-msgstr ""
+msgstr "Archentina"
 
 #: src/control/Control.ESignature.ts:132
 msgid "Austria"
@@ -1550,7 +1549,7 @@ msgstr ""
 
 #: src/control/Control.ESignature.ts:142
 msgid "Switzerland"
-msgstr ""
+msgstr "Suiza"
 
 #: src/control/Control.ESignature.ts:143
 msgid "Chile"
@@ -1686,7 +1685,7 @@ msgstr ""
 
 #: src/control/Control.ESignature.ts:176
 msgid "North Macedonia, Republic of"
-msgstr ""
+msgstr "Macedonya d'o Norte, Republica de"
 
 #: src/control/Control.ESignature.ts:177
 msgid "Malta"
@@ -1858,27 +1857,27 @@ msgstr ""
 
 #: src/control/Control.JSDialogBuilder.js:643
 msgid "Linear"
-msgstr ""
+msgstr "Linial"
 
 #: src/control/Control.JSDialogBuilder.js:646
 msgid "Axial"
-msgstr ""
+msgstr "Axial"
 
 #: src/control/Control.JSDialogBuilder.js:649
 msgid "Radial"
-msgstr ""
+msgstr "Radial"
 
 #: src/control/Control.JSDialogBuilder.js:652
 msgid "Ellipsoid"
-msgstr ""
+msgstr "Elipsoidal"
 
 #: src/control/Control.JSDialogBuilder.js:656
 msgid "Quadratic"
-msgstr ""
+msgstr "Cuadratico"
 
 #: src/control/Control.JSDialogBuilder.js:659
 msgid "Square"
-msgstr ""
+msgstr "Cuadrau"
 
 #: src/control/Control.JSDialogBuilder.js:662
 msgid "Fixed size"
@@ -1894,7 +1893,7 @@ msgstr ""
 
 #: src/control/Control.JSDialogBuilder.js:1376
 msgid "Color"
-msgstr ""
+msgstr "Color"
 
 #: src/control/Control.JSDialogBuilder.js:1456
 msgid "Select range"
@@ -1903,11 +1902,11 @@ msgstr ""
 #: src/control/Control.JSDialogBuilder.js:1567
 #: src/control/Control.NotebookbarBuilder.js:165
 msgid "Font Name"
-msgstr ""
+msgstr "Nombre d'o tipo de letra"
 
 #: src/control/Control.JSDialogBuilder.js:1569
 msgid "Font Size"
-msgstr ""
+msgstr "Grandaria d'a letra"
 
 #: src/control/Control.JSDialogBuilder.js:1571
 #: src/control/Control.NotebookbarCalc.js:946
@@ -1916,7 +1915,7 @@ msgstr ""
 #: src/control/Control.NotebookbarImpress.js:1327
 #: src/control/Control.NotebookbarWriter.js:1061
 msgid "Style"
-msgstr ""
+msgstr "Estilo"
 
 #: src/control/Control.JSDialogBuilder.js:1789
 msgid "reply"
@@ -1928,7 +1927,7 @@ msgstr ""
 
 #: src/control/Control.JSDialogBuilder.js:1867
 msgid "Insert Comment"
-msgstr ""
+msgstr "Ficar comentario"
 
 #: src/control/Control.JSDialogBuilder.js:2136
 msgid "Toggle dropdown"
@@ -1954,16 +1953,16 @@ msgstr ""
 #: src/control/Control.JSDialogBuilder.js:2442
 #: src/control/Control.Menubar.ts:955
 msgid "Rows"
-msgstr ""
+msgstr "Ringleras"
 
 #: src/control/Control.JSDialogBuilder.js:2443
 #: src/control/Control.Menubar.ts:958
 msgid "Columns"
-msgstr ""
+msgstr "Columnas"
 
 #: src/control/Control.JSDialogBuilder.js:2463
 msgid "Insert Table"
-msgstr ""
+msgstr "Ficar tabla"
 
 #: src/control/Control.LanguageDialog.js:64 src/control/Control.Menubar.ts:397
 #: src/control/Control.Menubar.ts:399 src/control/Control.Menubar.ts:401
@@ -1978,7 +1977,7 @@ msgstr ""
 
 #: src/control/Control.LanguageDialog.js:103
 msgid "Language"
-msgstr ""
+msgstr "Luenga"
 
 #: src/control/Control.Mention.ts:181
 msgid "No search results found!"
@@ -2244,7 +2243,7 @@ msgstr ""
 
 #: src/control/Control.Menubar.ts:383 src/control/Control.Menubar.ts:1377
 msgid "Insert Picture"
-msgstr ""
+msgstr "Ficar imachen"
 
 #: src/control/Control.Menubar.ts:384 src/control/Control.Menubar.ts:1378
 msgid "Insert Date"
@@ -2792,7 +2791,7 @@ msgstr ""
 
 #: src/control/Control.NotebookbarBuilder.js:526
 msgid "Image (.png)"
-msgstr ""
+msgstr "Imachen (.png)"
 
 #: src/control/Control.NotebookbarCalc.js:29
 #: src/control/Control.NotebookbarDraw.js:57
@@ -2811,7 +2810,7 @@ msgstr ""
 #: src/control/Control.NotebookbarWriter.js:965
 #: src/control/Control.NotebookbarWriter.js:2463
 msgid "Insert"
-msgstr ""
+msgstr "Ficar"
 
 #: src/control/Control.NotebookbarCalc.js:48
 #: src/control/Control.NotebookbarDraw.js:1284
@@ -2935,11 +2934,11 @@ msgstr ""
 #: src/control/Control.NotebookbarCalc.js:762
 #: src/control/Control.NotebookbarCalc.js:778
 msgid "Number"
-msgstr ""
+msgstr "Numero"
 
 #: src/control/Control.NotebookbarCalc.js:777
 msgid "General"
-msgstr ""
+msgstr "Cheneral"
 
 #: src/control/Control.NotebookbarCalc.js:779
 msgid "Percent"
@@ -2947,7 +2946,7 @@ msgstr ""
 
 #: src/control/Control.NotebookbarCalc.js:780
 msgid "Currency"
-msgstr ""
+msgstr "Moneda"
 
 #: src/control/Control.NotebookbarCalc.js:783
 msgid "Scientific"
@@ -3209,7 +3208,7 @@ msgstr ""
 
 #: src/control/Control.NotebookbarCalc.js:2058
 msgid "Insert Function"
-msgstr ""
+msgstr "Ficar función"
 
 #: src/control/Control.NotebookbarCalc.js:2066
 msgid "Function Library"
@@ -3801,7 +3800,7 @@ msgstr ""
 
 #: src/control/Control.TopToolbar.js:218
 msgid "Insert table"
-msgstr ""
+msgstr "Ficar tabla"
 
 #: src/control/Control.TopToolbar.js:221
 msgid "Insert shapes"
@@ -4546,7 +4545,7 @@ msgstr ""
 
 #: src/control/jsdialog/Definitions.Menu.ts:2364
 msgid "Insert comment"
-msgstr ""
+msgstr "Ficar comentario"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2368
 msgid "Comments list"
@@ -5472,7 +5471,7 @@ msgstr ""
 
 #: templates/templates.js:236
 msgid "Piano"
-msgstr ""
+msgstr "Piano"
 
 #: templates/templates.js:246
 msgid "Portfolio"
@@ -5480,7 +5479,7 @@ msgstr ""
 
 #: templates/templates.js:256
 msgid "Progress"
-msgstr ""
+msgstr "Progreso"
 
 #: templates/templates.js:266
 msgid "Sunset"
@@ -5559,6 +5558,10 @@ msgid ""
 "translate=\"true\">2</a> <a id=\"slide-3-indicator\" href=\"#slide-3\" data-"
 "translate=\"true\">3</a>"
 msgstr ""
+"<a id=\"slide-1-indicator\" class=\"active\" href=\"#slide-1\" data-"
+"translate=\"true\">1</a> <a id=\"slide-2-indicator\" href=\"#slide-2\" data-"
+"translate=\"true\">2</a> <a id=\"slide-3-indicator\" href=\"#slide-3\" data-"
+"translate=\"true\">3</a>"
 
 #~ msgid "Accessibility"
 #~ msgstr "Accesibilidat"

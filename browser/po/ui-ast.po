@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-20 12:14+0100\n"
-"PO-Revision-Date: 2025-11-28 09:31+0000\n"
+"PO-Revision-Date: 2026-05-02 04:09+0000\n"
 "Last-Translator: Adolfo Jayme Barrientos <fitojb@ubuntu.com>\n"
-"Language-Team: Asturian <https://hosted.weblate.org/projects/"
-"collabora-online/ui/ast/>\n"
-"Language: \n"
+"Language-Team: Asturian <https://hosted.weblate.org/projects/collabora-"
+"online/ui/ast/>\n"
+"Language: ast\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.15-dev\n"
+"X-Generator: Weblate 5.17.1\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -2679,7 +2679,7 @@ msgstr ""
 
 #: src/control/Notebookbar.CalcTableTab.ts:157
 msgid "First Column"
-msgstr ""
+msgstr "Primer columna"
 
 #: src/control/Notebookbar.CalcTableTab.ts:172
 msgid "Last Column"
@@ -2691,11 +2691,11 @@ msgstr ""
 
 #: src/control/Notebookbar.ImpressAnimationTab.ts:24
 msgid "Animation"
-msgstr ""
+msgstr "Animación"
 
 #: src/control/Notebookbar.ImpressAnimationTab.ts:41
 msgid "Applied animations"
-msgstr ""
+msgstr "Animaciones aplicaes"
 
 #: src/control/Notebookbar.ImpressAnimationTab.ts:59
 msgid "Move Up"
@@ -2718,9 +2718,8 @@ msgid "Effect"
 msgstr ""
 
 #: src/control/Notebookbar.ImpressTransitionTab.ts:24
-#, fuzzy
 msgid "Transition"
-msgstr "Transiciones"
+msgstr "Transición"
 
 #: src/control/Notebookbar.ImpressTransitionTab.ts:41
 #: src/control/Sidebar.FromNotebookbarPanel.ts:108
@@ -2764,7 +2763,7 @@ msgstr "Campos"
 
 #: src/control/Sidebar.FromNotebookbarPanel.ts:121
 msgid "Animations"
-msgstr ""
+msgstr "Animaciones"
 
 #: src/control/Control.NotebookbarBuilder.js:238
 msgid "Click to expand"
@@ -2792,7 +2791,7 @@ msgstr "Ficheru HTML (.html)"
 #: src/control/Control.NotebookbarBuilder.js:449
 #: src/control/Control.NotebookbarBuilder.js:485
 msgid "PDF Document (.pdf) with options"
-msgstr ""
+msgstr "Documentu PDF (.pdf) con opciones"
 
 #: src/control/Control.NotebookbarBuilder.js:432
 msgid "CSV File (.csv)"
@@ -3420,9 +3419,8 @@ msgid "Master Slide Templates"
 msgstr ""
 
 #: src/control/Control.NotebookbarImpress.js:1824
-#, fuzzy
 msgid "This Presentation"
-msgstr "Presentación"
+msgstr "Esta presentación"
 
 #: src/control/Control.NotebookbarImpress.js:1833
 msgid "Presentation Templates"
@@ -5230,7 +5228,7 @@ msgstr ""
 #: src/map/handler/Map.SlideShow.js:60
 #: src/slideshow/SlideShowPresenter.ts:1284
 msgid "All slides are hidden!"
-msgstr ""
+msgstr "Toles diapositives tán anubríes."
 
 #: src/map/handler/Map.SlideShow.js:167
 #: src/slideshow/SlideShowPresenter.ts:1311
@@ -5586,6 +5584,10 @@ msgid ""
 "translate=\"true\">2</a> <a id=\"slide-3-indicator\" href=\"#slide-3\" data-"
 "translate=\"true\">3</a>"
 msgstr ""
+"<a id=\"slide-1-indicator\" class=\"active\" href=\"#slide-1\" data-"
+"translate=\"true\">1</a> <a id=\"slide-2-indicator\" href=\"#slide-2\" data-"
+"translate=\"true\">2</a> <a id=\"slide-3-indicator\" href=\"#slide-3\" data-"
+"translate=\"true\">3</a>"
 
 #~ msgid "Paste Slide"
 #~ msgstr "Apegar diapositiva"

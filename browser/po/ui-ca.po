@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-20 12:14+0100\n"
-"PO-Revision-Date: 2026-03-03 14:39+0000\n"
-"Last-Translator: Héctor Gonzàlvez Escolano <hector.gie@gcloud.ua.es>\n"
+"PO-Revision-Date: 2026-05-02 04:09+0000\n"
+"Last-Translator: Adolfo Jayme Barrientos <fitojb@ubuntu.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/collabora-online/"
 "ui/ca/>\n"
-"Language: \n"
+"Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.17-dev\n"
+"X-Generator: Weblate 5.17.1\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -384,7 +384,7 @@ msgstr "Falta l'URL de configuració compartida a les variables inicials."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:215
 msgid "Access token is missing in initial variables."
-msgstr "Falta el token d'accés en les variables inicials."
+msgstr "Falta el testimoni d'accés en les variables inicials."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:293
 msgid ""
@@ -628,7 +628,7 @@ msgstr "Text amagat"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:397
 msgid "Placeholders"
-msgstr ""
+msgstr "Espais reservats"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:398
 msgid "Left pages"
@@ -1083,11 +1083,11 @@ msgstr ""
 
 #: src/canvas/sections/CompareChangesLabelSection.ts:194
 msgid "Initial Version"
-msgstr ""
+msgstr "Versió inicial"
 
 #: src/canvas/sections/CompareChangesLabelSection.ts:198
 msgid "Current Version"
-msgstr ""
+msgstr "Versió actual"
 
 #: src/canvas/sections/ShapeHandlesSection.ts:478
 msgid "Document contains unsupported media"
@@ -1140,7 +1140,7 @@ msgstr "Copia tota la informació de la versió en anglès"
 
 #: src/control/Control.AboutDialog.ts:430
 msgid "Version information has been copied"
-msgstr ""
+msgstr "S'ha copiat la informació sobre la versió"
 
 #: src/control/Control.AboutDialog.ts:470
 msgid "COOLWSD version:"
@@ -1168,7 +1168,7 @@ msgstr "No es permeten les fonts externes copiades"
 
 #: src/control/Control.AlertDialog.js:69
 msgid "It seems you have copied a selection that includes external images."
-msgstr "Sembla que has copiat una selecció que inclou imatges externes."
+msgstr "Sembla que heu copiat una selecció que inclou imatges externes."
 
 #: src/control/Control.AlertDialog.js:70
 msgid ""
@@ -1212,7 +1212,7 @@ msgstr ""
 #: src/control/Control.BackstageView.ts:223
 #: src/control/Control.BackstageView.ts:224
 msgid "Back to document"
-msgstr ""
+msgstr "Torna al document"
 
 #: src/control/Control.BackstageView.ts:272
 #: src/control/Control.BackstageView.ts:406
@@ -1232,7 +1232,7 @@ msgstr "Nou"
 
 #: src/control/Control.BackstageView.ts:288
 msgid "Open"
-msgstr ""
+msgstr "Obre"
 
 #: src/control/Control.BackstageView.ts:296
 #: src/control/Control.Notebookbar.js:637
@@ -1251,7 +1251,7 @@ msgstr "Comparteix"
 
 #: src/control/Control.BackstageView.ts:304
 msgid "Info"
-msgstr ""
+msgstr "Informació"
 
 #: src/control/Control.BackstageView.ts:320
 #: src/control/Control.NotebookbarCalc.js:165
@@ -1265,7 +1265,7 @@ msgstr "Anomena i desa"
 
 #: src/control/Control.BackstageView.ts:336
 msgid "Export"
-msgstr ""
+msgstr "Exporta"
 
 #: src/control/Control.BackstageView.ts:350 src/control/Control.Menubar.ts:123
 #: src/control/Control.Menubar.ts:464 src/control/Control.Menubar.ts:640
@@ -1285,7 +1285,7 @@ msgstr ""
 #: src/control/Control.BackstageView.ts:450
 #: src/control/Control.BackstageView.ts:453
 msgid "More Templates"
-msgstr ""
+msgstr "Més plantilles"
 
 #: src/control/Control.BackstageView.ts:479
 #: src/control/jsdialog/Widget.ColorPicker.ts:426
@@ -1298,15 +1298,15 @@ msgstr ""
 
 #: src/control/Control.BackstageView.ts:550
 msgid "Name"
-msgstr ""
+msgstr "Nom"
 
 #: src/control/Control.BackstageView.ts:556
 msgid "Modified Date"
-msgstr ""
+msgstr "Data de modificació"
 
 #: src/control/Control.BackstageView.ts:779
 msgid "Document Info"
-msgstr ""
+msgstr "Informació sobre el document"
 
 #: src/control/Control.BackstageView.ts:780
 msgid "View document properties and information"
@@ -1314,7 +1314,7 @@ msgstr ""
 
 #: src/control/Control.BackstageView.ts:796
 msgid "Export Document"
-msgstr ""
+msgstr "Exporta el document"
 
 #: src/control/Control.BackstageView.ts:797
 msgid "export your documents in different formats"
@@ -1332,26 +1332,25 @@ msgstr "Propietats"
 
 #: src/control/Control.BackstageView.ts:857
 msgid "More Property Info"
-msgstr ""
+msgstr "Més informació de propietat"
 
 #: src/control/Control.BackstageView.ts:936 templates/templates.js:50
 #: templates/templates.js:60 templates/templates.js:70
 msgid "Text Document"
-msgstr ""
+msgstr "Document de text"
 
 #: src/control/Control.BackstageView.ts:936
 #: src/control/Control.BackstageView.ts:939
-#, fuzzy
 msgid "Pages"
-msgstr "Pàgina"
+msgstr "Pàgines"
 
 #: src/control/Control.BackstageView.ts:937
 msgid "Spreadsheet"
-msgstr ""
+msgstr "Full de càlcul"
 
 #: src/control/Control.BackstageView.ts:937
 msgid "Sheets"
-msgstr ""
+msgstr "Fulls"
 
 #: src/control/Control.BackstageView.ts:938
 #: src/control/Control.NavigatorPanel.ts:188
@@ -1362,7 +1361,7 @@ msgstr "Diapositives"
 
 #: src/control/Control.BackstageView.ts:944
 msgid "Parts"
-msgstr ""
+msgstr "Parts"
 
 #: src/control/Control.BackstageView.ts:948
 #: src/control/Control.DocumentRepair.js:140
@@ -1371,7 +1370,7 @@ msgstr "Tipus"
 
 #: src/control/Control.BackstageView.ts:954
 msgid "Mode"
-msgstr ""
+msgstr "Mode"
 
 #: src/control/Control.BackstageView.ts:955
 msgid "View Only"
@@ -1379,15 +1378,15 @@ msgstr ""
 
 #: src/control/Control.BackstageView.ts:962
 msgid "File Name"
-msgstr ""
+msgstr "Nom del fitxer"
 
 #: src/control/Control.BackstageView.ts:1067
 msgid "Loading templates…"
-msgstr ""
+msgstr "S'estan carregant les plantilles…"
 
 #: src/control/Control.BackstageView.ts:1113
 msgid "Search templates"
-msgstr ""
+msgstr "Cerca plantilles"
 
 #: src/control/Control.BackstageView.ts:1181
 msgid "No templates match your search."
@@ -1408,7 +1407,7 @@ msgstr ""
 
 #: src/control/Control.BackstageView.ts:1443
 msgid "Untitled"
-msgstr ""
+msgstr "Sense títol"
 
 #: src/control/Control.Command.js:90
 msgid "Unlock"
@@ -1428,7 +1427,7 @@ msgstr ""
 
 #: src/control/Control.DocumentNameInput.js:27
 msgid "Document name"
-msgstr ""
+msgstr "Nom del document"
 
 #: src/control/Control.DocumentNameInput.js:119
 msgid "Path"
@@ -2142,7 +2141,7 @@ msgstr "Repara"
 
 #: src/control/Control.Menubar.ts:143
 msgid "Compare Changes"
-msgstr ""
+msgstr "Compara els canvis"
 
 #: src/control/Control.Menubar.ts:162 src/control/Control.Menubar.ts:487
 #: src/control/Control.Menubar.ts:493 src/control/Control.Menubar.ts:659
@@ -2681,19 +2680,19 @@ msgstr ""
 
 #: src/control/Notebookbar.CalcTableTab.ts:43
 msgid "Table Design"
-msgstr ""
+msgstr "Disseny de la taula"
 
 #: src/control/Notebookbar.CalcTableTab.ts:72
 msgid "Table Style Options"
-msgstr ""
+msgstr "Opcions de l'estil de la taula"
 
 #: src/control/Notebookbar.CalcTableTab.ts:85
 msgid "Header Row"
-msgstr ""
+msgstr "Fila de capçalera"
 
 #: src/control/Notebookbar.CalcTableTab.ts:100
 msgid "Total Row"
-msgstr ""
+msgstr "Fila de totals"
 
 #: src/control/Notebookbar.CalcTableTab.ts:121
 msgid "Banded Rows"
@@ -2705,11 +2704,11 @@ msgstr ""
 
 #: src/control/Notebookbar.CalcTableTab.ts:157
 msgid "First Column"
-msgstr ""
+msgstr "Primera columna"
 
 #: src/control/Notebookbar.CalcTableTab.ts:172
 msgid "Last Column"
-msgstr ""
+msgstr "Última columna"
 
 #: src/control/Notebookbar.CalcTableTab.ts:190
 msgid "Filter Buttons"
@@ -2725,11 +2724,11 @@ msgstr "Animacions aplicades"
 
 #: src/control/Notebookbar.ImpressAnimationTab.ts:59
 msgid "Move Up"
-msgstr ""
+msgstr "Apuja"
 
 #: src/control/Notebookbar.ImpressAnimationTab.ts:75
 msgid "Move Down"
-msgstr ""
+msgstr "Abaixa"
 
 #: src/control/Notebookbar.ImpressAnimationTab.ts:105
 msgid "Category"
@@ -2770,7 +2769,7 @@ msgstr "Després"
 
 #: src/control/Notebookbar.ImpressTransitionTab.ts:145
 msgid "Apply to All Slides"
-msgstr ""
+msgstr "Aplica a totes les diapositives"
 
 #: src/control/Notebookbar.WriterReferencesTab.ts:41
 msgid "Table of content"
@@ -2816,7 +2815,7 @@ msgstr "Fitxer HTML (.html)"
 #: src/control/Control.NotebookbarBuilder.js:449
 #: src/control/Control.NotebookbarBuilder.js:485
 msgid "PDF Document (.pdf) with options"
-msgstr ""
+msgstr "Document PDF (.pdf) amb opcions"
 
 #: src/control/Control.NotebookbarBuilder.js:432
 msgid "CSV File (.csv)"
@@ -3298,7 +3297,7 @@ msgstr "Format de cel·les"
 #: src/control/Control.NotebookbarCalc.js:2771
 #: src/control/Control.NotebookbarImpress.js:1847
 msgid "Themes"
-msgstr ""
+msgstr "Temes"
 
 #: src/control/Control.NotebookbarCalc.js:2876
 #: src/control/Control.NotebookbarCalc.js:3233
@@ -3434,17 +3433,16 @@ msgid "Master Slide Templates"
 msgstr ""
 
 #: src/control/Control.NotebookbarImpress.js:1824
-#, fuzzy
 msgid "This Presentation"
-msgstr "Tanca la presentació"
+msgstr "Aquesta presentació"
 
 #: src/control/Control.NotebookbarImpress.js:1833
 msgid "Presentation Templates"
-msgstr ""
+msgstr "Plantilles de presentació"
 
 #: src/control/Control.NotebookbarImpress.js:1903
 msgid "Slide Size"
-msgstr "Mida de diapositiva"
+msgstr "Mida de la diapositiva"
 
 #: src/control/Control.NotebookbarImpress.js:1926
 msgid "Background Image"
@@ -5218,7 +5216,7 @@ msgstr ""
 
 #: src/map/Clipboard.js:1499
 msgid "Cut"
-msgstr ""
+msgstr "Retalla"
 
 #: src/map/Clipboard.js:1515
 msgid ""
@@ -5307,7 +5305,7 @@ msgstr "Presentació de diapositives buida"
 #: src/map/handler/Map.SlideShow.js:60
 #: src/slideshow/SlideShowPresenter.ts:1284
 msgid "All slides are hidden!"
-msgstr ""
+msgstr "Totes les diapositives estan amagades."
 
 #: src/map/handler/Map.SlideShow.js:167
 #: src/slideshow/SlideShowPresenter.ts:1311
@@ -5477,7 +5475,6 @@ msgid "Enable Animations"
 msgstr "Activa les animacions"
 
 #: src/slideshow/SlideShowPresenter.ts:1512
-#, fuzzy
 msgid "Stop Following"
 msgstr "Deixa de seguir"
 
@@ -5551,7 +5548,7 @@ msgstr ""
 
 #: templates/templates.js:176
 msgid "Inspiration"
-msgstr ""
+msgstr "Inspiració"
 
 #: templates/templates.js:186
 msgid "Lights"
@@ -5575,7 +5572,7 @@ msgstr ""
 
 #: templates/templates.js:236
 msgid "Piano"
-msgstr ""
+msgstr "Piano"
 
 #: templates/templates.js:246
 msgid "Portfolio"
@@ -5583,7 +5580,7 @@ msgstr ""
 
 #: templates/templates.js:256
 msgid "Progress"
-msgstr ""
+msgstr "Progrés"
 
 #: templates/templates.js:266
 msgid "Sunset"
@@ -5679,6 +5676,10 @@ msgid ""
 "translate=\"true\">2</a> <a id=\"slide-3-indicator\" href=\"#slide-3\" data-"
 "translate=\"true\">3</a>"
 msgstr ""
+"<a id=\"slide-1-indicator\" class=\"active\" href=\"#slide-1\" data-"
+"translate=\"true\">1</a> <a id=\"slide-2-indicator\" href=\"#slide-2\" data-"
+"translate=\"true\">2</a> <a id=\"slide-3-indicator\" href=\"#slide-3\" data-"
+"translate=\"true\">3</a>"
 
 #~ msgid "Paste Slide"
 #~ msgstr "Enganxa una diapositiva"
