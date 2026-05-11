@@ -45,7 +45,7 @@
     <string name="physical_storage_settings">Cài đặt bộ nhớ vật lý</string>
     <string name="owncloud_settings">Cài đặt máy chủ đám mây</string>
     <string name="otg_missing_error">Tệp gốc không hợp lệ. Hãy kiểm tra thiết bị OTG và/hoặc thiết lập của bạn.</string>
-    <string name="ext_document_provider_error">Tệp gốc không hợp lệ. Kiểm tra cấu hình thẻ sd của bạn.</string>
+    <string name="ext_document_provider_error">Tệp gốc không hợp lệ. Kiểm tra cấu hình thẻ SD của bạn.</string>
     <string name="owncloud_unspecified_error">Lỗi không xác định khi kết nối đến máy chủ đám mây. Hãy kiểm tra thiết lập của bạn và/hoặc thử lại sau.</string>
     <string name="owncloud_unauthorized">Không thể đăng nhập vào máy chủ đám mây. Hãy kiểm tra thiết lập của bạn.</string>
     <string name="owncloud_wrong_connection">Không thể kết nối đến máy chủ đám mây. Hãy kiểm tra thiết lập của bạn.</string>
