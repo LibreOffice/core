@@ -913,7 +913,7 @@ bool ScColumn::HasCellNote(SCROW nStartRow, SCROW nEndRow) const
 void ScColumn::GetUnprotectedCells( SCROW nStartRow, SCROW nEndRow, ScRangeList& rRangeList ) const
 {
     SCROW nTmpStartRow = nStartRow, nTmpEndRow = nEndRow;
-    const ScPatternAttr* pPattern = pAttrArray->GetPatternRange(nTmpStartRow, nTmpEndRow, nStartRow);
+    const ScPatternAttr* pPattern = GetPatternRange(nTmpStartRow, nTmpEndRow, nStartRow);
     bool bProtection = pPattern->GetItem(ATTR_PROTECTION).GetProtection();
     if (!bProtection)
     {
@@ -927,7 +927,7 @@ void ScColumn::GetUnprotectedCells( SCROW nStartRow, SCROW nEndRow, ScRangeList&
     while (nEndRow > nTmpEndRow)
     {
         nStartRow = nTmpEndRow + 1;
-        pPattern = pAttrArray->GetPatternRange(nTmpStartRow, nTmpEndRow, nStartRow);
+        pPattern = GetPatternRange(nTmpStartRow, nTmpEndRow, nStartRow);
         bool bTmpProtection = pPattern->GetItem(ATTR_PROTECTION).GetProtection();
         if (!bTmpProtection)
         {
