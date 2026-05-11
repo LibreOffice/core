@@ -26,6 +26,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // Initialize the COOLWSD
         COWrapper.startServer()
 
+        // Start the WebDriver server if requested via --testDriverPort=<port>.
+        // This happens early, before any window/webview is created, so the
+        // test setup can wait for /status and drive the backstage from there.
+        WebDriverManager.shared.startIfRequested()
+
         // We have to set the product name in the menu entries explicitly, there seems to be no automatic way to do that
         updateProductName()
 

@@ -28,6 +28,8 @@ final class WebDriverServer {
     private let listener: NWListener
     private let jsExecutor: (String, @escaping (Any?, Error?) -> Void) -> Void
     private let focusHandler: (@escaping () -> Void) -> Void
+    private let handlesProvider: () -> [String]
+    private let switchHandler: (String) -> Bool
 
     /// All session IDs created via POST /session.
     private var sessionIds = Set<String>()
@@ -37,22 +39,23 @@ final class WebDriverServer {
      *
      * - Parameters:
      *   - port: TCP port to listen on.
-     *   - jsExecutor: Closure that evaluates JavaScript in the WKWebView.
-     *                 Called on an arbitrary queue; the closure must dispatch
-     *                 to the main thread internally if needed.  The completion
-     *                 handler receives the JS result or error.
-     *   - focusHandler: Closure that makes the WKWebView the first responder.
-     *                   Must dispatch to the main thread.  Calls the completion
-     *                   handler when done.
+     *   - jsExecutor: Closure that evaluates JavaScript on the active webview.
+     *   - focusHandler: Closure that makes the active webview the first responder.
+     *   - handlesProvider: Returns the current list of window handles.
+     *   - switchHandler: Set the active webview by handle; returns true on success.
      */
     init(port: UInt16,
          jsExecutor: @escaping (String, @escaping (Any?, Error?) -> Void) -> Void,
-         focusHandler: @escaping (@escaping () -> Void) -> Void) throws {
+         focusHandler: @escaping (@escaping () -> Void) -> Void,
+         handlesProvider: @escaping () -> [String],
+         switchHandler: @escaping (String) -> Bool) throws {
         let params = NWParameters.tcp
         params.acceptLocalOnly = true
         self.listener = try NWListener(using: params, on: NWEndpoint.Port(rawValue: port)!)
         self.jsExecutor = jsExecutor
         self.focusHandler = focusHandler
+        self.handlesProvider = handlesProvider
+        self.switchHandler = switchHandler
     }
 
     func start() {
@@ -207,13 +210,30 @@ final class WebDriverServer {
 
             // GET /session/{id}/window/handles
             if request.method == "GET" && subpath == ["window", "handles"] {
-                sendW3C(connection: connection, value: ["main"])
+                sendW3C(connection: connection, value: handlesProvider())
                 return
             }
 
-            // POST /session/{id}/window
+            // GET /session/{id}/window  -- current window handle
+            if request.method == "GET" && subpath == ["window"] {
+                sendW3C(connection: connection, value: handlesProvider().last ?? "")
+                return
+            }
+
+            // POST /session/{id}/window  -- switch to window
             if request.method == "POST" && subpath == ["window"] {
-                sendW3C(connection: connection, value: NSNull())
+                guard let json = try? JSONSerialization.jsonObject(with: request.body) as? [String: Any],
+                      let handle = json["handle"] as? String else {
+                    sendW3CError(connection: connection, error: "invalid argument",
+                                 message: "Missing 'handle' in body")
+                    return
+                }
+                if switchHandler(handle) {
+                    sendW3C(connection: connection, value: NSNull())
+                } else {
+                    sendW3CError(connection: connection, error: "no such window",
+                                 message: "Window handle '\(handle)' not found")
+                }
                 return
             }
         }

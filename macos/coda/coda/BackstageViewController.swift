@@ -22,6 +22,9 @@ final class BackstageViewController: NSViewController, WKScriptMessageHandlerWit
     /** Embedded web view hosting the HTML UI for the 3-button chooser. */
     private var webView: WKWebView!
 
+    /** Handle this webview registered under in WebDriverManager (for UI testing). */
+    private var webDriverHandle: String?
+
     /** Creates an empty root view to host the web view. */
     override func loadView() {
         self.view = NSView()
@@ -78,6 +81,8 @@ final class BackstageViewController: NSViewController, WKScriptMessageHandlerWit
         let dir = url.deletingLastPathComponent()
         let finalURL = components.url!
         webView.loadFileURL(finalURL, allowingReadAccessTo: dir)
+
+        webDriverHandle = WebDriverManager.shared.register(webView: webView)
     }
 
     /**
@@ -99,5 +104,8 @@ final class BackstageViewController: NSViewController, WKScriptMessageHandlerWit
      */
     deinit {
         webView?.configuration.userContentController.removeScriptMessageHandler(forName: "lok")
+        if let h = webDriverHandle {
+            WebDriverManager.shared.unregister(handle: h)
+        }
     }
 }

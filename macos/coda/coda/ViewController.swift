@@ -57,8 +57,8 @@ class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavig
     /// Offscreen text view that accumulates all "lok" messages for XCUITest assertions.
     private var testMessageLog: NSTextView?
 
-    /// W3C WebDriver server for executing JS commands from tests.
-    private var webDriverServer: WebDriverServer?
+    /// Handle this document webview is registered under in WebDriverManager.
+    private var webDriverHandle: String?
 
     var savedViewFrame: NSRect!
     var savedConsoleViewFrame: NSRect!
@@ -118,42 +118,16 @@ class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavig
             scrollView.documentView = textView
             self.view.addSubview(scrollView)
             testMessageLog = textView
+        }
 
-            // Start the test HTTP server for JS execution
-            let args = ProcessInfo.processInfo.arguments
-            let portString = args.lazy
-                .compactMap { $0.hasPrefix("--testDriverPort=") ? String($0.dropFirst("--testDriverPort=".count)) : nil }
-                .first
-            if let portString, let port = UInt16(portString) {
-                do {
-                    let server = try WebDriverServer(port: port,
-                        jsExecutor: { [weak self] js, completion in
-                            DispatchQueue.main.async {
-                                guard let webView = self?.webView else {
-                                    completion(nil, NSError(domain: "WebDriverServer", code: 1,
-                                                            userInfo: [NSLocalizedDescriptionKey: "webView not available"]))
-                                    return
-                                }
-                                webView.evaluateJavaScript(js, completionHandler: completion)
-                            }
-                        },
-                        focusHandler: { [weak self] done in
-                            DispatchQueue.main.async {
-                                if let webView = self?.webView {
-                                    webView.window?.makeKeyAndOrderFront(nil)
-                                    NSApp.activate(ignoringOtherApps: true)
-                                    webView.window?.makeFirstResponder(webView)
-                                }
-                                done()
-                            }
-                        }
-                    )
-                    server.start()
-                    webDriverServer = server
-                } catch {
-                    NSLog("WebDriverServer: failed to start: %@", error.localizedDescription)
-                }
-            }
+        // Register this webview with the WebDriver manager (no-op when
+        // the WebDriver server is not running).
+        webDriverHandle = WebDriverManager.shared.register(webView: webView)
+    }
+
+    deinit {
+        if let h = webDriverHandle {
+            WebDriverManager.shared.unregister(handle: h)
         }
     }
 
