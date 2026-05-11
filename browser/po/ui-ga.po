@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-20 12:14+0100\n"
-"PO-Revision-Date: 2026-03-10 18:10+0000\n"
+"PO-Revision-Date: 2026-03-22 10:09+0000\n"
 "Last-Translator: Aindriú Mac Giolla Eoin <aindriu80@gmail.com>\n"
 "Language-Team: Irish <https://hosted.weblate.org/projects/collabora-online/"
 "ui/ga/>\n"
-"Language: \n"
+"Language: ga\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : (n>2 && n<7) ? 2 :("
-"n>6 && n<11) ? 3 : 4;\n"
+"Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : (n>2 && n<7) ? 2 :(n>"
+"6 && n<11) ? 3 : 4;\n"
 "X-Generator: Weblate 5.17-dev\n"
 
 #: admin/admin.strings.js:15
@@ -1883,11 +1883,11 @@ msgstr "Dún dialóg"
 
 #: src/control/Control.JSDialogBuilder.js:496
 msgid "Increment value"
-msgstr ""
+msgstr "Luach méadaithe"
 
 #: src/control/Control.JSDialogBuilder.js:500
 msgid "Decrement value"
-msgstr ""
+msgstr "Laghdaigh luach"
 
 #: src/control/Control.JSDialogBuilder.js:640
 msgid "Solid"
@@ -2821,7 +2821,7 @@ msgstr "Comhad HTML (.html)"
 #: src/control/Control.NotebookbarBuilder.js:449
 #: src/control/Control.NotebookbarBuilder.js:485
 msgid "PDF Document (.pdf) with options"
-msgstr ""
+msgstr "Doiciméad PDF (.pdf) le roghanna"
 
 #: src/control/Control.NotebookbarBuilder.js:432
 msgid "CSV File (.csv)"
@@ -3208,15 +3208,15 @@ msgstr "Tábla"
 #: src/control/Control.NotebookbarCalc.js:1766
 #: src/control/Control.NotebookbarCalc.js:1769
 msgid "Table styles are only available in .xlsx files"
-msgstr ""
+msgstr "Níl stíleanna tábla ar fáil ach i gcomhaid .xlsx"
 
 #: src/control/Control.NotebookbarCalc.js:1767
 msgid "Insert a styled table"
-msgstr ""
+msgstr "Cuir tábla stílithe isteach"
 
 #: src/control/Control.NotebookbarCalc.js:1770
 msgid "Select a cell range first to insert a styled table"
-msgstr ""
+msgstr "Roghnaigh raon cealla ar dtús chun tábla stílithe a chur isteach"
 
 #: src/control/Control.NotebookbarCalc.js:1779
 #: src/control/Control.NotebookbarDraw.js:1015
@@ -3360,7 +3360,7 @@ msgstr "Ó thús"
 
 #: src/control/Control.NotebookbarImpress.js:472
 msgid "Fullscreen, starting at slide 1"
-msgstr ""
+msgstr "Lánscáileán, ag tosú ag sleamhnán 1"
 
 #: src/control/Control.NotebookbarImpress.js:479
 msgid "From Current Slide"
@@ -3368,7 +3368,7 @@ msgstr "Ón Sleamhnán Reatha"
 
 #: src/control/Control.NotebookbarImpress.js:480
 msgid "Fullscreen, starting at this slide"
-msgstr ""
+msgstr "Lánscáileán, ag tosú ag an sleamhnán seo"
 
 #: src/control/Control.NotebookbarImpress.js:494
 msgid "Present in Window"
@@ -3377,6 +3377,7 @@ msgstr "I láthair i bhFuinneog"
 #: src/control/Control.NotebookbarImpress.js:495
 msgid "Plays inside the document window. Starts at slide 1"
 msgstr ""
+"Seinntear taobh istigh den fhuinneog doiciméad. Tosaíonn sé ag sleamhnán 1"
 
 #: src/control/Control.NotebookbarImpress.js:503
 msgid "Presenter View"
@@ -3384,7 +3385,7 @@ msgstr "Radharc Láithreora"
 
 #: src/control/Control.NotebookbarImpress.js:504
 msgid "Shows your notes, next slide, and a timer"
-msgstr ""
+msgstr "Taispeánann sé do nótaí, an chéad sleamhnán eile, agus lasc ama"
 
 #: src/control/Control.NotebookbarImpress.js:512
 msgid "Present to All"
@@ -3392,7 +3393,7 @@ msgstr "Cuir i Láthair do Chách"
 
 #: src/control/Control.NotebookbarImpress.js:513
 msgid "Starts a slideshow on every viewer's screen"
-msgstr ""
+msgstr "Tosaíonn sé seo taispeántas sleamhnán ar scáileán gach lucht féachana"
 
 #: src/control/Control.NotebookbarImpress.js:521
 #: src/slideshow/SlideShowPresenter.ts:1517
@@ -3401,7 +3402,7 @@ msgstr "Lean an Láithreoir"
 
 #: src/control/Control.NotebookbarImpress.js:522
 msgid "View slides as the presenter advances them"
-msgstr ""
+msgstr "Féach ar shleamhnáin agus an láithreoir á gcur chun cinn"
 
 #: src/control/Control.NotebookbarImpress.js:650
 msgid "Slide Views"
@@ -3439,13 +3440,12 @@ msgid "Master Slide Templates"
 msgstr "Teimpléid Sleamhnán Máistir"
 
 #: src/control/Control.NotebookbarImpress.js:1824
-#, fuzzy
 msgid "This Presentation"
-msgstr "Dún Léiriú"
+msgstr "An Cur i Láthair seo"
 
 #: src/control/Control.NotebookbarImpress.js:1833
 msgid "Presentation Templates"
-msgstr ""
+msgstr "Teimpléid Cur i Láthair"
 
 #: src/control/Control.NotebookbarImpress.js:1903
 msgid "Slide Size"
@@ -3523,15 +3523,15 @@ msgstr "Leithead Leathanaigh"
 
 #: src/control/Control.NotebookbarWriter.js:2209
 msgid "Spellcheck"
-msgstr ""
+msgstr "Seiceáil litrithe"
 
 #: src/control/Control.NotebookbarWriter.js:2222
 msgid "Spelling Options"
-msgstr ""
+msgstr "Roghanna Litrithe"
 
 #: src/control/Control.NotebookbarWriter.js:2234
 msgid "Auto Spell Check"
-msgstr ""
+msgstr "Seiceáil Litrithe Uathoibríoch"
 
 #: src/control/Control.NotebookbarWriter.js:2262
 #: src/control/Control.NotebookbarWriter.js:2278
@@ -4414,11 +4414,11 @@ msgstr "An-scaoilte"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1788
 msgid "Inline"
-msgstr ""
+msgstr "Inlíne"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1794
 msgid "Side by Side"
-msgstr ""
+msgstr "Taobh le Taobh"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1807
 msgid "All users"
@@ -5051,11 +5051,10 @@ msgid "Failed to load document."
 msgstr "Theip ar an doiciméad a lódáil."
 
 #: src/errormessages.js:45
-#, fuzzy
 msgid "Save failed due to no disk space left. Document will now be read-only."
 msgstr ""
-"Theip ar shábháil toisc nach raibh spás diosca fágtha. Beidh an doiciméad "
-"inléite amháin anois."
+"Theip ar an sábháil mar gheall nach raibh spás diosca fágtha. Beidh an "
+"doiciméad inléite amháin anois."
 
 #: src/errormessages.js:46
 msgid ""
@@ -5514,7 +5513,6 @@ msgid "Click to exit presentation..."
 msgstr "Cliceáil chun an cur i láthair a fhágáil..."
 
 #: src/slideshow/SlideShowPresenter.ts:805
-#, fuzzy
 msgid "You are on the first slide"
 msgstr "Tá tú ar an gcéad sleamhnán"
 
