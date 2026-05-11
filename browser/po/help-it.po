@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-20 12:14+0200\n"
-"PO-Revision-Date: 2025-12-09 11:58+0000\n"
-"Last-Translator: Marco Cecchetti <mrcekets@gmail.com>\n"
+"PO-Revision-Date: 2026-04-03 13:09+0000\n"
+"Last-Translator: tfr tint <tfrtint@gmail.com>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/collabora-online/"
 "help/it/>\n"
 "Language: it\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Translate Toolkit 3.6.0\n"
+"X-Generator: Weblate 5.17-dev\n"
 
 #: html/cool-help.html%2Bdiv.h1:9-5
 msgid "Keyboard Shortcuts"
@@ -1838,7 +1838,6 @@ msgstr "Modificare un foglio di calcolo"
 #: html/cool-help.html%2Bdiv.div.h2:335-9
 #: html/cool-help.html%2Bdiv.div.div.h3:492-5
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:496-29
-#, fuzzy
 msgid "Formulas"
 msgstr "Formule"
 
