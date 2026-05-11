@@ -11,7 +11,7 @@
     <string name="pref_show_hidden_files">Sken ifyla.ikaramen</string>
     <string name="pref_show_hidden_files_summary">Rmed akken ad teffreḍ ifuyla/ikaramen</string>
     <string name="pref_sort_summary">Fren asmizwer n yifuyla:A-Z, s teɣzi neɣ s wazemz.</string>
-    <string name="pref_viewmode_summary">Sken ifuyla am yiẓiki neɣ am tebdert</string>
+    <string name="pref_viewmode_summary">Sken ifuyla am yiẓiki neɣ am tebdert.</string>
     <string name="pref_file_explorer_title">Taneɣruft n umsefrak n yifuyla</string>
     <string name="pref_sort_title">Asmizwer n ufaylu</string>
     <string name="pref_filter_title">Imsizdig n ufaylu amezwer</string>
@@ -60,7 +60,7 @@
     <string name="owncloud_wrong_connection">Ur izmir ara ad iqqen ɣer uqeddac asigna. Wali tawila-ik.</string>
     <string name="owncloud_unauthorized">Ur izmir ara ad iqqen ɣer uqeddac asigna. Wali tawila-ik.</string>
     <string name="owncloud_unspecified_error">Tuccḍa tarussin deg tuqqna ɣer uqeddac asigna. Wali tawila akked/neɣ ɛreḍ ticki.</string>
-    <string name="ext_document_provider_error">Yir afaylu aẓar: Wali tawila n tkarḍa-ik sd.</string>
+    <string name="ext_document_provider_error">Yir afaylu aẓar: Wali tawila-k n tkarḍa SD.</string>
     <string name="otg_missing_error">Yir afaylu aẓar: Wali ibenk-ik OTG neq/akked tawila.</string>
     <string name="storage_provider_settings">Iɣewwaren n usaǧǧaw n usekles</string>
     <string name="owncloud_settings">Iɣewwaren n uqeddac asigna</string>
@@ -90,9 +90,9 @@
     <string name="action_overwrite">Sfeɛj</string>
     <string name="loading">Yessalay-d…</string>
     <string name="share_document">Bḍu isemli</string>
-    <string name="unable_to_go_further">Ur izmir ara ad ikemmel</string>
+    <string name="unable_to_go_further">Ur izmir ara ad ikemmel.</string>
     <string name="bmp_null">Bmp d ilem!</string>
-    <string name="directory_not_saved">Akaram ur yettwasekles ara</string>
+    <string name="directory_not_saved">Akaram ur yettwasekles ara.</string>
     <string name="title_activity_show_html">Ɣef</string>
     <string name="file_exists_warning">Afaylu s yisem-a yella yakan ihi ad ifɛeǰ.</string>
     <string name="temp_file_saving_disabled">Afaylu-a i tɣuri kan, asekles yensa.</string>

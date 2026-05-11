@@ -7,11 +7,11 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-20 12:14+0100\n"
-"PO-Revision-Date: 2026-03-14 21:31+0000\n"
+"PO-Revision-Date: 2026-03-24 17:09+0000\n"
 "Last-Translator: ButterflyOfFire <boffire@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Kabyle <https://hosted.weblate.org/projects/collabora-online/"
 "ui/kab/>\n"
-"Language: \n"
+"Language: kab\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1224,7 +1224,7 @@ msgstr "Amaynut"
 
 #: src/control/Control.BackstageView.ts:288
 msgid "Open"
-msgstr ""
+msgstr "Ldi"
 
 #: src/control/Control.BackstageView.ts:296
 #: src/control/Control.Notebookbar.js:637
@@ -1398,7 +1398,7 @@ msgstr ""
 
 #: src/control/Control.BackstageView.ts:1443
 msgid "Untitled"
-msgstr ""
+msgstr "War isem"
 
 #: src/control/Control.Command.js:90
 msgid "Unlock"
@@ -2865,7 +2865,7 @@ msgstr "Asenqed"
 #: src/control/Control.NotebookbarImpress.js:116
 #: src/control/Control.NotebookbarWriter.js:69
 msgid "Format"
-msgstr ""
+msgstr "Amasal"
 
 #: src/control/Control.NotebookbarCalc.js:78
 #: src/control/Control.NotebookbarDraw.js:101
@@ -3515,7 +3515,7 @@ msgstr "Tehri n usebter"
 
 #: src/control/Control.NotebookbarWriter.js:2209
 msgid "Spellcheck"
-msgstr ""
+msgstr "Asenqed n tira"
 
 #: src/control/Control.NotebookbarWriter.js:2222
 msgid "Spelling Options"
@@ -4583,13 +4583,12 @@ msgid "Watermark"
 msgstr ""
 
 #: src/control/jsdialog/Definitions.Menu.ts:2364
-#, fuzzy
 msgid "Insert comment"
 msgstr "Ger awennit"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2368
 msgid "Comments list"
-msgstr ""
+msgstr "Tabdart n iwenniten"
 
 #: src/control/jsdialog/Util.SnackbarController.ts:122
 msgid "Dismiss"
@@ -5163,7 +5162,7 @@ msgstr ""
 
 #: src/map/Clipboard.js:1499
 msgid "Cut"
-msgstr ""
+msgstr "Gzem"
 
 #: src/map/Clipboard.js:1515
 msgid ""

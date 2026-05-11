@@ -1,0 +1,204 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-12-06 18:17+0000\n"
+"PO-Revision-Date: 2026-03-24 17:09+0000\n"
+"Last-Translator: ButterflyOfFire <boffire@users.noreply.hosted.weblate.org>\n"
+"Language-Team: Kabyle <https://hosted.weblate.org/projects/collabora-online/"
+"collabora-office-macos-app/kab/>\n"
+"Language: kab\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.17-dev\n"
+
+msgctxt "1UK-8n-QPP.title"
+msgid "Customize Toolbar…"
+msgstr ""
+
+#. Do not change the placeholder ProductName!
+msgctxt "1Xt-HY-uBw.title"
+msgid "ProductName"
+msgstr ""
+
+msgctxt "4J7-dP-txa.title"
+msgid "Enter Full Screen"
+msgstr ""
+
+#. Do not change the placeholder ProductName!
+msgctxt "4sb-4s-VLi.title"
+msgid "Quit ProductName"
+msgstr ""
+
+msgctxt "5QF-Oa-p0T.title"
+msgid "Edit"
+msgstr "Ẓreg"
+
+#. Do not change the placeholder ProductName!
+msgctxt "5kV-Vb-QxS.title"
+msgid "About ProductName"
+msgstr "Ɣef ProductName"
+
+msgctxt "6dh-zS-Vam.title"
+msgid "Redo"
+msgstr ""
+
+msgctxt "AYu-sK-qS6.title"
+msgid "Main Menu"
+msgstr "Umuɣ agejdan"
+
+msgctxt "BOF-NM-1cW.title"
+msgid "Preferences…"
+msgstr "Imenyafen…"
+
+msgctxt "Bw7-FT-i3A.title"
+msgid "Save As…"
+msgstr "Sekles s yisem…"
+
+msgctxt "DVo-aG-piG.title"
+msgid "Close"
+msgstr "Mdel"
+
+msgctxt "F2S-fz-NVQ.title"
+msgid "Help"
+msgstr "Tallalt"
+
+msgctxt "H8h-7b-M4v.title"
+msgid "View"
+msgstr ""
+
+msgctxt "HyV-fh-RgO.title"
+msgid "View"
+msgstr ""
+
+msgctxt "IAo-SY-fd9.title"
+msgid "Open…"
+msgstr "Ldi…"
+
+msgctxt "KaW-ft-85H.title"
+msgid "Revert to Saved"
+msgstr ""
+
+msgctxt "Kd2-mp-pUS.title"
+msgid "Show All"
+msgstr "Sken-iten-id akk"
+
+msgctxt "LE2-aR-0XJ.title"
+msgid "Bring All to Front"
+msgstr ""
+
+msgctxt "NMo-om-nkz.title"
+msgid "Services"
+msgstr "Imeẓla"
+
+msgctxt "OY7-WF-poV.title"
+msgid "Minimize"
+msgstr ""
+
+#. Do not change the placeholder ProductName!
+msgctxt "Olw-nP-bQN.title"
+msgid "Hide ProductName"
+msgstr "Ffer ProductName"
+
+msgctxt "R4o-n2-Eq4.title"
+msgid "Zoom"
+msgstr ""
+
+msgctxt "Td7-aD-5lo.title"
+msgid "Window"
+msgstr "Asfaylu"
+
+msgctxt "Vdr-fp-XzO.title"
+msgid "Hide Others"
+msgstr "Ffer wiyaḍ"
+
+msgctxt "W48-6f-4Dl.title"
+msgid "Edit"
+msgstr "Ẓreg"
+
+msgctxt "Was-JA-tGl.title"
+msgid "New"
+msgstr "Amaynut"
+
+msgctxt "WeT-3V-zwk.title"
+msgid "Paste and Match Style"
+msgstr ""
+
+msgctxt "aTl-1u-JFS.title"
+msgid "Print…"
+msgstr "Siggez…"
+
+msgctxt "aUF-d1-5bR.title"
+msgid "Window"
+msgstr "Asfaylu"
+
+msgctxt "bib-Uj-vzu.title"
+msgid "File"
+msgstr "Afaylu"
+
+msgctxt "dMs-cI-mzQ.title"
+msgid "File"
+msgstr "Afaylu"
+
+msgctxt "dRJ-4n-Yzg.title"
+msgid "Undo"
+msgstr ""
+
+msgctxt "gVA-U4-sdL.title"
+msgid "Paste"
+msgstr "Senṭeḍ"
+
+msgctxt "hz9-B4-Xy5.title"
+msgid "Services"
+msgstr "Imeẓla"
+
+msgctxt "kIP-vf-haE.title"
+msgid "Show Sidebar"
+msgstr "Sken-d agalis adisan"
+
+msgctxt "oas-Oc-fiZ.title"
+msgid "Open Recent"
+msgstr ""
+
+msgctxt "pxx-59-PXV.title"
+msgid "Save…"
+msgstr "Sekles…"
+
+msgctxt "qIS-W8-SiK.title"
+msgid "Page Setup…"
+msgstr "Tawila n usebter…"
+
+msgctxt "snW-S8-Cw5.title"
+msgid "Show Toolbar"
+msgstr "Sken-d tafeggagt n yifecka"
+
+msgctxt "tXI-mr-wws.title"
+msgid "Open Recent"
+msgstr ""
+
+#. Do not change the placeholder ProductName!
+msgctxt "uQy-DD-JDr.title"
+msgid "ProductName"
+msgstr "ProductName"
+
+msgctxt "uRl-iY-unG.title"
+msgid "Cut"
+msgstr "Gzem"
+
+msgctxt "vFu-3Y-2xa.title"
+msgid "Window"
+msgstr "Asfaylu"
+
+msgctxt "vNY-rz-j42.title"
+msgid "Clear Menu"
+msgstr "Sfeḍ umuɣ"
+
+msgctxt "wpr-3q-Mcd.title"
+msgid "Help"
+msgstr "Tallalt"
+
+msgctxt "x3v-GG-iWU.title"
+msgid "Copy"
+msgstr "Nɣel"
