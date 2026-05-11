@@ -269,12 +269,6 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
 
     bool bTmpDummy = !GetLen();
     SwFlyCntPortion* pFlyCnt = nullptr;
-    if( bTmpDummy )
-    {
-        nFlyAscent = 0;
-        nFlyHeight = 0;
-        nFlyDescent = 0;
-    }
 
     // #i3952#
     const bool bIgnoreBlanksAndTabsForLineHeightCalculation =
