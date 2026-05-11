@@ -90,6 +90,25 @@ Bridge::~Bridge() {
     }
 }
 
+void Bridge::sendCollabBye()
+{
+    // Sends {"type":"bye"} on the per-document collab WS so the
+    // server-side CollabBroker knows the disconnect is orderly and
+    // can reclaim itself immediately instead of waiting out its idle
+    // grace period for a reconnect that is not coming.  Safe to call
+    // when there is no collab WS (e.g. a local-only document) or
+    // when bye has already been sent.  Must be called while _document
+    // is still alive - call sites are the QMainWindow::closeEvent
+    // paths of the picker / open-in-new-window windows, not the
+    // Bridge destructor (which runs after the host window's
+    // value-typed _document has been destroyed).
+    if (_document._remoteInfo && _document._remoteInfo->collabWs)
+    {
+        _document._remoteInfo->collabWs->sendTextMessage(
+            QStringLiteral("{\"type\":\"bye\"}"));
+    }
+}
+
 void Bridge::createAndStartMessagePumpThread()
 {
     // Create pipe for close notifications
@@ -1055,13 +1074,17 @@ QVariant Bridge::cool(const QString& messageStr)
             _closeNotificationPipeForForwardingThread[0] = -1;
         }
 
-        // Close the collab WebSocket.  Disconnect first so that any
-        // textMessageReceived events still queued in the Qt event
-        // loop do not reach the new page that we are about to load
-        // (where they would land in window._codaCollabQueue and feed
-        // the post-switch _setupCodaCollab bail-out path).
+        // Close the collab WebSocket.  Send a {"type":"bye"} first
+        // so the server-side broker recognises this as an orderly
+        // close and reclaims itself immediately instead of waiting
+        // out its idle grace period.  Then disconnect signal slots
+        // so any textMessageReceived events still queued in the Qt
+        // event loop do not reach the new page that we are about to
+        // load (where they would land in window._codaCollabQueue
+        // and feed the post-switch _setupCodaCollab bail-out path).
         if (ri.collabWs)
         {
+            ri.collabWs->sendTextMessage(QStringLiteral("{\"type\":\"bye\"}"));
             ri.collabWs->disconnect();
             ri.collabWs->close();
         }

@@ -46,6 +46,7 @@ std::atomic<uint64_t> HandlerIdCounter{0};
 CollabBroker::CollabBroker(const std::string& docKey, const std::string& wopiSrc)
     : _docKey(docKey)
     , _wopiSrc(wopiSrc)
+    , _idleSince(std::chrono::steady_clock::now())
     , _accessToken(CollabAccessTokenLength, CollabAccessTokenRotation)
 {
     LOG_INF("CollabBroker created for docKey [" << _docKey << ']');
@@ -68,6 +69,11 @@ void CollabBroker::addHandler(const std::shared_ptr<CollabSocketHandler>& handle
     const std::string handlerId = generateHandlerId();
     handler->setHandlerId(handlerId);
     _handlers.push_back(handler);
+
+    // A new handler is here; the previous "graceful close was the
+    // last word" no longer holds.  Reset so the broker stays around
+    // again on the next idle period.
+    _gracefulClose = false;
 
     LOG_INF("CollabBroker [" << _docKey << "]: added handler [" << handlerId
             << "], total handlers: " << _handlers.size());
@@ -94,6 +100,23 @@ void CollabBroker::removeHandler(const std::shared_ptr<CollabSocketHandler>& han
 
     cleanupExpiredHandlers();
     LOG_DBG("CollabBroker [" << _docKey << "]: remaining handlers: " << _handlers.size());
+
+    if (_handlers.empty())
+    {
+        _idleSince = std::chrono::steady_clock::now();
+        if (handler->isGracefulClose())
+        {
+            // Client announced "bye": no reconnect is coming, so
+            // drop the editing state now and let isReclaimable()
+            // bypass the grace period so cleanupCollabBrokers reaps
+            // the broker on its next pass.
+            _editingStarted = false;
+            _gracefulClose = true;
+        }
+        // Otherwise (accidental disconnect): keep _editingStarted
+        // set so a reconnect within the grace window finds the
+        // session intact.
+    }
 }
 
 size_t CollabBroker::getHandlerCount() const
@@ -117,7 +140,18 @@ bool CollabBroker::isEmpty() const
 bool CollabBroker::isIdle() const
 {
     std::lock_guard<std::mutex> lock(_mutex);
-    return _handlers.empty() && !_editingStarted;
+    return _handlers.empty();
+}
+
+bool CollabBroker::isReclaimable(
+    std::chrono::steady_clock::duration grace) const
+{
+    std::lock_guard<std::mutex> lock(_mutex);
+    if (!_handlers.empty())
+        return false;
+    if (_gracefulClose)
+        return true;
+    return std::chrono::steady_clock::now() - _idleSince >= grace;
 }
 
 void CollabBroker::setWopiInfo(Poco::JSON::Object::Ptr wopiInfo)
@@ -397,11 +431,16 @@ std::shared_ptr<CollabBroker> findOrCreateCollabBroker(const std::string& docKey
 
 void cleanupCollabBrokers()
 {
+    // Grace period before reclaiming an idle broker, so a transient
+    // client disconnect (network blip) can reconnect and re-find the
+    // same broker with its state intact.
+    constexpr auto grace = std::chrono::seconds(30);
+
     std::lock_guard<std::mutex> lock(CollabBrokersMutex);
 
     for (auto it = CollabBrokers.begin(); it != CollabBrokers.end(); )
     {
-        if (it->second && it->second->isIdle())
+        if (it->second && it->second->isReclaimable(grace))
         {
             LOG_INF("Removing idle CollabBroker for docKey [" << it->first << ']');
             it = CollabBrokers.erase(it);

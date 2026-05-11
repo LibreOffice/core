@@ -36,6 +36,7 @@
 #include <QSslServer>
 #include <QSslSocket>
 #include <QTcpSocket>
+#include <QCloseEvent>
 #include <QTimer>
 #include <QUrlQuery>
 #include <QWebEnginePage>
@@ -543,6 +544,18 @@ void IntegratorFilePicker::extractAccessToken()
             _accessToken = val;
         emit wopiSelected();
     });
+}
+
+void IntegratorFilePicker::closeEvent(QCloseEvent* ev)
+{
+    // Tell the per-document collab broker we are leaving voluntarily
+    // before tearing the window down.  Must happen here rather than
+    // in Bridge's destructor, because by the time the destructor
+    // runs the QMainWindow's value-typed _document (which the bridge
+    // holds a reference to) has already been destroyed.
+    if (_bridge)
+        _bridge->sendCollabBye();
+    QMainWindow::closeEvent(ev);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

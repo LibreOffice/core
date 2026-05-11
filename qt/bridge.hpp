@@ -75,6 +75,12 @@ public:
     // send Online → JS
     void send2JS(const std::vector<char>& buffer);
 
+    /// Announce an orderly close to the per-document collab broker
+    /// by sending {"type":"bye"} on its WebSocket.  Must be called
+    /// from the host window's closeEvent while _document is still
+    /// alive - not from a destructor.
+    void sendCollabBye();
+
 public slots: // called from JavaScript
     // Called from JS via window.postMobileMessage
     void debug(const QString& msg);

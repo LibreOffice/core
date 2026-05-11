@@ -126,6 +126,11 @@ public:
     static WebView* findStarterScreen();
     static const std::vector<WebView*>& getAllInstances() { return s_instances; }
     void activateWindow();
+    /// Announce an orderly close to the per-document collab broker.
+    /// Forwarded to Bridge::sendCollabBye() while _document is still
+    /// valid - called from Window::closeEvent before owner_'s
+    /// destruction tears _document down.  No-op for local-only docs.
+    void sendCollabBye();
     bool isStarterScreen() const { return _document._fakeClientFd == -1 && _document._appDocId == 0; }
     QMainWindow* getMainWindow() const { return _mainWindow; }
 

@@ -244,6 +244,11 @@ private:
             closeCallback_();
 
         auto const p = owner_;
+        // Announce the orderly close to the per-document collab
+        // broker (no-op for local-only docs) before the WebView is
+        // destroyed, so it can reach the bridge's _document while
+        // it is still alive.
+        p->sendCollabBye();
         owner_ = nullptr;
         assert(p != nullptr);
         delete p;
@@ -1002,6 +1007,12 @@ void WebView::activateWindow()
         _mainWindow->raise();
         _mainWindow->activateWindow();
     }
+}
+
+void WebView::sendCollabBye()
+{
+    if (_bridge)
+        _bridge->sendCollabBye();
 }
 
 void WebView::queryGnomeFontScalingUpdateZoom()

@@ -55,6 +55,14 @@ class CollabSocketHandler : public WebSocketHandler
     /// Unique handler ID within the broker
     std::string _handlerId;
 
+    /// Set when the client sends a {"type":"bye"} message announcing
+    /// it is intentionally leaving (e.g. the user closed the doc, or
+    /// CODA-Q is switching out of local-edit mode).  Lets the broker
+    /// distinguish an orderly disconnect (reclaim immediately - no
+    /// reconnect expected) from a transient network drop (start the
+    /// idle grace clock and wait).
+    bool _byeReceived = false;
+
 public:
     CollabSocketHandler(const std::shared_ptr<StreamSocket>& socket,
                         const Poco::Net::HTTPRequest& request,
@@ -94,6 +102,12 @@ public:
 
     /// Sets the handler ID (called by CollabBroker::addHandler)
     void setHandlerId(const std::string& id) { _handlerId = id; }
+
+    /// True iff the client has announced via {"type":"bye"} that it
+    /// is leaving voluntarily; CollabBroker::removeHandler uses this
+    /// to decide between immediate reclaim and the idle grace
+    /// period.
+    bool isGracefulClose() const { return _byeReceived; }
 
     /// Called when the connection is closed
     void onDisconnect() override;

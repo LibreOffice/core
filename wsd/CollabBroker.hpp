@@ -79,7 +79,23 @@ class CollabBroker : public std::enable_shared_from_this<CollabBroker>
     std::vector<std::weak_ptr<CollabSocketHandler>> _handlers;
 
     /// Set when a user sends editing_started via the collab WebSocket.
+    /// Survives a transient client disconnect (handlers temporarily
+    /// empty within cleanupCollabBrokers' grace window) so a reconnect
+    /// resumes editing; gets reset only when the broker is reclaimed.
     bool _editingStarted = false;
+
+    /// When the broker last became idle (no handlers).  Used by
+    /// cleanupCollabBrokers() to keep an idle broker alive for a
+    /// short grace period so a transient client disconnect can
+    /// reconnect to the same broker.  Set in the constructor and in
+    /// removeHandler() whenever _handlers transitions to empty.
+    std::chrono::steady_clock::time_point _idleSince;
+
+    /// True when the last handler to leave announced an orderly
+    /// departure via {"type":"bye"}.  In that case we know no
+    /// reconnect is coming, so isReclaimable() returns true
+    /// immediately, bypassing the grace period.
+    bool _gracefulClose = false;
 
     /// WOPI info from the first authenticated handler (shared by all)
     Poco::JSON::Object::Ptr _wopiInfo;
@@ -118,10 +134,15 @@ public:
     /// Returns true if there are no active handlers
     bool isEmpty() const;
 
-    /// Returns true if there are no handlers and no editing was started.
-    /// Idle brokers can be cleaned up; brokers with _editingStarted set
-    /// are kept so late joiners see editingActive in the user_list.
+    /// Returns true if there are no handlers connected.  Idle
+    /// brokers are cleaned up by cleanupCollabBrokers().
     bool isIdle() const;
+
+    /// Returns true if isIdle() has been true for at least @grace.
+    /// cleanupCollabBrokers() uses this so a brief disconnect can
+    /// reconnect within the grace window without losing broker
+    /// state.
+    bool isReclaimable(std::chrono::steady_clock::duration grace) const;
 
     /// Set WOPI info (from first authenticated handler)
     void setWopiInfo(Poco::JSON::Object::Ptr wopiInfo);

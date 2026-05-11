@@ -58,6 +58,9 @@ signals:
     /// The caller reads them off the picker and then close()s it.
     void wopiSelected();
 
+protected:
+    void closeEvent(QCloseEvent* event) override;
+
 private:
     void extractAccessToken();
     /// Run integrator-specific JS to locate the WOPI access_token in

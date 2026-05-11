@@ -291,6 +291,16 @@ void CollabSocketHandler::handleAuthenticatedMessage(const std::string& msg)
     {
         handleEditingStarted();
     }
+    else if (type == "bye")
+    {
+        // Client is announcing an orderly departure (e.g. CODA-Q
+        // closed the document, or is switching out of local-edit
+        // mode).  Mark the handler so removeHandler() short-circuits
+        // the broker's idle grace period when this socket
+        // disconnects.
+        _byeReceived = true;
+        LOG_INF("Collab: bye received from " << _handlerId);
+    }
     else if (type == "switch_to_collab" || type == "saved_and_switching")
     {
         // Broadcast to other handlers as-is, adding the sender's identity.
