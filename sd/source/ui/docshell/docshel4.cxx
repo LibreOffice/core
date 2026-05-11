@@ -300,7 +300,7 @@ bool DrawDocShell::Load( SfxMedium& rMedium )
     }
 
     if (bRet)
-        mpDoc->UpdateAllLinks();
+        UpdateLinks();
 
     if( bRet )
     {
@@ -464,6 +464,9 @@ bool DrawDocShell::ImportFrom(SfxMedium &rMedium,
     const bool bRet = SfxObjectShell::ImportFrom(rMedium, xInsertPosition);
     mpDoc->decImportExport();
 
+    if (bRet && !xInsertPosition)
+        UpdateLinks();
+
     SfxItemSet& rSet = rMedium.GetItemSet();
     if (SfxItemState::SET == rSet.GetItemState(SID_DOC_STARTPRESENTATION))
     {
@@ -576,6 +579,9 @@ bool DrawDocShell::ConvertFrom( SfxMedium& rMedium )
     }
 
     FinishedLoading();
+
+    if (bRet)
+        UpdateLinks();
 
     // tell SFX to change viewshell when in preview mode
     if( IsPreview() )
