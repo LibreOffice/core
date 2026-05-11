@@ -8,11 +8,11 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-20 12:14+0100\n"
-"PO-Revision-Date: 2026-03-10 18:09+0000\n"
-"Last-Translator: Leif-Jöran Olsson <info@friprogramvarusyndikatet.se>\n"
+"PO-Revision-Date: 2026-03-27 20:09+0000\n"
+"Last-Translator: bittin1ddc447d824349b2 <bittin@reimu.nl>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/collabora-online/"
 "ui/sv/>\n"
-"Language: \n"
+"Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1870,11 +1870,11 @@ msgstr "Stäng dialogrutan"
 
 #: src/control/Control.JSDialogBuilder.js:496
 msgid "Increment value"
-msgstr ""
+msgstr "Inkrementellt värde"
 
 #: src/control/Control.JSDialogBuilder.js:500
 msgid "Decrement value"
-msgstr ""
+msgstr "Avtagande värde"
 
 #: src/control/Control.JSDialogBuilder.js:640
 msgid "Solid"
@@ -2808,7 +2808,7 @@ msgstr "HTML-fil (.html)"
 #: src/control/Control.NotebookbarBuilder.js:449
 #: src/control/Control.NotebookbarBuilder.js:485
 msgid "PDF Document (.pdf) with options"
-msgstr ""
+msgstr "PDF-dokument (.pdf) med alternativ"
 
 #: src/control/Control.NotebookbarBuilder.js:432
 msgid "CSV File (.csv)"
@@ -3195,15 +3195,15 @@ msgstr "Tabell"
 #: src/control/Control.NotebookbarCalc.js:1766
 #: src/control/Control.NotebookbarCalc.js:1769
 msgid "Table styles are only available in .xlsx files"
-msgstr ""
+msgstr "Tabellstilar är endast tillgängliga i .xlsx-filer"
 
 #: src/control/Control.NotebookbarCalc.js:1767
 msgid "Insert a styled table"
-msgstr ""
+msgstr "Infoga en stiliserad tabell"
 
 #: src/control/Control.NotebookbarCalc.js:1770
 msgid "Select a cell range first to insert a styled table"
-msgstr ""
+msgstr "Markera först ett cellområde för att infoga en stiliserad tabell"
 
 #: src/control/Control.NotebookbarCalc.js:1779
 #: src/control/Control.NotebookbarDraw.js:1015
@@ -3347,7 +3347,7 @@ msgstr "Från början"
 
 #: src/control/Control.NotebookbarImpress.js:472
 msgid "Fullscreen, starting at slide 1"
-msgstr ""
+msgstr "Helskärm, med början på bild 1"
 
 #: src/control/Control.NotebookbarImpress.js:479
 msgid "From Current Slide"
@@ -3355,7 +3355,7 @@ msgstr "Från aktuell bild"
 
 #: src/control/Control.NotebookbarImpress.js:480
 msgid "Fullscreen, starting at this slide"
-msgstr ""
+msgstr "Helskärm, med början på den här bilden"
 
 #: src/control/Control.NotebookbarImpress.js:494
 msgid "Present in Window"
@@ -3363,7 +3363,7 @@ msgstr "Presentera i fönster"
 
 #: src/control/Control.NotebookbarImpress.js:495
 msgid "Plays inside the document window. Starts at slide 1"
-msgstr ""
+msgstr "Spelas upp inuti dokumentfönstret. Börjar på bild 1"
 
 #: src/control/Control.NotebookbarImpress.js:503
 msgid "Presenter View"
@@ -3371,7 +3371,7 @@ msgstr "Presentatörsvy"
 
 #: src/control/Control.NotebookbarImpress.js:504
 msgid "Shows your notes, next slide, and a timer"
-msgstr ""
+msgstr "Visar dina anteckningar, nästa bild, och en timer"
 
 #: src/control/Control.NotebookbarImpress.js:512
 msgid "Present to All"
@@ -3379,7 +3379,7 @@ msgstr "Presentera till alla"
 
 #: src/control/Control.NotebookbarImpress.js:513
 msgid "Starts a slideshow on every viewer's screen"
-msgstr ""
+msgstr "Startar ett bildspel på alla tittares skärmar"
 
 #: src/control/Control.NotebookbarImpress.js:521
 #: src/slideshow/SlideShowPresenter.ts:1517
@@ -3388,7 +3388,7 @@ msgstr "Följ presentatör"
 
 #: src/control/Control.NotebookbarImpress.js:522
 msgid "View slides as the presenter advances them"
-msgstr ""
+msgstr "Visa bilder medan presentatören flyttar dem framåt"
 
 #: src/control/Control.NotebookbarImpress.js:650
 msgid "Slide Views"
@@ -3426,13 +3426,12 @@ msgid "Master Slide Templates"
 msgstr "Master Slide-mallar"
 
 #: src/control/Control.NotebookbarImpress.js:1824
-#, fuzzy
 msgid "This Presentation"
-msgstr "Stäng presentation"
+msgstr "Denna presentation"
 
 #: src/control/Control.NotebookbarImpress.js:1833
 msgid "Presentation Templates"
-msgstr ""
+msgstr "Presentationsmallar"
 
 #: src/control/Control.NotebookbarImpress.js:1903
 msgid "Slide Size"
@@ -3510,15 +3509,15 @@ msgstr "Sidbredd"
 
 #: src/control/Control.NotebookbarWriter.js:2209
 msgid "Spellcheck"
-msgstr ""
+msgstr "Stavningskontroll"
 
 #: src/control/Control.NotebookbarWriter.js:2222
 msgid "Spelling Options"
-msgstr ""
+msgstr "Stavningsalternativ"
 
 #: src/control/Control.NotebookbarWriter.js:2234
 msgid "Auto Spell Check"
-msgstr ""
+msgstr "Automatisk stavningskontroll"
 
 #: src/control/Control.NotebookbarWriter.js:2262
 #: src/control/Control.NotebookbarWriter.js:2278
@@ -4389,11 +4388,11 @@ msgstr "Mycket brett"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1788
 msgid "Inline"
-msgstr ""
+msgstr "Inline"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1794
 msgid "Side by Side"
-msgstr ""
+msgstr "Sida vid sida"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1807
 msgid "All users"
@@ -5010,11 +5009,10 @@ msgid "Failed to load document."
 msgstr "Kunde inte läsa in dokumentet."
 
 #: src/errormessages.js:45
-#, fuzzy
 msgid "Save failed due to no disk space left. Document will now be read-only."
 msgstr ""
-"Dokumentet kunde inte sparas på grund av brist på utrymme. Dokumentet är nu "
-"skrivskyddat."
+"Sparningen misslyckades på grund av att det inte finns något diskutrymme "
+"kvar. Dokumentet kommer nu att vara skrivskyddat."
 
 #: src/errormessages.js:46
 msgid ""
@@ -5465,9 +5463,8 @@ msgid "Click to exit presentation..."
 msgstr "Klicka för att avsluta presentationen ..."
 
 #: src/slideshow/SlideShowPresenter.ts:805
-#, fuzzy
 msgid "You are on the first slide"
-msgstr "Du är på den första bilden i bildspelet"
+msgstr "Du är på den första bilden"
 
 #: src/slideshow/SlideShowPresenter.ts:813
 msgid "Waiting for presenter to advance"
