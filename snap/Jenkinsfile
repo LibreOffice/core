@@ -71,6 +71,19 @@ pipeline {
                         --exclude='browser/node_modules' \
                         /src/ /build/
 
+                    # Carry the host's commit hash into the build. configure.ac
+                    # prefers dist_git_hash over `git log` (which would fail
+                    # anyway, since the rsync excludes .git), so without this
+                    # file the About dialog shows "git hash: <version-string>".
+                    # Skip if /build already has a dist_git_hash from a release
+                    # tarball, and skip if the host isn't a git checkout.
+                    if ! $EXEC $CONTAINER test -f /build/dist_git_hash; then
+                        GIT_HASH=$(cd $WORKSPACE && git log -1 --format=%h --abbrev=10 2>/dev/null)
+                        if [ -n "$GIT_HASH" ]; then
+                            $EXEC $CONTAINER bash -c "echo '$GIT_HASH' > /build/dist_git_hash"
+                        fi
+                    fi
+
                     $EXEC -w /build $CONTAINER \
                         snapcraft --destructive-mode --verbosity=verbose
                 '''

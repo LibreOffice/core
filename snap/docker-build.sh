@@ -78,6 +78,19 @@ $EXEC "$CONTAINER" rsync -a \
     --exclude='browser/node_modules' \
     /src/ /build/
 
+# Carry the host's commit hash into the build. configure.ac prefers
+# dist_git_hash over `git log` (which would fail anyway, since the
+# rsync excludes .git), so without this file the About dialog ends
+# up showing "git hash: <version-string>".
+# Skip if /build already has a dist_git_hash from a release tarball,
+# and skip if the host isn't a git checkout (e.g. tarball build).
+if ! $EXEC "$CONTAINER" test -f /build/dist_git_hash; then
+    GIT_HASH=$(cd "$REPO_ROOT" && git log -1 --format=%h --abbrev=10 2>/dev/null)
+    if [ -n "$GIT_HASH" ]; then
+        $EXEC "$CONTAINER" bash -c "echo '$GIT_HASH' > /build/dist_git_hash"
+    fi
+fi
+
 echo "==> Building snap (this will take a long time)..."
 $EXEC -w /build "$CONTAINER" \
     snapcraft --destructive-mode "$@"
