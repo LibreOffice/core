@@ -8,11 +8,11 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-20 12:14+0100\n"
-"PO-Revision-Date: 2026-03-10 18:09+0000\n"
+"PO-Revision-Date: 2026-03-22 10:09+0000\n"
 "Last-Translator: Besnik Bleta <besnik@programeshqip.org>\n"
-"Language-Team: Albanian <https://hosted.weblate.org/projects/"
-"collabora-online/ui/sq/>\n"
-"Language: \n"
+"Language-Team: Albanian <https://hosted.weblate.org/projects/collabora-"
+"online/ui/sq/>\n"
+"Language: sq\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -478,9 +478,8 @@ msgid "Show Grid"
 msgstr "Shfaq Rrjetë"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:365
-#, fuzzy
 msgid "Snap to grid"
-msgstr "Madhësi sa rrjeta"
+msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:366
 #: admin/src/integrator/AdminIntegratorSettings.ts:372
@@ -1238,7 +1237,7 @@ msgstr ""
 
 #: src/control/Control.BackstageView.ts:288
 msgid "Open"
-msgstr ""
+msgstr "Hape"
 
 #: src/control/Control.BackstageView.ts:296
 #: src/control/Control.Notebookbar.js:637
@@ -2822,7 +2821,7 @@ msgstr "Kartelë HTML (.html)"
 #: src/control/Control.NotebookbarBuilder.js:449
 #: src/control/Control.NotebookbarBuilder.js:485
 msgid "PDF Document (.pdf) with options"
-msgstr ""
+msgstr "Dokument PDF (.pdf) me mundësi"
 
 #: src/control/Control.NotebookbarBuilder.js:432
 msgid "CSV File (.csv)"
@@ -3209,15 +3208,17 @@ msgstr "Tabelë"
 #: src/control/Control.NotebookbarCalc.js:1766
 #: src/control/Control.NotebookbarCalc.js:1769
 msgid "Table styles are only available in .xlsx files"
-msgstr ""
+msgstr "Stile tabelash mund të përdoren vetëm në kartela .xlsx"
 
 #: src/control/Control.NotebookbarCalc.js:1767
 msgid "Insert a styled table"
-msgstr ""
+msgstr "Futni një tabelë të stilizuar"
 
 #: src/control/Control.NotebookbarCalc.js:1770
 msgid "Select a cell range first to insert a styled table"
 msgstr ""
+"Që të futni një tabelë të stilizuar, përzgjidhni së pari një interval "
+"kutizash"
 
 #: src/control/Control.NotebookbarCalc.js:1779
 #: src/control/Control.NotebookbarDraw.js:1015
@@ -3361,7 +3362,7 @@ msgstr "Nga Fillimi"
 
 #: src/control/Control.NotebookbarImpress.js:472
 msgid "Fullscreen, starting at slide 1"
-msgstr ""
+msgstr "Sa krejt ekrani, duke filluar nga diapozitivi 1"
 
 #: src/control/Control.NotebookbarImpress.js:479
 msgid "From Current Slide"
@@ -3369,7 +3370,7 @@ msgstr "Nga Diapozitivi i Tanishëm"
 
 #: src/control/Control.NotebookbarImpress.js:480
 msgid "Fullscreen, starting at this slide"
-msgstr ""
+msgstr "Sa krejt ekrani, duke filluar nga ky diapozitiv"
 
 #: src/control/Control.NotebookbarImpress.js:494
 msgid "Present in Window"
@@ -3377,7 +3378,7 @@ msgstr "Paraqite Në Dritare"
 
 #: src/control/Control.NotebookbarImpress.js:495
 msgid "Plays inside the document window. Starts at slide 1"
-msgstr ""
+msgstr "Luhet brenda dritares së dokumentit. Fillon me diapozitivin 1"
 
 #: src/control/Control.NotebookbarImpress.js:503
 msgid "Presenter View"
@@ -3386,6 +3387,7 @@ msgstr "Pamje Paraqitësi"
 #: src/control/Control.NotebookbarImpress.js:504
 msgid "Shows your notes, next slide, and a timer"
 msgstr ""
+"Bën shfaqjen e shënimeve tuaja, diapozitivit pasues dhe të një afatmatësi"
 
 #: src/control/Control.NotebookbarImpress.js:512
 msgid "Present to All"
@@ -3393,7 +3395,7 @@ msgstr "Paraqitja të Tërëve"
 
 #: src/control/Control.NotebookbarImpress.js:513
 msgid "Starts a slideshow on every viewer's screen"
-msgstr ""
+msgstr "Bën nisjen e një paraqitjeje diapozitivash në ekranin e çdo parësi"
 
 #: src/control/Control.NotebookbarImpress.js:521
 #: src/slideshow/SlideShowPresenter.ts:1517
@@ -3402,7 +3404,7 @@ msgstr "Ndiq Paraqitësin"
 
 #: src/control/Control.NotebookbarImpress.js:522
 msgid "View slides as the presenter advances them"
-msgstr ""
+msgstr "Shihni diapozitiva dora-dorës që paraqitësi shkon përpara me to"
 
 #: src/control/Control.NotebookbarImpress.js:650
 msgid "Slide Views"
@@ -3440,13 +3442,12 @@ msgid "Master Slide Templates"
 msgstr ""
 
 #: src/control/Control.NotebookbarImpress.js:1824
-#, fuzzy
 msgid "This Presentation"
-msgstr "Mbylle Paraqitjen"
+msgstr "Këtë Paraqitje"
 
 #: src/control/Control.NotebookbarImpress.js:1833
 msgid "Presentation Templates"
-msgstr ""
+msgstr "Gjedhe Paraqitjesh"
 
 #: src/control/Control.NotebookbarImpress.js:1903
 msgid "Slide Size"
@@ -3524,15 +3525,15 @@ msgstr "Gjerësi Faqeje"
 
 #: src/control/Control.NotebookbarWriter.js:2209
 msgid "Spellcheck"
-msgstr ""
+msgstr "Kontroll Drejtshkrimi"
 
 #: src/control/Control.NotebookbarWriter.js:2222
 msgid "Spelling Options"
-msgstr ""
+msgstr "Mundësi Drejtshkrimi"
 
 #: src/control/Control.NotebookbarWriter.js:2234
 msgid "Auto Spell Check"
-msgstr ""
+msgstr "Kontroll i Automatizuar Drejtshkrimi"
 
 #: src/control/Control.NotebookbarWriter.js:2262
 #: src/control/Control.NotebookbarWriter.js:2278
@@ -4069,9 +4070,8 @@ msgid "Updating citations"
 msgstr "Po përditësohen citime"
 
 #: src/control/Control.Zotero.js:1528
-#, fuzzy
 msgid "Unlinked citations"
-msgstr "Hiq Lidhje Nga Citime"
+msgstr "U hoqën lidhje citimesh"
 
 #: src/control/Control.Zotero.js:1533
 msgid ""
@@ -4405,11 +4405,11 @@ msgstr "Shumë Rrallë"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1788
 msgid "Inline"
-msgstr ""
+msgstr "Brendazi"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1794
 msgid "Side by Side"
-msgstr ""
+msgstr "Krah për Krah"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1807
 msgid "All users"
@@ -5033,7 +5033,6 @@ msgid "Failed to load document."
 msgstr "S’u arrit të ngarkohej dokument."
 
 #: src/errormessages.js:45
-#, fuzzy
 msgid "Save failed due to no disk space left. Document will now be read-only."
 msgstr ""
 "Ruajtja dështoi për shkak se s’ka më hapësirë në disk. Dokumenti do të jetë "
@@ -5495,7 +5494,6 @@ msgid "Click to exit presentation..."
 msgstr "Klikoni që të dilet nga paraqitja…"
 
 #: src/slideshow/SlideShowPresenter.ts:805
-#, fuzzy
 msgid "You are on the first slide"
 msgstr "Gjendeni te diapozitivi i parë"
 
