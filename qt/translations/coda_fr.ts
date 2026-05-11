@@ -6,57 +6,57 @@
     <message>
         <location filename="../DocumentOperations.cpp" line="49"/>
         <source>ODF text document (.odt)</source>
-        <translation type="unfinished"></translation>
+        <translation>Document Texte ODF (.odt)</translation>
     </message>
     <message>
         <location filename="../DocumentOperations.cpp" line="50"/>
         <source>Rich Text (.rtf)</source>
-        <translation type="unfinished"></translation>
+        <translation>Texte Enrichi (.rtf)</translation>
     </message>
     <message>
         <location filename="../DocumentOperations.cpp" line="51"/>
         <source>Word Document (.docx)</source>
-        <translation type="unfinished"></translation>
+        <translation>Document Word (.docx)</translation>
     </message>
     <message>
         <location filename="../DocumentOperations.cpp" line="52"/>
         <source>Word 2003 Document (.doc)</source>
-        <translation type="unfinished"></translation>
+        <translation>Document Word 2003 (.doc)</translation>
     </message>
     <message>
         <location filename="../DocumentOperations.cpp" line="58"/>
         <source>ODF spreadsheet (.ods)</source>
-        <translation type="unfinished"></translation>
+        <translation>Tableur ODF (.ods)</translation>
     </message>
     <message>
         <location filename="../DocumentOperations.cpp" line="59"/>
         <source>Excel Spreadsheet (.xlsx)</source>
-        <translation type="unfinished"></translation>
+        <translation>Tableur Excel (.xlsx)</translation>
     </message>
     <message>
         <location filename="../DocumentOperations.cpp" line="60"/>
         <source>Excel 2003 Spreadsheet (.xls)</source>
-        <translation type="unfinished"></translation>
+        <translation>Tableur Excel 2003 (.xls)</translation>
     </message>
     <message>
         <location filename="../DocumentOperations.cpp" line="66"/>
         <source>ODF presentation (.odp)</source>
-        <translation type="unfinished"></translation>
+        <translation>Présentation ODF (.odp)</translation>
     </message>
     <message>
         <location filename="../DocumentOperations.cpp" line="67"/>
         <source>PowerPoint Presentation (.pptx)</source>
-        <translation type="unfinished"></translation>
+        <translation>Présentation PowerPoint (.pptx)</translation>
     </message>
     <message>
         <location filename="../DocumentOperations.cpp" line="68"/>
         <source>PowerPoint 2003 Presentation (.ppt)</source>
-        <translation type="unfinished"></translation>
+        <translation>Présentation PowerPoint 2003 (.ppt)</translation>
     </message>
     <message>
         <location filename="../DocumentOperations.cpp" line="74"/>
         <source>ODF drawing (.odg)</source>
-        <translation type="unfinished"></translation>
+        <translation>Dessin ODF (.odg)</translation>
     </message>
     <message>
         <location filename="../DocumentOperations.cpp" line="106"/>
@@ -66,7 +66,7 @@
     <message>
         <location filename="../DocumentOperations.cpp" line="114"/>
         <source>Select Printer:</source>
-        <translation>Choisir une imprimante&#xa0;:</translation>
+        <translation>Sélectionnez l&apos;imprimante&#xa0;:</translation>
     </message>
     <message>
         <location filename="../DocumentOperations.cpp" line="123"/>
@@ -77,7 +77,7 @@
     <message>
         <location filename="../DocumentOperations.cpp" line="128"/>
         <source>Print to File</source>
-        <translation>Imprimer dans un fichier</translation>
+        <translation>Imprimer vers un fichier</translation>
     </message>
     <message>
         <location filename="../DocumentOperations.cpp" line="132"/>
@@ -164,23 +164,23 @@
     <message>
         <location filename="../WebView.cpp" line="156"/>
         <source>Presentation</source>
-        <translation type="unfinished"></translation>
+        <translation>Présentation</translation>
     </message>
     <message>
         <location filename="../WebView.cpp" line="161"/>
         <location filename="../WebView.cpp" line="177"/>
         <source>Text Document</source>
-        <translation type="unfinished"></translation>
+        <translation>Document texte</translation>
     </message>
     <message>
         <location filename="../WebView.cpp" line="166"/>
         <source>Spreadsheet</source>
-        <translation type="unfinished"></translation>
+        <translation>Tableur</translation>
     </message>
     <message>
         <location filename="../WebView.cpp" line="171"/>
         <source>Drawing</source>
-        <translation type="unfinished"></translation>
+        <translation>Dessin</translation>
     </message>
     <message>
         <location filename="../WebView.cpp" line="317"/>
