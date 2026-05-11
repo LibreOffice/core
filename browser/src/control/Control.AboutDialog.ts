@@ -88,6 +88,13 @@ class AboutDialog {
 		srOnly.className = 'visuallyhidden';
 		srOnly.textContent = ' ' + _('(opens in new tab)');
 		a.appendChild(srOnly);
+		// Route the click through window.open so CODA (Qt/Windows/macOS)
+		// hands the URL off to the system browser via the HYPERLINK bridge
+		// rather than letting the embedded webview navigate target=_blank itself.
+		a.addEventListener('click', (e: MouseEvent) => {
+			e.preventDefault();
+			window.open(linkHref, '_blank');
+		});
 
 		span.appendChild(a);
 		if (extraText) {
