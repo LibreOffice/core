@@ -208,8 +208,10 @@ final class WebDriverServer {
                 return
             }
 
-            // GET /session/{id}/window/handles
-            if request.method == "GET" && subpath == ["window", "handles"] {
+            // GET /session/{id}/window/handles  -- W3C
+            // GET /session/{id}/window_handles  -- JSON Wire (WebDriverIO 8 still uses this)
+            if request.method == "GET"
+                && (subpath == ["window", "handles"] || subpath == ["window_handles"]) {
                 sendW3C(connection: connection, value: handlesProvider())
                 return
             }
