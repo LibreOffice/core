@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-20 12:14+0100\n"
-"PO-Revision-Date: 2026-03-10 21:46+0000\n"
+"PO-Revision-Date: 2026-05-03 21:09+0000\n"
 "Last-Translator: Sebastiaan Veld <notify@virtfields.nl>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/collabora-online/"
 "ui/nl/>\n"
-"Language: \n"
+"Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.17-dev\n"
+"X-Generator: Weblate 5.17.1\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -996,7 +996,7 @@ msgstr "Draadje oplossen"
 
 #: src/canvas/sections/CommentListSection.ts:1303
 msgid "Promote to top comment"
-msgstr "Promoveren tot belangrijkste notitie"
+msgstr "Promoveren tot belangrijkste opmerking"
 
 #: src/canvas/sections/CommentListSection.ts:1309
 msgid "Show on the side"
@@ -1015,23 +1015,23 @@ msgstr "Weergeven in navigator"
 #: src/layer/tile/CanvasTileLayer.js:3385
 #: src/layer/tile/CanvasTileLayer.js:3396
 msgid "Comment"
-msgstr "Notitie"
+msgstr "Opmerking"
 
 #: src/canvas/sections/CommentListSection.ts:1576
 #: src/canvas/sections/CommentListSection.ts:1589
 msgid "Comments Updated"
-msgstr "Notities bijgewerkt"
+msgstr "Opmerkingen bijgewerkt"
 
 #: src/canvas/sections/CommentListSection.ts:1577
 msgid "Another user has removed this comment."
-msgstr "Een andere gebruiker heeft deze notitie verwijderd."
+msgstr "Een andere gebruiker heeft deze opmerking verwijderd."
 
 #: src/canvas/sections/CommentListSection.ts:1590
 msgid ""
 "Another user has updated the comment. Would you like to overwrite those "
 "changes?"
 msgstr ""
-"Een andere gebruiker heeft de notitie bijgewerkt. Wil je deze wijzigingen "
+"Een andere gebruiker heeft de opmerking bijgewerkt. Wil je deze wijziging "
 "overschrijven?"
 
 #: src/canvas/sections/CommentListSection.ts:1591 src/app/Socket.ts:1452
@@ -1044,11 +1044,11 @@ msgstr "Bijwerken"
 
 #: src/canvas/sections/CommentSection.ts:45
 msgid "Edit comment"
-msgstr "Notitie bewerken"
+msgstr "Opmerking bewerken"
 
 #: src/canvas/sections/CommentSection.ts:46
 msgid "Reply comment"
-msgstr "Reageer op notitie"
+msgstr "Reageer op opmerking"
 
 #: src/canvas/sections/CommentSection.ts:47
 msgid "Open menu"
@@ -1884,11 +1884,11 @@ msgstr "Venster sluiten"
 
 #: src/control/Control.JSDialogBuilder.js:496
 msgid "Increment value"
-msgstr ""
+msgstr "Waarde verhogen"
 
 #: src/control/Control.JSDialogBuilder.js:500
 msgid "Decrement value"
-msgstr ""
+msgstr "Waarde verlagen"
 
 #: src/control/Control.JSDialogBuilder.js:640
 msgid "Solid"
@@ -1966,7 +1966,7 @@ msgstr "antwoorden"
 
 #: src/control/Control.JSDialogBuilder.js:1867
 msgid "Insert Comment"
-msgstr "Notitie toevoegen"
+msgstr "Opmerking toevoegen"
 
 #: src/control/Control.JSDialogBuilder.js:2136
 msgid "Toggle dropdown"
@@ -2369,7 +2369,7 @@ msgstr "PowerPoint presentatie (.pptx)"
 
 #: src/control/Control.Menubar.ts:445 src/control/Control.Menubar.ts:629
 msgid "Save Comments"
-msgstr "Notities opslaan"
+msgstr "Opmerkingen opslaan"
 
 #: src/control/Control.Menubar.ts:454
 #: src/control/Control.NotebookbarBuilder.js:472
@@ -2414,12 +2414,12 @@ msgstr "Pagina-vullende dia's"
 #: src/control/Control.Menubar.ts:468
 #: src/control/Control.NotebookbarBuilder.js:654
 msgid "Notes Pages"
-msgstr "Pagina's met aantekeningen"
+msgstr "Pagina's met notities"
 
 #: src/control/Control.Menubar.ts:502
 #: src/control/Control.NotebookbarImpress.js:657
 msgid "Notes View"
-msgstr "Notities Weergave"
+msgstr "Notitieweergave"
 
 #: src/control/Control.Menubar.ts:506
 #: src/control/Control.NotebookbarImpress.js:663
@@ -2824,7 +2824,7 @@ msgstr "HTML bestand (.html)"
 #: src/control/Control.NotebookbarBuilder.js:449
 #: src/control/Control.NotebookbarBuilder.js:485
 msgid "PDF Document (.pdf) with options"
-msgstr ""
+msgstr "PDF-document (.pdf) met opties"
 
 #: src/control/Control.NotebookbarBuilder.js:432
 msgid "CSV File (.csv)"
@@ -3211,15 +3211,15 @@ msgstr "Tabel"
 #: src/control/Control.NotebookbarCalc.js:1766
 #: src/control/Control.NotebookbarCalc.js:1769
 msgid "Table styles are only available in .xlsx files"
-msgstr ""
+msgstr "Tabelopmaak is alleen beschikbaar in .xlsx-bestanden"
 
 #: src/control/Control.NotebookbarCalc.js:1767
 msgid "Insert a styled table"
-msgstr ""
+msgstr "Een opgemaakte tabel invoegen"
 
 #: src/control/Control.NotebookbarCalc.js:1770
 msgid "Select a cell range first to insert a styled table"
-msgstr ""
+msgstr "Selecteer eerst een celbereik om een opgemaakte tabel in te voegen"
 
 #: src/control/Control.NotebookbarCalc.js:1779
 #: src/control/Control.NotebookbarDraw.js:1015
@@ -3297,7 +3297,7 @@ msgstr "Filteren"
 #: src/control/Control.NotebookbarCalc.js:2605
 #: src/control/Control.NotebookbarImpress.js:2024
 msgid "Comments"
-msgstr "Notities"
+msgstr "Opmerkingen"
 
 #: src/control/Control.NotebookbarCalc.js:2711
 msgid "Format Cells"
@@ -3363,7 +3363,7 @@ msgstr "Vanaf het begin"
 
 #: src/control/Control.NotebookbarImpress.js:472
 msgid "Fullscreen, starting at slide 1"
-msgstr ""
+msgstr "Volledig scherm, vanaf dia 1"
 
 #: src/control/Control.NotebookbarImpress.js:479
 msgid "From Current Slide"
@@ -3371,7 +3371,7 @@ msgstr "Vanaf huidige dia"
 
 #: src/control/Control.NotebookbarImpress.js:480
 msgid "Fullscreen, starting at this slide"
-msgstr ""
+msgstr "Volledig scherm, vanaf deze dia"
 
 #: src/control/Control.NotebookbarImpress.js:494
 msgid "Present in Window"
@@ -3379,7 +3379,7 @@ msgstr "Presenteer in venster"
 
 #: src/control/Control.NotebookbarImpress.js:495
 msgid "Plays inside the document window. Starts at slide 1"
-msgstr ""
+msgstr "Wordt afgespeeld in het documentvenster. Begint bij dia 1"
 
 #: src/control/Control.NotebookbarImpress.js:503
 msgid "Presenter View"
@@ -3387,7 +3387,7 @@ msgstr "Presentatorweergave"
 
 #: src/control/Control.NotebookbarImpress.js:504
 msgid "Shows your notes, next slide, and a timer"
-msgstr ""
+msgstr "Toont notities, volgende dia en een timer"
 
 #: src/control/Control.NotebookbarImpress.js:512
 msgid "Present to All"
@@ -3395,7 +3395,7 @@ msgstr "Presenteer aan Iedereen"
 
 #: src/control/Control.NotebookbarImpress.js:513
 msgid "Starts a slideshow on every viewer's screen"
-msgstr ""
+msgstr "Start een diavoorstelling op het scherm van elke kijker"
 
 #: src/control/Control.NotebookbarImpress.js:521
 #: src/slideshow/SlideShowPresenter.ts:1517
@@ -3404,7 +3404,7 @@ msgstr "Volg Presentator"
 
 #: src/control/Control.NotebookbarImpress.js:522
 msgid "View slides as the presenter advances them"
-msgstr ""
+msgstr "De dia’s bekijken terwijl de presentator ze toont"
 
 #: src/control/Control.NotebookbarImpress.js:650
 msgid "Slide Views"
@@ -3442,13 +3442,12 @@ msgid "Master Slide Templates"
 msgstr "Sjablonen voor dia-ontwerpen"
 
 #: src/control/Control.NotebookbarImpress.js:1824
-#, fuzzy
 msgid "This Presentation"
-msgstr "Presentatie sluiten"
+msgstr "Deze presentatie"
 
 #: src/control/Control.NotebookbarImpress.js:1833
 msgid "Presentation Templates"
-msgstr ""
+msgstr "Presentatiesjablonen"
 
 #: src/control/Control.NotebookbarImpress.js:1903
 msgid "Slide Size"
@@ -3526,21 +3525,21 @@ msgstr "Paginabreedte"
 
 #: src/control/Control.NotebookbarWriter.js:2209
 msgid "Spellcheck"
-msgstr ""
+msgstr "Spellingscontrole"
 
 #: src/control/Control.NotebookbarWriter.js:2222
 msgid "Spelling Options"
-msgstr ""
+msgstr "Spellingopties"
 
 #: src/control/Control.NotebookbarWriter.js:2234
 msgid "Auto Spell Check"
-msgstr ""
+msgstr "Automatische spellingcontrole"
 
 #: src/control/Control.NotebookbarWriter.js:2262
 #: src/control/Control.NotebookbarWriter.js:2278
 #: src/control/jsdialog/Widget.HTMLContent.ts:189
 msgid "Show Comments"
-msgstr "Notities weergeven"
+msgstr "Opmerkingen weergeven"
 
 #: src/control/Control.NotebookbarWriter.js:2333
 msgid "Tracking"
@@ -4411,11 +4410,11 @@ msgstr "Zeer los"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1788
 msgid "Inline"
-msgstr ""
+msgstr "Inline"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1794
 msgid "Side by Side"
-msgstr ""
+msgstr "Naast elkaar"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1807
 msgid "All users"
@@ -4611,11 +4610,11 @@ msgstr "Watermerk"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2364
 msgid "Insert comment"
-msgstr "Notitie toevoegen"
+msgstr "Opmerking toevoegen"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2368
 msgid "Comments list"
-msgstr "Notitie overzicht"
+msgstr "Opmerkingenoverzicht"
 
 #: src/control/jsdialog/Util.SnackbarController.ts:122
 msgid "Dismiss"
@@ -5040,11 +5039,10 @@ msgid "Failed to load document."
 msgstr "Laden van het document mislukt."
 
 #: src/errormessages.js:45
-#, fuzzy
 msgid "Save failed due to no disk space left. Document will now be read-only."
 msgstr ""
-"Opslaan mislukt omdat er geen diskruimte meer is. Het document wordt nu "
-"'alleen lezen'."
+"Het opslaan is mislukt omdat er geen schijfruimte meer beschikbaar is. Het "
+"document is nu alleen-lezen."
 
 #: src/errormessages.js:46
 msgid ""
@@ -5216,7 +5214,7 @@ msgstr "Benoemd bereik"
 
 #: src/layer/tile/CanvasTileLayer.js:3413
 msgid "No Comments"
-msgstr "Geen notities"
+msgstr "Geen opmerkingen"
 
 #: src/main.js:144
 msgid "Warning! The browser you are using is not supported."
@@ -5489,7 +5487,7 @@ msgstr "Dia {0} van {1}"
 
 #: src/slideshow/PresenterConsole.js:1312
 msgid "No Notes"
-msgstr "Geen aantekeningen"
+msgstr "Geen notities"
 
 #: src/slideshow/PresenterConsole.js:1400
 msgid "Repeat in {0} seconds"
@@ -5501,7 +5499,6 @@ msgid "Click to exit presentation..."
 msgstr "Klik om presentatie te verlaten..."
 
 #: src/slideshow/SlideShowPresenter.ts:805
-#, fuzzy
 msgid "You are on the first slide"
 msgstr "Je bent op de eerste dia"
 
