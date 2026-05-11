@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-20 12:14+0100\n"
-"PO-Revision-Date: 2026-01-16 20:01+0000\n"
-"Last-Translator: Andras Timar <andras.timar@collabora.com>\n"
+"PO-Revision-Date: 2026-05-05 14:11+0000\n"
+"Last-Translator: Jérôme Herbinet <jerome@herbinet.fr>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/collabora-online/"
 "ui/fr/>\n"
-"Language: \n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.15.2\n"
+"X-Generator: Weblate 5.17.1\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -3061,7 +3061,7 @@ msgstr "Mauvais"
 #: src/control/Control.NotebookbarCalc.js:1023
 #: src/control/PermissionMode.ts:210
 msgid "Editing"
-msgstr "Éditer"
+msgstr "Édition"
 
 #: src/control/Control.NotebookbarCalc.js:1047
 #: src/control/Control.NotebookbarDraw.js:1197
@@ -4233,11 +4233,11 @@ msgstr "Lecture seule"
 
 #: src/control/PermissionMode.ts:125
 msgid "Viewing Mode"
-msgstr "Mode de Visualisation"
+msgstr "Mode visualisation"
 
 #: src/control/PermissionMode.ts:131
 msgid "Editing Mode"
-msgstr "Mode d'Édition"
+msgstr "Mode édition"
 
 #: src/control/PermissionMode.ts:141 src/control/PermissionMode.ts:213
 #: src/control/PermissionMode.ts:219 src/control/PermissionMode.ts:225
