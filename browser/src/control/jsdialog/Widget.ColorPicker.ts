@@ -334,7 +334,11 @@ function updatePalette(
 	customLabel.textContent = _('Custom') + ':';
 	customLabel.htmlFor = 'ui-color-picker-custom-input';
 
-	const customInput = window.L.DomUtil.create('input', '', customContainer);
+	const customInput = window.L.DomUtil.create(
+		'input',
+		'jsdialog ui-edit',
+		customContainer,
+	);
 	customInput.id = 'ui-color-picker-custom-input';
 	customInput.placeholder = '#FFF000';
 	customInput.maxlength = 7;
