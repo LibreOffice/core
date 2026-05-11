@@ -1815,7 +1815,42 @@ export class Comment extends CanvasSectionObject {
 		}
 	}
 
+	// In Writer, a comment-highlighted region overlays the document. By default
+	// this section would swallow mouse events, so a text selection drag started
+	// on top of a commented passage never reaches core. Forward the drag
+	// lifecycle (down/move/up) to MouseControl while leaving click handling
+	// to the existing onClick path.
+	private forwardWriterMouseEventToCore(handler: 'onMouseDown' | 'onMouseMove' | 'onMouseUp', point: cool.SimplePoint, dragDistance: Array<number>, e: MouseEvent): void {
+		const mousePoint = point.clone();
+		mousePoint.pX += this.myTopLeft[0];
+		mousePoint.pY += this.myTopLeft[1];
+		const mouseControl = app.activeDocument.mouseControl;
+		if (handler === 'onMouseMove')
+			mouseControl.onMouseMove(mousePoint, dragDistance, e);
+		else if (handler === 'onMouseDown')
+			mouseControl.onMouseDown(mousePoint, e);
+		else
+			mouseControl.onMouseUp(mousePoint, e);
+	}
+
+	public onMouseDown(point: cool.SimplePoint, e: MouseEvent): void {
+		if (app.map._docLayer._docType === 'text')
+			this.forwardWriterMouseEventToCore('onMouseDown', point, [0, 0], e);
+	}
+
+	public onMouseMove(point: cool.SimplePoint, dragDistance: Array<number>, e: MouseEvent): void {
+		if (app.map._docLayer._docType === 'text' && this.containerObject.isDraggingSomething())
+			this.forwardWriterMouseEventToCore('onMouseMove', point, dragDistance, e);
+	}
+
 	public onMouseUp (point: cool.SimplePoint, e: MouseEvent): void {
+		// A drag finishing on top of a commented region: let MouseControl
+		// send the matching buttonup so core completes the selection.
+		if (this.containerObject.isDraggingSomething() && app.map._docLayer._docType === 'text') {
+			this.forwardWriterMouseEventToCore('onMouseUp', point, [0, 0], e);
+			return;
+		}
+
 		// Hammer.js doesn't fire onClick event after touchEnd event.
 		// CanvasSectionContainer fires the onClick event. But since Hammer.js is used for map, it disables the onClick for SectionContainer.
 		// We will use this event as click event on touch devices, until we remove Hammer.js (then this code will be removed from here).

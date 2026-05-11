@@ -232,7 +232,7 @@ describe(['tagdesktop'], 'Annotation Tests', function() {
 		cy.cGet('#comment-container-1').should('be.visible');
 
 		/*
-			at this point, the space on the left of the document and the 
+			at this point, the space on the left of the document and the
 			space on the right of the document (without moving the document
 			to the left) is same, equal to half of the comment width;
 		*/
@@ -351,6 +351,99 @@ describe(['tagdesktop'], 'Annotation Tests', function() {
 			expect(textInput._lastSelectionStart).to.equal(20);
 			expect(textInput._lastSelectionEnd).to.equal(20);
 		});
+	});
+
+	it('Drag inside commented region forwards mouse events to core', function() {
+		// A Writer comment overlays the commented passage with a
+		// CommentSection that used to swallow mouse events. That blocked
+		// users from starting a text selection by mouse-dragging from
+		// inside the highlighted passage - core never saw the drag.
+		// CommentSection now delegates onMouseDown/Move/Up to MouseControl
+		// when a drag is active; this test exercises that path.
+
+		// 50% zoom (set in beforeEach) makes the highlight too small for a
+		// reliable drag, so switch to 100%.
+		desktopHelper.selectZoomLevel('100', false);
+		cy.getFrameWindow().then(function(win) {
+			return helper.processToIdle(win);
+		});
+
+		// Lay down a passage and select a slice of it so the comment is
+		// anchored to a real range and ends up with a meaningful
+		// highlight rectangle to drag inside.
+		helper.typeIntoDocument('Hello world from this test document for drag testing.{enter}');
+		helper.typeIntoDocument('{ctrl}{home}');
+		for (var i = 0; i < 17; ++i)
+			helper.typeIntoDocument('{shift}{rightArrow}');
+		helper.textSelectionShouldExist();
+
+		desktopHelper.insertComment('drag-test', true);
+		cy.cGet('.cool-annotation-content-wrapper').should('exist');
+
+		cy.getFrameWindow().then(function(win) {
+			return helper.processToIdle(win);
+		});
+
+		// Spy on MouseControl - if the new delegation works, the drag we
+		// dispatch below must reach these methods.
+		cy.getFrameWindow().then(function(win) {
+			cy.spy(win.app.activeDocument.mouseControl, 'onMouseDown').as('mcDown');
+			cy.spy(win.app.activeDocument.mouseControl, 'onMouseMove').as('mcMove');
+			cy.spy(win.app.activeDocument.mouseControl, 'onMouseUp').as('mcUp');
+		});
+
+		cy.getFrameWindow().then(function(win) {
+			var commentList = win.app.sectionContainer.getSectionWithName(
+				win.app.CSections.CommentList.name);
+			var comment = commentList.sectionProperties.commentList[0];
+			expect(comment, 'comment must exist').to.exist;
+			expect(comment.sectionProperties.data.rectangles,
+				'comment must own a highlight rectangle').to.exist;
+			var rects = comment.sectionProperties.data.rectangles;
+			expect(rects.length, 'at least one rectangle').to.be.greaterThan(0);
+			var rect = rects[0];
+
+			var canvas = win.document.getElementById('document-canvas');
+			var bounds = canvas.getBoundingClientRect();
+
+			// v1X/v1Y are view pixels inside the canvas (viewport offset
+			// baked in); /dpiScale -> CSS pixels.
+			var cssCenterX = ((rect.v1X + rect.v2X) / 2) / win.app.dpiScale;
+			var cssCenterY = ((rect.v1Y + rect.v4Y) / 2) / win.app.dpiScale;
+			var startX = bounds.left + cssCenterX - 10;
+			var startY = bounds.top + cssCenterY;
+			var endX = startX + 30;
+			var endY = startY;
+
+			// mouseenter primes mouseIsInside; the container's mousedown
+			// short-circuits otherwise.
+			canvas.dispatchEvent(new win.MouseEvent('mouseenter', {
+				clientX: startX, clientY: startY, button: 0, bubbles: true,
+			}));
+			canvas.dispatchEvent(new win.MouseEvent('mousedown', {
+				clientX: startX, clientY: startY, button: 0, bubbles: true,
+			}));
+			// mousemove and mouseup are wired on document, not canvas.
+			win.document.dispatchEvent(new win.MouseEvent('mousemove', {
+				clientX: endX, clientY: endY, button: 0, buttons: 1, bubbles: true,
+			}));
+			win.document.dispatchEvent(new win.MouseEvent('mouseup', {
+				clientX: endX, clientY: endY, button: 0, bubbles: true,
+			}));
+		});
+
+		// Each phase must have flowed through MouseControl. Without the
+		// CommentSection delegation, the spies stay silent because the
+		// section consumed the events.
+		cy.get('@mcDown').should('have.been.called');
+		cy.get('@mcMove').should('have.been.called');
+		cy.get('@mcUp').should('have.been.called');
+
+		// And core must have responded with a real text selection.
+		cy.getFrameWindow().then(function(win) {
+			return helper.processToIdle(win);
+		});
+		helper.textSelectionShouldExist();
 	});
 
 	it('Action_GoToComment postMessage returns error for invalid comment', function() {
