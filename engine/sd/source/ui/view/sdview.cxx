@@ -475,6 +475,8 @@ void View::CompleteRedraw(OutputDevice* pOutDev, const vcl::Region& rReg, sdr::c
 
     SdrPageView* pPgView = GetSdrPageView();
 
+    Color aSavedOutlinerBg(COL_AUTO);
+    bool bRestoreOutlinerBg = false;
     if (pPgView)
     {
         SdPage* pPage = static_cast<SdPage*>( pPgView->GetPage() );
@@ -491,12 +493,23 @@ void View::CompleteRedraw(OutputDevice* pOutDev, const vcl::Region& rReg, sdr::c
                     || (OUTDEV_PDF == pOutDev->GetOutDevType())))
                 bScreenDisplay = false;
 
+            // Save the shared outliner's bg so it doesn't leak across calls.
+            // Otherwise a later SVG export via SdrExchangeView::GetObjGraphic
+            // (e.g. shape drag preview) would inherit whichever view rendered
+            // tiles last, producing inverse auto-color text in multi-user
+            // dark/light setups.
+            aSavedOutlinerBg = rOutl.GetBackgroundColor();
+            bRestoreOutlinerBg = true;
+
             setOutlinerBgFromPage(rOutl, *pPgView, bScreenDisplay);
         }
     }
 
     ViewRedirector aViewRedirector;
     FmFormView::CompleteRedraw(pOutDev, rReg, pRedirector ? pRedirector : &aViewRedirector);
+
+    if (bRestoreOutlinerBg)
+        mrDoc.GetDrawOutliner().SetBackgroundColor(aSavedOutlinerBg);
 }
 
 void View::MarkListHasChanged()

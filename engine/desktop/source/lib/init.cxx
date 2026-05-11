@@ -170,6 +170,8 @@
 #include <svl/numformat.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
+#include <svx/svdmodel.hxx>
+#include <svx/svdoutl.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svxids.hrc>
 #include <svx/ucsubset.hxx>
@@ -5120,6 +5122,27 @@ static size_t doc_renderShapeSelection(COKitDocument* pThis, char** pOutput)
         aMediaDescriptor[u"SelectionOnly"_ustr] <<= true;
         aMediaDescriptor[u"OutputStream"_ustr] <<= xOut;
         aMediaDescriptor[u"IsPreview"_ustr] <<= true; // will down-scale graphics
+
+        // Pin the shared draw outliner's background to the requesting
+        // view's DOCCOLOR so automatic font colors resolve against the
+        // user's per-view theme.  Otherwise multi-user dark/light setups
+        // produce inverse-mode auto color text in the SVG drag preview.
+        SdrOutliner* pPinnedOutliner = nullptr;
+        Color aSavedOutlinerBg(COL_AUTO);
+        if (SfxViewShell* pViewShell = SfxViewShell::Current())
+        {
+            if (SdrView* pDrawView = pViewShell->GetDrawView())
+            {
+                pPinnedOutliner = &pDrawView->GetModel().GetDrawOutliner();
+                aSavedOutlinerBg = pPinnedOutliner->GetBackgroundColor();
+                pPinnedOutliner->SetBackgroundColor(
+                    pViewShell->GetColorConfigColor(svtools::DOCCOLOR));
+            }
+        }
+        comphelper::ScopeGuard aRestoreOutlinerBg([&]() {
+            if (pPinnedOutliner)
+                pPinnedOutliner->SetBackgroundColor(aSavedOutlinerBg);
+        });
 
         xStorable->storeToURL(u"private:stream"_ustr, aMediaDescriptor.getAsConstPropertyValueList());
 

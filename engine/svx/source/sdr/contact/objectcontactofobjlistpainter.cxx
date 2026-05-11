@@ -27,6 +27,8 @@
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <drawinglayer/processor2d/processor2dtools.hxx>
 #include <svx/unoapi.hxx>
+#include <svtools/colorcfg.hxx>
+#include <sfx2/viewsh.hxx>
 #include <tools/debug.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/pdfextoutdevdata.hxx>
@@ -101,6 +103,10 @@ void ObjectContactOfObjListPainter::ProcessDisplay(DisplayInfo& rDisplayInfo)
     aNewViewInformation2D.setViewTransformation(pTargetDevice->GetViewTransformation());
     aNewViewInformation2D.setViewport(aViewRange);
     aNewViewInformation2D.setVisualizedPage(GetXDrawPageForSdrPage(const_cast< SdrPage* >(mpProcessedPage)));
+    // Match ObjectContactOfPageView so SVG drag-preview rendering resolves
+    // automatic colors against the requesting view's theme (per-view dark mode).
+    if (const SfxViewShell* pViewShell = SfxViewShell::Current())
+        aNewViewInformation2D.setAutoColor(pViewShell->GetColorConfigColor(svtools::DOCCOLOR));
     setViewInformation2D2D(aNewViewInformation2D);
 
     // collect primitive data in a sequence; this will already use the updated ViewInformation2D
