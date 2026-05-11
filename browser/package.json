@@ -62,10 +62,13 @@
     "duplication": "jscpd --ignore src/app/TaskWorker.js ./src/ --exitCode 1 --min-lines 17"
   },
   "browserslist": [
-    "> 0.5%",
-    "last 2 versions",
-    "Firefox ESR",
-    "not dead",
-    "not op_mini all"
+    "Chrome >= 120",
+    "Edge >= 120",
+    "Firefox >= 128",
+    "Safari >= 16.4",
+    "iOS >= 16.4",
+    "ChromeAndroid >= 120",
+    "FirefoxAndroid >= 128",
+    "Samsung >= 21"
   ]
 }
