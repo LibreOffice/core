@@ -111,6 +111,20 @@ function _scrolledWindowControl(parentContainer, data, builder) {
 			var isLeftScrollBtn = isScrollBtn(prevSibling);
 			var isRightScrollBtn = isScrollBtn(nextSibling);
 
+			// Only swap to a native horizontal scrollbar when this scrolled
+			// window is the one driving sibling scroll buttons (the
+			// "external scroll" pattern, e.g. the TOC tokens row). If no
+			// such buttons exist this is a regular panel that just asked
+			// for hscrollbar-policy="never"; drop the max-content
+			// expansion so content fits the container instead of being
+			// clipped on the right (e.g. the Animation sidebar).
+			if (!isLeftScrollBtn && !isRightScrollBtn) {
+				content.style.width = '';
+				content.style.minWidth = '';
+				scrollwindow._externalScrollSetup = true;
+				return;
+			}
+
 			scrollwindow._externalScrollSetup = true;
 
 			// Hide sibling scroll buttons — only simple single-button
@@ -120,7 +134,7 @@ function _scrolledWindowControl(parentContainer, data, builder) {
 			if (isRightScrollBtn)
 				nextSibling.style.display = 'none';
 
-			// Always show a native browser scrollbar when content overflows
+			// Show a native browser scrollbar in place of the hidden buttons.
 			scrollwindow.style.overflowX = 'auto';
 		};
 
