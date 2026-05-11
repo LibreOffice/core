@@ -259,6 +259,8 @@ m4_ifelse(MOBILEAPP, [true],
         ]
       )
       data-mobile-app-name='MOBILEAPPNAME'
+      data-copyright-year='_YEAR_'
+      data-vendor='VENDOR'
       />
       ],
      [
