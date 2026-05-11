@@ -9147,6 +9147,7 @@ sd/source/core/CustomAnimationPreset.cxx
 sd/source/core/EffectMigration.cxx
 sd/source/core/PageListWatcher.cxx
 sd/source/core/PageListWatcher.hxx
+sd/source/core/SlideSectionManager.cxx
 sd/source/core/TransitionPreset.cxx
 sd/source/core/anminfo.cxx
 sd/source/core/annotations/Annotation.cxx
