@@ -12,16 +12,17 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-20 12:14+0100\n"
-"PO-Revision-Date: 2025-01-28 15:02+0000\n"
-"Last-Translator: Pedro Silva <pedro.silva@collabora.com>\n"
+"PO-Revision-Date: 2026-04-08 21:56+0000\n"
+"Last-Translator: Leonardo Oliveira "
+"<oliveiraleo@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "collabora-online/ui/pt_BR/>\n"
-"Language: \n"
+"Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.10-dev\n"
+"X-Generator: Weblate 5.17-dev\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -3663,9 +3664,8 @@ msgid "Document container started in {1} ms"
 msgstr ""
 
 #: src/control/Control.ServerAuditDialog.ts:318
-#, fuzzy
 msgid "Status"
-msgstr "Status:"
+msgstr "Status"
 
 #: src/control/Control.ServerAuditDialog.ts:328
 msgid "No issues found"
@@ -4460,9 +4460,8 @@ msgid "Line color"
 msgstr ""
 
 #: src/control/jsdialog/Definitions.Menu.ts:2028
-#, fuzzy
 msgid "Line style"
-msgstr "Estilo de linha:"
+msgstr "Estilo de linha"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2031
 msgid "Hairline (0.05 pt)"
