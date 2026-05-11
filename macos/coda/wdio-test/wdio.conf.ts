@@ -34,8 +34,11 @@ const QT_SPECS_DIR = join(__dirname, '..', '..', '..', 'qt', 'test', 'specs');
 export const config = {
 	runner: 'local',
 
-	// Run the harness spec - the most basic shared test
-	specs: [[join(QT_SPECS_DIR, 'harness.spec.ts')]],
+	// Specs to run, in order, in the same WebDriver session.
+	specs: [[
+		join(QT_SPECS_DIR, 'harness.spec.ts'),
+		join(QT_SPECS_DIR, 'document-lifecycle.spec.ts'),
+	]],
 
 	exclude: [],
 

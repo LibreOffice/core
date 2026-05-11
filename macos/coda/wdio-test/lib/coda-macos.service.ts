@@ -61,7 +61,8 @@ export class CodaMacOSServiceLauncher {
 	async onPrepare(): Promise<void> {
 		const { appPath, webDriverPort, fixturesDir } = this.#options;
 
-		// Copy fixtures to a temp directory so the app can write to them
+		// Copy fixtures to a temp directory; tests open files from there
+		// via the JS bridge as needed.
 		this.#testDocDir = mkdtempSync(join(tmpdir(), 'coda-macos-test-'));
 		mkdirSync(join(this.#testDocDir, 'Documents'));
 		cpSync(fixturesDir, join(this.#testDocDir, 'Documents'), {
@@ -72,18 +73,11 @@ export class CodaMacOSServiceLauncher {
 			'Documents',
 		);
 
-		// Pick a test file to open initially
-		const testFile = join(this.#testDocDir, 'Documents', 'hello.odt');
-
 		console.log('Starting coda-macos...');
-		// Pass the file before --args so `open` treats it as a document
-		// to open via Apple Events.  This grants the sandboxed app a
-		// security-scoped read for the file.  Putting the path inside
-		// --args would make it a plain argument that the app cannot
-		// access from its sandbox.
+		// Launch the app with no initial document so the backstage
+		// shows; tests that need a document open it from there.
 		this.#appProcess = spawn('open', [
 			'-a', appPath,
-			testFile,
 			'--args',
 			'--uitesting',
 			`--testDriverPort=${webDriverPort}`,
