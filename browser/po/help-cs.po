@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-20 12:14+0200\n"
-"PO-Revision-Date: 2026-01-19 18:01+0000\n"
-"Last-Translator: Jan Holesovsky <kendy@collabora.com>\n"
+"PO-Revision-Date: 2026-03-28 15:08+0000\n"
+"Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/collabora-online/"
 "help/cs/>\n"
 "Language: cs\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Translate Toolkit 3.6.0\n"
+"X-Generator: Weblate 5.17-dev\n"
 
 #: html/cool-help.html%2Bdiv.h1:9-5
 msgid "Keyboard Shortcuts"
@@ -3262,8 +3262,8 @@ msgid ""
 "Characters </span> or click the corresponding icon in the toolbar. A dialog "
 "opens."
 msgstr ""
-"Zvolte <span class=\"ui\">Vložit</span> → <span class=\"ui\">Speciální znak</"
-"span> nebo klepněte na odpovídající ikonu na nástrojové liště. Zobrazí se "
+"Zvolte <span class=\"ui\">Vložit</span> → <span class=\"ui\">Speciální znaky "
+"</span> nebo klikněte na odpovídající ikonu na nástrojové liště. Zobrazí se "
 "dialogové okno."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:696-31
@@ -3405,7 +3405,7 @@ msgstr "styl stránky"
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:728-5
 msgid "How do I change the page orientation to landscape inside my document?"
-msgstr "Jak změním orientaci stránky, aby byla na šířku"
+msgstr "Jak ve svém dokumentu změním orientaci stránky, aby byla na šířku?"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:730-7
 msgid ""
