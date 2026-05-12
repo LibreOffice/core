@@ -91,6 +91,22 @@ OUString SfxUndoAction::GetComment() const
 }
 
 
+OUString SfxUndoAction::GetObjDescription() const
+{
+    return OUString();
+}
+
+
+void SfxUndoAction::SetComment(const OUString& /*rStr*/)
+{
+}
+
+
+void SfxUndoAction::SetObjDescription(const OUString& /*rStr*/)
+{
+}
+
+
 ViewShellId SfxUndoAction::GetViewShellId() const
 {
     return ViewShellId(-1);
@@ -362,6 +378,61 @@ SfxUndoManager::~SfxUndoManager()
 {
 }
 
+void SfxUndoManager::SetUndoComment(const OUString& rComment)
+{
+    if (rComment.isEmpty())
+        return;
+
+    SfxUndoArray* pSfxUndoArray(m_xData->pActUndoArray);
+
+    if (nullptr == pSfxUndoArray)
+        return;
+
+    // get to outmost Undos
+    while (nullptr != pSfxUndoArray->pFatherUndoArray)
+        pSfxUndoArray = pSfxUndoArray->pFatherUndoArray;
+
+    if (pSfxUndoArray->maUndoActions.empty())
+        return;
+
+    // the outmost 1st undo should be a UndoGroup
+    SfxUndoAction* pSfxUndoAction(pSfxUndoArray->GetUndoAction(0));
+    if (nullptr == pSfxUndoAction)
+        return;
+
+    pSfxUndoAction->SetComment(rComment);
+}
+
+void SfxUndoManager::SetUndoComment(const OUString& rComment, const OUString& rObjDescr)
+{
+    if (rComment.isEmpty())
+        return;
+
+    SfxUndoArray* pSfxUndoArray(m_xData->pActUndoArray);
+
+    if (nullptr == pSfxUndoArray)
+        return;
+
+    // get to outmost Undos
+    while (nullptr != pSfxUndoArray->pFatherUndoArray)
+        pSfxUndoArray = pSfxUndoArray->pFatherUndoArray;
+
+    if (pSfxUndoArray->maUndoActions.empty())
+        return;
+
+    // the outmost 1st undo should be a UndoGroup
+    SfxUndoAction* pSfxUndoAction(pSfxUndoArray->GetUndoAction(0));
+    if (nullptr == pSfxUndoAction)
+        return;
+
+    // apply text replacement when given
+    OUString aComment(rComment);
+    if (!rObjDescr.isEmpty())
+        aComment = aComment.replaceFirst("%1", rObjDescr);
+
+    pSfxUndoAction->SetComment(aComment);
+    pSfxUndoAction->SetObjDescription(rObjDescr);
+}
 
 void SfxUndoManager::EnableUndo( bool i_enable )
 {
@@ -1331,14 +1402,14 @@ OUString SfxListUndoAction::GetComment() const
     return mpImpl->maComment;
 }
 
-ViewShellId SfxListUndoAction::GetViewShellId() const
-{
-    return mpImpl->mnViewShellId;
-}
-
 void SfxListUndoAction::SetComment(const OUString& rComment)
 {
     mpImpl->maComment = rComment;
+}
+
+ViewShellId SfxListUndoAction::GetViewShellId() const
+{
+    return mpImpl->mnViewShellId;
 }
 
 OUString SfxListUndoAction::GetRepeatComment(SfxRepeatTarget &) const

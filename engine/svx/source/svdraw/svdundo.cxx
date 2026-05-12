@@ -140,6 +140,21 @@ OUString SdrUndoGroup::GetComment() const
     return m_aComment.replaceAll("%1", m_aObjDescription);
 }
 
+OUString SdrUndoGroup::GetObjDescription() const
+{
+    return m_aObjDescription;
+}
+
+void SdrUndoGroup::SetComment(const OUString& rStr)
+{
+    m_aComment=rStr;
+}
+
+void SdrUndoGroup::SetObjDescription(const OUString& rStr)
+{
+    m_aObjDescription=rStr;
+}
+
 bool SdrUndoGroup::CanSdrRepeat(SdrView& rView) const
 {
     switch (m_eFunction)

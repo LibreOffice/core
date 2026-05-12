@@ -105,9 +105,11 @@ public:
     SdrUndoAction* GetAction(sal_Int32 nNum) const { return maActions[nNum].get(); }
     void AddAction(std::unique_ptr<SdrUndoAction> pAct);
 
-    void SetComment(const OUString& rStr) { m_aComment=rStr; }
-    void SetObjDescription(const OUString& rStr) { m_aObjDescription=rStr; }
+    virtual void SetComment(const OUString& rStr) override;
+    virtual void SetObjDescription(const OUString& rStr) override;
     virtual OUString GetComment() const override;
+    virtual OUString GetObjDescription() const override;
+
     virtual OUString GetSdrRepeatComment() const override;
 
     virtual void Undo() override;
