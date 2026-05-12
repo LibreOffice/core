@@ -55,6 +55,19 @@ DECLARE_OOXMLEXPORT_TEST(testTdf137335_whitespaceLineHeight, "tdf137335_whitespa
     CPPUNIT_ASSERT_EQUAL(SwTwips(276), Height);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf164835_nonDummyLineHeight, "tdf164835_nonDummyLineHeight.docx")
+{
+    // given a document where whitespace-only lines wrap beside an image
+    auto pXmlDoc = parseLayoutDump();
+
+    SwTwips nImageBottom = getXPath(pXmlDoc, "//fly/infos/bounds", "bottom").toInt32();
+    // CPPUNIT_ASSERT_EQUAL(1, getPages()); // should all be on a single page
+    assertXPathContent(pXmlDoc, "//page[2]/body/txt", u"Text below the picture");
+    SwTwips nTextTop = getXPath(pXmlDoc, "//page[2]/body/txt/infos/bounds", "top").toInt32();
+    // Without the fix, the text in paragraph 5 was beside the image.
+    CPPUNIT_ASSERT_GREATER(nImageBottom, nTextTop); // text is below the image
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf148057_columnBreak, "tdf148057_columnBreak.docx")
 {
     // given a document with a linefeed immediately following a column break (in non-column section)

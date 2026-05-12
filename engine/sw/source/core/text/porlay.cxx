@@ -386,7 +386,11 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
                     continue;
                 }
 
-                bHasOnlyBlankPortions = false;
+                // FlyPortions are just holes for text to wrap around.
+                // Since they are not part of the paragraph itself,
+                // FlyPortions don't negate the idea that the line only contains blank portions.
+                if (!pPos->IsFlyPortion())
+                    bHasOnlyBlankPortions = false;
 
                 // We had an attribute change: Sum up/build maxima of length and mass
 
