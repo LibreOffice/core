@@ -70,7 +70,13 @@ class DocumentViewBase {
 				// If it can not, then it will start a new, separate polygon.
 				const yMaxOfGroup = rectangle[1] + rectangle[3];
 
-				if (Math.abs(yMaxOfGroup - rectangles[0][1]) < 5)
+				const next = rectangles[0];
+				const xOverlap = !(
+					rectangle[0] + rectangle[2] <= next[0] ||
+					next[0] + next[2] <= rectangle[0]
+				);
+
+				if (Math.abs(yMaxOfGroup - next[1]) < 5 && xOverlap)
 					// 5 is the twips tolerance we pick.
 					group.push(rectangles.splice(0, 1)[0]);
 				else groups.push([rectangles.splice(0, 1)[0]]);
