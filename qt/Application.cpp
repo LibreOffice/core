@@ -40,6 +40,7 @@
 #include <QTemporaryFile>
 #include <QUrl>
 #include <QWebEngineProfile>
+#include <QWebEngineSettings>
 
 QWebEngineProfile* Application::globalProfile = nullptr;
 RecentFiles Application::recentFiles;
@@ -156,6 +157,16 @@ void Application::initialize()
 
         globalProfile->installUrlSchemeHandler(
             "cool", new CoolUrlSchemeHandler(globalProfile));
+
+        // The non-embed remote-doc flow loads cool.html via file://
+        // so its page-side JS can fetch() the cool server's
+        // /co/collab/fetch and POST to /co/collab/put.  Chromium
+        // blocks file://-origin pages from accessing remote URLs by
+        // default; flipping LocalContentCanAccessRemoteUrls lets the
+        // cross-origin fetches through (CORS on the server side is
+        // what controls actual access).
+        globalProfile->settings()->setAttribute(
+            QWebEngineSettings::LocalContentCanAccessRemoteUrls, true);
     }
 
     // Initialize recent files

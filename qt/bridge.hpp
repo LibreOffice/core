@@ -46,12 +46,13 @@ class Bridge : public QObject
     // true between showing the deferred cross-window paste progress snackbar and
     // receiving the paste's COMMANDRESULT; touched only on the GUI thread.
     bool _pasteInProgress = false;
-    // true from JS-side SAVESTARTED until the .uno:Save COMMANDRESULT
-    // has been observed and (for remote docs) the
-    // uploadLocalFileToServer round-trip has completed.  Watched by
-    // close-handlers so they don't prompt about "unsaved changes"
-    // during the window where core's status indicator has already
-    // gone away but the save is not actually finished.
+    // true from JS-side SAVESTARTED until the JS-side SAVECOMPLETED:
+    // that brackets both the .uno:Save round-trip and (for remote
+    // docs) the JS-driven collabUploadFile POST that pushes the
+    // just-saved bytes to the integrator.  Watched by close-handlers
+    // so they don't prompt about "unsaved changes" during the window
+    // where core's status indicator has already gone away but the
+    // save is not actually finished.
     bool _saveInFlight = false;
     // One-shot callback to run when _saveInFlight transitions back to
     // false.  Used by closeEvent paths to defer the window-close
@@ -72,14 +73,6 @@ class Bridge : public QObject
     /// invoke (then drop) any pending _onSaveComplete callback.
     void finishSave();
 
-    /// Upload the local file (assumed already written by a
-    /// successful .uno:Save) to the integrator via the per-document
-    /// collab WS.  No-op if the document is not a remote one (no
-    /// _remoteInfo / no collab WS).  Once the POST completes,
-    /// honours the JS-side _codaUploadAndSwitchAfterSave flag (set
-    /// by Permission.js when handing local-edit off to server-mode
-    /// collab) and switches the webview to server mode.
-    void uploadLocalFileToServer();
 
 public:
     explicit Bridge(QObject* parent, coda::DocumentData& document, QWidget* window, QWebEngineView* webView)
@@ -116,9 +109,9 @@ public:
     void onSaveComplete(std::function<void()> callback);
 
     /// Announce an orderly close to the per-document collab broker
-    /// by sending {"type":"bye"} on its WebSocket.  Must be called
-    /// from the host window's closeEvent while _document is still
-    /// alive - not from a destructor.
+    /// by asking the page's JS to send {"type":"bye"} on its
+    /// WebSocket.  Must be called from the host window's closeEvent
+    /// while the bridge is still alive.  No-op for local-only docs.
     void sendCollabBye();
 
 public slots: // called from JavaScript
@@ -147,6 +140,36 @@ public slots: // called from JavaScript
     /// through to the prefs file so the next getAllPrefs() (on any
     /// webview) sees it.
     void setPref(const QString& key, const QString& value);
+
+    /// Return WOPI connection params (wopiSrc, accessToken,
+    /// coolServer, coolPath) for a remote document as a JSON object
+    /// string, or the empty string for a local-only doc.  Called by
+    /// the page-JS bootstrap to decide whether to open the collab
+    /// WebSocket and fetch the document body before the standard
+    /// load flow runs.
+    QString getRemoteInfo();
+
+    /// Decode @base64Bytes and write them to a fresh temp file
+    /// preserving the extension of @filename, set
+    /// _document._fileURL to the resulting path, and return that
+    /// path so the page-JS can advance the standard load flow.
+    /// Used by remote-doc bootstrap after the JS-side collab fetch
+    /// gives us the bytes.
+    QString writeRemoteDocFile(const QString& filename,
+                               const QString& base64Bytes);
+
+    /// Read _document._fileURL bytes (the file LOKit just wrote on
+    /// a successful .uno:Save) and return them base64-encoded so
+    /// the page-JS upload path can POST them through the collab
+    /// /co/collab/put endpoint.  Returns the empty string when
+    /// there is no remote document or the file cannot be read.
+    QString readLocalDocBytes();
+
+    /// JS-side notification that a save (and, for remote docs,
+    /// the subsequent integrator upload) has finished.  Clears
+    /// _saveInFlight and runs any pending _onSaveComplete callback
+    /// (e.g. a deferred window-close).
+    void saveCompleted();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

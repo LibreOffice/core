@@ -41,23 +41,18 @@
 #include <QDesktopServices>
 #include <QDir>
 #include <QFile>
-#include <QEventLoop>
 #include <QFileDialog>
 #include <QFileInfo>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QMainWindow>
 #include <QMetaObject>
-#include <QNetworkAccessManager>
-#include <QNetworkReply>
-#include <QNetworkRequest>
 #include <QObject>
 #include <QPointer>
 #include <QString>
 #include <QTemporaryFile>
 #include <QTimer>
 #include <QUrl>
-#include <QWebSocket>
 #include <QWidget>
 
 static const int SHOW_JS_MAXLEN = 300;
@@ -92,21 +87,16 @@ Bridge::~Bridge() {
 
 void Bridge::sendCollabBye()
 {
-    // Sends {"type":"bye"} on the per-document collab WS so the
-    // server-side CollabBroker knows the disconnect is orderly and
-    // can reclaim itself immediately instead of waiting out its idle
-    // grace period for a reconnect that is not coming.  Safe to call
-    // when there is no collab WS (e.g. a local-only document) or
-    // when bye has already been sent.  Must be called while _document
-    // is still alive - call sites are the QMainWindow::closeEvent
-    // paths of the picker / open-in-new-window windows, not the
-    // Bridge destructor (which runs after the host window's
-    // value-typed _document has been destroyed).
-    if (_document._remoteInfo && _document._remoteInfo->collabWs)
-    {
-        _document._remoteInfo->collabWs->sendTextMessage(
-            QStringLiteral("{\"type\":\"bye\"}"));
-    }
+    // Ask the page-JS to send {"type":"bye"} on its collab WebSocket
+    // so the server-side CollabBroker knows the disconnect is orderly
+    // and can reclaim itself immediately instead of waiting out its
+    // idle grace period.  No-op if the page never opened a collab WS
+    // (e.g. a local-only document).
+    if (!_document._remoteInfo)
+        return;
+    evalJS(
+        "if (window.collabWs && window.collabWs.readyState === 1)"
+        "  window.collabWs.send('{\"type\":\"bye\"}');");
 }
 
 void Bridge::createAndStartMessagePumpThread()
@@ -309,6 +299,72 @@ void Bridge::setPref(const QString& key, const QString& value)
     Application::getPrefs().set(key.toStdString(), value.toStdString());
 }
 
+QString Bridge::getRemoteInfo()
+{
+    if (!_document._remoteInfo)
+        return {};
+    const auto& ri = *_document._remoteInfo;
+    QJsonObject obj;
+    obj["wopiSrc"] = ri.wopiSrc;
+    obj["accessToken"] = ri.accessToken;
+    obj["coolServer"] = ri.coolServer;
+    obj["coolPath"] = ri.coolPath;
+    return QString::fromUtf8(
+        QJsonDocument(obj).toJson(QJsonDocument::Compact));
+}
+
+QString Bridge::writeRemoteDocFile(const QString& filename,
+                                   const QString& base64Bytes)
+{
+    // Extension drives core's filter detection; keep whatever the
+    // integrator gave us via /co/collab/fetch's filename field.
+    QString ext;
+    int dot = filename.lastIndexOf('.');
+    if (dot >= 0)
+        ext = filename.mid(dot);
+
+    QTemporaryFile tmp(QDir::tempPath() + "/coda-XXXXXX" + ext);
+    if (!tmp.open())
+    {
+        LOG_ERR("writeRemoteDocFile: cannot open temp file");
+        return {};
+    }
+    const QByteArray bytes =
+        QByteArray::fromBase64(base64Bytes.toLatin1());
+    if (tmp.write(bytes) != bytes.size())
+    {
+        LOG_ERR("writeRemoteDocFile: short write to "
+                << tmp.fileName().toStdString());
+        return {};
+    }
+    const QString path = tmp.fileName();
+    tmp.close();
+    tmp.setAutoRemove(false);
+
+    _document._fileURL = Poco::URI(Poco::Path(path.toStdString()));
+    LOG_TRC("writeRemoteDocFile: wrote " << bytes.size()
+            << " bytes to " << path.toStdString());
+    return path;
+}
+
+QString Bridge::readLocalDocBytes()
+{
+    const std::string localPath = _document._fileURL.getPath();
+    QFile file(QString::fromStdString(localPath));
+    if (!file.open(QIODevice::ReadOnly))
+    {
+        LOG_ERR("readLocalDocBytes: cannot read " << localPath);
+        return {};
+    }
+    const QByteArray bytes = file.readAll();
+    return QString::fromLatin1(bytes.toBase64());
+}
+
+void Bridge::saveCompleted()
+{
+    finishSave();
+}
+
 void Bridge::promptSaveLocation(std::function<void(const std::string&, const std::string&)> callback)
 {
     // Prompt user to pick a save location and format
@@ -466,85 +522,6 @@ void Bridge::saveDocumentAs()
                 fakeSocketWriteQueue(fakeClientFd, saveasCmd.c_str(), saveasCmd.size());
             }
         });
-}
-
-void Bridge::uploadLocalFileToServer()
-{
-    if (!_document._remoteInfo || !_document._remoteInfo->collabWs)
-    {
-        finishSave();
-        return;
-    }
-
-    auto& ri = *_document._remoteInfo;
-
-    // Read the local file (already saved to disk by .uno:Save).
-    const std::string localPath = _document._fileURL.getPath();
-    QFile file(QString::fromStdString(localPath));
-    if (!file.open(QIODevice::ReadOnly))
-    {
-        LOG_ERR("uploadLocalFileToServer: cannot read " << localPath);
-        finishSave();
-        return;
-    }
-    const QByteArray fileBytes = file.readAll();
-    file.close();
-
-    // The collab protocol is: send {type:upload,...} on the WS, wait
-    // for an {type:upload_url,...} reply containing a one-shot POST
-    // URL, then POST the file bytes to that URL.
-    auto* ws = ri.collabWs.get();
-    const QString coolServer = ri.coolServer;
-    auto* bridge = this;
-
-    auto conn = std::make_shared<QMetaObject::Connection>();
-    *conn = QObject::connect(ws, &QWebSocket::textMessageReceived,
-        [conn, fileBytes, coolServer, bridge](const QString& msg) {
-            const QJsonObject jobj =
-                QJsonDocument::fromJson(msg.toUtf8()).object();
-            if (jobj["type"].toString() != "upload_url"
-                || jobj["requestId"].toString() != "coda-save")
-                return;
-            QObject::disconnect(*conn);
-
-            QString uploadUrl = jobj["url"].toString();
-            if (uploadUrl.startsWith('/'))
-                uploadUrl = coolServer + uploadUrl;
-
-            auto* nam = new QNetworkAccessManager;
-            QNetworkRequest req{QUrl(uploadUrl)};
-            req.setHeader(QNetworkRequest::ContentTypeHeader,
-                          "application/octet-stream");
-            QNetworkReply* reply = nam->post(req, fileBytes);
-            QObject::connect(reply, &QNetworkReply::finished,
-                [reply, nam, bridge]() {
-                    if (reply->error() != QNetworkReply::NoError)
-                        LOG_ERR("uploadLocalFileToServer: upload failed: "
-                                << reply->errorString().toStdString());
-                    reply->deleteLater();
-                    nam->deleteLater();
-
-                    // If Permission.js asked for a server-mode hand-off
-                    // after the save, run it now that the bytes are up.
-                    bridge->evalJS(
-                        "if (window._codaUploadAndSwitchAfterSave) {"
-                        "  window._codaUploadAndSwitchAfterSave = false;"
-                        "  window.collabSendMessage("
-                        "    {type:'saved_and_switching'});"
-                        "  window.switchToServerMode();"
-                        "}");
-
-                    // Upload round-trip done - the save is now truly
-                    // complete; release any close that has been
-                    // waiting on us.
-                    bridge->finishSave();
-                });
-        });
-
-    ws->sendTextMessage(
-        "{\"type\":\"upload\","
-        "\"stream\":\"contents\","
-        "\"requestId\":\"coda-save\"}");
 }
 
 QVariant Bridge::cool(const QString& messageStr)
@@ -709,24 +686,15 @@ QVariant Bridge::cool(const QString& messageStr)
     }
     else if (tokens.equals(0, "COMMANDRESULT"))
     {
+        // Only the clipboard-fetch trigger lives in C++ now; .uno:Save
+        // is driven entirely from the page-JS (collabUploadFile in
+        // browser/js/global.js) which closes out via SAVECOMPLETED
+        // below.
         Poco::JSON::Object::Ptr object;
         if (!JsonUtil::parseJSON(tokens.substrFromToken(1), object))
             return {};
 
         const std::string commandName = object->get("commandName").toString();
-        const bool success = object->get("success").convert<bool>();
-        bool wasModified = false;
-        if (object->has("wasModified"))
-        {
-            wasModified = object->get("wasModified").convert<bool>();
-        }
-
-        bool isAutosave = false;
-        if (object->has("isAutosave"))
-        {
-            isAutosave = object->get("isAutosave").convert<bool>();
-        }
-
         if (commandName == ".uno:Copy" || commandName == ".uno:Cut"
             || commandName == ".uno:CopySlide")
         {
@@ -745,23 +713,6 @@ QVariant Bridge::cool(const QString& messageStr)
                 _pasteInProgress = false;
             }
         }
-
-        if (commandName != ".uno:Save")
-            return {};
-
-        // For a remote document, a successful .uno:Save has only
-        // written the file to the local temp copy;
-        // uploadLocalFileToServer pushes the bytes back to the
-        // integrator via the collab WS, and also handles the
-        // optional server-mode hand-off triggered by the
-        // save-and-switch flow.  uploadLocalFileToServer is a no-op
-        // (and calls finishSave directly) for local-only docs and
-        // when the .uno:Save did not actually need to do anything
-        // (autosave on an unmodified doc, or a failure).
-        if (success && (wasModified || !isAutosave))
-            uploadLocalFileToServer();
-        else
-            finishSave();
     }
     else if (tokens.equals(0, "UPLOADSETTINGS"))
     {
@@ -1182,100 +1133,33 @@ QVariant Bridge::cool(const QString& messageStr)
     }
     else if (tokens.equals(0, "switchToServerMode"))
     {
-        // Switch from local to server-rendered collaborative editing
-        // by navigating to the COOL server's cool.html.
+        // Tear down the local-LOKit side of a remote document so the
+        // page can swap its underlying WebSocket from the FakeWebSocket
+        // (routed through this bridge to the in-process kit) to a real
+        // one pointing at the cool server.  The page-JS does the
+        // socket swap itself and also sends {"type":"bye"} on its
+        // collab WS before triggering this; here we only handle the
+        // FakeSocket teardown.  Do NOT navigate the webview - the
+        // whole point of this seamless switch (vs. the original
+        // _webView->load(coolUrl) path) is to keep the page loaded.
         if (!_document._remoteInfo)
             return {};
 
-        auto& ri = *_document._remoteInfo;
-
-        // TODO: if the document has been modified locally, save and
-        // upload via the collab endpoint before switching.
-
-        // Stop the local FakeSocket message pump.
+        // Stop the local FakeSocket message pump.  The in-process kit
+        // will exit on its own once its socket is gone.
         if (_closeNotificationPipeForForwardingThread[0] >= 0)
         {
             fakeSocketClose(_closeNotificationPipeForForwardingThread[0]);
             _closeNotificationPipeForForwardingThread[0] = -1;
         }
-
-        // Close the collab WebSocket.  Send a {"type":"bye"} first
-        // so the server-side broker recognises this as an orderly
-        // close and reclaims itself immediately instead of waiting
-        // out its idle grace period.  Then disconnect signal slots
-        // so any textMessageReceived events still queued in the Qt
-        // event loop do not reach the new page that we are about to
-        // load (where they would land in window._codaCollabQueue
-        // and feed the post-switch _setupCodaCollab bail-out path).
-        if (ri.collabWs)
-        {
-            ri.collabWs->sendTextMessage(QStringLiteral("{\"type\":\"bye\"}"));
-            ri.collabWs->disconnect();
-            ri.collabWs->close();
-        }
-
-        // Use the versioned cool.html path the IntegratorFilePicker
-        // captured (e.g. /browser/<hash>/cool.html), but drop the
-        // wasm/ segment that discovery.xml splices in for embed mode:
-        // switchToServerMode loads the regular cool.html.
-        QString path = ri.coolPath.isEmpty()
-            ? "/browser/dist/cool.html" : ri.coolPath;
-        path.replace("/wasm/cool.html", "/cool.html");
-        QString coolUrl = ri.coolServer + path
-            + "?WOPISrc=" + QUrl::toPercentEncoding(ri.wopiSrc)
-            + "&access_token=" + QUrl::toPercentEncoding(ri.accessToken)
-            + "&permission=edit";
-
-        LOG_TRC("switchToServerMode: loading "
-                << coolUrl.toStdString());
-
-        QMetaObject::invokeMethod(_webView, [this, coolUrl]() {
-            _webView->load(QUrl(coolUrl));
-        }, Qt::QueuedConnection);
     }
-    else if (tokens.equals(0, "replayCollabMessages"))
+    else if (tokens.equals(0, "SAVECOMPLETED"))
     {
-        // JS is ready - replay any collab messages buffered during
-        // the download phase.
-        if (_document._remoteInfo)
-        {
-            for (const auto& msg : _document._remoteInfo->pendingCollabMessages)
-            {
-                // Only replay user_list if no live notifications
-                // have updated collabUsers yet (user_list is stale
-                // and would overwrite live data).
-                if (msg.contains("\"type\":\"user_list\""))
-                {
-                    evalJS(
-                        "if (window._codaCollabMessage"
-                        "    && (!window.collabUsers"
-                        "        || window.collabUsers.length === 0))"
-                        "  window._codaCollabMessage("
-                        + msg.toStdString() + ");");
-                }
-                else
-                {
-                    evalJS(
-                        "if (window._codaCollabMessage)"
-                        "  window._codaCollabMessage("
-                        + msg.toStdString() + ");");
-                }
-            }
-            _document._remoteInfo->pendingCollabMessages.clear();
-            evalJS(
-                "if (window._codaCollabMessagesReplayed)"
-                "  window._codaCollabMessagesReplayed();");
-        }
-    }
-    else if (tokens.equals(0, "collab"))
-    {
-        // Forward a message from JS to the per-document collab
-        // WebSocket (if open).
-        if (_document._remoteInfo && _document._remoteInfo->collabWs)
-        {
-            QString payload = messageStr.mid(messageStr.indexOf(' ') + 1);
-            _document._remoteInfo->collabWs->sendTextMessage(payload);
-        }
+        // Page-JS finished the save (and, for remote docs, the
+        // subsequent integrator upload via collabUploadFile).
+        // Clear _saveInFlight and release any close that has been
+        // waiting on us.
+        saveCompleted();
     }
     else
     {

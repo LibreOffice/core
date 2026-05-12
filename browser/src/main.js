@@ -137,6 +137,65 @@ var initUI = function() {
 	}
 };
 
+// Local save callback shared by COWASM and CODA remote-doc paths.
+// Both flavours have already saved the document bytes locally; this
+// pushes them up to the integrator via /co/collab/put, then runs any
+// queued "save-and-switch-to-server-mode" hand-off.
+var _codaUploadOnSave = function(fileBytes, tag) {
+	window.app.console.log(tag + ': uploading ' + fileBytes.length + ' bytes');
+	map.fire('showbusy', {label: _('Saving...')});
+	return global.collabUploadFile(fileBytes).then(function() {
+		window.app.console.log(tag + ': upload completed');
+		map.fire('hidebusy');
+		if (window._switchToServerAfterSave) {
+			window._switchToServerAfterSave = false;
+			window.app.console.log(tag + ': switching to server mode after save');
+			window.collabSendMessage({type: 'saved_and_switching'});
+			window.switchToServerMode();
+		}
+	}).catch(function(err) {
+		window.app.console.error(tag + ': upload failed: ' + err.message);
+		map.fire('hidebusy');
+		if (window._switchToServerAfterSave) {
+			window._switchToServerAfterSave = false;
+			window.switchToServerMode();
+		}
+	});
+};
+
+// Common per-doc collab-notification wiring (peer joins, peer-driven
+// switch requests, etc.).  Used by both COWASM and CODA after the
+// /co/collab fetch resolves.
+var _codaWireCollabNotifications = function() {
+	// If a collaborative editing session is already active, ask the
+	// new user whether they want to join.  Defer to the next tick
+	// after updatepermission, because _enterReadOnlyMode fires
+	// closealldialogs right after updatepermission.
+	if (global.collabEditingActive) {
+		var showCollabDialog = function () {
+			app.events.off('updatepermission', showCollabDialog);
+			setTimeout(function () {
+				map._onCollabEditingActive();
+			}, 0);
+		};
+		app.events.on('updatepermission', showCollabDialog);
+	}
+
+	global.addCollabNotificationListener(function(msg) {
+		if (msg.type === 'editing_started' && msg.user) {
+			map._onOtherUserEditingStarted(
+				msg.user.name || msg.user.id,
+				msg.user.avatar);
+		} else if (msg.type === 'switch_to_collab') {
+			map._onSwitchToCollabRequest();
+		} else if (msg.type === 'saved_and_switching') {
+			map._onEditorSavedAndSwitching();
+		} else if (msg.type === 'user_left') {
+			map._onCollabUserLeft();
+		}
+	});
+};
+
 if (window.ThisIsTheEmscriptenApp) {
 	// Ensure the access token is available on the global object
 	// for switchToServerMode (MobileAppInitializer does not set
@@ -154,27 +213,9 @@ if (window.ThisIsTheEmscriptenApp) {
 
 		// Set up save callback before initializing the module.
 		// The C++ saveToServer() calls this via MAIN_THREAD_EM_ASM
-		// with the file bytes, and we handle the token exchange and upload.
+		// with the file bytes.
 		globalThis.collabSaveToServer = function(fileBytes) {
-			window.app.console.log('WASM: collabSaveToServer called with ' + fileBytes.length + ' bytes');
-			map.fire('showbusy', {label: _('Saving...')});
-			global.collabUploadFile(fileBytes).then(function() {
-				window.app.console.log('WASM: save completed successfully');
-				map.fire('hidebusy');
-				if (window._switchToServerAfterSave) {
-					window._switchToServerAfterSave = false;
-					window.app.console.log('WASM: switching to server mode after save');
-					window.collabSendMessage({type: 'saved_and_switching'});
-					window.switchToServerMode();
-				}
-			}).catch(function(err) {
-				window.app.console.error('WASM: save failed: ' + err.message);
-				map.fire('hidebusy');
-				if (window._switchToServerAfterSave) {
-					window._switchToServerAfterSave = false;
-					window.switchToServerMode();
-				}
-			});
+			_codaUploadOnSave(fileBytes, 'WASM');
 		};
 
 		global.collabFetchFile(fullDocUrl, accessToken).then(function(result) {
@@ -186,41 +227,7 @@ if (window.ThisIsTheEmscriptenApp) {
 			}
 			initUI();
 			initEmscriptenModule('collab', result.url);
-
-			// If a collaborative editing session is already active,
-			// ask the new user whether they want to join.  Defer
-			// to the next tick after updatepermission, because
-			// _enterReadOnlyMode fires closealldialogs right after
-			// updatepermission.
-			if (global.collabEditingActive) {
-				var showCollabDialog = function () {
-					app.events.off('updatepermission', showCollabDialog);
-					setTimeout(function () {
-						map._onCollabEditingActive();
-					}, 0);
-				};
-				app.events.on('updatepermission', showCollabDialog);
-			}
-
-			// Listen for collab notifications from other users
-			global.addCollabNotificationListener(function(msg) {
-				if (msg.type === 'editing_started' && msg.user) {
-					map._onOtherUserEditingStarted(
-						msg.user.name || msg.user.id,
-						msg.user.avatar);
-				} else if (msg.type === 'switch_to_collab') {
-					// Another user wants collaborative editing.
-					// Save local changes and switch to server mode.
-					map._onSwitchToCollabRequest();
-				} else if (msg.type === 'saved_and_switching') {
-					// The editor has saved and is switching.
-					map._onEditorSavedAndSwitching();
-				} else if (msg.type === 'user_left') {
-					// If we were waiting and all users left,
-					// stop waiting.
-					map._onCollabUserLeft();
-				}
-			});
+			_codaWireCollabNotifications();
 		}).catch(function(err) {
 			window.app.console.error('WASM: Collab fetch failed: ' + err.message + ', falling back to direct fetch');
 			initUI();
@@ -233,6 +240,127 @@ if (window.ThisIsTheEmscriptenApp) {
 		// Local file, use directly
 		initEmscriptenModule('local', docURL);
 	}
+} else if (window.ThisIsTheQtApp) {
+	// CODA-Q: the picker side sets _document._remoteInfo (wopiSrc,
+	// accessToken, coolServer, coolPath) on the C++ side before
+	// cool.html loads, for remote docs only.  Pull that via
+	// Bridge::getRemoteInfo once the QWebChannel bridge is ready; if
+	// non-empty, run the COWASM-style /co/collab fetch from JS, then
+	// hand the bytes back to native via Bridge::writeRemoteDocFile
+	// so LOKit can load them through the standard fakesocket flow.
+	// Local-only docs take the default path: initUI + map.loadDocument.
+	var _codaQtRemoteBootstrap = function() {
+		// On every successful .uno:Save, tell the bridge the save
+		// round-trip is over so it can clear _saveInFlight (and run
+		// any deferred-close callback).  For a remote doc still in
+		// local-edit mode, additionally drive the integrator upload
+		// via global.collabWs (closed-over below).  Registered up
+		// front rather than inside the remote-doc branch so local-
+		// only docs also get _saveInFlight cleared.
+		map.on('commandresult', function(ev) {
+			if (ev.commandName !== '.uno:Save')
+				return;
+			var done = function() {
+				window.postMobileMessage('SAVECOMPLETED');
+			};
+			if (
+				!ev.success ||
+				!global.collabWs ||
+				global.collabWs.readyState !== WebSocket.OPEN
+			) {
+				done();
+				return;
+			}
+			new Promise(function(r) {
+				window.bridge.readLocalDocBytes(r);
+			}).then(function(b64) {
+				if (!b64) {
+					done();
+					return;
+				}
+				var bin = atob(b64);
+				var arr = new Uint8Array(bin.length);
+				for (var i = 0; i < bin.length; i++)
+					arr[i] = bin.charCodeAt(i);
+				_codaUploadOnSave(arr, 'CODA-Q').then(done, done);
+			}, done);
+		});
+
+		new Promise(function(resolve) {
+			window.bridge.getRemoteInfo(resolve);
+		}).then(function(infoJson) {
+			if (!infoJson) {
+				// Local-only document: standard path.
+				initUI();
+				map.loadDocument(global.socket);
+				return;
+			}
+			var info = JSON.parse(infoJson);
+			// Cache for Permission.js's switchToServerMode override,
+			// which rebuilds the cool-server /cool/ws URL from these
+			// values.
+			window._codaRemoteInfo = info;
+			window.app.console.log('CODA-Q: remote doc, wopiSrc=' + info.wopiSrc);
+			initUI();
+			global.collabFetchFile(info.wopiSrc, info.accessToken, info.coolServer).then(function(result) {
+				window.app.console.log('CODA-Q: fetch URL: ' + result.url);
+				if (result.filename) {
+					map['wopi'].BaseFileName = result.filename;
+					map['wopi'].BreadcrumbDocName = result.filename;
+				}
+				return fetch(result.url).then(function(r) {
+					if (!r.ok)
+						throw new Error('GET ' + result.url + ' returned ' + r.status);
+					return r.arrayBuffer();
+				}).then(function(buf) {
+					// QWebChannel does not marshal ArrayBuffer cleanly,
+					// so base64 the body across the JS<->Qt boundary.
+					var bytes = new Uint8Array(buf);
+					var binary = '';
+					for (var i = 0; i < bytes.length; i++)
+						binary += String.fromCharCode(bytes[i]);
+					var b64 = btoa(binary);
+					return new Promise(function(r) {
+						window.bridge.writeRemoteDocFile(result.filename || 'document', b64, r);
+					});
+				}).then(function(localPath) {
+					if (!localPath)
+						throw new Error('writeRemoteDocFile failed');
+					window.app.console.log('CODA-Q: wrote local temp file ' + localPath);
+					// Point the FakeWebSocket's load message at the
+					// just-written file before opening the socket.
+					global.docURL = 'file://' + localPath;
+					map.options.doc = global.docURL;
+					if (result.filename) {
+						var fileName = result.filename;
+						document.title = fileName + ' - ' + window.brandProductName;
+					}
+					// Mirror the auto-fire in global.js (now gated on
+					// docURL being non-empty): now that we have a path,
+					// kick HULLO + the FakeWebSocket's onopen so
+					// coolwsd gets a non-empty 'load url=' message.
+					// Must happen *before* map.loadDocument hands the
+					// socket to app.socket.connect, which replaces
+					// onopen without firing it.
+					window.postMobileMessage('HULLO');
+					global.socket.onopen();
+					map.loadDocument(global.socket);
+					_codaWireCollabNotifications();
+					// (Save-completion handling - upload-when-collabWs-
+					// open or SAVECOMPLETED-when-not - is registered at
+					// the top of this bootstrap so it covers both local-
+					// only and remote-doc paths uniformly.)
+				});
+			}).catch(function(err) {
+				window.app.console.error('CODA-Q: remote bootstrap failed: '
+					+ (err && err.message ? err.message : err));
+			});
+		});
+	};
+	if (window.qtBridgeReady)
+		_codaQtRemoteBootstrap();
+	else
+		window.addEventListener('qtbridgeready', _codaQtRemoteBootstrap);
 } else {
 	initUI();
 	map.loadDocument(global.socket);

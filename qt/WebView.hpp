@@ -43,16 +43,11 @@ Bridge* attachRemoteBridge(QWebEnginePage* page,
                            coda::DocumentData& document,
                            QWidget* window, QWebEngineView* webView);
 
-/// Wire collab WebSocket textMessageReceived to Bridge::evalJS so
-/// user_joined/user_left/editing_started flow into the page JS.
-/// Rewrites relative /co/collab/avatar URLs to absolute URLs on the
-/// coolServer origin, since the embedded page is not hosted there.
-void wireCollabMessagesToBridge(Bridge* bridge,
-                                coda::RemoteDocInfo* remoteInfo);
-
 /// Add the CODA-local query parameters the Qt-flavored cool.html
-/// expects (file_path, permission, appdocid, userinterfacemode,
-/// darkTheme) to `url`.
+/// expects (permission, appdocid, userinterfacemode, lang, dir,
+/// darkTheme) to `url`.  file_path is intentionally omitted for
+/// remote documents - the page-JS materialises the temp file via
+/// Bridge::writeRemoteDocFile and uses the returned path itself.
 void addRemoteCoolParams(QUrl& url, const coda::DocumentData& document);
 
 /// Preferred window size for document viewing (full viewport) or for
@@ -116,8 +111,7 @@ public:
     QMainWindow* mainWindow() { return _mainWindow; }
 
     void load(const Poco::URI& fileURL = Poco::URI(), bool newFile = false, bool isStarterMode = false);
-    void loadRemote(const QString& localPath,
-                    std::shared_ptr<coda::RemoteDocInfo> remoteInfo);
+    void loadRemote(std::shared_ptr<coda::RemoteDocInfo> remoteInfo);
 
     // templatePath and basename can be empty strings and are optional.
     static WebView* createNewDocument(QWebEngineProfile* profile, const std::string& templateType,

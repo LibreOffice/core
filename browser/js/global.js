@@ -2287,12 +2287,17 @@ function showWelcomeSVG() {
 
 		global.socket.binaryType = 'arraybuffer';
 
-		if (global.ThisIsAMobileApp && !global.ThisIsTheEmscriptenApp && !window.starterScreen) {
+		if (global.ThisIsAMobileApp && !global.ThisIsTheEmscriptenApp && !window.starterScreen && global.docURL) {
 			// This corresponds to the initial GET request when creating a WebSocket
 			// connection and tells the app's code that it is OK to start invoking
 			// TheFakeWebSocket's onmessage handler. The app code that handles this
 			// special message knows the document to be edited anyway, and can send it
 			// on as necessary to the Online code.
+			// docURL gate: for CODA remote docs we don't yet have a local file
+			// path here - the bootstrap in main.js fetches the doc via
+			// /co/collab, asks the bridge's writeRemoteDocFile slot to
+			// materialise it, and only then fires HULLO + this.socket.onopen()
+			// itself.
 			global.postMobileMessage('HULLO');
 			// A FakeWebSocket is immediately open.
 			this.socket.onopen();
@@ -2301,12 +2306,30 @@ function showWelcomeSVG() {
 
 	// Fetch file using the /co/collab WebSocket endpoint.
 	// Returns a Promise that resolves to the download URL.
-	// Used by WASM builds to download documents via the collab endpoint.
-	global.collabFetchFile = function(wopiSrc, accessToken) {
+	// Used by WASM and CODA builds to download documents via the
+	// collab endpoint.  @coolServer is the http(s):// origin of the
+	// cool server when the page itself lives elsewhere (CODA loads
+	// cool.html from a local origin or file://); pass empty/null for
+	// COWASM (where the page is hosted on the cool server, so the
+	// /co/collab WS resolves correctly against the page origin).
+	// When set, the resolved fetch_url and upload_url responses are
+	// also rebased onto this origin if the server returns them as
+	// site-absolute paths (e.g. "/co/collab/fetch?token=...").
+	global.collabFetchFile = function(wopiSrc, accessToken, coolServer) {
+		// Stash for collabUploadFile so it can rebase upload_url
+		// against the same cool server.  Cleared on socket close.
+		global._collabCoolServer = coolServer || '';
 		return new Promise(function(resolve, reject) {
-			var wsProtocol = global.location.protocol === 'https:' ? 'wss:' : 'ws:';
-			var wsUrl = wsProtocol + '//' + global.location.host +
-				global.serviceRoot + '/co/collab?WOPISrc=' + encodeURIComponent(wopiSrc);
+			var wsUrl;
+			if (coolServer) {
+				wsUrl = coolServer.replace(/^https?:/, function(s) {
+					return s === 'https:' ? 'wss:' : 'ws:';
+				}) + '/co/collab?WOPISrc=' + encodeURIComponent(wopiSrc);
+			} else {
+				var wsProtocol = global.location.protocol === 'https:' ? 'wss:' : 'ws:';
+				wsUrl = wsProtocol + '//' + global.location.host +
+					global.serviceRoot + '/co/collab?WOPISrc=' + encodeURIComponent(wopiSrc);
+			}
 
 			global.app.console.log('Connecting to collab endpoint: ' + wsUrl);
 
@@ -2348,7 +2371,16 @@ function showWelcomeSVG() {
 					} else if (msg.type === 'fetch_url' && msg.requestId === 'wasm-init') {
 						clearTimeout(timeoutId);
 						if (msg.url) {
-							global.app.console.log('Collab fetch URL: ' + msg.url);
+							var url = msg.url;
+							// CollabSocketHandler returns site-absolute
+							// URLs (e.g. /co/collab/fetch?token=...).
+							// When cool.html is hosted on a different
+							// origin than the cool server, rebase onto
+							// _collabCoolServer so fetch() hits the
+							// right host.
+							if (url.startsWith('/') && global._collabCoolServer)
+								url = global._collabCoolServer + url;
+							global.app.console.log('Collab fetch URL: ' + url);
 							// Switch to notification handler for ongoing messages
 							global.collabWs.onmessage = global._collabNotificationHandler;
 							global.collabWs.onerror = function() {
@@ -2357,8 +2389,9 @@ function showWelcomeSVG() {
 							global.collabWs.onclose = function() {
 								global.app.console.log('Collab notification WebSocket closed');
 								global.collabWs = null;
+								global._collabCoolServer = '';
 							};
-							resolve({url: msg.url, filename: msg.filename});
+							resolve({url: url, filename: msg.filename});
 						} else {
 							global.collabWs.close();
 							reject(new Error('Collab fetch response missing URL'));
@@ -2440,8 +2473,15 @@ function showWelcomeSVG() {
 						reject(new Error('Collab upload response missing URL'));
 						return;
 					}
-					global.app.console.log('Collab upload URL: ' + msg.url);
-					fetch(msg.url, {
+					var url = msg.url;
+					// Site-absolute upload_url from CollabSocketHandler;
+					// rebase if cool.html lives on a different origin
+					// than the cool server (CODA case).  See the parallel
+					// rebase for fetch_url in collabFetchFile above.
+					if (url.startsWith('/') && global._collabCoolServer)
+						url = global._collabCoolServer + url;
+					global.app.console.log('Collab upload URL: ' + url);
+					fetch(url, {
 						method: 'POST',
 						body: fileBytes,
 						headers: { 'Content-Type': 'application/octet-stream' }
@@ -2484,6 +2524,30 @@ function showWelcomeSVG() {
 			return;
 		}
 
+		// Rebase the avatar URL the cool server's CollabBroker
+		// emits (CollabBroker.cpp's appendUserJson rewrites WOPI
+		// avatar URLs to a server-hosted /co/collab/avatar?...
+		// proxy, but as a site-absolute path).  Works as-is when
+		// cool.html is hosted on the cool server itself (COWASM),
+		// but for CODA (page on file:// or the embed HTTPS server)
+		// the relative URL would resolve against the page's origin
+		// and 404, so prepend _collabCoolServer when set.  Applies
+		// to every user-bearing message shape the broker emits.
+		var rebaseAvatar = function(user) {
+			if (user && typeof user.avatar === 'string'
+				&& user.avatar.startsWith('/')
+				&& global._collabCoolServer) {
+				user.avatar = global._collabCoolServer + user.avatar;
+			}
+		};
+		if (msg.user) {
+			rebaseAvatar(msg.user);
+		}
+		if (Array.isArray(msg.users)) {
+			for (var u = 0; u < msg.users.length; u++)
+				rebaseAvatar(msg.users[u]);
+		}
+
 		if (msg.type === 'user_list' && Array.isArray(msg.users)) {
 			global.collabUsers = msg.users;
 			global.collabEditingActive = !!msg.editingActive;
@@ -2512,53 +2576,145 @@ function showWelcomeSVG() {
 		}
 	};
 
-	// Switch from WASM to traditional server-based collaborative editing.
-	// Submits a form POST to the server-served cool.html, replicating
-	// the original WOPI loading mechanism used by wasm.html.
+	// Switch from local (WASM or LOKit-via-Bridge) editing to traditional
+	// server-based collaborative editing without reloading cool.html:
+	// tear down the local-edit plumbing, then point app.socket at a real
+	// /cool/ws on the cool server.  Covers both COWASM (page hosted on
+	// the cool server itself) and CODA (page hosted on file:// or the
+	// embed HTTPS server, with the per-document WOPI params published
+	// on window._codaRemoteInfo by the platform-specific bootstrap in
+	// main.js; currently the QtApp branch).
 	global.switchToServerMode = function() {
-		// Mute the emscripten message bridge so the WASM
-		// module stops interfering with the new connection.
-		window.postMobileMessage = function() {};
-		window.postMobileCall = function() {};
+		// CODA-only: clear save tracking on the native side before we
+		// mute postMobileMessage below.  saveCompleted() is a direct
+		// QWebChannel-slot-style call (or each platform's equivalent),
+		// so it survives the mute regardless, but keep it adjacent to
+		// the rest of the bridge-side teardown.  Otherwise the
+		// deferred-close path can hang on _saveInFlight=true forever
+		// if a save-and-switch fired SAVESTARTED first.
+		if (window.bridge && window.bridge.saveCompleted)
+			window.bridge.saveCompleted();
 
-		// No longer a mobile/WASM app from the browser's
-		// perspective - we're switching to server mode.
-		window.ThisIsAMobileApp = false;
-		window.ThisIsTheEmscriptenApp = false;
-
-		// Close the collab WebSocket if open.
+		// Send bye on the per-document collab WS and close it.  Same
+		// in both flavours: the broker recognises the orderly close
+		// and reclaims itself immediately rather than waiting out its
+		// idle grace period for a reconnect that is not coming.
 		if (global.collabWs) {
-			global.collabWs.close();
+			if (global.collabWs.readyState === WebSocket.OPEN) {
+				try { global.collabWs.send('{"type":"bye"}'); }
+				catch (e) { /* already closed */ }
+			}
+			try { global.collabWs.close(); }
+			catch (e) { /* already closed */ }
 			global.collabWs = null;
 		}
 
-		// Ensure access token is available for the server
-		// session.
-		if (window.accessToken) {
-			global.app.map.options.docParams['access_token'] =
-				window.accessToken;
-			global.app.map.options.docParams['access_token_ttl'] =
-				window.accessTokenTTL || '0';
+		// CODA-only: ask the bridge to drop its FakeSocket-to-in-
+		// process-kit pipe.  postMobileMessage must still be live at
+		// this point; muted below.  In COWASM postMobileMessage routes
+		// to the Emscripten module which has no handler for this
+		// message, so guarding on window.bridge avoids the no-op
+		// round-trip.
+		if (window.bridge)
+			window.postMobileMessage('switchToServerMode');
+
+		// From here on the page acts as a plain browser client.
+		window.postMobileMessage = function() {};
+		window.postMobileCall = function() {};
+		window.ThisIsAMobileApp = false;
+		window.ThisIsTheEmscriptenApp = false;
+		window.ThisIsTheQtApp = false;
+
+		// CODA-only: drop the bridge's FakeWebSocket so
+		// app.socket.connect below can take over cleanly with the
+		// real one.  Skipped in COWASM because wasm/wasmapp.cpp's
+		// send2JS keeps pushing tile/status messages via
+		// MAIN_THREAD_EM_ASM(globalThis.TheFakeWebSocket.onmessage(...))
+		// for a brief window after the swap; nulling it out from JS
+		// would land those calls on null and a stale error: message
+		// caught in flight could fire AlertDialog's
+		// "server encountered..." popup.  Leaving the COWASM
+		// FakeWebSocket alive is harmless: app.socket.connect detaches
+		// the old onerror/onclose handlers, and there's no real
+		// underlying socket to leak.
+		if (window.bridge && window.TheFakeWebSocket) {
+			try { window.TheFakeWebSocket.close(); }
+			catch (e) { /* already closed */ }
+			window.TheFakeWebSocket = null;
 		}
-		global.app.map.options.docParams['permission'] = 'edit';
 
-		// Create a real WebSocket to coolwsd.  Cannot use
-		// createWebSocket() since it checks ThisIsAMobileApp
-		// (which we just cleared) but we want a plain WS.
-		var loc = window.location;
-		var wsScheme = loc.protocol === 'https:' ? 'wss://' : 'ws://';
-		var docUrl = global.app.map.options.doc;
-		var sep = docUrl.includes('?') ? '&' : '?';
-		var params = global.app.map.options.docParams;
-		var paramStr = Object.keys(params).map(function(k) {
-			return encodeURIComponent(k) + '=' + encodeURIComponent(params[k]);
-		}).join('&');
-		var docUrlWithToken = docUrl + sep + paramStr;
-		var wsURI = wsScheme + loc.host + '/cool/ws?WOPISrc='
-			+ encodeURIComponent(docUrlWithToken) + '&compat=/ws';
-		global.app.console.log('Switching to server mode in-place: '
-			+ wsURI);
+		// Build the /cool/ws URL.  Two flavours depending on whether
+		// cool.html itself lives on the cool server (COWASM) or on a
+		// different origin (CODA: file:// or the embed HTTPS server).
+		// _codaRemoteInfo, set by main.js's CODA bootstrap from the
+		// bridge's getRemoteInfo slot (currently the QtApp branch via
+		// Bridge::getRemoteInfo), is the CODA signal.
+		var ri = window._codaRemoteInfo;
+		var wsURI;
+		if (ri) {
+			// CODA: target ri.coolServer with access_token as a
+			// top-level URL parameter (rather than encoded inside
+			// the WOPISrc value), because the cool-server's WOPI-
+			// token cross-origin upgrade bypass keys on
+			// RequestDetails::getParamByName, which only sees top-
+			// level params.  Overwrite map.options.doc, which was
+			// the local temp-file path during local-edit mode, with
+			// the integrator's WOPI URL.
+			global.app.map.options.doc = ri.wopiSrc;
+			global.app.map.options.docParams = {
+				access_token: ri.accessToken,
+				access_token_ttl: '0',
+				permission: 'edit',
+			};
+			global.app.map.options.wopi = true;
+			global.app.map.options.wopiSrc = ri.wopiSrc;
+			window.wopiSrc = ri.wopiSrc;
+			var coolWsScheme = ri.coolServer.startsWith('https:')
+				? 'wss:' : 'ws:';
+			var coolHost = ri.coolServer.replace(/^https?:/, '');
+			wsURI = coolWsScheme + coolHost + '/cool/ws?WOPISrc='
+				+ encodeURIComponent(ri.wopiSrc)
+				+ '&access_token='
+				+ encodeURIComponent(ri.accessToken)
+				+ '&access_token_ttl=0&permission=edit&compat=/ws';
+			// Repoint global.host (and the derived global.webserver) at the COOL server
+			// so subsequent Socket.ts reconnects via getWebSocketBaseURI build their
+			// URLs there (without this, the embed-server origin (where cool.html ifself
+			// is hosted) would still be used and reconnect attempts would 404 against
+			// the local static file server:
+			global.host = coolWsScheme + coolHost;
+			global.webserver = ri.coolServer.replace(/\/*$/, ''); // Remove trailing slash.
+		} else {
+			// COWASM: cool.html is hosted on the cool server, so a
+			// same-origin upgrade against location.host is fine.
+			// Embed access_token inside the WOPISrc value (the
+			// historical form; same-origin doesn't trigger the
+			// cross-origin bypass that would require top-level
+			// params instead).
+			if (window.accessToken) {
+				global.app.map.options.docParams['access_token'] =
+					window.accessToken;
+				global.app.map.options.docParams['access_token_ttl'] =
+					window.accessTokenTTL || '0';
+			}
+			global.app.map.options.docParams['permission'] = 'edit';
+			var loc = window.location;
+			var pageWsScheme = loc.protocol === 'https:'
+				? 'wss://' : 'ws://';
+			var docUrl = global.app.map.options.doc;
+			var sep = docUrl.includes('?') ? '&' : '?';
+			var paramStr = Object.keys(global.app.map.options.docParams)
+				.map(function(k) {
+					return encodeURIComponent(k) + '='
+						+ encodeURIComponent(
+							global.app.map.options.docParams[k]);
+				}).join('&');
+			wsURI = pageWsScheme + loc.host + '/cool/ws?WOPISrc='
+				+ encodeURIComponent(docUrl + sep + paramStr)
+				+ '&compat=/ws';
+		}
 
+		global.app.console.log('Switching to server mode: ' + wsURI);
 		var ws = new WebSocket(wsURI);
 		global.app.socket.connect(ws);
 	};

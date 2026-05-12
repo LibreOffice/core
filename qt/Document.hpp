@@ -14,16 +14,17 @@
 #include <Poco/URI.h>
 
 #include <QString>
-#include <QStringList>
 #include <memory>
-
-class QWebSocket;
 
 namespace coda
 {
 
-/// Parameters for a remote document opened via a COOL server's
-/// /co/collab endpoint.  Empty for local-only documents.
+/// WOPI connection params for a remote document opened via a COOL
+/// server's /co/collab endpoint.  Empty for local-only documents.
+/// The collab WebSocket itself is owned by the page-JS, not the
+/// native side; this struct only carries what the page-JS needs to
+/// reconstruct the URL at bootstrap (and what
+/// switchToServerMode-style flows need post-load).
 struct RemoteDocInfo
 {
     QString wopiSrc;
@@ -34,11 +35,6 @@ struct RemoteDocInfo
     // by switchToServerMode to navigate to the correct versioned
     // URL on the remote server.
     QString coolPath;
-    // Heap-allocated; lives as long as the document is open.
-    std::unique_ptr<QWebSocket> collabWs;
-    // Collab messages received during download, before JS forwarding
-    // is wired up.  Replayed by loadRemote.
-    QStringList pendingCollabMessages;
 };
 
 struct DocumentData

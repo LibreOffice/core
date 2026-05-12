@@ -453,26 +453,21 @@ void IntegratorFilePicker::attachEmbeddedDocument(
             << "wopiSrc=" << wopiSrc.toStdString()
             << " coolServer=" << coolServer.toStdString());
 
-    coda::RemoteDownload dl = coda::downloadRemoteDocument(
-        wopiSrc, accessToken, coolServer, coolPath);
-    if (dl.localPath.isEmpty())
-    {
-        LOG_WRN("IntegratorFilePicker: document download failed");
-        return;
-    }
+    auto remoteInfo = std::make_shared<coda::RemoteDocInfo>();
+    remoteInfo->wopiSrc = wopiSrc;
+    remoteInfo->accessToken = accessToken;
+    remoteInfo->coolServer = coolServer;
+    remoteInfo->coolPath = coolPath;
 
     _document = {
-        ._fileURL = Poco::URI(
-            Poco::Path(dl.localPath.toStdString())),
+        ._fileURL = Poco::URI(),
         ._fakeClientFd = fakeSocketSocket(),
         ._appDocId = coda::generateNewAppDocId(),
-        ._remoteInfo = std::move(dl.remoteInfo),
+        ._remoteInfo = std::move(remoteInfo),
     };
 
     _bridge = coda::attachRemoteBridge(
         _webView->page(), _document, this, _webView);
-    coda::wireCollabMessagesToBridge(
-        _bridge, _document._remoteInfo.get());
 
     // Build the URL we rewrite the iframe to: our local HTTPS server's
     // /cool.html with CODA-local params added.  Preserve the UI
@@ -482,8 +477,9 @@ void IntegratorFilePicker::attachEmbeddedDocument(
     // the JS render the integrator-iframe minimal chrome (no top
     // menu bar, smaller toolbar) instead of the local-edit chrome
     // we want here.  Both values are kept separately on
-    // _document._remoteInfo for switchToServerMode to rebuild the
-    // server-mode URL later.
+    // _document._remoteInfo for the page-JS bootstrap (via
+    // Bridge::getRemoteInfo) and for switchToServerMode to rebuild
+    // the server-mode URL later.
     QUrlQuery embedQuery(origQuery);
     embedQuery.removeAllQueryItems("WOPISrc");
     embedQuery.removeAllQueryItems("access_token");
@@ -499,12 +495,9 @@ void IntegratorFilePicker::attachEmbeddedDocument(
             << target.toString().toStdString());
     _webView->setUrl(target);
 
-    // Repurpose the picker dialog as the document viewer: set the
-    // window title to <filename> - APP_NAME and resize to match the
-    // non-embed document window.
-    Poco::Path uriPath(_document._fileURL.getPath());
-    QString fileName = QString::fromStdString(uriPath.getFileName());
-    setWindowTitle(fileName + " - " APP_NAME);
+    // Window title is generic until the page-JS resolves the doc
+    // filename via /co/collab/fetch.
+    setWindowTitle(APP_NAME);
     auto size = coda::documentWindowSize(false);
     resize(size.first, size.second);
 }
@@ -554,8 +547,8 @@ void IntegratorFilePicker::closeEvent(QCloseEvent* ev)
             << " isSaveInFlight="
             << (_bridge ? _bridge->isSaveInFlight() : false));
     // Defer the close until any in-flight save's upload round-trip has finished, otherwise
-    // tearing down the bridge would close the per-document collab WS that uploadLocalFileToServer
-    // is using to push the just-saved bytes back to the integrator, and those bytes would be lost:
+    // tearing down the page would interrupt the JS-side collabUploadFile POST that is
+    // pushing the just-saved bytes back to the integrator, and those bytes would be lost:
     if (_bridge && _bridge->isSaveInFlight())
     {
         LOG_TRC("IntegratorFilePicker::closeEvent: save in flight, "
