@@ -105,6 +105,7 @@ void SAL_CALL ColorPicker::setTitle(const OUString&) {}
 sal_Int16 SAL_CALL ColorPicker::execute()
 {
     ColorDialog aColorDialog(Application::GetFrameWeld(m_xParent));
+    aColorDialog.SetColor(m_aColor);
     const int nRet = aColorDialog.Execute();
     if (nRet == RET_OK)
         m_aColor = aColorDialog.GetColor();
