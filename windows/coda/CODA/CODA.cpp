@@ -46,9 +46,14 @@
 #include <common/Uri.hpp>
 #include <net/FakeSocket.hpp>
 #include <wsd/COOLWSD.hpp>
+#include <wsd/DocumentBroker.hpp>
+#include <wsd/RequestDetails.hpp>
 
 #include "Resource.h"
 #include "windows.hpp"
+
+extern std::map<std::string, std::shared_ptr<DocumentBroker>> DocBrokers;
+extern std::mutex DocBrokersMutex;
 
 // Note that all pathnames in this code that are plain narrow strings (std::string) are in UTF-8 and
 // can thus *not* be used for actual file system operations. They must always be converted to UTF-16
@@ -1451,6 +1456,149 @@ static bool isLightTheme()
     return value == 1;
 }
 
+static HRESULT GetStreamForIFStream(std::ifstream& file, IStream** outStream)
+{
+    std::vector<char> data((std::istreambuf_iterator<char>(file)),
+                           std::istreambuf_iterator<char>());
+
+    wil::com_ptr<IStream> stream;
+    stream.attach(SHCreateMemStream(
+        reinterpret_cast<const BYTE*>(data.data()),
+        static_cast<UINT>(data.size())));
+    if (!stream)
+        return E_OUTOFMEMORY;
+    *outStream = stream.detach();
+    return S_OK;
+}
+
+static HRESULT webResourceRequestedHandler(ICoreWebView2Environment* env,
+                                           ICoreWebView2* sender,
+                                           ICoreWebView2WebResourceRequestedEventArgs* args)
+{
+    wil::com_ptr<ICoreWebView2WebResourceRequest> request;
+    HRESULT hr;
+
+    hr = args->get_Request(&request);
+    if (!SUCCEEDED(hr))
+    {
+        LOG_ERR_S("get_Request() failed");
+        return hr;
+    }
+
+    wil::unique_cotaskmem_string uri;
+    hr = request->get_Uri(&uri);
+    if (!SUCCEEDED(hr))
+    {
+        LOG_ERR_S("get_Uri() failed");
+        return hr;
+    }
+
+    std::string uri2 = Uri::decode(Util::wide_string_to_string(uri.get()));
+    Poco::URI requestUri(uri2);
+    Poco::URI::QueryParameters params = requestUri.getQueryParameters();
+    std::string wopiSrc, tag;
+
+    const bool isMedia = requestUri.getPath() == "/media";
+    const bool isVtt = requestUri.getPath() == "/mediavtt";
+
+    if (!isMedia && !isVtt)
+    {
+        LOG_WRN_S("Unhandled path [" << requestUri.getPath() << ']');
+        return E_FAIL;
+    }
+
+    for (const auto& it : params)
+    {
+        if (it.first == "WOPISrc")
+            wopiSrc = it.second;
+        else if (it.first == "Tag")
+            tag = it.second;
+    }
+
+    if (tag.empty() || wopiSrc.empty())
+    {
+        LOG_ERR_S("Missing WOPISrc or Tag in ["
+                  << uri2 << ']');
+        return E_FAIL;
+    }
+
+    // For some reason for local documents the WOPISrc comes
+    // here with a drive letter in the host position of the URI.
+    // I.e. "file://C:/Users/foo/bar.ext" =>
+    // "file:///C:/Users/foo/bar.ext"
+    if (wopiSrc.size() > 10)
+    {
+        if (isalpha((unsigned char)wopiSrc[7]) &&
+            wopiSrc[8] == ':')
+            wopiSrc = "file:///" +
+                std::string(1, wopiSrc[7]) +
+                ":" +
+                wopiSrc.substr(9);
+    }
+
+    std::shared_ptr<DocumentBroker> docBroker;
+    const std::string docKey = RequestDetails::getDocKey(wopiSrc);
+    {
+        std::lock_guard<std::mutex> lock(DocBrokersMutex);
+        const auto it = DocBrokers.find(docKey);
+        if (it != DocBrokers.end())
+            docBroker = it->second;
+    }
+    if (!docBroker)
+    {
+        LOG_ERR_S("No DocBroker for WOPISrc [" << wopiSrc << ']');
+        return E_FAIL;
+    }
+
+    std::string mediaPath = docBroker->getEmbeddedMediaPath(tag);
+    if (mediaPath.empty())
+    {
+        LOG_ERR_S("No media path for tag [" << tag << ']');
+        return E_FAIL;
+    }
+
+    // Yes, the same code snippet once again. FIXME: Should
+    // obviously factor this out into a utility function.
+    if (mediaPath.length() > 4 && mediaPath[0] == '/' &&
+        mediaPath[2] == ':' && mediaPath[3] == '/')
+        mediaPath = mediaPath.substr(1);
+
+    std::ifstream file;
+    FileUtil::openFileToIFStream(mediaPath, file);
+    if (!file.is_open())
+    {
+        LOG_ERR_S("Cannot open [" << mediaPath << "]");
+        return E_FAIL;
+    }
+
+    const std::wstring mimeType = (isVtt ? L"text/vtt" : L"application/octet-stream");
+    wil::com_ptr<IStream> contentStream;
+    hr = GetStreamForIFStream(file, &contentStream);
+    if (!SUCCEEDED(hr))
+        return hr;
+
+    wil::com_ptr<ICoreWebView2WebResourceResponse> response;
+    hr = env->CreateWebResourceResponse(
+        contentStream.get(),
+        200, L"OK",
+        (L"Content-Type: " + mimeType + L"\r\n" +
+         L"Access-Control-Allow-Origin: *\r\n").c_str(),
+        &response);
+    if (!SUCCEEDED(hr))
+    {
+        LOG_ERR_S("CreateWebResourceResponse() failed");
+        return hr;
+    }
+
+    hr = args->put_Response(response.get());
+    if (!SUCCEEDED(hr))
+    {
+        LOG_ERR_S("put_Response() failed");
+        return hr;
+    }
+    return S_OK;
+}
+
 // Register the ODF IFilter (odffilter.dll) with Windows Search and the
 // FullDetails / PreviewDetails property strings Explorer uses, both under
 // HKCU\Software\Classes. The two bindings the MSIX manifest cannot
@@ -1765,14 +1913,37 @@ static void openCOOLWindow(const FilenameAndUri& filenameAndUri, DocumentMode mo
 
     AddClipboardFormatListener(hWnd);
 
-    auto options = Microsoft::WRL::Make<CoreWebView2EnvironmentOptions>();
+    // Configure the "cool" custom scheme registration
+    auto schemeRegistration =
+        Microsoft::WRL::Make<CoreWebView2CustomSchemeRegistration>(L"cool");
+    if (!SUCCEEDED(schemeRegistration->put_TreatAsSecure(TRUE)))
+        fatal("schemeRegistration->put_TreatAsSecure() failed");
+    if (!SUCCEEDED(schemeRegistration->put_HasAuthorityComponent(TRUE)))
+        fatal("schemeRegistration->put_HasAuthorityComponent() failed");
+
+    // We show a page from a file: URI, so we need to use "*"
+    LPCWSTR allowedOrigins[1] = { L"*" };
+    if (!SUCCEEDED(schemeRegistration->SetAllowedOrigins(1, allowedOrigins)))
+        fatal("schemeRegistration->SetAllowedOrigins() failed");
+
+    // Add the registration to the options (requires ICoreWebView2EnvironmentOptions4)
+    ICoreWebView2CustomSchemeRegistration* registrations[1] =
+        { schemeRegistration.Get() };
 
     // Required for instantiating new Web Workers, which otherwise fail with a
     // cross-origin SecurityError because file:// gets origin 'null'.
     std::wstring additionalArgs = L"--allow-file-access-from-files";
     if (enableWebDriver)
         additionalArgs += L" --remote-debugging-port=9222";
+
+    auto options = Microsoft::WRL::Make<CoreWebView2EnvironmentOptions>();
     options->put_AdditionalBrowserArguments(additionalArgs.c_str());
+
+    Microsoft::WRL::ComPtr<ICoreWebView2EnvironmentOptions4> options4;
+    if (!SUCCEEDED(options.As(&options4)))
+        fatal("options.As() failed");
+    if (!SUCCEEDED(options4->SetCustomSchemeRegistrations(1, registrations)))
+        fatal("options4->SetCustomSchemeRegistrations() failed");
 
     CreateCoreWebView2EnvironmentWithOptions(
         nullptr,
@@ -1784,8 +1955,7 @@ static void openCOOLWindow(const FilenameAndUri& filenameAndUri, DocumentMode mo
                 // Create a CoreWebView2Controller and get the associated CoreWebView2 whose parent is the main window hWnd
                 env->CreateCoreWebView2Controller(
                     data.hWnd,
-                    Microsoft::WRL::Callback<
-                        ICoreWebView2CreateCoreWebView2ControllerCompletedHandler>(
+                    Microsoft::WRL::Callback<ICoreWebView2CreateCoreWebView2ControllerCompletedHandler>(
                         [&data, env](HRESULT result, ICoreWebView2Controller* controller) -> HRESULT
                         {
                             if (!controller)
@@ -1810,6 +1980,30 @@ static void openCOOLWindow(const FilenameAndUri& filenameAndUri, DocumentMode mo
                             data.webViewController->put_Bounds(bounds);
 
                             EventRegistrationToken token;
+                            HRESULT hr;
+
+                            hr = (webView->AddWebResourceRequestedFilter(
+                                      L"cool://*",
+                                      COREWEBVIEW2_WEB_RESOURCE_CONTEXT_ALL));
+                            if (!SUCCEEDED(hr))
+                            {
+                                LOG_ERR_S("AddWebResourceRequestedFilter() failed");
+                                return hr;
+                            }
+
+                            hr = webView->add_WebResourceRequested(
+                                Microsoft::WRL::Callback<ICoreWebView2WebResourceRequestedEventHandler>(
+                                    [env](ICoreWebView2* sender,
+                                          ICoreWebView2WebResourceRequestedEventArgs* args) -> HRESULT
+                                    {
+                                        return webResourceRequestedHandler(env, sender, args);
+                                    }).Get(), &token);
+
+                            if (!SUCCEEDED(hr))
+                            {
+                                LOG_ERR_S("add_WebResourceRequested() failed");
+                                return hr;
+                            }
 
                             // Communication between host and web content
                             // Set an event handler for the host to return received message back to the web content
