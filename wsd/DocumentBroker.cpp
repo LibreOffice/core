@@ -1514,7 +1514,7 @@ DocumentBroker::updateSessionWithWopiInfo(const std::shared_ptr<ClientSession>& 
     // extractViewSettings / handleUpdateViewSettings.
     Object::Ptr userPrivateInfoObj;
     if (!userPrivateInfo.empty())
-        JsonUtil::parseJSON(userPrivateInfo, userPrivateInfoObj);
+        (void)JsonUtil::parseJSON(userPrivateInfo, userPrivateInfoObj);
     bool unusedMutated = false;
     std::string resolvedAIModel, resolvedAIRating;
     Object::Ptr noViewSettings;
