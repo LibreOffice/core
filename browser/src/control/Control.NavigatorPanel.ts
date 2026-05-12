@@ -343,9 +343,7 @@ class NavigatorPanel extends SidebarBase {
 
 			this.markNavigatorTreeView(navigatorData);
 
-			app.layoutingService.appendLayoutingTask(() => {
-				this.builder.build(this.container, [navigatorData], false);
-			});
+			this.builder.build(this.container, [navigatorData], false);
 
 			// There is case where user can directly click navigator from notebookbar view option
 			// in that case we first show the navigation panel and then switch to tab view
