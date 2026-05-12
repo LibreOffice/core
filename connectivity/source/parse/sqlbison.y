@@ -4529,67 +4529,6 @@ void OSQLParser::setParseTree(OSQLParseNode* pNewParseTree)
 	m_pParseTree.reset(pNewParseTree);
 }
 
-
-/** Delete all comments in a query.
-
-    See also getComment()/concatComment() implementation for
-    OQueryController::translateStatement().
- */
-static OUString delComment( const OUString& rQuery )
-{
-    // First a quick search if there is any "--" or "//" or "/*", if not then the whole
-    // copying loop is pointless.
-    if (rQuery.indexOf("--") < 0 && rQuery.indexOf("//") < 0 &&
-            rQuery.indexOf("/*") < 0)
-        return rQuery;
-
-    const sal_Unicode* pCopy = rQuery.getStr();
-    sal_Int32 nQueryLen = rQuery.getLength();
-    bool bIsText1  = false;     // "text"
-    bool bIsText2  = false;     // 'text'
-    bool bComment2 = false;     // /* comment */
-    bool bComment  = false;     // -- or // comment
-    OUStringBuffer aBuf(nQueryLen);
-    for (sal_Int32 i=0; i < nQueryLen; ++i)
-    {
-        if (bComment2)
-        {
-            if ((i+1) < nQueryLen)
-            {
-                if (pCopy[i]=='*' && pCopy[i+1]=='/')
-                {
-                    bComment2 = false;
-                    ++i;
-                }
-            }
-            else
-            {
-                // comment can't close anymore, actually an error, but...
-            }
-            continue;
-        }
-        if (pCopy[i] == '\n')
-            bComment = false;
-        else if (!bComment)
-        {
-            if (pCopy[i] == '\"' && !bIsText2)
-                bIsText1 = !bIsText1;
-            else if (pCopy[i] == '\'' && !bIsText1)
-                bIsText2 = !bIsText2;
-            if (!bIsText1 && !bIsText2 && (i+1) < nQueryLen)
-            {
-                if ((pCopy[i]=='-' && pCopy[i+1]=='-') || (pCopy[i]=='/' && pCopy[i+1]=='/'))
-                    bComment = true;
-                else if ((pCopy[i]=='/' && pCopy[i+1]=='*'))
-                    bComment2 = true;
-            }
-        }
-        if (!bComment && !bComment2)
-            aBuf.append( &pCopy[i], 1);
-    }
-    return aBuf.makeStringAndClear();
-}
-
 std::unique_ptr<OSQLParseNode> OSQLParser::parseTree(OUString& rErrorMessage,
                                      const OUString& rStatement,
                                      bool bInternational)
@@ -4601,12 +4540,9 @@ std::unique_ptr<OSQLParseNode> OSQLParser::parseTree(OUString& rErrorMessage,
 	// must be reset
 	setParser(this);
 
-	// delete comments before parsing
-	OUString sTemp = delComment(rStatement);
-
 	// defines how to scan
 	s_pScanner->SetRule(OSQLScanner::GetSQLRule()); // initial
-	s_pScanner->prepareScan(sTemp, m_pContext, bInternational);
+	s_pScanner->prepareScan(rStatement, m_pContext, bInternational);
 
 	SQLyylval.pParseNode = nullptr;
 	//	SQLyypvt = NULL;

@@ -24,6 +24,7 @@ $(eval $(call gb_CppunitTest_use_sdk_api,connectivity_commontools))
 $(eval $(call gb_CppunitTest_add_exception_objects,connectivity_commontools, \
 	connectivity/qa/connectivity/commontools/FValue_test \
 	connectivity/qa/connectivity/commontools/DBTypeConversion_test \
+	connectivity/qa/connectivity/commontools/SQLCommentTest \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,connectivity_commontools, \
@@ -36,6 +37,7 @@ $(eval $(call gb_CppunitTest_use_libraries,connectivity_commontools, \
 
 $(eval $(call gb_CppunitTest_use_components,connectivity_commontools,\
 	configmgr/source/configmgr \
+	i18npool/util/i18npool \
 ))
 
 $(eval $(call gb_CppunitTest_use_configuration,connectivity_commontools))

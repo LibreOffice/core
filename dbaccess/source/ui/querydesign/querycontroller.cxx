@@ -461,7 +461,29 @@ void OQueryController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >&
             SQLExceptionInfo aError;
             try
             {
-                setStatement_fireEvent( getContainer()->getStatement() );
+                OUString sContainerStatement = getContainer()->getStatement();
+
+                // When switching Design->SQL, preserve the original SQL with
+                // comments if the query body was not modified in Design view.
+                OUString sSavedStatementWithComments;
+                if (m_bGraphicalDesign && !m_sStatementWithComments.isEmpty() && m_pSqlIterator
+                    && m_pSqlIterator->getParseTree())
+                {
+                    // Parse the statement and check if it is the same with the
+                    // cached statement m_sStatementCanonical
+                    OUString sContainerCanonical;
+                    {
+                        OUString sErr;
+                        std::unique_ptr<::connectivity::OSQLParseNode> pTmp(
+                            m_aSqlParser.parseTree(sErr, sContainerStatement, m_bGraphicalDesign));
+                        if (pTmp)
+                            pTmp->parseNodeToStr(sContainerCanonical, getConnection());
+                    }
+                    if (sContainerCanonical == m_sStatementCanonical)
+                        sSavedStatementWithComments = m_sStatementWithComments;
+                }
+
+                setStatement_fireEvent(sContainerStatement);
                 if(m_sStatement.isEmpty() && m_pSqlIterator)
                 {
                     // change the view of the data
@@ -502,12 +524,35 @@ void OQueryController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >&
                             {
                                 // change the view of the data
                                 m_bGraphicalDesign = !m_bGraphicalDesign;
+
+                                if (m_bGraphicalDesign)
+                                {
+                                    // save the original SQL (with comments)
+                                    // so it can be restored when switching back.
+                                    m_sStatementWithComments = m_sStatement;
+                                    m_sStatementCanonical.clear();
+                                    m_pSqlIterator->getParseTree()->parseNodeToStr(
+                                        m_sStatementCanonical, getConnection());
+                                }
+                                else
+                                {
+                                    m_sStatementWithComments.clear();
+                                    m_sStatementCanonical.clear();
+                                }
+
                                 OUString sNewStatement;
-                                m_pSqlIterator->getParseTree()->parseNodeToStr( sNewStatement, getConnection() );
+                                if (!sSavedStatementWithComments.isEmpty())
+                                    sNewStatement = sSavedStatementWithComments;
+                                else if (m_bGraphicalDesign)
+                                    sNewStatement = m_sStatementCanonical;
+                                else
+                                    m_pSqlIterator->getParseTree()->parseNodeToStr(sNewStatement,
+                                                                                   getConnection());
                                 setStatement_fireEvent( sNewStatement );
                                 getContainer()->SaveUIConfig();
                                 m_vTableConnectionData.clear();
                                 impl_setViewMode( &aError );
+                                impl_resyncStatementCanonical();
                             }
                         }
                     }
@@ -614,6 +659,23 @@ void OQueryController::impl_showAutoSQLViewError( const css::uno::Any& _rErrorDe
         lcl_getObjectResourceString(STR_ERROR_PARSING_STATEMENT, m_nCommandType), *this, {}, 0,
         _rErrorDetails, lcl_getObjectResourceString(STR_INFO_OPENING_IN_SQL_VIEW, m_nCommandType));
     showError( aErrorContext );
+}
+
+void OQueryController::impl_resyncStatementCanonical()
+{
+    if (!m_bGraphicalDesign || m_sStatementWithComments.isEmpty())
+        return;
+    OUString sDesignSQL = getContainer()->getStatement();
+    if (sDesignSQL.isEmpty())
+        return;
+    OUString sErr;
+    std::unique_ptr<::connectivity::OSQLParseNode> pTmp(
+        m_aSqlParser.parseTree(sErr, sDesignSQL, m_bGraphicalDesign));
+    if (pTmp)
+    {
+        m_sStatementCanonical.clear();
+        pTmp->parseNodeToStr(m_sStatementCanonical, getConnection());
+    }
 }
 
 void OQueryController::impl_setViewMode( ::dbtools::SQLExceptionInfo* _pErrorInfo )
@@ -815,6 +877,8 @@ void OQueryController::impl_initialize(const ::comphelper::NamedValueCollection&
         {
             impl_setViewMode( &aError );
         }
+
+        impl_resyncStatementCanonical();
 
         if ( aError.isValid() && bAttemptedGraphicalDesign && !m_bGraphicalDesign )
         {
@@ -1703,6 +1767,19 @@ void OQueryController::impl_reset( const bool i_bForceCurrentControllerSettings 
     if(!m_pSqlIterator)
         setQueryComposer();
     OSL_ENSURE(m_pSqlIterator,"No SQLIterator set!");
+
+    // When loading (or re-loading) in Design view, restore the statement (possible with comments)
+    // but only if the user didn't change the statement while in Design view
+    // Then parse the statement to canonical form and update the cached statement
+    if (m_bGraphicalDesign && !m_sStatement.isEmpty() && m_sStatementWithComments.isEmpty())
+    {
+        m_sStatementWithComments = m_sStatement;
+        if (m_pSqlIterator && m_pSqlIterator->getParseTree())
+        {
+            m_sStatementCanonical.clear();
+            m_pSqlIterator->getParseTree()->parseNodeToStr(m_sStatementCanonical, getConnection());
+        }
+    }
 
     getContainer()->setNoneVisibleRow(m_nVisibleRows);
 }

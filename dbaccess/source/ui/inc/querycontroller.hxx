@@ -61,6 +61,10 @@ namespace dbaui
         css::uno::Reference< css::sdbcx::XAlterView >         m_xAlterView;
 
         OUString        m_sStatement;           // contains the current sql statement
+        OUString
+            m_sStatementWithComments; // original SQL with comments, saved when entering Design view
+        OUString
+            m_sStatementCanonical; // parseNodeToStr of the parse tree when entering Design view
         OUString        m_sUpdateCatalogName;   // catalog for update data
         OUString        m_sUpdateSchemaName;    // schema for update data
         mutable OUString
@@ -194,6 +198,12 @@ namespace dbaui
         /** switches to the graphical or SQL view mode, as determined by m_bGraphicalDesign
         */
         void    impl_setViewMode( ::dbtools::SQLExceptionInfo* _pErrorInfo );
+
+        /** Re-syncs m_sStatementCanonical with what the Design view actually generates
+            after its columns are fully populated. Must be called after forceInitialView()
+            or impl_setViewMode() when entering graphical design mode.
+        */
+        void impl_resyncStatementCanonical();
 
         /// sets m_sStatement, and notifies our respective property change listeners
         void    setStatement_fireEvent( const OUString& _rNewStatement, bool _bFireStatementChange = true );

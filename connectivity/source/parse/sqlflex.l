@@ -119,9 +119,11 @@ static void do_fatal_error(const char* msg)
 %s PREDICATE_GER
 %s DATE
 %s STRING
+%x BLOCK_COMMENT
 
 %option noyywrap
 %option never-interactive
+%option stack
 %%
 
 ABS                 {SQL_NEW_KEYWORD(SQL_TOKEN_ABS);  }
@@ -495,7 +497,12 @@ ZONE                {SQL_NEW_KEYWORD(SQL_TOKEN_ZONE);  }
 
 [ \t\r]+        {}
 
-"--".*$         {}
+"--"[^\n]*      { /* line comment: consumed; preceding whitespace/comments are grouped with the next token */ }
+
+"/*"            { yy_push_state(BLOCK_COMMENT); }
+<BLOCK_COMMENT>"*/"  { yy_pop_state(); }
+<BLOCK_COMMENT>\n    { }
+<BLOCK_COMMENT>.     { }
 
 .               {YY_FATAL_ERROR("Invalid symbol"); return SQL_TOKEN_INVALIDSYMBOL;}
 
