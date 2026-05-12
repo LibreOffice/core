@@ -3332,23 +3332,36 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		oldSize.x *= app.dpiScale;
 		oldSize.y *= app.dpiScale;
 
-		const smartZoomEnabled = window.prefs.get('smartZoom') != 'false';
-		if (this._invalidateZoomFirstFit && smartZoomEnabled) {
-			recalcFirstFit = true;
-			this._invalidateZoomFirstFit = false;
-		}
-
 		let bringCommentsIntoView = false;
-		const changeZoom = smartZoomEnabled || recalcFirstFit;
-		if (changeZoom && this.isWriter() && app.activeDocument.partHasComments && (recalcFirstFit || !this._includedCommentsInFirstFit)) {
-			bringCommentsIntoView = true;
-			this._includedCommentsInFirstFit = true;
-			this._firstFitDone = false;
+		let changeZoom = false;
+
+		if (this.isWriter()) {
+			const smartZoomEnabled = window.prefs.get('smartZoom') != 'false';
+			if (smartZoomEnabled) {
+				if (this._invalidateZoomFirstFit) {
+					recalcFirstFit = true;
+					this._invalidateZoomFirstFit = false;
+				}
+			}
+
+			// this isn't being triggered now when the sidebar shows up
+			const considerCommentWidthInOffset = () => {
+				if (app.activeDocument.partHasComments) {
+					if ((recalcFirstFit || !this._includedCommentsInFirstFit)) {
+						bringCommentsIntoView = true;
+						this._includedCommentsInFirstFit = true;
+						this._firstFitDone = false;
+					}
+				}
+			}
+
+			changeZoom  = smartZoomEnabled || recalcFirstFit;
+			if (changeZoom)
+				considerCommentWidthInOffset();
 		}
 
 		if (recalcFirstFit)
 			this._firstFitDone = false;
-
 		if (this._firstFitDone && newSize.x - oldSize.x === 0)
 			return;
 
