@@ -129,6 +129,7 @@ void XsltFilterTest::testXsltCopyNew()
 
     xIn->closeInput();
     xOut->closeOutput();
+    xXslt->terminate();
 
     osl::File foo(tempURL); // apparently it's necessary to open it again?
     foo.open(osl_File_OpenFlag_Read);
@@ -188,6 +189,7 @@ void XsltFilterTest::testXsltCopyOld()
 
     xIn->closeInput();
     xOut->closeOutput();
+    xXslt->terminate();
 
     osl::File foo(tempURL); // apparently it's necessary to open it again?
     foo.open(osl_File_OpenFlag_Read);
