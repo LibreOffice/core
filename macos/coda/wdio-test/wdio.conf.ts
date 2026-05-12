@@ -18,6 +18,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const WEBDRIVER_PORT = Number(process.env.WEBDRIVER_PORT || 4567);
+const NATIVE_UI_PORT = Number(process.env.NATIVE_UI_PORT || 4568);
 
 // Locate the Xcode Debug build by querying DerivedData (or take an
 // override via CODA_APP).
@@ -44,10 +45,10 @@ export const config = {
 
 	maxInstances: 1,
 
-	// Multiremote so the shared Qt specs can use browser.webEngine.
-	// The webEngine driver points directly at our WebDriverServer.
-	// The native driver also points at our server; native-only tests
-	// (AT-SPI) will fail but are in separate describe blocks.
+	// Multiremote, matching the Qt setup:
+	//   webEngine -> WebDriverServer (drives the WKWebView)
+	//   native    -> NativeUIServer  (drives macOS NSAccessibility)
+	// Both servers run in-process inside the app under test.
 	capabilities: {
 		webEngine: {
 			port: WEBDRIVER_PORT,
@@ -56,7 +57,7 @@ export const config = {
 			},
 		},
 		native: {
-			port: WEBDRIVER_PORT,
+			port: NATIVE_UI_PORT,
 			capabilities: {
 				browserName: 'chrome',
 			},
@@ -75,6 +76,7 @@ export const config = {
 		[CodaMacOSServiceLauncher, {
 			appPath: CODA_APP,
 			webDriverPort: WEBDRIVER_PORT,
+			nativeUIPort: NATIVE_UI_PORT,
 			fixturesDir: FIXTURES_DIR,
 		}],
 	],

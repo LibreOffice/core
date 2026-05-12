@@ -20,6 +20,7 @@ const sleep = promisify(setTimeout);
 interface CodaMacOSServiceOptions {
 	appPath: string;
 	webDriverPort: number | string;
+	nativeUIPort: number | string;
 	fixturesDir: string;
 }
 
@@ -59,7 +60,7 @@ export class CodaMacOSServiceLauncher {
 	}
 
 	async onPrepare(): Promise<void> {
-		const { appPath, webDriverPort, fixturesDir } = this.#options;
+		const { appPath, webDriverPort, nativeUIPort, fixturesDir } = this.#options;
 
 		// Copy fixtures to a temp directory; tests open files from there
 		// via the JS bridge as needed.
@@ -81,6 +82,7 @@ export class CodaMacOSServiceLauncher {
 			'--args',
 			'--uitesting',
 			`--testDriverPort=${webDriverPort}`,
+			`--nativeUIPort=${nativeUIPort}`,
 			'-ApplePersistenceIgnoreState', 'YES',
 		], {
 			stdio: ['ignore', 'pipe', 'pipe'],
@@ -94,10 +96,16 @@ export class CodaMacOSServiceLauncher {
 			if (msg) console.log(`[coda-macos]: ${msg}`);
 		});
 
-		await waitForHttp(
-			`http://localhost:${webDriverPort}/status`,
-			'WebDriverServer',
-		);
+		await Promise.all([
+			waitForHttp(
+				`http://localhost:${webDriverPort}/status`,
+				'WebDriverServer',
+			),
+			waitForHttp(
+				`http://localhost:${nativeUIPort}/status`,
+				'NativeUIServer',
+			),
+		]);
 
 		console.log('coda-macos is ready, tests will now run');
 	}
