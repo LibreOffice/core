@@ -273,7 +273,11 @@ static oslThread osl_thread_create_Impl (
 
 #if defined OPENBSD || defined MACOSX || defined LINUX
     if (pthread_attr_init(&attr) != 0)
+    {
+        pthread_mutex_unlock (&(pImpl->m_Lock));
+        osl_thread_destruct_Impl (&pImpl);
         return nullptr;
+    }
 
 #if defined OPENBSD
     stacksize = 262144;
@@ -286,8 +290,11 @@ static oslThread osl_thread_create_Impl (
     if (stacksize < 1024 * 1024)
         stacksize = 1024 * 1024;
 #endif
-    if (pthread_attr_setstacksize(&attr, stacksize) != 0) {
+    if (pthread_attr_setstacksize(&attr, stacksize) != 0)
+    {
         pthread_attr_destroy(&attr);
+        pthread_mutex_unlock (&(pImpl->m_Lock));
+        osl_thread_destruct_Impl (&pImpl);
         return nullptr;
     }
 #endif
