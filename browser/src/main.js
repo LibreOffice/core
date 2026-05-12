@@ -38,6 +38,8 @@ app.localeService = new LocaleService();
 app.setPermission(global.coolParams.get('permission') || 'edit');
 app.serverConnectionService = new ServerConnectionService();
 app.layoutingService = new LayoutingService();
+app.pendingOnDemandRenders = 0;
+app.pendingOnDemandRenderRequests = new Set();
 
 var timestamp = global.coolParams.get('timestamp');
 var target = global.coolParams.get('target') || '';

@@ -1920,6 +1920,17 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 	},
 
 	executeActionImpl: function(container, data) {
+		// Decrement before control lookup: this balances the increment
+		// in OnDemandRenderer's IntersectionObserver, which fires per
+		// reply regardless of whether the original placeholder still
+		// resolves to a control. Counting it here keeps the counter
+		// honest when the target widget was destroyed/rebuilt while
+		// the render_entry round-trip was in flight.
+		if (data.action_type === 'rendered_entry' || data.action_type === 'rendered_combobox_entry') {
+			app.pendingOnDemandRenderRequests.delete(data.control_id + ':' + data.pos);
+			if (app.pendingOnDemandRenders > 0) app.pendingOnDemandRenders--;
+		}
+
 		let control = this._getItemById(container, this._removeMenuId(data.control_id));
 		if (!control && data.control)
 			control = this._getItemById(container, this._removeMenuId(data.control.id));

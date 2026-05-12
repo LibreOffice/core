@@ -45,9 +45,17 @@ function onDemandRenderer(
 
 		if (requestRender) {
 			// render on demand
+			const pendingKey = controlId + ':' + entryId;
 			var onIntersection = (entries: any) => {
 				entries.forEach((entry: any) => {
 					if (entry.isIntersecting) {
+						// Skip if a render_entry for this (control,
+						// entry) pair is already in flight - core
+						// dedupes redundant requests and would not
+						// reply, leaking the counter.
+						if (app.pendingOnDemandRenderRequests.has(pendingKey)) return;
+						app.pendingOnDemandRenderRequests.add(pendingKey);
+						app.pendingOnDemandRenders++;
 						builder.callback(
 							controlType,
 							'render_entry',
