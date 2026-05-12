@@ -262,6 +262,7 @@ namespace desktop {
         Idle maIdle;
         OUString msIdleId;
         std::shared_ptr<CallbackFlushHandler> mpCallbackFlushHandler;
+        int mnViewId = -1;
 
         DECL_LINK(IdleHdl, Timer*, void);
     };

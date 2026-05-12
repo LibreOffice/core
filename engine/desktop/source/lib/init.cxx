@@ -161,6 +161,7 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <sfx2/bindings.hxx>
 #include <sfx2/msgpool.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/kit/componenthelpers.hxx>
@@ -1469,12 +1470,37 @@ WaitUntilIdle::WaitUntilIdle()
 
 IMPL_LINK_NOARG(WaitUntilIdle, IdleHdl, Timer*, void)
 {
+    // SfxBindings defers slot updates via an AutoTimer with
+    // TIMEOUT_FIRST=300ms (DEFAULT_IDLE priority).  The vcl::Idle
+    // backing this handler runs at TOOLKIT_DEBUG and is ready
+    // immediately, so without this drain we report "idle" while the
+    // 300ms timer is still pending and a later wave of sidebar
+    // updates arrives after the reply.  Drain the bindings of every
+    // view frame belonging to the originating view's document - using
+    // SfxViewFrame::Current() would pick the globally active frame,
+    // which need not be the one that armed this idle in multi-view /
+    // multi-doc kit processes.
+    const int nViewId = mnViewId;
+    SfxViewShell* pOriginShell = SfxViewShell::GetFirst(false,
+        [nViewId](const SfxViewShell& shell) { return shell.GetViewShellId().get() == nViewId; });
+    if (pOriginShell)
+    {
+        SfxObjectShell* pDocShell = pOriginShell->GetObjectShell();
+        for (SfxViewFrame* pFrame = SfxViewFrame::GetFirst(pDocShell);
+             pFrame;
+             pFrame = SfxViewFrame::GetNext(*pFrame, pDocShell))
+        {
+            pFrame->GetBindings().Update();
+        }
+    }
+
     tools::JsonWriter aJson;
     aJson.put("commandName", ".uno:ReportWhenIdle");
     aJson.put("idleID", msIdleId);
     mpCallbackFlushHandler->queue(KIT_CALLBACK_UNO_COMMAND_RESULT, aJson.finishAndGetAsOString());
     mpCallbackFlushHandler.reset();
     msIdleId.clear();
+    mnViewId = -1;
 }
 
 LibLODocument_Impl::LibLODocument_Impl(uno::Reference <css::lang::XComponent> xComponent, int nDocumentId)
@@ -5765,6 +5791,7 @@ static void doc_postUnoCommand(COKitDocument* pThis, const char* pCommand, const
     {
         assert(pDocument->maIdleHelper.msIdleId.isEmpty() && "idle id should be uset");
         pDocument->maIdleHelper.mpCallbackFlushHandler = pDocument->mpCallbackFlushHandlers[nView];
+        pDocument->maIdleHelper.mnViewId = nView;
 
         for (const beans::PropertyValue& rPropValue : aPropertyValuesVector)
         {
