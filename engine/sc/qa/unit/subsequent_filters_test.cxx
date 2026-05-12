@@ -1693,6 +1693,38 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest, testConventionalArrayFormulaSpillXLSX)
     CPPUNIT_ASSERT_EQUAL(40.0, pDocument->GetValue(ScAddress(6, 4, 0)));
 }
 
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testExpandedArrayCollapsesOnNewBlockerXLSX)
+{
+    // C2 holds =UNIQUE(A2:A5) imported as an expanded matrix into C2:C5.
+    // Writing a blocker into one of the reference cells must collapse
+    // the master back to #SPILL!, with the typed value preserved at the
+    // blocker position.
+    createScDoc("xlsx/Spill.xlsx");
+    ScDocument* pDocument = getScDoc();
+    ScDocShell* pDocShell = getScDocShell();
+
+    ScFormulaCell* pFormulaCell = pDocument->GetFormulaCell(ScAddress(2, 1, 0));
+    CPPUNIT_ASSERT_MESSAGE("Expected a formula cell at C2.", pFormulaCell != nullptr);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(FormulaError::NONE), sal_Int32(pFormulaCell->GetErrCode()));
+    CPPUNIT_ASSERT_EQUAL(10.0, pDocument->GetValue(ScAddress(2, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(20.0, pDocument->GetValue(ScAddress(2, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(30.0, pDocument->GetValue(ScAddress(2, 3, 0)));
+    CPPUNIT_ASSERT_EQUAL(40.0, pDocument->GetValue(ScAddress(2, 4, 0)));
+
+    // Drop a blocker into C5 (a reference cell).
+    pDocShell->GetDocFunc().SetStringCell(ScAddress(2, 4, 0), u"blocker"_ustr, /*bApi*/ true);
+
+    // The master collapses to a 1x1 #SPILL!, blocker should be preserved.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(FormulaError::Spill), sal_Int32(pFormulaCell->GetErrCode()));
+    CPPUNIT_ASSERT_EQUAL(u"#SPILL!"_ustr, pDocument->GetString(ScAddress(2, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"blocker"_ustr, pDocument->GetString(ScAddress(2, 4, 0)));
+    SCCOL nCols = 0;
+    SCROW nRows = 0;
+    pFormulaCell->GetMatColsRows(nCols, nRows);
+    CPPUNIT_ASSERT_EQUAL(SCCOL(1), nCols);
+    CPPUNIT_ASSERT_EQUAL(SCROW(1), nRows);
+}
+
 ScFiltersTest::ScFiltersTest()
     : ScModelTestBase(u"sc/qa/unit/data"_ustr)
 {

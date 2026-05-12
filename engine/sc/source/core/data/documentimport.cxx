@@ -484,6 +484,11 @@ void ScDocumentImport::setMatrixCells(
                 rColCells.set(pBlockPos->miCellPos, aPos.Row(), pCell);
         }
     }
+
+    // Register the expanded matrix master so spill resolution finds it
+    // again if a blocker is later placed inside its declared range.
+    if (rRange.aEnd.Col() > rRange.aStart.Col() || rRange.aEnd.Row() > rRange.aStart.Row())
+        mpImpl->mrDoc.MarkExpandedDynamicArray(rBasePos);
 }
 
 void ScDocumentImport::setTableOpCells(const ScRange& rRange, const ScTabOpParam& rParam)
