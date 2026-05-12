@@ -43,6 +43,14 @@ apps:
     common-id: com.collaboraoffice.Office
     environment:
       LD_LIBRARY_PATH: $SNAP/usr/lib/collaboraoffice/program:$LD_LIBRARY_PATH
+      # Chromium's nested user-namespace sandbox needs unshare() and a
+      # writable /proc tree that snap's seccomp filter and mount layout
+      # don't grant. Without this, QtWebEngineProcess aborts in
+      # credentials.cc with "Permission denied" on the first launch
+      # (and Qt sometimes manages to cache its way past it on subsequent
+      # launches). Snap confinement is already a sandbox, so disabling
+      # Chromium's inner sandbox is the right move here.
+      QTWEBENGINE_DISABLE_SANDBOX: "1"
     plugs:
       - home
       - network
