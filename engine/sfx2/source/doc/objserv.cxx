@@ -712,11 +712,14 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             else
             {
                 // no argument containing DocInfo; check optional arguments
-                bool bReadOnly = IsReadOnly();
+                const bool bKitReadOnly = SfxViewShell::IsCurrentKitViewReadOnly();
+                bool bReadOnly = IsReadOnly() || bKitReadOnly;
                 const SfxBoolItem* pROItem = rReq.GetArg(SID_DOC_READONLY);
-                if ( pROItem )
+                if (pROItem && !bKitReadOnly)
                     // override readonly attribute of document
                     // e.g. if a readonly document is saved elsewhere and user asks for editing DocInfo before
+                    // (ignored in kit read-only views so a .uno:SetDocumentProperties?ReadOnly:bool=false
+                    // dispatch cannot flip the dialog to writable)
                     bReadOnly = pROItem->GetValue();
 
                 // URL for dialog

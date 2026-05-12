@@ -37,6 +37,8 @@ private:
     virtual bool FillItemSet(SfxItemSet* set) override;
     virtual void Reset(const SfxItemSet* set) override;
 
+    bool m_bReadOnly;
+
     std::unique_ptr<weld::CheckButton> embedFontsCheckbox;
     std::unique_ptr<weld::CheckButton> embedUsedFontsCheckbox;
     std::unique_ptr<weld::CheckButton> embedLatinScriptFontsCheckbox;
