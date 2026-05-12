@@ -371,10 +371,15 @@ class NavigatorPanel extends SidebarBase {
 	}
 
 	onJSUpdate(e: FireEvent) {
+		const hadFocus = this.navigationPanel.contains(document.activeElement);
 		if (this.highlightTerm && this.highlightTerm.trim().length > 0) {
 			e.data.control.highlightTerm = this.highlightTerm;
 		}
-		return super.onJSUpdate(e);
+		const retval = super.onJSUpdate(e);
+		if (hadFocus) {
+			this.focusNavigationItem();
+		}
+		return retval;
 	}
 
 	closeSidebar() {
@@ -465,6 +470,13 @@ class NavigatorPanel extends SidebarBase {
 
 			if (setFocus) this.navigationPanel.focus();
 		});
+	}
+
+	focusNavigationItem() {
+		const focusRow = this.navigationPanel.querySelector<HTMLElement>(
+			'.ui-treeview-tree [tabindex="0"]',
+		);
+		focusRow?.focus();
 	}
 
 	isNavigationPanelVisible(): boolean {
