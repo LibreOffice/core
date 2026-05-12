@@ -592,7 +592,7 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
             mnAscent = nTabPortionAscent;
             Height(nTabPortionHeight, true);
         }
-        else if (bHasBlankPortion)
+        if (bHasBlankPortion)
         {
             if(  mnAscent < nSpacePortionAscent )
                 mnAscent = nSpacePortionAscent;

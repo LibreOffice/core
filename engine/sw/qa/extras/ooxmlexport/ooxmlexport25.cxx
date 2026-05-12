@@ -38,6 +38,23 @@ public:
     }
 };
 
+DECLARE_OOXMLEXPORT_TEST(testTdf137335_whitespaceLineHeight, "tdf137335_whitespaceLineHeight.docx")
+{
+    // given a one-paragraph document where the last two lines have only tabstops and spaces
+    auto pXmlDoc = parseLayoutDump();
+
+    SwTwips Height
+        = getXPath(pXmlDoc, "//page/body/txt/SwParaPortion/SwLineLayout[3]", "height").toInt32();
+    // Without the fix, the text height was based on the largest tabstop (48pt/1104 twips)
+    // instead of the largest space (72pt)
+    CPPUNIT_ASSERT_EQUAL(SwTwips(1656), Height);
+
+    // However, the last line (with the carriage return symbol) is not based on the whitespace size,
+    // but on the paragraph's default size (12pt in this case).
+    Height = getXPath(pXmlDoc, "//page/body/txt/SwParaPortion/SwLineLayout[4]", "height").toInt32();
+    CPPUNIT_ASSERT_EQUAL(SwTwips(276), Height);
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf148057_columnBreak, "tdf148057_columnBreak.docx")
 {
     // given a document with a linefeed immediately following a column break (in non-column section)
