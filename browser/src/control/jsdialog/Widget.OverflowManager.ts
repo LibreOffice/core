@@ -93,7 +93,7 @@ class OverflowManager {
 		);
 		this.scheduledRefresh = '';
 		if (!this.parentContainer) return;
-		if (!event?.force && this.lastMaxWidth === window.innerWidth) return;
+		if (!event.force && this.lastMaxWidth === window.innerWidth) return;
 
 		// check our visibility
 		let parentNode = this.parentContainer;
