@@ -501,7 +501,7 @@ void SdrModel::SetUndoComment(const OUString& rComment)
 
     if( mpImpl->mpUndoManager )
     {
-        OSL_FAIL("svx::SdrModel::SetUndoComment(), method not supported with application undo manager!" );
+        mpImpl->mpUndoManager->SetUndoComment(rComment);
     }
     else if( IsUndoEnabled() && m_nUndoLevel==1)
     {
@@ -514,7 +514,7 @@ void SdrModel::SetUndoComment(const OUString& rComment, const OUString& rObjDesc
     DBG_ASSERT(m_nUndoLevel!=0,"SdrModel::SetUndoComment(): UndoLevel is already 0!");
     if( mpImpl->mpUndoManager )
     {
-        OSL_FAIL("svx::SdrModel::SetUndoComment(), method not supported with application undo manager!" );
+        mpImpl->mpUndoManager->SetUndoComment(rComment, rObjDescr);
     }
     else
     {

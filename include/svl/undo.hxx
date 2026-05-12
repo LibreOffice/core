@@ -67,6 +67,10 @@ public:
     virtual bool            Merge( SfxUndoAction *pNextAction );
 
     virtual OUString    GetComment() const;
+    virtual OUString    GetObjDescription() const;
+    virtual void SetComment(const OUString& rStr);
+    virtual void SetObjDescription(const OUString& rStr);
+
     virtual OUString    GetRepeatComment(SfxRepeatTarget&) const;
     /// ID of the view shell that created this undo action.
     virtual ViewShellId GetViewShellId() const;
@@ -148,12 +152,13 @@ public:
     virtual bool            Merge( SfxUndoAction *pNextAction ) override;
 
     virtual OUString        GetComment() const override;
+    void SetComment(const OUString& rComment) override;
+
     /// See SfxUndoAction::GetViewShellId().
     ViewShellId GetViewShellId() const override;
     virtual OUString        GetRepeatComment(SfxRepeatTarget&) const override;
     sal_uInt16              GetId() const;
 
-    void SetComment(const OUString& rComment);
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
@@ -195,6 +200,9 @@ public:
 
                             SfxUndoManager( size_t nMaxUndoActionCount = 20 );
     virtual                 ~SfxUndoManager();
+
+    void SetUndoComment(const OUString& rComment);
+    void SetUndoComment(const OUString& rComment, const OUString& rObjDescr);
 
     void                    SetMaxUndoActionCount( size_t nMaxUndoActionCount );
     size_t                  GetMaxUndoActionCount() const;

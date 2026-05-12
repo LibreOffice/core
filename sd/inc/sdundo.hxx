@@ -29,7 +29,7 @@ class SD_DLLPUBLIC SdUndoAction : public SfxUndoAction
 public:
                             SdUndoAction(SdDrawDocument& rSdDrawDocument);
 
-    void                    SetComment(const OUString& rStr) { maComment = rStr; }
+    virtual void SetComment(const OUString& rStr) override { maComment = rStr; }
     virtual OUString        GetComment() const override { return maComment; }
     virtual SdUndoAction*   Clone() const { return nullptr; }
     /// See SfxUndoAction::GetViewShellId().
