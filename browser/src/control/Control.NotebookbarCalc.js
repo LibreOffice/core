@@ -2604,61 +2604,69 @@ window.L.Control.NotebookbarCalc = window.L.Control.NotebookbarWriter.extend({
 		// Note: when adding track changes elements, consider this._map['wopi'].HideChangeTrackingControls
 		var content = [
 			{
-				'id': 'review-spell-dialog',
-				'type': 'bigtoolitem',
-				'text': _UNO('.uno:SpellDialog'),
-				'command': '.uno:SpellDialog',
-				'accessibility': { focusBack: true,	combination: 'S', de: null }
-			},
-			{
-				'id': 'LanguageMenu',
-				'type': 'bigcustomtoolitem',
-				'text': _UNO('.uno:LanguageMenu'),
-				'command': 'languagemenu',
-				'accessibility': { focusBack: true,	combination: 'L', de: null }
-			},
-			{
-				'id': 'Review-Section-Language1',
-				'type': 'container',
-				'children': [
+				'type': 'overflowgroup',
+				'id': 'review-proofing',
+				'name': _('Proofing'),
+				'accessibility': { focusBack: true, combination: 'S', de: null },
+				'children' : [
 					{
-						'id': 'LineA19',
-						'type': 'toolbox',
-						'children': [
-							{
-								'id': 'review-spell-online',
-								'type': 'toolitem',
-								'text': _('Auto Spell Check'),
-								'command': '.uno:SpellOnline',
-								'accessibility': { focusBack: true,	combination: 'O', de: null },
-								'stateIcons': {
-									on: 'autospellcheck-on',
-									off: 'autospellcheck-off',
-								}
-							}
-						]
+						'id': 'review-spell-dialog',
+						'type': 'bigtoolitem',
+						'text': _UNO('.uno:SpellDialog'),
+						'command': '.uno:SpellDialog',
+						'accessibility': { focusBack: true,	combination: 'S', de: null }
 					},
 					{
-						'id': 'LineB20',
-						'type': 'toolbox',
+						'id': 'LanguageMenu',
+						'type': 'bigcustomtoolitem',
+						'text': _UNO('.uno:LanguageMenu'),
+						'command': 'languagemenu',
+						'accessibility': { focusBack: true,	combination: 'L', de: null }
+					},
+					{
+						'id': 'Review-Section-Language1',
+						'type': 'container',
 						'children': [
 							{
-								'id': 'review-hyphenate',
-								'type': 'toolitem',
-								'text': _UNO('.uno:Hyphenate', 'spreadsheet'),
-								'command': '.uno:Hyphenate',
-								'accessibility': { focusBack: true,	combination: 'H', de: null }
+								'id': 'LineA19',
+								'type': 'toolbox',
+								'children': [
+									{
+										'id': 'review-spell-online',
+										'type': 'toolitem',
+										'text': _('Auto Spell Check'),
+										'command': '.uno:SpellOnline',
+										'accessibility': { focusBack: true,	combination: 'O', de: null },
+										'stateIcons': {
+											on: 'autospellcheck-on',
+											off: 'autospellcheck-off',
+										}
+									}
+								]
+							},
+							{
+								'id': 'LineB20',
+								'type': 'toolbox',
+								'children': [
+									{
+										'id': 'review-hyphenate',
+										'type': 'toolitem',
+										'text': _UNO('.uno:Hyphenate', 'spreadsheet'),
+										'command': '.uno:Hyphenate',
+										'accessibility': { focusBack: true,	combination: 'H', de: null }
+									}
+								]
 							}
-						]
-					}
-				],
-				'vertical': 'true'
+						],
+						'vertical': 'true'
+					},
+				]
 			},
 			{ type: 'separator', id: 'review-hyphenate-break', orientation: 'vertical' },
 			{
 				'type': 'overflowgroup',
 				'id': 'review-comments',
-				'name':_('Comments'),
+				'name': _('Comments'),
 				'accessibility': { focusBack: true,	combination: 'IA', de: null },
 				'children' : [
 					{
@@ -2706,15 +2714,23 @@ window.L.Control.NotebookbarCalc = window.L.Control.NotebookbarWriter.extend({
 			},
 			{ type: 'separator', id: 'review-deletenote-break', orientation: 'vertical' },
 			{
-				'type': 'toolbox',
-				'children': [
+				'type': 'overflowgroup',
+				'id': 'review-protect',
+				'nofold': true,
+				'name': _('Protection'),
+				'children' : [
 					{
-						'id': 'review-protect-sheet',
-						'type': 'bigtoolitem',
-						'text': _UNO('.uno:Protect', 'spreadsheet'),
-						'command': '.uno:Protect',
-						'accessibility': { focusBack: true,	combination: 'DP', de: null }
-					}
+						'type': 'toolbox',
+						'children': [
+							{
+								'id': 'review-protect-sheet',
+								'type': 'bigtoolitem',
+								'text': _UNO('.uno:Protect', 'spreadsheet'),
+								'command': '.uno:Protect',
+								'accessibility': { focusBack: true,	combination: 'DP', de: null }
+							}
+						]
+					},
 				]
 			},
 		];
