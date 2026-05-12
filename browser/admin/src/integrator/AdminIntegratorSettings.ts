@@ -593,10 +593,6 @@ class SettingIframe {
 		} else {
 			this.settingsStorage = new OnlineSettingsStorage();
 		}
-		if (!isCODesktop) {
-			this.insertConfigSections();
-			this.setupLeftNavbar();
-		}
 		this.fetchAndPopulateSharedConfigs();
 		this.wordbook = (window as any).WordBook;
 	}
@@ -696,19 +692,6 @@ class SettingIframe {
 				fileAccept: '.dic',
 				buttonText: _('Upload Wordbook'),
 				uploadPath: this.PATH.wordBookUpload(),
-			},
-			{
-				id: 'xcu',
-				sectionTitle: _('Document settings'),
-				sectionDesc: _('Adjust how office documents behave.'),
-				listId: 'XcuList',
-				inputId: 'XcuFile',
-				buttonId: 'uploadXcuButton',
-				fileAccept: '.xcu',
-				// TODO: replace btn with rich interface (toggles)
-				buttonText: _('Upload Xcu'),
-				uploadPath: this.PATH.XcuUpload(),
-				debugOnly: true,
 			},
 			{
 				id: 'themes',
@@ -1723,21 +1706,6 @@ class SettingIframe {
 		return extraActionsDiv;
 	}
 
-	private generateViewSettingUI(data: ViewSettings) {
-		this._viewSetting = data;
-		this._viewSetting.aiProviderURL =
-			this.normalizeBaseUrl(data.aiProviderURL || '') ||
-			this.getDefaultAIProviderURL();
-		const settingsContainer = this._allConfigSection;
-		if (!settingsContainer) {
-			return;
-		}
-
-		this.generateAISettingsUI(data, settingsContainer);
-		this.generateZoteroUI(data, settingsContainer);
-		this.generateDocSigningUI(data, settingsContainer);
-	}
-
 	private generateZoteroUI(data: ViewSettings, settingsContainer: HTMLElement) {
 		const oldZoteroContainer = document.getElementById('zotero-section');
 
@@ -2672,6 +2640,9 @@ class SettingIframe {
 	}
 
 	private async populateSharedConfigUI(data: ConfigData): Promise<void> {
+		const settingsContainer = this._allConfigSection;
+		if (!settingsContainer) return;
+
 		const browserSettingButton = document.getElementById(
 			'uploadBrowserSettingsButton',
 		) as HTMLButtonElement | null;
@@ -2684,42 +2655,8 @@ class SettingIframe {
 			}
 		}
 
-		const xcuSettingButton = document.getElementById(
-			'uploadXcuButton',
-		) as HTMLButtonElement | null;
-
-		if (xcuSettingButton) {
-			if (data.xcu && data.xcu.length > 0) {
-				xcuSettingButton.style.display = 'none';
-			} else {
-				xcuSettingButton.style.removeProperty('display');
-			}
-		}
-
+		// Interface settings
 		if (data.kind === 'user') {
-			if (data.viewsetting && data.viewsetting.length > 0) {
-				const fetchContent = await this.settingsStorage.fetchSettingFile(
-					data.viewsetting[0].uri,
-				);
-				if (fetchContent) {
-					const loadedSettings = JSON.parse(fetchContent);
-					// Merge with default values to ensure all fields are present
-					const defaultViewSetting = this.getDefaultViewSettings();
-					const mergedSettings = this.mergeWithDefault(
-						defaultViewSetting,
-						loadedSettings,
-					);
-					this.generateViewSettingUI(mergedSettings);
-				} else {
-					const defaultViewSetting = this.getDefaultViewSettings();
-					this.generateViewSettingUI(defaultViewSetting);
-				}
-			} else {
-				const defaultViewSetting = this.getDefaultViewSettings();
-				this.generateViewSettingUI(defaultViewSetting);
-			}
-
-			// browser settings
 			if (data.browsersetting && data.browsersetting.length > 0) {
 				const browserSettingContent =
 					await this.settingsStorage.fetchSettingFile(
@@ -2734,11 +2671,10 @@ class SettingIframe {
 			} else {
 				this.browserSettingOptions = defaultBrowserSetting;
 			}
-			this.createBrowserSettingForm(this._allConfigSection!);
+			this.createBrowserSettingForm(settingsContainer);
 		}
 
-		const settingsContainer = this._allConfigSection;
-		if (!settingsContainer) return;
+		// Document settings (xcu)
 		if (!isCODesktop) {
 			if (data.xcu && data.xcu.length > 0) {
 				const xcuFileContent = await this.settingsStorage.fetchSettingFile(
@@ -2749,17 +2685,18 @@ class SettingIframe {
 					xcuFileContent,
 				);
 
-				const existingXcuSection = document.getElementById('xcu-section');
-				if (existingXcuSection) {
-					existingXcuSection.remove();
-				}
-
 				const xcuContainer = document.createElement('div');
 				xcuContainer.id = 'xcu-section';
 				xcuContainer.classList.add('section');
-				settingsContainer.appendChild(
-					this.xcuEditor.createXcuEditorUI(xcuContainer),
-				);
+				const xcuSection = this.xcuEditor.createXcuEditorUI(xcuContainer);
+				this.appendXcuDebugUploadControls(xcuContainer, data);
+
+				const existingXcuSection = document.getElementById('xcu-section');
+				if (existingXcuSection) {
+					existingXcuSection.replaceWith(xcuSection);
+				} else {
+					settingsContainer.appendChild(xcuSection);
+				}
 			} else {
 				// If user doesn't have any xcu file, we generate with default settings...
 				try {
@@ -2782,6 +2719,39 @@ class SettingIframe {
 			}
 		}
 
+		// AI settings
+		if (data.kind === 'user') {
+			let viewSetting = this.getDefaultViewSettings();
+			if (data.viewsetting && data.viewsetting.length > 0) {
+				const fetchContent = await this.settingsStorage.fetchSettingFile(
+					data.viewsetting[0].uri,
+				);
+				if (fetchContent) {
+					// Merge with default values to ensure all fields are present
+					viewSetting = this.mergeWithDefault(
+						viewSetting,
+						JSON.parse(fetchContent),
+					);
+				}
+			}
+			this._viewSetting = viewSetting;
+			this._viewSetting.aiProviderURL =
+				this.normalizeBaseUrl(viewSetting.aiProviderURL || '') ||
+				this.getDefaultAIProviderURL();
+			this.generateAISettingsUI(viewSetting, settingsContainer);
+		}
+
+		// Autotext and Custom dictionaries
+		if (!isCODesktop && !document.getElementById('autotext')) {
+			this.insertConfigSections();
+		}
+
+		// Document Signing and Zotero
+		if (data.kind === 'user') {
+			this.generateDocSigningUI(this._viewSetting, settingsContainer);
+			this.generateZoteroUI(this._viewSetting, settingsContainer);
+		}
+
 		this.setupLeftNavbar();
 
 		if (data.autotext)
@@ -2795,6 +2765,34 @@ class SettingIframe {
 			'#settings-nav .settings-nav-item',
 		);
 		if (navItem) navItem.focus();
+	}
+
+	private appendXcuDebugUploadControls(
+		xcuContainer: HTMLElement,
+		data: ConfigData,
+	): void {
+		if (!window.enableDebug) return;
+
+		const list = this.createUnorderedList('XcuList');
+		const fileInput = this.createFileInput('XcuFile', '.xcu');
+		// TODO: replace btn with rich interface (toggles)
+		const button = this.createButton('uploadXcuButton', _('Upload Xcu'));
+
+		if (data.xcu && data.xcu.length > 0) {
+			button.style.display = 'none';
+		}
+
+		button.addEventListener('click', () => fileInput.click());
+		fileInput.addEventListener('change', () => {
+			if (fileInput.files?.length) {
+				this.uploadFile(this.PATH.XcuUpload(), fileInput.files[0]);
+				fileInput.value = '';
+			}
+		});
+
+		xcuContainer.appendChild(list);
+		xcuContainer.appendChild(fileInput);
+		xcuContainer.appendChild(button);
 	}
 
 	private setupLeftNavbar(): void {
