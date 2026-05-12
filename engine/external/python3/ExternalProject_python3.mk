@@ -98,9 +98,6 @@ $(call gb_ExternalProject_get_state_target,python3,build) :
 		--prefix=/python-inst \
 		--with-system-expat \
 		$(if $(filter MACOSX,$(OS)), \
-			$(if $(filter INTEL,$(CPUNAME)),--enable-universalsdk=$(MACOSX_SDK_PATH) \
-                                --with-universal-archs=intel \
-            ) \
 			--enable-framework=/@__________________________________________________OOO --with-framework-name=LibreOfficePython, \
 			--enable-shared \
 		) \
