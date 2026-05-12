@@ -92,7 +92,7 @@ UCalendar* getLocalCalendar()
     }
 
     g_localCalInitialized = true;
-    g_cachedTZ = currentTZ;
+    g_cachedTZ = std::move(currentTZ);
 
     if (U_FAILURE(status))
         g_localCal = nullptr;
