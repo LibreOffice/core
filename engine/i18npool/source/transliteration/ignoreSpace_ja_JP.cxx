@@ -43,8 +43,9 @@ i18nutil::OneToOneMappingTable_t const ignoreSpace_ja_JP_mappingTable[] = {
 
 ignoreSpace_ja_JP::ignoreSpace_ja_JP()
 {
+    static i18nutil::oneToOneMapping _table(ignoreSpace_ja_JP_mappingTable, sizeof(ignoreSpace_ja_JP_mappingTable));
     func = nullptr;
-    table = new i18nutil::oneToOneMapping(ignoreSpace_ja_JP_mappingTable, sizeof(ignoreSpace_ja_JP_mappingTable));
+    table = &_table;
     map = nullptr;
     transliterationName = "ignoreSpace_ja_JP";
     implementationName = "com.sun.star.i18n.Transliteration.ignoreSpace_ja_JP";
