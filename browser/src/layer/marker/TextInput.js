@@ -292,7 +292,12 @@ window.L.TextInput = window.L.Layer.extend({
 		}
 
 		if (!window.ThisIsTheiOSApp && navigator.platform !== 'iPhone' && !window.keyboard.guessOnscreenKeyboard()) {
-			this._textArea.focus();
+			// preventScroll keeps Chromium from auto-scrolling html or body to bring
+			// the caret in this hidden contenteditable back into view when focus
+			// arrives during a chrome rebuild like the readonly-to-edit transition
+			// (which would otherwise shift the visible UI up by the chrome-height
+			// delta even though body has overflow:hidden):
+			this._textArea.focus({ preventScroll: true });
 		} else if (acceptInput === true) {
 			// On the iPhone, only call the textarea's focus() when we get an explicit
 			// true parameter. On the other hand, never call the textarea's blur().
@@ -310,7 +315,12 @@ window.L.TextInput = window.L.Layer.extend({
 			// "(anonymous function)" in hammer.js (an event handler), and when it is
 			// _onMessage (the WebSocket message handler in Socket.js).
 
-			this._textArea.focus();
+			// preventScroll keeps Chromium from auto-scrolling html or body to bring
+			// the caret in this hidden contenteditable back into view when focus
+			// arrives during a chrome rebuild like the readonly-to-edit transition
+			// (which would otherwise shift the visible UI up by the chrome-height
+			// delta even though body has overflow:hidden):
+			this._textArea.focus({ preventScroll: true });
 		}
 
 		if (!window.ThisIsTheiOSApp && navigator.platform !== 'iPhone' && !window.mode.isChromebook()) {
