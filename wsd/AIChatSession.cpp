@@ -416,7 +416,7 @@ bool AIChatSession::handleAction(const std::string& firstLine)
     finalMessages->add(systemMsg);
     for (unsigned i = 0; i < sanitizedMessages->size(); ++i)
         finalMessages->add(sanitizedMessages->get(i));
-    sanitizedMessages = finalMessages;
+    sanitizedMessages = std::move(finalMessages);
 
     // Trim to most recent messages if over limit (keep system prompt at index 0)
     while (sanitizedMessages->size() > MAX_AI_MESSAGES + 1)
@@ -456,10 +456,10 @@ bool AIChatSession::handleAction(const std::string& firstLine)
 
     // Initialize the tool loop state
     _toolLoop = std::make_unique<AIToolLoopState>();
-    _toolLoop->requestId = requestId;
-    _toolLoop->messages = sanitizedMessages;
+    _toolLoop->requestId = std::move(requestId);
+    _toolLoop->messages = std::move(sanitizedMessages);
     _toolLoop->model = model;
-    _toolLoop->requestUrl = requestUrl;
+    _toolLoop->requestUrl = std::move(requestUrl);
     _toolLoop->apiKey = apiKey;
 
     callLLMAPI();
@@ -534,7 +534,7 @@ void AIChatSession::callLLMAPI()
     httpSession->setFinishedHandler(std::move(finishedCallback));
 
     http::Session::ConnectFailCallback connectFailCallback =
-        [clientSessionPtr, self](const std::shared_ptr<http::Session>& /*session*/)
+        [clientSessionPtr = std::move(clientSessionPtr), self](const std::shared_ptr<http::Session>& /*session*/)
     {
         self->_activeChatSession.reset();
         if (self->_toolLoop)
@@ -625,7 +625,7 @@ void AIChatSession::handleLLMResponse(const std::string& responseBody)
         std::string assistantContent;
         JsonUtil::findJSONValue(message, "content", assistantContent);
         if (!assistantContent.empty())
-            _toolLoop->pendingSummary = assistantContent;
+            _toolLoop->pendingSummary = std::move(assistantContent);
 
         // Queue all tool calls for sequential processing
         _toolLoop->pendingToolCalls.clear();
@@ -736,7 +736,7 @@ bool AIChatSession::executeToolCall(const std::string& toolCallId,
         _toolLoop->awaitingApproval = true;
         _toolLoop->pendingToolCallId = toolCallId;
         _toolLoop->pendingToolName = fnName;
-        _toolLoop->pendingForwardCommand = command;
+        _toolLoop->pendingForwardCommand = std::move(command);
 
         sendToolApproval(fnName, "");
         return true;
@@ -886,7 +886,7 @@ bool AIChatSession::executeToolCall(const std::string& toolCallId,
         _toolLoop->awaitingApproval = true;
         _toolLoop->pendingToolCallId = toolCallId;
         _toolLoop->pendingToolName = fnName;
-        _toolLoop->pendingSummary = summary;
+        _toolLoop->pendingSummary = std::move(summary);
 
         // Store the pairs array for execution after approval.
         std::ostringstream storedJson;
@@ -937,7 +937,7 @@ bool AIChatSession::executeToolCall(const std::string& toolCallId,
                 }
                 sanitized += c;
             }
-            transform = sanitized;
+            transform = std::move(sanitized);
         }
 
         Poco::JSON::Object::Ptr transformObj = new Poco::JSON::Object();
@@ -997,7 +997,7 @@ bool AIChatSession::executeToolCall(const std::string& toolCallId,
         _toolLoop->pendingToolCallId = toolCallId;
         _toolLoop->pendingToolName = fnName;
         _toolLoop->pendingTransformArgs = transform;
-        _toolLoop->pendingSummary = summary;
+        _toolLoop->pendingSummary = std::move(summary);
 
         sendToolApproval(fnName, transform);
         return true;
@@ -1313,7 +1313,7 @@ std::pair<std::string, std::string> AIChatSession::parseImageGenResponse(
                 std::string message;
                 JsonUtil::findJSONValue(errorDetail, "message", message);
                 if (!message.empty())
-                    errorMsg = message;
+                    errorMsg = std::move(message);
             }
         }
         return {"", errorMsg};
@@ -1510,7 +1510,7 @@ void AIChatSession::processTransformImageGenerations(
 
                     std::string prompt = cmd->getValue<std::string>(key);
                     _toolLoop->pendingImageGens.push_back(
-                        {currentSlide, objId, prompt, std::string()});
+                        {currentSlide, objId, std::move(prompt), std::string()});
 
                     // Replace GenerateImage.N with InsertImage.N pointing
                     // to the loading placeholder
@@ -1706,7 +1706,8 @@ void AIChatSession::generateNextTransformImage(std::shared_ptr<DocumentBroker> d
         req.httpSession->setFinishedHandler(std::move(finishedCallback));
 
         http::Session::ConnectFailCallback connectFailCallback =
-            [clientSessionPtr, self, onImageFail](const std::shared_ptr<http::Session>& /*session*/)
+            [clientSessionPtr = std::move(clientSessionPtr), self,
+             onImageFail = std::move(onImageFail)](const std::shared_ptr<http::Session>& /*session*/)
         {
             self->_activeChatSession.reset();
 
@@ -1808,7 +1809,7 @@ bool AIChatSession::tryConsumeTransformedDocumentStructure(const std::shared_ptr
             _toolLoop->mainTransformResult = payload->jsonString();
             std::shared_ptr<DocumentBroker> broker = _session.getDocumentBroker();
             if (broker)
-                generateNextTransformImage(broker);
+                generateNextTransformImage(std::move(broker));
             else
             {
                 _toolLoop->generatingImages = false;
