@@ -433,8 +433,7 @@ void ScDocumentImport::setMatrixCells(
     // The file was saved with a #SPILL! error. Trust that and don't
     // materialise reference cells over the matrix range. Any blocker
     // cell still sitting in the range survives.
-    if (bCheckForSpill && (rRange.aEnd.Col() > rRange.aStart.Col()
-                           || rRange.aEnd.Row() > rRange.aStart.Row()))
+    if (bCheckForSpill)
     {
         pCell->MarkAsSpilled();
         return;

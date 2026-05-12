@@ -1665,6 +1665,34 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest, testArrayFormulaSpillXLSX)
     CPPUNIT_ASSERT_EQUAL(40.0, pDocument->GetValue(ScAddress(3, 4, 0)));
 }
 
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testConventionalArrayFormulaSpillXLSX)
+{
+    // G2 holds the conventional matrix formula =A2:A5 imported in #SPILL!
+    // state with blocker text "block" at G5. Clearing the blocker must
+    // auto-resolve the spill and expand the matrix into G2:G5 with the
+    // values from A2:A5.
+    createScDoc("xlsx/Spill.xlsx");
+    ScDocument* pDocument = getScDoc();
+
+    ScFormulaCell* pFormulaCell = pDocument->GetFormulaCell(ScAddress(6, 1, 0));
+    CPPUNIT_ASSERT_MESSAGE("Expected a formula cell at G2.", pFormulaCell != nullptr);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(FormulaError::Spill), sal_Int32(pFormulaCell->GetErrCode()));
+    CPPUNIT_ASSERT_EQUAL(u"#SPILL!"_ustr, pDocument->GetString(ScAddress(6, 1, 0)));
+    // The blocking cell must not have been overwritten.
+    CPPUNIT_ASSERT_EQUAL(u"block"_ustr, pDocument->GetString(ScAddress(6, 4, 0)));
+
+    // Clear the blocker at G5 and trigger spill resolution.
+    pDocument->SetString(ScAddress(6, 4, 0), u""_ustr);
+    getScDocShell()->ResolveSpilledOutputs();
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(FormulaError::NONE), sal_Int32(pFormulaCell->GetErrCode()));
+    // =A2:A5
+    CPPUNIT_ASSERT_EQUAL(10.0, pDocument->GetValue(ScAddress(6, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(20.0, pDocument->GetValue(ScAddress(6, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(30.0, pDocument->GetValue(ScAddress(6, 3, 0)));
+    CPPUNIT_ASSERT_EQUAL(40.0, pDocument->GetValue(ScAddress(6, 4, 0)));
+}
+
 ScFiltersTest::ScFiltersTest()
     : ScModelTestBase(u"sc/qa/unit/data"_ustr)
 {
