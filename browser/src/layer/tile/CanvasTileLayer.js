@@ -3305,6 +3305,20 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		return 10; /* failsafe 100% */
 	},
 
+	_recalcZoom: function(newSize, bringCommentsIntoView, maxZoom) {
+		let _zoom;
+
+		const commentWidth = app.sectionContainer.getSectionWithName(app.CSections.CommentList.name).sectionProperties.commentWidth;
+		let documentWidth = app.activeDocument.fileSize.pX;
+		if (bringCommentsIntoView) documentWidth += commentWidth;
+
+		var ratio = newSize.x / documentWidth;
+		_zoom = this._map.getScaleZoom(ratio);
+
+		if (maxZoom) _zoom = Math.min(maxZoom, Math.max(0.1, _zoom));
+		return _zoom;
+	},
+
 	/**
 	 * This is really just called on zoomend
 	 *
@@ -3369,15 +3383,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 
 		var zoom;
 		if (this.isImpress() || changeZoom /* writer */) {
-			const commentWidth = app.sectionContainer.getSectionWithName(app.CSections.CommentList.name).sectionProperties.commentWidth;
-			let documentWidth = app.activeDocument.fileSize.pX;
-			if (bringCommentsIntoView) documentWidth += commentWidth;
-
-			var ratio = newSize.x / documentWidth;
-			zoom = this._map.getScaleZoom(ratio);
-
-			if (maxZoom)
-				zoom = Math.min(maxZoom, Math.max(0.1, zoom));
+			zoom = this._recalcZoom(newSize, bringCommentsIntoView, maxZoom);
 		} else {
 			zoom = this._getWriterDefaultZoom();
 		}
