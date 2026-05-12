@@ -215,11 +215,11 @@ OrganizeDialog::OrganizeDialog(weld::Window* pParent, const css::uno::Reference<
 
     OUString sPage;
     if (tabId == 0)
-        sPage = "modules";
+        sPage = u"modules"_ustr;
     else if (tabId == 1)
-        sPage = "dialogs";
+        sPage = u"dialogs"_ustr;
     else
-        sPage = "libraries";
+        sPage = u"libraries"_ustr;
     m_xTabCtrl->set_current_page(sPage);
     ActivatePageHdl(sPage);
 
@@ -757,7 +757,7 @@ bool ObjectPage::GetSelection( ScriptDocument& rDocument, OUString& rLibName )
     rDocument = aDesc.GetDocument();
     rLibName = aDesc.GetLibName();
     if ( rLibName.isEmpty() )
-        rLibName = "Standard" ;
+        rLibName = u"Standard"_ustr ;
 
     DBG_ASSERT( rDocument.isAlive(), "ObjectPage::GetSelection: no or dead ScriptDocument in the selection!" );
     if ( !rDocument.isAlive() )
@@ -964,7 +964,7 @@ SbModule* createModImpl(weld::Window* pWin, const ScriptDocument& rDocument,
 
     OUString aLibName( rLibName );
     if ( aLibName.isEmpty() )
-        aLibName = "Standard" ;
+        aLibName = u"Standard"_ustr ;
     rDocument.getOrCreateLibrary( E_SCRIPTS, aLibName );
     OUString aModName = _aModName;
     if ( aModName.isEmpty() )

@@ -165,7 +165,7 @@ void SbiScanner::scanGoto()
         std::u16string_view aTemp = aLine.subView(n, 2);
         if(o3tl::equalsIgnoreAsciiCase(aTemp, u"to"))
         {
-            aSym = "goto";
+            aSym = u"goto"_ustr;
             nLineIdx += n + 2 - nCol;
             nCol = n + 2;
         }
@@ -482,7 +482,7 @@ bool SbiScanner::NextSym()
             default :
                 // treated as an operator
                 --nLineIdx; --nCol; nCol1 = nCol-1;
-                aSym = "&";
+                aSym = u"&"_ustr;
                 return true;
         }
         bNumber = true;
@@ -688,7 +688,7 @@ PrevLineCommentLbl:
         (aSym.startsWith("'") || aSym.equalsIgnoreAsciiCase("REM") || aSym.startsWith("#"))))
     {
         bPrevLineExtentsComment = false;
-        aSym = "REM";
+        aSym = u"REM"_ustr;
         sal_Int32 nLen = aLine.getLength() - nLineIdx;
         // tdf#149402 - don't extend comment if line ends in a whitespace (BasicCharClass::isWhitespace)
         if (bCompatible && !bLineEndsWithWhitespace && aLine[nLineIdx + nLen - 1] == '_'
@@ -727,7 +727,7 @@ eoln:
         nLine = nOldLine;
         nCol1 = nOldCol1;
         nCol2 = nOldCol2;
-        aSym = "\n";
+        aSym = u"\n"_ustr;
         nColLock = 0;
         bClosingUnderscore = false;
         // tdf#149157 - break multiline continuation in a comment after a new line

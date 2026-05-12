@@ -311,7 +311,7 @@ SbMethod* MacroChooser::CreateMacro()
     OUString aLibName( aDesc.GetLibName() );
 
     if ( aLibName.isEmpty() )
-        aLibName = "Standard" ;
+        aLibName = u"Standard"_ustr ;
 
     aDocument.getOrCreateLibrary( E_SCRIPTS, aLibName );
 

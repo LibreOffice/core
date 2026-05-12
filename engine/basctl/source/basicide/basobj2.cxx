@@ -294,7 +294,7 @@ OUString ChooseMacro(weld::Window* pParent,
             if ( aDocument.isDocument() )
             {
                 // document basic
-                aLocation = "document" ;
+                aLocation = u"document"_ustr ;
 
                 if ( rxLimitToDocument.is() )
                 {
@@ -330,7 +330,7 @@ OUString ChooseMacro(weld::Window* pParent,
             else
             {
                 // application basic
-                aLocation = "application" ;
+                aLocation = u"application"_ustr ;
             }
 
             // script URL

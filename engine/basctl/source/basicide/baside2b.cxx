@@ -2584,7 +2584,7 @@ void WatchWindow::UpdateWatches(bool bBasicStopped)
                     }
                     else
                     {
-                        aWatchStr = "Null";
+                        aWatchStr = u"Null"_ustr;
                         if( pItem->mpObject.is() )
                         {
                             bCollapse = true;
@@ -2620,7 +2620,7 @@ void WatchWindow::UpdateWatches(bool bBasicStopped)
                 {
                     if( !pVar->IsFixed() )
                     {
-                        aTypeStr = "Variant/";
+                        aTypeStr = u"Variant/"_ustr;
                     }
                     aTypeStr += getBasicTypeName( pVar->GetType() );
                 }

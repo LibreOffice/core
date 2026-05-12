@@ -1420,7 +1420,7 @@ void SbRtl_Join(StarBASIC *, SbxArray & rPar, bool)
     }
     else
     {
-        aDelim = " ";
+        aDelim = u" "_ustr;
     }
     OUStringBuffer aRetStr(32);
     sal_Int32 nLower, nUpper;
@@ -1461,7 +1461,7 @@ void SbRtl_Split(StarBASIC *, SbxArray & rPar, bool)
         }
         else
         {
-            aDelim = " ";
+            aDelim = u" "_ustr;
         }
 
         sal_Int32 nCount = -1;

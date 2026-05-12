@@ -642,7 +642,7 @@ static bool CollectAttrs( const SbxBase* p, OUString& rRes )
     OUString aAttrs;
     if( p->IsHidden() )
     {
-        aAttrs = "Hidden";
+        aAttrs = u"Hidden"_ustr;
     }
     if( p->IsSet( SbxFlagBits::ExtSearch ) )
     {

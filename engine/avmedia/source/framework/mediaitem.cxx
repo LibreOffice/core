@@ -431,7 +431,7 @@ OUString GetFilename(OUString const& rSourceURL)
     if (!::comphelper::OStorageHelper::IsValidZipEntryFileName(
                 filename, false) || !filename.getLength())
     {
-        filename = "media";
+        filename = u"media"_ustr;
     }
     return filename;
 }

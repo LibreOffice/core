@@ -255,7 +255,7 @@ SbUnoObject* createOLEObject_Impl( const OUString& aType )
         OUString aOLEType = aType;
         if ( aOLEType == "SAXXMLReader30" )
         {
-            aOLEType = "Msxml2.SAXXMLReader.3.0";
+            aOLEType = u"Msxml2.SAXXMLReader.3.0"_ustr;
         }
         Reference< XInterface > xOLEObject = xOLEFactory->createInstance( aOLEType );
         if( xOLEObject.is() )
@@ -1671,7 +1671,7 @@ bool checkUnoObjectType(SbUnoObject& rUnoObj, const OUString& rClass)
         OUString aClassName;
         if ( SbiRuntime::isVBAEnabled() )
         {
-            aClassName = ".";
+            aClassName = u"."_ustr;
             sal_Int32 nClassNameDot = rClass.lastIndexOf( '.' );
             if( nClassNameDot >= 0 )
             {
@@ -3493,7 +3493,7 @@ SbxVariable* SbUnoService::Find( const OUString& rName, SbxClassType )
                 {
                     if( xCtor->isDefaultConstructor() )
                     {
-                        aName = "create";
+                        aName = u"create"_ustr;
                     }
                 }
 

@@ -162,7 +162,7 @@ void SfxScriptLibraryContainer::writeLibraryElement( const Reference < XNameCont
 
     xmlscript::ModuleDescriptor aMod;
     aMod.aName = aElementName;
-    aMod.aLanguage = "StarBasic";
+    aMod.aLanguage = u"StarBasic"_ustr;
     Any aElement = xLib->getByName( aElementName );
     aElement >>= aMod.aCode;
 
@@ -173,16 +173,16 @@ void SfxScriptLibraryContainer::writeLibraryElement( const Reference < XNameCont
         switch( aModInfo.ModuleType )
         {
         case ModuleType::NORMAL:
-            aMod.aModuleType = "normal";
+            aMod.aModuleType = u"normal"_ustr;
             break;
         case ModuleType::CLASS:
-            aMod.aModuleType ="class";
+            aMod.aModuleType =u"class"_ustr;
             break;
         case ModuleType::FORM:
-            aMod.aModuleType = "form";
+            aMod.aModuleType = u"form"_ustr;
             break;
         case ModuleType::DOCUMENT:
-            aMod.aModuleType = "document";
+            aMod.aModuleType = u"document"_ustr;
             break;
         case ModuleType::UNKNOWN:
             // nothing

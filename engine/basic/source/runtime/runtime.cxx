@@ -449,9 +449,9 @@ std::shared_ptr<SvNumberFormatter> SbiInstance::PrepareNumberFormatter( sal_uInt
     switch( eDate )
     {
         default:
-        case DateOrder::MDY: aDateStr = "MM/DD/YYYY"; break;
-        case DateOrder::DMY: aDateStr = "DD/MM/YYYY"; break;
-        case DateOrder::YMD: aDateStr = "YYYY/MM/DD"; break;
+        case DateOrder::MDY: aDateStr = u"MM/DD/YYYY"_ustr; break;
+        case DateOrder::DMY: aDateStr = u"DD/MM/YYYY"_ustr; break;
+        case DateOrder::YMD: aDateStr = u"YYYY/MM/DD"_ustr; break;
     }
     OUString aStr( aDateStr );      // PutandConvertEntry() modifies string!
     pNumberFormatter->PutandConvertEntry( aStr, nCheckPos, nType,
@@ -2702,7 +2702,7 @@ void SbiRuntime::StepPRINT()        // print TOS
     OUString s;
     if( p->GetType() >= SbxINTEGER && p->GetType() <= SbxDOUBLE )
     {
-        s = " ";    // one blank before
+        s = u" "_ustr;    // one blank before
     }
     s += s1;
     pIosys->Write( s );
@@ -3520,7 +3520,7 @@ SbxVariable* SbiRuntime::FindElement( SbxObject* pObj, sal_uInt32 nOp1, sal_uInt
             PushVar( p );
             StepARGV();
             nOp1 = nOp1 | 0x8000; // indicate params are present
-            aName = "Evaluate";
+            aName = u"Evaluate"_ustr;
         }
         if( bLocal )
         {
@@ -4085,7 +4085,7 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
                             }
                             else if( xIndexAccess.is() )
                             {
-                                sDefaultMethod = "getByIndex";
+                                sDefaultMethod = u"getByIndex"_ustr;
                             }
                             if ( !sDefaultMethod.isEmpty() )
                             {

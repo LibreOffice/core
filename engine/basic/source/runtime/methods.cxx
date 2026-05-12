@@ -1377,7 +1377,7 @@ void SbRtl_Str(StarBASIC *, SbxArray & rPar, bool)
         else
         {
             if (!aStr.startsWith("-"))
-                aStrNew = " ";
+                aStrNew = u" "_ustr;
             aStrNew += aStr;
         }
     }
@@ -2501,11 +2501,11 @@ void SbRtl_Dir(StarBASIC *, SbxArray & rPar, bool)
                     {
                         if (rRTLData.nCurDirPos == -2)
                         {
-                            aPath = ".";
+                            aPath = u"."_ustr;
                         }
                         else if (rRTLData.nCurDirPos == -1)
                         {
-                            aPath = "..";
+                            aPath = u".."_ustr;
                         }
                         rRTLData.nCurDirPos++;
                     }
@@ -2616,11 +2616,11 @@ void SbRtl_Dir(StarBASIC *, SbxArray & rPar, bool)
                 {
                     if (rRTLData.nCurDirPos == -2)
                     {
-                        aPath = ".";
+                        aPath = u"."_ustr;
                     }
                     else if (rRTLData.nCurDirPos == -1)
                     {
-                        aPath = "..";
+                        aPath = u".."_ustr;
                     }
                     rRTLData.nCurDirPos++;
                 }
@@ -2828,7 +2828,7 @@ void SbRtl_FileDateTime(StarBASIC *, SbxArray & rPar, bool)
     OUString aRes;
     if (aDate.IsEmpty())
     {
-        aRes = "0000-00-00 00:00:00";
+        aRes = u"0000-00-00 00:00:00"_ustr;
     }
     else
     {
@@ -3512,7 +3512,7 @@ static OUString getObjectTypeName( SbxVariable* pVar )
         SbxBase* pBaseObj = pVar->GetObject();
         if( !pBaseObj )
         {
-           sRet = "Nothing";
+           sRet = u"Nothing"_ustr;
         }
         else
         {

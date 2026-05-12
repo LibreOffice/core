@@ -139,7 +139,7 @@ VclPtr<ModulWindow> Shell::CreateBasWin( const ScriptDocument& rDocument, const 
     OUString aModName( rModName );
 
     if ( aLibName.isEmpty() )
-        aLibName = "Standard" ;
+        aLibName = u"Standard"_ustr ;
 
     uno::Reference< container::XNameContainer > xLib = rDocument.getOrCreateLibrary( E_SCRIPTS, aLibName );
 

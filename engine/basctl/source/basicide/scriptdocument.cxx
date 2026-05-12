@@ -661,7 +661,7 @@ namespace basctl
                 return false;
 
             // create new module
-            _out_rNewModuleCode = "REM  *****  BASIC  *****\n\n" ;
+            _out_rNewModuleCode = u"REM  *****  BASIC  *****\n\n"_ustr ;
             if ( _bCreateMain )
                 _out_rNewModuleCode += "Sub Main\n\nEnd Sub\n" ;
 
@@ -814,10 +814,10 @@ namespace basctl
         try
         {
             URL aURL;
-            aURL.Complete = ".uno:Save" ;
+            aURL.Complete = u".uno:Save"_ustr ;
             aURL.Main = aURL.Complete;
-            aURL.Protocol = ".uno:" ;
-            aURL.Path = "Save" ;
+            aURL.Protocol = u".uno:"_ustr ;
+            aURL.Path = u"Save"_ustr ;
 
             Reference< XDispatchProvider > xDispProv( xFrame, UNO_QUERY_THROW );
             Reference< XDispatch > xDispatch(

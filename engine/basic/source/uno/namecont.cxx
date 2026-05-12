@@ -977,19 +977,19 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
                 OUString aCheckFileName;
 
                 // Check if script.xlb exists
-                aCheckFileName = "script";
+                aCheckFileName = u"script"_ustr;
                 checkAndCopyFileImpl( aUserBasicStandardInetObj,
                                       aPrevUserBasicStandardInetObj,
                                       aCheckFileName, aXlbExtension, mxSFI );
 
                 // Check if dialog.xlb exists
-                aCheckFileName = "dialog";
+                aCheckFileName = u"dialog"_ustr;
                 checkAndCopyFileImpl( aUserBasicStandardInetObj,
                                       aPrevUserBasicStandardInetObj,
                                       aCheckFileName, aXlbExtension, mxSFI );
 
                 // Check if module1.xba exists
-                aCheckFileName = "Module1";
+                aCheckFileName = u"Module1"_ustr;
                 checkAndCopyFileImpl( aUserBasicStandardInetObj,
                                       aPrevUserBasicStandardInetObj,
                                       aCheckFileName, u"xba", mxSFI );
@@ -2768,7 +2768,7 @@ void SAL_CALL SfxLibraryContainer::setVBACompatibilityMode( sal_Bool _vbacompatm
     OUString aLibName = pBasMgr->GetName();
     if ( aLibName.isEmpty())
     {
-        aLibName = "Standard";
+        aLibName = u"Standard"_ustr;
     }
     if( StarBASIC* pBasic = pBasMgr->GetLib( aLibName ) )
     {

@@ -380,7 +380,7 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
             StartListening(*pBasMgr, DuplicateHandling::Prevent /* log on only once */);
             OUString aLibName( rInfo.GetLib() );
             if ( aLibName.isEmpty() )
-                aLibName = "Standard" ;
+                aLibName = u"Standard"_ustr ;
             StarBASIC* pBasic = pBasMgr->GetLib( aLibName );
             if ( !pBasic )
             {

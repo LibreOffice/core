@@ -807,28 +807,28 @@ Document::retrieveCharacterAttributes(
     aAttrib.State = css::beans::PropertyState_DIRECT_VALUE;
 
     //character background color
-    aAttrib.Name = "CharBackColor";
+    aAttrib.Name = u"CharBackColor"_ustr;
     aAttrib.Value = mapFontColor( aFont.GetFillColor() );
     aAttribs.push_back(aAttrib);
 
     //character color
-    aAttrib.Name = "CharColor";
+    aAttrib.Name = u"CharColor"_ustr;
     //aAttrib.Value = mapFontColor( aFont.GetColor() );
     aAttrib.Value = mapFontColor( m_rEngine.GetTextColor() );
     aAttribs.push_back(aAttrib);
 
     //character font name
-    aAttrib.Name = "CharFontName";
+    aAttrib.Name = u"CharFontName"_ustr;
     aAttrib.Value <<= aFont.GetFamilyName();
     aAttribs.push_back(aAttrib);
 
     //character height
-    aAttrib.Name = "CharHeight";
+    aAttrib.Name = u"CharHeight"_ustr;
     aAttrib.Value <<= static_cast<sal_Int16>(aFont.GetFontHeight());
     aAttribs.push_back(aAttrib);
 
     //character posture
-    aAttrib.Name = "CharPosture";
+    aAttrib.Name = u"CharPosture"_ustr;
     aAttrib.Value <<= vcl::unohelper::ConvertFontSlant(aFont.GetItalicMaybeAskConfig());
     aAttribs.push_back(aAttrib);
 
@@ -840,22 +840,22 @@ Document::retrieveCharacterAttributes(
     */
 
     //character strikeout
-    aAttrib.Name = "CharStrikeout";
+    aAttrib.Name = u"CharStrikeout"_ustr;
     aAttrib.Value <<= static_cast<sal_Int16>(aFont.GetStrikeout());
     aAttribs.push_back(aAttrib);
 
     //character underline
-    aAttrib.Name = "CharUnderline";
+    aAttrib.Name = u"CharUnderline"_ustr;
     aAttrib.Value <<= static_cast<sal_Int16>(aFont.GetUnderline());
     aAttribs.push_back(aAttrib);
 
     //character weight
-    aAttrib.Name = "CharWeight";
+    aAttrib.Name = u"CharWeight"_ustr;
     aAttrib.Value <<= static_cast<float>(aFont.GetWeightMaybeAskConfig());
     aAttribs.push_back(aAttrib);
 
     //character alignment
-    aAttrib.Name = "ParaAdjust";
+    aAttrib.Name = u"ParaAdjust"_ustr;
     aAttrib.Value <<= static_cast<sal_Int16>(m_rEngine.GetTextAlign());
     aAttribs.push_back(aAttrib);
 

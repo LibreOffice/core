@@ -107,9 +107,9 @@ double ImpGetDate( const SbxValues* p )
             switch( eDate )
             {
                 default:
-                case DateOrder::MDY: aDateStr = "MM/DD/YYYY"; break;
-                case DateOrder::DMY: aDateStr = "DD/MM/YYYY"; break;
-                case DateOrder::YMD: aDateStr = "YYYY/MM/DD"; break;
+                case DateOrder::MDY: aDateStr = u"MM/DD/YYYY"_ustr; break;
+                case DateOrder::DMY: aDateStr = u"DD/MM/YYYY"_ustr; break;
+                case DateOrder::YMD: aDateStr = u"YYYY/MM/DD"_ustr; break;
             }
 
             OUString aStr = aDateStr + " HH:MM:SS";
@@ -287,9 +287,9 @@ void ImpPutDate( SbxValues* p, double n )
                     switch( eDate )
                     {
                         default:
-                        case DateOrder::MDY: aStr = "MM/DD/YYYY"; break;
-                        case DateOrder::DMY: aStr = "DD/MM/YYYY"; break;
-                        case DateOrder::YMD: aStr = "YYYY/MM/DD"; break;
+                        case DateOrder::MDY: aStr = u"MM/DD/YYYY"_ustr; break;
+                        case DateOrder::DMY: aStr = u"DD/MM/YYYY"_ustr; break;
+                        case DateOrder::YMD: aStr = u"YYYY/MM/DD"_ustr; break;
                     }
                 }
                 else
@@ -297,15 +297,15 @@ void ImpPutDate( SbxValues* p, double n )
                     switch( eDate )
                     {
                         default:
-                        case DateOrder::MDY: aStr = "MM/DD/YYYY HH:MM:SS"; break;
-                        case DateOrder::DMY: aStr = "DD/MM/YYYY HH:MM:SS"; break;
-                        case DateOrder::YMD: aStr = "YYYY/MM/DD HH:MM:SS"; break;
+                        case DateOrder::MDY: aStr = u"MM/DD/YYYY HH:MM:SS"_ustr; break;
+                        case DateOrder::DMY: aStr = u"DD/MM/YYYY HH:MM:SS"_ustr; break;
+                        case DateOrder::YMD: aStr = u"YYYY/MM/DD HH:MM:SS"_ustr; break;
                     }
                 }
             }
             else
             {
-                aStr = "HH:MM:SS";
+                aStr = u"HH:MM:SS"_ustr;
             }
             pFormatter->PutandConvertEntry( aStr,
                                             nCheckPos,

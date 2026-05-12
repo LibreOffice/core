@@ -149,7 +149,7 @@ static bool writeOasis2OOoLibraryElement(
 
     xml::sax::InputSource source;
     source.aInputStream = xInput;
-    source.sSystemId = "virtual file";
+    source.sSystemId = u"virtual file"_ustr;
 
     xParser->parseStream( source );
 

@@ -51,7 +51,7 @@ VclPtr<DialogWindow> Shell::CreateDlgWin( const ScriptDocument& rDocument, const
     OUString aDlgName( rDlgName );
 
     if ( aLibName.isEmpty() )
-        aLibName = "Standard" ;
+        aLibName = u"Standard"_ustr ;
 
     rDocument.getOrCreateLibrary( E_DIALOGS, aLibName );
 

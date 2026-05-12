@@ -1669,12 +1669,12 @@ void DlgEdObj::MakeDataAware( const Reference< frame::XModel >& xModel )
     //dummy BoundCell and CellRange instead of createInstance. This at least results in
     //the dialog editor not falling.
     css::beans::NamedValue aCellValue;
-    aCellValue.Name = "BoundCell";
+    aCellValue.Name = u"BoundCell"_ustr;
     css::table::CellAddress aCellAddress;
     aCellValue.Value <<= aCellAddress;
 
     css::beans::NamedValue aCellRange;
-    aCellRange.Name = "CellRange";
+    aCellRange.Name = u"CellRange"_ustr;
     css::table::CellRangeAddress aRangeAddress;
     aCellRange.Value <<= aRangeAddress;
 

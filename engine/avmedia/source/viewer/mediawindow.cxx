@@ -444,7 +444,7 @@ void MediaWindow::dispatchInsertAVMedia(const css::uno::Reference<css::frame::XD
                                         const css::awt::Size& rSize, const OUString& rURL, bool bLink)
 {
     util::URL aDispatchURL;
-    aDispatchURL.Complete = ".uno:InsertAVMedia";
+    aDispatchURL.Complete = u".uno:InsertAVMedia"_ustr;
 
     css::uno::Reference<css::util::XURLTransformer> xTrans(css::util::URLTransformer::create(::comphelper::getProcessComponentContext()));
     xTrans->parseStrict(aDispatchURL);

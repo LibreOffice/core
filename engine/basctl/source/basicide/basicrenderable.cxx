@@ -42,7 +42,7 @@ Renderable::Renderable (BaseWindow* pWin)
 
     // show Subgroup for print range
     vcl::PrinterOptionsHelper::UIControlOptions aPrintRangeOpt;
-    aPrintRangeOpt.maGroupHint = "PrintRange" ;
+    aPrintRangeOpt.maGroupHint = u"PrintRange"_ustr ;
     aPrintRangeOpt.mbInternalOnly = true;
 
     m_aUIProperties[0].Value = setSubgroupControlOpt(u"printrange"_ustr,
