@@ -303,7 +303,8 @@ var NotebookbarAccessibility = function() {
 			// Try to set focus on the first button of the tab content.
 			var currentSelectedTabPage = this.getCurrentSelectedTabPage();
 			var firstSelectableElement = JSDialog.FindFocusableElement(currentSelectedTabPage,'next');
-			firstSelectableElement.focus();
+			if (firstSelectableElement)
+				firstSelectableElement.focus();
 		}
 		else if (key === 'ARROWRIGHT') {
 			this.getNextTab('right');
