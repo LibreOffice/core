@@ -421,6 +421,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 					id: 'addsection',
 					type: 'comboboxentry',
 					text: _('Add Section'),
+					img: 'addslidesection',
 					pos: 0,
 				});
 			}
