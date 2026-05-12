@@ -49,13 +49,24 @@ function onDemandRenderer(
 			var onIntersection = (entries: any) => {
 				entries.forEach((entry: any) => {
 					if (entry.isIntersecting) {
-						// Skip if a render_entry for this (control,
-						// entry) pair is already in flight - core
-						// dedupes redundant requests and would not
-						// reply, leaking the counter.
-						if (app.pendingOnDemandRenderRequests.has(pendingKey)) return;
-						app.pendingOnDemandRenderRequests.add(pendingKey);
-						app.pendingOnDemandRenders++;
+						// Already rendered for this (controlId,
+						// entryId): rendersCache holds the image.
+						// Skipping avoids the redundant round-trip
+						// that core would dedupe and never reply to,
+						// which would leak the counter.
+						const cached = builder.rendersCache[controlId];
+						if (cached && cached.images[entryId]) return;
+
+						// Increment at most once per pair. On rebuild,
+						// observers for the new placeholder may fire
+						// while the original request is still in
+						// flight - allow the retry send to go out
+						// (core may have dropped the first request)
+						// but do not double-count.
+						if (!app.pendingOnDemandRenderRequests.has(pendingKey)) {
+							app.pendingOnDemandRenderRequests.add(pendingKey);
+							app.pendingOnDemandRenders++;
+						}
 						builder.callback(
 							controlType,
 							'render_entry',
