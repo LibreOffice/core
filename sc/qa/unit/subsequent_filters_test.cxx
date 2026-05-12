@@ -1650,28 +1650,29 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest, testNonAsciiWithDotXLSX)
 
 CPPUNIT_TEST_FIXTURE(ScFiltersTest, testArrayFormulaSpillXLSX)
 {
-    // Load the test document and verify that clearing the blocking cell resolves
-    // the #SPILL! error on import and the UNIQUE(A2:A5) values spill into C2:C5.
+    // D2 holds =UNIQUE(A2:A5) imported in #SPILL! state with blocker text
+    // "block" at D5. Clearing the blocker must auto resolve the spill and
+    // expand the matrix into D2:D5 with the values from A2:A5.
     createScDoc("xlsx/Spill.xlsx");
     ScDocument* pDocument = getScDoc();
 
-    ScFormulaCell* pFormulaCell = pDocument->GetFormulaCell(ScAddress(2, 1, 0));
-    CPPUNIT_ASSERT_MESSAGE("Expected a formula cell at C2.", pFormulaCell != nullptr);
+    ScFormulaCell* pFormulaCell = pDocument->GetFormulaCell(ScAddress(3, 1, 0));
+    CPPUNIT_ASSERT_MESSAGE("Expected a formula cell at D2.", pFormulaCell != nullptr);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(FormulaError::Spill), sal_Int32(pFormulaCell->GetErrCode()));
-    CPPUNIT_ASSERT_EQUAL(u"#SPILL!"_ustr, pDocument->GetString(ScAddress(2, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"#SPILL!"_ustr, pDocument->GetString(ScAddress(3, 1, 0)));
     // The blocking cell must not have been overwritten.
-    CPPUNIT_ASSERT_EQUAL(u"r"_ustr, pDocument->GetString(ScAddress(2, 4, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"block"_ustr, pDocument->GetString(ScAddress(3, 4, 0)));
 
-    // Clear the blocker at C5 and trigger spill resolution.
-    pDocument->SetString(ScAddress(2, 4, 0), u""_ustr);
+    // Clear the blocker at D5 and trigger spill resolution.
+    pDocument->SetString(ScAddress(3, 4, 0), u""_ustr);
     getScDocShell()->ResolveSpilledOutputs();
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(FormulaError::NONE), sal_Int32(pFormulaCell->GetErrCode()));
     // UNIQUE(A2:A5)
-    CPPUNIT_ASSERT_EQUAL(1.0, pDocument->GetValue(ScAddress(2, 1, 0)));
-    CPPUNIT_ASSERT_EQUAL(2.0, pDocument->GetValue(ScAddress(2, 2, 0)));
-    CPPUNIT_ASSERT_EQUAL(3.0, pDocument->GetValue(ScAddress(2, 3, 0)));
-    CPPUNIT_ASSERT_EQUAL(6.0, pDocument->GetValue(ScAddress(2, 4, 0)));
+    CPPUNIT_ASSERT_EQUAL(10.0, pDocument->GetValue(ScAddress(3, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(20.0, pDocument->GetValue(ScAddress(3, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(30.0, pDocument->GetValue(ScAddress(3, 3, 0)));
+    CPPUNIT_ASSERT_EQUAL(40.0, pDocument->GetValue(ScAddress(3, 4, 0)));
 }
 
 ScFiltersTest::ScFiltersTest()
