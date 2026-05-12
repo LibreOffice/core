@@ -121,6 +121,15 @@ final class NativeUIServer: WebDriverHTTPServerBase {
             return
         }
 
+        // GET /session/{id}/source
+        if request.method == "GET" && subpath == ["source"] {
+            DispatchQueue.main.async { [weak self] in
+                self?.sendW3C(connection: connection,
+                              value: NSAccessibilityServer.dumpTree())
+            }
+            return
+        }
+
         sendW3CError(connection: connection, error: "unknown command",
                      message: "\(request.method) \(request.path) not implemented")
     }
@@ -276,6 +285,28 @@ private enum NSAccessibilityServer {
             return view.isHidden || view.window == nil
         }
         return false
+    }
+
+    /// Return an indented text dump of the app's accessibility tree.
+    static func dumpTree() -> String {
+        var out = ""
+        for window in NSApp.windows {
+            dump(window, depth: 0, into: &out)
+        }
+        return out
+    }
+
+    private static func dump(_ obj: NSObject, depth: Int, into out: inout String) {
+        let indent = String(repeating: "  ", count: depth)
+        let ax = obj as? NSAccessibilityProtocol
+        let role = ax?.accessibilityRole()?.rawValue ?? "<no-role>"
+        let id = ax?.accessibilityIdentifier() ?? ""
+        let title = ax?.accessibilityTitle() ?? ""
+        out += "\(indent)\(role) id=\"\(id)\" title=\"\(title)\"\n"
+        let children = (ax?.accessibilityChildren() as? [NSObject]) ?? []
+        for child in children {
+            dump(child, depth: depth + 1, into: &out)
+        }
     }
 }
 
