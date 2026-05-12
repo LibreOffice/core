@@ -365,10 +365,10 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
                             {
                                 nSpacePortionHeight = pPos->Height();
                             }
-                            bHasBlankPortion = true;
                         }
                         bTmpDummy &= !pPos->InTabGrp();
                         pPos = pPos->GetNextPortion();
+                        bHasBlankPortion = true;
                         continue;
                     }
                 }
