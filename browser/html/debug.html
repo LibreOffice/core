@@ -57,6 +57,7 @@
                     filename = decodedWopiSrc.substring(lastSlash + 1);
                 }
             }
+            window.document.title = window.document.title + " - " + filename;
             document.getElementById("coolframe").title = filename + " - Collabora Online";
             if (req)
               localUrl += 'req=' + req + '&';
