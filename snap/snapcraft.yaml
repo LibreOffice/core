@@ -59,6 +59,18 @@ apps:
       - opengl
       - browser-support
       - audio-playback
+    # Coda-Qt registers the well-known DBus name com.collaboraoffice.Office
+    # for single-instance routing (open new doc in existing window). Without
+    # an explicit slot the AppArmor profile blocks the ownership and the
+    # registration fails, after which the app aborts.
+    slots:
+      - dbus-collabora-office
+
+slots:
+  dbus-collabora-office:
+    interface: dbus
+    bus: session
+    name: com.collaboraoffice.Office
 
 layout:
   /usr/lib/collaboraoffice:
