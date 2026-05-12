@@ -142,7 +142,7 @@ private:
                                 std::istream& message,
                                 SocketDisposition& disposition,
                                 const std::shared_ptr<StreamSocket>& socket,
-                                ssize_t headerSize);
+                                size_t headerSize);
 
     void finishedMessage(const Poco::Net::HTTPRequest& request,
                          const std::shared_ptr<StreamSocket>& socket,
@@ -152,8 +152,8 @@ private:
                            std::istream& message,
                            SocketDisposition& disposition,
                            const std::shared_ptr<StreamSocket>& socket,
-                           ssize_t headerSize,
-                           ssize_t contentSize,
+                           size_t headerSize,
+                           size_t contentSize,
                            bool eraseMessageFromSocket,
                            std::chrono::steady_clock::time_point now);
 #endif // !MOBILEAPP

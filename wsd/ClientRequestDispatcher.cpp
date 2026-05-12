@@ -732,8 +732,8 @@ void launchAsyncCheckFileInfo(
     }
 }
 
-void socketEraseConsumedBytes(const std::shared_ptr<StreamSocket>& socket, ssize_t headerSize,
-                              ssize_t contentSize, bool servedSync)
+void socketEraseConsumedBytes(const std::shared_ptr<StreamSocket>& socket, size_t headerSize,
+                              size_t contentSize, bool servedSync)
 {
     if( socket->getInBuffer().size() > 0 ) // erase request from inBuffer if not cleared by ignoreInput
     {
@@ -1093,8 +1093,8 @@ void ClientRequestDispatcher::handleFullMessage(Poco::Net::HTTPRequest& request,
                                                 std::istream& message,
                                                 SocketDisposition& disposition,
                                                 const std::shared_ptr<StreamSocket>& socket,
-                                                ssize_t headerSize,
-                                                ssize_t contentSize,
+                                                size_t headerSize,
+                                                size_t contentSize,
                                                 bool eraseMessageFromSocket,
                                                 std::chrono::steady_clock::time_point now)
 {
@@ -1122,7 +1122,7 @@ ClientRequestDispatcher::MessageResult ClientRequestDispatcher::handleMessage(Po
                                                                               std::istream& message,
                                                                               SocketDisposition& disposition,
                                                                               const std::shared_ptr<StreamSocket>& socket,
-                                                                              ssize_t headerSize)
+                                                                              size_t headerSize)
 {
     const bool closeConnection = !request.getKeepAlive(); // HTTP/1.1: closeConnection true w/ "Connection: close" only!
     LOG_DBG("Handling request: " << request << ", closeConnection: " << closeConnection);
