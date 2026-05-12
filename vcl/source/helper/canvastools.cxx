@@ -338,6 +338,19 @@ namespace vcl::unotools
                                   rRect.IsHeightEmpty() ? rRect.Top() : rRect.Bottom() );
         }
 
+        basegfx::B2IRectangle b2IRectangleFromClosedRectangle(tools::Rectangle const& rRect)
+        {
+            // although B2IRange internally has separate height/width emptiness, it doesn't
+            // expose any API to let us set them separately, so just do the best we can.
+            if (rRect.IsWidthEmpty() && rRect.IsHeightEmpty())
+            {
+                return basegfx::B2IRange(basegfx::B2ITuple(rRect.Left(), rRect.Top()));
+            }
+
+            return basegfx::B2IRange(rRect.Left(), rRect.Top(), rRect.Left() + rRect.GetWidth(),
+                                     rRect.Top() + rRect.GetHeight());
+        }
+
         basegfx::B2DSize b2DSizeFromSize(const Size& rSize)
         {
             return basegfx::B2DSize(rSize.Width(), rSize.Height());

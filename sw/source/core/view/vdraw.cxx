@@ -135,7 +135,11 @@ void SwViewShellImp::PaintLayer( const SdrLayerID _nLayerID,
     }
 
     pOutDev->Push( vcl::PushFlags::LINECOLOR );
-    basegfx::B2IRectangle const pageFrame = vcl::unotools::b2IRectangleFromRectangle(rPageFrame.getFrameArea().SVRect());
+
+    // tdf#124987: Writer considers frame rectangles closed ranges, and may position anchors
+    // at the edges of the rectangle. Convert this to B2IRectangle as a closed range, not open.
+    basegfx::B2IRectangle const pageFrame
+        = vcl::unotools::b2IRectangleFromClosedRectangle(rPageFrame.getFrameArea().SVRect());
     GetPageView()->DrawLayer(_nLayerID, pOutDev, pRedirector, aPaintRect.SVRect(), &pageFrame);
     pOutDev->Pop();
 

@@ -161,6 +161,7 @@ namespace vcl::unotools
         tools::Rectangle                   VCL_DLLPUBLIC rectangleFromB2IRectangle( const basegfx::B2IRange& );
         basegfx::B2IPoint           VCL_DLLPUBLIC b2IPointFromPoint(const Point&);
         basegfx::B2IRectangle       VCL_DLLPUBLIC b2IRectangleFromRectangle(const tools::Rectangle&);
+        basegfx::B2IRectangle       VCL_DLLPUBLIC b2IRectangleFromClosedRectangle(const tools::Rectangle&);
 
 }
 
