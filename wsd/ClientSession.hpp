@@ -370,7 +370,7 @@ public:
     /// (A/B/C/U).
     /// Returns aiConfigured: ai.enabled AND all three fields non-empty.
     bool resolveAndApplyAICredentials(
-        Poco::JSON::Object::Ptr viewSettings,
+        Poco::JSON::Object::Ptr& viewSettings,
         const Poco::JSON::Object::Ptr& userPrivateInfoObj,
         bool disableAISettings,
         bool& viewSettingsMutated,

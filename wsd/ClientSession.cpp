@@ -1713,7 +1713,7 @@ std::string computeEthicalRating(const std::string& model, const std::string& ur
 
 } // anonymous namespace
 
-bool ClientSession::resolveAndApplyAICredentials(Poco::JSON::Object::Ptr viewSettings,
+bool ClientSession::resolveAndApplyAICredentials(Poco::JSON::Object::Ptr& viewSettings,
                                                  const Poco::JSON::Object::Ptr& userPrivateInfoObj,
                                                  bool disableAISettings, bool& viewSettingsMutated,
                                                  std::string& outModel, std::string& outRating)

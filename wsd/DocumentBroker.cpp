@@ -1517,8 +1517,9 @@ DocumentBroker::updateSessionWithWopiInfo(const std::shared_ptr<ClientSession>& 
         JsonUtil::parseJSON(userPrivateInfo, userPrivateInfoObj);
     bool unusedMutated = false;
     std::string resolvedAIModel, resolvedAIRating;
+    Object::Ptr noViewSettings;
     const bool aiConfigured = session->resolveAndApplyAICredentials(
-        /*viewSettings=*/nullptr, userPrivateInfoObj,
+        noViewSettings, userPrivateInfoObj,
         wopiFileInfo->getDisableAISettings(), unusedMutated,
         resolvedAIModel, resolvedAIRating);
     wopiInfo->set("AIConfigured", aiConfigured);
