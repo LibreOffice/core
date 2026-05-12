@@ -2356,6 +2356,12 @@ void DocumentRedlineManager::PreAppendFormatRedline(AppendRedlineContext& rCtx)
                 MaybeNotifyRedlineModification(*rCtx.pRedl, m_rDoc);
                 break;
             }
+
+            // Not hierarchical: then keep the new redline, but copy data from the old redline, so
+            // the result later can be a merge of both redline formats, not just the new one.
+            if (const SwRedlineExtraData* pExtra = rCtx.pRedl->GetExtraData())
+                rCtx.pNewRedl->SetExtraData(pExtra);
+
             [[fallthrough]];
         case SwComparePosition::Outside:
             {

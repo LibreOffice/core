@@ -1263,6 +1263,7 @@ namespace //local functions originally from docfmt.cxx
         // check existing redline on the same range, and use its extra data, if it exists
         SwRedlineTable::size_type nRedlPos = rDoc.getIDocumentRedlineAccess().GetRedlinePos(
                 rRg.Start()->GetNode(), RedlineType::Format );
+        bool bExistingFormatRedlineAtRange = false;
         if( SwRedlineTable::npos != nRedlPos )
         {
             const SwPosition *pRStt, *pREnd;
@@ -1273,6 +1274,7 @@ namespace //local functions originally from docfmt.cxx
                 SwComparePosition eCompare = ComparePosition( *rRg.Start(), *rRg.End(), *pRStt, *pREnd );
                 if ( eCompare == SwComparePosition::Inside || eCompare == SwComparePosition::Equal )
                 {
+                    bExistingFormatRedlineAtRange = true;
                     if (pTmp->GetExtraData())
                     {
                         const SwRedlineExtraData* pExtraData = pTmp->GetExtraData();
@@ -1289,6 +1291,14 @@ namespace //local functions originally from docfmt.cxx
                     }
                 }
             } while( pRStt <= rRg.Start() && ++nRedlPos < rDoc.getIDocumentRedlineAccess().GetRedlineTable().size());
+        }
+        if (!xExtra && bExistingFormatRedlineAtRange)
+        {
+            // In case we have an existing format redline on the same range, but its data is
+            // intentionally empty, then make this explicit, to avoid having unwanted attributes in
+            // the format redline, due to the below "no existing format redline in the range" block.
+            xExtra.reset(new SwRedlineExtraData_FormatColl(
+                UIName(u""_ustr), SwPoolFormatId::UNKNOWN, nullptr));
         }
 
         SwRangeRedline * pRedline = new SwRangeRedline( RedlineType::Format, rRg );

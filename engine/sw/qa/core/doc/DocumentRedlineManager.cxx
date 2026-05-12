@@ -536,6 +536,59 @@ CPPUNIT_TEST_FIXTURE(Test, testDelThenFormatFormatInside)
     CPPUNIT_ASSERT_EQUAL(RedlineType::Delete, rRedlineData2.GetType());
     CPPUNIT_ASSERT(!rRedlineData2.Next());
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testFormatThenFormatOther)
+{
+    // Given an "AAA <format>BBB CCC DDD</format> EEE" document with a bold
+    // format redline authored by Alice:
+    createSwDoc("fmt.docx");
+    SwDocShell* pDocShell = getSwDocShell();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    SwDoc* pDoc = pDocShell->GetDoc();
+    IDocumentRedlineAccess& rIDRA = pDoc->getIDocumentRedlineAccess();
+    SwRedlineTable& rRedlines = rIDRA.GetRedlineTable();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rRedlines.size());
+    CPPUNIT_ASSERT_EQUAL(u"Alice"_ustr, rRedlines[0]->GetAuthorString());
+
+    // When a different author selects the same range and applies italic:
+    SwModule* pModule = SwModule::get();
+    pModule->SetRedlineAuthor("Bob");
+    comphelper::ScopeGuard g(
+        [pModule] { pModule->SetRedlineAuthor(SwResId(STR_REDLINE_UNKNOWN_AUTHOR)); });
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    // Skip "AAA ".
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 4, /*bBasicCall=*/false);
+    // Select "BBB CCC DDD".
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 11, /*bBasicCall=*/false);
+    SwView& rView = pWrtShell->GetView();
+    {
+        SvxPostureItem aPostureItem(ITALIC_NORMAL, RES_CHRATR_POSTURE);
+        SfxItemSetFixed<RES_CHRATR_BEGIN, RES_CHRATR_END> aSet(rView.GetPool());
+        aSet.Put(aPostureItem);
+        pWrtShell->SetAttrSet(aSet);
+    }
+
+    // Then make sure the only surviving redline is now authored by Bob (the
+    // current user), not Alice:
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rRedlines.size());
+    CPPUNIT_ASSERT_EQUAL(u"Bob"_ustr, rRedlines[0]->GetAuthorString());
+
+    // And when rejecting that surviving redline:
+    pWrtShell->RejectRedline(0, /*bDirect=*/false);
+
+    // Then make sure both Alice's bold and Bob's italic are gone from
+    // "BBB CCC DDD":
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 5, /*bBasicCall=*/false);
+    SfxItemSetFixed<RES_CHRATR_POSTURE, RES_CHRATR_WEIGHT> aSet(pDoc->GetAttrPool());
+    pWrtShell->GetCurAttr(aSet);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 5 (WEIGHT_NORMAL)
+    // - Actual  : 8 (WEIGHT_BOLD)
+    // i.e. the bold was in the document after reject, which is not correct.
+    CPPUNIT_ASSERT_EQUAL(WEIGHT_NORMAL, aSet.Get(RES_CHRATR_WEIGHT).GetValue());
+    CPPUNIT_ASSERT_EQUAL(ITALIC_NONE, aSet.Get(RES_CHRATR_POSTURE).GetValue());
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
