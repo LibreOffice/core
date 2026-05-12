@@ -1384,6 +1384,34 @@ function waitForTimers(win, tag) {
 	}, { timeout: Cypress.config('defaultCommandTimeout'), interval: 50 });
 }
 
+// Wait until every in-flight render_entry request from
+// jsdialog/Util.OnDemandRenderer has been answered. processToIdle
+// returns once core is idle and the layout queue has drained, but
+// the iconview's IntersectionObserver-driven on-demand renders can
+// still be in flight after that, replacing placeholders with images
+// and shifting layout. Visual tests that capture an element below
+// such an iconview must wait for this counter to reach zero, or
+// cypress will compute the element bbox before the shift and capture
+// a stale rect.
+//
+// Two RAFs precede the counter check because IntersectionObserver
+// callbacks dispatched by observe() fire on the next animation frame,
+// not synchronously - we need to give them a chance to run and
+// increment the counter before we sample it.
+function waitForOnDemandRenders(win) {
+	return cy.then(function() {
+		return new Cypress.Promise(function(resolve) {
+			win.requestAnimationFrame(function() {
+				win.requestAnimationFrame(resolve);
+			});
+		});
+	}).then(function() {
+		return cy.waitUntil(function() {
+			return (win.app.pendingOnDemandRenders || 0) === 0;
+		}, { timeout: Cypress.config('defaultCommandTimeout'), interval: 50 });
+	});
+}
+
 // Waits for a map stateChangeHandler item to reach the expected value.
 // Useful after sending uno commands where the state change message from
 // core may arrive asynchronously based on a state change timer from core
@@ -1493,6 +1521,7 @@ module.exports.waitUntilCoreIsIdle = waitUntilCoreIsIdle;
 module.exports.waitUntilLayoutingIsIdle = waitUntilLayoutingIsIdle;
 module.exports.processToIdle = processToIdle;
 module.exports.waitForTimers = waitForTimers;
+module.exports.waitForOnDemandRenders = waitForOnDemandRenders;
 module.exports.waitForMapState = waitForMapState;
 module.exports.maxScreenshotableViewportHeight = maxScreenshotableViewportHeight;
 module.exports.getContextMenuItem = getContextMenuItem;

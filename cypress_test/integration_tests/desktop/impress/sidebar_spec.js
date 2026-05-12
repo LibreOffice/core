@@ -41,6 +41,12 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Sidebar Tests', function()
 		cy.cGet('#fillattr').should('be.visible');
 		cy.cGet('#fillattr').should('contain.text', 'Light Blue');
 		helper.processToIdle(this.win);
+		// The slide layout iconview above #fillattr uses OnDemandRenderer
+		// to fetch its preview images. Those round-trips can land after
+		// processToIdle returns and shift #fillattr down between the
+		// bbox computation and the chrome screenshot. Wait for every
+		// in-flight render_entry to be answered first.
+		helper.waitForOnDemandRenders(this.win);
 		cy.cGet('#fillattr').compareSnapshot('sidebar_menubutton_color', 0.1);
 	});
 });
