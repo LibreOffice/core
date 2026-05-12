@@ -28,6 +28,7 @@ final class WebDriverManager {
     static let shared = WebDriverManager()
 
     private var server: WebDriverServer?
+    private var nativeServer: NativeUIServer?
 
     /// Insertion-ordered handles -> weak references to webviews.
     private var entries: [(handle: String, webView: Weak<WKWebView>)] = []
@@ -42,38 +43,55 @@ final class WebDriverManager {
     private init() {}
 
     /**
-     * Start the embedded WebDriver server if `--testDriverPort=<port>`
-     * is present in the launch arguments.  Idempotent.
+     * Start the embedded WebDriver servers if requested via launch arguments:
+     *   --testDriverPort=<port>  starts the WebDriverServer (webEngine driver)
+     *   --nativeUIPort=<port>    starts the NativeUIServer (native driver)
+     * Idempotent.
      */
     func startIfRequested() {
-        guard server == nil else { return }
-
         let args = ProcessInfo.processInfo.arguments
-        let portString = args.lazy
-            .compactMap { $0.hasPrefix("--testDriverPort=") ? String($0.dropFirst("--testDriverPort=".count)) : nil }
-            .first
-        guard let portString, let port = UInt16(portString) else { return }
 
-        do {
-            let s = try WebDriverServer(port: port,
-                jsExecutor: { [weak self] js, completion in
-                    self?.execute(js: js, completion: completion)
-                },
-                focusHandler: { [weak self] done in
-                    self?.focusActiveWebView(done: done)
-                },
-                handlesProvider: { [weak self] in
-                    self?.liveHandles() ?? []
-                },
-                switchHandler: { [weak self] handle in
-                    self?.switchTo(handle: handle) ?? false
-                }
-            )
-            s.start()
-            server = s
-        } catch {
-            NSLog("WebDriverManager: failed to start server: %@", error.localizedDescription)
+        if server == nil,
+           let port = readPort(from: args, prefix: "--testDriverPort=") {
+            do {
+                let s = try WebDriverServer(port: port,
+                    jsExecutor: { [weak self] js, completion in
+                        self?.execute(js: js, completion: completion)
+                    },
+                    focusHandler: { [weak self] done in
+                        self?.focusActiveWebView(done: done)
+                    },
+                    handlesProvider: { [weak self] in
+                        self?.liveHandles() ?? []
+                    },
+                    switchHandler: { [weak self] handle in
+                        self?.switchTo(handle: handle) ?? false
+                    }
+                )
+                s.start()
+                server = s
+            } catch {
+                NSLog("WebDriverManager: failed to start WebDriverServer: %@", error.localizedDescription)
+            }
         }
+
+        if nativeServer == nil,
+           let port = readPort(from: args, prefix: "--nativeUIPort=") {
+            do {
+                let s = try NativeUIServer(port: port)
+                s.start()
+                nativeServer = s
+            } catch {
+                NSLog("WebDriverManager: failed to start NativeUIServer: %@", error.localizedDescription)
+            }
+        }
+    }
+
+    private func readPort(from args: [String], prefix: String) -> UInt16? {
+        args.lazy
+            .compactMap { $0.hasPrefix(prefix) ? String($0.dropFirst(prefix.count)) : nil }
+            .first
+            .flatMap { UInt16($0) }
     }
 
     /**
