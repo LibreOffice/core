@@ -77,6 +77,7 @@
 #include <COKit/COKitEnums.h>
 #include <comphelper/kit.hxx>
 #include <comphelper/flagguard.hxx>
+#include <sfx2/kit/helper.hxx>
 #include <config_fuzzers.h>
 #include <memory>
 
@@ -483,8 +484,16 @@ Color ScDocument::GetTabBgColor( SCTAB nTab ) const
 
 void ScDocument::SetTabBgColor( SCTAB nTab, const Color& rColor )
 {
-    if (ScTable* pTable = FetchTable(nTab))
-        pTable->SetTabBgColor(rColor);
+    ScTable* pTable = FetchTable(nTab);
+    if (!pTable)
+        return;
+    const Color aOldColor = pTable->GetTabBgColor();
+    pTable->SetTabBgColor(rColor);
+    if (aOldColor != rColor && comphelper::COKit::isActive() && GetDrawLayer())
+    {
+        ScModelObj* pModel = GetDocumentShell()->GetModel();
+        KitHelper::notifyDocumentSizeChangedAllViews(pModel, false);
+    }
 }
 
 bool ScDocument::IsDefaultTabBgColor( SCTAB nTab ) const

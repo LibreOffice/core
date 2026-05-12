@@ -87,6 +87,26 @@ window.L.Control.Tabs = window.L.Control.extend({
 				callback: (this._protectSheet).bind(this),
 				_image: 'Protect',
 			},
+			'.uno:SetTabBgColor': {
+				name: app.IconUtil.createMenuItemLink(_UNO('.uno:SetTabBgColor', 'spreadsheet', true), 'SetTabBgColor'),
+				isHtmlName: true,
+				callback: (this._setTabColor).bind(this),
+				visible: function() {
+					return !this._isProtectedSheet(this._tabForContextMenu);
+				}.bind(this),
+				_image: 'SetTabBgColor',
+			},
+			'resettabcolor': {
+				name: app.IconUtil.createMenuItemLink(_('Reset Tab Color'), 'ResetTabBgColor'),
+				isHtmlName: true,
+				callback: (this._resetTabColor).bind(this),
+				visible: function() {
+					return !this._isProtectedSheet(this._tabForContextMenu)
+						&& !!app.calc.getPartColor(this._tabForContextMenu);
+				}.bind(this),
+				text: _('Reset Tab Color'),
+				_image: 'ResetTabBgColor',
+			},
 			'.uno:Show': {
 				name: app.IconUtil.createMenuItemLink(_UNO('.uno:Show', 'spreadsheet', true), 'Show'),
 				isHtmlName: true,
@@ -149,6 +169,8 @@ window.L.Control.Tabs = window.L.Control.extend({
 			'movesheetright': this._moveSheetRight.bind(this),
 			'.uno:Move': this._moveOrCopySheet.bind(this),
 			'.uno:CopyTab': function() { this._map.sendUnoCommand('.uno:Move'); }.bind(this),
+			'.uno:SetTabBgColor': this._setTabColor.bind(this),
+			'resettabcolor': this._resetTabColor.bind(this),
 		};
 
 		map.on('updateparts', this._updateDisabled, this);
@@ -286,6 +308,18 @@ window.L.Control.Tabs = window.L.Control.extend({
 					else {
 						window.L.DomUtil.removeClass(tab, 'spreadsheet-tab-sheetview');
 					}
+
+					const tabColor = app.calc.getPartColor(i);
+					if (tabColor) {
+						window.L.DomUtil.addClass(tab, 'spreadsheet-tab-colored');
+						tab.style.setProperty('--tab-color', '#' + tabColor);
+						const r = parseInt(tabColor.slice(0, 2), 16);
+						const g = parseInt(tabColor.slice(2, 4), 16);
+						const b = parseInt(tabColor.slice(4, 6), 16);
+						const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+						tab.style.setProperty('--tab-text-color', luminance < 0.5 ? '#ffffff' : '#1a1a1a');
+					}
+
 					label.textContent = e.partNames[i];
 					tab.id = id;
 
@@ -531,6 +565,88 @@ window.L.Control.Tabs = window.L.Control.extend({
 		if (!this._setPartIndex(this._tabForContextMenu)) {
 			this._map.sendUnoCommand('.uno:Protect');
 		}
+	},
+
+	// Optimistically apply the new color (or clear) to the tab DOM so the visual
+	// is immediate, regardless of when the engine round-trip arrives.
+	_applyTabColorVisual: function(tabIdx, hexNoHash) {
+		const tab = window.L.DomUtil.get('spreadsheet-tab' + tabIdx);
+		if (!tab) return;
+		if (!hexNoHash) {
+			window.L.DomUtil.removeClass(tab, 'spreadsheet-tab-colored');
+			tab.style.removeProperty('--tab-color');
+			tab.style.removeProperty('--tab-text-color');
+			return;
+		}
+		const c = hexNoHash.replace('#', '');
+		window.L.DomUtil.addClass(tab, 'spreadsheet-tab-colored');
+		tab.style.setProperty('--tab-color', '#' + c);
+		const r = parseInt(c.slice(0, 2), 16);
+		const g = parseInt(c.slice(2, 4), 16);
+		const b = parseInt(c.slice(4, 6), 16);
+		const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+		tab.style.setProperty('--tab-text-color', luminance < 0.5 ? '#ffffff' : '#1a1a1a');
+	},
+
+	// Engine operates on the current tab, so switch first. Then open the same
+	// JSDialog color picker used by the sidebar/notebookbar; selecting a color
+	// auto-dispatches .uno:TabBgColor via sendColorCommand. setTimeout defers
+	// past the context-menu's CloseAllDropdowns so our picker isn't killed.
+	_setTabColor: function() {
+		if (this._setPartIndex(this._tabForContextMenu)) return;
+		const tabIdx = this._tabForContextMenu;
+		const anchor = window.L.DomUtil.get('spreadsheet-tab' + tabIdx) || this._menuPosEl;
+		if (!anchor) return;
+		const self = this;
+		setTimeout(function() {
+			const entries = [
+				{
+					id: 'tab-bg-color-picker',
+					type: 'colorpicker',
+					command: '.uno:TabBgColor',
+				},
+				// Sibling separator so the popup isn't classified as one-child,
+				// which would strip the picker's outer padding.
+				{ type: 'separator' },
+			];
+			JSDialog.OpenDropdown(
+				'tab-bg-color-dropdown',
+				anchor,
+				entries,
+				function() {},
+				'bottom',
+				false,
+				false,
+				true,
+			);
+			// Attach an optimistic update listener once the dropdown DOM exists.
+			setTimeout(function() {
+				const dropdown = JSDialog.GetDropdown
+					? JSDialog.GetDropdown('tab-bg-color-dropdown')
+					: null;
+				if (!dropdown) return;
+				dropdown.addEventListener('click', function(evt) {
+					const target = evt.target;
+					const colorEntry = target.closest('.ui-color-picker-entry');
+					if (colorEntry) {
+						self._applyTabColorVisual(tabIdx, colorEntry.getAttribute('value'));
+						return;
+					}
+					if (target.id === 'transparent-color-button' ||
+						(target.closest && target.closest('#transparent-color-button'))) {
+						self._applyTabColorVisual(tabIdx, null);
+					}
+				}, true);
+			}, 0);
+		}, 0);
+	},
+
+	_resetTabColor: function() {
+		if (this._setPartIndex(this._tabForContextMenu)) return;
+		this._applyTabColorVisual(this._tabForContextMenu, null);
+		this._map.sendUnoCommand('.uno:TabBgColor', {
+			'TabBgColor.Color': { type: 'long', value: -1 },
+		});
 	},
 
 	_isProtectedSheet: function(idx) {

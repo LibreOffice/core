@@ -303,6 +303,13 @@ app.calc.isPartSheetView = function (part) {
 	return app.map._docLayer._lastStatusJSON.parts[part].sheetviewid >= 0;
 };
 
+app.calc.getPartColor = function (part) {
+	if (!app.map._docLayer || !app.map._docLayer._lastStatusJSON) return null;
+	const parts = app.map._docLayer._lastStatusJSON.parts;
+	if (part >= parts.length) return null;
+	return parts[part].color || null;
+};
+
 app.calc.isSelectedPartSheetView = function () {
 	if (!app.map._docLayer || !app.map._docLayer._lastStatusJSON) return false;
 

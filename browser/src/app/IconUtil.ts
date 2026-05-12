@@ -90,6 +90,8 @@ class IconUtil {
 		'InsertSheetAfter',
 		'Remove',
 		'Protect',
+		'SetTabBgColor',
+		'ResetTabBgColor',
 		'Show',
 		'Hide',
 		'MoveSheetLeft',

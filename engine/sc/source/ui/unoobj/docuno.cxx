@@ -704,6 +704,10 @@ OUString ScModelObj::getPartInfo( int nPart )
     jsonWriter.put("lastcolumn", lastColRow.getWidth());
     jsonWriter.put("lastrow", lastColRow.getHeight());
 
+    const Color aTabBgColor = rDocument.GetTabBgColor(nPart);
+    if (aTabBgColor != COL_AUTO)
+        jsonWriter.put("color", aTabBgColor.AsRGBHexString());
+
     return OStringToOUString(jsonWriter.finishAndGetAsOString(), RTL_TEXTENCODING_UTF8);
 }
 

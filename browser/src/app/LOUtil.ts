@@ -508,6 +508,7 @@ class LOUtil {
 			openhyperlinkoncursor: 'inserthyperlink',
 			pageformatdialog: 'pagedialog',
 			backgroundcolor: 'fillcolor',
+			settabbgcolor: 'fillcolor',
 			cellappearancepropertypanel: 'fillcolor',
 			formatarea: 'fillcolor',
 			glowcolor: 'fillcolor',
