@@ -1049,6 +1049,29 @@ bool allowedOriginByHost(const std::string& host, const std::string& actualOrigi
 
 template <typename T> bool allowedOrigin(const T& request, const RequestDetails& requestDetails)
 {
+    // Bypass the Origin check for /cool/ws (or legacy /cool/<docURI>/ws) when the request carries
+    // WOPISrc plus a non-empty access_token: that token is the actual authentication credential,
+    // and the Origin check (anti-XSRF defence) has nothing left to defend.  WOPI auth uses no
+    // implicit browser credential (the access_token rides in the query string, not cookies), so an
+    // attacker either has the token (and could use curl) or does not (and CheckFileInfo rejects it
+    // downstream).  We presence-check only, not validate, because validating would need a
+    // synchronous WOPI round-trip at upgrade time; a bogus token costs at most one round-trip
+    // before the WOPI handshake fails.  The path-segment gate scopes the bypass to the document WS
+    // upgrade so it cannot fire for /cool/adminws, whose cookie-based JWT auth really does need the
+    // Origin check.
+    if (requestDetails.equals(RequestDetails::Field::Type, "cool")
+        && (requestDetails.equals(1, "ws") || requestDetails.equals(2, "ws"))
+        && !requestDetails.getField(RequestDetails::Field::WOPISrc).empty())
+    {
+        std::string accessToken;
+        if (requestDetails.getParamByName("access_token", accessToken)
+            && !accessToken.empty())
+        {
+            LOG_TRC("Allowed Origin: WOPI-token-authenticated request, skipping Origin check");
+            return true;
+        }
+    }
+
     auto const it = request.find("Origin");
     if (it == request.end())
     {
