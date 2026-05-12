@@ -217,9 +217,11 @@ extensionsSkipList = {
 
 def main():
     discoveryXml = "discovery.xml"
-    repoGuess = os.environ["LOCOREPATH"]
-    if repoGuess is None:
-        repoGuess = os.path.join(os.environ["HOME"], "git/libreoffice/master")
+    try:
+        repoGuess = os.environ["COREPATH"]
+    except:
+        scriptPath = os.path.abspath(os.path.dirname(sys.argv[0]))
+        repoGuess = os.path.abspath(os.path.join(scriptPath, "../engine"))
     filterDir = os.path.join(repoGuess, "filter/source/config/fragments")
     if len(sys.argv) >= 3:
         discoveryXml = sys.argv[1]
