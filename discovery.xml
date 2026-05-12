@@ -6,26 +6,26 @@
         <app name="writer" favIconUrl="images/x-office-document.svg">
             <action name="view" default="true" ext="sxw"/>
             <action name="edit" default="true" ext="odt"/>
-            <action name="view" default="true" ext="odt"/>
+            <action name="view" ext="odt"/>
             <action name="edit" default="true" ext="fodt"/>
-            <action name="view" default="true" ext="fodt"/>
+            <action name="view" ext="fodt"/>
             <!-- Text template documents -->
             <action name="view" default="true" ext="stw"/>
             <action name="edit" default="true" ext="ott"/>
-            <action name="view" default="true" ext="ott"/>
+            <action name="view" ext="ott"/>
             <!-- MS Word -->
             <action name="edit" default="true" ext="doc"/>
-            <action name="view" default="true" ext="doc"/>
+            <action name="view" ext="doc"/>
             <action name="view" default="true" ext="dot"/>
             <!-- OOXML wordprocessing -->
             <action name="edit" default="true" ext="docx"/>
-            <action name="view" default="true" ext="docx"/>
+            <action name="view" ext="docx"/>
             <action name="edit" default="true" ext="docm"/>
-            <action name="view" default="true" ext="docm"/>
+            <action name="view" ext="docm"/>
             <action name="edit" default="true" ext="dotx"/>
-            <action name="view" default="true" ext="dotx"/>
+            <action name="view" ext="dotx"/>
             <action name="edit" default="true" ext="dotm"/>
-            <action name="view" default="true" ext="dotm"/>
+            <action name="view" ext="dotm"/>
             <!-- Others -->
             <action name="view" default="true" ext="wpd"/>
             <action name="view" default="true" ext="pdb"/>
@@ -35,9 +35,9 @@
             <action name="view" default="true" ext="lrf"/>
             <action name="view" default="true" ext="mw"/>
             <action name="edit" default="true" ext="rtf"/>
-            <action name="view" default="true" ext="rtf"/>
+            <action name="view" ext="rtf"/>
             <action name="edit" default="true" ext="txt"/>
-            <action name="view" default="true" ext="txt"/>
+            <action name="view" ext="txt"/>
             <action name="view" default="true" ext="fb2"/>
             <action name="view" default="true" ext="cwk"/>
             <action name="view" default="true" ext="pages"/>
@@ -49,54 +49,54 @@
             <!-- Text master documents -->
             <action name="view" default="true" ext="sxg"/>
             <action name="edit" default="true" ext="odm"/>
-            <action name="view" default="true" ext="odm"/>
+            <action name="view" ext="odm"/>
             <!-- Writer master document templates -->
             <action name="view" default="true" ext="otm"/>
         </app>
 
         <app name="writer-web">
             <action name="edit" default="true" ext="oth"/>
-            <action name="view" default="true" ext="oth"/>
+            <action name="view" ext="oth"/>
         </app>
 
         <!-- Calc documents -->
         <app name="calc" favIconUrl="images/x-office-spreadsheet.svg">
             <action name="view" default="true" ext="sxc"/>
             <action name="edit" default="true" ext="ods"/>
-            <action name="view" default="true" ext="ods"/>
+            <action name="view" ext="ods"/>
             <action name="edit" default="true" ext="fods"/>
-            <action name="view" default="true" ext="fods"/>
+            <action name="view" ext="fods"/>
             <!-- Spreadsheet template documents -->
             <action name="view" default="true" ext="stc"/>
             <action name="edit" default="true" ext="ots"/>
-            <action name="view" default="true" ext="ots"/>
+            <action name="view" ext="ots"/>
             <!-- MS Excel -->
             <action name="edit" default="true" ext="xls"/>
-            <action name="view" default="true" ext="xls"/>
+            <action name="view" ext="xls"/>
             <action name="edit" default="true" ext="xla"/>
-            <action name="view" default="true" ext="xla"/>
+            <action name="view" ext="xla"/>
             <!-- OOXML spreadsheet -->
             <action name="edit" default="true" ext="xltx"/>
-            <action name="view" default="true" ext="xltx"/>
+            <action name="view" ext="xltx"/>
             <action name="edit" default="true" ext="xltm"/>
-            <action name="view" default="true" ext="xltm"/>
+            <action name="view" ext="xltm"/>
             <action name="edit" default="true" ext="xlsx"/>
-            <action name="view" default="true" ext="xlsx"/>
+            <action name="view" ext="xlsx"/>
             <action name="edit" default="true" ext="xlsb"/>
-            <action name="view" default="true" ext="xlsb"/>
+            <action name="view" ext="xlsb"/>
             <action name="edit" default="true" ext="xlsm"/>
-            <action name="view" default="true" ext="xlsm"/>
+            <action name="view" ext="xlsm"/>
             <!-- Others -->
             <action name="edit" default="true" ext="dif"/>
-            <action name="view" default="true" ext="dif"/>
+            <action name="view" ext="dif"/>
             <action name="edit" default="true" ext="slk"/>
-            <action name="view" default="true" ext="slk"/>
+            <action name="view" ext="slk"/>
             <action name="edit" default="true" ext="csv"/>
-            <action name="view" default="true" ext="csv"/>
+            <action name="view" ext="csv"/>
             <action name="edit" default="true" ext="tsv"/>
-            <action name="view" default="true" ext="tsv"/>
+            <action name="view" ext="tsv"/>
             <action name="edit" default="true" ext="dbf"/>
-            <action name="view" default="true" ext="dbf"/>
+            <action name="view" ext="dbf"/>
             <action name="view" default="true" ext="wk1"/>
             <action name="view" default="true" ext="wks"/>
             <action name="view" default="true" ext="xlr"/>
@@ -113,28 +113,28 @@
         <app name="impress" favIconUrl="images/x-office-presentation.svg">
             <action name="view" default="true" ext="sxi"/>
             <action name="edit" default="true" ext="odp"/>
-            <action name="view" default="true" ext="odp"/>
+            <action name="view" ext="odp"/>
             <action name="edit" default="true" ext="fodp"/>
-            <action name="view" default="true" ext="fodp"/>
+            <action name="view" ext="fodp"/>
             <!-- Presentation template documents -->
             <action name="view" default="true" ext="sti"/>
             <action name="edit" default="true" ext="otp"/>
-            <action name="view" default="true" ext="otp"/>
+            <action name="view" ext="otp"/>
             <!-- MS PowerPoint -->
             <action name="edit" default="true" ext="ppt"/>
-            <action name="view" default="true" ext="ppt"/>
+            <action name="view" ext="ppt"/>
             <action name="view" default="true" ext="pot"/>
             <!-- OOXML presentation -->
             <action name="edit" default="true" ext="pptx"/>
-            <action name="view" default="true" ext="pptx"/>
+            <action name="view" ext="pptx"/>
             <action name="edit" default="true" ext="pptm"/>
-            <action name="view" default="true" ext="pptm"/>
+            <action name="view" ext="pptm"/>
             <action name="edit" default="true" ext="potx"/>
-            <action name="view" default="true" ext="potx"/>
+            <action name="view" ext="potx"/>
             <action name="edit" default="true" ext="potm"/>
-            <action name="view" default="true" ext="potm"/>
+            <action name="view" ext="potm"/>
             <action name="edit" default="true" ext="ppsx"/>
-            <action name="view" default="true" ext="ppsx"/>
+            <action name="view" ext="ppsx"/>
             <!-- Others -->
             <action name="view" default="true" ext="cgm"/>
             <action name="view" default="true" ext="key"/>
@@ -144,9 +144,9 @@
         <app name="draw">
             <action name="view" default="true" ext="sxd"/>
             <action name="edit" default="true" ext="odg"/>
-            <action name="view" default="true" ext="odg"/>
+            <action name="view" ext="odg"/>
             <action name="edit" default="true" ext="fodg"/>
-            <action name="view" default="true" ext="fodg"/>
+            <action name="view" ext="fodg"/>
             <!-- Drawing template documents -->
             <action name="view" default="true" ext="std"/>
             <action name="view" default="true" ext="otg"/>
