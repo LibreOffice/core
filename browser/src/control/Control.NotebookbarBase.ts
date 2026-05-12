@@ -161,7 +161,7 @@ class NotebookbarBase extends JSDialogComponent {
 				selected: false,
 				ondemand: true,
 				width: 96,
-				height: 72,
+				height: 30, // adjust with expected image to not blink
 			});
 		});
 
