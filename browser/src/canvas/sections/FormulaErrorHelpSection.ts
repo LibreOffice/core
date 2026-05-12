@@ -78,7 +78,7 @@ class FormulaErrorHelpSection extends HTMLObjectSection {
 
 		// Help on this error
 		this.addMenuItem(menu, _('Help on this error'), () => {
-			window.open('https://help.collaboraoffice.com/', '_blank');
+			window.open('https://help.collaboraoffice.com/', '_blank', 'noopener');
 		});
 
 		// Inspect with Function Wizard
