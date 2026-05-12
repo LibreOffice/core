@@ -189,13 +189,17 @@ void ChartTypeTabPage::stateChanged()
     //detect the new ThreeDLookScheme
     rtl::Reference< Diagram > xDiagram = m_xChartModel->getFirstChartDiagram();
     // tdf#124295 - select always a 3D scheme
-    if (ThreeDLookScheme aThreeDLookScheme = xDiagram->detectScheme();
-        aThreeDLookScheme != ThreeDLookScheme::ThreeDLookScheme_Unknown)
-        aParameter.eThreeDLookScheme = aThreeDLookScheme;
+    if (xDiagram)
+    {
+        if (ThreeDLookScheme aThreeDLookScheme = xDiagram->detectScheme();
+            aThreeDLookScheme != ThreeDLookScheme::ThreeDLookScheme_Unknown)
+            aParameter.eThreeDLookScheme = aThreeDLookScheme;
+    }
 
     try
     {
-        xDiagram->getPropertyValue(CHART_UNONAME_SORT_BY_XVALUES) >>= aParameter.bSortByXValues;
+        if (xDiagram)
+            xDiagram->getPropertyValue(CHART_UNONAME_SORT_BY_XVALUES) >>= aParameter.bSortByXValues;
     }
     catch ( const uno::Exception& )
     {
