@@ -83,7 +83,7 @@ export class CodaMacOSServiceLauncher {
 			'--uitesting',
 			`--testDriverPort=${webDriverPort}`,
 			`--nativeUIPort=${nativeUIPort}`,
-			'-ApplePersistenceIgnoreState', 'YES',
+			'-ApplePersistenceIgnoreState=YES',
 		], {
 			stdio: ['ignore', 'pipe', 'pipe'],
 		});
