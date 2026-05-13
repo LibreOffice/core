@@ -9,6 +9,8 @@
 
 #include <swtiledrenderingtest.hxx>
 
+#include <config_vclplug.h>
+
 #include <string>
 #include <string_view>
 
@@ -2147,6 +2149,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testRedlineField)
     CPPUNIT_ASSERT(pRedline->GetDescr().indexOf(aDate.GetFieldName())!= -1);
 }
 
+#if !ENABLE_HEADLESS
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testIMESupport)
 {
     SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
@@ -2176,6 +2179,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testIMESupport)
     // content contains only the last IME composition, not all
     CPPUNIT_ASSERT_EQUAL(OUString(aInputs[aInputs.size() - 1] + "Aaa bbb."), pShellCursor->GetPoint()->GetNode().GetTextNode()->GetText());
 }
+#endif
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testIMEFormattingAtEndOfParagraph)
 {

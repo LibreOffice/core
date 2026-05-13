@@ -201,13 +201,11 @@ $(eval $(call gb_Module_add_slowcheck_targets,sw,\
     CppunitTest_sw_snap_to_grid \
 ))
 
-ifneq ($(DISABLE_GUI),TRUE)
 ifeq ($(OS),LINUX)
 $(eval $(call gb_Module_add_slowcheck_targets,sw,\
     CppunitTest_sw_tiledrendering \
     CppunitTest_sw_tiledrendering2 \
 ))
-endif
 endif
 
 ifneq ($(DISABLE_CVE_TESTS),TRUE)

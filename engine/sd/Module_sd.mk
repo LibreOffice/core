@@ -59,7 +59,6 @@ $(eval $(call gb_Module_add_slowcheck_targets,sd,\
 ))
 endif
 
-ifneq ($(DISABLE_GUI),TRUE)
 ifeq ($(OS),LINUX)
 $(eval $(call gb_Module_add_slowcheck_targets,sd,\
     CppunitTest_sd_svg_export_tests \
@@ -67,7 +66,6 @@ $(eval $(call gb_Module_add_slowcheck_targets,sd,\
     CppunitTest_sd_tiledrendering2 \
     CppunitTest_sd_kit_search \
 ))
-endif
 endif
 
 # screenshots

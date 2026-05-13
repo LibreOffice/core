@@ -71,13 +71,11 @@ $(eval $(call gb_Module_add_check_targets,sc,\
 ))
 endif
 
-ifneq ($(DISABLE_GUI),TRUE)
 ifeq ($(OS),LINUX)
 $(eval $(call gb_Module_add_check_targets,sc,\
 	CppunitTest_sc_tiledrendering \
 	CppunitTest_sc_tiledrendering2 \
 ))
-endif
 endif
 
 $(eval $(call gb_Module_add_slowcheck_targets,sc, \
