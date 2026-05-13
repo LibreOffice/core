@@ -211,28 +211,33 @@ void SAL_CALL ToolboxController::update()
 // WeakComponentImplHelperBase
 void ToolboxController::disposing(std::unique_lock<std::mutex>& rGuard)
 {
-    comphelper::unique_unlock aUnlock(rGuard);
-    SolarMutexGuard aSolarMutexGuard;
-    Reference< XStatusListener > xStatusListener(this);
-    for (auto const& listener : m_aListenerMap)
     {
-        try
+        comphelper::unique_unlock aUnlock(rGuard);
+        SolarMutexGuard aSolarMutexGuard;
+        Reference< XStatusListener > xStatusListener(this);
+        for (auto const& listener : m_aListenerMap)
         {
-            Reference< XDispatch > xDispatch( listener.second );
+            try
+            {
+                Reference< XDispatch > xDispatch( listener.second );
 
-            css::util::URL aTargetURL;
-            aTargetURL.Complete = listener.first;
-            if ( m_xUrlTransformer.is() )
-                m_xUrlTransformer->parseStrict( aTargetURL );
+                css::util::URL aTargetURL;
+                aTargetURL.Complete = listener.first;
+                if ( m_xUrlTransformer.is() )
+                    m_xUrlTransformer->parseStrict( aTargetURL );
 
-            if ( xDispatch.is() && xStatusListener.is() )
-                xDispatch->removeStatusListener( xStatusListener, aTargetURL );
+                if ( xDispatch.is() && xStatusListener.is() )
+                    xDispatch->removeStatusListener( xStatusListener, aTargetURL );
+            }
+            catch ( Exception& )
+            {
+            }
         }
-        catch ( Exception& )
-        {
-        }
+        m_aListenerMap.clear();
+        m_xFrame.clear();
+        m_xUrlTransformer.clear();
     }
-    m_aListenerMap.clear();
+    ::comphelper::OPropertyContainerImplHelper<ToolboxController_Base, ToolboxController>::disposePropertySetListeners(rGuard);
 }
 
 // XEventListener
