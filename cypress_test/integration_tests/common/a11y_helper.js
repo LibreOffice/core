@@ -428,6 +428,10 @@ function testDialog(win, commandSpec) {
 }
 
 const allCommonDialogs = [
+	// .uno:Signature must run first: it shows a "save before sign" prompt
+	// when the document is modified, which aborts the dialog flow. Running
+	// before any other dialog dirties the doc keeps that prompt out of the way.
+	'.uno:Signature',
 	'.uno:AcceptTrackedChanges',
 	{ command: '.uno:ExportToPDF', args: { SynchronMode: { type: 'boolean', value: false } } },
 	'.uno:FontworkGalleryFloater',
@@ -438,7 +442,6 @@ const allCommonDialogs = [
 	'.uno:RunMacro',
 	'.uno:SearchDialog',
 	'.uno:SetDocumentProperties',
-	'.uno:Signature',
 	'.uno:SpellDialog',
 	'.uno:SpellingAndGrammarDialog',
 	'.uno:SplitCell',

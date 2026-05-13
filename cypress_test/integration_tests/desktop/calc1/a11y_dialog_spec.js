@@ -269,6 +269,7 @@ describe(['tagdesktop'], 'Accessibility Calc Dialog Tests', { testIsolation: fal
     });
 
     it('PDF export warning dialog', function () {
+        cy.cGet('#spreadsheet-tab0').click();
         a11yHelper.testPDFExportWarningDialog(win);
     });
 

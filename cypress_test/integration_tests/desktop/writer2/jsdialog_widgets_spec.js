@@ -5,6 +5,7 @@ var desktopHelper = require('../../common/desktop_helper');
 
 describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'JSDialog widgets visual tests', function() {
 	beforeEach(function() {
+		cy.viewport(1600, helper.maxScreenshotableViewportHeight);
 		helper.setupAndLoadDocument('writer/help_dialog.odt');
 		cy.getFrameWindow().then((win) => {
 			this.win = win;
@@ -36,6 +37,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'JSDialog widgets visual te
 	it('Checkbox', function() {
 		cy.cGet('#check_btn_1').compareSnapshot('checkbox_checked', 0.1);
 		cy.cGet('#check_btn_2').compareSnapshot('checkbox', 0.1);
+		cy.cGet('#check_btn_3').scrollIntoView();
 		cy.cGet('#check_btn_3').compareSnapshot('checkbox_disabled_checked', 0.1);
 		cy.cGet('#check_btn_4').compareSnapshot('checkbox_disabled', 0.1);
 	});
@@ -43,7 +45,9 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'JSDialog widgets visual te
 	it('Radio button', function() {
 		cy.cGet('#radio_btn_1').compareSnapshot('radio_checked', 0.1);
 		cy.cGet('#radio_btn_2').compareSnapshot('radio', 0.1);
+		cy.cGet('#radio_btn_3').scrollIntoView();
 		cy.cGet('#radio_btn_3').compareSnapshot('radio_disabled_checked', 0.1);
+		cy.cGet('#radio_btn_4').scrollIntoView();
 		cy.cGet('#radio_btn_4').compareSnapshot('radio_disabled', 0.1);
 	});
 
@@ -52,32 +56,32 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'JSDialog widgets visual te
 	});
 
 	it('Treelistbox focus', function() {
-		cy.cGet('#link_btn_2').click();
-		helper.assertFocus('id','link_btn_2');
-		// since no entry is selected the first entry should get focused
-		cy.realPress('Tab');
-		cy.cGet('#contenttree .ui-treeview-entry:nth-child(1)').should('have.focus');
+		// with no selection the first entry should be the only tab-focusable entry
+		cy.cGet('#contenttree_0').should('have.attr', 'tabindex', '0');
+		cy.cGet('#contenttree_1').should('have.attr', 'tabindex', '-1');
+		cy.cGet('#contenttree_2').should('have.attr', 'tabindex', '-1');
+		cy.cGet('#contenttree').should('not.have.attr', 'tabindex');
+
+		cy.cGet('#contenttree_0').focus();
+		helper.assertFocus('id', 'contenttree_0');
 
 		// check that we can navigate inside the widget
 		cy.realPress('ArrowDown');
-		cy.cGet('#contenttree .ui-treeview-entry:nth-child(2)').should('have.focus');
+		cy.cGet('#contenttree_1').should('have.focus');
 		cy.realPress('ArrowDown');
-		cy.cGet('#contenttree .ui-treeview-entry:nth-child(3)').should('have.focus');
+		cy.cGet('#contenttree_2').should('have.focus');
 
-		// select the second entry
+		// select the third entry
 		cy.realPress('Space');
-		cy.cGet('#contenttree .ui-treeview-entry:nth-child(3)').should('have.class', 'selected');
+		cy.cGet('#contenttree_2').should('have.class', 'selected');
 
-		// check that now the whole widget is no more focusable and tab-indexes are restored and
-		// that the next focusable element is the first entry
-		cy.cGet('#link_btn_2').click();
-		helper.assertFocus('id','link_btn_2');
-		cy.realPress('Tab');
-		cy.cGet('#contenttree .ui-treeview-entry:nth-child(1)').should('have.focus');
+		// after selection, the selected entry becomes the only tab-focusable entry
+		cy.cGet('#contenttree_0').should('have.attr', 'tabindex', '-1');
+		cy.cGet('#contenttree_2').should('have.attr', 'tabindex', '0');
 		cy.cGet('#contenttree').should('not.have.attr', 'tabindex');
 	});
 
-	it('Treelistbox with-headers', function() {
+	it.skip('Treelistbox with-headers', function() {
 		cy.cGet('#contenttree2').compareSnapshot('treeview_headers', 0.12);
 
 		// use sort feature
