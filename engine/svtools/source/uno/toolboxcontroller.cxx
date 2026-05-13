@@ -232,6 +232,7 @@ void ToolboxController::disposing(std::unique_lock<std::mutex>& rGuard)
         {
         }
     }
+    m_aListenerMap.clear();
 }
 
 // XEventListener
