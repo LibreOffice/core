@@ -124,10 +124,6 @@ python3_EXTENSION_MODULES= \
 	Modules/termios.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	Modules/unicodedata.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	Modules/_uuid.$(python3_EXTENSION_MODULE_SUFFIX).so \
-	Modules/xxlimited_35.$(python3_EXTENSION_MODULE_SUFFIX).so \
-	Modules/xxlimited.$(python3_EXTENSION_MODULE_SUFFIX).so \
-	Modules/xxsubtype.$(python3_EXTENSION_MODULE_SUFFIX).so \
-	Modules/_xxtestfuzz.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	Modules/zlib.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	Modules/_zoneinfo.$(python3_EXTENSION_MODULE_SUFFIX).so \
 
