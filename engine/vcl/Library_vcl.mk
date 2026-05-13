@@ -764,7 +764,7 @@ ifeq ($(OS),ANDROID)
 $(eval $(call gb_Library_add_libs,vcl,\
     -llog \
     -landroid \
-    -llo-bootstrap \
+    -lcokit-bootstrap \
 ))
 $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/android/androidinst \

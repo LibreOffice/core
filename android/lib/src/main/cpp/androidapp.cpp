@@ -46,7 +46,7 @@ jobject g_loActivityObj = nullptr;
 extern "C" JNIEXPORT jint JNICALL
 JNI_OnLoad(JavaVM* vm, void*) {
     javaVM = vm;
-    libreofficekit_set_javavm(vm);
+    cokit_set_javavm(vm);
 
     JNIEnv* env;
     if (vm->GetEnv((void**)&env, JNI_VERSION_1_6) != JNI_OK) {
@@ -238,7 +238,7 @@ Java_org_libreoffice_androidlib_LOActivity_postMobileMessageNative(JNIEnv *env, 
         LOG_DBG("From JS: cool: some object");
 }
 
-extern "C" jboolean libreofficekit_initialize(JNIEnv* env, jstring dataDir, jstring cacheDir, jstring apkFile, jobject assetManager);
+extern "C" jboolean cokit_initialize(JNIEnv* env, jstring dataDir, jstring cacheDir, jstring apkFile, jobject assetManager);
 
 /// Create the COOLWSD instance.
 extern "C" JNIEXPORT void JNICALL
@@ -266,7 +266,7 @@ Java_org_libreoffice_androidlib_LOActivity_createCOOLWSD(JNIEnv *env, jobject in
     static const std::string userNameString = std::string(env->GetStringUTFChars(userName, nullptr));
     user_name = userNameString.c_str();
     lokInitialized = true;
-    libreofficekit_initialize(env, dataDir, cacheDir, apkFile, assetManager);
+    cokit_initialize(env, dataDir, cacheDir, apkFile, assetManager);
 
     ProcUtil::setThreadName("main");
 

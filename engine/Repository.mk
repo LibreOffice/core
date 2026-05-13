@@ -346,7 +346,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,math, \
 
 ifeq ($(OS),EMSCRIPTEN)
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
-	lo-bootstrap \
+	cokit-bootstrap \
 ))
 endif
 
@@ -597,7 +597,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_NONE, \
 	wpftqahelper \
 	precompiled_system \
 	$(if $(ENABLE_CLI),$(if $(filter MSC,$(COM)),cli_cppuhelper)) \
-	$(if $(filter $(OS),ANDROID),lo-bootstrap) \
+	$(if $(filter $(OS),ANDROID),cokit-bootstrap) \
 	$(if $(filter $(OS),MACOSX),OOoSpotlightImporter) \
 ))
 

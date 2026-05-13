@@ -105,8 +105,8 @@ oslProcessError bootstrap_getExecutableFile(rtl_uString ** ppFileURL)
     oslProcessError result = osl_Process_E_NotFound;
 
 #ifdef ANDROID
-    /* Now with just a single DSO, this one from lo-bootstrap.c is as good as
-     * any */
+    /* Now with just a single DSO, this one from cokit-bootstrap.c is as good
+     * as any */
     void * addr = dlsym (RTLD_DEFAULT, "JNI_OnLoad");
 #else
 #if defined __linux

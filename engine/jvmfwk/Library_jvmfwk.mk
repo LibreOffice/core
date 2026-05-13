@@ -37,7 +37,7 @@ $(eval $(call gb_Library_use_libraries,jvmfwk,\
 
 ifeq ($(OS),ANDROID)
 $(eval $(call gb_Library_use_libraries,jvmfwk,\
-    lo-bootstrap \
+    cokit-bootstrap \
 ))
 endif
 

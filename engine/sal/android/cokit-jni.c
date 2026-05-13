@@ -65,7 +65,7 @@ void Java_org_libreoffice_kit_COKit_redirectStdio
 
 /// Initialize the COKit.
 __attribute__ ((visibility("default")))
-jboolean libreofficekit_initialize(JNIEnv* env,
+jboolean cokit_initialize(JNIEnv* env,
      jstring dataDir, jstring cacheDir, jstring apkFile, jobject assetManager)
 {
     struct stat st;
@@ -147,7 +147,7 @@ jboolean libreofficekit_initialize(JNIEnv* env,
         return JNI_FALSE;
     }
 
-    LOGI("COKit: libreofficekit_initialize finished");
+    LOGI("COKit: cokit_initialize finished");
 
     return JNI_TRUE;
 }
@@ -163,7 +163,7 @@ jboolean Java_org_libreoffice_kit_COKit_initializeNative
 
     (void) clazz;
 
-    libreofficekit_initialize(env, dataDir, cacheDir, apkFile, assetManager);
+    cokit_initialize(env, dataDir, cacheDir, apkFile, assetManager);
 
     // COKit expects a path to the program/ directory
     free(full_program_dir);

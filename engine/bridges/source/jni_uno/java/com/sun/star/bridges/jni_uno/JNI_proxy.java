@@ -38,7 +38,7 @@ public final class JNI_proxy implements java.lang.reflect.InvocationHandler
 
             boolean disable_dynloading = false;
             try {
-                System.loadLibrary("lo-bootstrap");
+                System.loadLibrary("cokit-bootstrap");
             } catch (UnsatisfiedLinkError e) {
                 disable_dynloading = true;
             }

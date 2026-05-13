@@ -32,8 +32,8 @@
 
 #undef LOGI
 
-#define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, "lo-bootstrap", __VA_ARGS__))
-#define LOGE(...) ((void)__android_log_print(ANDROID_LOG_ERROR, "lo-bootstrap", __VA_ARGS__))
+#define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, "cokit-bootstrap", __VA_ARGS__))
+#define LOGE(...) ((void)__android_log_print(ANDROID_LOG_ERROR, "cokit-bootstrap", __VA_ARGS__))
 
 #define MAX(a,b) ((a) > (b) ? (a) : (b))
 
@@ -411,7 +411,7 @@ Java_org_libreoffice_android_Bootstrap_putenv(JNIEnv* env,
     {
         static int beenhere=0;
         if (!beenhere) {
-            LOGI("lo-bootstrap: Sleeping for 20 seconds, start ndk-gdb NOW if that is your intention");
+            LOGI("cokit-bootstrap: Sleeping for 20 seconds, start ndk-gdb NOW if that is your intention");
             sleep(20);
             beenhere = 1;
         }
@@ -654,17 +654,17 @@ Java_org_libreoffice_android_Bootstrap_setCommandArgs(JNIEnv* env,
 {
     char **c_argv;
     int c_argc;
-    Dl_info lo_bootstrap_info;
+    Dl_info cokit_bootstrap_info;
 
     (void) clazz;
 
     if (!get_jni_string_array(env, "setCommandArgs :argv", argv, &c_argc, (const char ***) &c_argv))
         return;
 
-    if (dladdr(Java_org_libreoffice_android_Bootstrap_setCommandArgs, &lo_bootstrap_info) != 0) {
-        char *new_argv0 = malloc(strlen(lo_bootstrap_info.dli_fname) + strlen(c_argv[0]));
+    if (dladdr(Java_org_libreoffice_android_Bootstrap_setCommandArgs, &cokit_bootstrap_info) != 0) {
+        char *new_argv0 = malloc(strlen(cokit_bootstrap_info.dli_fname) + strlen(c_argv[0]));
         char *slash;
-        strcpy(new_argv0, lo_bootstrap_info.dli_fname);
+        strcpy(new_argv0, cokit_bootstrap_info.dli_fname);
         slash = strrchr(new_argv0, '/');
         if (slash != NULL)
             *slash = '\0';
@@ -899,7 +899,7 @@ Java_org_libreoffice_android_Bootstrap_address_1of_1direct_1byte_1buffer(JNIEnv 
 
 __attribute__ ((visibility("default")))
 void
-libreofficekit_set_javavm(JavaVM *vm)
+cokit_set_javavm(JavaVM *vm)
 {
     the_java_vm = vm;
 }

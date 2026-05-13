@@ -7246,11 +7246,11 @@ reportdesign/source/ui/report/dlgedclip.cxx
 reportdesign/source/ui/report/dlgedfac.cxx
 reportdesign/source/ui/report/dlgedfunc.cxx
 reportdesign/source/ui/report/propbrw.cxx
-sal/android/libreofficekit-jni.c
-sal/android/lo-bootstrap.c
+sal/android/cokit-jni.c
+sal/android/cokit-bootstrap.c
 sal/android/uthash.h
 sal/cppunittester/cppunittester.cxx
-sal/emscripten/lo-bootstrap.c
+sal/emscripten/cokit-bootstrap.c
 sal/inc/signalshared.hxx
 sal/osl/all/compat.cxx
 sal/osl/all/debugbase.cxx

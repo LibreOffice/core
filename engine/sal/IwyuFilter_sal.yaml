@@ -21,7 +21,7 @@ excludelist:
     sal/cppunittester/cppunittester.cxx:
     # Actually used
     - boost/algorithm/string.hpp
-    sal/emscripten/lo-bootstrap.c:
+    sal/emscripten/cokit-bootstrap.c:
     # Actually needed for lo_get_app_data_dir
     - osl/detail/emscripten-bootstrap.h
     sal/qa/osl/security/osl_Security.cxx:

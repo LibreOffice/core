@@ -54,7 +54,7 @@ public class SharedLibraryLoader {
 
             boolean disable_dynloading = false;
             try {
-                System.loadLibrary("lo-bootstrap");
+                System.loadLibrary("cokit-bootstrap");
             } catch (UnsatisfiedLinkError e) {
                 disable_dynloading = true;
             }

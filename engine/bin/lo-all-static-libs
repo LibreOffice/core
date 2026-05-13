@@ -43,7 +43,7 @@ ANDROID)
     oslibs="$oslibs $WORKDIR/UnpackedTarball/cairo/builddir/src/libcairo-lo.a"
     oslibs="$oslibs $WORKDIR/UnpackedTarball/xmlsec/src/.libs/libxmlsec1.a"
     oslibs="$oslibs $WORKDIR/UnpackedTarball/xmlsec/src/nss/.libs/libxmlsec1-nss.a"
-    # Only liblo-bootstrap.a ends up here:
+    # Only libcokit-bootstrap.a ends up here:
     oslibs="$oslibs $WORKDIR/LinkTarget/Library/lib*.a"
     oslibs="$oslibs $WORKDIR/UnpackedTarball/openssl/*.a"
 
