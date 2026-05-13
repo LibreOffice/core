@@ -305,6 +305,14 @@ public:
     void setThreadOwner(const ProcUtil::ThreadId id) { _owner = id; }
     void assertCacheSize();
 
+#ifdef BUILDING_TESTS
+    /// Test-only: register a tile as being rendered with the given start
+    /// time, bypassing the need for a real ClientSession subscriber.
+    /// Used to simulate scenarios where the kit has stalled or hung.
+    void injectTileBeingRenderedForTest(const TileDesc& tile,
+                                        std::chrono::steady_clock::time_point startTime);
+#endif
+
 private:
     void ensureCacheSize();
     static size_t itemCacheSize(const Tile &tile);

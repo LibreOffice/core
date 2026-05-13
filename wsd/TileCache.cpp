@@ -651,6 +651,15 @@ void TileCache::setMaxCacheSize(size_t cacheSize)
     ensureCacheSize();
 }
 
+#ifdef BUILDING_TESTS
+void TileCache::injectTileBeingRenderedForTest(const TileDesc& tile,
+                                               std::chrono::steady_clock::time_point startTime)
+{
+    auto tileBeingRendered = std::make_shared<TileBeingRendered>(tile, startTime);
+    _tilesBeingRendered[tile] = std::move(tileBeingRendered);
+}
+#endif
+
 void TileCache::saveDataToStreamCache(StreamType type, const std::string &fileName, const char *data, const size_t size)
 {
     if (_dontCache)

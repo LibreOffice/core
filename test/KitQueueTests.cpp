@@ -22,6 +22,7 @@
 #include <Message.hpp>
 #include <kit/KitQueue.hpp>
 #include <SenderQueue.hpp>
+#include <wsd/TileCache.hpp>
 #include <common/Util.hpp>
 
 #include <algorithm>
@@ -46,6 +47,7 @@ class KitQueueTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testSenderQueueProgress);
     CPPUNIT_TEST(testSenderQueueTileDeduplication);
     CPPUNIT_TEST(testSenderQueueTileDedupReportsDroppedWireId);
+    CPPUNIT_TEST(testTileCacheKitHangBecomesStale);
     CPPUNIT_TEST(testInvalidateViewCursorDeduplication);
     CPPUNIT_TEST(testCallbackModifiedStatusIsSkipped);
     CPPUNIT_TEST(testCallbackInvalidation);
@@ -91,6 +93,7 @@ class KitQueueTests : public CPPUNIT_NS::TestFixture
     void testSenderQueueProgress();
     void testSenderQueueTileDeduplication();
     void testSenderQueueTileDedupReportsDroppedWireId();
+    void testTileCacheKitHangBecomesStale();
     void testInvalidateViewCursorDeduplication();
     void testCallbackModifiedStatusIsSkipped();
     void testCallbackInvalidation();
@@ -723,6 +726,69 @@ void KitQueueTests::testSenderQueueTileDedupReportsDroppedWireId()
     LOK_ASSERT_EQUAL_STR(true, q3.enqueue(makeTile(300)));
     LOK_ASSERT_EQUAL_STR(true, q3.enqueue(makeTile(301)));
     LOK_ASSERT_EQUAL(static_cast<size_t>(1), q3.size());
+}
+
+// Reproduces the kit-hang scenario for an in-flight tile render.
+//
+// When a client sends a tilecombine, the server calls
+// requestTileRendering → subscribeToTileRendering, which inserts a
+// TileBeingRendered into _tilesBeingRendered with a start timestamp.
+// If the kit doesn't reply in time (hang), no path removes the entry.
+// Once the entry's age exceeds COMMAND_TIMEOUT_MS, isStale() flips
+// and hasTileBeingRendered returns false. The next call to
+// requestTileRendering sees "no in-progress render" and re-issues to
+// kit. Without a re-issue trigger, the entry sits there orphaned.
+// So in case throttled client tilecombine (5s limit) we would NOT re-issue
+// and leave this state with missing tiles on the client.
+void KitQueueTests::testTileCacheKitHangBecomesStale()
+{
+    constexpr std::string_view testname = __func__;
+
+    TileCache cache("dummy://test-doc.odt", std::chrono::system_clock::now(),
+                    /*dontCache=*/true);
+
+    const TileDesc tile = TileDesc::parse(
+        "tile nviewid=0 part=0 width=256 height=256 tileposx=0 tileposy=0 "
+        "tilewidth=3840 tileheight=3840");
+
+    // Simulate the server beginning to render this tile (kit request sent).
+    const auto t0 = std::chrono::steady_clock::now();
+    cache.injectTileBeingRenderedForTest(tile, t0);
+
+    // Existence-only check (no `now`): entry is in the map.
+    LOK_ASSERT_EQUAL_STR(true, cache.hasTileBeingRendered(tile));
+
+    // Just after the request: not stale. requestTileRendering would NOT
+    // re-issue here; it would just subscribe to the existing render.
+    {
+        const auto fresh = t0 + std::chrono::milliseconds(100);
+        LOK_ASSERT_EQUAL_STR(true, cache.hasTileBeingRendered(tile, &fresh));
+    }
+
+    // Just under the timeout: still considered in-progress.
+    {
+        const auto almost = t0 + std::chrono::milliseconds(COMMAND_TIMEOUT_MS - 1);
+        LOK_ASSERT_EQUAL_STR(true, cache.hasTileBeingRendered(tile, &almost));
+    }
+
+    // One step past the timeout: kit has hung. Staleness check now
+    // returns false. The entry has NOT been removed from the map - no
+    // automatic cleanup ever fires - so a client that retriggers will
+    // re-issue to kit; a client that doesn't (e.g. blocked by the
+    // 5s per-tile client-side rate limit) leaves the request lost.
+    {
+        const auto stale = t0 + std::chrono::milliseconds(COMMAND_TIMEOUT_MS + 1);
+        LOK_ASSERT_EQUAL_STR(false, cache.hasTileBeingRendered(tile, &stale));
+        // Entry still present:
+        LOK_ASSERT_EQUAL_STR(true, cache.hasTileBeingRendered(tile));
+    }
+
+    // Far past the timeout: still stale, still no cleanup.
+    {
+        const auto wayPast = t0 + std::chrono::seconds(60);
+        LOK_ASSERT_EQUAL_STR(false, cache.hasTileBeingRendered(tile, &wayPast));
+        LOK_ASSERT_EQUAL_STR(true, cache.hasTileBeingRendered(tile));
+    }
 }
 
 void KitQueueTests::testInvalidateViewCursorDeduplication()
