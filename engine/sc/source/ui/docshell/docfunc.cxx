@@ -967,7 +967,7 @@ bool ScDocFunc::ShowNote( const ScAddress& rPos, bool bShow )
     ScDocument& rDoc = rDocShell.GetDocument();
     ScPostIt* pNote = rDoc.GetNote( rPos );
     if( !pNote || (bShow == pNote->IsCaptionShown()) ||
-        (comphelper::COKit::isActive() && !comphelper::COKit::isTiledAnnotations()) )
+        comphelper::COKit::isActive() )
         return false;
 
     // move the caption to internal or hidden layer and create undo action

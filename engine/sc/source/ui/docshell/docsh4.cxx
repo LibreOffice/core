@@ -3032,8 +3032,7 @@ bool ScDocShell::DdeSetData( const OUString& rItem,
 void ScDocShell::KitCommentNotify(KitCommentNotificationType nType, const ScDocument& rDocument, const ScAddress& rPos, const ScPostIt* pNote)
 {
     if ( !rDocument.IsDocVisible() || // don't want callbacks until document load
-         !comphelper::COKit::isActive() ||
-         comphelper::COKit::isTiledAnnotations() )
+         !comphelper::COKit::isActive() )
         return;
 
     tools::JsonWriter aAnnotation;

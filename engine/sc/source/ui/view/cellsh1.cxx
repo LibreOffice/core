@@ -2746,7 +2746,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                                                 pAuthorItem ? &pAuthorItem->GetValue() : nullptr,
                                                 pDateItem ? &pDateItem->GetValue() : nullptr );
                 }
-                else if (!comphelper::COKit::isActive() || comphelper::COKit::isTiledAnnotations())
+                else if (!comphelper::COKit::isActive())
                 {
                     pTabViewShell->EditNote();                  // note object to edit
                 }
