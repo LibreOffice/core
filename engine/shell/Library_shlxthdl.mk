@@ -52,11 +52,6 @@ $(eval $(call gb_Library_add_ldflags,shlxthdl,\
 
 $(eval $(call gb_Library_add_exception_objects,shlxthdl,\
     shell/source/win32/shlxthandler/classfactory \
-    shell/source/win32/shlxthandler/columninfo/columninfo \
-    shell/source/win32/shlxthandler/infotips/infotips \
-    shell/source/win32/shlxthandler/propsheets/document_statistic \
-    shell/source/win32/shlxthandler/propsheets/listviewbuilder \
-    shell/source/win32/shlxthandler/propsheets/propsheets \
     shell/source/win32/shlxthandler/shlxthdl \
     shell/source/win32/shlxthandler/thumbviewer/thumbviewer \
 ))

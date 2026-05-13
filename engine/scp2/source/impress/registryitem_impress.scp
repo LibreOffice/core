@@ -476,25 +476,11 @@ RegistryItem gid_Regitem_Sti_PersistentHandler
     Value = "{7BC0E713-5703-45BE-A29D-5D46D8B39262}";
 End
 
-RegistryItem gid_Regitem_Sti_Shellex_00021500_0000_0000_C000_000000000046
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Prg_Impress_Bin;
-    Subkey = ".sti\shellex\{00021500-0000-0000-C000-000000000046}";
-    Value = "{087B3AE3-E237-4467-B8DB-5A38AB959AC9}";
-End
-
 RegistryItem gid_Regitem_Sti_Shellex_BB2E617C_0920_11D1_9A0B_00C04FC2D6C1
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Impress_Bin;
     Subkey = ".sti\shellex\{BB2E617C-0920-11D1-9A0B-00C04FC2D6C1}";
     Value = "{3B092F0C-7696-40E3-A80F-68D74DA84210}";
-End
-
-RegistryItem gid_Regitem_StarImpressTemplate_6_Shellex_PropertySheetHandlers_MyPropSheet1
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Prg_Impress_Bin;
-    Subkey = "soffice.StarImpressTemplate.6\shellex\PropertySheetHandlers\MyPropSheet1";
-    Value = "{63542C48-9552-494A-84F7-73AA6A7C99C1}";
 End
 
 RegistryItem gid_Regitem_Sti_Contenttype
@@ -530,25 +516,11 @@ RegistryItem gid_Regitem_Sxi_PersistentHandler
     Value = "{7BC0E713-5703-45BE-A29D-5D46D8B39262}";
 End
 
-RegistryItem gid_Regitem_Sxi_Shellex_00021500_0000_0000_C000_000000000046
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Prg_Impress_Bin;
-    Subkey = ".sxi\shellex\{00021500-0000-0000-C000-000000000046}";
-    Value = "{087B3AE3-E237-4467-B8DB-5A38AB959AC9}";
-End
-
 RegistryItem gid_Regitem_Sxi_Shellex_BB2E617C_0920_11D1_9A0B_00C04FC2D6C1
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Impress_Bin;
     Subkey = ".sxi\shellex\{BB2E617C-0920-11D1-9A0B-00C04FC2D6C1}";
     Value = "{3B092F0C-7696-40E3-A80F-68D74DA84210}";
-End
-
-RegistryItem gid_Regitem_StarImpressDocument_6_Shellex_PropertySheetHandlers_MyPropSheet1
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Prg_Impress_Bin;
-    Subkey = "soffice.StarImpressDocument.6\shellex\PropertySheetHandlers\MyPropSheet1";
-    Value = "{63542C48-9552-494A-84F7-73AA6A7C99C1}";
 End
 
 RegistryItem gid_Regitem_Sxi_Contenttype
@@ -610,25 +582,11 @@ RegistryItem gid_Regitem_Odp_PersistentHandler
     Value = "{7BC0E713-5703-45BE-A29D-5D46D8B39262}";
 End
 
-RegistryItem gid_Regitem_Odp_Shellex_00021500_0000_0000_C000_000000000046
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Prg_Impress_Bin;
-    Subkey = ".odp\shellex\{00021500-0000-0000-C000-000000000046}";
-    Value = "{087B3AE3-E237-4467-B8DB-5A38AB959AC9}";
-End
-
 RegistryItem gid_Regitem_Odp_Shellex_BB2E617C_0920_11D1_9A0B_00C04FC2D6C1
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Impress_Bin;
     Subkey = ".odp\shellex\{BB2E617C-0920-11D1-9A0B-00C04FC2D6C1}";
     Value = "{3B092F0C-7696-40E3-A80F-68D74DA84210}";
-End
-
-RegistryItem gid_Regitem_ImpressDocument_1_Shellex_PropertySheetHandlers_MyPropSheet1
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Prg_Impress_Bin;
-    Subkey = "CollaboraOffice.ImpressDocument.1\shellex\PropertySheetHandlers\MyPropSheet1";
-    Value = "{63542C48-9552-494A-84F7-73AA6A7C99C1}";
 End
 
 RegistryItem gid_Regitem__Odp
@@ -876,25 +834,11 @@ RegistryItem gid_Regitem_Otp_PersistentHandler
     Value = "{7BC0E713-5703-45BE-A29D-5D46D8B39262}";
 End
 
-RegistryItem gid_Regitem_Otp_Shellex_00021500_0000_0000_C000_000000000046
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Prg_Impress_Bin;
-    Subkey = ".otp\shellex\{00021500-0000-0000-C000-000000000046}";
-    Value = "{087B3AE3-E237-4467-B8DB-5A38AB959AC9}";
-End
-
 RegistryItem gid_Regitem_Otp_Shellex_BB2E617C_0920_11D1_9A0B_00C04FC2D6C1
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Impress_Bin;
     Subkey = ".otp\shellex\{BB2E617C-0920-11D1-9A0B-00C04FC2D6C1}";
     Value = "{3B092F0C-7696-40E3-A80F-68D74DA84210}";
-End
-
-RegistryItem gid_Regitem_ImpressTemplate_1_Shellex_PropertySheetHandlers_MyPropSheet1
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Prg_Impress_Bin;
-    Subkey = "CollaboraOffice.ImpressTemplate.1\shellex\PropertySheetHandlers\MyPropSheet1";
-    Value = "{63542C48-9552-494A-84F7-73AA6A7C99C1}";
 End
 
 RegistryItem gid_Regitem_Otp

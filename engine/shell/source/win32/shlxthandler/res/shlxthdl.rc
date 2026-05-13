@@ -7,6 +7,12 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "shlxthdl_impl.rc"
+#include <winresrc.h>
+
+#include "resource.h"
+
+MANIFEST_RESOURCE_ID RT_MANIFEST "shlxthdl.manifest"
+
+IDP_SIGNET RCDATA "signet.png"
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

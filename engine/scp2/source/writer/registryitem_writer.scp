@@ -376,13 +376,6 @@ RegistryItem gid_Regitem_Soffice_Starwriterdocument_Curver
     Value = "soffice.StarWriterDocument.6";
 End
 
-RegistryItem gid_Regitem_StarWriterGlobalDocument_6_Shellex_PropertySheetHandlers_MyPropSheet1
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Prg_Wrt_Bin;
-    Subkey = "soffice.StarWriterGlobalDocument.6\shellex\PropertySheetHandlers\MyPropSheet1";
-    Value = "{63542C48-9552-494A-84F7-73AA6A7C99C1}";
-End
-
 RegistryItem gid_Regitem_Soffice_Starwriterglobaldocument_6
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = "soffice.StarWriterGlobalDocument.6";
@@ -460,13 +453,6 @@ RegistryItem gid_Regitem_Soffice_Starwriterglobaldocument_Curver
     Subkey = "soffice.StarWriterGlobalDocument\CurVer";
     ModuleID = gid_Module_Prg_Wrt_Bin;
     Value = "soffice.StarWriterGlobalDocument.6";
-End
-
-RegistryItem gid_Regitem_StarWriterTemplate_6_Shellex_PropertySheetHandlers_MyPropSheet1
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Prg_Wrt_Bin;
-    Subkey = "soffice.StarWriterTemplate.6\shellex\PropertySheetHandlers\MyPropSheet1";
-    Value = "{63542C48-9552-494A-84F7-73AA6A7C99C1}";
 End
 
 RegistryItem gid_Regitem_Soffice_Starwritertemplate_6
@@ -548,13 +534,6 @@ RegistryItem gid_Regitem_Stw_PersistentHandler
     Value = "{7BC0E713-5703-45BE-A29D-5D46D8B39262}";
 End
 
-RegistryItem gid_Regitem_Stw_Shellex_00021500_0000_0000_C000_000000000046
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Prg_Wrt_Bin;
-    Subkey = ".stw\shellex\{00021500-0000-0000-C000-000000000046}";
-    Value = "{087B3AE3-E237-4467-B8DB-5A38AB959AC9}";
-End
-
 RegistryItem gid_Regitem_Stw_Shellex_BB2E617C_0920_11D1_9A0B_00C04FC2D6C1
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Wrt_Bin;
@@ -600,13 +579,6 @@ RegistryItem gid_Regitem_Sxg_PersistentHandler
     ModuleID = gid_Module_Prg_Wrt_Bin;
     Subkey = ".sxg\PersistentHandler";
     Value = "{7BC0E713-5703-45BE-A29D-5D46D8B39262}";
-End
-
-RegistryItem gid_Regitem_Sxg_Shellex_00021500_0000_0000_C000_000000000046
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Prg_Wrt_Bin;
-    Subkey = ".sxg\shellex\{00021500-0000-0000-C000-000000000046}";
-    Value = "{087B3AE3-E237-4467-B8DB-5A38AB959AC9}";
 End
 
 RegistryItem gid_Regitem_Sxg_Shellex_BB2E617C_0920_11D1_9A0B_00C04FC2D6C1
@@ -664,13 +636,6 @@ RegistryItem gid_Regitem_Sxw_PersistentHandler
     Value = "{7BC0E713-5703-45BE-A29D-5D46D8B39262}";
 End
 
-RegistryItem gid_Regitem_Sxw_Shellex_00021500_0000_0000_C000_000000000046
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Prg_Wrt_Bin;
-    Subkey = ".sxw\shellex\{00021500-0000-0000-C000-000000000046}";
-    Value = "{087B3AE3-E237-4467-B8DB-5A38AB959AC9}";
-End
-
 RegistryItem gid_Regitem_Sxw_Shellex_BB2E617C_0920_11D1_9A0B_00C04FC2D6C1
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Wrt_Bin;
@@ -692,13 +657,6 @@ RegistryItem gid_Regitem_Sxw_Mime_Database
     Subkey = "MIME\Database\Content Type\application/vnd.sun.xml.writer";
     Name = "Extension";
     Value = ".sxw";
-End
-
-RegistryItem gid_Regitem_StarWriterDocument_6_Shellex_PropertySheetHandlers_MyPropSheet1
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Prg_Wrt_Bin;
-    Subkey = "soffice.StarWriterDocument.6\shellex\PropertySheetHandlers\MyPropSheet1";
-    Value = "{63542C48-9552-494A-84F7-73AA6A7C99C1}";
 End
 
 RegistryItem gid_Regitem__Sxw
@@ -744,25 +702,11 @@ RegistryItem gid_Regitem_Odt_PersistentHandler
     Value = "{7BC0E713-5703-45BE-A29D-5D46D8B39262}";
 End
 
-RegistryItem gid_Regitem_Odt_Shellex_00021500_0000_0000_C000_000000000046
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Prg_Wrt_Bin;
-    Subkey = ".odt\shellex\{00021500-0000-0000-C000-000000000046}";
-    Value = "{087B3AE3-E237-4467-B8DB-5A38AB959AC9}";
-End
-
 RegistryItem gid_Regitem_Odt_Shellex_BB2E617C_0920_11D1_9A0B_00C04FC2D6C1
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Wrt_Bin;
     Subkey = ".odt\shellex\{BB2E617C-0920-11D1-9A0B-00C04FC2D6C1}";
     Value = "{3B092F0C-7696-40E3-A80F-68D74DA84210}";
-End
-
-RegistryItem gid_Regitem_WriterDocument_1_Shellex_PropertySheetHandlers_MyPropSheet1
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Prg_Wrt_Bin;
-    Subkey = "CollaboraOffice.WriterDocument.1\shellex\PropertySheetHandlers\MyPropSheet1";
-    Value = "{63542C48-9552-494A-84F7-73AA6A7C99C1}";
 End
 
 RegistryItem gid_Regitem__Odt
@@ -1033,25 +977,11 @@ RegistryItem gid_Regitem_Ott_PersistentHandler
     Value = "{7BC0E713-5703-45BE-A29D-5D46D8B39262}";
 End
 
-RegistryItem gid_Regitem_Ott_Shellex_00021500_0000_0000_C000_000000000046
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Prg_Wrt_Bin;
-    Subkey = ".ott\shellex\{00021500-0000-0000-C000-000000000046}";
-    Value = "{087B3AE3-E237-4467-B8DB-5A38AB959AC9}";
-End
-
 RegistryItem gid_Regitem_Ott_Shellex_BB2E617C_0920_11D1_9A0B_00C04FC2D6C1
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Wrt_Bin;
     Subkey = ".ott\shellex\{BB2E617C-0920-11D1-9A0B-00C04FC2D6C1}";
     Value = "{3B092F0C-7696-40E3-A80F-68D74DA84210}";
-End
-
-RegistryItem gid_Regitem_WriterTemplate_1_Shellex_PropertySheetHandlers_MyPropSheet1
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Prg_Wrt_Bin;
-    Subkey = "CollaboraOffice.WriterTemplate.1\shellex\PropertySheetHandlers\MyPropSheet1";
-    Value = "{63542C48-9552-494A-84F7-73AA6A7C99C1}";
 End
 
 RegistryItem gid_Regitem_Ott
@@ -1176,25 +1106,11 @@ RegistryItem gid_Regitem_Odm_PersistentHandler
     Value = "{7BC0E713-5703-45BE-A29D-5D46D8B39262}";
 End
 
-RegistryItem gid_Regitem_Odm_Shellex_00021500_0000_0000_C000_000000000046
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Prg_Wrt_Bin;
-    Subkey = ".odm\shellex\{00021500-0000-0000-C000-000000000046}";
-    Value = "{087B3AE3-E237-4467-B8DB-5A38AB959AC9}";
-End
-
 RegistryItem gid_Regitem_Odm_Shellex_BB2E617C_0920_11D1_9A0B_00C04FC2D6C1
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Wrt_Bin;
     Subkey = ".odm\shellex\{BB2E617C-0920-11D1-9A0B-00C04FC2D6C1}";
     Value = "{3B092F0C-7696-40E3-A80F-68D74DA84210}";
-End
-
-RegistryItem gid_Regitem_WriterGlobalDocument_1_Shellex_PropertySheetHandlers_MyPropSheet1
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Prg_Wrt_Bin;
-    Subkey = "CollaboraOffice.WriterGlobalDocument.1\shellex\PropertySheetHandlers\MyPropSheet1";
-    Value = "{63542C48-9552-494A-84F7-73AA6A7C99C1}";
 End
 
 RegistryItem gid_Regitem_Odm
@@ -1326,25 +1242,11 @@ RegistryItem gid_Regitem_Oth_PersistentHandler
     Value = "{7BC0E713-5703-45BE-A29D-5D46D8B39262}";
 End
 
-RegistryItem gid_Regitem_Oth_Shellex_00021500_0000_0000_C000_000000000046
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Prg_Wrt_Bin;
-    Subkey = ".oth\shellex\{00021500-0000-0000-C000-000000000046}";
-    Value = "{087B3AE3-E237-4467-B8DB-5A38AB959AC9}";
-End
-
 RegistryItem gid_Regitem_Oth_Shellex_BB2E617C_0920_11D1_9A0B_00C04FC2D6C1
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Wrt_Bin;
     Subkey = ".oth\shellex\{BB2E617C-0920-11D1-9A0B-00C04FC2D6C1}";
     Value = "{3B092F0C-7696-40E3-A80F-68D74DA84210}";
-End
-
-RegistryItem gid_Regitem_WriterWebTemplate_Shellex_PropertySheetHandlers_MyPropSheet1
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Prg_Wrt_Bin;
-    Subkey = "CollaboraOffice.WriterWebTemplate.1\shellex\PropertySheetHandlers\MyPropSheet1";
-    Value = "{63542C48-9552-494A-84F7-73AA6A7C99C1}";
 End
 
 RegistryItem gid_Regitem_Oth

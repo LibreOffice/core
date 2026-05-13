@@ -19,9 +19,6 @@
 
 #include <global.hxx>
 #include "classfactory.hxx"
-#include <infotips.hxx>
-#include <propsheets.hxx>
-#include <columninfo.hxx>
 #include <thumbviewer.hxx>
 #include <shlxthdl.hxx>
 
@@ -92,16 +89,7 @@ HRESULT STDMETHODCALLTYPE CClassFactory::CreateInstance(
 
     IUnknown* pUnk = nullptr;
 
-    if (CLSID_PROPERTYSHEET_HANDLER == m_Clsid)
-        pUnk = static_cast<IShellExtInit*>(new CPropertySheet());
-
-    else if (CLSID_INFOTIP_HANDLER == m_Clsid)
-        pUnk = static_cast<IQueryInfo*>(new CInfoTip());
-
-    else if (CLSID_COLUMN_HANDLER == m_Clsid)
-        pUnk = new CColumnInfo();
-
-    else if (CLSID_THUMBVIEWER_HANDLER == m_Clsid)
+    if (CLSID_THUMBVIEWER_HANDLER == m_Clsid)
         pUnk = CreateThumbviewer();
 
     if (nullptr == pUnk)

@@ -14,10 +14,6 @@ $(eval $(call gb_WinResTarget_set_include,shlxthdl,\
 	-I$(SRCDIR)/shell/inc \
 ))
 
-$(eval $(call gb_WinResTarget_use_custom_headers,shlxthdl,\
-	shell/source/win32/shlxthandler/res \
-))
-
 $(eval $(call gb_WinResTarget_set_rcfile,shlxthdl,shell/source/win32/shlxthandler/res/shlxthdl))
 
 # vim: set shiftwidth=4 tabstop=4 noexpandtab:

@@ -41,14 +41,10 @@ namespace /* private */
 {
     const wchar_t* const GUID_PLACEHOLDER       = L"{GUID}";
     const wchar_t* const EXTENSION_PLACEHOLDER  = L"{EXT}";
-    const wchar_t* const FORWARDKEY_PLACEHOLDER = L"{FWDKEY}";
 
     const wchar_t* const CLSID_ENTRY                         = L"CLSID\\{GUID}\\InProcServer32";
     const wchar_t* const SHELLEX_IID_ENTRY                   = L"{EXT}\\shellex\\{GUID}";
     const wchar_t* const SHELLEX_ENTRY                       = L"{EXT}\\shellex";
-    const wchar_t* const FORWARD_PROPSHEET_MYPROPSHEET_ENTRY = L"{FWDKEY}\\shellex\\PropertySheetHandlers\\MyPropSheet1";
-    const wchar_t* const FORWARD_PROPSHEET_ENTRY             = L"{FWDKEY}\\shellex\\PropertySheetHandlers";
-    const wchar_t* const FORWARD_SHELLEX_ENTRY               = L"{FWDKEY}\\shellex";
 
     const wchar_t* const SHELL_EXTENSION_APPROVED_KEY_NAME   = L"Software\\Microsoft\\Windows\\CurrentVersion\\Shell Extensions\\Approved";
 
@@ -92,119 +88,6 @@ namespace /* private */
         std::wstring tmp = L"CLSID\\";
         tmp += ClsidToString(Guid);
         return DeleteRegistryTree(HKEY_CLASSES_ROOT, tmp.c_str()) ? S_OK : E_FAIL;
-    }
-
-    HRESULT RegisterColumnHandler(const wchar_t* ModuleFileName)
-    {
-        if (FAILED(RegisterComComponent(ModuleFileName, CLSID_COLUMN_HANDLER)))
-            return E_FAIL;
-
-        std::wstring tmp = L"Folder\\shellex\\ColumnHandlers\\";
-        tmp += ClsidToString(CLSID_COLUMN_HANDLER);
-
-        return SetRegistryKey(
-            HKEY_CLASSES_ROOT,
-            tmp.c_str(),
-            L"",
-            COLUMN_HANDLER_DESCRIPTIVE_NAME) ? S_OK : E_FAIL;
-    }
-
-    HRESULT UnregisterColumnHandler()
-    {
-        std::wstring tmp = L"Folder\\shellex\\ColumnHandlers\\";
-        tmp += ClsidToString(CLSID_COLUMN_HANDLER);
-
-        if (!DeleteRegistryTree(HKEY_CLASSES_ROOT, tmp.c_str()))
-            return E_FAIL;
-
-        return UnregisterComComponent(CLSID_COLUMN_HANDLER);
-    }
-
-    HRESULT RegisterInfotipHandler(const wchar_t* ModuleFileName)
-    {
-        if (FAILED(RegisterComComponent(ModuleFileName, CLSID_INFOTIP_HANDLER)))
-            return E_FAIL;
-
-        std::wstring iid = ClsidToString(IID_IQueryInfo);
-        std::wstring tmp;
-
-        for(size_t i = 0; i < OOFileExtensionTableSize; i++)
-        {
-            tmp = SHELLEX_IID_ENTRY;
-            SubstitutePlaceholder(tmp, EXTENSION_PLACEHOLDER, OOFileExtensionTable[i].ExtensionU);
-            SubstitutePlaceholder(tmp, GUID_PLACEHOLDER, iid);
-
-            if (!SetRegistryKey(HKEY_CLASSES_ROOT, tmp.c_str(), L"", ClsidToString(CLSID_INFOTIP_HANDLER).c_str()))
-                return E_FAIL;
-        }
-        return S_OK;
-    }
-
-    HRESULT UnregisterInfotipHandler()
-    {
-        std::wstring iid = ClsidToString(IID_IQueryInfo);
-        std::wstring tmp;
-
-        for (size_t i = 0; i < OOFileExtensionTableSize; i++)
-        {
-            tmp = SHELLEX_IID_ENTRY;
-
-            SubstitutePlaceholder(tmp, EXTENSION_PLACEHOLDER, OOFileExtensionTable[i].ExtensionU);
-            SubstitutePlaceholder(tmp, GUID_PLACEHOLDER, iid);
-
-            DeleteRegistryTree(HKEY_CLASSES_ROOT, tmp.c_str());
-
-            // if there are no further subkey below .ext\\shellex
-            // delete the whole subkey
-            tmp = SHELLEX_ENTRY;
-            SubstitutePlaceholder(tmp, EXTENSION_PLACEHOLDER, OOFileExtensionTable[i].ExtensionU);
-
-            DeleteRegistryKey(HKEY_CLASSES_ROOT, tmp.c_str());
-        }
-        return UnregisterComComponent(CLSID_INFOTIP_HANDLER);
-    }
-
-    HRESULT RegisterPropSheetHandler(const wchar_t* ModuleFileName)
-    {
-        std::wstring FwdKeyEntry;
-
-        if (FAILED(RegisterComComponent(ModuleFileName, CLSID_PROPERTYSHEET_HANDLER)))
-            return E_FAIL;
-
-        for (size_t i = 0; i < OOFileExtensionTableSize; i++)
-        {
-            FwdKeyEntry = FORWARD_PROPSHEET_MYPROPSHEET_ENTRY;
-            SubstitutePlaceholder(FwdKeyEntry, FORWARDKEY_PLACEHOLDER, OOFileExtensionTable[i].RegistryForwardKey);
-
-            if (!SetRegistryKey(HKEY_CLASSES_ROOT, FwdKeyEntry.c_str(), L"", ClsidToString(CLSID_PROPERTYSHEET_HANDLER).c_str()))
-                return E_FAIL;
-        }
-        return S_OK;
-    }
-
-    HRESULT UnregisterPropSheetHandler()
-    {
-        std::wstring FwdKeyEntry;
-
-        for (size_t i = 0; i < OOFileExtensionTableSize; i++)
-        {
-            FwdKeyEntry = FORWARD_PROPSHEET_MYPROPSHEET_ENTRY;
-            SubstitutePlaceholder(FwdKeyEntry, FORWARDKEY_PLACEHOLDER, OOFileExtensionTable[i].RegistryForwardKey);
-
-            DeleteRegistryTree(HKEY_CLASSES_ROOT, FwdKeyEntry.c_str());
-
-            FwdKeyEntry = FORWARD_PROPSHEET_ENTRY;
-            SubstitutePlaceholder(FwdKeyEntry, FORWARDKEY_PLACEHOLDER, OOFileExtensionTable[i].RegistryForwardKey);
-
-            DeleteRegistryKey(HKEY_CLASSES_ROOT, FwdKeyEntry.c_str());
-
-            FwdKeyEntry = FORWARD_SHELLEX_ENTRY;
-            SubstitutePlaceholder(FwdKeyEntry, FORWARDKEY_PLACEHOLDER, OOFileExtensionTable[i].RegistryForwardKey);
-
-            DeleteRegistryKey(HKEY_CLASSES_ROOT, FwdKeyEntry.c_str());
-        }
-
-        return UnregisterComComponent(CLSID_PROPERTYSHEET_HANDLER);
     }
 
     HRESULT RegisterThumbviewerHandler(const wchar_t* ModuleFileName)
@@ -289,21 +172,6 @@ STDAPI DllRegisterServer()
 
     HRESULT hr = S_OK;
 
-    if (SUCCEEDED(RegisterColumnHandler(ModuleFileName)))
-        ApproveShellExtension(CLSID_COLUMN_HANDLER, COLUMN_HANDLER_DESCRIPTIVE_NAME);
-    else
-        hr = E_FAIL;
-
-    if (SUCCEEDED(RegisterInfotipHandler(ModuleFileName)))
-        ApproveShellExtension(CLSID_INFOTIP_HANDLER, INFOTIP_HANDLER_DESCRIPTIVE_NAME);
-    else
-        hr = E_FAIL;
-
-    if (SUCCEEDED(RegisterPropSheetHandler(ModuleFileName)))
-        ApproveShellExtension(CLSID_PROPERTYSHEET_HANDLER, PROPSHEET_HANDLER_DESCRIPTIVE_NAME);
-    else
-        hr = E_FAIL;
-
     if (SUCCEEDED(RegisterThumbviewerHandler(ModuleFileName)))
         ApproveShellExtension(CLSID_THUMBVIEWER_HANDLER, THUMBVIEWER_HANDLER_DESCRIPTIVE_NAME);
     else
@@ -318,21 +186,6 @@ STDAPI DllRegisterServer()
 STDAPI DllUnregisterServer()
 {
     HRESULT hr = S_OK;
-
-    if (FAILED(UnregisterColumnHandler()))
-        hr = E_FAIL;
-
-    UnapproveShellExtension(CLSID_COLUMN_HANDLER);
-
-    if (FAILED(UnregisterInfotipHandler()))
-        hr = E_FAIL;
-
-    UnapproveShellExtension(CLSID_INFOTIP_HANDLER);
-
-    if (FAILED(UnregisterPropSheetHandler()))
-        hr = E_FAIL;
-
-    UnapproveShellExtension(CLSID_PROPERTYSHEET_HANDLER);
 
     if (FAILED(UnregisterThumbviewerHandler()))
         hr = E_FAIL;
@@ -349,23 +202,13 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
     *ppv = nullptr;
 
-    if ((rclsid != CLSID_INFOTIP_HANDLER) &&
-        (rclsid != CLSID_COLUMN_HANDLER) &&
-        (rclsid != CLSID_PROPERTYSHEET_HANDLER) &&
-        (rclsid != CLSID_THUMBVIEWER_HANDLER))
+    if (rclsid != CLSID_THUMBVIEWER_HANDLER)
         return CLASS_E_CLASSNOTAVAILABLE;
 
     if ((riid != IID_IUnknown) && (riid != IID_IClassFactory))
         return E_NOINTERFACE;
 
-    if ( rclsid == CLSID_INFOTIP_HANDLER )
-        OutputDebugStringFormatW( L"DllGetClassObject: Create CLSID_INFOTIP_HANDLER\n" );
-    else if ( rclsid == CLSID_COLUMN_HANDLER )
-        OutputDebugStringFormatW( L"DllGetClassObject: Create CLSID_COLUMN_HANDLER\n" );
-    else if ( rclsid == CLSID_PROPERTYSHEET_HANDLER )
-        OutputDebugStringFormatW( L"DllGetClassObject: Create CLSID_PROPERTYSHEET_HANDLER\n" );
-    else if ( rclsid == CLSID_THUMBVIEWER_HANDLER )
-        OutputDebugStringFormatW( L"DllGetClassObject: Create CLSID_THUMBVIEWER_HANDLER\n" );
+    OutputDebugStringFormatW( L"DllGetClassObject: Create CLSID_THUMBVIEWER_HANDLER\n" );
 
     IUnknown* pUnk = new CClassFactory(rclsid);
     *ppv = pUnk;

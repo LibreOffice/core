@@ -455,25 +455,11 @@ RegistryItem gid_Regitem_Sxc_PersistentHandler
     Value = "{7BC0E713-5703-45BE-A29D-5D46D8B39262}";
 End
 
-RegistryItem gid_Regitem_Sxc_Shellex_00021500_0000_0000_C000_000000000046
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Prg_Calc_Bin;
-    Subkey = ".sxc\shellex\{00021500-0000-0000-C000-000000000046}";
-    Value = "{087B3AE3-E237-4467-B8DB-5A38AB959AC9}";
-End
-
 RegistryItem gid_Regitem_Sxc_Shellex_BB2E617C_0920_11D1_9A0B_00C04FC2D6C1
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Calc_Bin;
     Subkey = ".sxc\shellex\{BB2E617C-0920-11D1-9A0B-00C04FC2D6C1}";
     Value = "{3B092F0C-7696-40E3-A80F-68D74DA84210}";
-End
-
-RegistryItem gid_Regitem_StarCalcDocument_1_Shellex_PropertySheetHandlers_MyPropSheet1
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Prg_Calc_Bin;
-    Subkey = "soffice.StarCalcDocument.6\shellex\PropertySheetHandlers\MyPropSheet1";
-    Value = "{63542C48-9552-494A-84F7-73AA6A7C99C1}";
 End
 
 RegistryItem gid_Regitem_Stc_PersistentHandler
@@ -483,25 +469,11 @@ RegistryItem gid_Regitem_Stc_PersistentHandler
     Value = "{7BC0E713-5703-45BE-A29D-5D46D8B39262}";
 End
 
-RegistryItem gid_Regitem_Stc_Shellex_00021500_0000_0000_C000_000000000046
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Prg_Calc_Bin;
-    Subkey = ".stc\shellex\{00021500-0000-0000-C000-000000000046}";
-    Value = "{087B3AE3-E237-4467-B8DB-5A38AB959AC9}";
-End
-
 RegistryItem gid_Regitem_Stc_Shellex_BB2E617C_0920_11D1_9A0B_00C04FC2D6C1
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Calc_Bin;
     Subkey = ".stc\shellex\{BB2E617C-0920-11D1-9A0B-00C04FC2D6C1}";
     Value = "{3B092F0C-7696-40E3-A80F-68D74DA84210}";
-End
-
-RegistryItem gid_Regitem_StarCalcTemplate_6_Shellex_PropertySheetHandlers_MyPropSheet1
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Prg_Calc_Bin;
-    Subkey = "soffice.StarCalcTemplate.6\shellex\PropertySheetHandlers\MyPropSheet1";
-    Value = "{63542C48-9552-494A-84F7-73AA6A7C99C1}";
 End
 
 RegistryItem gid_Regitem_Stc
@@ -597,25 +569,11 @@ RegistryItem gid_Regitem_Ods_PersistentHandler
     Value = "{7BC0E713-5703-45BE-A29D-5D46D8B39262}";
 End
 
-RegistryItem gid_Regitem_Ods_Shellex_00021500_0000_0000_C000_000000000046
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Prg_Calc_Bin;
-    Subkey = ".ods\shellex\{00021500-0000-0000-C000-000000000046}";
-    Value = "{087B3AE3-E237-4467-B8DB-5A38AB959AC9}";
-End
-
 RegistryItem gid_Regitem_Ods_Shellex_BB2E617C_0920_11D1_9A0B_00C04FC2D6C1
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Calc_Bin;
     Subkey = ".ods\shellex\{BB2E617C-0920-11D1-9A0B-00C04FC2D6C1}";
     Value = "{3B092F0C-7696-40E3-A80F-68D74DA84210}";
-End
-
-RegistryItem gid_Regitem_CalcDocument_1_Shellex_PropertySheetHandlers_MyPropSheet1
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Prg_Calc_Bin;
-    Subkey = "CollaboraOffice.CalcDocument.1\shellex\PropertySheetHandlers\MyPropSheet1";
-    Value = "{63542C48-9552-494A-84F7-73AA6A7C99C1}";
 End
 
 RegistryItem gid_Regitem__Ods
@@ -863,25 +821,11 @@ RegistryItem gid_Regitem_Ots_PersistentHandler
     Value = "{7BC0E713-5703-45BE-A29D-5D46D8B39262}";
 End
 
-RegistryItem gid_Regitem_Ots_Shellex_00021500_0000_0000_C000_000000000046
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Prg_Calc_Bin;
-    Subkey = ".ots\shellex\{00021500-0000-0000-C000-000000000046}";
-    Value = "{087B3AE3-E237-4467-B8DB-5A38AB959AC9}";
-End
-
 RegistryItem gid_Regitem_Ots_Shellex_BB2E617C_0920_11D1_9A0B_00C04FC2D6C1
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Calc_Bin;
     Subkey = ".ots\shellex\{BB2E617C-0920-11D1-9A0B-00C04FC2D6C1}";
     Value = "{3B092F0C-7696-40E3-A80F-68D74DA84210}";
-End
-
-RegistryItem gid_Regitem_CalcTemplate_1_Shellex_PropertySheetHandlers_MyPropSheet1
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Prg_Calc_Bin;
-    Subkey = "CollaboraOffice.CalcTemplate.1\shellex\PropertySheetHandlers\MyPropSheet1";
-    Value = "{63542C48-9552-494A-84F7-73AA6A7C99C1}";
 End
 
 RegistryItem gid_Regitem_Ots

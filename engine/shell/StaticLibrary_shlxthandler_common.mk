@@ -33,7 +33,6 @@ $(eval $(call gb_StaticLibrary_add_exception_objects,shlxthandler_common,\
     shell/source/win32/ooofilereader/simpletag \
     shell/source/win32/shlxthandler/ooofilt/stream_helper \
     shell/source/win32/shlxthandler/util/fileextensions \
-    shell/source/win32/shlxthandler/util/iso8601_converter \
     shell/source/win32/shlxthandler/util/registry \
     shell/source/win32/shlxthandler/util/utilities \
     shell/source/win32/zipfile/zipexcptn \

@@ -57,7 +57,6 @@ $(eval $(call gb_Module_add_targets,shell,\
 
 ifeq ($(COM),MSC)
 $(eval $(call gb_Module_add_targets,shell,\
-	CustomTarget_shlxthdl_res \
 	Library_ooofilt \
 	Library_propertyhdl \
 	Library_shlxthdl \
