@@ -392,7 +392,7 @@ formula::ParamClass ScParameterClassification::GetParameterType(
     {
         case ocExternal:
         case ocUDExternal:
-            return GetExternalParameterType( static_cast<const FormulaExternalToken*>(pToken), nParameter);
+            return GetExternalParameterType(pToken, nParameter);
         case ocMacro:
             return (nParameter == SAL_MAX_UINT16 ? Value : Reference);
         default:
@@ -425,15 +425,24 @@ formula::ParamClass ScParameterClassification::GetParameterType(
     return Unknown;
 }
 
-formula::ParamClass ScParameterClassification::GetExternalParameterType( const FormulaExternalToken* pToken,
-        sal_uInt16 nParameter)
+formula::ParamClass ScParameterClassification::GetExternalParameterType(const FormulaToken* pToken,
+                                                                        sal_uInt16 nParameter)
 {
     formula::ParamClass eRet = Unknown;
     if (nParameter == SAL_MAX_UINT16)
         return eRet;
 
+    if (pToken->GetType() != svExternal)
+    {
+        SAL_WARN("sc.core", "external function token has non-external token type: "
+                                << static_cast<int>(pToken->GetType()));
+        return eRet;
+    }
+
+    const FormulaExternalToken* pExternalToken = static_cast<const FormulaExternalToken*>(pToken);
+
     // similar to ScInterpreter::ScExternal()
-    OUString aFuncName = pToken->GetExternal().toAsciiUpperCase();  // programmatic name
+    OUString aFuncName = pExternalToken->GetExternal().toAsciiUpperCase(); // programmatic name
     {
         const LegacyFuncData* pLegacyFuncData = ScGlobal::GetLegacyFuncCollection()->findByName(aFuncName);
         if (pLegacyFuncData)

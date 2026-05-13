@@ -2584,7 +2584,25 @@ void ScInterpreter::ScExternal()
 {
     sal_uInt8 nParamCount = GetByte();
     OUString aUnoName;
-    OUString aFuncName( static_cast<const FormulaExternalToken*>(pCur)->GetExternal().toAsciiUpperCase());    // programmatic name
+
+    if (pCur->GetType() != svExternal)
+    {
+        SAL_WARN("sc.core", "external function token has non-external token type: "
+                                << static_cast<int>(pCur->GetType()));
+
+        while (nParamCount-- > 0)
+        {
+            PopError();
+        }
+
+        PushError(FormulaError::NoRef);
+
+        return;
+    }
+
+    const FormulaExternalToken* pExternalToken = static_cast<const FormulaExternalToken*>(pCur);
+    OUString aFuncName(pExternalToken->GetExternal().toAsciiUpperCase()); // programmatic name
+
     LegacyFuncData* pLegacyFuncData = ScGlobal::GetLegacyFuncCollection()->findByName(aFuncName);
     if (pLegacyFuncData)
     {
