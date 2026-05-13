@@ -264,6 +264,9 @@ protected:
             aEvt.Source = static_cast<css::beans::XPropertySet*>(this);
             m_aBoundLC.disposeAndClear(rGuard, aEvt);
             m_aVetoableLC.disposeAndClear(rGuard, aEvt);
+            m_aPropertyChangeListeners.disposeAndClear(rGuard, aEvt);
+            m_aPropertiesChangeListeners.disposeAndClear(rGuard, aEvt);
+            m_aVetoableChangeListeners.disposeAndClear(rGuard, aEvt);
         }
         osl_atomic_decrement(&this->m_refCount);
     }
