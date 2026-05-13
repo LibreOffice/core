@@ -31,13 +31,87 @@
         <property name="border-width">6</property>
         <property name="row-spacing">6</property>
         <child>
-          <!-- n-columns=1 n-rows=3 -->
+          <!-- n-columns=1 n-rows=5 -->
           <object class="GtkGrid">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="hexpand">True</property>
             <property name="vexpand">True</property>
             <property name="row-spacing">6</property>
+            <child>
+              <object class="GtkLabel" id="searchlabel">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="label" translatable="yes" context="functionpanel|searchlabel">_Search</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">search</property>
+                <property name="xalign">0</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="orientation">horizontal</property>
+                <property name="spacing">6</property>
+                <child>
+                  <object class="GtkEntry" id="search">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="hexpand">True</property>
+                    <property name="placeholder-text" translatable="yes" context="functionpanel|search">Search all functions</property>
+                    <property name="truncate-multiline">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="similaritysearch">
+                    <property name="label" translatable="yes" context="functionpanel|similaritysearch">Similar</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
+                    <property name="use-underline">True</property>
+                    <property name="draw-indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="similaritysearch-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="functionpanel|extended_tip|similaritysearch">Search and Sort functions by similarity</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">2</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="categorylabel">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="label" translatable="yes" context="functionpanel|categorylabel">_Category</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">category</property>
+                <property name="xalign">0</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">2</property>
+              </packing>
+            </child>
             <child>
               <!-- n-columns=3 n-rows=1 -->
               <object class="GtkGrid">
@@ -83,7 +157,6 @@
                     </items>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="category-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes" context="functionpanel|category-atkobject">Category</property>
                         <property name="AtkObject::accessible-description" translatable="yes" context="functionpanel|extended_tip|category">Displays the available functions.</property>
                       </object>
                     </child>
@@ -96,7 +169,7 @@
               </object>
               <packing>
                 <property name="left-attach">0</property>
-                <property name="top-attach">1</property>
+                <property name="top-attach">3</property>
               </packing>
             </child>
             <child>
@@ -140,58 +213,7 @@
               </object>
               <packing>
                 <property name="left-attach">0</property>
-                <property name="top-attach">2</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkBox">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="orientation">horizontal</property>
-                <property name="spacing">6</property>
-                <child>
-                  <object class="GtkEntry" id="search">
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="hexpand">True</property>
-                    <property name="placeholder-text" translatable="yes" context="functionpanel|search">Search all functions</property>
-                    <property name="truncate-multiline">True</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="search-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes" context="functionpanel|accessiblename|search">Search all functions</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkCheckButton" id="similaritysearch">
-                    <property name="label" translatable="yes" context="functionpanel|similaritysearch">Similar</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">False</property>
-                    <property name="use-underline">True</property>
-                    <property name="draw-indicator">True</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="similaritysearch-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="functionpanel|extended_tip|similaritysearch">Search and Sort functions by similarity</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">2</property>
-                  </packing>
-                </child>
-              </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">0</property>
+                <property name="top-attach">4</property>
               </packing>
             </child>
           </object>
