@@ -227,8 +227,12 @@ void FuCopy::DoExecute( SfxRequest& rReq )
             }
         }
 
-        double aWidth = double( aRect.Right() - aRect.Left() + lWidth ) / ( aRect.Right() - aRect.Left() );
-        double aHeight = double( aRect.Bottom() - aRect.Top() + lHeight ) / ( aRect.Bottom() - aRect.Top() );
+        // vertical/horizontal lines have zero width/height; leave that axis
+        // unscaled to avoid 0/0=NaN scale propagating into ResizeRect.
+        const tools::Long nRectW = aRect.Right() - aRect.Left();
+        const tools::Long nRectH = aRect.Bottom() - aRect.Top();
+        double aWidth  = nRectW ? double(nRectW + lWidth)  / nRectW : 1.0;
+        double aHeight = nRectH ? double(nRectH + lHeight) / nRectH : 1.0;
 
         if( mpView->IsResizeAllowed() )
             mpView->ResizeAllMarked( aRect.TopLeft(), aWidth, aHeight );
