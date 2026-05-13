@@ -3375,15 +3375,8 @@ $(call gb_LinkTarget_use_package,$(1),python3)
 endif
 
 ifeq ($(OS),WNT)
-ifeq ($(CPUNAME),X86_64)
-python_arch_subdir=amd64/
-else ifeq ($(CPUNAME),AARCH64)
-python_arch_subdir=arm64/
-else
-python_arch_subdir=win32/
-endif
 $(call gb_LinkTarget_add_libs,$(1),\
-	$(gb_UnpackedTarball_workdir)/python3/PCbuild/$(python_arch_subdir)python$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)$(if $(MSVC_USE_DEBUG_RUNTIME),_d).lib \
+	$(gb_UnpackedTarball_workdir)/python3/PCbuild/$(if $(filter AARCH64,$(CPUNAME)),arm64,$(if $(filter X86_64,$(CPUNAME)),amd64,win32))/python$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)$(if $(MSVC_USE_DEBUG_RUNTIME),_d).lib \
 )
 else ifeq ($(OS),MACOSX)
 $(call gb_LinkTarget_add_libs,$(1),\
