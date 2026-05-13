@@ -21,5 +21,6 @@
 #undef Size
 #undef TimeValue
 #undef TimeRecord
+#undef UInt
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
