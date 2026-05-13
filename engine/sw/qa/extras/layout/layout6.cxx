@@ -2232,6 +2232,27 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testTdf169999)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testInlineTextBoxPosition)
+{
+    createSwDoc("inline-textbox-position.docx");
+
+    xmlDocUniquePtr pLayoutDump = parseLayoutDump();
+    CPPUNIT_ASSERT(pLayoutDump);
+
+    const sal_Int32 nShortShapeTop
+        = getXPath(pLayoutDump,
+                   "/root/page/body/txt/anchored/SwAnchoredDrawObject[1]/bounds", "top")
+              .toInt32();
+    const sal_Int32 nShortFlyTop
+        = getXPath(pLayoutDump,
+                   "/root/page/body/txt/anchored/fly[1]/infos/bounds", "top")
+              .toInt32();
+
+    // Without the fix ShortBox's fly landed at the anchor paragraph's
+    // print-area top while its SdrObject sat below it. The two must coincide.
+    CPPUNIT_ASSERT_EQUAL(nShortShapeTop, nShortFlyTop);
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testTdf170846_1)
 {
     // In this document, the whole floating table must move to page 2
