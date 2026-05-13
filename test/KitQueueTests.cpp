@@ -48,6 +48,7 @@ class KitQueueTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testSenderQueueTileDeduplication);
     CPPUNIT_TEST(testSenderQueueTileDedupReportsDroppedWireId);
     CPPUNIT_TEST(testTileCacheKitHangBecomesStale);
+    CPPUNIT_TEST(testTileCacheStaleRenderIsReissued);
     CPPUNIT_TEST(testInvalidateViewCursorDeduplication);
     CPPUNIT_TEST(testCallbackModifiedStatusIsSkipped);
     CPPUNIT_TEST(testCallbackInvalidation);
@@ -94,6 +95,7 @@ class KitQueueTests : public CPPUNIT_NS::TestFixture
     void testSenderQueueTileDeduplication();
     void testSenderQueueTileDedupReportsDroppedWireId();
     void testTileCacheKitHangBecomesStale();
+    void testTileCacheStaleRenderIsReissued();
     void testInvalidateViewCursorDeduplication();
     void testCallbackModifiedStatusIsSkipped();
     void testCallbackInvalidation();
@@ -788,6 +790,86 @@ void KitQueueTests::testTileCacheKitHangBecomesStale()
         const auto wayPast = t0 + std::chrono::seconds(60);
         LOK_ASSERT_EQUAL_STR(false, cache.hasTileBeingRendered(tile, &wayPast));
         LOK_ASSERT_EQUAL_STR(true, cache.hasTileBeingRendered(tile));
+    }
+}
+
+// Verifies the periodic stale-render sweep:
+//   - returns stale entries for re-issue when live subscribers remain,
+//   - resets the start time so the next sweep does not re-flag them,
+//   - drops stale entries whose subscribers have all gone.
+void KitQueueTests::testTileCacheStaleRenderIsReissued()
+{
+    constexpr std::string_view testname = __func__;
+
+    TileCache cache("dummy://test-doc.odt", std::chrono::system_clock::now(),
+                    /*dontCache=*/true);
+
+    const TileDesc tileA = TileDesc::parse(
+        "tile nviewid=0 part=0 width=256 height=256 tileposx=0 tileposy=0 "
+        "tilewidth=3840 tileheight=3840");
+    const TileDesc tileB = TileDesc::parse(
+        "tile nviewid=0 part=0 width=256 height=256 tileposx=3840 tileposy=0 "
+        "tilewidth=3840 tileheight=3840");
+
+    int sessionA = 0;
+    auto liveSubscriber = std::shared_ptr<ClientSession>(
+        reinterpret_cast<ClientSession*>(&sessionA), [](ClientSession*) {});
+
+    const auto t0 = std::chrono::steady_clock::now();
+    cache.injectTileBeingRenderedForTest(tileA, t0, liveSubscriber);
+
+    // tileB has a subscriber that goes away before the sweep sees it.
+    {
+        int sessionB = 0;
+        auto goneSubscriber = std::shared_ptr<ClientSession>(
+            reinterpret_cast<ClientSession*>(&sessionB), [](ClientSession*) {});
+        cache.injectTileBeingRenderedForTest(tileB, t0, goneSubscriber);
+        // goneSubscriber drops out of scope here; its weak_ptr in the cache
+        // is now expired.
+    }
+
+    // Not stale yet: sweep should return nothing.
+    {
+        const auto fresh = t0 + std::chrono::milliseconds(100);
+        auto reissue = cache.takeStaleRendersForReissue(fresh);
+        LOK_ASSERT_EQUAL(static_cast<size_t>(0), reissue.size());
+        // Both entries still tracked.
+        LOK_ASSERT_EQUAL_STR(true, cache.hasTileBeingRendered(tileA));
+        LOK_ASSERT_EQUAL_STR(true, cache.hasTileBeingRendered(tileB));
+    }
+
+    // After the timeout: sweep returns tileA (live subscriber), and
+    // silently drops tileB (no live subscribers left).
+    const auto stale = t0 + std::chrono::milliseconds(COMMAND_TIMEOUT_MS + 1);
+    {
+        auto reissue = cache.takeStaleRendersForReissue(stale);
+        LOK_ASSERT_EQUAL(static_cast<size_t>(1), reissue.size());
+        LOK_ASSERT_EQUAL(tileA.getTilePosX(), reissue[0].getTilePosX());
+        LOK_ASSERT_EQUAL(tileA.getTilePosY(), reissue[0].getTilePosY());
+
+        // tileA's start time was reset to `stale`. The entry is still
+        // present (it is waiting for a new kit reply).
+        LOK_ASSERT_EQUAL_STR(true, cache.hasTileBeingRendered(tileA, &stale));
+
+        // tileB's entry was dropped because all subscribers are gone.
+        LOK_ASSERT_EQUAL_STR(false, cache.hasTileBeingRendered(tileB));
+    }
+
+    // Immediately calling the sweep again must not re-flag tileA: the
+    // start time was just reset to `stale`, so it is now fresh again.
+    {
+        auto reissue = cache.takeStaleRendersForReissue(stale);
+        LOK_ASSERT_EQUAL(static_cast<size_t>(0), reissue.size());
+        LOK_ASSERT_EQUAL_STR(true, cache.hasTileBeingRendered(tileA));
+    }
+
+    // Advance far past the new start: tileA goes stale again, sweep
+    // returns it once more. This is what would happen if the kit keeps
+    // hanging across multiple sweep intervals.
+    {
+        const auto staleAgain = stale + std::chrono::milliseconds(COMMAND_TIMEOUT_MS + 1);
+        auto reissue = cache.takeStaleRendersForReissue(staleAgain);
+        LOK_ASSERT_EQUAL(static_cast<size_t>(1), reissue.size());
     }
 }
 

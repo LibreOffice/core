@@ -362,6 +362,7 @@ void DocumentBroker::pollThread()
     uint64_t adminRecv = 0;
     auto lastBWUpdateTime = std::chrono::steady_clock::now();
     auto lastClipboardHashUpdateTime = std::chrono::steady_clock::now();
+    auto lastStaleRenderCheck = std::chrono::steady_clock::now();
 
     const std::chrono::seconds limit_load_secs =
 #if ENABLE_DEBUG
@@ -413,6 +414,20 @@ void DocumentBroker::pollThread()
         // so double that - 4Mb per view.
         if (_tileCache)
             _tileCache->setMaxCacheSize(8 * 1024 * 256 * 2 * _sessions.size());
+
+        // Recover from kit hangs / very slow renders. If a tile render has
+        // been pending longer than COMMAND_TIMEOUT_MS, re-issue it. Client-side
+        // per-tile rate limits (5s) plus the same timeout server-side can
+        // otherwise leave a tile permanently lost when the client lacks a
+        // trigger to retry.
+        if (_tileCache &&
+            (now - lastStaleRenderCheck) >= std::chrono::milliseconds(COMMAND_TIMEOUT_MS))
+        {
+            lastStaleRenderCheck = now;
+            auto stale = _tileCache->takeStaleRendersForReissue(now);
+            if (!stale.empty())
+                sendTileCombine(TileCombined::create(stale));
+        }
 
         if (isInteractive())
         {

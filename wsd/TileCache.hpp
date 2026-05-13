@@ -294,6 +294,15 @@ public:
 
     int getTileBeingRenderedVersion(const TileDesc& tileDesc);
 
+    /// Sweep for renderings older than COMMAND_TIMEOUT_MS - typically
+    /// caused by a slow or stuck kit. As a side effect:
+    ///  - entries whose subscribers have all gone are removed,
+    ///  - the start time of returned entries is reset to @p now so the
+    ///    very next sweep does not see them as stale again.
+    /// Returns the tile descriptors that should be re-issued to the kit.
+    std::vector<TileDesc>
+    takeStaleRendersForReissue(std::chrono::steady_clock::time_point now);
+
     /// Set the high watermark for tilecache size
     void setMaxCacheSize(size_t cacheSize);
 
@@ -309,8 +318,13 @@ public:
     /// Test-only: register a tile as being rendered with the given start
     /// time, bypassing the need for a real ClientSession subscriber.
     /// Used to simulate scenarios where the kit has stalled or hung.
-    void injectTileBeingRenderedForTest(const TileDesc& tile,
-                                        std::chrono::steady_clock::time_point startTime);
+    /// If subscriber is non-null, it is added to the rendering's
+    /// subscriber list (held as a weak_ptr) so takeStaleRendersForReissue
+    /// sees a live subscriber.
+    void injectTileBeingRenderedForTest(
+        const TileDesc& tile,
+        std::chrono::steady_clock::time_point startTime,
+        const std::shared_ptr<ClientSession>& subscriber = {});
 #endif
 
 private:

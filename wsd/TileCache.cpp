@@ -26,6 +26,7 @@
 #include <common/Util.hpp>
 #include <wsd/ClientSession.hpp>
 
+#include <algorithm>
 #include <cassert>
 #include <climits>
 #include <cstddef>
@@ -95,6 +96,9 @@ struct TileCache::TileBeingRendered
     void setVersion(int version) { _tile.setVersion(version); }
 
     std::chrono::steady_clock::time_point getStartTime() const { return _startTime; }
+    /// Reset the start time. Used after re-issuing a stalled render so the
+    /// entry is not flagged stale again on the very next sweep.
+    void resetStartTime(std::chrono::steady_clock::time_point now) { _startTime = now; }
     std::chrono::milliseconds
     getElapsedTimeMs(const std::chrono::steady_clock::time_point now) const
     {
@@ -174,6 +178,47 @@ int TileCache::getTileBeingRenderedVersion(const TileDesc& tile)
 {
     std::shared_ptr<TileBeingRendered> tileBeingRendered = findTileBeingRendered(tile);
     return tileBeingRendered ? tileBeingRendered->getVersion() : 0;
+}
+
+std::vector<TileDesc>
+TileCache::takeStaleRendersForReissue(std::chrono::steady_clock::time_point now)
+{
+    ASSERT_CORRECT_THREAD_OWNER(_owner);
+
+    std::vector<TileDesc> reissue;
+    for (auto it = _tilesBeingRendered.begin(); it != _tilesBeingRendered.end(); )
+    {
+        const auto& tbr = it->second;
+        if (!tbr->isStale(now))
+        {
+            ++it;
+            continue;
+        }
+
+        // Compact the subscriber list, discarding any sessions that
+        // have gone away while the kit was being slow.
+        auto& subs = tbr->getSubscribers();
+        subs.erase(std::remove_if(subs.begin(), subs.end(),
+                                  [](const std::weak_ptr<ClientSession>& w)
+                                  { return w.expired(); }),
+                   subs.end());
+
+        if (subs.empty())
+        {
+            LOG_DBG("Dropping stale render with no live subscribers: "
+                    << it->first.serialize());
+            it = _tilesBeingRendered.erase(it);
+            continue;
+        }
+
+        LOG_WRN("Re-issuing stalled tile render after "
+                << tbr->getElapsedTimeMs(now).count() << "ms for "
+                << subs.size() << " subscribers: " << it->first.serialize());
+        reissue.push_back(it->first);
+        tbr->resetStartTime(now);
+        ++it;
+    }
+    return reissue;
 }
 
 Tile TileCache::lookupTile(const TileDesc& tile)
@@ -652,10 +697,14 @@ void TileCache::setMaxCacheSize(size_t cacheSize)
 }
 
 #ifdef BUILDING_TESTS
-void TileCache::injectTileBeingRenderedForTest(const TileDesc& tile,
-                                               std::chrono::steady_clock::time_point startTime)
+void TileCache::injectTileBeingRenderedForTest(
+    const TileDesc& tile,
+    std::chrono::steady_clock::time_point startTime,
+    const std::shared_ptr<ClientSession>& subscriber)
 {
     auto tileBeingRendered = std::make_shared<TileBeingRendered>(tile, startTime);
+    if (subscriber)
+        tileBeingRendered->getSubscribers().push_back(subscriber);
     _tilesBeingRendered[tile] = std::move(tileBeingRendered);
 }
 #endif
