@@ -61,7 +61,9 @@ public:
     /** Check whether this "auto-collection" is used in document.
      */
     virtual bool IsPoolTextCollUsed(SwPoolFormatId nId) const = 0;
+    virtual bool IsPoolTextCollUsed(const SwTextFormatColl&) const = 0;
     virtual bool IsPoolFormatUsed(SwPoolFormatId nId) const = 0;
+    virtual bool IsPoolFormatUsed(const SwFormat&) const = 0;
     virtual bool IsPoolPageDescUsed(SwPoolFormatId nId) const = 0;
 
 protected:
