@@ -21,6 +21,14 @@
 #include <wsd/ClientSession.hpp>
 #include <wsd/DocumentBroker.hpp>
 
+DocumentBroker::~DocumentBroker() = default;
+
+void DocumentBroker::setLoaded() {}
+
+void DocumentBroker::setInteractive(bool) {}
+
+bool DocumentBroker::handleInput(const std::shared_ptr<Message>&) { return false; }
+
 void DocumentBroker::assertCorrectThread(LOG_CAPTURE_CALLER) const {}
 
 void DocumentBroker::recordFirstTileSent() {}
