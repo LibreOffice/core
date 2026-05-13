@@ -91,25 +91,25 @@ OUString UITabPage::GetCurrentApp()
         switch (vcl::EnumContext::GetApplicationEnum(xModuleManager->identify(xCurrentFrame)))
         {
             case vcl::EnumContext::Application::Writer:
-                sResult = "Writer";
+                sResult = u"Writer"_ustr;
                 break;
             case vcl::EnumContext::Application::Calc:
-                sResult = "Calc";
+                sResult = u"Calc"_ustr;
                 break;
             case vcl::EnumContext::Application::Impress:
-                sResult = "Impress";
+                sResult = u"Impress"_ustr;
                 break;
             case vcl::EnumContext::Application::Draw:
-                sResult = "Draw";
+                sResult = u"Draw"_ustr;
                 break;
             case vcl::EnumContext::Application::Formula:
-                sResult = "Formula";
+                sResult = u"Formula"_ustr;
                 break;
             case vcl::EnumContext::Application::Base:
-                sResult = "Base";
+                sResult = u"Base"_ustr;
                 break;
             default:
-                sResult = "Unsupported";
+                sResult = u"Unsupported"_ustr;
         }
     }
     return sResult;

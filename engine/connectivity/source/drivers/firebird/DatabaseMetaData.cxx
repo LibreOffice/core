@@ -1250,9 +1250,9 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumnPrivileges(
     {
         OUString sAppend;
         if (sColumnNamePattern.match(wld))
-            sAppend = "AND priv.RDB$FIELD_NAME LIKE '%' ";
+            sAppend = u"AND priv.RDB$FIELD_NAME LIKE '%' "_ustr;
         else
-            sAppend = "AND priv.RDB$FIELD_NAME = '%' ";
+            sAppend = u"AND priv.RDB$FIELD_NAME = '%' "_ustr;
 
         queryBuf.append(sAppend.replaceAll(wld, sColumnNamePattern));
     }
@@ -1330,9 +1330,9 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumns(
     {
         OUString sAppend;
         if (tableNamePattern.match("%"))
-            sAppend = "AND relfields.RDB$RELATION_NAME LIKE '%' ";
+            sAppend = u"AND relfields.RDB$RELATION_NAME LIKE '%' "_ustr;
         else
-            sAppend = "AND relfields.RDB$RELATION_NAME = '%' ";
+            sAppend = u"AND relfields.RDB$RELATION_NAME = '%' "_ustr;
 
         queryBuf.append(sAppend.replaceAll("%", tableNamePattern));
     }
@@ -1341,9 +1341,9 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumns(
     {
         OUString sAppend;
         if (columnNamePattern.match("%"))
-            sAppend = "AND relfields.RDB$FIELD_NAME LIKE '%' ";
+            sAppend = u"AND relfields.RDB$FIELD_NAME LIKE '%' "_ustr;
         else
-            sAppend = "AND relfields.RDB$FIELD_NAME = '%' ";
+            sAppend = u"AND relfields.RDB$FIELD_NAME = '%' "_ustr;
 
         queryBuf.append(sAppend.replaceAll("%", columnNamePattern));
     }
@@ -1552,9 +1552,9 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
     {
         OUString sAppend;
         if (tableNamePattern.match(wld))
-            sAppend = "AND RDB$RELATION_NAME LIKE '%' ";
+            sAppend = u"AND RDB$RELATION_NAME LIKE '%' "_ustr;
         else
-            sAppend = "AND RDB$RELATION_NAME = '%' ";
+            sAppend = u"AND RDB$RELATION_NAME = '%' "_ustr;
 
         queryBuf.append(sAppend.replaceAll(wld, tableNamePattern));
     }
@@ -1587,17 +1587,17 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
 
             if (nSystemFlag == 1)
             {
-                sTableType = "SYSTEM TABLE";
+                sTableType = u"SYSTEM TABLE"_ustr;
             }
             else if (aIsView)
             {
-                sTableType = "VIEW";
+                sTableType = u"VIEW"_ustr;
             }
             else
             {
                 // see above about src/jrd/constants.h
                 if (nTableType == 0 || nTableType == 2)
-                    sTableType = "TABLE";
+                    sTableType = u"TABLE"_ustr;
             }
 
             aCurrentRow[4] = new ORowSetValueDecorator(sTableType);
@@ -1931,9 +1931,9 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
     {
         OUString sAppend;
         if (sTableNamePattern.match(wld))
-            sAppend = "WHERE priv.RDB$RELATION_NAME LIKE '%' ";
+            sAppend = u"WHERE priv.RDB$RELATION_NAME LIKE '%' "_ustr;
         else
-            sAppend = "WHERE priv.RDB$RELATION_NAME = '%' ";
+            sAppend = u"WHERE priv.RDB$RELATION_NAME = '%' "_ustr;
 
         queryBuf.append(sAppend.replaceAll(wld, sTableNamePattern));
     }

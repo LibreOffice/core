@@ -313,11 +313,11 @@ void TrendlineResources::FillItemSet(SfxItemSet* rOutAttrs) const
     rOutAttrs->Put(SfxStringItem(SCHATTR_REGRESSION_CURVE_NAME, aName));
     aName = m_xEE_XName->get_text();
     if ( aName.isEmpty() )
-        aName = "x";
+        aName = u"x"_ustr;
     rOutAttrs->Put(SfxStringItem(SCHATTR_REGRESSION_XNAME, aName));
     aName = m_xEE_YName->get_text();
     if ( aName.isEmpty() )
-        aName = "f(x)";
+        aName = u"f(x)"_ustr;
     rOutAttrs->Put(SfxStringItem(SCHATTR_REGRESSION_YNAME, aName));
 
     sal_Int32 aDegree = m_xNF_Degree->get_value();

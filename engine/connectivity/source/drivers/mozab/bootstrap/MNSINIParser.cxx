@@ -79,7 +79,7 @@ IniParser::IniParser(OUString const & rIniName)
                     sectionName =  OStringToOUString(
                         o3tl::trim(line.subView(nIndexStart + 1,nIndexEnd - nIndexStart -1)), RTL_TEXTENCODING_ASCII_US );
                     if (sectionName.isEmpty())
-                        sectionName = "no name section";
+                        sectionName = u"no name section"_ustr;
                 }
             }
         }

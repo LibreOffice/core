@@ -352,9 +352,9 @@ void SvxNotebookbarConfigPage::searchNodeandAttribute(std::vector<NotebookbarEnt
                     {
                         nodeEntries.sClassId = sClassId;
                         nodeEntries.sUIItemId = sUIItemId;
-                        nodeEntries.sDisplayName = "Null";
-                        nodeEntries.sVisibleValue = "Null";
-                        nodeEntries.sActionName = "Null";
+                        nodeEntries.sDisplayName = u"Null"_ustr;
+                        nodeEntries.sVisibleValue = u"Null"_ustr;
+                        nodeEntries.sActionName = u"Null"_ustr;
                         aEntries.push_back(nodeEntries);
                     }
                     else if (sClassId == "sfxlo-PriorityHBox"
@@ -365,8 +365,8 @@ void SvxNotebookbarConfigPage::searchNodeandAttribute(std::vector<NotebookbarEnt
                         nodeEntries.sUIItemId = sUIItemId;
                         nodeEntries.sDisplayName
                             = aCategoryList[aCategoryList.size() - 1].sDisplayName;
-                        nodeEntries.sVisibleValue = "Null";
-                        nodeEntries.sActionName = "Null";
+                        nodeEntries.sVisibleValue = u"Null"_ustr;
+                        nodeEntries.sActionName = u"Null"_ustr;
                         aEntries.push_back(nodeEntries);
                     }
                 }
@@ -519,9 +519,9 @@ void SvxNotebookbarEntriesListBox::ChangedVisibility(int nRow)
 
     OUString sVisible;
     if (m_xControl->get_toggle(nRow) == TRISTATE_TRUE)
-        sVisible = "True";
+        sVisible = u"True"_ustr;
     else
-        sVisible = "False";
+        sVisible = u"False"_ustr;
     OUString sSetEntries = sUIItemId + ",visible," + sVisible;
     Sequence<OUString> sSeqOfEntries{ sSetEntries };
     EditRegistryFile(sUIItemId, sSetEntries, sNotebookbarInterface);

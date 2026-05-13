@@ -1243,8 +1243,8 @@ std::unique_ptr<OSQLParseNode> OSQLParser::predicateTree(OUString& rErrorMessage
                     if ( xFormats.is() )
                     {
                         css::lang::Locale aLocale;
-                        aLocale.Language = "en";
-                        aLocale.Country = "US";
+                        aLocale.Language = u"en"_ustr;
+                        aLocale.Country = u"US"_ustr;
                         OUString sFormat(u"YYYY-MM-DD"_ustr);
                         m_nDateFormatKey = xFormats->queryKey(sFormat,aLocale,false);
                         if ( m_nDateFormatKey == sal_Int32(-1) )
@@ -1744,7 +1744,7 @@ bool OSQLParseNode::addDateValue(OUStringBuffer& rString, const SQLParseNodePara
     {
          if (rParam.aMetaData.shouldEscapeDateTime())
          {
-             suQuote = "#";
+             suQuote = u"#"_ustr;
          }
     }
     else

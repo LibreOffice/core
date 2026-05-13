@@ -166,7 +166,7 @@ namespace comphelper {
         sal_Int32 nNewLen = aMedDescr.getLength() + 1;
         aMedDescr.realloc(nNewLen);
         auto pMedDescr = aMedDescr.getArray();
-        pMedDescr[nNewLen-1].Name = "MacroEventRead";
+        pMedDescr[nNewLen-1].Name = u"MacroEventRead"_ustr;
         pMedDescr[nNewLen-1].Value <<= true;
         rModel->attachResource(rModel->getURL(), aMedDescr);
     }

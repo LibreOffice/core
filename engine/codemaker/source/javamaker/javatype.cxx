@@ -2010,45 +2010,45 @@ void handleConstantGroup(
         sal_uInt16 valueIndex = sal_uInt16(); // avoid false warnings
         switch (member.value.type) {
         case unoidl::ConstantValue::TYPE_BOOLEAN:
-            type = "boolean";
+            type = u"boolean"_ustr;
             valueIndex = cf->addIntegerInfo(sal_Int32(member.value.booleanValue));
             break;
         case unoidl::ConstantValue::TYPE_BYTE:
-            type = "byte";
+            type = u"byte"_ustr;
             valueIndex = cf->addIntegerInfo(member.value.byteValue);
             break;
         case unoidl::ConstantValue::TYPE_SHORT:
-            type = "short";
+            type = u"short"_ustr;
             valueIndex = cf->addIntegerInfo(member.value.shortValue);
             break;
         case unoidl::ConstantValue::TYPE_UNSIGNED_SHORT:
-            type = "unsigned short";
+            type = u"unsigned short"_ustr;
             valueIndex = cf->addIntegerInfo(member.value.unsignedShortValue);
             break;
         case unoidl::ConstantValue::TYPE_LONG:
-            type = "long";
+            type = u"long"_ustr;
             valueIndex = cf->addIntegerInfo(member.value.longValue);
             break;
         case unoidl::ConstantValue::TYPE_UNSIGNED_LONG:
-            type = "unsigned long";
+            type = u"unsigned long"_ustr;
             valueIndex = cf->addIntegerInfo(
                 static_cast< sal_Int32 >(member.value.unsignedLongValue));
             break;
         case unoidl::ConstantValue::TYPE_HYPER:
-            type = "hyper";
+            type = u"hyper"_ustr;
             valueIndex = cf->addLongInfo(member.value.hyperValue);
             break;
         case unoidl::ConstantValue::TYPE_UNSIGNED_HYPER:
-            type = "unsigned hyper";
+            type = u"unsigned hyper"_ustr;
             valueIndex = cf->addLongInfo(
                 static_cast< sal_Int64 >(member.value.unsignedHyperValue));
             break;
         case unoidl::ConstantValue::TYPE_FLOAT:
-            type = "float";
+            type = u"float"_ustr;
             valueIndex = cf->addFloatInfo(member.value.floatValue);
             break;
         case unoidl::ConstantValue::TYPE_DOUBLE:
-            type = "double";
+            type = u"double"_ustr;
             valueIndex = cf->addDoubleInfo(member.value.doubleValue);
             break;
         }

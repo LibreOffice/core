@@ -223,7 +223,7 @@ void SvxOnlineUpdateTabPage::UpdateUserAgent()
 
         OUString aPseudoURL = u"useragent:normal"_ustr;
         if( m_xExtrasCheckBox->get_active() )
-            aPseudoURL = "useragent:extended";
+            aPseudoURL = u"useragent:extended"_ustr;
         const uno::Sequence< beans::StringPair > aHeaders
             = xDav->getUserRequestHeaders( aPseudoURL, ucb::WebDAVHTTPMethod(0) );
 
@@ -476,7 +476,7 @@ IMPL_LINK_NOARG(SvxOnlineUpdateTabPage, CheckNowHdl_Impl, weld::Button&, void)
             css::configuration::theDefaultProvider::get( xContext ) );
 
         beans::NamedValue aProperty;
-        aProperty.Name  = "nodepath";
+        aProperty.Name  = u"nodepath"_ustr;
         aProperty.Value <<= u"org.openoffice.Office.Addons/AddonUI/OfficeHelp/UpdateCheckJob"_ustr;
 
         uno::Sequence< uno::Any > aArgumentList{ uno::Any(aProperty) };

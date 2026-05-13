@@ -48,52 +48,52 @@ WrappedScaleProperty::WrappedScaleProperty(tScaleProperty eScaleProperty
     switch( m_eScaleProperty )
     {
         case SCALE_PROP_MAX:
-            m_aOuterName = "Max";
+            m_aOuterName = u"Max"_ustr;
             break;
         case SCALE_PROP_MIN:
-            m_aOuterName = "Min";
+            m_aOuterName = u"Min"_ustr;
             break;
         case SCALE_PROP_ORIGIN:
-            m_aOuterName = "Origin";
+            m_aOuterName = u"Origin"_ustr;
             break;
         case SCALE_PROP_STEPMAIN:
-            m_aOuterName = "StepMain";
+            m_aOuterName = u"StepMain"_ustr;
             break;
         case SCALE_PROP_STEPHELP:
-            m_aOuterName = "StepHelp";
+            m_aOuterName = u"StepHelp"_ustr;
             break;
         case SCALE_PROP_STEPHELP_COUNT:
-            m_aOuterName = "StepHelpCount";
+            m_aOuterName = u"StepHelpCount"_ustr;
             break;
         case SCALE_PROP_AUTO_MAX:
-            m_aOuterName = "AutoMax";
+            m_aOuterName = u"AutoMax"_ustr;
             break;
         case SCALE_PROP_AUTO_MIN:
-            m_aOuterName = "AutoMin";
+            m_aOuterName = u"AutoMin"_ustr;
             break;
         case SCALE_PROP_AUTO_ORIGIN:
-            m_aOuterName = "AutoOrigin";
+            m_aOuterName = u"AutoOrigin"_ustr;
             break;
         case SCALE_PROP_AUTO_STEPMAIN:
-            m_aOuterName = "AutoStepMain";
+            m_aOuterName = u"AutoStepMain"_ustr;
             break;
         case SCALE_PROP_AUTO_STEPHELP:
-            m_aOuterName = "AutoStepHelp";
+            m_aOuterName = u"AutoStepHelp"_ustr;
             break;
         case SCALE_PROP_AXIS_TYPE:
-            m_aOuterName = "AxisType";
+            m_aOuterName = u"AxisType"_ustr;
             break;
         case SCALE_PROP_DATE_INCREMENT:
-            m_aOuterName = "TimeIncrement";
+            m_aOuterName = u"TimeIncrement"_ustr;
             break;
         case SCALE_PROP_EXPLICIT_DATE_INCREMENT:
-            m_aOuterName = "ExplicitTimeIncrement";
+            m_aOuterName = u"ExplicitTimeIncrement"_ustr;
             break;
         case SCALE_PROP_LOGARITHMIC:
-            m_aOuterName = "Logarithmic";
+            m_aOuterName = u"Logarithmic"_ustr;
             break;
         case SCALE_PROP_REVERSEDIRECTION:
-            m_aOuterName = "ReverseDirection";
+            m_aOuterName = u"ReverseDirection"_ustr;
             break;
         default:
             OSL_FAIL("unknown scale property");

@@ -112,18 +112,18 @@ bool UnsafeBridge::v_isValid(OUString * pReason)
     bool result = m_count > 0;
     if (!result)
     {
-        *pReason = "not entered";
+        *pReason = u"not entered"_ustr;
     }
     else
     {
         result = m_threadId == osl::Thread::getCurrentIdentifier();
 
         if (!result)
-            *pReason = "wrong thread";
+            *pReason = u"wrong thread"_ustr;
     }
 
     if (result)
-        *pReason = "OK";
+        *pReason = u"OK"_ustr;
 
     return result;
 }

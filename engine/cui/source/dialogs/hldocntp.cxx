@@ -173,7 +173,7 @@ void SvxHyperlinkNewDocTp::FillDocumentList()
         if ( !aDocumentUrl.isEmpty() )
         {
             if ( aDocumentUrl == "private:factory/simpress?slot=6686" )              // SJ: #106216# do not start
-                aDocumentUrl = "private:factory/simpress"; // the AutoPilot for impress
+                aDocumentUrl = u"private:factory/simpress"_ustr; // the AutoPilot for impress
 
             // insert private-url and default-extension as user-data
             std::shared_ptr<const SfxFilter> pFilter = SfxFilter::GetDefaultFilterFromFactory( aDocumentUrl );

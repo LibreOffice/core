@@ -183,7 +183,7 @@ void ChartLineStyleWrapper::updateData()
         return;
 
     css::util::URL aUrl;
-    aUrl.Complete = ".uno:XLineStyle";
+    aUrl.Complete = u".uno:XLineStyle"_ustr;
 
     css::frame::FeatureStateEvent aEvent;
     aEvent.IsEnabled = true;
@@ -192,7 +192,7 @@ void ChartLineStyleWrapper::updateData()
     aEvent.State = xPropSet->getPropertyValue(u"LineStyle"_ustr);
     mpControl->statusChanged(aEvent);
 
-    aUrl.Complete = ".uno:LineDash";
+    aUrl.Complete = u".uno:LineDash"_ustr;
 
     auto aLineDashName = xPropSet->getPropertyValue(u"LineDashName"_ustr);
     OUString aDashName;

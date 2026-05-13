@@ -291,7 +291,7 @@ uno::Sequence< beans::NamedValue > MimeConfigurationHelper::GetObjPropsFromConfi
 
             aResult.realloc( aObjPropNames.getLength() + 1 );
             auto pResult = aResult.getArray();
-            pResult[0].Name = "ClassID";
+            pResult[0].Name = u"ClassID"_ustr;
             pResult[0].Value <<= aClassID;
 
             for ( sal_Int32 nInd = 0; nInd < aObjPropNames.getLength(); nInd++ )
@@ -580,7 +580,7 @@ OUString MimeConfigurationHelper::UpdateMediaDescriptorWithFilterName(
             sal_Int32 nOldLen = aMediaDescr.getLength();
             aMediaDescr.realloc( nOldLen + 1 );
             auto pMediaDescr = aMediaDescr.getArray();
-            pMediaDescr[nOldLen].Name = "FilterName";
+            pMediaDescr[nOldLen].Name = u"FilterName"_ustr;
             pMediaDescr[ nOldLen ].Value <<= aFilterName;
 
         }
@@ -598,7 +598,7 @@ OUString MimeConfigurationHelper::UpdateMediaDescriptorWithFilterName(
                         sal_Int32 nOldLen = aMediaDescr.getLength();
                         aMediaDescr.realloc( nOldLen + 1 );
                         auto pMediaDescr = aMediaDescr.getArray();
-                        pMediaDescr[nOldLen].Name = "FilterName";
+                        pMediaDescr[nOldLen].Name = u"FilterName"_ustr;
                         pMediaDescr[ nOldLen ].Value = prop.Value;
                         break;
                     }
@@ -639,7 +639,7 @@ OUString MimeConfigurationHelper::UpdateMediaDescriptorWithFilterName(
         sal_Int32 nOldLen = aMediaDescr.getLength();
         aMediaDescr.realloc( nOldLen + 1 );
         auto pMediaDescr = aMediaDescr.getArray();
-        pMediaDescr[nOldLen].Name = "DocumentService";
+        pMediaDescr[nOldLen].Name = u"DocumentService"_ustr;
         pMediaDescr[nOldLen].Value <<= aDocName;
     }
 

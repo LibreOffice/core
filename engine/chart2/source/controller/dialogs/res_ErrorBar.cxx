@@ -591,7 +591,7 @@ void ErrorBarResources::FillItemSet(SfxItemSet& rOutAttrs) const
             {
                 // the strings aPosRange/aNegRange have to be set to a non-empty
                 // arbitrary string to generate error-bar sequences
-                aPosRange = "x";
+                aPosRange = u"x"_ustr;
                 aNegRange = aPosRange;
             }
             else

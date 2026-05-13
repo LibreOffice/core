@@ -618,25 +618,25 @@ Color AccessibleBase::getColor( eColorType eColType )
                 case OBJECTTYPE_DATA_POINT:
                     if( eColType == ACC_BASE_FOREGROUND )
                     {
-                        aPropName = "BorderColor";
-                        aStylePropName = "BorderTransparency";
+                        aPropName = u"BorderColor"_ustr;
+                        aStylePropName = u"BorderTransparency"_ustr;
                     }
                     else
                     {
-                        aPropName = "Color";
-                        aStylePropName = "Transparency";
+                        aPropName = u"Color"_ustr;
+                        aStylePropName = u"Transparency"_ustr;
                     }
                     break;
                 default:
                     if( eColType == ACC_BASE_FOREGROUND )
                     {
-                        aPropName = "LineColor";
-                        aStylePropName = "LineTransparence";
+                        aPropName = u"LineColor"_ustr;
+                        aStylePropName = u"LineTransparence"_ustr;
                     }
                     else
                     {
-                        aPropName = "FillColor";
-                        aStylePropName = "FillTransparence";
+                        aPropName = u"FillColor"_ustr;
+                        aStylePropName = u"FillTransparence"_ustr;
                     }
                     break;
             }

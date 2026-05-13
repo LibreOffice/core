@@ -38,7 +38,7 @@ using namespace ::com::sun::star::sdbc;
 
 ODbaseConnection::ODbaseConnection(ODriver* _pDriver) : OConnection(_pDriver)
 {
-    m_aFilenameExtension = "dbf";
+    m_aFilenameExtension = u"dbf"_ustr;
 }
 
 ODbaseConnection::~ODbaseConnection()

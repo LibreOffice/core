@@ -447,22 +447,22 @@ void OCalcTable::fillColumns()
         switch ( eType )
         {
             case DataType::VARCHAR:
-                aTypeName = "VARCHAR";
+                aTypeName = u"VARCHAR"_ustr;
                 break;
             case DataType::DECIMAL:
-                aTypeName = "DECIMAL";
+                aTypeName = u"DECIMAL"_ustr;
                 break;
             case DataType::BIT:
-                aTypeName = "BOOL";
+                aTypeName = u"BOOL"_ustr;
                 break;
             case DataType::DATE:
-                aTypeName = "DATE";
+                aTypeName = u"DATE"_ustr;
                 break;
             case DataType::TIME:
-                aTypeName = "TIME";
+                aTypeName = u"TIME"_ustr;
                 break;
             case DataType::TIMESTAMP:
-                aTypeName = "TIMESTAMP";
+                aTypeName = u"TIMESTAMP"_ustr;
                 break;
             default:
                 SAL_WARN( "connectivity.drivers","missing type name");

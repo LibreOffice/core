@@ -116,9 +116,9 @@ void CharacterPropertyItemConverter::FillSpecialItem(
         {
             OUString aPostfix;
             if( nWhichId == EE_CHAR_FONTINFO_CJK )
-                aPostfix = "Asian";
+                aPostfix = u"Asian"_ustr;
             else if( nWhichId == EE_CHAR_FONTINFO_CTL )
-                aPostfix = "Complex";
+                aPostfix = u"Complex"_ustr;
 
             SvxFontItem aItem( nWhichId );
 
@@ -207,9 +207,9 @@ void CharacterPropertyItemConverter::FillSpecialItem(
         {
             OUString aPostfix;
             if( nWhichId == EE_CHAR_ITALIC_CJK )
-                aPostfix = "Asian";
+                aPostfix = u"Asian"_ustr;
             else if( nWhichId == EE_CHAR_ITALIC_CTL )
-                aPostfix = "Complex";
+                aPostfix = u"Complex"_ustr;
 
             SvxPostureItem aItem( ITALIC_NONE, nWhichId );
 
@@ -228,9 +228,9 @@ void CharacterPropertyItemConverter::FillSpecialItem(
         {
             OUString aPostfix;
             if( nWhichId == EE_CHAR_WEIGHT_CJK )
-                aPostfix = "Asian";
+                aPostfix = u"Asian"_ustr;
             else if( nWhichId == EE_CHAR_WEIGHT_CTL )
-                aPostfix = "Complex";
+                aPostfix = u"Complex"_ustr;
 
             SvxWeightItem aItem( WEIGHT_NORMAL, nWhichId );
 
@@ -249,9 +249,9 @@ void CharacterPropertyItemConverter::FillSpecialItem(
         {
             OUString aPostfix;
             if( nWhichId == EE_CHAR_FONTHEIGHT_CJK )
-                aPostfix = "Asian";
+                aPostfix = u"Asian"_ustr;
             else if( nWhichId == EE_CHAR_FONTHEIGHT_CTL )
-                aPostfix = "Complex";
+                aPostfix = u"Complex"_ustr;
 
             SvxFontHeightItem aItem( 240, 100, nWhichId );
 
@@ -318,9 +318,9 @@ bool CharacterPropertyItemConverter::ApplySpecialItem(
         {
             OUString aPostfix;
             if( nWhichId == EE_CHAR_FONTINFO_CJK )
-                aPostfix = "Asian";
+                aPostfix = u"Asian"_ustr;
             else if( nWhichId == EE_CHAR_FONTINFO_CTL )
-                aPostfix = "Complex";
+                aPostfix = u"Complex"_ustr;
 
             const SvxFontItem & rItem =
                 static_cast< const SvxFontItem & >(
@@ -443,9 +443,9 @@ bool CharacterPropertyItemConverter::ApplySpecialItem(
         {
             OUString aPostfix;
             if( nWhichId == EE_CHAR_ITALIC_CJK )
-                aPostfix = "Asian";
+                aPostfix = u"Asian"_ustr;
             else if( nWhichId == EE_CHAR_ITALIC_CTL )
-                aPostfix = "Complex";
+                aPostfix = u"Complex"_ustr;
 
             const SvxPostureItem & rItem =
                 static_cast< const SvxPostureItem & >(
@@ -468,9 +468,9 @@ bool CharacterPropertyItemConverter::ApplySpecialItem(
         {
             OUString aPostfix;
             if( nWhichId == EE_CHAR_WEIGHT_CJK )
-                aPostfix = "Asian" ;
+                aPostfix = u"Asian"_ustr ;
             else if( nWhichId == EE_CHAR_WEIGHT_CTL )
-                aPostfix = "Complex";
+                aPostfix = u"Complex"_ustr;
 
             const SvxWeightItem & rItem =
                 static_cast< const SvxWeightItem & >(
@@ -493,9 +493,9 @@ bool CharacterPropertyItemConverter::ApplySpecialItem(
         {
             OUString aPostfix;
             if( nWhichId == EE_CHAR_FONTHEIGHT_CJK )
-                aPostfix = "Asian";
+                aPostfix = u"Asian"_ustr;
             else if( nWhichId == EE_CHAR_FONTHEIGHT_CTL )
-                aPostfix = "Complex";
+                aPostfix = u"Complex"_ustr;
 
             const SvxFontHeightItem & rItem =
                 static_cast< const SvxFontHeightItem & >(

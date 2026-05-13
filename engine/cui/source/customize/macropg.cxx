@@ -444,7 +444,7 @@ void SvxMacroTabPage_::GenericHandler_Impl(const weld::Button* pBtn)
     if (pBtn == mpImpl->xDeletePB.get())
     {
         // delete pressed
-        sEventType =  "Script" ;
+        sEventType =  u"Script"_ustr ;
         sEventURL.clear();
         if (!bAppEvents)
             bDocModified = true;
@@ -462,7 +462,7 @@ void SvxMacroTabPage_::GenericHandler_Impl(const weld::Button* pBtn)
         short ret = aAssignDlg.run();
         if( ret )
         {
-            sEventType = "UNO";
+            sEventType = u"UNO"_ustr;
             sEventURL = aAssignDlg.getURL();
             if (!bAppEvents)
                 bDocModified = true;
@@ -475,7 +475,7 @@ void SvxMacroTabPage_::GenericHandler_Impl(const weld::Button* pBtn)
         short ret = aDlg.run();
         if ( ret )
         {
-            sEventType = "Script";
+            sEventType = u"Script"_ustr;
             sEventURL = aDlg.GetScriptURL();
             if (!bAppEvents)
                 bDocModified = true;

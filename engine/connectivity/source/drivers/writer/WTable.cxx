@@ -125,22 +125,22 @@ void OWriterTable::fillColumns()
         switch (eType)
         {
             case sdbc::DataType::VARCHAR:
-                aTypeName = "VARCHAR";
+                aTypeName = u"VARCHAR"_ustr;
                 break;
             case sdbc::DataType::DECIMAL:
-                aTypeName = "DECIMAL";
+                aTypeName = u"DECIMAL"_ustr;
                 break;
             case sdbc::DataType::BIT:
-                aTypeName = "BOOL";
+                aTypeName = u"BOOL"_ustr;
                 break;
             case sdbc::DataType::DATE:
-                aTypeName = "DATE";
+                aTypeName = u"DATE"_ustr;
                 break;
             case sdbc::DataType::TIME:
-                aTypeName = "TIME";
+                aTypeName = u"TIME"_ustr;
                 break;
             case sdbc::DataType::TIMESTAMP:
-                aTypeName = "TIMESTAMP";
+                aTypeName = u"TIMESTAMP"_ustr;
                 break;
             default:
                 SAL_WARN("connectivity.writer", "missing type name");

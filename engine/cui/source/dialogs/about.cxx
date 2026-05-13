@@ -225,7 +225,7 @@ OUString AboutDialog::GetMiscString() {
   }
 
   if (aCalcMode.isEmpty())
-      aCalcMode = " default";
+      aCalcMode = u" default"_ustr;
   sMisc += "Calc:" + aCalcMode;
 
   return sMisc;

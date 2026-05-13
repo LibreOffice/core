@@ -124,8 +124,8 @@ void SearchThread::ImplSearch( const INetURLObject& rStartURL,
         Content aCnt( rStartURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), xEnv, comphelper::getProcessComponentContext() );
         Sequence< OUString > aProps( 2 );
 
-        aProps.getArray()[ 0 ] = "IsFolder";
-        aProps.getArray()[ 1 ] = "IsDocument";
+        aProps.getArray()[ 0 ] = u"IsFolder"_ustr;
+        aProps.getArray()[ 1 ] = u"IsDocument"_ustr;
         css::uno::Reference< XResultSet > xResultSet(
             aCnt.createCursor( aProps ) );
 

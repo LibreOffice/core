@@ -1151,7 +1151,7 @@ void SAL_CALL InternalDataProvider::insertDataSeries(::sal_Int32 nAfterIndex)
 OUString SAL_CALL InternalDataProvider::convertRangeToXML( const OUString& aRangeRepresentation )
 {
     XMLRangeHelper::CellRange aRange;
-    aRange.aTableName = "local-table";
+    aRange.aTableName = u"local-table"_ustr;
 
     // attention: this data provider has the limitation that it stores
     // internally if data comes from columns or rows. It is intended for

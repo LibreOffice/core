@@ -199,7 +199,7 @@ bool SeriesOptionsItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const Sf
 
                 OUString aPropName(u"GapwidthSequence"_ustr );
                 if( nWhichId == SCHATTR_BAR_OVERLAP )
-                    aPropName = "OverlapSequence";
+                    aPropName = u"OverlapSequence"_ustr;
 
                 rtl::Reference< DataSeries > xDataSeries( dynamic_cast<DataSeries*>(GetPropertySet().get()) );
                 rtl::Reference< Diagram > xDiagram( m_xChartModel->getFirstChartDiagram() );

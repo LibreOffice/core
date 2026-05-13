@@ -441,7 +441,7 @@ void lcl_setDefaultWritingMode( const std::shared_ptr< DrawModelWrapper >& pDraw
                                 }
                             }
                             if(aPageStyle.isEmpty())
-                                aPageStyle = "Standard";
+                                aPageStyle = u"Standard"_ustr;
                         }
                         else
                         {
@@ -452,7 +452,7 @@ void lcl_setDefaultWritingMode( const std::shared_ptr< DrawModelWrapper >& pDraw
                                 xParentProps->getPropertyValue( u"PageStyle"_ustr ) >>= aPageStyle;
                             }
                             if(aPageStyle.isEmpty())
-                                aPageStyle = "Default";
+                                aPageStyle = u"Default"_ustr;
                         }
                         if( nWritingMode == -1 || nWritingMode == text::WritingMode2::PAGE )
                         {
@@ -879,7 +879,7 @@ awt::Rectangle ChartView::getRectangleOfObject( const OUString& rObjectCID, bool
                 {
                     OUString aShapeName = u"MarkHandles"_ustr;
                     if( eObjectType == OBJECTTYPE_DIAGRAM )
-                        aShapeName = "PlotAreaIncludingAxes";
+                        aShapeName = u"PlotAreaIncludingAxes"_ustr;
                     SdrObject* pShape = DrawModelWrapper::getNamedSdrObject( aShapeName, pRootList );
                     if( pShape )
                     {

@@ -435,13 +435,13 @@ void SvxSaveTabPage::Reset( const SfxItemSet* )
                     OUString sReplace;
                     switch(nData)
                     {
-                        case  APP_WRITER        : sReplace = "com.sun.star.text.TextDocument";  break;
-                        case  APP_WRITER_WEB    : sReplace = "com.sun.star.text.WebDocument";   break;
-                        case  APP_WRITER_GLOBAL : sReplace = "com.sun.star.text.GlobalDocument";   break;
-                        case  APP_CALC          : sReplace = "com.sun.star.sheet.SpreadsheetDocument";break;
-                        case  APP_IMPRESS       : sReplace = "com.sun.star.presentation.PresentationDocument";break;
-                        case  APP_DRAW          : sReplace = "com.sun.star.drawing.DrawingDocument";break;
-                        case  APP_MATH          : sReplace = "com.sun.star.formula.FormulaProperties";break;
+                        case  APP_WRITER        : sReplace = u"com.sun.star.text.TextDocument"_ustr;  break;
+                        case  APP_WRITER_WEB    : sReplace = u"com.sun.star.text.WebDocument"_ustr;   break;
+                        case  APP_WRITER_GLOBAL : sReplace = u"com.sun.star.text.GlobalDocument"_ustr;   break;
+                        case  APP_CALC          : sReplace = u"com.sun.star.sheet.SpreadsheetDocument"_ustr;break;
+                        case  APP_IMPRESS       : sReplace = u"com.sun.star.presentation.PresentationDocument"_ustr;break;
+                        case  APP_DRAW          : sReplace = u"com.sun.star.drawing.DrawingDocument"_ustr;break;
+                        case  APP_MATH          : sReplace = u"com.sun.star.formula.FormulaProperties"_ustr;break;
                         default: SAL_WARN("cui.options", "illegal user data");
                     }
                     sCommand = sCommand.replaceFirst("%1", sReplace);

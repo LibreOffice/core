@@ -113,70 +113,70 @@ Statics & getStatics()
 {
     static Statics* p = []() {
             static Statics statics ;
-            statics.SYSTEM_TABLE = "SYSTEM TABLE";
-            statics.TABLE = "TABLE";
-            statics.VIEW = "VIEW";
-            statics.UNKNOWN = "UNKNOWN";
-            statics.YES = "YES";
-            statics.NO = "NO";
-            statics.NO_NULLS = "NO_NULLS";
-            statics.NULABLE = "NULABLE";
-            statics.NULLABLE_UNKNOWN = "NULLABLE_UNKNOWN";
+            statics.SYSTEM_TABLE = u"SYSTEM TABLE"_ustr;
+            statics.TABLE = u"TABLE"_ustr;
+            statics.VIEW = u"VIEW"_ustr;
+            statics.UNKNOWN = u"UNKNOWN"_ustr;
+            statics.YES = u"YES"_ustr;
+            statics.NO = u"NO"_ustr;
+            statics.NO_NULLS = u"NO_NULLS"_ustr;
+            statics.NULABLE = u"NULABLE"_ustr;
+            statics.NULLABLE_UNKNOWN = u"NULLABLE_UNKNOWN"_ustr;
 
-            statics.TYPE = "Type";
-            statics.TYPE_NAME = "TypeName";
-            statics.NAME = "Name";
-            statics.SCHEMA_NAME = "SchemaName";
-            statics.CATALOG_NAME = "CatalogName";
-            statics.DESCRIPTION = "Description";
-            statics.PRIVILEGES = "Privileges";
+            statics.TYPE = u"Type"_ustr;
+            statics.TYPE_NAME = u"TypeName"_ustr;
+            statics.NAME = u"Name"_ustr;
+            statics.SCHEMA_NAME = u"SchemaName"_ustr;
+            statics.CATALOG_NAME = u"CatalogName"_ustr;
+            statics.DESCRIPTION = u"Description"_ustr;
+            statics.PRIVILEGES = u"Privileges"_ustr;
 
-            statics.DEFAULT_VALUE = "DefaultValue";
-            statics.IS_AUTO_INCREMENT = "IsAutoIncrement";
-            statics.IS_CURRENCY = "IsCurrency";
-            statics.IS_NULLABLE = "IsNullable";
-            statics.IS_ROW_VERSISON = "IsRowVersion";
-            statics.PRECISION = "Precision";
-            statics.SCALE = "Scale";
+            statics.DEFAULT_VALUE = u"DefaultValue"_ustr;
+            statics.IS_AUTO_INCREMENT = u"IsAutoIncrement"_ustr;
+            statics.IS_CURRENCY = u"IsCurrency"_ustr;
+            statics.IS_NULLABLE = u"IsNullable"_ustr;
+            statics.IS_ROW_VERSISON = u"IsRowVersion"_ustr;
+            statics.PRECISION = u"Precision"_ustr;
+            statics.SCALE = u"Scale"_ustr;
 
-            statics.cPERCENT = "%";
-            statics.BEGIN = "BEGIN";
-            statics.COMMIT = "COMMIT";
-            statics.ROLLBACK = "ROLLBACK";
+            statics.cPERCENT = u"%"_ustr;
+            statics.BEGIN = u"BEGIN"_ustr;
+            statics.COMMIT = u"COMMIT"_ustr;
+            statics.ROLLBACK = u"ROLLBACK"_ustr;
 
-            statics.KEY = "Key";
-            statics.REFERENCED_TABLE = "ReferencedTable";
-            statics.UPDATE_RULE = "UpdateRule";
-            statics.DELETE_RULE = "DeleteRule";
-            statics.PRIVATE_COLUMNS = "PrivateColumns";
-            statics.PRIVATE_FOREIGN_COLUMNS = "PrivateForeignColumns";
+            statics.KEY = u"Key"_ustr;
+            statics.REFERENCED_TABLE = u"ReferencedTable"_ustr;
+            statics.UPDATE_RULE = u"UpdateRule"_ustr;
+            statics.DELETE_RULE = u"DeleteRule"_ustr;
+            statics.PRIVATE_COLUMNS = u"PrivateColumns"_ustr;
+            statics.PRIVATE_FOREIGN_COLUMNS = u"PrivateForeignColumns"_ustr;
 
-            statics.KEY_COLUMN = "KeyColumn";
-            statics.RELATED_COLUMN = "RelatedColumn";
-            statics.PASSWORD = "Password";
-            statics.USER = "User";
+            statics.KEY_COLUMN = u"KeyColumn"_ustr;
+            statics.RELATED_COLUMN = u"RelatedColumn"_ustr;
+            statics.PASSWORD = u"Password"_ustr;
+            statics.USER = u"User"_ustr;
 
-            statics.CURSOR_NAME = "CursorName";
-            statics.ESCAPE_PROCESSING = "EscapeProcessing";
-            statics.FETCH_DIRECTION = "FetchDirection";
-            statics.FETCH_SIZE = "FetchSize";
-            statics.IS_BOOKMARKABLE = "IsBookmarkable";
-            statics.RESULT_SET_CONCURRENCY = "ResultSetConcurrency";
-            statics.RESULT_SET_TYPE = "ResultSetType";
+            statics.CURSOR_NAME = u"CursorName"_ustr;
+            statics.ESCAPE_PROCESSING = u"EscapeProcessing"_ustr;
+            statics.FETCH_DIRECTION = u"FetchDirection"_ustr;
+            statics.FETCH_SIZE = u"FetchSize"_ustr;
+            statics.IS_BOOKMARKABLE = u"IsBookmarkable"_ustr;
+            statics.RESULT_SET_CONCURRENCY = u"ResultSetConcurrency"_ustr;
+            statics.RESULT_SET_TYPE = u"ResultSetType"_ustr;
 
-            statics.COMMAND = "Command";
-            statics.CHECK_OPTION = "CheckOption";
+            statics.COMMAND = u"Command"_ustr;
+            statics.CHECK_OPTION = u"CheckOption"_ustr;
 
-            statics.TRUE = "t";
-            statics.FALSE = "f";
-            statics.IS_PRIMARY_KEY_INDEX = "IsPrimaryKeyIndex";
-            statics.IS_CLUSTERED = "IsClustered";
-            statics.IS_UNIQUE = "IsUnique";
-            statics.IS_ASCENDING = "IsAscending";
-            statics.PRIVATE_COLUMN_INDEXES = "PrivateColumnIndexes";
-            statics.HELP_TEXT = "HelpText";
+            statics.TRUE = u"t"_ustr;
+            statics.FALSE = u"f"_ustr;
+            statics.IS_PRIMARY_KEY_INDEX = u"IsPrimaryKeyIndex"_ustr;
+            statics.IS_CLUSTERED = u"IsClustered"_ustr;
+            statics.IS_UNIQUE = u"IsUnique"_ustr;
+            statics.IS_ASCENDING = u"IsAscending"_ustr;
+            statics.PRIVATE_COLUMN_INDEXES = u"PrivateColumnIndexes"_ustr;
+            statics.HELP_TEXT = u"HelpText"_ustr;
 
-            statics.CATALOG = "Catalog";
+            statics.CATALOG = u"Catalog"_ustr;
 
             Type tString = cppu::UnoType<OUString>::get();
             Type tInt = cppu::UnoType<sal_Int32>::get();
@@ -185,7 +185,7 @@ Statics & getStatics()
 
             // Table props set
             ImplementationStatics &ist = statics.refl.table;
-            ist.implName = "org.openoffice.comp.pq.sdbcx.Table";
+            ist.implName = u"org.openoffice.comp.pq.sdbcx.Table"_ustr;
             ist.serviceNames = { u"com.sun.star.sdbcx.Table"_ustr };
             PropertyDef tableDef[] =
                 {
@@ -200,7 +200,7 @@ Statics & getStatics()
                 tableDef, std::size(tableDef), READONLY );
 
             statics.refl.tableDescriptor.implName =
-                "org.openoffice.comp.pq.sdbcx.TableDescriptor";
+                u"org.openoffice.comp.pq.sdbcx.TableDescriptor"_ustr;
             statics.refl.tableDescriptor.serviceNames = { u"com.sun.star.sdbcx.TableDescriptor"_ustr };
             PropertyDef tableDescDef[] =
                 {
@@ -214,7 +214,7 @@ Statics & getStatics()
                 tableDescDef, std::size(tableDescDef), 0 );
 
             // Column props set
-            statics.refl.column.implName = "org.openoffice.comp.pq.sdbcx.Column";
+            statics.refl.column.implName = u"org.openoffice.comp.pq.sdbcx.Column"_ustr;
             statics.refl.column.serviceNames = { u"com.sun.star.sdbcx.Column"_ustr };
             PropertyDefEx columnDef[] =
                 {
@@ -236,7 +236,7 @@ Statics & getStatics()
                 columnDef, std::size(columnDef) );
 
             statics.refl.columnDescriptor.implName =
-                "org.openoffice.comp.pq.sdbcx.ColumnDescriptor";
+                u"org.openoffice.comp.pq.sdbcx.ColumnDescriptor"_ustr;
             statics.refl.columnDescriptor.serviceNames = { u"com.sun.star.sdbcx.ColumnDescriptor"_ustr };
             PropertyDef columnDescDef[] =
                 {
@@ -259,7 +259,7 @@ Statics & getStatics()
                 columnDescDef, std::size(columnDescDef), 0 );
 
             // Key properties
-            statics.refl.key.implName = "org.openoffice.comp.pq.sdbcx.Key";
+            statics.refl.key.implName = u"org.openoffice.comp.pq.sdbcx.Key"_ustr;
             statics.refl.key.serviceNames = { u"com.sun.star.sdbcx.Key"_ustr };
             PropertyDef keyDef[] =
                 {
@@ -277,7 +277,7 @@ Statics & getStatics()
 
             // Key properties
             statics.refl.keyDescriptor.implName =
-                "org.openoffice.comp.pq.sdbcx.KeyDescriptor";
+                u"org.openoffice.comp.pq.sdbcx.KeyDescriptor"_ustr;
             statics.refl.keyDescriptor.serviceNames = { u"com.sun.star.sdbcx.KeyDescriptor"_ustr };
             PropertyDef keyDescDef[] =
                 {
@@ -292,7 +292,7 @@ Statics & getStatics()
 
 
             // KeyColumn props set
-            statics.refl.keycolumn.implName = "org.openoffice.comp.pq.sdbcx.KeyColumn";
+            statics.refl.keycolumn.implName = u"org.openoffice.comp.pq.sdbcx.KeyColumn"_ustr;
             statics.refl.keycolumn.serviceNames = { u"com.sun.star.sdbcx.KeyColumn"_ustr };
             PropertyDef keycolumnDef[] =
                 {
@@ -315,7 +315,7 @@ Statics & getStatics()
 
             // KeyColumn props set
             statics.refl.keycolumnDescriptor.implName =
-                "org.openoffice.comp.pq.sdbcx.KeyColumnDescriptor";
+                u"org.openoffice.comp.pq.sdbcx.KeyColumnDescriptor"_ustr;
             statics.refl.keycolumnDescriptor.serviceNames =
                 { u"com.sun.star.sdbcx.KeyColumnDescriptor"_ustr };
             PropertyDef keycolumnDescDef[] =
@@ -327,7 +327,7 @@ Statics & getStatics()
                 keycolumnDescDef, std::size(keycolumnDescDef), 0 );
 
             // view props set
-            statics.refl.view.implName = "org.openoffice.comp.pq.sdbcx.View";
+            statics.refl.view.implName = u"org.openoffice.comp.pq.sdbcx.View"_ustr;
             statics.refl.view.serviceNames = { u"com.sun.star.sdbcx.View"_ustr };
             PropertyDef viewDef[] =
                 {
@@ -341,12 +341,12 @@ Statics & getStatics()
                 viewDef, std::size(viewDef), READONLY );
 
             // view props set
-            statics.refl.viewDescriptor.implName = "org.openoffice.comp.pq.sdbcx.ViewDescriptor";
+            statics.refl.viewDescriptor.implName = u"org.openoffice.comp.pq.sdbcx.ViewDescriptor"_ustr;
             statics.refl.viewDescriptor.serviceNames = { u"com.sun.star.sdbcx.ViewDescriptor"_ustr };
             statics.refl.viewDescriptor.pProps = createPropertyArrayHelper(
                 viewDef, std::size(viewDef), 0 ); // reuse view, as it is identical
             // user props set
-            statics.refl.user.implName = "org.openoffice.comp.pq.sdbcx.User";
+            statics.refl.user.implName = u"org.openoffice.comp.pq.sdbcx.User"_ustr;
             statics.refl.user.serviceNames = { u"com.sun.star.sdbcx.User"_ustr };
             PropertyDef userDefRO[] =
                 {
@@ -357,7 +357,7 @@ Statics & getStatics()
 
             // user props set
             statics.refl.userDescriptor.implName =
-                "org.openoffice.comp.pq.sdbcx.UserDescriptor";
+                u"org.openoffice.comp.pq.sdbcx.UserDescriptor"_ustr;
             statics.refl.userDescriptor.serviceNames = { u"com.sun.star.sdbcx.UserDescriptor"_ustr };
             PropertyDef userDefWR[] =
                 {
@@ -368,7 +368,7 @@ Statics & getStatics()
                 userDefWR, std::size(userDefWR), 0 );
 
             // index props set
-            statics.refl.index.implName = "org.openoffice.comp.pq.sdbcx.Index";
+            statics.refl.index.implName = u"org.openoffice.comp.pq.sdbcx.Index"_ustr;
             statics.refl.index.serviceNames = { u"com.sun.star.sdbcx.Index"_ustr };
             PropertyDef indexDef[] =
                 {
@@ -384,13 +384,13 @@ Statics & getStatics()
 
             // index props set
             statics.refl.indexDescriptor.implName =
-                "org.openoffice.comp.pq.sdbcx.IndexDescriptor";
+                u"org.openoffice.comp.pq.sdbcx.IndexDescriptor"_ustr;
             statics.refl.indexDescriptor.serviceNames = { u"com.sun.star.sdbcx.IndexDescriptor"_ustr };
             statics.refl.indexDescriptor.pProps = createPropertyArrayHelper(
                 indexDef, std::size(indexDef), 0 );
 
             // indexColumn props set
-            statics.refl.indexColumn.implName = "org.openoffice.comp.pq.sdbcx.IndexColumn";
+            statics.refl.indexColumn.implName = u"org.openoffice.comp.pq.sdbcx.IndexColumn"_ustr;
             statics.refl.indexColumn.serviceNames = { u"com.sun.star.sdbcx.IndexColumn"_ustr };
             PropertyDef indexColumnDef[] =
                 {
@@ -413,7 +413,7 @@ Statics & getStatics()
 
             // indexColumn props set
             statics.refl.indexColumnDescriptor.implName =
-                "org.openoffice.comp.pq.sdbcx.IndexColumnDescriptor";
+                u"org.openoffice.comp.pq.sdbcx.IndexColumnDescriptor"_ustr;
             statics.refl.indexColumnDescriptor.serviceNames =
                 { u"com.sun.star.sdbcx.IndexColumnDescriptor"_ustr };
             PropertyDef indexColumnDescDef[] =
@@ -426,36 +426,36 @@ Statics & getStatics()
 
             // databasemetadata
             statics.tablesRowNames = std::vector< OUString > ( 5 );
-            statics.tablesRowNames[TABLE_INDEX_CATALOG] = "TABLE_CAT";
-            statics.tablesRowNames[TABLE_INDEX_SCHEMA] = "TABLE_SCHEM";
-            statics.tablesRowNames[TABLE_INDEX_NAME] = "TABLE_NAME";
-            statics.tablesRowNames[TABLE_INDEX_TYPE] = "TABLE_TYPE";
-            statics.tablesRowNames[TABLE_INDEX_REMARKS] = "REMARKS";
+            statics.tablesRowNames[TABLE_INDEX_CATALOG] = u"TABLE_CAT"_ustr;
+            statics.tablesRowNames[TABLE_INDEX_SCHEMA] = u"TABLE_SCHEM"_ustr;
+            statics.tablesRowNames[TABLE_INDEX_NAME] = u"TABLE_NAME"_ustr;
+            statics.tablesRowNames[TABLE_INDEX_TYPE] = u"TABLE_TYPE"_ustr;
+            statics.tablesRowNames[TABLE_INDEX_REMARKS] = u"REMARKS"_ustr;
 
             statics.primaryKeyNames = std::vector< OUString > ( 6 );
-            statics.primaryKeyNames[0] = "TABLE_CAT";
-            statics.primaryKeyNames[1] = "TABLE_SCHEM";
-            statics.primaryKeyNames[2] = "TABLE_NAME";
-            statics.primaryKeyNames[3] = "COLUMN_NAME";
-            statics.primaryKeyNames[4] = "KEY_SEQ";
-            statics.primaryKeyNames[5] = "PK_NAME";
+            statics.primaryKeyNames[0] = u"TABLE_CAT"_ustr;
+            statics.primaryKeyNames[1] = u"TABLE_SCHEM"_ustr;
+            statics.primaryKeyNames[2] = u"TABLE_NAME"_ustr;
+            statics.primaryKeyNames[3] = u"COLUMN_NAME"_ustr;
+            statics.primaryKeyNames[4] = u"KEY_SEQ"_ustr;
+            statics.primaryKeyNames[5] = u"PK_NAME"_ustr;
 
-            statics.SELECT = "SELECT";
-            statics.UPDATE = "UPDATE";
-            statics.INSERT = "INSERT";
-            statics.DELETE = "DELETE";
-            statics.RULE = "RULE";
-            statics.REFERENCES = "REFERENCES";
-            statics.TRIGGER = "TRIGGER";
-            statics.EXECUTE = "EXECUTE";
-            statics.USAGE = "USAGE";
-            statics.CREATE = "CREATE";
-            statics.TEMPORARY = "TEMPORARY";
-            statics.INDEX = "Index";
-            statics.INDEX_COLUMN = "IndexColumn";
+            statics.SELECT = u"SELECT"_ustr;
+            statics.UPDATE = u"UPDATE"_ustr;
+            statics.INSERT = u"INSERT"_ustr;
+            statics.DELETE = u"DELETE"_ustr;
+            statics.RULE = u"RULE"_ustr;
+            statics.REFERENCES = u"REFERENCES"_ustr;
+            statics.TRIGGER = u"TRIGGER"_ustr;
+            statics.EXECUTE = u"EXECUTE"_ustr;
+            statics.USAGE = u"USAGE"_ustr;
+            statics.CREATE = u"CREATE"_ustr;
+            statics.TEMPORARY = u"TEMPORARY"_ustr;
+            statics.INDEX = u"Index"_ustr;
+            statics.INDEX_COLUMN = u"IndexColumn"_ustr;
 
             statics.schemaNames = std::vector< OUString > ( 1 );
-            statics.schemaNames[0] = "TABLE_SCHEM";
+            statics.schemaNames[0] = u"TABLE_SCHEM"_ustr;
 
             statics.tableTypeData = std::vector< std::vector< Any > >( 2 );
 
@@ -469,7 +469,7 @@ Statics & getStatics()
             statics.tableTypeData[1][0] <<= statics.SYSTEM_TABLE;
 
             statics.tableTypeNames = std::vector< OUString > ( 1 );
-            statics.tableTypeNames[0] = "TABLE_TYPE";
+            statics.tableTypeNames[0] = u"TABLE_TYPE"_ustr;
 
             statics.columnRowNames =
             {

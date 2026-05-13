@@ -123,7 +123,7 @@ namespace dbtools
                         if ( _rData.sCommand.isEmpty() )
                             break;
 
-                        sStatement = "SELECT * FROM ";
+                        sStatement = u"SELECT * FROM "_ustr;
 
                         OUString sCatalog, sSchema, sTable;
                         qualifiedNameComponents( _rData.xConnection->getMetaData(), _rData.sCommand, sCatalog, sSchema, sTable, EComposeRule::InDataManipulation );

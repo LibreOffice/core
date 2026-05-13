@@ -289,7 +289,7 @@ bool ErrorBarItemConverter::ApplySpecialItem(
                             if( xIntDataProvider.is())
                             {
                                 xIntDataProvider->appendSequence();
-                                aNewRange = "last";
+                                aNewRange = u"last"_ustr;
                                 bApplyNewRange = true;
                             }
                         }

@@ -572,7 +572,7 @@ namespace cppcanvas::internal
                             // map ODF to svg gradient orientation - x
                             // instead of y direction
                             aGradInfo.setTextureTransform(aGradInfo.getTextureTransform() * aRot90);
-                            aGradientService = "LinearGradient";
+                            aGradientService = u"LinearGradient"_ustr;
                             break;
 
                         case css::awt::GradientStyle_AXIAL:
@@ -605,7 +605,7 @@ namespace cppcanvas::internal
 
                             aShift.translate(-0.5,0);
                             aGradInfo.setTextureTransform(aGradInfo.getTextureTransform() * aShift);
-                            aGradientService = "LinearGradient";
+                            aGradientService = u"LinearGradient"_ustr;
                             break;
                         }
 
@@ -615,7 +615,7 @@ namespace cppcanvas::internal
                                                                         aOffset,
                                                                         nSteps,
                                                                         fBorder);
-                            aGradientService = "EllipticalGradient";
+                            aGradientService = u"EllipticalGradient"_ustr;
                             break;
 
                         case css::awt::GradientStyle_ELLIPTICAL:
@@ -625,7 +625,7 @@ namespace cppcanvas::internal
                                                                             nSteps,
                                                                             fBorder,
                                                                             fRotation);
-                            aGradientService = "EllipticalGradient";
+                            aGradientService = u"EllipticalGradient"_ustr;
                             break;
 
                         case css::awt::GradientStyle_SQUARE:
@@ -635,7 +635,7 @@ namespace cppcanvas::internal
                                                                         nSteps,
                                                                         fBorder,
                                                                         fRotation);
-                            aGradientService = "RectangularGradient";
+                            aGradientService = u"RectangularGradient"_ustr;
                             break;
 
                         case css::awt::GradientStyle_RECT:
@@ -645,7 +645,7 @@ namespace cppcanvas::internal
                                                                              nSteps,
                                                                              fBorder,
                                                                              fRotation);
-                            aGradientService = "RectangularGradient";
+                            aGradientService = u"RectangularGradient"_ustr;
                             break;
 
                         default:

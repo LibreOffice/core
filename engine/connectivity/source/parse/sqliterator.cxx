@@ -814,7 +814,7 @@ void OSQLParseTreeIterator::traverseCreateColumns(const OSQLParseNode* pSelectNo
             }
             else if(pDatatype && pDatatype->getNodeType() == SQLNodeType::Keyword)
             {
-                aTypeName = "VARCHAR";
+                aTypeName = u"VARCHAR"_ustr;
             }
 
             if (!aTypeName.isEmpty())

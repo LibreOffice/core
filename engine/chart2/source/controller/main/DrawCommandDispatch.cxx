@@ -540,32 +540,32 @@ bool DrawCommandDispatch::parseCommandURL( const OUString& rCommandURL, ChartCom
             {
                 case ChartCommandID::DrawToolboxCsBasic:
                     {
-                        aType = "diamond";
+                        aType = u"diamond"_ustr;
                     }
                     break;
                 case ChartCommandID::DrawToolboxCsSymbol:
                     {
-                        aType = "smiley";
+                        aType = u"smiley"_ustr;
                     }
                     break;
                 case ChartCommandID::DrawToolboxCsArrow:
                     {
-                        aType = "left-right-arrow";
+                        aType = u"left-right-arrow"_ustr;
                     }
                     break;
                 case ChartCommandID::DrawToolboxCsFlowchart:
                     {
-                        aType = "flowchart-internal-storage";
+                        aType = u"flowchart-internal-storage"_ustr;
                     }
                     break;
                 case ChartCommandID::DrawToolboxCsCallout:
                     {
-                        aType = "round-rectangular-callout";
+                        aType = u"round-rectangular-callout"_ustr;
                     }
                     break;
                 case ChartCommandID::DrawToolboxCsStar:
                     {
-                        aType = "star5";
+                        aType = u"star5"_ustr;
                     }
                     break;
                 default:

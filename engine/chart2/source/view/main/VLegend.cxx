@@ -173,7 +173,7 @@ awt::Size lcl_createTextShapes(
                 aLabelString += rEntry.xLabel->getString();
                 // workaround for Issue #i67540#
                 if( aLabelString.isEmpty())
-                    aLabelString = " ";
+                    aLabelString = u" "_ustr;
             }
 
             rtl::Reference<SvxShapeText> xEntry =

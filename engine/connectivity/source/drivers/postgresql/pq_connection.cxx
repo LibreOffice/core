@@ -473,7 +473,7 @@ void Connection::initialize( const Sequence< Any >& aArguments )
                     PQfreemem(err);
                 }
                 else
-                    errorMessage = "#no error message#";
+                    errorMessage = u"#no error message#"_ustr;
                 // HY092 is "Invalid attribute/option identifier."
                 // Just the most likely error; the error might be  HY024 "Invalid attribute value".
                 throw SQLException(

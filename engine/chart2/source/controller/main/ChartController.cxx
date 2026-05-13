@@ -2209,9 +2209,9 @@ void ChartElementThemeType::convertPoolItemsToProperties(std::vector<SfxPoolItem
             {
                 OUString aPostfix;
                 if (nWhichId == EE_CHAR_FONTINFO_CJK)
-                    aPostfix = "Asian";
+                    aPostfix = u"Asian"_ustr;
                 else if (nWhichId == EE_CHAR_FONTINFO_CTL)
-                    aPostfix = "Complex";
+                    aPostfix = u"Complex"_ustr;
 
                 const SvxFontItem& rItem = static_cast<const SvxFontItem&>(*pPoolItem);
 
@@ -2302,9 +2302,9 @@ void ChartElementThemeType::convertPoolItemsToProperties(std::vector<SfxPoolItem
             {
                 OUString aPostfix;
                 if (nWhichId == EE_CHAR_ITALIC_CJK)
-                    aPostfix = "Asian";
+                    aPostfix = u"Asian"_ustr;
                 else if (nWhichId == EE_CHAR_ITALIC_CTL)
-                    aPostfix = "Complex";
+                    aPostfix = u"Complex"_ustr;
 
                 const SvxPostureItem& rItem = static_cast<const SvxPostureItem&>(*pPoolItem);
 
@@ -2322,9 +2322,9 @@ void ChartElementThemeType::convertPoolItemsToProperties(std::vector<SfxPoolItem
             {
                 OUString aPostfix;
                 if (nWhichId == EE_CHAR_WEIGHT_CJK)
-                    aPostfix = "Asian";
+                    aPostfix = u"Asian"_ustr;
                 else if (nWhichId == EE_CHAR_WEIGHT_CTL)
-                    aPostfix = "Complex";
+                    aPostfix = u"Complex"_ustr;
 
                 const SvxWeightItem& rItem = static_cast<const SvxWeightItem&>(*pPoolItem);
 
@@ -2342,9 +2342,9 @@ void ChartElementThemeType::convertPoolItemsToProperties(std::vector<SfxPoolItem
             {
                 OUString aPostfix;
                 if (nWhichId == EE_CHAR_FONTHEIGHT_CJK)
-                    aPostfix = "Asian";
+                    aPostfix = u"Asian"_ustr;
                 else if (nWhichId == EE_CHAR_FONTHEIGHT_CTL)
-                    aPostfix = "Complex";
+                    aPostfix = u"Complex"_ustr;
 
                 const SvxFontHeightItem& rItem = static_cast<const SvxFontHeightItem&>(*pPoolItem);
 

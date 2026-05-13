@@ -802,79 +802,79 @@ OUString ObjectIdentifier::getStringForType( ObjectType eObjectType )
     switch( eObjectType )
     {
         case OBJECTTYPE_PAGE:
-                aRet="Page";
+                aRet=u"Page"_ustr;
                 break;
         case OBJECTTYPE_TITLE:
-                aRet="Title";
+                aRet=u"Title"_ustr;
                 break;
         case OBJECTTYPE_LEGEND:
-                aRet="Legend";
+                aRet=u"Legend"_ustr;
                 break;
         case OBJECTTYPE_LEGEND_ENTRY:
-                aRet="LegendEntry";
+                aRet=u"LegendEntry"_ustr;
                 break;
         case OBJECTTYPE_DIAGRAM:
-                aRet="D";
+                aRet=u"D"_ustr;
                 break;
         case OBJECTTYPE_DIAGRAM_WALL:
-                aRet="DiagramWall";
+                aRet=u"DiagramWall"_ustr;
                 break;
         case OBJECTTYPE_DIAGRAM_FLOOR:
-                aRet="DiagramFloor";
+                aRet=u"DiagramFloor"_ustr;
                 break;
         case OBJECTTYPE_AXIS:
-                aRet="Axis";
+                aRet=u"Axis"_ustr;
                 break;
         case OBJECTTYPE_AXIS_UNITLABEL:
-                aRet="AxisUnitLabel";
+                aRet=u"AxisUnitLabel"_ustr;
                 break;
         case OBJECTTYPE_GRID:
-                aRet="Grid";
+                aRet=u"Grid"_ustr;
                 break;
         case OBJECTTYPE_SUBGRID:
-                aRet="SubGrid";
+                aRet=u"SubGrid"_ustr;
                 break;
         case OBJECTTYPE_DATA_SERIES:
-                aRet="Series";
+                aRet=u"Series"_ustr;
                 break;
         case OBJECTTYPE_DATA_POINT:
-                aRet="Point";
+                aRet=u"Point"_ustr;
                 break;
         case OBJECTTYPE_DATA_LABELS:
-                aRet="DataLabels";
+                aRet=u"DataLabels"_ustr;
                 break;
         case OBJECTTYPE_DATA_LABEL:
-                aRet="DataLabel";
+                aRet=u"DataLabel"_ustr;
                 break;
         case OBJECTTYPE_DATA_ERRORS_X:
-                aRet="ErrorsX";
+                aRet=u"ErrorsX"_ustr;
                 break;
         case OBJECTTYPE_DATA_ERRORS_Y:
-                aRet="ErrorsY";
+                aRet=u"ErrorsY"_ustr;
                 break;
         case OBJECTTYPE_DATA_ERRORS_Z:
-                aRet="ErrorsZ";
+                aRet=u"ErrorsZ"_ustr;
                 break;
         case OBJECTTYPE_DATA_CURVE:
-                aRet="Curve";
+                aRet=u"Curve"_ustr;
                 break;
         case OBJECTTYPE_DATA_CURVE_EQUATION:
-                aRet="Equation";
+                aRet=u"Equation"_ustr;
                 break;
         case OBJECTTYPE_DATA_AVERAGE_LINE:
-                aRet="Average";
+                aRet=u"Average"_ustr;
                 break;
         case OBJECTTYPE_DATA_STOCK_RANGE:
-                aRet="StockRange";
+                aRet=u"StockRange"_ustr;
                 break;
         case OBJECTTYPE_DATA_STOCK_LOSS:
-                aRet="StockLoss";
+                aRet=u"StockLoss"_ustr;
                 break;
         case OBJECTTYPE_DATA_STOCK_GAIN:
-                aRet="StockGain";
+                aRet=u"StockGain"_ustr;
                 break;
         case OBJECTTYPE_DATA_TABLE:
-                aRet="DataTable";
+                aRet=u"DataTable"_ustr;
                 break;
         default: //OBJECTTYPE_UNKNOWN
             ;
@@ -1203,7 +1203,7 @@ Reference< beans::XPropertySet > ObjectIdentifier::getObjectPropertySet(
                         else if (eObjectType == OBJECTTYPE_DATA_ERRORS_Y)
                             errorBar = CHART_UNONAME_ERRORBAR_Y;
                         else
-                            errorBar = "ErrorBarZ";
+                            errorBar = u"ErrorBarZ"_ustr;
 
                         xSeries->getPropertyValue( errorBar ) >>= xErrorBarProp;
                         xObjectProperties = std::move(xErrorBarProp);

@@ -161,27 +161,27 @@ uno::Sequence< beans::PropertyValue > DocPasswordHelper::ConvertPasswordInfo( co
     }
 
     if (nAlgorithm == 1)
-        sAlgorithm = "MD2";
+        sAlgorithm = u"MD2"_ustr;
     else if (nAlgorithm == 2)
-        sAlgorithm = "MD4";
+        sAlgorithm = u"MD4"_ustr;
     else if (nAlgorithm == 3)
-        sAlgorithm = "MD5";
+        sAlgorithm = u"MD5"_ustr;
     else if (nAlgorithm == 4)
-        sAlgorithm = "SHA-1";
+        sAlgorithm = u"SHA-1"_ustr;
     else if (nAlgorithm == 5)
-        sAlgorithm = "MAC";
+        sAlgorithm = u"MAC"_ustr;
     else if (nAlgorithm == 6)
-        sAlgorithm = "RIPEMD";
+        sAlgorithm = u"RIPEMD"_ustr;
     else if (nAlgorithm == 7)
-        sAlgorithm = "RIPEMD-160";
+        sAlgorithm = u"RIPEMD-160"_ustr;
     else if (nAlgorithm == 9)
-        sAlgorithm = "HMAC";
+        sAlgorithm = u"HMAC"_ustr;
     else if (nAlgorithm == 12)
-        sAlgorithm = "SHA-256";
+        sAlgorithm = u"SHA-256"_ustr;
     else if (nAlgorithm == 13)
-        sAlgorithm = "SHA-384";
+        sAlgorithm = u"SHA-384"_ustr;
     else if (nAlgorithm == 14)
-        sAlgorithm = "SHA-512";
+        sAlgorithm = u"SHA-512"_ustr;
 
     if ( !sCount.isEmpty() )
     {

@@ -163,7 +163,7 @@ SvxProxyTabPage::SvxProxyTabPage(weld::Container* pPage, weld::DialogController*
                 comphelper::getProcessComponentContext() ) );
 
     beans::NamedValue aProperty;
-    aProperty.Name  = "nodepath";
+    aProperty.Name  = u"nodepath"_ustr;
     aProperty.Value <<= u"org.openoffice.Inet/Settings"_ustr;
 
     Sequence< Any > aArgumentList{ Any(aProperty) };
@@ -518,7 +518,7 @@ IMPL_LINK_NOARG(SvxSecurityTabPage, CertMgrPBHdl, weld::Button&, void)
                                  FileDialogFlags::NONE, nullptr);
         OUString sPath = m_xParameterEdit->get_text();
         if (sPath.isEmpty())
-            sPath = "/usr/bin";
+            sPath = u"/usr/bin"_ustr;
 
         OUString sUrl;
         osl::FileBase::getFileURLFromSystemPath(sPath, sUrl);
@@ -1013,7 +1013,7 @@ IMPL_LINK_NOARG(SvxEMailTabPage, FileDialogHdl_Impl, weld::Button&, void)
     FileDialogHelper aHelper(css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, FileDialogFlags::NONE, GetFrameWeld());
     OUString sPath = m_xMailerURLED->get_text();
     if ( sPath.isEmpty() )
-        sPath = "/usr/bin";
+        sPath = u"/usr/bin"_ustr;
 
     OUString sUrl;
     osl::FileBase::getFileURLFromSystemPath(sPath, sUrl);

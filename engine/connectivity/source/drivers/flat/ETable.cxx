@@ -325,12 +325,12 @@ void OFlatTable::impl_fillColumnInfo_nothrow(QuotedTokenizedString const & aFirs
                 if(io_nPrecisions)
                 {
                     io_nType = DataType::DECIMAL;
-                    o_sTypeName = "DECIMAL";
+                    o_sTypeName = u"DECIMAL"_ustr;
                 }
                 else
                 {
                     io_nType = DataType::DOUBLE;
-                    o_sTypeName = "DOUBLE";
+                    o_sTypeName = u"DOUBLE"_ustr;
                 }
             }
             else
@@ -346,21 +346,21 @@ void OFlatTable::impl_fillColumnInfo_nothrow(QuotedTokenizedString const & aFirs
             {
                 case css::util::NumberFormat::DATE:
                     io_nType = DataType::DATE;
-                    o_sTypeName = "DATE";
+                    o_sTypeName = u"DATE"_ustr;
                     break;
                 case css::util::NumberFormat::DATETIME:
                     io_nType = DataType::TIMESTAMP;
-                    o_sTypeName = "TIMESTAMP";
+                    o_sTypeName = u"TIMESTAMP"_ustr;
                     break;
                 case css::util::NumberFormat::TIME:
                     io_nType = DataType::TIME;
-                    o_sTypeName = "TIME";
+                    o_sTypeName = u"TIME"_ustr;
                     break;
                 default:
                     io_nType = DataType::VARCHAR;
                     io_nPrecisions = 0; // nyi: Data can be longer!
                     io_nScales = 0;
-                    o_sTypeName = "VARCHAR";
+                    o_sTypeName = u"VARCHAR"_ustr;
             };
         }
     }

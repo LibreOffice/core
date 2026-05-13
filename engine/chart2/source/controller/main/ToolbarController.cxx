@@ -56,7 +56,7 @@ void ChartToolbarController::click()
         return;
 
     css::util::URL aURL;
-    aURL.Path = "FormatSelection";
+    aURL.Path = u"FormatSelection"_ustr;
     xDispatch->dispatch(aURL, css::uno::Sequence<css::beans::PropertyValue>());
 }
 

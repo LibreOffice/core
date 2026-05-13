@@ -93,16 +93,16 @@ WrappedAxisAndGridExistenceProperty::WrappedAxisAndGridExistenceProperty( bool b
             if( m_bAxis )
             {
                 if( m_bMain )
-                    m_aOuterName = "HasXAxis";
+                    m_aOuterName = u"HasXAxis"_ustr;
                 else
-                    m_aOuterName = "HasSecondaryXAxis";
+                    m_aOuterName = u"HasSecondaryXAxis"_ustr;
             }
             else
             {
                 if( m_bMain )
-                    m_aOuterName = "HasXAxisGrid";
+                    m_aOuterName = u"HasXAxisGrid"_ustr;
                 else
-                    m_aOuterName = "HasXAxisHelpGrid";
+                    m_aOuterName = u"HasXAxisHelpGrid"_ustr;
             }
         }
         break;
@@ -112,14 +112,14 @@ WrappedAxisAndGridExistenceProperty::WrappedAxisAndGridExistenceProperty( bool b
             {
                 OSL_ENSURE(m_bMain,"there is no secondary z axis at the old api");
                 m_bMain = true;
-                m_aOuterName = "HasZAxis";
+                m_aOuterName = u"HasZAxis"_ustr;
             }
             else
             {
                 if( m_bMain )
-                    m_aOuterName = "HasZAxisGrid";
+                    m_aOuterName = u"HasZAxisGrid"_ustr;
                 else
-                    m_aOuterName = "HasZAxisHelpGrid";
+                    m_aOuterName = u"HasZAxisHelpGrid"_ustr;
             }
         }
         break;
@@ -128,16 +128,16 @@ WrappedAxisAndGridExistenceProperty::WrappedAxisAndGridExistenceProperty( bool b
             if( m_bAxis )
             {
                 if( m_bMain )
-                    m_aOuterName = "HasYAxis";
+                    m_aOuterName = u"HasYAxis"_ustr;
                 else
-                    m_aOuterName = "HasSecondaryYAxis";
+                    m_aOuterName = u"HasSecondaryYAxis"_ustr;
             }
             else
             {
                 if( m_bMain )
-                    m_aOuterName = "HasYAxisGrid";
+                    m_aOuterName = u"HasYAxisGrid"_ustr;
                 else
-                    m_aOuterName = "HasYAxisHelpGrid";
+                    m_aOuterName = u"HasYAxisHelpGrid"_ustr;
             }
         }
         break;
@@ -237,23 +237,23 @@ WrappedAxisTitleExistenceProperty::WrappedAxisTitleExistenceProperty(sal_Int32 n
     switch( nTitleIndex )
     {
         case 0:
-            m_aOuterName = "HasXAxisTitle";
+            m_aOuterName = u"HasXAxisTitle"_ustr;
             m_eTitleType = TitleHelper::X_AXIS_TITLE;
             break;
         case 2:
-            m_aOuterName = "HasZAxisTitle";
+            m_aOuterName = u"HasZAxisTitle"_ustr;
             m_eTitleType = TitleHelper::Z_AXIS_TITLE;
             break;
         case 3:
-            m_aOuterName = "HasSecondaryXAxisTitle";
+            m_aOuterName = u"HasSecondaryXAxisTitle"_ustr;
             m_eTitleType = TitleHelper::SECONDARY_X_AXIS_TITLE;
             break;
         case 4:
-            m_aOuterName = "HasSecondaryYAxisTitle";
+            m_aOuterName = u"HasSecondaryYAxisTitle"_ustr;
             m_eTitleType = TitleHelper::SECONDARY_Y_AXIS_TITLE;
             break;
         default:
-            m_aOuterName = "HasYAxisTitle";
+            m_aOuterName = u"HasYAxisTitle"_ustr;
             m_eTitleType = TitleHelper::Y_AXIS_TITLE;
             break;
     }
@@ -349,7 +349,7 @@ WrappedAxisLabelExistenceProperty::WrappedAxisLabelExistenceProperty(bool bMain,
             break;
         case 2:
             OSL_ENSURE(m_bMain,"there is no description available for a secondary z axis");
-            m_aOuterName = "HasZAxisDescription";
+            m_aOuterName = u"HasZAxisDescription"_ustr;
             break;
         default:
             m_aOuterName = m_bMain ? std::u16string_view(u"HasYAxisDescription") : std::u16string_view(u"HasSecondaryYAxisDescription");

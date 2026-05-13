@@ -235,16 +235,16 @@ void SvxHpLinkDlg::SetPage ( SvxHyperlinkItem const * pItem )
     OUString sPageId(msRememberedPageId);
 
     if (comphelper::COKit::isActive()) {
-        sPageId = "internet";
+        sPageId = u"internet"_ustr;
     }
 
     if (eProtocolTyp == INetProtocol::Http || eProtocolTyp == INetProtocol::Https || eProtocolTyp == INetProtocol::Ftp) {
-        sPageId = "internet";
+        sPageId = u"internet"_ustr;
     } else if (eProtocolTyp == INetProtocol::Mailto) {
-        sPageId = "mail";
+        sPageId = u"mail"_ustr;
     } else if (!comphelper::COKit::isActive() &&
         (eProtocolTyp == INetProtocol::File || aStrURL.startsWith("#"))) {
-        sPageId = "document";
+        sPageId = u"document"_ustr;
     }
 
     IconChoicePage* pPage = GetTabPage(sPageId);

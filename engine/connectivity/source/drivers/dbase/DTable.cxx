@@ -352,13 +352,13 @@ void ODbaseTable::fillColumns()
         {
         case 'C':
             eType = DataType::VARCHAR;
-            aTypeName = "VARCHAR";
+            aTypeName = u"VARCHAR"_ustr;
             break;
         case 'F':
         case 'N':
-            aTypeName = "DECIMAL";
+            aTypeName = u"DECIMAL"_ustr;
             if ( aDBFColumn.db_typ == 'N' )
-                aTypeName = "NUMERIC";
+                aTypeName = u"NUMERIC"_ustr;
             eType = DataType::DECIMAL;
 
             // for numeric fields two characters more are written, then the precision of the column description predescribes,
@@ -368,40 +368,40 @@ void ODbaseTable::fillColumns()
             break;
         case 'L':
             eType = DataType::BIT;
-            aTypeName = "BOOLEAN";
+            aTypeName = u"BOOLEAN"_ustr;
             break;
         case 'Y':
             bIsCurrency = true;
             eType = DataType::DOUBLE;
-            aTypeName = "DOUBLE";
+            aTypeName = u"DOUBLE"_ustr;
             break;
         case 'D':
             eType = DataType::DATE;
-            aTypeName = "DATE";
+            aTypeName = u"DATE"_ustr;
             break;
         case 'T':
             eType = DataType::TIMESTAMP;
-            aTypeName = "TIMESTAMP";
+            aTypeName = u"TIMESTAMP"_ustr;
             break;
         case 'I':
             eType = DataType::INTEGER;
-            aTypeName = "INTEGER";
+            aTypeName = u"INTEGER"_ustr;
             break;
         case 'M':
             if ( bFoxPro && ( aDBFColumn.db_free2[0] & 0x04 ) == 0x04 )
             {
                 eType = DataType::LONGVARBINARY;
-                aTypeName = "LONGVARBINARY";
+                aTypeName = u"LONGVARBINARY"_ustr;
             }
             else
             {
-                aTypeName = "LONGVARCHAR";
+                aTypeName = u"LONGVARCHAR"_ustr;
                 eType = DataType::LONGVARCHAR;
             }
             nPrecision = 2147483647;
             break;
         case 'P':
-            aTypeName = "LONGVARBINARY";
+            aTypeName = u"LONGVARBINARY"_ustr;
             eType = DataType::LONGVARBINARY;
             nPrecision = 2147483647;
             break;
@@ -409,12 +409,12 @@ void ODbaseTable::fillColumns()
         case 'B':
             if ( m_aHeader.type == VisualFoxPro || m_aHeader.type == VisualFoxProAuto )
             {
-                aTypeName = "DOUBLE";
+                aTypeName = u"DOUBLE"_ustr;
                 eType = DataType::DOUBLE;
             }
             else
             {
-                aTypeName = "LONGVARBINARY";
+                aTypeName = u"LONGVARBINARY"_ustr;
                 eType = DataType::LONGVARBINARY;
                 nPrecision = 2147483647;
             }

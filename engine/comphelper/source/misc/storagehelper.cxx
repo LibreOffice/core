@@ -316,11 +316,11 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageOfFormatFromInputStr
 {
     uno::Sequence< beans::PropertyValue > aProps( bRepairStorage ? 2 : 1 );
     auto pProps = aProps.getArray();
-    pProps[0].Name = "StorageFormat";
+    pProps[0].Name = u"StorageFormat"_ustr;
     pProps[0].Value <<= aFormat;
     if ( bRepairStorage )
     {
-        pProps[1].Name = "RepairPackage";
+        pProps[1].Name = u"RepairPackage"_ustr;
         pProps[1].Value <<= bRepairStorage;
     }
 
@@ -340,11 +340,11 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageOfFormatFromStream(
 {
     uno::Sequence< beans::PropertyValue > aProps( bRepairStorage ? 2 : 1 );
     auto pProps = aProps.getArray();
-    pProps[0].Name = "StorageFormat";
+    pProps[0].Name = u"StorageFormat"_ustr;
     pProps[0].Value <<= aFormat;
     if ( bRepairStorage )
     {
-        pProps[1].Name = "RepairPackage";
+        pProps[1].Name = u"RepairPackage"_ustr;
         pProps[1].Value <<= bRepairStorage;
     }
 

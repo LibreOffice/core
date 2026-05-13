@@ -104,25 +104,25 @@ ORowSetValue OOp_DayName::operate(const ORowSetValue& lhs) const
     switch (eDayOfWeek)
     {
         case MONDAY:
-            sRet = "Monday";
+            sRet = u"Monday"_ustr;
             break;
         case TUESDAY:
-            sRet = "Tuesday";
+            sRet = u"Tuesday"_ustr;
             break;
         case WEDNESDAY:
-            sRet = "Wednesday";
+            sRet = u"Wednesday"_ustr;
             break;
         case THURSDAY:
-            sRet = "Thursday";
+            sRet = u"Thursday"_ustr;
             break;
         case FRIDAY:
-            sRet = "Friday";
+            sRet = u"Friday"_ustr;
             break;
         case SATURDAY:
-            sRet = "Saturday";
+            sRet = u"Saturday"_ustr;
             break;
         case SUNDAY:
-            sRet = "Sunday";
+            sRet = u"Sunday"_ustr;
             break;
         default:
             OSL_FAIL("Error in enum values for date");
@@ -140,40 +140,40 @@ ORowSetValue OOp_MonthName::operate(const ORowSetValue& lhs) const
     switch (aD.Month)
     {
         case 1:
-            sRet = "January";
+            sRet = u"January"_ustr;
             break;
         case 2:
-            sRet = "February";
+            sRet = u"February"_ustr;
             break;
         case 3:
-            sRet = "March";
+            sRet = u"March"_ustr;
             break;
         case 4:
-            sRet = "April";
+            sRet = u"April"_ustr;
             break;
         case 5:
-            sRet = "May";
+            sRet = u"May"_ustr;
             break;
         case 6:
-            sRet = "June";
+            sRet = u"June"_ustr;
             break;
         case 7:
-            sRet = "July";
+            sRet = u"July"_ustr;
             break;
         case 8:
-            sRet = "August";
+            sRet = u"August"_ustr;
             break;
         case 9:
-            sRet = "September";
+            sRet = u"September"_ustr;
             break;
         case 10:
-            sRet = "October";
+            sRet = u"October"_ustr;
             break;
         case 11:
-            sRet = "November";
+            sRet = u"November"_ustr;
             break;
         case 12:
-            sRet = "December";
+            sRet = u"December"_ustr;
             break;
     }
     return sRet;

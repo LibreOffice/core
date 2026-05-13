@@ -510,7 +510,7 @@ IMPL_LINK_NOARG(DataSourceTabPage, MainRangeButtonClickedHdl, weld::Button&, voi
                                        lcl_GetSelectedRole( *m_xLB_ROLE, true ));
         }
         // replace series name
-        aReplacement = "%SERIESNAME";
+        aReplacement = u"%SERIESNAME"_ustr;
         nIndex = aUIStr.indexOf( aReplacement );
         if( nIndex != -1 )
         {

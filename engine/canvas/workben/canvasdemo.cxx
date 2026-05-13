@@ -114,8 +114,8 @@ class DemoRenderer
 
             lang::Locale aLocale;
             rendering::FontInfo aFontInfo;
-            aFontInfo.FamilyName = "Swiss";
-            aFontInfo.StyleName = "SansSerif";
+            aFontInfo.FamilyName = u"Swiss"_ustr;
+            aFontInfo.StyleName = u"SansSerif"_ustr;
             geometry::Matrix2D aFontMatrix( 1, 0,
                                             0, 1 );
             rendering::FontRequest aFontRequest( aFontInfo, 12.0, 0.0, aLocale );

@@ -547,7 +547,7 @@ OUString ObjectNameProvider::getHelpText( std::u16string_view rObjectCID, const 
             }
 
             //replace data series index
-            aWildcard =  "%SERIESNUMBER";
+            aWildcard =  u"%SERIESNUMBER"_ustr;
             nIndex = aRet.indexOf( aWildcard );
             if( nIndex != -1 )
             {
@@ -567,14 +567,14 @@ OUString ObjectNameProvider::getHelpText( std::u16string_view rObjectCID, const 
             }
 
             //replace point values
-            aWildcard =  "%POINTVALUES";
+            aWildcard =  u"%POINTVALUES"_ustr;
             nIndex = aRet.indexOf( aWildcard );
             if( nIndex != -1 )
                 aRet = aRet.replaceAt( nIndex, aWildcard.getLength(), lcl_getDataPointValueText(
                 xSeries,nPointIndex, DataSeriesHelper::getCoordinateSystemOfSeries(xSeries, xDiagram), xChartModel ) );
 
             //replace series name
-            aWildcard = "%SERIESNAME";
+            aWildcard = u"%SERIESNAME"_ustr;
             nIndex = aRet.indexOf( aWildcard );
             if( nIndex != -1 )
                 aRet = aRet.replaceAt( nIndex, aWildcard.getLength(), lcl_getDataSeriesName( rObjectCID, xChartModel ) );
@@ -616,9 +616,9 @@ OUString ObjectNameProvider::getHelpText( std::u16string_view rObjectCID, const 
                         if( xEqProp.is())
                         {
                             if ( !(xEqProp->getPropertyValue( u"XName"_ustr) >>= aXName) )
-                                aXName = "x";
+                                aXName = u"x"_ustr;
                             if ( !(xEqProp->getPropertyValue( u"YName"_ustr) >>= aYName) )
-                                aYName = "f(x)";
+                                aYName = u"f(x)"_ustr;
                         }
                         xCalculator->setRegressionProperties(aDegree, bForceIntercept, aInterceptValue, aPeriod, aMovingType);
                         xCalculator->setXYNames ( aXName, aYName );
@@ -645,7 +645,7 @@ OUString ObjectNameProvider::getHelpText( std::u16string_view rObjectCID, const 
                             }
 
                             // replace r^2
-                            aWildcard = "%RSQUARED";
+                            aWildcard = u"%RSQUARED"_ustr;
                             nIndex = aRet.indexOf( aWildcard );
                             if( nIndex != -1 )
                             {
@@ -713,7 +713,7 @@ OUString ObjectNameProvider::getHelpText( std::u16string_view rObjectCID, const 
                         }
 
                         // replace standard deviation
-                        aWildcard = "%STD_DEVIATION";
+                        aWildcard = u"%STD_DEVIATION"_ustr;
                         nIndex = aRet.indexOf( aWildcard );
                         if( nIndex != -1 )
                         {

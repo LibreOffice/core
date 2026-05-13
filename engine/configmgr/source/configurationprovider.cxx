@@ -235,7 +235,7 @@ Service::createInstanceWithArguments(
         //TODO: should the Access use the dynamically changing locale_ instead?
         locale = locale_;
         if (locale.isEmpty()) {
-            locale = "en-US";
+            locale = u"en-US"_ustr;
         }
     }
     bool update;

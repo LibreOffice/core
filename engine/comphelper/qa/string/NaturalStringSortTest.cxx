@@ -35,8 +35,8 @@ public:
     void testNatural()
     {
         lang::Locale aLocale;
-        aLocale.Language = "en";
-        aLocale.Country = "US";
+        aLocale.Language = u"en"_ustr;
+        aLocale.Country = u"US"_ustr;
 
         comphelper::string::NaturalStringSorter aSorter(comphelper::getProcessComponentContext(),
                                                         aLocale);

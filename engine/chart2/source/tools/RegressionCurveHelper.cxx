@@ -60,26 +60,26 @@ OUString lcl_getServiceNameForType(SvxChartRegress eType)
     switch( eType )
     {
         case SvxChartRegress::Linear:
-            aServiceName = "com.sun.star.chart2.LinearRegressionCurve";
+            aServiceName = u"com.sun.star.chart2.LinearRegressionCurve"_ustr;
             break;
         case SvxChartRegress::Log:
-            aServiceName = "com.sun.star.chart2.LogarithmicRegressionCurve";
+            aServiceName = u"com.sun.star.chart2.LogarithmicRegressionCurve"_ustr;
             break;
         case SvxChartRegress::Exp:
-            aServiceName = "com.sun.star.chart2.ExponentialRegressionCurve";
+            aServiceName = u"com.sun.star.chart2.ExponentialRegressionCurve"_ustr;
             break;
         case SvxChartRegress::Power:
-            aServiceName = "com.sun.star.chart2.PotentialRegressionCurve";
+            aServiceName = u"com.sun.star.chart2.PotentialRegressionCurve"_ustr;
             break;
         case SvxChartRegress::Polynomial:
-            aServiceName = "com.sun.star.chart2.PolynomialRegressionCurve";
+            aServiceName = u"com.sun.star.chart2.PolynomialRegressionCurve"_ustr;
             break;
         case SvxChartRegress::MovingAverage:
-            aServiceName = "com.sun.star.chart2.MovingAverageRegressionCurve";
+            aServiceName = u"com.sun.star.chart2.MovingAverageRegressionCurve"_ustr;
             break;
         default:
             OSL_FAIL("unknown regression curve type - use linear instead");
-            aServiceName = "com.sun.star.chart2.LinearRegressionCurve";
+            aServiceName = u"com.sun.star.chart2.LinearRegressionCurve"_ustr;
             break;
     }
     return aServiceName;

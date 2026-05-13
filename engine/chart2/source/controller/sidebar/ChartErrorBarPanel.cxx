@@ -180,7 +180,7 @@ double getValue(const rtl::Reference<::chart::ChartModel>& xModel,
 
     OUString aName = u"PositiveError"_ustr;
     if (eDir == ErrorBarDirection::NEGATIVE)
-        aName = "NegativeError";
+        aName = u"NegativeError"_ustr;
 
     css::uno::Any aAny = xPropSet->getPropertyValue(aName);
 
@@ -204,7 +204,7 @@ void setValue(const rtl::Reference<::chart::ChartModel>& xModel,
 
     OUString aName = u"PositiveError"_ustr;
     if (eDir == ErrorBarDirection::NEGATIVE)
-        aName = "NegativeError";
+        aName = u"NegativeError"_ustr;
 
     xPropSet->setPropertyValue(aName, css::uno::Any(nVal));
 }

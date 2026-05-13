@@ -660,7 +660,7 @@ OUString SAL_CALL DiagramWrapper::getDiagramType()
         }
     }
     if( aRet.isEmpty())
-        aRet = "com.sun.star.chart.BarDiagram";
+        aRet = u"com.sun.star.chart.BarDiagram"_ustr;
 
     return aRet;
 }
@@ -1297,13 +1297,13 @@ WrappedStackingProperty::WrappedStackingProperty(StackMode eStackMode, std::shar
     switch( m_eStackMode )
     {
     case StackMode::YStacked:
-        m_aOuterName = "Stacked";
+        m_aOuterName = u"Stacked"_ustr;
         break;
     case StackMode::YStackedPercent:
-        m_aOuterName = "Percent";
+        m_aOuterName = u"Percent"_ustr;
         break;
     case StackMode::ZStacked:
-        m_aOuterName = "Deep";
+        m_aOuterName = u"Deep"_ustr;
         break;
     default:
         OSL_FAIL( "unexpected stack mode" );

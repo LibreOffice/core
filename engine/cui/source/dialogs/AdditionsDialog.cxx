@@ -484,7 +484,7 @@ AdditionsDialog::AdditionsDialog(weld::Window* pParent, const OUString& sAdditio
     else
     {
         set_title(titlePrefix);
-        sTag = "allextensions"; // Means empty parameter
+        sTag = u"allextensions"_ustr; // Means empty parameter
     }
 
     OUString sEncodedURLPart = INetURLObject::encode(sTag, INetURLObject::PART_PCHAR,

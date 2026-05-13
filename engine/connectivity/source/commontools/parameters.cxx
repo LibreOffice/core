@@ -226,7 +226,7 @@ namespace dbtools
         }
 
         // generate a parameter name which is not already used
-        o_rNewParamName = "link_from_";
+        o_rNewParamName = u"link_from_"_ustr;
         o_rNewParamName += convertName2SQLName( _rMasterColumn, m_sSpecialCharacters );
         while ( m_aParameterInformation.find( o_rNewParamName ) != m_aParameterInformation.end() )
         {

@@ -496,7 +496,7 @@ rtl::Reference<SvxShapeText> VSeriesPlotter::createDataLabel( const rtl::Referen
         if( bUseCustomLabel )
         {
             nTextListLength = ( nCustomLabelsCount > 3 ) ? nCustomLabelsCount : 3;
-            aSeparator = "";
+            aSeparator = u""_ustr;
             aTextList = Sequence< OUString >( nTextListLength );
             auto pTextList = aTextList.getArray();
             for( sal_uInt32 i = 0; i < nCustomLabelsCount; ++i )
@@ -554,7 +554,7 @@ rtl::Reference<SvxShapeText> VSeriesPlotter::createDataLabel( const rtl::Referen
                     }
                     case DataPointCustomLabelFieldType_NEWLINE:
                     {
-                        pTextList[i] = "\n";
+                        pTextList[i] = u"\n"_ustr;
                         break;
                     }
                     default:

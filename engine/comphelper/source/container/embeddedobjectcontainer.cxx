@@ -325,18 +325,18 @@ uno::Reference<embed::XEmbeddedObject> EmbeddedObjectContainer::Get_Impl(
         uno::Reference < embed::XEmbeddedObjectCreator > xFactory = embed::EmbeddedObjectCreator::create( ::comphelper::getProcessComponentContext() );
         uno::Sequence< beans::PropertyValue > aObjDescr(1 + (xCopy.is() ? 1 : 0) + (pBaseURL ? 1 : 0));
         auto itObjDescr = aObjDescr.getArray();
-        itObjDescr->Name = "Parent";
+        itObjDescr->Name = u"Parent"_ustr;
         itObjDescr->Value <<= pImpl->m_xModel.get();
         if (pBaseURL)
         {
             ++itObjDescr;
-            itObjDescr->Name = "DefaultParentBaseURL";
+            itObjDescr->Name = u"DefaultParentBaseURL"_ustr;
             itObjDescr->Value <<= *pBaseURL;
         }
         if ( xCopy.is() )
         {
             ++itObjDescr;
-            itObjDescr->Name = "CloneFrom";
+            itObjDescr->Name = u"CloneFrom"_ustr;
             itObjDescr->Value <<= xCopy;
         }
 
@@ -376,11 +376,11 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CreateEmbedde
         const size_t nArgs = oDefaultParentBaseURL.has_value() ? 2 : 1;
         uno::Sequence< beans::PropertyValue > aObjDescr( nArgs );
         auto pObjDescr = aObjDescr.getArray();
-        pObjDescr[0].Name = "Parent";
+        pObjDescr[0].Name = u"Parent"_ustr;
         pObjDescr[0].Value <<= pImpl->m_xModel.get();
         if (oDefaultParentBaseURL.has_value())
         {
-            pObjDescr[1].Name = "DefaultParentBaseURL";
+            pObjDescr[1].Name = u"DefaultParentBaseURL"_ustr;
             pObjDescr[1].Value <<= *oDefaultParentBaseURL;
         }
         xObj.set( xFactory->createInstanceInitNew(
@@ -600,11 +600,11 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::InsertEmbedde
         uno::Reference < embed::XEmbeddedObjectCreator > xFactory = embed::EmbeddedObjectCreator::create( ::comphelper::getProcessComponentContext() );
         uno::Sequence< beans::PropertyValue > aObjDescr(pBaseURL ? 2 : 1);
         auto pObjDescr = aObjDescr.getArray();
-        pObjDescr[0].Name = "Parent";
+        pObjDescr[0].Name = u"Parent"_ustr;
         pObjDescr[0].Value <<= pImpl->m_xModel.get();
         if (pBaseURL)
         {
-            pObjDescr[1].Name = "DefaultParentBaseURL";
+            pObjDescr[1].Name = u"DefaultParentBaseURL"_ustr;
             pObjDescr[1].Value <<= *pBaseURL;
         }
         xObj.set( xFactory->createInstanceInitFromMediaDescriptor(
@@ -1245,20 +1245,20 @@ bool EmbeddedObjectContainer::StoreAsChildren(bool _bOasisFormat,bool _bCreateEm
                 {
                     uno::Sequence< beans::PropertyValue > aArgs( _bOasisFormat ? 3 : 4 );
                     auto pArgs = aArgs.getArray();
-                    pArgs[0].Name = "StoreVisualReplacement";
+                    pArgs[0].Name = u"StoreVisualReplacement"_ustr;
                     pArgs[0].Value <<= !_bOasisFormat;
 
                     // if it is an embedded object or the optimized inserting fails the normal inserting should be done
-                    pArgs[1].Name = "CanTryOptimization";
+                    pArgs[1].Name = u"CanTryOptimization"_ustr;
                     pArgs[1].Value <<= !_bCreateEmbedded;
 
-                    pArgs[2].Name = "AutoSaveEvent";
+                    pArgs[2].Name = u"AutoSaveEvent"_ustr;
                     pArgs[2].Value <<= _bAutoSaveEvent;
 
                     if ( !_bOasisFormat )
                     {
                         // if object has no cached replacement it will use this one
-                        pArgs[3].Name = "VisualReplacement";
+                        pArgs[3].Name = u"VisualReplacement"_ustr;
                         pArgs[3].Value <<= xStream;
                     }
 

@@ -186,9 +186,9 @@ OUString getSourceRangeStrFromLabeledSequences( const uno::Sequence< uno::Refere
 {
     OUString aDirection;
     if(bPositive)
-        aDirection = "positive";
+        aDirection = u"positive"_ustr;
     else
-        aDirection = "negative";
+        aDirection = u"negative"_ustr;
 
     for( uno::Reference< chart2::data::XLabeledDataSequence > const & labeledData : aSequences )
     {

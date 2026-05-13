@@ -550,7 +550,7 @@ OUString java_sql_DatabaseMetaData::impl_callStringMethod( const char* _pMethodN
     {
         OUString sLoggedResult( sReturn );
         if ( sLoggedResult.isEmpty() )
-            sLoggedResult = "<empty string>";
+            sLoggedResult = u"<empty string>"_ustr;
         m_aLogger.log( LogLevel::FINEST, STR_LOG_META_DATA_RESULT, _pMethodName, sLoggedResult );
     }
 

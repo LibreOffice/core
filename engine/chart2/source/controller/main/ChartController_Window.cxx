@@ -158,69 +158,69 @@ OUString lcl_getFormatCommandForObjectCID( std::u16string_view rCID )
     {
         case OBJECTTYPE_DIAGRAM:
         case OBJECTTYPE_DIAGRAM_WALL:
-            aDispatchCommand = ".uno:FormatWall";
+            aDispatchCommand = u".uno:FormatWall"_ustr;
             break;
         case OBJECTTYPE_DIAGRAM_FLOOR:
-            aDispatchCommand = ".uno:FormatFloor";
+            aDispatchCommand = u".uno:FormatFloor"_ustr;
             break;
         case OBJECTTYPE_PAGE:
-            aDispatchCommand = ".uno:FormatChartArea";
+            aDispatchCommand = u".uno:FormatChartArea"_ustr;
             break;
         case OBJECTTYPE_LEGEND:
-            aDispatchCommand = ".uno:FormatLegend";
+            aDispatchCommand = u".uno:FormatLegend"_ustr;
             break;
         case OBJECTTYPE_TITLE:
-            aDispatchCommand = ".uno:FormatTitle";
+            aDispatchCommand = u".uno:FormatTitle"_ustr;
             break;
         case OBJECTTYPE_LEGEND_ENTRY:
         case OBJECTTYPE_DATA_SERIES:
-            aDispatchCommand = ".uno:FormatDataSeries";
+            aDispatchCommand = u".uno:FormatDataSeries"_ustr;
             break;
         case OBJECTTYPE_AXIS:
         case OBJECTTYPE_AXIS_UNITLABEL:
-            aDispatchCommand = ".uno:FormatAxis";
+            aDispatchCommand = u".uno:FormatAxis"_ustr;
             break;
         case OBJECTTYPE_GRID:
-            aDispatchCommand = ".uno:FormatMajorGrid";
+            aDispatchCommand = u".uno:FormatMajorGrid"_ustr;
             break;
         case OBJECTTYPE_SUBGRID:
-            aDispatchCommand = ".uno:FormatMinorGrid";
+            aDispatchCommand = u".uno:FormatMinorGrid"_ustr;
             break;
         case OBJECTTYPE_DATA_LABELS:
-            aDispatchCommand = ".uno:FormatDataLabels";
+            aDispatchCommand = u".uno:FormatDataLabels"_ustr;
             break;
         case OBJECTTYPE_DATA_LABEL:
-            aDispatchCommand = ".uno:FormatDataLabel";
+            aDispatchCommand = u".uno:FormatDataLabel"_ustr;
             break;
         case OBJECTTYPE_DATA_POINT:
-            aDispatchCommand = ".uno:FormatDataPoint";
+            aDispatchCommand = u".uno:FormatDataPoint"_ustr;
             break;
         case OBJECTTYPE_DATA_AVERAGE_LINE:
-            aDispatchCommand = ".uno:FormatMeanValue";
+            aDispatchCommand = u".uno:FormatMeanValue"_ustr;
             break;
         case OBJECTTYPE_DATA_ERRORS_X:
-            aDispatchCommand = ".uno:FormatXErrorBars";
+            aDispatchCommand = u".uno:FormatXErrorBars"_ustr;
             break;
         case OBJECTTYPE_DATA_ERRORS_Y:
-            aDispatchCommand = ".uno:FormatYErrorBars";
+            aDispatchCommand = u".uno:FormatYErrorBars"_ustr;
             break;
         case OBJECTTYPE_DATA_ERRORS_Z:
-            aDispatchCommand = ".uno:FormatZErrorBars";
+            aDispatchCommand = u".uno:FormatZErrorBars"_ustr;
             break;
         case OBJECTTYPE_DATA_CURVE:
-            aDispatchCommand = ".uno:FormatTrendline";
+            aDispatchCommand = u".uno:FormatTrendline"_ustr;
             break;
         case OBJECTTYPE_DATA_CURVE_EQUATION:
-            aDispatchCommand = ".uno:FormatTrendlineEquation";
+            aDispatchCommand = u".uno:FormatTrendlineEquation"_ustr;
             break;
         case OBJECTTYPE_DATA_STOCK_RANGE:
-            aDispatchCommand = ".uno:FormatSelection";
+            aDispatchCommand = u".uno:FormatSelection"_ustr;
             break;
         case OBJECTTYPE_DATA_STOCK_LOSS:
-            aDispatchCommand = ".uno:FormatStockLoss";
+            aDispatchCommand = u".uno:FormatStockLoss"_ustr;
             break;
         case OBJECTTYPE_DATA_STOCK_GAIN:
-            aDispatchCommand = ".uno:FormatStockGain";
+            aDispatchCommand = u".uno:FormatStockGain"_ustr;
             break;
         default: //OBJECTTYPE_UNKNOWN
             break;

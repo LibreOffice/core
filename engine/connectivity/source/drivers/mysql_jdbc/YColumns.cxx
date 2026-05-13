@@ -43,7 +43,7 @@ OMySQLColumn::OMySQLColumn()
 
 void OMySQLColumn::construct()
 {
-    m_sAutoIncrement = "auto_increment";
+    m_sAutoIncrement = u"auto_increment"_ustr;
     registerProperty(
         OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_AUTOINCREMENTCREATION),
         PROPERTY_ID_AUTOINCREMENTCREATION, 0, &m_sAutoIncrement,

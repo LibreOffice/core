@@ -516,37 +516,37 @@ void CuiAboutConfigTabPage::FillItems(const Reference<XNameAccess>& xNameAccess,
                 {
                     if (bHasValue)
                         sValue = OUString::boolean(aNode.get<bool>());
-                    sType = "boolean";
+                    sType = u"boolean"_ustr;
                 }
                 else if (aType == cppu::UnoType<sal_Int16>::get())
                 {
                     if (bHasValue)
                         sValue = OUString::number(aNode.get<sal_Int16>());
-                    sType = "short";
+                    sType = u"short"_ustr;
                 }
                 else if (aType == cppu::UnoType<sal_Int32>::get())
                 {
                     if (bHasValue)
                         sValue = OUString::number(aNode.get<sal_Int32>());
-                    sType = "int";
+                    sType = u"int"_ustr;
                 }
                 else if (aType == cppu::UnoType<sal_Int64>::get())
                 {
                     if (bHasValue)
                         sValue = OUString::number(aNode.get<sal_Int64>());
-                    sType = "long";
+                    sType = u"long"_ustr;
                 }
                 else if (aType == cppu::UnoType<double>::get())
                 {
                     if (bHasValue)
                         sValue = OUString::number(aNode.get<double>());
-                    sType = "double";
+                    sType = u"double"_ustr;
                 }
                 else if (aType == cppu::UnoType<OUString>::get())
                 {
                     if (bHasValue)
                         sValue = aNode.get<OUString>();
-                    sType = "string";
+                    sType = u"string"_ustr;
                 }
                 else if (aType == cppu::UnoType<css::uno::Sequence<sal_Int8>>::get())
                 {
@@ -563,7 +563,7 @@ void CuiAboutConfigTabPage::FillItems(const Reference<XNameAccess>& xNameAccess,
                             sValue.append(s.toAsciiUpperCase());
                         }
                     }
-                    sType = "hexBinary";
+                    sType = u"hexBinary"_ustr;
                 }
                 else if (aType == cppu::UnoType<css::uno::Sequence<sal_Bool>>::get())
                 {
@@ -579,7 +579,7 @@ void CuiAboutConfigTabPage::FillItems(const Reference<XNameAccess>& xNameAccess,
                             sValue.append(OUString::boolean(seq[j]));
                         }
                     }
-                    sType = "boolean-list";
+                    sType = u"boolean-list"_ustr;
                 }
                 else if (aType == cppu::UnoType<css::uno::Sequence<sal_Int16>>::get())
                 {
@@ -595,7 +595,7 @@ void CuiAboutConfigTabPage::FillItems(const Reference<XNameAccess>& xNameAccess,
                             sValue.append(static_cast<sal_Int32>(seq[j]));
                         }
                     }
-                    sType = "short-list";
+                    sType = u"short-list"_ustr;
                 }
                 else if (aType == cppu::UnoType<css::uno::Sequence<sal_Int32>>::get())
                 {
@@ -611,7 +611,7 @@ void CuiAboutConfigTabPage::FillItems(const Reference<XNameAccess>& xNameAccess,
                             sValue.append(seq[j]);
                         }
                     }
-                    sType = "int-list";
+                    sType = u"int-list"_ustr;
                 }
                 else if (aType == cppu::UnoType<css::uno::Sequence<sal_Int64>>::get())
                 {
@@ -627,7 +627,7 @@ void CuiAboutConfigTabPage::FillItems(const Reference<XNameAccess>& xNameAccess,
                             sValue.append(seq[j]);
                         }
                     }
-                    sType = "long-list";
+                    sType = u"long-list"_ustr;
                 }
                 else if (aType == cppu::UnoType<css::uno::Sequence<double>>::get())
                 {
@@ -643,13 +643,13 @@ void CuiAboutConfigTabPage::FillItems(const Reference<XNameAccess>& xNameAccess,
                             sValue.append(seq[j]);
                         }
                     }
-                    sType = "double-list";
+                    sType = u"double-list"_ustr;
                 }
                 else if (aType == cppu::UnoType<css::uno::Sequence<OUString>>::get())
                 {
                     if (bHasValue)
                         sValue = lcl_StringListToString(aNode.get<uno::Sequence<OUString>>());
-                    sType = "string-list";
+                    sType = u"string-list"_ustr;
                 }
                 else if (aType
                          == cppu::UnoType<css::uno::Sequence<css::uno::Sequence<sal_Int8>>>::get())
@@ -675,7 +675,7 @@ void CuiAboutConfigTabPage::FillItems(const Reference<XNameAccess>& xNameAccess,
                             }
                         }
                     }
-                    sType = "hexBinary-list";
+                    sType = u"hexBinary-list"_ustr;
                 }
                 else
                 {
@@ -707,7 +707,7 @@ Reference<XNameAccess> CuiAboutConfigTabPage::getConfigAccess(const OUString& sN
         css::configuration::theDefaultProvider::get(xContext));
 
     beans::NamedValue aProperty;
-    aProperty.Name = "nodepath";
+    aProperty.Name = u"nodepath"_ustr;
     aProperty.Value <<= sNodePath;
 
     uno::Sequence<uno::Any> aArgumentList{ uno::Any(aProperty) };
@@ -715,9 +715,9 @@ Reference<XNameAccess> CuiAboutConfigTabPage::getConfigAccess(const OUString& sN
     OUString sAccessString;
 
     if (bUpdate)
-        sAccessString = "com.sun.star.configuration.ConfigurationUpdateAccess";
+        sAccessString = u"com.sun.star.configuration.ConfigurationUpdateAccess"_ustr;
     else
-        sAccessString = "com.sun.star.configuration.ConfigurationAccess";
+        sAccessString = u"com.sun.star.configuration.ConfigurationAccess"_ustr;
 
     uno::Reference<container::XNameAccess> xNameAccess(
         xConfigProvider->createInstanceWithArguments(sAccessString, aArgumentList),
@@ -797,12 +797,12 @@ IMPL_LINK_NOARG(CuiAboutConfigTabPage, StandardHdl_Impl, weld::Button&, void)
         bool bValue;
         if (sPropertyValue == "true")
         {
-            sDialogValue = "false";
+            sDialogValue = u"false"_ustr;
             bValue = false;
         }
         else
         {
-            sDialogValue = "true";
+            sDialogValue = u"true"_ustr;
             bValue = true;
         }
 

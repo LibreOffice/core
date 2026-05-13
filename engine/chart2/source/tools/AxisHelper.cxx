@@ -232,7 +232,7 @@ sal_Int32 AxisHelper::getExplicitNumberFormatKeyForAxis(
             {
                 OUString aRoleToMatch;
                 if( nDimensionIndex == 0 )
-                    aRoleToMatch = "values-x";
+                    aRoleToMatch = u"values-x"_ustr;
                 const std::vector< rtl::Reference< ChartType > > & aChartTypes( xCorrespondingCoordinateSystem->getChartTypes2());
                 for( rtl::Reference< ChartType > const & chartType : aChartTypes )
                 {

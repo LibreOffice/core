@@ -475,7 +475,7 @@ void SvxScriptOrgDialog::CheckButtons( Reference< browse::XBrowseNode > const & 
             m_xEditButton->set_sensitive(false);
         }
 
-        sName = "Deletable";
+        sName = u"Deletable"_ustr;
 
         if ( getBoolProperty( xProps, sName ) )
         {
@@ -486,7 +486,7 @@ void SvxScriptOrgDialog::CheckButtons( Reference< browse::XBrowseNode > const & 
             m_xDelButton->set_sensitive(false);
         }
 
-        sName = "Creatable";
+        sName = u"Creatable"_ustr;
 
         if ( getBoolProperty( xProps, sName ) )
         {
@@ -497,7 +497,7 @@ void SvxScriptOrgDialog::CheckButtons( Reference< browse::XBrowseNode > const & 
             m_xCreateButton->set_sensitive(false);
         }
 
-        sName = "Renamable";
+        sName = u"Renamable"_ustr;
 
         if ( getBoolProperty( xProps, sName ) )
         {
@@ -707,11 +707,11 @@ void SvxScriptOrgDialog::createEntry(const weld::TreeIter& rEntry)
         InputDialogMode nMode = InputDialogMode::NEWLIB;
         if (m_xScriptsBox->get_iter_depth(rEntry) == 0)
         {
-            aNewStdName = "Library" ;
+            aNewStdName = u"Library"_ustr ;
         }
         else
         {
-            aNewStdName = "Macro" ;
+            aNewStdName = u"Macro"_ustr ;
             nMode = InputDialogMode::NEWMACRO;
         }
         //do we need L10N for this? ie something like:

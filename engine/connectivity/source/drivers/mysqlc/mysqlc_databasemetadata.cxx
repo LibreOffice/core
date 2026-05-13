@@ -698,27 +698,27 @@ Reference<XResultSet> SAL_CALL ODatabaseMetaData::getColumns(const Any& /*catalo
     {
         OUString sAppend;
         if (tableNamePattern.match("%"))
-            sAppend = "AND TABLE_NAME LIKE '%' ";
+            sAppend = u"AND TABLE_NAME LIKE '%' "_ustr;
         else
-            sAppend = "AND TABLE_NAME = '%' ";
+            sAppend = u"AND TABLE_NAME = '%' "_ustr;
         queryBuf.append(sAppend.replaceAll("%", tableNamePattern));
     }
     if (!schemaPattern.isEmpty())
     {
         OUString sAppend;
         if (schemaPattern.match("%"))
-            sAppend = "AND TABLE_SCHEMA LIKE '%' ";
+            sAppend = u"AND TABLE_SCHEMA LIKE '%' "_ustr;
         else
-            sAppend = "AND TABLE_SCHEMA = '%' ";
+            sAppend = u"AND TABLE_SCHEMA = '%' "_ustr;
         queryBuf.append(sAppend.replaceAll("%", schemaPattern));
     }
     if (!columnNamePattern.isEmpty())
     {
         OUString sAppend;
         if (columnNamePattern.match("%"))
-            sAppend = "AND COLUMN_NAME LIKE '%' ";
+            sAppend = u"AND COLUMN_NAME LIKE '%' "_ustr;
         else
-            sAppend = "AND COLUMN_NAME = '%' ";
+            sAppend = u"AND COLUMN_NAME = '%' "_ustr;
         queryBuf.append(sAppend.replaceAll("%", columnNamePattern));
     }
 
