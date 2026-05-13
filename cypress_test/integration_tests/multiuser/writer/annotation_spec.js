@@ -41,7 +41,7 @@ describe(['tagmultiuser'], 'Multiuser Annotation Tests', function () {
 		cy.cGet('#annotation-content-area-1').should('contain','some text0');
 		cy.cGet('#comment-annotation-menu-1').click();
 		cy.cGet('body').contains('.ui-combobox-entry.jsdialog.ui-grid-cell', 'Modify').click();
-		cy.cGet('#annotation-modify-textarea-1').type(', some other text');
+		cy.cGet('#annotation-modify-textarea-1').type('{end}, some other text');
 		cy.cGet('#annotation-save-1').click();
 		cy.cGet('.cool-annotation-content-wrapper').should('exist');
 		cy.cGet('#annotation-content-area-1').should('contain','some text0, some other text');
@@ -109,7 +109,7 @@ describe(['tagmultiuser'], 'Multiuser Annotation Tests', function () {
 		cy.cGet('.cool-annotation-img').click();
 		cy.cGet('#comment-annotation-menu-1').click();
 		cy.cGet('body').contains('.ui-combobox-entry.jsdialog.ui-grid-cell', 'Modify').click();
-		cy.cGet('#annotation-modify-textarea-1').type(', some other text');
+		cy.cGet('#annotation-modify-textarea-1').type('{end}, some other text');
 		cy.cGet('#annotation-save-1').click();
 		cy.cGet('.cool-annotation-content-wrapper').should('exist');
 		cy.cGet('#annotation-content-area-1').should('contain','some text0, some other text');
@@ -216,7 +216,7 @@ describe(['tagmultiuser'], 'Multiuser Annotation Tests', function () {
 		cy.cGet('#annotation-content-area-1').should('have.text','some text0');
 		cy.cGet('#comment-annotation-menu-1').click();
 		cy.cGet('body').contains('.ui-combobox-entry.jsdialog.ui-grid-cell', 'Modify').click();
-		cy.cGet('#annotation-modify-textarea-1').type(', some other text');
+		cy.cGet('#annotation-modify-textarea-1').type('{end}, some other text');
 		cy.cGet('#map').focus();
 		cy.cGet('.annotation-button-autosaved').should('be.visible');
 		cy.cGet('.annotation-button-delete').should('be.visible');
@@ -235,7 +235,7 @@ describe(['tagmultiuser'], 'Multiuser Annotation Tests', function () {
 		cy.cGet('#annotation-content-area-1').should('have.text','some text0');
 		cy.cGet('#comment-annotation-menu-1').click();
 		cy.cGet('body').contains('.ui-combobox-entry.jsdialog.ui-grid-cell', 'Modify').click();
-		cy.cGet('#annotation-modify-textarea-1').type(', some other text');
+		cy.cGet('#annotation-modify-textarea-1').type('{end}, some other text');
 		cy.cGet('#map').focus();
 		cy.cGet('.annotation-button-autosaved').should('be.visible');
 		cy.cGet('.annotation-button-delete').should('be.visible');
@@ -258,7 +258,7 @@ describe(['tagmultiuser'], 'Multiuser Annotation Tests', function () {
 		cy.cGet('#annotation-content-area-1').should('have.text','some text0');
 		cy.cGet('#comment-annotation-menu-1').click();
 		cy.cGet('body').contains('.ui-combobox-entry.jsdialog.ui-grid-cell', 'Modify').click();
-		cy.cGet('#annotation-modify-textarea-1').type(', some other text');
+		cy.cGet('#annotation-modify-textarea-1').type('{end}, some other text');
 		cy.cGet('#map').focus();
 		cy.cGet('.annotation-button-autosaved').should('be.visible');
 		cy.cGet('.annotation-button-delete').should('be.visible');
