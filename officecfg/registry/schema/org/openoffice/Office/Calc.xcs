@@ -1307,6 +1307,18 @@
         </prop>
       </group>
     </group>
+    <group oor:name="ClipboardCellsExport">
+      <info>
+        <desc>Contains settings for copying cells to the clipboard.</desc>
+      </info>
+      <prop oor:name="ShrinkToDataArea" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>If true (default), the copied cell range is shrunk to the data area, omitting empty cells at the leading and trailing edges of the selection. Set to false to preserve the full selection including empty border cells.</desc>
+          <label>Shrink copied selection to data area</label>
+        </info>
+        <value>true</value>
+      </prop>
+    </group>
     <group oor:name="Calculate">
       <info>
         <desc>Contains settings that affect cell calculation.</desc>

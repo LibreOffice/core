@@ -70,6 +70,8 @@
 #include <rtl/math.hxx>
 #include <sax/tools/converter.hxx>
 
+#include <officecfg/Office/Calc.hxx>
+
 #include <memory>
 #include <string_view>
 
@@ -1948,7 +1950,9 @@ bool ScImportExport::Doc2Text( SvStream& rStrm )
     SCROW nEndRow = aRange.aEnd.Row();
     SCTAB nEndTab = aRange.aEnd.Tab();
 
-    if (!rDoc.GetClipParam().isMultiRange() && nStartTab == nEndTab)
+    // tdf#109299 - shrink to data area on entire document export or expert configuration
+    if ((bAll || officecfg::Office::Calc::ClipboardCellsExport::ShrinkToDataArea::get())
+        && !rDoc.GetClipParam().isMultiRange() && nStartTab == nEndTab)
         if (!rDoc.ShrinkToDataArea( nStartTab, nStartCol, nStartRow, nEndCol, nEndRow ))
             return false;
 

@@ -10,6 +10,9 @@
 #include "helper/debughelper.hxx"
 #include "helper/qahelper.hxx"
 
+#include <officecfg/Office/Calc.hxx>
+#include <comphelper/configuration.hxx>
+
 #include <attrib.hxx>
 #include <bcaslot.hxx>
 #include <clipparam.hxx>
@@ -19,6 +22,7 @@
 #include <editeng/brushitem.hxx>
 #include <editutil.hxx>
 #include <formulacell.hxx>
+#include <impex.hxx>
 #include <iostream>
 #include <patattr.hxx>
 #include <postit.hxx>
@@ -10572,6 +10576,43 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteMatrixFormula)
     CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(0, 2, 0)));
     // A4 Cell value should contain 3.0
     CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(0, 3, 0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testExportTextLeadingEmptyCellsTdf109299)
+{
+    m_pDoc->InsertTab(0, u"Test"_ustr);
+
+    // Set a value to A1; B1 intentionally left empty
+    m_pDoc->SetString(ScAddress(0, 0, 0), u"A1"_ustr);
+
+    // Create range from A1 to B1 including the empty cell B1
+    ScRange aRange(ScAddress(0, 0, 0), ScAddress(1, 0, 0));
+
+    // ShrinkToDataArea is true (default case): trailing empty cell B1 is shrunk away
+    {
+        ScImportExport aObj(*m_pDoc, aRange);
+        OUString aResult;
+        CPPUNIT_ASSERT(aObj.ExportString(aResult, SotClipboardFormatId::STRING));
+        CPPUNIT_ASSERT_EQUAL(u"A1"_ustr, aResult);
+    }
+
+    // ShrinkToDataArea is false: trailing empty cell B1 is kept
+    {
+        auto pChange = comphelper::ConfigurationChanges::create();
+        officecfg::Office::Calc::ClipboardCellsExport::ShrinkToDataArea::set(false, pChange);
+        pChange->commit();
+
+        ScImportExport aObj(*m_pDoc, aRange);
+        OUString aResult;
+        CPPUNIT_ASSERT(aObj.ExportString(aResult, SotClipboardFormatId::STRING));
+        CPPUNIT_ASSERT(aResult.startsWith("A1\t"));
+
+        // Restore default value
+        officecfg::Office::Calc::ClipboardCellsExport::ShrinkToDataArea::set(true, pChange);
+        pChange->commit();
+    }
 
     m_pDoc->DeleteTab(0);
 }
