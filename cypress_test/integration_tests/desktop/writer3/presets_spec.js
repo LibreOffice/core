@@ -28,16 +28,18 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Preset tests.', function()
 	});
 
 	// Ensure that shared wordbook was installed.
-	it.skip('Verify shared wordbook install.', function() {
+	it('Verify shared wordbook install.', function() {
 		// Add some text and check spelling
 		ceHelper.type('collaboraonline');
 
 		cy.cGet('#Review-tab-label').click();
 
-                cy.cGet('.notebookbar > .unoSpellingAndGrammarDialog > button').click();
+                cy.cGet('.notebookbar > .unoSpellingAndGrammarDialog > button').first().click();
 
-		// we should end up with the "there are no misspelling information dialog"
-		cy.cGet('.ui-dialog-title').should('have.text', 'Spelling: Information');
+		// we should end up with the "there are no misspelling" Information messagebox.
+		// Scope to its own #Information; the underlying SpellingDialog stays visible
+		// behind it and a bare .ui-dialog-title would match both and concatenate.
+		cy.cGet('#Information.ui-dialog-title').should('have.text', 'Information');
 
 		cy.cGet('body').type('{esc}');
 		cy.cGet('body').type('{esc}');
@@ -57,16 +59,18 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Preset tests.', function()
 	});
 
 	// Ensure that user wordbook was installed.
-	it.skip('Verify user wordbook install.', function() {
+	it('Verify user wordbook install.', function() {
 		// Add some text and check spelling
 		ceHelper.type('sneha');
 
 		cy.cGet('#Review-tab-label').click();
 
-                cy.cGet('.notebookbar > .unoSpellingAndGrammarDialog > button').click();
+                cy.cGet('.notebookbar > .unoSpellingAndGrammarDialog > button').first().click();
 
-		// we should end up with the "there are no misspelling information dialog"
-		cy.cGet('.ui-dialog-title').should('have.text', 'Spelling: Information');
+		// we should end up with the "there are no misspelling" Information messagebox.
+		// Scope to its own #Information; the underlying SpellingDialog stays visible
+		// behind it and a bare .ui-dialog-title would match both and concatenate.
+		cy.cGet('#Information.ui-dialog-title').should('have.text', 'Information');
 
 		cy.cGet('body').type('{esc}');
 		cy.cGet('body').type('{esc}');

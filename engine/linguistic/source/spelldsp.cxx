@@ -837,6 +837,9 @@ void SpellCheckerDispatcher::FlushSpellCache()
 {
     if (m_pCache)
         m_pCache->Flush();
+    // Drop the cached language->dictionaries map on spell dictionary changes,
+    // so e.g. additional dictionary installed via "addconfig") get picked up.
+    m_aDictionaryMap.clear();
 }
 
 void SpellCheckerDispatcher::setCharClass(const LanguageTag& rLanguageTag)

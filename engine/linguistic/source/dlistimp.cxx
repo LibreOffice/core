@@ -324,12 +324,16 @@ void DicList::SearchForDictionaries(
             uno::Reference< XDictionary > xDic =
                         new DictionaryNeo( aDicTitle.isEmpty() ? aDicName : aDicTitle, nLang, eType, aURL, bIsWriteablePath );
 
+            // Register before setActive so that the (conditional) setActive
+            // triggered ACTIVATE_DIC event reaches DicEvtListenerHelper and
+            // notifies listeners of dictionary changes.
+            addDictionary( xDic );
+
             // when using kit we don't have "options" dialog to make user-dictionaries active
             // so when we add user-dictionary, we make them active as well
             if (comphelper::COKit::isActive())
                 xDic->setActive(true);
 
-            addDictionary( xDic );
             nCount++;
         }
     }
