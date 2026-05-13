@@ -589,10 +589,7 @@ sub run {
             $filesinproductlanguageresolvedarrayref = installer::scriptitems::remove_Files_For_Languagepacks($filesinproductlanguageresolvedarrayref);
         }
 
-        if ( ! $allvariableshashref->{'NO_README_IN_ROOTDIR'} )
-        {
-            $filesinproductlanguageresolvedarrayref = installer::scriptitems::add_License_Files_into_Installdir($filesinproductlanguageresolvedarrayref, $dirsinproductlanguageresolvedarrayref, $languagesarrayref);
-        }
+        $filesinproductlanguageresolvedarrayref = installer::scriptitems::add_License_Files_into_Installdir($filesinproductlanguageresolvedarrayref, $dirsinproductlanguageresolvedarrayref, $languagesarrayref);
 
         installer::scriptitems::make_filename_language_specific($filesinproductlanguageresolvedarrayref);
 
@@ -1228,7 +1225,7 @@ sub run {
                 # Copying the cde, kde and gnome packages into the installation set
                 if ( $installer::globals::addsystemintegration ) { installer::epmfile::put_systemintegration_into_installset($installer::globals::epmoutpath, $includepatharrayref, $allvariableshashref, $modulesinproductarrayref); }
 
-                # Adding license and readme into installation set
+                # Adding license into installation set
                 if ($installer::globals::addlicensefile) { installer::worker::put_scpactions_into_installset("."); }
 
                 # Adding license file into setup
@@ -1255,7 +1252,7 @@ sub run {
                 # Copying the cde, kde and gnome packages into the installation set
                 if ( $installer::globals::addsystemintegration ) { installer::epmfile::put_systemintegration_into_installset($newepmdir, $includepatharrayref, $allvariableshashref, $modulesinproductarrayref); }
 
-                # Adding license and readme into installation set
+                # Adding license into installation set
                 if ($installer::globals::addlicensefile) { installer::worker::put_scpactions_into_installset("."); }
 
                 # Adding license file into setup

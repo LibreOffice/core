@@ -917,14 +917,11 @@ sub get_sourcepath_from_filename_and_includepath
 
     if (!($foundsourcefile))    # testing with lowercase filename
     {
-        # Attention: README01.html is copied for Windows to readme01.html, not case sensitive
-
         for ( my $j = 0; $j <= $#installer::globals::allincludepaths; $j++ )
         {
             my $allfiles = $installer::globals::allincludepaths[$j];
 
             my $newfilename = $$searchfilenameref;
-            $newfilename =~ s/readme/README/;       # special handling for readme files
             $newfilename =~ s/license/LICENSE/;     # special handling for license files
 
             if ( exists( $allfiles->{$newfilename} ))
@@ -1216,10 +1213,8 @@ sub add_License_Files_into_Installdir
 
     my ($foundofficedir, $officedirectorygid, $officedirectoryhostname) = get_office_directory_gid_and_hostname($dirsarrayref);
 
-    # copy all files from directory share/readme, that contain the default language in their name
-    # without default language into the installation root. This makes the settings of the correct
-    # file names superfluous. On the other hand this requires a dependency to the directory
-    # share/readme
+    # Copy each ROOTLICENSEFILE-flagged file in the default language into the
+    # installation root, with the language suffix dropped from the filename.
 
     for ( my $i = 0; $i <= $#{$filesarrayref}; $i++ )
     {
@@ -1228,8 +1223,7 @@ sub add_License_Files_into_Installdir
         my $styles = "";
         if ( $onefile->{'Styles'} ) { $styles = $onefile->{'Styles'}; }
 
-        if ( ( $destination =~ /share\Q$installer::globals::separator\Ereadme\Q$installer::globals::separator\E(\w+?)_?$defaultlanguage\.?(\w*)\s*/ )
-            || (( $styles =~ /\bROOTLICENSEFILE\b/ ) && ( $destination =~ /\Q$installer::globals::separator\E?(\w+?)_?$defaultlanguage\.?(\w*?)\s*$/ )) )
+        if (( $styles =~ /\bROOTLICENSEFILE\b/ ) && ( $destination =~ /\Q$installer::globals::separator\E?(\w+?)_?$defaultlanguage\.?(\w*?)\s*$/ ))
         {
             my $filename = $1;
             my $extension = $2;

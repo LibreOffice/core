@@ -271,10 +271,9 @@ sub create_epm_header
 
     my @epmheader = ();
 
-    my ($licensefilename, $readmefilename, $readmefilenameen);
+    my $licensefilename;
 
     my $foundlicensefile = 0;
-    my $foundreadmefile = 0;
 
     my $line = "";
     my $infoline = "";
@@ -285,15 +284,10 @@ sub create_epm_header
     # %copyright 1999-2003 by OOo
     # %vendor LibreOffice
     # %license /test/replace/01/LICENSE01
-    # %readme /test/replace/01/README01
     # %requires foo
     # %provides bar
     # %replaces bar
     # %incompat bar
-
-    # The first language in the languages array determines the language of license and readme file
-
-    my $searchlanguage = ${$languagesref}[0];
 
     # using the description for the %product line in the epm list file
 
@@ -336,35 +330,15 @@ sub create_epm_header
     $line = "%vendor" . " " . $vendorstring . "\n";
     push(@epmheader, $line);
 
-    # License and Readme file can be included automatically from the file list
+    # License file can be included automatically from the file list
 
     if ( $installer::globals::iswindowsbuild )
     {
         $licensefilename = "license.txt";
-        $readmefilename = "readme.txt";
-        $readmefilenameen = "readme_en-US.txt";
     }
     else
     {
         $licensefilename = "LICENSE";
-        $readmefilename = "README";
-        $readmefilenameen = "README_en-US";
-    }
-
-    if (( $installer::globals::languagepack )   # in language packs and help packs the files LICENSE and README are removed, because they are not language specific
-        || ( $installer::globals::helppack )
-        || ( $variableshashref->{'NO_README_IN_ROOTDIR'} ))
-    {
-        if ( $installer::globals::iswindowsbuild )
-        {
-            $licensefilename = "license.txt";
-            $readmefilename = "readme_$searchlanguage.txt";
-        }
-        else
-        {
-            $licensefilename = "LICENSE";
-            $readmefilename = "README_$searchlanguage";
-        }
     }
 
     my $license_in_package_defined = 0;
@@ -388,54 +362,6 @@ sub create_epm_header
             $licensefilename = "linuxcopyrightfile";
             $license_in_package_defined = 1;
         }
-    }
-
-    # searching for and readme file;
-    # URE uses special README; others use README_en-US
-    # it does not matter which one is passed for epm if both are packaged
-    foreach my $possiblereadmefilename ($readmefilenameen, $readmefilename)
-    {
-        last if ($foundreadmefile);
-        for ( my $i = 0; $i <= $#{$filesinproduct}; $i++ )
-        {
-            my $onefile = ${$filesinproduct}[$i];
-            my $filename = $onefile->{'Name'};
-            # in the SDK it's in subdirectory sdk/share/readme
-            if ( $filename =~ /$possiblereadmefilename$/ )
-            {
-                $foundreadmefile = 1;
-                $line = "%readme" . " " . $onefile->{'sourcepath'} . "\n";
-                push(@epmheader, $line);
-                last;
-            }
-        }
-    }
-
-    # the readme file need not be packaged more times in the help content
-    # it needs to be installed in parallel with the main package anyway
-    # try to find the README file between all available files (not only between the packaged)
-    if (!($foundreadmefile) && $installer::globals::helppack)
-    {
-        my $fileref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$readmefilenameen, "" , 0);
-        if($$fileref ne "" )
-        {
-            $infoline = "Fallback to readme file: \"$$fileref\"!\n";
-            push(@installer::globals::logfileinfo, $infoline);
-
-            $foundreadmefile = 1;
-            $line = "%readme" . " " . $$fileref . "\n";
-            push(@epmheader, $line);
-        }
-    }
-
-    if (!$foundreadmefile && $variableshashref->{'NO_README_IN_ROOTDIR'})
-    {
-        $infoline = "Fallback to dummy readme file\n";
-        push(@installer::globals::logfileinfo, $infoline);
-
-        $foundreadmefile = 1;
-        $line = "%readme DUMMY\n";
-        push(@epmheader, $line);
     }
 
     # searching for and license file
@@ -482,7 +408,6 @@ sub create_epm_header
     {
     for my $onefile (@{$filesinproduct})
     {
-        # in the SDK it's in subdirectory sdk/share/readme so try to match that
         if ($onefile->{'Name'} =~ /$licensefilename$/)
             {
                 push @epmheader, "%license" . " " . $onefile->{'sourcepath'} . "\n";
@@ -512,11 +437,6 @@ sub create_epm_header
     if (!($foundlicensefile))
     {
         installer::exiter::exit_program("ERROR: Could not find license file $licensefilename (B)", "create_epm_header");
-    }
-
-    if (!($foundreadmefile))
-    {
-        installer::exiter::exit_program("ERROR: Could not find readme file $readmefilename (C)", "create_epm_header");
     }
 
     # including %replaces

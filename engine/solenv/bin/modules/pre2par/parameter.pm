@@ -40,7 +40,7 @@ The following parameter are needed:
 
 Example:
 
-perl pre2par.pl -l test.mlf -s readme.pre -o readme.par -v
+perl pre2par.pl -l test.mlf -s input.pre -o output.par -v
 
 ---------------------------------------------------------
 End
