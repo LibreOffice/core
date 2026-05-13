@@ -283,7 +283,7 @@ void SwAnnotationWin::ToggleResolved()
 void SwAnnotationWin::ToggleResolvedForThread()
 {
     auto pTop = GetTopReplyNote();
-    pTop->ToggleResolved();
+    pTop->SetResolved(!IsThreadResolved());
     mrMgr.UpdateResolvedStatus(pTop);
     mrMgr.LayoutPostIts();
 }

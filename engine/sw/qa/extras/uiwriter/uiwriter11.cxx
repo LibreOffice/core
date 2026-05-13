@@ -595,6 +595,34 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest11, testPageSizeKeepsOrientation)
     CPPUNIT_ASSERT_GREATER(aLandscapeA4.Width(), aNewSize.Width());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest11, testResolveCommentThreadPartiallyResolved)
+{
+    // Given a document with a comment thread (root + replies):
+    createSwDoc("tdf108791_comments_with_tracked_changes.fodt");
+
+    SwPostItMgr* pPostItMgr = getSwDocShell()->GetView()->GetPostItMgr();
+    auto& aPostItFields = pPostItMgr->GetPostItFields();
+    const SwPostItField* pRoot = aPostItFields[0]->mpPostIt->GetPostItField();
+    const SwPostItField* pReply = aPostItFields[1]->mpPostIt->GetPostItField();
+
+    // Put the thread into the partially-resolved state: root resolved, reply not.
+    OUString sRootId = OUString::number(pRoot->GetPostItId());
+    dispatchCommand(mxComponent, u".uno:ResolveComment"_ustr,
+                    { comphelper::makePropertyValue(u"Id"_ustr, sRootId) });
+    CPPUNIT_ASSERT(pRoot->GetResolved());
+    CPPUNIT_ASSERT(!pReply->GetResolved());
+
+    // Resolve the thread the way online does, by id.
+    dispatchCommand(mxComponent, u".uno:ResolveCommentThread"_ustr,
+                    { comphelper::makePropertyValue(u"Id"_ustr, sRootId) });
+
+    // Without the fix in place, this test would have failed with:
+    // - Expression: pRoot->GetResolved()
+    // i.e. the whole thread was unresolved.
+    CPPUNIT_ASSERT(pRoot->GetResolved());
+    CPPUNIT_ASSERT(pReply->GetResolved());
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
