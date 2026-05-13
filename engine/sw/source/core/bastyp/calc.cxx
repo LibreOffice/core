@@ -560,6 +560,8 @@ const CharClass* SwCalc::GetCharClass() const
 
 void SwCalc::SetCharClass(const LanguageTag& rLanguageTag)
 {
+    if( m_pCharClass && m_pCharClass != &GetAppCharClass() )
+        delete m_pCharClass;
     m_pCharClass = new CharClass( ::comphelper::getProcessComponentContext(), rLanguageTag );
 }
 
