@@ -1538,7 +1538,7 @@ void ScDBData::RefreshTableColumnNames( ScDocument* pDoc )
     mbTableColumnNamesDirty = false;
 }
 
-void ScDBData::RefreshTableColumnNames( ScDocument& rDoc, const ScRange& rRange )
+void ScDBData::RefreshTableColumnNames( ScDocument& rDoc, const ScRangeList& rRangeList )
 {
     // Header-less tables get names generated, completely empty a full refresh.
     if (mbTableColumnNamesDirty && (!HasHeader() || maTableColumnNames.empty()))
@@ -1548,8 +1548,7 @@ void ScDBData::RefreshTableColumnNames( ScDocument& rDoc, const ScRange& rRange 
     }
 
     // Check if this is affected for the range requested.
-    ScRange aIntersection( GetHeaderArea().Intersection( rRange));
-    if (!aIntersection.IsValid())
+    if (!rRangeList.Intersects(GetHeaderArea()))
         return;
 
     // Always fully refresh, only one cell of a range was broadcasted per area
@@ -2294,14 +2293,12 @@ std::vector<const ScDBData*> ScDBCollection::GetAllNamedDBsInArea(SCCOL nCol1, S
 
 void ScDBCollection::RefreshDirtyTableColumnNames()
 {
-    for (size_t i=0; i < maNamedDBs.maDirtyTableColumnNames.size(); ++i)
+    if (maNamedDBs.maDirtyTableColumnNames.empty())
+        return;
+    for (auto const& it : maNamedDBs)
     {
-        const ScRange & rRange = maNamedDBs.maDirtyTableColumnNames[i];
-        for (auto const& it : maNamedDBs)
-        {
-            if (it->AreTableColumnNamesDirty())
-                it->RefreshTableColumnNames( maNamedDBs.mrDoc, rRange);
-        }
+        if (it->AreTableColumnNamesDirty())
+            it->RefreshTableColumnNames( maNamedDBs.mrDoc, maNamedDBs.maDirtyTableColumnNames);
     }
     maNamedDBs.maDirtyTableColumnNames.RemoveAll();
 }

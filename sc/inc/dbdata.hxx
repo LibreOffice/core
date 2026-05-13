@@ -254,7 +254,7 @@ public:
 
     /** Refresh/update the column names with the header row's cell contents
         within the given range. */
-    void RefreshTableColumnNames( ScDocument& rDoc, const ScRange& rRange );
+    void RefreshTableColumnNames( ScDocument& rDoc, const ScRangeList& rRangeList );
 
     /** Finds the column named rName and returns the corresponding offset
         within the table.
