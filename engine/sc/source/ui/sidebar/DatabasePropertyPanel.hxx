@@ -54,8 +54,10 @@ private:
     std::unique_ptr<weld::ComboBox> m_xCmbStyle;
 
     ::sfx2::sidebar::ControllerItem maHeaderRowCtrl;
+    ::sfx2::sidebar::ControllerItem maTotalRowCtrl;
 
     DECL_LINK(EntryChanged, weld::Toggleable&, void);
+    DECL_LINK(TotalRowChanged, weld::Toggleable&, void);
     DECL_LINK(StyleChanged, weld::ComboBox&, void);
 
     vcl::EnumContext maContext;

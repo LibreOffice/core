@@ -6548,6 +6548,24 @@ SfxVoidItem RemoveCalcTable SID_REMOVE_CALCTABLE
 ]
 
 
+SfxBoolItem TableTotalRow SID_TABLE_TOTALROW
+(SfxBoolItem TableTotalRow SID_TABLE_TOTALROW)
+[
+    AutoUpdate = FALSE,
+    FastCall = TRUE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::Table;
+]
+
+
 SfxVoidItem SelectArrayFormula SID_MARKARRAYFORMULA
 ()
 [

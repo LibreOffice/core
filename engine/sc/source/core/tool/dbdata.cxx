@@ -50,12 +50,11 @@
 
 using namespace com::sun::star;
 
-constexpr int DBSETTING_PARAMS = 8;
+constexpr int DBSETTING_PARAMS = 7;
 
 ScDatabaseSettingItem::ScDatabaseSettingItem():
     SfxPoolItem(SCITEM_DATABASE_SETTING),
     mbHeaderRow(false),
-    mbTotalRow(false),
     mbFirstCol(false),
     mbLastCol(false),
     mbStripedRows(false),
@@ -64,13 +63,12 @@ ScDatabaseSettingItem::ScDatabaseSettingItem():
 {
 }
 
-ScDatabaseSettingItem::ScDatabaseSettingItem(bool bHeaderRow, bool bTotalRow, bool bFirstCol,
+ScDatabaseSettingItem::ScDatabaseSettingItem(bool bHeaderRow, bool bFirstCol,
                                              bool bLastCol, bool bStripedRows, bool bStripedCols,
                                              bool bShowFilters, const OUString& aStyleID)
     :
     SfxPoolItem(SCITEM_DATABASE_SETTING),
     mbHeaderRow(bHeaderRow),
-    mbTotalRow(bTotalRow),
     mbFirstCol(bFirstCol),
     mbLastCol(bLastCol),
     mbStripedRows(bStripedRows),
@@ -83,7 +81,6 @@ ScDatabaseSettingItem::ScDatabaseSettingItem(bool bHeaderRow, bool bTotalRow, bo
 ScDatabaseSettingItem::ScDatabaseSettingItem(const ScDatabaseSettingItem& rItem):
     SfxPoolItem(SCITEM_DATABASE_SETTING),
     mbHeaderRow(rItem.mbHeaderRow),
-    mbTotalRow(rItem.mbTotalRow),
     mbFirstCol(rItem.mbFirstCol),
     mbLastCol(rItem.mbLastCol),
     mbStripedRows(rItem.mbStripedRows),
@@ -106,7 +103,6 @@ bool ScDatabaseSettingItem::QueryValue(uno::Any& rVal, sal_uInt8 nMemberId ) con
         {
             css::uno::Sequence<css::beans::PropertyValue> aSeq{
                 comphelper::makePropertyValue(u"ContainsHeader"_ustr, mbHeaderRow),
-                comphelper::makePropertyValue(u"TotalsRow"_ustr, mbTotalRow),
                 comphelper::makePropertyValue(u"UseFirstColumnFormatting"_ustr, mbFirstCol),
                 comphelper::makePropertyValue(u"UseLastColumnFormatting"_ustr, mbLastCol),
                 comphelper::makePropertyValue(u"UseRowStripes"_ustr, mbStripedRows),
@@ -122,24 +118,21 @@ bool ScDatabaseSettingItem::QueryValue(uno::Any& rVal, sal_uInt8 nMemberId ) con
             rVal <<= mbHeaderRow;
             break;
         case MID_2:
-            rVal <<= mbTotalRow;
-            break;
-        case MID_3:
             rVal <<= mbFirstCol;
             break;
-        case MID_4:
+        case MID_3:
             rVal <<= mbLastCol;
             break;
-        case MID_5:
+        case MID_4:
             rVal <<= mbStripedRows;
             break;
-        case MID_6:
+        case MID_5:
             rVal <<= mbStripedCols;
             break;
-        case MID_7:
+        case MID_6:
             rVal <<= mbShowFilters;
             break;
-        case MID_8:
+        case MID_7:
             rVal <<= maStyleID;
             break;
         default:
@@ -165,7 +158,6 @@ bool ScDatabaseSettingItem::PutValue(const uno::Any& rVal, sal_uInt8 nMemberId)
             {
                 OUString sTmpID;
                 bool bTmpHRow(false);
-                bool bTmpTRow(false);
                 bool bTmpFCol(false);
                 bool bTmpLCol(false);
                 bool bTmpSRows(false);
@@ -179,11 +171,6 @@ bool ScDatabaseSettingItem::PutValue(const uno::Any& rVal, sal_uInt8 nMemberId)
                     if (rProp.Name == u"ContainsHeader")
                     {
                         bAllConverted &= (rProp.Value >>= bTmpHRow);
-                        ++nConvertedCount;
-                    }
-                    else if (rProp.Name == u"TotalsRow")
-                    {
-                        bAllConverted &= (rProp.Value >>= bTmpTRow);
                         ++nConvertedCount;
                     }
                     else if (rProp.Name == u"UseFirstColumnFormatting")
@@ -221,7 +208,6 @@ bool ScDatabaseSettingItem::PutValue(const uno::Any& rVal, sal_uInt8 nMemberId)
                 if (bAllConverted && nConvertedCount == DBSETTING_PARAMS)
                 {
                     mbHeaderRow = bTmpHRow;
-                    mbTotalRow = bTmpTRow;
                     mbFirstCol = bTmpFCol;
                     mbLastCol = bTmpLCol;
                     mbStripedRows = bTmpSRows;
@@ -237,24 +223,21 @@ bool ScDatabaseSettingItem::PutValue(const uno::Any& rVal, sal_uInt8 nMemberId)
             bRet = (rVal >>= bVal); if (bRet) mbHeaderRow=bVal; break;
             break;
         case MID_2:
-            bRet = (rVal >>= bVal); if (bRet) mbTotalRow=bVal; break;
-            break;
-        case MID_3:
             bRet = (rVal >>= bVal); if (bRet) mbFirstCol=bVal; break;
             break;
-        case MID_4:
+        case MID_3:
             bRet = (rVal >>= bVal); if (bRet) mbLastCol=bVal; break;
             break;
-        case MID_5:
+        case MID_4:
             bRet = (rVal >>= bVal); if (bRet) mbStripedRows=bVal; break;
             break;
-        case MID_6:
+        case MID_5:
             bRet = (rVal >>= bVal); if (bRet) mbStripedCols=bVal; break;
             break;
-        case MID_7:
+        case MID_6:
             bRet = (rVal >>= bVal); if (bRet) mbShowFilters=bVal; break;
             break;
-        case MID_8:
+        case MID_7:
         {
             OUString aVal;
             bRet = (rVal >>= aVal); if (bRet) maStyleID = std::move(aVal); break;
@@ -280,7 +263,6 @@ SfxPoolItem* ScDatabaseSettingItem::CreateDefault()
 ScDatabaseSettingItem& ScDatabaseSettingItem::operator=(const ScDatabaseSettingItem& rItem)
 {
     mbHeaderRow = rItem.mbHeaderRow;
-    mbTotalRow = rItem.mbTotalRow;
     mbFirstCol = rItem.mbFirstCol;
     mbLastCol = rItem.mbLastCol;
     mbStripedRows = rItem.mbStripedRows;
@@ -298,7 +280,7 @@ bool ScDatabaseSettingItem::operator==(const SfxPoolItem& rItem) const
         return false;
 
     const ScDatabaseSettingItem& rDBItem = static_cast<const ScDatabaseSettingItem&>(rItem);
-    return mbHeaderRow == rDBItem.mbHeaderRow && mbTotalRow == rDBItem.mbTotalRow && mbFirstCol == rDBItem.mbFirstCol &&
+    return mbHeaderRow == rDBItem.mbHeaderRow && mbFirstCol == rDBItem.mbFirstCol &&
         mbLastCol == rDBItem.mbLastCol && mbStripedRows == rDBItem.mbStripedRows && mbStripedCols == rDBItem.mbStripedCols &&
         mbShowFilters == rDBItem.mbShowFilters && maStyleID == rDBItem.maStyleID;
 }
@@ -306,11 +288,6 @@ bool ScDatabaseSettingItem::operator==(const SfxPoolItem& rItem) const
 bool ScDatabaseSettingItem::HasHeaderRow() const
 {
     return mbHeaderRow;
-}
-
-bool ScDatabaseSettingItem::HasTotalRow() const
-{
-    return mbTotalRow;
 }
 
 bool ScDatabaseSettingItem::HasFirstCol() const

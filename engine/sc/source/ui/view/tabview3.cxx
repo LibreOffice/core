@@ -319,6 +319,7 @@ void ScTabView::InvalidateAttribs()
         rBindings.Invalidate( SID_ATTR_BORDER_DIAG_BLTR );
         rBindings.Invalidate( SID_NUMBER_TYPE_FORMAT );
         rBindings.Invalidate( SID_DATABASE_SETTINGS );
+        rBindings.Invalidate( SID_TABLE_TOTALROW );
     }
 
     rBindings.Invalidate( SID_BACKGROUND_COLOR );

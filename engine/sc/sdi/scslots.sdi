@@ -24,13 +24,12 @@ module StarCalc
     struct ScDatabaseSetting
     {
         BOOL HeaderRow              MID_1;
-        BOOL TotalRow               MID_2;
-        BOOL FirstCol               MID_3;
-        BOOL LastCol                MID_4;
-        BOOL StripedRows            MID_5;
-        BOOL StripedCols            MID_6;
-        BOOL ShowFilters            MID_7;
-        String StyleID              MID_8
+        BOOL FirstCol               MID_2;
+        BOOL LastCol                MID_3;
+        BOOL StripedRows            MID_4;
+        BOOL StripedCols            MID_5;
+        BOOL ShowFilters            MID_6;
+        String StyleID              MID_7
     };
     item ScDatabaseSetting ScDatabaseSettingItem;
 

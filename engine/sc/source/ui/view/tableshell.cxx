@@ -76,7 +76,8 @@ void ScTableShell::ExecuteDatabaseSettings(const SfxRequest& rReq)
             const SfxPoolItem* pItem = nullptr;
             if (pSet->GetItemState(SCITEM_DATABASE_SETTING, true, &pItem) != SfxItemState::SET)
                 break;
-            const auto* pDBItem = dynamic_cast<const ScDatabaseSettingItem*>(pItem);
+            const ScDatabaseSettingItem* pDBItem
+                = dynamic_cast<const ScDatabaseSettingItem*>(pItem);
             if (!pDBItem)
                 break;
             const ScDBData* pDBData = GetTableDBDataAtCursor();
@@ -86,7 +87,6 @@ void ScTableShell::ExecuteDatabaseSettings(const SfxRequest& rReq)
             ScDBData aNewDBData(*pDBData);
             aNewDBData.SetAutoFilter(pDBItem->HasShowFilters());
             aNewDBData.SetHeader(pDBItem->HasHeaderRow());
-            aNewDBData.SetTotals(pDBItem->HasTotalRow());
 
             ScTableStyleParam aNewParam(*pDBData->GetTableStyleInfo());
             aNewParam.mbRowStripes = pDBItem->HasStripedRows();
@@ -97,16 +97,38 @@ void ScTableShell::ExecuteDatabaseSettings(const SfxRequest& rReq)
             aNewDBData.SetTableStyleInfo(aNewParam);
 
             ScDBDocFunc aFunc(*rViewData.GetDocShell());
-            if (pDBData->HasTotals() == aNewDBData.HasTotals())
-            {
-                aFunc.ModifyDBData(aNewDBData);
+            aFunc.ModifyDBData(aNewDBData);
+        }
+        break;
+        case SID_REMOVE_CALCTABLE:
+            m_pViewShell->DeleteCalcTable();
+            break;
+        case SID_TABLE_TOTALROW:
+        {
+            const ScDBData* pDBData = GetTableDBDataAtCursor();
+            if (!pDBData)
                 break;
-            }
 
-            // Total Row toggled — add or remove.
+            // Desired value: SfxBoolItem in args if present, else toggle.
+            bool bNewTotal = !pDBData->HasTotals();
+            if (pSet)
+            {
+                const SfxPoolItem* pItem = nullptr;
+                if (pSet->GetItemState(SID_TABLE_TOTALROW, true, &pItem) == SfxItemState::SET)
+                {
+                    if (const SfxBoolItem* pBoolItem = dynamic_cast<const SfxBoolItem*>(pItem))
+                        bNewTotal = pBoolItem->GetValue();
+                }
+            }
+            if (bNewTotal == pDBData->HasTotals())
+                break;
+
+            ScDBData aNewDBData(*pDBData);
+            aNewDBData.SetTotals(bNewTotal);
+
             ScSubTotalParam aSubTotalParam;
             aNewDBData.GetSubTotalParam(aSubTotalParam);
-            const bool bRemove = !aNewDBData.HasTotals();
+            const bool bRemove = !bNewTotal;
             if (bRemove)
             {
                 // store current subtotal settings before removing total row
@@ -115,20 +137,15 @@ void ScTableShell::ExecuteDatabaseSettings(const SfxRequest& rReq)
             }
             aSubTotalParam.bRemoveOnly = bRemove;
             aSubTotalParam.bReplace = bRemove;
+
+            ScDBDocFunc aFunc(*rViewData.GetDocShell());
             aFunc.DoTableSubTotals(aNewDBData.GetTab(), aNewDBData, aSubTotalParam, true, false);
         }
         break;
-        case SID_REMOVE_CALCTABLE:
-            m_pViewShell->DeleteCalcTable();
-            break;
     }
 
-    // TODO: when DoTableSubTotals refuses the toggle (tear-risk + blocked band), the
-    // underlying ScDBData state is unchanged, so this Invalidate produces an
-    // ScDatabaseSettingItem equal to the cached one. SfxBindings suppresses the
-    // resulting NotifyItemUpdate, no commandstatechanged echo is sent, and the Total
-    // Row checkbox in both the sidebar and the notebookbar stays visually flipped.
     rBindings.Invalidate(SID_DATABASE_SETTINGS);
+    rBindings.Invalidate(SID_TABLE_TOTALROW);
 }
 
 void ScTableShell::GetDatabaseSettings(SfxItemSet& rSet)
@@ -144,15 +161,30 @@ void ScTableShell::GetDatabaseSettings(SfxItemSet& rSet)
                 if (const ScDBData* pDBData = GetTableDBDataAtCursor())
                 {
                     const ScTableStyleParam* pParam = pDBData->GetTableStyleInfo();
-                    rSet.Put(ScDatabaseSettingItem(pDBData->HasHeader(), pDBData->HasTotals(),
-                                                   pParam->mbFirstColumn, pParam->mbLastColumn,
-                                                   pParam->mbRowStripes, pParam->mbColumnStripes,
+                    rSet.Put(ScDatabaseSettingItem(pDBData->HasHeader(), pParam->mbFirstColumn,
+                                                   pParam->mbLastColumn, pParam->mbRowStripes,
+                                                   pParam->mbColumnStripes,
                                                    pDBData->HasAutoFilter(), pParam->maStyleID));
                 }
             }
             break;
             case SID_REMOVE_CALCTABLE:
                 break;
+            case SID_TABLE_TOTALROW:
+            {
+                const ScDBData* pDBData = GetTableDBDataAtCursor();
+                if (!pDBData)
+                {
+                    rSet.DisableItem(nWhich);
+                    break;
+                }
+                // Disable if the next click (toggle direction) would be refused.
+                if (pDBData->WouldTableTotalsBeRefused(!pDBData->HasTotals()))
+                    rSet.DisableItem(nWhich);
+                else
+                    rSet.Put(SfxBoolItem(nWhich, pDBData->HasTotals()));
+            }
+            break;
         }
         nWhich = aIter.NextWhich();
     }

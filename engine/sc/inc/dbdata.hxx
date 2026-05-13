@@ -41,7 +41,6 @@ class ScTokenArray;
 class SC_DLLPUBLIC ScDatabaseSettingItem final : public SfxPoolItem
 {
     bool mbHeaderRow;
-    bool mbTotalRow;
     bool mbFirstCol;
     bool mbLastCol;
     bool mbStripedRows;
@@ -53,7 +52,7 @@ public:
     static SfxPoolItem* CreateDefault();
     DECLARE_ITEM_TYPE_FUNCTION(ScDatabaseSettingItem)
     ScDatabaseSettingItem();
-    ScDatabaseSettingItem(bool bHeaderRow, bool bTotalRow, bool bFirstCol, bool bLastCol,
+    ScDatabaseSettingItem(bool bHeaderRow, bool bFirstCol, bool bLastCol,
                           bool bStripedRows, bool bStripedCols, bool bShowFilter,
                           const OUString& aStyleID);
     ScDatabaseSettingItem( const ScDatabaseSettingItem& rItem );
@@ -67,7 +66,6 @@ public:
     virtual ScDatabaseSettingItem* Clone( SfxItemPool *pPool = nullptr ) const override;
 
     bool HasHeaderRow() const;
-    bool HasTotalRow() const;
     bool HasFirstCol() const;
     bool HasLastCol() const;
     bool HasStripedRows() const;

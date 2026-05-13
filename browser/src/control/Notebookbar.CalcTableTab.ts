@@ -97,8 +97,7 @@ class CalcTableTab implements NotebookbarTab {
 									{
 										id: 'chk_total_row2',
 										type: 'checkbox',
-										command: '.uno:DatabaseSettings',
-										commandField: 'TotalsRow',
+										command: '.uno:TableTotalRow',
 										text: _('Total Row'),
 										accessibility: {
 											focusBack: true,

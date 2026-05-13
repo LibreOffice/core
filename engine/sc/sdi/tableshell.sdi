@@ -11,6 +11,7 @@ interface Table
 {
     SID_DATABASE_SETTINGS [ ExecMethod = ExecuteDatabaseSettings; StateMethod = GetDatabaseSettings; ]
     SID_REMOVE_CALCTABLE  [ ExecMethod = ExecuteDatabaseSettings; StateMethod = GetDatabaseSettings; ]
+    SID_TABLE_TOTALROW    [ ExecMethod = ExecuteDatabaseSettings; StateMethod = GetDatabaseSettings; ]
 }
 
 shell ScTableShell

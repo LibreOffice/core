@@ -43,6 +43,7 @@ ScDatabasePropertyPanel::ScDatabasePropertyPanel(weld::Widget* pParent,
     , m_xChkLastColumn(m_xBuilder->weld_check_button(u"chk_last_column"_ustr))
     , m_xCmbStyle(m_xBuilder->weld_combo_box(u"cb_styles"_ustr))
     , maHeaderRowCtrl(SID_DATABASE_SETTINGS, *pBindings, *this)
+    , maTotalRowCtrl(SID_TABLE_TOTALROW, *pBindings, *this)
     , mpBindings(pBindings)
 {
     Initialize();
@@ -60,12 +61,13 @@ ScDatabasePropertyPanel::~ScDatabasePropertyPanel()
     m_xCmbStyle.reset();
 
     maHeaderRowCtrl.dispose();
+    maTotalRowCtrl.dispose();
 }
 
 void ScDatabasePropertyPanel::Initialize()
 {
     m_xChkHeaderRow->connect_toggled(LINK(this, ScDatabasePropertyPanel, EntryChanged));
-    m_xChkTotalRow->connect_toggled(LINK(this, ScDatabasePropertyPanel, EntryChanged));
+    m_xChkTotalRow->connect_toggled(LINK(this, ScDatabasePropertyPanel, TotalRowChanged));
     m_xChkFilterButtons->connect_toggled(LINK(this, ScDatabasePropertyPanel, EntryChanged));
     m_xChkBandedRows->connect_toggled(LINK(this, ScDatabasePropertyPanel, EntryChanged));
     m_xChkBandedColumns->connect_toggled(LINK(this, ScDatabasePropertyPanel, EntryChanged));
@@ -115,7 +117,6 @@ void ScDatabasePropertyPanel::NotifyItemUpdate(sal_uInt16 nSID, SfxItemState eSt
                 const ScDatabaseSettingItem* pItem
                     = static_cast<const ScDatabaseSettingItem*>(pState);
                 m_xChkHeaderRow->set_active(pItem->HasHeaderRow());
-                m_xChkTotalRow->set_active(pItem->HasTotalRow());
                 m_xChkFirstColumn->set_active(pItem->HasFirstCol());
                 m_xChkLastColumn->set_active(pItem->HasLastCol());
                 m_xChkBandedRows->set_active(pItem->HasStripedRows());
@@ -137,24 +138,36 @@ void ScDatabasePropertyPanel::NotifyItemUpdate(sal_uInt16 nSID, SfxItemState eSt
                 }
             }
             break;
+        case SID_TABLE_TOTALROW:
+            m_xChkTotalRow->set_sensitive(eState != SfxItemState::DISABLED);
+            if (const SfxBoolItem* pBoolItem = dynamic_cast<const SfxBoolItem*>(pState))
+                m_xChkTotalRow->set_active(pBoolItem->GetValue());
+            break;
     }
 }
 
 IMPL_LINK_NOARG(ScDatabasePropertyPanel, EntryChanged, weld::Toggleable&, void)
 {
-    ScDatabaseSettingItem aItem(m_xChkHeaderRow->get_active(), m_xChkTotalRow->get_active(),
-                                m_xChkFirstColumn->get_active(), m_xChkLastColumn->get_active(),
-                                m_xChkBandedRows->get_active(), m_xChkBandedColumns->get_active(),
+    ScDatabaseSettingItem aItem(m_xChkHeaderRow->get_active(), m_xChkFirstColumn->get_active(),
+                                m_xChkLastColumn->get_active(), m_xChkBandedRows->get_active(),
+                                m_xChkBandedColumns->get_active(),
                                 m_xChkFilterButtons->get_active(), m_xCmbStyle->get_active_id());
     GetBindings()->GetDispatcher()->ExecuteList(SID_DATABASE_SETTINGS, SfxCallMode::RECORD,
                                                 { &aItem });
 }
 
+IMPL_LINK_NOARG(ScDatabasePropertyPanel, TotalRowChanged, weld::Toggleable&, void)
+{
+    SfxBoolItem aItem(SID_TABLE_TOTALROW, m_xChkTotalRow->get_active());
+    GetBindings()->GetDispatcher()->ExecuteList(SID_TABLE_TOTALROW, SfxCallMode::RECORD,
+                                                { &aItem });
+}
+
 IMPL_LINK_NOARG(ScDatabasePropertyPanel, StyleChanged, weld::ComboBox&, void)
 {
-    ScDatabaseSettingItem aItem(m_xChkHeaderRow->get_active(), m_xChkTotalRow->get_active(),
-                                m_xChkFirstColumn->get_active(), m_xChkLastColumn->get_active(),
-                                m_xChkBandedRows->get_active(), m_xChkBandedColumns->get_active(),
+    ScDatabaseSettingItem aItem(m_xChkHeaderRow->get_active(), m_xChkFirstColumn->get_active(),
+                                m_xChkLastColumn->get_active(), m_xChkBandedRows->get_active(),
+                                m_xChkBandedColumns->get_active(),
                                 m_xChkFilterButtons->get_active(), m_xCmbStyle->get_active_id());
     GetBindings()->GetDispatcher()->ExecuteList(SID_DATABASE_SETTINGS, SfxCallMode::RECORD,
                                                 { &aItem });

@@ -1054,6 +1054,15 @@ class Dispatcher {
 			return;
 		}
 
+		// Generic fallback for bare .uno:* commands with no JS-side handler.
+		// Forwards to core via sendUnoCommand — typically a fire-and-forget
+		// toggle (the slot reads current state and flips). Optional args go
+		// through `data` if the caller supplied any.
+		if (action.startsWith('.uno:')) {
+			app.map.sendUnoCommand(action, data);
+			return;
+		}
+
 		console.error('unknown dispatch: "' + action + '"');
 	}
 }

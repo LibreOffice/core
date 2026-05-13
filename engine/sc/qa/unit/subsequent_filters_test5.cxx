@@ -307,19 +307,13 @@ ScDBData* findDBData(ScDocument* pDoc, const OUString& rName)
     return pColl->getNamedDBs().findByUpperName(ScGlobal::getCharClass().uppercase(rName));
 }
 
-void dispatchDatabaseSettings(ScTabViewShell* pViewShell, const ScDBData* pDBData, bool bTotalRow)
+void dispatchDatabaseTotalRow(ScTabViewShell* pViewShell, bool bTotalRow)
 {
-    const ScTableStyleParam* pStyleInfo = pDBData->GetTableStyleInfo();
-    CPPUNIT_ASSERT(pStyleInfo);
-
     SfxDispatcher* pDispatcher = pViewShell->GetViewFrame().GetBindings().GetDispatcher();
     CPPUNIT_ASSERT(pDispatcher);
 
-    ScDatabaseSettingItem aItem(pDBData->HasHeader(), bTotalRow, pStyleInfo->mbFirstColumn,
-                                pStyleInfo->mbLastColumn, pStyleInfo->mbRowStripes,
-                                pStyleInfo->mbColumnStripes, pDBData->HasAutoFilter(),
-                                pStyleInfo->maStyleID);
-    pDispatcher->ExecuteList(SID_DATABASE_SETTINGS, SfxCallMode::SYNCHRON, { &aItem });
+    SfxBoolItem aItem(SID_TABLE_TOTALROW, bTotalRow);
+    pDispatcher->ExecuteList(SID_TABLE_TOTALROW, SfxCallMode::SYNCHRON, { &aItem });
 }
 } // anonymous namespace
 
@@ -352,10 +346,11 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testTotalRowToggle)
 
     ScDBData* pDBData = findDBData(pDoc, u"Table2"_ustr);
     CPPUNIT_ASSERT(pDBData);
+    CPPUNIT_ASSERT(pDBData->GetTableStyleInfo());
     CPPUNIT_ASSERT(pDBData->HasTotals());
 
     // --- Toggle total row OFF ---
-    dispatchDatabaseSettings(pViewShell, pDBData, false);
+    dispatchDatabaseTotalRow(pViewShell, false);
 
     // Refresh DB data pointer (may have been replaced)
     pDBData = findDBData(pDoc, u"Table2"_ustr);
@@ -366,7 +361,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testTotalRowToggle)
     CPPUNIT_ASSERT(pDoc->GetValue(ScAddress(0, 8, 0)) != 0.0);
 
     // --- Toggle total row ON ---
-    dispatchDatabaseSettings(pViewShell, pDBData, true);
+    dispatchDatabaseTotalRow(pViewShell, true);
 
     pDBData = findDBData(pDoc, u"Table2"_ustr);
     CPPUNIT_ASSERT(pDBData);
@@ -398,9 +393,10 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testTotalRowUndoRedo)
 
     ScDBData* pDBData = findDBData(pDoc, u"Table2"_ustr);
     CPPUNIT_ASSERT(pDBData);
+    CPPUNIT_ASSERT(pDBData->GetTableStyleInfo());
 
     // Toggle total row OFF
-    dispatchDatabaseSettings(pViewShell, pDBData, false);
+    dispatchDatabaseTotalRow(pViewShell, false);
 
     pDBData = findDBData(pDoc, u"Table2"_ustr);
     CPPUNIT_ASSERT(pDBData);
@@ -447,6 +443,8 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testTotalRowToggleInPlaceWiderNeighbor)
     ScDBData* pBottom = findDBData(pDoc, u"Table1"_ustr);
     CPPUNIT_ASSERT(pTop);
     CPPUNIT_ASSERT(pBottom);
+    CPPUNIT_ASSERT(pTop->GetTableStyleInfo());
+    CPPUNIT_ASSERT(pBottom->GetTableStyleInfo());
     CPPUNIT_ASSERT(!pTop->HasTotals());
     CPPUNIT_ASSERT(!pBottom->HasTotals());
 
@@ -454,7 +452,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testTotalRowToggleInPlaceWiderNeighbor)
     pBottom->GetArea(aBottomBefore);
 
     // --- Toggle Total Row ON on the top table ---
-    dispatchDatabaseSettings(pViewShell, pTop, true);
+    dispatchDatabaseTotalRow(pViewShell, true);
 
     pTop = findDBData(pDoc, u"Table2"_ustr);
     pBottom = findDBData(pDoc, u"Table1"_ustr);
@@ -522,6 +520,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testTotalRowToggleRefusedBlockedBand)
 
     ScDBData* pTop = findDBData(pDoc, u"Table2"_ustr);
     CPPUNIT_ASSERT(pTop);
+    CPPUNIT_ASSERT(pTop->GetTableStyleInfo());
     CPPUNIT_ASSERT(!pTop->HasTotals());
 
     // Sanity check: the predicate reports refusal up-front (this is the path the
@@ -529,7 +528,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testTotalRowToggleRefusedBlockedBand)
     CPPUNIT_ASSERT(pTop->WouldTableTotalsBeRefused(true));
 
     // --- Attempt to toggle Total Row ON — must be refused ---
-    dispatchDatabaseSettings(pViewShell, pTop, true);
+    dispatchDatabaseTotalRow(pViewShell, true);
 
     pTop = findDBData(pDoc, u"Table2"_ustr);
     CPPUNIT_ASSERT(pTop);
@@ -540,6 +539,60 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testTotalRowToggleRefusedBlockedBand)
 
     // Blocking value still where we put it
     CPPUNIT_ASSERT_EQUAL(99.0, pDoc->GetValue(ScAddress(1, 15, 0)));
+}
+
+// SID_TABLE_TOTALROW state: when toggling-on is allowed, the slot reports an
+// SfxBoolItem matching HasTotals(); when WouldTableTotalsBeRefused is true,
+// the slot is DisableItem'd. Reuse the wider-neighbour fixture (Table2 on top
+// with Table1 spanning columns D/E below).
+CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testTotalRowSlotState_Allowed)
+{
+    createScDoc("xlsx/toggleTotalTearDet.xlsx");
+    ScDocument* pDoc = getScDoc();
+    CPPUNIT_ASSERT(pDoc);
+
+    ScTabViewShell* pViewShell = getViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+
+    goToCell(u"A4"_ustr); // inside Table2; band below is empty
+
+    ScDBData* pTop = findDBData(pDoc, u"Table2"_ustr);
+    CPPUNIT_ASSERT(pTop);
+    CPPUNIT_ASSERT(!pTop->HasTotals());
+    CPPUNIT_ASSERT(!pTop->WouldTableTotalsBeRefused(true));
+
+    std::unique_ptr<SfxPoolItem> pState;
+    SfxItemState eState
+        = pViewShell->GetViewFrame().GetBindings().QueryState(SID_TABLE_TOTALROW, pState);
+    CPPUNIT_ASSERT(eState != SfxItemState::DISABLED);
+    const SfxBoolItem* pBoolItem = dynamic_cast<const SfxBoolItem*>(pState.get());
+    CPPUNIT_ASSERT(pBoolItem);
+    CPPUNIT_ASSERT_EQUAL(false, pBoolItem->GetValue());
+}
+
+CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testTotalRowSlotState_DisabledWhenBlocked)
+{
+    createScDoc("xlsx/toggleTotalTearDet.xlsx");
+    ScDocument* pDoc = getScDoc();
+    CPPUNIT_ASSERT(pDoc);
+
+    ScTabViewShell* pViewShell = getViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+
+    // Block the in-place destination row (row 16, 0-indexed 15) in the band
+    pDoc->SetValue(ScAddress(1, 15, 0), 99.0);
+
+    goToCell(u"A4"_ustr); // inside Table2
+
+    ScDBData* pTop = findDBData(pDoc, u"Table2"_ustr);
+    CPPUNIT_ASSERT(pTop);
+    CPPUNIT_ASSERT(!pTop->HasTotals());
+    CPPUNIT_ASSERT(pTop->WouldTableTotalsBeRefused(true));
+
+    std::unique_ptr<SfxPoolItem> pState;
+    SfxItemState eState
+        = pViewShell->GetViewFrame().GetBindings().QueryState(SID_TABLE_TOTALROW, pState);
+    CPPUNIT_ASSERT_EQUAL(SfxItemState::DISABLED, eState);
 }
 
 CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testFullColumnRefs)

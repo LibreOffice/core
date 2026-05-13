@@ -18,7 +18,6 @@
 // for uno
 interface TableStyleInfo {
 	ContainsHeader: boolean;
-	TotalsRow: boolean;
 	UseFirstColumnFormatting: boolean;
 	UseLastColumnFormatting: boolean;
 	UseRowStripes: boolean;
@@ -118,17 +117,13 @@ class TableStylesService {
 
 	/** Build the .uno:DatabaseSettings args from a TableStyleInfo, translating
 	 * state-side property names to the PoolItem MID names declared in
-	 * scslots.sdi (HeaderRow, TotalRow, ...) that the SDI parameter list
-	 * expects. */
+	 * scslots.sdi (HeaderRow, FirstCol, ...) that the SDI parameter list
+	 * expects. Total Row lives on its own slot (.uno:TableTotalRow). */
 	private buildArgs(state: TableStyleInfo): any {
 		return {
 			'DatabaseSettings.HeaderRow': {
 				type: 'boolean',
 				value: state.ContainsHeader,
-			},
-			'DatabaseSettings.TotalRow': {
-				type: 'boolean',
-				value: state.TotalsRow,
 			},
 			'DatabaseSettings.FirstCol': {
 				type: 'boolean',
@@ -298,7 +293,6 @@ class TableStylesService {
 			// fallback, generate from defined styles
 			tableStyle = {
 				ContainsHeader: this.styleHasElement(tableStyleEntry, 'HeaderRow'),
-				TotalsRow: this.styleHasElement(tableStyleEntry, 'TotalRow'),
 				UseFirstColumnFormatting: this.styleHasElement(
 					tableStyleEntry,
 					'FirstColumn',
