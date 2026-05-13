@@ -7,41 +7,38 @@ describe(['tagdesktop'], 'AI Chat Sidebar', function() {
 
 	beforeEach(function() {
 		helper.setupAndLoadDocument('writer/help_dialog.odt');
+		cy.getFrameWindow().then((win) => {
+			this.win = win;
+		});
 	});
 
 	describe('Open/Close', function() {
 		it('Sidebar opens when AI is configured', function() {
-			cy.getFrameWindow().then(function(win) {
-				aichatHelper.enableAIAndStubSocket(win, {});
-			});
+			aichatHelper.enableAIAndStubSocket(this.win, {});
 			aichatHelper.openAIChat();
 		});
 
 		it('Toggle closes sidebar', function() {
-			cy.getFrameWindow().then(function(win) {
-				aichatHelper.enableAIAndStubSocket(win, {});
-			});
+			aichatHelper.enableAIAndStubSocket(this.win, {});
 			aichatHelper.openAIChat();
 			// Second dispatch should close
-			cy.getFrameWindow().then(function(win) {
-				win.app.dispatcher.dispatch('aichat');
+			cy.then(() => {
+				this.win.app.dispatcher.dispatch('aichat');
 			});
+			helper.waitUntilLayoutingIsIdle(this.win);
 			cy.cGet('#aichat-dock-wrapper.visible').should('not.exist');
 		});
 
 		it('Close button closes sidebar', function() {
-			cy.getFrameWindow().then(function(win) {
-				aichatHelper.enableAIAndStubSocket(win, {});
-			});
+			aichatHelper.enableAIAndStubSocket(this.win, {});
 			aichatHelper.openAIChat();
 			aichatHelper.closeAIChat();
 		});
 
 		it('Shows snackbar when AI is not configured', function() {
-			cy.getFrameWindow().then(function(win) {
-				win.app.map.isAIConfigured = false;
-				win.app.dispatcher.dispatch('aichat');
-			});
+			this.win.app.map.isAIConfigured = false;
+			this.win.app.dispatcher.dispatch('aichat');
+			helper.waitUntilLayoutingIsIdle(this.win);
 			cy.cGet('#snackbar-container').should('be.visible');
 			cy.cGet('#aichat-dock-wrapper.visible').should('not.exist');
 		});
@@ -49,9 +46,7 @@ describe(['tagdesktop'], 'AI Chat Sidebar', function() {
 
 	describe('Empty State', function() {
 		beforeEach(function() {
-			cy.getFrameWindow().then(function(win) {
-				aichatHelper.enableAIAndStubSocket(win, {});
-			});
+			aichatHelper.enableAIAndStubSocket(this.win, {});
 			aichatHelper.openAIChat();
 		});
 
@@ -77,9 +72,7 @@ describe(['tagdesktop'], 'AI Chat Sidebar', function() {
 
 	describe('Input Behavior', function() {
 		beforeEach(function() {
-			cy.getFrameWindow().then(function(win) {
-				aichatHelper.enableAIAndStubSocket(win, {});
-			});
+			aichatHelper.enableAIAndStubSocket(this.win, {});
 			aichatHelper.openAIChat();
 		});
 
@@ -89,15 +82,18 @@ describe(['tagdesktop'], 'AI Chat Sidebar', function() {
 
 		it('Send button enables on text input', function() {
 			aichatHelper.typeIntoAIInput('Hello');
+			helper.waitUntilLayoutingIsIdle(this.win);
 			cy.cGet('#aichat-send-btn button').should('not.have.attr', 'disabled');
 		});
 
 		it('Send button re-disables on clear', function() {
 			aichatHelper.typeIntoAIInput('Hello');
+			helper.waitUntilLayoutingIsIdle(this.win);
 			cy.cGet('#aichat-send-btn button').should('not.have.attr', 'disabled');
 			cy.cGet('#aichat-input.ui-textarea').clear({ force: true });
 			// Trigger a change event so the sidebar picks up the empty value
 			cy.cGet('#aichat-input.ui-textarea').trigger('change', { force: true });
+			helper.waitUntilLayoutingIsIdle(this.win);
 			cy.cGet('#aichat-send-btn button').should('have.attr', 'disabled');
 		});
 
@@ -108,15 +104,14 @@ describe(['tagdesktop'], 'AI Chat Sidebar', function() {
 
 	describe('Send & Response', function() {
 		beforeEach(function() {
-			cy.getFrameWindow().then(function(win) {
-				aichatHelper.enableAIAndStubSocket(win, { content: 'Hello from AI' });
-			});
+			aichatHelper.enableAIAndStubSocket(this.win, { content: 'Hello from AI' });
 			aichatHelper.openAIChat();
 		});
 
 		it('User message appears after send', function() {
 			aichatHelper.typeIntoAIInput('Hello');
 			aichatHelper.clickSend();
+			helper.waitUntilLayoutingIsIdle(this.win);
 			cy.cGet('#aichat-msg-0').should('exist');
 			cy.cGet('#aichat-msg-0').should('have.class', 'aichat-msg-user');
 			cy.cGet('#aichat-msg-0').should('contain.text', 'Hello');
@@ -125,6 +120,7 @@ describe(['tagdesktop'], 'AI Chat Sidebar', function() {
 		it('Assistant response appears', function() {
 			aichatHelper.typeIntoAIInput('Hello');
 			aichatHelper.clickSend();
+			helper.waitUntilLayoutingIsIdle(this.win);
 			cy.cGet('#aichat-msg-1').should('exist');
 			cy.cGet('#aichat-msg-1').should('have.class', 'aichat-msg-assistant');
 			cy.cGet('#aichat-msg-1').should('contain.text', 'Hello from AI');
@@ -133,6 +129,7 @@ describe(['tagdesktop'], 'AI Chat Sidebar', function() {
 		it('Input is cleared after send', function() {
 			aichatHelper.typeIntoAIInput('Hello');
 			aichatHelper.clickSend();
+			helper.waitUntilLayoutingIsIdle(this.win);
 			cy.cGet('#aichat-msg-0').should('exist');
 			cy.cGet('#aichat-input.ui-textarea').should('have.value', '');
 		});
@@ -141,20 +138,20 @@ describe(['tagdesktop'], 'AI Chat Sidebar', function() {
 			aichatHelper.typeIntoAIInput('Hello');
 			aichatHelper.clickSend();
 			cy.cGet('#aichat-msg-1').should('exist');
+			helper.waitUntilLayoutingIsIdle(this.win);
 			cy.cGet('#aichat-clear-btn button').should('not.have.attr', 'disabled');
 		});
 	});
 
 	describe('Prompt Chips', function() {
 		beforeEach(function() {
-			cy.getFrameWindow().then(function(win) {
-				aichatHelper.enableAIAndStubSocket(win, { content: 'Chip response' });
-			});
+			aichatHelper.enableAIAndStubSocket(this.win, { content: 'Chip response' });
 			aichatHelper.openAIChat();
 		});
 
 		it('Clicking a chip sends the prompt', function() {
 			cy.cGet('#aichat-chip-0 button').click();
+			helper.waitUntilLayoutingIsIdle(this.win);
 			cy.cGet('#aichat-msg-0').should('exist');
 			cy.cGet('#aichat-msg-0').should('have.class', 'aichat-msg-user');
 			// The chip at index 0 sends "Make it more concise"
@@ -164,6 +161,7 @@ describe(['tagdesktop'], 'AI Chat Sidebar', function() {
 		it('Chips disappear after send', function() {
 			cy.cGet('#aichat-chip-0 button').click();
 			cy.cGet('#aichat-msg-0').should('exist');
+			helper.waitUntilLayoutingIsIdle(this.win);
 			cy.cGet('#aichat-chips').should('not.exist');
 			cy.cGet('#aichat-empty-state').should('not.exist');
 		});
@@ -171,17 +169,17 @@ describe(['tagdesktop'], 'AI Chat Sidebar', function() {
 
 	describe('Clear Conversation', function() {
 		beforeEach(function() {
-			cy.getFrameWindow().then(function(win) {
-				aichatHelper.enableAIAndStubSocket(win, { content: 'Response' });
-			});
+			aichatHelper.enableAIAndStubSocket(this.win, { content: 'Response' });
 			aichatHelper.openAIChat();
 			aichatHelper.typeIntoAIInput('Hello');
 			aichatHelper.clickSend();
 			cy.cGet('#aichat-msg-1').should('exist');
+			helper.waitUntilLayoutingIsIdle(this.win);
 		});
 
 		it('Clear resets to empty state', function() {
 			cy.cGet('#aichat-clear-btn button').click();
+			helper.waitUntilLayoutingIsIdle(this.win);
 			cy.cGet('#aichat-empty-state').should('exist');
 			cy.cGet('#aichat-chips').should('exist');
 			cy.cGet('#aichat-msg-0').should('not.exist');
@@ -189,19 +187,19 @@ describe(['tagdesktop'], 'AI Chat Sidebar', function() {
 
 		it('Clear disables clear button', function() {
 			cy.cGet('#aichat-clear-btn button').click();
+			helper.waitUntilLayoutingIsIdle(this.win);
 			cy.cGet('#aichat-clear-btn button').should('have.attr', 'disabled');
 		});
 	});
 
 	describe('Action Buttons', function() {
 		beforeEach(function() {
-			cy.getFrameWindow().then(function(win) {
-				aichatHelper.enableAIAndStubSocket(win, { content: 'Copyable text' });
-			});
+			aichatHelper.enableAIAndStubSocket(this.win, { content: 'Copyable text' });
 			aichatHelper.openAIChat();
 			aichatHelper.typeIntoAIInput('Hello');
 			aichatHelper.clickSend();
 			cy.cGet('#aichat-msg-1').should('exist');
+			helper.waitUntilLayoutingIsIdle(this.win);
 		});
 
 		it('Copy button exists on assistant messages', function() {
@@ -220,24 +218,22 @@ describe(['tagdesktop'], 'AI Chat Sidebar', function() {
 
 	describe('Error Handling', function() {
 		it('Shows error message with error class', function() {
-			cy.getFrameWindow().then(function(win) {
-				aichatHelper.enableAIAndStubSocket(win, { success: false, error: 'Something went wrong' });
-			});
+			aichatHelper.enableAIAndStubSocket(this.win, { success: false, error: 'Something went wrong' });
 			aichatHelper.openAIChat();
 			aichatHelper.typeIntoAIInput('Hello');
 			aichatHelper.clickSend();
+			helper.waitUntilLayoutingIsIdle(this.win);
 			cy.cGet('#aichat-msg-1').should('exist');
 			cy.cGet('#aichat-msg-1').should('have.class', 'aichat-msg-error');
 			cy.cGet('#aichat-msg-1').should('contain.text', 'Error:');
 		});
 
 		it('Retry button appears on error messages', function() {
-			cy.getFrameWindow().then(function(win) {
-				aichatHelper.enableAIAndStubSocket(win, { success: false, error: 'Fail' });
-			});
+			aichatHelper.enableAIAndStubSocket(this.win, { success: false, error: 'Fail' });
 			aichatHelper.openAIChat();
 			aichatHelper.typeIntoAIInput('Hello');
 			aichatHelper.clickSend();
+			helper.waitUntilLayoutingIsIdle(this.win);
 			cy.cGet('#aichat-msg-1').should('exist');
 			cy.cGet('#aichat-retry-1').should('exist');
 		});
@@ -245,15 +241,14 @@ describe(['tagdesktop'], 'AI Chat Sidebar', function() {
 
 	describe('See More/Less', function() {
 		beforeEach(function() {
-			cy.getFrameWindow().then(function(win) {
-				aichatHelper.enableAIAndStubSocket(win, {});
-			});
+			aichatHelper.enableAIAndStubSocket(this.win, {});
 			aichatHelper.openAIChat();
 		});
 
 		it('See more expands chips', function() {
 			cy.cGet('#aichat-chip-3').should('not.exist');
 			cy.cGet('#aichat-see-more button').click();
+			helper.waitUntilLayoutingIsIdle(this.win);
 			cy.cGet('#aichat-chip-3').should('exist');
 			cy.cGet('#aichat-chip-4').should('exist');
 			cy.cGet('#aichat-chip-5').should('exist');
@@ -262,8 +257,10 @@ describe(['tagdesktop'], 'AI Chat Sidebar', function() {
 
 		it('See less collapses chips', function() {
 			cy.cGet('#aichat-see-more button').click();
+			helper.waitUntilLayoutingIsIdle(this.win);
 			cy.cGet('#aichat-chip-3').should('exist');
 			cy.cGet('#aichat-see-more button').click();
+			helper.waitUntilLayoutingIsIdle(this.win);
 			cy.cGet('#aichat-chip-3').should('not.exist');
 			cy.cGet('#aichat-see-more').should('contain.text', 'See more');
 		});
@@ -271,20 +268,20 @@ describe(['tagdesktop'], 'AI Chat Sidebar', function() {
 
 	describe('Keyboard Navigation', function() {
 		beforeEach(function() {
-			cy.getFrameWindow().then(function(win) {
-				aichatHelper.enableAIAndStubSocket(win, { content: 'Keyboard response' });
-			});
+			aichatHelper.enableAIAndStubSocket(this.win, { content: 'Keyboard response' });
 			aichatHelper.openAIChat();
 		});
 
 		it('Escape closes sidebar', function() {
 			cy.cGet('#aichat-input.ui-textarea').type('{esc}', { force: true });
+			helper.waitUntilLayoutingIsIdle(this.win);
 			cy.cGet('#aichat-dock-wrapper.visible').should('not.exist');
 		});
 
 		it('Enter sends message', function() {
 			aichatHelper.typeIntoAIInput('Hello');
 			cy.cGet('#aichat-input.ui-textarea').type('{enter}', { force: true });
+			helper.waitUntilLayoutingIsIdle(this.win);
 			cy.cGet('#aichat-msg-0').should('exist');
 			cy.cGet('#aichat-msg-0').should('have.class', 'aichat-msg-user');
 		});
@@ -292,6 +289,7 @@ describe(['tagdesktop'], 'AI Chat Sidebar', function() {
 		it('Shift-Enter does not send message', function() {
 			aichatHelper.typeIntoAIInput('Hello');
 			cy.cGet('#aichat-input.ui-textarea').type('{shift}{enter}', { force: true });
+			helper.waitUntilLayoutingIsIdle(this.win);
 			cy.cGet('#aichat-msg-0').should('not.exist');
 			cy.cGet('#aichat-input.ui-textarea').should('not.have.value', '');
 		});

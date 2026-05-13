@@ -1,4 +1,6 @@
-/* global cy */
+/* global cy require */
+
+var helper = require('./helper');
 
 /**
  * Enable AI configuration and stub the socket to intercept aichat: messages.
@@ -56,6 +58,9 @@ function openAIChat() {
  */
 function closeAIChat() {
 	cy.cGet('#aichat-close-btn button').click();
+	cy.getFrameWindow().then(function(win) {
+		return helper.waitUntilLayoutingIsIdle(win);
+	});
 	cy.cGet('#aichat-dock-wrapper.visible').should('not.exist');
 }
 
