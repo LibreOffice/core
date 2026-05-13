@@ -13,15 +13,18 @@
 #include <utility>
 
 #include <vcl/builder.hxx>
+#include <vcl/commandinfoprovider.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/notebookbar/notebookbar.hxx>
 #include <vcl/notebookbar/NotebookBarAddonsItem.hxx>
 #include <vcl/syswin.hxx>
 #include <vcl/taskpanelist.hxx>
+#include <vcl/themecolors.hxx>
 #include <vcl/NotebookbarContextControl.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/processfactory.hxx>
 #include <rtl/bootstrap.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <osl/file.hxx>
 #include <config_folders.h>
 #include <com/sun/star/frame/XFrame.hpp>
@@ -79,6 +82,7 @@ NotebookBar::NotebookBar(Window* pParent, const OUString& rID, const OUString& r
     , m_pViewShell(nullptr)
     , m_bIsWelded(false)
     , m_sUIXMLDescription(rUIXMLDescription)
+    , m_sModule(vcl::CommandInfoProvider::GetModuleIdentifier(rFrame))
 {
     m_pEventListener->setupFrameListener(true);
 
@@ -322,7 +326,25 @@ void NotebookBar::StateChanged(const  StateChangedType nStateChange )
 void NotebookBar::UpdateBackground()
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-    SetBackground(rStyleSettings.GetDialogColor());
+    Color aColor = rStyleSettings.GetDialogColor();
+    // macOS excluded since AquaGraphicsBackendBase::performDrawNativeControl() case ControlType::TabPane
+    // draws the whole Notebookbar and does not allow to just color the background
+#ifndef MACOSX
+    const sal_uInt8 cTrans = officecfg::Office::Common::Misc::NotebookbarColorTransparency::get();
+    if (ThemeColors::VclPluginCanUseThemeColors())
+    {
+        const ThemeColors& rThemeColors = ThemeColors::GetThemeColors();
+        if (m_sModule == "com.sun.star.text.TextDocument")
+            aColor.Merge(rThemeColors.GetWriterNotebookbarColor(), cTrans);
+        else if (m_sModule == "com.sun.star.sheet.SpreadsheetDocument")
+            aColor.Merge(rThemeColors.GetCalcNotebookbarColor(), cTrans);
+        else if (m_sModule == "com.sun.star.presentation.PresentationDocument")
+            aColor.Merge(rThemeColors.GetImpressNotebookbarColor(), cTrans);
+        else if (m_sModule == "com.sun.star.drawing.DrawingDocument")
+            aColor.Merge(rThemeColors.GetDrawNotebookbarColor(), cTrans);
+    }
+#endif
+    SetBackground(Wallpaper(aColor));
     UpdateDefaultSettings();
     GetOutDev()->SetSettings( DefaultSettings );
 

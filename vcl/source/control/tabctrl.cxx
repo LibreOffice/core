@@ -29,6 +29,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/tabpage.hxx>
+#include <vcl/themecolors.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/toolkit/button.hxx>
 #include <vcl/menu.hxx>
@@ -1163,11 +1164,16 @@ void TabControl::Paint( vcl::RenderContext& rRenderContext, const tools::Rectang
         if (lcl_canPaint(rRenderContext, rRect, aRect))
             rRenderContext.DrawNativeControl(ControlType::TabPane, ControlPart::Entire,
                                              aRect, nState, aTabPaneValue, OUString());
-
-        if (!bPaneWithHeader && rRenderContext.IsNativeControlSupported(ControlType::TabHeader, ControlPart::Entire)
-                && lcl_canPaint(rRenderContext, rRect, aHeaderRect))
+        // Notebookbar background colors are set in NotebookBar::UpdateBackground(), if theming is enabled
+        Color aColor = ThemeColors::VclPluginCanUseThemeColors()
+                           ? rRenderContext.GetBackgroundColor()
+                           : COL_AUTO;
+        if (!bPaneWithHeader
+            && rRenderContext.IsNativeControlSupported(ControlType::TabHeader, ControlPart::Entire)
+            && lcl_canPaint(rRenderContext, rRect, aHeaderRect))
             rRenderContext.DrawNativeControl(ControlType::TabHeader, ControlPart::Entire,
-                                             aHeaderRect, nState, aTabPaneValue, OUString());
+                                             aHeaderRect, nState, aTabPaneValue, OUString(),
+                                             aColor);
     }
     else
     {

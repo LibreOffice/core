@@ -314,6 +314,18 @@ public:
     void                            SetWindowTextColor( const Color& rColor );
     const Color&                    GetWindowTextColor() const;
 
+    void                            SetWriterNotebookbarColor( const Color& rColor );
+    const Color&                    GetWriterNotebookbarColor() const;
+
+    void                            SetCalcNotebookbarColor( const Color& rColor );
+    const Color&                    GetCalcNotebookbarColor() const;
+
+    void                            SetImpressNotebookbarColor( const Color& rColor );
+    const Color&                    GetImpressNotebookbarColor() const;
+
+    void                            SetDrawNotebookbarColor( const Color& rColor );
+    const Color&                    GetDrawNotebookbarColor() const;
+
     void                            SetDialogColor( const Color& rColor );
     const Color&                    GetDialogColor() const;
 

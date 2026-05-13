@@ -507,6 +507,26 @@
             <value xsi:nil="true"/>
           </prop>
         </node>
+        <node oor:name="WriterNotebookbarColor">
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="CalcNotebookbarColor">
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="ImpressNotebookbarColor">
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="DrawNotebookbarColor">
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
         <node oor:name="BaseColor">
           <prop oor:name="Color">
             <value xsi:nil="true"/>
@@ -998,6 +1018,26 @@
             <value xsi:nil="true"/>
           </prop>
         </node>
+        <node oor:name="WriterNotebookbarColor">
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="CalcNotebookbarColor">
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="ImpressNotebookbarColor">
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="DrawNotebookbarColor">
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
         <node oor:name="BaseColor">
           <prop oor:name="Color">
             <value xsi:nil="true"/>
@@ -1485,6 +1525,26 @@
           </prop>
         </node>
         <node oor:name="WindowTextColor">
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="WriterNotebookbarColor">
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="CalcNotebookbarColor">
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="ImpressNotebookbarColor">
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="DrawNotebookbarColor">
           <prop oor:name="Color">
             <value xsi:nil="true"/>
           </prop>
