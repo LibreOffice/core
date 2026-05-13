@@ -190,10 +190,13 @@ void SAL_CALL OOXMLFastContextHandler::startFastElement
     else if (Element == (NMSP_officeMath | XML_jc) && mpParent && mpParent->mpParent )
     {
         mbIsMathPara = true;
-        auto aAttrLst = Attribs->getFastAttributes();
-        if (aAttrLst[0].Value == "center") mpParent->mpParent->mnMathJcVal = eMathParaJc::CENTER;
-        if (aAttrLst[0].Value == "left") mpParent->mpParent->mnMathJcVal = eMathParaJc::LEFT;
-        if (aAttrLst[0].Value == "right") mpParent->mpParent->mnMathJcVal = eMathParaJc::RIGHT;
+        if (Attribs->hasAttribute(M_TOKEN(val)))
+        {
+            OUString sVal = Attribs->getValue(M_TOKEN(val));
+            if (sVal == "center") mpParent->mpParent->mnMathJcVal = eMathParaJc::CENTER;
+            else if (sVal == "left") mpParent->mpParent->mnMathJcVal = eMathParaJc::LEFT;
+            else if (sVal == "right") mpParent->mpParent->mnMathJcVal = eMathParaJc::RIGHT;
+        }
     }
 
     if (oox::getNamespace(Element) == NMSP_mce)
