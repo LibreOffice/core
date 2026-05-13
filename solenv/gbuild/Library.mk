@@ -261,6 +261,7 @@ gb_Library_set_x86 = $(call gb_Library__forward_to_Linktarget,$(0),$(1),$(2),$(3
 gb_Library_add_libs = $(call gb_Library__forward_to_Linktarget,$(0),$(1),$(2),$(3))
 gb_Library_disable_standard_system_libs = $(call gb_Library__forward_to_Linktarget,$(0),$(1),$(2),$(3))
 gb_Library_use_system_darwin_frameworks = $(call gb_Library__forward_to_Linktarget,$(0),$(1),$(2),$(3))
+gb_Library_darwin_add_rpath = $(call gb_Library__forward_to_Linktarget,$(0),$(1),$(2),$(3))
 gb_Library_use_system_win32_libs = $(call gb_Library__forward_to_Linktarget,$(0),$(1),$(2),$(3))
 gb_Library_set_library_path_flags = $(call gb_Library__forward_to_Linktarget,$(0),$(1),$(2),$(3))
 gb_Library_use_api = $(call gb_Library__forward_to_Linktarget,$(0),$(1),$(2),$(3))

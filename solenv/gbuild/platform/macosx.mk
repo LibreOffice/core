@@ -131,6 +131,9 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(PERL) $(SRCDIR)/solenv/bin/macosx-change-install-names.pl app $(LAYER) $(1) &&) \
 	$(if $(filter Library Bundle CppunitTest,$(TARGETTYPE)),\
 		$(PERL) $(SRCDIR)/solenv/bin/macosx-change-install-names.pl shl $(LAYER) $(1) &&) \
+	$(if $(filter Library Executable,$(TARGETTYPE)),\
+	    $(if $(ADD_RPATH),\
+	        $(INSTALL_NAME_TOOL) -add_rpath $(ADD_RPATH) $(1) &&)) \
 	$(if $(filter Library,$(TARGETTYPE)),\
 		otool -l $(1) | grep -A 5 LC_ID_DYLIB \
 			> $(WORKDIR)/LinkTarget/$(2).exports.tmp && \
@@ -175,6 +178,10 @@ $(if $(call gb_LinkTarget__is_merged,$(1)),\
   $(call gb_LinkTarget_add_libs,$(call gb_Library_get_linktarget,merged),$(foreach fw,$(2),-framework $(fw))))
 endef
 
+define gb_LinkTarget_darwin_add_rpath
+$(call gb_LinkTarget_get_target,$(1)) : ADD_RPATH :=
+$(call gb_LinkTarget_get_target,$(1)) : ADD_RPATH := $(2)
+endef
 
 # Library class
 

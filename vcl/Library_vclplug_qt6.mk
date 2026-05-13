@@ -185,6 +185,10 @@ $(eval $(call gb_Library_add_cxxflags,vclplug_qt6,\
     $(gb_OBJCXXFLAGS) \
 ))
 
+$(eval $(call gb_Library_darwin_add_rpath,vclplug_qt6,\
+	"$(QT6_LIBDIR)" \
+))
+
 $(eval $(call gb_Library_use_libraries,vclplug_qt6,\
     vclplug_osx \
 ))

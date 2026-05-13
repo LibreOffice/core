@@ -313,6 +313,21 @@ dnl path location is gpg, so make sure we find it
     unset mac_gpg_path
 }
 
+dnl format a header path taking into account Mac frameworks
+format_header_path()
+{
+    local package_dir="${1}"
+    local parent_dir="${2}"
+    local header_file="${3}"
+
+    local header_path="${1}/${2}/${3}"
+    if test "$_os" = "Darwin"; then
+        header_path="${1}/${2}.framework/Versions/A/Headers/${3}"
+    fi
+	PathFormat "${header_path}"
+}
+
+
 dnl semantically test a three digits version
 dnl $1 - $3 = minimal version
 dnl $4 - $6 = current version
@@ -14240,29 +14255,40 @@ then
     qt6_platformsdir="`$QMAKE6 -query QT_INSTALL_PLUGINS | tr -d '\r'`/platforms"
     QT6_PLATFORMS_SRCDIR="$qt6_platformsdir"
 
-    qt6_test_include="QtWidgets/qapplication.h"
-    AC_MSG_CHECKING([for Qt6 headers])
-    qt6_incdir="no"
-    for inc_dir in $qt6_incdirs; do
-        PathFormat "$inc_dir"
-        if test -r "${formatted_path_unix}/${qt6_test_include}"; then
-            qt6_incdir="$inc_dir"
-            break
+    # Look for Qt6 headers; on Mac we just the Qt framework that we find below, not
+    # a separate headers directory
+    if test "$_os" == "Darwin"; then
+        for inc_dir in $qt6_incdirs; do
+			qt6_incdir="$inc_dir"
+			break
+        done
+    else
+        qt6_test_include="QtWidgets/qapplication.h"
+        AC_MSG_CHECKING([for Qt6 headers])
+        qt6_incdir="no"
+        for inc_dir in $qt6_incdirs; do
+            PathFormat "$inc_dir"
+            if test -r "${formatted_path_unix}/${qt6_test_include}"; then
+                qt6_incdir="$inc_dir"
+                break
+            fi
+        done
+        AC_MSG_RESULT([$qt6_incdir])
+        if test "x$qt6_incdir" = "xno"; then
+            AC_MSG_ERROR([Qt6 headers not found.  Please specify the root of your Qt6 installation by exporting QT6DIR before running "configure".])
         fi
-    done
-    AC_MSG_RESULT([$qt6_incdir])
-    if test "x$qt6_incdir" = "xno"; then
-        AC_MSG_ERROR([Qt6 headers not found.  Please specify the root of your Qt6 installation by exporting QT6DIR before running "configure".])
-    fi
-    # check for scenario: qt6-qtbase-devel-*.86_64 installed but host is i686
-    AC_LANG_PUSH([C++])
-    save_CPPFLAGS=$CPPFLAGS
-    CPPFLAGS="${CPPFLAGS} -I${qt6_incdir}"
-    AC_CHECK_HEADER(QtCore/qconfig.h, [],
-        [AC_MSG_ERROR(qconfig.h header not found.)], [])
-    CPPFLAGS=$save_CPPFLAGS
-    AC_LANG_POP([C++])
 
+        # check for scenario: qt6-qtbase-devel-*.86_64 installed but host is i686
+        AC_LANG_PUSH([C++])
+        save_CPPFLAGS=$CPPFLAGS
+        CPPFLAGS="${CPPFLAGS} -I${qt6_incdir}"
+        AC_CHECK_HEADER(QtCore/qconfig.h, [],
+            [AC_MSG_ERROR(qconfig.h header not found.)], [])
+        CPPFLAGS=$save_CPPFLAGS
+        AC_LANG_POP([C++])
+    fi
+
+    qt6_test_library="Qt6Widgets"
     case "$_os" in
     Emscripten)
         qt6_library_prefix="lib"
@@ -14275,8 +14301,9 @@ then
         qt6_library_suffixes=".lib d.lib"
         ;;
     Darwin)
-        qt6_library_prefix="lib"
-        qt6_library_suffixes=".dylib"
+        qt6_library_prefix=""
+        qt6_library_suffixes=".framework"
+        qt6_test_library="QtWidgets"
         ;;
 	*)
         qt6_library_prefix="lib"
@@ -14284,7 +14311,6 @@ then
 	    ;;
     esac
 
-    qt6_test_library="Qt6Widgets"
     AC_MSG_CHECKING([for Qt6 libraries])
     qt6_libdir="no"
     for lib_dir in $qt6_libdirs; do
@@ -14298,9 +14324,11 @@ then
         done
     done
     AC_MSG_RESULT([$qt6_libdir])
+
     if test "x$qt6_libdir" = "xno"; then
         AC_MSG_ERROR([Qt6 libraries not found.  Please specify the root of your Qt6 installation by exporting QT6DIR before running "configure".])
     fi
+    QT6_LIBDIR="${qt6_libdir}"
 
     if test "$_os" = "Emscripten"; then
         if test ! -f "$QT6_PLATFORMS_SRCDIR"/wasm_shell.html ; then
@@ -14312,27 +14340,34 @@ then
     fi
 
     QT6_CFLAGS="-I$qt6_incdir -DQT_NO_VERSION_TAGGING"
-    QT6_CFLAGS=$(printf '%s' "$QT6_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
     if test "$_os" = "WINNT"; then
         QT6_LIBS="-LIBPATH:${qt6_libdir} Qt6Core${qt6_library_suffix} Qt6Gui${qt6_library_suffix} Qt6Widgets${qt6_library_suffix}"
     elif test "$_os" = "Darwin"; then
-        QT6_LIBS="-rpath ${qt6_libdir} -L${qt6_libdir} -lQt6Core -lQt6Gui -lQt6Widgets"
+        QT6_LIBS="-F ${qt6_libdir} -framework QtCore -framework QtGui -framework QtWidgets -framework QtNetwork"
+        QT6_CFLAGS="${QT6_CFLAGS} -F ${qt6_libdir}"
     else
         QT6_LIBS="-L$qt6_libdir -lQt6Core -lQt6Gui -lQt6Widgets"
     fi
+    QT6_CFLAGS=$(printf '%s' "$QT6_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
 
     if test "$_os" = "Emscripten"; then
         QT6_LIBS="$QT6_LIBS -lQt6BundledPcre2 -lQt6BundledZLIB -L${qt6_platformsdir} -lqwasm -sGL_ENABLE_GET_PROC_ADDRESS"
     else
         if ! test "$enable_qt6_multimedia" = "no"; then
-            PathFormat "${qt6_incdir}"
-            if ! test -r "${formatted_path_unix}/QtMultimediaWidgets/QVideoWidget"; then
+            qt6_mm_headerdir="${qt6_incdir}"
+            if test "$_os" = "Darwin"; then
+                qt6_mm_headerdir="${qt6_libdir}"
+            fi
+			format_header_path "${qt6_mm_headerdir}" "QtMultimediaWidgets" "QVideoWidget"
+            if ! test -r "${formatted_path_unix}"; then
                 AC_MSG_ERROR([Qt 6 QMultimedia not found.])
                 break
             fi
             ENABLE_QT6_MULTIMEDIA=TRUE
             if test "$_os" = "WINNT"; then
                 QT6_LIBS="$QT6_LIBS Qt6Multimedia${qt6_library_suffix} Qt6MultimediaWidgets${qt6_library_suffix}"
+			elif test "$_os" = "Darwin"; then
+                QT6_LIBS="$QT6_LIBS -framework QtMultimedia -framework QtMultimediaWidgets"
             else
                 QT6_LIBS="$QT6_LIBS -lQt6Multimedia -lQt6MultimediaWidgets"
             fi
@@ -14375,6 +14410,7 @@ the root of your Qt installation by exporting QT6DIR before running "configure".
 fi
 AC_SUBST(QT6_CFLAGS)
 AC_SUBST(QT6_LIBS)
+AC_SUBST(QT6_LIBDIR)
 AC_SUBST(MOC6)
 AC_SUBST(QT6_PLATFORMS_SRCDIR)
 AC_SUBST(ENABLE_QT6_MULTIMEDIA)
