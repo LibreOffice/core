@@ -8,7 +8,9 @@
  */
 
 #include <textboxhelper.hxx>
+#include <anchoredobject.hxx>
 #include <dcontact.hxx>
+#include <frame.hxx>
 #include <fmtcntnt.hxx>
 #include <fmtanchr.hxx>
 #include <fmtcnct.hxx>
@@ -1408,10 +1410,25 @@ bool SwTextBoxHelper::doTextBoxPositioning(SwFrameFormat* pShape, SdrObject* pOb
             }
             else
             {
-                // Simple textboxes: vertical position equals to the vertical offset of the shape
-                aNewVOri.SetPos(
-                    ((pShape->GetVertOrient().GetPos()) > 0 ? pShape->GetVertOrient().GetPos() : 0)
-                    + aRect.Top());
+                SdrObject* pRealObj = pObj ? pObj : pShape->FindRealSdrObject();
+                const tools::Rectangle aSnapRect(pRealObj->GetSnapRect());
+
+                // Simple textboxes: place the textframe at the shape's actual
+                // laid-out text-area top, expressed relative to the anchor
+                // paragraph's print area.
+                SwTwips nPrintAreaAbsTop = 0;
+                if (auto* pContact = dynamic_cast<SwContact*>(pRealObj->GetUserCall()))
+                {
+                    if (const SwAnchoredObject* pAnchObj = pContact->GetAnchoredObj(pRealObj))
+                    {
+                        if (const SwFrame* pAnchorFrame = pAnchObj->GetAnchorFrame())
+                        {
+                            nPrintAreaAbsTop = pAnchorFrame->getFrameArea().Top()
+                                               + pAnchorFrame->getFramePrintArea().Top();
+                        }
+                    }
+                }
+                aNewVOri.SetPos(aSnapRect.Top() + aRect.Top() - nPrintAreaAbsTop);
             }
 
             // Special cases when the shape is aligned to the line
