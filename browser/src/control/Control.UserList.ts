@@ -85,6 +85,12 @@ class UserList extends window.L.Control {
 
 		const userListElement = document.getElementById('userListSummaryButton');
 		userListElement.setAttribute('aria-label', _('User List Summary'));
+		userListElement.setAttribute('aria-haspopup', 'menu');
+		userListElement.setAttribute('aria-expanded', 'false');
+		userListElement.setAttribute('aria-controls', 'userlist-dropdown');
+		(userListElement as any)._onDropDown = (open: boolean) => {
+			userListElement.setAttribute('aria-expanded', String(open));
+		};
 
 		this.registerHeaderAvatarEvents();
 	}
