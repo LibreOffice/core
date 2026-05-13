@@ -314,7 +314,8 @@ void TextObjectBar::GetAttrStateImpl(const ViewShell& rViewShell, ::sd::View* pV
                                 bDisableLeft = false;
                             }
 
-                            if( (nDepth < pOLV->GetOutliner().GetMaxDepth() && ( !bOutlineViewSh || rOutl.GetAbsPos(pPara) != 0 )) ||
+                            // tdf#148629 - disable demote command on non-list paragraphs
+                            if( (nDepth >= 0 && nDepth < pOLV->GetOutliner().GetMaxDepth() && ( !bOutlineViewSh || rOutl.GetAbsPos(pPara) != 0 )) ||
                                 (bOutlineViewSh && (nDepth <= 0) && ::Outliner::HasParaFlag( pPara, ParaFlag::ISPAGE ) && rOutl.GetAbsPos(pPara) != 0) )
                             {
                                 // not maximum depth and not at top

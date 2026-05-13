@@ -550,6 +550,38 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf169813_prevent_unintended_dashed_li
     CPPUNIT_ASSERT_EQUAL(drawing::LineStyle_NONE, rStyleItem.GetValue());
 }
 
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf148629_disabled_demote_command)
+{
+    createSdImpressDoc();
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+
+    // Start text edit of the empty content shape
+    SdPage* pActualPage = pViewShell->GetActualPage();
+    pActualPage->SetAutoLayout(AUTOLAYOUT_TITLE_CONTENT, true);
+    insertStringToObject(1, u"List Item", /*bUseEscape*/ false);
+
+    // Check that the demote command is enabled
+    std::unique_ptr<SfxPoolItem> pItem;
+    CPPUNIT_ASSERT_EQUAL(
+        SfxItemState::DEFAULT,
+        pViewShell->GetViewFrame()->GetBindings().QueryState(SID_OUTLINE_RIGHT, pItem));
+
+    // Start text edit of the empty title shape
+    typeKey(pXImpressDocument, KEY_ESCAPE);
+    insertStringToObject(0, u"Title", /*bUseEscape*/ false);
+
+    // Without the fix in place, this test would have failed with:
+    // - Expected: 1  (SfxItemState::DISABLED)
+    // - Actual  : 32 (SfxItemState::DEFAULT)
+    // i.e. the demote command was not disabled
+    CPPUNIT_ASSERT_EQUAL(
+        SfxItemState::DISABLED,
+        pViewShell->GetViewFrame()->GetBindings().QueryState(SID_OUTLINE_RIGHT, pItem));
+}
+
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf162455)
 {
     createSdImpressDoc();
