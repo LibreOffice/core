@@ -89,7 +89,6 @@ $(eval $(call gb_Library_use_system_darwin_frameworks,sal,\
 endif
 
 $(eval $(call gb_Library_add_exception_objects,sal,\
-	sal/osl/all/compat \
 	sal/osl/all/debugbase \
 	sal/osl/all/filepath \
 	sal/osl/all/loadmodulerelative \

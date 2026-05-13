@@ -57,7 +57,6 @@ $(eval $(call gb_Library_set_include,cppuhelper,\
 $(eval $(call gb_Library_add_exception_objects,cppuhelper,\
 	cppuhelper/source/access_control \
 	cppuhelper/source/bootstrap \
-	cppuhelper/source/compat \
 	cppuhelper/source/compbase \
 	cppuhelper/source/component_context \
 	cppuhelper/source/component \

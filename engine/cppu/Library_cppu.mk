@@ -26,7 +26,6 @@ $(eval $(call gb_Library_use_libraries,cppu,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,cppu,\
-	cppu/source/cppu/compat \
 	cppu/source/cppu/cppu_opt \
 	cppu/source/threadpool/current \
 	cppu/source/threadpool/jobqueue \
