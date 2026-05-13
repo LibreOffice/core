@@ -2921,6 +2921,9 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             }
 
             pTabViewShell->DeleteContents( InsertDeleteFlags::NOTE );      // delete all notes in selection
+            rBindings.Invalidate( SID_INSERT_THREADED_COMMENT );
+            rBindings.Invalidate( SID_INSERT_POSTIT );
+            rBindings.Invalidate( SID_DELETE_NOTE );
             rReq.Done();
         }
         break;
