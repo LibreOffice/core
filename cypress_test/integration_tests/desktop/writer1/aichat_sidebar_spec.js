@@ -90,9 +90,10 @@ describe(['tagdesktop'], 'AI Chat Sidebar', function() {
 			aichatHelper.typeIntoAIInput('Hello');
 			helper.waitUntilLayoutingIsIdle(this.win);
 			cy.cGet('#aichat-send-btn button').should('not.have.attr', 'disabled');
-			cy.cGet('#aichat-input.ui-textarea').clear({ force: true });
-			// Trigger a change event so the sidebar picks up the empty value
-			cy.cGet('#aichat-input.ui-textarea').trigger('change', { force: true });
+			// Drive the clear like a real user: keyup events from the
+			// selectall+backspace are what Widget.MultilineEdit listens
+			// for to notify the sidebar of an input change.
+			cy.cGet('#aichat-input.ui-textarea').type('{selectall}{backspace}');
 			helper.waitUntilLayoutingIsIdle(this.win);
 			cy.cGet('#aichat-send-btn button').should('have.attr', 'disabled');
 		});
@@ -273,14 +274,14 @@ describe(['tagdesktop'], 'AI Chat Sidebar', function() {
 		});
 
 		it('Escape closes sidebar', function() {
-			cy.cGet('#aichat-input.ui-textarea').type('{esc}', { force: true });
+			cy.cGet('#aichat-input.ui-textarea').type('{esc}');
 			helper.waitUntilLayoutingIsIdle(this.win);
 			cy.cGet('#aichat-dock-wrapper.visible').should('not.exist');
 		});
 
 		it('Enter sends message', function() {
 			aichatHelper.typeIntoAIInput('Hello');
-			cy.cGet('#aichat-input.ui-textarea').type('{enter}', { force: true });
+			cy.cGet('#aichat-input.ui-textarea').type('{enter}');
 			helper.waitUntilLayoutingIsIdle(this.win);
 			cy.cGet('#aichat-msg-0').should('exist');
 			cy.cGet('#aichat-msg-0').should('have.class', 'aichat-msg-user');
@@ -288,7 +289,7 @@ describe(['tagdesktop'], 'AI Chat Sidebar', function() {
 
 		it('Shift-Enter does not send message', function() {
 			aichatHelper.typeIntoAIInput('Hello');
-			cy.cGet('#aichat-input.ui-textarea').type('{shift}{enter}', { force: true });
+			cy.cGet('#aichat-input.ui-textarea').type('{shift}{enter}');
 			helper.waitUntilLayoutingIsIdle(this.win);
 			cy.cGet('#aichat-msg-0').should('not.exist');
 			cy.cGet('#aichat-input.ui-textarea').should('not.have.value', '');
