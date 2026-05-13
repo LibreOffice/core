@@ -584,7 +584,8 @@ class SlideShowPresenter {
 		}
 
 		this._progressBarContainer = this._createProgressBar(parent);
-		if (!this._isWelcomePresentation)
+		const presenterConsoleActive = !!this._map.presenterConsole?._active;
+		if (!this._isWelcomePresentation && !presenterConsoleActive)
 			this._slideNavContainer = this._createSlideNav(
 				parent,
 				showSwitchMonitors,

@@ -20,6 +20,7 @@ class PresenterConsole {
 	constructor(map, presenter) {
 		this._map = map;
 		this._presenter = presenter;
+		this._active = false;
 		this._map.on('presentationinfo', this._onPresentationInfo, this);
 		this._map.on('newpresentinconsole', this._onPresentInConsole, this);
 	}
@@ -249,13 +250,16 @@ class PresenterConsole {
 			return;
 		}
 
+		this._active = true;
 		this._map.fire('newpresentinwindow');
 		if (!this._presenter._slideShowWindowProxy) {
+			this._active = false;
 			return;
 		}
 
 		this._proxyPresenter = this._openPresenterWindow();
 		if (!this._proxyPresenter) {
+			this._active = false;
 			this._presenter._notifyBlockedPresenting();
 			return;
 		}
@@ -1186,6 +1190,7 @@ class PresenterConsole {
 		if (this._proxyPresenter && !this._proxyPresenter.closed)
 			this._proxyPresenter.close();
 
+		this._active = false;
 		app.map.slideShowPresenter._fromPresenterConsole = false;
 		window.removeEventListener('beforeunload', this._boundOnWindowClose);
 
@@ -1201,6 +1206,7 @@ class PresenterConsole {
 		this._proxyPresenter.removeEventListener('keydown', this._boundOnKeyDown);
 		this._proxyPresenter.clearInterval(this._timer);
 		this._proxyPresenter.close();
+		this._active = false;
 		app.map.slideShowPresenter._fromPresenterConsole = false;
 
 		delete this._proxyPresenter;
