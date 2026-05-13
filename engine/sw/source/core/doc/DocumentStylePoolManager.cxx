@@ -2571,6 +2571,18 @@ bool DocumentStylePoolManager::IsPoolTextCollUsed( SwPoolFormatId nId ) const
     return isUsed;
 }
 
+/// Check if this AutoCollection is already/still in use in this Document
+bool DocumentStylePoolManager::IsPoolTextCollUsed( const SwTextFormatColl& rFormat ) const
+{
+    if( !rFormat.HasWriterListeners() )
+        return false;
+
+    bool isUsed = false;
+    sw::AutoFormatUsedHint aHint(isUsed, m_rDoc.GetNodes());
+    rFormat.CallSwClientNotify(aHint);
+    return isUsed;
+}
+
 /// Check if this AutoCollection is already/still in use
 bool DocumentStylePoolManager::IsPoolFormatUsed( SwPoolFormatId nId ) const
 {
@@ -2618,6 +2630,16 @@ bool DocumentStylePoolManager::IsPoolFormatUsed( SwPoolFormatId nId ) const
     // Check if we have dependent ContentNodes in the Nodes array
     // (also indirect ones for derived Formats)
     return pNewFormat->IsUsed();
+}
+
+bool DocumentStylePoolManager::IsPoolFormatUsed( const SwFormat& rFormat ) const
+{
+    // Not found or no dependencies?
+    if(!rFormat.HasWriterListeners() )
+        return false;
+    // Check if we have dependent ContentNodes in the Nodes array
+    // (also indirect ones for derived Formats)
+    return rFormat.IsUsed();
 }
 
 /// Check if this AutoCollection is already/still in use in this Document
