@@ -1891,6 +1891,7 @@ static void lcl_UpdateXmlValues(const SdtData& sdtData, const uno::Reference<css
 
     xTransformer->start();
     xListener->wait();
+    xTransformer->terminate();
 }
 
 void DocxExport::WriteCustomXml()
