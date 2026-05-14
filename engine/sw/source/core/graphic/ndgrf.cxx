@@ -231,13 +231,8 @@ bool SwGrfNode::ReRead(
                 maGrfObj.SetGraphic( *pGraphic );
                 onGraphicChanged();
                 bReadGrf = true;
-                // Create connection without update, as we have the graphic,
-                // but don't connect if the user has not yet allowed link
-                // updates because the async download would fetch the URL
-                // before the user is prompted
-                SwDocShell* pDocSh = GetDoc().GetDocShell();
-                if (!pDocSh || pDocSh->getEmbeddedObjectContainer().getUserAllowsLinkUpdate())
-                    mxLink->Connect();
+                // create connection without update, as we have the graphic
+                mxLink->Connect();
             }
             else
             {
