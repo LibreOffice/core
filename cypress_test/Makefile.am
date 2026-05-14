@@ -140,7 +140,8 @@ start_short_idle_coolwsd: @JAILS_PATH@ @CACHE_PATH@ $(NODE_BINS) setup_short_idl
 	$(call run_JS_error_check)
 	$(call start_coolwsd)
 
-$(MOBILE_TEST_FILES_DONE): $(PID_FILE) $(DESKTOP_TEST_FILES_DONE)
+# SUITE_ONLY drops the desktop ordering dep so check-mobile can run independently
+$(MOBILE_TEST_FILES_DONE): $(PID_FILE) $(if $(SUITE_ONLY),,$(DESKTOP_TEST_FILES_DONE))
 	$(if $(PARALLEL_BUILD),\
 		$(call run_mobile_tests,$(subst $(MOBILE_TRACK_FOLDER)/,,$(basename $@)),$(basename $@).log),\
 		$(call run_mobile_tests))
@@ -282,9 +283,16 @@ check-desktop-mobile-multi:
 check-mobile: @JAILS_PATH@ @CACHE_PATH@ $(NODE_BINS)
 	$(call cleanup_before_run)
 	$(call run_JS_error_check)
-	$(call start_coolwsd)
-	$(call run_mobile_tests,$(spec))
+# coolwsd is already running via the parent make for the parallel sub-make case
+	$(if $(and $(PARALLEL_BUILD), $(if $(spec),,yes)),,$(call start_coolwsd))
+# with -jN and no single spec, dispatch to per-file .done targets via sub-make;
+# SUITE_ONLY=1 suppresses the mobile -> desktop ordering dependency
+	$(if $(and $(PARALLEL_BUILD), $(if $(spec),,yes)),\
+		$(MAKE) SUITE_ONLY=1 $(MOBILE_TEST_FILES_DONE),\
+		$(call run_mobile_tests,$(spec)))
 	$(V)$(KILL_COMMAND) || true
+# run_buffered.sh always exits 0 and records failures in ERROR_LOG
+	$(V)test ! -f $(ERROR_LOG) || (cat $(ERROR_LOG) && false)
 
 run-mobile: @JAILS_PATH@ @CACHE_PATH@ $(NODE_BINS)
 	$(call cleanup_before_run)
@@ -384,9 +392,15 @@ endef
 check-desktop: @JAILS_PATH@ @CACHE_PATH@ $(NODE_BINS)
 	$(call cleanup_before_run)
 	$(call run_JS_error_check)
-	$(call start_coolwsd)
-	$(call run_desktop_tests,$(spec))
+# coolwsd is already running via the parent make for the parallel sub-make case
+	$(if $(and $(PARALLEL_BUILD), $(if $(spec),,yes)),,$(call start_coolwsd))
+# with -jN and no single spec, dispatch to per-file .done targets via sub-make
+	$(if $(and $(PARALLEL_BUILD), $(if $(spec),,yes)),\
+		$(MAKE) $(DESKTOP_TEST_FILES_DONE),\
+		$(call run_desktop_tests,$(spec)))
 	$(V)$(KILL_COMMAND) || true
+# run_buffered.sh always exits 0 and records failures in ERROR_LOG
+	$(V)test ! -f $(ERROR_LOG) || (cat $(ERROR_LOG) && false)
 
 run-desktop: @JAILS_PATH@ @CACHE_PATH@ $(NODE_BINS)
 	$(call cleanup_before_run)
