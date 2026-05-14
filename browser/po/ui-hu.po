@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-11 14:06+0200\n"
-"PO-Revision-Date: 2026-05-11 13:37+0000\n"
+"PO-Revision-Date: 2026-05-12 14:12+0000\n"
 "Last-Translator: Andras Timar <andras.timar@collabora.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/collabora-"
 "online/collabora-ui/hu/>\n"
@@ -1141,9 +1141,8 @@ msgid "Resolved"
 msgstr "Megoldva"
 
 #: src/canvas/sections/CommentSection.ts:574
-#, fuzzy
 msgid "Removed"
-msgstr "Eltávolítás"
+msgstr "Törölve"
 
 #: src/canvas/sections/CommentSection.ts:1160
 #: src/control/jsdialog/Widget.Comment.ts:177
@@ -4777,9 +4776,8 @@ msgid "Insert Comment"
 msgstr "Megjegyzés beszúrása"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2401
-#, fuzzy
 msgid "Insert Note"
-msgstr "Dátum beszúrása"
+msgstr "Jegyzet beszúrása"
 
 #: src/control/jsdialog/Util.SnackbarController.ts:122
 msgid "Dismiss"
