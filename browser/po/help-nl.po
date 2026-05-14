@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-11 14:06+0200\n"
-"PO-Revision-Date: 2026-05-04 13:07+0000\n"
-"Last-Translator: Stephan Paternotte <stephan@paternottes.net>\n"
+"PO-Revision-Date: 2026-05-12 14:11+0000\n"
+"Last-Translator: Sebastiaan Veld <notify@virtfields.nl>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/collabora-online/"
 "help/nl/>\n"
 "Language: nl\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Translate Toolkit 3.6.0\n"
+"X-Generator: Weblate 2026.5-dev\n"
 
 #: html/cool-help.html%2Bdiv.h1:9-5
 msgid "Keyboard Shortcuts"
@@ -1974,9 +1974,9 @@ msgid ""
 "the assigned color. Note: you will see your cursor as black, blinking "
 "cursor, although others will see you with a different color."
 msgstr ""
-"Elke gebruiker krijg een kleur toegewezen. Het muis van elke gebruiker zal "
-"in dit kleur verschenen zijn. NB : U zalt uw muis en uw knipperende cursor "
-"in zwart zien, hoewel de andere U met een andere kleur zullen zien."
+"Elke gebruiker krijgt een kleur toegewezen. De cursor van elke gebruiker "
+"wordt weergegeven in de toegewezen kleur. Let op: je ziet je eigen cursor "
+"als een zwarte, knipperende cursor, maar anderen zien je in een andere kleur."
 
 #: html/cool-help.html%2Bdiv.div.div.ul.li:368-7
 msgid ""
@@ -2012,8 +2012,9 @@ msgid ""
 "<span class=\"def\">The document area:</span> The application area shows the "
 "document contents, either spreadsheets, presentations or text documents."
 msgstr ""
-"<span class=\"def\">Het toepassingsgebied</span>Het toepassingsgebied toont "
-"de documentinhoud, hetzij spreadsheets, presentaties of tekstdocumenten."
+"<span class=\"def\">Het documentgedeelte:</span> In het toepassingsgedeelte "
+"wordt de inhoud van het document weergegeven, of het nu gaat om "
+"spreadsheets, presentaties of tekstdocumenten."
 
 #: html/cool-help.html%2Bdiv.div.div.p:380-5
 msgid ""
@@ -2066,6 +2067,8 @@ msgid ""
 "Status bar showing page number, word count, insert mode, selection mode, "
 "language, edit mode, navigation, zoom, and search"
 msgstr ""
+"Statusbalk met paginanummer, woordentelling, invoegmodus, selectiemodus, "
+"taal, bewerkingsmodus, navigatie, zoomfunctie en zoekfunctie"
 
 #: html/cool-help.html%2Bdiv.div.div.p:393-5
 msgid ""
@@ -2080,9 +2083,8 @@ msgstr ""
 "hoofdlettergevoelig. Er zijn drie knoppen direct naast het zoekvak:"
 
 #: html/cool-help.html%2Bdiv.div.div.ul.li:395-7
-#, fuzzy
 msgid "Search backwards"
-msgstr "Achterwaarts zoeken>"
+msgstr "Achteruit zoeken"
 
 #: html/cool-help.html%2Bdiv.div.div.ul.li:396-7
 msgid "Search forward"
@@ -2134,6 +2136,7 @@ msgstr ""
 msgid ""
 "Information bar showing page navigation arrows, zoom controls, and zoom level"
 msgstr ""
+"Informatiebalk met pijltjes voor paginanavigatie, zoomknoppen en zoomniveau"
 
 #: html/cool-help.html%2Bdiv.div.p:412-5
 msgid ""
@@ -2285,6 +2288,8 @@ msgid ""
 "Repair Document dialog listing past document states with columns for action "
 "type, author, and timestamp"
 msgstr ""
+"Dialoogvenster 'Document herstellen' met een overzicht van eerdere "
+"documentstatussen, met kolommen voor actietype, auteur en tijdstempel"
 
 #: html/cool-help.html%2Bdiv.div.div.p:432-5
 msgid ""
@@ -2321,6 +2326,8 @@ msgid ""
 "Idle document overlay with the message: Idle document - please click to "
 "reload and resume editing"
 msgstr ""
+"Overlay bij inactief document met de melding: Document is inactief – klik "
+"hier om opnieuw te laden en verder te gaan met bewerken"
 
 #: html/cool-help.html%2Bdiv.div.div.p:438-5
 msgid ""
@@ -2344,10 +2351,10 @@ msgid ""
 "or browser window, or from outside of the browser, the pasted content will "
 "preserve rich text."
 msgstr ""
-"Wanneer u inhoud plakt die vanuit hetzelfde document is gekopieerd, blijven "
-"de indeling en elementen behouden. Als u kopieert vanuit een ander document, "
-"in een ander tabblad of browservenster, of van buiten de browser, behoudt de "
-"inhoud geplakt als Rich Text (RTF)."
+"Wanneer u inhoud plakt die uit hetzelfde document is gekopieerd, blijven de "
+"opmaak en de elementen behouden. Als u inhoud kopieert uit een ander "
+"document, uit een ander tabblad of browservenster, of van buiten de browser, "
+"blijft de opmaak van de geplakte inhoud behouden."
 
 #: html/cool-help.html%2Bdiv.div.div.p:443-5
 msgid ""
@@ -2418,6 +2425,8 @@ msgid ""
 "Chart Wizard dialog with chart type list on the left, chart style previews, "
 "3D and shape options"
 msgstr ""
+"Het dialoogvenster Grafiekwizard met links een lijst met grafiektypen, "
+"voorbeelden van grafiekstijlen en opties voor 3D en vormen"
 
 #: html/cool-help.html%2Bdiv.div.div.ol.li:460-7
 msgid "If no table or range was selected, a prototype chart is displayed."
@@ -2430,6 +2439,8 @@ msgid ""
 "Column chart with grouped bars showing data for four rows across three "
 "columns"
 msgstr ""
+"Kolomdiagram met gegroepeerde balken waarin gegevens voor vier rijen over "
+"drie kolommen worden weergegeven"
 
 #: html/cool-help.html%2Bdiv.div.div.p:464-28
 msgid ""
@@ -2449,8 +2460,8 @@ msgid ""
 "<span class=\"def\">Chart formatting:</span> The same context menu brings "
 "you to chart data table and chart type selection."
 msgstr ""
-"<span class=\"def\">Diagram opmaken</span> Hetzelfde contextmenu brengt u "
-"naar de gegevenstabel en de selectie van het diagramtype."
+"<span class=\"def\">Grafiekopmaak:</span> Via hetzelfde contextmenu kunt u "
+"de gegevenstabel van de grafiek openen en een grafiektype selecteren."
 
 #: html/cool-help.html%2Bdiv.div.div.p:466-28
 msgid ""
@@ -2523,6 +2534,8 @@ msgid ""
 "Comment box showing author name, date, and the comment text, displayed "
 "beside the document"
 msgstr ""
+"Een opmerkingenveld met de naam van de auteur, de datum en de tekst van de "
+"opmerking, weergegeven naast het document"
 
 #: html/cool-help.html%2Bdiv.div.div.p:478-5
 msgid ""
@@ -2552,6 +2565,7 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.div.img[alt]:483-29
 msgid "Text with a red wavy underline beneath a misspelled word"
 msgstr ""
+"Tekst met een rode golvende onderstreping onder een verkeerd gespeld woord"
 
 #: html/cool-help.html%2Bdiv.div.div.p:484-5
 msgid ""
@@ -2600,6 +2614,8 @@ msgid ""
 "Formula bar showing cell reference B1, function wizard icon, and the formula "
 "=SIN(PI()*A1/10)"
 msgstr ""
+"Formulebalk met celverwijzing B1, het pictogram van de functie-wizard en de "
+"formule =SIN(PI()*A1/10)"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:499-5
 msgid ""
@@ -2637,6 +2653,8 @@ msgid ""
 "Format Cells dialog on the Numbers tab with category list, format options, "
 "decimal places, and format code"
 msgstr ""
+"Het dialoogvenster 'Cellen opmaken' op het tabblad 'Getallen' met een "
+"categorielijst, opmaakopties, decimalen en opmaakcode"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:511-30
 msgid ""
@@ -2677,6 +2695,9 @@ msgid ""
 "AutoFilter dropdown menu on a spreadsheet column with sort, filter by color, "
 "filter by condition, and checkboxes for individual values"
 msgstr ""
+"Het vervolgkeuzemenu van AutoFilter in een kolom van een spreadsheet, met "
+"opties voor sorteren, filteren op kleur, filteren op voorwaarde en "
+"selectievakjes voor afzonderlijke waarden"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:518-7
 msgid ""
@@ -2716,6 +2737,9 @@ msgid ""
 "Spreadsheet with row and column grouping controls showing outline level "
 "buttons and collapse/expand toggles"
 msgstr ""
+"Spreadsheet met bedieningselementen voor het groeperen van rijen en "
+"kolommen, met knoppen voor het weergeven van overzichtsniveaus en "
+"schakelaars voor het samenvouwen en uitvouwen"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:527-5
 msgid ""
@@ -2741,6 +2765,9 @@ msgid ""
 "Validity dialog on the Criteria tab with Allow set to List, showing options "
 "for empty cells, selection list, and entry values"
 msgstr ""
+"Het dialoogvenster 'Geldigheid' op het tabblad 'Criteria', waarbij "
+"'Toestaan' is ingesteld op 'Lijst', met opties voor lege cellen, een "
+"keuzelijst en invoerwaarden"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:533-7
 msgid ""
@@ -2767,6 +2794,8 @@ msgid ""
 "Cell dropdown list showing validated entries such as Apple, Pear, Banana, "
 "Kiwi, and Lemon"
 msgstr ""
+"Een vervolgkeuzelijst met gevalideerde antwoorden zoals appel, peer, banaan, "
+"kiwi en citroen"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:538-7
 msgid ""
@@ -2796,6 +2825,9 @@ msgid ""
 "Spreadsheet cell with a comment popup showing the author, date, comment "
 "text, and Save/Cancel buttons"
 msgstr ""
+"Een cel in een spreadsheet met een pop-upvenster waarin de auteur, de datum, "
+"de tekst van de opmerking en de knoppen ‘Opslaan’ en ‘Annuleren’ worden "
+"weergegeven"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:546-5
 msgid ""
@@ -2816,6 +2848,8 @@ msgid ""
 "Conditional formatting icon set picker showing arrows, circles, traffic "
 "lights, stars, smiley faces, and bar chart symbol sets"
 msgstr ""
+"Keuzelijst voor symbolensets voor voorwaardelijke opmaak met pijlen, "
+"cirkels, verkeerslichten, sterren, smileygezichten en staafdiagrammen"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:555-30
 msgid ""
@@ -2911,6 +2945,9 @@ msgid ""
 "Paragraph dialog on the Indents and Spacing tab with settings for indent, "
 "spacing, and line spacing, and a preview on the right"
 msgstr ""
+"Het dialoogvenster 'Alinea' op het tabblad 'Inspringen en spatiëring' met "
+"instellingen voor inspringen, spatiëring en regelafstand, en een "
+"voorbeeldweergave aan de rechterkant"
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:576-5
 msgid "Handling Tables"
@@ -2933,6 +2970,8 @@ msgid ""
 "Insert Table picker showing a grid to select the number of rows and columns, "
 "currently showing 5 by 3"
 msgstr ""
+"Tabelkiezer invoegen met een raster om het aantal rijen en kolommen te "
+"selecteren; momenteel wordt 5 bij 3 weergegeven"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:581-5
 msgid ""
@@ -2964,6 +3003,8 @@ msgid ""
 "Tracked change shown as a comment box beside the document with author name, "
 "date, and change description"
 msgstr ""
+"Wijzigingen worden weergegeven als een opmerkingenvak naast het document, "
+"met de naam van de auteur, de datum en een beschrijving van de wijziging"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:587-5
 msgid ""
@@ -3101,6 +3142,9 @@ msgid ""
 "Slide properties panel showing format, orientation, background, and master "
 "slide settings, with a layout gallery of thumbnail options below"
 msgstr ""
+"Het deelvenster met dia-eigenschappen, waarin de instellingen voor opmaak, "
+"uitlijning, achtergrond en masterdia worden weergegeven, met daaronder een "
+"galerij met miniatuurafbeeldingen van verschillende lay-outs"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:626-30
 msgid ""
@@ -3290,6 +3334,8 @@ msgid ""
 "Thesaurus dialog for the word company, listing alternatives such as "
 "institution, establishment, and troupe, with a Replace with field"
 msgstr ""
+"Thesaurusvenster voor het ingestelde woord bedrijf, met alternatieven zoals ‘"
+"instelling’, ‘onderneming’ en ‘gezelschap’, en een veld ‘Vervangen door’"
 
 #: html/cool-help.html%2Bdiv.div.div.h4:677-5
 msgid ""
@@ -3330,6 +3376,8 @@ msgid ""
 "Word Count dialog showing word and character counts for the current "
 "selection and for the whole document"
 msgstr ""
+"Het dialoogvenster Woorden toont het aantal woorden en tekens voor de "
+"huidige selectie en voor het hele document"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:688-5
 msgid ""
@@ -3376,6 +3424,9 @@ msgid ""
 "hexadecimal and decimal code inputs, and recent and favorite characters at "
 "the bottom"
 msgstr ""
+"Het dialoogvenster 'Speciale tekens' met een tekenrooster, zoek- en "
+"lettertypevelden, invoervelden voor hexadecimale en decimale codes, en "
+"recent gebruikte en favoriete tekens onderaan"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:699-7
 msgid ""
@@ -3489,6 +3540,9 @@ msgid ""
 "Manage Changes dialog with a list of tracked changes showing action, author, "
 "date, and comment columns, and Accept, Reject, Accept All, Reject All buttons"
 msgstr ""
+"Het dialoogvenster ‘Wijzigingen beheren’ met een lijst van bijgehouden "
+"wijzigingen, met kolommen voor actie, auteur, datum en opmerking, en knoppen "
+"voor ‘Accepteren’, ‘Afwijzen’, ‘Alles accepteren’ en ‘Alles afwijzen’"
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:720-5
 msgid "How do I set the margins of the document?"
@@ -3523,6 +3577,9 @@ msgid ""
 "Page Style dialog on the Organizer tab showing style name, next style, "
 "inherit from, and category fields, with a summary of page properties"
 msgstr ""
+"Het dialoogvenster 'Paginastijl' op het tabblad 'Organizer' met de velden "
+"'Stijlnaam', 'Volgende stijl', 'Overnemen van' en 'Categorie', plus een "
+"overzicht van de paginaprop"
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:730-5
 msgid "How do I change the page orientation to landscape inside my document?"
@@ -3685,6 +3742,8 @@ msgid ""
 "Text Import dialog with character set, locale, separator options, and a "
 "preview of the imported CSV data"
 msgstr ""
+"Dialoogvenster 'Tekst importeren' met opties voor tekenset, landinstelling "
+"en scheidingsteken, en een voorbeeld van de geïmporteerde CSV-gegevens"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:778-7
 msgid ""
@@ -3796,6 +3855,9 @@ msgid ""
 "Area dialog on the Color tab with a color palette, active and new color "
 "previews, RGB value fields, and a custom palette section"
 msgstr ""
+"Het dialoogvenster 'Gebied' op het tabblad 'Kleur' met een kleurenpalet, "
+"voorbeelden van de huidige en nieuwe kleuren, velden voor RGB-waarden en een "
+"gedeelte voor aangepaste paletten"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:819-7
 msgid "Set the properties of the element of the object."
