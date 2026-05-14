@@ -389,6 +389,7 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
         if ( aDataHelper.GetFileList( nFormatId, aFileList ) )
         {
             sal_uLong nCount = aFileList.Count();
+            SetMultiInsertState(nCount > 1);
             for( sal_uLong i = 0; i < nCount ; i++ )
             {
                 OUString aFile = aFileList.GetFile( i );

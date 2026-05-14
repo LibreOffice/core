@@ -73,6 +73,7 @@ private:
     ScAddress   aFormatSource;      // for automatic extension of formatting
     ScRange     aFormatArea;
     bool        bFormatValid;
+    bool        mbMultiInsert;
 
 public:
                     ScViewFunc( vcl::Window* pParent, ScDocShell& rDocSh, ScTabViewShell* pViewShell );
@@ -149,6 +150,9 @@ public:
                                         const css::uno::Reference< css::datatransfer::XTransferable >& rxTransferable,
                                         SCCOL nPosX, SCROW nPosY, const Point* pLogicPos,
                                         bool bLink = false, bool bAllowDialogs = false, bool useSavedPrefs = false );
+
+    bool            isMultiInsert() { return mbMultiInsert; }
+    void            SetMultiInsertState( bool bMultiInsert ) { mbMultiInsert = bMultiInsert; }
 
     bool            PasteFile( const Point&, const OUString&, bool bLink );
     bool            PasteObject( const Point&, const css::uno::Reference < css::embed::XEmbeddedObject >&, const Size*, const Graphic* = nullptr, const OUString& = OUString(), sal_Int64 nAspect = css::embed::Aspects::MSOLE_CONTENT );

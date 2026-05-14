@@ -74,6 +74,11 @@ struct SvxOpenGrf_Impl
 };
 
 
+void SvxOpenGraphicDialog::setMultiSelect(bool bEnable)
+{
+    mpImpl->aFileDlg.GetFilePicker()->setMultiSelectionMode(bEnable);
+}
+
 SvxOpenGrf_Impl::SvxOpenGrf_Impl(weld::Window* pPreferredParent,
                                  sal_Int16 nDialogType)
     : aFileDlg(nDialogType, FileDialogFlags::Graphic, pPreferredParent)
@@ -258,6 +263,11 @@ ErrCode SvxOpenGraphicDialog::GetGraphic(Graphic& rGraphic) const
 OUString SvxOpenGraphicDialog::GetPath() const
 {
     return mpImpl->aFileDlg.GetPath();
+}
+
+Sequence< OUString > SvxOpenGraphicDialog::GetSelectedFiles() const
+{
+    return mpImpl->aFileDlg.GetSelectedFiles();
 }
 
 OUString SvxOpenGraphicDialog::GetCurrentFilter() const

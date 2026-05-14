@@ -838,16 +838,17 @@ ErrCode FileDialogHelper_Impl::getGraphic( Graphic& rGraphic )
 
     // rhbz#1079672 do not return maGraphic, it needs not to be the selected file
 
-    OUString aPath;
     Sequence<OUString> aPathSeq = mxFileDlg->getSelectedFiles();
 
-    if (aPathSeq.getLength() == 1)
+    if (aPathSeq.getLength() > 0)
     {
-        aPath = aPathSeq[0];
+        for (const auto& fileName : aPathSeq)
+        {
+            nRet = getGraphic(fileName, rGraphic);
+            if (nRet != ERRCODE_NONE)
+                return nRet;
+        }
     }
-
-    if (!aPath.isEmpty())
-        nRet = getGraphic(aPath, rGraphic);
     else
         nRet = ERRCODE_IO_GENERAL;
 

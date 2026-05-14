@@ -21,6 +21,7 @@
 #include <memory>
 #include <sfx2/dllapi.h>
 #include <rtl/ustring.hxx>
+#include <com/sun/star/uno/Sequence.hxx>
 
 namespace com::sun::star::ui::dialogs { class XFilePickerControlAccess; }
 namespace com::sun::star::uno { template <class interface_type> class Reference; }
@@ -42,6 +43,8 @@ public:
 
     void                    SetPath( const OUString& rPath, bool bLinkState );
     OUString                GetPath() const;
+    css::uno::Sequence< OUString >    GetSelectedFiles() const;
+    void setMultiSelect(bool bEnable);
 
     ErrCode                 GetGraphic(Graphic&) const;
 

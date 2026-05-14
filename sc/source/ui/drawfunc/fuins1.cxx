@@ -34,6 +34,7 @@
 #include <svx/svxids.hrc>
 #include <vcl/graphicfilter.hxx>
 #include <svl/stritem.hxx>
+#include <svl/slstitm.hxx>
 #include <avmedia/mediawindow.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld/Window.hxx>
@@ -111,7 +112,7 @@ void ScLimitSizeOnDrawPage( Size& rSize, Point& rPos, const Size& rPage )
 static void lcl_InsertGraphic( const Graphic& rGraphic,
                         const OUString& rFileName, bool bAsLink, bool bApi,
                         ScTabViewShell& rViewSh, const vcl::Window* pWindow, SdrView* pView,
-                        ScAnchorType aAnchorType = SCA_CELL )
+                        ScAnchorType aAnchorType = SCA_CELL, bool bMultiInsert = false )
 {
     Graphic& rGraphic1 = const_cast<Graphic &>(rGraphic);
     GraphicNativeMetadata aMetadata;
@@ -132,7 +133,7 @@ static void lcl_InsertGraphic( const Graphic& rGraphic,
     if(pDrawView)
     {
         const SdrMarkList& rMarkList = pDrawView->GetMarkedObjectList();
-        if (1 == rMarkList.GetMarkCount())
+        if (1 == rMarkList.GetMarkCount() && !bMultiInsert)
         {
             SdrObject* pPickObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
 
@@ -306,6 +307,7 @@ FuInsertGraphic::FuInsertGraphic( ScTabViewShell&   rViewSh,
         SvxOpenGraphicDialog aDlg(ScResId(STR_INSERTGRAPHIC), pWin ? pWin->GetFrameWeld() : nullptr,
                                   ui::dialogs::TemplateDescription::FILEOPEN_LINK_PREVIEW_IMAGE_ANCHOR);
 
+        aDlg.setMultiSelect(true);
         Reference<ui::dialogs::XFilePickerControlAccess> xCtrlAcc = aDlg.GetFilePickerControlAccess();
         sal_Int16 nSelect = 0;
         Sequence<OUString> aListBoxEntries {
@@ -335,16 +337,19 @@ FuInsertGraphic::FuInsertGraphic( ScTabViewShell&   rViewSh,
             ErrCode nError = aDlg.GetGraphic(aGraphic);
             if( nError == ERRCODE_NONE )
             {
-                OUString aFileName = aDlg.GetPath();
+                Sequence < OUString > aFileNames = aDlg.GetSelectedFiles();
                 const OUString& aFilterName = aDlg.GetDetectedFilter();
                 bool bAsLink = aDlg.IsAsLink();
 
                 // really store as link only?
                 if( bAsLink && officecfg::Office::Common::Misc::ShowLinkWarningDialog::get() )
                 {
-                    SvxLinkWarningDialog aWarnDlg(pWin ? pWin->GetFrameWeld() : nullptr, aFileName);
-                    if (aWarnDlg.run() != RET_OK)
-                        bAsLink = false; // don't store as link
+                    for (const auto& aFileName : aFileNames)
+                    {
+                        SvxLinkWarningDialog aWarnDlg(pWin ? pWin->GetFrameWeld() : nullptr, aFileName);
+                        if (aWarnDlg.run() != RET_OK)
+                            bAsLink = false; // don't store as link
+                    }
                 }
 
                 // Anchor to cell or to page?
@@ -364,18 +369,30 @@ FuInsertGraphic::FuInsertGraphic( ScTabViewShell&   rViewSh,
                 else
                     aAnchorType = SCA_DONTKNOW;
 
-                lcl_InsertGraphic( aGraphic, aFileName, bAsLink, false, rViewSh, pWindow, pView, aAnchorType );
-
                 //  append items for recording
-                rReq.AppendItem( SfxStringItem( SID_INSERT_GRAPHIC, aFileName ) );
+                SfxStringListItem aItem(SID_INSERT_GRAPHIC);
+                aItem.SetStringList(aFileNames);
+                rReq.AppendItem(aItem);
                 rReq.AppendItem( SfxStringItem( FN_PARAM_FILTER, aFilterName ) );
                 rReq.AppendItem( SfxBoolItem( FN_PARAM_1, bAsLink ) );
+                for (const auto& aFileName : aFileNames)
+                {
+                    nError = GraphicFilter::LoadGraphic(aFileName, aFilterName, aGraphic, &GraphicFilter::GetGraphicFilter());
+                    // format not equal to current filter (with autodetection)
+                    if (nError == ERRCODE_GRFILTER_FORMATERROR)
+                        nError = GraphicFilter::LoadGraphic(aFileName, OUString(), aGraphic, &GraphicFilter::GetGraphicFilter());
+                    if (nError == ERRCODE_NONE)
+                        lcl_InsertGraphic( aGraphic, aFileName, bAsLink, false, rViewSh, pWindow, pView, aAnchorType, aFileNames.getLength() > 1);
+                    else
+                        SAL_WARN("sc", "Failed to load graphic: " << aFileName);
+                }
                 rReq.Done();
             }
             else
             {
                 //  error is handled in SvxOpenGraphicDialog::GetGraphic
             }
+            aDlg.setMultiSelect(false);
         }
     }
 }

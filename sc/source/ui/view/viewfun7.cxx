@@ -396,7 +396,7 @@ bool ScViewFunc::PasteGraphic( const Point& rPos, const Graphic& rGraphic,
     if (pPageView)
     {
         SdrObject* pPickObj = pScDrawView->PickObj(rPos, pScDrawView->getHitTolLog(), pPageView);
-        if (pPickObj)
+        if (pPickObj && !isMultiInsert())
         {
             const OUString aBeginUndo(ScResId(STR_UNDO_DRAGDROP));
             SdrObject* pResult = pScDrawView->ApplyGraphicToObject(

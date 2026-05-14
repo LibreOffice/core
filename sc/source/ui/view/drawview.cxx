@@ -1097,7 +1097,8 @@ SdrObject* ScDrawView::ApplyGraphicToObject(
         ReplaceObjectAtView(&rHitObject, *GetSdrPageView(), pNewGrafObj.get());
 
         // set in all cases - the Clone() will have copied an existing link (!)
-        pNewGrafObj->SetGraphicLink( rFile );
+        if (!rFile.isEmpty())
+            pNewGrafObj->SetGraphicLink(rFile);
 
         EndUndo();
         return pNewGrafObj.get();
