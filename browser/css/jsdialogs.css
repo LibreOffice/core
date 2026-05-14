@@ -855,7 +855,7 @@ body button:not(.ui-corner-all):not(.button-primary):not(.unobutton):not(.form-f
 	font-weight: bold;
 }
 
-.ui-treeview-rowheader {
+#ChartDataDialog .ui-treeview-rowheader {
 	font-weight: bold;
 	text-align: center;
 	background-color: var(--color-background-dark);
