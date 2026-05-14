@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: coolwsd 25.04.7.3\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-06 18:17+0000\n"
-"PO-Revision-Date: 2026-04-17 11:10+0000\n"
-"Last-Translator: Adolfo Jayme Barrientos <fitojb@ubuntu.com>\n"
+"PO-Revision-Date: 2026-05-14 03:11+0000\n"
+"Last-Translator: Ecron <ecron_89@hotmail.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-office-macos-app/ca/>\n"
 "Language: ca\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.17.1-dev\n"
+"X-Generator: Weblate 2026.5.dev0\n"
 
 msgctxt "1UK-8n-QPP.title"
 msgid "Customize Toolbar…"
@@ -25,7 +25,7 @@ msgstr "ProductName"
 
 msgctxt "4J7-dP-txa.title"
 msgid "Enter Full Screen"
-msgstr ""
+msgstr "Pantalla completa"
 
 #. Do not change the placeholder ProductName!
 msgctxt "4sb-4s-VLi.title"
@@ -87,7 +87,7 @@ msgstr "Mostra-ho tot"
 
 msgctxt "LE2-aR-0XJ.title"
 msgid "Bring All to Front"
-msgstr ""
+msgstr "Posa-ho tot al front"
 
 msgctxt "NMo-om-nkz.title"
 msgid "Services"
@@ -112,7 +112,7 @@ msgstr "Finestra"
 
 msgctxt "Vdr-fp-XzO.title"
 msgid "Hide Others"
-msgstr ""
+msgstr "Amaga els altres"
 
 msgctxt "W48-6f-4Dl.title"
 msgid "Edit"
@@ -124,7 +124,7 @@ msgstr "Nou"
 
 msgctxt "WeT-3V-zwk.title"
 msgid "Paste and Match Style"
-msgstr ""
+msgstr "Enganxa amb el mateix estil"
 
 msgctxt "aTl-1u-JFS.title"
 msgid "Print…"
@@ -168,7 +168,7 @@ msgstr "Desa…"
 
 msgctxt "qIS-W8-SiK.title"
 msgid "Page Setup…"
-msgstr ""
+msgstr "Configuració de la pàgina…"
 
 msgctxt "snW-S8-Cw5.title"
 msgid "Show Toolbar"
@@ -193,7 +193,7 @@ msgstr "Finestra"
 
 msgctxt "vNY-rz-j42.title"
 msgid "Clear Menu"
-msgstr ""
+msgstr "Menú clar"
 
 msgctxt "wpr-3q-Mcd.title"
 msgid "Help"
