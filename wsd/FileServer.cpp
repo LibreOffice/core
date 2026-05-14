@@ -1055,6 +1055,7 @@ static const std::string WOPI_SETTING_BASE_URL = "%WOPI_SETTING_BASE_URL%";
 static const std::string IFRAME_TYPE = "%IFRAME_TYPE%";
 static const std::string UI_THEME = "%UI_THEME%";
 static const std::string VERSION = "%VERSION%";
+static const std::string WOPI_HOST_ID = "%WOPI_HOST_ID%";
 static const std::string EXPERIMENTAL_FEATURES = "%EXPERIMENTAL_FEATURES%";
 
 /// Per user request variables.
@@ -1158,6 +1159,8 @@ public:
         extractVariable(form, "iframe_type", IFRAME_TYPE);
 
         extractVariable(form, "ui_theme", UI_THEME);
+
+        extractVariable(form, "host_session_id", WOPI_HOST_ID);
 
         std::string buyProduct;
         {
@@ -1273,7 +1276,7 @@ FileServerRequestHandler::ResourceAccessDetails FileServerRequestHandler::prepro
     Poco::replaceInPlace(preprocess, CHECK_FILE_INFO_OVERRIDE,
                          checkFileInfoToJSON(urv[CHECK_FILE_INFO_OVERRIDE]));
     Poco::replaceInPlace(preprocess, WOPI_SETTING_BASE_URL, urv[WOPI_SETTING_BASE_URL]);
-    Poco::replaceInPlace(preprocess, std::string("%WOPI_HOST_ID%"), form.get("host_session_id", ""));
+    Poco::replaceInPlace(preprocess, WOPI_HOST_ID, urv[WOPI_HOST_ID]);
     Poco::replaceInPlace(preprocess, EXPERIMENTAL_FEATURES,
                          std::string(EnableExperimental ? "true" : "false"));
 
