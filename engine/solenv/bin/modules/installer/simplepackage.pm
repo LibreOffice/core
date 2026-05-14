@@ -435,35 +435,6 @@ sub create_package
                 }
             }
         }
-        elsif ($volume_name_classic_app eq 'LibreOffice SDK' || $volume_name_classic_app eq 'LibreOfficeDev SDK')
-        {
-            if ( $ENV{'MACOSX_CODESIGNING_IDENTITY'} )
-            {
-                my $sdkbindir = "$localtempdir/$folder/$allvariables->{'PRODUCTNAME'}$allvariables->{'PRODUCTVERSION'}_SDK/bin";
-                opendir(my $dh, $sdkbindir);
-                foreach my $sdkbinary (readdir $dh) {
-                    next unless -f "$sdkbindir/$sdkbinary";
-                    $systemcall = "codesign --force --verbose --options=runtime --identifier='$ENV{MACOSX_BUNDLE_IDENTIFIER}.$sdkbinary' --sign '$ENV{MACOSX_CODESIGNING_IDENTITY}' --entitlements $ENV{BUILDDIR}/hardened_runtime.xcent $sdkbindir/$sdkbinary > /tmp/codesign_losdk_$sdkbinary.log 2>&1";
-                    print "... $systemcall ...\n";
-                    my $returnvalue = system($systemcall);
-                    my $infoline = "Systemcall: $systemcall\n";
-                    push( @installer::globals::logfileinfo, $infoline);
-
-                    if ($returnvalue)
-                    {
-                        $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
-                        push( @installer::globals::logfileinfo, $infoline);
-                    }
-                    else
-                    {
-                        $infoline = "Success: Executed \"$systemcall\" successfully!\n";
-                        push( @installer::globals::logfileinfo, $infoline);
-                        unlink "/tmp/codesign_losdk_$sdkbinary.log";
-                    }
-                }
-                closedir($dh);
-            }
-        }
         my $megabytes = 1500;
         $megabytes = 3000 if $ENV{'ENABLE_DEBUG'};
 
@@ -560,17 +531,7 @@ sub create_simple_package
         $packagename = installer::download::set_download_filename(\$locallanguage, $allvariables);
     }
 
-    # Work around Windows problems with long pathnames (see issue 50885) by
-    # putting the to-be-archived installation tree into the temp directory
-    # instead of the module output tree (unless LOCALINSTALLDIR dictates
-    # otherwise, anyway); can be removed once issue 50885 is fixed:
     my $tempinstalldir = $installdir;
-    if ( $installer::globals::iswindowsbuild &&
-         $installer::globals::packageformat eq "archive" &&
-         !$installer::globals::localinstalldirset )
-    {
-        $tempinstalldir = File::Temp::tempdir;
-    }
 
     # Creating subfolder in installdir, which shall become the root of package or zip file
     my $subfolderdir = "";
@@ -610,7 +571,7 @@ sub create_simple_package
     }
 
     # stripping files ?!
-    if (( $installer::globals::strip ) && ( ! $installer::globals::iswindowsbuild )) { strip_libraries($filesref, $languagestringref); }
+    if ( $installer::globals::strip ) { strip_libraries($filesref, $languagestringref); }
 
     # copy Files
     installer::logger::print_message( "... copying files ...\n" );
@@ -650,15 +611,12 @@ sub create_simple_package
         {
             installer::systemactions::copy_one_file($source, $destination);
 
-            if ( ! $installer::globals::iswindowsbuild )
+            # see issue 102274
+            if ( $onefile->{'UnixRights'} )
             {
-                # see issue 102274
-                if ( $onefile->{'UnixRights'} )
+                if ( ! -l $destination ) # that would be rather pointless
                 {
-                    if ( ! -l $destination ) # that would be rather pointless
-                    {
-                        chmod oct($onefile->{'UnixRights'}), $destination;
-                    }
+                    chmod oct($onefile->{'UnixRights'}), $destination;
                 }
             }
         }

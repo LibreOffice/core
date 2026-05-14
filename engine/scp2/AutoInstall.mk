@@ -9,8 +9,6 @@
 
 $(eval $(call gb_AutoInstall_AutoInstall))
 
-$(eval $(call gb_AutoInstall_add_module,activexbinarytable,LIBO_LIB_FILE_BINARYTABLE))
-$(eval $(call gb_AutoInstall_add_module,activex,LIBO_LIB_FILE))
 $(eval $(call gb_AutoInstall_add_module,base,LIBO_LIB_FILE,LIBO_EXECUTABLE))
 $(eval $(call gb_AutoInstall_add_module,base_brand,,LIBO_EXECUTABLE,,PACKAGE_FILELIST))
 $(eval $(call gb_AutoInstall_add_module,brand,,LIBO_EXECUTABLE,,PACKAGE_FILELIST))
@@ -37,13 +35,9 @@ $(eval $(call gb_AutoInstall_add_module,python_scriptprovider,,,,PACKAGE_FILELIS
 $(eval $(call gb_AutoInstall_add_module,python_librelogo,,,,PACKAGE_FILELIST))
 $(eval $(call gb_AutoInstall_add_module,postgresqlsdbc,LIBO_LIB_FILE,,,PACKAGE_FILELIST))
 $(eval $(call gb_AutoInstall_add_module,pdfimport,LIBO_LIB_FILE,LIBO_EXECUTABLE,,PACKAGE_FILELIST))
-$(eval $(call gb_AutoInstall_add_module,quickstart,,LIBO_EXECUTABLE))
 $(eval $(call gb_AutoInstall_add_module,reportbuilder,LIBO_LIB_FILE,,LIBO_JAR_FILE,PACKAGE_FILELIST))
 $(eval $(call gb_AutoInstall_add_module,sdk,,SDK_EXECUTABLE,,SDK_PACKAGE_FILELIST))
-$(eval $(call gb_AutoInstall_add_module,spsuppfiles,LIBO_LIB_FILE,LIBO_EXECUTABLE))
 $(eval $(call gb_AutoInstall_add_module,ure,URE_PRIVATE_LIB,URE_EXECUTABLE,URE_JAR_FILE,PACKAGE_FILELIST))
-$(eval $(call gb_AutoInstall_add_module,winexplorerextbinarytable,LIBO_LIB_FILE_BINARYTABLE))
-$(eval $(call gb_AutoInstall_add_module,winexplorerext,SHLXTHDL_LIB_FILE))
 $(eval $(call gb_AutoInstall_add_module,writer,LIBO_LIB_FILE))
 $(eval $(call gb_AutoInstall_add_module,writer_brand,,LIBO_EXECUTABLE,,PACKAGE_FILELIST))
 $(eval $(call gb_AutoInstall_add_module,xsltfilter,,,,PACKAGE_FILELIST))

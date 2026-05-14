@@ -338,18 +338,6 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                 eCurrentEvent = CommandLineEvent::Conversion;
                 setHeadless();
             }
-            else if ( oArg == "quickstart" )
-            {
-#if defined(ENABLE_QUICKSTART_APPLET)
-                m_quickstart = true;
-#endif
-                m_noquickstart = false;
-            }
-            else if ( oArg == "quickstart=no" )
-            {
-                m_noquickstart = true;
-                m_quickstart = false;
-            }
             else if ( oArg == "terminate_after_init" )
             {
                 m_terminateafterinit = true;
@@ -700,8 +688,6 @@ void CommandLineArgs::InitParamValues()
     m_invisible = true;
     m_headless = true;
 #endif
-    m_quickstart = false;
-    m_noquickstart = false;
     m_terminateafterinit = false;
     m_nologo = false;
     m_nolockcheck = false;

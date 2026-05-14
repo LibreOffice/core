@@ -716,40 +716,6 @@ $(eval $(call gb_Helper_register_plugins_for_install,PLAINLIBS_OOO,ooo, \
 ))
 
 ifeq ($(OS),WNT)
-$(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,activexbinarytable, \
-	regactivex \
-))
-
-$(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,activex, \
-	so_activex \
-))
-
-$(eval $(call gb_Helper_register_executables_for_install,OOO,spsuppfiles, \
-	spsupp_helper \
-))
-
-$(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,spsuppfiles, \
-	$(if $(CXX_X64_BINARY),spsupp_x64) \
-	$(if $(CXX_X86_BINARY),spsupp_x86) \
-))
-
-$(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooobinarytable, \
-	$(if $(WINDOWS_SDK_HOME),\
-		instooofiltmsi \
-		qslnkmsi \
-		reg_dlls \
-		reg4allmsdoc \
-		sdqsmsi \
-		sellangmsi \
-		sn_tools \
-		$(if $(ENABLE_ONLINE_UPDATE_MAR),install_updateservice) \
-	) \
-))
-
-$(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,winexplorerextbinarytable, \
-	shlxtmsi \
-))
-
 $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_SHLXTHDL,winexplorerext, \
 	ooofilt \
 	propertyhdl \
@@ -841,7 +807,6 @@ $(eval $(call gb_Helper_register_packages, \
 	instsetoo_native_setup \
 	$(if $(ENABLE_OOENV),instsetoo_native_ooenv) \
 	postprocess_registry \
-	setup_native_misc \
 	sysui_share \
 	vcl_fontunxpsprint \
 ))

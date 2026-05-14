@@ -1,5 +1,0 @@
-LIBRARY		"reg_dlls.dll"
-EXPORTS
-			RegDLLs
-			UnregDLLs
-			PrepRegUnregDLLs

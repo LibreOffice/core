@@ -1,8 +1,10 @@
 #!/bin/sh
 
-# unpack parameters
+# unpack parameters. The first colon-separated field of the target name
+# (the module family - "openoffice" / "ooohelppack") used to feed the
+# Windows MSI template path; that pipeline is gone, so the field is now
+# unused and parsing skips it.
 VERBOSITY=$1; shift
-MSITEMPL=$(echo "$@" | cut -d ':' -f 1)
 LANG=$(echo "$@" | cut -d ':' -f 2)
 PRODNAME=$(echo "$@" | cut -d ':' -f 3)
 EXTENSION=$(echo "$@" | cut -d ':' -f 4)
@@ -20,13 +22,6 @@ if [ "${VERBOSITY}" = "-verbose" ] ; then
     set -x
 fi
 
-# add extra params for Windows
-EXTRA_PARAMS=
-if [ "${OS}" = "WNT" ] && [ -n "${MSITEMPL}" ]; then
-    EXTRA_PARAMS="${EXTRA_PARAMS} -msitemplate ${WORKDIR}/CustomTarget/instsetoo_native/install/msi_templates/${MSITEMPL}"
-    EXTRA_PARAMS="${EXTRA_PARAMS} -msilanguage ${WORKDIR}/CustomTarget/instsetoo_native/install/win_ulffiles"
-fi
-
 # need to strip?
 if [ "${STRIP}" = "strip" ] ; then
     export ENABLE_STRIP=1
@@ -41,7 +36,6 @@ ${PERL} -w "${SRCDIR}"/solenv/bin/make_installer.pl \
     -u "${instsetoo_OUT}" \
     -packer "${COMPRESSIONTOOL}" \
     -buildid "${LIBO_VERSION_PATCH}" \
-    ${EXTRA_PARAMS:+$EXTRA_PARAMS} \
     ${EXTENSION:+"$EXTENSION"} \
     -format "${PKGFORMAT}" \
     "${VERBOSITY}"

@@ -65,8 +65,6 @@ class CommandLineArgs
         bool                IsNoRestore() const { return m_norestore;}
         bool                IsNoDefault() const { return m_nodefault;}
         bool                IsHeadless() const { return m_headless;}
-        bool                IsQuickstart() const { return m_quickstart;}
-        bool                IsNoQuickstart() const { return m_noquickstart;}
         bool                IsTerminateAfterInit() const { return m_terminateafterinit;}
         bool                IsNoLogo() const { return m_nologo;}
         bool                IsNoLockcheck() const { return m_nolockcheck;}
@@ -135,8 +133,6 @@ class CommandLineArgs
         bool m_invisible;
         bool m_norestore;
         bool m_headless;
-        bool m_quickstart;
-        bool m_noquickstart;
         bool m_terminateafterinit;
         bool m_nologo;
         bool m_nolockcheck;

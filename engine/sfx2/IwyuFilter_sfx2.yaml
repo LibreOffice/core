@@ -65,11 +65,6 @@ excludelist:
     sfx2/source/appl/newhelp.cxx:
     # Actually used
     - com/sun/star/i18n/XBreakIterator.hpp
-    sfx2/source/appl/shutdownicon.cxx:
-    # Needed on MAC
-    - osl/file.hxx
-    # Needed on WIN32
-    - sfx2/sfxresid.hxx
     - sfx2/strings.hrc
     sfx2/source/bastyp/fltfnc.cxx:
     # Needed for UnoType to work

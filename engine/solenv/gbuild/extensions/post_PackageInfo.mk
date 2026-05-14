@@ -20,9 +20,6 @@ gb_PackageInfo_InstallModules := \
 	ooo \
 	writer \
 	ure \
-	activexbinarytable \
-	ooobinarytable \
-	winexplorerextbinarytable \
 
 define gb_PackageInfo_emit_binaries_command
 @touch $(foreach suf,executables libraries files,$(gb_PackageInfo_get_target)/$(1).$(suf))

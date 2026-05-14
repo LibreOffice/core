@@ -148,16 +148,6 @@ End
 
 // Files
 
-#ifdef WNT
-File gid_Brand_File_Desktophelper_Txt
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Brand_Dir_Program;
-    Name = "desktophelper.txt";
-    ComponentCondition = "CREATEDESKTOPLINK=1";
-End
-#endif
-
 File gid_Brand_File_Share_Registry_Cjk_Xcd
     TXT_FILE_BODY;
     Styles = (PACKED,MAKE_LANG_SPECIFIC);

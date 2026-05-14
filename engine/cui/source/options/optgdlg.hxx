@@ -52,9 +52,6 @@ private:
     std::unique_ptr<weld::Widget> m_xCrashReportImg;
 #endif
 #if defined(_WIN32)
-    std::unique_ptr<weld::Widget> m_xQuickStarterFrame;
-    std::unique_ptr<weld::CheckButton> m_xQuickLaunchCB;
-    std::unique_ptr<weld::Widget> m_xQuickLaunchImg;
     std::unique_ptr<weld::Widget> m_xFileAssocFrame;
     std::unique_ptr<weld::Button> m_xFileAssocBtn;
     std::unique_ptr<weld::CheckButton> m_xPerformFileExtCheck;

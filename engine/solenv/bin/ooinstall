@@ -20,15 +20,10 @@ use Cwd;
 
 $path = '';
 $strip = '';
-$is_windows = 0;
 my $tmp_dir;
 
 # FIXME: really we should hunt and parse / source the config_host.mk magic I guess.
 die "You need your environment setup right, eg. run make cmd cmd='ooinstall /path/to/install'" if (!defined $ENV{SRC_ROOT});
-
-if ($ENV{OS} eq 'WNT') {
-    $is_windows = 1;
-}
 
 if (defined($ENV{TMPDIR})) {
     $tmp_dir = $ENV{TMPDIR};
@@ -71,16 +66,9 @@ if (defined $ENV{DESTDIR} &&
     $destdir = "-destdir \"$ENV{DESTDIR}\"";
 }
 
-$msi='';
-if ($is_windows) {
-    $msi = "-msitemplate $ENV{SRC_ROOT}/workdir/CustomTarget/instsetoo_native/install/msi_templates " .
-           "-msilanguage $ENV{SRC_ROOT}/workdir/CustomTarget/instsetoo_native/install/win_ulffiles";
-}
-
-# FIXME: a better solution would be to fix installer to deal with broken symlinks
-# make distro-pack-install shuffle with the SDK installation to make it LSB compliant
-# it creates symlinks from the original path to /usr/share; they are not valid with $DESTDIR
-# and potential second ooinstall call fails with strange error messages if the old tree is still there
+# Wipe DESTDIR before re-running so a stale install tree from a previous run
+# (which may still hold broken symlinks pointing outside DESTDIR) does not
+# cause the installer to bail with confusing errors.
 if ($destdir && "$ENV{DESTDIR}" ne "/" && -d "$ENV{DESTDIR}") {
     print "Cleaning destdir...\n";
     system ("rm -rf \"$ENV{DESTDIR}\"") && die "Failed to clean up destdir: $!";
@@ -97,7 +85,7 @@ system ("cd $ENV{SRC_ROOT}/instsetoo_native/util ; " .
         "-w $ENV{SRCDIR}/solenv/bin/make_installer.pl " .
         "-f $ENV{BUILDDIR}/instsetoo_native/util/openoffice.lst -l $langs -p $PRODUCTNAME_no_spaces " .
         "-u $tmp_dir " .
-        "-buildid $BUILD $destdir $strip $msi " .
+        "-buildid $BUILD $destdir $strip " .
         "-simple $path") && die "Failed to install: $!";
 
 print "Installer finished\n";

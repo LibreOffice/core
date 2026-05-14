@@ -131,21 +131,19 @@ public:
         OpenHelpUrl,           ///< Open a help URL
         Print,                 ///< Print document
         PrivateDoShutdown,    ///< Shutdown application
-        QuickStart,            ///< Start QuickStart
         ShowDialog,            ///< Show a dialog
         Unaccept               ///< Stop listening for connections
     };
 
     /** Explicit constructor for ApplicationEvent.
 
-     @attention Type::Appear, Type::PrivateDoShutdown and
-        Type::QuickStart are the \em only events that don't need to include
-        a data string with the event. No other events should use this
-        constructor!
+     @attention Type::Appear and Type::PrivateDoShutdown are the \em only
+        events that don't need to include a data string with the event.
+        No other events should use this constructor!
     */
     explicit ApplicationEvent(Type type): aEvent(type)
     {
-        assert(type == Type::Appear || type == Type::PrivateDoShutdown || type == Type::QuickStart);
+        assert(type == Type::Appear || type == Type::PrivateDoShutdown);
     }
 
     /** Constructor for ApplicationEvent, accepts a string for the data

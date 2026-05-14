@@ -72,7 +72,6 @@ ifeq ($(OS),WNT)
 $(eval $(call gb_Module_add_targets,desktop,\
     StaticLibrary_winloader \
     StaticLibrary_winlauncher \
-    Executable_quickstart \
     Executable_sbase \
     Executable_scalc \
     Executable_sdraw \
@@ -88,7 +87,6 @@ $(eval $(call gb_Module_add_targets,desktop,\
         Executable_unopkg \
         Executable_unopkg_com \
     ) \
-    WinResTarget_quickstart \
     WinResTarget_sbase \
     WinResTarget_scalc \
     WinResTarget_sdraw \

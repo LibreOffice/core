@@ -49,7 +49,6 @@
 #include <sfx2/objsh.hxx>
 #include <comphelper/kit.hxx>
 #include <objshimp.hxx>
-#include <shutdownicon.hxx>
 
 using namespace ::com::sun::star::uno;
 
@@ -178,19 +177,6 @@ void SfxApplication::GetOptions( SfxItemSet& rSet )
                 bRet = toSet_ifRW<officecfg::Office::Common::Save::Document::EditProperty>(
                     rSet, SID_ATTR_DOCINFO);
                 break;
-            case SID_ATTR_QUICKLAUNCHER:
-                if ( ShutdownIcon::IsQuickstarterInstalled() )
-                {
-                    if ( rSet.Put( SfxBoolItem( SID_ATTR_QUICKLAUNCHER,
-                                                ShutdownIcon::GetAutostart() ) ) )
-                        bRet = true;
-                }
-                else
-                {
-                    rSet.DisableItem( SID_ATTR_QUICKLAUNCHER );
-                    bRet = true;
-                }
-                break;
             case SID_SAVEREL_INET:
                 bRet = toSet_ifRW<officecfg::Office::Common::Save::URL::Internet>(
                     rSet, SID_SAVEREL_INET);
@@ -302,12 +288,6 @@ void SfxApplication::SetOptions(const SfxItemSet &rSet)
                     pShUndoMgr->SetMaxUndoActionCount( nUndoCount );
             }
         }
-    }
-
-    // Office autostart
-    if ( const SfxBoolItem *pItem = rSet.GetItemIfSet(SID_ATTR_QUICKLAUNCHER))
-    {
-        ShutdownIcon::SetAutostart( pItem->GetValue() );
     }
 
     toCfg_ifSet<officecfg::Inet::Settings::ooInetProxyType>(rSet, SID_INET_PROXY_TYPE, batch);

@@ -2125,16 +2125,6 @@ AC_ARG_ENABLE(windows-build-signing,
         [Enable signing of windows binaries (*.exe, *.dll)]),
 ,)
 
-AC_ARG_ENABLE(silent-msi,
-    AS_HELP_STRING([--enable-silent-msi],
-        [Enable MSI with LIMITUI=1 (silent install).]),
-,)
-
-AC_ARG_ENABLE(wix,
-    AS_HELP_STRING([--enable-wix],
-        [Build Windows installer using WiX.]),
-,)
-
 AC_ARG_ENABLE(macosx-code-signing,
     AS_HELP_STRING([--enable-macosx-code-signing=<identity>],
         [Sign executables, dylibs, frameworks and the app bundle. If you
@@ -4728,11 +4718,6 @@ if test "$_os" = "WINNT"; then
         #endif
     ]])],[AC_MSG_RESULT([yes])],[AC_MSG_ERROR([no])])
 
-    # we used to build 64bit bits for 32bit windows (explorer shell extension, activex, similar)
-    # dating back when there was no 64bit version of LibreOffice yet (pre 5.0)
-    # now (since 25.8) we only care about the inverse, building the 32bit twain and activex spsupp
-    # lib when targeting/building the 64bit version for Windows
-
     # Check for 32-bit compiler to use to build the 32-bit TWAIN shim
     # needed to support TWAIN scan on both 32- and 64-bit systems
 
@@ -5997,7 +5982,7 @@ AC_MSG_CHECKING([which package format to use])
 if test -n "$with_package_format" -a "$with_package_format" != no; then
     for i in $with_package_format; do
         case "$i" in
-        bsd | deb | pkg | rpm | archive | dmg | installed | msi | emscripten)
+        bsd | deb | pkg | rpm | archive | dmg | installed | emscripten)
             ;;
         *)
             AC_MSG_ERROR([unsupported format $i. Supported by EPM are:
@@ -6011,7 +5996,6 @@ archive - .tar.gz or .zip
 dmg - macOS .dmg
 emscripten - directory with qt_soffice.html etc.
 installed - installation tree
-msi - Windows .msi
         ])
             ;;
         esac
@@ -6972,24 +6956,6 @@ AC_MSG_CHECKING([for required Perl modules])
 dnl Digest::MD5 seems only be used for packaging, but is basically a given
 perl_use_string="use Cwd ; use Digest::MD5"
 perl_use_string_spp="use Cwd ; use Digest::MD5"
-if test "$_os" = "WINNT"; then
-    if test -n "$PKGFORMAT"; then
-        for i in $PKGFORMAT; do
-            case "$i" in
-            msi)
-                # for getting fonts versions to use in MSI
-                if test -n "$WSL_ONLY_AS_HELPER"; then
-                    # in case of a wsl-as-helper build, the packaging is done using strawberry-perl
-                    # and not the perl provided by git-bash
-                    perl_use_string_spp="$perl_use_string_spp ; use Font::TTF::Font"
-                else
-                    perl_use_string="$perl_use_string ; use Font::TTF::Font"
-                fi
-                ;;
-            esac
-        done
-    fi
-fi
 if test "$with_system_hsqldb" = "yes"; then
     perl_use_string="$perl_use_string ; use Archive::Zip"
 fi
@@ -7343,43 +7309,10 @@ the  Windows SDK are installed.])
         fi
     fi
 
-    dnl TODO: solenv/bin/modules/installer/windows/msiglobal.pm wants to use a
-    dnl WiLangId.vbs that is included only in some SDKs (e.g., included in v7.1
-    dnl but not in v8.0), so allow this to be overridden with a
-    dnl WINDOWS_SDK_WILANGID for now; a full-blown --with-windows-sdk-wilangid
-    dnl and configuration error if no WiLangId.vbs is found would arguably be
-    dnl better, but I do not know under which conditions exactly it is needed by
-    dnl msiglobal.pm:
-    if test -z "$WINDOWS_SDK_WILANGID" -a -n "$WINDOWS_SDK_HOME"; then
-        WINDOWS_SDK_WILANGID_unix=$WINDOWS_SDK_HOME_unix/Samples/sysmgmt/msi/scripts/WiLangId.vbs
-        if ! test -e "$WINDOWS_SDK_WILANGID_unix" ; then
-            WINDOWS_SDK_WILANGID_unix="${WINDOWS_SDK_HOME_unix}/bin/${WINDOWS_SDK_LIB_SUBDIR}/${WIN_BUILD_ARCH}/WiLangId.vbs"
-        fi
-        if ! test -e "$WINDOWS_SDK_WILANGID_unix" ; then
-            WINDOWS_SDK_WILANGID_unix=$WINDOWS_SDK_HOME_unix/bin/$WIN_BUILD_ARCH/WiLangId.vbs
-        fi
-        if ! test -e "$WINDOWS_SDK_WILANGID_unix" ; then
-            WINDOWS_SDK_WILANGID_unix="C:/Program Files (x86)/Windows Kits/8.1/bin/$WIN_BUILD_ARCH/WiLangId.vbs"
-        fi
-        PathFormat "$WINDOWS_SDK_WILANGID_unix"
-        WINDOWS_SDK_WILANGID="$formatted_path"
-    fi
-    if test -n "$with_lang" -a "$with_lang" != "en-US"; then
-        if test -n "$with_package_format" -a "$with_package_format" != no; then
-            for i in "$with_package_format"; do
-                if test "$i" = "msi"; then
-                    if ! test -e "$WINDOWS_SDK_WILANGID_unix" ; then
-                        AC_MSG_ERROR([WiLangId.vbs not found - building translated packages will fail])
-                    fi
-                fi
-            done
-        fi
-    fi
 fi
 AC_SUBST(WINDOWS_SDK_HOME)
 AC_SUBST(WINDOWS_SDK_LIB_SUBDIR)
 AC_SUBST(WINDOWS_SDK_VERSION)
-AC_SUBST(WINDOWS_SDK_WILANGID)
 
 if test "$build_os" = "cygwin" -o "$build_os" = "wsl" -o -n "$WSL_ONLY_AS_HELPER"; then
     dnl Check midl.exe; this being the first check for a tool in the SDK bin
@@ -14440,37 +14373,6 @@ else
 fi
 AC_SUBST(ENABLE_EXTENSION_UPDATE)
 
-
-dnl ===================================================================
-dnl Test whether to create MSI with LIMITUI=1 (silent install)
-dnl ===================================================================
-AC_MSG_CHECKING([whether to create MSI with LIMITUI=1 (silent install)])
-if test "$enable_silent_msi" = "" -o "$enable_silent_msi" = "no"; then
-    AC_MSG_RESULT([no])
-    ENABLE_SILENT_MSI=
-else
-    AC_MSG_RESULT([yes])
-    ENABLE_SILENT_MSI=TRUE
-    SCPDEFS="$SCPDEFS -DENABLE_SILENT_MSI"
-fi
-AC_SUBST(ENABLE_SILENT_MSI)
-
-dnl ===================================================================
-dnl Check for WiX tools.
-dnl ===================================================================
-if test "$enable_wix" = "" -o "enable_wix" = "no"; then
-    AC_MSG_RESULT([no])
-    ENABLE_WIX=
-else
-    AC_MSG_RESULT([yes])
-    # FIXME: this should do proper detection, but the path is currently
-    # hardcoded in msicreator/createmsi.py
-    if ! test -x "/cygdrive/c/Program Files (x86)/WiX Toolset v3.11/bin/candle"; then
-      AC_MSG_ERROR([WiX requested but WiX toolset v3.11 not found at the expected location])
-    fi
-    ENABLE_WIX=TRUE
-fi
-AC_SUBST(ENABLE_WIX)
 
 AC_MSG_CHECKING([whether and how to use Xinerama])
 if test "$USING_X11" = TRUE; then

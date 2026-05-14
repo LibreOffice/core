@@ -114,8 +114,6 @@ sub set_global_environment_variables
     if ( $ENV{'ENABLE_DBGUTIL'} ) {} else { $installer::globals::pro = 1; }
 
     if ( $ENV{'VERBOSE'} && ( (lc $ENV{'VERBOSE'}) eq "false" ) ) { $installer::globals::quiet = 1; }
-    if ( $ENV{'PREPARE_WINPATCH'} ) { $installer::globals::prepare_winpatch = 1; }
-    if ( $ENV{'PREVIOUS_IDT_DIR'} ) { $installer::globals::previous_idt_dir = $ENV{'PREVIOUS_IDT_DIR'}; }
     if ( $ENV{'LOCALINSTALLDIR'} ) { $installer::globals::localinstalldir = $ENV{'LOCALINSTALLDIR'}; }
     if ( $ENV{'LOCALUNPACKDIR'} ) { $installer::globals::localunpackdir = $ENV{'LOCALUNPACKDIR'}; }
     if ( $ENV{'MAX_LANG_LENGTH'} ) { $installer::globals::max_lang_length = $ENV{'MAX_LANG_LENGTH'}; }

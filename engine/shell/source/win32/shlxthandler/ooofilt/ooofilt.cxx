@@ -30,7 +30,6 @@
 
 #include <contentreader.hxx>
 #include <metainforeader.hxx>
-#include <registry.hxx>
 #include <fileextensions.hxx>
 
 
@@ -61,8 +60,6 @@
 #include "propspec.hxx"
 
 #include <stream_helper.hxx>
-
-#include <olectl.h> // declarations of DllRegisterServer/DllUnregisterServer
 
 //C-------------------------------------------------------------------------
 //  Class:      COooFilter
@@ -911,46 +908,6 @@ extern "C" HRESULT STDMETHODCALLTYPE DllCanUnloadNow()
         return S_OK;
     else
         return S_FALSE;
-}
-//F-------------------------------------------------------------------------
-//  Function:   DllRegisterServer
-//              DllUnregisterServer
-//  Summary:    Registers and unregisters DLL server
-//  Returns:    DllRegisterServer
-//                  S_OK
-//                      Registration was successful
-//                  SELFREG_E_CLASS
-//                      Registration was unsuccessful
-//                  SELFREG_E_TYPELIB
-//                      (not implemented)
-//                  E_OUTOFMEMORY
-//                      (not implemented)
-//                  E_UNEXPECTED
-//                      (not implemented)
-//              DllUnregisterServer
-//                  S_OK
-//                      Unregistration was successful
-//                  S_FALSE
-//                      Unregistration was successful, but other
-//                      entries still exist for the DLL's classes
-//                  SELFREG_E_CLASS
-//                      (not implemented)
-//                  SELFREG_E_TYPELIB
-//                      (not implemented)
-//                  E_OUTOFMEMORY
-//                      (not implemented)
-//                  E_UNEXPECTED
-//                      (not implemented)
-
-STDAPI DllRegisterServer()
-{
-    return S_OK;
-}
-
-
-STDAPI DllUnregisterServer()
-{
-    return S_OK;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Module_Module,instsetoo_native))
 
-ifneq (,$(PKGFORMAT)$(filter TRUE,$(LIBO_TEST_INSTALL) $(ENABLE_WIX)))
+ifneq (,$(PKGFORMAT)$(filter TRUE,$(LIBO_TEST_INSTALL)))
 
 ifeq ($(OS),EMSCRIPTEN)
 $(eval $(call gb_Module_add_targets,instsetoo_native, \

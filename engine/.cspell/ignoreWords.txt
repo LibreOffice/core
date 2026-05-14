@@ -21,7 +21,6 @@ ooenv
 oosplash
 rpmbuild
 soname
-spsupp
 xapian
 zstd
 zxing

@@ -110,11 +110,7 @@ sub save_script_file
     my $infoline = "Saving script file $newscriptfilename\n";
     push( @installer::globals::logfileinfo, $infoline);
 
-    if ( ! $installer::globals::iswindowsbuild )
-    {
-        chmod 0775, $newscriptfilename;
-    }
-
+    chmod 0775, $newscriptfilename;
     return $newscriptfilename;
 }
 
@@ -327,10 +323,6 @@ sub get_download_platformname
     {
         $platformname = "Solaris";
     }
-    elsif ( $installer::globals::iswindowsbuild )
-    {
-        $platformname = "Win";
-    }
     elsif ( $installer::globals::isfreebsdbuild )
     {
         $platformname = "FreeBSD";
@@ -431,10 +423,6 @@ sub get_download_functionality
     elsif ( $installer::globals::helppack )
     {
         $functionality = "helppack";
-    }
-    elsif ( $allvariables->{'POSTVERSIONEXTENSION'} eq "SDK" )
-    {
-        $functionality = "sdk";
     }
     elsif ( $allvariables->{'POSTVERSIONEXTENSION'} eq "TEST" )
     {
@@ -623,8 +611,7 @@ sub create_download_sets
     my $lastdir = $installationdir;
     installer::pathanalyzer::make_absolute_filename_to_relative_filename(\$lastdir);
 
-    if ( $installer::globals::iswindowsbuild && $lastdir =~ /\./ ) { $lastdir =~ s/\./_download_inprogress\./ }
-    else { $lastdir = $lastdir . "_download_inprogress"; }
+    $lastdir = $lastdir . "_download_inprogress";
 
     # removing existing directory "_native_packed_inprogress" and "_native_packed_witherror" and "_native_packed"
 
@@ -650,16 +637,12 @@ sub create_download_sets
 
     $downloadname = set_download_filename($languagestringref, $allvariableshashref);
 
-    if ( ! $installer::globals::iswindowsbuild )    # Unix specific part
-    {
 
-        # whether to use fakeroot (only required for Solaris and Linux)
-        my $usefakeroot = 0;
-        if (( $installer::globals::issolarisbuild ) || ( $installer::globals::islinuxbuild )) { $usefakeroot = 1; }
+    # whether to use fakeroot (only required for Solaris and Linux)
+    my $usefakeroot = 0;
+    if (( $installer::globals::issolarisbuild ) || ( $installer::globals::islinuxbuild )) { $usefakeroot = 1; }
 
-        my $downloadfile = create_tar_gz_file_from_directory($installationdir, $usefakeroot, $downloaddir, $downloadname);
-    }
-
+    my $downloadfile = create_tar_gz_file_from_directory($installationdir, $usefakeroot, $downloaddir, $downloadname);
     return $downloaddir;
 }
 

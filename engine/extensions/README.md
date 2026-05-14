@@ -37,12 +37,6 @@ which is implemented by `OleServer_Impl`.
 
 See `extensions/source/ole/`
 
-## ActiveX Control
-
-This allows embedding LO into a Win32 application as an ActiveX control.
-
-See `extensions/source/activex/`
-
 ## Spotlight Provider
 
 On macOS, this allows indexing ODF documents with Spotlight.

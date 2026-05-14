@@ -30,7 +30,6 @@
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 #include <com/sun/star/deployment/UpdateInformationProvider.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/office/Quickstart.hpp>
 #include <com/sun/star/system/SystemShellExecute.hpp>
 #include <com/sun/star/system/SystemShellExecuteException.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>

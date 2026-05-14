@@ -28,7 +28,6 @@ use installer::exiter;
 use installer::globals;
 use installer::pathanalyzer;
 use installer::remover;
-use installer::windows::msiglobal;
 
 ######################################################
 # Creating a new directory
@@ -256,10 +255,8 @@ sub create_directories
                 if (length($languagestring) > $installer::globals::max_lang_length )
                 {
                     my $number_of_languages = get_number_of_langs($languagestring);
-                    #replace this in the same it was done in installer/windows/directory.pm
-                    #chomp(my $shorter = `echo $languagestring | $ENV{'MD5SUM'} | sed -e "s/ .*//g"`);
-                    #my $id = substr($shorter, 0, 8); # taking only the first 8 digits
-                    my $id = installer::windows::msiglobal::calculate_id($languagestring, 8); # taking only the first 8 digits
+                    chomp(my $shorter = `echo $languagestring | $ENV{'MD5SUM'} | sed -e "s/ .*//g"`);
+                    my $id = substr($shorter, 0, 8); # taking only the first 8 digits
                     $languagestring = "lang_" . $number_of_languages . "_id_" . $id;
                 }
 

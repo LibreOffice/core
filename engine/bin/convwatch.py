@@ -103,7 +103,6 @@ class OfficeConnection:
     def bootstrap(self, soffice, userdir, socket):
         argv = [ soffice, "--accept=" + socket + ";urp",
                 "-env:UserInstallation=" + userdir,
-                "--quickstart=no",
                 "--norestore", "--nologo", "--headless" ]
         if "--valgrind" in self.args:
             argv.append("--valgrind")

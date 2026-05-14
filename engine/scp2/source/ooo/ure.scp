@@ -223,13 +223,3 @@ Module gid_Module_Root_Ure_Hidden
             gid_File_Misc_TypesRdb,
             gid_File_Misc_ServicesRdb);
 End
-
-// Windows Registry:
-
-RegistryItem gid_Regitem_Path
-    ModuleID = gid_Module_Root;
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "Software\LibreOffice\%PRODUCTNAME";
-    Name = "Path";
-    Value = "[INSTALLLOCATION]";
-End

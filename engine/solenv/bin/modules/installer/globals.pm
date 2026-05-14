@@ -47,7 +47,6 @@ BEGIN
     $installer::globals::dounzip = 1;
     $installer::globals::languages_defined_in_productlist = 0;
     $installer::globals::setupscript_defined_in_productlist = 0;
-    $installer::globals::iswindowsbuild = 0;
     $installer::globals::islinuxbuild = 0;
     $installer::globals::isrpmbuild = 0;
     $installer::globals::isdebbuild = 0;
@@ -62,8 +61,6 @@ BEGIN
     $installer::globals::unpackpath = "";
     $installer::globals::workpath = ""; # installation working dir; some helper scripts are
     # placed here by gbuild
-    $installer::globals::idttemplatepath = "";
-    $installer::globals::idtlanguagepath = "";
     $installer::globals::buildid = "Not set";
     $installer::globals::fontsfolder = "FontsFolder";
     $installer::globals::fontsfoldername = "Fonts";
@@ -81,11 +78,8 @@ BEGIN
     $installer::globals::templatefolder = "TemplateFolder";
     $installer::globals::templatefoldername = "Templates";
     $installer::globals::programmenufolder = "ProgramMenuFolder";
-    $installer::globals::lcidlistname = $ENV{'SRCDIR'} . "/l10ntools/source/ulfconv/msi-encodinglist.txt";
-    $installer::globals::msilanguage = "";  # hash reference for msi languages LCID
     $installer::globals::sofficeiconadded = 0;
     $installer::globals::temppath = "";
-    $installer::globals::cyg_temppath = "";
     $installer::globals::temppathdefined = 0;
     $installer::globals::packageversion = 1;
     $installer::globals::packagerevision = 1;
@@ -93,7 +87,6 @@ BEGIN
     $installer::globals::rpminfologged = 0;
     $installer::globals::debian = "";
     $installer::globals::installertypedir = "";
-    $installer::globals::controlledmakecabversion = "5";
     $installer::globals::max_lang_length = 50;
     $installer::globals::globalblock = "Globals";
     $installer::globals::rootmodulegid = "";
@@ -116,17 +109,6 @@ BEGIN
     $installer::globals::packagelist = "";
     $installer::globals::shiptestdirectory = "";
     $installer::globals::archiveformat = "";
-    $installer::globals::updatelastsequence = 0;
-    $installer::globals::updatesequencecounter = 0;
-    $installer::globals::updatedatabase = 0;
-    $installer::globals::updatedatabasepath = "";
-    $installer::globals::pffcabfilename = "ooobasis3.0_pff.cab";
-    %installer::globals::allmergemodulefilesequences = ();
-    %installer::globals::newupdatefiles = ();
-    %installer::globals::allusedupdatesequences = ();
-    %installer::globals::mergemodulefiles = ();
-    $installer::globals::mergefiles_added_into_collector = 0;
-    $installer::globals::creating_windows_installer_patch = 0;
 
     $installer::globals::strip = 0;
 
@@ -188,7 +170,6 @@ BEGIN
     $installer::globals::helppack = 0;
     $installer::globals::refresh_includepaths = 0;
     $installer::globals::include_paths_read = 0;
-    @installer::globals::patchfilecollector = ();
     @installer::globals::userregistrycollector = ();
     $installer::globals::addeduserregitrykeys = 0;
     $installer::globals::desktoplinkexists = 0;
@@ -218,19 +199,6 @@ BEGIN
     %installer::globals::treeconditions = ();
     %installer::globals::usedtreeconditions = ();
     %installer::globals::moduledestination = ();
-
-    $installer::globals::fix_number_of_cab_files = 1;
-    $installer::globals::cabfilecompressionlevel = 21; # Using LZX compression, possible values are: 15 | 16 | ... | 21 (best compression)
-    $installer::globals::number_of_cabfiles = 1;    # only for $fix_number_of_cab_files = 1
-    $installer::globals::include_cab_in_msi = 1;
-    $installer::globals::msidatabasename = "";
-    $installer::globals::prepare_winpatch = 0;
-    $installer::globals::previous_idt_dir = "";
-    $installer::globals::msitranpath = "";
-    $installer::globals::insert_file_at_end = 0;
-    $installer::globals::newfilesexist = 0;
-    $installer::globals::usesharepointpath = 0;
-    %installer::globals::newfilescollector = ();
 
     $installer::globals::saveinstalldir = "";
     $installer::globals::csp_installdir = "";       # global installdir of createsimplepackage() in simplepackage.pm

@@ -133,7 +133,6 @@ class Desktop final : public Application
     private:
         static bool             InitializeConfiguration();
         static void             FlushConfiguration();
-        static bool             InitializeQuickstartMode( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
         static void             HandleBootstrapPathErrors( ::utl::Bootstrap::Status, std::u16string_view aMsg );
 

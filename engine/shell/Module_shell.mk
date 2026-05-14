@@ -9,12 +9,6 @@
 
 $(eval $(call gb_Module_Module,shell))
 
-ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
-$(eval $(call gb_Module_add_targets_for_build,shell,\
-    $(if $(filter WNT,$(OS)),Executable_lngconvex) \
-))
-endif
-
 ifeq ($(gb_Side),host)
 
 $(eval $(call gb_Module_add_targets,shell,\
@@ -47,12 +41,10 @@ endif
 ifeq ($(OS),WNT)
 
 $(eval $(call gb_Module_add_targets,shell,\
-	Executable_regsvrex \
 	Executable_senddoc \
 	Library_smplmail \
 	Library_wininetbe \
 	Library_jumplist \
-	Executable_spsupp_helper \
 ))
 
 ifeq ($(COM),MSC)
@@ -63,26 +55,10 @@ $(eval $(call gb_Module_add_targets,shell,\
 	StaticLibrary_shlxthandler_common \
 	StaticLibrary_xmlparser \
 	WinResTarget_shlxthdl \
-	CustomTarget_spsupp_idl \
-	WinResTarget_spsupp \
-	WinResTarget_spsupp_dlg \
 ))
 
 $(eval $(call gb_Module_add_check_targets,shell,\
     CppunitTest_shell_zip \
-))
-endif
-
-
-ifneq ($(CXX_X64_BINARY),)
-$(eval $(call gb_Module_add_targets,shell,\
-	Library_spsupp_x64 \
-))
-endif
-
-ifneq ($(CXX_X86_BINARY),)
-$(eval $(call gb_Module_add_targets,shell,\
-	Library_spsupp_x86 \
 ))
 endif
 

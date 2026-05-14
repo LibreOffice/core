@@ -438,66 +438,6 @@
       </packing>
     </child>
     <child>
-      <object class="GtkFrame" id="quickstarter">
-        <property name="can-focus">False</property>
-        <property name="label-xalign">0</property>
-        <property name="shadow-type">none</property>
-        <child>
-          <!-- n-columns=2 n-rows=1 -->
-          <object class="GtkGrid" id="grid7">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="margin-start">12</property>
-            <property name="margin-top">6</property>
-            <property name="row-spacing">6</property>
-            <property name="column-spacing">6</property>
-            <child>
-              <object class="GtkCheckButton" id="quicklaunch">
-                <property name="label" translatable="yes" context="optgeneralpage|quicklaunch">Load %PRODUCTNAME during system start-up</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="receives-default">False</property>
-                <property name="no-show-all">True</property>
-                <property name="use-underline">True</property>
-                <property name="draw-indicator">True</property>
-              </object>
-              <packing>
-                <property name="left-attach">1</property>
-                <property name="top-attach">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkImage" id="lockquicklaunch">
-                <property name="can-focus">False</property>
-                <property name="no-show-all">True</property>
-                <property name="halign">center</property>
-                <property name="valign">center</property>
-                <property name="icon-name">res/lock.png</property>
-              </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">0</property>
-              </packing>
-            </child>
-          </object>
-        </child>
-        <child type="label">
-          <object class="GtkLabel" id="label8">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="label" translatable="yes" context="optgeneralpage|label8">%PRODUCTNAME Quickstarter</property>
-            <attributes>
-              <attribute name="weight" value="bold"/>
-            </attributes>
-          </object>
-        </child>
-      </object>
-      <packing>
-        <property name="left-attach">0</property>
-        <property name="top-attach">6</property>
-      </packing>
-    </child>
-    <child>
       <object class="GtkFrame" id="fileassoc">
         <property name="can-focus">False</property>
         <property name="label-xalign">0</property>

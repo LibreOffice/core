@@ -21,15 +21,6 @@ $(eval $(call gb_InstallScript_use_modules,setup_osl,\
 	scp2/ure \
 	scp2/writer \
 	scp2/xsltfilter \
-	$(if $(filter WNT,$(OS)),\
-		scp2/activex \
-		scp2/quickstart \
-		scp2/spsupp \
-		scp2/windows \
-		$(if $(filter MSC,$(COM)),\
-			scp2/winexplorerext \
-		) \
-	) \
 	$(if $(WITH_EXTENSION_INTEGRATION),\
 		scp2/extensions \
 	) \

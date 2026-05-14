@@ -76,7 +76,6 @@
 #include <com/sun/star/task/OfficeRestartManager.hpp>
 #include <com/sun/star/task/XRestartManager.hpp>
 #include <com/sun/star/document/XDocumentEventListener.hpp>
-#include <com/sun/star/office/Quickstart.hpp>
 #include <com/sun/star/system/XSystemShellExecute.hpp>
 #include <com/sun/star/system/SystemShellExecute.hpp>
 #include <com/sun/star/loader/XImplementationLoader.hpp>
@@ -298,20 +297,6 @@ bool cleanExtensionCache() {
 
 #endif
 
-bool shouldLaunchQuickstart()
-{
-    bool bQuickstart = Desktop::GetCommandLineArgs().IsQuickstart();
-    if (!bQuickstart)
-    {
-        auto aQLSet = SfxItemSet::makeFixedSfxItemSet<SID_ATTR_QUICKLAUNCHER, SID_ATTR_QUICKLAUNCHER>(SfxGetpApp()->GetPool());
-        SfxApplication::GetOptions(aQLSet);
-        const SfxBoolItem* pLauncherItem = aQLSet.GetItemIfSet(SID_ATTR_QUICKLAUNCHER, false);
-        if (pLauncherItem)
-            bQuickstart = pLauncherItem->GetValue();
-    }
-    return bQuickstart;
-}
-
 void SetRestartState() {
     try {
         std::shared_ptr< comphelper::ConfigurationChanges > batch(
@@ -323,25 +308,6 @@ void SetRestartState() {
     }
 }
 
-void DoRestartActionsIfNecessary(bool quickstart) {
-    if (!quickstart)
-        return;
-
-    try {
-        if (officecfg::Setup::Office::OfficeRestartInProgress::get()) {
-            std::shared_ptr< comphelper::ConfigurationChanges > batch(
-                comphelper::ConfigurationChanges::create());
-            officecfg::Setup::Office::OfficeRestartInProgress::set(
-                false, batch);
-            batch->commit();
-            css::office::Quickstart::createStart(
-                comphelper::getProcessComponentContext(),
-                shouldLaunchQuickstart());
-        }
-    } catch (css::uno::Exception &) {
-        TOOLS_WARN_EXCEPTION("desktop.app", "ignoring");
-    }
-}
 
 void RemoveIconCacheDirectory()
 {
@@ -1596,7 +1562,7 @@ int Desktop::Main()
     pExecGlobals->bRestartRequested = xRestartManager->isRestartRequested(true);
     if ( !pExecGlobals->bRestartRequested )
     {
-        if ((!rCmdLineArgs.WantsToLoadDocument() && !rCmdLineArgs.IsInvisible() && !rCmdLineArgs.IsHeadless() && !rCmdLineArgs.IsQuickstart()) &&
+        if ((!rCmdLineArgs.WantsToLoadDocument() && !rCmdLineArgs.IsInvisible() && !rCmdLineArgs.IsHeadless()) &&
             (SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::EModule::STARTMODULE)) &&
             (!bExistsRecoveryData                                                  ) &&
             (!bExistsSessionData                                                   ) &&
@@ -1630,10 +1596,6 @@ int Desktop::Main()
 
         SetSplashScreenProgress(80);
         recordTime(startT, "SetSplashScreenProgress(80): time = ");
-
-        if ( !rCmdLineArgs.IsInvisible() &&
-             !rCmdLineArgs.IsNoQuickstart() )
-            InitializeQuickstartMode( xContext );
 
         if ( xDesktop.is() )
             xDesktop->addTerminateListener( new RequestHandlerController );
@@ -1675,9 +1637,6 @@ int Desktop::Main()
 
         if ( !pExecGlobals->bRestartRequested )
         {
-            // if this run of the office is triggered by restart, some additional actions should be done
-            DoRestartActionsIfNecessary( !rCmdLineArgs.IsInvisible() && !rCmdLineArgs.IsNoQuickstart() );
-
             Execute();
         }
     }
@@ -1871,41 +1830,6 @@ void Desktop::FlushConfiguration()
         css::uno::UNO_QUERY_THROW)->flush();
 }
 
-bool Desktop::InitializeQuickstartMode( const Reference< XComponentContext >& rxContext )
-{
-    try
-    {
-        // the shutdown icon sits in the systray and allows the user to keep
-        // the office instance running for quicker restart
-        // this will only be activated if --quickstart was specified on cmdline
-
-        bool bQuickstart = shouldLaunchQuickstart();
-
-        // Try to instantiate quickstart service. This service is not mandatory, so
-        // do nothing if service is not available
-
-        // #i105753# the following if was invented for performance
-        // unfortunately this broke the Mac behavior which is to always run
-        // in quickstart mode since Mac applications do not usually quit
-        // when the last document closes.
-        // Note that this claim that on macOS we "always run in quickstart mode"
-        // has nothing to do with (quick) *starting* (i.e. starting automatically
-        // when the user logs in), though, but with not quitting when no documents
-        // are open.
-        #ifndef MACOSX
-        if ( bQuickstart )
-        #endif
-        {
-            css::office::Quickstart::createStart(rxContext, bQuickstart);
-        }
-        return true;
-    }
-    catch( const css::uno::Exception& )
-    {
-        return false;
-    }
-}
-
 void Desktop::OverrideSystemSettings( AllSettings& rSettings )
 {
     if ( !SvtTabAppearanceCfg::IsInitialized () )
@@ -2010,7 +1934,6 @@ void Desktop::OpenClients()
 
     const CommandLineArgs& rArgs = GetCommandLineArgs();
 
-    if (!rArgs.IsQuickstart())
     {
         OUString aHelpModule;
         if (rArgs.IsHelpWriter()) {
@@ -2208,7 +2131,7 @@ void Desktop::OpenClients()
         // created when all of the document windows are closed. This
         // causes the old "File only" menubar to be displayed
         // instead of the Start Center's menubar.
-        if (!rArgs.IsQuickstart() && !rArgs.IsInvisible())
+        if (!rArgs.IsInvisible())
         {
             SvtModuleOptions aOpt;
             if (aOpt.IsModuleInstalled(SvtModuleOptions::EModule::STARTMODULE))
@@ -2234,7 +2157,7 @@ void Desktop::OpenClients()
     if ( xList->hasElements() )
         return;
 
-    if ( rArgs.IsQuickstart() || rArgs.IsInvisible() || Application::AnyInput( VclInputFlags::APPEVENT ) )
+    if ( rArgs.IsInvisible() || Application::AnyInput( VclInputFlags::APPEVENT ) )
     {
 #ifdef MACOSX
         // Related: tdf#41775 show Start Center before loading documents
@@ -2243,7 +2166,7 @@ void Desktop::OpenClients()
         // the Start Center doesn't get created when all of the document
         // windows are closed. This causes the old "File only" menubar
         // to be displayed instead of the Start Center's menubar.
-        if (!rArgs.IsQuickstart() && !rArgs.IsInvisible())
+        if (!rArgs.IsInvisible())
         {
             SvtModuleOptions aOpt;
             if (aOpt.IsModuleInstalled(SvtModuleOptions::EModule::STARTMODULE))
@@ -2251,7 +2174,6 @@ void Desktop::OpenClients()
         }
 #endif
 
-        // soffice was started as tray icon ...
         return;
     }
 
@@ -2467,18 +2389,6 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
                 pD->doShutdown();
         }
         break;
-    case ApplicationEvent::Type::QuickStart:
-        if ( !GetCommandLineArgs().IsInvisible()  )
-        {
-            // If the office has been started the second time its command line arguments are sent through a pipe
-            // connection to the first office. We want to reuse the quickstart option for the first office.
-            // NOTICE: The quickstart service must be initialized inside the "main thread", so we use the
-            // application events to do this (they are executed inside main thread)!!!
-            // Don't start quickstart service if the user specified "--invisible" on the command line!
-            const Reference< css::uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
-            css::office::Quickstart::createStart(xContext, true/*Quickstart*/);
-        }
-        break;
     case ApplicationEvent::Type::ShowDialog:
         // This is only used on macOS, and only for About or Preferences.
         // Ignore all errors here. It's clicking a menu entry only ...
@@ -2523,10 +2433,9 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
 void Desktop::OpenSplashScreen()
 {
     const CommandLineArgs &rCmdLine = GetCommandLineArgs();
-    // Show intro only if this is normal start (e.g. no server, no quickstart, no printing )
+    // Show intro only if this is normal start (e.g. no server, no printing)
     if ( !(!rCmdLine.IsInvisible() &&
          !rCmdLine.IsHeadless() &&
-         !rCmdLine.IsQuickstart() &&
          !rCmdLine.IsMinimized() &&
          !rCmdLine.IsNoLogo() &&
          !rCmdLine.IsTerminateAfterInit() &&
@@ -2682,16 +2591,6 @@ void Desktop::CheckFirstRun( )
     // use VCL timer, which won't trigger during shutdown if the
     // application exits before timeout
     m_firstRunTimer.Start();
-
-#ifdef _WIN32
-    // Check if Quickstarter should be started (on Windows only)
-    OUString sRootKey = ReplaceStringHookProc("Software\\%OOOVENDOR\\%PRODUCTNAME\\%PRODUCTVERSION");
-    if (ERROR_SUCCESS == RegGetValueW(HKEY_LOCAL_MACHINE, o3tl::toW(sRootKey.getStr()), L"RunQuickstartAtFirstStart", RRF_RT_ANY, nullptr, nullptr, nullptr))
-    {
-        css::uno::Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
-        css::office::Quickstart::createAutoStart(xContext, true/*Quickstart*/, true/*bAutostart*/);
-    }
-#endif
 }
 
 }

@@ -77,15 +77,6 @@ endif
 
 ifeq ($(OS),WNT)
 
-ifeq ($(COM),MSC)
-$(eval $(call gb_Module_add_targets,extensions,\
-	WinResTarget_activex \
-	Library_so_activex \
-	CustomTarget_so_activex_idl \
-))
-
-endif # COM=MSC
-
 $(eval $(call gb_Module_add_targets,extensions,\
 	Library_oleautobridge \
 ))

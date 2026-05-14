@@ -128,7 +128,6 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/appl/preventduplicateinteraction \
     sfx2/source/appl/sfxhelp \
     sfx2/source/appl/sfxpicklist \
-    sfx2/source/appl/shutdownicon \
     sfx2/source/appl/workwin \
     sfx2/source/appl/xpackcreator \
     sfx2/source/bastyp/bitset \
@@ -324,18 +323,13 @@ $(eval $(call gb_SdiTarget_set_include,sfx2/sdi/sfxslots,\
     -I$(SRCDIR)/sfx2/sdi \
 ))
 
-ifeq ($(OS),$(filter WNT MACOSX,$(OS)))
-$(eval $(call gb_Library_add_defs,sfx,\
-    -DENABLE_QUICKSTART_APPLET \
-))
-endif
-
+# sfxhelp.cxx pulls in Foundation/NSString.h and CoreFoundation/CFURL.h
+# under #ifdef MACOSX. Compile the whole sfx library as Objective-C++ on
+# macOS so the C++ compiler can parse the @class/@protocol forms in those
+# headers, and link the matching frameworks.
 ifeq ($(OS),MACOSX)
 $(eval $(call gb_Library_add_cxxflags,sfx,\
     $(gb_OBJCXXFLAGS) \
-))
-$(eval $(call gb_Library_add_objcxxobjects,sfx,\
-    sfx2/source/appl/shutdowniconaqua \
 ))
 $(eval $(call gb_Library_add_libs,sfx,\
     -lobjc \
@@ -348,7 +342,6 @@ endif
 ifeq ($(OS),WNT)
 
 $(eval $(call gb_Library_add_exception_objects,sfx,\
-    sfx2/source/appl/shutdowniconw32 \
     sfx2/source/doc/syspathw32 \
 ))
 

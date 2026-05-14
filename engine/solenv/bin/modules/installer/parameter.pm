@@ -46,8 +46,6 @@ The following parameter are needed:
 -l: Language of the product (comma and hash) (optional, defined in productlist)
 -simple: Path to do a simple install to
 -u: Path, in which zipfiles are unpacked (optional)
--msitemplate: Source of the msi file templates (Windows compiler only)
--msilanguage: Source of the msi file templates (Windows compiler only)
 -buildid: Current BuildID (optional)
 -pro: Product version
 -format: Package format
@@ -62,14 +60,7 @@ The following parameter are needed:
 -packer: Path and parameters for tarball packaging tool (default: gzip (Unix only))
 -log : Logging all available information (optional)
 
-Examples for Windows:
-
-perl make_epmlist.pl -f zip.lst -p OfficeFAT -l en-US
-                     -u /export/unpack -buildid 8712
-                     -msitemplate /export/msi_files
-                     -msilanguage /export/msi_languages
-
-Examples for Non-Windows:
+Example:
 
 perl make_epmlist.pl -f zip.lst -p OfficeFAT -l en-US -format rpm
                      -u /export/unpack -buildid 8712 -ispatchedepm
@@ -123,8 +114,6 @@ sub getparameter
         elsif ($param eq "-u") { $installer::globals::unpackpath = shift(@ARGV); }
         elsif ($param eq "-i") { $installer::globals::rootpath = shift(@ARGV); }
         elsif ($param eq "-dontcallepm") { $installer::globals::call_epm = 0; }
-        elsif ($param eq "-msitemplate") { $installer::globals::idttemplatepath = shift(@ARGV); }
-        elsif ($param eq "-msilanguage") { $installer::globals::idtlanguagepath = shift(@ARGV); }
         elsif ($param eq "-buildid") { $installer::globals::buildid = shift(@ARGV); }
         elsif ($param eq "-copyproject") { $installer::globals::is_copy_only_project = 1; }
         elsif ($param eq "-languagepack") { $installer::globals::languagepack = 1; }
@@ -242,11 +231,6 @@ sub setglobalvariables
     # If PKGFORMAT contains more than one format (for example "rpm deb") this is split in the
     # makefile calling the perl program.
     $installer::globals::installertypedir = $installer::globals::packageformat;
-
-    if ( $installer::globals::os eq 'WNT' )
-    {
-        $installer::globals::iswindowsbuild = 1;
-    }
 
     if ( $installer::globals::os eq 'SOLARIS')
     {
@@ -372,22 +356,12 @@ sub setglobalvariables
 
         $installer::globals::temppath = $installer::globals::temppath . $installer::globals::separator . $installer::globals::platformid;
         installer::systemactions::create_directory($installer::globals::temppath);
-        if ( $^O =~ /cygwin/i )
-        {
-            $installer::globals::cyg_temppath = $installer::globals::temppath;
-            $installer::globals::cyg_temppath =~ s/\\/\\\\/g;
-            chomp( $installer::globals::cyg_temppath = qx{cygpath -w "$installer::globals::cyg_temppath"} );
-        }
         $installer::globals::temppathdefined = 1;
     }
     else
     {
         $installer::globals::temppathdefined = 0;
     }
-
-    # only one cab file, if Windows msp patches shall be prepared
-    if ( $installer::globals::prepare_winpatch ) { $installer::globals::number_of_cabfiles = 1; }
-
 }
 
 ############################################
@@ -397,64 +371,6 @@ sub setglobalvariables
 
 sub control_required_parameter
 {
-    if (!($installer::globals::is_copy_only_project))
-    {
-        ##############################################################################################
-        # idt template path. Only required for Windows build
-        # for the creation of the msi database.
-        ##############################################################################################
-
-        if (($installer::globals::idttemplatepath eq "") && ($installer::globals::iswindowsbuild))
-        {
-            installer::logger::print_error( "idt template path not set (-msitemplate)!" );
-            usage();
-            exit(-1);
-        }
-
-        ##############################################################################################
-        # idt language path. Only required for Windows build
-        # for the creation of the msi database.
-        ##############################################################################################
-
-        if (($installer::globals::idtlanguagepath eq "") && ($installer::globals::iswindowsbuild))
-        {
-            installer::logger::print_error( "idt language path not set (-msilanguage)!" );
-            usage();
-            exit(-1);
-        }
-
-        # Analyzing the idt template path
-
-        if (!($installer::globals::idttemplatepath eq ""))  # idttemplatepath set, relative or absolute?
-        {
-            make_path_absolute(\$installer::globals::idttemplatepath);
-        }
-
-        installer::remover::remove_ending_pathseparator(\$installer::globals::idttemplatepath);
-
-        # Analyzing the idt language path
-
-        if (!($installer::globals::idtlanguagepath eq ""))  # idtlanguagepath set, relative or absolute?
-        {
-            make_path_absolute(\$installer::globals::idtlanguagepath);
-        }
-
-        installer::remover::remove_ending_pathseparator(\$installer::globals::idtlanguagepath);
-
-        # In the msi template directory a files "codes.txt" has to exist, in which the ProductCode
-        # and the UpgradeCode for the product are defined.
-        # The name "codes.txt" can be overwritten in Product definition with CODEFILENAME (msiglobal.pm)
-
-        if (( $installer::globals::iswindowsbuild ) && ( $installer::globals::packageformat ne "archive" ) && ( $installer::globals::packageformat ne "installed" ))
-        {
-            $installer::globals::codefilename = $installer::globals::idttemplatepath  . $installer::globals::separator . $installer::globals::codefilename;
-            installer::files::check_file($installer::globals::codefilename);
-            $installer::globals::componentfilename = $installer::globals::idttemplatepath  . $installer::globals::separator . $installer::globals::componentfilename;
-            installer::files::check_file($installer::globals::componentfilename);
-        }
-
-    }
-
     #######################################
     # Testing existence of files
     # also for copy-only projects
@@ -509,12 +425,8 @@ sub outputparameter
     if ( $installer::globals::rootpath eq "" ) { push(@output, "Using default installpath\n"); }
     else { push(@output, "Installpath: $installer::globals::rootpath\n"); }
     push(@output, "Package format: $installer::globals::packageformat\n");
-    if (!($installer::globals::idttemplatepath eq ""))  { push(@output, "msi templatepath: $installer::globals::idttemplatepath\n"); }
-    if ((!($installer::globals::idttemplatepath eq "")) && (!($installer::globals::iswindowsbuild))) { push(@output, "msi template path will be ignored for non Windows builds!\n"); }
-    if (!($installer::globals::idtlanguagepath eq ""))  { push(@output, "msi languagepath: $installer::globals::idtlanguagepath\n"); }
-    if ((!($installer::globals::idtlanguagepath eq "")) && (!($installer::globals::iswindowsbuild))) { push(@output, "msi language path will be ignored for non Windows builds!\n"); }
-    if ((!($installer::globals::iswindowsbuild)) && ( $installer::globals::call_epm )) { push(@output, "Calling epm\n"); }
-    if ((!($installer::globals::iswindowsbuild)) && (!($installer::globals::call_epm))) { push(@output, "Not calling epm\n"); }
+    if ( $installer::globals::call_epm ) { push(@output, "Calling epm\n"); }
+    else { push(@output, "Not calling epm\n"); }
     if ( $installer::globals::strip ) { push(@output, "Stripping files\n"); }
     else { push(@output, "No file stripping\n"); }
     if ( $installer::globals::debian ) { push(@output, "Linux: Creating Debian packages\n"); }

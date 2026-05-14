@@ -50,8 +50,6 @@ $(eval $(call gb_Library_use_api,sofficeapp,\
 
 $(eval $(call gb_Library_add_defs,sofficeapp,\
     -DDESKTOP_DLLIMPLEMENTATION \
-    $(if $(filter WNT,$(OS)),-DENABLE_QUICKSTART_APPLET) \
-    $(if $(filter MACOSX,$(OS)),-DENABLE_QUICKSTART_APPLET) \
 ))
 
 $(eval $(call gb_Library_set_precompiled_header,sofficeapp,desktop/inc/pch/precompiled_sofficeapp))

@@ -70,7 +70,6 @@
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #include <com/sun/star/container/XSet.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
-#include <com/sun/star/office/Quickstart.hpp>
 #include <com/sun/star/linguistic2/XLinguProperties.hpp>
 
 #include <vcl/vclenum.hxx>
@@ -179,9 +178,6 @@ OfaMiscTabPage::OfaMiscTabPage(weld::Container* pPage, weld::DialogController* p
     , m_xCrashReportImg(m_xBuilder->weld_widget("lockcrashreport"))
 #endif
 #if defined(_WIN32)
-    , m_xQuickStarterFrame(m_xBuilder->weld_widget("quickstarter"))
-    , m_xQuickLaunchCB(m_xBuilder->weld_check_button("quicklaunch"))
-    , m_xQuickLaunchImg(m_xBuilder->weld_widget("lockquicklaunch"))
     , m_xFileAssocFrame(m_xBuilder->weld_widget("fileassoc"))
     , m_xFileAssocBtn(m_xBuilder->weld_button("assocfiles"))
     , m_xPerformFileExtCheck(m_xBuilder->weld_check_button("cbPerformFileExtCheck"))
@@ -193,11 +189,6 @@ OfaMiscTabPage::OfaMiscTabPage(weld::Container* pPage, weld::DialogController* p
 #endif
 
 #if defined(_WIN32)
-    // Store-packaged apps (located under the protected Program Files\WindowsApps) can't use normal
-    // shell shortcuts to their exe. TODO: show a button to open "Startup Apps" system applet?
-    if (!sal::systools::IsStorePackagedApp())
-        m_xQuickStarterFrame->show();
-
     m_xFileAssocFrame->show();
     m_xFileAssocBtn->connect_clicked(LINK(this, OfaMiscTabPage, FileAssocClick));
 #endif
@@ -231,7 +222,7 @@ OUString OfaMiscTabPage::GetAllStrings()
 
     OUString checkButton[]
         = { u"exthelp"_ustr,   u"popupnohelp"_ustr, u"cbShowTipOfTheDay"_ustr, u"filedlg"_ustr,
-            u"docstatus"_ustr, u"crashreport"_ustr, u"quicklaunch"_ustr,       u"cbPerformFileExtCheck"_ustr };
+            u"docstatus"_ustr, u"crashreport"_ustr, u"cbPerformFileExtCheck"_ustr };
 
     for (const auto& check : checkButton)
     {
@@ -304,11 +295,6 @@ bool OfaMiscTabPage::FillItemSet( SfxItemSet* rSet )
         bModified = true;
     }
 
-    if( m_xQuickLaunchCB->get_state_changed_from_saved())
-    {
-        rSet->Put(SfxBoolItem(SID_ATTR_QUICKLAUNCHER, m_xQuickLaunchCB->get_active()));
-        bModified = true;
-    }
 #endif
 
     batch->commit();
@@ -378,18 +364,6 @@ void OfaMiscTabPage::Reset( const SfxItemSet* rSet )
 #endif
 
 #if defined(_WIN32)
-    if (const SfxBoolItem* pItem = rSet->GetItemIfSet( SID_ATTR_QUICKLAUNCHER, false ))
-    {
-        m_xQuickLaunchCB->set_active( pItem->GetValue() );
-    }
-    else
-    {
-        // quickstart not installed
-        m_xQuickStarterFrame->hide();
-    }
-
-    m_xQuickLaunchCB->save_state();
-
     m_xPerformFileExtCheck->set_active(
         officecfg::Office::Common::Misc::PerformFileExtCheck::get());
     m_xPerformFileExtCheck->save_state();
@@ -1155,12 +1129,6 @@ bool OfaLanguagesTabPage::FillItemSet( SfxItemSet* rSet )
                     comphelper::getProcessComponentContext(), GetFrameWeld(),
                     svtools::RESTART_REASON_LANGUAGE_CHANGE))
                 GetDialogController()->response(RET_OK);
-
-            // tell quickstarter to stop being a veto listener
-
-            const Reference< XComponentContext >& xContext(
-                comphelper::getProcessComponentContext());
-            css::office::Quickstart::createAndSetVeto(xContext, false, false, false/*DisableVeto*/);
         }
     }
     catch (const Exception&)

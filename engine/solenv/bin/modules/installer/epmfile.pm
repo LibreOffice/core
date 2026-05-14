@@ -332,14 +332,7 @@ sub create_epm_header
 
     # License file can be included automatically from the file list
 
-    if ( $installer::globals::iswindowsbuild )
-    {
-        $licensefilename = "license.txt";
-    }
-    else
-    {
-        $licensefilename = "LICENSE";
-    }
+    $licensefilename = "LICENSE";
 
     my $license_in_package_defined = 0;
 

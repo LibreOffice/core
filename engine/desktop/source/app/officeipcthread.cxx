@@ -907,14 +907,6 @@ bool IpcThread::process(OString const & arguments, bool * waitProcessed) {
     {
         const CommandLineArgs &rCurrentCmdLineArgs = Desktop::GetCommandLineArgs();
 
-        if ( aCmdLineArgs->IsQuickstart() )
-        {
-            // we have to use application event, because we have to start quickstart service in main thread!!
-            ApplicationEvent* pAppEvent =
-                new ApplicationEvent(ApplicationEvent::Type::QuickStart);
-            ImplPostForeignAppEvent( pAppEvent );
-        }
-
         // handle request for acceptor
         std::vector< OUString > const & accept = aCmdLineArgs->GetAccept();
         for (auto const& elem : accept)
@@ -1006,7 +998,7 @@ bool IpcThread::process(OString const & arguments, bool * waitProcessed) {
             }
         }
 
-        if ( !aCmdLineArgs->IsQuickstart() ) {
+        {
             bool bShowHelp = false;
             OUStringBuffer aHelpURLBuffer;
             if (aCmdLineArgs->IsHelpWriter()) {

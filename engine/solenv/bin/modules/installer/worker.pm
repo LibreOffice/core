@@ -37,23 +37,6 @@ use installer::pathanalyzer;
 use installer::scpzipfiles;
 use installer::scriptitems;
 use installer::systemactions;
-use installer::windows::language;
-
-#########################################
-# Saving the patchlist file
-#########################################
-
-sub _save_patchlist_file
-{
-    my ($installlogdir, $patchlistfilename) = @_;
-
-    my $installpatchlistdir = installer::systemactions::create_directory_next_to_directory($installlogdir, "patchlist");
-    $patchlistfilename =~ s/log\_/patchfiles\_/;
-    $patchlistfilename =~ s/\.log/\.txt/;
-    installer::files::save_file($installpatchlistdir . $installer::globals::separator . $patchlistfilename, \@installer::globals::patchfilecollector);
-    installer::logger::print_message( "... creating patchlist file $patchlistfilename \n" );
-
-}
 
 ###############################################################
 # Removing all directories of a special language
@@ -155,11 +138,6 @@ sub analyze_and_save_logfile
     installer::logger::print_message( "... creating log file $numberedlogfilename \n" );
     installer::files::save_file($loggingdir . $numberedlogfilename, \@installer::globals::logfileinfo);
     installer::files::save_file($installlogdir . $installer::globals::separator . $numberedlogfilename, \@installer::globals::logfileinfo);
-
-    # Saving the list of patchfiles in a patchlist directory in the install directory
-    if ( $installer::globals::creating_windows_installer_patch ) { _save_patchlist_file($installlogdir, $numberedlogfilename); }
-
-    if ( $installer::globals::creating_windows_installer_patch ) { $installer::globals::creating_windows_installer_patch = 0; }
 
     # Exiting the packaging process, if an error occurred.
     # This is important, to get an error code "-1", if an error was found in the log file,
@@ -325,9 +303,8 @@ sub install_simple ($$$$$$)
         my $destination = $onefile->{'destination'};
         my $sourcepath = $onefile->{'sourcepath'};
 
-        # This is necessary to install SDK that includes files with $ in its name
-        # Otherwise, the following shell commands does not work and the file list
-        # is not correct
+        # Collapse the gbuild-internal $$ escape back to a single $ so the
+        # following shell commands and file lists see the real filename.
         $destination =~ s/\$\$/\$/;
         $sourcepath =~ s/\$\$/\$/;
 

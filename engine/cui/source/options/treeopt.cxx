@@ -1393,12 +1393,7 @@ std::optional<SfxItemSet> OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId )
                     SID_HTML_MODE, SID_HTML_MODE,
                     SID_ATTR_METRIC, SID_ATTR_METRIC,
                     SID_AUTOSPELL_CHECK, SID_AUTOSPELL_CHECK,
-                    SID_ATTR_QUICKLAUNCHER, SID_ATTR_QUICKLAUNCHER,
                     SID_ATTR_YEAR2000, SID_ATTR_YEAR2000> );
-
-            auto aOptSet = SfxItemSet::makeFixedSfxItemSet<SID_ATTR_QUICKLAUNCHER, SID_ATTR_QUICKLAUNCHER>( SfxGetpApp()->GetPool() );
-            SfxApplication::GetOptions(aOptSet);
-            pRet->Put(aOptSet);
 
             SfxViewFrame* pViewFrame = SfxViewFrame::Current();
             if ( pViewFrame )
@@ -1536,11 +1531,6 @@ void OfaTreeOptionsDialog::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet 
         {
             std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
 
-            auto aOptSet = SfxItemSet::makeFixedSfxItemSet<SID_ATTR_QUICKLAUNCHER, SID_ATTR_QUICKLAUNCHER>( SfxGetpApp()->GetPool() );
-            aOptSet.Put(rSet);
-            if(aOptSet.Count())
-                SfxApplication::SetOptions( aOptSet );
-            // get dispatcher anew, because SetOptions() might have destroyed the dispatcher
             SfxViewFrame *pViewFrame = SfxViewFrame::Current();
 
 //          evaluate Year2000

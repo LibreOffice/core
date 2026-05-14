@@ -116,7 +116,7 @@ void LaunchRegistrationUI()
                 CLSID_ApplicationAssociationRegistrationUI, nullptr, CLSCTX_INPROC_SERVER);
 
             // LaunchAdvancedAssociationUI only works for applications registered under
-            // Software\RegisteredApplications. See scp2/source/ooo/registryitem_ooo.scp
+            // Software\RegisteredApplications (handled by the MSIX FileTypeAssociation manifest entries).
             const OUString expanded = Translate::ExpandVariables("%PRODUCTNAME %PRODUCTVERSION");
             pIf->LaunchAdvancedAssociationUI(o3tl::toW(expanded.getStr()));
         }

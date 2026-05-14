@@ -21,7 +21,6 @@
 
 #include <thumbviewer.hxx>
 #include <shlxthdl.hxx>
-#include <registry.hxx>
 #include <fileextensions.hxx>
 #include <config.hxx>
 #include <zipfile.hxx>

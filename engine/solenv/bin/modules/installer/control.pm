@@ -70,9 +70,8 @@ sub check_needed_files_in_path
 
 sub check_system_path
 {
-    # The following files have to be found in the environment variable PATH
-    # All platforms: zip
-    # Windows only: "msiinfo.exe", "msidb.exe", "uuidgen.exe", "makecab.exe", "msitran.exe", "expand.exe" for msi database and packaging
+    # The following files have to be found in the environment variable PATH:
+    # zip
 
     my $onefile;
     my $error = 0;
@@ -96,11 +95,7 @@ sub check_system_path
 
     my @needed_files_in_path = ();
 
-    if (($installer::globals::iswin) && ($installer::globals::iswindowsbuild))
-    {
-        @needed_files_in_path = ("msiinfo.exe", "msidb.exe", "uuidgen.exe", "makecab.exe", "msitran.exe", "expand.exe");
-    }
-    elsif ($installer::globals::iswin)
+    if ($installer::globals::iswin)
     {
         @needed_files_in_path = ("zip.exe");
     }
@@ -123,8 +118,6 @@ sub check_system_path
         else
         {
             installer::logger::print_message( "\tFound: $$fileref\n" );
-            # Saving the absolute path for msitran.exe. This is required for the determination of the checksum.
-            if ( $onefile eq "msitran.exe" ) { $installer::globals::msitranpath = $$fileref; }
         }
     }
 
@@ -135,114 +128,19 @@ sub check_system_path
 
     # checking for epm, which has to be in the path or in the solver
 
-    if (( $installer::globals::call_epm ) && (!($installer::globals::iswindowsbuild)))
+    $onefile = "epm";
+    my $fileref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$onefile, $patharrayref , 0);
+    if (!( $$fileref eq "" ))
     {
-        my $onefile = "epm";
-        my $fileref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$onefile, $patharrayref , 0);
-        if (!( $$fileref eq "" ))
+        $installer::globals::epm_in_path = 1;
+
+        if ( $$fileref =~ /^\s*\.\/epm\s*$/ )
         {
-            $installer::globals::epm_in_path = 1;
-
-            if ( $$fileref =~ /^\s*\.\/epm\s*$/ )
-            {
-                my $currentdir = cwd();
-                $$fileref =~ s/\./$currentdir/;
-            }
-
-            $installer::globals::epm_path = $$fileref;
-        }
-    }
-}
-
-######################################################################
-# Determining the version of file makecab.exe
-######################################################################
-
-sub get_makecab_version
-{
-    my $makecabversion = -1;
-
-    my $systemcall = "makecab.exe |";
-    my @makecaboutput = ();
-
-    open (CAB, $systemcall);
-    while (<CAB>) { push(@makecaboutput, $_); }
-    close (CAB);
-
-    my $returnvalue = $?;   # $? contains the return value of the systemcall
-
-    if ($returnvalue)
-    {
-        my $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
-        push( @installer::globals::globallogfileinfo, $infoline);
-    }
-    else
-    {
-        my $infoline = "Success: Executed \"$systemcall\" successfully!\n";
-        push( @installer::globals::globallogfileinfo, $infoline);
-
-        my $versionline = "";
-
-        for ( my $i = 0; $i <= $#makecaboutput; $i++ )
-        {
-            if ( $makecaboutput[$i] =~ /\bVersion\b/i )
-            {
-                $versionline = $makecaboutput[$i];
-                last;
-            }
+            my $currentdir = cwd();
+            $$fileref =~ s/\./$currentdir/;
         }
 
-        $infoline = $versionline;
-        push( @installer::globals::globallogfileinfo, $infoline);
-
-        if ( $versionline =~ /\bVersion\b\s+(\d+[\d\.]+\d+)\s+/ )
-        {
-            $makecabversion = $1;
-        }
-
-        # Only using the first number
-
-        if ( $makecabversion =~ /^\s*(\d+?)\D*/ )
-        {
-            $makecabversion = $1;
-        }
-
-        $infoline = "Using version: " . $makecabversion . "\n";
-        push( @installer::globals::globallogfileinfo, $infoline);
-    }
-
-    return $makecabversion;
-}
-
-######################################################################
-# Checking the version of file makecab.exe
-######################################################################
-
-sub check_makecab_version
-{
-    # checking version of makecab.exe
-    # Now it is guaranteed, that makecab.exe is in the path
-
-    my $do_check = 1;
-
-    my $makecabversion = get_makecab_version();
-
-    my $infoline = "Tested version: " . $installer::globals::controlledmakecabversion . "\n";
-    push( @installer::globals::globallogfileinfo, $infoline);
-
-    if ( $makecabversion < 0 ) { $do_check = 0; } # version could not be determined
-
-    if ( $do_check )
-    {
-        if ( $makecabversion < $installer::globals::controlledmakecabversion )
-        {
-            installer::exiter::exit_program("makecab.exe too old. Found version: \"$makecabversion\", required version: \"$installer::globals::controlledmakecabversion\"!", "check_makecab_version");
-        }
-    }
-    else
-    {
-        $infoline = "Warning: No version check of makecab.exe\n";
-        push( @installer::globals::globallogfileinfo, $infoline);
+        $installer::globals::epm_path = $$fileref;
     }
 }
 
@@ -392,46 +290,6 @@ sub check_logfile
     }
 
     return $contains_error;
-}
-
-#############################################################
-# Reading the Windows list file for Windows language codes
-# Encoding field is no longer used. We use UTF-8 everywhere.
-#############################################################
-
-sub read_lcidlist
-{
-    my ($patharrayref) = @_;
-
-    if ( ! -f $installer::globals::lcidlistname ) { installer::exiter::exit_program("ERROR: Did not find Windows LCID list $installer::globals::lcidlistname!", "read_lcidlist"); }
-
-    my $infoline = "Found LCID file: $installer::globals::lcidlistname\n";
-    push(@installer::globals::globallogfileinfo, $infoline);
-
-    my $lcidlist = installer::files::read_file($installer::globals::lcidlistname);
-    my %msilanguage = ();
-
-    for ( my $i = 0; $i <= $#{$lcidlist}; $i++ )
-    {
-        my $line = ${$lcidlist}[$i];
-        # de-mangle various potential DOS line-ending problems
-        $line =~ s/\r//g;
-        $line =~ s/\n//g;
-        $line =~ s/\s*\#.*$//; # removing comments after "#"
-        if ( $line =~ /^\s*$/ ) { next; }  # this is an empty line
-
-        if ( $line =~ /^\s*([\w-]+)\s+(\d+)\s+(\d+)\s*$/ )
-        {
-            my $onelanguage = $1;
-            my $windowslanguage = $3;
-            $msilanguage{$onelanguage} = $windowslanguage;
-        }
-        else
-        {
-            installer::exiter::exit_program("ERROR: Wrong syntax in Windows LCID list $installer::globals::lcidlistname in line $i: '$line'", "read_lcidlist");
-        }
-    }
-    $installer::globals::msilanguage = \%msilanguage;
 }
 
 #############################################################

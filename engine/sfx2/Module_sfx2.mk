@@ -49,7 +49,6 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,sfx2,\
 	PythonTest_sfx2_python \
 ))
 
-#todo: clean up quickstarter stuff in both libraries
 #todo: move standard pool to svl
 
 # screenshots
