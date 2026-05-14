@@ -312,7 +312,7 @@ OUString SwView::GetPageStr(sal_uInt16 nPhyNum, sal_uInt16 nVirtNum, const OUStr
 }
 
 ErrCode SwView::InsertGraphic( const OUString &rPath, const OUString &rFilter,
-                                bool bLink, GraphicFilter *pFilter )
+                                bool bLink, GraphicFilter *pFilter, bool bMultiInsert )
 {
     SwWait aWait( *GetDocShell(), true );
 
@@ -346,7 +346,7 @@ ErrCode SwView::InsertGraphic( const OUString &rPath, const OUString &rFilter,
         // #i123922# determine if we really want to insert or replace the graphic at a selected object
         const bool bReplaceMode(rShell.HasSelection() && SelectionType::Frame == rShell.GetSelectionType());
 
-        if(bReplaceMode)
+        if( bReplaceMode && !bMultiInsert )
         {
             // #i123922# Do same as in D&D, ReRead graphic and all is done
             rShell.ReRead(
@@ -357,6 +357,12 @@ ErrCode SwView::InsertGraphic( const OUString &rPath, const OUString &rFilter,
         else
         {
             rShell.StartAction();
+            if ( bMultiInsert && rShell.IsSelFrameMode() ){
+                SwShellCursor *pCursor = rShell.SwCursorShell::GetCursor_();
+                Point pPt = pCursor->GetPtPos();
+                rShell.LeaveSelFrameMode();
+                rShell.SwCursorShell::SetCursor( pPt, true );
+            }
             if( bLink )
             {
                 SwDocShell* pDocSh = GetDocShell();
@@ -395,11 +401,14 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
     bool bReturn = false;
     SwDocShell* pDocShell = GetDocShell();
     SwDoc* pDoc = pDocShell->GetDoc();
+    Sequence<OUString> aFileNames;
 
     UIName sGraphicFormat( SwResId(STR_POOLFRM_GRAPHIC) );
 
     const SfxStringItem* pName = rReq.GetArg(SID_INSERT_GRAPHIC);
     bool bShowError = !pName;
+    if(pName)
+        aFileNames = {pName->GetValue()};
 
     // No file pickers in a non-desktop (mobile app) build.
 
@@ -411,7 +420,7 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
     {
         std::unique_ptr<FileDialogHelper> pFileDlg(new FileDialogHelper(
             ui::dialogs::TemplateDescription::FILEOPEN_LINK_PREVIEW_IMAGE_TEMPLATE,
-            FileDialogFlags::Graphic, GetFrameWeld()));
+            FileDialogFlags::Graphic | FileDialogFlags::MultiSelection, GetFrameWeld()));
         pFileDlg->SetTitle(SwResId(STR_INSERT_GRAPHIC ));
         pFileDlg->SetContext( FileDialogHelper::WriterInsertImage );
 
@@ -481,9 +490,11 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
             pWin->CaptureMouse();
         if (bHaveName)
         {
-            rReq.AppendItem(SfxStringItem(SID_INSERT_GRAPHIC, pFileDlg->GetPath()));
+            aFileNames = pFileDlg->GetSelectedFiles();
+            SfxStringListItem aItem(SID_INSERT_GRAPHIC);
+            aItem.SetStringList(aFileNames);
+            rReq.AppendItem(aItem);
             rReq.AppendItem(SfxStringItem(FN_PARAM_FILTER, pFileDlg->GetCurrentFilter()));
-            pName = rReq.GetArg(SID_INSERT_GRAPHIC);
 
             bool bAsLink = false;
             if(nHtmlMode & HTMLMODE_ON)
@@ -511,9 +522,8 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
         }
     }
 #endif
-    if (pName)
+    if (aFileNames.size())
     {
-        OUString aFileName = pName->GetValue();
         OUString aFilterName;
         if (const SfxStringItem* pFilter = rReq.GetArg(FN_PARAM_FILTER))
             aFilterName = pFilter->GetValue();
@@ -533,9 +543,12 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
             if (bAsLink && bShowError
                 && officecfg::Office::Common::Misc::ShowLinkWarningDialog::get())
             {
-                SvxLinkWarningDialog aWarnDlg(GetFrameWeld(), aFileName);
-                if (aWarnDlg.run() != RET_OK)
-                    bAsLink=false; // don't store as link
+                for (const auto& aFileName : aFileNames)
+                {
+                    SvxLinkWarningDialog aWarnDlg(GetFrameWeld(), aFileName);
+                    if (aWarnDlg.run() != RET_OK)
+                        bAsLink=false; // don't store as link
+                }
             }
         }
 #endif
@@ -552,12 +565,15 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
 
         rSh.StartUndo(SwUndoId::INSERT, &aRewriter);
 
-        ErrCode nError = InsertGraphic( aFileName, aFilterName, bAsLink, &GraphicFilter::GetGraphicFilter() );
+        ErrCode nError = ERRCODE_NONE;
 
-        // format not equal to current filter (with autodetection)
-        if( nError == ERRCODE_GRFILTER_FORMATERROR )
-            nError = InsertGraphic( aFileName, OUString(), bAsLink, &GraphicFilter::GetGraphicFilter() );
-
+        for (const auto& aFileName : aFileNames)
+        {
+            nError = InsertGraphic( aFileName, aFilterName, bAsLink, &GraphicFilter::GetGraphicFilter(), aFileNames.getLength() > 1 );
+            // format not equal to current filter (with autodetection)
+            if( nError == ERRCODE_GRFILTER_FORMATERROR )
+                nError = InsertGraphic( aFileName, OUString(), bAsLink, &GraphicFilter::GetGraphicFilter(), aFileNames.getLength() > 1 );
+        }
         // #i123922# no new FrameFormat for replace mode, only when new object was created,
         // else this would reset the current setting for the frame holding the graphic
         if ( !bReplaceMode && rSh.IsFrameSelected() )

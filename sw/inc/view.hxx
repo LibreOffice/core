@@ -661,7 +661,7 @@ public:
 
     // public for D&D
     ErrCode     InsertGraphic( const OUString &rPath, const OUString &rFilter,
-                            bool bLink, GraphicFilter *pFlt );
+                            bool bLink, GraphicFilter *pFlt, bool bMultiInsert = false );
 
     void ExecuteScan( SfxRequest& rReq );
 

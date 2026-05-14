@@ -55,6 +55,7 @@
 #define ShellClass_SwDrawShell
 #include <sfx2/msg.hxx>
 #include <swslots.hxx>
+#include <com/sun/star/uno/Sequence.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -117,6 +118,7 @@ void SwDrawShell::InsertPictureFromFile(SdrObject& rObject)
         return;
 
     SvxOpenGraphicDialog aDlg(SwResId(STR_INSERT_GRAPHIC), GetView().GetFrameWeld());
+    aDlg.setMultiSelect(false);
 
     if (ERRCODE_NONE != aDlg.Execute())
         return;
@@ -145,7 +147,7 @@ void SwDrawShell::InsertPictureFromFile(SdrObject& rObject)
 
         // set in all cases - the Clone() will have copied an existing link (!)
         pNewGrafObj->SetGraphicLink(
-            bAsLink ? aDlg.GetPath() : OUString());
+        bAsLink ? aDlg.GetPath() : OUString());
 
         pResult = pNewGrafObj.get();
     }
