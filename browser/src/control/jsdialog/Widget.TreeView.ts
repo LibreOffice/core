@@ -821,6 +821,7 @@ class TreeViewControl {
 			rowElements.push(td);
 			if (
 				parseInt(index) === 0 &&
+				this._gridMode &&
 				(this._containerRole === 'grid' || this._containerRole === 'treegrid')
 			) {
 				window.L.DomUtil.addClass(td, 'ui-treeview-rowheader');
