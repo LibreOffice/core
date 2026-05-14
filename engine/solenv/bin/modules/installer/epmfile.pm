@@ -439,6 +439,10 @@ sub create_epm_header
         installer::exiter::exit_program("ERROR: Could not find license file $licensefilename (B)", "create_epm_header");
     }
 
+    # The patched epm in external/epm rejects list files without %readme,
+    # even though deb/rpm/pkg targets ignore the value. Emit a placeholder.
+    push(@epmheader, "%readme DUMMY\n");
+
     # including %replaces
 
     my $replaces = "";
