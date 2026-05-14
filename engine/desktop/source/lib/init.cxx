@@ -5110,10 +5110,20 @@ static size_t doc_renderShapeSelection(COKitDocument* pThis, char** pOutput)
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
 
-    KitChartHelper aChartHelper(SfxViewShell::Current());
-
-    if (aChartHelper.GetWindow())
-        return 0;
+    // In Calc and Impress, double-clicking a shape leaves the shape in edit
+    // mode while the parent doc's selection becomes invalid (Calc selects
+    // the cell, Impress drops the shape selection).  Bail out to avoid
+    // rendering during that transition.  Writer's chart wizard differs: it
+    // inserts the chart and enters edit mode immediately, but the chart
+    // frame remains selected at the Writer level as a TextEmbeddedObject,
+    // and writer_svg_Export's embedded-object path can render the
+    // replacement graphic even while the chart is still in edit mode.
+    if (doc_getDocumentType(pThis) != KIT_DOCTYPE_TEXT)
+    {
+        KitChartHelper aChartHelper(SfxViewShell::Current());
+        if (aChartHelper.GetWindow())
+            return 0;
+    }
 
     try
     {
