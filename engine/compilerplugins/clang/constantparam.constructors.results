@@ -42,10 +42,6 @@ connectivity/source/commontools/TColumnsHelper.cxx:45
     void connectivity::OColumnsHelperImpl::OColumnsHelperImpl(_Bool)
     _Bool _bCase
     isCaseSensitive()
-connectivity/source/drivers/firebird/View.hxx:27
-    void connectivity::firebird::View::View(const class com::sun::star::uno::Reference<class com::sun::star::sdbc::XConnection> &,_Bool,const class rtl::OUString &,const class rtl::OUString &)
-    _Bool _bCaseSensitive
-    isCaseSensitive()
 connectivity/source/drivers/mysqlc/mysqlc_view.hxx:38
     void connectivity::mysqlc::View::View(const class com::sun::star::uno::Reference<class com::sun::star::sdbc::XConnection> &,_Bool,const class rtl::OUString &,const class rtl::OUString &)
     _Bool _bCaseSensitive

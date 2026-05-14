@@ -35,16 +35,6 @@ $(eval $(call gb_Module_add_targets,dbaccess,\
 ))
 
 ifneq ($(OS),iOS)
-ifeq ($(ENABLE_FIREBIRD_SDBC),TRUE)
-$(eval $(call gb_Module_add_check_targets,dbaccess,\
-    $(if $(ENABLE_JAVA),CppunitTest_dbaccess_migration) \
-))
-
-$(eval $(call gb_Module_add_check_targets,dbaccess,\
-    CppunitTest_dbaccess_firebird_test \
-))
-endif
-
 ifneq ($(filter SCRIPTING,$(BUILD_TYPE)),)
 $(eval $(call gb_Module_add_check_targets,dbaccess,\
 	CppunitTest_dbaccess_dialog_save \
@@ -60,16 +50,6 @@ $(eval $(call gb_Module_add_check_targets,dbaccess,\
     CppunitTest_dbaccess_RowSetClones \
     CppunitTest_dbaccess_CRMDatabase_test \
 ))
-endif
-
-# This runs a suite of performance tests on embedded firebird and HSQLDB.
-# Instructions on running the test can be found in qa/unit/embeddedb_performancetest
-ifeq ($(ENABLE_FIREBIRD_SDBC),TRUE)
-ifeq ($(ENABLE_JAVA),TRUE)
-$(eval $(call gb_Module_add_check_targets,dbaccess,\
-    CppunitTest_dbaccess_embeddeddb_performancetest \
-))
-endif
 endif
 
 $(eval $(call gb_Module_add_subsequentcheck_targets,dbaccess,\

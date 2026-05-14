@@ -90,10 +90,6 @@ comphelper/qa/unit/variadictemplates.cxx:63
     void extract(const class com::sun::star::uno::Sequence<class com::sun::star::uno::Any> &,int,optional<type-parameter-?-?> &,const class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> &)
     int nArg
     4
-connectivity/source/drivers/firebird/StatementCommonBase.hxx:91
-    short connectivity::firebird::OStatementCommonBase::getSqlInfoItem(char)
-    char aInfoItem
-    21
 connectivity/source/drivers/postgresql/pq_connection.cxx:371
     void properties2arrays(const class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> &,const class com::sun::star::uno::Reference<class com::sun::star::script::XTypeConverter> &,unsigned short,class pq_sdbc_driver::(anonymous namespace)::cstr_vector &,class pq_sdbc_driver::(anonymous namespace)::cstr_vector &)
     unsigned short enc

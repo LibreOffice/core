@@ -333,18 +333,6 @@ bool OSQLParseNode::parseNodeToExecutableStatement( OUString& _out_rString, cons
 
     aParseParam.pParser = &_rParser;
 
-    // LIMIT keyword differs in Firebird
-    OSQLParseNode* pTableExp = getChild(3);
-    Reference< XDatabaseMetaData > xMeta( _rxConnection->getMetaData() );
-    OUString sLimitValue;
-    if( pTableExp->getChild(6)->count() >= 2 && pTableExp->getChild(6)->getChild(1)
-            && (xMeta->getURL().equalsIgnoreAsciiCase("sdbc:embedded:firebird")
-                || xMeta->getURL().startsWithIgnoreAsciiCase("sdbc:firebird:")))
-    {
-        sLimitValue = pTableExp->getChild(6)->getChild(1)->getTokenValue();
-        delete pTableExp->removeAt(6);
-    }
-
     _out_rString.clear();
     OUStringBuffer sBuffer;
     bool bSuccess = false;
@@ -357,13 +345,6 @@ bool OSQLParseNode::parseNodeToExecutableStatement( OUString& _out_rString, cons
     {
         if ( _pErrorHolder )
             *_pErrorHolder = e;
-    }
-
-    if(sLimitValue.getLength() > 0)
-    {
-        static constexpr char SELECT_KEYWORD[] = "SELECT";
-        sBuffer.insert(sBuffer.indexOf(SELECT_KEYWORD) + strlen(SELECT_KEYWORD),
-                Concat2View(" FIRST " + sLimitValue));
     }
 
     _out_rString = sBuffer.makeStringAndClear();

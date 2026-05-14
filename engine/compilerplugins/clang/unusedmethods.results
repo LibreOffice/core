@@ -50,10 +50,6 @@ connectivity/source/drivers/evoab2/NResultSet.hxx:60
     rtl::OString connectivity::evoab::OEvoabVersionHelper::getUserName(void *)
 connectivity/source/drivers/evoab2/NResultSetMetaData.hxx:49
     com::sun::star::uno::Reference<com::sun::star::sdbc::XResultSetMetaData> connectivity::evoab::OEvoabResultSetMetaData::operator Reference()
-connectivity/source/drivers/firebird/Driver.hxx:63
-    const com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> & connectivity::firebird::FirebirdDriver::getContext() const
-connectivity/source/drivers/firebird/Util.hxx:73
-    const rtl::OUString & connectivity::firebird::ColumnTypeInfo::getCharacterSet() const
 connectivity/source/drivers/mysqlc/mysqlc_connection.hxx:180
     rtl::OUString connectivity::mysqlc::OConnection::transFormPreparedStatement(const rtl::OUString &)
 connectivity/source/drivers/mysqlc/mysqlc_prepared_resultset.hxx:91

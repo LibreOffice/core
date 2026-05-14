@@ -196,21 +196,6 @@ packageversion = "%PACKAGEVERSION"
 End
 
 Start
-module = "gid_Module_Optional_Firebird"
-solarispackagename = "%BASISPACKAGEPREFIX-Firebird"
-solarisrequires = "%BASISPACKAGEPREFIX-core"
-packagename = "%BASISPACKAGEPREFIX-firebird"
-freebsdrequires = "%BASISPACKAGEPREFIX-core"
-requires = "%BASISPACKAGEPREFIX-core"
-copyright = "2026 Collabora Productivity Ltd."
-solariscopyright = "solariscopyrightfile"
-vendor = "Collabora Productivity Ltd."
-description = "Firebird module for %PRODUCTNAME %PRODUCTVERSION"
-destpath = "/opt"
-packageversion = "%PACKAGEVERSION"
-End
-
-Start
 module = "gid_Module_Optional_Grfflt"
 solarispackagename = "%BASISPACKAGEPREFIX-graphicfilter"
 solarisrequires = "%BASISPACKAGEPREFIX-core"

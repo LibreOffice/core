@@ -149,7 +149,6 @@ gb_MERGE_LIBRARY_LIST += \
 	$(call gb_Helper_optional,DBCONNECTIVITY, \
 		flat \
 		file) \
-	$(if $(ENABLE_FIREBIRD_SDBC),firebird_sdbc) \
 	$(if $(filter WNT,$(OS)), \
 		fps \
 	) \

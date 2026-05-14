@@ -809,43 +809,6 @@ gb_LinkTarget__use_jawt :=
 
 endif # ENABLE_JAVA
 
-ifneq ($(SYSTEM_LIBATOMIC_OPS),)
-
-define gb_LinkTarget__use_libatomic_ops
-$(call gb_LinkTarget_set_include,$(1),\
-	$$(INCLUDE) \
-	$(LIBATOMIC_OPS_CFLAGS) \
-)
-$(call gb_LinkTarget_add_libs,$(1), $(LIBATOMIC_OPS_LIBS))
-
-endef
-gb_ExternalProject__use_libatomic_ops :=
-
-else # !SYSTEM_LIBATOMIC_OPS
-
-define gb_LinkTarget__use_libatomic_ops
-$(call gb_LinkTarget_set_include,$(1),\
-$(LIBATOMIC_OPS_CFLAGS) \
-	$$(INCLUDE) \
-	$(LIBATOMIC_OPS_CFLAGS) \
-)
-$(call gb_LinkTarget_use_external_project,$(1),\
-	libatomic_ops \
-)
-
-$(call gb_LinkTarget_add_libs,$(1),\
-	-L$(gb_UnpackedTarball_workdir)/libatomic_ops/src/lib -latomic_ops \
-)
-
-endef
-
-define gb_ExternalProject__use_libatomic_ops
-$(call gb_ExternalProject_use_external_project,$(1),libatomic_ops)
-
-endef
-
-endif # SYSTEM_LIBATOMIC_OPS
-
 
 ifneq ($(SYSTEM_LIBEXTTEXTCAT),)
 
@@ -3073,90 +3036,6 @@ $(call gb_ExternalProject_use_external_project,$(1),openldap)
 endef
 
 endif # SYSTEM_OPENLDAP
-
-ifneq ($(SYSTEM_LIBTOMMATH),)
-
-define gb_LinkTarget__use_libtommath
-$(call gb_LinkTarget_set_include,$(1),\
-	$(LIBTOMMATH_CFLAGS) \
-	$$(INCLUDE) \
-)
-$(call gb_LinkTarget_add_libs,$(1),$(LIBTOMMATH_LIBS))
-
-endef
-
-else # !SYSTEM_LIBTOMMATH
-define gb_LinkTarget__use_libtommath
-$(call gb_LinkTarget_set_include,$(1),\
-	-I${WORKDIR}/UnpackedTarball/libtommath \
-	$$(INCLUDE) \
-)
-$(call gb_LinkTarget_add_libs,$(1),\
-	$(gb_UnpackedTarball_workdir)/libtommath/libtommath$(gb_StaticLibrary_PLAINEXT) \
-)
-$(call gb_LinkTarget_use_external_project,$(1),libtommath)
-
-endef
-
-endif # SYSTEM_LIBTOMMATH
-
-define gb_ExternalProject__use_libtommath
-$(call gb_ExternalProject_use_external_project,$(1),libtommath)
-
-endef
-
-ifeq ($(ENABLE_FIREBIRD_SDBC),TRUE)
-
-ifneq ($(SYSTEM_FIREBIRD),)
-
-define gb_LinkTarget__use_libfbembed
-$(call gb_LinkTarget_set_include,$(1),\
-	$(FIREBIRD_CFLAGS) \
-	$$(INCLUDE) \
-)
-$(call gb_LinkTarget_add_libs,$(1),$(FIREBIRD_LIBS))
-
-endef
-
-else # !SYSTEM_FIREBIRD
-
-$(eval $(call gb_Helper_register_packages_for_install,firebirdsdbc,\
-	firebird \
-))
-
-#$(call gb_LinkTarget__use_libatomic_ops,$(1))
-#$(call gb_LinkTarget__use_libtommath,$(1))
-
-define gb_LinkTarget__use_libfbembed
-$(call gb_LinkTarget_use_package,$(1),firebird)
-$(call gb_LinkTarget_set_include,$(1),\
-	-I$(gb_UnpackedTarball_workdir)/firebird/gen/$(if $(ENABLE_DEBUG),Debug,Release)/firebird/include \
-	$$(INCLUDE) \
-)
-ifeq ($(COM),MSC)
-$(call gb_LinkTarget_add_libs,$(1),\
-	$(gb_UnpackedTarball_workdir)/firebird/gen/$(if $(ENABLE_DEBUG),Debug,Release)/firebird/bin/ifbclient.lib \
-)
-else
-$(call gb_LinkTarget_add_libs,$(1),\
-	-L$(gb_UnpackedTarball_workdir)/firebird/gen/$(if $(ENABLE_DEBUG),Debug,Release)/firebird/lib -lfbclient \
-)
-endif
-
-endef
-
-
-# endef
-
-endif # SYSTEM_FIREBIRD
-
-else # !ENABLE_FIREBIRD_SDBC
-
-gb_LinkTarget__use_firebird :=
-# gb_LinkTarget__use_atomic_ops :=
-# gb_LinkTarget__use_libtommath :=
-
-endif # ENABLE_FIREBIRD_SDBC
 
 
 ifneq ($(SYSTEM_POSTGRESQL),)

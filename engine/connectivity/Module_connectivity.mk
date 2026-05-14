@@ -78,13 +78,6 @@ $(eval $(call gb_Module_add_targets,connectivity,\
 ))
 endif
 
-ifeq ($(ENABLE_FIREBIRD_SDBC),TRUE)
-$(eval $(call gb_Module_add_targets,connectivity,\
-	Configuration_firebird \
-	Library_firebird_sdbc \
-))
-endif
-
 ifeq ($(ENABLE_MARIADBC),TRUE)
 $(eval $(call gb_Module_add_targets,connectivity,\
 	Configuration_mysql \

@@ -463,12 +463,6 @@ postprocess_FILES_main += \
 postprocess_DRIVERS += hsqldb jdbc mysql_jdbc
 endif
 
-ifeq ($(ENABLE_FIREBIRD_SDBC),TRUE)
-postprocess_FILES_main += \
-	$(call gb_XcuModuleTarget_get_target,connectivity/registry/firebird)/org/openoffice/Office/DataAccess/Drivers-firebird.xcu
-postprocess_DRIVERS += firebird_sdbc
-endif
-
 ifeq ($(ENABLE_MARIADBC),TRUE)
 postprocess_FILES_main += \
 	$(call gb_XcuModuleTarget_get_target,connectivity/registry/mysqlc)/org/openoffice/Office/DataAccess/Drivers-mysqlc.xcu

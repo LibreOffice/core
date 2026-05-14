@@ -536,10 +536,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,postgresqlsdbc, \
 		postgresql-sdbc-impl) \
 ))
 
-$(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,firebirdsdbc, \
-	$(if $(ENABLE_FIREBIRD_SDBC),firebird_sdbc) \
-))
-
 ifneq ($(ENABLE_PDFIMPORT),)
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,pdfimport, \
 	pdfimport \

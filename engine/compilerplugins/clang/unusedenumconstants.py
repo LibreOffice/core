@@ -185,7 +185,6 @@ def is_ignore(srcLoc):
          "vcl/unx/gtk/salnativewidgets-gtk.cxx",
          "sc/inc/callform.hxx", # ParamType
          "include/i18nlangtag/applelangid.hxx", # AppleLanguageId
-         "connectivity/source/drivers/firebird/Util.hxx", # firebird::BlobSubtype
          "include/xmloff/xmltoken.hxx",
          "sw/source/writerfilter/rtftok/rtfcontrolwords.hxx",
          ]):

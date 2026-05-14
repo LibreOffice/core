@@ -112,13 +112,6 @@
         "dest-filename": "@CPPUNIT_TARBALL@"
     },
     {
-        "url": "https://dev-www.libreoffice.org/src/@FIREBIRD_TARBALL@",
-        "sha256": "@FIREBIRD_SHA256SUM@",
-        "type": "file",
-        "dest": "external/tarballs",
-        "dest-filename": "@FIREBIRD_TARBALL@"
-    },
-    {
         "url": "https://dev-www.libreoffice.org/src/@GLM_TARBALL@",
         "sha256": "@GLM_SHA256SUM@",
         "type": "file",
@@ -250,13 +243,6 @@
         "type": "file",
         "dest": "external/tarballs",
         "dest-filename": "@STAROFFICE_TARBALL@"
-    },
-    {
-        "url": "https://dev-www.libreoffice.org/src/@LIBTOMMATH_TARBALL@",
-        "sha256": "@LIBTOMMATH_SHA256SUM@",
-        "type": "file",
-        "dest": "external/tarballs",
-        "dest-filename": "@LIBTOMMATH_TARBALL@"
     },
     {
         "url": "https://dev-www.libreoffice.org/src/@VISIO_TARBALL@",
@@ -677,13 +663,6 @@
         "type": "file",
         "dest": "external/tarballs",
         "dest-filename": "@LIBNUMBERTEXT_TARBALL@"
-    },
-    {
-        "url": "https://dev-www.libreoffice.org/src/@LIBATOMIC_OPS_TARBALL@",
-        "sha256": "@LIBATOMIC_OPS_SHA256SUM@",
-        "type": "file",
-        "dest": "external/tarballs",
-        "dest-filename": "@LIBATOMIC_OPS_TARBALL@"
     },
     {
         "url": "https://dev-www.libreoffice.org/src/@SKIA_TARBALL@",

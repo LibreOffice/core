@@ -29,7 +29,6 @@
 #include <OAuthenticationContinuation.hxx>
 
 #include <hsqlimport.hxx>
-#include <migrwarndlg.hxx>
 
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -65,8 +64,6 @@
 #include <algorithm>
 #include <iterator>
 #include <set>
-
-#include <config_firebird.h>
 
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
@@ -522,62 +519,6 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const OUString
 
     Reference< XDriverManager > xManager;
 
-#if ENABLE_FIREBIRD_SDBC
-    bool bIgnoreMigration = false;
-    bool bNeedMigration = false;
-    rtl::Reference< ODatabaseDocument > xModel = m_pImpl->getModel_noCreate();
-    if ( xModel)
-    {
-        //See ODbTypeWizDialogSetup::SaveDatabaseDocument
-        ::comphelper::NamedValueCollection::get(xModel->getArgs(), u"IgnoreFirebirdMigration") >>= bIgnoreMigration;
-    }
-    else
-    {
-        //ignore when we don't have a model. E.g. Mailmerge, data sources, fields...
-        bIgnoreMigration = true;
-    }
-
-    if (!officecfg::Office::Common::Misc::ExperimentalMode::get())
-        bIgnoreMigration = true;
-
-    if(!bIgnoreMigration && m_pImpl->m_sConnectURL == "sdbc:embedded:hsqldb")
-    {
-        Reference<XStorage> const xRootStorage = m_pImpl->getOrCreateRootStorage();
-        if (!o3tl::getEnvironment(u"DBACCESS_HSQL_MIGRATION"_ustr).isEmpty())
-            bNeedMigration = true;
-        else
-        {
-            Reference<XPropertySet> const xPropSet(xRootStorage, UNO_QUERY_THROW);
-            sal_Int32 nOpenMode(0);
-            if ((xPropSet->getPropertyValue(u"OpenMode"_ustr) >>= nOpenMode)
-                && (nOpenMode & css::embed::ElementModes::WRITE)
-                && (!Application::IsHeadlessModeEnabled()))
-            {
-                MigrationWarnDialog aWarnDlg(m_pImpl->GetFrameWeld());
-                bNeedMigration = aWarnDlg.run() == RET_OK;
-            }
-        }
-        if (bNeedMigration)
-        {
-            // back up content xml file if migration was successful
-            static constexpr OUString BACKUP_XML_NAME = u"content_before_migration.xml"_ustr;
-            try
-            {
-                if(xRootStorage->isStreamElement(BACKUP_XML_NAME))
-                    xRootStorage->removeElement(BACKUP_XML_NAME);
-            }
-            catch (NoSuchElementException&)
-            {
-                SAL_INFO("dbaccess", "No file content_before_migration.xml found" );
-            }
-            xRootStorage->copyElementTo(u"content.xml"_ustr, xRootStorage,
-                BACKUP_XML_NAME);
-
-            m_pImpl->m_sConnectURL = "sdbc:embedded:firebird";
-        }
-    }
-#endif
-
     try {
         xManager.set( ConnectionPool::create( m_pImpl->m_aContext ), UNO_QUERY_THROW );
     } catch( const Exception& ) {  }
@@ -689,17 +630,6 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const OUString
 
         throwGenericSQLException( sMessage, static_cast< XDataSource* >( this ), Any( aContext ) );
     }
-
-#if ENABLE_FIREBIRD_SDBC
-    if( bNeedMigration )
-    {
-        Reference< css::document::XDocumentSubStorageSupplier> xDocSup(
-                m_pImpl->getDocumentSubStorageSupplier() );
-        dbahsql::HsqlImporter importer(xReturn,
-                xDocSup->getDocumentSubStorage(u"database"_ustr,ElementModes::READWRITE) );
-        importer.importHsqlDatabase(m_pImpl->GetFrameWeld());
-    }
-#endif
 
     return xReturn;
 }

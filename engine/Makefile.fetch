@@ -119,7 +119,6 @@ fetch_SRC_TARBALLS := \
 	$(call fetch_Optional,EPUBGEN,EPUBGEN_TARBALL) \
 	$(call fetch_Optional,ETONYEK,ETONYEK_TARBALL) \
 	$(call fetch_Optional,EXPAT,EXPAT_TARBALL) \
-	$(call fetch_Optional,FIREBIRD,FIREBIRD_TARBALL) \
 	$(call fetch_Optional,FONTCONFIG,FONTCONFIG_TARBALL) \
 	$(call fetch_Optional,FREEHAND,FREEHAND_TARBALL) \
 	$(call fetch_Optional,FREETYPE,FREETYPE_TARBALL) \
@@ -149,7 +148,6 @@ fetch_SRC_TARBALLS := \
 	$(call fetch_Optional,JFREEREPORT,JFREEREPORT_SAC_TARBALL) \
 	$(call fetch_Optional,LIBJPEG_TURBO,LIBJPEG_TURBO_TARBALL) \
 	$(call fetch_Optional,LCMS2,LCMS2_TARBALL) \
-	$(call fetch_Optional,LIBATOMIC_OPS,LIBATOMIC_OPS_TARBALL) \
 	$(call fetch_Optional,LIBASSUAN,LIBASSUAN_TARBALL) \
 	$(call fetch_Optional,LIBEOT,LIBEOT_TARBALL) \
 	$(call fetch_Optional,LIBEXTTEXTCAT,LIBEXTTEXTCAT_TARBALL) \
@@ -160,7 +158,6 @@ fetch_SRC_TARBALLS := \
 	$(call fetch_Optional,LIBNUMBERTEXT,LIBNUMBERTEXT_TARBALL) \
 	$(call fetch_Optional,LIBPNG,LIBPNG_TARBALL) \
 	$(call fetch_Optional,LIBTIFF,LIBTIFF_TARBALL) \
-	$(call fetch_Optional,LIBTOMMATH,LIBTOMMATH_TARBALL) \
 	$(call fetch_Optional,LIBWEBP,LIBWEBP_TARBALL) \
 	$(call fetch_Optional,LIBXML2,LIBXML_TARBALL) \
 	$(call fetch_Optional,XMLSEC,XMLSEC_TARBALL) \

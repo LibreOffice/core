@@ -49,7 +49,6 @@ libraryNames = {
     "tiff": "libtiff",
     "zxing": "zxing-cpp",
     "liborcus": "orcus",
-    "ltm": "libtommath",
     "clucene-core": "clucene-core",
     "lp_solve": "lp_solve",
     "hsqldb": "hsqldb",

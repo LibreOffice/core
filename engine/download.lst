@@ -116,11 +116,6 @@ EXPAT_TARBALL := expat-2.7.5.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-FIREBIRD_SHA256SUM := acb85cedafa10ce106b1823fb236b1b3e5d942a5741e8f8435cc8ccfec0afe76
-FIREBIRD_TARBALL := Firebird-3.0.7.33374-0.tar.bz2
-# three static lines
-# so that git cherry-pick
-# will not run into conflicts
 FONTCONFIG_SHA256SUM := 9f5cae93f4fffc1fbc05ae99cdfc708cd60dfd6612ffc0512827025c026fa541
 FONTCONFIG_TARBALL := fontconfig-2.17.1.tar.xz
 # three static lines
@@ -482,11 +477,6 @@ LIBASSUAN_TARBALL := libassuan-3.0.2.tar.bz2
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-LIBATOMIC_OPS_SHA256SUM := 0db3ebff755db170f65e74a64ec4511812e9ee3185c232eeffeacd274190dfb0
-LIBATOMIC_OPS_TARBALL := libatomic_ops-7.10.0.tar.gz
-# three static lines
-# so that git cherry-pick
-# will not run into conflicts
 LIBEOT_SHA256SUM := cf5091fa8e7dcdbe667335eb90a2cfdd0a3fe8f8c7c8d1ece44d9d055736a06a
 LIBEOT_TARBALL := libeot-0.01.tar.bz2
 # three static lines
@@ -514,11 +504,6 @@ LIBLANGTAG_TARBALL := liblangtag-0.6.8.tar.bz2
 # will not run into conflicts
 LIBNUMBERTEXT_SHA256SUM := 5dcb4db3b2340f81f601ce86d8d76b69e34d70f84f804192c901e4b7f84d5fb0
 LIBNUMBERTEXT_TARBALL := libnumbertext-1.0.11.tar.xz
-# three static lines
-# so that git cherry-pick
-# will not run into conflicts
-LIBTOMMATH_SHA256SUM := 296272d93435991308eb73607600c034b558807a07e829e751142e65ccfa9d08
-LIBTOMMATH_TARBALL := ltm-1.3.0.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts

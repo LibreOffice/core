@@ -12,14 +12,11 @@ $(eval $(call gb_InstallModule_InstallModule,scp2/base))
 $(eval $(call gb_InstallModule_use_auto_install_libs,scp2/base,\
 	base \
 	base_brand \
-	firebirdsdbc \
 	postgresqlsdbc \
 ))
 
 $(eval $(call gb_InstallModule_define_if_set,scp2/base,\
 	ENABLE_MACOSX_SANDBOX \
-	ENABLE_FIREBIRD_SDBC \
-	SYSTEM_FIREBIRD \
 ))
 
 $(eval $(call gb_InstallModule_add_templates,scp2/base,\
@@ -28,7 +25,6 @@ $(eval $(call gb_InstallModule_add_templates,scp2/base,\
 
 $(eval $(call gb_InstallModule_add_scpfiles,scp2/base,\
     scp2/source/base/file_base \
-    scp2/source/base/firebird \
 ))
 
 $(eval $(call gb_InstallModule_add_localized_scpfiles,scp2/base,\

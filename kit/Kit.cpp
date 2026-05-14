@@ -4492,7 +4492,7 @@ bool globalPreinit(const std::string &loTemplate)
              "abp avmediagst avmediavlc cmdmail losessioninstall OGLTrans PresenterScreen "
              "syssh ucpftp1 ucpgio1 ucpimage updatecheckui updatefeed updchk"
              // Database
-             "dbaxml dbmm dbp dbu deployment firebird_sdbc mork "
+             "dbaxml dbmm dbp dbu deployment mork "
              "mysql mysqlc odbc postgresql-sdbc postgresql-sdbc-impl sdbc2 sdbt"
              // Java
              "javaloader javavm jdbc rpt rptui rptxml ",

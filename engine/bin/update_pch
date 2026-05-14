@@ -56,7 +56,6 @@ DEFAULTS = \
     'connectivity.dbpool2'              : ( 5, EXCLUDE, INCLUDE, EXCLUDE), #   3.0
     'connectivity.dbtools'              : ( 2, EXCLUDE, EXCLUDE, INCLUDE), #   0.8
     'connectivity.file'                 : ( 2, EXCLUDE, INCLUDE, EXCLUDE), #   5.1
-    'connectivity.firebird_sdbc'        : ( 2, EXCLUDE, EXCLUDE, EXCLUDE), #   5.1
     'connectivity.flat'                 : ( 2, EXCLUDE, INCLUDE, INCLUDE), #   4.6
     'connectivity.mysql'                : ( 4, EXCLUDE, INCLUDE, EXCLUDE), #   3.4
     'connectivity.odbc'                 : ( 2, EXCLUDE, EXCLUDE, INCLUDE), #   5.0

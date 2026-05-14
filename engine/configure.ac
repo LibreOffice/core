@@ -951,7 +951,6 @@ AC_SUBST([ENABLE_ANDROID_EDITING])
 disable_database_connectivity_dependencies()
 {
     enable_evolution2=no
-    enable_firebird_sdbc=no
     enable_mariadb_sdbc=no
     enable_postgresql_sdbc=no
     enable_report_builder=no
@@ -1077,7 +1076,6 @@ cygwin*|wsl*)
         build_skia=yes
         enable_gpgmepp=no
         enable_coinmp=no
-        enable_firebird_sdbc=no
     fi
     ;;
 
@@ -1247,7 +1245,6 @@ haiku*)
     enable_pdfium=no
     enable_sdremote=no
     enable_postgresql_sdbc=no
-    enable_firebird_sdbc=no
     _os=Haiku
     ;;
 
@@ -2202,11 +2199,6 @@ libo_FUZZ_ARG_ENABLE(lotuswordpro,
         [Disable the build of the Lotus Word Pro filter.]),
 ,test "${enable_lotuswordpro+set}" = set || enable_lotuswordpro=yes)
 
-libo_FUZZ_ARG_ENABLE(firebird-sdbc,
-    AS_HELP_STRING([--disable-firebird-sdbc],
-        [Disable the build of the Firebird-SDBC driver if it doesn't compile for you.]),
-,test "${enable_firebird_sdbc+set}" = set || enable_firebird_sdbc=yes)
-
 AC_ARG_ENABLE(bogus-pkg-config,
     AS_HELP_STRING([--enable-bogus-pkg-config],
         [MACOSX only: on MacOSX pkg-config can cause trouble. by default if one is found in the PATH, an error is issued. This flag turn that error into a warning.]),
@@ -2614,17 +2606,6 @@ AC_ARG_WITH(libpq-path,
         [Use this PostgreSQL C interface (libpq) installation for building
          the PostgreSQL-SDBC extension.]),
 ,)
-
-AC_ARG_WITH(system-firebird,
-    AS_HELP_STRING([--with-system-firebird],
-        [Use Firebird libraries already on system, for building the Firebird-SDBC
-         driver. If fb_config is not in PATH, use FBCONFIG to point to it.]),,
-    [with_system_firebird="$with_system_libs"])
-
-AC_ARG_WITH(system-libtommath,
-            AS_HELP_STRING([--with-system-libtommath],
-                           [Use libtommath already on system]),,
-            [with_system_libtommath="$with_system_libs"])
 
 AC_ARG_WITH(system-hsqldb,
     AS_HELP_STRING([--with-system-hsqldb],
@@ -6263,7 +6244,6 @@ if test "$cross_compiling" = "yes"; then
         --disable-cairo-canvas \
         --disable-cups \
         --disable-customtarget-components \
-        --disable-firebird-sdbc \
         --disable-gpgmepp \
         --disable-gstreamer-1-0 \
         --disable-gtk3 \
@@ -11112,117 +11092,6 @@ AC_SUBST(BUILD_POSTGRESQL_SDBC)
 AC_SUBST(SYSTEM_POSTGRESQL)
 AC_SUBST(POSTGRESQL_INC)
 AC_SUBST(POSTGRESQL_LIB)
-
-dnl ===================================================================
-dnl Check for Firebird stuff
-dnl ===================================================================
-ENABLE_FIREBIRD_SDBC=
-if test "$enable_firebird_sdbc" = "yes" ; then
-    SCPDEFS="$SCPDEFS -DWITH_FIREBIRD_SDBC"
-
-    dnl ===================================================================
-    dnl Check for system Firebird
-    dnl ===================================================================
-    AC_MSG_CHECKING([which Firebird to use])
-    if test "$with_system_firebird" = "yes"; then
-        AC_MSG_RESULT([external])
-        SYSTEM_FIREBIRD=TRUE
-        AC_PATH_PROG(FIREBIRDCONFIG, [fb_config])
-        if test -z "$FIREBIRDCONFIG"; then
-            AC_MSG_NOTICE([No fb_config -- using pkg-config])
-            PKG_CHECK_MODULES([FIREBIRD], [fbclient >= 3], [FIREBIRD_PKGNAME=fbclient], [
-                PKG_CHECK_MODULES([FIREBIRD], [fbembed], [FIREBIRD_PKGNAME=fbembed])
-            ])
-            FIREBIRD_VERSION=`pkg-config --modversion "$FIREBIRD_PKGNAME"`
-        else
-            AC_MSG_NOTICE([fb_config found])
-            FIREBIRD_VERSION=`$FIREBIRDCONFIG --version`
-            AC_MSG_CHECKING([for Firebird Client library])
-            FIREBIRD_CFLAGS=`$FIREBIRDCONFIG --cflags`
-            FIREBIRD_LIBS=`$FIREBIRDCONFIG --embedlibs`
-            FilterLibs "${FIREBIRD_LIBS}"
-            FIREBIRD_LIBS="${filteredlibs}"
-        fi
-        AC_MSG_RESULT([includes `$FIREBIRD_CFLAGS', libraries `$FIREBIRD_LIBS'])
-        AC_MSG_CHECKING([Firebird version])
-        if test -n "${FIREBIRD_VERSION}"; then
-            FIREBIRD_MAJOR=`echo $FIREBIRD_VERSION | cut -d"." -f1`
-            if test "$FIREBIRD_MAJOR" -ge "3"; then
-                AC_MSG_RESULT([OK])
-            else
-                AC_MSG_ERROR([Ensure firebird >= 3 is installed])
-            fi
-        else
-            save_CFLAGS="${CFLAGS}"
-            CFLAGS="${CFLAGS} ${FIREBIRD_CFLAGS}"
-            AC_COMPILE_IFELSE([AC_LANG_SOURCE([[#include <ibase.h>
-#if defined(FB_API_VER) && FB_API_VER == 30
-int fb_api_is_30(void) { return 0; }
-#else
-#error "Wrong Firebird API version"
-#endif]])],AC_MSG_RESULT([OK]),AC_MSG_ERROR([Ensure firebird 3.0.x is installed]))
-            CFLAGS="$save_CFLAGS"
-        fi
-        ENABLE_FIREBIRD_SDBC=TRUE
-        AC_DEFINE([ENABLE_FIREBIRD_SDBC],1)
-    elif test "$enable_database_connectivity" = no; then
-        AC_MSG_RESULT([none])
-    elif test "$cross_compiling" = "yes"; then
-        AC_MSG_RESULT([none])
-    else
-        dnl Embedded Firebird has version 3.0
-        dnl We need libatomic_ops for any non X86/X64 system
-        if test "${CPUNAME}" != INTEL -a "${CPUNAME}" != X86_64; then
-            dnl ===================================================================
-            dnl Check for system libatomic_ops
-            dnl ===================================================================
-            libo_CHECK_SYSTEM_MODULE([libatomic_ops],[LIBATOMIC_OPS],[atomic_ops >= 0.7.2])
-            if test "$with_system_libatomic_ops" = "yes"; then
-                SYSTEM_LIBATOMIC_OPS=TRUE
-                AC_CHECK_HEADERS(atomic_ops.h, [],
-                [AC_MSG_ERROR(atomic_ops.h not found. install libatomic_ops)], [])
-            else
-                SYSTEM_LIBATOMIC_OPS=
-                LIBATOMIC_OPS_CFLAGS="-I${WORKDIR}/UnpackedTarball/libatomic_ops/include"
-                LIBATOMIC_OPS_LIBS="-latomic_ops"
-                BUILD_TYPE="$BUILD_TYPE LIBATOMIC_OPS"
-            fi
-        fi
-
-        AC_MSG_RESULT([internal])
-        SYSTEM_FIREBIRD=
-        FIREBIRD_CFLAGS="-I${WORKDIR}/UnpackedTarball/firebird/gen/Release/firebird/include"
-        FIREBIRD_LIBS="-lfbclient"
-
-        if test "$with_system_libtommath" = "yes"; then
-            SYSTEM_LIBTOMMATH=TRUE
-            dnl check for tommath presence
-            save_LIBS=$LIBS
-            AC_CHECK_HEADER(tommath.h,,AC_MSG_ERROR(Include file for tommath not found - please install development tommath package))
-            AC_CHECK_LIB(tommath, mp_init, LIBTOMMATH_LIBS=-ltommath, AC_MSG_ERROR(Library tommath not found - please install development tommath package))
-            LIBS=$save_LIBS
-        else
-            SYSTEM_LIBTOMMATH=
-            LIBTOMMATH_CFLAGS="-I${WORKDIR}/UnpackedTarball/libtommath"
-            LIBTOMMATH_LIBS="-ltommath"
-            BUILD_TYPE="$BUILD_TYPE LIBTOMMATH"
-        fi
-
-        BUILD_TYPE="$BUILD_TYPE FIREBIRD"
-        ENABLE_FIREBIRD_SDBC=TRUE
-        AC_DEFINE([ENABLE_FIREBIRD_SDBC],1)
-    fi
-fi
-AC_SUBST(ENABLE_FIREBIRD_SDBC)
-AC_SUBST(SYSTEM_LIBATOMIC_OPS)
-AC_SUBST(LIBATOMIC_OPS_CFLAGS)
-AC_SUBST(LIBATOMIC_OPS_LIBS)
-AC_SUBST(SYSTEM_FIREBIRD)
-AC_SUBST(FIREBIRD_CFLAGS)
-AC_SUBST(FIREBIRD_LIBS)
-AC_SUBST(SYSTEM_LIBTOMMATH)
-AC_SUBST(LIBTOMMATH_CFLAGS)
-AC_SUBST(LIBTOMMATH_LIBS)
 
 dnl ===================================================================
 dnl Check for system curl
@@ -16299,7 +16168,6 @@ AC_CONFIG_HEADERS([config_host/config_emscripten.h])
 AC_CONFIG_HEADERS([config_host/config_features.h])
 AC_CONFIG_HEADERS([config_host/config_feature_desktop.h])
 AC_CONFIG_HEADERS([config_host/config_feature_opencl.h])
-AC_CONFIG_HEADERS([config_host/config_firebird.h])
 AC_CONFIG_HEADERS([config_host/config_folders.h])
 AC_CONFIG_HEADERS([config_host/config_fonts.h])
 AC_CONFIG_HEADERS([config_host/config_fuzzers.h])

@@ -1,9 +1,6 @@
 chart2/source/inc/CachedDataSequence.hxx:128
     chart::CachedDataSequence m_nNumberFormatKey sal_Int32
     void chart::CachedDataSequence::registerProperties()
-connectivity/source/drivers/firebird/ResultSet.hxx:85
-    connectivity::firebird::OResultSet m_statusVector ISC_STATUS_ARRAY
-    unsigned char connectivity::firebird::OResultSet::next()
 connectivity/source/inc/FDatabaseMetaDataResultSet.hxx:114
     connectivity::ODatabaseMetaDataResultSet m_nFetchSize sal_Int32
     void connectivity::ODatabaseMetaDataResultSet::construct()

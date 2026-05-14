@@ -80,7 +80,6 @@ certain functionality.
 @li @c connectivity.dbase
 @li @c connectivity.drivers - a bit overly general, maybe it should be removed?
 @li @c connectivity.evoab2
-@li @c connectivity.firebird
 @li @c connectivity.flat
 @li @c connectivity.hsqldb
 @li @c connectivity.jdbc

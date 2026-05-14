@@ -92,7 +92,6 @@ OUT=$(cd "$3" && /bin/pwd)
                 *.bau | \
                 *.pyc | \
                 */_sysconfigdata_m_darwin_darwin.py | \
-                */Contents/Resources/firebird/security3.fdb | \
                 */Contents/Resources/autocorr/acor_*.dat | \
                 */Contents/Resources/resource/*/LC_MESSAGES/*.mo | \
                 */Contents/Resources/config/images_*.zip)

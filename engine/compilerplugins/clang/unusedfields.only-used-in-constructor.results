@@ -62,10 +62,6 @@ connectivity/source/drivers/evoab2/EApi.h:121
     EContactAddress address_format char *
 connectivity/source/drivers/evoab2/EApi.h:125
     EContactAddress ext char *
-connectivity/source/drivers/firebird/Driver.hxx:49
-    connectivity::firebird::FirebirdDriver m_firebirdTMPDirectory ::utl::TempFileNamed
-connectivity/source/drivers/firebird/Driver.hxx:50
-    connectivity::firebird::FirebirdDriver m_firebirdLockDirectory ::utl::TempFileNamed
 connectivity/source/drivers/postgresql/pq_statics.hxx:105
     pq_sdbc_driver::ImplementationStatics types css::uno::Sequence<css::uno::Type>
 connectivity/source/inc/component/CResultSet.hxx:41

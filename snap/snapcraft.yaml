@@ -117,7 +117,6 @@ parts:
         --disable-evolution2 \
         --disable-ext-nlpsolver \
         --disable-ext-wiki-publisher \
-        --disable-firebird-sdbc \
         --disable-gio \
         --disable-gstreamer-1-0 \
         --disable-gtk3 \

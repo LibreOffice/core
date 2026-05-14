@@ -35,7 +35,6 @@ $(eval $(call gb_Module_add_moduledirs,external,\
 	$(call gb_Helper_optional,EPUBGEN,libepubgen) \
 	$(call gb_Helper_optional,ETONYEK,libetonyek) \
 	$(call gb_Helper_optional,EXPAT,expat) \
-	$(call gb_Helper_optional,FIREBIRD,firebird) \
 	$(call gb_Helper_optional,FONTCONFIG,fontconfig) \
 	$(call gb_Helper_optional,FREEHAND,libfreehand) \
 	$(call gb_Helper_optional,FREETYPE,freetype) \
@@ -54,7 +53,6 @@ $(eval $(call gb_Module_add_moduledirs,external,\
 	$(call gb_Helper_optional,LIBJPEG_TURBO,libjpeg-turbo) \
 	$(call gb_Helper_optional,LCMS2,lcms2) \
 	$(call gb_Helper_optional,LIBASSUAN,libassuan) \
-	$(call gb_Helper_optional,LIBATOMIC_OPS,libatomic_ops) \
 	$(call gb_Helper_optional,LIBEOT,libeot) \
 	$(call gb_Helper_optional,LIBEXTTEXTCAT,libexttextcat) \
 	$(call gb_Helper_optional,LIBFFI,libffi) \
@@ -67,7 +65,6 @@ $(eval $(call gb_Module_add_moduledirs,external,\
 	$(call gb_Helper_optional,LIBXML2,libxml2) \
 	$(call gb_Helper_optional,LIBXSLT,libxslt) \
 	$(call gb_Helper_optional,LPSOLVE,lpsolve) \
-	$(call gb_Helper_optional,LIBTOMMATH,libtommath) \
 	$(call gb_Helper_optional,LXML,lxml) \
 	$(call gb_Helper_optional,MARIADB_CONNECTOR_C,mariadb-connector-c) \
 	$(call gb_Helper_optional,MD4C,md4c) \
