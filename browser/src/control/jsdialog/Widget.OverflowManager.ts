@@ -20,6 +20,7 @@ class OverflowManager {
 	data: ContainerWidgetJSON;
 	lastMaxWidth: number = -1;
 	scheduledRefresh: TaskId = '';
+	initialSizeResizeObserver: ResizeObserver | null = null;
 
 	constructor(parentContainer: Element, data: ContainerWidgetJSON) {
 		this.parentContainer = parentContainer as HTMLElement;
@@ -28,6 +29,20 @@ class OverflowManager {
 		window.addEventListener('resize', this.onResize.bind(this));
 		if (app.map) app.map.on('refreshoverflows', this.onRefresh, this);
 		else app.console.error('OverflowManager: no app.map available');
+
+		// In classic mode the first onRefresh can fire before the parent has
+		// been laid out, leaving scrollWidth at 0 and every group folded.
+		// Re-run once the container actually has a measurable width.
+		if (typeof ResizeObserver !== 'undefined') {
+			this.initialSizeResizeObserver = new ResizeObserver(() => {
+				if (this.parentContainer.scrollWidth > 0) {
+					this.initialSizeResizeObserver?.disconnect();
+					this.initialSizeResizeObserver = null;
+					this.onRefresh({ force: true } as Event & { force?: boolean });
+				}
+			});
+			this.initialSizeResizeObserver.observe(this.parentContainer);
+		}
 	}
 
 	calculateMaxWidth(): number {
@@ -60,8 +75,11 @@ class OverflowManager {
 				requiredWidth,
 		);
 
-		// not yet known width -> do not assume it is small to prevent scrollbars
-		if (requiredWidth === 0) return true;
+		// Width not known yet -> defer the decision. The ResizeObserver
+		// installed in the constructor will retrigger onRefresh once the
+		// container has been measured; folding now would leave every group
+		// collapsed until the next window resize.
+		if (requiredWidth === 0) return false;
 
 		return maxWidth < requiredWidth;
 	}
