@@ -3,17 +3,17 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-11 14:06+0200\n"
-"PO-Revision-Date: 2026-05-06 21:11+0000\n"
+"PO-Revision-Date: 2026-05-12 14:11+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
-"Language-Team: Croatian <https://hosted.weblate.org/projects/"
-"collabora-online/help/hr/>\n"
+"Language-Team: Croatian <https://hosted.weblate.org/projects/collabora-"
+"online/help/hr/>\n"
 "Language: hr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Translate Toolkit 3.6.0\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Weblate 2026.5-dev\n"
 
 #: html/cool-help.html%2Bdiv.h1:9-5
 msgid "Keyboard Shortcuts"
@@ -1847,7 +1847,7 @@ msgstr "Zajedničko uređivanje"
 #: html/cool-help.html%2Bdiv.nav.ul.li:330-13
 #: html/cool-help.html%2Bdiv.div.h3:374-5
 msgid "<span class=\"productname\">{productname}</span> user interface"
-msgstr "Korisničko sučelje <span class=\"productname\">{productname}</span>a"
+msgstr "<span class=\"productname\">{productname}</span> korisničko sučelje"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:331-13
 #: html/cool-help.html%2Bdiv.div.h3:411-5
@@ -2071,7 +2071,6 @@ msgstr ""
 "slova. Postoje tri gumba odmah pored polja pretrage:"
 
 #: html/cool-help.html%2Bdiv.div.div.ul.li:395-7
-#, fuzzy
 msgid "Search backwards"
 msgstr "Pretraži prema natrag"
 
