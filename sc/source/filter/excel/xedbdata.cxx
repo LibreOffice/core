@@ -77,6 +77,14 @@ void XclExpTablesImpl8::SaveXml( XclExpXmlStream& rStrm )
     pWorksheetStrm->startElement(XML_tableParts);
     for (auto const& it : maTables)
     {
+        const ScDBData& rData = *it.mpData;
+        ScRange aRange(ScAddress::UNINITIALIZED);
+        rData.GetArea(aRange);
+        // minimal height of a valid table, don't export if less than that, Excel won't accept it
+        const SCROW nMinHeight = (rData.HasHeader() ? 1 : 0) + (rData.HasTotals() ? 1 : 0) + 1;
+        if (aRange.aEnd.Row() - aRange.aStart.Row() + 1 < nMinHeight)
+            continue;
+
         OUString aRelId;
         sax_fastparser::FSHelperPtr pTableStrm = rStrm.CreateOutputStream(
                 XclXmlUtils::GetStreamName("xl/tables/", "table", it.mnTableId),

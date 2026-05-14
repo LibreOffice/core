@@ -34,6 +34,7 @@
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/drawing/XDrawPages.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
+#include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 #include <com/sun/star/sheet/GlobalSheetSettings.hpp>
 
 using namespace ::com::sun::star;
@@ -1205,6 +1206,23 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testLocalePrefix)
     // earlier "[$-407]#,##0.00\ [$€];[RED]\-#,##0.00\ [$€]"
     assertXPath(pStyle, "/x:styleSheet/x:numFmts/x:numFmt[6]", "formatCode",
                 u"#,##0.00\\ [$€-407];[RED]\\-#,##0.00\\ [$€]");
+}
+
+CPPUNIT_TEST_FIXTURE(ScExportTest4, testCool15769MinimalDBRanges)
+{
+    createScDoc("ods/cool15769_minimal_DB_ranges.ods");
+    save(TestFilter::XLSX);
+
+    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
+        = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory),
+                                                      maTempFile.GetURL());
+    // without the fix degenerate tables would have been exported to XLSX
+    // with only headers/totals and no content, which Excel doesn't accept
+    CPPUNIT_ASSERT(!xNameAccess->hasByName(u"xl/tables/table1.xml"_ustr));
+    CPPUNIT_ASSERT(!xNameAccess->hasByName(u"xl/tables/table4.xml"_ustr));
+    // these tables should exist regardless of the change
+    CPPUNIT_ASSERT(xNameAccess->hasByName(u"xl/tables/table2.xml"_ustr));
+    CPPUNIT_ASSERT(xNameAccess->hasByName(u"xl/tables/table3.xml"_ustr));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
