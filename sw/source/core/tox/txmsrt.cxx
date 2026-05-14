@@ -36,6 +36,7 @@
 #include <pam.hxx>
 #include <txttxmrk.hxx>
 #include <frmfmt.hxx>
+#include <fmtanchr.hxx>
 #include <fmtfld.hxx>
 #include <txmsrt.hxx>
 #include <ndtxt.hxx>
@@ -139,6 +140,7 @@ SwTOXSortTabBase::SwTOXSortTabBase( TOXSortType nTyp, const SwContentNode* pNd,
     : pTOXNd( nullptr ), pTextMark( pMark ), pTOXIntl( pInter ),
     nPos( 0 ), nCntPos( 0 ), nType( o3tl::narrowing<sal_uInt16>(nTyp) )
     , m_bValidText( false )
+    , m_bAnchoredAsChar( false )
 {
     if ( pLocale )
         aLocale = *pLocale;
@@ -177,6 +179,10 @@ SwTOXSortTabBase::SwTOXSortTabBase( TOXSortType nTyp, const SwContentNode* pNd,
                 OSL_ENSURE(bResult, "where is the text node");
                 nPos = aPos.GetNodeIndex();
                 nCntPos = aPos.GetContentIndex();
+
+                const SwFrameFormat* pFlyFormat = pNd->GetFlyFormat();
+                if (pFlyFormat && pFlyFormat->GetAnchor().GetAnchorId() == RndStdIds::FLY_AS_CHAR)
+                    m_bAnchoredAsChar = true;
             }
         }
         else
@@ -291,8 +297,16 @@ bool SwTOXSortTabBase::sort_lt(const SwTOXSortTabBase& rCmp)
             }
             else if( pFirst && pFirst->IsTextNode() &&
                      pNext && pNext->IsTextNode() )
-                    return ::IsFrameBehind( *static_cast<const SwTextNode*>(pNext), nCntPos,
-                                            *static_cast<const SwTextNode*>(pFirst), nCntPos );
+            {
+                // An inline (as-char) anchored fly's content is rendered
+                // at its anchor character position. If the character offset is same
+                // then the inline fly is rendered before the paragraph.
+                if (m_bAnchoredAsChar != rCmp.m_bAnchoredAsChar)
+                    return m_bAnchoredAsChar;
+
+                return ::IsFrameBehind(*static_cast<const SwTextNode*>(pNext), nCntPos,
+                                       *static_cast<const SwTextNode*>(pFirst), nCntPos);
+            }
         }
     }
     return false;
