@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-11 14:06+0200\n"
-"PO-Revision-Date: 2025-12-13 18:47+0000\n"
+"PO-Revision-Date: 2026-05-12 14:11+0000\n"
 "Last-Translator: Priit Jõerüüt <jrthwlate@users.noreply.hosted.weblate.org>\n"
-"Language-Team: Estonian <https://hosted.weblate.org/projects/"
-"collabora-online/ui/et/>\n"
-"Language: \n"
+"Language-Team: Estonian <https://hosted.weblate.org/projects/collabora-"
+"online/collabora-ui/et/>\n"
+"Language: et\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.15-dev\n"
+"X-Generator: Weblate 2026.5-dev\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -133,15 +133,15 @@ msgstr "Diagrammid"
 
 #: admin/admin.strings.js:42
 msgid "Memory Graph"
-msgstr ""
+msgstr "Mäludiagramm"
 
 #: admin/admin.strings.js:43
 msgid "CPU Graph"
-msgstr ""
+msgstr "Protsessori diagramm"
 
 #: admin/admin.strings.js:44
 msgid "Network Graph"
-msgstr ""
+msgstr "Võrgukasutuse diagramm"
 
 #: admin/admin.strings.js:45
 #: admin/src/integrator/AdminIntegratorSettings.ts:1071
@@ -162,7 +162,7 @@ msgstr "Salvesta"
 
 #: admin/admin.strings.js:46
 msgid "Cache size of memory statistics"
-msgstr ""
+msgstr "Mälustatistika puhverdatud suurus"
 
 #: admin/admin.strings.js:47
 msgid "Time interval of memory statistics (in ms)"
@@ -219,7 +219,7 @@ msgstr "Uuenda logi andmeid"
 
 #: admin/admin.strings.js:60
 msgid "Channel Filter:"
-msgstr ""
+msgstr "Kanalite filter:"
 
 #: admin/admin.strings.js:61 src/app/TableStylesService.ts:228
 #: src/app/TableStylesService.ts:416
@@ -230,11 +230,11 @@ msgstr "Puudub"
 
 #: admin/admin.strings.js:62
 msgid "Set Log Levels"
-msgstr ""
+msgstr "Seadista logimise detailsus"
 
 #: admin/admin.strings.js:63
 msgid "Log Levels"
-msgstr ""
+msgstr "Logimise detailsus"
 
 #: admin/admin.strings.js:64 src/control/Control.AlertDialog.js:32
 #: src/control/Control.AlertDialog.js:38
@@ -247,11 +247,11 @@ msgstr "Sulge"
 
 #: admin/admin.strings.js:65
 msgid "Update Log Levels"
-msgstr ""
+msgstr "Uuenda logimise detailsust"
 
 #: admin/admin.strings.js:66
 msgid "Version Information"
-msgstr ""
+msgstr "Versiooniteave"
 
 #: admin/admin.strings.js:67
 msgid "License"
@@ -402,19 +402,18 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:432
 #: admin/src/integrator/AdminIntegratorSettings.ts:436
-#, fuzzy
 msgid "Provider"
-msgstr "Teenusepakkuja:"
+msgstr "Teenusepakkuja"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:433
 #: admin/src/integrator/AdminIntegratorSettings.ts:437
 msgid "API Key"
-msgstr ""
+msgstr "API võti"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:434
 #: admin/src/integrator/AdminIntegratorSettings.ts:439
 msgid "Model"
-msgstr ""
+msgstr "Mudel"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:435
 #: admin/src/integrator/AdminIntegratorSettings.ts:438
@@ -459,12 +458,12 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:449
 msgid "Show status bar"
-msgstr ""
+msgstr "Näita olekuriba"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:450
 #: src/control/Control.Menubar.ts:173 src/control/Control.Menubar.ts:501
 msgid "Show Ruler"
-msgstr ""
+msgstr "Näita joonlauda"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:451
 msgid "Accessibility Checker"
@@ -477,7 +476,7 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:453
 msgid "Show Sidebar"
-msgstr ""
+msgstr "Näita külgriba"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:454
 msgid "Custom Animation"
@@ -485,37 +484,37 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:457
 msgid "Style List"
-msgstr ""
+msgstr "Stiilide loend"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:460
 #: src/control/Control.NotebookbarCalc.js:1162
 #: src/control/Control.NotebookbarDraw.js:535
 #: src/control/Control.NotebookbarImpress.js:702
 msgid "Grid"
-msgstr ""
+msgstr "Ruudustik"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:461
 #: src/control/Control.BackstageView.ts:328
 msgid "Print"
-msgstr ""
+msgstr "Prindi"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:462
 msgid "Other"
-msgstr ""
+msgstr "Muu"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:463
 #: src/control/Control.NotebookbarImpress.js:711
 msgid "Show Grid"
-msgstr ""
+msgstr "Näita ruudustikku"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:464
 msgid "Snap to grid"
-msgstr ""
+msgstr "Haagi alusvõrgule"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:465
 #: admin/src/integrator/AdminIntegratorSettings.ts:471
 msgid "Size to grid"
-msgstr ""
+msgstr "Säti mõõt alusvõrgu alusel"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:466
 msgid "Synchronize axes"
@@ -612,9 +611,8 @@ msgstr ""
 #: templates/templates.js:250 templates/templates.js:260
 #: templates/templates.js:270 templates/templates.js:279
 #: templates/templates.js:290 templates/templates.js:300
-#, fuzzy
 msgid "Presentation"
-msgstr "Tühi esitlus"
+msgstr "Esitlus"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:486
 #: src/control/Control.Zotero.js:1341 src/slideshow/PresenterConsole.js:33
@@ -719,7 +717,6 @@ msgid "Upload Wordbook"
 msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:699
-#, fuzzy
 msgid "Document settings"
 msgstr "Dokumendi seadistused"
 
@@ -766,9 +763,8 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1072
 #: admin/src/integrator/Xcu.ts:405
-#, fuzzy
 msgid "Save Document settings"
-msgstr "Dokumendi seadistused"
+msgstr "Salvesta dokumendi seadistused"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1349
 msgid "(Warning: Server accessibility must be enabled to toggle)"
@@ -1118,9 +1114,8 @@ msgid "Resolved"
 msgstr "Lahendatud"
 
 #: src/canvas/sections/CommentSection.ts:574
-#, fuzzy
 msgid "Removed"
-msgstr "Eemalda"
+msgstr "Eemaldatud"
 
 #: src/canvas/sections/CommentSection.ts:1160
 #: src/control/jsdialog/Widget.Comment.ts:177
@@ -3299,9 +3294,8 @@ msgstr ""
 #: src/control/Control.NotebookbarImpress.js:1249
 #: src/control/Control.NotebookbarImpress.js:1593
 #: src/control/Control.NotebookbarWriter.js:1311
-#, fuzzy
 msgid "Shapes"
-msgstr "Kuju"
+msgstr "Kujundid"
 
 #: src/control/Control.NotebookbarCalc.js:1908
 #: src/control/Control.NotebookbarDraw.js:1605
@@ -3391,22 +3385,22 @@ msgstr ""
 #: src/control/Control.NotebookbarImpress.js:2791
 #: src/control/Control.NotebookbarWriter.js:3117
 msgid "Image Controls"
-msgstr ""
+msgstr "Pildi juhtnupud"
 
 #: src/control/Control.NotebookbarDraw.js:76
 #: src/control/Control.NotebookbarWriter.js:57
 msgid "Layout"
-msgstr ""
+msgstr "Paigutus"
 
 #: src/control/Control.NotebookbarDraw.js:329
 msgid "PDF Document (.pdf) - Expert"
-msgstr ""
+msgstr "PDF-dokument (.pdf) - asjatundjatele"
 
 #: src/control/Control.NotebookbarDraw.js:503
 #: src/control/Control.NotebookbarImpress.js:647
 #: src/control/Control.NotebookbarWriter.js:1751
 msgid "Ruler"
-msgstr ""
+msgstr "Joonlaud"
 
 #: src/control/Control.NotebookbarDraw.js:913
 #: src/control/Control.NotebookbarImpress.js:1049
@@ -3414,7 +3408,7 @@ msgstr ""
 #: src/control/Control.NotebookbarWriter.js:829
 #: src/control/Control.NotebookbarWriter.js:2666
 msgid "Paragraph"
-msgstr ""
+msgstr "Lõik"
 
 #: src/control/Control.NotebookbarImpress.js:96
 msgid "Design"
@@ -3422,7 +3416,7 @@ msgstr ""
 
 #: src/control/Control.NotebookbarImpress.js:104
 msgid "Slide Show"
-msgstr ""
+msgstr "Slaidiesitus"
 
 #: src/control/Control.NotebookbarImpress.js:150
 msgid "Master"
@@ -3525,21 +3519,20 @@ msgid "Master Slide Templates"
 msgstr ""
 
 #: src/control/Control.NotebookbarImpress.js:1867
-#, fuzzy
 msgid "This Presentation"
-msgstr "Tühi esitlus"
+msgstr "See esitlus"
 
 #: src/control/Control.NotebookbarImpress.js:1876
 msgid "Presentation Templates"
-msgstr ""
+msgstr "Esitlusfailide mallid"
 
 #: src/control/Control.NotebookbarImpress.js:1947
 msgid "Slide Size"
-msgstr ""
+msgstr "Slaidi suurus"
 
 #: src/control/Control.NotebookbarImpress.js:1970
 msgid "Background Image"
-msgstr ""
+msgstr "Taustapilt"
 
 #: src/control/Control.NotebookbarImpress.js:2176
 msgid "Merge & Split"
@@ -4717,9 +4710,8 @@ msgid "Insert Comment"
 msgstr ""
 
 #: src/control/jsdialog/Definitions.Menu.ts:2401
-#, fuzzy
 msgid "Insert Note"
-msgstr "Lisa kuupäev"
+msgstr "Lisa märge"
 
 #: src/control/jsdialog/Util.SnackbarController.ts:122
 msgid "Dismiss"
@@ -5386,9 +5378,8 @@ msgid ""
 msgstr ""
 
 #: src/map/handler/Map.FileInserter.js:229
-#, fuzzy
 msgid "Uploading..."
-msgstr "Laadin..."
+msgstr "Laadin üles…"
 
 #: src/map/handler/Map.FileInserter.js:254
 msgid "Uploading file to server failed with status: {0}"
@@ -5437,18 +5428,16 @@ msgstr ""
 
 #: src/map/handler/Map.SlideShow.js:203
 #: src/slideshow/SlideShowPresenter.ts:1132
-#, fuzzy
 msgid "Close Presentation"
-msgstr "Tühi esitlus"
+msgstr "Sulge esitlus"
 
 #: src/map/handler/Map.SlideShow.js:230
 msgid "Presenting in fullscreen"
 msgstr ""
 
 #: src/map/handler/Map.SlideShow.js:231
-#, fuzzy
 msgid "End Presentation"
-msgstr "Tühi esitlus"
+msgstr "Lõpeta esitlus"
 
 #: src/map/handler/Map.SlideShow.js:295
 #: src/slideshow/SlideShowPresenter.ts:1297
