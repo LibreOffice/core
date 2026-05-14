@@ -736,7 +736,7 @@
         "--with-system-zlib",
         "--with-system-zstd",
         "--with-theme=colibre colibre_svg",
-        "--with-vendor=Collabora",
+        "--with-vendor=Collabora Productivity Limited",
         "--without-buildconfig-recorded",
         "--without-help",
         "--without-java",
