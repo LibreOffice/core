@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
   xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+  xmlns:uap3="http://schemas.microsoft.com/appx/manifest/uap/windows10/3"
   xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
-  xmlns:desktop="http://schemas.microsoft.com/appx/manifest/desktop/windows10">
+  xmlns:desktop="http://schemas.microsoft.com/appx/manifest/desktop/windows10"
+  xmlns:desktop2="http://schemas.microsoft.com/appx/manifest/desktop/windows10/2"
+  xmlns:com="http://schemas.microsoft.com/appx/manifest/com/windows10"
+  IgnorableNamespaces="uap uap3 rescap desktop desktop2 com">
   <Identity Name="CollaboraProductivityLtd.CollaboraOfficeDesktop" Version="%VER" Publisher="CN=E9F172FF-9203-4DB8-A589-184C7A58C071" ProcessorArchitecture="%ARCH"/>
   <Properties>
     <DisplayName>Collabora Office Desktop</DisplayName>
@@ -13,7 +17,7 @@
     <Resource Language="en-US"/>
 %RES    </Resources>
   <Dependencies>
-    <TargetDeviceFamily Name="Windows.Desktop" MinVersion="10.0.10240.0" MaxVersionTested="10.0.19041.508"/>
+    <TargetDeviceFamily Name="Windows.Desktop" MinVersion="10.0.17763.0" MaxVersionTested="10.0.22621.0"/>
     <PackageDependency Name="Microsoft.VCLibs.140.00.UWPDesktop" MinVersion="14.0.24210.0" Publisher="CN=Microsoft Corporation, O=Microsoft Corporation, L=Redmond, S=Washington, C=US"/>
   </Dependencies>
   <Capabilities>
@@ -24,23 +28,51 @@
     <Application Id="CODA" Executable="program/Collabora Office.exe" EntryPoint="Windows.FullTrustApplication">
       <uap:VisualElements DisplayName="Collabora Office Desktop" Description="sofficeUapDescription" Square150x150Logo="Assets/Square150x150Logo.png" Square44x44Logo="Assets/Square44x44Logo.png" BackgroundColor="white"/>
       <Extensions>
+        <!-- Register the three shell-extension CLSIDs as in-proc DLLs hosted
+             by the default COM surrogate (dllhost.exe). The shell picks the
+             right host process for each interface itself: prevhost.exe for
+             thumbnails, SearchFilterHost.exe for the IFilter, etc.
+             SystemSurrogate="PreviewHost" cannot be used here - it is for
+             IPreviewHandler classes only, and adding it causes Windows to
+             silently drop the entire <com:Extension> at install time.
+             Per-extension binding for the thumbnail and property handlers is
+             attached to each ODF FileTypeAssociation below; the IFilter has
+             no documented manifest binding and is wired up at runtime via
+             HKCU\Software\Classes by the CODA launcher. -->
+        <com:Extension Category="windows.comServer">
+          <com:ComServer>
+            <com:SurrogateServer DisplayName="Collabora Office Thumbnail Handler">
+              <com:Class Id="8DD6FA24-F2C1-409F-B879-61A829643EB2" Path="program\shlxthdl\shlxthdl.dll" ThreadingModel="STA"/>
+            </com:SurrogateServer>
+            <com:SurrogateServer DisplayName="Collabora Office Property Handler">
+              <com:Class Id="90B47FF6-F60A-43CD-9BAD-1BD9F5CA2E70" Path="program\shlxthdl\propertyhdl.dll" ThreadingModel="STA"/>
+            </com:SurrogateServer>
+            <com:SurrogateServer DisplayName="Collabora Office ODF Filter">
+              <com:Class Id="DEB88601-6245-4803-81A5-13082BB738FF" Path="program\shlxthdl\odffilter.dll" ThreadingModel="STA"/>
+            </com:SurrogateServer>
+          </com:ComServer>
+        </com:Extension>
         <uap:Extension Category="windows.fileTypeAssociation">
-          <uap:FileTypeAssociation Name="calc8">
+          <uap3:FileTypeAssociation Name="calc8">
             <uap:DisplayName>Calc 8</uap:DisplayName>
             <uap:Logo>Assets/spreadsheet.png</uap:Logo>
             <uap:SupportedFileTypes>
               <uap:FileType>.ods</uap:FileType>
             </uap:SupportedFileTypes>
-          </uap:FileTypeAssociation>
+            <desktop2:ThumbnailHandler Clsid="8DD6FA24-F2C1-409F-B879-61A829643EB2"/>
+            <desktop2:DesktopPropertyHandler Clsid="90B47FF6-F60A-43CD-9BAD-1BD9F5CA2E70"/>
+          </uap3:FileTypeAssociation>
         </uap:Extension>
         <uap:Extension Category="windows.fileTypeAssociation">
-          <uap:FileTypeAssociation Name="calc8_template">
+          <uap3:FileTypeAssociation Name="calc8_template">
             <uap:DisplayName>Calc 8 Template</uap:DisplayName>
             <uap:Logo>Assets/spreadsheet-template.png</uap:Logo>
             <uap:SupportedFileTypes>
               <uap:FileType>.ots</uap:FileType>
             </uap:SupportedFileTypes>
-          </uap:FileTypeAssociation>
+            <desktop2:ThumbnailHandler Clsid="8DD6FA24-F2C1-409F-B879-61A829643EB2"/>
+            <desktop2:DesktopPropertyHandler Clsid="90B47FF6-F60A-43CD-9BAD-1BD9F5CA2E70"/>
+          </uap3:FileTypeAssociation>
         </uap:Extension>
         <uap:Extension Category="windows.fileTypeAssociation">
           <uap:FileTypeAssociation Name="calc_dbase">
@@ -114,22 +146,26 @@
           </uap:FileTypeAssociation>
         </uap:Extension>
         <uap:Extension Category="windows.fileTypeAssociation">
-          <uap:FileTypeAssociation Name="calc_staroffice_xml_calc">
+          <uap3:FileTypeAssociation Name="calc_staroffice_xml_calc">
             <uap:DisplayName>Calc 6.0</uap:DisplayName>
             <uap:Logo>Assets/spreadsheet.png</uap:Logo>
             <uap:SupportedFileTypes>
               <uap:FileType>.sxc</uap:FileType>
             </uap:SupportedFileTypes>
-          </uap:FileTypeAssociation>
+            <desktop2:ThumbnailHandler Clsid="8DD6FA24-F2C1-409F-B879-61A829643EB2"/>
+            <desktop2:DesktopPropertyHandler Clsid="90B47FF6-F60A-43CD-9BAD-1BD9F5CA2E70"/>
+          </uap3:FileTypeAssociation>
         </uap:Extension>
         <uap:Extension Category="windows.fileTypeAssociation">
-          <uap:FileTypeAssociation Name="calc_staroffice_xml_calc_template">
+          <uap3:FileTypeAssociation Name="calc_staroffice_xml_calc_template">
             <uap:DisplayName>Calc 6.0 Template</uap:DisplayName>
             <uap:Logo>Assets/spreadsheet-template.png</uap:Logo>
             <uap:SupportedFileTypes>
               <uap:FileType>.stc</uap:FileType>
             </uap:SupportedFileTypes>
-          </uap:FileTypeAssociation>
+            <desktop2:ThumbnailHandler Clsid="8DD6FA24-F2C1-409F-B879-61A829643EB2"/>
+            <desktop2:DesktopPropertyHandler Clsid="90B47FF6-F60A-43CD-9BAD-1BD9F5CA2E70"/>
+          </uap3:FileTypeAssociation>
         </uap:Extension>
         <uap:Extension Category="windows.fileTypeAssociation">
           <uap:FileTypeAssociation Name="calc_sylk">
@@ -160,22 +196,26 @@
           </uap:FileTypeAssociation>
         </uap:Extension>
         <uap:Extension Category="windows.fileTypeAssociation">
-          <uap:FileTypeAssociation Name="draw8">
+          <uap3:FileTypeAssociation Name="draw8">
             <uap:DisplayName>Draw 8</uap:DisplayName>
             <uap:Logo>Assets/presentation.png</uap:Logo>
             <uap:SupportedFileTypes>
               <uap:FileType>.odg</uap:FileType>
             </uap:SupportedFileTypes>
-          </uap:FileTypeAssociation>
+            <desktop2:ThumbnailHandler Clsid="8DD6FA24-F2C1-409F-B879-61A829643EB2"/>
+            <desktop2:DesktopPropertyHandler Clsid="90B47FF6-F60A-43CD-9BAD-1BD9F5CA2E70"/>
+          </uap3:FileTypeAssociation>
         </uap:Extension>
         <uap:Extension Category="windows.fileTypeAssociation">
-          <uap:FileTypeAssociation Name="draw8_template">
+          <uap3:FileTypeAssociation Name="draw8_template">
             <uap:DisplayName>Draw 8 Template</uap:DisplayName>
             <uap:Logo>Assets/drawing-template.png</uap:Logo>
             <uap:SupportedFileTypes>
               <uap:FileType>.otg</uap:FileType>
             </uap:SupportedFileTypes>
-          </uap:FileTypeAssociation>
+            <desktop2:ThumbnailHandler Clsid="8DD6FA24-F2C1-409F-B879-61A829643EB2"/>
+            <desktop2:DesktopPropertyHandler Clsid="90B47FF6-F60A-43CD-9BAD-1BD9F5CA2E70"/>
+          </uap3:FileTypeAssociation>
         </uap:Extension>
         <uap:Extension Category="windows.fileTypeAssociation">
           <uap3:FileTypeAssociation Name="draw_odg_flatxml">
@@ -188,22 +228,26 @@
           </uap3:FileTypeAssociation>
         </uap:Extension>
         <uap:Extension Category="windows.fileTypeAssociation">
-          <uap:FileTypeAssociation Name="draw_staroffice_xml_draw">
+          <uap3:FileTypeAssociation Name="draw_staroffice_xml_draw">
             <uap:DisplayName>OpenOffice.org 1.0 Drawing</uap:DisplayName>
             <uap:Logo>Assets/drawing.png</uap:Logo>
             <uap:SupportedFileTypes>
               <uap:FileType>.sxd</uap:FileType>
             </uap:SupportedFileTypes>
-          </uap:FileTypeAssociation>
+            <desktop2:ThumbnailHandler Clsid="8DD6FA24-F2C1-409F-B879-61A829643EB2"/>
+            <desktop2:DesktopPropertyHandler Clsid="90B47FF6-F60A-43CD-9BAD-1BD9F5CA2E70"/>
+          </uap3:FileTypeAssociation>
         </uap:Extension>
         <uap:Extension Category="windows.fileTypeAssociation">
-          <uap:FileTypeAssociation Name="draw_staroffice_xml_draw_template">
+          <uap3:FileTypeAssociation Name="draw_staroffice_xml_draw_template">
             <uap:DisplayName>Draw 6.0 Template</uap:DisplayName>
             <uap:Logo>Assets/drawing-template.png</uap:Logo>
             <uap:SupportedFileTypes>
               <uap:FileType>.std</uap:FileType>
             </uap:SupportedFileTypes>
-          </uap:FileTypeAssociation>
+            <desktop2:ThumbnailHandler Clsid="8DD6FA24-F2C1-409F-B879-61A829643EB2"/>
+            <desktop2:DesktopPropertyHandler Clsid="90B47FF6-F60A-43CD-9BAD-1BD9F5CA2E70"/>
+          </uap3:FileTypeAssociation>
         </uap:Extension>
         <uap:Extension Category="windows.fileTypeAssociation">
           <uap:FileTypeAssociation Name="generic_html">
@@ -239,22 +283,26 @@
           </uap:FileTypeAssociation>
         </uap:Extension>
         <uap:Extension Category="windows.fileTypeAssociation">
-          <uap:FileTypeAssociation Name="impress8">
+          <uap3:FileTypeAssociation Name="impress8">
             <uap:DisplayName>Impress 8</uap:DisplayName>
             <uap:Logo>Assets/presentation.png</uap:Logo>
             <uap:SupportedFileTypes>
               <uap:FileType>.odp</uap:FileType>
             </uap:SupportedFileTypes>
-          </uap:FileTypeAssociation>
+            <desktop2:ThumbnailHandler Clsid="8DD6FA24-F2C1-409F-B879-61A829643EB2"/>
+            <desktop2:DesktopPropertyHandler Clsid="90B47FF6-F60A-43CD-9BAD-1BD9F5CA2E70"/>
+          </uap3:FileTypeAssociation>
         </uap:Extension>
         <uap:Extension Category="windows.fileTypeAssociation">
-          <uap:FileTypeAssociation Name="impress8_template">
+          <uap3:FileTypeAssociation Name="impress8_template">
             <uap:DisplayName>Impress 8 Template</uap:DisplayName>
             <uap:Logo>Assets/presentation-template.png</uap:Logo>
             <uap:SupportedFileTypes>
               <uap:FileType>.otp</uap:FileType>
             </uap:SupportedFileTypes>
-          </uap:FileTypeAssociation>
+            <desktop2:ThumbnailHandler Clsid="8DD6FA24-F2C1-409F-B879-61A829643EB2"/>
+            <desktop2:DesktopPropertyHandler Clsid="90B47FF6-F60A-43CD-9BAD-1BD9F5CA2E70"/>
+          </uap3:FileTypeAssociation>
         </uap:Extension>
         <uap:Extension Category="windows.fileTypeAssociation">
           <uap:FileTypeAssociation Name="impress_ms_powerpoint_97">
@@ -325,22 +373,26 @@
           </uap:FileTypeAssociation>
         </uap:Extension>
         <uap:Extension Category="windows.fileTypeAssociation">
-          <uap:FileTypeAssociation Name="impress_staroffice_xml_impress">
+          <uap3:FileTypeAssociation Name="impress_staroffice_xml_impress">
             <uap:DisplayName>OpenOffice.org 1.0 Presentation</uap:DisplayName>
             <uap:Logo>Assets/presentation.png</uap:Logo>
             <uap:SupportedFileTypes>
               <uap:FileType>.sxi</uap:FileType>
             </uap:SupportedFileTypes>
-          </uap:FileTypeAssociation>
+            <desktop2:ThumbnailHandler Clsid="8DD6FA24-F2C1-409F-B879-61A829643EB2"/>
+            <desktop2:DesktopPropertyHandler Clsid="90B47FF6-F60A-43CD-9BAD-1BD9F5CA2E70"/>
+          </uap3:FileTypeAssociation>
         </uap:Extension>
         <uap:Extension Category="windows.fileTypeAssociation">
-          <uap:FileTypeAssociation Name="impress_staroffice_xml_impress_template">
+          <uap3:FileTypeAssociation Name="impress_staroffice_xml_impress_template">
             <uap:DisplayName>Impress 6.0 Template</uap:DisplayName>
             <uap:Logo>Assets/presentation-template.png</uap:Logo>
             <uap:SupportedFileTypes>
               <uap:FileType>.sti</uap:FileType>
             </uap:SupportedFileTypes>
-          </uap:FileTypeAssociation>
+            <desktop2:ThumbnailHandler Clsid="8DD6FA24-F2C1-409F-B879-61A829643EB2"/>
+            <desktop2:DesktopPropertyHandler Clsid="90B47FF6-F60A-43CD-9BAD-1BD9F5CA2E70"/>
+          </uap3:FileTypeAssociation>
         </uap:Extension>
         <uap:Extension Category="windows.fileTypeAssociation">
           <uap:FileTypeAssociation Name="ms_excel_2007_xml_template">
@@ -381,31 +433,37 @@
           </uap:FileTypeAssociation>
         </uap:Extension>
         <uap:Extension Category="windows.fileTypeAssociation">
-          <uap:FileTypeAssociation Name="writer8">
+          <uap3:FileTypeAssociation Name="writer8">
             <uap:DisplayName>Writer 8</uap:DisplayName>
             <uap:Logo>Assets/text.png</uap:Logo>
             <uap:SupportedFileTypes>
               <uap:FileType>.odt</uap:FileType>
             </uap:SupportedFileTypes>
-          </uap:FileTypeAssociation>
+            <desktop2:ThumbnailHandler Clsid="8DD6FA24-F2C1-409F-B879-61A829643EB2"/>
+            <desktop2:DesktopPropertyHandler Clsid="90B47FF6-F60A-43CD-9BAD-1BD9F5CA2E70"/>
+          </uap3:FileTypeAssociation>
         </uap:Extension>
         <uap:Extension Category="windows.fileTypeAssociation">
-          <uap:FileTypeAssociation Name="writer8_template">
+          <uap3:FileTypeAssociation Name="writer8_template">
             <uap:DisplayName>Writer 8 Template</uap:DisplayName>
             <uap:Logo>Assets/text-template.png</uap:Logo>
             <uap:SupportedFileTypes>
               <uap:FileType>.ott</uap:FileType>
             </uap:SupportedFileTypes>
-          </uap:FileTypeAssociation>
+            <desktop2:ThumbnailHandler Clsid="8DD6FA24-F2C1-409F-B879-61A829643EB2"/>
+            <desktop2:DesktopPropertyHandler Clsid="90B47FF6-F60A-43CD-9BAD-1BD9F5CA2E70"/>
+          </uap3:FileTypeAssociation>
         </uap:Extension>
         <uap:Extension Category="windows.fileTypeAssociation">
-          <uap:FileTypeAssociation Name="writerglobal8">
+          <uap3:FileTypeAssociation Name="writerglobal8">
             <uap:DisplayName>Writer 8 Master Document</uap:DisplayName>
             <uap:Logo>Assets/master-document.png</uap:Logo>
             <uap:SupportedFileTypes>
               <uap:FileType>.odm</uap:FileType>
             </uap:SupportedFileTypes>
-          </uap:FileTypeAssociation>
+            <desktop2:ThumbnailHandler Clsid="8DD6FA24-F2C1-409F-B879-61A829643EB2"/>
+            <desktop2:DesktopPropertyHandler Clsid="90B47FF6-F60A-43CD-9BAD-1BD9F5CA2E70"/>
+          </uap3:FileTypeAssociation>
         </uap:Extension>
         <uap:Extension Category="windows.fileTypeAssociation">
           <uap:FileTypeAssociation Name="writerglobal8_template">
@@ -417,22 +475,26 @@
           </uap:FileTypeAssociation>
         </uap:Extension>
         <uap:Extension Category="windows.fileTypeAssociation">
-          <uap:FileTypeAssociation Name="writerweb8_writer_template">
+          <uap3:FileTypeAssociation Name="writerweb8_writer_template">
             <uap:DisplayName>Writer/Web 8 Template</uap:DisplayName>
             <uap:Logo>Assets/text-template.png</uap:Logo>
             <uap:SupportedFileTypes>
               <uap:FileType>.oth</uap:FileType>
             </uap:SupportedFileTypes>
-          </uap:FileTypeAssociation>
+            <desktop2:ThumbnailHandler Clsid="8DD6FA24-F2C1-409F-B879-61A829643EB2"/>
+            <desktop2:DesktopPropertyHandler Clsid="90B47FF6-F60A-43CD-9BAD-1BD9F5CA2E70"/>
+          </uap3:FileTypeAssociation>
         </uap:Extension>
         <uap:Extension Category="windows.fileTypeAssociation">
-          <uap:FileTypeAssociation Name="writer_globaldocument_staroffice_xml_writer_globaldocument">
+          <uap3:FileTypeAssociation Name="writer_globaldocument_staroffice_xml_writer_globaldocument">
             <uap:DisplayName>Writer 6.0 Master Document</uap:DisplayName>
             <uap:Logo>Assets/master-document.png</uap:Logo>
             <uap:SupportedFileTypes>
               <uap:FileType>.sxg</uap:FileType>
             </uap:SupportedFileTypes>
-          </uap:FileTypeAssociation>
+            <desktop2:ThumbnailHandler Clsid="8DD6FA24-F2C1-409F-B879-61A829643EB2"/>
+            <desktop2:DesktopPropertyHandler Clsid="90B47FF6-F60A-43CD-9BAD-1BD9F5CA2E70"/>
+          </uap3:FileTypeAssociation>
         </uap:Extension>
         <uap:Extension Category="windows.fileTypeAssociation">
           <uap:FileTypeAssociation Name="writer_ms_word_2003_xml">
@@ -510,22 +572,26 @@
           </uap:FileTypeAssociation>
         </uap:Extension>
         <uap:Extension Category="windows.fileTypeAssociation">
-          <uap:FileTypeAssociation Name="writer_staroffice_xml_writer">
+          <uap3:FileTypeAssociation Name="writer_staroffice_xml_writer">
             <uap:DisplayName>OpenOffice.org 1.0 Text Document</uap:DisplayName>
             <uap:Logo>Assets/text.png</uap:Logo>
             <uap:SupportedFileTypes>
               <uap:FileType>.sxw</uap:FileType>
             </uap:SupportedFileTypes>
-          </uap:FileTypeAssociation>
+            <desktop2:ThumbnailHandler Clsid="8DD6FA24-F2C1-409F-B879-61A829643EB2"/>
+            <desktop2:DesktopPropertyHandler Clsid="90B47FF6-F60A-43CD-9BAD-1BD9F5CA2E70"/>
+          </uap3:FileTypeAssociation>
         </uap:Extension>
         <uap:Extension Category="windows.fileTypeAssociation">
-          <uap:FileTypeAssociation Name="writer_staroffice_xml_writer_template">
+          <uap3:FileTypeAssociation Name="writer_staroffice_xml_writer_template">
             <uap:DisplayName>Writer 6.0 Template</uap:DisplayName>
             <uap:Logo>Assets/text-template.png</uap:Logo>
             <uap:SupportedFileTypes>
               <uap:FileType>.stw</uap:FileType>
             </uap:SupportedFileTypes>
-          </uap:FileTypeAssociation>
+            <desktop2:ThumbnailHandler Clsid="8DD6FA24-F2C1-409F-B879-61A829643EB2"/>
+            <desktop2:DesktopPropertyHandler Clsid="90B47FF6-F60A-43CD-9BAD-1BD9F5CA2E70"/>
+          </uap3:FileTypeAssociation>
         </uap:Extension>
       </Extensions>
     </Application>
