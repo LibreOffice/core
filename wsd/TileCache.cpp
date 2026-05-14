@@ -41,6 +41,16 @@
 
 using namespace COOLProtocol;
 
+namespace
+{
+    /// Upper bound on how many stalled tiles a single stale-render sweep
+    /// will reissue.
+    constexpr size_t MAX_STALE_REISSUE_PER_SWEEP = 64;
+
+    /// Reissue count at which log line is promoted for a tile
+    constexpr int STALE_REISSUE_WARN_AT = 3;
+}
+
 TileCache::TileCache(std::string docURL, const std::chrono::system_clock::time_point& modifiedTime,
                      bool dontCache)
     : _docURL(std::move(docURL))
@@ -110,6 +120,9 @@ struct TileCache::TileBeingRendered
         return getElapsedTimeMs(now) > std::chrono::milliseconds(COMMAND_TIMEOUT_MS);
     }
 
+    int getReissueCount() const { return _reissueCount; }
+    void bumpReissue() { ++_reissueCount; }
+
     std::vector<std::weak_ptr<ClientSession>>& getSubscribers() { return _subscribers; }
 
     void dumpState(std::ostream& os);
@@ -118,6 +131,7 @@ private:
     std::vector<std::weak_ptr<ClientSession>> _subscribers;
     std::chrono::steady_clock::time_point _startTime;
     TileDesc _tile;
+    int _reissueCount = 0;
 };
 
 size_t TileCache::countTilesBeingRenderedForSession(const std::shared_ptr<ClientSession>& session,
@@ -185,7 +199,14 @@ TileCache::takeStaleRendersForReissue(std::chrono::steady_clock::time_point now)
 {
     ASSERT_CORRECT_THREAD_OWNER(_owner);
 
-    std::vector<TileDesc> reissue;
+    // First pass: collect stale entries with live subscribers, dropping
+    // entries whose subscribers have all gone away.
+    using MapIter = std::unordered_map<TileDesc, std::shared_ptr<TileBeingRendered>,
+                       TileDescCacheHasher,
+                       TileDescCacheCompareEq>::iterator;
+    std::vector<MapIter> candidates;
+    candidates.reserve(_tilesBeingRendered.size());
+
     for (auto it = _tilesBeingRendered.begin(); it != _tilesBeingRendered.end(); )
     {
         const auto& tbr = it->second;
@@ -195,8 +216,6 @@ TileCache::takeStaleRendersForReissue(std::chrono::steady_clock::time_point now)
             continue;
         }
 
-        // Compact the subscriber list, discarding any sessions that
-        // have gone away while the kit was being slow.
         auto& subs = tbr->getSubscribers();
         subs.erase(std::remove_if(subs.begin(), subs.end(),
                                   [](const std::weak_ptr<ClientSession>& w)
@@ -211,13 +230,46 @@ TileCache::takeStaleRendersForReissue(std::chrono::steady_clock::time_point now)
             continue;
         }
 
-        LOG_WRN("Re-issuing stalled tile render after "
-                << tbr->getElapsedTimeMs(now).count() << "ms for "
-                << subs.size() << " subscribers: " << it->first.serialize());
-        reissue.push_back(it->first);
-        tbr->resetStartTime(now);
+        candidates.push_back(it);
         ++it;
     }
+
+    // oldest first
+    std::sort(candidates.begin(), candidates.end(),
+              [](const MapIter& a, const MapIter& b)
+              { return a->second->getStartTime() < b->second->getStartTime(); });
+
+    const size_t take = std::min(candidates.size(), MAX_STALE_REISSUE_PER_SWEEP);
+    std::vector<TileDesc> reissue;
+    reissue.reserve(take);
+
+    // reissue up to MAX_STALE_REISSUE_PER_SWEEP
+    for (size_t i = 0; i < take; ++i)
+    {
+        auto& tbr = candidates[i]->second;
+        const TileDesc& tile = candidates[i]->first;
+
+        tbr->bumpReissue();
+        const int count = tbr->getReissueCount();
+
+        if (count >= STALE_REISSUE_WARN_AT)
+            LOG_WRN("Tile reissued " << count << " times - kit likely unhealthy: "
+                    << tile.serialize());
+        else
+            LOG_INF("Re-issuing stalled tile render after "
+                    << tbr->getElapsedTimeMs(now).count() << "ms for "
+                    << tbr->getSubscribers().size() << " subscribers: "
+                    << tile.serialize());
+
+        reissue.push_back(tile);
+        tbr->resetStartTime(now);
+    }
+
+    if (candidates.size() > take)
+        LOG_INF("Deferred " << (candidates.size() - take)
+                << " stale tile(s) to next sweep; per-sweep cap is "
+                << MAX_STALE_REISSUE_PER_SWEEP);
+
     return reissue;
 }
 
