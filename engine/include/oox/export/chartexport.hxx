@@ -142,6 +142,16 @@ public:
     bool mbLinkToExternalData = true;
 
 private:
+    struct ChartDimInfo
+    {
+        OUString sFormula;
+        OUString sNFormula;
+        OUString sDimTypeStr;   // "val", "cat", "size", etc.
+        bool bIsNumeric = false;
+        bool bHasInfo = false;  // true if chartex properties were found
+    };
+
+
     sal_Int32           mnXmlNamespace;
     sal_Int32           mnSeriesCount;
     css::uno::Reference< css::frame::XModel > mxChartModel;
@@ -200,6 +210,7 @@ private:
     void exportBitmapFill( const css::uno::Reference< css::beans::XPropertySet >& xPropSet );
     void exportHatch(const css::uno::Reference<css::beans::XPropertySet>& xPropSet);
     void exportDataTable( );
+    ChartDimInfo getChartDimInfo( const css::uno::Reference<css::chart2::data::XDataSequence>& xSeq);
 
     void exportAreaChart( const css::uno::Reference< css::chart2::XChartType >& xChartType );
     void exportBarChart( const css::uno::Reference< css::chart2::XChartType >& xChartType );
@@ -313,6 +324,7 @@ private:
         sal_Int32 nLabelIndex, DataLabelsRange& rDLblsRange,
         bool bIsChartex);
 
+    static void writeChartDim(const ::sax_fastparser::FSHelperPtr& pFS, const ChartDimInfo& rInfo);
 public:
 
     OOX_DLLPUBLIC ChartExport( sal_Int32 nXmlNamespace, ::sax_fastparser::FSHelperPtr pFS, css::uno::Reference< css::frame::XModel > const & xModel,

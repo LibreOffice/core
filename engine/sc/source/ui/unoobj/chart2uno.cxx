@@ -2487,6 +2487,9 @@ ScChart2DataSequence::ScChart2DataSequence(ScDocument* pDoc, const ScChart2DataS
     , m_aHiddenValues(r.m_aHiddenValues)
     , m_aRole(r.m_aRole)
     , m_bIncludeHiddenCells( r.m_bIncludeHiddenCells)
+    , m_eDimType( r.m_eDimType)
+    , m_sFormula( r.m_sFormula)
+    , m_sNFormula( r.m_sNFormula)
     , m_nObjectId( 0 )
     , m_pDocument( pDoc)
     , m_aPropSet(lcl_GetDataSequencePropertyMap())
@@ -3401,6 +3404,21 @@ void SAL_CALL ScChart2DataSequence::setPropertyValue(
         rValue>>= bTimeBased;
         mbTimeBased = bTimeBased;
     }
+    else if( rPropertyName == "ChartExDimType" )
+    {
+        if ( !(rValue >>= m_eDimType))
+            throw lang::IllegalArgumentException();
+    }
+    else if( rPropertyName == "ChartExFormula" )
+    {
+        if ( !(rValue >>= m_sFormula))
+            throw lang::IllegalArgumentException();
+    }
+    else if( rPropertyName == "ChartExNFormula" )
+    {
+        if ( !(rValue >>= m_sNFormula))
+            throw lang::IllegalArgumentException();
+    }
     else
         throw beans::UnknownPropertyException(rPropertyName);
     // TODO: support optional properties
@@ -3436,6 +3454,12 @@ uno::Any SAL_CALL ScChart2DataSequence::getPropertyValue(const OUString& rProper
         }
         aRet <<= bHasStringLabel;
     }
+    else if ( rPropertyName == "ChartExDimType" )
+        aRet <<= m_eDimType;
+    else if ( rPropertyName == "ChartExFormula" )
+        aRet <<= m_sFormula;
+    else if ( rPropertyName == "ChartExNFormula" )
+        aRet <<= m_sNFormula;
     else
         throw beans::UnknownPropertyException(rPropertyName);
     // TODO: support optional properties

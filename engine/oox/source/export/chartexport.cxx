@@ -27,6 +27,8 @@
 #include <oox/token/relationship.hxx>
 #include <oox/export/utils.hxx>
 #include <drawingml/chart/typegroupconverter.hxx>
+#include <oox/drawingml/chart/datasourcemodel.hxx>
+#include <drawingml/chart/seriesmodel.hxx>
 #include <basegfx/utils/gradienttools.hxx>
 #include <docmodel/uno/UnoGradientTools.hxx>
 #include <docmodel/uno/UnoComplexColor.hxx>
@@ -1651,6 +1653,16 @@ void ChartExport::exportChartSpace( const Reference< css::chart::XChartDocument 
         }
     }
 
+    Reference< chart2::XChartDocument > xNewDoc( xChartDoc, uno::UNO_QUERY );
+    mxDiagram.set( xChartDoc->getDiagram() );
+    if( xNewDoc.is()) {
+        mxNewDiagram.set( xNewDoc->getFirstDiagram());
+    }
+
+    // We're not to the plotArea yet, but we need some of the stuff that gets
+    // set up in InitPlotArea() in order to do the chartex data export.
+    InitPlotArea( );
+
     // TODO: get the correct editing language
     if (bIsChartex) {
         // chartData
@@ -1700,6 +1712,63 @@ void ChartExport::exportChartSpace( const Reference< css::chart::XChartDocument 
     }
 
     pFS->endElement( FSNS( nChartNS, XML_chartSpace ) );
+}
+
+void ChartExport::writeChartDim(const sax_fastparser::FSHelperPtr& pFS,
+                         const ChartDimInfo& rInfo)
+{
+    sal_Int32 nDimToken = rInfo.bIsNumeric ? FSNS(XML_cx, XML_numDim) : FSNS(XML_cx, XML_strDim);
+
+    pFS->startElement(nDimToken, XML_type, rInfo.sDimTypeStr);
+
+    pFS->startElement(FSNS(XML_cx, XML_f));
+    pFS->writeEscaped(rInfo.sFormula);
+    pFS->endElement(FSNS(XML_cx, XML_f));
+
+    if (!rInfo.sNFormula.isEmpty())
+    {
+        pFS->startElement(FSNS(XML_cx, XML_nf));
+        pFS->writeEscaped(rInfo.sNFormula);
+        pFS->endElement(FSNS(XML_cx, XML_nf));
+    }
+
+    pFS->endElement(nDimToken);
+}
+
+ChartExport::ChartDimInfo ChartExport::getChartDimInfo(
+    const Reference<chart2::data::XDataSequence>& xSeq)
+{
+    using namespace oox::drawingml::chart;
+    ChartDimInfo aInfo;
+    if (!xSeq.is())
+        return aInfo;
+    Reference<beans::XPropertySet> xProp(xSeq, uno::UNO_QUERY);
+    if (!xProp.is())
+        return aInfo;
+    Reference<beans::XPropertySetInfo> xPropInfo(xProp->getPropertySetInfo());
+    if (!xPropInfo.is())
+        return aInfo;
+
+    if (GetProperty(xProp, u"ChartExDimType"_ustr))
+    {
+        sal_Int32 nDimType = 0;
+        mAny >>= nDimType;
+        auto eDimType = static_cast<DataSourceType>(nDimType);
+        if (dataSourceTypeToCx(eDimType, aInfo.bIsNumeric, aInfo.sDimTypeStr))
+            aInfo.bHasInfo = true;
+    }
+
+    if (GetProperty(xProp, u"ChartExFormula"_ustr))
+    {
+        mAny >>= aInfo.sFormula;
+    }
+
+    if (GetProperty(xProp, u"ChartExNFormula"_ustr))
+    {
+        mAny >>= aInfo.sNFormula;
+    }
+
+    return aInfo;
 }
 
 void ChartExport::exportData_chartex( [[maybe_unused]] const Reference< css::chart::XChartDocument >& xChartDoc)
@@ -1784,19 +1853,43 @@ void ChartExport::exportData_chartex( [[maybe_unused]] const Reference< css::cha
                     // The data id needs to agree with the id in exportSeries(). See DATA_ID_COMMENT
                     pFS->startElement(FSNS(XML_cx, XML_data), XML_id, OUString::number(nSeriesIndex));
 
-                    // .xlsx chartex files seem to have this magical "_xlchart..." string,
-                    // and no explicit data, while .docx and .pptx contain the literal data,
-                    // as well as a ../embeddings file (which LO doesn't seem to produce).
-                    // But there's probably a smarter way to determine which pathway to take
-                    // than based on document type.
+                    // For XLSX, chartex files use formula references (e.g. "_xlchart.v1.0")
+                    // rather than literal data. For DOCX/PPTX, literal data is embedded.
+                    // If dimension info was stored during import, use it for both paths.
+                    //
+                    // Try to export stored dimension info from all data sequences.
+                    bool bExportedFromProperties = false;
                     if (GetDocumentType() == DOCUMENT_XLSX && eChartType != chart::TYPEID_HISTO)
                     {
-                        // Just hard-coding this for now
+                        // Iterate all data sequences and output each dimension
+                        // using the stored chartex properties.
+                        for (sal_Int32 i = 0; i < aSeqCnt.getLength(); ++i)
+                        {
+                            Reference<chart2::data::XDataSequence> xSeq(aSeqCnt[i]->getValues());
+                            ChartDimInfo aInfo = getChartDimInfo(xSeq);
+                            if (aInfo.bHasInfo && !aInfo.sFormula.isEmpty())
+                            {
+                                writeChartDim(pFS, aInfo);
+                                bExportedFromProperties = true;
+                            }
+                        }
+                        // Also check the categories sequence
+                        if (mxCategoriesValues.is())
+                        {
+                            ChartDimInfo aCatInfo = getChartDimInfo(mxCategoriesValues);
+                            if (aCatInfo.bHasInfo && !aCatInfo.sFormula.isEmpty())
+                            {
+                                writeChartDim(pFS, aCatInfo);
+                                bExportedFromProperties = true;
+                            }
+                        }
+                    }
+
+                    if (!bExportedFromProperties && GetDocumentType() == DOCUMENT_XLSX) {
+                        // Fallback: hard-coded formulas for charts not imported from chartex
 
                         sal_Int32 nSuffixVal = nSeriesIndex;
 
-                        // Output category data formula for some chart types.
-                        // (This is completely hacky)
                         if (eChartType ==  chart::TYPEID_SUNBURST ||
                                 eChartType == chart::TYPEID_TREEMAP) {
                             pFS->startElement(FSNS(XML_cx, XML_strDim), XML_type, "cat");
@@ -1825,15 +1918,10 @@ void ChartExport::exportData_chartex( [[maybe_unused]] const Reference< css::cha
                             sNumDimType = "val";
                         }
 
-                        // Now output value data formula
                         pFS->startElement(FSNS(XML_cx, XML_numDim), XML_type,
                                 sNumDimType.c_str());
                         pFS->startElement(FSNS(XML_cx, XML_f));
 
-                        // Set the formula value based on the chart type. This
-                        // is just a hack. It obviously should be based on the
-                        // identifier for the actual data (either as imported or
-                        // created within LO). TODO
                         std::string sFormulaId;
                         switch( eChartType )
                         {
@@ -1856,16 +1944,11 @@ void ChartExport::exportData_chartex( [[maybe_unused]] const Reference< css::cha
                                 assert(false);
                                 break;
                         }
-                        // Append the id value, which seems (?) to be what
-                        // follows the period in the string. E.g., for id=2 we
-                        // might end up with "_xlchart.v1.2"
                         sFormulaId.append(std::to_string(nSuffixVal));
-
                         pFS->writeEscaped(sFormulaId);
-
                         pFS->endElement(FSNS(XML_cx, XML_f));
                         pFS->endElement(FSNS(XML_cx, XML_numDim));
-                    } else {    // PPTX, DOCX
+                    } else if (GetDocumentType() != DOCUMENT_XLSX) {    // PPTX, DOCX
                         OUString aCellRange = mxCategoriesValues.is() ? mxCategoriesValues->getSourceRangeRepresentation() : OUString();
 #undef OUTPUT_SPLIT_CATEGORIES  // do we need this or not? TODO
 #ifdef OUTPUT_SPLIT_CATEGORIES
@@ -2186,12 +2269,6 @@ void ChartExport::exportAdditionalShapes( const Reference< css::chart::XChartDoc
 void ChartExport::exportChart( const Reference< css::chart::XChartDocument >& xChartDoc,
         bool bIsChartex)
 {
-    Reference< chart2::XChartDocument > xNewDoc( xChartDoc, uno::UNO_QUERY );
-    mxDiagram.set( xChartDoc->getDiagram() );
-    if( xNewDoc.is()) {
-        mxNewDiagram.set( xNewDoc->getFirstDiagram());
-    }
-
     // get Properties of ChartDocument
     bool bHasMainTitle = false;
     bool bHasLegend = false;
@@ -2245,7 +2322,6 @@ void ChartExport::exportChart( const Reference< css::chart::XChartDocument >& xC
         pFS->singleElement(FSNS(XML_c, XML_autoTitleDeleted), XML_val, "1");
     }
 
-    InitPlotArea( );
     if( mbIs3DChart )
     {
         if (!bIsChartex) {

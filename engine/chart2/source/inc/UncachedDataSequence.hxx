@@ -134,6 +134,9 @@ private:
     sal_Int32                                       m_nNumberFormatKey;
     OUString                                 m_sRole;
     OUString                                 m_aXMLRange;
+    OUString                                 m_aChartExFormula;
+    OUString                                 m_aChartExNFormula;
+    sal_Int32                                       m_nChartExDimType;
     // </properties>
 
     /** This method registers all properties.  It should be called by all

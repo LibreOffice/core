@@ -18,6 +18,7 @@
  */
 
 #include <oox/drawingml/chart/datasourcemodel.hxx>
+#include <drawingml/chart/seriesmodel.hxx>
 #include <svl/zforlist.hxx>
 
 namespace oox::drawingml::chart {
@@ -39,6 +40,42 @@ DataSourceModel::DataSourceModel()
 
 DataSourceModel::~DataSourceModel()
 {
+}
+
+DataSourceType dataSourceTypeFromCx(bool bNumeric, std::u16string_view rType)
+{
+    if (bNumeric)
+    {
+        if (rType == u"val")      return DataSourceType::NUM_VAL;
+        if (rType == u"x")        return DataSourceType::NUM_X;
+        if (rType == u"y")        return DataSourceType::NUM_Y;
+        if (rType == u"size")     return DataSourceType::NUM_SIZE;
+        if (rType == u"colorVal") return DataSourceType::NUM_COLORVAL;
+        return DataSourceType::NUM_VAL; // default for numDim
+    }
+    else
+    {
+        if (rType == u"cat")      return DataSourceType::STR_CAT;
+        if (rType == u"colorStr") return DataSourceType::STR_COLORSTR;
+        if (rType == u"entityId") return DataSourceType::STR_ENTITYID;
+        return DataSourceType::STR_CAT; // default for strDim
+    }
+}
+
+bool dataSourceTypeToCx(DataSourceType eType, bool& rbNumeric, OUString& rsType)
+{
+    switch (eType)
+    {
+        case DataSourceType::STR_CAT:      rbNumeric = false; rsType = "cat";      return true;
+        case DataSourceType::STR_COLORSTR: rbNumeric = false; rsType = "colorStr"; return true;
+        case DataSourceType::STR_ENTITYID: rbNumeric = false; rsType = "entityId"; return true;
+        case DataSourceType::NUM_VAL:      rbNumeric = true;  rsType = "val";      return true;
+        case DataSourceType::NUM_X:        rbNumeric = true;  rsType = "x";        return true;
+        case DataSourceType::NUM_Y:        rbNumeric = true;  rsType = "y";        return true;
+        case DataSourceType::NUM_SIZE:     rbNumeric = true;  rsType = "size";     return true;
+        case DataSourceType::NUM_COLORVAL: rbNumeric = true;  rsType = "colorVal"; return true;
+        default: return false;
+    }
 }
 
 } // namespace oox::drawingml::chart

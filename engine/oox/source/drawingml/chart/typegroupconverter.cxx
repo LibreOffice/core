@@ -328,18 +328,33 @@ Reference< XLabeledDataSequence > TypeGroupConverter::createCategorySequence()
         first series, even if it was empty. */
     for (auto const& elem : mrModel.maSeries)
     {
-        if( elem->maSources.has( DataSourceType::CATEGORIES ) )
+        if( elem->maSources.has( DataSourceType::STR_CAT ) )
         {
             SeriesConverter aSeriesConv(*this, *elem);
             xLabeledSeq = aSeriesConv.createCategorySequence( u"categories"_ustr );
             if (xLabeledSeq.is())
                 break;
         }
-        else if( nMaxValues <= 0 && elem->maSources.has( DataSourceType::VALUES ) )
+        else if( nMaxValues <= 0 )
         {
-            DataSourceModel *pValues = elem->maSources.get( DataSourceType::VALUES ).get();
-            if( pValues->mxDataSeq.is() )
-                nMaxValues = pValues->mxDataSeq->maData.size();
+            // Check all numeric dimension types for point count
+            static const DataSourceType aNumTypes[] = {
+                DataSourceType::NUM_VAL, DataSourceType::NUM_SIZE,
+                DataSourceType::NUM_COLORVAL, DataSourceType::NUM_X,
+                DataSourceType::NUM_Y,
+            };
+            for (DataSourceType eType : aNumTypes)
+            {
+                if (elem->maSources.has(eType))
+                {
+                    DataSourceModel *pValues = elem->maSources.get(eType).get();
+                    if (pValues->mxDataSeq.is())
+                    {
+                        nMaxValues = pValues->mxDataSeq->maData.size();
+                        break;
+                    }
+                }
+            }
         }
     }
     /* n#839727 Create Category Sequence when none are found */
@@ -348,9 +363,9 @@ Reference< XLabeledDataSequence > TypeGroupConverter::createCategorySequence()
             nMaxValues = 2;
         typedef RefVector<SeriesModel> SeriesModelVector;
         SeriesModelVector::value_type aModel = mrModel.maSeries.get(0);
-        if (!aModel->maSources.has(DataSourceType::CATEGORIES))
+        if (!aModel->maSources.has(DataSourceType::STR_CAT))
         {
-            DataSourceModel &aSrc = aModel->maSources.create( DataSourceType::CATEGORIES );
+            DataSourceModel &aSrc = aModel->maSources.create( DataSourceType::STR_CAT );
             DataSequenceModel &aSeq = aSrc.mxDataSeq.create();
             aSeq.mnPointCount = nMaxValues;
             for( sal_Int32 i = 0; i < nMaxValues; i++ )

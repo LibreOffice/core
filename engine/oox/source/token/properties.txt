@@ -54,6 +54,9 @@ CellStyle
 CenterHorizontally
 CenterVertically
 Change
+ChartExDimType
+ChartExFormula
+ChartExNFormula
 CharBackColor
 CharBackgroundComplexColor
 CharCaseMap

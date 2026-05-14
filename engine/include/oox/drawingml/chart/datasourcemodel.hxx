@@ -37,8 +37,9 @@ struct DataSequenceModel
     typedef ::std::map< sal_Int32, css::uno::Any > AnyMap;
 
     AnyMap              maData;             /// Map of values, indexed by point identifier.
-    OUString     maFormula;          /// Formula reference, e.g. into a spreadsheet.
-    OUString     maFormatCode;       /// Number format for double values.
+    OUString            maFormula;          /// Formula reference, e.g. into a spreadsheet.
+    OUString            maNFormula;         /// Formula reference for a <cx:nf> element
+    OUString            maFormatCode;       /// Number format for double values.
     sal_Int32           mnPointCount;       /// Number of points in this series source.
     sal_Int32           mnLevelCount;       /// Number of category levels.
     SvNumFormatType     meFormatType;       /// Type of number format in maFormatCode.
@@ -76,6 +77,18 @@ struct DataSourceCxModel
     explicit            DataSourceCxModel() = default;
 };
 
+
+/// Convert chartex XML attributes to a DataSourceType.
+/// @param bNumeric  true for numDim, false for strDim
+/// @param rType     the type attribute value (e.g. "val", "cat", "size")
+DataSourceType dataSourceTypeFromCx(bool bNumeric, std::u16string_view rType);
+
+/// Convert a DataSourceType back to chartex XML element/attribute info.
+/// @param eType      the DataSourceType
+/// @param rbNumeric  set to true for numDim, false for strDim
+/// @param rsType     set to the type attribute value
+/// @return false if eType is not a dimension type (POINTS, DATALABELS)
+bool dataSourceTypeToCx(DataSourceType eType, bool& rbNumeric, OUString& rsType);
 
 } // namespace oox::drawingml::chart
 

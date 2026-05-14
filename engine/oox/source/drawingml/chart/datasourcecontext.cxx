@@ -85,6 +85,7 @@ ContextHandlerRef DoubleSequenceContext::onCreateContext( sal_Int32 nElement, co
         case CX_TOKEN(numDim) :
             switch (nElement) {
                 case CX_TOKEN(f):
+                case CX_TOKEN(nf):
                     return this;
                 case CX_TOKEN(lvl):
                     mrModel.mnPointCount = rAttribs.getInteger(XML_ptCount, -1);
@@ -110,6 +111,9 @@ void DoubleSequenceContext::onCharacters( const OUString& rChars )
         case C_TOKEN( f ):
         case CX_TOKEN( f ):
             mrModel.maFormula = rChars;
+        break;
+        case CX_TOKEN( nf ):
+            mrModel.maNFormula = rChars;
         break;
         case C_TOKEN( formatCode ):
             mrModel.maFormatCode = rChars;
@@ -284,6 +288,7 @@ ContextHandlerRef StringSequenceContext::onCreateContext( sal_Int32 nElement, co
         case CX_TOKEN(strDim) :
             switch (nElement) {
                 case CX_TOKEN(f):
+                case CX_TOKEN(nf):
                     return this;
                 case CX_TOKEN(lvl):
                     mrModel.mnPointCount = rAttribs.getInteger(XML_ptCount, -1);
@@ -300,6 +305,9 @@ void StringSequenceContext::onCharacters( const OUString& rChars )
         case C_TOKEN( f ):
         case CX_TOKEN( f ):
             mrModel.maFormula = rChars;
+        break;
+        case CX_TOKEN( nf ):
+            mrModel.maNFormula = rChars;
         break;
         case C15_TOKEN( f ):
             if (mbReadC15)
@@ -398,33 +406,20 @@ ContextHandlerRef DataSourceCxContext::onCreateContext(sal_Int32 nElement, const
                 {
                     assert(paCurSource);
                     OUString sType = rAttribs.getString(XML_type, "val");
-                    if (sType == "cat") {
-                        DataSourceModel& rDataModel = paCurSource->create(DataSourceType::CATEGORIES);
-                        return new DoubleSequenceContext(*this,
-                                rDataModel.mxDataSeq.create());
-                    } else {
-                        // default is VALUES
-                        DataSourceModel& rDataModel = paCurSource->create(DataSourceType::VALUES);
-                        return new DoubleSequenceContext(*this,
-                                rDataModel.mxDataSeq.create());
-                    }
-                    break;
+                    DataSourceType eDimType = dataSourceTypeFromCx(true, sType);
+                    DataSourceModel& rDataModel = paCurSource->create(eDimType);
+                    return new DoubleSequenceContext(*this,
+                            rDataModel.mxDataSeq.create());
                 }
 
                 case CX_TOKEN(strDim) :
                 {
                     assert(paCurSource);
                     OUString sType = rAttribs.getString(XML_type, "cat");
-                    if (sType == "val") {
-                        DataSourceModel& rDataModel = paCurSource->create(DataSourceType::VALUES);
-                        return new StringSequenceContext(*this,
-                                rDataModel.mxDataSeq.create());
-                    } else {
-                        // default is CATEGORIES
-                        DataSourceModel& rDataModel = paCurSource->create(DataSourceType::CATEGORIES);
-                        return new StringSequenceContext(*this,
-                                rDataModel.mxDataSeq.create());
-                    }
+                    DataSourceType eDimType = dataSourceTypeFromCx(false, sType);
+                    DataSourceModel& rDataModel = paCurSource->create(eDimType);
+                    return new StringSequenceContext(*this,
+                            rDataModel.mxDataSeq.create());
                 }
             }
             break;

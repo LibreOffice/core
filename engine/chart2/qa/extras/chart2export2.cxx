@@ -1919,6 +1919,59 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testChartexGeography)
     CPPUNIT_ASSERT(sBinaryContent.startsWith(u"7HvJkt24kuWvpOWm"));
 }
 
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testChartexDimRoundTrip_regionMap)
+{
+    // regionMap.xlsx has strDim type="cat" and numDim type="colorVal",
+    // each with <cx:f> and <cx:nf> formulas. Verify they round-trip.
+    loadFromFile(u"xlsx/regionMap.xlsx");
+    save(TestFilter::XLSX);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"xl/charts/chartEx1.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    static constexpr OString sData = "/cx:chartSpace/cx:chartData/cx:data"_ostr;
+
+    // strDim with type="cat"
+    assertXPath(pXmlDoc, sData + "/cx:strDim", "type", u"cat");
+    assertXPathContent(pXmlDoc, sData + "/cx:strDim/cx:f", u"_xlchart.v5.1");
+    assertXPathContent(pXmlDoc, sData + "/cx:strDim/cx:nf", u"_xlchart.v5.0");
+
+    // numDim with type="colorVal"
+    assertXPath(pXmlDoc, sData + "/cx:numDim", "type", u"colorVal");
+    assertXPathContent(pXmlDoc, sData + "/cx:numDim/cx:f", u"_xlchart.v5.3");
+    assertXPathContent(pXmlDoc, sData + "/cx:numDim/cx:nf", u"_xlchart.v5.2");
+}
+
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testChartexDimRoundTrip_boxWhisker)
+{
+    // boxWhisker.xlsx has 3 numDim type="val" elements, one per data series.
+    loadFromFile(u"xlsx/boxWhisker.xlsx");
+    save(TestFilter::XLSX);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"xl/charts/chartEx1.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // data id=0
+    assertXPath(pXmlDoc, "/cx:chartSpace/cx:chartData/cx:data[@id='0']/cx:numDim", "type", u"val");
+    assertXPathContent(pXmlDoc, "/cx:chartSpace/cx:chartData/cx:data[@id='0']/cx:numDim/cx:f",
+                       u"_xlchart.v1.0");
+}
+
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testChartexDimRoundTrip_sunburst)
+{
+    // sunburst.xlsx has strDim type="cat" and numDim type="size".
+    loadFromFile(u"xlsx/sunburst.xlsx");
+    save(TestFilter::XLSX);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"xl/charts/chartEx1.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    static constexpr OString sData ="/cx:chartSpace/cx:chartData/cx:data"_ostr;
+
+    assertXPath(pXmlDoc, sData + "/cx:strDim", "type", u"cat");
+    assertXPathContent(pXmlDoc, sData + "/cx:strDim/cx:f", u"_xlchart.v1.0");
+
+    assertXPath(pXmlDoc, sData + "/cx:numDim", "type", u"size");
+    assertXPathContent(pXmlDoc, sData + "/cx:numDim/cx:f", u"_xlchart.v1.1");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
