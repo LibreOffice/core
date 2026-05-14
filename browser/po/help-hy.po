@@ -3,16 +3,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-11 14:06+0200\n"
-"PO-Revision-Date: 2026-03-11 14:40+0000\n"
+"PO-Revision-Date: 2026-05-12 14:12+0000\n"
 "Last-Translator: Tigran Zargaryan <tigranflib@gmail.com>\n"
-"Language-Team: Armenian <https://hosted.weblate.org/projects/"
-"collabora-online/help/hy/>\n"
+"Language-Team: Armenian <https://hosted.weblate.org/projects/collabora-"
+"online/help/hy/>\n"
 "Language: hy\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Translate Toolkit 3.6.0\n"
+"X-Generator: Weblate 2026.5-dev\n"
 
 #: html/cool-help.html%2Bdiv.h1:9-5
 msgid "Keyboard Shortcuts"
@@ -2054,6 +2054,9 @@ msgid ""
 "Status bar showing page number, word count, insert mode, selection mode, "
 "language, edit mode, navigation, zoom, and search"
 msgstr ""
+"Կարգավիճակի գոտի, որը ցույց է տալիս էջի համարը, բառերի քանակը, ներմուծման "
+"ռեժիմը, ընտրության ռեժիմը, լեզուն, խմբագրման ռեժիմը, նավիգացիան, մեծացումը և "
+"որոնումը"
 
 #: html/cool-help.html%2Bdiv.div.div.p:393-5
 msgid ""
@@ -2068,9 +2071,8 @@ msgstr ""
 "զգայուն չէ մեծատառերի նկատմամբ։ Որոնման դաշտի կողքին կան երեք կոճակներ:"
 
 #: html/cool-help.html%2Bdiv.div.div.ul.li:395-7
-#, fuzzy
 msgid "Search backwards"
-msgstr "Որոնել հետընթաց>"
+msgstr "Որոնել հետընթաց"
 
 #: html/cool-help.html%2Bdiv.div.div.ul.li:396-7
 msgid "Search forward"
@@ -2121,6 +2123,8 @@ msgstr ""
 msgid ""
 "Information bar showing page navigation arrows, zoom controls, and zoom level"
 msgstr ""
+"Տեղեկատվական գոտի, որը ցույց է տալիս էջի նավարկման սլաքները, մեծացման "
+"կառավարման տարրերը և մեծացման մակարդակը"
 
 #: html/cool-help.html%2Bdiv.div.p:412-5
 msgid ""
@@ -2271,6 +2275,8 @@ msgid ""
 "Repair Document dialog listing past document states with columns for action "
 "type, author, and timestamp"
 msgstr ""
+"«Փաստաթղթի վերականգնման» երկխոսության պատուհան, որը թվարկում է փաստաթղթի "
+"նախկին վիճակները՝ գործողության տեսակի, հեղինակի և ժամանակային նշման սյուներով"
 
 #: html/cool-help.html%2Bdiv.div.div.p:432-5
 msgid ""
@@ -2306,6 +2312,8 @@ msgid ""
 "Idle document overlay with the message: Idle document - please click to "
 "reload and resume editing"
 msgstr ""
+"Անգործուն փաստաթուղթը ծածկվում է հետևյալ հաղորդագրությամբ՝ Անգործուն "
+"փաստաթուղթ - խնդրում ենք սեղմել՝ վերբեռնելու և խմբագրումը վերսկսելու համար"
 
 #: html/cool-help.html%2Bdiv.div.div.p:438-5
 msgid ""
@@ -2403,6 +2411,8 @@ msgid ""
 "Chart Wizard dialog with chart type list on the left, chart style previews, "
 "3D and shape options"
 msgstr ""
+"«Գծապատկերների վարպետ» երկխոսության պատուհան՝ ձախ կողմում գտնվող գծապատկերի "
+"տեսակների ցանկով, գծապատկերի ոճերի նախադիտումներով, եռաչափ և ձևի ընտրանքներով"
 
 #: html/cool-help.html%2Bdiv.div.div.ol.li:460-7
 msgid "If no table or range was selected, a prototype chart is displayed."
@@ -2414,6 +2424,8 @@ msgid ""
 "Column chart with grouped bars showing data for four rows across three "
 "columns"
 msgstr ""
+"Սյունակային դիագրամ՝ խմբավորված սյուներով, որը ցույց է տալիս տվյալները չորս "
+"տողերի համար՝ երեք սյուների վրա"
 
 #: html/cool-help.html%2Bdiv.div.div.p:464-28
 msgid ""
@@ -2507,6 +2519,8 @@ msgid ""
 "Comment box showing author name, date, and the comment text, displayed "
 "beside the document"
 msgstr ""
+"Մեկնաբանության դաշտ, որը ցույց է տալիս հեղինակի անունը, ամսաթիվը և "
+"մեկնաբանության տեքստը, որը ցուցադրվում է փաստաթղթի կողքին"
 
 #: html/cool-help.html%2Bdiv.div.div.p:478-5
 msgid ""
@@ -2536,7 +2550,7 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.img[alt]:483-29
 msgid "Text with a red wavy underline beneath a misspelled word"
-msgstr ""
+msgstr "Սխալ գրված բառի տակ կարմիր ալիքավոր ընդգծված տեքստ"
 
 #: html/cool-help.html%2Bdiv.div.div.p:484-5
 msgid ""
@@ -2584,6 +2598,8 @@ msgid ""
 "Formula bar showing cell reference B1, function wizard icon, and the formula "
 "=SIN(PI()*A1/10)"
 msgstr ""
+"Բանաձևերի գոտի, որը ցույց է տալիս B1 բջջի հղումը, ֆունկցիայի օգնականի "
+"պատկերակը և =SIN(PI()*A1/10) բանաձևը"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:499-5
 msgid ""
@@ -2622,6 +2638,8 @@ msgid ""
 "Format Cells dialog on the Numbers tab with category list, format options, "
 "decimal places, and format code"
 msgstr ""
+"«Ձևաչափել բջիջները» երկխոսության պատուհանը «Թվեր» ներդիրում՝ դասերի ցանկով, "
+"ձևաչափի ընտրանքներով, տասնորդական նիշերով և ձևաչափի կոդով"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:511-30
 msgid ""
@@ -2662,6 +2680,8 @@ msgid ""
 "AutoFilter dropdown menu on a spreadsheet column with sort, filter by color, "
 "filter by condition, and checkboxes for individual values"
 msgstr ""
+"Աղյուսակի սյունակում AutoFilter իջնող ցանկ՝ տեսակավորելով, զտելով ըստ "
+"գույնի, զտելով ըստ պայմանի և առանձին արժեքների համար նշատուփերով"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:518-7
 msgid ""
@@ -2701,6 +2721,8 @@ msgid ""
 "Spreadsheet with row and column grouping controls showing outline level "
 "buttons and collapse/expand toggles"
 msgstr ""
+"Էլ․ աղյուսակ՝ տողերի և սյուների խմբավորման կառավարման տարրերով, որոնք ցույց "
+"են տալիս ուրվագծման մակարդակի կոճակները և ծալման/ընդլայնման անջատիչները"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:527-5
 msgid ""
@@ -2726,6 +2748,9 @@ msgid ""
 "Validity dialog on the Criteria tab with Allow set to List, showing options "
 "for empty cells, selection list, and entry values"
 msgstr ""
+"«Չափանիշներ» ներդիրում գործող վավերականության երկխոսության պատուհան՝ «"
+"Թույլատրել» կարգավորումով որպես «Ցուցակ» արտահայտությունը ցույց տալով դատարկ "
+"բջիջների, ընտրության ցանկի և մուտքագրման արժեքների տարբերակները"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:533-7
 msgid ""
@@ -2753,6 +2778,8 @@ msgid ""
 "Cell dropdown list showing validated entries such as Apple, Pear, Banana, "
 "Kiwi, and Lemon"
 msgstr ""
+"Բջիջների բացվող ցանկ, որը ցույց է տալիս վավերացված գրառումներ, ինչպիսիք են՝ "
+"խնձոր, տանձ, բանան, կիվի և կիտրոն"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:538-7
 msgid ""
@@ -2782,6 +2809,8 @@ msgid ""
 "Spreadsheet cell with a comment popup showing the author, date, comment "
 "text, and Save/Cancel buttons"
 msgstr ""
+"Էլ․ աղյուսակի բջիջ՝ մեկնաբանության բացվող պատուհանով, որը ցույց է տալիս "
+"հեղինակին, ամսաթիվը, մեկնաբանության տեքստը և Պահպանել/Չեղարկել կոճակները"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:546-5
 msgid ""
@@ -2802,6 +2831,9 @@ msgid ""
 "Conditional formatting icon set picker showing arrows, circles, traffic "
 "lights, stars, smiley faces, and bar chart symbol sets"
 msgstr ""
+"Պայմանական ձևաչափման պատկերակների հավաքածուի ընտրիչ, որը ցույց է տալիս "
+"սլաքներ, շրջանակներ, լուսացույցեր, աստղեր, ժպտացող դեմքեր և սյունակային "
+"դիագրամի խորհրդանիշների հավաքածուներ"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:555-30
 msgid ""
@@ -2899,6 +2931,9 @@ msgid ""
 "Paragraph dialog on the Indents and Spacing tab with settings for indent, "
 "spacing, and line spacing, and a preview on the right"
 msgstr ""
+"Պարբերության երկխոսության պատուհան «Ելուստներ և Բացատներ» ներդիրում՝ "
+"ելուստների, բացատների և տողերի միջև ընկած տարածության կարգավորումներով, "
+"ինչպես նաև աջ կողմում նախադիտումով"
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:576-5
 msgid "Handling Tables"
@@ -2922,6 +2957,8 @@ msgid ""
 "Insert Table picker showing a grid to select the number of rows and columns, "
 "currently showing 5 by 3"
 msgstr ""
+"Տեղադրեք աղյուսակ ընտրիչ, որը ցույց է տալիս ցանց՝ տողերի և սյուների քանակը "
+"ընտրելու համար, ներկայումս ցուցադրվում է 5-ը 3-ի վրա"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:581-5
 msgid ""
@@ -2954,6 +2991,8 @@ msgid ""
 "Tracked change shown as a comment box beside the document with author name, "
 "date, and change description"
 msgstr ""
+"Հետևված փոփոխությունը ցուցադրվում է որպես մեկնաբանության դաշտ փաստաթղթի "
+"կողքին՝ հեղինակի անունով, ամսաթվով և փոփոխության նկարագրությամբ"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:587-5
 msgid ""
@@ -3092,6 +3131,9 @@ msgid ""
 "Slide properties panel showing format, orientation, background, and master "
 "slide settings, with a layout gallery of thumbnail options below"
 msgstr ""
+"Սահիկի հատկությունների վահանակը ցույց է տալիս ձևաչափը, կողմնորոշումը, ֆոնը և "
+"գլխավոր սահիկի կարգավորումները, իսկ ներքևում պատկերված է մանրապատկերների "
+"ընտրանքների դասավորության պատկերասրահը"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:626-30
 msgid ""
@@ -3197,11 +3239,11 @@ msgid ""
 "your changes, you must either undo them, or use the <span class=\"ui\""
 ">Revision History </span> in the <span class=\"ui\">File</span> menu."
 msgstr ""
-"<span class=\"productname\">{productname}</span>-ը պարբերաբար պահպանում է "
+"<span class=\"productname\">{productname}</span> պարբերաբար պահպանում է "
 "փաստաթուղթը ֆոնային ռեժիմով, դուք չեք կարող պարզապես փակել այն առանց այն "
-"պահպանելու: Ձեր փոփոխությունները չեղարկելու համար դուք պետք է կամ չեղարկեք "
-"դրանք, կամ օգտագործեք <span class=\"ui\">Փոփոխությունների պատմություն</span>-"
-"ը <span class=\"ui\">Նիշք</span> ընտրացանկում:"
+"պահպանելու: Ձեր փոփոխություններից հրաժարվելու համար դուք պետք է կամ չեղարկեք "
+"դրանք, կամ օգտագործեք <span class=\"ui\">Վերանայումների պատմություն </span> "
+"<span class=\"ui\">Նիշք</span> ընտրացանկում։"
 
 #: html/cool-help.html%2Bdiv.div.div.h4:656-5
 msgid ""
@@ -3282,6 +3324,9 @@ msgid ""
 "Thesaurus dialog for the word company, listing alternatives such as "
 "institution, establishment, and troupe, with a Replace with field"
 msgstr ""
+"«Ընկերություն» բառի թեզաուրուսի երկխոսության պատուհան, որը թվարկում է "
+"այլընտրանքներ, ինչպիսիք են՝ հաստատություն, հիմնարկ և խումբ, «Փոխարինել» "
+"դաշտով"
 
 #: html/cool-help.html%2Bdiv.div.div.h4:677-5
 msgid ""
@@ -3322,6 +3367,8 @@ msgid ""
 "Word Count dialog showing word and character counts for the current "
 "selection and for the whole document"
 msgstr ""
+"Բառերի քանակի երկխոսության պատուհան, որը ցույց է տալիս բառերի և նիշերի "
+"քանակը ընթացիկ ընտրության և ամբողջ փաստաթղթի համար"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:688-5
 msgid ""
@@ -3368,6 +3415,9 @@ msgid ""
 "hexadecimal and decimal code inputs, and recent and favorite characters at "
 "the bottom"
 msgstr ""
+"Հատուկ նիշերի երկխոսության պատուհան՝ նիշերի ցանցով, որոնման և տառատեսակի "
+"դաշտերով, տասնվեցական և տասնորդական կոդերի մուտքագրմամբ, ինչպես նաև ներքևում "
+"գտնվող վերջին և նախընտրելի նիշերով"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:699-7
 msgid ""
@@ -3448,11 +3498,12 @@ msgid ""
 "Beware that if track changes are enabled but hidden, you still record "
 "changes and may inadvertently leave unwanted text available in the document."
 msgstr ""
-"Փոփոխություններին հետևելը ցուցադրելու կամ թաքցնելու համար ընտրեք <span class="
-"\"ui\">Խմբագրել</span> → <span class=\"ui\">Հետևել փոփոխություններին</span> →"
-" <span class=\"ui\">Ցուցադրել</span>: Զգույշ եղեք, որ եթե փոփոխությունների "
-"հետևման գործառույթը միացված է, բայց թաքցված, դուք դեռ գրանցում եք "
-"փոփոխությունները և կարող եք պատահաբար փաստաթղթում թողնել անցանկալի տեքստ:"
+"Փոփոխություններին հետևելը ցուցադրելու կամ թաքցնելու համար ընտրեք <span "
+"class=\"ui\">Խմբագրել</span> → <span class=\"ui\">Հետևել փոփոխություններին </"
+"span> → <span class=\"ui\">Ցուցադրել</span>։ Զգույշ եղեք, որ եթե "
+"փոփոխությունների հետևման գործառույթը միացված է, բայց թաքցված, դուք դեռ "
+"գրանցում եք փոփոխությունները և կարող եք պատահաբար փաստաթղթում թողնել "
+"անցանկալի տեքստ:"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:716-5
 msgid ""
@@ -3467,20 +3518,24 @@ msgid ""
 msgstr ""
 "Փոփոխությունները կարող են ընդունվել կամ մերժվել: Փոփոխությունները ընդունելու "
 "կամ մերժելու համար սեղմեք փաստաթղթի աջ կողմում գտնվող մեկնաբանությունների "
-"դաշտում գտնվող համապատասխան պատկերակների վրա: Կամ ընտրեք <span class=\"ui\""
-">Խմբագրել</span> → <span class=\"ui\">Հետևել փոփոխություններին</span> → "
-"<span class=\"ui\">Ընդունել</span> կամ <span class=\"ui\">Մերժել</span>: "
-"Ավելին, եթե անհրաժեշտ է զտել փոփոխությունները ընդունելուց կամ մերժելուց "
-"առաջ, ընտրեք <span class=\"ui\">Խմբագրել</span> → <span class=\"ui\">Հետևել "
-"փոփոխություններին</span> → <span class=\"ui\">Կառավարել</span>: Երկխոսության "
-"պատուհանը ցույց է տալիս հետևված բոլոր փոփոխությունների ցանկը: "
-"Համապատասխանաբար օգտագործեք երկխոսության կոճակները:"
+"դաշտում գտնվող համապատասխան պատկերակների վրա: Այլընտրանքորեն, ընտրեք <span "
+"class=\"ui\">Խմբագրել</span> → <span class=\"ui\">Հետևել փոփոխություններին </"
+"span> → <span class=\"ui\">Ընդունել</span> կամ <span class=\"ui\">Մերժել</"
+"span>։ Ավելին, եթե անհրաժեշտ է զտել փոփոխությունները ընդունելուց կամ "
+"մերժելուց առաջ, ընտրեք <span class=\"ui\">Խմբագրել</span> → <span "
+"class=\"ui\">Հետևել փոփոխություններին </span> → <span class=\"ui\">"
+"Կառավարել</span>։ Երկխոսության պատուհանը ցույց է տալիս հետևված բոլոր "
+"փոփոխությունների ցանկը: Համապատասխանաբար օգտագործեք երկխոսության կոճակները:"
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:717-29
 msgid ""
 "Manage Changes dialog with a list of tracked changes showing action, author, "
 "date, and comment columns, and Accept, Reject, Accept All, Reject All buttons"
 msgstr ""
+"«Կառավարել փոփոխությունները» երկխոսության պատուհան՝ հետևված փոփոխությունների "
+"ցանկով, որը ցույց է տալիս գործողությունը, հեղինակը, ամսաթիվը և "
+"մեկնաբանությունը, ինչպես նաև «Ընդունել», «Մերժել», «Ընդունել բոլորը», «"
+"Մերժել բոլորը» կոճակները"
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:720-5
 msgid "How do I set the margins of the document?"
@@ -3515,6 +3570,9 @@ msgid ""
 "Page Style dialog on the Organizer tab showing style name, next style, "
 "inherit from, and category fields, with a summary of page properties"
 msgstr ""
+"«Կազմակերպիչ» ներդիրում «Էջի ոճ» երկխոսության պատուհանը, որը ցույց է տալիս "
+"ոճի անվանումը, հաջորդ ոճը, «ժառանգել» և դասի դաշտերը՝ էջի հատկությունների "
+"ամփոփագրով"
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:730-5
 msgid "How do I change the page orientation to landscape inside my document?"
@@ -3536,7 +3594,7 @@ msgid ""
 "span>, <span class=\"ui\">Text Flow </span> tab"
 msgstr ""
 "Ընտրեք <span class=\"ui\">Ձևաչափ</span> → <span class=\"ui\">Պարբերություն</"
-"span>, <span class=\"ui\">Տեքստի հոսք</span> ներդիրը"
+"span>, <span class=\"ui\">Տեքստի հոսք </span> ներդիրը"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:734-7
 msgid ""
@@ -3679,6 +3737,8 @@ msgid ""
 "Text Import dialog with character set, locale, separator options, and a "
 "preview of the imported CSV data"
 msgstr ""
+"Տեքստի ներմուծման երկխոսության պատուհան՝ նիշերի հավաքածուով, տեղայնացմամբ, "
+"բաժանիչի ընտրանքներով և ներմուծված CSV տվյալների նախադիտմամբ"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:778-7
 msgid ""
@@ -3791,6 +3851,9 @@ msgid ""
 "Area dialog on the Color tab with a color palette, active and new color "
 "previews, RGB value fields, and a custom palette section"
 msgstr ""
+"Գույն ներդիրի «Տարածք» երկխոսության պատուհան՝ գունային ներկապնակ, ակտիվ և "
+"նոր գույների նախադիտումներ, RGB արժեքի դաշտեր և անհատականացված ներկապնակ "
+"բաժինով"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:819-7
 msgid "Set the properties of the element of the object."
