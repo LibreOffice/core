@@ -41,6 +41,8 @@
 #include <Poco/JSON/Parser.h>
 #include <Poco/URI.h>
 
+#include <algorithm>
+#include <array>
 #include <chrono>
 #include <cstring>
 #include <exception>
@@ -48,6 +50,7 @@
 #include <initializer_list>
 #include <iostream>
 #include <sstream>
+#include <string_view>
 #include <utility>
 
 namespace
@@ -127,6 +130,58 @@ Poco::JSON::Object::Ptr makeParamSchema(
     return schema;
 }
 
+namespace AIToolNames
+{
+constexpr std::string_view GenerateImage              = "generate_image";
+constexpr std::string_view ExtractDocumentStructure   = "extract_document_structure";
+constexpr std::string_view TransformDocumentStructure = "transform_document_structure";
+constexpr std::string_view ExtractLinkTargets         = "extract_link_targets";
+constexpr std::string_view ListCalcFunctions          = "list_calc_functions";
+constexpr std::string_view EvaluateFormula            = "evaluate_formula";
+constexpr std::string_view SetCellFormula             = "set_cell_formula";
+}
+
+// Parse a tool's argument JSON. Most models emit a single object
+// ({...}), but some small models emit a JSON array of objects
+// ([{...},{...}]); when that happens, merge all element objects into
+// one so downstream lookups by key continue to work.
+bool parseLenientArgs(const std::string& argsJson,
+                      Poco::JSON::Object::Ptr& argsObj)
+{
+    if (JsonUtil::parseJSON(argsJson, argsObj))
+        return true;
+
+    try
+    {
+        Poco::JSON::Parser parser;
+        Poco::Dynamic::Var v = parser.parse(argsJson);
+        if (v.type() != typeid(Poco::JSON::Array::Ptr))
+            return false;
+
+        auto arr = v.extract<Poco::JSON::Array::Ptr>();
+        Poco::JSON::Object::Ptr merged = new Poco::JSON::Object();
+        for (unsigned i = 0; arr && i < arr->size(); ++i)
+        {
+            Poco::JSON::Object::Ptr el = arr->getObject(i);
+            if (!el)
+                continue;
+            std::vector<std::string> keys;
+            el->getNames(keys);
+            for (const auto& k : keys)
+                merged->set(k, el->get(k));
+        }
+        argsObj = merged;
+        return true;
+    }
+    catch (const std::exception& e)
+    {
+        LOG_ERR("parseLenientArgs: JSON parser threw while parsing tool args: "
+                << e.what() << "; argsSize=" << argsJson.size()
+                << " argsHead=" << argsJson.substr(0, 200));
+        return false;
+    }
+}
+
 } // anonymous namespace
 
 AIChatSession::AIChatSession(ClientSession& session)
@@ -183,7 +238,7 @@ Poco::JSON::Array::Ptr AIChatSession::buildToolDefinitions() const
 
     // generate_image - existing tool
     tools->add(makeAITool(
-        "generate_image",
+        std::string(AIToolNames::GenerateImage),
         "Generate an image based on the user's description. Call this when the "
         "user asks to create, draw, generate, sketch, or make an image or picture.",
         makeParamSchema(
@@ -192,7 +247,7 @@ Poco::JSON::Array::Ptr AIChatSession::buildToolDefinitions() const
 
     // extract_document_structure - inspect the open document
     tools->add(makeAITool(
-        "extract_document_structure",
+        std::string(AIToolNames::ExtractDocumentStructure),
         DocumentToolDescriptions::EXTRACT_DOC_STRUCTURE_DESCRIPTION,
         makeParamSchema(
             {{"filter", {"string",
@@ -203,7 +258,7 @@ Poco::JSON::Array::Ptr AIChatSession::buildToolDefinitions() const
 
     // transform_document_structure - modify the open document
     tools->add(makeAITool(
-        "transform_document_structure",
+        std::string(AIToolNames::TransformDocumentStructure),
         std::string(
             "Transform the currently-open document's structure using a JSON command "
             "sequence. Supports Impress slide operations, Writer/Calc content control "
@@ -219,13 +274,13 @@ Poco::JSON::Array::Ptr AIChatSession::buildToolDefinitions() const
 
     // extract_link_targets - get link targets from the open document
     tools->add(makeAITool(
-        "extract_link_targets",
+        std::string(AIToolNames::ExtractLinkTargets),
         DocumentToolDescriptions::EXTRACT_LINK_TARGETS_DESCRIPTION,
         makeParamSchema({}, {})));
 
     // list_calc_functions - discover available spreadsheet functions
     tools->add(makeAITool(
-        "list_calc_functions",
+        std::string(AIToolNames::ListCalcFunctions),
         "List all available spreadsheet functions in the current Calc document, "
         "grouped by category. Returns function names and signatures. "
         "Call this when you need to verify a function exists or discover "
@@ -234,7 +289,7 @@ Poco::JSON::Array::Ptr AIChatSession::buildToolDefinitions() const
 
     // evaluate_formula - test a formula without inserting it
     tools->add(makeAITool(
-        "evaluate_formula",
+        std::string(AIToolNames::EvaluateFormula),
         "Evaluate a formula without inserting it into the spreadsheet. "
         "Returns the computed result so you can verify correctness before inserting. "
         "Always call this before set_cell_formula to check your formula produces "
@@ -246,7 +301,7 @@ Poco::JSON::Array::Ptr AIChatSession::buildToolDefinitions() const
 
     // set_cell_formula - insert formulas into cells (Calc only)
     tools->add(makeAITool(
-        "set_cell_formula",
+        std::string(AIToolNames::SetCellFormula),
         "Set formulas or values in one or more cells of the currently open spreadsheet. "
         "Use US English formula syntax (commas as argument separators, period as decimal "
         "separator). Always prefix formulas with =. Example: =AVERAGE(A1:A10). "
@@ -344,7 +399,15 @@ bool AIChatSession::handleAction(const std::string& firstLine)
             " sub-headings or blank lines before the bullet items."
             " When calling transform_document_structure, include a 'summary' parameter"
             " with a markdown preview of ONLY the slides being created or modified in"
-            " this transform call, not pre-existing slides.";
+            " this transform call, not pre-existing slides."
+            " If the user asks to rewrite, rephrase, shorten, summarise, condense,"
+            " or make text more concise, and they have provided selected text, reply"
+            " with the rewritten text directly in your message. Do NOT call"
+            " transform_document_structure for these requests."
+            " Only call transform_document_structure when the user explicitly asks to"
+            " insert, add, create, replace, edit, modify, or delete slides or slide"
+            " content. Never emit transform JSON, tool names, or .uno: commands in"
+            " your plain-text replies.";
 
     Poco::JSON::Array::Ptr sanitizedMessages = new Poco::JSON::Array();
 
@@ -571,9 +634,16 @@ void AIChatSession::handleLLMResponse(const std::string& responseBody)
 
     const std::string& requestId = _toolLoop->requestId;
 
+    LOG_DBG("AIToolLoop: raw LLM response [" << requestId
+            << "] (" << responseBody.size() << " bytes): "
+            << responseBody.substr(0, 2000));
+
     Poco::JSON::Object::Ptr responseObject = new Poco::JSON::Object();
     if (!JsonUtil::parseJSON(responseBody, responseObject))
     {
+        LOG_WRN("AIToolLoop: LLM response is not valid JSON [" << requestId
+                << "], bodySize=" << responseBody.size()
+                << " bodyHead=" << responseBody.substr(0, 300));
         sendChatResult(false, "No response from AI", requestId);
         _toolLoop.reset();
         return;
@@ -582,6 +652,8 @@ void AIChatSession::handleLLMResponse(const std::string& responseBody)
     Poco::JSON::Array::Ptr choices = responseObject->getArray("choices");
     if (!choices || choices->size() == 0)
     {
+        LOG_WRN("AIToolLoop: LLM response missing or empty 'choices' [" << requestId
+                << "], bodyHead=" << responseBody.substr(0, 300));
         sendChatResult(false, "No response from AI", requestId);
         _toolLoop.reset();
         return;
@@ -590,17 +662,21 @@ void AIChatSession::handleLLMResponse(const std::string& responseBody)
     Poco::JSON::Object::Ptr choice = choices->getObject(0);
     if (!choice)
     {
+        LOG_WRN("AIToolLoop: LLM response choices[0] is null [" << requestId << ']');
         sendChatResult(false, "No response from AI", requestId);
         _toolLoop.reset();
         return;
     }
 
     std::string finishReason;
-    JsonUtil::findJSONValue(choice, "finish_reason", finishReason);
+    if (!choice->isNull("finish_reason"))
+        JsonUtil::findJSONValue(choice, "finish_reason", finishReason);
 
     Poco::JSON::Object::Ptr message = choice->getObject("message");
     if (!message)
     {
+        LOG_WRN("AIToolLoop: LLM response choices[0].message is null ["
+                << requestId << "], finishReason='" << finishReason << "'");
         sendChatResult(false, "No response from AI", requestId);
         _toolLoop.reset();
         return;
@@ -623,7 +699,8 @@ void AIChatSession::handleLLMResponse(const std::string& responseBody)
 
         // Capture the AI's text content so it can be shown in approval dialogs.
         std::string assistantContent;
-        JsonUtil::findJSONValue(message, "content", assistantContent);
+        if (!message->isNull("content"))
+            JsonUtil::findJSONValue(message, "content", assistantContent);
         if (!assistantContent.empty())
             _toolLoop->pendingSummary = std::move(assistantContent);
 
@@ -652,11 +729,12 @@ void AIChatSession::handleLLMResponse(const std::string& responseBody)
         return;
     }
 
-    // No tool calls - this is the final text response
     std::string result;
     std::string reasoning;
-    JsonUtil::findJSONValue(message, "content", result);
-    JsonUtil::findJSONValue(message, "reasoning", reasoning);
+    if (!message->isNull("content"))
+        JsonUtil::findJSONValue(message, "content", result);
+    if (!message->isNull("reasoning"))
+        JsonUtil::findJSONValue(message, "reasoning", reasoning);
 
     if (result.empty())
     {
@@ -671,6 +749,17 @@ void AIChatSession::handleLLMResponse(const std::string& responseBody)
             sendChatResult(false,
                 "The model ran out of tokens before producing output. Try a "
                 "shorter input or a model with a larger output budget.", requestId);
+        }
+        else if (finishReason.empty())
+        {
+            // Zero-token blank: provider returned a well-formed envelope
+            // with all fields null and no completion. Usually transient.
+            LOG_WRN("AIToolLoop: provider returned zero-token blank ["
+                    << requestId << "], bodySize=" << responseBody.size());
+            sendChatResult(false,
+                "The model returned an empty response (no tokens generated). "
+                "This is usually a temporary provider issue — please retry, "
+                "or try a different model.", requestId);
         }
         else
         {
@@ -694,11 +783,11 @@ bool AIChatSession::executeToolCall(const std::string& toolCallId,
     const std::string requestId = _toolLoop->requestId;
 
     // generate_image - delegate to existing handler (terminates tool loop)
-    if (fnName == "generate_image")
+    if (fnName == AIToolNames::GenerateImage)
     {
         Poco::JSON::Object::Ptr argsObj = new Poco::JSON::Object();
         std::string imagePrompt;
-        if (JsonUtil::parseJSON(argsJson, argsObj))
+        if (parseLenientArgs(argsJson, argsObj))
             JsonUtil::findJSONValue(argsObj, "prompt", imagePrompt);
 
         if (imagePrompt.empty())
@@ -722,11 +811,11 @@ bool AIChatSession::executeToolCall(const std::string& toolCallId,
     }
 
     // extract_document_structure - requires user approval
-    if (fnName == "extract_document_structure")
+    if (fnName == AIToolNames::ExtractDocumentStructure)
     {
         std::string filter;
         Poco::JSON::Object::Ptr argsObj = new Poco::JSON::Object();
-        if (JsonUtil::parseJSON(argsJson, argsObj))
+        if (parseLenientArgs(argsJson, argsObj))
             JsonUtil::findJSONValue(argsObj, "filter", filter);
 
         std::string command = "extractdocumentstructure url=interactive";
@@ -743,7 +832,7 @@ bool AIChatSession::executeToolCall(const std::string& toolCallId,
     }
 
     // extract_link_targets - read-only, send to kit
-    if (fnName == "extract_link_targets")
+    if (fnName == AIToolNames::ExtractLinkTargets)
     {
         _toolLoop->awaitingKitResponse = true;
         _toolLoop->pendingToolCallId = toolCallId;
@@ -756,11 +845,11 @@ bool AIChatSession::executeToolCall(const std::string& toolCallId,
     }
 
     // evaluate_formula - read-only, send to kit
-    if (fnName == "evaluate_formula")
+    if (fnName == AIToolNames::EvaluateFormula)
     {
         std::string cell, formula;
         Poco::JSON::Object::Ptr argsObj = new Poco::JSON::Object();
-        if (JsonUtil::parseJSON(argsJson, argsObj))
+        if (parseLenientArgs(argsJson, argsObj))
         {
             JsonUtil::findJSONValue(argsObj, "cell", cell);
             JsonUtil::findJSONValue(argsObj, "formula", formula);
@@ -788,7 +877,7 @@ bool AIChatSession::executeToolCall(const std::string& toolCallId,
     }
 
     // list_calc_functions - read-only, send to kit
-    if (fnName == "list_calc_functions")
+    if (fnName == AIToolNames::ListCalcFunctions)
     {
         _toolLoop->awaitingKitResponse = true;
         _toolLoop->pendingToolCallId = toolCallId;
@@ -801,11 +890,11 @@ bool AIChatSession::executeToolCall(const std::string& toolCallId,
     }
 
     // set_cell_formula - requires user approval (single or batch)
-    if (fnName == "set_cell_formula")
+    if (fnName == AIToolNames::SetCellFormula)
     {
         std::string cell, formula, formulasJson, summary;
         Poco::JSON::Object::Ptr argsObj = new Poco::JSON::Object();
-        if (JsonUtil::parseJSON(argsJson, argsObj))
+        if (parseLenientArgs(argsJson, argsObj))
         {
             JsonUtil::findJSONValue(argsObj, "cell", cell);
             JsonUtil::findJSONValue(argsObj, "formula", formula);
@@ -826,8 +915,10 @@ bool AIChatSession::executeToolCall(const std::string& toolCallId,
                 auto result = parser.parse(formulasJson);
                 parsed = result.extract<Poco::JSON::Array::Ptr>();
             }
-            catch (const std::exception&)
+            catch (const std::exception& e)
             {
+                LOG_DBG("set_cell_formula: invalid 'formulas' JSON: " << e.what()
+                        << ", payload head: " << formulasJson.substr(0, 200));
                 continueToolLoop(toolCallId,
                     "{\"error\":\"Invalid JSON in formulas parameter. "
                     "Must be an array of {cell, formula} objects.\"}");
@@ -898,15 +989,26 @@ bool AIChatSession::executeToolCall(const std::string& toolCallId,
     }
 
     // transform_document_structure - requires user approval
-    if (fnName == "transform_document_structure")
+    if (fnName == AIToolNames::TransformDocumentStructure)
     {
         std::string transform;
         std::string summary;
         Poco::JSON::Object::Ptr argsObj = new Poco::JSON::Object();
-        if (JsonUtil::parseJSON(argsJson, argsObj))
+        if (parseLenientArgs(argsJson, argsObj))
         {
             JsonUtil::findJSONValue(argsObj, "transform", transform);
+
+            // Lenient: when the model skips the {"transform": "..."}
+            // wrapper and puts {"Transforms": {...}} at the top level,
+            // treat the whole args object as the transform.(eg. for small models)
+            if (transform.empty() && argsObj->has("Transforms"))
+            {
+                JsonUtil::findJSONValue(argsObj, "Transforms", transform);
+            }
+
             JsonUtil::findJSONValue(argsObj, "summary", summary);
+            if (summary.empty() && argsObj->has("Summary"))
+                JsonUtil::findJSONValue(argsObj, "Summary", summary);
         }
 
         if (transform.empty())
@@ -1004,6 +1106,8 @@ bool AIChatSession::executeToolCall(const std::string& toolCallId,
     }
 
     // Unknown tool - feed error back to LLM
+    LOG_WRN("AIToolLoop: model called unknown tool '" << fnName << "' ["
+            << requestId << ']');
     continueToolLoop(toolCallId, "{\"error\":\"Unknown tool: " + fnName + "\"}");
     return true;
 }
@@ -1129,7 +1233,7 @@ bool AIChatSession::handleApprove(const std::string& firstLine)
             sendToolProgress(_toolLoop->pendingToolName, "Working...");
             docBroker->forwardToChild(_session.client_from_this(), command);
         }
-        else if (_toolLoop->pendingToolName == "set_cell_formula")
+        else if (_toolLoop->pendingToolName == AIToolNames::SetCellFormula)
         {
             _toolLoop->awaitingApproval = false;
 
@@ -1141,13 +1245,15 @@ bool AIChatSession::handleApprove(const std::string& firstLine)
                 auto result = parser.parse(_toolLoop->pendingTransformArgs);
                 pairs = result.extract<Poco::JSON::Array::Ptr>();
             }
-            catch (const std::exception&)
+            catch (const std::exception& e)
             {
+                LOG_WRN("handleApprove: failed to parse stored formulas (internal bug): "
+                        << e.what());
                 continueToolLoop(toolCallId, "{\"error\":\"Internal error parsing stored formulas\"}");
                 return true;
             }
 
-            sendToolProgress("set_cell_formula", "Setting formulas...");
+            sendToolProgress(std::string(AIToolNames::SetCellFormula), "Setting formulas...");
 
             // Dispatch GoToCell + EnterString for each pair
             Poco::JSON::Array resultArr;
@@ -1198,12 +1304,12 @@ bool AIChatSession::handleApprove(const std::string& firstLine)
         // User rejected - feed rejection back to LLM with tool-specific message
         _toolLoop->awaitingApproval = false;
         std::string rejectionMsg;
-        if (_toolLoop->pendingToolName == "extract_document_structure")
+        if (_toolLoop->pendingToolName == AIToolNames::ExtractDocumentStructure)
             rejectionMsg =
                 "{\"error\":\"User declined document inspection. "
                 "Answer their request directly without inspecting the document. "
                 "If the request is to create new content, just generate it.\"}";
-        else if (_toolLoop->pendingToolName == "set_cell_formula")
+        else if (_toolLoop->pendingToolName == AIToolNames::SetCellFormula)
             rejectionMsg =
                 "{\"error\":\"User rejected the formula insertion. "
                 "Show them the formula in a code block so they can copy it manually, "
@@ -1762,8 +1868,8 @@ bool AIChatSession::tryConsumeCommandValues(const std::shared_ptr<Message>& payl
 {
     if (!_toolLoop || !_toolLoop->awaitingKitResponse)
         return false;
-    if (_toolLoop->pendingToolName != "list_calc_functions"
-        && _toolLoop->pendingToolName != "evaluate_formula")
+    if (_toolLoop->pendingToolName != AIToolNames::ListCalcFunctions
+        && _toolLoop->pendingToolName != AIToolNames::EvaluateFormula)
         return false;
 
     _toolLoop->awaitingKitResponse = false;
