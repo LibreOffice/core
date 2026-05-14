@@ -25,7 +25,7 @@ export COOLWSD_SERVER
 export FREE_PORT
 export COOLWSD_VERSION_HASH
 
-PARALLEL_SCRIPT = $(abs_srcdir)/run_parallel.sh
+BUFFERED_SCRIPT = $(abs_srcdir)/run_buffered.sh
 
 PID_FILE=$(abs_builddir)/workdir/coolwsd.pid
 ERROR_LOG=$(abs_builddir)/workdir/error.log
@@ -324,7 +324,7 @@ define run_mobile_tests
 	$(V)echo
 	$(eval ENV_EXTENDED=$(MOBILE_ENV)$(if $(3),$(COMMA)$(3)))
 	$(if $(and $(PARALLEL_BUILD), $(1)),\
-		$(V)$(call run_test_parallel,\
+		$(V)$(call run_test_buffered,\
 			$(MOBILE_CONFIG),$(ENV_EXTENDED),$(1),mobile,$(2))\
 	,\
 		$(eval SPEC_FILE=$(if $(1),$(MOBILE_TEST_FOLDER)/$(1)))\
@@ -437,7 +437,7 @@ define run_desktop_tests
 	$(eval export CYPRESS_INCLUDE_TAGS)
 	$(eval ENV_EXTENDED=$(DESKTOP_ENV)$(if $(3),$(COMMA)$(3)))
 	$(if $(and $(PARALLEL_BUILD), $(1)),\
-		$(V)$(call run_test_parallel,\
+		$(V)$(call run_test_buffered,\
 			$(DESKTOP_CONFIG),$(ENV_EXTENDED),$(1),desktop,$(2))\
 	,\
 		$(eval SPEC_FILE=$(if $(1),$(DESKTOP_TEST_FOLDER)/$(1)))\
@@ -501,7 +501,7 @@ define run_idle_tests
 	$(eval export CYPRESS_INCLUDE_TAGS)
 	$(eval ENV_EXTENDED=$(IDLE_ENV)$(if $(3),$(COMMA)$(3)))
 	$(if $(and $(PARALLEL_BUILD), $(1)),\
-		$(V)$(call run_test_parallel,\
+		$(V)$(call run_test_buffered,\
 			$(IDLE_CONFIG),$(ENV_EXTENDED),$(1),idle,$(2))\
 	,\
 		$(eval SPEC_FILE=$(if $(1),$(IDLE_TEST_FOLDER)/$(1)))\
@@ -609,7 +609,7 @@ run-interfer-mobile: @JAILS_PATH@ @CACHE_PATH@ $(NODE_BINS)
 	$(call run_interactive_single,\
 		$(INTERFER_MOBILE_CONFIG1),$(INTERFER_MOBILE_ENV1),$(USER1_SPEC)) &
 	$(V)sleep 5
-	$(V)$(call run_test_parallel,\
+	$(V)$(call run_test_buffered,\
 		$(INTERFER_MOBILE_CONFIG2),$(INTERFER_MOBILE_ENV2),$(USER2_SPEC),interfer,$(USER2_LOG)) || true
 	$(V)$(KILL_COMMAND) || true
 
@@ -641,10 +641,10 @@ define run_mobile_interference_test
 	$(eval USER2_SPEC=interference_user_spec.js)
 	$(eval USER1_LOG=$(MULTIUSER_TRACK_FOLDER)/$(USER1_SPEC).log)
 	$(eval USER2_LOG=$(MULTIUSER_TRACK_FOLDER)/$(USER2_SPEC).log)
-	$(V)$(call run_test_parallel,\
+	$(V)$(call run_test_buffered,\
 		$(INTERFER_MOBILE_CONFIG1),$(INTERFER_MOBILE_ENV1),$(USER1_SPEC),interfer-mobile,$(USER1_LOG)) & \
 	sleep 5 && \
-	$(call run_test_parallel,\
+	$(call run_test_buffered,\
 		$(INTERFER_MOBILE_CONFIG2),$(INTERFER_MOBILE_ENV2),$(USER2_SPEC),interfer,$(USER2_LOG)) && \
 	wait # waits the background process to be finished
 endef
@@ -704,7 +704,7 @@ run-interfer-desktop: @JAILS_PATH@ @CACHE_PATH@ $(NODE_BINS)
 	$(call run_interactive_single,\
 		$(INTERFER_DESKTOP_CONFIG1),$(INTERFER_DESKTOP_ENV1),$(USER1_SPEC)) &
 	$(V)sleep 5
-	$(V)$(call run_test_parallel,\
+	$(V)$(call run_test_buffered,\
 		$(INTERFER_DESKTOP_CONFIG2),$(INTERFER_DESKTOP_ENV2),$(USER2_SPEC),interfer,$(USER2_LOG)) || true
 	$(V)$(KILL_COMMAND) || true
 
@@ -736,10 +736,10 @@ define run_desktop_interference_test
 	$(eval USER2_SPEC=interference_user_spec.js)
 	$(eval USER1_LOG=$(MULTIUSER_TRACK_FOLDER)/$(USER1_SPEC).log)
 	$(eval USER2_LOG=$(MULTIUSER_TRACK_FOLDER)/$(USER2_SPEC).log)
-	$(V)$(call run_test_parallel,\
+	$(V)$(call run_test_buffered,\
 		$(INTERFER_DESKTOP_CONFIG1),$(INTERFER_DESKTOP_ENV1),$(USER1_SPEC),interfer-desktop,$(USER1_LOG)) & \
 	sleep 5 && \
-	$(call run_test_parallel,\
+	$(call run_test_buffered,\
 		$(INTERFER_DESKTOP_CONFIG2),$(INTERFER_DESKTOP_ENV2),$(USER2_SPEC),interfer,$(USER2_LOG)) && \
 	wait # waits the background process to be finished
 endef
@@ -818,8 +818,8 @@ endef
 # 4 - type:   test type (e.g. mobile, desktop, multi-user)
 # 5 - log:    log file path
 # 6 - config-file: cypress configuration file (e.g. cypress.config.ts)
-define run_test_parallel
-	$(PARALLEL_SCRIPT) \
+define run_test_buffered
+	$(BUFFERED_SCRIPT) \
 		--browser $(BROWSER) \
 		--config $(1) \
 		--env $(2) \

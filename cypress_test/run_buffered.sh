@@ -16,8 +16,8 @@ ERROR_LOG="${BUILDDIR}/workdir/error.log"
 
 print_help ()
 {
-    echo "Usage: run_parallel.sh --spec <name_spec.js> OPTIONS"
-    echo "Runs a specified cypress test"
+    echo "Usage: run_buffered.sh --spec <name_spec.js> OPTIONS"
+    echo "Runs a specified cypress test with output buffered to a log file"
     echo ""
     echo "   --spec <file>              The test file we need to run"
     echo "   --log-file <file>          Log output to this test"
