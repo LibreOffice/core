@@ -585,11 +585,13 @@ class SlideShowPresenter {
 
 		this._progressBarContainer = this._createProgressBar(parent);
 		const presenterConsoleActive = !!this._map.presenterConsole?._active;
-		if (!this._isWelcomePresentation && !presenterConsoleActive)
+		if (!this._isWelcomePresentation && !presenterConsoleActive) {
 			this._slideNavContainer = this._createSlideNav(
 				parent,
 				showSwitchMonitors,
 			);
+			this._showSlideControls();
+		}
 
 		canvas.addEventListener(
 			'click',
@@ -950,6 +952,10 @@ class SlideShowPresenter {
 			function (this: SlideShowPresenter) {
 				clearTimeout(this._slideControlsTimer);
 			}.bind(this),
+		);
+		container.addEventListener(
+			'mouseleave',
+			this._showSlideControls.bind(this),
 		);
 		container.addEventListener('click', (e: Event) => {
 			const target = e.target as HTMLElement;
