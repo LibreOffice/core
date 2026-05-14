@@ -44,7 +44,10 @@ enum
 {
     PROP_NUMBERFORMAT_KEY,
     PROP_PROPOSED_ROLE,
-    PROP_XML_RANGE
+    PROP_XML_RANGE,
+    PROP_CHARTEX_FORMULA,
+    PROP_CHARTEX_NFORMULA,
+    PROP_CHARTEX_DIM_TYPE
 };
 }  // anonymous namespace
 
@@ -55,6 +58,7 @@ UncachedDataSequence::UncachedDataSequence(
     rtl::Reference< InternalDataProvider > xIntDataProv,
     OUString aRangeRepresentation )
         : m_nNumberFormatKey(0),
+          m_nChartExDimType(0),
           m_xDataProvider(std::move( xIntDataProv )),
           m_aSourceRepresentation(std::move( aRangeRepresentation )),
           m_xModifyEventForwarder( new ModifyEventForwarder() )
@@ -67,6 +71,7 @@ UncachedDataSequence::UncachedDataSequence(
     OUString aRangeRepresentation,
     const OUString & rRole )
         : m_nNumberFormatKey(0),
+          m_nChartExDimType(0),
           m_xDataProvider(std::move( xIntDataProv )),
           m_aSourceRepresentation(std::move( aRangeRepresentation )),
           m_xModifyEventForwarder( new ModifyEventForwarder() )
@@ -79,6 +84,9 @@ UncachedDataSequence::UncachedDataSequence(
 UncachedDataSequence::UncachedDataSequence( const UncachedDataSequence & rSource )
         : m_nNumberFormatKey( rSource.m_nNumberFormatKey ),
           m_sRole( rSource.m_sRole ),
+          m_aChartExFormula( rSource.m_aChartExFormula ),
+          m_aChartExNFormula( rSource.m_aChartExNFormula ),
+          m_nChartExDimType( rSource.m_nChartExDimType ),
           m_xDataProvider( rSource.m_xDataProvider ),
           m_aSourceRepresentation( rSource.m_aSourceRepresentation ),
           m_xModifyEventForwarder( new ModifyEventForwarder() )
@@ -108,6 +116,24 @@ void UncachedDataSequence::registerProperties()
                       0,   // PropertyAttributes
                       & m_aXMLRange,
                       cppu::UnoType<decltype(m_aXMLRange)>::get() );
+
+    registerProperty( u"ChartExFormula"_ustr,
+                      PROP_CHARTEX_FORMULA,
+                      0,
+                      & m_aChartExFormula,
+                      cppu::UnoType<decltype(m_aChartExFormula)>::get() );
+
+    registerProperty( u"ChartExNFormula"_ustr,
+                      PROP_CHARTEX_NFORMULA,
+                      0,
+                      & m_aChartExNFormula,
+                      cppu::UnoType<decltype(m_aChartExNFormula)>::get() );
+
+    registerProperty( u"ChartExDimType"_ustr,
+                      PROP_CHARTEX_DIM_TYPE,
+                      0,
+                      & m_nChartExDimType,
+                      cppu::UnoType<decltype(m_nChartExDimType)>::get() );
 }
 
 IMPLEMENT_FORWARD_XINTERFACE2( UncachedDataSequence, UncachedDataSequence_Base, comphelper::OPropertyContainer2 )

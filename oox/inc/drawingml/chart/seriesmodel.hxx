@@ -213,10 +213,22 @@ struct LayoutPropsModel
     std::optional<GeographyModel> mxGeography;
 };
 
+/// Dimension/data source type. The STR_ and NUM_ values correspond to chartex
+/// ST_StringDimensionType and ST_NumericDimensionType, respectively. STR_CAT
+/// and NUM_VAL are also used by traditional (non-chartex) charts.
 enum class DataSourceType: sal_Int32
 {
-    CATEGORIES,         /// Data point categories.
-    VALUES,             /// Data point values.
+    // String dimension types (strDim)
+    STR_CAT,            /// "cat" - categories (also used by traditional charts)
+    STR_COLORSTR,       /// "colorStr" - color strings
+    STR_ENTITYID,       /// "entityId" - entity identifiers
+    // Numeric dimension types (numDim)
+    NUM_VAL,            /// "val" - numeric values (also used by traditional charts)
+    NUM_X,              /// "x" - x-axis values
+    NUM_Y,              /// "y" - y-axis values
+    NUM_SIZE,           /// "size" - size values (e.g. sunburst, treemap)
+    NUM_COLORVAL,       /// "colorVal" - color values (e.g. region map)
+    // Non-dimension types (traditional charts only)
     POINTS,             /// Data point size (e.g. bubble size in bubble charts).
     DATALABELS,         /// Data point labels.
 };

@@ -73,14 +73,15 @@ namespace {
 Reference< XLabeledDataSequence > lclCreateLabeledDataSequence(
         const ConverterRoot& rParent,
         DataSourceModel* pValues, const OUString& rRole,
-        TextModel* pTitle = nullptr )
+        TextModel* pTitle = nullptr,
+        std::optional<DataSourceType> oDimType = std::nullopt )
 {
     // create data sequence for values
     Reference< XDataSequence > xValueSeq;
     if( pValues )
     {
         DataSourceConverter aSourceConv( rParent, *pValues );
-        xValueSeq = aSourceConv.createDataSequence( rRole );
+        xValueSeq = aSourceConv.createDataSequence( rRole, oDimType );
     }
 
     // create data sequence for title
@@ -817,12 +818,28 @@ SeriesConverter::~SeriesConverter()
 
 Reference< XLabeledDataSequence > SeriesConverter::createCategorySequence( const OUString& rRole )
 {
-    return createLabeledDataSequence(DataSourceType::CATEGORIES, rRole, false);
+    return createLabeledDataSequence(DataSourceType::STR_CAT, rRole, false);
 }
 
 Reference< XLabeledDataSequence > SeriesConverter::createValueSequence( const OUString& rRole )
 {
-    return createLabeledDataSequence( DataSourceType::VALUES, rRole, true );
+    if (mrModel.maSources.has(DataSourceType::NUM_VAL))
+        return createLabeledDataSequence( DataSourceType::NUM_VAL, rRole, true );
+
+    // For chartex charts, the numeric dimension may not be type "val".
+    // Try other numeric dimension types.
+    static const DataSourceType aNumTypes[] = {
+        DataSourceType::NUM_SIZE, DataSourceType::NUM_COLORVAL,
+        DataSourceType::NUM_X, DataSourceType::NUM_Y,
+    };
+    for (DataSourceType eType : aNumTypes)
+    {
+        if (mrModel.maSources.has(eType))
+            return createLabeledDataSequence(eType, rRole, true);
+    }
+
+    // Nothing found; try NUM_VAL anyway (will return empty sequence)
+    return createLabeledDataSequence( DataSourceType::NUM_VAL, rRole, true );
 }
 
 Reference< XDataSeries > SeriesConverter::createDataSeries( const TypeGroupConverter& rTypeGroup, bool bVaryColorsByPoint )
@@ -955,7 +972,7 @@ Reference< XDataSeries > SeriesConverter::createDataSeries( const TypeGroupConve
         if( xLabels->maNumberFormat.maFormatCode.isEmpty() )
         {
             // Use number format code from Value series
-            DataSourceModel* pValues = mrModel.maSources.get( DataSourceType::VALUES ).get();
+            DataSourceModel* pValues = mrModel.maSources.get( DataSourceType::NUM_VAL ).get();
             if( pValues )
                 xLabels->maNumberFormat.maFormatCode = pValues->mxDataSeq->maFormatCode;
         }
@@ -1015,7 +1032,7 @@ Reference< XLabeledDataSequence > SeriesConverter::createLabeledDataSequence(
 {
     DataSourceModel* pValues = mrModel.maSources.get( eSourceType ).get();
     TextModel* pTitle = bUseTextLabel ? mrModel.mxText.get() : nullptr;
-    return lclCreateLabeledDataSequence( *this, pValues, rRole, pTitle );
+    return lclCreateLabeledDataSequence( *this, pValues, rRole, pTitle, eSourceType );
 }
 
 } // namespace oox

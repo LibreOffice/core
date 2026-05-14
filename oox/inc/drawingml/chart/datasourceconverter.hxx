@@ -21,6 +21,7 @@
 #define INCLUDED_OOX_DRAWINGML_CHART_DATASOURCECONVERTER_HXX
 
 #include <drawingml/chart/converterbase.hxx>
+#include <optional>
 
 namespace com::sun::star {
     namespace chart2::data { class XDataSequence; }
@@ -28,6 +29,7 @@ namespace com::sun::star {
 
 namespace oox::drawingml::chart {
 
+enum class DataSourceType : sal_Int32;
 
 struct DataSequenceModel;
 
@@ -37,9 +39,11 @@ public:
     explicit            DataSequenceConverter( const ConverterRoot& rParent, DataSequenceModel& rModel );
     virtual             ~DataSequenceConverter() override;
 
-    /** Creates a data sequence object from the contained formula link. */
+    /** Creates a data sequence object from the contained formula link.
+        @param oDimType  If set, stores this as the ChartExDimType property. */
     css::uno::Reference< css::chart2::data::XDataSequence >
-                        createDataSequence( const OUString& rRole );
+                        createDataSequence( const OUString& rRole,
+                                            std::optional<DataSourceType> oDimType = std::nullopt );
 };
 
 
@@ -51,9 +55,11 @@ public:
     explicit            DataSourceConverter( const ConverterRoot& rParent, DataSourceModel& rModel );
     virtual             ~DataSourceConverter() override;
 
-    /** Creates a data sequence object from the contained series data. */
+    /** Creates a data sequence object from the contained series data.
+        @param oDimType  If set, forwarded to DataSequenceConverter. */
     css::uno::Reference< css::chart2::data::XDataSequence >
-                        createDataSequence( const OUString& rRole );
+                        createDataSequence( const OUString& rRole,
+                                            std::optional<DataSourceType> oDimType = std::nullopt );
 };
 
 

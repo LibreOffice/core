@@ -484,7 +484,7 @@ ContextHandlerRef AreaSeriesContext::onCreateContext( sal_Int32 nElement, const 
             switch( nElement )
             {
                 case C_TOKEN( cat ):
-                    return new DataSourceContext( *this, mrModel.maSources.create( DataSourceType::CATEGORIES ) );
+                    return new DataSourceContext( *this, mrModel.maSources.create( DataSourceType::STR_CAT ) );
                 case C_TOKEN( errBars ):
                     return new ErrorBarContext( *this, mrModel.maErrorBars.create(bMSO2007Doc) );
                 case C_TOKEN( dLbls ):
@@ -494,7 +494,7 @@ ContextHandlerRef AreaSeriesContext::onCreateContext( sal_Int32 nElement, const 
                 case C_TOKEN( trendline ):
                     return new TrendlineContext( *this, mrModel.maTrendlines.create(bMSO2007Doc) );
                 case C_TOKEN( val ):
-                    return new DataSourceContext( *this, mrModel.maSources.create( DataSourceType::VALUES ) );
+                    return new DataSourceContext( *this, mrModel.maSources.create( DataSourceType::NUM_VAL ) );
             }
         break;
     }
@@ -519,7 +519,7 @@ ContextHandlerRef BarSeriesContext::onCreateContext( sal_Int32 nElement, const A
             switch( nElement )
             {
                 case C_TOKEN( cat ):
-                    return new DataSourceContext( *this, mrModel.maSources.create( DataSourceType::CATEGORIES ) );
+                    return new DataSourceContext( *this, mrModel.maSources.create( DataSourceType::STR_CAT ) );
                 case C_TOKEN( dLbls ):
                     return new DataLabelsContext( *this, mrModel.mxLabels.create(bMSO2007Doc) );
                 case C_TOKEN( dPt ):
@@ -537,7 +537,7 @@ ContextHandlerRef BarSeriesContext::onCreateContext( sal_Int32 nElement, const A
                 case C_TOKEN( trendline ):
                     return new TrendlineContext( *this, mrModel.maTrendlines.create(bMSO2007Doc) );
                 case C_TOKEN( val ):
-                    return new DataSourceContext( *this, mrModel.maSources.create( DataSourceType::VALUES ) );
+                    return new DataSourceContext( *this, mrModel.maSources.create( DataSourceType::NUM_VAL ) );
             }
         break;
     }
@@ -578,9 +578,9 @@ ContextHandlerRef BubbleSeriesContext::onCreateContext( sal_Int32 nElement, cons
                 case C_TOKEN( trendline ):
                     return new TrendlineContext( *this, mrModel.maTrendlines.create(bMSO2007Doc) );
                 case C_TOKEN( xVal ):
-                    return new DataSourceContext( *this, mrModel.maSources.create( DataSourceType::CATEGORIES ) );
+                    return new DataSourceContext( *this, mrModel.maSources.create( DataSourceType::STR_CAT ) );
                 case C_TOKEN( yVal ):
-                    return new DataSourceContext( *this, mrModel.maSources.create( DataSourceType::VALUES ) );
+                    return new DataSourceContext( *this, mrModel.maSources.create( DataSourceType::NUM_VAL ) );
             }
         break;
     }
@@ -605,7 +605,7 @@ ContextHandlerRef LineSeriesContext::onCreateContext( sal_Int32 nElement, const 
             switch( nElement )
             {
                 case C_TOKEN( cat ):
-                    return new DataSourceContext( *this, mrModel.maSources.create( DataSourceType::CATEGORIES ) );
+                    return new DataSourceContext( *this, mrModel.maSources.create( DataSourceType::STR_CAT ) );
                 case C_TOKEN( dLbls ):
                     return new DataLabelsContext( *this, mrModel.mxLabels.create(bMSO2007Doc) );
                 case C_TOKEN( dPt ):
@@ -620,7 +620,7 @@ ContextHandlerRef LineSeriesContext::onCreateContext( sal_Int32 nElement, const 
                 case C_TOKEN( trendline ):
                     return new TrendlineContext( *this, mrModel.maTrendlines.create(bMSO2007Doc) );
                 case C_TOKEN( val ):
-                    return new DataSourceContext( *this, mrModel.maSources.create( DataSourceType::VALUES ) );
+                    return new DataSourceContext( *this, mrModel.maSources.create( DataSourceType::NUM_VAL ) );
             }
         break;
     }
@@ -645,7 +645,7 @@ ContextHandlerRef PieSeriesContext::onCreateContext( sal_Int32 nElement, const A
             switch( nElement )
             {
                 case C_TOKEN( cat ):
-                    return new DataSourceContext( *this, mrModel.maSources.create( DataSourceType::CATEGORIES ) );
+                    return new DataSourceContext( *this, mrModel.maSources.create( DataSourceType::STR_CAT ) );
                 case C_TOKEN( dLbls ):
                     return new DataLabelsContext( *this, mrModel.mxLabels.create(bMSO2007Doc) );
                 case C_TOKEN( dPt ):
@@ -654,7 +654,7 @@ ContextHandlerRef PieSeriesContext::onCreateContext( sal_Int32 nElement, const A
                     mrModel.mnExplosion = rAttribs.getInteger( XML_val, 0 );
                     return nullptr;
                 case C_TOKEN( val ):
-                    return new DataSourceContext( *this, mrModel.maSources.create( DataSourceType::VALUES ) );
+                    return new DataSourceContext( *this, mrModel.maSources.create( DataSourceType::NUM_VAL ) );
             }
         break;
     }
@@ -679,7 +679,7 @@ ContextHandlerRef RadarSeriesContext::onCreateContext( sal_Int32 nElement, const
             switch( nElement )
             {
                 case C_TOKEN( cat ):
-                    return new DataSourceContext( *this, mrModel.maSources.create( DataSourceType::CATEGORIES ) );
+                    return new DataSourceContext( *this, mrModel.maSources.create( DataSourceType::STR_CAT ) );
                 case C_TOKEN( dLbls ):
                     return new DataLabelsContext( *this, mrModel.mxLabels.create(bMSO2007Doc) );
                 case C_TOKEN( dPt ):
@@ -690,7 +690,7 @@ ContextHandlerRef RadarSeriesContext::onCreateContext( sal_Int32 nElement, const
                     mrModel.mbSmooth = rAttribs.getBool( XML_val, bMSO2007Doc );
                     return nullptr;
                 case C_TOKEN( val ):
-                    return new DataSourceContext( *this, mrModel.maSources.create( DataSourceType::VALUES ) );
+                    return new DataSourceContext( *this, mrModel.maSources.create( DataSourceType::NUM_VAL ) );
             }
         break;
     }
@@ -728,9 +728,9 @@ ContextHandlerRef ScatterSeriesContext::onCreateContext( sal_Int32 nElement, con
                 case C_TOKEN( trendline ):
                     return new TrendlineContext( *this, mrModel.maTrendlines.create(bMSO2007Doc) );
                 case C_TOKEN( xVal ):
-                    return new DataSourceContext( *this, mrModel.maSources.create( DataSourceType::CATEGORIES ) );
+                    return new DataSourceContext( *this, mrModel.maSources.create( DataSourceType::STR_CAT ) );
                 case C_TOKEN( yVal ):
-                    return new DataSourceContext( *this, mrModel.maSources.create( DataSourceType::VALUES ) );
+                    return new DataSourceContext( *this, mrModel.maSources.create( DataSourceType::NUM_VAL ) );
             }
         break;
     }
@@ -754,9 +754,9 @@ ContextHandlerRef SurfaceSeriesContext::onCreateContext( sal_Int32 nElement, con
             switch( nElement )
             {
                 case C_TOKEN( cat ):
-                    return new DataSourceContext( *this, mrModel.maSources.create( DataSourceType::CATEGORIES ) );
+                    return new DataSourceContext( *this, mrModel.maSources.create( DataSourceType::STR_CAT ) );
                 case C_TOKEN( val ):
-                    return new DataSourceContext( *this, mrModel.maSources.create( DataSourceType::VALUES ) );
+                    return new DataSourceContext( *this, mrModel.maSources.create( DataSourceType::NUM_VAL ) );
             }
         break;
     }
