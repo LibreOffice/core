@@ -1072,7 +1072,7 @@ class PresenterConsole {
 
 	_onPresentToAll() {
 		app.map.slideShowPresenter.setLeader(true);
-		app.map.slideShowPresenter._fromPresenterConsole = true;
+		app.map.slideShowPresenter._presentToAllInProgress = true;
 		app.map.fire('newpresentinwindow');
 	}
 
@@ -1191,7 +1191,7 @@ class PresenterConsole {
 			this._proxyPresenter.close();
 
 		this._active = false;
-		app.map.slideShowPresenter._fromPresenterConsole = false;
+		app.map.slideShowPresenter._presentToAllInProgress = false;
 		window.removeEventListener('beforeunload', this._boundOnWindowClose);
 
 		this._presenter.endPresentation(true);
@@ -1207,7 +1207,7 @@ class PresenterConsole {
 		this._proxyPresenter.clearInterval(this._timer);
 		this._proxyPresenter.close();
 		this._active = false;
-		app.map.slideShowPresenter._fromPresenterConsole = false;
+		app.map.slideShowPresenter._presentToAllInProgress = false;
 
 		delete this._proxyPresenter;
 		delete this._currentIndex;
