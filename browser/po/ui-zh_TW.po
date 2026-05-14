@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-11 14:06+0200\n"
-"PO-Revision-Date: 2026-03-23 14:07+0000\n"
+"PO-Revision-Date: 2026-05-14 03:11+0000\n"
 "Last-Translator: Jeff Huang <s8321414@gmail.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
-"projects/collabora-online/ui/zh_Hant/>\n"
-"Language: \n"
+"projects/collabora-online/collabora-ui/zh_Hant/>\n"
+"Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.17-dev\n"
+"X-Generator: Weblate 2026.5.dev0\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -402,33 +402,31 @@ msgstr "簽章憑證授權機構"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:432
 #: admin/src/integrator/AdminIntegratorSettings.ts:436
-#, fuzzy
 msgid "Provider"
-msgstr "提供者："
+msgstr "提供者"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:433
 #: admin/src/integrator/AdminIntegratorSettings.ts:437
 msgid "API Key"
-msgstr ""
+msgstr "API 金鑰"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:434
 #: admin/src/integrator/AdminIntegratorSettings.ts:439
-#, fuzzy
 msgid "Model"
-msgstr "模式"
+msgstr "模型"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:435
 #: admin/src/integrator/AdminIntegratorSettings.ts:438
 msgid "Base URL"
-msgstr ""
+msgstr "基礎 URL"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:440
 msgid "Image Size"
-msgstr ""
+msgstr "影像大小"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:441
 msgid "Request Timeout (seconds)"
-msgstr ""
+msgstr "請求逾時（秒）"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:444
 msgid "In-document Screen Reader"
@@ -448,11 +446,11 @@ msgstr "深色模式"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:446
 msgid "Smart Zoom"
-msgstr ""
+msgstr "智慧型縮放"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:447
 msgid "Default Zoom"
-msgstr ""
+msgstr "預設縮放"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:448
 msgid "Compact layout"
@@ -842,69 +840,69 @@ msgstr "人工智慧小幫手"
 msgid ""
 "Configure AI provider credentials and model. Models are fetched "
 "automatically when credentials change."
-msgstr ""
+msgstr "設定人工智慧服務供應商的憑證與模型。當憑證變更時，系統會自動取得模型。"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1926
 msgid "Text Generation"
-msgstr ""
+msgstr "文字產生"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1976
 #: admin/src/integrator/AdminIntegratorSettings.ts:2082
 msgid "e.g."
-msgstr ""
+msgstr "例如"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1995
 #: admin/src/integrator/AdminIntegratorSettings.ts:2113
 #: admin/src/integrator/AdminIntegratorSettings.ts:2557
 #: admin/src/integrator/AdminIntegratorSettings.ts:2573
 msgid "Fetch models to select"
-msgstr ""
+msgstr "擷取待選取的模型"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2024
 msgid "Image Generation"
-msgstr ""
+msgstr "影像產生"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2029
 msgid "Same as Text AI"
-msgstr ""
+msgstr "與文字人工智慧相同"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2098
 msgid "Leave empty to use Text AI key"
-msgstr ""
+msgstr "留空以使用文字人工智慧金鑰"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2360
 #: admin/src/integrator/AdminIntegratorSettings.ts:2447
 msgid "Fetching models..."
-msgstr ""
+msgstr "正在擷取模型……"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2389
 #: admin/src/integrator/AdminIntegratorSettings.ts:2399
 #: admin/src/integrator/AdminIntegratorSettings.ts:2476
 #: admin/src/integrator/AdminIntegratorSettings.ts:2486
 msgid "No models found"
-msgstr ""
+msgstr "找不到模型"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2409
 #: admin/src/integrator/AdminIntegratorSettings.ts:2496
 msgid "Models fetched successfully"
-msgstr ""
+msgstr "擷取模型成功"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2415
 #: admin/src/integrator/AdminIntegratorSettings.ts:2502
 msgid "Failed to fetch models"
-msgstr ""
+msgstr "擷取模型失敗"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2425
 msgid "Invalid provider configuration"
-msgstr ""
+msgstr "無效的提供者組態"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2537
 msgid "None (disable image generation)"
-msgstr ""
+msgstr "無（停用影像產生）"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2919
 msgid "Reset"
-msgstr ""
+msgstr "重設"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3038
 #: src/map/handler/Map.WOPI.js:793
@@ -1035,22 +1033,21 @@ msgid "Event handling has been delayed for an unexpectedly long time: {0}ms"
 msgstr "事件處理意外延遲了很長的時間：{0}毫秒"
 
 #: src/app/TableStylesService.ts:101
-#, fuzzy
 msgid "Light"
-msgstr "光照"
+msgstr "淺色"
 
 #: src/app/TableStylesService.ts:103
 msgid "Medium"
-msgstr ""
+msgstr "中等"
 
 #: src/app/TableStylesService.ts:105
 msgid "Dark"
-msgstr ""
+msgstr "深色"
 
 #: src/app/TableStylesService.ts:107
 #: src/control/jsdialog/Widget.ColorPicker.ts:334
 msgid "Custom"
-msgstr ""
+msgstr "自訂"
 
 #: src/app/TableStylesService.ts:195 src/app/TableStylesService.ts:207
 #: src/app/TableStylesService.ts:209
@@ -1118,9 +1115,8 @@ msgid "Resolved"
 msgstr "已解決"
 
 #: src/canvas/sections/CommentSection.ts:574
-#, fuzzy
 msgid "Removed"
-msgstr "移除"
+msgstr "已移除"
 
 #: src/canvas/sections/CommentSection.ts:1160
 #: src/control/jsdialog/Widget.Comment.ts:177
@@ -1227,7 +1223,7 @@ msgstr "自動色彩"
 #: src/control/Control.AboutDialog.ts:89
 #: src/control/jsdialog/Widget.TreeView.ts:786
 msgid "(opens in new tab)"
-msgstr ""
+msgstr "（在新分頁開啟）"
 
 #: src/control/Control.AboutDialog.ts:148
 msgid "Served by: "
@@ -2734,7 +2730,7 @@ msgstr "表格設計"
 
 #: src/control/Notebookbar.CalcTableTab.ts:72
 msgid "Table Options"
-msgstr ""
+msgstr "表格選項"
 
 #: src/control/Notebookbar.CalcTableTab.ts:85
 msgid "Header Row"
@@ -2941,7 +2937,7 @@ msgstr "圖片"
 #: src/control/Control.NotebookbarImpress.js:143
 #: src/control/Control.NotebookbarWriter.js:103
 msgid "Chart"
-msgstr ""
+msgstr "圖表"
 
 #: src/control/Control.NotebookbarCalc.js:99
 #: src/control/Control.NotebookbarDraw.js:122
@@ -3010,7 +3006,7 @@ msgstr "剪貼簿"
 #: src/control/Control.NotebookbarWriter.js:648
 #: src/control/Control.TopToolbar.js:148
 msgid "Clone Formatting (double click to keep active)"
-msgstr ""
+msgstr "拓製格式設定（雙擊以維持啟用）"
 
 #: src/control/Control.NotebookbarCalc.js:456
 #: src/control/Control.NotebookbarDraw.js:649
@@ -3018,7 +3014,7 @@ msgstr ""
 #: src/control/Control.NotebookbarWriter.js:649
 #: src/control/Control.TopToolbar.js:148
 msgid "Clone Formatting is active (click again or press Esc to exit)"
-msgstr ""
+msgstr "拓製格式設定已啟用（再次點擊或按 Esc 即可退出）"
 
 #: src/control/Control.NotebookbarCalc.js:492
 #: src/control/Control.NotebookbarDraw.js:685
@@ -3430,7 +3426,7 @@ msgstr "母片"
 
 #: src/control/Control.NotebookbarImpress.js:479
 msgid "Start Slide Show"
-msgstr ""
+msgstr "開始投影片放映"
 
 #: src/control/Control.NotebookbarImpress.js:484
 msgid "From Beginning"
@@ -3450,7 +3446,7 @@ msgstr "全螢幕，從此投影片開始"
 
 #: src/control/Control.NotebookbarImpress.js:508
 msgid "Present"
-msgstr ""
+msgstr "展示"
 
 #: src/control/Control.NotebookbarImpress.js:514
 msgid "Present in Window"
@@ -3487,7 +3483,7 @@ msgstr "隨著簡報者翻頁，同步檢視投影片"
 
 #: src/control/Control.NotebookbarImpress.js:552
 msgid "Set Up"
-msgstr ""
+msgstr "設定"
 
 #: src/control/Control.NotebookbarImpress.js:679
 msgid "Slide Views"
@@ -3647,28 +3643,28 @@ msgstr "貼上"
 
 #: src/control/Control.PartsPreview.js:422
 msgid "Add Section"
-msgstr ""
+msgstr "新增區塊"
 
 #: src/control/Control.PartsPreview.js:564
 #: src/control/Control.PartsPreview.js:637
 msgid "Rename Section"
-msgstr ""
+msgstr "重新命名區塊"
 
 #: src/control/Control.PartsPreview.js:571
 msgid "Move Section Up"
-msgstr ""
+msgstr "將區塊向上移動"
 
 #: src/control/Control.PartsPreview.js:579
 msgid "Move Section Down"
-msgstr ""
+msgstr "將區塊向下移動"
 
 #: src/control/Control.PartsPreview.js:586
 msgid "Remove Section"
-msgstr ""
+msgstr "移除區塊"
 
 #: src/control/Control.PartsPreview.js:638
 msgid "Enter new section name:"
-msgstr ""
+msgstr "輸入新區塊名稱："
 
 #: src/control/Control.SaveState.ts:49
 msgid "Saving"
@@ -3859,11 +3855,11 @@ msgstr "選取計數"
 
 #: src/control/Control.StatusBar.js:267
 msgid "Previous Page"
-msgstr ""
+msgstr "上一頁"
 
 #: src/control/Control.StatusBar.js:269
 msgid "Next Page"
-msgstr ""
+msgstr "下一頁"
 
 #: src/control/Control.StatusBar.js:275
 msgid "Zoom to Fit Page Width"
@@ -3871,7 +3867,7 @@ msgstr "縮放至符合頁面寬度"
 
 #: src/control/Control.StatusBar.js:280
 msgid "Status Bar Menu"
-msgstr ""
+msgstr "狀態列選單"
 
 #: src/control/Control.StatusBar.js:553
 msgid "The document is probably locked and has been opened as view-only"
@@ -4508,7 +4504,7 @@ msgstr "並排顯示"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1815
 msgid "Hidden"
-msgstr ""
+msgstr "隱藏"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1829
 msgid "All users"
@@ -4717,9 +4713,8 @@ msgid "Insert Comment"
 msgstr "插入評註"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2401
-#, fuzzy
 msgid "Insert Note"
-msgstr "插入日期"
+msgstr "插入備註"
 
 #: src/control/jsdialog/Util.SnackbarController.ts:122
 msgid "Dismiss"
@@ -4740,7 +4735,7 @@ msgstr "自動"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:253
 msgid "Palette"
-msgstr ""
+msgstr "調色盤"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:268
 msgid "Color palette"
@@ -4795,7 +4790,7 @@ msgstr "所選的儲存格範圍"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:44
 msgid "Cell Selection"
-msgstr ""
+msgstr "儲存格選取"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:48
 msgid "Entering text mode"
@@ -4803,7 +4798,7 @@ msgstr "輸入文字模式"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:49
 msgid "Insert Mode"
-msgstr ""
+msgstr "插入模式"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:54
 msgid "Selection Mode"
@@ -4820,7 +4815,7 @@ msgstr "函式選擇"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:68
 msgid "Table Cell Functions"
-msgstr ""
+msgstr "表格儲存格函式"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:73
 msgid "Your changes have been saved"
@@ -4989,7 +4984,7 @@ msgstr "伺服器正在關閉"
 #: src/docdispatcher.ts:373 src/docdispatcher.ts:386
 msgid ""
 "AI is not configured. Go to File > Options > View Settings to set it up."
-msgstr ""
+msgstr "尚未設定人工智慧。請前往「檔案」→「選項」→「檢視設定」進行設定。"
 
 #: src/docdispatcher.ts:607
 msgid "Are you sure you want to delete this slide?"
