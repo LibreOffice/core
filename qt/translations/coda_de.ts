@@ -82,7 +82,7 @@
     <message>
         <location filename="../DocumentOperations.cpp" line="132"/>
         <source>Enter file path...</source>
-        <translation>Dateipfad eingeben...</translation>
+        <translation>Dateipfad eingeben…</translation>
     </message>
     <message>
         <location filename="../DocumentOperations.cpp" line="144"/>

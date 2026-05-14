@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-11 14:06+0200\n"
-"PO-Revision-Date: 2026-05-11 13:37+0000\n"
+"PO-Revision-Date: 2026-05-12 14:11+0000\n"
 "Last-Translator: Mr-Update <mr.update@yahoo.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/de/>\n"
@@ -420,7 +420,7 @@ msgstr "Anbieter"
 #: admin/src/integrator/AdminIntegratorSettings.ts:433
 #: admin/src/integrator/AdminIntegratorSettings.ts:437
 msgid "API Key"
-msgstr ""
+msgstr "API-Schlüssel"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:434
 #: admin/src/integrator/AdminIntegratorSettings.ts:439
@@ -430,7 +430,7 @@ msgstr "Modell"
 #: admin/src/integrator/AdminIntegratorSettings.ts:435
 #: admin/src/integrator/AdminIntegratorSettings.ts:438
 msgid "Base URL"
-msgstr ""
+msgstr "Basis-URL"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:440
 msgid "Image Size"
@@ -438,7 +438,7 @@ msgstr "Bildgröße"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:441
 msgid "Request Timeout (seconds)"
-msgstr ""
+msgstr "Zeitlimit für die Anfrage (Sekunden)"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:444
 msgid "In-document Screen Reader"
@@ -633,7 +633,7 @@ msgstr "Anmerkungen"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:487
 msgid "Handouts"
-msgstr "Handouts"
+msgstr "Handzettel"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:488
 #: src/control/Control.NavigatorPanel.ts:213
@@ -642,7 +642,7 @@ msgstr "Gliederung"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:489
 msgid "Handout horizontal"
-msgstr "Handout horizontal"
+msgstr "Handzettel (Querformat)"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:490
 msgid "Images"
@@ -871,6 +871,8 @@ msgid ""
 "Configure AI provider credentials and model. Models are fetched "
 "automatically when credentials change."
 msgstr ""
+"Konfigurieren Sie die Anmeldedaten und das Modell des KI-Anbieters. Die "
+"Modelle werden automatisch abgerufen, wenn sich die Anmeldedaten ändern."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1926
 msgid "Text Generation"
@@ -886,7 +888,7 @@ msgstr "z. B."
 #: admin/src/integrator/AdminIntegratorSettings.ts:2557
 #: admin/src/integrator/AdminIntegratorSettings.ts:2573
 msgid "Fetch models to select"
-msgstr ""
+msgstr "Modelle zum Auswählen abrufen"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2024
 msgid "Image Generation"
@@ -894,41 +896,41 @@ msgstr "Bildgenerierung"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2029
 msgid "Same as Text AI"
-msgstr ""
+msgstr "Identisch mit Text-KI"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2098
 msgid "Leave empty to use Text AI key"
-msgstr ""
+msgstr "Leer lassen, um den Text-KI-Schlüssel zu verwenden"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2360
 #: admin/src/integrator/AdminIntegratorSettings.ts:2447
 msgid "Fetching models..."
-msgstr ""
+msgstr "Modelle werden abgerufen …"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2389
 #: admin/src/integrator/AdminIntegratorSettings.ts:2399
 #: admin/src/integrator/AdminIntegratorSettings.ts:2476
 #: admin/src/integrator/AdminIntegratorSettings.ts:2486
 msgid "No models found"
-msgstr ""
+msgstr "Keine Modelle gefunden"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2409
 #: admin/src/integrator/AdminIntegratorSettings.ts:2496
 msgid "Models fetched successfully"
-msgstr ""
+msgstr "Modelle erfolgreich abgerufen"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2415
 #: admin/src/integrator/AdminIntegratorSettings.ts:2502
 msgid "Failed to fetch models"
-msgstr ""
+msgstr "Abrufen der Modelle ist fehlgeschlagen"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2425
 msgid "Invalid provider configuration"
-msgstr ""
+msgstr "Ungültige Anbieterkonfiguration"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2537
 msgid "None (disable image generation)"
-msgstr ""
+msgstr "Keine (Bildgenerierung deaktivieren)"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2919
 msgid "Reset"
@@ -957,7 +959,7 @@ msgstr "Ausnahmewörter werden bei der Rechtschreibprüfung unterstrichen"
 
 #: admin/src/integrator/WordBook.ts:132
 msgid "Loading Wordbook..."
-msgstr "Wörterbuch wird geladen..."
+msgstr "Wörterbuch wird geladen …"
 
 #: admin/src/integrator/WordBook.ts:333
 msgid "Type to add a word"
@@ -1042,13 +1044,13 @@ msgid ""
 "retry your request..."
 msgstr ""
 "Das System passt derzeit die Ressourcen an. Bitte warten Sie einen Moment, "
-"während wir Ihre Anfrage erneut versuchen..."
+"während wir Ihre Anfrage erneut versuchen …"
 
 #: js/global.js:1768
 msgid "The document is being migrated to a new server. Retrying shortly..."
 msgstr ""
 "Das Dokument wird auf einen neuen Server migriert. Ein erneuter Versuch "
-"erfolgt in Kürze..."
+"erfolgt in Kürze …"
 
 #: js/global.js:1770
 msgid "Failed to get RouteToken from controller"
@@ -1060,7 +1062,7 @@ msgstr "Debugging-Werkzeuge"
 
 #: src/app/Debug.ts:159
 msgid "Ctrl+Shift+Alt+D to exit"
-msgstr "Strg+Umschalt+Alt+D zum Beenden"
+msgstr "Strg+Alt+Umschalt+D zum Beenden"
 
 #: src/app/Debug.ts:1537
 msgid "Event handling has been delayed for an unexpectedly long time: {0}ms"
@@ -1073,7 +1075,7 @@ msgstr "Hell"
 
 #: src/app/TableStylesService.ts:103
 msgid "Medium"
-msgstr ""
+msgstr "Mittel"
 
 #: src/app/TableStylesService.ts:105
 msgid "Dark"
@@ -1082,7 +1084,7 @@ msgstr "Dunkel"
 #: src/app/TableStylesService.ts:107
 #: src/control/jsdialog/Widget.ColorPicker.ts:334
 msgid "Custom"
-msgstr ""
+msgstr "Benutzerdefiniert"
 
 #: src/app/TableStylesService.ts:195 src/app/TableStylesService.ts:207
 #: src/app/TableStylesService.ts:209
@@ -1135,7 +1137,7 @@ msgstr "Antworten"
 
 #: src/canvas/sections/CommentSection.ts:459
 msgid "Press Ctrl + Enter to post"
-msgstr "Drücken Sie Strg + Eingabetaste zu einwerfen"
+msgstr "Drücken Sie Strg+Enter zum Posten"
 
 #: src/canvas/sections/CommentSection.ts:532
 #: src/canvas/sections/CommentSection.ts:533
@@ -1260,7 +1262,7 @@ msgstr "Automatische Farbe"
 #: src/control/Control.AboutDialog.ts:89
 #: src/control/jsdialog/Widget.TreeView.ts:786
 msgid "(opens in new tab)"
-msgstr ""
+msgstr "(wird in einem neuen Tab geöffnet)"
 
 #: src/control/Control.AboutDialog.ts:148
 msgid "Served by: "
@@ -1272,7 +1274,7 @@ msgstr "Widgets ansehen"
 
 #: src/control/Control.AboutDialog.ts:206
 msgid "\"Slow Proxy\""
-msgstr "\"Langsamer Proxy\""
+msgstr "„Langsamer Proxy“"
 
 #: src/control/Control.AboutDialog.ts:213
 msgid "Time zone:"
@@ -1423,7 +1425,7 @@ msgstr "Optionen"
 
 #: src/control/Control.BackstageView.ts:407
 msgid "Start a new document from one of the following templates."
-msgstr "Erstelle ein neues Dokument aus einer der folgenden Vorlagen."
+msgstr "Erstellen Sie ein neues Dokument aus einer der folgenden Vorlagen."
 
 #: src/control/Control.BackstageView.ts:450
 #: src/control/Control.BackstageView.ts:453
@@ -1453,7 +1455,7 @@ msgstr "Dokument-Info"
 
 #: src/control/Control.BackstageView.ts:784
 msgid "View document properties and information"
-msgstr "Dokumenteneigenschaften und -informationen anzeigen"
+msgstr "Dokumenteigenschaften und -informationen anzeigen"
 
 #: src/control/Control.BackstageView.ts:800
 msgid "Export Document"
@@ -1557,7 +1559,7 @@ msgstr "Entsperren"
 
 #: src/control/Control.DocumentNameInput.js:27
 msgid "Document name"
-msgstr "Dokumentenbezeichnung"
+msgstr "Dokumentname"
 
 #: src/control/Control.DocumentNameInput.js:119
 msgid "Path"
@@ -1587,7 +1589,7 @@ msgstr "Wann?"
 
 #: src/control/Control.DocumentRepair.js:160
 msgid "You have not done anything to rollback yet..."
-msgstr "Sie haben noch nichts für ein Rollback getan..."
+msgstr "Sie haben noch nichts für ein Rollback getan …"
 
 #: src/control/Control.DocumentRepair.js:170
 msgid "Redo"
@@ -2222,7 +2224,7 @@ msgstr "Herunterladen als"
 #: src/control/Control.Menubar.ts:1088 src/control/Control.Menubar.ts:1153
 #: src/control/Control.Menubar.ts:1217 src/control/Control.Menubar.ts:1275
 msgid "PDF Document (.pdf) as..."
-msgstr "PDF-Dokument (.pdf) als..."
+msgstr "PDF-Dokument (.pdf) als …"
 
 #: src/control/Control.Menubar.ts:120 src/control/Control.Menubar.ts:787
 msgid "HTML file (.html)"
@@ -2321,7 +2323,7 @@ msgstr "Alle"
 #: src/control/Control.NotebookbarImpress.js:1659
 #: src/control/Control.NotebookbarWriter.js:1358
 msgid "Smart Picker"
-msgstr "Smart Picker"
+msgstr "Intelligente Auswahl"
 
 #: src/control/Control.Menubar.ts:265
 msgid "Text orientation"
@@ -2335,7 +2337,7 @@ msgstr "Zitate"
 #: src/control/Control.Menubar.ts:339
 #: src/control/Notebookbar.WriterReferencesTab.ts:72
 msgid "Update Index"
-msgstr "Verzeichnisse Aktualisieren"
+msgstr "Index aktualisieren"
 
 #: src/control/Control.Menubar.ts:348
 #: src/control/Notebookbar.WriterReferencesTab.ts:220
@@ -2378,7 +2380,7 @@ msgstr "Checkbox einfügen"
 
 #: src/control/Control.Menubar.ts:384 src/control/Control.Menubar.ts:1377
 msgid "Insert Dropdown"
-msgstr "Auswahlliste einfügen"
+msgstr "Aufklappmenü einfügen"
 
 #: src/control/Control.Menubar.ts:385 src/control/Control.Menubar.ts:1378
 msgid "Insert Picture"
@@ -2391,7 +2393,7 @@ msgstr "Datum einfügen"
 #: src/control/Control.Menubar.ts:407 src/control/Control.Menubar.ts:1124
 #: src/control/Control.NotebookbarWriter.js:544
 msgid "Screen Reading"
-msgstr "Stimme Über"
+msgstr "Bildschirmlesen"
 
 #: src/control/Control.Menubar.ts:420 src/control/Control.Menubar.ts:607
 #: src/control/Control.Menubar.ts:751 src/control/Control.Menubar.ts:1056
@@ -2489,7 +2491,7 @@ msgstr "Aktuelle Folie als Bitmap (.bmp)"
 #: src/control/Control.Menubar.ts:459
 #: src/control/Control.NotebookbarBuilder.js:492
 msgid "Current slide as Graphics Interchange Format (.gif)"
-msgstr "Aktuelle Folie als Grafikaustausch-Format (.gif)"
+msgstr "Aktuelle Folie als Grafikaustauschformat (.gif)"
 
 #: src/control/Control.Menubar.ts:460
 #: src/control/Control.NotebookbarBuilder.js:497
@@ -2523,12 +2525,12 @@ msgstr "Masteransicht"
 
 #: src/control/Control.Menubar.ts:520
 msgid "Local Multimedia..."
-msgstr "Lokales Multimedia..."
+msgstr "Lokales Multimedia…"
 
 #: src/control/Control.Menubar.ts:589 src/control/Control.Menubar.ts:1197
 #: src/control/Control.PresentationBar.js:128
 msgid "Fullscreen presentation"
-msgstr "Vollbild Präsentation"
+msgstr "Vollbild-Präsentation"
 
 #: src/control/Control.Menubar.ts:590
 msgid "Present current slide"
@@ -2547,7 +2549,7 @@ msgstr "Präsentator-Konsole"
 #: src/control/Control.NotebookbarBuilder.js:454
 #: src/control/Control.NotebookbarBuilder.js:508
 msgid "ODF Drawing (.odg)"
-msgstr "ODF Zeichnung (.odg)"
+msgstr "ODF-Zeichnung (.odg)"
 
 #: src/control/Control.Menubar.ts:771 src/control/Control.Menubar.ts:783
 #: src/control/Control.Menubar.ts:1276
@@ -2587,78 +2589,78 @@ msgstr "Zelle fokussieren"
 #: src/control/Control.Menubar.ts:928
 #: src/control/jsdialog/Definitions.Menu.ts:1877
 msgid "Highlight cells with..."
-msgstr "Markieren Sie Zellen mit..."
+msgstr "Markieren Sie Zellen mit …"
 
 #: src/control/Control.Menubar.ts:929
 #: src/control/jsdialog/Definitions.Menu.ts:1880
 msgid "Values greater than..."
-msgstr "Werte größer als..."
+msgstr "Werte größer als …"
 
 #: src/control/Control.Menubar.ts:930
 #: src/control/jsdialog/Definitions.Menu.ts:1884
 msgid "Values less than..."
-msgstr "Werte kleiner als..."
+msgstr "Werte kleiner als …"
 
 #: src/control/Control.Menubar.ts:931
 #: src/control/jsdialog/Definitions.Menu.ts:1888
 msgid "Values equal to..."
-msgstr "Werte gleich..."
+msgstr "Werte gleich …"
 
 #: src/control/Control.Menubar.ts:932
 #: src/control/jsdialog/Definitions.Menu.ts:1892
 msgid "Values between..."
-msgstr "Werte zwischen..."
+msgstr "Werte zwischen …"
 
 #: src/control/Control.Menubar.ts:933
 #: src/control/jsdialog/Definitions.Menu.ts:1896
 msgid "Values duplicate..."
-msgstr "Werte duplizieren..."
+msgstr "Werte duplizieren…"
 
 #: src/control/Control.Menubar.ts:934
 #: src/control/jsdialog/Definitions.Menu.ts:1900
 msgid "Containing text..."
-msgstr "Enthält Text..."
+msgstr "Enthält Text …"
 
 #: src/control/Control.Menubar.ts:936 src/control/Control.Menubar.ts:946
 #: src/control/jsdialog/Definitions.Menu.ts:1904
 #: src/control/jsdialog/Definitions.Menu.ts:1935
 msgid "More highlights..."
-msgstr "Weitere Highlights..."
+msgstr "Weitere Highlights…"
 
 #: src/control/Control.Menubar.ts:938
 #: src/control/jsdialog/Definitions.Menu.ts:1908
 msgid "Top/Bottom Rules..."
-msgstr "Regeln oben/unten..."
+msgstr "Regeln oben/unten…"
 
 #: src/control/Control.Menubar.ts:939
 #: src/control/jsdialog/Definitions.Menu.ts:1911
 msgid "Top N elements..."
-msgstr "Obere N Elemente..."
+msgstr "Obere N Elemente …"
 
 #: src/control/Control.Menubar.ts:940
 #: src/control/jsdialog/Definitions.Menu.ts:1915
 msgid "Top N percent..."
-msgstr "Obere N Prozent..."
+msgstr "Obere N Prozent …"
 
 #: src/control/Control.Menubar.ts:941
 #: src/control/jsdialog/Definitions.Menu.ts:1919
 msgid "Bottom N elements..."
-msgstr "Untere N Elemente..."
+msgstr "Untere N Elemente …"
 
 #: src/control/Control.Menubar.ts:942
 #: src/control/jsdialog/Definitions.Menu.ts:1923
 msgid "Bottom N percent..."
-msgstr "Untere N Prozent..."
+msgstr "Untere N Prozent …"
 
 #: src/control/Control.Menubar.ts:943
 #: src/control/jsdialog/Definitions.Menu.ts:1927
 msgid "Above Average..."
-msgstr "Überdurchschnittlich..."
+msgstr "Überdurchschnittlich …"
 
 #: src/control/Control.Menubar.ts:944
 #: src/control/jsdialog/Definitions.Menu.ts:1931
 msgid "Below Average..."
-msgstr "Unterdurchschnittlich..."
+msgstr "Unterdurchschnittlich …"
 
 #: src/control/Control.Menubar.ts:1073 src/control/Control.Menubar.ts:1139
 #: src/control/Control.Menubar.ts:1204 src/control/Control.Menubar.ts:1259
@@ -2698,7 +2700,7 @@ msgstr "Auf Standardsprache zurücksetzen"
 #: src/control/Control.Menubar.ts:1664 src/control/Control.Toolbar.js:256
 #: src/control/jsdialog/Definitions.Menu.ts:2157
 msgid "More..."
-msgstr "Mehr…"
+msgstr "Mehr …"
 
 #: src/control/Control.Menubar.ts:2015
 msgid "Use Compact view"
@@ -2772,7 +2774,7 @@ msgstr "Ergebnisse"
 #: src/control/Control.NavigatorPanel.ts:508
 #: src/control/jsdialog/Widget.TreeView.ts:2040
 msgid "Search..."
-msgstr "Suchen..."
+msgstr "Suchen…"
 
 #: src/control/Control.QuickFindPanel.ts:122
 msgid "Type in the search box to find anything in your document"
@@ -2786,7 +2788,7 @@ msgstr "Tabellengestaltung"
 
 #: src/control/Notebookbar.CalcTableTab.ts:72
 msgid "Table Options"
-msgstr ""
+msgstr "Tabellenoptionen"
 
 #: src/control/Notebookbar.CalcTableTab.ts:85
 msgid "Header Row"
@@ -3062,7 +3064,7 @@ msgstr "Zwischenablage"
 #: src/control/Control.NotebookbarWriter.js:648
 #: src/control/Control.TopToolbar.js:148
 msgid "Clone Formatting (double click to keep active)"
-msgstr ""
+msgstr "Formatierung kopieren (zum Aktivieren doppelt anklicken)"
 
 #: src/control/Control.NotebookbarCalc.js:456
 #: src/control/Control.NotebookbarDraw.js:649
@@ -3071,6 +3073,8 @@ msgstr ""
 #: src/control/Control.TopToolbar.js:148
 msgid "Clone Formatting is active (click again or press Esc to exit)"
 msgstr ""
+"Formatierung kopieren ist aktiviert (zum Beenden erneut klicken oder Esc "
+"drücken)"
 
 #: src/control/Control.NotebookbarCalc.js:492
 #: src/control/Control.NotebookbarDraw.js:685
@@ -3504,7 +3508,7 @@ msgstr "Vollbildschirm, beginnend mit dieser Folie"
 
 #: src/control/Control.NotebookbarImpress.js:508
 msgid "Present"
-msgstr ""
+msgstr "Präsentieren"
 
 #: src/control/Control.NotebookbarImpress.js:514
 msgid "Present in Window"
@@ -3541,7 +3545,7 @@ msgstr "Folien anzeigen, sobald der Präsentator sie weiterblättert"
 
 #: src/control/Control.NotebookbarImpress.js:552
 msgid "Set Up"
-msgstr ""
+msgstr "Einrichten"
 
 #: src/control/Control.NotebookbarImpress.js:679
 msgid "Slide Views"
@@ -3701,28 +3705,28 @@ msgstr "Einfügen"
 
 #: src/control/Control.PartsPreview.js:422
 msgid "Add Section"
-msgstr ""
+msgstr "Bereich hinzufügen"
 
 #: src/control/Control.PartsPreview.js:564
 #: src/control/Control.PartsPreview.js:637
 msgid "Rename Section"
-msgstr ""
+msgstr "Bereich umbenennen"
 
 #: src/control/Control.PartsPreview.js:571
 msgid "Move Section Up"
-msgstr ""
+msgstr "Bereich nach oben verschieben"
 
 #: src/control/Control.PartsPreview.js:579
 msgid "Move Section Down"
-msgstr ""
+msgstr "Bereich nach unten verschieben"
 
 #: src/control/Control.PartsPreview.js:586
 msgid "Remove Section"
-msgstr ""
+msgstr "Bereich entfernen"
 
 #: src/control/Control.PartsPreview.js:638
 msgid "Enter new section name:"
-msgstr ""
+msgstr "Geben Sie den Namen des neuen Bereichs ein:"
 
 #: src/control/Control.SaveState.ts:49
 msgid "Saving"
@@ -3935,7 +3939,7 @@ msgstr "Auf Seitenbreite zoomen"
 
 #: src/control/Control.StatusBar.js:280
 msgid "Status Bar Menu"
-msgstr ""
+msgstr "Menü der Statusleiste"
 
 #: src/control/Control.StatusBar.js:553
 msgid "The document is probably locked and has been opened as view-only"
@@ -3988,7 +3992,7 @@ msgstr "Tabelle nach rechts bewegen"
 
 #: src/control/Control.Tabs.js:129 src/control/Control.Tabs.js:135
 msgid "Copy Sheet..."
-msgstr "Tabellen kopieren..."
+msgstr "Tabellen kopieren…"
 
 #: src/control/Control.Tabs.js:511
 msgid "Are you sure you want to delete sheet, {sheet}?"
@@ -4117,7 +4121,7 @@ msgstr ""
 
 #: src/control/Control.Zotero.js:246 src/app/Socket.ts:2439
 msgid "Loading..."
-msgstr "Lade…"
+msgstr "Wird geladen …"
 
 #: src/control/Control.Zotero.js:257 src/control/Control.Zotero.js:454
 #: src/slideshow/PresenterConsole.js:31
@@ -4820,7 +4824,7 @@ msgstr "Automatisch"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:253
 msgid "Palette"
-msgstr ""
+msgstr "Palette"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:268
 msgid "Color palette"
@@ -4848,7 +4852,7 @@ msgstr "Benutzerdefinierte Ränder…"
 
 #: src/control/jsdialog/Widget.PageSizeEntry.ts:91
 msgid "More Paper Sizes..."
-msgstr "Mehr Papiergrößen..."
+msgstr "Mehr Papiergrößen…"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:31
 msgid "Number of Pages. Click to open the Go to Page dialog box."
@@ -4877,7 +4881,7 @@ msgstr "Ausgewählter Zellbereich"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:44
 msgid "Cell Selection"
-msgstr ""
+msgstr "Zellauswahl"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:48
 msgid "Entering text mode"
@@ -4902,7 +4906,7 @@ msgstr "Funktionsauswahl"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:68
 msgid "Table Cell Functions"
-msgstr ""
+msgstr "Funktionen für Tabellenzellen"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:73
 msgid "Your changes have been saved"
@@ -5017,7 +5021,7 @@ msgstr "Konfigurationswarnung für Cluster"
 
 #: src/app/Socket.ts:1813
 msgid "Wrong server, reconnecting..."
-msgstr "Falscher Server, Verbindung wird neu aufgebaut ..."
+msgstr "Falscher Server, Verbindung wird neu aufgebaut …"
 
 #: src/app/Socket.ts:1831
 msgid "Unsupported server version."
@@ -5074,7 +5078,7 @@ msgstr ""
 
 #: src/app/Socket.ts:2439
 msgid "Connecting..."
-msgstr "Verbinde…"
+msgstr "Wird verbunden …"
 
 #: src/app/Socket.ts:2455
 msgid "Server is shutting down"
@@ -5084,6 +5088,8 @@ msgstr "Server wird heruntergefahren"
 msgid ""
 "AI is not configured. Go to File > Options > View Settings to set it up."
 msgstr ""
+"KI ist nicht konfiguriert. Gehen Sie zu „Datei → Optionen → "
+"Ansichtseinstellungen“, um sie einzurichten."
 
 #: src/docdispatcher.ts:607
 msgid "Are you sure you want to delete this slide?"
@@ -5669,7 +5675,7 @@ msgstr "Neue Datei aus Vorlage erzeugen …"
 
 #: src/map/handler/Map.WOPI.js:245
 msgid "Compare Document..."
-msgstr "Dokument vergleichen..."
+msgstr "Dokument vergleichen …"
 
 #: src/map/handler/Map.WOPI.js:793
 msgid "File name should contain an extension."
@@ -5685,7 +5691,7 @@ msgstr "Willkommensdialog"
 
 #: src/slideshow/PauseTimer.ts:141
 msgid "Pause... ( %SECONDS% )"
-msgstr "Pause... ( %SECONDS% )"
+msgstr "Pause … ( %SECONDS% )"
 
 #: src/slideshow/PresenterConsole.js:29
 msgid "Current Slide"
@@ -5714,7 +5720,7 @@ msgstr "Fortsetzen"
 
 #: src/slideshow/PresenterConsole.js:39
 msgid "Present to all"
-msgstr "An alle präsentieren"
+msgstr "Allen präsentieren"
 
 #: src/slideshow/PresenterConsole.js:40
 msgid "Go Back"
@@ -5747,7 +5753,7 @@ msgstr "Wiederholung in {0} Sekunden"
 #: src/slideshow/PresenterConsole.js:1405
 #: src/slideshow/SlideShowPresenter.ts:632
 msgid "Click to exit presentation..."
-msgstr "Klicken Sie hier, um die Präsentation zu beenden..."
+msgstr "Klicken Sie hier, um die Präsentation zu beenden …"
 
 #: src/slideshow/SlideShowPresenter.ts:804
 msgid "You are on the first slide"
