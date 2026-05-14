@@ -1238,9 +1238,15 @@ bool ClientSession::_handleInput(const char *buffer, int length)
 
         return forwardToChild(firstLine, docBroker);
     }
+    else if (tokens.equals(0, "setviewreadonly"))
+    {
+        // only if the session has WOPI write permission
+        if (!isWritable())
+            return false;
+        return forwardToChild(firstLine, docBroker);
+    }
     else if (tokens.equals(0, "formfieldevent") ||
              tokens.equals(0, "sallogoverride") ||
-             tokens.equals(0, "setviewreadonly") ||
              tokens.equals(0, "contentcontrolevent"))
     {
         return forwardToChild(firstLine, docBroker);
