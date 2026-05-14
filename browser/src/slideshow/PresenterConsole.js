@@ -67,18 +67,19 @@ class PresenterConsole {
                                     <div id="first-presentation">
 										<div id="timer-container">
 											<div id="timer"></div>
-											 <div id="timer-controls">
-												<button type="button" id="pause" data-cooltip="${this.labels.pause}" aria-label="${this.labels.pause}">
-													<img src="${LOUtil.getImageURL('presenterscreen-ButtonPauseTimerNormal.svg')}">
-												</button>
-												<button type="button" id="restart" data-cooltip="${this.labels.restart}" aria-label="${this.labels.restart}">
-													<img src="${LOUtil.getImageURL('presenterscreen-ButtonRestartTimerNormal.svg')}">
-												</button>
-												<button type="button" id="presentToAll" data-cooltip="${this.labels.presentToAll}" aria-label="${this.labels.presentToAll}">
-													<img src="${LOUtil.getImageURL('presenterscreen-ButtonFollowMeNormal.svg')}">
-												</button>
-											 </div>
 											<div id="today"></div>
+										</div>
+										<div id="timer-controls">
+											<button type="button" id="pause" data-cooltip="${this.labels.pause}" aria-label="${this.labels.pause}">
+												<img src="${LOUtil.getImageURL('presenterscreen-ButtonPauseTimerNormal.svg')}">
+											</button>
+											<button type="button" id="restart" data-cooltip="${this.labels.restart}" aria-label="${this.labels.restart}">
+												<img src="${LOUtil.getImageURL('presenterscreen-ButtonRestartTimerNormal.svg')}">
+											</button>
+											<button type="button" id="presentToAll" data-cooltip="${this.labels.presentToAll}" aria-label="${this.labels.presentToAll}">
+												<img src="${LOUtil.getImageURL('presenterscreen-ButtonFollowMeNormal.svg')}">
+												<span>${this.labels.presentToAll}</span>
+											</button>
 										</div>
                                         <div id='current-slide-container'>
                                             <canvas id="current-presentation"></canvas>
@@ -551,23 +552,41 @@ class PresenterConsole {
 		elem = this._proxyPresenter.document.querySelector('#timer-container');
 		elem.style.display = 'flex';
 		elem.style.alignItems = 'center';
-		elem.style.gap = '15px';
+		elem.style.justifyContent = 'space-between';
+		elem.style.width = '100%';
+		elem.style.marginBottom = '1vh';
 
 		elem = this._proxyPresenter.document.querySelector('#timer');
-		elem.style.fontSize = '22px';
-		elem.style.width = '85px';
-		elem.style.color = this.slideShowColor;
+		elem.style.fontSize = '80px';
+		elem.style.fontWeight = '600';
+		elem.style.color = window
+			.getComputedStyle(document.documentElement)
+			.getPropertyValue('--color-text-light');
 
 		let timeControlElem =
 			this._proxyPresenter.document.querySelector('#timer-controls');
 		timeControlElem.style.display = 'flex';
 		timeControlElem.style.alignItems = 'center';
-		timeControlElem.style.gap = '5px';
+		timeControlElem.style.gap = '1vw';
+		timeControlElem.style.marginBottom = '1vh';
 
 		timeControlElem.addEventListener(
 			'click',
 			window.L.bind(this._onToolbarClick, this),
 		);
+
+		let presentToAllBtn =
+			this._proxyPresenter.document.querySelector('#presentToAll');
+		presentToAllBtn.style.flexDirection = 'row';
+		presentToAllBtn.style.alignItems = 'center';
+		presentToAllBtn.style.gap = '8px';
+		presentToAllBtn.style.padding = '6px 14px';
+		presentToAllBtn.style.border = '1px solid currentColor';
+		presentToAllBtn.style.borderRadius = this.PresenterConsoleBtnRadius;
+		presentToAllBtn.style.marginLeft = 'auto';
+		presentToAllBtn.style.cursor = 'pointer';
+		presentToAllBtn.style.whiteSpace = 'nowrap';
+		presentToAllBtn.style.fontSize = '16px';
 
 		// Style buttons in slideshow control container
 		const buttons = timeControlElem.querySelectorAll('button');
@@ -582,8 +601,8 @@ class PresenterConsole {
 
 				const img = button.querySelector('img');
 				if (img) {
-					img.style.width = '32px';
-					img.style.height = '32px';
+					img.style.width = '48px';
+					img.style.height = '48px';
 				}
 			}.bind(this),
 		);
@@ -597,9 +616,12 @@ class PresenterConsole {
 
 		elem = this._proxyPresenter.document.querySelector('#today');
 		elem.style.textAlign = 'right';
-		elem.style.fontSize = '22px';
+		elem.style.fontSize = '80px';
+		elem.style.fontWeight = '600';
 		elem.style.marginLeft = 'auto';
-		elem.style.color = this.slideShowColor;
+		elem.style.color = window
+			.getComputedStyle(document.documentElement)
+			.getPropertyValue('--color-text-light');
 
 		this._ticks = 0;
 		this._onTimer();
