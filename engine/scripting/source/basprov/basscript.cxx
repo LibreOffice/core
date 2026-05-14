@@ -279,6 +279,10 @@ constexpr OUString BASSCRIPT_PROPERTY_CALLER = u"Caller"_ustr;
 
             // reset parameters
             m_xMethod->SetParameters( nullptr );
+
+            // prevent cycles from leaking memory
+            if (xSbxParams)
+                xSbxParams->Clear();
         }
 
         return aReturn;
