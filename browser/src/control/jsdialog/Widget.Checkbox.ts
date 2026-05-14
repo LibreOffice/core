@@ -167,8 +167,6 @@ JSDialog.Checkbox = function (
 	); // filter(Boolean) removes nulls
 
 	const toggleFunction = () => {
-		if (container.getAttribute('disabled') === 'true') return;
-
 		// Compound command read: data.commandField names a property within
 		// the command's multi-field state object. Else legacy boolean-string
 		// state. Else the static `data.checked`.
