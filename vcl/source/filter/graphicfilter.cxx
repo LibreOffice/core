@@ -926,6 +926,10 @@ ErrCode GraphicFilter::readPNG(SvStream & rStream, Graphic& rGraphic, GfxLinkTyp
         rGraphic = Graphic(*aImportOutput.moBitmap);
         rLinkType = GfxLinkType::NativePng;
     }
+    else if (aImportOutput.moAnimation) {
+        rGraphic = Graphic(*aImportOutput.moAnimation);
+        rLinkType = GfxLinkType::NativePng;
+    }
     else
         aReturnCode = ERRCODE_GRFILTER_FILTERERROR;
 
