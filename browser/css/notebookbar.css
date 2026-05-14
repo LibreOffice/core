@@ -509,6 +509,19 @@ label.notebookbar.ui-checkbox-label {
 	max-height: min(calc( 72vh - 98px), 400px) !important;
 }
 
+/* icon view placeholders when we still render proper image */
+
+.ui-iconview-ondemand-placeholder span {
+	background-color: var(--color-stylesview-border);
+	opacity: 0.8;
+	border-radius: 50px;
+	color: transparent;
+}
+
+.ui-iconview-ondemand-placeholder.selected {
+	border: none !important;
+}
+
 .ui-iconview-buttons-container {
 	display: flex;
 	flex-direction: column;

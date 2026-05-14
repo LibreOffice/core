@@ -150,6 +150,7 @@ function _iconViewEntry(
 		else placeholder.title = '';
 
 		parentContainer.requestRenders(entry, placeholder, entryContainer);
+		entryContainer.classList.add('ui-iconview-ondemand-placeholder');
 	} else {
 		_createEntryImage(entryContainer, builder, entry, entry.image);
 	}
@@ -402,6 +403,7 @@ JSDialog.iconView = function (
 			const image = builder.rendersCache[id].images[pos];
 			const hasText = entry.text && data.textWithIconEnabled;
 
+			container.classList.remove('ui-iconview-ondemand-placeholder');
 			container.replaceChildren();
 			if (hasText) {
 				container = window.L.DomUtil.create(
