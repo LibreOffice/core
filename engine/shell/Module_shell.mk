@@ -49,7 +49,7 @@ $(eval $(call gb_Module_add_targets,shell,\
 
 ifeq ($(COM),MSC)
 $(eval $(call gb_Module_add_targets,shell,\
-	Library_ooofilt \
+	Library_odffilter \
 	Library_propertyhdl \
 	Library_shlxthdl \
 	StaticLibrary_shlxthandler_common \

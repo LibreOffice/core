@@ -17,59 +17,57 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SHELL_SOURCE_WIN32_SHLXTHANDLER_OOOFILT_OOOFILT_HXX
-#define INCLUDED_SHELL_SOURCE_WIN32_SHLXTHANDLER_OOOFILT_OOOFILT_HXX
+#ifndef INCLUDED_SHELL_SOURCE_WIN32_SHLXTHANDLER_ODFFILTER_ODFFILTER_HXX
+#define INCLUDED_SHELL_SOURCE_WIN32_SHLXTHANDLER_ODFFILTER_ODFFILTER_HXX
 
 #include <types.hxx>
 
 //+-------------------------------------------------------------------------
-//  Contents:   LibreOffice filter declarations
-//  Platform:   Windows 2000, Windows XP
-
+//  Contents:   ODF filter declarations
 //+-------------------------------------------------------------------------
 
 class CContentReader;
 class CMetaInfoReader;
 class CFullPropSpec;
 
-LONG g_lInstances = 0;                        // Global count of COooFilter and COooFilterCF instances
+LONG g_lInstances = 0;                        // Global count of COdfFilter and COdfFilterCF instances
 GUID const guidStorage = PSGUID_STORAGE;      // GUID for storage property set
 
 //C-------------------------------------------------------------------------
-//  Class:      COooFilter
-//  Purpose:    Implements interfaces of LibreOffice filter
+//  Class:      COdfFilter
+//  Purpose:    Implements interfaces of the ODF filter
 
-// OooFilter Class ID
-// {7BC0E710-5703-45be-A29D-5D46D8B39262}
-GUID const CLSID_COooFilter =
+// ODF Filter Class ID
+// {DEB88601-6245-4803-81A5-13082BB738FF}
+GUID const CLSID_COdfFilter =
 {
-    0x7bc0e710,
-    0x5703,
-    0x45be,
-    { 0xa2, 0x9d, 0x5d, 0x46, 0xd8, 0xb3, 0x92, 0x62 }
+    0xdeb88601,
+    0x6245,
+    0x4803,
+    { 0x81, 0xa5, 0x13, 0x08, 0x2b, 0xb7, 0x38, 0xff }
 };
 
-// LibreOffice Persistent Handler Class ID
-// {7BC0E713-5703-45be-A29D-5D46D8B39262}
+// ODF Persistent Handler Class ID
+// {3EE9BB34-748E-4FBA-B6A5-94C200A11455}
 const CLSID CLSID_PERSISTENT_HANDLER =
-{0x7bc0e713, 0x5703, 0x45be, {0xa2, 0x9d, 0x5d, 0x46, 0xd8, 0xb3, 0x92, 0x62}};
+{0x3ee9bb34, 0x748e, 0x4fba, {0xb6, 0xa5, 0x94, 0xc2, 0x00, 0xa1, 0x14, 0x55}};
 
-// LibreOffice Persistent Handler Addin Registered Class ID
+// IID_IFilter - well-known Microsoft interface ID for IFilter
 // {89BCB740-6119-101A-BCB7-00DD010655AF}
 const CLSID CLSID_PERSISTENT_HANDLER_ADDIN =
 {0x89bcb740, 0x6119, 0x101a, {0xbc, 0xb7, 0x00, 0xdd, 0x01, 0x06, 0x55, 0xaf}};
 
-// LibreOffice Filter Handler Class ID
-// {7BC0E710-5703-45be-A29D-5D46D8B39262}
+// ODF Filter Handler Class ID (same as CLSID_COdfFilter)
+// {DEB88601-6245-4803-81A5-13082BB738FF}
 const CLSID CLSID_FILTER_HANDLER =
-{0x7bc0e710, 0x5703, 0x45be, {0xa2, 0x9d, 0x5d, 0x46, 0xd8, 0xb3, 0x92, 0x62}};
+{0xdeb88601, 0x6245, 0x4803, {0x81, 0xa5, 0x13, 0x08, 0x2b, 0xb7, 0x38, 0xff}};
 
 enum class FilterState
 {
     FilteringContent,                           // Filtering the content property
     FilteringProperty                           // Filtering the pseudo property
 };
-class COooFilter : public IFilter, public IPersistFile, public IPersistStream
+class COdfFilter : public IFilter, public IPersistFile, public IPersistStream
 {
 public:
     // From IUnknown
@@ -129,10 +127,10 @@ public:
 
 
 private:
-    friend class COooFilterCF;
+    friend class COdfFilterCF;
 
-    COooFilter();
-    virtual ~COooFilter();
+    COdfFilter();
+    virtual ~COdfFilter();
 
     LONG                      m_lRefs;                  // Reference count
     CContentReader *          m_pContentReader;         // A content reader that retrieves document content.
@@ -155,11 +153,11 @@ private:
 };
 
 //C-------------------------------------------------------------------------
-//  Class:      COooFilterCF
-//  Purpose:    Implements class factory for LibreOffice filter
+//  Class:      COdfFilterCF
+//  Purpose:    Implements class factory for the ODF filter
 
 
-class COooFilterCF : public IClassFactory
+class COdfFilterCF : public IClassFactory
 {
 public:
     // From IUnknown
@@ -184,12 +182,12 @@ private:
         REFIID     iid,
         LPVOID *   ppvObj);
 
-    COooFilterCF();
-    virtual  ~COooFilterCF();
+    COdfFilterCF();
+    virtual  ~COdfFilterCF();
 
     LONG m_lRefs;           // Reference count
 };
 
-#endif // INCLUDED_SHELL_SOURCE_WIN32_SHLXTHANDLER_OOOFILT_OOOFILT_HXX
+#endif // INCLUDED_SHELL_SOURCE_WIN32_SHLXTHANDLER_ODFFILTER_ODFFILTER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

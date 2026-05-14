@@ -10060,11 +10060,11 @@ shell/source/win32/ooofilereader/simpletag.cxx
 shell/source/win32/ooofilereader/simpletag.hxx
 shell/source/win32/shlxthandler/classfactory.cxx
 shell/source/win32/shlxthandler/classfactory.hxx
-shell/source/win32/shlxthandler/ooofilt/ooofilt.cxx
-shell/source/win32/shlxthandler/ooofilt/ooofilt.hxx
-shell/source/win32/shlxthandler/ooofilt/propspec.cxx
-shell/source/win32/shlxthandler/ooofilt/propspec.hxx
-shell/source/win32/shlxthandler/ooofilt/stream_helper.cxx
+shell/source/win32/shlxthandler/odffilter/odffilter.cxx
+shell/source/win32/shlxthandler/odffilter/odffilter.hxx
+shell/source/win32/shlxthandler/odffilter/propspec.cxx
+shell/source/win32/shlxthandler/odffilter/propspec.hxx
+shell/source/win32/shlxthandler/odffilter/stream_helper.cxx
 shell/source/win32/shlxthandler/prophdl/propertyhdl.cxx
 shell/source/win32/shlxthandler/shlxthdl.cxx
 shell/source/win32/shlxthandler/thumbviewer/thumbviewer.cxx

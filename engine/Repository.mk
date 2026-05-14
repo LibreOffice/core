@@ -717,7 +717,7 @@ $(eval $(call gb_Helper_register_plugins_for_install,PLAINLIBS_OOO,ooo, \
 
 ifeq ($(OS),WNT)
 $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_SHLXTHDL,winexplorerext, \
-	ooofilt \
+	odffilter \
 	propertyhdl \
 	shlxthdl \
 ))

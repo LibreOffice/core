@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SHELL_SOURCE_WIN32_SHLXTHANDLER_OOOFILT_PROPSPEC_HXX
-#define INCLUDED_SHELL_SOURCE_WIN32_SHLXTHANDLER_OOOFILT_PROPSPEC_HXX
+#ifndef INCLUDED_SHELL_SOURCE_WIN32_SHLXTHANDLER_ODFFILTER_PROPSPEC_HXX
+#define INCLUDED_SHELL_SOURCE_WIN32_SHLXTHANDLER_ODFFILTER_PROPSPEC_HXX
 
 //+-------------------------------------------------------------------------
 //  File:       propspec.hxx
@@ -33,7 +33,7 @@
 //+-------------------------------------------------------------------------
 //  Declare:    CLSID_SummaryInformation, GUID
 //              CLSID_Storage, GUID
-//  Contents:   Definitions of OpenOffice.org Document properties
+//  Contents:   Definitions of ODF document properties
 
 
 //+-------------------------------------------------------------------------
@@ -122,6 +122,6 @@ inline BOOL CFullPropSpec::IsPropertyPropid() const
     return _psProperty.ulKind == PRSPEC_PROPID;
 }
 
-#endif // INCLUDED_SHELL_SOURCE_WIN32_SHLXTHANDLER_OOOFILT_PROPSPEC_HXX
+#endif // INCLUDED_SHELL_SOURCE_WIN32_SHLXTHANDLER_ODFFILTER_PROPSPEC_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

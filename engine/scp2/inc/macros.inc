@@ -383,20 +383,6 @@ End
     REGISTRY_ENTRY_PRINTTO_CMD(name,modid,app) \
     REGISTRY_ENTRY_TEMPLATE_CAPABILITIES(name,modid,key,doc_type) \
 
-#ifdef _MSC_VER
-
-#define REGISTER_PROPERTY_HANDLER_FOR_EXTENSION(extension) \
-    RegistryItem CONCAT2(gid_Regitem_Software_Microsoft_Windows_CurrentVersion_PropertySystem_PropertyHandlers_,extension) \
-        ParentID = PREDEFINED_HKEY_LOCAL_MACHINE; \
-        ModuleID = gid_Module_Optional_Winexplorerext; \
-        Subkey = STRING(CONCAT2(SOFTWARE\Microsoft\Windows\CurrentVersion\PropertySystem\PropertyHandlers\.,extension)); \
-        Value = "{AE424E85-F6DF-4910-A6A9-438797986431}"; \
-    End
-
-#else
-#define REGISTER_PROPERTY_HANDLER_FOR_EXTENSION(extension) // empty
-#endif
-
 
 #define SCP2_URE_DL_DIR GID_DIR_URE_LIB
 #if defined WNT
