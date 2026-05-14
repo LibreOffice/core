@@ -535,18 +535,19 @@ namespace emfio
             return;
         }
 
-        // aGraphic will be the only output of the EMF parser, so its size hint can be the same as
-        // ours.
-        aGraphic.getVectorGraphicData()->setSizeHint(maSizeHint);
-
-        maBmpSaveList.emplace_back(
-            aGraphic.GetBitmap(), aOutputRect, SRCCOPY, /*bForceAlpha=*/true);
         const std::shared_ptr<VectorGraphicData> pVectorGraphicData
             = aGraphic.getVectorGraphicData();
         if (!pVectorGraphicData)
         {
             return;
         }
+
+        // aGraphic will be the only output of the EMF parser, so its size hint can be the same as
+        // ours.
+        pVectorGraphicData->setSizeHint(maSizeHint);
+
+        maBmpSaveList.emplace_back(
+            aGraphic.GetBitmap(), aOutputRect, SRCCOPY, /*bForceAlpha=*/true);
 
         if (pVectorGraphicData->getType() != VectorGraphicDataType::Pdf)
         {
