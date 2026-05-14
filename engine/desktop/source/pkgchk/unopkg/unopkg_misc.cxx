@@ -253,12 +253,12 @@ void printf_package(
     if (option.IsPresent) {
         beans::Ambiguous<sal_Bool> const & reg = option.Value;
         if (reg.IsAmbiguous)
-            value = "unknown";
+            value = u"unknown"_ustr;
         else
             value = reg.Value ? std::u16string_view(u"yes") : std::u16string_view(u"no");
     }
     else
-        value = "n/a";
+        value = u"n/a"_ustr;
     printf_line( u"is registered", value, level + 1 );
 
     const Reference<deployment::XPackageTypeInfo> xPackageType(

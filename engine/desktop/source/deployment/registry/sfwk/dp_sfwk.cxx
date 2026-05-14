@@ -221,7 +221,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
                     nullptr, makeURL( url, u"parcel-descriptor.xml"_ustr ),
                     xCmdEnv, false /* no throw */ ))
             {
-                mediaType = "application/vnd.sun.star.framework-script";
+                mediaType = u"application/vnd.sun.star.framework-script"_ustr;
             }
         }
         if (mediaType.isEmpty())

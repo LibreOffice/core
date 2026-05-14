@@ -30,7 +30,7 @@ const LanguageTag& getOfficeLanguageTag()
         //fallback, the locale is currently only set when the user starts the
         //office for the first time.
         if (slang.isEmpty())
-            slang = "en-US";
+            slang = u"en-US"_ustr;
         return LanguageTag(slang);
     }();
     return OFFICE_LANG;

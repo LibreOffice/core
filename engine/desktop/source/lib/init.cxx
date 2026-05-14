@@ -8259,9 +8259,9 @@ static void preLoadTypeDetection()
 
         uno::Sequence<beans::PropertyValue> aMediaDesc(2);
         auto pArgs = aMediaDesc.getArray();
-        pArgs[0].Name = "URL";
+        pArgs[0].Name = u"URL"_ustr;
         pArgs[0].Value <<= OUString("private:stream");
-        pArgs[1].Name = "InputStream";
+        pArgs[1].Name = u"InputStream"_ustr;
         pArgs[1].Value <<= xInputStream;
 
         xTypeDetection->queryTypeByDescriptor(aMediaDesc, true);

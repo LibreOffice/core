@@ -355,11 +355,11 @@ extern "C" int unopkg_main()
         if (repository.isEmpty())
         {
             if (option_shared)
-                repository = "shared";
+                repository = u"shared"_ustr;
             else if (option_bundled)
-                repository = "bundled";
+                repository = u"bundled"_ustr;
             else
-                repository = "user";
+                repository = u"user"_ustr;
         }
         else
         {
@@ -389,11 +389,11 @@ extern "C" int unopkg_main()
             //otherwise we cannot delete the registry data folder.
             OUString extensionUnorc;
             if (repository == "user")
-                extensionUnorc = "$UNO_USER_PACKAGES_CACHE/registry/com.sun.star.comp.deployment.component.PackageRegistryBackend/unorc";
+                extensionUnorc = u"$UNO_USER_PACKAGES_CACHE/registry/com.sun.star.comp.deployment.component.PackageRegistryBackend/unorc"_ustr;
             else if (repository == "shared")
-                extensionUnorc = "$SHARED_EXTENSIONS_USER/registry/com.sun.star.comp.deployment.component.PackageRegistryBackend/unorc";
+                extensionUnorc = u"$SHARED_EXTENSIONS_USER/registry/com.sun.star.comp.deployment.component.PackageRegistryBackend/unorc"_ustr;
             else if (repository == "bundled")
-                extensionUnorc = "$BUNDLED_EXTENSIONS_USER/registry/com.sun.star.comp.deployment.component.PackageRegistryBackend/unorc";
+                extensionUnorc = u"$BUNDLED_EXTENSIONS_USER/registry/com.sun.star.comp.deployment.component.PackageRegistryBackend/unorc"_ustr;
             else
                 OSL_ASSERT(false);
 

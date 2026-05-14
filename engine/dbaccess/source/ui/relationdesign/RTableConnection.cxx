@@ -89,18 +89,18 @@ void ORelationTableConnection::Draw(vcl::RenderContext& rRenderContext, const to
     switch (pData->GetCardinality())
     {
     case Cardinality::OneMany:
-        aSourceText = "1";
-        aDestText   = "n";
+        aSourceText = u"1"_ustr;
+        aDestText   = u"n"_ustr;
         break;
 
     case Cardinality::ManyOne:
-        aSourceText = "n";
-        aDestText   = "1";
+        aSourceText = u"n"_ustr;
+        aDestText   = u"1"_ustr;
         break;
 
     case Cardinality::OneOne:
-        aSourceText = "1";
-        aDestText   = "1";
+        aSourceText = u"1"_ustr;
+        aDestText   = u"1"_ustr;
         break;
     default: break;
     }

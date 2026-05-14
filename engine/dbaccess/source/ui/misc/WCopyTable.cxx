@@ -853,7 +853,7 @@ IMPL_LINK_NOARG(OCopyTableWizard, ImplOKHdl, weld::Button&, void)
                             m_bCreatePrimaryKeyColumn = true;
                             m_aKeyName = pPage->GetKeyName();
                             if ( m_aKeyName.isEmpty() )
-                                m_aKeyName = "ID";
+                                m_aKeyName = u"ID"_ustr;
                             m_aKeyName = createUniqueName( m_aKeyName );
                             sal_Int32 nBreakPos2 = 0;
                             CheckColumns(nBreakPos2);

@@ -283,9 +283,9 @@ Reference<XConnection> OSharedConnectionManager::getConnection( const OUString& 
     sal_Int32 nPos = aInfoCopy.getLength();
     aInfoCopy.realloc( nPos + 2 );
     auto pInfoCopy = aInfoCopy.getArray();
-    pInfoCopy[nPos].Name      = "TableFilter";
+    pInfoCopy[nPos].Name      = u"TableFilter"_ustr;
     pInfoCopy[nPos++].Value <<= _pDataSource->m_pImpl->m_aTableFilter;
-    pInfoCopy[nPos].Name      = "TableTypeFilter";
+    pInfoCopy[nPos].Name      = u"TableTypeFilter"_ustr;
     pInfoCopy[nPos++].Value <<= _pDataSource->m_pImpl->m_aTableTypeFilter;
 
     OUString sUser = user;
@@ -548,13 +548,13 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const OUString
         sal_Int32 nArgPos = 0;
         if (!sUser.isEmpty())
         {
-            aUserPwdRange[ nArgPos ].Name = "user";
+            aUserPwdRange[ nArgPos ].Name = u"user"_ustr;
             aUserPwdRange[ nArgPos ].Value <<= sUser;
             ++nArgPos;
         }
         if (!sPwd.isEmpty())
         {
-            aUserPwdRange[ nArgPos ].Name = "password";
+            aUserPwdRange[ nArgPos ].Name = u"password"_ustr;
             aUserPwdRange[ nArgPos ].Value <<= sPwd;
         }
         Reference< XDriver > xDriver;
@@ -591,14 +591,14 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const OUString
                 aDriverInfo.realloc(nCount + 3 );
                 auto pDriverInfo = aDriverInfo.getArray();
 
-                pDriverInfo[nCount].Name = "URL";
+                pDriverInfo[nCount].Name = u"URL"_ustr;
                 pDriverInfo[nCount++].Value <<= m_pImpl->getURL();
 
-                pDriverInfo[nCount].Name = "Storage";
+                pDriverInfo[nCount].Name = u"Storage"_ustr;
                 Reference< css::document::XDocumentSubStorageSupplier> xDocSup( m_pImpl->getDocumentSubStorageSupplier() );
                 pDriverInfo[nCount++].Value <<= xDocSup->getDocumentSubStorage(u"database"_ustr,ElementModes::READWRITE);
 
-                pDriverInfo[nCount].Name = "Document";
+                pDriverInfo[nCount].Name = u"Document"_ustr;
                 pDriverInfo[nCount++].Value <<= getDatabaseDocument();
             }
             if (nAdditionalArgs)

@@ -759,7 +759,7 @@ OUString    Desktop::CreateErrorMsgString(
         case ::utl::Bootstrap::INVALID_VERSION_FILE_ENTRY:
         {
             // This needs to be improved, see #i67575#:
-            aMsg = "Invalid version file entry";
+            aMsg = u"Invalid version file entry"_ustr;
             bFileInfo = false;
         }
         break;
@@ -1072,7 +1072,7 @@ bool impl_bringToFrontRecoveryUI()
         return false;
 
     css::util::URL aURL;
-    aURL.Complete = "vnd.sun.star.autorecovery:/doBringToFront";
+    aURL.Complete = u"vnd.sun.star.autorecovery:/doBringToFront"_ustr;
     Reference< css::util::XURLTransformer > xURLParser =
         css::util::URLTransformer::create(::comphelper::getProcessComponentContext());
     xURLParser->parseStrict(aURL);
@@ -1548,7 +1548,7 @@ int Desktop::Main()
     pExecGlobals->pCTLLanguageOptions.reset( new SvtCTLOptions(true));
 
     css::document::DocumentEvent aEvent;
-    aEvent.EventName = "OnStartApp";
+    aEvent.EventName = u"OnStartApp"_ustr;
     pExecGlobals->xGlobalBroadcaster->documentEventOccured(aEvent);
 
     SetSplashScreenProgress(50);
@@ -2014,19 +2014,19 @@ void Desktop::OpenClients()
     {
         OUString aHelpModule;
         if (rArgs.IsHelpWriter()) {
-            aHelpModule = "swriter/helpwriter";
+            aHelpModule = u"swriter/helpwriter"_ustr;
         } else if (rArgs.IsHelpCalc()) {
-            aHelpModule = "scalc/helpcalc";
+            aHelpModule = u"scalc/helpcalc"_ustr;
         } else if (rArgs.IsHelpDraw()) {
-            aHelpModule = "sdraw/helpdraw";
+            aHelpModule = u"sdraw/helpdraw"_ustr;
         } else if (rArgs.IsHelpImpress()) {
-            aHelpModule = "simpress/helpimpress";
+            aHelpModule = u"simpress/helpimpress"_ustr;
         } else if (rArgs.IsHelpBase()) {
-            aHelpModule = "sdatabase/helpbase";
+            aHelpModule = u"sdatabase/helpbase"_ustr;
         } else if (rArgs.IsHelpBasic()) {
-            aHelpModule = "sbasic/helpbasic";
+            aHelpModule = u"sbasic/helpbasic"_ustr;
         } else if (rArgs.IsHelpMath()) {
-            aHelpModule = "smath/helpmath";
+            aHelpModule = u"smath/helpmath"_ustr;
         }
         if (!aHelpModule.isEmpty()) {
             OUString aHelpURL = "vnd.sun.star.help://"
@@ -2072,7 +2072,7 @@ void Desktop::OpenClients()
             Reference< css::util::XURLTransformer > xParser = css::util::URLTransformer::create( ::comphelper::getProcessComponentContext() );
 
             css::util::URL aCmd;
-            aCmd.Complete = "vnd.sun.star.autorecovery:/disableRecovery";
+            aCmd.Complete = u"vnd.sun.star.autorecovery:/disableRecovery"_ustr;
             xParser->parseStrict(aCmd);
 
             xRecovery->dispatch(aCmd, css::uno::Sequence< css::beans::PropertyValue >());
@@ -2492,9 +2492,9 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
             Reference< css::util::XURLTransformer > xParser = css::util::URLTransformer::create(xContext);
             css::util::URL aCommand;
             if( rAppEvent.GetStringData() == "PREFERENCES" )
-                aCommand.Complete = ".uno:OptionsTreeDialog";
+                aCommand.Complete = u".uno:OptionsTreeDialog"_ustr;
             else if( rAppEvent.GetStringData() == "ABOUT" )
-                aCommand.Complete = ".uno:About";
+                aCommand.Complete = u".uno:About"_ustr;
             if( !aCommand.Complete.isEmpty() )
             {
                 xParser->parseStrict(aCommand);
@@ -2538,26 +2538,26 @@ void Desktop::OpenSplashScreen()
     // Determine application name from command line parameters
     OUString aAppName;
     if ( rCmdLine.IsWriter() )
-        aAppName = "writer";
+        aAppName = u"writer"_ustr;
     else if ( rCmdLine.IsCalc() )
-        aAppName = "calc";
+        aAppName = u"calc"_ustr;
     else if ( rCmdLine.IsDraw() )
-        aAppName = "draw";
+        aAppName = u"draw"_ustr;
     else if ( rCmdLine.IsImpress() )
-        aAppName = "impress";
+        aAppName = u"impress"_ustr;
     else if ( rCmdLine.IsBase() )
-        aAppName = "base";
+        aAppName = u"base"_ustr;
     else if ( rCmdLine.IsGlobal() )
-        aAppName = "global";
+        aAppName = u"global"_ustr;
     else if ( rCmdLine.IsMath() )
-        aAppName = "math";
+        aAppName = u"math"_ustr;
     else if ( rCmdLine.IsWeb() )
-        aAppName = "web";
+        aAppName = u"web"_ustr;
 
     // Which splash to use
     OUString aSplashService( u"com.sun.star.office.SplashScreen"_ustr );
     if ( rCmdLine.HasSplashPipe() )
-        aSplashService = "com.sun.star.office.PipeSplashScreen";
+        aSplashService = u"com.sun.star.office.PipeSplashScreen"_ustr;
 
     Sequence< Any > aSeq{ Any(true) /* bVisible */, Any(aAppName) };
     const css::uno::Reference< css::uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();

@@ -417,13 +417,13 @@ OUString ODbTypeWizDialogSetup::getDatasourceType(const SfxItemSet& _rSet) const
         switch( m_pMySQLIntroPage->getMySQLMode() )
         {
             case OMySQLIntroPageSetup::VIA_JDBC:
-                sRet = "sdbc:mysql:jdbc:";
+                sRet = u"sdbc:mysql:jdbc:"_ustr;
                 break;
             case OMySQLIntroPageSetup::VIA_NATIVE:
-                sRet = "sdbc:mysql:mysqlc:";
+                sRet = u"sdbc:mysql:mysqlc:"_ustr;
                 break;
             case OMySQLIntroPageSetup::VIA_ODBC:
-                sRet = "sdbc:mysql:odbc:";
+                sRet = u"sdbc:mysql:odbc:"_ustr;
                 break;
         }
     }
@@ -575,13 +575,13 @@ IMPL_LINK(ODbTypeWizDialogSetup, ImplClickHdl, OMySQLIntroPageSetup*, _pMySQLInt
     switch( _pMySQLIntroPageSetup->getMySQLMode() )
     {
         case  OMySQLIntroPageSetup::VIA_ODBC:
-            sURLPrefix = "sdbc:mysql:odbc:";
+            sURLPrefix = u"sdbc:mysql:odbc:"_ustr;
             break;
         case  OMySQLIntroPageSetup::VIA_JDBC:
-            sURLPrefix = "sdbc:mysql:jdbc:";
+            sURLPrefix = u"sdbc:mysql:jdbc:"_ustr;
             break;
         case  OMySQLIntroPageSetup::VIA_NATIVE:
-            sURLPrefix = "sdbc:mysql:mysqlc:";
+            sURLPrefix = u"sdbc:mysql:mysqlc:"_ustr;
             break;
     }
     activatePath( static_cast<PathId>(m_pCollection->getIndexOf(sURLPrefix) + 1), true);

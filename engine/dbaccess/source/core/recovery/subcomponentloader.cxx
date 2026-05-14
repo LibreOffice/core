@@ -91,7 +91,7 @@ namespace dbaccess
             if ( mxDocDefCommands.is() )
             {
                 Command aCommandOpen;
-                aCommandOpen.Name = "show";
+                aCommandOpen.Name = u"show"_ustr;
 
                 const sal_Int32 nCommandIdentifier = mxDocDefCommands->createCommandIdentifier();
                 mxDocDefCommands->execute( aCommandOpen, nCommandIdentifier, nullptr );

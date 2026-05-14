@@ -253,7 +253,7 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments
             {
                 Sequence<Any> aIni{ Any(getContainerStorage()), Any(sPersistentName) };
                 Command aCommand;
-                aCommand.Name = "copyTo";
+                aCommand.Name = u"copyTo"_ustr;
                 aCommand.Argument <<= aIni;
 
                 xCopyFrom->execute(aCommand,-1,Reference< XCommandEnvironment >());
@@ -312,7 +312,7 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments
         {
             Sequence<Any> aIni{ Any(sURL) };
             Command aCommand;
-            aCommand.Name = "insert";
+            aCommand.Name = u"insert"_ustr;
             aCommand.Argument <<= aIni;
             Reference< XCommandProcessor > xCommandProcessor(xContent,UNO_QUERY);
             if ( xContent.is() )
@@ -722,7 +722,7 @@ void SAL_CALL ODocumentContainer::removeByName( const OUString& _rName )
     {
         Command aCommand;
 
-        aCommand.Name = "delete";
+        aCommand.Name = u"delete"_ustr;
         xContent->execute(aCommand,xContent->createCommandIdentifier(),Reference< XCommandEnvironment >());
     }
 

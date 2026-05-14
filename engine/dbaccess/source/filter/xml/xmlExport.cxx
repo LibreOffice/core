@@ -345,13 +345,13 @@ void ODBExport::exportDataSource()
                 if (property.Name == PROPERTY_BOOLEANCOMPARISONMODE)
                 {
                     if ( sValue == "0" )
-                        sValue = "equal-integer";
+                        sValue = u"equal-integer"_ustr;
                     else if ( sValue == "1" )
-                        sValue = "is-boolean";
+                        sValue = u"is-boolean"_ustr;
                     else if ( sValue == "2" )
-                        sValue = "equal-boolean";
+                        sValue = u"equal-boolean"_ustr;
                     else if ( sValue == "3" )
-                        sValue = "equal-use-only-zero";
+                        sValue = u"equal-use-only-zero"_ustr;
                     if ( sValue == "equal-integer" )
                         continue;
                     eToken = XML_BOOLEAN_COMPARISON_MODE;
@@ -518,7 +518,7 @@ void ODBExport::exportConnectionData()
                 {
                     OUString sExtension;
                     if ( eType == dbaccess::DST_MSACCESS )
-                        sExtension = "mdb";
+                        sExtension = u"mdb"_ustr;
                     else
                     {
                         Reference< XPropertySet > xDataSourceSettings;
@@ -1196,7 +1196,7 @@ void ODBExport::GetViewSettings(Sequence<PropertyValue>& aProps)
         sal_Int32 nLength = aProps.getLength();
         aProps.realloc(nLength + 1);
         auto& prop = asNonConstRange(aProps)[nLength];
-        prop.Name = "Queries";
+        prop.Name = u"Queries"_ustr;
         prop.Value <<= aQueries;
     }
     catch(const Exception&)
@@ -1222,7 +1222,7 @@ void ODBExport::GetConfigurationSettings(Sequence<PropertyValue>& aProps)
         {
             aProps.realloc(nLength + 1);
             auto pProps = aProps.getArray();
-            pProps[nLength].Name = "layout-settings";
+            pProps[nLength].Name = u"layout-settings"_ustr;
             pProps[nLength].Value = std::move(aValue);
         }
     }

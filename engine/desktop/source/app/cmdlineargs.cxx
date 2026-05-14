@@ -328,7 +328,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
             else if ( oArg == "cat" )
             {
                 m_textcat = true;
-                m_conversionparams = "txt:Text";
+                m_conversionparams = u"txt:Text"_ustr;
                 eCurrentEvent = CommandLineEvent::Conversion;
                 setHeadless();
             }
@@ -410,7 +410,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                 // We specifically need to consume the following 2 arguments
                 // for --protector
                 if ((!supplier.next(aArg) || !supplier.next(aArg)) && m_unknown.isEmpty())
-                    m_unknown = "--protector must be followed by two arguments";
+                    m_unknown = u"--protector must be followed by two arguments"_ustr;
             }
             else if ( oArg == "version" )
             {
@@ -525,7 +525,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                 if (supplier.next(aArg))
                     m_printername = aArg;
                 else if (m_unknown.isEmpty())
-                    m_unknown = "--pt must be followed by printername";
+                    m_unknown = u"--pt must be followed by printername"_ustr;
             }
             else if ( aArg == "-p" )
             {
@@ -564,7 +564,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                     setHeadless();
                 }
                 else if (m_unknown.isEmpty())
-                    m_unknown = "--convert-to must be followed by output_file_extension[:output_filter_name]";
+                    m_unknown = u"--convert-to must be followed by output_file_extension[:output_filter_name]"_ustr;
             }
             else if ( oArg == "print-to-file" )
             {
@@ -578,11 +578,11 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                     if (supplier.next(aArg))
                         m_printername = aArg;
                     else if (m_unknown.isEmpty())
-                        m_unknown = "--printer-name must be followed by printername";
+                        m_unknown = u"--printer-name must be followed by printername"_ustr;
                 }
                 else if (m_unknown.isEmpty())
                 {
-                    m_unknown = "--printer-name must directly follow --print-to-file";
+                    m_unknown = u"--printer-name must directly follow --print-to-file"_ustr;
                 }
             }
             else if ( oArg == "outdir" )
@@ -593,11 +593,11 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                     if (supplier.next(aArg))
                         m_conversionout = aArg;
                     else if (m_unknown.isEmpty())
-                        m_unknown = "--outdir must be followed by output directory path";
+                        m_unknown = u"--outdir must be followed by output directory path"_ustr;
                 }
                 else if (m_unknown.isEmpty())
                 {
-                    m_unknown = "--outdir must directly follow either output filter specification of --convert-to, or --print-to-file or its printer specification";
+                    m_unknown = u"--outdir must directly follow either output filter specification of --convert-to, or --print-to-file or its printer specification"_ustr;
                 }
             }
             else if ( eCurrentEvent == CommandLineEvent::Conversion
@@ -606,7 +606,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                 if (supplier.next(aArg))
                     m_convertimages = aArg;
                 else if (m_unknown.isEmpty())
-                    m_unknown = "--convert-images-to must be followed by an image type";
+                    m_unknown = u"--convert-images-to must be followed by an image type"_ustr;
             }
             else if ( aArg.startsWith("-") )
             {

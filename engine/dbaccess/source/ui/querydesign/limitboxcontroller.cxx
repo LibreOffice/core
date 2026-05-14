@@ -281,7 +281,7 @@ void LimitBoxController::dispatchCommand(
         uno::Reference< frame::XDispatch >      xDispatch;
         uno::Reference< util::XURLTransformer > xURLTransformer = getURLTransformer();
 
-        aURL.Complete = ".uno:DBLimit";
+        aURL.Complete = u".uno:DBLimit"_ustr;
         xURLTransformer->parseStrict( aURL );
         xDispatch = xDispatchProvider->queryDispatch( aURL, OUString(), 0 );
         if ( xDispatch.is() )

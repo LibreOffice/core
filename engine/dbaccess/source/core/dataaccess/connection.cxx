@@ -575,7 +575,7 @@ Reference< XPreparedStatement >  SAL_CALL OConnection::prepareCommand( const OUS
     {
         case CommandType::TABLE:
             {
-                aStatement = "SELECT * FROM ";
+                aStatement = u"SELECT * FROM "_ustr;
 
                 OUString sCatalog, sSchema, sTable;
                 ::dbtools::qualifiedNameComponents( getMetaData(), command, sCatalog, sSchema, sTable, ::dbtools::EComposeRule::InDataManipulation );

@@ -61,10 +61,10 @@ OXMLConnectionResource::OXMLConnectionResource( ODBFilter& rImport,
                 aProperty.Name = PROPERTY_TYPE;
                 break;
             case XML_ELEMENT(XLINK, XML_SHOW):
-                aProperty.Name = "Show";
+                aProperty.Name = u"Show"_ustr;
                 break;
             case XML_ELEMENT(XLINK, XML_ACTUATE):
-                aProperty.Name = "Actuate";
+                aProperty.Name = u"Actuate"_ustr;
                 break;
             default:
                 XMLOFF_WARN_UNKNOWN("dbaccess", aIter);

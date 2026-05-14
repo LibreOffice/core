@@ -344,9 +344,9 @@ namespace dbaui
     {
         OUString sExtension;
         if (m_xAccessTextFiles->get_active())
-            sExtension = "txt";
+            sExtension = u"txt"_ustr;
         else if (m_xAccessCSVFiles->get_active())
-            sExtension = "csv";
+            sExtension = u"csv"_ustr;
         else
         {
             sExtension = m_xOwnExtension->get_text();

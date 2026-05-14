@@ -112,7 +112,7 @@ namespace dbaui
         switch ( _eOpenMode )
         {
             case ElementOpenMode::Normal:
-                sOpenMode = "open";
+                sOpenMode = u"open"_ustr;
                 break;
 
             case ElementOpenMode::Mail:
@@ -120,7 +120,7 @@ namespace dbaui
                 [[fallthrough]];
 
             case ElementOpenMode::Design:
-                sOpenMode = "openDesign";
+                sOpenMode = u"openDesign"_ustr;
                 break;
 
             default:
@@ -215,7 +215,7 @@ namespace dbaui
                 aCommandArgs.put( u"OpenMode"_ustr, aOpenModeArg );
 
                 Command aCommand;
-                aCommand.Name = "openDesign";
+                aCommand.Name = u"openDesign"_ustr;
                 aCommand.Argument <<= aCommandArgs.getPropertyValues();
                 weld::WaitObject aWaitCursor(m_pDialogParent);
                 xNewDocument.set( xContent->execute( aCommand, xContent->createCommandIdentifier(), nullptr ), UNO_QUERY );

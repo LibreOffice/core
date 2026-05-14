@@ -1086,7 +1086,7 @@ void OQueryController::executeQuery()
         InvalidateFeature(SID_DB_QUERY_PREVIEW);
 
         URL aWantToDispatch;
-        aWantToDispatch.Complete = ".component:DB/DataSourceBrowser";
+        aWantToDispatch.Complete = u".component:DB/DataSourceBrowser"_ustr;
 
         OUString sFrameName( FRAME_NAME_QUERY_PREVIEW );
         sal_Int32 nSearchFlags = FrameSearchFlag::CHILDREN;

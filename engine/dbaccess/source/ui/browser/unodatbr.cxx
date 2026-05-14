@@ -557,7 +557,7 @@ void SbaTableQueryBrowser::InitializeGridModel(const Reference< css::form::XForm
                 Any* pValueIter = aValues.getArray();
                 if ( m_bPreview )
                 {
-                    *pStringIter++  = "AlwaysShowCursor";
+                    *pStringIter++  = u"AlwaysShowCursor"_ustr;
                     *pValueIter++   <<= false;
                     *pStringIter++  = PROPERTY_BORDER;
                     *pValueIter++   <<= sal_Int16(0);
@@ -571,16 +571,16 @@ void SbaTableQueryBrowser::InitializeGridModel(const Reference< css::form::XForm
                 *pValueIter++   = pData->xObjectProperties->getPropertyValue(PROPERTY_TEXTRELIEF);
                 if ( m_bPreview )
                 {
-                    *pStringIter++  = "HasNavigationBar";
+                    *pStringIter++  = u"HasNavigationBar"_ustr;
                     *pValueIter++       <<= false;
-                    *pStringIter++  = "HasRecordMarker";
+                    *pStringIter++  = u"HasRecordMarker"_ustr;
                     *pValueIter++       <<= false;
                 }
                 *pStringIter++  = PROPERTY_ROW_HEIGHT;
                 *pValueIter++   = pData->xObjectProperties->getPropertyValue(PROPERTY_ROW_HEIGHT);
                 if ( m_bPreview )
                 {
-                    *pStringIter++  = "Tabstop";
+                    *pStringIter++  = u"Tabstop"_ustr;
                     *pValueIter++       <<= false;
                 }
                 *pStringIter++  = PROPERTY_TEXTCOLOR;
@@ -639,7 +639,7 @@ void SbaTableQueryBrowser::InitializeGridModel(const Reference< css::form::XForm
                     case DataType::BIT:
                     case DataType::BOOLEAN:
                     {
-                        aCurrentModelType = "CheckBox";
+                        aCurrentModelType = u"CheckBox"_ustr;
                         aInitialValues.emplace_back( "VisualEffect", Any( VisualEffect::FLAT ) );
                         sDefaultProperty = PROPERTY_DEFAULTSTATE;
 
@@ -661,7 +661,7 @@ void SbaTableQueryBrowser::InitializeGridModel(const Reference< css::form::XForm
                     case DataType::BINARY:
                     case DataType::VARBINARY:
                     case DataType::LONGVARBINARY:
-                        aCurrentModelType = "TextField";
+                        aCurrentModelType = u"TextField"_ustr;
                         sDefaultProperty = PROPERTY_DEFAULTTEXT;
                         break;
 
@@ -670,7 +670,7 @@ void SbaTableQueryBrowser::InitializeGridModel(const Reference< css::form::XForm
                         bFormattedIsNumeric = false;
                         [[fallthrough]];
                     default:
-                        aCurrentModelType = "FormattedField";
+                        aCurrentModelType = u"FormattedField"_ustr;
                         sDefaultProperty = PROPERTY_EFFECTIVEDEFAULT;
 
                         if ( xSupplier.is() )

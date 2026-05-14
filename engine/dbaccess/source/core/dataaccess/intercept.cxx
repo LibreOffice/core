@@ -136,7 +136,7 @@ void SAL_CALL OInterceptor::dispatch( const URL& URL,const Sequence<PropertyValu
             {
                 aNewArgs.realloc( nInd + 1 );
                 auto pNewArgs = aNewArgs.getArray();
-                pNewArgs[nInd].Name = "SaveTo";
+                pNewArgs[nInd].Name = u"SaveTo"_ustr;
                 pNewArgs[nInd].Value <<= true;
             }
 
@@ -196,7 +196,7 @@ void SAL_CALL OInterceptor::addStatusListener(
         {
             FeatureStateEvent aStateEvent;
             aStateEvent.FeatureURL.Complete = m_aInterceptedURL[DISPATCH_SAVEAS];
-            aStateEvent.FeatureDescriptor = "SaveCopyTo";
+            aStateEvent.FeatureDescriptor = u"SaveCopyTo"_ustr;
             aStateEvent.IsEnabled = true;
             aStateEvent.Requery = false;
             aStateEvent.State <<= u"($3)"_ustr;
@@ -215,7 +215,7 @@ void SAL_CALL OInterceptor::addStatusListener(
     {   // Save
         FeatureStateEvent aStateEvent;
         aStateEvent.FeatureURL.Complete = m_aInterceptedURL[DISPATCH_SAVE];
-        aStateEvent.FeatureDescriptor = "Update";
+        aStateEvent.FeatureDescriptor = u"Update"_ustr;
         aStateEvent.IsEnabled = true;
         aStateEvent.Requery = false;
 
@@ -238,7 +238,7 @@ void SAL_CALL OInterceptor::addStatusListener(
         {   // Close and return
             FeatureStateEvent aStateEvent;
             aStateEvent.FeatureURL.Complete = m_aInterceptedURL[i];
-            aStateEvent.FeatureDescriptor = "Close and Return";
+            aStateEvent.FeatureDescriptor = u"Close and Return"_ustr;
             aStateEvent.IsEnabled = true;
             aStateEvent.Requery = false;
             Control->statusChanged(aStateEvent);

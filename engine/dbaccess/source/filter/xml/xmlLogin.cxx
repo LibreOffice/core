@@ -75,7 +75,7 @@ OXMLLogin::OXMLLogin( ODBFilter& rImport,
                     {
                         bUserFound = true;
                         PropertyValue aProperty;
-                        aProperty.Name = "UseSystemUser";
+                        aProperty.Name = u"UseSystemUser"_ustr;
                         aProperty.Value <<= IsXMLToken(aIter, XML_TRUE);
                         rImport.addInfo(aProperty);
                     }

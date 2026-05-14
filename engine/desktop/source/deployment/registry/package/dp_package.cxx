@@ -356,7 +356,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
                     &metaInfContent, makeURL( url, u"META-INF"_ustr ),
                     xCmdEnv, false /* no throw */ ))
                 {
-                     mediaType = "application/vnd.sun.star.package-bundle";
+                     mediaType = u"application/vnd.sun.star.package-bundle"_ustr;
                 }
                 //No support of legacy bundles, because every folder could be one.
             }
@@ -365,9 +365,9 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
                 const OUString title( StrTitle::getTitle( ucbContent ) );
                 if (title.endsWithIgnoreAsciiCase(".oxt") ||
                     title.endsWithIgnoreAsciiCase(".uno.pkg"))
-                    mediaType = "application/vnd.sun.star.package-bundle";
+                    mediaType = u"application/vnd.sun.star.package-bundle"_ustr;
                 else if (title.endsWithIgnoreAsciiCase(".zip"))
-                    mediaType = "application/vnd.sun.star.legacy-package-bundle";
+                    mediaType = u"application/vnd.sun.star.legacy-package-bundle"_ustr;
             }
         }
         if (mediaType.isEmpty())
@@ -1088,7 +1088,7 @@ void BackendImpl::PackageImpl::exportTo(
             if (xPackageType.is())
                 mediaType = xPackageType->getMediaType();
             else
-                mediaType = "unknown";
+                mediaType = u"unknown"_ustr;
             pattribs[ 1 ].Value <<= mediaType;
             manifest.push_back( attribs );
         }
@@ -1180,13 +1180,13 @@ Sequence< Reference<deployment::XPackage> > BackendImpl::PackageImpl::getBundle(
                     if (create_ucb_content(
                             nullptr, makeURL( m_url_expanded, u"script.xlb"_ustr ),
                             xCmdEnv, false /* no throw */ )) {
-                        mediaType = "application/vnd.sun.star.basic-library";
+                        mediaType = u"application/vnd.sun.star.basic-library"_ustr;
                     }
                     // probe for dialog.xlb:
                     else if (create_ucb_content(
                                  nullptr, makeURL( m_url_expanded, u"dialog.xlb"_ustr ),
                                  xCmdEnv, false /* no throw */ ))
-                        mediaType = "application/vnd.sun.star.dialog-library";
+                        mediaType = u"application/vnd.sun.star.dialog-library"_ustr;
 
                     if (!mediaType.isEmpty()) {
                         const Reference<deployment::XPackage> xPackage(

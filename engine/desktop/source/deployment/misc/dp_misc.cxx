@@ -165,13 +165,13 @@ bool needToSyncRepository(std::u16string_view name)
     OUString file;
     if ( name == u"bundled" )
     {
-        folder = "$BUNDLED_EXTENSIONS";
-        file = "$BUNDLED_EXTENSIONS_USER/lastsynchronized";
+        folder = u"$BUNDLED_EXTENSIONS"_ustr;
+        file = u"$BUNDLED_EXTENSIONS_USER/lastsynchronized"_ustr;
     }
     else if ( name == u"shared" )
     {
-        folder = "$UNO_SHARED_PACKAGES_CACHE/uno_packages";
-        file = "$SHARED_EXTENSIONS_USER/lastsynchronized";
+        folder = u"$UNO_SHARED_PACKAGES_CACHE/uno_packages"_ustr;
+        file = u"$SHARED_EXTENSIONS_USER/lastsynchronized"_ustr;
     }
     else
     {

@@ -562,7 +562,7 @@ namespace dbaui
         case ::dbaccess::DST_MYSQL_JDBC:
         case ::dbaccess::DST_MYSQL_ODBC:
         case ::dbaccess::DST_MYSQL_NATIVE:
-            _inout_rDisplayName = "MySQL/MariaDB";
+            _inout_rDisplayName = u"MySQL/MariaDB"_ustr;
             break;
         default:
             break;

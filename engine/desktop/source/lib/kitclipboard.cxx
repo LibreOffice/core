@@ -185,12 +185,12 @@ void KitTransferable::initFlavourFromMime(css::datatransfer::DataFlavor& rFlavor
 {
     if (aMimeType.startsWith("text/plain"))
     {
-        aMimeType = "text/plain;charset=utf-16";
+        aMimeType = u"text/plain;charset=utf-16"_ustr;
         rFlavor.DataType = cppu::UnoType<OUString>::get();
     }
     else if (aMimeType.startsWith("text/markdown"))
     {
-        aMimeType = "text/markdown";
+        aMimeType = u"text/markdown"_ustr;
         rFlavor.DataType = cppu::UnoType<OUString>::get();
     }
     else if (aMimeType == "application/x-libreoffice-markdown-annotated")

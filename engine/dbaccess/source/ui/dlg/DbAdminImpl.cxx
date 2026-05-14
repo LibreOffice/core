@@ -614,7 +614,7 @@ void ODbDataSourceAdministrationHelper::translateProperties(const Reference< XPr
             if( rAdditionalInfo.Name == "JDBCDRV" )
             {   // compatibility
                 PropertyValue aCompatibility(rAdditionalInfo);
-                aCompatibility.Name = "JavaDriverClass";
+                aCompatibility.Name = u"JavaDriverClass"_ustr;
                 aInfos.insert(aCompatibility);
             }
             else

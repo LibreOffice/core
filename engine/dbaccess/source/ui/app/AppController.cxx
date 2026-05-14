@@ -1047,11 +1047,11 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                         OUString aTarget;
                         if ( _nId == SID_NEWDOCDIRECT )
                         {
-                            aURL.Complete = "private:factory/sdatabase?Interactive";
-                            aTarget = "_default";
+                            aURL.Complete = u"private:factory/sdatabase?Interactive"_ustr;
+                            aTarget = u"_default"_ustr;
                         }
                         else
-                            aURL.Complete = ".uno:Open";
+                            aURL.Complete = u".uno:Open"_ustr;
 
                         if ( m_xUrlTransformer.is() )
                             m_xUrlTransformer->parseStrict( aURL );
@@ -1588,16 +1588,16 @@ namespace
         switch(_eType)
         {
             case E_TABLE:
-                sToolbar = "private:resource/toolbar/tableobjectbar";
+                sToolbar = u"private:resource/toolbar/tableobjectbar"_ustr;
                 break;
             case E_QUERY:
-                sToolbar = "private:resource/toolbar/queryobjectbar";
+                sToolbar = u"private:resource/toolbar/queryobjectbar"_ustr;
                 break;
             case E_FORM:
-                sToolbar = "private:resource/toolbar/formobjectbar";
+                sToolbar = u"private:resource/toolbar/formobjectbar"_ustr;
                 break;
             case E_REPORT:
-                sToolbar = "private:resource/toolbar/reportobjectbar";
+                sToolbar = u"private:resource/toolbar/reportobjectbar"_ustr;
                 break;
             case E_NONE:
                 break;

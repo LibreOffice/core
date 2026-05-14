@@ -582,7 +582,7 @@ namespace dbaui
             OUString sContentType;
             if ( INetProtocol::File == eProtocol )
             {
-                sContentType = "application/vnd.sun.staroffice.fsys-folder";
+                sContentType = u"application/vnd.sun.staroffice.fsys-folder"_ustr;
                 // the file UCP currently does not support the ContentType property
             }
             else

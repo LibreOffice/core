@@ -622,14 +622,14 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
             {
                 if (jarManifestHeaderPresent(
                         url, u"RegistrationClassName", xCmdEnv ))
-                    mediaType = "application/vnd.sun.star.uno-component;type=Java";
+                    mediaType = u"application/vnd.sun.star.uno-component;type=Java"_ustr;
                 if (mediaType.isEmpty())
-                    mediaType = "application/vnd.sun.star.uno-typelibrary;type=Java";
+                    mediaType = u"application/vnd.sun.star.uno-typelibrary;type=Java"_ustr;
             }
             else if (title.endsWithIgnoreAsciiCase(".py"))
-                mediaType = "application/vnd.sun.star.uno-component;type=Python";
+                mediaType = u"application/vnd.sun.star.uno-component;type=Python"_ustr;
             else if (title.endsWithIgnoreAsciiCase(".rdb"))
-                mediaType = "application/vnd.sun.star.uno-typelibrary;type=RDB";
+                mediaType = u"application/vnd.sun.star.uno-typelibrary;type=RDB"_ustr;
         }
         if (mediaType.isEmpty())
             throw lang::IllegalArgumentException(

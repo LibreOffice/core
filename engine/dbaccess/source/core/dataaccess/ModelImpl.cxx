@@ -371,7 +371,7 @@ ODatabaseModelImpl::ODatabaseModelImpl( const Reference< XComponentContext >& _r
             ,m_nControllerLockCount(0)
 {
     // some kind of default
-    m_sConnectURL = "jdbc:";
+    m_sConnectURL = u"jdbc:"_ustr;
     m_aTableFilter = { u"%"_ustr };
     impl_construct_nothrow();
 }

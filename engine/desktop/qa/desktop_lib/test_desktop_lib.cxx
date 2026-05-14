@@ -362,13 +362,13 @@ DesktopKitTest::loadDocUrlImpl(const OUString& rFileURL, COKitDocumentType eType
     switch (eType)
     {
     case KIT_DOCTYPE_TEXT:
-        aService = "com.sun.star.text.TextDocument";
+        aService = u"com.sun.star.text.TextDocument"_ustr;
         break;
     case KIT_DOCTYPE_SPREADSHEET:
-        aService = "com.sun.star.sheet.SpreadsheetDocument";
+        aService = u"com.sun.star.sheet.SpreadsheetDocument"_ustr;
         break;
     case KIT_DOCTYPE_PRESENTATION:
-        aService = "com.sun.star.presentation.PresentationDocument";
+        aService = u"com.sun.star.presentation.PresentationDocument"_ustr;
         break;
     default:
         CPPUNIT_ASSERT(false);
@@ -1230,10 +1230,10 @@ void DesktopKitTest::testSheetDragDrop()
         css::util::URL aURL;
         std::unique_ptr<SfxPoolItem> pState;
 
-        aURL.Protocol = ".uno:";
-        aURL.Complete = ".uno:Address";
-        aURL.Path = "Address";
-        aURL.Main = ".uno:Address";
+        aURL.Protocol = u".uno:"_ustr;
+        aURL.Complete = u".uno:Address"_ustr;
+        aURL.Path = u"Address"_ustr;
+        aURL.Main = u".uno:Address"_ustr;
 
         rViewFrame.GetBindings().QueryState(rViewFrame.GetBindings().QuerySlotId(aURL), pState);
         pState->QueryValue(aValue);
@@ -1286,10 +1286,10 @@ void DesktopKitTest::testSheetDragDrop()
         css::util::URL aURL;
         std::unique_ptr<SfxPoolItem> pState;
 
-        aURL.Protocol = ".uno:";
-        aURL.Complete = ".uno:Address";
-        aURL.Path = "Address";
-        aURL.Main = ".uno:Address";
+        aURL.Protocol = u".uno:"_ustr;
+        aURL.Complete = u".uno:Address"_ustr;
+        aURL.Path = u"Address"_ustr;
+        aURL.Main = u".uno:Address"_ustr;
 
         rViewFrame.GetBindings().QueryState(rViewFrame.GetBindings().QuerySlotId(aURL), pState);
         pState->QueryValue(aValue);
@@ -3325,22 +3325,22 @@ void DesktopKitTest::testExtractParameter()
     CPPUNIT_ASSERT_EQUAL(u"de-DE"_ustr, aValue);
     CPPUNIT_ASSERT_EQUAL(OUString(), aOptions);
 
-    aOptions = "Language=en-US,Something";
+    aOptions = u"Language=en-US,Something"_ustr;
     aValue = extractParameter(aOptions, u"Language");
     CPPUNIT_ASSERT_EQUAL(u"en-US"_ustr, aValue);
     CPPUNIT_ASSERT_EQUAL(u"Something"_ustr, aOptions);
 
-    aOptions = "SomethingElse,Language=cs-CZ";
+    aOptions = u"SomethingElse,Language=cs-CZ"_ustr;
     aValue = extractParameter(aOptions, u"Language");
     CPPUNIT_ASSERT_EQUAL(u"cs-CZ"_ustr, aValue);
     CPPUNIT_ASSERT_EQUAL(u"SomethingElse"_ustr, aOptions);
 
-    aOptions = "Something1,Language=hu-HU,Something2";
+    aOptions = u"Something1,Language=hu-HU,Something2"_ustr;
     aValue = extractParameter(aOptions, u"Language");
     CPPUNIT_ASSERT_EQUAL(u"hu-HU"_ustr, aValue);
     CPPUNIT_ASSERT_EQUAL(u"Something1,Something2"_ustr, aOptions);
 
-    aOptions = "Something1,Something2=blah,Something3";
+    aOptions = u"Something1,Something2=blah,Something3"_ustr;
     aValue = extractParameter(aOptions, u"Language");
     CPPUNIT_ASSERT_EQUAL(OUString(), aValue);
     CPPUNIT_ASSERT_EQUAL(u"Something1,Something2=blah,Something3"_ustr, aOptions);
@@ -3933,7 +3933,7 @@ void DesktopKitTest::testMetricField()
     CPPUNIT_ASSERT(pUIWin);
 
     StringMap aMap;
-    aMap[u"VALUE"_ustr] = "75.06";
+    aMap[u"VALUE"_ustr] = u"75.06"_ustr;
     pUIWin->execute(u"VALUE"_ustr, aMap);
 
     StringMap aRet = pUIWin->get_state();

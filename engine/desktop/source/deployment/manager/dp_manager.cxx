@@ -344,10 +344,10 @@ Reference<deployment::XPackageManager> PackageManagerImpl::create(
 
     OUString logFile, stamp;
     if ( context == "user" ) {
-        that->m_activePackages = "vnd.sun.star.expand:$UNO_USER_PACKAGES_CACHE/uno_packages";
-        that->m_registrationData = "vnd.sun.star.expand:$UNO_USER_PACKAGES_CACHE";
-        that->m_registryCache = "vnd.sun.star.expand:$UNO_USER_PACKAGES_CACHE/registry";
-        logFile = "$UNO_USER_PACKAGES_CACHE/log.txt";
+        that->m_activePackages = u"vnd.sun.star.expand:$UNO_USER_PACKAGES_CACHE/uno_packages"_ustr;
+        that->m_registrationData = u"vnd.sun.star.expand:$UNO_USER_PACKAGES_CACHE"_ustr;
+        that->m_registryCache = u"vnd.sun.star.expand:$UNO_USER_PACKAGES_CACHE/registry"_ustr;
+        logFile = u"$UNO_USER_PACKAGES_CACHE/log.txt"_ustr;
         //We use the extension .sys for the file because on Windows Vista a sys
         //(as well as exe and dll) file
         //will not be written in the VirtualStore. For example if the process has no
@@ -359,38 +359,38 @@ Reference<deployment::XPackageManager> PackageManagerImpl::create(
         //using virtualization it appears that he/she can. Then a shared extension can
         //be installed but is only visible for the user (because the extension is in
         //the virtual store).
-        stamp = "$UNO_USER_PACKAGES_CACHE";
+        stamp = u"$UNO_USER_PACKAGES_CACHE"_ustr;
     }
     else if ( context == "shared" ) {
-        that->m_activePackages = "vnd.sun.star.expand:$UNO_SHARED_PACKAGES_CACHE/uno_packages";
-        that->m_registrationData = "vnd.sun.star.expand:$SHARED_EXTENSIONS_USER";
-        that->m_registryCache = "vnd.sun.star.expand:$SHARED_EXTENSIONS_USER/registry";
-        logFile = "$SHARED_EXTENSIONS_USER/log.txt";
+        that->m_activePackages = u"vnd.sun.star.expand:$UNO_SHARED_PACKAGES_CACHE/uno_packages"_ustr;
+        that->m_registrationData = u"vnd.sun.star.expand:$SHARED_EXTENSIONS_USER"_ustr;
+        that->m_registryCache = u"vnd.sun.star.expand:$SHARED_EXTENSIONS_USER/registry"_ustr;
+        logFile = u"$SHARED_EXTENSIONS_USER/log.txt"_ustr;
 #if !HAVE_FEATURE_READONLY_INSTALLSET
         // The "shared" extensions are read-only when we have a
         // read-only installset.
-        stamp = "$UNO_SHARED_PACKAGES_CACHE";
+        stamp = u"$UNO_SHARED_PACKAGES_CACHE"_ustr;
 #endif
     }
     else if ( context == "bundled" ) {
-        that->m_activePackages = "vnd.sun.star.expand:$BUNDLED_EXTENSIONS";
-        that->m_registrationData = "vnd.sun.star.expand:$BUNDLED_EXTENSIONS_USER";
-        that->m_registryCache = "vnd.sun.star.expand:$BUNDLED_EXTENSIONS_USER/registry";
-        logFile = "$BUNDLED_EXTENSIONS_USER/log.txt";
+        that->m_activePackages = u"vnd.sun.star.expand:$BUNDLED_EXTENSIONS"_ustr;
+        that->m_registrationData = u"vnd.sun.star.expand:$BUNDLED_EXTENSIONS_USER"_ustr;
+        that->m_registryCache = u"vnd.sun.star.expand:$BUNDLED_EXTENSIONS_USER/registry"_ustr;
+        logFile = u"$BUNDLED_EXTENSIONS_USER/log.txt"_ustr;
         //No stamp file. We assume that bundled is always readonly. It must not be
         //modified from ExtensionManager but only by the installer
     }
     else if ( context == "tmp" ) {
-        that->m_activePackages = "vnd.sun.star.expand:$TMP_EXTENSIONS/extensions";
-        that->m_registrationData = "vnd.sun.star.expand:$TMP_EXTENSIONS";
-        that->m_registryCache = "vnd.sun.star.expand:$TMP_EXTENSIONS/registry";
-        stamp = "$TMP_EXTENSIONS";
+        that->m_activePackages = u"vnd.sun.star.expand:$TMP_EXTENSIONS/extensions"_ustr;
+        that->m_registrationData = u"vnd.sun.star.expand:$TMP_EXTENSIONS"_ustr;
+        that->m_registryCache = u"vnd.sun.star.expand:$TMP_EXTENSIONS/registry"_ustr;
+        stamp = u"$TMP_EXTENSIONS"_ustr;
     }
     else if (context == "bak") {
-        that->m_activePackages = "vnd.sun.star.expand:$BAK_EXTENSIONS/extensions";
-        that->m_registrationData = "vnd.sun.star.expand:$BAK_EXTENSIONS";
-        that->m_registryCache = "vnd.sun.star.expand:$BAK_EXTENSIONS/registry";
-        stamp = "$BAK_EXTENSIONS";
+        that->m_activePackages = u"vnd.sun.star.expand:$BAK_EXTENSIONS/extensions"_ustr;
+        that->m_registrationData = u"vnd.sun.star.expand:$BAK_EXTENSIONS"_ustr;
+        that->m_registryCache = u"vnd.sun.star.expand:$BAK_EXTENSIONS/registry"_ustr;
+        stamp = u"$BAK_EXTENSIONS"_ustr;
     }
 
     else if (! context.match("vnd.sun.star.tdoc:/")) {
@@ -712,9 +712,9 @@ Reference<deployment::XPackage> PackageManagerImpl::addPackage(
     {
         OUString message;
         if (m_context == "shared")
-            message = "You need write permissions to install a shared extension!";
+            message = u"You need write permissions to install a shared extension!"_ustr;
         else
-            message = "You need write permissions to install this extension!";
+            message = u"You need write permissions to install this extension!"_ustr;
         throw deployment::DeploymentException(
             message, static_cast<OWeakObject *>(this), Any() );
     }

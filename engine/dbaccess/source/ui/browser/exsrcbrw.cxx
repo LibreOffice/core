@@ -144,7 +144,7 @@ void SAL_CALL SbaExternalSourceBrowser::dispatch(const css::util::URL& aURL, con
         if (sControlType.isEmpty())
         {
             SAL_WARN("dbaccess.ui", "SbaExternalSourceBrowser::dispatch(AddGridColumn) : missing argument (ColumnType) !");
-            sControlType = "TextField";
+            sControlType = u"TextField"_ustr;
         }
         OSL_ENSURE(aControlProps.hasElements(), "SbaExternalSourceBrowser::dispatch(AddGridColumn) : missing argument (ColumnProperties) !");
 
@@ -246,7 +246,7 @@ Reference< css::frame::XDispatch >  SAL_CALL SbaExternalSourceBrowser::queryDisp
             m_xUrlTransformer->parseStrict( aNewUrl );
 
         // set a new mark
-        aNewUrl.Mark = "DB/FormGridView";
+        aNewUrl.Mark = u"DB/FormGridView"_ustr;
             // this controller is instantiated when somebody dispatches the ".component:DB/FormGridView" in any
             // frame, so we use "FormGridView" as mark that a dispatch request came from this view
 

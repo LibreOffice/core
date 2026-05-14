@@ -102,12 +102,12 @@ namespace
             {
             case SQLExceptionInfo::TYPE::SQLWarning:
                 ppProvider = &m_pWarningsImage;
-                sNormalImageID = "dialog-warning";
+                sNormalImageID = u"dialog-warning"_ustr;
                 break;
 
             case SQLExceptionInfo::TYPE::SQLContext:
                 ppProvider = &m_pInfoImage;
-                sNormalImageID = "dialog-information";
+                sNormalImageID = u"dialog-information"_ustr;
                 break;
 
             default:

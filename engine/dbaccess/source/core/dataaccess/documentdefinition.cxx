@@ -1694,8 +1694,8 @@ void ODocumentDefinition::onCommandPreview(Any& _rImage)
         if ( xTransfer.is() )
         {
             DataFlavor aFlavor;
-            aFlavor.MimeType = "image/png";
-            aFlavor.HumanPresentableName = "Portable Network Graphics";
+            aFlavor.MimeType = u"image/png"_ustr;
+            aFlavor.HumanPresentableName = u"Portable Network Graphics"_ustr;
             aFlavor.DataType = cppu::UnoType<Sequence < sal_Int8 >>::get();
 
             _rImage = xTransfer->getTransferData( aFlavor );

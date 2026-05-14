@@ -142,7 +142,7 @@ OXMLDataSource::OXMLDataSource( ODBFilter& rImport,
                     aProperty.Value <<= aIter.toInt32();
                     break;
                 case XML_JAVA_CLASSPATH:
-                    aProperty.Name = "JavaDriverClassPath";
+                    aProperty.Name = u"JavaDriverClassPath"_ustr;
                     break;
                 default:
                     XMLOFF_WARN_UNKNOWN("dbaccess", aIter);

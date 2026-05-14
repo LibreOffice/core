@@ -473,7 +473,7 @@ void BackendImpl::implProcessHelp(
                             if( nLastSlash != -1 )
                                 aLang = aLangURL.copy( nLastSlash + 1 );
                             else
-                                aLang = "en";
+                                aLang = u"en"_ustr;
 
                             HelpIndexer aIndexer(aLang, u"help"_ustr, langFolderDestExpanded, langFolderDestExpanded);
                             aIndexer.indexDocuments();

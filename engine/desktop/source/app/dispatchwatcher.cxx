@@ -383,7 +383,7 @@ bool DispatchWatcher::executeDispatchRequests(
             aArgs.emplace_back("Silent", 0, Any(true), PropertyState_DIRECT_VALUE);
 
             // hidden documents should never be put into open tasks
-            aTarget = "_blank";
+            aTarget = u"_blank"_ustr;
         }
         else
         {
@@ -487,7 +487,7 @@ bool DispatchWatcher::executeDispatchRequests(
         {
             INetURLObject aObj( aName );
             if ( aObj.GetProtocol() == INetProtocol::PrivSoffice )
-                aTarget = "_default";
+                aTarget = u"_default"_ustr;
 
             // Set "AsTemplate" argument according to request type
             if ( aDispatchRequest.aRequestType == REQUEST_FORCENEW ||
@@ -651,12 +651,12 @@ bool DispatchWatcher::executeDispatchRequests(
                                     nProps +=1;
                                 Sequence<PropertyValue> conversionProperties( nProps );
                                 auto pconversionProperties = conversionProperties.getArray();
-                                pconversionProperties[0].Name = "ConversionRequestOrigin";
+                                pconversionProperties[0].Name = u"ConversionRequestOrigin"_ustr;
                                 pconversionProperties[0].Value <<= u"CommandLine"_ustr;
-                                pconversionProperties[1].Name = "Overwrite";
+                                pconversionProperties[1].Name = u"Overwrite"_ustr;
                                 pconversionProperties[1].Value <<= true;
 
-                                pconversionProperties[2].Name = "FilterName";
+                                pconversionProperties[2].Name = u"FilterName"_ustr;
                                 if( 0 < nFilterOptionsIndex )
                                 {
                                     OUString sFilterName = aFilter.copy(0, nFilterOptionsIndex);
@@ -683,7 +683,7 @@ bool DispatchWatcher::executeDispatchRequests(
 
                                     pconversionProperties[2].Value <<= sFilterName;
 
-                                    pconversionProperties[3].Name = "FilterOptions";
+                                    pconversionProperties[3].Name = u"FilterOptions"_ustr;
                                     pconversionProperties[3].Value <<= sFilterOptions;
                                 }
                                 else
@@ -694,7 +694,7 @@ bool DispatchWatcher::executeDispatchRequests(
                                 if ( !aImgOut.isEmpty() )
                                 {
                                     assert(conversionProperties[nProps-1].Name.isEmpty());
-                                    pconversionProperties[nProps-1].Name = "ImageFilter";
+                                    pconversionProperties[nProps-1].Name = u"ImageFilter"_ustr;
                                     pconversionProperties[nProps-1].Value <<= aImgOut;
                                 }
 

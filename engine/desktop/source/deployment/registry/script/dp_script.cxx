@@ -241,12 +241,12 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
             if (create_ucb_content(
                     nullptr, makeURL( url, u"script.xlb"_ustr ),
                     xCmdEnv, false /* no throw */ ))
-                mediaType = "application/vnd.sun.star.basic-library";
+                mediaType = u"application/vnd.sun.star.basic-library"_ustr;
             // probe for dialog.xlb:
             else if (create_ucb_content(
                          nullptr, makeURL( url, u"dialog.xlb"_ustr ),
                          xCmdEnv, false /* no throw */ ))
-                mediaType = "application/vnd.sun.star.dialog-library";
+                mediaType = u"application/vnd.sun.star.dialog-library"_ustr;
         }
         if (mediaType.isEmpty())
             throw lang::IllegalArgumentException(

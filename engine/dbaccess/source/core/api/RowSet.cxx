@@ -2315,7 +2315,7 @@ bool ORowSet::impl_buildActiveCommand_throw()
             }
             else
             {
-                sCommand = "SELECT * FROM ";
+                sCommand = u"SELECT * FROM "_ustr;
                 OUString sCatalog, sSchema, sTable;
                 ::dbtools::qualifiedNameComponents( m_xActiveConnection->getMetaData(), m_aCommand, sCatalog, sSchema, sTable, ::dbtools::EComposeRule::InDataManipulation );
                 sCommand += ::dbtools::composeTableNameForSelect( m_xActiveConnection, sCatalog, sSchema, sTable );

@@ -79,43 +79,43 @@ static OUString mapModuleShortNameToIdentifier(std::u16string_view sShortName)
     OUString sIdentifier;
 
     if ( sShortName == u"StartModule" )
-        sIdentifier = "com.sun.star.frame.StartModule";
+        sIdentifier = u"com.sun.star.frame.StartModule"_ustr;
 
     else if ( sShortName == u"swriter" )
-        sIdentifier = "com.sun.star.text.TextDocument";
+        sIdentifier = u"com.sun.star.text.TextDocument"_ustr;
 
     else if ( sShortName == u"scalc" )
-        sIdentifier = "com.sun.star.sheet.SpreadsheetDocument";
+        sIdentifier = u"com.sun.star.sheet.SpreadsheetDocument"_ustr;
 
     else if ( sShortName == u"sdraw" )
-        sIdentifier = "com.sun.star.drawing.DrawingDocument";
+        sIdentifier = u"com.sun.star.drawing.DrawingDocument"_ustr;
 
     else if ( sShortName == u"simpress" )
-        sIdentifier = "com.sun.star.presentation.PresentationDocument";
+        sIdentifier = u"com.sun.star.presentation.PresentationDocument"_ustr;
 
     else if ( sShortName == u"smath" )
-        sIdentifier = "com.sun.star.formula.FormulaProperties";
+        sIdentifier = u"com.sun.star.formula.FormulaProperties"_ustr;
 
     else if ( sShortName == u"schart" )
-        sIdentifier = "com.sun.star.chart2.ChartDocument";
+        sIdentifier = u"com.sun.star.chart2.ChartDocument"_ustr;
 
     else if ( sShortName == u"BasicIDE" )
-        sIdentifier = "com.sun.star.script.BasicIDE";
+        sIdentifier = u"com.sun.star.script.BasicIDE"_ustr;
 
     else if ( sShortName == u"dbapp" )
-        sIdentifier = "com.sun.star.sdb.OfficeDatabaseDocument";
+        sIdentifier = u"com.sun.star.sdb.OfficeDatabaseDocument"_ustr;
 
     else if ( sShortName == u"sglobal" )
-        sIdentifier = "com.sun.star.text.GlobalDocument";
+        sIdentifier = u"com.sun.star.text.GlobalDocument"_ustr;
 
     else if ( sShortName == u"sweb" )
-        sIdentifier = "com.sun.star.text.WebDocument";
+        sIdentifier = u"com.sun.star.text.WebDocument"_ustr;
 
     else if ( sShortName == u"swxform" )
-        sIdentifier = "com.sun.star.xforms.XMLFormDocument";
+        sIdentifier = u"com.sun.star.xforms.XMLFormDocument"_ustr;
 
     else if ( sShortName == u"sbibliography" )
-        sIdentifier = "com.sun.star.frame.Bibliography";
+        sIdentifier = u"com.sun.star.frame.Bibliography"_ustr;
 
     return sIdentifier;
 }
@@ -793,9 +793,9 @@ uno::Reference< XNameAccess > MigrationImpl::getConfigAccess(const char* pPath, 
     try {
         OUString sAccessSrvc;
         if (bUpdate)
-            sAccessSrvc = "com.sun.star.configuration.ConfigurationUpdateAccess";
+            sAccessSrvc = u"com.sun.star.configuration.ConfigurationUpdateAccess"_ustr;
         else
-            sAccessSrvc = "com.sun.star.configuration.ConfigurationAccess";
+            sAccessSrvc = u"com.sun.star.configuration.ConfigurationAccess"_ustr;
 
         OUString sConfigURL = OUString::createFromAscii(pPath);
 

@@ -245,7 +245,7 @@ namespace dbaui
             else
             {
                 // in addition, we need some infos about the connection used
-                m_sCatalogSeparator = ".";    // (default)
+                m_sCatalogSeparator = u"."_ustr;    // (default)
                 m_bCatalogAtStart = true;   // (default)
                 try
                 {
