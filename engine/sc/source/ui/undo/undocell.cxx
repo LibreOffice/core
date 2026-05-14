@@ -266,6 +266,13 @@ void ScUndoEnterData::Undo()
     rDoc.SyncSheetViews(maPos.Tab());
 
     DoChange();
+
+    // Forward path ran spill resolution at the end of the write operation.
+    // Replay it so a dynamic array master that collapsed, because the user
+    // typed a blocker into one of its reference cells, re-expands now that
+    // the blocker is gone (and vice-versa).
+    rDocShell.ResolveSpilledOutputs();
+
     EndUndo();
 
     HelperNotifyChanges::NotifyIfChangesListeners(rDocShell, maPos, maOldValues, u"undo"_ustr);
@@ -298,6 +305,9 @@ void ScUndoEnterData::Redo()
     rDoc.SyncSheetViews(maPos.Tab());
 
     DoChange();
+
+    rDocShell.ResolveSpilledOutputs();
+
     EndRedo();
 
     HelperNotifyChanges::NotifyIfChangesListeners(rDocShell, maPos, maOldValues, u"redo"_ustr);
