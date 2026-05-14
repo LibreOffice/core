@@ -302,7 +302,7 @@ m4_ifelse(MOBILEAPP, [true],
       data-ui-defaults = "%UI_DEFAULTS%"
       data-use-integration-theme = "%USE_INTEGRATION_THEME%"
       data-user-interface-mode = "%USER_INTERFACE_MODE%"
-      data-vendor = VENDOR
+      data-vendor = "VENDOR"
       data-version-path = "%VERSION%"
       data-wasm-enabled = "%WASM_ENABLED%"
       data-wopi-host-id = "%WOPI_HOST_ID%"
