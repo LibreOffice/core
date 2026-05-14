@@ -30,6 +30,13 @@
 BufferStream::BufferStream(IStream *str) :
     stream(str)
 {
+    // Retain the stream for the lifetime of the BufferStream. CBaseReader's
+    // ZipFile member reads from us lazily on every GetUncompressedContent,
+    // so the underlying IStream must outlive the BufferStream wrapper -
+    // SearchFilterHost / PrevHost are not required to keep the IStream alive
+    // past IPersistStream::Load() / IInitializeWithStream::Initialize().
+    stream->AddRef();
+
     // These next few lines work around the "Seek pointer" bug found on Vista.
     char cBuf[20];
     unsigned long nCount;
@@ -42,6 +49,7 @@ BufferStream::BufferStream(IStream *str) :
 
 BufferStream::~BufferStream()
 {
+    stream->Release();
 }
 
 unsigned long BufferStream::sread (unsigned char *buf, unsigned long size)

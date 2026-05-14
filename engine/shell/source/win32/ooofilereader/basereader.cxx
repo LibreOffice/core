@@ -21,6 +21,8 @@
 
 #include <xml_parser.hxx>
 
+#include <stdio.h>  // SEEK_SET
+
 #include <assert.h>
 #include <memory>
 
@@ -55,13 +57,47 @@ void CBaseReader::end_document()
 /** Read interested tag content into respective structure then start parsing process.
     @param ContentName
     the xml file name in the zipped document which we interest.
+
+    For zipped ODF, reads only the named sub-document (meta.xml or
+    content.xml) and parses it.
+
+    For flat ODF (the document is a single XML file - not a zip), the
+    ContentName parameter is ignored: the entire document is parsed in one
+    pass. The readers' chooseTagReader dispatch already returns CDummyTag
+    for tags it does not recognize, so feeding the whole flat-ODF document
+    is safe - the metainfo reader picks out tags under <office:meta>, the
+    content reader picks out body paragraphs under <office:body>, and
+    everything else is no-op.
 */
 void CBaseReader::Initialize( const std::string& ContentName)
 {
     try
     {
         if (m_ZipContent.empty())
-            m_ZipFile.GetUncompressedContent( ContentName, m_ZipContent );
+        {
+            if (m_ZipFile.IsValid())
+            {
+                m_ZipFile.GetUncompressedContent( ContentName, m_ZipContent );
+            }
+            else if (StreamInterface* stream = m_ZipFile.GetStream())
+            {
+                // Flat ODF: slurp the whole document. Zip detection has
+                // moved the read cursor, seek back to start first.
+                stream->sseek(0, SEEK_SET);
+                unsigned char buf[65536];
+                for (;;)
+                {
+                    unsigned long n = stream->sread(buf, sizeof(buf));
+                    if (n == 0)
+                        break;
+                    m_ZipContent.insert(m_ZipContent.end(),
+                                        reinterpret_cast<char*>(buf),
+                                        reinterpret_cast<char*>(buf) + n);
+                    if (n < sizeof(buf))
+                        break;
+                }
+            }
+        }
 
         if (!m_ZipContent.empty())
         {

@@ -24,6 +24,7 @@
 #include <fileextensions.hxx>
 #include <config.hxx>
 #include <zipfile.hxx>
+#include <stream_helper.hxx>
 #include <utilities.hxx>
 
 #include <resource.h>
@@ -35,6 +36,7 @@
 #include <shellapi.h>
 #include <objidl.h>
 #include <shlobj.h>
+#include <thumbcache.h>
 #include <gdiplus.h>
 
 #include <algorithm>
@@ -274,58 +276,30 @@ HRESULT STDMETHODCALLTYPE StreamOnZipBuffer::UnlockRegion(ULARGE_INTEGER, ULARGE
 HRESULT STDMETHODCALLTYPE StreamOnZipBuffer::Clone(IStream **)
 {  return E_NOTIMPL; }
 
-class CThumbviewer : public IPersistFile, public IExtractImage
+class CThumbviewer : public IInitializeWithStream, public IThumbnailProvider
 {
 public:
     CThumbviewer();
     virtual ~CThumbviewer();
 
-    // IUnknown methods
-
+    // IUnknown
     virtual HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid,
                                                      void __RPC_FAR* __RPC_FAR* ppvObject) override;
-
     virtual ULONG STDMETHODCALLTYPE AddRef() override;
-
     virtual ULONG STDMETHODCALLTYPE Release() override;
 
-    // IExtractImage methods
+    // IInitializeWithStream
+    virtual HRESULT STDMETHODCALLTYPE Initialize(IStream* pStream, DWORD grfMode) override;
 
-    virtual HRESULT STDMETHODCALLTYPE Extract(HBITMAP* phBmpImage) override;
-
-    virtual HRESULT STDMETHODCALLTYPE GetLocation(LPWSTR pszPathBuffer, DWORD cchMax,
-                                                  DWORD* pdwPriority, const SIZE* prgSize,
-                                                  DWORD dwRecClrDepth, DWORD* pdwFlags) override;
-
-    // IPersist methods
-
-    virtual HRESULT STDMETHODCALLTYPE GetClassID(CLSID* pClassID) override;
-
-    // IPersistFile methods
-
-    virtual HRESULT STDMETHODCALLTYPE IsDirty() override;
-
-    virtual HRESULT STDMETHODCALLTYPE Load(
-        /* [in] */ LPCOLESTR pszFileName,
-        /* [in] */ DWORD dwMode) override;
-
-    virtual HRESULT STDMETHODCALLTYPE Save(
-        /* [unique][in] */ LPCOLESTR pszFileName,
-        /* [in] */ BOOL fRemember) override;
-
-    virtual HRESULT STDMETHODCALLTYPE SaveCompleted(
-        /* [unique][in] */ LPCOLESTR pszFileName) override;
-
-    virtual HRESULT STDMETHODCALLTYPE GetCurFile(
-        /* [out] */ LPOLESTR __RPC_FAR* ppszFileName) override;
+    // IThumbnailProvider
+    virtual HRESULT STDMETHODCALLTYPE GetThumbnail(UINT cx, HBITMAP* phbmp,
+                                                   WTS_ALPHATYPE* pdwAlpha) override;
 
 private:
     std::atomic<ULONG> ref_count_ = 1;
-    DWORD color_depth_ = 0;
-    std::wstring filename_;
-    SIZE thumbnail_size_ = { .cx = 0, .cy = 0 };
     ULONG_PTR gdiplus_token_;
     Gdiplus::Bitmap* signet_;
+    IStream* stream_ = nullptr;
 };
 
 CThumbviewer::CThumbviewer()
@@ -341,26 +315,28 @@ CThumbviewer::CThumbviewer()
 
 CThumbviewer::~CThumbviewer()
 {
+    if (stream_)
+        stream_->Release();
     delete signet_;
     Gdiplus::GdiplusShutdown(gdiplus_token_);
     InterlockedDecrement(&g_DllRefCnt);
 }
 
-// IUnknown methods
+// IUnknown
 
 HRESULT STDMETHODCALLTYPE CThumbviewer::QueryInterface(REFIID riid, void __RPC_FAR *__RPC_FAR *ppvObject)
 {
     *ppvObject = nullptr;
 
-    if ((IID_IUnknown == riid) || (IID_IPersistFile == riid))
+    if (IID_IUnknown == riid || IID_IInitializeWithStream == riid)
     {
-        *ppvObject = static_cast<IPersistFile*>(this);
+        *ppvObject = static_cast<IInitializeWithStream*>(this);
         AddRef();
         return S_OK;
     }
-    else if (IID_IExtractImage == riid)
+    else if (IID_IThumbnailProvider == riid)
     {
-        *ppvObject = static_cast<IExtractImage*>(this);
+        *ppvObject = static_cast<IThumbnailProvider*>(this);
         AddRef();
         return S_OK;
     }
@@ -382,167 +358,146 @@ ULONG STDMETHODCALLTYPE CThumbviewer::Release()
     return refcnt;
 }
 
-// IExtractImage2 methods
+// IInitializeWithStream
+
+HRESULT STDMETHODCALLTYPE CThumbviewer::Initialize(IStream* pStream, DWORD grfMode)
+{
+    if (grfMode & STGM_READWRITE)
+        return STG_E_ACCESSDENIED;
+    if (!pStream)
+        return E_INVALIDARG;
+    if (stream_)
+        return E_UNEXPECTED;  // Initialize called twice
+
+    stream_ = pStream;
+    stream_->AddRef();
+    return S_OK;
+}
+
+// IThumbnailProvider
 
 const std::string THUMBNAIL_CONTENT = "Thumbnails/thumbnail.png";
 
-HRESULT STDMETHODCALLTYPE CThumbviewer::Extract(HBITMAP *phBmpImage)
+HRESULT STDMETHODCALLTYPE CThumbviewer::GetThumbnail(UINT cx, HBITMAP* phbmp, WTS_ALPHATYPE* pdwAlpha)
 {
+    if (!phbmp || !pdwAlpha)
+        return E_INVALIDARG;
+    if (!stream_)
+        return E_UNEXPECTED;
+
+    *phbmp = nullptr;
+    *pdwAlpha = WTSAT_UNKNOWN;
+
     HRESULT hr = E_FAIL;
 
     try
     {
-        std::wstring fname = getShortPathName( filename_ );
-        ZipFile zipfile(fname);
+        BufferStream zipStream(stream_);
+        ZipFile zipfile(&zipStream);
 
-        if (zipfile.HasContent(THUMBNAIL_CONTENT))
+        if (!zipfile.HasContent(THUMBNAIL_CONTENT))
+            return E_FAIL;
+
+        ZipFile::ZipContentBuffer_t thumbnail;
+        zipfile.GetUncompressedContent(THUMBNAIL_CONTENT, thumbnail);
+
+        Gdiplus::Bitmap thumbnail_png(StreamOnZipBuffer::Create(std::move(thumbnail)), TRUE);
+        if (thumbnail_png.GetHeight() == 0 || thumbnail_png.GetWidth() == 0)
+            return E_FAIL;
+
+        // The IThumbnailProvider contract: target is cx-by-cx square,
+        // 32-bit BGRA top-down DIB with premultiplied alpha (WTSAT_ARGB).
+        const SIZE thumbnail_size = { static_cast<LONG>(cx), static_cast<LONG>(cx) };
+
+        BITMAPINFO bmi = {};
+        bmi.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
+        bmi.bmiHeader.biWidth = thumbnail_size.cx;
+        bmi.bmiHeader.biHeight = -thumbnail_size.cy;  // top-down
+        bmi.bmiHeader.biPlanes = 1;
+        bmi.bmiHeader.biBitCount = 32;
+        bmi.bmiHeader.biCompression = BI_RGB;
+
+        LPVOID lpBits = nullptr;
+        HBITMAP hMemBmp = CreateDIBSection(nullptr, &bmi, DIB_RGB_COLORS, &lpBits, nullptr, 0);
+        if (!hMemBmp)
+            return E_OUTOFMEMORY;
+
+        // Wrap the DIB pixels in a GDI+ Bitmap so we can render straight into it
+        // without bouncing through a DC.
+        Gdiplus::Bitmap canvasBmp(thumbnail_size.cx, thumbnail_size.cy,
+                                  thumbnail_size.cx * 4, PixelFormat32bppPARGB, static_cast<BYTE*>(lpBits));
+        Gdiplus::Graphics graphics(&canvasBmp);
+        graphics.SetInterpolationMode(Gdiplus::InterpolationModeHighQualityBicubic);
+
+        const UINT offset = 3;  // border space
+        Gdiplus::Rect canvas(0, 0, thumbnail_size.cx, thumbnail_size.cy);
+        Gdiplus::Rect canvas_thumbnail(offset, offset,
+                                       thumbnail_size.cx - 2 * offset,
+                                       thumbnail_size.cy - 2 * offset);
+
+        Gdiplus::Rect scaledRect = CalcScaledAspectRatio(
+            Gdiplus::Rect(0, 0, thumbnail_png.GetWidth(), thumbnail_png.GetHeight()),
+            canvas_thumbnail);
+
+        Gdiplus::SolidBrush whiteBrush(Gdiplus::Color(255, 255, 255, 255));
+        graphics.FillRectangle(&whiteBrush, canvas);
+
+        scaledRect.X = (canvas.Width - scaledRect.Width) / 2;
+        scaledRect.Y = (canvas.Height - scaledRect.Height) / 2;
+
+        Gdiplus::Pen blackPen(Gdiplus::Color(255, 0, 0, 0), 1);
+        Gdiplus::Rect border_rect(scaledRect.X, scaledRect.Y, scaledRect.Width, scaledRect.Height);
+        graphics.DrawRectangle(&blackPen, border_rect);
+
+        scaledRect.X += 1;
+        scaledRect.Y += 1;
+        scaledRect.Width -= 1;
+        scaledRect.Height -= 1;
+
+        Gdiplus::Status stat = graphics.DrawImage(
+            &thumbnail_png, scaledRect, 0, 0,
+            thumbnail_png.GetWidth(), thumbnail_png.GetHeight(),
+            Gdiplus::UnitPixel);
+
+        // Overlay the signet for signed documents.
+        if (IsSignedDocument(zipfile))
         {
-            ZipFile::ZipContentBuffer_t thumbnail;
-            zipfile.GetUncompressedContent(THUMBNAIL_CONTENT, thumbnail);
+            const double SCALING_FACTOR = 0.6;
+            Gdiplus::Rect signet_scaled(
+                0, 0,
+                static_cast<INT>(signet_->GetWidth() * SCALING_FACTOR),
+                static_cast<INT>(signet_->GetHeight() * SCALING_FACTOR));
+            Gdiplus::Point pos_signet = CalcSignetPosition(canvas_thumbnail, border_rect, signet_scaled);
+            Gdiplus::Rect dest(pos_signet.X, pos_signet.Y, signet_scaled.GetRight(), signet_scaled.GetBottom());
 
-            Gdiplus::Bitmap thumbnail_png(StreamOnZipBuffer::Create(std::move(thumbnail)), TRUE);
+            stat = graphics.DrawImage(
+                signet_, dest,
+                0, 0, signet_->GetWidth(), signet_->GetHeight(),
+                Gdiplus::UnitPixel);
+        }
 
-            if ((thumbnail_png.GetHeight() == 0) || (thumbnail_png.GetWidth() == 0))
-            {
-                return E_FAIL;
-            }
-
-            HWND hwnd = GetDesktopWindow();
-            HDC hdc = GetDC(hwnd);
-            HDC memDC = CreateCompatibleDC(hdc);
-
-            if (memDC)
-            {
-                UINT offset = 3; // reserve a little border space
-
-                Gdiplus::Rect canvas(0, 0, thumbnail_size_.cx, thumbnail_size_.cy);
-                Gdiplus::Rect canvas_thumbnail(offset, offset, thumbnail_size_.cx - 2 * offset, thumbnail_size_.cy - 2 * offset);
-
-                Gdiplus::Rect scaledRect = CalcScaledAspectRatio(
-                    Gdiplus::Rect(0, 0, thumbnail_png.GetWidth(), thumbnail_png.GetHeight()), canvas_thumbnail);
-
-                struct {
-                    BITMAPINFOHEADER bi;
-                    DWORD ct[256];
-                } dib;
-
-                ZeroMemory(&dib, sizeof(dib));
-
-                dib.bi.biSize = sizeof(BITMAPINFOHEADER);
-                dib.bi.biWidth = thumbnail_size_.cx;
-                dib.bi.biHeight = thumbnail_size_.cy;
-                dib.bi.biPlanes = 1;
-                dib.bi.biBitCount = static_cast<WORD>(color_depth_);
-                dib.bi.biCompression = BI_RGB;
-
-                LPVOID lpBits;
-                HBITMAP hMemBmp = CreateDIBSection(memDC, reinterpret_cast<LPBITMAPINFO>(&dib), DIB_RGB_COLORS, &lpBits, nullptr, 0);
-                HGDIOBJ hOldObj = SelectObject(memDC, hMemBmp);
-
-                Gdiplus::Graphics graphics(memDC);
-                Gdiplus::Pen blackPen(Gdiplus::Color(255, 0, 0, 0), 1);
-
-                Gdiplus::SolidBrush whiteBrush(Gdiplus::Color(255, 255, 255, 255));
-                graphics.FillRectangle(&whiteBrush, canvas);
-
-                scaledRect.X = (canvas.Width - scaledRect.Width) / 2;
-                scaledRect.Y = (canvas.Height - scaledRect.Height) / 2;
-
-                Gdiplus::Rect border_rect(scaledRect.X, scaledRect.Y, scaledRect.Width, scaledRect.Height);
-                graphics.DrawRectangle(&blackPen, border_rect);
-
-                scaledRect.X += 1;
-                scaledRect.Y += 1;
-                scaledRect.Width -= 1;
-                scaledRect.Height -= 1;
-
-                graphics.SetInterpolationMode(Gdiplus::InterpolationModeHighQualityBicubic);
-                Gdiplus::Status stat = graphics.DrawImage(
-                    &thumbnail_png, scaledRect, 0 , 0,
-                    thumbnail_png.GetWidth(), thumbnail_png.GetHeight(), Gdiplus::UnitPixel);
-
-                /* Add a signet sign to the thumbnail of signed documents */
-                if (IsSignedDocument(zipfile))
-                {
-                    double SCALING_FACTOR = 0.6;
-                    Gdiplus::Rect signet_scaled(
-                        0, 0, static_cast<INT>(signet_->GetWidth() * SCALING_FACTOR), static_cast<INT>(signet_->GetHeight() * SCALING_FACTOR));
-                    Gdiplus::Point pos_signet = CalcSignetPosition(canvas_thumbnail, border_rect, signet_scaled);
-                    Gdiplus::Rect dest(pos_signet.X, pos_signet.Y, signet_scaled.GetRight(), signet_scaled.GetBottom());
-
-                    stat = graphics.DrawImage(
-                        signet_, dest,
-                        0, 0, signet_->GetWidth(), signet_->GetHeight(),
-                        Gdiplus::UnitPixel);
-                }
-
-                if (stat == Gdiplus::Ok)
-                {
-                    *phBmpImage = hMemBmp;
-                    hr = NOERROR;
-                }
-
-                SelectObject(memDC, hOldObj);
-                DeleteDC(memDC);
-            }
-
-            ReleaseDC(hwnd, hdc);
+        if (stat == Gdiplus::Ok)
+        {
+            *phbmp = hMemBmp;
+            *pdwAlpha = WTSAT_RGB;  // background is opaque white
+            hr = S_OK;
+        }
+        else
+        {
+            DeleteObject(hMemBmp);
         }
     }
-    catch(std::exception&)
+    catch (std::exception&)
     {
-        OutputDebugStringFormatW( L"CThumbviewer Extract ERROR!\n" );
+        OutputDebugStringFormatW(L"CThumbviewer::GetThumbnail ERROR!\n");
         hr = E_FAIL;
     }
+
     return hr;
 }
 
-HRESULT STDMETHODCALLTYPE CThumbviewer::GetLocation(
-    LPWSTR pszPathBuffer, DWORD cchMax, DWORD *pdwPriority, const SIZE *prgSize, DWORD dwRecClrDepth, DWORD *pdwFlags)
-{
-    if ((prgSize == nullptr) || (pdwFlags == nullptr) || ((*pdwFlags & IEIFLAG_ASYNC) && (pdwPriority == nullptr)))
-        return E_INVALIDARG;
-
-    thumbnail_size_ = *prgSize;
-    color_depth_ = dwRecClrDepth;
-
-    *pdwFlags = IEIFLAG_CACHE; // we don't cache the image
-
-    wcsncpy(pszPathBuffer, filename_.c_str(), cchMax);
-
-    return NOERROR;
-}
-
-// IPersist methods
-
-HRESULT STDMETHODCALLTYPE CThumbviewer::GetClassID(CLSID* pClassID)
-{
-    *pClassID = CLSID_THUMBVIEWER_HANDLER;
-    return S_OK;
-}
-
-// IPersistFile methods
-
-HRESULT STDMETHODCALLTYPE CThumbviewer::Load(LPCOLESTR pszFileName, DWORD)
-{
-    filename_ = pszFileName;
-    return S_OK;
-}
-
-HRESULT STDMETHODCALLTYPE CThumbviewer::IsDirty()
-{ return E_NOTIMPL; }
-
-HRESULT STDMETHODCALLTYPE CThumbviewer::Save(LPCOLESTR, BOOL)
-{ return E_NOTIMPL; }
-
-HRESULT STDMETHODCALLTYPE CThumbviewer::SaveCompleted(LPCOLESTR)
-{ return E_NOTIMPL; }
-
-HRESULT STDMETHODCALLTYPE CThumbviewer::GetCurFile(LPOLESTR __RPC_FAR*)
-{ return E_NOTIMPL; }
-
 } // namespace
 
-IExtractImage* CreateThumbviewer() { return new CThumbviewer; }
+IThumbnailProvider* CreateThumbviewer() { return new CThumbviewer; }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

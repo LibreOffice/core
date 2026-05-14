@@ -23,10 +23,10 @@
 #include <sal/macros.h>
 
 
-const std::wstring WRITER_FILE_EXTENSIONS   = L"sxwstwsxgodtottodm";
-const std::wstring CALC_FILE_EXTENSIONS     = L"sxcstcodsots";
-const std::wstring DRAW_FILE_EXTENSIONS     = L"sxdstdodgotg";
-const std::wstring IMPRESS_FILE_EXTENSIONS  = L"sxistiodpotp";
+const std::wstring WRITER_FILE_EXTENSIONS   = L"sxwstwsxgodtottodmfodt";
+const std::wstring CALC_FILE_EXTENSIONS     = L"sxcstcodsotsfods";
+const std::wstring DRAW_FILE_EXTENSIONS     = L"sxdstdodgotgfodg";
+const std::wstring IMPRESS_FILE_EXTENSIONS  = L"sxistiodpotpfodp";
 const std::wstring MATH_FILE_EXTENSIONS     = L"sxmodf";
 const std::wstring WEB_FILE_EXTENSIONS      = L"oth";
 const std::wstring DATABASE_FILE_EXTENSIONS = L"odb";
@@ -53,7 +53,12 @@ const FileExtensionEntry OOFileExtensionTable[] = {
     { ".odp", L".odp", L"LibreOffice.ImpressDocument.1"      },
     { ".otp", L".otp", L"LibreOffice.ImpressTemplate.1"      },
     { ".odf", L".odf", L"LibreOffice.MathDocument.1"         },
-    { ".odb", L".odb", L"LibreOffice.DatabaseDocument.1"     }
+    { ".odb", L".odb", L"LibreOffice.DatabaseDocument.1"     },
+    // Flat ODF (single XML file, no zip container).
+    { ".fodt", L".fodt", L"LibreOffice.WriterDocumentFlat.1"  },
+    { ".fods", L".fods", L"LibreOffice.CalcDocumentFlat.1"    },
+    { ".fodg", L".fodg", L"LibreOffice.DrawDocumentFlat.1"    },
+    { ".fodp", L".fodp", L"LibreOffice.ImpressDocumentFlat.1" }
     };
 
 

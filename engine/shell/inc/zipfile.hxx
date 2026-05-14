@@ -120,9 +120,23 @@ public:
     */
     bool HasContent(const std::string& ContentName) const;
 
+    /** True iff the source was a valid zip stream. False indicates the
+        caller-supplied filename or stream was something else (e.g. a flat
+        ODF document) - the underlying stream is still accessible via
+        GetStream() so callers can read it as raw XML.
+    */
+    bool IsValid() const { return m_bValid; }
+
+    /** The underlying stream, preserved even when the source is not a zip.
+        Callers using this for a raw read should sseek(0, SEEK_SET) first
+        because zip detection has moved the read cursor.
+    */
+    StreamInterface* GetStream() const { return m_pStream; }
+
 private:
     StreamInterface* m_pStream;
     bool m_bShouldFree;
+    bool m_bValid;
 };
 
 #endif

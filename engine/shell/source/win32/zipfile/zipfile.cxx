@@ -415,22 +415,21 @@ bool ZipFile::IsValidZipFileVersionNumber(void* /* stream*/)
 */
 ZipFile::ZipFile(const Filepath_t &FileName) :
     m_pStream(nullptr),
-    m_bShouldFree(true)
+    m_bShouldFree(true),
+    m_bValid(false)
 {
     m_pStream = new FileStream(FileName.c_str());
-    if (!isZipStream(m_pStream))
-    {
-        delete m_pStream;
-        m_pStream = nullptr;
-    }
+    m_bValid = isZipStream(m_pStream);
+    // Keep m_pStream regardless - callers (e.g. CBaseReader handling flat
+    // ODF) may want to read it as raw XML when it is not a zip.
 }
 
 ZipFile::ZipFile(StreamInterface *stream) :
     m_pStream(stream),
-    m_bShouldFree(false)
+    m_bShouldFree(false),
+    m_bValid(false)
 {
-    if (!isZipStream(stream))
-        m_pStream = nullptr;
+    m_bValid = isZipStream(stream);
 }
 
 
@@ -447,6 +446,8 @@ ZipFile::~ZipFile()
 void ZipFile::GetUncompressedContent(
     const std::string &ContentName, /*inout*/ ZipContentBuffer_t &ContentBuffer)
 {
+    if (!m_bValid)
+        return;
     CentralDirectoryEntry entry;
     if (!FindEntry(m_pStream, ContentName, &entry))
         return;
@@ -502,6 +503,8 @@ void ZipFile::GetUncompressedContent(
 std::vector<std::string> ZipFile::GetDirectory() const
 {
     std::vector<std::string> dir;
+    if (!m_bValid)
+        return dir;
     IterateEntries(m_pStream,
                    [&dir](const CentralDirectoryEntry& entry)
                    {
@@ -515,7 +518,7 @@ std::vector<std::string> ZipFile::GetDirectory() const
 /** Convenience query function */
 bool ZipFile::HasContent(const std::string &ContentName) const
 {
-    return FindEntry(m_pStream, ContentName);
+    return m_bValid && FindEntry(m_pStream, ContentName);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

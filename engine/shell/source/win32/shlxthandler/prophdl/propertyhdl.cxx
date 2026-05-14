@@ -88,7 +88,7 @@ HRESULT STDMETHODCALLTYPE CPropertyHdl::QueryInterface(REFIID riid, void __RPC_F
     else if (IID_IPropertyStoreCapabilities == riid)
     {
         OutputDebugStringFormatW( L"CPropertyHdl: QueryInterface (IID_IPropertyStoreCapabilities)\n" );
-        IUnknown* pUnk = static_cast<IPropertyStore*>(this);
+        IUnknown* pUnk = static_cast<IPropertyStoreCapabilities*>(this);
         pUnk->AddRef();
         *ppvObject = pUnk;
         return S_OK;
@@ -117,7 +117,7 @@ ULONG STDMETHODCALLTYPE CPropertyHdl::Release()
 {
     LONG refcnt = InterlockedDecrement( &m_RefCnt );
 
-    if ( 0 == m_RefCnt )
+    if ( 0 == refcnt )
         delete this;
 
     return refcnt;
@@ -199,8 +199,12 @@ HRESULT STDMETHODCALLTYPE CPropertyHdl::Initialize( IStream *pStream, DWORD grfM
 
     if ( !m_pCache )
     {
-        if ( FAILED( PSCreateMemoryPropertyStore( IID_PPV_ARGS( &m_pCache ) ) ) )
-            OutputDebugStringFormatW( L"CPropertyHdl::Initialize: PSCreateMemoryPropertyStore failed" );
+        HRESULT hr = PSCreateMemoryPropertyStore( IID_PPV_ARGS( &m_pCache ) );
+        if ( FAILED( hr ) || !m_pCache )
+        {
+            OutputDebugStringFormatW( L"CPropertyHdl::Initialize: PSCreateMemoryPropertyStore failed\n" );
+            return FAILED( hr ) ? hr : E_FAIL;
+        }
 
         BufferStream tmpStream(pStream);
 
@@ -276,6 +280,7 @@ void CPropertyHdl::LoadProperties( CMetaInfoReader *pMetaInfoReader )
 {
     OutputDebugStringFormatW( L"CPropertyHdl: LoadProperties\n" );
     PROPVARIANT propvarValues;
+    PropVariantInit( &propvarValues );
 
     for ( UINT i = 0; i < UINT(gPropertyTableSize); ++i )
     {
@@ -292,6 +297,7 @@ void CPropertyHdl::LoadProperties( CMetaInfoReader *pMetaInfoReader )
             }
         }
     }
+    PropVariantClear( &propvarValues );
 }
 
 //                              CClassFactory

@@ -85,11 +85,20 @@
           </uap:FileTypeAssociation>
         </uap:Extension>
         <uap:Extension Category="windows.fileTypeAssociation">
-          <uap:FileTypeAssociation Name="calc_ods_flatxml">
+          <uap3:FileTypeAssociation Name="calc_ods_flatxml">
             <uap:DisplayName>OpenDocument Spreadsheet (Flat XML)</uap:DisplayName>
             <uap:Logo>Assets/spreadsheet.png</uap:Logo>
             <uap:SupportedFileTypes>
               <uap:FileType>.fods</uap:FileType>
+            </uap:SupportedFileTypes>
+            <desktop2:DesktopPropertyHandler Clsid="90B47FF6-F60A-43CD-9BAD-1BD9F5CA2E70"/>
+          </uap3:FileTypeAssociation>
+        </uap:Extension>
+        <uap:Extension Category="windows.fileTypeAssociation">
+          <uap:FileTypeAssociation Name="calc_xml_open_with">
+            <uap:DisplayName>XML Document</uap:DisplayName>
+            <uap:Logo>Assets/spreadsheet.png</uap:Logo>
+            <uap:SupportedFileTypes>
               <uap:FileType>.xml</uap:FileType>
             </uap:SupportedFileTypes>
           </uap:FileTypeAssociation>
@@ -169,13 +178,14 @@
           </uap:FileTypeAssociation>
         </uap:Extension>
         <uap:Extension Category="windows.fileTypeAssociation">
-          <uap:FileTypeAssociation Name="draw_odg_flatxml">
+          <uap3:FileTypeAssociation Name="draw_odg_flatxml">
             <uap:DisplayName>OpenDocument Drawing (Flat XML)</uap:DisplayName>
             <uap:Logo>Assets/drawing.png</uap:Logo>
             <uap:SupportedFileTypes>
               <uap:FileType>.fodg</uap:FileType>
             </uap:SupportedFileTypes>
-          </uap:FileTypeAssociation>
+            <desktop2:DesktopPropertyHandler Clsid="90B47FF6-F60A-43CD-9BAD-1BD9F5CA2E70"/>
+          </uap3:FileTypeAssociation>
         </uap:Extension>
         <uap:Extension Category="windows.fileTypeAssociation">
           <uap:FileTypeAssociation Name="draw_staroffice_xml_draw">
@@ -276,13 +286,14 @@
           </uap:FileTypeAssociation>
         </uap:Extension>
         <uap:Extension Category="windows.fileTypeAssociation">
-          <uap:FileTypeAssociation Name="impress_odp_flatxml">
+          <uap3:FileTypeAssociation Name="impress_odp_flatxml">
             <uap:DisplayName>OpenDocument Presentation (Flat XML)</uap:DisplayName>
             <uap:Logo>Assets/presentation.png</uap:Logo>
             <uap:SupportedFileTypes>
               <uap:FileType>.fodp</uap:FileType>
             </uap:SupportedFileTypes>
-          </uap:FileTypeAssociation>
+            <desktop2:DesktopPropertyHandler Clsid="90B47FF6-F60A-43CD-9BAD-1BD9F5CA2E70"/>
+          </uap3:FileTypeAssociation>
         </uap:Extension>
         <uap:Extension Category="windows.fileTypeAssociation">
           <uap:FileTypeAssociation Name="office_open_xml_presentation">
@@ -480,13 +491,14 @@
           </uap:FileTypeAssociation>
         </uap:Extension>
         <uap:Extension Category="windows.fileTypeAssociation">
-          <uap:FileTypeAssociation Name="writer_odt_flatxml">
+          <uap3:FileTypeAssociation Name="writer_odt_flatxml">
             <uap:DisplayName>OpenDocument Text (Flat XML)</uap:DisplayName>
             <uap:Logo>Assets/text.png</uap:Logo>
             <uap:SupportedFileTypes>
               <uap:FileType>.fodt</uap:FileType>
             </uap:SupportedFileTypes>
-          </uap:FileTypeAssociation>
+            <desktop2:DesktopPropertyHandler Clsid="90B47FF6-F60A-43CD-9BAD-1BD9F5CA2E70"/>
+          </uap3:FileTypeAssociation>
         </uap:Extension>
         <uap:Extension Category="windows.fileTypeAssociation">
           <uap:FileTypeAssociation Name="writer_rich_text_format">

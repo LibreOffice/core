@@ -19,8 +19,8 @@
 
 #pragma once
 
-#include <shlobj.h>
+#include <thumbcache.h>
 
-IExtractImage* CreateThumbviewer();
+IThumbnailProvider* CreateThumbviewer();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
