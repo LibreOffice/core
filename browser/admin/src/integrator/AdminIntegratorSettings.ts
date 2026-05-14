@@ -983,6 +983,45 @@ class SettingIframe {
 				defaultTab.click();
 			}
 		}, 0);
+
+		this.installSettingsHooks();
+	}
+
+	private _updateZoomDropdownState() {
+		const smartZoomCheckbox: HTMLInputElement | null = document.querySelector(
+			'#common-smartZoom-input',
+		);
+		if (!smartZoomCheckbox) {
+			console.error('#common-smartZoom-input does not exist!');
+			return;
+		}
+
+		const defaultZoomDropdown: HTMLSelectElement | null =
+			document.querySelector('#common-defaultZoom-select');
+		if (!defaultZoomDropdown) {
+			console.error('#common-defaultZoom-select does not exist!');
+			return;
+		}
+
+		const updateDropdownState = () => {
+			defaultZoomDropdown.disabled = smartZoomCheckbox.checked;
+		};
+
+		smartZoomCheckbox.addEventListener('change', () => {
+			updateDropdownState();
+		});
+
+		updateDropdownState();
+	}
+
+	/*
+	 * this is where we setup state relations between various widgets. like
+	 * "disable that control when the checkbox is checked...". by the time this
+	 * function is called, all the controls exist, so we can query them here and
+	 * setup listeners...
+	 */
+	public installSettingsHooks() {
+		this._updateZoomDropdownState();
 	}
 
 	private createBrowserSettingTabsNav(
