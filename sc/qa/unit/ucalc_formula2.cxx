@@ -5290,6 +5290,72 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testDeleteMasterDeletesWholeMatrix)
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(TestFormula2, testSpillMatrixUndoRedoRefCellBlocker)
+{
+    // Writing a blocker into a reference cell of an expanded matrix
+    // collapses the master to #SPILL!. Undoing that write must restore
+    // the reference cell and re-expand the matrix. The blocker no
+    // longer exists so the master should be back to its full result.
+    // Redo must re-blocker and re-collapse.
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+
+    m_pDoc->SetValue(ScAddress(1, 0, 0), 10.0);
+    m_pDoc->SetValue(ScAddress(1, 1, 0), 20.0);
+    m_pDoc->SetValue(ScAddress(1, 2, 0), 30.0);
+    m_pDoc->SetValue(ScAddress(1, 3, 0), 40.0);
+
+    ScDocFunc& rFunc = m_xDocShell->GetDocFunc();
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
+    aMark.SelectOneTable(0);
+
+    // UNIQUE(B1:B4) expanded into A1:A4.
+    rFunc.EnterMatrix(ScRange(0, 0, 0, 0, 3, 0), &aMark, nullptr, u"=UNIQUE(B1:B4)"_ustr, true,
+                      false, OUString(), formula::FormulaGrammar::GRAM_DEFAULT, true);
+
+    ScFormulaCell* pFormulaCell = m_pDoc->GetFormulaCell(ScAddress(0, 0, 0));
+    CPPUNIT_ASSERT(pFormulaCell);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(FormulaError::NONE), sal_Int32(pFormulaCell->GetErrCode()));
+
+    auto assertExpanded = [&](const char* label) {
+        SCCOL nCols = 0;
+        SCROW nRows = 0;
+        pFormulaCell->GetMatColsRows(nCols, nRows);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(label, sal_Int32(FormulaError::NONE),
+                                     sal_Int32(pFormulaCell->GetErrCode()));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(label, SCCOL(1), nCols);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(label, SCROW(4), nRows);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(label, 10.0, m_pDoc->GetValue(ScAddress(0, 0, 0)));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(label, 20.0, m_pDoc->GetValue(ScAddress(0, 1, 0)));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(label, 30.0, m_pDoc->GetValue(ScAddress(0, 2, 0)));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(label, 40.0, m_pDoc->GetValue(ScAddress(0, 3, 0)));
+    };
+
+    assertExpanded("Initial state");
+
+    // Add a blocker into a reference cell.
+    bool bDummy = false;
+    rFunc.SetNormalString(bDummy, ScAddress(0, 3, 0), u"blocker"_ustr, /*bApi*/ true);
+
+    // Master should collapse.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(FormulaError::Spill), sal_Int32(pFormulaCell->GetErrCode()));
+    CPPUNIT_ASSERT_EQUAL(u"blocker"_ustr, m_pDoc->GetString(ScAddress(0, 3, 0)));
+
+    SfxUndoManager* pUndoManager = m_pDoc->GetUndoManager();
+    CPPUNIT_ASSERT(pUndoManager);
+
+    // Undo - matrix must be fully expanded again, blocker gone.
+    pUndoManager->Undo();
+    assertExpanded("After Undo");
+
+    // Redo - blocker back, master collapsed.
+    pUndoManager->Redo();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(FormulaError::Spill), sal_Int32(pFormulaCell->GetErrCode()));
+    CPPUNIT_ASSERT_EQUAL(u"blocker"_ustr, m_pDoc->GetString(ScAddress(0, 3, 0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_TEST_FIXTURE(TestFormula2, testSpillMatrixContractionOnValueChange)
 {
     // A dynamic array formula shrinks when its source data produces fewer

@@ -262,7 +262,16 @@ bool ScDocument::IsMatrixSpillBlocked(const ScRange& rRange,
         {
             if (nCol < rOrigin.Col() + nDeclCols && nRow < rOrigin.Row() + nDeclRows)
                 continue; // inside the already-declared sub-range
-            if (const_cast<ScDocument*>(this)->HasData(nCol, nRow, rOrigin.Tab()))
+            ScRefCellValue aCell(const_cast<ScDocument&>(*this),
+                                 ScAddress(nCol, nRow, rOrigin.Tab()));
+            // A reference cell already belongs to a matrix - it's never a
+            // foreign blocker. This also lets the spill check recover when
+            // Undo restores reference cells inside a now collapsed master,
+            // which should re-expand on the next reconciliation.
+            if (aCell.getType() == CELLTYPE_FORMULA
+                && aCell.getFormula()->GetMatrixFlag() == ScMatrixMode::Reference)
+                continue;
+            if (!aCell.isEmpty())
                 return true;
         }
     }
