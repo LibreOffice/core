@@ -811,7 +811,7 @@ body {
 .cool-annotation-textarea {
 	font-family: var(--cool-font) !important;
 	font-size: var(--default-font-size);
-	border: 1px solid var(--color-text-lighter);
+	border: 1px solid var(--color-text-light);
 	background-color: var(--color-background-dark);
 	color: var(--color-main-text);
 	overflow-x: hidden;
@@ -1088,7 +1088,7 @@ body {
 .cool-bar a.leaflet-disabled {
 	cursor: default;
 	background-color: var(--color-background-lighter);
-	color: var(--color-text-lighter);
+	color: var(--color-text-light);
 }
 
 .cool-bar a {

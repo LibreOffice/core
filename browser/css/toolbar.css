@@ -189,7 +189,7 @@
 }
 
 #toolbar-down .ToolbarStatusInactive {
-	color: var(--color-text-lighter);
+	color: var(--color-text-light);
 	box-shadow: inset 0px 0px 0px 10px var(--color-background-dark), 0px 0px 0px 2px var(--color-background-dark), 4px 0px 0px 1px var(--color-background-lighter), -4px 0px 0px 1px #fff, 0px 0px 0px 5px var(--color-background-lighter);
 }
 #presentation-toolbar {
@@ -1696,7 +1696,7 @@ menu-entry-with-icon.padding-left + menu-entry-icon.width */
 	padding-inline-start: 8px;
 	font-size: var(--default-font-size);
 	padding-block-end: 4px;
-	color: var(--color-text-lighter);
+	color: var(--color-text-light);
 }
 
 .user-list-item.selected-user .user-list-item--name {

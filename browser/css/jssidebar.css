@@ -396,7 +396,7 @@ button#button2.ui-pushbutton.jsdialog.sidebar {
 	color: var(--color-primary);
 }
 [data-theme='dark'] #NavigatorPanel div.selected {
-	color: var(--color-text-lighter);
+	color: var(--color-text-light);
 }
 
 #NavigatorPanel .ui-treeview-entry,
@@ -623,7 +623,7 @@ span.jsdialog.sidebar.ui-treeview-notexpandable {
 
 #QuickFindPanel .ui-treeview-cell-text-content.page-divider {
 	/* TODO The treeview entry should have disabled listeners for these items */
-	color: var(--color-text-lighter);
+	color: var(--color-text-light);
 }
 
 /* search field box */

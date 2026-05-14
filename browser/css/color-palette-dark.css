@@ -9,7 +9,8 @@
 	--color-main-text: #e8e8e8;
 	--color-text-dark: #e8e8e8;  /* select */
 	--color-text-darker: #c0bfbc;  /* hover */
-	--color-text-lighter: #fff; /* secondard text, disabled */
+	--color-text-light: #fff; /* secondard text, disabled */
+	--color-text-lighter: #f8f9fa;
 	--color-status-badge: #d6d6d6;
 	--color-slideshow: #d6d6d6;
 	--color-date-text: #d6d6d6;

@@ -240,7 +240,7 @@
 
 .backstage-content-description {
 	font-size: var(--default-font-size);
-	color: var(--color-text-lighter);
+	color: var(--color-text-light);
 	margin-bottom: 24px;
 	line-height: 1.5;
 	margin-top: 0px;
@@ -436,7 +436,7 @@
 .template-grid-empty {
 	grid-column: 1 / -1;
 	text-align: center;
-	color: var(--color-text-lighter);
+	color: var(--color-text-light);
 	padding: 24px 0;
 	font-size: 14px;
 }
@@ -484,7 +484,7 @@
 
 .format-description {
 	font-size: calc(var(--default-font-size) - 1px);
-	color: var(--color-text-lighter);
+	color: var(--color-text-light);
 	margin-top: 4px;
 }
 
@@ -539,7 +539,7 @@
 
 .property-label {
 	font-size: var(--medium-font-size);
-	color: var(--color-text-lighter);
+	color: var(--color-text-light);
 	min-width: 6rem;
 }
 
@@ -603,7 +603,7 @@
 
 .backstage-recent-document-time-cell {
 	padding-left: 32px;
-	color: var(--color-text-lighter);
+	color: var(--color-text-light);
 	font-size: var(--default-font-size);
 	font-weight: 400;
 }
@@ -633,7 +633,7 @@
 
 .backstage-recent-document-path-text {
 	font-size: calc(var(--default-font-size) - 1px);
-	color: var(--color-text-lighter);
+	color: var(--color-text-light);
 	font-weight: 400;
 	overflow: hidden;
 	text-overflow: ellipsis;

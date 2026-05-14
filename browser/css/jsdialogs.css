@@ -687,7 +687,7 @@ body button:not(.ui-corner-all):not(.button-primary):not(.unobutton):not(.form-f
 
 .ui-linkbutton:hover {
 	cursor: pointer;
-	color: var(--color-text-lighter) !important;
+	color: var(--color-text-light) !important;
 }
 
 /* TreeView */
@@ -755,7 +755,7 @@ body button:not(.ui-corner-all):not(.button-primary):not(.unobutton):not(.form-f
 .ui-treeview-entry div.disabled,
 .ui-treeview-entry.disabled {
 	background-color: var(--color-background-dark) !important;
-	color: var(--color-text-lighter) !important;
+	color: var(--color-text-light) !important;
 	pointer-events: none;
 }
 
@@ -765,7 +765,7 @@ body button:not(.ui-corner-all):not(.button-primary):not(.unobutton):not(.form-f
 }
 
 .ui-treeview.empty {
-	color: var(--color-text-lighter);
+	color: var(--color-text-light);
 }
 
 .ui-treeview-cell.with-sub-dialog {
@@ -1040,7 +1040,7 @@ input[type='checkbox']:checked.autofilter, .jsdialog input[type='checkbox']:chec
 }
 
 .context-menu-item.context-menu-disabled {
-	color: var(--color-text-lighter);
+	color: var(--color-text-light);
 	background-color: var(--color-background-lighter);
 }
 
@@ -1183,7 +1183,7 @@ img.context-menu-icon {
 }
 
 .jsdialog input[type='radio'][disabled='disabled'] ~ label {
-	color: var(--color-text-lighter);
+	color: var(--color-text-light);
 }
 
 /* text label */
@@ -1247,7 +1247,7 @@ img.context-menu-icon {
 
 .jsdialog.spinfieldcontainer[disabled] {
 	border: 1px solid var(--color-border-lighter);
-	color: var(--color-text-lighter);
+	color: var(--color-text-light);
 	background: var(--color-background-lighter);
 }
 
@@ -1292,11 +1292,11 @@ img.context-menu-icon {
 }
 
 .spinfieldbutton-up::after {
-	border-bottom: 5px solid var(--color-text-lighter);
+	border-bottom: 5px solid var(--color-text-light);
 }
 
 .spinfieldbutton-down::after {
-	border-top: 5px solid var(--color-text-lighter);
+	border-top: 5px solid var(--color-text-light);
 }
 
 .spinfieldcontainer:not([disabled]):hover .spinfieldbutton-up::after {
@@ -1616,7 +1616,7 @@ img.context-menu-icon {
 .ui-overflow-group-label {
 	font-family: var(--cool-font);
 	font-size: var(--overflow-group-font-size);
-	color: var(--color-text-lighter);
+	color: var(--color-text-light);
 	flex-grow: 1;
 	text-align: center;
 }
@@ -2075,11 +2075,11 @@ button.has-img img {
 
 .jsdialog.menubutton[disabled] {
 	background-color: transparent !important;
-	color: var(--color-text-lighter) !important;
+	color: var(--color-text-light) !important;
 }
 
 .jsdialog.menubutton[disabled] .arrow {
-	border-top-color: var(--color-text-lighter);
+	border-top-color: var(--color-text-light);
 }
 
 /* toolbox */

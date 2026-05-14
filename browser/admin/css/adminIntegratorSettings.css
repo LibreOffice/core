@@ -18,7 +18,7 @@
   --border-radius-element: 8px;
   --default-clickable-area: 34px;
   --default-grid-baseline: 4px;
-  --color-text-lighter: var(--settings-text-maxcontrast);
+  --color-text-light: var(--settings-text-maxcontrast);
   --color-scrollbar: var(--settings-border-contrast) transparent;
 }
 
@@ -431,7 +431,7 @@ ul {
   transform: translateY(-50%);
   pointer-events: none;
   font-size: 0.8em;
-  color: var(--color-text-lighter);
+  color: var(--color-text-light);
 }
 
 .dic-dropdown-container .open {
@@ -466,7 +466,7 @@ ul {
 
 .dic-dropdown-description {
   font-size: 0.8em;
-  color: var(--color-text-lighter);
+  color: var(--color-text-light);
   line-height: 1.2;
 }
 

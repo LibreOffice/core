@@ -48,7 +48,7 @@ html[dir='rtl'] .sub-menu-arrow {
 /* Permisson mode status */
 .mobile .ui-badge {
 	background-color: transparent;
-	color: var(--color-text-lighter);
+	color: var(--color-text-light);
 }
 .status-edit-mode {
 	display: none;
@@ -415,7 +415,7 @@ textarea.cool-annotation-textarea {
 /* Related to jsdialogs.css */
 /*   - macros */
 #mobile-wizard-content #MacroWarnMedium p {
-	color: var(--color-text-lighter);
+	color: var(--color-text-light);
 }
 #mobile-wizard-content #MacroWarnMedium p:first-child {
 	color: #333;
@@ -464,7 +464,7 @@ textarea.cool-annotation-textarea {
 	line-height: 11px;
 	display: block;
 	padding-left: 8px;
-	color: var(--color-text-lighter);
+	color: var(--color-text-light);
 	font-size: 22px;
 }
 

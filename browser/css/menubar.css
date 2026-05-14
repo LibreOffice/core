@@ -67,7 +67,7 @@
 	width: auto;
 	flex: 0 0 auto;
 	font-size: var(--default-font-size);
-	color: var(--color-text-lighter);
+	color: var(--color-text-light);
 }
 
 .main-nav.hasnotebookbar .document-title:focus-within > label[for='document-name-input'] {
@@ -263,7 +263,7 @@ nav.hasnotebookbar [id^='save'].saved::after {
 }
 .lo-menu > li .disabled {
 	background: var(--color-main-background);
-	color: var(--color-text-lighter);
+	color: var(--color-text-light);
 }
 .lo-menu > li > a:hover, .lo-menu > li > a:focus, .lo-menu > li > a:active, .lo-menu > li > a.highlighted {
 	background: var(--color-background-darker);
@@ -308,7 +308,7 @@ nav.hasnotebookbar [id^='save'].saved::after {
 .lo-menu ul a > span.shortcut {
 	margin-inline-start: auto;
 	padding-inline-start: 16px;
-	color: var(--color-text-lighter);
+	color: var(--color-text-light);
 }
 .lo-menu ul > li {
 	border-left: 0;
@@ -434,7 +434,7 @@ nav.hasnotebookbar [id^='save'].saved::after {
 }
 
 #menu-last-mod a {
-	color: var(--color-text-lighter);
+	color: var(--color-text-light);
 	padding: 8px 15px 7px;
 	z-index: 400;
 	border: 1px solid transparent;
@@ -446,7 +446,7 @@ nav.hasnotebookbar [id^='save'].saved::after {
 
 /* For classic mode */
 #main-menu .locking-disabled, #menu-nb-hamburger .locking-disabled {
-	color: var(--color-text-lighter) !important;
+	color: var(--color-text-light) !important;
 	background-color: var(--color-background-lighter);
 	box-shadow: inset 0 0 2px 0 rgba(0,0,0,0.2);
 	background: url('images/lc_lock.svg') right top / 24px no-repeat

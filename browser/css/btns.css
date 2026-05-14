@@ -1,7 +1,7 @@
 /* For btns hover status see device-desktop.css */
 
 .jsdialog:not(.sidebar) *[disabled]:not(.spinfieldbutton-up):not(.spinfieldbutton-down):not(.spinfield) {
-	color: var(--color-text-lighter) !important;
+	color: var(--color-text-light) !important;
 	background: var(--color-background-lighter);
 }
 
@@ -197,7 +197,7 @@ button.jsdialog[disabled] img {
 }
 
 .jsdialog.ui-button-box button[disabled='disabled'] {
-	color: var(--color-text-lighter) !important;
+	color: var(--color-text-light) !important;
 	background-color: var(--color-background-lighter) !important;
 	border-color: var(--color-border-lighter) !important;
 }
@@ -208,7 +208,7 @@ button.jsdialog[disabled] img {
 }
 
 .ui-pushbutton[disabled] {
-	color: var(--color-text-lighter) !important;
+	color: var(--color-text-light) !important;
 	background-color: var(--color-background-lighter) !important;
 	border: 1px solid var(--color-border-lighter) !important;
 }
