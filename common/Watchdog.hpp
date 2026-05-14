@@ -38,7 +38,7 @@ class Watchdog final : private std::thread
     std::unique_ptr<std::thread> _thread;
     std::atomic<bool> _exit;
 
-    static const uint64_t MsToTrigger = 100;
+    static const uint64_t MsToTrigger = 75;
 
 public:
     Watchdog()
