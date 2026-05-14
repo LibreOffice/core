@@ -346,12 +346,19 @@ def main():
     subprocess.run([makepri_exe, 'new', '/pr', path2win(assetsrootdir), '/cf', path2win(os.path.join(scriptPath, 'MakePri.xml')), '/in', 'CollaboraProductivityLtd.CollaboraOfficeDesktop', '/of', path2win(pri_file)]).check_returncode()
 
     fileBaseName = args.distname + '.' + args.ver + '.' + args.arch + '.'
-    appxName = os.path.join(workdir, fileBaseName + 'appx')
-    appxsymName = os.path.join(workdir, fileBaseName + 'appxsym')
-    appxuploadName = os.path.join(args.outdir, fileBaseName + 'appxupload')
 
-    # now build the APPX. This depends on MakeAppx.exe being in the $PATH if no winkit in inifile
+    # now build the package. This depends on MakeAppx.exe being in the $PATH if no winkit in inifile
     subprocess.run([makeappx_exe, 'build', '/f', path2win(packaginglayout_xml), '/op', path2win(workdir)]).check_returncode()
+
+    # MakeAppx.exe picks the output extension from the manifest: a manifest
+    # referencing 10.0.17763+ schema (com / desktop2 namespaces, or that
+    # MinVersion) is written as .msix / .msixbundle; an older schema yields
+    # .appx / .appxbundle. Same container in either case; pick whichever
+    # filename MakeAppx actually produced.
+    pkgExt = 'msix' if os.path.exists(os.path.join(workdir, fileBaseName + 'msix')) else 'appx'
+    appxName = os.path.join(workdir, fileBaseName + pkgExt)
+    appxsymName = os.path.join(workdir, fileBaseName + pkgExt + 'sym')
+    appxuploadName = os.path.join(args.outdir, fileBaseName + pkgExt + 'upload')
 
     if args.pfx:
         pfxWin = path2win(args.pfx)
