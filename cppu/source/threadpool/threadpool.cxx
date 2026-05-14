@@ -179,7 +179,7 @@ namespace cppu_threadpool
         std::scoped_lock guard( m_mutex );
 
         ThreadIdHashMap::iterator ii = m_mapQueue.find( aThreadId );
-        OSL_ASSERT( ii != m_mapQueue.end() );
+        assert( ii != m_mapQueue.end() );
 
         if( bAsynchron )
         {
@@ -237,7 +237,7 @@ namespace cppu_threadpool
             {
                 m_mapQueue[ aThreadId ] = std::pair < JobQueue * , JobQueue * > ( nullptr , nullptr );
                 ii = m_mapQueue.find( aThreadId );
-                OSL_ASSERT( ii != m_mapQueue.end() );
+                assert( ii != m_mapQueue.end() );
             }
 
             if( bAsynchron )
