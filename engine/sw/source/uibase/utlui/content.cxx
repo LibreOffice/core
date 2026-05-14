@@ -579,10 +579,25 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
                 if (nLevel >= m_nOutlineLevel)
                     continue;
                 double nYPos = m_bAlphabeticSort ? 0 : static_cast<double>(getYPos(*pNode));
-                if (nEndOfExtrasIndex >= pNode->GetIndex() && pNode->GetFlyFormat())
+                const SwFrameFormat* pFlyFormat = pNode->GetFlyFormat();
+                if (nEndOfExtrasIndex >= pNode->GetIndex() && pFlyFormat)
                 {
-                    nYPos += nOutlinesInFramesIndexAdjustment;
-                    nOutlinesInFramesIndexAdjustment += 0.00001;
+                    // For fly nodes getYPos() returns their anchor node's nYPos
+                    const SwFormatAnchor& rAnchor = pFlyFormat->GetAnchor();
+                    const SwPosition* pAnchorPos = rAnchor.GetContentAnchor();
+                    if (rAnchor.GetAnchorId() == RndStdIds::FLY_AS_CHAR && pAnchorPos
+                        && pAnchorPos->GetContentIndex() == 0)
+                    {
+                        // An inline (as-char) fly anchored at the start of its
+                        // anchor paragraph renders before the paragraph's own
+                        // text. Place its outline entry before the anchor's nYPos.
+                        nYPos -= 0.0001;
+                    }
+                    else
+                    {
+                        nYPos += nOutlinesInFramesIndexAdjustment;
+                        nOutlinesInFramesIndexAdjustment += 0.00001;
+                    }
                 }
 
                 auto pCnt(std::make_unique<SwOutlineContent>(this, aEntry, i, nLevel,

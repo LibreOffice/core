@@ -2273,6 +2273,22 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testTdf170846_2)
     assertXPath(pXmlDoc, "//page[2]//tab", 3); // Three tables on page 2
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testTocInlineHeadingOrder)
+{
+    createSwDoc("toc-inline-heading-order.fodt");
+    dispatchCommand(mxComponent, u".uno:UpdateAllIndexes"_ustr, {});
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    // The TOC is the second section in the body. The body section's three
+    // txt children carry the entries in document order.
+    assertXPath(pXmlDoc, "/root/page[1]/body/section[2]/txt[1]/SwParaPortion/SwLineLayout",
+                "portion", u"Foo");
+    assertXPath(pXmlDoc, "/root/page[1]/body/section[2]/txt[2]/SwParaPortion/SwLineLayout",
+                "portion", u"Bar");
+    assertXPath(pXmlDoc, "/root/page[1]/body/section[2]/txt[3]/SwParaPortion/SwLineLayout",
+                "portion", u" boo");
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testInlineTableShiftDown)
 {
     createSwDoc("floattable-center-shift-down.docx");

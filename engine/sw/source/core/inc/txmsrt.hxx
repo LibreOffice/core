@@ -162,6 +162,7 @@ struct SwTOXSortTabBase
 
 private:
     bool m_bValidText;
+    bool m_bAnchoredAsChar; // used by SwTOXSortTabBase::sort_lt to break ties
     TextAndReading m_aSort;
 
     virtual TextAndReading GetText_Impl(SwRootFrame const* pLayout) const = 0;
