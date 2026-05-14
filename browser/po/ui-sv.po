@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-11 14:06+0200\n"
-"PO-Revision-Date: 2026-05-11 13:37+0000\n"
+"PO-Revision-Date: 2026-05-12 14:11+0000\n"
 "Last-Translator: Leif-Jöran Olsson <info@friprogramvarusyndikatet.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/sv/>\n"
@@ -1057,16 +1057,16 @@ msgstr "Ljust"
 
 #: src/app/TableStylesService.ts:103
 msgid "Medium"
-msgstr ""
+msgstr "Mellan"
 
 #: src/app/TableStylesService.ts:105
 msgid "Dark"
-msgstr ""
+msgstr "Mörkt"
 
 #: src/app/TableStylesService.ts:107
 #: src/control/jsdialog/Widget.ColorPicker.ts:334
 msgid "Custom"
-msgstr ""
+msgstr "Anpassad"
 
 #: src/app/TableStylesService.ts:195 src/app/TableStylesService.ts:207
 #: src/app/TableStylesService.ts:209
@@ -1136,9 +1136,8 @@ msgid "Resolved"
 msgstr "Löst"
 
 #: src/canvas/sections/CommentSection.ts:574
-#, fuzzy
 msgid "Removed"
-msgstr "Ta bort"
+msgstr "Borttagen"
 
 #: src/canvas/sections/CommentSection.ts:1160
 #: src/control/jsdialog/Widget.Comment.ts:177
@@ -1245,7 +1244,7 @@ msgstr "Automatisk färg"
 #: src/control/Control.AboutDialog.ts:89
 #: src/control/jsdialog/Widget.TreeView.ts:786
 msgid "(opens in new tab)"
-msgstr ""
+msgstr "(öppnas i ny flik)"
 
 #: src/control/Control.AboutDialog.ts:148
 msgid "Served by: "
@@ -2167,7 +2166,7 @@ msgstr "PDF-dokument (.pdf)"
 #: src/control/Control.NotebookbarBuilder.js:395
 #: src/control/Control.NotebookbarBuilder.js:596
 msgid "EPUB (.epub)"
-msgstr "EPUB (.epub)"
+msgstr "EPub (.epub)"
 
 #: src/control/Control.Menubar.ts:109 src/control/Control.UIManager.ts:393
 msgid "Rename Document"
@@ -2759,7 +2758,7 @@ msgstr "Tabell design"
 
 #: src/control/Notebookbar.CalcTableTab.ts:72
 msgid "Table Options"
-msgstr ""
+msgstr "Tabellalternativ"
 
 #: src/control/Notebookbar.CalcTableTab.ts:85
 msgid "Header Row"
@@ -2966,7 +2965,7 @@ msgstr "Bild"
 #: src/control/Control.NotebookbarImpress.js:143
 #: src/control/Control.NotebookbarWriter.js:103
 msgid "Chart"
-msgstr ""
+msgstr "Diagram"
 
 #: src/control/Control.NotebookbarCalc.js:99
 #: src/control/Control.NotebookbarDraw.js:122
@@ -3035,7 +3034,7 @@ msgstr "Urklipp"
 #: src/control/Control.NotebookbarWriter.js:648
 #: src/control/Control.TopToolbar.js:148
 msgid "Clone Formatting (double click to keep active)"
-msgstr ""
+msgstr "Klona formatering (dubbelklicka för att hålla aktiv)"
 
 #: src/control/Control.NotebookbarCalc.js:456
 #: src/control/Control.NotebookbarDraw.js:649
@@ -3044,6 +3043,7 @@ msgstr ""
 #: src/control/Control.TopToolbar.js:148
 msgid "Clone Formatting is active (click again or press Esc to exit)"
 msgstr ""
+"Klona formatering är aktiv (klicka igen eller tryck på Esc för att avsluta)"
 
 #: src/control/Control.NotebookbarCalc.js:492
 #: src/control/Control.NotebookbarDraw.js:685
@@ -3455,7 +3455,7 @@ msgstr "Master"
 
 #: src/control/Control.NotebookbarImpress.js:479
 msgid "Start Slide Show"
-msgstr ""
+msgstr "Starta bildspel"
 
 #: src/control/Control.NotebookbarImpress.js:484
 msgid "From Beginning"
@@ -3475,7 +3475,7 @@ msgstr "Helskärm, med början på den här bilden"
 
 #: src/control/Control.NotebookbarImpress.js:508
 msgid "Present"
-msgstr ""
+msgstr "Nuvarande"
 
 #: src/control/Control.NotebookbarImpress.js:514
 msgid "Present in Window"
@@ -3512,7 +3512,7 @@ msgstr "Visa bilder medan presentatören flyttar dem framåt"
 
 #: src/control/Control.NotebookbarImpress.js:552
 msgid "Set Up"
-msgstr ""
+msgstr "Ställ in"
 
 #: src/control/Control.NotebookbarImpress.js:679
 msgid "Slide Views"
@@ -3672,28 +3672,28 @@ msgstr "Klistra in"
 
 #: src/control/Control.PartsPreview.js:422
 msgid "Add Section"
-msgstr ""
+msgstr "Lägga till avsnitt"
 
 #: src/control/Control.PartsPreview.js:564
 #: src/control/Control.PartsPreview.js:637
 msgid "Rename Section"
-msgstr ""
+msgstr "Byt namn på avsnitt"
 
 #: src/control/Control.PartsPreview.js:571
 msgid "Move Section Up"
-msgstr ""
+msgstr "Flytta avsnittet uppåt"
 
 #: src/control/Control.PartsPreview.js:579
 msgid "Move Section Down"
-msgstr ""
+msgstr "Flytta avsnittet neråt"
 
 #: src/control/Control.PartsPreview.js:586
 msgid "Remove Section"
-msgstr ""
+msgstr "Ta bort avsnitt"
 
 #: src/control/Control.PartsPreview.js:638
 msgid "Enter new section name:"
-msgstr ""
+msgstr "Ange nytt avsnittsnamn:"
 
 #: src/control/Control.SaveState.ts:49
 msgid "Saving"
@@ -3890,11 +3890,11 @@ msgstr "Antal i markering"
 
 #: src/control/Control.StatusBar.js:267
 msgid "Previous Page"
-msgstr ""
+msgstr "Föregående sida"
 
 #: src/control/Control.StatusBar.js:269
 msgid "Next Page"
-msgstr ""
+msgstr "Nästa sida"
 
 #: src/control/Control.StatusBar.js:275
 msgid "Zoom to Fit Page Width"
@@ -3902,7 +3902,7 @@ msgstr "Zooma för att passa sidbredd"
 
 #: src/control/Control.StatusBar.js:280
 msgid "Status Bar Menu"
-msgstr ""
+msgstr "Statusmeny"
 
 #: src/control/Control.StatusBar.js:553
 msgid "The document is probably locked and has been opened as view-only"
@@ -4552,7 +4552,7 @@ msgstr "Sida vid sida"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1815
 msgid "Hidden"
-msgstr ""
+msgstr "Dolt"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1829
 msgid "All users"
@@ -4761,9 +4761,8 @@ msgid "Insert Comment"
 msgstr "Infoga kommentar"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2401
-#, fuzzy
 msgid "Insert Note"
-msgstr "Infoga datum"
+msgstr "Infoga anteckning"
 
 #: src/control/jsdialog/Util.SnackbarController.ts:122
 msgid "Dismiss"
@@ -4784,7 +4783,7 @@ msgstr "Automatisk"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:253
 msgid "Palette"
-msgstr ""
+msgstr "Palett"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:268
 msgid "Color palette"
@@ -4839,7 +4838,7 @@ msgstr "Markerat cellområde"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:44
 msgid "Cell Selection"
-msgstr ""
+msgstr "Cellurval"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:48
 msgid "Entering text mode"
@@ -4847,7 +4846,7 @@ msgstr "Textläge aktiverat"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:49
 msgid "Insert Mode"
-msgstr ""
+msgstr "Infogningsläge"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:54
 msgid "Selection Mode"
@@ -4864,7 +4863,7 @@ msgstr "Urval av funktioner"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:68
 msgid "Table Cell Functions"
-msgstr ""
+msgstr "Tabellcellsfunktioner"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:73
 msgid "Your changes have been saved"
@@ -5036,6 +5035,8 @@ msgstr "Servern stängs av"
 msgid ""
 "AI is not configured. Go to File > Options > View Settings to set it up."
 msgstr ""
+"AI-användning är inte konfigurerad. Gå till Fil > Alternativ > Visa "
+"inställningar för att konfigurera den."
 
 #: src/docdispatcher.ts:607
 msgid "Are you sure you want to delete this slide?"

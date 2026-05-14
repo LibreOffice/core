@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-11 14:06+0200\n"
-"PO-Revision-Date: 2026-03-11 14:40+0000\n"
+"PO-Revision-Date: 2026-05-12 14:12+0000\n"
 "Last-Translator: Leif-Jöran Olsson <info@friprogramvarusyndikatet.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/collabora-online/"
 "help/sv/>\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Translate Toolkit 3.6.0\n"
+"X-Generator: Weblate 2026.5-dev\n"
 
 #: html/cool-help.html%2Bdiv.h1:9-5
 msgid "Keyboard Shortcuts"
@@ -2058,6 +2058,8 @@ msgid ""
 "Status bar showing page number, word count, insert mode, selection mode, "
 "language, edit mode, navigation, zoom, and search"
 msgstr ""
+"Statusraden som visar sidnummer, ordräkning, infoga läge, urvalsläge, språk, "
+"redigeringsläge, navigering, zoom och sök"
 
 #: html/cool-help.html%2Bdiv.div.div.p:393-5
 msgid ""
@@ -2072,7 +2074,6 @@ msgstr ""
 "finns tre knappar precis bredvid sökrutan:"
 
 #: html/cool-help.html%2Bdiv.div.div.ul.li:395-7
-#, fuzzy
 msgid "Search backwards"
 msgstr "Sök bakåt"
 
@@ -2124,6 +2125,7 @@ msgstr ""
 msgid ""
 "Information bar showing page navigation arrows, zoom controls, and zoom level"
 msgstr ""
+"Informationsfält som visar sidnavigationspilar, zoomkontroller och zoomnivå"
 
 #: html/cool-help.html%2Bdiv.div.p:412-5
 msgid ""
@@ -2271,6 +2273,8 @@ msgid ""
 "Repair Document dialog listing past document states with columns for action "
 "type, author, and timestamp"
 msgstr ""
+"Dialogruta för repararera dokument som visar tidigare dokumenttillstånd med "
+"kolumner för åtgärdstyp, författare och tidsstämpel"
 
 #: html/cool-help.html%2Bdiv.div.div.p:432-5
 msgid ""
@@ -2306,6 +2310,8 @@ msgid ""
 "Idle document overlay with the message: Idle document - please click to "
 "reload and resume editing"
 msgstr ""
+"Överlager för inaktivt dokument med meddelandet: Inaktivt dokument - klicka "
+"för att ladda om och återuppta redigering"
 
 #: html/cool-help.html%2Bdiv.div.div.p:438-5
 msgid ""
@@ -2404,6 +2410,9 @@ msgid ""
 "Chart Wizard dialog with chart type list on the left, chart style previews, "
 "3D and shape options"
 msgstr ""
+"Dialogruta för hjälp med diagram med en lista över olika typer till vänster, "
+"förhandsgranskning av diagramstilar, inställningar för 3D och olika former "
+"att infoga"
 
 #: html/cool-help.html%2Bdiv.div.div.ol.li:460-7
 msgid "If no table or range was selected, a prototype chart is displayed."
@@ -2415,6 +2424,8 @@ msgid ""
 "Column chart with grouped bars showing data for four rows across three "
 "columns"
 msgstr ""
+"Kolumnbaserade diagram med grupperade staplar som visar data med fyra rader "
+"över tre kolumner"
 
 #: html/cool-help.html%2Bdiv.div.div.p:464-28
 msgid ""
@@ -2506,6 +2517,8 @@ msgid ""
 "Comment box showing author name, date, and the comment text, displayed "
 "beside the document"
 msgstr ""
+"Kommentarsruta som visar författarens namn, datum och kommentartexten. Rutan "
+"visas bredvid dokumentet"
 
 #: html/cool-help.html%2Bdiv.div.div.p:478-5
 msgid ""
@@ -2533,7 +2546,7 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.img[alt]:483-29
 msgid "Text with a red wavy underline beneath a misspelled word"
-msgstr ""
+msgstr "Text med en röd vågig understrykning under ord att granska"
 
 #: html/cool-help.html%2Bdiv.div.div.p:484-5
 msgid ""
@@ -2579,6 +2592,8 @@ msgid ""
 "Formula bar showing cell reference B1, function wizard icon, and the formula "
 "=SIN(PI()*A1/10)"
 msgstr ""
+"Formelfält som visar cellreferens B1, ikonen för funktionsguiden samt själva "
+"formeln =SIN(PI()*A1/10)"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:499-5
 msgid ""
@@ -2616,6 +2631,8 @@ msgid ""
 "Format Cells dialog on the Numbers tab with category list, format options, "
 "decimal places, and format code"
 msgstr ""
+"Dialogruta för Formatera celler på fliken Tal med kategorilista, "
+"formatalternativ, antal decimaler och formateringskod"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:511-30
 msgid ""
@@ -2655,6 +2672,9 @@ msgid ""
 "AutoFilter dropdown menu on a spreadsheet column with sort, filter by color, "
 "filter by condition, and checkboxes for individual values"
 msgstr ""
+"Rullgardinsmenyn AutoFilter för en kolumn i kalkylbladet med sortera, "
+"filtrera efter färg, filtrera efter tillstånd och kryssrutor för enskilda "
+"värden"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:518-7
 msgid ""
@@ -2692,6 +2712,8 @@ msgid ""
 "Spreadsheet with row and column grouping controls showing outline level "
 "buttons and collapse/expand toggles"
 msgstr ""
+"Kalkylblad med rad- och kolumngrupperingskontroller som visar knappar för "
+"konturnivå och fäll ihop-/fäll ut-växlar"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:527-5
 msgid ""
@@ -2716,6 +2738,8 @@ msgid ""
 "Validity dialog on the Criteria tab with Allow set to List, showing options "
 "for empty cells, selection list, and entry values"
 msgstr ""
+"Dialogruta för validering på fliken Kriterier med Tillåt att lista, visa "
+"alternativ för tomma celler, urvalslista och värden"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:533-7
 msgid ""
@@ -2742,6 +2766,8 @@ msgid ""
 "Cell dropdown list showing validated entries such as Apple, Pear, Banana, "
 "Kiwi, and Lemon"
 msgstr ""
+"Rullgardinsmeny för celler som visar validerade poster som äpple, päron, "
+"banan, kiwi och citron"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:538-7
 msgid ""
@@ -2770,6 +2796,8 @@ msgid ""
 "Spreadsheet cell with a comment popup showing the author, date, comment "
 "text, and Save/Cancel buttons"
 msgstr ""
+"Kalkylbladscell med en fäll ut kommentarsruta som visar författaren, datum, "
+"kommentarstext och Spara-/Avbryt-knappar"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:546-5
 msgid ""
@@ -2790,6 +2818,8 @@ msgid ""
 "Conditional formatting icon set picker showing arrows, circles, traffic "
 "lights, stars, smiley faces, and bar chart symbol sets"
 msgstr ""
+"Ikon för Villkorlig formateringsväljare som visar pilar, cirklar, "
+"trafikljus, stjärnor, smiley-ansikten och legend för stapeldiagram"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:555-30
 msgid ""
@@ -2884,6 +2914,9 @@ msgid ""
 "Paragraph dialog on the Indents and Spacing tab with settings for indent, "
 "spacing, and line spacing, and a preview on the right"
 msgstr ""
+"Dialogruta för styckesformatering på fliken Indrag och avstånd med "
+"inställningar för indrag, avstånd och linjeavstånd samt en "
+"förhandsgranskning till höger"
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:576-5
 msgid "Handling Tables"
@@ -2906,6 +2939,8 @@ msgid ""
 "Insert Table picker showing a grid to select the number of rows and columns, "
 "currently showing 5 by 3"
 msgstr ""
+"Infoga tabell-väljare som visar ett rutnät för att välja antalet rader och "
+"kolumner, som för närvarande visar 5 gånger 3"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:581-5
 msgid ""
@@ -2938,6 +2973,8 @@ msgid ""
 "Tracked change shown as a comment box beside the document with author name, "
 "date, and change description"
 msgstr ""
+"Spårade ändringar visas som en kommentarruta bredvid dokumentet med "
+"författarens namn, datum och ändringsbeskrivning"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:587-5
 msgid ""
@@ -3072,6 +3109,9 @@ msgid ""
 "Slide properties panel showing format, orientation, background, and master "
 "slide settings, with a layout gallery of thumbnail options below"
 msgstr ""
+"Panel för bildegenskaper som visar format, utsträckning, bakgrunds- och "
+"masterbild-inställningar, med ett layoutgalleri för miniatyrbildsalternativ "
+"under"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:626-30
 msgid ""
@@ -3175,8 +3215,7 @@ msgstr ""
 "<span class=\"productname\">{productname}</span> sparar dokumentet i "
 "bakgrunden regelbundet, du kan inte bara stänga utan att spara det. Om du "
 "vill överge dina ändringar måste du antingen ångra dem eller använda <span "
-"class=\"ui\">Revideringshistorik</span> i menyn <span class=\"ui\""
-">Arkiv</span>."
+"class=\"ui\">Ändringshistorik</span> i menyn <span class=\"ui\">Arkiv</span>."
 
 #: html/cool-help.html%2Bdiv.div.div.h4:656-5
 msgid ""
@@ -3257,6 +3296,8 @@ msgid ""
 "Thesaurus dialog for the word company, listing alternatives such as "
 "institution, establishment, and troupe, with a Replace with field"
 msgstr ""
+"Dialogruta för tesaurusuppslag för ordet företag, som visar alternativ som "
+"institution, etablering och troupe, med ett fält för ersätt med"
 
 #: html/cool-help.html%2Bdiv.div.div.h4:677-5
 msgid ""
@@ -3297,6 +3338,8 @@ msgid ""
 "Word Count dialog showing word and character counts for the current "
 "selection and for the whole document"
 msgstr ""
+"Dialogruta för ordantal som visar antal ord och tecken i det aktuella "
+"urvalet samt för hela dokumentet"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:688-5
 msgid ""
@@ -3341,6 +3384,9 @@ msgid ""
 "hexadecimal and decimal code inputs, and recent and favorite characters at "
 "the bottom"
 msgstr ""
+"Dialogruta för specialtecken med en teckenmatris, sök- och teckenfält, "
+"hexadecimal och decimalkod för inmatning samt senaste använda och favorit-"
+"specialtecken längst ner"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:699-7
 msgid ""
@@ -3449,6 +3495,9 @@ msgid ""
 "Manage Changes dialog with a list of tracked changes showing action, author, "
 "date, and comment columns, and Accept, Reject, Accept All, Reject All buttons"
 msgstr ""
+"Dialogruta för hantera ändringar med en lista över spårade ändringar som "
+"visar åtgärd, författare, datum och kommentarkolumner, samt knappar för och "
+"Godkänn, Avvisa, Godkänn alla, och Avvisa alla"
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:720-5
 msgid "How do I set the margins of the document?"
@@ -3483,6 +3532,8 @@ msgid ""
 "Page Style dialog on the Organizer tab showing style name, next style, "
 "inherit from, and category fields, with a summary of page properties"
 msgstr ""
+"Dialogruta för sidstilar på fliken Organisera som visar stilnamn, nästa "
+"stil, ärv från, och kategorifält, med en sammanfattning av sidegenskaperna"
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:730-5
 msgid "How do I change the page orientation to landscape inside my document?"
@@ -3644,6 +3695,8 @@ msgid ""
 "Text Import dialog with character set, locale, separator options, and a "
 "preview of the imported CSV data"
 msgstr ""
+"Dialogruta för textimport med teckenuppsättning, lokalisering, och "
+"avskiljare samt en förhandsvisning av aktuella CSV-data för import"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:778-7
 msgid ""
@@ -3755,6 +3808,8 @@ msgid ""
 "Area dialog on the Color tab with a color palette, active and new color "
 "previews, RGB value fields, and a custom palette section"
 msgstr ""
+"Dialogruta för ytor på fliken Färg med en färgpalett, förhandsgranskning med "
+"aktiva och nya färger, RGB-värdefält tillsammans med och en anpassa palett"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:819-7
 msgid "Set the properties of the element of the object."
