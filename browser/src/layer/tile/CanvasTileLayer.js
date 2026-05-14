@@ -3299,7 +3299,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 
 	_getMaxZoom: function() {
 		if (this.isImpress())
-			return 10; /* 100% */
+			return 13; /* 170% */
 		if (this.isWriter())
 			return 13; /* 170% */
 
