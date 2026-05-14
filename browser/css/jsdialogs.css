@@ -2374,7 +2374,8 @@ button.has-img img {
 [data-theme='dark'] #CTL_RECT img.ui-drawing-area,
 [data-theme='dark'] #CTL_ANGLE img.ui-drawing-area,
 [data-theme='dark'] #daRatioTop img.ui-drawing-area,
-[data-theme='dark'] #daRatioBottom img.ui-drawing-area {
+[data-theme='dark'] #daRatioBottom img.ui-drawing-area,
+[data-theme='dark'] img#imRatio.ui-image {
 	filter: invert(.95)
 }
 
