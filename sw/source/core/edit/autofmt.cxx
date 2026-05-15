@@ -178,6 +178,8 @@ class SwAutoFormat
     bool DeleteJoinCurNextPara(SwTextFrame const* pNextFrame, bool bIgnoreLeadingBlanks = false);
     /// delete in the node start and/or end
     void DeleteLeadingTrailingBlanks( bool bStart = true, bool bEnd = true );
+    // deletes trailing blanks regardless of what the config says
+    void DeleteTrailingBlanksNoConfig();
     void DelEmptyLine( bool bTstNextPara = true );
     /// when using multiline paragraphs delete the "left" and/or
     /// "right" margins
@@ -1079,6 +1081,21 @@ bool SwAutoFormat::IsSentenceAtEnd(const SwTextFrame & rTextFrame)
     return '.' == rStr[ n ];
 }
 
+void SwAutoFormat::DeleteTrailingBlanksNoConfig()
+{
+    TextFrameIndex nPos(TextFrameIndex(GetTrailingBlanks(m_pCurTextFrame->GetText())));
+
+    if (TextFrameIndex(m_pCurTextFrame->GetText().getLength()) != nPos)
+    {
+        *m_aDelPam.GetPoint() = m_pCurTextFrame->MapViewToModelPos(
+                TextFrameIndex(m_pCurTextFrame->GetText().getLength()));
+        m_aDelPam.SetMark();
+        *m_aDelPam.GetPoint() = m_pCurTextFrame->MapViewToModelPos(nPos);
+        DeleteSel( m_aDelPam );
+        m_aDelPam.DeleteMark();
+    }
+}
+
 /// Delete beginning and/or end in a node
 void SwAutoFormat::DeleteLeadingTrailingBlanks(bool bStart, bool bEnd)
 {
@@ -1099,15 +1116,8 @@ void SwAutoFormat::DeleteLeadingTrailingBlanks(bool bStart, bool bEnd)
         m_aDelPam.DeleteMark();
     }
     nPos = TextFrameIndex(GetTrailingBlanks(m_pCurTextFrame->GetText()));
-    if (bEnd && TextFrameIndex(m_pCurTextFrame->GetText().getLength()) != nPos)
-    {
-        *m_aDelPam.GetPoint() = m_pCurTextFrame->MapViewToModelPos(
-                TextFrameIndex(m_pCurTextFrame->GetText().getLength()));
-        m_aDelPam.SetMark();
-        *m_aDelPam.GetPoint() = m_pCurTextFrame->MapViewToModelPos(nPos);
-        DeleteSel( m_aDelPam );
-        m_aDelPam.DeleteMark();
-    }
+    if (bEnd)
+        DeleteTrailingBlanksNoConfig();
 }
 
 namespace sw {
@@ -1506,7 +1516,7 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
 
     // only delete blanks if something else (numbering or style) is going to be changed
     if (m_aFlags.bSetNumRule || !m_aFlags.bAFormatByInput || m_aFlags.bReplaceStyles)
-        DeleteLeadingTrailingBlanks();
+        DeleteTrailingBlanksNoConfig();
 
     bool bChgBullet = false, bChgEnum = false;
     TextFrameIndex nAutoCorrPos(0);
