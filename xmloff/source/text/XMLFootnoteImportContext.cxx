@@ -81,6 +81,13 @@ void XMLFootnoteImportContext::startFastElement(
 
     // attach footnote to document
     Reference<XTextContent> xTextContent(xIfc, UNO_QUERY);
+    if (!xTextContent.is())
+    {
+        // e.g. Calc/Impress model
+        SAL_WARN("xmloff.text", "skipping footnote: service unavailable");
+        mbIsValid = false;
+        return;
+    }
     rHelper.InsertTextContent(xTextContent);
 
     // process id attribute
@@ -127,6 +134,9 @@ void XMLFootnoteImportContext::startFastElement(
 
 void XMLFootnoteImportContext::endFastElement(sal_Int32 )
 {
+    if (!mbListContextPushed)
+        return;
+
     // get rid of last dummy paragraph
     rHelper.DeleteParagraph();
 
@@ -134,9 +144,7 @@ void XMLFootnoteImportContext::endFastElement(sal_Int32 )
     rHelper.SetCursor(xOldCursor);
 
     // reinstall old list item
-    if (mbListContextPushed) {
-        rHelper.PopListContext();
-    }
+    rHelper.PopListContext();
 }
 
 css::uno::Reference< css::xml::sax::XFastContextHandler > XMLFootnoteImportContext::createFastChildContext(
