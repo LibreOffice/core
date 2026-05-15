@@ -44,6 +44,10 @@ window.L.Map.Print = window.L.Handler.extend({
 		this._printIframe.title = _('Print dialog');
 		this._printIframe.onload = window.L.bind(this._onIframeLoaded, this);
 		window.L.DomUtil.setStyle(this._printIframe, 'visibility', 'hidden');
+		if (window.L.Browser.safari) {
+			// In Safari, 'visibility: hidden' does not work.
+			window.L.DomUtil.setStyle(this._printIframe, 'display', 'none');
+		}
 		window.L.DomUtil.setStyle(this._printIframe, 'position', 'fixed');
 		window.L.DomUtil.setStyle(this._printIframe, 'right', '0');
 		window.L.DomUtil.setStyle(this._printIframe, 'bottom', '0');
@@ -52,7 +56,17 @@ window.L.Map.Print = window.L.Handler.extend({
 
 	_onIframeLoaded: function () {
 		this._printIframe.contentWindow.focus(); // Required for IE
-		this._printIframe.contentWindow.print();
+		if (window.L.Browser.safari) {
+			// In Safari, we have to wait until the PDF iframe is rendered.
+			// Wait 2 paint cycles to be safe.
+			requestAnimationFrame(() => {
+				requestAnimationFrame(() => {
+					this._printIframe.contentWindow.print();
+				});
+			});
+		} else {
+			this._printIframe.contentWindow.print();
+		}
 		// couldn't find another way to remove it
 		setTimeout(window.L.bind(this._closePrintIframe, this, this._printIframe), 300 * 1000);
 	},
