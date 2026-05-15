@@ -621,6 +621,15 @@ CPPUNIT_TEST_FIXTURE(SwAutoCorrectTest, test_ApplyEsperantoHats)
     CPPUNIT_ASSERT_EQUAL(u"Eĥoŝanĝoĉiuĵaŭde ?"_ustr, getParagraph(1)->getString());
 }
 
+CPPUNIT_TEST_FIXTURE(SwAutoCorrectTest, test_CapitalizeEsperantoHat)
+{
+    // Tests that the Esperanto hat converter can be combined with the start sentence capitaliser
+    createSwDoc("eo.fodt");
+
+    emulateTyping(u"cxu?");
+    CPPUNIT_ASSERT_EQUAL(u"Ĉu?"_ustr, getParagraph(1)->getString());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
