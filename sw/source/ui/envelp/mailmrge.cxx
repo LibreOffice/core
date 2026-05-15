@@ -367,6 +367,9 @@ IMPL_LINK_NOARG(SwMailMergeDlg, OutputTypeHdl, weld::Toggleable&, void)
     if( !bPrint ) {
         SaveTypeHdl( m_xSaveSingleDocRB->get_active() ? *m_xSaveSingleDocRB : *m_xSaveIndividualRB );
     } else {
+        // For printer, force "single doc" as "individual docs" is not implemented
+        // See sw/source/uibase/dbui/README
+        m_xSaveSingleDocRB->set_active( true );
         m_xPathFT->set_sensitive(false);
         m_xPathED->set_sensitive(false);
         m_xPathPB->set_sensitive(false);

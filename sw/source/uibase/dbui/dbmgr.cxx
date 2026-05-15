@@ -1076,7 +1076,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell& rSourceShell,
     }
     else if( bMT_SHELL || bMT_PRINTER )
     {
-        assert(bCheckSingleFile_);
+        assert(bCheckSingleFile_ && "individual documents not supported");
         bCheckSingleFile_ = true;
         assert(sPrefix_.isEmpty());
         sPrefix_.clear();
