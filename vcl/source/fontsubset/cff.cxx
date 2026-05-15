@@ -1519,6 +1519,12 @@ void CffContext::readDictOp()
             pCmdName = pDictOps[nOpId];
         else
         {
+            if (mpReadPtr >= mpReadEnd)
+            {
+                SAL_WARN("vcl.fonts.cff", "truncated CFF dict op 12 escape");
+                abandonDictParse();
+                return;
+            }
             const U8 nExtId = *(mpReadPtr++);
             if (nExtId < 39)
                 pCmdName = pDictEscs[nExtId];
@@ -1702,6 +1708,12 @@ void CffContext::readDictOp()
     else if (c == 29)
     { // longint
         ++mpReadPtr; // skip 29
+        if (mpReadPtr + 4 > mpReadEnd)
+        {
+            SAL_WARN("vcl.fonts.cff", "truncated CFF dict longint");
+            abandonDictParse();
+            return;
+        }
         sal_Int32 nS32 = mpReadPtr[0] << 24;
         nS32 += mpReadPtr[1] << 16;
         nS32 += mpReadPtr[2] << 8;
@@ -1735,6 +1747,23 @@ void CffContext::read2push()
 
     const U8*& p = mpReadPtr;
     const U8 c = *p;
+    // total bytes consumed by this integer encoding, including the first
+    int nLen;
+    if (c == 28)
+        nLen = 3;
+    else if (c <= 246)
+        nLen = 1;
+    else if (c <= 254)
+        nLen = 2;
+    else
+        nLen = 5;
+    if (p + nLen > mpReadEnd)
+    {
+        SAL_WARN("vcl.fonts.cff", "truncated CFF dict integer (c=" << int(c) << ")");
+        abandonDictParse();
+        push(0);
+        return;
+    }
     if (c == 28)
     {
         sal_Int16 nS16 = (p[1] << 8) + p[2];
