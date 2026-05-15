@@ -35,10 +35,14 @@ describe('Test harness', () => {
 		});
 	});
 
-	describe('native (AT-SPI) driver', () => {
-		it('should connect and retrieve the accessibility tree', async function () {
+	describe('native (accessibility) driver', () => {
+		it('should return an accessibility tree', async function () {
 			const source = await browser.native.getPageSource();
-			expect(source).toBeTruthy();
+			expect(source).toMatch(/^<desktop_frame\b/);
+			expect(source).toContain('accessibility-id="QApplication"');
+			expect(source).toContain(
+				'accessibility-id="QApplication.QMainWindow.QWebEngineView"',
+			);
 		});
 	});
 });
