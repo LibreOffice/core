@@ -64,7 +64,12 @@ elif [ "${TEST_TYPE}" = "interfer" ]; then
     TEST_FILE_PATH="${DIR}/integration_tests/common/"${TEST_FILE};
 fi
 
-RUN_COMMAND="setsid ${CYPRESS_BINARY} run \
+SETSID_WAIT=
+if setsid --wait true 2>/dev/null; then
+    SETSID_WAIT="--wait"
+fi
+
+RUN_COMMAND="setsid ${SETSID_WAIT} ${CYPRESS_BINARY} run \
     --browser ${BROWSER} \
     --headless \
     --config-file ${TEST_CONFIG_FILE}\

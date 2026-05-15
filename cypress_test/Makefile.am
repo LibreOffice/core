@@ -75,6 +75,8 @@ ALLOWED_PORTS = $(if $(findstring php-proxy, $(CYPRESS_INTEGRATION)),$(PHP_PROXY
 KILL_COMMAND=$(if $(coolwsd),true,pkill -F $(PID_FILE) || pkill --signal SIGKILL -F $(PID_FILE))
 LOAD_PID_FILE=$(abs_builddir)/workdir/load.pids
 PARALLEL_BUILD = $(findstring -j,$(MAKEFLAGS))
+# use setsid --wait when available so Ctrl-C propagates to the cypress process group
+SETSID := setsid $(shell setsid --wait true 2>/dev/null && echo --wait)
 
 COMMA :=,
 EMPTY :=
@@ -375,7 +377,7 @@ define run_lighthouse_tests
 	$(eval LIGHTHOUSE_BROWSER=chrome)
 	$(eval SPEC_FILE=$(if $(1),$(LIGHTHOUSE_TEST_FOLDER)/$(1)))
 	$(if $(1),$(call check_spec_existence,$(1),lighthouse))
-	setsid $(CYPRESS_BINARY) run \
+	$(SETSID) $(CYPRESS_BINARY) run \
 		--browser $(LIGHTHOUSE_BROWSER) \
 		--headless \
 		--config-file $(CYPRESS_CONFIG) \
@@ -814,7 +816,7 @@ endef
 # 4 - spec:   test file path (e.g. cypress' --spec argument)
 define run_interactive_single
 	DEBUG='cypress:*' \
-		setsid $(CYPRESS_BINARY) run \
+		$(SETSID) $(CYPRESS_BINARY) run \
 		--browser $(BROWSER) \
 		--headed --no-exit \
 		--config-file $(CYPRESS_CONFIG) \
@@ -868,7 +870,7 @@ LOAD_STOP_CMD = $(if $(ENABLE_CPULOAD),\
 # 4 - spec (optional):   test file path (e.g. cypress' --spec argument)
 define run_test_headless
 	$(LOAD_START_CMD) \
-	setsid $(CYPRESS_BINARY) run \
+	$(SETSID) $(CYPRESS_BINARY) run \
 		--browser $(BROWSER) \
 		--headless \
 		--config-file $(CYPRESS_CONFIG) \
