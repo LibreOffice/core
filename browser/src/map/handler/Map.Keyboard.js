@@ -419,13 +419,23 @@ window.L.Map.Keyboard = window.L.Handler.extend({
 		if (window.KeyboardShortcuts.processEvent(app.UI.language.fromURL, ev)) {
 			return;
 		}
+
 		if (this._map.jsdialog
 			&& (this._map.jsdialog.hasDialogOpened() || this._map.jsdialog.hasSnackbarOpened() || this._map.jsdialog.hasDropdownOpened())
 			&& this._map.jsdialog.handleKeyEvent(ev)) {
 			ev.preventDefault();
 			return;
 		}
-		else if (this._map._docLayer && (this._map._docLayer._docType === 'presentation' || this._map._docLayer._docType === 'drawing') && this._map._docLayer._preview.partsFocused === true) {
+
+		const comment = app.definitions.Comment.isAnyEdit();
+		if (comment) {
+			const container = comment.sectionProperties.container;
+			if (container && !container.contains(document.activeElement) && ev.ctrlKey && ev.key === 'Enter') {
+				comment.onCommentKeyDown(ev);
+			}
+		}
+
+		if (this._map._docLayer && (this._map._docLayer._docType === 'presentation' || this._map._docLayer._docType === 'drawing') && this._map._docLayer._preview.partsFocused === true) {
 			if (ev.shiftKey && !ev.ctrlKey && !ev.altKey
 				&& (ev.keyCode === this.keyCodes.DOWN || ev.keyCode === this.keyCodes.UP || ev.keyCode === this.keyCodes.HOME || ev.keyCode === this.keyCodes.END)
 				&& ev.type === 'keydown') {
