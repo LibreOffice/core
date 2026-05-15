@@ -1813,7 +1813,7 @@ bool CffContext::seekIndexEnd( int nIndexBase)
     const int nDataCount = (mpReadPtr[0]<<8) + mpReadPtr[1];
     const int nDataOfsSz = mpReadPtr[2];
     mpReadPtr += 3 + nDataOfsSz * nDataCount;
-    if ( mpReadPtr > mpBaseEnd)
+    if (mpReadPtr + nDataOfsSz > mpBaseEnd)
         return false;
     int nEndOfs = 0;
     switch( nDataOfsSz) {
@@ -1823,12 +1823,12 @@ bool CffContext::seekIndexEnd( int nIndexBase)
         case 3: nEndOfs = (mpReadPtr[0]<<16) + (mpReadPtr[1]<<8) + mpReadPtr[2];break;
         case 4: nEndOfs = (mpReadPtr[0]<<24) + (mpReadPtr[1]<<16) + (mpReadPtr[2]<<8) + mpReadPtr[3]; break;
     }
+    if (nEndOfs < 0)
+        return false;
     mpReadPtr += nDataOfsSz;
     mpReadPtr += nEndOfs - 1;
     mpReadEnd = mpBaseEnd;
-    if ( nEndOfs < 0)
-        return false;
-    if ( mpReadEnd > mpBaseEnd)
+    if (mpReadPtr > mpBaseEnd)
         return false;
     return true;
 }
