@@ -2509,6 +2509,12 @@ RealType CffContext::readRealVal()
     constexpr S64 nDigitCap = (SAL_MAX_INT64 - 9) / 10;
     for (;;)
     {
+        if (mpReadPtr >= mpReadEnd)
+        {
+            SAL_WARN("vcl.fonts.cff", "truncated CFF dict real number");
+            abandonDictParse();
+            return 0.0;
+        }
         const U8 c = *(mpReadPtr++); // read nibbles
         // parse high nibble
         const U8 nH = c >> 4U;
