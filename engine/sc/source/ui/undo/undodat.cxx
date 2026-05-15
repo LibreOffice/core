@@ -1287,20 +1287,17 @@ void ScUndoDBData::DoChange( const bool bUndo )
             {
                 if (bAreaChanged)
                     rDoc.CompileDBFormula();
+                // ScMF::Auto only ever lives on the header row, so all
+                // three branches operate on the header span only.
                 if (bOldAutoFilter && !bNewAutoFilter)
                 {
                     rDoc.RemoveFlagsTab(aOldRange.aStart.Col(), aOldRange.aStart.Row(),
-                                        aOldRange.aEnd.Col(), aOldRange.aEnd.Row(),
+                                        aOldRange.aEnd.Col(), aOldRange.aStart.Row(),
                                         aOldRange.aStart.Tab(), ScMF::Auto);
                 }
                 else if (bOldAutoFilter && bNewAutoFilter)
                 {
-                    rDoc.RemoveFlagsTab(aOldRange.aStart.Col(), aOldRange.aStart.Row(),
-                                        aOldRange.aEnd.Col(), aOldRange.aEnd.Row(),
-                                        aOldRange.aStart.Tab(), ScMF::Auto);
-                    rDoc.ApplyFlagsTab(aNewRange.aStart.Col(), aNewRange.aStart.Row(),
-                                       aNewRange.aEnd.Col(), aNewRange.aStart.Row(),
-                                       aNewRange.aStart.Tab(), ScMF::Auto);
+                    ScDBData::SwapAutoFilterFlagOnHeader(rDoc, aOldRange, aNewRange);
                 }
                 else if (!bOldAutoFilter && bNewAutoFilter)
                 {
