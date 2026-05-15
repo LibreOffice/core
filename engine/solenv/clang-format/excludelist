@@ -7659,6 +7659,7 @@ sc/qa/unit/mark_test.cxx
 sc/qa/unit/opencl-test-1.cxx
 sc/qa/unit/opencl-test-2.cxx
 sc/qa/unit/screenshots/screenshots.cxx
+sc/qa/unit/subsequent_export_test2.cxx
 sc/qa/unit/tiledrendering/tiledrendering.cxx
 sc/qa/unit/ucalc.cxx
 sc/qa/unit/ucalc_condformat.cxx
@@ -9079,6 +9080,7 @@ sd/qa/unit/SVGExportTests.cxx
 sd/qa/unit/SdrPdfImportTest.cxx
 sd/qa/unit/activex-controls-tests.cxx
 sd/qa/unit/dialogs-test.cxx
+sd/qa/unit/export-tests-ooxml4.cxx
 sd/qa/unit/filters-test.cxx
 sd/qa/unit/tiledrendering/tiledrendering.cxx
 sd/qa/unit/uimpress.cxx
@@ -10371,6 +10373,7 @@ sot/source/sdstor/ucbstorage.cxx
 sot/source/unoolestorage/xolesimplestorage.cxx
 sot/source/unoolestorage/xolesimplestorage.hxx
 starmath/inc/ElementsDockingWindow.hxx
+starmath/inc/cursor.hxx
 starmath/inc/dialog.hxx
 starmath/inc/document.hxx
 starmath/inc/format.hxx
@@ -11102,6 +11105,7 @@ svx/source/items/galleryitem.cxx
 svx/source/items/grfitem.cxx
 svx/source/items/hlnkitem.cxx
 svx/source/items/legacyitem.cxx
+svx/source/items/numfmtsh.cxx
 svx/source/items/numinf.cxx
 svx/source/items/ofaitem.cxx
 svx/source/items/pageitem.cxx
@@ -11709,6 +11713,7 @@ sw/qa/extras/ooxmlimport/ooxmlimport.cxx
 sw/qa/extras/tiledrendering/tiledrendering.cxx
 sw/qa/extras/txtencexport/txtencexport.cxx
 sw/qa/extras/uiwriter/uiwriter.cxx
+sw/qa/extras/unowriter/unowriter.cxx
 sw/qa/extras/ww8export/ww8export.cxx
 sw/qa/extras/ww8export/ww8export2.cxx
 sw/qa/extras/ww8export/ww8export3.cxx
