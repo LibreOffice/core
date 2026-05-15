@@ -372,11 +372,18 @@ class VRuler extends Ruler {
 				'cool-ruler-drag cool-ruler-right',
 				this._rMarginWrapper,
 			);
-			const topMarginTooltipText: string = _('Top Margin');
-			const bottomMarginTooltipText: string = _('Bottom Margin');
-
-			this._tMarginDrag.dataset.title = topMarginTooltipText;
-			this._bMarginDrag.dataset.title = bottomMarginTooltipText;
+			// Tooltip lives on the drag handles, matching the horizontal ruler,
+			// with the sidebar above/below icons.
+			this._setupMarginTooltip(
+				this._tMarginDrag,
+				_('Top Margin'),
+				'lc_aboveparaspacing.svg',
+			);
+			this._setupMarginTooltip(
+				this._bMarginDrag,
+				_('Bottom Margin'),
+				'lc_belowparaspacing.svg',
+			);
 		}
 
 		this._tMarginMarker.style.width =
@@ -463,10 +470,17 @@ class VRuler extends Ruler {
 				element.getBoundingClientRect().left) *
 			0.5;
 		this._markerHorizontalLine.style.left = String(newLeft + halfWidth) + 'px';
+
+		// Live-update the pinned tooltip so the user can position precisely.
+		this._updateMarginTooltip(element);
 	}
 
 	_moveIndentationEnd(e: Event) {
 		this._map.rulerActive = false;
+
+		// Release the pinned tooltip - unconditional so the early-return
+		// below can't leave it stuck on screen.
+		if (this._map.tooltip) this._map.tooltip.unlock();
 
 		if (e.type !== 'panend') {
 			window.L.DomEvent.off(
@@ -592,5 +606,72 @@ class VRuler extends Ruler {
 		this._initialposition = this._lastposition = e.clientY - documentTop;
 		this._markerHorizontalLine.style.display = 'block';
 		this._markerHorizontalLine.style.left = this._lastposition + 'px';
+
+		// Pin the tooltip on the active handle so it stays visible while
+		// the drag moves the pointer away from it.
+		this._pinMarginTooltip(document.getElementById(this._indentationElementId));
+	}
+
+	// Attach a rich cooltip with a sidebar icon and a short label. Refresh
+	// data-cooltip on mouseenter so the value shown on hover also reflects
+	// the current margin.
+	_setupMarginTooltip(elem: HTMLElement, label: string, iconFile: string) {
+		elem.dataset.cooltipLabel = label;
+		elem.setAttribute('data-cooltip', label);
+		elem.setAttribute('data-cooltip-icon', app.LOUtil.getImageURL(iconFile));
+		elem.addEventListener('mouseenter', () => {
+			const value = this._formatRulerValue(this._currentMarginMm100(elem));
+			elem.setAttribute('data-cooltip', label + ': ' + value);
+		});
+		window.L.control.attachTooltipEventListener(elem, this._map);
+	}
+
+	// Format an mm100 value as a 2-decimal-place string in the user's
+	// preferred ruler unit (cm by default, inch when set).
+	_formatRulerValue(mm100: number): string {
+		// The ruler ticks are always drawn in centimetres (one mark per cm),
+		// so show the tooltip value in cm too rather than the document's
+		// measurement unit, which would otherwise disagree with the ruler.
+		return (mm100 / 1000).toFixed(2) + ' cm';
+	}
+
+	_currentMarginMm100(elem: HTMLElement): number {
+		// The top/bottom page margin reaches from the ruler face edge to
+		// the active marker's centre. Use bounding rects for live values.
+		const ratio = this.options.DraggableConvertRatio;
+		const halfWidth = elem.getBoundingClientRect().width * 0.5;
+		if (elem.id === 'lo-vertical-pstart-marker' || elem === this._tMarginDrag) {
+			return (
+				(this._pVerticalStartMarker.getBoundingClientRect().top -
+					this._rTSContainer.getBoundingClientRect().top +
+					halfWidth) /
+					ratio +
+				this.options.pageTopMargin
+			);
+		}
+		if (elem.id === 'lo-vertical-pend-marker' || elem === this._bMarginDrag) {
+			return (
+				(this._rTSContainer.getBoundingClientRect().bottom -
+					this._pVerticalEndMarker.getBoundingClientRect().bottom +
+					halfWidth) /
+					ratio +
+				this.options.pageBottomMargin
+			);
+		}
+		return 0;
+	}
+
+	_pinMarginTooltip(elem: HTMLElement) {
+		if (!this._map.tooltip || !elem) return;
+		const label = elem.dataset.cooltipLabel || '';
+		const value = this._formatRulerValue(this._currentMarginMm100(elem));
+		this._map.tooltip.lock(elem, label + ': ' + value);
+	}
+
+	_updateMarginTooltip(elem: HTMLElement) {
+		if (!this._map.tooltip || !elem) return;
+		const label = elem.dataset.cooltipLabel || '';
+		const value = this._formatRulerValue(this._currentMarginMm100(elem));
+		this._map.tooltip.updateLabel(elem, label + ': ' + value);
 	}
 }

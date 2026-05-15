@@ -50,7 +50,7 @@ class Tooltip {
 	}
 
 	beginHide(elem) {
-		if (this._cancel || this._disabled) return;
+		if (this._cancel || this._disabled || this._locked) return;
 
 		let win = this._options.window ? this._options.window : window;
 		win.clearTimeout(this._showTimeout);
@@ -60,6 +60,31 @@ class Tooltip {
 				window.L.bind(this.hide, this, elem),
 				this._options.timeout / 8,
 			);
+	}
+
+	// Pin the tooltip on a specific element so it stays visible while the
+	// caller animates it (e.g. live value during a drag). Cancels any pending
+	// hide and re-runs show() so the icon/label DOM is correct.
+	lock(elem, textContent) {
+		if (this._disabled) return;
+		let win = this._options.window ? this._options.window : window;
+		win.clearTimeout(this._hideTimeout);
+		win.clearTimeout(this._showTimeout);
+		this._locked = true;
+		this.show(elem, textContent);
+	}
+
+	// Update just the label text on an already-locked tooltip, without
+	// recomputing the position. Cheap enough to call from a mousemove.
+	updateLabel(elem, textContent) {
+		if (this._current !== elem) return;
+		let label = this._container.querySelector('.cooltip-label');
+		if (label) label.textContent = textContent;
+	}
+
+	unlock() {
+		this._locked = false;
+		this.hide();
 	}
 
 	// Switch the tooltip subsystem off entirely and hide live tooltip if any.
@@ -139,14 +164,35 @@ class Tooltip {
 		if (this._disabled) return;
 		// `textContent` adds flexibility, enabling custom messages like document "Saved" instead of the fixed "cool-tooltip."
 		let content = textContent ? textContent : elem.dataset.cooltip,
+			iconUrl = elem.dataset.cooltipIcon,
 			rectView = new DOMRect(0, 0, window.innerWidth, window.innerHeight),
 			rectElem = elem.getBoundingClientRect(),
 			rectCont,
 			rectTooltip,
 			index = 0;
 
-		this._container.textContent = content;
-		if (!this._container.textContent) return;
+		// Clear any prior content (built safely via DOM nodes to support
+		// an optional icon without resorting to innerHTML).
+		while (this._container.firstChild)
+			this._container.removeChild(this._container.firstChild);
+
+		if (!content && !iconUrl) return;
+
+		this._container.classList.toggle('cooltip-with-icon', !!iconUrl);
+
+		if (iconUrl) {
+			let icon = document.createElement('img');
+			icon.src = iconUrl;
+			icon.alt = '';
+			icon.className = 'cooltip-icon';
+			this._container.appendChild(icon);
+		}
+		if (content) {
+			let label = document.createElement('span');
+			label.className = 'cooltip-label';
+			label.textContent = content;
+			this._container.appendChild(label);
+		}
 
 		rectCont = this._container.getBoundingClientRect();
 
@@ -162,7 +208,7 @@ class Tooltip {
 	}
 
 	hide() {
-		if (this._cancel) return;
+		if (this._cancel || this._locked) return;
 
 		this._container.style.visibility = 'hidden';
 		this._current = null;

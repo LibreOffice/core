@@ -11,3 +11,15 @@
 	font-family: var(--cool-font);
 	font-size: var(--tooltip-font-size);
 }
+
+.cooltip-text.cooltip-with-icon {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.cooltip-text .cooltip-icon {
+	flex: 0 0 auto;
+	width: 24px;
+	height: 24px;
+}

@@ -99,8 +99,8 @@ class HRuler extends Ruler {
 	_changeInteractions(e: any) {
 		if (this._lMarginDrag) {
 			if (e.perm === 'edit') {
-				this._lMarginDrag.style.cursor = 'e-resize';
-				this._rMarginDrag.style.cursor = 'w-resize';
+				this._lMarginDrag.style.cursor = 'grab';
+				this._rMarginDrag.style.cursor = 'grab';
 
 				if (!this.getWindowProperty<boolean>('ThisIsTheiOSApp')) {
 					window.L.DomEvent.on(
@@ -165,6 +165,25 @@ class HRuler extends Ruler {
 		this._pEndMarker.id = 'lo-pend-marker';
 		this._pEndMarker.classList.add('cool-ruler-indentation-marker-up');
 		this._rFace.appendChild(this._pEndMarker);
+
+		// Rich tooltips (image + help text) for the three paragraph-indent
+		// drag handles. Labels and icons are pulled from the sidebar so the
+		// translations are shared and the icon themes apply automatically.
+		this._setupIndentTooltip(
+			this._firstLineMarker,
+			_('First Line Indent'),
+			'lc_firstlineindent.svg',
+		);
+		this._setupIndentTooltip(
+			this._pStartMarker,
+			_('Before Text Indent'),
+			'lc_beforetextindent.svg',
+		);
+		this._setupIndentTooltip(
+			this._pEndMarker,
+			_('After Text Indent'),
+			'lc_aftertextindent.svg',
+		);
 
 		// While one of the markers is being dragged, a vertical line should be visible in order to indicate the new position of the marker..
 		this._markerVerticalLine = window.L.DomUtil.create(
@@ -610,11 +629,16 @@ class HRuler extends Ruler {
 				'cool-ruler-rtooltip',
 				this._rMarginDrag,
 			);
-			var lMarginTooltipText = _('Left Margin');
-			var rMarginTooltipText = _('Right Margin');
-
-			this._lMarginDrag.dataset.title = lMarginTooltipText;
-			this._rMarginDrag.dataset.title = rMarginTooltipText;
+			this._setupIndentTooltip(
+				this._lMarginDrag,
+				_('Left Margin'),
+				'lc_beforetextindent.svg',
+			);
+			this._setupIndentTooltip(
+				this._rMarginDrag,
+				_('Right Margin'),
+				'lc_aftertextindent.svg',
+			);
 		}
 
 		this._lMarginMarker.style.width =
@@ -782,11 +806,16 @@ class HRuler extends Ruler {
 				'cool-ruler-rtooltip',
 				this._rMarginDrag,
 			);
-			var lMarginTooltipText = _('Left Margin');
-			var rMarginTooltipText = _('Right Margin');
-
-			this._lMarginDrag.dataset.title = lMarginTooltipText;
-			this._rMarginDrag.dataset.title = rMarginTooltipText;
+			this._setupIndentTooltip(
+				this._lMarginDrag,
+				_('Left Margin'),
+				'lc_beforetextindent.svg',
+			);
+			this._setupIndentTooltip(
+				this._rMarginDrag,
+				_('Right Margin'),
+				'lc_aftertextindent.svg',
+			);
 		}
 
 		this._lMarginMarker.style.width =
@@ -881,10 +910,18 @@ class HRuler extends Ruler {
 			0.5;
 		this._markerVerticalLine.style.left =
 			String(newLeft + halfWidth + this._getNavigationSidebarWidth()) + 'px';
+
+		// Reflect the new position in the pinned tooltip so the user can
+		// place the marker precisely without reading off the ruler.
+		this._updateIndentTooltip(element);
 	}
 
 	_moveIndentationEnd(e: Event) {
 		this._map.rulerActive = false;
+
+		// Release the pinned tooltip - unconditional so the early-return
+		// below can't leave it stuck on screen.
+		if (this._map.tooltip) this._map.tooltip.unlock();
 
 		if (e.type !== 'panend') {
 			window.L.DomEvent.off(
@@ -1005,6 +1042,10 @@ class HRuler extends Ruler {
 		this._initialposition = this._lastposition = e.clientX;
 		this._markerVerticalLine.style.display = 'block';
 		this._markerVerticalLine.style.left = this._lastposition + 'px';
+
+		// Pin the tooltip so it stays visible while the drag moves the
+		// pointer away from the handle, and seed it with the current value.
+		this._pinIndentTooltip(document.getElementById(this._indentationElementId));
 	}
 
 	_initiateDrag(e: any) {
@@ -1027,13 +1068,20 @@ class HRuler extends Ruler {
 		this._initialposition = e.clientX;
 		this._lastposition = this._initialposition;
 
+		var draggedDrag: HTMLDivElement;
 		if (window.L.DomUtil.hasClass(dragableElem, 'cool-ruler-right')) {
 			window.L.DomUtil.addClass(this._rMarginDrag, 'leaflet-drag-moving');
-			this._rFace.style.cursor = 'w-resize';
+			this._rFace.style.cursor = 'grabbing';
+			draggedDrag = this._rMarginDrag;
 		} else {
 			window.L.DomUtil.addClass(this._lMarginDrag, 'leaflet-drag-moving');
-			this._rFace.style.cursor = 'e-resize';
+			this._rFace.style.cursor = 'grabbing';
+			draggedDrag = this._lMarginDrag;
 		}
+
+		// Pin the cooltip on the active margin handle so it stays visible
+		// while the drag moves the pointer away from it.
+		this._pinMarginTooltip(draggedDrag);
 	}
 
 	_moveMargin(e: any) {
@@ -1057,6 +1105,7 @@ class HRuler extends Ruler {
 					) / 10
 				).toString() + unit;
 			this._rMarginDrag.style.width = newPos + 'px';
+			this._updateMarginTooltip(this._rMarginDrag);
 		} else {
 			newPos =
 				this.options.DraggableConvertRatio * this.options.leftOffset +
@@ -1068,11 +1117,14 @@ class HRuler extends Ruler {
 					Math.round(newPos / (this.options.DraggableConvertRatio * 100)) / 10
 				).toString() + unit;
 			this._lMarginDrag.style.width = newPos + 'px';
+			this._updateMarginTooltip(this._lMarginDrag);
 		}
 	}
 
 	_endDrag(e: any) {
 		this._map.rulerActive = false;
+
+		if (this._map.tooltip) this._map.tooltip.unlock();
 
 		var posChange;
 		if (e.type === 'touchend')
@@ -1423,5 +1475,103 @@ class HRuler extends Ruler {
 
 	_getNavigationSidebarWidth() {
 		return app.map?.navigator ? app.map.navigator.getCurrentWidth() : 0;
+	}
+
+	// Attach a rich cooltip with a sidebar icon and a short label.
+	// The label is stored separately so we can append a live value to it
+	// while the handle is being dragged. Refresh data-cooltip on mouseenter
+	// so the value shown on hover also reflects the current indent.
+	_setupIndentTooltip(elem: HTMLElement, label: string, iconFile: string) {
+		elem.dataset.cooltipLabel = label;
+		elem.setAttribute('data-cooltip', label);
+		elem.setAttribute('data-cooltip-icon', app.LOUtil.getImageURL(iconFile));
+		elem.addEventListener('mouseenter', () => {
+			const isMarginDrag = elem.classList.contains('cool-ruler-drag');
+			const value = this._formatRulerValue(
+				isMarginDrag
+					? this._currentMarginMm100(elem)
+					: this._currentIndentMm100(elem),
+			);
+			elem.setAttribute('data-cooltip', label + ': ' + value);
+		});
+		window.L.control.attachTooltipEventListener(elem, this._map);
+	}
+
+	// Format an mm100 value as a 2-decimal-place string in the user's
+	// preferred ruler unit (cm by default, inch when set).
+	_formatRulerValue(mm100: number): string {
+		// The ruler ticks are always drawn in centimetres (one mark per cm),
+		// so show the tooltip value in cm too rather than the document's
+		// measurement unit, which would otherwise disagree with the ruler.
+		return (mm100 / 1000).toFixed(2) + ' cm';
+	}
+
+	// Indent in mm100 of the marker currently being dragged, derived from
+	// the marker's live screen position so the value tracks the drag.
+	_currentIndentMm100(element: HTMLElement): number {
+		const ratio = this.options.DraggableConvertRatio;
+		const halfWidth = element.getBoundingClientRect().width * 0.5;
+		if (element.id === 'lo-fline-marker') {
+			return (
+				(this._firstLineMarker.getBoundingClientRect().left -
+					this._pStartMarker.getBoundingClientRect().left +
+					halfWidth) /
+				ratio
+			);
+		}
+		if (element.id === 'lo-pstart-marker') {
+			return (
+				(this._pStartMarker.getBoundingClientRect().left -
+					this._rTSContainer.getBoundingClientRect().left +
+					halfWidth) /
+				ratio
+			);
+		}
+		if (element.id === 'lo-pend-marker') {
+			return (
+				(this._rTSContainer.getBoundingClientRect().right -
+					this._pEndMarker.getBoundingClientRect().right +
+					halfWidth) /
+				ratio
+			);
+		}
+		return 0;
+	}
+
+	// Lock the cooltip on the given marker and seed it with the current
+	// "<label>: <value>" string, ready for live updates during the drag.
+	_pinIndentTooltip(elem: HTMLElement) {
+		if (!this._map.tooltip || !elem) return;
+		const label = elem.dataset.cooltipLabel || '';
+		const value = this._formatRulerValue(this._currentIndentMm100(elem));
+		this._map.tooltip.lock(elem, label + ': ' + value);
+	}
+
+	_updateIndentTooltip(elem: HTMLElement) {
+		if (!this._map.tooltip || !elem) return;
+		const label = elem.dataset.cooltipLabel || '';
+		const value = this._formatRulerValue(this._currentIndentMm100(elem));
+		this._map.tooltip.updateLabel(elem, label + ': ' + value);
+	}
+
+	// Lock the cooltip on a page-margin handle (left or right) and seed it
+	// with the current value derived from the live drag-handle width.
+	_pinMarginTooltip(elem: HTMLElement) {
+		if (!this._map.tooltip || !elem) return;
+		const label = elem.dataset.cooltipLabel || '';
+		const value = this._formatRulerValue(this._currentMarginMm100(elem));
+		this._map.tooltip.lock(elem, label + ': ' + value);
+	}
+
+	_updateMarginTooltip(elem: HTMLElement) {
+		if (!this._map.tooltip || !elem) return;
+		const label = elem.dataset.cooltipLabel || '';
+		const value = this._formatRulerValue(this._currentMarginMm100(elem));
+		this._map.tooltip.updateLabel(elem, label + ': ' + value);
+	}
+
+	_currentMarginMm100(elem: HTMLElement): number {
+		const widthPx = parseFloat(elem.style.width) || 0;
+		return widthPx / this.options.DraggableConvertRatio;
 	}
 }

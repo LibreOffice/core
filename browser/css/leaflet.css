@@ -772,6 +772,7 @@ input.clipboard {
 	top: 0;
 	z-index: 12;
 	background-repeat: no-repeat;
+	cursor: grab;
 }
 
 .cool-ruler-indentation-marker-up {
@@ -783,6 +784,18 @@ input.clipboard {
 	bottom: 0;
 	z-index: 12;
 	background-repeat: no-repeat;
+	cursor: grab;
+}
+
+/* Tint the indent handles on hover so it's obvious they're draggable. */
+.cool-ruler-indentation-marker-down:hover,
+.cool-ruler-indentation-marker-up:hover {
+	filter: invert(43%) sepia(80%) saturate(2000%) hue-rotate(190deg);
+}
+
+.cool-ruler-indentation-marker-down:active,
+.cool-ruler-indentation-marker-up:active {
+	cursor: grabbing;
 }
 
 .cool-ruler-indentation-marker-center,
@@ -888,6 +901,19 @@ input.clipboard {
 
 .cool-ruler-drag.cool-ruler-left {
 	border-right: 3px solid var(--color-border-dark);
+}
+
+/* Highlight the margin handle border on hover. */
+.cool-ruler-drag.cool-ruler-right:hover {
+	border-left-color: var(--color-primary);
+}
+
+.cool-ruler-drag.cool-ruler-left:hover {
+	border-right-color: var(--color-primary);
+}
+
+.cool-ruler-drag.leaflet-drag-moving {
+	cursor: grabbing;
 }
 
 .cool-ruler-left.leaflet-drag-moving {
