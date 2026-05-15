@@ -51,7 +51,9 @@
 #include <mdiexp.hxx>
 #include <docary.hxx>
 #include <charfmt.hxx>
+#include <charformats.hxx>
 #include <fchrfmt.hxx>
+#include <fmtcol.hxx>
 #include <fldbas.hxx>
 #include <fmtfld.hxx>
 #include <txtfld.hxx>
@@ -1059,6 +1061,10 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
     if( GetCreateType() & SwTOXElement::Template )
         UpdateTemplate( pOwnChapterNode, pLayout );
 
+    // headings styled with a heading-linked character style on a leading run
+    if (SwTOXBase::GetType() == TOX_CONTENT && (GetCreateType() & SwTOXElement::OutlineLevel))
+        UpdateLinkedCharStyles(pOwnChapterNode, pLayout);
+
     if( GetCreateType() & SwTOXElement::Ole ||
             TOX_OBJECTS == SwTOXBase::GetType())
         UpdateContent( SwTOXElement::Ole, pOwnChapterNode, pLayout );
@@ -1539,6 +1545,108 @@ void SwTOXBaseSection::UpdateTemplate(const SwTextNode* pOwnChapterNode,
                 }
             }
         }
+    }
+}
+
+/// Generate table of contents from runs styled with a character style that is linked
+/// to a heading paragraph style. Only a run at the start of the paragraph is considered.
+void SwTOXBaseSection::UpdateLinkedCharStyles(const SwTextNode* pOwnChapterNode,
+                                              SwRootFrame const* const pLayout)
+{
+    SwDoc& rDoc = GetFormat()->GetDoc();
+
+    // Only do the (potentially full document) scan below if the document
+    // actually has a character style linked to a heading style.
+    bool bHasHeadingLinkedCharStyle = false;
+    for (const SwCharFormat* pCharFormat : *rDoc.GetCharFormats())
+    {
+        const SwTextFormatColl* pLinked = pCharFormat->GetLinkedParaFormat();
+        if (pLinked && pLinked->GetAttrOutlineLevel() > 0)
+        {
+            bHasHeadingLinkedCharStyle = true;
+            break;
+        }
+    }
+
+    if (!bHasHeadingLinkedCharStyle)
+        return;
+
+    SwNodes& rNds = rDoc.GetNodes();
+    for (SwNodeOffset nNd(0); nNd < rNds.Count(); ++nNd)
+    {
+        ::SetProgressState(0, rDoc.GetDocShell());
+
+        SwTextNode* pTextNd = rNds[nNd]->GetTextNode();
+        if (!pTextNd || !pTextNd->HasHints())
+            continue;
+
+        // Real heading paragraphs are handled by UpdateOutline
+        if (pTextNd->GetAttrOutlineLevel() > 0)
+            continue;
+
+        if (!useTextNodeForIndex(pTextNd, GetLevel(), IsFromChapter(), pOwnChapterNode, pLayout))
+            continue;
+
+        sal_Int32 nStart = 0;
+
+        // Tracked deletions are hidden when redlines are hidden, so the first
+        // run in the view paragraph can differ from model's first run.
+        // Base the start index on the layout's paragraph start index.
+        if (pLayout)
+        {
+            SwTextFrame* pFrame = static_cast<SwTextFrame*>(pTextNd->getLayoutFrame(pLayout));
+            if (pFrame)
+            {
+                std::pair<SwTextNode*, sal_Int32> pos(pFrame->MapViewToModel(TextFrameIndex(0)));
+
+                if (pos.first == pTextNd)
+                    nStart = pos.second;
+            }
+        }
+
+        sal_Int32 nEnd = nStart;
+        sal_uInt16 nLevel = 0;
+        const SwpHints& rHints = pTextNd->GetSwpHints();
+
+        for (size_t i = 0; i < rHints.Count(); ++i)
+        {
+            const SwTextAttr* pHint = rHints.Get(i);
+
+            if (pHint->Which() != RES_TXTATR_CHARFMT || !pHint->GetEnd() || pHint->GetStart() > nEnd
+                || *pHint->GetEnd() <= nEnd)
+                continue;
+
+            const SwCharFormat* pCharFormat = pHint->GetCharFormat().GetCharFormat();
+            const SwTextFormatColl* pLinked
+                = pCharFormat ? pCharFormat->GetLinkedParaFormat() : nullptr;
+
+            if (!pLinked || (nLevel && nLevel != pLinked->GetAttrOutlineLevel())
+                || pLinked->GetAttrOutlineLevel() <= 0)
+                break;
+
+            if (nEnd == nStart)
+                nLevel = o3tl::narrowing<sal_uInt16>(pLinked->GetAttrOutlineLevel());
+
+            nEnd = *pHint->GetEnd();
+        }
+
+        if (nEnd == nStart)
+            continue;
+
+        // Skip levels deeper than the table of contents collects.
+        if (nLevel > GetLevel())
+            continue;
+
+        std::unique_ptr<SwTOXPara> pNew(
+            new SwTOXPara(*pTextNd, SwTOXElement::LinkedCharStyle, nLevel));
+        pNew->SetStartIndex(nStart);
+        pNew->SetEndIndex(nEnd);
+        pNew->InitText(pLayout);
+
+        if (pNew->GetText().sText.isEmpty())
+            continue;
+
+        InsertSorted(std::move(pNew));
     }
 }
 

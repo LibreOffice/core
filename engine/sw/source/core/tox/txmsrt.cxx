@@ -558,6 +558,7 @@ SwTOXPara::SwTOXPara(SwContentNode& rNd, SwTOXElement eT, sal_uInt16 nLevel, OUS
     {
     case SwTOXElement::Template:
     case SwTOXElement::OutlineLevel:
+    case SwTOXElement::LinkedCharStyle:
         assert(rNd.IsTextNode());
         rNd.GetDoc().getIDocumentMarkAccess()->getMarkForTextNode(
             *rNd.GetTextNode(), IDocumentMarkAccess::MarkType::CROSSREF_HEADING_BOOKMARK);
@@ -572,6 +573,14 @@ TextAndReading SwTOXPara::GetText_Impl(SwRootFrame const*const pLayout) const
     const SwContentNode* pNd = aTOXSources[0].pNd;
     switch( eType )
     {
+    case SwTOXElement::LinkedCharStyle:
+        return TextAndReading(
+            static_cast<const SwTextNode*>(pNd)->GetExpandText(
+                pLayout, nStartIndex, nEndIndex == -1 ? -1 : nEndIndex - nStartIndex, false, false,
+                false,
+                pLayout && pLayout->IsHideRedlines() ? ExpandMode::HideDeletions : ExpandMode(0)),
+            OUString());
+
     case SwTOXElement::Sequence:
         if (nStartIndex != 0 || nEndIndex != -1)
         {
@@ -696,6 +705,7 @@ std::pair<OUString, bool> SwTOXPara::GetURL(SwRootFrame const*const) const
     {
     case SwTOXElement::Template:
     case SwTOXElement::OutlineLevel:
+    case SwTOXElement::LinkedCharStyle:
         {
             const SwTextNode * pTextNd = pNd->GetTextNode();
 

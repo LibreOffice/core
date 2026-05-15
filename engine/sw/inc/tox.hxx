@@ -381,6 +381,7 @@ enum class SwTOXElement : sal_uInt16
     Bookmark              = 0x0400,
     Newline               = 0x0800,
     ParagraphOutlineLevel = 0x1000,
+    LinkedCharStyle       = 0x2000,
 };
 namespace o3tl {
     template<> struct typed_flags<SwTOXElement> : is_typed_flags<SwTOXElement, 0x3fff> {};
