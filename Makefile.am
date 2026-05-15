@@ -689,12 +689,14 @@ COMMON_PARAMS = \
 	--o:ssl.ca_file_path="$(abs_top_srcdir)/etc/ca-chain.cert.pem" \
 	--o:admin_console.username=admin --o:admin_console.password=admin
 
-run: setup-wsd
+check-apparmour-namespaces:
 	@if test "${TEST_APPARMOR}" = "enabled"; then \
 		echo apparmor_restrict_unprivileged_userns is enabled, which blocks user namespaces; \
 	        (which podman > /dev/null 2>&1 && echo "Using podman unshare to workaround") || \
-		(echo "WARNING: install podman to workaround this" && false); \
+		(echo "WARNING: to workaround this, either (a) disable with sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0 or (b) install podman" && false); \
 	fi
+
+run: setup-wsd check-apparmour-namespaces
 	$(ENABLE_NAMESPACE) ./coolwsd $(COMMON_PARAMS) \
 			--o:logging.file[@enable]=${OUTPUT_TO_FILE} --o:logging.level=trace \
 			--o:logging_ui_cmd.file[@enable]=${OUTPUT_TO_FILE} \
@@ -993,7 +995,7 @@ check-snap-langs:
 
 check-recursive: eslint
 
-check: all-local check-for-system-nss check-flatpak-langs check-snap-langs prettier eslint presets-dir check-recursive
+check: all-local check-for-system-nss check-flatpak-langs check-snap-langs prettier eslint presets-dir check-apparmour-namespaces check-recursive
 	$(GEN_COVERAGE_COMMAND)
 
 coverage-report:
