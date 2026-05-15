@@ -43,7 +43,7 @@ strip = '$(STRIP)'
 # TODO: this is pretty ugly...
 [host_machine]
 system = '$(if $(filter WNT,$(OS)),windows,$(if $(filter MACOSX,$(OS)),darwin,$(if $(filter ANDROID,$(OS)),android,linux)))'
-cpu_family = '$(subst X86_64,x86_64,$(RTL_ARCH))'
+cpu_family = '$(subst X86_64,x86_64,$(subst AARCH64,aarch64,$(subst ARM,arm,$(RTL_ARCH))))'
 cpu = '$(if $(filter x86,$(RTL_ARCH)),i686,$(if $(filter X86_64,$(RTL_ARCH)),x86_64,$(if $(filter AARCH64,$(RTL_ARCH)),aarch64,armv7)))'
 endian = '$(ENDIANNESS)'
 endef
