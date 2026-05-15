@@ -660,7 +660,6 @@ window.L.Control.NotebookbarBuilder = window.L.Control.JSDialogBuilder.extend({
 		$(control.label).unbind('click');
 		$(control.container).click(function () {
 			if (!$(control.container).hasClass('disabled')) {
-				builder.refreshSidebar = true;
 				var command = data.command + '?On:bool=true';
 				builder.callback('toolbutton', 'click', control.button, command, builder);
 			}

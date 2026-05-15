@@ -5307,18 +5307,7 @@ static void lcl_sendDialogEvent(unsigned long long int nWindowId, const char* pA
         const OUString sCurrentShellId = OUString::number(nCurrentShellId);
 
         // special values for window id
-        if (nWindowId == static_cast<unsigned long long int>(-1))
-        {
-            sWindowId = sCurrentShellId + "sidebar";
-
-            // force sidebar resend - for legacy mobile-wizard: {"id":"-1"}
-            if (aMap.size() == 1)
-            {
-                // force resend - used in mobile-wizard
-                jsdialog::SendFullUpdate(sCurrentShellId + "sidebar", u"Panel"_ustr);
-                return;
-            }
-        }
+        // nWindowId == -1 was legacy refresh sidebar - no longer in use
         if (nWindowId == static_cast<unsigned long long int>(-2))
             sWindowId = sCurrentShellId + "notebookbar";
         if (nWindowId == static_cast<unsigned long long int>(-3))
@@ -5349,8 +5338,7 @@ static void lcl_sendDialogEvent(unsigned long long int nWindowId, const char* pA
         if (!SfxViewShell::Current() && jsdialog::ExecuteAction(u"0"_ustr, sControlId, aMap))
             return;
 
-        // force resend - used in mobile-wizard
-        jsdialog::SendSidebarForView(nCurrentShellId);
+        assert(false && "we should not be here - invalid message");
     }
     catch (std::out_of_range& e)
     {

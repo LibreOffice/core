@@ -1661,7 +1661,6 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 
 		var clickFunction = function (e) {
 			if (!div.hasAttribute('disabled')) {
-				builder.refreshSidebar = true;
 				if (data.postmessage) {
 					let isContextualButton = e.target.offsetParent.id === 'context-toolbar';
 					const msgId = isContextualButton ? 'Clicked_ContextualButton' : 'Clicked_Button';

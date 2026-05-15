@@ -55,10 +55,8 @@ window.L.Control.MobileWizard = window.L.Control.extend({
 		this.backButton.click(function() { history.back(); });
 	},
 
-	_showWizardSidebar: function(event) {
+	_showWizardSidebar: function() {
 		this.map.showSidebar = true;
-		if (!event || !event.noRefresh)
-			this._refreshSidebar();
 	},
 
 	_closeWizard: function() {
@@ -172,16 +170,6 @@ window.L.Control.MobileWizard = window.L.Control.extend({
 		}
 
 		return null;
-	},
-
-	_refreshSidebar: function(ms) {
-		ms = ms !== undefined ? ms : 400;
-		setTimeout(function () {
-			var message = 'dialogevent ' +
-			    (window.sidebarId !== undefined ? window.sidebarId : -1) +
-			    ' {"id":"-1"}';
-			app.socket.sendMessage(message);
-		}, ms);
 	},
 
 	_onMobileWizard: function(data) {

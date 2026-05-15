@@ -125,7 +125,6 @@ JSDialog.mobileComboboxEntry = function(parentContainer, data, builder) {
 		window.L.DomUtil.addClass(comboboxEntry, data.style);
 
 	comboboxEntry.addEventListener('click', function () {
-		builder.refreshSidebar = true;
 		if (builder.wizard)
 			builder.wizard.goLevelUp();
 		builder.callback('combobox', 'selected', comboboxEntry.parent, data.pos + ';' + comboboxEntry.textContent, builder);

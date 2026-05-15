@@ -11,6 +11,10 @@ describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Searching via search bar.',
 
 		mobileHelper.enableEditingMobile();
 
+		// Make sure the spreadsheet finished loading before starting the search,
+		// otherwise the search can start against an empty cell selection.
+		cy.cGet(helper.addressInputSelector).should('have.value', 'A2');
+
 		searchHelper.showSearchBar();
 	});
 

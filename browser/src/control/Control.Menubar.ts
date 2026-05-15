@@ -2492,7 +2492,7 @@ class Menubar extends window.L.Control {
 		} else if (id === 'pagesetup') {
 			this._map.sendUnoCommand('.uno:SidebarShow');
 			this._map.sendUnoCommand('.uno:LOKSidebarWriterPage');
-			this._map.fire('showwizardsidebar', {noRefresh: true});
+			this._map.fire('showwizardsidebar');
 			window.pageMobileWizard = true;
 		} else if (id === 'showslide') {
 			app.dispatcher.dispatch('showslide');
