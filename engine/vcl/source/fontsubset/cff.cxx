@@ -1796,6 +1796,8 @@ int CffContext::seekIndexData( int nIndexBase, int nDataIndex)
         return -1;
     const int nDataOfsSz = mpReadPtr[2];
     mpReadPtr += 3 + (nDataOfsSz * nDataIndex);
+    if (mpReadPtr + nDataOfsSz > mpBaseEnd)
+        return -1;
     int nOfs1 = 0;
     switch( nDataOfsSz) {
         default: SAL_WARN("vcl.fonts.cff", "\tINVALID nDataOfsSz=" << nDataOfsSz); return -1;
@@ -1805,6 +1807,8 @@ int CffContext::seekIndexData( int nIndexBase, int nDataIndex)
         case 4: nOfs1 = (mpReadPtr[0]<<24) + (mpReadPtr[1]<<16) + (mpReadPtr[2]<<8) + mpReadPtr[3]; break;
     }
     mpReadPtr += nDataOfsSz;
+    if (mpReadPtr + nDataOfsSz > mpBaseEnd)
+        return -1;
 
     int nOfs2 = 0;
     switch( nDataOfsSz) {
