@@ -510,6 +510,7 @@ class UserList extends window.L.Control {
 			const listItem = window.L.DomUtil.create('div', 'user-list-item');
 			listItem.setAttribute('data-view-id', viewId);
 			listItem.setAttribute('role', 'button');
+			listItem.setAttribute('tabindex', '0');
 
 			if (following !== undefined && viewId == following[0]) {
 				$(listItem).addClass('selected-user');
@@ -522,13 +523,22 @@ class UserList extends window.L.Control {
 				user.extraInfo,
 				user.color,
 			);
+			avatar.alt = '';
+			avatar.setAttribute('aria-hidden', 'true');
 			user.cachedUserListAvatar = avatar;
 
 			listItem.appendChild(avatar);
 			listItem.appendChild(userLabelContainer);
-			listItem.addEventListener('click', () => {
+			const activate = () => {
 				this.followUser(viewId);
 				JSDialog.CloseDropdown('userlist');
+			};
+			listItem.addEventListener('click', activate);
+			listItem.addEventListener('keydown', (e: KeyboardEvent) => {
+				if (e.key === 'Enter' || e.key === ' ') {
+					e.preventDefault();
+					activate();
+				}
 			});
 
 			return listItem;
@@ -536,6 +546,17 @@ class UserList extends window.L.Control {
 
 		const followEditorWrapper = window.L.DomUtil.create('div', '');
 		followEditorWrapper.id = 'follow-editor';
+		followEditorWrapper.setAttribute('role', 'checkbox');
+		followEditorWrapper.setAttribute('tabindex', '0');
+		followEditorWrapper.setAttribute(
+			'aria-label',
+			_('Always follow the editor'),
+		);
+		followEditorWrapper.setAttribute(
+			'aria-checked',
+			String(app.isFollowingEditor()),
+		);
+
 		const followEditorCheckbox = window.L.DomUtil.create(
 			'input',
 			'follow-editor-checkbox jsdialog ui-checkbox',
@@ -543,12 +564,21 @@ class UserList extends window.L.Control {
 		);
 		followEditorCheckbox.id = 'follow-editor-checkbox';
 		followEditorCheckbox.setAttribute('type', 'checkbox');
+		followEditorCheckbox.setAttribute('tabindex', '-1');
+		followEditorCheckbox.setAttribute('aria-hidden', 'true');
 		followEditorCheckbox.onchange = (event: Event) => {
 			(window as any).editorUpdate(event);
 			this.renderAll();
 		};
 		(followEditorCheckbox as HTMLInputElement).checked =
 			app.isFollowingEditor();
+
+		followEditorWrapper.addEventListener('keydown', (e: KeyboardEvent) => {
+			if (e.key === ' ' || e.key === 'Enter') {
+				e.preventDefault();
+				(followEditorCheckbox as HTMLInputElement).click();
+			}
+		});
 
 		const followEditorCheckboxLabel = window.L.DomUtil.create(
 			'label',
@@ -557,6 +587,7 @@ class UserList extends window.L.Control {
 		);
 		followEditorCheckboxLabel.innerText = _('Always follow the editor');
 		followEditorCheckboxLabel.setAttribute('for', 'follow-editor-checkbox');
+		followEditorCheckboxLabel.setAttribute('aria-hidden', 'true');
 
 		popoverElement.replaceChildren(...userElements, followEditorWrapper);
 	}
