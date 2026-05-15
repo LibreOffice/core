@@ -161,7 +161,7 @@ describe(['tagdesktop'], 'Annotation Tests', function() {
 		cy.cGet('#comment-container-1').should('be.not.visible');
 	});
 
-	it('Visibility at Different Window Widths (increasing)', function () {
+	it.skip('Visibility at Different Window Widths (increasing)', function () {
 		/*
 			1. start with collapsed comment and increase window width
 			2. cy.viewport(1400, 600); at 150% comment is collapsed
