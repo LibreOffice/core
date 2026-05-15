@@ -16,20 +16,18 @@ describe(['tagdesktop'], 'WebSocket reconnection', function () {
 		helper.typeIntoDocument('{ctrl}{End}');
 		desktopHelper.assertVisiblePage(12, 12, 12);
 
+		// Close the raw WebSocket to trigger automatic reconnection
 		var preDisconnectY1;
 		cy.getFrameWindow().then(function (win) {
 			preDisconnectY1 = win.app.activeDocument.activeLayout.viewedRectangle.y1;
 			expect(preDisconnectY1).to.be.greaterThan(0);
-		});
-
-		// Close the raw WebSocket to trigger automatic reconnection
-		cy.getFrameWindow().then(function (win) {
 			win.app.socket.socket.close();
 		});
 
 		// Can't use processToIdle with the socket closed
 		cy.wait(500);
 
+		// Wait for reconnection to complete
 		cy.cGet('#document-canvas').should('be.visible');
 		cy.getFrameWindow().its('app.socket._reconnecting')
 			.should('eq', false);
@@ -37,6 +35,7 @@ describe(['tagdesktop'], 'WebSocket reconnection', function () {
 			helper.processToIdle(win);
 		});
 
+		// Verify the page position is preserved after reconnection
 		desktopHelper.assertVisiblePage(12, 12, 12);
 
 		cy.cGet('#document-canvas').click(200, 200);
@@ -46,9 +45,10 @@ describe(['tagdesktop'], 'WebSocket reconnection', function () {
 
 		desktopHelper.assertVisiblePage(12, 12, 12);
 		cy.getFrameWindow().then(function (win) {
+			const DRIFT_TOLERANCE_TWIPS = 5000;
 			var postClickY1 = win.app.activeDocument.activeLayout.viewedRectangle.y1;
 			var drift = Math.abs(postClickY1 - preDisconnectY1);
-			expect(drift).to.be.lessThan(preDisconnectY1 / 2);
+			expect(drift).to.be.lessThan(DRIFT_TOLERANCE_TWIPS);
 		});
 	});
 });

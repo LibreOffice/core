@@ -109,14 +109,17 @@ window.L.WriterTileLayer = window.L.CanvasTileLayer.extend({
 
 	_setNewSize: function (/*cool.SimplePoint*/ size) {
 		app.activeDocument.fileSize = size;
-		app.activeDocument.activeLayout.viewSize = app.activeDocument.fileSize.clone();
+		app.activeDocument.activeLayout.viewSize = size.clone();
 		this._updateMaxBounds(true);
 	},
 
 	_releaseReconnectFileSize: function () {
-		this._setNewSize(this._reconnectFileSize);
 		this._reconnectFileSize = null;
 		this._reconnectFileSizeTimer = null;
+		var last = this._reconnectLatestStatus;
+		this._reconnectLatestStatus = null;
+		if (last && (last.x !== app.activeDocument.fileSize.x || last.y !== app.activeDocument.fileSize.y))
+			this._setNewSize(last);
 	},
 
 	_onStatusMsg: function (textMsg) {
@@ -139,20 +142,24 @@ window.L.WriterTileLayer = window.L.CanvasTileLayer.extend({
 		if (statusJSON.readonly && !this._documentInfo)
 			this._map.setPermission('readonly');
 
-		var sizeChanged = statusJSON.width !== app.activeDocument.fileSize.x || statusJSON.height !== app.activeDocument.fileSize.y;
-		if (sizeChanged && (app.socket._reconnecting || this._reconnectFileSize)) {
+		// Suppress shrinking sizes during reconnect's incremental reload
+		// so setMaxBounds doesn't pan the view; timer covers real shrinks.
+		if (app.socket._reconnecting && !this._reconnectFileSize && app.activeDocument.fileSize.y > 0)
+			this._reconnectFileSize = app.activeDocument.fileSize.clone();
+		if (this._reconnectFileSize) {
 			if (this._reconnectFileSizeTimer)
 				clearTimeout(this._reconnectFileSizeTimer);
-			if (statusJSON.width >= app.activeDocument.fileSize.x && statusJSON.height >= app.activeDocument.fileSize.y) {
+			if (statusJSON.width >= this._reconnectFileSize.x && statusJSON.height >= this._reconnectFileSize.y) {
 				this._reconnectFileSize = null;
+				this._reconnectFileSizeTimer = null;
 			} else {
-				// Suppress shrinking sizes during reconnection incremental reload
-				// The timer avoids this supression being permanent
-				sizeChanged = false;
-				this._reconnectFileSize = new cool.SimplePoint(statusJSON.width, statusJSON.height);
-				this._reconnectFileSizeTimer = setTimeout(this._releaseReconnectFileSize.bind(this), 5000);
+				const RECONNECT_FILE_SIZE_RELEASE_MS = 5000;
+				this._reconnectLatestStatus = new cool.SimplePoint(statusJSON.width, statusJSON.height);
+				this._reconnectFileSizeTimer = setTimeout(this._releaseReconnectFileSize.bind(this), RECONNECT_FILE_SIZE_RELEASE_MS);
 			}
 		}
+		var sizeChanged = !this._reconnectFileSize &&
+			(statusJSON.width !== app.activeDocument.fileSize.x || statusJSON.height !== app.activeDocument.fileSize.y);
 
 		if (statusJSON.viewid !== undefined) {
 			this._viewId = statusJSON.viewid;
