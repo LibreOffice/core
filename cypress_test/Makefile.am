@@ -117,6 +117,9 @@ IDLE_TEST_FILES_DONE= \
 MULTIUSER_TESTS_DONE= \
 	$(MULTIUSER_TRACK_FOLDER)/multiuser_tests.done
 
+MULTIUSER_TEST_FILES_DONE= \
+	$(foreach test_file,$(MULTIUSER_TEST_FILES),$(MULTIUSER_TRACK_FOLDER)/$(test_file).done)
+
 check-local: do-check
 	$(if $(wildcard $(ERROR_LOG)),$(error CypressError: some tests failed!))
 
@@ -166,6 +169,16 @@ $(DESKTOP_TEST_FILES_DONE): $(PID_FILE)
 $(MULTIUSER_TESTS_DONE): $(PID_FILE) $(MOBILE_TEST_FILES_DONE) $(IDLE_TEST_FILES_DONE)
 	$(call run_all_multiuser_tests)
 	$(V)mkdir -p $(dir $@) && touch $@
+
+$(MULTIUSER_TEST_FILES_DONE): $(PID_FILE)
+	$(if $(PARALLEL_BUILD),\
+		$(call run_multiuser_tests,$(subst $(MULTIUSER_TRACK_FOLDER)/,,$(basename $@)),$(basename $@).log),\
+		$(call run_multiuser_tests))
+	$(if $(PARALLEL_BUILD),\
+		$(V)mkdir -p $(dir $@) && touch $@\
+		,\
+		$(V)$(foreach done_file,$(MULTIUSER_TEST_FILES_DONE),mkdir -p $(dir $(done_file)) && touch $(done_file) &&) true\
+	)
 
 $(IDLE_TEST_FILES_DONE): start_short_idle_coolwsd $(PID_FILE)
 	$(if $(PARALLEL_BUILD),\
@@ -590,6 +603,26 @@ define run_multiuser_test
 	$(eval SPEC_FILE=$(if $(1),$(MULTIUSER_TEST_FOLDER)/$(1)))
 	$(call run_test_headless,\
 		$(MULTIUSER_CONFIG),$(ENV_EXTENDED),$(SPEC_FILE))
+endef
+
+# Run one multi-user test / all multi-user tests in headless mode.
+# Parameters:
+# 1 - spec (optional):	test file to run, if not specified all multi-user tests are run.
+# 2 - log (optional):	log file for cypress run, needed for parallel build only.
+# 3 - +env (optional):	additional env variables (will be appended to $(MULTIUSER_ENV).
+define run_multiuser_tests
+	$(V)echo $(if $(1),"Running cypress multi-user test: $(1)","Running cypress multi-user tests...")
+	$(V)echo
+	$(eval ENV_EXTENDED=$(MULTIUSER_ENV)$(if $(3),$(COMMA)$(3)))
+	$(if $(and $(PARALLEL_BUILD), $(1)),\
+		$(V)$(call run_test_buffered,\
+			$(MULTIUSER_CONFIG),$(ENV_EXTENDED),$(1),multi-user,$(2))\
+	,\
+		$(eval SPEC_FILE=$(if $(1),$(MULTIUSER_TEST_FOLDER)/$(1)))\
+		$(if $(1),$(call check_spec_existence,$(1),multi))\
+		$(call run_test_headless,\
+			$(MULTIUSER_CONFIG),$(ENV_EXTENDED),$(SPEC_FILE))\
+	)
 endef
 
 ############################
