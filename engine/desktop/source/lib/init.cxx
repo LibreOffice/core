@@ -3039,8 +3039,24 @@ static COKitDocument* lo_documentLoadWithOptions(COKit* pThis, const char* pURL,
         sal_Int16 nMacroExecMode = document::MacroExecMode::USE_CONFIG;
 #else
         const OUString aEnableMacrosExecution = extractParameter(aOptions, u"EnableMacrosExecution");
-        sal_Int16 nMacroExecMode = aEnableMacrosExecution == "true" ? document::MacroExecMode::USE_CONFIG :
-            document::MacroExecMode::NEVER_EXECUTE;
+        sal_Int16 nMacroExecMode;
+        if (aEnableMacrosExecution == "true")
+        {
+            nMacroExecMode = document::MacroExecMode::USE_CONFIG;
+        }
+        else
+        {
+            nMacroExecMode = document::MacroExecMode::NEVER_EXECUTE;
+            // also set the global flag so IsMacroDisabled() returns true,
+            // blocking share-location scripts that bypass the per-document
+            // MacroExecutionMode check. Affects this per-document process instance,
+            // may require re-visiting when/if CODA gets macro support.
+            std::shared_ptr<comphelper::ConfigurationChanges> xChanges =
+                comphelper::ConfigurationChanges::create();
+            officecfg::Office::Common::Security::Scripting::DisableMacrosExecution::set(
+                true, xChanges);
+            xChanges->commit();
+        }
 #endif
 
         // set AsTemplate explicitly false to be able to load template files
