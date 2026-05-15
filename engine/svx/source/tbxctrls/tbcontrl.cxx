@@ -1632,11 +1632,10 @@ IMPL_LINK(SvxStyleBox_Base, DumpAsPropertyTreeHdl, tools::JsonWriter&, rJsonWrit
         return;
 
     {
-        auto entriesNode = rJsonWriter.startNode("entries");
+        auto entriesNode = rJsonWriter.startArray("entries");
         for (int i = 0, nEntryCount = m_xWidget->get_count(); i < nEntryCount; ++i)
         {
-            auto entryNode = rJsonWriter.startNode("");
-            rJsonWriter.put("", m_xWidget->get_text(i));
+            rJsonWriter.putSimpleValue(m_xWidget->get_text(i));
         }
     }
 
@@ -1644,11 +1643,10 @@ IMPL_LINK(SvxStyleBox_Base, DumpAsPropertyTreeHdl, tools::JsonWriter&, rJsonWrit
     rJsonWriter.put("selectedCount", static_cast<sal_Int32>(nActive == -1 ? 0 : 1));
 
     {
-        auto selectedNode = rJsonWriter.startNode("selectedEntries");
+        auto selectedNode = rJsonWriter.startArray("selectedEntries");
         if (nActive != -1)
         {
-            auto node = rJsonWriter.startNode("");
-            rJsonWriter.put("", static_cast<sal_Int32>(nActive));
+            rJsonWriter.putSimpleValue(OUString::number(nActive));
         }
     }
 
@@ -2032,11 +2030,10 @@ void SvxFontNameBox_Base::Select(bool bNonTravelSelect)
 IMPL_LINK(SvxFontNameBox_Base, DumpAsPropertyTreeHdl, tools::JsonWriter&, rJsonWriter, void)
 {
     {
-        auto entriesNode = rJsonWriter.startNode("entries");
+        auto entriesNode = rJsonWriter.startArray("entries");
         for (int i = 0, nEntryCount = m_xWidget->get_count(); i < nEntryCount; ++i)
         {
-            auto entryNode = rJsonWriter.startNode("");
-            rJsonWriter.put("", m_xWidget->get_text(i));
+            rJsonWriter.putSimpleValue(m_xWidget->get_text(i));
         }
     }
 
@@ -2044,11 +2041,10 @@ IMPL_LINK(SvxFontNameBox_Base, DumpAsPropertyTreeHdl, tools::JsonWriter&, rJsonW
     rJsonWriter.put("selectedCount", static_cast<sal_Int32>(nSelectedEntry == -1 ? 0 : 1));
 
     {
-        auto selectedNode = rJsonWriter.startNode("selectedEntries");
+        auto selectedNode = rJsonWriter.startArray("selectedEntries");
         if (nSelectedEntry != -1)
         {
-            auto entryNode = rJsonWriter.startNode("");
-            rJsonWriter.put("", m_xWidget->get_text(nSelectedEntry));
+            rJsonWriter.putSimpleValue(m_xWidget->get_text(nSelectedEntry));
         }
     }
 

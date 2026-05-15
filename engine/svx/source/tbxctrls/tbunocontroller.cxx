@@ -328,22 +328,20 @@ void SvxFontSizeBox_Impl::DataChanged( const DataChangedEvent& rDCEvt )
 IMPL_LINK(SvxFontSizeBox_Base, DumpAsPropertyTreeHdl, tools::JsonWriter&, rJsonWriter, void)
 {
     {
-        auto entriesNode = rJsonWriter.startNode("entries");
+        auto entriesNode = rJsonWriter.startArray("entries");
         for (int i = 0, nCount = m_xWidget->get_count(); i < nCount; ++i)
         {
-            auto entryNode = rJsonWriter.startNode("");
-            rJsonWriter.put("", m_xWidget->get_text(i));
+            rJsonWriter.putSimpleValue(m_xWidget->get_text(i));
         }
     }
 
     int nActive = m_xWidget->get_active();
     rJsonWriter.put("selectedCount", static_cast<sal_Int32>(nActive == -1 ? 0 : 1));
     {
-        auto selectedNode = rJsonWriter.startNode("selectedEntries");
+        auto selectedNode = rJsonWriter.startArray("selectedEntries");
         if (nActive != -1)
         {
-            auto node = rJsonWriter.startNode("");
-            rJsonWriter.put("", static_cast<sal_Int32>(nActive));
+            rJsonWriter.putSimpleValue(OUString::number(nActive));
         }
     }
 
