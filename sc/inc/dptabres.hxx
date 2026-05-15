@@ -500,11 +500,10 @@ class ScDPResultDimension
 {
 public:
     typedef std::vector<std::unique_ptr<ScDPResultMember>> MemberArray;
-    typedef std::unordered_map<SCROW, ScDPResultMember*> MemberHash;
 private:
     const ScDPResultData*   pResultData;
     MemberArray             maMemberArray;
-    MemberHash              maMemberHash;
+
     OUString                aDimensionName;     //! or ptr to IntDimension?
     tools::Long                    nSortMeasure;
     ScMemberSortOrder       aMemberOrder;       // used when sorted by measure
