@@ -509,8 +509,8 @@ class Document: NSDocument {
         // Add lang and (potentially) darkTheme
         Document.addCommonCOOLQueryItems(to: &components)
 
-        if isNewDocument {
-            components.queryItems?.append(URLQueryItem(name: "isnewdocument", value: "true"))
+        if !isNewDocument {
+            components.queryItems?.append(URLQueryItem(name: "startreadonly", value: "true"))
         }
 
         if isWelcome {

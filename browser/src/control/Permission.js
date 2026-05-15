@@ -41,7 +41,11 @@ window.L.Map.include({
 		}
 		var that = this;
 		if (perm === 'edit') {
-			if (this._shouldStartReadOnly() || window.mode.isSmallScreenDevice() || window.mode.isTablet()) {
+			// Only apply the opt-in gate when the doc is first opened;
+			// later setPermission calls (reload, save-as, server perm
+			// changes) honor what was asked.
+			var firstOpen = this._permission === undefined;
+			if (firstOpen && (this._shouldStartReadOnly() || window.mode.isSmallScreenDevice() || window.mode.isTablet())) {
 				button.on('click', function () {
 					that._switchToEditMode();
 				});
@@ -107,7 +111,7 @@ window.L.Map.include({
 	_shouldStartReadOnly: function () {
 		if (this.isLockedReadOnlyUser())
 			return true;
-		if (window.mode.isCODesktop() && !window.mode.isNewDocument()) {
+		if (window.coolParams.get('startreadonly') === 'true') {
 			return true;
 		}
 		var fileName = this['wopi'].BaseFileName;

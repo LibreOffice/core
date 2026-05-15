@@ -205,9 +205,6 @@ class BrowserProperties {
 			isCODesktop: function() {
 				return global.ThisIsTheMacOSApp || global.ThisIsTheQtApp || global.ThisIsTheWindowsApp;
 			},
-			isNewDocument: function() {
-				return window.coolParams.get('isnewdocument');
-			},
 			isDesktop: function() {
 				if (global.ThisIsTheWindowsApp || global.ThisIsTheQtApp	|| global.ThisIsTheMacOSApp)
 					return true;

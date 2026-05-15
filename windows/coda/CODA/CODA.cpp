@@ -1942,7 +1942,7 @@ static void openCOOLWindow(const FilenameAndUri& filenameAndUri, DocumentMode mo
 
                             if (data.mode != DocumentMode::STARTER)
                                 coolURL +=
-                                    std::string((data.mode == DocumentMode::NEW ? "&isnewdocument=true" : "")) +
+                                    std::string((data.mode != DocumentMode::NEW ? "&startreadonly=true" : "")) +
                                     std::string((data.mode == DocumentMode::WELCOME ? "&welcome=true" : ""));
 
                             webView->Navigate(Util::string_to_wide_string(coolURL).c_str());

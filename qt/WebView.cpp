@@ -583,8 +583,8 @@ void WebView::load(const Poco::URI& fileURL, bool newFile, bool isStarterMode)
 
     if (!isStarterMode)
     {
-        if (newFile)
-            urlAndQuery.addQueryParameter("isnewdocument", "true");
+        if (!newFile)
+            urlAndQuery.addQueryParameter("startreadonly", "true");
         if (_isWelcome)
             urlAndQuery.addQueryParameter("welcome", "true");
     }

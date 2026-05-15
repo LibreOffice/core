@@ -335,7 +335,6 @@ interface Window {
 		isDesktop(): boolean;
 		isTablet(): boolean;
 		isCODesktop(): boolean;
-		isNewDocument(): boolean;
 		isChromebook(): boolean;
 		getDeviceFormFactor(): string;
 	};
