@@ -1077,26 +1077,14 @@ FontWeight AnalyzeTTFWeight(const TrueTypeFont* ttf)
 
 int TestFontParsing(const void* data, sal_uInt32 size)
 {
-    // Exercise TrueType/OpenType parsing
-    vcl::TrueTypeFont* pTTF = nullptr;
-    if (vcl::OpenTTFontBuffer(data, size, 0, &pTTF) == vcl::SFErrCodes::Ok)
+    if (data && size > 0)
     {
-        vcl::TTGlobalFontInfo aInfo;
-        vcl::GetTTGlobalFontInfo(pTTF, &aInfo);
-
-        // If the font has a CFF table, exercise the CFF parser with it
-        sal_uInt32 nCFFSize = 0;
-        const sal_uInt8* pCFF = pTTF->table(vcl::O_CFF, nCFFSize);
-        if (pCFF && nCFFSize > 0)
-        {
-            std::vector<sal_uInt8> aOutBuffer;
-            FontSubsetInfo aCFFInfo;
-            vcl::ConvertCFFfontToType1(pCFF, nCFFSize, aOutBuffer, aCFFInfo);
-        }
-
-        vcl::CloseTTFont(pTTF);
+        FontSubsetInfo aInfo;
+        aInfo.m_nFontType = FontType::TYPE1_PFB;
+        std::vector<sal_uInt8> aOutBuffer;
+        vcl::ConvertCFFfontToType1(static_cast<const unsigned char*>(data),
+                                   size, aOutBuffer, aInfo);
     }
-
     return 0;
 }
 
