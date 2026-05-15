@@ -36,6 +36,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,breakpad,\
 	external/breakpad/SIGSTKSZ.patch \
 	external/breakpad/sanitizer.patch \
 	external/breakpad/include.patch \
+	external/breakpad/no-checked_array_iterator.patch \
 ))
 
 $(eval $(call gb_UnpackedTarball_add_files,breakpad,src/tools/windows/dump_syms,\

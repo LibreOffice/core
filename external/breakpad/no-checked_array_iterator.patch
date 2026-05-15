@@ -1,0 +1,16 @@
+--- src/client/windows/crash_generation/minidump_generator.cc
++++ src/client/windows/crash_generation/minidump_generator.cc
+@@ -176,13 +176,7 @@
+   stream_data->Reserved = 0;
+   std::copy(operations_.begin(),
+             operations_.end(),
+-#if defined(_MSC_VER) && !defined(_LIBCPP_STD_VER)
+-            stdext::checked_array_iterator<AVRF_HANDLE_OPERATION*>(
+-                reinterpret_cast<AVRF_HANDLE_OPERATION*>(stream_data + 1),
+-                operations_.size())
+-#else
+             reinterpret_cast<AVRF_HANDLE_OPERATION*>(stream_data + 1)
+-#endif
+             );
+ 
+   return true;
