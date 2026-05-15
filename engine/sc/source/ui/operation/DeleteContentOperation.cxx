@@ -97,8 +97,8 @@ bool DeleteContentOperation::runImplementation()
         bMulti = false;
 
     // no objects on protected tabs
-    bool bObjects
-        = (mnFlags & InsertDeleteFlags::OBJECTS) && !sc::DocFuncUtil::hasProtectedTab(rDoc, aWorkMark);
+    bool bObjects = (mnFlags & InsertDeleteFlags::OBJECTS)
+                    && !sc::DocFuncUtil::hasProtectedTab(rDoc, aWorkMark);
 
     sal_uInt16 nExtFlags = 0; // extra flags are needed only if attributes are deleted
     if (mnFlags & InsertDeleteFlags::ATTRIB)
@@ -126,11 +126,16 @@ bool DeleteContentOperation::runImplementation()
     // To keep track of all non-empty cells within the deleted area.
     std::shared_ptr<ScSimpleUndo::DataSpansType> pDataSpans;
 
+    // Capture every multi-cell matrix master inside the delete range so
+    // undo can re-register them in the expanded-matrix tracking set after
+    // restoring their cells.
+    std::vector<ScAddress> aRestoreExpandedMatrices;
     if (mbRecord)
     {
         pUndoDoc = sc::DocFuncUtil::createDeleteContentsUndoDoc(rDoc, aMultiMark, aMarkRange,
                                                                 mnFlags, bMulti);
         pDataSpans = sc::DocFuncUtil::getNonEmptyCellSpans(rDoc, aMultiMark, aMarkRange);
+        aRestoreExpandedMatrices = rDoc.CollectExpandedDynamicArraysInRange(aMultiMark, aMarkRange);
     }
 
     rDoc.DeleteSelection(mnFlags, aMultiMark);
@@ -138,9 +143,9 @@ bool DeleteContentOperation::runImplementation()
     // add undo action after drawing undo is complete (objects and note captions)
     if (mbRecord)
     {
-        sc::DocFuncUtil::addDeleteContentsUndo(mrDocShell.GetUndoManager(), mrDocShell, aMultiMark,
-                                               aExtendedRange, std::move(pUndoDoc), mnFlags,
-                                               pDataSpans, bMulti, bDrawUndo);
+        sc::DocFuncUtil::addDeleteContentsUndo(
+            mrDocShell.GetUndoManager(), mrDocShell, aMultiMark, aExtendedRange,
+            std::move(pUndoDoc), mnFlags, pDataSpans, bMulti, bDrawUndo, aRestoreExpandedMatrices);
     }
 
     syncSheetViews();

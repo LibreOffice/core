@@ -41,7 +41,8 @@ public:
         SfxUndoManager* pUndoMgr, ScDocShell& rDocSh, const ScMarkData& rMark,
         const ScRange& rRange, ScDocumentUniquePtr&& pUndoDoc, InsertDeleteFlags nFlags,
         const std::shared_ptr<ScSimpleUndo::DataSpansType>& pSpans,
-        bool bMulti, bool bDrawUndo );
+        bool bMulti, bool bDrawUndo,
+        std::vector<ScAddress> const& rRestoreExpandedMatrices);
 
     static std::shared_ptr<ScSimpleUndo::DataSpansType> getNonEmptyCellSpans(
         const ScDocument& rDoc, const ScMarkData& rMark, const ScRange& rRange );

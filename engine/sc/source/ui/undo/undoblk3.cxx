@@ -93,6 +93,11 @@ void ScUndoDeleteContents::SetDataSpans( const std::shared_ptr<DataSpansType>& p
     mpDataSpans = pSpans;
 }
 
+void ScUndoDeleteContents::SetRestoreExpandedMatrices(std::vector<ScAddress> const& rPositions)
+{
+    maRestoreExpandedMatrices = rPositions;
+}
+
 void ScUndoDeleteContents::SetChangeTrack()
 {
     ScChangeTrack* pChangeTrack = rDocShell.GetDocument().GetChangeTrack();
@@ -131,6 +136,11 @@ void ScUndoDeleteContents::DoChange( const bool bUndo )
         aCopyRange.aEnd.SetTab(nTabCount-1);
 
         pUndoDoc->CopyToDocument(aCopyRange, nUndoFlags, bMulti, rDoc, &aMarkData);
+
+        // Restore the document-level matrix tracking. Re-add any multi-cell 
+        // matrix masters captured before the delete.
+        for (const ScAddress& rPosition : maRestoreExpandedMatrices)
+            rDoc.MarkExpandedDynamicArray(rPosition);
 
         DoSdrUndoAction( pDrawUndo.get(), &rDoc );
 

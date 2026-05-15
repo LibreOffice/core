@@ -278,6 +278,25 @@ bool ScDocument::IsMatrixSpillBlocked(const ScRange& rRange,
     return false;
 }
 
+std::vector<ScAddress> ScDocument::CollectExpandedDynamicArraysInRange(
+    const ScMarkData& rMark, const ScRange& rRange) const
+{
+    std::vector<ScAddress> aResult;
+    if (maExpandedDynamicArrays.empty())
+        return aResult;
+    for (const ScAddress& rPosition : maExpandedDynamicArrays)
+    {
+        if (!rMark.GetTableSelect(rPosition.Tab()))
+            continue;
+        if (rPosition.Col() < rRange.aStart.Col() || rPosition.Col() > rRange.aEnd.Col())
+            continue;
+        if (rPosition.Row() < rRange.aStart.Row() || rPosition.Row() > rRange.aEnd.Row())
+            continue;
+        aResult.push_back(rPosition);
+    }
+    return aResult;
+}
+
 bool ScDocument::HasMatrixBlocker(const ScRange& rRange) const
 {
     const ScAddress& rOrigin = rRange.aStart;

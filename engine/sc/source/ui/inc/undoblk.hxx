@@ -265,8 +265,15 @@ public:
 
     void SetDataSpans( const std::shared_ptr<DataSpansType>& pSpans );
 
+    /// Positions of multi cell matrix masters that fell inside the deleted
+    /// range. The delete drops them from the expanded matrix tracking set,
+    /// Undo restores their cells but the tracking has to be re-added
+    /// explicitly.
+    void SetRestoreExpandedMatrices(std::vector<ScAddress> const& rPositions);
+
 private:
     std::shared_ptr<DataSpansType> mpDataSpans; // Spans of non-empty cells.
+    std::vector<ScAddress> maRestoreExpandedMatrices;
 
     ScRange         aRange;
     ScMarkData      aMarkData;

@@ -102,12 +102,14 @@ void DocFuncUtil::addDeleteContentsUndo(
     SfxUndoManager* pUndoMgr, ScDocShell& rDocSh, const ScMarkData& rMark,
     const ScRange& rRange, ScDocumentUniquePtr&& pUndoDoc, InsertDeleteFlags nFlags,
     const std::shared_ptr<ScSimpleUndo::DataSpansType>& pSpans,
-    bool bMulti, bool bDrawUndo )
+    bool bMulti, bool bDrawUndo,
+    std::vector<ScAddress> const& rRestoreExpandedMatrices)
 {
     std::unique_ptr<ScUndoDeleteContents> pUndo(
         new ScUndoDeleteContents(
             rDocSh, rMark, rRange, std::move(pUndoDoc), bMulti, nFlags, bDrawUndo));
     pUndo->SetDataSpans(pSpans);
+    pUndo->SetRestoreExpandedMatrices(rRestoreExpandedMatrices);
 
     pUndoMgr->AddUndoAction(std::move(pUndo));
 }

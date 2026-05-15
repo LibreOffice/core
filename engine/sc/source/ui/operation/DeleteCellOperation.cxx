@@ -79,11 +79,14 @@ bool DeleteCellOperation::runImplementation()
     std::shared_ptr<ScSimpleUndo::DataSpansType> pDataSpans;
 
     ScDocumentUniquePtr pUndoDoc;
+    std::vector<ScAddress> aRestoreExpandedMatrices;
     if (mbRecord)
     {
         pUndoDoc = sc::DocFuncUtil::createDeleteContentsUndoDoc(rDoc, aMarkData, ScRange(aPosition),
                                                                 mnFlags, false);
         pDataSpans = sc::DocFuncUtil::getNonEmptyCellSpans(rDoc, aMarkData, ScRange(aPosition));
+        aRestoreExpandedMatrices
+            = rDoc.CollectExpandedDynamicArraysInRange(aMarkData, ScRange(aPosition));
     }
 
     tools::Long nBefore(mrDocShell.GetTwipWidthHint(aPosition));
@@ -92,9 +95,9 @@ bool DeleteCellOperation::runImplementation()
 
     if (mbRecord)
     {
-        sc::DocFuncUtil::addDeleteContentsUndo(mrDocShell.GetUndoManager(), mrDocShell, aMarkData,
-                                               ScRange(aPosition), std::move(pUndoDoc), mnFlags,
-                                               pDataSpans, false, bDrawUndo);
+        sc::DocFuncUtil::addDeleteContentsUndo(
+            mrDocShell.GetUndoManager(), mrDocShell, aMarkData, ScRange(aPosition),
+            std::move(pUndoDoc), mnFlags, pDataSpans, false, bDrawUndo, aRestoreExpandedMatrices);
     }
 
     if (!mrDocFunc.AdjustRowHeight(ScRange(aPosition), true, mbApi))
