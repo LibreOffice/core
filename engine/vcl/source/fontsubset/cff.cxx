@@ -738,6 +738,11 @@ private:
     bool    callType2Subr( bool bGlobal, int nSubrNumber);
     sal_Int32 getReadOfs() const { return static_cast<sal_Int32>(mpReadPtr - mpBasePtr);}
 
+    // Abandon the current dict-data parse on malformed input.  Advancing
+    // mpReadPtr past mpReadEnd exits the parse loop, and trips the mpReadPtr
+    // != mpReadEnd post-check so flags as a parse failure.
+    void abandonDictParse() { mpReadPtr = mpReadEnd + 1; }
+
     const U8* mpBasePtr;
     const U8* mpBaseEnd;
 
@@ -1704,11 +1709,18 @@ RealType CffContext::readRealVal()
     int nExpSign = 0;
     S64 nNumber = 0;
     RealType fReal = +1.0;
+    // nNumber * 10 + 9 must fit in S64; anything beyond is a malformed
+    constexpr S64 nDigitCap = (SAL_MAX_INT64 - 9) / 10;
     for(;;){
         const U8 c = *(mpReadPtr++); // read nibbles
         // parse high nibble
         const U8 nH = c >> 4U;
         if( nH <= 9) {
+            if (nNumber > nDigitCap) {
+                SAL_WARN("vcl.fonts.cff", "CFF real number overflow");
+                abandonDictParse();
+                return 0.0;
+            }
             nNumber = nNumber * 10 + nH;
             --nExpVal;
         } else if( nH == 10) {  // comma
@@ -1731,6 +1743,11 @@ RealType CffContext::readRealVal()
         // parse low nibble
         const U8 nL = c & 0x0F;
         if( nL <= 9) {
+            if (nNumber > nDigitCap) {
+                SAL_WARN("vcl.fonts.cff", "CFF real number overflow");
+                abandonDictParse();
+                return 0.0;
+            }
             nNumber = nNumber * 10 + nL;
             --nExpVal;
         } else if( nL == 10) {  // comma
