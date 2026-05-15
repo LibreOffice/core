@@ -140,11 +140,10 @@
                   <object class="GtkLabel" id="numfollowedby">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="hexpand">True</property>
                     <property name="label" translatable="yes" context="numberingpositionpage|numfollowedby">Followed by:</property>
                     <property name="use-underline">True</property>
                     <property name="mnemonic-widget">numfollowedbylb</property>
-                    <property name="xalign">1</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
@@ -158,7 +157,7 @@
                     <property name="label" translatable="yes" context="numberingpositionpage|num2align">Alignment:</property>
                     <property name="use-underline">True</property>
                     <property name="mnemonic-widget">num2alignlb</property>
-                    <property name="xalign">1</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
@@ -172,7 +171,7 @@
                     <property name="label" translatable="yes" context="numberingpositionpage|alignedat">Aligned at:</property>
                     <property name="use-underline">True</property>
                     <property name="mnemonic-widget">alignedatmf</property>
-                    <property name="xalign">1</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
@@ -186,7 +185,7 @@
                     <property name="label" translatable="yes" context="numberingpositionpage|indentat">Indent at:</property>
                     <property name="use-underline">True</property>
                     <property name="mnemonic-widget">indentatmf</property>
-                    <property name="xalign">1</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
@@ -219,7 +218,7 @@
                     <property name="label" translatable="yes" context="numberingpositionpage|at">Tab stop at:</property>
                     <property name="use-underline">True</property>
                     <property name="mnemonic-widget">atmf</property>
-                    <property name="xalign">1</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
@@ -291,7 +290,7 @@
                     <property name="label" translatable="yes" context="numberingpositionpage|indent">Indent:</property>
                     <property name="use-underline">True</property>
                     <property name="mnemonic-widget">indentmf</property>
-                    <property name="xalign">1</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
@@ -345,7 +344,7 @@
                     <property name="label" translatable="yes" context="numberingpositionpage|numberingwidth">Width of numbering:</property>
                     <property name="use-underline">True</property>
                     <property name="mnemonic-widget">numberingwidthmf</property>
-                    <property name="xalign">1</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
@@ -399,7 +398,7 @@ numbering and text:</property>
                     <property name="use-underline">True</property>
                     <property name="justify">right</property>
                     <property name="mnemonic-widget">numdistmf</property>
-                    <property name="xalign">1</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
@@ -413,7 +412,7 @@ numbering and text:</property>
                     <property name="label" translatable="yes" context="numberingpositionpage|numalign">Alignment:</property>
                     <property name="use-underline">True</property>
                     <property name="mnemonic-widget">numalignlb</property>
-                    <property name="xalign">1</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
