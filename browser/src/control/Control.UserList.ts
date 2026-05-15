@@ -486,11 +486,18 @@ class UserList extends window.L.Control {
 
 	renderHeaderAvatarPopover(popoverElement: Element) {
 		// Popover rendering
+		const focusedInside =
+			document.activeElement && popoverElement.contains(document.activeElement)
+				? (document.activeElement as HTMLElement)
+				: null;
+		const activeViewId = focusedInside?.getAttribute('data-view-id') ?? null;
+		const focusedFollowEditor = focusedInside?.id === 'follow-editor';
+
 		const users = Array.from(this.getSortedUsers());
 
 		const following = this.getFollowedUser();
 
-		const userElements = users.map(([viewId, user]) => {
+		const userElements = users.map(([viewId, user], rowIndex) => {
 			const userLabel = window.L.DomUtil.create('div', 'user-list-item--name');
 			userLabel.innerText = user.username;
 
@@ -511,6 +518,10 @@ class UserList extends window.L.Control {
 			listItem.setAttribute('data-view-id', viewId);
 			listItem.setAttribute('role', 'button');
 			listItem.setAttribute('tabindex', '0');
+			// JSDialog.KeyboardGridNavigation reads row:col from `index` to move
+			// focus on ArrowUp/ArrowDown - without it getRowColumn returns
+			// [-1,-1] and arrows do nothing.
+			listItem.setAttribute('index', rowIndex + ':0');
 
 			if (following !== undefined && viewId == following[0]) {
 				$(listItem).addClass('selected-user');
@@ -548,6 +559,7 @@ class UserList extends window.L.Control {
 		followEditorWrapper.id = 'follow-editor';
 		followEditorWrapper.setAttribute('role', 'checkbox');
 		followEditorWrapper.setAttribute('tabindex', '0');
+		followEditorWrapper.setAttribute('index', users.length + ':0');
 		followEditorWrapper.setAttribute(
 			'aria-label',
 			_('Always follow the editor'),
@@ -590,6 +602,15 @@ class UserList extends window.L.Control {
 		followEditorCheckboxLabel.setAttribute('aria-hidden', 'true');
 
 		popoverElement.replaceChildren(...userElements, followEditorWrapper);
+
+		if (activeViewId !== null) {
+			const restored = popoverElement.querySelector(
+				'.user-list-item[data-view-id="' + activeViewId + '"]',
+			) as HTMLElement | null;
+			if (restored) restored.focus();
+		} else if (focusedFollowEditor) {
+			followEditorWrapper.focus();
+		}
 	}
 
 	renderFollowingChip() {
