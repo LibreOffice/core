@@ -22,6 +22,7 @@
 #include <QByteArray>
 #include <QClipboard>
 #include <QGuiApplication>
+#include <QHash>
 #include <QLatin1String>
 #include <QMimeData>
 #include <QString>
@@ -86,6 +87,7 @@ class LazyClipboardMimeData : public QMimeData
 {
     unsigned _appDocId;
     QStringList _mimeTypes;
+    mutable QHash<QString, QByteArray> _cache;
 
 public:
     LazyClipboardMimeData(unsigned appDocId, QStringList mimeTypes)
@@ -101,13 +103,40 @@ public:
         return _mimeTypes.contains(mimeType);
     }
 
+    unsigned sourceDocId() const { return _appDocId; }
+
+    /// Must be called while the source document is still alive.
+    void materialize() const
+    {
+        std::unique_ptr<QMimeData> data;
+        for (const QString& f : _mimeTypes)
+        {
+            if (_cache.contains(f))
+                continue;
+            if (!data)
+            {
+                data = fetchClipboardData(_appDocId);
+                if (!data)
+                    return;
+            }
+            _cache.insert(f, data->data(f));
+        }
+    }
+
 protected:
     QVariant retrieveData(const QString& mimeType, QMetaType /*type*/) const override
     {
-        std::string mimeStr = mimeType.toStdString();
+        auto it = _cache.constFind(mimeType);
+        if (it != _cache.constEnd())
+            return *it;
+
+        const std::string mimeStr = mimeType.toStdString();
         const char* pMimeTypes[] = { mimeStr.c_str(), nullptr };
-        auto data = fetchClipboardData(_appDocId, pMimeTypes);
-        return data ? data->data(mimeType) : QVariant{};
+        std::unique_ptr<QMimeData> data = fetchClipboardData(_appDocId, pMimeTypes);
+        // Cache empty results too, to suppress repeated probes for unavailable formats.
+        QByteArray bytes = data ? data->data(mimeType) : QByteArray{};
+        _cache.insert(mimeType, bytes);
+        return bytes;
     }
 };
 
@@ -181,11 +210,11 @@ void setLazyClipboard(unsigned appDocId, QStringList mimeTypes)
 
 void materializeClipboard(unsigned appDocId)
 {
-    auto mimeData = fetchClipboardData(appDocId);
-    if (!mimeData)
+    const QMimeData* current = QGuiApplication::clipboard()->mimeData();
+    const LazyClipboardMimeData* lazy = dynamic_cast<const LazyClipboardMimeData*>(current);
+    if (!lazy || lazy->sourceDocId() != appDocId)
         return;
-    QGuiApplication::clipboard()->setMimeData(mimeData.release());
-    sClipboardSourceDocId.store(appDocId);
+    lazy->materialize();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

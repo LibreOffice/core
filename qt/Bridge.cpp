@@ -527,11 +527,7 @@ QVariant Bridge::cool(const QString& messageStr)
 
         // Materialise lazy clipboard before destroying the document so that
         // an external paste after the document closes still works.
-        if (QApplication::clipboard()->ownsClipboard()
-            && sClipboardSourceDocId.load() == _document._appDocId)
-        {
-            materializeClipboard(_document._appDocId);
-        }
+        materializeClipboard(_document._appDocId);
 
         fakeSocketClose(_closeNotificationPipeForForwardingThread[0]);
 
