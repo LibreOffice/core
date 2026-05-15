@@ -767,7 +767,7 @@ private:
     sal_Int32 mnCntrMask;
 
     int     seekIndexData( int nIndexBase, int nDataIndex);
-    void    seekIndexEnd( int nIndexBase);
+    bool    seekIndexEnd( int nIndexBase);
     bool    readIndexCount( int nIndexBase, int& rCount);
 
     CffLocal    maCffLocal[256];
@@ -1887,27 +1887,32 @@ int CffSubsetterContext::seekIndexData( int nIndexBase, int nDataIndex)
 }
 
 // skip over a CFF/CID index table
-void CffSubsetterContext::seekIndexEnd( int nIndexBase)
+bool CffSubsetterContext::seekIndexEnd( int nIndexBase)
 {
-    assert( (nIndexBase > 0) && (mpBasePtr + nIndexBase + 3 <= mpBaseEnd));
+    if (nIndexBase <= 0 || mpBasePtr + nIndexBase + 3 > mpBaseEnd)
+        return false;
     mpReadPtr = mpBasePtr + nIndexBase;
     const int nDataCount = (mpReadPtr[0]<<8) + mpReadPtr[1];
     const int nDataOfsSz = mpReadPtr[2];
     mpReadPtr += 3 + nDataOfsSz * nDataCount;
-    assert( mpReadPtr <= mpBaseEnd);
+    if (mpReadPtr + nDataOfsSz > mpBaseEnd)
+        return false;
     int nEndOfs = 0;
     switch( nDataOfsSz) {
-        default: SAL_WARN("vcl.fonts", "\tINVALID nDataOfsSz=" << nDataOfsSz); return;
+        default: SAL_WARN("vcl.fonts", "\tINVALID nDataOfsSz=" << nDataOfsSz); return false;
         case 1: nEndOfs = mpReadPtr[0]; break;
         case 2: nEndOfs = (mpReadPtr[0]<<8) + mpReadPtr[1]; break;
         case 3: nEndOfs = (mpReadPtr[0]<<16) + (mpReadPtr[1]<<8) + mpReadPtr[2];break;
         case 4: nEndOfs = (mpReadPtr[0]<<24) + (mpReadPtr[1]<<16) + (mpReadPtr[2]<<8) + mpReadPtr[3]; break;
     }
+    if (nEndOfs < 0)
+        return false;
     mpReadPtr += nDataOfsSz;
     mpReadPtr += nEndOfs - 1;
     mpReadEnd = mpBaseEnd;
-    assert( nEndOfs >= 0);
-    assert( mpReadEnd <= mpBaseEnd);
+    if (mpReadPtr > mpBaseEnd)
+        return false;
+    return true;
 }
 
 // read the 16-bit entry count at the start of a CFF/CID index table
@@ -1993,7 +1998,8 @@ bool CffSubsetterContext::initialCffRead()
 
     // prepare access to the String index
     mnStringIdxBase =  getReadOfs();
-    seekIndexEnd( mnStringIdxBase);
+    if (!seekIndexEnd( mnStringIdxBase))
+        return false;
 
     // prepare access to the GlobalSubr index
     mnGlobalSubrBase =  getReadOfs();
