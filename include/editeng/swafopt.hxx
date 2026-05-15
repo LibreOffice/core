@@ -92,52 +92,56 @@ struct EDITENG_DLLPUBLIC SvxSwAutoFormatFlags
 
     sal_uInt8 nRightMargin;
 
-    bool bAutoCorrect : 1;
-    bool bCapitalStartSentence : 1;
-    bool bCapitalStartWord : 1;
+#define SVX_SW_FLAG_ENTRIES(prefix, suffix)                                                        \
+    prefix bAutoCorrect suffix;                                                                    \
+    prefix bCapitalStartSentence suffix;                                                           \
+    prefix bCapitalStartWord suffix;                                                               \
+                                                                                                   \
+    prefix bChgUserColl suffix;                                                                    \
+    prefix bChgEnumNum suffix;                                                                     \
+                                                                                                   \
+    prefix bAFormatByInput suffix;                                                                 \
+    prefix bDelEmptyNode suffix;                                                                   \
+    prefix bSetNumRule suffix;                                                                     \
+    prefix bSetNumRuleAfterSpace suffix;                                                           \
+                                                                                                   \
+    prefix bChgOrdinalNumber suffix;                                                               \
+    prefix bChgToEnEmDash suffix;                                                                  \
+    prefix bAddNonBrkSpace suffix;                                                                 \
+    prefix bTransliterateRTL suffix;                                                               \
+    prefix bChgAngleQuotes suffix;                                                                 \
+    prefix bEsperantoHats suffix;                                                                  \
+    prefix bChgWeightUnderl suffix;                                                                \
+    prefix bSetINetAttr suffix;                                                                    \
+    prefix bSetDOIAttr suffix;                                                                     \
+                                                                                                   \
+    prefix bSetBorder suffix;                                                                      \
+    prefix bCreateTable suffix;                                                                    \
+    prefix bReplaceStyles suffix;                                                                  \
+    prefix bReplaceStylesByInput suffix;                                                           \
+                                                                                                   \
+    prefix bWithRedlining suffix;                                                                  \
+                                                                                                   \
+    prefix bRightMargin suffix;                                                                    \
+                                                                                                   \
+    prefix bAutoCompleteWords suffix;                                                              \
+    prefix bAutoCmpltCollectWords suffix;                                                          \
+    prefix bAutoCmpltEndless suffix;                                                               \
+    /* -- under NT here starts a new long */                                                       \
+    prefix bAutoCmpltAppendBlank suffix;                                                           \
+    prefix bAutoCmpltShowAsTip suffix;                                                             \
+                                                                                                   \
+    prefix bAFormatDelSpacesAtSttEnd suffix;                                                       \
+    prefix bAFormatDelSpacesBetweenLines suffix;                                                   \
+    prefix bAFormatByInpDelSpacesAtSttEnd suffix;                                                  \
+    prefix bAFormatByInpDelSpacesBetweenLines suffix;                                              \
+                                                                                                   \
+    prefix bAutoCmpltKeepList suffix;
 
-    bool bChgUserColl : 1;
-    bool bChgEnumNum : 1;
-
-    bool bAFormatByInput : 1;
-    bool bDelEmptyNode : 1;
-    bool bSetNumRule : 1;
-    bool bSetNumRuleAfterSpace : 1;
-
-    bool bChgOrdinalNumber : 1;
-    bool bChgToEnEmDash : 1;
-    bool bAddNonBrkSpace : 1;
-    bool bTransliterateRTL : 1;
-    bool bChgAngleQuotes : 1;
-    bool bEsperantoHats : 1;
-    bool bChgWeightUnderl : 1;
-    bool bSetINetAttr : 1;
-    bool bSetDOIAttr : 1;
-
-    bool bSetBorder : 1;
-    bool bCreateTable : 1;
-    bool bReplaceStyles : 1;
-    bool bReplaceStylesByInput : 1;
-
-    bool bWithRedlining : 1;
-
-    bool bRightMargin : 1;
-
-    bool bAutoCompleteWords : 1;
-    bool bAutoCmpltCollectWords : 1;
-    bool bAutoCmpltEndless : 1;
-// -- under NT here starts a new long
-    bool bAutoCmpltAppendBlank : 1;
-    bool bAutoCmpltShowAsTip : 1;
-
-    bool bAFormatDelSpacesAtSttEnd : 1;
-    bool bAFormatDelSpacesBetweenLines : 1;
-    bool bAFormatByInpDelSpacesAtSttEnd : 1;
-    bool bAFormatByInpDelSpacesBetweenLines : 1;
-
-    bool bAutoCmpltKeepList : 1;
+    SVX_SW_FLAG_ENTRIES(bool, : 1)
 
     SvxSwAutoFormatFlags();
+    void resetAllFlags();
 };
 
 #endif

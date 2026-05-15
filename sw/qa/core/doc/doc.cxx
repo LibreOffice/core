@@ -179,6 +179,30 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testBulletsOnSpace)
     ErrorRegistry::Reset();
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testKeepSpacesWhenNotBullet)
+{
+    // Tests that typing a one-letter word followed by a space doesn’t end up deleting the space
+    // when the bullet point converter is enabled. See tdf#171135.
+    SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
+    pAutoCorrect->GetSwFlags().bSetNumRule = true;
+    pAutoCorrect->GetSwFlags().bSetNumRuleAfterSpace = true;
+
+    createSwDoc();
+    SwDocShell* pDocShell = getSwDocShell();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    pWrtShell->Down(/*bSelect=*/false);
+    SwEditWin& rEditWin = pDocShell->GetView()->GetEditWin();
+    KeyEvent aKeyEvent('I', 0);
+    rEditWin.KeyInput(aKeyEvent);
+    KeyEvent aKeyEvent2(' ', KEY_SPACE);
+    rEditWin.KeyInput(aKeyEvent2);
+    SwTextNode* pTextNode = pWrtShell->GetCursor()->GetPointNode().GetTextNode();
+
+    // The space should still be there
+    CPPUNIT_ASSERT_EQUAL(u"I "_ustr, pTextNode->GetText());
+    ErrorRegistry::Reset();
+}
+
 CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testLocaleIndependentTemplate)
 {
     createSwDoc("locale-independent-template.odt");

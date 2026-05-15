@@ -2705,7 +2705,19 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 {
                     SvxSwAutoFormatFlags& rFlags = pACorr->GetSwFlags();
                     if(pACfg->IsAutoFormatByInput() && rFlags.bSetNumRule && rFlags.bSetNumRuleAfterSpace)
-                        rSh.AutoFormat(&rFlags, true);
+                    {
+                        // Make a copy of the flags but disable all the ones that aren’t relevant to
+                        // the bullet formatting so that we don’t apply any other formatting such as
+                        // deleting the trailing space. See tdf#171135.
+                        SvxSwAutoFormatFlags aFlags = rFlags;
+                        aFlags.resetAllFlags();
+                        aFlags.bSetNumRule = true;
+                        aFlags.bSetNumRuleAfterSpace = true;
+                        aFlags.bAFormatByInput = rFlags.bAFormatByInput;
+                        aFlags.bWithRedlining = rFlags.bWithRedlining;
+                        aFlags.bChgEnumNum = rFlags.bChgEnumNum;
+                        rSh.AutoFormat(&aFlags, true);
+                    }
                 }
             }
         }

@@ -80,4 +80,10 @@ SvxSwAutoFormatFlags::SvxSwAutoFormatFlags()
     pSmartTagMgr = nullptr;
 }
 
+void SvxSwAutoFormatFlags::resetAllFlags()
+{
+    // Set all of the flags to false
+    SVX_SW_FLAG_ENTRIES(, = false)
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
