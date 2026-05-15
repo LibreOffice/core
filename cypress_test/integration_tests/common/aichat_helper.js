@@ -10,13 +10,11 @@ var helper = require('./helper');
  * @param {string} [opts.content='Mock AI response']  - assistant text
  * @param {boolean} [opts.success=true]                - whether the response succeeds
  * @param {string} [opts.error]                        - error text when success=false
- * @param {number} [opts.delay=50]                     - ms before firing the mock result
  */
 function enableAIAndStubSocket(win, opts) {
 	var content = (opts && opts.content) || 'Mock AI response';
 	var success = opts && opts.success !== undefined ? opts.success : true;
 	var error   = (opts && opts.error) || '';
-	var delay   = (opts && opts.delay !== undefined) ? opts.delay : 50;
 
 	win.app.map.isAIConfigured = true;
 
@@ -25,7 +23,7 @@ function enableAIAndStubSocket(win, opts) {
 		if (typeof msg === 'string' && msg.startsWith('aichat: ')) {
 			var payload = JSON.parse(msg.substring('aichat: '.length));
 			var requestId = payload.requestId;
-			setTimeout(function() {
+			win.app.layoutingService.onDrain(function() {
 				var result = { requestId: requestId, success: success };
 				if (success) {
 					result.content = content;
@@ -33,7 +31,7 @@ function enableAIAndStubSocket(win, opts) {
 					result.error = error || 'Mock error';
 				}
 				win.app.map.fire('aichatresult', result);
-			}, delay);
+			});
 		} else if (typeof msg === 'string' && msg.startsWith('aichatcancel: ')) {
 			// swallow cancel messages
 		} else {
@@ -68,14 +66,14 @@ function closeAIChat() {
  * Type text into the AI chat textarea.
  */
 function typeIntoAIInput(text) {
-	cy.cGet('#aichat-input.ui-textarea').type(text, { force: true });
+	cy.cGet('#aichat-input.ui-textarea').type(text);
 }
 
 /**
  * Click the send button.
  */
 function clickSend() {
-	cy.cGet('#aichat-send-btn button').click({ force: true });
+	cy.cGet('#aichat-send-btn button').click();
 }
 
 module.exports.enableAIAndStubSocket = enableAIAndStubSocket;

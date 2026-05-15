@@ -174,8 +174,8 @@ describe(['tagdesktop'], 'AI Chat Sidebar', function() {
 			aichatHelper.openAIChat();
 			aichatHelper.typeIntoAIInput('Hello');
 			aichatHelper.clickSend();
-			cy.cGet('#aichat-msg-1').should('exist');
 			helper.waitUntilLayoutingIsIdle(this.win);
+			cy.cGet('#aichat-msg-1').should('exist');
 		});
 
 		it('Clear resets to empty state', function() {
@@ -199,8 +199,8 @@ describe(['tagdesktop'], 'AI Chat Sidebar', function() {
 			aichatHelper.openAIChat();
 			aichatHelper.typeIntoAIInput('Hello');
 			aichatHelper.clickSend();
-			cy.cGet('#aichat-msg-1').should('exist');
 			helper.waitUntilLayoutingIsIdle(this.win);
+			cy.cGet('#aichat-msg-1').should('exist');
 		});
 
 		it('Copy button exists on assistant messages', function() {
