@@ -764,6 +764,8 @@ void SwLineLayout::MaxAscentDescent( SwTwips& _orAscent,
         if ( !pTmpPortion->IsBreakPortion() && !pTmpPortion->IsFlyPortion() &&
             // tdf#130804 ignore bookmark portions
              pTmpPortion->GetWhichPor() != PortionType::Bookmark &&
+             // tdf#172113 ignore comment portions
+             !pTmpPortion->IsPostItsPortion() &&
              ( !_bNoFlyCntPorAndLinePor ||
                ( !pTmpPortion->IsFlyCntPortion() &&
                  !(pTmpPortion == this && pTmpPortion->GetNextPortion() ) ) ) )
