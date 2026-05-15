@@ -1,0 +1,7 @@
+{
+    "manifestVersion": "0.1",
+    "name": "Text demo",
+    "entry": "index.html",
+    "icon": "icon.svg",
+    "supports": ["text"]
+}

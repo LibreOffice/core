@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Text demo</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 13px; background: #fff; padding: 12px; }
+label { display: block; margin: 8px 0 4px; font-weight: 600; }
+input[type="text"], input[type="number"] { width: 100%; padding: 6px; border: 1px solid #ccc; border-radius: 4px; font-size: 13px; }
+.checkbox-row { display: flex; align-items: center; gap: 6px; margin: 12px 0; }
+.checkbox-row label { margin: 0; font-weight: 400; }
+button { padding: 6px 14px; border: none; border-radius: 4px; cursor: pointer; font-size: 13px; background: #333; color: #fff; }
+.divider { margin: 16px 0; border-top: 1px solid #ddd; }
+.result { margin-top: 8px; padding: 6px; border: 1px solid #ddd; border-radius: 4px; min-height: 1.5em; white-space: pre-wrap; word-break: break-word; }
+.result.error { color: #b00; border-color: #f5c0c0; background: #fff5f5; }
+</style>
+<script src="../cool.js"></script>
+</head>
+<body>
+
+<label for="greeting">Greeting:</label>
+<input id="greeting" type="text" value="Hello!">
+
+<div class="checkbox-row">
+  <input id="colorize" type="checkbox" checked>
+  <label for="colorize">Colorize paragraphs</label>
+</div>
+
+<button onclick="apply()">Apply</button>
+
+<div class="divider"></div>
+
+<label for="paraN">Paragraph number (1-based):</label>
+<input id="paraN" type="number" min="1" value="1">
+<button onclick="readNthParagraph()">Read Nth paragraph</button>
+<div id="readResult" class="result"></div>
+
+<script>
+function apply() {
+  const greeting = document.getElementById('greeting').value;
+  const colorize = document.getElementById('colorize').checked;
+  cool.callRemote(function (greeting, colorize) {
+    console.log('script called with:', greeting, colorize);
+    const desktop = uno.idl.com.sun.star.frame.Desktop.create(uno.componentContext);
+    const model = desktop.getCurrentFrame().getController().getModel();
+    const text = model.getText();
+    const cursor = text.createTextCursor();
+    cursor.setString(greeting);
+    if (colorize) {
+      for (const para of text.createEnumeration()) {
+        const color = Math.floor(Math.random() * 0xffffff);
+        try {
+          para.setPropertyValue('CharColor', color);
+        } catch (e) {
+          console.log('caught:', e);
+        }
+      }
+    }
+  }, greeting, colorize);
+}
+
+function readNthParagraph() {
+  const n = parseInt(document.getElementById('paraN').value, 10);
+  const resultEl = document.getElementById('readResult');
+  resultEl.classList.remove('error');
+  resultEl.textContent = '...';
+  cool.callRemote(function (n) {
+    const desktop = uno.idl.com.sun.star.frame.Desktop.create(uno.componentContext);
+    const model = desktop.getCurrentFrame().getController().getModel();
+    const en = model.getText().createEnumeration();
+    for (let i = 1; i < n; i++) {
+      en.nextElement();
+    }
+    return en.nextElement().getString();
+  }, n).then(function (text) {
+    resultEl.textContent = text;
+  }).catch(function (err) {
+    resultEl.classList.add('error');
+    resultEl.textContent = err.message;
+  });
+}
+</script>
+</body>
+</html>
