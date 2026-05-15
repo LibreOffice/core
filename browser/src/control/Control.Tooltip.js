@@ -39,7 +39,7 @@ class Tooltip {
 	}
 
 	beginShow(elem) {
-		if (this._cancel) return;
+		if (this._cancel || this._disabled) return;
 
 		let win = this._options.window ? this._options.window : window;
 		win.clearTimeout(this._showTimeout);
@@ -50,7 +50,7 @@ class Tooltip {
 	}
 
 	beginHide(elem) {
-		if (this._cancel) return;
+		if (this._cancel || this._disabled) return;
 
 		let win = this._options.window ? this._options.window : window;
 		win.clearTimeout(this._showTimeout);
@@ -60,6 +60,22 @@ class Tooltip {
 				window.L.bind(this.hide, this, elem),
 				this._options.timeout / 8,
 			);
+	}
+
+	// Switch the tooltip subsystem off entirely and hide live tooltip if any.
+	disable() {
+		if (this._disabled) return;
+		let win = this._options.window ? this._options.window : window;
+		this._disabled = true;
+		win.clearTimeout(this._showTimeout);
+		win.clearTimeout(this._hideTimeout);
+		this._container.style.visibility = 'hidden';
+		this._current = null;
+		this._cancel = false;
+	}
+
+	enable() {
+		this._disabled = false;
 	}
 
 	/**
@@ -120,6 +136,7 @@ class Tooltip {
 	}
 
 	show(elem, textContent) {
+		if (this._disabled) return;
 		// `textContent` adds flexibility, enabling custom messages like document "Saved" instead of the fixed "cool-tooltip."
 		let content = textContent ? textContent : elem.dataset.cooltip,
 			rectView = new DOMRect(0, 0, window.innerWidth, window.innerHeight),
@@ -152,6 +169,7 @@ class Tooltip {
 	}
 
 	mouseEnter() {
+		if (this._disabled) return;
 		if (this._current) {
 			let win = this._options.window ? this._options.window : window;
 			this._cancel = true;
@@ -161,6 +179,7 @@ class Tooltip {
 	}
 
 	mouseLeave() {
+		if (this._disabled) return;
 		this._cancel = false;
 		this.beginHide();
 	}
