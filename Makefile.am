@@ -9,6 +9,11 @@
 #
 ETAGS=ctags -e
 
+# Default to one make job per CPU. An explicit -j on the command line
+# wins. On platforms without nproc leave MAKEFLAGS alone.
+NPROC := $(if $(findstring j,$(MAKEFLAGS)),,$(shell nproc 2>/dev/null))
+MAKEFLAGS := $(MAKEFLAGS) $(if $(NPROC),-j$(NPROC))
+
 build-samples:
 	$(QUIET_MKDIRP) mkdir -p $(abs_top_builddir)/test/samples
 	$(QUIET_SAMPLES) $(abs_top_srcdir)/scripts/build-samples.py $(abs_top_srcdir)/test/samples $(abs_top_srcdir)/test/samples
