@@ -65,6 +65,12 @@ DECLARE_OOXMLEXPORT_TEST(testTdf164835_nonDummyLineHeight, "tdf164835_nonDummyLi
     CPPUNIT_ASSERT_GREATER(nImageBottom, nTextTop); // text is below the image
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf172113_linespacingComment, "tdf172113_linespacingComment.odt")
+{
+    // given a two page document - triple spaced with a comment in an otherwise empty paragraph
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf148057_columnBreak, "tdf148057_columnBreak.docx")
 {
     // given a document with a linefeed immediately following a column break (in non-column section)
