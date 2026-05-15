@@ -73,6 +73,8 @@ public:
 
     static bool allowedWSOrigin(const std::string& origin);
 
+    static bool isForbiddenKitHost(const std::string& host);
+
 private:
     /// parse a single alias from groups of alias_groups, return an empty string if the pattern was invalid
     ///

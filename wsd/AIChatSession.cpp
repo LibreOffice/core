@@ -35,6 +35,7 @@
 #include <wsd/COOLWSD.hpp>
 #include <wsd/DocumentBroker.hpp>
 #include <wsd/DocumentToolDescriptions.hpp>
+#include <wsd/HostUtil.hpp>
 
 #if !MOBILEAPP
 // The COOL HTTP client stack (http::Session) is server-only; the desktop apps
@@ -749,6 +750,17 @@ void AIChatSession::callLLMAPI()
 {
     if (!_toolLoop)
         return;
+
+    Poco::URI uri(_toolLoop->requestUrl);
+    if (HostUtil::isForbiddenKitHost(uri.getHost()))
+    {
+        LOG_WRN("Rejected AI chat request to host not in KIT allowlist ["
+                << COOLWSD::anonymizeUrl(_toolLoop->requestUrl) << ']');
+        sendChatResult(false, "Target host is not in the allowed host list, contact your administrator",
+                       _toolLoop->requestId);
+        _toolLoop.reset();
+        return;
+    }
 
     Poco::JSON::Object::Ptr payload = new Poco::JSON::Object();
     payload->set("model", _toolLoop->model);
@@ -1799,6 +1811,13 @@ ImageGenRequest AIChatSession::createImageGenRequest(const std::string& prompt)
         baseUrl.pop_back();
 
     req.requestUrl = baseUrl + "/v1/images/generations";
+
+    Poco::URI uri(req.requestUrl);
+    if (HostUtil::isForbiddenKitHost(uri.getHost()))
+    {
+        req.error = "Target host is not in the allowed host list, contact your administrator";
+        return req;
+    }
 
     const std::string imageModel = _session.getAIImageModel();
     if (imageModel.empty())

@@ -245,18 +245,6 @@ std::string_view preCannedAIProviderBaseUrl(std::string_view id)
     return {};
 }
 
-/// Returns true if the host is forbidden by KIT_HOST_ALLOWLIST, matching
-/// the convention of core's HostFilter::isForbidden.
-bool isForbiddenKitHost(const std::string& host)
-{
-    static const char* allowlist = std::getenv("KIT_HOST_ALLOWLIST");
-    if (!allowlist || allowlist[0] == '\0')
-        return false;
-
-    static const std::regex allowedRegex(allowlist);
-    return !std::regex_match(host, allowedRegex);
-}
-
 /// Returns true if the host is allowed, false otherwise.
 bool isAllowedWopiHost(const Poco::URI& uri)
 {
@@ -1990,7 +1978,7 @@ void FileServerRequestHandler::fetchModels(const Poco::Net::HTTPRequest& request
 
     Poco::URI uri(baseUrl);
 
-    if (isCustom && isForbiddenKitHost(uri.getHost()))
+    if (isCustom && HostUtil::isForbiddenKitHost(uri.getHost()))
     {
         LOG_WRN("Rejected fetch-models request to host not in KIT allowlist ["
                 << Anonymizer::anonymizeUrl(baseUrl) << ']');

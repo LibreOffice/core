@@ -328,6 +328,16 @@ bool HostUtil::isWopiHostsEmpty()
     return WopiHosts.empty();
 }
 
+bool HostUtil::isForbiddenKitHost(const std::string& host)
+{
+    static const char* allowlist = std::getenv("KIT_HOST_ALLOWLIST");
+    if (!allowlist || allowlist[0] == '\0')
+        return false;
+
+    static const std::regex allowedRegex(allowlist);
+    return !std::regex_match(host, allowedRegex);
+}
+
 #endif // !MOBILEAPP
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
