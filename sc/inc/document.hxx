@@ -980,6 +980,10 @@ public:
     {
         return maExpandedDynamicArrays;
     }
+    /// Collect every tracked expanded matrix master position that falls
+    /// inside rRange on any selected tab.
+    SC_DLLPUBLIC std::vector<ScAddress> CollectExpandedDynamicArraysInRange(
+        const ScMarkData& rMark, const ScRange& rRange) const;
 
     /// Returns true if any non-origin cell in rRange holds data that isn't
     /// one of its reference cells.
