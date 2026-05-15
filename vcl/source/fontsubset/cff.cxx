@@ -1615,10 +1615,12 @@ void CffSubsetterContext::callType2Subr( bool bGlobal, int nSubrNumber)
 
     if( bGlobal ) {
         nSubrNumber += mnGlobalSubrBias;
-        seekIndexData( mnGlobalSubrBase, nSubrNumber);
+        if (seekIndexData( mnGlobalSubrBase, nSubrNumber) < 0)
+            return;
     } else {
         nSubrNumber += mpCffLocal->mnLocalSubrBias;
-        seekIndexData( mpCffLocal->mnLocalSubrBase, nSubrNumber);
+        if (seekIndexData( mpCffLocal->mnLocalSubrBase, nSubrNumber) < 0)
+            return;
     }
 
     // The CFF specification limits subroutine call nesting to 10 levels;
@@ -1795,6 +1797,8 @@ int CffSubsetterContext::seekIndexData( int nIndexBase, int nDataIndex)
         return -1;
     const int nDataOfsSz = mpReadPtr[2];
     mpReadPtr += 3 + (nDataOfsSz * nDataIndex);
+    if (mpReadPtr + nDataOfsSz > mpBaseEnd)
+        return -1;
     int nOfs1 = 0;
     switch( nDataOfsSz) {
         default: SAL_WARN("vcl.fonts", "\tINVALID nDataOfsSz=" << nDataOfsSz); return -1;
@@ -1804,6 +1808,8 @@ int CffSubsetterContext::seekIndexData( int nIndexBase, int nDataIndex)
         case 4: nOfs1 = (mpReadPtr[0]<<24) + (mpReadPtr[1]<<16) + (mpReadPtr[2]<<8) + mpReadPtr[3]; break;
     }
     mpReadPtr += nDataOfsSz;
+    if (mpReadPtr + nDataOfsSz > mpBaseEnd)
+        return -1;
 
     int nOfs2 = 0;
     switch( nDataOfsSz) {
@@ -1923,7 +1929,8 @@ bool CffSubsetterContext::initialCffRead()
         return false;
     if( nTopDictCount) {
         for( int i = 0; i < nTopDictCount; ++i) {
-            seekIndexData( nTopDictBase, i);
+            if (seekIndexData( nTopDictBase, i) < 0)
+                return false;
             while( mpReadPtr < mpReadEnd)
                 readDictOp();
             if (mpReadPtr != mpReadEnd)
@@ -1969,7 +1976,8 @@ bool CffSubsetterContext::initialCffRead()
         // read FDArray details to get access to the PRIVDICTs
         for( int i = 0; i < mnFDAryCount; ++i) {
             mpCffLocal = &maCffLocal[i];
-            seekIndexData( mnFontDictBase, i);
+            if (seekIndexData( mnFontDictBase, i) < 0)
+                return false;
             while( mpReadPtr < mpReadEnd)
                 readDictOp();
             if (mpReadPtr != mpReadEnd)
@@ -2389,7 +2397,8 @@ void CffSubsetterContext::convertCharStrings(const sal_GlyphId* pGlyphIds, int n
 
         // convert the Type2op charstring to its Type1op counterpart
         const int nT2Len = seekIndexData(mnCharStrBase, nCffGlyphId);
-        assert(nT2Len > 0);
+        if (nT2Len <= 0)
+            continue;
 
         CharString aCharString;
         const int nT1Len = convert2Type1Ops(mpCffLocal, mpReadPtr, nT2Len, aCharString.aOps, std::size(aCharString.aOps));
