@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Events demo</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 13px; background: #fff; padding: 12px; }
+label { display: block; margin: 8px 0 4px; font-weight: 600; }
+p.help { color: #666; margin-bottom: 8px; }
+.state { display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; align-items: baseline; }
+.state .key { color: #666; }
+.state .val { word-break: break-word; }
+button { padding: 6px 14px; border: none; border-radius: 4px; cursor: pointer; font-size: 13px; background: #666; color: #fff; margin-top: 12px; }
+</style>
+<script src="../cool.js"></script>
+</head>
+<body>
+
+<label>Live document state:</label>
+<p class="help">
+  Counters maintained from <code>cool.document.on*</code> events.  Modify the document,
+  click around to change the selection, or add/edit/remove a comment in the sidebar.
+</p>
+<div class="state">
+  <span class="key">Modifications:</span>
+  <span class="val" id="modCount">0</span>
+  <span class="key">Selection changes:</span>
+  <span class="val" id="selCount">0</span>
+  <span class="key">Active comments:</span>
+  <span class="val" id="commentCount">0</span>
+  <span class="key">Last comment activity:</span>
+  <span class="val" id="lastComment">-</span>
+</div>
+<button onclick="resetState()">Reset counters</button>
+
+<script>
+let modCount = 0;
+let selCount = 0;
+const activeComments = new Set();
+
+function refreshState() {
+  document.getElementById('modCount').textContent = modCount;
+  document.getElementById('selCount').textContent = selCount;
+  document.getElementById('commentCount').textContent = activeComments.size;
+}
+
+function resetState() {
+  modCount = 0;
+  selCount = 0;
+  activeComments.clear();
+  document.getElementById('lastComment').textContent = '-';
+  refreshState();
+}
+
+function describeComment(verb, c) {
+  const author = c.author || '?';
+  const snippet = (c.text || '').slice(0, 40)
+    + ((c.text || '').length > 40 ? '...' : '');
+  document.getElementById('lastComment').textContent
+    = verb + ' by ' + author + (snippet ? ': ' + JSON.stringify(snippet) : '');
+}
+
+cool.document.onModified = function () {
+  modCount++;
+  refreshState();
+};
+cool.document.onSelectionChanged = function () {
+  selCount++;
+  refreshState();
+};
+cool.document.onCommentAdded = function (c) {
+  activeComments.add(c.id);
+  describeComment('added', c);
+  refreshState();
+};
+cool.document.onCommentChanged = function (c) {
+  activeComments.add(c.id);
+  describeComment('changed', c);
+  refreshState();
+};
+cool.document.onCommentRemoved = function (c) {
+  activeComments.delete(c.id);
+  describeComment('removed', c);
+  refreshState();
+};
+</script>
+</body>
+</html>
