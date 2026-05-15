@@ -7322,7 +7322,8 @@ void SwContentTree::BringCommentToAttention(sal_uInt16 nCommentId)
             {
                 if (const SwPostItContent* pPostIt = weld::fromId<SwPostItContent*>(m_xTreeView->get_id(*xIter)))
                 {
-                    if (nCommentId == pPostIt->GetPostItField()->GetPostItId())
+                    const SwPostItField* pPostItField = pPostIt->GetPostItField();
+                    if (pPostItField && nCommentId == pPostItField->GetPostItId())
                     {
                         GotoContent(weld::fromId<SwContent*>(m_xTreeView->get_id(*xIter)));
                         m_xTreeView->grab_focus();
