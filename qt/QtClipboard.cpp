@@ -171,8 +171,23 @@ void setClipboard(unsigned appDocId)
 
     std::vector<std::string> mimeTypeStrings;
     std::vector<QByteArray> byteArrays;
+
+    // Enforce UTF-8 for text data as that is what COKit expects.
+    if (data->hasText())
+    {
+        QByteArray utf8 = data->text().toUtf8();
+        if (!utf8.isEmpty())
+        {
+            mimeTypeStrings.push_back("text/plain;charset=utf-8");
+            byteArrays.push_back(std::move(utf8));
+        }
+    }
+
     for (const QString& format : data->formats())
     {
+        // Text already extracted as UTF-8 above; don't forward any raw text/plain* variant.
+        if (format.startsWith(QLatin1String("text/plain")))
+            continue;
         if (!isLoKitFormat(format))
             continue;
         QByteArray bytes = data->data(format);
