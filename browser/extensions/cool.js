@@ -84,6 +84,77 @@
 		};
 	};
 
+	// Define a property on cool.document that lazily wires a UNO listener of `typeName` to the
+	// attach/detach scripts when set to a function, and unwires it when set back to null.  The
+	// listener interface's relevant method name `methodName` is delivered to the iframe-side
+	// handler stored in `current`, which is whatever the property currently holds.  Inherited
+	// XEventListener.disposing has no handler installed; the dispatcher's default null
+	// response is fine for a void return type.
+	function defineUnoDocEvent(propName, typeName, attachFn, detachFn, methodName) {
+		let handle = null;
+		let current = null;
+		const on = {};
+		on[methodName] = function (event) {
+			if (current) current(event);
+		};
+		Object.defineProperty(window.cool.document, propName, {
+			enumerable: true,
+			get: function () { return current; },
+			set: function (fn) {
+				current = (typeof fn === 'function') ? fn : null;
+				if (current && !handle) {
+					handle = window.cool.attachListener(typeName, {
+						attach: attachFn,
+						detach: detachFn,
+						on: on
+					});
+				} else if (!current && handle) {
+					handle.detach();
+					handle = null;
+				}
+			}
+		});
+	}
+
+	// High-level facade for document-level events.  Extension authors write
+	// `cool.document.onCommentAdded = function (comment) {...}` etc.; setting the property to a
+	// function subscribes, setting it back to null unsubscribes.
+	window.cool.document = {
+		onCommentAdded: null,
+		onCommentChanged: null,
+		onCommentRemoved: null
+	};
+	defineUnoDocEvent(
+		'onSelectionChanged',
+		'com.sun.star.view.XSelectionChangeListener',
+		function (proxy) {
+			const desktop
+				= uno.idl.com.sun.star.frame.Desktop.create(uno.componentContext);
+			desktop.getCurrentFrame().getController().addSelectionChangeListener(proxy);
+		},
+		function (proxy) {
+			const desktop
+				= uno.idl.com.sun.star.frame.Desktop.create(uno.componentContext);
+			desktop.getCurrentFrame().getController()
+				.removeSelectionChangeListener(proxy);
+		},
+		'selectionChanged');
+	defineUnoDocEvent(
+		'onModified',
+		'com.sun.star.util.XModifyListener',
+		function (proxy) {
+			const desktop
+				= uno.idl.com.sun.star.frame.Desktop.create(uno.componentContext);
+			desktop.getCurrentFrame().getController().getModel().addModifyListener(proxy);
+		},
+		function (proxy) {
+			const desktop
+				= uno.idl.com.sun.star.frame.Desktop.create(uno.componentContext);
+			desktop.getCurrentFrame().getController().getModel()
+				.removeModifyListener(proxy);
+		},
+		'modified');
+
 	// Detach every listener still registered with cool.attachListener, so closing the iframe
 	// doesn't leave orphaned proxies on the kit side:
 	function detachAll() {
@@ -145,6 +216,19 @@
 						deliverProxyResult(data.callId, null);
 					}
 				);
+			}
+		} else if (data.msgId === 'Extension_DocumentEvent') {
+			// Map the event name (e.g. "commentAdded") to the corresponding cool.document
+			// handler slot (onCommentAdded) and call it if the extension installed one:
+			const handlerName
+				= 'on' + data.name.charAt(0).toUpperCase() + data.name.slice(1);
+			const fn = window.cool.document[handlerName];
+			if (typeof fn === 'function') {
+				try {
+					fn(data.payload);
+				} catch (err) {
+					console.warn('cool.document.' + handlerName + ' threw:', err);
+				}
 			}
 		} else if (data.msgId === 'Extension_Teardown') {
 			detachAll();

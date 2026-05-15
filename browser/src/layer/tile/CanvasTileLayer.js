@@ -1139,6 +1139,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		else if (textMsg.startsWith('comment:')) {
 			var obj = JSON.parse(textMsg.substring('comment:'.length + 1));
 			app.sectionContainer.getSectionWithName(app.CSections.CommentList.name).onACKComment(obj);
+			this._map.fire('comment', obj);
 		}
 		else if (textMsg.startsWith('redlinetablemodified:')) {
 			obj = JSON.parse(textMsg.substring('redlinetablemodified:'.length + 1));

@@ -143,6 +143,37 @@ window.L.Control.Extension = window.L.Control.extend({
 		window.addEventListener('message', this._onPostMessage.bind(this));
 		map.on('executescriptresult', this._onScriptResult, this);
 		map.on('proxycall', this._onProxyCall, this);
+		map.on('comment', this._onComment, this);
+	},
+
+	// Forward LOK comment events (Add/Modify/Remove) to the iframe as Extension_DocumentEvent
+	// postMessages with the corresponding event name; cool.js maps each to the matching
+	// cool.document.onCommentXxx handler.
+	_onComment: function (e: { comment?: { action?: string } }) {
+		if (!this._iframe || !this._iframe.contentWindow || !e || !e.comment)
+			return;
+		let name: string;
+		switch (e.comment.action) {
+			case 'Add':
+				name = 'commentAdded';
+				break;
+			case 'Modify':
+				name = 'commentChanged';
+				break;
+			case 'Remove':
+				name = 'commentRemoved';
+				break;
+			default:
+				return;
+		}
+		this._iframe.contentWindow.postMessage(
+			JSON.stringify({
+				msgId: 'Extension_DocumentEvent',
+				name: name,
+				payload: e.comment,
+			}),
+			'*',
+		);
 	},
 
 	_onProxyCall: function (e: {
