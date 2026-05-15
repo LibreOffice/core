@@ -25,6 +25,7 @@ $(eval $(call gb_Library_use_unpacked,qjs,quickjs))
 ifeq ($(OS),LINUX)
 $(eval $(call gb_Library_add_libs,qjs, \
     -lm \
+    -pthread \
 ))
 endif
 

@@ -56,6 +56,7 @@ gb_MERGE_LIBRARY_LIST := \
 	i18npool \
 	i18nutil \
 	icg \
+	$(call gb_Helper_optional,QUICKJS,jsuno) \
 	lng \
 	lnth \
 	localebe1 \
