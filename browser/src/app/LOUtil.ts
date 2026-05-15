@@ -29,6 +29,16 @@ interface IconNameMap {
 
 declare var DOMPurify: any;
 
+// cool: URLs are used by mobile/derivative apps (iOS, Android, CODA-W,
+// CODA-Q) for embedded media; DOMPurify's default allow-list rejects them.
+if (window.ThisIsAMobileApp && DOMPurify.isSupported) {
+	DOMPurify.addHook('uponSanitizeAttribute', (_node: Node, data: any) => {
+		if (data.attrValue.startsWith('cool:')) {
+			data.forceKeepAttr = true;
+		}
+	});
+}
+
 // LOUtil contains various LO related utility functions used
 // throughout the code.
 

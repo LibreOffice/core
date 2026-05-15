@@ -33,6 +33,7 @@
 #include <QString>
 #include <QTranslator>
 #include <QWebEngineProfile>
+#include <QWebEngineUrlScheme>
 
 #include <pwd.h>
 
@@ -129,6 +130,18 @@ namespace
 
 int main(int argc, char** argv)
 {
+    // Must run before QApplication.
+    // LocalScheme + LocalAccessAllowed lets the file:// page reach cool:.
+    {
+        QWebEngineUrlScheme scheme("cool");
+        scheme.setSyntax(QWebEngineUrlScheme::Syntax::Path);
+        scheme.setFlags(QWebEngineUrlScheme::SecureScheme
+                      | QWebEngineUrlScheme::LocalScheme
+                      | QWebEngineUrlScheme::LocalAccessAllowed
+                      | QWebEngineUrlScheme::CorsEnabled);
+        QWebEngineUrlScheme::registerScheme(scheme);
+    }
+
     QApplication app(argc, argv);
 
     user_name = getUserName();

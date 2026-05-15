@@ -12,6 +12,7 @@
 #include <config.h>
 
 #include <common/MobileApp.hpp>
+#include <qt/CoolUrlSchemeHandler.hpp>
 #include <qt/qt.hpp>
 
 #include <common/Log.hpp>
@@ -40,6 +41,9 @@ void Application::initialize()
         globalProfile->setPersistentStoragePath(appData);
         globalProfile->setCachePath(cacheData);
         globalProfile->setHttpCacheType(QWebEngineProfile::DiskHttpCache);
+
+        globalProfile->installUrlSchemeHandler(
+            "cool", new CoolUrlSchemeHandler(globalProfile));
     }
 
     // Initialize recent files
