@@ -338,6 +338,14 @@ public:
 
     void            PostDataChanged();
 
+    /// Drain pass for the per-DBData adjacency-band listener: walks every
+    /// named DBData and, where Notify flagged a pending auto-expansion and
+    /// the runtime gates pass, pushes a separate ScUndoExpandTableArea undo
+    /// entry and grows the table area. Called from ScDocShell::Notify after
+    /// RefreshDirtyTableColumnNames so the extension lands outside the
+    /// inner cell-input list-action bracket (two-step undo).
+    SC_DLLPUBLIC void ProcessPendingTableExpansions();
+
     void            UpdatePaintExt( sal_uInt16& rExtFlags, SCCOL nStartCol, SCROW nStartRow, SCTAB nStartTab,
                                                        SCCOL nEndCol, SCROW nEndRow, SCTAB nEndTab );
     void            UpdatePaintExt( sal_uInt16& rExtFlags, const ScRange& rRange );

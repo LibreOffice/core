@@ -29,6 +29,7 @@
 #include <svl/poolitem.hxx>
 
 #include <memory>
+#include <optional>
 #include <set>
 #include <vector>
 
@@ -181,6 +182,21 @@ private:
     bool            mbTableColumnNamesDirty;
     SCSIZE          nFilteredRowCount;
 
+    /// Pending auto-expansion state, set by Notify, consumed by the drain.
+    /// Trigger range IsValid() is the "pending" signal; the overflow flags
+    /// veto expansion when we overflow the band.
+    bool            mbOverflowDown;
+    bool            mbOverflowRight;
+    ScRange         maPendingTriggerRangeDown;
+    ScRange         maPendingTriggerRangeRight;
+
+    /// Ranges currently passed to StartListeningArea, stored so the matching
+    /// EndListeningArea call uses the exact same range (slot machine matches
+    /// by exact range — see ScDocument::EndListeningArea).
+    ScRange         maRegisteredHeaderRange;
+    ScRange         maRegisteredRowBand;
+    ScRange         maRegisteredColBand;
+
     using ScRefreshTimer::operator==;
 
 public:
@@ -219,9 +235,12 @@ public:
                        SCCOL nUpdateCol = -1);
     void        SetByRow(bool bByR)             { bByRow = bByR; }
     bool        HasHeader() const               { return bHasHeader; }
-    void        SetHeader(bool bHasH)           { bHasHeader = bHasH; }
+    /// On flag change, surgically re-registers the header listener.
+    void        SetHeader(bool bHasH);
     bool        HasTotals() const               { return bHasTotals; }
-    void        SetTotals(bool bTotals)         { bHasTotals = bTotals; }
+    /// On flag change, surgically re-registers the adjacency band listeners
+    /// (the row band is gated on !bHasTotals).
+    void        SetTotals(bool bTotals);
     void        SetIndex(sal_uInt16 nInd)           { nIndex = nInd; }
     sal_uInt16  GetIndex() const                { return nIndex; }
     bool        IsDoSize() const                { return bDoSize; }
@@ -236,8 +255,30 @@ public:
     void        SetContainer( ScDBDataContainerBase* pContainer ) { mpContainer = pContainer; }
     /** Returns header row range if has headers, else invalid range. */
     ScRange     GetHeaderArea() const;
+    /// Register/unregister the header-row area listener used to keep
+    /// column-name caching in sync.
     void        StartTableColumnNamesListener();
     void        EndTableColumnNamesListener();
+
+    /// Register/unregister the adjacency band listeners used for MSO-style
+    /// auto-expand. Row band is suppressed when bHasTotals is true.
+    void        StartAdjacencyBandsListener();
+    void        EndAdjacencyBandsListener();
+
+    bool        HasPendingExpansion() const
+                    { return maPendingTriggerRangeDown.IsValid()
+                          || maPendingTriggerRangeRight.IsValid(); }
+    void        ClearPendingExpansion();
+    /// Re-evaluates the pending extension against runtime gates and
+    /// returns the new area to apply, or std::nullopt if any gate fails.
+    std::optional<ScRange> ResolvePendingExpansion(const ScDocument& rDoc) const;
+
+    /// Sync the AutoFilter dropdown flag (ScMF::Auto) on the header row
+    /// when a styled table's area changes. Caller must gate on
+    /// HasHeader() && HasAutoFilter().
+    static void SwapAutoFilterFlagOnHeader(ScDocument& rDoc,
+                                           const ScRange& rOldArea,
+                                           const ScRange& rNewArea);
     SC_DLLPUBLIC void SetTableColumnNames( ::std::vector< OUString >&& rNames );
     SC_DLLPUBLIC const ::std::vector< OUString >& GetTableColumnNames() const { return maTableColumnNames; }
     SC_DLLPUBLIC void SetTableColumnModel( TableColumnModel& rModel )
@@ -350,6 +391,13 @@ private:
     void AdjustTableColumnNames( UpdateRefMode eUpdateRefMode, SCCOL nDx, SCCOL nCol1,
             SCCOL nOldCol1, SCCOL nOldCol2, SCCOL nNewCol1, SCCOL nNewCol2 );
     void InvalidateTableColumnNames( bool bSwapToEmptyNames );
+
+    /// Classify a single broadcast hit against the adjacency bands and their
+    /// overflow buffers. Returns true if the cell was inside one of our
+    /// bands' outer rectangles (so the per-cell Notify path can skip the
+    /// header-dirty fallback). Called from Notify for both per-cell ScHint
+    /// and aggregated ScBulkData paths.
+    bool processBandHitAt(const ScAddress& rPos);
 };
 
 class ScDBCollection

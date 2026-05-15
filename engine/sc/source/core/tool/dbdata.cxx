@@ -40,6 +40,8 @@
 #include <sortparam.hxx>
 #include <dociter.hxx>
 #include <brdcst.hxx>
+#include <bulkdatahint.hxx>
+#include <columnspanset.hxx>
 #include <osl/diagnose.h>
 
 #include <comphelper/stl_types.hxx>
@@ -383,7 +385,14 @@ ScDBData::ScDBData( const OUString& rName,
     bAutoFilter (false),
     bModified   (false),
     mbTableColumnNamesDirty(true),
-    nFilteredRowCount(SCSIZE_MAX)
+    nFilteredRowCount(SCSIZE_MAX),
+    mbOverflowDown(false),
+    mbOverflowRight(false),
+    maPendingTriggerRangeDown(ScAddress::INITIALIZE_INVALID),
+    maPendingTriggerRangeRight(ScAddress::INITIALIZE_INVALID),
+    maRegisteredHeaderRange(ScAddress::INITIALIZE_INVALID),
+    maRegisteredRowBand(ScAddress::INITIALIZE_INVALID),
+    maRegisteredColBand(ScAddress::INITIALIZE_INVALID)
 {
     aUpper = ScGlobal::getCharClass().uppercase(aUpper);
     if (!rTableStyleID.isEmpty())
@@ -424,7 +433,14 @@ ScDBData::ScDBData( const ScDBData& rData ) :
     bModified           (rData.bModified),
     maTableColumnNames  (rData.maTableColumnNames),
     mbTableColumnNamesDirty(rData.mbTableColumnNamesDirty),
-    nFilteredRowCount   (rData.nFilteredRowCount)
+    nFilteredRowCount   (rData.nFilteredRowCount),
+    mbOverflowDown(false),
+    mbOverflowRight(false),
+    maPendingTriggerRangeDown(ScAddress::INITIALIZE_INVALID),
+    maPendingTriggerRangeRight(ScAddress::INITIALIZE_INVALID),
+    maRegisteredHeaderRange(ScAddress::INITIALIZE_INVALID),
+    maRegisteredRowBand(ScAddress::INITIALIZE_INVALID),
+    maRegisteredColBand(ScAddress::INITIALIZE_INVALID)
 {
     if (rData.mpTableStyles)
         mpTableStyles.reset(new ScTableStyleParam(*rData.mpTableStyles));
@@ -461,7 +477,14 @@ ScDBData::ScDBData( const OUString& rName, const ScDBData& rData ) :
     bModified           (rData.bModified),
     maTableColumnNames  (rData.maTableColumnNames),
     mbTableColumnNamesDirty (rData.mbTableColumnNamesDirty),
-    nFilteredRowCount   (rData.nFilteredRowCount)
+    nFilteredRowCount   (rData.nFilteredRowCount),
+    mbOverflowDown(false),
+    mbOverflowRight(false),
+    maPendingTriggerRangeDown(ScAddress::INITIALIZE_INVALID),
+    maPendingTriggerRangeRight(ScAddress::INITIALIZE_INVALID),
+    maRegisteredHeaderRange(ScAddress::INITIALIZE_INVALID),
+    maRegisteredRowBand(ScAddress::INITIALIZE_INVALID),
+    maRegisteredColBand(ScAddress::INITIALIZE_INVALID)
 {
     aUpper = ScGlobal::getCharClass().uppercase(aUpper);
     if (rData.mpTableStyles)
@@ -475,13 +498,22 @@ ScDBData& ScDBData::operator= (const ScDBData& rData)
         // Don't modify the name.  The name is not mutable as it is used as a key
         // in the container to keep the db ranges sorted by the name.
 
-        bool bHeaderRangeDiffers = (nTable != rData.nTable || nStartCol != rData.nStartCol ||
+        const bool bHeaderRangeDiffers = (nTable != rData.nTable || nStartCol != rData.nStartCol ||
                 nEndCol != rData.nEndCol || nStartRow != rData.nStartRow);
-        bool bNeedsListening = ((bHasHeader && bHeaderRangeDiffers) || (!bHasHeader && rData.bHasHeader));
-        if (bHasHeader && (!rData.bHasHeader || bHeaderRangeDiffers))
-        {
+        // Decide per listener kind whether it needs (un)registration.
+        const bool bHeaderListenerChange =
+                bHeaderRangeDiffers
+                || bHasHeader != rData.bHasHeader;
+        const bool bBandsListenerChange =
+                bHeaderRangeDiffers
+                || nEndRow != rData.nEndRow
+                || bHasTotals != rData.bHasTotals
+                || (!!mpTableStyles) != (!!rData.mpTableStyles);
+
+        if (bHeaderListenerChange)
             EndTableColumnNamesListener();
-        }
+        if (bBandsListenerChange)
+            EndAdjacencyBandsListener();
         ScRefreshTimer::operator=( rData );
         mpSortParam.reset(new ScSortParam(*rData.mpSortParam));
         mpQueryParam.reset(new ScQueryParam(*rData.mpQueryParam));
@@ -520,8 +552,11 @@ ScDBData& ScDBData::operator= (const ScDBData& rData)
             mbTableColumnNamesDirty = rData.mbTableColumnNamesDirty;
         }
 
-        if (bNeedsListening)
+        // Re-register; each Start internally no-ops when not applicable.
+        if (bHeaderListenerChange)
             StartTableColumnNamesListener();
+        if (bBandsListenerChange)
+            StartAdjacencyBandsListener();
     }
     return *this;
 }
@@ -640,9 +675,15 @@ ScRange ScDBData::GetHeaderArea() const
 
 void ScDBData::SetArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2)
 {
-    bool bHeaderRangeChange = (nTab != nTable || nCol1 != nStartCol || nCol2 != nEndCol || nRow1 != nStartRow);
+    const bool bHeaderRangeChange = (nTab != nTable || nCol1 != nStartCol || nCol2 != nEndCol || nRow1 != nStartRow);
+    // Bands also depend on the bottom edge, so any geometric change requires re-registration.
+    const bool bGeometryChange = bHeaderRangeChange || nRow2 != nEndRow;
+
+    // End before mutating; each End uses its own saved range.
     if (bHeaderRangeChange)
         EndTableColumnNamesListener();
+    if (bGeometryChange)
+        EndAdjacencyBandsListener();
 
     nTable  = nTab;
     nStartCol = nCol1;
@@ -658,6 +699,8 @@ void ScDBData::SetArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW 
         InvalidateTableColumnNames( true);
         StartTableColumnNamesListener();
     }
+    if (bGeometryChange)
+        StartAdjacencyBandsListener();
 }
 
 void ScDBData::MoveTo(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
@@ -1391,17 +1434,193 @@ void ScDBData::ExtendBackColorArea(const ScDocument& rDoc)
 
 void ScDBData::StartTableColumnNamesListener()
 {
-    if (mpContainer && bHasHeader)
-    {
-        ScDocument& rDoc = mpContainer->GetDocument();
-        if (!rDoc.IsClipOrUndo())
-            rDoc.StartListeningArea( GetHeaderArea(), false, this);
-    }
+    if (!mpContainer || !bHasHeader)
+        return;
+    ScDocument& rDoc = mpContainer->GetDocument();
+    if (rDoc.IsClipOrUndo())
+        return;
+
+    const ScRange aHeaderRange = GetHeaderArea();
+    if (!aHeaderRange.IsValid())
+        return;
+
+    rDoc.StartListeningArea(aHeaderRange, /*bGroupListening*/ false, this);
+    maRegisteredHeaderRange = aHeaderRange;
 }
 
 void ScDBData::EndTableColumnNamesListener()
 {
-    EndListeningAll();
+    if (!maRegisteredHeaderRange.IsValid())
+        return;     // not currently registered
+
+    if (mpContainer)
+    {
+        ScDocument& rDoc = mpContainer->GetDocument();
+        rDoc.EndListeningArea(maRegisteredHeaderRange,
+                              /*bGroupListening*/ false, this);
+    }
+    maRegisteredHeaderRange = ScRange(ScAddress::INITIALIZE_INVALID);
+}
+
+void ScDBData::StartAdjacencyBandsListener()
+{
+    if (!mpContainer || !GetTableStyleInfo())
+        return;
+    ScDocument& rDoc = mpContainer->GetDocument();
+    if (rDoc.IsClipOrUndo())
+        return;
+
+    // Register on an "outer rectangle" per band (band + 1-cell overflow
+    // buffer). Notify classifies in-band hits as expansion triggers and
+    // out-of-band hits as overflow (suppresses expansion).
+    // Row band is suppressed entirely when a Total Row is present.
+    // bGroupListening=true: a single bulk hint with a ColumnSpanSet on
+    // scope close (avoids the per-column deduplication a non-group
+    // listener would hit on multi-cell paste).
+    if (!bHasTotals && nEndRow < rDoc.MaxRow())
+    {
+        const SCCOL nLeft  = std::max<SCCOL>(nStartCol - 1, 0);
+        const SCCOL nRight = std::min<SCCOL>(nEndCol + 1, rDoc.MaxCol());
+        const SCROW nTop   = nEndRow + 1;
+        const SCROW nBot   = std::min<SCROW>(nEndRow + 2, rDoc.MaxRow());
+        const ScRange aRowBand(nLeft, nTop, nTable, nRight, nBot, nTable);
+        rDoc.StartListeningArea(aRowBand, /*bGroupListening*/ true, this);
+        maRegisteredRowBand = aRowBand;
+    }
+
+    // Column band: col nEndCol+1, rows [nStartRow..nEndRow].
+    // Column band outer: cols [nEndCol+1..nEndCol+2], rows [nStartRow-1..nEndRow+1].
+    if (nEndCol < rDoc.MaxCol())
+    {
+        const SCCOL nLeft  = nEndCol + 1;
+        const SCCOL nRight = std::min<SCCOL>(nEndCol + 2, rDoc.MaxCol());
+        const SCROW nTop   = std::max<SCROW>(nStartRow - 1, 0);
+        const SCROW nBot   = std::min<SCROW>(nEndRow + 1, rDoc.MaxRow());
+        const ScRange aColBand(nLeft, nTop, nTable, nRight, nBot, nTable);
+        rDoc.StartListeningArea(aColBand, /*bGroupListening*/ true, this);
+        maRegisteredColBand = aColBand;
+    }
+}
+
+void ScDBData::EndAdjacencyBandsListener()
+{
+    // End with the exact range used at Start (slot machine matches by range).
+    if (mpContainer)
+    {
+        ScDocument& rDoc = mpContainer->GetDocument();
+        if (maRegisteredRowBand.IsValid())
+            rDoc.EndListeningArea(maRegisteredRowBand,
+                                  /*bGroupListening*/ true, this);
+        if (maRegisteredColBand.IsValid())
+            rDoc.EndListeningArea(maRegisteredColBand,
+                                  /*bGroupListening*/ true, this);
+    }
+    maRegisteredRowBand = ScRange(ScAddress::INITIALIZE_INVALID);
+    maRegisteredColBand = ScRange(ScAddress::INITIALIZE_INVALID);
+
+    // Pending state references the about-to-be-stale band, drop it.
+    ClearPendingExpansion();
+}
+
+void ScDBData::SetHeader(bool bHasH)
+{
+    if (bHasHeader == bHasH)
+        return;
+    EndTableColumnNamesListener();
+    bHasHeader = bHasH;
+    StartTableColumnNamesListener();
+}
+
+void ScDBData::SetTotals(bool bTotals)
+{
+    if (bHasTotals == bTotals)
+        return;
+    // Row band registration is gated on !bHasTotals — re-register on flip.
+    EndAdjacencyBandsListener();
+    bHasTotals = bTotals;
+    StartAdjacencyBandsListener();
+}
+
+void ScDBData::SwapAutoFilterFlagOnHeader(ScDocument& rDoc,
+                                          const ScRange& rOldArea,
+                                          const ScRange& rNewArea)
+{
+    rDoc.RemoveFlagsTab(rOldArea.aStart.Col(), rOldArea.aStart.Row(),
+                        rOldArea.aEnd.Col(),   rOldArea.aStart.Row(),
+                        rOldArea.aStart.Tab(), ScMF::Auto);
+    rDoc.ApplyFlagsTab(rNewArea.aStart.Col(), rNewArea.aStart.Row(),
+                       rNewArea.aEnd.Col(),   rNewArea.aStart.Row(),
+                       rNewArea.aStart.Tab(), ScMF::Auto);
+}
+
+void ScDBData::ClearPendingExpansion()
+{
+    mbOverflowDown = false;
+    mbOverflowRight = false;
+    // Reset to INVALID so the next ExtendTo() assigns (first hit of a new
+    // drain cycle) and HasPendingExpansion() reads as false.
+    maPendingTriggerRangeDown = ScRange(ScAddress::INITIALIZE_INVALID);
+    maPendingTriggerRangeRight = ScRange(ScAddress::INITIALIZE_INVALID);
+}
+
+std::optional<ScRange> ScDBData::ResolvePendingExpansion(const ScDocument& rDoc) const
+{
+    if (!HasPendingExpansion() || !GetTableStyleInfo())
+        return std::nullopt;
+
+    // Gates: no overflow + at least one trigger cell non-empty + all band
+    // cells outside the trigger range empty.
+    SCCOL nNewEndCol = nEndCol;
+    SCROW nNewEndRow = nEndRow;
+
+    if (maPendingTriggerRangeDown.IsValid() && !bHasTotals && !mbOverflowDown
+        && maPendingTriggerRangeDown.aStart.Tab() == nTable
+        && maPendingTriggerRangeDown.aStart.Row() == nEndRow + 1
+        && maPendingTriggerRangeDown.aStart.Col() >= nStartCol
+        && maPendingTriggerRangeDown.aEnd.Col() <= nEndCol)
+    {
+        const SCROW nBandRow = nEndRow + 1;
+        const SCCOL nTrigFirst = maPendingTriggerRangeDown.aStart.Col();
+        const SCCOL nTrigLast  = maPendingTriggerRangeDown.aEnd.Col();
+
+        if (rDoc.IsBlockEmpty(nTrigFirst, nBandRow, nTrigLast, nBandRow, nTable))
+            return std::nullopt;
+        if (nStartCol < nTrigFirst
+            && !rDoc.IsBlockEmpty(nStartCol, nBandRow, nTrigFirst - 1, nBandRow, nTable))
+            return std::nullopt;
+        if (nTrigLast < nEndCol
+            && !rDoc.IsBlockEmpty(nTrigLast + 1, nBandRow, nEndCol, nBandRow, nTable))
+            return std::nullopt;
+
+        nNewEndRow = nEndRow + 1;
+    }
+
+    if (maPendingTriggerRangeRight.IsValid() && !mbOverflowRight
+        && maPendingTriggerRangeRight.aStart.Tab() == nTable
+        && maPendingTriggerRangeRight.aStart.Col() == nEndCol + 1
+        && maPendingTriggerRangeRight.aStart.Row() >= nStartRow
+        && maPendingTriggerRangeRight.aEnd.Row() <= nEndRow)
+    {
+        const SCCOL nBandCol = nEndCol + 1;
+        const SCROW nTrigFirst = maPendingTriggerRangeRight.aStart.Row();
+        const SCROW nTrigLast  = maPendingTriggerRangeRight.aEnd.Row();
+
+        if (rDoc.IsBlockEmpty(nBandCol, nTrigFirst, nBandCol, nTrigLast, nTable))
+            return std::nullopt;
+        if (nStartRow < nTrigFirst
+            && !rDoc.IsBlockEmpty(nBandCol, nStartRow, nBandCol, nTrigFirst - 1, nTable))
+            return std::nullopt;
+        if (nTrigLast < nEndRow
+            && !rDoc.IsBlockEmpty(nBandCol, nTrigLast + 1, nBandCol, nEndRow, nTable))
+            return std::nullopt;
+
+        nNewEndCol = nEndCol + 1;
+    }
+
+    if (nNewEndRow == nEndRow && nNewEndCol == nEndCol)
+        return std::nullopt;
+
+    return ScRange(nStartCol, nStartRow, nTable, nNewEndCol, nNewEndRow, nTable);
 }
 
 void ScDBData::SetTableColumnNames( ::std::vector< OUString >&& rNames )
@@ -1657,45 +1876,182 @@ const OUString & ScDBData::GetTableColumnName( SCCOL nCol ) const
     return maTableColumnNames[nOffset];
 }
 
+namespace {
+
+/// Flattens a ColumnSpanSet of band-area hits into cell addresses for
+/// ScDBData::Notify's bulk-data path.
+struct CollectCellsAction final : public sc::ColumnSpanSet::Action
+{
+    std::vector<ScAddress> maCells;
+    void execute(const ScAddress& rPos, SCROW nLength, bool bVal) override
+    {
+        if (!bVal)
+            return;
+        for (SCROW i = 0; i < nLength; ++i)
+            maCells.emplace_back(rPos.Col(), rPos.Row() + i, rPos.Tab());
+    }
+};
+
+} // namespace
+
+bool ScDBData::processBandHitAt(const ScAddress& rPos)
+{
+    if (!GetTableStyleInfo() || rPos.Tab() != nTable)
+        return false;
+
+    // Recalc-suppression is handled at the Notify level (runtime-flag
+    // guards); by here, the hint is known to be a direct-edit event.
+
+    const SCCOL nCol = rPos.Col();
+    const SCROW nRow = rPos.Row();
+    bool bAny = false;
+
+    // Row band: in-band → extend trigger range; outer buffer → overflow.
+    // Suppressed when a Total Row is the bottom boundary.
+    if (!bHasTotals)
+    {
+        const SCROW nBandRow = nEndRow + 1;
+        if (nCol >= nStartCol - 1 && nCol <= nEndCol + 1
+            && nRow >= nBandRow && nRow <= nBandRow + 1)
+        {
+            const bool bInBand = (nCol >= nStartCol && nCol <= nEndCol
+                                  && nRow == nBandRow);
+            if (bInBand)
+            {
+                // ExtendTo on an invalid range assigns (first hit); on a
+                // valid range it extends. IsValid() then == "pending".
+                maPendingTriggerRangeDown.ExtendTo(
+                    ScRange(nCol, nBandRow, nTable));
+            }
+            else
+            {
+                mbOverflowDown = true;
+            }
+            bAny = true;
+        }
+    }
+
+    // Col band: same shape on the right. The corner cell sits in both
+    // bands' outer rectangles, so don't return early — let it flag overflow
+    // for both directions.
+    const SCCOL nBandCol = nEndCol + 1;
+    if (nCol >= nBandCol && nCol <= nBandCol + 1
+        && nRow >= nStartRow - 1 && nRow <= nEndRow + 1)
+    {
+        const bool bInBand = (nCol == nBandCol
+                              && nRow >= nStartRow && nRow <= nEndRow);
+        if (bInBand)
+        {
+            maPendingTriggerRangeRight.ExtendTo(
+                ScRange(nBandCol, nRow, nTable));
+        }
+        else
+        {
+            mbOverflowRight = true;
+        }
+        bAny = true;
+    }
+
+    return bAny;
+}
+
 void ScDBData::Notify( const SfxHint& rHint )
 {
+    if (!mpContainer)
+    {
+        assert(!"ScDBData::Notify - how did we end up here without container?");
+        return;
+    }
+
+    // Bulk-data path: paste / bulk-broadcast scope delivers one ScBulkData
+    // with a ColumnSpanSet. Flatten it via CollectCellsAction, then route
+    // each cell through processBandHitAt. Recalc suppression uses the same
+    // three runtime flags as the per-hint path below (FinalTrackFormulas
+    // wraps its TrackFormulas call in its own bulk scope, so recalc hits
+    // arrive here as BulkDataHint with mbFinalTrackFormulas still set).
+    if (rHint.GetId() == SfxHintId::ScBulkData)
+    {
+        ScDocument& rDoc = mpContainer->GetDocument();
+        if (rDoc.IsInInterpreter() || rDoc.IsCalculatingFormulaTree()
+            || rDoc.IsFinalTrackFormulas())
+            return;
+
+        const auto& rBulkHint = static_cast<const sc::BulkDataHint&>(rHint);
+        const sc::ColumnSpanSet* pSpans = rBulkHint.getSpans();
+        if (!pSpans)
+            return;
+        CollectCellsAction aAction;
+        pSpans->executeAction(rDoc, aAction);
+        for (const auto& aCell : aAction.maCells)
+            processBandHitAt(aCell);
+        return;
+    }
+
     if (rHint.GetId() != SfxHintId::ScDataChanged)
         return;
     const ScHint* pScHint = static_cast<const ScHint*>(&rHint);
 
+    const ScAddress aHintStart = pScHint->GetStartAddress();
+    const SCROW nHintRowCount = pScHint->GetRowCount();
+
+    // Recalc-suppression: a formula in the band recalcing
+    // must not trigger expansion. Gates only the band classifier — the
+    // header-dirty fallback below still runs so a recalc INSIDE the header
+    // refreshes the cached column names.
+    const ScDocument& rDoc = mpContainer->GetDocument();
+    const bool bIsRecalcHint =
+        rDoc.IsInInterpreter()
+        || rDoc.IsCalculatingFormulaTree()
+        || rDoc.IsFinalTrackFormulas();
+
+    // Per-cell classification for band hits. If any cell of the hint was
+    // classified as a band/overflow hit, skip the header-dirty fallback
+    // (the header listener — non-group — handles header changes on its
+    // own notification).
+    bool bAnyBandHit = false;
+    if (!bIsRecalcHint)
+    {
+        for (SCROW i = 0; i < nHintRowCount; ++i)
+        {
+            const ScAddress aHit(aHintStart.Col(), aHintStart.Row() + i, aHintStart.Tab());
+            if (processBandHitAt(aHit))
+                bAnyBandHit = true;
+        }
+    }
+    if (bAnyBandHit)
+        return;
+
+    // Header-dirty path. Preserve the pre-existing behavior, which is
+    // tolerant of broadcasts outside the header range (treated as a
+    // defensive "refresh column names just in case").
     mbTableColumnNamesDirty = true;
-    if (!mpContainer)
-        assert(!"ScDBData::Notify - how did we end up here without container?");
+    // Only one cell of a range is broadcasted per area listener if
+    // multiple cells are affected. Expand the range to what this is
+    // listening to. Broadcasted address outside should not happen,
+    // but... let it trigger a refresh if.
+    const ScRange aHeaderRange( GetHeaderArea());
+    ScAddress aHintAddress( aHintStart);
+    if (aHeaderRange.IsValid())
+    {
+        mpContainer->GetDirtyTableColumnNames().Join( aHeaderRange);
+        // Header range is one row.
+        // The ScHint's "range" is an address with row count.
+        // Though broadcasted is usually only one cell, check for the
+        // possible case of row block and for one cell in the same row.
+        if (aHintAddress.Row() <= aHeaderRange.aStart.Row()
+                && aHeaderRange.aStart.Row() < aHintAddress.Row() + nHintRowCount)
+        {
+            aHintAddress.SetRow( aHeaderRange.aStart.Row());
+            if (!aHeaderRange.Contains( aHintAddress))
+                mpContainer->GetDirtyTableColumnNames().Join( ScRange(aHintAddress) );
+        }
+    }
     else
     {
-        // Only one cell of a range is broadcasted per area listener if
-        // multiple cells are affected. Expand the range to what this is
-        // listening to. Broadcasted address outside should not happen,
-        // but... let it trigger a refresh if.
-        const ScRange aHeaderRange( GetHeaderArea());
-        ScAddress aHintAddress( pScHint->GetStartAddress());
-        if (aHeaderRange.IsValid())
-        {
-            mpContainer->GetDirtyTableColumnNames().Join( aHeaderRange);
-            // Header range is one row.
-            // The ScHint's "range" is an address with row count.
-            // Though broadcasted is usually only one cell, check for the
-            // possible case of row block and for one cell in the same row.
-            if (aHintAddress.Row() <= aHeaderRange.aStart.Row()
-                    && aHeaderRange.aStart.Row() < aHintAddress.Row() + pScHint->GetRowCount())
-            {
-                aHintAddress.SetRow( aHeaderRange.aStart.Row());
-                if (!aHeaderRange.Contains( aHintAddress))
-                    mpContainer->GetDirtyTableColumnNames().Join( ScRange(aHintAddress) );
-            }
-        }
-        else
-        {
-            // We need *some* range in the dirty list even without header area,
-            // otherwise the container would not attempt to call a refresh.
-            aHintAddress.SetRow( nStartRow);
-            mpContainer->GetDirtyTableColumnNames().Join( ScRange(aHintAddress) );
-        }
+        // We need *some* range in the dirty list even without header area,
+        // otherwise the container would not attempt to call a refresh.
+        aHintAddress.SetRow( nStartRow);
+        mpContainer->GetDirtyTableColumnNames().Join( ScRange(aHintAddress) );
     }
 
     // Do not refresh column names here, which might trigger unwanted
@@ -1723,7 +2079,10 @@ void ScDBData::GetFilterSelCount( SCSIZE& nSelected, SCSIZE& nTotal )
 
 void ScDBData::SetTableStyleInfo(const ScTableStyleParam& rParam)
 {
+    const bool bWasUnstyled = !mpTableStyles;
     mpTableStyles.reset(new ScTableStyleParam(rParam));
+    if (bWasUnstyled)
+        StartAdjacencyBandsListener();  // newly eligible for auto-expand
 }
 
 const ScTableStyleParam* ScDBData::GetTableStyleInfo() const
@@ -1997,6 +2356,7 @@ void ScDBCollection::NamedDBs::initInserted( ScDBData* p )
         return;
 
     p->StartTableColumnNamesListener(); // needs the container be set already
+    p->StartAdjacencyBandsListener();   // ditto; no-op for unstyled tables
     if (!p->AreTableColumnNamesDirty())
         return;
 

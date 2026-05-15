@@ -1328,6 +1328,85 @@ void ScUndoDBData::DoChange( const bool bUndo )
     }
 }
 
+// auto-expand a styled named DBData area
+ScUndoExpandTableArea::ScUndoExpandTableArea(ScDocShell& rNewDocShell,
+                                             const OUString& rDBDataName,
+                                             const ScRange& rOldArea,
+                                             const ScRange& rNewArea)
+    : ScSimpleUndo(rNewDocShell)
+    , maDBDataName(rDBDataName)
+    , maOldArea(rOldArea)
+    , maNewArea(rNewArea)
+{
+}
+
+ScUndoExpandTableArea::~ScUndoExpandTableArea()
+{
+}
+
+OUString ScUndoExpandTableArea::GetComment() const
+{
+    return ScResId(STR_UNDO_EXPAND_TABLE_AREA);
+}
+
+void ScUndoExpandTableArea::Undo()
+{
+    BeginUndo();
+    DoChange(true);
+    EndUndo();
+}
+
+void ScUndoExpandTableArea::Redo()
+{
+    BeginRedo();
+    DoChange(false);
+    EndRedo();
+}
+
+void ScUndoExpandTableArea::Repeat(SfxRepeatTarget& /*rTarget*/)
+{
+}
+
+bool ScUndoExpandTableArea::CanRepeat(SfxRepeatTarget& /*rTarget*/) const
+{
+    return false;
+}
+
+void ScUndoExpandTableArea::DoChange(bool bUndo)
+{
+    ScDocument& rDoc = rDocShell.GetDocument();
+    ScDBCollection* pColl = rDoc.GetDBCollection();
+    if (!pColl)
+        return;
+
+    ScDBData* pData = pColl->getNamedDBs().findByName(maDBDataName);
+    if (!pData)
+        return;
+
+    const ScRange& rTarget = bUndo ? maOldArea : maNewArea;
+    const ScRange& rOther  = bUndo ? maNewArea : maOldArea;
+
+    pData->SetArea(rTarget.aStart.Tab(),
+                   rTarget.aStart.Col(), rTarget.aStart.Row(),
+                   rTarget.aEnd.Col(), rTarget.aEnd.Row());
+
+    // Sync ScMF::Auto with the new header span (no-op for row-down).
+    if (pData->HasHeader() && pData->HasAutoFilter())
+        ScDBData::SwapAutoFilterFlagOnHeader(rDoc, rOther, rTarget);
+
+    // Repaint the union of old + new.
+    const ScRange aRepaint(
+        std::min(maOldArea.aStart.Col(), maNewArea.aStart.Col()),
+        std::min(maOldArea.aStart.Row(), maNewArea.aStart.Row()),
+        maOldArea.aStart.Tab(),
+        std::max(maOldArea.aEnd.Col(), maNewArea.aEnd.Col()),
+        std::max(maOldArea.aEnd.Row(), maNewArea.aEnd.Row()),
+        maOldArea.aStart.Tab());
+    rDocShell.PostPaint(aRepaint, PaintPartFlags::Grid);
+
+    SfxGetpApp()->Broadcast(SfxHint(SfxHintId::ScDbAreasChanged));
+}
+
 ScUndoImportData::ScUndoImportData( ScDocShell& rNewDocShell, SCTAB nNewTab,
                                 const ScImportParam& rParam, SCCOL nNewEndX, SCROW nNewEndY,
                                 SCCOL nNewFormula,

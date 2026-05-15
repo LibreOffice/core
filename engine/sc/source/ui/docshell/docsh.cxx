@@ -121,6 +121,7 @@
 #include <xmlwrap.hxx>
 #include <drwlayer.hxx>
 #include <dbdata.hxx>
+#include <undodat.hxx>
 #include <scextopt.hxx>
 #include <compiler.hxx>
 #include <warnpassword.hxx>
@@ -3260,6 +3261,7 @@ void ScDocShell::SetDocumentModified()
         if ( m_pDocument->IsForcedFormulaPending() && m_pDocument->GetAutoCalc() )
             m_pDocument->CalcFormulaTree( true );
         m_pDocument->RefreshDirtyTableColumnNames();
+        ProcessPendingTableExpansions();
         PostDataChanged();
 
         //  Detective AutoUpdate:
@@ -3284,6 +3286,81 @@ void ScDocShell::SetDocumentModified()
 
     // notify UNO objects after BCA_BRDCST_ALWAYS etc.
     m_pDocument->BroadcastUno( SfxHint( SfxHintId::DataChanged ) );
+}
+
+void ScDocShell::ProcessPendingTableExpansions()
+{
+    // Suppress during recalc and on clip/undo documents — the drain
+    // mutates DBData area and pushes undo entries.
+    if (m_pDocument->IsInInterpreter()
+        || m_pDocument->IsCalculatingFormulaTree()
+        || m_pDocument->IsFinalTrackFormulas()
+        || m_pDocument->IsClipOrUndo())
+        return;
+
+    ScDBCollection* pColl = m_pDocument->GetDBCollection();
+    if (!pColl)
+        return;
+
+    // Undo/redo: the content entry re-broadcasts and re-flags us; the
+    // matching ScUndoExpandTableArea replays the area on its own. Drop
+    // any pending flags so they don't leak to the next event we process.
+    if (IsInUndo())
+    {
+        for (auto const& it : pColl->getNamedDBs())
+            it->ClearPendingExpansion();
+        return;
+    }
+
+    bool bAnyExtended = false;
+    for (auto const& it : pColl->getNamedDBs())
+    {
+        ScDBData* pData = it.get();
+
+        if (pData->HasPendingExpansion())
+        {
+            std::optional<ScRange> aNewArea = pData->ResolvePendingExpansion(*m_pDocument);
+            if (aNewArea)
+            {
+                ScRange aOldArea;
+                pData->GetArea(aOldArea);
+
+                if (m_pDocument->IsUndoEnabled())
+                {
+                    GetUndoManager()->AddUndoAction(
+                        std::make_unique<ScUndoExpandTableArea>(
+                            *this, pData->GetName(), aOldArea, *aNewArea));
+                }
+
+                // TODO: when a row-band expansion's trigger
+                // range contains ONLY formula cells, MSO activates Total
+                // Row mode on the new row instead of a regular data row.
+                // Detect via maPendingTriggerRangeDown cell types; call
+                // SetTotals(true) after SetArea; extend ScUndoExpandTableArea
+                // with an mbAddedTotalRow flag so Undo restores both.
+                pData->SetArea(aNewArea->aStart.Tab(),
+                               aNewArea->aStart.Col(), aNewArea->aStart.Row(),
+                               aNewArea->aEnd.Col(), aNewArea->aEnd.Row());
+
+                // Sync ScMF::Auto with the new header span (adds the flag
+                // on newly-included header cells when extending right;
+                // no-op for row-down since the header doesn't move).
+                if (pData->HasHeader() && pData->HasAutoFilter())
+                    ScDBData::SwapAutoFilterFlagOnHeader(
+                        *m_pDocument, aOldArea, *aNewArea);
+
+                PostPaint(*aNewArea, PaintPartFlags::Grid);
+                bAnyExtended = true;
+            }
+        }
+
+        // Always clear so overflow flags set without a pending expansion
+        // don't leak into the next drain cycle.
+        pData->ClearPendingExpansion();
+    }
+
+    if (bAnyExtended)
+        SfxGetpApp()->Broadcast(SfxHint(SfxHintId::ScDbAreasChanged));
 }
 
 /**

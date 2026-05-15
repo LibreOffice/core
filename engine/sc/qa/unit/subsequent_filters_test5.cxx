@@ -14,6 +14,7 @@
 #include <comphelper/propertyvalue.hxx>
 #include <dbdata.hxx>
 #include <dbdocfun.hxx>
+#include <docfunc.hxx>
 #include <docsh.hxx>
 #include <document.hxx>
 #include <patattr.hxx>
@@ -593,6 +594,56 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testTotalRowSlotState_DisabledWhenBlocked)
     SfxItemState eState
         = pViewShell->GetViewFrame().GetBindings().QueryState(SID_TABLE_TOTALROW, pState);
     CPPUNIT_ASSERT_EQUAL(SfxItemState::DISABLED, eState);
+}
+
+// Recalc-flip suppression: a formula sitting in a styled
+// table's adjacency band must NOT trigger auto-expand when it recalcs —
+// only direct edits/pastes do. Uses a saved-file fixture so the formula's
+// listener subscription is fully established on load.
+CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testAutoExpandRecalcFlipDoesNotExpand)
+{
+    // Fixture: Table2 at A3:C15 (no totals); Table1 at A21:E30 (no totals).
+    createScDoc("xlsx/toggleTotalTearDet.xlsx");
+    ScDocument* pDoc = getScDoc();
+    CPPUNIT_ASSERT(pDoc);
+
+    ScDBData* pTop = findDBData(pDoc, u"Table2"_ustr);
+    CPPUNIT_ASSERT(pTop);
+    CPPUNIT_ASSERT(pTop->GetTableStyleInfo());
+
+    ScRange aArea;
+    pTop->GetArea(aArea);
+    CPPUNIT_ASSERT_EQUAL(SCROW(14), aArea.aEnd.Row());
+
+    // Step 1: type =G33 into A16 (Table2's row band) — the direct-edit
+    // broadcast triggers auto-expand. (Formula cell is non-empty
+    // regardless of value.)
+    insertStringToCell(u"A16"_ustr, u"=G33");
+    pTop = findDBData(pDoc, u"Table2"_ustr);
+    pTop->GetArea(aArea);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("step 1: user formula expanded Table2", SCROW(15),
+                                 aArea.aEnd.Row());
+
+    // Step 2: undo the expansion only. A16 keeps =G33, back inside the band.
+    pDoc->GetUndoManager()->Undo();
+    pTop = findDBData(pDoc, u"Table2"_ustr);
+    pTop->GetArea(aArea);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("step 2: undo restored Table2 area", SCROW(14), aArea.aEnd.Row());
+
+    // Step 3: change G33 → A16 recalcs via FinalTrackFormulas. The band
+    // listener catches the recalc-flip and skips. Use docfunc so the drain
+    // actually runs via SetDocumentModified.
+    ScDocShell* pDocShell = getScDocShell();
+    pDocShell->GetDocFunc().SetValueCell(ScAddress(6, 32, 0), 99.0, false);
+
+    // Sanity: prove the formula actually recalc'd (else test is a no-op).
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("step 3: formula at A16 must have recalc'd", 99.0,
+                                 pDoc->GetValue(ScAddress(0, 15, 0)));
+
+    pTop = findDBData(pDoc, u"Table2"_ustr);
+    pTop->GetArea(aArea);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("step 3: recalc-flip must NOT expand Table2", SCROW(14),
+                                 aArea.aEnd.Row());
 }
 
 CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testFullColumnRefs)

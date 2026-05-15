@@ -11,7 +11,9 @@
 
 #include <TableStyleGenerator.hxx>
 #include <tablestyle.hxx>
+#include <attrib.hxx>
 #include <dbdata.hxx>
+#include <docfunc.hxx>
 #include <docsh.hxx>
 #include <document.hxx>
 #include <scitems.hxx>
@@ -83,11 +85,17 @@ void applyThemeToDocument(ScDocument* pDoc, std::shared_ptr<model::ColorSet> pCo
     pTheme->setColorSet(pColorSet);
 }
 
-// Create a ScDBData with table style assigned, range A1:D10 with header and total rows
-ScDBData* createTestDBData(ScDocument* pDoc, const OUString& rStyleName)
+// Create a ScDBData with table style assigned. Defaults give A1:D10 with
+// header and total rows under name "TestTable" — the geometry used by the
+// pattern-resolution tests below. Pass non-default arguments for tests
+// that need varied geometry / header / totals.
+ScDBData* createTestDBData(ScDocument* pDoc, const OUString& rStyleName, SCCOL nCol1 = 0,
+                           SCROW nRow1 = 0, SCCOL nCol2 = 3, SCROW nRow2 = 10,
+                           bool bHasHeader = true, bool bHasTotals = true,
+                           const OUString& rName = u"TestTable"_ustr)
 {
-    // range: A1:D11 (row 0 = header, rows 1-9 = data, row 10 = total)
-    ScDBData* pDBData = new ScDBData(u"TestTable"_ustr, 0, 0, 0, 3, 10, true, true, true);
+    ScDBData* pDBData = new ScDBData(rName, /*nTab*/ 0, nCol1, nRow1, nCol2, nRow2,
+                                     /*bByRow*/ true, bHasHeader, bHasTotals);
 
     ScTableStyleParam aStyleParam;
     aStyleParam.maStyleID = rStyleName;
@@ -101,6 +109,13 @@ ScDBData* createTestDBData(ScDocument* pDoc, const OUString& rStyleName)
         = pDoc->GetDBCollection()->getNamedDBs().insert(std::unique_ptr<ScDBData>(pDBData));
     CPPUNIT_ASSERT(bInserted);
     return pDBData;
+}
+
+ScRange getArea(const ScDBData& rData)
+{
+    ScRange aRange;
+    rData.GetArea(aRange);
+    return aRange;
 }
 
 } // anonymous namespace
@@ -821,6 +836,270 @@ CPPUNIT_TEST_FIXTURE(TableStylesTest, testTableStyleTinyTable)
     pStyle->GetFillItem(aDB3, 0, 1, 0);
     pStyle->GetBoxItem(aDB3, 0, 0, 0);
     pStyle->GetBoxItem(aDB3, 0, 1, 0);
+
+    m_pDoc->DeleteTab(0);
+}
+
+// Auto-expansion: typing in the row immediately below a styled named DBData
+// (without a Total Row) grows the table down by one row, on its own undo step.
+CPPUNIT_TEST_FIXTURE(TableStylesTest, testAutoExpandRowDown)
+{
+    m_pDoc->InsertTab(0, u"AutoExpandDown"_ustr);
+
+    // Styled table at A1:D5, header, no total. Adjacency row band = A6:D6.
+    ScDBData* pData = createTestDBData(m_pDoc, u"TableStyleMedium2"_ustr, 0, 0, 3, 4,
+                                       /*bHasHeader*/ true, /*bHasTotals*/ false);
+
+    // Type into B6 — the row band immediately below.
+    m_pDoc->SetString(ScAddress(1, 5, 0), u"hello"_ustr);
+
+    CPPUNIT_ASSERT_MESSAGE("Notify should have flagged the row-down expansion",
+                           pData->HasPendingExpansion());
+
+    // Drain.
+    m_xDocShell->ProcessPendingTableExpansions();
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("table should now reach row 6", ScRange(0, 0, 0, 3, 5, 0),
+                                 getArea(*pData));
+    CPPUNIT_ASSERT_MESSAGE("pending flag should be cleared after drain",
+                           !pData->HasPendingExpansion());
+
+    m_pDoc->DeleteTab(0);
+}
+
+// Auto-expansion: typing in the column immediately right of a styled named
+// DBData grows the table by one column. Works regardless of Total Row.
+CPPUNIT_TEST_FIXTURE(TableStylesTest, testAutoExpandColumnRight)
+{
+    m_pDoc->InsertTab(0, u"AutoExpandRight"_ustr);
+
+    // Styled table at A1:C4 with both header and total. Adjacency col band = D1:D4.
+    ScDBData* pData = createTestDBData(m_pDoc, u"TableStyleMedium2"_ustr, 0, 0, 2, 3,
+                                       /*bHasHeader*/ true, /*bHasTotals*/ true);
+
+    m_pDoc->SetString(ScAddress(3, 1, 0), u"new col"_ustr);
+
+    CPPUNIT_ASSERT_MESSAGE("Notify should have flagged the col-right expansion",
+                           pData->HasPendingExpansion());
+
+    m_xDocShell->ProcessPendingTableExpansions();
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("table should now reach column D", ScRange(0, 0, 0, 3, 3, 0),
+                                 getArea(*pData));
+
+    m_pDoc->DeleteTab(0);
+}
+
+// Total Row blocks row-down expansion but NOT column-right expansion.
+CPPUNIT_TEST_FIXTURE(TableStylesTest, testAutoExpandTotalRowGate)
+{
+    m_pDoc->InsertTab(0, u"TotalRowGate"_ustr);
+
+    // Styled table at A1:C4 with header AND total. Total Row is row 4.
+    // Typing in row 5 (immediately below the total) must NOT expand.
+    ScDBData* pData = createTestDBData(m_pDoc, u"TableStyleMedium2"_ustr, 0, 0, 2, 3,
+                                       /*bHasHeader*/ true, /*bHasTotals*/ true);
+
+    m_pDoc->SetString(ScAddress(0, 4, 0), u"after total"_ustr);
+    m_xDocShell->ProcessPendingTableExpansions();
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Total Row must block row-down expansion",
+                                 ScRange(0, 0, 0, 2, 3, 0), getArea(*pData));
+
+    // But column-right still expands in the same table.
+    m_pDoc->SetString(ScAddress(3, 1, 0), u"col side"_ustr);
+    m_xDocShell->ProcessPendingTableExpansions();
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("column-right must expand even with Total Row",
+                                 ScRange(0, 0, 0, 3, 3, 0), getArea(*pData));
+
+    m_pDoc->DeleteTab(0);
+}
+
+// Corner cell (nEndCol+1, nEndRow+1) is in neither band — no expansion.
+CPPUNIT_TEST_FIXTURE(TableStylesTest, testAutoExpandCornerExcluded)
+{
+    m_pDoc->InsertTab(0, u"CornerExcluded"_ustr);
+
+    ScDBData* pData = createTestDBData(m_pDoc, u"TableStyleMedium2"_ustr, 0, 0, 2, 3,
+                                       /*bHasHeader*/ true, /*bHasTotals*/ false);
+
+    // Diagonal corner D5: outside both row band (A5:C5) and col band (D1:D4).
+    m_pDoc->SetString(ScAddress(3, 4, 0), u"corner"_ustr);
+    m_xDocShell->ProcessPendingTableExpansions();
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("corner cell must not trigger expansion",
+                                 ScRange(0, 0, 0, 2, 3, 0), getArea(*pData));
+    CPPUNIT_ASSERT_MESSAGE("no pending flag for corner hits", !pData->HasPendingExpansion());
+
+    m_pDoc->DeleteTab(0);
+}
+
+// Pre-existing content elsewhere in the band suppresses expansion when we
+// fill another cell of the same band (the "first new cell" rule).
+CPPUNIT_TEST_FIXTURE(TableStylesTest, testAutoExpandBandOccupiedSuppresses)
+{
+    m_pDoc->InsertTab(0, u"BandOccupied"_ustr);
+
+    // Pre-populate A6 *before* the DBData exists (so no listener was active
+    // and A6 simply has unrelated prior content).
+    m_pDoc->SetString(ScAddress(0, 5, 0), u"prior"_ustr);
+
+    ScDBData* pData = createTestDBData(m_pDoc, u"TableStyleMedium2"_ustr, 0, 0, 3, 4,
+                                       /*bHasHeader*/ true, /*bHasTotals*/ false);
+
+    // Now type in B6 — but A6 already has content unrelated to the table.
+    // Per MSO: no expansion.
+    m_pDoc->SetString(ScAddress(1, 5, 0), u"user input"_ustr);
+    m_xDocShell->ProcessPendingTableExpansions();
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("prior occupancy must block expansion", ScRange(0, 0, 0, 3, 4, 0),
+                                 getArea(*pData));
+
+    m_pDoc->DeleteTab(0);
+}
+
+// Undo of an auto-expansion restores the prior area without touching the
+// just-typed cell content (the content has its own separately-stackable
+// undo entry).
+CPPUNIT_TEST_FIXTURE(TableStylesTest, testAutoExpandUndo)
+{
+    m_pDoc->InsertTab(0, u"AutoExpandUndo"_ustr);
+    m_pDoc->EnableUndo(true);
+
+    ScDBData* pData = createTestDBData(m_pDoc, u"TableStyleMedium2"_ustr, 0, 0, 3, 4,
+                                       /*bHasHeader*/ true, /*bHasTotals*/ false);
+
+    m_pDoc->SetString(ScAddress(2, 5, 0), u"trigger"_ustr);
+    m_xDocShell->ProcessPendingTableExpansions();
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("expansion should have applied", ScRange(0, 0, 0, 3, 5, 0),
+                                 getArea(*pData));
+
+    // Undo only the expansion (top of undo stack).
+    m_xDocShell->GetUndoManager()->Undo();
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("undo should restore the prior area", ScRange(0, 0, 0, 3, 4, 0),
+                                 getArea(*pData));
+
+    // Redo brings it back.
+    m_xDocShell->GetUndoManager()->Redo();
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("redo should re-apply the expansion", ScRange(0, 0, 0, 3, 5, 0),
+                                 getArea(*pData));
+
+    m_pDoc->DeleteTab(0);
+}
+
+// Helper: is the AutoFilter dropdown flag (ScMF::Auto) set on the given cell?
+namespace
+{
+bool cellHasAutoFilterFlag(const ScDocument& rDoc, SCCOL nCol, SCROW nRow, SCTAB nTab)
+{
+    const ScPatternAttr* pPattern = rDoc.GetPattern(nCol, nRow, nTab);
+    return pPattern && pPattern->GetItem(ATTR_MERGE_FLAG).HasAutoFilter();
+}
+} // anonymous namespace
+
+// Column-right expansion on a styled table with AutoFilter on must propagate
+// ScMF::Auto to the new header cell (so the dropdown button renders). Undo
+// removes it; Redo brings it back.
+CPPUNIT_TEST_FIXTURE(TableStylesTest, testAutoExpandAutoFilterFlag)
+{
+    m_pDoc->InsertTab(0, u"AutoExpandAutoFilter"_ustr);
+    m_pDoc->EnableUndo(true);
+
+    // A1:C5, header, no total.
+    ScDBData* pData = createTestDBData(m_pDoc, u"TableStyleMedium2"_ustr, 0, 0, 2, 4,
+                                       /*bHasHeader*/ true, /*bHasTotals*/ false);
+    pData->SetAutoFilter(true);
+    // Seed the initial AutoFilter dropdown flag on the header row (this is
+    // what SetAutoFilter does in the real flow via ApplyFlagsTab).
+    m_pDoc->ApplyFlagsTab(0, 0, 2, 0, 0, ScMF::Auto);
+
+    CPPUNIT_ASSERT(cellHasAutoFilterFlag(*m_pDoc, 0, 0, 0));
+    CPPUNIT_ASSERT(cellHasAutoFilterFlag(*m_pDoc, 2, 0, 0));
+    CPPUNIT_ASSERT(!cellHasAutoFilterFlag(*m_pDoc, 3, 0, 0)); // not in table yet
+
+    // User types in the column band: D2.
+    m_pDoc->SetString(ScAddress(3, 1, 0), u"new col"_ustr);
+    m_xDocShell->ProcessPendingTableExpansions();
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("table expands to column D", ScRange(0, 0, 0, 3, 4, 0),
+                                 getArea(*pData));
+    CPPUNIT_ASSERT_MESSAGE("new header cell D1 must have AutoFilter dropdown flag",
+                           cellHasAutoFilterFlag(*m_pDoc, 3, 0, 0));
+
+    // Undo the expansion — the new header cell loses its flag.
+    m_xDocShell->GetUndoManager()->Undo();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("undo restores prior area", ScRange(0, 0, 0, 2, 4, 0),
+                                 getArea(*pData));
+    CPPUNIT_ASSERT_MESSAGE("D1 must lose AutoFilter flag after undo",
+                           !cellHasAutoFilterFlag(*m_pDoc, 3, 0, 0));
+    CPPUNIT_ASSERT_MESSAGE("A1 keeps AutoFilter flag", cellHasAutoFilterFlag(*m_pDoc, 0, 0, 0));
+
+    // Redo brings the flag back on the new header cell.
+    m_xDocShell->GetUndoManager()->Redo();
+    CPPUNIT_ASSERT_MESSAGE("D1 regains AutoFilter flag after redo",
+                           cellHasAutoFilterFlag(*m_pDoc, 3, 0, 0));
+
+    m_pDoc->DeleteTab(0);
+}
+
+// Two-step undo/redo: typing via ScDocFunc creates content +
+// expansion undo entries.
+//   Undo #1: expansion reverts (table shrinks, content stays)
+//   Undo #2: content reverts (cell empty, table at old area)
+//   Redo #1: content re-applies (cell back, table stays at old area)
+//   Redo #2: expansion re-applies (table grows again)
+// Redo #1 must NOT re-expand — the drain skips during undo/redo replay.
+CPPUNIT_TEST_FIXTURE(TableStylesTest, testAutoExpandTwoStepUndoRedo)
+{
+    m_pDoc->InsertTab(0, u"TwoStepUndo"_ustr);
+    m_pDoc->EnableUndo(true);
+
+    ScDBData* pData = createTestDBData(m_pDoc, u"TableStyleMedium2"_ustr, 0, 0, 3, 4,
+                                       /*bHasHeader*/ true, /*bHasTotals*/ false);
+
+    // Type through the docfunc path so a real ScUndoEnterData entry is
+    // pushed. The drain then pushes ScUndoExpandTableArea on top.
+    const ScAddress aTrigger(1, 5, 0); // B6, inside the row band A6:D6
+    m_xDocShell->GetDocFunc().SetStringCell(aTrigger, u"hello"_ustr, /*bInteraction*/ false);
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("table expanded after typing", ScRange(0, 0, 0, 3, 5, 0),
+                                 getArea(*pData));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("cell B6 has the typed value", u"hello"_ustr,
+                                 m_pDoc->GetString(aTrigger));
+
+    // Undo #1 — only the expansion reverts.
+    m_xDocShell->GetUndoManager()->Undo();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("undo 1: area shrinks", ScRange(0, 0, 0, 3, 4, 0),
+                                 getArea(*pData));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("undo 1: content remains", u"hello"_ustr,
+                                 m_pDoc->GetString(aTrigger));
+
+    // Undo #2 — content reverts.
+    m_xDocShell->GetUndoManager()->Undo();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("undo 2: area still at original", ScRange(0, 0, 0, 3, 4, 0),
+                                 getArea(*pData));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("undo 2: cell empty", OUString(), m_pDoc->GetString(aTrigger));
+
+    // Redo #1 — content reapplies. The morning fix prevents this from
+    // *also* re-expanding the table as a side effect of the redo replay.
+    m_xDocShell->GetUndoManager()->Redo();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("redo 1: cell has content again", u"hello"_ustr,
+                                 m_pDoc->GetString(aTrigger));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("redo 1: table MUST still be at old area",
+                                 ScRange(0, 0, 0, 3, 4, 0), getArea(*pData));
+    CPPUNIT_ASSERT_MESSAGE("redo 1: no pending expansion flag should linger",
+                           !pData->HasPendingExpansion());
+
+    // Redo #2 — expansion reapplies.
+    m_xDocShell->GetUndoManager()->Redo();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("redo 2: area expanded again", ScRange(0, 0, 0, 3, 5, 0),
+                                 getArea(*pData));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("redo 2: cell still has content", u"hello"_ustr,
+                                 m_pDoc->GetString(aTrigger));
 
     m_pDoc->DeleteTab(0);
 }

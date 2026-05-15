@@ -74,6 +74,7 @@
 #define STR_UNDO_DBADDTABLE                     NC_("STR_UNDO_DBTABLE", "Create table")
 #define STR_UNDO_DBREMTABLE                     NC_("STR_UNDO_DBTABLE", "Delete table")
 #define STR_UNDO_DBDATA                         NC_("STR_UNDO_DBDATA", "Change Database Range")
+#define STR_UNDO_EXPAND_TABLE_AREA              NC_("STR_UNDO_EXPAND_TABLE_AREA", "Auto-Expand Table")
 #define STR_UNDO_IMPORTDATA                     NC_("STR_UNDO_IMPORTDATA", "Importing")
 #define STR_UNDO_REPEATDB                       NC_("STR_UNDO_REPEATDB", "Refresh range")
 #define STR_UNDO_LISTNAMES                      NC_("STR_UNDO_LISTNAMES", "List names")

@@ -330,6 +330,33 @@ private:
     void           DoChange(const bool bUndo);
 };
 
+/// Undo entry for the MSO-parity auto-expansion of a styled named DBData
+/// when we add content adjacent to the table area. Recorded as its own
+/// (separate) undo step so the expansion can be undone without losing
+/// the cell content that triggered it.
+class ScUndoExpandTableArea: public ScSimpleUndo
+{
+public:
+                    ScUndoExpandTableArea( ScDocShell& rNewDocShell,
+                            const OUString& rDBDataName,
+                            const ScRange& rOldArea, const ScRange& rNewArea );
+    virtual         ~ScUndoExpandTableArea() override;
+
+    virtual void    Undo() override;
+    virtual void    Redo() override;
+    virtual void    Repeat(SfxRepeatTarget& rTarget) override;
+    virtual bool    CanRepeat(SfxRepeatTarget& rTarget) const override;
+
+    virtual OUString GetComment() const override;
+
+private:
+    OUString        maDBDataName;
+    ScRange         maOldArea;
+    ScRange         maNewArea;
+
+    void            DoChange(bool bUndo);
+};
+
 class ScUndoImportData: public ScSimpleUndo
 {
 public:
