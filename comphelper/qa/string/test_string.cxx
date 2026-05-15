@@ -46,6 +46,7 @@ public:
     void testReverseCodePoints();
     void testSplit();
     void testRemoveAny();
+    void testBufferReplaceAt();
 
     CPPUNIT_TEST_SUITE(TestString);
     CPPUNIT_TEST(testStripStart);
@@ -59,6 +60,7 @@ public:
     CPPUNIT_TEST(testReverseCodePoints);
     CPPUNIT_TEST(testSplit);
     CPPUNIT_TEST(testRemoveAny);
+    CPPUNIT_TEST(testBufferReplaceAt);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -231,6 +233,44 @@ void TestString::testRemoveAny()
     CPPUNIT_ASSERT_EQUAL(in, removeAny(in, test6));
     sal_Unicode const test7 [] = { 'A', 'B', 'C', 'a', 'b', 'c', 0 };
     CPPUNIT_ASSERT_EQUAL(OUString(), removeAny(in, test7));
+}
+
+void TestString::testBufferReplaceAt()
+{
+    using namespace ::comphelper::string;
+    using namespace std::string_view_literals;
+
+    OUStringBuffer aIn;
+
+    replaceAt(aIn, /*index*/ 0, /*count*/ 0, u""sv);
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, aIn.makeStringAndClear());
+
+    replaceAt(aIn, /*index*/ 0, /*count*/ 0, u"abc"sv);
+    CPPUNIT_ASSERT_EQUAL(u"abc"_ustr, aIn.makeStringAndClear());
+
+    aIn.append(u"abc"sv);
+    replaceAt(aIn, /*index*/ 0, /*count*/ 0, u"xyz"sv);
+    CPPUNIT_ASSERT_EQUAL(u"xyzabc"_ustr, aIn.makeStringAndClear());
+
+    aIn.append(u"abc"sv);
+    replaceAt(aIn, /*index*/ 2, /*count*/ 0, u"xyz"sv);
+    CPPUNIT_ASSERT_EQUAL(u"abxyzc"_ustr, aIn.makeStringAndClear());
+
+    aIn.append(u"abpqc"sv);
+    replaceAt(aIn, /*index*/ 2, /*count*/ 2, u"xyz"sv);
+    CPPUNIT_ASSERT_EQUAL(u"abxyzc"_ustr, aIn.makeStringAndClear());
+
+    aIn.append(u"abpqrstc"sv);
+    replaceAt(aIn, /*index*/ 2, /*count*/ 5, u"xyz"sv);
+    CPPUNIT_ASSERT_EQUAL(u"abxyzc"_ustr, aIn.makeStringAndClear());
+
+    aIn.append(u"abpqrstc"sv);
+    replaceAt(aIn, /*index*/ 2, /*count*/ 5, u""sv);
+    CPPUNIT_ASSERT_EQUAL(u"abc"_ustr, aIn.makeStringAndClear());
+
+    aIn.append(u"abc"sv);
+    replaceAt(aIn, /*index*/ 3, /*count*/ 0, u"xyz"sv);
+    CPPUNIT_ASSERT_EQUAL(u"abcxyz"_ustr, aIn.makeStringAndClear());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(TestString);

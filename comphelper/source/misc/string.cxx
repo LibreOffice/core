@@ -25,6 +25,7 @@
 #include <utility>
 #include <vector>
 #include <algorithm>
+#include <span>
 
 #include <o3tl/safeint.hxx>
 #include <o3tl/string_view.hxx>
@@ -671,9 +672,19 @@ void replaceAt(OUStringBuffer& rIn, sal_Int32 nIndex, sal_Int32 nCount, std::u16
     if (newStr.size() > o3tl::make_unsigned(nCount))
         rIn.ensureCapacity(nOldLength + newStr.size() - nCount);
 
-    sal_Unicode* pStr = const_cast<sal_Unicode*>(rIn.getStr());
-    memmove(pStr + nIndex + newStr.size(), pStr + nIndex + nCount, nOldLength - nIndex + nCount);
-    memcpy(pStr + nIndex, newStr.data(), newStr.size());
+    std::span<sal_Unicode> pOldSpan{ const_cast<sal_Unicode*>(rIn.getStr()),
+                                     static_cast<size_t>(nOldLength) };
+    std::span<sal_Unicode> pNewSpan{ const_cast<sal_Unicode*>(rIn.getStr()),
+                                     static_cast<size_t>(nNewLength) };
+
+    // Move tail to the end of the new string
+    auto pSrcTail = pOldSpan.subspan(nIndex + nCount);
+    auto pDstTail = pNewSpan.subspan(nIndex + newStr.size());
+    std::copy_backward(pSrcTail.begin(), pSrcTail.end(), pDstTail.end());
+
+    // Copy inserted string into position
+    auto pInsert = pNewSpan.subspan(nIndex);
+    std::copy_n(newStr.data(), newStr.size(), pInsert.begin());
 
     rIn.setLength(nNewLength);
 }
