@@ -944,21 +944,6 @@ XclExpXmlStream::XclExpXmlStream( const uno::Reference< XComponentContext >& rCC
 {
 }
 
-oox::drawingml::ShapeExport& XclExpXmlStream::getOrCreateShapeExport()
-{
-    if (!mpShapeExport)
-    {
-        mpShapeExport.reset(new oox::drawingml::ShapeExport(
-            XML_xdr, GetCurrentStream(), nullptr, this, drawingml::DOCUMENT_XLSX));
-        ScDocShell* pShell = getDocShell();
-        ScDocument& rDoc = pShell->GetDocument();
-        auto pURLTransformer = std::make_shared<ScURLTransformer>(rDoc);
-        mpShapeExport->SetURLTranslator(pURLTransformer);
-    }
-
-    return *mpShapeExport;
-}
-
 XclExpXmlStream::~XclExpXmlStream()
 {
     assert(maStreams.empty() && "Forgotten PopStream()?");

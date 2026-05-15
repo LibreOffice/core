@@ -195,7 +195,7 @@ EscherExHostAppData* XclEscherEx::StartShape( const Reference< XShape >& rxShape
     //added for exporting OCX control
     sal_Int16 nMsCtlType = 0;
     if ( !pObj )
-        pCurrXclObj = new XclObjAny( mrObjMgr, rxShape);// just what is it?!?
+        pCurrXclObj = new XclObjAny( mrObjMgr, rxShape, &GetDoc() );// just what is it?!?
     else
     {
         pCurrXclObj = nullptr;
@@ -220,10 +220,10 @@ EscherExHostAppData* XclEscherEx::StartShape( const Reference< XShape >& rxShape
                         pCurrXclObj = new XclObjOle( mrObjMgr, *static_cast<SdrOle2Obj*>(pObj) );
                 }
                 else    // just a metafile
-                    pCurrXclObj = new XclObjAny( mrObjMgr, rxShape);
+                    pCurrXclObj = new XclObjAny( mrObjMgr, rxShape, &GetDoc() );
             }
             else
-                pCurrXclObj = new XclObjAny( mrObjMgr, rxShape);
+                pCurrXclObj = new XclObjAny( mrObjMgr, rxShape, &GetDoc() );
         }
         else if( nObjType == SdrObjKind::UNO )
         {
@@ -244,13 +244,13 @@ EscherExHostAppData* XclEscherEx::StartShape( const Reference< XShape >& rxShape
             else  //TBX Form Control
                 pCurrXclObj = CreateTBXCtrlObj( rxShape, pChildAnchor ).release();
             if( !pCurrXclObj )
-                pCurrXclObj = new XclObjAny( mrObjMgr, rxShape); // just a metafile
+                pCurrXclObj = new XclObjAny( mrObjMgr, rxShape, &GetDoc() ); // just a metafile
         }
         else if( !ScDrawLayer::IsNoteCaption( pObj ) )
         {
             // ignore permanent note shapes
             // #i12190# do not ignore callouts (do not filter by object type ID)
-            pCurrXclObj = ShapeInteractionHelper::CreateShapeObj( mrObjMgr, rxShape);
+            pCurrXclObj = ShapeInteractionHelper::CreateShapeObj( mrObjMgr, rxShape, &GetDoc() );
             ShapeInteractionHelper::PopulateShapeInteractionInfo( mrObjMgr, rxShape, *pCurrAppData );
         }
     }
@@ -530,9 +530,9 @@ void XclEscherClientTextbox::WriteData( EscherEx& /*rEx*/ ) const
 }
 
 XclExpShapeObj*
-ShapeInteractionHelper::CreateShapeObj( XclExpObjectManager& rObjMgr, const Reference< XShape >& xShape)
+ShapeInteractionHelper::CreateShapeObj( XclExpObjectManager& rObjMgr, const Reference< XShape >& xShape, ScDocument* pDoc )
 {
-    return new XclExpShapeObj( rObjMgr, xShape);
+    return new XclExpShapeObj( rObjMgr, xShape, pDoc );
 }
 
 void ShapeInteractionHelper::PopulateShapeInteractionInfo(const XclExpObjectManager& rObjMgr,

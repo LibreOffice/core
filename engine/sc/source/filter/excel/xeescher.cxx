@@ -1948,8 +1948,8 @@ XclMacroHelper::SetMacroLink( const OUString& rMacroName )
     return false;
 }
 
-XclExpShapeObj::XclExpShapeObj( XclExpObjectManager& rRoot, css::uno::Reference< css::drawing::XShape > const & xShape) :
-    XclObjAny( rRoot, xShape),
+XclExpShapeObj::XclExpShapeObj( XclExpObjectManager& rRoot, css::uno::Reference< css::drawing::XShape > const & xShape, ScDocument* pDoc ) :
+    XclObjAny( rRoot, xShape, pDoc ),
     XclMacroHelper( rRoot )
 {
     if (SdrObject* pSdrObj = SdrObject::getSdrObjectFromXShape(xShape))

@@ -216,7 +216,7 @@ public:
 class XclExpShapeObj : public XclObjAny, public XclMacroHelper
 {
 public:
-    explicit            XclExpShapeObj( XclExpObjectManager& rRoot, css::uno::Reference< css::drawing::XShape > const & xShape);
+    explicit            XclExpShapeObj( XclExpObjectManager& rRoot, css::uno::Reference< css::drawing::XShape > const & xShape, ScDocument* pDoc );
     virtual             ~XclExpShapeObj() override;
 private:
     virtual void        WriteSubRecs( XclExpStream& rStrm ) override;

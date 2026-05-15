@@ -329,8 +329,6 @@ public:
     virtual oox::drawingml::chart::ChartConverter* getChartConverter() override;
 
     static OUString GenerateUniqueTableName(const std::u16string_view& rOriginalName, const std::vector<OUString>& aNewTabNames, const std::vector<OUString>& aOriginalTabNames);
-
-    oox::drawingml::ShapeExport& getOrCreateShapeExport();
     sal_Int32 getAndIncrementDiagramId() { maDiagramId++; return maDiagramId; };
 
 private:
