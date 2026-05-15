@@ -114,6 +114,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 					window.L.DomUtil.addClass(this._previewTiles[selectedPart], 'preview-img-currentpart');
 				this._ensureVisiblePreviews(); // Load previews.
 				this._previewInitialized = true;
+				this._updateSelectedSection();
 			}
 			else
 			{
@@ -130,6 +131,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 							window.L.DomUtil.addClass(this._previewTiles[j], 'preview-img-selectedpart');
 					}
 				}
+				this._updateSelectedSection();
 			}
 
 			if (!this.options.allowOrientation) {
@@ -540,6 +542,47 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		}
 
 		this._applyAllSectionsCollapse();
+
+		this._updateSelectedSection();
+	},
+
+	_updateSelectedSection: function () {
+		if (!this._sectionHeaders || this._sectionHeaders.length === 0)
+			return;
+
+		var sections = (app.impress && app.impress.sections) || [];
+		var partList = (app.impress && app.impress.partList) || [];
+		var fullySelected = new Set();
+		for (var s = 0; s < sections.length; s++) {
+			var start = sections[s].startIndex;
+			var end = (s + 1 < sections.length)
+				? sections[s + 1].startIndex - 1
+				: this._previewTiles.length - 1;
+			if (start < 0 || end < start)
+				continue;
+
+			var allSelected = true;
+			for (var p = start; p <= end; p++) {
+				if (!partList[p] || !partList[p].selected) {
+					allSelected = false;
+					break;
+				}
+			}
+			if (allSelected)
+				fullySelected.add(s);
+		}
+
+		for (var h = 0; h < this._sectionHeaders.length; h++) {
+			var header = this._sectionHeaders[h];
+			var nameSpan = header.querySelector('.slide-section-name');
+			if (!nameSpan)
+				continue;
+			var headerSectionIndex = parseInt(header.getAttribute('data-section-index'), 10);
+			if (fullySelected.has(headerSectionIndex))
+				window.L.DomUtil.addClass(nameSpan, 'selected');
+			else
+				window.L.DomUtil.removeClass(nameSpan, 'selected');
+		}
 	},
 
 	_createSectionHeader: function (section, sectionIndex) {
