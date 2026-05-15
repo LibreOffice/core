@@ -26,6 +26,9 @@ function onDemandRenderer(
 	entryText: string | undefined,
 ) {
 	const setupOnDemandRenderer = () => {
+		// avoid races, might be already updated
+		if (!parentContainer.contains(placeholder)) return;
+
 		const cachedComboboxEntries = builder.rendersCache[controlId];
 		let requestRender = true;
 
