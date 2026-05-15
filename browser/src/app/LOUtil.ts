@@ -421,9 +421,15 @@ class LOUtil {
 			cleanName = cleanName.toLowerCase();
 		}
 
-		// Skip icon lookup for numeric-only IDs (JSDialog artifacts like 1, 5, 65535)
-		// and core sr* resource IDs (like sr20006)
-		if (/^\d+$/.test(cleanName) || /^sr\d+$/.test(cleanName)) return '';
+		// Skip icon lookup for numeric-only IDs (JSDialog artifacts like 1, 5, 65535),
+		// core sr* resource IDs (like sr20006), and JSDialog submenu placeholder IDs
+		// (submenu1, submenu2, ...).
+		if (
+			/^\d+$/.test(cleanName) ||
+			/^sr\d+$/.test(cleanName) ||
+			/^submenu\d+$/.test(cleanName)
+		)
+			return '';
 
 		// Skip icon lookup for overflow button pseudo-commands
 		if (cleanName.startsWith('overflow-button-')) return '';
