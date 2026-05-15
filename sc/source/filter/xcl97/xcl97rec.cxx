@@ -1099,9 +1099,10 @@ void XclObjOle::Save( XclExpStream& rStrm )
 
 // --- class XclObjAny -------------------------------------------
 
-XclObjAny::XclObjAny( XclExpObjectManager& rObjMgr, const Reference< XShape >& rShape)
+XclObjAny::XclObjAny( XclExpObjectManager& rObjMgr, const Reference< XShape >& rShape, ScDocument* pDoc )
     : XclObj( rObjMgr, EXC_OBJTYPE_UNKNOWN )
     , mxShape( rShape )
+    , mpDoc(pDoc)
 {
 }
 
@@ -1368,6 +1369,11 @@ void XclObjAny::SaveXml( XclExpXmlStream& rStrm )
     }
 
     sax_fastparser::FSHelperPtr pDrawing = rStrm.GetCurrentStream();
+
+    ShapeExport aDML(XML_xdr, pDrawing, nullptr, &rStrm, drawingml::DOCUMENT_XLSX);
+    auto pURLTransformer = std::make_shared<ScURLTransformer>(*mpDoc);
+    aDML.SetURLTranslator(pURLTransformer);
+
     pDrawing->startElement( FSNS( XML_xdr, XML_twoCellAnchor ), // OOXTODO: oneCellAnchor, absoluteAnchor
             XML_editAs, GetEditAs( *this ) );
     Reference< XPropertySet > xPropSet( mxShape, UNO_QUERY );
@@ -1375,7 +1381,6 @@ void XclObjAny::SaveXml( XclExpXmlStream& rStrm )
     {
         WriteFromTo( rStrm, *this );
         bool bWriteAsShape(true);
-        ShapeExport& rDML(rStrm.getOrCreateShapeExport());
 
         if (pObject->isDiagram())
         {
@@ -1392,10 +1397,10 @@ void XclObjAny::SaveXml( XclExpXmlStream& rStrm )
             if (bSaveAsDiagram)
             {
                 const sal_Int32 nDiagramId(rStrm.getAndIncrementDiagramId());
-                const sal_Int32 nShapeId = rDML.GetNewShapeID(mxShape);
+                const sal_Int32 nShapeId = aDML.GetNewShapeID(mxShape);
                 SAL_INFO("sc.eppt", "writing Diagram " + OUString::number(nDiagramId) + " with Shape Id " + OUString::number(nShapeId));
                 pDrawing->startElementNS(XML_xdr, XML_graphicFrame);
-                rDML.WriteDiagram(mxShape, nDiagramId, nShapeId);
+                aDML.WriteDiagram(mxShape, nDiagramId, nShapeId);
                 pDrawing->endElementNS(XML_xdr, XML_graphicFrame);
                 bWriteAsShape = false;
             }
@@ -1403,7 +1408,7 @@ void XclObjAny::SaveXml( XclExpXmlStream& rStrm )
 
         if (bWriteAsShape)
         {
-            rDML.WriteShape( mxShape );
+            aDML.WriteShape( mxShape );
         }
     }
 

@@ -54,7 +54,7 @@ class ShapeInteractionHelper
 {
 public:
    static XclExpShapeObj* CreateShapeObj( XclExpObjectManager& rObjMgr, const css::uno::Reference<
-                            css::drawing::XShape >& xShape);
+                            css::drawing::XShape >& xShape, ScDocument* pDoc );
    static void PopulateShapeInteractionInfo( const XclExpObjectManager& rObjMgr, const css::uno::Reference< css::drawing::XShape >& xShape, EscherExHostAppData& rHostAppData );
 };
 
