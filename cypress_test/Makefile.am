@@ -285,11 +285,16 @@ clean-local:
 	rm -rf .nyc_output
 	rm -rf coverage
 
-# Used on jenkins to run all the tests in parallel as much as possible
-check-desktop-mobile-multi:
-	check-desktop
-	check-mobile
-	check-multi
+# Used on jenkins to run all the tests in parallel as much as possible.
+# Using $(PID_FILE) as dependency to start coolwsd.
+check-desktop-mobile-multi: @JAILS_PATH@ @CACHE_PATH@ $(NODE_BINS)
+	$(MAKE) SUITE_ONLY=1 \
+		$(DESKTOP_TEST_FILES_DONE) \
+		$(MOBILE_TEST_FILES_DONE) \
+		$(MULTIUSER_TEST_FILES_DONE)
+	$(V)$(KILL_COMMAND) || true
+# run_buffered.sh always exits 0 and records failures in ERROR_LOG
+	$(V)test ! -f $(ERROR_LOG) || (cat $(ERROR_LOG) && false)
 
 ###############
 # Mobile tests.
