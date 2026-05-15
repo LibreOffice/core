@@ -540,8 +540,7 @@ CPPUNIT_TEST_FIXTURE(Test, testAutocorrectRedline)
     pWrtShell->Insert("1000 MWh/an.");
 
     // Author enables track changes and replaces "1000 M" with "7 G":
-    RedlineFlags nMode = pWrtShell->GetRedlineFlags();
-    pWrtShell->SetRedlineFlags(nMode | RedlineFlags::On);
+    dispatchCommand(mxComponent, ".uno:TrackChanges", {});
     pWrtShell->SttPara(/*bSelect=*/false);
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 6, /*bBasicCall=*/false);
     pWrtShell->DelRight();
@@ -549,7 +548,7 @@ CPPUNIT_TEST_FIXTURE(Test, testAutocorrectRedline)
 
     // Hide change display — visible text is now "7 GWh/an."
     // This creates MergedPara, so GetText() returns MergedPara::mergedText.
-    pWrtShell->SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowInsert);
+    dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
 
     // When typing after "an.", FnCapitalStartWord tries to change "GWh" to
     // "Gwh" via Replace. With hidden redlines, Replace recreates the
