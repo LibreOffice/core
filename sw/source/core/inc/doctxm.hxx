@@ -43,6 +43,8 @@ class SwTOXBaseSection final : public SwTOXBase, public SwSection
              SwRootFrame const* pLayout );
     void UpdateTemplate( const SwTextNode* pOwnChapterNode,
              SwRootFrame const* pLayout );
+    void UpdateLinkedCharStyles( const SwTextNode* pOwnChapterNode,
+             SwRootFrame const* pLayout );
     void UpdateContent( SwTOXElement eType,
              const SwTextNode* pOwnChapterNode,
              SwRootFrame const* pLayout );

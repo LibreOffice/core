@@ -915,6 +915,29 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf114773)
                          aIndexString);
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testLinkedCharStyleHeading)
+{
+    createSwDoc("linked_char_style_heading.docx");
+
+    uno::Reference<text::XDocumentIndexesSupplier> xIndexSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexes = xIndexSupplier->getDocumentIndexes();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexes->getCount());
+    uno::Reference<text::XDocumentIndex> xTOCIndex(xIndexes->getByIndex(0), uno::UNO_QUERY);
+
+    xTOCIndex->update();
+    uno::Reference<text::XTextRange> xTextRange = xTOCIndex->getAnchor();
+    uno::Reference<text::XText> xText = xTextRange->getText();
+    uno::Reference<text::XTextCursor> xTextCursor = xText->createTextCursor();
+    xTextCursor->gotoRange(xTextRange->getStart(), false);
+    xTextCursor->gotoRange(xTextRange->getEnd(), true);
+    const OUString aIndexString(convertLineEnd(xTextCursor->getString(), LineEnd::LINEEND_LF));
+
+    CPPUNIT_ASSERT(aIndexString.indexOf(u"Real Heading") != -1);
+    // Without the fix the leading heading-linked run is not collected at all.
+    CPPUNIT_ASSERT(aIndexString.indexOf(u"InlineHeading") != -1);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), aIndexString.indexOf(u"trailing text"));
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf104315)
 {
     createSwDoc("tdf104315.odt");
