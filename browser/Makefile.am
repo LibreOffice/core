@@ -1148,6 +1148,15 @@ $(DIST_FOLDER)/extensions/%: $(srcdir)/extensions/%
 		`ln -sf $(abs_srcdir)/$< $@`; \
 	fi
 
+.PHONY: install-demo-extensions
+install-demo-extensions:
+	for m in $(srcdir)/extensions/*/manifest.json; do \
+		dir=$$(dirname $$m) && \
+		id=$$(basename $$dir) && \
+		mkdir -p $(DIST_FOLDER)/extensions/$$id && \
+		cp -r $$dir/. $(DIST_FOLDER)/extensions/$$id/; \
+	done
+
 if ENABLE_DEBUG
 SourceMap=--allowJs true --sourceMap true --inlineSources true
 endif

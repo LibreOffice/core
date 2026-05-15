@@ -5,6 +5,7 @@ tmp/**/*
 *.sublime-*
 *.js.html
 index.html
+!extensions/*/index.html
 bower.json
 component.json
 
