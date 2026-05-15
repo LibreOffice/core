@@ -38,7 +38,8 @@ ifeq ($(OS),WNT)
 $(call gb_ExternalProject_get_state_target,python3,build) :
 	$(call gb_Trace_StartRange,python3,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
-		MAKEFLAGS= MSBuild.exe pcbuild.sln /t:Build $(gb_MSBUILD_CONFIG_AND_PLATFORM) \
+		MAKEFLAGS= CL=-D_SILENCE_EXPERIMENTAL_COROUTINE_DEPRECATION_WARNINGS \
+			MSBuild.exe pcbuild.sln /t:Build $(gb_MSBUILD_CONFIG_AND_PLATFORM) \
 			/p:bz2Dir=$(gb_UnpackedTarball_workdir)/bzip2 \
 			/p:opensslIncludeDir=$(gb_UnpackedTarball_workdir)/openssl/include \
 			/p:opensslOutDir=$(gb_UnpackedTarball_workdir)/openssl \
