@@ -79,3 +79,7 @@ leak:libjvm
 leak:NSS_CMSMessage_CreateFromDER
 leak:PK11_FindPrivateKeyFromCert
 leak:PK11_ImportDERPrivateKeyInfoAndReturnKey
+
+# Right now, xpdfimport has a lot of leaks, and merely printing that out takes a very long,
+# and we're not really interested in leaks in external programs.
+leak:instdir/program/xpdfimport
