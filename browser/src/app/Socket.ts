@@ -1190,6 +1190,14 @@ class Socket {
 				app.console.error('Failed to parse executescriptresult: ' + e);
 			}
 			return;
+		} else if (textMsg.startsWith('proxycall: ')) {
+			try {
+				const call = JSON.parse(textMsg.substring('proxycall: '.length));
+				this._map.fire('proxycall', call);
+			} catch (ex) {
+				app.console.error('Failed to parse proxycall: ' + ex);
+			}
+			return;
 		} else if (textMsg.startsWith('perm:')) {
 			this._onPermMsg(textMsg);
 			return;

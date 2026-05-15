@@ -2811,7 +2811,12 @@ static char* lo_extractDocumentStructureRequest(COKit* pThis, const char* pFileP
 
 static int lo_getDocsCount(COKit* pThis);
 
-static void lo_executeScript(char const * script, char ** result, char ** error);
+static void lo_executeScript(
+    char const * script, char ** result, char ** error,
+    void (*proxyCallback) (void * data, char const * payload), void * proxyCallbackData);
+static void lo_deliverProxyResult(char const * callId, char const * jsonValue);
+static void lo_cancelProxyCalls();
+static int lo_isExpectedReentry();
 
 LibCO_Impl::LibCO_Impl()
     : m_pOfficeClass( gOfficeClass.lock() )
@@ -2852,6 +2857,9 @@ LibCO_Impl::LibCO_Impl()
         m_pOfficeClass->registerFileSaveDialogCallback = lo_registerFileSaveDialogCallback;
         m_pOfficeClass->getDocsCount = lo_getDocsCount;
         m_pOfficeClass->executeScript = lo_executeScript;
+        m_pOfficeClass->deliverProxyResult = lo_deliverProxyResult;
+        m_pOfficeClass->cancelProxyCalls = lo_cancelProxyCalls;
+        m_pOfficeClass->isExpectedReentry = lo_isExpectedReentry;
 
         gOfficeClass = m_pOfficeClass;
     }
@@ -7948,15 +7956,24 @@ static void doc_setColorPreviewState(SAL_UNUSED_PARAMETER COKitDocument* /*pThis
     KitHelper::setColorPreviewState(nId, bEnabled);
 }
 
-static void lo_executeScript(char const * script, char ** result, char ** error) {
+static void lo_executeScript(
+    char const * script, char ** result, char ** error,
+    void (*proxyCallback) (void * data, char const * payload), void * proxyCallbackData) {
     comphelper::ProfileZone zone("lo_executeScript");
     SolarMutexGuard guard;
     SetLastExceptionMsg();
     *result = nullptr;
     *error = nullptr;
 #if HAVE_FEATURE_QUICKJS
+    std::function<void(OUString const&)> hook;
+    if (proxyCallback != nullptr) {
+        hook = [proxyCallback, proxyCallbackData](OUString const & payload) {
+            OString const utf8(payload.toUtf8());
+            proxyCallback(proxyCallbackData, utf8.getStr());
+        };
+    }
     try {
-        OUString value = jsuno::execute(OUString::fromUtf8(script));
+        OUString value = jsuno::execute(OUString::fromUtf8(script), std::move(hook));
         if (!value.isEmpty()) {
             *result = convertOUString(value);
         }
@@ -7966,10 +7983,39 @@ static void lo_executeScript(char const * script, char ** result, char ** error)
     }
 #else
     (void) script;
+    (void) proxyCallback;
+    (void) proxyCallbackData;
     static constexpr auto msg = u"executeScript: QuickJS support is not enabled in this build"_ustr;
     SetLastExceptionMsg(msg);
     *error = convertOUString(msg);
 #endif
+}
+
+static void lo_deliverProxyResult(char const * callId, char const * jsonValue)
+{
+    comphelper::ProfileZone zone("lo_deliverProxyResult");
+    SolarMutexGuard guard;
+    SetLastExceptionMsg();
+#if HAVE_FEATURE_QUICKJS
+    jsuno::deliverProxyResult(OUString::fromUtf8(callId), OUString::fromUtf8(jsonValue));
+#else
+    (void) callId;
+    (void) jsonValue;
+#endif
+}
+
+static void lo_cancelProxyCalls()
+{
+    comphelper::ProfileZone zone("lo_cancelProxyCalls");
+    // jsuno owns its own locks for the call hook and pending-results map, so no SolarMutex:
+#if HAVE_FEATURE_QUICKJS
+    jsuno::cancelProxyCalls();
+#endif
+}
+
+static int lo_isExpectedReentry()
+{
+    return vcl::kit::isExpectedReentry() ? 1 : 0;
 }
 
 static char* lo_getError (COKit *pThis)

@@ -146,6 +146,12 @@ ChildSession::~ChildSession()
     {
         _docManager->getLOKit()->stopURP(_URPContext);
     }
+
+    // The iframe that would have answered any in-flight proxy listener calls is gone:
+    if (_docManager != nullptr)
+    {
+        _docManager->getLOKit()->cancelProxyCalls();
+    }
 }
 
 void ChildSession::disconnect()
@@ -608,6 +614,7 @@ bool ChildSession::_handleInput(const char *buffer, int length)
                tokens.equals(0, "toggletiledumping") ||
                tokens.equals(0, "getpresentationinfo") ||
                tokens.equals(0, "executescript") ||
+               tokens.equals(0, "proxyreturn") ||
                tokens.equals(0, "getslidesections"));
 
         ProfileZone pz("ChildSession::_handleInput:" + tokens[0]);
@@ -932,6 +939,10 @@ bool ChildSession::_handleInput(const char *buffer, int length)
         else if (tokens.equals(0, "executescript"))
         {
             return executeScript(buffer, length, tokens);
+        }
+        else if (tokens.equals(0, "proxyreturn"))
+        {
+            return proxyReturn(buffer, length);
         }
         else if (tokens.equals(0, "getslidesections"))
         {
@@ -3413,7 +3424,16 @@ bool ChildSession::executeScript(char const * buffer, int length, StringVector c
 
     char * result = nullptr;
     char * error = nullptr;
-    _docManager->getLOKit()->executeScript(script.c_str(), &result, &error);
+    // Capturing `this` is safe even though the proxy callback can fire long after
+    // executeScript has returned, since the callback runs only while the proxy stays
+    // attached and ChildSession outlives that:
+    _docManager->getLOKit()->executeScript(
+        script.c_str(), &result, &error,
+        [](void * data, char const * payload) {
+            static_cast<ChildSession *>(data)->sendTextFrame(
+                "proxycall: " + std::string(payload));
+        },
+        this);
 
     // Build the response by string concatenation rather than via Poco JSON,
     // because @c result is already a JSON value (whatever JSON.stringify
@@ -3437,6 +3457,23 @@ bool ChildSession::executeScript(char const * buffer, int length, StringVector c
     // semantics (rather than collapsing it to JSON null).
     body += '}';
     sendTextFrame("executescriptresult: " + body);
+    return true;
+}
+
+bool ChildSession::proxyReturn(char const * buffer, int length) {
+    // Wire format: "proxyreturn <callId> <json-value>"; hand off to deliverProxyResult to
+    // unblock the engine-side proxy spinning on Application::Yield for this callId:
+    std::string_view const full(buffer, length);
+    constexpr std::string_view prefix("proxyreturn ");
+    auto const idEnd = full.find(' ', prefix.size());
+    if (idEnd == std::string_view::npos)
+    {
+        sendTextFrameAndLogError("error: cmd=proxyreturn kind=syntax");
+        return false;
+    }
+    std::string const callId(full.substr(prefix.size(), idEnd - prefix.size()));
+    std::string const jsonValue(full.substr(idEnd + 1));
+    _docManager->getLOKit()->deliverProxyResult(callId.c_str(), jsonValue.c_str());
     return true;
 }
 

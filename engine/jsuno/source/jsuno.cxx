@@ -14,18 +14,21 @@
 #include <cstdint>
 #include <cstdlib>
 #include <exception>
+#include <functional>
 #include <iostream>
 #include <limits>
+#include <map>
 #include <memory>
+#include <mutex>
 #include <optional>
 #include <sstream>
-#include <string>
 #include <string_view>
 #include <utility>
 #include <vector>
 
 #include <quickjs.h>
 
+#include <com/sun/star/beans/XIntrospectionAccess.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/reflection/InvocationTargetException.hpp>
@@ -37,8 +40,11 @@
 #include <com/sun/star/reflection/XStructTypeDescription.hpp>
 #include <com/sun/star/reflection/XTypeDescription.hpp>
 #include <com/sun/star/script/Invocation.hpp>
+#include <com/sun/star/script/InvocationAdapterFactory.hpp>
 #include <com/sun/star/script/InvocationInfo.hpp>
+#include <com/sun/star/script/XInvocation.hpp>
 #include <com/sun/star/script/XInvocation2.hpp>
+#include <com/sun/star/script/XInvocationAdapterFactory2.hpp>
 #include <com/sun/star/script/provider/ScriptExceptionRaisedException.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
@@ -48,18 +54,25 @@
 #include <com/sun/star/uno/genfunc.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/exc_hlp.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <jsuno/detail/dllapi.hxx>
 #include <jsuno/jsuno.hxx>
+#include <tools/json_writer.hxx>
 #include <o3tl/any.hxx>
 #include <o3tl/safeint.hxx>
 #include <o3tl/string_view.hxx>
 #include <o3tl/unreachable.hxx>
-#include <rtl/string.h>
+#include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
-#include <sal/log.hxx>
 #include <sal/types.h>
+#include <typelib/typedescription.h>
 #include <typelib/typedescription.hxx>
+#include <vcl/kit.hxx>
+#include <vcl/svapp.hxx>
+#include <uno/data.h>
+
+#include "json.hxx"
 
 namespace
 {
@@ -236,8 +249,9 @@ private:
 
 struct RuntimeData
 {
-    RuntimeData(JSRuntime* rt)
-        : symbolIteratorAtom(rt)
+    RuntimeData(JSRuntime* rt, std::function<void(OUString const&)> proxyCallHook_)
+        : proxyCallHook(std::move(proxyCallHook_))
+        , symbolIteratorAtom(rt)
     {
     }
 
@@ -255,6 +269,9 @@ struct RuntimeData
     JSClassID ctorClassId = 0;
     JSClassID singletonClassId = 0;
     JSClassID moduleClassId = 0;
+
+    // Hook captured by every ProxyInvocation created during this execute() call:
+    std::function<void(OUString const&)> proxyCallHook;
 
     AtomRef symbolIteratorAtom;
 
@@ -2352,6 +2369,261 @@ JSValue sameUnoObject(JSContext* ctx, JSValueConst, int argc, JSValueConst* argv
     });
 }
 
+// Live `$internal.createProxy` adapters indexed by id so `$internal.takeProxy` can return the
+// same C++ adapter UNO was originally handed (each jsuno::execute uses a fresh JSRuntime, so
+// JS-side identity does not survive):
+std::mutex g_proxyMapMutex;
+std::map<OUString, css::uno::Reference<css::uno::XInterface>> g_proxyMap;
+
+// Per-callId rendezvous between ProxyInvocation::invoke (spinning Application::Yield) and
+// jsuno::deliverProxyResult:
+struct PendingProxyResult
+{
+    bool delivered = false;
+    OUString json;
+};
+std::mutex g_pendingProxyResultsMutex;
+std::map<OUString, PendingProxyResult> g_pendingProxyResults;
+sal_Int64 g_nextProxyCallId = 0;
+
+// Return the declared return type of `methodName` on `interfaceType`, or void if it has no
+// such method:
+css::uno::Type lookupMethodReturnType(css::uno::Type const& interfaceType,
+                                      std::u16string_view methodName)
+{
+    typelib_TypeDescription* td = nullptr;
+    typelib_typedescriptionreference_getDescription(&td, interfaceType.getTypeLibType());
+    if (td == nullptr)
+    {
+        return cppu::UnoType<void>::get();
+    }
+    typelib_typedescription_complete(&td);
+    css::uno::Type ret = cppu::UnoType<void>::get();
+    if (td->eTypeClass == typelib_TypeClass_INTERFACE)
+    {
+        auto const ifaceTd = reinterpret_cast<typelib_InterfaceTypeDescription*>(td);
+        for (sal_Int32 i = 0; i != ifaceTd->nAllMembers; ++i)
+        {
+            typelib_TypeDescription* memberTd = nullptr;
+            typelib_typedescriptionreference_getDescription(&memberTd, ifaceTd->ppAllMembers[i]);
+            if (memberTd != nullptr)
+            {
+                if (memberTd->eTypeClass == typelib_TypeClass_INTERFACE_METHOD)
+                {
+                    auto const methodTd
+                        = reinterpret_cast<typelib_InterfaceMethodTypeDescription*>(memberTd);
+                    if (OUString::unacquired(&methodTd->aBase.pMemberName) == methodName)
+                    {
+                        ret = css::uno::Type(methodTd->pReturnTypeRef);
+                        typelib_typedescription_release(memberTd);
+                        break;
+                    }
+                }
+                typelib_typedescription_release(memberTd);
+            }
+        }
+    }
+    typelib_typedescription_release(td);
+    return ret;
+}
+
+class ProxyInvocation final : public cppu::WeakImplHelper<css::script::XInvocation>
+{
+public:
+    ProxyInvocation(css::uno::Type interfaceType, OUString proxyId,
+                    std::function<void(OUString const&)> proxyCallHook)
+        : m_interfaceType(std::move(interfaceType))
+        , m_proxyId(std::move(proxyId))
+        , m_proxyCallHook(std::move(proxyCallHook))
+    {
+    }
+
+    css::uno::Reference<css::beans::XIntrospectionAccess> SAL_CALL getIntrospection() override
+    {
+        return {};
+    }
+
+    css::uno::Any SAL_CALL invoke(OUString const& aFunctionName,
+                                  css::uno::Sequence<css::uno::Any> const& aParams,
+                                  css::uno::Sequence<sal_Int16>& aOutParamIndex,
+                                  css::uno::Sequence<css::uno::Any>& aOutParam) override
+    {
+        aOutParamIndex = {};
+        aOutParam = {};
+
+        css::uno::Type const returnType = lookupMethodReturnType(m_interfaceType, aFunctionName);
+        bool const isVoid = returnType.getTypeClass() == css::uno::TypeClass_VOID;
+        // Void-return methods are fire-and-forget; non-void methods spin Application::Yield
+        // below until the iframe answers (listener notifications often fire from engine code
+        // that cannot tolerate Application::Yield re-entry, and a void handler's only signal
+        // back to its caller would be an exception --- which no listener we mirror does):
+        OUString callId;
+        if (!isVoid)
+        {
+            std::lock_guard lock(g_pendingProxyResultsMutex);
+            callId = "c" + OUString::number(g_nextProxyCallId++);
+            g_pendingProxyResults[callId] = {};
+        }
+
+        OString payload;
+        {
+            tools::JsonWriter w;
+            try
+            {
+                w.put("proxyId", m_proxyId);
+                if (!callId.isEmpty())
+                {
+                    w.put("callId", callId);
+                }
+                w.put("method", aFunctionName);
+                {
+                    auto const args = w.startArray("args");
+                    for (auto const& a : aParams)
+                    {
+                        OStringBuffer buf;
+                        appendUnoAsJson(buf, a.getValueType(), a.getValue());
+                        w.putRaw(buf);
+                    }
+                }
+            }
+            catch (...)
+            {
+                // Finalise the JsonWriter so its destructor doesn't assert on an unfinished
+                // write while we propagate the real exception:
+                (void)w.finishAndGetAsOString();
+                throw;
+            }
+            payload = w.finishAndGetAsOString();
+        }
+        if (m_proxyCallHook)
+        {
+            m_proxyCallHook(OUString::fromUtf8(payload));
+        }
+
+        if (isVoid)
+        {
+            return {};
+        }
+
+        // Spin Application::Yield until the iframe delivers a value for our callId, holding
+        // the SolarMutex Yield needs (the listener convention releases it around our
+        // invocation, and Yield drops it during waits so the wire-side dispatch can still
+        // grab it) and bracketing the spin with push/popExpectedReentry so the host poll
+        // loop's non-async-dialog guard does not flag the intentional kitPoll re-entry:
+        SolarMutexGuard guard;
+        vcl::kit::pushExpectedReentry();
+        struct ReentryPopper
+        {
+            ~ReentryPopper() { vcl::kit::popExpectedReentry(); }
+        } popper;
+        OUString jsonResult;
+        for (;;)
+        {
+            {
+                std::lock_guard lock(g_pendingProxyResultsMutex);
+                auto const it = g_pendingProxyResults.find(callId);
+                if (it != g_pendingProxyResults.end() && it->second.delivered)
+                {
+                    jsonResult = std::move(it->second.json);
+                    g_pendingProxyResults.erase(it);
+                    break;
+                }
+            }
+            Application::Yield();
+        }
+        return parseJsonToAny(jsonResult, returnType);
+    }
+
+    void SAL_CALL setValue(OUString const&, css::uno::Any const&) override {}
+
+    css::uno::Any SAL_CALL getValue(OUString const&) override { return {}; }
+
+    sal_Bool SAL_CALL hasMethod(OUString const&) override { return true; }
+
+    sal_Bool SAL_CALL hasProperty(OUString const&) override { return false; }
+
+private:
+    css::uno::Type m_interfaceType;
+    OUString m_proxyId;
+    std::function<void(OUString const&)> m_proxyCallHook;
+};
+
+JSValue internalCreateProxy(JSContext* ctx, JSValueConst, int argc, JSValueConst* argv)
+{
+    return callFromJs(ctx, [ctx, argc, argv] {
+        assert(argc >= 2);
+        if (JS_GetClassID(argv[0]) != getRuntimeData(ctx)->interfaceClassId)
+        {
+            JS_ThrowTypeError(ctx,
+                              "$internal.createProxy: first argument must be a UNO interface type");
+            throw JsException();
+        }
+        css::uno::Type const interfaceType(static_cast<typelib_TypeDescriptionReference*>(
+            JS_GetOpaque(argv[0], getRuntimeData(ctx)->interfaceClassId)));
+        if (!JS_IsString(argv[1]))
+        {
+            JS_ThrowTypeError(ctx, "$internal.createProxy: second argument must be a string id");
+            throw JsException();
+        }
+        std::size_t idLen = 0;
+        UniqueCString16 const idStr(ctx, JS_ToCStringLenUTF16(ctx, &idLen, argv[1]));
+        if (idStr.get() == nullptr)
+        {
+            throw JsException();
+        }
+        OUString const id(idStr.get(), idLen);
+        css::uno::Reference<css::script::XInvocation> invocation(
+            new ProxyInvocation(interfaceType, id, getRuntimeData(ctx)->proxyCallHook));
+        css::uno::Reference<css::script::XInvocationAdapterFactory2> factory
+            = css::script::InvocationAdapterFactory::create(
+                comphelper::getProcessComponentContext());
+        css::uno::Reference<css::uno::XInterface> adapter(
+            factory->createAdapter(invocation, { interfaceType }), css::uno::UNO_SET_THROW);
+        {
+            std::lock_guard lock(g_proxyMapMutex);
+            auto const[it, inserted] = g_proxyMap.try_emplace(id, adapter);
+            if (!inserted)
+            {
+                JS_ThrowReferenceError(ctx, "$internal.createProxy: id is already in use");
+                throw JsException();
+            }
+        }
+        return wrapUnoObject(ctx, adapter);
+    });
+}
+
+JSValue internalTakeProxy(JSContext* ctx, JSValueConst, int argc, JSValueConst* argv)
+{
+    return callFromJs(ctx, [ctx, argc, argv] {
+        assert(argc >= 1);
+        if (!JS_IsString(argv[0]))
+        {
+            JS_ThrowTypeError(ctx, "$internal.takeProxy: argument must be a string id");
+            throw JsException();
+        }
+        std::size_t idLen = 0;
+        UniqueCString16 const idStr(ctx, JS_ToCStringLenUTF16(ctx, &idLen, argv[0]));
+        if (idStr.get() == nullptr)
+        {
+            throw JsException();
+        }
+        OUString const id(idStr.get(), idLen);
+        css::uno::Reference<css::uno::XInterface> adapter;
+        {
+            std::lock_guard lock(g_proxyMapMutex);
+            auto const it = g_proxyMap.find(id);
+            if (it == g_proxyMap.end())
+            {
+                JS_ThrowReferenceError(ctx, "$internal.takeProxy: no proxy with that id");
+                throw JsException();
+            }
+            adapter = std::move(it->second);
+            g_proxyMap.erase(it);
+        }
+        return wrapUnoObject(ctx, adapter);
+    });
+}
+
 JSValue invokeUno(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv, int,
                   JSValueConst* func_data)
 {
@@ -2480,10 +2752,10 @@ ExceptionData extractExceptionData(JSContext* ctx, ValueRef const& err)
 }
 }
 
-OUString jsuno::execute(OUString const& script)
+OUString jsuno::execute(OUString const& script, std::function<void(OUString const&)> proxyCallHook)
 {
     auto const rt = JS_NewRuntime();
-    JS_SetRuntimeOpaque(rt, new RuntimeData(rt));
+    JS_SetRuntimeOpaque(rt, new RuntimeData(rt, std::move(proxyCallHook)));
     JS_NewClassID(rt, &getRuntimeData(rt)->pointerClassId);
     JSClassDef pointerClass{ "InternalPointer", pointerFinalizer, nullptr, nullptr, nullptr };
     [[maybe_unused]] auto e = JS_NewClass(rt, getRuntimeData(rt)->pointerClassId, &pointerClass);
@@ -2593,6 +2865,14 @@ OUString jsuno::execute(OUString const& script)
         JS_SetPropertyStr(ctx, uno, "componentContext",
                           wrapUnoObject(ctx, comphelper::getProcessComponentContext()));
         JS_SetPropertyStr(ctx, global, "uno", uno.release());
+        // Plumbing for cool.js's attach/detach trampolines; not part of the JS UNO surface
+        // proper:
+        ValueRef internalObj(ctx, JS_NewObject(ctx));
+        JS_SetPropertyStr(ctx, internalObj, "createProxy",
+                          JS_NewCFunction(ctx, internalCreateProxy, "createProxy", 2));
+        JS_SetPropertyStr(ctx, internalObj, "takeProxy",
+                          JS_NewCFunction(ctx, internalTakeProxy, "takeProxy", 1));
+        JS_SetPropertyStr(ctx, global, "$internal", internalObj.release());
         auto const input = script.toUtf8();
         ValueRef const evalRes(
             ctx, JS_Eval(ctx, input.getStr(), input.getLength(), "<input>", JS_EVAL_TYPE_GLOBAL));
@@ -2636,6 +2916,30 @@ OUString jsuno::execute(OUString const& script)
             exc->message, {}, u"<input>"_ustr, u"JavaScript"_ustr, -1, exc->type);
     }
     return result;
+}
+
+void jsuno::deliverProxyResult(OUString const& callId, OUString const& jsonValue)
+{
+    std::lock_guard lock(g_pendingProxyResultsMutex);
+    auto const it = g_pendingProxyResults.find(callId);
+    if (it == g_pendingProxyResults.end())
+    {
+        return;
+    }
+    it->second.delivered = true;
+    it->second.json = jsonValue;
+}
+
+// Unblock every spinning ProxyInvocation::invoke by marking each pending entry as delivered
+// with an empty JSON body, so a torn-down iframe can't leave the kit waiting forever:
+void jsuno::cancelProxyCalls()
+{
+    std::lock_guard lock(g_pendingProxyResultsMutex);
+    for (auto & [ callId, entry ] : g_pendingProxyResults)
+    {
+        entry.delivered = true;
+        entry.json.clear();
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

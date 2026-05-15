@@ -9,6 +9,22 @@
 	let nextCallId = 0;
 	const pending = Object.create(null);
 
+	let nextProxyId = 0;
+	// Mapping from proxyId to { on: { method: handler, ... }, detach } objects:
+	const listeners = Object.create(null);
+
+	function attachTrampoline(typeName, proxyId, fnSrc) {
+		const parts = typeName.split('.');
+		let type = uno.idl;
+		for (const p of parts) type = type[p];
+		const proxy = $internal.createProxy(type, proxyId);
+		(0, eval)('(' + fnSrc + ')')(proxy);
+	}
+	function detachTrampoline(proxyId, fnSrc) {
+		const proxy = $internal.takeProxy(proxyId);
+		(0, eval)('(' + fnSrc + ')')(proxy);
+	}
+
 	// Takes a function `fn` followed by arguments `args`.  Runs `fn.apply(null, args)` inside a
 	// JS UNO context in the document's kit process and returns a Promise that resolves to the
 	// function application's JSON-decoded return value, or rejects with an Error wrapping the
@@ -33,6 +49,60 @@
 		return promise;
 	};
 
+	// Bundle a UNO listener registration with its iframe-side per-method handlers.
+	//
+	// `typeName` is the UNO interface name as a dotted string, e.g.
+	// "com.sun.star.document.XDocumentEventListener".
+	//
+	// `spec.attach(proxy)` runs in the kit's JS UNO context with a freshly-created proxy
+	// already bound to that interface; the implementation just wires the proxy into the
+	// relevant UNO API (e.g. `model.addDocumentEventListener(proxy)`).  `spec.detach(proxy)`
+	// gets the same proxy back and must do the matching unwire (e.g.
+	// `model.removeDocumentEventListener(proxy)`); skipping it would leak the kit-side
+	// listener.  Both run as cool.callRemote scripts.
+	//
+	// `spec.on` is an object mapping UNO method names to handler functions; handlers receive
+	// the method's UNO arguments and may return a value (or a Promise of one) to be sent back
+	// as the listener method's return value (only relevant for non-void methods).
+	//
+	// Returns a handle with a `.detach()` method.
+	window.cool.attachListener = function (typeName, spec) {
+		const proxyId = 'p' + (nextProxyId++);
+		listeners[proxyId] = {
+			on: spec.on,
+			detach: spec.detach
+		};
+		window.cool.callRemote(attachTrampoline, typeName, proxyId, spec.attach.toString());
+		return {
+			detach: function () {
+				const entry = listeners[proxyId];
+				if (!entry) return;
+				delete listeners[proxyId];
+				window.cool.callRemote(
+					detachTrampoline, proxyId, entry.detach.toString());
+			}
+		};
+	};
+
+	// Detach every listener still registered with cool.attachListener, so closing the iframe
+	// doesn't leave orphaned proxies on the kit side:
+	function detachAll() {
+		for (const proxyId of Object.keys(listeners)) {
+			const entry = listeners[proxyId];
+			delete listeners[proxyId];
+			window.cool.callRemote(
+				detachTrampoline, proxyId, entry.detach.toString());
+		}
+	}
+
+	function deliverProxyResult(callId, value) {
+		window.parent.postMessage(JSON.stringify({
+			msgId: 'Extension_ProxyReturn',
+			callId: callId,
+			value: value === undefined ? null : value
+		}), '*');
+	}
+
 	window.addEventListener('message', function (e) {
 		if (e.source !== window.parent) return;
 		let data;
@@ -46,21 +116,48 @@
 			console.warn('postMessage is not an object: ' + JSON.stringify(data));
 			return;
 		}
-		if (data.msgId !== 'Extension_CallResult') {
-			console.warn('postMessage has unexpected msgId: ' + data.msgId);
-			return;
-		}
-		const entry = pending[data.callId];
-		if (!entry) {
-			console.warn('Extension_CallResult: unknown callId ' + data.callId);
-			return;
-		}
-		delete pending[data.callId];
-		if (data.err !== undefined) {
-			//TODO: reconstruct specific (JS and UNO) exception types?
-			entry.reject(new Error(data.err));
+		if (data.msgId === 'Extension_CallResult') {
+			const entry = pending[data.callId];
+			if (!entry) {
+				console.warn('Extension_CallResult: unknown callId ' + data.callId);
+				return;
+			}
+			delete pending[data.callId];
+			if (data.err !== undefined) {
+				//TODO: reconstruct specific (JS and UNO) exception types?
+				entry.reject(new Error(data.err));
+			} else {
+				entry.resolve(data.ok);
+			}
+		} else if (data.msgId === 'Extension_ProxyCall') {
+			const entry = listeners[data.proxyId];
+			const fn = entry && entry.on[data.method];
+			const result = fn
+				? Promise.resolve(fn.apply(null, data.args || []))
+				: Promise.resolve(null);
+			if (data.callId !== undefined && data.callId !== null) {
+				result.then(
+					function (value) {
+						deliverProxyResult(data.callId, value);
+					},
+					function (err) {
+						console.warn('proxy handler threw:', err);
+						deliverProxyResult(data.callId, null);
+					}
+				);
+			}
+		} else if (data.msgId === 'Extension_Teardown') {
+			detachAll();
+			window.parent.postMessage(JSON.stringify({
+				msgId: 'Extension_TeardownDone'
+			}), '*');
 		} else {
-			entry.resolve(data.ok);
+			console.warn('postMessage has unexpected msgId: ' + data.msgId);
 		}
+	});
+
+	// Best-effort cleanup when the iframe goes away without a Teardown handshake:
+	window.addEventListener('pagehide', function () {
+		detachAll();
 	});
 })();

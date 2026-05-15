@@ -168,7 +168,19 @@ struct COKitClassStruct
             COKitFileSaveDialogCallback pCallback);
 
     /// @see kit::Office::executeScript().
-    void (*executeScript) (char const * script, char ** result, char ** error);
+    void (*executeScript) (
+        char const * script, char ** result, char ** error,
+        void (*proxyCallback) (void * data, char const * payload),
+        void * proxyCallbackData);
+
+    /// @see kit::Office::deliverProxyResult().
+    void (*deliverProxyResult) (char const * callId, char const * jsonValue);
+
+    /// @see kit::Office::cancelProxyCalls().
+    void (*cancelProxyCalls) (void);
+
+    /// @see kit::Office::isExpectedReentry().
+    int (*isExpectedReentry) (void);
 };
 
 #define COKIT_DOCUMENT_HAS(pDoc,member) COKIT_HAS_MEMBER(COKitDocumentClass,member,(pDoc)->pClass->nSize)

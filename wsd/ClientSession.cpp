@@ -1548,7 +1548,8 @@ bool ClientSession::_handleInput(const char *buffer, int length)
         }
     }
 #endif
-    else if (tokens.equals(0, "executescript"))
+    else if (tokens.equals(0, "executescript") ||
+             tokens.equals(0, "proxyreturn"))
     {
         return forwardToChild(std::string(buffer, length), docBroker);
     }

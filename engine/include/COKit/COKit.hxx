@@ -1253,13 +1253,68 @@ public:
      * The @c script, @c *result and @c *error strings are NUL-terminated C strings, thus cannot
      * contain embedded NUL characters.
      *
+     * @c proxyCallback, if non-null, is captured by every JS-UNO proxy listener stub created
+     * during this call, and fires when the stub later receives a UNO call.  It is called
+     * with the @c proxyCallbackData pointer and a NUL-terminated JSON payload describing the
+     * call (see jsuno::execute).  The callback may fire synchronously while @c script runs,
+     * or later from any thread for as long as the proxy is registered.  Each proxy keeps the
+     * callback it captured at creation time, so a later executeScript with a different
+     * callback only affects proxies created by that later call.
+     *
      * @param script the script source.
      * @param result out-param for the result.
      * @param error out-param for the error message.
+     * @param proxyCallback hook for proxy listener fires; may be null.
+     * @param proxyCallbackData opaque pointer passed to @c proxyCallback on each call.
      */
-    void executeScript(char const * script, char ** result, char ** error)
+    void executeScript(char const * script, char ** result, char ** error,
+                       void (*proxyCallback) (void * data, char const * payload) = nullptr,
+                       void * proxyCallbackData = nullptr)
     {
-        mpThis->pClass->executeScript(script, result, error);
+        mpThis->pClass->executeScript(script, result, error, proxyCallback, proxyCallbackData);
+    }
+
+    /**
+     * Deliver the iframe-side response value back to a JS-UNO proxy listener whose
+     * `invoke` is currently waiting (synchronous return-value path).  @c callId matches a callId
+     * that was previously sent in the proxyCallback payload.  @c jsonValue is the JSON
+     * encoding of the JS-side return value, which the proxy will decode to the listener
+     * method's declared return type.
+     *
+     * Both strings are NUL-terminated C strings and must not contain embedded U+0000.
+     *
+     * Spurious callIds (no matching pending invoke) are silently ignored.
+     *
+     * @param callId opaque token matching one previously delivered to proxyCallback.
+     * @param jsonValue JSON-encoded return value for the listener method.
+     */
+    void deliverProxyResult(char const * callId, char const * jsonValue)
+    {
+        mpThis->pClass->deliverProxyResult(callId, jsonValue);
+    }
+
+    /**
+     * Cancel all in-flight JS-UNO proxy listener calls by unblocking any
+     * ProxyInvocation::invoke currently waiting in Application::Yield, treating each pending
+     * call as if the iframe had returned an empty value.  Intended to be called from
+     * ChildSession destruction so the kit's main thread can't end up spinning on a
+     * synchronous proxy result that will never come.
+     */
+    void cancelProxyCalls()
+    {
+        mpThis->pClass->cancelProxyCalls();
+    }
+
+    /**
+     * Whether the current thread is inside a window where it has explicitly opted into a kitPoll
+     * re-entry (via vcl::kit::pushExpectedReentry).  The host poll loop should suppress its
+     * non-async-dialog warning while this is true.
+     *
+     * @return non-zero if a re-entry is expected.
+     */
+    bool isExpectedReentry()
+    {
+        return mpThis->pClass->isExpectedReentry();
     }
 
     /**

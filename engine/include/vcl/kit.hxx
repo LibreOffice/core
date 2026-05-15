@@ -30,6 +30,13 @@ void VCL_DLLPUBLIC trimMemory(int nTarget);
 
 // Dump internal state of VCL windows etc. for debugging
 void VCL_DLLPUBLIC dumpState(rtl::OStringBuffer& rState);
+
+// Bracket a deliberate kitPoll re-entry (e.g. spinning Application::Yield to wait for a
+// synchronous proxy listener return value) so the host poll loop's non-async-dialog guard
+// does not flag it; counter rather than flag so nested waits compose:
+void VCL_DLLPUBLIC pushExpectedReentry();
+void VCL_DLLPUBLIC popExpectedReentry();
+bool VCL_DLLPUBLIC isExpectedReentry();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

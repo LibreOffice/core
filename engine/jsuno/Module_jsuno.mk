@@ -15,6 +15,7 @@ $(eval $(call gb_Module_add_targets,jsuno, \
 
 $(eval $(call gb_Module_add_check_targets,jsuno, \
     CppunitTest_jsuno_execute \
+    CppunitTest_jsuno_json \
     CppunitTest_jsuno_testuno \
 ))
 

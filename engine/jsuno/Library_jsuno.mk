@@ -12,6 +12,7 @@ $(eval $(call gb_Library_Library,jsuno))
 $(eval $(call gb_Library_add_defs,jsuno,-DLO_DLLIMPLEMENTATION_JSUNO))
 
 $(eval $(call gb_Library_add_exception_objects,jsuno, \
+    jsuno/source/json \
     jsuno/source/jsuno \
 ))
 
@@ -24,6 +25,8 @@ $(eval $(call gb_Library_use_libraries,jsuno, \
     cppu \
     cppuhelper \
     sal \
+    tl \
+    vcl \
 ))
 
 $(eval $(call gb_Library_use_sdk_api,jsuno))

@@ -4238,10 +4238,13 @@ void DesktopKitTest::testABI()
     CPPUNIT_ASSERT_EQUAL(classOffset(25), offsetof(COKitClass, getDocsCount));
     CPPUNIT_ASSERT_EQUAL(classOffset(26), offsetof(COKitClass, registerFileSaveDialogCallback));
     CPPUNIT_ASSERT_EQUAL(classOffset(27), offsetof(COKitClass, executeScript));
+    CPPUNIT_ASSERT_EQUAL(classOffset(28), offsetof(COKitClass, deliverProxyResult));
+    CPPUNIT_ASSERT_EQUAL(classOffset(29), offsetof(COKitClass, cancelProxyCalls));
+    CPPUNIT_ASSERT_EQUAL(classOffset(30), offsetof(COKitClass, isExpectedReentry));
 
     // When extending COKit with a new function pointer,  add new assert for the offsetof the
     // new function pointer and bump this assert for the size of the class.
-    CPPUNIT_ASSERT_EQUAL(classOffset(28), sizeof(COKitClass));
+    CPPUNIT_ASSERT_EQUAL(classOffset(31), sizeof(COKitClass));
 
     CPPUNIT_ASSERT_EQUAL(documentClassOffset(0), offsetof(COKitDocumentClass, destroy));
     CPPUNIT_ASSERT_EQUAL(documentClassOffset(1), offsetof(COKitDocumentClass, saveAs));

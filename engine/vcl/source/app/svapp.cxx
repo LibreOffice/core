@@ -1739,6 +1739,19 @@ bool isUnipoll()
     return pSVData && pSVData->mpPollCallback != nullptr;
 }
 
+namespace
+{
+thread_local int g_expectedReentryDepth = 0;
+}
+
+void pushExpectedReentry() { ++g_expectedReentryDepth; }
+void popExpectedReentry()
+{
+    assert(g_expectedReentryDepth > 0);
+    --g_expectedReentryDepth;
+}
+bool isExpectedReentry() { return g_expectedReentryDepth > 0; }
+
 void numberOfViewsChanged(int count)
 {
     if (count == 0)

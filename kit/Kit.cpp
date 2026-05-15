@@ -3061,7 +3061,9 @@ int KitSocketPoll::kitPoll(int timeoutMicroS)
     static std::atomic<int> reentries = 0;
     static int lastWarned = 1;
     ReEntrancyGuard guard(reentries);
-    if (reentries != lastWarned)
+    // Skip re-entries the engine has explicitly opted into via vcl::kit::pushExpectedReentry,
+    // and leave lastWarned untouched too so a later depth-1 kitPoll doesn't fire spuriously:
+    if (reentries != lastWarned && !(loKitPtr && loKitPtr->pClass->isExpectedReentry()))
     {
         LOG_ERR("non-async dialog triggered");
 #if !MOBILEAPP
