@@ -1451,6 +1451,180 @@ static bool isLightTheme()
     return value == 1;
 }
 
+// Register the ODF IFilter (odffilter.dll) with Windows Search and the
+// FullDetails / PreviewDetails property strings Explorer uses, both under
+// HKCU\Software\Classes. The two bindings the MSIX manifest cannot
+// express declaratively are:
+//
+//   - the per-extension IFilter chain Windows Search walks:
+//       .odt -> PersistentHandler ->
+//       PersistentAddinsRegistered\{IID_IFilter} -> IFilter CLSID
+//   - the per-extension FullDetails / PreviewDetails strings under
+//       SystemFileAssociations\.<ext>, which control the field list shown
+//       in Properties->Details and in the preview pane (the property
+//       handler itself is wired via desktop2:DesktopPropertyHandler in
+//       the manifest, but it only fills the fields Explorer asks for).
+//
+// HKCU\Software\Classes is silo'd for packaged processes - writes from
+// this process would land in a per-package virtual class hive that
+// Windows Search and Explorer never read. ProcMon confirmed this even
+// with unvirtualizedResources and with a self-respawned breakaway child:
+// the silo follows packaged-EXE images regardless. So instead we build a
+// .reg file and shell out to System32\reg.exe (unpackaged, escapes the
+// silo with the DesktopAppBreakaway attribute). reg.exe writes the
+// values to real HKCU where the shell looks for them.
+//
+// Idempotent on every launch.
+//
+// Limitation: HKCU writes survive package uninstall. Users who remove
+// Collabora Office may continue to see (silent) failed lookups for ODF
+// IFilter until the keys are pruned.
+static void registerOdfShellExtensions()
+{
+    // CLSIDs match engine/shell/source/win32/shlxthandler/odffilter/odffilter.hxx
+    static constexpr wchar_t kPersistentHandlerClsid[] =
+        L"{3EE9BB34-748E-4FBA-B6A5-94C200A11455}";
+    static constexpr wchar_t kIFilterClsid[] =
+        L"{DEB88601-6245-4803-81A5-13082BB738FF}";
+    // Microsoft's well-known IID_IFilter
+    static constexpr wchar_t kIidIFilter[] =
+        L"{89BCB740-6119-101A-BCB7-00DD010655AF}";
+
+    // Extensions we can actually filter - matches OOFileExtensionTable in
+    // engine/shell/source/win32/shlxthandler/util/fileextensions.cxx
+    static constexpr const wchar_t* kExtensions[] = {
+        L".odt", L".ott", L".odm", L".oth",
+        L".ods", L".ots",
+        L".odg", L".otg",
+        L".odp", L".otp",
+        L".odf", L".odb",
+        L".sxw", L".stw", L".sxg",
+        L".sxc", L".stc",
+        L".sxi", L".sti",
+        L".sxd", L".std",
+        L".sxm",
+        // Flat ODF (single XML file, no zip container).
+        L".fodt", L".fods", L".fodg", L".fodp",
+    };
+
+    static constexpr wchar_t kFullDetails[] =
+        L"prop:System.PropGroup.Description;"
+        L"System.Title;System.Author;System.Subject;"
+        L"System.Keywords;System.Comment;"
+        L"System.PropGroup.FileSystem;"
+        L"System.ItemNameDisplay;System.ItemTypeText;"
+        L"System.ItemFolderPathDisplay;System.Size;"
+        L"System.DateCreated;System.DateModified;System.FileAttributes";
+
+    static constexpr wchar_t kPreviewDetails[] =
+        L"prop:System.Title;*System.Author;*System.Subject;*System.Comment";
+
+    // Build the .reg file content.
+    std::wstring reg = L"Windows Registry Editor Version 5.00\r\n\r\n";
+    for (const wchar_t* ext : kExtensions)
+    {
+        reg += L"[HKEY_CURRENT_USER\\Software\\Classes\\";
+        reg += ext;
+        reg += L"\\PersistentHandler]\r\n@=\"";
+        reg += kPersistentHandlerClsid;
+        reg += L"\"\r\n\r\n";
+    }
+    reg += L"[HKEY_CURRENT_USER\\Software\\Classes\\CLSID\\";
+    reg += kPersistentHandlerClsid;
+    reg += L"]\r\n@=\"Collabora Office ODF IFilter Persistent Handler\"\r\n\r\n";
+    reg += L"[HKEY_CURRENT_USER\\Software\\Classes\\CLSID\\";
+    reg += kPersistentHandlerClsid;
+    reg += L"\\PersistentAddinsRegistered\\";
+    reg += kIidIFilter;
+    reg += L"]\r\n@=\"";
+    reg += kIFilterClsid;
+    reg += L"\"\r\n\r\n";
+    for (const wchar_t* ext : kExtensions)
+    {
+        reg += L"[HKEY_CURRENT_USER\\Software\\Classes\\SystemFileAssociations\\";
+        reg += ext;
+        reg += L"]\r\n\"FullDetails\"=\"";
+        reg += kFullDetails;
+        reg += L"\"\r\n\"PreviewDetails\"=\"";
+        reg += kPreviewDetails;
+        reg += L"\"\r\n\r\n";
+    }
+
+    // Write the .reg file under %LocalAppData%\<appName> with the UTF-16 LE
+    // BOM that reg.exe import expects.
+    PWSTR appDataFolder = nullptr;
+    if (FAILED(SHGetKnownFolderPath(FOLDERID_LocalAppData, 0, NULL, &appDataFolder)))
+        return;
+    std::wstring regFilePath = appDataFolder;
+    CoTaskMemFree(appDataFolder);
+    regFilePath += L"\\";
+    regFilePath += appName;
+    CreateDirectoryW(regFilePath.c_str(), nullptr);
+    regFilePath += L"\\register-shellext.reg";
+
+    HANDLE hFile = CreateFileW(regFilePath.c_str(), GENERIC_WRITE, 0, nullptr,
+                               CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr);
+    if (hFile == INVALID_HANDLE_VALUE)
+        return;
+    const WORD bom = 0xFEFF;
+    DWORD written = 0;
+    WriteFile(hFile, &bom, sizeof(bom), &written, nullptr);
+    WriteFile(hFile, reg.data(),
+              static_cast<DWORD>(reg.size() * sizeof(wchar_t)),
+              &written, nullptr);
+    CloseHandle(hFile);
+
+    // Spawn System32\reg.exe import outside the silo via the
+    // DesktopAppBreakaway process attribute. The breakaway attribute does
+    // not let our own (packaged) EXE escape, but reg.exe is unpackaged so
+    // it goes to a plain desktop process whose writes hit real HKCU.
+    wchar_t systemDir[MAX_PATH];
+    if (GetSystemDirectoryW(systemDir, ARRAYSIZE(systemDir)) == 0)
+        return;
+    std::wstring cmdLine = L"\"";
+    cmdLine += systemDir;
+    cmdLine += L"\\reg.exe\" import \"";
+    cmdLine += regFilePath;
+    cmdLine += L"\"";
+
+    SIZE_T attrSize = 0;
+    InitializeProcThreadAttributeList(NULL, 1, 0, &attrSize);
+    if (attrSize == 0)
+        return;
+    std::vector<BYTE> attrBuffer(attrSize);
+    LPPROC_THREAD_ATTRIBUTE_LIST attrList =
+        reinterpret_cast<LPPROC_THREAD_ATTRIBUTE_LIST>(attrBuffer.data());
+    if (!InitializeProcThreadAttributeList(attrList, 1, 0, &attrSize))
+        return;
+    DWORD policy = PROCESS_CREATION_DESKTOP_APP_BREAKAWAY_ENABLE_PROCESS_TREE;
+    if (!UpdateProcThreadAttribute(attrList, 0,
+                                   PROC_THREAD_ATTRIBUTE_DESKTOP_APP_POLICY,
+                                   &policy, sizeof(policy), NULL, NULL))
+    {
+        DeleteProcThreadAttributeList(attrList);
+        return;
+    }
+
+    STARTUPINFOEXW si = {};
+    si.StartupInfo.cb = sizeof(si);
+    si.StartupInfo.dwFlags = STARTF_USESHOWWINDOW;
+    si.StartupInfo.wShowWindow = SW_HIDE;
+    si.lpAttributeList = attrList;
+
+    PROCESS_INFORMATION pi = {};
+    BOOL ok = CreateProcessW(NULL, cmdLine.data(), NULL, NULL, FALSE,
+                             EXTENDED_STARTUPINFO_PRESENT | CREATE_NO_WINDOW,
+                             NULL, NULL,
+                             reinterpret_cast<LPSTARTUPINFOW>(&si), &pi);
+    DeleteProcThreadAttributeList(attrList);
+    if (!ok)
+        return;
+
+    WaitForSingleObject(pi.hProcess, 5000);
+    CloseHandle(pi.hThread);
+    CloseHandle(pi.hProcess);
+}
+
 static void openCOOLWindow(const FilenameAndUri& filenameAndUri, DocumentMode mode)
 {
     bool havePersistedSize = false;
@@ -2273,6 +2447,12 @@ int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR, int showWindowMode)
     SHGetKnownFolderPath(FOLDERID_LocalAppData, 0, NULL, &appDataFolder);
     localAppData = Util::wide_string_to_string(std::wstring(appDataFolder) + L"\\" + appName);
     CoTaskMemFree(appDataFolder);
+
+    // Wire up the ODF IFilter into Windows Search and the FullDetails /
+    // PreviewDetails strings the Properties dialog needs, both under
+    // HKCU\Software\Classes. See registerOdfShellExtensions() for the
+    // silo-escape mechanism. Idempotent on every launch.
+    registerOdfShellExtensions();
 
     // A "LANG" environment variable is not a thing on Windows, but check
     // for a such anyway, for easier testing.
