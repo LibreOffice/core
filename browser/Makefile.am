@@ -101,7 +101,7 @@ COOL_WELCOME_SRC = $(shell find $(srcdir)/welcome -name '*')
 COOL_WELCOME_DST = $(patsubst $(srcdir)/welcome/%,$(DIST_FOLDER)/welcome/%,$(COOL_WELCOME_SRC))
 endif
 
-COOL_EXTENSIONS_SRC = $(shell find $(srcdir)/extensions -name '*.html' -or -name '*.js')
+COOL_EXTENSIONS_SRC = $(srcdir)/extensions/cool.js
 COOL_EXTENSIONS_DST = $(patsubst $(srcdir)/extensions/%,$(DIST_FOLDER)/extensions/%,$(COOL_EXTENSIONS_SRC))
 
 COOL_ADMIN_SRC = $(shell find $(srcdir)/admin -name '*.html' -or -name '*.css' -or -name '*.ttf' -or -name 'OFL.txt' -or -name '*.svg')
