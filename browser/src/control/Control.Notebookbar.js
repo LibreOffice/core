@@ -262,6 +262,74 @@ window.L.Control.Notebookbar = window.L.Control.extend({
 		return [];
 	},
 
+	// Shared filter used by each doc-type notebookbar's getTabs/getTabsJSON
+	// to drop the Extensions entries when the COOL-side extension support is
+	// disabled by runtime config; nulls in the array (e.g. a stubbed-out
+	// getExtensionsTab) are dropped too:
+	_filterExtensionsTab: function(arr) {
+		return arr.filter(function(t) {
+			if (!t) return false;
+			if (!window.enableExperimentalFeatures && t.name === 'Extensions') return false;
+			return true;
+		});
+	},
+
+	// Shared entry used by each doc-type notebookbar's getTabsJSON to build
+	// the "Extensions" tab: one bigcustomtoolitem per loaded manifest, or a
+	// fixed-text placeholder when discovery hasn't yet populated
+	// app.map._extensions.  Click ids start with "extension-toggle-" so
+	// docdispatcher.dispatch routes them to ext.toggle().  Call
+	// notebookbar.refresh() after loadExtensions resolves to rebuild this
+	// tab against the real extension list.
+	getExtensionsTab: function() {
+		var exts = app.map._extensions || {};
+		var ids = Object.keys(exts).sort();
+		var content = [];
+		if (ids.length === 0) {
+			content.push({
+				'id': 'extensions-empty',
+				'type': 'fixedtext',
+				'text': _('No extensions are installed.'),
+			});
+		} else {
+			for (var i = 0; i < ids.length; i++) {
+				var id = ids[i];
+				var manifest = exts[id].options.manifest;
+				var baseUrl = exts[id].options.baseUrl;
+				content.push({
+					'id': 'extension-toggle-' + id,
+					'type': 'bigcustomtoolitem',
+					'text': manifest.name,
+					'icon': manifest.icon ? baseUrl + manifest.icon : undefined,
+					'command': 'extension-toggle-' + id,
+				});
+			}
+		}
+		//HACK: Control.JSDialogBuilder.build's "hasManyChildren && isContainer" path only
+		// emits the <div id="Extensions-container"> wrapper when the inner overflowmanager
+		// has more than one child; so pin a trailing dummy spacer so the 0-extensions
+		// placeholder case and the 1-extension case still produce the wrapper that
+		// A11yValidator's checkTabContainerConsistency (and any future selector wanting
+		// #Extensions-container) expects:
+		content.push({
+			'id': 'extensions-tail-pin',
+			'type': 'spacer',
+		});
+		return this.getTabPage('Extensions', content);
+	},
+
+	// Rebuild the notebookbar from a fresh tabsJSON.  Used by
+	// ServerConnectionService once extensions have been discovered so the
+	// Extensions tab picks them up; preserves whichever tab the user has
+	// open by passing _lastSelectedTabName back through getFullJSON.
+	refresh: function() {
+		var selected = this._lastSelectedTabName
+			? this._lastSelectedTabName + '-tab-label'
+			: this.HOME_TAB_ID;
+		this.model.fullUpdate(this.getFullJSON(selected));
+		if (this.container) this.loadTab();
+	},
+
 	getShortcutsBarData: function() {
 		var hasSave = !this._map['wopi'].HideSaveOption;
 		return [

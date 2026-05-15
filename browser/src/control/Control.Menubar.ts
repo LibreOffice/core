@@ -417,6 +417,7 @@ class Menubar extends window.L.Control {
 				{type: 'separator'},
 				{name: _UNO('.uno:RunMacro'), id: 'runmacro', uno: '.uno:RunMacro'}
 			]},
+			{name: _('Extensions'), id: 'extensions-menu', type: 'menu', menu: []},
 			{name: _UNO('.uno:HelpMenu', 'text'), id: 'help', type: 'menu', accessibility: {combination: 'MY'}, menu: [
 				{name: _('Online Help'), id: 'online-help', type: 'action', iosapp: false},
 				{type: 'separator', iosapp: false},
@@ -604,6 +605,7 @@ class Menubar extends window.L.Control {
 				{name: _UNO('.uno:RunMacro'), id: 'runmacro', uno: '.uno:RunMacro'}
 
 			]},
+			{name: _('Extensions'), id: 'extensions-menu', type: 'menu', menu: []},
 			{name: _UNO('.uno:HelpMenu', 'presentation'), id: 'help', type: 'menu', accessibility: {combination: 'MY'}, menu: [
 				{name: _('Online Help'), id: 'online-help', type: 'action', iosapp: false},
 				{type: 'separator', iosapp: false},
@@ -748,6 +750,7 @@ class Menubar extends window.L.Control {
 				{name: _UNO('.uno:LanguageMenu'), type: 'menu', menu: [
 					{name: _('None (Do not check spelling)'), id: 'nonelanguage', uno: '.uno:LanguageStatus?Language:string=Default_LANGUAGE_NONE'}]}
 			]},
+			{name: _('Extensions'), id: 'extensions-menu', type: 'menu', menu: []},
 			{name: _UNO('.uno:HelpMenu', 'presentation'), id: 'help', type: 'menu', accessibility: {combination: 'MY'}, menu: [
 				{name: _('Online Help'), id: 'online-help', type: 'action', iosapp: false},
 				{type: 'separator', iosapp: false},
@@ -1053,6 +1056,7 @@ class Menubar extends window.L.Control {
 				{type: 'separator'},
 				{name: _UNO('.uno:RunMacro'), id: 'runmacro', uno: '.uno:RunMacro'}
 			]},
+			{name: _('Extensions'), id: 'extensions-menu', type: 'menu', menu: []},
 			{name: _UNO('.uno:HelpMenu', 'spreadsheet'), id: 'help', type: 'menu', accessibility: {combination: 'MY'}, menu: [
 				{name: _('Online Help'), id: 'online-help', type: 'action', iosapp: false},
 				{type: 'separator', iosapp: false},
@@ -1694,6 +1698,46 @@ class Menubar extends window.L.Control {
 		}
 	}
 
+	// Populate the Extensions submenu in `menu` from the current
+	// app.map._extensions; called from _onRefresh, which also runs after
+	// loadExtensions resolves (via menubar.refresh()), so the menu
+	// reflects whichever manifests the discovery picked up.
+	private _refreshExtensionsMenu(menu: MenuItem[]): void {
+		const idx = menu.findIndex((item) => item.id === 'extensions-menu');
+		if (idx < 0) return;
+		// Gate the Extensions submenu on the experimental-features flag by
+		// splicing it out of the static menu definition; subsequent calls
+		// find no entry and return early:
+		if (!window.enableExperimentalFeatures) {
+			menu.splice(idx, 1);
+			return;
+		}
+		const target = menu[idx];
+		const exts = (this._map._extensions || {}) as { [id: string]: any };
+		const ids = Object.keys(exts).sort();
+		if (ids.length === 0) {
+			target.menu = [{
+				name: _('(No extensions installed)'),
+				id: 'extensions-empty',
+				type: 'action',
+				disabled: true,
+			}];
+		} else {
+			target.menu = ids.map((id) => ({
+				name: exts[id].options.manifest.name as string,
+				id: 'extension-toggle-' + id,
+				type: 'action',
+			}));
+		}
+	}
+
+	// Public entry point for external callers to ask for a menubar rebuild
+	// (e.g. once Control.Extension.loadExtensions has populated
+	// app.map._extensions and the Extensions submenu needs to repopulate).
+	public refresh(): void {
+		this._onRefresh();
+	}
+
 	/**
 	 * Refreshes the menubar.
 	 */
@@ -1710,12 +1754,16 @@ class Menubar extends window.L.Control {
 		// Add document specific menu
 		var docType = this._map.getDocType();
 		if (docType === 'text') {
+			this._refreshExtensionsMenu(this.options.text);
 			this._initializeMenu(this.options.text);
 		} else if (docType === 'spreadsheet') {
+			this._refreshExtensionsMenu(this.options.spreadsheet);
 			this._initializeMenu(this.options.spreadsheet);
 		} else if (docType === 'presentation') {
+			this._refreshExtensionsMenu(this.options.presentation);
 			this._initializeMenu(this.options.presentation);
 		} else if (docType === 'drawing') {
+			this._refreshExtensionsMenu(this.options.drawing);
 			this._initializeMenu(this.options.drawing);
 		}
 
@@ -2326,7 +2374,8 @@ class Menubar extends window.L.Control {
 			|| id === 'print-all-sheets'
 			|| id === 'serveraudit'
 			|| id === 'animationdeck'
-			|| id === 'transitiondeck') {
+			|| id === 'transitiondeck'
+			|| id.startsWith('extension-toggle-')) {
 			app.dispatcher.dispatch(id);
 		} else if (id === ('settings-dialog')) {
 			this._map.settings.showSettingsDialog();

@@ -1,0 +1,88 @@
+/*
+ * Copyright the Collabora Online contributors.
+ *
+ * SPDX-License-Identifier: MPL-2.0
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+/*
+ * An extension's iframe is rendered as a foldable panel prepended to
+ * #sidebar-panel - it sits above whatever core deck (Properties, ...)
+ * is currently rendered, and coexists with it.  Folding hides the
+ * iframe via CSS only so the iframe stays in the DOM and keeps its
+ * listeners attached.  Clicking the close X tears the iframe down
+ * (Extension_Teardown handshake) and removes the panel.
+ */
+
+.extension-panel {
+	display: flex;
+	flex-direction: column;
+	border-bottom: 1px solid var(--color-border);
+	background: var(--color-main-background);
+}
+
+.extension-panel-header {
+	display: flex;
+	align-items: center;
+	padding: 6px 12px;
+	background: var(--color-background-darker);
+	cursor: pointer;
+	user-select: none;
+	flex-shrink: 0;
+}
+
+.extension-panel-disclosure {
+	margin-inline-end: 8px;
+	display: inline-block;
+	width: 0;
+	height: 0;
+	border-inline-start: 5px solid transparent;
+	border-inline-end: 5px solid transparent;
+	border-top: 6px solid currentColor;
+	transition: transform 0.15s ease-out;
+}
+
+.extension-panel.folded .extension-panel-disclosure {
+	transform: rotate(-90deg);
+}
+
+.extension-panel-title {
+	flex: 1;
+	font-weight: 600;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.extension-panel-close {
+	background: none;
+	border: none;
+	color: inherit;
+	font-size: 14px;
+	cursor: pointer;
+	padding: 0 4px;
+	margin-inline-start: 4px;
+}
+
+.extension-panel-body {
+	overflow: hidden;
+}
+
+.extension-panel.folded .extension-panel-body {
+	display: none;
+}
+
+/* The iframe's actual height is driven from the iframe side: cool.js
+ * watches its document with a ResizeObserver and posts the body's
+ * scrollHeight back to Control.Extension as Extension_Resize, which then
+ * sets iframe.style.height.  Until the first message arrives the iframe
+ * sits at its element-default height (~150px) so the user sees something
+ * sensible during load. */
+.extension-panel-body > iframe {
+	border: none;
+	width: 100%;
+	display: block;
+}

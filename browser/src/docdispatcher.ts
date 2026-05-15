@@ -1034,6 +1034,13 @@ class Dispatcher {
 			return;
 		}
 
+		if (action.startsWith('extension-toggle-')) {
+			const id = action.substring('extension-toggle-'.length);
+			const ext = app.map._extensions && app.map._extensions[id];
+			if (ext) ext.toggle();
+			return;
+		}
+
 		if (
 			action === '.uno:Copy' ||
 			action === '.uno:Cut' ||

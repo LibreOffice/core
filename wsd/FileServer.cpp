@@ -72,6 +72,7 @@
 #include <Poco/URI.h>
 #include <Poco/Util/LayeredConfiguration.h>
 
+#include <algorithm>
 #include <chrono>
 #include <iomanip>
 #include <sstream>
@@ -287,6 +288,7 @@ FileServerRequestHandler::FileServerRequestHandler(const std::string& root)
     {
         FileHash.reserve(4096); // We have ~3964 files.
         readDirToHash(root, "/browser/dist");
+        synthesizeExtensionsIndex();
     }
     catch (...)
     {
@@ -917,6 +919,69 @@ const std::string *FileServerRequestHandler::getCompressedFile(const std::string
     // If a compressed version is not available, return the original uncompressed data.
     const auto& pair = FileHash[path];
     return pair.second.empty() ? &pair.first : &pair.second;
+}
+
+void FileServerRequestHandler::synthesizeExtensionsIndex()
+{
+    // Walk FileHash for "/browser/dist/extensions/<id>/manifest.json" entries; <id> is
+    // the directory that an admin has dropped under $(DIST_FOLDER)/extensions/ to
+    // deploy an extension (see browser/Makefile.am and browser/extensions/README.md).
+    static const std::string prefix = "/browser/dist/extensions/";
+    static const std::string suffix = "/manifest.json";
+    std::vector<std::string> ids;
+    for (const auto& entry : FileHash)
+    {
+        const std::string& key = entry.first;
+        if (!key.starts_with(prefix) || !key.ends_with(suffix))
+            continue;
+        const std::string id =
+            key.substr(prefix.size(), key.size() - prefix.size() - suffix.size());
+        // Skip nested manifest.json files (only direct subdirectories of extensions/
+        // are extension roots):
+        if (id.find('/') != std::string::npos)
+            continue;
+        ids.push_back(id);
+    }
+    std::sort(ids.begin(), ids.end());
+
+    std::string json;
+    json.push_back('[');
+    bool first = true;
+    for (const auto& id : ids)
+    {
+        if (!first) json.push_back(',');
+        first = false;
+        json.push_back('"');
+        json.append(id);
+        json.push_back('"');
+    }
+    json.push_back(']');
+
+    // Pre-compress in step with the rest of readDirToHash so the request handler's
+    // gzip path serves correctly-encoded bytes; getCompressedFile silently falls back
+    // to the uncompressed entry on init/deflate failure here, matching readDirToHash.
+    std::string gzipped;
+    z_stream strm;
+    strm.zalloc = Z_NULL;
+    strm.zfree = Z_NULL;
+    strm.opaque = Z_NULL;
+    if (deflateInit2(&strm, Z_BEST_COMPRESSION, Z_DEFLATED, 31, 8, Z_DEFAULT_STRATEGY) == Z_OK)
+    {
+        const unsigned long bound = deflateBound(&strm, json.size());
+        gzipped.resize(bound);
+        strm.next_in = reinterpret_cast<unsigned char*>(json.data());
+        strm.avail_in = json.size();
+        strm.next_out = reinterpret_cast<unsigned char*>(gzipped.data());
+        strm.avail_out = bound;
+        if (deflate(&strm, Z_FINISH) == Z_STREAM_END)
+            gzipped.resize(bound - strm.avail_out);
+        else
+            gzipped.clear();
+        deflateEnd(&strm);
+    }
+
+    // Replaces any stale build-time index.json so the runtime view always wins:
+    FileHash[prefix + "index.json"] = std::make_pair(std::move(json), std::move(gzipped));
 }
 
 const std::string *FileServerRequestHandler::getUncompressedFile(const std::string &path)

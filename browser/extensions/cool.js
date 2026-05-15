@@ -160,4 +160,22 @@
 	window.addEventListener('pagehide', function () {
 		detachAll();
 	});
+
+	// Tell the parent how tall our content actually is so it can size the
+	// hosting iframe element to the document body's scrollHeight (i.e. fit
+	// without scrollbars inside the iframe).  Uses ResizeObserver if
+	// available; falls back to a single send after load.  This works
+	// regardless of origin because it's a postMessage, not direct DOM
+	// access on the parent side.
+	function postHeight() {
+		const h = document.documentElement.scrollHeight;
+		window.parent.postMessage(JSON.stringify({
+			msgId: 'Extension_Resize',
+			height: h
+		}), '*');
+	}
+	window.addEventListener('load', postHeight);
+	if (typeof ResizeObserver !== 'undefined') {
+		new ResizeObserver(postHeight).observe(document.documentElement);
+	}
 })();

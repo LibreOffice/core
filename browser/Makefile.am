@@ -240,6 +240,7 @@ COOL_CSS =\
 	$(srcdir)/css/jssidebar.css \
 	$(srcdir)/css/forced-colors.css \
 	$(srcdir)/css/aichat-sidebar.css \
+	$(srcdir)/css/extension-sidebar.css \
 	$(srcdir)/css/override-smartmenus.css \
 	$(srcdir)/css/jquery-ui-lightness.css \
 	$(srcdir)/css/infobar.css \
@@ -756,6 +757,7 @@ COOL_JS_LST =\
 	src/slideshow/operation/SScale.ts \
 	src/slideshow/operation/STranslate.ts \
 	src/control/Control.Scroll.Annotation.js \
+	src/control/Control.Extension.ts \
 	src/main.js
 
 COOL_JS_SRC = $(filter %.js,$(COOL_JS_LST))
@@ -1382,6 +1384,7 @@ pot:
 		src/slideshow/PauseTimer.ts \
 		src/slideshow/PresenterConsole.js \
 		src/slideshow/SlideShowPresenter.ts \
+		src/control/Control.Extension.ts \
 		templates/templates.js
 
 	html2po --pot --input=html/cool-help.html --output=po/templates/cool-help.pot --duplicates=merge

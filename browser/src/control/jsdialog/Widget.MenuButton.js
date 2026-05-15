@@ -147,7 +147,11 @@ function _menubuttonControl (parentContainer, data, builder) {
 			JSDialog.AddOnClick(control.button, applyCallback);
 		} else {
 			JSDialog.AddOnClick(control.button, clickFunction);
-			if (control.label)
+			// Only wire the label separately when it isn't a descendant of
+			// the button - otherwise a click on the label fires both
+			// handlers (its own and the button's via bubbling), and any
+			// toggle-style action ends up firing twice.
+			if (control.label && !control.button.contains(control.label))
 				JSDialog.AddOnClick(control.label, clickFunction);
 		}
 

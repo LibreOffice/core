@@ -164,6 +164,7 @@ interface MapInterface extends Evented {
 	// TODO fix types:
 	jsdialog: any;
 	zotero: any;
+	_extensions: { [id: string]: any };
 
 	_cacheSVG: string[];
 	calcInputBarHasFocus(): boolean;

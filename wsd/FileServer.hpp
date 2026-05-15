@@ -215,6 +215,11 @@ public:
 
     void readDirToHash(const std::string& basePath, const std::string& path);
 
+    // Build the extension discovery index ("/browser/dist/extensions/index.json") by
+    // collecting every "/browser/dist/extensions/<id>/manifest.json" already cached in
+    // FileHash and emitting a JSON array of the <id>s; called once after readDirToHash:
+    void synthesizeExtensionsIndex();
+
     const std::string *getCompressedFile(const std::string &path);
 
     const std::string *getUncompressedFile(const std::string &path);

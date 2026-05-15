@@ -33,7 +33,7 @@ var formulaTabName = 'Formula';
 window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 
 	getTabs: function() {
-		return [
+		return this._filterExtensionsTab([
 			{
 				'text': _('File'),
 				'id': fileTabName + '-tab-label',
@@ -119,17 +119,23 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 				'accessibility': { focusBack: true, combination: 'Y', de: 'E' }
 			},
 			{
+				'text': _('Extensions'),
+				'id': 'Extensions-tab-label',
+				'name': 'Extensions',
+				'accessibility': { focusBack: true, combination: 'X' }
+			},
+			{
 				'text': _('Formula'),
 				'id': formulaTabName + '-tab-label',
 				'name': formulaTabName,
 				'context': 'Math',
 				'accessibility': { focusBack: true, combination: 'V', de: 'Y' }
 			}
-		];
+		]);
 	},
 
 	getTabsJSON: function () {
-		return [
+		return this._filterExtensionsTab([
 			this.getFileTab(),
 			this.getHomeTab(),
 			this.getInsertTab(),
@@ -144,8 +150,9 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 			this.getChartTab(),
 			this.getViewTab(),
 			this.getHelpTab(),
+			this.getExtensionsTab(),
 			this.getFormulaTab()
-		]
+		]);
 	},
 
 	getFullJSON: function (selectedId) {

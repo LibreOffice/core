@@ -98,6 +98,37 @@ class ServerConnectionService {
 	/// see _appLoadedConditions in Map.Wopi.js
 	public onDocumentLoaded() {
 		app.console.debug('ServerConnectionService: onDocumentLoaded');
+
+		if (!app.map._extensions) {
+			// Mark synchronously so a re-entry of onDocumentLoaded doesn't
+			// kick off a second discovery; loadExtensions replaces this with
+			// the real map once each manifest has resolved.
+			app.map._extensions = {};
+			window.L.loadExtensions(app.map, app.map.getDocType()).then(
+				function (exts: { [id: string]: any }) {
+					app.map._extensions = exts;
+					// Nothing to add to the notebookbar tab or the menubar
+					// submenu, the initial render's "no extensions" placeholder
+					// is still correct, so skip the rebuild work:
+					if (Object.keys(exts).length === 0) return;
+					// Both the menubar's Extensions submenu and the
+					// notebookbar's Extensions tab build from
+					// app.map._extensions; refresh whichever is in use so the
+					// just-discovered list shows up.
+					if (app.map.menubar) app.map.menubar.refresh();
+					// uiManager.notebookbar is the NotebookbarBase wrapper;
+					// the JS notebookbar that holds the model + loadTab is on
+					// its .impl field (see Control.NotebookbarBase.ts).
+					if (
+						app.map.uiManager &&
+						app.map.uiManager.notebookbar &&
+						app.map.uiManager.notebookbar.impl
+					) {
+						app.map.uiManager.notebookbar.impl.refresh();
+					}
+				},
+			);
+		}
 	}
 
 	public onFirstTileReceived() {
