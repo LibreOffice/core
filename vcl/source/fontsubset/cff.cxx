@@ -2634,6 +2634,8 @@ int CffContext::seekIndexData(int nIndexBase, int nDataIndex)
         return -1;
     const int nDataOfsSz = mpReadPtr[2];
     mpReadPtr += 3 + (nDataOfsSz * nDataIndex);
+    if (mpReadPtr + nDataOfsSz > mpBaseEnd)
+        return -1;
     int nOfs1 = 0;
     switch (nDataOfsSz)
     {
@@ -2655,6 +2657,8 @@ int CffContext::seekIndexData(int nIndexBase, int nDataIndex)
             break;
     }
     mpReadPtr += nDataOfsSz;
+    if (mpReadPtr + nDataOfsSz > mpBaseEnd)
+        return -1;
 
     int nOfs2 = 0;
     switch (nDataOfsSz)
