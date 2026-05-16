@@ -361,7 +361,7 @@ def processIWYUOutput(iwyuOutput, moduleRules, fileName, noexclude, checknamespa
                                     'connectivity|'
                                     'cpp|java|' # for codemaker::
                                     'cppu|'
-                                    'dbaccess|dbahsql|dbaui|dbtools|'
+                                    'dbaccess|dbaui|dbtools|'
                                     'desktop|dp_misc|'
                                     'drawinglayer|attribute|geometry|primitive2d|processor2d|'
                                     'editeng|'

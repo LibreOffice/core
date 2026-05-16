@@ -403,7 +403,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	ctl \
 	$(call gb_Helper_optional,DBCONNECTIVITY, \
 		dba \
-		dbahsql \
 		dbase \
 		dbaxml) \
 	dbtools \

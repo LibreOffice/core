@@ -139,7 +139,6 @@ gb_MERGE_LIBRARY_LIST += \
 	date \
 	$(call gb_Helper_optional,DBCONNECTIVITY, \
 		dba \
-		dbahsql \
 		dbase \
 		dbaxml \
 		dbpool2 \

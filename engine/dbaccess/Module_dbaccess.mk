@@ -11,7 +11,6 @@ $(eval $(call gb_Module_Module,dbaccess))
 
 $(eval $(call gb_Module_add_targets,dbaccess,\
 	Library_dba \
-	Library_dbahsql \
 ))
 
 $(eval $(call gb_Module_add_l10n_targets,dbaccess,\
@@ -40,7 +39,6 @@ $(eval $(call gb_Module_add_check_targets,dbaccess,\
 	CppunitTest_dbaccess_dialog_save \
 	CppunitTest_dbaccess_empty_stdlib_save \
 	CppunitTest_dbaccess_nolib_save \
-	CppunitTest_dbaccess_hsqlschema_import \
 ))
 endif
 

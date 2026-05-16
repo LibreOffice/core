@@ -28,8 +28,6 @@
 #include "databasedocument.hxx"
 #include <OAuthenticationContinuation.hxx>
 
-#include <hsqlimport.hxx>
-
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>
