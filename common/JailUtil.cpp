@@ -438,9 +438,7 @@ void cleanupJails(const std::string& root)
             // Remove legacy things that look like jails
             else if (tryRemoveJail(childDir))
             {
-                static size_t warned = 0;
-                if (!(warned++))
-                    LOG_WRN("Cleaned legacy jail without pid prefix after upgrade " << childDir);
+                LOG_WRN_ONCE("Cleaned legacy jail without pid prefix after upgrade " << childDir);
             }
             // else legacy tmp or linkable
         }
