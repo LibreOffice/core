@@ -8,6 +8,8 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
+MAINTAINERCLEANFILES = Makefile.in
+
 # Source-list duplication mirrors the convention in test/Makefile.am: paths
 # are sub-Makefile-relative (../common/Foo.cpp etc), so they don't share with
 # the top-level shared_sources/coolwsd_sources/coolforkit_sources directly.

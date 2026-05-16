@@ -1,3 +1,5 @@
+MAINTAINERCLEANFILES = Makefile.in
+
 bin_PROGRAMS = coda-qt
 
 include_paths = -I${top_srcdir}/common -I${top_srcdir}/net -I${top_srcdir}/kit -I${top_srcdir}/wsd -I${top_srcdir} ${ZSTD_CFLAGS} ${QT6_CFLAGS}
@@ -183,3 +185,6 @@ EXTRA_DIST += \
 	$(TEST_DIR)/specs/open-file.spec.ts
 
 ### --- WebdriverIO test integration end ---
+
+distclean-local:
+	rm -rf .deps

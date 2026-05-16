@@ -124,6 +124,8 @@ nginxconfig_DATA = etc/nginx/coolwsd.conf
 
 ACLOCAL_AMFLAGS = -I m4
 
+CLEANFILES = clang/plugin.o clang/plugin.so
+
 # quick and easy for now.
 include_paths = -I${top_srcdir}/common -I${top_srcdir}/net -I${top_srcdir}/wsd -I${top_srcdir}/kit ${ZLIB_CFLAGS} ${ZSTD_CFLAGS} ${PNG_CFLAGS}
 if ENABLE_SSL
@@ -647,7 +649,7 @@ cleanup:
 
 # Always cleanup before removing the binaries.
 # Note: this can break with -j option!
-clean-am: cleanup clean-binPROGRAMS clean-generic clean-libtool clean-local clean-noinstPROGRAMS mostlyclean-am
+clean-am: cleanup clean-binPROGRAMS clean-generic clean-libtool clean-local clean-noinstLIBRARIES clean-noinstPROGRAMS mostlyclean-am
 
 clean-local:
 	$(CLEANUP_COMMAND)
@@ -658,6 +660,8 @@ clean-local:
 	rm -rf loolconfig loolconvert loolforkit loolmap loolmount # kill old binaries
 	rm -rf loolwsd loolwsd_fuzzer coolwsd_fuzzer loolstress loolsocketdump
 	rm -rf collabora-online-sbom.spdx.json
+	rm -rf test/data/presets
+	rm -f test/samples/calc-edit.fods test/samples/draw-edit.odg test/samples/impress-edit.fodp test/samples/writer-edit.fodt test/samples/writer-large-edit.fodt
 	$(CLEANUP_COVERAGE)
 
 if ENABLE_DEBUG
@@ -796,6 +800,35 @@ else
 SYSTEM_STAMP =
 
 endif
+
+distclean-local:
+	rm -rf $(top_srcdir)/scripts/__pycache__
+
+# Override automake's distclean and maintainer-clean to defer cleanup of files and directories that
+# must not disappear during the recursive descent through SUBDIRS (which lists "." in the middle):
+
+EMPTY_DEPDIRS = \
+	common/.deps \
+	fuzzer/.deps \
+	kit/.deps \
+	net/.deps \
+	tools/.deps \
+	wasm/.deps \
+	wsd/.deps \
+	wsd/wopi/.deps
+
+distclean: distclean-recursive
+	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
+	-rm -f Makefile
+	rm -rf $(EMPTY_DEPDIRS)
+
+maintainer-clean: maintainer-clean-recursive
+	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
+	-rm -rf $(top_srcdir)/autom4te.cache
+	-rm -f Makefile
+	rm -rf $(EMPTY_DEPDIRS)
+	rm -f $(top_srcdir)/Makefile.in $(top_srcdir)/aclocal.m4 $(top_srcdir)/compile $(top_srcdir)/config.guess $(top_srcdir)/config.sub $(top_srcdir)/config_unused.h.in $(top_srcdir)/configure $(top_srcdir)/configure~ $(top_srcdir)/depcomp $(top_srcdir)/install-sh $(top_srcdir)/ltmain.sh $(top_srcdir)/missing
+	rm -rf $(top_srcdir)/m4
 
 .PHONY: cleanup setup-wsd
 

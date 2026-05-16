@@ -1,6 +1,7 @@
 MAKEFLAGS = --no-builtin-rules
 CTAGS = ctags
 BUILT_SOURCES = node_modules
+MAINTAINERCLEANFILES = Makefile.in
 
 L10N_PO = $(if $(filter true,$(ENABLE_ANDROIDAPP)),$(filter-out %-ca-valencia.po,$(wildcard $(srcdir)/po/*.po)),$(wildcard $(srcdir)/po/*.po))
 # See https://issuetracker.google.com/issues/293294923 for why we need to filter out ca-valencian
@@ -1357,9 +1358,12 @@ l10n: pot
 clean-local:
 	@rm -rf $(DIST_FOLDER)
 	@rm -rf $(INTERMEDIATE_DIR)
+	@rm -rf $(TYPESCRIPT_JS_DIR)
 	@rm -rf node_modules
 	@rm -f $(abs_srcdir)/jsconfig.json
 	@rm -f $(abs_srcdir)/admin/jsconfig.json
+	@rm -f mocha.log duplication.log
+	@rm -f $(MOCHA_JS_DIR)/main.js
 
 CLEANFILES = tscompile.done $(INTERMEDIATE_DIR)/cool-src.js $(DIST_FOLDER)/bundle.css $(DIST_FOLDER)/bundle.js $(INTERMEDIATE_DIR)/cool-src.js admin/adminIntegratorSettings.html
 

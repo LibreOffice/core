@@ -446,6 +446,9 @@ TEST_EXTENSIONS = .la
 LA_LOG_DRIVER = ${top_builddir}/test/run_unit.sh
 LOG_DRIVER = ${top_builddir}/test/run_unit_standalone.sh
 
+CLEANFILES = test.log PerformanceMetricsSummary.csv $(srcdir)/data/docStructureTransformed.docx
+MAINTAINERCLEANFILES = Makefile.in
+
 EXTRA_DIST = data/delta-text.png data/delta-text2.png data/delta-graphic.png data/delta-graphic2.png data/hello.odt data/hello.txt $(test_SOURCES) $(unittest_SOURCES) run_unit.sh run_unit_standalone.sh
 
 build-tests: ${all_la_unit_tests}
@@ -494,5 +497,8 @@ all-local: unittest unithttplib clienttest
 	@UNITTEST=1 ${top_builddir}/test/unithttplib --cert-path ${abs_top_srcdir}/etc 2> test.log || (cat test.log && /bin/false)
 	@echo "Done test all-local"
 	@$(CLEANUP_COMMAND)
+
+distclean-local:
+	rm -rf .deps
 
 .PRECIOUS: $(TEST_LOGS)

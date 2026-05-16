@@ -1,6 +1,8 @@
 ## macos/Makefile.am
 ## macOS-only localization rules (storyboard + gettext)
 
+MAINTAINERCLEANFILES = Makefile.in
+
 ## ------------------------------------------------------------
 ## Paths
 ## ------------------------------------------------------------
