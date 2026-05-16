@@ -99,9 +99,6 @@ namespace FileUtil
     /// Will use the Obfuscated User ID if one is provided via WOPI.
     std::string anonymizeUsername(const std::string& username);
 
-    /// Create a secure, random directory path.
-    std::string createRandomDir(const std::string& path);
-
     // Components of a per-download tmp path under the kit jail's document root.
     // WSD recovers the file from a downloadId by looking up the registered URL
     // (a path relative to the jail doc root) and joining it back with the jail

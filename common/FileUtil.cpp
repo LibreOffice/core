@@ -41,18 +41,12 @@
 
 namespace FileUtil
 {
-    std::string createRandomDir(const std::string& path)
-    {
-        std::string name = Util::rng::getFilename(64);
-        createDirectory(path + '/' + name);
-        return name;
-    }
-
     DownloadJailPath createDownloadJailPath(const std::string& jailDocRoot,
                                             const std::string& filename)
     {
         DownloadJailPath result;
-        result.tmpDir = createRandomDir(jailDocRoot);
+        result.tmpDir = Util::rng::getFilename(64);
+        createDirectory(jailDocRoot + '/' + result.tmpDir);
         result.urlInJail = result.tmpDir + '/' + filename;
         result.absolutePath = jailDocRoot + result.urlInJail;
         return result;

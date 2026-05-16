@@ -3006,7 +3006,8 @@ bool ChildSession::saveAs(const StringVector& tokens)
 
         std::string jailDoc = getJailDocRoot();
 
-        const std::string tmpDir = FileUtil::createRandomDir(jailDoc);
+        const std::string tmpDir = Util::rng::getFilename(64);
+        FileUtil::createDirectory(jailDoc + '/' + tmpDir);
         const Poco::Path filenameParam(pathSegments[pathSegments.size() - 1]);
         url = std::string("file://") + jailDoc + tmpDir + '/' + filenameParam.getFileName();
         // url becomes decoded at this stage
