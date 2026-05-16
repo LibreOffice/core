@@ -31,6 +31,7 @@
 class SwEditShell;
 class SwPaM;
 struct SwPosition;
+class SwTextFrame;
 class SfxItemSet;
 
 class SwDontExpandItem
@@ -50,6 +51,7 @@ class SwAutoCorrDoc final : public SvxAutoCorrDoc
 {
     SwEditShell& m_rEditSh;
     SwPaM& m_rCursor;
+    const SwTextFrame& m_rFrame;
     std::optional<SwNodeIndex> m_oIndex;
     int m_nEndUndoCounter;
     bool    m_bUndoIdInitialized;
@@ -58,7 +60,8 @@ class SwAutoCorrDoc final : public SvxAutoCorrDoc
     void DeleteSelImpl(SwPaM & rDelPam);
 
 public:
-    SwAutoCorrDoc( SwEditShell& rEditShell, SwPaM& rPam, sal_Unicode cIns = 0 );
+    SwAutoCorrDoc( SwEditShell& rEditShell, SwPaM& rPam, const SwTextFrame& rFrame,
+                   sal_Unicode cIns = 0 );
     virtual ~SwAutoCorrDoc() override;
 
     virtual bool Delete( sal_Int32 nStt, sal_Int32 nEnd ) override;
@@ -70,6 +73,8 @@ public:
                             SfxPoolItem& ) override;
 
     virtual bool SetINetAttr( sal_Int32 nStt, sal_Int32 nEnd, const OUString& rURL ) override;
+
+    virtual const OUString& GetText() const override;
 
     // return text of a previous paragraph
     // If it does not exist or if there is nothing before, return blank.

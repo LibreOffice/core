@@ -1973,7 +1973,7 @@ void SwAutoFormat::AutoCorrect(TextFrameIndex nPos)
     m_aDelPam.DeleteMark();
     *m_aDelPam.GetPoint() = m_pCurTextFrame->MapViewToModelPos(TextFrameIndex(0));
 
-    SwAutoCorrDoc aACorrDoc( *m_pEditShell, m_aDelPam );
+    SwAutoCorrDoc aACorrDoc( *m_pEditShell, m_aDelPam, *m_pCurTextFrame );
 
     SwTextFrameInfo aFInfo( nullptr );
 
@@ -2274,7 +2274,7 @@ void SwAutoFormat::AutoCorrect(TextFrameIndex nPos)
                     pATst->FnChgOrdinalNumber(aACorrDoc, *pText, sal_Int32(nSttPos), sal_Int32(nPos), eLang)) ||
                 ( m_aFlags.bChgToEnEmDash &&
                     SetRedlineText( STR_AUTOFMTREDL_DASH ) &&
-                    pATst->FnChgToEnEmDash(aACorrDoc, *pText, sal_Int32(nSttPos), sal_Int32(nPos), eLang)) ||
+                    pATst->FnChgToEnEmDash(aACorrDoc, sal_Int32(nSttPos), sal_Int32(nPos), eLang)) ||
                 ( m_aFlags.bSetINetAttr &&
                     (nPos == TextFrameIndex(pText->getLength()) || IsSpace((*pText)[sal_Int32(nPos)])) &&
                     SetRedlineText( STR_AUTOFMTREDL_DETECT_URL ) &&
@@ -2294,7 +2294,7 @@ void SwAutoFormat::AutoCorrect(TextFrameIndex nPos)
                     SetRedlineText( STR_AUTOFMTREDL_ESPERANTOHAT );
                     sal_Int32 nOldTextLength = pText->getLength();
                     sal_Int32 nEnd = sal_Int32(nPos);
-                    pATst->FnAddEsperantoHats(aACorrDoc, *pText, sal_Int32(nSttPos), nEnd);
+                    pATst->FnAddEsperantoHats(aACorrDoc, sal_Int32(nSttPos), nEnd);
                     // If red lining is being applied then any replacements will increase the length
                     // of the text instead of reducing it because both the X version and the
                     // circumflex version will appear in it.
@@ -2307,13 +2307,13 @@ void SwAutoFormat::AutoCorrect(TextFrameIndex nPos)
                 if( m_aFlags.bCapitalStartWord )
                 {
                     SetRedlineText( STR_AUTOFMTREDL_CPTL_STT_WORD );
-                    pATst->FnCapitalStartWord(aACorrDoc, *pText, sal_Int32(nSttPos), sal_Int32(nPos), eLang);
+                    pATst->FnCapitalStartWord(aACorrDoc, sal_Int32(nSttPos), sal_Int32(nPos), eLang);
                 }
                 // capital letter at the beginning of a sentence?
                 if( m_aFlags.bCapitalStartSentence && bFirst )
                 {
                     SetRedlineText( STR_AUTOFMTREDL_CPTL_STT_SENT );
-                    pATst->FnCapitalStartSentence(aACorrDoc, *pText, true, sal_Int32(nSttPos), sal_Int32(nPos), eLang);
+                    pATst->FnCapitalStartSentence(aACorrDoc, true, sal_Int32(nSttPos), sal_Int32(nPos), eLang);
                 }
 
                 bFirst = bFirstSent;

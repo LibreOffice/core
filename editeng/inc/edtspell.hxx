@@ -122,6 +122,8 @@ public:
     virtual void    SetAttr( sal_Int32 nStt, sal_Int32 nEnd, sal_uInt16 nSlotId, SfxPoolItem& ) override;
     virtual bool    SetINetAttr( sal_Int32 nStt, sal_Int32 nEnd, const OUString& rURL ) override;
 
+    virtual const OUString& GetText() const override;
+
     virtual OUString const* GetPrevPara(bool bAtNormalPos) override;
 
     virtual bool        ChgAutoCorrWord( sal_Int32& rSttPos, sal_Int32 nEndPos,

@@ -379,10 +379,11 @@ void SvxAutoCorrect::SetAutoCorrFlag( ACFlags nFlag, bool bOn )
 
 
 // Correct TWo INitial CApitals
-void SvxAutoCorrect::FnCapitalStartWord( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
+void SvxAutoCorrect::FnCapitalStartWord( SvxAutoCorrDoc& rDoc,
                                     sal_Int32 nSttPos, sal_Int32 nEndPos,
                                     LanguageType eLang )
 {
+    const OUString& rTxt = rDoc.GetText();
     CharClass& rCC = GetCharClass( eLang );
 
     // Delete all non alphanumeric. Test the characters at the beginning/end of
@@ -577,10 +578,11 @@ bool SvxAutoCorrect::FnChgOrdinalNumber(
 
 // Replace dashes
 bool SvxAutoCorrect::FnChgToEnEmDash(
-                                SvxAutoCorrDoc& rDoc, const OUString& rTxt,
+                                SvxAutoCorrDoc& rDoc,
                                 sal_Int32 nSttPos, sal_Int32 nEndPos,
                                 LanguageType eLang )
 {
+    const OUString& rTxt = rDoc.GetText();
     bool bRet = false;
     CharClass& rCC = GetCharClass( eLang );
     if (eLang == LANGUAGE_SYSTEM)
@@ -910,10 +912,11 @@ bool SvxAutoCorrect::FnChgWeightUnderl( SvxAutoCorrDoc& rDoc, const OUString& rT
 
 // Capitalize first letter of every sentence
 void SvxAutoCorrect::FnCapitalStartSentence( SvxAutoCorrDoc& rDoc,
-                                    const OUString& rTxt, bool bNormalPos,
+                                    bool bNormalPos,
                                     sal_Int32 nSttPos, sal_Int32 nEndPos,
                                     LanguageType eLang )
 {
+    const OUString& rTxt = rDoc.GetText();
 
     if( rTxt.isEmpty() || nEndPos <= nSttPos )
         return;
@@ -1196,10 +1199,12 @@ void SvxAutoCorrect::FnCapitalStartSentence( SvxAutoCorrDoc& rDoc,
 }
 
 // Correct accidental use of cAPS LOCK key
-bool SvxAutoCorrect::FnCorrectCapsLock( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
+bool SvxAutoCorrect::FnCorrectCapsLock( SvxAutoCorrDoc& rDoc,
                                         sal_Int32 nSttPos, sal_Int32 nEndPos,
                                         LanguageType eLang )
 {
+    const OUString& rTxt = rDoc.GetText();
+
     if (nEndPos - nSttPos < 2)
         // string must be at least 2-character long.
         return false;
@@ -1241,8 +1246,7 @@ bool SvxAutoCorrect::FnCorrectCapsLock( SvxAutoCorrDoc& rDoc, const OUString& rT
     return true;
 }
 
-void SvxAutoCorrect::FnAddEsperantoHats( SvxAutoCorrDoc& rDoc, std::u16string_view rText,
-                                         sal_Int32 nStart, sal_Int32& nEnd )
+void SvxAutoCorrect::FnAddEsperantoHats( SvxAutoCorrDoc& rDoc, sal_Int32 nStart, sal_Int32& nEnd )
 {
     static const std::pair<sal_Unicode, sal_Unicode> aCharMap[] = {
         { 'C', u'Ĉ' }, { 'G', u'Ĝ' }, { 'H', u'Ĥ' }, { 'J', u'Ĵ' }, { 'S', u'Ŝ' }, { 'U', u'Ŭ' },
@@ -1252,6 +1256,7 @@ void SvxAutoCorrect::FnAddEsperantoHats( SvxAutoCorrDoc& rDoc, std::u16string_vi
     // in the likely event that there is nothing to change.
     OUStringBuffer sReplacement(0);
     sal_Int32 nPendingPos = nStart;
+    const OUString& rText = rDoc.GetText();
 
     for (int i = nStart + 1; i < nEnd; ++i)
     {
@@ -1283,7 +1288,7 @@ void SvxAutoCorrect::FnAddEsperantoHats( SvxAutoCorrDoc& rDoc, std::u16string_vi
             nPendingPos = i - 1;
         }
 
-        sReplacement.append(rText.substr(nPendingPos, i - 1 - nPendingPos) +
+        sReplacement.append(rText.subView(nPendingPos, i - 1 - nPendingPos) +
                             OUStringChar(pPos->second));
         nPendingPos = i + 1;
     }
@@ -1707,13 +1712,12 @@ void SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
                     // Capital letter at beginning of paragraph?
                     if( IsAutoCorrFlag( ACFlags::CapitalStartSentence ) )
                     {
-                        FnCapitalStartSentence( rDoc, aPara, false,
-                                                nCapLttrPos, nEnd, eLang );
+                        FnCapitalStartSentence( rDoc, false, nCapLttrPos, nEnd, eLang );
                     }
 
                     if( IsAutoCorrFlag( ACFlags::ChgToEnEmDash ) )
                     {
-                        FnChgToEnEmDash( rDoc, aPara, nCapLttrPos, nEnd, eLang );
+                        FnChgToEnEmDash( rDoc, nCapLttrPos, nEnd, eLang );
                     }
                 }
                 break;
@@ -1741,23 +1745,15 @@ void SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
             ;
         else
         {
-            // Each autocorrect function below (FnCorrectCapsLock,
-            // FnCapitalStartSentence, FnCapitalStartWord) can modify the
-            // document via rDoc.Replace. With track changes enabled, this can
-            // cause the text frame's text to be freed and reallocated, making
-            // rTxt a dangling reference. Use a local copy to avoid
-            // use-after-free when subsequent functions read the text.
-            OUString aTxt(rTxt);
-
             bool bLockKeyOn = pFrameWin && (pFrameWin->GetIndicatorState() & KeyIndicatorState::CAPSLOCK);
-            bool bUnsupported = lcl_IsUnsupportedUnicodeChar( rCC, aTxt, nCapLttrPos, nInsPos );
+            bool bUnsupported = lcl_IsUnsupportedUnicodeChar( rCC, rTxt, nCapLttrPos, nInsPos );
 
             if ( IsAutoCorrFlag( ACFlags::EsperantoHats ) &&
                  eLang == LANGUAGE_USER_ESPERANTO )
-                FnAddEsperantoHats( rDoc, rTxt, nCapLttrPos, nInsPos );
+                FnAddEsperantoHats( rDoc, nCapLttrPos, nInsPos );
 
             if ( bLockKeyOn && IsAutoCorrFlag( ACFlags::CorrectCapsLock ) &&
-                 FnCorrectCapsLock( rDoc, aTxt, nCapLttrPos, nInsPos, eLang ) )
+                 FnCorrectCapsLock( rDoc, nCapLttrPos, nInsPos, eLang ) )
             {
                 // Correct accidental use of cAPS LOCK key (do this only when
                 // the caps or shift lock key is pressed). Turn off the caps
@@ -1769,19 +1765,19 @@ void SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
             if( !bUnsupported &&
                 IsAutoCorrFlag( ACFlags::CapitalStartSentence ) )
             {
-                FnCapitalStartSentence( rDoc, aTxt, true, nCapLttrPos, nInsPos, eLang );
+                FnCapitalStartSentence( rDoc, true, nCapLttrPos, nInsPos, eLang );
             }
 
             // Two capital letters at beginning of word ??
             if( !bUnsupported &&
                 IsAutoCorrFlag( ACFlags::CapitalStartWord ) )
             {
-                FnCapitalStartWord( rDoc, aTxt, nCapLttrPos, nInsPos, eLang );
+                FnCapitalStartWord( rDoc, nCapLttrPos, nInsPos, eLang );
             }
 
             if( IsAutoCorrFlag( ACFlags::ChgToEnEmDash ) )
             {
-                FnChgToEnEmDash( rDoc, aTxt, nCapLttrPos, nInsPos, eLang );
+                FnChgToEnEmDash( rDoc, nCapLttrPos, nInsPos, eLang );
             }
         }
 

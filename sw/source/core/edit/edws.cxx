@@ -240,9 +240,9 @@ void SwEditShell::AutoCorrect( SvxAutoCorrect& rACorr, bool bInsert,
     SwPaM* pCursor = getShellCursor( true );
     SwTextNode* pTNd = pCursor->GetPointNode().GetTextNode();
 
-    SwAutoCorrDoc aSwAutoCorrDoc( *this, *pCursor, cChar );
     // FIXME: this _must_ be called with reference to the actual node text!
     SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(pTNd->getLayoutFrame(GetLayout())));
+    SwAutoCorrDoc aSwAutoCorrDoc( *this, *pCursor, *pFrame, cChar );
     TextFrameIndex const nPos(pFrame->MapModelToViewPos(*pCursor->GetPoint()));
     // tdf#147414 sw_redlinehide: if cursor moved backward, it may be at the
     // start of a delete redline - but MapViewToModelPos() always returns end
@@ -277,8 +277,8 @@ OUString SwEditShell::GetPrevAutoCorrWord(SvxAutoCorrect& rACorr)
     SwTextNode* pTNd = pCursor->GetPointNode().GetTextNode();
     if (pTNd)
     {
-        SwAutoCorrDoc aSwAutoCorrDoc( *this, *pCursor, 0 );
         SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(pTNd->getLayoutFrame(GetLayout())));
+        SwAutoCorrDoc aSwAutoCorrDoc( *this, *pCursor, *pFrame, 0 );
         TextFrameIndex const nPos(pFrame->MapModelToViewPos(*pCursor->GetPoint()));
         sRet = rACorr.GetPrevAutoCorrWord(aSwAutoCorrDoc, pFrame->GetText(), sal_Int32(nPos));
     }

@@ -118,6 +118,12 @@ public:
 
     virtual bool SetINetAttr( sal_Int32 nStt, sal_Int32 nEnd, const OUString& rURL ) = 0;
 
+    // Gets the text of the paragraph being corrected. This is the same as the rTxt referenced
+    // passed into the AutoCorrect function, but it can sometimes change after performing
+    // modifications on the document if redlines are enabled. Eventually we should move towards
+    // always using this method to retrieve the text instead of the rTxt parameter.
+    virtual const OUString& GetText() const = 0;
+
     // Return the text of a previous paragraph.
     // If no paragraph exits or just an empty one, then return an empty string.
     // The flag indicates:
@@ -461,13 +467,13 @@ public:
                                     bool bAbbreviation = false);
 
     // Methods for the auto-correction
-    void FnCapitalStartWord( SvxAutoCorrDoc&, const OUString&,
+    void FnCapitalStartWord( SvxAutoCorrDoc&,
                                 sal_Int32 nSttPos, sal_Int32 nEndPos,
                                 LanguageType eLang );
     bool FnChgOrdinalNumber( SvxAutoCorrDoc&, const OUString&,
                                 sal_Int32 nSttPos, sal_Int32 nEndPos,
                                 LanguageType eLang );
-    bool FnChgToEnEmDash( SvxAutoCorrDoc&, const OUString&,
+    bool FnChgToEnEmDash( SvxAutoCorrDoc&,
                                 sal_Int32 nSttPos, sal_Int32 nEndPos,
                                 LanguageType eLang );
     // Returns an updated position, at which the insertion/removal happened. It may be
@@ -483,13 +489,13 @@ public:
                                 LanguageType eLang );
     bool FnChgWeightUnderl( SvxAutoCorrDoc&, const OUString&,
                                 sal_Int32 nEndPos );
-    void FnCapitalStartSentence( SvxAutoCorrDoc&, const OUString&, bool bNormalPos,
+    void FnCapitalStartSentence( SvxAutoCorrDoc&, bool bNormalPos,
                                 sal_Int32 nSttPos, sal_Int32 nEndPos,
                                 LanguageType eLang);
-    bool FnCorrectCapsLock( SvxAutoCorrDoc&, const OUString&,
+    bool FnCorrectCapsLock( SvxAutoCorrDoc&,
                             sal_Int32 nSttPos, sal_Int32 nEndPos,
                             LanguageType eLang );
-    void FnAddEsperantoHats( SvxAutoCorrDoc&, std::u16string_view, sal_Int32 nStartPos,
+    void FnAddEsperantoHats( SvxAutoCorrDoc&, sal_Int32 nStartPos,
                              sal_Int32& nEndPos );
 
     static ACFlags  GetDefaultFlags();

@@ -89,9 +89,10 @@ void PaMIntoCursorShellRing::RemoveFromRing( SwPaM& rPam, SwPaM const * pPrev )
     } while( p != pPrev );
 }
 
-SwAutoCorrDoc::SwAutoCorrDoc( SwEditShell& rEditShell, SwPaM& rPam,
+SwAutoCorrDoc::SwAutoCorrDoc( SwEditShell& rEditShell, SwPaM& rPam, const SwTextFrame& rFrame,
                                 sal_Unicode cIns )
     : m_rEditSh( rEditShell ), m_rCursor( rPam )
+    , m_rFrame(rFrame)
     , m_nEndUndoCounter(0)
     , m_bUndoIdInitialized( cIns == 0 )
 {
@@ -325,6 +326,11 @@ bool SwAutoCorrDoc::SetINetAttr( sal_Int32 nStt, sal_Int32 nEnd, const OUString&
     if( !m_bUndoIdInitialized )
         m_bUndoIdInitialized = true;
     return true;
+}
+
+const OUString& SwAutoCorrDoc::GetText() const
+{
+    return m_rFrame.GetText();
 }
 
 /** Return the text of a previous paragraph

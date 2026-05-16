@@ -602,6 +602,11 @@ bool EdtAutoCorrDoc::SetINetAttr(sal_Int32 nStt, sal_Int32 nEnd,
     return true;
 }
 
+const OUString& EdtAutoCorrDoc::GetText() const
+{
+    return pCurNode->GetString();
+}
+
 OUString const* EdtAutoCorrDoc::GetPrevPara(bool const)
 {
     // Return previous paragraph, so that it can be determined,
