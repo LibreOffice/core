@@ -201,12 +201,13 @@ namespace FileUtil
     /// Returns as UTF-8 on Windows. (And surely also on any sane Unix?)
     std::string getSysTempDirectoryPath();
 
-    /// Create randomized temporary directory in the root provided
-    /// with S_IRWXU (read, write, and execute by owner) permissions.
-    /// If root is empty, the current system temp directory is used.
+    /// Create randomized temporary directory in the root provided.
+    /// See createTmpDir for details.
     std::string createRandomTmpDir(std::string root = std::string());
 
     /// Create a temporary directory in the root provided
+    /// with S_IRWXU (read, write, and execute by owner) permissions.
+    /// If root is empty, the current system temp directory is used.
     std::string createTmpDir(const std::string& dirName, std::string root = std::string());
 
     /// Returns the realpath(3) of the provided path. This also has a separate implementation for
