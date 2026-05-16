@@ -348,7 +348,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/ifc/drawing/_XGluePointsSupplier \
     qadevOOo/tests/java/ifc/drawing/_XLayerManager \
     qadevOOo/tests/java/ifc/drawing/_XLayerSupplier \
-    qadevOOo/tests/java/ifc/drawing/_XMasterPagesSupplier \
     qadevOOo/tests/java/ifc/drawing/_XMasterPageTarget \
     qadevOOo/tests/java/ifc/drawing/_XShape \
     qadevOOo/tests/java/ifc/drawing/_XShapeBinder \

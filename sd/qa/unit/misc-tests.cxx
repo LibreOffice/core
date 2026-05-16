@@ -16,6 +16,7 @@
 #include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
+#include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPages.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
@@ -98,6 +99,7 @@ public:
     void testPageBackgroundImages();
     void testCanvasSlideExportODP();
     void testDuplicateAndMove();
+    void testApiXMasterPagesSupplier();
 
     CPPUNIT_TEST_SUITE(SdMiscTest);
     CPPUNIT_TEST(testTdf99396_UndoCellVerticalAlignment);
@@ -127,6 +129,7 @@ public:
     CPPUNIT_TEST(testPageBackgroundImages);
     CPPUNIT_TEST(testCanvasSlideExportODP);
     CPPUNIT_TEST(testDuplicateAndMove);
+    CPPUNIT_TEST(testApiXMasterPagesSupplier);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -1288,6 +1291,16 @@ void SdMiscTest::testDuplicateAndMove()
     // - Expected: 25200x2630@(1400,628)
     // - Actual  : 19799x11137@(600,2257)
     CPPUNIT_ASSERT_EQUAL(pFirstPage->GetObj(0)->GetSnapRect(), pLastPage->GetObj(0)->GetSnapRect());
+}
+
+void SdMiscTest::testApiXMasterPagesSupplier()
+{
+    createSdImpressDoc();
+    uno::Reference<drawing::XMasterPagesSupplier> xMasterPagesSupplier(mxComponent,
+                                                                       uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPages> xMasterPages(xMasterPagesSupplier->getMasterPages(),
+                                                     uno::UNO_SET_THROW);
+    CPPUNIT_ASSERT(xMasterPages->getCount() >= 1);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdMiscTest);

@@ -57,4 +57,3 @@
 "SdXImpressDocument";"com::sun::star::frame::XModel";"getCurrentSelection()"
 "SdXImpressDocument";"com::sun::star::util::XModifyBroadcaster";"addModifyListener()"
 "SdXImpressDocument";"com::sun::star::util::XModifyBroadcaster";"removeModifyListener()"
-"SdXImpressDocument";"com::sun::star::drawing::XMasterPagesSupplier";"getMasterPages()"
