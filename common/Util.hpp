@@ -1340,7 +1340,7 @@ int main(int argc, char**argv)
     std::string base64Decode(const std::string& input);
 
 #ifdef _WIN32
-    std::wstring string_to_wide_string(const std::string& string);
+    std::wstring string_to_wide_string(std::string_view string);
     std::string wide_string_to_string(const std::wstring& wide_string);
 #endif
 } // end namespace Util

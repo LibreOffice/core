@@ -48,7 +48,7 @@ namespace Util
         return &tm;
     }
 
-    std::wstring string_to_wide_string(const std::string& string)
+    std::wstring string_to_wide_string(const std::string_view string)
     {
         if (string.empty())
         {
