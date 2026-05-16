@@ -25,7 +25,6 @@
 "SdXImpressDocument";"com::sun::star::frame::XStorable";"store()"
 "SdXImpressDocument";"com::sun::star::frame::XStorable";"storeAsURL()"
 "SdXImpressDocument";"com::sun::star::frame::XStorable";"storeToURL()"
-"SdXImpressDocument";"com::sun::star::drawing::XDrawPageDuplicator";"duplicate()"
 "SdXImpressDocument";"com::sun::star::document::XEventsSupplier#optional";"getEvents()"
 "SdXImpressDocument";"com::sun::star::util::XModifiable";"isModified()"
 "SdXImpressDocument";"com::sun::star::util::XModifiable";"setModified()"

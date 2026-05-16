@@ -16,6 +16,7 @@
 #include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
+#include <com/sun/star/drawing/XDrawPageDuplicator.hpp>
 #include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPages.hpp>
@@ -99,6 +100,7 @@ public:
     void testPageBackgroundImages();
     void testCanvasSlideExportODP();
     void testDuplicateAndMove();
+    void testApiXDrawPageDuplicator();
     void testApiXMasterPagesSupplier();
 
     CPPUNIT_TEST_SUITE(SdMiscTest);
@@ -129,6 +131,7 @@ public:
     CPPUNIT_TEST(testPageBackgroundImages);
     CPPUNIT_TEST(testCanvasSlideExportODP);
     CPPUNIT_TEST(testDuplicateAndMove);
+    CPPUNIT_TEST(testApiXDrawPageDuplicator);
     CPPUNIT_TEST(testApiXMasterPagesSupplier);
     CPPUNIT_TEST_SUITE_END();
 };
@@ -1291,6 +1294,23 @@ void SdMiscTest::testDuplicateAndMove()
     // - Expected: 25200x2630@(1400,628)
     // - Actual  : 19799x11137@(600,2257)
     CPPUNIT_ASSERT_EQUAL(pFirstPage->GetObj(0)->GetSnapRect(), pLastPage->GetObj(0)->GetSnapRect());
+}
+
+void SdMiscTest::testApiXDrawPageDuplicator()
+{
+    createSdImpressDoc();
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent,
+                                                                   uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPages> xDrawPages(xDrawPagesSupplier->getDrawPages(),
+                                                   uno::UNO_SET_THROW);
+    sal_Int32 nOldCount = xDrawPages->getCount();
+
+    uno::Reference<drawing::XDrawPage> xPage(xDrawPages->getByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPageDuplicator> xDuplicator(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xNewPage = xDuplicator->duplicate(xPage);
+
+    CPPUNIT_ASSERT(xNewPage.is());
+    CPPUNIT_ASSERT_EQUAL(nOldCount + 1, xDrawPages->getCount());
 }
 
 void SdMiscTest::testApiXMasterPagesSupplier()

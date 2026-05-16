@@ -340,7 +340,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/ifc/drawing/_TextShapeDescriptor \
     qadevOOo/tests/java/ifc/drawing/_XConnectorShape \
     qadevOOo/tests/java/ifc/drawing/_XControlShape \
-    qadevOOo/tests/java/ifc/drawing/_XDrawPageDuplicator \
     qadevOOo/tests/java/ifc/drawing/_XDrawPages \
     qadevOOo/tests/java/ifc/drawing/_XDrawPagesSupplier \
     qadevOOo/tests/java/ifc/drawing/_XDrawPageSupplier \
