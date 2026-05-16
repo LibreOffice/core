@@ -25,6 +25,11 @@ window.L.ImpressTileLayer = window.L.CanvasTileLayer.extend({
 
 		this._preview = window.L.control.partsPreview();
 
+		// Vector rendered slide thumbnails.
+		this._vectorThumbnails = cool.VectorRenderingConfig.isEnabled()
+			? new cool.VectorThumbnailHandler(this)
+			: null;
+
 		if (window.mode.isSmallScreenDevice()) {
 			this._addButton = window.L.control.mobileSlide();
 			window.L.DomUtil.addClass(window.L.DomUtil.get('mobile-edit-button'), 'impress');
@@ -301,6 +306,13 @@ window.L.ImpressTileLayer = window.L.CanvasTileLayer.extend({
 		}
 
 		if (!values) {
+			return;
+		}
+
+		if (values.type === 'vectortile') {
+			if (this._vectorThumbnails) {
+				this._vectorThumbnails.handleVectorTileResponse(values);
+			}
 			return;
 		}
 

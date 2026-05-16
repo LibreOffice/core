@@ -368,6 +368,7 @@ COOL_JS_LST =\
 	src/layer/Layer.js \
 	src/layer/tile/SheetGeometry.ts \
 	src/layer/tile/CanvasTileUtils.ts \
+	src/layer/tile/CanvasTileLayerInterface.ts \
 	src/canvas/CanvasSectionProps.js \
 	src/canvas/CanvasSectionContainer.ts \
 	src/canvas/CanvasSectionObject.ts \
@@ -386,6 +387,16 @@ COOL_JS_LST =\
 	src/canvas/sections/PreloadMapSection.ts \
 	src/canvas/sections/TilesSection.ts \
 	src/canvas/sections/CalcRTLAwareDocumentPosition.ts \
+	src/canvas/vector/PendingPreview.ts \
+	src/canvas/vector/PreviewId.ts \
+	src/canvas/vector/SlideObject.ts \
+	src/canvas/vector/primitive/BackgroundColorPrimitive.ts \
+	src/canvas/vector/primitive/Primitive.ts \
+	src/canvas/vector/VectorPrimitiveRenderer.ts \
+	src/canvas/vector/VectorRenderingConfig.ts \
+	src/canvas/vector/VectorThumbnailHandler.ts \
+	src/canvas/vector/VectorTileData.ts \
+	src/canvas/vector/VectorTileResponse.ts \
 	src/canvas/sections/AutoFillBaseSection.ts \
 	src/canvas/sections/CellFillMarkerSection.ts \
 	src/canvas/sections/ImpressSelectionRectangle.ts \

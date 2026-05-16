@@ -1329,6 +1329,8 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 			const preview = this._map._docPreviews ? this._map._docPreviews[command.part] : null;
 			if (preview) { preview.invalid = true; }
 
+			this.clearCachedVectorThumbnail(command.part);
+
 			const topLeftTwips = new cool.Point(command.x, command.y);
 			const offset = new cool.Point(command.width, command.height);
 			const bottomRightTwips = topLeftTwips.add(offset);
@@ -1336,6 +1338,13 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 			// 1s after the last invalidation, update the preview
 			clearTimeout(this._previewInvalidator);
 			this._previewInvalidator = setTimeout(window.L.bind(this._invalidatePreviews, this), this.options.previewInvalidationTimeout);
+		}
+	},
+
+	// Drop the cached vector tile for the input part.
+	clearCachedVectorThumbnail: function(part) {
+		if (this._vectorThumbnails) {
+			this._vectorThumbnails.clearCachedPart(part);
 		}
 	},
 
