@@ -61,6 +61,7 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,libexttextcat_fingerprint,$(
 	langclass/LM/fo.lm \
 	langclass/LM/fon.lm \
 	langclass/LM/fr.lm \
+	langclass/LM/frp.lm \
 	langclass/LM/fur.lm \
 	langclass/LM/fy.lm \
 	langclass/LM/ga.lm \
@@ -70,7 +71,7 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,libexttextcat_fingerprint,$(
 	langclass/LM/gu.lm \
 	langclass/LM/gug.lm \
 	langclass/LM/gv.lm \
-	langclass/LM/ha-NG.lm \
+	langclass/LM/ha-Latn-NG.lm \
 	langclass/LM/haw.lm \
 	langclass/LM/he.lm \
 	langclass/LM/hi.lm \
@@ -87,6 +88,8 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,libexttextcat_fingerprint,$(
 	langclass/LM/it.lm \
 	langclass/LM/ja.lm \
 	langclass/LM/ka.lm \
+	langclass/LM/kaa.lm \
+	langclass/LM/kab.lm \
 	langclass/LM/kbd.lm \
 	langclass/LM/kk.lm \
 	langclass/LM/kl.lm \
@@ -107,6 +110,7 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,libexttextcat_fingerprint,$(
 	langclass/LM/lt.lm \
 	langclass/LM/lv.lm \
 	langclass/LM/mai.lm \
+	langclass/LM/mfe.lm \
 	langclass/LM/mi.lm \
 	langclass/LM/min.lm \
 	langclass/LM/mk.lm \
@@ -134,6 +138,7 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,libexttextcat_fingerprint,$(
 	langclass/LM/plt.lm \
 	langclass/LM/pt.lm \
 	langclass/LM/quh.lm \
+	langclass/LM/qul.lm \
 	langclass/LM/quz.lm \
 	langclass/LM/rm.lm \
 	langclass/LM/ro.lm \
@@ -148,9 +153,12 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,libexttextcat_fingerprint,$(
 	langclass/LM/sg.lm \
 	langclass/LM/shs.lm \
 	langclass/LM/si.lm \
+	langclass/LM/sid.lm \
 	langclass/LM/sk.lm \
 	langclass/LM/skr.lm \
 	langclass/LM/sl.lm \
+	langclass/LM/smn.lm \
+	langclass/LM/sms.lm \
 	langclass/LM/so.lm \
 	langclass/LM/sq.lm \
 	langclass/LM/sr-Cyrl.lm \
@@ -162,6 +170,7 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,libexttextcat_fingerprint,$(
 	langclass/LM/swb.lm \
 	langclass/LM/sw.lm \
 	langclass/LM/ta.lm \
+	langclass/LM/te.lm \
 	langclass/LM/tet.lm \
 	langclass/LM/tg.lm \
 	langclass/LM/th.lm \
@@ -188,6 +197,7 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,libexttextcat_fingerprint,$(
 	langclass/LM/xh.lm \
 	langclass/LM/yi.lm \
 	langclass/LM/yo.lm \
+	langclass/LM/yrk.lm \
 	langclass/LM/zh-Hans.lm \
 	langclass/LM/zh-Hant.lm \
 	langclass/LM/zu.lm \
