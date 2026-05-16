@@ -79,10 +79,6 @@ namespace FileUtil
     // Wraps std::filesystem::create_directory.
     void createDirectory(std::string_view dir);
 
-    // Wraps std::filesystem::temp_directory_path(), and if that fails, uses obvious fallbacks.
-    // Returns as UTF-8 on Windows. (And surely also on any sane Unix?)
-    std::string getSysTempDirectoryPath();
-
     /// Returns true iff the path given is writable by our *real* UID.
     /// On Windows "real UID" is meaningless.
     bool isWritable(const char* path);
@@ -201,7 +197,8 @@ namespace FileUtil
     /// Platform-dependent implementations.
     bool linkOrCopyFile(const std::string& source, const std::string& newPath);
 
-    /// Returns the system temporary directory.
+    /// Wraps std::filesystem::temp_directory_path(), and if that fails, uses obvious fallbacks.
+    /// Returns as UTF-8 on Windows. (And surely also on any sane Unix?)
     std::string getSysTempDirectoryPath();
 
     /// Create randomized temporary directory in the root provided
