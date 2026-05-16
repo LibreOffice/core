@@ -188,7 +188,7 @@ private:
     std::unique_ptr<ImplOutDevData> mpOutDevData;
     std::vector< VCLXGraphics* >*   mpUnoGraphicsList;
     vcl::ExtOutDevData*             mpExtOutDevData;
-    std::unique_ptr<CoordinateMapper> mpMapper;
+    mutable std::unique_ptr<CoordinateMapper> mpMapper;
 
     // The canvas interface for this output device. Is persistent after the first GetCanvas() call
     mutable css::uno::WeakReference< css::rendering::XCanvas >    mxCanvas;
@@ -225,12 +225,10 @@ private:
     RasterOp                        meRasterOp;
     Wallpaper                       maBackground;
     std::optional<AllSettings>      moSettings;
-    MapMode                         maMapMode;
     Point                           maRefPoint;
     AntialiasingFlags               mnAntialiasing;
     LanguageType                    meTextLanguage;
 
-    mutable bool                    mbMap : 1;
     mutable bool                    mbClipRegion : 1;
     mutable bool                    mbBackground : 1;
     mutable bool                    mbOutput : 1;
@@ -1187,7 +1185,7 @@ public:
 
     bool                        IsFontAvailable( std::u16string_view rFontName ) const;
 
-    bool                        AddTempDevFont( const OUString& rFileURL, const OUString& rFontName );
+    bool                        AddTempDevFont(const OUString& rFileURL, const OUString& rFontName) const;
     bool                        RemoveTempDevFont( const OUString& rFileURL, const OUString& rFontName );
     void                        RefreshFontData( const bool bNewFontLists );
 
@@ -1579,13 +1577,13 @@ protected:
 public:
 
     void                        EnableMapMode( bool bEnable = true );
-    bool                        IsMapModeEnabled() const { return mbMap; }
+    bool                        IsMapModeEnabled() const;
 
     void                        SetMapMode();
     void                        SetMapMode( const MapMode& rNewMapMode );
     void                        SetRelativeMapMode( const MapMode& rNewMapMode );
     virtual void                SetMetafileMapMode(const MapMode& rNewMapMode, bool bIsRecord);
-    const MapMode&              GetMapMode() const { return maMapMode; }
+    const MapMode&              GetMapMode() const;
 
 protected:
     virtual void ImplInitMapModeObjects();

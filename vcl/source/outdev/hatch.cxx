@@ -27,6 +27,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/virdev.hxx>
 
+#include <CoordinateMapper.hxx>
 #include <drawmode.hxx>
 #include <salgdi.hxx>
 
@@ -77,19 +78,19 @@ void OutputDevice::DrawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch& 
     {
         tools::PolyPolygon     aPolyPoly( LogicToPixel( rPolyPoly ) );
         GDIMetaFile*    pOldMetaFile = mpMetaFile;
-        bool            bOldMap = mbMap;
+        bool bOldMap = mpMapper->IsMapModeEnabled();
 
         aPolyPoly.Optimize( PolyOptimizeFlags::NO_SAME );
         aHatch.SetDistance(LogicWidthToDevicePixel(aHatch.GetDistance()));
 
         mpMetaFile = nullptr;
-        EnableMapMode( false );
+        mpMapper->EnableMapMode(false);
         Push( vcl::PushFlags::LINECOLOR );
         SetLineColor( aHatch.GetColor() );
         InitLineColor();
         DrawHatch( aPolyPoly, aHatch, false );
         Pop();
-        EnableMapMode( bOldMap );
+        mpMapper->EnableMapMode(bOldMap);
         mpMetaFile = pOldMetaFile;
     }
 }

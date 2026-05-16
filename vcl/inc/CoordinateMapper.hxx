@@ -23,13 +23,17 @@
 #include <tools/long.hxx>
 
 #include <vcl/dllapi.h>
+#include <vcl/mapmod.hxx>
 
 class CoordinateMapper
 {
 private:
-    sal_Int32 mnDPIX;
-    sal_Int32 mnDPIY;
-    sal_Int32 mnDPIScalePercentage;
+    bool mbMap = false;
+    MapMode maMapMode;
+
+    sal_Int32 mnDPIX = 0;
+    sal_Int32 mnDPIY = 0;
+    sal_Int32 mnDPIScalePercentage = 100;
 
     /// Output offset for device output in pixel (pseudo window offset within window system's frames)
     tools::Long mnOutOffX;
@@ -40,7 +44,8 @@ private:
     tools::Long mnOutHeight;
 
 public:
-    CoordinateMapper();
+    bool IsMapModeEnabled() const { return mbMap; }
+    void EnableMapMode(bool bEnable = true) { mbMap = bEnable; }
 
     sal_Int32 GetDPIX() const;
     sal_Int32 GetDPIY() const;
@@ -65,6 +70,19 @@ public:
 
     void SetOutputWidthPixel(tools::Long nWidth);
     void SetOutputHeightPixel(tools::Long nHeight);
+
+    const MapMode& GetMapMode() const { return maMapMode; }
+    bool IsDefaultMapMode() const { return maMapMode.IsDefault(); }
+    void ResetMapMode() { maMapMode = MapMode(); }
+    void ResetMapMode(const MapMode& rMapMode) { maMapMode = rMapMode; }
+    MapUnit GetMapUnit() const { return maMapMode.GetMapUnit(); }
+
+    double GetScaleX() const { return maMapMode.GetScaleX(); }
+    double GetScaleY() const { return maMapMode.GetScaleY(); }
+    void SetScaleX(double nX) { maMapMode.SetScaleX(nX); }
+    void SetScaleY(double nY) { maMapMode.SetScaleY(nY); }
+
+    void SetOrigin(const Point& rPt) { maMapMode.SetOrigin(rPt); }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

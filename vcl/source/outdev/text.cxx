@@ -38,6 +38,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/sysdata.hxx>
 
+#include <CoordinateMapper.hxx>
 #include <ImplLayoutArgs.hxx>
 #include <ImplOutDevData.hxx>
 #include <drawmode.hxx>
@@ -265,7 +266,7 @@ bool OutputDevice::ImplDrawRotateText( SalLayout& rSalLayout )
     GDIMetaFile* pOldMetaFile = mpMetaFile;
     tools::Long nOldOffX = GetOutOffXPixel();
     tools::Long nOldOffY = GetOutOffYPixel();
-    bool bOldMap = mbMap;
+    bool bOldMap = mpMapper->IsMapModeEnabled();
 
     SetOutOffXPixel(0);
     SetOutOffYPixel(0);
@@ -643,7 +644,7 @@ tools::Long OutputDevice::GetTextHeight() const
 
     tools::Long nHeight = mpFontInstance->mnLineHeight + mnEmphasisAscent + mnEmphasisDescent;
 
-    if ( mbMap )
+    if (mpMapper->IsMapModeEnabled())
         nHeight = DevicePixelToLogicHeight(nHeight);
 
     return nHeight;
@@ -857,7 +858,7 @@ OutputDevice::GetPartialTextArray(const OUString& rStr, KernArray* pKernArray, s
     if (pDXPixelArray)
     {
         assert(pKernArray && "pDXPixelArray depends on pKernArray existing");
-        if (mbMap)
+        if (mpMapper->IsMapModeEnabled())
         {
             for (int i = 0; i < nPartLen; ++i)
                 (*pDXPixelArray)[i] = ImplDevicePixelToLogicWidthDouble((*pDXPixelArray)[i]);
@@ -932,7 +933,7 @@ void OutputDevice::GetCaretPositions( const OUString& rStr, KernArray& rCaretPos
     }
 
     // convert from font units to logical units
-    if( mbMap )
+    if (mpMapper->IsMapModeEnabled())
     {
         for (i = 0; i < nCaretPos; ++i)
             aCaretPixelPos[i] = ImplDevicePixelToLogicWidthDouble(aCaretPixelPos[i]);
@@ -1160,7 +1161,7 @@ std::unique_ptr<SalLayout> OutputDevice::ImplLayout(
     }
 
     double nPixelWidth = nLogicalWidth;
-    if( nLogicalWidth && mbMap )
+    if (nLogicalWidth && mpMapper->IsMapModeEnabled())
     {
         // convert from logical units to physical units
         nPixelWidth = LogicWidthToDeviceSubPixel(nLogicalWidth);
@@ -1197,7 +1198,7 @@ std::unique_ptr<SalLayout> OutputDevice::ImplLayout(
 
         JustificationData stJustification{ nJustMinCluster, nJustLen };
 
-        if (!pDXArray.empty() && mbMap)
+        if (!pDXArray.empty() && mpMapper->IsMapModeEnabled())
         {
             // convert from logical units to font units without rounding,
             // keeping accuracy for lower levels
@@ -1288,7 +1289,7 @@ std::unique_ptr<SalLayout> OutputDevice::ImplLayout(
 
     // default to on for pdf export, which uses SubPixelToLogic to convert back to
     // the logical coord space, of if we are scaling/mapping
-    if (mbMap || meOutDevType == OUTDEV_PDF)
+    if (mpMapper->IsMapModeEnabled() || meOutDevType == OUTDEV_PDF)
         pSalLayout->DrawBase() = LogicToDeviceSubPixel(rLogicalPos);
     else
     {
@@ -1348,7 +1349,7 @@ sal_Int32 OutputDevice::GetTextBreak( const OUString& rStr, tools::Long nTextWid
         // problem with rounding errors especially for small nCharExtras
         // TODO: remove when layout units have subpixel granularity
         tools::Long nSubPixelFactor = 1;
-        if (!mbMap)
+        if (!mpMapper->IsMapModeEnabled())
             nSubPixelFactor = 64;
         double nTextPixelWidth = LogicWidthToDeviceSubPixel(nTextWidth * nSubPixelFactor);
         double nExtraPixelWidth = 0;
@@ -1383,7 +1384,7 @@ sal_Int32 OutputDevice::GetTextBreakArray(const OUString& rStr, tools::Long nTex
         // problem with rounding errors especially for small nCharExtras
         // TODO: remove when layout units have subpixel granularity
         tools::Long nSubPixelFactor = 1;
-        if (!mbMap)
+        if (!mpMapper->IsMapModeEnabled())
             nSubPixelFactor = 64;
 
         double nTextPixelWidth = LogicWidthToDeviceSubPixel(nTextWidth * nSubPixelFactor);
@@ -2083,7 +2084,7 @@ bool OutputDevice::GetTextBoundRect(basegfx::B2DRectangle& rRect, const OUString
             basegfx::B2DPoint aPos = pSalLayout->GetDrawPosition(basegfx::B2DPoint(nXOffset, 0));
             aPixelRect.translate(mnTextOffX - aPos.getX(), mnTextOffY - aPos.getY());
             rRect = PixelToLogic( aPixelRect );
-            if (mbMap)
+            if (mpMapper->IsMapModeEnabled())
             {
                 rRect.translate(maMapRes.mnMapOfsX, maMapRes.mnMapOfsY);
             }
@@ -2113,10 +2114,10 @@ bool OutputDevice::GetTextOutlines( basegfx::B2DPolyPolygonVector& rVector,
 
     // we want to get the Rectangle in logical units, so to
     // avoid rounding errors we just size the font in logical units
-    bool bOldMap = mbMap;
+    bool bOldMap = mpMapper->IsMapModeEnabled();
     if( bOldMap )
     {
-        const_cast<OutputDevice&>(*this).mbMap = false;
+        mpMapper->EnableMapMode(false);
         const_cast<OutputDevice&>(*this).mbNewFont = true;
     }
 
@@ -2168,7 +2169,7 @@ bool OutputDevice::GetTextOutlines( basegfx::B2DPolyPolygonVector& rVector,
     if( bOldMap )
     {
         // restore original font size and map mode
-        const_cast<OutputDevice&>(*this).mbMap = bOldMap;
+        mpMapper->EnableMapMode(bOldMap);
         const_cast<OutputDevice&>(*this).mbNewFont = true;
     }
 
@@ -2184,14 +2185,14 @@ bool OutputDevice::GetGlyphOutlines( const sal_uInt32* pGlyphIds, sal_Int32 nGly
     rOutlines.clear();
     rOutlines.reserve(nGlyphs);
 
-    bool bOldMap = mbMap;
+    bool bOldMap = mpMapper->IsMapModeEnabled();
     if (bOldMap)
     {
-        const_cast<OutputDevice&>(*this).mbMap = false;
+        const_cast<OutputDevice&>(*this).EnableMapMode(false);
         const_cast<OutputDevice&>(*this).mbNewFont = true;
         if (!InitFont())
         {
-            const_cast<OutputDevice&>(*this).mbMap = true;
+            const_cast<OutputDevice&>(*this).EnableMapMode(true);
             const_cast<OutputDevice&>(*this).mbNewFont = true;
             return false;
         }
@@ -2212,7 +2213,7 @@ bool OutputDevice::GetGlyphOutlines( const sal_uInt32* pGlyphIds, sal_Int32 nGly
 
     if (bOldMap)
     {
-        const_cast<OutputDevice&>(*this).mbMap = true;
+        const_cast<OutputDevice&>(*this).EnableMapMode(true);
         const_cast<OutputDevice&>(*this).mbNewFont = true;
     }
 

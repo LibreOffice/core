@@ -25,6 +25,7 @@
 #include <vcl/rendercontext/DrawGridFlags.hxx>
 #include <vcl/virdev.hxx>
 
+#include <CoordinateMapper.hxx>
 #include <salgdi.hxx>
 
 #include <cassert>
@@ -290,8 +291,8 @@ void OutputDevice::DrawGrid( const tools::Rectangle& rRect, const Size& rDist, D
     if( mbInitFillColor )
         InitFillColor();
 
-    const bool bOldMap = mbMap;
-    EnableMapMode( false );
+    const bool bOldMap = mpMapper->IsMapModeEnabled();
+    mpMapper->EnableMapMode(false);
 
     if( nFlags & DrawGridFlags::Dots )
     {
@@ -324,7 +325,7 @@ void OutputDevice::DrawGrid( const tools::Rectangle& rRect, const Size& rDist, D
         }
     }
 
-    EnableMapMode( bOldMap );
+    mpMapper->EnableMapMode(bOldMap);
 }
 
 void OutputDevice::DrawGridOfCrosses(const tools::Rectangle& rGridArea, const Size& rGridDistance,
@@ -422,8 +423,8 @@ void OutputDevice::DrawGridOfCrosses(const tools::Rectangle& rGridArea, const Si
                 continue;
             }
 
-            const bool bOldMap = mbMap;
-            EnableMapMode(false);
+            const bool bOldMap = mpMapper->IsMapModeEnabled();
+            mpMapper->EnableMapMode(false);
 
             // Draw horizontal line if visible
             if (nPositionY >= rDrawingArea.Top() && nPositionY <= rDrawingArea.Bottom())
@@ -439,7 +440,7 @@ void OutputDevice::DrawGridOfCrosses(const tools::Rectangle& rGridArea, const Si
                                      *this);
             }
 
-            EnableMapMode(bOldMap);
+            mpMapper->EnableMapMode(bOldMap);
         }
     }
 }

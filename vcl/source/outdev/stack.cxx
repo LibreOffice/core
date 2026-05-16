@@ -26,6 +26,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/settings.hxx>
 
+#include <CoordinateMapper.hxx>
 #include <drawmode.hxx>
 #include <salgdi.hxx>
 
@@ -74,8 +75,8 @@ void OutputDevice::Push(vcl::PushFlags nFlags)
 
     if (nFlags & vcl::PushFlags::MAPMODE)
     {
-        rState.mpMapMode = maMapMode;
-        rState.mbMapActive = mbMap;
+        rState.mpMapMode = mpMapper->GetMapMode();
+        rState.mbMapActive = mpMapper->IsMapModeEnabled();
     }
 
     if (nFlags & vcl::PushFlags::CLIPREGION && mbClipRegion)
@@ -164,7 +165,7 @@ void OutputDevice::Pop()
             SetMapMode( *rState.mpMapMode );
         else
             SetMapMode();
-        mbMap = rState.mbMapActive;
+        mpMapper->EnableMapMode(rState.mbMapActive);
     }
 
     if ( rState.mnFlags & vcl::PushFlags::CLIPREGION )

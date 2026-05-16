@@ -35,6 +35,8 @@
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/BitmapWriteAccess.hxx>
+
+#include <CoordinateMapper.hxx>
 #include <pdf/pdfwriter_impl.hxx>
 #include <salgdi.hxx>
 
@@ -334,9 +336,9 @@ void OutputDevice::EmulateDrawTransparent ( const tools::PolyPolygon& rPolyPoly,
 
             if( aVDev->SetOutputSizePixel( aDstSz ) )
             {
-                const bool bOldMap = mbMap;
+                const bool bOldMap = mpMapper->IsMapModeEnabled();
 
-                EnableMapMode( false );
+                mpMapper->EnableMapMode( false );
 
                 aVDev->SetLineColor( COL_BLACK );
                 aVDev->SetFillColor( COL_BLACK );
@@ -411,7 +413,7 @@ void OutputDevice::EmulateDrawTransparent ( const tools::PolyPolygon& rPolyPoly,
 
                     DrawBitmap( aDstRect.TopLeft(), aPaint );
 
-                    EnableMapMode( bOldMap );
+                    mpMapper->EnableMapMode( bOldMap );
 
                     if( mbLineColor )
                     {
@@ -542,7 +544,7 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos, 
 
                     // copy MapMode state and disable for target
                     const bool bOrigMapModeEnabled(IsMapModeEnabled());
-                    EnableMapMode(false);
+                    mpMapper->EnableMapMode(false);
 
                     // copy MapMode state and disable for buffer
                     const bool bBufferMapModeEnabled(xVDev->IsMapModeEnabled());
@@ -587,13 +589,13 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos, 
 
                     // draw masked content to target and restore MapMode
                     DrawBitmap(aDstRect.TopLeft(), Bitmap(aPaint.CreateColorBitmap(), aAlpha));
-                    EnableMapMode(bOrigMapModeEnabled);
+                    mpMapper->EnableMapMode(bOrigMapModeEnabled);
                 }
                 else
                 {
                     MapMode aMap( GetMapMode() );
                     Point aOutPos( PixelToLogic( aDstRect.TopLeft() ) );
-                    const bool bOldMap = mbMap;
+                    const bool bOldMap = mpMapper->IsMapModeEnabled();
 
                     aMap.SetOrigin( Point( -aOutPos.X(), -aOutPos.Y() ) );
                     xVDev->SetMapMode( aMap );
@@ -622,9 +624,9 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos, 
 
                     xVDev.disposeAndClear();
 
-                    EnableMapMode( false );
+                    mpMapper->EnableMapMode( false );
                     DrawBitmap(aDstRect.TopLeft(), Bitmap(aPaint.CreateColorBitmap(), aAlpha));
-                    EnableMapMode( bOldMap );
+                    mpMapper->EnableMapMode( bOldMap );
                 }
             }
         }
@@ -1766,8 +1768,9 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
                                         Application::Reschedule( true );
                                     }
 
-                                    const bool bOldMap = mbMap;
-                                    mbMap = aPaintVDev->mbMap = false;
+                                    const bool bOldMap = mpMapper->IsMapModeEnabled();
+                                    mpMapper->EnableMapMode(false);
+                                    aPaintVDev->EnableMapMode(false);
 
                                     Bitmap aBandBmp( aPaintVDev->GetBitmap( Point(), aDstSzPix ) );
 
@@ -1781,8 +1784,8 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
                                     rOutMtf.AddAction( new MetaBmpScaleAction( aDstPtPix, aDstSzPix, aBandBmp ) );
                                     rOutMtf.AddAction( new MetaCommentAction( "PRNSPOOL_TRANSPARENTBITMAP_END"_ostr ) );
 
-                                    aPaintVDev->mbMap = true;
-                                    mbMap = bOldMap;
+                                    aPaintVDev->EnableMapMode();
+                                    mpMapper->EnableMapMode(bOldMap);
                                 }
 
                                 // overlapping bands to avoid missing lines (e.g. PostScript)

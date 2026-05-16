@@ -472,6 +472,36 @@ CPPUNIT_TEST_FIXTURE(CppUnit::TestFixture, testMapRelativeScaling)
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Relative origin was ignored!", tools::Long(300), aResult.Y());
 }
 
+CPPUNIT_TEST_FIXTURE(CppUnit::TestFixture, testMapModeInvalidation)
+{
+    ScopedVclPtrInstance<VirtualDevice> pVDev;
+    MapMode aMapMode(MapUnit::Map100thMM); // 1 unit = 0.01mm
+    pVDev->SetMapMode(aMapMode);
+    pVDev->EnableMapMode(true);
+
+    // Capture the initial logic-to-pixel result
+    Point aLogicPt(1000, 1000);
+    Point aPixelPt1 = pVDev->LogicToPixel(aLogicPt);
+
+    // DISABLE MapMode
+    // This is where your bug lived!
+    pVDev->EnableMapMode(false);
+    Point aPixelPt2 = pVDev->LogicToPixel(aLogicPt);
+
+    // In 'false' mode, LogicToPixel should be an identity (1:1)
+    CPPUNIT_ASSERT_EQUAL(aLogicPt.X(), aPixelPt2.X());
+    CPPUNIT_ASSERT_EQUAL(aLogicPt.Y(), aPixelPt2.Y());
+
+    // RE-ENABLE MapMode
+    // This verifies the 'true' restoration correctly invalidates the cache
+    pVDev->EnableMapMode(true);
+    Point aPixelPt3 = pVDev->LogicToPixel(aLogicPt);
+
+    // This should match the very first calculation
+    CPPUNIT_ASSERT_EQUAL(aPixelPt1.X(), aPixelPt3.X());
+    CPPUNIT_ASSERT_EQUAL(aPixelPt1.Y(), aPixelPt3.Y());
+}
+
 } // end anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();
