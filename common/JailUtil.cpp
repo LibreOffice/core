@@ -22,6 +22,7 @@
 #include <common/Log.hpp>
 #include <common/NumUtil.hpp>
 #include <common/SigUtil.hpp>
+#include <common/Unit.hpp>
 #include <common/Util.hpp>
 
 #include <csignal>
@@ -393,7 +394,9 @@ void cleanupJails(const std::string& root)
             // Modern jails should look like this:
             //   jails/<coolwsd-pid>-<random>/<random>/
             size_t pidSepPos = jail.find('-');
-            if (pidSepPos != std::string::npos)
+            // Unit-tests remove their jails, unless they fail.
+            // Here, we don't remove orphaned jails while unit-testing to aid debugging.
+            if (!UnitWSD::isUnitTesting() && pidSepPos != std::string::npos)
             {
                 bool skip = false;
                 const std::string_view pidStr = std::string_view(jail).substr(0, pidSepPos);

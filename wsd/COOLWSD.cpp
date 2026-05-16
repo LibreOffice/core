@@ -4163,7 +4163,8 @@ void COOLWSD::innerMain()
         ForKitProc.reset();
     }
 
-    JailUtil::cleanupJails(CleanupChildRoot);
+    // In unit-tests remove only our jails, otherwise cleanup all jails.
+    JailUtil::cleanupJails(UnitWSD::isUnitTesting() ? ChildRoot : CleanupChildRoot);
 #endif // !MOBILEAPP
 
     if constexpr (Util::isMobileApp())
