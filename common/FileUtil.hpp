@@ -197,6 +197,11 @@ namespace FileUtil
     /// Platform-dependent implementations.
     bool linkOrCopyFile(const std::string& source, const std::string& newPath);
 
+    /// Changes the various envars used for the system temporary-files directory.
+    /// Used to privatize the directory we use for temporary files,
+    /// which some libraries use these envars to query.
+    void setSysTempDirectoryPath(const std::string& path);
+
     /// Wraps std::filesystem::temp_directory_path(), and if that fails, uses obvious fallbacks.
     /// Returns as UTF-8 on Windows. (And surely also on any sane Unix?)
     std::string getSysTempDirectoryPath();
