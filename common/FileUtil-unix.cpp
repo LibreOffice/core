@@ -445,17 +445,20 @@ namespace FileUtil
     std::string getSysTempDirectoryPath()
     {
         // Don't const to allow for automatic move on return.
-        std::string path = std::filesystem::temp_directory_path();
+        std::error_code ec;
+        std::string path = std::filesystem::temp_directory_path(ec);
 
-        if (!path.empty())
+        if (!ec && !path.empty())
             return path;
 
         // Sensible fallback, though shouldn't be needed.
         const char *tmp = getenv("TMPDIR");
         if (!tmp)
+            tmp = getenv("TMP");
+        if (!tmp)
             tmp = getenv("TEMP");
         if (!tmp)
-            tmp = getenv("TMP");
+            tmp = getenv("TEMPDIR");
         if (!tmp)
             tmp = "/tmp";
         return tmp;

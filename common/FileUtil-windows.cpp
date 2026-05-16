@@ -157,18 +157,19 @@ namespace FileUtil
 
     std::string getSysTempDirectoryPath()
     {
-        std::wstring path = std::filesystem::temp_directory_path().wstring();
+        std::error_code ec;
+        std::wstring path = std::filesystem::temp_directory_path(ec).wstring();
 
-        if (!path.empty() && path.back() == L'\\')
+        if (!ec && !path.empty() && path.back() == L'\\')
             path.pop_back();
 
-        if (!path.empty())
+        if (!ec && !path.empty())
             return Util::wide_string_to_string(path);
 
         // Try some fallbacks
-        wchar_t *tmp = _wgetenv(L"TEMP");
+        wchar_t* tmp = _wgetenv(L"TMP");
         if (!tmp || tmp[0] == L'\0')
-            tmp = _wgetenv(L"TMP");
+            tmp = _wgetenv(L"TEMP");
         if (tmp && tmp[0] == L'\0')
             tmp = NULL;
 
