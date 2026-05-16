@@ -1302,6 +1302,15 @@ void COOLWSD::setupChildRoot(const bool UseMountNamespaces)
     JailUtil::disableBindMounting(); // Default to assume failure
     JailUtil::disableMountNamespaces();
 
+    if constexpr (!Util::isMobileApp())
+    {
+        // Now create a temp directory inside our private child-root.
+        const std::string tmpDir = ChildRoot + "systmp";
+        FileUtil::createDirectories(tmpDir);
+        LOG_INF("Setting system temporary directory path: " << tmpDir);
+        FileUtil::setSysTempDirectoryPath(tmpDir); // Only implemented and meaningful on *ix.
+    }
+
 #if ENABLE_CHILDROOTS
     Log::preFork();
 

@@ -155,6 +155,11 @@ namespace FileUtil
         std::filesystem::create_directory(Util::string_to_wide_string(dir));
     }
 
+    void createDirectories(const std::string_view dir)
+    {
+        std::filesystem::create_directories(Util::string_to_wide_string(dir));
+    }
+
     void setSysTempDirectoryPath(const std::string& /*path*/)
     {
         // Not implemented as we're in the user's environment anyway (i.e. no sharing).

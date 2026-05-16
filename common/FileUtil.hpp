@@ -79,6 +79,9 @@ namespace FileUtil
     // Wraps std::filesystem::create_directory.
     void createDirectory(std::string_view dir);
 
+    /// Wraps std::filesystem::create_directories.
+    void createDirectories(std::string_view dir);
+
     /// Returns true iff the path given is writable by our *real* UID.
     /// On Windows "real UID" is meaningless.
     bool isWritable(const char* path);

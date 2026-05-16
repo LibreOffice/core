@@ -442,6 +442,8 @@ namespace FileUtil
         std::filesystem::create_directory(dir);
     }
 
+    void createDirectories(std::string_view dir) { std::filesystem::create_directories(dir); }
+
     void setSysTempDirectoryPath(const std::string& path)
     {
         ::setenv("TMPDIR", path.data(), 1);

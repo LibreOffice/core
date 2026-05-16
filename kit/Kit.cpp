@@ -3899,7 +3899,7 @@ void lokit_main(
             }
 
             // Setup /tmp and set TMPDIR.
-            ::setenv("TMPDIR", "/tmp", 1);
+            FileUtil::setSysTempDirectoryPath("/tmp");
             allowedPaths += ":w:/tmp";
 
             copyCertificateDatabaseToTmp(jailPath);
@@ -3974,8 +3974,8 @@ void lokit_main(
             allowedPaths += ":r:" + loTemplate;
             JailRoot = jailPathStr;
 
-            std::string tmpPath = jailPathStr + "tmp";
-            ::setenv("TMPDIR", tmpPath.c_str(), 1);
+            const std::string tmpPath = jailPathStr + "tmp";
+            FileUtil::setSysTempDirectoryPath(tmpPath);
             allowedPaths += ":w:" + tmpPath;
             LOG_DBG("Using tmpdir [" << tmpPath << "]");
 
