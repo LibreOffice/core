@@ -358,6 +358,15 @@ window.L.Control.JSDialog = window.L.Control.extend({
 
 		instance.form = window.L.DomUtil.create('form', 'jsdialog-container ui-dialog ui-widget-content lokdialog_container', instance.container);
 		instance.form.setAttribute('role', 'dialog');
+		// aria-modal tells screen readers to ignore everything outside this dialog while it is open.
+		// Apply to real modal dialogs only. Skip popup-style jsdialog instances that share this code path but aren't modal:
+		// dropdowns, snackbars, document-area popovers, autocomplete popups and autofill preview tooltips.
+		if (!instance.isDropdown
+			&& !instance.isSnackbar
+			&& !instance.isDocumentAreaPopup
+			&& !instance.isAutoCompletePopup
+			&& !instance.isAutoFillPreviewTooltip)
+			instance.form.setAttribute('aria-modal', 'true');
 		instance.form.setAttribute('autocomplete', 'off');
 		if (instance.title)
 			instance.form.setAttribute('aria-labelledby', instance.title);

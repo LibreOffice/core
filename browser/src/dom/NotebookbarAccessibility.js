@@ -194,15 +194,19 @@ var NotebookbarAccessibility = function() {
 				}
 				else if (this.state === 1) {
 					itemWasClicked = true;
-					this.setTabItemDescription(element);
 					var selectTarget = element.tagName === 'SELECT' ? element : element.querySelector('select');
 					if (selectTarget) {
+						this.setTabItemDescription(element);
 						selectTarget.focus();
 						selectTarget.showPicker();
 					} else {
 						var clickTarget = element.querySelector('button.unobutton') || element;
+						const doFocusToMap = this.filteredItem && this.filteredItem.focusBack === true;
+						// Blur the offscreen role="tablist" input first so the screen reader doesn't enumerate the notebookbar tabs on focus-out.
+						// The blur handler (onInputBlur) clears aria-description with resetState(). So, no need to clear it again here.
+						this.accessibilityInputElement.blur();
 						clickTarget.click();
-						if (this.filteredItem && this.filteredItem.focusBack === true)
+						if (doFocusToMap)
 							this.focusToMap();
 					}
 				}
