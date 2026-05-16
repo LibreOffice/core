@@ -106,6 +106,9 @@ private:
     void setToggleButtonProperties(QToolButton& rButton, stringmap& rProps, QWidget* pParentWidget);
     static void setWidgetProperties(QWidget& rWidget, stringmap& rProps);
     static QWidget* windowForObject(QObject* pObject);
+    static Qt::Alignment getAlignment(stringmap& rProps);
+    static void setWidgetAlignment(QWidget& rWidget, stringmap& rProps);
+    static void setLayoutAlignment(QLayout& rLayout, stringmap& rProps);
 
     static void applyGridPackingProperties(QWidget* pCurrentChild, QGridLayout& rGrid,
                                            const stringmap& rPackingProperties);

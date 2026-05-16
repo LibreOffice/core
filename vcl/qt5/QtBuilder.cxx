@@ -61,6 +61,8 @@ QString convertAccelerator(const OUString& rText)
 }
 }
 
+const char* const PROPERTY_ALIGNMENT = "property-alignment";
+
 QtBuilder::QtBuilder(QWidget* pParent, std::u16string_view sUIRoot, const OUString& rUIFile)
     : WidgetBuilder(sUIRoot, rUIFile, false)
 {
@@ -506,6 +508,8 @@ QObject* QtBuilder::insertObject(QObject* pParent, const OUString& rClass, std::
         if (pParentLayout)
             pParentLayout->addWidget(pWidget);
 
+        setWidgetAlignment(*pWidget, rProps);
+
         QtInstanceWidget::setHelpId(*pWidget, getHelpRoot() + rId);
 
         pWidget->setToolTip(toRichTextTooltip(extractTooltipText(rProps)));
@@ -523,6 +527,8 @@ QObject* QtBuilder::insertObject(QObject* pParent, const OUString& rClass, std::
             pParentBoxLayout->addLayout(pLayout);
         else if (QGridLayout* pParentGridLayout = qobject_cast<QGridLayout*>(pParentLayout))
             pParentGridLayout->addLayout(pLayout, pParentGridLayout->rowCount(), 0);
+
+        setLayoutAlignment(*pLayout, rProps);
     }
 
     if (pObject)
@@ -787,8 +793,14 @@ void QtBuilder::applyGridPackingProperties(QWidget* pCurrentChild, QGridLayout& 
     auto aHeightIt = rPackingProperties.find(u"height"_ustr);
     sal_Int32 nRowSpan = (aHeightIt == rPackingProperties.end()) ? 1 : aHeightIt->second.toInt32();
 
+    // Retrieve any alignment set on the widget
+    Qt::Alignment nAlign;
+    QVariant aVariant = pCurrentChild->property(PROPERTY_ALIGNMENT);
+    if (aVariant.canConvert<Qt::Alignment>())
+        nAlign = aVariant.value<Qt::Alignment>();
+
     rGrid.removeWidget(pCurrentChild);
-    rGrid.addWidget(pCurrentChild, nRow, nColumn, nRowSpan, nColumnSpan);
+    rGrid.addWidget(pCurrentChild, nRow, nColumn, nRowSpan, nColumnSpan, nAlign);
 }
 
 void QtBuilder::applyPackingProperties(QObject* pCurrentChild, QObject* pParent,
@@ -980,6 +992,64 @@ void QtBuilder::setItemViewProperties(const QAbstractItemView& rIconView, string
     auto aIt = rProps.find(u"activate-on-single-click"_ustr);
     if (aIt != rProps.end() && toBool(aIt->second))
         QtInstanceItemView::enableActivateOnSingleClick(rIconView);
+}
+
+static Qt::Alignment toQtAlign(std::u16string_view sValue, bool bHorizontal)
+{
+    Qt::Alignment eRet = bHorizontal ? Qt::AlignLeft : Qt::AlignTop;
+
+    if (sValue == u"start")
+        eRet = bHorizontal ? Qt::AlignLeft : Qt::AlignTop;
+    else if (sValue == u"end")
+        eRet = bHorizontal ? Qt::AlignRight : Qt::AlignBottom;
+    else if (sValue == u"center")
+        eRet = bHorizontal ? Qt::AlignHCenter : Qt::AlignVCenter;
+    else if (sValue == u"baseline" && !bHorizontal)
+        eRet = Qt::AlignBaseline;
+    // "fill" is not currently used
+
+    return eRet;
+}
+
+Qt::Alignment QtBuilder::getAlignment(stringmap& rProps)
+{
+    Qt::Alignment nAlign;
+
+    for (auto const & [ rKey, rValue ] : rProps)
+    {
+        if (rKey == u"halign")
+            nAlign |= toQtAlign(rValue, true);
+        else if (rKey == u"valign")
+            nAlign |= toQtAlign(rValue, false);
+    }
+
+    return nAlign;
+}
+
+void QtBuilder::setWidgetAlignment(QWidget& rWidget, stringmap& rProps)
+{
+    Qt::Alignment nAlign = getAlignment(rProps);
+    if (nAlign != 0)
+    {
+        // Cache for later if the widget needs to be re-added to the layout
+        rWidget.setProperty(PROPERTY_ALIGNMENT, QVariant::fromValue(nAlign));
+
+        if (QLayout* pLayout = rWidget.layout())
+            pLayout->setAlignment(&rWidget, nAlign);
+    }
+}
+
+void QtBuilder::setLayoutAlignment(QLayout& rLayout, stringmap& rProps)
+{
+    Qt::Alignment nAlign = getAlignment(rProps);
+    if (nAlign != 0)
+    {
+        // Cache for later if the layout needs to be re-added to its parent layout
+        rLayout.setProperty(PROPERTY_ALIGNMENT, QVariant::fromValue(nAlign));
+
+        if (QLayout* pParentLayout = rLayout.layout())
+            pParentLayout->setAlignment(&rLayout, nAlign);
+    }
 }
 
 void QtBuilder::setLabelProperties(QLabel& rLabel, stringmap& rProps)
