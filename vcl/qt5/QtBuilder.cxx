@@ -972,6 +972,24 @@ void QtBuilder::setItemViewProperties(const QAbstractItemView& rIconView, string
         QtInstanceItemView::enableActivateOnSingleClick(rIconView);
 }
 
+static Qt::Alignment toAlign(OUString rValue, bool bHorizontal)
+{
+    Qt::Alignment eRet = bHorizontal ? Qt::AlignLeft : Qt::AlignTop;
+
+    if (rValue == u"fill")
+        eRet = Qt::AlignJustify;
+    else if (rValue == u"start")
+        eRet = bHorizontal ? Qt::AlignLeft : Qt::AlignTop;
+    else if (rValue == u"end")
+        eRet = bHorizontal ? Qt::AlignRight : Qt::AlignBottom;
+    else if (rValue == u"center")
+        eRet = bHorizontal ? Qt::AlignHCenter : Qt::AlignVCenter;
+    else if (rValue == u"baseline")
+        eRet = Qt::AlignBaseline;
+
+    return eRet;
+}
+
 void QtBuilder::setLabelProperties(QLabel& rLabel, stringmap& rProps)
 {
     for (auto const & [ rKey, rValue ] : rProps)
@@ -980,6 +998,10 @@ void QtBuilder::setLabelProperties(QLabel& rLabel, stringmap& rProps)
             rLabel.setText(convertAccelerator(rValue));
         else if (rKey == u"wrap")
             rLabel.setWordWrap(toBool(rValue));
+        else if (rKey == u"halign")
+            rLabel.setAlignment(toAlign(rValue, true));
+        else if (rKey == u"valign")
+            rLabel.setAlignment(toAlign(rValue, false));
     }
 }
 
