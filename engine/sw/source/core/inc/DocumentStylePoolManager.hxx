@@ -41,7 +41,6 @@ public:
     virtual SwNumRule* GetNumRuleFromPool( SwPoolFormatId nId ) override;
     virtual bool IsPoolTextCollUsed( SwPoolFormatId nId ) const override;
     virtual bool IsPoolTextCollUsed( const SwTextFormatColl& ) const override;
-    virtual bool IsPoolFormatUsed( SwPoolFormatId nId ) const override;
     virtual bool IsPoolFormatUsed( const SwFormat& ) const override;
     virtual bool IsPoolPageDescUsed( SwPoolFormatId nId ) const override;
 

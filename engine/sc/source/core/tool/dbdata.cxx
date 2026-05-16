@@ -1731,11 +1731,6 @@ const ScTableStyleParam* ScDBData::GetTableStyleInfo() const
     return mpTableStyles.get();
 }
 
-void ScDBData::RemoveTableStyleInfo()
-{
-    mpTableStyles.reset();
-}
-
 ScSubTotalFunc ScDBData::GetSubTotalFuncFromString(std::u16string_view sFunction)
 {
     if (sFunction == u"sum")

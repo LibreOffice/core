@@ -49,8 +49,6 @@ static bool g_bRangeHeaders(false);
 
 static bool g_bViewIdForVisCursorInvalidation(false);
 
-static bool g_bLocalRendering(false);
-
 static bool g_bSlideshowRendering(false);
 
 static Compat g_eCompatFlags(Compat::none);
@@ -218,16 +216,6 @@ bool isViewIdForVisCursorInvalidation()
 bool isRangeHeaders()
 {
     return g_bRangeHeaders;
-}
-
-void setLocalRendering(bool bLocalRendering)
-{
-    g_bLocalRendering = bLocalRendering;
-}
-
-bool isLocalRendering()
-{
-    return g_bLocalRendering;
 }
 
 void setSlideshowRendering(bool bSlideshowRendering)

@@ -491,24 +491,6 @@ void ODatabaseSource::disposing()
     m_pImpl.clear();
 }
 
-weld::Window* ODatabaseModelImpl::GetFrameWeld()
-{
-    if (m_xDialogParent.is())
-        return Application::GetFrameWeld(m_xDialogParent);
-
-    rtl::Reference<ODatabaseDocument> xModel = getModel_noCreate();
-    if (!xModel.is())
-        return nullptr;
-    Reference<XController> xController(xModel->getCurrentController());
-    if (!xController.is())
-        return nullptr;
-    Reference<XFrame> xFrame(xController->getFrame());
-    if (!xFrame.is())
-        return nullptr;
-    Reference<css::awt::XWindow> xWindow(xFrame->getContainerWindow());
-    return Application::GetFrameWeld(xWindow);
-}
-
 Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const OUString& _rUid, const OUString& _rPwd)
 {
     Reference< XConnection > xReturn;

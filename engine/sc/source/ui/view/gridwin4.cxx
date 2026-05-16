@@ -1015,7 +1015,6 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
                                           : aOrigin.getX();
         Size aPixelOffset(nXOffset, aOrigin.getY());
         pContentDev->SetPixelOffset(aPixelOffset);
-        comphelper::COKit::setLocalRendering();
     }
 
     DrawRedraw( aOutputData, SC_LAYER_FRONT );

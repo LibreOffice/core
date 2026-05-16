@@ -148,12 +148,6 @@ Size SystemChildWindow::GetOptimalSize() const
     return vcl::Window::GetOptimalSize();
 }
 
-void SystemChildWindow::SetLeaveEnterBackgrounds(const css::uno::Sequence<css::uno::Any>& rLeaveArgs, const css::uno::Sequence<css::uno::Any>& rEnterArgs)
-{
-    if (mpWindowImpl->mpSysObj)
-        mpWindowImpl->mpSysObj->SetLeaveEnterBackgrounds(rLeaveArgs, rEnterArgs);
-}
-
 void SystemChildWindow::SetForwardKey( bool bEnable )
 {
     if ( mpWindowImpl->mpSysObj )

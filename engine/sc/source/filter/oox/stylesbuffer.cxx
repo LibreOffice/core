@@ -658,14 +658,6 @@ void Font::importAttribs( sal_Int32 nElement, const AttributeList& rAttribs )
     }
 }
 
-void Font::setFontElements(const XlsColor& rColor, bool bWeight)
-{
-    maModel.maColor = rColor;
-    maUsedFlags.mbColorUsed = true;
-    maModel.mbBold = bWeight;
-    maUsedFlags.mbWeightUsed = true;
-}
-
 void Font::importFont( SequenceInputStream& rStrm )
 {
     SAL_WARN_IF( mbDxf, "sc", "Font::importFont - unexpected conditional formatting flag" );
@@ -1593,16 +1585,6 @@ void Border::importDxfBorder( sal_Int32 nElement, SequenceInputStream& rStrm )
     }
 }
 
-void Border::setBorderElement( sal_Int32 nElement, const XlsColor& rColor, sal_Int32 nStyle)
-{
-    if( BorderLineModel* pBorderLine = getBorderLine( nElement ) )
-    {
-        pBorderLine->maColor = rColor;
-        pBorderLine->mnStyle = nStyle;
-        pBorderLine->mbUsed = true;
-    }
-}
-
 void Border::finalizeImport( bool bRTL )
 {
     if (bRTL)
@@ -1991,19 +1973,6 @@ void Fill::importDxfStop( SequenceInputStream& rStrm )
     if( !mxGradientModel )
         mxGradientModel = std::make_shared<GradientFillModel>();
     mxGradientModel->readGradientStop( rStrm, true );
-}
-
-void Fill::setFillColors(const XlsColor& rFgColor, const XlsColor& rBgColor)
-{
-    mxPatternModel = std::make_shared<PatternFillModel>(true);
-    mxPatternModel->mnPattern = XML_solid;
-    mxPatternModel->mbPatternUsed = true;
-
-    mxPatternModel->maPatternColor = rFgColor;
-    mxPatternModel->mbPattColorUsed = true;
-
-    mxPatternModel->maFillColor = rBgColor;
-    mxPatternModel->mbFillColorUsed = true;
 }
 
 void Fill::finalizeImport()
@@ -2491,21 +2460,6 @@ ProtectionRef const & Dxf::createProtection( bool bAlwaysNew )
     return mxProtection;
 }
 
-void Dxf::setFill(FillRef xFill)
-{
-    mxFill = xFill;
-}
-
-void Dxf::setBorder(BorderRef xBorder)
-{
-    mxBorder = xBorder;
-}
-
-void Dxf::setFont(FontRef xFont)
-{
-    mxFont = xFont;
-}
-
 void Dxf::importNumFmt( const AttributeList& rAttribs )
 {
     // don't propagate number formats defined in Dxf entries
@@ -2622,11 +2576,6 @@ void TableStyle::setName(const OUString& rName)
     maName = rName;
 }
 
-void TableStyle::setUIName(const OUString& rName)
-{
-    maUIName = rName;
-}
-
 void TableStyle::importTableStyleElement(const AttributeList& rAttribs)
 {
     TableStyleElementInfo aInfo;
@@ -2655,13 +2604,6 @@ void TableStyle::importTableStyleElement(const AttributeList& rAttribs)
     ScTableStyleElement eElement = aElementItr->second;
     aInfo.mnStripeCount = rAttribs.getInteger(XML_size, 1);
 
-    maTableStyleElements.insert({eElement, aInfo});
-}
-
-void TableStyle::setTableStyleElement(ScTableStyleElement eElement, sal_Int32 nDxfId)
-{
-    TableStyleElementInfo aInfo;
-    aInfo.mnDxfID = nDxfId;
     maTableStyleElements.insert({eElement, aInfo});
 }
 

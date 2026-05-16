@@ -72,17 +72,6 @@ public:
     */
     virtual css::uno::Reference<css::awt::XWindow> getWindow() override;
 
-    virtual css::uno::Reference<css::rendering::XCanvas> getCanvas() override;
-
-    /** Hide or show the pane.  If there is more than one window used to
-        implement the pane then it is left to the implementation if one,
-        some, or all windows are hidden or shown as long as the pane becomes
-        hidden or visible.
-        @param bIsVisible
-            When `TRUE` then show the pane.  Hide it otherwise.
-    */
-    virtual void setVisible (bool bIsVisible);
-
     //----- XResource ---------------------------------------------------------
 
     virtual rtl::Reference<sd::framework::ResourceId> getResourceId() override;

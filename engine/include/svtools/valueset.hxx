@@ -342,7 +342,6 @@ public:
     {
         return mbNoSelection;
     }
-    sal_uInt16 GetHighlightedItemId() const { return mnHighItemId; }
 
     void            SetItemImage( sal_uInt16 nItemId, const Image& rImage );
     Image           GetItemImage( sal_uInt16 nItemId ) const;

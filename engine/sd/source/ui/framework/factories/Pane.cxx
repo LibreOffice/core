@@ -71,29 +71,6 @@ Reference<awt::XWindow> Pane::getWindow()
     return mxWindow;
 }
 
-Reference<rendering::XCanvas> Pane::getCanvas()
-{
-    std::unique_lock aGuard (m_aMutex);
-    throwIfDisposed(aGuard);
-
-    if ( ! mxCanvas.is())
-        mxCanvas = CreateCanvas();
-
-    return mxCanvas;
-}
-
-void Pane::setVisible (bool bIsVisible)
-{
-    {
-        std::unique_lock aGuard (m_aMutex);
-        throwIfDisposed(aGuard);
-    }
-
-    vcl::Window* pWindow = GetWindow();
-    if (pWindow != nullptr)
-        pWindow->Show(bIsVisible);
-}
-
 //----- XResource -------------------------------------------------------------
 
 rtl::Reference<ResourceId> Pane::getResourceId()

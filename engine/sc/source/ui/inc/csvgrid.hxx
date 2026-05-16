@@ -65,7 +65,6 @@ private:
 
 public:
     explicit ScCsvGrid(const ScCsvLayoutData& rData, ScCsvTableBox* pTableBox);
-    ScCsvTableBox* GetTableBox() { return mpTableBox; }
     virtual ~ScCsvGrid() override;
 
     static ScCsvSplits          LoadFixedWidthList();

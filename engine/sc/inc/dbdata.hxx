@@ -341,7 +341,6 @@ public:
 
     SC_DLLPUBLIC void SetTableStyleInfo(const ScTableStyleParam& rParams);
     SC_DLLPUBLIC const ScTableStyleParam* GetTableStyleInfo() const;
-    void RemoveTableStyleInfo();
 
     static ScSubTotalFunc GetSubTotalFuncFromString(std::u16string_view sFunction);
     static OUString GetStringFromSubTotalFunc(ScSubTotalFunc eFunc);

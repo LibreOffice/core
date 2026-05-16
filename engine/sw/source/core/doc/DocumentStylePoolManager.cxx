@@ -2584,54 +2584,6 @@ bool DocumentStylePoolManager::IsPoolTextCollUsed( const SwTextFormatColl& rForm
 }
 
 /// Check if this AutoCollection is already/still in use
-bool DocumentStylePoolManager::IsPoolFormatUsed( SwPoolFormatId nId ) const
-{
-    const SwFormat *pNewFormat = nullptr;
-    const SwFormatsBase* pArray[ 2 ];
-    sal_uInt16 nArrCnt = 1;
-    bool bFnd = true;
-
-    if (SwPoolFormatId::CHR_BEGIN <= nId && nId < SwPoolFormatId::CHR_END)
-    {
-        pArray[0] = m_rDoc.GetCharFormats();
-    }
-    else if (SwPoolFormatId::FRM_BEGIN <= nId && nId < SwPoolFormatId::FRM_END)
-    {
-        pArray[0] = m_rDoc.GetFrameFormats();
-        pArray[1] = m_rDoc.GetSpzFrameFormats();
-        nArrCnt = 2;
-    }
-    else
-    {
-        SAL_WARN("sw.core", "Invalid Pool Id: " << sal_uInt16(nId) << " should be within "
-            "[" << int(SwPoolFormatId::CHR_BEGIN) << "," << int(SwPoolFormatId::CHR_END) << ") or "
-            "[" << int(SwPoolFormatId::FRM_BEGIN) << "," << int(SwPoolFormatId::FRM_END) << ")");
-        bFnd = false;
-    }
-
-    if( bFnd )
-    {
-        bFnd = false;
-        while (nArrCnt > 0 && !bFnd)
-        {
-            --nArrCnt;
-            for( size_t n = 0; !bFnd && n < (*pArray[nArrCnt]).GetFormatCount(); ++n )
-            {
-                pNewFormat = (*pArray[ nArrCnt ] ).GetFormat( n );
-                if( nId == pNewFormat->GetPoolFormatId() )
-                    bFnd = true;
-            }
-        }
-    }
-
-    // Not found or no dependencies?
-    if(!bFnd || !pNewFormat->HasWriterListeners() )
-        return false;
-    // Check if we have dependent ContentNodes in the Nodes array
-    // (also indirect ones for derived Formats)
-    return pNewFormat->IsUsed();
-}
-
 bool DocumentStylePoolManager::IsPoolFormatUsed( const SwFormat& rFormat ) const
 {
     // Not found or no dependencies?

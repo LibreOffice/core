@@ -764,61 +764,6 @@ void ScTableStyle::SetPattern(ScTableStyleElement eTableStyleElement,
     }
 }
 
-void ScTableStyle::SetTablePattern(std::unique_ptr<ScPatternAttr> pPattern)
-{
-    mpTablePattern = std::move(pPattern);
-}
-
-void ScTableStyle::SetFirstColumnStripePattern(std::unique_ptr<ScPatternAttr> pPattern)
-{
-    mpFirstColumnStripePattern = std::move(pPattern);
-}
-
-void ScTableStyle::SetSecondColumnStripePattern(std::unique_ptr<ScPatternAttr> pPattern)
-{
-    mpSecondColumnStripePattern = std::move(pPattern);
-}
-
-void ScTableStyle::SetFirstRowStripePattern(std::unique_ptr<ScPatternAttr> pPattern)
-{
-    mpFirstRowStripePattern = std::move(pPattern);
-}
-
-void ScTableStyle::SetSecondRowStripePattern(std::unique_ptr<ScPatternAttr> pPattern)
-{
-    mpSecondRowStripePattern = std::move(pPattern);
-}
-
-void ScTableStyle::SetLastColumnPattern(std::unique_ptr<ScPatternAttr> pPattern)
-{
-    mpLastColumnPattern = std::move(pPattern);
-}
-
-void ScTableStyle::SetFirstColumnPattern(std::unique_ptr<ScPatternAttr> pPattern)
-{
-    mpFirstColumnPattern = std::move(pPattern);
-}
-
-void ScTableStyle::SetHeaderRowPattern(std::unique_ptr<ScPatternAttr> pPattern)
-{
-    mpHeaderRowPattern = std::move(pPattern);
-}
-
-void ScTableStyle::SetTotalRowPattern(std::unique_ptr<ScPatternAttr> pPattern)
-{
-    mpTotalRowPattern = std::move(pPattern);
-}
-
-void ScTableStyle::SetFirstHeaderCellPattern(std::unique_ptr<ScPatternAttr> pPattern)
-{
-    mpFirstHeaderCellPattern = std::move(pPattern);
-}
-
-void ScTableStyle::SetLastHeaderCellPattern(std::unique_ptr<ScPatternAttr> pPattern)
-{
-    mpLastHeaderCellPattern = std::move(pPattern);
-}
-
 std::map<ScTableStyleElement, const ScPatternAttr*> ScTableStyle::GetSetPatterns() const
 {
     std::map<ScTableStyleElement, const ScPatternAttr*> aPatterns;
@@ -881,14 +826,6 @@ std::map<ScTableStyleElement, const ScPatternAttr*> ScTableStyle::GetSetPatterns
     return aPatterns;
 }
 
-sal_Int32 ScTableStyle::GetFirstRowStripeSize() const { return mnFirstRowStripeSize; }
-
-sal_Int32 ScTableStyle::GetSecondRowStripeSize() const { return mnSecondRowStripeSize; }
-
-sal_Int32 ScTableStyle::GetFirstColumnStripeSize() const { return mnFirstColStripeSize; }
-
-sal_Int32 ScTableStyle::GetSecondColumnStripeSize() const { return mnSecondColStripeSize; }
-
 ScTableStyles::ScTableStyles(ScDocument* pDoc)
     : mpDoc(pDoc)
 {
@@ -901,12 +838,6 @@ void ScTableStyles::AddTableStyle(std::unique_ptr<ScTableStyle> pTableStyle)
     // either reject duplicates (with UI validation) or use insert_or_assign
     // to replace the existing style.
     maTableStyles.insert({ pTableStyle->GetName(), std::move(pTableStyle) });
-    InvalidateBindings();
-}
-
-void ScTableStyles::DeleteTableStyle(const OUString& rName)
-{
-    maTableStyles.erase(rName);
     InvalidateBindings();
 }
 

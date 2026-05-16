@@ -165,7 +165,6 @@ public:
     /// Sets the current numbering rule at the insert position, if any.
     void SetNumRuleItem(const SwNumRuleItem* pItem) { m_pNumRuleItem = pItem; }
 
-    bool IsNewDoc() const { return m_bNewDoc; }
     ErrCode CallParser();
 
     ~SwMarkdownParser();

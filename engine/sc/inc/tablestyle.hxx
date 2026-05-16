@@ -89,24 +89,8 @@ public:
 
     void SetPattern(ScTableStyleElement eTableStyleElement,
                     std::unique_ptr<ScPatternAttr> pPattern);
-    void SetTablePattern(std::unique_ptr<ScPatternAttr> pPattern);
-    void SetFirstColumnStripePattern(std::unique_ptr<ScPatternAttr> pPattern);
-    void SetSecondColumnStripePattern(std::unique_ptr<ScPatternAttr> pPattern);
-    void SetFirstRowStripePattern(std::unique_ptr<ScPatternAttr> pPattern);
-    void SetSecondRowStripePattern(std::unique_ptr<ScPatternAttr> pPattern);
-    void SetLastColumnPattern(std::unique_ptr<ScPatternAttr> pPattern);
-    void SetFirstColumnPattern(std::unique_ptr<ScPatternAttr> pPattern);
-    void SetHeaderRowPattern(std::unique_ptr<ScPatternAttr> pPattern);
-    void SetTotalRowPattern(std::unique_ptr<ScPatternAttr> pPattern);
-    void SetFirstHeaderCellPattern(std::unique_ptr<ScPatternAttr> pPattern);
-    void SetLastHeaderCellPattern(std::unique_ptr<ScPatternAttr> pPattern);
 
     std::map<ScTableStyleElement, const ScPatternAttr*> GetSetPatterns() const;
-
-    sal_Int32 GetFirstRowStripeSize() const;
-    sal_Int32 GetFirstColumnStripeSize() const;
-    sal_Int32 GetSecondRowStripeSize() const;
-    sal_Int32 GetSecondColumnStripeSize() const;
 
     void SetOOXMLDefault(bool bDefault);
     bool IsOOXMLDefault() const;
@@ -136,7 +120,6 @@ public:
     ScTableStyles(ScDocument* pDoc);
 
     void AddTableStyle(std::unique_ptr<ScTableStyle> pTableStyle);
-    void DeleteTableStyle(const OUString& rName);
     const ScTableStyle* GetTableStyle(const OUString& rName) const;
     bool HasTableStyle() const { return !maTableStyles.empty(); }
 

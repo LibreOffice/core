@@ -439,7 +439,6 @@ protected:
     // number of visible rows in the window (incl. "truncated" rows)
     sal_uInt16      GetVisibleRows() const;
     sal_Int32       GetTopRow() const { return nTopRow; }
-    sal_uInt16      GetFirstVisibleColNumber() const { return nFirstCol; }
 
     // Focus-Rect enable / disable
     SAL_DLLPRIVATE void DoShowCursor();

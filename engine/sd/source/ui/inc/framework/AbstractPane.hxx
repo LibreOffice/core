@@ -41,16 +41,6 @@ public:
         pane that is used to display a view.
     */
     virtual css::uno::Reference<css::awt::XWindow> getWindow() = 0;
-
-    /** Return the com::sun::star::awt::XCanvas of the pane.  The
-        com::sun::star::rendering::XCanvas object is expected to
-        be associated with the com::sun::star::awt::XWindow object returned by
-        getWindow().
-        @return
-            When the com::sun::star::rendering::XCanvas
-            interface is not supported then an empty reference is returned.
-    */
-    virtual css::uno::Reference<css::rendering::XCanvas> getCanvas() = 0;
 };
 
 } // end of namespace sd::framework

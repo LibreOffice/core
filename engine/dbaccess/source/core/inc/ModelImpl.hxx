@@ -480,8 +480,6 @@ public:
     void    unlockModify()            { m_bModificationLock = false; }
     bool    isModifyLocked() const    { return m_bModificationLock; }
 
-    weld::Window* GetFrameWeld();
-
 private:
     void    impl_construct_nothrow();
     css::uno::Reference< css::embed::XStorage > const &

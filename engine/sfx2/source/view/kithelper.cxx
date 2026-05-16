@@ -395,27 +395,6 @@ void KitHelper::setViewLanguage(int nId, const OUString& rBcp47LanguageTag)
     }
 }
 
-void KitHelper::setViewLanguageAndLocale(int nId, const OUString& rBcp47LanguageTag)
-{
-    std::vector<SfxViewShell*>& rViewArr = SfxGetpApp()->GetViewShells_Impl();
-
-    for (SfxViewShell* pViewShell : rViewArr)
-    {
-        if (pViewShell->GetViewShellId() == ViewShellId(nId))
-        {
-            pViewShell->SetKitLanguageAndLocale(rBcp47LanguageTag);
-            // sync also global getter if we are the current view
-            bool bIsCurrShell = (pViewShell == SfxViewShell::Current());
-            if (bIsCurrShell)
-            {
-                comphelper::COKit::setLanguageTag(LanguageTag(rBcp47LanguageTag));
-                comphelper::COKit::setLocale(LanguageTag(rBcp47LanguageTag));
-            }
-            return;
-        }
-    }
-}
-
 void KitHelper::setViewReadOnly(int nId, bool readOnly)
 {
     if (SfxViewShell* pViewShell = getViewOfId(nId))

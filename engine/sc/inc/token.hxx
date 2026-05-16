@@ -115,7 +115,6 @@ public:
     ScMatrixRangeToken( const ScMatrixRangeToken& );
 
     const ScComplexRefData& GetDoubleRef() const { return maRef; }
-    ScComplexRefData& GetDoubleRef() { return maRef; }
     virtual FormulaToken* Clone() const override;
     virtual bool IsMatrixRangeToken() const override { return true; }
 };
@@ -303,8 +302,6 @@ public:
     ScMatrixCellResultToken( ScConstMatrixRef pMat, const formula::FormulaToken* pUL );
     ScMatrixCellResultToken( const ScMatrixCellResultToken& );
     virtual ~ScMatrixCellResultToken() override;
-    double                      GetDouble() const;
-    const svl::SharedString & GetString() const;
     const ScMatrix*             GetMatrix() const;
     virtual bool                operator==( const formula::FormulaToken& rToken ) const override;
     virtual FormulaToken*       Clone() const override;

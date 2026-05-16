@@ -39,8 +39,6 @@ void SectionHeaderPainter::SetLayerInvalidator(std::unique_ptr<ILayerInvalidator
     mpLayerInvalidator = std::move(pInvalidator);
 }
 
-void SectionHeaderPainter::HandleDataChanged() { mbStyleValid = false; }
-
 void SectionHeaderPainter::EnsureStyle(const OutputDevice& rDevice)
 {
     if (mbStyleValid)

@@ -75,13 +75,6 @@ COMPHELPER_DLLPUBLIC bool isActive();
 /// eg. file-system resources with its parent process?
 COMPHELPER_DLLPUBLIC bool isForkedChild();
 
-/// Shift the coordinates before rendering each bitmap.
-/// Used by Calc to render each tile separately.
-/// This should be unnecessary (and removed) once Calc
-/// moves to using 100MM Unit.
-COMPHELPER_DLLPUBLIC void setLocalRendering(bool bLocalRendering = true);
-COMPHELPER_DLLPUBLIC bool isLocalRendering();
-
 /// Used by SlideshowLayerRenderer for signaling that a slide rendering is occurring.
 COMPHELPER_DLLPUBLIC void setSlideshowRendering(bool bSlideshowRendering);
 COMPHELPER_DLLPUBLIC bool isSlideshowRendering();

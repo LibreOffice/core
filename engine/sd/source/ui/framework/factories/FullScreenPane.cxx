@@ -120,19 +120,6 @@ void FullScreenPane::disposing(std::unique_lock<std::mutex>& l)
     FrameWindowPane::disposing(l);
 }
 
-void FullScreenPane::setVisible (const bool bIsVisible)
-{
-    {
-        std::unique_lock aGuard (m_aMutex);
-        throwIfDisposed(aGuard);
-    }
-
-    if (mpWindow != nullptr)
-        mpWindow->Show(bIsVisible);
-    if (mpWorkWindow != nullptr)
-        mpWorkWindow->Show(bIsVisible);
-}
-
 IMPL_LINK(FullScreenPane, WindowEventHandler, VclWindowEvent&, rEvent, void)
 {
     switch (rEvent.GetId())
