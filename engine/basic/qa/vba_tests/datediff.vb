@@ -18,6 +18,13 @@ End Function
 Sub verify_testDateDiff()
     On Error GoTo errorHandler
 
+    ' All inputs below use DD/MM/YYYY. In MM/DD/YYYY locales (e.g. en-US, the
+    ' default for the Windows app build) "22/11/..." is rejected because month
+    ' 22 is invalid, so the DateDiff calls raise Data type mismatch. Probe with
+    ' "31/01/2003" which parses only as 31-Jan-2003 to detect a DD/MM locale,
+    ' and skip the assertions otherwise.
+    If Not IsDate("31/01/2003") Then Exit Sub
+
     TestUtil.AssertEqual(DateDiff("yyyy", "22/11/2003", "22/11/2013"),                             10, "DateDiff(""yyyy"", ""22/11/2003"", ""22/11/2013"")")
     TestUtil.AssertEqual(DateDiff("q", "22/11/2003", "22/11/2013"),                                40, "DateDiff(""q"", ""22/11/2003"", ""22/11/2013"")")
     TestUtil.AssertEqual(DateDiff("m", "22/11/2003", "22/11/2013"),                               120, "DateDiff(""m"", ""22/11/2003"", ""22/11/2013"")")
