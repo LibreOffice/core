@@ -688,7 +688,7 @@ Any Runtime::pyObject2Any(const PyRef & source) const
         }
         else
         {
-        sal_Int64 l = static_cast<sal_Int64>(PyLong_AsLong (o));
+        sal_Int64 l = PyLong_AsLongLong (o);
         if( l < 128 && l >= -128 )
         {
             sal_Int8 b = static_cast<sal_Int8>(l);
