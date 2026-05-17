@@ -87,9 +87,13 @@ void KitWebSocketHandler::handleMessage(const std::vector<char>& data)
         _docKey = tokens[2];
         const std::string& docId = tokens[3];
         const std::string url = Uri::decode(_docKey);
-        const std::string fileId = Uri::getFilenameFromURL(url);
-        Anonymizer::mapAnonymized(fileId,
-                                  fileId); // Identity mapping, since fileId is already obfuscated
+        if (Anonymizer::enabled())
+        {
+            const std::string fileId = Uri::getFilenameFromURL(url);
+            Anonymizer::mapAnonymized(
+                fileId,
+                fileId); // Identity mapping, since fileId is already obfuscated
+        }
 
         if (!_document)
         {

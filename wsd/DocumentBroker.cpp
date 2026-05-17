@@ -2954,9 +2954,9 @@ void DocumentBroker::uploadToStorageInternal(const std::shared_ptr<ClientSession
 
     // Map the FileId from the docKey to the new filename to anonymize the new filename as the FileId.
     const std::string newFilename = Uri::getFilenameFromURL(uri);
-    const std::string fileId = Uri::getFilenameFromURL(Uri::decode(_docKey));
     if (Anonymizer::enabled())
     {
+        const std::string fileId = Uri::getFilenameFromURL(Uri::decode(_docKey));
         LOG_DBG("New filename [" << Anonymizer::anonymizeUrl(newFilename)
                                  << "] will be known by its fileId [" << fileId << ']');
 

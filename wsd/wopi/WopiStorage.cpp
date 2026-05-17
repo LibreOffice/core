@@ -133,8 +133,10 @@ void WopiStorage::handleWOPIFileInfo(const WOPIFileInfo& wopiFileInfo, LockConte
     setFileInfo(wopiFileInfo);
 
     if (Anonymizer::enabled())
+    {
         Anonymizer::mapAnonymized(Uri::getFilenameFromURL(wopiFileInfo.getFilename()),
                                   Uri::getFilenameFromURL(getUri().toString()));
+    }
 
     if (wopiFileInfo.getSupportsLocks())
         lockCtx.initSupportsLocks();

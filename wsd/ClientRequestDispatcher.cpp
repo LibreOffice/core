@@ -2445,9 +2445,12 @@ bool ClientRequestDispatcher::handleClientProxyRequest(const Poco::Net::HTTPRequ
     LOG_INF("URL [" << url << "] for Proxy request.");
     auto uriPublic = RequestDetails::sanitizeURI(url);
     const auto docKey = RequestDetails::getDocKey(uriPublic);
-    const std::string fileId = Uri::getFilenameFromURL(Uri::decode(docKey));
-    Anonymizer::mapAnonymized(fileId,
-                              fileId); // Identity mapping, since fileId is already obfuscated
+    if (Anonymizer::enabled())
+    {
+        const std::string fileId = Uri::getFilenameFromURL(Uri::decode(docKey));
+        Anonymizer::mapAnonymized(fileId,
+                                  fileId); // Identity mapping, since fileId is already obfuscated
+    }
 
     LOG_INF("Starting Proxy request handler for session ["
             << _id << "] on url [" << Anonymizer::anonymizeUrl(url) << "].");

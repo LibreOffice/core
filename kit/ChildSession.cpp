@@ -1396,7 +1396,11 @@ bool ChildSession::downloadAs(const StringVector& tokens)
     }
 
     // Obfuscate the new name.
-    Anonymizer::mapAnonymized(Uri::getFilenameFromURL(name), _docManager->getObfuscatedFileId());
+    if (Anonymizer::enabled())
+    {
+        Anonymizer::mapAnonymized(Uri::getFilenameFromURL(name),
+                                  _docManager->getObfuscatedFileId());
+    }
 
     getTokenString(tokens[3], "format", format);
 

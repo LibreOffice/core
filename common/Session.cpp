@@ -317,9 +317,12 @@ void Session::parseDocOptions(const StringVector& tokens, int& part, std::string
         }
     }
 
-    Anonymizer::mapAnonymized(_userId, _userIdAnonym);
-    Anonymizer::mapAnonymized(_userName, _userNameAnonym);
-    Anonymizer::mapAnonymized(_jailedFilePath, _jailedFilePathAnonym);
+    if (Anonymizer::enabled())
+    {
+        Anonymizer::mapAnonymized(_userId, _userIdAnonym);
+        Anonymizer::mapAnonymized(_userName, _userNameAnonym);
+        Anonymizer::mapAnonymized(_jailedFilePath, _jailedFilePathAnonym);
+    }
 
     if (tokens.size() > offset)
     {

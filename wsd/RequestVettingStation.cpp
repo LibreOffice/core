@@ -71,8 +71,11 @@ void RequestVettingStation::handleRequest(const std::string& id)
     const auto uriPublic = RequestDetails::sanitizeURI(url);
     const auto docKey = RequestDetails::getDocKey(uriPublic);
     const std::string fileId = Uri::getFilenameFromURL(Uri::decode(docKey));
-    Anonymizer::mapAnonymized(fileId,
-                              fileId); // Identity mapping, since fileId is already obfuscated
+    if (Anonymizer::enabled())
+    {
+        Anonymizer::mapAnonymized(fileId,
+                                  fileId); // Identity mapping, since fileId is already obfuscated
+    }
 
     // Check if readonly session is required.
     const bool isReadOnly = Uri::hasReadonlyPermission(uriPublic.toString());
@@ -238,8 +241,11 @@ void RequestVettingStation::handleRequest(const std::string& id,
     const auto uriPublic = RequestDetails::sanitizeURI(url);
     std::string docKey = RequestDetails::getDocKey(uriPublic);
     const std::string fileId = Uri::getFilenameFromURL(Uri::decode(docKey));
-    Anonymizer::mapAnonymized(fileId,
-                              fileId); // Identity mapping, since fileId is already obfuscated
+    if (Anonymizer::enabled())
+    {
+        Anonymizer::mapAnonymized(fileId,
+                                  fileId); // Identity mapping, since fileId is already obfuscated
+    }
 
     // Check if readonly session is required.
     const bool isReadOnly = Uri::hasReadonlyPermission(uriPublic.toString());
