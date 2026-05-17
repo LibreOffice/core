@@ -135,11 +135,6 @@ const defaultXcuObj: Record<string, any> = {
 			},
 			EmptyPages: true,
 		},
-		Content: {
-			Display: {
-				GraphicObject: true,
-			},
-		},
 	},
 };
 
@@ -187,6 +182,9 @@ class Xcu {
 			const path = rawPath.startsWith(prefix)
 				? rawPath.slice(prefix.length)
 				: rawPath;
+
+			// Drop the deprecated Writer/Content/Display setting
+			if (path === 'Writer/Content/Display') return;
 
 			const keys = path.split('/').filter((key) => key.trim() !== '');
 

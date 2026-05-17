@@ -499,7 +499,6 @@ class SettingIframe {
 		RightPage: _('Right pages'),
 		Brochure: _('Brochure'),
 		BrochureRightToLeft: _('Brochure Right to Left'),
-		GraphicObject: _('Images and Objects'),
 		// Add more as needed
 	};
 
