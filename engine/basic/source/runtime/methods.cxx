@@ -3286,12 +3286,6 @@ void SbRtl_Shell(StarBASIC *, SbxArray & rPar, bool)
         return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
     }
 
-    // Just go straight to error in this case
-    if (comphelper::COKit::isActive())
-    {
-        return StarBASIC::Error(ERRCODE_BASIC_FILE_NOT_FOUND);
-    }
-
     oslProcessOption nOptions = osl_Process_SEARCHPATH | osl_Process_DETACHED;
 
     OUString aCmdLine = rPar.Get(1)->GetOUString();
@@ -3359,6 +3353,12 @@ void SbRtl_Shell(StarBASIC *, SbxArray & rPar, bool)
 
     if (aTokenVector.empty())
         return StarBASIC::Error(ERRCODE_BASIC_BAD_ARGUMENT);
+
+    // In COKit (server) context, do not actually launch a process; report the
+    // command as not found. Bad-argument validation above still runs first so
+    // empty-arg calls keep returning ERRCODE_BASIC_BAD_ARGUMENT as expected.
+    if (comphelper::COKit::isActive())
+        return StarBASIC::Error(ERRCODE_BASIC_FILE_NOT_FOUND);
 
     sal_Int16 nWinStyle = 0;
     if( nArgCount >= 3 )
