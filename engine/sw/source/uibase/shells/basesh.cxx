@@ -3473,10 +3473,10 @@ void SwBaseShell::ExecuteGallery(SfxRequest &rReq)
 
 void SwBaseShell::ExecField( SfxRequest const & rReq )
 {
+#if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
     sal_uInt16 nSlot = rReq.GetSlot();
     switch( nSlot )
     {
-#if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
         case FN_CHANGE_DBFIELD:
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
@@ -3491,10 +3491,13 @@ void SwBaseShell::ExecField( SfxRequest const & rReq )
             );
         }
         break;
-#endif
         default:
             OSL_FAIL("wrong dispatcher");
     }
+#else
+    (void)rReq;
+    OSL_FAIL("wrong dispatcher");
+#endif
 }
 
 std::shared_ptr<std::vector<std::unique_ptr<SwPaM>>> SwBaseShell::CopyPaMRing(SwPaM& rOrig)
