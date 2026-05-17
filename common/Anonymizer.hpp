@@ -21,9 +21,9 @@
 #include <string_view>
 #include <memory>
 #include <unordered_map>
-#include <vector>
 
 #if ENABLE_SSL
+#include <vector>
 #include <openssl/evp.h>
 #include <openssl/rand.h>
 #endif
