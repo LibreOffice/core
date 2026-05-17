@@ -117,6 +117,10 @@ describe(['tagdesktop'], 'Notebookbar checkbox widgets', function() {
 		newFilePath = helper.setupAndLoadDocument('writer/notebookbar.odt');
 		desktopHelper.switchUIToNotebookbar();
 		cy.cGet('#View-tab-label').click();
+		cy.getFrameWindow().then((win) => {
+			this.win = win;
+			helper.processToIdle(win);
+		});
 	});
 
 	it('Ruler Toggle', function() {
@@ -127,10 +131,13 @@ describe(['tagdesktop'], 'Notebookbar checkbox widgets', function() {
 		cy.cGet('#showruler-input').check();
 		cy.cGet('#showruler-input').should('be.checked');
 		cy.cGet('.cool-ruler').should('be.visible');
+		helper.processToIdle(this.win);
 
 		cy.cGet('#lo-fline-marker').should('exist');
 
-		// Move the indentation marker.
+		// Drag the first-line indentation marker right by 100px. processToIdle
+		// between events lets the leaflet mousemove handler bound at mousedown
+		// settle under CI load before the next event fires.
 		cy.cGet('#lo-fline-marker').then(function(items) {
 			expect(items).to.have.lengthOf(1);
 			const boundingRectangle = items[0].getBoundingClientRect();
@@ -139,23 +146,26 @@ describe(['tagdesktop'], 'Notebookbar checkbox widgets', function() {
 
 			cy.wrap(x1).as('x1');
 
-			cy.cGet('#lo-fline-marker').realMouseDown(x1, y1); // Press mouse button.
-			cy.wait(500);
-			cy.cGet('#lo-fline-marker').realMouseMove(x1 + 100, y1); // Move mouse.
-			cy.wait(500);
-			cy.cGet('#lo-fline-marker').realMouseUp(x1, y1); // Release mouse button.
-			cy.wait(500);
-			cy.cGet('#lo-fline-marker').realMouseMove(x1, y1); // Move mouse back.
+			cy.cGet('#lo-fline-marker').realMouseDown(x1, y1);
 		});
+		helper.processToIdle(this.win);
+		cy.get('@x1').then(function(x1) {
+			cy.cGet('#lo-fline-marker').realMouseMove(x1 + 100, 0);
+		});
+		helper.processToIdle(this.win);
+		cy.get('@x1').then(function(x1) {
+			cy.cGet('#lo-fline-marker').realMouseUp(x1 + 100, 0);
+		});
+		helper.processToIdle(this.win);
 
-		cy.cGet('#lo-fline-marker').should('be.visible');
-		cy.cGet('#lo-fline-marker').then(function(items) {
-			expect(items).to.have.lengthOf(1);
-			const boundingRectangle = items[0].getBoundingClientRect();
-			const x = boundingRectangle.left;
-
-			cy.wait(1000);
-			cy.get('@x1').should('not.be.equal', x);
+		// Re-read the marker position on each retry: the panend round-trips
+		// .uno:LeftRightParaMargin before the DOM settles, so the post-drag
+		// position can't be frozen into a constant.
+		cy.get('@x1').then(function(x1) {
+			cy.cGet('#lo-fline-marker').should(function($items) {
+				expect($items).to.have.lengthOf(1);
+				expect($items[0].getBoundingClientRect().left).to.not.equal(x1);
+			});
 		});
 
 		// Check that there are no tab stops.
