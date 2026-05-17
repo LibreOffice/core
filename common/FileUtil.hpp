@@ -77,7 +77,7 @@ namespace FileUtil
     int makeDirectory(const std::string& dir);
 
     // Wraps std::filesystem::create_directory.
-    void createDirectory(const std::string& dir);
+    void createDirectory(std::string_view dir);
 
     // Wraps std::filesystem::temp_directory_path(), and if that fails, uses obvious fallbacks.
     // Returns as UTF-8 on Windows. (And surely also on any sane Unix?)
@@ -264,7 +264,7 @@ namespace FileUtil
     /// Reads the whole file to memory. Only for small files.
     std::unique_ptr<std::vector<char>> readFile(const std::string& path, int maxSize = 256 * 1024);
 
-    void copyDirectoryRecursive(const std::string& srcDir, const std::string& destDir, bool log);
+    void copyDirectoryRecursive(std::string_view srcDir, std::string_view destDir, bool log);
     /// File/Directory stat helper.
     class Stat
     {

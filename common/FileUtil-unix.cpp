@@ -437,7 +437,7 @@ namespace FileUtil
         return ::mkdir(dir.c_str(), S_IRWXU);
     }
 
-    void createDirectory(const std::string& dir)
+    void createDirectory(std::string_view dir)
     {
         std::filesystem::create_directory(dir);
     }

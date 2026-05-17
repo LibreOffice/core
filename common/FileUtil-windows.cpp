@@ -150,7 +150,7 @@ namespace FileUtil
         return _wmkdir(Util::string_to_wide_string(dir).c_str());
     }
 
-    void createDirectory(const std::string& dir)
+    void createDirectory(std::string_view dir)
     {
         std::filesystem::create_directory(Util::string_to_wide_string(dir));
     }

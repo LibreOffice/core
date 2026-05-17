@@ -241,7 +241,7 @@ namespace FileUtil
                           std::istreambuf_iterator<char>(lhs.rdbuf()));
     }
 
-    void copyDirectoryRecursive(const std::string& srcDir, const std::string& destDir, bool log)
+    void copyDirectoryRecursive(std::string_view srcDir, std::string_view destDir, bool log)
     {
         namespace fs = std::filesystem;
         try
