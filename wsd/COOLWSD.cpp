@@ -3294,13 +3294,13 @@ private:
         }
         else if (child && child->getPid() > 0)
         {
-            const std::string abbreviatedMessage = COOLWSD::AnonymizeUserData ? "..." : message->abbr();
+            const std::string abbreviatedMessage = Anonymizer::enabled() ? "..." : message->abbr();
             LOG_WRN("Child " << child->getPid() << " has no DocBroker to handle message: ["
                              << abbreviatedMessage << ']');
         }
         else
         {
-            const std::string abbreviatedMessage = COOLWSD::AnonymizeUserData ? "..." : message->abbr();
+            const std::string abbreviatedMessage = Anonymizer::enabled() ? "..." : message->abbr();
             LOG_ERR("Cannot handle message with unassociated Kit (PID " << _pid << "): ["
                                                                         << abbreviatedMessage);
         }
@@ -3449,7 +3449,7 @@ void COOLWSDServer::dumpState(std::ostream& os) const
        << "\n  ConfigFile: " << COOLWSD::ConfigFile << "\n  ConfigDir: " << COOLWSD::ConfigDir
        << "\n  LogLevel: " << COOLWSD::LogLevel
        << "\n  LogDisabledAreas: " << COOLWSD::LogDisabledAreas
-       << "\n  AnonymizeUserData: " << (COOLWSD::AnonymizeUserData ? "yes" : "no")
+       << "\n  AnonymizeUserData: " << (Anonymizer::enabled() ? "yes" : "no")
        << "\n  CheckCoolUser: " << (COOLWSD::CheckCoolUser ? "yes" : "no")
        << "\n  IsProxyPrefixEnabled: " << (COOLWSD::IsProxyPrefixEnabled ? "yes" : "no")
        << "\n  OverrideWatermark: " << COOLWSD::OverrideWatermark

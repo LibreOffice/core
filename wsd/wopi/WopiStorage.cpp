@@ -132,7 +132,7 @@ void WopiStorage::handleWOPIFileInfo(const WOPIFileInfo& wopiFileInfo, LockConte
 {
     setFileInfo(wopiFileInfo);
 
-    if (COOLWSD::AnonymizeUserData)
+    if (Anonymizer::enabled())
         Anonymizer::mapAnonymized(Uri::getFilenameFromURL(wopiFileInfo.getFilename()),
                                   Uri::getFilenameFromURL(getUri().toString()));
 
@@ -170,7 +170,7 @@ WopiStorage::WOPIFileInfo::WOPIFileInfo(const FileInfo& fileInfo, Poco::JSON::Ob
     std::ostringstream wopiResponse;
 
     // Anonymize key values.
-    if (COOLWSD::AnonymizeUserData)
+    if (Anonymizer::enabled())
     {
         JsonUtil::findJSONValue(object, "ObfuscatedUserId", _obfuscatedUserId);
         if (!_obfuscatedUserId.empty())
@@ -922,7 +922,7 @@ WopiStorage::handleUploadToStorageResponse(const WopiUploadDetails& details,
 
         if (Log::isEnabled(Log::Level::INF))
         {
-            if (COOLWSD::AnonymizeUserData)
+            if (Anonymizer::enabled())
             {
                 Poco::JSON::Object::Ptr object;
                 if (JsonUtil::parseJSON(responseString, object))

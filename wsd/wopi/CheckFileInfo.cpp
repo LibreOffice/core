@@ -117,7 +117,7 @@ bool CheckFileInfo::checkFileInfo(int redirectLimit)
             {
                 LOG_DBG("WOPI::CheckFileInfo ("
                         << callDurationMs
-                        << "): " << (COOLWSD::AnonymizeUserData ? "obfuscated" : wopiResponse));
+                        << "): " << (Anonymizer::enabled() ? "obfuscated" : wopiResponse));
 
                 _state = State::Pass;
             }
