@@ -134,8 +134,8 @@ findOrCreateDocBroker(DocumentBroker::ChildType type, const std::string& uri,
 {
     LOG_INF("Find or create DocBroker for docKey ["
             << docKey << "] for session [" << id << "] on url ["
-            << COOLWSD::anonymizeUrl(uriPublic.toString()) << ']'
-            << " with configid " << configId);
+            << Anonymizer::anonymizeUrl(uriPublic.toString()) << ']' << " with configid "
+            << configId);
 
     std::unique_lock<std::mutex> docBrokersLock(DocBrokersMutex);
 
@@ -2087,7 +2087,7 @@ bool ClientRequestDispatcher::handlePostRequest(const RequestDetails& requestDet
 {
     assert(socket && "Must have a valid socket");
 
-    LOG_INF("Post request: [" << COOLWSD::anonymizeUrl(requestDetails.getURI()) << ']');
+    LOG_INF("Post request: [" << Anonymizer::anonymizeUrl(requestDetails.getURI()) << ']');
 
     if (requestDetails.equals(1, "convert-to") ||
         requestDetails.equals(1, "extract-link-targets") ||
@@ -2329,7 +2329,7 @@ bool ClientRequestDispatcher::handlePostRequest(const RequestDetails& requestDet
         const Poco::Path filePath(FileUtil::buildLocalPathToJail(COOLWSD::EnableMountNamespaces,
                                                                  COOLWSD::ChildRoot + jailId,
                                                                  JAILED_DOCUMENT_ROOT + decoded));
-        const std::string filePathAnonym = COOLWSD::anonymizeUrl(filePath.toString());
+        const std::string filePathAnonym = Anonymizer::anonymizeUrl(filePath.toString());
 
         if (foundDownloadId && filePath.isAbsolute() && Poco::File(filePath).exists())
         {
@@ -2449,13 +2449,13 @@ bool ClientRequestDispatcher::handleClientProxyRequest(const Poco::Net::HTTPRequ
     Anonymizer::mapAnonymized(fileId,
                               fileId); // Identity mapping, since fileId is already obfuscated
 
-    LOG_INF("Starting Proxy request handler for session [" << _id << "] on url ["
-                                                           << COOLWSD::anonymizeUrl(url) << "].");
+    LOG_INF("Starting Proxy request handler for session ["
+            << _id << "] on url [" << Anonymizer::anonymizeUrl(url) << "].");
 
     // Check if readonly session is required.
     const bool isReadOnly = Uri::hasReadonlyPermission(uriPublic.toString());
 
-    LOG_INF("URL [" << COOLWSD::anonymizeUrl(url) << "] is "
+    LOG_INF("URL [" << Anonymizer::anonymizeUrl(url) << "] is "
                     << (isReadOnly ? "readonly" : "writable") << '.');
     (void)request;
     (void)message;

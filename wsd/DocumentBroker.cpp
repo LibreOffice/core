@@ -239,7 +239,7 @@ DocumentBroker::DocumentBroker(ChildType type, const std::string& uri, const Poc
     assert(_mobileAppDocId > 0 && "Unexpected to have no mobileAppDocId in a mobile app");
 #endif
 
-    LOG_INF("DocumentBroker [" << COOLWSD::anonymizeUrl(_uriPublic.toString())
+    LOG_INF("DocumentBroker [" << Anonymizer::anonymizeUrl(_uriPublic.toString())
                                << "] created with docKey [" << _docKey
                                << "], always_save_on_exit: " << _alwaysSaveOnExit);
 
@@ -1031,7 +1031,7 @@ bool DocumentBroker::download(
         // Pass the public URI to storage as it needs to load using the token
         // and other storage-specific data provided in the URI.
         LOG_DBG("Creating new storage instance for URI ["
-                << COOLWSD::anonymizeUrl(uriPublic.toString()) << ']');
+                << Anonymizer::anonymizeUrl(uriPublic.toString()) << ']');
 
         try
         {
@@ -1259,7 +1259,7 @@ bool DocumentBroker::download(
             getBrowserSettingSync(session, userSettingsUri);
             if (!session->getSentBrowserSetting())
             {
-                const std::string uriAnonym = COOLWSD::anonymizeUrl(userSettingsUri);
+                const std::string uriAnonym = Anonymizer::anonymizeUrl(userSettingsUri);
                 LOG_ERR("Request to uri["
                         << uriAnonym
                         << "] failed or timedout while adding session #" + session->getId());
@@ -1343,14 +1343,13 @@ bool DocumentBroker::doDownloadDocument(const Authorization& auth,
     Poco::DigestOutputStream dos(sha1);
     Poco::StreamCopier::copyStream(istr, dos);
     dos.close();
-    LOG_INF("SHA1 for DocKey [" << _docKey << "] of [" << COOLWSD::anonymizeUrl(localPath)
+    LOG_INF("SHA1 for DocKey [" << _docKey << "] of [" << Anonymizer::anonymizeUrl(localPath)
                                 << "]: " << Poco::DigestEngine::digestToHex(sha1.digest()));
 
     std::string localPathEncoded;
     Poco::URI::encode(localPath, "#?", localPathEncoded);
     _uriJailed = Poco::URI(Poco::Path(localPath)).toString();
-    _uriJailedAnonym =
-        Poco::URI(Poco::Path(COOLWSD::anonymizeUrl(localPathEncoded))).toString();
+    _uriJailedAnonym = Poco::URI(Poco::Path(Anonymizer::anonymizeUrl(localPathEncoded))).toString();
     for (const auto& it : additionalFileLocalPaths)
     {
         std::string additionalFileLocalPathEncoded;
@@ -1975,7 +1974,7 @@ void DocumentBroker::asyncInstallPresets(const std::shared_ptr<ClientSession>& s
         }
         else
         {
-            const std::string uriAnonym = COOLWSD::anonymizeUrl(userSettingsUri);
+            const std::string uriAnonym = Anonymizer::anonymizeUrl(userSettingsUri);
             LOG_ERR("Failed to load all settings from [" << uriAnonym << ']');
             stop("configfailed");
         }
@@ -2008,7 +2007,7 @@ DocumentBroker::sendHttpSyncRequest(const std::string& url, const std::string& l
     std::shared_ptr<http::Session> httpSession(StorageConnectionManager::getHttpSession(uri));
     http::Request request(uri.getPathAndQuery());
 
-    const std::string uriAnonym = COOLWSD::anonymizeUrl(url);
+    const std::string uriAnonym = Anonymizer::anonymizeUrl(url);
     LOG_DBG("Getting " << logContext << " from [" << uriAnonym << "] using sync request");
     std::shared_ptr<const http::Response> httpResponse = httpSession->syncRequest(request);
     const http::StatusLine statusLine = httpResponse->statusLine();
@@ -2103,7 +2102,7 @@ DocumentBroker::asyncInstallPresets(const std::shared_ptr<SocketPoll>& poll, con
     std::shared_ptr<http::Session> httpSession(StorageConnectionManager::getHttpSession(settingsUri));
     http::Request request(settingsUri.getPathAndQuery());
 
-    std::string uriAnonym = COOLWSD::anonymizeUrl(userSettingsUri);
+    std::string uriAnonym = Anonymizer::anonymizeUrl(userSettingsUri);
     LOG_DBG("Getting settings from [" << uriAnonym << ']');
 
     auto presetTasks = std::make_shared<PresetsInstallTask>(poll, configId, presetsPath,
@@ -2164,7 +2163,7 @@ void DocumentBroker::asyncInstallPreset(
     const std::function<void(const std::string&, bool)>& finishedCB,
     const std::shared_ptr<ClientSession>& session)
 {
-    std::string uriAnonym = COOLWSD::anonymizeUrl(presetUri);
+    std::string uriAnonym = Anonymizer::anonymizeUrl(presetUri);
     LOG_DBG("Getting preset from [" << uriAnonym << ']');
 
     const Poco::URI uri{presetUri};
@@ -2958,7 +2957,7 @@ void DocumentBroker::uploadToStorageInternal(const std::shared_ptr<ClientSession
     const std::string fileId = Uri::getFilenameFromURL(Uri::decode(_docKey));
     if (COOLWSD::AnonymizeUserData)
     {
-        LOG_DBG("New filename [" << COOLWSD::anonymizeUrl(newFilename)
+        LOG_DBG("New filename [" << Anonymizer::anonymizeUrl(newFilename)
                                  << "] will be known by its fileId [" << fileId << ']');
 
         Anonymizer::mapAnonymized(newFilename, fileId);
@@ -2970,7 +2969,7 @@ void DocumentBroker::uploadToStorageInternal(const std::shared_ptr<ClientSession
         return;
     }
 
-    const std::string uriAnonym = COOLWSD::anonymizeUrl(uri);
+    const std::string uriAnonym = Anonymizer::anonymizeUrl(uri);
 
     // If the file timestamp hasn't changed, skip uploading.
     const std::chrono::system_clock::time_point newFileModifiedTime
@@ -3196,7 +3195,7 @@ void DocumentBroker::handleUploadToStorageSuccessful(const StorageBase::UploadRe
 
         const std::string url = uri.toString();
         std::string encodedName = Uri::encode(filename);
-        const std::string filenameAnonym = COOLWSD::anonymizeUrl(filename);
+        const std::string filenameAnonym = Anonymizer::anonymizeUrl(filename);
         std::ostringstream oss;
         oss << "renamefile: " << "filename=" << encodedName << " url=" << url;
         broadcastMessage(oss.str());
@@ -3212,13 +3211,13 @@ void DocumentBroker::handleUploadToStorageSuccessful(const StorageBase::UploadRe
         // encode the name
         std::string encodedName;
         Poco::URI::encode(filename, "", encodedName);
-        const std::string filenameAnonym = COOLWSD::anonymizeUrl(filename);
+        const std::string filenameAnonym = Anonymizer::anonymizeUrl(filename);
 
         const auto session = _uploadRequest->session();
         if (session)
         {
             LOG_DBG("Uploaded SaveAs docKey [" << _docKey << "] to URI ["
-                                               << COOLWSD::anonymizeUrl(url) << "] with name ["
+                                               << Anonymizer::anonymizeUrl(url) << "] with name ["
                                                << filenameAnonym << "] successfully.");
 
             std::ostringstream oss;
@@ -3237,7 +3236,7 @@ void DocumentBroker::handleUploadToStorageSuccessful(const StorageBase::UploadRe
         else
         {
             LOG_DBG("Uploaded SaveAs docKey ["
-                    << _docKey << "] to URI [" << COOLWSD::anonymizeUrl(url) << "] with name ["
+                    << _docKey << "] to URI [" << Anonymizer::anonymizeUrl(url) << "] with name ["
                     << filenameAnonym << "] successfully, but the client session is closed.");
         }
     }
@@ -4115,7 +4114,10 @@ std::size_t DocumentBroker::addSession(const std::shared_ptr<ClientSession>& ses
     }
     catch (const std::exception& exc)
     {
-        LOG_ERR("Failed to add session to [" << _docKey << "] with URI [" << COOLWSD::anonymizeUrl(session->getPublicUri().toString()) << "]: " << exc.what());
+        LOG_ERR("Failed to add session to ["
+                << _docKey << "] with URI ["
+                << Anonymizer::anonymizeUrl(session->getPublicUri().toString())
+                << "]: " << exc.what());
         if (_sessions.empty())
         {
             LOG_INF("Doc [" << _docKey << "] has no more sessions. Marking to destroy.");
@@ -5884,9 +5886,9 @@ void DocumentBroker::dumpState(std::ostream& os)
     os << "\n  sent: " << sent << " bytes";
     os << "\n  recv: " << recv << " bytes";
     os << "\n  jail id: " << _jailId;
-    os << "\n  filename: " << COOLWSD::anonymizeUrl(_filename);
+    os << "\n  filename: " << Anonymizer::anonymizeUrl(_filename);
     os << "\n  public uri: " << _uriPublic.toString();
-    os << "\n  jailed uri: " << COOLWSD::anonymizeUrl(_uriJailed);
+    os << "\n  jailed uri: " << Anonymizer::anonymizeUrl(_uriJailed);
     os << "\n  doc key: " << _docKey;
     os << "\n  doc id: " << _docId;
     os << "\n  num sessions: " << _sessions.size();

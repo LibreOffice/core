@@ -349,7 +349,7 @@ public:
     {
         setUri(uri);
         setAdditionalFileUris(additionalFileUrisPublic);
-        LOG_DBG("Storage ctor: " << COOLWSD::anonymizeUrl(_uri.toString()));
+        LOG_DBG("Storage ctor: " << Anonymizer::anonymizeUrl(_uri.toString()));
     }
 
     virtual ~StorageBase() { LOG_TRC("~StorageBase " << _uri.toString()); }
@@ -574,7 +574,7 @@ public:
     {
         LOG_INF("LocalStorage ctor with localStorePath: ["
                 << localStorePath << "], jailPath: [" << jailPath << "], uri: ["
-                << COOLWSD::anonymizeUrl(uri.toString()) << "].");
+                << Anonymizer::anonymizeUrl(uri.toString()) << "].");
     }
 
     class LocalFileInfo

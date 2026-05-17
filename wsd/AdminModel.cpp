@@ -129,7 +129,7 @@ const std::string AdminDocument::getHistory() const
     std::ostringstream oss;
     oss << "{";
     oss << "\"docKey\"" << ":\"" << _docKey << "\",";
-    oss << "\"filename\"" << ":\"" << COOLWSD::anonymizeUrl(getFilename()) << "\",";
+    oss << "\"filename\"" << ":\"" << Anonymizer::anonymizeUrl(getFilename()) << "\",";
     oss << "\"start\"" << ':' << _start << ',';
     oss << "\"end\"" << ':' << _end << ',';
     oss << "\"pid\"" << ':' << getPid() << ',';
@@ -619,7 +619,7 @@ void AdminModel::addDocument(const std::string& docKey, pid_t pid,
     {
         LOG_ANY("docstats : adding a document : "
                 << filename << ", created by : " << Anonymizer::anonymize(userName)
-                << ", using WopiHost : " << COOLWSD::anonymizeUrl(wopiHost)
+                << ", using WopiHost : " << Anonymizer::anonymizeUrl(wopiHost)
                 << ", allocating memory of : " << memoryAllocated);
     }
     notify(oss.str());

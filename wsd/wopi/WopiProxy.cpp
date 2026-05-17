@@ -44,7 +44,8 @@ void WopiProxy::handleRequest(std::istream & message,
     std::shared_ptr<StreamSocket> socket = _socket.lock();
     if (!socket)
     {
-        LOG_ERR("Invalid socket while handling wopi proxy request for [" << COOLWSD::anonymizeUrl(url) << ']');
+        LOG_ERR("Invalid socket while handling wopi proxy request for ["
+                << Anonymizer::anonymizeUrl(url) << ']');
         return;
     }
 
@@ -55,10 +56,10 @@ void WopiProxy::handleRequest(std::istream & message,
                               fileId); // Identity mapping, since fileId is already obfuscated
 
     LOG_INF("Starting GET request handler for session [" << _id << "] on url ["
-                                                         << COOLWSD::anonymizeUrl(url) << "].");
+                                                         << Anonymizer::anonymizeUrl(url) << "].");
 
-    LOG_INF("Sanitized URI [" << COOLWSD::anonymizeUrl(url) << "] to ["
-                              << COOLWSD::anonymizeUrl(uriPublic.toString())
+    LOG_INF("Sanitized URI [" << Anonymizer::anonymizeUrl(url) << "] to ["
+                              << Anonymizer::anonymizeUrl(uriPublic.toString())
                               << "] and mapped to docKey [" << docKey << "] for session [" << _id
                               << "].");
 
@@ -70,10 +71,10 @@ void WopiProxy::handleRequest(std::istream & message,
     switch (storageType)
     {
         case StorageBase::StorageType::Unsupported:
-            LOG_ERR("Unsupported URI [" << COOLWSD::anonymizeUrl(uriPublic.toString())
+            LOG_ERR("Unsupported URI [" << Anonymizer::anonymizeUrl(uriPublic.toString())
                                         << "] or no storage configured");
             throw BadRequestException("No Storage configured or invalid URI [" +
-                                      COOLWSD::anonymizeUrl(uriPublic.toString()) + ']');
+                                      Anonymizer::anonymizeUrl(uriPublic.toString()) + ']');
 
         case StorageBase::StorageType::Unauthorized:
             LOG_ERR("No authorized hosts found matching the target host [" << uriPublic.getHost()
@@ -83,15 +84,15 @@ void WopiProxy::handleRequest(std::istream & message,
 
         case StorageBase::StorageType::Conversion:
             // We don't expect conversion requests.
-            LOG_ERR("Unsupported URI [" << COOLWSD::anonymizeUrl(uriPublic.toString())
+            LOG_ERR("Unsupported URI [" << Anonymizer::anonymizeUrl(uriPublic.toString())
                                         << "] for conversion");
             throw BadRequestException("Invalid URI for conversion [" +
-                                      COOLWSD::anonymizeUrl(uriPublic.toString()) + ']');
+                                      Anonymizer::anonymizeUrl(uriPublic.toString()) + ']');
 
 #if ENABLE_LOCAL_FILESYSTEM
         case StorageBase::StorageType::FileSystem:
         {
-            LOG_INF("URI [" << COOLWSD::anonymizeUrl(uriPublic.toString()) << "] on docKey ["
+            LOG_INF("URI [" << Anonymizer::anonymizeUrl(uriPublic.toString()) << "] on docKey ["
                             << docKey << "] is for a FileSystem document");
 
             // Send the file contents.
@@ -113,7 +114,7 @@ void WopiProxy::handleRequest(std::istream & message,
 
 #if !MOBILEAPP
         case StorageBase::StorageType::Wopi:
-            LOG_INF("URI [" << COOLWSD::anonymizeUrl(uriPublic.toString()) << "] on docKey ["
+            LOG_INF("URI [" << Anonymizer::anonymizeUrl(uriPublic.toString()) << "] on docKey ["
                             << docKey << "] is for a WOPI document");
             std::optional<std::string> postBody;
             if (_requestDetails.isPost()) {
@@ -141,10 +142,10 @@ void WopiProxy::handleRequest(std::istream & message,
 void WopiProxy::checkFileInfo(const std::shared_ptr<TerminatingPoll>& poll, const Poco::URI& uri,
                               std::optional<std::string> const & postBody, int redirectLimit)
 {
-    auto cfiContinuation = [this, poll, uri, postBody](
-        [[maybe_unused]] CheckFileInfo& checkFileInfo)
+    auto cfiContinuation =
+        [this, poll, uri, postBody]([[maybe_unused]] CheckFileInfo& checkFileInfo)
     {
-        const std::string uriAnonym = COOLWSD::anonymizeUrl(uri.toString());
+        const std::string uriAnonym = Anonymizer::anonymizeUrl(uri.toString());
 
         std::shared_ptr<StreamSocket> socket = _socket.lock();
         if (!socket)
@@ -179,7 +180,7 @@ void WopiProxy::checkFileInfo(const std::shared_ptr<TerminatingPoll>& poll, cons
             // First try the FileUrl, if provided.
             if (!fileUrl.empty())
             {
-                const std::string fileUrlAnonym = COOLWSD::anonymizeUrl(fileUrl);
+                const std::string fileUrlAnonym = Anonymizer::anonymizeUrl(fileUrl);
                 try
                 {
                     LOG_INF("WOPI::GetFile using FileUrl: " << fileUrlAnonym);
@@ -229,7 +230,7 @@ void WopiProxy::transfer(const std::shared_ptr<TerminatingPoll>& poll, const std
                          std::optional<std::string> const & postBody,
                          const Poco::URI& uriPublic, int redirectLimit)
 {
-    std::string uriAnonym = COOLWSD::anonymizeUrl(uriPublic.toString());
+    std::string uriAnonym = Anonymizer::anonymizeUrl(uriPublic.toString());
 
     LOG_DBG("Getting info for wopi uri [" << uriAnonym << ']');
     _httpSession = StorageConnectionManager::getHttpSession(uriPublic);
@@ -269,7 +270,7 @@ void WopiProxy::transfer(const std::shared_ptr<TerminatingPoll>& poll, const std
             if (redirectLimit)
             {
                 const std::string& location = httpResponse->get("Location");
-                LOG_TRC("WOPI::GetFile redirect to URI [" << COOLWSD::anonymizeUrl(location)
+                LOG_TRC("WOPI::GetFile redirect to URI [" << Anonymizer::anonymizeUrl(location)
                                                           << "]");
 
                 transfer(poll, location, postBody, Poco::URI(location), redirectLimit - 1);

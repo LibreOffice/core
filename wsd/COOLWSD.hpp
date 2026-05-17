@@ -235,12 +235,6 @@ public:
     /// Sets the log level of current kits.
     static void setLogLevelsOfKits(const std::string& level);
 
-    /// Anonymize the basename of filenames, preserving the path and extension.
-    static std::string anonymizeUrl(const std::string& url)
-    {
-        return FileUtil::anonymizeUrl(url);
-    }
-
     static void alertAllUsersInternal(const std::string& msg);
     static void alertUserInternal(const std::string& dockey, const std::string& msg);
     static void setMigrationMsgReceived(const std::string& docKey);

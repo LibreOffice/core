@@ -60,9 +60,11 @@ TileCache::TileCache(std::string docURL, const std::chrono::system_clock::time_p
     , _dontCache(dontCache)
 {
 #ifndef BUILDING_TESTS
-    LOG_INF("TileCache ctor for uri [" << COOLWSD::anonymizeUrl(_docURL) <<
-            "], modifiedTime=" << std::chrono::duration_cast<std::chrono::seconds>
-							(modifiedTime.time_since_epoch()).count() << "], dontCache=" << _dontCache);
+    LOG_INF(
+        "TileCache ctor for uri ["
+        << Anonymizer::anonymizeUrl(_docURL) << "], modifiedTime="
+        << std::chrono::duration_cast<std::chrono::seconds>(modifiedTime.time_since_epoch()).count()
+        << "], dontCache=" << _dontCache);
 #endif
     (void)modifiedTime;
 }
@@ -71,7 +73,7 @@ TileCache::~TileCache()
 {
     _owner = ProcUtil::ThreadId();
 #ifndef BUILDING_TESTS
-    LOG_INF("~TileCache dtor for uri [" << COOLWSD::anonymizeUrl(_docURL) << "].");
+    LOG_INF("~TileCache dtor for uri [" << Anonymizer::anonymizeUrl(_docURL) << "].");
 #endif
 }
 

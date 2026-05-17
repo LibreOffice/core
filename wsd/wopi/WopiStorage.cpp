@@ -182,7 +182,7 @@ WopiStorage::WOPIFileInfo::WOPIFileInfo(const FileInfo& fileInfo, Poco::JSON::Ob
 
         // Set anonymized version of the above fields before logging.
         // Note: anonymization caches the result, so we don't need to store here.
-        object->set("BaseFileName", COOLWSD::anonymizeUrl(getFilename()));
+        object->set("BaseFileName", Anonymizer::anonymizeUrl(getFilename()));
 
         // If obfuscatedUserId is provided, then don't log the originals and use it.
         if (_obfuscatedUserId.empty())
@@ -537,7 +537,7 @@ std::string WopiStorage::downloadStorageFileToLocal(const Authorization& auth,
     {
         // Download the template file and load it normally.
         // The document will get saved once loading in Core is complete.
-        const std::string templateUriAnonym = COOLWSD::anonymizeUrl(templateUri);
+        const std::string templateUriAnonym = Anonymizer::anonymizeUrl(templateUri);
         try
         {
             LOG_INF("WOPI::GetFile template source: " << templateUriAnonym);
@@ -555,7 +555,7 @@ std::string WopiStorage::downloadStorageFileToLocal(const Authorization& auth,
     // First try the FileUrl, if provided.
     if (!_fileUrl.empty())
     {
-        const std::string fileUrlAnonym = COOLWSD::anonymizeUrl(_fileUrl);
+        const std::string fileUrlAnonym = Anonymizer::anonymizeUrl(_fileUrl);
         try
         {
             LOG_INF("WOPI::GetFile using FileUrl: " << fileUrlAnonym);
@@ -606,7 +606,7 @@ std::string WopiStorage::downloadDocument(const Poco::URI& uriObject, const std:
     const http::Request httpRequest = StorageConnectionManager::createHttpRequest(uriObject, auth);
 
     setRootFilePath(Poco::Path(getLocalRootPath(), getFileInfo().getFilename()).toString());
-    setRootFilePathAnonym(COOLWSD::anonymizeUrl(getRootFilePath()));
+    setRootFilePathAnonym(Anonymizer::anonymizeUrl(getRootFilePath()));
 
     // Make sure the path is valid.
     const Poco::Path downloadPath = Poco::Path(getRootFilePath()).parent();
@@ -648,7 +648,7 @@ std::string WopiStorage::downloadDocument(const Poco::URI& uriObject, const std:
         if (redirectLimit)
         {
             const std::string& location = httpResponse->get("Location");
-            LOG_TRC("WOPI::GetFile redirect to URI [" << COOLWSD::anonymizeUrl(location) << ']');
+            LOG_TRC("WOPI::GetFile redirect to URI [" << Anonymizer::anonymizeUrl(location) << ']');
 
             Poco::URI redirectUriObject(location);
             return downloadDocument(redirectUriObject, uriAnonym, auth, redirectLimit - 1);
@@ -689,7 +689,7 @@ std::string WopiStorage::downloadDocument(const Poco::URI& uriObject, const std:
             outfile.open(wopiCertDest);
             if (!outfile.is_open())
             {
-                const std::string wopiCertDestAnonym = COOLWSD::anonymizeUrl(wopiCertDest);
+                const std::string wopiCertDestAnonym = Anonymizer::anonymizeUrl(wopiCertDest);
                 LOG_ERR("Cannot open file [" << wopiCertDestAnonym << "] to save wopi cert.");
             }
             else
@@ -732,7 +732,7 @@ std::size_t WopiStorage::uploadLocalFileToStorageAsync(
 
     const bool isSaveAs = !saveAsPath.empty() && !saveAsFilename.empty();
     const std::string filePath(isSaveAs ? saveAsPath : getRootFilePathUploading());
-    std::string filePathAnonym = COOLWSD::anonymizeUrl(filePath);
+    std::string filePathAnonym = Anonymizer::anonymizeUrl(filePath);
 
     const FileUtil::Stat fileStat(filePath);
     if (!fileStat.good())
@@ -751,7 +751,7 @@ std::size_t WopiStorage::uploadLocalFileToStorageAsync(
                                            : uriObject.getPath() + "/contents");
     auth.authorizeURI(uriObject);
 
-    std::string uriAnonym = COOLWSD::anonymizeUrl(uriObject.toString());
+    std::string uriAnonym = Anonymizer::anonymizeUrl(uriObject.toString());
 
     const std::string wopiLog(isSaveAs ? "WOPI::PutRelativeFile"
                                        : (isRename ? "WOPI::RenameFile" : "WOPI::PutFile"));
@@ -942,7 +942,7 @@ WopiStorage::handleUploadToStorageResponse(const WopiUploadDetails& details,
 
                         const std::string filenameOnly = Uri::getFilenameFromURL(filename);
                         Anonymizer::mapAnonymized(filenameOnly, obfuscatedFileId);
-                        object->set("Name", COOLWSD::anonymizeUrl(filename));
+                        object->set("Name", Anonymizer::anonymizeUrl(filename));
                     }
 
                     // Stringify to log.
@@ -972,10 +972,10 @@ WopiStorage::handleUploadToStorageResponse(const WopiUploadDetails& details,
                 if (details.isSaveAs || details.isRename)
                 {
                     const std::string name = JsonUtil::getJSONValue<std::string>(object, "Name");
-                    LOG_TRC(wopiLog << " returns Name [" << COOLWSD::anonymizeUrl(name) << "].");
+                    LOG_TRC(wopiLog << " returns Name [" << Anonymizer::anonymizeUrl(name) << "].");
 
                     const std::string url = JsonUtil::getJSONValue<std::string>(object, "Url");
-                    LOG_TRC(wopiLog << " returns Url [" << COOLWSD::anonymizeUrl(url) << "].");
+                    LOG_TRC(wopiLog << " returns Url [" << Anonymizer::anonymizeUrl(url) << "].");
 
                     result.setSaveAsResult(name, url);
                 }

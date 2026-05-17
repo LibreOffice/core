@@ -18,6 +18,7 @@
 
 #include "Admin.hpp"
 
+#include <common/Anonymizer.hpp>
 #include <common/Common.hpp>
 #include <common/ConfigUtil.hpp>
 #include <common/JsonUtil.hpp>
@@ -193,7 +194,7 @@ void AdminSocketHandler::handleMessage(const std::vector<char> &payload)
                 if (Admin::instance().logAdminAction())
                 {
                     LOG_ANY("Admin request to kill document ["
-                            << COOLWSD::anonymizeUrl(model.getFilename(pid)) << "] with pid ["
+                            << Anonymizer::anonymizeUrl(model.getFilename(pid)) << "] with pid ["
                             << pid << "] and source IPAddress [" << _clientIPAdress << ']');
                 }
                 SigUtil::killChild(pid, SIGKILL);

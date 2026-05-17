@@ -3140,7 +3140,7 @@ private:
             std::string configId;
             std::map<std::string, std::string> admsProps;
 #if !MOBILEAPP
-            LOG_TRC("Child connection with URI [" << COOLWSD::anonymizeUrl(request.getUrl())
+            LOG_TRC("Child connection with URI [" << Anonymizer::anonymizeUrl(request.getUrl())
                                                   << ']');
             Poco::URI requestURI(request.getUrl());
             if (requestURI.getPath() == FORKIT_URI)
@@ -3218,15 +3218,15 @@ private:
 
             if (pid <= 0)
             {
-                LOG_ERR("Invalid PID in child URI [" << COOLWSD::anonymizeUrl(request.getUrl())
+                LOG_ERR("Invalid PID in child URI [" << Anonymizer::anonymizeUrl(request.getUrl())
                                                      << ']');
                 return;
             }
 
             if (jailId.empty())
             {
-                LOG_ERR("Invalid JailId in child URI [" << COOLWSD::anonymizeUrl(request.getUrl())
-                                                        << ']');
+                LOG_ERR("Invalid JailId in child URI ["
+                        << Anonymizer::anonymizeUrl(request.getUrl()) << ']');
                 return;
             }
 

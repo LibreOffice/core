@@ -1568,7 +1568,7 @@ void ClientSession::uploadBrowserSettingsToWopiHost()
     uriObject.addQueryParameter("fileId", filePath);
     auth.authorizeURI(uriObject);
 
-    const std::string& uriAnonym = COOLWSD::anonymizeUrl(uriObject.toString());
+    const std::string& uriAnonym = Anonymizer::anonymizeUrl(uriObject.toString());
 
     auto httpRequest = StorageConnectionManager::createHttpRequest(uriObject, auth);
     httpRequest.setVerb(http::Request::VERB_POST);
@@ -1610,7 +1610,7 @@ void ClientSession::uploadViewSettingsToWopiHost()
         uriObject.addQueryParameter("fileId", filePath);
         auth.authorizeURI(uriObject);
 
-        const std::string uriAnonym = COOLWSD::anonymizeUrl(uriObject.toString());
+        const std::string uriAnonym = Anonymizer::anonymizeUrl(uriObject.toString());
 
         auto httpRequest = StorageConnectionManager::createHttpRequest(uriObject, auth);
         httpRequest.setVerb(http::Request::VERB_POST);

@@ -157,20 +157,20 @@ StorageBase::StorageType StorageBase::validate(const Poco::URI& uri,
 {
     if (uri.isRelative() || uri.getScheme() == "file")
     {
-        LOG_DBG("Public URI [" << COOLWSD::anonymizeUrl(uri.toString()) << "] is a file");
+        LOG_DBG("Public URI [" << Anonymizer::anonymizeUrl(uri.toString()) << "] is a file");
 
 #if ENABLE_DEBUG
         if (std::getenv("FAKE_UNAUTHORIZED"))
         {
             LOG_DBG("FAKE_UNAUTHORIZED envar is set, unauthorized uri ["
-                    << COOLWSD::anonymizeUrl(uri.toString()) << ']');
+                    << Anonymizer::anonymizeUrl(uri.toString()) << ']');
             return StorageBase::StorageType::Unauthorized;
         }
 #endif
 
         if (takeOwnership)
         {
-            LOG_DBG("Validated URI [" << COOLWSD::anonymizeUrl(uri.toString())
+            LOG_DBG("Validated URI [" << Anonymizer::anonymizeUrl(uri.toString())
                                       << "] as Conversion");
             // Normalize the path.
             Poco::Path path = Poco::Path(uri.getPath());
@@ -187,7 +187,7 @@ StorageBase::StorageType StorageBase::validate(const Poco::URI& uri,
 #if ENABLE_LOCAL_FILESYSTEM
         if (FilesystemEnabled)
         {
-            LOG_DBG("Validated URI [" << COOLWSD::anonymizeUrl(uri.toString())
+            LOG_DBG("Validated URI [" << Anonymizer::anonymizeUrl(uri.toString())
                                       << "] as FileSystem");
             return StorageBase::StorageType::FileSystem;
         }
@@ -205,7 +205,7 @@ StorageBase::StorageType StorageBase::validate(const Poco::URI& uri,
         HostUtil::setFirstHost(uri);
         if (HostUtil::allowedWopiHost(targetHost) || isLocalhost(targetHost))
         {
-            LOG_DBG("Validated URI [" << COOLWSD::anonymizeUrl(uri.toString()) << "] as WOPI");
+            LOG_DBG("Validated URI [" << Anonymizer::anonymizeUrl(uri.toString()) << "] as WOPI");
             return StorageBase::StorageType::Wopi;
         }
 
@@ -215,19 +215,20 @@ StorageBase::StorageType StorageBase::validate(const Poco::URI& uri,
         {
             if (HostUtil::allowedWopiHost(address))
             {
-                LOG_DBG("Validated URI [" << COOLWSD::anonymizeUrl(uri.toString()) << "] as WOPI");
+                LOG_DBG("Validated URI [" << Anonymizer::anonymizeUrl(uri.toString())
+                                          << "] as WOPI");
                 return StorageBase::StorageType::Wopi;
             }
         }
 
         LOG_DBG("No acceptable WOPI hosts found matching the target host ["
-                << targetHost << "] in config for URI [" << COOLWSD::anonymizeUrl(uri.toString())
+                << targetHost << "] in config for URI [" << Anonymizer::anonymizeUrl(uri.toString())
                 << ']');
         return StorageBase::StorageType::Unauthorized;
     }
 #endif
 
-    LOG_DBG("No Storage configured or invalid URI [" << COOLWSD::anonymizeUrl(uri.toString())
+    LOG_DBG("No Storage configured or invalid URI [" << Anonymizer::anonymizeUrl(uri.toString())
                                                      << ']');
     return StorageBase::StorageType::Unsupported;
 }
@@ -255,10 +256,10 @@ std::unique_ptr<StorageBase> StorageBase::create(const Poco::URI& uri, const std
     switch (type)
     {
         case StorageBase::StorageType::Unsupported:
-            LOG_ERR("Unsupported URI [" << COOLWSD::anonymizeUrl(uri.toString())
+            LOG_ERR("Unsupported URI [" << Anonymizer::anonymizeUrl(uri.toString())
                                         << "] or no storage configured");
             throw BadRequestException("No Storage configured or invalid URI " +
-                                      COOLWSD::anonymizeUrl(uri.toString()) + ']');
+                                      Anonymizer::anonymizeUrl(uri.toString()) + ']');
 
             break;
         case StorageBase::StorageType::Unauthorized:
@@ -287,7 +288,7 @@ std::unique_ptr<StorageBase> StorageBase::create(const Poco::URI& uri, const std
     }
 
     throw BadRequestException("No Storage configured or invalid URI " +
-                              COOLWSD::anonymizeUrl(uri.toString()) + ']');
+                              Anonymizer::anonymizeUrl(uri.toString()) + ']');
 }
 
 std::atomic<unsigned> LocalStorage::LastLocalStorageId;
@@ -295,7 +296,9 @@ std::atomic<unsigned> LocalStorage::LastLocalStorageId;
 std::unique_ptr<LocalStorage::LocalFileInfo> LocalStorage::getLocalFileInfo()
 {
     const Poco::Path path = getUri().getPath();
-    LOG_DBG("Getting info for local uri [" << COOLWSD::anonymizeUrl(getUri().toString()) << "], path [" << COOLWSD::anonymizeUrl(path.toString()) << "].");
+    LOG_DBG("Getting info for local uri [" << Anonymizer::anonymizeUrl(getUri().toString())
+                                           << "], path ["
+                                           << Anonymizer::anonymizeUrl(path.toString()) << "].");
 
     const FileUtil::Stat stat(path.toString());
     const std::chrono::system_clock::time_point lastModified = stat.modifiedTimepoint();
@@ -332,9 +335,9 @@ std::string LocalStorage::downloadStorageFileToLocal(const Authorization& /*auth
         additionalFileFilenames[it.first] = Poco::Path(it.second.getPath()).getFileName();
     }
     setRootFilePath(Poco::Path(getLocalRootPath(), filename).toString());
-    setRootFilePathAnonym(COOLWSD::anonymizeUrl(getRootFilePath()));
-    LOG_INF("Public URI [" << COOLWSD::anonymizeUrl(getUri().getPath()) <<
-            "] jailed to [" << getRootFilePathAnonym() << "].");
+    setRootFilePathAnonym(Anonymizer::anonymizeUrl(getRootFilePath()));
+    LOG_INF("Public URI [" << Anonymizer::anonymizeUrl(getUri().getPath()) << "] jailed to ["
+                           << getRootFilePathAnonym() << "].");
     AdditionalFilePaths additionalFileJailedFilePaths;
     for (const auto& it : additionalFileFilenames)
     {
@@ -386,7 +389,7 @@ std::string LocalStorage::downloadStorageFileToLocal(const Authorization& /*auth
         }
         catch (const Poco::Exception& exc)
         {
-            LOG_ERR("Failed to move [" << COOLWSD::anonymizeUrl(publicFilePath) << "] to ["
+            LOG_ERR("Failed to move [" << Anonymizer::anonymizeUrl(publicFilePath) << "] to ["
                                        << getRootFilePathAnonym() << "]: " << exc.displayText());
         }
     }
@@ -394,13 +397,13 @@ std::string LocalStorage::downloadStorageFileToLocal(const Authorization& /*auth
     if (!FileUtil::Stat(getRootFilePath()).exists())
     {
         // Try to link.
-        LOG_INF("Linking " << COOLWSD::anonymizeUrl(publicFilePath) << " to "
+        LOG_INF("Linking " << Anonymizer::anonymizeUrl(publicFilePath) << " to "
                            << getRootFilePathAnonym());
         if (!Poco::File(getRootFilePath()).exists()
             && link(publicFilePath.c_str(), getRootFilePath().c_str()) == -1)
         {
             // Failed
-            LOG_INF_SYS("link(\"" << COOLWSD::anonymizeUrl(publicFilePath) << "\", \""
+            LOG_INF_SYS("link(\"" << Anonymizer::anonymizeUrl(publicFilePath) << "\", \""
                                   << getRootFilePathAnonym() << "\") failed. Will copy");
         }
     }
@@ -416,7 +419,7 @@ std::string LocalStorage::downloadStorageFileToLocal(const Authorization& /*auth
     }
     catch (const Poco::Exception& exc)
     {
-        LOG_ERR("copyTo(\"" << COOLWSD::anonymizeUrl(publicFilePath) << "\", \""
+        LOG_ERR("copyTo(\"" << Anonymizer::anonymizeUrl(publicFilePath) << "\", \""
                             << getRootFilePathAnonym() << "\") failed: " << exc.displayText());
         throw;
     }
@@ -477,7 +480,7 @@ std::size_t LocalStorage::uploadLocalFileToStorageAsync(
     }
     catch (const Poco::Exception& exc)
     {
-        LOG_ERR("copyTo(\"" << getRootFilePathAnonym() << "\", \"" << COOLWSD::anonymizeUrl(path)
+        LOG_ERR("copyTo(\"" << getRootFilePathAnonym() << "\", \"" << Anonymizer::anonymizeUrl(path)
                             << "\") failed: " << exc.displayText());
         // Default UploadResult is failure.
     }
