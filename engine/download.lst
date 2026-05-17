@@ -409,8 +409,8 @@ HUNSPELL_TARBALL := hunspell-1.7.3.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-HYPHEN_SHA256SUM := 304636d4eccd81a14b6914d07b84c79ebb815288c76fe027b9ebff6ff24d5705
-HYPHEN_TARBALL := 5ade6ae2a99bc1e9e57031ca88d36dad-hyphen-2.8.8.tar.gz
+HYPHEN_SHA256SUM := 783743daf477de8c4d16e3c74b4d2827377017718d8e17e2d9440210246f6abe
+HYPHEN_TARBALL := 442b985e604f8143a5a0e7bacd6b2e40-hyphen-2.8.9.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
