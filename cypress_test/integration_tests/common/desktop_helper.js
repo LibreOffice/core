@@ -49,6 +49,18 @@ function sidebarToggle() {
 	cy.cGet('#optionscontainer [id^="SidebarDeck.PropertyDeck"] button').click();
 }
 
+// Ensure the sidebar dock is hidden, regardless of starting state.
+function ensureSidebarHidden() {
+	cy.log('>> ensureSidebarHidden');
+	cy.cGet('#sidebar-dock-wrapper').then(function($dock) {
+		if ($dock.is(':visible')) {
+			cy.cGet('#optionscontainer [id^="SidebarDeck.PropertyDeck"] button').click();
+		}
+	});
+	cy.cGet('#sidebar-dock-wrapper').should('not.be.visible');
+	cy.log('<< ensureSidebarHidden - end');
+}
+
 // Wait for the sidebar to reshow and grab focus to its first focusable
 // element via the 'sidebarstealfocus' timer scheduled in
 // Control.Sidebar.ts.
@@ -654,6 +666,7 @@ module.exports.updateFollowingUsers = updateFollowingUsers;
 module.exports.assertVisiblePage = assertVisiblePage;
 module.exports.closeNavigatorSidebar = closeNavigatorSidebar;
 module.exports.sidebarToggle = sidebarToggle;
+module.exports.ensureSidebarHidden = ensureSidebarHidden;
 module.exports.assertSidebarStealsFocus = assertSidebarStealsFocus;
 module.exports.getCompactIcon = getCompactIcon;
 module.exports.getNbIcon = getNbIcon;

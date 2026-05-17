@@ -673,7 +673,7 @@ describe(['tagdesktop'], 'Collapsed Annotation Tests', function() {
 		cy.cGet('.cool-annotation-info-collapsed').should('be.not.visible');
 
 		helper.reloadDocument(newFilePath);
-		desktopHelper.sidebarToggle();
+		desktopHelper.ensureSidebarHidden();
 		cy.cGet('.cool-annotation-img').click();
 		cy.cGet('.cool-annotation-content-wrapper').should('exist');
 		cy.cGet('#annotation-content-area-1').should('have.text','some text0');
