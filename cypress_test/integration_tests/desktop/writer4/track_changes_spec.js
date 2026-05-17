@@ -480,6 +480,7 @@ describe(['tagdesktop'], 'Restricted user tracked changes dialog button state', 
 		desktopHelper.getNbIcon('AcceptTrackedChanges', 'Review').click();
 		cy.cGet('#AcceptRejectChangesDialog').should('be.visible');
 		cy.cGet('#writerchanges .ui-treeview-entry').first().click();
+		cy.getFrameWindow().then((win) => helper.processToIdle(win));
 	}
 
 	it('Accept and reject buttons are disabled for restricted user', function() {
