@@ -58,7 +58,7 @@ Quarantine::Quarantine(DocumentBroker& docBroker, const std::string& docName)
     , _quarantinedFilename(Delimiter + std::to_string(docBroker.getPid()) + Delimiter + _docName)
 {
     std::string anonymizedFilename = _quarantinedFilename;
-    Util::replaceAllSubStr(anonymizedFilename, _docName, COOLWSD::anonymizeUsername(_docName));
+    Util::replaceAllSubStr(anonymizedFilename, _docName, Anonymizer::anonymize(_docName));
     LOG_DBG("Quarantine ctor for [" << _docKey << "], filename: [" << anonymizedFilename << ']');
 }
 

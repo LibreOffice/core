@@ -1158,9 +1158,9 @@ bool DocumentBroker::download(
     if (session)
     {
         LOG_DBG("Setting username ["
-                << COOLWSD::anonymizeUsername(session->getUserName()) << "] and userId ["
-                << COOLWSD::anonymizeUsername(session->getUserId()) << "] for session ["
-                << sessionId << "] with canonical id " << session->getCanonicalViewId());
+                << Anonymizer::anonymize(session->getUserName()) << "] and userId ["
+                << Anonymizer::anonymize(session->getUserId()) << "] for session [" << sessionId
+                << "] with canonical id " << session->getCanonicalViewId());
     }
 
     // Basic file information was stored by the above getWOPIFileInfo() or getLocalFileInfo() calls
@@ -1586,7 +1586,7 @@ DocumentBroker::updateSessionWithWopiInfo(const std::shared_ptr<ClientSession>& 
         // using json because fetching details from json string is easier and will be consistent
         Object::Ptr userStats = new Object();
         userStats->set("PostMessageOrigin", wopiFileInfo->getPostMessageOrigin());
-        userStats->set("UserID", COOLWSD::anonymizeUsername(userId));
+        userStats->set("UserID", Anonymizer::anonymize(userId));
         userStats->set("BaseFileName", wopiStorage->getFileInfo().getFilename());
         userStats->set("UserCanWrite", wopiFileInfo->getUserCanWrite());
 

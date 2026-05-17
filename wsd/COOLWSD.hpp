@@ -241,12 +241,6 @@ public:
         return FileUtil::anonymizeUrl(url);
     }
 
-    /// Anonymize user names and IDs.
-    /// Will use the Obfuscated User ID if one is provided via WOPI.
-    static std::string anonymizeUsername(const std::string& username)
-    {
-        return FileUtil::anonymizeUsername(username);
-    }
     static void alertAllUsersInternal(const std::string& msg);
     static void alertUserInternal(const std::string& dockey, const std::string& msg);
     static void setMigrationMsgReceived(const std::string& docKey);

@@ -18,6 +18,7 @@
 
 #include "AdminModel.hpp"
 
+#include <common/Anonymizer.hpp>
 #include <common/ConfigUtil.hpp>
 #include <common/Log.hpp>
 #include <common/Protocol.hpp>
@@ -617,7 +618,7 @@ void AdminModel::addDocument(const std::string& docKey, pid_t pid,
     if (log)
     {
         LOG_ANY("docstats : adding a document : "
-                << filename << ", created by : " << COOLWSD::anonymizeUsername(userName)
+                << filename << ", created by : " << Anonymizer::anonymize(userName)
                 << ", using WopiHost : " << COOLWSD::anonymizeUrl(wopiHost)
                 << ", allocating memory of : " << memoryAllocated);
     }

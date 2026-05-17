@@ -1978,14 +1978,14 @@ bool ClientSession::loadDocument(const char* /*buffer*/, int /*length*/,
             Poco::URI::encode(getUserId(), "", encodedUserId);
             oss << " authorid=" << encodedUserId;
             encodedUserId.clear();
-            Poco::URI::encode(COOLWSD::anonymizeUsername(getUserId()), "", encodedUserId);
+            Poco::URI::encode(Anonymizer::anonymize(getUserId()), "", encodedUserId);
             oss << " xauthorid=" << encodedUserId;
 
             std::string encodedUserName;
             Poco::URI::encode(getUserName(), "", encodedUserName);
             oss << " author=" << encodedUserName;
             encodedUserName.clear();
-            Poco::URI::encode(COOLWSD::anonymizeUsername(getUserName()), "", encodedUserName);
+            Poco::URI::encode(Anonymizer::anonymize(getUserName()), "", encodedUserName);
             oss << " xauthor=" << encodedUserName;
         }
 

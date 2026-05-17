@@ -109,7 +109,7 @@ void anonymizeAvatarURL(Poco::JSON::Object::Ptr& userExtraInfo)
         if (endPos != std::string::npos)
         {
             std::string avatarUserName = avatarURL.substr(startPos, endPos - startPos);
-            avatarURL.replace(startPos, endPos - startPos, COOLWSD::anonymizeUsername(avatarUserName));
+            avatarURL.replace(startPos, endPos - startPos, Anonymizer::anonymize(avatarUserName));
         }
         userExtraInfo->set("avatar", avatarURL);
     }
@@ -122,7 +122,7 @@ void anonymizeUserPrivateInfo(Poco::JSON::Object::Ptr& userPrivateInfo)
     {
         auto value = userPrivateInfo->getValue<std::string>(key);
         if(!value.empty())
-            userPrivateInfo->set(key, COOLWSD::anonymizeUsername(value));
+            userPrivateInfo->set(key, Anonymizer::anonymize(value));
     }
 }
 
@@ -187,9 +187,9 @@ WopiStorage::WOPIFileInfo::WOPIFileInfo(const FileInfo& fileInfo, Poco::JSON::Ob
         // If obfuscatedUserId is provided, then don't log the originals and use it.
         if (_obfuscatedUserId.empty())
         {
-            object->set("OwnerId", COOLWSD::anonymizeUsername(getOwnerId()));
-            object->set("UserId", COOLWSD::anonymizeUsername(_userId));
-            object->set("UserFriendlyName", COOLWSD::anonymizeUsername(_username));
+            object->set("OwnerId", Anonymizer::anonymize(getOwnerId()));
+            object->set("UserId", Anonymizer::anonymize(_userId));
+            object->set("UserFriendlyName", Anonymizer::anonymize(_username));
         }
 
         if (auto userExtraInfo = object->getObject("UserExtraInfo"))
