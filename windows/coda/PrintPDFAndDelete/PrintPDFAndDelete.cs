@@ -27,8 +27,9 @@ namespace PrintPDFAndDelete
 {
     internal static class PrintPDFAndDelete
     {
-        private static string[] _args;
-        private static Form _dummy;
+        // Assigned in Main before any read; null-forgiving silences CS8618.
+        private static string[] _args = null!;
+        private static Form _dummy = null!;
 
         [STAThread]
         static void Main(string[] args)
@@ -107,7 +108,7 @@ namespace PrintPDFAndDelete
                     float scaleFactor = Math.Min(X, Y);
 
                     // Draw the image on the page
-                    e.Graphics.DrawImage(image, 0, 0, image.Width * scaleFactor, image.Height * scaleFactor);
+                    e.Graphics!.DrawImage(image, 0, 0, image.Width * scaleFactor, image.Height * scaleFactor);
 
                     index++;
                     if (index < images.Count)
@@ -135,7 +136,7 @@ namespace PrintPDFAndDelete
                 // directory. But if you when testing or otherwise happen to call it with a file
                 // that is not the only one in its directory, Directory.Delete() will not do
                 // anything, you won't accidentally lose other files.
-                Directory.Delete(Path.GetDirectoryName(path));
+                Directory.Delete(Path.GetDirectoryName(path)!);
                 Application.Exit();
             }
             catch (System.Exception ex)
