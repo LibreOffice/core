@@ -8,17 +8,17 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-11 14:06+0200\n"
-"PO-Revision-Date: 2026-03-18 21:09+0000\n"
+"PO-Revision-Date: 2026-05-17 10:11+0000\n"
 "Last-Translator: dukezas <dukezas@gmail.com>\n"
-"Language-Team: Lithuanian <https://hosted.weblate.org/projects/"
-"collabora-online/ui/lt/>\n"
-"Language: \n"
+"Language-Team: Lithuanian <https://hosted.weblate.org/projects/collabora-"
+"online/collabora-ui/lt/>\n"
+"Language: lt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n"
-"%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.17-dev\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"(n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Weblate 2026.6.dev0\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -404,33 +404,31 @@ msgstr "Parašo CA"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:432
 #: admin/src/integrator/AdminIntegratorSettings.ts:436
-#, fuzzy
 msgid "Provider"
-msgstr "Teikėjas:"
+msgstr "Teikėjas"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:433
 #: admin/src/integrator/AdminIntegratorSettings.ts:437
 msgid "API Key"
-msgstr ""
+msgstr "API raktas"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:434
 #: admin/src/integrator/AdminIntegratorSettings.ts:439
-#, fuzzy
 msgid "Model"
-msgstr "Režimas"
+msgstr "Modelis"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:435
 #: admin/src/integrator/AdminIntegratorSettings.ts:438
 msgid "Base URL"
-msgstr ""
+msgstr "Bazinis URL"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:440
 msgid "Image Size"
-msgstr ""
+msgstr "Paveikslėlio dydis"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:441
 msgid "Request Timeout (seconds)"
-msgstr ""
+msgstr "Užklausai skirtas laikas (sekundėmis)"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:444
 msgid "In-document Screen Reader"
@@ -450,11 +448,11 @@ msgstr "Tamsus režimas"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:446
 msgid "Smart Zoom"
-msgstr ""
+msgstr "Išmanus mastelis"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:447
 msgid "Default Zoom"
-msgstr ""
+msgstr "Numatytasis mastelis"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:448
 msgid "Compact layout"
@@ -853,68 +851,70 @@ msgid ""
 "Configure AI provider credentials and model. Models are fetched "
 "automatically when credentials change."
 msgstr ""
+"Konfigūruokite DI teikėjo prisijungimo duomenis ir modelį. Modeliai gaunami "
+"automatiškai, kai pasikeičia prisijungimo duomenys."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1926
 msgid "Text Generation"
-msgstr ""
+msgstr "Teksto generavimas"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1976
 #: admin/src/integrator/AdminIntegratorSettings.ts:2082
 msgid "e.g."
-msgstr ""
+msgstr "pvz"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1995
 #: admin/src/integrator/AdminIntegratorSettings.ts:2113
 #: admin/src/integrator/AdminIntegratorSettings.ts:2557
 #: admin/src/integrator/AdminIntegratorSettings.ts:2573
 msgid "Fetch models to select"
-msgstr ""
+msgstr "Įkelkite modelius, kuriuos norite pasirinkti"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2024
 msgid "Image Generation"
-msgstr ""
+msgstr "Paveikslėlio generavimas"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2029
 msgid "Same as Text AI"
-msgstr ""
+msgstr "Tas pats kaip teksto DI"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2098
 msgid "Leave empty to use Text AI key"
-msgstr ""
+msgstr "Palikite tuščią, jei norite naudoti teksto DI raktą"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2360
 #: admin/src/integrator/AdminIntegratorSettings.ts:2447
 msgid "Fetching models..."
-msgstr ""
+msgstr "Gaunami modeliai..."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2389
 #: admin/src/integrator/AdminIntegratorSettings.ts:2399
 #: admin/src/integrator/AdminIntegratorSettings.ts:2476
 #: admin/src/integrator/AdminIntegratorSettings.ts:2486
 msgid "No models found"
-msgstr ""
+msgstr "Modelių nerasta"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2409
 #: admin/src/integrator/AdminIntegratorSettings.ts:2496
 msgid "Models fetched successfully"
-msgstr ""
+msgstr "Modeliai sėkmingai gauti"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2415
 #: admin/src/integrator/AdminIntegratorSettings.ts:2502
 msgid "Failed to fetch models"
-msgstr ""
+msgstr "Nepavyko gauti modelių"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2425
 msgid "Invalid provider configuration"
-msgstr ""
+msgstr "Neteisinga teikėjo konfigūracija"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2537
 msgid "None (disable image generation)"
-msgstr ""
+msgstr "Nieko (išjungti vaizdų generavimą)"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2919
 msgid "Reset"
-msgstr ""
+msgstr "Nustatyti iš naujo"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3038
 #: src/map/handler/Map.WOPI.js:793
@@ -1047,22 +1047,21 @@ msgid "Event handling has been delayed for an unexpectedly long time: {0}ms"
 msgstr "Įvykių apdorojimas buvo atidėtas netikėtai ilgam: {0}ms"
 
 #: src/app/TableStylesService.ts:101
-#, fuzzy
 msgid "Light"
-msgstr "Šviesos"
+msgstr "Šviesus"
 
 #: src/app/TableStylesService.ts:103
 msgid "Medium"
-msgstr ""
+msgstr "Vidutinis"
 
 #: src/app/TableStylesService.ts:105
 msgid "Dark"
-msgstr ""
+msgstr "Tamsus"
 
 #: src/app/TableStylesService.ts:107
 #: src/control/jsdialog/Widget.ColorPicker.ts:334
 msgid "Custom"
-msgstr ""
+msgstr "Pasirinktas"
 
 #: src/app/TableStylesService.ts:195 src/app/TableStylesService.ts:207
 #: src/app/TableStylesService.ts:209
@@ -1131,9 +1130,8 @@ msgid "Resolved"
 msgstr "Išspręstas"
 
 #: src/canvas/sections/CommentSection.ts:574
-#, fuzzy
 msgid "Removed"
-msgstr "Pašalinti"
+msgstr "Pašalintas"
 
 #: src/canvas/sections/CommentSection.ts:1160
 #: src/control/jsdialog/Widget.Comment.ts:177
@@ -1240,7 +1238,7 @@ msgstr "Automatinė spalva"
 #: src/control/Control.AboutDialog.ts:89
 #: src/control/jsdialog/Widget.TreeView.ts:786
 msgid "(opens in new tab)"
-msgstr ""
+msgstr "(atsidaro naujame skirtuke)"
 
 #: src/control/Control.AboutDialog.ts:148
 msgid "Served by: "
@@ -2165,7 +2163,7 @@ msgstr "PDF dokumentas (.pdf)"
 #: src/control/Control.NotebookbarBuilder.js:395
 #: src/control/Control.NotebookbarBuilder.js:596
 msgid "EPUB (.epub)"
-msgstr "EPUB (.epub)"
+msgstr "EPUB( .epub)"
 
 #: src/control/Control.Menubar.ts:109 src/control/Control.UIManager.ts:393
 msgid "Rename Document"
@@ -2361,7 +2359,7 @@ msgstr "Įterpti paveikslėlį"
 
 #: src/control/Control.Menubar.ts:386 src/control/Control.Menubar.ts:1379
 msgid "Insert Date"
-msgstr "Įterpti datą"
+msgstr "Įterpti Datą"
 
 #: src/control/Control.Menubar.ts:407 src/control/Control.Menubar.ts:1124
 #: src/control/Control.NotebookbarWriter.js:544
@@ -3548,9 +3546,8 @@ msgid "Master Slide Templates"
 msgstr "Pagrindinės(ių) skaidrės(ių) šablonai"
 
 #: src/control/Control.NotebookbarImpress.js:1867
-#, fuzzy
 msgid "This Presentation"
-msgstr "Uždaryti pristatymą"
+msgstr "Šis pristatymas"
 
 #: src/control/Control.NotebookbarImpress.js:1876
 msgid "Presentation Templates"
@@ -4761,9 +4758,8 @@ msgid "Insert Comment"
 msgstr "Įterpti komentarą"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2401
-#, fuzzy
 msgid "Insert Note"
-msgstr "Įterpti datą"
+msgstr "Įterpti pastabą"
 
 #: src/control/jsdialog/Util.SnackbarController.ts:122
 msgid "Dismiss"
@@ -5227,11 +5223,10 @@ msgid "Failed to load document."
 msgstr "Nepavyko užkrauti dokumento."
 
 #: src/errormessages.js:45
-#, fuzzy
 msgid "Save failed due to no disk space left. Document will now be read-only."
 msgstr ""
-"Nepavyko išsaugoti, nes diske nebėra vietos. Dokumentas dabar bus skirtas "
-"tik skaitymui."
+"Nepavyko išsaugoti, nes diske nebėra vietos. Dokumentas bus skirtas tik "
+"skaitymui."
 
 #: src/errormessages.js:46
 msgid ""
@@ -5678,7 +5673,6 @@ msgid "Click to exit presentation..."
 msgstr "Spustelėkite, kad išeitumėte iš pristatymo..."
 
 #: src/slideshow/SlideShowPresenter.ts:804
-#, fuzzy
 msgid "You are on the first slide"
 msgstr "Esate pirmoje skaidrėje"
 

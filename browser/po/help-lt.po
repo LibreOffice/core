@@ -3,17 +3,17 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-11 14:06+0200\n"
-"PO-Revision-Date: 2025-12-29 14:42+0000\n"
+"PO-Revision-Date: 2026-05-17 10:11+0000\n"
 "Last-Translator: dukezas <dukezas@gmail.com>\n"
-"Language-Team: Lithuanian <https://hosted.weblate.org/projects/"
-"collabora-online/help/lt/>\n"
+"Language-Team: Lithuanian <https://hosted.weblate.org/projects/collabora-"
+"online/help/lt/>\n"
 "Language: lt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n"
-"%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Translate Toolkit 3.6.0\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"(n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Weblate 2026.6.dev0\n"
 
 #: html/cool-help.html%2Bdiv.h1:9-5
 msgid "Keyboard Shortcuts"
@@ -166,7 +166,6 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.h2:28-9
 #: html/cool-help.html%2Bdiv.div.div.h2:196-9
 #: html/cool-help.html%2Bdiv.div.div.h2:261-9
-#, fuzzy
 msgid "Text formatting"
 msgstr "Teksto formatavimas"
 
@@ -502,7 +501,6 @@ msgstr "Rodyklė kairėn"
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:60-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:223-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:288-38
-#, fuzzy
 msgid "Move cursor with selection to the left"
 msgstr "Žymėti kairėn"
 
@@ -519,7 +517,6 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:61-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:224-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:289-38
-#, fuzzy
 msgid "Go to beginning of a word"
 msgstr "Eiti į žodžio pradžią"
 
@@ -530,13 +527,12 @@ msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Arrow Left</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Rodyklė kairėn</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Rodyklė Kairėn</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:62-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:225-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:290-38
-#, fuzzy
 msgid "Select to the left word by word"
 msgstr "Žymėti po žodį kairėn"
 
@@ -555,21 +551,18 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:63-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:226-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:291-38
-#, fuzzy
 msgid "Move cursor to the right"
 msgstr "Perkelti žymeklį dešinėn"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:63-89
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:226-89
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:291-89
-#, fuzzy
 msgid "Arrow Right"
 msgstr "Rodyklė dešinėn"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:64-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:227-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:292-38
-#, fuzzy
 msgid "Move cursor with selection to the right"
 msgstr "Žymėti dešinėn"
 
@@ -586,7 +579,6 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:65-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:228-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:293-38
-#, fuzzy
 msgid "Go to start of the next word"
 msgstr "Eiti į kito žodžio pradžią"
 
@@ -597,13 +589,12 @@ msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Arrow Right</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Rodyklė dešinėn</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Rodyklė Dešinėn</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:66-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:229-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:294-38
-#, fuzzy
 msgid "Select to the right word by word"
 msgstr "Žymėti po žodį dešinėn"
 
@@ -622,21 +613,18 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:67-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:230-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:295-38
-#, fuzzy
 msgid "Move cursor up one line"
-msgstr "Perkelti žymeklį eilute aukštyn"
+msgstr "Perkelti žymeklį viena eilute aukštyn"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:67-88
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:230-88
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:295-88
-#, fuzzy
 msgid "Arrow Up"
 msgstr "Rodyklė aukštyn"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:68-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:231-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:296-38
-#, fuzzy
 msgid "Select lines in upwards direction"
 msgstr "Žymėti eilutes aukštyn"
 
@@ -653,107 +641,102 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:69-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:232-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:297-38
-#, fuzzy
 msgid "Move cursor to beginning of the previous paragraph"
 msgstr "Perkelti žymeklį į ankstesnės pastraipos pradžią"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:69-115
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:232-115
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:297-115
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Arrow Up</kbd>"
-msgstr "Vald</kbd><span class=\"kbd--plus\">+</span><kbd>Rodyklė aukštyn"
+msgstr ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Rodyklė aukštyn</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:70-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:233-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:298-38
-#, fuzzy
 msgid "Select to beginning of paragraph"
 msgstr "Žymėti iki pastraipos pradžios"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:70-97
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:233-97
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:298-97
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Arrow Up</kbd>"
 msgstr ""
-"Vald</kbd><span class=\"kbd--plus\">+</span><kbd>Lyg2</kbd><span class=\"kbd"
-"--plus\">+</span><kbd>Rodyklė aukštyn"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Rodyklė aukštyn</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:71-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:234-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:299-38
-#, fuzzy
 msgid "Move cursor down one line"
-msgstr "Perkelti žymeklį eilute žemyn"
+msgstr "Perkelti žymeklį viena eilute žemyn"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:71-90
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:234-90
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:299-90
-#, fuzzy
 msgid "Arrow Down"
 msgstr "Rodyklė žemyn"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:72-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:235-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:300-38
-#, fuzzy
 msgid "Select lines in downwards direction"
 msgstr "Žymėti eilutes žemyn"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:72-100
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:235-100
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:300-100
-#, fuzzy
 msgid ""
 "<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Arrow Down</kbd>"
-msgstr "Lyg2</kbd><span class=\"kbd--plus\">+</span><kbd>Rodyklė žemyn"
+msgstr ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Rodyklė žemyn</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:73-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:236-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:301-38
-#, fuzzy
 msgid "Move cursor to beginning of the next paragraph"
 msgstr "Perkelti žymeklį į kitos pastraipos pradžią"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:73-111
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:236-111
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:301-111
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Arrow Down</kbd>"
-msgstr "Vald</kbd><span class=\"kbd--plus\">+</span><kbd>Rodyklė žemyn"
+msgstr ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Rodyklė Žemyn</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:74-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:237-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:302-38
-#, fuzzy
 msgid "Select to end of paragraph"
 msgstr "Žymėti iki pastraipos pabaigos"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:74-91
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:237-91
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:302-91
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Arrow Down</kbd>"
 msgstr ""
-"Vald</kbd><span class=\"kbd--plus\">+</span><kbd>Lyg2</kbd><span class=\"kbd"
-"--plus\">+</span><kbd>Rodyklė žemyn"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Rodyklė žemyn</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:75-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:238-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:303-38
-#, fuzzy
 msgid "Go to beginning of line"
 msgstr "Eiti į eilutės pradžią"
 
@@ -767,7 +750,6 @@ msgstr "Pagrindinis"
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:76-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:239-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:304-38
-#, fuzzy
 msgid "Go and select to the beginning of a line"
 msgstr "Eiti ir žymėti iki eilutės pradžios"
 
@@ -775,16 +757,16 @@ msgstr "Eiti ir žymėti iki eilutės pradžios"
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:141-138
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:239-105
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:304-105
-#, fuzzy
 msgid ""
 "<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Home</kbd>"
-msgstr "Lyg2</kbd><span class=\"kbd--plus\">+</span><kbd>Prad"
+msgstr ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Pradžia</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:77-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:240-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:305-38
-#, fuzzy
 msgid "Go to start of document"
 msgstr "Eiti į dokumento pradžią"
 
@@ -793,11 +775,12 @@ msgstr "Eiti į dokumento pradžią"
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:137-118
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:240-88
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:305-88
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Home</kbd>"
-msgstr "Vald</kbd><span class=\"kbd--plus\">+</span><kbd>Prad"
+msgstr ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Pradžia</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:78-38
 msgid "Go and select text to start of document"
@@ -806,20 +789,18 @@ msgstr "Eiti ir žymėti iki dokumento pradžios"
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:78-104
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:241-103
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:306-103
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Home</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>V</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Pradžia</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:79-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:242-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:307-38
-#, fuzzy
 msgid "Go to end of line"
 msgstr "Eiti į eilutės pabaigą"
 
@@ -827,14 +808,12 @@ msgstr "Eiti į eilutės pabaigą"
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:140-118
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:242-82
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:307-82
-#, fuzzy
 msgid "End"
-msgstr "Pab"
+msgstr "Pabaiga"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:80-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:243-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:308-38
-#, fuzzy
 msgid "Go and select to the end of a line"
 msgstr "Eiti ir žymėti iki eilutės pabaigos"
 
@@ -842,16 +821,16 @@ msgstr "Eiti ir žymėti iki eilutės pabaigos"
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:142-137
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:243-99
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:308-99
-#, fuzzy
 msgid ""
 "<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>End</kbd>"
-msgstr "Lyg2</kbd><span class=\"kbd--plus\">+</span><kbd>Pab"
+msgstr ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Pabaiga</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:81-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:244-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:309-38
-#, fuzzy
 msgid "Go to end of document"
 msgstr "Eiti į dokumento pabaigą"
 
@@ -860,11 +839,12 @@ msgstr "Eiti į dokumento pabaigą"
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:138-131
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:244-86
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:309-86
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>End</kbd>"
-msgstr "Vald</kbd><span class=\"kbd--plus\">+</span><kbd>Pab"
+msgstr ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Pabaiga</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:82-38
 msgid "Go and select text to end of document"
@@ -873,15 +853,14 @@ msgstr "Eiti ir žymėti iki dokumento pabaigos"
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:82-102
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:245-101
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:310-101
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>End</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>V</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Pabaiga</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:83-38
 msgid "Move the view up one page"
@@ -896,27 +875,28 @@ msgid "Switch cursor between text and header"
 msgstr "Perjungti žymeklį tarp teksto ir antraštės"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:84-102
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>PageUp</kbd>"
-msgstr "Vald</kbd><span class=\"kbd--plus\">+</span><kbd>Psl↑"
+msgstr ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Puslapis į viršų</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:85-38
 msgid "Extend the selection up one page"
 msgstr "Išplėsti pasirinkimą vienu puslapiu aukštyn"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:85-97
-#, fuzzy
 msgid ""
 "<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>PageUp</kbd>"
-msgstr "Lyg2</kbd><span class=\"kbd--plus\">+</span><kbd>Psl↑"
+msgstr ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Puslapis į Viršų</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:86-38
-#, fuzzy
 msgid "Move the view down one page"
-msgstr "Eiti puslapiu aukštyn"
+msgstr "Eiti puslapiu žemyn"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:86-92
 msgid "PageDown"
@@ -927,73 +907,76 @@ msgid "Switch cursor between text and footer"
 msgstr "Perjungti žymeklį tarp teksto ir poraštės"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:87-102
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>PageDown</kbd>"
-msgstr "Vald</kbd><span class=\"kbd--plus\">+</span><kbd>Psl↑"
+msgstr ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Puslapis žemyn</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:88-38
 msgid "Extend the selection down one page"
 msgstr "Išplėsti pasirinkimą vienu puslapiu žemyn"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:88-99
-#, fuzzy
 msgid ""
 "<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>PageDown</kbd>"
-msgstr "Lyg2</kbd><span class=\"kbd--plus\">+</span><kbd>Psl↑"
+msgstr ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Puslapis Žemyn</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:89-38
 msgid "Delete to beginning of word"
 msgstr "Ištrinti iki žodžio pradžios"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:89-92
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Backspace</kbd>"
-msgstr "Vald</kbd><span class=\"kbd--plus\">+</span><kbd>Psl↑"
+msgstr ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Back space</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:90-38
 msgid "Delete to end of word"
 msgstr "Ištrinti iki žodžio pabaigos"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:90-86
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Del</kbd>"
-msgstr "Vald</kbd><span class=\"kbd--plus\">+</span><kbd>D"
+msgstr ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Trinti</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:91-38
 msgid "Delete to beginning of sentence"
 msgstr "Ištrinti iki sakinio pradžios"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:91-96
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Backspace</kbd>"
 msgstr ""
-"Vald</kbd><span class=\"kbd--plus\">+</span><kbd>Lyg2</kbd><span class=\"kbd"
-"--plus\">+</span><kbd>Prad"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Back "
+"space</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:92-38
 msgid "Delete to end of sentence"
 msgstr "Ištrinti iki sakinio pabaigos"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:92-90
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Del</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>V</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Ištrinti</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.h2:96-9
 msgid "Shortcut Keys for Tables"
@@ -1029,11 +1012,12 @@ msgstr ""
 " į dabartinės lentelės pabaigą, trečias paspaudimas – į dokumento pabaigą."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:101-38
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Tab</kbd>"
-msgstr "Vald</kbd><span class=\"kbd--plus\">+</span><kbd>Z"
+msgstr ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Tabuliatorius</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:101-146
 msgid ""
@@ -1046,11 +1030,12 @@ msgstr ""
 " aria-hidden=\"true\">+</span><kbd>Tab</kbd>."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:102-38
-#, fuzzy
 msgid ""
 "<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Arrow Keys</kbd>"
-msgstr "Lyg2</kbd><span class=\"kbd--plus\">+</span><kbd>Rodyklė kairėn"
+msgstr ""
+"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Rodyklės</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:102-152
 msgid ""
@@ -1059,14 +1044,14 @@ msgstr ""
 "Stulpelio/eilutės didinimui/mažinimui naudoti dešinį apatinį langelio kampą"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:103-38
-#, fuzzy
 msgid ""
 "<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Arrow Keys</kbd>"
 msgstr ""
-"Vald</kbd><span class=\"kbd--plus\">+</span><kbd>Lyg2</kbd><span class=\"kbd"
-"--plus\">+</span><kbd>Rodyklė kairėn"
+"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Rodyklės</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:103-219
 msgid "Increase/decrease the size of the column/row on the left/top cell edge"
@@ -1074,14 +1059,14 @@ msgstr ""
 "Stulpelio/eilutės didinimui/mažinimui naudoti kairį viršutinį langelio kampą"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:104-38
-#, fuzzy
 msgid ""
 "<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Arrow Keys</kbd>"
 msgstr ""
-"Vald</kbd><span class=\"kbd--plus\">+</span><kbd>Lyg2</kbd><span class=\"kbd"
-"--plus\">+</span><kbd>Rodyklė kairėn"
+"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Rodyklės</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:104-218
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:105-285
@@ -1089,24 +1074,24 @@ msgid "Like Alt, but only the active cell is modified"
 msgstr "Kaip \"Alt\", bet modifikuojamas tik aktyvus langelis"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:105-38
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Arrow Keys</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>V</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Shift</"
+"kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Rodyklės</"
+"kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:106-38
-#, fuzzy
 msgid ""
 "<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Insert</kbd>"
-msgstr "Lyg2</kbd><span class=\"kbd--plus\">+</span><kbd>Pab"
+msgstr ""
+"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Įterpti</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:106-148
 msgid ""
@@ -1119,11 +1104,12 @@ msgstr ""
 "kbd> įterpia langelį"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:107-38
-#, fuzzy
 msgid ""
 "<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Del</kbd>"
-msgstr "Vald</kbd><span class=\"kbd--plus\">+</span><kbd>D"
+msgstr ""
+"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Trinti</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:107-145
 msgid ""
@@ -1136,14 +1122,14 @@ msgstr ""
 "kbd> sujungia langelį su šalia esančiu"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:108-38
-#, fuzzy
 msgid ""
 "<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Del</kbd>"
 msgstr ""
-"Vald</kbd><span class=\"kbd--plus\">+</span><kbd>Lyg2</kbd><span class=\"kbd"
-"--plus\">+</span><kbd>P"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Trinti</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td.p:108-235
 msgid ""
@@ -1183,30 +1169,26 @@ msgid "Insert footnote"
 msgstr "Įterpti išnašą"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:117-80
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>F</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>5</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>F</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:118-38
 msgid "Insert endnote"
 msgstr "Įterpti galinę išnašą"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:118-79
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>D</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>5</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>D</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:119-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:170-38
@@ -1215,66 +1197,65 @@ msgstr "Įterpti komentarą"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:119-79
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:170-79
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>C</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>5</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>C</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:121-38
 msgid "Insert soft hyphen"
 msgstr "Taisyklingas žodžių kėlimas"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:121-83
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>-</kbd>"
-msgstr "Vald</kbd><span class=\"kbd--plus\">+</span><kbd>Z"
+msgstr ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>-"
+"</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:122-38
 msgid "Insert non-breaking hyphen"
 msgstr "Įterpti nekeliamą brūkšnelį"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:122-91
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>-</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>V</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>-</"
+"kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:124-38
 msgid "Insert non-breaking space"
 msgstr "Įterpti nekeliamą tarpą"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:124-90
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Space</kbd>"
 msgstr ""
-"Vald</kbd><span class=\"kbd--plus\">+</span><kbd>Lyg2</kbd><span class=\"kbd"
-"--plus\">+</span><kbd>Prad"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Tarpas</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:125-38
 msgid "Insert line break"
 msgstr "Įterpti eilutės pabaigą"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:125-82
-#, fuzzy
 msgid ""
 "<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Enter</kbd>"
-msgstr "Lyg2</kbd><span class=\"kbd--plus\">+</span><kbd>Pab"
+msgstr ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Enter</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:126-38
 msgid "Manual page break"
@@ -1283,26 +1264,26 @@ msgstr "Puslapio pabaiga"
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:126-82
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:254-98
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:319-105
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Enter</kbd>"
-msgstr "Vald</kbd><span class=\"kbd--plus\">+</span><kbd>Pab"
+msgstr ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Enter</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:127-38
 msgid "Column break (in multicolumnar text)"
 msgstr "Stulpelio nutraukimas (daugiaskilčiame tekste)"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:127-101
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Enter</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>V</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Įvestis</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:128-38
 msgid ""
@@ -1311,11 +1292,12 @@ msgstr "Įterpti naują pastraipą prieš skyrių, po jo arba prieš lentelę"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:128-139
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:129-175
-#, fuzzy
 msgid ""
 "<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Enter</kbd>"
-msgstr "Lyg2</kbd><span class=\"kbd--plus\">+</span><kbd>Pab"
+msgstr ""
+"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Enter</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:129-38
 msgid ""
@@ -1369,11 +1351,12 @@ msgstr ""
 "aukštyn."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:143-184
-#, fuzzy
 msgid ""
 "<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Page Up</kbd>"
-msgstr "Lyg2</kbd><span class=\"kbd--plus\">+</span><kbd>Psl↑"
+msgstr ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Puslapis į viršų</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:144-38
 msgid ""
@@ -1384,11 +1367,12 @@ msgstr ""
 "dabartiniame stulpelyje arba išplečia esamą pasirinkimą vienu puslapiu žemyn."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:144-188
-#, fuzzy
 msgid ""
 "<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Page Down</kbd>"
-msgstr "Lyg2</kbd><span class=\"kbd--plus\">+</span><kbd>Psl↑"
+msgstr ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Puslapis žemyn</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:145-38
 msgid ""
@@ -1401,11 +1385,12 @@ msgstr ""
 "perkeliamas į kitą stulpelį kairėje, kuriame yra duomenų"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:145-265
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Left Arrow</kbd>"
-msgstr "Vald</kbd><span class=\"kbd--plus\">+</span><kbd>Pab"
+msgstr ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Rodyklė kairėn</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:146-38
 msgid ""
@@ -1418,11 +1403,12 @@ msgstr ""
 "perkeliamas į kitą stulpelį dešinėje, kuriame yra duomenų."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:146-269
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Right Arrow</kbd>"
-msgstr "Vald</kbd><span class=\"kbd--plus\">+</span><kbd>Pab"
+msgstr ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Rodyklė dešinėn</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:147-38
 msgid ""
@@ -1435,11 +1421,12 @@ msgstr ""
 "eilutę, kurioje yra duomenys."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:147-241
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Up Arrow</kbd>"
-msgstr "Vald</kbd><span class=\"kbd--plus\">+</span><kbd>Rodyklė aukštyn"
+msgstr ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Rodyklė į viršų</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:148-38
 msgid ""
@@ -1452,40 +1439,40 @@ msgstr ""
 "kitą eilutę, kurioje yra duomenų."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:148-246
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Down Arrow</kbd>"
-msgstr "Vald</kbd><span class=\"kbd--plus\">+</span><kbd>Pab"
+msgstr ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Rodyklė žemyn</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:149-38
 msgid "Go to next sheet."
 msgstr "Eiti į kitą lapą."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:149-82
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Page Down</kbd>"
 msgstr ""
-"Vald</kbd><span class=\"kbd--plus\">+</span><kbd>Lyg2</kbd><span class=\"kbd"
-"--plus\">+</span><kbd>Rodyklė žemyn"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Puslapis žemyn</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:150-38
 msgid "Go to previous sheet."
 msgstr "Eiti į ankstesnį lapą."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:150-86
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Page Up</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>5</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Page "
+"Up</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:151-38
 msgid ""
@@ -1500,36 +1487,38 @@ msgstr ""
 "langelių diapazonas."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:151-292
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Arrow</kbd>"
 msgstr ""
-"Vald</kbd><span class=\"kbd--plus\">+</span><kbd>Lyg2</kbd><span class=\"kbd"
-"--plus\">+</span><kbd>Rodyklė aukštyn"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Rodyklės</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:152-38
 msgid "Moves one sheet to the left."
 msgstr "Perkelia lapu į kairę."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:152-93
-#, fuzzy
 msgid ""
 "<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Page Up</kbd>"
-msgstr "Lyg2</kbd><span class=\"kbd--plus\">+</span><kbd>Psl↑"
+msgstr ""
+"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Puslapis į viršų</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:153-38
 msgid "Moves one screen page to the right."
 msgstr "Perkelia vienu ekrano lapu į dešinę."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:153-100
-#, fuzzy
 msgid ""
 "<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Page Down</kbd>"
-msgstr "Lyg2</kbd><span class=\"kbd--plus\">+</span><kbd>Psl↑"
+msgstr ""
+"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Puslapis žemyn</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:154-38
 msgid ""
@@ -1542,14 +1531,14 @@ msgstr ""
 "tik ankstesnį lapą ir paverčia jį dabartiniu lapu."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:154-280
-#, fuzzy
 msgid ""
 "<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Page Up</kbd>"
 msgstr ""
-"Vald</kbd><span class=\"kbd--plus\">+</span><kbd>Lyg2</kbd><span class=\"kbd"
-"--plus\">+</span><kbd>P"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Puslapis į viršų</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:155-38
 msgid ""
@@ -1562,14 +1551,14 @@ msgstr ""
 "lapą ir paverčia jį dabartiniu lapu."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:155-268
-#, fuzzy
 msgid ""
 "<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Page Down</kbd>"
 msgstr ""
-"Vald</kbd><span class=\"kbd--plus\">+</span><kbd>Lyg2</kbd><span class=\"kbd"
-"--plus\">+</span><kbd>P"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Puslapis žemyn</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:156-38
 msgid ""
@@ -1582,11 +1571,12 @@ msgstr ""
 "diapazonas, kuriame yra duomenų ir kurį riboja tuščios eilutės ir stulpeliai."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:156-269
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>*</kbd>"
-msgstr "Vald</kbd><span class=\"kbd--plus\">+</span><kbd>Z"
+msgstr ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"*</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:157-38
 msgid ""
@@ -1597,147 +1587,144 @@ msgstr ""
 "formulės diapazoną, kuriame yra žymeklis."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:157-178
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>/</kbd>"
-msgstr "Vald</kbd><span class=\"kbd--plus\">+</span><kbd>Z"
+msgstr ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>/"
+"</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:158-38
 msgid "Insert cells (as in menu Insert - Cells)"
-msgstr ""
+msgstr "Įterpti langelius (kaip meniu Įterpti - Langeliai)"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:158-105
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Plus key</kbd>"
-msgstr "Vald</kbd><span class=\"kbd--plus\">+</span><kbd>P"
+msgstr ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Pliuso klavišas</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:159-38
 msgid "Delete cells (as in menu Edit - Delete Cells)"
-msgstr ""
+msgstr "Ištrinti langelius (kaip meniu „Redaguoti“ – „Ištrinti langelius“)"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:159-110
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Minus key</kbd>"
-msgstr "Vald</kbd><span class=\"kbd--plus\">+</span><kbd>Pab"
+msgstr ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Minuso klavišas</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.h2:163-9
-#, fuzzy
 msgid "Cell formatting"
-msgstr "Teksto formatavimas"
+msgstr "Langelio formatavimas"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:171-38
 msgid "Display comment"
-msgstr ""
+msgstr "Rodyti komentarą"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:171-80
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>F1</kbd>"
-msgstr "Vald</kbd><span class=\"kbd--plus\">+</span><kbd>1"
+msgstr ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"F1</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:172-38
 msgid "Fill Down"
-msgstr ""
+msgstr "Pildyti žemyn"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:178-38
 msgid "Set Optimal Column Width"
-msgstr ""
+msgstr "Optimalus stulpelio plotis"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:179-38
 msgid "Two decimal places, thousands separator"
-msgstr ""
+msgstr "Du skaičiai po kablelio, tūkstančių skirtukas"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:179-104
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>1</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>V</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>1</"
+"kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:180-38
 msgid "Standard exponential format"
-msgstr ""
+msgstr "Standartinis eksponentinis formatas"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:180-92
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>2</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>V</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>2</"
+"kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:181-38
 msgid "Standard date format"
-msgstr ""
+msgstr "Standartinis datos formatas"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:181-85
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>3</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>V</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>3</"
+"kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:182-38
 msgid "Standard currency format"
-msgstr ""
+msgstr "Standartinis valiutos formatas"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:182-89
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>4</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>V</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>4</"
+"kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:183-38
 msgid "Standard percentage format (two decimal places)"
-msgstr ""
+msgstr "Standartinis procentų formatas (du skaičiai po kablelio)"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:183-112
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>5</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>V</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>5</"
+"kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:184-38
 msgid "Standard format"
-msgstr ""
+msgstr "Standartinis formatas"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:184-80
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>6</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>V</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>6</"
+"kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.h2:188-9
 msgid "Insert"
@@ -1745,63 +1732,62 @@ msgstr "Įterpti"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:190-38
 msgid "Insert date"
-msgstr ""
+msgstr "Įterpti datą"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:190-76
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>;</kbd> or <kbd>,</kbd>"
-msgstr "Vald</kbd><span class=\"kbd--plus\">+</span><kbd>Rodyklė aukštyn"
+msgstr ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+";</kbd> arba <kbd>,</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:214-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:279-38
 msgid "Demote list item (list item has to be selected)"
-msgstr ""
+msgstr "Pažeminti sąrašo elementą (sąrašo elementas turi būti pasirinktas)"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:214-112
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:252-119
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:279-112
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:317-119
 msgid "Tab"
-msgstr ""
+msgstr "Tab'as"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:215-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:280-38
 msgid "Promote list item (list item has to be selected)"
-msgstr ""
+msgstr "Paaukštinti sąrašo elementą (sąrašo elementas turi būti pasirinktas)"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:215-113
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:253-127
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:280-113
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:318-127
-#, fuzzy
 msgid ""
 "<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Tab</kbd>"
-msgstr "Lyg2</kbd><span class=\"kbd--plus\">+</span><kbd>Pab"
+msgstr ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Tabuliatorius</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.h2:219-9
 #: html/cool-help.html%2Bdiv.div.div.h2:284-9
-#, fuzzy
 msgid "Text selection and navigation in a textbox"
-msgstr "Teksto žymėjimas ir judėjimas dokumente"
+msgstr "Teksto žymėjimas ir judėjimas teksto lauke"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:241-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:306-38
-#, fuzzy
 msgid "Go and select text to start of textbox"
-msgstr "Eiti ir žymėti iki dokumento pradžios"
+msgstr "Eiti ir žymėti iki teksto lauko pradžios"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:245-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:310-38
-#, fuzzy
 msgid "Go and select text to end of textbox"
-msgstr "Eiti ir žymėti iki dokumento pabaigos"
+msgstr "Eiti ir žymėti iki teksto lauko pabaigos"
 
 #: html/cool-help.html%2Bdiv.div.div.h2:249-9
 msgid "Slide keyboard shortcuts"
-msgstr ""
+msgstr "Spartieji klavišai skaidrėms"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:251-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:316-38
@@ -1809,69 +1795,69 @@ msgid ""
 "Escape current mode, i.e. from edit mode switch to object selection mode, "
 "from object selection mode switch to view mode."
 msgstr ""
+"Išeiti iš dabartinio režimo, t. y. iš redagavimo režimo perjungti į objektų "
+"pasirinkimo režimą, iš objektų pasirinkimo režimo perjungti į peržiūros "
+"režimą."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:251-186
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:316-186
 msgid "Esc"
-msgstr ""
+msgstr "Esc'as"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:252-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:317-38
 msgid "Select objects in the order in which they were created"
-msgstr ""
+msgstr "Pasirinkite objektus tokia tvarka, kokia jie buvo sukurti"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:253-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:318-38
 msgid "Select objects in the reverse order in which they were created"
-msgstr ""
+msgstr "Pasirinkite objektus atvirkščia tvarka, nei jie buvo sukurti"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:254-38
 msgid "Move to next text object on slide"
-msgstr ""
+msgstr "Pereiti prie kito teksto objekto skaidrėje"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:255-38
 msgid "Select all in slide"
-msgstr ""
+msgstr "Skaidrėje pasirinkti viską"
 
 #: html/cool-help.html%2Bdiv.div.div.h2:314-9
 msgid "Draw page keyboard shortcuts"
-msgstr ""
+msgstr "Piešimo puslapio spartieji klavišai"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:319-38
 msgid "Move to next text object on drawing page"
-msgstr ""
+msgstr "Pereiti prie sekančio teksto objekto piešimo puslapyje"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:320-38
 msgid "Select all in drawing page"
-msgstr ""
+msgstr "Pasirinkti viską piešimo puslapyje"
 
 #: html/cool-help.html%2Bdiv.h2:326-5
-#, fuzzy
 msgid "<span class=\"productname\">{productname}</span> Help"
-msgstr "Prezentacijos <span class=\"productname\">{productname}</span>"
+msgstr "<span class=\"productname\">{productname}</span> Pagalba"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:329-13
 #: html/cool-help.html%2Bdiv.div.h3:364-5
-#, fuzzy
 msgid "Collaborative editing"
-msgstr "Teksto formatavimas"
+msgstr "Bendras redagavimas"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:330-13
 #: html/cool-help.html%2Bdiv.div.h3:374-5
-#, fuzzy
 msgid "<span class=\"productname\">{productname}</span> user interface"
-msgstr "Prezentacijos <span class=\"productname\">{productname}</span>"
+msgstr "<span class=\"productname\">{productname}</span> vartotojo sąsaja"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:331-13
 #: html/cool-help.html%2Bdiv.div.h3:411-5
 msgid "Opening, closing, saving, printing and downloading documents"
 msgstr ""
+"Dokumentų atidarymas, uždarymas, išsaugojimas, spausdinimas ir atsisiuntimas"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:332-13
 #: html/cool-help.html%2Bdiv.div.h3:420-5
-#, fuzzy
 msgid "Editing documents"
-msgstr "Tekstinių dokumentų redagavimas"
+msgstr "Dokumentų redagavimas"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:333-13
 #: html/cool-help.html%2Bdiv.nav.ul.li:339-13
@@ -1880,18 +1866,17 @@ msgstr "Tekstinių dokumentų redagavimas"
 #: html/cool-help.html%2Bdiv.div.div.h3:510-5
 #: html/cool-help.html%2Bdiv.div.div.h3:621-5
 msgid "Advanced features"
-msgstr ""
+msgstr "Išplėstinės funkcijos"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:335-13
 #: html/cool-help.html%2Bdiv.div.h3:488-5
-#, fuzzy
 msgid "<span class=\"productname\">{productname}</span> spreadsheets"
-msgstr "Tekstiniai dokumentai <span class=\"productname\">{productname}</span>"
+msgstr "<span class=\"productname\">{productname}</span> skaičiuoklės"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:336-13
 #: html/cool-help.html%2Bdiv.div.div.h3:490-5
 msgid "Editing spreadsheets"
-msgstr ""
+msgstr "Skaičiuoklių redagavimas"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:337-13
 #: html/cool-help.html%2Bdiv.div.div.h3:494-5
@@ -2030,6 +2015,14 @@ msgid ""
 "click the show icon <span class=\"w2ui-icon unfold icon-size\" role=\"img\" "
 "aria-label=\"show menu bar\" title=\"Show menu bar\"></span>."
 msgstr ""
+"<span class=\"def\">Meniu juosta:</span> Pagrindinis meniu yra viršuje ir "
+"jame yra daug parinkčių, pvz., spausdinimo, redagavimo, peržiūros ir kitos "
+"išplėstinės komandos. Meniu juostą galite paslėpti spustelėdami slėpimo "
+"piktogramą <span class=\"w2ui-icon fold icon-size\" role=\"img\" aria-"
+"label=\"hide menu bar\" title=\"Hide menu bar\"></span>, esančią tolimajame "
+"dešiniajame kampe. Norėdami ją vėl rodyti, spustelėkite rodymo piktogramą "
+"<span class=\"w2ui-icon unfold icon-size\" role=\"img\" aria-label=\"show "
+"menu bar\" title=\"Show menu bar\"></span>."
 
 #: html/cool-help.html%2Bdiv.div.div.p:383-5
 msgid ""
@@ -2063,6 +2056,9 @@ msgid ""
 "Status bar showing page number, word count, insert mode, selection mode, "
 "language, edit mode, navigation, zoom, and search"
 msgstr ""
+"Būsenos juostoje rodomas puslapio numeris, žodžių skaičius, įterpimo "
+"režimas, pasirinkimo režimas, kalba, redagavimo režimas, naršymas, mastelio "
+"keitimas ir paieška"
 
 #: html/cool-help.html%2Bdiv.div.div.p:393-5
 msgid ""
@@ -2077,7 +2073,6 @@ msgstr ""
 "raidžių. Šalia paieškos laukelio yra trys mygtukai:"
 
 #: html/cool-help.html%2Bdiv.div.div.ul.li:395-7
-#, fuzzy
 msgid "Search backwards"
 msgstr "Atbulinė paieška"
 
@@ -2090,16 +2085,15 @@ msgid "Cancel the search (appears only when a text has been searched)"
 msgstr "Atšaukti paiešką (rodomas tik esant teksto paieškai)"
 
 #: html/cool-help.html%2Bdiv.div.div.p:401-5
-#, fuzzy
 msgid ""
 "<span class=\"def\">The zoom bar:</span> The zoom bar includes buttons to "
 "reset zoom to 100%, zoom out and zoom in. The zoom applies to the document "
 "area, the user interface is not affected. The current level of zoom is shown "
 "in this area."
 msgstr ""
-"<span class=\"def\">Mastelio juosta:</span> Dešinėje būsenos juostos pusėje "
-"yra mygtukų rinkinys, leidžiantis padidinti vaizdą iki 100 %, jį atitolinti "
-"ir priartinti. Mastelio keitimas taikomas dokumento sričiai, vartotojo "
+"<span class=\"def\">Mastelio keitimo juosta:</span> Mastelio keitimo "
+"juostoje yra mygtukai, skirti atkurti 100 % mastelį, atitolinti ir "
+"priartinti vaizdą. Mastelio keitimas taikomas dokumento sričiai, vartotojo "
 "sąsajos tai nepaveikia. Dabartinis mastelio lygis rodomas šioje srityje."
 
 #: html/cool-help.html%2Bdiv.div.div.p:402-5
@@ -2108,7 +2102,7 @@ msgid ""
 "will only see pixels appear at inserted images, such as jpg’s or png’s."
 msgstr ""
 "Tekstas, diagramos, formos ir svg vaizdai išliks ryškūs; priartinus matysite "
-"pikselius tik įterptuose vaizduose, pvz., JPG arba PNG."
+"pikselius tik įterptuose vaizduose, pvz., 'jpg' arba 'png'."
 
 #: html/cool-help.html%2Bdiv.div.div.p:403-5
 msgid "Using the browser zoom affects the document and user interface areas."
@@ -2122,11 +2116,16 @@ msgid ""
 "details about the current document. The actual information depends on the "
 "nature of the document."
 msgstr ""
+"<span class=\"def\">Informacijos juosta:</span> Informacijos juostoje rodoma "
+"išsami informacija apie dabartinį dokumentą. Tikroji informacija priklauso "
+"nuo dokumento pobūdžio."
 
 #: html/cool-help.html%2Bdiv.div.div.div.img[alt]:407-29
 msgid ""
 "Information bar showing page navigation arrows, zoom controls, and zoom level"
 msgstr ""
+"Informacijos juosta, kurioje rodomos puslapio naršymo rodyklės, mastelio "
+"keitimo valdikliai ir mastelio lygis"
 
 #: html/cool-help.html%2Bdiv.div.p:412-5
 msgid ""
@@ -2275,6 +2274,8 @@ msgid ""
 "Repair Document dialog listing past document states with columns for action "
 "type, author, and timestamp"
 msgstr ""
+"Dokumento taisymo dialogo langas, kuriame pateikiamos ankstesnės dokumento "
+"būsenos su veiksmo tipo, autoriaus ir laiko žymos stulpeliais"
 
 #: html/cool-help.html%2Bdiv.div.div.p:432-5
 msgid ""
@@ -2308,6 +2309,8 @@ msgid ""
 "Idle document overlay with the message: Idle document - please click to "
 "reload and resume editing"
 msgstr ""
+"Neaktyvaus dokumento langas su pranešimu: Neaktyvus dokumentas – "
+"spustelėkite, kad įkeltumėte iš naujo ir tęstumėte redagavimą"
 
 #: html/cool-help.html%2Bdiv.div.div.p:438-5
 msgid ""
@@ -2460,9 +2463,8 @@ msgid ""
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.h4:475-5
-#, fuzzy
 msgid "Comments in documents"
-msgstr "Eiti į dokumento pabaigą"
+msgstr "Komentarai dokumentuose"
 
 #: html/cool-help.html%2Bdiv.div.div.p:476-5
 msgid ""
@@ -2707,9 +2709,8 @@ msgid ""
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.h3:562-5
-#, fuzzy
 msgid "Formatting text"
-msgstr "Teksto formatavimas"
+msgstr "Teksto Formatavimas"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:564-5
 msgid ""
@@ -3052,9 +3053,8 @@ msgid ""
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:685-5
-#, fuzzy
 msgid "How do I get a word count of my document?"
-msgstr "Eiti į dokumento pradžią"
+msgstr "Kaip sužinoti žodžių skaičių mano dokumente?"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:686-5
 msgid ""
@@ -3186,9 +3186,8 @@ msgid ""
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:720-5
-#, fuzzy
 msgid "How do I set the margins of the document?"
-msgstr "Eiti į dokumento pradžią"
+msgstr "Kaip nustatyti dokumento paraštes?"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:721-5
 msgid ""
@@ -3277,9 +3276,8 @@ msgid "Select the text you want to apply the new format."
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:750-5
-#, fuzzy
 msgid "Applying a paragraph style:"
-msgstr "Taikyti pastraipos stilių „Antraštė 1“"
+msgstr "Pastraipos stiliaus taikymas:"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:752-7
 msgid "Place the cursor at the paragraph to be formatted"
@@ -3414,9 +3412,8 @@ msgid ""
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li.img[alt]:808-176
-#, fuzzy
 msgid "slide show"
-msgstr "Skaidrių demonstracija"
+msgstr "skaidrių rodymas"
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:812-5
 msgid "How can I change the line, area and position of a shape in my slides?"
