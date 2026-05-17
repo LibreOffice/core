@@ -3313,7 +3313,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		const commentWidth = app.sectionContainer.getSectionWithName(app.CSections.CommentList.name).sectionProperties.commentWidth;
 		let documentWidth = app.activeDocument.fileSize.pX;
 		let documentHeight = app.activeDocument.fileSize.pY;
-		if (bringCommentsIntoView) documentWidth += commentWidth;
+		if (this.isWriter() && bringCommentsIntoView) newSize.x -= commentWidth;
 
 		var ratio = newSize.x / documentWidth;
 		_zoom = this._map.getScaleZoom(ratio);
