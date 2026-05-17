@@ -259,7 +259,7 @@ class ScriptForge(object, metaclass = ...):
             Otherwise, it returns the already created instance.
 
             Either the first two arguments are mandatory when Python and LibreOffice run in separate processes,
-            or the the third one is required.
+            or the third one is required.
             Otherwise, do not call this routine or leave all arguments out.
             To execute at most once by LibreOffice session.
                 Args
