@@ -65,17 +65,17 @@ public:
 
     /// Sets the anonymized version of a given plain-text string.
     /// After this, 'anonymize(plain)' will return 'anonymized'.
-    static void mapAnonymized(const std::string& plain, const std::string& anonymized)
+    static void mapAnonymized(std::string plain, std::string anonymized)
     {
         if (_instance)
         {
-            _instance->map(plain, anonymized);
+            _instance->map(std::move(plain), std::move(anonymized));
         }
     }
 
     /// Sets the anonymized version of a given plain-text string.
     /// After this, 'anonymize(plain)' will return 'anonymized'.
-    void map(const std::string& plain, const std::string& anonymized)
+    void map(std::string plain, std::string anonymized)
     {
         if (plain.empty() || anonymized.empty())
             return;
@@ -85,7 +85,7 @@ public:
 
         std::unique_lock<std::mutex> lock(_mutex);
 
-        _map[plain] = anonymized;
+        _map.insert_or_assign(std::move(plain), std::move(anonymized));
     }
 
     /// Anonymize a sensitive string to avoid leaking it.
