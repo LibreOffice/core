@@ -1001,8 +1001,10 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 								elementToFocus.focus();
 							else if (elementToFocus)
 								document.querySelector('.ui-tab.notebookbar.selected').focus();
-							else {
-								// Nothing found — cycle to first focusable
+							else if (isTab) {
+								// Tab wrap-around only. If the user actually pressed Tab,
+								// wrap to first/last. For arrow keys, leave focus alone so
+								// it stays on the current button when nothing is found.
 								let visibleContainer = Array.from(container[0].children).find(child =>
 									!child.classList.contains('hidden') && child.offsetParent !== null
 								);
