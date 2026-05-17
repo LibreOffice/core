@@ -353,6 +353,7 @@ $(filter-out \
 	    scripting/source/basprov/basprov \
 	    scripting/util/scriptframe) \
 	$(if $(filter DBCONNECTIVITY,$(BUILD_TYPE)),, \
+	    connectivity/source/manager/sdbc2 \
 	    dbaccess/util/dba \
 		forms/util/frm),$(1))
 endef
