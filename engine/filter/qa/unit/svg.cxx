@@ -416,10 +416,14 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, testTdf168135)
     xmlDocUniquePtr pXmlDoc = parseExportedFile();
 
     assertXPath(pXmlDoc, "//svg:g[@class='TextShape']//svg:rect[@fill='rgb(255,255,0)']", 2);
-    assertXPath(pXmlDoc, "(//svg:g[@class='TextShape']//svg:rect[@fill='rgb(255,255,0)'])[1]",
-                "height", u"776");
-    assertXPath(pXmlDoc, "(//svg:g[@class='TextShape']//svg:rect[@fill='rgb(255,255,0)'])[2]",
-                "height", u"776");
+    // The absolute height varies slightly between platforms due to font metrics
+    // (776 on Linux, 775 on Windows); what tdf#168135 actually fixed is that
+    // both highlights have the same height.
+    OUString aHeight1 = getXPath(
+        pXmlDoc, "(//svg:g[@class='TextShape']//svg:rect[@fill='rgb(255,255,0)'])[1]", "height");
+    OUString aHeight2 = getXPath(
+        pXmlDoc, "(//svg:g[@class='TextShape']//svg:rect[@fill='rgb(255,255,0)'])[2]", "height");
+    CPPUNIT_ASSERT_EQUAL(aHeight1, aHeight2);
 }
 
 CPPUNIT_TEST_FIXTURE(SvgFilterTest, testExportControllerFromModel)
