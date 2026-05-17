@@ -78,7 +78,8 @@ namespace Log
 
     /// Convert unsigned long num to base-10 ascii in place.
     /// Returns the *end* position.
-    char* to_ascii(char* buf, std::size_t num)
+    /// Only called from the non-IOS/!FreeBSD/!Windows branches below.
+    [[maybe_unused]] char* to_ascii(char* buf, std::size_t num)
     {
         int i = 0;
         do

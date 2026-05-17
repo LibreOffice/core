@@ -46,7 +46,8 @@ UnitBase::TestResult UnitBase::GlobalResult = UnitBase::TestResult::Ok;
 namespace
 {
 std::thread TimeoutThread;
-std::mutex TimeoutThreadMutex;
+// Only locked inside the ENABLE_DEBUG block that starts TimeoutThread.
+[[maybe_unused]] std::mutex TimeoutThreadMutex;
 std::condition_variable TimeoutConditionVariable;
 bool KitWorkFinished = false;
 
