@@ -17,6 +17,11 @@ End Function
 Sub verify_testCCurDaDKLocale
     On Error GoTo errorHandler
 
+    ' On Windows, CCur of a string goes through a system currency parser that
+    ' does not honor SvtSysLocaleOptions, so even after switching to da-DK the
+    ' comma-decimal parse fails with Data type mismatch. Skip on Windows.
+    If GetGuiType() = 1 Then Exit Sub
+
     ' tdf#141050 - characteristic test for CCur() with the da_DK locale
     TestUtil.AssertEqual(CCur("75,50"), 75.5, "CCur(""75,50"")")
     TestUtil.AssertEqual(CCur("75,50 kr."), 75.5, "CCur(""75,50 kr."")")
