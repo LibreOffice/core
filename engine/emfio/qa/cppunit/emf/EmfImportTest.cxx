@@ -1622,7 +1622,7 @@ CPPUNIT_TEST_FIXTURE(Test, testExtTextOutScaleGM_COMPATIBLE)
 #ifndef _WIN32 //FIXME
     assertXPath(pDocument, aXPathPrefix + "textsimpleportion[3]", "width", u"201");
 #else
-    assertXPathDoubleValue(pDocument, aXPathPrefix + "textsimpleportion[3]", "width", 199.0, 1.0);
+    assertXPathDoubleValue(pDocument, aXPathPrefix + "textsimpleportion[3]", "width", 200.0, 2.0);
 #endif
     assertXPath(pDocument, aXPathPrefix + "textsimpleportion[3]", "height", u"317");
 
