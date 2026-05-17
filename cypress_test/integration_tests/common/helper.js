@@ -405,7 +405,7 @@ function documentChecks(skipInitializedCheck = false) {
 	if (Cypress.env('INTEGRATION') !== 'nextcloud') {
 		doIfOnDesktop(function() {
 			if (Cypress.env('pdf-view') !== true)
-				cy.cGet('#sidebar-panel', { timeout: 20000 }).should('be.visible').should('not.be.empty');
+				cy.cGet('#sidebar-panel', {timeout: Cypress.config('defaultCommandTimeout') * 2.0}).should('be.visible').should('not.be.empty');
 
 			// Check that the document does not take the whole window width.
 			cy.window()
@@ -419,10 +419,13 @@ function documentChecks(skipInitializedCheck = false) {
 				});
 		});
 
-		// In Writer wait for styles to appear in notebookbar
+		// In Writer wait for styles to appear in notebookbar. The img only
+		// exists after the on-demand renderer round-trips with core for at
+		// least one entry, so use the same 20s timeout as the other
+		// document-load checks rather than the default 10s.
 		doIfOnDesktop(() => {
 			doIfInWriter(() => {
-				cy.cGet('#stylesview.notebookbar .icon-view-item-container img')
+				cy.cGet('#stylesview.notebookbar .icon-view-item-container img', {timeout: Cypress.config('defaultCommandTimeout') * 2.0})
 					.should('exist');
 			});
 		});
