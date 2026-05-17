@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-11 14:06+0200\n"
-"PO-Revision-Date: 2026-04-13 11:09+0000\n"
+"PO-Revision-Date: 2026-05-17 10:11+0000\n"
 "Last-Translator: Aindriú Mac Giolla Eoin <aindriu80@gmail.com>\n"
 "Language-Team: Irish <https://hosted.weblate.org/projects/collabora-online/"
 "help/ga/>\n"
@@ -11,9 +11,9 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : (n>2 && n<7) ? 2 :("
-"n>6 && n<11) ? 3 : 4;\n"
-"X-Generator: Translate Toolkit 3.6.0\n"
+"Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : (n>2 && n<7) ? 2 :(n>"
+"6 && n<11) ? 3 : 4;\n"
+"X-Generator: Weblate 2026.6.dev0\n"
 
 #: html/cool-help.html%2Bdiv.h1:9-5
 msgid "Keyboard Shortcuts"
@@ -2066,6 +2066,9 @@ msgid ""
 "Status bar showing page number, word count, insert mode, selection mode, "
 "language, edit mode, navigation, zoom, and search"
 msgstr ""
+"Barra stádais a thaispeánann uimhir leathanaigh, comhaireamh focal, mód "
+"iontrála, mód roghnúcháin, teanga, mód eagarthóireachta, loingseoireacht, "
+"súmáil isteach agus cuardach"
 
 #: html/cool-help.html%2Bdiv.div.div.p:393-5
 msgid ""
@@ -2081,9 +2084,8 @@ msgstr ""
 "cuardaigh:"
 
 #: html/cool-help.html%2Bdiv.div.div.ul.li:395-7
-#, fuzzy
 msgid "Search backwards"
-msgstr "Cuardaigh ar gcúl>"
+msgstr "Cuardaigh ar gcúl"
 
 #: html/cool-help.html%2Bdiv.div.div.ul.li:396-7
 msgid "Search forward"
@@ -2134,6 +2136,8 @@ msgstr ""
 msgid ""
 "Information bar showing page navigation arrows, zoom controls, and zoom level"
 msgstr ""
+"Barra faisnéise a thaispeánann saigheada nascleanúna leathanaigh, rialuithe "
+"súmála agus leibhéal súmála"
 
 #: html/cool-help.html%2Bdiv.div.p:412-5
 msgid ""
@@ -2174,7 +2178,7 @@ msgstr ""
 "Sábháiltear doiciméid in <span class=\"productname\">{productname}</span> go "
 "huathoibríoch, ach má tá imní ort go ndéantar doiciméad a shioncronú chomh "
 "tapa agus is féidir is féidir leat iallach a chur ar shábháil ag baint úsáid "
-"as an gcomhad <span class=\"ui\">Comhad iontráil an roghchláir </span> <span "
+"as an gcomhad <span class=\"ui\">Comhad</span> iontráil an roghchláir <span "
 "class=\"ui\">Sábháil</span>."
 
 #: html/cool-help.html%2Bdiv.div.div.p:416-30
@@ -2285,6 +2289,8 @@ msgid ""
 "Repair Document dialog listing past document states with columns for action "
 "type, author, and timestamp"
 msgstr ""
+"Dialóg Deisiúcháin Doiciméid a liostaíonn stáit an doiciméid san am atá "
+"thart le colúin le haghaidh cineál gnímh, údar, agus stampa ama"
 
 #: html/cool-help.html%2Bdiv.div.div.p:432-5
 msgid ""
@@ -2320,6 +2326,8 @@ msgid ""
 "Idle document overlay with the message: Idle document - please click to "
 "reload and resume editing"
 msgstr ""
+"Forleagan doiciméad díomhaoin leis an teachtaireacht: Doiciméad díomhaoin - "
+"cliceáil le do thoil chun athlódáil agus atosú ar an eagarthóireacht"
 
 #: html/cool-help.html%2Bdiv.div.div.p:438-5
 msgid ""
@@ -2418,6 +2426,8 @@ msgid ""
 "Chart Wizard dialog with chart type list on the left, chart style previews, "
 "3D and shape options"
 msgstr ""
+"Dialóg Draoi Cairte le liosta cineálacha cairte ar chlé, réamhamhairc stíl "
+"chairte, roghanna 3T agus cruth"
 
 #: html/cool-help.html%2Bdiv.div.div.ol.li:460-7
 msgid "If no table or range was selected, a prototype chart is displayed."
@@ -2428,6 +2438,8 @@ msgid ""
 "Column chart with grouped bars showing data for four rows across three "
 "columns"
 msgstr ""
+"Cairt cholún le barraí grúpáilte a thaispeánann sonraí do cheithre shraith "
+"trasna trí cholún"
 
 #: html/cool-help.html%2Bdiv.div.div.p:464-28
 msgid ""
@@ -2487,7 +2499,7 @@ msgid ""
 "<span class=\"def\">Insert local image:</span> opens the browser file picker "
 "to upload the image from your local computer and insert it into the document."
 msgstr ""
-"<span class=\"def\">Ionsáigh íomhá áitiúil: osclaíonn</span> roghnóir comhad "
+"<span class=\"def\">Ionsáigh íomhá áitiúil:</span> osclaíonn roghnóir comhad "
 "an bhrabhsálaí chun an íomhá a uaslódáil ó do ríomhaire áitiúil agus í a "
 "chur isteach sa doiciméad."
 
@@ -2522,6 +2534,8 @@ msgid ""
 "Comment box showing author name, date, and the comment text, displayed "
 "beside the document"
 msgstr ""
+"Bosca tráchta a thaispeánann ainm an údair, an dáta agus téacs an tráchta, "
+"le feiceáil in aice leis an doiciméad"
 
 #: html/cool-help.html%2Bdiv.div.div.p:478-5
 msgid ""
@@ -2550,7 +2564,7 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.img[alt]:483-29
 msgid "Text with a red wavy underline beneath a misspelled word"
-msgstr ""
+msgstr "Téacs le líne tonnach dhearg faoi fhocal mílitrithe"
 
 #: html/cool-help.html%2Bdiv.div.div.p:484-5
 msgid ""
@@ -2598,6 +2612,8 @@ msgid ""
 "Formula bar showing cell reference B1, function wizard icon, and the formula "
 "=SIN(PI()*A1/10)"
 msgstr ""
+"Barra foirmle a thaispeánann tagairt cille B1, deilbhín draoi feidhme, agus "
+"an fhoirmle =SIN(PI()*A1/10)"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:499-5
 msgid ""
@@ -2636,6 +2652,8 @@ msgid ""
 "Format Cells dialog on the Numbers tab with category list, format options, "
 "decimal places, and format code"
 msgstr ""
+"Dialóg Formáid Cealla ar an táb Uimhreacha le liosta catagóirí, roghanna "
+"formáide, áiteanna deachúlacha, agus cód formáide"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:511-30
 msgid ""
@@ -2675,6 +2693,9 @@ msgid ""
 "AutoFilter dropdown menu on a spreadsheet column with sort, filter by color, "
 "filter by condition, and checkboxes for individual values"
 msgstr ""
+"Roghchlár anuas AutoScagaire ar cholún scarbhileog le sórtáil, scagadh de "
+"réir datha, scagadh de réir coinníoll, agus boscaí seiceála do luachanna "
+"aonair"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:518-7
 msgid ""
@@ -2714,6 +2735,8 @@ msgid ""
 "Spreadsheet with row and column grouping controls showing outline level "
 "buttons and collapse/expand toggles"
 msgstr ""
+"Scarbhileog le rialuithe grúpála sraitheanna agus colún a thaispeánann "
+"cnaipí leibhéal imlíne agus lasca comhbhrúite/leathnaithe"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:527-5
 msgid ""
@@ -2738,6 +2761,9 @@ msgid ""
 "Validity dialog on the Criteria tab with Allow set to List, showing options "
 "for empty cells, selection list, and entry values"
 msgstr ""
+"Dialóg bailíochta ar an táb Critéir agus Ceadaigh socraithe go Liosta, ag "
+"taispeáint roghanna do chealla folamha, liosta roghnúcháin, agus luachanna "
+"iontrála"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:533-7
 msgid ""
@@ -2764,6 +2790,8 @@ msgid ""
 "Cell dropdown list showing validated entries such as Apple, Pear, Banana, "
 "Kiwi, and Lemon"
 msgstr ""
+"Liosta anuas cealla a thaispeánann iontrálacha bailíochtaithe amhail Úll, "
+"Piorra, Banana, Cíví agus Líomóid"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:538-7
 msgid ""
@@ -2793,6 +2821,8 @@ msgid ""
 "Spreadsheet cell with a comment popup showing the author, date, comment "
 "text, and Save/Cancel buttons"
 msgstr ""
+"Cill scarbhileoige le preabfhuinneog tráchta a thaispeánann an t-údar, an "
+"dáta, téacs na tráchta, agus na cnaipí Sábháil/Cealaigh"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:546-5
 msgid ""
@@ -2813,6 +2843,9 @@ msgid ""
 "Conditional formatting icon set picker showing arrows, circles, traffic "
 "lights, stars, smiley faces, and bar chart symbol sets"
 msgstr ""
+"Roghnóir tacair deilbhíní formáidithe coinníollaigh a thaispeánann "
+"saigheada, ciorcail, soilse tráchta, réaltaí, aghaidheanna aoibh gháire, "
+"agus tacair siombailí chairt barra"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:555-30
 msgid ""
@@ -2909,6 +2942,8 @@ msgid ""
 "Paragraph dialog on the Indents and Spacing tab with settings for indent, "
 "spacing, and line spacing, and a preview on the right"
 msgstr ""
+"Dialóg mhír ar an táb Eangú agus Spásáil le socruithe le haghaidh eangú, "
+"spásáil agus spásáil líne, agus réamhamharc ar dheis"
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:576-5
 msgid "Handling Tables"
@@ -2932,6 +2967,8 @@ msgid ""
 "Insert Table picker showing a grid to select the number of rows and columns, "
 "currently showing 5 by 3"
 msgstr ""
+"Roghnóir Tábla Ionsáigh a thaispeánann eangach chun líon na sraitheanna agus "
+"na gcolún a roghnú, ag taispeáint 5 faoi 3 faoi láthair"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:581-5
 msgid ""
@@ -2964,6 +3001,8 @@ msgid ""
 "Tracked change shown as a comment box beside the document with author name, "
 "date, and change description"
 msgstr ""
+"Athrú rianaithe a thaispeántar mar bhosca tráchta in aice leis an doiciméad "
+"le hainm an údair, an dáta agus cur síos ar an athrú"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:587-5
 msgid ""
@@ -3103,6 +3142,9 @@ msgid ""
 "Slide properties panel showing format, orientation, background, and master "
 "slide settings, with a layout gallery of thumbnail options below"
 msgstr ""
+"Painéal airíonna sleamhnáin a thaispeánann socruithe formáide, treoshuímh, "
+"cúlra agus máistir-sleamhnáin, le gailearaí leagan amach de roghanna "
+"mionsamhlacha thíos"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:626-30
 msgid ""
@@ -3209,9 +3251,9 @@ msgid ""
 msgstr ""
 "Sábhálann <span class=\"productname\">{productname}</span> an doiciméad sa "
 "chúlra go rialta, ní féidir leat é a dhúnadh gan é a shábháil. Chun do chuid "
-"athruithe a thréigean, ní mór duit iad a chealú, nó an <span class=\"ui\""
-">Stair Athbhreithnithe</span> a úsáid sa roghchlár <span class=\"ui\""
-">Comhad</span>."
+"athruithe a thréigean, ní mór duit iad a chealú, nó an <span class=\"ui\">"
+"Stair Athbhreithnithe </span> a úsáid sa roghchlár <span class=\"ui\">"
+"Comhad</span>."
 
 #: html/cool-help.html%2Bdiv.div.div.h4:656-5
 msgid ""
@@ -3292,6 +3334,8 @@ msgid ""
 "Thesaurus dialog for the word company, listing alternatives such as "
 "institution, establishment, and troupe, with a Replace with field"
 msgstr ""
+"Dialóg téasáras don fhocal cuideachta, ina liostaítear roghanna malartacha "
+"amhail institiúid, establishment, agus troupe, le réimse Ionadaigh le"
 
 #: html/cool-help.html%2Bdiv.div.div.h4:677-5
 msgid ""
@@ -3332,6 +3376,8 @@ msgid ""
 "Word Count dialog showing word and character counts for the current "
 "selection and for the whole document"
 msgstr ""
+"Dialóg Líon Focal a thaispeánann comhaireamh focal agus carachtar don "
+"roghnúchán reatha agus don doiciméad ar fad"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:688-5
 msgid ""
@@ -3378,6 +3424,9 @@ msgid ""
 "hexadecimal and decimal code inputs, and recent and favorite characters at "
 "the bottom"
 msgstr ""
+"Dialóg Carachtair Speisialta le greille carachtar, réimsí cuardaigh agus "
+"cló, ionchuir chód heicsidheachúlach agus deachúil, agus carachtair le "
+"déanaí agus is fearr leat ag an mbun"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:699-7
 msgid ""
@@ -3458,12 +3507,12 @@ msgid ""
 "Beware that if track changes are enabled but hidden, you still record "
 "changes and may inadvertently leave unwanted text available in the document."
 msgstr ""
-"Chun athruithe rianta a thaispeáint nó a chur i bhfolach roghnaigh <span "
-"class=\"ui\">Cuir</span> → <span class=\"ui\">Athruithe Rian</span> → <span "
-"class=\"ui\">Taispeáin</span> in eagar. Tabhair faoi deara má tá athruithe "
-"rian cumasaithe ach i bhfolach, go ndéanfaidh tú athruithe fós a thaifeadadh "
-"agus go bhféadfadh sé go bhfágfaidh tú téacs nach dteastaíonn ar fáil sa "
-"doiciméad gan chuimhneamh."
+"Chun athruithe rianaithe a thaispeáint nó a cheilt, roghnaigh <span "
+"class=\"ui\">Eagar</span> → <span class=\"ui\">Rianaigh Athruithe </span> → "
+"<span class=\"ui\">Taispeáin</span>. Tabhair faoi deara, má tá athruithe "
+"rianaithe cumasaithe ach i bhfolach, go ndéanfaidh tú athruithe a "
+"thaifeadadh fós agus go bhféadfadh téacs nach dteastaíonn a fhágáil ar fáil "
+"sa doiciméad gan chuimhneamh."
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:716-5
 msgid ""
@@ -3476,22 +3525,25 @@ msgid ""
 "\"ui\">Track Changes </span> → <span class=\"ui\">Manage</span>. A dialog "
 "shows a list of all tracked changes. Use the dialog buttons accordingly."
 msgstr ""
-"Is féidir athruithe a ghlacadh nó a dhiúltú. Chun athruithe a ghlacadh nó a "
-"dhiúltú, cliceáil ar na deilbhíní comhfhreagracha sa bhosca tuairimí ar "
-"thaobh na láimhe deise den doiciméad. Mar rogha air sin, roghnaigh <span "
-"class=\"ui\">Cuir in eagar</span> → <span class=\"ui\">Athruithe Rian</span> "
-"→ <span class=\"ui\">Glac leis</span> nó <span class= \"ui\">Diúltaigh</"
-"span>. Ina theannta sin, más gá duit athruithe a scagadh sula nglacann tú "
-"leo nó sula ndiúltaítear dóibh, roghnaigh <span class=\"ui\">Cuir in eagar</"
-"span> → <span class=\"ui\">Athruithe Rian</span> → <span class=\"ui\" "
-">Bainistigh</span>. Taispeánann dialóg liosta de na hathruithe rianaithe go "
-"léir. Bain úsáid as na cnaipí dialóige dá réir sin."
+"Is féidir glacadh le hathruithe nó iad a dhiúltú. Chun glacadh le hathruithe "
+"nó iad a dhiúltú, cliceáil ar na deilbhíní comhfhreagracha sa bhosca "
+"tuairimí ar dheis an doiciméid. Nó is féidir leat <span class=\"ui\">Eagar</"
+"span> → <span class=\"ui\">Rianaigh Athruithe </span> → <span class=\"ui\">"
+"Glac</span> nó <span class=\"ui\">Diúltaigh</span> a roghnú. Ina theannta "
+"sin, más gá duit athruithe a scagadh sula nglactar leo nó sula ndiúltaítear "
+"dóibh, roghnaigh <span class=\"ui\">Eagar</span> → <span class=\"ui\">"
+"Rianaigh Athruithe </span> → <span class=\"ui\">Bainistigh</span>. "
+"Taispeánann dialóg liosta de na hathruithe rianaithe go léir. Bain úsáid as "
+"na cnaipí dialóige dá réir."
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:717-29
 msgid ""
 "Manage Changes dialog with a list of tracked changes showing action, author, "
 "date, and comment columns, and Accept, Reject, Accept All, Reject All buttons"
 msgstr ""
+"Dialóg Bainistigh Athruithe le liosta d’athruithe rianaithe a thaispeánann "
+"colúin gnímh, údair, dáta agus tráchta, agus na cnaipí Glac leis, Diúltaigh, "
+"Glac leis Uile, Diúltaigh Uile"
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:720-5
 msgid "How do I set the margins of the document?"
@@ -3526,6 +3578,9 @@ msgid ""
 "Page Style dialog on the Organizer tab showing style name, next style, "
 "inherit from, and category fields, with a summary of page properties"
 msgstr ""
+"Dialóg Stíl Leathanaigh ar an táb Eagraitheora ina bhfuil ainm na stíle, an "
+"chéad stíl eile, oidhreacht ó, agus réimsí catagóire, mar aon le hachoimre "
+"ar airíonna an leathanaigh"
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:730-5
 msgid "How do I change the page orientation to landscape inside my document?"
@@ -3546,8 +3601,8 @@ msgid ""
 "Choose <span class=\"ui\">Format</span> → <span class=\"ui\">Paragraph</"
 "span>, <span class=\"ui\">Text Flow </span> tab"
 msgstr ""
-"Roghnaigh <span class=\"ui\">Formáid</span> → <span class=\"ui\">Alt</span>, "
-"cluaisín <span class=\"ui\">Sreabhadh Téacs</span>"
+"Roghnaigh <span class=\"ui\">Formáid</span> → <span class=\"ui\">Mír</span>, "
+"an cluaisín <span class=\"ui\">Sreabhadh Téacs </span>"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:734-7
 msgid ""
@@ -3692,6 +3747,8 @@ msgid ""
 "Text Import dialog with character set, locale, separator options, and a "
 "preview of the imported CSV data"
 msgstr ""
+"Dialóg Iompórtála Téacs le tacar carachtar, logán, roghanna deighilteora, "
+"agus réamhamharc ar na sonraí CSV allmhairithe"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:778-7
 msgid ""
@@ -3810,6 +3867,8 @@ msgid ""
 "Area dialog on the Color tab with a color palette, active and new color "
 "previews, RGB value fields, and a custom palette section"
 msgstr ""
+"Dialóg limistéir ar an táb Dath le pailéad dathanna, réamhamhairc dathanna "
+"gníomhacha agus nua, réimsí luacha RGB, agus rannóg pailéid saincheaptha"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:819-7
 msgid "Set the properties of the element of the object."

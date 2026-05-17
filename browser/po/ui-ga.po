@@ -8,17 +8,17 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-11 14:06+0200\n"
-"PO-Revision-Date: 2026-03-22 10:09+0000\n"
+"PO-Revision-Date: 2026-05-17 10:11+0000\n"
 "Last-Translator: Aindriú Mac Giolla Eoin <aindriu80@gmail.com>\n"
 "Language-Team: Irish <https://hosted.weblate.org/projects/collabora-online/"
-"ui/ga/>\n"
-"Language: \n"
+"collabora-ui/ga/>\n"
+"Language: ga\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : (n>2 && n<7) ? 2 :("
-"n>6 && n<11) ? 3 : 4;\n"
-"X-Generator: Weblate 5.17-dev\n"
+"Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : (n>2 && n<7) ? 2 :(n>"
+"6 && n<11) ? 3 : 4;\n"
+"X-Generator: Weblate 2026.6.dev0\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -407,33 +407,31 @@ msgstr "Síniú CA"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:432
 #: admin/src/integrator/AdminIntegratorSettings.ts:436
-#, fuzzy
 msgid "Provider"
-msgstr "Soláthraí:"
+msgstr "Soláthraí"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:433
 #: admin/src/integrator/AdminIntegratorSettings.ts:437
 msgid "API Key"
-msgstr ""
+msgstr "Eochair API"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:434
 #: admin/src/integrator/AdminIntegratorSettings.ts:439
-#, fuzzy
 msgid "Model"
-msgstr "Mód"
+msgstr "Samhail"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:435
 #: admin/src/integrator/AdminIntegratorSettings.ts:438
 msgid "Base URL"
-msgstr ""
+msgstr "Bun-URL"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:440
 msgid "Image Size"
-msgstr ""
+msgstr "Méid na hÍomhá"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:441
 msgid "Request Timeout (seconds)"
-msgstr ""
+msgstr "Am Teorann Iarratais (soicindí)"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:444
 msgid "In-document Screen Reader"
@@ -453,11 +451,11 @@ msgstr "Mód Dorcha"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:446
 msgid "Smart Zoom"
-msgstr ""
+msgstr "Zúmáil Chliste"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:447
 msgid "Default Zoom"
-msgstr ""
+msgstr "Súmáil Réamhshocraithe"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:448
 msgid "Compact layout"
@@ -862,68 +860,70 @@ msgid ""
 "Configure AI provider credentials and model. Models are fetched "
 "automatically when credentials change."
 msgstr ""
+"Cumraigh dintiúir agus samhail sholáthraí na hintleachta saorga. Faightear "
+"samhlacha go huathoibríoch nuair a athraíonn dintiúir."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1926
 msgid "Text Generation"
-msgstr ""
+msgstr "Giniúint Téacs"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1976
 #: admin/src/integrator/AdminIntegratorSettings.ts:2082
 msgid "e.g."
-msgstr ""
+msgstr "m.sh."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1995
 #: admin/src/integrator/AdminIntegratorSettings.ts:2113
 #: admin/src/integrator/AdminIntegratorSettings.ts:2557
 #: admin/src/integrator/AdminIntegratorSettings.ts:2573
 msgid "Fetch models to select"
-msgstr ""
+msgstr "Faigh samhlacha le roghnú"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2024
 msgid "Image Generation"
-msgstr ""
+msgstr "Giniúint Íomhánna"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2029
 msgid "Same as Text AI"
-msgstr ""
+msgstr "Mar an gcéanna le Téacs AI"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2098
 msgid "Leave empty to use Text AI key"
-msgstr ""
+msgstr "Fág folamh chun eochair Téacs AI a úsáid"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2360
 #: admin/src/integrator/AdminIntegratorSettings.ts:2447
 msgid "Fetching models..."
-msgstr ""
+msgstr "Ag fáil samhlacha..."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2389
 #: admin/src/integrator/AdminIntegratorSettings.ts:2399
 #: admin/src/integrator/AdminIntegratorSettings.ts:2476
 #: admin/src/integrator/AdminIntegratorSettings.ts:2486
 msgid "No models found"
-msgstr ""
+msgstr "Níor aimsíodh aon mhúnlaí"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2409
 #: admin/src/integrator/AdminIntegratorSettings.ts:2496
 msgid "Models fetched successfully"
-msgstr ""
+msgstr "Fuarthas samhlacha go rathúil"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2415
 #: admin/src/integrator/AdminIntegratorSettings.ts:2502
 msgid "Failed to fetch models"
-msgstr ""
+msgstr "Theip ar shamhlacha a fháil"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2425
 msgid "Invalid provider configuration"
-msgstr ""
+msgstr "Cumraíocht sholáthraí neamhbhailí"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2537
 msgid "None (disable image generation)"
-msgstr ""
+msgstr "Gan aon cheann (díchumasaigh giniúint íomhá)"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2919
 msgid "Reset"
-msgstr ""
+msgstr "Athshocraigh"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3038
 #: src/map/handler/Map.WOPI.js:793
@@ -1059,22 +1059,21 @@ msgstr ""
 "{0}ms"
 
 #: src/app/TableStylesService.ts:101
-#, fuzzy
 msgid "Light"
-msgstr "Soilse"
+msgstr "Solas"
 
 #: src/app/TableStylesService.ts:103
 msgid "Medium"
-msgstr ""
+msgstr "Meánach"
 
 #: src/app/TableStylesService.ts:105
 msgid "Dark"
-msgstr ""
+msgstr "Dorcha"
 
 #: src/app/TableStylesService.ts:107
 #: src/control/jsdialog/Widget.ColorPicker.ts:334
 msgid "Custom"
-msgstr ""
+msgstr "Saincheaptha"
 
 #: src/app/TableStylesService.ts:195 src/app/TableStylesService.ts:207
 #: src/app/TableStylesService.ts:209
@@ -1144,9 +1143,8 @@ msgid "Resolved"
 msgstr "Réitithe"
 
 #: src/canvas/sections/CommentSection.ts:574
-#, fuzzy
 msgid "Removed"
-msgstr "Bain"
+msgstr "Bainte"
 
 #: src/canvas/sections/CommentSection.ts:1160
 #: src/control/jsdialog/Widget.Comment.ts:177
@@ -1253,7 +1251,7 @@ msgstr "Dath uathoibríoch"
 #: src/control/Control.AboutDialog.ts:89
 #: src/control/jsdialog/Widget.TreeView.ts:786
 msgid "(opens in new tab)"
-msgstr ""
+msgstr "(osclaítear i gcluaisín nua)"
 
 #: src/control/Control.AboutDialog.ts:148
 msgid "Served by: "
@@ -2773,7 +2771,7 @@ msgstr "Dearadh Tábla"
 
 #: src/control/Notebookbar.CalcTableTab.ts:72
 msgid "Table Options"
-msgstr ""
+msgstr "Roghanna Tábla"
 
 #: src/control/Notebookbar.CalcTableTab.ts:85
 msgid "Header Row"
@@ -2980,7 +2978,7 @@ msgstr "Pictiúr"
 #: src/control/Control.NotebookbarImpress.js:143
 #: src/control/Control.NotebookbarWriter.js:103
 msgid "Chart"
-msgstr ""
+msgstr "Cairt"
 
 #: src/control/Control.NotebookbarCalc.js:99
 #: src/control/Control.NotebookbarDraw.js:122
@@ -3049,7 +3047,7 @@ msgstr "Gearrthaisce"
 #: src/control/Control.NotebookbarWriter.js:648
 #: src/control/Control.TopToolbar.js:148
 msgid "Clone Formatting (double click to keep active)"
-msgstr ""
+msgstr "Formáidiú Clónála (cliceáil faoi dhó le fanacht gníomhach)"
 
 #: src/control/Control.NotebookbarCalc.js:456
 #: src/control/Control.NotebookbarDraw.js:649
@@ -3057,7 +3055,7 @@ msgstr ""
 #: src/control/Control.NotebookbarWriter.js:649
 #: src/control/Control.TopToolbar.js:148
 msgid "Clone Formatting is active (click again or press Esc to exit)"
-msgstr ""
+msgstr "Tá Formáidiú Clónála gníomhach (cliceáil arís nó brúigh Esc le scoir)"
 
 #: src/control/Control.NotebookbarCalc.js:492
 #: src/control/Control.NotebookbarDraw.js:685
@@ -3224,7 +3222,7 @@ msgstr "Ailínigh"
 #: src/control/Control.NotebookbarWriter.js:3022
 #: src/control/Control.NotebookbarWriter.js:3345
 msgid "Arrange"
-msgstr "Socraigh"
+msgstr "Eagraigh"
 
 #: src/control/Control.NotebookbarCalc.js:1414
 msgid "Sheet View"
@@ -3469,7 +3467,7 @@ msgstr "Máistir"
 
 #: src/control/Control.NotebookbarImpress.js:479
 msgid "Start Slide Show"
-msgstr ""
+msgstr "Tosaigh Taispeántas Sleamhnán"
 
 #: src/control/Control.NotebookbarImpress.js:484
 msgid "From Beginning"
@@ -3489,7 +3487,7 @@ msgstr "Lánscáileán, ag tosú ag an sleamhnán seo"
 
 #: src/control/Control.NotebookbarImpress.js:508
 msgid "Present"
-msgstr ""
+msgstr "I láthair"
 
 #: src/control/Control.NotebookbarImpress.js:514
 msgid "Present in Window"
@@ -3527,7 +3525,7 @@ msgstr "Féach ar shleamhnáin agus an láithreoir á gcur chun cinn"
 
 #: src/control/Control.NotebookbarImpress.js:552
 msgid "Set Up"
-msgstr ""
+msgstr "Socraigh"
 
 #: src/control/Control.NotebookbarImpress.js:679
 msgid "Slide Views"
@@ -3687,28 +3685,28 @@ msgstr "Greamaigh"
 
 #: src/control/Control.PartsPreview.js:422
 msgid "Add Section"
-msgstr ""
+msgstr "Cuir Roinn leis"
 
 #: src/control/Control.PartsPreview.js:564
 #: src/control/Control.PartsPreview.js:637
 msgid "Rename Section"
-msgstr ""
+msgstr "Athainmnigh an Rannóg"
 
 #: src/control/Control.PartsPreview.js:571
 msgid "Move Section Up"
-msgstr ""
+msgstr "Bog an Roinn Suas"
 
 #: src/control/Control.PartsPreview.js:579
 msgid "Move Section Down"
-msgstr ""
+msgstr "Bog an Roinn Síos"
 
 #: src/control/Control.PartsPreview.js:586
 msgid "Remove Section"
-msgstr ""
+msgstr "Bain an Roinn"
 
 #: src/control/Control.PartsPreview.js:638
 msgid "Enter new section name:"
-msgstr ""
+msgstr "Cuir isteach ainm nua na rannóige:"
 
 #: src/control/Control.SaveState.ts:49
 msgid "Saving"
@@ -3910,11 +3908,11 @@ msgstr "Líon na roghanna"
 
 #: src/control/Control.StatusBar.js:267
 msgid "Previous Page"
-msgstr ""
+msgstr "Leathanach Roimhe Seo"
 
 #: src/control/Control.StatusBar.js:269
 msgid "Next Page"
-msgstr ""
+msgstr "An Leathanach Eile"
 
 #: src/control/Control.StatusBar.js:275
 msgid "Zoom to Fit Page Width"
@@ -3922,7 +3920,7 @@ msgstr "Zúmáil chun Oiriúnú do Leithead an Leathanaigh"
 
 #: src/control/Control.StatusBar.js:280
 msgid "Status Bar Menu"
-msgstr ""
+msgstr "Roghchlár Barra Stádais"
 
 #: src/control/Control.StatusBar.js:553
 msgid "The document is probably locked and has been opened as view-only"
@@ -4579,7 +4577,7 @@ msgstr "Taobh le Taobh"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1815
 msgid "Hidden"
-msgstr ""
+msgstr "I bhfolach"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1829
 msgid "All users"
@@ -4788,9 +4786,8 @@ msgid "Insert Comment"
 msgstr "Ionsáigh Nóta"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2401
-#, fuzzy
 msgid "Insert Note"
-msgstr "Ionsáigh Dáta"
+msgstr "Cuir Nóta isteach"
 
 #: src/control/jsdialog/Util.SnackbarController.ts:122
 msgid "Dismiss"
@@ -4811,7 +4808,7 @@ msgstr "Uathoibríoch"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:253
 msgid "Palette"
-msgstr ""
+msgstr "Pailéad"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:268
 msgid "Color palette"
@@ -4868,7 +4865,7 @@ msgstr "Raon roghnaithe cealla"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:44
 msgid "Cell Selection"
-msgstr ""
+msgstr "Roghnú Cealla"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:48
 msgid "Entering text mode"
@@ -4876,7 +4873,7 @@ msgstr "Mód téacs á iontráil"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:49
 msgid "Insert Mode"
-msgstr ""
+msgstr "Mód Ionsáigh"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:54
 msgid "Selection Mode"
@@ -4893,7 +4890,7 @@ msgstr "Rogha feidhmeanna"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:68
 msgid "Table Cell Functions"
-msgstr ""
+msgstr "Feidhmeanna Cealla Tábla"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:73
 msgid "Your changes have been saved"
@@ -5073,6 +5070,8 @@ msgstr "Tá an freastalaí ag múchadh"
 msgid ""
 "AI is not configured. Go to File > Options > View Settings to set it up."
 msgstr ""
+"Níl an AI cumraithe. Téigh go Comhad > Roghanna > Socruithe Amhairc chun é a "
+"shocrú."
 
 #: src/docdispatcher.ts:607
 msgid "Are you sure you want to delete this slide?"
