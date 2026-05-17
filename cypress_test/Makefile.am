@@ -287,12 +287,13 @@ clean-local:
 
 # Used on jenkins to run all the tests in parallel as much as possible.
 # Using $(PID_FILE) as dependency to start coolwsd.
+# trap KILL_COMMAND on EXIT so a failed sub-make still kills coolwsd.
 check-desktop-mobile-multi: @JAILS_PATH@ @CACHE_PATH@ $(NODE_BINS)
+	trap '$(KILL_COMMAND) || true' EXIT; \
 	$(MAKE) SUITE_ONLY=1 \
 		$(DESKTOP_TEST_FILES_DONE) \
 		$(MOBILE_TEST_FILES_DONE) \
 		$(MULTIUSER_TEST_FILES_DONE)
-	$(V)$(KILL_COMMAND) || true
 # run_buffered.sh always exits 0 and records failures in ERROR_LOG
 	$(V)test ! -f $(ERROR_LOG) || (cat $(ERROR_LOG) && false)
 
@@ -306,11 +307,12 @@ check-mobile: @JAILS_PATH@ @CACHE_PATH@ $(NODE_BINS)
 # coolwsd is already running via the parent make for the parallel sub-make case
 	$(if $(and $(PARALLEL_BUILD), $(if $(spec),,yes)),,$(call start_coolwsd))
 # with -jN and no single spec, dispatch to per-file .done targets via sub-make;
-# SUITE_ONLY=1 suppresses the mobile -> desktop ordering dependency
+# SUITE_ONLY=1 suppresses the mobile -> desktop ordering dependency;
+# trap KILL_COMMAND on EXIT so a failed sub-make still kills coolwsd
 	$(if $(and $(PARALLEL_BUILD), $(if $(spec),,yes)),\
+		trap '$(KILL_COMMAND) || true' EXIT; \
 		$(MAKE) SUITE_ONLY=1 $(MOBILE_TEST_FILES_DONE),\
 		$(call run_mobile_tests,$(spec)))
-	$(V)$(KILL_COMMAND) || true
 # run_buffered.sh always exits 0 and records failures in ERROR_LOG
 	$(V)test ! -f $(ERROR_LOG) || (cat $(ERROR_LOG) && false)
 
@@ -414,11 +416,12 @@ check-desktop: @JAILS_PATH@ @CACHE_PATH@ $(NODE_BINS)
 	$(call run_JS_error_check)
 # coolwsd is already running via the parent make for the parallel sub-make case
 	$(if $(and $(PARALLEL_BUILD), $(if $(spec),,yes)),,$(call start_coolwsd))
-# with -jN and no single spec, dispatch to per-file .done targets via sub-make
+# with -jN and no single spec, dispatch to per-file .done targets via sub-make;
+# trap KILL_COMMAND on EXIT so a failed sub-make still kills coolwsd
 	$(if $(and $(PARALLEL_BUILD), $(if $(spec),,yes)),\
+		trap '$(KILL_COMMAND) || true' EXIT; \
 		$(MAKE) $(DESKTOP_TEST_FILES_DONE),\
 		$(call run_desktop_tests,$(spec)))
-	$(V)$(KILL_COMMAND) || true
 # run_buffered.sh always exits 0 and records failures in ERROR_LOG
 	$(V)test ! -f $(ERROR_LOG) || (cat $(ERROR_LOG) && false)
 
