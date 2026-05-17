@@ -121,12 +121,25 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Slide sections', function(
 			// 3 sections: Section-1 (slides 1-4), Section-2 (5-11), Section-3 (12-13).
 			assertSectionHeaders(['Section-1', 'Section-2', 'Section-3']);
 
+			// Wait until that the has the expected shape before clicking.
+			// The section header DOM can be present while the sections array is
+			// still being filled in from the late-arriving .uno:SlideSections state.
+			cy.window().should((win) => {
+				var sections = win['0'].app.impress.sections;
+				expect(sections).to.have.length(3);
+				expect(sections[0].startIndex).to.equal(0);
+				expect(sections[1].startIndex).to.equal(4);
+				expect(sections[2].startIndex).to.equal(11);
+				expect(win['0'].app.impress.partList).to.have.length(13);
+			});
+
 			// Click the body of Section-2's header (anywhere that isn't the toggle).
 			cy.cGet('.slide-section-header').eq(1)
 				.find('.slide-section-name').click();
 			helper.processToIdle(this.win);
 
-			cy.window().then((win) => {
+			// Use should() so the assertion block retries.
+			cy.window().should((win) => {
 				var impress = win['0'].app.impress;
 				// Slides in Section-2 (indices 4-10) should be selected.
 				for (var i = 4; i <= 10; i++)
