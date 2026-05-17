@@ -252,8 +252,8 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,sc,\
 	JunitTest_sc_unoapi_4 \
 	JunitTest_sc_unoapi_6 \
 	JunitTest_sc_unoapi_7 \
-	CppunitTest_sc_opencl-1 \
-	CppunitTest_sc_opencl-2 \
+	$(call gb_Helper_optional,OPENCL,CppunitTest_sc_opencl-1) \
+	$(call gb_Helper_optional,OPENCL,CppunitTest_sc_opencl-2) \
 ))
 
 $(eval $(call gb_Module_add_perfcheck_targets,sc,\
