@@ -10,7 +10,14 @@ describe(['tagdesktop'], 'Image Operation Tests', function() {
 		helper.setupAndLoadDocument('writer/image_operation.odt');
 		desktopHelper.switchUIToNotebookbar();
 		cy.viewport(1920,1080);
-
+		// The viewport change fires map 'resize' which triggers
+		// CanvasTileLayer._fitWidthZoom and sends an async clientzoom
+		// Wait for that to settle so the test's own selectZoomLevel
+		// call isn't overwritten by the late arrival.
+		cy.getFrameWindow().then((win) => {
+			this.win = win;
+			return helper.processToIdle(win);
+		});
 	});
 
 	it('Insert Image',function() {
