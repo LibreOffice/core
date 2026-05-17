@@ -92,16 +92,6 @@ namespace FileUtil
 
     // End of wrappers for platform-dependent API.
 
-    /// Used for anonymizing URLs
-    void setUrlAnonymization(bool anonymize, std::uint64_t salt);
-
-    /// Anonymize the basename of filenames, preserving the path and extension.
-    std::string anonymizeUrl(const std::string& url);
-
-    /// Anonymize user names and IDs.
-    /// Will use the Obfuscated User ID if one is provided via WOPI.
-    std::string anonymizeUsername(const std::string& username);
-
     // Components of a per-download tmp path under the kit jail's document root.
     // WSD recovers the file from a downloadId by looking up the registered URL
     // (a path relative to the jail doc root) and joining it back with the jail
