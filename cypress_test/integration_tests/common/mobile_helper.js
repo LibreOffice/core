@@ -339,6 +339,15 @@ function insertImage() {
 	cy.cGet('#insertgraphic[type=file]')
 		.attachFile('/mobile/writer/image_to_insert.png');
 
+	// The upload + insert round-trip is asynchronous.
+	// CPU load the default 10s wait on the SVG might be not enough
+
+	cy.wait(1000);
+
+	cy.getFrameWindow().then(function(win) {
+		helper.processToIdle(win);
+	});
+
 	cy.cGet('#document-container svg g')
 		.should('exist');
 
