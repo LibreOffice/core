@@ -655,15 +655,6 @@ tools::Long GetSide(const tools::Rectangle& rRect, int i)
     };
     return (rRect.*GetSides[i])();
 }
-
-double GetZoom(const ScViewData& rViewData, int i)
-{
-    static const decltype(&ScViewData::GetZoomX) GetZooms[4] = {
-        &ScViewData::GetZoomX, &ScViewData::GetZoomY,
-        &ScViewData::GetZoomX, &ScViewData::GetZoomY
-    };
-    return (rViewData.*GetZooms[i])();
-}
 }
 
 void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableInfo, ScOutputData& aOutputData,
@@ -1213,24 +1204,11 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
                     o3tl::convert(tools::Rectangle(aOtherStart, aOtherEnd), o3tl::Length::px,
                                   aOrigOutputAreaUnit));
 
-                tools::Long sides[4];
-                for (auto i: {0, 1, 2, 3})
-                {
-                    const double zoomThis = ::GetZoom(mrViewData, i);
-                    const double zoomOther = ::GetZoom(rOtherViewData, i);
-
-                    const auto unscaledOtherEditRectSide
-                        = GetSide(aOtherEditRect, i) * zoomOther;
-
-                    const auto scaledAdd
-                        = (GetSide(aOrigOutputArea, i) - unscaledOtherEditRectSide) * zoomThis;
-
-                    sides[i] = GetSide(aEditRectPx, i)
-                               + o3tl::convert(scaledAdd, aOrigOutputAreaUnit, o3tl::Length::px);
-                }
-
-                aNewOutputArea = tools::Rectangle(sides[0], sides[1], sides[2], sides[3]);
-                aNewOutputArea += aOriginAbsPx;
+                aNewOutputArea = ComputeForeignEditOutputArea(
+                    aOrigOutputArea, aOrigOutputAreaUnit,
+                    aOtherEditRect, aEditRectPx, aOriginAbsPx,
+                    mrViewData.GetZoomX(),     mrViewData.GetZoomY(),
+                    rOtherViewData.GetZoomX(), rOtherViewData.GetZoomY());
             }
             // compute output area for RTL case
             if (bLokRTL)
@@ -1693,6 +1671,36 @@ void ScGridWindow::LogicInvalidate(const tools::Rectangle* pRectangle)
 {
     ScTabViewShell* pViewShell = mrViewData.GetViewShell();
     LogicInvalidatePart(pRectangle, pViewShell->getPart());
+}
+
+tools::Rectangle ScGridWindow::ComputeForeignEditOutputArea(
+    const tools::Rectangle& rOrigOutputArea, o3tl::Length eOrigUnit,
+    const tools::Rectangle& rOtherEditRect,
+    const tools::Rectangle& rEditRectPx,
+    const Point& rOriginAbsPx,
+    double fZoomThisX, double fZoomThisY,
+    double fZoomOtherX, double fZoomOtherY)
+{
+    tools::Long sides[4];
+    for (int i = 0; i < 4; ++i)
+    {
+        // sides 0/2 (Left/Right) use horizontal zoom; 1/3 (Top/Bottom) use vertical.
+        const bool bIsX = (i % 2 == 0);
+        const double zoomThis  = bIsX ? fZoomThisX  : fZoomThisY;
+        const double zoomOther = bIsX ? fZoomOtherX : fZoomOtherY;
+
+        // rOtherEditRect is px-as-eOrigUnit (zoom-affected via the fixed 96 DPI
+        // factor); rOrigOutputArea came from PixelToLogic with the editing view's
+        // zoomed LogicMode, so it is zoom-neutral. Divide to put both in the same
+        // frame before subtracting.
+        const double unscaledOther = GetSide(rOtherEditRect, i) / zoomOther;
+        const double scaledAdd     = (GetSide(rOrigOutputArea, i) - unscaledOther) * zoomThis;
+        sides[i] = GetSide(rEditRectPx, i)
+                   + o3tl::convert(scaledAdd, eOrigUnit, o3tl::Length::px);
+    }
+    tools::Rectangle aResult(sides[0], sides[1], sides[2], sides[3]);
+    aResult += rOriginAbsPx;
+    return aResult;
 }
 
 bool ScGridWindow::InvalidateByForeignEditView(EditView* pEditView)

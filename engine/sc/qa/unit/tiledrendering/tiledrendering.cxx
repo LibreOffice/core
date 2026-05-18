@@ -49,7 +49,10 @@
 #include <undomanager.hxx>
 #include <docsh.hxx>
 #include <tabvwsh.hxx>
+#include <gridwin.hxx>
 #include <sctestviewcallback.hxx>
+#include <o3tl/unit_conversion.hxx>
+#include <cstdlib>
 
 using namespace com::sun::star;
 
@@ -2927,6 +2930,62 @@ void testInvalidateOnTextEditWithDifferentZoomLevels::TestBody(const ColRowZoom&
     CPPUNIT_ASSERT(!rInvalidations.empty());
     tools::Rectangle aInvRect2 = rInvalidations[0];
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Invalidation rectangle is wrong.", aInvRect1, aInvRect2);
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testForeignEditOutputAreaDifferentZoom)
+{
+    // When a foreign EditView fits exactly inside its cell (no text growth),
+    // the OutputArea computed for rendering it into a painter at a different
+    // zoom must equal the painter's pixel cell rect, regardless of the zoom
+    // combination. With the prior code the editing view's zoom was multiplied
+    // instead of divided, so the relation only held when zoomOther == 1.0,
+    // which made in-progress edits invisible to other views unless the editor
+    // happened to be at 100%.
+
+    // 1000x200 twip cell:
+    //   real mm100   : 1764 x 353
+    //   px at 100%   :   67 x  13
+    //   px at 150%   :  100 x  20
+    //   px at  50%   :   33 x   7
+    // px-as-mm100 (96 DPI fixed: 2540/96 ~= 26.458):
+    //   100% : 67 * 26.458 ~= 1773
+    //   150% : 100 * 26.458 ~= 2645
+    //    50% : 33 * 26.458 ~=  873
+
+    const tools::Rectangle aOrigOA(0, 0, 1764, 353);
+    const Point aOriginAbsPx(0, 0);
+
+    struct Case
+    {
+        const char* sLabel;
+        double fThis, fOther;
+        tools::Rectangle aEditPx;
+        tools::Rectangle aOtherEdit;
+    };
+    const Case cases[] = {
+        // painter 100%, editor 150% - the broken direction prior to the fix
+        { "painter=1.0 editor=1.5", 1.0, 1.5,
+          tools::Rectangle(0, 0,  67, 13), tools::Rectangle(0, 0, 2645, 529) },
+        // painter 150%, editor 100% - worked even with the prior code
+        { "painter=1.5 editor=1.0", 1.5, 1.0,
+          tools::Rectangle(0, 0, 100, 20), tools::Rectangle(0, 0, 1773, 344) },
+        // painter 100%, editor 50% - also broken prior to the fix
+        { "painter=1.0 editor=0.5", 1.0, 0.5,
+          tools::Rectangle(0, 0,  67, 13), tools::Rectangle(0, 0,  873, 172) },
+    };
+
+    for (const auto& c : cases)
+    {
+        const tools::Rectangle aResult = ScGridWindow::ComputeForeignEditOutputArea(
+            aOrigOA, o3tl::Length::mm100, c.aOtherEdit, c.aEditPx, aOriginAbsPx,
+            c.fThis, c.fThis, c.fOther, c.fOther);
+
+        // Allow +/-2 px rounding slack from the 96 DPI px<->mm100 conversion.
+        CPPUNIT_ASSERT_MESSAGE(c.sLabel, std::abs(aResult.Left()   - c.aEditPx.Left())   <= 2);
+        CPPUNIT_ASSERT_MESSAGE(c.sLabel, std::abs(aResult.Top()    - c.aEditPx.Top())    <= 2);
+        CPPUNIT_ASSERT_MESSAGE(c.sLabel, std::abs(aResult.Right()  - c.aEditPx.Right())  <= 2);
+        CPPUNIT_ASSERT_MESSAGE(c.sLabel, std::abs(aResult.Bottom() - c.aEditPx.Bottom()) <= 2);
+    }
 }
 
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testOpenURL)

@@ -27,6 +27,7 @@
 #include "checklistmenu.hxx"
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 #include <o3tl/deleter.hxx>
+#include <o3tl/unit_conversion.hxx>
 #include <vcl/window.hxx>
 
 #include <memory>
@@ -397,6 +398,17 @@ public:
     void LogicInvalidatePart(const tools::Rectangle* pRectangle, int nPart);
 
     bool InvalidateByForeignEditView(EditView* pEditView) override;
+
+    // Compute the OutputArea (in painter pixels) for a foreign EditView when the
+    // editing view's zoom differs from the painter's. Static for testability.
+    SC_DLLPUBLIC static tools::Rectangle ComputeForeignEditOutputArea(
+        const tools::Rectangle& rOrigOutputArea, o3tl::Length eOrigUnit,
+        const tools::Rectangle& rOtherEditRect,
+        const tools::Rectangle& rEditRectPx,
+        const Point& rOriginAbsPx,
+        double fZoomThisX, double fZoomThisY,
+        double fZoomOtherX, double fZoomOtherY);
+
     /// Update the cell selection according to what handles have been dragged.
     /// @see vcl::ITiledRenderable::setTextSelection() for the values of nType.
     /// Coordinates are in pixels.
