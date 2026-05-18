@@ -15,6 +15,7 @@
 
 #include <config.h>
 
+#include <common/Log.hpp>
 #include <common/Unit.hpp>
 #include <net/HttpRequest.hpp>
 #include <net/Socket.hpp>
@@ -49,7 +50,7 @@ class UnitTimeoutBase0 : public UnitWSD
 {
 public:
     bool assertMessage(http::WebSocketSession& session, const std::string_view expectedPrefix,
-                       const std::string_view expectedId)
+                       const std::string_view expectedId, LOG_CAPTURE_CALLER_DECLARATION)
     {
         std::vector<char> res = session.poll(
             [&](const std::vector<char>& message) -> bool
@@ -126,7 +127,8 @@ public:
         return UnitBase::socketPoll();
     }
 
-    void assertHttpResponse(const http::Session& session, const http::Response& response)
+    void assertHttpResponse(const http::Session& session, const http::Response& response,
+                            LOG_CAPTURE_CALLER_DECLARATION)
     {
         if (session.isConnected())
         {
@@ -156,7 +158,7 @@ public:
                                   std::vector<std::shared_ptr<TerminatingPoll>>& socketPollers,
                                   size_t maxConnections, size_t connectionsCount,
                                   size_t connectionLimit, bool useOwnPoller,
-                                  bool pollerOnClientThread)
+                                  bool pollerOnClientThread, LOG_CAPTURE_CALLER_DECLARATION)
     {
         size_t connected = 0;
         for (size_t sockIdx = 0; sockIdx < connectionsCount; ++sockIdx)
@@ -184,7 +186,8 @@ public:
         }
         TST_LOG("Test: Connected: " << connected << " / " << connectionsCount << ", limit "
                                     << connectionLimit);
-        LOK_ASSERT(maxConnections - 1 <= connected && connected <= maxConnections + 1);
+        LOK_ASSERT_MESSAGE("connected: " << connected << ", maxConnections: " << maxConnections,
+                           maxConnections - 1 <= connected && connected <= maxConnections + 1);
 
         TST_LOG("Clearing Sessions: " << testname);
         sessions.clear();
@@ -388,6 +391,7 @@ UnitBase::TestResult UnitTimeoutBase1::testWSDChatPing()
             // LOK_ASSERT_EQUAL(false, session->isConnected());
         }
     }
+
     for (size_t sockIdx = 0; sockIdx < _connectionCount; ++sockIdx)
     {
         const std::shared_ptr<http::WebSocketSession>& wsSession = sessions[sockIdx];
