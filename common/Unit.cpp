@@ -587,31 +587,31 @@ UnitWSD* UnitWSD::getMaybeNull() { return static_cast<UnitWSD*>(GlobalArray[Glob
 
 void UnitWSD::startNextTest()
 {
-            // Get the current UnitWSDInterface to pass to the next one.
-            UnitWSD* currentWSD = getMaybeNull();
-            UnitWSDInterface* unitWsdInterface = currentWSD ? currentWSD->_wsd : nullptr;
+    // Get the current UnitWSDInterface to pass to the next one.
+    UnitWSD* currentWSD = getMaybeNull();
+    UnitWSDInterface* unitWsdInterface = currentWSD ? currentWSD->_wsd : nullptr;
 
-            // We have more tests.
-            ++GlobalIndex;
-            filter();
+    // We have more tests.
+    ++GlobalIndex;
+    filter();
 
-            if (GlobalArray[GlobalIndex] != nullptr && !SigUtil::getShutdownRequestFlag() &&
-                (_result == TestResult::Ok || GlobalTestOptions.getKeepgoing()))
-            {
-                TST_LOG("Starting test #" << GlobalIndex + 1 << ": "
-                                          << GlobalArray[GlobalIndex]->getTestname());
-                UnitWSD* globalWSD = getMaybeNull();
-                if (globalWSD)
-                {
-                    globalWSD->setWSD(unitWsdInterface);
-                    globalWSD->configure(Poco::Util::Application::instance().config());
-                }
+    if (GlobalArray[GlobalIndex] != nullptr && !SigUtil::getShutdownRequestFlag() &&
+        (_result == TestResult::Ok || GlobalTestOptions.getKeepgoing()))
+    {
+        TST_LOG("Starting test #" << GlobalIndex + 1 << ": "
+                                  << GlobalArray[GlobalIndex]->getTestname());
+        UnitWSD* globalWSD = getMaybeNull();
+        if (globalWSD)
+        {
+            globalWSD->setWSD(unitWsdInterface);
+            globalWSD->configure(Poco::Util::Application::instance().config());
+        }
 
-                GlobalArray[GlobalIndex]->initialize();
-            }
+        GlobalArray[GlobalIndex]->initialize();
+    }
 
-            // Wake-up so the previous test stops.
-            SocketPoll::wakeupWorld();
+    // Wake-up so the previous test stops.
+    SocketPoll::wakeupWorld();
 }
 
 void UnitWSD::onExitTest(TestResult result, const std::string&)
