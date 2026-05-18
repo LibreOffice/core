@@ -45,6 +45,9 @@ describe(['tagmobile', 'tagnextcloud'], 'Insert objects via insertion wizard.', 
 		cy.cGet('.inserttablecontrols button').should('be.visible').click();
 		// Table is inserted with the markers shown
 		cy.cGet('.table-column-resize-marker').should('exist');
+		// The marker can render before the table cells are in the document
+		// model, so a bare ctrl+a/copy sequence selects nothing.
+		helper.processToIdle(this.win);
 		helper.typeIntoDocument('{ctrl}a');
 		helper.copy();
 		// Two rows
@@ -66,6 +69,8 @@ describe(['tagmobile', 'tagnextcloud'], 'Insert objects via insertion wizard.', 
 		cy.cGet('.inserttablecontrols button').should('be.visible').click();
 		// Table is inserted with the markers shown
 		cy.cGet('.table-column-resize-marker').should('exist');
+		// Same insert-then-select race as 'Insert default table'.
+		helper.processToIdle(this.win);
 		helper.typeIntoDocument('{ctrl}a');
 		helper.copy();
 		// Three rows
