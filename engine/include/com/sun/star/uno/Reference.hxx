@@ -165,12 +165,6 @@ inline Reference< interface_type >::Reference( interface_type * pInterface, __sa
 }
 
 template< class interface_type >
-inline Reference< interface_type >::Reference( interface_type * pInterface, UnoReference_NoAcquire )
-{
-    _pInterface = castToXInterface(pInterface);
-}
-
-template< class interface_type >
 inline Reference< interface_type >::Reference( const BaseReference & rRef, UnoReference_Query )
 {
     _pInterface = iquery( rRef.get() );
@@ -255,14 +249,6 @@ inline bool Reference< interface_type >::set(
         pOld->release();
     return (NULL != pInterface);
 }
-
-template< class interface_type >
-inline bool Reference< interface_type >::set(
-    interface_type * pInterface, UnoReference_NoAcquire )
-{
-    return set( pInterface, SAL_NO_ACQUIRE );
-}
-
 
 template< class interface_type >
 inline bool Reference< interface_type >::set(

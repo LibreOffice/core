@@ -279,14 +279,6 @@ public:
         @param dummy SAL_NO_ACQUIRE to force obvious distinction to other constructors
     */
     inline Reference( interface_type * pInterface, __sal_NoAcquire dummy);
-    /** Constructor: Sets given interface pointer without acquiring it.
-        Deprecated, please use SAL_NO_ACQUIRE version.
-
-        @deprecated
-        @param pInterface another reference
-        @param dummy UNO_REF_NO_ACQUIRE to force obvious distinction to other constructors
-    */
-    inline SAL_DEPRECATED("use SAL_NO_ACQUIRE version") Reference( interface_type * pInterface, UnoReference_NoAcquire dummy );
 
     /** Constructor: Queries given interface for reference interface type (interface_type).
 
@@ -407,15 +399,6 @@ public:
         @return true, if non-null interface was set
     */
     inline bool SAL_CALL set( interface_type * pInterface, __sal_NoAcquire dummy);
-    /** Sets interface pointer without acquiring it. An interface already set will be released.
-        Deprecated, please use SAL_NO_ACQUIRE version.
-
-        @deprecated
-        @param pInterface an interface pointer
-        @param dummy UNO_REF_NO_ACQUIRE to force obvious distinction to set methods
-        @return true, if non-null interface was set
-    */
-    inline SAL_DEPRECATED("use SAL_NO_ACQUIRE version") bool SAL_CALL set( interface_type * pInterface, UnoReference_NoAcquire dummy);
 
     /** Queries given interface for reference interface type (interface_type) and sets it.
         An interface already set will be released.

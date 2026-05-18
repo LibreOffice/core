@@ -1009,36 +1009,6 @@ public:
     }
 
     /**
-      Compares two strings with a maximum count of characters.
-
-      The comparison is based on the numeric value of each character in
-      the strings and return a value indicating their relationship.
-      Since this method is optimized for performance, the ASCII character
-      values are not converted in any way. The caller has to make sure that
-      all ASCII characters are in the allowed range between 0 and 127.
-      The ASCII string must be NULL-terminated.
-      This function can't be used for language specific sorting.
-
-      @deprecated  This is a confusing overload with unexpectedly different
-      semantics from the one-parameter form, so it is marked as deprecated.
-      Practically all uses compare the return value against zero and can thus
-      be replaced with uses of startsWith.
-
-      @param  asciiStr          the 8-Bit ASCII character string to be compared.
-      @param  maxLength         the maximum count of characters to be compared.
-      @return   0 - if both strings are equal
-                < 0 - if this string is less than the string argument
-                > 0 - if this string is greater than the string argument
-    */
-    SAL_DEPRECATED(
-        "replace s1.compareToAscii(s2, strlen(s2)) == 0 with s1.startsWith(s2)")
-    sal_Int32 compareToAscii( const char * asciiStr, sal_Int32 maxLength ) const
-    {
-        return rtl_ustr_ascii_shortenedCompare_WithLength( pData->buffer, pData->length,
-                                                           asciiStr, maxLength );
-    }
-
-    /**
       Compares two strings in reverse order.
 
       This could be useful, if normally both strings start with the same
@@ -2879,76 +2849,6 @@ public:
     static auto boolean(bool b)
     {
         return OUStringNumber<RTL_USTR_MAX_VALUEOFBOOLEAN>(rtl_ustr_valueOfBoolean, b);
-    }
-
-    /**
-      Returns the string representation of the char argument.
-
-      @param    c   a character.
-      @return   a string with the string representation of the argument.
-      @deprecated use operator, function or constructor taking char or sal_Unicode argument
-    */
-    SAL_DEPRECATED("convert to OUString or use directly") static OUString valueOf( sal_Unicode c )
-    {
-        return OUString( &c, 1 );
-    }
-
-    /**
-      Returns the string representation of the int argument.
-
-      This function can't be used for language specific conversion.
-
-      @param    i           a int32.
-      @param    radix       the radix (between 2 and 36)
-      @return   a string with the string representation of the argument.
-      @deprecated use number()
-    */
-    SAL_DEPRECATED("use number()") static OUString valueOf( sal_Int32 i, sal_Int16 radix = 10 )
-    {
-        return number( i, radix );
-    }
-
-    /**
-      Returns the string representation of the long argument.
-
-      This function can't be used for language specific conversion.
-
-      @param    ll          a int64.
-      @param    radix       the radix (between 2 and 36)
-      @return   a string with the string representation of the argument.
-      @deprecated use number()
-    */
-    SAL_DEPRECATED("use number()") static OUString valueOf( sal_Int64 ll, sal_Int16 radix = 10 )
-    {
-        return number( ll, radix );
-    }
-
-    /**
-      Returns the string representation of the float argument.
-
-      This function can't be used for language specific conversion.
-
-      @param    f           a float.
-      @return   a string with the string representation of the argument.
-      @deprecated use number()
-    */
-    SAL_DEPRECATED("use number()") static OUString valueOf( float f )
-    {
-        return number(f);
-    }
-
-    /**
-      Returns the string representation of the double argument.
-
-      This function can't be used for language specific conversion.
-
-      @param    d           a double.
-      @return   a string with the string representation of the argument.
-      @deprecated use number()
-    */
-    SAL_DEPRECATED("use number()") static OUString valueOf( double d )
-    {
-        return number(d);
     }
 
     /**

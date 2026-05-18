@@ -155,49 +155,6 @@ public:
 #endif
 };
 
-/** Helper class to implement IDs for XUnoTunnel.  Construct a static object
-    of this class for your UNO object's implementation id.
-*/
-class SAL_DEPRECATED("Uses broken double checked locking") SAL_WARN_UNUSED CPPUHELPER_DLLPUBLIC OImplementationId
-{
-    mutable css::uno::Sequence< sal_Int8 > * _pSeq;
-    sal_Bool _bUseEthernetAddress;
-
-public:
-    ~OImplementationId();
-
-    /// @endcond
-
-    /** Constructor.
-
-        @param bUseEthernetAddress whether an ethernet mac address should be taken into account
-    */
-    OImplementationId( bool bUseEthernetAddress = true )
-        : _pSeq( NULL )
-        , _bUseEthernetAddress( bUseEthernetAddress )
-        {}
-    /** Constructor giving implementation id.
-
-        @param rSeq implementation id
-    */
-    OImplementationId( const css::uno::Sequence< sal_Int8 > & rSeq )
-        : _pSeq( new css::uno::Sequence< sal_Int8 >( rSeq ) )
-        , _bUseEthernetAddress( false )
-        {}
-SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    OImplementationId( const OImplementationId & rId )
-        : _pSeq( new css::uno::Sequence< sal_Int8 >( rId.getImplementationId() ) )
-        , _bUseEthernetAddress( false )
-        {}
-SAL_WNODEPRECATED_DECLARATIONS_POP
-
-    /** Get implementation id.
-
-        @return implementation id
-    */
-    css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() const;
-};
-
 }
 
 #endif

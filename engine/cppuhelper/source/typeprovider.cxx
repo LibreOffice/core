@@ -30,35 +30,9 @@ using namespace com::sun::star::uno;
 namespace cppu
 {
 
-// suppress spurious warning triggered by SAL_DEPRECATED in class declaration
-#if defined _MSC_VER && !defined __clang__
-#pragma warning(push)
-#pragma warning(disable: 4996)
-#endif
-
-OImplementationId::~OImplementationId()
-{
-    delete _pSeq;
-}
-
 #if defined _MSC_VER && !defined __clang__
 #pragma warning(pop)
 #endif
-
-Sequence< sal_Int8 > OImplementationId::getImplementationId() const
-{
-    if (! _pSeq)
-    {
-        MutexGuard aGuard( Mutex::getGlobalMutex() );
-        if (! _pSeq)
-        {
-            Sequence< sal_Int8 > * pSeq = new Sequence< sal_Int8 >( 16 );
-            ::rtl_createUuid( reinterpret_cast<sal_uInt8 *>(pSeq->getArray()), nullptr, _bUseEthernetAddress );
-            _pSeq = pSeq;
-        }
-    }
-    return *_pSeq;
-}
 
 namespace
 {

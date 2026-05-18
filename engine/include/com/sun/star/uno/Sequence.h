@@ -281,54 +281,6 @@ inline ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL toUnoSequence(
 }
 }
 
-/** Gets the meta type of IDL sequence.
-
-    There are cases (involving templates) where uses of getCppuType are known to
-    not compile.  Use cppu::UnoType or cppu::getTypeFavourUnsigned instead.
-
-    The dummy parameter is just a typed pointer for function signature.
-
-    @tparam E element type of sequence
-    @return type of IDL sequence
-
-    @deprecated
-    Use cppu::UnoType instead.
-*/
-template< class E > SAL_DEPRECATED("use cppu::UnoType")
-inline const ::com::sun::star::uno::Type &
-SAL_CALL getCppuType( const ::com::sun::star::uno::Sequence< E > * );
-
-/** Gets the meta type of IDL sequence.
-    This function has been introduced, because one cannot get the (templated)
-    cppu type out of C++ array types.
-
-    @attention
-    the given element type must be the same as the template argument type!
-    @tparam E element type of sequence
-    @param rElementType element type of sequence
-    @return type of IDL sequence
-
-    @deprecated
-    Use cppu::UnoType instead.
-*/
-template< class E > SAL_DEPRECATED("use cppu::UnoType")
-inline const ::com::sun::star::uno::Type &
-SAL_CALL getCppuSequenceType( const ::com::sun::star::uno::Type & rElementType );
-
-/** Gets the meta type of IDL sequence< char >.
-    This function has been introduced due to ambiguities with unsigned short.
-
-    The dummy parameter is just a typed pointer for function signature.
-
-    @return type of IDL sequence< char >
-
-    @deprecated
-    Use cppu::UnoType instead.
-*/
-SAL_DEPRECATED("use cppu::UnoType")
-inline const ::com::sun::star::uno::Type &
-SAL_CALL getCharSequenceCppuType();
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
