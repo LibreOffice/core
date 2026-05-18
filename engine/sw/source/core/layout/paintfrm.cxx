@@ -7241,12 +7241,12 @@ static void lcl_RefreshLine( const SwLayoutFrame *pLay,
     }
 }
 
-static std::vector<basegfx::B2DPolygon> lcl_CreatePageAreaDelimiterPolygons(const SwRect& rRect, bool bHeaderFooter)
+static std::vector<basegfx::B2DPolygon> lcl_CreatePageAreaDelimiterPolygons(const SwRect& rRect)
 {
     std::vector<basegfx::B2DPolygon> aPolygons;
 
     // Hide text boundaries by default - cool#3491
-    if (!bHeaderFooter && comphelper::COKit::isActive())
+    if (comphelper::COKit::isActive())
         return aPolygons;
 
     double nLineLength = 200.0; // in Twips
@@ -7369,7 +7369,7 @@ std::vector<basegfx::B2DPolygon> SwPageFrame::GetSubsidiaryLinesPolygons(const S
         return aPolygons;
 
     if (!rViewShell.GetViewOptions()->IsTextBoundariesFull())
-        aPolygons = lcl_CreatePageAreaDelimiterPolygons(aArea, false /* body */);
+        aPolygons = lcl_CreatePageAreaDelimiterPolygons(aArea);
     else
         aPolygons = lcl_CreateRectangleDelimiterPolygons(aArea);
 
@@ -7494,7 +7494,7 @@ std::vector<basegfx::B2DPolygon> SwHeadFootFrame::GetSubsidiaryLinesPolygons(con
     SwRect aArea( getFramePrintArea() );
     aArea += getFrameArea().Pos();
     if (!rViewShell.GetViewOptions()->IsTextBoundariesFull( ))
-        aPolygons = lcl_CreatePageAreaDelimiterPolygons(aArea, true /* header/footer*/);
+        aPolygons = lcl_CreatePageAreaDelimiterPolygons(aArea);
     else
         aPolygons = lcl_CreateRectangleDelimiterPolygons(aArea);
 

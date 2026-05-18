@@ -65,6 +65,7 @@ app.CSections.FormFieldButton =       { name: 'form field button' };
 app.CSections.CursorHandler =     { name: 'cursor handler' };
 
 app.CSections.ContentControl =        { name: 'content control'   , zIndex: 11 };
+app.CSections.HeaderFooterBoundary =  { name: 'header footer boundary', zIndex: 11 };
 app.CSections.TooltipAnchorLeft =     { name: 'tooltip anchor left' , zIndex: 11 };
 app.CSections.TooltipAnchorRight =    { name: 'tooltip anchor right' };
 app.CSections.CalcValidityDropDown =  { name: 'calc validity dropdown', zIndex: 11 };
@@ -148,9 +149,11 @@ app.CSections.DefaultForDocumentObjects.drawingOrder = 10;
 /* zIndex = 11  */
 app.CSections.ContentControl.processingOrder =		1; // Writer.
 app.CSections.TooltipAnchorLeft.processingOrder =	2; // Writer.
+app.CSections.HeaderFooterBoundary.processingOrder =	3; // Writer.
 
 app.CSections.ContentControl.drawingOrder =			1; // Writer.
 app.CSections.TooltipAnchorLeft.drawingOrder =		2; // Writer.
+app.CSections.HeaderFooterBoundary.drawingOrder =	3; // Writer.
 
 /* zIndex = 13 */
 app.CSections.Scroll.processingOrder = 				1; // Writer & Impress & Calc.

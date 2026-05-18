@@ -2217,6 +2217,14 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		else if (textMsg.startsWith('.uno:Context=') && this.isImpress()) {
 			this._selectionContextChanged(textMsg.replace('.uno:Context=', ''));
 		}
+		else if (textMsg.startsWith('headerfooterboundary=')) {
+			textMsg = textMsg.substring('headerfooterboundary='.length);
+			if (!app.sectionContainer.doesSectionExist(app.CSections.HeaderFooterBoundary.name)) {
+				app.sectionContainer.addSection(new cool.HeaderFooterBoundarySection());
+			}
+			var hfBoundarySection = app.sectionContainer.getSectionWithName(app.CSections.HeaderFooterBoundary.name);
+			hfBoundarySection.update(JSON.parse(textMsg));
+		}
 		else {
 			var index = textMsg.indexOf('=');
 			var commandName = index !== -1 ? textMsg.substr(0, index) : '';

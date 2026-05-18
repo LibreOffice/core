@@ -455,6 +455,7 @@ COOL_JS_LST =\
 	src/canvas/sections/DiagramButtonSection.ts \
 	src/canvas/sections/ContentControlDropdownSubSection.ts \
 	src/canvas/sections/ContentControlSection.ts \
+	src/canvas/sections/HeaderFooterBoundarySection.ts \
 	src/canvas/sections/TooltipAnchorSection.ts \
 	src/layer/marker/ProgressOverlay.js \
 	src/layer/marker/TextInput.js \

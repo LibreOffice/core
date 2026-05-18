@@ -46,6 +46,7 @@ class IDocumentListItems;
 class IDocumentOutlineNodes;
 class SfxPrinter;
 class SwRootFrame;
+class SwPageFrame;
 class SwNodes;
 class SdrView;
 class SfxItemPool;
@@ -172,6 +173,8 @@ class UNLESS_MERGELIBS_MORE(SAL_DLLPUBLIC_RTTI) SwViewShell : public sw::Ring<Sw
 
     SdrPaintWindow*         mpTargetPaintWindow;
     VclPtr<OutputDevice>    mpBufferedOut;
+
+    OString                 maLastHeaderFooterBoundaryPayload;
 
     SwRootFramePtr            mpLayout;
 
@@ -620,6 +623,7 @@ public:
     void ToggleHeaderFooterEdit();
     /// Acts both for headers / footers, depending on the bShow(Header|Footer)Separator flags
     bool IsHeaderFooterEdit() const { return mbHeaderFooterEdit; }
+    void NotifyHeaderFooterBoundaryToKit(const SwPageFrame* pPage = nullptr);
     bool IsShowHeaderFooterSeparator( FrameControlType eControl ) { return (eControl == FrameControlType::Header)? mbShowHeaderSeparator: mbShowFooterSeparator; }
     virtual void SetShowHeaderFooterSeparator( FrameControlType eControl, bool bShow );
     bool IsSelectAll() const { return mbSelectAll; }

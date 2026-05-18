@@ -3143,6 +3143,9 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
 
                 if ( !rSh.IsHeaderFooterEdit() )
                     rSh.ToggleHeaderFooterEdit();
+
+                // entering header/footer area
+                rSh.NotifyHeaderFooterBoundaryToKit( pPageFrame );
             }
         }
     }

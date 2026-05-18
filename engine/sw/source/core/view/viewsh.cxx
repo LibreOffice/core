@@ -81,6 +81,9 @@
 #include <shellres.hxx>
 #include <sfx2/kit/helper.hxx>
 #include <tools/UnitConversion.hxx>
+#include <tools/json_writer.hxx>
+#include <COKit/COKitEnums.h>
+#include <hffrm.hxx>
 
 #if !HAVE_FEATURE_DESKTOP
 #include <vcl/sysdata.hxx>
@@ -133,6 +136,10 @@ void SwViewShell::ToggleHeaderFooterEdit()
     }
 
     InvalidatePageAndHFSubsidiaryLines();
+
+    // leaving header/footer area
+    if ( !IsHeaderFooterEdit() )
+        NotifyHeaderFooterBoundaryToKit();
 }
 
 // Invalidate Subsidiary Lines around headers/footers and page frames to repaint
@@ -148,6 +155,60 @@ void SwViewShell::InvalidatePageAndHFSubsidiaryLines()
 
     for (const auto &rRect : aInvalidRects)
         GetWin()->Invalidate(rRect);
+}
+
+void SwViewShell::NotifyHeaderFooterBoundaryToKit(const SwPageFrame* pPage)
+{
+    if (!comphelper::COKit::isActive())
+        return;
+
+    SfxViewShell* pSfxViewShell = GetSfxViewShell();
+    if (!pSfxViewShell)
+        return;
+
+    tools::JsonWriter aJson;
+
+    if (!IsHeaderFooterEdit())
+    {
+        aJson.put("hide", true);
+    }
+    else
+    {
+        // Resolve the page being edited from the cursor when not given.
+        if (!pPage)
+        {
+            if (SwCursorShell* pCursorShell = dynamic_cast<SwCursorShell*>(this))
+            {
+                if (const SwContentFrame* pContent = pCursorShell->GetCurrFrame(false))
+                    pPage = pContent->FindPageFrame();
+            }
+        }
+
+        const SwHeaderFrame* pHeader = pPage ? pPage->GetHeaderFrame() : nullptr;
+        const SwFooterFrame* pFooter = pPage ? pPage->GetFooterFrame() : nullptr;
+
+        auto lcl_rectString = [](const SwFrame* pFrame) -> OString {
+            const SwRect& rArea = pFrame->getFrameArea();
+            return OString::number(rArea.Left()) + ", " + OString::number(rArea.Top())
+                 + ", " + OString::number(rArea.Width()) + ", "
+                 + OString::number(rArea.Height());
+        };
+
+        if (pHeader)
+            aJson.put("header", lcl_rectString(pHeader));
+        if (pFooter)
+            aJson.put("footer", lcl_rectString(pFooter));
+        if (pPage)
+            aJson.put("page", lcl_rectString(pPage));
+    }
+
+    OString aPayload = aJson.finishAndGetAsOString();
+    if (aPayload == maLastHeaderFooterBoundaryPayload)
+        return;
+
+    maLastHeaderFooterBoundaryPayload = aPayload;
+    pSfxViewShell->viewCallback(KIT_CALLBACK_STATE_CHANGED,
+                                "headerfooterboundary=" + aPayload);
 }
 
 void SwViewShell::setOutputToWindow(bool bOutputToWindow)
@@ -452,6 +513,10 @@ void SwViewShell::ImplEndAction( const bool bIdleEnd )
     --mnStartAction;
     UISizeNotify();
     ++mnStartAction;
+
+    // refresh header/footer boundary in case edited header/footer changed size
+    if ( IsHeaderFooterEdit() )
+        NotifyHeaderFooterBoundaryToKit();
 
 #if !ENABLE_WASM_STRIP_ACCESSIBILITY
     if( Imp()->IsAccessible() )
