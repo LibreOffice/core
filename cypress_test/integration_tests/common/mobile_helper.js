@@ -109,6 +109,12 @@ function closeHamburgerMenu() {
 function openMobileWizard() {
 	cy.log('>> openMobileWizard - start');
 
+	// Drain any in-flight core work first so the toggle isn't racing
+	// against a pending sidebar update.
+	cy.getFrameWindow().then(function(win) {
+		helper.processToIdle(win);
+	});
+
 	// Open mobile wizard
 	cy.cGet('#toolbar-up #mobile_wizard')
 		.should('not.have.class', 'disabled')
@@ -142,6 +148,12 @@ function closeMobileWizard() {
 
 function openInsertionWizard() {
 	cy.log('>> openInsertionWizard - start');
+
+	// Drain any in-flight core work first so the toggle isn't racing
+	// against a pending update.
+	cy.getFrameWindow().then(function(win) {
+		helper.processToIdle(win);
+	});
 
 	cy.cGet('#toolbar-up #insertion_mobile_wizard')
 		.should('not.have.class', 'disabled');
