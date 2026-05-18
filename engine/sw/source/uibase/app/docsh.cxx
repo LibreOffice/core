@@ -1344,7 +1344,7 @@ constexpr OUString s_EventNames[] =
     u"OnFieldMergeFinished"_ustr,
     u"OnLayoutFinished"_ustr
 };
-sal_Int32 const s_nEvents(SAL_N_ELEMENTS(s_EventNames));
+sal_Int32 const s_nEvents(std::size(s_EventNames));
 
 Sequence< OUString >    SwDocShell::GetEventNames()
 {
