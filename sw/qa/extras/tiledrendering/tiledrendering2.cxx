@@ -846,7 +846,6 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testImageBulletRemoteNotFetched)
     // text:list-level-style-image with a remote xlink:href must not fetch
     // the URL during paint when link updates are not allowed.
     comphelper::LibreOfficeKit::setActive(false);
-    comphelper::ScopeGuard aLOKitGuard([] { comphelper::LibreOfficeKit::setActive(true); });
 
     uno::Sequence<beans::PropertyValue> aParams = {
         comphelper::makePropertyValue(u"UpdateDocMode"_ustr,

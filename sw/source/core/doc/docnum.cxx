@@ -1182,6 +1182,7 @@ bool SwDoc::DelNumRule( const UIName& rName, bool bBroadcast )
         // #i34097# DeleteAndDestroy deletes rName if
         // rName is directly taken from the numrule.
         const UIName aTmpName( rName );
+        (*mpNumRuleTable)[ nPos ]->RemoveGrfLinks(*this);
         delete (*mpNumRuleTable)[ nPos ];
         mpNumRuleTable->erase( mpNumRuleTable->begin() + nPos );
         maNumRuleMap.erase(aTmpName);
