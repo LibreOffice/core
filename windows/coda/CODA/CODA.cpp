@@ -1753,24 +1753,77 @@ static void registerOdfShellExtensions()
         return;
     }
 
+    // Capture reg.exe's stderr/stdout via a pipe so a failure message can
+    // be surfaced verbatim (e.g. "ERROR: Access is denied.") instead of
+    // just the numeric exit code.
+    SECURITY_ATTRIBUTES sa = { sizeof(sa), nullptr, TRUE };
+    HANDLE hReadPipe = nullptr;
+    HANDLE hWritePipe = nullptr;
+    if (!CreatePipe(&hReadPipe, &hWritePipe, &sa, 65536))
+    {
+        DeleteProcThreadAttributeList(attrList);
+        return;
+    }
+    SetHandleInformation(hReadPipe, HANDLE_FLAG_INHERIT, 0);
+
     STARTUPINFOEXW si = {};
     si.StartupInfo.cb = sizeof(si);
-    si.StartupInfo.dwFlags = STARTF_USESHOWWINDOW;
+    si.StartupInfo.dwFlags = STARTF_USESHOWWINDOW | STARTF_USESTDHANDLES;
     si.StartupInfo.wShowWindow = SW_HIDE;
+    si.StartupInfo.hStdInput = GetStdHandle(STD_INPUT_HANDLE);
+    si.StartupInfo.hStdOutput = hWritePipe;
+    si.StartupInfo.hStdError = hWritePipe;
     si.lpAttributeList = attrList;
 
     PROCESS_INFORMATION pi = {};
-    BOOL ok = CreateProcessW(NULL, cmdLine.data(), NULL, NULL, FALSE,
+    BOOL ok = CreateProcessW(NULL, cmdLine.data(), NULL, NULL, TRUE,
                              EXTENDED_STARTUPINFO_PRESENT | CREATE_NO_WINDOW,
                              NULL, NULL,
                              reinterpret_cast<LPSTARTUPINFOW>(&si), &pi);
     DeleteProcThreadAttributeList(attrList);
+    // Parent must close its copy of the write end so the read end sees EOF
+    // when reg.exe exits.
+    CloseHandle(hWritePipe);
     if (!ok)
+    {
+        CloseHandle(hReadPipe);
         return;
+    }
 
     WaitForSingleObject(pi.hProcess, 5000);
+
+    std::string output;
+    char buf[1024];
+    DWORD nRead = 0;
+    while (ReadFile(hReadPipe, buf, sizeof(buf), &nRead, nullptr) && nRead > 0)
+        output.append(buf, nRead);
+    CloseHandle(hReadPipe);
+
+    DWORD exitCode = STILL_ACTIVE;
+    GetExitCodeProcess(pi.hProcess, &exitCode);
     CloseHandle(pi.hThread);
     CloseHandle(pi.hProcess);
+    if (exitCode != 0)
+    {
+        while (!output.empty() && (output.back() == '\r' || output.back() == '\n'
+                                   || output.back() == ' ' || output.back() == '\t'))
+            output.pop_back();
+        // reg.exe writes in the user's OEM (console) codepage; widen for
+        // OutputDebugStringW. Log:: is not initialized yet at this point
+        // in wWinMain. DebugView (Sysinternals) captures the output.
+        int wlen = MultiByteToWideChar(CP_OEMCP, 0,
+                                       output.c_str(), static_cast<int>(output.size()),
+                                       nullptr, 0);
+        std::wstring wide(wlen, L'\0');
+        MultiByteToWideChar(CP_OEMCP, 0,
+                            output.c_str(), static_cast<int>(output.size()),
+                            wide.data(), wlen);
+        std::wstring msg = L"registerOdfShellExtensions: reg.exe failed: ";
+        msg += wide.empty() ? L"(no diagnostic on stderr)" : wide;
+        msg += L"\n";
+        OutputDebugStringW(msg.c_str());
+    }
+    DeleteFileW(regFilePath.c_str());
 }
 
 static void openCOOLWindow(const FilenameAndUri& filenameAndUri, DocumentMode mode)
