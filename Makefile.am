@@ -43,9 +43,11 @@ endif
 else !ENABLE_MOBILEAPP
 
 if ENABLE_FUZZERS
-# With fuzzers, we only need the unit-test
-# (for sanity checks) and the fuzzers themselves.
-SUBDIRS = test fuzzer
+# Fuzzers link against libsimd.a, which is a noinst_LIBRARIES
+# built at the top level, so '.' must be in SUBDIRS. The unit
+# tests in test/ scan browser/dist via TDIST, so 'browser' must
+# be built too.
+SUBDIRS = . browser test fuzzer
 bin_PROGRAMS =
 
 else !ENABLE_FUZZERS
