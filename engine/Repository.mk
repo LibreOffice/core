@@ -48,7 +48,6 @@ $(eval $(call gb_Helper_register_executables,NONE, \
 	io-testconnection \
 	langsupport \
 	$(if $(filter iOS,$(OS)),LibreOffice) \
-	lngconvex \
 	localize \
     $(call gb_CondExeLockfile,lockfile) \
 	makedepend \
@@ -59,7 +58,6 @@ $(eval $(call gb_Helper_register_executables,NONE, \
 	pdfverify \
 	pocheck \
 	propex \
-	regsvrex \
 	saxparser \
 	svidl \
 	$(if $(ENABLE_ONLINE_UPDATE_MAR),\
@@ -240,12 +238,6 @@ $(eval $(call gb_Helper_register_executables_for_install,OOO,ooo, \
 	) \
 	$(if $(filter OPENCL,$(BUILD_TYPE)),opencltest) \
 ))
-
-ifeq ($(OS),WNT)
-$(eval $(call gb_Helper_register_executables_for_install,OOO,quickstart, \
-	quickstart \
-))
-endif
 
 $(eval $(call gb_Helper_register_executables_for_install,OOO,python, \
 	$(if $(filter WNT,$(OS)), \
