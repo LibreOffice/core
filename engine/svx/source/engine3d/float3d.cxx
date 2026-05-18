@@ -2524,16 +2524,16 @@ void Svx3DCtrlItem::StateChangedAtToolBoxControl( sal_uInt16 /*nSId*/,
 
 SvxConvertTo3DItem::SvxConvertTo3DItem(sal_uInt16 _nId, SfxBindings* _pBindings)
 :   SfxControllerItem(_nId, *_pBindings),
-    bState(false)
+    m_bState(false)
 {
 }
 
 void SvxConvertTo3DItem::StateChangedAtToolBoxControl(sal_uInt16 /*_nId*/, SfxItemState eState, const SfxPoolItem* /*pState*/)
 {
     bool bNewState = (eState != SfxItemState::DISABLED);
-    if(bNewState != bState)
+    if(bNewState != m_bState)
     {
-        bState = bNewState;
+        m_bState = bNewState;
         SfxDispatcher* pDispatcher = LocalGetDispatcher(&GetBindings());
         if (pDispatcher != nullptr)
         {

@@ -297,13 +297,13 @@ class Svx3DCtrlItem final : public SfxControllerItem
 
 class SvxConvertTo3DItem final : public SfxControllerItem
 {
-    bool                        bState;
+    bool                        m_bState;
 
     virtual void StateChangedAtToolBoxControl(sal_uInt16 nSId, SfxItemState eState, const SfxPoolItem* pState) override;
 
 public:
     SvxConvertTo3DItem(sal_uInt16 nId, SfxBindings* pBindings);
-    bool GetState() const { return bState; }
+    bool GetState() const { return m_bState; }
 };
 
 #endif // INCLUDED_SVX_FLOAT3D_HXX
