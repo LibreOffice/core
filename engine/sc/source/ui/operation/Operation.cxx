@@ -255,6 +255,20 @@ void Operation::syncSheetViews(UndoSheetViewSortData* pUndoSortData)
 
     rDocument.SyncSheetViews(nDefaultViewTab);
 
+    // Invalidate every sheet view tab whose content was just rewritten.
+    if (pManager)
+    {
+        if (ScDocShell* pDocShell = mpViewData->GetDocShell())
+        {
+            for (auto const& rSheetView : pManager->iterateValidSheetViews())
+            {
+                SCTAB nSheetViewTab = rSheetView.getTableNumber();
+                pDocShell->PostPaint(0, 0, nSheetViewTab, rDocument.MaxCol(), rDocument.MaxRow(),
+                                     nSheetViewTab, PaintPartFlags::Grid);
+            }
+        }
+    }
+
     // Attach sort data and auto-filter range to the undo action
     if (pManager && pUndoSortData)
     {
@@ -316,6 +330,7 @@ void Operation::syncCellToSheetViews(const ScAddress& rDefaultViewAddress,
     SCROW nDefaultRow = rDefaultViewAddress.Row();
 
     ScDBData* pDefaultViewDBData = rDocument.GetAnonymousDBData(nDefaultViewTab);
+    ScDocShell* pDocShell = mpViewData->GetDocShell();
 
     for (auto& rSheetView : pManager->iterateValidSheetViews())
     {
@@ -347,6 +362,18 @@ void Operation::syncCellToSheetViews(const ScAddress& rDefaultViewAddress,
             // Don't call resetSortOrder() here - we can just let it merge the existing
             // sort indices with the new ones and the result will be correct.
             rDocument.Sort(nSheetViewTab, aSortParam, false, false, nullptr, nullptr);
+
+            // Re-sort can shuffle every row in the sort range. Repaint all.
+            if (pDocShell)
+            {
+                pDocShell->PostPaint(aSortParam.nCol1, aSortParam.nRow1, nSheetViewTab,
+                                     aSortParam.nCol2, aSortParam.nRow2, nSheetViewTab,
+                                     PaintPartFlags::Grid);
+            }
+        }
+        else if (pDocShell)
+        {
+            pDocShell->PostPaintCell(aSheetViewAddress);
         }
     }
 }
@@ -367,6 +394,8 @@ void Operation::syncCellPatternToSheetViews(const ScAddress& rDefaultViewAddress
     SCCOL nColumn = rDefaultViewAddress.Col();
     SCROW nDefaultRow = rDefaultViewAddress.Row();
 
+    ScDocShell* pDocShell = mpViewData->GetDocShell();
+
     for (auto& rSheetView : pManager->iterateValidSheetViews())
     {
         SCTAB nSheetViewTab = rSheetView.getTableNumber();
@@ -378,6 +407,13 @@ void Operation::syncCellPatternToSheetViews(const ScAddress& rDefaultViewAddress
             rDocument.RemoveEditTextCharAttribs(aSheetViewAddress, rPattern);
 
         rDocument.ApplyPattern(nColumn, nSheetViewRow, nSheetViewTab, rPattern);
+
+        if (pDocShell)
+        {
+            pDocShell->PostPaint(nColumn, nSheetViewRow, nSheetViewTab, nColumn, nSheetViewRow,
+                                 nSheetViewTab, PaintPartFlags::Grid,
+                                 SC_PF_LINES | SC_PF_TESTMERGE);
+        }
     }
 }
 
@@ -467,6 +503,14 @@ void Operation::syncMarkPatternToSheetViews(const ScMarkData& rDefaultViewMark,
         aSheetViewMark.MarkToSimple();
 
         rDocument.ApplySelectionPattern(rPattern, aSheetViewMark, nullptr);
+
+        if (ScDocShell* pDocShell = mpViewData->GetDocShell())
+        {
+            ScRange const& rPaintRange = aSheetViewMark.GetArea();
+            pDocShell->PostPaint(rPaintRange.aStart.Col(), rPaintRange.aStart.Row(), nSheetViewTab,
+                                 rPaintRange.aEnd.Col(), rPaintRange.aEnd.Row(), nSheetViewTab,
+                                 PaintPartFlags::Grid, SC_PF_LINES | SC_PF_TESTMERGE);
+        }
     }
 }
 

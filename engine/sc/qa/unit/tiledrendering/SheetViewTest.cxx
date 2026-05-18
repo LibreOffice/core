@@ -9,8 +9,10 @@
 
 #include <sctiledrenderingtest.hxx>
 
+#include <comphelper/kit.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <sfx2/kit/helper.hxx>
 #include <vcl/scheduler.hxx>
 #include <COKit/COKitEnums.h>
@@ -5420,6 +5422,73 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_ReplacePivotTable_DefaultAndSheetView)
 
         // Verify both pivot tables have the same layout
         CPPUNIT_ASSERT_EQUAL(*pDefaultDPObject->GetSaveData(), *pSheetViewDPObject->GetSaveData());
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(SyncTest, testSync_OperationInvalidatesOtherView)
+{
+    // Sheet view sync mutates content on the sheet view tab, so the view sitting on
+    // that tab must receive a tile invalidation. The reverse must also hold for the
+    // default view tab.
+
+    ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+
+    comphelper::COKit::setPartInInvalidation(true);
+    comphelper::ScopeGuard aPartInvalidationGuard(
+        []() { comphelper::COKit::setPartInInvalidation(false); });
+
+    setupViews();
+
+    switchToSheetView();
+    createNewSheetViewInCurrentView();
+    sortDescendingForCell(u"A1");
+
+    CPPUNIT_ASSERT_EQUAL(SCTAB(1), mpTabViewSheetView->GetViewData().GetTabNumber());
+    CPPUNIT_ASSERT_EQUAL(SCTAB(0), mpTabViewDefaultView->GetViewData().GetTabNumber());
+
+    // Operation on the default view tab must invalidate the sheet view tab.
+    {
+        switchToDefaultView();
+        Scheduler::ProcessEventsToIdle();
+
+        moSheetView->ClearAllInvalids();
+        moDefaultView->ClearAllInvalids();
+
+        gotoCell(u"A3");
+        dispatchCommand(mxComponent, u".uno:ClearContents"_ustr, {});
+        Scheduler::ProcessEventsToIdle();
+
+        CPPUNIT_ASSERT_MESSAGE("default view tab should be repainted",
+                               moDefaultView->m_bInvalidateTiles);
+        CPPUNIT_ASSERT_MESSAGE("sheet view tab should be repainted",
+                               moSheetView->m_bInvalidateTiles);
+
+        auto const& rSheetViewParts = moSheetView->m_aInvalidationsParts;
+        CPPUNIT_ASSERT_MESSAGE("sheet view callback should receive an invalidation",
+                               std::ranges::find(rSheetViewParts, 1) != rSheetViewParts.end());
+    }
+
+    // Operation on the sheet view tab must invalidate the default view tab.
+    {
+        switchToSheetView();
+        Scheduler::ProcessEventsToIdle();
+
+        moSheetView->ClearAllInvalids();
+        moDefaultView->ClearAllInvalids();
+
+        gotoCell(u"A1");
+        dispatchCommand(mxComponent, u".uno:ClearContents"_ustr, {});
+        Scheduler::ProcessEventsToIdle();
+
+        CPPUNIT_ASSERT_MESSAGE("sheet view tab should be repainted",
+                               moSheetView->m_bInvalidateTiles);
+        CPPUNIT_ASSERT_MESSAGE("default view tab should be repainted",
+                               moDefaultView->m_bInvalidateTiles);
+
+        auto const& rDefaultViewParts = moDefaultView->m_aInvalidationsParts;
+        CPPUNIT_ASSERT_MESSAGE("default view callback should receive an invalidation",
+                               std::ranges::find(rDefaultViewParts, 0) != rDefaultViewParts.end());
     }
 }
 
