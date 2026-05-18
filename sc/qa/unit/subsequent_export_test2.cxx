@@ -975,11 +975,38 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf106181)
     assertXPath(
         pDrawing,
         "/xdr:wsDr/mc:AlternateContent/mc:Choice/xdr:twoCellAnchor/xdr:sp/xdr:nvSpPr/xdr:cNvPr",
-        "hidden", u"0");
+        "hidden", u"1");
 
     xmlDocUniquePtr pVmlDrawing = parseExport(u"xl/drawings/vmlDrawing1.vml"_ustr);
     CPPUNIT_ASSERT(pVmlDrawing);
     assertXPathContent(pVmlDrawing, "//xx:ClientData/xx:FmlaLink", u"$D$9");
+}
+
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testDoubleCheckbox)
+{
+    createScDoc("ods/tdf106181.ods");
+    save(TestFilter::XLSX);
+
+    xmlDocUniquePtr pDrawing = parseExport(u"xl/drawings/drawing1.xml"_ustr);
+    CPPUNIT_ASSERT(pDrawing);
+
+    assertXPath(
+        pDrawing,
+        "/xdr:wsDr/mc:AlternateContent/mc:Choice/xdr:twoCellAnchor/xdr:sp/xdr:nvSpPr/xdr:cNvPr",
+        "hidden", u"1");
+    OUString aDrawSpid
+        = getXPath(pDrawing,
+                   "/xdr:wsDr/mc:AlternateContent/mc:Choice/xdr:twoCellAnchor/xdr:sp/xdr:nvSpPr/"
+                   "xdr:cNvPr/a:extLst/a:ext/a14:compatExt",
+                   "spid");
+
+    CPPUNIT_ASSERT(!aDrawSpid.isEmpty());
+
+    xmlDocUniquePtr pVmlDrawing = parseExport(u"xl/drawings/vmlDrawing1.vml"_ustr);
+    CPPUNIT_ASSERT(pVmlDrawing);
+
+    const OUString aVmlSpid = getXPath(pVmlDrawing, "//v:shape", "spid");
+    CPPUNIT_ASSERT_EQUAL(aDrawSpid, aVmlSpid);
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf145057)
