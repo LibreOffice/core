@@ -190,7 +190,7 @@ public:
 
     std::unique_ptr<weld::Builder> CreateBuilder(weld::Widget* pParent, const OUString& rUIRoot,
                                                  const OUString& rUIFile) override;
-    virtual weld::MessageDialog* CreateMessageDialog(weld::Widget* pParent,
+    virtual std::unique_ptr<weld::MessageDialog> CreateMessageDialog(weld::Widget* pParent,
                                                      VclMessageType eMessageType,
                                                      VclButtonsType eButtonType,
                                                      const OUString& rPrimaryMessage) override;
