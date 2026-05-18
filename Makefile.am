@@ -466,6 +466,7 @@ shared_headers = \
                  common/CommandControl.hpp \
                  common/Common.hpp \
                  common/ConfigUtil.hpp \
+                 common/ContainerUtil.hpp \
                  common/Crypto.hpp \
                  common/FileUtil.hpp \
                  common/Globals.hpp \
