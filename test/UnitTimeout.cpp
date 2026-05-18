@@ -435,12 +435,10 @@ class UnitTimeoutInactivity : public UnitTimeoutBase0
 
     void configure(Poco::Util::LayeredConfiguration& /* config */) override
     {
-        // net::Defaults.inactivityTimeout = 3600s;
+        // Set every net::Defaults field this suite cares about: tests share global state,
+        // so each test must establish the values it needs rather than inherit them.
         net::Defaults.inactivityTimeout = 360ms;
-        //
-        // The following WSPing setup would cause ping/pong packages avoiding the inactivity TO
-        //   net::Defaults.wsPingAvgTimeout = std::chrono::microseconds(25);
-        //   net::Defaults.wsPingInterval = 30ms;
+        net::Defaults.maxExtConnections = 200000;
     }
 
 public:
@@ -626,6 +624,8 @@ class UnitTimeoutConnections : public UnitTimeoutBase1
 {
     void configure(Poco::Util::LayeredConfiguration& /* config */) override
     {
+        // Set every net::Defaults field this suite cares about: tests share global state,
+        // so each test must establish the values it needs rather than inherit them.
         net::Defaults.inactivityTimeout = 3600s;
         net::Defaults.maxExtConnections = connectionLimit();
     }
@@ -642,7 +642,10 @@ class UnitTimeoutNone : public UnitTimeoutBase1
 {
     void configure(Poco::Util::LayeredConfiguration& /* config */) override
     {
-        // Keep original values -> No timeout
+        // Set every net::Defaults field this suite cares about: tests share global state,
+        // so each test must establish the values it needs rather than inherit them.
+        net::Defaults.inactivityTimeout = 3600s;
+        net::Defaults.maxExtConnections = 200000;
     }
 
 public:
