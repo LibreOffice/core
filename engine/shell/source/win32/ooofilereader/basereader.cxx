@@ -93,8 +93,6 @@ void CBaseReader::Initialize( const std::string& ContentName)
                     m_ZipContent.insert(m_ZipContent.end(),
                                         reinterpret_cast<char*>(buf),
                                         reinterpret_cast<char*>(buf) + n);
-                    if (n < sizeof(buf))
-                        break;
                 }
             }
         }
