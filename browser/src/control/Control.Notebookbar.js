@@ -527,6 +527,12 @@ window.L.Control.Notebookbar = window.L.Control.extend({
 		let alreadySelected = null;
 		// Currently selected tab name, part of the element's ID.
 		let currentlySelectedTabName = null;
+
+		if (requestedContext && requestedContext.includes('MasterPage'))
+			this._isMasterView = true;
+		else if (requestedContext && requestedContext.includes('DrawPage'))
+			this._isMasterView = false;
+
 		for (var tab in tabs) {
 			var tabElement = $('#' + tabs[tab].name + '-tab-label');
 			if (tabElement.hasClass('selected')) {
@@ -549,6 +555,10 @@ window.L.Control.Notebookbar = window.L.Control.extend({
 							contextTab = tabElement;
 						else
 							alreadySelected = tabElement;
+						tabMatched = true;
+					} else if (this._isMasterView && contexts[context] === 'MasterPage') {
+						tabElement.show();
+						tabElement.removeClass('hidden');
 						tabMatched = true;
 					} else if (contexts[context] === 'default') {
 						tabElement.show();
