@@ -46,17 +46,10 @@ AccessibilityCheckEntry::AccessibilityCheckEntry(
     , m_xFixButton(m_xBuilder->weld_button(u"accessibilityCheckEntryFixButton"_ustr))
     , m_pAccessibilityIssue(rAccessibilityIssue)
 {
-    // lock in the height as including the button so all rows are the same height
-    m_xContainer->set_size_request(-1, m_xContainer->get_preferred_size().Height());
-
     if (m_pAccessibilityIssue->canGotoIssue())
     {
         m_xGotoButton->set_label(m_pAccessibilityIssue->m_aIssueText);
-
-        // tdf#156137 allow LinkButton label to wrap
-        int nMaxWidth = m_xGotoButton->get_approximate_digit_width() * 10;
         m_xGotoButton->set_label_wrap(true);
-        m_xGotoButton->set_size_request(nMaxWidth, -1);
 
         m_xGotoButton->connect_activate_link(
             LINK(this, AccessibilityCheckEntry, GotoButtonClicked));
