@@ -535,6 +535,8 @@ window.L.Control.Notebookbar = window.L.Control.extend({
 			if (tabs[tab].context) {
 				tabElement.hide();
 				var contexts = tabs[tab].context.split('|');
+				var tabMatched = false;
+
 				for (var context in contexts) {
 					// Check the tab isn't hidden.
 					if (!this.map.uiManager.isTabVisible(tabs[tab].name)) {
@@ -547,11 +549,18 @@ window.L.Control.Notebookbar = window.L.Control.extend({
 							contextTab = tabElement;
 						else
 							alreadySelected = tabElement;
+						tabMatched = true;
 					} else if (contexts[context] === 'default') {
 						tabElement.show();
+						tabElement.removeClass('hidden');
+						tabMatched = true;
+
 						if (!tabElement.hasClass('selected'))
 							defaultTab = tabElement;
 					}
+				}
+				if (!tabMatched) {
+					tabElement.addClass('hidden');
 				}
 			} else if (!this.map.uiManager.isTabVisible(tabs[tab].name)) {
 				// There is no context, but we check if the tab is hidden
