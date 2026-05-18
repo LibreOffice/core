@@ -5873,8 +5873,8 @@ msgid "Get Involved"
 msgstr "Sodelujte"
 
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.h2:49-7
-msgid "https://collaboraonline.github.io/"
-msgstr "https://collaboraonline.github.io/ (v angl.)"
+msgid "https://www.collaboraonline.org/"
+msgstr "https://www.collaboraonline.org/ (v angl.)"
 
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.p:50-7
 msgid ""
@@ -5882,17 +5882,17 @@ msgid ""
 "to the <a target=\"_blank\" rel=\"noopener\" href=\"https://collaboraonline."
 "github.io/post/build-code/\">step-by-step instructions</a> and build CODE "
 "from scratch. You can also help out with <a target=\"_blank\" "
-"rel=\"noopener\" href=\"https://collaboraonline.github.io/post/translate/"
+"rel=\"noopener\" href=\"https://www.collaboraonline.org/post/translate/"
 "\">translations</a> or by <a target=\"_blank\" rel=\"noopener\" "
-"href=\"https://collaboraonline.github.io/post/filebugs/\">filing a bug "
+"href=\"https://www.collaboraonline.org/post/filebugs/\">filing a bug "
 "report</a> with all the essential steps on how to reproduce it."
 msgstr ""
 "Želite prispevati, pa ne veste, kje začeti? Oglejte si <a target=\"_blank\" "
-"rel=\"noopener\" href=\"https://collaboraonline.github.io/post/build-code/\""
+"rel=\"noopener\" href=\"https://www.collaboraonline.org/post/build-code/\""
 ">napotke po korakih</a> in sami zgradite CODE. Pomagate lahko tudi pri <a "
-"target=\"_blank\" rel=\"noopener\" href=\"https://collaboraonline.github.io/"
+"target=\"_blank\" rel=\"noopener\" href=\"https://www.collaboraonline.org/"
 "post/translate/\">prevajanju</a> ali <a target=\"_blank\" rel=\"noopener\" "
-"href=\"https://collaboraonline.github.io/post/filebugs/\">poročanju o "
+"href=\"https://www.collaboraonline.org/post/filebugs/\">poročanju o "
 "hroščih</a> z vsemi potrebnimi koraki, kako jih priklicati."
 
 #: welcome/welcome.html%2Bhtml.body.div.div:55-5

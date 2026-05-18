@@ -5875,8 +5875,8 @@ msgid "Get Involved"
 msgstr "Қатысу"
 
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.h2:49-7
-msgid "https://collaboraonline.github.io/"
-msgstr "https://collaboraonline.github.io/"
+msgid "https://www.collaboraonline.org/"
+msgstr "https://www.collaboraonline.org/"
 
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.p:50-7
 #, fuzzy
@@ -5885,17 +5885,17 @@ msgid ""
 "to the <a target=\"_blank\" rel=\"noopener\" href=\"https://collaboraonline."
 "github.io/post/build-code/\">step-by-step instructions</a> and build CODE "
 "from scratch. You can also help out with <a target=\"_blank\" "
-"rel=\"noopener\" href=\"https://collaboraonline.github.io/post/translate/"
+"rel=\"noopener\" href=\"https://www.collaboraonline.org/post/translate/"
 "\">translations</a> or by <a target=\"_blank\" rel=\"noopener\" "
-"href=\"https://collaboraonline.github.io/post/filebugs/\">filing a bug "
+"href=\"https://www.collaboraonline.org/post/filebugs/\">filing a bug "
 "report</a> with all the essential steps on how to reproduce it."
 msgstr ""
 "Сіз өз үлесіңізді қосқыңыз келеді, бірақ қайдан бастау керектігін білмейсіз "
-"бе? <a target=\"_blank\" href=\"https://collaboraonline.github.io/post/"
+"бе? <a target=\"_blank\" href=\"https://www.collaboraonline.org/post/"
 "build-code/\">Қадамдық нұсқауларға</a> өтіп, CODE-ны нөлден жинаңыз. Сондай-"
-"ақ, сіз <a target=\"_blank\" href=\"https://collaboraonline.github.io/post/"
+"ақ, сіз <a target=\"_blank\" href=\"https://www.collaboraonline.org/post/"
 "translate/\">аудармаларға</a> немесе <a target=\"_blank\" href=\"https"
-"://collaboraonline.github.io/post/filebugs/\">қателер туралы хабарламалар "
+"://www.collaboraonline.org/post/filebugs/\">қателер туралы хабарламалар "
 "жіберуге</a> көмектесе аласыз, оның барлығын қателікті қайталауға қажетті "
 "қадамдармен бірге."
 

@@ -5816,8 +5816,8 @@ msgid "Get Involved"
 msgstr "مشارکت کنید"
 
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.h2:49-7
-msgid "https://collaboraonline.github.io/"
-msgstr "https://collaboraonline.github.io/"
+msgid "https://www.collaboraonline.org/"
+msgstr "https://www.collaboraonline.org/"
 
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.p:50-7
 #, fuzzy
@@ -5826,17 +5826,17 @@ msgid ""
 "to the <a target=\"_blank\" rel=\"noopener\" href=\"https://collaboraonline."
 "github.io/post/build-code/\">step-by-step instructions</a> and build CODE "
 "from scratch. You can also help out with <a target=\"_blank\" "
-"rel=\"noopener\" href=\"https://collaboraonline.github.io/post/translate/"
+"rel=\"noopener\" href=\"https://www.collaboraonline.org/post/translate/"
 "\">translations</a> or by <a target=\"_blank\" rel=\"noopener\" "
-"href=\"https://collaboraonline.github.io/post/filebugs/\">filing a bug "
+"href=\"https://www.collaboraonline.org/post/filebugs/\">filing a bug "
 "report</a> with all the essential steps on how to reproduce it."
 msgstr ""
 "آیا شما علاقه مند به مشارکت هستید اما نمی دانید از کجا شروع کنید؟ به <a "
-"target=\"_blank\" href=\"https://collaboraonline.github.io/post/build-code/\""
+"target=\"_blank\" href=\"https://www.collaboraonline.org/post/build-code/\""
 ">دستورالعمل های گام به گام</a> بروید و کد را از ابتدا بسازید. همچنین می‌"
-"توانید با <a target=\"_blank\" href=\"https://collaboraonline.github.io/post/"
+"توانید با <a target=\"_blank\" href=\"https://www.collaboraonline.org/post/"
 "translate/\">ترجمه‌ها</a> یا با <a target=\"_blank\" href=\"https کمک کنید "
-"://collaboraonline.github.io/post/filebugs/\">پرونده کردن گزارش اشکال</a> با "
+"://www.collaboraonline.org/post/filebugs/\">پرونده کردن گزارش اشکال</a> با "
 "تمام مراحل ضروری در مورد نحوه بازتولید آن."
 
 #: welcome/welcome.html%2Bhtml.body.div.div:55-5

@@ -7,7 +7,7 @@ assignees: ''
 
 ---
 
-**This is an [Easy Hack](https://collaboraonline.github.io/post/easyhacks/).**
+**This is an [Easy Hack](https://www.collaboraonline.org/post/easyhacks/).**
 Potential mentors: @USERNAMEOFMENTOR
 
 ### Detailed description and rationale

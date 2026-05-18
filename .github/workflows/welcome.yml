@@ -36,7 +36,7 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: context.payload.pull_request.number,
-              body: `Thanks for opening this pull request!\n\nThings that will help get your PR across the finish line:\n\n- Check out our [contributing guidelines](https://github.com/CollaboraOnline/online/blob/main/CONTRIBUTING.md).\n- Connect with us through one of [our communication channels](https://collaboraonline.github.io/post/communicate/).\n- Click on the details link next to the failing CI checks, if any, to see an explanation on how to fix it.\n- Feel free to ping @Darshan-upadhyay1110 or the mentor of the easyHack you are solving if you need help. CC: @pedropintosilva\n- Explore more Easy Hacks to dive deeper into Collabora Online and start contributing: https://github.com/CollaboraOnline/online/issues?q=is%3Aissue%20state%3Aopen%20label%3A%22Easy%20Hack%22`
+              body: `Thanks for opening this pull request!\n\nThings that will help get your PR across the finish line:\n\n- Check out our [contributing guidelines](https://github.com/CollaboraOnline/online/blob/main/CONTRIBUTING.md).\n- Connect with us through one of [our communication channels](https://www.collaboraonline.org/post/communicate/).\n- Click on the details link next to the failing CI checks, if any, to see an explanation on how to fix it.\n- Feel free to ping @Darshan-upadhyay1110 or the mentor of the easyHack you are solving if you need help. CC: @pedropintosilva\n- Explore more Easy Hacks to dive deeper into Collabora Online and start contributing: https://github.com/CollaboraOnline/online/issues?q=is%3Aissue%20state%3Aopen%20label%3A%22Easy%20Hack%22`
             });
 
   first-merge:

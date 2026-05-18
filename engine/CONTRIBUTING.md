@@ -31,10 +31,10 @@ Thanks for wanting to contribute source code to Collabora Office. You rock!
 
 1. Clone the repo and set up the git hooks: `cd .git/hooks && ln -s ../../.git-hooks/* ./`
 2. Build it (run `autogen.sh` and `make`)
-3. Grab one of our newcomer-friendly [easy hacks](https://collaboraonline.github.io/post/easyhacks/)
+3. Grab one of our newcomer-friendly [easy hacks](https://www.collaboraonline.org/post/easyhacks/)
 4. Submit your patch with `git review`
 
-And if you get stuck at any point, just drop by one of our [communication channels](https://collaboraonline.github.io/post/communicate/).
+And if you get stuck at any point, just drop by one of our [communication channels](https://www.collaboraonline.org/post/communicate/).
 
 ### Sign your work
 

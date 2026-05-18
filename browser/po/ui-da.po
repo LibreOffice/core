@@ -5888,8 +5888,8 @@ msgid "Get Involved"
 msgstr "Bliv involveret"
 
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.h2:49-7
-msgid "https://collaboraonline.github.io/"
-msgstr "https://collaboraonline.github.io/"
+msgid "https://www.collaboraonline.org/"
+msgstr "https://www.collaboraonline.org/"
 
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.p:50-7
 #, fuzzy
@@ -5898,17 +5898,17 @@ msgid ""
 "to the <a target=\"_blank\" rel=\"noopener\" href=\"https://collaboraonline."
 "github.io/post/build-code/\">step-by-step instructions</a> and build CODE "
 "from scratch. You can also help out with <a target=\"_blank\" "
-"rel=\"noopener\" href=\"https://collaboraonline.github.io/post/translate/"
+"rel=\"noopener\" href=\"https://www.collaboraonline.org/post/translate/"
 "\">translations</a> or by <a target=\"_blank\" rel=\"noopener\" "
-"href=\"https://collaboraonline.github.io/post/filebugs/\">filing a bug "
+"href=\"https://www.collaboraonline.org/post/filebugs/\">filing a bug "
 "report</a> with all the essential steps on how to reproduce it."
 msgstr ""
 "Er du interesseret i at bidrage, men ved ikke, hvor du skal starte? Gå til "
-"<a target=\"_blank\" href=\"https://collaboraonline.github.io/post/"
+"<a target=\"_blank\" href=\"https://www.collaboraonline.org/post/"
 "build-code/\">trin-for-trin instruktioner</a> og byg CODE fra bunden. Du kan "
 "også hjælpe med <a target=\"_blank\" href=\"https://collaboraonline.github."
 "io/post/translate/\">oversættelse</a> eller ved <a target=\"_blank\" href="
-"\"https://collaboraonline.github.io/post/filebugs/\">udfylde en fejlrapport</"
+"\"https://www.collaboraonline.org/post/filebugs/\">udfylde en fejlrapport</"
 "a> med alle de væsentlige trin for, hvordan man genskaber fejlen."
 
 #: welcome/welcome.html%2Bhtml.body.div.div:55-5

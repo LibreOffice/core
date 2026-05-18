@@ -1304,7 +1304,7 @@
       <table:table-cell office:value-type="string" calcext:value-type="string">
        <text:p>Hyperlink:</text:p>
       </table:table-cell>
-      <table:table-cell table:style-name="ce44" table:content-validation-name="val1" office:value-type="string" calcext:value-type="string"><text:p><text:a xlink:href="https://collaboraonline.github.io/post/build-code/" xlink:type="simple">Build</text:a></text:p>
+      <table:table-cell table:style-name="ce44" table:content-validation-name="val1" office:value-type="string" calcext:value-type="string"><text:p><text:a xlink:href="https://www.collaboraonline.org/post/build-code/" xlink:type="simple">Build</text:a></text:p>
       </table:table-cell>
       <table:table-cell table:number-columns-repeated="16290"/>
      </table:table-row>

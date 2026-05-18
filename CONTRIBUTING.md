@@ -72,7 +72,7 @@ If you would rather set things up by hand:
    ```
 4. Build it ([on Linux][build-linux] or [on any platform][build-any]).
 
-[build-linux]: https://collaboraonline.github.io/post/build-code/
+[build-linux]: https://www.collaboraonline.org/post/build-code/
 [build-any]: https://forum.collaboraonline.com/t/start-developing-cool-on-any-platform-in-5-minutes/52
 
 ### Install the commit-msg hook
@@ -93,7 +93,7 @@ amendments.
 
 Grab one of our newcomer-friendly [easy hacks][easyhacks].
 
-[easyhacks]: https://collaboraonline.github.io/post/easyhacks/
+[easyhacks]: https://www.collaboraonline.org/post/easyhacks/
 
 ### Submitting a patch
 
@@ -118,7 +118,7 @@ of the patches.
 If you get stuck at any point, drop by one of our
 [communication channels][channels].
 
-[channels]: https://collaboraonline.github.io/post/communicate/
+[channels]: https://www.collaboraonline.org/post/communicate/
 
 ### Sign your work
 

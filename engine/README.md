@@ -131,7 +131,7 @@ benefit of external users of this API.
 ## Finding Out More
 
 Beyond this, you can read the `README.md` files, send us patches, talk
-to us https://collaboraonline.github.io/post/communicate/ and/or grab
+to us https://www.collaboraonline.org/post/communicate/ and/or grab
 people on Matrix #cool-dev:matrix.org we're a friendly and generally
 helpful mob. We know the code can be hard to get into at first, and so
 there are no silly questions.

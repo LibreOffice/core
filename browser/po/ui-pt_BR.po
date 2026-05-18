@@ -5866,8 +5866,8 @@ msgid "Get Involved"
 msgstr "Junte-se à comunidade"
 
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.h2:49-7
-msgid "https://collaboraonline.github.io/"
-msgstr "https://collaboraonline.github.io/"
+msgid "https://www.collaboraonline.org/"
+msgstr "https://www.collaboraonline.org/"
 
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.p:50-7
 #, fuzzy
@@ -5876,17 +5876,17 @@ msgid ""
 "to the <a target=\"_blank\" rel=\"noopener\" href=\"https://collaboraonline."
 "github.io/post/build-code/\">step-by-step instructions</a> and build CODE "
 "from scratch. You can also help out with <a target=\"_blank\" "
-"rel=\"noopener\" href=\"https://collaboraonline.github.io/post/translate/"
+"rel=\"noopener\" href=\"https://www.collaboraonline.org/post/translate/"
 "\">translations</a> or by <a target=\"_blank\" rel=\"noopener\" "
-"href=\"https://collaboraonline.github.io/post/filebugs/\">filing a bug "
+"href=\"https://www.collaboraonline.org/post/filebugs/\">filing a bug "
 "report</a> with all the essential steps on how to reproduce it."
 msgstr ""
 "Você está interessado em contribuir, mas não sabe por onde começar? Acesse "
-"às <a target=\"_blank\" href=\"https://collaboraonline.github.io/post/"
+"às <a target=\"_blank\" href=\"https://www.collaboraonline.org/post/"
 "build-code/\">instruções passo a passo</a> e construa CODE a partir do zero. "
 "Você também pode ajudar com <a target=\"_blank\" href=\"https"
-"://collaboraonline.github.io/post/translate/\">traduções</a> ou <a target="
-"\"_blank\" href=\"https://collaboraonline.github.io/post/filebugs/\""
+"://www.collaboraonline.org/post/translate/\">traduções</a> ou <a target="
+"\"_blank\" href=\"https://www.collaboraonline.org/post/filebugs/\""
 ">preenchendo relatórios de erros</a> com todos os passos essenciais sobre "
 "como reproduzi-los."
 

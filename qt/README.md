@@ -1,4 +1,4 @@
-Build instruction have moved to https://collaboraonline.github.io/post/build-co-linux/
+Build instruction have moved to https://www.collaboraonline.org/post/build-co-linux/
 
 # Release helpers
 

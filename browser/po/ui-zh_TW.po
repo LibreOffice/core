@@ -5760,8 +5760,8 @@ msgid "Get Involved"
 msgstr "參與"
 
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.h2:49-7
-msgid "https://collaboraonline.github.io/"
-msgstr "https://collaboraonline.github.io/"
+msgid "https://www.collaboraonline.org/"
+msgstr "https://www.collaboraonline.org/"
 
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.p:50-7
 msgid ""
@@ -5769,17 +5769,17 @@ msgid ""
 "to the <a target=\"_blank\" rel=\"noopener\" href=\"https://collaboraonline."
 "github.io/post/build-code/\">step-by-step instructions</a> and build CODE "
 "from scratch. You can also help out with <a target=\"_blank\" "
-"rel=\"noopener\" href=\"https://collaboraonline.github.io/post/translate/"
+"rel=\"noopener\" href=\"https://www.collaboraonline.org/post/translate/"
 "\">translations</a> or by <a target=\"_blank\" rel=\"noopener\" "
-"href=\"https://collaboraonline.github.io/post/filebugs/\">filing a bug "
+"href=\"https://www.collaboraonline.org/post/filebugs/\">filing a bug "
 "report</a> with all the essential steps on how to reproduce it."
 msgstr ""
 "有興趣做出貢獻但不知道從哪裡開始？前往 <a target=\"_blank\" rel=\"noopener\" "
-"href=\"https://collaboraonline.github.io/post/build-code/\""
+"href=\"https://www.collaboraonline.org/post/build-code/\""
 ">逐步說明</a>並從頭開始建立程式碼。您還可以幫忙<a target=\"_blank\" rel="
-"\"noopener\" href=\"https://collaboraonline.github.io/post/translate/\""
+"\"noopener\" href=\"https://www.collaboraonline.org/post/translate/\""
 ">翻譯</a>或透過<a target=\"_blank\" rel=\"noopener\" href=\"https"
-"://collaboraonline.github.io/post/filebugs/\""
+"://www.collaboraonline.org/post/filebugs/\""
 ">提交錯誤報告</a>以及如何重現它的所有基本步驟。"
 
 #: welcome/welcome.html%2Bhtml.body.div.div:55-5

@@ -10,7 +10,7 @@
 [![Matrix](https://img.shields.io/badge/Matrix-%23cool--dev-turquoise.svg)](https://matrix.to/#/#cool-dev:matrix.org)
 [![Telegram](https://img.shields.io/badge/Telegram-Collabora%20Online-green.svg)](https://t.me/CollaboraOnline)
 [![Forum](https://img.shields.io/badge/Forum-Discourse-blue.svg)](https://forum.collaboraonline.com/)
-[![Website](https://img.shields.io/badge/Website-collaboraonline.github.io-blueviolet.svg)](https://collaboraonline.github.io/)
+[![Website](https://img.shields.io/badge/Website-www.collaboraonline.org-blueviolet.svg)](https://www.collaboraonline.org/)
 [![L10n](https://img.shields.io/badge/L10n-Weblate-lightgrey.svg)](https://hosted.weblate.org/projects/collabora-online/)
 [![Gitpod Ready-to-Code](https://img.shields.io/badge/Gitpod-ready--to--code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/CollaboraOnline/online)
 
@@ -24,7 +24,7 @@
 * [Collabora Online](https://www.collaboraonline.com/collabora-online/)
 * [Collabora Office](https://www.collaboraonline.com/collabora-office/)
 * [Collabora Office for iOS and Android](https://www.collaboraonline.com/collabora-office-android-ios/)
-* For additional details, build instructions, downloads, and more, please visit [collaboraonline.github.io](https://collaboraonline.github.io/). You can also explore the [SDK Documentation](https://sdk.collaboraonline.com/).
+* For additional details, build instructions, downloads, and more, please visit [www.collaboraonline.org](https://www.collaboraonline.org/). You can also explore the [SDK Documentation](https://sdk.collaboraonline.com/).
 
 ## Key features
 * View and edit text documents, spreadsheets, presentations & more
@@ -102,15 +102,15 @@ This project has several components:
 
 ## Further recommended reading with build details
 
-* **[Build Collabora online](https://collaboraonline.github.io/post/build-code/)**
+* **[Build Collabora online](https://www.collaboraonline.org/post/build-code/)**
 
 ## iOS and Android apps
 
 ### Building
 
 See the corresponding web pages:
-* **[Build for iOS](https://collaboraonline.github.io/post/build-code-ios/)**
-* **[Build for Android](https://collaboraonline.github.io/post/build-code-android/)**
+* **[Build for iOS](https://www.collaboraonline.org/post/build-code-ios/)**
+* **[Build for Android](https://www.collaboraonline.org/post/build-code-android/)**
 
 ### Releases and pre-releases
 
@@ -140,7 +140,7 @@ merged into `main`).
 
 ## GitPod
 
-Head over to https://collaboraonline.github.io/post/build-code/#build-code-on-gitpod and follow the steps.
+Head over to https://www.collaboraonline.org/post/build-code/#build-code-on-gitpod and follow the steps.
 
 ## Admin Panel
 

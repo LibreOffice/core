@@ -169,7 +169,7 @@ In order for Collaborative Editing and copy/paste to function correctly on kuber
 4. Install helm-chart using below command, it should deploy the collabora-online
 
    ``` bash
-   helm repo add collabora https://collaboraonline.github.io/online/
+   helm repo add collabora https://www.collaboraonline.org/online/
    helm install --create-namespace --namespace collabora collabora-online collabora/collabora-online -f my_values.yaml
    ```
 

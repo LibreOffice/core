@@ -1,1 +1,1 @@
-Moved to https://collaboraonline.github.io/post/build-co-windows
+Moved to https://www.collaboraonline.org/post/build-co-windows

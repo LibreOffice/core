@@ -5899,8 +5899,8 @@ msgid "Get Involved"
 msgstr "Participe"
 
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.h2:49-7
-msgid "https://collaboraonline.github.io/"
-msgstr "https://collaboraonline.github.io/ (en inglés)"
+msgid "https://www.collaboraonline.org/"
+msgstr "https://www.collaboraonline.org/ (en inglés)"
 
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.p:50-7
 #, fuzzy
@@ -5909,17 +5909,17 @@ msgid ""
 "to the <a target=\"_blank\" rel=\"noopener\" href=\"https://collaboraonline."
 "github.io/post/build-code/\">step-by-step instructions</a> and build CODE "
 "from scratch. You can also help out with <a target=\"_blank\" "
-"rel=\"noopener\" href=\"https://collaboraonline.github.io/post/translate/"
+"rel=\"noopener\" href=\"https://www.collaboraonline.org/post/translate/"
 "\">translations</a> or by <a target=\"_blank\" rel=\"noopener\" "
-"href=\"https://collaboraonline.github.io/post/filebugs/\">filing a bug "
+"href=\"https://www.collaboraonline.org/post/filebugs/\">filing a bug "
 "report</a> with all the essential steps on how to reproduce it."
 msgstr ""
 "¿Quiere contribuir pero no sabe por dónde empezar? Consulte las <a target="
-"\"_blank\" href=\"https://collaboraonline.github.io/post/build-code/\""
+"\"_blank\" href=\"https://www.collaboraonline.org/post/build-code/\""
 ">instrucciones paso a paso</a> y compile CODE desde cero. También puede "
-"ayudar con las <a target=\"_blank\" href=\"https://collaboraonline.github.io/"
+"ayudar con las <a target=\"_blank\" href=\"https://www.collaboraonline.org/"
 "post/translate/\">traducciones</a> o <a target=\"_blank\" href=\"https"
-"://collaboraonline.github.io/post/filebugs/\">enviando informes de defectos</"
+"://www.collaboraonline.org/post/filebugs/\">enviando informes de defectos</"
 "a> que incluyan todos los pasos esenciales para reproducirlos."
 
 #: welcome/welcome.html%2Bhtml.body.div.div:55-5
