@@ -224,9 +224,14 @@ void Application::UICoverageReport(tools::JsonWriter& rJson,
             missingAppDialogUIs = jsdialog::completeCalcDialogList(entries);
             missingAppSidebarUIs = jsdialog::completeCalcSidebarList(entries);
             break;
+        case KIT_DOCTYPE_PRESENTATION:
+            sAppName = "Impress";
+            missingAppDialogUIs = jsdialog::completeImpressDialogList(entries);
+            missingAppSidebarUIs = jsdialog::completeImpressSidebarList(entries);
+            break;
         default:
             sAppName = "Unknown";
-            SAL_WARN("vcl", "Impress coverage not implemented");
+            SAL_WARN("vcl", sAppName << " coverage not implemented");
             break;
     };
 

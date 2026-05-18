@@ -123,6 +123,11 @@
                     <property name="events">GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
                     <property name="hexpand">True</property>
                     <property name="vexpand">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="previews-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes" context="tabledesignpanel|previews-atkobject">Table Styles</property>
+                      </object>
+                    </child>
                   </object>
                 </child>
               </object>

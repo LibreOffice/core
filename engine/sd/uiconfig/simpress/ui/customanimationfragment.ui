@@ -264,6 +264,11 @@
             <property name="can_focus">True</property>
           </object>
         </child>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="fontname-atkobject">
+            <property name="AtkObject::accessible-name" translatable="yes" context="customanimationfragment|fontname-atkobject">Font Name</property>
+          </object>
+        </child>
       </object>
       <packing>
         <property name="expand">False</property>
@@ -410,6 +415,11 @@
         <property name="hexpand">True</property>
         <property name="truncate-multiline">True</property>
         <property name="editable">False</property>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="entry-atkobject">
+            <property name="AtkObject::accessible-name" translatable="yes" context="customanimationfragment|entry-atkobject">Animation Effect Property</property>
+          </object>
+        </child>
       </object>
       <packing>
         <property name="expand">False</property>

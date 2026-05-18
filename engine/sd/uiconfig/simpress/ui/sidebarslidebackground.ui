@@ -135,6 +135,8 @@
             <property name="can-focus">False</property>
             <property name="halign">end</property>
             <property name="ellipsize">end</property>
+            <property name="use-underline">True</property>
+            <property name="mnemonic-widget">masterslide</property>
           </object>
           <packing>
             <property name="left-attach">0</property>
@@ -162,6 +164,11 @@
             <property name="model">liststore4</property>
             <property name="entry-text-column">0</property>
             <property name="id-column">1</property>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="fillattr1-atkobject">
+                <property name="AtkObject::accessible-name" translatable="yes" context="sidebarslidebackground|fillattr1-atkobject">Hatching/Bitmap</property>
+              </object>
+            </child>
             <child>
               <object class="GtkCellRendererText" id="cellrenderertext3"/>
               <attributes>

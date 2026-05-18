@@ -327,6 +327,7 @@
                     <property name="halign">end</property>
                     <property name="label" translatable="yes" context="customanimationspanel|categorylabel">Category:</property>
                     <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">categorylb</property>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
@@ -448,6 +449,7 @@
                     <property name="halign">end</property>
                     <property name="label" translatable="yes" context="customanimationspanel|start_effect">_Start:</property>
                     <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">start_effect_list</property>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
@@ -496,6 +498,7 @@
                     <property name="halign">end</property>
                     <property name="label" translatable="yes" context="customanimationspanel|effect_duration">D_uration:</property>
                     <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">anim_duration</property>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>

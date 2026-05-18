@@ -171,7 +171,7 @@ void IconView::PaintEntry(SvTreeListEntry& rEntry, tools::Long nX, tools::Long n
     Point aEntryPos(nX, nY);
 
     auto popIt = rRenderContext.ScopedPush(vcl::PushFlags::FILLCOLOR | vcl::PushFlags::LINECOLOR
-                                           | vcl::PushFlags::FONT);
+                                           | vcl::PushFlags::FONT | vcl::PushFlags::TEXTCOLOR);
     const Color aBackupColor = rRenderContext.GetFillColor();
 
     const StyleSettings& rSettings = rRenderContext.GetSettings().GetStyleSettings();

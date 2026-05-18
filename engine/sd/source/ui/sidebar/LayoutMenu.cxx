@@ -519,7 +519,7 @@ void LayoutMenu::Fill()
                 else
                 {
                     Bitmap aScaledBmp = aVDev->GetBitmap(Point(0,0), aVDev->GetOutputSizePixel());
-                    mxLayoutIconView->insert(id, nullptr, &sId, &aScaledBmp, nullptr);
+                    mxLayoutIconView->insert(id, &sLayoutName, &sId, &aScaledBmp, nullptr);
                 }
                 maLayoutToStringMap[elem.maAutoLayout] = elem.mpStrResId;
 

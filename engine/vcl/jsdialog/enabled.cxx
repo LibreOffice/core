@@ -758,6 +758,30 @@ std::vector<OUString> completeCalcSidebarList(const o3tl::sorted_vector<OUString
     return missing;
 }
 
+std::vector<OUString> completeImpressDialogList(const o3tl::sorted_vector<OUString>& entries)
+{
+    std::vector<OUString> missing;
+    for (const auto& entry : SimpressDialogList)
+    {
+        OUString sEntry(entry);
+        if (!entries.contains(sEntry))
+            missing.push_back(sEntry);
+    }
+    return missing;
+}
+
+std::vector<OUString> completeImpressSidebarList(const o3tl::sorted_vector<OUString>& entries)
+{
+    std::vector<OUString> missing;
+    for (const auto& entry : SidebarList)
+    {
+        OUString sEntry(entry);
+        if (sEntry.startsWith("modules/simpress/") && !entries.contains(sEntry))
+            missing.push_back(sEntry);
+    }
+    return missing;
+}
+
 std::vector<OUString> completeCommonSidebarList(const o3tl::sorted_vector<OUString>& entries,
                                                 /*COKitDocumentType*/ int docType)
 {
