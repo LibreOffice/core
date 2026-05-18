@@ -93,6 +93,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/weld/Window.hxx>
 #include <vcl/weld/weld.hxx>
 
 #include <memory>

@@ -97,6 +97,7 @@
 #include <svl/languageoptions.hxx>
 
 #include <svl/undo.hxx>
+#include <vcl/weld/Window.hxx>
 #include <swabstdlg.hxx>
 
 #include <comphelper/string.hxx>

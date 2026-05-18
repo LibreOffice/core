@@ -66,6 +66,7 @@
 #include <svx/svxdlg.hxx>
 #include <vcl/EnumContext.hxx>
 #include <vcl/unohelp2.hxx>
+#include <vcl/weld/Window.hxx>
 
 #include <sc.hrc>
 #include <globstr.hrc>

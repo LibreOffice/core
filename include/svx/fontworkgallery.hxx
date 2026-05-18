@@ -25,6 +25,7 @@
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/IconView.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
+#include <vcl/weld/Window.hxx>
 #include <vcl/weld/weld.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <map>

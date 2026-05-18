@@ -23,7 +23,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <svtools/ctrltool.hxx>
-
+#include <vcl/weld/Window.hxx>
 
 namespace pcr
 {

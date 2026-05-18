@@ -12,6 +12,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <ucbhelper/commandenvironment.hxx>
 #include <vcl/weld/TreeView.hxx>
+#include <vcl/weld/Window.hxx>
 #include <vcl/weld/weld.hxx>
 
 namespace com :: sun :: star :: ucb { class XCommandEnvironment; }

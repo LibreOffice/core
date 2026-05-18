@@ -28,6 +28,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Window.hxx>
 #include <vcl/weld/weld.hxx>
 #include <svx/strings.hrc>
 #include <svx/svdograf.hxx>

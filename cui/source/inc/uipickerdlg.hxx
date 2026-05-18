@@ -10,6 +10,7 @@
 #pragma once
 
 #include <sfx2/tabdlg.hxx>
+#include <vcl/weld/Window.hxx>
 
 class UIPickerDialog : public SfxTabDialogController
 {

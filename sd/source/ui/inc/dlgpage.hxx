@@ -21,6 +21,7 @@
 
 #include <sfx2/tabdlg.hxx>
 #include <svx/xtable.hxx>
+#include <vcl/weld/Window.hxx>
 
 class SfxObjectShell;
 

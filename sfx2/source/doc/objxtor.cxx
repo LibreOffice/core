@@ -36,6 +36,7 @@
 #include <sal/log.hxx>
 #include <tools/mapunit.hxx>
 #include <tools/urlobj.hxx>
+#include <vcl/weld/Window.hxx>
 #include <vcl/weld/weld.hxx>
 #include <vcl/svapp.hxx>
 #include <svl/eitem.hxx>

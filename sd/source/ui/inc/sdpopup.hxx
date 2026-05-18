@@ -21,7 +21,7 @@
 
 #include <i18nlangtag/lang.h>
 #include <vcl/weld/Builder.hxx>
-#include <vcl/weld/weld.hxx>
+#include <vcl/weld/Window.hxx>
 
 class SvxFieldData;
 

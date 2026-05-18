@@ -24,6 +24,7 @@
 #include <svx/weldeditview.hxx>
 #include <editeng/svxenum.hxx>
 #include <unotools/weakref.hxx>
+#include <vcl/weld/Window.hxx>
 
 #include <functional>
 

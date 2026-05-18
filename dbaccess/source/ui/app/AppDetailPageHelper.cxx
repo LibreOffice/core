@@ -51,6 +51,7 @@
 #include <imageprovider.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/cvtgrf.hxx>
+#include <vcl/weld/Window.hxx>
 #include <tools/stream.hxx>
 #include <toolkit/awt/vclxmenu.hxx>
 #include "AppController.hxx"

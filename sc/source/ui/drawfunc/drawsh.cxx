@@ -62,6 +62,7 @@
 #include <tools/UnitConversion.hxx>
 #include <comphelper/lok.hxx>
 #include <vcl/unohelp2.hxx>
+#include <vcl/weld/Window.hxx>
 
 using namespace css;
 

@@ -11,6 +11,7 @@
 
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/Window.hxx>
 
 #include <edtwin.hxx>
 #include <view.hxx>

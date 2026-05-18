@@ -25,6 +25,7 @@
 #include <scresid.hxx>
 
 #include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Window.hxx>
 
 static sal_uInt8 nInsItemChecked = 0;
 

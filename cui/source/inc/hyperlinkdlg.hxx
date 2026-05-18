@@ -16,7 +16,7 @@
 #include <svx/hlnkitem.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <sfx2/childwin.hxx>
-#include <vcl/weld/weld.hxx>
+#include <vcl/weld/Window.hxx>
 
 class HyperlinkDialog : public SfxTabDialogController
 {

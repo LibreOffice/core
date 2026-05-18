@@ -20,7 +20,7 @@
 #pragma once
 
 #include <vcl/weld/DialogController.hxx>
-#include <vcl/weld/weld.hxx>
+#include <vcl/weld/Window.hxx>
 #include "scui_def.hxx"
 
 class ScNameCreateDlg final : public weld::GenericDialogController

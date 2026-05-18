@@ -36,6 +36,7 @@
 #include <svl/stritem.hxx>
 #include <avmedia/mediawindow.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/Window.hxx>
 #include <vcl/weld/weld.hxx>
 #include <vcl/GraphicNativeTransform.hxx>
 #include <vcl/GraphicNativeMetadata.hxx>

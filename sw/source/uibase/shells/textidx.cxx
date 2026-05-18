@@ -23,6 +23,7 @@
 #include <svl/eitem.hxx>
 #include <editeng/sizeitem.hxx>
 #include <osl/diagnose.h>
+#include <vcl/weld/Window.hxx>
 #include <fmtfsize.hxx>
 #include <fldbas.hxx>
 #include <uiitems.hxx>

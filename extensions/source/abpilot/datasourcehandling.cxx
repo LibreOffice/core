@@ -48,6 +48,7 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <unotools/sharedunocomponent.hxx>
 #include <vcl/stdtext.hxx>
+#include <vcl/weld/Window.hxx>
 #include <vcl/weld/weld.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfile.hxx>

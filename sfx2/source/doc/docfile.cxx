@@ -130,6 +130,7 @@
 #include <officecfg/Office/Common.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <vcl/embeddedfontsmanager.hxx>
+#include <vcl/weld/Window.hxx>
 #include <vcl/weld/weld.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/diagnose_ex.hxx>

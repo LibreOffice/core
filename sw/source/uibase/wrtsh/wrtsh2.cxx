@@ -67,6 +67,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/Menu.hxx>
+#include <vcl/weld/Window.hxx>
 #include <vcl/weld/weldutils.hxx>
 #include <strings.hrc>
 #include <officecfg/Office/Common.hxx>

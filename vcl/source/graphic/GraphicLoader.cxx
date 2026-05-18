@@ -15,7 +15,7 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/graphicfilter.hxx>
-#include <vcl/weld/weld.hxx>
+#include <vcl/weld/Window.hxx>
 
 using namespace css;
 

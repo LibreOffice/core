@@ -20,7 +20,7 @@
 #pragma once
 
 #include <vcl/weld/DialogController.hxx>
-#include <vcl/weld/weld.hxx>
+#include <vcl/weld/Window.hxx>
 
 /** Warning box for "Replace cell contents?".
     With warning image and "Do not show again" checkbox. */

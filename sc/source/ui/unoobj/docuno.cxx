@@ -55,6 +55,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/themecolors.hxx>
 #include <vcl/vclevent.hxx>
+#include <vcl/weld/Window.hxx>
 #include <tools/json_writer.hxx>
 #include <tools/multisel.hxx>
 #include <tools/UnitConversion.hxx>

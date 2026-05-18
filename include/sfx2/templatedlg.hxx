@@ -36,18 +36,10 @@ class XModel;
 namespace weld
 {
 class ComboBox;
-}
-namespace weld
-{
 class Entry;
-}
-namespace weld
-{
-class TreeView;
-}
-namespace weld
-{
 class MenuButton;
+class TreeView;
+class Window;
 }
 
 class SFX2_DLLPUBLIC SfxTemplateManagerDlg : public weld::GenericDialogController

@@ -26,6 +26,7 @@
 #include <svl/numformat.hxx>
 #include <svx/colorbox.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/Window.hxx>
 #include <formula/token.hxx>
 #include <formula/errorcodes.hxx>
 #include <tokenarray.hxx>

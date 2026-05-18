@@ -20,6 +20,7 @@
 #include <scitems.hxx>
 #include <utility>
 #include <vcl/virdev.hxx>
+#include <vcl/weld/Window.hxx>
 #include <editeng/boxitem.hxx>
 #include <sfx2/app.hxx>
 #include <comphelper/lok.hxx>

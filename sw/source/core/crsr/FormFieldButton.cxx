@@ -12,6 +12,7 @@
 #include <basegfx/color/bcolortools.hxx>
 #include <tools/mapunit.hxx>
 #include <bookmark.hxx>
+#include <vcl/weld/Window.hxx>
 #include <vcl/weld/weldutils.hxx>
 #include <vcl/event.hxx>
 

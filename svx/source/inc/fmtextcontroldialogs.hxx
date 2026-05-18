@@ -21,6 +21,7 @@
 #define INCLUDED_SVX_SOURCE_INC_FMTEXTCONTROLDIALOGS_HXX
 
 #include <sfx2/tabdlg.hxx>
+#include <vcl/weld/Window.hxx>
 #include <editeng/flstitem.hxx>
 
 namespace svx

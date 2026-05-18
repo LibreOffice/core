@@ -47,6 +47,7 @@
 #include <svx/dialogs.hrc>
 #include <svl/inethist.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/Window.hxx>
 #include <svx/svxerr.hxx>
 #include <comphelper/diagnose_ex.hxx>
 

@@ -20,6 +20,7 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_DOCFNOTE_HXX
 
 #include <sfx2/tabdlg.hxx>
+#include <vcl/weld/Window.hxx>
 
 class SwWrtShell;
 

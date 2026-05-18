@@ -21,6 +21,7 @@
 
 #include <sfx2/basedlgs.hxx>
 #include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Window.hxx>
 #include <com/sun/star/uno/Sequence.h>
 
 namespace com::sun::star{

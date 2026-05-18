@@ -52,6 +52,7 @@
 #include <svx/unobrushitemhelper.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Window.hxx>
 
 using namespace com::sun::star;
 

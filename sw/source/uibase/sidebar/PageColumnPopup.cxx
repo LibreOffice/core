@@ -20,6 +20,7 @@
 #include "PageColumnControl.hxx"
 #include <vcl/toolbox.hxx>
 #include <vcl/weld/Toolbar.hxx>
+#include <vcl/weld/Window.hxx>
 
 PageColumnPopup::PageColumnPopup(const css::uno::Reference<css::uno::XComponentContext>& rContext)
     : PopupWindowController(rContext, nullptr, OUString())

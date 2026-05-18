@@ -12,6 +12,7 @@
 #include <bookmark.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/Window.hxx>
 #include <xmloff/odffields.hxx>
 #include <IMark.hxx>
 #include <view.hxx>

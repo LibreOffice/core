@@ -20,6 +20,7 @@
 
 #include <sfx2/basedlgs.hxx>
 #include <vcl/weld/SpinButton.hxx>
+#include <vcl/weld/Window.hxx>
 
 class SwInsertAbstractDlg final : public SfxDialogController
 {

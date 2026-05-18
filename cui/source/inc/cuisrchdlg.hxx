@@ -20,6 +20,7 @@
 
 #include <i18nutil/transliteration.hxx>
 #include <sfx2/basedlgs.hxx>
+#include <vcl/weld/Window.hxx>
 
 class SvxJSearchOptionsPage;
 

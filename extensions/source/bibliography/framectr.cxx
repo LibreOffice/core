@@ -46,6 +46,7 @@
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <vcl/weld/Window.hxx>
 #include <vcl/weld/weld.hxx>
 #include <osl/mutex.hxx>
 

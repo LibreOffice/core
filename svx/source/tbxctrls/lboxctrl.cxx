@@ -25,6 +25,7 @@
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/Toolbar.hxx>
 #include <vcl/weld/TreeView.hxx>
+#include <vcl/weld/Window.hxx>
 #include <svtools/toolbarmenu.hxx>
 #include <svx/dialmgr.hxx>
 #include <lboxctrl.hxx>

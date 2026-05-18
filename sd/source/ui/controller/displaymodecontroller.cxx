@@ -15,6 +15,7 @@
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/Toolbar.hxx>
 #include <vcl/weld/ScrolledWindow.hxx>
+#include <vcl/weld/Window.hxx>
 
 #include <strings.hrc>
 

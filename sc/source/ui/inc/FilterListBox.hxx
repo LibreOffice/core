@@ -25,6 +25,7 @@
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/Popover.hxx>
 #include <vcl/weld/TreeView.hxx>
+#include <vcl/weld/Window.hxx>
 #include <vcl/weld/weld.hxx>
 
 class ScGridWindow;

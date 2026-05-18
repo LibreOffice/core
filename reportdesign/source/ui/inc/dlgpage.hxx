@@ -20,6 +20,7 @@
 #define INCLUDED_REPORTDESIGN_SOURCE_UI_INC_DLGPAGE_HXX
 
 #include <sfx2/tabdlg.hxx>
+#include <vcl/weld/Window.hxx>
 
 namespace rptui
 {

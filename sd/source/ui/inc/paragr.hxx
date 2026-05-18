@@ -20,6 +20,7 @@
 #pragma once
 
 #include <sfx2/tabdlg.hxx>
+#include <vcl/weld/Window.hxx>
 
 /**
  * Paragraph-Tab-Dialog

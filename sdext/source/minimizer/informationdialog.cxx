@@ -30,6 +30,7 @@
 #include <sal/macros.h>
 #include <vcl/svapp.hxx>
 #include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Window.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::awt;

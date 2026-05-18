@@ -20,7 +20,7 @@
 
 #include <memory>
 #include <vcl/weld/DialogController.hxx>
-#include <vcl/weld/weld.hxx>
+#include <vcl/weld/Window.hxx>
 #include <svl/itemset.hxx>
 
 #include "res_ErrorBar.hxx"

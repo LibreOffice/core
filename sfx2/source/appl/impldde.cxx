@@ -29,6 +29,7 @@
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/Entry.hxx>
+#include <vcl/weld/Window.hxx>
 #include <vcl/weld/weld.hxx>
 #include <sot/exchange.hxx>
 #include <rtl/ustring.hxx>

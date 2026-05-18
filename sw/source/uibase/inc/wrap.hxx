@@ -23,6 +23,7 @@
 #include <sfx2/basedlgs.hxx>
 #include <svx/swframetypes.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
+#include <vcl/weld/Window.hxx>
 
 class SwWrtShell;
 

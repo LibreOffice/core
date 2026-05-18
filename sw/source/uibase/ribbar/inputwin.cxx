@@ -35,6 +35,7 @@
 #include <vcl/image.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld/Menu.hxx>
+#include <vcl/weld/Window.hxx>
 #include <vcl/weld/weldutils.hxx>
 
 #include <swtypes.hxx>

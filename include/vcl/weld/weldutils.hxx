@@ -55,6 +55,7 @@ class FormattedSpinButton;
 class TextWidget;
 class TreeIter;
 class TreeView;
+class Window;
 
 typedef comphelper::WeakComponentImplHelper<css::awt::XWindow> TransportAsXWindow_Base;
 

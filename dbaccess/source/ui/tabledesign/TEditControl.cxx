@@ -44,6 +44,7 @@
 #include <vcl/commandevent.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld/Menu.hxx>
+#include <vcl/weld/Window.hxx>
 
 using namespace ::dbaui;
 using namespace ::comphelper;

@@ -41,6 +41,7 @@
 #include <sfx2/request.hxx>
 #include <vcl/EnumContext.hxx>
 #include <vcl/rendercontext/GetDefaultFontFlags.hxx>
+#include <vcl/weld/Window.hxx>
 #include <svl/whiter.hxx>
 #include <editeng/outliner.hxx>
 #include <editeng/editstat.hxx>

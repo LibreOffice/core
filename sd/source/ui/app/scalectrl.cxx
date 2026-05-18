@@ -24,6 +24,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/Menu.hxx>
+#include <vcl/weld/Window.hxx>
 #include <vcl/weld/weldutils.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>

@@ -20,6 +20,7 @@
 
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/Entry.hxx>
+#include <vcl/weld/Window.hxx>
 #include <vcl/weld/weld.hxx>
 
 class QueryFolderNameDialog : public weld::GenericDialogController

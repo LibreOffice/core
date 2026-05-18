@@ -22,6 +22,7 @@
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
 #include <vcl/weld/TreeView.hxx>
+#include <vcl/weld/Window.hxx>
 #include "TableAutoFmtPreview.hxx"
 
 class SVX_DLLPUBLIC SvxTableAutoFmtDlg : public weld::GenericDialogController

@@ -20,7 +20,7 @@
 
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/SpinButton.hxx>
-#include <vcl/weld/weld.hxx>
+#include <vcl/weld/Window.hxx>
 
 class FmInputRecordNoDialog : public weld::GenericDialogController
 {

@@ -37,6 +37,7 @@
 #include <vcl/weld/Menu.hxx>
 #include <vcl/weld/ScrolledWindow.hxx>
 #include <vcl/weld/TreeView.hxx>
+#include <vcl/weld/Window.hxx>
 #include <vcl/weld/customweld.hxx>
 #include <vcl/weld/weldutils.hxx>
 #include <svtools/valueset.hxx>

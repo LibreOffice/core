@@ -24,6 +24,7 @@
 #include <vcl/idle.hxx>
 #include <vcl/vclptr.hxx>
 #include <vcl/transfer.hxx>
+#include <vcl/weld/Window.hxx>
 
 #include "callbacks.hxx"
 #include "TableConnectionData.hxx"

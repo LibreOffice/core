@@ -38,6 +38,7 @@
 #include <vcl/inputctx.hxx>
 #include <vcl/transfer.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/Window.hxx>
 #include <vcl/weld/weldutils.hxx>
 #include <vcl/window.hxx>
 #include <sot/exchange.hxx>

@@ -25,6 +25,7 @@
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
+#include <vcl/weld/Window.hxx>
 #include <svl/intitem.hxx>
 #include <svl/itempool.hxx>
 #include <svl/eitem.hxx>

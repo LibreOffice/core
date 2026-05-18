@@ -77,6 +77,7 @@
 #include <vcl/commandevent.hxx>
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/Menu.hxx>
+#include <vcl/weld/Window.hxx>
 #include <vcl/weld/weldutils.hxx>
 
 #include <vcl/settings.hxx>

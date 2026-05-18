@@ -19,7 +19,7 @@
 #pragma once
 
 #include <sfx2/signaturestate.hxx>
-#include <vcl/weld/weld.hxx>
+#include <vcl/weld/Window.hxx>
 
 class SfxObjectShell;
 

@@ -35,6 +35,7 @@
 #include <vcl/toolbox.hxx>
 #include <vcl/event.hxx>
 #include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Window.hxx>
 #include <svl/itemset.hxx>
 
 namespace basctl

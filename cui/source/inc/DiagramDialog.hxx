@@ -13,6 +13,7 @@
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/TextView.hxx>
 #include <vcl/weld/TreeView.hxx>
+#include <vcl/weld/Window.hxx>
 #include <vcl/weld/weld.hxx>
 
 class SdrObjGroup;

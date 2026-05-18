@@ -19,6 +19,7 @@
 #pragma once
 
 #include <sfx2/basedlgs.hxx>
+#include <vcl/weld/Window.hxx>
 
 class SfxItemSet;
 class SfxItemPool;

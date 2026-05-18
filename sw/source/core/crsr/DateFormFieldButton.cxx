@@ -13,6 +13,7 @@
 #include <tools/date.hxx>
 #include <svl/numformat.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/Window.hxx>
 
 IMPL_LINK(DateFormFieldButton, ImplSelectHdl, weld::Calendar&, rCalendar, void)
 {

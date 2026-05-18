@@ -51,6 +51,7 @@
 #include <svx/xflhtit.hxx>
 #include <svx/zoomslideritem.hxx>
 #include <vcl/ptrstyle.hxx>
+#include <vcl/weld/Window.hxx>
 
 #include <global.hxx>
 #include <appoptio.hxx>

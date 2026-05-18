@@ -30,6 +30,7 @@
 #include <svx/svxerr.hxx>
 #include <svx/dialmgr.hxx>
 #include <editeng/unolingu.hxx>
+#include <vcl/weld/Window.hxx>
 #include <vcl/weld/weld.hxx>
 #include <drawdoc.hxx>
 #include <View.hxx>

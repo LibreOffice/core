@@ -18,6 +18,7 @@
  */
 
 #include <unotools/localedatawrapper.hxx>
+#include <vcl/weld/Window.hxx>
 
 #include <chgtrack.hxx>
 #include <redcom.hxx>

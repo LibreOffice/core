@@ -37,6 +37,7 @@
 
 #include <basegfx/utils/zoomtools.hxx>
 #include <comphelper/lok.hxx>
+#include <vcl/weld/Window.hxx>
 #include <vcl/weld/weld.hxx>
 #include <tools/svborder.hxx>
 #include <osl/diagnose.h>

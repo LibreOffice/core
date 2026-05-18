@@ -33,6 +33,7 @@
 #include <vcl/commandevent.hxx>
 #include <vcl/ptrstyle.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/weld/Window.hxx>
 #include <o3tl/deleter.hxx>
 #include <o3tl/unit_conversion.hxx>
 

@@ -26,6 +26,7 @@
 #include <vcl/weld/DrawingArea.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
 #include <vcl/weld/SpinButton.hxx>
+#include <vcl/weld/Window.hxx>
 
 class CuiGraphicPreviewWindow : public weld::CustomWidgetController
 {

@@ -31,6 +31,7 @@
 #include <svx/flagsdef.hxx>
 
 #include <vcl/tabs.hrc>
+#include <vcl/weld/Window.hxx>
 
 ScCharDlg::ScCharDlg(weld::Window* pParent, const SfxItemSet* pAttr, const SfxObjectShell* pDocShell, bool bDrawText)
     : SfxTabDialogController(pParent, u"modules/scalc/ui/chardialog.ui"_ustr, u"CharDialog"_ustr, pAttr)

@@ -23,6 +23,7 @@
 #include <utility>
 #include <vcl/weld/IconView.hxx>
 #include <vcl/weld/TreeView.hxx>
+#include <vcl/weld/Window.hxx>
 #include <vcl/weld/weld.hxx>
 #include <rtl/ustring.hxx>
 

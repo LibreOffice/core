@@ -12,6 +12,7 @@
 #include <svl/numformat.hxx>
 #include <tools/date.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/Window.hxx>
 
 #include <edtwin.hxx>
 #include <formatcontentcontrol.hxx>

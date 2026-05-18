@@ -23,6 +23,7 @@
 #include <sfx2/tabdlg.hxx>
 #include <svx/xtable.hxx>
 #include <svx/tabarea.hxx>
+#include <vcl/weld/Window.hxx>
 
 class SdrModel;
 class SvxFormatCellsDialog : public SfxTabDialogController

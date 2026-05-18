@@ -26,6 +26,7 @@
 #include <unotools/configmgr.hxx>
 #include <vcl/ptrstyle.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/Window.hxx>
 #include <o3tl/enumrange.hxx>
 #include <comphelper/lok.hxx>
 

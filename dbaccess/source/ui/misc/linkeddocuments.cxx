@@ -37,6 +37,7 @@
 #include <com/sun/star/container/XHierarchicalNameContainer.hpp>
 #include <comphelper/mimeconfighelper.hxx>
 #include <utility>
+#include <vcl/weld/Window.hxx>
 #include <vcl/weld/weld.hxx>
 
 #include <cppuhelper/exc_hlp.hxx>

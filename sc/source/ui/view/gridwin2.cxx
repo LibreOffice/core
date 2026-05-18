@@ -20,6 +20,7 @@
 #include <scitems.hxx>
 #include <vcl/ptrstyle.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/weld/Window.hxx>
 #include <comphelper/lok.hxx>
 
 #include <attrib.hxx>

@@ -20,6 +20,7 @@
 #include <dbaccess/genericcontroller.hxx>
 #include <browserids.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/Window.hxx>
 #include <vcl/weld/weld.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <dbaccess/dataview.hxx>
