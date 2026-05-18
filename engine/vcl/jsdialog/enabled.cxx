@@ -684,6 +684,12 @@ std::vector<OUString> completeWriterDialogList(const o3tl::sorted_vector<OUStrin
     std::vector<OUString> missing;
     for (const auto& entry : SwriterDialogList)
     {
+        // Skip this one, it is reached from outlinenumbering.ui's
+        // "format" menubutton which is hidden when COKit is active
+        // (see SwOutlineTabDialog ctor).
+        if (entry == u"modules/swriter/ui/numberingnamedialog.ui")
+            continue;
+
         OUString sEntry(entry);
         if (!entries.contains(sEntry))
             missing.push_back(sEntry);
