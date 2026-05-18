@@ -101,13 +101,6 @@ describe(['tagdesktop'], 'Accessibility Impress Dialog Tests', { testIsolation: 
             });
     }
 
-    function escLevel(win, count) {
-            for (var i = 0; i < count; i++) {
-                    helper.typeIntoDocument('{esc}');
-                    helper.processToIdle(win);
-            }
-    }
-
     it('Detects non-native button element error', function () {
         testA11yErrorDetection(function($dialog, win) {
             // Inject a span with role="button" instead of native <button>

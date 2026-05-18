@@ -60,7 +60,7 @@ describe(['tagdesktop'], 'Spinfield unit and button tests', function () {
 		});
 
 		// Unit persists after arrow key change
-		cy.cGet('#leftmf-input').invoke('val').then(function (val) {
+		cy.cGet('#leftmf-input').invoke('val').then(function () {
 			cy.cGet('#leftmf-input').focus();
 			cy.cGet('#leftmf-input').type('{uparrow}');
 
