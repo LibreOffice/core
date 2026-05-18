@@ -205,7 +205,7 @@ describe(['tagdesktop'], 'Collapsed Annotation Tests', function() {
 		helper.reloadDocument(newFilePath);
 		desktopHelper.closeNavigatorSidebar();
 		desktopHelper.getNbIcon('ModifyPage.selected').click();
-		cy.cGet('.cool-annotation-img').click();
+		cy.cGet('.cool-annotation-img').scrollIntoView().click();
 		cy.cGet('.cool-annotation-content-wrapper').should('exist');
 		cy.cGet('[id^=annotation-content-area-]').should('have.text','some text0');
 		cy.cGet('.cool-annotation-info-collapsed').should('be.not.visible');
