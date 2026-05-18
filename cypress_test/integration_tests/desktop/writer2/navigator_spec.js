@@ -18,6 +18,9 @@ describe(['tagdesktop'], 'Scroll through document, modify heading', function() {
 	beforeEach(function() {
 		helper.setupAndLoadDocument('writer/navigator.odt');
 		cy.cGet('#navigator-floating-icon').click(); // Ensure it's open
+		cy.getFrameWindow().then((win) => {
+			this.win = win;
+		});
 	});
 
 	it('Navigator visual test', function() {
@@ -43,24 +46,31 @@ describe(['tagdesktop'], 'Scroll through document, modify heading', function() {
 		// Doubleclick several items, and check if the document is scrolled to the right page
 		cy.cGet('#contenttree').contains('.jsdialog.sidebar.ui-treeview-cell-text', 'Feedback').dblclick();
 		desktopHelper.assertVisiblePage(2, 2, 8);
+		helper.processToIdle(this.win);
 
 		cy.cGet('#contenttree').contains('.jsdialog.sidebar.ui-treeview-cell-text', 'Text').dblclick();
 		desktopHelper.assertVisiblePage(5, 6, 8);
+		helper.processToIdle(this.win);
 
 		cy.cGet('#contenttree').contains('.jsdialog.sidebar.ui-treeview-cell-text', 'Replacing').dblclick();
 		desktopHelper.assertVisiblePage(7, 7, 8);
+		helper.processToIdle(this.win);
 
 		cy.cGet('#contenttree').contains('.jsdialog.sidebar.ui-treeview-cell-text', 'Table15').dblclick();
 		desktopHelper.assertVisiblePage(2, 2, 8);
+		helper.processToIdle(this.win);
 
 		cy.cGet('#contenttree').contains('.jsdialog.sidebar.ui-treeview-cell-text', 'Frame39').dblclick();
 		desktopHelper.assertVisiblePage(4, 4, 8);
+		helper.processToIdle(this.win);
 
 		cy.cGet('#contenttree').contains('.jsdialog.sidebar.ui-treeview-cell-text', 'Frame27').dblclick();
 		desktopHelper.assertVisiblePage(6, 6, 8);
+		helper.processToIdle(this.win);
 
 		cy.cGet('#contenttree').contains('.jsdialog.sidebar.ui-treeview-cell-text', 'graphics3').dblclick();
 		desktopHelper.assertVisiblePage(1, 1, 8);
+		helper.processToIdle(this.win);
 
 		cy.cGet('#contenttree').contains('.jsdialog.sidebar.ui-treeview-cell-text', 'graphics10').dblclick();
 		desktopHelper.assertVisiblePage(5, 5, 8);
