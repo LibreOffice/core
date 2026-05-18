@@ -397,7 +397,7 @@ class UnitWSD : public UnitBase
 {
     UnitWSDInterface *_wsd;
     bool _hasKitHooks;
-    std::atomic_bool _hasDocBroker;
+    std::atomic_int _docBrokerCounter;
 
 public:
     explicit UnitWSD(const std::string& testname);

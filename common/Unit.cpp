@@ -513,7 +513,7 @@ UnitWSD::UnitWSD(const std::string& name)
     : UnitBase(name, UnitType::Wsd)
     , _wsd(nullptr)
     , _hasKitHooks(false)
-    , _hasDocBroker(false)
+    , _docBrokerCounter(0)
 {
 }
 
@@ -548,9 +548,8 @@ void UnitWSD::DocBrokerCreate(const std::string& key)
 {
     if (isUnitTesting())
     {
+        ++_docBrokerCounter;
         onDocBrokerCreate(key);
-
-        _hasDocBroker = true;
     }
 }
 
@@ -559,20 +558,20 @@ void UnitWSD::DocBrokerDestroy(const std::string& key)
     if (isUnitTesting())
     {
         onDocBrokerDestroy(key);
-        if (!isFinished())
-        {
-            // Not yet finished; don't start the next test just yet.
-            return;
-        }
 
         // We could be called from either a SocketPoll (websrv_poll)
         // or from invokeTest (coolwsd main).
         std::lock_guard<std::mutex> guard(_lock);
 
-        // Check if we have more tests, but keep the current index if it's the last.
-        if (haveMoreTests())
+        if (--_docBrokerCounter == 0)
         {
-            startNextTest();
+            // Check if we have more tests, but keep the current index if it's the last.
+            if (isFinished() && haveMoreTests())
+            {
+                assert(this == &UnitWSD::get() &&
+                       "Expected to advance only the current UnitWSD instance");
+                startNextTest();
+            }
         }
     }
 }
@@ -632,7 +631,7 @@ void UnitWSD::onExitTest(TestResult result, const std::string&)
             return;
         }
 
-        if (_hasDocBroker)
+        if (_docBrokerCounter > 0)
         {
             TST_LOG("Have more tests. Waiting for the DocBroker to destroy before starting them");
         }
