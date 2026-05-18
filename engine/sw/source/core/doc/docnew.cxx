@@ -724,6 +724,7 @@ void SwDoc::ClearDoc()
     mpOutlineRule = nullptr;
     for( SwNumRule* pNumRule : *mpNumRuleTable )
     {
+        pNumRule->RemoveGrfLinks(*this);
         getIDocumentListsAccess().deleteListForListStyle(pNumRule->GetName());
         delete pNumRule;
     }

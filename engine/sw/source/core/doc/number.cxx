@@ -565,6 +565,7 @@ SwNumRule::~SwNumRule()
 
 namespace {
 
+/// Numbering rule bullets can be bitmaps, and those can be links
 class SwNumRuleLink final : public sfx2::SvBaseLink
 {
     SwNumRule* m_pRule;
