@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 -->
+<!-- Generated with glade 3.40.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.24"/>
   <object class="GtkBox" id="A11yCheckIssuesPanel">
@@ -20,8 +20,11 @@
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="halign">start</property>
+            <property name="xalign">0</property>
             <property name="hexpand">True</property>
+            <property name="max-width-chars">25</property>
             <property name="label" translatable="yes" context="a11ycheckissuespanel|lbOptions">Adjust accessibility check options</property>
+            <property name="wrap">True</property>
           </object>
           <packing>
             <property name="left-attach">0</property>
@@ -36,7 +39,6 @@
             <property name="receives-default">True</property>
             <property name="halign">end</property>
             <property name="valign">center</property>
-            <property name="hexpand">True</property>
             <property name="use-underline">True</property>
             <child internal-child="accessible">
               <object class="AtkObject" id="bOptions-atkobject">

@@ -245,6 +245,15 @@ void FixedText::Draw( OutputDevice* pDev, const Point& rPos,
 void FixedText::Resize()
 {
     Control::Resize();
+    if (GetStyle() & WB_WORDBREAK)
+    {
+        tools::Long nNewWidth = GetSizePixel().Width();
+        if (nNewWidth != m_nLastAllocatedWidth && nNewWidth > 0)
+        {
+            m_nLastAllocatedWidth = nNewWidth;
+            queue_resize();
+        }
+    }
     Invalidate();
 }
 
@@ -334,13 +343,36 @@ Size FixedText::CalcMinimumSize( tools::Long nMaxWidth ) const
 
 Size FixedText::GetOptimalSize() const
 {
-    sal_Int32 nMaxAvailWidth = 0x7fffffff;
+    sal_Int32 nMaxWidthCharsPx = -1;
     if (m_nMaxWidthChars != -1)
     {
         OUString aBuf(OUString::Concat(RepeatedUChar('x', m_nMaxWidthChars)));
-        nMaxAvailWidth = getTextDimensions(this, aBuf, 0x7fffffff).Width();
+        nMaxWidthCharsPx = getTextDimensions(this, aBuf, 0x7fffffff).Width();
     }
-    Size aRet = CalcMinimumSize(nMaxAvailWidth);
+
+    sal_Int32 nWrapWidth = 0x7fffffff;
+    // Height for width: Use last allocated width to calculate the needed height
+    // - fall back to max width chars if set, otherwise no limit
+    if ((GetStyle() & WB_WORDBREAK) && m_nLastAllocatedWidth > 0)
+        nWrapWidth = m_nLastAllocatedWidth;
+    else if (nMaxWidthCharsPx > 0)
+        nWrapWidth = nMaxWidthCharsPx;
+
+    Size aRet = CalcMinimumSize(nWrapWidth);
+
+    // Keep the wrapped height from CalcMinimumSize(cache), but report the
+    // unwrapped width as preferred width. Reporting the wrapped-text bounding-box width
+    // (or the cached allocation) creates a loop where the parent container progressively
+    // shrinks the column to match a shrinking preferred width.
+    if ((GetStyle() & WB_WORDBREAK) && m_nLastAllocatedWidth > 0)
+    {
+        Size aUnwrapped = CalcMinimumSize(0x7fffffff);
+        aRet.setWidth(aUnwrapped.Width());
+    }
+
+    if (nMaxWidthCharsPx > 0)
+        aRet.setWidth(std::min<tools::Long>(aRet.Width(), nMaxWidthCharsPx));
+
     if (m_nMinWidthChars != -1)
     {
         OUString aBuf(OUString::Concat(RepeatedUChar('x', m_nMinWidthChars)));
