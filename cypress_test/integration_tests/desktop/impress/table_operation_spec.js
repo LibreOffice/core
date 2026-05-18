@@ -195,7 +195,9 @@ describe(['tagdesktop'], 'Table operations', function() {
 			.should('have.length', 3);
 
 		desktopHelper.getNbIcon('EntireRow', 'Table').click();
+		helper.processToIdle(this.win);
 		desktopHelper.getNbIcon('MergeCells', 'Table').should('not.be.disabled').click();
+		helper.processToIdle(this.win);
 
 		retriggerNewSvgForTableInTheCenter();
 
@@ -222,7 +224,9 @@ describe(['tagdesktop'], 'Table operations', function() {
 			.should('have.length', 3);
 
 		desktopHelper.getNbIcon('EntireColumn', 'Table').click();
+		helper.processToIdle(this.win);
 		desktopHelper.getNbIcon('MergeCells', 'Table').should('not.be.disabled').click();
+		helper.processToIdle(this.win);
 
 		retriggerNewSvgForTableInTheCenter();
 
