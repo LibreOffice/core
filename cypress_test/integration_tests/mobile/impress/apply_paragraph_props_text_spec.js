@@ -34,13 +34,13 @@ describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Apply paragraph properties 
 	function openParagraphPropertiesPanel() {
 		mobileHelper.openMobileWizard();
 		cy.cGet('#ParaPropertyPanel').click();
-		cy.cGet('.unoParaLeftToRight').should('be.visible');
+		cy.cGet('#ParaPropertyPanel .unoParaLeftToRight').should('be.visible');
 	}
 
 	function openListsPropertiesPanel() {
 		mobileHelper.openMobileWizard();
 		cy.cGet('#ListsPropertyPanel').click();
-		cy.cGet('.unoDefaultBullet').should('be.visible');
+		cy.cGet('#ListsPropertyPanel .unoDefaultBullet').should('be.visible');
 	}
 
 	it('Apply horizontal alignment on selected text.', function() {

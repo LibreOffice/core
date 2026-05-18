@@ -29,7 +29,7 @@ describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Apply paragraph properties 
 
 		cy.cGet('#ParaPropertyPanel').click();
 
-		cy.cGet('.unoParaLeftToRight').should('be.visible');
+		cy.cGet('#ParaPropertyPanel .unoParaLeftToRight').should('be.visible');
 	}
 
 	function openListsPropertiesPanel() {
@@ -37,7 +37,7 @@ describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Apply paragraph properties 
 
 		cy.cGet('#ListsPropertyPanel').click();
 
-		cy.cGet('.unoDefaultBullet').should('be.visible');
+		cy.cGet('#ListsPropertyPanel .unoDefaultBullet').should('be.visible');
 	}
 
 	it.skip('Apply left/right alignment on text shape.', function() {

@@ -263,6 +263,10 @@ window.L.Control.MobileWizardWindow = window.L.Control.extend({
 		$('#mobile-wizard.funcwizard div#mobile-wizard-content').removeClass('hideHelpBG');
 		$('#mobile-wizard.funcwizard div#mobile-wizard-content').addClass('showHelpBG');
 
+		// The content panel may carry the "hidden" class from the server
+		// state (visible: false). Removing it is required for .show() to
+		// take effect, because .hidden has display:none !important.
+		$(contentToShow).children('.ui-content').first().removeClass('hidden');
 		if (animate)
 			$(contentToShow).children('.ui-content').first().show('slide', { direction: 'right' }, 'fast');
 		else
