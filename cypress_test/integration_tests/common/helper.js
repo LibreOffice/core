@@ -1384,7 +1384,7 @@ function processToIdle(win) {
 function waitForTimers(win, tag) {
 	return cy.waitUntil(function() {
 		return !win.app.timerRegistry.hasActive(tag);
-	}, { timeout: Cypress.config('defaultCommandTimeout'), interval: 50 });
+	}, { interval: 50 });
 }
 
 // Wait until every in-flight render_entry request from
@@ -1411,7 +1411,7 @@ function waitForOnDemandRenders(win) {
 	}).then(function() {
 		return cy.waitUntil(function() {
 			return (win.app.pendingOnDemandRenders || 0) === 0;
-		}, { timeout: Cypress.config('defaultCommandTimeout'), interval: 50 });
+		}, { interval: 50 });
 	});
 }
 

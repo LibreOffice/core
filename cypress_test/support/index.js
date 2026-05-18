@@ -116,6 +116,8 @@ Cypress.Commands.overwrite('waitUntil', function(originalFn, subject, checkFunct
 		options = {};
 	if (!options.interval)
 		options.interval = 100; // ms
+	if (!options.timeout)
+		options.timeout = Cypress.config('defaultCommandTimeout');
 	if (!options.verbose)
 		options.verbose = true;
 	return originalFn(subject, checkFunction, options);

@@ -266,7 +266,7 @@ function waitForSlideShowIdle(win) {
 		if (!presenter || !presenter._slideShowNavigator)
 			return false;
 		return presenter._slideShowNavigator.currentSlideIndex !== undefined;
-	}, { timeout: Cypress.config('defaultCommandTimeout'), interval: 50 });
+	}, { interval: 50 });
 	helper.waitForTimers(win, 'slideshowupdate');
 }
 
