@@ -41,9 +41,9 @@
 #include <svl/grabbagitem.hxx>
 #include <doc.hxx>
 
-#define TEXT_PADDING 3
-#define BOX_DISTANCE 3
-#define BUTTON_WIDTH 12
+constexpr int TEXT_PADDING = 3;
+constexpr int BOX_DISTANCE = 3;
+constexpr int BUTTON_WIDTH = 12;
 
 UnfloatTableButton::UnfloatTableButton(SwEditWin* pEditWin, const SwFrame* pFrame)
     : SwFrameMenuButtonBase(pEditWin, pFrame, u"modules/swriter/ui/unfloatbutton.ui"_ustr,

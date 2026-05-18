@@ -52,9 +52,9 @@
 #include <vcl/settings.hxx>
 #include <memory>
 
-#define BUTTON_WIDTH 30
-#define BUTTON_HEIGHT 19
-#define ARROW_WIDTH 9
+constexpr int BUTTON_WIDTH = 30;
+constexpr int BUTTON_HEIGHT = 19;
+constexpr int ARROW_WIDTH = 9;
 
 using namespace basegfx;
 using namespace basegfx::utils;

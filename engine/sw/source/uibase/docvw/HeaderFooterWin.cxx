@@ -51,9 +51,9 @@
 #include <vcl/virdev.hxx>
 #include <memory>
 
-#define TEXT_PADDING 5
-#define BOX_DISTANCE 10
-#define BUTTON_WIDTH 18
+constexpr int TEXT_PADDING = 5;
+constexpr int BOX_DISTANCE = 10;
+constexpr int BUTTON_WIDTH = 18;
 
 using namespace basegfx;
 using namespace basegfx::utils;

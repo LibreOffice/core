@@ -69,8 +69,12 @@ void SwReadOnlyPopup::Check( sal_uInt16 nMID, sal_uInt16 nSID, SfxDispatcher con
         m_xMenu->EnableItem(nMID, false);
 }
 
-#define MN_READONLY_GRAPHICTOGALLERY 1000
-#define MN_READONLY_BACKGROUNDTOGALLERY 2000
+namespace {
+enum ReadOnlyMenuId {
+    MN_READONLY_GRAPHICTOGALLERY = 1000,
+    MN_READONLY_BACKGROUNDTOGALLERY = 2000
+};
+}
 
 SwReadOnlyPopup::SwReadOnlyPopup(const Point &rDPos, SwView &rV)
     : m_aBuilder(nullptr, AllSettings::GetUIRootDir(), u"modules/swriter/ui/readonlymenu.ui"_ustr, u""_ustr)

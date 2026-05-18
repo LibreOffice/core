@@ -158,7 +158,7 @@
 using namespace sw::mark;
 using namespace ::com::sun::star;
 
-#define SCROLL_TIMER_RETARD_LIMIT 5
+constexpr int SCROLL_TIMER_RETARD_LIMIT = 5;
 
 /**
  * Globals

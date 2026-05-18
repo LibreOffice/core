@@ -26,9 +26,9 @@
 #include <viewopt.hxx>
 #include <wrtsh.hxx>
 
-#define TEXT_PADDING 3
-#define BOX_DISTANCE 3
-#define BUTTON_WIDTH 12
+constexpr int TEXT_PADDING = 3;
+constexpr int BOX_DISTANCE = 3;
+constexpr int BUTTON_WIDTH = 12;
 
 SwContentControlAliasButton::SwContentControlAliasButton(SwEditWin* pEditWin,
                                                          const SwContentControl* pContentControl)
