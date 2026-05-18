@@ -27,21 +27,9 @@ namespace com::sun::star::awt
 {
 class XWindow;
 }
-namespace com::sun::star::datatransfer::clipboard
-{
-class XClipboard;
-}
-namespace com::sun::star::datatransfer::dnd
-{
-class XDropTarget;
-}
 namespace com::sun::star::graphic
 {
 class XGraphic;
-}
-namespace comphelper
-{
-class OAccessible;
 }
 namespace rtl
 {
