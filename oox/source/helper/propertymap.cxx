@@ -183,7 +183,7 @@ PropertyMap::PropertyMap() :
 
 bool PropertyMap::hasProperty( sal_Int32 nPropId ) const
 {
-    return maProperties.find( nPropId ) != maProperties.end();
+    return maProperties.contains(nPropId);
 }
 
 bool PropertyMap::setAnyProperty( sal_Int32 nPropId, const Any& rValue )
