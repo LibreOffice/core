@@ -30,7 +30,11 @@
 #if defined(_MSC_VER)
 #define LO_DLLPUBLIC_EXPORT __declspec(dllexport)
 #elif defined(__GNUC__)
+#if defined(DISABLE_DYNLOADING)
+#define LO_DLLPUBLIC_EXPORT __attribute__((visibility("hidden")))
+#else
 #define LO_DLLPUBLIC_EXPORT __attribute__((visibility("default")))
+#endif
 #else
 #define LO_DLLPUBLIC_EXPORT
 #endif
