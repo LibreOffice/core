@@ -1318,11 +1318,26 @@ void XclExpTbxControlObj::SaveXml( XclExpXmlStream& rStrm )
             // xdr:nvSpPr
             pDrawing->startElement(FSNS(XML_xdr, XML_nvSpPr));
             {
-                pDrawing->singleElement(FSNS(XML_xdr, XML_cNvPr),
-                    XML_id, OString::number(mnShapeId),
-                    XML_name, msCtrlName, // control name
-                    XML_descr, msLabel, // description as alt text
-                    XML_hidden, mbVisible ? "0" : "1");
+                // The form control's visible rendering comes from the VML
+                // companion shape in vmlDrawing1.vml; this DrawingML entry is
+                // an anchor/compatibility record, so it is always hidden and
+                // linked to the VML shape via compatExt/@spid. Without this,
+                // Excel renders both representations and the control appears
+                // doubled.
+                pDrawing->startElement(FSNS(XML_xdr, XML_cNvPr), XML_id, OString::number(mnShapeId),
+                                       XML_name, msCtrlName, // control name
+                                       XML_descr, msLabel, // description as alt text
+                                       XML_hidden, "1");
+                pDrawing->startElement(FSNS(XML_a, XML_extLst));
+                pDrawing->startElement(FSNS(XML_a, XML_ext),
+                    XML_uri, "{63B3BB69-23CF-44E3-9099-C40C66FF867C}");
+                pDrawing->setAllowXEscape(false);
+                pDrawing->singleElement(FSNS(XML_a14, XML_compatExt),
+                    XML_spid, "_x0000_s" + OString::number(mnShapeId));
+                pDrawing->setAllowXEscape(true);
+                pDrawing->endElement(FSNS(XML_a, XML_ext));
+                pDrawing->endElement(FSNS(XML_a, XML_extLst));
+                pDrawing->endElement(FSNS(XML_xdr, XML_cNvPr));
                 pDrawing->singleElement(FSNS(XML_xdr, XML_cNvSpPr));
             }
             pDrawing->endElement(FSNS(XML_xdr, XML_nvSpPr));
