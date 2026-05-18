@@ -171,6 +171,7 @@ public:
 
     void testPng();
     void testApng();
+    void testApng_tdf172076();
     void testPngSuite();
     void testMsGifInPng();
     void testPngRoundtrip8BitGrey();
@@ -184,6 +185,7 @@ public:
     CPPUNIT_TEST_SUITE(PngFilterTest);
     CPPUNIT_TEST(testPng);
     CPPUNIT_TEST(testApng);
+    CPPUNIT_TEST(testApng_tdf172076);
     CPPUNIT_TEST(testPngSuite);
     CPPUNIT_TEST(testMsGifInPng);
     CPPUNIT_TEST(testPngRoundtrip8BitGrey);
@@ -373,6 +375,20 @@ void PngFilterTest::testApng()
     CPPUNIT_ASSERT_EQUAL(aFrame2.mnWait, aFrame2Roundtripped.mnWait);
     CPPUNIT_ASSERT_EQUAL(aFrame2.meDisposal, aFrame2Roundtripped.meDisposal);
     CPPUNIT_ASSERT_EQUAL(aFrame2.meBlend, aFrame2Roundtripped.meBlend);
+}
+
+void PngFilterTest::testApng_tdf172076()
+{
+    Graphic aGraphic;
+    const OUString aURL(getFullUrl(u"tdf172076.png"));
+    SvFileStream aFileStream(aURL, StreamMode::READ);
+    GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
+    ErrCode aResult = rFilter.ImportGraphic(aGraphic, aURL, aFileStream);
+    CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, aResult);
+    CPPUNIT_ASSERT(aGraphic.IsGfxLink());
+    CPPUNIT_ASSERT_EQUAL(GfxLinkType::NativePng, aGraphic.GetSharedGfxLink()->GetType());
+    CPPUNIT_ASSERT(aGraphic.IsAnimated());
+    CPPUNIT_ASSERT_EQUAL(size_t(7), aGraphic.GetAnimation().GetAnimationFrames().size());
 }
 
 void PngFilterTest::testPngSuite()
