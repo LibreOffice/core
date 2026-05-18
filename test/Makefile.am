@@ -181,6 +181,7 @@ wsd_sources = \
 test_base_sources = \
 	DeltaTests.cpp \
 	FileServeWhiteBoxTests.cpp \
+	HexUtilTests.cpp \
 	HostUtilTests.cpp \
 	HttpWhiteBoxTests.cpp \
 	KitQueueTests.cpp \
