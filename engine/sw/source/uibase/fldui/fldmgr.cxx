@@ -1560,9 +1560,19 @@ bool SwFieldMgr::InsertField(
             pCurShell->Left(SwCursorSkipMode::Chars, false,
                 (SwInputFieldSubType::Var == (nInputSubType & SwInputFieldSubType::LowerMask) || pCurShell->GetViewOptions()->IsFieldName()) ? 1 : 2,
                 false);
-            pCurShell->StartInputFieldDlg(pField.get(), false, true, rData.m_pParent);
 
-            pCurShell->Pop(SwCursorShell::PopMode::DeleteCurrent);
+            // Keep the temporary field alive while the async dialog is open;
+            // it is the dialog's model.
+            std::shared_ptr<SwField> pSharedField(pField.release());
+            pCurShell->StartInputFieldDlg(pSharedField.get(), false, true, rData.m_pParent,
+                [pCurShell, pSharedField](bool, SwWrtShell::FieldDialogPressedButton) {
+                    pCurShell->Pop(SwCursorShell::PopMode::DeleteCurrent);
+                    pCurShell->EndAllAction();
+                });
+
+            // No bExp/bTable/bPageVar/GetRef path applies for Input fields,
+            // and Postit YRS handling does not apply either.
+            return isSuccess;
         }
 
         if (bExp && m_bEvalExp)

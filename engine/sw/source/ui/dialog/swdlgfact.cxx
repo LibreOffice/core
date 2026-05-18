@@ -874,7 +874,7 @@ VclPtr<AbstractGlossaryDlg> SwAbstractDialogFactory_Impl::CreateGlossaryDlg(SfxV
 namespace
 {
 class AbstractFieldInputDlg_Impl
-    : public vcl::AbstractDialogImpl_Sync<AbstractFieldInputDlg, SwFieldInputDlg>
+    : public vcl::AbstractDialogImpl_Async<AbstractFieldInputDlg, SwFieldInputDlg>
 {
 public:
     using AbstractDialogImpl_BASE::AbstractDialogImpl_BASE;

@@ -208,10 +208,12 @@ void SwWrtShell::UpdateInputFieldsStep(const std::shared_ptr<SwInputFieldList>& 
     }
     else
     {
-        FieldDialogPressedButton ePressedButton = FieldDialogPressedButton::NONE;
-        bool bCancel
-            = StartInputFieldDlg(pField, bPrev, bNext, GetView().GetFrameWeld(), &ePressedButton);
-        UpdateInputFieldsContinue(pLst, nCnt, nIndex, bCancel, ePressedButton);
+        StartInputFieldDlg(pField, bPrev, bNext, GetView().GetFrameWeld(),
+                           [this, pLst, nCnt, nIndex](bool bCancel,
+                                                      FieldDialogPressedButton ePressedButton) {
+                               UpdateInputFieldsContinue(pLst, nCnt, nIndex, bCancel,
+                                                        ePressedButton);
+                           });
     }
 }
 
@@ -295,31 +297,28 @@ class FieldDeletionListener : public SvtListener
 }
 
 // Start input dialog for a specific field
-bool SwWrtShell::StartInputFieldDlg(SwField* pField, bool bPrevButton, bool bNextButton,
-                                    weld::Widget* pParentWin, SwWrtShell::FieldDialogPressedButton* pPressedButton)
+void SwWrtShell::StartInputFieldDlg(SwField* pField, bool bPrevButton, bool bNextButton,
+                                    weld::Widget* pParentWin,
+                                    const std::function<void(bool, FieldDialogPressedButton)>& rCallback)
 {
-
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-    ScopedVclPtr<AbstractFieldInputDlg> pDlg(pFact->CreateFieldInputDlg(pParentWin, *this, pField, bPrevButton, bNextButton));
+    VclPtr<AbstractFieldInputDlg> pDlg(pFact->CreateFieldInputDlg(pParentWin, *this, pField, bPrevButton, bNextButton));
 
-    bool bRet;
+    auto pListener = std::make_shared<FieldDeletionListener>(pDlg.get(), pField);
 
-    {
-        FieldDeletionListener aModify(pDlg.get(), pField);
-        bRet = RET_CANCEL == pDlg->Execute();
-    }
-
-    if (pPressedButton)
-    {
+    pDlg->StartExecuteAsync([pDlg, pListener, rCallback, this](sal_Int32 nRet) {
+        FieldDialogPressedButton ePressedButton = FieldDialogPressedButton::NONE;
         if (pDlg->PrevButtonPressed())
-            *pPressedButton = FieldDialogPressedButton::Previous;
+            ePressedButton = FieldDialogPressedButton::Previous;
         else if (pDlg->NextButtonPressed())
-            *pPressedButton = FieldDialogPressedButton::Next;
-    }
+            ePressedButton = FieldDialogPressedButton::Next;
 
-    pDlg.disposeAndClear();
-    GetWin()->PaintImmediately();
-    return bRet;
+        pDlg->disposeOnce();
+        bool bCancel = RET_CANCEL == nRet;
+        GetWin()->PaintImmediately();
+        if (rCallback)
+            rCallback(bCancel, ePressedButton);
+    });
 }
 
 void SwWrtShell::EditDropDownFieldDlg(SwField* pField, weld::Widget* pParentWin)
@@ -542,14 +541,24 @@ void SwWrtShell::ClickToField(const SwField& rField, bool bExecHyperlinks)
             const SwInputField* pInputField = dynamic_cast<const SwInputField*>(&rField);
             if ( pInputField == nullptr )
             {
-                StartInputFieldDlg(const_cast<SwField*>(&rField), false, false, GetView().GetFrameWeld());
+                StartInputFieldDlg(const_cast<SwField*>(&rField), false, false, GetView().GetFrameWeld(),
+                                   [this](bool, FieldDialogPressedButton) {
+                                       m_bIsInClickToEdit = false;
+                                   });
+                return;
             }
         }
         break;
 
     case SwFieldIds::SetExp:
         if( static_cast<const SwSetExpField&>(rField).GetInputFlag() )
-            StartInputFieldDlg(const_cast<SwField*>(&rField), false, false, GetView().GetFrameWeld());
+        {
+            StartInputFieldDlg(const_cast<SwField*>(&rField), false, false, GetView().GetFrameWeld(),
+                               [this](bool, FieldDialogPressedButton) {
+                                   m_bIsInClickToEdit = false;
+                               });
+            return;
+        }
         break;
     case SwFieldIds::Dropdown :
         EditDropDownFieldDlg(const_cast<SwField*>(&rField), GetView().GetFrameWeld());

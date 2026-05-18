@@ -426,7 +426,7 @@ typedef bool (SwWrtShell::*FNSimpleMove)();
     void    MoveCursor( bool bWithSelect = false );
 
     // update input fields
-    bool    StartInputFieldDlg(SwField*, bool bPrevButton, bool bNextButton, weld::Widget* pParentWin, FieldDialogPressedButton* pPressedButton = nullptr);
+    void    StartInputFieldDlg(SwField*, bool bPrevButton, bool bNextButton, weld::Widget* pParentWin, const std::function<void(bool, FieldDialogPressedButton)>& rCallback = {});
     // update DropDown fields
     void    StartDropDownFieldDlg(SwField*, bool bPrevButton, bool bNextButton, weld::Widget* pParentWin, const std::function<void(bool, FieldDialogPressedButton)>& rCallback);
     // update single DropDown field
