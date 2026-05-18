@@ -1,4 +1,4 @@
-/* global describe it cy beforeEach require */
+/* global describe it cy beforeEach require expect */
 
 var helper = require('../../common/helper');
 var desktopHelper = require('../../common/desktop_helper');
@@ -104,6 +104,9 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Scroll through document', 
 
 			// Hover the canvas so mouseIsInside is true on mousedown.
 			cy.cGet('body').realMouseMove(barX, barY);
+			cy.wrap(null).should(function() {
+				expect(win.app.sectionContainer.isMouseInside()).to.be.true;
+			});
 
 			cy.cGet('body').realMouseDown({
 				pointer: 'mouse', button: 'left',
