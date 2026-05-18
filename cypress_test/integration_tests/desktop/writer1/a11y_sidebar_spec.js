@@ -35,8 +35,7 @@ describe(['tagdesktop'], 'Accessibility Writer Sidebar Tests', { testIsolation: 
 
 		cy.get('@uicoverageResult').then(result => {
 			expect(result.used, `used .ui files`).to.not.be.empty;
-			// TODO, make this true
-			// expect(result.CompleteWriterSidebarCoverage, `complete writer sidebar coverage`).to.be.true;
+			expect(result.CompleteWriterSidebarCoverage, `complete writer sidebar coverage`).to.be.true;
 		});
 	});
 
