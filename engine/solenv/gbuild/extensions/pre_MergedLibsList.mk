@@ -38,6 +38,8 @@ gb_MERGE_LIBRARY_LIST := \
 	comphelper \
 	configmgr \
 	cppcanvas \
+	cppu \
+	cppuhelper \
 	ctl \
 	cui \
 	date \
@@ -85,11 +87,15 @@ gb_MERGE_LIBRARY_LIST := \
 	$(call gb_Helper_optionals_and,DESKTOP XMLHELP,helplinker) \
 	hwp \
 	hyphen \
+	i18nlangtag \
 	i18nsearch \
 	i18npool \
 	i18nutil \
 	icg \
 	$(call gb_Helper_optional,QUICKJS,jsuno) \
+	$(if $(ENABLE_JAVA), \
+		jvmaccess \
+		jvmfwk) \
 	lng \
 	lnth \
 	localebe1 \
@@ -113,6 +119,8 @@ gb_MERGE_LIBRARY_LIST := \
 	pdffilter \
 	pricing \
 	$(call gb_Helper_optional,SCRIPTING,protocolhandler) \
+	reg \
+	salhelper \
 	sax \
 	sb \
 	$(call gb_Helper_optional,SCRIPTING,scriptframe) \
@@ -131,6 +139,7 @@ gb_MERGE_LIBRARY_LIST := \
 	spell \
 	$(if $(or $(DISABLE_GUI),$(ENABLE_WASM_STRIP_SPLASH)),,spl) \
 	srtrs1 \
+	store \
 	$(call gb_Helper_optional,SCRIPTING,stringresource) \
 	svgio \
 	svl \
@@ -155,6 +164,7 @@ gb_MERGE_LIBRARY_LIST := \
 	ucpimage \
 	ucpfile1 \
 	ucptdoc1 \
+	unoidl \
 	unordf \
 	unoxml \
 	utl \
@@ -176,6 +186,7 @@ gb_MERGE_LIBRARY_LIST := \
 	xsec_xmlsec \
 	xmlfa \
 	xmlfd \
+	xmlreader \
 	xmlsecurity \
 	xmlscript \
 	xo \

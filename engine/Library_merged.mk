@@ -16,15 +16,7 @@ $(eval $(call gb_Library_use_library_objects,merged,\
 ))
 
 $(eval $(call gb_Library_use_libraries,merged,\
-	cppu \
-	cppuhelper \
-	i18nlangtag \
-	$(if $(ENABLE_JAVA), \
-		jvmaccess \
-		jvmfwk) \
 	sal \
-	salhelper \
-	xmlreader \
 ))
 
 ifeq ($(OS),WNT)
