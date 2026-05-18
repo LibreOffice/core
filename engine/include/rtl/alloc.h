@@ -279,9 +279,6 @@ SAL_DLLPUBLIC void SAL_CALL rtl_cache_free (
 ) SAL_THROW_EXTERN_C();
 
 
-#ifdef LIBO_INTERNAL_ONLY
-
-/** @cond INTERNAL */
 /** rtl_alloc_preInit
  *
  * This function, is called at the beginning and again
@@ -312,9 +309,6 @@ SAL_DLLPUBLIC void SAL_CALL rtl_cache_free (
 SAL_DLLPUBLIC void SAL_CALL rtl_alloc_preInit (
     sal_uInt8 mode
 ) SAL_THROW_EXTERN_C();
-/** @endcond */
-
-#endif
 
 #ifdef __cplusplus
 }

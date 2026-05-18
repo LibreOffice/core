@@ -26,13 +26,11 @@
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
 
-#if defined LIBO_INTERNAL_ONLY
 #include <array>
 #include <cassert>
 #include <cstddef>
 #include <string_view>
 #include "config_global.h"
-#endif
 
 namespace rtl {
 
@@ -135,8 +133,6 @@ inline rtl::OUString Uri::convertRelToAbs(rtl::OUString const & rBaseUriRef,
     return aResult;
 }
 
-#if defined LIBO_INTERNAL_ONLY
-
 constexpr std::size_t UriCharClassSize = 128;
 
 // Create a char class (for use with rtl_uriEncode and rtl::Uri::encode), represented as a
@@ -159,8 +155,6 @@ auto createUriCharClass(std::u8string_view unencoded)
     }
     return a;
 }
-
-#endif
 
 }
 

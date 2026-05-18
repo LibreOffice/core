@@ -29,9 +29,7 @@
 #include <intrin.h>
 #endif
 
-#if defined LIBO_INTERNAL_ONLY
 #include "config_global.h"
-#endif
 
 #ifdef __cplusplus
 extern "C" {

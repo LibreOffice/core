@@ -35,11 +35,9 @@ namespace osl
     {
     }
 
-#if defined LIBO_INTERNAL_ONLY
     SocketAddr::SocketAddr(SocketAddr && other) noexcept : m_handle(other.m_handle) {
         other.m_handle = nullptr;
     }
-#endif
 
     inline SocketAddr::SocketAddr(oslSocketAddr Addr)
         : m_handle( osl_copySocketAddr( Addr ) )
@@ -141,7 +139,6 @@ namespace osl
         return *this;
     }
 
-#if defined LIBO_INTERNAL_ONLY
     SocketAddr & SocketAddr::operator =(SocketAddr && other) noexcept {
         if (m_handle != nullptr) {
             osl_destroySocketAddr(m_handle);
@@ -150,7 +147,6 @@ namespace osl
         other.m_handle = nullptr;
         return *this;
     }
-#endif
 
     inline SocketAddr & SAL_CALL SocketAddr::assign( oslSocketAddr Addr, __osl_socket_NoCopy )
     {

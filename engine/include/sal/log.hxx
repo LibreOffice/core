@@ -142,7 +142,7 @@ inline char const * unwrapStream(SAL_UNUSED_PARAMETER StreamIgnore const &) {
             (level), (area), (where), sal_detail_stream, 0); \
     }
 
-#if defined LIBO_INTERNAL_ONLY && defined __GNUC__ && !defined __clang__
+#if defined __GNUC__ && !defined __clang__
 // move cold/seldom-used code out of line, and into a separate linker section
 #define SAL_DETAIL_LOG_STREAM(condition, level, area, where, stream) \
     do { \

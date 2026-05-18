@@ -27,9 +27,7 @@
 
 #include "sal/types.h"
 
-#if defined LIBO_INTERNAL_ONLY
 #include <type_traits>
-#endif
 
 namespace rtl
 {
@@ -53,7 +51,6 @@ inline SAL_CONSTEXPR bool isAscii(sal_uInt32 code)
     return code <= 0x7F;
 }
 
-#if defined LIBO_INTERNAL_ONLY
 bool isAscii(char) = delete;
 bool isAscii(signed char) = delete;
 template <typename T>
@@ -62,7 +59,6 @@ isAscii(T code)
 {
     return isAscii(sal_uInt32(code));
 }
-#endif
 
 /** Check for ASCII lower case character.
 
@@ -77,7 +73,6 @@ inline SAL_CONSTEXPR bool isAsciiLowerCase(sal_uInt32 code)
     return code >= 'a' && code <= 'z';
 }
 
-#if defined LIBO_INTERNAL_ONLY
 bool isAsciiLowerCase(char) = delete;
 bool isAsciiLowerCase(signed char) = delete;
 template <typename T>
@@ -86,7 +81,6 @@ isAsciiLowerCase(T code)
 {
     return isAsciiLowerCase(sal_uInt32(code));
 }
-#endif
 
 /** Check for ASCII upper case character.
 
@@ -101,7 +95,6 @@ inline SAL_CONSTEXPR bool isAsciiUpperCase(sal_uInt32 code)
     return code >= 'A' && code <= 'Z';
 }
 
-#if defined LIBO_INTERNAL_ONLY
 bool isAsciiUpperCase(char) = delete;
 bool isAsciiUpperCase(signed char) = delete;
 template <typename T>
@@ -110,7 +103,6 @@ isAsciiUpperCase(T code)
 {
     return isAsciiUpperCase(sal_uInt32(code));
 }
-#endif
 
 /** Check for ASCII alphabetic character.
 
@@ -125,7 +117,6 @@ inline SAL_CONSTEXPR bool isAsciiAlpha(sal_uInt32 code)
     return isAsciiLowerCase(code) || isAsciiUpperCase(code);
 }
 
-#if defined LIBO_INTERNAL_ONLY
 bool isAsciiAlpha(char) = delete;
 bool isAsciiAlpha(signed char) = delete;
 template <typename T>
@@ -134,7 +125,6 @@ isAsciiAlpha(T code)
 {
     return isAsciiAlpha(sal_uInt32(code));
 }
-#endif
 
 /** Check for ASCII digit character.
 
@@ -149,7 +139,6 @@ inline SAL_CONSTEXPR bool isAsciiDigit(sal_uInt32 code)
     return code >= '0' && code <= '9';
 }
 
-#if defined LIBO_INTERNAL_ONLY
 bool isAsciiDigit(char) = delete;
 bool isAsciiDigit(signed char) = delete;
 template <typename T>
@@ -158,7 +147,6 @@ isAsciiDigit(T code)
 {
     return isAsciiDigit(sal_uInt32(code));
 }
-#endif
 
 /** Check for ASCII alphanumeric character.
 
@@ -173,7 +161,6 @@ inline SAL_CONSTEXPR bool isAsciiAlphanumeric(sal_uInt32 code)
     return isAsciiDigit(code) || isAsciiAlpha(code);
 }
 
-#if defined LIBO_INTERNAL_ONLY
 bool isAsciiAlphanumeric(char) = delete;
 bool isAsciiAlphanumeric(signed char) = delete;
 template <typename T>
@@ -182,7 +169,6 @@ isAsciiAlphanumeric(T code)
 {
     return isAsciiAlphanumeric(sal_uInt32(code));
 }
-#endif
 
 /** Check for ASCII canonic hexadecimal digit character.
 
@@ -197,7 +183,6 @@ inline SAL_CONSTEXPR bool isAsciiCanonicHexDigit(sal_uInt32 code)
     return isAsciiDigit(code) || (code >= 'A' && code <= 'F');
 }
 
-#if defined LIBO_INTERNAL_ONLY
 bool isAsciiCanonicHexDigit(char) = delete;
 bool isAsciiCanonicHexDigit(signed char) = delete;
 template <typename T>
@@ -206,7 +191,6 @@ isAsciiCanonicHexDigit(T code)
 {
     return isAsciiCanonicHexDigit(sal_uInt32(code));
 }
-#endif
 
 /** Check for ASCII hexadecimal digit character.
 
@@ -221,7 +205,6 @@ inline SAL_CONSTEXPR bool isAsciiHexDigit(sal_uInt32 code)
     return isAsciiCanonicHexDigit(code) || (code >= 'a' && code <= 'f');
 }
 
-#if defined LIBO_INTERNAL_ONLY
 bool isAsciiHexDigit(char) = delete;
 bool isAsciiHexDigit(signed char) = delete;
 template <typename T>
@@ -230,7 +213,6 @@ isAsciiHexDigit(T code)
 {
     return isAsciiHexDigit(sal_uInt32(code));
 }
-#endif
 
 /** Check for ASCII octal digit character.
 
@@ -244,7 +226,6 @@ inline SAL_CONSTEXPR bool isAsciiOctalDigit(sal_uInt32 code)
     return code >= '0' && code <= '7';
 }
 
-#if defined LIBO_INTERNAL_ONLY
 bool isAsciiOctalDigit(char) = delete;
 bool isAsciiOctalDigit(signed char) = delete;
 template <typename T>
@@ -253,7 +234,6 @@ isAsciiOctalDigit(T code)
 {
     return isAsciiOctalDigit(sal_uInt32(code));
 }
-#endif
 
 /** Check for ASCII white space character.
 
@@ -269,7 +249,6 @@ inline SAL_CONSTEXPR bool isAsciiWhiteSpace(sal_uInt32 code)
            || code == '\v';
 }
 
-#if defined LIBO_INTERNAL_ONLY
 bool isAsciiWhiteSpace(char) = delete;
 bool isAsciiWhiteSpace(signed char) = delete;
 template <typename T>
@@ -278,7 +257,6 @@ isAsciiWhiteSpace(T code)
 {
     return isAsciiWhiteSpace(sal_uInt32(code));
 }
-#endif
 
 /** Convert a character, if ASCII, to upper case.
 
@@ -292,7 +270,6 @@ inline SAL_CONSTEXPR sal_uInt32 toAsciiUpperCase(sal_uInt32 code)
     return isAsciiLowerCase(code) ? code - 32 : code;
 }
 
-#if defined LIBO_INTERNAL_ONLY
 sal_uInt32 toAsciiUpperCase(char) = delete;
 sal_uInt32 toAsciiUpperCase(signed char) = delete;
 template <typename T>
@@ -302,7 +279,6 @@ toAsciiUpperCase(T code)
 {
     return toAsciiUpperCase(sal_uInt32(code));
 }
-#endif
 
 /** Convert a character, if ASCII, to lower case.
 
@@ -316,7 +292,6 @@ inline SAL_CONSTEXPR sal_uInt32 toAsciiLowerCase(sal_uInt32 code)
     return isAsciiUpperCase(code) ? code + 32 : code;
 }
 
-#if defined LIBO_INTERNAL_ONLY
 sal_uInt32 toAsciiLowerCase(char) = delete;
 sal_uInt32 toAsciiLowerCase(signed char) = delete;
 template <typename T>
@@ -326,7 +301,6 @@ toAsciiLowerCase(T code)
 {
     return toAsciiLowerCase(sal_uInt32(code));
 }
-#endif
 
 /** Compare two characters ignoring ASCII case.
 

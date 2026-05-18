@@ -22,10 +22,8 @@
 
 #include "sal/config.h"
 
-#if defined LIBO_INTERNAL_ONLY
 #if defined __cplusplus
 #include <chrono>
-#endif
 #endif
 
 #include "sal/saldllapi.h"
@@ -41,7 +39,7 @@
     2106.
 */
 
-#if defined LIBO_INTERNAL_ONLY && defined __cplusplus
+#if defined __cplusplus
 
 struct TimeValue {
     TimeValue() = default;

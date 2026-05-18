@@ -99,10 +99,8 @@ public:
     */
     inline Mapping( const Mapping & rMapping );
 
-#if defined LIBO_INTERNAL_ONLY
     Mapping(Mapping && other) noexcept : _pMapping(other._pMapping)
     { other._pMapping = nullptr; }
-#endif
 
     /** Destructor.
     */
@@ -122,7 +120,6 @@ public:
     Mapping & SAL_CALL operator = ( const Mapping & rMapping )
         { return operator = ( rMapping._pMapping ); }
 
-#if defined LIBO_INTERNAL_ONLY
     Mapping & operator =(Mapping && other) noexcept {
         if (_pMapping != nullptr) {
             (*_pMapping->release)(_pMapping);
@@ -131,7 +128,6 @@ public:
         other._pMapping = nullptr;
         return *this;
     }
-#endif
 
     /** Provides a pointer to the C mapping. The returned mapping is NOT acquired!
 

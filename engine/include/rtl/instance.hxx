@@ -381,7 +381,6 @@ namespace rtl {
               using the outer class
               (the one that derives from this base class)
 */
-#if defined LIBO_INTERNAL_ONLY
 template<typename T, typename Unique>
 class Static {
 public:
@@ -396,31 +395,6 @@ public:
         return instance;
     }
 };
-#else
-template<typename T, typename Unique>
-class Static {
-public:
-    /** Gets the static.  Mutual exclusion is performed using the
-        osl global mutex.
-
-        @return
-                static variable
-    */
-    static T & get() {
-        return *rtl_Instance<
-            T, StaticInstance,
-            ::osl::MutexGuard, ::osl::GetGlobalMutex >::create(
-                StaticInstance(), ::osl::GetGlobalMutex() );
-    }
-private:
-    struct StaticInstance {
-        T * operator () () {
-            static T instance;
-            return &instance;
-        }
-    };
-};
-#endif
 
 /** Helper base class for a late-initialized (default-constructed)
     static variable, implementing the double-checked locking pattern correctly.
@@ -441,7 +415,6 @@ private:
               using the outer class
               (the one that derives from this base class)
 */
-#if defined LIBO_INTERNAL_ONLY
 template<typename T, typename Data, typename Unique>
 class StaticWithArg {
 public:
@@ -467,53 +440,6 @@ public:
         return instance;
     }
 };
-#else
-template<typename T, typename Data, typename Unique>
-class StaticWithArg {
-public:
-    /** Gets the static.  Mutual exclusion is performed using the
-        osl global mutex.
-
-        @return
-                static variable
-    */
-    static T & get(const Data& rData) {
-        return *rtl_Instance<
-            T, StaticInstanceWithArg,
-            ::osl::MutexGuard, ::osl::GetGlobalMutex,
-            Data >::create( StaticInstanceWithArg(),
-                                      ::osl::GetGlobalMutex(),
-                                      rData );
-    }
-
-    /** Gets the static.  Mutual exclusion is performed using the
-        osl global mutex.
-
-        @return
-                static variable
-    */
-    static T & get(Data& rData) {
-        return *rtl_Instance<
-            T, StaticInstanceWithArg,
-            ::osl::MutexGuard, ::osl::GetGlobalMutex,
-            Data >::create( StaticInstanceWithArg(),
-                                      ::osl::GetGlobalMutex(),
-                                      rData );
-    }
-private:
-    struct StaticInstanceWithArg {
-        T * operator () (const Data& rData) {
-            static T instance(rData);
-            return &instance;
-        }
-
-        T * operator () (Data& rData) {
-            static T instance(rData);
-            return &instance;
-         }
-    };
-};
-#endif
 
 /** Helper class for a late-initialized static aggregate, e.g. an array,
     implementing the double-checked locking pattern correctly.
@@ -523,7 +449,6 @@ private:
     @tparam InitAggregate
               initializer functor class
 */
-#if defined LIBO_INTERNAL_ONLY
 template<typename T, typename InitAggregate>
 class StaticAggregate {
 public:
@@ -539,24 +464,6 @@ public:
         return instance;
     }
 };
-#else
-template<typename T, typename InitAggregate>
-class StaticAggregate {
-public:
-    /** Gets the static aggregate, late-initializing.
-        Mutual exclusion is performed using the osl global mutex.
-
-        @return
-                aggregate
-    */
-    static T * get() {
-        return rtl_Instance<
-            T, InitAggregate,
-            ::osl::MutexGuard, ::osl::GetGlobalMutex >::create(
-                InitAggregate(), ::osl::GetGlobalMutex() );
-    }
-};
-#endif
 /** Helper base class for a late-initialized static variable,
     implementing the double-checked locking pattern correctly.
 
@@ -588,7 +495,6 @@ public:
               Initializer functor's return type.
               Default is T (common practice).
 */
-#if defined LIBO_INTERNAL_ONLY
 template<typename T, typename InitData,
          typename Unique = InitData, typename Data = T>
 class StaticWithInit {
@@ -604,34 +510,6 @@ public:
         return instance;
     }
 };
-#else
-template<typename T, typename InitData,
-         typename Unique = InitData, typename Data = T>
-class StaticWithInit {
-public:
-    /** Gets the static.  Mutual exclusion is performed using the
-        osl global mutex.
-
-        @return
-                static variable
-    */
-    static T & get() {
-        return *rtl_Instance<
-            T, StaticInstanceWithInit,
-            ::osl::MutexGuard, ::osl::GetGlobalMutex,
-            Data, InitData >::create( StaticInstanceWithInit(),
-                                      ::osl::GetGlobalMutex(),
-                                      InitData() );
-    }
-private:
-    struct StaticInstanceWithInit {
-        T * operator () ( Data d ) {
-            static T instance(d);
-            return &instance;
-        }
-    };
-};
-#endif
 } // namespace rtl
 
 #endif // INCLUDED_RTL_INSTANCE_HXX

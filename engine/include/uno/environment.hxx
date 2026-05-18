@@ -78,10 +78,8 @@ public:
     */
     inline Environment( const Environment & rEnv );
 
-#if defined LIBO_INTERNAL_ONLY
     Environment(Environment && other) noexcept : _pEnv(other._pEnv)
     { other._pEnv = nullptr; }
-#endif
 
     /** Destructor: releases a set environment.
     */
@@ -101,7 +99,6 @@ public:
     Environment & SAL_CALL operator = ( const Environment & rEnv )
         { return operator = ( rEnv._pEnv ); }
 
-#if defined LIBO_INTERNAL_ONLY
     Environment & operator =(Environment && other) {
         if (_pEnv != nullptr) {
             (*_pEnv->release)(_pEnv);
@@ -110,7 +107,6 @@ public:
         other._pEnv = nullptr;
         return *this;
     }
-#endif
 
     /** Provides UNacquired pointer to the set C environment.
 

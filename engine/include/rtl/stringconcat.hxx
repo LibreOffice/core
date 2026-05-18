@@ -10,8 +10,6 @@
 #ifndef INCLUDED_RTL_STRINGCONCAT_HXX
 #define INCLUDED_RTL_STRINGCONCAT_HXX
 
-// This file is only included from LIBO_INTERNAL_ONLY
-
 #include "rtl/stringutils.hxx"
 #include "rtl/string.h"
 #include "rtl/ustring.h"

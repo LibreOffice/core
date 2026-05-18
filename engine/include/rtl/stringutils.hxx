@@ -15,11 +15,9 @@
 #include <cassert>
 #include <cstddef>
 
-#if defined LIBO_INTERNAL_ONLY
 #include <limits>
 #include <new>
 #include <type_traits>
-#endif
 
 #include "sal/types.h"
 
@@ -38,9 +36,6 @@ namespace rtl
 #ifdef RTL_STRING_UNITTEST
 #undef rtl
 #endif
-
-#if defined LIBO_INTERNAL_ONLY
-/// @cond INTERNAL
 
 // A simple wrapper around a single char.  Can be useful in string concatenation contexts, like in
 //
@@ -106,12 +101,8 @@ struct SAL_WARN_UNUSED OUStringChar_ {
 };
 using OUStringChar = OUStringChar_ const;
 
-/// @endcond
-#endif
-
 namespace libreoffice_internal
 {
-#if defined LIBO_INTERNAL_ONLY
 template <typename I, std::enable_if_t<
     std::is_integral_v<I> && std::is_signed_v<I>,
     int> = 0>
@@ -139,7 +130,6 @@ sal_Int32 ThrowIfInvalidStrLen(I i, sal_Int32 margin = 0)
         throw std::bad_alloc();
     return i;
 }
-#endif
 
 /*
 These templates use SFINAE (Substitution failure is not an error) to help distinguish the various
@@ -187,12 +177,10 @@ struct CharPtrDetector< char*, T >
     typedef T Type;
     static const bool ok = true;
 };
-#if defined LIBO_INTERNAL_ONLY
 template<typename T> struct CharPtrDetector<sal_Unicode *, T> { using TypeUtf16 = T; };
 template<typename T> struct CharPtrDetector<sal_Unicode const *, T> { using TypeUtf16 = T; };
 template<typename T> struct CharPtrDetector<sal_Unicode[], T> { using TypeUtf16 = T; };
 template<typename T> struct CharPtrDetector<sal_Unicode const[], T> { using TypeUtf16 = T; };
-#endif
 
 template< typename T1, typename T2 >
 struct NonConstCharArrayDetector
@@ -216,11 +204,9 @@ struct NonConstCharArrayDetector< const char[], T >
     typedef T Type;
 };
 #endif
-#if defined LIBO_INTERNAL_ONLY
 template<typename T, std::size_t N> struct NonConstCharArrayDetector<sal_Unicode[N], T> {
     using TypeUtf16 = T;
 };
-#endif
 
 template< typename T1, typename T2 = void >
 struct ConstCharArrayDetector
@@ -233,10 +219,7 @@ struct ConstCharArrayDetector< const char[ N ], T >
     typedef T Type;
     static const std::size_t length = N - 1;
     static const bool ok = true;
-#if defined LIBO_INTERNAL_ONLY
-    constexpr
-#endif
-    static bool isValid(char const (& literal)[N]) {
+    constexpr static bool isValid(char const (& literal)[N]) {
         for (std::size_t i = 0; i != N - 1; ++i) {
             if (literal[i] == '\0') {
                 return false;
@@ -244,10 +227,7 @@ struct ConstCharArrayDetector< const char[ N ], T >
         }
         return literal[N - 1] == '\0';
     }
-#if defined LIBO_INTERNAL_ONLY
-    constexpr
-#endif
-    static char const * toPointer(char const (& literal)[N]) { return literal; }
+    constexpr static char const * toPointer(char const (& literal)[N]) { return literal; }
 };
 
 #if defined(__COVERITY__) && __COVERITY_MAJOR__ <= 2024
@@ -259,21 +239,14 @@ struct ConstCharArrayDetector< const char[ 1 ], T >
     typedef T Type;
     static const std::size_t length = 0;
     static const bool ok = true;
-#if defined LIBO_INTERNAL_ONLY
-    constexpr
-#endif
-    static bool isValid(char const (& literal)[1]) {
+    constexpr static bool isValid(char const (& literal)[1]) {
         return literal[0] == '\0';
     }
-#if defined LIBO_INTERNAL_ONLY
-    constexpr
-#endif
-    static char const * toPointer(char const (& literal)[1]) { return literal; }
+    constexpr static char const * toPointer(char const (& literal)[1]) { return literal; }
 };
 #endif
 
-#if defined LIBO_INTERNAL_ONLY \
-    && !(defined _MSC_VER && _MSC_VER >= 1930 && _MSC_VER <= 1939 && defined _MANAGED)
+#if !(defined _MSC_VER && _MSC_VER >= 1930 && _MSC_VER <= 1939 && defined _MANAGED)
 template<std::size_t N, typename T>
 struct ConstCharArrayDetector<char8_t const [N], T> {
     using Type = T;
@@ -292,7 +265,6 @@ struct ConstCharArrayDetector<char8_t const [N], T> {
 };
 #endif
 
-#if defined LIBO_INTERNAL_ONLY
 template<std::size_t N, typename T>
 struct ConstCharArrayDetector<sal_Unicode const [N], T> {
     using TypeUtf16 = T;
@@ -323,9 +295,8 @@ template<typename T> struct ConstCharArrayDetector<
         OUStringChar_ const & literal)
     { return &literal.c; }
 };
-#endif
 
-#if defined LIBO_INTERNAL_ONLY && defined RTL_STRING_UNITTEST
+#if defined RTL_STRING_UNITTEST
 
 // this one is used to rule out only const char[N]
 template< typename T >

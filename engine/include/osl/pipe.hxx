@@ -51,11 +51,9 @@ namespace osl
             osl_acquirePipe( m_handle );
     }
 
-#if defined LIBO_INTERNAL_ONLY
     Pipe::Pipe(Pipe && other) noexcept : m_handle(other.m_handle) {
         other.m_handle = nullptr;
     }
-#endif
 
     inline Pipe::Pipe( oslPipe pipe, __sal_NoAcquire )
         : m_handle ( pipe )
@@ -97,7 +95,6 @@ namespace osl
         return *this;
     }
 
-#if defined LIBO_INTERNAL_ONLY
     Pipe & Pipe::operator =(Pipe && other) noexcept {
         if (m_handle != nullptr) {
             osl_releasePipe(m_handle);
@@ -106,7 +103,6 @@ namespace osl
         other.m_handle = nullptr;
         return *this;
     }
-#endif
 
     inline Pipe & SAL_CALL Pipe::operator=( oslPipe pipe)
     {

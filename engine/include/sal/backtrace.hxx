@@ -16,7 +16,6 @@
 #include "rtl/ustring.hxx"
 #include <memory>
 
-/// @cond INTERNAL
 /**
   Two stage API for recording and then later decoding stack backtraces.
   Useful for debugging facilities where we are only interested in decoding
@@ -24,7 +23,6 @@
 
   @param backtraceDepth value indicating the maximum backtrace depth; must be > 0
 */
-#if defined LIBO_INTERNAL_ONLY
 
 namespace sal
 {
@@ -39,8 +37,6 @@ SAL_DLLPUBLIC std::unique_ptr<BacktraceState> backtrace_get(sal_uInt32 backtrace
 
 SAL_DLLPUBLIC OUString backtrace_to_string(BacktraceState* backtraceState);
 }
-
-#endif
 
 #endif
 

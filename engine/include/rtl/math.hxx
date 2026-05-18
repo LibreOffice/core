@@ -165,7 +165,6 @@ inline void doubleToUStringBuffer( rtl::OUStringBuffer& rBuffer, double fValue,
 
 /** A wrapper around rtl_math_stringToDouble.
  */
-#ifdef LIBO_INTERNAL_ONLY
 inline double stringToDouble(std::string_view aString,
                              char cDecSeparator, char cGroupSeparator,
                              rtl_math_ConversionStatus * pStatus = NULL,
@@ -181,28 +180,10 @@ inline double stringToDouble(std::string_view aString,
         *pParsedEnd = static_cast<sal_Int32>(pEnd - pBegin);
     return fResult;
 }
-#else
-inline double stringToDouble(rtl::OString const & rString,
-                             char cDecSeparator, char cGroupSeparator,
-                             rtl_math_ConversionStatus * pStatus = NULL,
-                             sal_Int32 * pParsedEnd = NULL)
-{
-    char const * pBegin = rString.getStr();
-    char const * pEnd;
-    double fResult = rtl_math_stringToDouble(pBegin,
-                                             pBegin + rString.getLength(),
-                                             cDecSeparator, cGroupSeparator,
-                                             pStatus, &pEnd);
-    if (pParsedEnd != NULL)
-        *pParsedEnd = static_cast<sal_Int32>(pEnd - pBegin);
-    return fResult;
-}
-#endif
 
 
 /** A wrapper around rtl_math_uStringToDouble.
  */
-#ifdef LIBO_INTERNAL_ONLY
 inline double stringToDouble(std::u16string_view aString,
                              sal_Unicode cDecSeparator,
                              sal_Unicode cGroupSeparator,
@@ -219,24 +200,6 @@ inline double stringToDouble(std::u16string_view aString,
         *pParsedEnd = static_cast<sal_Int32>(pEnd - pBegin);
     return fResult;
 }
-#else
-inline double stringToDouble(rtl::OUString const & rString,
-                             sal_Unicode cDecSeparator,
-                             sal_Unicode cGroupSeparator,
-                             rtl_math_ConversionStatus * pStatus = NULL,
-                             sal_Int32 * pParsedEnd = NULL)
-{
-    sal_Unicode const * pBegin = rString.getStr();
-    sal_Unicode const * pEnd;
-    double fResult = rtl_math_uStringToDouble(pBegin,
-                                              pBegin + rString.getLength(),
-                                              cDecSeparator, cGroupSeparator,
-                                              pStatus, &pEnd);
-    if (pParsedEnd != NULL)
-        *pParsedEnd = static_cast<sal_Int32>(pEnd - pBegin);
-    return fResult;
-}
-#endif
 
 /** A wrapper around rtl_math_round.
  */

@@ -27,21 +27,17 @@
 #include <limits>
 #include <new>
 
-#if defined LIBO_INTERNAL_ONLY
 #include <string_view>
 #include <type_traits>
 #include <utility>
-#endif
 
 #include "rtl/ustrbuf.h"
 #include "rtl/ustring.hxx"
 #include "rtl/stringutils.hxx"
 #include "sal/types.h"
 
-#ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
 #include "o3tl/safeint.hxx"
 #include "rtl/stringconcat.hxx"
-#endif
 
 #ifdef RTL_STRING_UNITTEST
 extern bool rtl_string_unittest_invalid_conversion;
@@ -105,7 +101,6 @@ public:
     {
         rtl_uString_new_WithLength( &pData, length );
     }
-#if defined LIBO_INTERNAL_ONLY
     template<typename T>
     explicit OUStringBuffer(T length, std::enable_if_t<std::is_integral_v<T>, int> = 0)
         : OUStringBuffer(static_cast<sal_Int32>(length))
@@ -121,7 +116,6 @@ public:
 #endif
     explicit OUStringBuffer(char16_t) = delete;
     explicit OUStringBuffer(char32_t) = delete;
-#endif
 
     /**
         Constructs a string buffer so that it represents the same
@@ -133,21 +127,12 @@ public:
 
         @param   value   the initial contents of the buffer.
      */
-#if defined LIBO_INTERNAL_ONLY
     OUStringBuffer(std::u16string_view sv)
         : pData(nullptr)
         , nCapacity(libreoffice_internal::ThrowIfInvalidStrLen(sv.length(), 16) + 16)
     {
         rtl_uStringbuffer_newFromStr_WithLength( &pData, sv.data(), sv.length() );
     }
-#else
-    OUStringBuffer(const OUString& value)
-        : pData(NULL)
-        , nCapacity( value.getLength() + 16 )
-    {
-        rtl_uStringbuffer_newFromStr_WithLength( &pData, value.getStr(), value.getLength() );
-    }
-#endif
 
     template< typename T >
     OUStringBuffer( T& literal, typename libreoffice_internal::ConstCharArrayDetector< T, libreoffice_internal::Dummy >::Type = libreoffice_internal::Dummy() )
@@ -165,7 +150,6 @@ public:
 #endif
     }
 
-#if defined LIBO_INTERNAL_ONLY
     /** @overload */
     template<typename T>
     OUStringBuffer(
@@ -181,9 +165,8 @@ public:
             libreoffice_internal::ConstCharArrayDetector<T>::toPointer(literal),
             libreoffice_internal::ConstCharArrayDetector<T>::length);
     }
-#endif
 
-#if defined LIBO_INTERNAL_ONLY && defined RTL_STRING_UNITTEST
+#if defined RTL_STRING_UNITTEST
     /// @cond INTERNAL
     /**
      * Only used by unittests to detect incorrect conversions.
@@ -212,10 +195,8 @@ public:
     /// @endcond
 #endif
 
-#ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
     /**
      @overload
-     @internal
     */
     template< typename T1, typename T2 >
     OUStringBuffer( OUStringConcat< T1, T2 >&& c )
@@ -230,18 +211,14 @@ public:
 
     /**
      @overload
-     @internal
     */
     template< std::size_t N >
     OUStringBuffer( OUStringNumber< N >&& n )
         : OUStringBuffer(std::u16string_view(n))
     {
     }
-#endif
 
-#if defined LIBO_INTERNAL_ONLY
     operator std::u16string_view() const { return {getStr(), sal_uInt32(getLength())}; }
-#endif
 
     /** Assign to this a copy of value.
      */
@@ -257,7 +234,6 @@ public:
         return *this;
     }
 
-#if defined LIBO_INTERNAL_ONLY
     /** Move assignment
      */
     OUStringBuffer& operator = ( OUStringBuffer&& value ) noexcept
@@ -270,11 +246,9 @@ public:
         rtl_uString_new( &value.pData );
         return *this;
     }
-#endif
 
     /** Assign from a string.
     */
-#if defined LIBO_INTERNAL_ONLY
     OUStringBuffer & operator =(std::u16string_view string) {
         sal_Int32 n = string.length();
         if (n >= nCapacity) {
@@ -287,19 +261,6 @@ public:
         pData->length = n;
         return *this;
     }
-#else
-    OUStringBuffer & operator =(OUString const & string) {
-        sal_Int32 n = string.getLength();
-        if (n >= nCapacity) {
-            ensureCapacity(n + 16); //TODO: check for overflow
-        }
-        std::memcpy(
-            pData->buffer, string.pData->buffer,
-            (n + 1) * sizeof (sal_Unicode));
-        pData->length = n;
-        return *this;
-    }
-#endif
 
     /** Assign from a string literal.
     */
@@ -325,7 +286,6 @@ public:
         return *this;
     }
 
-#if defined LIBO_INTERNAL_ONLY
     /** @overload */
     template<typename T>
     typename libreoffice_internal::ConstCharArrayDetector<
@@ -335,9 +295,7 @@ public:
             std::u16string_view(libreoffice_internal::ConstCharArrayDetector<T>::toPointer(literal),
                                 libreoffice_internal::ConstCharArrayDetector<T>::length));
     }
-#endif
 
-#if defined LIBO_INTERNAL_ONLY
     /** @overload */
     template<typename T1, typename T2>
     OUStringBuffer & operator =(OUStringConcat<T1, T2> && concat) {
@@ -350,13 +308,12 @@ public:
         return *this;
     }
 
-    /** @overload @internal */
+    /** @overload */
     template<std::size_t N>
     OUStringBuffer & operator =(OUStringNumber<N> && n)
     {
         return operator =(std::u16string_view(n));
     }
-#endif
 
     /**
         Release the string data.
@@ -508,12 +465,10 @@ public:
      */
     const sal_Unicode*  getStr() const SAL_RETURNS_NONNULL { return pData->buffer; }
 
-#if defined LIBO_INTERNAL_ONLY
     // Provide unsafe non-const access to the null-terminated string.  Callers can mutate the
     // contents of the string buffer (including introducing embedded null characters), but cannot
     // modify its length.
     sal_Unicode * getMutableStr() SAL_RETURNS_NONNULL { return pData->buffer; }
-#endif
 
     /**
       Access to individual characters.
@@ -560,35 +515,10 @@ public:
         @param   str   a string.
         @return  this string buffer.
      */
-#if !defined LIBO_INTERNAL_ONLY
-    OUStringBuffer & append(const OUString &str)
-#else
     OUStringBuffer & append(std::u16string_view str)
-#endif
     {
         return insert(getLength(), str);
     }
-
-#if !defined LIBO_INTERNAL_ONLY
-    /**
-        Appends the content of a stringbuffer to this string buffer.
-
-        The characters of the <code>OUStringBuffer</code> argument are appended, in
-        order, to the contents of this string buffer, increasing the
-        length of this string buffer by the length of the argument.
-
-        @param   str   a string.
-        @return  this string buffer.
-     */
-    OUStringBuffer & append(const OUStringBuffer &str)
-    {
-        if(!str.isEmpty())
-        {
-            append( str.getStr(), str.getLength() );
-        }
-        return *this;
-    }
-#endif
 
     /**
         Appends the string representation of the <code>char</code> array
@@ -601,13 +531,9 @@ public:
         @param   str   the characters to be appended.
         @return  this string buffer.
      */
-#if defined LIBO_INTERNAL_ONLY
     template<typename T>
     typename libreoffice_internal::CharPtrDetector<T, OUStringBuffer &>::TypeUtf16
     append(T const & str)
-#else
-    OUStringBuffer & append( const sal_Unicode * str )
-#endif
     {
         return insert(getLength(), str);
     }
@@ -640,7 +566,6 @@ public:
         return insert(getLength(), literal);
     }
 
-#if defined LIBO_INTERNAL_ONLY
     template<typename T>
     typename libreoffice_internal::NonConstCharArrayDetector<T, OUStringBuffer &>::TypeUtf16
     append(T & value) { return append(static_cast<sal_Unicode *>(value)); }
@@ -652,19 +577,15 @@ public:
     append(T & literal) {
         return insert(getLength(), literal);
     }
-#endif
 
-#ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
     /**
      @overload
-     @internal
     */
     template< typename T1, typename T2 >
     OUStringBuffer& append( OUStringConcat< T1, T2 >&& c )
     {
         return insert(getLength(), std::move(c));
     }
-#endif
 
     /**
         Appends a 8-Bit ASCII character string to this string buffer.
@@ -793,9 +714,7 @@ public:
         return insert(getLength(), c);
     }
 
-#if defined LIBO_INTERNAL_ONLY
     void append(sal_uInt16) = delete;
-#endif
 
     /**
         Appends the string representation of the <code>sal_Int32</code>
@@ -899,18 +818,14 @@ public:
         return pData->buffer + n;
     }
 
-#if defined LIBO_INTERNAL_ONLY
     /**
        "Stream" operator to append a value to this OUStringBuffer.
-
-       @internal
      */
     template<typename T>
     OUStringBuffer& operator<<(T&& rValue)
     {
         return append(std::forward<T>(rValue));
     }
-#endif
 
     /**
         Inserts the string into this string buffer.
@@ -927,22 +842,13 @@ public:
         @param      str      a string.
         @return     this string buffer.
      */
-#if defined LIBO_INTERNAL_ONLY
     OUStringBuffer & insert(sal_Int32 offset, std::u16string_view str)
     {
         return insert(offset, str.data(), libreoffice_internal::ThrowIfInvalidStrLen(str.length()));
     }
-#else
-    OUStringBuffer & insert(sal_Int32 offset, const OUString & str)
-    {
-        return insert( offset, str.getStr(), str.getLength() );
-    }
-#endif
 
-#ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
     /**
      @overload
-     @internal
     */
     template <typename T1, typename T2>
     OUStringBuffer& insert(sal_Int32 offset, OUStringConcat<T1, T2>&& c)
@@ -959,7 +865,6 @@ public:
         c.addData(pData->buffer + offset);
         return *this;
     }
-#endif
 
     /**
         Inserts the string representation of the <code>char</code> array
@@ -1024,7 +929,6 @@ public:
         return *this;
     }
 
-#if defined LIBO_INTERNAL_ONLY
     /** @overload */
     template<typename T>
     typename libreoffice_internal::ConstCharArrayDetector<
@@ -1035,7 +939,6 @@ public:
             libreoffice_internal::ConstCharArrayDetector<T>::toPointer(literal),
             libreoffice_internal::ConstCharArrayDetector<T>::length);
     }
-#endif
 
     /**
         Inserts the string representation of the <code>sal_Bool</code>
@@ -1389,7 +1292,6 @@ public:
                  returned. If it does not occur as a substring starting
                  at fromIndex or beyond, -1 is returned.
     */
-#if defined LIBO_INTERNAL_ONLY
     sal_Int32 indexOf( std::u16string_view str, sal_Int32 fromIndex = 0 ) const
     {
         assert( fromIndex >= 0 && fromIndex <= pData->length );
@@ -1397,15 +1299,6 @@ public:
                                                         str.data(), str.length() );
         return (ret < 0 ? ret : ret+fromIndex);
     }
-#else
-    sal_Int32 indexOf( const OUString & str, sal_Int32 fromIndex = 0 ) const
-    {
-        assert( fromIndex >= 0 && fromIndex <= pData->length );
-        sal_Int32 ret = rtl_ustr_indexOfStr_WithLength( pData->buffer+fromIndex, pData->length-fromIndex,
-                                                        str.pData->buffer, str.pData->length );
-        return (ret < 0 ? ret : ret+fromIndex);
-    }
-#endif
 
     /**
        @overload
@@ -1423,7 +1316,6 @@ public:
         return n < 0 ? n : n + fromIndex;
     }
 
-#if defined LIBO_INTERNAL_ONLY
     /** @overload */
     template<typename T>
     typename
@@ -1434,7 +1326,6 @@ public:
                                 libreoffice_internal::ConstCharArrayDetector<T>::length),
             fromIndex);
     }
-#endif
 
     /**
        Returns the index within this string of the last occurrence of
@@ -1451,19 +1342,11 @@ public:
                  the last such substring is returned. If it does not occur as
                  a substring, -1 is returned.
     */
-#if defined LIBO_INTERNAL_ONLY
     sal_Int32 lastIndexOf( std::u16string_view str ) const
     {
         return rtl_ustr_lastIndexOfStr_WithLength( pData->buffer, pData->length,
                                                    str.data(), str.length() );
     }
-#else
-    sal_Int32 lastIndexOf( const OUString & str ) const
-    {
-        return rtl_ustr_lastIndexOfStr_WithLength( pData->buffer, pData->length,
-                                                   str.pData->buffer, str.pData->length );
-    }
-#endif
 
     /**
        Returns the index within this string of the last occurrence of
@@ -1482,21 +1365,12 @@ public:
                  of the first character of the last such substring is
                  returned. Otherwise, -1 is returned.
     */
-#if defined LIBO_INTERNAL_ONLY
     sal_Int32 lastIndexOf( std::u16string_view str, sal_Int32 fromIndex ) const
     {
         assert( fromIndex >= 0 && fromIndex <= pData->length );
         return rtl_ustr_lastIndexOfStr_WithLength( pData->buffer, fromIndex,
                                                    str.data(), str.length() );
     }
-#else
-    sal_Int32 lastIndexOf( const OUString & str, sal_Int32 fromIndex ) const
-    {
-        assert( fromIndex >= 0 && fromIndex <= pData->length );
-        return rtl_ustr_lastIndexOfStr_WithLength( pData->buffer, fromIndex,
-                                                   str.pData->buffer, str.pData->length );
-    }
-#endif
 
     /**
        @overload
@@ -1513,7 +1387,6 @@ public:
             libreoffice_internal::ConstCharArrayDetector<T>::length);
     }
 
-#if defined LIBO_INTERNAL_ONLY
     /** @overload */
     template<typename T>
     typename
@@ -1523,7 +1396,6 @@ public:
             std::u16string_view(libreoffice_internal::ConstCharArrayDetector<T>::toPointer(literal),
                                 libreoffice_internal::ConstCharArrayDetector<T>::length));
     }
-#endif
 
     /**
        Strip the given character from the start of the buffer.
@@ -1585,7 +1457,6 @@ public:
         return stripStart(c) + stripEnd(c);
     }
 
-#if defined LIBO_INTERNAL_ONLY
     /**
       Returns a std::u16string_view that is a view of a substring of this string.
 
@@ -1623,7 +1494,6 @@ public:
         assert(count <= getLength() - beginIndex);
         return std::u16string_view(*this).substr(beginIndex, count);
     }
-#endif
 
     /**
       Returns a new string buffer that is a substring of this string.
@@ -1679,16 +1549,13 @@ private:
     sal_Int32       nCapacity;
 };
 
-#if defined LIBO_INTERNAL_ONLY
 template<> struct ToStringHelper<OUStringBuffer> {
     static std::size_t length(OUStringBuffer const & s) { return s.getLength(); }
 
     sal_Unicode * operator()(sal_Unicode * buffer, OUStringBuffer const & s) const SAL_RETURNS_NONNULL
     { return addDataHelper(buffer, s.getStr(), s.getLength()); }
 };
-#endif
 
-#if defined LIBO_INTERNAL_ONLY
     // Define this here to avoid circular includes
     inline OUString & OUString::operator+=( const OUStringBuffer & str ) &
     {
@@ -1704,7 +1571,6 @@ template<> struct ToStringHelper<OUStringBuffer> {
     {
         return unacquired(&str.pData);
     }
-#endif
 }
 
 #ifdef RTL_STRING_UNITTEST
@@ -1714,7 +1580,7 @@ typedef rtlunittest::OUStringBuffer OUStringBuffer;
 }
 #endif
 
-#if defined LIBO_INTERNAL_ONLY && !defined RTL_STRING_UNITTEST
+#if !defined RTL_STRING_UNITTEST
 using ::rtl::OUStringBuffer;
 #endif
 

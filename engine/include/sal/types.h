@@ -109,7 +109,7 @@ typedef unsigned char       sal_uInt8;
     #error "Please define the 64-bit types for your architecture/compiler in include/sal/types.h"
 #endif
 
-#if defined LIBO_INTERNAL_ONLY && defined __cplusplus
+#if defined __cplusplus
     #define SAL_UNICODE_NOTEQUAL_WCHAR_T
     typedef char16_t sal_Unicode;
 #elif defined(_WIN32)
@@ -274,7 +274,7 @@ typedef void *                   sal_Handle;
     Compilers that support a construct of this nature will emit a compile
     time warning on unused return value.
 */
-#if defined LIBO_INTERNAL_ONLY && defined __cplusplus
+#if defined __cplusplus
 #define SAL_WARN_UNUSED_RESULT [[nodiscard]]
 #elif (defined __GNUC__ \
      && (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 1))) \
@@ -284,7 +284,6 @@ typedef void *                   sal_Handle;
 #   define SAL_WARN_UNUSED_RESULT
 #endif
 
-#if defined LIBO_INTERNAL_ONLY
 /** Use this as markup for functions and methods whose return value may be
     null and should not be dereferenced unconditionally.
 
@@ -295,7 +294,6 @@ typedef void *                   sal_Handle;
 #   define SAL_RET_MAYBENULL _Ret_maybenull_
 #else
 #   define SAL_RET_MAYBENULL /*coverity[+returnsnull]*/
-#endif
 #endif
 
 /** Use this for pure virtual classes, e.g. class SAL_NO_VTABLE Foo { ...
@@ -357,7 +355,7 @@ typedef struct _sal_Sequence
     which won't throw in practice, or where std::terminate is
     an acceptable response if they do
 */
-#if defined(LIBO_INTERNAL_ONLY) && defined(__COVERITY__) && __COVERITY_MAJOR__ <= 2024
+#if defined(__COVERITY__) && __COVERITY_MAJOR__ <= 2024
 #   define COVERITY_NOEXCEPT_FALSE noexcept(false)
 #else
 #   define COVERITY_NOEXCEPT_FALSE
@@ -377,38 +375,16 @@ namespace com { namespace sun { namespace star { } } }
 namespace css = ::com::sun::star;
 
 /** C++11 "= delete" feature.
-
-    For LIBO_INTERNAL_ONLY, calling a deleted function will cause a compile-time
-    error, while otherwise it will only cause a link-time error as the declared
-    function is not defined.
 */
-#if defined LIBO_INTERNAL_ONLY
 #define SAL_DELETED_FUNCTION = delete
-#else
-#define SAL_DELETED_FUNCTION
-#endif
 
 /** C++11 "override" feature.
-
-    For LIBO_INTERNAL_ONLY, force the method to override an existing method in
-    parent, error out if the method with the correct signature does not exist.
 */
-#if defined LIBO_INTERNAL_ONLY
 #define SAL_OVERRIDE override
-#else
-#define SAL_OVERRIDE
-#endif
 
 /** C++11 "constexpr" feature.
-
-    For LIBO_INTERNAL_ONLY, declare that it's possible to evaluate the value
-    at compile time.
 */
-#if defined LIBO_INTERNAL_ONLY
 #define SAL_CONSTEXPR constexpr
-#else
-#define SAL_CONSTEXPR
-#endif
 
 /** Macro for C++11 "noexcept" vs. "throw ()" exception specification.
 
@@ -467,11 +443,7 @@ template< typename T1, typename T2 > inline T1 static_int_cast(T2 n) {
 */
 
 #if defined __GNUC__ || defined __clang__
-#if defined LIBO_INTERNAL_ONLY
 #    define SAL_DEPRECATED(message) __attribute__((deprecated(message)))
-#else
-#    define SAL_DEPRECATED(message) __attribute__((deprecated))
-#endif
 #elif defined(_MSC_VER)
 #    define SAL_DEPRECATED(message) __declspec(deprecated(message))
 #else
@@ -502,13 +474,13 @@ template< typename T1, typename T2 > inline T1 static_int_cast(T2 n) {
         SAL_WNODEPRECATED_DECLARATIONS_POP
 */
 
-#if defined LIBO_INTERNAL_ONLY && defined __GNUC__
+#if defined __GNUC__
 #define SAL_WNODEPRECATED_DECLARATIONS_PUSH \
     _Pragma(SAL_STRINGIFY_ARG(GCC diagnostic push)) \
     _Pragma(SAL_STRINGIFY_ARG(GCC diagnostic ignored "-Wdeprecated-declarations"))
 #define SAL_WNODEPRECATED_DECLARATIONS_POP \
     _Pragma(SAL_STRINGIFY_ARG(GCC diagnostic pop))
-#elif defined LIBO_INTERNAL_ONLY && defined _MSC_VER
+#elif defined _MSC_VER
 #define SAL_WNODEPRECATED_DECLARATIONS_PUSH \
     _Pragma(SAL_STRINGIFY_ARG(warning(push))) \
     _Pragma(SAL_STRINGIFY_ARG(warning(disable : 4996)))
@@ -587,7 +559,7 @@ template< typename T1, typename T2 > inline T1 static_int_cast(T2 n) {
 
 */
 
-#if defined LIBO_INTERNAL_ONLY && (defined __GNUC__ || defined __clang__)
+#if (defined __GNUC__ || defined __clang__)
 #define SAL_WARN_UNUSED __attribute__((warn_unused))
 #else
 #define SAL_WARN_UNUSED
@@ -671,14 +643,13 @@ template< typename T1, typename T2 > inline T1 static_int_cast(T2 n) {
 #define __has_attribute(x) 0
 #endif
 
-#if defined LIBO_INTERNAL_ONLY && ((defined __GNUC__ && !defined __clang__) || (defined __clang__ && __has_attribute(returns_nonnull)))
+#if ((defined __GNUC__ && !defined __clang__) || (defined __clang__ && __has_attribute(returns_nonnull)))
 #define SAL_RETURNS_NONNULL  __attribute__((returns_nonnull))
 #else
 #define SAL_RETURNS_NONNULL
 #endif
 /// @endcond
 
-#if defined LIBO_INTERNAL_ONLY
 // An annotation mechanism used by some loplugins.  The id argument must be an ordinary string
 // literal.  For Clang, this expands to a clang::annotate attribute with an annotation consisting of
 // the concatenation of a "loplugin:" prefix and the given id suffix.  For non-Clang, this expands
@@ -687,7 +658,6 @@ template< typename T1, typename T2 > inline T1 static_int_cast(T2 n) {
 #define SAL_LOPLUGIN_ANNOTATE(id) [[clang::annotate("loplugin:" id)]]
 #else
 #define SAL_LOPLUGIN_ANNOTATE(id)
-#endif
 #endif
 
 #endif // INCLUDED_SAL_TYPES_H

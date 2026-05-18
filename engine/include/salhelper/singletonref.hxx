@@ -131,9 +131,7 @@ class SingletonRef
             // <- GLOBAL SAFE
         }
 
-#if defined LIBO_INTERNAL_ONLY
         SingletonRef & operator =(SingletonRef const &) = default;
-#endif
 
         /** @short  Allows rSingle->someBodyOp().
          */

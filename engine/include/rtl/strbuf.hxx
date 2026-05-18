@@ -29,11 +29,9 @@
 #include "rtl/string.hxx"
 #include "rtl/stringutils.hxx"
 
-#ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
 #include "rtl/stringconcat.hxx"
 #include <string_view>
 #include <type_traits>
-#endif
 
 #ifdef RTL_STRING_UNITTEST
 extern bool rtl_string_unittest_const_literal;
@@ -103,7 +101,6 @@ public:
     {
         rtl_string_new_WithLength( &pData, length );
     }
-#if defined LIBO_INTERNAL_ONLY
     template<typename T>
     explicit OStringBuffer(T length, std::enable_if_t<std::is_integral_v<T>, int> = 0)
         : OStringBuffer(static_cast<sal_Int32>(length))
@@ -119,7 +116,6 @@ public:
 #endif
     explicit OStringBuffer(char16_t) = delete;
     explicit OStringBuffer(char32_t) = delete;
-#endif
 
     /**
         Constructs a string buffer so that it represents the same
@@ -131,21 +127,12 @@ public:
 
         @param   value   the initial string value.
      */
-#if defined LIBO_INTERNAL_ONLY
     OStringBuffer(std::string_view sv)
         : pData(nullptr)
         , nCapacity(libreoffice_internal::ThrowIfInvalidStrLen(sv.length(), 16) + 16)
     {
         rtl_stringbuffer_newFromStr_WithLength( &pData, sv.data(), sv.length() );
     }
-#else
-    OStringBuffer(const OString& value)
-        : pData(NULL)
-        , nCapacity( value.getLength() + 16 )
-    {
-        rtl_stringbuffer_newFromStr_WithLength( &pData, value.getStr(), value.getLength() );
-    }
-#endif
 
     /**
         @overload
@@ -223,10 +210,8 @@ public:
         rtl_stringbuffer_newFromStr_WithLength( &pData, value, length );
     }
 
-#ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
     /**
      @overload
-     @internal
     */
     template< typename T1, typename T2 >
     OStringBuffer( OStringConcat< T1, T2 >&& c )
@@ -241,17 +226,13 @@ public:
 
     /**
      @overload
-     @internal
     */
     template< std::size_t N >
     OStringBuffer( OStringNumber< N >&& n )
         : OStringBuffer( n.buf, n.length)
     {}
-#endif
 
-#if defined LIBO_INTERNAL_ONLY
     operator std::string_view() const { return {getStr(), sal_uInt32(getLength())}; }
-#endif
 
     /** Assign to this a copy of value.
      */
@@ -269,7 +250,6 @@ public:
 
     /** Assign from a string.
     */
-#if defined LIBO_INTERNAL_ONLY
     OStringBuffer & operator =(std::string_view string) {
         sal_Int32 n = string.length();
         if (n >= nCapacity) {
@@ -280,17 +260,6 @@ public:
         pData->length = n;
         return *this;
     }
-#else
-    OStringBuffer & operator =(OString const & string) {
-        sal_Int32 n = string.getLength();
-        if (n >= nCapacity) {
-            ensureCapacity(n + 16); //TODO: check for overflow
-        }
-        std::memcpy(pData->buffer, string.pData->buffer, n + 1);
-        pData->length = n;
-        return *this;
-    }
-#endif
 
     /** Assign from a string literal.
     */
@@ -313,7 +282,6 @@ public:
         return *this;
     }
 
-#if defined LIBO_INTERNAL_ONLY
     /** @overload */
     template<typename T1, typename T2>
     OStringBuffer & operator =(OStringConcat<T1, T2> && concat) {
@@ -326,13 +294,12 @@ public:
         return *this;
     }
 
-    /** @overload @internal */
+    /** @overload */
     template<std::size_t N>
     OStringBuffer & operator =(OStringNumber<N> && n)
     {
         return operator =(std::string_view(n));
     }
-#endif
 
     /**
         Release the string data.
@@ -485,12 +452,10 @@ public:
      */
     const char* getStr() const SAL_RETURNS_NONNULL { return pData->buffer; }
 
-#if defined LIBO_INTERNAL_ONLY
     // Provide unsafe non-const access to the null-terminated string.  Callers can mutate the
     // contents of the string buffer (including introducing embedded null characters), but cannot
     // modify its length.
     char * getMutableStr() SAL_RETURNS_NONNULL { return pData->buffer; }
-#endif
 
     /**
       Access to individual characters.
@@ -513,23 +478,6 @@ public:
     {
         return OString(pData->buffer, pData->length);
     }
-
-#if !defined LIBO_INTERNAL_ONLY
-    /**
-        Appends the string to this string buffer.
-
-        The characters of the <code>String</code> argument are appended, in
-        order, to the contents of this string buffer, increasing the
-        length of this string buffer by the length of the argument.
-
-        @param   str   a string.
-        @return  this string buffer.
-     */
-    OStringBuffer & append(const OString &str)
-    {
-        return insert(getLength(), str);
-    }
-#endif
 
     /**
         Appends the string representation of the <code>char</code> array
@@ -582,10 +530,8 @@ public:
         return insert(getLength(), str, len);
     }
 
-#ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
     /**
      @overload
-     @internal
     */
     template< typename T1, typename T2 >
     OStringBuffer& append( OStringConcat< T1, T2 >&& c )
@@ -598,14 +544,11 @@ public:
 
     /**
      @overload
-     @internal
      */
     OStringBuffer& append( std::string_view s )
     {
         return insert(getLength(), s);
     }
-
-#endif
 
     /**
         Appends the string representation of the <code>sal_Bool</code>
@@ -764,17 +707,10 @@ public:
         @param      str      a string.
         @return     this string buffer.
      */
-#if defined LIBO_INTERNAL_ONLY
     OStringBuffer & insert(sal_Int32 offset, std::string_view str)
     {
         return insert( offset, str.data(), str.length() );
     }
-#else
-    OStringBuffer & insert(sal_Int32 offset, const OString & str)
-    {
-        return insert( offset, str.getStr(), str.getLength() );
-    }
-#endif
 
     /**
         Inserts the string representation of the <code>char</code> array
@@ -1065,14 +1001,12 @@ private:
     sal_Int32       nCapacity;
 };
 
-#if defined LIBO_INTERNAL_ONLY
 template<> struct ToStringHelper<OStringBuffer> {
     static std::size_t length(OStringBuffer const & s) { return s.getLength(); }
 
     char * operator()(char * buffer, OStringBuffer const & s) const SAL_RETURNS_NONNULL
     { return addDataHelper(buffer, s.getStr(), s.getLength()); }
 };
-#endif
 
 }
 
@@ -1084,7 +1018,7 @@ typedef rtlunittest::OStringBuffer OStringBuffer;
 #undef RTL_STRING_CONST_FUNCTION
 #endif
 
-#if defined LIBO_INTERNAL_ONLY && !defined RTL_STRING_UNITTEST
+#if !defined RTL_STRING_UNITTEST
 using ::rtl::OStringBuffer;
 #endif
 

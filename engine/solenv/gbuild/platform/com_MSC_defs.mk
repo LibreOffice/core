@@ -197,11 +197,6 @@ gb_STDLIBS := \
 
 gb_CFLAGS_WERROR = $(if $(ENABLE_WERROR),-WX)
 
-# there does not seem to be a way to force C++03 with MSVC, nor with clang-cl against MSVC system
-# headers; the oldest version that MSVC supports is C++14, so use that as a rather imperfect
-# approximation:
-gb_CXX03FLAGS := -std:c++14
-
 gb_LinkTarget_EXCEPTIONFLAGS := \
 	-EHs \
 

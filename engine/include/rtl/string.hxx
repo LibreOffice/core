@@ -31,21 +31,17 @@
 #include <utility>
 #include <string.h>
 
-#if defined LIBO_INTERNAL_ONLY
 #include <algorithm>
 #include <string_view>
 #include <type_traits>
-#endif
 
 #include "rtl/math.h"
 #include "rtl/textenc.h"
 #include "rtl/string.h"
 #include "rtl/stringutils.hxx"
 
-#ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
 #include "config_global.h"
 #include "rtl/stringconcat.hxx"
-#endif
 
 #ifdef RTL_STRING_UNITTEST
 extern bool rtl_string_unittest_const_literal;
@@ -73,8 +69,6 @@ namespace rtl
 #define RTL_STRING_CONST_FUNCTION
 #endif
 /// @endcond
-
-#ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
 
 /**
 A wrapper dressing a string literal as a static-refcount rtl_String.
@@ -151,8 +145,6 @@ template<OStringLiteral L> struct OStringHolder {
 
 }
 
-#endif
-
 /* ======================================================================= */
 
 /**
@@ -190,17 +182,10 @@ public:
     /**
       New string containing no characters.
     */
-#if defined LIBO_INTERNAL_ONLY
     constexpr
-#endif
     OString()
     {
-#if defined LIBO_INTERNAL_ONLY
         pData = const_cast<rtl_String *>(&empty.str);
-#else
-        pData = NULL;
-        rtl_string_new( &pData );
-#endif
     }
 
     /**
@@ -208,13 +193,10 @@ public:
 
       @param    str         an OString.
     */
-#if defined LIBO_INTERNAL_ONLY
     constexpr
-#endif
     OString( const OString & str )
     {
         pData = str.pData;
-#if defined LIBO_INTERNAL_ONLY
         if (std::is_constant_evaluated()) {
             //TODO: We would want to
             //
@@ -223,11 +205,9 @@ public:
             // here, but that wouldn't work because read of member `str` of OUStringLiteral's
             // anonymous union with active member `more` is not allowed in a constant expression.
         } else
-#endif
             rtl_string_acquire( pData );
     }
 
-#if defined LIBO_INTERNAL_ONLY
 #if !defined(__COVERITY__) // suppress COPY_INSTEAD_OF_MOVE suggestions
     /**
       Move constructor.
@@ -250,7 +230,6 @@ public:
         str.pData = nullptr;
         rtl_string_new( &str.pData );
     }
-#endif
 #endif
 
     /**
@@ -287,7 +266,7 @@ public:
         rtl_string_newFromStr_WithLength( &pData, &value, 1 );
     }
 
-#if defined LIBO_INTERNAL_ONLY && !defined RTL_STRING_UNITTEST_CONCAT
+#if !defined RTL_STRING_UNITTEST_CONCAT
     // Catch inadvertent conversions to the above ctor (e.g., from sal_[u]Int8, aka [un]signed
     // char):
     OString(int) = delete;
@@ -366,7 +345,6 @@ public:
         rtl_string_newFromStr_WithLength( &pData, value, length );
     }
 
-#ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
     /// @cond INTERNAL
     /**
       New string from an 8-Bit string literal.
@@ -375,15 +353,11 @@ public:
         pData(const_cast<rtl_String *>(&literal.str)) {}
     template<std::size_t N> OString(OStringLiteral<N> &&) = delete;
     /// @endcond
-#endif
 
-#if defined LIBO_INTERNAL_ONLY
     // For operator ""_tstr:
     template<OStringLiteral L> constexpr OString(detail::OStringHolder<L> const & holder):
         pData(const_cast<rtl_String *>(&holder.literal.str)) {}
-#endif
 
-#if defined LIBO_INTERNAL_ONLY
     explicit OString(std::string_view sv) {
         if (sv.size() > sal_uInt32(std::numeric_limits<sal_Int32>::max())) {
             throw std::bad_alloc();
@@ -391,7 +365,6 @@ public:
         pData = nullptr;
         rtl_string_newFromStr_WithLength(&pData, sv.data(), sv.size());
     }
-#endif
 
     /**
       New string from a Unicode character buffer array.
@@ -418,10 +391,8 @@ public:
         }
     }
 
-#ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
     /**
      @overload
-     @internal
     */
     template< typename T1, typename T2 >
     OString( OStringConcat< T1, T2 >&& c )
@@ -438,27 +409,20 @@ public:
 
     /**
      @overload
-     @internal
     */
     template< std::size_t N >
     OString( OStringNumber< N >&& n )
         : OString( n.buf, n.length )
     {}
-#endif
 
-#ifdef LIBO_INTERNAL_ONLY
     OString(std::nullptr_t) = delete;
-#endif
 
     /**
       Release the string data.
     */
-#if defined LIBO_INTERNAL_ONLY
     constexpr
-#endif
     ~OString()
     {
-#if defined LIBO_INTERNAL_ONLY
         if (std::is_constant_evaluated()) {
            //TODO: We would want to
            //
@@ -467,11 +431,9 @@ public:
            // here, but that wouldn't work because read of member `str` of OUStringLiteral's
            // anonymous union with active member `more` is not allowed in a constant expression.
         } else
-#endif
             rtl_string_release( pData );
     }
 
-#if defined LIBO_INTERNAL_ONLY
     /** Provides an OString const & passing a storage pointer of an
         rtl_String * handle.
         It is more convenient to use C++ OString member functions when dealing
@@ -485,7 +447,6 @@ public:
     */
     static OString const & unacquired( rtl_String * const * ppHandle )
         { return * reinterpret_cast< OString const * >( ppHandle ); }
-#endif
 
     /**
       Assign a new string.
@@ -498,7 +459,6 @@ public:
         return *this;
     }
 
-#if defined LIBO_INTERNAL_ONLY
 #if !defined(__COVERITY__) // suppress COPY_INSTEAD_OF_MOVE suggestions
     /**
       Move assign a new string.
@@ -513,7 +473,6 @@ public:
         rtl_string_new( &str.pData );
         return *this;
     }
-#endif
 #endif
 
     /**
@@ -543,19 +502,13 @@ public:
 
       @param    str         an OString.
     */
-    OString & operator+=( const OString & str )
-#if defined LIBO_INTERNAL_ONLY
-        &
-#endif
+    OString & operator+=( const OString & str ) &
     {
         rtl_string_newConcat( &pData, pData, str.pData );
         return *this;
     }
-#if defined LIBO_INTERNAL_ONLY
     void operator+=(OString const &) && = delete;
-#endif
 
-#if defined LIBO_INTERNAL_ONLY
     template<typename T> typename libreoffice_internal::CharPtrDetector<T, OString &>::Type
     operator +=(T const & value) & { return operator +=(std::string_view(value)); }
     template<typename T> typename libreoffice_internal::CharPtrDetector<T, OString &>::Type
@@ -597,12 +550,9 @@ public:
         return *this;
     }
     void operator +=(std::string_view) && = delete;
-#endif
 
-#ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
     /**
      @overload
-     @internal
     */
     template< typename T1, typename T2 >
     OString& operator+=( OStringConcat< T1, T2 >&& c ) & {
@@ -621,7 +571,6 @@ public:
 
     /**
      @overload
-     @internal
     */
     template< std::size_t N >
     OString& operator+=( OStringNumber< N >&& n ) & {
@@ -629,7 +578,6 @@ public:
     }
     template<std::size_t N> void operator +=(
         OStringNumber<N> &&) && = delete;
-#endif
 
     /**
       Clears the string, i.e, makes a zero-character string
@@ -799,7 +747,6 @@ public:
       @return   true if the strings are equal;
                 false, otherwise.
     */
-#if defined LIBO_INTERNAL_ONLY
     bool equalsIgnoreAsciiCase( std::string_view str ) const
     {
         if ( sal_uInt32(pData->length) != str.size() )
@@ -809,17 +756,6 @@ public:
         return rtl_str_compareIgnoreAsciiCase_WithLength( pData->buffer, pData->length,
                                                           str.data(), str.size() ) == 0;
     }
-#else
-    bool equalsIgnoreAsciiCase( const OString & str ) const
-    {
-        if ( pData->length != str.pData->length )
-            return false;
-        if ( pData == str.pData )
-            return true;
-        return rtl_str_compareIgnoreAsciiCase_WithLength( pData->buffer, pData->length,
-                                                          str.pData->buffer, str.pData->length ) == 0;
-    }
-#endif
 
     /**
       Perform an ASCII lowercase comparison of two strings.
@@ -918,21 +854,12 @@ public:
                 at the given position;
                 false, otherwise.
     */
-#if defined LIBO_INTERNAL_ONLY
     bool match( std::string_view str, sal_Int32 fromIndex = 0 ) const
     {
         assert(fromIndex >= 0);
         return rtl_str_shortenedCompare_WithLength( pData->buffer+fromIndex, pData->length-fromIndex,
                                                     str.data(), str.size(), str.size() ) == 0;
     }
-#else
-    bool match( const OString & str, sal_Int32 fromIndex = 0 ) const
-    {
-        assert(fromIndex >= 0);
-        return rtl_str_shortenedCompare_WithLength( pData->buffer+fromIndex, pData->length-fromIndex,
-                                                    str.pData->buffer, str.pData->length, str.pData->length ) == 0;
-    }
-#endif
 
     /**
      @overload
@@ -1005,7 +932,6 @@ public:
                 at the given position;
                 false, otherwise.
     */
-#if defined LIBO_INTERNAL_ONLY
     bool matchIgnoreAsciiCase( std::string_view str, sal_Int32 fromIndex = 0 ) const
     {
         assert(fromIndex >= 0);
@@ -1013,15 +939,6 @@ public:
                                                                    str.data(), str.size(),
                                                                    str.size() ) == 0;
     }
-#else
-    bool matchIgnoreAsciiCase( const OString & str, sal_Int32 fromIndex = 0 ) const
-    {
-        assert(fromIndex >= 0);
-        return rtl_str_shortenedCompareIgnoreAsciiCase_WithLength( pData->buffer+fromIndex, pData->length-fromIndex,
-                                                                   str.pData->buffer, str.pData->length,
-                                                                   str.pData->length ) == 0;
-    }
-#endif
     /**
      @overload
      This function accepts an ASCII string literal as its argument.
@@ -1043,7 +960,6 @@ public:
             == 0;
     }
 
-#if defined LIBO_INTERNAL_ONLY
     /**
       Check whether this string starts with a given substring.
 
@@ -1093,29 +1009,7 @@ public:
         }
         return b;
     }
-#else
-    /**
-      Check whether this string starts with a given substring.
 
-      @param str the substring to be compared
-
-      @param rest if non-null, and this function returns true, then assign a
-      copy of the remainder of this string to *rest. Available since
-      LibreOffice 4.2
-
-      @return true if and only if the given str appears as a substring at the
-      start of this string
-    */
-    bool startsWith(OString const & str, OString * rest = NULL) const {
-        bool b = match(str);
-        if (b && rest != NULL) {
-            *rest = copy(str.getLength());
-        }
-        return b;
-    }
-#endif
-
-#if defined LIBO_INTERNAL_ONLY
     /**
      @overload
      This function accepts an ASCII string literal as its argument.
@@ -1160,26 +1054,7 @@ public:
         }
         return b;
     }
-#else
-    /**
-     @overload
-     This function accepts an ASCII string literal as its argument.
-    */
-    template< typename T >
-    typename libreoffice_internal::ConstCharArrayDetector< T, bool >::Type startsWith(
-        T & literal, OString * rest = NULL) const
-    {
-        RTL_STRING_CONST_FUNCTION
-        bool b = match(literal, 0);
-        if (b && rest != NULL) {
-            *rest = copy(
-                libreoffice_internal::ConstCharArrayDetector<T>::length);
-        }
-        return b;
-    }
-#endif
 
-#if defined LIBO_INTERNAL_ONLY
     /**
       Check whether this string starts with a given string, ignoring the case of
       ASCII letters.
@@ -1253,36 +1128,7 @@ public:
         }
         return b;
     }
-#else
-    /**
-      Check whether this string starts with a given string, ignoring the case of
-      ASCII letters.
 
-      Character values between 65 and 90 (ASCII A-Z) are interpreted as
-      values between 97 and 122 (ASCII a-z).
-      This function can't be used for language specific comparison.
-
-      @param str the substring to be compared
-
-      @param rest if non-null, and this function returns true, then assign a
-      copy of the remainder of this string to *rest.
-
-      @return true if and only if the given str appears as a substring at the
-      start of this string, ignoring the case of ASCII letters ("A"--"Z" and
-      "a"--"z")
-    */
-    bool startsWithIgnoreAsciiCase(OString const & str, OString * rest = NULL)
-        const
-    {
-        bool b = matchIgnoreAsciiCase(str);
-        if (b && rest != NULL) {
-            *rest = copy(str.getLength());
-        }
-        return b;
-    }
-#endif
-
-#if defined LIBO_INTERNAL_ONLY
     /**
      @overload
      This function accepts an ASCII string literal as its argument.
@@ -1326,28 +1172,7 @@ public:
         }
         return b;
     }
-#else
-    /**
-     @overload
-     This function accepts an ASCII string literal as its argument.
-    */
-    template< typename T >
-    typename libreoffice_internal::ConstCharArrayDetector< T, bool >::Type
-    startsWithIgnoreAsciiCase(T & literal, OString * rest = NULL) const
-    {
-        RTL_STRING_CONST_FUNCTION
-        assert(
-            libreoffice_internal::ConstCharArrayDetector<T>::isValid(literal));
-        bool b = matchIgnoreAsciiCase(literal);
-        if (b && rest != NULL) {
-            *rest = copy(
-                libreoffice_internal::ConstCharArrayDetector<T>::length);
-        }
-        return b;
-    }
-#endif
 
-#if defined LIBO_INTERNAL_ONLY
     /**
       Check whether this string ends with a given substring.
 
@@ -1399,30 +1224,7 @@ public:
         }
         return b;
     }
-#else
-    /**
-      Check whether this string ends with a given substring.
 
-      @param str the substring to be compared
-
-      @param rest if non-null, and this function returns true, then assign a
-      copy of the remainder of this string to *rest. Available since
-      LibreOffice 4.2
-
-      @return true if and only if the given str appears as a substring at the
-      end of this string
-    */
-    bool endsWith(OString const & str, OString * rest = NULL) const {
-        bool b = str.getLength() <= getLength()
-            && match(str, getLength() - str.getLength());
-        if (b && rest != NULL) {
-            *rest = copy(0, getLength() - str.getLength());
-        }
-        return b;
-    }
-#endif
-
-#if defined LIBO_INTERNAL_ONLY
     /**
      @overload
      This function accepts an ASCII string literal as its argument.
@@ -1482,35 +1284,6 @@ public:
         }
         return b;
     }
-#else
-    /**
-     @overload
-     This function accepts an ASCII string literal as its argument.
-    */
-    template< typename T >
-    typename libreoffice_internal::ConstCharArrayDetector< T, bool >::Type endsWith(
-        T & literal, OString * rest = NULL) const
-    {
-        RTL_STRING_CONST_FUNCTION
-        assert(
-            libreoffice_internal::ConstCharArrayDetector<T>::isValid(literal));
-        bool b
-            = (libreoffice_internal::ConstCharArrayDetector<T>::length
-               <= sal_uInt32(getLength()))
-            && match(
-                libreoffice_internal::ConstCharArrayDetector<T>::toPointer(
-                    literal),
-                (getLength()
-                 - libreoffice_internal::ConstCharArrayDetector<T>::length));
-        if (b && rest != NULL) {
-            *rest = copy(
-                0,
-                (getLength()
-                 - libreoffice_internal::ConstCharArrayDetector<T>::length));
-        }
-        return b;
-    }
-#endif
 
     /**
       Check whether this string ends with a given substring.
@@ -1741,7 +1514,6 @@ public:
                 returned. If it does not occur as a substring starting
                 at fromIndex or beyond, -1 is returned.
     */
-#if defined LIBO_INTERNAL_ONLY
     sal_Int32 indexOf( std::string_view str, sal_Int32 fromIndex = 0 ) const
     {
         assert(fromIndex >= 0);
@@ -1749,15 +1521,6 @@ public:
                                                        str.data(), str.size() );
         return (ret < 0 ? ret : ret+fromIndex);
     }
-#else
-    sal_Int32 indexOf( const OString & str, sal_Int32 fromIndex = 0 ) const
-    {
-        assert(fromIndex >= 0);
-        sal_Int32 ret = rtl_str_indexOfStr_WithLength( pData->buffer+fromIndex, pData->length-fromIndex,
-                                                       str.pData->buffer, str.pData->length );
-        return (ret < 0 ? ret : ret+fromIndex);
-    }
-#endif
     /**
      @overload
      This function accepts an ASCII string literal as its argument.
@@ -1824,19 +1587,11 @@ public:
                 the last such substring is returned. If it does not occur as
                 a substring, -1 is returned.
     */
-#if defined LIBO_INTERNAL_ONLY
     sal_Int32 lastIndexOf( std::string_view str ) const
     {
         return rtl_str_lastIndexOfStr_WithLength( pData->buffer, pData->length,
                                                   str.data(), str.size() );
     }
-#else
-    sal_Int32 lastIndexOf( const OString & str ) const
-    {
-        return rtl_str_lastIndexOfStr_WithLength( pData->buffer, pData->length,
-                                                  str.pData->buffer, str.pData->length );
-    }
-#endif
 
     /**
       Returns the index within this string of the last occurrence of
@@ -1855,19 +1610,11 @@ public:
                 of the first character of the last such substring is
                 returned. Otherwise, -1 is returned.
     */
-#if defined LIBO_INTERNAL_ONLY
     sal_Int32 lastIndexOf( std::string_view str, sal_Int32 fromIndex ) const
     {
         return rtl_str_lastIndexOfStr_WithLength( pData->buffer, fromIndex,
                                                   str.data(), str.size() );
     }
-#else
-    sal_Int32 lastIndexOf( const OString & str, sal_Int32 fromIndex ) const
-    {
-        return rtl_str_lastIndexOfStr_WithLength( pData->buffer, fromIndex,
-                                                  str.pData->buffer, str.pData->length );
-    }
-#endif
 
     /**
       Returns a new string that is a substring of this string.
@@ -1903,7 +1650,6 @@ public:
         return OString( pNew, SAL_NO_ACQUIRE );
     }
 
-#if defined LIBO_INTERNAL_ONLY
     /**
       Returns a std::string_view that is a view of a substring of this string.
 
@@ -1941,63 +1687,13 @@ public:
         assert(count <= getLength() - beginIndex);
         return std::string_view(*this).substr(beginIndex, count);
     }
-#endif
 
-#ifndef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
-    /**
-      Concatenates the specified string to the end of this string.
-
-      @param    str   the string that is concatenated to the end
-                      of this string.
-      @return   a string that represents the concatenation of this string
-                followed by the string argument.
-    */
-    SAL_WARN_UNUSED_RESULT OString concat( const OString & str ) const
-    {
-        rtl_String* pNew = NULL;
-        rtl_string_newConcat( &pNew, pData, str.pData );
-        return OString( pNew, SAL_NO_ACQUIRE );
-    }
-#endif
-
-#ifndef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
-    friend OString operator+( const OString & str1, const OString & str2  )
-    {
-        return str1.concat( str2 );
-    }
-#endif
-
-// hide this from internal code to avoid ambiguous lookup error
-#ifndef LIBO_INTERNAL_ONLY
-    /**
-      Returns a new string resulting from replacing n = count characters
-      from position index in this string with newStr.
-
-      @param  index   the replacing index in str.
-                      The index must be greater or equal as 0 and
-                      less or equal as the length of the string.
-      @param  count   the count of characters that will replaced
-                      The count must be greater or equal as 0 and
-                      less or equal as the length of the string minus index.
-      @param  newStr  the new substring.
-      @return the new string.
-    */
-    SAL_WARN_UNUSED_RESULT OString replaceAt( sal_Int32 index, sal_Int32 count, const OString& newStr ) const
-    {
-        rtl_String* pNew = NULL;
-        rtl_string_newReplaceStrAt( &pNew, pData, index, count, newStr.pData );
-        return OString( pNew, SAL_NO_ACQUIRE );
-    }
-#endif
-
-#ifdef LIBO_INTERNAL_ONLY
     SAL_WARN_UNUSED_RESULT OString replaceAt( sal_Int32 index, sal_Int32 count, std::string_view newStr ) const
     {
         rtl_String* pNew = NULL;
         rtl_string_newReplaceStrAt_WithLength ( &pNew, pData, index, count, newStr.data(), newStr.size() );
         return OString( pNew, SAL_NO_ACQUIRE );
     }
-#endif
 
     /**
       Returns a new string resulting from replacing all occurrences of
@@ -2274,8 +1970,6 @@ public:
         return rtl_str_toDouble( pData->buffer );
     }
 
-#ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
-
     static auto number( int i, sal_Int16 radix = 10 )
     {
         return OStringNumber<RTL_STR_MAX_VALUEOFINT32>(rtl_str_valueOfInt32, i, radix);
@@ -2300,49 +1994,6 @@ public:
     {
         return number( static_cast< unsigned long long >( i ), radix );
     }
-#else
-    /**
-      Returns the string representation of the integer argument.
-
-      This function can't be used for language specific conversion.
-
-      @param    i           an integer value
-      @param    radix       the radix (between 2 and 36)
-      @return   a string with the string representation of the argument.
-    */
-    static OString number( int i, sal_Int16 radix = 10 )
-    {
-        char aBuf[RTL_STR_MAX_VALUEOFINT32];
-        return OString(aBuf, rtl_str_valueOfInt32(aBuf, i, radix));
-    }
-    /// @overload
-    static OString number( unsigned int i, sal_Int16 radix = 10 )
-    {
-        return number( static_cast< unsigned long long >( i ), radix );
-    }
-    /// @overload
-    static OString number( long i, sal_Int16 radix = 10 )
-    {
-        return number( static_cast< long long >( i ), radix );
-    }
-    /// @overload
-    static OString number( unsigned long i, sal_Int16 radix = 10 )
-    {
-        return number( static_cast< unsigned long long >( i ), radix );
-    }
-    /// @overload
-    static OString number( long long ll, sal_Int16 radix = 10 )
-    {
-        char aBuf[RTL_STR_MAX_VALUEOFINT64];
-        return OString(aBuf, rtl_str_valueOfInt64(aBuf, ll, radix));
-    }
-    /// @overload
-    static OString number( unsigned long long ll, sal_Int16 radix = 10 )
-    {
-        char aBuf[RTL_STR_MAX_VALUEOFUINT64];
-        return OString(aBuf, rtl_str_valueOfUInt64(aBuf, ll, radix));
-    }
-#endif
 
     /**
       Returns the string representation of the float argument.
@@ -2386,44 +2037,10 @@ public:
         return OString(pNew, SAL_NO_ACQUIRE);
     }
 
-#ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
     static auto boolean(bool b)
     {
         return OStringNumber<RTL_STR_MAX_VALUEOFBOOLEAN>(rtl_str_valueOfBoolean, b);
     }
-#else
-    /**
-      Returns the string representation of the sal_Bool argument.
-
-      If the sal_Bool is true, the string "true" is returned.
-      If the sal_Bool is false, the string "false" is returned.
-      This function can't be used for language specific conversion.
-
-      @param    b   a sal_Bool.
-      @return   a string with the string representation of the argument.
-      @deprecated use boolean()
-    */
-    SAL_DEPRECATED("use boolean()") static OString valueOf( sal_Bool b )
-    {
-        return boolean(b);
-    }
-
-    /**
-      Returns the string representation of the boolean argument.
-
-      If the argument is true, the string "true" is returned.
-      If the argument is false, the string "false" is returned.
-      This function can't be used for language specific conversion.
-
-      @param    b   a bool.
-      @return   a string with the string representation of the argument.
-    */
-    static OString boolean( bool b )
-    {
-        char aBuf[RTL_STR_MAX_VALUEOFBOOLEAN];
-        return OString(aBuf, rtl_str_valueOfBoolean(aBuf, b));
-    }
-#endif
 
     /**
       Returns the string representation of the char argument.
@@ -2495,11 +2112,8 @@ public:
         return number(d);
     }
 
-#if defined LIBO_INTERNAL_ONLY
     operator std::string_view() const { return {getStr(), sal_uInt32(getLength())}; }
-#endif
 
-#if defined LIBO_INTERNAL_ONLY
     // A wrapper for the first expression in an
     //
     //   OString::Concat(e1) + e2 + ...
@@ -2520,15 +2134,11 @@ public:
     template<typename T, std::size_t N> [[nodiscard]] static
     OStringConcat<OStringConcatMarker, T[N]>
     Concat(T (& value)[N]) { return OStringConcat<OStringConcatMarker, T[N]>(value); }
-#endif
 
 private:
-#if defined LIBO_INTERNAL_ONLY
-        static constexpr auto empty = OStringLiteral(""); // [-loplugin:ostr]
-#endif
+    static constexpr auto empty = OStringLiteral(""); // [-loplugin:ostr]
 };
 
-#if defined LIBO_INTERNAL_ONLY
 inline bool operator ==(OString const & lhs, StringConcatenation<char> const & rhs)
 { return lhs == std::string_view(rhs); }
 inline bool operator !=(OString const & lhs, StringConcatenation<char> const & rhs)
@@ -2537,15 +2147,10 @@ inline bool operator ==(StringConcatenation<char> const & lhs, OString const & r
 { return std::string_view(lhs) == rhs; }
 inline bool operator !=(StringConcatenation<char> const & lhs, OString const & rhs)
 { return std::string_view(lhs) != rhs; }
-#endif
 
 /* ======================================================================= */
 
-#ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
 
-/**
- @internal
-*/
 template<>
 struct ToStringHelper< OString >
 {
@@ -2553,9 +2158,6 @@ struct ToStringHelper< OString >
     char* operator()( char* buffer, const OString& s ) const { return addDataHelper( buffer, s.getStr(), s.getLength()); }
 };
 
-/**
- @internal
-*/
 template<std::size_t N>
 struct ToStringHelper< OStringLiteral<N> >
 {
@@ -2563,16 +2165,12 @@ struct ToStringHelper< OStringLiteral<N> >
     char* operator()( char* buffer, const OStringLiteral<N>& str ) const { return addDataHelper( buffer, str.getStr(), str.getLength() ); }
 };
 
-/**
- @internal
-*/
 template< typename charT, typename traits, typename T1, typename T2 >
 inline std::basic_ostream<charT, traits> & operator <<(
     std::basic_ostream<charT, traits> & stream, OStringConcat< T1, T2 >&& concat)
 {
     return stream << OString( std::move(concat) );
 }
-#endif
 
 
 /** A helper to use OStrings with hash maps.
@@ -2633,7 +2231,7 @@ typedef rtlunittest::OString OString;
 #undef RTL_STRING_CONST_FUNCTION
 #endif
 
-#if defined LIBO_INTERNAL_ONLY && !defined RTL_STRING_UNITTEST
+#if !defined RTL_STRING_UNITTEST
 using ::rtl::OString;
 using ::rtl::OStringChar;
 using ::rtl::Concat2View;
@@ -2641,8 +2239,6 @@ using ::rtl::OStringHash;
 using ::rtl::OStringLiteral;
 using RepeatedChar = ::rtl::RepeatedChar_t<char>;
 #endif
-
-#if defined LIBO_INTERNAL_ONLY
 
 template<
 #if defined RTL_STRING_UNITTEST
@@ -2677,13 +2273,9 @@ rtl
         ::detail::OStringHolder<L>();
 }
 
-#endif
-
-/// @cond INTERNAL
 /**
   Make OString hashable by default for use in STL containers.
 */
-#if defined LIBO_INTERNAL_ONLY
 namespace std {
 
 template<>
@@ -2705,9 +2297,6 @@ struct hash<::rtl::OString>
 };
 
 }
-
-#endif
-/// @endcond
 
 #endif // INCLUDED_RTL_STRING_HXX
 

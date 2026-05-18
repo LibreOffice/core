@@ -25,10 +25,8 @@
 #include <cassert>
 #include <cstddef>
 #include <functional>
-#ifdef LIBO_INTERNAL_ONLY
 #include <type_traits>
 #include "com/sun/star/uno/Reference.h"
-#endif
 
 #include "sal/types.h"
 
@@ -78,7 +76,6 @@ public:
             m_pBody->acquire();
     }
 
-#ifdef LIBO_INTERNAL_ONLY
 #if !defined(__COVERITY__) // suppress COPY_INSTEAD_OF_MOVE suggestions
     /** Move constructor...
      */
@@ -88,9 +85,7 @@ public:
         handle.m_pBody = nullptr;
     }
 #endif
-#endif
 
-#if defined LIBO_INTERNAL_ONLY
     /** Up-casting conversion operator
 
         Does not work for up-casts to ambiguous bases.
@@ -112,7 +107,6 @@ public:
     {
         return css::uno::Reference<super_type>(m_pBody);
     }
-#endif
 
     /** Destructor...
      */
@@ -147,7 +141,6 @@ public:
         return set( handle.m_pBody );
     }
 
-#ifdef LIBO_INTERNAL_ONLY
     /** Assignment.
      *   Unbinds this instance from its body (if bound),
      *   bind it to the body represented by the handle, and
@@ -163,7 +156,6 @@ public:
         handle.m_pBody = nullptr;
         return *this;
     }
-#endif
 
     /** Assignment...
      */
@@ -227,14 +219,12 @@ public:
         return (m_pBody != NULL);
     }
 
-#if defined LIBO_INTERNAL_ONLY
     /** Returns True if the handle does point to a valid body.
      */
     explicit operator bool() const
     {
         return is();
     }
-#endif
 
     /** Returns True if this points to pBody.
      */
@@ -282,11 +272,9 @@ public:
 
 } // namespace rtl
 
-#if defined LIBO_INTERNAL_ONLY
 namespace std
 {
 
-/// @cond INTERNAL
 /**
   Make rtl::Reference hashable by default for use in STL containers.
 */
@@ -296,11 +284,8 @@ struct hash<::rtl::Reference<T>>
     std::size_t operator()(::rtl::Reference<T> const & s) const
     { return std::size_t(s.get()); }
 };
-/// @endcond
 
 }
-
-#endif
 
 #endif /* ! INCLUDED_RTL_REF_HXX */
 

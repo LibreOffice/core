@@ -19,16 +19,7 @@ public:
     {
     }
 
-    void run() override
-    {
-        // Don't execute for < C++11, so we don't accidentally rewrite the legacy definitions of
-        // SAL_THROW_EXTERN_C and SAL_NOEXCEPT in include/sal/types.h e.g. when building
-        // CppunitTest_odk_checkapi which explicitly uses gb_CXX03FLAGS:
-        if (compiler.getLangOpts().CPlusPlus11)
-        {
-            TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
-        }
-    }
+    void run() override { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }
 
     bool VisitFunctionProtoTypeLoc(FunctionProtoTypeLoc tloc)
     {

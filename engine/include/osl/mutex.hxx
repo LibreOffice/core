@@ -190,11 +190,7 @@ namespace osl
         */
         void clear()
         {
-#ifdef LIBO_INTERNAL_ONLY
             assert(pT);
-#else
-            if (pT)
-#endif
             {
                 pT->release();
                 pT = NULL;
@@ -237,9 +233,7 @@ namespace osl
         */
         void reset()
         {
-#ifdef LIBO_INTERNAL_ONLY
             assert(!this->pT);
-#endif
             if (pResetT)
             {
                 this->pT = pResetT;
@@ -248,7 +242,6 @@ namespace osl
         }
     };
 
-#ifdef LIBO_INTERNAL_ONLY
     // A RAII helper to allow exception-safe scoped release of an acquired object
     template<class ResettableGuard_t>
     class ResettableGuardScopedReleaser
@@ -264,14 +257,11 @@ namespace osl
     private:
         ResettableGuard_t& m_rResettableGuard;
     };
-#endif
 
     typedef Guard<Mutex> MutexGuard;
     typedef ClearableGuard<Mutex> ClearableMutexGuard;
     typedef ResettableGuard< Mutex > ResettableMutexGuard;
-#ifdef LIBO_INTERNAL_ONLY
     typedef ResettableGuardScopedReleaser<ResettableMutexGuard> ResettableMutexGuardScopedReleaser;
-#endif
 }
 
 #endif // INCLUDED_OSL_MUTEX_HXX

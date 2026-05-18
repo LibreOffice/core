@@ -119,9 +119,7 @@ namespace osl
             return static_cast<Result>(osl_waitCondition(condition, pTimeout));
         }
 
-#if defined LIBO_INTERNAL_ONLY
         Result wait(TimeValue const & timeout) { return wait(&timeout); }
-#endif
 
         /** Checks if the condition is set without blocking.
 
