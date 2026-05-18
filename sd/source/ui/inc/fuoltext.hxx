@@ -70,6 +70,7 @@ public:
     static rtl::Reference<FuPoor> Create( ViewShell& rViewSh, ::sd::Window* pWin, ::sd::SimpleOutlinerView* pView, SdDrawDocument& rDoc, SfxRequest& rReq );
 
     virtual bool KeyInput(const KeyEvent& rKEvt) override;
+    virtual bool MouseButtonUp(const MouseEvent& rMEvt) override;
     /** Call this method when the text in the outliner (may) have changed.
         It will invalidate some slots of the view frame and update the
         preview in the slide sorter.

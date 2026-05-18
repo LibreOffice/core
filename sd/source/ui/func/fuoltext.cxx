@@ -88,6 +88,14 @@ void FuOutlineText::UpdateForKeyPress (const KeyEvent& rEvent)
     mrViewShell.UpdatePreview(mrViewShell.GetActualPage());
 }
 
+bool FuOutlineText::MouseButtonUp(const MouseEvent& rMEvt)
+{
+    const bool bReturn = FuSimpleOutlinerText::MouseButtonUp(rMEvt);
+    // tdf#99079 - update slide selection to match the cursor position
+    mrViewShell.UpdatePreview(mrViewShell.GetActualPage());
+    return bReturn;
+}
+
 /**
  * Process keyboard input
  * @returns sal_True if a KeyEvent is being processed, sal_False otherwise
