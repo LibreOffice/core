@@ -36,6 +36,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/types.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <algorithm>
 
 namespace calc
 {
@@ -161,11 +162,7 @@ namespace calc
     {
         // look up in our sequence
         const Sequence< Type > aSupportedTypes( getSupportedValueTypes(rGuard) );
-        for ( auto const & i : aSupportedTypes )
-            if ( aType == i )
-                return true;
-
-        return false;
+        return std::find(aSupportedTypes.begin(), aSupportedTypes.end(), aType) != aSupportedTypes.end();
     }
 
     Any SAL_CALL OCellValueBinding::getValue( const Type& aType )

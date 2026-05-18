@@ -40,6 +40,8 @@
 #include <bitmaps.hlst>
 #include <unonames.hxx>
 
+#include <algorithm>
+
 using  namespace ::com::sun::star;
 
 const TranslateId aTypeResIds[SC_LINKTARGETTYPE_COUNT] =
@@ -114,10 +116,7 @@ uno::Sequence<OUString> SAL_CALL ScLinkTargetTypesObj::getElementNames()
 
 sal_Bool SAL_CALL ScLinkTargetTypesObj::hasByName(const OUString& aName)
 {
-    for (const auto & i : aNames)
-        if ( i == aName )
-            return true;
-    return false;
+    return std::find(std::begin(aNames), std::end(aNames), aName) != std::end(aNames);
 }
 
 // container::XElementAccess
