@@ -95,7 +95,7 @@ include $(BUILDDIR)/config_$(gb_Side).mk
 
 export GMAKE_OPTIONS?=-r$(if $(verbose),,s)$(value $(MAKEFLAGS))
 
-PARALLELISM_OPTION := $(if $(filter-out 0,$(PARALLELISM)),-j $(PARALLELISM),)
+PARALLELISM_OPTION := $(if $(filter-out 0,$(PARALLELISM)),-j $(PARALLELISM),)$(if $(LOADLIMIT), -l $(LOADLIMIT),)
 
 #
 # Partial Build

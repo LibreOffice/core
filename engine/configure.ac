@@ -3009,6 +3009,13 @@ AC_ARG_WITH(parallelism,
         40.]),
 ,)
 
+AC_ARG_WITH(load-limit,
+    AS_HELP_STRING([--with-load-limit=N],
+        [Pass -l N to make so that no new job is started if the system load
+        average is >= N. Useful on shared CI hosts where multiple builds
+        compete for cores. No load limit by default.]),
+,)
+
 AC_ARG_WITH(all-tarballs,
     AS_HELP_STRING([--with-all-tarballs],
         [Download all external tarballs unconditionally]))
@@ -6158,6 +6165,7 @@ if test "$cross_compiling" = "yes"; then
     echo "    Running CONF-FOR-BUILD/configure" \
         $sub_conf_defaults \
         --with-parallelism="'$with_parallelism'" \
+        --with-load-limit="'$with_load_limit'" \
         --with-theme="'$with_theme'" \
         --with-vendor="'$with_vendor'" \
         $sub_conf_opts \
@@ -6167,6 +6175,7 @@ if test "$cross_compiling" = "yes"; then
     ./configure \
         $sub_conf_defaults \
         --with-parallelism="$with_parallelism" \
+        --with-load-limit="$with_load_limit" \
         --with-theme="$with_theme" \
         "--with-vendor=$with_vendor" \
         $sub_conf_opts \
@@ -14899,6 +14908,16 @@ else
     AC_MSG_RESULT([$PARALLELISM])
 fi
 AC_SUBST(PARALLELISM)
+
+AC_MSG_CHECKING([for make load limit])
+if test -n "$with_load_limit" -a "$with_load_limit" != "no" -a "$with_load_limit" != "yes"; then
+    LOADLIMIT=$with_load_limit
+    AC_MSG_RESULT([$LOADLIMIT])
+else
+    LOADLIMIT=
+    AC_MSG_RESULT([none])
+fi
+AC_SUBST(LOADLIMIT)
 
 #
 # Set up ILIB for MSVC build
