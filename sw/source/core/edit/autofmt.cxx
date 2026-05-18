@@ -2292,14 +2292,15 @@ void SwAutoFormat::AutoCorrect(TextFrameIndex nPos)
                 if( m_aFlags.bEsperantoHats && eLang == LANGUAGE_USER_ESPERANTO )
                 {
                     SetRedlineText( STR_AUTOFMTREDL_ESPERANTOHAT );
-                    sal_Int32 nOldTextLength = pText->getLength();
+                    sal_Int32 nOldTextLength = aACorrDoc.GetText().getLength();
                     sal_Int32 nEnd = sal_Int32(nPos);
                     pATst->FnAddEsperantoHats(aACorrDoc, sal_Int32(nSttPos), nEnd);
-                    // If red lining is being applied then any replacements will increase the length
-                    // of the text instead of reducing it because both the X version and the
-                    // circumflex version will appear in it.
-                    if( m_aFlags.bWithRedlining )
-                        nPos += TextFrameIndex(pText->getLength() - nOldTextLength);
+                    // If red lining is being applied and deletes are visible then any replacements
+                    // will increase the length of the text instead of reducing it because both the
+                    // X version and the circumflex version will appear in it.
+                    sal_Int32 nNewTextLength = aACorrDoc.GetText().getLength();
+                    if ( nNewTextLength > nOldTextLength )
+                        nPos += TextFrameIndex(nNewTextLength - nOldTextLength);
                     else
                         nPos = TextFrameIndex(nEnd);
                 }
