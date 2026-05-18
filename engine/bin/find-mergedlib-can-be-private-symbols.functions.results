@@ -18269,10 +18269,6 @@ create_hash_table
 css_comp_Impress_oox_PowerPointExport
 daxpy
 dbaccess::operator==(dbaccess::ODsnTypeCollection::TypeIterator const&, dbaccess::ODsnTypeCollection::TypeIterator const&)
-dbahsql::CreateStmtParser::parseColumnPart(std::basic_string_view<char16_t, std::char_traits<char16_t> >)
-dbahsql::CreateStmtParser::parsePrimaryKeys(std::basic_string_view<char16_t, std::char_traits<char16_t> >)
-dbahsql::FbCreateStmtParser::appendPrimaryKeyPart(rtl::OUStringBuffer&) const
-dbahsql::FbCreateStmtParser::ensureProperTableLengths() const
 dbtools::DBTypeConversion::convertUnicodeString(rtl::OUString const&, rtl::OString&, unsigned short)
 dbtools::DBTypeConversion::convertUnicodeStringToLength(rtl::OUString const&, rtl::OString&, int, unsigned short)
 dbtools::DBTypeConversion::getNULLDate(com::sun::star::uno::Reference<com::sun::star::util::XNumberFormatsSupplier> const&)

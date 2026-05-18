@@ -2472,12 +2472,7 @@ void OApplicationController::OnFirstControllerConnected()
 
     try
     {
-        // If the migration just happened, but was not successful, the document is reloaded.
-        // In this case, we should not show the warning, again.
-        if ( ::comphelper::NamedValueCollection::getOrDefault( m_xModel->getArgs(), u"SuppressMigrationWarning", false ) )
-            return;
-
-        // also, if the document is read-only, then no migration is possible, and the
+        // if the document is read-only, then no migration is possible, and the
         // respective menu entry is hidden. So, don't show the warning in this case, too.
         if ( Reference< XStorable >( m_xModel, UNO_QUERY_THROW )->isReadonly() )
             return;

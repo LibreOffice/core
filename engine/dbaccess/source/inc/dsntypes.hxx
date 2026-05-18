@@ -58,11 +58,9 @@ enum DATASOURCE_TYPE
     DST_EMBEDDED_HSQLDB     = 23,
     DST_MYSQL_NATIVE        = 24,
     DST_MYSQL_NATIVE_DIRECT = 25,
-    DST_FIREBIRD            = 26,
-    DST_EMBEDDED_FIREBIRD   = 27,
-    DST_POSTGRES            = 28,
-    DST_WRITER              = 29,
-    DST_EMBEDDED_UNKNOWN    = 30,    /// for all embedded addons driver
+    DST_POSTGRES            = 26,
+    DST_WRITER              = 27,
+    DST_EMBEDDED_UNKNOWN    = 28,    /// for all embedded addons driver
 
 
     DST_USERDEFINE1,    /// first user defined driver

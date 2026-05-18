@@ -1351,53 +1351,6 @@ void CopyTableWizard::impl_doCopy_nothrow()
 
                 if ( xSourceResultSet.is() )
                     impl_copyRows_throw( xSourceResultSet, xTable );
-
-                // tdf#119962
-                const Reference< XDatabaseMetaData > xDestMetaData( m_xDestConnection->getMetaData(), UNO_SET_THROW );
-                OUString sDatabaseDest = xDestMetaData->getDatabaseProductName().toAsciiLowerCase();
-                // If we created a new primary key, then it won't necessarily be an IDENTITY column
-                const bool bShouldCreatePrimaryKey = rWizard.shouldCreatePrimaryKey();
-                if ( !bShouldCreatePrimaryKey && (sDatabaseDest.indexOf("firebird") != -1) )
-                {
-                    const OUString sComposedTableName = ::dbtools::composeTableName( xDestMetaData, xTable, ::dbtools::EComposeRule::InDataManipulation, true );
-
-                    OUString aSchema,aTable;
-                    xTable->getPropertyValue(u"SchemaName"_ustr) >>= aSchema;
-                    xTable->getPropertyValue(u"Name"_ustr)       >>= aTable;
-                    Any aCatalog = xTable->getPropertyValue(u"CatalogName"_ustr);
-
-                    const Reference< XResultSet > xResultPKCL(xDestMetaData->getPrimaryKeys(aCatalog,aSchema,aTable));
-                    Reference< XRow > xRowPKCL(xResultPKCL, UNO_QUERY_THROW);
-                    OUString sPKCL;
-                    if ( xRowPKCL.is() )
-                    {
-                        if (xResultPKCL->next())
-                        {
-                            sPKCL = xRowPKCL->getString(4);
-                        }
-                    }
-
-                    if (!sPKCL.isEmpty())
-                    {
-                        OUString strSql = "SELECT MAX(\"" + sPKCL + "\") FROM " + sComposedTableName;
-
-                        Reference< XResultSet > xResultMAXNUM(m_xDestConnection->createStatement()->executeQuery(strSql));
-                        Reference< XRow > xRow(xResultMAXNUM, UNO_QUERY_THROW);
-
-                        sal_Int64 maxVal = -1L;
-                        if (xResultMAXNUM->next())
-                        {
-                            maxVal = xRow->getLong(1);
-                        }
-
-                        if (maxVal > 0L)
-                        {
-                            strSql = "ALTER TABLE " + sComposedTableName + " ALTER \"" + sPKCL + "\" RESTART WITH " + OUString::number(maxVal + 1);
-
-                            m_xDestConnection->createStatement()->execute(strSql);
-                        }
-                    }
-                }
             }
             break;
 

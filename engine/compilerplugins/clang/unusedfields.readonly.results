@@ -190,8 +190,6 @@ dbaccess/source/core/dataaccess/documentcontainer.cxx:67
     dbaccess::(anonymous namespace)::LocalNameApproval m_aErrors ::connectivity::SQLError
 dbaccess/source/core/inc/ContentHelper.hxx:101
     dbaccess::OContentHelper m_aErrorHelper const ::connectivity::SQLError
-dbaccess/source/filter/hsqldb/parseschema.hxx:34
-    dbahsql::SchemaParser m_PrimaryKeys std::map<OUString, std::vector<OUString> >
 dbaccess/source/ui/control/tabletree.cxx:126
     dbaui::(anonymous namespace)::OViewSetter m_aEqualFunctor ::comphelper::UStringMixEqual
 dbaccess/source/ui/dlg/advancedsettings.hxx:34

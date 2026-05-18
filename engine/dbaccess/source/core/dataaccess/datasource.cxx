@@ -51,9 +51,7 @@
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbtools.hxx>
 #include <cppuhelper/typeprovider.hxx>
-#include <officecfg/Office/Common.hxx>
 #include <comphelper/diagnose_ex.hxx>
-#include <o3tl/environment.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
 #include <tools/urlobj.hxx>

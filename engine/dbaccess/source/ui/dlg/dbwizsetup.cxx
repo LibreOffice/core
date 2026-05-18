@@ -679,7 +679,6 @@ bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
             aArgs.put( u"Overwrite"_ustr, true );
             aArgs.put( u"InteractionHandler"_ustr, xHandler );
             aArgs.put( u"MacroExecutionMode"_ustr, MacroExecMode::USE_CONFIG );
-            aArgs.put( u"IgnoreFirebirdMigration"_ustr, true );
 
             OUString sPath = ODbDataSourceAdministrationHelper::getDocumentUrl( *m_pOutSet );
             xStore->storeAsURL( sPath, aArgs.getPropertyValues() );

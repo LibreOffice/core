@@ -297,17 +297,6 @@ namespace dbaui
                     setURLNoPrefix(aSelector.GetSelected());
                 break;
             }
-            case ::dbaccess::DST_FIREBIRD:
-            {
-                OUString sFilterName(DBA_RES (STR_FIREBIRD_FILTERNAME));
-                ::sfx2::FileDialogHelper aFileDlg(
-                    ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
-                    FileDialogFlags::NONE, GetFrameWeld());
-                aFileDlg.AddFilter(sFilterName,u"*.fdb"_ustr);
-                aFileDlg.SetCurrentFilter(sFilterName);
-                askForFileName(aFileDlg);
-                break;
-            }
             default:
                 break;
         }
@@ -318,23 +307,6 @@ namespace dbaui
     IMPL_LINK_NOARG(OConnectionHelper, OnCreateDatabase, weld::Button&, void)
     {
         OSL_ENSURE(m_pAdminDialog,"No Admin dialog set! ->GPF");
-        const ::dbaccess::DATASOURCE_TYPE eType = m_pCollection->determineType(m_eType);
-        switch ( eType )
-        {
-        case ::dbaccess::DST_FIREBIRD:
-            {
-                OUString sFilterName(DBA_RES (STR_FIREBIRD_FILTERNAME));
-                ::sfx2::FileDialogHelper aFileDlg(
-                    ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION,
-                    FileDialogFlags::NONE, GetFrameWeld());
-                aFileDlg.AddFilter(sFilterName,u"*.fdb"_ustr);
-                aFileDlg.SetCurrentFilter(sFilterName);
-                askForFileName(aFileDlg);
-                break;
-            }
-            default:
-                break;
-        }
 
         checkTestConnection();
     }

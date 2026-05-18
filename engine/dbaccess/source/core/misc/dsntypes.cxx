@@ -181,7 +181,6 @@ OUString ODsnTypeCollection::getDatasourcePrefixFromMediaType(std::u16string_vie
 bool ODsnTypeCollection::isShowPropertiesEnabled( const OUString& _sURL )
 {
     return !(   _sURL.startsWithIgnoreAsciiCase("sdbc:embedded:hsqldb")
-            ||  _sURL.startsWithIgnoreAsciiCase("sdbc:embedded:firebird")
             ||  _sURL.startsWithIgnoreAsciiCase("sdbc:address:outlook")
             ||  _sURL.startsWithIgnoreAsciiCase("sdbc:address:outlookexp")
             ||  _sURL.startsWithIgnoreAsciiCase("sdbc:address:mozilla:")
@@ -281,10 +280,7 @@ bool ODsnTypeCollection::isEmbeddedDatabase( std::u16string_view _sURL )
 
 OUString ODsnTypeCollection::getEmbeddedDatabase()
 {
-    if (!HAVE_FEATURE_JAVA || officecfg::Office::Common::Misc::ExperimentalMode::get())
-        return u"sdbc:embedded:firebird"_ustr;
-    else
-        return u"sdbc:embedded:hsqldb"_ustr;
+    return u"sdbc:embedded:hsqldb"_ustr;
 }
 
 
@@ -312,9 +308,6 @@ DATASOURCE_TYPE ODsnTypeCollection::determineType(std::u16string_view _rDsn) con
 
     if (sDsn.equalsIgnoreAsciiCase("sdbc:embedded:hsqldb"))
         return DST_EMBEDDED_HSQLDB;
-
-    if (sDsn.equalsIgnoreAsciiCase("sdbc:embedded:firebird"))
-        return DST_EMBEDDED_FIREBIRD;
 
     if (sDsn.startsWithIgnoreAsciiCase("sdbc:embedded:"))
         return DST_EMBEDDED_UNKNOWN;
@@ -369,7 +362,6 @@ DATASOURCE_TYPE ODsnTypeCollection::determineType(std::u16string_view _rDsn) con
         KnownPrefix( u"sdbc:flat:"_ustr,          DST_FLAT,               false ),
         KnownPrefix( u"sdbc:odbc:"_ustr,          DST_ODBC,               false ),
         KnownPrefix( u"sdbc:dbase:"_ustr,         DST_DBASE,              false ),
-        KnownPrefix( u"sdbc:firebird:"_ustr,      DST_FIREBIRD,           false ),
         KnownPrefix( u"sdbc:mysql:odbc:"_ustr,    DST_MYSQL_ODBC,         false ),
         KnownPrefix( u"sdbc:mysql:jdbc:"_ustr,    DST_MYSQL_JDBC,         false ),
         KnownPrefix( u"sdbc:mysql:mysqlc:"_ustr,  DST_MYSQL_NATIVE,       false ),
@@ -457,7 +449,6 @@ void ODsnTypeCollection::fillPageIds(std::u16string_view _sURL,std::vector<sal_I
         case DST_KAB:
         case DST_MACAB:
         case DST_EMBEDDED_HSQLDB:
-        case DST_EMBEDDED_FIREBIRD:
         case DST_EMBEDDED_UNKNOWN:
             break;
         default:

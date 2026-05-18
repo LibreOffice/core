@@ -153,11 +153,6 @@ namespace dbaui
                 if (m_xEmbeddedDBType->find_text(sDisplayName) == -1 &&
                     dbaccess::ODsnTypeCollection::isEmbeddedDatabase(sURLPrefix))
                 {
-#if !HAVE_FEATURE_MACOSX_SANDBOX
-                    if( !officecfg::Office::Common::Misc::ExperimentalMode::get()
-                        && sURLPrefix.startsWith("sdbc:embedded:firebird") )
-                        continue;
-#endif
                     aDisplayedTypes.emplace_back( sURLPrefix, sDisplayName );
                     m_bIsDisplayedTypesEmpty = false;
                 }
@@ -311,8 +306,7 @@ namespace dbaui
                 _inout_rDisplayName.clear();
         }
 
-        if ( eType ==  ::dbaccess::DST_EMBEDDED_HSQLDB
-                || eType ==  ::dbaccess::DST_EMBEDDED_FIREBIRD )
+        if ( eType ==  ::dbaccess::DST_EMBEDDED_HSQLDB )
             _inout_rDisplayName.clear();
 
         return _inout_rDisplayName.getLength() > 0;
@@ -549,7 +543,7 @@ namespace dbaui
         // Sets the default selected database on startup.
         if (m_xRB_CreateDatabase->get_active() )
         {
-            return m_pCollection->getTypeDisplayName( u"sdbc:firebird:" );
+            return m_pCollection->getTypeDisplayName( u"jdbc:" );
         }
 
         return OGeneralPage::getDatasourceName( _rSet );

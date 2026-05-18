@@ -502,8 +502,6 @@ merge dbaccess::IPropertyContainer with dbaccess::OColumn
 merge dbaccess::IRefreshListener with dbaccess::OConnection
 merge dbaccess::OColumnWrapper with dbaccess::OTableColumnDescriptorWrapper
 merge dbaccess::OComponentDefinition_Impl with dbaccess::OCommandDefinition_Impl
-merge dbahsql::AlterStmtParser with dbahsql::FbAlterStmtParser
-merge dbahsql::CreateStmtParser with dbahsql::FbCreateStmtParser
 merge dbaui::IController with dbaui::OGenericUnoController
 merge dbaui::IEntryFilter with dbaui::(anonymous namespace)::FilterByEntryDataId
 merge dbaui::IUpdateHelper with dbaui::OParameterUpdateHelper

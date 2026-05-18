@@ -11638,13 +11638,6 @@ dbaccess::OAuthenticationContinuation::setRememberPassword(com::sun::star::ucb::
 dbaccess::OAuthenticationContinuation::setUserName(rtl::OUString const&)
 dbaccess::ODsnTypeCollection::TypeIterator::TypeIterator(dbaccess::ODsnTypeCollection::TypeIterator const&)
 dbaccess::ResourceManager::loadString(TranslateId, char const*, std::basic_string_view<char16_t, std::char_traits<char16_t> >, char const*, std::basic_string_view<char16_t, std::char_traits<char16_t> >)
-dbahsql::CreateStmtParser::parseColumnPart(std::basic_string_view<char16_t, std::char_traits<char16_t> >)
-dbahsql::CreateStmtParser::parsePrimaryKeys(std::basic_string_view<char16_t, std::char_traits<char16_t> >)
-dbahsql::FbCreateStmtParser::appendPrimaryKeyPart(rtl::OUStringBuffer&) const
-dbahsql::FbCreateStmtParser::ensureProperTableLengths() const
-dbahsql::HsqlImporter::insertRow(std::__debug::vector<com::sun::star::uno::Any, std::allocator<com::sun::star::uno::Any> > const&, std::basic_string_view<char16_t, std::char_traits<char16_t> >, std::__debug::vector<dbahsql::ColumnDefinition, std::allocator<dbahsql::ColumnDefinition> > const&)
-dbahsql::HsqlImporter::parseTableRows(std::__debug::vector<int, std::allocator<int> > const&, std::__debug::vector<dbahsql::ColumnDefinition, std::allocator<dbahsql::ColumnDefinition> > const&, rtl::OUString const&)
-dbahsql::HsqlImporter::processTree(dbahsql::HsqlBinaryNode&, dbahsql::HsqlRowInputStream&, std::__debug::vector<dbahsql::ColumnDefinition, std::allocator<dbahsql::ColumnDefinition> > const&, rtl::OUString const&, int)
 dbaui::DBSubComponentController::appendError(rtl::OUString const&)
 dbaui::DBSubComponentController::attachModel(com::sun::star::uno::Reference<com::sun::star::frame::XModel> const&)
 dbaui::DBSubComponentController::clearError()

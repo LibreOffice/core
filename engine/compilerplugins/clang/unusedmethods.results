@@ -134,10 +134,6 @@ cui/source/inc/GraphicsTestsDialog.hxx:48
     void GraphicsTestsDialog::LinkStubHandleResultViewRequest(void *,weld::Button &)
 cui/source/inc/SvxNotebookbarConfigPage.hxx:40
     void SvxNotebookbarConfigPage::SetElement()
-dbaccess/source/filter/hsqldb/fbalterparser.hxx:19
-    void dbahsql::FbAlterStmtParser::ensureProperTableLengths() const
-dbaccess/source/filter/hsqldb/parseschema.hxx:80
-    const std::map<rtl::OUString, std::vector<rtl::OUString> > & dbahsql::SchemaParser::getPrimaryKeys() const
 dbaccess/source/ui/inc/dsmeta.hxx:87
     __gnu_debug::_Safe_iterator<struct std::_Rb_tree_const_iterator<int>, std::set<int> > dbaui::FeatureSet::begin() const
 dbaccess/source/ui/inc/dsmeta.hxx:88
