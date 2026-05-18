@@ -1812,7 +1812,7 @@ bool ClientRequestDispatcher::handleClipboardRequest(const Poco::Net::HTTPReques
                   << "] on request to URL: " << request.getURI());
 
         // we got the wrong request.
-        HttpHelper::sendErrorAndShutdown(http::StatusCode::BadRequest, socket, "wrong server");
+        HttpHelper::sendErrorAndShutdown(http::StatusCode::BadRequest, socket, "wrong server, this is likely an issue with your reverse proxy configuration, See https://sdk.collaboraonline.com/docs/installation/Proxy_settings.html");
         return true;
     }
 
