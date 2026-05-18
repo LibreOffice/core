@@ -19,6 +19,9 @@ describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Interact with bottom toolba
 		cy.getFrameWindow().then(function(win) {
 			this.win = win;
 		});
+
+		// Wait for the cell state to fully switch
+		cy.cGet('#toolbar-down .unoBold').should('not.have.attr', 'disabled');
 	});
 
 	function getTextEndPosForFirstCell() {
