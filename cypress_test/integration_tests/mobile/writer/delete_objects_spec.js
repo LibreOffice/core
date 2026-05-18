@@ -56,6 +56,11 @@ describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Delete Objects', function()
 		cy.cGet('.inserttablecontrols button').should('be.visible').click();
 		// Table is inserted with the markers shown
 		cy.cGet('.table-column-resize-marker').should('exist');
+		// The .table-column-resize-marker can render before the table is
+		// fully in the document model, so the immediate ctrl+a may select
+		// nothing and the copy ends in "fallback copy fail". Drain core
+		// first so the document model is settled.
+		helper.processToIdle(this.win);
 		helper.typeIntoDocument('{ctrl}a');
 		helper.copy();
 		// Two rows
