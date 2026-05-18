@@ -14,11 +14,18 @@ Setup
 
   Fedora:
     dnf install weston at-spi2-core python3-pyatspi \
-        python3-gobject python3-lxml python3-numpy
+        python3-gobject python3-lxml python3-numpy \
+        qt6-qtwayland
+
+  openSUSE:
+    zypper in weston at-spi2-core python3-atspi \
+        python3-gobject python3-lxml python3-numpy \
+        qt6-wayland
 
   Ubuntu/Debian:
     apt install weston at-spi2-core python3-pyatspi \
-        python3-gi python3-lxml python3-numpy
+        python3-gi python3-lxml python3-numpy \
+        qt6-wayland
 
 2. Clone and set up selenium-webdriver-at-spi somewhere you prefer:
 
@@ -47,6 +54,19 @@ Build and run the tests:
     make check-qtapp
 
 `make check-qtapp` installs npm dependencies automatically on first run.
+
+Troubleshooting
+---------------
+
+The tests run headless inside a nested Weston compositor, so the coda-qt
+window is normally invisible.  If eg. coda-qt crashes right after
+the test starts and you cannot tell why, set `CODA_QT_TEST_GUI=1`:
+
+    CODA_QT_TEST_GUI=1 make check-qtapp
+
+This opens the Weston window on your desktop so you can watch the test run
+interactively, or even launch coda-qt by hand inside that window to
+reproduce the crash without the harness.
 
 Environment variables
 ---------------------

@@ -1757,9 +1757,7 @@ AS_IF([test "$ENABLE_WINDOWSAPP" != "true"],
 dnl config for qtapp frontend for cool
 AS_IF([test "$ENABLE_QTAPP" = true],
       [
-       PKG_CHECK_MODULES([QT6],
-             [Qt6Core Qt6Widgets Qt6Gui Qt6WebEngineCore Qt6WebChannel Qt6WebEngineWidgets Qt6DBus Qt6PrintSupport],,
-             [AC_MSG_ERROR([Qt6 not found. Set QT6_CFLAGS and QT6_LIBS if your distro lacks .pc files.])])
+       PKG_CHECK_MODULES([QT6], [Qt6Core Qt6Widgets Qt6Gui Qt6WebEngineCore Qt6WebChannel Qt6WebEngineWidgets Qt6DBus Qt6PrintSupport])
 
        dnl Locate qtpaths6 for Qt6 tool discovery
        AC_PATH_PROG([QTPATHS6], [qtpaths6], [no],
@@ -1786,7 +1784,7 @@ AS_IF([test "$ENABLE_QTAPP" = true],
              AC_MSG_RESULT([$LRELEASE])
        else
              AC_MSG_RESULT([no])
-             AC_MSG_ERROR([lrelease not found in $QT_BIN_DIR])
+             AC_MSG_ERROR([lrelease not found in $QT_BIN_DIR, please install qt6-tools-linguist or so.])
        fi
        AC_SUBST(LRELEASE)
 
