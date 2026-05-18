@@ -62,9 +62,9 @@ OUString SAL_CALL SimpleTextFormatter::format(const LogRecord& _rRecord)
     OUString aLogEntry;
     // Highlight warnings
     if (_rRecord.Level == css::logging::LogLevel::SEVERE)
-        aLogEntry = "ERROR: ";
+        aLogEntry = u"ERROR: "_ustr;
     else if (_rRecord.Level == css::logging::LogLevel::WARNING)
-        aLogEntry = "WARNING: ";
+        aLogEntry = u"WARNING: "_ustr;
 
     return aLogEntry + _rRecord.Message + "\n";
 }

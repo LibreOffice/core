@@ -103,21 +103,21 @@ bool OwnView_Impl::CreateModelFromURL( const OUString& aFileURL )
             uno::Sequence< beans::PropertyValue > aArgs( m_aFilterName.isEmpty() ? 4 : 5 );
             auto pArgs = aArgs.getArray();
 
-            pArgs[0].Name = "URL";
+            pArgs[0].Name = u"URL"_ustr;
             pArgs[0].Value <<= aFileURL;
 
-            pArgs[1].Name = "ReadOnly";
+            pArgs[1].Name = u"ReadOnly"_ustr;
             pArgs[1].Value <<= true;
 
-            pArgs[2].Name = "InteractionHandler";
+            pArgs[2].Name = u"InteractionHandler"_ustr;
             pArgs[2].Value <<= uno::Reference< task::XInteractionHandler >( new DummyHandler_Impl() );
 
-            pArgs[3].Name = "DontEdit";
+            pArgs[3].Name = u"DontEdit"_ustr;
             pArgs[3].Value <<= true;
 
             if ( !m_aFilterName.isEmpty() )
             {
-                pArgs[4].Name = "FilterName";
+                pArgs[4].Name = u"FilterName"_ustr;
                 pArgs[4].Value <<= m_aFilterName;
             }
 
@@ -192,13 +192,13 @@ OUString OwnView_Impl::GetFilterNameFromExtentionAndInStream(
 
     uno::Sequence< beans::PropertyValue > aArgs( aTypeName.isEmpty() ? 2 : 3 );
     auto pArgs = aArgs.getArray();
-    pArgs[0].Name = "URL";
+    pArgs[0].Name = u"URL"_ustr;
     pArgs[0].Value <<= u"private:stream"_ustr;
-    pArgs[1].Name = "InputStream";
+    pArgs[1].Name = u"InputStream"_ustr;
     pArgs[1].Value <<= xInputStream;
     if ( !aTypeName.isEmpty() )
     {
-        pArgs[2].Name = "TypeName";
+        pArgs[2].Name = u"TypeName"_ustr;
         pArgs[2].Value <<= aTypeName;
     }
 

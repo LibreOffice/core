@@ -175,7 +175,7 @@ void Sane::Init()
     pSaneLib = osl_loadModule( sSaneLibName.pData, SAL_LOADMODULE_LAZY );
     if( ! pSaneLib )
     {
-        sSaneLibName = "libsane" SAL_DLLEXTENSION ".1";
+        sSaneLibName = u"libsane"_ustr SAL_DLLEXTENSION ".1";
         pSaneLib = osl_loadModule( sSaneLibName.pData, SAL_LOADMODULE_LAZY );
     }
     // try reasonable places that might not be in the library search path
@@ -982,7 +982,7 @@ OUString Sane::GetOptionUnitName( int n )
     SANE_Unit nUnit = mppOptions[n]->unit;
     size_t nUnitAsSize = static_cast<size_t>(nUnit);
     if (nUnitAsSize >= std::size( ppUnits ))
-        aText = "[unknown units]";
+        aText = u"[unknown units]"_ustr;
     else
         aText = OUString( ppUnits[ nUnit ], strlen(ppUnits[ nUnit ]), osl_getThreadTextEncoding() );
     return aText;

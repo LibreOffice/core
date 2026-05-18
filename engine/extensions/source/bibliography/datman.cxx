@@ -598,14 +598,14 @@ void BibDataManager::InsertFields(const Reference< XFormComponent > & _rxGrid)
             {
                 case DataType::BIT:
                 case DataType::BOOLEAN:
-                    sCurrentModelType = "CheckBox";
+                    sCurrentModelType = u"CheckBox"_ustr;
                     break;
 
                 case DataType::BINARY:
                 case DataType::VARBINARY:
                 case DataType::LONGVARBINARY:
                 case DataType::BLOB:
-                    sCurrentModelType = "TextField";
+                    sCurrentModelType = u"TextField"_ustr;
                     break;
 
                 case DataType::VARCHAR:
@@ -615,7 +615,7 @@ void BibDataManager::InsertFields(const Reference< XFormComponent > & _rxGrid)
                     bFormattedIsNumeric = false;
                     [[fallthrough]];
                 default:
-                    sCurrentModelType = "FormattedField";
+                    sCurrentModelType = u"FormattedField"_ustr;
                     bIsFormatted = true;
                     break;
             }
@@ -926,7 +926,7 @@ void BibDataManager::setActiveDataSource(const OUString& rURL)
 
     if(pToolbar)
     {
-        aURL.Complete =".uno:Bib/source";
+        aURL.Complete =u".uno:Bib/source"_ustr;
         aEvent.FeatureURL = std::move(aURL);
         pToolbar->statusChanged( aEvent );
     }
@@ -1136,33 +1136,33 @@ OUString BibDataManager::getControlName(sal_Int32 nFormatKey )
     {
         case DataType::BIT:
         case DataType::BOOLEAN:
-            aResStr="CheckBox";
+            aResStr=u"CheckBox"_ustr;
             break;
         case DataType::TINYINT:
         case DataType::SMALLINT:
         case DataType::INTEGER:
-            aResStr="NumericField";
+            aResStr=u"NumericField"_ustr;
             break;
         case DataType::REAL:
         case DataType::DOUBLE:
         case DataType::NUMERIC:
         case DataType::DECIMAL:
-            aResStr="FormattedField";
+            aResStr=u"FormattedField"_ustr;
             break;
         case DataType::TIMESTAMP:
-            aResStr="FormattedField";
+            aResStr=u"FormattedField"_ustr;
             break;
         case DataType::DATE:
-            aResStr="DateField";
+            aResStr=u"DateField"_ustr;
             break;
         case DataType::TIME:
-            aResStr="TimeField";
+            aResStr=u"TimeField"_ustr;
             break;
         case DataType::CHAR:
         case DataType::VARCHAR:
         case DataType::LONGVARCHAR:
         default:
-            aResStr="TextField";
+            aResStr=u"TextField"_ustr;
             break;
     }
     return aResStr;

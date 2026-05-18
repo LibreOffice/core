@@ -795,68 +795,68 @@ uno::Sequence< OUString > SAL_CALL SvxUnoTextField::getSupportedServiceNames()
 {
     uno::Sequence<OUString> aSeq(4);
     OUString* pServices = aSeq.getArray();
-    pServices[0] = "com.sun.star.text.TextContent";
-    pServices[1] = "com.sun.star.text.TextField";
+    pServices[0] = u"com.sun.star.text.TextContent"_ustr;
+    pServices[1] = u"com.sun.star.text.TextField"_ustr;
 
     switch (mnServiceId)
     {
         case text::textfield::Type::DATE:
         case text::textfield::Type::TIME:
         case text::textfield::Type::EXTENDED_TIME:
-            pServices[2] = "com.sun.star.text.TextField.DateTime";
-            pServices[3] = "com.sun.star.text.textfield.DateTime";
+            pServices[2] = u"com.sun.star.text.TextField.DateTime"_ustr;
+            pServices[3] = u"com.sun.star.text.textfield.DateTime"_ustr;
         break;
         case text::textfield::Type::URL:
-            pServices[2] = "com.sun.star.text.TextField.URL";
-            pServices[3] = "com.sun.star.text.textfield.URL";
+            pServices[2] = u"com.sun.star.text.TextField.URL"_ustr;
+            pServices[3] = u"com.sun.star.text.textfield.URL"_ustr;
         break;
         case text::textfield::Type::PAGE:
-            pServices[2] = "com.sun.star.text.TextField.PageNumber";
-            pServices[3] = "com.sun.star.text.textfield.PageNumber";
+            pServices[2] = u"com.sun.star.text.TextField.PageNumber"_ustr;
+            pServices[3] = u"com.sun.star.text.textfield.PageNumber"_ustr;
         break;
         case text::textfield::Type::PAGES:
-            pServices[2] = "com.sun.star.text.TextField.PageCount";
-            pServices[3] = "com.sun.star.text.textfield.PageCount";
+            pServices[2] = u"com.sun.star.text.TextField.PageCount"_ustr;
+            pServices[3] = u"com.sun.star.text.textfield.PageCount"_ustr;
         break;
         case text::textfield::Type::DOCINFO_TITLE:
-            pServices[2] = "com.sun.star.text.TextField.docinfo.Title";
-            pServices[3] = "com.sun.star.text.textfield.docinfo.Title";
+            pServices[2] = u"com.sun.star.text.TextField.docinfo.Title"_ustr;
+            pServices[3] = u"com.sun.star.text.textfield.docinfo.Title"_ustr;
         break;
         case text::textfield::Type::TABLE:
-            pServices[2] = "com.sun.star.text.TextField.SheetName";
-            pServices[3] = "com.sun.star.text.textfield.SheetName";
+            pServices[2] = u"com.sun.star.text.TextField.SheetName"_ustr;
+            pServices[3] = u"com.sun.star.text.textfield.SheetName"_ustr;
         break;
         case text::textfield::Type::EXTENDED_FILE:
-            pServices[2] = "com.sun.star.text.TextField.FileName";
-            pServices[3] = "com.sun.star.text.textfield.FileName";
+            pServices[2] = u"com.sun.star.text.TextField.FileName"_ustr;
+            pServices[3] = u"com.sun.star.text.textfield.FileName"_ustr;
         break;
         case text::textfield::Type::AUTHOR:
-            pServices[2] = "com.sun.star.text.TextField.Author";
-            pServices[3] = "com.sun.star.text.textfield.Author";
+            pServices[2] = u"com.sun.star.text.TextField.Author"_ustr;
+            pServices[3] = u"com.sun.star.text.textfield.Author"_ustr;
         break;
         case text::textfield::Type::MEASURE:
-            pServices[2] = "com.sun.star.text.TextField.Measure";
-            pServices[3] = "com.sun.star.text.textfield.Measure";
+            pServices[2] = u"com.sun.star.text.TextField.Measure"_ustr;
+            pServices[3] = u"com.sun.star.text.textfield.Measure"_ustr;
         break;
         case text::textfield::Type::PRESENTATION_HEADER:
-            pServices[2] = "com.sun.star.presentation.TextField.Header";
-            pServices[3] = "com.sun.star.presentation.textfield.Header";
+            pServices[2] = u"com.sun.star.presentation.TextField.Header"_ustr;
+            pServices[3] = u"com.sun.star.presentation.textfield.Header"_ustr;
         break;
         case text::textfield::Type::PRESENTATION_FOOTER:
-            pServices[2] = "com.sun.star.presentation.TextField.Footer";
-            pServices[3] = "com.sun.star.presentation.textfield.Footer";
+            pServices[2] = u"com.sun.star.presentation.TextField.Footer"_ustr;
+            pServices[3] = u"com.sun.star.presentation.textfield.Footer"_ustr;
         break;
         case text::textfield::Type::PRESENTATION_DATE_TIME:
-            pServices[2] = "com.sun.star.presentation.TextField.DateTime";
-            pServices[3] = "com.sun.star.presentation.textfield.DateTime";
+            pServices[2] = u"com.sun.star.presentation.TextField.DateTime"_ustr;
+            pServices[3] = u"com.sun.star.presentation.textfield.DateTime"_ustr;
         break;
         case text::textfield::Type::PAGE_NAME:
-            pServices[2] = "com.sun.star.text.TextField.PageName";
-            pServices[3] = "com.sun.star.text.textfield.PageName";
+            pServices[2] = u"com.sun.star.text.TextField.PageName"_ustr;
+            pServices[3] = u"com.sun.star.text.textfield.PageName"_ustr;
         break;
         case text::textfield::Type::DOCINFO_CUSTOM:
-            pServices[2] = "com.sun.star.text.TextField.DocInfo.Custom";
-            pServices[3] = "com.sun.star.text.textfield.DocInfo.Custom";
+            pServices[2] = u"com.sun.star.text.TextField.DocInfo.Custom"_ustr;
+            pServices[3] = u"com.sun.star.text.textfield.DocInfo.Custom"_ustr;
         break;
         default:
             aSeq.realloc(0);

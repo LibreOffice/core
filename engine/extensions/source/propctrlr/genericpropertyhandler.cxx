@@ -244,7 +244,7 @@ namespace pcr
     void UrlClickHandler::impl_dispatch_throw( const OUString& _rURL )
     {
         Reference< XURLTransformer > xTransformer( URLTransformer::create(m_xContext) );
-        URL aURL; aURL.Complete = ".uno:OpenHyperlink";
+        URL aURL; aURL.Complete = u".uno:OpenHyperlink"_ustr;
         xTransformer->parseStrict( aURL );
 
         Reference< XDesktop2 > xDispProv = Desktop::create( m_xContext );
@@ -573,7 +573,7 @@ namespace pcr
         if ( !aDescriptor.Control.is() )
             PropertyHandlerHelper::describePropertyLine( pos->second, aDescriptor, _rxControlFactory );
 
-        aDescriptor.Category = "General";
+        aDescriptor.Category = u"General"_ustr;
         return aDescriptor;
     }
 

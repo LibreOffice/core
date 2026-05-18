@@ -303,8 +303,8 @@ namespace pcr
             aDescriptor.PrimaryButtonId = UID_PROP_ADD_DATA_TYPE;
             aDescriptor.SecondaryButtonId = UID_PROP_REMOVE_DATA_TYPE;
             aDescriptor.HasPrimaryButton = aDescriptor.HasSecondaryButton = true;
-            aDescriptor.PrimaryButtonImageURL = "private:graphicrepository/extensions/res/buttonplus.png";
-            aDescriptor.SecondaryButtonImageURL = "private:graphicrepository/extensions/res/buttonminus.png";
+            aDescriptor.PrimaryButtonImageURL = u"private:graphicrepository/extensions/res/buttonplus.png"_ustr;
+            aDescriptor.SecondaryButtonImageURL = u"private:graphicrepository/extensions/res/buttonminus.png"_ustr;
             break;
 
         case PROPERTY_ID_XSD_WHITESPACES:
@@ -399,7 +399,7 @@ namespace pcr
             break;
         }
 
-        aDescriptor.Category = "Data";
+        aDescriptor.Category = u"Data"_ustr;
         aDescriptor.DisplayName = m_pInfoService->getPropertyTranslation( nPropId );
         aDescriptor.HelpURL = HelpIdUrl::getHelpURL( m_pInfoService->getPropertyHelpId( nPropId ) );
 

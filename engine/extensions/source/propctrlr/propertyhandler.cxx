@@ -199,9 +199,9 @@ namespace pcr
         aDescriptor.DisplayName = m_pInfoService->getPropertyTranslation( nPropId );
 
         if ( ( m_pInfoService->getPropertyUIFlags( nPropId ) & PROP_FLAG_DATA_PROPERTY ) != 0 )
-            aDescriptor.Category = "Data";
+            aDescriptor.Category = u"Data"_ustr;
         else
-            aDescriptor.Category = "General";
+            aDescriptor.Category = u"General"_ustr;
         return aDescriptor;
     }
 
@@ -370,28 +370,28 @@ namespace pcr
             OUString sConfigurationProperty;
             if ( xDocumentSI->supportsService( SERVICE_WEB_DOCUMENT ) )
             {   // writer
-                sConfigurationLocation = "/org.openoffice.Office.WriterWeb/Layout/Other";
-                sConfigurationProperty = "MeasureUnit";
+                sConfigurationLocation = u"/org.openoffice.Office.WriterWeb/Layout/Other"_ustr;
+                sConfigurationProperty = u"MeasureUnit"_ustr;
             }
             else if ( xDocumentSI->supportsService( SERVICE_TEXT_DOCUMENT ) )
             {   // writer
-                sConfigurationLocation = "/org.openoffice.Office.Writer/Layout/Other";
-                sConfigurationProperty = "MeasureUnit";
+                sConfigurationLocation = u"/org.openoffice.Office.Writer/Layout/Other"_ustr;
+                sConfigurationProperty = u"MeasureUnit"_ustr;
             }
             else if ( xDocumentSI->supportsService( SERVICE_SPREADSHEET_DOCUMENT ) )
             {   // calc
-                sConfigurationLocation = "/org.openoffice.Office.Calc/Layout/Other/MeasureUnit";
-                sConfigurationProperty = "Metric";
+                sConfigurationLocation = u"/org.openoffice.Office.Calc/Layout/Other/MeasureUnit"_ustr;
+                sConfigurationProperty = u"Metric"_ustr;
             }
             else if ( xDocumentSI->supportsService( SERVICE_DRAWING_DOCUMENT ) )
             {
-                sConfigurationLocation = "/org.openoffice.Office.Draw/Layout/Other/MeasureUnit";
-                sConfigurationProperty = "Metric";
+                sConfigurationLocation = u"/org.openoffice.Office.Draw/Layout/Other/MeasureUnit"_ustr;
+                sConfigurationProperty = u"Metric"_ustr;
             }
             else if ( xDocumentSI->supportsService( SERVICE_PRESENTATION_DOCUMENT ) )
             {
-                sConfigurationLocation = "/org.openoffice.Office.Impress/Layout/Other/MeasureUnit";
-                sConfigurationProperty = "Metric";
+                sConfigurationLocation = u"/org.openoffice.Office.Impress/Layout/Other/MeasureUnit"_ustr;
+                sConfigurationProperty = u"Metric"_ustr;
             }
 
             // read the measurement unit from the configuration

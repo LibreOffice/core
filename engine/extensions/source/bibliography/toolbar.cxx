@@ -287,7 +287,7 @@ void BibToolBar::InitListener()
         return;
 
     util::URL aQueryURL;
-    aQueryURL.Complete = ".uno:Bib/MenuFilter";
+    aQueryURL.Complete = u".uno:Bib/MenuFilter"_ustr;
     xTrans->parseStrict( aQueryURL);
     rtl::Reference<BibToolBarListener> pQuery=new BibTBQueryMenuListener(this, aQueryURL.Complete, nTBC_BT_AUTOFILTER);
     xDisp->addStatusListener(pQuery, aQueryURL);

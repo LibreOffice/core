@@ -109,7 +109,7 @@ namespace pcr
     {
         Sequence< OUString > aSupported( m_aSupportedServiceNames );
         aSupported.realloc( aSupported.getLength() + 1 );
-        aSupported.getArray()[ aSupported.getLength() - 1 ] = "com.sun.star.inspection.ObjectInspector";
+        aSupported.getArray()[ aSupported.getLength() - 1 ] = u"com.sun.star.inspection.ObjectInspector"_ustr;
         return aSupported;
     }
 

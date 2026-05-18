@@ -63,7 +63,7 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
     {
         // use system fallback
         // TODO: in future users factories can be tested
-        aEmbedFactory = "com.sun.star.embed.OLEEmbeddedObjectFactory";
+        aEmbedFactory = u"com.sun.star.embed.OLEEmbeddedObjectFactory"_ustr;
     }
 
     uno::Reference < uno::XInterface > xFact( m_xContext->getServiceManager()->createInstanceWithContext(aEmbedFactory, m_xContext) );
@@ -141,7 +141,7 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
             uno::Any aAny = xPropSet->getPropertyValue(u"MediaType"_ustr);
             aAny >>= aMediaType;
             if ( aMediaType == "application/vnd.sun.star.oleobject" )
-                aEmbedFactory = "com.sun.star.embed.OLEEmbeddedObjectFactory";
+                aEmbedFactory = u"com.sun.star.embed.OLEEmbeddedObjectFactory"_ustr;
         }
         catch ( const uno::Exception& )
         {

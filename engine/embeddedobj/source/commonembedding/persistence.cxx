@@ -111,7 +111,7 @@ static uno::Sequence< beans::PropertyValue > addAsTemplate( const uno::Sequence<
     {
         aResult.realloc( nLength + 1 );
         auto pResult = aResult.getArray();
-        pResult[nLength].Name = "AsTemplate";
+        pResult[nLength].Name = u"AsTemplate"_ustr;
         pResult[nLength].Value <<= true;
     }
 
@@ -414,15 +414,15 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::LoadLink_Impl()
         return nullptr;
     }
 
-    pArgs[0].Name = "URL";
+    pArgs[0].Name = u"URL"_ustr;
     pArgs[0].Value <<= sURL;
 
-    pArgs[1].Name = "FilterName";
+    pArgs[1].Name = u"FilterName"_ustr;
     pArgs[1].Value <<= m_aLinkFilterName;
 
     if ( m_bLinkHasPassword )
     {
-        pArgs[2].Name = "Password";
+        pArgs[2].Name = u"Password"_ustr;
         pArgs[2].Value <<= m_aLinkPassword;
     }
 

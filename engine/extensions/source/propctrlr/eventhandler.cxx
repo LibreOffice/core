@@ -241,7 +241,7 @@ namespace pcr
                     sLocation;
 
                 // also, this new-style spec requires the script code to be "Script" instead of "StarBasic"
-                aScriptEvent.ScriptType = "Script";
+                aScriptEvent.ScriptType = u"Script"_ustr;
             }
             return aScriptEvent;
         }
@@ -732,7 +732,7 @@ namespace pcr
         aDescriptor.HelpURL = HelpIdUrl::getHelpURL( rEvent.sHelpId );
         aDescriptor.PrimaryButtonId = OStringToOUString(rEvent.sUniqueBrowseId, RTL_TEXTENCODING_UTF8);
         aDescriptor.HasPrimaryButton = true;
-        aDescriptor.Category = "Events";
+        aDescriptor.Category = u"Events"_ustr;
         return aDescriptor;
     }
 

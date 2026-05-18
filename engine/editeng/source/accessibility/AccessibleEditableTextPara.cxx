@@ -699,25 +699,25 @@ OUString GetFieldTypeNameFromField(EFieldInfo const &ree)
             if (pDateField)
             {
                 if (pDateField->GetType() == SvxDateType::Fix)
-                    strFldType = "date (fixed)";
+                    strFldType = u"date (fixed)"_ustr;
                 else if (pDateField->GetType() == SvxDateType::Var)
-                    strFldType = "date (variable)";
+                    strFldType = u"date (variable)"_ustr;
             }
             break;
         }
         case text::textfield::Type::PAGE:
-            strFldType = "page-number";
+            strFldType = u"page-number"_ustr;
             break;
         //support the sheet name & pages fields
         case text::textfield::Type::PAGES:
-            strFldType = "page-count";
+            strFldType = u"page-count"_ustr;
             break;
         case text::textfield::Type::TABLE:
-            strFldType = "sheet-name";
+            strFldType = u"sheet-name"_ustr;
             break;
         //End
         case text::textfield::Type::TIME:
-            strFldType = "time";
+            strFldType = u"time"_ustr;
             break;
         case text::textfield::Type::EXTENDED_TIME:
         {
@@ -725,21 +725,21 @@ OUString GetFieldTypeNameFromField(EFieldInfo const &ree)
             if (pTimeField)
             {
                 if (pTimeField->GetType() == SvxTimeType::Fix)
-                    strFldType = "time (fixed)";
+                    strFldType = u"time (fixed)"_ustr;
                 else if (pTimeField->GetType() == SvxTimeType::Var)
-                    strFldType = "time (variable)";
+                    strFldType = u"time (variable)"_ustr;
             }
             break;
         }
         case text::textfield::Type::AUTHOR:
-            strFldType = "author";
+            strFldType = u"author"_ustr;
             break;
         case text::textfield::Type::EXTENDED_FILE:
         case text::textfield::Type::DOCINFO_TITLE:
-            strFldType = "file name";
+            strFldType = u"file name"_ustr;
             break;
         case text::textfield::Type::DOCINFO_CUSTOM:
-            strFldType = "custom document property";
+            strFldType = u"custom document property"_ustr;
             break;
         default:
             break;
@@ -977,7 +977,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL AccessibleEditableTextPara::getCh
         sal_Int32 nRes = aRes.getLength();
         aRes.realloc( nRes + 1 );
         beans::PropertyValue &rRes = aRes.getArray()[nRes];
-        rRes.Name = "NumberingPrefix";
+        rRes.Name = u"NumberingPrefix"_ustr;
         OUString numStr;
         if (aBulletInfo.nType != SVX_NUM_CHAR_SPECIAL && aBulletInfo.nType != SVX_NUM_BITMAP)
             numStr = aBulletInfo.aText;
@@ -991,7 +991,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL AccessibleEditableTextPara::getCh
             nRes = aRes.getLength();
             aRes.realloc( nRes + 1 );
             beans::PropertyValue &rResField = aRes.getArray()[nRes];
-            rResField.Name = "FieldType";
+            rResField.Name = u"FieldType"_ustr;
             rResField.Value <<= strFieldType.toAsciiLowerCase();
             rResField.Handle = -1;
             rResField.State = PropertyState_DIRECT_VALUE;

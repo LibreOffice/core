@@ -439,13 +439,13 @@ bool DocumentHolder::ShowInplace( const uno::Reference< awt::XWindowPeer >& xPar
         auto pArgs = aArgs.getArray();
         beans::NamedValue aArg;
 
-        aArg.Name    = "ContainerWindow";
+        aArg.Name    = u"ContainerWindow"_ustr;
         aArg.Value <<= xOwnWindow;
         pArgs[0] <<= aArg;
 
         if ( xContFrame.is() )
         {
-            aArg.Name    = "ParentFrame";
+            aArg.Name    = u"ParentFrame"_ustr;
             aArg.Value <<= xContFrame;
             pArgs[1] <<= aArg;
         }
@@ -971,13 +971,13 @@ bool DocumentHolder::LoadDocToFrame( bool bInPlace )
         if (    xServiceInfo.is()
             &&  xServiceInfo->supportsService(u"com.sun.star.report.ReportDefinition"_ustr) )
         {
-            sUrl = ".component:DB/ReportDesign";
+            sUrl = u".component:DB/ReportDesign"_ustr;
         }
         else if( xServiceInfo.is()
             &&   xServiceInfo->supportsService(u"com.sun.star.chart2.ChartDocument"_ustr))
-            sUrl = "private:factory/schart";
+            sUrl = u"private:factory/schart"_ustr;
         else
-            sUrl = "private:object";
+            sUrl = u"private:object"_ustr;
 
         xComponentLoader->loadComponentFromURL( sUrl,
                                                     u"_self"_ustr,

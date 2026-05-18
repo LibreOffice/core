@@ -718,7 +718,7 @@ sal_Int32 SvxAutoCorrect::FnAddNonBrkSpace(
         OUString allChars = u":;?!%"_ustr;
         OUString chars( allChars );
         if ( bFrCA )
-            chars = ":";
+            chars = u":"_ustr;
 
         sal_Unicode cChar = rTxt[ nEndPos ];
         bool bHasSpace = chars.indexOf( cChar ) != -1;

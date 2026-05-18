@@ -304,7 +304,7 @@ UpdateInformationProvider::UpdateInformationProvider(
         css::configuration::theDefaultProvider::get(m_xContext));
 
     auto pRequestHeaderList = m_aRequestHeaderList.getArray();
-    pRequestHeaderList[0].First = "Accept-Language";
+    pRequestHeaderList[0].First = u"Accept-Language"_ustr;
     pRequestHeaderList[0].Second = getConfigurationItem( xConfigurationProvider, u"org.openoffice.Setup/L10N"_ustr, u"ooLocale"_ustr );
 }
 
@@ -390,7 +390,7 @@ uno::Sequence< beans::StringPair > SAL_CALL UpdateInformationProvider::getUserRe
     else
     {
         auto pPair = aPair.getArray();
-        pPair[1].First = "User-Agent";
+        pPair[1].First = u"User-Agent"_ustr;
         pPair[1].Second = aUserAgent;
     }
 
@@ -405,7 +405,7 @@ uno::Any
 UpdateInformationProvider::getConfigurationItemAny(uno::Reference<lang::XMultiServiceFactory> const & configurationProvider, OUString const & node, OUString const & item)
 {
     beans::PropertyValue aProperty;
-    aProperty.Name  = "nodepath";
+    aProperty.Name  = u"nodepath"_ustr;
     aProperty.Value <<= node;
 
     uno::Sequence< uno::Any > aArgumentList{ uno::Any(aProperty) };
@@ -458,7 +458,7 @@ UpdateInformationProvider::load(const OUString& rURL)
     aOpenArgument.OpeningFlags = { { u"KeepAlive"_ustr, uno::Any(false) } };
 
     ucb::Command aCommand;
-    aCommand.Name = "open";
+    aCommand.Name = u"open"_ustr;
     aCommand.Argument <<= aOpenArgument;
 
     sal_Int32 nCommandId = xCommandProcessor->createCommandIdentifier();
@@ -579,7 +579,7 @@ UpdateInformationProvider::getUpdateInformationEnumeration(
                     if( !extensionId.isEmpty() )
                         aXPathExpression = "//atom:entry/atom:category[@term=\'" + extensionId + "\']/..";
                     else
-                        aXPathExpression = "//atom:entry";
+                        aXPathExpression = u"//atom:entry"_ustr;
 
                     uno::Reference< xml::dom::XNodeList > xNodeList;
                     try {
