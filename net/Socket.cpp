@@ -102,8 +102,8 @@ std::unique_ptr<Watchdog> SocketPoll::PollWatchdog;
 
 std::atomic<size_t> StreamSocket::ExternalConnectionCount = 0;
 
-net::DefaultValues net::Defaults = { .inactivityTimeout = std::chrono::seconds(3600),
-                                     .maxExtConnections = 200000 /* arbitrary value to be resolved */ };
+net::DefaultValues net::Defaults = { .inactivityTimeout = net::DefaultInactivityTimeout,
+                                     .maxExtConnections = net::DefaultMaxExtConnections };
 
 constexpr std::string_view Socket::toString(Type t)
 {

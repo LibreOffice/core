@@ -36,10 +36,15 @@ struct sockaddr;
 namespace net
 {
 
+/// Initial values for DefaultValues. Tests that mutate net::Defaults
+/// should reset to these rather than hard-code a literal.
+constexpr std::chrono::seconds DefaultInactivityTimeout = std::chrono::seconds(3600);
+constexpr size_t DefaultMaxExtConnections = 200000;
+
 class DefaultValues
 {
 public:
-    /// StreamSocket inactivity timeout in us (3600s default). Zero disables instrument.
+    /// StreamSocket inactivity timeout in us (DefaultInactivityTimeout default). Zero disables instrument.
     std::chrono::microseconds inactivityTimeout;
 
     /// Maximum number of concurrent external TCP connections. Zero disables instrument,

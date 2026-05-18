@@ -438,7 +438,7 @@ class UnitTimeoutInactivity : public UnitTimeoutBase0
         // Set every net::Defaults field this suite cares about: tests share global state,
         // so each test must establish the values it needs rather than inherit them.
         net::Defaults.inactivityTimeout = 360ms;
-        net::Defaults.maxExtConnections = 200000;
+        net::Defaults.maxExtConnections = net::DefaultMaxExtConnections;
     }
 
 public:
@@ -626,7 +626,7 @@ class UnitTimeoutConnections : public UnitTimeoutBase1
     {
         // Set every net::Defaults field this suite cares about: tests share global state,
         // so each test must establish the values it needs rather than inherit them.
-        net::Defaults.inactivityTimeout = 3600s;
+        net::Defaults.inactivityTimeout = net::DefaultInactivityTimeout;
         net::Defaults.maxExtConnections = connectionLimit();
     }
 
@@ -644,8 +644,8 @@ class UnitTimeoutNone : public UnitTimeoutBase1
     {
         // Set every net::Defaults field this suite cares about: tests share global state,
         // so each test must establish the values it needs rather than inherit them.
-        net::Defaults.inactivityTimeout = 3600s;
-        net::Defaults.maxExtConnections = 200000;
+        net::Defaults.inactivityTimeout = net::DefaultInactivityTimeout;
+        net::Defaults.maxExtConnections = net::DefaultMaxExtConnections;
     }
 
 public:
