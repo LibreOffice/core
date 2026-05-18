@@ -753,37 +753,37 @@ window.L.Control.NotebookbarCalc = window.L.Control.NotebookbarWriter.extend({
 				},
 				{ type: 'separator', id: 'home-wrap-merge-break', orientation: 'vertical' },
 				{
-				'type': 'container',
-				'children': [
-					{
-						'type': 'toolbox',
-						'children': [
-							{
-								'id': 'home-wrap-text',
-								'type': 'toolitem',
-								'text': _UNO('.uno:WrapText', 'spreadsheet'),
-								'command': '.uno:WrapText',
-								'accessibility': { focusBack: true,	combination: 'W', de: null }
-							}
-						]
-					},
-					{
-						'type': 'toolbox',
-						'children': [
-							{
-								'id': 'home-merge-cells',
-								'type': 'toolitem',
-								'text': _('Merge & Center'),
-								'command': '.uno:ToggleMergeCells',
-								'accessibility': { focusBack: true, combination: 'MC', de: null }
-							}
-						]
+					'type': 'container',
+					'children': [
+						{
+							'type': 'toolbox',
+							'children': [
+								{
+									'id': 'home-wrap-text',
+									'type': 'toolitem',
+									'text': _UNO('.uno:WrapText', 'spreadsheet'),
+									'command': '.uno:WrapText',
+									'accessibility': { focusBack: true,	combination: 'W', de: null }
+								}
+							]
+						},
+						{
+							'type': 'toolbox',
+							'children': [
+								{
+									'id': 'home-merge-cells',
+									'type': 'toolitem',
+									'text': _('Merge & Center'),
+									'command': '.uno:ToggleMergeCells',
+									'accessibility': { focusBack: true, combination: 'MC', de: null }
+								}
+							]
+						}
+					],
+					'vertical': 'true'
 					}
-				],
-				'vertical': 'true'
-				}
-			]
-		},
+				]
+			},
 			{ type: 'separator', id: 'home-pararighttoleft-break', orientation: 'vertical' },
 			{
 				'type': 'overflowgroup',
