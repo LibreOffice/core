@@ -87,7 +87,7 @@ describe(['tagdesktop'], 'Image Operation Tests', function() {
 
 		triggerNewSVGForShapeInTheCenter();
 
-		helper.assertImageSize(463, 185);
+		helper.assertImageSize(322, 129);
 
 		//Keep ratio checked
 		//sidebar needs more time
@@ -101,6 +101,6 @@ describe(['tagdesktop'], 'Image Operation Tests', function() {
 
 		triggerNewSVGForShapeInTheCenter();
 
-		helper.assertImageSize(579, 232);
+		helper.assertImageSize(402, 161);
 	});
 });
