@@ -1753,6 +1753,19 @@ sal_uInt64 ScCountIfCellIterator< accessType >::GetCount()
     {
         maParam.nCol1 = rDoc.ClampToAllocatedColumns(nTab, maParam.nCol1);
         maParam.nCol2 = rDoc.ClampToAllocatedColumns(nTab, maParam.nCol2);
+
+        // Also trim rows to the actual data area. Empty cells outside the
+        // data bounding box cannot match a non-empty criterion (which the
+        // mbMatchEmpty guard above already confirms), so the result is
+        // unchanged. Mirrors the trim that COUNTIFS already performs in
+        // ScInterpreter::IterateParametersIfs.
+        ScRange aRange(maParam.nCol1, maParam.nRow1, nTab,
+                       maParam.nCol2, maParam.nRow2, nTab);
+        if (rDoc.GetDataAreaSubrange(aRange))
+        {
+            maParam.nRow1 = aRange.aStart.Row();
+            maParam.nRow2 = aRange.aEnd.Row();
+        }
     }
     nCol = maParam.nCol1;
     InitPos();
