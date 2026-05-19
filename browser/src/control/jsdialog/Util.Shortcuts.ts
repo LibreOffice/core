@@ -17,9 +17,6 @@
  */
 
 declare var JSDialog: any;
-declare var unoShortcutsMap: any;
-declare var unoShortcutsL10N: any;
-declare var unoShortcutsModifierL10N: any;
 
 // Non-UNO IDs that share a shortcut with a UNO (or findbar protocol)
 // command.  Routing them through the locale-aware shortcut table keeps
@@ -46,7 +43,7 @@ class ShortcutsUtil {
 		// Load shortcuts generated from core's Accelerators.xcu.
 		if (typeof unoShortcutsMap !== 'undefined') {
 			for (const [command, shortcut] of Object.entries(unoShortcutsMap)) {
-				this.shortcutMap.set(command, shortcut as string);
+				this.shortcutMap.set(command, shortcut);
 			}
 		}
 
@@ -55,8 +52,7 @@ class ShortcutsUtil {
 		if (typeof unoShortcutsL10N !== 'undefined') {
 			for (const [lang, overrides] of Object.entries(unoShortcutsL10N)) {
 				if ((String as any).locale.startsWith(lang)) {
-					const o = overrides as Record<string, string>;
-					for (const [command, shortcut] of Object.entries(o)) {
+					for (const [command, shortcut] of Object.entries(overrides)) {
 						this.shortcutMap.set(command, shortcut);
 					}
 					break;
@@ -94,10 +90,8 @@ class ShortcutsUtil {
 				unoShortcutsModifierL10N,
 			)) {
 				if (String.locale.startsWith(lang)) {
-					for (const [eng, loc] of Object.entries(
-						replacements as Record<string, string>,
-					)) {
-						text = text.replace(eng, loc as string);
+					for (const [eng, loc] of Object.entries(replacements)) {
+						text = text.replace(eng, loc);
 					}
 					break;
 				}

@@ -348,7 +348,7 @@ COOL_JS_LST =\
 	src/Leaflet.js \
 	src/errormessages.js \
 	src/unocommands.js \
-	src/unoshortcuts.js \
+	src/unoshortcuts.ts \
 	src/UNO/Key.js \
 	src/core/Util.js \
 	src/core/Class.js \

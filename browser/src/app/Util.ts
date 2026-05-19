@@ -11,7 +11,6 @@
  */
 
 declare var brandProductFAQURL: string | undefined;
-declare var unoShortcutsModifierL10N: any;
 
 interface IDAble {
 	_leaflet_id: number;
@@ -249,9 +248,8 @@ class Util {
 				unoShortcutsModifierL10N,
 			)) {
 				if ((String as any).locale.startsWith(lang)) {
-					const r = replacements as Record<string, string>;
-					if (r['Ctrl']) ctrlName = r['Ctrl'];
-					if (r['Alt']) altName = r['Alt'];
+					if (replacements['Ctrl']) ctrlName = replacements['Ctrl'];
+					if (replacements['Alt']) altName = replacements['Alt'];
 					break;
 				}
 			}

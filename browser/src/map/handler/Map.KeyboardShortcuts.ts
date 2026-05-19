@@ -14,7 +14,6 @@
 declare var ThisIsTheMacOSApp: any;
 declare var ThisIsTheQtApp: any;
 declare var ThisIsTheWindowsApp: any;
-declare var unoShortcutsL10NKeyBindings: any;
 
 function isCtrlKey (e: KeyboardEvent) {
     if ((window as any).ThisIsTheiOSApp || window.L.Browser.mac)
@@ -448,7 +447,7 @@ if (typeof unoShortcutsL10NKeyBindings !== 'undefined') {
             existingKeys.add(d.key + '|' + d.modifier);
         }
 
-        for (const b of bindings as any[]) {
+        for (const b of bindings) {
             const k = b.key + '|' + b.modifier;
             if (!existingKeys.has(k)) {
                 existing.push(new ShortcutDescriptor({

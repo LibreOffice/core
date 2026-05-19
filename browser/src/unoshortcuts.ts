@@ -1,8 +1,14 @@
 // Don't modify, generated using scripts/unoshortcuts.py
 /* eslint-disable no-unused-vars */
 
-/** @type {any} */
-var unoShortcutsMap = {
+interface UnoKeyBinding {
+	key: string;
+	modifier: number;
+	unoAction: string;
+	docType?: 'text' | 'presentation' | 'drawing' | 'spreadsheet';
+}
+
+var unoShortcutsMap: Record<string, string> = {
 	'.uno:AlignBlock': 'Ctrl+J',
 	'.uno:AlignHorizontalCenter': 'Ctrl+E',
 	'.uno:AlignLeft': 'Ctrl+L',
@@ -111,8 +117,7 @@ var unoShortcutsMap = {
 	'vnd.sun.star.findbar:FocusToFindbar': 'Ctrl+F',
 };
 
-/** @type {any} */
-var unoShortcutsL10N = {
+var unoShortcutsL10N: Record<string, Record<string, string>> = {
 	bs: {
 		'.uno:InsertCurrentDate': 'Ctrl+,',
 		'.uno:InsertCurrentTime': 'Ctrl+Shift+,',
@@ -245,8 +250,7 @@ var unoShortcutsL10N = {
 	},
 };
 
-/** @type {any} */
-var unoShortcutsL10NKeyBindings = {
+var unoShortcutsL10NKeyBindings: Record<string, UnoKeyBinding[]> = {
 	da: [
 		{ key: 'f', modifier: 1, unoAction: '.uno:Bold' },
 		{ key: 'k', modifier: 1, unoAction: '.uno:Italic' },
@@ -391,8 +395,7 @@ var unoShortcutsL10NKeyBindings = {
 	],
 };
 
-/** @type {any} */
-var unoShortcutsModifierL10N = {
+var unoShortcutsModifierL10N: Record<string, Record<string, string>> = {
 	ca: { Shift: 'Maj' },
 	da: { Shift: 'Skift' },
 	de: { Ctrl: 'Strg', Shift: 'Umschalt' },

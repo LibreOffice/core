@@ -22,7 +22,6 @@
       ]
     },
     "exclude": [
-      "src/unoshortcuts.js",
       "node_modules",
       "./node_modules",
       "./node_modules/*",

@@ -716,26 +716,31 @@ def _renderObject(props, indent, trailing=','):
 
 def writeUnoshortcutsJS(onlinePath, shortcuts, l10nShortcuts,
                         l10nKeyBindings, modifierL10N):
-    """Write the generated unoshortcuts.js file."""
-    outPath = os.path.join(onlinePath, 'browser/src/unoshortcuts.js')
+    """Write the generated unoshortcuts.ts file."""
+    outPath = os.path.join(onlinePath, 'browser/src/unoshortcuts.ts')
     with open(outPath, 'w', encoding='utf-8') as f:
         f.write("// Don't modify, generated using scripts/unoshortcuts.py\n")
         f.write("/* eslint-disable no-unused-vars */\n\n")
 
+        # Shape of a per-language manual key binding entry. Mirrors the
+        # subset of ShortcutDescriptor's constructor params that the
+        # generator can derive from Accelerators.xcu.
+        f.write("interface UnoKeyBinding {\n")
+        f.write("\tkey: string;\n")
+        f.write("\tmodifier: number;\n")
+        f.write("\tunoAction: string;\n")
+        f.write("\tdocType?: 'text' | 'presentation' | 'drawing' | 'spreadsheet';\n")
+        f.write("}\n\n")
+
         # en-US command -> display string (for tooltips).
-        # @type {any} so tsc accepts the shared declaration in
-        # Util.Shortcuts.ts (declare var unoShortcutsMap: any) when both
-        # files are compiled together (e.g. mocha_tests).
-        f.write("/** @type {any} */\n")
-        f.write("var unoShortcutsMap = {\n")
+        f.write("var unoShortcutsMap: Record<string, string> = {\n")
         for cmd in sorted(shortcuts.keys()):
             f.write("\t%s: '%s',\n" % (_jsKey(cmd), shortcuts[cmd]))
         f.write("};\n\n")
 
         # Per-language tooltip overrides: command -> display string
         # where the shortcut differs from en-US.
-        f.write("/** @type {any} */\n")
-        f.write("var unoShortcutsL10N = {\n")
+        f.write("var unoShortcutsL10N: Record<string, Record<string, string>> = {\n")
         for lang in sorted(l10nShortcuts.keys()):
             f.write("\t%s: {\n" % _jsKey(lang))
             for cmd in sorted(l10nShortcuts[lang].keys()):
@@ -747,8 +752,7 @@ def writeUnoshortcutsJS(onlinePath, shortcuts, l10nShortcuts,
         # Per-language key bindings: key combo -> command where the
         # command differs from en-US for that key.  Used by
         # Map.KeyboardShortcuts.ts to register ShortcutDescriptors.
-        f.write("/** @type {any} */\n")
-        f.write("var unoShortcutsL10NKeyBindings = {\n")
+        f.write("var unoShortcutsL10NKeyBindings: Record<string, UnoKeyBinding[]> = {\n")
         for lang in sorted(l10nKeyBindings.keys()):
             # Sort for stable output.
             entries = sorted(l10nKeyBindings[lang],
@@ -781,8 +785,7 @@ def writeUnoshortcutsJS(onlinePath, shortcuts, l10nShortcuts,
 
         # Localized modifier key names, extracted from
         # vcl/unx/generic/app/keysymnames.cxx in core.
-        f.write("/** @type {any} */\n")
-        f.write("var unoShortcutsModifierL10N = {\n")
+        f.write("var unoShortcutsModifierL10N: Record<string, Record<string, string>> = {\n")
         for lang in sorted(modifierL10N.keys()):
             props = []
             for eng in ('Ctrl', 'Shift', 'Alt'):
@@ -795,8 +798,8 @@ def writeUnoshortcutsJS(onlinePath, shortcuts, l10nShortcuts,
 
 
 def parseUnoshortcutsJS(onlinePath):
-    """Read the existing unoshortcuts.js and return command -> shortcut map."""
-    jsPath = os.path.join(onlinePath, 'browser/src/unoshortcuts.js')
+    """Read the existing unoshortcuts.ts and return command -> shortcut map."""
+    jsPath = os.path.join(onlinePath, 'browser/src/unoshortcuts.ts')
     shortcuts = {}
     with open(jsPath, 'r', encoding='utf-8') as f:
         for line in f:
