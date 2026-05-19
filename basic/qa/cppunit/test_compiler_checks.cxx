@@ -296,4 +296,13 @@ CPPUNIT_TEST_FIXTURE(CppUnit::TestFixture, testVbaOptionalArrayParameterIsSyntax
     CPPUNIT_ASSERT_EQUAL(ERRCODE_BASIC_SYNTAX, aMacro.getError().GetCode());
 }
 
+CPPUNIT_TEST_FIXTURE(CppUnit::TestFixture, testArrayArgumentWithSize)
+{
+    MacroSnippet aMacro(u"Sub doUnitTest(A(12) As Integer)\n"
+                        "End Sub\n"_ustr);
+    aMacro.Compile();
+    CPPUNIT_ASSERT(aMacro.HasError());
+    CPPUNIT_ASSERT_EQUAL(ERRCODE_BASIC_EXPECTED, aMacro.getError().GetCode());
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
