@@ -18,6 +18,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,tools_test, \
     tools/qa/cppunit/test_duration \
     tools/qa/cppunit/test_fract \
     tools/qa/cppunit/test_inetmime \
+    tools/qa/cppunit/test_JsonPath \
     tools/qa/cppunit/test_json_writer \
     tools/qa/cppunit/test_pathutils \
     tools/qa/cppunit/test_poly \
