@@ -27,6 +27,7 @@
 /// <reference path="./helper/rectUtil.ts" />
 /// <reference path="./helper/Events.ts"/>
 /// <reference path="./helper/util.ts"/>
+/// <reference path="./helper/CanvasRecorder.ts"/>
 /// <reference path="./data/LOUtilTestData.ts"/>
 /// <reference path="./data/SheetGeometryTestData.ts" />
 
@@ -42,4 +43,5 @@
 /// <reference path="./ServerCommand.test.ts" />
 /// <reference path="./DomUtil.test.ts" />
 /// <reference path="./Shortcuts.test.ts" />
+/// <reference path="./VectorPrimitiveRenderer.test.ts" />
 // NOTE: reference new tests here ...
