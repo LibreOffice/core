@@ -2,6 +2,7 @@
 
 var helper = require('../../common/helper');
 var impressHelper = require('../../common/impress_helper');
+var desktopHelper = require('../../common/desktop_helper')
 
 describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Impress shape SVG flicker.', function() {
 
@@ -16,6 +17,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Impress shape SVG flicker.
 	// hidden again. The fix removes the showSVG() call from the visibility
 	// toggle; the SVG is only shown on demand (drag/resize).
 	it('No SVG flicker after editing text and pressing Escape.', function() {
+		desktopHelper.selectZoomLevel(70);
 		// Select the text shape in the center.
 		impressHelper.selectTextShapeInTheCenter();
 
