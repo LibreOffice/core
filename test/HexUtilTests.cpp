@@ -35,6 +35,12 @@ class HexUtilTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testHexify);
     CPPUNIT_TEST(testBytesToHex);
     CPPUNIT_TEST(testNumberToHex);
+    CPPUNIT_TEST(testEncodeIdKnownValues);
+    CPPUNIT_TEST(testEncodeIdOstream);
+    CPPUNIT_TEST(testEncodeIdPadChar);
+    CPPUNIT_TEST(testEncodeIdZeroSize);
+    CPPUNIT_TEST(testDecodeIdKnownValues);
+    CPPUNIT_TEST(testEncodeDecodeRoundTrip);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -42,6 +48,12 @@ class HexUtilTests : public CPPUNIT_NS::TestFixture
     void testHexify();
     void testBytesToHex();
     void testNumberToHex();
+    void testEncodeIdKnownValues();
+    void testEncodeIdOstream();
+    void testEncodeIdPadChar();
+    void testEncodeIdZeroSize();
+    void testDecodeIdKnownValues();
+    void testEncodeDecodeRoundTrip();
 };
 
 void HexUtilTests::testStringifyHexLine()
@@ -152,6 +164,117 @@ void HexUtilTests::testNumberToHex()
                                      HexUtil::encodeId(buffer, size, ~number, width));
             }
         }
+    }
+}
+
+void HexUtilTests::testEncodeIdKnownValues()
+{
+    constexpr std::string_view testname = __func__;
+
+    // Default width is 5, default pad is '0'.
+    LOK_ASSERT_EQUAL_STR("00000", HexUtil::encodeId(0));
+    LOK_ASSERT_EQUAL_STR("00001", HexUtil::encodeId(1));
+    LOK_ASSERT_EQUAL_STR("0000a", HexUtil::encodeId(0xa));
+    LOK_ASSERT_EQUAL_STR("000ff", HexUtil::encodeId(0xff));
+    LOK_ASSERT_EQUAL_STR("12345", HexUtil::encodeId(0x12345));
+
+    // Numbers wider than the requested width: width is a *minimum*, not a cap.
+    LOK_ASSERT_EQUAL_STR("123456", HexUtil::encodeId(0x123456));
+    LOK_ASSERT_EQUAL_STR("ffffffffffffffff", HexUtil::encodeId(UINT64_MAX));
+
+    // Width 0 means "no padding".
+    LOK_ASSERT_EQUAL_STR("0", HexUtil::encodeId(0, 0));
+    LOK_ASSERT_EQUAL_STR("ff", HexUtil::encodeId(0xff, 0));
+
+    // Lowercase hex output.
+    LOK_ASSERT_EQUAL_STR("deadbeef", HexUtil::encodeId(0xDEADBEEF, 0));
+}
+
+void HexUtilTests::testEncodeIdOstream()
+{
+    constexpr std::string_view testname = __func__;
+
+    // The stream overload appends and returns the same stream.
+    std::ostringstream oss;
+    oss << "prefix-";
+    std::ostringstream& ret = HexUtil::encodeId(oss, 0x42, 4);
+    LOK_ASSERT_EQUAL_STR(std::string("prefix-0042"), oss.str());
+    LOK_ASSERT(&ret == &oss);
+
+    // Stream and string overloads agree.
+    for (std::uint64_t n : { std::uint64_t(0), std::uint64_t(1), std::uint64_t(0xabc),
+                             std::uint64_t(0x123456789abcdef0), UINT64_MAX })
+    {
+        for (int width : { 0, 1, 5, 16 })
+        {
+            std::ostringstream o;
+            HexUtil::encodeId(o, n, width);
+            LOK_ASSERT_EQUAL_STR(HexUtil::encodeId(n, width), o.str());
+        }
+    }
+}
+
+void HexUtilTests::testEncodeIdPadChar()
+{
+    constexpr std::string_view testname = __func__;
+
+    LOK_ASSERT_EQUAL_STR("    a", HexUtil::encodeId(0xa, 5, ' '));
+    LOK_ASSERT_EQUAL_STR("xxx12", HexUtil::encodeId(0x12, 5, 'x'));
+    // No padding needed: pad char is irrelevant.
+    LOK_ASSERT_EQUAL_STR("12345", HexUtil::encodeId(0x12345, 5, ' '));
+    LOK_ASSERT_EQUAL_STR("123456", HexUtil::encodeId(0x123456, 5, ' '));
+}
+
+void HexUtilTests::testEncodeIdZeroSize()
+{
+    constexpr std::string_view testname = __func__;
+
+    // A zero-sized buffer must produce an empty result without writing.
+    char buffer[1] = { '\xCC' };
+    const auto out = HexUtil::encodeId(buffer, 0, 0x12345, 5);
+    LOK_ASSERT_EQUAL(std::size_t(0), out.size());
+    LOK_ASSERT_EQUAL(char('\xCC'), buffer[0]);
+}
+
+void HexUtilTests::testDecodeIdKnownValues()
+{
+    constexpr std::string_view testname = __func__;
+
+    LOK_ASSERT_EQUAL(std::uint64_t(0), HexUtil::decodeId(""));
+    LOK_ASSERT_EQUAL(std::uint64_t(0), HexUtil::decodeId("0"));
+    LOK_ASSERT_EQUAL(std::uint64_t(0), HexUtil::decodeId("00000"));
+    LOK_ASSERT_EQUAL(std::uint64_t(1), HexUtil::decodeId("1"));
+    LOK_ASSERT_EQUAL(std::uint64_t(1), HexUtil::decodeId("00001"));
+    LOK_ASSERT_EQUAL(std::uint64_t(0xff), HexUtil::decodeId("ff"));
+    LOK_ASSERT_EQUAL(std::uint64_t(0xff), HexUtil::decodeId("FF"));
+    LOK_ASSERT_EQUAL(std::uint64_t(0xdeadbeef), HexUtil::decodeId("deadbeef"));
+    LOK_ASSERT_EQUAL(std::uint64_t(0xdeadbeef), HexUtil::decodeId("DEADBEEF"));
+    LOK_ASSERT_EQUAL(UINT64_MAX, HexUtil::decodeId("ffffffffffffffff"));
+}
+
+void HexUtilTests::testEncodeDecodeRoundTrip()
+{
+    constexpr std::string_view testname = __func__;
+
+    // Sweep specific values and bit positions.
+    const std::uint64_t base[] = { 0, 1, 0xa, 0xff, 0x100, 0x12345, UINT64_MAX };
+    for (std::uint64_t n : base)
+    {
+        LOK_TRACE("Round-trip: 0x" << std::hex << n);
+        LOK_ASSERT_EQUAL(n, HexUtil::decodeId(HexUtil::encodeId(n, 0)));
+        LOK_ASSERT_EQUAL(n, HexUtil::decodeId(HexUtil::encodeId(n, 16)));
+    }
+
+    for (int shift = 0; shift < 64; ++shift)
+    {
+        const std::uint64_t n = std::uint64_t(1) << shift;
+        LOK_TRACE("Round-trip shift " << shift << ": 0x" << std::hex << n);
+        LOK_ASSERT_EQUAL(n, HexUtil::decodeId(HexUtil::encodeId(n, 0)));
+        LOK_ASSERT_EQUAL(n, HexUtil::decodeId(HexUtil::encodeId(n, 16)));
+        const std::uint64_t inv = ~n;
+        LOK_TRACE("Round-trip ~shift " << shift << ": 0x" << std::hex << inv);
+        LOK_ASSERT_EQUAL(inv, HexUtil::decodeId(HexUtil::encodeId(inv, 0)));
+        LOK_ASSERT_EQUAL(inv, HexUtil::decodeId(HexUtil::encodeId(inv, 16)));
     }
 }
 
