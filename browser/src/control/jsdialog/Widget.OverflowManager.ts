@@ -103,6 +103,13 @@ class OverflowManager {
 			parentNode = parentNode.parentNode as HTMLElement;
 		}
 
+		// Bail when any ancestor is display:none (e.g. notebookbar
+		// collapsed via #toolbar-row). Measuring a hidden container
+		// gives near-zero width, which would fold every group into the
+		// hiddenItems wrapper and corrupt the layout that needs to be
+		// restored when the notebookbar is shown again.
+		if (this.parentContainer.offsetParent === null) return;
+
 		this.lastMaxWidth = window.innerWidth;
 
 		const groups = this.parentContainer.querySelectorAll('.ui-overflow-group');
