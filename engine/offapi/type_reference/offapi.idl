@@ -3134,12 +3134,6 @@ module com {
      short StartRow;
      short EndRow;
     };
-    /** @deprecated */ published struct ChartDataValue {
-     double Value;
-     double HighError;
-     double LowError;
-    };
-    /** @deprecated */ published typedef sequence< ::com::sun::star::chart::ChartDataValue > ChartDataPoint;
     published service ChartDataPointProperties {
      service ::com::sun::star::drawing::LineProperties;
      service ::com::sun::star::style::CharacterProperties;
@@ -3157,10 +3151,6 @@ module com {
      [property, optional] long SegmentOffset;
      [property, optional] boolean TextWordWrap;
      [property, optional] ::com::sun::star::graphic::XGraphic SymbolBitmap;
-    };
-    /** @deprecated */ published struct ChartDataRow {
-     string Name;
-     sequence< sequence< ::com::sun::star::chart::ChartDataValue > > Points;
     };
     published service ChartDataRowProperties {
      service ::com::sun::star::chart::ChartDataPointProperties;

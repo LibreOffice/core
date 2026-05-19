@@ -1904,10 +1904,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/chart,\
 	ChartDataCaption \
 	ChartDataChangeEvent \
 	ChartDataChangeType \
-	ChartDataPoint \
-	ChartDataRow \
 	ChartDataRowSource \
-	ChartDataValue \
 	ChartErrorCategory \
 	ChartErrorIndicatorType \
 	ChartLegendExpansion \
