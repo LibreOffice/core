@@ -1,0 +1,17 @@
+diff --git a/node_modules/cypress-visual-regression/dist/plugin.js b/node_modules/cypress-visual-regression/dist/plugin.js
+index dc60446..75636fe 100644
+--- a/node_modules/cypress-visual-regression/dist/plugin.js
++++ b/node_modules/cypress-visual-regression/dist/plugin.js
+@@ -146,6 +146,12 @@ var compareSnapshots = async (options) => {
+   const expectedImageBuffer = (0, import_node_fs.readFileSync)(expectedImagePath);
+   const expectedImage = import_pngjs2.PNG.sync.read(expectedImageBuffer);
+   const actualImagePath = options.screenshotAbsolutePath;
++  // Under load the screenshot file can lag the onAfterScreenshot callback;
++  // poll briefly for it to appear before readFileSync throws ENOENT.
++  const waitStart = Date.now();
++  while (!(0, import_fs.existsSync)(actualImagePath) && Date.now() - waitStart < 5000) {
++    await new Promise(r => setTimeout(r, 100));
++  }
+   const actualImageBuffer = (0, import_node_fs.readFileSync)(actualImagePath);
+   const actualImage = import_pngjs2.PNG.sync.read(actualImageBuffer);
+   const diffFileName = retryAttempt > 0 ? `${sanitizedFileName} (attempt ${retryAttempt + 1}).png` : `${sanitizedFileName}.png`;
