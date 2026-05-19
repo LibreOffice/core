@@ -271,29 +271,29 @@ function traverseTabs(getContainer, win, level, command, isNested = false) {
 						})
 						.then(() => {
 							// Writer-specific tab subdialogs
-							if (command == '.uno:SetDocumentProperties' && tabAriaControls == 'customprops') {
+							if (command == '.uno:SetDocumentProperties' && tabId == 'customprops') {
 								cy.cGet('#durationbutton-button').click();
 								handleDialog(win, level + 1);
-							} else if (command == '.uno:SetDocumentProperties' && tabAriaControls == 'general') {
+							} else if (command == '.uno:SetDocumentProperties' && tabId == 'general') {
 								cy.cGet('#changepass-button').should('not.be.disabled').click();
 								handleDialog(win, level + 1);
-							} else if (command == '.uno:InsertSection' && tabAriaControls == 'section') {
+							} else if (command == '.uno:InsertSection' && tabId == 'section') {
 								// check protect to enable password dialog
 								cy.cGet('#protect-input').check();
 								cy.cGet('#selectpassword-button').should('not.be.disabled').click();
 								handleDialog(win, level + 1);
 								cy.cGet('#protect-input').uncheck();
 								cy.cGet('#selectpassword-button').should('be.disabled');
-							} else if (command == '.uno:HyperlinkDialog' && tabAriaControls == '~Document') {
+							} else if (command == '.uno:HyperlinkDialog' && tabId == 'document') {
 								cy.cGet('#browse-button').click();
 								handleDialog(win, level + 1);
-							} else if (command == '.uno:FontDialog' && tabAriaControls == 'font') {
+							} else if (command == '.uno:FontDialog' && tabId == 'font') {
 								cy.cGet('#btnWestFeatures-button').click();
 								handleDialog(win, level + 1);
-							} else if ((command == '.uno:PageDialog' || command == '.uno:PageFormatDialog') && tabAriaControls == 'Footer') {
+							} else if ((command == '.uno:PageDialog' || command == '.uno:PageFormatDialog') && tabId == 'footer') {
 								cy.cGet('button.ui-pushbutton[aria-label="More..."]:visible').click();
 								handleDialog(win, level + 1);
-							} else if (command == '.uno:FormatArea' && tabAriaControls == 'lbhatch') {
+							} else if (command == '.uno:FormatArea' && tabId == 'lbhatch') {
 								cy.cGet('button.ui-pushbutton[aria-label="Add"]:visible').click();
 								testNameDialog(win, level);
 							}
