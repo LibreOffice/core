@@ -82,7 +82,6 @@
 #include <o3tl/string_view.hxx>
 
 #include <Window.hxx>
-#include <svl/intitem.hxx>
 #include <DrawController.hxx>
 #include <ResourceId.hxx>
 
