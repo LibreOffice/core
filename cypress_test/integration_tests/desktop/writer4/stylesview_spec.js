@@ -23,12 +23,12 @@ describe(['tagdesktop'], 'Stylesview Iconview Tests', function() {
 	it('Scroll Up/Down Buttons', function() {
 		cy.cGet('#stylesview-iconview-list-scroll-up').should('exist').should('be.visible');
 		cy.cGet('#stylesview-iconview-list-scroll-down').should('exist').should('be.visible');
-		cy.cGet('#stylesview_0').should('exist').should('be.visible');
+		cy.cGet('#stylesview_0').should('exist').scrollIntoView().should('be.visible');
 
 		cy.cGet('#stylesview-iconview-list-scroll-down').click();
 		cy.cGet('#stylesview_0').should('exist').should('not.be.visible');
 		cy.cGet('#stylesview-iconview-list-scroll-up').click();
-		cy.cGet('#stylesview_0').should('exist').should('be.visible');
+		cy.cGet('#stylesview_0').should('exist').scrollIntoView().should('be.visible');
 	});
 
 	it('Expander Button', function() {
