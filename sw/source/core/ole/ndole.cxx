@@ -755,8 +755,11 @@ bool SwOLENode::CompleteDeferredLink()
         if (!xObj.is())
             return false;
 
-        SwDoc& rDoc = GetDoc();
-        comphelper::EmbeddedObjectContainer& rContainer = rDoc.GetDocShell()->getEmbeddedObjectContainer();
+        SwDocShell *pDocSh = GetDoc().GetDocShell();
+        if (!pDocSh)
+            return false;
+
+        comphelper::EmbeddedObjectContainer& rContainer = pDocSh->getEmbeddedObjectContainer();
 
         OUString aPersistName;
         rContainer.InsertEmbeddedObject(xObj, aPersistName);
