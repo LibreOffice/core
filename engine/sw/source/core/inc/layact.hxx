@@ -215,7 +215,7 @@ class SwLayIdle
     void ShowIdle( Color eName );
 #endif
 
-    bool DoIdleJob_( const SwContentFrame*, IdleJobType );
+    bool DoIdleJob_( const SwContentFrame*, IdleJobType, IdleJobArea );
     bool DoIdleJob(IdleJobType eJobType, IdleJobArea eJobArea);
 
     static bool isJobEnabled(IdleJobType eJob, const SwViewShell* pViewShell);

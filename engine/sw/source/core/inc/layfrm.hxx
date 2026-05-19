@@ -115,7 +115,7 @@ public:
      */
     const SwFrame *ContainsAny( const bool _bInvestigateFootnoteForSections = false ) const;
     inline SwFrame *ContainsAny( const bool _bInvestigateFootnoteForSections = false );
-    bool IsAnLower( const SwFrame * ) const;
+    SW_DLLPUBLIC bool IsAnLower( const SwFrame * ) const;
 
     virtual const SwFrameFormat *GetFormat() const;
     virtual       SwFrameFormat *GetFormat();

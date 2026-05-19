@@ -32,6 +32,8 @@
 
 #include <com/sun/star/document/UpdateDocMode.hpp>
 #include <sfx2/linkmgr.hxx>
+#include <ndtxt.hxx>
+#include <txtfrm.hxx>
 #include <view.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <IDocumentLinksAdministration.hxx>
@@ -779,6 +781,52 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSpellcheckVisibleArea)
 
     // Then make sure the visible area is spellchecked, but not the rest:
     CPPUNIT_ASSERT(!pPage1->IsInvalidSpelling());
+    CPPUNIT_ASSERT(pPage2->IsInvalidSpelling());
+    CPPUNIT_ASSERT(pPage3->IsInvalidSpelling());
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSpellcheckIdle)
+{
+    // Given a document with 3 pages, the first page is visible, spellcheck is only done for the
+    // visible page:
+    OUString aURL = createFileURL(u"3pages.odt");
+    UnoApiXmlTest::loadFromURL(aURL);
+    SwDocShell* pDocShell = getSwDocShell();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    SwRootFrame* pLayout = pWrtShell->GetLayout();
+    SwPageFrame* pPage1 = pLayout->GetLower()->DynCastPageFrame();
+    pWrtShell->setKitVisibleArea(pPage1->getFrameArea().SVRect());
+    SwPageFrame* pPage2 = pPage1->GetNext()->DynCastPageFrame();
+    SwPageFrame* pPage3 = pPage2->GetNext()->DynCastPageFrame();
+    pWrtShell->LayoutIdle();
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(!pPage1->IsInvalidSpelling());
+    CPPUNIT_ASSERT(!pPage2->IsInvalidSpelling());
+    CPPUNIT_ASSERT(!pPage3->IsInvalidSpelling());
+    for (SwPageFrame* pPage : { pPage2, pPage3 })
+    {
+        SwContentFrame* pContent = pPage->ContainsContent();
+        while (pContent && pPage->IsAnLower(pContent))
+        {
+            if (pContent->IsTextFrame())
+            {
+                SwTextFrame* pTextFrame = static_cast<SwTextFrame*>(pContent);
+                if (SwTextNode* pNode = pTextFrame->GetTextNodeFirst())
+                    pNode->SetWrongDirty(sw::WrongState::TODO);
+            }
+            pContent = pContent->GetNextContentFrame();
+        }
+        pPage->InvalidateSpelling();
+    }
+    CPPUNIT_ASSERT(pPage2->IsInvalidSpelling());
+    CPPUNIT_ASSERT(pPage3->IsInvalidSpelling());
+
+    // When doing idle layout and and the anyInput callback wants to interrupt:
+    AnyInputCallback aAnyInput;
+    pWrtShell->LayoutIdle();
+
+    // Then make sure spellcheck is avoided for non-visible pages:
+    // Without the fix in place, async layout did spellcheck for all pages.
     CPPUNIT_ASSERT(pPage2->IsInvalidSpelling());
     CPPUNIT_ASSERT(pPage3->IsInvalidSpelling());
 }

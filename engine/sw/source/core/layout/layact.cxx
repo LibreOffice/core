@@ -2089,7 +2089,7 @@ void SwLayAction::FormatFlyContent( const SwFlyFrame *pFly )
     CheckWaitCursor();
 }
 
-bool SwLayIdle::DoIdleJob_( const SwContentFrame *pCnt, IdleJobType eJob )
+bool SwLayIdle::DoIdleJob_( const SwContentFrame *pCnt, IdleJobType eJob, IdleJobArea eJobArea )
 {
     OSL_ENSURE( pCnt->IsTextFrame(), "NoText neighbour of Text" );
     // robust against misuse by e.g. #i52542#
@@ -2173,8 +2173,16 @@ bool SwLayIdle::DoIdleJob_( const SwContentFrame *pCnt, IdleJobType eJob )
                 m_bPageValid = m_bPageValid && (sw::WrongState::TODO != pTextNode->GetWrongDirty());
                 if ( aRepaint.HasArea() )
                     m_pImp->GetShell().InvalidateWindows( aRepaint );
-                if (Application::AnyInput(VCL_INPUT_ANY & VclInputFlags(~VclInputFlags::TIMER)))
+                bool bInterrupt = Application::AnyInput(VCL_INPUT_ANY & VclInputFlags(~VclInputFlags::TIMER));
+                if (!bInterrupt && eJobArea == IdleJobArea::ALL)
+                {
+                    // Idle spellcheck for the non-visible area: interrupt on user input.
+                    bInterrupt = comphelper::COKit::anyInput();
+                }
+                if (bInterrupt)
+                {
                     return true;
+                }
                 break;
             }
             case IdleJobType::AUTOCOMPLETE_WORDS:
@@ -2226,7 +2234,7 @@ bool SwLayIdle::DoIdleJob_( const SwContentFrame *pCnt, IdleJobType eJob )
                     {
                         if ( pC->IsTextFrame() )
                         {
-                            if ( DoIdleJob_( pC, eJob ) )
+                            if ( DoIdleJob_( pC, eJob, eJobArea ) )
                                 return true;
                         }
                         pC = pC->GetNextContentFrame();
@@ -2301,7 +2309,7 @@ bool SwLayIdle::DoIdleJob(IdleJobType eJob, IdleJobArea eJobArea)
         const SwContentFrame* pContentFrame = pPage->ContainsContent();
         while (pContentFrame && pPage->IsAnLower(pContentFrame))
         {
-            if (DoIdleJob_(pContentFrame, eJob))
+            if (DoIdleJob_(pContentFrame, eJob, eJobArea))
             {
                 SAL_INFO("sw.idle", "DoIdleJob " << sal_Int32(eJob) << " interrupted on page " << pPage->GetPhyPageNum());
                 return true;
@@ -2321,7 +2329,7 @@ bool SwLayIdle::DoIdleJob(IdleJobType eJob, IdleJobArea eJobArea)
                     {
                         if ( pC->IsTextFrame() )
                         {
-                            if ( DoIdleJob_( pC, eJob ) )
+                            if ( DoIdleJob_( pC, eJob, eJobArea ) )
                             {
                                 SAL_INFO("sw.idle", "DoIdleJob " << sal_Int32(eJob) << " interrupted on page " << pPage->GetPhyPageNum());
                                 return true;
@@ -2551,8 +2559,16 @@ SwLayIdle::SwLayIdle( SwRootFrame *pRt, SwViewShellImp *pI ) :
         {
             if (!DoIdleJob(IdleJobType::WORD_COUNT, IdleJobArea::ALL))
                 if (!DoIdleJob(IdleJobType::SMART_TAGS, IdleJobArea::ALL))
-                    if (!DoIdleJob(IdleJobType::ONLINE_SPELLING, IdleJobArea::ALL))
+                {
+                    // Let the COKit anyInput() mechanism know that we're inside the idle spellcheck.
+                    comphelper::COKit::setIdleLayouting(true);
+                    bool bRet = DoIdleJob(IdleJobType::ONLINE_SPELLING, IdleJobArea::ALL);
+                    comphelper::COKit::setIdleLayouting(false);
+                    if (!bRet)
+                    {
                         DoIdleJob(IdleJobType::AUTOCOMPLETE_WORDS, IdleJobArea::ALL);
+                    }
+                }
         }
 
         bool bInValid = false;
