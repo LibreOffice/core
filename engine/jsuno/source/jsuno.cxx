@@ -2734,6 +2734,21 @@ ExceptionData extractExceptionData(JSContext* ctx, ValueRef const& err)
                 haveMessage = true;
             }
         }
+        if (!haveMessage)
+        {
+            // See whether this is a css.uno.Exception with a Message member:
+            ValueRef const unoMsgVal(ctx, JS_GetPropertyStr(ctx, err, "Message"));
+            if (JS_IsString(unoMsgVal))
+            {
+                std::size_t n;
+                UniqueCString16 const p(ctx, JS_ToCStringLenUTF16(ctx, &n, unoMsgVal));
+                if (p.get() != nullptr)
+                {
+                    exc.message = OUString(p.get(), n);
+                    haveMessage = true;
+                }
+            }
+        }
     }
     if (!haveMessage)
     {
