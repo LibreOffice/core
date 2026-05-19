@@ -356,8 +356,13 @@ class ViewLayoutMultiPage extends ViewLayoutNewBase {
 		return result;
 	}
 
-	public override scroll(pX: number, pY: number): boolean {
-		const scrolled = super.scroll(pX, pY);
+	public override scroll(
+		pX: number,
+		pY: number,
+		userIsScrolling: boolean = false,
+	): boolean {
+		if (userIsScrolling) this.unselectCommentOnScroll();
+		const scrolled = super.scroll(pX, pY, userIsScrolling);
 
 		if (scrolled) {
 			this.updateViewData();
@@ -367,7 +372,11 @@ class ViewLayoutMultiPage extends ViewLayoutNewBase {
 		return scrolled;
 	}
 
-	public override scrollTo(pX: number, pY: number): void {
+	public override scrollTo(
+		pX: number,
+		pY: number,
+		userIsScrolling: boolean = false,
+	): void {
 		const point = cool.SimplePoint.fromCorePixels([pX, pY]);
 		if (!this.viewedRectangle.containsPoint(point.toArray())) {
 			const index = this.getClosestRectangleIndex(point);

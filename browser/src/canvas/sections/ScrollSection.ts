@@ -542,7 +542,8 @@ export class ScrollSection extends CanvasSectionObject {
 		if (!app.activeDocument.activeLayout.canScrollVertical(app.sectionContainer.getSectionWithName(app.CSections.Tiles.name)))
 			return;
 
-		app.activeDocument.activeLayout.scroll(0, offset);
+		const userIsScrolling: boolean = true;
+		app.activeDocument.activeLayout.scroll(0, offset, userIsScrolling);
 
 		if (app.file.fileBasedView) this.map._docLayer._checkSelectedPart();
 
@@ -553,7 +554,8 @@ export class ScrollSection extends CanvasSectionObject {
 		if (!app.activeDocument.activeLayout.canScrollHorizontal(app.sectionContainer.getSectionWithName(app.CSections.Tiles.name)))
 			return;
 
-		app.activeDocument.activeLayout.scroll(offset,0 );
+		const userIsScrolling: boolean = true;
+		app.activeDocument.activeLayout.scroll(offset, 0, userIsScrolling);
 
 		return true;
 	}

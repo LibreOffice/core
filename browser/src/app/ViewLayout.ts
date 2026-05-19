@@ -483,7 +483,12 @@ class ViewLayoutBase {
 		return this.viewSize.pY > documentAnchor.size[1];
 	}
 
-	public scroll(pX: number, pY: number): void {
+	public scroll(
+		pX: number,
+		pY: number,
+		userIsScrolling: boolean = false,
+	): void {
+		if (userIsScrolling) this.unselectCommentOnScroll();
 		this.refreshScrollProperties();
 		const documentAnchor = this.getDocumentAnchorSection();
 
@@ -494,11 +499,14 @@ class ViewLayoutBase {
 			this.scrollVertical(pY);
 
 		this.refreshCurrentCoordList();
-		this.unselectCommentOnScroll();
 		app.sectionContainer.requestReDraw();
 	}
 
-	public scrollTo(pX: number, pY: number): void {
+	public scrollTo(
+		pX: number,
+		pY: number,
+		userIsScrolling: boolean = false,
+	): void {
 		this.refreshScrollProperties();
 
 		this.scrollProperties.moveBy = null;
@@ -506,7 +514,7 @@ class ViewLayoutBase {
 		pX -= this.viewedRectangle.pX1;
 		pY -= this.viewedRectangle.pY1;
 
-		this.scroll(pX, pY);
+		this.scroll(pX, pY, userIsScrolling);
 	}
 
 	public setOverviewPageVisArea(point: cool.SimplePoint): void {

@@ -249,8 +249,12 @@ class ViewLayoutCompareChanges extends ViewLayoutNewBase {
 		return (anchorWidth - rightPageRightEdge) * 2;
 	}
 
-	public override scroll(pX: number, pY: number): boolean {
-		const scrolled = super.scroll(pX, pY);
+	public override scroll(
+		pX: number,
+		pY: number,
+		userIsScrolling: boolean = false,
+	): boolean {
+		const scrolled = super.scroll(pX, pY, userIsScrolling);
 
 		if (scrolled) {
 			this.refreshView();

@@ -73,7 +73,12 @@ class ViewLayoutNewBase extends ViewLayoutBase {
 		this.scrollProperties.horizontalScrollStep = documentAnchor.size[0] / 2;
 	}
 
-	public scroll(pX: number, pY: number): boolean {
+	public scroll(
+		pX: number,
+		pY: number,
+		userIsScrolling: boolean = false,
+	): boolean {
+		if (userIsScrolling) this.unselectCommentOnScroll();
 		this.refreshScrollProperties();
 		const documentAnchor = this.getDocumentAnchorSection();
 		let scrolled = false;
