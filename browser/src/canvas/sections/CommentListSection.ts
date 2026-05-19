@@ -1327,7 +1327,7 @@ export class CommentSection extends CanvasSectionObject {
 				this.setThreadPopup(this.sectionProperties.selectedComment, false);
 				this.sectionProperties.showSelectedBigger = false;
 			}
-			
+
 			const previouslySelectedComment = this.sectionProperties.selectedComment;
 			this.sectionProperties.selectedComment = null;
 			if (app.map._docLayer._docType !== 'spreadsheet') {
@@ -2430,7 +2430,8 @@ export class CommentSection extends CanvasSectionObject {
 	}
 
 	private update (reLayout: boolean = true): void {
-		this.sectionProperties.reLayout = reLayout;
+		if (reLayout)
+			this.sectionProperties.reLayout = true;
 		this.updateDOM();
 	}
 
@@ -2438,10 +2439,13 @@ export class CommentSection extends CanvasSectionObject {
 		if (!this.sectionProperties.firstImport) return;
 
 		app.layoutingService.appendLayoutingTask(() => {
-			if (this.sectionProperties.reLayout && app.map._docLayer._docType === 'text')
+			const reLayout = this.sectionProperties.reLayout;
+			this.sectionProperties.reLayout = false;
+
+			if (reLayout && app.map._docLayer._docType === 'text')
 				this.updateThreadInfoIndicator();
 
-			this.layout(this.sectionProperties.reLayout);
+			this.layout(reLayout);
 		});
 
 		app.sectionContainer.requestReDraw();
@@ -2624,8 +2628,19 @@ export class CommentSection extends CanvasSectionObject {
 								maxSize += moveUp;
 							}
 						}
-						if (maxSize > minMaxHeight)
-							this.sectionProperties.commentList[i].sectionProperties.contentNode.style.maxHeight = Math.round(maxSize) + 'px';
+						if (maxSize > minMaxHeight) {
+							const comment = this.sectionProperties.commentList[i];
+							const contentNode = comment.sectionProperties.contentNode;
+							const oldMaxHeight = parseFloat(contentNode.style.maxHeight) || minMaxHeight;
+							contentNode.style.maxHeight = Math.round(maxSize) + 'px';
+
+							// Without this, a later layout(false) would reuse a stale value.
+							if (comment.cachedCommentHeight !== null) {
+								const oldContent = Math.min(actHeight, oldMaxHeight);
+								const newContent = Math.min(actHeight, maxSize);
+								comment.cachedCommentHeight += newContent - oldContent;
+							}
+						}
 					}
 				}
 			}
