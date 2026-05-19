@@ -4224,11 +4224,6 @@ module com {
       };
      };
     };
-    module bootstrap {
-     /** @deprecated */ published service BootstrapContext {
-      interface ::com::sun::star::uno::XComponentContext;
-     };
-    };
     published singleton theDefaultProvider: ::com::sun::star::lang::XMultiServiceFactory;
    };
    module ui {

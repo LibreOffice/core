@@ -45,8 +45,6 @@ published service BackendAdapter
 
       <p>If this interface is present, a SingleBackend
         may be passed, that is used to access the data.
-        Also a com::sun::star::configuration::bootstrap::BootstrapContext
-        can be passed, that provides further settings for the backend.
       </p>
 
       <p>If this interface is missing, the real backend to use is determined

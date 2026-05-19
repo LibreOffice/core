@@ -696,9 +696,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/configuration/
 	LayerWriter \
 	SchemaParser \
 ))
-$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/configuration/bootstrap,\
-	BootstrapContext \
-))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/datatransfer/clipboard,\
 	ClipboardManager \
 	GenericClipboard \
