@@ -745,9 +745,7 @@ void QtWidget::changeEvent(QEvent* pEvent)
     switch (pEvent->type())
     {
         case QEvent::FontChange:
-            [[fallthrough]];
         case QEvent::PaletteChange:
-            [[fallthrough]];
         case QEvent::StyleChange:
         {
             GetQtInstance().UpdateStyle(QEvent::FontChange == pEvent->type());
