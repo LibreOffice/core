@@ -100,6 +100,12 @@ void DataSeriesProperties::AddPropertiesToVector(
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID );
 
+    rOutProperties.emplace_back( "HasDataLabels",
+                  PROP_DATASERIES_HAS_DATA_LABELS,
+                  cppu::UnoType<sal_Bool>::get(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEVOID );
+
     rOutProperties.emplace_back( "MeanLine",
                   PROP_DATASERIES_MEAN_LINE,
                   cppu::UnoType<sal_Bool>::get(),

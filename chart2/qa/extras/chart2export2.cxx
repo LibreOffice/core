@@ -178,6 +178,9 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testChartexElementsXLSX_boxWhisker)
     assertXPath(pXmlDoc, sSeriesPath + "/cx:layoutPr/cx:visibility", "outliers", u"1");
     assertXPath(pXmlDoc, sSeriesPath + "/cx:layoutPr/cx:statistics", "quartileMethod",
                 u"exclusive");
+
+    // There should not be a dataLabels tag
+    assertXPath(pXmlDoc, sSeriesPath + "/cx:dataLabels", 0);
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testChartexTitleXLSX_clusteredColumn)

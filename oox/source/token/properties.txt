@@ -264,6 +264,7 @@ HScroll
 Handles
 HasAutoShowInfo
 HasColumnRowHeaders
+HasDataLabels
 HasExplicitFill
 HasGeography
 HasHorizontalScrollBar
