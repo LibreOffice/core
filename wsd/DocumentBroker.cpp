@@ -1763,6 +1763,7 @@ void PresetsInstallTask::install(const Poco::JSON::Object::Ptr& settings,
             addGroup(settings, "viewsetting", presets);
             addGroup(settings, "xcu", presets);
             addGroup(settings, "template", presets);
+            addGroup(settings, "themes", presets);
         }
 
         Cache::supplyConfigFiles(_configId, presets);
@@ -1896,6 +1897,31 @@ static std::string extractViewSettings(const std::string& viewSettingsPath,
     return viewSettingsString;
 }
 
+// Preset groups whose files we round-trip back to the host on document
+// close. The first element is the preset directory name (matching the
+// addGroup() name and the engine's $(userurl)/<group> directory); the
+// second flag means "only upload files we already saw at install time,
+// plus 'standard.dic' as a one-off exception". Themes have no such
+// exception: every .theme file in the user dir is something the user
+// created or edited and is worth preserving.
+namespace
+{
+struct RoundTripPresetGroup
+{
+    std::string name;
+    bool onlyKnownOrStandardDic;
+};
+
+const std::vector<RoundTripPresetGroup>& getRoundTripPresetGroups()
+{
+    static const std::vector<RoundTripPresetGroup> sGroups = {
+        { "wordbook", true },
+        { "themes", false },
+    };
+    return sGroups;
+}
+} // namespace
+
 void DocumentBroker::asyncInstallPresets(const std::shared_ptr<ClientSession>& session,
                                          const std::string& configId,
                                          const std::string& userSettingsUri,
@@ -1912,22 +1938,30 @@ void DocumentBroker::asyncInstallPresets(const std::shared_ptr<ClientSession>& s
 
         if (success)
         {
-            std::string searchDir = presetsPath;
-            searchDir.append("wordbook");
-            const auto fileNames = FileUtil::getDirEntries(searchDir);
-            std::error_code ec;
-            for (const auto& fileName : fileNames)
+            // Record the on-disk timestamps of every file we just installed
+            // for groups that get uploaded back to the host on document
+            // close, so we can tell later which files the user actually
+            // modified. Keyed by "group/file" to keep distinct groups in
+            // the same map without name collisions.
+            for (const RoundTripPresetGroup& group : getRoundTripPresetGroups())
             {
-                std::string filePath = searchDir;
-                filePath.push_back('/');
-                filePath.append(fileName);
-                std::filesystem::file_time_type ts = std::filesystem::last_write_time(filePath, ec);
-                if (ec)
+                std::string searchDir = presetsPath + group.name;
+                const auto fileNames = FileUtil::getDirEntries(searchDir);
+                std::error_code ec;
+                for (const auto& fileName : fileNames)
                 {
-                    LOG_ERR("File[" << fileName << "] doesn't exist");
-                    continue;
+                    std::string filePath = searchDir;
+                    filePath.push_back('/');
+                    filePath.append(fileName);
+                    std::filesystem::file_time_type ts
+                        = std::filesystem::last_write_time(filePath, ec);
+                    if (ec)
+                    {
+                        LOG_ERR("File[" << group.name << '/' << fileName << "] doesn't exist");
+                        continue;
+                    }
+                    _presetTimestamp[group.name + "/" + fileName] = ts;
                 }
-                _presetTimestamp[fileName] = ts;
             }
 
             const std::string viewSettings = presetsPath + "viewsetting/viewsetting.json";
@@ -4489,66 +4523,76 @@ void DocumentBroker::uploadPresetsToWopiHost()
     const std::string& jailPresetsPath = FileUtil::buildLocalPathToJail(
         COOLWSD::EnableMountNamespaces, getJailRoot(), JAILED_CONFIG_ROOT);
 
-    Poco::URI uriObject = DocumentBroker::getPresetUploadBaseUrl(_uriPublic);
+    const Poco::URI uploadBaseUri = DocumentBroker::getPresetUploadBaseUrl(_uriPublic);
     LOG_DBG("Uploading presets from jailPath[" << jailPresetsPath << "] to wopiHost["
-                                               << uriObject.toString() << ']');
+                                               << uploadBaseUri.toString() << ']');
 
-    std::string searchDir = jailPresetsPath;
-    searchDir.append("wordbook");
-    const auto fileNames = FileUtil::getDirEntries(searchDir);
-    std::error_code ec;
-    for (const auto& fileName : fileNames)
+    for (const RoundTripPresetGroup& group : getRoundTripPresetGroups())
     {
-        std::string fileJailPath = searchDir;
-        fileJailPath.push_back('/');
-        fileJailPath.append(fileName);
-        std::filesystem::file_time_type currentTimestamp =
-            std::filesystem::last_write_time(fileJailPath, ec);
-
-        auto it = _presetTimestamp.find(fileName);
-        bool skipUpload = false;
-        if (ec)
-            skipUpload = true;
-        else if (it != _presetTimestamp.end())
-            skipUpload = (currentTimestamp <= it->second);
-        else if (fileName != "standard.dic")
-            skipUpload = true;
-
-        if (skipUpload)
+        std::string searchDir = jailPresetsPath;
+        searchDir.append(group.name);
+        const auto fileNames = FileUtil::getDirEntries(searchDir);
+        std::error_code ec;
+        for (const auto& fileName : fileNames)
         {
-            LOG_TRC("Skip uploading preset file [" << fileName << "] to wopiHost["
-                                                   << uriObject.toString() << "], "
-                                                   << (ec ? "missing" : "no modification"));
-            continue;
+            std::string fileJailPath = searchDir;
+            fileJailPath.push_back('/');
+            fileJailPath.append(fileName);
+            std::filesystem::file_time_type currentTimestamp =
+                std::filesystem::last_write_time(fileJailPath, ec);
+
+            const std::string key = group.name + "/" + fileName;
+            auto it = _presetTimestamp.find(key);
+            bool skipUpload = false;
+            if (ec)
+                skipUpload = true;
+            else if (it != _presetTimestamp.end())
+                skipUpload = (currentTimestamp <= it->second);
+            else if (group.onlyKnownOrStandardDic && fileName != "standard.dic")
+                skipUpload = true;
+
+            if (skipUpload)
+            {
+                LOG_TRC("Skip uploading preset file [" << key << "] to wopiHost["
+                                                       << uploadBaseUri.toString() << "], "
+                                                       << (ec ? "missing" : "no modification"));
+                continue;
+            }
+
+            std::string filePath = "/settings/userconfig/";
+            filePath.append(group.name);
+            filePath.push_back('/');
+            filePath.append(fileName);
+
+            // Build a fresh URI per upload so the fileId query parameter
+            // doesn't accumulate across iterations.
+            Poco::URI uriObject = uploadBaseUri;
+            uriObject.addQueryParameter("fileId", filePath);
+
+            auto httpRequest = StorageConnectionManager::createHttpRequest(
+                uriObject, Authorization::create(_uriPublic));
+            httpRequest.setVerb(http::Request::VERB_POST);
+
+            LOG_TRC("Uploading file from jailPath[" << filePath << "] to wopiHost["
+                                                    << uriObject.toString() << ']');
+
+            httpRequest.setBodyFile(fileJailPath);
+            httpRequest.set("Content-Type", "application/octet-stream");
+
+            auto httpSession = StorageConnectionManager::getHttpSession(uriObject);
+            auto httpResponse = httpSession->syncRequest(httpRequest);
+
+            http::StatusLine statusLine = httpResponse->statusLine();
+            if (statusLine.statusCode() != http::StatusCode::OK)
+            {
+                LOG_ERR("Failed to upload file[" << key << "] to wopiHost["
+                                                 << uriObject.getAuthority() << " with status["
+                                                 << statusLine.reasonPhrase() << ']');
+                continue;
+            }
+
+            LOG_DBG("Successfully uploaded presetFile[" << key << ']');
         }
-
-        std::string filePath = "/settings/userconfig/wordbook/";
-        filePath.append(fileName);
-        uriObject.addQueryParameter("fileId", filePath);
-
-        auto httpRequest = StorageConnectionManager::createHttpRequest(
-            uriObject, Authorization::create(_uriPublic));
-        httpRequest.setVerb(http::Request::VERB_POST);
-
-        LOG_TRC("Uploading file from jailPath[" << filePath << "] to wopiHost["
-                                                << uriObject.toString() << ']');
-
-        httpRequest.setBodyFile(fileJailPath);
-        httpRequest.set("Content-Type", "application/octet-stream");
-
-        auto httpSession = StorageConnectionManager::getHttpSession(uriObject);
-        auto httpResponse = httpSession->syncRequest(httpRequest);
-
-        http::StatusLine statusLine = httpResponse->statusLine();
-        if (statusLine.statusCode() != http::StatusCode::OK)
-        {
-            LOG_ERR("Failed to upload file[" << fileName << "] to wopiHost["
-                                             << uriObject.getAuthority() << " with status["
-                                             << statusLine.reasonPhrase() << ']');
-            continue;
-        }
-
-        LOG_DBG("Successfully uploaded presetFile[" << fileName << ']');
     }
 }
 #endif
