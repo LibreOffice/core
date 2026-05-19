@@ -17,25 +17,30 @@ namespace jsuno
 class ValueRef
 {
 public:
-    ValueRef(JSContext* ctx, JSValue val = JS_UNINITIALIZED)
-        : ctx_(ctx)
+    ValueRef(JSRuntime* rt, JSValue val = JS_UNINITIALIZED)
+        : rt_(rt)
         , val_(val)
     {
     }
 
+    ValueRef(JSContext* ctx, JSValue val = JS_UNINITIALIZED)
+        : ValueRef(JS_GetRuntime(ctx), val)
+    {
+    }
+
     ValueRef(ValueRef&& ref)
-        : ctx_(ref.ctx_)
+        : rt_(ref.rt_)
         , val_(ref.val_)
     {
         ref.val_ = JS_UNINITIALIZED;
     }
 
-    ~ValueRef() { JS_FreeValue(ctx_, val_); }
+    ~ValueRef() { JS_FreeValueRT(rt_, val_); }
 
     ValueRef& operator=(ValueRef&& ref)
     {
-        assert(ctx_ == ref.ctx_);
-        JS_FreeValue(ctx_, val_);
+        assert(rt_ == ref.rt_);
+        JS_FreeValueRT(rt_, val_);
         val_ = ref.val_;
         ref.val_ = JS_UNINITIALIZED;
         return *this;
@@ -43,14 +48,14 @@ public:
 
     ValueRef& operator=(JSValue val)
     {
-        JS_FreeValue(ctx_, val_);
+        JS_FreeValueRT(rt_, val_);
         val_ = val;
         return *this;
     }
 
     operator JSValueConst() const { return val_; }
 
-    JSValue dup() const { return JS_DupValue(ctx_, val_); }
+    JSValue dup() const { return JS_DupValueRT(rt_, val_); }
 
     JSValue release()
     {
@@ -65,7 +70,7 @@ private:
     ValueRef(ValueRef const&) = delete;
     void operator=(ValueRef const&) = delete;
 
-    JSContext* ctx_;
+    JSRuntime* rt_;
     JSValue val_;
 };
 }
