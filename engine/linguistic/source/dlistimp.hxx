@@ -65,16 +65,16 @@ class DicList : public cppu::WeakImplHelper<css::linguistic2::XSearchableDiction
     DicList & operator = (const DicList &) = delete;
 
 
-    void                CreateDicList();
+    void                CreateDicList(bool bDispatchEvents);
     DictionaryVec_t &   GetOrCreateDicList()
                         {
                             if ( !bInCreation && aDicList.empty() )
-                                CreateDicList();
+                                CreateDicList(/*bDispatchEvents=*/false);
                             return aDicList;
                         }
 
     void                SearchForDictionaries( DictionaryVec_t &rDicList,
-                                            const OUString &rDicDir, bool bIsWritePath );
+                                            const OUString &rDicDir, bool bIsWritePath, bool bDispatchEvents );
     sal_Int32           GetDicPos(const css::uno::Reference<
                             css::linguistic2::XDictionary > &xDic);
 

@@ -269,7 +269,8 @@ DicList::~DicList()
 void DicList::SearchForDictionaries(
     DictionaryVec_t&rDicList,
     const OUString &rDicDirURL,
-    bool bIsWriteablePath )
+    bool bIsWriteablePath,
+    bool bDispatchEvents )
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
 
@@ -324,15 +325,28 @@ void DicList::SearchForDictionaries(
             uno::Reference< XDictionary > xDic =
                         new DictionaryNeo( aDicTitle.isEmpty() ? aDicName : aDicTitle, nLang, eType, aURL, bIsWriteablePath );
 
-            // Register before setActive so that the (conditional) setActive
-            // triggered ACTIVATE_DIC event reaches DicEvtListenerHelper and
-            // notifies listeners of dictionary changes.
-            addDictionary( xDic );
+            // For runtime re-init (e.g. setOption("addconfig") after a
+            // wordbook install) attach the listener before setActive so the
+            // (conditional) setActive triggered ACTIVATE_DIC event reaches
+            // DicEvtListenerHelper and notifies listeners of dictionary
+            // changes.
+            if (bDispatchEvents)
+                addDictionary( xDic );
 
             // when using kit we don't have "options" dialog to make user-dictionaries active
             // so when we add user-dictionary, we make them active as well
             if (comphelper::COKit::isActive())
                 xDic->setActive(true);
+
+            // Alternatively, for lazy first-time creation path which can enter
+            // here from a grammar-checking worker holding GetLinguMutex,
+            // firing events can deadlock against the main thread waiting on
+            // GetLinguMutex in getSpellChecker. In this case m_aDictionaryMap
+            // is empty until after CreateDicList returns anyway, so the events
+            // aren't needed.  In this case call addDictionary after it is
+            // already set as active to avoid firing the events.
+            if (!bDispatchEvents)
+                addDictionary( xDic );
 
             nCount++;
         }
@@ -588,11 +602,11 @@ void SAL_CALL DicList::initialize(const css::uno::Sequence<css::uno::Any>& /*rAr
 
     if (!bInCreation && !bDisposing)
     {
-        CreateDicList();
+        CreateDicList(/*bDispatchEvents=*/true);
     }
 }
 
-void DicList::CreateDicList()
+void DicList::CreateDicList(bool bDispatchEvents)
 {
     bInCreation = true;
 
@@ -602,7 +616,7 @@ void DicList::CreateDicList()
     for (const OUString & aPath : aPaths)
     {
         const bool bIsWriteablePath = (aPath == aWriteablePath);
-        SearchForDictionaries( aDicList, aPath, bIsWriteablePath );
+        SearchForDictionaries( aDicList, aPath, bIsWriteablePath, bDispatchEvents );
     }
 
     // create IgnoreAllList dictionary with empty URL (non persistent)
