@@ -363,19 +363,43 @@ export class SheetGeometry {
 	}
 
 	public convertRectangleToTileTwips(simpleRectangle: cool.SimpleRectangle): void {
-		simpleRectangle.x1 = this._columns.getTileTwipsPosFromPrint(simpleRectangle.x1);
-		simpleRectangle.y1 = this._rows.getTileTwipsPosFromPrint(simpleRectangle.y1);
+		// getTileTwipsPosFromPrint expects an absolute position from origin,
+		// so convert each edge independently and derive width/height from
+		// the converted edges.
+		const x1PT = simpleRectangle.x1;
+		const y1PT = simpleRectangle.y1;
+		const x2PT = x1PT + simpleRectangle.width;
+		const y2PT = y1PT + simpleRectangle.height;
 
-		simpleRectangle.width = this._columns.getTileTwipsPosFromPrint(simpleRectangle.width);
-		simpleRectangle.height = this._rows.getTileTwipsPosFromPrint(simpleRectangle.height);
+		const x1TT = this._columns.getTileTwipsPosFromPrint(x1PT);
+		const y1TT = this._rows.getTileTwipsPosFromPrint(y1PT);
+		const x2TT = this._columns.getTileTwipsPosFromPrint(x2PT);
+		const y2TT = this._rows.getTileTwipsPosFromPrint(y2PT);
+
+		simpleRectangle.x1 = x1TT;
+		simpleRectangle.y1 = y1TT;
+		simpleRectangle.width = x2TT - x1TT;
+		simpleRectangle.height = y2TT - y1TT;
 	}
 
 	public convertRawRectangleToTileTwips(rectangle: number[]): void {
-		rectangle[0] = this._columns.getTileTwipsPosFromPrint(rectangle[0]);
-		rectangle[1] = this._rows.getTileTwipsPosFromPrint(rectangle[1]);
+		// getTileTwipsPosFromPrint expects an absolute position from origin,
+		// so convert each edge independently and derive width/height from
+		// the converted edges.
+		const x1PT = rectangle[0];
+		const y1PT = rectangle[1];
+		const x2PT = x1PT + rectangle[2];
+		const y2PT = y1PT + rectangle[3];
 
-		rectangle[2] = this._columns.getTileTwipsPosFromPrint(rectangle[2]);
-		rectangle[3] = this._rows.getTileTwipsPosFromPrint(rectangle[3]);
+		const x1TT = this._columns.getTileTwipsPosFromPrint(x1PT);
+		const y1TT = this._rows.getTileTwipsPosFromPrint(y1PT);
+		const x2TT = this._columns.getTileTwipsPosFromPrint(x2PT);
+		const y2TT = this._rows.getTileTwipsPosFromPrint(y2PT);
+
+		rectangle[0] = x1TT;
+		rectangle[1] = y1TT;
+		rectangle[2] = x2TT - x1TT;
+		rectangle[3] = y2TT - y1TT;
 	}
 
 	// accepts a point in tile-twips coordinates and returns the equivalent point
