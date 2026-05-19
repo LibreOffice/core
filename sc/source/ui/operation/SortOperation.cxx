@@ -14,7 +14,6 @@
 #include <editable.hxx>
 #include <markdata.hxx>
 #include <SheetViewOperationsTester.hxx>
-#include <editable.hxx>
 #include <progress.hxx>
 #include <undosort.hxx>
 #include <scresid.hxx>
