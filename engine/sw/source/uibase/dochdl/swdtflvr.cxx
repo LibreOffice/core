@@ -2248,14 +2248,15 @@ bool SwTransferable::PasteFileContent( const TransferableDataHelper& rData,
                 }
 
                 pRead = ReadAscii;
-                SwAsciiOptions aAOpt;
-                aAOpt.SetCharSet( RTL_TEXTENCODING_UCS2 );
-                pRead->GetReaderOpt().SetASCIIOpts( aAOpt );
             }
             else
             {
                 pRead = ReadMarkdown;
             }
+
+            SwAsciiOptions aAOpt;
+            aAOpt.SetCharSet( RTL_TEXTENCODING_UCS2 );
+            pRead->GetReaderOpt().SetASCIIOpts( aAOpt );
         }
     }
 

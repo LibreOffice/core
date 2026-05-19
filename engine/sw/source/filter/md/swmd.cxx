@@ -761,6 +761,8 @@ void SwMarkdownParser::RegisterTable(MDTable* pTable) { m_aTables.push_back(pTab
 
 void SwMarkdownParser::DeRegisterTable(MDTable* pTable) { std::erase(m_aTables, pTable); }
 
+void SwMarkdownParser::SetSrcEncoding(rtl_TextEncoding eSrcEnc) { m_eSrcEnc = eSrcEnc; }
+
 SwMarkdownParser::SwMarkdownParser(SwDoc& rD, SwPaM& rCursor, SvStream& rIn, OUString aBaseURL,
                                    bool bReadNewDoc)
     : m_xDoc(&rD)
@@ -874,6 +876,10 @@ ErrCodeMsg MarkdownReader::Read(SwDoc& rDoc, const OUString& rBaseURL, SwPaM& rP
     }
 
     SwMarkdownParser parser(rDoc, rPam, *m_pStream, rBaseURL, !m_bInsertMode);
+    const rtl_TextEncoding eSrcEnc = m_aOption.GetASCIIOpts().GetCharSet();
+    parser.SetSrcEncoding(eSrcEnc);
+    comphelper::ScopeGuard guard([this] { m_aOption.ResetASCIIOpts(); });
+
     if (pNumRuleItem)
     {
         parser.SetNumRuleItem(pNumRuleItem);
@@ -891,11 +897,15 @@ ErrCodeMsg MarkdownReader::Read(SwDoc& rDoc, const OUString& rBaseURL, SwPaM& rP
 ErrCode SwMarkdownParser::CallParser()
 {
     // use utf8
-    m_rInput.DetectEncoding();
-    const rtl_TextEncoding eSrcEnc = m_rInput.GetStreamEncoding();
+    rtl_TextEncoding eSrcEnc = m_eSrcEnc;
     if (eSrcEnc == RTL_TEXTENCODING_DONTKNOW)
     {
-        return ERRCODE_IO_INVALIDCHAR;
+        m_rInput.DetectEncoding();
+        eSrcEnc = m_rInput.GetStreamEncoding();
+        if (eSrcEnc == RTL_TEXTENCODING_DONTKNOW)
+        {
+            return ERRCODE_IO_INVALIDCHAR;
+        }
     }
 
     const sal_uInt64 nFilesize = m_rInput.remainingSize();
