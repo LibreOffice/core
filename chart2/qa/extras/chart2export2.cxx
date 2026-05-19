@@ -360,6 +360,19 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testChartexBinningXLSX)
         "intervalClosed", u"r");
 }
 
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testChartexNoSpPr)
+{
+    loadFromFile(u"xlsx/regionMap.xlsx");
+    save(TestFilter::XLSX);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"xl/charts/chartEx1.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // Verify that the series is there but that it has no spPr child
+    assertXPath(pXmlDoc, "/cx:chartSpace/cx:chart/cx:plotArea/cx:plotAreaRegion/cx:series");
+    assertXPath(pXmlDoc, "/cx:chartSpace/cx:chart/cx:plotArea/cx:plotAreaRegion/cx:series/cx:spPr",
+                0);
+}
+
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testAxisTitleRotationXLSX)
 {
     loadFromFile(u"xlsx/axis_title_rotation.xlsx");
