@@ -260,10 +260,13 @@ function resetZoomLevel() {
 	cy.log('<< resetZoomLevel - end');
 }
 
-function fitWidthZoom() {
+function fitWidthZoom(isWriter = true) {
 	cy.log('>> fitWidthZoom - start');
 
-	cy.cGet('#toolbar-down #fitwidthzoom').click();
+	if (isWriter)
+		cy.cGet('#toolbar-down #fitwidthzoom-writer').click();
+	else
+		cy.cGet('#toolbar-down #fitwidthzoom-impress').click();
 
 	cy.log('<< fitWidthZoom - end');
 }

@@ -22,7 +22,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Statusbar tests.', functio
 	});
 
 	it('Change zoom level.', function() {
-		desktopHelper.fitWidthZoom();
+		desktopHelper.fitWidthZoom(false);
 		desktopHelper.shouldHaveZoomLevel('100');
 		desktopHelper.zoomIn();
 		desktopHelper.shouldHaveZoomLevel('120');
@@ -31,23 +31,23 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Statusbar tests.', functio
 	});
 
 	it('Select zoom level.', function() {
-		desktopHelper.fitWidthZoom();
+		desktopHelper.fitWidthZoom(false);
 		desktopHelper.shouldHaveZoomLevel('100');
 		desktopHelper.selectZoomLevel('280', false);
 		desktopHelper.shouldHaveZoomLevel('280');
 	});
 
 	it('Dynamic Zoom', function () {
-		desktopHelper.fitWidthZoom();
+		desktopHelper.fitWidthZoom(false);
 		desktopHelper.shouldHaveZoomLevel('100');
 
 		cy.viewport(1420, 1080);
-		desktopHelper.fitWidthZoom();
+		desktopHelper.fitWidthZoom(false);
 		desktopHelper.shouldHaveZoomLevel('70');
 
 		desktopHelper.zoomIn();
 		desktopHelper.zoomIn();
-		desktopHelper.fitWidthZoom();
+		desktopHelper.fitWidthZoom(false);
 		desktopHelper.shouldHaveZoomLevel('70');
 	});
 });
