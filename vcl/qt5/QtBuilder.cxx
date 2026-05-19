@@ -498,8 +498,8 @@ QObject* QtBuilder::insertObject(QObject* pParent, const OUString& rClass, std::
                 pParentLayout = new QVBoxLayout(pParentWidget);
         }
 
-        // add widget to parent layout
-        if (pParentLayout)
+        // add widget to parent layout if it wasn't added by Qt already
+        if (pParentLayout && (pParentLayout->indexOf(pWidget) < 0))
             pParentLayout->addWidget(pWidget);
 
         QtInstanceWidget::setHelpId(*pWidget, getHelpRoot() + rId);
