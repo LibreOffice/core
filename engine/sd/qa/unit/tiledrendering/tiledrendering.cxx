@@ -11,6 +11,8 @@
 
 #include <app.hrc>
 #include <test/helper/transferable.hxx>
+#include <tools/JsonPath.hxx>
+#include <test/JsonTestTools.hxx>
 #include <boost/property_tree/json_parser.hpp>
 #include <functional>
 #include <set>
@@ -4605,51 +4607,47 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPasteMarkdownInEditMode)
 namespace
 {
 /// Recursively traverse the JSON tree
-void forEachPrimitive(const boost::property_tree::ptree& rNode,
-                      const std::function<void(const boost::property_tree::ptree&)>& rVisitor)
+void forEachPrimitive(const tools::JsonPath& rNode,
+                      const std::function<void(const tools::JsonPath&)>& rVisitor)
 {
     // Did we found a primitive
-    if (rNode.get_optional<std::string>("type"))
+    if (rNode.has("type"))
         rVisitor(rNode);
 
     // Recurse into arrays
     for (const char* pArrayName : { "children", "primitives", "objects" })
     {
-        auto aChildOpt = rNode.get_child_optional(pArrayName);
-        if (aChildOpt)
+        if (const auto* pArray = rNode.find(pArrayName))
         {
-            for (const auto& rChild : *aChildOpt)
-                forEachPrimitive(rChild.second, rVisitor);
+            for (const auto& rChild : *pArray)
+                forEachPrimitive(rNode.sub(rChild.second), rVisitor);
         }
     }
 
     // Recurse into sub-nodes
-    auto aMasterOpt = rNode.get_child_optional("masterPage");
-    if (aMasterOpt)
-        forEachPrimitive(*aMasterOpt, rVisitor);
+    if (auto oMasterPage = rNode.at("masterPage"))
+        forEachPrimitive(*oMasterPage, rVisitor);
 }
 
 /// Collect all primitive types in the JSON tree
-std::set<std::string> collectPrimitiveTypes(const boost::property_tree::ptree& rTree)
+std::set<OString> collectPrimitiveTypes(const tools::JsonPath& rJson)
 {
-    std::set<std::string> aTypes;
-    forEachPrimitive(rTree, [&aTypes](const boost::property_tree::ptree& rNode) {
-        auto sType = rNode.get_optional<std::string>("type");
-        if (sType)
+    std::set<OString> aTypes;
+    forEachPrimitive(rJson, [&aTypes](const tools::JsonPath& rNode) {
+        if (auto sType = rNode.getString("type"))
             aTypes.insert(*sType);
     });
     return aTypes;
 }
 
 /// Collect all "text" values from the JSON primitive tree.
-std::vector<std::string> collectPrimitiveTexts(const boost::property_tree::ptree& rTree)
+std::vector<OString> collectPrimitiveTexts(const tools::JsonPath& rJson)
 {
-    std::vector<std::string> aTexts;
-    forEachPrimitive(rTree, [&aTexts](const boost::property_tree::ptree& rNode)
+    std::vector<OString> aTexts;
+    forEachPrimitive(rJson, [&aTexts](const tools::JsonPath& rNode)
     {
-        auto oText = rNode.get_optional<std::string>("text");
-        if (oText)
-            aTexts.push_back(*oText);
+        if (auto sText = rNode.getString("text"))
+            aTexts.push_back(*sText);
     });
     return aTexts;
 }
@@ -4669,42 +4667,39 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPaintVectorTile)
     CPPUNIT_ASSERT(!aResult.isEmpty());
 
     // Parse and verify JSON structure
-    std::stringstream aStream(std::string(aResult.getStr(), aResult.getLength()));
-    boost::property_tree::ptree aTree;
-    boost::property_tree::read_json(aStream, aTree);
+    auto aJson = JsonTestTools::parseJson(std::string_view(aResult.getStr(), aResult.getLength()));
 
     // Must have a "vectortile"
-    CPPUNIT_ASSERT_EQUAL(std::string("vectortile"), aTree.get<std::string>("type"));
+    CPPUNIT_ASSERT_EQUAL("vectortile"_ostr, aJson.getString("/type").value_or(OString()));
 
     // Slide dimensions must be present
-    CPPUNIT_ASSERT(aTree.get_optional<int>("slideWidth"));
-    CPPUNIT_ASSERT(aTree.get_optional<int>("slideHeight"));
+    CPPUNIT_ASSERT(aJson.has("/slideWidth"));
+    CPPUNIT_ASSERT(aJson.has("/slideHeight"));
 
     // Check master page
-    auto oMaster = aTree.get_child_optional("masterPage");
-    CPPUNIT_ASSERT(oMaster);
-    auto& aMasterPrimitives = oMaster->get_child("primitives");
+    auto oMasterPrimitives = aJson.at("/masterPage/primitives");
+    CPPUNIT_ASSERT(oMasterPrimitives.has_value());
     // Master page: white fill + gradient background + 2 placeholder SdrRects.
     size_t nNumberOfMasterPrimitives = 0;
     bool bHasWhiteFill = false;
     bool bHasGradient = false;
-    for (const auto& rPrimitive : aMasterPrimitives)
+    for (const auto& rPrimitive : oMasterPrimitives->tree())
     {
         ++nNumberOfMasterPrimitives;
-        std::string sType = rPrimitive.second.get<std::string>("type");
+        tools::JsonPath aPrimitive = oMasterPrimitives->sub(rPrimitive.second);
+        OString sType = aPrimitive.getString("type").value_or(OString());
         if (sType == "polyPolygonColor")
         {
-            std::string sColor = rPrimitive.second.get<std::string>("color");
-            if (sColor == "#ffffff")
+            if (aPrimitive.getString("color").value_or(OString()) == "#ffffff")
                 bHasWhiteFill = true;
         }
         else if (sType == "polyPolygonGradient")
         {
             bHasGradient = true;
             // Verify gradient has color stops
-            auto& rGradient = rPrimitive.second.get_child("gradient");
-            CPPUNIT_ASSERT_EQUAL(std::string("linear"), rGradient.get<std::string>("style"));
-            CPPUNIT_ASSERT(rGradient.get_child_optional("colorStops"));
+            CPPUNIT_ASSERT_EQUAL("linear"_ostr,
+                                 aPrimitive.getString("gradient/style").value_or(OString()));
+            CPPUNIT_ASSERT(aPrimitive.has("gradient/colorStops"));
         }
     }
     CPPUNIT_ASSERT_EQUAL(size_t(4), nNumberOfMasterPrimitives);
@@ -4712,41 +4707,41 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPaintVectorTile)
     CPPUNIT_ASSERT_MESSAGE("Expecting gradient background", bHasGradient);
 
     // Check slide objects
-    auto& aObjects = aTree.get_child("objects");
-    size_t nNumberOfObjects = 0;
-    for (const auto& rObject : aObjects)
+    auto oObjects = aJson.at("/objects");
+    CPPUNIT_ASSERT(oObjects.has_value());
+    for (const auto& rObject : oObjects->tree())
     {
-        ++nNumberOfObjects;
-        CPPUNIT_ASSERT(rObject.second.get_optional<std::string>("id"));
-        CPPUNIT_ASSERT(rObject.second.get_child_optional("primitives"));
+        tools::JsonPath aObject = oObjects->sub(rObject.second);
+        CPPUNIT_ASSERT(aObject.has("id"));
+        CPPUNIT_ASSERT(aObject.has("primitives"));
     }
 
     // Check number of objects is what we expect.
-    CPPUNIT_ASSERT_EQUAL(size_t(10), nNumberOfObjects);
+    CPPUNIT_ASSERT_EQUAL(size_t(10), aJson.getSize("/objects").value_or(0));
 
     // Collect all primitive types in the JSON tree.
-    std::set<std::string> aTypes = collectPrimitiveTypes(aTree);
+    std::set<OString> aTypes = collectPrimitiveTypes(aJson);
 
     // Verify specific primitive types are present
-    CPPUNIT_ASSERT_MESSAGE("Expecting polyPolygonColor", aTypes.count("polyPolygonColor") > 0);
-    CPPUNIT_ASSERT_MESSAGE("Expecting textSimplePortion", aTypes.count("textSimplePortion") > 0);
-    CPPUNIT_ASSERT_MESSAGE("Expecting polygonStrokeArrow", aTypes.count("polygonStrokeArrow") > 0);
-    CPPUNIT_ASSERT_MESSAGE("Expecting graphic", aTypes.count("graphic") > 0);
-    CPPUNIT_ASSERT_MESSAGE("Expecting shadow", aTypes.count("shadow") > 0);
-    CPPUNIT_ASSERT_MESSAGE("Expecting glow", aTypes.count("glow") > 0);
-    CPPUNIT_ASSERT_MESSAGE("Expecting polyPolygonAlphaGradient", aTypes.count("polyPolygonAlphaGradient") > 0);
+    CPPUNIT_ASSERT_MESSAGE("Expecting polyPolygonColor", aTypes.count("polyPolygonColor"_ostr) > 0);
+    CPPUNIT_ASSERT_MESSAGE("Expecting textSimplePortion", aTypes.count("textSimplePortion"_ostr) > 0);
+    CPPUNIT_ASSERT_MESSAGE("Expecting polygonStrokeArrow", aTypes.count("polygonStrokeArrow"_ostr) > 0);
+    CPPUNIT_ASSERT_MESSAGE("Expecting graphic", aTypes.count("graphic"_ostr) > 0);
+    CPPUNIT_ASSERT_MESSAGE("Expecting shadow", aTypes.count("shadow"_ostr) > 0);
+    CPPUNIT_ASSERT_MESSAGE("Expecting glow", aTypes.count("glow"_ostr) > 0);
+    CPPUNIT_ASSERT_MESSAGE("Expecting polyPolygonAlphaGradient", aTypes.count("polyPolygonAlphaGradient"_ostr) > 0);
 
     // No unknown primitives
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("No 'unknown' primitive type expected", std::size_t(0), aTypes.count("unknown"));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("No 'unknown' primitive type expected", size_t(0), aTypes.count("unknown"_ostr));
 
     // Verify that field placeholders have been replaced.
-    std::vector<std::string> aTexts = collectPrimitiveTexts(aTree);
+    std::vector<OString> aTexts = collectPrimitiveTexts(aJson);
     for (const auto& rText : aTexts)
     {
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("<number> was not replaced", std::string::npos, rText.find("<number>"));
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("<date/time> was not replaced", std::string::npos, rText.find("<date/time>"));
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("<footer> was not replaced", std::string::npos, rText.find("<footer>"));
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("<header> was not replaced", std::string::npos, rText.find("<header>"));
+        CPPUNIT_ASSERT_MESSAGE("<number> was not replaced", rText.indexOf("<number>") < 0);
+        CPPUNIT_ASSERT_MESSAGE("<date/time> was not replaced", rText.indexOf("<date/time>") < 0);
+        CPPUNIT_ASSERT_MESSAGE("<footer> was not replaced", rText.indexOf("<footer>") < 0);
+        CPPUNIT_ASSERT_MESSAGE("<header> was not replaced", rText.indexOf("<header>") < 0);
     }
 }
 
@@ -4763,29 +4758,25 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPaintVectorTileMasterPagePlacehol
     OString aResult = aJsonWriter.finishAndGetAsOString();
     CPPUNIT_ASSERT(!aResult.isEmpty());
 
-    std::stringstream aStream(std::string(aResult.getStr(), aResult.getLength()));
-    boost::property_tree::ptree aTree;
-    boost::property_tree::read_json(aStream, aTree);
+    auto aJson = JsonTestTools::parseJson(std::string_view(aResult.getStr(), aResult.getLength()));
 
     // The master page of the test document has only two presentation
     // placeholders (title + outline) which must be filtered out.
-    auto oMaster = aTree.get_child_optional("masterPage");
-    CPPUNIT_ASSERT(oMaster);
+    auto oMasterPage = aJson.at("/masterPage");
+    CPPUNIT_ASSERT(oMasterPage.has_value());
 
-    std::vector<std::string> aMasterTexts;
-    forEachPrimitive(*oMaster, [&aMasterTexts](const boost::property_tree::ptree& rNode)
+    std::vector<OString> aMasterTexts;
+    forEachPrimitive(*oMasterPage, [&aMasterTexts](const tools::JsonPath& rNode)
     {
-        auto oText = rNode.get_optional<std::string>("text");
-        if (oText)
-            aMasterTexts.push_back(*oText);
+        if (auto sText = rNode.getString("text"))
+            aMasterTexts.push_back(*sText);
     });
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
         "Master page title/outline placeholder text must be filtered out",
         size_t(0), aMasterTexts.size());
 
     // The slide itself should still contain its rectangle.
-    auto& aObjects = aTree.get_child("objects");
-    CPPUNIT_ASSERT_EQUAL(size_t(1), aObjects.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aJson.getSize("/objects").value_or(0));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

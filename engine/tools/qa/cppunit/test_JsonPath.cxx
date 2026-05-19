@@ -158,6 +158,46 @@ CPPUNIT_TEST_FIXTURE(JsonPathTest, testAtSharesOwnership)
     CPPUNIT_ASSERT_EQUAL("#ffffff"_ostr, oSub->getString("color").value_or(OString()));
 }
 
+CPPUNIT_TEST_FIXTURE(JsonPathTest, testSubWrapsIteratedChild)
+{
+    // The typical use of sub() is iterating tree() directly and
+    // wrapping each child for path queries.
+    auto oJson = tools::JsonPath::parse(kSample);
+    CPPUNIT_ASSERT(oJson.has_value());
+
+    auto oPrimitives = oJson->at("/primitives");
+    CPPUNIT_ASSERT(oPrimitives.has_value());
+
+    std::vector<OString> aTypes;
+    for (const auto& rChild : oPrimitives->tree())
+    {
+        tools::JsonPath aChild = oPrimitives->sub(rChild.second);
+        aTypes.push_back(aChild.getString("type").value_or(OString()));
+    }
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aTypes.size());
+    CPPUNIT_ASSERT_EQUAL("backgroundcolor"_ostr, aTypes[0]);
+    CPPUNIT_ASSERT_EQUAL("polyPolygonColor"_ostr, aTypes[1]);
+}
+
+CPPUNIT_TEST_FIXTURE(JsonPathTest, testSubSharesOwnership)
+{
+    // A JsonPath obtained from sub() must keep the tree alive after
+    // both the original root JsonPath and the intermediate at()
+    // result are destroyed.
+    std::optional<tools::JsonPath> oSub;
+    {
+        auto oJson = tools::JsonPath::parse(kSample);
+        CPPUNIT_ASSERT(oJson.has_value());
+        auto oPrimitives = oJson->at("/primitives");
+        CPPUNIT_ASSERT(oPrimitives.has_value());
+        // Pick the first child via iteration.
+        const auto& rFirst = oPrimitives->tree().front().second;
+        oSub = oPrimitives->sub(rFirst);
+    }
+    CPPUNIT_ASSERT(oSub.has_value());
+    CPPUNIT_ASSERT_EQUAL("backgroundcolor"_ostr, oSub->getString("type").value_or(OString()));
+}
+
 CPPUNIT_TEST_FIXTURE(JsonPathTest, testLeadingSlashOptional)
 {
     auto oJson = tools::JsonPath::parse(kSample);

@@ -66,6 +66,11 @@ public:
     /// returned JsonPath shares ownership with this one.
     std::optional<JsonPath> at(std::string_view sPath) const noexcept;
 
+    /// Wrap a node already known to be part of this tree as a new
+    /// JsonPath sharing ownership with this. The caller must ensure
+    /// rSubTree is part of the tree rooted at this->tree().
+    JsonPath sub(const boost::property_tree::ptree& rSubTree) const noexcept;
+
     /// Value at sPath read as an OString. Empty path returns this node's
     /// value. Returns std::nullopt if the path is missing.
     std::optional<OString> getString(std::string_view sPath = std::string_view()) const noexcept;

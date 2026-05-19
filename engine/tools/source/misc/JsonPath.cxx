@@ -185,6 +185,11 @@ std::optional<JsonPath> JsonPath::at(std::string_view sPath) const noexcept
     return JsonPath(mpOwned, *pNode);
 }
 
+JsonPath JsonPath::sub(const boost::property_tree::ptree& rSubTree) const noexcept
+{
+    return JsonPath(mpOwned, rSubTree);
+}
+
 std::optional<OString> JsonPath::getString(std::string_view sPath) const noexcept
 {
     auto oValue = readValue<std::string>(walkPath(*mpTree, sPath));
