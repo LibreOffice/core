@@ -303,7 +303,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testExtTextInputInvalidChars)
 {
 // TODO figure out why the ext text input in this test code reaches the wrong window on
 // non-headless.
-#if !defined _WIN32
+#if !defined MACOSX && !defined _WIN32
     sal_uInt32 i;
 
     // Given an empty document:
