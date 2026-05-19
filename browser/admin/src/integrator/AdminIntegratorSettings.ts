@@ -43,6 +43,7 @@ interface ConfigData {
 	browsersetting: ConfigItem[] | null;
 	viewsetting: ConfigItem[] | null;
 	xcu: ConfigItem[] | null;
+	themes: ConfigItem[] | null;
 }
 
 interface ViewSettings {
@@ -538,6 +539,7 @@ class SettingIframe {
 			this.settingConfigBasePath() + '/browsersetting/',
 		viewSettingsUpload: () => this.settingConfigBasePath() + '/viewsetting/',
 		XcuUpload: () => this.settingConfigBasePath() + '/xcu/',
+		themesUpload: () => this.settingConfigBasePath() + '/themes/',
 	};
 	private browserSettingOptions: Record<string, any> = {};
 
@@ -706,6 +708,19 @@ class SettingIframe {
 				buttonText: _('Upload Xcu'),
 				uploadPath: this.PATH.XcuUpload(),
 				debugOnly: true,
+			},
+			{
+				id: 'themes',
+				sectionTitle: _('Document themes'),
+				sectionDesc: _(
+					'Upload custom document themes (.theme). These define color palettes available under Format > Theme.',
+				),
+				listId: 'themesList',
+				inputId: 'themesFile',
+				buttonId: 'uploadThemesButton',
+				fileAccept: '.theme',
+				buttonText: _('Upload Theme'),
+				uploadPath: this.PATH.themesUpload(),
 			},
 		];
 
@@ -2773,6 +2788,7 @@ class SettingIframe {
 		if (data.wordbook)
 			this.populateList('wordbookList', data.wordbook, '/wordbook');
 		if (data.xcu) this.populateList('XcuList', data.xcu, '/xcu');
+		if (data.themes) this.populateList('themesList', data.themes, '/themes');
 
 		var navItem = document.querySelector<HTMLElement>(
 			'#settings-nav .settings-nav-item',
