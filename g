@@ -58,7 +58,17 @@ if [ "$1" == "review" ]; then
         exit 1
     fi
     if [ "$NUM_COMMITS" -gt 1 ]; then
-        git push $GERRIT_REMOTE HEAD~1:refs/for/$TRACKED_BRANCH%wip
+        # Push WIP commits.  If Gerrit rejects with "no new changes" it
+        # just means the WIP patches are already up-to-date; continue
+        # to push the topmost commit as the actual review.
+        set +e
+        wip_output=$(git push $GERRIT_REMOTE HEAD~1:refs/for/$TRACKED_BRANCH%wip 2>&1)
+        wip_status=$?
+        set -e
+        echo "$wip_output"
+        if [ $wip_status -ne 0 ] && ! echo "$wip_output" | grep -q "no new changes"; then
+            exit $wip_status
+        fi
     fi
     git push $GERRIT_REMOTE HEAD:refs/for/$TRACKED_BRANCH
 
