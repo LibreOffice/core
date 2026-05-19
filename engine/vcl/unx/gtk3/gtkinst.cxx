@@ -23654,7 +23654,7 @@ void silence_gwarning(const gchar* /*log_domain*/,
 // VclCustomWidget is used by the jsdialog (online) for client-rendered
 // widgets; on the desktop GTK path it has no rendering, so register an empty
 // GtkLabel-derived GType under that name as a placeholder for gtk_builder.
-static GType vcl_custom_widget_get_type()
+GType vcl_custom_widget_get_type()
 {
     static GType type = 0;
     if (!type)
