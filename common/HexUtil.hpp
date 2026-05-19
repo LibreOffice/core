@@ -100,16 +100,23 @@ inline std::string bytesToHexString(const std::string_view str)
     return bytesToHexString(str.data(), str.size());
 }
 
-inline int hexDigitFromChar(char c)
+/// Maps a char to its hex value (0..15) or -1 for any non-hex char.
+constexpr int hexDigitFromChar(char c)
 {
-    if (c >= '0' && c <= '9')
-        return c - '0';
-    else if (c >= 'a' && c <= 'f')
-        return c - 'a' + 10;
-    else if (c >= 'A' && c <= 'F')
-        return c - 'A' + 10;
-    else
-        return -1;
+    constexpr auto table = []
+    {
+        std::array<signed char, 256> t{};
+        t.fill(-1);
+        for (int i = 0; i <= 9; ++i)
+            t['0' + i] = static_cast<signed char>(i);
+        for (int i = 0; i < 6; ++i)
+        {
+            t['a' + i] = static_cast<signed char>(10 + i);
+            t['A' + i] = static_cast<signed char>(10 + i);
+        }
+        return t;
+    }();
+    return table[static_cast<unsigned char>(c)];
 }
 
 inline std::string hexStringToBytes(const uint8_t* data, size_t size)

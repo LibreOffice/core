@@ -34,6 +34,7 @@ class HexUtilTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testStringifyHexLine);
     CPPUNIT_TEST(testHexify);
     CPPUNIT_TEST(testBytesToHex);
+    CPPUNIT_TEST(testHexDigitFromChar);
     CPPUNIT_TEST(testNumberToHex);
     CPPUNIT_TEST(testEncodeIdKnownValues);
     CPPUNIT_TEST(testEncodeIdOstream);
@@ -47,6 +48,7 @@ class HexUtilTests : public CPPUNIT_NS::TestFixture
     void testStringifyHexLine();
     void testHexify();
     void testBytesToHex();
+    void testHexDigitFromChar();
     void testNumberToHex();
     void testEncodeIdKnownValues();
     void testEncodeIdOstream();
@@ -165,6 +167,27 @@ void HexUtilTests::testNumberToHex()
             }
         }
     }
+}
+
+void HexUtilTests::testHexDigitFromChar()
+{
+    constexpr std::string_view testname = __func__;
+
+    for (int i = 0; i <= 9; ++i)
+        LOK_ASSERT_EQUAL(i, HexUtil::hexDigitFromChar(static_cast<char>('0' + i)));
+    for (int i = 0; i < 6; ++i)
+    {
+        LOK_ASSERT_EQUAL(10 + i, HexUtil::hexDigitFromChar(static_cast<char>('a' + i)));
+        LOK_ASSERT_EQUAL(10 + i, HexUtil::hexDigitFromChar(static_cast<char>('A' + i)));
+    }
+
+    // Non-hex chars return -1.
+    for (char c : { ' ', '\0', '/', ':', '@', 'G', '`', 'g', 'z' })
+        LOK_ASSERT_EQUAL(-1, HexUtil::hexDigitFromChar(c));
+
+    // High-bit bytes (interpreted via unsigned char) also return -1.
+    LOK_ASSERT_EQUAL(-1, HexUtil::hexDigitFromChar(static_cast<char>(0x80)));
+    LOK_ASSERT_EQUAL(-1, HexUtil::hexDigitFromChar(static_cast<char>(0xff)));
 }
 
 void HexUtilTests::testEncodeIdKnownValues()
