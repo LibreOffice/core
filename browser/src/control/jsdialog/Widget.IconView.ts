@@ -272,6 +272,23 @@ JSDialog.iconView = function (
 	data: IconViewJSON,
 	builder: JSBuilder,
 ) {
+	// The renders cache is keyed by visual position, so it is only valid
+	// while the entry at each position stays the same. If the entries
+	// have shifted since the last render (e.g. the Theme dialog reopens
+	// with a different document theme at position 0), every cached image
+	// would be paired with the wrong label. Drop stale images when the
+	// entry texts change.
+	const cache = builder.rendersCache[data.id];
+	if (cache) {
+		const signature = data.entries
+			? data.entries.map((e: IconViewEntry) => e.text || '').join('|')
+			: '';
+		if (cache.signature !== signature) {
+			cache.images = [];
+			cache.signature = signature;
+		}
+	}
+
 	const iconview = window.L.DomUtil.create(
 		'div',
 		builder.options.cssClass + ' ui-iconview',
