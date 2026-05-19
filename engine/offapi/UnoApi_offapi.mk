@@ -657,44 +657,9 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/configuration,
 	UpdateRootElement \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/configuration/backend,\
-	Backend \
-	BackendAdapter \
-	CopyImporter \
-	DefaultBackend \
-	DataImporter \
-	HierarchyBrowser \
-	Importer \
 	InteractionHandler \
 	Layer \
-	LayerDescriber \
-	LayerFilter \
-	LayerUpdateMerger \
-	LdapMultiLayerStratum \
-	LdapSingleBackend \
-	LdapSingleStratum \
-	LocalDataImporter \
-	LocalHierarchyBrowser \
-	LocalSchemaSupplier \
-	LocalSingleBackend \
-	LocalSingleStratum \
-	MergeImporter \
-	MultiLayerStratum \
-	MultiStratumBackend \
-	OfflineBackend \
-	OnlineBackend \
-	PlatformBackend \
 	Schema \
-	SchemaSupplier \
-	SingleBackend \
-	SingleBackendAdapter \
-	SingleLayerStratum \
-	SystemIntegration \
-	UpdatableLayer \
-))
-$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/configuration/backend/xml,\
-	LayerParser \
-	LayerWriter \
-	SchemaParser \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/datatransfer/clipboard,\
 	ClipboardManager \
@@ -2026,38 +1991,23 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/configuration,\
 	XUpdate \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/configuration/backend,\
-	AuthenticationFailedException \
 	BackendAccessException \
 	BackendSetupException \
-	CannotConnectException \
 	ComponentChangeEvent \
-	ConnectionLostException \
-	InsufficientAccessRightsException \
-	InvalidAuthenticationMechanismException \
 	MalformedDataException \
 	MergeRecoveryRequest \
 	NodeAttribute \
-	PropertyInfo \
 	SchemaAttribute \
 	StratumCreationException \
 	TemplateIdentifier \
-	XBackend \
 	XBackendChangesListener \
 	XBackendChangesNotifier \
-	XBackendEntities \
 	XCompositeLayer \
 	XLayer \
-	XLayerContentDescriber \
 	XLayerHandler \
-	XLayerImporter \
-	XMultiLayerStratum \
 	XSchema \
 	XSchemaHandler \
-	XSchemaSupplier \
-	XSingleLayerStratum \
-	XUpdatableLayer \
 	XUpdateHandler \
-	XVersionedSchemaSupplier \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/datatransfer,\
 	DataFlavor \

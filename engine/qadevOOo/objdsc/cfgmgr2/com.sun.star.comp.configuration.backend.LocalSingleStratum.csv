@@ -1,6 +1,0 @@
-"LocalSingleStratum";"com::sun::star::configuration::backend::XSingleLayerStratum";"getLayer()"
-"LocalSingleStratum";"com::sun::star::configuration::backend::XSingleLayerStratum";"getUpdatableLayer()"
-"LocalSingleStratum";"com::sun::star::configuration::backend::XBackendEntities#optional";"getOwnerEntity()"
-"LocalSingleStratum";"com::sun::star::configuration::backend::XBackendEntities#optional";"getAdminEntity()"
-"LocalSingleStratum";"com::sun::star::configuration::backend::XBackendEntities#optional";"supportsEntity()"
-"LocalSingleStratum";"com::sun::star::configuration::backend::XBackendEntities#optional";"isEqualEntity()"

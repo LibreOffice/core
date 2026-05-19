@@ -3957,62 +3957,13 @@ module com {
      published exception BackendSetupException: ::com::sun::star::configuration::CannotLoadConfigurationException {
       any BackendException;
      };
-     published exception AuthenticationFailedException: ::com::sun::star::configuration::backend::BackendSetupException {
-     };
      published exception BackendAccessException: ::com::sun::star::lang::WrappedTargetException {
      };
      published interface XLayer;
      published interface XUpdateHandler;
-     published interface XBackend {
-      interface ::com::sun::star::uno::XInterface;
-      sequence< ::com::sun::star::configuration::backend::XLayer > listOwnLayers([in] string aComponent) raises (::com::sun::star::configuration::backend::BackendAccessException, ::com::sun::star::lang::IllegalArgumentException);
-      ::com::sun::star::configuration::backend::XUpdateHandler getOwnUpdateHandler([in] string aComponent) raises (::com::sun::star::configuration::backend::BackendAccessException, ::com::sun::star::lang::NoSupportException, ::com::sun::star::lang::IllegalArgumentException);
-      sequence< ::com::sun::star::configuration::backend::XLayer > listLayers([in] string aComponent, [in] string aEntity) raises (::com::sun::star::configuration::backend::BackendAccessException, ::com::sun::star::lang::IllegalArgumentException);
-      ::com::sun::star::configuration::backend::XUpdateHandler getUpdateHandler([in] string aComponent, [in] string aEntity) raises (::com::sun::star::configuration::backend::BackendAccessException, ::com::sun::star::lang::NoSupportException, ::com::sun::star::lang::IllegalArgumentException);
-     };
-     published interface XBackendEntities {
-      interface ::com::sun::star::uno::XInterface;
-      string getOwnerEntity();
-      string getAdminEntity();
-      boolean supportsEntity([in] string aEntity) raises (::com::sun::star::configuration::backend::BackendAccessException);
-      boolean isEqualEntity([in] string aEntity, [in] string aOtherEntity) raises (::com::sun::star::configuration::backend::BackendAccessException, ::com::sun::star::lang::IllegalArgumentException);
-     };
      published interface XSchema;
-     published interface XSchemaSupplier {
-      interface ::com::sun::star::uno::XInterface;
-      ::com::sun::star::configuration::backend::XSchema getComponentSchema([in] string aComponent) raises (::com::sun::star::configuration::backend::BackendAccessException, ::com::sun::star::lang::IllegalArgumentException);
-     };
-     published service Backend {
-      interface ::com::sun::star::configuration::backend::XSchemaSupplier;
-      interface ::com::sun::star::configuration::backend::XBackend;
-      [optional] interface ::com::sun::star::configuration::backend::XBackendEntities;
-     };
-     published service BackendAdapter {
-      service ::com::sun::star::configuration::backend::Backend;
-      interface ::com::sun::star::configuration::backend::XBackendEntities;
-      [optional] interface ::com::sun::star::lang::XInitialization;
-     };
-     published exception CannotConnectException: ::com::sun::star::configuration::backend::BackendSetupException {
-     };
-     published exception ConnectionLostException: ::com::sun::star::configuration::backend::BackendAccessException {
-     };
      published exception MalformedDataException: ::com::sun::star::uno::Exception {
       any ErrorDetails;
-     };
-     published interface XLayerImporter {
-      interface ::com::sun::star::uno::XInterface;
-      ::com::sun::star::configuration::backend::XBackend getTargetBackend();
-      void setTargetBackend([in] ::com::sun::star::configuration::backend::XBackend aBackend) raises (::com::sun::star::lang::NullPointerException);
-      void importLayer([in] ::com::sun::star::configuration::backend::XLayer aLayer) raises (::com::sun::star::configuration::backend::MalformedDataException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::NullPointerException, ::com::sun::star::lang::WrappedTargetException);
-      void importLayerForEntity([in] ::com::sun::star::configuration::backend::XLayer aLayer, [in] string aEntity) raises (::com::sun::star::configuration::backend::MalformedDataException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::NullPointerException, ::com::sun::star::lang::WrappedTargetException);
-     };
-     published service Importer {
-      interface ::com::sun::star::configuration::backend::XLayerImporter;
-      [optional] interface ::com::sun::star::lang::XInitialization;
-     };
-     published service CopyImporter {
-      service ::com::sun::star::configuration::backend::Importer;
-      interface ::com::sun::star::lang::XInitialization;
      };
     };
    };
@@ -4024,19 +3975,9 @@ module com {
    };
    module configuration {
     module backend {
-     published service DataImporter {
-      interface ::com::sun::star::task::XJob;
-     };
-     published service HierarchyBrowser {
-      interface ::com::sun::star::task::XJob;
-     };
-     published exception InsufficientAccessRightsException: ::com::sun::star::configuration::backend::BackendAccessException {
-     };
      published service InteractionHandler {
       interface ::com::sun::star::task::XInteractionHandler;
       interface ::com::sun::star::lang::XInitialization;
-     };
-     published exception InvalidAuthenticationMechanismException: ::com::sun::star::configuration::backend::BackendSetupException {
      };
      published interface XLayerHandler;
      published interface XLayer {
@@ -4064,10 +4005,6 @@ module com {
       [optional] interface ::com::sun::star::util::XTimeStamped;
       [property, optional, readonly] string URL;
      };
-     published service LayerFilter {
-      interface ::com::sun::star::configuration::backend::XLayer;
-      interface ::com::sun::star::lang::XInitialization;
-     };
      published struct TemplateIdentifier {
       string Name;
       string Component;
@@ -4092,57 +4029,12 @@ module com {
       void addOrReplacePropertyWithValue([in] string aName, [in] short aAttributes, [in] any aValue) raises (::com::sun::star::configuration::backend::MalformedDataException, ::com::sun::star::lang::WrappedTargetException);
       void removeProperty([in] string aName) raises (::com::sun::star::configuration::backend::MalformedDataException, ::com::sun::star::lang::WrappedTargetException);
      };
-     published service LayerUpdateMerger {
-      interface ::com::sun::star::configuration::backend::XUpdateHandler;
-      interface ::com::sun::star::lang::XInitialization;
-     };
-     published interface XUpdatableLayer;
-     published interface XMultiLayerStratum {
-      interface ::com::sun::star::uno::XInterface;
-      sequence< string > listLayerIds([in] string aComponent, [in] string aEntity) raises (::com::sun::star::configuration::backend::BackendAccessException, ::com::sun::star::lang::IllegalArgumentException);
-      string getUpdateLayerId([in] string aComponent, [in] string aEntity) raises (::com::sun::star::configuration::backend::BackendAccessException, ::com::sun::star::lang::NoSupportException, ::com::sun::star::lang::IllegalArgumentException);
-      ::com::sun::star::configuration::backend::XLayer getLayer([in] string aLayerId, [in] string aTimestamp) raises (::com::sun::star::configuration::backend::BackendAccessException, ::com::sun::star::lang::IllegalArgumentException);
-      sequence< ::com::sun::star::configuration::backend::XLayer > getLayers([in] sequence< string > aLayerIds, [in] string aTimestamp) raises (::com::sun::star::configuration::backend::BackendAccessException, ::com::sun::star::lang::IllegalArgumentException);
-      sequence< ::com::sun::star::configuration::backend::XLayer > getMultipleLayers([in] sequence< string > aLayerIds, [in] sequence< string > aTimestamps) raises (::com::sun::star::configuration::backend::BackendAccessException, ::com::sun::star::lang::IllegalArgumentException);
-      ::com::sun::star::configuration::backend::XUpdatableLayer getUpdatableLayer([in] string aLayerId) raises (::com::sun::star::configuration::backend::BackendAccessException, ::com::sun::star::lang::NoSupportException, ::com::sun::star::lang::IllegalArgumentException);
-     };
-     published service SingleBackend {
-      interface ::com::sun::star::configuration::backend::XSchemaSupplier;
-      interface ::com::sun::star::configuration::backend::XMultiLayerStratum;
-      interface ::com::sun::star::configuration::backend::XBackendEntities;
-     };
-     published service LdapSingleBackend {
-      service ::com::sun::star::configuration::backend::SingleBackend;
-     };
-     published interface XSingleLayerStratum {
-      interface ::com::sun::star::uno::XInterface;
-      ::com::sun::star::configuration::backend::XLayer getLayer([in] string aComponent, [in] string aTimestamp) raises (::com::sun::star::configuration::backend::BackendAccessException, ::com::sun::star::lang::IllegalArgumentException);
-      ::com::sun::star::configuration::backend::XUpdatableLayer getUpdatableLayer([in] string aComponent) raises (::com::sun::star::configuration::backend::BackendAccessException, ::com::sun::star::lang::NoSupportException, ::com::sun::star::lang::IllegalArgumentException);
-     };
-     published service LocalDataImporter {
-      service ::com::sun::star::configuration::backend::DataImporter;
-     };
-     published service LocalHierarchyBrowser {
-      service ::com::sun::star::configuration::backend::HierarchyBrowser;
-     };
-     published service LocalSingleBackend {
-      service ::com::sun::star::configuration::backend::SingleBackend;
-     };
-     published service MergeImporter {
-      service ::com::sun::star::configuration::backend::Importer;
-     };
      published constants NodeAttribute {
       const short FINALIZED = 256;
       const short FUSE = 2048;
       const short MANDATORY = 512;
       const short MASK = 32512;
       const short READONLY = 1024;
-     };
-     published service OfflineBackend {
-      service ::com::sun::star::configuration::backend::BackendAdapter;
-     };
-     published service OnlineBackend {
-      service ::com::sun::star::configuration::backend::BackendAdapter;
      };
      published interface XSchemaHandler;
      published interface XSchema {
@@ -4160,17 +4052,6 @@ module com {
       const short LOCALIZED = 2;
       const short MASK = 255;
       const short REQUIRED = 1;
-     };
-     published service SingleBackendAdapter {
-      service ::com::sun::star::configuration::backend::BackendAdapter;
-     };
-     published interface XUpdatableLayer {
-      interface ::com::sun::star::configuration::backend::XLayer;
-      void replaceWith([in] ::com::sun::star::configuration::backend::XLayer aNewLayer) raises (::com::sun::star::lang::NullPointerException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::configuration::backend::MalformedDataException);
-     };
-     published service UpdatableLayer {
-      service ::com::sun::star::configuration::backend::Layer;
-      interface ::com::sun::star::configuration::backend::XUpdatableLayer;
      };
      published interface XLayerHandler {
       interface ::com::sun::star::uno::XInterface;
@@ -4205,23 +4086,6 @@ module com {
       void addPropertyWithDefault([in] string aName, [in] short aAttributes, [in] any aDefaultValue) raises (::com::sun::star::configuration::backend::MalformedDataException, ::com::sun::star::lang::WrappedTargetException);
       void addInstance([in] string aName, [in] ::com::sun::star::configuration::backend::TemplateIdentifier aTemplate) raises (::com::sun::star::configuration::backend::MalformedDataException, ::com::sun::star::lang::WrappedTargetException);
       void addItemType([in] ::com::sun::star::configuration::backend::TemplateIdentifier aItemType) raises (::com::sun::star::configuration::backend::MalformedDataException, ::com::sun::star::lang::WrappedTargetException);
-     };
-     module xml {
-      published service LayerParser {
-       interface ::com::sun::star::configuration::backend::XLayer;
-       interface ::com::sun::star::io::XActiveDataSink;
-       interface ::com::sun::star::lang::XInitialization;
-      };
-      published service LayerWriter {
-       interface ::com::sun::star::configuration::backend::XLayerHandler;
-       interface ::com::sun::star::io::XActiveDataSource;
-       interface ::com::sun::star::lang::XInitialization;
-      };
-      published service SchemaParser {
-       interface ::com::sun::star::configuration::backend::XSchema;
-       interface ::com::sun::star::io::XActiveDataSink;
-       interface ::com::sun::star::lang::XInitialization;
-      };
      };
     };
     published singleton theDefaultProvider: ::com::sun::star::lang::XMultiServiceFactory;

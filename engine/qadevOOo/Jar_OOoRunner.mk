@@ -254,15 +254,8 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/ifc/chart/_XStatisticDisplay \
     qadevOOo/tests/java/ifc/chart/_XTwoAxisXSupplier \
     qadevOOo/tests/java/ifc/chart/_XTwoAxisYSupplier \
-    qadevOOo/tests/java/ifc/configuration/backend/_XBackend \
-    qadevOOo/tests/java/ifc/configuration/backend/_XBackendEntities \
     qadevOOo/tests/java/ifc/configuration/backend/_XLayer \
-    qadevOOo/tests/java/ifc/configuration/backend/_XLayerHandler \
-    qadevOOo/tests/java/ifc/configuration/backend/_XLayerImporter \
-    qadevOOo/tests/java/ifc/configuration/backend/_XMultiLayerStratum \
     qadevOOo/tests/java/ifc/configuration/backend/_XSchema \
-    qadevOOo/tests/java/ifc/configuration/backend/_XSchemaSupplier \
-    qadevOOo/tests/java/ifc/configuration/backend/_XSingleLayerStratum \
     qadevOOo/tests/java/ifc/configuration/backend/_XUpdateHandler \
     qadevOOo/tests/java/ifc/configuration/_XTemplateContainer \
     qadevOOo/tests/java/ifc/configuration/_XTemplateInstance \
