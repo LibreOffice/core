@@ -1495,11 +1495,12 @@ void SwTextFrame::FormatAdjust( SwTextFormatter &rLine,
                 nContentBottom = nFrameBottom;
                 break;
             }
-            if (!pFly->Lower() || !pFly->isFrameAreaPositionValid() || !pFly->IsFlySplitAllowed())
+            const SwFrame* pLower =  pFly->Lower();
+            if (!pLower || !pFly->isFrameAreaPositionValid() || !pFly->IsFlySplitAllowed())
                 continue;
 
             SwTwips nFlyHeight = aRectFnSet.GetHeight(pFly->getFrameArea());
-            SwTwips nContentHeight = aRectFnSet.GetHeight(pFly->Lower()->getFrameArea());
+            SwTwips nContentHeight = aRectFnSet.GetHeight(pLower->getFrameArea());
             // Only grow when the content overflows the fly frame (i.e. the fly needs splitting)
             if (nContentHeight > nFlyHeight)
             {
