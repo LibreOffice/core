@@ -152,6 +152,183 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Slide sections', function(
 			});
 		});
 
+		describe('Drop slide onto section header', function() {
+
+			function dropOnSectionHeader(sectionIndex) {
+				cy.cGet('.slide-section-header').eq(sectionIndex).then(function($el) {
+					var evt = new Event('drop', { bubbles: true, cancelable: true });
+					$el[0].dispatchEvent(evt);
+				});
+			}
+
+			// Wait until app.impress.sections reflects [0, 4, 11] - the section
+			// header DOM can render before the late-arriving SlideSections state
+			// has populated app.impress.sections.
+			function waitForInitialSections() {
+				cy.window().should(function(win) {
+					var s = win['0'].app.impress.sections;
+					expect(s).to.have.length(3);
+					expect(s.map(function(x) { return x.startIndex; }))
+						.to.deep.equal([0, 4, 11]);
+					expect(win['0'].app.impress.partList).to.have.length(13);
+				});
+			}
+
+			it('Drop sends correct message', function() {
+				helper.processToIdle(this.win);
+				waitForInitialSections();
+
+				// Stub sendMessage so we can inspect what the drop handler emits
+				// without letting the message round-trip to the server.
+				cy.window().then(function(win) {
+					cy.stub(win['0'].app.socket, 'sendMessage').as('sendMessage');
+				});
+
+				// Section-2 starts at index 4 -> position = 3, intoSection = 1.
+				dropOnSectionHeader(1);
+				cy.get('@sendMessage').should('have.been.calledWith',
+					'moveselectedclientparts position=3 intoSection=1');
+
+				// Section-1 starts at index 0 -> position = -1, intoSection = 0.
+				dropOnSectionHeader(0);
+				cy.get('@sendMessage').should('have.been.calledWith',
+					'moveselectedclientparts position=-1 intoSection=0');
+			});
+
+			it('Drop clears dropsite class', function() {
+				helper.processToIdle(this.win);
+				waitForInitialSections();
+
+				// Simulate the dragover state by adding the class directly.
+				cy.cGet('.slide-section-header').eq(1).then(function($el) {
+					$el[0].classList.add('slide-section-dropsite');
+				});
+				cy.cGet('.slide-section-header').eq(1)
+					.should('have.class', 'slide-section-dropsite');
+
+				dropOnSectionHeader(1);
+
+				cy.cGet('.slide-section-header').eq(1)
+					.should('not.have.class', 'slide-section-dropsite');
+			});
+
+			it('Drop anchors section to moved slide', function() {
+				helper.processToIdle(this.win);
+				waitForInitialSections();
+
+				var slide0Hash;
+				cy.window().then(function(win) {
+					slide0Hash = win['0'].app.impress.partList[0].hash;
+				});
+
+				// Select slide 0 only.
+				cy.cGet('#preview-img-part-0').click();
+				helper.processToIdle(this.win);
+				cy.window().should(function(win) {
+					expect(win['0'].app.impress.isSlideSelected(0)).to.be.true;
+				});
+
+				// Drop onto Section-2 header.
+				dropOnSectionHeader(1);
+				helper.processToIdle(this.win);
+
+				cy.window().should(function(win) {
+					var impress = win['0'].app.impress;
+					// Section-1 shrinks (loses slide 0), Section-2 anchors to the
+					// moved slide, Section-3 stays put.
+					expect(impress.sections.map(function(s) { return s.startIndex; }))
+						.to.deep.equal([0, 3, 11]);
+					expect(impress.partList[3].hash).to.equal(slide0Hash);
+				});
+			});
+
+			it('Emptying a section removes it', function() {
+				helper.processToIdle(this.win);
+				waitForInitialSections();
+
+				// Section-3 owns slides 11-12. Select both.
+				cy.cGet('#preview-img-part-11').scrollIntoView().click();
+				cy.cGet('#preview-img-part-12').scrollIntoView().click({ ctrlKey: true });
+				helper.processToIdle(this.win);
+				cy.window().should(function(win) {
+					expect(win['0'].app.impress.isSlideSelected(11)).to.be.true;
+					expect(win['0'].app.impress.isSlideSelected(12)).to.be.true;
+				});
+
+				// Drop on Section-1 header.
+				dropOnSectionHeader(0);
+				helper.processToIdle(this.win);
+
+				cy.window().should(function(win) {
+					var impress = win['0'].app.impress;
+					// Section-3 is gone because all its slides moved out.
+					expect(impress.sections).to.have.length(2);
+					expect(impress.sections.map(function(s) { return s.name; }))
+						.to.deep.equal(['Section-1', 'Section-2']);
+				});
+			});
+
+			it('Multi-slide drop anchors to first selected', function() {
+				helper.processToIdle(this.win);
+				waitForInitialSections();
+
+				var slide0Hash;
+				cy.window().then(function(win) {
+					slide0Hash = win['0'].app.impress.partList[0].hash;
+				});
+
+				// Select slides 0 and 1.
+				cy.cGet('#preview-img-part-0').click();
+				cy.cGet('#preview-img-part-1').click({ ctrlKey: true });
+				helper.processToIdle(this.win);
+				cy.window().should(function(win) {
+					expect(win['0'].app.impress.isSlideSelected(0)).to.be.true;
+					expect(win['0'].app.impress.isSlideSelected(1)).to.be.true;
+				});
+
+				// Drop on Section-3 header (startIndex 11 -> position 10).
+				dropOnSectionHeader(2);
+				helper.processToIdle(this.win);
+
+				cy.window().should(function(win) {
+					var impress = win['0'].app.impress;
+					// Section-3 anchors to the first moved slide; Section-1 and
+					// Section-2 shift up to fill the gap left by the moved slides.
+					expect(impress.sections.map(function(s) { return s.startIndex; }))
+						.to.deep.equal([0, 2, 9]);
+					expect(impress.partList[9].hash).to.equal(slide0Hash);
+				});
+			});
+
+			it('Anchoring persists across reload', function() {
+				helper.processToIdle(this.win);
+				waitForInitialSections();
+
+				// Drop slide 0 onto Section-2 header.
+				cy.cGet('#preview-img-part-0').click();
+				helper.processToIdle(this.win);
+				dropOnSectionHeader(1);
+				helper.processToIdle(this.win);
+
+				cy.window().should(function(win) {
+					expect(win['0'].app.impress.sections.map(function(s) { return s.startIndex; }))
+						.to.deep.equal([0, 3, 11]);
+				});
+
+				helper.processToIdle(this.win);
+				helper.reloadDocument(this.newFilePath);
+				cy.getFrameWindow().then((win) => {
+					this.win = win;
+				});
+				helper.processToIdle(this.win);
+
+				cy.window().should(function(win) {
+					expect(win['0'].app.impress.sections.map(function(s) { return s.startIndex; }))
+						.to.deep.equal([0, 3, 11]);
+				});
+			});
+		});
+
 		it('Collapse section hides its slides', function() {
 			helper.processToIdle(this.win);
 

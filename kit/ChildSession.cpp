@@ -3260,11 +3260,17 @@ bool ChildSession::moveSelectedClientParts(const StringVector& tokens)
         return false;
     }
 
+    // Optional: re-anchor the named section to the first moved slide so
+    // the dragged slide becomes that section's new first slide.
+    int intoSection = -1;
+    for (size_t i = 2; i < tokens.size(); ++i)
+        getTokenInteger(tokens[i], "intoSection", intoSection);
+
     getLOKitDocument()->setView(_viewId);
 
     if (getLOKitDocument()->getDocumentType() != KIT_DOCTYPE_TEXT)
     {
-        getLOKitDocument()->moveSelectedParts(position, false); // Move, don't duplicate.
+        getLOKitDocument()->moveSelectedParts(position, false, intoSection); // Move, don't duplicate.
 
         // Get the status to notify clients of the reordering and selection change.
         const std::string status = LOKitHelper::documentStatus(getLOKitDocument()->get());

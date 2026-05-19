@@ -735,9 +735,12 @@ public:
     /// Moves the selected pages/slides to a new position.
     /// nPosition is the new position where the selection
     /// should go. bDuplicate when true will copy instead of move.
-    void moveSelectedParts(int nPosition, bool bDuplicate)
+    /// nIntoSection: when >= 0, re-anchor that section to the first moved
+    /// slide (slide becomes the section's new first slide).  Pass -1 (default)
+    /// to keep the existing section anchoring.
+    void moveSelectedParts(int nPosition, bool bDuplicate, int nIntoSection = -1)
     {
-        mpDoc->pClass->moveSelectedParts(mpDoc, nPosition, bDuplicate);
+        mpDoc->pClass->moveSelectedParts(mpDoc, nPosition, bDuplicate, nIntoSection);
     }
 
     /**

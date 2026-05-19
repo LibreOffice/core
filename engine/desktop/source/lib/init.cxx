@@ -1145,7 +1145,7 @@ static char* doc_getPartPageRectangles(COKitDocument* pThis);
 static int doc_getPart(COKitDocument* pThis);
 static void doc_setPart(COKitDocument* pThis, int nPart);
 static void doc_selectPart(COKitDocument* pThis, int nPart, int nSelect);
-static void doc_moveSelectedParts(COKitDocument* pThis, int nPosition, bool bDuplicate);
+static void doc_moveSelectedParts(COKitDocument* pThis, int nPosition, bool bDuplicate, int nIntoSection);
 static char* doc_getPartName(COKitDocument* pThis, int nPart);
 static void doc_setPartMode(COKitDocument* pThis, int nPartMode);
 static int doc_getEditMode(COKitDocument* pThis);
@@ -4172,7 +4172,7 @@ static void doc_selectPart(COKitDocument* pThis, int nPart, int nSelect)
     pDoc->selectPart( nPart, nSelect );
 }
 
-static void doc_moveSelectedParts(COKitDocument* pThis, int nPosition, bool bDuplicate)
+static void doc_moveSelectedParts(COKitDocument* pThis, int nPosition, bool bDuplicate, int nIntoSection)
 {
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
@@ -4184,7 +4184,7 @@ static void doc_moveSelectedParts(COKitDocument* pThis, int nPosition, bool bDup
         return;
     }
 
-    pDoc->moveSelectedParts(nPosition, bDuplicate);
+    pDoc->moveSelectedParts(nPosition, bDuplicate, nIntoSection);
 }
 
 static char* doc_getPartPageRectangles(COKitDocument* pThis)

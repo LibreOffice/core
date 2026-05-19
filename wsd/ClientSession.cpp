@@ -1119,8 +1119,11 @@ bool ClientSession::_handleInput(const char *buffer, int length)
         if (!_isTextDocument)
         {
             int position;
-            if (tokens.size() != 2 ||
-                !getTokenInteger(tokens[1], "position", position))
+            int intoSection;
+            if (tokens.size() < 2 || tokens.size() > 3 ||
+                !getTokenInteger(tokens[1], "position", position) ||
+                (tokens.size() == 3 &&
+                 !getTokenInteger(tokens[2], "intoSection", intoSection)))
             {
                 sendTextFrameAndLogError("error: cmd=moveselectedclientparts kind=syntax");
                 return false;

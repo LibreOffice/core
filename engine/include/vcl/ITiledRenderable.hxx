@@ -367,8 +367,10 @@ public:
      * Move selected pages/slides to a new position.
      * nPosition: the new position to move to.
      * bDuplicate: to copy (true), or to move (false).
+     * nIntoSection: when >= 0, the section at that index will be re-anchored
+     * to the first moved slide; pass -1 to keep default section anchoring.
      */
-    virtual void moveSelectedParts(int /*nPosition*/, bool /*bDuplicate*/) {}
+    virtual void moveSelectedParts(int /*nPosition*/, bool /*bDuplicate*/, int /*nIntoSection*/) {}
 
     /// @see kit::Document::completeFunction().
     virtual void completeFunction(const OUString& /*rFunctionName*/)

@@ -550,6 +550,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		var header = window.L.DomUtil.create('div', 'slide-section-header');
 		header.setAttribute('data-section-index', sectionIndex);
 		header.setAttribute('data-start-index', section.startIndex);
+		header.setAttribute('draggable', 'false');
 
 		var toggleBtn = window.L.DomUtil.create('button', 'slide-section-toggle ui-expander-btn', header);
 		toggleBtn.type = 'button';
@@ -586,6 +587,36 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 
 				that._openSectionContextMenu(section, sectionIndex, e);
 			}, this);
+		}
+
+		// Drop target: dropping a slide onto a section header makes it the
+		// new first slide of that section.  Dropping above the header (on
+		// the preceding slide frame) keeps the default behaviour of placing
+		// the slide outside the section.
+		if (!app.file.fileBasedView) {
+			header.addEventListener('dragenter', function (e) {
+				if (e.preventDefault) e.preventDefault();
+			});
+			header.addEventListener('dragover', function (e) {
+				if (e.preventDefault) e.preventDefault();
+				e.dataTransfer.dropEffect = 'move';
+				header.classList.add('slide-section-dropsite');
+				return false;
+			});
+			header.addEventListener('dragleave', function () {
+				header.classList.remove('slide-section-dropsite');
+			});
+			header.addEventListener('drop', function (e) {
+				if (e.stopPropagation) e.stopPropagation();
+				if (e.preventDefault) e.preventDefault();
+				header.classList.remove('slide-section-dropsite');
+				var startIndex = section.startIndex;
+				var position = startIndex > 0 ? startIndex - 1 : -1;
+				app.socket.sendMessage(
+					'moveselectedclientparts position=' + position +
+					' intoSection=' + sectionIndex);
+				return false;
+			});
 		}
 
 		return header;

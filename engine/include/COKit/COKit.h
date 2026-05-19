@@ -428,7 +428,11 @@ struct COKitDocumentClassStruct
     void (*selectPart) (COKitDocument* pThis, int nPart, int nSelect);
 
     /// @see kit::Document::moveSelectedParts().
-    void (*moveSelectedParts) (COKitDocument* pThis, int nPosition, bool bDuplicate);
+    /// nIntoSection: when >= 0, the section at that index will be re-anchored
+    /// to the first moved slide (i.e. the slide becomes the new section start).
+    /// Pass -1 to keep the default behaviour where sections stay anchored to
+    /// their existing non-moved slides.
+    void (*moveSelectedParts) (COKitDocument* pThis, int nPosition, bool bDuplicate, int nIntoSection);
 
     /// Resize window with given id.
     /// @see kit::Document::resizeWindow().

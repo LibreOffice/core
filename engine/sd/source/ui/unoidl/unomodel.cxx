@@ -18,6 +18,7 @@
  */
 
 #include <memory>
+#include <set>
 
 #include <com/sun/star/presentation/XPresentation2.hpp>
 
@@ -132,6 +133,7 @@
 #include <Annotation.hxx>
 #include <drawdoc.hxx>
 #include <SlideSectionManager.hxx>
+#include <UndoSlideSection.hxx>
 #include <sdmod.hxx>
 #include <sdresid.hxx>
 #include <sdpage.hxx>
@@ -4224,7 +4226,7 @@ void SdXImpressDocument::selectPart(int nPart, int nSelect)
     pViewSh->SelectPage(nPart, nSelect);
 }
 
-void SdXImpressDocument::moveSelectedParts(int nPosition, bool bDuplicate)
+void SdXImpressDocument::moveSelectedParts(int nPosition, bool bDuplicate, int nIntoSection)
 {
     // Duplicating is currently unsupported.
     if (bDuplicate)
@@ -4240,7 +4242,130 @@ void SdXImpressDocument::moveSelectedParts(int nPosition, bool bDuplicate)
         = pSlideSorter ? pSlideSorter->GetPageSelection() : nullptr;
     if (!pSelectedPage)
         return;
+
+    sd::SlideSectionManager& rSectionMgr = mpDoc->GetSectionManager();
+    const sal_Int32 nSectionCount = rSectionMgr.GetSectionCount();
+    const sal_uInt16 nPageCount = mpDoc->GetSdPageCount(PageKind::Standard);
+
+    // Sections are positional boundaries - they don't follow dragged slides.
+    // When a section's start slide is moved away, the section anchors to
+    // the first non-moved slide remaining in its range.  If all slides in
+    // the section were moved, the section is removed.
+    //
+    // For sections whose start slide was NOT moved, we still need to
+    // update the startIndex to account for the positional shift caused
+    // by the insertion/removal.
+    //
+    // If nIntoSection is set, the user explicitly wants the first moved
+    // slide to become the new start of that section, overriding the
+    // default anchor for that one section.
+
+    std::set<SdPage*> aMovedPages(pSelectedPage->begin(), pSelectedPage->end());
+
+    struct SectionAnchor
+    {
+        SdPage* pPage;
+        OUString aName;
+        OUString aId;
+    };
+    std::vector<SectionAnchor> aAnchors;
+
+    if (nSectionCount > 0)
+    {
+        for (sal_Int32 s = 0; s < nSectionCount; ++s)
+        {
+            const sd::SlideSection& rSec = rSectionMgr.GetSection(s);
+            sal_Int32 nStart = rSec.mnStartIndex;
+            sal_Int32 nEnd = (s + 1 < nSectionCount)
+                ? rSectionMgr.GetSection(s + 1).mnStartIndex
+                : static_cast<sal_Int32>(nPageCount);
+
+            SdPage* pAnchor = nullptr;
+            for (sal_Int32 p = nStart; p < nEnd; ++p)
+            {
+                SdPage* pPage = mpDoc->GetSdPage(
+                    static_cast<sal_uInt16>(p), PageKind::Standard);
+                if (aMovedPages.find(pPage) == aMovedPages.end())
+                {
+                    pAnchor = pPage;
+                    break;
+                }
+            }
+
+            aAnchors.push_back({ pAnchor, rSec.maName, rSec.maId });
+        }
+
+        // Override one section's anchor with the first moved slide so it
+        // becomes the new section start (drop onto section header UX).
+        if (nIntoSection >= 0 && nIntoSection < nSectionCount
+            && !pSelectedPage->empty())
+        {
+            aAnchors[nIntoSection].pPage = (*pSelectedPage)[0];
+        }
+    }
+
+    const bool bUndo = mpDoc->IsUndoEnabled();
+    if (bUndo && nSectionCount > 0)
+        mpDoc->BegUndo(SdResId(STR_UNDO_MOVEPAGES));
+
+    auto pSectionUndo = (bUndo && nSectionCount > 0)
+        ? std::make_unique<sd::UndoSlideSection>(*mpDoc, SdResId(STR_UNDO_MOVEPAGES))
+        : nullptr;
+
     mpDoc->MovePages(nPosition, *pSelectedPage);
+
+    if (nSectionCount > 0)
+    {
+        sal_uInt16 nNewPageCount = mpDoc->GetSdPageCount(PageKind::Standard);
+
+        std::vector<sd::SlideSection> aNewSections;
+        for (const auto& rAnchor : aAnchors)
+        {
+            if (!rAnchor.pPage)
+                continue;
+
+            for (sal_uInt16 p = 0; p < nNewPageCount; ++p)
+            {
+                if (mpDoc->GetSdPage(p, PageKind::Standard) == rAnchor.pPage)
+                {
+                    sd::SlideSection aSec;
+                    aSec.maName = rAnchor.aName;
+                    aSec.maId = rAnchor.aId;
+                    aSec.mnStartIndex = static_cast<sal_Int32>(p);
+                    aNewSections.push_back(aSec);
+                    break;
+                }
+            }
+        }
+
+        std::sort(aNewSections.begin(), aNewSections.end(),
+                  [](const sd::SlideSection& a, const sd::SlideSection& b) {
+                      return a.mnStartIndex < b.mnStartIndex;
+                  });
+
+        auto aOldSections = rSectionMgr.GetSectionsSnapshot();
+        bool bChanged = (aNewSections.size() != aOldSections.size());
+        if (!bChanged)
+        {
+            for (size_t i = 0; i < aNewSections.size(); ++i)
+            {
+                if (aNewSections[i].mnStartIndex != aOldSections[i].mnStartIndex)
+                {
+                    bChanged = true;
+                    break;
+                }
+            }
+        }
+
+        if (bChanged)
+            rSectionMgr.RestoreSectionsSnapshot(aNewSections);
+    }
+
+    if (pSectionUndo)
+    {
+        mpDoc->AddUndo(std::move(pSectionUndo));
+        mpDoc->EndUndo();
+    }
 }
 
 OUString SdXImpressDocument::getPartInfo(int nPart)

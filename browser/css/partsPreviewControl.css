@@ -58,6 +58,17 @@
 	border-bottom: 20px solid var(--color-primary);
 }
 
+/* Drop indicator on a section header: drop here to make the dragged slide
+   the first slide of this section (visually fills the header). */
+.slide-section-header.slide-section-dropsite {
+	background-color: var(--color-primary);
+	color: var(--color-primary-text);
+}
+
+.slide-section-header.slide-section-dropsite .slide-section-name {
+	color: var(--color-primary-text);
+}
+
 .hidden-slide {
 	opacity: 0.5;
 }
