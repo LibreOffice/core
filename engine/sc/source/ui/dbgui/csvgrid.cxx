@@ -477,6 +477,13 @@ void ScCsvGrid::DoSelectAction( sal_uInt32 nColIndex, sal_uInt16 nModifier )
 
 // cell contents --------------------------------------------------------------
 
+void ScCsvGrid::SetTextLineCount( sal_Int32 nLineCount )
+{
+    if (nLineCount < 0)
+        nLineCount = 0;
+    maTexts.resize(static_cast<size_t>(nLineCount));
+}
+
 void ScCsvGrid::ImplSetTextLineSep(
         sal_Int32 nLine, const OUString& rTextLine,
         const OUString& rSepChars, sal_Unicode cTextSep, bool bMergeSep, bool bRemoveSpace )

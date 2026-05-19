@@ -98,6 +98,10 @@ void ScCsvTableBox::SetUniStrings(
 {
     mxGrid->DisableRepaint();
     sal_Int32 nLineCount = static_cast<sal_Int32>(rTextLines.size());
+    // Drop any tail rows kept from a previous refresh with more lines (e.g.
+    // a charset change that now yields fewer decodable lines), otherwise
+    // stale content would leak into DumpWidgetData.
+    mxGrid->SetTextLineCount( nLineCount );
     for( sal_Int32 nLine = 0; nLine < nLineCount; ++nLine )
     {
         if( mbFixedMode )

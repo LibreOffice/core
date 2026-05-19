@@ -165,6 +165,9 @@ private:
 
     // cell contents ----------------------------------------------------------
 public:
+    /** Resizes the preview text storage to nLineCount, discarding any tail
+        rows from a previous refresh. */
+    void                        SetTextLineCount( sal_Int32 nLineCount );
     /** Fills all cells of a line with the passed text (separators mode). */
     void                        ImplSetTextLineSep(
                                     sal_Int32 nLine, const OUString& rTextLine,
