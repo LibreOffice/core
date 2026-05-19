@@ -14,6 +14,7 @@
 #include <algorithm>
 #include <array>
 #include <cassert>
+#include <charconv>
 #include <cstdint>
 #include <sstream>
 #include <string>
@@ -312,12 +313,11 @@ inline std::ostringstream& encodeId(std::ostringstream& oss, const std::uint64_t
 }
 
 /// Decode the hex-string into an ID. The reverse of encodeId().
+/// Returns 0 if @str is empty or has no parseable hex prefix.
 inline std::uint64_t decodeId(const std::string_view str)
 {
     std::uint64_t id = 0;
-    std::stringstream ss;
-    ss << std::hex << str;
-    ss >> id;
+    std::from_chars(str.data(), str.data() + str.size(), id, 16);
     return id;
 }
 

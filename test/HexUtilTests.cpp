@@ -250,6 +250,19 @@ void HexUtilTests::testDecodeIdKnownValues()
     LOK_ASSERT_EQUAL(std::uint64_t(0xdeadbeef), HexUtil::decodeId("deadbeef"));
     LOK_ASSERT_EQUAL(std::uint64_t(0xdeadbeef), HexUtil::decodeId("DEADBEEF"));
     LOK_ASSERT_EQUAL(UINT64_MAX, HexUtil::decodeId("ffffffffffffffff"));
+
+    // Trailing non-hex chars: parse stops at the first invalid char and the
+    // already-parsed prefix is returned.
+    LOK_ASSERT_EQUAL(std::uint64_t(0xff), HexUtil::decodeId("ff_garbage"));
+    LOK_ASSERT_EQUAL(std::uint64_t(0xabc), HexUtil::decodeId("abc xyz"));
+
+    // No parseable hex prefix: returns 0.
+    LOK_ASSERT_EQUAL(std::uint64_t(0), HexUtil::decodeId("zzz"));
+    LOK_ASSERT_EQUAL(std::uint64_t(0), HexUtil::decodeId(" 1"));
+
+    // Overflow (>16 hex digits): from_chars reports out-of-range and the
+    // returned value stays at 0 (the initial default).
+    LOK_ASSERT_EQUAL(std::uint64_t(0), HexUtil::decodeId("1ffffffffffffffff"));
 }
 
 void HexUtilTests::testEncodeDecodeRoundTrip()
