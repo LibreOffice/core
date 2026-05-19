@@ -31,6 +31,7 @@ public:
     // Basic DiagramHelper support
     virtual bool isDiagram() const override;
     virtual const std::shared_ptr< svx::diagram::DiagramHelper_svx >& getDiagramHelper() const override;
+    void resetDiagramHelper(const std::shared_ptr< svx::diagram::DiagramHelper_svx >& rDiagramHelper = nullptr);
 
     // return DiagramSubSelection if exists. This will always return
     // a valid SdrObject* to allow to use this as a loop-through-call
@@ -43,9 +44,7 @@ private:
 
     Point maRefPoint; // Reference point inside the object group
 
-    // Allow *only* DiagramHelper itself to set this internal reference to
-    // tightly control usage
-    friend class svx::diagram::DiagramHelper_svx;
+    // the DiagramHelper if this SdrObjGroup host a Diagram
     std::shared_ptr< svx::diagram::DiagramHelper_svx > mp_DiagramHelper;
 
 public:

@@ -270,7 +270,23 @@ void DiagramData_oox::writeDiagramData(DrawingML& rOriginalDrawingML, sax_fastpa
 
     rTarget->endElementNS(XML_dgm, XML_bg);
 
-    rTarget->singleElementNS(XML_dgm, XML_whole);
+    bool bBGLineStyleWritten(false);
+    if (xBgShape.is())
+    {
+        uno::Reference<beans::XPropertySet> xProps(xBgShape, uno::UNO_QUERY);
+        bBGLineStyleWritten = xProps->getPropertyValue(u"LineStyle"_ustr) != drawing::LineStyle_NONE;
+
+        if (bBGLineStyleWritten)
+        {
+            rTarget->startElementNS(XML_dgm, XML_whole);
+            aShapeExport.WriteOutline( xProps );
+            // aShapeExport.WriteLineArrow( xProps, false);
+            rTarget->endElementNS(XML_dgm, XML_whole);
+        }
+    }
+
+    if (!bBGLineStyleWritten)
+        rTarget->singleElementNS(XML_dgm, XML_whole);
 
     // write ExtList & it's contents
     // Note: I *tried* to use XML_dsp and xmlns:dsp, but these are not defined, thus
@@ -296,12 +312,14 @@ void DiagramData_oox::writeDiagramData(DrawingML& rOriginalDrawingML, sax_fastpa
 DiagramData_oox::DiagramData_oox()
 : svx::diagram::DiagramData_svx()
 , mpBackgroundShapeFillProperties( std::make_shared<FillProperties>() )
+, mpBackgroundShapeLineProperties( std::make_shared<LineProperties>() )
 {
 }
 
 DiagramData_oox::DiagramData_oox(DiagramData_oox const& rSource)
 : svx::diagram::DiagramData_svx(rSource)
 , mpBackgroundShapeFillProperties(rSource.mpBackgroundShapeFillProperties)
+, mpBackgroundShapeLineProperties(rSource.mpBackgroundShapeLineProperties)
 , maPointShapeMap()
 {
 }
@@ -309,6 +327,7 @@ DiagramData_oox::DiagramData_oox(DiagramData_oox const& rSource)
 DiagramData_oox::DiagramData_oox(const boost::property_tree::ptree& rDiagramModel)
 : svx::diagram::DiagramData_svx(rDiagramModel)
 , mpBackgroundShapeFillProperties( std::make_shared<FillProperties>() )
+, mpBackgroundShapeLineProperties( std::make_shared<LineProperties>() )
 {
 }
 

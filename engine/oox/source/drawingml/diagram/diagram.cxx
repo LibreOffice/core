@@ -31,6 +31,7 @@
 #include <sal/log.hxx>
 #include <editeng/unoprnms.hxx>
 #include <drawingml/fillproperties.hxx>
+#include <drawingml/lineproperties.hxx>
 #include <drawingml/customshapeproperties.hxx>
 #include <o3tl/unit_conversion.hxx>
 #include <oox/drawingml/theme.hxx>
@@ -153,6 +154,8 @@ void SmartArtDiagram::createShapeHierarchyFromModel( const ShapePtr & pParentSha
     pBackground->setSize(pParentShape->getSize());
     if (mpData->getBackgroundShapeFillProperties())
         pBackground->getFillProperties() = *mpData->getBackgroundShapeFillProperties();
+    if (mpData->getBackgroundShapeLineProperties())
+        pBackground->getLineProperties() = *mpData->getBackgroundShapeLineProperties();
 
     // create and set ModelID for BackgroundShape to allow later association
     getData()->setBackgroundShapeModelID(OStringToOUString(comphelper::xml::generateGUIDString(), RTL_TEXTENCODING_UTF8));

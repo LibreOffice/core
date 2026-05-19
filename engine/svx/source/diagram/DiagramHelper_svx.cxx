@@ -42,6 +42,10 @@
 #include <svx/svdmodel.hxx>
 #include <svx/svdundo.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <svx/xlineit0.hxx>
+#include <svx/xfillit0.hxx>
+#include <com/sun/star/drawing/LineStyle.hpp>
+#include <com/sun/star/drawing/FillStyle.hpp>
 #include <osl/diagnose.h>
 
 using namespace ::com::sun::star;
@@ -441,16 +445,84 @@ void DiagramHelper_svx::disconnectFromSdrObjGroup(bool bEnableUndo)
     {
         SdrModel& rDrawModel(pRootObject->getSdrModelFromSdrObject());
         const bool bUndo(bEnableUndo && rDrawModel.IsUndoEnabled());
+        rtl::Reference<SdrObject> pBGObject(pRootObject->GetObj(0));
+
+        // check if obj(0) is the BGObject, else reset
+        if (nullptr != pBGObject && !pBGObject->isDiagramBackgroundShape())
+            pBGObject.clear();
+
         if (bUndo)
         {
-            // create undo action
+            // create undo action for DissolveModel
             rDrawModel.AddUndo(rDrawModel.GetSdrUndoFactory().CreateUndoDiagramDissolveModel(*pRootObject));
         }
 
-        // remove locks. Do this before resetting RootShape below, it uses that
+        // remove locks. Do this before resetting RootShape below, it uses that.
+        // this also removes DiagramModelIDs, so check for that is already above.
         applyLocksToDiagramObjects(false);
+
+        if (nullptr != pBGObject)
+        {
+            // evtl. need to take care of BGObject to create the objects
+            // needed to visualize what we see due to using
+            // ViewContactOfDiagram mechanism to manipulate visualization
+            if (pBGObject->HasLineStyle())
+            {
+                if (pBGObject->HasFillStyle())
+                {
+                    // LineStyle and FillStyle:
+                    // - need to clone and add as last object with deactivated fill
+                    // - need to deactivate line at BGObject, too
+                    rtl::Reference<SdrObject> pFGObject(pBGObject->CloneSdrObject(rDrawModel));
+                    pRootObject->InsertObject(pFGObject.get());
+
+                    if (bUndo)
+                    {
+                        rDrawModel.AddUndo(rDrawModel.GetSdrUndoFactory().CreateUndoNewObject(*pFGObject));
+                        rDrawModel.AddUndo(rDrawModel.GetSdrUndoFactory().CreateUndoAttrObject(*pBGObject));
+                        rDrawModel.AddUndo(rDrawModel.GetSdrUndoFactory().CreateUndoAttrObject(*pFGObject));
+                    }
+
+                    pBGObject->SetMergedItem(XLineStyleItem(css::drawing::LineStyle_NONE));
+                    pFGObject->SetMergedItem(XFillStyleItem(css::drawing::FillStyle_NONE));
+                }
+                else
+                {
+                    // LineStyle and no FillStyle:
+                    // - need to move to end of list
+                    if (bUndo)
+                        rDrawModel.AddUndo(rDrawModel.GetSdrUndoFactory().CreateUndoRemoveObject(*pBGObject));
+
+                    pRootObject->RemoveObject(0);
+                    pRootObject->InsertObject(pBGObject.get());
+
+                    if (bUndo)
+                        rDrawModel.AddUndo(rDrawModel.GetSdrUndoFactory().CreateUndoInsertObject(*pBGObject));
+                }
+            }
+            else
+            {
+                if (pBGObject->HasFillStyle())
+                {
+                    // no LineStyle and FillStyle:
+                    // - no change needed
+                }
+                else
+                {
+                    // no LineStyle and no FillStyle:
+                    // - BGObject not needed at all, remove
+                    if (bUndo)
+                        rDrawModel.AddUndo(rDrawModel.GetSdrUndoFactory().CreateUndoDeleteObject(*pBGObject));
+
+                    pRootObject->RemoveObject(0);
+                    pBGObject.clear();
+                }
+            }
+        }
+
+        // now cut connection
         accessRootShape().clear();
-        pRootObject->mp_DiagramHelper.reset();
+        pRootObject->resetDiagramHelper();
     }
 }
 
@@ -463,7 +535,7 @@ void DiagramHelper_svx::connectToSdrObjGroup(
     if (rxRootShape && rTarget == rxRootShape)
     {
         pRootObject = dynamic_cast<SdrObjGroup*>(SdrObject::getSdrObjectFromXShape(rxRootShape));
-        if (pRootObject != nullptr &&  pRootObject->mp_DiagramHelper.get() == this)
+        if (pRootObject != nullptr &&  pRootObject->getDiagramHelper().get() == this)
         {
             // connection already established
             return;
@@ -479,9 +551,9 @@ void DiagramHelper_svx::connectToSdrObjGroup(
     if (nullptr != pRootObject)
     {
         if (nullptr != mpDiagramHelperFromUndo)
-            pRootObject->mp_DiagramHelper = *mpDiagramHelperFromUndo;
+            pRootObject->resetDiagramHelper(*mpDiagramHelperFromUndo);
         else
-            pRootObject->mp_DiagramHelper.reset(this);
+            pRootObject->resetDiagramHelper(std::shared_ptr< DiagramHelper_svx >(this));
     }
 
     applyLocksToDiagramObjects(true);

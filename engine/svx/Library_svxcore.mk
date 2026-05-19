@@ -241,6 +241,7 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/sdr/contact/viewobjectcontactredirector \
     svx/source/sdr/contact/viewcontactofsdrcircobj \
     svx/source/sdr/contact/viewcontactofgroup \
+    svx/source/sdr/contact/viewcontactofdiagram \
     svx/source/sdr/contact/viewcontactofunocontrol \
     svx/source/sdr/contact/viewcontactofsdrobjcustomshape \
     svx/source/sdr/contact/viewcontactofsdrobj \

@@ -26,24 +26,25 @@
 
 namespace sdr::contact
     {
-        class ViewContactOfGroup final : public ViewContactOfSdrObj
+        class ViewContactOfGroup : public ViewContactOfSdrObj
         {
         public:
             // basic constructor, used from SdrObject.
             explicit ViewContactOfGroup(SdrObjGroup& rGroup);
             virtual ~ViewContactOfGroup() override;
 
-        private:
-            // Create an Object-Specific ViewObjectContact, set ViewContact and
-            // ObjectContact. Always needs to return something. Default is to create
-            // a standard ViewObjectContact containing the given ObjectContact and *this
-            virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact) override;
-
+        protected:
             // internal access to SdrObject
             const SdrObjGroup& GetSdrObjGroup() const
             {
                 return static_cast<const SdrObjGroup&>(GetSdrObject());
             }
+
+        private:
+            // Create an Object-Specific ViewObjectContact, set ViewContact and
+            // ObjectContact. Always needs to return something. Default is to create
+            // a standard ViewObjectContact containing the given ObjectContact and *this
+            virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact) override;
 
             // This method is responsible for creating the graphical visualisation data
             // ONLY based on model data

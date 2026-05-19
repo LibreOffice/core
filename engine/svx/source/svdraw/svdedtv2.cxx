@@ -1928,43 +1928,16 @@ void SdrEditView::UnGroupMarked()
             }
             size_t nDstCnt=pGrp->GetOrdNum();
             SdrObjList* pDstLst=pM->GetPageView()->GetObjList();
-            size_t nObjCount=pSrcLst->GetObjCount();
             const bool bIsDiagram(pGrp->isDiagram());
 
-            // If the Group is a Diagram, it has a filler BG object to guarantee
-            // the Diagam's dimensions. Identify that shape
-            if(bIsDiagram && nObjCount)
+            if(bIsDiagram)
             {
-                SdrObject* pObj(pSrcLst->GetObj(0));
-
-                if(nullptr != pObj && !pObj->IsGroupObject() && pObj->IsMoveProtect() && pObj->IsResizeProtect())
-                {
-                    if(pObj->HasFillStyle() || pObj->HasLineStyle())
-                    {
-                        // If it has FillStyle or LineStyle it is a useful object representing
-                        // that possible defined fill from oox import. In this case, we should
-                        // keep the shape
-                    }
-                    else
-                    {
-                        // If it has no FillStyle or LineStyle it is not useful for any further processing
-                        // but only was used as a placeholder, directly get rid of it
-                        if( bUndo )
-                            AddUndo(GetModel().GetSdrUndoFactory().CreateUndoDeleteObject(*pObj));
-
-                        // necessary to reset, else pSrcLst->RemoveObject below will just
-                        // do nothing
-                        pObj->SetDeleteProtect(false);
-
-                        pSrcLst->RemoveObject(0);
-                        nObjCount = pSrcLst->GetObjCount();
-                    }
-                }
-
-                // clear diagram information, create UNDO fir it.
+                // clear diagram information, create UNDO for it.
                 // That also uses applyLocksToDiagramObjects which removes the
                 // Move/Resize/DeleteProtect flags. Especially DeleteProtect is
                 // necessary, else the call below to pSrcLst->RemoveObject will fail
+                // also contains all needed actions to take correct care of BGObject
+                // and it's fill/lineStyle settings
                 const std::shared_ptr< svx::diagram::DiagramHelper_svx >& rDiagramHelper(pGrp->getDiagramHelper());
                 assert(rDiagramHelper); // pGrp->isDiagram() is already true, so should not happen
                 rDiagramHelper->disconnectFromSdrObjGroup(bUndo);
@@ -1973,6 +1946,8 @@ void SdrEditView::UnGroupMarked()
             // FIRST move contained objects to parent of group, so that
             // the contained objects are NOT migrated to the UNDO-ItemPool
             // when AddUndo(new SdrUndoDelObj(*pGrp)) is called.
+            const size_t nObjCount(pSrcLst->GetObjCount());
+
             if( bUndo )
             {
                 for (size_t no=nObjCount; no>0;)
