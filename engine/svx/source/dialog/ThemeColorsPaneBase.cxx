@@ -45,23 +45,59 @@ void ThemeColorsPaneBase::initColorSets(const model::Theme* pTheme)
         mxIconViewThemeColors->freeze();
         mxIconViewThemeColors->clear();
 
+        // The legacy "LibreOffice" theme is kept in the model so documents that
+        // already reference it keep working, but it is not offered as a choice
+        // in the UI. "Office" is the fallback selection in its place.
+        static constexpr std::u16string_view aHiddenThemeName = u"LibreOffice";
+        static constexpr std::u16string_view aFallbackDefaultName = u"Office";
+
+        int nVisiblePos = 0;
+        int nFirstVisiblePos = -1;
+        size_t nFirstVisibleIndex = 0;
+        int nFallbackPos = -1;
+        size_t nFallbackIndex = 0;
         for (size_t i = 0; i < maColorSets.size(); ++i)
         {
-            auto const& rColorSet = maColorSets[i];
-            auto pVirDev = CreateColorSetPreview(rColorSet);
+            model::ColorSet const& rColorSet = maColorSets[i];
+            if (rColorSet.getName() == aHiddenThemeName)
+                continue;
+
+            ScopedVclPtr<VirtualDevice> pVirDev = CreateColorSetPreview(rColorSet);
 
             Bitmap aBitmap(pVirDev->GetBitmap(Point(0, 0), pVirDev->GetOutputSizePixel()));
             OUString sId = OUString::number(i);
             OUString sName = rColorSet.getName();
             mxIconViewThemeColors->insert(-1, &sName, &sId, &aBitmap, nullptr);
+
+            if (nFirstVisiblePos < 0)
+            {
+                nFirstVisiblePos = nVisiblePos;
+                nFirstVisibleIndex = i;
+            }
+            if (nFallbackPos < 0 && rColorSet.getName() == aFallbackDefaultName)
+            {
+                nFallbackPos = nVisiblePos;
+                nFallbackIndex = i;
+            }
+            ++nVisiblePos;
         }
 
         mxIconViewThemeColors->thaw();
 
-        if (!maColorSets.empty())
+        if (nFirstVisiblePos >= 0)
         {
-            mxIconViewThemeColors->select(0);
-            mpCurrentColorSet = std::make_shared<model::ColorSet>(maColorSets[0]);
+            // If the document's current theme was hidden, fall back to "Office".
+            const bool bDocumentThemeHidden
+                = pTheme && !maColorSets.empty() && maColorSets[0].getName() == aHiddenThemeName;
+            int nSelectedPos = nFirstVisiblePos;
+            size_t nSelectedIndex = nFirstVisibleIndex;
+            if (bDocumentThemeHidden && nFallbackPos >= 0)
+            {
+                nSelectedPos = nFallbackPos;
+                nSelectedIndex = nFallbackIndex;
+            }
+            mxIconViewThemeColors->select(nSelectedPos);
+            mpCurrentColorSet = std::make_shared<model::ColorSet>(maColorSets[nSelectedIndex]);
         }
     }
 }
