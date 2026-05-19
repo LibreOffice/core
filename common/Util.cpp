@@ -18,6 +18,7 @@
 #include <config_version.h>
 
 #include <common/Common.hpp>
+#include <common/HexUtil.hpp>
 #include <common/Log.hpp>
 #include <common/NumUtil.hpp>
 #include <common/Protocol.hpp>
@@ -27,7 +28,6 @@
 #include <common/Util.hpp>
 #include <common/base64.hpp>
 
-#include <Poco/HexBinaryEncoder.h>
 #include <Poco/URI.h>
 #include <Poco/Util/Application.h>
 
@@ -149,12 +149,10 @@ namespace Util
         /// Generate a string of random characters.
         std::string getHexString(const std::size_t length)
         {
-            std::stringstream ss;
-            Poco::HexBinaryEncoder hex(ss);
-            hex.rdbuf()->setLineLength(0); // Don't insert line breaks.
-            hex.write(getBytes(length).data(), length);
-            hex.close(); // Flush.
-            return ss.str().substr(0, length);
+            const auto bytes = getBytes(length);
+            std::string hex = HexUtil::bytesToHexString(bytes.data(), bytes.size());
+            hex.resize(length);
+            return hex;
         }
 
         /// Generates a random string in Base64.
