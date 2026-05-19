@@ -148,8 +148,6 @@ public:
     };
 };
 
-#if !(defined _MSC_VER && _MSC_VER <= 1929 && defined _MANAGED)
-
 namespace detail {
 
 template<OStringLiteral L> struct OStringHolder {
@@ -157,8 +155,6 @@ template<OStringLiteral L> struct OStringHolder {
 };
 
 }
-
-#endif
 
 #endif
 
@@ -199,12 +195,12 @@ public:
     /**
       New string containing no characters.
     */
-#if defined LIBO_INTERNAL_ONLY && !(defined _MSC_VER && _MSC_VER <= 1929 && defined _MANAGED)
+#if defined LIBO_INTERNAL_ONLY
     constexpr
 #endif
     OString()
     {
-#if defined LIBO_INTERNAL_ONLY && !(defined _MSC_VER && _MSC_VER <= 1929 && defined _MANAGED)
+#if defined LIBO_INTERNAL_ONLY
         pData = const_cast<rtl_String *>(&empty.str);
 #else
         pData = NULL;
@@ -217,13 +213,13 @@ public:
 
       @param    str         an OString.
     */
-#if defined LIBO_INTERNAL_ONLY && !(defined _MSC_VER && _MSC_VER <= 1929 && defined _MANAGED)
+#if defined LIBO_INTERNAL_ONLY
     constexpr
 #endif
     OString( const OString & str )
     {
         pData = str.pData;
-#if defined LIBO_INTERNAL_ONLY && !(defined _MSC_VER && _MSC_VER <= 1929 && defined _MANAGED)
+#if defined LIBO_INTERNAL_ONLY
         if (std::is_constant_evaluated()) {
             //TODO: We would want to
             //
@@ -244,13 +240,10 @@ public:
       @param    str         an OString.
       @since LibreOffice 5.2
     */
-#if !(defined _MSC_VER && _MSC_VER <= 1929 && defined _MANAGED)
     constexpr
-#endif
     OString( OString && str ) noexcept
     {
         pData = str.pData;
-#if !(defined _MSC_VER && _MSC_VER <= 1929 && defined _MANAGED)
         if (std::is_constant_evaluated()) {
             //TODO: We would want to
             //
@@ -260,7 +253,6 @@ public:
             // anonymous union with active member `more` is not allowed in a constant expression.
             return;
         }
-#endif
         str.pData = nullptr;
         rtl_string_new( &str.pData );
     }
@@ -395,7 +387,7 @@ public:
     /// @endcond
 #endif
 
-#if defined LIBO_INTERNAL_ONLY && !(defined _MSC_VER && _MSC_VER <= 1929 && defined _MANAGED)
+#if defined LIBO_INTERNAL_ONLY
     // For operator ""_tstr:
     template<OStringLiteral L> constexpr OString(detail::OStringHolder<L> const & holder):
         pData(const_cast<rtl_String *>(&holder.literal.str)) {}
@@ -471,12 +463,12 @@ public:
     /**
       Release the string data.
     */
-#if defined LIBO_INTERNAL_ONLY && !(defined _MSC_VER && _MSC_VER <= 1929 && defined _MANAGED)
+#if defined LIBO_INTERNAL_ONLY
     constexpr
 #endif
     ~OString()
     {
-#if defined LIBO_INTERNAL_ONLY && !(defined _MSC_VER && _MSC_VER <= 1929 && defined _MANAGED)
+#if defined LIBO_INTERNAL_ONLY
         if (std::is_constant_evaluated()) {
            //TODO: We would want to
            //
@@ -2736,7 +2728,7 @@ public:
 #endif
 
 private:
-#if defined LIBO_INTERNAL_ONLY && !(defined _MSC_VER && _MSC_VER <= 1929 && defined _MANAGED)
+#if defined LIBO_INTERNAL_ONLY
         static constexpr auto empty = OStringLiteral(""); // [-loplugin:ostr]
 #endif
 };
@@ -2857,7 +2849,7 @@ using ::rtl::OStringLiteral;
 using RepeatedChar = ::rtl::RepeatedChar_t<char>;
 #endif
 
-#if defined LIBO_INTERNAL_ONLY && !(defined _MSC_VER && _MSC_VER <= 1929 && defined _MANAGED)
+#if defined LIBO_INTERNAL_ONLY
 
 template<
 #if defined RTL_STRING_UNITTEST

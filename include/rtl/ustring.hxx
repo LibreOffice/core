@@ -174,12 +174,12 @@ public:
     /**
       New string containing no characters.
     */
-#if defined LIBO_INTERNAL_ONLY && !(defined _MSC_VER && _MSC_VER <= 1929 && defined _MANAGED)
+#if defined LIBO_INTERNAL_ONLY
     constexpr
 #endif
     OUString()
     {
-#if defined LIBO_INTERNAL_ONLY && !(defined _MSC_VER && _MSC_VER <= 1929 && defined _MANAGED)
+#if defined LIBO_INTERNAL_ONLY
         pData = const_cast<rtl_uString *>(&empty.str);
 #else
         pData = NULL;
@@ -191,13 +191,13 @@ public:
 
       @param    str         an OUString.
     */
-#if defined LIBO_INTERNAL_ONLY && !(defined _MSC_VER && _MSC_VER <= 1929 && defined _MANAGED)
+#if defined LIBO_INTERNAL_ONLY
     constexpr
 #endif
     OUString( const OUString & str )
     {
         pData = str.pData;
-#if defined LIBO_INTERNAL_ONLY && !(defined _MSC_VER && _MSC_VER <= 1929 && defined _MANAGED)
+#if defined LIBO_INTERNAL_ONLY
         if (std::is_constant_evaluated()) {
             //TODO: We would want to
             //
@@ -218,13 +218,10 @@ public:
       @param    str         an OUString.
       @since LibreOffice 5.2
     */
-#if !(defined _MSC_VER && _MSC_VER <= 1929 && defined _MANAGED)
     constexpr
-#endif
     OUString( OUString && str ) noexcept
     {
         pData = str.pData;
-#if !(defined _MSC_VER && _MSC_VER <= 1929 && defined _MANAGED)
         if (std::is_constant_evaluated()) {
             //TODO: We would want to
             //
@@ -234,7 +231,6 @@ public:
             // anonymous union with active member `more` is not allowed in a constant expression.
             return;
         }
-#endif
         str.pData = nullptr;
         rtl_uString_new( &str.pData );
     }
@@ -425,7 +421,7 @@ public:
     /// @endcond
 #endif
 
-#if defined LIBO_INTERNAL_ONLY && !(defined _MSC_VER && _MSC_VER <= 1929 && defined _MANAGED)
+#if defined LIBO_INTERNAL_ONLY
     // For operator ""_tstr:
     template<OStringLiteral L> OUString(detail::OStringHolder<L> const & holder) {
         pData = nullptr;
@@ -530,12 +526,12 @@ public:
     /**
       Release the string data.
     */
-#if defined LIBO_INTERNAL_ONLY && !(defined _MSC_VER && _MSC_VER <= 1929 && defined _MANAGED)
+#if defined LIBO_INTERNAL_ONLY
     constexpr
 #endif
     ~OUString()
     {
-#if defined LIBO_INTERNAL_ONLY && !(defined _MSC_VER && _MSC_VER <= 1929 && defined _MANAGED)
+#if defined LIBO_INTERNAL_ONLY
         if (std::is_constant_evaluated()) {
            //TODO: We would want to
            //
@@ -3873,7 +3869,7 @@ private:
         return *this;
     }
 
-#if defined LIBO_INTERNAL_ONLY && !(defined _MSC_VER && _MSC_VER <= 1929 && defined _MANAGED)
+#if defined LIBO_INTERNAL_ONLY
     static constexpr auto empty = OUStringLiteral(u""); // [-loplugin:ostr]
 #endif
 };
@@ -4068,7 +4064,7 @@ using ::rtl::Concat2View;
 using RepeatedUChar = ::rtl::RepeatedChar_t<sal_Unicode>;
 #endif
 
-#if defined LIBO_INTERNAL_ONLY && !(defined _MSC_VER && _MSC_VER <= 1929 && defined _MANAGED)
+#if defined LIBO_INTERNAL_ONLY
 
 template<
 #if defined RTL_STRING_UNITTEST
@@ -4113,7 +4109,6 @@ struct hash<::rtl::OUString>
 
 }
 
-#if !(defined _MSC_VER && _MSC_VER <= 1929 && defined _MANAGED)
 /**
   * static empty string object, handy for returning from functions where the function is
   * returning a "const OUString &"
@@ -4121,7 +4116,6 @@ struct hash<::rtl::OUString>
   * @since LibreOffice 25.2
   */
 static inline constexpr ::rtl::OUString EMPTY_OUSTRING = u""_ustr;
-#endif
 
 #endif
 /// @endcond
