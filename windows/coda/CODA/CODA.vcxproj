@@ -24,6 +24,8 @@
     <ProjectGuid>{01e897c1-3460-4aa1-a374-98a8dcd58a7c}</ProjectGuid>
     <RootNamespace>CODA</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
+    <ResolveNuGetPackages>false</ResolveNuGetPackages>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
