@@ -1182,6 +1182,8 @@ void QtBuilder::setGridLayoutProperties(QGridLayout& rGridLayout, stringmap& rPr
     aIt = rProps.find(u"column-spacing"_ustr);
     if (aIt != rProps.end())
         rGridLayout.setHorizontalSpacing(aIt->second.toUInt32());
+
+    rGridLayout.setContentsMargins(0, 0, 0, 0);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
