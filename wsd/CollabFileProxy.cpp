@@ -144,6 +144,12 @@ void CollabFileProxy::doDownload(const std::shared_ptr<TerminatingPoll>& poll,
 
         LOG_TRC("CollabFileProxy: GetFile returned " << statusCode);
 
+        // CORS allow-origin for cross-origin JS callers (see success
+        // path below).  Applied uniformly to error responses too so
+        // the browser surfaces the actual status code to JS instead
+        // of an opaque "CORS failure".
+        const std::string corsHeader = "Access-Control-Allow-Origin: *\r\n";
+
         // Handle redirects
         if (statusCode == http::StatusCode::MovedPermanently ||
             statusCode == http::StatusCode::Found ||
@@ -162,7 +168,8 @@ void CollabFileProxy::doDownload(const std::shared_ptr<TerminatingPoll>& poll,
             {
                 LOG_WRN("CollabFileProxy: too many redirects for ["
                         << uriAnonym << ']');
-                HttpHelper::sendErrorAndShutdown(http::StatusCode::BadGateway, socket);
+                HttpHelper::sendErrorAndShutdown(http::StatusCode::BadGateway, socket,
+                                                 std::string_view(), corsHeader);
                 return;
             }
         }
@@ -178,7 +185,7 @@ void CollabFileProxy::doDownload(const std::shared_ptr<TerminatingPoll>& poll,
                 statusCode == http::StatusCode::Forbidden
                     ? http::StatusCode::Forbidden
                     : http::StatusCode::BadGateway,
-                socket);
+                socket, std::string_view(), corsHeader);
             return;
         }
 
@@ -193,6 +200,14 @@ void CollabFileProxy::doDownload(const std::shared_ptr<TerminatingPoll>& poll,
         if (contentType.empty())
             contentType = "application/octet-stream";
         response.setBody(httpResponse->getBody(), contentType);
+        // The /co/collab/fetch endpoint is the byte-stream side of
+        // the token-gated download protocol.  CODA's page JS calls
+        // it from cool.html's origin (file:// or https://localhost),
+        // which is cross-origin to the cool server, so the response
+        // needs to advertise CORS access.  The token check above is
+        // what enforces authorization; the Origin is not a security
+        // boundary here.
+        response.set("Access-Control-Allow-Origin", "*");
         socket->sendAndShutdown(response);
     };
 
@@ -247,6 +262,11 @@ void CollabFileProxy::doUpload(const std::shared_ptr<TerminatingPoll>& poll,
                 << " for " << bodySize << " bytes to [" << uriAnonym
                 << "] in " << duration);
 
+        // CORS allow-origin for cross-origin JS callers of
+        // /co/collab/put (CODA's page JS lives on cool.html's origin,
+        // which is cross-origin to the cool server).  Same rationale
+        // as the GET side in doDownload.
+        const std::string corsHeader = "Access-Control-Allow-Origin: *\r\n";
         if (statusCode == http::StatusCode::OK)
         {
             // Update any existing DocumentBroker's stored timestamp
@@ -286,6 +306,7 @@ void CollabFileProxy::doUpload(const std::shared_ptr<TerminatingPoll>& poll,
             // Return the WOPI response (contains LastModifiedTime etc.)
             http::Response response(http::StatusCode::OK);
             response.setBody(httpResponse->getBody(), "application/json; charset=utf-8");
+            response.set("Access-Control-Allow-Origin", "*");
             socket->sendAndShutdown(response);
         }
         else if (statusCode == http::StatusCode::Conflict)
@@ -293,17 +314,20 @@ void CollabFileProxy::doUpload(const std::shared_ptr<TerminatingPoll>& poll,
             // Document was modified externally
             http::Response response(http::StatusCode::Conflict);
             response.setBody(httpResponse->getBody(), "application/json; charset=utf-8");
+            response.set("Access-Control-Allow-Origin", "*");
             socket->sendAndShutdown(response);
         }
         else if (statusCode == http::StatusCode::Unauthorized ||
                  statusCode == http::StatusCode::Forbidden)
         {
-            HttpHelper::sendErrorAndShutdown(http::StatusCode::Forbidden, socket);
+            HttpHelper::sendErrorAndShutdown(http::StatusCode::Forbidden, socket,
+                                             std::string_view(), corsHeader);
         }
         else
         {
             LOG_ERR("CollabFileProxy: PutFile failed with " << statusCode);
-            HttpHelper::sendErrorAndShutdown(http::StatusCode::BadGateway, socket);
+            HttpHelper::sendErrorAndShutdown(http::StatusCode::BadGateway, socket,
+                                             std::string_view(), corsHeader);
         }
     };
 
