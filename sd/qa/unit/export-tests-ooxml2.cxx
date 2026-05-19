@@ -1612,16 +1612,20 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testSmartartRotation2)
 
     save(TestFilter::PPTX);
 
+    // NOTE: adapted sp[4] to sp[3] since disconnectFromSdrObjGroup does now
+    // remove a BGObject if no Line/FillStyle is used at all, which is
+    // correct. This was the 1st (empty) shape in ungrouped representation,
+    // so tested info moved to sp[3]
     xmlDocUniquePtr pXmlDocContent = parseExport(u"ppt/slides/slide1.xml"_ustr);
     assertXPathContent(pXmlDocContent,
-                       "/p:sld/p:cSld/p:spTree/p:grpSp/p:sp[4]/p:txBody/a:p/a:r/a:t", u"Text");
-    assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:grpSp/p:sp[4]/p:txBody/a:bodyPr", "rot",
+                       "/p:sld/p:cSld/p:spTree/p:grpSp/p:sp[3]/p:txBody/a:p/a:r/a:t", u"Text");
+    assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:grpSp/p:sp[3]/p:txBody/a:bodyPr", "rot",
                 u"10800000");
     double dX = getXPath(pXmlDocContent,
-                         "/p:sld/p:cSld/p:spTree/p:grpSp/p:sp[4]/p:spPr/a:xfrm/a:off", "x")
+                         "/p:sld/p:cSld/p:spTree/p:grpSp/p:sp[3]/p:spPr/a:xfrm/a:off", "x")
                     .toDouble();
     double dY = getXPath(pXmlDocContent,
-                         "/p:sld/p:cSld/p:spTree/p:grpSp/p:sp[4]/p:spPr/a:xfrm/a:off", "y")
+                         "/p:sld/p:cSld/p:spTree/p:grpSp/p:sp[3]/p:spPr/a:xfrm/a:off", "y")
                     .toDouble();
     CPPUNIT_ASSERT_DOUBLES_EQUAL(2276280.0, dX, dX * .001);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(3158280.0, dY, dY * .001);

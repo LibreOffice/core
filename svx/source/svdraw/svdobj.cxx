@@ -284,6 +284,11 @@ bool SdrObject::removeDiagramNode()
     return rDiagramHelper->removeDiagramNode(rID, getSdrModelFromSdrObject());
 }
 
+void SdrObject::resetViewContact()
+{
+    mpViewContact.reset();
+}
+
 bool SdrObject::isDiagram() const
 {
     return false;
@@ -528,7 +533,7 @@ SdrObject::SdrObject(SdrModel& rSdrModel, SdrObject const & rSource)
     m_bIsUnoObj=false;
 
     mpProperties.reset();
-    mpViewContact.reset();
+    resetViewContact();
 
     // The CloneSdrObject() method uses the local copy constructor from the individual
     // sdr::properties::BaseProperties class. Since the target class maybe for another
@@ -584,7 +589,7 @@ SdrObject::~SdrObject()
 
     m_pGrabBagItem.reset();
     mpProperties.reset();
-    mpViewContact.reset();
+    resetViewContact();
     impRemoveIncarnatedSdrObjectToSdrModel(*this, getSdrModelFromSdrObject());
 }
 

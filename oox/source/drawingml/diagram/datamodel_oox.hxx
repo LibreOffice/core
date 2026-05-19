@@ -50,6 +50,7 @@ public:
     virtual void buildDiagramDataModel(bool bClearOoxShapes);
 
     FillPropertiesPtr& getBackgroundShapeFillProperties() { return mpBackgroundShapeFillProperties; }
+    LinePropertiesPtr& getBackgroundShapeLineProperties() { return mpBackgroundShapeLineProperties; }
 #ifdef DBG_UTIL
     virtual void dump() const;
 #endif
@@ -66,6 +67,9 @@ private:
 
     // - FillStyle for Diagram Background (empty constructed, may stay empty)
     FillPropertiesPtr mpBackgroundShapeFillProperties;
+
+    // - LineStyle for Diagram Background (empty constructed, may stay empty)
+    LinePropertiesPtr mpBackgroundShapeLineProperties;
 
     // temporary processing data, deleted when using build(). Association
     // map between oox::drawingml::Shape and svx::diagram::Point ModelData

@@ -242,6 +242,9 @@ public:
     // temporary check if to use AdvancedDiagramFeatures
     static bool useAdvancedDiagramFeatures();
 
+protected:
+    void resetViewContact();
+
 private:
     // check if a ObjectName is set and it is in DiagramModelID syntax
     bool ObjectNameIsDiagramModelID();

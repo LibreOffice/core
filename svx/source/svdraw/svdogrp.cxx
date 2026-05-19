@@ -27,7 +27,7 @@
 #include <svx/strings.hrc>
 
 #include <sdr/properties/groupproperties.hxx>
-#include <sdr/contact/viewcontactofgroup.hxx>
+#include <sdr/contact/viewcontactofdiagram.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
@@ -44,6 +44,15 @@ bool SdrObjGroup::isDiagram() const
 const std::shared_ptr< svx::diagram::DiagramHelper_svx >& SdrObjGroup::getDiagramHelper() const
 {
     return mp_DiagramHelper;
+}
+
+void SdrObjGroup::resetDiagramHelper(const std::shared_ptr< svx::diagram::DiagramHelper_svx >& rDiagramHelper)
+{
+    if (mp_DiagramHelper.get() != rDiagramHelper.get())
+    {
+        mp_DiagramHelper = rDiagramHelper;
+        resetViewContact();
+    }
 }
 
 SdrObject* SdrObjGroup::getDiagramSubSelection()
@@ -65,6 +74,11 @@ std::unique_ptr<sdr::properties::BaseProperties> SdrObjGroup::CreateObjectSpecif
 // DrawContact section
 std::unique_ptr<sdr::contact::ViewContact> SdrObjGroup::CreateObjectSpecificViewContact()
 {
+    if (isDiagram())
+        // if we host a Diagram, use specialized ViewContact for this
+        return std::make_unique<sdr::contact::ViewContactOfDiagram>(*this);
+
+    // default SdrObjGroup ViewContact
     return std::make_unique<sdr::contact::ViewContactOfGroup>(*this);
 }
 
@@ -105,7 +119,7 @@ SdrObjGroup::SdrObjGroup(SdrModel& rSdrModel, SdrObjGroup const & rSource)
     if (SdrObject::useAdvancedDiagramFeatures() && rSource.getDiagramHelper())
     {
         // create complete clone of current DiagramData
-        mp_DiagramHelper.reset(rSource.getDiagramHelper()->clone());
+        resetDiagramHelper(std::shared_ptr< svx::diagram::DiagramHelper_svx >(rSource.getDiagramHelper()->clone()));
 
         // need to set new RootShape to newly created associated XShape
         mp_DiagramHelper->getRootShape() = getUnoShape();
@@ -850,7 +864,9 @@ void SdrObjGroup::SetDescription(const OUString& rStr)
                 aOrigDescription = OUString::fromUtf8(aDiagramModel.get("origDesc", ""));
 
                 // parse content to a new Diagram DataModel
-                mp_DiagramHelper = svx::diagram::DiagramHelperFactory_svx::getDiagramHelperFactory_svx().createDiagramHelper_svx(aDiagramModel);
+                std::shared_ptr<svx::diagram::DiagramHelper_svx> aNewHelper(svx::diagram::DiagramHelperFactory_svx::getDiagramHelperFactory_svx().createDiagramHelper_svx(aDiagramModel));
+
+                resetDiagramHelper(aNewHelper);
                 mp_DiagramHelper->getRootShape() = getUnoShape();
             }
         }

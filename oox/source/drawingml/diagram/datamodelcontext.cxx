@@ -21,6 +21,7 @@
 #include <oox/helper/attributelist.hxx>
 #include <drawingml/misccontexts.hxx>
 #include <drawingml/shapepropertiescontext.hxx>
+#include <drawingml/linepropertiescontext.hxx>
 #include <drawingml/textbodycontext.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
@@ -330,6 +331,35 @@ private:
     OoxDiagramDataPtr mpDataModel;
 };
 
+// CT_WholeFormatting (Line attributes for BackgroundShape)
+class WholeFormattingContext
+    : public ContextHandler2
+{
+public:
+    WholeFormattingContext( ContextHandler2Helper const & rParent, OoxDiagramDataPtr const& pModel )
+        : ContextHandler2( rParent )
+        , mpDataModel( pModel )
+        {
+            assert( pModel && "the data model MUST NOT be NULL" );
+        }
+
+    virtual ContextHandlerRef
+    onCreateContext( sal_Int32 aElementToken,
+                     const AttributeList& rAttribs ) override
+        {
+            switch( aElementToken )
+            {
+            case A_TOKEN( ln ):
+                return new LinePropertiesContext( *this, rAttribs, *mpDataModel->getBackgroundShapeLineProperties(), nullptr, false );
+            default:
+                break;
+            }
+            return this;
+        }
+private:
+    OoxDiagramDataPtr mpDataModel;
+};
+
 }
 
 DataModelContext::DataModelContext( ContextHandler2Helper const& rParent,
@@ -365,8 +395,7 @@ DataModelContext::onCreateContext( ::sal_Int32 aElement,
         return new BackgroundFormattingContext( *this, mpDataModel );
     case DGM_TOKEN( whole ):
         // CT_WholeE2oFormatting
-        // TODO
-        return nullptr;
+        return new WholeFormattingContext( *this, mpDataModel );
     case DGM_TOKEN( extLst ):
     case A_TOKEN( ext ):
         break;
