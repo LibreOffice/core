@@ -161,7 +161,9 @@ sub check_prettier()
 
 # Do the work :-)
 
-my $rc = system("cd engine && exec ./.git-hooks/pre-commit");
+my $rc = -d "engine"
+    ? system("cd engine && exec ./.git-hooks/pre-commit")
+    : 0;
 if ($rc != 0) {
     exit($rc >> 8 || 1);
 }
