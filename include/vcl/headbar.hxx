@@ -259,7 +259,7 @@ public:
     virtual void        MouseMove( const MouseEvent& rMEvt ) override;
     virtual void        Tracking( const TrackingEvent& rTEvt ) override;
     virtual void        Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
-    virtual void        Draw( OutputDevice* pDev, const Point& rPos,SystemTextColorFlags nFlags ) override;
+    virtual void Draw(OutputDevice& rDev, const Point& rPos, SystemTextColorFlags nFlags) override;
     virtual void        Resize() override;
     virtual void        Command( const CommandEvent& rCEvt ) override;
     virtual void        RequestHelp( const HelpEvent& rHEvt ) override;

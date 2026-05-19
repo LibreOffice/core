@@ -155,7 +155,7 @@ public:
     Size            CalcBlockSize( sal_uInt16 nColumns, sal_uInt16 nLines ) const;
     void            GetMaxVisColumnsAndLines( sal_uInt16& rnCols, sal_uInt16& rnLines ) const;
 
-    void            Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlags nFlags ) override;
+    void Draw(OutputDevice& rDev, const Point& rPos, SystemTextColorFlags nFlags) override;
 
     void            DisableSelectionOnFocus();
 

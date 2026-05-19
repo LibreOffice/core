@@ -43,7 +43,7 @@ public:
 
     bool ControlHasFocus() const;
 
-    virtual void Draw(OutputDevice* pDevice, const Point& rPos,
+    virtual void Draw(OutputDevice& rDevice, const Point& rPos,
                       SystemTextColorFlags nFlags) override;
 
     void SetPriority(TaskPriority nPriority);

@@ -885,38 +885,39 @@ void HeaderBar::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle
         ImplDrawItem(rRenderContext, i, (i == nCurItemPos), &rRect);
 }
 
-void HeaderBar::Draw( OutputDevice* pDev, const Point& rPos,
-                      SystemTextColorFlags nFlags )
+void HeaderBar::Draw(OutputDevice& rDev, const Point& rPos, SystemTextColorFlags nFlags)
 {
-    Point       aPos  = pDev->LogicToPixel( rPos );
+    Point aPos = rDev.LogicToPixel(rPos);
     Size        aSize = GetSizePixel();
     tools::Rectangle   aRect( aPos, aSize );
-    vcl::Font   aFont = GetDrawPixelFont( pDev );
+    vcl::Font aFont = GetDrawPixelFont(&rDev);
 
-    auto popIt = pDev->ScopedPush();
-    pDev->SetMapMode();
-    pDev->SetFont( aFont );
+    auto popIt = rDev.ScopedPush();
+    rDev.SetMapMode();
+    rDev.SetFont(aFont);
     if ( nFlags & SystemTextColorFlags::Mono )
-        pDev->SetTextColor( COL_BLACK );
+        rDev.SetTextColor(COL_BLACK);
     else
-        pDev->SetTextColor( GetTextColor() );
-    pDev->SetTextFillColor();
+        rDev.SetTextColor(GetTextColor());
+    rDev.SetTextFillColor();
 
     // draw background
     {
-        pDev->DrawWallpaper( aRect, GetBackground() );
+        rDev.DrawWallpaper(aRect, GetBackground());
         if ( mnBorderOff1 || mnBorderOff2 )
         {
-            pDev->SetLineColor( GetSettings().GetStyleSettings().GetDarkShadowColor() );
+            rDev.SetLineColor(GetSettings().GetStyleSettings().GetDarkShadowColor());
             if ( mnBorderOff1 )
-                pDev->DrawLine( aRect.TopLeft(), Point( aRect.Right(), aRect.Top() ) );
+                rDev.DrawLine(aRect.TopLeft(), Point(aRect.Right(), aRect.Top()));
             if ( mnBorderOff2 )
-                pDev->DrawLine( Point( aRect.Left(), aRect.Bottom() ), Point( aRect.Right(), aRect.Bottom() ) );
+                rDev.DrawLine(Point(aRect.Left(), aRect.Bottom()),
+                              Point(aRect.Right(), aRect.Bottom()));
             // #i40393# draw left and right border, if WB_BORDER was set in ImplInit()
             if ( mnBorderOff1 && mnBorderOff2 )
             {
-                pDev->DrawLine( aRect.TopLeft(), Point( aRect.Left(), aRect.Bottom() ) );
-                pDev->DrawLine( Point( aRect.Right(), aRect.Top() ), Point( aRect.Right(), aRect.Bottom() ) );
+                rDev.DrawLine(aRect.TopLeft(), Point(aRect.Left(), aRect.Bottom()));
+                rDev.DrawLine(Point(aRect.Right(), aRect.Top()),
+                              Point(aRect.Right(), aRect.Bottom()));
             }
         }
     }
@@ -931,9 +932,9 @@ void HeaderBar::Draw( OutputDevice* pDev, const Point& rPos,
         if ( aItemRect.Right() > 16000 )
             aItemRect.SetRight( 16000 );
         vcl::Region aRegion( aRect );
-        pDev->SetClipRegion( aRegion );
-        ImplDrawItem(*pDev, i, false, aItemRect, &aRect );
-        pDev->SetClipRegion();
+        rDev.SetClipRegion(aRegion);
+        ImplDrawItem(rDev, i, false, aItemRect, &aRect);
+        rDev.SetClipRegion();
     }
 }
 

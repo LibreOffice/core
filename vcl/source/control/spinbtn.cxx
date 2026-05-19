@@ -118,17 +118,17 @@ void SpinButton::Resize()
     Invalidate();
 }
 
-void SpinButton::Draw(OutputDevice* pDev, const Point& rPos, SystemTextColorFlags nFlags)
+void SpinButton::Draw(OutputDevice& rDev, const Point& rPos, SystemTextColorFlags nFlags)
 {
-    Point aPos  = pDev->LogicToPixel(rPos);
+    Point aPos = rDev.LogicToPixel(rPos);
     Size aSize = GetSizePixel();
 
-    auto popIt = pDev->ScopedPush();
-    pDev->SetMapMode();
+    auto popIt = rDev.ScopedPush();
+    rDev.SetMapMode();
     if ( !(nFlags & SystemTextColorFlags::Mono) )
     {
         // DecoView uses the FaceColor...
-        AllSettings aSettings = pDev->GetSettings();
+        AllSettings aSettings = rDev.GetSettings();
         StyleSettings aStyleSettings = aSettings.GetStyleSettings();
         if ( IsControlBackground() )
             aStyleSettings.SetFaceColor( GetControlBackground() );
@@ -136,7 +136,7 @@ void SpinButton::Draw(OutputDevice* pDev, const Point& rPos, SystemTextColorFlag
             aStyleSettings.SetFaceColor( GetSettings().GetStyleSettings().GetFaceColor() );
 
         aSettings.SetStyleSettings( aStyleSettings );
-        pDev->SetSettings( aSettings );
+        rDev.SetSettings(aSettings);
     }
 
     tools::Rectangle   aRect( Point( 0, 0 ), aSize );
@@ -155,9 +155,9 @@ void SpinButton::Draw(OutputDevice* pDev, const Point& rPos, SystemTextColorFlag
     aUpperRect += aPos;
     aLowerRect += aPos;
 
-    ImplDrawSpinButton(*pDev, this, aUpperRect, aLowerRect, false, false,
-                       IsEnabled() && ImplIsUpperEnabled(),
-                       IsEnabled() && ImplIsLowerEnabled(), mbHorz, true);
+    ImplDrawSpinButton(rDev, this, aUpperRect, aLowerRect, false, false,
+                       IsEnabled() && ImplIsUpperEnabled(), IsEnabled() && ImplIsLowerEnabled(),
+                       mbHorz, true);
 }
 
 void SpinButton::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/)

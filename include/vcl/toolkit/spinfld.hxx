@@ -45,7 +45,8 @@ public:
     SAL_DLLPRIVATE virtual void MouseButtonUp( const MouseEvent& rMEvt ) override;
     SAL_DLLPRIVATE virtual void MouseMove( const MouseEvent& rMEvt ) override;
     SAL_DLLPRIVATE virtual void Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
-    SAL_DLLPRIVATE virtual void Draw( OutputDevice* pDev, const Point& rPos,SystemTextColorFlags nFlags ) override;
+    SAL_DLLPRIVATE virtual void Draw(OutputDevice& rDev, const Point& rPos,
+                                     SystemTextColorFlags nFlags) override;
     SAL_DLLPRIVATE virtual void Resize() override;
     SAL_DLLPRIVATE virtual void StateChanged( StateChangedType nType ) override;
     SAL_DLLPRIVATE virtual void DataChanged( const DataChangedEvent& rDCEvt ) override;

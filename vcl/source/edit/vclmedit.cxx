@@ -1278,24 +1278,24 @@ void VclMultiLineEdit::DataChanged( const DataChangedEvent& rDCEvt )
         Control::DataChanged( rDCEvt );
 }
 
-void VclMultiLineEdit::Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlags nFlags )
+void VclMultiLineEdit::Draw(OutputDevice& rDev, const Point& rPos, SystemTextColorFlags nFlags)
 {
     ImplInitSettings(true);
 
-    Point aPos = pDev->LogicToPixel( rPos );
+    Point aPos = rDev.LogicToPixel(rPos);
     Size aSize = GetSizePixel();
 
-    vcl::Font aFont = pImpVclMEdit->GetTextWindow()->GetDrawPixelFont(pDev);
+    vcl::Font aFont = pImpVclMEdit->GetTextWindow()->GetDrawPixelFont(&rDev);
     aFont.SetTransparent( true );
 
-    auto popIt = pDev->ScopedPush();
-    pDev->SetMapMode();
-    pDev->SetFont( aFont );
-    pDev->SetTextFillColor();
+    auto popIt = rDev.ScopedPush();
+    rDev.SetMapMode();
+    rDev.SetFont(aFont);
+    rDev.SetTextFillColor();
 
     // Border/Background
-    pDev->SetLineColor();
-    pDev->SetFillColor();
+    rDev.SetLineColor();
+    rDev.SetFillColor();
     bool bBorder = (GetStyle() & WB_BORDER);
     bool bBackground = IsControlBackground();
     if ( bBorder || bBackground )
@@ -1303,25 +1303,25 @@ void VclMultiLineEdit::Draw( OutputDevice* pDev, const Point& rPos, SystemTextCo
         tools::Rectangle aRect( aPos, aSize );
         if ( bBorder )
         {
-            DecorationView aDecoView( pDev );
+            DecorationView aDecoView(&rDev);
             aRect = aDecoView.DrawFrame( aRect, DrawFrameStyle::DoubleIn );
         }
         if ( bBackground )
         {
-            pDev->SetFillColor( GetControlBackground() );
-            pDev->DrawRect( aRect );
+            rDev.SetFillColor(GetControlBackground());
+            rDev.DrawRect(aRect);
         }
     }
 
-    pDev->SetSystemTextColor(nFlags, IsEnabled());
+    rDev.SetSystemTextColor(nFlags, IsEnabled());
 
     OUString aText = GetText();
-    Size aTextSz( pDev->GetTextWidth( aText ), pDev->GetTextHeight() );
+    Size aTextSz(rDev.GetTextWidth(aText), rDev.GetTextHeight());
     sal_uLong nLines = static_cast<sal_uLong>(aSize.Height() / aTextSz.Height());
     if ( !nLines )
         nLines = 1;
     aTextSz.setHeight( nLines*aTextSz.Height() );
-    tools::Long nOnePixel = GetDrawPixel( pDev, 1 );
+    tools::Long nOnePixel = GetDrawPixel(&rDev, 1);
     tools::Long nOffX = 3*nOnePixel;
     tools::Long nOffY = 2*nOnePixel;
 
@@ -1331,7 +1331,7 @@ void VclMultiLineEdit::Draw( OutputDevice* pDev, const Point& rPos, SystemTextCo
         tools::Rectangle aClip( aPos, aSize );
         if ( aTextSz.Height() > aSize.Height() )
             aClip.AdjustBottom(aTextSz.Height() - aSize.Height() + 1 );  // so that HP-printer does not 'optimize-away'
-        pDev->IntersectClipRegion( aClip );
+        rDev.IntersectClipRegion(aClip);
     }
 
     ExtTextEngine aTE;
@@ -1339,7 +1339,7 @@ void VclMultiLineEdit::Draw( OutputDevice* pDev, const Point& rPos, SystemTextCo
     aTE.SetMaxTextWidth( aSize.Width() );
     aTE.SetFont( aFont );
     aTE.SetTextAlign( pImpVclMEdit->GetTextWindow()->GetTextEngine()->GetTextAlign() );
-    aTE.Draw( pDev, Point( aPos.X() + nOffX, aPos.Y() + nOffY ) );
+    aTE.Draw(&rDev, Point(aPos.X() + nOffX, aPos.Y() + nOffY));
 }
 
 bool VclMultiLineEdit::EventNotify( NotifyEvent& rNEvt )

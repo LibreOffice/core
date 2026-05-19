@@ -981,23 +981,23 @@ IMPL_LINK( SpinField, ImplTimeout, Timer*, pTimer, void )
     }
 }
 
-void SpinField::Draw(OutputDevice* pDev, const Point& rPos, SystemTextColorFlags nFlags)
+void SpinField::Draw(OutputDevice& rDev, const Point& rPos, SystemTextColorFlags nFlags)
 {
-    Edit::Draw(pDev, rPos, nFlags);
+    Edit::Draw(rDev, rPos, nFlags);
 
     WinBits nFieldStyle = GetStyle();
     if ( (nFlags & SystemTextColorFlags::NoControls ) || !( nFieldStyle & (WB_SPIN|WB_DROPDOWN) ) )
         return;
 
-    Point aPos = pDev->LogicToPixel( rPos );
+    Point aPos = rDev.LogicToPixel(rPos);
     Size aSize = GetSizePixel();
-    AllSettings aOldSettings = pDev->GetSettings();
+    AllSettings aOldSettings = rDev.GetSettings();
 
-    pDev->Push();
-    pDev->SetMapMode();
+    rDev.Push();
+    rDev.SetMapMode();
 
     tools::Rectangle aDD, aUp, aDown;
-    ImplCalcButtonAreas(pDev, aSize, aDD, aUp, aDown);
+    ImplCalcButtonAreas(&rDev, aSize, aDD, aUp, aDown);
     aDD.Move(aPos.X(), aPos.Y());
     aUp.Move(aPos.X(), aPos.Y());
     aUp.AdjustTop( 1 );
@@ -1011,7 +1011,7 @@ void SpinField::Draw(OutputDevice* pDev, const Point& rPos, SystemTextColorFlags
 
     if (GetStyle() & WB_DROPDOWN)
     {
-        DecorationView aView( pDev );
+        DecorationView aView(&rDev);
         tools::Rectangle aInnerRect = aView.DrawButton( aDD, DrawButtonFlags::NoLightBorder );
         DrawSymbolFlags nSymbolStyle = IsEnabled() ? DrawSymbolFlags::NONE : DrawSymbolFlags::Disable;
         aView.DrawSymbol(aInnerRect, SymbolType::SPIN_DOWN, aButtonTextColor, nSymbolStyle);
@@ -1019,12 +1019,11 @@ void SpinField::Draw(OutputDevice* pDev, const Point& rPos, SystemTextColorFlags
 
     if (GetStyle() & WB_SPIN)
     {
-        ImplDrawSpinButton(*pDev, this, aUp, aDown, false, false);
+        ImplDrawSpinButton(rDev, this, aUp, aDown, false, false);
     }
 
-    pDev->Pop();
-    pDev->SetSettings(aOldSettings);
-
+    rDev.Pop();
+    rDev.SetSettings(aOldSettings);
 }
 
 FactoryFunction SpinField::GetUITestFactory() const

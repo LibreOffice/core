@@ -1703,22 +1703,22 @@ void Edit::Resize()
     }
 }
 
-void Edit::Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlags nFlags )
+void Edit::Draw(OutputDevice& rDev, const Point& rPos, SystemTextColorFlags nFlags)
 {
-    ApplySettings(*pDev);
+    ApplySettings(rDev);
 
-    Point aPos = pDev->LogicToPixel( rPos );
+    Point aPos = rDev.LogicToPixel(rPos);
     Size aSize = GetSizePixel();
-    vcl::Font aFont = GetDrawPixelFont( pDev );
+    vcl::Font aFont = GetDrawPixelFont(&rDev);
 
-    pDev->Push();
-    pDev->SetMapMode();
-    pDev->SetFont( aFont );
-    pDev->SetTextFillColor();
+    rDev.Push();
+    rDev.SetMapMode();
+    rDev.SetFont(aFont);
+    rDev.SetTextFillColor();
 
     // Border/Background
-    pDev->SetLineColor();
-    pDev->SetFillColor();
+    rDev.SetLineColor();
+    rDev.SetFillColor();
     bool bBorder = (GetStyle() & WB_BORDER);
     bool bBackground = IsControlBackground();
     if ( bBorder || bBackground )
@@ -1726,32 +1726,32 @@ void Edit::Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlags nFl
         tools::Rectangle aRect( aPos, aSize );
         if ( bBorder )
         {
-            ImplDrawFrame( pDev, aRect );
+            ImplDrawFrame(&rDev, aRect);
         }
         if ( bBackground )
         {
-            pDev->SetFillColor( GetControlBackground() );
-            pDev->DrawRect( aRect );
+            rDev.SetFillColor(GetControlBackground());
+            rDev.DrawRect(aRect);
         }
     }
 
     // Content
     if ( nFlags & SystemTextColorFlags::Mono )
-        pDev->SetTextColor( COL_BLACK );
+        rDev.SetTextColor(COL_BLACK);
     else
     {
         if ( !IsEnabled() )
         {
             const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-            pDev->SetTextColor( rStyleSettings.GetDisableColor() );
+            rDev.SetTextColor(rStyleSettings.GetDisableColor());
         }
         else
         {
-            pDev->SetTextColor( GetTextColor() );
+            rDev.SetTextColor(GetTextColor());
         }
     }
 
-    const tools::Long nOnePixel = GetDrawPixel( pDev, 1 );
+    const tools::Long nOnePixel = GetDrawPixel(&rDev, 1);
     const tools::Long nOffX = 3*nOnePixel;
     DrawTextFlags nTextStyle = DrawTextFlags::VCenter;
     tools::Rectangle aTextRect( aPos, aSize );
@@ -1767,8 +1767,8 @@ void Edit::Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlags nFl
     aTextRect.AdjustRight( -nOffX );
 
     OUString    aText = ImplGetText();
-    tools::Long        nTextHeight = pDev->GetTextHeight();
-    tools::Long        nTextWidth = pDev->GetTextWidth( aText );
+    tools::Long nTextHeight = rDev.GetTextHeight();
+    tools::Long nTextWidth = rDev.GetTextWidth(aText);
     tools::Long        nOffY = (aSize.Height() - nTextHeight) / 2;
 
     // Clipping?
@@ -1779,17 +1779,17 @@ void Edit::Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlags nFl
         tools::Rectangle aClip( aPos, aSize );
         if ( nTextHeight > aSize.Height() )
             aClip.AdjustBottom(nTextHeight-aSize.Height()+1 );  // prevent HP printers from 'optimizing'
-        pDev->IntersectClipRegion( aClip );
+        rDev.IntersectClipRegion(aClip);
     }
 
-    pDev->DrawText( aTextRect, aText, nTextStyle );
-    pDev->Pop();
+    rDev.DrawText(aTextRect, aText, nTextStyle);
+    rDev.Pop();
 
     if ( GetSubEdit() )
     {
         Size aOrigSize(GetSubEdit()->GetSizePixel());
         GetSubEdit()->SetSizePixel(GetSizePixel());
-        GetSubEdit()->Draw(pDev, rPos, nFlags);
+        GetSubEdit()->Draw(rDev, rPos, nFlags);
         GetSubEdit()->SetSizePixel(aOrigSize);
     }
 }

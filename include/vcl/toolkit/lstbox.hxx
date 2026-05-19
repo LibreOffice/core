@@ -126,7 +126,8 @@ public:
     virtual rtl::Reference<comphelper::OAccessible> CreateAccessible() override;
 
     SAL_DLLPRIVATE virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
-    SAL_DLLPRIVATE virtual void Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlags nFlags ) override;
+    SAL_DLLPRIVATE virtual void Draw(OutputDevice& rDev, const Point& rPos,
+                                     SystemTextColorFlags nFlags) override;
     SAL_DLLPRIVATE virtual void Resize() override;
     SAL_DLLPRIVATE virtual bool PreNotify( NotifyEvent& rNEvt ) override;
     SAL_DLLPRIVATE virtual void StateChanged( StateChangedType nType ) override;

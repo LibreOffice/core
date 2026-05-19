@@ -145,22 +145,22 @@ void ImageControl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectan
     pBorderWindow->GetOutDev()->DrawRect(aRect);
 }
 
-void ImageControl::Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlags )
+void ImageControl::Draw(OutputDevice& rDev, const Point& rPos, SystemTextColorFlags)
 {
-    const Point     aPos  = pDev->LogicToPixel( rPos );
+    const Point aPos = rDev.LogicToPixel(rPos);
     const Size      aSize = GetSizePixel();
     tools::Rectangle aRect( aPos, aSize );
 
-    auto popIt = pDev->ScopedPush();
-    pDev->SetMapMode();
+    auto popIt = rDev.ScopedPush();
+    rDev.SetMapMode();
 
     // Border
     if ( GetStyle() & WB_BORDER )
     {
-        ImplDrawFrame( pDev, aRect );
+        ImplDrawFrame(&rDev, aRect);
     }
-    pDev->IntersectClipRegion( aRect );
-    ImplDraw( *pDev, aRect.TopLeft(), aRect.GetSize() );
+    rDev.IntersectClipRegion(aRect);
+    ImplDraw(rDev, aRect.TopLeft(), aRect.GetSize());
 }
 
 void ImageControl::GetFocus()

@@ -378,16 +378,16 @@ void ScrollBar::ImplCalc( bool bUpdate )
     ImplUpdateRects( bUpdate );
 }
 
-void ScrollBar::Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlags nFlags )
+void ScrollBar::Draw(OutputDevice& rDev, const Point& rPos, SystemTextColorFlags nFlags)
 {
-    Point aPos  = pDev->LogicToPixel( rPos );
+    Point aPos = rDev.LogicToPixel(rPos);
 
-    auto popIt = pDev->ScopedPush();
-    pDev->SetMapMode();
+    auto popIt = rDev.ScopedPush();
+    rDev.SetMapMode();
     if ( !(nFlags & SystemTextColorFlags::Mono) )
     {
         // DecoView uses the FaceColor...
-        AllSettings aSettings = pDev->GetSettings();
+        AllSettings aSettings = rDev.GetSettings();
         StyleSettings aStyleSettings = aSettings.GetStyleSettings();
         if ( IsControlBackground() )
             aStyleSettings.SetFaceColor( GetControlBackground() );
@@ -395,7 +395,7 @@ void ScrollBar::Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlag
             aStyleSettings.SetFaceColor( GetSettings().GetStyleSettings().GetFaceColor() );
 
         aSettings.SetStyleSettings( aStyleSettings );
-        pDev->SetSettings( aSettings );
+        rDev.SetSettings(aSettings);
     }
 
     // For printing:
@@ -414,7 +414,7 @@ void ScrollBar::Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlag
     maPage1Rect+=aPos;
     maPage2Rect+=aPos;
 
-    ImplDraw(*pDev);
+    ImplDraw(rDev);
 
     mbCalcSize = true;
 }

@@ -327,7 +327,7 @@ namespace frm
         if ( eTargetUnit != MapUnit::MapPixel )
             aPos = pTargetDevice->PixelToLogic( aPos );
 
-        pControl->Draw( pTargetDevice, aPos, SystemTextColorFlags::NoControls );
+        pControl->Draw(*pTargetDevice, aPos, SystemTextColorFlags::NoControls);
     }
 
 

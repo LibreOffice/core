@@ -187,14 +187,14 @@ void FileControl::SetEditModifyHdl( const Link<Edit&,void>& rLink )
     maEdit->SetModifyHdl(rLink);
 }
 
-void FileControl::Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlags nFlags )
+void FileControl::Draw(OutputDevice& rDev, const Point& rPos, SystemTextColorFlags nFlags)
 {
     WinBits nOldEditStyle = GetEdit().GetStyle();
     if ( GetStyle() & WB_BORDER )
         GetEdit().SetStyle( nOldEditStyle|WB_BORDER );
     Size aOrigSize(GetEdit().GetSizePixel());
     GetEdit().SetSizePixel(GetSizePixel());
-    GetEdit().Draw( pDev, rPos, nFlags );
+    GetEdit().Draw(rDev, rPos, nFlags);
     GetEdit().SetSizePixel(aOrigSize);
     if ( GetStyle() & WB_BORDER )
         GetEdit().SetStyle( nOldEditStyle );

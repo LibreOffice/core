@@ -481,7 +481,7 @@ public:
     virtual void    GetFocus() override;
     virtual void    Resize() override;
     virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
-    virtual void    Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlags nFlags ) override;
+    virtual void Draw(OutputDevice& rDev, const Point& rPos, SystemTextColorFlags nFlags) override;
     virtual void    Command( const CommandEvent& rEvt ) override;
     virtual void    StartDrag( sal_Int8 _nAction, const Point& _rPosPixel ) override;
 

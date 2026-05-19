@@ -88,7 +88,7 @@ public:
 
     virtual rtl::Reference<comphelper::OAccessible> CreateAccessible() override;
 
-    virtual void    Draw( OutputDevice* pDev, const Point& rPos,SystemTextColorFlags nFlags ) override;
+    virtual void Draw(OutputDevice& rDev, const Point& rPos, SystemTextColorFlags nFlags) override;
     virtual void    Resize() override;
     virtual bool    EventNotify( NotifyEvent& rNEvt ) override;
     virtual void    StateChanged( StateChangedType nType ) override;

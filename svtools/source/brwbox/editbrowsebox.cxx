@@ -1235,7 +1235,7 @@ void EditBrowseBox::PaintTristate(const tools::Rectangle& rRect, const TriState&
                            aBoxSize);
     pCheckBoxPaint->SetPosSizePixel(aRect.TopLeft(), aRect.GetSize());
 
-    pCheckBoxPaint->Draw(GetDataWindow().GetOutDev(), aRect.TopLeft(), SystemTextColorFlags::NONE);
+    pCheckBoxPaint->Draw(*GetDataWindow().GetOutDev(), aRect.TopLeft(), SystemTextColorFlags::NONE);
 }
 
 void EditBrowseBox::AsynchGetFocus()

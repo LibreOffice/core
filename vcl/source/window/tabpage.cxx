@@ -162,28 +162,28 @@ void TabPage::Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle&
             aControlValue, OUString() );
 }
 
-void TabPage::Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlags )
+void TabPage::Draw(OutputDevice& rDev, const Point& rPos, SystemTextColorFlags)
 {
-    Point aPos = pDev->LogicToPixel( rPos );
+    Point aPos = rDev.LogicToPixel(rPos);
     Size aSize = GetSizePixel();
 
     Wallpaper aWallpaper = GetBackground();
     if ( !aWallpaper.IsBitmap() )
         ImplInitSettings();
 
-    auto popIt = pDev->ScopedPush();
-    pDev->SetMapMode();
-    pDev->SetLineColor();
+    auto popIt = rDev.ScopedPush();
+    rDev.SetMapMode();
+    rDev.SetLineColor();
 
     if ( aWallpaper.IsBitmap() )
-        pDev->DrawBitmap( aPos, aSize, aWallpaper.GetBitmap() );
+        rDev.DrawBitmap(aPos, aSize, aWallpaper.GetBitmap());
     else
     {
         if( aWallpaper.GetColor() == COL_AUTO )
-            pDev->SetFillColor( GetSettings().GetStyleSettings().GetDialogColor() );
+            rDev.SetFillColor(GetSettings().GetStyleSettings().GetDialogColor());
         else
-            pDev->SetFillColor( aWallpaper.GetColor() );
-        pDev->DrawRect( tools::Rectangle( aPos, aSize ) );
+            rDev.SetFillColor(aWallpaper.GetColor());
+        rDev.DrawRect(tools::Rectangle(aPos, aSize));
     }
 }
 

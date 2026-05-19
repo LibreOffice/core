@@ -92,7 +92,7 @@ public:
 
 protected:
     explicit        Dialog( WindowType eType );
-    virtual void    Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlags nFlags ) override;
+    virtual void Draw(OutputDevice& rDev, const Point& rPos, SystemTextColorFlags nFlags) override;
     virtual void    settingOptimalLayoutSize(Window *pBox) override;
 
 protected:

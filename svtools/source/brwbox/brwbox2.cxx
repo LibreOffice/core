@@ -645,40 +645,42 @@ void BrowseBox::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle
     }
 }
 
-void BrowseBox::Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlags nFlags )
+void BrowseBox::Draw(OutputDevice& rDev, const Point& rPos, SystemTextColorFlags nFlags)
 {
     // we need pixel coordinates
     Size aRealSize = GetSizePixel();
-    Point aRealPos = pDev->LogicToPixel(rPos);
+    Point aRealPos = rDev.LogicToPixel(rPos);
 
     if ((aRealSize.Width() < 3) || (aRealSize.Height() < 3))
         // we want to have two pixels frame ...
         return;
 
-    vcl::Font aFont = pDataWin->GetDrawPixelFont( pDev );
-        // the 'normal' painting uses always the data window as device to output to, so we have to calc the new font
-        // relative to the data wins current settings
+    vcl::Font aFont = pDataWin->GetDrawPixelFont(&rDev);
+    // the 'normal' painting uses always the data window as device to output to, so we have to calc the new font
+    // relative to the data wins current settings
 
-    auto popIt = pDev->ScopedPush();
-    pDev->SetMapMode();
-    pDev->SetFont( aFont );
+    auto popIt = rDev.ScopedPush();
+    rDev.SetMapMode();
+    rDev.SetFont(aFont);
     if (nFlags & SystemTextColorFlags::Mono)
-        pDev->SetTextColor(COL_BLACK);
+        rDev.SetTextColor(COL_BLACK);
     else
-        pDev->SetTextColor(pDataWin->GetTextColor());
+        rDev.SetTextColor(pDataWin->GetTextColor());
 
     // draw a frame
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-    pDev->SetLineColor(rStyleSettings.GetDarkShadowColor());
-    pDev->DrawLine(Point(aRealPos.X(), aRealPos.Y()),
-                   Point(aRealPos.X(), aRealPos.Y() + aRealSize.Height() - 1));
-    pDev->DrawLine(Point(aRealPos.X(), aRealPos.Y()),
-                   Point(aRealPos.X() + aRealSize.Width() - 1, aRealPos.Y()));
-    pDev->SetLineColor(rStyleSettings.GetShadowColor());
-    pDev->DrawLine(Point(aRealPos.X() + aRealSize.Width() - 1, aRealPos.Y() + 1),
-                   Point(aRealPos.X() + aRealSize.Width() - 1, aRealPos.Y() + aRealSize.Height() - 1));
-    pDev->DrawLine(Point(aRealPos.X() + aRealSize.Width() - 1, aRealPos.Y() + aRealSize.Height() - 1),
-                   Point(aRealPos.X() + 1, aRealPos.Y() + aRealSize.Height() - 1));
+    rDev.SetLineColor(rStyleSettings.GetDarkShadowColor());
+    rDev.DrawLine(Point(aRealPos.X(), aRealPos.Y()),
+                  Point(aRealPos.X(), aRealPos.Y() + aRealSize.Height() - 1));
+    rDev.DrawLine(Point(aRealPos.X(), aRealPos.Y()),
+                  Point(aRealPos.X() + aRealSize.Width() - 1, aRealPos.Y()));
+    rDev.SetLineColor(rStyleSettings.GetShadowColor());
+    rDev.DrawLine(
+        Point(aRealPos.X() + aRealSize.Width() - 1, aRealPos.Y() + 1),
+        Point(aRealPos.X() + aRealSize.Width() - 1, aRealPos.Y() + aRealSize.Height() - 1));
+    rDev.DrawLine(
+        Point(aRealPos.X() + aRealSize.Width() - 1, aRealPos.Y() + aRealSize.Height() - 1),
+        Point(aRealPos.X() + 1, aRealPos.Y() + aRealSize.Height() - 1));
 
     HeaderBar* pBar = pDataWin->pHeaderBar;
 
@@ -687,7 +689,8 @@ void BrowseBox::Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlag
     if (!m_nDataRowHeight)
         ImpGetDataRowHeight();
     tools::Long nHeightLogic = PixelToLogic(Size(0, m_nDataRowHeight), MapMode(MapUnit::Map10thMM)).Height();
-    tools::Long nForeignHeightPixel = pDev->LogicToPixel(Size(0, nHeightLogic), MapMode(MapUnit::Map10thMM)).Height();
+    tools::Long nForeignHeightPixel
+        = rDev.LogicToPixel(Size(0, nHeightLogic), MapMode(MapUnit::Map10thMM)).Height();
 
     tools::Long nOriginalHeight = m_nDataRowHeight;
     m_nDataRowHeight = nForeignHeightPixel;
@@ -699,7 +702,8 @@ void BrowseBox::Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlag
         BrowserColumn* pCurrent = mvCols[ nPos ].get();
 
         tools::Long nWidthLogic = PixelToLogic(Size(pCurrent->Width(), 0), MapMode(MapUnit::Map10thMM)).Width();
-        tools::Long nForeignWidthPixel = pDev->LogicToPixel(Size(nWidthLogic, 0), MapMode(MapUnit::Map10thMM)).Width();
+        tools::Long nForeignWidthPixel
+            = rDev.LogicToPixel(Size(nWidthLogic, 0), MapMode(MapUnit::Map10thMM)).Width();
 
         pCurrent->SetWidth(nForeignWidthPixel, GetZoom());
         if ( pBar )
@@ -717,7 +721,8 @@ void BrowseBox::Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlag
     {
         // the title height with respect to the font set for the given device
         tools::Long nTitleHeight = PixelToLogic(Size(0, GetTitleHeight()), MapMode(MapUnit::Map10thMM)).Height();
-        nTitleHeight = pDev->LogicToPixel(Size(0, nTitleHeight), MapMode(MapUnit::Map10thMM)).Height();
+        nTitleHeight
+            = rDev.LogicToPixel(Size(0, nTitleHeight), MapMode(MapUnit::Map10thMM)).Height();
 
         BrowserColumn* pFirstCol = !mvCols.empty() ? mvCols[ 0 ].get() : nullptr;
 
@@ -728,11 +733,11 @@ void BrowseBox::Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlag
             // do this before converting to logics !
 
         // the header's draw expects logic coordinates, again
-        aHeaderPos = pDev->PixelToLogic(aHeaderPos);
+        aHeaderPos = rDev.PixelToLogic(aHeaderPos);
 
         Size aOrigSize(pBar->GetSizePixel());
         pBar->SetSizePixel(aHeaderSize);
-        pBar->Draw(pDev, aHeaderPos, nFlags);
+        pBar->Draw(rDev, aHeaderPos, nFlags);
         pBar->SetSizePixel(aOrigSize);
 
         // draw the "upper left cell" (the intersection between the header bar and the handle column)
@@ -741,15 +746,17 @@ void BrowseBox::Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlag
             ButtonFrame aButtonFrame( aRealPos,
                 Size( pFirstCol->Width()-1, nTitleHeight-1 ),
                 pFirstCol->Title(), !IsEnabled());
-            aButtonFrame.Draw( *pDev );
+            aButtonFrame.Draw(rDev);
 
-            auto popIt2 = pDev->ScopedPush(vcl::PushFlags::LINECOLOR);
-            pDev->SetLineColor( COL_BLACK );
+            auto popIt2 = rDev.ScopedPush(vcl::PushFlags::LINECOLOR);
+            rDev.SetLineColor(COL_BLACK);
 
-            pDev->DrawLine( Point( aRealPos.X(), aRealPos.Y() + nTitleHeight-1 ),
-               Point( aRealPos.X() + pFirstCol->Width() - 1, aRealPos.Y() + nTitleHeight-1 ) );
-            pDev->DrawLine( Point( aRealPos.X() + pFirstCol->Width() - 1, aRealPos.Y() ),
-               Point( aRealPos.X() + pFirstCol->Width() - 1, aRealPos.Y() + nTitleHeight-1 ) );
+            rDev.DrawLine(
+                Point(aRealPos.X(), aRealPos.Y() + nTitleHeight - 1),
+                Point(aRealPos.X() + pFirstCol->Width() - 1, aRealPos.Y() + nTitleHeight - 1));
+            rDev.DrawLine(
+                Point(aRealPos.X() + pFirstCol->Width() - 1, aRealPos.Y()),
+                Point(aRealPos.X() + pFirstCol->Width() - 1, aRealPos.Y() + nTitleHeight - 1));
         }
 
         aRealPos.AdjustY(aHeaderSize.Height() );
@@ -758,18 +765,18 @@ void BrowseBox::Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlag
 
     // draw our own content (with clipping)
     vcl::Region aRegion(tools::Rectangle(aRealPos, aRealSize));
-    pDev->SetClipRegion( pDev->PixelToLogic( aRegion ) );
+    rDev.SetClipRegion(rDev.PixelToLogic(aRegion));
 
     // do we have to paint the background
     bool bBackground = pDataWin->IsControlBackground();
     if ( bBackground )
     {
         tools::Rectangle aRect( aRealPos, aRealSize );
-        pDev->SetFillColor( pDataWin->GetControlBackground() );
-        pDev->DrawRect( aRect );
+        rDev.SetFillColor(pDataWin->GetControlBackground());
+        rDev.DrawRect(aRect);
     }
 
-    ImplPaintData( *pDev, tools::Rectangle( aRealPos, aRealSize ), true );
+    ImplPaintData(rDev, tools::Rectangle(aRealPos, aRealSize), true);
 
     // restore the column widths/data row height
     m_nDataRowHeight = nOriginalHeight;
@@ -777,7 +784,8 @@ void BrowseBox::Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlag
     {
         BrowserColumn* pCurrent = mvCols[ nPos ].get();
 
-        tools::Long nForeignWidthLogic = pDev->PixelToLogic(Size(pCurrent->Width(), 0), MapMode(MapUnit::Map10thMM)).Width();
+        tools::Long nForeignWidthLogic
+            = rDev.PixelToLogic(Size(pCurrent->Width(), 0), MapMode(MapUnit::Map10thMM)).Width();
         tools::Long nWidthPixel = LogicToPixel(Size(nForeignWidthLogic, 0), MapMode(MapUnit::Map10thMM)).Width();
 
         pCurrent->SetWidth(nWidthPixel, GetZoom());

@@ -67,7 +67,7 @@ void SAL_CALL VCLXTabPageContainer::draw( sal_Int32 nX, sal_Int32 nY )
         {
             ::Point aPos( nX, nY );
             aPos  = pDev->PixelToLogic( aPos );
-            pTabPage->Draw( pDev, aPos, SystemTextColorFlags::NONE );
+            pTabPage->Draw(*pDev, aPos, SystemTextColorFlags::NONE);
         }
     }
 

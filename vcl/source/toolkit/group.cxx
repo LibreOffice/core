@@ -177,23 +177,22 @@ void GroupBox::Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle
     ImplDraw(&rRenderContext, SystemTextColorFlags::NONE, Point(), GetOutputSizePixel());
 }
 
-void GroupBox::Draw( OutputDevice* pDev, const Point& rPos,
-                     SystemTextColorFlags nFlags )
+void GroupBox::Draw(OutputDevice& rDev, const Point& rPos, SystemTextColorFlags nFlags)
 {
-    Point       aPos  = pDev->LogicToPixel( rPos );
+    Point aPos = rDev.LogicToPixel(rPos);
     Size        aSize = GetSizePixel();
-    vcl::Font   aFont = GetDrawPixelFont( pDev );
+    vcl::Font aFont = GetDrawPixelFont(&rDev);
 
-    auto popIt = pDev->ScopedPush();
-    pDev->SetMapMode();
-    pDev->SetFont( aFont );
+    auto popIt = rDev.ScopedPush();
+    rDev.SetMapMode();
+    rDev.SetFont(aFont);
     if ( nFlags & SystemTextColorFlags::Mono )
-        pDev->SetTextColor( COL_BLACK );
+        rDev.SetTextColor(COL_BLACK);
     else
-        pDev->SetTextColor( GetTextColor() );
-    pDev->SetTextFillColor();
+        rDev.SetTextColor(GetTextColor());
+    rDev.SetTextFillColor();
 
-    ImplDraw( pDev, nFlags, aPos, aSize );
+    ImplDraw(&rDev, nFlags, aPos, aSize);
 }
 
 void GroupBox::Resize()

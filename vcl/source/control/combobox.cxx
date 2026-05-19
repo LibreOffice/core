@@ -1148,22 +1148,22 @@ rtl::Reference<comphelper::OAccessible> ComboBox::CreateAccessible()
     return new VCLXAccessibleComboBox(this);
 }
 
-void ComboBox::Draw(OutputDevice* pDev, const Point& rPos, SystemTextColorFlags eFlags)
+void ComboBox::Draw(OutputDevice& rDev, const Point& rPos, SystemTextColorFlags eFlags)
 {
-    GetMainWindow()->ApplySettings(*pDev);
+    GetMainWindow()->ApplySettings(rDev);
 
-    const Point aPos = pDev->LogicToPixel( rPos );
+    const Point aPos = rDev.LogicToPixel(rPos);
     const Size aSize = GetSizePixel();
-    const vcl::Font aFont = GetMainWindow()->GetDrawPixelFont( pDev );
+    const vcl::Font aFont = GetMainWindow()->GetDrawPixelFont(&rDev);
 
-    pDev->Push();
-    pDev->SetMapMode();
-    pDev->SetFont( aFont );
-    pDev->SetTextFillColor();
+    rDev.Push();
+    rDev.SetMapMode();
+    rDev.SetFont(aFont);
+    rDev.SetTextFillColor();
 
     // Border/Background
-    pDev->SetLineColor();
-    pDev->SetFillColor();
+    rDev.SetLineColor();
+    rDev.SetFillColor();
     const bool bBorder = (GetStyle() & WB_BORDER);
     const bool bBackground = IsControlBackground();
     if ( bBorder || bBackground )
@@ -1172,27 +1172,27 @@ void ComboBox::Draw(OutputDevice* pDev, const Point& rPos, SystemTextColorFlags 
         // aRect.Top() += nEditHeight;
         if ( bBorder )
         {
-            ImplDrawFrame( pDev, aRect );
+            ImplDrawFrame(&rDev, aRect);
         }
         if ( bBackground )
         {
-            pDev->SetFillColor( GetControlBackground() );
-            pDev->DrawRect( aRect );
+            rDev.SetFillColor(GetControlBackground());
+            rDev.DrawRect(aRect);
         }
     }
 
     // contents
     if ( !IsDropDownBox() )
     {
-        const tools::Long nOnePixel = GetDrawPixel(pDev, 1);
-        const tools::Long nTextHeight = pDev->GetTextHeight();
+        const tools::Long nOnePixel = GetDrawPixel(&rDev, 1);
+        const tools::Long nTextHeight = rDev.GetTextHeight();
         const tools::Long nEditHeight = nTextHeight + 6 * nOnePixel;
         DrawTextFlags eTextStyle = DrawTextFlags::VCenter;
 
         // First, draw the edit part
         Size aOrigSize(m_pSubEdit->GetSizePixel());
         m_pSubEdit->SetSizePixel(Size(aSize.Width(), nEditHeight));
-        m_pSubEdit->Draw(pDev, aPos, eFlags);
+        m_pSubEdit->Draw(rDev, aPos, eFlags);
         m_pSubEdit->SetSizePixel(aOrigSize);
 
         // Second, draw the listbox
@@ -1205,23 +1205,23 @@ void ComboBox::Draw(OutputDevice* pDev, const Point& rPos, SystemTextColorFlags 
 
         if (eFlags & SystemTextColorFlags::Mono)
         {
-            pDev->SetTextColor( COL_BLACK );
+            rDev.SetTextColor(COL_BLACK);
         }
         else
         {
             if ( !IsEnabled() )
             {
                 const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-                pDev->SetTextColor( rStyleSettings.GetDisableColor() );
+                rDev.SetTextColor(rStyleSettings.GetDisableColor());
             }
             else
             {
-                pDev->SetTextColor( GetTextColor() );
+                rDev.SetTextColor(GetTextColor());
             }
         }
 
         tools::Rectangle aClip( aPos, aSize );
-        pDev->IntersectClipRegion( aClip );
+        rDev.IntersectClipRegion(aClip);
         sal_Int32 nLines = static_cast<sal_Int32>( nTextHeight > 0 ? (aSize.Height()-nEditHeight)/nTextHeight : 1 );
         if ( !nLines )
             nLines = 1;
@@ -1237,20 +1237,21 @@ void ComboBox::Draw(OutputDevice* pDev, const Point& rPos, SystemTextColorFlags 
         // the drawing starts here
         for ( sal_Int32 n = 0; n < nLines; ++n )
         {
-            pDev->DrawText(aTextRect, m_pImplLB->GetEntryList().GetEntryText(n + nTEntry), eTextStyle);
+            rDev.DrawText(aTextRect, m_pImplLB->GetEntryList().GetEntryText(n + nTEntry),
+                          eTextStyle);
             aTextRect.AdjustTop(nTextHeight );
             aTextRect.AdjustBottom(nTextHeight );
         }
     }
 
-    pDev->Pop();
+    rDev.Pop();
 
     // Call Edit::Draw after restoring the MapMode...
     if ( IsDropDownBox() )
     {
         const Size aOrigSize(m_pSubEdit->GetSizePixel());
         m_pSubEdit->SetSizePixel(GetSizePixel());
-        m_pSubEdit->Draw(pDev, rPos, eFlags);
+        m_pSubEdit->Draw(rDev, rPos, eFlags);
         m_pSubEdit->SetSizePixel(aOrigSize);
         // DD-Button ?
     }

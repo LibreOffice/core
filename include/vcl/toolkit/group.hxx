@@ -48,7 +48,7 @@ public:
     explicit        GroupBox( vcl::Window* pParent, WinBits nStyle );
 
     virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
-    virtual void    Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlags nFlags ) override;
+    virtual void Draw(OutputDevice& rDev, const Point& rPos, SystemTextColorFlags nFlags) override;
     virtual void    Resize() override;
     virtual void    StateChanged( StateChangedType nType ) override;
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;

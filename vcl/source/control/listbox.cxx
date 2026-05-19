@@ -333,22 +333,22 @@ void ListBox::ApplySettings(vcl::RenderContext& rRenderContext)
     rRenderContext.SetBackground();
 }
 
-void ListBox::Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlags nFlags )
+void ListBox::Draw(OutputDevice& rDev, const Point& rPos, SystemTextColorFlags nFlags)
 {
-    mpImplLB->GetMainWindow()->ApplySettings(*pDev);
+    mpImplLB->GetMainWindow()->ApplySettings(rDev);
 
-    Point aPos = pDev->LogicToPixel( rPos );
+    Point aPos = rDev.LogicToPixel(rPos);
     Size aSize = GetSizePixel();
-    vcl::Font aFont = mpImplLB->GetMainWindow()->GetDrawPixelFont( pDev );
+    vcl::Font aFont = mpImplLB->GetMainWindow()->GetDrawPixelFont(&rDev);
 
-    auto popIt = pDev->ScopedPush();
-    pDev->SetMapMode();
-    pDev->SetFont( aFont );
-    pDev->SetTextFillColor();
+    auto popIt = rDev.ScopedPush();
+    rDev.SetMapMode();
+    rDev.SetFont(aFont);
+    rDev.SetTextFillColor();
 
     // Border/Background
-    pDev->SetLineColor();
-    pDev->SetFillColor();
+    rDev.SetLineColor();
+    rDev.SetFillColor();
     bool bBorder = (GetStyle() & WB_BORDER);
     bool bBackground = IsControlBackground();
     if ( bBorder || bBackground )
@@ -356,34 +356,34 @@ void ListBox::Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlags 
         tools::Rectangle aRect( aPos, aSize );
         if ( bBorder )
         {
-            ImplDrawFrame( pDev, aRect );
+            ImplDrawFrame(&rDev, aRect);
         }
         if ( bBackground )
         {
-            pDev->SetFillColor( GetControlBackground() );
-            pDev->DrawRect( aRect );
+            rDev.SetFillColor(GetControlBackground());
+            rDev.DrawRect(aRect);
         }
     }
 
     // Content
     if ( nFlags & SystemTextColorFlags::Mono )
     {
-        pDev->SetTextColor( COL_BLACK );
+        rDev.SetTextColor(COL_BLACK);
     }
     else
     {
         if ( !IsEnabled() )
         {
             const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-            pDev->SetTextColor( rStyleSettings.GetDisableColor() );
+            rDev.SetTextColor(rStyleSettings.GetDisableColor());
         }
         else
         {
-            pDev->SetTextColor( GetTextColor() );
+            rDev.SetTextColor(GetTextColor());
         }
     }
 
-    const tools::Long nOnePixel = GetDrawPixel( pDev, 1 );
+    const tools::Long nOnePixel = GetDrawPixel(&rDev, 1);
     const tools::Long nOffX = 3*nOnePixel;
     DrawTextFlags nTextStyle = DrawTextFlags::VCenter;
     tools::Rectangle aTextRect( aPos, aSize );
@@ -401,8 +401,8 @@ void ListBox::Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlags 
     if ( IsDropDownBox() )
     {
         OUString   aText = GetSelectedEntry();
-        tools::Long       nTextHeight = pDev->GetTextHeight();
-        tools::Long       nTextWidth = pDev->GetTextWidth( aText );
+        tools::Long nTextHeight = rDev.GetTextHeight();
+        tools::Long nTextWidth = rDev.GetTextWidth(aText);
         tools::Long       nOffY = (aSize.Height()-nTextHeight) / 2;
 
         // Clipping?
@@ -413,18 +413,18 @@ void ListBox::Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlags 
             tools::Rectangle aClip( aPos, aSize );
             if ( nTextHeight > aSize.Height() )
                 aClip.AdjustBottom(nTextHeight-aSize.Height()+1 );  // So that HP Printers don't optimize this away
-            pDev->IntersectClipRegion( aClip );
+            rDev.IntersectClipRegion(aClip);
         }
 
-        pDev->DrawText( aTextRect, aText, nTextStyle );
+        rDev.DrawText(aTextRect, aText, nTextStyle);
     }
     else
     {
-        tools::Long        nTextHeight = pDev->GetTextHeight();
+        tools::Long nTextHeight = rDev.GetTextHeight();
         sal_uInt16  nLines = ( nTextHeight > 0 ) ? static_cast<sal_uInt16>(aSize.Height() / nTextHeight) : 1;
         tools::Rectangle   aClip( aPos, aSize );
 
-        pDev->IntersectClipRegion( aClip );
+        rDev.IntersectClipRegion(aClip);
 
         if ( !nLines )
             nLines = 1;
@@ -435,20 +435,22 @@ void ListBox::Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlags 
             bool bSelected = mpImplLB->GetEntryList().IsEntryPosSelected( nEntry );
             if ( bSelected )
             {
-                pDev->SetFillColor( COL_BLACK );
-                pDev->DrawRect( tools::Rectangle(  Point( aPos.X(), aPos.Y() + n*nTextHeight ),
-                                            Point( aPos.X() + aSize.Width(), aPos.Y() + (n+1)*nTextHeight + 2*nOnePixel ) ) );
-                pDev->SetFillColor();
-                pDev->SetTextColor( COL_WHITE );
+                rDev.SetFillColor(COL_BLACK);
+                rDev.DrawRect(
+                    tools::Rectangle(Point(aPos.X(), aPos.Y() + n * nTextHeight),
+                                     Point(aPos.X() + aSize.Width(),
+                                           aPos.Y() + (n + 1) * nTextHeight + 2 * nOnePixel)));
+                rDev.SetFillColor();
+                rDev.SetTextColor(COL_WHITE);
             }
 
             aTextRect.SetTop( aPos.Y() + n*nTextHeight );
             aTextRect.SetBottom( aTextRect.Top() + nTextHeight );
 
-            pDev->DrawText( aTextRect, mpImplLB->GetEntryList().GetEntryText( nEntry ), nTextStyle );
+            rDev.DrawText(aTextRect, mpImplLB->GetEntryList().GetEntryText(nEntry), nTextStyle);
 
             if ( bSelected )
-                pDev->SetTextColor( COL_BLACK );
+                rDev.SetTextColor(COL_BLACK);
         }
     }
 }

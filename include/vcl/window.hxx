@@ -713,7 +713,7 @@ public:
 
     SAL_DLLPRIVATE void                 Erase(vcl::RenderContext& rRenderContext);
 
-    virtual void                        Draw( ::OutputDevice* pDev, const Point& rPos, SystemTextColorFlags nFlags );
+    virtual void Draw(OutputDevice& rDev, const Point& rPos, SystemTextColorFlags nFlags);
     virtual void                        Move();
     virtual void                        Resize();
     virtual void                        Activate();

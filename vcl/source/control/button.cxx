@@ -1403,29 +1403,28 @@ void PushButton::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangl
     ImplDrawPushButton(rRenderContext);
 }
 
-void PushButton::Draw( OutputDevice* pDev, const Point& rPos,
-                       SystemTextColorFlags nFlags )
+void PushButton::Draw(OutputDevice& rDev, const Point& rPos, SystemTextColorFlags nFlags)
 {
-    Point       aPos  = pDev->LogicToPixel( rPos );
+    Point aPos = rDev.LogicToPixel(rPos);
     Size        aSize = GetSizePixel();
     tools::Rectangle   aRect( aPos, aSize );
-    vcl::Font   aFont = GetDrawPixelFont( pDev );
+    vcl::Font aFont = GetDrawPixelFont(&rDev);
 
-    auto popIt = pDev->ScopedPush();
-    pDev->SetMapMode();
-    pDev->SetFont( aFont );
+    auto popIt = rDev.ScopedPush();
+    rDev.SetMapMode();
+    rDev.SetFont(aFont);
 
     std::optional<StyleSettings> oOrigDevStyleSettings;
 
     if ( nFlags & SystemTextColorFlags::Mono )
     {
-        pDev->SetTextColor( COL_BLACK );
+        rDev.SetTextColor(COL_BLACK);
     }
     else
     {
-        pDev->SetTextColor( GetTextColor() );
+        rDev.SetTextColor(GetTextColor());
         // DecoView uses the FaceColor...
-        AllSettings aSettings = pDev->GetSettings();
+        AllSettings aSettings = rDev.GetSettings();
         StyleSettings aStyleSettings = aSettings.GetStyleSettings();
         oOrigDevStyleSettings = aStyleSettings;
         if ( IsControlBackground() )
@@ -1433,11 +1432,11 @@ void PushButton::Draw( OutputDevice* pDev, const Point& rPos,
         else
             aStyleSettings.SetFaceColor( GetSettings().GetStyleSettings().GetFaceColor() );
         aSettings.SetStyleSettings( aStyleSettings );
-        pDev->OutputDevice::SetSettings( aSettings );
+        rDev.OutputDevice::SetSettings(aSettings);
     }
-    pDev->SetTextFillColor();
+    rDev.SetTextFillColor();
 
-    DecorationView aDecoView( pDev );
+    DecorationView aDecoView(&rDev);
     DrawButtonFlags nButtonStyle = DrawButtonFlags::NONE;
     if ( nFlags & SystemTextColorFlags::Mono )
         nButtonStyle |= DrawButtonFlags::Mono;
@@ -1445,15 +1444,15 @@ void PushButton::Draw( OutputDevice* pDev, const Point& rPos,
         nButtonStyle |= DrawButtonFlags::Checked;
     aRect = aDecoView.DrawButton( aRect, nButtonStyle );
 
-    ImplDrawPushButtonContent( pDev, nFlags, aRect, true, nButtonStyle );
+    ImplDrawPushButtonContent(&rDev, nFlags, aRect, true, nButtonStyle);
 
     // restore original settings (which are not affected by Push/Pop) after
     // finished drawing
     if (oOrigDevStyleSettings)
     {
-        AllSettings aSettings = pDev->GetSettings();
+        AllSettings aSettings = rDev.GetSettings();
         aSettings.SetStyleSettings(*oOrigDevStyleSettings);
-        pDev->OutputDevice::SetSettings( aSettings );
+        rDev.OutputDevice::SetSettings(aSettings);
     }
 }
 
@@ -2505,18 +2504,17 @@ void RadioButton::Paint( vcl::RenderContext& rRenderContext, const tools::Rectan
     ImplDrawRadioButton(rRenderContext);
 }
 
-void RadioButton::Draw( OutputDevice* pDev, const Point& rPos,
-                        SystemTextColorFlags nFlags )
+void RadioButton::Draw(OutputDevice& rDev, const Point& rPos, SystemTextColorFlags nFlags)
 {
     if ( !maImage )
     {
         MapMode     aResMapMode( MapUnit::Map100thMM );
-        Point       aPos  = pDev->LogicToPixel( rPos );
+        Point aPos = rDev.LogicToPixel(rPos);
         Size        aSize = GetSizePixel();
-        Size        aImageSize = pDev->LogicToPixel( Size( 300, 300 ), aResMapMode );
-        Size        aBrd1Size = pDev->LogicToPixel( Size( 20, 20 ), aResMapMode );
-        Size        aBrd2Size = pDev->LogicToPixel( Size( 60, 60 ), aResMapMode );
-        vcl::Font   aFont = GetDrawPixelFont( pDev );
+        Size aImageSize = rDev.LogicToPixel(Size(300, 300), aResMapMode);
+        Size aBrd1Size = rDev.LogicToPixel(Size(20, 20), aResMapMode);
+        Size aBrd2Size = rDev.LogicToPixel(Size(60, 60), aResMapMode);
+        vcl::Font aFont = GetDrawPixelFont(&rDev);
         tools::Rectangle   aStateRect;
         tools::Rectangle   aMouseRect;
 
@@ -2536,29 +2534,28 @@ void RadioButton::Draw( OutputDevice* pDev, const Point& rPos,
         if ( !aBrd2Size.Height() )
             aBrd2Size.setHeight( 1 );
 
-        auto popIt = pDev->ScopedPush();
-        pDev->SetMapMode();
-        pDev->SetFont( aFont );
+        auto popIt = rDev.ScopedPush();
+        rDev.SetMapMode();
+        rDev.SetFont(aFont);
         if ( nFlags & SystemTextColorFlags::Mono )
-            pDev->SetTextColor( COL_BLACK );
+            rDev.SetTextColor(COL_BLACK);
         else
-            pDev->SetTextColor( GetTextColor() );
-        pDev->SetTextFillColor();
+            rDev.SetTextColor(GetTextColor());
+        rDev.SetTextFillColor();
 
-        ImplDraw( pDev, nFlags, aPos, aSize,
-                  aImageSize, aStateRect, aMouseRect );
+        ImplDraw(&rDev, nFlags, aPos, aSize, aImageSize, aStateRect, aMouseRect);
 
         Point   aCenterPos = aStateRect.Center();
         tools::Long    nRadX = aImageSize.Width()/2;
         tools::Long    nRadY = aImageSize.Height()/2;
 
-        pDev->SetLineColor();
-        pDev->SetFillColor( COL_BLACK );
-        pDev->DrawPolygon( tools::Polygon( aCenterPos, nRadX, nRadY ) );
+        rDev.SetLineColor();
+        rDev.SetFillColor(COL_BLACK);
+        rDev.DrawPolygon(tools::Polygon(aCenterPos, nRadX, nRadY));
         nRadX -= aBrd1Size.Width();
         nRadY -= aBrd1Size.Height();
-        pDev->SetFillColor( COL_WHITE );
-        pDev->DrawPolygon( tools::Polygon( aCenterPos, nRadX, nRadY ) );
+        rDev.SetFillColor(COL_WHITE);
+        rDev.DrawPolygon(tools::Polygon(aCenterPos, nRadX, nRadY));
         if ( mbChecked )
         {
             nRadX -= aBrd1Size.Width();
@@ -2567,8 +2564,8 @@ void RadioButton::Draw( OutputDevice* pDev, const Point& rPos,
                 nRadX = 1;
             if ( !nRadY )
                 nRadY = 1;
-            pDev->SetFillColor( COL_BLACK );
-            pDev->DrawPolygon( tools::Polygon( aCenterPos, nRadX, nRadY ) );
+            rDev.SetFillColor(COL_BLACK);
+            rDev.DrawPolygon(tools::Polygon(aCenterPos, nRadX, nRadY));
         }
     }
     else
@@ -3330,17 +3327,16 @@ void CheckBox::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&
     ImplDrawCheckBox(rRenderContext);
 }
 
-void CheckBox::Draw( OutputDevice* pDev, const Point& rPos,
-                     SystemTextColorFlags nFlags )
+void CheckBox::Draw(OutputDevice& rDev, const Point& rPos, SystemTextColorFlags nFlags)
 {
     MapMode     aResMapMode( MapUnit::Map100thMM );
-    Point       aPos  = pDev->LogicToPixel( rPos );
+    Point aPos = rDev.LogicToPixel(rPos);
     Size        aSize = GetSizePixel();
-    Size        aImageSize = pDev->LogicToPixel( Size( 300, 300 ), aResMapMode );
-    Size        aBrd1Size = pDev->LogicToPixel( Size( 20, 20 ), aResMapMode );
-    Size        aBrd2Size = pDev->LogicToPixel( Size( 30, 30 ), aResMapMode );
-    tools::Long        nCheckWidth = pDev->LogicToPixel( Size( 20, 20 ), aResMapMode ).Width();
-    vcl::Font   aFont = GetDrawPixelFont( pDev );
+    Size aImageSize = rDev.LogicToPixel(Size(300, 300), aResMapMode);
+    Size aBrd1Size = rDev.LogicToPixel(Size(20, 20), aResMapMode);
+    Size aBrd2Size = rDev.LogicToPixel(Size(30, 30), aResMapMode);
+    tools::Long nCheckWidth = rDev.LogicToPixel(Size(20, 20), aResMapMode).Width();
+    vcl::Font aFont = GetDrawPixelFont(&rDev);
     tools::Rectangle   aStateRect;
     tools::Rectangle   aMouseRect;
 
@@ -3362,30 +3358,29 @@ void CheckBox::Draw( OutputDevice* pDev, const Point& rPos,
     if ( !nCheckWidth )
         nCheckWidth = 1;
 
-    auto popIt = pDev->ScopedPush();
-    pDev->SetMapMode();
-    pDev->SetFont( aFont );
+    auto popIt = rDev.ScopedPush();
+    rDev.SetMapMode();
+    rDev.SetFont(aFont);
     if ( nFlags & SystemTextColorFlags::Mono )
-        pDev->SetTextColor( COL_BLACK );
+        rDev.SetTextColor(COL_BLACK);
     else
-        pDev->SetTextColor( GetTextColor() );
-    pDev->SetTextFillColor();
+        rDev.SetTextColor(GetTextColor());
+    rDev.SetTextFillColor();
 
-    ImplDraw( pDev, nFlags, aPos, aSize,
-              aImageSize, aStateRect, aMouseRect );
+    ImplDraw(&rDev, nFlags, aPos, aSize, aImageSize, aStateRect, aMouseRect);
 
-    pDev->SetLineColor();
-    pDev->SetFillColor( COL_BLACK );
-    pDev->DrawRect( aStateRect );
+    rDev.SetLineColor();
+    rDev.SetFillColor(COL_BLACK);
+    rDev.DrawRect(aStateRect);
     aStateRect.AdjustLeft(aBrd1Size.Width() );
     aStateRect.AdjustTop(aBrd1Size.Height() );
     aStateRect.AdjustRight( -(aBrd1Size.Width()) );
     aStateRect.AdjustBottom( -(aBrd1Size.Height()) );
     if ( meState == TRISTATE_INDET )
-        pDev->SetFillColor( COL_LIGHTGRAY );
+        rDev.SetFillColor(COL_LIGHTGRAY);
     else
-        pDev->SetFillColor( COL_WHITE );
-    pDev->DrawRect( aStateRect );
+        rDev.SetFillColor(COL_WHITE);
+    rDev.DrawRect(aStateRect);
 
     if ( meState == TRISTATE_TRUE )
     {
@@ -3401,7 +3396,7 @@ void CheckBox::Draw( OutputDevice* pDev, const Point& rPos,
         Point   aTempPos12( aPos12 );
         Point   aTempPos21( aPos21 );
         Point   aTempPos22( aPos22 );
-        pDev->SetLineColor( COL_BLACK );
+        rDev.SetLineColor(COL_BLACK);
         tools::Long nDX = 0;
         for ( tools::Long i = 0; i < nCheckWidth; i++ )
         {
@@ -3420,8 +3415,8 @@ void CheckBox::Draw( OutputDevice* pDev, const Point& rPos,
                 aTempPos21.setX( aPos21.X()-nDX );
                 aTempPos22.setX( aPos22.X()-nDX );
             }
-            pDev->DrawLine( aTempPos11, aTempPos12 );
-            pDev->DrawLine( aTempPos21, aTempPos22 );
+            rDev.DrawLine(aTempPos11, aTempPos12);
+            rDev.DrawLine(aTempPos21, aTempPos22);
         }
     }
 }

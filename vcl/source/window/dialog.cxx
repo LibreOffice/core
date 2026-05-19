@@ -1367,25 +1367,25 @@ void Dialog::GetDrawWindowBorder( sal_Int32& rLeftBorder, sal_Int32& rTopBorder,
     aImplWin->GetBorder( rLeftBorder, rTopBorder, rRightBorder, rBottomBorder );
 }
 
-void Dialog::Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlags )
+void Dialog::Draw(OutputDevice& rDev, const Point& rPos, SystemTextColorFlags)
 {
-    Point aPos = pDev->LogicToPixel( rPos );
+    Point aPos = rDev.LogicToPixel(rPos);
     Size aSize = GetSizePixel();
 
     Wallpaper aWallpaper = GetBackground();
     if ( !aWallpaper.IsBitmap() )
         ImplInitSettings();
 
-    auto popIt = pDev->ScopedPush();
-    pDev->SetMapMode();
-    pDev->SetLineColor();
+    auto popIt = rDev.ScopedPush();
+    rDev.SetMapMode();
+    rDev.SetLineColor();
 
     if ( aWallpaper.IsBitmap() )
-        pDev->DrawBitmap( aPos, aSize, aWallpaper.GetBitmap() );
+        rDev.DrawBitmap(aPos, aSize, aWallpaper.GetBitmap());
     else
     {
-        pDev->SetFillColor( aWallpaper.GetColor() );
-        pDev->DrawRect( tools::Rectangle( aPos, aSize ) );
+        rDev.SetFillColor(aWallpaper.GetColor());
+        rDev.DrawRect(tools::Rectangle(aPos, aSize));
     }
 
     if (!( GetStyle() & WB_NOBORDER ))
@@ -1396,7 +1396,7 @@ void Dialog::Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlags )
         aImplWin->SetDisplayActive( true );
         aImplWin->InitView();
 
-        aImplWin->Draw( pDev, aPos );
+        aImplWin->Draw(&rDev, aPos);
     }
 }
 

@@ -289,9 +289,10 @@ namespace frm
         return bDone || Control::EventNotify(_rNEvt);
     }
 
-    void RichTextControl::Draw( OutputDevice* _pDev, const Point& _rPos, SystemTextColorFlags /*_nFlags*/ )
+    void RichTextControl::Draw(OutputDevice& rDev, const Point& _rPos,
+                               SystemTextColorFlags /*_nFlags*/)
     {
-        m_pImpl->Draw( _pDev, _rPos, _pDev->PixelToLogic(GetSizePixel()) );
+        m_pImpl->Draw(&rDev, _rPos, rDev.PixelToLogic(GetSizePixel()));
     }
 
     EditView& RichTextControl::getView()
