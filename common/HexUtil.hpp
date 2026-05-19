@@ -242,10 +242,18 @@ inline std::string dumpHex(const char* legend, const char* prefix,
 }
 
 /// Hex-encode an integral ID into a buffer, with padding support.
+/// If @size is smaller than the encoded form needs, high-order hex digits are
+/// silently truncated to fit. A @size of 0 returns an empty view.
 inline std::string_view encodeId(char* buffer, std::size_t size, const std::uint64_t number,
                                  int width, char pad = '0')
 {
-    // Skip leading (high-order) zeros, if any.
+    if (buffer == nullptr || size == 0)
+    {
+        return std::string_view();
+    }
+
+    // Skip leading (high-order) zeros, if any. For number == 0 we stop at
+    // highNibble == 0 so we still emit a single '0' digit below.
     int highNibble = (2 * sizeof(number) - 1) * 4;
     while ((number & (std::uint64_t(0xf) << highNibble)) == 0)
     {
@@ -258,22 +266,32 @@ inline std::string_view encodeId(char* buffer, std::size_t size, const std::uint
     highNibble = std::min<int>(size - 1, highNibble / 4) * 4;
     width = std::min<int>(size, width);
     int outIndex = 0;
-    const int hexBytes = (highNibble / 4) + 1;
-    for (; width > hexBytes; --width)
+    const int hexDigits = (highNibble / 4) + 1;
+    for (; width > hexDigits; --width)
     {
         buffer[outIndex++] = pad;
     }
 
-    // Hexify the remaining, if any.
+    // Hexify the remaining digits. We emit two chars per iteration when the
+    // remaining bit count is byte-aligned, and a single leading char otherwise.
     constexpr const char* const Hex = "0123456789abcdef";
-    while (highNibble >= 0)
+    int bits = highNibble + 4; // total bits of @number still to emit
+    if ((bits & 7) != 0) // odd hex digits remaining: emit the leading nibble
     {
-        const auto byte = static_cast<unsigned char>((number >> highNibble) & 0xf);
-        buffer[outIndex++] = (Hex[byte >> 4] << 8) | Hex[byte & 0xf];
-        highNibble -= 4;
+        bits -= 4;
+        const auto nibble = static_cast<unsigned char>((number >> bits) & 0xf);
+        buffer[outIndex++] = Hex[nibble];
     }
 
-    // Return a reference to the given buffer.
+    while (bits > 0)
+    {
+        bits -= 8;
+        const auto byte = static_cast<unsigned char>((number >> bits) & 0xff);
+        buffer[outIndex++] = Hex[byte >> 4];
+        buffer[outIndex++] = Hex[byte & 0xf];
+    }
+
+    // Return a view over the given buffer.
     return std::string_view(buffer, outIndex);
 }
 
