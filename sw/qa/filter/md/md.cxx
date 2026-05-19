@@ -1044,6 +1044,22 @@ CPPUNIT_TEST_FIXTURE(Test, testPaste)
     CPPUNIT_ASSERT_EQUAL(aABottom, aList2Bottom);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testCTLPaste)
+{
+    createSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    rtl::Reference<TransferDataContainer> xTransferable(new TransferDataContainer);
+    xTransferable->CopyString(SotClipboardFormatId::MARKDOWN, u"שלום"_ustr);
+    TransferableDataHelper aHelper(xTransferable);
+    SwTransferable::PasteFormat(*pWrtShell, aHelper, SotClipboardFormatId::MARKDOWN);
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: שלום
+    // - Actual  : some gibberish value at beginning + ?픅?
+    CPPUNIT_ASSERT_EQUAL(u"שלום"_ustr, getParagraph(1)->getString());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

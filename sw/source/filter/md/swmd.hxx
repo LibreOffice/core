@@ -91,6 +91,7 @@ class SwMarkdownParser
 
     sal_Int32 m_nBlockQuoteDepth = -1;
     sal_uInt64 m_nProgress = 0;
+    rtl_TextEncoding m_eSrcEnc = RTL_TEXTENCODING_DONTKNOW;
 
     bool m_bNewDoc;
     bool m_bNoParSpace = true;
@@ -156,6 +157,7 @@ class SwMarkdownParser
 public:
     void RegisterTable(MDTable* pTable);
     void DeRegisterTable(MDTable* pTable);
+    void SetSrcEncoding(rtl_TextEncoding eSrcEnc);
 
 public:
     SwMarkdownParser(SwDoc& rD, SwPaM& rCursor, SvStream& rIn, OUString aBaseURL, bool bReadNewDoc);
