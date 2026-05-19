@@ -56,18 +56,6 @@ class Mapping
     uno_Mapping * _pMapping;
 
 public:
-    // these are here to force memory de/allocation to sal lib.
-    /// @cond INTERNAL
-    static void * SAL_CALL operator new ( size_t nSize )
-        { return ::rtl_allocateMemory( nSize ); }
-    static void SAL_CALL operator delete ( void * pMem )
-        { ::rtl_freeMemory( pMem ); }
-    static void * SAL_CALL operator new ( size_t, void * pMem )
-        { return pMem; }
-    static void SAL_CALL operator delete ( void *, void * )
-        {}
-    /// @endcond
-
     /** Holds a mapping from the specified source to the specified destination by environment
         type names.
 

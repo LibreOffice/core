@@ -29,25 +29,4 @@ SimpleReferenceObject::~SimpleReferenceObject()
     assert(m_nCount == 0);
 }
 
-void *SimpleReferenceObject::operator new(std::size_t nSize)
-{
-    return ::operator new(nSize);
-}
-
-void *SimpleReferenceObject::operator new(std::size_t nSize,
-                                           std::nothrow_t const &)
-{
-    return ::operator new(nSize, std::nothrow);
-}
-
-void SimpleReferenceObject::operator delete(void * pPtr)
-{
-    ::operator delete(pPtr);
-}
-
-void SimpleReferenceObject::operator delete(void * pPtr, std::nothrow_t const &)
-{
-    ::operator delete(pPtr, std::nothrow);
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

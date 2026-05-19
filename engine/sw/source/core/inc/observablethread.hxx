@@ -46,10 +46,6 @@ class ObservableThread : public osl::Thread,
         void SetListener( std::weak_ptr< IFinishedThreadListener > const & pThreadListener,
                           const oslInterlockedCount nThreadID );
 
-        // resolve ambiguity
-        using SimpleReferenceObject::operator new;
-        using SimpleReferenceObject::operator delete;
-
     protected:
 
         ObservableThread();

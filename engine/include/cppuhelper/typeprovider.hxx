@@ -40,18 +40,6 @@ class SAL_WARN_UNUSED CPPUHELPER_DLLPUBLIC OTypeCollection
     css::uno::Sequence< css::uno::Type > _aTypes;
 
 public:
-    /// @cond INTERNAL
-    // these are here to force memory de/allocation to sal lib.
-    static void * SAL_CALL operator new( size_t nSize )
-        { return ::rtl_allocateMemory( nSize ); }
-    static void SAL_CALL operator delete( void * pMem )
-        { ::rtl_freeMemory( pMem ); }
-    static void * SAL_CALL operator new( size_t, void * pMem )
-        { return pMem; }
-    static void SAL_CALL operator delete( void *, void * )
-        {}
-    /// @endcond
-
     OTypeCollection(
         const css::uno::Type & rType1,
         const css::uno::Sequence< css::uno::Type > & rAddTypes = css::uno::Sequence< css::uno::Type >() );
@@ -176,18 +164,6 @@ class SAL_DEPRECATED("Uses broken double checked locking") SAL_WARN_UNUSED CPPUH
     sal_Bool _bUseEthernetAddress;
 
 public:
-    /// @cond INTERNAL
-
-    // these are here to force memory de/allocation to sal lib.
-    static void * SAL_CALL operator new( size_t nSize )
-        { return ::rtl_allocateMemory( nSize ); }
-    static void SAL_CALL operator delete( void * pMem )
-        { ::rtl_freeMemory( pMem ); }
-    static void * SAL_CALL operator new( size_t, void * pMem )
-        { return pMem; }
-    static void SAL_CALL operator delete( void *, void * )
-        {}
-
     ~OImplementationId();
 
     /// @endcond

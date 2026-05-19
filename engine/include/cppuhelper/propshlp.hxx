@@ -46,16 +46,6 @@ namespace cppu
 class SAL_WARN_UNUSED CPPUHELPER_DLLPUBLIC IPropertyArrayHelper
 {
 public:
-    // these are here to force memory de/allocation to sal lib.
-    static void * SAL_CALL operator new( size_t nSize )
-        { return ::rtl_allocateMemory( nSize ); }
-    static void SAL_CALL operator delete( void * pMem )
-        { ::rtl_freeMemory( pMem ); }
-    static void * SAL_CALL operator new( size_t, void * pMem )
-        { return pMem; }
-    static void SAL_CALL operator delete( void *, void * )
-        {}
-
     /**
        Following the rule, the first virtual method implies a virtual destructor.
      */
@@ -222,16 +212,6 @@ struct hashInt32_Impl
 class SAL_WARN_UNUSED CPPUHELPER_DLLPUBLIC OMultiTypeInterfaceContainerHelperInt32
 {
 public:
-    // these are here to force memory de/allocation to sal lib.
-    static void * SAL_CALL operator new( size_t nSize )
-        { return ::rtl_allocateMemory( nSize ); }
-    static void SAL_CALL operator delete( void * pMem )
-        { ::rtl_freeMemory( pMem ); }
-    static void * SAL_CALL operator new( size_t, void * pMem )
-        { return pMem; }
-    static void SAL_CALL operator delete( void *, void * )
-        {}
-
     /**
       Create a container of interface containers.
 

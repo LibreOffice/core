@@ -58,18 +58,6 @@ template<class interface_type> class Reference;
 class SAL_WARN_UNUSED SAL_DLLPUBLIC_RTTI Any : public uno_Any
 {
 public:
-    /// @cond INTERNAL
-    // these are here to force memory de/allocation to sal lib.
-    static void * SAL_CALL operator new ( size_t nSize )
-        { return ::rtl_allocateMemory( nSize ); }
-    static void SAL_CALL operator delete ( void * pMem )
-        { ::rtl_freeMemory( pMem ); }
-    static void * SAL_CALL operator new ( size_t, void * pMem )
-        { return pMem; }
-    static void SAL_CALL operator delete ( void *, void * )
-        {}
-    /// @endcond
-
     /** Default constructor: Any holds no value; its type is void.
     */
     inline Any();

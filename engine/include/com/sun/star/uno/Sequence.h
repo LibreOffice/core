@@ -63,16 +63,6 @@ class SAL_WARN_UNUSED SAL_DLLPUBLIC_RTTI Sequence
 public:
     /// @cond INTERNAL
 
-    // these are here to force memory de/allocation to sal lib.
-    static void * SAL_CALL operator new ( ::size_t nSize )
-        { return ::rtl_allocateMemory( nSize ); }
-    static void SAL_CALL operator delete ( void * pMem )
-        { ::rtl_freeMemory( pMem ); }
-    static void * SAL_CALL operator new ( ::size_t, void * pMem )
-        { return pMem; }
-    static void SAL_CALL operator delete ( void *, void * )
-        {}
-
     /** Static pointer to typelib type of sequence.
         Don't use directly, call getCppuType().
     */

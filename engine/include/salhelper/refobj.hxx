@@ -43,24 +43,6 @@ class ReferenceObject
     ReferenceObject& operator= (const ReferenceObject&) SAL_DELETED_FUNCTION;
 
 public:
-    /** Allocation.
-     */
-    static void* operator new (size_t n)
-    {
-        return ::rtl_allocateMemory (n);
-    }
-    static void operator delete (void* p)
-    {
-        ::rtl_freeMemory (p);
-    }
-    static void* operator new (size_t, void* p)
-    {
-        return p;
-    }
-    static void operator delete (void*, void*)
-    {}
-
-public:
     /** Construction.
      */
     ReferenceObject() : m_nReferenceCount(0)

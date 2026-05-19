@@ -60,16 +60,6 @@ public:
     */
     virtual ~WeakComponentImplHelperBase() SAL_OVERRIDE;
 
-    // these are here to force memory de/allocation to sal lib.
-    static void * SAL_CALL operator new( size_t nSize )
-        { return ::rtl_allocateMemory( nSize ); }
-    static void SAL_CALL operator delete( void * pMem )
-        { ::rtl_freeMemory( pMem ); }
-    static void * SAL_CALL operator new( size_t, void * pMem )
-        { return pMem; }
-    static void SAL_CALL operator delete( void *, void * )
-        {}
-
     virtual css::uno::Any SAL_CALL queryInterface(
         css::uno::Type const & rType ) SAL_OVERRIDE;
     virtual void SAL_CALL acquire()
@@ -100,16 +90,6 @@ protected:
     WeakAggComponentImplHelperBase( ::osl::Mutex & rMutex );
 public:
     virtual ~WeakAggComponentImplHelperBase() SAL_OVERRIDE;
-
-    // these are here to force memory de/allocation to sal lib.
-    static void * SAL_CALL operator new( size_t nSize )
-        { return ::rtl_allocateMemory( nSize ); }
-    static void SAL_CALL operator delete( void * pMem )
-        { ::rtl_freeMemory( pMem ); }
-    static void * SAL_CALL operator new( size_t, void * pMem )
-        { return pMem; }
-    static void SAL_CALL operator delete( void *, void * )
-        {}
 
     virtual css::uno::Any SAL_CALL queryInterface(
         css::uno::Type const & rType ) SAL_OVERRIDE;

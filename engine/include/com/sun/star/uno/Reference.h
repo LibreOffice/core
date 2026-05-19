@@ -228,18 +228,6 @@ class SAL_DLLPUBLIC_RTTI Reference : public BaseReference
     }
 
 public:
-    /// @cond INTERNAL
-    // these are here to force memory de/allocation to sal lib.
-    static void * SAL_CALL operator new ( ::size_t nSize )
-        { return ::rtl_allocateMemory( nSize ); }
-    static void SAL_CALL operator delete ( void * pMem )
-        { ::rtl_freeMemory( pMem ); }
-    static void * SAL_CALL operator new ( ::size_t, void * pMem )
-        { return pMem; }
-    static void SAL_CALL operator delete ( void *, void * )
-        {}
-    /// @endcond
-
     /** Destructor: Releases interface if set.
     */
     inline ~Reference() COVERITY_NOEXCEPT_FALSE;

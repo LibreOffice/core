@@ -45,12 +45,6 @@ namespace cppu_threadpool {
 
         bool launch();
 
-        static void * operator new(std::size_t size)
-        { return SimpleReferenceObject::operator new(size); }
-
-        static void operator delete(void * pointer)
-        { SimpleReferenceObject::operator delete(pointer); }
-
     private:
         virtual void SAL_CALL run() override;
         virtual void SAL_CALL onTerminated() override;
