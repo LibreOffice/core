@@ -790,9 +790,9 @@ uno::Any SAL_CALL SwXMailMerge::execute(
     OSL_ENSURE( !pOldSrc || pOldSrc == this, "Ooops... different event source already set." );
     pMgr->SetMailMergeEvtSrc( this );   // launch events for listeners
 
-    SfxGetpApp()->NotifyEvent(SfxEventHint(SfxEventHintId::SwMailMerge, SwDocShell::GetEventName(STR_SW_EVENT_MAIL_MERGE), xCurDocSh.get()));
+    SfxGetpApp()->NotifyEvent(SfxEventHint(SfxEventHintId::SwMailMerge, SwDocShell::GetEventName(static_cast<sal_Int32>(StrSwEvent::MailMerge)), xCurDocSh.get()));
     bool bSucc = pMgr->Merge( aMergeDesc );
-    SfxGetpApp()->NotifyEvent(SfxEventHint(SfxEventHintId::SwMailMergeEnd, SwDocShell::GetEventName(STR_SW_EVENT_MAIL_MERGE_END), xCurDocSh.get()));
+    SfxGetpApp()->NotifyEvent(SfxEventHint(SfxEventHintId::SwMailMergeEnd, SwDocShell::GetEventName(static_cast<sal_Int32>(StrSwEvent::MailMergeEnd)), xCurDocSh.get()));
 
     pMgr->SetMailMergeEvtSrc( pOldSrc );
 

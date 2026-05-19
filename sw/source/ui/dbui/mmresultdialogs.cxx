@@ -838,13 +838,13 @@ IMPL_LINK_NOARG(SwMMResultPrintDialog, PrintHdl_Impl, weld::Button&, void)
     }
 
     SfxObjectShell* pObjSh = pTargetView->GetViewFrame().GetObjectShell();
-    SfxGetpApp()->NotifyEvent(SfxEventHint(SfxEventHintId::SwMailMerge, SwDocShell::GetEventName(STR_SW_EVENT_MAIL_MERGE), pObjSh));
+    SfxGetpApp()->NotifyEvent(SfxEventHint(SfxEventHintId::SwMailMerge, SwDocShell::GetEventName(static_cast<sal_Int32>(StrSwEvent::MailMerge)), pObjSh));
 
     uno::Sequence aProps{ comphelper::makePropertyValue(u"MonitorVisible"_ustr, true),
                           comphelper::makePropertyValue(u"Pages"_ustr, sPages) };
 
     pTargetView->ExecPrint( aProps, false, true );
-    SfxGetpApp()->NotifyEvent(SfxEventHint(SfxEventHintId::SwMailMergeEnd, SwDocShell::GetEventName(STR_SW_EVENT_MAIL_MERGE_END), pObjSh));
+    SfxGetpApp()->NotifyEvent(SfxEventHint(SfxEventHintId::SwMailMergeEnd, SwDocShell::GetEventName(static_cast<sal_Int32>(StrSwEvent::MailMergeEnd)), pObjSh));
 
     m_xDialog->response(RET_OK);
 }

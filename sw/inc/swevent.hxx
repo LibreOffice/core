@@ -24,19 +24,21 @@
 #include "frmfmt.hxx"
 #include "hints.hxx"
 
-#define     STR_SW_EVENT_PAGE_COUNT           0
-#define     STR_SW_EVENT_MAIL_MERGE           1
-#define     STR_SW_EVENT_MAIL_MERGE_END       2
-#define     STR_SW_EVENT_FIELD_MERGE          3
-#define     STR_SW_EVENT_FIELD_MERGE_FINISHED 4
-#define     STR_SW_EVENT_LAYOUT_FINISHED      5
-#define     STR_SW_EVENT_OBJECT_SELECT        6
-#define     STR_SW_EVENT_START_INS_GLOSSARY   7
-#define     STR_SW_EVENT_END_INS_GLOSSARY     8
-#define     STR_SW_EVENT_FRM_KEYINPUT_ALPHA   9
-#define     STR_SW_EVENT_FRM_KEYINPUT_NOALPHA 10
-#define     STR_SW_EVENT_FRM_RESIZE           11
-#define     STR_SW_EVENT_FRM_MOVE             12
+enum class StrSwEvent : sal_Int32 {
+    PageCount,
+    MailMerge,
+    MailMergeEnd,
+    FieldMerge,
+    FieldMergeFinished,
+    LayoutFinished,
+    ObjectSelect,
+    StartInsGlossary,
+    EndInsGlossary,
+    FrmKeyInputAlpha,
+    FrmKeyInputNoAlpha,
+    FrmResize,
+    FrmMove
+};
 
 class SwFormatINetFormat;
 class IMapObject;
