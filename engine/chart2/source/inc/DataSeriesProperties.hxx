@@ -56,6 +56,7 @@ namespace chart::DataSeriesProperties
         PROP_DATASERIES_GEOCACHE_PROVIDER,
         PROP_DATASERIES_GEOCACHE_BINARY,
         PROP_DATASERIES_GEOCACHE_CLEAR_DATA,
+        PROP_DATASERIES_HAS_EXPLICIT_FILL
     };
 
     void AddPropertiesToVector(

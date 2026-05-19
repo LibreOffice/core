@@ -921,6 +921,12 @@ Reference< XDataSeries > SeriesConverter::createDataSeries( const TypeGroupConve
     ObjectFormatter& rFormatter = getFormatter();
     ObjectType eObjType = rTypeGroup.getSeriesObjectType();
     bool bMSO2007Doc = getFilter().isMSO2007Document();
+
+    if (mrModel.mxShapeProp.is())
+    {
+        aSeriesProp.setProperty(PROP_HasExplicitFill, true);
+    }
+
     if( rTypeInfo.mbPictureOptions )
         rFormatter.convertFrameFormatting( aSeriesProp, mrModel.mxShapeProp, mrModel.mxPicOptions.getOrCreate(bMSO2007Doc), eObjType, mrModel.mnIndex );
     else

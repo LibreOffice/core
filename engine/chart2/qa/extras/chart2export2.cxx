@@ -343,6 +343,19 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testChartexBinningXLSX)
         "intervalClosed", u"r");
 }
 
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testChartexNoSpPr)
+{
+    loadFromFile(u"xlsx/regionMap.xlsx");
+    save(TestFilter::XLSX);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"xl/charts/chartEx1.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // Verify that the series is there but that it has no spPr child
+    assertXPath(pXmlDoc, "/cx:chartSpace/cx:chart/cx:plotArea/cx:plotAreaRegion/cx:series");
+    assertXPath(pXmlDoc, "/cx:chartSpace/cx:chart/cx:plotArea/cx:plotAreaRegion/cx:series/cx:spPr",
+                0);
+}
+
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testAxisTitleRotationXLSX)
 {
     loadFromFile(u"xlsx/axis_title_rotation.xlsx");
@@ -1963,7 +1976,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testChartexDimRoundTrip_sunburst)
     xmlDocUniquePtr pXmlDoc = parseExport(u"xl/charts/chartEx1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
 
-    static constexpr OString sData ="/cx:chartSpace/cx:chartData/cx:data"_ostr;
+    static constexpr OString sData = "/cx:chartSpace/cx:chartData/cx:data"_ostr;
 
     assertXPath(pXmlDoc, sData + "/cx:strDim", "type", u"cat");
     assertXPathContent(pXmlDoc, sData + "/cx:strDim/cx:f", u"_xlchart.v1.0");
