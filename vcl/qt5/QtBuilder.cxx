@@ -1035,6 +1035,19 @@ void QtBuilder::setLabelProperties(QLabel& rLabel, stringmap& rProps)
             rLabel.setAlignment(toAlign(rValue, true));
         else if (rKey == u"valign")
             rLabel.setAlignment(toAlign(rValue, false));
+        else if (rKey == u"xalign")
+        {
+            double fVal = rValue.toFloat();
+            Qt::Alignment eAlign = Qt::AlignLeft;
+
+            if (fVal < 0.4)
+                eAlign = Qt::AlignLeft;
+            else if (fVal >= 0.4 && fVal <= 0.6)
+                eAlign = Qt::AlignCenter;
+            else
+                eAlign = Qt::AlignRight;
+            rLabel.setAlignment(eAlign);
+        }
     }
 }
 
