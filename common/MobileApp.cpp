@@ -47,6 +47,13 @@ DocumentData & DocumentData::get(unsigned docId)
     return *idToDocDataMap[docId];
 }
 
+DocumentData * DocumentData::getIfExists(unsigned docId)
+{
+    const std::lock_guard<std::mutex> lock(idToDocDataMapMutex);
+    auto it = idToDocDataMap.find(docId);
+    return it != idToDocDataMap.end() ? it->second : nullptr;
+}
+
 void DocumentData::deallocate(unsigned docId)
 {
     if (idToDocDataMap.find(docId) == idToDocDataMap.end())

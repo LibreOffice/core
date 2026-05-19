@@ -50,7 +50,13 @@ bool selectDocViewAsCurrent(kit::Document* loKitDoc)
 std::unique_ptr<QMimeData> fetchClipboardData(unsigned appDocId,
                                               const char** pMimeTypes = nullptr)
 {
-    kit::Document* loKitDoc = DocumentData::get(appDocId).loKitDocument;
+    // A still-mounted LazyClipboardMimeData can outlive its source doc;
+    // DocumentData::get crashes on a removed id, so check first.
+    DocumentData* docData = DocumentData::getIfExists(appDocId);
+    if (!docData)
+        return nullptr;
+
+    kit::Document* loKitDoc = docData->loKitDocument;
     if (!loKitDoc || !selectDocViewAsCurrent(loKitDoc))
         return nullptr;
 
