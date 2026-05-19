@@ -1555,9 +1555,11 @@ void ExcelToSc::DoMulArgs( DefTokenId eId, sal_uInt8 nCnt )
                 aPool << n;
         }
         else
-            aPool << eId;
+            aPool << aPool.Store( eId, OUString() );
         nCnt--;
     }
+    else if( eId == ocExternal || eId == ocUDExternal )
+        aPool << aPool.Store( eId, OUString() );
     else
         aPool << eId;
 
