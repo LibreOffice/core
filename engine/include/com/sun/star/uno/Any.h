@@ -31,7 +31,7 @@
 #include "com/sun/star/uno/TypeClass.hdl"
 #include "rtl/alloc.h"
 
-#if defined LIBO_INTERNAL_ONLY && !(defined _MSC_VER && _MSC_VER <= 1929 && defined _MANAGED)
+#if defined LIBO_INTERNAL_ONLY
 #include <type_traits>
 #endif
 
@@ -79,7 +79,7 @@ public:
         @param value value of the Any
     */
     template <typename T>
-#if defined LIBO_INTERNAL_ONLY && !(defined _MSC_VER && _MSC_VER <= 1929 && defined _MANAGED)
+#if defined LIBO_INTERNAL_ONLY
         // Disallow things like
         // Reference<XInterface> x(...);
         // Any a(*x);

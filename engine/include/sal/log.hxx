@@ -211,7 +211,7 @@ inline char const * unwrapStream(SAL_UNUSED_PARAMETER StreamIgnore const &) {
 #if defined _LIBCPP_VERSION \
     || (defined _GLIBCXX_RELEASE \
         && (_GLIBCXX_RELEASE >= 12 || (_GLIBCXX_RELEASE == 11 && __GLIBCXX__ > 20210428))) \
-    || (defined _MSC_VER && _MSC_VER >= 1915)
+    || (defined _MSC_VER)
 #define SAL_STREAM(stream) \
     (::std::ostringstream() << stream).str()
 #else

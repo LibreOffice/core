@@ -60,7 +60,7 @@ inline Any::Any()
 
 
 template <typename T>
-#if defined LIBO_INTERNAL_ONLY && !(defined _MSC_VER && _MSC_VER <= 1929 && defined _MANAGED)
+#if defined LIBO_INTERNAL_ONLY
     // Disallow things like
     // Reference<XInterface> x(...);
     // Any a(*x);
