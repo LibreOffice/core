@@ -249,7 +249,9 @@ QObject* QtBuilder::insertObject(QObject* pParent, const OUString& rClass, std::
     }
     else if (rClass == u"GtkFrame")
     {
-        pObject = new QGroupBox(pParentWidget);
+        QGroupBox* pGroupBox = new QGroupBox(pParentWidget);
+        pGroupBox->setContentsMargins(0, 0, 0, 0);
+        pObject = pGroupBox;
     }
     else if (rClass == u"GtkGrid")
     {
@@ -554,6 +556,17 @@ void QtBuilder::tweakInsertedChild(QObject* pParent, QObject* pCurrentChild, std
                 // For QGroupBox, the title can be set directly. Therefore, take over the
                 // title from the label and delete the separate label widget again
                 pGroupBox->setTitle(pLabel->text());
+
+                // Set title font to bold to match LO style; must be done before
+                // updating top margin below, otherwise it resets the margin
+                pGroupBox->setStyleSheet("QGroupBox { font-weight: bold; }");
+
+                // Give the group box's label some space to prevent overlap with contents
+                QFontMetrics fm = QFontMetrics(qApp->font());
+                QRect r = fm.boundingRect(QRect(0, 0, 200, 100), Qt::TextWordWrap,
+                                          QLatin1String("asdf"));
+                pGroupBox->setContentsMargins(0, r.height(), 0, 0);
+
                 deleteObject(pLabel);
             }
             else if (QtExpander* pExpander = qobject_cast<QtExpander*>(pParent))
