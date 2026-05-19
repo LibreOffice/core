@@ -150,13 +150,20 @@ ScTypedCaseStrSet::const_iterator findText(
     return rDataSet.end(); // no matching text found
 }
 
+OUString lcl_RemoveLineEnd(const OUString& rStr)
+{
+    return convertLineEnd(rStr, LINEEND_LF).replace('\n', ' ');
+}
+
 OUString getExactMatch(const ScTypedCaseStrSet& rDataSet, const OUString& rString)
 {
-    auto it = std::find_if(rDataSet.begin(), rDataSet.end(),
-        [&rString](const ScTypedStrData& rData) {
-            return (rData.GetStringType() != ScTypedStrData::Value)
-                && ScGlobal::GetTransliteration().isEqual(rData.GetString(), rString);
-        });
+    // tdf#98913 - compare strings without line ends
+    auto it
+        = std::find_if(rDataSet.begin(), rDataSet.end(), [&rString](const ScTypedStrData& rData) {
+              return (rData.GetStringType() != ScTypedStrData::Value)
+                     && ScGlobal::GetTransliteration().isEqual(lcl_RemoveLineEnd(rData.GetString()),
+                                                               rString);
+          });
     if (it != rDataSet.end())
         return it->GetString();
     return rString;
@@ -726,12 +733,6 @@ static OUString GetEditText(const EditEngine* pEng)
 static void lcl_RemoveTabs(OUString& rStr)
 {
     rStr = rStr.replace('\t', ' ');
-}
-
-static void lcl_RemoveLineEnd(OUString& rStr)
-{
-    rStr = convertLineEnd(rStr, LINEEND_LF);
-    rStr = rStr.replace('\n', ' ');
 }
 
 static sal_Int32 lcl_MatchParenthesis( const OUString& rStr, sal_Int32 nPos )
@@ -2159,7 +2160,7 @@ void ScInputHandler::UseColData() // When typing
     // Strings can contain line endings (e.g. due to dBase import),
     // which would result in multiple paragraphs here, which is not desirable.
     //! Then GetExactMatch doesn't work either
-    lcl_RemoveLineEnd( aNew );
+    aNew = lcl_RemoveLineEnd( aNew );
 
     // Keep paragraph, just append the rest
     //! Exact replacement in EnterHandler !!!
@@ -2216,7 +2217,7 @@ void ScInputHandler::NextAutoEntry( bool bBack )
                         bInOwnChange = true;        // disable ModifyHdl (reset below)
                         mbPartialPrefix = false;
 
-                        lcl_RemoveLineEnd( aNew );
+                        aNew = lcl_RemoveLineEnd( aNew );
                         OUString aIns = aNew.copy(aAutoSearch.getLength());
 
                         //  when editing in input line, apply to both edit views

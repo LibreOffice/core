@@ -720,6 +720,33 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf144308)
     xGlobalSheetSettings->setDoAutoComplete(bOldValue);
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf98913_auto_complete_multi_line_strings)
+{
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+
+    // Insert text into cell A1 with embedded newline
+    pDoc->SetString(ScAddress(0, 0, 0), u"Hello\nWorld"_ustr);
+
+    // Activate auto complete
+    css::uno::Reference<css::sheet::XGlobalSheetSettings> xGlobalSheetSettings
+        = css::sheet::GlobalSheetSettings::create(::comphelper::getProcessComponentContext());
+    const bool bOldValue = xGlobalSheetSettings->getDoAutoComplete();
+    xGlobalSheetSettings->setDoAutoComplete(true);
+
+    // Insert the prefix of the test string without the embedded newline
+    insertStringToCell(u"A2"_ustr, u"Hello");
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: Hello\nWorld
+    // - Actual  : Hello
+    // i.e. the multi-line string was not auto-completed
+    CPPUNIT_ASSERT_EQUAL(u"Hello\nWorld"_ustr, pDoc->GetString(ScAddress(0, 1, 0)));
+
+    // Restore the previous auto complete value
+    xGlobalSheetSettings->setDoAutoComplete(bOldValue);
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testPasteWithReturnKey)
 {
     createScDoc();
