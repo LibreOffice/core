@@ -864,10 +864,13 @@ std::vector<OUString> completeCommonDialogList(const o3tl::sorted_vector<OUStrin
             if (!linguisticDataAvailable && (
                 entry == u"cui/ui/thesaurus.ui" ||
                 entry == u"cui/ui/spellingdialog.ui" ||
-                entry == u"cui/ui/spelloptionsdialog.ui"))
+                entry == u"cui/ui/spelloptionsdialog.ui" ||
+                entry == u"cui/ui/optlingupage.ui"))
             {
                 // Skip the dialogs that can't be reached in the absence of
-                // linguistic data.
+                // linguistic data. optlingupage is reached only via the
+                // Spelling dialog's Options... button, so it shares the same
+                // gate.
                 continue;
             }
 
@@ -881,6 +884,43 @@ std::vector<OUString> completeCommonDialogList(const o3tl::sorted_vector<OUStrin
                          entry == u"svx/ui/redlinecontrol.ui" ||
                          entry == u"svx/ui/redlinefilterpage.ui" ||
                          entry == u"svx/ui/redlineviewpage.ui")
+                {
+                    continue;
+                }
+                // SvxSearchDialog only shows the Format/Attribute search
+                // buttons in the writer m_bWriter branch, so these
+                // subdialogs can't be reached in calc, impress or draw.
+                if (entry == u"cui/ui/searchattrdialog.ui" ||
+                    entry == u"cui/ui/searchformatdialog.ui")
+                {
+                    continue;
+                }
+                // The cui BulletsAndNumbering dialog and its subpages are
+                // writer-only, calc has no list/outline dialog, and
+                // impress/draw use their own dedicated numbering dialog.
+                if (entry == u"cui/ui/numberingoptionspage.ui" ||
+                    entry == u"cui/ui/numberingpositionpage.ui" ||
+                    entry == u"cui/ui/pickbulletpage.ui" ||
+                    entry == u"cui/ui/pickgraphicpage.ui" ||
+                    entry == u"cui/ui/picknumberingpage.ui" ||
+                    entry == u"cui/ui/pickoutlinepage.ui")
+                {
+                    continue;
+                }
+                // ParagraphDialog Text Flow and Asian Typography subpages
+                // are only in writer's paragraph dialog.
+                if (entry == u"cui/ui/textflowpage.ui" ||
+                    entry == u"cui/ui/twolinespage.ui")
+                {
+                    continue;
+                }
+                // Reached only via writer-specific flows (header/footer
+                // "More..." button, image Compress/Crop, etc
+                if (entry == u"cui/ui/borderareatransparencydialog.ui" ||
+                    entry == u"cui/ui/croppage.ui" ||
+                    entry == u"cui/ui/formatnumberdialog.ui" ||
+                    entry == u"cui/ui/spinbox.ui" ||
+                    entry == u"sfx/ui/password.ui")
                 {
                     continue;
                 }
@@ -910,6 +950,21 @@ std::vector<OUString> completeCommonDialogList(const o3tl::sorted_vector<OUStrin
                 {
                     continue;
                 }
+                // SvxSearchDialog hides the Format/Attribute search buttons in
+                // calc (only the writer m_bWriter branch shows them), so these
+                // subdialogs can't be reached.
+                if (entry == u"cui/ui/searchattrdialog.ui" ||
+                    entry == u"cui/ui/searchformatdialog.ui")
+                {
+                    continue;
+                }
+            }
+
+            if (docType == KIT_DOCTYPE_TEXT)
+            {
+                // Not supported in Calc
+                if (entry == u"cui/ui/borderbackgrounddialog.ui")
+                    continue;
             }
 
             // Skip this one, I don't think it can appear in practice
@@ -924,7 +979,7 @@ std::vector<OUString> completeCommonDialogList(const o3tl::sorted_vector<OUStrin
                 continue;
             // Skip this one, is the query dialog about enabling overwrite
             // mode which is disabled in the default config
-            else if (entry == u"cui/ui/querysetinsmodedialog.ui")
+            else if (entry == u"cui/ui/querydialog.ui")
                 continue;
             // Skip this one, its actually a sd-only one (with code in sd), but
             // somehow the .ui is in cui

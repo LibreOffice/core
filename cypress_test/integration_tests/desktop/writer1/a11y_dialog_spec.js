@@ -78,8 +78,7 @@ describe(['tagdesktop'], 'Accessibility Writer Dialog Tests', { testIsolation: f
         cy.get('@uicoverageResult').then(result => {
             expect(result.used, `used .ui files`).to.not.be.empty;
             expect(result.CompleteWriterDialogCoverage, `complete writer dialog coverage`).to.be.true;
-            // TODO: make this true
-            // expect(result.CompleteCommonDialogCoverage, `complete common dialog coverage`).to.be.true;
+            expect(result.CompleteCommonDialogCoverage, `complete common dialog coverage`).to.be.true;
         });
     });
 
@@ -378,12 +377,12 @@ describe(['tagdesktop'], 'Accessibility Writer Dialog Tests', { testIsolation: f
         cy.then(() => {
             win.app.map.sendUnoCommand('.uno:TransformDialog');
         });
-        a11yHelper.handleDialog(win, 1);
+        a11yHelper.handleDialog(win, 1, '.uno:TransformDialog');
 
         cy.then(() => {
             win.app.map.sendUnoCommand('.uno:FormatArea');
         });
-        a11yHelper.handleDialog(win, 1);
+        a11yHelper.handleDialog(win, 1, '.uno:FormatArea');
 
         // exit shape mode
         helper.typeIntoDocument('{esc}');
@@ -399,7 +398,7 @@ describe(['tagdesktop'], 'Accessibility Writer Dialog Tests', { testIsolation: f
         cy.then(() => {
             win.app.map.sendUnoCommand('.uno:FormatLine');
         });
-        a11yHelper.handleDialog(win, 1);
+        a11yHelper.handleDialog(win, 1, '.uno:FormatLine');
         // exit line mode
         helper.typeIntoDocument('{esc}');
     });
@@ -414,7 +413,7 @@ describe(['tagdesktop'], 'Accessibility Writer Dialog Tests', { testIsolation: f
         .then(() => {
             win.app.map.sendUnoCommand('.uno:PasteSpecial');
         });
-        a11yHelper.handleDialog(win, 1);
+        a11yHelper.handleDialog(win, 1, '.uno:PasteSpecial');
     });
 
     allWriterDialogs.forEach(function (commandSpec) {

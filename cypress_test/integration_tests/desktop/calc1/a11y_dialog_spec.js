@@ -98,9 +98,10 @@ describe(['tagdesktop'], 'Accessibility Calc Dialog Tests', { testIsolation: fal
 
         cy.get('@uicoverageResult').then(result => {
             expect(result.used, `used .ui files`).to.not.be.empty;
-            // TODO: make these true
+            // TODO: make this true
             // expect(result.CompleteCalcDialogCoverage, `complete calc dialog coverage`).to.be.true;
-            // expect(result.CompleteCommonDialogCoverage, `complete common dialog coverage`).to.be.true;
+            expect(result.CompleteCommonDialogCoverage,
+                `complete common dialog coverage; missing: ${JSON.stringify(result.MissingCommonDialogCoverage)}`).to.be.true;
         });
     });
 
@@ -191,6 +192,76 @@ describe(['tagdesktop'], 'Accessibility Calc Dialog Tests', { testIsolation: fal
         a11yHelper.handleDialog(win, 1);
 
         // exit shape mode
+        helper.typeIntoDocument('{esc}');
+    });
+
+    it('Hatch Add name dialog and duplicate warning', function () {
+        // The shared traverseTabs lbhatch handler covers this for writer but
+        // doesn't fire here, so trigger the cui/ui/namedialog.ui +
+        // cui/ui/queryduplicatedialog.ui path explicitly.
+        cy.then(() => {
+            win.app.map.sendUnoCommand('.uno:BasicShapes.octagon');
+        });
+        cy.cGet('#test-div-shapeHandlesSection').should('exist');
+
+        cy.then(() => {
+            win.app.map.sendUnoCommand('.uno:FormatArea');
+        });
+
+        a11yHelper.getActiveDialog(1)
+            .then(() => helper.processToIdle(win))
+            .then(() => {
+                // Click the inner Hatch sub-tab in the Area tab page. The
+                // rendered .ui-tabs container is visibility:hidden until the
+                // outer Area tab is selected, so click the DOM node directly.
+                cy.cGet('.ui-dialog [role="tab"]').then($tabs => {
+                    let areaTab = null;
+                    let hatchTab = null;
+                    $tabs.each((_i, el) => {
+                        const controls = el.getAttribute('aria-controls') || '';
+                        const label = (el.getAttribute('aria-label') || el.textContent || '').trim();
+                        if (controls === 'RID_SVXPAGE_AREA' || (!areaTab && label === 'Area' && controls !== 'lbhatch'))
+                            areaTab = el;
+                        if (controls === 'lbhatch')
+                            hatchTab = el;
+                    });
+                    expect(areaTab, 'outer Area tab').to.not.be.null;
+                    expect(hatchTab, 'inner Hatch tab').to.not.be.null;
+                    areaTab.click();
+                    hatchTab.click();
+                });
+                return helper.processToIdle(win);
+            })
+            .then(() => {
+                cy.cGet('button.ui-pushbutton[aria-label="Add"]:visible').click();
+                return helper.processToIdle(win);
+            });
+
+        // First Add: accept the default suggested name "Hatching 1".
+        a11yHelper.getActiveDialog(2)
+            .then(() => helper.processToIdle(win))
+            .then(() => {
+                a11yHelper.runA11yValidation(win, 'validatedialogsa11y');
+                cy.cGet('[role="dialog"][aria-labelledby*="Name"] #ok-button')
+                    .should('be.enabled').click();
+                return helper.processToIdle(win);
+            });
+
+        // Add again with a duplicate name to force the warning subdialog.
+        cy.cGet('button.ui-pushbutton[aria-label="Add"]:visible').click();
+        a11yHelper.getActiveDialog(2)
+            .then(() => helper.processToIdle(win))
+            .then(() => {
+                cy.cGet('#name_entry-input').type('{selectall}{backspace}Hatching 1');
+                cy.cGet('[role="dialog"][aria-labelledby*="Name"] #ok-button')
+                    .should('be.enabled').click();
+                return helper.processToIdle(win);
+            });
+
+        // queryduplicatedialog replaces namedialog at the same level.
+        a11yHelper.handleDialog(win, 2);
+
+        a11yHelper.closeActiveDialog(1);
         helper.typeIntoDocument('{esc}');
     });
 

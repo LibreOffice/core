@@ -290,10 +290,13 @@ function traverseTabs(getContainer, win, level, command, isNested = false) {
 							} else if (command == '.uno:FontDialog' && tabId == 'font') {
 								cy.cGet('#btnWestFeatures-button').click();
 								handleDialog(win, level + 1);
-							} else if ((command == '.uno:PageDialog' || command == '.uno:PageFormatDialog') && tabId == 'footer') {
-								cy.cGet('button.ui-pushbutton[aria-label="More..."]:visible').click();
+							} else if ((command == '.uno:PageDialog' || command == '.uno:PageFormatDialog') && (tabId == 'header' || tabId == 'footer')) {
+								// enable the header/footer to make the More... button sensitive
+								const toggleId = tabId == 'header' ? '#checkHeaderOn-input' : '#checkFooterOn-input';
+								cy.cGet(toggleId).check({ force: true });
+								cy.cGet('[id^="buttonMore"][id$="-button"]').filter(':visible').first().should('be.enabled').click();
 								handleDialog(win, level + 1);
-							} else if (command == '.uno:FormatArea' && tabId == 'lbhatch') {
+							} else if ((command == '.uno:FormatArea' || command == '.uno:PageDialog' || command == '.uno:PageFormatDialog') && tabAriaControls == 'lbhatch') {
 								cy.cGet('button.ui-pushbutton[aria-label="Add"]:visible').click();
 								testNameDialog(win, level);
 							}
@@ -380,6 +383,25 @@ function handleDialog(win, level, command, isWarningDialog) {
 				cy.cGet('#similarity-input').check();
 				cy.cGet('#similaritybtn-button').should('be.enabled').click();
 				handleDialog(win, level + 1);
+				cy.cGet('#similarity-input').uncheck();
+				cy.cGet('#soundslike-input').check();
+				cy.cGet('#soundslikebtn-button').should('be.enabled').click();
+				handleDialog(win, level + 1);
+				cy.cGet('#soundslike-input').uncheck();
+				// Format and Attributes search are writer-only and the
+				// buttons are hidden in calc/draw.
+				cy.cGet('body').then($body => {
+					if ($body.find('#attributes-button:visible').length) {
+						cy.cGet('#attributes-button').should('be.enabled').click();
+						handleDialog(win, level + 1);
+					}
+				});
+				cy.cGet('body').then($body => {
+					if ($body.find('#format-button:visible').length) {
+						cy.cGet('#format-button').should('be.enabled').click();
+						handleDialog(win, level + 1);
+					}
+				});
 			} else if (command == '.uno:Signature') {
 				cy.cGet('#signatures .ui-treeview-entry > div:first-child').click();
 				cy.cGet('#view-button').should('be.enabled').click();
