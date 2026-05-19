@@ -32,6 +32,26 @@ describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Mobile wizard state tests',
 		mobileHelper.openMobileWizard();
 	});
 
+	// Regression: after closing the hamburger menu, a single click on
+	// the mobile wizard toolbar button must reopen the wizard. With the
+	// legacy refresh-sidebar pathway removed, core's sidebar state
+	// could fall out of sync with the browser's after the hamburger
+	// menu took it over, and the first reopen click would no-op
+	// (forcing the user to click twice).
+	it('Mobile wizard reopens on first click after hamburger menu.', function() {
+		mobileHelper.enableEditingMobile();
+		mobileHelper.openMobileWizard();
+		mobileHelper.openHamburgerMenu();
+		mobileHelper.closeHamburgerMenu();
+		// Single click - not through openMobileWizard which would
+		// drain core and mask the race.
+		cy.cGet('#toolbar-up #mobile_wizard')
+			.should('not.have.class', 'disabled')
+			.click();
+		cy.cGet('#mobile-wizard-content').should('not.be.empty');
+		cy.cGet('#toolbar-up #mobile_wizard').should('have.class', 'selected');
+	});
+
 	it('Close mobile wizard by context wizard.', function() {
 		// Click on edit button
 		mobileHelper.enableEditingMobile();
