@@ -1221,13 +1221,13 @@ void Window::PaintImmediately()
         GetOutDev()->Flush();
 }
 
-void Window::ImplPaintToDevice( OutputDevice* i_pTargetOutDev, const Point& i_rPos )
+void Window::ImplPaintToDevice(OutputDevice& rTargetOutDev, const Point& i_rPos)
 {
     // Special drawing when called through LOKit
     // TODO: Move to its own method
     if (comphelper::LibreOfficeKit::isActive())
     {
-        VclPtrInstance<VirtualDevice> pDevice(*i_pTargetOutDev);
+        VclPtrInstance<VirtualDevice> pDevice(rTargetOutDev);
         pDevice->EnableRTL(IsRTLEnabled());
 
         Size aSize(GetOutputSizePixel());
@@ -1279,7 +1279,7 @@ void Window::ImplPaintToDevice( OutputDevice* i_pTargetOutDev, const Point& i_rP
 
         Paint(*pDevice, tools::Rectangle(Point(), GetOutputSizePixel()));
 
-        i_pTargetOutDev->DrawOutDev(i_rPos, aSize, Point(), pDevice->PixelToLogic(aSize), *pDevice);
+        rTargetOutDev.DrawOutDev(i_rPos, aSize, Point(), pDevice->PixelToLogic(aSize), *pDevice);
 
         bool bHasMirroredGraphics = pDevice->HasMirroredGraphics();
 
@@ -1300,7 +1300,7 @@ void Window::ImplPaintToDevice( OutputDevice* i_pTargetOutDev, const Point& i_rP
                 Point aPos( i_rPos );
                 aPos += Point(nDeltaX, nDeltaY);
 
-                pChild->ImplPaintToDevice( i_pTargetOutDev, aPos );
+                pChild->ImplPaintToDevice(rTargetOutDev, aPos);
             }
         }
         return;
@@ -1316,8 +1316,8 @@ void Window::ImplPaintToDevice( OutputDevice* i_pTargetOutDev, const Point& i_rP
     tools::Long nOldDPIX = pOutDev->GetDPIX();
     tools::Long nOldDPIY = pOutDev->GetDPIY();
 
-    GetOutDev()->SetDPIX(i_pTargetOutDev->GetDPIX());
-    GetOutDev()->SetDPIY(i_pTargetOutDev->GetDPIY());
+    GetOutDev()->SetDPIX(rTargetOutDev.GetDPIX());
+    GetOutDev()->SetDPIY(rTargetOutDev.GetDPIY());
 
     bool bOutput = GetOutDev()->IsOutputEnabled();
     GetOutDev()->EnableOutput();
@@ -1396,15 +1396,14 @@ void Window::ImplPaintToDevice( OutputDevice* i_pTargetOutDev, const Point& i_rP
     mpWindowImpl->mbReallyVisible = bRVisible;
 
     // paint metafile to VDev
-    VclPtrInstance<VirtualDevice> pMaskedDevice(*i_pTargetOutDev,
-                                                DeviceFormat::WITH_ALPHA);
+    VclPtrInstance<VirtualDevice> pMaskedDevice(rTargetOutDev, DeviceFormat::WITH_ALPHA);
 
     pMaskedDevice->SetOutputSizePixel( GetOutputSizePixel(), true, true );
     pMaskedDevice->EnableRTL( IsRTLEnabled() );
     aMtf.WindStart();
     aMtf.Play(*pMaskedDevice);
     Bitmap aBmpEx( pMaskedDevice->GetBitmap( Point( 0, 0 ), aPaintRect.GetSize() ) );
-    i_pTargetOutDev->DrawBitmap( i_rPos, aBmpEx );
+    rTargetOutDev.DrawBitmap(i_rPos, aBmpEx);
     // get rid of virtual device now so they don't pile up during recursive calls
     pMaskedDevice.disposeAndClear();
 
@@ -1422,9 +1421,9 @@ void Window::ImplPaintToDevice( OutputDevice* i_pTargetOutDev, const Point& i_rP
             // i_rPos *may* be in logical coordinates if a MapMode is set at
             // i_pTargetOutDev. To not mix values of different coordinate systems
             // it *needs* to be converted (which does nothing if no MapMode)
-            Point aDelta( i_pTargetOutDev->PixelToLogic( Point( nDeltaX, nDeltaY )) );
+            Point aDelta(rTargetOutDev.PixelToLogic(Point(nDeltaX, nDeltaY)));
             aPos += aDelta;
-            pChild->ImplPaintToDevice( i_pTargetOutDev, aPos );
+            pChild->ImplPaintToDevice(rTargetOutDev, aPos);
         }
     }
 
@@ -1462,9 +1461,9 @@ void Window::PaintToDevice(OutputDevice& rDev, const Point& rPos)
     mpWindowImpl->mbVisible = true;
 
     if( mpWindowImpl->mpBorderWindow )
-        mpWindowImpl->mpBorderWindow->ImplPaintToDevice(&rDev, rPos);
+        mpWindowImpl->mpBorderWindow->ImplPaintToDevice(rDev, rPos);
     else
-        ImplPaintToDevice(&rDev, rPos);
+        ImplPaintToDevice(rDev, rPos);
 
     mpWindowImpl->mbVisible = bVisible;
 

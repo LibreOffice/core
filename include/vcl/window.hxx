@@ -671,7 +671,7 @@ private:
     SAL_DLLPRIVATE bool                 ImplStopDnd();
     SAL_DLLPRIVATE void                 ImplStartDnd();
 
-    virtual void                        ImplPaintToDevice( ::OutputDevice* pTargetOutDev, const Point& rPos );
+    virtual void ImplPaintToDevice(OutputDevice& rTargetOutDev, const Point& rPos);
 
 protected:
     // Single argument ctors shall be explicit.
