@@ -121,6 +121,24 @@ aichatcancel: <requestId>
     Cancel an in-progress AI chat request. <requestId> is the identifier
     from the original 'aichat' message.
 
+executescript <callId> <script>
+
+    Run <script> as a JavaScript snippet in the kit's JS UNO and reply via 'executescriptresult:'
+    tagged with the same <callId>.
+
+    Used by the iframe-extension framework (browser/extensions/cool.js's cool.callRemote helper) to
+    call into the kit from extension iframes.  <callId> is an opaque string the client picks for
+    matching the resulting 'executescriptresult:'.
+
+proxyreturn <callId> <json-value>
+
+    Deliver the JSON-encoded return value of a JS-UNO listener proxy invocation back to the kit-side
+    proxy stub (which is spinning in Application::Yield waiting for it, cf. ProxyInvocation::invoke
+    in engine/jsuno/source/jsuno.cxx).  <callId> is the id that was sent out in the corresponding
+    'proxycall:' (whose payload contains a non-null callId iff the invoked listener method has a
+    non-void return type).  Only meaningful while a 'proxycall:' is still outstanding; spurious or
+    late 'proxyreturn' messages are silently ignored.
+
 insertfile name=<name> type=<type>
 
     Inserts the file with the name <name> into the document, we currently
@@ -714,6 +732,27 @@ aichatresult:<json>
     - imageData: Base64-encoded PNG image data (on success, for image responses)
     - error: Error message (on failure)
     - requestId: The request identifier from the original 'aichat' message
+
+executescriptresult: <json>
+
+    Reply to an 'executescript' message.  The JSON payload has the shape
+
+        { "id": <callId> [, "ok": <jsonValue>] [, "err": <string>] }
+
+    Exactly one of "ok" or "err" is set, except when the script's result value was something
+    JSON.stringify drops (undefined, a function, a symbol), in which case neither key is present,
+    which the client-side helper surfaces as a Promise resolving to JavaScript undefined.
+
+proxycall: <json>
+
+    Notification that a UNO listener proxy installed via an earlier 'executescript' has been invoked
+    from UNO.  The JSON payload has the shape
+
+        { "proxyId": <string>, "callId": <string>, "method": <string>, "args": [...] }
+
+    "callId" is present iff the proxy stub is waiting for a synchronous return value via
+    'proxyreturn' (i.e. the listener method has a non-void return type; for void return types the
+    call is fire-and-forget).
 
 tile: part=<partNumber> width=<width> height=<height> tileposx=<xpos> tileposy=<ypos> tilewidth=<tileWidth> tileheight=<tileHeight> [timestamp=<time>] [wid=<wireId>]
 <binaryPngImage>
