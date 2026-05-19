@@ -106,6 +106,7 @@ private:
     void setToggleButtonProperties(QToolButton& rButton, stringmap& rProps, QWidget* pParentWidget);
     static void addButtonToButtonBox(QAbstractButton& rButton, QWidget* pParentWidget,
                                      QMessageBox::ButtonRole nRole);
+    static void setGridLayoutProperties(QGridLayout& rGridLayout, stringmap& rProps);
     static void setWidgetProperties(QWidget& rWidget, stringmap& rProps);
     static QWidget* windowForObject(QObject* pObject);
     static Qt::Alignment getAlignment(stringmap& rProps);
