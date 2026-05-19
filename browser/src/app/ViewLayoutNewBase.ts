@@ -73,6 +73,20 @@ class ViewLayoutNewBase extends ViewLayoutBase {
 		this.scrollProperties.horizontalScrollStep = documentAnchor.size[0] / 2;
 	}
 
+	// This is duplicated in ViewLayoutWriter and ViewLayoutNewBase because the
+	// other way would have been to move this to ViewLayoutBase, but that introduces
+	// view jumps in Calc, so code duplication seemed like the obvious choice after
+	// that.
+	public unselectCommentOnScroll() {
+		const commentSection = app.sectionContainer.getSectionWithName(
+			app.CSections.CommentList.name,
+		) as cool.CommentSection;
+
+		if (commentSection && commentSection.sectionProperties.selectedComment) {
+			commentSection.unselect();
+		}
+	}
+
 	public scroll(
 		pX: number,
 		pY: number,
