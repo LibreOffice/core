@@ -516,6 +516,12 @@ window.L.Control.JSDialog = window.L.Control.extend({
 
 		this.addFocusHandler(instance); // Loop focus for all dialogues.
 
+		// Track focus inside the dialog so we can restore it across full-dialog rebuilds.
+		instance.container.addEventListener('focusin', (ev) => {
+			if (ev.target && ev.target.id)
+				instance.lastFocusedInDialogId = ev.target.id;
+		});
+
 		var clickToCloseId = instance.clickToClose ? window.L.Util.sanitizeElementId(instance.clickToClose) : null;
 		const sanitizedPrefix = window.L.Util.sanitizeElementId('.uno:');
 		if (clickToCloseId && clickToCloseId.indexOf(sanitizedPrefix) === 0)
@@ -555,6 +561,16 @@ window.L.Control.JSDialog = window.L.Control.extend({
 	},
 
 	setupInitialFocus: function(instance) {
+		// Restore focus preserved across a full-dialog rebuild before falling back to default.
+		if (instance.preservedFocusId) {
+			const restored = instance.container.querySelector('[id=\'' + instance.preservedFocusId + '\']');
+			instance.preservedFocusId = null;
+			if (restored && JSDialog.IsFocusable(restored)) {
+				restored.focus();
+				return;
+			}
+		}
+
 		// setup initial focus and helper elements for closing popup
 		var initialFocusElement = this._getFocusablesForInitialFocus(instance.container);
 
@@ -942,6 +958,25 @@ window.L.Control.JSDialog = window.L.Control.extend({
 			if (existingNode) {
 				instance.posx = existingNode.startX;
 				instance.posy = existingNode.startY;
+
+				// Preserve keyboard focus across a full-dialog rebuild (tdf#169006 follow-up).
+				// Multiple FullUpdates may arrive back-to-back before any of the
+				// associated layouting tasks (which attach the new container) run, so
+				// the live activeElement may already be detached from the previous
+				// existingNode. Try in order:
+				//   1. live activeElement inside the previous container,
+				//   2. the previous container's recorded focusin id,
+				//   3. an unconsumed preservedFocusId from a still-pending rebuild.
+				const activeEl = document.activeElement;
+				if (activeEl && activeEl.id
+					&& existingNode.container
+					&& existingNode.container.contains(activeEl)) {
+					instance.preservedFocusId = activeEl.id;
+				} else if (existingNode.lastFocusedInDialogId) {
+					instance.preservedFocusId = existingNode.lastFocusedInDialogId;
+				} else if (existingNode.preservedFocusId) {
+					instance.preservedFocusId = existingNode.preservedFocusId;
+				}
 			}
 
 			// We show some dialogs such as Macro Security Warning Dialog and Text Import Dialog (csv)
