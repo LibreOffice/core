@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include <common/Log.hpp>
 #include <common/StateEnum.hpp>
 #include <common/Util.hpp>
 #include <net/Socket.hpp>
@@ -108,18 +109,19 @@ protected:
     STATE_ENUM(TestResult, Failed, Ok, TimedOut);
 
     /// Encourages the process to exit with this value (unless hooked)
-    virtual void exitTest(TestResult result, const std::string& reason = std::string());
+    virtual void exitTest(TestResult result, const std::string& reason = std::string(),
+                          LOG_CAPTURE_CALLER_DECLARATION);
 
     /// Fail the test with the given reason.
-    void failTest(const std::string& reason)
+    void failTest(const std::string& reason, LOG_CAPTURE_CALLER_DECLARATION)
     {
-        exitTest(TestResult::Failed, reason);
+        exitTest(TestResult::Failed, reason, LOG_PASS_PARENT_CALLER);
     }
 
     /// Pass the test with the given optional reason.
-    void passTest(const std::string& reason = std::string())
+    void passTest(const std::string& reason = std::string(), LOG_CAPTURE_CALLER_DECLARATION)
     {
-        exitTest(TestResult::Ok, reason);
+        exitTest(TestResult::Ok, reason, LOG_PASS_PARENT_CALLER);
     }
 
     /// Called when a test has ended, to clean up.

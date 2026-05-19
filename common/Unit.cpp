@@ -403,7 +403,7 @@ bool UnitBase::filterSendWebSocketMessage(const std::string_view data, const WSO
     return onFilterSendWebSocketMessage(data, code, flush, unitReturn);
 }
 
-void UnitBase::exitTest(TestResult result, const std::string& reason)
+void UnitBase::exitTest(TestResult result, const std::string& reason, LOG_CAPTURE_CALLER)
 {
     // We could be called from either a SocketPoll (websrv_poll)
     // or from invokeTest (coolwsd main).
