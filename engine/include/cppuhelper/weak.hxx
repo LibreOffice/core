@@ -133,9 +133,7 @@ public:
     SAL_CALL operator css::uno::Reference< css::uno::XInterface > ()
         { return this; }
 
-#if defined LIBO_INTERNAL_ONLY
     css::uno::XWeak* getXWeak() { return this; }
-#endif
 };
 
 /// @cond INTERNAL
@@ -157,9 +155,7 @@ static inline css::uno::XInterface * acquire(OWeakObject * instance)
     return instance;
 }
 
-#if defined LIBO_INTERNAL_ONLY
 static inline css::uno::XWeak* getXWeak(OWeakObject* instance) { return instance; }
-#endif
 /// @endcond
 
 }

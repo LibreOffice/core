@@ -37,8 +37,6 @@ namespace com { namespace sun { namespace star { namespace lang {
 } } } }
 namespace osl { class Mutex; }
 
-#if defined LIBO_INTERNAL_ONLY
-
 // A replacement for WeakAggComponentImplHelper1 has deliberately been left out,
 // as the underlying aggregation mechanism is known broken in general and should
 // not be used.
@@ -125,8 +123,6 @@ public:
 };
 
 }
-
-#endif
 
 #endif
 
