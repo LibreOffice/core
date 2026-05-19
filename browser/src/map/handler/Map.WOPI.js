@@ -513,6 +513,18 @@ window.L.Map.WOPI = window.L.Handler.extend({
 			return;
 		}
 		else if (msg.MessageId === 'Send_UNO_Command' && msg.Values && msg.Values.Command) {
+			// Commands to insert comments without args initiate interactive insertion,
+			// showing in-place editor, and in PDF, entering a click-to-place mode.
+			if (!msg.Values.Args) {
+				if (msg.Values.Command === '.uno:InsertAnnotation') {
+					this._map.insertComment();
+					return;
+				}
+				if (msg.Values.Command === '.uno:InsertThreadedComment') {
+					this._map.insertThreadedComment();
+					return;
+				}
+			}
 			this._map.sendUnoCommand(msg.Values.Command, msg.Values.Args || '');
 			return;
 		}

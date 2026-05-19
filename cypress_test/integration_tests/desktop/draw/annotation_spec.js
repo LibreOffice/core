@@ -320,6 +320,37 @@ describe(['tagdesktop'], 'PDF Threaded Comments', function() {
 		});
 	});
 
+	// A WOPI host can request a new comment in PDF by posting Send_UNO_Command
+	// with .uno:InsertAnnotation. That should enter the in-browser handling,
+	// instead of sending the command to engine.
+	it('Send_UNO_Command .uno:InsertAnnotation enters click-to-place mode', { env: { 'pdf-view': true } }, function() {
+		let initialCount = 0;
+
+		cy.getFrameWindow().then(function(win) {
+			const section = win.app.sectionContainer.getSectionWithName(
+				win.app.CSections.CommentList.name);
+			initialCount = section.sectionProperties.commentList.length;
+
+			const message = {
+				MessageId: 'Send_UNO_Command',
+				Values: { Command: '.uno:InsertAnnotation' }
+			};
+			win.postMessage(JSON.stringify(message), '*');
+		});
+
+		cy.getFrameWindow().should(function(win) {
+			expect(win.document.getElementById('document-canvas').style.cursor,
+				'placement mode must switch the canvas cursor to crosshair')
+				.to.equal('crosshair');
+
+			const section = win.app.sectionContainer.getSectionWithName(
+				win.app.CSections.CommentList.name);
+			expect(section.sectionProperties.commentList.length,
+				'no comment should be created until the user picks a position')
+				.to.equal(initialCount);
+		});
+	});
+
 	// Negative path through placement mode: enter placement, miss the page
 	// (no comment), then click on the page (anchor visible at the click
 	// point), then cancel the editor before saving (no comment ends up in

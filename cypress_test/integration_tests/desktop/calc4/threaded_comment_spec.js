@@ -15,6 +15,25 @@ describe(['tagdesktop'], 'Threaded Comment', function() {
 		});
 	});
 
+	// A WOPI host can request a new threaded comment by posting Send_UNO_Command
+	// with .uno:InsertThreadedComment. That should enter the in-browser handling,
+	// instead of sending the command to engine.
+	it('Send_UNO_Command .uno:InsertThreadedComment opens a new comment editor', function() {
+		cy.getFrameWindow().then(function(win) {
+			const message = {
+				MessageId: 'Send_UNO_Command',
+				Values: { Command: '.uno:InsertThreadedComment' }
+			};
+			win.postMessage(JSON.stringify(message), '*');
+		});
+
+		// Same expectation as with the toolbar button: the new-comment editor
+		// placeholder appears so the user can type before the slot is dispatched.
+		cy.cGet('#comment-container-new').should('exist');
+		cy.cGet('.cool-annotation').last().find('#annotation-modify-textarea-new')
+			.should('exist');
+	});
+
 	it('Insert, resolve, unresolve, and remove threaded comment', function() {
 		// Click the "Insert Comment" button on the Insert tab.
 		cy.cGet('#Insert-tab-label').click();
