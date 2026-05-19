@@ -7436,7 +7436,7 @@ static void doc_paintWindowForView(LibreOfficeKitDocument* pThis, unsigned nLOKW
     aMapMode.SetOrigin(Point(-(nX / fDPIScale), -(nY / fDPIScale)));
     pDevice->SetMapMode(aMapMode);
 
-    pWindow->PaintToDevice(pDevice.get(), Point(0, 0));
+    pWindow->PaintToDevice(*pDevice, Point(0, 0));
 #endif
 
     comphelper::LibreOfficeKit::setDialogPainting(false);

@@ -1407,7 +1407,7 @@ public:
     bool    IsNativeWidgetEnabled() const;
 
     // a helper method for a Control's Draw method
-    void PaintToDevice( ::OutputDevice* pDevice, const Point& rPos );
+    void PaintToDevice(OutputDevice& rDevice, const Point& rPos);
 
     //  Keyboard access functions
 

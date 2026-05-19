@@ -1438,13 +1438,13 @@ void Window::ImplPaintToDevice( OutputDevice* i_pTargetOutDev, const Point& i_rP
     GetOutDev()->SetDPIY(nOldDPIY);
 }
 
-void Window::PaintToDevice(OutputDevice* pDev, const Point& rPos)
+void Window::PaintToDevice(OutputDevice& rDev, const Point& rPos)
 {
     if( !mpWindowImpl )
         return;
 
-    SAL_WARN_IF(  pDev->HasMirroredGraphics(), "vcl.window", "PaintToDevice to mirroring graphics" );
-    SAL_WARN_IF(  pDev->IsRTLEnabled(), "vcl.window", "PaintToDevice to mirroring device" );
+    SAL_WARN_IF(rDev.HasMirroredGraphics(), "vcl.window", "PaintToDevice to mirroring graphics");
+    SAL_WARN_IF(rDev.IsRTLEnabled(), "vcl.window", "PaintToDevice to mirroring device");
 
     vcl::Window* pRealParent = nullptr;
     if( ! mpWindowImpl->mbVisible )
@@ -1462,9 +1462,9 @@ void Window::PaintToDevice(OutputDevice* pDev, const Point& rPos)
     mpWindowImpl->mbVisible = true;
 
     if( mpWindowImpl->mpBorderWindow )
-        mpWindowImpl->mpBorderWindow->ImplPaintToDevice( pDev, rPos );
+        mpWindowImpl->mpBorderWindow->ImplPaintToDevice(&rDev, rPos);
     else
-        ImplPaintToDevice( pDev, rPos );
+        ImplPaintToDevice(&rDev, rPos);
 
     mpWindowImpl->mbVisible = bVisible;
 
