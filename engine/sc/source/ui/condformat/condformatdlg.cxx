@@ -208,6 +208,9 @@ IMPL_LINK(ScCondFormatList, AfterColFormatTypeHdl, void*, p, void)
         return;
 
     sal_Int32 nPos = pBox->get_active();
+    // Destroy the old entry before constructing the new one so JSInstanceBuilder
+    // does not see duplicate buildable names and rename the new widgets (which
+    // would break focus restoration after the rebuild in online).
     switch(nPos)
     {
         case 0:
@@ -215,28 +218,32 @@ IMPL_LINK(ScCondFormatList, AfterColFormatTypeHdl, void*, p, void)
                 return;
 
             Freeze();
-            itr->reset(new ScColorScale2FrmtEntry(this, mrDoc, maPos));
+            itr->reset();
+            *itr = std::make_unique<ScColorScale2FrmtEntry>(this, mrDoc, maPos);
             break;
         case 1:
             if((*itr)->GetType() == condformat::entry::COLORSCALE3)
                 return;
 
             Freeze();
-            itr->reset(new ScColorScale3FrmtEntry(this, mrDoc, maPos));
+            itr->reset();
+            *itr = std::make_unique<ScColorScale3FrmtEntry>(this, mrDoc, maPos);
             break;
         case 2:
             if((*itr)->GetType() == condformat::entry::DATABAR)
                 return;
 
             Freeze();
-            itr->reset(new ScDataBarFrmtEntry(this, mrDoc, maPos));
+            itr->reset();
+            *itr = std::make_unique<ScDataBarFrmtEntry>(this, mrDoc, maPos);
             break;
         case 3:
             if((*itr)->GetType() == condformat::entry::ICONSET)
                 return;
 
             Freeze();
-            itr->reset(new ScIconSetFrmtEntry(this, mrDoc, maPos));
+            itr->reset();
+            *itr = std::make_unique<ScIconSetFrmtEntry>(this, mrDoc, maPos);
             break;
         default:
             break;
