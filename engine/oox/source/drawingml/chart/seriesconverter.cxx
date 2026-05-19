@@ -968,6 +968,10 @@ Reference< XDataSeries > SeriesConverter::createDataSeries( const TypeGroupConve
         aPointConv.convertFromModel( xDataSeries, rTypeGroup, mrModel );
     }
 
+    // Track whether the series itself had data labels (not inherited from type group)
+    if (mrModel.mxLabels.is())
+        aSeriesProp.setProperty(PROP_HasDataLabels, true);
+
     /*  Series data label settings. If and only if the series does not contain
         a c:dLbls element, then the c:dLbls element of the parent chart type is
         used (data label settings of the parent chart type are *not* merged

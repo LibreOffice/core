@@ -4239,8 +4239,12 @@ void ChartExport::exportSeries_chartex( const Reference<chart2::XChartType>& xCh
             if (aChartType != "com.sun.star.chart2.HistogramChartType")
             {
                 DataLabelsRange aDLblsRange;
-                // export data labels
-                exportDataLabels(rSeries, nSeriesLength, eChartType, aDLblsRange, true);
+                // export data labels only if the series had them on import
+                bool bHasDataLabels = false;
+                if (xOldPropSet.is())
+                    xOldPropSet->getPropertyValue(u"HasDataLabels"_ustr) >>= bHasDataLabels;
+                if (bHasDataLabels)
+                    exportDataLabels(rSeries, nSeriesLength, eChartType, aDLblsRange, true);
             }
 
             // dataId links to the correct data set in the <cx:chartData>. See
