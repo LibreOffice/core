@@ -975,6 +975,11 @@ void QtBuilder::setDialogProperties(QDialog& rDialog, stringmap& rProps)
             rDialog.setModal(toBool(rValue));
         else if (rKey == u"title")
             rDialog.setWindowTitle(toQString(rValue));
+        else if (rKey == u"border-width")
+        {
+            sal_uInt32 nBorderWidth = rValue.toUInt32() * 2;
+            rDialog.setContentsMargins(nBorderWidth, nBorderWidth, nBorderWidth, nBorderWidth);
+        }
     }
 }
 
