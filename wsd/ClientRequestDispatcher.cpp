@@ -25,6 +25,7 @@
 
 #include <common/Anonymizer.hpp>
 #include <common/ConfigUtil.hpp>
+#include <common/HexUtil.hpp>
 #include <common/JsonUtil.hpp>
 #include <common/NumUtil.hpp>
 #include <common/StateEnum.hpp>
@@ -667,7 +668,7 @@ std::atomic<uint64_t> ClientRequestDispatcher::NextConnectionId(1);
 void ClientRequestDispatcher::onConnect(const std::shared_ptr<StreamSocket>& socket)
 {
     assert(socket && "Expected a valid socket in ClientRequestDispatcher::onConnect()");
-    _id = Util::encodeId(NextConnectionId++, 3);
+    _id = HexUtil::encodeId(NextConnectionId++, 3);
     _socket = socket;
     _lastSeenHTTPHeader = socket->getLastSeenTime();
     setLogContext(socket->getFD());

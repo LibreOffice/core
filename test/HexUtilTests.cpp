@@ -114,16 +114,16 @@ void HexUtilTests::testNumberToHex()
         std::uint64_t number = 0;
         LOK_TRACE("Number: " << std::hex << number << std::dec << " (shift: 0"
                              << "), width: " << width);
-        LOK_ASSERT_EQUAL_STR(hexifyStd(number, width), Util::encodeId(number, width));
-        LOK_ASSERT_EQUAL_STR(hexifyStd(~number, width), Util::encodeId(~number, width));
+        LOK_ASSERT_EQUAL_STR(hexifyStd(number, width), HexUtil::encodeId(number, width));
+        LOK_ASSERT_EQUAL_STR(hexifyStd(~number, width), HexUtil::encodeId(~number, width));
 
         for (int shift = 0; shift < 64; ++shift)
         {
             number = 1UL << shift;
             LOK_TRACE("Number: " << std::hex << number << std::dec << " (shift: " << shift
                                  << "), width: " << width);
-            LOK_ASSERT_EQUAL_STR(hexifyStd(number, width), Util::encodeId(number, width));
-            LOK_ASSERT_EQUAL_STR(hexifyStd(~number, width), Util::encodeId(~number, width));
+            LOK_ASSERT_EQUAL_STR(hexifyStd(number, width), HexUtil::encodeId(number, width));
+            LOK_ASSERT_EQUAL_STR(hexifyStd(~number, width), HexUtil::encodeId(~number, width));
         }
     }
 
@@ -137,9 +137,9 @@ void HexUtilTests::testNumberToHex()
             LOK_TRACE("Number: " << std::hex << number << std::dec << " (shift: 0"
                                  << "), width: " << width << ", size: " << size);
             LOK_ASSERT_EQUAL_STR(hexifyStd(number, width, size),
-                                 Util::encodeId(buffer, size, number, width));
+                                 HexUtil::encodeId(buffer, size, number, width));
             LOK_ASSERT_EQUAL_STR(hexifyStd(~number, width, size),
-                                 Util::encodeId(buffer, size, ~number, width));
+                                 HexUtil::encodeId(buffer, size, ~number, width));
 
             for (int shift = 0; shift < 64; ++shift)
             {
@@ -147,9 +147,9 @@ void HexUtilTests::testNumberToHex()
                 LOK_TRACE("Number: " << std::hex << number << std::dec << " (shift: " << shift
                                      << "), width: " << width << ", size: " << size);
                 LOK_ASSERT_EQUAL_STR(hexifyStd(number, width, size),
-                                     Util::encodeId(buffer, size, number, width));
+                                     HexUtil::encodeId(buffer, size, number, width));
                 LOK_ASSERT_EQUAL_STR(hexifyStd(~number, width, size),
-                                     Util::encodeId(buffer, size, ~number, width));
+                                     HexUtil::encodeId(buffer, size, ~number, width));
             }
         }
     }

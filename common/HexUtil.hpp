@@ -11,6 +11,7 @@
 
 #pragma once
 
+#include <algorithm>
 #include <array>
 #include <cassert>
 #include <cstdint>
@@ -238,6 +239,68 @@ inline std::string dumpHex(const char* legend, const char* prefix,
     std::vector<char> data(startIt, endIt);
     dumpHex(oss, data, legend, prefix, skipDup, width);
     return oss.str();
+}
+
+/// Hex-encode an integral ID into a buffer, with padding support.
+inline std::string_view encodeId(char* buffer, std::size_t size, const std::uint64_t number,
+                                 int width, char pad = '0')
+{
+    // Skip leading (high-order) zeros, if any.
+    int highNibble = (2 * sizeof(number) - 1) * 4;
+    while ((number & (std::uint64_t(0xf) << highNibble)) == 0)
+    {
+        highNibble -= 4;
+        if (highNibble <= 0)
+            break;
+    }
+
+    // Pad, if necessary.
+    highNibble = std::min<int>(size - 1, highNibble / 4) * 4;
+    width = std::min<int>(size, width);
+    int outIndex = 0;
+    const int hexBytes = (highNibble / 4) + 1;
+    for (; width > hexBytes; --width)
+    {
+        buffer[outIndex++] = pad;
+    }
+
+    // Hexify the remaining, if any.
+    constexpr const char* const Hex = "0123456789abcdef";
+    while (highNibble >= 0)
+    {
+        const auto byte = static_cast<unsigned char>((number >> highNibble) & 0xf);
+        buffer[outIndex++] = (Hex[byte >> 4] << 8) | Hex[byte & 0xf];
+        highNibble -= 4;
+    }
+
+    // Return a reference to the given buffer.
+    return std::string_view(buffer, outIndex);
+}
+
+/// Hex-encode an integral ID into a string, with padding support.
+inline std::string encodeId(const std::uint64_t number, int width = 5, char pad = '0')
+{
+    char buffer[32];
+    return std::string(encodeId(buffer, sizeof(buffer), number, width, pad));
+}
+
+/// Hex-encode an integral ID into a stream, with padding support.
+inline std::ostringstream& encodeId(std::ostringstream& oss, const std::uint64_t number,
+                                    int width = 5, char pad = '0')
+{
+    char buffer[32];
+    oss << encodeId(buffer, sizeof(buffer), number, width, pad);
+    return oss;
+}
+
+/// Decode the hex-string into an ID. The reverse of encodeId().
+inline std::uint64_t decodeId(const std::string_view str)
+{
+    std::uint64_t id = 0;
+    std::stringstream ss;
+    ss << std::hex << str;
+    ss >> id;
+    return id;
 }
 
 } // namespace HexUtil

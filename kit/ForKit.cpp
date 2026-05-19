@@ -19,6 +19,7 @@
 #include <common/Common.hpp>
 #include <common/ConfigUtil.hpp>
 #include <common/FileUtil.hpp>
+#include <common/HexUtil.hpp>
 #include <common/JailUtil.hpp>
 #include <common/Log.hpp>
 #include <common/NumUtil.hpp>
@@ -590,7 +591,7 @@ int createCOKit(const std::string& childRoot, const std::string& sysTemplate,
             }
         };
 
-        std::string processName = "kit_spare_" + Util::encodeId(spareKitId, 3);
+        std::string processName = "kit_spare_" + HexUtil::encodeId(spareKitId, 3);
         childPid = forkKit(childFunc, processName, parentFunc);
     }
 
@@ -672,7 +673,7 @@ int createSubForKit(const std::string& subForKitIdent, const std::string& childR
         }
     };
 
-    std::string processName = "subforkit_" + Util::encodeId(subForKitId, 3);
+    std::string processName = "subforkit_" + HexUtil::encodeId(subForKitId, 3);
     childPid = forkKit(childFunc, processName, parentFunc);
 
     const auto duration = (std::chrono::steady_clock::now() - startForkingTime);

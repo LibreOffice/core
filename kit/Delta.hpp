@@ -253,24 +253,24 @@ class DeltaGenerator {
                 {
                     uint32_t cpu_scratch[width];
                     uint64_t cpu_rleMask[_rleMaskUnits];
-                    unsigned int cpu_outp = 0;
+                    size_t cpu_outp = 0;
                     initPixRowCpu(from, cpu_scratch, &cpu_outp, cpu_rleMask, width);
 
                     // check our result
                     if (memcmp(cpu_rleMask, _rleMask, sizeof (cpu_rleMask)))
                     {
                         std::cerr << "Masks differ " <<
-                            Util::bytesToHexString(reinterpret_cast<const char *>(_rleMask), sizeof(_rleMask)) << "\n" <<
-                            Util::bytesToHexString(reinterpret_cast<const char *>(cpu_rleMask), sizeof(_rleMask)) << "\n";
+                            HexUtil::bytesToHexString(reinterpret_cast<const char *>(_rleMask), sizeof(_rleMask)) << "\n" <<
+                            HexUtil::bytesToHexString(reinterpret_cast<const char *>(cpu_rleMask), sizeof(_rleMask)) << "\n";
                     }
                     assert(_rleSize == cpu_outp);
                     if(_rleSize > 0 && memcmp(scratch, cpu_scratch, _rleSize))
                     {
                         std::cerr << "RLE pixels differ mask:\n" <<
-                            Util::bytesToHexString(reinterpret_cast<const char *>(_rleMask), sizeof(_rleMask)) << "\n" <<
+                            HexUtil::bytesToHexString(reinterpret_cast<const char *>(_rleMask), sizeof(_rleMask)) << "\n" <<
                             "pixels:\n" <<
-                            Util::bytesToHexString(reinterpret_cast<const char *>(scratch), _rleSize) << "\n" <<
-                            Util::bytesToHexString(reinterpret_cast<const char *>(cpu_scratch), _rleSize) << "\n";
+                            HexUtil::bytesToHexString(reinterpret_cast<const char *>(scratch), _rleSize) << "\n" <<
+                            HexUtil::bytesToHexString(reinterpret_cast<const char *>(cpu_scratch), _rleSize) << "\n";
                     }
                 }
 #endif

@@ -22,6 +22,7 @@
 #include <test/lokassert.hpp>
 
 #include <Unit.hpp>
+#include <common/HexUtil.hpp>
 #include <common/Util.hpp>
 #include <helpers.hpp>
 
@@ -52,7 +53,7 @@ void UnitPaste::invokeWSDTest()
 
     for (int i = 0; i < 5; ++i)
     {
-        const std::string text = std::to_string(i + 1) + "sh9le[;\"CFD7U[#B+nW=$kXgx{sv9QE#\"l1y\"hr" + Util::encodeId(Util::rng::getNext());
+        const std::string text = std::to_string(i + 1) + "sh9le[;\"CFD7U[#B+nW=$kXgx{sv9QE#\"l1y\"hr" + HexUtil::encodeId(Util::rng::getNext());
         TST_LOG("Pasting text #" << i + 1 << ": " << text);
 
         // Always delete everything to have an empty doc.

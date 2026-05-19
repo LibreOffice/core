@@ -160,7 +160,7 @@ private:
         // Prepend with count to make it unique within a single process instance,
         // in case we get collisions (which we will, eventually). N.B.: Identical
         // strings likely to have different prefixes when logged in WSD process vs. Kit.
-        return '#' + Util::encodeId(_prefix++, 0) + '#' + Util::encodeId(hash, 0) + '#';
+        return '#' + HexUtil::encodeId(_prefix++, 0) + '#' + HexUtil::encodeId(hash, 0) + '#';
     }
 
 #if ENABLE_SSL

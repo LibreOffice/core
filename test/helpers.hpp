@@ -18,6 +18,7 @@
 
 #include <common/Common.hpp>
 #include <common/ConfigUtil.hpp>
+#include <common/HexUtil.hpp>
 #include <common/JsonUtil.hpp>
 #include <common/Syscall.hpp>
 #include <common/Unit.hpp>
@@ -179,7 +180,7 @@ inline std::string getTempFileCopyPath(const std::string& srcDir, const std::str
 
     bool retry;
     do {
-        std::string dstFilename = dstFilenamePrefix + Util::encodeId(Util::rng::getNext()) + '_' + srcFilename;
+        std::string dstFilename = dstFilenamePrefix + HexUtil::encodeId(Util::rng::getNext()) + '_' + srcFilename;
 
         retry = false;
         dstPath = std::filesystem::temp_directory_path() / dstFilename;

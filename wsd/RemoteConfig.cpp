@@ -23,6 +23,7 @@
 #include "RemoteConfig.hpp"
 
 #include <common/CommandControl.hpp>
+#include <common/HexUtil.hpp>
 #include <common/JsonUtil.hpp>
 #include <net/HttpRequest.hpp>
 #include <net/Socket.hpp>
@@ -824,7 +825,7 @@ bool RemoteFontConfigPoll::finishDownload(const std::string& uri,
     // And in reality, it is a bit unclear how likely it even is that fonts downloaded through
     // this mechanism even will be updated.
     const std::string fontFile =
-        COOLWSD::TmpFontDir + '/' + Util::encodeId(Util::rng::getNext()) + ".ttf";
+        COOLWSD::TmpFontDir + '/' + HexUtil::encodeId(Util::rng::getNext()) + ".ttf";
 
     std::ofstream fontStream(fontFile);
     fontStream.write(body.data(), body.size());

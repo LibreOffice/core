@@ -22,6 +22,7 @@
 #include <common/Common.hpp>
 #include <common/ConfigUtil.hpp>
 #include <common/FileUtil.hpp>
+#include <common/HexUtil.hpp>
 #include <common/JsonUtil.hpp>
 #include <common/Log.hpp>
 #include <common/MobileApp.hpp>
@@ -215,7 +216,7 @@ BackgroundSaveWatchdog::BackgroundSaveWatchdog(unsigned mobileAppDocId,
           // mobileAppDocId is on the stack, so capture it by value.
           [mobileAppDocId, savingTid, this]()
           {
-              ProcUtil::setThreadName("kitbgsv_" + Util::encodeId(mobileAppDocId, 3) + "_wdg");
+              ProcUtil::setThreadName("kitbgsv_" + HexUtil::encodeId(mobileAppDocId, 3) + "_wdg");
 
               const auto timeout = std::chrono::seconds(
                   ConfigUtil::getInt("per_document.bgsave_timeout_secs", 120));
@@ -1594,8 +1595,8 @@ bool Document::forkToSave(const std::function<void()>& childSave, int viewId)
 
         // sort out thread local variables to get logging right from
         // as early as possible.
-        ProcUtil::setThreadName("kitbgsv_" + Util::encodeId(_mobileAppDocId, 3) + '_' +
-                            Util::encodeId(numSaves, 3));
+        ProcUtil::setThreadName("kitbgsv_" + HexUtil::encodeId(_mobileAppDocId, 3) + '_' +
+                            HexUtil::encodeId(numSaves, 3));
         _isBgSaveProcess = true;
 
         SigUtil::addActivity("forked background save process: " +

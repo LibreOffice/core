@@ -25,6 +25,7 @@
 #include <common/Common.hpp>
 #include <common/ConfigUtil.hpp>
 #include <common/FileUtil.hpp>
+#include <common/HexUtil.hpp>
 #include <common/JsonUtil.hpp>
 #include <common/Log.hpp>
 #include <common/Message.hpp>
@@ -198,7 +199,7 @@ DocumentBroker::DocumentBroker(ChildType type, const std::string& uri, const Poc
     , _storageManager(ConfigUtil::getConfigValue<std::chrono::milliseconds>(
           "per_document.min_time_between_uploads_ms", 5000))
     , _docKey(docKey)
-    , _docId(Util::encodeId(DocBrokerId++, 3))
+    , _docId(HexUtil::encodeId(DocBrokerId++, 3))
     , _configId(configId)
     , _poll(
           std::make_shared<DocumentBrokerPoll>("doc" SHARED_DOC_THREADNAME_SUFFIX + _docId, *this))

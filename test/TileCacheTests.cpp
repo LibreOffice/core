@@ -550,7 +550,7 @@ void TileCacheTests::testUnresponsiveClient()
     std::ostringstream oss;
     for (int i = 0; i < 1000; ++i)
     {
-        Util::encodeId(oss, Util::rng::getNext(), 6);
+        HexUtil::encodeId(oss, Util::rng::getNext(), 6);
     }
 
     const std::string documentContents = oss.str();
