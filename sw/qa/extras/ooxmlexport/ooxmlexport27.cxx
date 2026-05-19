@@ -91,6 +91,21 @@ CPPUNIT_TEST_FIXTURE(Test, testSdtPictureDataBinding)
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testCool15788_symbolContentControl)
+{
+    createSwDoc("Cool15788_symbolContentControl.docx");
+
+    save(TestFilter::DOCX);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    // this must not exist, otherwise Word complains about the file
+    // <w:sym w:font="Wingdings" w:char="f04b"/>
+    CPPUNIT_ASSERT_EQUAL(
+        0, countXPathNodes(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtContent/w:r[2]/w:sym"));
+    // simply a <w:t> element with the symbol must exist instead
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtContent/w:r[2]/w:t", u"\xf04b");
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 

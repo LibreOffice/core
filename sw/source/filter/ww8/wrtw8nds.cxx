@@ -2300,6 +2300,13 @@ bool MSWordExportBase::NeedTextNodeSplit( const SwTextNode& rNd, SwSoftPageBreak
 namespace {
 OUString lcl_GetSymbolFont(SwAttrPool& rPool, const SwTextNode& rTextNode, int nStart, int nEnd)
 {
+    // later symbol font is used to replace exported character with element "sym"
+    // this is not allowed in (some?) content controls, Word won't open result
+    SwTextAttr* pAttr = rTextNode.GetTextAttrAt(nStart, RES_TXTATR_CONTENTCONTROL,
+                                                ::sw::GetTextAttrMode::Default);
+    if (pAttr)
+        return OUString();
+
     SfxItemSet aSet(SfxItemSet::makeFixedSfxItemSet<RES_CHRATR_FONT, RES_CHRATR_FONT>( rPool ));
     if (rTextNode.GetParaAttr(aSet, nStart, nEnd))
     {
