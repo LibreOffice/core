@@ -160,7 +160,7 @@ public:
     void CheckFileLink_Impl();
 
     // Register a deferred link during import, when link updates are not yet
-    // allowed, and create the the actual embedded object when the user allows
+    // allowed, and create the actual embedded object when the user allows
     // link updating.
     void SetDeferredLink(const OUString& rLinkURL,
                          const css::uno::Sequence<css::beans::PropertyValue>& rMediaDescriptor);
