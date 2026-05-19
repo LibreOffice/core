@@ -25,12 +25,31 @@
 #include <swmodule.hxx>
 #include <wrtsh.hxx>
 #include <comphelper/kit.hxx>
+#include <sfx2/docfile.hxx>
+#include <sfx2/docfilt.hxx>
 #include <svl/numformat.hxx>
 #include <svl/zformat.hxx>
 #include <o3tl/string_view.hxx>
 
 #define USER_DATA_VERSION_1 "1"
 #define USER_DATA_VERSION USER_DATA_VERSION_1
+
+namespace
+{
+bool isOwnFormat()
+{
+    if (const SwDocShell* pDocShell = dynamic_cast<SwDocShell*>(SfxObjectShell::Current()))
+    {
+        if (const SfxMedium* pMedium = pDocShell->GetMedium())
+        {
+            if (const std::shared_ptr<const SfxFilter>& pFilter = pMedium->GetFilter())
+                return pFilter->IsOwnFormat();
+        }
+    }
+
+    return true;
+}
+}
 
 SwFieldDokPage::SwFieldDokPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet *const pCoreSet)
     : SwFieldPage(pPage, pController, u"modules/swriter/ui/flddocumentpage.ui"_ustr,
@@ -289,10 +308,14 @@ IMPL_LINK_NOARG(SwFieldDokPage, TypeHdl, weld::TreeView&, void)
     else
     {
         AddSubType(SwFieldTypesEnum::PageNumber);
-        AddSubType(SwFieldTypesEnum::PreviousPage);
-        AddSubType(SwFieldTypesEnum::NextPage);
+        nCount = 1;
+        if (isOwnFormat())
+        {
+            AddSubType(SwFieldTypesEnum::PreviousPage);
+            AddSubType(SwFieldTypesEnum::NextPage);
+            nCount = 3;
+        }
         nTypeId = static_cast<SwFieldTypesEnum>(m_xSelectionLB->get_id(0).toUInt32());
-        nCount = 3;
         m_xSelectionLB->connect_selection_changed(LINK(this, SwFieldDokPage, SubTypeHdl));
     }
 
