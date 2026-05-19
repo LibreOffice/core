@@ -254,7 +254,9 @@ QObject* QtBuilder::insertObject(QObject* pParent, const OUString& rClass, std::
     else if (rClass == u"GtkGrid")
     {
         pLayoutParentWidget = new QWidget(pParentWidget);
-        pObject = new QGridLayout(pLayoutParentWidget);
+        QGridLayout* pGridLayout = new QGridLayout(pLayoutParentWidget);
+        setGridLayoutProperties(*pGridLayout, rProps);
+        pObject = pGridLayout;
     }
     else if (rClass == u"GtkIconView")
     {
@@ -1169,6 +1171,17 @@ QWidget* QtBuilder::windowForObject(QObject* pObject)
     }
 
     return nullptr;
+}
+
+void QtBuilder::setGridLayoutProperties(QGridLayout& rGridLayout, stringmap& rProps)
+{
+    auto aIt = rProps.find(u"row-spacing"_ustr);
+    if (aIt != rProps.end())
+        rGridLayout.setVerticalSpacing(aIt->second.toUInt32());
+
+    aIt = rProps.find(u"column-spacing"_ustr);
+    if (aIt != rProps.end())
+        rGridLayout.setHorizontalSpacing(aIt->second.toUInt32());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
