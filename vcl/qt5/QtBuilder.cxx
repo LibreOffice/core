@@ -196,7 +196,7 @@ QObject* QtBuilder::insertObject(QObject* pParent, const OUString& rClass, std::
     else if (rClass == u"GtkButton")
     {
         QPushButton* pButton = new QPushButton(pParentWidget);
-        setButtonProperties(*pButton, rProps, pParentWidget);
+        setButtonProperties(*pButton, rId, rProps, pParentWidget);
         pObject = pButton;
     }
     else if (rClass == u"GtkCalendar")
@@ -218,7 +218,7 @@ QObject* QtBuilder::insertObject(QObject* pParent, const OUString& rClass, std::
     else if (rClass == u"GtkCheckButton")
     {
         QCheckBox* pCheckBox = new QCheckBox(pParentWidget);
-        setCheckButtonProperties(*pCheckBox, rProps, pParentWidget);
+        setCheckButtonProperties(*pCheckBox, rId, rProps, pParentWidget);
         pObject = pCheckBox;
     }
     else if (rClass == u"GtkComboBox" || rClass == u"GtkComboBoxText")
@@ -302,7 +302,7 @@ QObject* QtBuilder::insertObject(QObject* pParent, const OUString& rClass, std::
     else if (rClass == u"GtkMenuButton")
     {
         QToolButton* pMenuButton = new QToolButton(pParentWidget);
-        setMenuButtonProperties(*pMenuButton, rProps, pParentWidget);
+        setMenuButtonProperties(*pMenuButton, rId, rProps, pParentWidget);
         pObject = pMenuButton;
     }
     else if (rClass == u"GtkNotebook")
@@ -323,7 +323,7 @@ QObject* QtBuilder::insertObject(QObject* pParent, const OUString& rClass, std::
     {
         QRadioButton* pRadioButton = new QRadioButton(pParentWidget);
         // apply GtkCheckButton properties because GtkRadioButton subclasses GtkCheckButton in GTK 3
-        setCheckButtonProperties(*pRadioButton, rProps, pParentWidget);
+        setCheckButtonProperties(*pRadioButton, rId, rProps, pParentWidget);
         extractRadioButtonGroup(rId, rProps);
         pObject = pRadioButton;
     }
@@ -379,7 +379,7 @@ QObject* QtBuilder::insertObject(QObject* pParent, const OUString& rClass, std::
     {
         QToolButton* pButton = new QToolButton(pParentWidget);
         pButton->setCheckable(true);
-        setButtonProperties(*pButton, rProps, pParentWidget);
+        setButtonProperties(*pButton, rId, rProps, pParentWidget);
         pObject = pButton;
     }
     else if (rClass == u"GtkToolbar")
@@ -886,8 +886,21 @@ void QtBuilder::replaceWidget(QWidget* pOldWidget, QWidget* pNewWidget)
     deleteObject(pOldWidget);
 }
 
-void QtBuilder::setButtonProperties(QAbstractButton& rButton, stringmap& rProps,
-                                    QWidget* pParentWidget)
+static QDialogButtonBox::ButtonRole getButtonRole(const OUString& rId)
+{
+    if (rId == u"help" || rId == u"btn_help")
+        return QDialogButtonBox::HelpRole;
+    else if (rId == u"ok" || rId == u"btn_ok")
+        return QDialogButtonBox::AcceptRole;
+    else if (rId == u"cancel" || rId == u"close" || rId == "btn_cancel" || rId == u"btn_close")
+        return QDialogButtonBox::RejectRole;
+    else if (rId == u"apply" || rId == u"btn_apply")
+        return QDialogButtonBox::ApplyRole;
+    return QDialogButtonBox::NoRole;
+}
+
+void QtBuilder::setButtonProperties(QAbstractButton& rButton, const OUString& rId,
+                                    stringmap& rProps, QWidget* pParentWidget)
 {
     for (auto const & [ rKey, rValue ] : rProps)
     {
@@ -911,7 +924,7 @@ void QtBuilder::setButtonProperties(QAbstractButton& rButton, stringmap& rProps,
 
     if (QDialogButtonBox* pButtonBox = qobject_cast<QDialogButtonBox*>(pParentWidget))
     {
-        pButtonBox->addButton(&rButton, QDialogButtonBox::NoRole);
+        pButtonBox->addButton(&rButton, getButtonRole(rId));
 
         // for message boxes, avoid implicit standard buttons in addition to those explicitly added
         if (QMessageBox* pMessageBox = qobject_cast<QMessageBox*>(pParentWidget->window()))
@@ -919,8 +932,8 @@ void QtBuilder::setButtonProperties(QAbstractButton& rButton, stringmap& rProps,
     }
 }
 
-void QtBuilder::setCheckButtonProperties(QAbstractButton& rButton, stringmap& rProps,
-                                         QWidget* pParentWidget)
+void QtBuilder::setCheckButtonProperties(QAbstractButton& rButton, const OUString& rId,
+                                         stringmap& rProps, QWidget* pParentWidget)
 {
     for (auto const & [ rKey, rValue ] : rProps)
     {
@@ -936,7 +949,7 @@ void QtBuilder::setCheckButtonProperties(QAbstractButton& rButton, stringmap& rP
         }
     }
 
-    setButtonProperties(rButton, rProps, pParentWidget);
+    setButtonProperties(rButton, rId, rProps, pParentWidget);
 }
 
 void QtBuilder::setDialogProperties(QDialog& rDialog, stringmap& rProps)
@@ -1005,8 +1018,8 @@ void QtBuilder::setLabelProperties(QLabel& rLabel, stringmap& rProps)
     }
 }
 
-void QtBuilder::setMenuButtonProperties(QToolButton& rButton, stringmap& rProps,
-                                        QWidget* pParentWidget)
+void QtBuilder::setMenuButtonProperties(QToolButton& rButton, const OUString& rId,
+                                        stringmap& rProps, QWidget* pParentWidget)
 {
     const OUString sMenu = extractPopupMenu(rProps);
     if (!sMenu.isEmpty())
@@ -1016,7 +1029,7 @@ void QtBuilder::setMenuButtonProperties(QToolButton& rButton, stringmap& rProps,
         rButton.setMenu(pMenu);
     }
 
-    setButtonProperties(rButton, rProps, pParentWidget);
+    setButtonProperties(rButton, rId, rProps, pParentWidget);
     QtInstanceMenuButton::updateToolButtonStyle(rButton);
 }
 

@@ -90,8 +90,9 @@ private:
                                                    Qt::ItemDataRole eDataRole);
     // remove pOldWidget from the widget hierarchy and set (child widget) pNewWidget in its place
     static void replaceWidget(QWidget* pOldWidget, QWidget* pNewWidget);
-    void setButtonProperties(QAbstractButton& rButton, stringmap& rProps, QWidget* pParentWidget);
-    void setCheckButtonProperties(QAbstractButton& rButton, stringmap& rProps,
+    void setButtonProperties(QAbstractButton& rButton, const OUString& rId, stringmap& rProps,
+                             QWidget* pParentWidget);
+    void setCheckButtonProperties(QAbstractButton& rButton, const OUString& rId, stringmap& rProps,
                                   QWidget* pParentWidget);
     static void setDialogProperties(QDialog& rDialog, stringmap& rProps);
     static void setEntryProperties(QLineEdit& rLineEdit, stringmap& rProps);
@@ -99,7 +100,8 @@ private:
     static void setLabelProperties(QLabel& rLabel, stringmap& rProps);
     static void setMessageDialogProperties(QMessageBox& rMessageBox, stringmap& rProps);
     static void setMenuActionGroup(QMenu* pMenu, QAction* pAction, const OUString& rRadioGroupId);
-    void setMenuButtonProperties(QToolButton& rButton, stringmap& rProps, QWidget* pParentWidget);
+    void setMenuButtonProperties(QToolButton& rButton, const OUString& rId, stringmap& rProps,
+                                 QWidget* pParentWidget);
     void setScaleProperties(QSlider& rSlider, stringmap& rProps);
     void setSpinButtonProperties(QDoubleSpinBox& rSpinBox, stringmap& rProps);
     void setTextViewProperties(QPlainTextEdit& rTextEdit, stringmap& rProps);
