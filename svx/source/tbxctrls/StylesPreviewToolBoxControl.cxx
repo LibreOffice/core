@@ -136,31 +136,13 @@ StylesPreviewToolBoxControl::createItemWindow(const css::uno::Reference<css::awt
 {
     css::uno::Reference<css::awt::XWindow> xItemWindow;
 
-    /* TODO
-    if (m_pBuilder)
+    VclPtr<vcl::Window> pParent = VCLUnoHelper::GetWindow(rParent);
+    if (pParent)
     {
         SolarMutexGuard aSolarMutexGuard;
 
-        std::unique_ptr<weld::Container> xWidget(*m_pBuilder);
-
-        xItemWindow
-            = css::uno::Reference<css::awt::XWindow>(new weld::TransportAsXWindow(xWidget.get()));
-
-        m_xWeldBox.reset(new StylesPreviewWindow_Base(std::move(xWidget)));
-        m_pBox = m_xWeldBox.get();
-    }
-    else
-    */
-    {
-        VclPtr<vcl::Window> pParent = VCLUnoHelper::GetWindow(rParent);
-        if (pParent)
-        {
-            SolarMutexGuard aSolarMutexGuard;
-
-            m_xVclBox
-                = VclPtr<StylesPreviewWindow_Impl>::Create(pParent, m_aDefaultStyles, m_xFrame);
-            xItemWindow = VCLUnoHelper::GetInterface(m_xVclBox);
-        }
+        m_xVclBox = VclPtr<StylesPreviewWindow_Impl>::Create(pParent, m_aDefaultStyles, m_xFrame);
+        xItemWindow = VCLUnoHelper::GetInterface(m_xVclBox);
     }
 
     return xItemWindow;
