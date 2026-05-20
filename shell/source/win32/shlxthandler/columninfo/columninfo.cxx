@@ -24,8 +24,9 @@
 #include <utilities.hxx>
 #include <config.hxx>
 
-#include <sal/macros.h>
 #include <malloc.h>
+
+#include <iterator>
 
 namespace /* private */
 {
@@ -39,7 +40,7 @@ namespace /* private */
         {{PSGUID_SUMMARYINFORMATION, PIDSI_PAGECOUNT},VT_BSTR, LVCFMT_LEFT, 30, SHCOLSTATE_TYPE_STR, L"Pagecount", L"Pagecount"}
     };
 
-    size_t ColumnInfoTableSize = SAL_N_ELEMENTS(ColumnInfoTable);
+    size_t ColumnInfoTableSize = std::size(ColumnInfoTable);
 
 bool IsOOFileExtension(wchar_t const * Extension)
 {
@@ -126,7 +127,7 @@ COM_DECLSPEC_NOTHROW HRESULT STDMETHODCALLTYPE CColumnInfo::GetColumnInfo(DWORD 
     psci->scid.pid   = ColumnInfoTable[dwIndex].scid.pid;
     ZeroMemory(psci->wszTitle, sizeof(psci->wszTitle));
     wcsncpy(psci->wszTitle, ColumnInfoTable[dwIndex].wszTitle,
-            SAL_N_ELEMENTS(psci->wszTitle) - 1);
+            std::size(psci->wszTitle) - 1);
 
     return S_OK;
 }
