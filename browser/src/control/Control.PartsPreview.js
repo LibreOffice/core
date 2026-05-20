@@ -604,7 +604,38 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		if (start < 0 || end < start)
 			return;
 
-		this._selectPartRange(start, end, false);
+		var applyRange = () => {
+			this._map.selectPart(start, 1, false);
+			for (var id = start + 1; id <= end; ++id)
+				this._map.selectPart(id, 1, false);
+			this._selectedPartRange = [start, end];
+		};
+
+		this._map.deselectAll();
+
+		if (this._map._docLayer._selectedPart === start) {
+			applyRange();
+			return;
+		}
+
+		// setPart(start) triggers SwitchPage in core, which posts itself
+		// for async execution when a paint is in progress (common under
+		// CI load). SwitchPage deselects every page before selecting the
+		// new current one, so issuing the multi-select before it runs
+		// loses slides start+1..end. Wait for the kit's setpart:
+		// confirmation - it only fires after SwitchPage actually
+		// completes - before extending the selection.
+		var done = false;
+		var onSetPart = function () {
+			if (done) return;
+			done = true;
+			applyRange();
+		};
+		this._map.once('setpart', onSetPart);
+		// Safety net in case setpart: never arrives.
+		setTimeout(onSetPart, 2000);
+
+		this._map.setPart(start);
 	},
 
 	_toggleSectionCollapse: function (sectionIndex) {
