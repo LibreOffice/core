@@ -46,14 +46,14 @@ public:
     /// Safe to call when no instance exists.
     static DRAWINGLAYERCORE_DLLPUBLIC void shutdown();
 
-    void onTeardown();
-
 private:
     struct FlushBatch
     {
         std::vector<rtl::Reference<BufferedDecompositionPrimitive2D>> mRemoved1;
         std::vector<rtl::Reference<BufferedDecompositionGroupPrimitive2D>> mRemoved2;
     };
+
+    void onTeardown();
 
     virtual void SAL_CALL run() override;
     void updateImpl(const BufferedDecompositionPrimitive2D*);
@@ -73,7 +73,6 @@ private:
     std::unordered_map<const BufferedDecompositionGroupPrimitive2D*,
                        unotools::WeakReference<BufferedDecompositionGroupPrimitive2D>>
         maRegistered2;
-    std::mutex maMutex;
     bool mbShutdown{ false };
     std::condition_variable maDelayOrTerminate;
 };

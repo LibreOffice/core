@@ -45,9 +45,12 @@ void BufferedDecompositionPrimitive2D::setBuffered2DDecomposition(Primitive2DRef
     }
     else
     {
-        // decomposition changed, touch
-        maLastAccess = std::chrono::steady_clock::now();
-        BufferedDecompositionFlusher::update(this);
+        if (rNew)
+        {
+            // register decomposition for flushing
+            maLastAccess = std::chrono::steady_clock::now();
+            BufferedDecompositionFlusher::update(this);
+        }
 
         // tdf#158913 need to secure change when flush/multithreading is in use
         std::lock_guard Guard(maCallbackLock);

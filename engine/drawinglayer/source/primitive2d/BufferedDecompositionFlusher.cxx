@@ -18,8 +18,13 @@
  */
 
 #include <sal/config.h>
+#include <sal/log.hxx>
 #include <comphelper/solarmutex.hxx>
 #include <drawinglayer/primitive2d/BufferedDecompositionFlusher.hxx>
+
+#include <atomic>
+#include <mutex>
+#include <thread>
 
 namespace drawinglayer::primitive2d
 {
@@ -46,10 +51,42 @@ namespace drawinglayer::primitive2d
 
 namespace
 {
+// Debug - we should not be re-adding items while we flush.
+bool g_bFlushing;
+// simple code lock for all BufferedDecompositionFlushing
+// that also covers g_pInstance.
+std::mutex g_aMutex;
+std::atomic<std::thread::id> g_aMutexOwner;
 std::unique_ptr<BufferedDecompositionFlusher> g_pInstance;
+
+struct LockedGuard
+{
+    std::unique_lock<std::mutex> lock;
+    LockedGuard()
+        : lock(g_aMutex)
+    {
+        g_aMutexOwner = std::this_thread::get_id();
+    }
+    ~LockedGuard() { g_aMutexOwner = std::thread::id{}; }
+
+    template <class Predicate>
+    bool wait_for(std::condition_variable& cv, std::chrono::seconds d, Predicate pred)
+    {
+        g_aMutexOwner = std::thread::id{};
+        const bool bSignalled = cv.wait_for(lock, d, std::move(pred));
+        g_aMutexOwner = std::this_thread::get_id();
+        return bSignalled;
+    }
+};
+
+// to get call-site details nicely
+#define assertIsLocked()                                                                           \
+    assert(g_aMutexOwner == std::this_thread::get_id()                                             \
+           && "BufferedDecompositionFlusher mutex must be locked by this thread here");
 
 BufferedDecompositionFlusher* getOrCreateInstance()
 {
+    assertIsLocked();
     if (!g_pInstance)
         g_pInstance.reset(new BufferedDecompositionFlusher);
     return g_pInstance.get();
@@ -59,30 +96,46 @@ BufferedDecompositionFlusher* getOrCreateInstance()
 // static
 void BufferedDecompositionFlusher::shutdown()
 {
-    if (!g_pInstance)
-        return;
+    std::unique_ptr<BufferedDecompositionFlusher> pInst;
+    {
+        LockedGuard l;
 
-    g_pInstance->onTeardown();
+        if (!g_pInstance)
+            return;
+
+        g_pInstance->onTeardown();
+    }
+
     g_pInstance->join();
-    g_pInstance->flushPending();
-    g_pInstance.reset();
+
+    {
+        LockedGuard l;
+        pInst = std::move(g_pInstance);
+    }
+
+    pInst->flushPending();
+
+    assert(!g_pInstance && "thread flusher re-created during shutdown");
 }
 
 // static
 void BufferedDecompositionFlusher::update(const BufferedDecompositionPrimitive2D* p)
 {
+    LockedGuard l;
     getOrCreateInstance()->updateImpl(p);
 }
 
 // static
 void BufferedDecompositionFlusher::update(const BufferedDecompositionGroupPrimitive2D* p)
 {
+    LockedGuard l;
     getOrCreateInstance()->updateImpl(p);
 }
 
 // static
 void BufferedDecompositionFlusher::remove(const BufferedDecompositionPrimitive2D* p)
 {
+    LockedGuard l;
     if (g_pInstance)
         g_pInstance->removeImpl(p);
 }
@@ -90,6 +143,7 @@ void BufferedDecompositionFlusher::remove(const BufferedDecompositionPrimitive2D
 // static
 void BufferedDecompositionFlusher::remove(const BufferedDecompositionGroupPrimitive2D* p)
 {
+    LockedGuard l;
     if (g_pInstance)
         g_pInstance->removeImpl(p);
 }
@@ -98,7 +152,9 @@ BufferedDecompositionFlusher::BufferedDecompositionFlusher() { create(); }
 
 void BufferedDecompositionFlusher::updateImpl(const BufferedDecompositionPrimitive2D* p)
 {
-    std::unique_lock l(maMutex);
+    assertIsLocked();
+    // do not re-add object when we clear their buffered primitives
+    assert(!g_bFlushing);
     if (!mbShutdown)
     {
         unotools::WeakReference<BufferedDecompositionPrimitive2D> xRef(
@@ -109,7 +165,9 @@ void BufferedDecompositionFlusher::updateImpl(const BufferedDecompositionPrimiti
 
 void BufferedDecompositionFlusher::updateImpl(const BufferedDecompositionGroupPrimitive2D* p)
 {
-    std::unique_lock l(maMutex);
+    assertIsLocked();
+    // do not re-add an object when we clear their buffered primitives
+    assert(!g_bFlushing);
     if (!mbShutdown)
     {
         unotools::WeakReference<BufferedDecompositionGroupPrimitive2D> xRef(
@@ -120,14 +178,14 @@ void BufferedDecompositionFlusher::updateImpl(const BufferedDecompositionGroupPr
 
 void BufferedDecompositionFlusher::removeImpl(const BufferedDecompositionPrimitive2D* p)
 {
-    std::unique_lock l(maMutex);
+    assertIsLocked();
     if (!mbShutdown)
         maRegistered1.erase(p);
 }
 
 void BufferedDecompositionFlusher::removeImpl(const BufferedDecompositionGroupPrimitive2D* p)
 {
-    std::unique_lock l(maMutex);
+    assertIsLocked();
     if (!mbShutdown)
         maRegistered2.erase(p);
 }
@@ -139,7 +197,7 @@ BufferedDecompositionFlusher::collectRemoved(std::chrono::steady_clock::duration
     FlushBatch aBatch;
     std::vector<rtl::Reference<BasePrimitive2D>> aDelayRelease;
     {
-        std::unique_lock l(maMutex);
+        LockedGuard l;
         for (auto it = maRegistered1.begin(); it != maRegistered1.end();)
         {
             rtl::Reference<BufferedDecompositionPrimitive2D> xPrim = it->second.get();
@@ -187,6 +245,8 @@ void BufferedDecompositionFlusher::flushRemoved(FlushBatch& rBatch)
 {
     // some parts of skia do not take kindly to being accessed from multiple threads
     osl::Guard<comphelper::SolarMutex> aGuard(comphelper::SolarMutex::get());
+    g_bFlushing = true;
+
     for (const auto& xPrim : rBatch.mRemoved1)
         xPrim->setBuffered2DDecomposition(nullptr);
     for (const auto& xPrim : rBatch.mRemoved2)
@@ -195,6 +255,8 @@ void BufferedDecompositionFlusher::flushRemoved(FlushBatch& rBatch)
     // destruction would touch vcl resources.
     rBatch.mRemoved1.clear();
     rBatch.mRemoved2.clear();
+
+    g_bFlushing = false;
 }
 
 void SAL_CALL BufferedDecompositionFlusher::run()
@@ -205,8 +267,8 @@ void SAL_CALL BufferedDecompositionFlusher::run()
         FlushBatch aBatch = collectRemoved(std::chrono::seconds(10));
         flushRemoved(aBatch);
 
-        std::unique_lock l(maMutex);
-        if (mbShutdown || maDelayOrTerminate.wait_for(l, std::chrono::seconds(2), [this] {
+        LockedGuard l;
+        if (mbShutdown || l.wait_for(maDelayOrTerminate, std::chrono::seconds(2), [this] {
                 return mbShutdown;
             }))
             break;
@@ -215,10 +277,8 @@ void SAL_CALL BufferedDecompositionFlusher::run()
 
 void BufferedDecompositionFlusher::onTeardown()
 {
-    {
-        std::unique_lock l2(maMutex);
-        mbShutdown = true;
-    }
+    assertIsLocked();
+    mbShutdown = true;
     maDelayOrTerminate.notify_all();
 }
 
