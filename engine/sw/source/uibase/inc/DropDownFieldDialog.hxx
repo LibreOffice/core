@@ -19,19 +19,22 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_DROPDOWNFIELDDIALOG_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_DROPDOWNFIELDDIALOG_HXX
 
+#include <svl/lstner.hxx>
 #include <vcl/weld.hxx>
 
 class SwDropDownField;
 class SwField;
+class SwFormatField;
 class SwWrtShell;
 
 // Dialog to edit drop down field selection
 namespace sw
 {
-class DropDownFieldDialog final : public weld::GenericDialogController
+class DropDownFieldDialog final : public weld::GenericDialogController, public SfxListener
 {
     SwWrtShell                 &m_rSh;
     SwDropDownField*           m_pDropField;
+    SwFormatField*             m_pFormatField;
 
     weld::Button* m_pPressedButton;
     std::unique_ptr<weld::TreeView> m_xListItemsLB;
@@ -51,6 +54,7 @@ public:
     bool PrevButtonPressed() const;
     bool NextButtonPressed() const;
     void Apply();
+    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
     virtual short run() override
     {
         short nRet = GenericDialogController::run();
