@@ -49,7 +49,7 @@ sub extract_all_tables_from_msidatabase
     $systemcall =~ s/\//\\\\/g;
 
     my $systemcall_output = `$systemcall`;
-    my $returnvalue = $? >> 8;
+    $returnvalue = $? >> 8;
 
     $infoline = "Systemcall: $systemcall\n";
     push( @installer::globals::logfileinfo, $infoline);
