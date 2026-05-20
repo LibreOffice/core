@@ -30,6 +30,9 @@ class SwSpellDialogChildWindow final
 {
     bool            m_bIsGrammarCheckingOn;
     std::unique_ptr<SpellState> m_pSpellState;
+    // Lifetime guard for async dialog callbacks: set to false in destructor
+    // so callbacks that outlive the child window can bail out safely.
+    std::shared_ptr<bool> m_xAlive;
 
     SwWrtShell*     GetWrtShell_Impl();
     void            MakeTextSelection_Impl(SwWrtShell& rSh, ShellMode eSelMode);

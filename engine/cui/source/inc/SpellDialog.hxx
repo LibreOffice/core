@@ -241,6 +241,7 @@ public:
     virtual void    Close() override;
 
     void            InvalidateDialog();
+    void            Resume();
 };
 
 } //namespace svx

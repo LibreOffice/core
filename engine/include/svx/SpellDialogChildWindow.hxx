@@ -99,6 +99,11 @@ protected:
         a "Resume" button that initiates a reinitialization.
      */
     void InvalidateSpellDialog();
+    /** Re-trigger the spelling continuation flow on the underlying dialog.
+        Used by derived classes after an asynchronous "continue from start"
+        prompt has been answered, so the dialog can fetch the next sentence.
+     */
+    void Resume();
     /** Notifies the ChildWindow about the get focus event. The ChildWindow should now check if
         the spelling dialog should be set to the 'Resume' state by calling InvalidateSpellDialog()
      */

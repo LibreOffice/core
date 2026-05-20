@@ -1026,6 +1026,11 @@ void SpellDialog::Deactivate()
     ToplevelFocusChanged();
 }
 
+void SpellDialog::Resume()
+{
+    SpellContinue_Impl(nullptr);
+}
+
 void SpellDialog::InvalidateDialog()
 {
     if( bFocusLocked )

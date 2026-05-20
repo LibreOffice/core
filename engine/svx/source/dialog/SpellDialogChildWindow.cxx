@@ -62,6 +62,12 @@ void SpellDialogChildWindow::InvalidateSpellDialog()
         m_xAbstractSpellDialog->InvalidateDialog();
 }
 
+void SpellDialogChildWindow::Resume()
+{
+    if (m_xAbstractSpellDialog)
+        m_xAbstractSpellDialog->Resume();
+}
+
 bool SpellDialogChildWindow::HasAutoCorrection()
 {
     return false;

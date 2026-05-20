@@ -77,6 +77,7 @@ protected:
 public:
     virtual void Initialize() = 0;
     virtual void InvalidateDialog() = 0;
+    virtual void Resume() = 0;
     virtual std::shared_ptr<SfxDialogController> GetController() = 0;
     virtual SfxBindings& GetBindings() = 0;
 };

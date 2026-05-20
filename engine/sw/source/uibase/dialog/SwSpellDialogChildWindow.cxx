@@ -181,12 +181,14 @@ SwSpellDialogChildWindow::SwSpellDialogChildWindow (
         _pParent, nId, pBindings)
     , m_bIsGrammarCheckingOn(false)
     , m_pSpellState(new SpellState)
+    , m_xAlive(std::make_shared<bool>(true))
 {
     SvtLinguConfig().GetProperty( UPN_IS_GRAMMAR_INTERACTIVE ) >>= m_bIsGrammarCheckingOn;
 }
 
 SwSpellDialogChildWindow::~SwSpellDialogChildWindow ()
 {
+    *m_xAlive = false;
     SwWrtShell* pWrtShell = GetWrtShell_Impl();
     if(!m_pSpellState->m_bInitialCall && pWrtShell)
         pWrtShell->SpellEnd();
@@ -406,7 +408,6 @@ The code below would only be part of the solution.
         }
         // now only the rest of the body text can be spelled -
         // if the spelling started inside of the body
-        bool bCloseMessage = true;
         if(aRet.empty() && !m_pSpellState->m_bStartedInSelection)
         {
             OSL_ENSURE(m_pSpellState->m_bDrawingsSpelled &&
@@ -414,45 +415,76 @@ The code below would only be part of the solution.
                         "not all parts of the document are already spelled");
             if( m_pSpellState->m_xStartRange.is() && !bNoDictionaryAvailable )
             {
+                // Run async: a modal run() lets the kit destroy this child
+                // window during the message loop, which made
+                // LockFocusNotification crash on a dangling this. Return
+                // empty now; on "Yes", the callback restarts spelling and
+                // calls Resume() to pump the dialog forward.
                 LockFocusNotification( true );
-                std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetController()->getDialog(),
-                                                                                        VclMessageType::Question, VclButtonsType::YesNo, SwResId(STR_QUERY_SPELL_CONTINUE)));
-                sal_uInt16 nRet = xBox->run();
-                if (RET_YES == nRet)
+                std::shared_ptr<weld::MessageDialog> xBox(
+                    Application::CreateMessageDialog(GetController()->getDialog(),
+                                                     VclMessageType::Question,
+                                                     VclButtonsType::YesNo,
+                                                     SwResId(STR_QUERY_SPELL_CONTINUE)));
+                std::shared_ptr<bool> xAlive = m_xAlive;
+                xBox->runAsync(xBox, [this, xBox, xAlive](sal_Int32 nResult)
                 {
-                    SwUnoInternalPaM aPam(*pWrtShell->GetDoc());
-                    if (::sw::XTextRangeToSwPaM(aPam,
-                                m_pSpellState->m_xStartRange))
+                    if (!*xAlive)
+                        return;
+                    if (RET_YES == nResult)
                     {
-                        pWrtShell->SetSelection(aPam);
-                        pWrtShell->SpellStart(SwDocPositions::Start, SwDocPositions::Curr, SwDocPositions::Start);
-                        if(!pWrtShell->SpellSentence(aRet, m_bIsGrammarCheckingOn))
-                            pWrtShell->SpellEnd();
+                        SwWrtShell* pAsyncWrtShell = GetWrtShell_Impl();
+                        if (pAsyncWrtShell && m_pSpellState->m_xStartRange.is())
+                        {
+                            SwUnoInternalPaM aPam(*pAsyncWrtShell->GetDoc());
+                            if (::sw::XTextRangeToSwPaM(aPam,
+                                        m_pSpellState->m_xStartRange))
+                            {
+                                pAsyncWrtShell->SetSelection(aPam);
+                                pAsyncWrtShell->SpellStart(SwDocPositions::Start,
+                                                           SwDocPositions::Curr,
+                                                           SwDocPositions::Start);
+                            }
+                        }
+                        m_pSpellState->m_xStartRange = nullptr;
+                        LockFocusNotification(false);
+                        // take care that the now valid selection is stored
+                        LoseFocus();
+                        Resume();
                     }
-                    m_pSpellState->m_xStartRange = nullptr;
-                    LockFocusNotification( false );
-                }
-                else
-                    bCloseMessage = false; // no closing message if a wrap around has been denied
+                    else
+                    {
+                        // no closing message if a wrap around has been denied
+                        LockFocusNotification(false);
+                    }
+                });
+                return aRet;
             }
         }
 
         lcl_updateSpellStateCursorPos(*m_pSpellState, *pWrtShell);
 
-        if( aRet.empty() && bCloseMessage )
+        if( aRet.empty() )
         {
             LockFocusNotification( true );
             OUString sInfo( SwResId( bNoDictionaryAvailable ? STR_DICTIONARY_UNAVAILABLE : STR_SPELLING_COMPLETED ) );
-            auto xSpellController = GetController();
+            std::shared_ptr<SfxDialogController> xSpellController = GetController();
             // #i84610#
-            std::unique_ptr<weld::MessageDialog> xBox(
+            std::shared_ptr<weld::MessageDialog> xBox(
                 Application::CreateMessageDialog( xSpellController->getDialog(),
                                                   VclMessageType::Info,
                                                   VclButtonsType::Ok,
                                                   sInfo ) );
-            xBox->run();
-            LockFocusNotification( false );
-            xSpellController->getDialog()->grab_focus();
+            std::shared_ptr<bool> xAlive = m_xAlive;
+            xBox->runAsync(xBox, [this, xBox, xAlive, xSpellController](sal_Int32 /*nResult*/)
+            {
+                if (!*xAlive)
+                    return;
+                LockFocusNotification(false);
+                // take care that the now valid selection is stored
+                LoseFocus();
+                xSpellController->getDialog()->grab_focus();
+            });
         }
     }
     return aRet;
