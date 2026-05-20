@@ -1585,19 +1585,17 @@ void SortedResultSet::ResortModified( EventList* pList )
 
 void SortedResultSet::ResortNew( EventList* pList )
 {
-    sal_IntPtr            i, nNewPos, nVal;
-
     try {
-        for ( i = mnLastSort; i<static_cast<sal_IntPtr>(maS2O.Count()); i++ )
+        for (sal_IntPtr i = mnLastSort; i < static_cast<sal_IntPtr>(maS2O.Count()); i++)
         {
             SortListData *const pData = m_ModList[i];
-            nNewPos = FindPos( pData, 1, mnLastSort );
+            const sal_IntPtr nNewPos = FindPos(pData, 1, mnLastSort);
             if ( nNewPos != i )
             {
                 maS2O.Move( static_cast<sal_uInt32>(i), nNewPos );
                 for (size_t j=1; j< m_O2S.size(); ++j)
                 {
-                    nVal = m_O2S[j];
+                    const sal_IntPtr nVal = m_O2S[j];
                     if ( nVal >= nNewPos )
                         m_O2S[j] = nVal + 1;
                 }
