@@ -343,10 +343,6 @@ html[data-theme='dark'] .savemodified.unotoolbutton:not(.notebookbar) .unobutton
 	height: var(--btn-img-size);
 }
 
-.has-dropdown--color.notebookbar {
-	height: var(--btn-size) !important;
-}
-
 .unotoolbutton.notebookbar .unolabel {
 	font-size: var(--header-font-size);
 	font-family: var(--cool-font);
