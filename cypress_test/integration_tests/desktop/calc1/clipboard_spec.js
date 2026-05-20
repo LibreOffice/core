@@ -194,7 +194,12 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Calc clipboard tests.', fu
 		helper.setDummyClipboardForCopy();
 
 		calcHelper.dblClickOnFirstCell();
-		cy.cGet('.ui-custom-textarea-text-layer').should('not.have.text', '');
+		// Wait for the inline cell editor to be active (blinking cursor over
+		// the cell). The formula bar shares .ui-custom-textarea-text-layer
+		// with the cell editor, so the previous assertion could pass while
+		// the cell was not yet in edit mode and the subsequent keystrokes
+		// would then move the cell selection instead of editing A1.
+		cy.cGet('.cursor-overlay .blinking-cursor').should('be.visible');
 
 		let url = 'http://www.example.com/';
 		helper.typeIntoDocument('{rightArrow}{backspace}' + url + '{enter}');
@@ -207,6 +212,11 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Calc clipboard tests.', fu
 
 		calcHelper.clickOnFirstCell();
 		cy.cGet('.hyperlink-pop-up-container').should('be.visible');
+		// Confirm the popup belongs to our URL (not a stale popup left over
+		// from an earlier click) and that the kit considers A1 the current
+		// selection: the formula bar reflects the active cell's value.
+		cy.cGet('#hyperlink-pop-up').should('have.text', url);
+		cy.cGet('#sc_input_window.formulabar .ui-custom-textarea-text-layer').should('have.text', url);
 
 		helper.processToIdle(this.win);
 		cy.cGet('#hyperlink-pop-up-copy').click();
