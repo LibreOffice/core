@@ -555,7 +555,7 @@ bool SwDBManager::Merge( const SwMergeDescriptor& rMergeDesc )
         case DBManagerOptions::MailMergeFile:
         case DBManagerOptions::MailMergeShell:
             // save files and send them as e-Mail if required
-            bRet = MergeMailFiles(pWorkShell, rMergeDesc);
+            bRet = MergeMailFiles(*pWorkShell, rMergeDesc);
             break;
 
         default:
@@ -1051,7 +1051,7 @@ public:
  * Please have a look at the README in the same directory, before you make
  * larger changes in this function!
  */
-bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
+bool SwDBManager::MergeMailFiles(SwWrtShell& rSourceShell,
                                  const SwMergeDescriptor& rMergeDescriptor)
 {
     // deconstruct mail merge type for better readability.
@@ -1062,7 +1062,8 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
     const bool bMT_FILE = rMergeDescriptor.eMergeType == DBManagerOptions::MailMergeFile;
 
     //check if the doc is synchronized and contains at least one linked section
-    const bool bSynchronizedDoc = pSourceShell->IsLabelDoc() && pSourceShell->GetSectionFormatCount() > 1;
+    const bool bSynchronizedDoc
+        = rSourceShell.IsLabelDoc() && rSourceShell.GetSectionFormatCount() > 1;
     const bool bNeedsTempFiles = ( bMT_EMAIL || bMT_FILE );
     const bool bIsMergeSilent = IsMergeSilent();
 
@@ -1149,7 +1150,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
         }
     }
 
-    SwDocShell  *pSourceDocSh = pSourceShell->GetView().GetDocShell();
+    SwDocShell* pSourceDocSh = rSourceShell.GetView().GetDocShell();
 
     // setup the output format
     std::shared_ptr<const SfxFilter> pStoreToFilter = SwIoSystem::GetFileFilter(
@@ -1192,16 +1193,16 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
     std::shared_ptr<weld::GenericDialogController> xProgressDlg;
 
     comphelper::ScopeGuard restoreInMailMerge(
-        [pSourceShell, val = pSourceShell->GetDoc()->IsInMailMerge()]
-        { pSourceShell->GetDoc()->SetInMailMerge(val); });
-    pSourceShell->GetDoc()->SetInMailMerge(true);
+        [&rSourceShell, val = rSourceShell.GetDoc()->IsInMailMerge()]
+        { rSourceShell.GetDoc()->SetInMailMerge(val); });
+    rSourceShell.GetDoc()->SetInMailMerge(true);
     try
     {
         vcl::Window *pSourceWindow = nullptr;
         if( !bIsMergeSilent )
         {
             // construct the process dialog
-            pSourceWindow = &pSourceShell->GetView().GetEditWin();
+            pSourceWindow = &rSourceShell.GetView().GetEditWin();
             if (!bMT_PRINTER)
                 xProgressDlg = std::make_shared<CreateMonitor>(pSourceWindow->GetFrameWeld());
             else
@@ -1222,9 +1223,9 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
         if( bCreateSingleFile && !pTargetView )
         {
             // create a target docshell to put the merged document into
-            xTargetDocShell = lcl_CreateWorkingDocument( WorkingDocType::TARGET,
-                *pSourceShell, bMT_SHELL ? pSourceWindow : nullptr,
-                nullptr, &pTargetView, &pTargetShell, &pTargetDoc );
+            xTargetDocShell = lcl_CreateWorkingDocument(
+                WorkingDocType::TARGET, rSourceShell, bMT_SHELL ? pSourceWindow : nullptr, nullptr,
+                &pTargetView, &pTargetShell, &pTargetDoc);
 
             if (nMaxDumpDocs)
                 lcl_SaveDebugDoc( xTargetDocShell.get(), "MergeDoc" );
@@ -1242,8 +1243,8 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
         if( bCreateSingleFile )
         {
             // determine the page style and number used at the start of the source document
-            pSourceShell->SttEndDoc(true);
-            nStartingPageNo = pSourceShell->GetVirtPageNum();
+            rSourceShell.SttEndDoc(true);
+            nStartingPageNo = rSourceShell.GetVirtPageNum();
         }
 
         // Progress, to prohibit KeyInputs
@@ -1274,8 +1275,8 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
             // Synchronized docs don't auto-advance the record set, but there is a
             // "security" check, which will always advance the record set, if there
             // is no "next record" field in a synchronized doc => nRecordPerDoc > 0
-            sal_Int32 nRecordPerDoc = pSourceShell->GetDoc()
-                    ->getIDocumentFieldsAccess().GetRecordsPerDocument();
+            sal_Int32 nRecordPerDoc
+                = rSourceShell.GetDoc()->getIDocumentFieldsAccess().GetRecordsPerDocument();
             if ( bSynchronizedDoc && (nRecordPerDoc > 1) )
                 --nRecordPerDoc;
             assert( nRecordPerDoc > 0 );
@@ -1381,9 +1382,9 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                 {
                     assert( !xWorkDocSh.Is());
                     pWorkDocOrigDBManager = this;
-                    xWorkDocSh = lcl_CreateWorkingDocument( WorkingDocType::COPY,
-                        *pSourceShell, nullptr, &pWorkDocOrigDBManager,
-                        &pWorkView, &pWorkShell, &pWorkDoc );
+                    xWorkDocSh = lcl_CreateWorkingDocument(WorkingDocType::COPY, rSourceShell,
+                                                           nullptr, &pWorkDocOrigDBManager,
+                                                           &pWorkView, &pWorkShell, &pWorkDoc);
                     if ( (nMaxDumpDocs < 0) || (nDocNo <= nMaxDumpDocs) )
                         lcl_SaveDebugDoc( xWorkDocSh, "WorkDoc", nDocNo );
 
@@ -1638,7 +1639,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
             pViewFrame = SfxViewFrame::GetNext(*pViewFrame, pSourceDocSh);
         }
 
-        SwModule::get()->SetView(&pSourceShell->GetView());
+        SwModule::get()->SetView(&rSourceShell.GetView());
 
         if( xMailDispatcher.is() )
         {

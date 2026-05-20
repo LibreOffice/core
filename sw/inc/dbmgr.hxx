@@ -279,8 +279,7 @@ class SwDBManager
     void ImportDBEntry(SwWrtShell* pSh);
 
     /// Run the mail merge for defined modes, except DBManagerOptions::MailMerge
-    bool MergeMailFiles( SwWrtShell* pSh,
-                                        const SwMergeDescriptor& rMergeDescriptor );
+    bool MergeMailFiles(SwWrtShell& rSourceShell, const SwMergeDescriptor& rMergeDescriptor);
 
     bool ToNextMergeRecord();
     bool IsValidMergeRecord() const;
