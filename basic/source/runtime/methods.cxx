@@ -2870,36 +2870,32 @@ void SbRtl_EOF(StarBASIC *, SbxArray & rPar, bool)
 {
     // No changes for UCB
     if (rPar.Count() != 2)
+        return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+
+    sal_Int16 nChannel = rPar.Get(1)->GetInteger();
+    SbiIoSystem* pIO = GetSbData()->pInst->GetIoSystem();
+    SbiStream* pSbStrm = pIO->GetStream( nChannel );
+    if ( !pSbStrm )
     {
-        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+        return StarBASIC::Error( ERRCODE_BASIC_BAD_CHANNEL );
+    }
+    bool beof;
+    SvStream* pSvStrm = pSbStrm->GetStrm();
+    if ( pSbStrm->IsText() )
+    {
+        char cBla;
+        (*pSvStrm).ReadChar( cBla ); // can we read another character?
+        beof = pSvStrm->eof();
+        if ( !beof )
+        {
+            pSvStrm->SeekRel( -1 );
+        }
     }
     else
     {
-        sal_Int16 nChannel = rPar.Get(1)->GetInteger();
-        SbiIoSystem* pIO = GetSbData()->pInst->GetIoSystem();
-        SbiStream* pSbStrm = pIO->GetStream( nChannel );
-        if ( !pSbStrm )
-        {
-            return StarBASIC::Error( ERRCODE_BASIC_BAD_CHANNEL );
-        }
-        bool beof;
-        SvStream* pSvStrm = pSbStrm->GetStrm();
-        if ( pSbStrm->IsText() )
-        {
-            char cBla;
-            (*pSvStrm).ReadChar( cBla ); // can we read another character?
-            beof = pSvStrm->eof();
-            if ( !beof )
-            {
-                pSvStrm->SeekRel( -1 );
-            }
-        }
-        else
-        {
-            beof = pSvStrm->eof();  // for binary data!
-        }
-        rPar.Get(0)->PutBool(beof);
+        beof = pSvStrm->eof();  // for binary data!
     }
+    rPar.Get(0)->PutBool(beof);
 }
 
 void SbRtl_FileAttr(StarBASIC *, SbxArray & rPar, bool)
