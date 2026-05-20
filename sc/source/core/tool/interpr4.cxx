@@ -3598,6 +3598,9 @@ void ScInterpreter::ScMacro()
         }
     }
 
+    // prevent cycles from leaking memory
+    refPar->Clear();
+
     if (bVolatileMacro && meVolatileType == NOT_VOLATILE)
         meVolatileType = VOLATILE_MACRO;
 #endif
