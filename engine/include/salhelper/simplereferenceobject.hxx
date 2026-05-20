@@ -32,6 +32,9 @@ namespace salhelper {
 
     Classes that want to implement a reference-counting mechanism based on the
     acquire()/release() interface should derive from this class.
+
+    Arrays of reference-counted objects are of no use, so it seems best to simply
+    define operators new[] and delete[] as deleted.
  */
 class SALHELPER_DLLPUBLIC SimpleReferenceObject
 {
@@ -80,6 +83,14 @@ private:
     /** not implemented
      */
     void operator =(SimpleReferenceObject) SAL_DELETED_FUNCTION;
+
+    /** see general class documentation
+     */
+    static void * operator new[](std::size_t) SAL_DELETED_FUNCTION;
+
+    /** see general class documentation
+     */
+    static void operator delete[](void * pPtr) SAL_DELETED_FUNCTION;
 };
 
 }
