@@ -22,6 +22,7 @@
 #include <sfx2/dllapi.h>
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/Entry.hxx>
+#include <vcl/weld/LevelBar.hxx>
 #include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weld.hxx>
 #include <o3tl/typed_flags_set.hxx>

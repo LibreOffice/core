@@ -9,24 +9,18 @@
 
 #pragma once
 
-#include <sal/config.h>
+#include <vcl/dllapi.h>
+#include <vcl/weld/Widget.hxx>
 
-#include "QtInstanceWidget.hxx"
-
-#include <vcl/weld/LevelBar.hxx>
-
-#include <QtWidgets/QProgressBar>
-
-class QtInstanceLevelBar : public QtInstanceWidget, public virtual weld::LevelBar
+namespace weld
 {
-    Q_OBJECT
-
-    QProgressBar* m_pProgressBar;
-
+class VCL_DLLPUBLIC LevelBar : virtual public Widget
+{
 public:
-    QtInstanceLevelBar(QProgressBar* pProgressBar);
-
-    virtual void set_percentage(double fPercentage) override;
+    /// Sets LevelBar fill percentage.
+    /// @param fPercentage bar's fill percentage, [0.0, 100.0]
+    virtual void set_percentage(double fPercentage) = 0;
 };
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

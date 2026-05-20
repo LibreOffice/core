@@ -362,14 +362,6 @@ public:
     virtual void set_text(const OUString& rText) = 0;
 };
 
-class VCL_DLLPUBLIC LevelBar : virtual public Widget
-{
-public:
-    /// Sets LevelBar fill percentage.
-    /// @param fPercentage bar's fill percentage, [0.0, 100.0]
-    virtual void set_percentage(double fPercentage) = 0;
-};
-
 class VCL_DLLPUBLIC Image : virtual public Widget
 {
 public:
