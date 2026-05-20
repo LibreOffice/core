@@ -273,7 +273,7 @@ class SwDBManager
     SwDSParam*          FindDSConnection(const OUString& rSource, bool bCreate);
 
     /// Insert data record as text into document.
-    void ImportFromConnection( SwWrtShell* pSh);
+    void ImportFromConnection(SwWrtShell& rSh);
 
     /// Insert a single data record as text into document.
     void ImportDBEntry(SwWrtShell* pSh);
