@@ -939,7 +939,7 @@ TEMPLATE_MANIFEST = $(DIST_FOLDER)/templates/templates.js
 
 $(TYPESCRIPT_JS_DIR)/%.js: $(srcdir)/%.ts
 	@mkdir -p $(dir $@)
-	$(QUIET_TSC) $(builddir)/node_modules/typescript/bin/tsc --outFile $@ $<
+	$(QUIET_TSC) $(NODE) $(builddir)/node_modules/typescript/bin/tsc --outFile $@ $<
 
 build-cool: \
 	$(COOL_L10N_DST) \
@@ -1142,8 +1142,8 @@ SourceMap=--allowJs true --sourceMap true --inlineSources true
 endif
 
 tscompile.done: $(COOL_JS_SRC) $(COOL_TS_SRC) $(COOL_TSX_SRC)
-	$(QUIET_TSC) $(builddir)/node_modules/typescript/bin/tsc --typeRoots $(builddir)/node_modules/@types --outDir $(DIST_FOLDER)/src --rootDir $(srcdir)/src --checkJs false --project $(srcdir)/tsconfig.json $(SourceMap)
-	$(QUIET_TSC) $(builddir)/node_modules/.bin/tsc-strict --typeRoots $(builddir)/node_modules/@types --outDir $(DIST_FOLDER)/src --rootDir $(srcdir)/src --checkJs false --project $(srcdir)/tsconfig.json $(SourceMap)
+	$(QUIET_TSC) $(NODE) $(builddir)/node_modules/typescript/bin/tsc --typeRoots $(builddir)/node_modules/@types --outDir $(DIST_FOLDER)/src --rootDir $(srcdir)/src --checkJs false --project $(srcdir)/tsconfig.json $(SourceMap)
+	$(QUIET_TSC) $(NODE) $(builddir)/node_modules/.bin/tsc-strict --typeRoots $(builddir)/node_modules/@types --outDir $(DIST_FOLDER)/src --rootDir $(srcdir)/src --checkJs false --project $(srcdir)/tsconfig.json $(SourceMap)
 	@touch $@
 
 $(COOL_TS_JS_DST): tscompile.done
