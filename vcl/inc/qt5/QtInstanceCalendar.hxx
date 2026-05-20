@@ -13,6 +13,8 @@
 
 #include "QtInstanceWidget.hxx"
 
+#include <vcl/weld/Calendar.hxx>
+
 #include <QtWidgets/QCalendarWidget>
 
 class QtInstanceCalendar : public QtInstanceWidget, public virtual weld::Calendar

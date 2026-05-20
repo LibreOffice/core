@@ -25,6 +25,7 @@
 #include <svtools/toolbarmenu.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/metric.hxx>
+#include <vcl/weld/Calendar.hxx>
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/MenuButton.hxx>
 #include <vcl/weld/weld.hxx>

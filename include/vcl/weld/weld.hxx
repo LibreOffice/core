@@ -40,7 +40,6 @@ enum class PointerStyle;
 enum class VclSizeGroupMode;
 class Color;
 class CommandEvent;
-class Date;
 class Formatter;
 class InputContext;
 class KeyEvent;
@@ -377,36 +376,6 @@ public:
     virtual void set_from_icon_name(const OUString& rIconName) = 0;
     virtual void set_image(VirtualDevice* pDevice) = 0;
     virtual void set_image(const css::uno::Reference<css::graphic::XGraphic>& rImage) = 0;
-};
-
-class VCL_DLLPUBLIC Calendar : virtual public Widget
-{
-    friend class ::LOKTrigger;
-
-    Link<Calendar&, void> m_aSelectedHdl;
-    Link<Calendar&, void> m_aActivatedHdl;
-
-protected:
-    void signal_selected()
-    {
-        if (notify_events_disabled())
-            return;
-        m_aSelectedHdl.Call(*this);
-    }
-
-    void signal_activated()
-    {
-        if (notify_events_disabled())
-            return;
-        m_aActivatedHdl.Call(*this);
-    }
-
-public:
-    void connect_selected(const Link<Calendar&, void>& rLink) { m_aSelectedHdl = rLink; }
-    void connect_activated(const Link<Calendar&, void>& rLink) { m_aActivatedHdl = rLink; }
-
-    virtual void set_date(const Date& rDate) = 0;
-    virtual Date get_date() const = 0;
 };
 
 enum class LabelType

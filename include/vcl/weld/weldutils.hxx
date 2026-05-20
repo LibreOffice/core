@@ -21,6 +21,7 @@
 #include <vcl/weld/weld.hxx>
 
 class CalendarWrapper;
+class Date;
 
 enum class ExtDateFieldFormat;
 enum class ExtTimeFieldFormat;
