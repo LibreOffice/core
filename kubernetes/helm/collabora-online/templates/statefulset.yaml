@@ -64,7 +64,7 @@ spec:
             httpGet:
               path: /
               port: {{ .Values.deployment.containerPort }}
-              scheme: HTTP
+              scheme: {{ .Values.probes.scheme | default "HTTP" | upper }}
             failureThreshold: {{ .Values.probes.startup.failureThreshold }}
             periodSeconds: {{ .Values.probes.startup.periodSeconds }}
           {{- end }}
@@ -73,7 +73,7 @@ spec:
             httpGet:
               path: /
               port: {{ .Values.deployment.containerPort }}
-              scheme: HTTP
+              scheme: {{ .Values.probes.scheme | default "HTTP" | upper }}
             initialDelaySeconds: {{ .Values.probes.liveness.initialDelaySeconds }}
             periodSeconds: {{ .Values.probes.liveness.periodSeconds }}
             timeoutSeconds: {{ .Values.probes.liveness.timeoutSeconds }}
@@ -85,7 +85,7 @@ spec:
             httpGet:
               path: /
               port: {{ .Values.deployment.containerPort }}
-              scheme: HTTP
+              scheme: {{ .Values.probes.scheme | default "HTTP" | upper }}
             initialDelaySeconds: {{ .Values.probes.readiness.initialDelaySeconds }}
             periodSeconds: {{ .Values.probes.readiness.periodSeconds }}
             timeoutSeconds: {{ .Values.probes.readiness.timeoutSeconds }}

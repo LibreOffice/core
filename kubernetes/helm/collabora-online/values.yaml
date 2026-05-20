@@ -197,6 +197,10 @@ deployment:
     securityContext: {}
 
 probes:
+  # Scheme used by the kubelet to reach the probe endpoint.
+  # Set to HTTPS when SSL is terminated directly at coolwsd (e.g. via
+  # extra_params: --o:ssl.enable=true).
+  scheme: HTTP
   startup:
     enabled: true
     failureThreshold: 30
@@ -495,6 +499,9 @@ dynamicConfig:
   containerPort: 80
 
   probes:
+    # Scheme used by the kubelet to reach the dynamicConfig probe endpoint.
+    # Set to HTTPS when the dynamicConfig pod terminates SSL itself.
+    scheme: HTTP
     startup:
       enabled: true
       failureThreshold: 30

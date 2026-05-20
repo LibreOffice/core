@@ -45,7 +45,7 @@ spec:
             httpGet:
               path: /
               port: {{ .Values.dynamicConfig.containerPort }}
-              scheme: HTTP
+              scheme: {{ .Values.dynamicConfig.probes.scheme | default "HTTP" | upper }}
             failureThreshold: {{ .Values.dynamicConfig.probes.startup.failureThreshold }}
             periodSeconds: {{ .Values.dynamicConfig.probes.startup.periodSeconds }}
           {{- end }}
@@ -54,7 +54,7 @@ spec:
             httpGet:
               path: /
               port: {{ .Values.dynamicConfig.containerPort }}
-              scheme: HTTP
+              scheme: {{ .Values.dynamicConfig.probes.scheme | default "HTTP" | upper }}
             initialDelaySeconds: {{ .Values.dynamicConfig.probes.liveness.initialDelaySeconds }}
             periodSeconds: {{ .Values.dynamicConfig.probes.liveness.periodSeconds }}
             timeoutSeconds: {{ .Values.dynamicConfig.probes.liveness.timeoutSeconds }}
@@ -66,7 +66,7 @@ spec:
             httpGet:
               path: /
               port: {{ .Values.dynamicConfig.containerPort }}
-              scheme: HTTP
+              scheme: {{ .Values.dynamicConfig.probes.scheme | default "HTTP" | upper }}
             initialDelaySeconds: {{ .Values.dynamicConfig.probes.readiness.initialDelaySeconds }}
             periodSeconds: {{ .Values.dynamicConfig.probes.readiness.periodSeconds }}
             timeoutSeconds: {{ .Values.dynamicConfig.probes.readiness.timeoutSeconds }}
