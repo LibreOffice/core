@@ -394,7 +394,7 @@ label.notebookbar.ui-checkbox-label {
 .unotoolbutton[disabled]:not(.unospan-shortcutstoolbox),
 .mobile-wizard-widebutton.disabled,
 .locking-disabled {
-	opacity: 0.65;
+	opacity: var(--opacity-icon-disabled);
 	cursor: not-allowed;
 }
 
