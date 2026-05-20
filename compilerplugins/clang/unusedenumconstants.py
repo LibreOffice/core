@@ -184,7 +184,6 @@ def is_ignore(srcLoc):
          "vcl/unx/gtk/xid_fullscreen_on_all_monitors.c",
          "vcl/unx/gtk/salnativewidgets-gtk.cxx",
          "sc/inc/callform.hxx", # ParamType
-         "include/i18nlangtag/applelangid.hxx", # AppleLanguageId
          "connectivity/source/drivers/firebird/Util.hxx", # firebird::BlobSubtype
          "include/xmloff/xmltoken.hxx",
          "sw/source/writerfilter/rtftok/rtfcontrolwords.hxx",

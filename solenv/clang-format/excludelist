@@ -5050,7 +5050,6 @@ include/framework/undomanagerhelper.hxx
 include/helpcompiler/HelpIndexer.hxx
 include/helpcompiler/HelpSearch.hxx
 include/helpcompiler/compilehelp.hxx
-include/i18nlangtag/applelangid.hxx
 include/i18nlangtag/lang.h
 include/i18nlangtag/languagetag.hxx
 include/i18nlangtag/languagetagicu.hxx
