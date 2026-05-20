@@ -34,12 +34,16 @@ ARG nobrand
 # UTF-8 locale is needed to handle file names with non-ASCII characters
 ENV LC_CTYPE C.UTF-8
 
+# Collabora apt signing keys (release for stable repos, snapshot for repos-snapshot)
+ADD --chmod=644 https://www.collaboraoffice.com/downloads/gpg/collaboraonline-release-keyring.gpg /usr/share/keyrings/
+ADD --chmod=644 https://www.collaboraoffice.com/downloads/gpg/collaboraonline-snapshot-keyring.gpg /usr/share/keyrings/
+
 # Mount secret URL part (for type 'cool') securely
 RUN --mount=type=secret,id=secret_key \
 # Update repos before installing packages
     apt-get update && \
 # Install dependencies of installer of Collabora Online
-    apt-get -y install cpio tzdata libcap2-bin apt-transport-https gnupg2 ca-certificates curl libnss-wrapper && \
+    apt-get -y install tzdata libcap2-bin ca-certificates libnss-wrapper && \
 # Setup Collabora repo
     repourl="https://collaboraoffice.com/${repo:-repos}/CollaboraOnline/"; \
     secret_key=$(cat /run/secrets/secret_key); \
@@ -53,14 +57,11 @@ RUN --mount=type=secret,id=secret_key \
         echo "Based on the provided build arguments Collabora Online Development Edition will be used."; \
         repourl="${repourl}26.04-CODE/CODE-deb/"; \
     fi && \
-    echo "deb [signed-by=/usr/share/keyrings/collaboraonline-release-keyring.gpg] ${repourl} /" > /etc/apt/sources.list.d/collabora.list && \
-# Download Collabora package signing key
+    keyring=collaboraonline-release-keyring; \
     if [ "$repo" = "repos-snapshot" ]; then \
-        curl https://www.collaboraoffice.com/downloads/gpg/collaboraonline-snapshot-keyring.gpg --output /usr/share/keyrings/collaboraonline-snapshot-keyring.gpg; \
-        sed -i "s/collaboraonline-release-keyring/collaboraonline-snapshot-keyring/" /etc/apt/sources.list.d/collabora.list; \
-    else \
-        curl https://www.collaboraoffice.com/downloads/gpg/collaboraonline-release-keyring.gpg --output /usr/share/keyrings/collaboraonline-release-keyring.gpg; \
+        keyring=collaboraonline-snapshot-keyring; \
     fi && \
+    echo "deb [signed-by=/usr/share/keyrings/${keyring}.gpg] ${repourl} /" > /etc/apt/sources.list.d/collabora.list && \
 # Update repos again
     apt-get update && \
 # Install Collabora Online (Collabora Office is a dependency)
