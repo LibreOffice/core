@@ -65,6 +65,9 @@ CPPUNIT_TEST_FIXTURE(NamedSheetViewsImportExportTest, testRoundtripXLSX)
     // View1: nsvFilter sort rule on column 2, no column filters
     OString sView1 = "/xnsv:namedSheetViews/xnsv:namedSheetView[1]/xnsv:nsvFilter"_ostr;
     assertXPath(pNsv, sView1, 1);
+    // tableId="0" marks the filter as bound to the worksheet auto-filter, not a
+    // formal <table>.
+    assertXPath(pNsv, sView1, "tableId", u"0");
     assertXPath(pNsv, sView1 + "/xnsv:columnFilter", 0);
     assertXPath(pNsv, sView1 + "/xnsv:sortRules/xnsv:sortRule", 1);
     assertXPath(pNsv, sView1 + "/xnsv:sortRules/xnsv:sortRule", "colId", u"2");
@@ -73,6 +76,7 @@ CPPUNIT_TEST_FIXTURE(NamedSheetViewsImportExportTest, testRoundtripXLSX)
     // View2: nsvFilter with 2 column filters and sort rule on column 0
     OString sView2 = "/xnsv:namedSheetViews/xnsv:namedSheetView[2]/xnsv:nsvFilter"_ostr;
     assertXPath(pNsv, sView2, 1);
+    assertXPath(pNsv, sView2, "tableId", u"0");
     assertXPath(pNsv, sView2 + "/xnsv:columnFilter", 2);
 
     // Column filter on ID 1

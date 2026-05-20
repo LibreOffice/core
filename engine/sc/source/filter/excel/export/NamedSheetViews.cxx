@@ -296,9 +296,12 @@ void xcl::exp::NamedSheetViews::saveSheetView(const sax_fastparser::FSHelperPtr&
         aRange.aEnd.SetTab(nViewTab);
 
         OString aRangeString = XclXmlUtils::ToOString(GetDoc(), aRange);
-        // TODO: emit XML_tableId when the filter is bound to a real table
+        // tableId=0 marks the filter as bound to the worksheet auto-filter
+        // (anonymous DB range), not to a formal <table> element.
+        // TODO: emit the real <table id> when sheet view filters get bound to
+        // a formal table.
         pStream->startElement(XML_nsvFilter, XML_filterId, rSheetView.GetFilterGUID(), XML_ref,
-                              aRangeString);
+                              aRangeString, XML_tableId, OString::number(0));
 
         ScQueryParam aQueryParam;
         pDBData->GetQueryParam(aQueryParam);
