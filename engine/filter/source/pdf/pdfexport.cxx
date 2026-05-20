@@ -309,7 +309,7 @@ static OUString getMimetypeForDocument( const Reference< XComponentContext >& xC
                 Reference< lang::XMultiServiceFactory > xConfigProvider =
                     configuration::theDefaultProvider::get( xContext );
                 beans::NamedValue aPathProp;
-                aPathProp.Name = "nodepath";
+                aPathProp.Name = u"nodepath"_ustr;
                 aPathProp.Value <<= u"/org.openoffice.Setup/Office/Factories/"_ustr;
                 uno::Sequence< uno::Any > aArgs{ uno::Any(aPathProp) };
 
@@ -1036,13 +1036,13 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                 OUString aSrcMimetype = getMimetypeForDocument( mxContext, mxSrcDoc );
                 OUString aExt;
                 if (aSrcMimetype == "application/vnd.oasis.opendocument.text")
-                    aExt = ".odt";
+                    aExt = u".odt"_ustr;
                 else if (aSrcMimetype == "application/vnd.oasis.opendocument.presentation")
-                    aExt = ".odp";
+                    aExt = u".odp"_ustr;
                 else if (aSrcMimetype == "application/vnd.oasis.opendocument.spreadsheet")
-                    aExt = ".ods";
+                    aExt = u".ods"_ustr;
                 else if (aSrcMimetype == "application/vnd.oasis.opendocument.graphics")
-                    aExt = ".odg";
+                    aExt = u".odg"_ustr;
                 std::unique_ptr<vcl::PDFOutputStream> pStream(new PDFExportStreamDoc(mxSrcDoc, aPreparedPermissionPassword));
                 aPDFWriter.AddAttachedFile("Original" + aExt, aSrcMimetype, u"Embedded original document of this PDF file"_ustr, std::move(pStream));
             }

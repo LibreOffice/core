@@ -173,7 +173,7 @@ css::uno::Reference< css::awt::XWindow > TaskCreatorService::implts_createContai
     if (bTopWindow)
     {
         aDescriptor.Type                =   css::awt::WindowClass_TOP;
-        aDescriptor.WindowServiceName   =   "window";
+        aDescriptor.WindowServiceName   =   u"window"_ustr;
         aDescriptor.ParentIndex         =   -1;
         aDescriptor.Parent.clear();
         aDescriptor.Bounds              =   aPosSize;
@@ -186,7 +186,7 @@ css::uno::Reference< css::awt::XWindow > TaskCreatorService::implts_createContai
     else
     {
         aDescriptor.Type                =   css::awt::WindowClass_TOP;
-        aDescriptor.WindowServiceName   =   "dockingwindow";
+        aDescriptor.WindowServiceName   =   u"dockingwindow"_ustr;
         aDescriptor.ParentIndex         =   1;
         aDescriptor.Parent              =   std::move(xParentWindowPeer);
         aDescriptor.Bounds              =   aPosSize;

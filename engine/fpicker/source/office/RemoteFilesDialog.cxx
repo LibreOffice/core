@@ -101,7 +101,7 @@ RemoteFilesDialog::RemoteFilesDialog( weld::Window* pParent, PickerFlags nBits )
 
     m_xContainer->set_sensitive(false);
 
-    m_sIniKey = "RemoteFilesDialog";
+    m_sIniKey = u"RemoteFilesDialog"_ustr;
     InitSize();
 
     m_xName_ed->connect_focus_in(LINK(this, RemoteFilesDialog, FileNameGetFocusHdl));
@@ -596,7 +596,7 @@ IMPL_LINK ( RemoteFilesDialog, EditServiceMenuHdl, const OUString&, rIdent, void
                     break;
                 }
                 case RET_NO:
-                    sIdent = "delete_service";
+                    sIdent = u"delete_service"_ustr;
                     break;
                 case RET_CANCEL :
                 default :

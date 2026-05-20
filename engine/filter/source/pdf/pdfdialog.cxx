@@ -127,7 +127,7 @@ Sequence< PropertyValue > SAL_CALL PDFDialog::getPropertyValues()
         maMediaDescriptor.realloc( ++nCount );
     auto pMediaDescriptor = maMediaDescriptor.getArray();
 
-    pMediaDescriptor[ i ].Name = "FilterData";
+    pMediaDescriptor[ i ].Name = u"FilterData"_ustr;
     pMediaDescriptor[ i ].Value <<= maFilterData;
 
     return maMediaDescriptor;

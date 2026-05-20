@@ -294,15 +294,15 @@ OUString JobData::getEnvironmentDescriptor() const
     switch(m_eEnvironment)
     {
         case E_EXECUTION :
-            sDescriptor = "EXECUTOR";
+            sDescriptor = u"EXECUTOR"_ustr;
             break;
 
         case E_DISPATCH :
-            sDescriptor = "DISPATCH";
+            sDescriptor = u"DISPATCH"_ustr;
             break;
 
         case E_DOCUMENTEVENT :
-            sDescriptor = "DOCUMENTEVENT";
+            sDescriptor = u"DOCUMENTEVENT"_ustr;
             break;
         default:
             break;

@@ -139,22 +139,22 @@ namespace frm
         switch (m_nControlClass)
         {
             case FormComponentType::RADIOBUTTON:
-                aServiceName = "radiobutton";
+                aServiceName = u"radiobutton"_ustr;
                 break;
             case FormComponentType::CHECKBOX:
-                aServiceName = "checkbox";
+                aServiceName = u"checkbox"_ustr;
                 break;
             case FormComponentType::COMBOBOX:
-                aServiceName = "combobox";
+                aServiceName = u"combobox"_ustr;
                 break;
             case FormComponentType::LISTBOX:
-                aServiceName = "listbox";
+                aServiceName = u"listbox"_ustr;
                 break;
             default:
                 if (m_bMultiLine)
-                    aServiceName = "MultiLineEdit";
+                    aServiceName = u"MultiLineEdit"_ustr;
                 else
-                    aServiceName = "Edit";
+                    aServiceName = u"Edit"_ustr;
         }
         return aServiceName;
     }

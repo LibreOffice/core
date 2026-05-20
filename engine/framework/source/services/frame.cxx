@@ -2550,7 +2550,7 @@ void SAL_CALL XFrameImpl::windowClosing( const css::lang::EventObject& )
      */
 
     css::util::URL aURL;
-    aURL.Complete = ".uno:CloseFrame";
+    aURL.Complete = u".uno:CloseFrame"_ustr;
     css::uno::Reference< css::util::XURLTransformer > xParser(css::util::URLTransformer::create(m_xContext));
     xParser->parseStrict(aURL);
 

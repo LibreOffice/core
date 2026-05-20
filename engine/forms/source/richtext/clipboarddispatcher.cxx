@@ -45,13 +45,13 @@ namespace frm
             switch ( _eFunc )
             {
             case OClipboardDispatcher::eCut:
-                aURL.Complete = ".uno:Cut";
+                aURL.Complete = u".uno:Cut"_ustr;
                 break;
             case OClipboardDispatcher::eCopy:
-                aURL.Complete = ".uno:Copy";
+                aURL.Complete = u".uno:Copy"_ustr;
                 break;
             case OClipboardDispatcher::ePaste:
-                aURL.Complete = ".uno:Paste";
+                aURL.Complete = u".uno:Paste"_ustr;
                 break;
             }
             return aURL;

@@ -1123,7 +1123,7 @@ void SVGFilter::implExportDocumentHeaderImpressOrDraw(sal_Int32 nDocX, sal_Int32
     }
     else
     {
-        aAttr = "0 0 ";
+        aAttr = u"0 0 "_ustr;
     }
 
     aAttr += OUString::number(nDocWidth) + " " + OUString::number(nDocHeight);
@@ -1153,7 +1153,7 @@ void SVGFilter::implExportDocumentHeaderImpressOrDraw(sal_Int32 nDocX, sal_Int32
     mpSVGExport->AddAttribute(u"class"_ustr, u"ClipPathGroup"_ustr);
     SvXMLElementExport aDefsElem(*mpSVGExport, u"defs"_ustr, true, true);
     {
-        msClipPathId = "presentation_clip_path";
+        msClipPathId = u"presentation_clip_path"_ustr;
         mpSVGExport->AddAttribute(u"id"_ustr, msClipPathId);
         mpSVGExport->AddAttribute(u"clipPathUnits"_ustr, u"userSpaceOnUse"_ustr);
         SvXMLElementExport aClipPathElem(*mpSVGExport, u"clipPath"_ustr, true, true);
@@ -1278,16 +1278,16 @@ void SVGFilter::implGenerateMetaData()
         switch( nPageNumberingType )
         {
             case css::style::NumberingType::CHARS_UPPER_LETTER:
-                sNumberingType = "alpha-upper";
+                sNumberingType = u"alpha-upper"_ustr;
                 break;
             case css::style::NumberingType::CHARS_LOWER_LETTER:
-                sNumberingType = "alpha-lower";
+                sNumberingType = u"alpha-lower"_ustr;
                 break;
             case css::style::NumberingType::ROMAN_UPPER:
-                sNumberingType = "roman-upper";
+                sNumberingType = u"roman-upper"_ustr;
                 break;
             case css::style::NumberingType::ROMAN_LOWER:
-                sNumberingType = "roman-lower";
+                sNumberingType = u"roman-lower"_ustr;
                 break;
             case css::style::NumberingType::ARABIC:
                 // arabic numbering type is the default, so we do not append any attribute for it
@@ -1578,23 +1578,23 @@ void SVGFilter::implEmbedBulletGlyphs()
 
     OUString sPathData = u"M 580,1141 L 1163,571 580,0 -4,571 580,1141 Z"_ustr;
     implEmbedBulletGlyph( 57356, sPathData );
-    sPathData = "M 8,1128 L 1137,1128 1137,0 8,0 8,1128 Z";
+    sPathData = u"M 8,1128 L 1137,1128 1137,0 8,0 8,1128 Z"_ustr;
     implEmbedBulletGlyph( 57354, sPathData );
-    sPathData = "M 174,0 L 602,739 174,1481 1456,739 174,0 Z M 1358,739 L 309,1346 659,739 1358,739 Z";
+    sPathData = u"M 174,0 L 602,739 174,1481 1456,739 174,0 Z M 1358,739 L 309,1346 659,739 1358,739 Z"_ustr;
     implEmbedBulletGlyph( 10146, sPathData );
-    sPathData = "M 2015,739 L 1276,0 717,0 1260,543 174,543 174,936 1260,936 717,1481 1274,1481 2015,739 Z";
+    sPathData = u"M 2015,739 L 1276,0 717,0 1260,543 174,543 174,936 1260,936 717,1481 1274,1481 2015,739 Z"_ustr;
     implEmbedBulletGlyph( 10132, sPathData );
-    sPathData = "M 0,-2 C -7,14 -16,27 -25,37 L 356,567 C 262,823 215,952 215,954 215,979 228,992 255,992 264,992 276,990 289,987 310,991 331,999 354,1012 L 381,999 492,748 772,1049 836,1024 860,1049 C 881,1039 901,1025 922,1006 886,937 835,863 770,784 769,783 710,716 594,584 L 774,223 C 774,196 753,168 711,139 L 727,119 C 717,90 699,76 672,76 641,76 570,178 457,381 L 164,-76 C 142,-110 111,-127 72,-127 30,-127 9,-110 8,-76 1,-67 -2,-52 -2,-32 -2,-23 -1,-13 0,-2 Z";
+    sPathData = u"M 0,-2 C -7,14 -16,27 -25,37 L 356,567 C 262,823 215,952 215,954 215,979 228,992 255,992 264,992 276,990 289,987 310,991 331,999 354,1012 L 381,999 492,748 772,1049 836,1024 860,1049 C 881,1039 901,1025 922,1006 886,937 835,863 770,784 769,783 710,716 594,584 L 774,223 C 774,196 753,168 711,139 L 727,119 C 717,90 699,76 672,76 641,76 570,178 457,381 L 164,-76 C 142,-110 111,-127 72,-127 30,-127 9,-110 8,-76 1,-67 -2,-52 -2,-32 -2,-23 -1,-13 0,-2 Z"_ustr;
     implEmbedBulletGlyph( 10007, sPathData );
-    sPathData = "M 285,-33 C 182,-33 111,30 74,156 52,228 41,333 41,471 41,549 55,616 82,672 116,743 169,778 240,778 293,778 328,747 346,684 L 369,508 C 377,444 397,411 428,410 L 1163,1116 C 1174,1127 1196,1133 1229,1133 1271,1133 1292,1118 1292,1087 L 1292,965 C 1292,929 1282,901 1262,881 L 442,47 C 390,-6 338,-33 285,-33 Z";
+    sPathData = u"M 285,-33 C 182,-33 111,30 74,156 52,228 41,333 41,471 41,549 55,616 82,672 116,743 169,778 240,778 293,778 328,747 346,684 L 369,508 C 377,444 397,411 428,410 L 1163,1116 C 1174,1127 1196,1133 1229,1133 1271,1133 1292,1118 1292,1087 L 1292,965 C 1292,929 1282,901 1262,881 L 442,47 C 390,-6 338,-33 285,-33 Z"_ustr;
     implEmbedBulletGlyph( 10004, sPathData );
-    sPathData = "M 813,0 C 632,0 489,54 383,161 276,268 223,411 223,592 223,773 276,916 383,1023 489,1130 632,1184 813,1184 992,1184 1136,1130 1245,1023 1353,916 1407,772 1407,592 1407,412 1353,268 1245,161 1136,54 992,0 813,0 Z";
+    sPathData = u"M 813,0 C 632,0 489,54 383,161 276,268 223,411 223,592 223,773 276,916 383,1023 489,1130 632,1184 813,1184 992,1184 1136,1130 1245,1023 1353,916 1407,772 1407,592 1407,412 1353,268 1245,161 1136,54 992,0 813,0 Z"_ustr;
     implEmbedBulletGlyph( 9679, sPathData );
-    sPathData = "M 346,457 C 273,457 209,483 155,535 101,586 74,649 74,723 74,796 101,859 155,911 209,963 273,989 346,989 419,989 480,963 531,910 582,859 608,796 608,723 608,648 583,586 532,535 482,483 420,457 346,457 Z";
+    sPathData = u"M 346,457 C 273,457 209,483 155,535 101,586 74,649 74,723 74,796 101,859 155,911 209,963 273,989 346,989 419,989 480,963 531,910 582,859 608,796 608,723 608,648 583,586 532,535 482,483 420,457 346,457 Z"_ustr;
     implEmbedBulletGlyph( 8226, sPathData );
-    sPathData = "M -4,459 L 1135,459 1135,606 -4,606 -4,459 Z";
+    sPathData = u"M -4,459 L 1135,459 1135,606 -4,606 -4,459 Z"_ustr;
     implEmbedBulletGlyph( 8211, sPathData );
-    sPathData = "M 173,740 C 173,903 231,1043 346,1159 462,1274 601,1332 765,1332 928,1332 1067,1274 1183,1159 1299,1043 1357,903 1357,740 1357,577 1299,437 1183,322 1067,206 928,148 765,148 601,148 462,206 346,322 231,437 173,577 173,740 Z";
+    sPathData = u"M 173,740 C 173,903 231,1043 346,1159 462,1274 601,1332 765,1332 928,1332 1067,1274 1183,1159 1299,1043 1357,903 1357,740 1357,577 1299,437 1183,322 1067,206 928,148 765,148 601,148 462,206 346,322 231,437 173,577 173,740 Z"_ustr;
     implEmbedBulletGlyph( 61548, sPathData );
 }
 
@@ -2017,9 +2017,9 @@ bool SVGFilter::implExportPage( std::u16string_view sPageId,
                 OUString aDesc;
 
                 if( bMaster )
-                    aDesc = "Master_Slide";
+                    aDesc = u"Master_Slide"_ustr;
                 else
-                    aDesc = "Page";
+                    aDesc = u"Page"_ustr;
 
                 mpSVGExport->AddAttribute(u"class"_ustr, aDesc);
             }
@@ -2212,13 +2212,13 @@ bool SVGFilter::implExportShape( const Reference< css::drawing::XShape >& rxShap
             switch( static_cast<ParagraphAdjust>(nTextAdjust) )
             {
                 case ParagraphAdjust_LEFT:
-                        sTextAdjust = "left";
+                        sTextAdjust = u"left"_ustr;
                         break;
                 case ParagraphAdjust_CENTER:
-                        sTextAdjust = "center";
+                        sTextAdjust = u"center"_ustr;
                         break;
                 case ParagraphAdjust_RIGHT:
-                        sTextAdjust = "right";
+                        sTextAdjust = u"right"_ustr;
                         break;
                 default:
                     break;
@@ -2649,25 +2649,25 @@ OUString SVGFilter::implGetClassFromShape( const Reference< css::drawing::XShape
     const OUString      aShapeType( rxShape->getShapeType() );
 
     if( aShapeType.lastIndexOf( "drawing.GroupShape" ) != -1 )
-        aRet = "Group";
+        aRet = u"Group"_ustr;
     else if( aShapeType.lastIndexOf( "drawing.GraphicObjectShape" ) != -1 )
-        aRet = "Graphic";
+        aRet = u"Graphic"_ustr;
     else if( aShapeType.lastIndexOf( "drawing.OLE2Shape" ) != -1 )
-        aRet = "OLE2";
+        aRet = u"OLE2"_ustr;
     else if( aShapeType.lastIndexOf( "drawing.TextShape" ) != -1 )
-        aRet = "TextShape";
+        aRet = u"TextShape"_ustr;
     else if( aShapeType.lastIndexOf( "presentation.HeaderShape" ) != -1 )
-        aRet = "Header";
+        aRet = u"Header"_ustr;
     else if( aShapeType.lastIndexOf( "presentation.FooterShape" ) != -1 )
-        aRet = "Footer";
+        aRet = u"Footer"_ustr;
     else if( aShapeType.lastIndexOf( "presentation.DateTimeShape" ) != -1 )
-        aRet = "DateTime";
+        aRet = u"DateTime"_ustr;
     else if( aShapeType.lastIndexOf( "presentation.SlideNumberShape" ) != -1 )
-        aRet = "PageNumber";
+        aRet = u"PageNumber"_ustr;
     else if( aShapeType.lastIndexOf( "presentation.TitleTextShape" ) != -1 )
-        aRet = "TitleText";
+        aRet = u"TitleText"_ustr;
     else if( aShapeType.lastIndexOf( "presentation.OutlinerShape" ) != -1 )
-        aRet = "Outline";
+        aRet = u"Outline"_ustr;
     else
         aRet = aShapeType;
 

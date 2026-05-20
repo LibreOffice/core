@@ -379,54 +379,54 @@ AddonsOptions_Impl::AddonsOptions_Impl()
     m_aPropNames[ INDEX_IMAGEIDENTIFIER ] = PROPERTYNAME_IMAGEIDENTIFIER;
     m_aPropNames[ INDEX_CONTEXT         ] = PROPERTYNAME_CONTEXT;
     m_aPropNames[ INDEX_SUBMENU         ] = PROPERTYNAME_SUBMENU; // Submenu set!
-    m_aPropNames[ INDEX_CONTROLTYPE     ] = "ControlType";
-    m_aPropNames[ INDEX_WIDTH           ] = "Width";
-    m_aPropNames[ INDEX_ALIGN           ] = "Alignment";
-    m_aPropNames[ INDEX_AUTOSIZE        ] = "AutoSize";
-    m_aPropNames[ INDEX_OWNERDRAW       ] = "OwnerDraw";
-    m_aPropNames[ INDEX_MANDATORY       ] = "Mandatory";
-    m_aPropNames[ INDEX_STYLE           ] = "Style";
+    m_aPropNames[ INDEX_CONTROLTYPE     ] = u"ControlType"_ustr;
+    m_aPropNames[ INDEX_WIDTH           ] = u"Width"_ustr;
+    m_aPropNames[ INDEX_ALIGN           ] = u"Alignment"_ustr;
+    m_aPropNames[ INDEX_AUTOSIZE        ] = u"AutoSize"_ustr;
+    m_aPropNames[ INDEX_OWNERDRAW       ] = u"OwnerDraw"_ustr;
+    m_aPropNames[ INDEX_MANDATORY       ] = u"Mandatory"_ustr;
+    m_aPropNames[ INDEX_STYLE           ] = u"Style"_ustr;
 
     // initialize array with fixed images property names
-    m_aPropImagesNames[ OFFSET_IMAGES_SMALL         ] = "ImageSmall";
-    m_aPropImagesNames[ OFFSET_IMAGES_BIG           ] = "ImageBig";
-    m_aPropImagesNames[ OFFSET_IMAGES_SMALLHC       ] = "ImageSmallHC";
-    m_aPropImagesNames[ OFFSET_IMAGES_BIGHC         ] = "ImageBigHC";
-    m_aPropImagesNames[ OFFSET_IMAGES_SMALL_URL     ] = "ImageSmallURL";
-    m_aPropImagesNames[ OFFSET_IMAGES_BIG_URL       ] = "ImageBigURL";
-    m_aPropImagesNames[ OFFSET_IMAGES_SMALLHC_URL   ] = "ImageSmallHCURL";
-    m_aPropImagesNames[ OFFSET_IMAGES_BIGHC_URL     ] = "ImageBigHCURL";
+    m_aPropImagesNames[ OFFSET_IMAGES_SMALL         ] = u"ImageSmall"_ustr;
+    m_aPropImagesNames[ OFFSET_IMAGES_BIG           ] = u"ImageBig"_ustr;
+    m_aPropImagesNames[ OFFSET_IMAGES_SMALLHC       ] = u"ImageSmallHC"_ustr;
+    m_aPropImagesNames[ OFFSET_IMAGES_BIGHC         ] = u"ImageBigHC"_ustr;
+    m_aPropImagesNames[ OFFSET_IMAGES_SMALL_URL     ] = u"ImageSmallURL"_ustr;
+    m_aPropImagesNames[ OFFSET_IMAGES_BIG_URL       ] = u"ImageBigURL"_ustr;
+    m_aPropImagesNames[ OFFSET_IMAGES_SMALLHC_URL   ] = u"ImageSmallHCURL"_ustr;
+    m_aPropImagesNames[ OFFSET_IMAGES_BIGHC_URL     ] = u"ImageBigHCURL"_ustr;
 
     // initialize array with fixed merge menu property names
-    m_aPropMergeMenuNames[ OFFSET_MERGEMENU_MERGEPOINT    ] = "MergePoint";
-    m_aPropMergeMenuNames[ OFFSET_MERGEMENU_MERGECOMMAND  ] = "MergeCommand";
-    m_aPropMergeMenuNames[ OFFSET_MERGEMENU_MERGECOMMANDPARAMETER ] = "MergeCommandParameter";
-    m_aPropMergeMenuNames[ OFFSET_MERGEMENU_MERGEFALLBACK ] = "MergeFallback";
-    m_aPropMergeMenuNames[ OFFSET_MERGEMENU_MERGECONTEXT  ] = "MergeContext";
-    m_aPropMergeMenuNames[ OFFSET_MERGEMENU_MENUITEMS     ] = "MenuItems";
+    m_aPropMergeMenuNames[ OFFSET_MERGEMENU_MERGEPOINT    ] = u"MergePoint"_ustr;
+    m_aPropMergeMenuNames[ OFFSET_MERGEMENU_MERGECOMMAND  ] = u"MergeCommand"_ustr;
+    m_aPropMergeMenuNames[ OFFSET_MERGEMENU_MERGECOMMANDPARAMETER ] = u"MergeCommandParameter"_ustr;
+    m_aPropMergeMenuNames[ OFFSET_MERGEMENU_MERGEFALLBACK ] = u"MergeFallback"_ustr;
+    m_aPropMergeMenuNames[ OFFSET_MERGEMENU_MERGECONTEXT  ] = u"MergeContext"_ustr;
+    m_aPropMergeMenuNames[ OFFSET_MERGEMENU_MENUITEMS     ] = u"MenuItems"_ustr;
 
-    m_aPropMergeToolbarNames[ OFFSET_MERGETOOLBAR_TOOLBAR               ] = "MergeToolBar";
-    m_aPropMergeToolbarNames[ OFFSET_MERGETOOLBAR_MERGEPOINT            ] = "MergePoint";
-    m_aPropMergeToolbarNames[ OFFSET_MERGETOOLBAR_MERGECOMMAND          ] = "MergeCommand";
-    m_aPropMergeToolbarNames[ OFFSET_MERGETOOLBAR_MERGECOMMANDPARAMETER ] = "MergeCommandParameter";
-    m_aPropMergeToolbarNames[ OFFSET_MERGETOOLBAR_MERGEFALLBACK         ] = "MergeFallback";
-    m_aPropMergeToolbarNames[ OFFSET_MERGETOOLBAR_MERGECONTEXT          ] = "MergeContext";
-    m_aPropMergeToolbarNames[ OFFSET_MERGETOOLBAR_TOOLBARITEMS          ] = "ToolBarItems";
+    m_aPropMergeToolbarNames[ OFFSET_MERGETOOLBAR_TOOLBAR               ] = u"MergeToolBar"_ustr;
+    m_aPropMergeToolbarNames[ OFFSET_MERGETOOLBAR_MERGEPOINT            ] = u"MergePoint"_ustr;
+    m_aPropMergeToolbarNames[ OFFSET_MERGETOOLBAR_MERGECOMMAND          ] = u"MergeCommand"_ustr;
+    m_aPropMergeToolbarNames[ OFFSET_MERGETOOLBAR_MERGECOMMANDPARAMETER ] = u"MergeCommandParameter"_ustr;
+    m_aPropMergeToolbarNames[ OFFSET_MERGETOOLBAR_MERGEFALLBACK         ] = u"MergeFallback"_ustr;
+    m_aPropMergeToolbarNames[ OFFSET_MERGETOOLBAR_MERGECONTEXT          ] = u"MergeContext"_ustr;
+    m_aPropMergeToolbarNames[ OFFSET_MERGETOOLBAR_TOOLBARITEMS          ] = u"ToolBarItems"_ustr;
 
-    m_aPropMergeNotebookBarNames[ OFFSET_MERGENOTEBOOKBAR_NOTEBOOKBAR           ] = "MergeNotebookBar";
-    m_aPropMergeNotebookBarNames[ OFFSET_MERGENOTEBOOKBAR_MERGEPOINT            ] = "MergePoint";
-    m_aPropMergeNotebookBarNames[ OFFSET_MERGENOTEBOOKBAR_MERGECOMMAND          ] = "MergeCommand";
-    m_aPropMergeNotebookBarNames[ OFFSET_MERGENOTEBOOKBAR_MERGECOMMANDPARAMETER ] = "MergeCommandParameter";
-    m_aPropMergeNotebookBarNames[ OFFSET_MERGENOTEBOOKBAR_MERGEFALLBACK         ] = "MergeFallback";
-    m_aPropMergeNotebookBarNames[ OFFSET_MERGENOTEBOOKBAR_MERGECONTEXT          ] = "MergeContext";
-    m_aPropMergeNotebookBarNames[ OFFSET_MERGENOTEBOOKBAR_NOTEBOOKBARITEMS      ] = "NotebookBarItems";
+    m_aPropMergeNotebookBarNames[ OFFSET_MERGENOTEBOOKBAR_NOTEBOOKBAR           ] = u"MergeNotebookBar"_ustr;
+    m_aPropMergeNotebookBarNames[ OFFSET_MERGENOTEBOOKBAR_MERGEPOINT            ] = u"MergePoint"_ustr;
+    m_aPropMergeNotebookBarNames[ OFFSET_MERGENOTEBOOKBAR_MERGECOMMAND          ] = u"MergeCommand"_ustr;
+    m_aPropMergeNotebookBarNames[ OFFSET_MERGENOTEBOOKBAR_MERGECOMMANDPARAMETER ] = u"MergeCommandParameter"_ustr;
+    m_aPropMergeNotebookBarNames[ OFFSET_MERGENOTEBOOKBAR_MERGEFALLBACK         ] = u"MergeFallback"_ustr;
+    m_aPropMergeNotebookBarNames[ OFFSET_MERGENOTEBOOKBAR_MERGECONTEXT          ] = u"MergeContext"_ustr;
+    m_aPropMergeNotebookBarNames[ OFFSET_MERGENOTEBOOKBAR_NOTEBOOKBARITEMS      ] = u"NotebookBarItems"_ustr;
 
-    m_aPropMergeStatusbarNames[ OFFSET_MERGESTATUSBAR_MERGEPOINT            ] = "MergePoint";
-    m_aPropMergeStatusbarNames[ OFFSET_MERGESTATUSBAR_MERGECOMMAND          ] = "MergeCommand";
-    m_aPropMergeStatusbarNames[ OFFSET_MERGESTATUSBAR_MERGECOMMANDPARAMETER ] = "MergeCommandParameter";
-    m_aPropMergeStatusbarNames[ OFFSET_MERGESTATUSBAR_MERGEFALLBACK         ] = "MergeFallback";
-    m_aPropMergeStatusbarNames[ OFFSET_MERGESTATUSBAR_MERGECONTEXT          ] = "MergeContext";
-    m_aPropMergeStatusbarNames[ OFFSET_MERGESTATUSBAR_STATUSBARITEMS        ] = "StatusBarItems";
+    m_aPropMergeStatusbarNames[ OFFSET_MERGESTATUSBAR_MERGEPOINT            ] = u"MergePoint"_ustr;
+    m_aPropMergeStatusbarNames[ OFFSET_MERGESTATUSBAR_MERGECOMMAND          ] = u"MergeCommand"_ustr;
+    m_aPropMergeStatusbarNames[ OFFSET_MERGESTATUSBAR_MERGECOMMANDPARAMETER ] = u"MergeCommandParameter"_ustr;
+    m_aPropMergeStatusbarNames[ OFFSET_MERGESTATUSBAR_MERGEFALLBACK         ] = u"MergeFallback"_ustr;
+    m_aPropMergeStatusbarNames[ OFFSET_MERGESTATUSBAR_MERGECONTEXT          ] = u"MergeContext"_ustr;
+    m_aPropMergeStatusbarNames[ OFFSET_MERGESTATUSBAR_STATUSBARITEMS        ] = u"StatusBarItems"_ustr;
 
     ReadConfigurationData();
 

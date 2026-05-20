@@ -359,26 +359,26 @@ css::uno::Sequence< css::beans::NamedValue > Job::impl_generateJobArgs( /*IN*/ c
         ++nLen;
     css::uno::Sequence< css::beans::NamedValue > lEnvArgs(nLen);
     auto plEnvArgs = lEnvArgs.getArray();
-    plEnvArgs[0].Name = "EnvType";
+    plEnvArgs[0].Name = u"EnvType"_ustr;
     plEnvArgs[0].Value <<= m_aJobCfg.getEnvironmentDescriptor();
 
     sal_Int32 i = 0;
     if (m_xFrame.is())
     {
         ++i;
-        plEnvArgs[i].Name = "Frame";
+        plEnvArgs[i].Name = u"Frame"_ustr;
         plEnvArgs[i].Value <<= m_xFrame;
     }
     if (m_xModel.is())
     {
         ++i;
-        plEnvArgs[i].Name = "Model";
+        plEnvArgs[i].Name = u"Model"_ustr;
         plEnvArgs[i].Value <<= m_xModel;
     }
     if (eMode==JobData::E_EVENT)
     {
         ++i;
-        plEnvArgs[i].Name = "EventName";
+        plEnvArgs[i].Name = u"EventName"_ustr;
         plEnvArgs[i].Value <<= m_aJobCfg.getEvent();
     }
 
@@ -402,7 +402,7 @@ css::uno::Sequence< css::beans::NamedValue > Job::impl_generateJobArgs( /*IN*/ c
         sal_Int32 nLength = lAllArgs.getLength();
         lAllArgs.realloc(nLength+1);
         auto plAllArgs = lAllArgs.getArray();
-        plAllArgs[nLength].Name = "Config";
+        plAllArgs[nLength].Name = u"Config"_ustr;
         plAllArgs[nLength].Value <<= lConfigArgs;
     }
     if (!lJobConfigArgs.empty())
@@ -410,7 +410,7 @@ css::uno::Sequence< css::beans::NamedValue > Job::impl_generateJobArgs( /*IN*/ c
         sal_Int32 nLength = lAllArgs.getLength();
         lAllArgs.realloc(nLength+1);
         auto plAllArgs = lAllArgs.getArray();
-        plAllArgs[nLength].Name = "JobConfig";
+        plAllArgs[nLength].Name = u"JobConfig"_ustr;
         plAllArgs[nLength].Value <<= comphelper::containerToSequence(lJobConfigArgs);
     }
     if (lEnvArgs.hasElements())
@@ -418,7 +418,7 @@ css::uno::Sequence< css::beans::NamedValue > Job::impl_generateJobArgs( /*IN*/ c
         sal_Int32 nLength = lAllArgs.getLength();
         lAllArgs.realloc(nLength+1);
         auto plAllArgs = lAllArgs.getArray();
-        plAllArgs[nLength].Name = "Environment";
+        plAllArgs[nLength].Name = u"Environment"_ustr;
         plAllArgs[nLength].Value <<= lEnvArgs;
     }
     if (lDynamicArgs.hasElements())
@@ -426,7 +426,7 @@ css::uno::Sequence< css::beans::NamedValue > Job::impl_generateJobArgs( /*IN*/ c
         sal_Int32 nLength = lAllArgs.getLength();
         lAllArgs.realloc(nLength+1);
         auto plAllArgs = lAllArgs.getArray();
-        plAllArgs[nLength].Name = "DynamicData";
+        plAllArgs[nLength].Name = u"DynamicData"_ustr;
         plAllArgs[nLength].Value <<= lDynamicArgs;
     }
 

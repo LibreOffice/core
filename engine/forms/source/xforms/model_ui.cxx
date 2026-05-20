@@ -85,12 +85,12 @@ OUString Model::getDefaultServiceNameForNode( const css::uno::Reference<css::xml
         switch( mxDataTypes->getDataType( sTypeName )->getTypeClass() )
         {
         case css::xsd::DataTypeClass::BOOLEAN:
-            sService = "com.sun.star.form.component.CheckBox";
+            sService = u"com.sun.star.form.component.CheckBox"_ustr;
             break;
         case css::xsd::DataTypeClass::DOUBLE:
         case css::xsd::DataTypeClass::DECIMAL:
         case css::xsd::DataTypeClass::FLOAT:
-            sService = "com.sun.star.form.component.NumericField";
+            sService = u"com.sun.star.form.component.NumericField"_ustr;
             break;
 
         case css::xsd::DataTypeClass::STRING:
@@ -454,7 +454,7 @@ void Model::renameInstance( const OUString& sFrom,
         // add name property
         aSeq.realloc( nLength + 1 );
         pSeq = aSeq.getArray();
-        pSeq[ nLength ].Name = "ID";
+        pSeq[ nLength ].Name = u"ID"_ustr;
         nProp = nLength;
     }
 
@@ -974,25 +974,25 @@ void xforms::setInstanceData(
     sal_Int32 nIndex = 0;
     if(pID != nullptr)
     {
-        pSequence[ nIndex ].Name = "ID";
+        pSequence[ nIndex ].Name = u"ID"_ustr;
         pSequence[ nIndex ].Value <<= *pID;
         nIndex++;
     }
     if(pInstance != nullptr)
     {
-        pSequence[ nIndex ].Name = "Instance";
+        pSequence[ nIndex ].Name = u"Instance"_ustr;
         pSequence[ nIndex ].Value <<= *pInstance;
         nIndex++;
     }
     if(pURL != nullptr)
     {
-        pSequence[ nIndex ].Name = "URL";
+        pSequence[ nIndex ].Name = u"URL"_ustr;
         pSequence[ nIndex ].Value <<= *pURL;
         nIndex++;
     }
     if(pURLOnce != nullptr)
     {
-        pSequence[ nIndex ].Name = "URLOnce";
+        pSequence[ nIndex ].Name = u"URLOnce"_ustr;
         pSequence[ nIndex ].Value <<= *pURLOnce;
         nIndex++;
     }

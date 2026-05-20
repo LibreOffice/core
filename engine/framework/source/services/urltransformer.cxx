@@ -280,7 +280,7 @@ OUString SAL_CALL URLTransformer::getPresentation( const css::util::URL& aURL,
         if ( !bWithPassword && !aTestURL.Password.isEmpty() )
         {
             // Exchange password text with other placeholder string
-            aTestURL.Password = "<******>";
+            aTestURL.Password = u"<******>"_ustr;
             assemble( aTestURL );
         }
 

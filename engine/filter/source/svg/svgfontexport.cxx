@@ -205,15 +205,15 @@ void SVGFontExport::implEmbedFont( const vcl::Font& rFont )
 
             // Font Weight
             if( aFont.GetWeightMaybeAskConfig() != WEIGHT_NORMAL )
-                aFontWeight = "bold";
+                aFontWeight = u"bold"_ustr;
             else
-                aFontWeight = "normal";
+                aFontWeight = u"normal"_ustr;
 
             // Font Italic
             if( aFont.GetItalicMaybeAskConfig() != ITALIC_NONE )
-                aFontStyle = "italic";
+                aFontStyle = u"italic"_ustr;
             else
-                aFontStyle = "normal";
+                aFontStyle = u"normal"_ustr;
 
             mrExport.AddAttribute( u"font-family"_ustr, GetMappedFontName( rFont.GetFamilyName() ) );
             mrExport.AddAttribute( u"units-per-em"_ustr, aUnitsPerEM );

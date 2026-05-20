@@ -190,7 +190,7 @@ OUString SAL_CALL FilterDetect::detect( css::uno::Sequence< css::beans::Property
                     if (location == aArguments.getLength())
                     {
                         aArguments.realloc(aArguments.getLength() + 1);
-                        aArguments.getArray()[location].Name = "TypeName";
+                        aArguments.getArray()[location].Name = u"TypeName"_ustr;
                     }
                     aArguments.getArray()[location].Value <<= sTypeName;
                     return sTypeName;

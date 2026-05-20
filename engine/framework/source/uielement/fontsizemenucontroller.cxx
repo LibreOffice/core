@@ -249,7 +249,7 @@ void FontSizeMenuController::impl_setPopupMenu(std::unique_lock<std::mutex>& /*r
     Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
     css::util::URL aTargetURL;
     // Register for font name updates which gives us info about the current font!
-    aTargetURL.Complete = ".uno:CharFontName";
+    aTargetURL.Complete = u".uno:CharFontName"_ustr;
     m_xURLTransformer->parseStrict( aTargetURL );
     m_xCurrentFontDispatch = xDispatchProvider->queryDispatch( aTargetURL, OUString(), 0 );
 }
@@ -262,7 +262,7 @@ void SAL_CALL FontSizeMenuController::updatePopupMenu()
 
     Reference< XDispatch > xDispatch( m_xCurrentFontDispatch );
     css::util::URL aTargetURL;
-    aTargetURL.Complete = ".uno:CharFontName";
+    aTargetURL.Complete = u".uno:CharFontName"_ustr;
     m_xURLTransformer->parseStrict( aTargetURL );
     aLock.unlock();
 

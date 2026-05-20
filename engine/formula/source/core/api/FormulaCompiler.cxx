@@ -234,7 +234,7 @@ bool OpCodeList::getOpCodeString( OUString& rStr, sal_uInt16 nOp )
         {
             if (meSepType == FormulaCompiler::SeparatorType::SEMICOLON_BASE)
             {
-                rStr = ";";
+                rStr = u";"_ustr;
                 return true;
             }
         }
@@ -243,7 +243,7 @@ bool OpCodeList::getOpCodeString( OUString& rStr, sal_uInt16 nOp )
         {
             if (meSepType == FormulaCompiler::SeparatorType::SEMICOLON_BASE)
             {
-                rStr = ";";
+                rStr = u";"_ustr;
                 return true;
             }
         }
@@ -252,7 +252,7 @@ bool OpCodeList::getOpCodeString( OUString& rStr, sal_uInt16 nOp )
         {
             if (meSepType == FormulaCompiler::SeparatorType::SEMICOLON_BASE)
             {
-                rStr = "|";
+                rStr = u"|"_ustr;
                 return true;
             }
         }
@@ -1352,10 +1352,10 @@ void FormulaCompiler::OpCodeMap::copyFrom( const OpCodeMap& r )
             switch (eOp)
             {
                 case ocRRI:
-                    aSymbol = "RRI";
+                    aSymbol = u"RRI"_ustr;
                     break;
                 case ocTableOp:
-                    aSymbol = "MULTIPLE.OPERATIONS";
+                    aSymbol = u"MULTIPLE.OPERATIONS"_ustr;
                     break;
                 default:
                     aSymbol = r.mpTable[i];
@@ -2451,7 +2451,7 @@ bool FormulaCompiler::CompileTokenArray()
         mpCode = pData;
         bool bWasForced = mpArr->IsRecalcModeForced();
         if ( bWasForced && mbAutoCorrect )
-            maCorrectedFormula = "=";
+            maCorrectedFormula = u"="_ustr;
         mpArr->ClearRecalcMode();
         maArrIterator.Reset();
         meLastOp = ocOpen;

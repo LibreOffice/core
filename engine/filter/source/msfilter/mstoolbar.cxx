@@ -271,7 +271,7 @@ void TBCData::ImportToolBarControl( CustomToolBarImportHelper& helper, std::vect
     bBeginGroup = rHeader.isBeginGroup();
     controlGeneralInfo.ImportToolBarControlData( helper, props );
     beans::PropertyValue aProp;
-    aProp.Name = "Visible";
+    aProp.Name = u"Visible"_ustr;
     aProp.Value <<= rHeader.isVisible(); // where is the visible attribute stored
     props.push_back( aProp );
     if ( rHeader.getTct() == 0x01
@@ -330,7 +330,7 @@ void TBCData::ImportToolBarControl( CustomToolBarImportHelper& helper, std::vect
     }
     else if ( rHeader.getTct() == 0x0a )
     {
-        aProp.Name = "CommandURL";
+        aProp.Name = u"CommandURL"_ustr;
 
         TBCMenuSpecific* pMenu = getMenuSpecific();
         if ( pMenu )
@@ -343,7 +343,7 @@ void TBCData::ImportToolBarControl( CustomToolBarImportHelper& helper, std::vect
     }
 
     short icontext =  ( rHeader.getTbct() & 0x03 );
-    aProp.Name = "Style";
+    aProp.Name = u"Style"_ustr;
     if ( bIsMenuBar )
     {
         nStyle |= ui::ItemStyle::TEXT;
@@ -487,7 +487,7 @@ TBCGeneralInfo::ImportToolBarControlData( CustomToolBarImportHelper& helper, std
     // if ( rHeader.getTct() == 0x01 && rHeader.getTcID() == 0x01 ) // not defined, probably this is a command
     if ( !extraInfo.getOnAction().isEmpty() )
     {
-        aProp.Name = "CommandURL";
+        aProp.Name = u"CommandURL"_ustr;
         ooo::vba::MacroResolvedInfo aMacroInf = ooo::vba::resolveVBAMacro( &helper.GetDocShell(), extraInfo.getOnAction(), true );
         if ( aMacroInf.mbFound )
             aProp.Value = CustomToolBarImportHelper::createCommandFromMacro( aMacroInf.msResolvedMacro );
@@ -496,15 +496,15 @@ TBCGeneralInfo::ImportToolBarControlData( CustomToolBarImportHelper& helper, std
         sControlData.push_back( aProp );
     }
 
-    aProp.Name = "Label";
+    aProp.Name = u"Label"_ustr;
     aProp.Value <<= customText.getString().replace('&','~');
     sControlData.push_back( aProp );
 
-    aProp.Name = "Type";
+    aProp.Name = u"Type"_ustr;
     aProp.Value <<= ui::ItemType::DEFAULT;
     sControlData.push_back( aProp );
 
-    aProp.Name = "Tooltip";
+    aProp.Name = u"Tooltip"_ustr;
     aProp.Value <<= tooltip.getString();
     sControlData.push_back( aProp );
 /*

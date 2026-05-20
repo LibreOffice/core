@@ -431,15 +431,15 @@ void XMLFilterTestDialog::doExport( const Reference< XComponent >& xComp )
                 int i = 0;
 
 
-                pSourceData[i  ].Name = "OutputStream";
+                pSourceData[i  ].Name = u"OutputStream"_ustr;
                 pSourceData[i++].Value <<= xIS;
 
-                pSourceData[i].Name = "Indent";
+                pSourceData[i].Name = u"Indent"_ustr;
                 pSourceData[i++].Value <<= true;
 
                 if( bUseDocType )
                 {
-                    pSourceData[i  ].Name = "DocType_Public";
+                    pSourceData[i  ].Name = u"DocType_Public"_ustr;
                     pSourceData[i++].Value <<= m_xFilterInfo->maDocType;
                 }
 

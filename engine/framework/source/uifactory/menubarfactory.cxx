@@ -139,12 +139,12 @@ void MenuBarFactory::CreateUIElement(const OUString& ResourceURL
         PropertyValue aPropValue;
         if ( n == nURLPropertyIndex )
         {
-            aPropValue.Name = "ResourceURL";
+            aPropValue.Name = u"ResourceURL"_ustr;
             aPropValue.Value <<= aResourceURL;
         }
         else if ( n == nConfigPropertyIndex )
         {
-            aPropValue.Name = "ConfigurationSource";
+            aPropValue.Name = u"ConfigurationSource"_ustr;
             aPropValue.Value <<= xCfgMgr;
         }
         else

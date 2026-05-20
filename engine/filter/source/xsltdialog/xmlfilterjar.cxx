@@ -230,7 +230,7 @@ void XMLFilterJarHelper::openPackage( const OUString& rPackageURL,
 
         // let ZipPackage be used ( no manifest.xml is required )
         beans::NamedValue aArg;
-        aArg.Name = "StorageFormat";
+        aArg.Name = u"StorageFormat"_ustr;
         aArg.Value <<= ZIP_STORAGE_FORMAT_STRING;
         Sequence< Any > aArguments{ Any(rPackageURL), Any(aArg) };
 

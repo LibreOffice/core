@@ -1765,7 +1765,7 @@ void AutoRecovery::implts_openConfig()
     css::beans::PropertyValue aParam;
 
     // set root path
-    aParam.Name = "nodepath";
+    aParam.Name = u"nodepath"_ustr;
     aParam.Value <<= OUString(CFG_PACKAGE_RECOVERY);
     lParams.push_back(css::uno::Any(aParam));
 
@@ -1958,7 +1958,7 @@ void AutoRecovery::implts_specifyDefaultFilterAndExtension(AutoRecovery::TDocume
             rInfo.Extension = "." + lExtensions[0];
         }
         else
-            rInfo.Extension = ".unknown";
+            rInfo.Extension = u".unknown"_ustr;
     }
     catch(const css::uno::Exception&)
     {

@@ -142,14 +142,14 @@ Reference< XInterface > SAL_CALL UIControllerFactory::createInstanceWithArgument
 
     // Append the command URL to the Arguments sequence so that one controller can be
     // used for more than one command URL.
-    aPropValue.Name     = "CommandURL";
+    aPropValue.Name     = u"CommandURL"_ustr;
     aPropValue.Value  <<= ServiceSpecifier;
     pNewArgs[nAppendIndex] <<= aPropValue;
 
     // Append the optional value argument. It's an empty string if no additional info
     // is provided to the controller.
     OUString aValue = m_pConfigAccess->getValueFromCommandModule( ServiceSpecifier, aPropName );
-    aPropValue.Name = "Value";
+    aPropValue.Name = u"Value"_ustr;
     aPropValue.Value <<= aValue;
     pNewArgs[nAppendIndex+1] <<= aPropValue;
 

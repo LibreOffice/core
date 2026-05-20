@@ -208,37 +208,37 @@ std::vector<OUString> FilterFactory::impl_queryMatchByDocumentService(const Quer
     if ( sDocumentService == "writer" )
     {
         OSL_FAIL("DEPRECATED!\nPlease use right document service for filter query!");
-        sDocumentService = "com.sun.star.text.TextDocument";
+        sDocumentService = u"com.sun.star.text.TextDocument"_ustr;
     }
     else if ( sDocumentService == "web" )
     {
         OSL_FAIL("DEPRECATED!\nPlease use right document service for filter query!");
-        sDocumentService = "com.sun.star.text.WebDocument";
+        sDocumentService = u"com.sun.star.text.WebDocument"_ustr;
     }
     else if ( sDocumentService == "global" )
     {
         OSL_FAIL("DEPRECATED!\nPlease use right document service for filter query!");
-        sDocumentService = "com.sun.star.text.GlobalDocument";
+        sDocumentService = u"com.sun.star.text.GlobalDocument"_ustr;
     }
     else if ( sDocumentService == "calc" )
     {
         OSL_FAIL("DEPRECATED!\nPlease use right document service for filter query!");
-        sDocumentService = "com.sun.star.sheet.SpreadsheetDocument";
+        sDocumentService = u"com.sun.star.sheet.SpreadsheetDocument"_ustr;
     }
     else if ( sDocumentService == "draw" )
     {
         OSL_FAIL("DEPRECATED!\nPlease use right document service for filter query!");
-        sDocumentService = "com.sun.star.drawing.DrawingDocument";
+        sDocumentService = u"com.sun.star.drawing.DrawingDocument"_ustr;
     }
     else if ( sDocumentService == "impress" )
     {
         OSL_FAIL("DEPRECATED!\nPlease use right document service for filter query!");
-        sDocumentService = "com.sun.star.presentation.PresentationDocument";
+        sDocumentService = u"com.sun.star.presentation.PresentationDocument"_ustr;
     }
     else if ( sDocumentService == "math" )
     {
         OSL_FAIL("DEPRECATED!\nPlease use right document service for filter query!");
-        sDocumentService = "com.sun.star.formula.FormulaProperties";
+        sDocumentService = u"com.sun.star.formula.FormulaProperties"_ustr;
     }
 #endif
 

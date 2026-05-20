@@ -66,7 +66,7 @@ OUString PathExpression::_getExpressionForEvaluation() const
 {
     OUString sExpr = ComputedExpression::_getExpressionForEvaluation();
     if( sExpr.isEmpty())
-        sExpr = ".";
+        sExpr = u"."_ustr;
     return sExpr;
 }
 

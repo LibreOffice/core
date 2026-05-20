@@ -183,7 +183,7 @@ void FontMenuController::impl_setPopupMenu(std::unique_lock<std::mutex>& /*rGuar
 
     css::util::URL aTargetURL;
     // Register for font list updates to get the current font list from the controller
-    aTargetURL.Complete = ".uno:FontNameList";
+    aTargetURL.Complete = u".uno:FontNameList"_ustr;
     m_xURLTransformer->parseStrict( aTargetURL );
     m_xFontListDispatch = xDispatchProvider->queryDispatch( aTargetURL, OUString(), 0 );
 }
@@ -195,7 +195,7 @@ void SAL_CALL FontMenuController::updatePopupMenu()
     std::unique_lock aLock( m_aMutex );
     Reference< XDispatch > xDispatch( m_xFontListDispatch );
     css::util::URL aTargetURL;
-    aTargetURL.Complete = ".uno:FontNameList";
+    aTargetURL.Complete = u".uno:FontNameList"_ustr;
     m_xURLTransformer->parseStrict( aTargetURL );
     aLock.unlock();
 

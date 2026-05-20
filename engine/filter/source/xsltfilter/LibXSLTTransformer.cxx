@@ -339,7 +339,7 @@ namespace XSLT
             if (lastErr)
                 msg = OStringToOUString(lastErr->message, RTL_TEXTENCODING_UTF8);
             else
-                msg = "Unknown XSLT transformation error";
+                msg = u"Unknown XSLT transformation error"_ustr;
 
             m_transformer->error(msg);
         }

@@ -363,7 +363,7 @@ SvtFileDialog::SvtFileDialog(weld::Window* pParent, PickerFlags nStyle)
     }
 
     // set the ini file for extracting the size
-    m_xImpl->m_aIniKey = "FileDialog";
+    m_xImpl->m_aIniKey = u"FileDialog"_ustr;
 
     AddControls_Impl( );
 
@@ -2002,7 +2002,7 @@ void SvtFileDialog::AddControls_Impl( )
     // create the "show preview" checkbox ( and the preview window, too ), if needed
     if ( m_nPickerFlags & PickerFlags::ShowPreview  )
     {
-        m_xImpl->m_aIniKey = "ImportGraphicDialog";
+        m_xImpl->m_aIniKey = u"ImportGraphicDialog"_ustr;
 
         // "preview"
         m_xCbPreviewBox->set_label( FpsResId( STR_SVT_FILEPICKER_SHOW_PREVIEW ) );

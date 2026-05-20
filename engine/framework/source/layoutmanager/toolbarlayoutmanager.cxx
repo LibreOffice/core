@@ -1082,9 +1082,9 @@ void ToolbarLayoutManager::implts_createAddonsToolBars()
 
     uno::Sequence< beans::PropertyValue > aPropSeq( 2 );
     auto pPropSeq = aPropSeq.getArray();
-    pPropSeq[0].Name = "Frame";
+    pPropSeq[0].Name = u"Frame"_ustr;
     pPropSeq[0].Value <<= xFrame;
-    pPropSeq[1].Name = "ConfigurationData";
+    pPropSeq[1].Name = u"ConfigurationData"_ustr;
     for ( sal_uInt32 i = 0; i < nCount; i++ )
     {
         OUString aAddonToolBarName( "private:resource/toolbar/addon_" +

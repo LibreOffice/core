@@ -166,7 +166,7 @@ css::uno::Sequence<OUString> OGridControlModel::getSupportedServiceNames()
     css::uno::Sequence<OUString> aSupported = OControlModel::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 4);
     auto pSupported = aSupported.getArray();
-    pSupported[aSupported.getLength()-4] = "com.sun.star.awt.UnoControlModel";
+    pSupported[aSupported.getLength()-4] = u"com.sun.star.awt.UnoControlModel"_ustr;
     pSupported[aSupported.getLength()-3] = FRM_SUN_COMPONENT_GRIDCONTROL;
     pSupported[aSupported.getLength()-2] = FRM_COMPONENT_GRID;
     pSupported[aSupported.getLength()-1] = FRM_COMPONENT_GRIDCONTROL;

@@ -91,7 +91,7 @@ bool XMLFilterTabDialog::onOk()
                 {
                     if( xFilterContainer->hasByName( mpNewInfo->maFilterName ) )
                     {
-                        sErrorPage = "general";
+                        sErrorPage = u"general"_ustr;
                         pErrorId = STR_ERROR_FILTER_NAME_EXISTS;
                         pFocusWindow = mpBasicPage->m_xEDFilterName.get();
                         aReplace1 = mpNewInfo->maFilterName;
@@ -146,7 +146,7 @@ bool XMLFilterTabDialog::onOk()
                                 pValues->Value >>= aInterfaceName;
                                 if( aInterfaceName == mpNewInfo->maInterfaceName )
                                 {
-                                    sErrorPage = "general";
+                                    sErrorPage = u"general"_ustr;
                                     pErrorId = STR_ERROR_TYPE_NAME_EXISTS;
                                     pFocusWindow = mpBasicPage->m_xEDInterfaceName.get();
                                     aReplace1 = mpNewInfo->maInterfaceName;
@@ -174,7 +174,7 @@ bool XMLFilterTabDialog::onOk()
             if( aRC != osl::File::E_None )
             {
                 pErrorId = STR_ERROR_EXPORT_XSLT_NOT_FOUND;
-                sErrorPage = "transformation";
+                sErrorPage = u"transformation"_ustr;
                 pFocusWindow = mpXSLTPage->m_xEDExportXSLT->getWidget();
             }
         }
@@ -190,7 +190,7 @@ bool XMLFilterTabDialog::onOk()
             if( aRC != osl::File::E_None )
             {
                 pErrorId = STR_ERROR_IMPORT_XSLT_NOT_FOUND;
-                sErrorPage = "transformation";
+                sErrorPage = u"transformation"_ustr;
                 pFocusWindow = mpXSLTPage->m_xEDImportTemplate->getWidget();
             }
         }
@@ -200,7 +200,7 @@ bool XMLFilterTabDialog::onOk()
     if((mpNewInfo->maImportXSLT.isEmpty()) && (mpNewInfo->maExportXSLT.isEmpty()) )
     {
         pErrorId = STR_ERROR_EXPORT_XSLT_NOT_FOUND;
-        sErrorPage = "transformation";
+        sErrorPage = u"transformation"_ustr;
         pFocusWindow = mpXSLTPage->m_xEDExportXSLT->getWidget();
     }
 
@@ -214,7 +214,7 @@ bool XMLFilterTabDialog::onOk()
             if( aRC != osl::File::E_None )
             {
                 pErrorId = STR_ERROR_IMPORT_TEMPLATE_NOT_FOUND;
-                sErrorPage = "transformation";
+                sErrorPage = u"transformation"_ustr;
                 pFocusWindow = mpXSLTPage->m_xEDImportTemplate->getWidget();
             }
         }

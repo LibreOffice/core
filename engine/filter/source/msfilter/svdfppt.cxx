@@ -7000,7 +7000,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                             aCharPropList.emplace( aCharPropList.begin() + n + 1, pNewCPS );
 
                             pNewCPS = new PPTCharPropSet( *pSet );
-                            pNewCPS->maString = " ";
+                            pNewCPS->maString = u" "_ustr;
                             aCharPropList.emplace( aCharPropList.begin() + n + 1, pNewCPS );
                         }
                         if ( nCount )

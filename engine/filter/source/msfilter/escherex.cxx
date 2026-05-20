@@ -3354,7 +3354,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                     if ( xText.is() )
                         aText = xText->getString();
                     if ( aText.isEmpty() )
-                        aText = "your text";   // TODO: moving into a resource
+                        aText = u"your text"_ustr;   // TODO: moving into a resource
                     AddOpt( DFF_Prop_gtextUNICODE, aText );
 
                     // FontWork Font
@@ -3362,7 +3362,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                     uno::Any aAny = aXPropSet->getPropertyValue( u"CharFontName"_ustr );
                     aAny >>= aFontName;
                     if ( aFontName.isEmpty() )
-                        aFontName = "Arial Black";
+                        aFontName = u"Arial Black"_ustr;
                     AddOpt( DFF_Prop_gtextFont, aFontName );
 
                     if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, u"CharScaleWidth"_ustr, true ) )
@@ -4230,10 +4230,10 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, GraphicObjec
                         aGIFStream.Seek( STREAM_SEEK_TO_BEGIN );
                         aGIFStream.ReadBytes(pSeq, nGIFSreamLen);
                         beans::PropertyValue aChunkProp, aFilterProp;
-                        aChunkProp.Name = "msOG";
+                        aChunkProp.Name = u"msOG"_ustr;
                         aChunkProp.Value <<= aGIFSeq;
                         uno::Sequence<beans::PropertyValue> aAdditionalChunkSequence{ std::move(aChunkProp) };
-                        aFilterProp.Name = "AdditionalChunks";
+                        aFilterProp.Name = u"AdditionalChunks"_ustr;
                         aFilterProp.Value <<= aAdditionalChunkSequence;
                         uno::Sequence<beans::PropertyValue> aFilterData{ std::move(aFilterProp) };
                         nErrCode = rFilter.ExportGraphic( aGraphic, u"", aStream,

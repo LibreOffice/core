@@ -594,12 +594,12 @@ namespace frm
             break;
 
         case FormFeature::MoveAbsolute:
-            sItemText = "12345678";
+            sItemText = u"12345678"_ustr;
             nHeight = _pItemWindow->get_preferred_size().Height();
             break;
 
         case FormFeature::TotalRecords:
-            sItemText = "123456";
+            sItemText = u"123456"_ustr;
             break;
         }
 

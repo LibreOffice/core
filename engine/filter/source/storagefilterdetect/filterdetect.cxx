@@ -108,7 +108,7 @@ OUString SAL_CALL StorageFilterDetect::detect(uno::Sequence<beans::PropertyValue
         if (comphelper::COKit::isActive() && aTypeName == "draw8_template")
         {
             // save it as draw8 instead of template format
-            aTypeName = "draw8";
+            aTypeName = u"draw8"_ustr;
         }
     }
 

@@ -169,7 +169,7 @@ double SVGAttributeWriter::ImplRound( double fValue )
 void SVGAttributeWriter::ImplGetColorStr( const Color& rColor, OUString& rColorStr )
 {
     if( rColor.GetAlpha() == 0 )
-        rColorStr = "none";
+        rColorStr = u"none"_ustr;
     else
     {
         rColorStr = "rgb(" + OUString::number(rColor.GetRed()) + "," + OUString::number(rColor.GetGreen()) +
@@ -363,12 +363,12 @@ void SVGAttributeWriter::SetFontAttr( const vcl::Font& rFont )
     if( rFont.GetItalic() != ITALIC_NONE )
     {
         if( rFont.GetItalic() == ITALIC_OBLIQUE )
-            aFontStyle = "oblique";
+            aFontStyle = u"oblique"_ustr;
         else
-            aFontStyle = "italic";
+            aFontStyle = u"italic"_ustr;
     }
     else
-        aFontStyle = "normal";
+        aFontStyle = u"normal"_ustr;
 
     mrExport.AddAttribute(aXMLAttrFontStyle, aFontStyle);
 
@@ -396,13 +396,13 @@ void SVGAttributeWriter::SetFontAttr( const vcl::Font& rFont )
         if( rFont.GetUnderline() != LINESTYLE_NONE || rFont.GetStrikeout() != STRIKEOUT_NONE )
         {
             if( rFont.GetUnderline() != LINESTYLE_NONE )
-                aTextDecoration = "underline ";
+                aTextDecoration = u"underline "_ustr;
 
             if( rFont.GetStrikeout() != STRIKEOUT_NONE )
                 aTextDecoration += "line-through ";
         }
         else
-            aTextDecoration = "none";
+            aTextDecoration = u"none"_ustr;
 
         mrExport.AddAttribute(aXMLAttrTextDecoration, aTextDecoration);
     }
@@ -873,13 +873,13 @@ void SVGTextWriter::addFontAttributes( bool bIsTextContainer )
         if( eCurFontItalic != ITALIC_NONE )
         {
             if( eCurFontItalic == ITALIC_OBLIQUE )
-                sFontStyle = "oblique";
+                sFontStyle = u"oblique"_ustr;
             else
-                sFontStyle = "italic";
+                sFontStyle = u"italic"_ustr;
         }
         else
         {
-            sFontStyle = "normal";
+            sFontStyle = u"normal"_ustr;
         }
         mrExport.AddAttribute(aXMLAttrFontStyle, sFontStyle);
     }
@@ -919,7 +919,7 @@ void SVGTextWriter::addFontAttributes( bool bIsTextContainer )
         if( eCurFontLineStyle != eParFontLineStyle )
         {
             if( eCurFontLineStyle != LINESTYLE_NONE )
-                sTextDecoration = "underline";
+                sTextDecoration = u"underline"_ustr;
             bIsDecorationChanged = true;
         }
         if( eCurFontStrikeout != eParFontStrikeout )
@@ -939,7 +939,7 @@ void SVGTextWriter::addFontAttributes( bool bIsTextContainer )
         }
         else if( bIsDecorationChanged )
         {
-            sTextDecoration = "none";
+            sTextDecoration = u"none"_ustr;
             mrExport.AddAttribute(aXMLAttrTextDecoration, sTextDecoration);
         }
     }
@@ -1045,7 +1045,7 @@ bool SVGTextWriter::nextParagraph()
 #if OSL_DEBUG_LEVEL > 0
                             if( bIsNumbered )
                             {
-                                sInfo = "true";
+                                sInfo = u"true"_ustr;
                                 mrExport.AddAttribute(u"is-numbered"_ustr, sInfo);
                             }
 #endif
@@ -1110,14 +1110,14 @@ bool SVGTextWriter::nextParagraph()
                 mrTextPortionEnumeration.set( xEnumeration );
             }
 #if OSL_DEBUG_LEVEL > 0
-            sInfo = "Paragraph";
+            sInfo = u"Paragraph"_ustr;
 #endif
         }
         else if( xServiceInfo->supportsService( u"com.sun.star.text.Table"_ustr ) )
         {
             OSL_FAIL( "SVGTextWriter::nextParagraph: text tables are not handled." );
 #if OSL_DEBUG_LEVEL > 0
-            sInfo = "Table";
+            sInfo = u"Table"_ustr;
 #endif
         }
         else
@@ -1180,9 +1180,9 @@ bool SVGTextWriter::nextTextPortion()
         sInfo = "type: " + sPortionType + "; ";
     }
 #endif
-    msPageCount = "";
-    msDateTimeType = "";
-    msTextFieldType = "";
+    msPageCount = u""_ustr;
+    msDateTimeType = u""_ustr;
+    msTextFieldType = u""_ustr;
     if( xPortionTextRange.is() )
     {
 #if OSL_DEBUG_LEVEL > 0
@@ -1373,13 +1373,13 @@ void SVGTextWriter::startTextParagraph()
         switch( meNumberingType )
         {
             case NumberingType::CHAR_SPECIAL:
-                    sNumberingType = "bullet-style";
+                    sNumberingType = u"bullet-style"_ustr;
                     break;
             case NumberingType::BITMAP:
-                    sNumberingType = "image-style";
+                    sNumberingType = u"image-style"_ustr;
                     break;
             default:
-                    sNumberingType = "number-style";
+                    sNumberingType = u"number-style"_ustr;
                     break;
         }
         mrExport.AddAttribute(u"ooo:numbering-type"_ustr, sNumberingType);

@@ -178,7 +178,7 @@ namespace frm
         aSupported.realloc( aSupported.getLength() + 2 );
 
         OUString* pArray = aSupported.getArray();
-        pArray[ aSupported.getLength() - 2 ] = "com.sun.star.awt.UnoControlModel";
+        pArray[ aSupported.getLength() - 2 ] = u"com.sun.star.awt.UnoControlModel"_ustr;
         pArray[ aSupported.getLength() - 1 ] = FRM_SUN_COMPONENT_NAVTOOLBAR;
         return aSupported;
     }

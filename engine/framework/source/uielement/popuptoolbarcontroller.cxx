@@ -653,7 +653,7 @@ void SAL_CALL NewToolbarController::execute( sal_Int16 /*KeyModifier*/ )
         if ( pMenuAttributes )
             aTarget = pMenuAttributes->aTargetFrame;
         else
-            aTarget = "_default";
+            aTarget = u"_default"_ustr;
     }
     else
         aURL = m_aCommandURL;

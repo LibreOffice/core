@@ -709,20 +709,20 @@ bool queryOrcusTypeAndFilter(const uno::Sequence<beans::PropertyValue>& rDescrip
 
     if (aURL.endsWith(".xlsx"))
     {
-        rType = "generic_Text";
-        rFilter = "xlsx";
+        rType = u"generic_Text"_ustr;
+        rFilter = u"xlsx"_ustr;
         return true;
     }
     else if (aURL.endsWith(".ods"))
     {
-        rType = "generic_Text";
-        rFilter = "ods";
+        rType = u"generic_Text"_ustr;
+        rFilter = u"ods"_ustr;
         return true;
     }
     else if (aURL.endsWith(".csv"))
     {
-        rType = "generic_Text";
-        rFilter = "csv";
+        rType = u"generic_Text"_ustr;
+        rFilter = u"csv"_ustr;
         return true;
     }
 
@@ -1263,7 +1263,7 @@ void LoadEnv::impl_jumpToMark(const css::uno::Reference< css::frame::XFrame >& x
     // <- SAFE
 
     css::util::URL aCmd;
-    aCmd.Complete = ".uno:JumpToMark";
+    aCmd.Complete = u".uno:JumpToMark"_ustr;
 
     css::uno::Reference< css::util::XURLTransformer > xParser(css::util::URLTransformer::create(xContext));
     xParser->parseStrict(aCmd);

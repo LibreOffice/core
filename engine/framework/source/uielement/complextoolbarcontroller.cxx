@@ -270,7 +270,7 @@ void ComplexToolbarController::addNotifyInfo(
     uno::Sequence< beans::NamedValue > aInfoSeq( rInfo );
     aInfoSeq.realloc( nCount+1 );
     auto pInfoSeq = aInfoSeq.getArray();
-    pInfoSeq[nCount].Name  = "Source";
+    pInfoSeq[nCount].Name  = u"Source"_ustr;
     pInfoSeq[nCount].Value <<= getFrameInterface();
     pNotifyInfo->aInfoSeq  = std::move(aInfoSeq);
 

@@ -120,7 +120,7 @@ sal_Unicode bestFitOpenSymbolToMSFont(sal_Unicode cChar,
           in our private area, so give up and show a standard
           bullet symbol
         */
-        rFontName = "Wingdings";
+        rFontName = u"Wingdings"_ustr;
         cChar = u'\x6C';
     }
     return cChar;
@@ -616,7 +616,7 @@ static EquationResult Read_SubF_Combined(WW8ReadFieldParams& rReadParam)
                 }
                 if (!sCombinedCharacters.isEmpty())
                 {
-                    aResult.sType = "CombinedCharacters";
+                    aResult.sType = u"CombinedCharacters"_ustr;
                     aResult.sResult = sCombinedCharacters;
                 }
                 else
@@ -644,7 +644,7 @@ static EquationResult Read_SubF_Combined(WW8ReadFieldParams& rReadParam)
                         sCombinedCharacters = sPart.subView( nBegin+1, nEnd-nBegin-1 );
                         if ( !sCombinedCharacters.isEmpty() )
                         {
-                            aResult.sType = "Input";
+                            aResult.sType = u"Input"_ustr;
                             aResult.sResult = sCombinedCharacters;
                         }
                     }

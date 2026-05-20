@@ -899,14 +899,14 @@ css::uno::Reference< css::uno::XInterface > FilterCache::impl_createConfigAccess
             css::beans::NamedValue aParam;
 
             // set root path
-            aParam.Name = "nodepath";
+            aParam.Name = u"nodepath"_ustr;
             aParam.Value <<= sRoot;
             lParams.push_back(css::uno::Any(aParam));
 
             // enable "all locales mode" ... if required
             if (bLocalesMode)
             {
-                aParam.Name = "locale";
+                aParam.Name = u"locale"_ustr;
                 aParam.Value <<= u"*"_ustr;
                 lParams.push_back(css::uno::Any(aParam));
             }

@@ -757,14 +757,14 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
                                 {
                                     OUString aPropName( u"EndShape"_ustr );
                                     SetPropValue( Any(aXShape), xPropSet, aPropName );
-                                    aPropName = "EndGluePointIndex";
+                                    aPropName = u"EndGluePointIndex"_ustr;
                                     SetPropValue( Any(nId), xPropSet, aPropName );
                                 }
                                 else
                                 {
                                     OUString aPropName( u"StartShape"_ustr );
                                     SetPropValue( Any(aXShape), xPropSet, aPropName );
-                                    aPropName = "StartGluePointIndex";
+                                    aPropName = u"StartGluePointIndex"_ustr;
                                     SetPropValue( Any(nId), xPropSet, aPropName );
                                 }
 
@@ -1613,7 +1613,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
 
     // "Type" property, including the predefined CustomShape type name
 
-    aProp.Name  = "Type";
+    aProp.Name  = u"Type"_ustr;
     aProp.Value <<= EnhancedCustomShapeTypeNames::Get( rObjData.eShapeType );
     aPropVec.push_back( aProp );
 
@@ -1630,7 +1630,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         aViewBox.Y = GetPropertyValue( DFF_Prop_geoTop, 0 );
         aViewBox.Width = nCoordWidth = o3tl::saturating_sub<sal_Int32>(GetPropertyValue(DFF_Prop_geoRight, 21600), aViewBox.X);
         aViewBox.Height = nCoordHeight = o3tl::saturating_sub<sal_Int32>(GetPropertyValue(DFF_Prop_geoBottom, 21600), aViewBox.Y);
-        aProp.Name = "ViewBox";
+        aProp.Name = u"ViewBox"_ustr;
         aProp.Value <<= aViewBox;
         aPropVec.push_back( aProp );
     }
@@ -1664,7 +1664,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         if ( nTextRotateAngle )
         {
             double fTextRotateAngle = nTextRotateAngle;
-            aProp.Name = "TextRotateAngle";
+            aProp.Name = u"TextRotateAngle"_ustr;
             aProp.Value <<= fTextRotateAngle;
             aPropVec.push_back( aProp );
         }
@@ -1678,7 +1678,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         PropVec aExtrusionPropVec;
 
         // "Extrusion"
-        aProp.Name = "Extrusion";
+        aProp.Name = u"Extrusion"_ustr;
         aProp.Value <<= bExtrusionOn;
         aExtrusionPropVec.push_back( aProp );
 
@@ -1693,7 +1693,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
             fBrightness = GetPropertyValue( DFF_Prop_c3DAmbientIntensity, 0 );
         }
         fBrightness /= 655.36;
-        aProp.Name = "Brightness";
+        aProp.Name = u"Brightness"_ustr;
         aProp.Value <<= fBrightness;
         aExtrusionPropVec.push_back( aProp );
 
@@ -1709,7 +1709,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
             aDepthParaPair.First.Type = EnhancedCustomShapeParameterType::NORMAL;
             aDepthParaPair.Second.Value <<= fFraction;
             aDepthParaPair.Second.Type = EnhancedCustomShapeParameterType::NORMAL;
-            aProp.Name = "Depth";
+            aProp.Name = u"Depth"_ustr;
             aProp.Value <<= aDepthParaPair;
             aExtrusionPropVec.push_back( aProp );
         }
@@ -1721,30 +1721,30 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
             fDiffusion = static_cast<sal_Int32>(GetPropertyValue( DFF_Prop_c3DDiffuseAmt, 0 ));
             fDiffusion /= 655.36;
         }
-        aProp.Name = "Diffusion";
+        aProp.Name = u"Diffusion"_ustr;
         aProp.Value <<= fDiffusion;
         aExtrusionPropVec.push_back( aProp );
 
         // "NumberOfLineSegments"
         if ( IsProperty( DFF_Prop_c3DTolerance ) )
         {
-            aProp.Name = "NumberOfLineSegments";
+            aProp.Name = u"NumberOfLineSegments"_ustr;
             aProp.Value <<= static_cast<sal_Int32>(GetPropertyValue( DFF_Prop_c3DTolerance, 0 ));
             aExtrusionPropVec.push_back( aProp );
         }
         // "LightFace"
         bool bExtrusionLightFace = ( GetPropertyValue( DFF_Prop_fc3DLightFace, 0 ) & 1 ) != 0;
-        aProp.Name = "LightFace";
+        aProp.Name = u"LightFace"_ustr;
         aProp.Value <<= bExtrusionLightFace;
         aExtrusionPropVec.push_back( aProp );
         // "FirstLightHarsh"
         bool bExtrusionFirstLightHarsh = ( GetPropertyValue( DFF_Prop_fc3DFillHarsh, 0 ) & 2 ) != 0;
-        aProp.Name = "FirstLightHarsh";
+        aProp.Name = u"FirstLightHarsh"_ustr;
         aProp.Value <<= bExtrusionFirstLightHarsh;
         aExtrusionPropVec.push_back( aProp );
         // "SecondLightHarsh"
         bool bExtrusionSecondLightHarsh = ( GetPropertyValue( DFF_Prop_fc3DFillHarsh, 0 ) & 1 ) != 0;
-        aProp.Name = "SecondLightHarsh";
+        aProp.Name = u"SecondLightHarsh"_ustr;
         aProp.Value <<= bExtrusionSecondLightHarsh;
         aExtrusionPropVec.push_back( aProp );
 
@@ -1758,7 +1758,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
             fFirstLightLevel = static_cast<sal_Int32>(GetPropertyValue( DFF_Prop_c3DKeyIntensity, 0 ));
         }
         fFirstLightLevel /= 655.36;
-        aProp.Name = "FirstLightLevel";
+        aProp.Name = u"FirstLightLevel"_ustr;
         aProp.Value <<= fFirstLightLevel;
         aExtrusionPropVec.push_back( aProp );
 
@@ -1772,7 +1772,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
             fSecondLightLevel = static_cast<sal_Int32>(GetPropertyValue( DFF_Prop_c3DFillIntensity, 0 ));
         }
         fSecondLightLevel /= 655.36;
-        aProp.Name = "SecondLightLevel";
+        aProp.Name = u"SecondLightLevel"_ustr;
         aProp.Value <<= fSecondLightLevel;
         aExtrusionPropVec.push_back( aProp );
 
@@ -1783,7 +1783,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
             double fLightY = static_cast<double>(static_cast<sal_Int32>(GetPropertyValue( DFF_Prop_c3DKeyY, 0 )));
             double fLightZ = static_cast<double>(static_cast<sal_Int32>(GetPropertyValue( DFF_Prop_c3DKeyZ, 10000 )));
             css::drawing::Direction3D aExtrusionFirstLightDirection( fLightX, fLightY, fLightZ );
-            aProp.Name = "FirstLightDirection";
+            aProp.Name = u"FirstLightDirection"_ustr;
             aProp.Value <<= aExtrusionFirstLightDirection;
             aExtrusionPropVec.push_back( aProp );
         }
@@ -1794,17 +1794,17 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
             double fLight2Y = static_cast<double>(static_cast<sal_Int32>(GetPropertyValue( DFF_Prop_c3DFillY, 0 )));
             double fLight2Z = static_cast<double>(static_cast<sal_Int32>(GetPropertyValue( DFF_Prop_c3DFillZ, 10000 )));
             css::drawing::Direction3D aExtrusionSecondLightDirection( fLight2X, fLight2Y, fLight2Z );
-            aProp.Name = "SecondLightDirection";
+            aProp.Name = u"SecondLightDirection"_ustr;
             aProp.Value <<= aExtrusionSecondLightDirection;
             aExtrusionPropVec.push_back( aProp );
         }
 
         // "Metal"
         bool bExtrusionMetal = ( GetPropertyValue( DFF_Prop_fc3DLightFace, 0 ) & 4 ) != 0;
-        aProp.Name = "Metal";
+        aProp.Name = u"Metal"_ustr;
         aProp.Value <<= bExtrusionMetal;
         aExtrusionPropVec.push_back( aProp );
-        aProp.Name = "MetalType";
+        aProp.Name = u"MetalType"_ustr;
         aProp.Value <<= css::drawing::EnhancedCustomShapeMetalType::MetalMSCompatible;
         aExtrusionPropVec.push_back(aProp);
 
@@ -1816,7 +1816,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
             if ( nExtrusionRenderMode == mso_Wireframe )
                 eExtrusionShadeMode = css::drawing::ShadeMode_DRAFT;
 
-            aProp.Name = "ShadeMode";
+            aProp.Name = u"ShadeMode"_ustr;
             aProp.Value <<= eExtrusionShadeMode;
             aExtrusionPropVec.push_back( aProp );
         }
@@ -1830,7 +1830,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
             aRotateAnglePair.First.Type = EnhancedCustomShapeParameterType::NORMAL;
             aRotateAnglePair.Second.Value <<= fAngleY;
             aRotateAnglePair.Second.Type = EnhancedCustomShapeParameterType::NORMAL;
-            aProp.Name = "RotateAngle";
+            aProp.Name = u"RotateAngle"_ustr;
             aProp.Value <<= aRotateAnglePair;
             aExtrusionPropVec.push_back( aProp );
         }
@@ -1847,7 +1847,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                     static_cast<double>(static_cast<sal_Int32>(GetPropertyValue( DFF_Prop_c3DRotationCenterY, 0 ))) / 65536.0,
                     static_cast<double>(static_cast<sal_Int32>(GetPropertyValue( DFF_Prop_c3DRotationCenterZ, 0 ))) / 360.0 );
 
-                aProp.Name = "RotationCenter";
+                aProp.Name = u"RotationCenter"_ustr;
                 aProp.Value <<= aRotationCenter;
                 aExtrusionPropVec.push_back( aProp );
             }
@@ -1858,7 +1858,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         {
             double fShininess = static_cast<sal_Int32>(GetPropertyValue( DFF_Prop_c3DShininess, 0 ));
             fShininess *= 10.0; // error in [MS ODRAW] (2021), type is not FixedPoint but long.
-            aProp.Name = "Shininess";
+            aProp.Name = u"Shininess"_ustr;
             aProp.Value <<= fShininess;
             aExtrusionPropVec.push_back( aProp );
         }
@@ -1881,7 +1881,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         aSkewPair.First.Type = EnhancedCustomShapeParameterType::NORMAL;
         aSkewPair.Second.Value <<= fSkewAngle;
         aSkewPair.Second.Type = EnhancedCustomShapeParameterType::NORMAL;
-        aProp.Name = "Skew";
+        aProp.Name = u"Skew"_ustr;
         aProp.Value <<= aSkewPair;
         aExtrusionPropVec.push_back( aProp );
 
@@ -1891,13 +1891,13 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         {
             double fSpecularity = static_cast<sal_Int32>(GetPropertyValue( DFF_Prop_c3DSpecularAmt, 0 ));
             fSpecularity /= 655.36;
-            aProp.Name = "Specularity";
+            aProp.Name = u"Specularity"_ustr;
             aProp.Value <<= fSpecularity;
             aExtrusionPropVec.push_back( aProp );
         }
         // "ProjectionMode"
         ProjectionMode eProjectionMode = (GetPropertyValue( DFF_Prop_fc3DFillHarsh, 0 ) & 4) ? ProjectionMode_PARALLEL : ProjectionMode_PERSPECTIVE;
-        aProp.Name = "ProjectionMode";
+        aProp.Name = u"ProjectionMode"_ustr;
         aProp.Value <<= eProjectionMode;
         aExtrusionPropVec.push_back( aProp );
 
@@ -1914,7 +1914,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
             fViewZ = static_cast<double>(static_cast<sal_Int32>(GetPropertyValue( DFF_Prop_c3DZViewpoint, 9000000 ))) / 360.0;
         }
         css::drawing::Position3D aExtrusionViewPoint( fViewX, fViewY, fViewZ );
-        aProp.Name = "ViewPoint";
+        aProp.Name = u"ViewPoint"_ustr;
         aProp.Value <<= aExtrusionViewPoint;
         aExtrusionPropVec.push_back( aProp );
 
@@ -1930,20 +1930,20 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
             aOriginPair.First.Type = EnhancedCustomShapeParameterType::NORMAL;
             aOriginPair.Second.Value <<= fOriginY;
             aOriginPair.Second.Type = EnhancedCustomShapeParameterType::NORMAL;
-            aProp.Name = "Origin";
+            aProp.Name = u"Origin"_ustr;
             aProp.Value <<= aOriginPair;
             aExtrusionPropVec.push_back( aProp );
         }
         // "ExtrusionColor"
         bool bExtrusionColor = IsProperty( DFF_Prop_c3DExtrusionColor );    // ( GetPropertyValue( DFF_Prop_fc3DLightFace ) & 2 ) != 0;
-        aProp.Name = "Color";
+        aProp.Name = u"Color"_ustr;
         aProp.Value <<= bExtrusionColor;
         aExtrusionPropVec.push_back( aProp );
         if ( IsProperty( DFF_Prop_c3DExtrusionColor ) )
             rSet.Put( XSecondaryFillColorItem( OUString(), rManager.MSO_CLR_ToColor(
                 GetPropertyValue( DFF_Prop_c3DExtrusionColor, 0 ), DFF_Prop_c3DExtrusionColor ) ) );
         // pushing the whole Extrusion element
-        aProp.Name = "Extrusion";
+        aProp.Name = u"Extrusion"_ustr;
         aProp.Value <<= comphelper::containerToSequence(aExtrusionPropVec);
         aPropVec.push_back( aProp );
     }
@@ -1972,7 +1972,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                 rEquation = EnhancedCustomShape2d::GetEquation( nFlags, nP1, nP2, nP3 );
             }
             // pushing the whole Equations element
-            aProp.Name = "Equations";
+            aProp.Name = u"Equations"_ustr;
             aProp.Value <<= aEquations;
             aPropVec.push_back( aProp );
         }
@@ -2023,25 +2023,25 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                 EnhancedCustomShapeParameterPair aPosition;
                 EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aPosition.First,  nPositionX, true, true  );
                 EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aPosition.Second, nPositionY, true, false );
-                aProp.Name = "Position";
+                aProp.Name = u"Position"_ustr;
                 aProp.Value <<= aPosition;
                 aHandlePropVec.push_back( aProp );
 
                 if ( nFlags & SvxMSDffHandleFlags::MIRRORED_X )
                 {
-                    aProp.Name = "MirroredX";
+                    aProp.Name = u"MirroredX"_ustr;
                     aProp.Value <<= true;
                     aHandlePropVec.push_back( aProp );
                 }
                 if ( nFlags & SvxMSDffHandleFlags::MIRRORED_Y )
                 {
-                    aProp.Name = "MirroredY";
+                    aProp.Name = u"MirroredY"_ustr;
                     aProp.Value <<= true;
                     aHandlePropVec.push_back( aProp );
                 }
                 if ( nFlags & SvxMSDffHandleFlags::SWITCHED )
                 {
-                    aProp.Name = "Switched";
+                    aProp.Name = u"Switched"_ustr;
                     aProp.Value <<= true;
                     aHandlePropVec.push_back( aProp );
                 }
@@ -2056,7 +2056,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                     EnhancedCustomShapeParameterPair aPolar;
                     EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aPolar.First,  nCenterX, bool( nFlags & SvxMSDffHandleFlags::CENTER_X_IS_SPECIAL ), true  );
                     EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aPolar.Second, nCenterY, bool( nFlags & SvxMSDffHandleFlags::CENTER_Y_IS_SPECIAL ), false );
-                    aProp.Name = "Polar";
+                    aProp.Name = u"Polar"_ustr;
                     aProp.Value <<= aPolar;
                     aHandlePropVec.push_back( aProp );
                 }
@@ -2069,7 +2069,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                     EnhancedCustomShapeParameterPair aMap;
                     EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aMap.First,  nCenterX, bool( nFlags & SvxMSDffHandleFlags::CENTER_X_IS_SPECIAL ), true  );
                     EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aMap.Second, nCenterY, bool( nFlags & SvxMSDffHandleFlags::CENTER_Y_IS_SPECIAL ), false );
-                    aProp.Name = "Map";
+                    aProp.Name = u"Map"_ustr;
                     aProp.Value <<= aMap;
                     aHandlePropVec.push_back( aProp );
                 }
@@ -2082,7 +2082,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                         EnhancedCustomShapeParameter aRangeXMinimum;
                         EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aRangeXMinimum,  nRangeXMin,
                             bool( nFlags & SvxMSDffHandleFlags::RANGE_X_MIN_IS_SPECIAL ), true  );
-                        aProp.Name = "RangeXMinimum";
+                        aProp.Name = u"RangeXMinimum"_ustr;
                         aProp.Value <<= aRangeXMinimum;
                         aHandlePropVec.push_back( aProp );
                     }
@@ -2093,7 +2093,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                         EnhancedCustomShapeParameter aRangeXMaximum;
                         EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aRangeXMaximum, nRangeXMax,
                             bool( nFlags & SvxMSDffHandleFlags::RANGE_X_MAX_IS_SPECIAL ), false );
-                        aProp.Name = "RangeXMaximum";
+                        aProp.Name = u"RangeXMaximum"_ustr;
                         aProp.Value <<= aRangeXMaximum;
                         aHandlePropVec.push_back( aProp );
                     }
@@ -2104,7 +2104,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                         EnhancedCustomShapeParameter aRangeYMinimum;
                         EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aRangeYMinimum, nRangeYMin,
                             bool( nFlags & SvxMSDffHandleFlags::RANGE_Y_MIN_IS_SPECIAL ), true );
-                        aProp.Name = "RangeYMinimum";
+                        aProp.Name = u"RangeYMinimum"_ustr;
                         aProp.Value <<= aRangeYMinimum;
                         aHandlePropVec.push_back( aProp );
                     }
@@ -2115,7 +2115,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                         EnhancedCustomShapeParameter aRangeYMaximum;
                         EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aRangeYMaximum, nRangeYMax,
                             bool( nFlags & SvxMSDffHandleFlags::RANGE_Y_MAX_IS_SPECIAL ), false );
-                        aProp.Name = "RangeYMaximum";
+                        aProp.Name = u"RangeYMaximum"_ustr;
                         aProp.Value <<= aRangeYMaximum;
                         aHandlePropVec.push_back( aProp );
                     }
@@ -2129,7 +2129,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                         EnhancedCustomShapeParameter aRadiusRangeMinimum;
                         EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aRadiusRangeMinimum, nRangeXMin,
                             bool( nFlags & SvxMSDffHandleFlags::RANGE_X_MIN_IS_SPECIAL ), true  );
-                        aProp.Name = "RadiusRangeMinimum";
+                        aProp.Name = u"RadiusRangeMinimum"_ustr;
                         aProp.Value <<= aRadiusRangeMinimum;
                         aHandlePropVec.push_back( aProp );
                     }
@@ -2140,7 +2140,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                         EnhancedCustomShapeParameter aRadiusRangeMaximum;
                         EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aRadiusRangeMaximum, nRangeXMax,
                             bool( nFlags & SvxMSDffHandleFlags::RANGE_X_MAX_IS_SPECIAL ), false );
-                        aProp.Name = "RadiusRangeMaximum";
+                        aProp.Name = u"RadiusRangeMaximum"_ustr;
                         aProp.Value <<= aRadiusRangeMaximum;
                         aHandlePropVec.push_back( aProp );
                     }
@@ -2148,7 +2148,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                 aHandlesRange[ i ] = comphelper::containerToSequence(aHandlePropVec);
             }
             // pushing the whole Handles element
-            aProp.Name = "Handles";
+            aProp.Name = u"Handles"_ustr;
             aProp.Value <<= aHandles;
             aPropVec.push_back( aProp );
         }
@@ -2181,7 +2181,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         if ( IsHardAttribute( DFF_Prop_f3DOK ) )
         {
             bool bExtrusionAllowed = ( GetPropertyValue( DFF_Prop_fFillOK, 0 ) & 16 ) != 0;
-            aProp.Name = "ExtrusionAllowed";
+            aProp.Name = u"ExtrusionAllowed"_ustr;
             aProp.Value <<= bExtrusionAllowed;
             aPathPropVec.push_back( aProp );
         }
@@ -2189,7 +2189,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         if ( IsHardAttribute( DFF_Prop_fFillShadeShapeOK ) )
         {
             bool bConcentricGradientFillAllowed = ( GetPropertyValue( DFF_Prop_fFillOK, 0 ) & 2 ) != 0;
-            aProp.Name = "ConcentricGradientFillAllowed";
+            aProp.Name = u"ConcentricGradientFillAllowed"_ustr;
             aProp.Value <<= bConcentricGradientFillAllowed;
             aPathPropVec.push_back( aProp );
         }
@@ -2197,7 +2197,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         if ( IsHardAttribute( DFF_Prop_fGtextOK ) || ( GetPropertyValue( DFF_Prop_gtextFStrikethrough, 0 ) & 0x4000 ) )
         {
             bool bTextPathAllowed = ( GetPropertyValue( DFF_Prop_fFillOK, 0 ) & 4 ) != 0;
-            aProp.Name = "TextPathAllowed";
+            aProp.Name = u"TextPathAllowed"_ustr;
             aProp.Value <<= bTextPathAllowed;
             aPathPropVec.push_back( aProp );
         }
@@ -2257,7 +2257,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                     EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( rCoordinate.Second, nY );
                 }
             }
-            aProp.Name = "Coordinates";
+            aProp.Name = u"Coordinates"_ustr;
             aProp.Value <<= aCoordinates;
             aPathPropVec.push_back( aProp );
         }
@@ -2387,7 +2387,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                     rSegment.Count = nCnt;
                 }
             }
-            aProp.Name = "Segments";
+            aProp.Name = u"Segments"_ustr;
             aProp.Value <<= aSegments;
             aPathPropVec.push_back( aProp );
         }
@@ -2395,7 +2395,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         if ( IsProperty( DFF_Prop_stretchPointX ) )
         {
             sal_Int32 nStretchX = GetPropertyValue( DFF_Prop_stretchPointX, 0 );
-            aProp.Name = "StretchX";
+            aProp.Name = u"StretchX"_ustr;
             aProp.Value <<= nStretchX;
             aPathPropVec.push_back( aProp );
         }
@@ -2403,7 +2403,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         if ( IsProperty( DFF_Prop_stretchPointY ) )
         {
             sal_Int32 nStretchY = GetPropertyValue( DFF_Prop_stretchPointY, 0 );
-            aProp.Name = "StretchY";
+            aProp.Name = u"StretchY"_ustr;
             aProp.Value <<= nStretchY;
             aPathPropVec.push_back( aProp );
         }
@@ -2441,7 +2441,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                     EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( rTextFrame.BottomRight.First,  nRight );
                     EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( rTextFrame.BottomRight.Second, nBottom);
                 }
-                aProp.Name = "TextFrames";
+                aProp.Name = u"TextFrames"_ustr;
                 aProp.Value <<= aTextFrames;
                 aPathPropVec.push_back( aProp );
             }
@@ -2490,21 +2490,21 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                     EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( rGluePoint.Second, nY );
                 }
             }
-            aProp.Name = "GluePoints";
+            aProp.Name = u"GluePoints"_ustr;
             aProp.Value <<= aGluePoints;
             aPathPropVec.push_back( aProp );
         }
         if ( IsProperty( DFF_Prop_connectorType ) )
         {
             sal_Int16 nGluePointType = static_cast<sal_uInt16>(GetPropertyValue( DFF_Prop_connectorType, 0 ));
-            aProp.Name = "GluePointType";
+            aProp.Name = u"GluePointType"_ustr;
             aProp.Value <<= nGluePointType;
             aPathPropVec.push_back( aProp );
         }
         // pushing the whole Path element
         if ( !aPathPropVec.empty() )
         {
-            aProp.Name = "Path";
+            aProp.Name = u"Path"_ustr;
             aProp.Value <<= comphelper::containerToSequence(aPathPropVec);
             aPropVec.push_back( aProp );
         }
@@ -2518,7 +2518,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         PropVec aTextPathPropVec;
 
         // TextPath
-        aProp.Name = "TextPath";
+        aProp.Name = u"TextPath"_ustr;
         aProp.Value <<= bTextPathOn;
         aTextPathPropVec.push_back( aProp );
 
@@ -2547,23 +2547,23 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
             eTextPathMode = EnhancedCustomShapeTextPathMode_SHAPE;
         else if ( bTextPathFitPath )
             eTextPathMode = EnhancedCustomShapeTextPathMode_PATH;
-        aProp.Name = "TextPathMode";
+        aProp.Name = u"TextPathMode"_ustr;
         aProp.Value <<= eTextPathMode;
         aTextPathPropVec.push_back( aProp );
 
         // ScaleX
         bool bTextPathScaleX = ( GetPropertyValue( DFF_Prop_gtextFStrikethrough, 0 ) & 0x40 ) != 0;
-        aProp.Name = "ScaleX";
+        aProp.Name = u"ScaleX"_ustr;
         aProp.Value <<= bTextPathScaleX;
         aTextPathPropVec.push_back( aProp );
         // SameLetterHeights
         bool bSameLetterHeight = ( GetPropertyValue( DFF_Prop_gtextFStrikethrough, 0 ) & 0x80 ) != 0;
-        aProp.Name = "SameLetterHeights";
+        aProp.Name = u"SameLetterHeights"_ustr;
         aProp.Value <<= bSameLetterHeight;
         aTextPathPropVec.push_back( aProp );
 
         // pushing the whole TextPath element
-        aProp.Name = "TextPath";
+        aProp.Name = u"TextPath"_ustr;
         aProp.Value <<= comphelper::containerToSequence(aTextPathPropVec);
         aPropVec.push_back( aProp );
     }
@@ -2600,7 +2600,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
             pAdjustmentSeq[ nAdjustmentValues ].State = ePropertyState;
             i--;
         }
-        aProp.Name = "AdjustmentValues";
+        aProp.Name = u"AdjustmentValues"_ustr;
         aProp.Value <<= aAdjustmentSeq;
         aPropVec.push_back( aProp );
     }
@@ -4740,7 +4740,7 @@ rtl::Reference<SdrObject> SvxMSDffManager::ImportShape( const DffRecordHeader& r
                         EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( pTextFrame[ 0 ].BottomRight.First, nRight );
                         EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( pTextFrame[ 0 ].BottomRight.Second,nBottom );
                         PropertyValue aProp;
-                        aProp.Name = "TextFrames";
+                        aProp.Name = u"TextFrames"_ustr;
                         aProp.Value <<= aTextFrame;
                         aGeometryItem.SetPropertyValue( sPath, aProp );
 
@@ -4775,7 +4775,7 @@ rtl::Reference<SdrObject> SvxMSDffManager::ImportShape( const DffRecordHeader& r
 
                         // now setting a new name, so the above correction is only done once when importing from ms
                         SdrCustomShapeGeometryItem aGeoName( static_cast<SdrObjCustomShape*>(xRet.get())->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
-                        aPropVal.Name = "Type";
+                        aPropVal.Name = u"Type"_ustr;
                         aPropVal.Value <<= u"mso-spt100"_ustr;
                         aGeoName.SetPropertyValue( aPropVal );
                         static_cast<SdrObjCustomShape*>(xRet.get())->SetMergedItem( aGeoName );
@@ -7207,17 +7207,17 @@ css::uno::Reference < css::embed::XEmbeddedObject >  SvxMSDffManager::CheckForCo
 
             uno::Sequence<beans::PropertyValue> aMedium(aFilterName.isEmpty() ? 3 : 4);
             auto pMedium = aMedium.getArray();
-            pMedium[0].Name = "InputStream";
+            pMedium[0].Name = u"InputStream"_ustr;
             uno::Reference < io::XInputStream > xStream = new ::utl::OSeekableInputStreamWrapper( aMemStream );
             pMedium[0].Value <<= xStream;
-            pMedium[1].Name = "URL";
+            pMedium[1].Name = u"URL"_ustr;
             pMedium[1].Value <<= u"private:stream"_ustr;
-            pMedium[2].Name = "DocumentBaseURL";
+            pMedium[2].Name = u"DocumentBaseURL"_ustr;
             pMedium[2].Value <<= rBaseURL;
 
             if ( !aFilterName.isEmpty() )
             {
-                pMedium[3].Name = "FilterName";
+                pMedium[3].Name = u"FilterName"_ustr;
                 pMedium[3].Value <<= aFilterName;
             }
 

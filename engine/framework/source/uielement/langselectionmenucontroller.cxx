@@ -271,10 +271,10 @@ void LanguageSelectionMenuController::initializeImpl( std::unique_lock<std::mute
 
         if ( m_bInitialized )
         {
-            m_aLangStatusCommandURL               = ".uno:LanguageStatus";
+            m_aLangStatusCommandURL               = u".uno:LanguageStatus"_ustr;
             m_aMenuCommandURL_Lang                = m_aLangStatusCommandURL;
-            m_aMenuCommandURL_Font                = ".uno:FontDialog";
-            m_aMenuCommandURL_CharDlgForParagraph = ".uno:FontDialogForParagraph";
+            m_aMenuCommandURL_Font                = u".uno:FontDialog"_ustr;
+            m_aMenuCommandURL_CharDlgForParagraph = u".uno:FontDialogForParagraph"_ustr;
         }
     }
 }

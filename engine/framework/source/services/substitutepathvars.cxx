@@ -617,7 +617,7 @@ OUString const & SubstitutePathVariables::impl_getSubstituteVariableValue( const
 
 void SubstitutePathVariables::SetPredefinedPathVariables()
 {
-    m_aPreDefVars.m_FixedVar[PREDEFVAR_BRANDBASEURL] = "$BRAND_BASE_DIR";
+    m_aPreDefVars.m_FixedVar[PREDEFVAR_BRANDBASEURL] = u"$BRAND_BASE_DIR"_ustr;
     rtl::Bootstrap::expandMacros(
         m_aPreDefVars.m_FixedVar[PREDEFVAR_BRANDBASEURL]);
 

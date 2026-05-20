@@ -251,7 +251,7 @@ OUString getDefaultProjectName( SfxObjectShell const * pShell )
     {
         aPrjName = pBasicMgr->GetName();
         if( aPrjName.isEmpty() )
-            aPrjName = "Standard";
+            aPrjName = u"Standard"_ustr;
     }
     return aPrjName;
 }

@@ -113,7 +113,7 @@ LayoutManager::LayoutManager( const Reference< XComponentContext >& xContext ) :
         , m_bInSetCurrentUIVisibility( false )
 {
     // Initialize statusbar member
-    m_aStatusBarElement.m_aType = "statusbar";
+    m_aStatusBarElement.m_aType = u"statusbar"_ustr;
     m_aStatusBarElement.m_aName = STATUS_BAR_ALIAS;
 
     if (!comphelper::COKit::isActive())

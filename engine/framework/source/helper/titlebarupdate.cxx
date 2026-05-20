@@ -128,19 +128,19 @@ void TitleBarUpdate::impl_updateApplicationID(const css::uno::Reference< css::fr
         OUString sDesktopName;
         OUString aModuleId = xModuleManager->identify(xFrame);
         if ( aModuleId.startsWith("com.sun.star.text.") || aModuleId.startsWith("com.sun.star.xforms.") )
-            sDesktopName = "Writer";
+            sDesktopName = u"Writer"_ustr;
         else if ( aModuleId.startsWith("com.sun.star.sheet.") )
-            sDesktopName = "Calc";
+            sDesktopName = u"Calc"_ustr;
         else if ( aModuleId.startsWith("com.sun.star.presentation.") )
-            sDesktopName = "Impress";
+            sDesktopName = u"Impress"_ustr;
         else if ( aModuleId.startsWith("com.sun.star.drawing." ) )
-            sDesktopName = "Draw";
+            sDesktopName = u"Draw"_ustr;
         else if ( aModuleId.startsWith("com.sun.star.formula." ) )
-            sDesktopName = "Math";
+            sDesktopName = u"Math"_ustr;
         else if ( aModuleId.startsWith("com.sun.star.sdb.") )
-            sDesktopName = "Base";
+            sDesktopName = u"Base"_ustr;
         else
-            sDesktopName = "Startcenter";
+            sDesktopName = u"Startcenter"_ustr;
 #if defined(_WIN32)
         // We use a hardcoded product name matching the registry keys so applications can be associated with file types
         sApplicationID = "Collabora.CollaboraOffice." + sDesktopName;

@@ -339,21 +339,21 @@ void SAL_CALL OReadToolBoxDocumentHandler::startElement(
                 /// check whether RTL interface or not
                 if(AllSettings::GetLayoutRTL()){
                     if (aCommandURL == ".uno:ParaLeftToRight")
-                        aCommandURL = ".uno:ParaRightToLeft";
+                        aCommandURL = u".uno:ParaRightToLeft"_ustr;
                     else if (aCommandURL == ".uno:ParaRightToLeft")
-                        aCommandURL = ".uno:ParaLeftToRight";
+                        aCommandURL = u".uno:ParaLeftToRight"_ustr;
                     else if (aCommandURL == ".uno:LeftPara")
-                        aCommandURL = ".uno:RightPara";
+                        aCommandURL = u".uno:RightPara"_ustr;
                     else if (aCommandURL == ".uno:RightPara")
-                        aCommandURL = ".uno:LeftPara";
+                        aCommandURL = u".uno:LeftPara"_ustr;
                     else if (aCommandURL == ".uno:AlignLeft")
-                        aCommandURL = ".uno:AlignRight";
+                        aCommandURL = u".uno:AlignRight"_ustr;
                     else if (aCommandURL == ".uno:AlignRight")
-                        aCommandURL = ".uno:AlignLeft";
+                        aCommandURL = u".uno:AlignLeft"_ustr;
                     else if (aCommandURL == ".uno:WrapLeft")
-                        aCommandURL = ".uno:WrapRight";
+                        aCommandURL = u".uno:WrapRight"_ustr;
                     else if (aCommandURL == ".uno:WrapRight")
-                        aCommandURL = ".uno:WrapLeft";
+                        aCommandURL = u".uno:WrapLeft"_ustr;
                 }
 
                 auto aToolbarItemProp( comphelper::InitPropertySequence( {

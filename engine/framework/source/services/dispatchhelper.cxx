@@ -142,7 +142,7 @@ DispatchHelper::executeDispatch(const css::uno::Reference<css::frame::XDispatch>
         sal_Int32 nLength = lArguments.getLength();
         aArguments.realloc(nLength + 1);
         auto pArguments = aArguments.getArray();
-        pArguments[nLength].Name = "SynchronMode";
+        pArguments[nLength].Name = u"SynchronMode"_ustr;
         pArguments[nLength].Value <<= SyncronFlag;
 
         if (xNotifyDispatch.is())

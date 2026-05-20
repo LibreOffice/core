@@ -232,7 +232,7 @@ void ResourceMenuController::updatePopupMenu()
         return;
 
     css::util::URL aObjectMenuURL;
-    aObjectMenuURL.Complete = ".uno:ObjectMenue";
+    aObjectMenuURL.Complete = u".uno:ObjectMenue"_ustr;
     m_xURLTransformer->parseStrict( aObjectMenuURL );
     css::uno::Reference< css::frame::XDispatchProvider > xDispatchProvider( m_xFrame, css::uno::UNO_QUERY );
     css::uno::Reference< css::frame::XDispatch > xDispatch( xDispatchProvider->queryDispatch( aObjectMenuURL, OUString(), 0 ) );

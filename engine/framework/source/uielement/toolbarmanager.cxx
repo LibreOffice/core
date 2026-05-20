@@ -1825,7 +1825,7 @@ void ToolBarManager::AddCustomizeMenuItems(ToolBox const * pToolBar)
     if ( m_xFrame.is() )
     {
         Reference< XDispatchProvider > xProv( m_xFrame, UNO_QUERY );
-        aURL.Complete = ".uno:ConfigureDialog";
+        aURL.Complete = u".uno:ConfigureDialog"_ustr;
         m_xURLTransformer->parseStrict( aURL );
         if ( xProv.is() )
             xDisp = xProv->queryDispatch( aURL, OUString(), 0 );
@@ -2099,7 +2099,7 @@ IMPL_LINK( ToolBarManager, MenuSelect, Menu*, pMenu, bool )
                 if ( m_xFrame.is() )
                 {
                     Reference< XDispatchProvider > xProv( m_xFrame, UNO_QUERY );
-                    aURL.Complete = ".uno:ConfigureDialog";
+                    aURL.Complete = u".uno:ConfigureDialog"_ustr;
                     m_xURLTransformer->parseStrict( aURL );
                     if ( xProv.is() )
                         xDisp = xProv->queryDispatch( aURL, OUString(), 0 );

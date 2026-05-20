@@ -1256,7 +1256,7 @@ void FormulaDlg_Impl::SaveArg( sal_uInt16 nEd )
     for (sal_uInt16 i = 0; i <= nEd; i++)
     {
         if ( m_aArguments[i].isEmpty() )
-            m_aArguments[i] = " ";
+            m_aArguments[i] = u" "_ustr;
     }
     if (!m_xParaWin->GetArgument(nEd).isEmpty())
         m_aArguments[nEd] = m_xParaWin->GetArgument(nEd);

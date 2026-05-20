@@ -213,7 +213,7 @@ void XMLFilterSettingsDialog::onNew()
     aTempInfo.maInterfaceName = createUniqueInterfaceName(FilterResId(STR_DEFAULT_UI_NAME));
 
     // set default application
-    aTempInfo.maDocumentService = "com.sun.star.text.TextDocument";
+    aTempInfo.maDocumentService = u"com.sun.star.text.TextDocument"_ustr;
 
     // execute XML Filter Dialog
     XMLFilterTabDialog aDlg(m_xDialog.get(), mxContext, &aTempInfo);
@@ -553,7 +553,7 @@ bool XMLFilterSettingsDialog::insertOrEdit( filter_info_impl* pNewInfo, const fi
         {
             aValues.realloc(5);
             auto pValues = aValues.getArray();
-            pValues[4].Name = "DetectService";
+            pValues[4].Name = u"DetectService"_ustr;
             pValues[4].Value <<= u"com.sun.star.comp.filters.XMLFilterDetect"_ustr;
         }
 

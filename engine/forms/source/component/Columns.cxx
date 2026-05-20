@@ -64,16 +64,16 @@ const css::uno::Sequence<OUString>& getColumnTypes()
     {
         css::uno::Sequence<OUString> tmp(10);
         OUString* pNames = tmp.getArray();
-        pNames[TYPE_CHECKBOX]       = "CheckBox";
-        pNames[TYPE_COMBOBOX]       = "ComboBox";
-        pNames[TYPE_CURRENCYFIELD]  = "CurrencyField";
-        pNames[TYPE_DATEFIELD]      = "DateField";
-        pNames[TYPE_FORMATTEDFIELD] = "FormattedField";
-        pNames[TYPE_LISTBOX]        = "ListBox";
-        pNames[TYPE_NUMERICFIELD]   = "NumericField";
-        pNames[TYPE_PATTERNFIELD]   = "PatternField";
-        pNames[TYPE_TEXTFIELD]      = "TextField";
-        pNames[TYPE_TIMEFIELD]      = "TimeField";
+        pNames[TYPE_CHECKBOX]       = u"CheckBox"_ustr;
+        pNames[TYPE_COMBOBOX]       = u"ComboBox"_ustr;
+        pNames[TYPE_CURRENCYFIELD]  = u"CurrencyField"_ustr;
+        pNames[TYPE_DATEFIELD]      = u"DateField"_ustr;
+        pNames[TYPE_FORMATTEDFIELD] = u"FormattedField"_ustr;
+        pNames[TYPE_LISTBOX]        = u"ListBox"_ustr;
+        pNames[TYPE_NUMERICFIELD]   = u"NumericField"_ustr;
+        pNames[TYPE_PATTERNFIELD]   = u"PatternField"_ustr;
+        pNames[TYPE_TEXTFIELD]      = u"TextField"_ustr;
+        pNames[TYPE_TIMEFIELD]      = u"TimeField"_ustr;
         return tmp;
     }();
     return aColumnTypes;
