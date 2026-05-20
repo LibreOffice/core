@@ -2728,6 +2728,14 @@ button.has-img img {
 	padding: 2px;
 }
 
+#FormulaDialog #FunctionPage #help {
+	width: 100%;
+	justify-content: stretch;
+}
+#FormulaDialog #FunctionPage #help-button {
+	width: 100% !important;
+}
+
 /* text-area overflow on function wizard window */
 
 #FormulaDialog #ed_formula.ui-textarea {
