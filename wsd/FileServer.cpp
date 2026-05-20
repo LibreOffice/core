@@ -1446,6 +1446,13 @@ FileServerRequestHandler::ResourceAccessDetails FileServerRequestHandler::prepro
     csp.appendDirective("img-src", "data:"); // Equivalent to unsafe-inline!
     csp.appendDirectiveUrl("img-src", "https://www.collaboraoffice.com/");
 
+    // When comment_avatar points at an http(s) image, the browser still needs
+    // an img-src entry for that origin or the iframe CSP refuses to load it.
+    // data: URLs are already covered above; other schemes are not useful here.
+    const std::string commentAvatarUrl = ConfigUtil::getString("comment_avatar", "");
+    if (commentAvatarUrl.starts_with("http://") || commentAvatarUrl.starts_with("https://"))
+        csp.appendDirectiveUrl("img-src", commentAvatarUrl);
+
     // Frame ancestors: Allow coolwsd host, wopi host and anything configured.
     // This is deprecated.
     std::string configFrameAncestor = config.getString("net.frame_ancestors", "");
