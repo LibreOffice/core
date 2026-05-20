@@ -578,16 +578,18 @@ void RequestVettingStation::createClientSession(const std::shared_ptr<DocumentBr
                 LOG_ERR_S("Storage error while starting session on "
                           << docBroker->getDocKey() << " for socket #" << moveSocket->getFD()
                           << ". Terminating connection. Error: " << exc.what());
-                sendErrorAndShutdownWS(ws, "error: cmd=storage kind=loadfailed",
-                                       WebSocketHandler::StatusCodes::POLICY_VIOLATION);
+                sendErrorAndShutdownWS(
+                    ws, COOLProtocol::buildErrorFrame("storage", "loadfailed", exc.what()),
+                    WebSocketHandler::StatusCodes::POLICY_VIOLATION);
             }
             catch (const StorageSpaceLowException& exc)
             {
                 LOG_ERR_S("Disk-Full error while starting session on "
                           << docBroker->getDocKey() << " for socket #" << moveSocket->getFD()
                           << ". Terminating connection. Error: " << exc.what());
-                sendErrorAndShutdownWS(ws, "error: cmd=internal kind=diskfull",
-                                       WebSocketHandler::StatusCodes::UNEXPECTED_CONDITION);
+                sendErrorAndShutdownWS(
+                    ws, COOLProtocol::buildErrorFrame("internal", "diskfull", exc.what()),
+                    WebSocketHandler::StatusCodes::UNEXPECTED_CONDITION);
             }
             catch (const std::exception& exc)
             {

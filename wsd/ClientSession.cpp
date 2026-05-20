@@ -2398,7 +2398,8 @@ bool ClientSession::sendTile(const char * /*buffer*/, int /*length*/, const Stri
     catch (const std::exception& exc)
     {
         LOG_ERR("Failed to process tile command: " << exc.what());
-        return sendTextFrameAndLogError("error: cmd=tile kind=invalid");
+        return sendTextFrameAndLogError(
+            COOLProtocol::buildErrorFrame("tile", "invalid", exc.what()));
     }
 
     return true;

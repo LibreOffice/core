@@ -2782,7 +2782,8 @@ void DocumentBroker::handleSaveResponse(const std::shared_ptr<ClientSession>& se
     {
         LOG_INF("Failed to save docKey [" << _docKey
                                           << "] as .uno:Save has failed in COKit. Notifying clients");
-        session->sendTextFrameAndLogError("error: cmd=storage kind=savefailed");
+        session->sendTextFrameAndLogError(
+            COOLProtocol::buildErrorFrame("storage", "savefailed", result));
         broadcastSaveResult(false, "Could not save the document");
     }
 
@@ -3351,15 +3352,15 @@ void DocumentBroker::handleUploadToStorageResponse(const StorageBase::UploadResu
     handleUploadToStorageFailed(uploadResult);
 }
 
-void DocumentBroker::reportUploadToStorageFailed()
+void DocumentBroker::reportUploadToStorageFailed(std::string_view reason)
 {
     const auto session = _uploadRequest->session();
     if (session)
     {
         LOG_ERR("Failed to upload docKey [" << _docKey << "] to URI [" << _uploadRequest->uriAnonym()
                                             << "]. Notifying client.");
-        const std::string msg = std::string("error: cmd=storage kind=")
-                                + (_uploadRequest->isRename() ? "renamefailed" : "savefailed");
+        const std::string msg = COOLProtocol::buildErrorFrame(
+            "storage", _uploadRequest->isRename() ? "renamefailed" : "savefailed", reason);
         session->sendTextFrame(msg);
     }
     else
@@ -3404,10 +3405,12 @@ void DocumentBroker::handleUploadToStorageFailed(const StorageBase::UploadResult
                "on doc read-only and notifying clients.");
 
         // Make everyone readonly and tell everyone that the file is too large for the storage.
+        const std::string toolargeMsg = COOLProtocol::buildErrorFrame(
+            "storage", "savetoolarge", uploadResult.getReason());
         for (const auto& sessionIt : _sessions)
         {
             sessionIt.second->setWritable(false);
-            sessionIt.second->sendTextFrameAndLogError("error: cmd=storage kind=savetoolarge");
+            sessionIt.second->sendTextFrameAndLogError(toolargeMsg);
         }
 
         broadcastSaveResult(false, "Too large", uploadResult.getReason());
@@ -3420,10 +3423,12 @@ void DocumentBroker::handleUploadToStorageFailed(const StorageBase::UploadResult
                 << " bytes. Making all sessions on doc read-only and notifying clients.");
 
         // Make everyone readonly and tell everyone that storage is low on diskspace.
+        const std::string diskfullMsg = COOLProtocol::buildErrorFrame(
+            "storage", "savediskfull", uploadResult.getReason());
         for (const auto& sessionIt : _sessions)
         {
             sessionIt.second->setWritable(false);
-            sessionIt.second->sendTextFrameAndLogError("error: cmd=storage kind=savediskfull");
+            sessionIt.second->sendTextFrameAndLogError(diskfullMsg);
         }
 
         broadcastSaveResult(false, "Disk full", uploadResult.getReason());
@@ -3493,7 +3498,7 @@ void DocumentBroker::handleUploadToStorageFailed(const StorageBase::UploadResult
         endActivity(); // Probably in Activity::Upload.
         startActivity(DocumentState::Activity::SyncFileTimestamp);
 
-        reportUploadToStorageFailed();
+        reportUploadToStorageFailed(uploadResult.getReason());
 
         // Notify all.
         broadcastSaveResult(false, "Save failed", uploadResult.getReason());
@@ -4147,7 +4152,7 @@ std::size_t DocumentBroker::addSession(const std::shared_ptr<ClientSession>& ses
 
         return count;
     }
-    catch (const StorageSpaceLowException&)
+    catch (const StorageSpaceLowException& exc)
     {
         LOG_ERR("Out of storage while loading document with URI ["
                 << session->getPublicUri().toString() << ']');
@@ -4156,7 +4161,7 @@ std::size_t DocumentBroker::addSession(const std::shared_ptr<ClientSession>& ses
         // even if in this case it might be a totally different location (file system, or
         // some other type of storage somewhere). This message is not sent to all clients,
         // though, just to all sessions of this document.
-        alertAllUsers("internal", "diskfull");
+        alertAllUsers("internal", "diskfull", exc.what());
         throw;
     }
     catch (const std::exception& exc)

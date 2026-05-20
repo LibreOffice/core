@@ -71,6 +71,10 @@ namespace COOLProtocol
             + std::to_string(ProtocolMinorVersionNumber);
     }
 
+    /// Build an "error: cmd=<cmd> kind=<kind> {errordetail=<message>}" frame
+    std::string buildErrorFrame(std::string_view cmd, std::string_view kind,
+                                std::string_view message = {});
+
     // Parse a string into a version tuple.
     // Negative numbers for error.
     std::tuple<int, int, std::string> ParseVersion(const std::string& version);

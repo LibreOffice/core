@@ -360,8 +360,8 @@ public:
     bool onDocumentError(const std::string& message) override
     {
         // This may trigger multiple times.
-        LOK_ASSERT_EQUAL_MESSAGE("Expect only documentunloading errors",
-                                 std::string("error: cmd=internal kind=diskfull"), message);
+        LOK_ASSERT_MESSAGE("Expect only diskfull errors",
+                           message.starts_with("error: cmd=internal kind=diskfull"));
 
         LOK_ASSERT_STATE(_phase, Phase::Filter);
 

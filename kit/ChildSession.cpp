@@ -4012,8 +4012,12 @@ void ChildSession::loKitCallback(const int type, const std::string& payload)
             Poco::Dynamic::Var var = parser.parse(payload);
             const Object::Ptr& object = var.extract<Object::Ptr>();
 
-            sendTextFrameAndLogError("error: cmd=" + object->get("cmd").toString() +
-                    " kind=" + object->get("kind").toString() + " code=" + object->get("code").toString());
+            const std::string message =
+                object->has("message") ? object->get("message").toString() : std::string();
+            std::string frame = COOLProtocol::buildErrorFrame(
+                object->get("cmd").toString(), object->get("kind").toString(), message);
+            frame += " code=" + object->get("code").toString();
+            sendTextFrameAndLogError(frame);
         }
         break;
     case KIT_CALLBACK_CONTEXT_MENU:

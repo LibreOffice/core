@@ -359,8 +359,8 @@ public:
         TST_LOG("uploadAttemptCount: " << _uploadAttemptCount);
         if (_uploadAttemptCount == 1)
         {
-            LOK_ASSERT_EQUAL_MESSAGE("Expect only documentconflict errors",
-                                     std::string("error: cmd=storage kind=savefailed"), message);
+            LOK_ASSERT_MESSAGE("Expect only savefailed errors",
+                               message.starts_with("error: cmd=storage kind=savefailed"));
         }
         else
         {

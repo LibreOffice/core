@@ -483,9 +483,11 @@ class Socket {
 		if (!this._map._docLoadedOnce && this.ReconnectCount === 0) {
 			let errorType: string = '';
 			let errorMsg: string;
+			let errorDetail: string | undefined;
 			const reason = event.reason;
 			if (reason && reason.startsWith('error:')) {
 				var command = this.parseServerCmd(reason);
+				errorDetail = command.errorDetail;
 				if (
 					command.errorCmd === 'internal' &&
 					command.errorKind === 'unauthorized'
@@ -523,6 +525,7 @@ class Socket {
 				cmd: 'socket',
 				kind: 'closed',
 				id: 4,
+				errorDetail: errorDetail,
 			});
 			const postMessageObj = {
 				errorType: errorType,
@@ -2198,7 +2201,10 @@ class Socket {
 				storageError = storageError.replace('%storageserver', tmpLink.host);
 
 				// show message to the user in Control.AlertDialog
-				this._map.fire('warn', { msg: storageError });
+				this._map.fire('warn', {
+					msg: storageError,
+					errorDetail: command.errorDetail,
+				});
 
 				// send to wopi handler so we can respond
 				const postMessageObj = {
@@ -2222,7 +2228,10 @@ class Socket {
 			this._map.hideBusy();
 			this._map._fatal = true;
 			if (command.errorKind === 'diskfull') {
-				this._map.fire('error', { msg: errorMessages.diskfull });
+				this._map.fire('error', {
+					msg: errorMessages.diskfull,
+					errorDetail: command.errorDetail,
+				});
 			} else if (command.errorKind === 'unauthorized') {
 				const postMessageObj = {
 					errorType: 'websocketunauthorized',
@@ -2265,7 +2274,10 @@ class Socket {
 				msg = _('Wrong password provided. Please try again.');
 			} else if (errorKind.startsWith('faileddocloading')) {
 				this._map._fatal = true;
-				this._map.fire('error', { msg: errorMessages.faileddocloading });
+				this._map.fire('error', {
+					msg: errorMessages.faileddocloading,
+					errorDetail: command.errorDetail,
+				});
 			} else if (errorKind.startsWith('docloadtimeout')) {
 				this._map._fatal = true;
 				this._map.fire('error', { msg: errorMessages.docloadtimeout });
@@ -2296,6 +2308,13 @@ class Socket {
 				if (this.ReconnectCount > 1) {
 					this._map.showBusy(errorMessages.docunloadingretry, false);
 				}
+			} else {
+				// Any other load error (io, network, etc.)
+				this._map._fatal = true;
+				this._map.fire('error', {
+					msg: errorMessages.faileddocloading,
+					errorDetail: command.errorDetail,
+				});
 			}
 
 			if (passwordNeeded) {
@@ -2323,7 +2342,10 @@ class Socket {
 			}
 			this._map._fatal = true;
 			app.idleHandler._active = false; // Practically disconnected.
-			this._map.fire('error', { msg: textMsg });
+			this._map.fire('error', {
+				msg: textMsg,
+				errorDetail: command.errorDetail,
+			});
 		}
 
 		return false;

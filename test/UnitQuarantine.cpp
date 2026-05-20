@@ -196,8 +196,8 @@ public:
 
         if (getCountCheckFileInfo() == 1)
         {
-            LOK_ASSERT_EQUAL_MESSAGE("Expect only savefailed errors on first upload",
-                                     std::string("error: cmd=storage kind=savefailed"), message);
+            LOK_ASSERT_MESSAGE("Expect only savefailed errors on first upload",
+                               message.starts_with("error: cmd=storage kind=savefailed"));
         }
         else
         {

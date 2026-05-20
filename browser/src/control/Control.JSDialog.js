@@ -107,10 +107,13 @@ window.L.Control.JSDialog = window.L.Control.extend({
 		return false;
 	},
 
-	closeAll: function(leaveSnackbar) {
+	closeAll: function(leaveSnackbar, leaveAlert) {
+		var alertId = JSDialog.generateModalId('cool_alert');
 		var dialogs = Object.keys(this.dialogs);
 		for (var i = 0; i < dialogs.length; i++) {
 			if (leaveSnackbar && dialogs[i] && dialogs[i] === 'snackbar')
+				continue;
+			if (leaveAlert && dialogs[i] === alertId)
 				continue;
 
 			this.close(dialogs[i], app.idleHandler._active);
@@ -207,7 +210,7 @@ window.L.Control.JSDialog = window.L.Control.extend({
 	},
 
 	onCloseAll: function() {
-		this.closeAll(/*leaveSnackbar*/ true);
+		this.closeAll(/*leaveSnackbar*/ true, /*leaveAlert*/ this.map._fatal);
 		// should also close all dropdowns on close all dialogs
 		this.closeAllDropdowns();
 	},

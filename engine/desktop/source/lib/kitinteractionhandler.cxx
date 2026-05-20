@@ -32,11 +32,14 @@
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/ucb/InteractiveNetworkConnectException.hpp>
 #include <com/sun/star/ucb/InteractiveNetworkOffLineException.hpp>
+#include <com/sun/star/task/InteractionRequestStringResolver.hpp>
 
+#include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
 #include <com/sun/star/ucb/InteractiveIOException.hpp>
 #include <com/sun/star/ucb/InteractiveNetworkReadException.hpp>
 #include <com/sun/star/ucb/InteractiveNetworkResolveNameException.hpp>
 #include <com/sun/star/ucb/InteractiveNetworkWriteException.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
 
 #include <com/sun/star/task/DocumentPasswordRequest2.hpp>
 #include <com/sun/star/task/DocumentMSPasswordRequest2.hpp>
@@ -177,12 +180,34 @@ bool FallbackToStandard(const uno::Reference<task::XInteractionRequest>& xReques
     return true;
 }
 
+/// Ask the standard (uui) for the localized human-readable message
+OUString getErrMessage(const uno::Reference<task::XInteractionRequest>& xRequest)
+{
+    try
+    {
+        auto xResolver(task::InteractionRequestStringResolver::create(
+            comphelper::getProcessComponentContext()));
+        const beans::Optional<OUString> aMessage
+            = xResolver->getStringFromInformationalRequest(xRequest);
+        if (aMessage.IsPresent)
+            return aMessage.Value;
+    }
+    catch (const uno::Exception&)
+    {
+    }
+    return OUString();
+}
 }
 
-bool KitInteractionHandler::handleIOException(const css::uno::Sequence<css::uno::Reference<css::task::XInteractionContinuation>> &rContinuations, const css::uno::Any& rRequest)
+bool KitInteractionHandler::handleIOException(
+    const css::uno::Reference<css::task::XInteractionRequest>& rRequest)
 {
+    const css::uno::Sequence<css::uno::Reference<css::task::XInteractionContinuation>>
+        rContinuations = rRequest->getContinuations();
+    const css::uno::Any aRequest = rRequest->getRequest();
+
     ucb::InteractiveIOException aIoException;
-    if (!(rRequest >>= aIoException))
+    if (!(aRequest >>= aIoException))
         return false;
 
     static ErrCode const aErrorCode[int(ucb::IOErrorCode_WRONG_VERSION) + 1] =
@@ -225,7 +250,28 @@ bool KitInteractionHandler::handleIOException(const css::uno::Sequence<css::uno:
         ERRCODE_IO_WRONGVERSION,
     };
 
-    postError(aIoException.Classification, "io", aErrorCode[static_cast<int>(aIoException.Code)], u""_ustr);
+    // Ask the standard (uui) for the localized human-readable message.
+    OUString sErrMessage = getErrMessage(rRequest);
+
+    if (sErrMessage.isEmpty())
+    {
+        ucb::InteractiveAugmentedIOException aAugmented;
+        if (aRequest >>= aAugmented)
+        {
+            for (const auto& rArg : aAugmented.Arguments)
+            {
+                beans::PropertyValue aProp;
+                if ((rArg >>= aProp) && aProp.Name == "Uri")
+                {
+                    aProp.Value >>= sErrMessage;
+                    break;
+                }
+            }
+        }
+    }
+
+    postError(aIoException.Classification, "io", aErrorCode[static_cast<int>(aIoException.Code)],
+              sErrMessage);
     selectApproved(rContinuations);
 
     return true;
@@ -406,7 +452,7 @@ sal_Bool SAL_CALL KitInteractionHandler::handleInteractionRequest(
     uno::Sequence<uno::Reference<task::XInteractionContinuation>> const aContinuations = xRequest->getContinuations();
     uno::Any const request(xRequest->getRequest());
 
-    if (handleIOException(aContinuations, request))
+    if (handleIOException(xRequest))
         return true;
 
     if (handleNetworkException(aContinuations, request))

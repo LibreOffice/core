@@ -71,7 +71,7 @@ private:
     */
     void postError(css::task::InteractionClassification classif, const char* kind, ErrCode code, const OUString &message);
 
-    bool handleIOException(const css::uno::Sequence<css::uno::Reference<css::task::XInteractionContinuation>> &rContinuations, const css::uno::Any& rRequest);
+    bool handleIOException(const css::uno::Reference<css::task::XInteractionRequest>& rRequest);
     bool handleNetworkException(const css::uno::Sequence<css::uno::Reference<css::task::XInteractionContinuation>> &rContinuations, const css::uno::Any& rRequest);
     bool handlePasswordRequest(const css::uno::Sequence<css::uno::Reference<css::task::XInteractionContinuation>> &rContinuations, const css::uno::Any& rRequest);
     static bool handleFilterOptionsRequest(const css::uno::Sequence<css::uno::Reference<css::task::XInteractionContinuation>> &rContinuations, const css::uno::Any& rRequest);

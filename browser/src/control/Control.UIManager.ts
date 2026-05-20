@@ -2604,6 +2604,130 @@ class UIManager extends window.L.Control {
 		]);
 	}
 
+	/// shows an error modal (message + optional "Technical details")
+	/// message - user facing error message
+	/// errorDetail - optional technical detail shown in a collapsed expander
+	/// buttonText - text inside the dismiss button
+	/// callback - callback on dismiss
+	showErrorModal(
+		message: string,
+		errorDetail?: string,
+		buttonText: string = _('Close'),
+		callback?: () => void,
+	): void {
+		const id = 'cool_alert';
+		var dialogId = this.generateModalId(id);
+		var children: any[] = [
+			{
+				id: 'info-modal-label1',
+				type: 'fixedtext',
+				text: message
+			},
+		];
+		if (errorDetail) {
+			children.push({
+				id: 'technical-details-expander',
+				type: 'expander',
+				expanded: false,
+				children: [
+					{
+						id: 'technical-details-label',
+						type: 'fixedtext',
+						text: _('Show technical details'),
+					},
+					{
+						id: 'technical-details-text',
+						type: 'multilineedit',
+						text: errorDetail,
+						readonly: true,
+					},
+				],
+			});
+		}
+		const buttonChildren: any[] = [];
+		if (errorDetail) {
+			buttonChildren.push({
+				id: 'copy-error-details',
+				type: 'pushbutton',
+				text: '',
+				image: 'lc_copy.svg',
+				aria: { label: _('Copy error details') },
+			});
+		}
+		buttonChildren.push({
+			id: 'response-ok',
+			type: 'pushbutton',
+			text: buttonText,
+			'has_default': true,
+		});
+		children.push({
+			id: '',
+			type: 'buttonbox',
+			text: '',
+			enabled: true,
+			children: buttonChildren,
+			vertical: false,
+			layoutstyle: 'end'
+		});
+		var json = this._modalDialogJSON(id, '', !window.mode.isDesktop(), children, 'response-ok');
+
+		const responses: any[] = [
+			{id: 'response-ok', func: () => {
+				if (typeof callback === 'function') {
+					callback();
+				}
+				this.closeModal(dialogId);
+			}}
+		];
+		if (errorDetail) {
+			responses.push({id: 'copy-error-details', func: () => {
+				this._copyErrorDetailsToClipboard(message, errorDetail);
+			}});
+		}
+		this.showModal(json, responses);
+	}
+
+	private _copyErrorDetailsToClipboard(message: string, technicalDetails: string): void {
+		const text = message + '\n' + _('Technical Details:') + '\n' + technicalDetails;
+		const timeout = 1000;
+
+		const onSuccess = () => {
+			this.showSnackbar(_('Error details copied to clipboard'), null, null, timeout);
+			const img = document.querySelector('#copy-error-details img') as HTMLImageElement;
+			if (img) {
+				app.LOUtil.setImage(img, 'lc_clipboard-check.svg', this.map);
+				setTimeout(() => app.LOUtil.setImage(img, 'lc_copy.svg', this.map), timeout);
+			}
+		};
+
+		const onFailure = (err: unknown) => {
+			window.console.error('Error copying text to clipboard:', err);
+			this.showSnackbar(_('Failed to copy error details'), null, null, timeout);
+		};
+
+		if (window.mode.isCODesktop()) {
+			(window as any).postMobileMessage('TEXTCLIPBOARD ' + text);
+			onSuccess();
+		} else if (navigator.clipboard && window.isSecureContext) {
+			navigator.clipboard.writeText(text).then(onSuccess, onFailure);
+		} else {
+			const ta = document.createElement('textarea');
+			ta.style.position = 'absolute';
+			ta.style.opacity = '0';
+			ta.value = text;
+			document.body.appendChild(ta);
+			ta.select();
+			try {
+				if (document.execCommand('copy')) onSuccess();
+				else onFailure('execCommand returned false');
+			} catch (err) {
+				onFailure(err);
+			} finally {
+				document.body.removeChild(ta);
+			}
+		}
+	}
+
 	// Helper functions
 
 	/**

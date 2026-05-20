@@ -29,15 +29,15 @@ window.L.Control.AlertDialog = window.L.Control.extend({
 
 		if (e.msg) {
 			if (window.ThisIsAMobileApp && this._map._fatal) {
-				this._map.uiManager.showConfirmModal('cool_alert', '', e.msg, _('Close'), function() {
+				this._map.uiManager.showErrorModal(e.msg, e.errorDetail, _('Close'), function() {
 					window.postMobileMessage('BYE');
 					this._map.uiManager.closeAll();
-				}.bind(this), true /* Hide cancel button */);
+				}.bind(this));
 			}
 			else
-				this._map.uiManager.showConfirmModal('cool_alert', '', e.msg, _('Close'), function() { /* Do nothing. */ }, true);
+				this._map.uiManager.showErrorModal(e.msg, e.errorDetail);
 
-			window.app.console.error('AlertDialog: ' + e.msg);
+			window.app.console.error('AlertDialog: ' + e.msg + (e.errorDetail ? ' (' + e.errorDetail + ')' : ''));
 		}
 		else if (e.cmd == 'load' && e.kind == 'docunloading') {
 			// Handled by transparently retrying.
@@ -107,9 +107,9 @@ window.L.Control.AlertDialog = window.L.Control.extend({
 			var msg = _('The server encountered a {0} error while parsing the {1} command.');
 			msg = msg.replace('{0}', e.kind);
 			msg = msg.replace('{1}', e.cmd);
-			this._map.uiManager.showInfoModal('cool_alert', '', msg, '', _('Close'), function() { /* Do nothing. */ }, false);
+			this._map.uiManager.showErrorModal(msg, e.errorDetail);
 
-			window.app.console.error('AlertDialog: ' + msg);
+			window.app.console.error('AlertDialog: ' + msg + (e.errorDetail ? ' (' + e.errorDetail + ')' : ''));
 		}
 	}
 });

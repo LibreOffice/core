@@ -18,6 +18,7 @@
 
 #include <common/Authorization.hpp>
 #include <common/Log.hpp>
+#include <common/Protocol.hpp>
 #include <common/Session.hpp>
 #include <common/SigUtil.hpp>
 #include <common/Util.hpp>
@@ -419,9 +420,10 @@ public:
     void uploadPresetsToWopiHost();
 #endif
 
-    void alertAllUsers(const std::string& cmd, const std::string& kind)
+    void alertAllUsers(const std::string& cmd, const std::string& kind,
+                       std::string_view message = {})
     {
-        alertAllUsers("error: cmd=" + cmd + " kind=" + kind);
+        alertAllUsers(COOLProtocol::buildErrorFrame(cmd, kind, message));
     }
 
     /// Sets the log level of kit.
@@ -831,7 +833,7 @@ private:
     void handleUploadToStorageFailed(const StorageBase::UploadResult& uploadResult);
 
     /// Send the error message about failed upload
-    void reportUploadToStorageFailed();
+    void reportUploadToStorageFailed(std::string_view reason = {});
 
     /// Sends the .uno:Save command to LoKit.
     bool sendUnoSave(const std::shared_ptr<ClientSession>& session, bool dontTerminateEdit = true,

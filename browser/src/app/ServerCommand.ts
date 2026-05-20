@@ -19,6 +19,7 @@ class ServerCommand {
 	public errorCmd?: string;
 	public errorCode?: string;
 	public errorKind?: string;
+	public errorDetail?: string;
 	public jail?: string;
 	public dir?: string;
 	public downloadid?: string;
@@ -107,6 +108,8 @@ class ServerCommand {
 				this.errorCode = tokens[i].substring(5);
 			} else if (tokens[i].substring(0, 5) === 'kind=') {
 				this.errorKind = tokens[i].substring(5);
+			} else if (tokens[i].substring(0, 12) === 'errordetail=') {
+				this.errorDetail = decodeURIComponent(tokens[i].substring(12));
 			} else if (tokens[i].substring(0, 5) === 'jail=') {
 				this.jail = tokens[i].substring(5);
 			} else if (tokens[i].substring(0, 4) === 'dir=') {
