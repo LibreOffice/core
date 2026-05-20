@@ -20,6 +20,7 @@
 
 #include <sfx2/basedlgs.hxx>
 #include <vcl/weld/Entry.hxx>
+#include <vcl/weld/Expander.hxx>
 #include <vcl/weld/MessageDialog.hxx>
 
 #include <memory>

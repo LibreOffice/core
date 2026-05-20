@@ -14,6 +14,8 @@
 #include "QtExpander.hxx"
 #include "QtInstanceWidget.hxx"
 
+#include <vcl/weld/Expander.hxx>
+
 class QtInstanceExpander : public QtInstanceWidget, public virtual weld::Expander
 {
     Q_OBJECT

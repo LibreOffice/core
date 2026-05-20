@@ -23,6 +23,7 @@
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 
 #include <vcl/weld/ComboBox.hxx>
+#include <vcl/weld/Expander.hxx>
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/SpinButton.hxx>
 #include <vcl/weld/TreeView.hxx>

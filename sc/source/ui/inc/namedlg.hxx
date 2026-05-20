@@ -22,6 +22,8 @@
 #include "anyrefdg.hxx"
 #include "namemgrtable.hxx"
 
+#include <vcl/weld/Expander.hxx>
+
 #include <memory>
 #include <map>
 

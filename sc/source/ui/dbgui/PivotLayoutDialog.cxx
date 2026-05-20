@@ -28,6 +28,7 @@
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 #include <com/sun/star/sheet/DataPilotFieldSortMode.hpp>
 #include <vcl/weld/Dialog.hxx>
+#include <vcl/weld/Expander.hxx>
 
 using namespace css::uno;
 using namespace css::sheet;

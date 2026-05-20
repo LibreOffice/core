@@ -21,6 +21,7 @@
 #include <sfx2/sidebar/Panel.hxx>
 #include <sfx2/sidebar/Theme.hxx>
 #include <sidebar/ControllerFactory.hxx>
+#include <vcl/weld/Expander.hxx>
 
 using namespace css;
 using namespace css::uno;

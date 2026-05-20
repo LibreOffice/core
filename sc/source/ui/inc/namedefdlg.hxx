@@ -12,6 +12,7 @@
 #include "anyrefdg.hxx"
 
 #include <vcl/weld/ComboBox.hxx>
+#include <vcl/weld/Expander.hxx>
 
 #include <map>
 

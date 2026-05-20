@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include <vcl/weld/Expander.hxx>
+
 #include <vector>
 #include "anyrefdg.hxx"
 #include <dbdata.hxx>

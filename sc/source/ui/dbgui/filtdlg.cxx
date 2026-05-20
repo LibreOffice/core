@@ -39,6 +39,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/weld/ComboBox.hxx>
+#include <vcl/weld/Expander.hxx>
 #include <vcl/weld/ScrolledWindow.hxx>
 #include <vcl/weld/Dialog.hxx>
 #include <vcl/weld/MessageDialog.hxx>

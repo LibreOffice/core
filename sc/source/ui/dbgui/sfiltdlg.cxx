@@ -35,6 +35,7 @@
 #include <filtdlg.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld/Dialog.hxx>
+#include <vcl/weld/Expander.hxx>
 #include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weld.hxx>
 

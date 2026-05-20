@@ -433,22 +433,6 @@ public:
     virtual void set_font_color(const Color& rColor) = 0;
 };
 
-class VCL_DLLPUBLIC Expander : virtual public Widget
-{
-    Link<Expander&, void> m_aExpandedHdl;
-
-protected:
-    void signal_expanded() { m_aExpandedHdl.Call(*this); }
-
-public:
-    virtual void set_label(const OUString& rText) = 0;
-    virtual OUString get_label() const = 0;
-    virtual bool get_expanded() const = 0;
-    virtual void set_expanded(bool bExpand) = 0;
-
-    void connect_expanded(const Link<Expander&, void>& rLink) { m_aExpandedHdl = rLink; }
-};
-
 enum class Placement
 {
     Under,
