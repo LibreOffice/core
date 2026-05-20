@@ -1234,6 +1234,12 @@ void JSButton::set_label(const OUString& rText)
         sendUpdate();
 }
 
+void JSButton::set_from_icon_name(const OUString& rIconName)
+{
+    SalInstanceButton::set_from_icon_name(rIconName);
+    sendUpdate();
+}
+
 JSLinkButton::JSLinkButton(JSDialogSender* pSender, ::FixedHyperlink* pButton,
                            SalInstanceBuilder* pBuilder, bool bTakeOwnership)
     : JSWidget<SalInstanceLinkButton, ::FixedHyperlink>(pSender, pButton, pBuilder, bTakeOwnership)

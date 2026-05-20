@@ -534,6 +534,7 @@ public:
     JSButton(JSDialogSender* pSender, ::Button* pButton, SalInstanceBuilder* pBuilder,
              bool bTakeOwnership);
     virtual void set_label(const OUString& rText) override;
+    virtual void set_from_icon_name(const OUString& rIconName) override;
 };
 
 class JSLinkButton final : public JSWidget<SalInstanceLinkButton, ::FixedHyperlink>
