@@ -457,7 +457,7 @@ button.leaflet-control-search-next
 	color: var(--color-text-darker);
 }
 #toolbar-up .ui-combobox-button {
-	padding-left: 10px;
+	padding-inline: 5px;
 }
 #fontsizecombobox-input-context-toolbar {
 	width: 55px !important;
