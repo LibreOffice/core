@@ -1253,8 +1253,25 @@ class BitmapTileManager {
 					const key = coords.key();
 					const tile = this.tiles.get(key);
 
-					if (!tile || tile.needsFetch()) queue.push(coords);
-					else if (isCurrent) this.makeTileCurrent(tile);
+					if (!tile || tile.needsFetch()) {
+						queue.push(coords);
+						// A visible tile that was invalidated and lost its
+						// bitmap (e.g. permission change triggered an EMPTY
+						// invalidate then a tab blur reclaimed graphics
+						// memory) still has its cached rawDeltas. Core will
+						// not resend content because our oldwid matches, so
+						// without a rehydrate here the tile stays blank.
+						// Rehydrate directly rather than via makeTileCurrent
+						// to avoid bypassing the tilecombine cooldown.
+						if (
+							isCurrent &&
+							tile &&
+							tile.distanceFromView === 0 &&
+							tile.hasKeyframe() &&
+							!tile.image
+						)
+							this.rehydrateTile(tile, false);
+					} else if (isCurrent) this.makeTileCurrent(tile);
 				}
 			}
 		}
