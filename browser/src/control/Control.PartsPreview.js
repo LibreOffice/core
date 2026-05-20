@@ -276,7 +276,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 			img.focus();
 
 			var entries = [];
-			if (that.copiedSlide || window.L.Browser.clipboardApiAvailable) {
+			if (window.L.Browser.clipboardApiAvailable) {
 				entries.push({
 					id: 'paste',
 					type: 'comboboxentry',
@@ -436,7 +436,6 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 					return false;
 				switch (entry.id) {
 				case 'copy':
-					that.copiedSlide = e;
 					that._map._clip.clearSelection();
 					that._map._clip.setTextSelectionType('slide');
 					that._map._clip._execCopyCutPaste('copy', '.uno:CopySlide');
@@ -974,54 +973,50 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		app.sectionContainer.getSectionWithName(app.CSections.Scroll.name).onScrollBy({x: currentScrollX, y: buttonType === 'prev' ? -scrollBySize : scrollBySize});
 	},
 
-	// Paste a slide, preferring the system clipboard for cross-tab pastes.
+	// Paste a slide. Always read from the system clipboard and force-upload
+	// to the local Kit (skipping the same-tab pTransferClip shortcut),
+	// so that a copy from another tab/document wins over any stale local copy.
 	// nPos: insertion position for the frame context menu (may be undefined for img context menu).
 	_pasteSlide: async function(nPos) {
-		// Guard against concurrent invocations (e.g. rapid double-click).
 		if (this._pastePending)
 			return;
 		this._pastePending = true;
 		try {
-			if (this.copiedSlide) {
-				// Check if the system clipboard has been updated by a different
-				// tab/session since our last copy. If so, prefer the system clipboard.
-				let useInternalCopy = true;
-				if (window.L.Browser.clipboardApiAvailable) {
-					try {
-						const items = await navigator.clipboard.read();
-						if (items.length > 0 && items[0].types.includes('text/html')) {
-							const blob = await items[0].getType('text/html');
-							const html = await blob.text();
-							const clip = this._map._clip;
-							const meta = clip.getMetaOrigin(html);
-							const id = clip.getMetaPath(0);
-							const idOld = clip.getMetaPath(1);
-							// If meta origin does not match this tab's clipboard, use system clipboard
-							if (meta !== '' && (id === '' || meta.indexOf(id) < 0) && (idOld === '' || meta.indexOf(idOld) < 0)) {
-								useInternalCopy = false;
-							}
+			if (nPos !== undefined)
+				this._map.setPart(Math.max(0, nPos - 1));
+
+			const clip = this._map._clip;
+
+			if (window.L.Browser.clipboardApiAvailable) {
+				let html = '';
+				try {
+					let foundItem = null;
+					const items = await navigator.clipboard.read();
+					for (const item of items) {
+						if (item.types.includes('text/html')) {
+							foundItem = item;
+							break;
 						}
-					} catch (e) {
-						// clipboard read failed or permission denied - keep using internal copy
 					}
+
+					if (foundItem) {
+						const blob = await foundItem.getType('text/html');
+						html = await blob.text();
+					}
+				} catch (e) {
+					html = '';
 				}
-				if (useInternalCopy) {
-					// Same-tab paste: use duplicate which allows insertion at a position
-					this._setPart(this.copiedSlide);
-					this._map.duplicatePage(nPos);
-				} else {
-					// System clipboard is from a different tab - use it
-					this.copiedSlide = null;
-					if (nPos !== undefined)
-						this._map.setPart(Math.max(0, nPos - 1));
-					this._map._clip.filterExecCopyPaste('.uno:Paste');
+				if (html) {
+					// preferInternal=false skips the pTransferClip shortcut,
+					// so the most recent system-clipboard content wins.
+					clip.dataTransferToDocument(null, false, html, false);
+					return;
 				}
-			} else {
-				// Cross-tab/browser paste: use system clipboard
-				if (nPos !== undefined)
-					this._map.setPart(Math.max(0, nPos - 1)); // new slide is inserted after set slide
-				this._map._clip.filterExecCopyPaste('.uno:Paste');
 			}
+
+			// Fallback when the Clipboard API is unavailable: let the
+			// browser's paste event drive things.
+			clip.filterExecCopyPaste('.uno:Paste');
 		} finally {
 			this._pastePending = false;
 		}

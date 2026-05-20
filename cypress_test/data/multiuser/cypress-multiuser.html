@@ -21,23 +21,29 @@
                 width: 49%; " height="100%" width="49%" align="right">
     </iframe>
     <script>
-        function constructWopiUrl() {
+        // filePathParam: 'file_path' (iframe1) or 'file_path2' (iframe2).
+        // When file_path2 is missing, iframe2 falls back to file_path so
+        // existing single-file multiuser tests keep working.
+        function constructWopiUrl(filePathParam) {
             var wopiUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + "?";
             wopiUrl = wopiUrl.replace("cypress-multiuser.html", "cool.html");
             var params = new URLSearchParams(window.location.search);
-            var filePath = params.get('file_path').substr(1);
+            var filePath = params.get(filePathParam);
+            if (filePath === null)
+                filePath = params.get('file_path');
+            filePath = filePath.substr(1);
             params.delete('file_path');
+            params.delete('file_path2');
             var wopiSrc = window.location.protocol + "//" + window.location.host + "/wopi/files/" + encodeURIComponent(filePath);
             wopiUrl = wopiUrl + "WOPISrc=" + wopiSrc + '&' + params.toString();
             return wopiUrl
         }
-       var wopiUrl = constructWopiUrl();
        var form1 = document.getElementById("form1");
-       form1.action = wopiUrl
+       form1.action = constructWopiUrl('file_path');
        form1.submit();
 
        var form2 = document.getElementById("form2");
-       form2.action = wopiUrl
+       form2.action = constructWopiUrl('file_path2');
 
         window.addEventListener(
             'message',

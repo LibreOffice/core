@@ -132,6 +132,48 @@ function setupAndLoadDocument(filePath, isMultiUser = false, copyCertificates = 
 }
 
 /*
+ * Sets up two independent documents and opens each in its own multiuser
+ * iframe (iframe1 and iframe2). The cypress-multiuser.html template reads
+ * file_path for iframe1 and file_path2 for iframe2.
+ */
+function setupAndLoadTwoDocuments(filePath1, filePath2, lang) {
+	cy.log('>> setupAndLoadTwoDocuments - start');
+
+	var newFilePath1 = setupDocument(filePath1);
+	var newFilePath2 = setupDocument(filePath2);
+
+	cy.viewport(2000, 660);
+	cy.cSetActiveFrame('#iframe1');
+
+	var URI = '/browser/' + Cypress.env('WSD_VERSION_HASH') + '/cypress-multiuser.html'
+		+ '?lang=' + (lang || 'en-US')
+		+ '&file_path=' + Cypress.env('DATA_WORKDIR') + newFilePath1
+		+ '&file_path2=' + Cypress.env('DATA_WORKDIR') + newFilePath2;
+
+	cy.visit(URI, {
+		onBeforeLoad: function(win) {
+			win.addEventListener('error', logError);
+			win.addEventListener('DOMContentLoaded', function () {
+				for (var i = 0; i < win.frames.length; i++) {
+					win.frames[i].addEventListener('error', logError);
+				}
+			});
+		}
+	});
+
+	cy.cSetActiveFrame('#iframe1');
+	documentChecks();
+	cy.cSetActiveFrame('#iframe2');
+	// iframe2 takes longer to fully initialize; skip the strict
+	// 'initialized' wait here and let the test rely on cy.cGet's
+	// auto-retry against the elements it actually touches.
+	documentChecks(true);
+
+	cy.log('<< setupAndLoadTwoDocuments - end');
+	return [newFilePath1, newFilePath2];
+}
+
+/*
  * Covers most use cases. For more flexibility,
  * call closeDocument and loadDocument directly
  */
@@ -1469,6 +1511,7 @@ function getContextMenuItemList() {
 module.exports.setupDocument = setupDocument;
 module.exports.loadDocument = loadDocument;
 module.exports.setupAndLoadDocument = setupAndLoadDocument;
+module.exports.setupAndLoadTwoDocuments = setupAndLoadTwoDocuments;
 module.exports.reloadDocument = reloadDocument;
 module.exports.documentChecks = documentChecks;
 module.exports.assertCursorAndFocus = assertCursorAndFocus;
