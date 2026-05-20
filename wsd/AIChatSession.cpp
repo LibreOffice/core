@@ -1376,7 +1376,6 @@ ImageGenRequest AIChatSession::createImageGenRequest(const std::string& prompt)
         imageSize = "1024x1024";
     payload->set("size", imageSize);
     payload->set("n", 1);
-    payload->set("response_format", "b64_json");
     payload->set("model", imageModel);
 
     LOG_DBG("AIImageGeneration: model=" << imageModel << ", size=" << imageSize);

@@ -377,6 +377,19 @@ public:
         std::string& outModel,
         std::string& outRating);
 
+    /// Resolve AI image-generation credentials with the same precedence as
+    /// resolveAndApplyAICredentials:
+    ///   viewSettings[aiImageProviderAPIKey|URL|aiImageModel|aiImageSize]
+    ///   -> userPrivateInfoObj[AIImageProviderAPIKey|URL|AIImageModel|AIImageSize]
+    ///   -> coolwsd.xml ai.image_api_key / ai.image_api_url / ai.image_model / ai.image_size
+    /// Applies the resolved values to this session. If viewSettings is non-null
+    /// and a field is filled from userPrivateInfoObj, viewSettings is mutated
+    /// (and viewSettingsMutated set to true) so callers can persist the
+    /// migration.
+    void resolveAndApplyAIImageCredentials(Poco::JSON::Object::Ptr& viewSettings,
+                                           const Poco::JSON::Object::Ptr& userPrivateInfoObj,
+                                           bool& viewSettingsMutated);
+
     /// Override parsedDocOption values we get from browser setting json
     /// Because when client sends `load url` it doesn't have information about browser setting json
     void overrideDocOption();

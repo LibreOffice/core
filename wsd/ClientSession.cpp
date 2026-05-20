@@ -1760,6 +1760,39 @@ bool ClientSession::resolveAndApplyAICredentials(Poco::JSON::Object::Ptr& viewSe
     return configured;
 }
 
+void ClientSession::resolveAndApplyAIImageCredentials(
+    Poco::JSON::Object::Ptr& viewSettings, const Poco::JSON::Object::Ptr& userPrivateInfoObj,
+    bool& viewSettingsMutated)
+{
+    auto resolveField = [&](const std::string& vsKey, const std::string& upiKey,
+                            const std::string& cfgKey) -> std::string
+    {
+        std::string value;
+        if (viewSettings)
+            JsonUtil::findJSONValue(viewSettings, vsKey, value);
+        if (value.empty() && userPrivateInfoObj)
+        {
+            JsonUtil::findJSONValue(userPrivateInfoObj, upiKey, value);
+            if (!value.empty() && viewSettings)
+            {
+                LOG_INF("Migrating field [" << vsKey << "] from user private info");
+                viewSettings->set(vsKey, value);
+                viewSettingsMutated = true;
+            }
+        }
+        if (value.empty())
+            value = ConfigUtil::getConfigValue<std::string>(cfgKey, "");
+        return value;
+    };
+
+    setAIImageProviderAPIKey(
+        resolveField("aiImageProviderAPIKey", "AIImageProviderAPIKey", "ai.image_api_key"));
+    setAIImageProviderURL(
+        resolveField("aiImageProviderURL", "AIImageProviderURL", "ai.image_api_url"));
+    setAIImageModel(resolveField("aiImageModel", "AIImageModel", "ai.image_model"));
+    setAIImageSize(resolveField("aiImageSize", "AIImageSize", "ai.image_size"));
+}
+
 bool ClientSession::handleUpdateViewSettings(const std::string& firstLine)
 {
     const std::string jsonPayload = firstLine.substr(strlen("updateviewsettings "));
@@ -1778,17 +1811,11 @@ bool ClientSession::handleUpdateViewSettings(const std::string& firstLine)
                                      isDisableAISettings(), viewSettingsMutated,
                                      resolvedModel, resolvedRating);
 
-    std::string aiImageProviderAPIKey, aiImageProviderURL, aiImageModel, aiImageSize;
+    resolveAndApplyAIImageCredentials(viewSettings, /*userPrivateInfoObj=*/nullptr,
+                                      viewSettingsMutated);
+
     std::string aiRequestTimeout;
-    JsonUtil::findJSONValue(viewSettings, "aiImageProviderAPIKey", aiImageProviderAPIKey);
-    JsonUtil::findJSONValue(viewSettings, "aiImageProviderURL", aiImageProviderURL);
-    JsonUtil::findJSONValue(viewSettings, "aiImageModel", aiImageModel);
-    JsonUtil::findJSONValue(viewSettings, "aiImageSize", aiImageSize);
     JsonUtil::findJSONValue(viewSettings, "aiRequestTimeout", aiRequestTimeout);
-    setAIImageProviderAPIKey(aiImageProviderAPIKey);
-    setAIImageProviderURL(aiImageProviderURL);
-    setAIImageModel(aiImageModel);
-    setAIImageSize(aiImageSize);
     setAIRequestTimeout(aiRequestTimeout);
 
     std::string zoteroAPIKey, signatureCert, signatureKey, signatureCa;

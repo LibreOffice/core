@@ -1542,6 +1542,7 @@ DocumentBroker::updateSessionWithWopiInfo(const std::shared_ptr<ClientSession>& 
         noViewSettings, userPrivateInfoObj,
         wopiFileInfo->getDisableAISettings(), unusedMutated,
         resolvedAIModel, resolvedAIRating);
+    session->resolveAndApplyAIImageCredentials(noViewSettings, userPrivateInfoObj, unusedMutated);
     wopiInfo->set("AIConfigured", aiConfigured);
     if (aiConfigured)
         wopiInfo->set("AIModelName", resolvedAIModel);
@@ -1816,8 +1817,7 @@ static std::string extractViewSettings(const std::string& viewSettingsPath,
             }
         }
 
-        std::string zoteroAPIKey, signatureCertificate, signatureKey, signatureCa,
-            aiImageProviderAPIKey, aiImageProviderURL, aiImageModel, aiImageSize;
+        std::string zoteroAPIKey, signatureCertificate, signatureKey, signatureCa;
 
         bool viewSettingsNeedUpdate = false;
 
@@ -1860,15 +1860,8 @@ static std::string extractViewSettings(const std::string& viewSettingsPath,
             viewSettings, userPrivateInfoObj, session->isDisableAISettings(),
             viewSettingsNeedUpdate, resolvedAIModel, resolvedAIRating);
 
-        JsonUtil::findJSONValue(viewSettings, "aiImageProviderAPIKey", aiImageProviderAPIKey);
-        JsonUtil::findJSONValue(viewSettings, "aiImageProviderURL", aiImageProviderURL);
-        JsonUtil::findJSONValue(viewSettings, "aiImageModel", aiImageModel);
-        JsonUtil::findJSONValue(viewSettings, "aiImageSize", aiImageSize);
-
-        session->setAIImageProviderAPIKey(aiImageProviderAPIKey);
-        session->setAIImageProviderURL(aiImageProviderURL);
-        session->setAIImageModel(aiImageModel);
-        session->setAIImageSize(aiImageSize);
+        session->resolveAndApplyAIImageCredentials(viewSettings, userPrivateInfoObj,
+                                                   viewSettingsNeedUpdate);
 
         if (viewSettingsNeedUpdate)
         {
