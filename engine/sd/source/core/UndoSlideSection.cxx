@@ -19,6 +19,14 @@ UndoSlideSection::UndoSlideSection(SdDrawDocument& rDoc, const OUString& rCommen
 {
 }
 
+UndoSlideSection::UndoSlideSection(SdDrawDocument& rDoc, const OUString& rComment,
+                                   std::vector<SlideSection> aOldSections)
+    : SdrUndoAction(rDoc)
+    , maOldSections(std::move(aOldSections))
+    , maComment(rComment)
+{
+}
+
 void UndoSlideSection::Undo()
 {
     auto& rDoc = static_cast<SdDrawDocument&>(m_rMod);

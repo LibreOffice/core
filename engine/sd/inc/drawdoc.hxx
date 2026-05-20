@@ -360,6 +360,7 @@ private:
                         maFrameViewList;
     std::unique_ptr<SdCustomShowList>   mpCustomShowList;
     std::unique_ptr<sd::SlideSectionManager> mpSectionManager;
+    bool                mbInternalPageMove = false;
     ::sd::DrawDocShell* mpDocSh;
     SdTransferable *    mpCreatingTransferable;
     bool                mbHasOnlineSpellErrors;
@@ -396,6 +397,7 @@ private:
 
     SAL_DLLPRIVATE void                UpdatePageObjectsInNotes(sal_uInt16 nStartPos);
     SAL_DLLPRIVATE void                UpdatePageRelativeURLs(SdPage const * pPage, sal_uInt16 nPos, sal_Int32 nIncrement);
+    SAL_DLLPRIVATE sal_Int32           GetStandardPageIndex(SdPage const * pPage) const;
     SAL_DLLPRIVATE void                FillOnlineSpellingList(SdPage const * pPage);
     SAL_DLLPRIVATE void                SpellObject(SdrTextObj* pObj);
 

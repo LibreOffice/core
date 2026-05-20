@@ -78,6 +78,14 @@ public:
     /// Does not move any slides.
     void RestoreSectionsSnapshot(const std::vector<SlideSection>& rSections);
 
+    /// Shift section anchors after a slide is inserted; a slide at a
+    /// section boundary stays in the preceding section.
+    void OnSlideInserted(sal_Int32 nNewStandardIndex);
+
+    /// Shift section anchors after a slide is removed; zero-slide
+    /// sections are dropped.
+    void OnSlideRemoved(sal_Int32 nOldStandardIndex);
+
 private:
     SdDrawDocument& mrDoc;
     std::vector<SlideSection> maSections;

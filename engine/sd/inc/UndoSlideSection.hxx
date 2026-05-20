@@ -31,6 +31,8 @@ class SD_DLLPUBLIC UndoSlideSection final : public SdrUndoAction
 {
 public:
     UndoSlideSection(SdDrawDocument& rDoc, const OUString& rComment);
+    UndoSlideSection(SdDrawDocument& rDoc, const OUString& rComment,
+                     std::vector<SlideSection> aOldSections);
 
     virtual void Undo() override;
     virtual void Redo() override;

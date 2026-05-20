@@ -8,8 +8,12 @@
  */
 
 #include <SlideSectionManager.hxx>
+#include <DrawDocShell.hxx>
+#include <UndoSlideSection.hxx>
 #include <drawdoc.hxx>
 #include <sdpage.hxx>
+#include <sdresid.hxx>
+#include <strings.hrc>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 
@@ -19,10 +23,23 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/xmltools.hxx>
 #include <sfx2/viewsh.hxx>
+#include <svl/undo.hxx>
 #include <svx/svdmodel.hxx>
 #include <tools/json_writer.hxx>
 
 using namespace ::com::sun::star;
+
+namespace
+{
+bool isInUndoRedo(const SdDrawDocument& rDoc)
+{
+    sd::DrawDocShell* pShell = rDoc.GetDocSh();
+    if (!pShell)
+        return false;
+    SfxUndoManager* pMgr = pShell->GetUndoManager();
+    return pMgr && pMgr->IsDoing();
+}
+}
 
 namespace sd
 {
@@ -298,6 +315,93 @@ void SlideSectionManager::MoveSection(sal_Int32 nOldIndex, sal_Int32 nNewIndex)
     }
 
     NotifySectionsChanged();
+}
+
+void SlideSectionManager::OnSlideInserted(sal_Int32 nNewStandardIndex)
+{
+    if (maSections.empty())
+        return;
+
+    if (isInUndoRedo(mrDoc))
+        return;
+
+    const bool bUndoEnabled = mrDoc.IsUndoEnabled();
+    std::vector<SlideSection> aSnapshot;
+    if (bUndoEnabled)
+        aSnapshot = GetSectionsSnapshot();
+
+    bool bChanged = false;
+    for (auto& rSec : maSections)
+    {
+        if (rSec.mnStartIndex < nNewStandardIndex)
+            continue;
+
+        // Keep first section at 0 so the new slide is not orphaned.
+        if (nNewStandardIndex == 0 && &rSec == &maSections.front()
+            && rSec.mnStartIndex == 0)
+            continue;
+
+        rSec.mnStartIndex += 1;
+        bChanged = true;
+    }
+
+    if (bChanged)
+    {
+        if (bUndoEnabled)
+            mrDoc.AddUndo(std::make_unique<UndoSlideSection>(
+                mrDoc, SdResId(STR_UNDO_INSERTPAGES), std::move(aSnapshot)));
+        NotifySectionsChanged();
+    }
+}
+
+void SlideSectionManager::OnSlideRemoved(sal_Int32 nOldStandardIndex)
+{
+    if (maSections.empty())
+        return;
+
+    if (isInUndoRedo(mrDoc))
+        return;
+
+    const bool bUndoEnabled = mrDoc.IsUndoEnabled();
+    std::vector<SlideSection> aSnapshot;
+    if (bUndoEnabled)
+        aSnapshot = GetSectionsSnapshot();
+
+    bool bChanged = false;
+    for (auto& rSec : maSections)
+    {
+        if (rSec.mnStartIndex > nOldStandardIndex)
+        {
+            rSec.mnStartIndex -= 1;
+            bChanged = true;
+        }
+    }
+
+    const sal_uInt16 nPageCount = mrDoc.GetSdPageCount(PageKind::Standard);
+    auto it = maSections.begin();
+    while (it != maSections.end())
+    {
+        const sal_Int32 nEnd = ((it + 1) != maSections.end())
+                                   ? (it + 1)->mnStartIndex
+                                   : static_cast<sal_Int32>(nPageCount);
+        if (nEnd <= it->mnStartIndex)
+        {
+            it = maSections.erase(it);
+            bChanged = true;
+        }
+        else
+        {
+            ++it;
+        }
+    }
+
+    if (bChanged)
+    {
+        if (bUndoEnabled)
+            mrDoc.AddUndo(std::make_unique<UndoSlideSection>(
+                mrDoc, SdResId(STR_UNDO_DELETEPAGES), std::move(aSnapshot)));
+        NotifySectionsChanged();
+    }
 }
 
 std::vector<SlideSection> SlideSectionManager::GetSectionsSnapshot() const { return maSections; }

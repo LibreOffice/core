@@ -43,10 +43,12 @@
 
 #include <svx/svditer.hxx>
 #include <comphelper/kit.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <xmloff/autolayout.hxx>
 
 #include <sdresid.hxx>
 #include <drawdoc.hxx>
+#include <SlideSectionManager.hxx>
 #include <sdpage.hxx>
 #include <strings.hrc>
 #include <glob.hxx>
@@ -442,6 +444,17 @@ void SdDrawDocument::UpdatePageRelativeURLs(SdPage const * pPage, sal_uInt16 nPo
     UpdatePageRelativeURLsImpl(aItemCallback);
 }
 
+sal_Int32 SdDrawDocument::GetStandardPageIndex(SdPage const * pPage) const
+{
+    const sal_uInt16 nStandardCount = GetSdPageCount(PageKind::Standard);
+    for (sal_uInt16 i = 0; i < nStandardCount; ++i)
+    {
+        if (GetSdPage(i, PageKind::Standard) == pPage)
+            return i;
+    }
+    return -1;
+}
+
 // Move page
 void SdDrawDocument::MovePage(sal_uInt16 nPgNum, sal_uInt16 nNewPos)
 {
@@ -452,6 +465,12 @@ void SdDrawDocument::MovePage(sal_uInt16 nPgNum, sal_uInt16 nNewPos)
         if (nNewPos == 1)
             nNewPos = 3;
     }
+    // MovePage does remove+insert internally; suppress anchor updates.
+    const bool bOldInternalPageMove = mbInternalPageMove;
+    mbInternalPageMove = true;
+    comphelper::ScopeGuard aGuard([this, bOldInternalPageMove]() {
+        mbInternalPageMove = bOldInternalPageMove;
+    });
     FmFormModel::MovePage(nPgNum, nNewPos);
 
     sal_uInt16 nMin = std::min(nPgNum, nNewPos);
@@ -478,6 +497,14 @@ void SdDrawDocument::InsertPage(SdrPage* pPage, sal_uInt16 nPos)
     {
         SdXImpressDocument* pDoc = getUnoModel();
         KitHelper::notifyDocumentSizeChangedAllViews(pDoc);
+    }
+
+    if (!mbInternalPageMove && mpSectionManager && !pSdPage->IsMasterPage()
+        && pSdPage->GetPageKind() == PageKind::Standard)
+    {
+        const sal_Int32 nStandardIndex = GetStandardPageIndex(pSdPage);
+        if (nStandardIndex >= 0)
+            mpSectionManager->OnSlideInserted(nStandardIndex);
     }
 
     if (HasCanvasPage())
@@ -511,6 +538,19 @@ rtl::Reference<SdrPage> SdDrawDocument::RemovePage(sal_uInt16 nPgNum)
     if (HasCanvasPage() && GetSdPageCount(PageKind::Standard) == 2
         && nPgNum == 3 && !mbDestroying)
         return nullptr;
+
+    // Computed before the erase, while the page is still in the model.
+    sal_Int32 nRemovedStandardIndex = -1;
+    if (!mbInternalPageMove && mpSectionManager && !mbDestroying)
+    {
+        SdPage* pOldPage = static_cast<SdPage*>(GetPage(nPgNum));
+        if (pOldPage && !pOldPage->IsMasterPage()
+            && pOldPage->GetPageKind() == PageKind::Standard)
+        {
+            nRemovedStandardIndex = GetStandardPageIndex(pOldPage);
+        }
+    }
+
     rtl::Reference<SdrPage> pPage = FmFormModel::RemovePage(nPgNum);
 
     bool bLast = ((nPgNum+1)/2 == (GetPageCount()+1)/2);
@@ -545,6 +585,9 @@ rtl::Reference<SdrPage> SdDrawDocument::RemovePage(sal_uInt16 nPgNum)
     {
         updatePagePreviewsGrid(pSdPage);
     }
+
+    if (nRemovedStandardIndex >= 0 && mpSectionManager)
+        mpSectionManager->OnSlideRemoved(nRemovedStandardIndex);
 
     return pPage;
 }

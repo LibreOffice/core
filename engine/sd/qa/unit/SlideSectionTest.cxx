@@ -442,6 +442,243 @@ CPPUNIT_TEST_FIXTURE(SlideSectionTest, testUndoRedoMoveSection)
     CPPUNIT_ASSERT_EQUAL(u"Section-3"_ustr, rMgr.GetSection(2).maName);
 }
 
+// Direct unit tests for the OnSlideInserted / OnSlideRemoved primitives that
+// the SdDrawDocument insert/remove paths call after a standard slide is
+// added or deleted. The fixture's three sections start at standard indices
+// 0, 4 and 11 (Section-1 has 4 slides, Section-2 has 7, Section-3 has 2).
+
+// The original bug: duplicating the last slide of a section pushed the new
+// slide into the next section because the next section's startIndex did not
+// shift. Inserting at the end-of-section boundary (index 4 = start of
+// Section-2) must shift Section-2 and Section-3 so the new slide stays in
+// Section-1.
+CPPUNIT_TEST_FIXTURE(SlideSectionTest, testOnSlideInsertedAtSectionBoundary)
+{
+    createSdImpressDoc("pptx/slide-section-test.pptx");
+
+    sd::SlideSectionManager& rMgr = getSectionManager();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), rMgr.GetSection(0).mnStartIndex);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), rMgr.GetSection(1).mnStartIndex);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(11), rMgr.GetSection(2).mnStartIndex);
+
+    rMgr.OnSlideInserted(4);
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), rMgr.GetSection(0).mnStartIndex);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), rMgr.GetSection(1).mnStartIndex);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(12), rMgr.GetSection(2).mnStartIndex);
+    // The new slide at index 4 belongs to Section-1, not Section-2.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), rMgr.GetSectionIndexForSlide(4));
+}
+
+// Inserting in the middle of a section keeps both sides in the same section
+// and shifts everything beyond.
+CPPUNIT_TEST_FIXTURE(SlideSectionTest, testOnSlideInsertedInMiddleOfSection)
+{
+    createSdImpressDoc("pptx/slide-section-test.pptx");
+
+    sd::SlideSectionManager& rMgr = getSectionManager();
+
+    rMgr.OnSlideInserted(2);
+
+    // Section-1 still starts at 0; later sections shift up by 1.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), rMgr.GetSection(0).mnStartIndex);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), rMgr.GetSection(1).mnStartIndex);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(12), rMgr.GetSection(2).mnStartIndex);
+}
+
+// Insertion at index 0 must not push the first section off slide 0, or the
+// new slide would be section-less.
+CPPUNIT_TEST_FIXTURE(SlideSectionTest, testOnSlideInsertedAtFrontKeepsFirstSection)
+{
+    createSdImpressDoc("pptx/slide-section-test.pptx");
+
+    sd::SlideSectionManager& rMgr = getSectionManager();
+
+    rMgr.OnSlideInserted(0);
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), rMgr.GetSection(0).mnStartIndex);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), rMgr.GetSection(1).mnStartIndex);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(12), rMgr.GetSection(2).mnStartIndex);
+}
+
+// Insertion past the end of all sections leaves them unchanged.
+CPPUNIT_TEST_FIXTURE(SlideSectionTest, testOnSlideInsertedPastEndIsNoop)
+{
+    createSdImpressDoc("pptx/slide-section-test.pptx");
+
+    sd::SlideSectionManager& rMgr = getSectionManager();
+    const auto aBefore = rMgr.GetSectionsSnapshot();
+
+    rMgr.OnSlideInserted(100);
+
+    const auto aAfter = rMgr.GetSectionsSnapshot();
+    CPPUNIT_ASSERT_EQUAL(aBefore.size(), aAfter.size());
+    for (size_t i = 0; i < aBefore.size(); ++i)
+        CPPUNIT_ASSERT_EQUAL(aBefore[i].mnStartIndex, aAfter[i].mnStartIndex);
+}
+
+// Removing a slide that is not a section start shifts subsequent section
+// starts down by one and drops no section.
+CPPUNIT_TEST_FIXTURE(SlideSectionTest, testOnSlideRemovedFromMiddle)
+{
+    createSdImpressDoc("pptx/slide-section-test.pptx");
+
+    sd::SlideSectionManager& rMgr = getSectionManager();
+
+    rMgr.OnSlideRemoved(2);
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), rMgr.GetSectionCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), rMgr.GetSection(0).mnStartIndex);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), rMgr.GetSection(1).mnStartIndex);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(10), rMgr.GetSection(2).mnStartIndex);
+}
+
+// Removing the first slide of a multi-slide section keeps that section.
+// Its start index stays the same because the slide that was at start+1 is
+// now at start (the section's effective anchor has shifted in place).
+CPPUNIT_TEST_FIXTURE(SlideSectionTest, testOnSlideRemovedFromSectionStart)
+{
+    createSdImpressDoc("pptx/slide-section-test.pptx");
+
+    sd::SlideSectionManager& rMgr = getSectionManager();
+
+    // Drive the manager primitive directly to keep the assertion focused on
+    // the index arithmetic; the full integration path (via
+    // SdDrawDocument::RemovePage) is covered by
+    // testRemoveSingletonSlideDropsSection below.
+    rMgr.OnSlideRemoved(0);
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), rMgr.GetSectionCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), rMgr.GetSection(0).mnStartIndex);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), rMgr.GetSection(1).mnStartIndex);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(10), rMgr.GetSection(2).mnStartIndex);
+}
+
+// Removing the only slide of a singleton section drops that section. Uses
+// the public XDrawPages UNO interface, which routes through
+// SdDrawDocument::RemovePage and exercises the integration path.
+CPPUNIT_TEST_FIXTURE(SlideSectionTest, testRemoveSingletonSlideDropsSection)
+{
+    createSdImpressDoc("pptx/slide-section-test.pptx");
+
+    SdDrawDocument* pDoc = getDoc();
+    sd::SlideSectionManager& rMgr = pDoc->GetSectionManager();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), rMgr.GetSectionCount());
+
+    // Make Section-2 a singleton by adding a section at index 5. The fixture
+    // originally has Section-2 spanning indices 4..10; AddSection(5) splits
+    // it so the original Section-2 is just slide 4.
+    rMgr.AddSection(5, u"Inserted"_ustr);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), rMgr.GetSectionCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), rMgr.GetSection(1).mnStartIndex);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), rMgr.GetSection(2).mnStartIndex);
+
+    uno::Reference<drawing::XDrawPagesSupplier> xPagesSup(mxComponent,
+                                                         uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPages> xPages = xPagesSup->getDrawPages();
+    uno::Reference<drawing::XDrawPage> xPage(xPages->getByIndex(4),
+                                             uno::UNO_QUERY_THROW);
+    xPages->remove(xPage);
+
+    // Section-2 (the singleton) must be dropped; the others remain with
+    // their starts shifted down by one for everything after the deletion.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), rMgr.GetSectionCount());
+    CPPUNIT_ASSERT_EQUAL(u"Section-1"_ustr, rMgr.GetSection(0).maName);
+    CPPUNIT_ASSERT_EQUAL(u"Inserted"_ustr, rMgr.GetSection(1).maName);
+    CPPUNIT_ASSERT_EQUAL(u"Section-3"_ustr, rMgr.GetSection(2).maName);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), rMgr.GetSection(0).mnStartIndex);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), rMgr.GetSection(1).mnStartIndex);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(10), rMgr.GetSection(2).mnStartIndex);
+}
+
+// Undoing a delete that dropped a singleton section must bring the section
+// back. Without the UndoSlideSection that OnSlideRemoved records, the page
+// would reappear on undo but its section would stay gone.
+CPPUNIT_TEST_FIXTURE(SlideSectionTest, testUndoRestoresDroppedSection)
+{
+    createSdImpressDoc("pptx/slide-section-test.pptx");
+
+    SdDrawDocument* pDoc = getDoc();
+    sd::SlideSectionManager& rMgr = pDoc->GetSectionManager();
+
+    // Make Section-2 a singleton so deleting slide 4 will drop it entirely.
+    rMgr.AddSection(5, u"Inserted"_ustr);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), rMgr.GetSectionCount());
+
+    uno::Reference<drawing::XDrawPagesSupplier> xPagesSup(mxComponent,
+                                                         uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPages> xPages = xPagesSup->getDrawPages();
+    uno::Reference<drawing::XDrawPage> xPage(xPages->getByIndex(4),
+                                             uno::UNO_QUERY_THROW);
+    xPages->remove(xPage);
+
+    // Singleton Section-2 has been dropped.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), rMgr.GetSectionCount());
+    CPPUNIT_ASSERT_EQUAL(u"Section-1"_ustr, rMgr.GetSection(0).maName);
+    CPPUNIT_ASSERT_EQUAL(u"Inserted"_ustr, rMgr.GetSection(1).maName);
+    CPPUNIT_ASSERT_EQUAL(u"Section-3"_ustr, rMgr.GetSection(2).maName);
+
+    getUndoManager().Undo();
+
+    // The dropped section must be back, with its original name and anchor.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), rMgr.GetSectionCount());
+    CPPUNIT_ASSERT_EQUAL(u"Section-1"_ustr, rMgr.GetSection(0).maName);
+    CPPUNIT_ASSERT_EQUAL(u"Section-2"_ustr, rMgr.GetSection(1).maName);
+    CPPUNIT_ASSERT_EQUAL(u"Inserted"_ustr, rMgr.GetSection(2).maName);
+    CPPUNIT_ASSERT_EQUAL(u"Section-3"_ustr, rMgr.GetSection(3).maName);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), rMgr.GetSection(1).mnStartIndex);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), rMgr.GetSection(2).mnStartIndex);
+
+    getUndoManager().Redo();
+
+    // Redo drops the singleton again.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), rMgr.GetSectionCount());
+    CPPUNIT_ASSERT_EQUAL(u"Section-1"_ustr, rMgr.GetSection(0).maName);
+    CPPUNIT_ASSERT_EQUAL(u"Inserted"_ustr, rMgr.GetSection(1).maName);
+    CPPUNIT_ASSERT_EQUAL(u"Section-3"_ustr, rMgr.GetSection(2).maName);
+}
+
+// Inserting a slide via the full integration path (XDrawPages::insertNewByIndex)
+// and then undoing must restore the section anchors to their original state.
+CPPUNIT_TEST_FIXTURE(SlideSectionTest, testUndoRestoresSectionsAfterSlideInsert)
+{
+    createSdImpressDoc("pptx/slide-section-test.pptx");
+
+    SdDrawDocument* pDoc = getDoc();
+    sd::SlideSectionManager& rMgr = pDoc->GetSectionManager();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), rMgr.GetSectionCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), rMgr.GetSection(0).mnStartIndex);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), rMgr.GetSection(1).mnStartIndex);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(11), rMgr.GetSection(2).mnStartIndex);
+
+    uno::Reference<drawing::XDrawPagesSupplier> xPagesSup(mxComponent,
+                                                         uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPages> xPages = xPagesSup->getDrawPages();
+    const sal_Int32 nOrigPageCount = xPages->getCount();
+
+    xPages->insertNewByIndex(4);
+
+    CPPUNIT_ASSERT_EQUAL(nOrigPageCount + 1, xPages->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), rMgr.GetSection(0).mnStartIndex);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), rMgr.GetSection(1).mnStartIndex);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(12), rMgr.GetSection(2).mnStartIndex);
+
+    getUndoManager().Undo();
+
+    CPPUNIT_ASSERT_EQUAL(nOrigPageCount, xPages->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), rMgr.GetSectionCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), rMgr.GetSection(0).mnStartIndex);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), rMgr.GetSection(1).mnStartIndex);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(11), rMgr.GetSection(2).mnStartIndex);
+
+    getUndoManager().Redo();
+
+    CPPUNIT_ASSERT_EQUAL(nOrigPageCount + 1, xPages->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), rMgr.GetSection(0).mnStartIndex);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), rMgr.GetSection(1).mnStartIndex);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(12), rMgr.GetSection(2).mnStartIndex);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

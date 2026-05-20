@@ -329,6 +329,87 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Slide sections', function(
 			});
 		});
 
+		describe('Section anchors follow insert and delete', function() {
+			function waitForInitialSections() {
+				cy.window().should(function(win) {
+					var s = win['0'].app.impress.sections;
+					expect(s).to.have.length(3);
+					expect(s.map(function(x) { return x.startIndex; }))
+						.to.deep.equal([0, 4, 11]);
+					expect(win['0'].app.impress.partList).to.have.length(13);
+				});
+			}
+
+			// Reproduce the original bug: duplicating the last slide of a
+			// section used to push the duplicate into the next section
+			// because that section's startIndex did not shift. The new slide
+			// must stay in the same section, and the following sections'
+			// startIndex must move forward by one.
+			it('Duplicating last slide of Section-1 keeps duplicate in Section-1', function() {
+				helper.processToIdle(this.win);
+				waitForInitialSections();
+
+				// Slide 3 (preview index 3) is the last slide of Section-1.
+				cy.cGet('#preview-img-part-3').scrollIntoView().rightclick();
+				clickContextMenuItem('Duplicate Slide');
+				helper.processToIdle(this.win);
+
+				cy.window().should(function(win) {
+					var impress = win['0'].app.impress;
+					expect(impress.partList).to.have.length(14);
+					// Section-1 grew by one slide; Section-2 / Section-3 shift up.
+					expect(impress.sections.map(function(s) { return s.startIndex; }))
+						.to.deep.equal([0, 5, 12]);
+				});
+			});
+
+			// Deleting the only slide of a singleton section drops the
+			// section entirely.
+			it('Deleting only slide of a singleton section drops the section', function() {
+				helper.processToIdle(this.win);
+				waitForInitialSections();
+
+				// Insert a section starting at slide 5 so the original
+				// Section-2 is reduced to a single slide (slide 4).
+				cy.cGet('#preview-img-part-4').scrollIntoView().rightclick();
+				clickContextMenuItem('Add Section');
+				helper.processToIdle(this.win);
+				cy.window().should(function(win) {
+					expect(win['0'].app.impress.sections).to.have.length(4);
+				});
+
+				// Delete slide 4 (the only slide left in Section-2).
+				cy.cGet('#preview-img-part-4').scrollIntoView().rightclick();
+				clickContextMenuItem('Delete Slide');
+				helper.processToIdle(this.win);
+
+				cy.window().should(function(win) {
+					var impress = win['0'].app.impress;
+					expect(impress.partList).to.have.length(12);
+					expect(impress.sections).to.have.length(3);
+					expect(impress.sections.map(function(s) { return s.name; }))
+						.to.deep.equal(['Section-1', 'Untitled Section', 'Section-3']);
+				});
+
+				// Reload to confirm the dropped section survives a PPTX
+				// round-trip and the remaining sections persist correctly.
+				helper.processToIdle(this.win);
+				helper.reloadDocument(this.newFilePath);
+				cy.getFrameWindow().then((win) => {
+					this.win = win;
+				});
+				helper.processToIdle(this.win);
+
+				cy.window().should(function(win) {
+					var impress = win['0'].app.impress;
+					expect(impress.partList).to.have.length(12);
+					expect(impress.sections).to.have.length(3);
+					expect(impress.sections.map(function(s) { return s.name; }))
+						.to.deep.equal(['Section-1', 'Untitled Section', 'Section-3']);
+				});
+			});
+		});
+
 		it('Collapse section hides its slides', function() {
 			helper.processToIdle(this.win);
 
