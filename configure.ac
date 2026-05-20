@@ -223,6 +223,19 @@ PathFormat()
         formatted_path_unix=$(wslpath -u "$(cd /mnt/c; cmd.exe /c $shortpath_cmd "$formatted_path" | tr -d '\r')")
         # WSL can't run Windows binaries from Windows pathnames so we need a separate return value in Unix format
         formatted_path=$(wslpath -m "$formatted_path_unix")
+        # workaround for wsl < 2.4.5 not preserving the trailing slash, use case statement since
+        # ${VARIABLE: -1} / using offsets is not in POSIX sh
+        case "$formatted_path_unix" in
+            */)
+                case "$formatted_path" in
+                    */)
+                        ;;
+                    *)
+                        formatted_path="$formatted_path/"
+                        ;;
+                esac
+                ;;
+        esac
     elif test "$build_os" = "cygwin"; then
         # while for cygwin there's no difference between the different realms during configure and
         # during the build, AC_PATH_PROG still only accepts a path starting with / as valid, so also
