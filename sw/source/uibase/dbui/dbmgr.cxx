@@ -596,7 +596,7 @@ void SwDBManager::ImportFromConnection(SwWrtShell& rSh)
     {
         sal_uInt32 i = 0;
         do {
-            ImportDBEntry(&rSh);
+            ImportDBEntry(rSh);
             if( 10 == ++i )
                 oWait.emplace(*rSh.GetView().GetDocShell(), true);
 
@@ -608,7 +608,7 @@ void SwDBManager::ImportFromConnection(SwWrtShell& rSh)
     rSh.EndAllAction();
 }
 
-void SwDBManager::ImportDBEntry(SwWrtShell* pSh)
+void SwDBManager::ImportDBEntry(SwWrtShell& rSh)
 {
     if(!m_pImpl->pMergeData || m_pImpl->pMergeData->bEndOfDB)
         return;
@@ -629,8 +629,8 @@ void SwDBManager::ImportDBEntry(SwWrtShell* pSh)
         if (i < nLength - 1)
             sStr.append("\t");
     }
-    pSh->SwEditShell::Insert2(sStr.makeStringAndClear());
-    pSh->SwFEShell::SplitNode();    // line feed
+    rSh.SwEditShell::Insert2(sStr.makeStringAndClear());
+    rSh.SwFEShell::SplitNode(); // line feed
 }
 
 bool SwDBManager::GetTableNames(weld::ComboBox& rBox, const OUString& rDBName)
