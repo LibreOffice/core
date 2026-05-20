@@ -392,6 +392,7 @@ COOL_JS_LST =\
 	src/canvas/vector/PreviewId.ts \
 	src/canvas/vector/SlideObject.ts \
 	src/canvas/vector/primitive/BackgroundColorPrimitive.ts \
+	src/canvas/vector/primitive/PolyPolygonColorPrimitive.ts \
 	src/canvas/vector/primitive/Primitive.ts \
 	src/canvas/vector/VectorPrimitiveRenderer.ts \
 	src/canvas/vector/VectorRenderingConfig.ts \

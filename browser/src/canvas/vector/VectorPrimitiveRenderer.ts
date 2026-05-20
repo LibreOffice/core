@@ -25,6 +25,12 @@ namespace cool {
 						primitive as BackgroundColorPrimitive,
 					);
 					break;
+				case PolyPolygonColorPrimitive.type:
+					this._renderPolyPolygonColor(
+						context,
+						primitive as PolyPolygonColorPrimitive,
+					);
+					break;
 			}
 
 			if (primitive.children)
@@ -44,6 +50,17 @@ namespace cool {
 			context.fillStyle = primitive.color;
 			context.fillRect(0, 0, context.canvas.width, context.canvas.height);
 			context.restore();
+		}
+
+		private _renderPolyPolygonColor(
+			context: CanvasRenderingContext2D,
+			primitive: PolyPolygonColorPrimitive,
+		): void {
+			if (!primitive.path || !primitive.color) return;
+
+			const path = new Path2D(primitive.path);
+			context.fillStyle = primitive.color;
+			context.fill(path);
 		}
 
 		private _renderPrimitives(

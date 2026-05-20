@@ -28,6 +28,7 @@
 /// <reference path="./helper/Events.ts"/>
 /// <reference path="./helper/util.ts"/>
 /// <reference path="./helper/CanvasRecorder.ts"/>
+/// <reference path="./helper/Path2DRecorder.ts"/>
 /// <reference path="./data/LOUtilTestData.ts"/>
 /// <reference path="./data/SheetGeometryTestData.ts" />
 

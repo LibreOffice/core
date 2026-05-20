@@ -80,6 +80,7 @@
 /// <reference path="../src/canvas/sections/CalcRTLAwareDocumentPosition.ts" />
 /// <reference path="../src/canvas/vector/primitive/Primitive.ts" />
 /// <reference path="../src/canvas/vector/primitive/BackgroundColorPrimitive.ts" />
+/// <reference path="../src/canvas/vector/primitive/PolyPolygonColorPrimitive.ts" />
 /// <reference path="../src/canvas/vector/VectorPrimitiveRenderer.ts" />
 /// <reference path="../src/canvas/sections/AutoFillBaseSection.ts" />
 /// <reference path="../src/canvas/sections/CellFillMarkerSection.ts" />

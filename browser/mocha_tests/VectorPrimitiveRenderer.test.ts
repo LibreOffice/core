@@ -10,6 +10,17 @@
  */
 
 describe('VectorPrimitiveRenderer', function () {
+	// The renderer constructs new Path2D. Use Path2DRecorder
+	// as a stand-in to capture the path string.
+	let originalPath2D: any;
+	before(function () {
+		originalPath2D = (globalThis as any).Path2D;
+		(globalThis as any).Path2D = Path2DRecorder;
+	});
+	after(function () {
+		(globalThis as any).Path2D = originalPath2D;
+	});
+
 	it('fills the whole canvas for backgroundcolor', function () {
 		const recorder = new CanvasRecorder(200, 150);
 		const renderer = new cool.VectorPrimitiveRenderer();
@@ -55,6 +66,39 @@ describe('VectorPrimitiveRenderer', function () {
 		renderer.renderPrimitive(recorder as any, primitive);
 
 		nodeassert.strictEqual(recorder.countOf('fillRect'), 0);
+	});
+
+	it('fills a Path2D for polyPolygonColor', function () {
+		const recorder = new CanvasRecorder();
+		const renderer = new cool.VectorPrimitiveRenderer();
+		const primitive = {
+			type: 'polyPolygonColor',
+			color: '#00ff00',
+			path: 'M 0 0 L 10 0 L 10 10 Z',
+		};
+
+		renderer.renderPrimitive(recorder as any, primitive);
+
+		const fillCall = recorder.findCall('fill');
+		nodeassert.ok(fillCall, 'fill not called');
+		nodeassert.strictEqual(recorder.properties.fillStyle, '#00ff00');
+		nodeassert.strictEqual(fillCall.args.length, 1);
+		nodeassert.strictEqual(
+			(fillCall.args[0] as Path2DRecorder).path,
+			'M 0 0 L 10 0 L 10 10 Z',
+		);
+	});
+
+	it('skips polyPolygonColor with missing path or color', function () {
+		const recorder = new CanvasRecorder();
+		const renderer = new cool.VectorPrimitiveRenderer();
+		const noPath = { type: 'polyPolygonColor', color: '#fff' };
+		const noColor = { type: 'polyPolygonColor', path: 'M 0 0' };
+
+		renderer.renderPrimitive(recorder as any, noPath);
+		renderer.renderPrimitive(recorder as any, noColor);
+
+		nodeassert.strictEqual(recorder.countOf('fill'), 0);
 	});
 
 	it('recurses through children', function () {
