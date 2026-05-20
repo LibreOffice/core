@@ -256,6 +256,9 @@ void Operation::syncSheetViews(UndoSheetViewSortData* pUndoSortData)
     rDocument.SyncSheetViews(nDefaultViewTab);
 
     // Invalidate every sheet view tab whose content was just rewritten.
+    // SyncSheetViews re-applies the stored sort and query/filter on the sheet
+    // view tab, which can change row visibility. Therefor we need to apply
+    // Left, Top and Size paint part flags.
     if (pManager)
     {
         if (ScDocShell* pDocShell = mpViewData->GetDocShell())
@@ -264,7 +267,9 @@ void Operation::syncSheetViews(UndoSheetViewSortData* pUndoSortData)
             {
                 SCTAB nSheetViewTab = rSheetView.getTableNumber();
                 pDocShell->PostPaint(0, 0, nSheetViewTab, rDocument.MaxCol(), rDocument.MaxRow(),
-                                     nSheetViewTab, PaintPartFlags::Grid);
+                                     nSheetViewTab,
+                                     PaintPartFlags::Grid | PaintPartFlags::Left
+                                         | PaintPartFlags::Top | PaintPartFlags::Size);
             }
         }
     }
@@ -410,6 +415,10 @@ void Operation::syncCellPatternToSheetViews(const ScAddress& rDefaultViewAddress
 
         if (pDocShell)
         {
+            // The pattern may have changed a border (drawn on the gap between
+            // two cells, so the neighbour must repaint too -> SC_PF_LINES) and
+            // may have been applied to a merged cell (the whole merge needs
+            // refresh, not just our rect -> SC_PF_TESTMERGE).
             pDocShell->PostPaint(nColumn, nSheetViewRow, nSheetViewTab, nColumn, nSheetViewRow,
                                  nSheetViewTab, PaintPartFlags::Grid,
                                  SC_PF_LINES | SC_PF_TESTMERGE);
@@ -507,6 +516,10 @@ void Operation::syncMarkPatternToSheetViews(const ScMarkData& rDefaultViewMark,
         if (ScDocShell* pDocShell = mpViewData->GetDocShell())
         {
             ScRange const& rPaintRange = aSheetViewMark.GetArea();
+            // The pattern may have changed a border (drawn on the gap between
+            // two cells, so neighbours must repaint too -> SC_PF_LINES) and
+            // may have been applied to merged cells (the whole merge needs
+            // refresh, not just our rect -> SC_PF_TESTMERGE).
             pDocShell->PostPaint(rPaintRange.aStart.Col(), rPaintRange.aStart.Row(), nSheetViewTab,
                                  rPaintRange.aEnd.Col(), rPaintRange.aEnd.Row(), nSheetViewTab,
                                  PaintPartFlags::Grid, SC_PF_LINES | SC_PF_TESTMERGE);
