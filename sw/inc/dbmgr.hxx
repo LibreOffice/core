@@ -82,13 +82,13 @@ class SwCalc;
 class INetURLObject;
 class SwDocShell;
 
-enum DBManagerOptions
+enum class DBManagerOptions
 {
-    DBMGR_MERGE,             ///< Data records in fields.
-    DBMGR_MERGE_PRINTER,     ///< Print mail merge.
-    DBMGR_MERGE_EMAIL,       ///< Send mail merge as email.
-    DBMGR_MERGE_FILE,        ///< Save mail merge as files.
-    DBMGR_MERGE_SHELL        ///< Create merge doc and keep the doc shell.
+    MailMerge, ///< Data records in fields.
+    MailMergePrinter, ///< Print mail merge.
+    MailMergeEmail, ///< Send mail merge as email.
+    MailMergeFile, ///< Save mail merge as files.
+    MailMergeShell ///< Create merge doc and keep the doc shell.
 };
 
 // Administration of (new) logical databases.
@@ -136,7 +136,7 @@ typedef std::vector<std::unique_ptr<SwDSParam>> SwDSParams_t;
 
 struct SwMergeDescriptor
 {
-    const DBManagerOptions                              nMergeType;
+    const DBManagerOptions eMergeType;
     SwWrtShell&                                         rSh;
     const svx::ODataAccessDescriptor&                   rDescriptor;
 
@@ -217,10 +217,9 @@ struct SwMergeDescriptor
 
     SwMailMergeConfigItem*                              pMailMergeConfigItem;
 
-    SwMergeDescriptor( const DBManagerOptions nType,
-                       SwWrtShell& rShell,
-                       const svx::ODataAccessDescriptor& rDesc ) :
-        nMergeType(nType),
+    SwMergeDescriptor(DBManagerOptions eType, SwWrtShell& rShell,
+                      const svx::ODataAccessDescriptor& rDesc) :
+        eMergeType(eType),
         rSh(rShell),
         rDescriptor(rDesc),
         bCreateSingleFile( false ),
@@ -229,7 +228,8 @@ struct SwMergeDescriptor
         bSendAsAttachment( false ),
         pMailMergeConfigItem( nullptr )
     {
-        if( nType == DBMGR_MERGE_SHELL || nType == DBMGR_MERGE_PRINTER )
+        if (eType == DBManagerOptions::MailMergeShell
+            || eType == DBManagerOptions::MailMergePrinter)
             bCreateSingleFile = true;
     }
 };
@@ -278,7 +278,7 @@ class SwDBManager
     /// Insert a single data record as text into document.
     void ImportDBEntry(SwWrtShell* pSh);
 
-    /// Run the mail merge for defined modes, except DBMGR_MERGE
+    /// Run the mail merge for defined modes, except DBManagerOptions::MailMerge
     bool MergeMailFiles( SwWrtShell* pSh,
                                         const SwMergeDescriptor& rMergeDescriptor );
 

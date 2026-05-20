@@ -149,7 +149,8 @@ void SwTextShell::ExecDB(SfxRequest const &rReq)
                 aDescriptor[DataAccessDescriptorProperty::Selection]    <<= aSelection;
                 aDescriptor[DataAccessDescriptorProperty::CommandType]  <<= nCommandTypeArg;
 
-                SwMergeDescriptor aMergeDesc( DBMGR_MERGE, *GetShellPtr(), aDescriptor );
+                SwMergeDescriptor aMergeDesc(DBManagerOptions::MailMerge, *GetShellPtr(),
+                                             aDescriptor);
                 pDBManager->Merge(aMergeDesc);
 
                 if ( bDisposeResultSet )

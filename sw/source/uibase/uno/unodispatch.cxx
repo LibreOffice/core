@@ -199,7 +199,7 @@ void SwXDispatch::dispatch(const util::URL& aURL,
     if(aURL.Complete == cURLInsertContent)
     {
         svx::ODataAccessDescriptor aDescriptor(aArgs);
-        SwMergeDescriptor aMergeDesc( DBMGR_MERGE, rSh, aDescriptor );
+        SwMergeDescriptor aMergeDesc(DBManagerOptions::MailMerge, rSh, aDescriptor);
         pDBManager->Merge(aMergeDesc);
     }
     else if(aURL.Complete == cURLInsertColumns)

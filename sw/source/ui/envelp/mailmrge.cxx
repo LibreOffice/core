@@ -125,7 +125,7 @@ SwMailMergeDlg::SwMailMergeDlg(weld::Window* pParent, SwWrtShell& rShell,
     : SfxDialogController(pParent, u"modules/swriter/ui/mailmerge.ui"_ustr, u"MailmergeDialog"_ustr)
     , m_pImpl(new SwMailMergeDlg_Impl)
     , m_rSh(rShell)
-    , m_nMergeType(DBMGR_MERGE_EMAIL)
+    , m_nMergeType(DBManagerOptions::MailMergeEmail)
     , m_xBeamerWin(m_xBuilder->weld_container(u"beamer"_ustr))
     , m_xAllRB(m_xBuilder->weld_radio_button(u"all"_ustr))
     , m_xMarkedRB(m_xBuilder->weld_radio_button(u"selected"_ustr))
@@ -480,9 +480,9 @@ bool SwMailMergeDlg::ExecQryShell()
     }
 
     if (m_xPrinterRB->get_active())
-        m_nMergeType = DBMGR_MERGE_PRINTER;
+        m_nMergeType = DBManagerOptions::MailMergePrinter;
     else {
-        m_nMergeType = DBMGR_MERGE_FILE;
+        m_nMergeType = DBManagerOptions::MailMergeFile;
         m_pModOpt->SetMailingPath( GetURLfromPath() );
         m_pModOpt->SetIsNameFromColumn(m_xGenerateFromDataBaseCB->get_active());
         m_pModOpt->SetIsFileEncryptedFromColumn(m_xPasswordCB->get_active());

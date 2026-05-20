@@ -457,12 +457,12 @@ bool SwDBManager::Merge( const SwMergeDescriptor& rMergeDesc )
     rtl::Reference<SwDoc> pWorkDoc;
     SwDBManager        *pWorkDocOrigDBManager = nullptr;
 
-    switch( rMergeDesc.nMergeType )
+    switch (rMergeDesc.eMergeType)
     {
-        case DBMGR_MERGE_PRINTER:
-        case DBMGR_MERGE_EMAIL:
-        case DBMGR_MERGE_FILE:
-        case DBMGR_MERGE_SHELL:
+        case DBManagerOptions::MailMergePrinter:
+        case DBManagerOptions::MailMergeEmail:
+        case DBManagerOptions::MailMergeFile:
+        case DBManagerOptions::MailMergeShell:
         {
             SwDocShell *pSourceDocSh = rMergeDesc.rSh.GetView().GetDocShell();
             if( pSourceDocSh->IsModified() )
@@ -539,9 +539,9 @@ bool SwDBManager::Merge( const SwMergeDescriptor& rMergeDesc )
     }
 
     bool bRet = true;
-    switch(rMergeDesc.nMergeType)
+    switch (rMergeDesc.eMergeType)
     {
-        case DBMGR_MERGE:
+        case DBManagerOptions::MailMerge:
             pWorkShell->LockPaint(LockPaintReason::InvalidateLayout);
             pWorkShell->StartAllAction();
             pWorkShell->SwViewShell::UpdateFields( true );
@@ -550,10 +550,10 @@ bool SwDBManager::Merge( const SwMergeDescriptor& rMergeDesc )
             pWorkShell->UnlockPaint();
             break;
 
-        case DBMGR_MERGE_PRINTER:
-        case DBMGR_MERGE_EMAIL:
-        case DBMGR_MERGE_FILE:
-        case DBMGR_MERGE_SHELL:
+        case DBManagerOptions::MailMergePrinter:
+        case DBManagerOptions::MailMergeEmail:
+        case DBManagerOptions::MailMergeFile:
+        case DBManagerOptions::MailMergeShell:
             // save files and send them as e-Mail if required
             bRet = MergeMailFiles(pWorkShell, rMergeDesc);
             break;
@@ -1056,10 +1056,10 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
 {
     // deconstruct mail merge type for better readability.
     // uppercase naming is intentional!
-    const bool bMT_EMAIL   = rMergeDescriptor.nMergeType == DBMGR_MERGE_EMAIL;
-    const bool bMT_SHELL   = rMergeDescriptor.nMergeType == DBMGR_MERGE_SHELL;
-    const bool bMT_PRINTER = rMergeDescriptor.nMergeType == DBMGR_MERGE_PRINTER;
-    const bool bMT_FILE    = rMergeDescriptor.nMergeType == DBMGR_MERGE_FILE;
+    const bool bMT_EMAIL = rMergeDescriptor.eMergeType == DBManagerOptions::MailMergeEmail;
+    const bool bMT_SHELL = rMergeDescriptor.eMergeType == DBManagerOptions::MailMergeShell;
+    const bool bMT_PRINTER = rMergeDescriptor.eMergeType == DBManagerOptions::MailMergePrinter;
+    const bool bMT_FILE = rMergeDescriptor.eMergeType == DBManagerOptions::MailMergeFile;
 
     //check if the doc is synchronized and contains at least one linked section
     const bool bSynchronizedDoc = pSourceShell->IsLabelDoc() && pSourceShell->GetSectionFormatCount() > 1;
@@ -3237,7 +3237,7 @@ std::shared_ptr<SwMailMergeConfigItem> SwDBManager::PerformMailMerge(SwView cons
     SwWrtShell& rSh = pView->GetWrtShell();
     xConfigItem->SetTargetView(nullptr);
 
-    SwMergeDescriptor aMergeDesc(DBMGR_MERGE_SHELL, rSh, aDescriptor);
+    SwMergeDescriptor aMergeDesc(DBManagerOptions::MailMergeShell, rSh, aDescriptor);
     aMergeDesc.pMailMergeConfigItem = xConfigItem.get();
     aMergeDesc.bCreateSingleFile = true;
     rSh.GetDBManager()->Merge(aMergeDesc);

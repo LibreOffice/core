@@ -646,13 +646,21 @@ uno::Any SAL_CALL SwXMailMerge::execute(
     // aDescriptor[ svx::DataAccessDescriptorProperty::ColumnObject ]    not used
     aDescriptor[ svx::DataAccessDescriptorProperty::Selection ]          <<= aCurSelection;
 
-    DBManagerOptions nMergeType;
+    DBManagerOptions eMergeType;
     switch (nCurOutputType)
     {
-        case MailMergeType::PRINTER : nMergeType = DBMGR_MERGE_PRINTER; break;
-        case MailMergeType::FILE    : nMergeType = DBMGR_MERGE_FILE; break;
-        case MailMergeType::MAIL    : nMergeType = DBMGR_MERGE_EMAIL; break;
-        case MailMergeType::SHELL   : nMergeType = DBMGR_MERGE_SHELL; break;
+        case MailMergeType::PRINTER:
+            eMergeType = DBManagerOptions::MailMergePrinter;
+            break;
+        case MailMergeType::FILE:
+            eMergeType = DBManagerOptions::MailMergeFile;
+            break;
+        case MailMergeType::MAIL:
+            eMergeType = DBManagerOptions::MailMergeEmail;
+            break;
+        case MailMergeType::SHELL:
+            eMergeType = DBManagerOptions::MailMergeShell;
+            break;
         default:
             throw IllegalArgumentException(u"Invalid value of property: OutputType"_ustr, getXWeak(), 0 );
     }
@@ -664,7 +672,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
     OSL_ENSURE( pMgr, "database manager missing" );
     m_pMgr = pMgr;
 
-    SwMergeDescriptor aMergeDesc( nMergeType, rSh, aDescriptor );
+    SwMergeDescriptor aMergeDesc(eMergeType, rSh, aDescriptor);
 
     std::unique_ptr< SwMailMergeConfigItem > pMMConfigItem;
     uno::Reference< mail::XMailService > xInService;
@@ -804,7 +812,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
     if(aMergeDesc.xSmtpServer.is() && aMergeDesc.xSmtpServer->isConnected())
         aMergeDesc.xSmtpServer->disconnect();
 
-    if (DBMGR_MERGE_SHELL == nMergeType)
+    if (DBManagerOptions::MailMergeShell == eMergeType)
     {
         return Any(aMergeDesc.pMailMergeConfigItem->GetTargetView()->GetDocShell()->GetModel());
     }

@@ -787,7 +787,7 @@ void SwModule::ExecOther(SfxRequest& rReq)
                         }));
 
             SwWrtShell& rSh = pView->GetWrtShell();
-            SwMergeDescriptor aMergeDesc(DBMGR_MERGE, rSh, aDescriptor);
+            SwMergeDescriptor aMergeDesc(DBManagerOptions::MailMerge, rSh, aDescriptor);
             rSh.GetDBManager()->Merge(aMergeDesc);
 
             // update enabled / disabled status of the buttons in the toolbar
