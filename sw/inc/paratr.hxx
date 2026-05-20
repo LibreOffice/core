@@ -237,8 +237,6 @@ inline const SvxParaGridItem &SwAttrSet::GetParaGrid(bool bInP) const
     {   return Get( RES_PARATR_SNAPTOGRID, bInP ); }
 inline const SwParaConnectBorderItem &SwAttrSet::GetParaConnectBorder(bool bInP) const
     {   return Get( RES_PARATR_CONNECT_BORDER, bInP ); }
-inline const SvxAutoFrameDirectionItem &SwAttrSet::GetAutoFrameDirection(bool bInP) const
-    {   return Get( RES_PARATR_AUTOFRAMEDIR, bInP ); }
 
 // Implementation of paragraph-attributes methods of SwFormat
 inline const SvxLineSpacingItem &SwFormat::GetLineSpacing(bool bInP) const

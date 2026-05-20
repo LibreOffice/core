@@ -12,21 +12,6 @@
 
 namespace basctl
 {
-IdeParamInfo::IdeParamInfo(OUString sName_, OUString sTypeName_, bool bOut, bool bIn)
-    : sName(std::move(sName_))
-    , sTypeName(std::move(sTypeName_))
-    , bIsOut(bOut)
-    , bIsIn(bIn)
-{
-}
-
-IdeDimensionInfo::IdeDimensionInfo(sal_Int32 lower, sal_Int32 upper, bool dynamic)
-    : nLowerBound(lower)
-    , nUpperBound(upper)
-    , bIsDynamic(dynamic)
-{
-}
-
 IdeSymbolInfo::IdeSymbolInfo(std::u16string_view rName, IdeSymbolKind eTheKind,
                              std::u16string_view rParentIdentifier)
     : sName(rName)
@@ -41,39 +26,6 @@ IdeSymbolInfo::IdeSymbolInfo(std::u16string_view rName, IdeSymbolKind eTheKind,
         // Child ID = Parent's Full ID + ":" + Child's Name
         sIdentifier = OUString::Concat(rParentIdentifier) + u":" + rName;
     }
-}
-
-void IdeSymbolInfo::AddMember(std::shared_ptr<IdeSymbolInfo> pMember)
-{
-    if (!pMember)
-        return;
-
-    mapMembers.insert_or_assign(pMember->sName, std::move(pMember));
-}
-
-OUString CreateRootIdentifier(IdeSymbolKind eKind, std::u16string_view sOptionalPayload)
-{
-    OUStringBuffer sId(u"root:");
-
-    switch (eKind)
-    {
-        case IdeSymbolKind::ROOT_UNO_APIS:
-            sId.append(u"uno_apis");
-            break;
-        case IdeSymbolKind::ROOT_APPLICATION_LIBS:
-            sId.append(u"app_macros");
-            break;
-        case IdeSymbolKind::ROOT_DOCUMENT_LIBS:
-            sId.append(OUString::Concat(u"doc:") + sOptionalPayload);
-            break;
-        case IdeSymbolKind::ROOT_BASIC_BUILTINS:
-            sId.append(u"builtins");
-            break;
-        default:
-            sId.append(u"unknown");
-            break;
-    }
-    return sId.makeStringAndClear();
 }
 
 } // namespace basctl

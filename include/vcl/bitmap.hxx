@@ -699,8 +699,6 @@ public:
     [[nodiscard]]
     static Bitmap     AutoScaleBitmap( Bitmap const & rBitmap, const tools::Long aStandardSize );
 
-    SAL_DLLPRIVATE void Draw( OutputDevice* pOutDev,
-                              const Point& rDestPt ) const;
     void                Draw( OutputDevice* pOutDev,
                               const Point& rDestPt, const Size& rDestSize ) const;
 

@@ -159,8 +159,6 @@ public:
 
     void setCRGB(sal_Int32 nR, sal_Int32 nG, sal_Int32 nB);
 
-    void setRGB(double r, double g, double b);
-
     void getRGB(double& r, double& g, double& b);
 
     Color getRGB() const;
@@ -172,8 +170,6 @@ public:
     void setHSL(sal_Int32 nH, sal_Int32 nS, sal_Int32 nL);
 
     void setSystemColor(SystemColorType eSystemColorType, sal_Int32 nRGB);
-
-    bool isOpaque() const;
 
     bool isTransparent() const;
 

@@ -70,12 +70,6 @@ public:
 
     void            ReduceInaccurate( unsigned nSignificantBits );
 
-    /// Multiply the two fractions represented here and reduce inaccuracy to 32-bits, used by vcl
-    static Fraction MakeFraction(tools::Long nN1, tools::Long nN2, tools::Long nD1, tools::Long nD2);
-
-    // Compute value usable as hash.
-    size_t GetHashValue() const;
-
     TOOLS_DLLPUBLIC friend Fraction operator+( const Fraction& rVal1, const Fraction& rVal2 );
     TOOLS_DLLPUBLIC friend Fraction operator-( const Fraction& rVal1, const Fraction& rVal2 );
     TOOLS_DLLPUBLIC friend Fraction operator*( const Fraction& rVal1, const Fraction& rVal2 );

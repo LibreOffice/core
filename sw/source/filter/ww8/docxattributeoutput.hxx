@@ -1126,7 +1126,6 @@ public:
 
     /// Return the right export class.
     virtual DocxExport& GetExport() override;
-    const DocxExport& GetExport() const { return const_cast< DocxAttributeOutput* >( this )->GetExport(); }
 
     /// For e.g. the output of the styles, we need to switch the serializer to another one.
     void SetSerializer( ::sax_fastparser::FSHelperPtr const & pSerializer );

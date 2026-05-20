@@ -43,20 +43,6 @@ private:
     bool m_bSuccess;
     bool m_bUseExportTag;
 
-public:
-    /** Everything was allright
-     */
-    bool getSuccess() const { return m_bSuccess; }
-
-    /** Set's if xmlns field is added
-     */
-    void setUseExportTag(bool bUseExportTag) { m_bUseExportTag = bUseExportTag; }
-
-    /** Set's the element tree to be exported.
-      * If it isn't nullptr the this will be exported instead of the document
-     */
-    void setElementTree(SmMlElement* pElementTree) { m_pElementTree = pElementTree; }
-
 private:
     /** Adds an element
       */

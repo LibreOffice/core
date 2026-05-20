@@ -461,16 +461,6 @@ void IdeDataProvider::Initialize()
     SAL_INFO("basctl", "Synchronous data provider initialization complete.");
 }
 
-void IdeDataProvider::Reset()
-{
-    SAL_INFO("basctl", "IdeDataProvider: Resetting state.");
-    m_bInitialized = false;
-    m_aAllTopLevelNodes.clear();
-    m_aMembersCache.clear();
-
-    m_pUnoHierarchy = std::make_unique<UnoApiHierarchy>();
-}
-
 void IdeDataProvider::performFullUnoScan()
 {
     IdeTimer aScanTimer(u"IdeDataProvider::performFullUnoScan"_ustr);

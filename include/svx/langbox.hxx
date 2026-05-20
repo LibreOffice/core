@@ -93,7 +93,6 @@ public:
     LanguageType get_saved_active_id() const { return m_eSavedLanguage; }
     bool get_active_id_changed_from_saved() const { return m_eSavedLanguage != get_active_id(); }
     void hide() { m_xControl->hide(); }
-    void set_visible(bool bShow) { m_xControl->set_visible(bShow); }
     void set_size_request(int nWidth, int nHeight) {  m_xControl->set_size_request(nWidth, nHeight); }
     void set_width_chars(int nChars) { m_xControl->set_entry_width_chars(nChars); }
     void set_sensitive(bool bSensitive) { m_xControl->set_sensitive(bSensitive); }

@@ -36,15 +36,6 @@ void ComplexColor::setCRGB(sal_Int32 nR, sal_Int32 nG, sal_Int32 nB)
     meType = ColorType::CRGB;
 }
 
-void ComplexColor::setRGB(double r, double g, double b)
-{
-    mnComponent1 = r;
-    mnComponent2 = g;
-    mnComponent3 = b;
-    maFinalColor = ::Color(sal_Int8(r), sal_Int8(g), sal_Int8(b));
-    meType = ColorType::RGB;
-}
-
 void ComplexColor::getRGB(double& r, double& g, double& b)
 {
     if (meType != ColorType::RGB)
@@ -84,18 +75,6 @@ void ComplexColor::setSystemColor(SystemColorType eSystemColorType, sal_Int32 nR
     maLastColor = ::Color(ColorTransparency, nRGB);
     meSystemColorType = eSystemColorType;
     meType = ColorType::System;
-}
-
-bool ComplexColor::isOpaque() const
-{
-    for (const Transformation& t : maTransformations)
-    {
-        if (t.meType == model::TransformationType::Alpha && t.mnValue != 10000)
-        {
-            return false;
-        }
-    }
-    return true;
 }
 
 bool ComplexColor::isTransparent() const

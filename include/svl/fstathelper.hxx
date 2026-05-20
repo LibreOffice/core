@@ -43,12 +43,6 @@ SVL_DLLPUBLIC bool GetModifiedDateTimeOfFile( const OUString& rURL,
     UCB.IsContent.
 */
 SVL_DLLPUBLIC bool IsDocument( const OUString& rURL );
-
-/** Return if under the URL a folder exist. This is only a wrapper for the
-    UCB.isFolder.
-*/
-SVL_DLLPUBLIC bool IsFolder( const OUString& rURL );
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

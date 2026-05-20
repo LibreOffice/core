@@ -75,20 +75,4 @@ bool FStatHelper::IsDocument( const OUString& rURL )
     return bExist;
 }
 
-bool FStatHelper::IsFolder( const OUString& rURL )
-{
-    bool bExist = false;
-    try
-    {
-        ::ucbhelper::Content aTestContent( rURL,
-                                uno::Reference< XCommandEnvironment > (),
-                                comphelper::getProcessComponentContext());
-        bExist = aTestContent.isFolder();
-    }
-    catch(...)
-    {
-    }
-    return bExist;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

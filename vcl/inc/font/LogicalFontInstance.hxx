@@ -101,19 +101,7 @@ public: // TODO: make data members private
     double GetAverageWidthFactor() const { return m_nAveWidthFactor; }
     const vcl::font::FontSelectPattern& GetFontSelectPattern() const { return m_aFontSelData; }
 
-    void SetVariations(const std::vector<vcl::font::Variation>& rVariations)
-    {
-        m_aVariations = rVariations;
-        mxVariations.reset();
-    }
     const std::vector<vcl::font::Variation>& GetVariations() const;
-
-    void SetOpticalSizing(bool bOpticalSizing)
-    {
-        m_bOpticalSizing = bOpticalSizing;
-        mxVariations.reset();
-    }
-    bool GetOpticalSizing() const { return m_bOpticalSizing; }
 
     void SetPointSize(float fPointSize)
     {

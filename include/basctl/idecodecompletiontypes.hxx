@@ -102,7 +102,6 @@ struct IdeParamInfo
     bool bIsIn = true;
 
     IdeParamInfo() = default;
-    IdeParamInfo(OUString sName_, OUString sTypeName_, bool bOut, bool bIn);
 };
 
 /**
@@ -116,7 +115,6 @@ struct IdeDimensionInfo
     bool bIsDynamic = true;
 
     IdeDimensionInfo() = default;
-    IdeDimensionInfo(sal_Int32 lower, sal_Int32 upper, bool dynamic = false);
 };
 
 /**
@@ -162,14 +160,10 @@ struct IdeSymbolInfo
     IdeSymbolInfo() = default;
     IdeSymbolInfo(std::u16string_view rName, IdeSymbolKind eTheKind,
                   std::u16string_view rParentIdentifier);
-
-    void AddMember(std::shared_ptr<IdeSymbolInfo> pMember);
 };
 
 using SymbolInfoList = std::vector<std::shared_ptr<IdeSymbolInfo>>;
 using ParamInfoList = std::vector<IdeParamInfo>;
-
-OUString CreateRootIdentifier(IdeSymbolKind eKind, std::u16string_view sOptionalPayload = u"");
 
 } // namespace basctl
 

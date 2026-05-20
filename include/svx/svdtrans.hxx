@@ -231,8 +231,6 @@ public:
     FrPair(const double& rX, const double& rY)    : m_aX(rX),m_aY(rY)               {}
     FrPair(tools::Long nMul, tools::Long nDiv) = delete;
     FrPair(tools::Long xMul, tools::Long xDiv, tools::Long yMul, tools::Long yDiv): m_aX(double(xMul)/xDiv),m_aY(double(yMul)/yDiv) {}
-    double X() const { return m_aX; }
-    double Y() const { return m_aY; }
     double& X()             { return m_aX; }
     double& Y()             { return m_aY; }
 };

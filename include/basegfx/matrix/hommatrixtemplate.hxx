@@ -370,17 +370,6 @@ namespace basegfx::internal
                 }
             }
 
-            void doMulMatrix(const double& rfValue)
-            {
-                for(sal_uInt16 a(0); a < RowSize; a++)
-                {
-                    for(sal_uInt16 b(0); b < RowSize; b++)
-                    {
-                        set(a, b, get(a, b) * rfValue);
-                    }
-                }
-            }
-
             void doMulMatrix(const ImplHomMatrixTemplate& rMat)
             {
                 // create a copy as source for the original values

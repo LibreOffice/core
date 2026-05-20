@@ -14,12 +14,6 @@ using namespace css;
 
 namespace model::style
 {
-uno::Reference<chart2::XChartColorStyle>
-createXChartColorStyle(model::ColorStyleSet const& rColorStyle)
-{
-    return new UnoChartColorStyle(rColorStyle);
-}
-
 model::ColorStyleSet*
 getFromXChartColorStyle(uno::Reference<chart2::XChartColorStyle> const& rxColorStyle)
 {

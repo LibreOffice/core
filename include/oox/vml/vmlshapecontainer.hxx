@@ -79,11 +79,6 @@ public:
         Searches in all group shapes too. */
     const ShapeBase*    getShapeById( const OUString& rShapeId ) const;
 
-    /** Searches for a shape by using the passed functor that takes a constant
-        reference of a ShapeBase object. */
-    template< typename Functor >
-    const ShapeBase*    findShape( const Functor& rFunctor ) const;
-
     /**
       (Word only) Returns the last shape in the collection, if it is after the last
       mark from pushMark(), and removes it.
@@ -131,13 +126,6 @@ std::shared_ptr<ShapeT> ShapeContainer::createShape()
     maShapes.push_back( xShape );
     return xShape;
 }
-
-template< typename Functor >
-const ShapeBase* ShapeContainer::findShape( const Functor& rFunctor ) const
-{
-    return maShapes.findIf( rFunctor ).get();
-}
-
 
 } // namespace oox::vml
 

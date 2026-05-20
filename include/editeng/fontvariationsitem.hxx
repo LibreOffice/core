@@ -18,7 +18,6 @@ class EDITENG_DLLPUBLIC SvxFontVariationsItem final : public SfxPoolItem
     std::vector<vcl::font::Variation> maVariations;
 
 public:
-    static SfxPoolItem* CreateDefault();
     DECLARE_ITEM_TYPE_FUNCTION(SvxFontVariationsItem)
 
     SvxFontVariationsItem(sal_uInt16 nId);

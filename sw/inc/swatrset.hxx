@@ -324,7 +324,6 @@ public:
     inline const SvxParaVertAlignItem &GetParaVertAlign(bool = true) const;
     inline const SvxParaGridItem        &GetParaGrid(bool = true) const;
     inline const SwParaConnectBorderItem &GetParaConnectBorder(bool = true ) const;
-    inline const SvxAutoFrameDirectionItem &GetAutoFrameDirection(bool = true) const;
 
     // Tablebox attributes  - implementation in cellatr.hxx
     inline  const SwTableBoxNumFormat       &GetTableBoxNumFormat( bool = true ) const;

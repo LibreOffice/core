@@ -151,7 +151,6 @@ public:
         : moAccess(rBitmap)
     {
     }
-    BitmapScopedInfoAccess() {}
 
     BitmapScopedInfoAccess& operator=(const Bitmap& rBitmap)
     {

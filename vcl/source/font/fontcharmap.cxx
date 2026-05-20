@@ -56,34 +56,6 @@ bool ImplFontCharMap::isDefaultMap() const
     return bIsDefault;
 }
 
-static unsigned GetUShort(const unsigned char* p) { return((p[0]<<8) | p[1]);}
-
-bool HasMicrosoftSymbolCmap(const unsigned char* pCmap, int nLength)
-{
-    // parse the table header and check for validity
-    if( !pCmap || (nLength < 24) )
-        return false;
-
-    if( GetUShort( pCmap ) != 0x0000 ) // simple check for CMAP corruption
-        return false;
-
-    int nSubTables = GetUShort(pCmap + 2);
-    if( (nSubTables <= 0) || (nSubTables > (nLength - 24) / 8) )
-        return false;
-
-    for (const unsigned char* p = pCmap + 4; --nSubTables >= 0; p += 8)
-    {
-        int nPlatform = GetUShort(p);
-        int nEncoding = GetUShort(p + 2);
-        // https://developer.apple.com/fonts/TrueType-Reference-Manual/RM06/Chap6cmap.html
-        // When the platformID is 3 (Windows), an encoding of 0 is Symbol
-        if (nPlatform == 3 && nEncoding == 0)
-            return true;
-    }
-
-    return false;
-}
-
 FontCharMap::FontCharMap()
     : mpImplFontCharMap( ImplFontCharMap::getDefaultMap() )
 {

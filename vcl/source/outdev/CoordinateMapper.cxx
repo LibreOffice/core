@@ -50,8 +50,6 @@ void CoordinateMapper::SetDPIScalePercentage(sal_Int32 nPercent)
     mnDPIScalePercentage = nPercent;
 }
 
-float CoordinateMapper::GetDPIScaleFactor() const { return mnDPIScalePercentage / 100.0f; }
-
 tools::Long CoordinateMapper::GetOutOffXPixel() const { return mnOutOffX; }
 
 tools::Long CoordinateMapper::GetOutOffYPixel() const { return mnOutOffY; }

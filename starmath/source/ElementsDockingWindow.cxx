@@ -690,11 +690,6 @@ OUString SmElementsControl::GetElementHelpText(const OUString& itemId)
     return weld::fromId<ElementData*>(itemId)->maHelpText;
 }
 
-int SmElementsControl::GetElementPos(const OUString& itemId)
-{
-    return weld::fromId<ElementData*>(itemId)->maPos;
-}
-
 void SmElementsControl::setElementSetIndex(int nSetIndex, bool bForceBuild)
 {
     if (!bForceBuild && mnCurrentSetIndex == nSetIndex)

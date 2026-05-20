@@ -46,6 +46,4 @@ private:
     int                 mnCharCount;      // covered codepoints
 };
 
-bool VCL_DLLPUBLIC HasMicrosoftSymbolCmap(const unsigned char* pRawData, int nRawLength);
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

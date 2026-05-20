@@ -2201,11 +2201,6 @@ Color Bitmap::GetAverageColor() const
                    static_cast<sal_uInt8>(fBlue / nCnt));
 }
 
-void Bitmap::Draw( OutputDevice* pOutDev, const Point& rDestPt ) const
-{
-    pOutDev->DrawBitmap( rDestPt, *this );
-}
-
 void Bitmap::Draw( OutputDevice* pOutDev,
                      const Point& rDestPt, const Size& rDestSize ) const
 {

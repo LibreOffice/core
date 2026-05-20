@@ -22,7 +22,6 @@
 class EDITENG_DLLPUBLIC SvxOpticalSizingItem final : public SfxBoolItem
 {
 public:
-    static SfxPoolItem* CreateDefault();
     DECLARE_ITEM_TYPE_FUNCTION(SvxOpticalSizingItem)
     SvxOpticalSizingItem(const bool bOpticalSizing /*= false*/, const sal_uInt16 nId);
 

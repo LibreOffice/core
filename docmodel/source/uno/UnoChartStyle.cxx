@@ -15,11 +15,6 @@ using namespace css;
 
 namespace model::style
 {
-uno::Reference<chart2::XChartStyle> createXChartStyle(model::StyleSet const& rStyle)
-{
-    return new UnoChartStyle(rStyle);
-}
-
 model::StyleSet* getFromXChartStyle(uno::Reference<chart2::XChartStyle> const& rxStyle)
 {
     UnoChartStyle* pUnoChartStyle = static_cast<UnoChartStyle*>(rxStyle.get());

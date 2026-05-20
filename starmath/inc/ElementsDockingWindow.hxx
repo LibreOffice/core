@@ -60,7 +60,6 @@ class SmElementsControl
 
     static OUString GetElementSource(const OUString& itemId);
     static OUString GetElementHelpText(const OUString& itemId);
-    static int GetElementPos(const OUString& itemId);
 
 public:
 

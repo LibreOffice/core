@@ -44,7 +44,6 @@ public:
 
     virtual void Initialize() = 0;
     virtual bool IsInitialized() const = 0;
-    virtual void Reset() = 0;
 
     // Data Access Methods
     virtual SymbolInfoList GetTopLevelNodes() = 0;
@@ -61,7 +60,6 @@ public:
 
     void Initialize() override;
     bool IsInitialized() const override { return m_bInitialized; }
-    void Reset() override;
     void AddDocumentNodesWithModules();
     void RefreshDocumentNodes();
 
@@ -72,7 +70,6 @@ public:
 
 private:
     void performFullUnoScan();
-    void addDocumentNodes();
 
     // Core data
     std::unique_ptr<UnoApiHierarchy> m_pUnoHierarchy;

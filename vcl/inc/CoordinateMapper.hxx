@@ -51,8 +51,6 @@ public:
     sal_Int32 GetDPIScalePercentage() const;
     void SetDPIScalePercentage(sal_Int32 nPercentage);
 
-    float GetDPIScaleFactor() const;
-
     tools::Long GetOutOffXPixel() const;
     tools::Long GetOutOffYPixel() const;
 

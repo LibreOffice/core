@@ -36,8 +36,6 @@ public:
 
 namespace model::style
 {
-DOCMODEL_DLLPUBLIC css::uno::Reference<css::chart2::XChartColorStyle>
-createXChartColorStyle(model::ColorStyleSet const& rColorStyle);
 DOCMODEL_DLLPUBLIC model::ColorStyleSet*
 getFromXChartColorStyle(css::uno::Reference<css::chart2::XChartColorStyle> const& rxColorStyle);
 }

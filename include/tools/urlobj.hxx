@@ -425,8 +425,6 @@ public:
     bool SetUser(std::u16string_view rTheUser)
     { return setUser(rTheUser, RTL_TEXTENCODING_UTF8); }
 
-    inline bool SetPass(std::u16string_view rThePassword);
-
     // Host and Port:
 
     bool HasPort() const { return m_aPort.isPresent(); }
@@ -1244,13 +1242,6 @@ inline bool INetURLObject::translateToInternal(std::u16string_view
 {
     return convertExtToInt(rTheExtURIRef, rTheIntURIRef,
                            eDecodeMechanism, eCharset);
-}
-
-inline bool INetURLObject::SetPass(std::u16string_view rThePassword)
-{
-    return rThePassword.empty() ?
-               clearPassword() :
-               setPassword(rThePassword, RTL_TEXTENCODING_UTF8);
 }
 
 inline bool INetURLObject::SetParam(std::u16string_view rTheQuery,
