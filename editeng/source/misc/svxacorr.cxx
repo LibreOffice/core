@@ -1260,7 +1260,7 @@ void SvxAutoCorrect::FnAddEsperantoHats( SvxAutoCorrDoc& rDoc, sal_Int32 nStart,
 
     for (int i = nStart + 1; i < nEnd; ++i)
     {
-        if (rText[i] != 'x' && rText[i] != 'X')
+        if (!lcl_IsInArr(u"xX", rText[i]))
             continue;
 
         const std::pair<sal_Unicode, sal_Unicode>* pPos
@@ -1273,12 +1273,9 @@ void SvxAutoCorrect::FnAddEsperantoHats( SvxAutoCorrDoc& rDoc, sal_Int32 nStart,
         // Only fix ux if it follows e or a because the letter is found almost exclusively in the
         // combinations eŭ and aŭ. That way we avoid changing the letter in common proper nouns such
         // as Linux.
-        if (pPos->second == u'ŭ' || pPos->second == u'Ŭ')
+        if (lcl_IsInArr(u"ŭŬ", pPos->second))
         {
-            if (i - 1 <= nStart)
-                continue;
-            char16_t nPrevChar = rText[i - 2];
-            if (nPrevChar != 'a' && nPrevChar != 'e' && nPrevChar != 'A' && nPrevChar != 'E')
+            if (i - 1 <= nStart || !lcl_IsInArr(u"aeAE", rText[i - 2]))
                 continue;
         }
 
