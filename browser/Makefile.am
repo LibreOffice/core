@@ -1077,7 +1077,7 @@ adminIntegratorSettings:
 		> $(DIST_FOLDER)/adminIntegratorSettings.html
 
 node_modules: package.json node_shrinkpack
-	@UV_USE_IO_URING=0 npm ci --offline
+	@UV_USE_IO_URING=0 $(NPM) ci --offline
 	@touch node_modules
 
 update-shrinkpack:
