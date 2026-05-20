@@ -40,6 +40,7 @@ class ScTabViewShell;
 class ScInputWindow;
 class ScPatternAttr;
 class ScEditEngineDefaulter;
+struct PasteOrDropInfos;
 class EditView;
 class EditTextObject;
 class ScInputHdlState;
@@ -176,6 +177,7 @@ private:
     DECL_LINK( ModifyHdl, LinkParamNone*, void );
     DECL_LINK( ShowHideTipVisibleParentListener, VclWindowEvent&, void );
     DECL_LINK( ShowHideTipVisibleSecParentListener, VclWindowEvent&, void );
+    DECL_LINK( EndPasteOrDropHdl, PasteOrDropInfos&, void );
 
 public:
     ScInputHandler(const ScInputHandler&) = delete;

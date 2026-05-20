@@ -482,8 +482,8 @@ public:
     // MT: Can't create new virtual functions like for ParagraphInserted/Deleted, must be compatible in SRC638, change later...
     SAL_DLLPRIVATE void            SetBeginMovingParagraphsHdl( const Link<MoveParagraphsInfo&,void>& rLink );
     SAL_DLLPRIVATE void            SetEndMovingParagraphsHdl( const Link<MoveParagraphsInfo&,void>& rLink );
-    SAL_DLLPRIVATE void            SetBeginPasteOrDropHdl( const Link<PasteOrDropInfos&,void>& rLink );
-    SAL_DLLPRIVATE void            SetEndPasteOrDropHdl( const Link<PasteOrDropInfos&,void>& rLink );
+    void            SetBeginPasteOrDropHdl( const Link<PasteOrDropInfos&,void>& rLink );
+    void            SetEndPasteOrDropHdl( const Link<PasteOrDropInfos&,void>& rLink );
 
     virtual void    ProcessFirstLineOfParagraph(sal_Int32 nPara, const Point& rStartPos, OutputDevice& rOutDev, StripPortionsHelper& rStripPortionsHelper);
 
