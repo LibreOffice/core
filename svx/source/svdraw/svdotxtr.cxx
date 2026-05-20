@@ -50,7 +50,9 @@ void SdrTextObj::NbcSetSnapRect(const tools::Rectangle& rRect)
         tools::Long nHgt0=aSR0.Bottom()-aSR0.Top();
         tools::Long nWdt1=rRect.Right()-rRect.Left();
         tools::Long nHgt1=rRect.Bottom()-rRect.Top();
-        SdrTextObj::NbcResize(maSnapRect.TopLeft(), double(nWdt1) / nWdt0, double(nHgt1) / nHgt0);
+        double xFact = nWdt0 ? double(nWdt1) / nWdt0 : 1.0;
+        double yFact = nHgt0 ? double(nHgt1) / nHgt0 : 1.0;
+        SdrTextObj::NbcResize(maSnapRect.TopLeft(), xFact, yFact);
         SdrTextObj::NbcMove(Size(rRect.Left()-aSR0.Left(),rRect.Top()-aSR0.Top()));
     }
     else
