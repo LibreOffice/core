@@ -662,6 +662,24 @@ namespace sw::mark
             }
         }
 
+        // For new fieldmark insertions, suppress SetModified during character
+        // insertion AND mark registration.  Each InsertString call inside
+        // InitDoc() (lcl_SetFieldMarks) cascades through embedded-object modify
+        // listeners into replacement graphic generation, which initializes
+        // layout (PrtOle2) and calls FindFieldSep.  Until the fieldmark is
+        // also inserted into m_vFieldmarks below, getFieldmarkAt returns null
+        // for the just-inserted FIELDSTART character; FindFieldSep then
+        // dereferences null (SIGSEGV).  Fire a single SetModified once the
+        // fieldmark is fully registered.
+        const bool bIsNewFieldmark = (eMode == InsertMode::New)
+            && (eType == IDocumentMarkAccess::MarkType::TEXT_FIELDMARK
+                || eType == IDocumentMarkAccess::MarkType::CHECKBOX_FIELDMARK
+                || eType == IDocumentMarkAccess::MarkType::DROPDOWN_FIELDMARK
+                || eType == IDocumentMarkAccess::MarkType::DATE_FIELDMARK);
+        const bool bOldEnableSetModified = m_rDoc.getIDocumentState().IsEnableSetModified();
+        if (bIsNewFieldmark)
+            m_rDoc.getIDocumentState().SetEnableSetModified(false);
+
         // insert any dummy chars before inserting into sorted vectors
         pMark->InitDoc(m_rDoc, eMode, pSepPos);
 
@@ -702,6 +720,13 @@ namespace sw::mark
             // to be inserted in the vectors.
             SwPaM const tmp(pMark->GetMarkPos(), pMark->GetOtherMarkPos());
             sw::UpdateFramesForAddDeleteRedline(m_rDoc, tmp);
+        }
+
+        if (bIsNewFieldmark)
+        {
+            m_rDoc.getIDocumentState().SetEnableSetModified(bOldEnableSetModified);
+            if (bOldEnableSetModified)
+                m_rDoc.getIDocumentState().SetModified();
         }
 
         SAL_INFO("sw.core", "--- makeType ---");
