@@ -471,6 +471,7 @@ SwTextNode *SwTextNode::SplitContentNode(const SwPosition & rPos,
         }
     }
 
+    ResetAttr( RES_PARATR_AUTOFRAMEDIR );
     ResetAttr( RES_PARATR_LIST_ISRESTART );
     ResetAttr( RES_PARATR_LIST_RESTARTVALUE );
     ResetAttr( RES_PARATR_LIST_ISCOUNTED );

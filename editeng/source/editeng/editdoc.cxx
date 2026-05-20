@@ -3622,6 +3622,10 @@ EditPaM EditDoc::InsertParaBreak( EditPaM aPaM, bool bKeepEndingAttribs )
     // for a new paragraph we like to have the bullet/numbering visible by default
     aContentAttribs.GetItems().Put( SfxBoolItem( EE_PARA_BULLETSTATE, true) );
 
+    // tdf#172081: The auto writing dir attrib is used to flag paragraphs that
+    // have writing dir manually set. This shouldn't be copied to new paragraphs.
+    aContentAttribs.GetItems().ClearItem(EE_PARA_AUTOWRITINGDIR);
+
     // ContentNode constructor copies also the paragraph attributes
     ContentNode* pNode = new ContentNode(aStr, std::move(aContentAttribs));
 

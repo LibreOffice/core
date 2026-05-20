@@ -822,6 +822,28 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest11, testTdf151857ParaStylePreservesWritingMod
     CPPUNIT_ASSERT(!getProperty<bool>(getRun(getParagraph(1), 1), u"WritingModeAutomatic"_ustr));
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest11, testTdf172081SplitParaClearsWritingModeAutoDF)
+{
+    createSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+
+    pWrtShell->Insert(u"Some content"_ustr);
+
+    // Cycle the paragraph direction to add WritingModeAutomatic direct formatting
+    dispatchCommand(mxComponent, u".uno:ParaRightToLeft"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:ParaLeftToRight"_ustr, {});
+    CPPUNIT_ASSERT(!getProperty<bool>(getRun(getParagraph(1), 1), u"WritingModeAutomatic"_ustr));
+
+    // Split the paragraph in the middle
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect*/ false, 4, /*bBasicCall*/ false);
+    pWrtShell->SplitNode();
+
+    // The first paragraph should still have the DF, but it should be cleared on the second one
+    CPPUNIT_ASSERT(!getProperty<bool>(getRun(getParagraph(1), 1), u"WritingModeAutomatic"_ustr));
+    CPPUNIT_ASSERT(getProperty<bool>(getRun(getParagraph(2), 1), u"WritingModeAutomatic"_ustr));
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 

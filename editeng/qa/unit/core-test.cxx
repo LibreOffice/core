@@ -20,6 +20,7 @@
 #include <sfx2/app.hxx>
 #include <svl/itempool.hxx>
 #include <editeng/adjustitem.hxx>
+#include <editeng/autodiritem.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/lspcitem.hxx>
@@ -141,6 +142,7 @@ public:
     void testTdf157037PasteTextAutoDirection();
     void testFontVariationsItem();
     void testEscapementNotPreservedOnParaBreak();
+    void testAutoDirNotPreservedOnParaBreak();
 
     DECL_STATIC_LINK(Test, CalcFieldValueHdl, EditFieldInfo*, void);
 
@@ -178,6 +180,7 @@ public:
     CPPUNIT_TEST(testTdf157037PasteTextAutoDirection);
     CPPUNIT_TEST(testFontVariationsItem);
     CPPUNIT_TEST(testEscapementNotPreservedOnParaBreak);
+    CPPUNIT_TEST(testAutoDirNotPreservedOnParaBreak);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -2545,6 +2548,39 @@ void Test::testEscapementNotPreservedOnParaBreak()
 
     const EditCharAttrib* pEscAttr = pNode->GetCharAttribs().FindEmptyAttrib(EE_CHAR_ESCAPEMENT, 0);
     CPPUNIT_ASSERT_MESSAGE("Escapement attribute should NOT be included.", !pEscAttr);
+}
+
+void Test::testAutoDirNotPreservedOnParaBreak()
+{
+    EditEngine aEditEngine(mpItemPool.get());
+    EditDoc& rDoc = aEditEngine.GetEditDoc();
+
+    aEditEngine.SetText(u"Some content"_ustr);
+
+    // Set autowritingdir DF on the first paragraph
+    auto pSet = std::make_unique<SfxItemSet>(aEditEngine.GetEmptyItemSet());
+    pSet->Put(SvxAutoFrameDirectionItem{ false, EE_PARA_AUTOWRITINGDIR });
+    aEditEngine.QuickSetAttribs(*pSet, ESelection{ 0, 0, 0, 12 });
+
+    // Insert paragraph break in the middle of the paragraph
+    rDoc.InsertParaBreak(EditPaM{ rDoc.GetObject(0), 6 }, /*bKeepEndingAttribs*/ true);
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), rDoc.Count());
+    CPPUNIT_ASSERT_EQUAL(u"Some c"_ustr, rDoc.GetParaAsString(sal_Int32(0)));
+    CPPUNIT_ASSERT_EQUAL(u"ontent"_ustr, rDoc.GetParaAsString(sal_Int32(1)));
+
+    // The first paragraph should still have the DF
+    auto* pNode = rDoc.GetObject(0);
+    CPPUNIT_ASSERT(pNode);
+
+    CPPUNIT_ASSERT(pNode->GetContentAttribs().HasItem(EE_PARA_AUTOWRITINGDIR));
+    const SvxAutoFrameDirectionItem& rAttr
+        = pNode->GetContentAttribs().GetItem(EE_PARA_AUTOWRITINGDIR);
+    CPPUNIT_ASSERT(!rAttr.GetValue());
+
+    const auto* pNode2 = rDoc.GetObject(1);
+    CPPUNIT_ASSERT(pNode2);
+    CPPUNIT_ASSERT(!pNode2->GetContentAttribs().HasItem(EE_PARA_AUTOWRITINGDIR));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
