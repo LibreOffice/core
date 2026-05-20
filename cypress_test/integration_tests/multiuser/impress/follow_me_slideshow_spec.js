@@ -31,7 +31,7 @@ describe(['tagmultiuser'], 'Follow me slide show', function() {
 
         cy.cSetActiveFrame('#iframe2');
         getSlideShow().should('be.visible');
-        getSlideShowContent().find(".slideshow-nav-container #endshow").click();
+        impressHelper.clickSlideShowNav(win2, '#endshow');
         getSlideShow().should('not.exist');
         cy.cGet('.notebookbar #slide-presentation-follow-me').should('be.not.visible');
         cy.cGet('.notebookbar #slide-presentation-follow').should('be.visible');
@@ -60,7 +60,7 @@ describe(['tagmultiuser'], 'Follow me slide show', function() {
 
         //move to nextslide last effect
         for (let i = 0; i < 5; i++) {
-            getSlideShowContent().find(".slideshow-nav-container #next").click();
+            impressHelper.clickSlideShowNav(win2, '#next');
             impressHelper.waitForSlideShowIdle(win2);
             impressHelper.waitForSlideShowIdle(win1);
         }
@@ -73,7 +73,7 @@ describe(['tagmultiuser'], 'Follow me slide show', function() {
 
         // go to previous effect
         cy.cSetActiveFrame('#iframe2');
-        getSlideShowContent().find(".slideshow-nav-container #previous").click();
+        impressHelper.clickSlideShowNav(win2, '#previous');
         impressHelper.waitForSlideShowIdle(win2);
         impressHelper.waitForSlideShowIdle(win1);
         getSlideShowCanvas().compareSnapshot('slide2_effect2', 0.05);
@@ -84,7 +84,7 @@ describe(['tagmultiuser'], 'Follow me slide show', function() {
         //go to previous effect
         cy.cSetActiveFrame('#iframe2');
         for (let i = 0; i < 3; i++) {
-            getSlideShowContent().find(".slideshow-nav-container #previous").click();
+            impressHelper.clickSlideShowNav(win2, '#previous');
             impressHelper.waitForSlideShowIdle(win2);
             impressHelper.waitForSlideShowIdle(win1);
         }
@@ -103,7 +103,7 @@ describe(['tagmultiuser'], 'Follow me slide show', function() {
 
         //move to nextslide last effect
         for (let i = 0; i < 4; i++) {
-            getSlideShowContent().find(".slideshow-nav-container #next").click();
+            impressHelper.clickSlideShowNav(win2, '#next');
             impressHelper.waitForSlideShowIdle(win2);
             impressHelper.waitForSlideShowIdle(win1);
         }
@@ -116,7 +116,7 @@ describe(['tagmultiuser'], 'Follow me slide show', function() {
 
         //unfollow by going 1 slide backward
         for (let i = 0; i < 3; i++) {
-            getSlideShowContent().find(".slideshow-nav-container #previous").click();
+            impressHelper.clickSlideShowNav(win1, '#previous');
             impressHelper.waitForSlideShowIdle(win1);
         }
         // higher tolerance due to difference in state of navigation buttons
@@ -130,7 +130,7 @@ describe(['tagmultiuser'], 'Follow me slide show', function() {
         getSlideShowCanvas().compareSnapshot('slide2_effect2', 0.07);
 
         cy.cSetActiveFrame('#iframe2');
-        getSlideShowContent().find(".slideshow-nav-container #next").click();
+        impressHelper.clickSlideShowNav(win2, '#next');
         impressHelper.waitForSlideShowIdle(win2);
         impressHelper.waitForSlideShowIdle(win1);
         getSlideShowCanvas().compareSnapshot('slide2_effect3', 0.07);
@@ -145,7 +145,7 @@ describe(['tagmultiuser'], 'Follow me slide show', function() {
 
         //move to nextslide last effect
         for (let i = 0; i < 4; i++) {
-            getSlideShowContent().find(".slideshow-nav-container #next").click();
+            impressHelper.clickSlideShowNav(win2, '#next');
             impressHelper.waitForSlideShowIdle(win2);
             impressHelper.waitForSlideShowIdle(win1);
         }
@@ -153,7 +153,7 @@ describe(['tagmultiuser'], 'Follow me slide show', function() {
 
         cy.cSetActiveFrame('#iframe1');
         impressHelper.waitForSlideShowIdle(win1);
-        getSlideShowContent().find(".slideshow-nav-container #endshow").click();
+        impressHelper.clickSlideShowNav(win1, '#endshow');
         getSlideShow().should('not.exist');
         // Wait for the _windowCloseInterval cleanup to complete before clicking follow.
         helper.waitForTimers(win1, 'slideshowwindowclose');
@@ -189,7 +189,7 @@ describe(['tagmultiuser'], 'Follow me slide show', function() {
         getSlideShow().should('be.visible');
         impressHelper.waitForSlideShowIdle(win2);
         impressHelper.waitForSlideShowIdle(win1);
-        getSlideShowContent().find('.slideshow-nav-container #next').click();
+        impressHelper.clickSlideShowNav(win2, '#next');
         impressHelper.waitForSlideShowIdle(win2);
         impressHelper.waitForSlideShowIdle(win1);
 
@@ -214,7 +214,7 @@ describe(['tagmultiuser'], 'Follow me slide show', function() {
         impressHelper.waitForSlideShowIdle(win2);
         impressHelper.waitForSlideShowIdle(win1);
         for (let i = 0; i < 4; i++) {
-            getSlideShowContent().find('.slideshow-nav-container #next').click();
+            impressHelper.clickSlideShowNav(win2, '#next');
             impressHelper.waitForSlideShowIdle(win2);
             impressHelper.waitForSlideShowIdle(win1);
         }
@@ -226,9 +226,9 @@ describe(['tagmultiuser'], 'Follow me slide show', function() {
         impressHelper.waitForSlideShowIdle(win1);
 
         // Follower goes backward 2 times on slide 2 to rewind effects
-        getSlideShowContent().find('.slideshow-nav-container #previous').click();
+        impressHelper.clickSlideShowNav(win1, '#previous');
         impressHelper.waitForSlideShowIdle(win1);
-        getSlideShowContent().find('.slideshow-nav-container #previous').click();
+        impressHelper.clickSlideShowNav(win1, '#previous');
         impressHelper.waitForSlideShowIdle(win1);
 
         // Follower presses PageDown - should skip only to leader's 2 effects, not all 3
@@ -244,7 +244,7 @@ describe(['tagmultiuser'], 'Follow me slide show', function() {
         getSlideShow().should('be.visible');
         impressHelper.waitForSlideShowIdle(win2);
         impressHelper.waitForSlideShowIdle(win1);
-        getSlideShowContent().find(".slideshow-nav-container #next").click();
+        impressHelper.clickSlideShowNav(win2, '#next');
         impressHelper.waitForSlideShowIdle(win2);
         impressHelper.waitForSlideShowIdle(win1);
 
@@ -255,7 +255,7 @@ describe(['tagmultiuser'], 'Follow me slide show', function() {
         getSlideShowCanvas().compareSnapshot('effect1', 0.05);
 
         cy.cSetActiveFrame('#iframe2');
-        getSlideShowContent().find(".slideshow-nav-container #endshow").click();
+        impressHelper.clickSlideShowNav(win2, '#endshow');
         getSlideShow().should('not.exist');
         cy.cSetActiveFrame('#iframe1');
         getSlideShow().should('not.exist');
