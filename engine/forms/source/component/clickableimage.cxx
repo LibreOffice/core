@@ -742,9 +742,9 @@ namespace frm
 
         if (!rURL.isEmpty() && !::svt::GraphicAccess::isSupportedURL( rURL ) )
         {
-            SfxObjectShell *pObjSh = GetObjectShell();
-
             m_pMedium.reset(new SfxMedium(rURL, StreamMode::STD_READ));
+
+            SfxObjectShell *pObjSh = GetObjectShell();
 
             if( pObjSh )
             {
