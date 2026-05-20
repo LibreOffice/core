@@ -20,6 +20,10 @@ describe.skip(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Table Operation', func
 		impressHelper.removeShapeSelection();
 
 		helper.typeIntoDocument('{ctrl}{a}');
+
+		cy.getFrameWindow().then(function(win) {
+			helper.processToIdle(win);
+		});
 	}
 
 	function selectFullTable() {

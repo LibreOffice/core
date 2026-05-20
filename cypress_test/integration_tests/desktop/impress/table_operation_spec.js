@@ -21,6 +21,10 @@ describe(['tagdesktop'], 'Table operations', function() {
 		impressHelper.removeShapeSelection();
 
 		helper.typeIntoDocument('{ctrl}{a}');
+
+		cy.getFrameWindow().then(function(win) {
+			helper.processToIdle(win);
+		});
 	}
 
 	function selectFullTable(win) {
