@@ -934,6 +934,21 @@ void ScInputHandler::ImplCreateEditEngine()
     mpEditEngine->SetControlWord( mpEditEngine->GetControlWord() | EEControlBits::AUTOCORRECT );
     mpEditEngine->SetReplaceLeadingSingleQuotationMark( false );
     mpEditEngine->SetModifyHdl( LINK( this, ScInputHandler, ModifyHdl ) );
+    mpEditEngine->SetEndPasteOrDropHdl( LINK( this, ScInputHandler, EndPasteOrDropHdl ) );
+}
+
+IMPL_LINK_NOARG( ScInputHandler, EndPasteOrDropHdl, PasteOrDropInfos&, void )
+{
+    // tdf#167545: clipboard / drag-and-drop data can carry paragraph-level
+    // attributes (notably SvxAdjustItem) that override the cell pattern's
+    // adjust in the in-edit EditEngine and shift the overlay paint outside
+    // the destination cell. Calc cells don't store paragraph attribs;
+    // EnterHandler strips them at commit. Do the same after every paste /
+    // drop so in-edit rendering matches the committed result: RemoveAdjust
+    // drops paragraph attribs (migrating differing char-level items down to
+    // characters), and UpdateAdjust re-applies the cell pattern's defaults.
+    RemoveAdjust();
+    UpdateAdjust( 0 );
 }
 
 void ScInputHandler::UpdateAutoCorrFlag()
