@@ -103,8 +103,6 @@ class StylesPreviewWindow_Base
     friend class StylesListUpdateTask;
 
 protected:
-    static constexpr unsigned STYLES_COUNT = 6;
-
     css::uno::Reference<css::frame::XFrame> m_xFrame;
 
     std::unique_ptr<weld::IconView> m_xStylesView;
