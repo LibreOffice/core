@@ -19,6 +19,8 @@
 
 
 #include <string.h>
+#include <charconv>
+#include <system_error>
 
 #include <comphelper/servicehelper.hxx>
 #include <o3tl/string_view.hxx>
@@ -37,7 +39,6 @@
 #include <com/sun/star/xml/dom/XDocument.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 
-#include <boost/lexical_cast.hpp>
 #include <libxml/xpathInternals.h>
 
 #include "xpathlib.hxx"
@@ -368,6 +369,15 @@ void xforms_secondsFromDateTimeFunction(xmlXPathParserContextPtr ctxt, int nargs
 
 }
 
+static bool parseSalInt32(const xmlChar* pBegin, const xmlChar* pEnd, sal_Int32& value)
+{
+    const char* charBegin = reinterpret_cast<const char*>(pBegin);
+    const char* charEnd = reinterpret_cast<const char*>(pEnd);
+    auto [ptr, error] = std::from_chars(charBegin, charEnd, value);
+
+    return error == std::errc();
+}
+
 static bool parseDuration(const xmlChar* aString, bool& bNegative, sal_Int32& nYears, sal_Int32& nMonth, sal_Int32& nDays,
                               sal_Int32& nHours, sal_Int32& nMinutes, sal_Int32& nSeconds)
 {
@@ -390,26 +400,53 @@ static bool parseDuration(const xmlChar* aString, bool& bNegative, sal_Int32& nY
     {
         switch(pToken[0]) {
         case 'Y':
-            nYears = boost::lexical_cast<sal_Int32>(pString, pString-pToken);
+            if (!parseSalInt32(pString, pToken, nYears))
+            {
+                return false;
+            }
+
             pString = ++pToken;
             break;
         case 'M':
             if (!bTime)
-                nMonth = boost::lexical_cast<sal_Int32>(pString, pString-pToken);
+            {
+                if (!parseSalInt32(pString, pToken, nMonth))
+                {
+                    return false;
+                }
+            }
             else
-                nMinutes = boost::lexical_cast<sal_Int32>(pString, pString-pToken);
+            {
+                if (!parseSalInt32(pString, pToken, nMinutes))
+                {
+                    return false;
+                }
+            }
+
             pString = ++pToken;
             break;
         case 'D':
-            nDays = boost::lexical_cast<sal_Int32>(pString, pString-pToken);
+            if (!parseSalInt32(pString, pToken, nDays))
+            {
+                return false;
+            }
+
             pString = ++pToken;
             break;
         case 'H':
-            nHours = boost::lexical_cast<sal_Int32>(pString, pString-pToken);
+            if (!parseSalInt32(pString, pToken, nHours))
+            {
+                return false;
+            }
+
             pString = ++pToken;
             break;
         case 'S':
-            nSeconds = boost::lexical_cast<sal_Int32>(pString, pString-pToken);
+            if (!parseSalInt32(pString, pToken, nSeconds))
+            {
+                return false;
+            }
+
             pString = ++pToken;
             break;
         case 'T':
