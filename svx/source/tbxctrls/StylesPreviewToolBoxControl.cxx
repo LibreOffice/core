@@ -44,7 +44,6 @@ void SAL_CALL StylesPreviewToolBoxControl::dispose()
 
     SolarMutexGuard aSolarMutexGuard;
     m_xVclBox.disposeAndClear();
-    m_xWeldBox.reset();
 }
 
 void StylesPreviewToolBoxControl::InitializeStyles(

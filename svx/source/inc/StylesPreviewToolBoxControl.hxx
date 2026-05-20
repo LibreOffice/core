@@ -29,7 +29,6 @@ class StylesPreviewToolBoxControl final
     : public cppu::ImplInheritanceHelper<svt::ToolboxController, css::lang::XServiceInfo>
 {
     VclPtr<StylesPreviewWindow_Impl> m_xVclBox;
-    std::unique_ptr<StylesPreviewWindow_Base> m_xWeldBox;
 
     StylePreviewList m_aDefaultStyles;
 
