@@ -19,6 +19,7 @@
 
 #include <wrtsh.hxx>
 #include <fldbas.hxx>
+#include <fmtfld.hxx>
 #include <DropDownFieldDialog.hxx>
 #include <flddropdown.hxx>
 
@@ -35,6 +36,7 @@ sw::DropDownFieldDialog::DropDownFieldDialog(weld::Widget *pParent, SwWrtShell &
     : GenericDialogController(pParent, u"modules/swriter/ui/dropdownfielddialog.ui"_ustr, u"DropdownFieldDialog"_ustr)
     , m_rSh( rS )
     , m_pDropField(nullptr)
+    , m_pFormatField(nullptr)
     , m_pPressedButton(nullptr)
     , m_xListItemsLB(m_xBuilder->weld_tree_view(u"list"_ustr))
     , m_xOKPB(m_xBuilder->weld_button(u"ok"_ustr))
@@ -64,6 +66,11 @@ sw::DropDownFieldDialog::DropDownFieldDialog(weld::Widget *pParent, SwWrtShell &
     {
 
         m_pDropField = static_cast<SwDropDownField*>(pField);
+        // Listen on the owning SwFormatField so we can detect if the field is
+        // removed/replaced while this (async in COOL) dialog is open.
+        m_pFormatField = pField->GetTyp()->FindFormatForField(pField);
+        if (m_pFormatField)
+            StartListening(*m_pFormatField);
         OUString sTitle = m_xDialog->get_title() +
             m_pDropField->GetPar2();
         m_xDialog->set_title(sTitle);
@@ -81,6 +88,30 @@ sw::DropDownFieldDialog::DropDownFieldDialog(weld::Widget *pParent, SwWrtShell &
 
 sw::DropDownFieldDialog::~DropDownFieldDialog()
 {
+    EndListeningAll();
+}
+
+void sw::DropDownFieldDialog::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
+{
+    const SfxHintId nId = rHint.GetId();
+    if (nId == SfxHintId::Dying)
+    {
+        EndListening(rBC);
+        m_pDropField = nullptr;
+        m_pFormatField = nullptr;
+        return;
+    }
+    if (nId != SfxHintId::SwFormatField)
+        return;
+    const SwFormatFieldHint& rFormatHint = static_cast<const SwFormatFieldHint&>(rHint);
+    const SwFormatFieldHintWhich eWhich = rFormatHint.Which();
+    if (eWhich == SwFormatFieldHintWhich::REMOVED
+        || eWhich == SwFormatFieldHintWhich::CHANGED)
+    {
+        EndListening(rBC);
+        m_pDropField = nullptr;
+        m_pFormatField = nullptr;
+    }
 }
 
 void sw::DropDownFieldDialog::Apply()
