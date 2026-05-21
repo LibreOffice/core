@@ -1,0 +1,106 @@
+#
+# Copyright the Collabora Online contributors.
+#
+# SPDX-License-Identifier: MPL-2.0
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+
+MAINTAINERCLEANFILES = Makefile.in
+
+NODE_MODULES = $(abs_top_builddir)/browser/node_modules
+TSC = $(NODE) $(NODE_MODULES)/typescript/bin/tsc
+MOCHA = $(NODE) $(NODE_MODULES)/mocha/bin/mocha
+
+WORKDIR = $(abs_builddir)/workdir
+BUILD_MARKER = $(WORKDIR)/.built
+
+SRCS = $(wildcard $(srcdir)/*.ts) $(wildcard $(srcdir)/helper/*.ts)
+
+# The port coolwsd listens on. Pass another one when a server already listens on the default.
+COOLWSD_BIN = $(abs_top_builddir)/coolwsd
+COOLWSD_PORT ?= 9980
+COOLWSD_URL ?= ws://localhost:$(COOLWSD_PORT)
+COOLWSD_PID = $(WORKDIR)/coolwsd.pid
+COOLWSD_LOG = $(WORKDIR)/coolwsd.log
+# The tests load copies of the samples from here.
+DOCUMENTS_DIR = $(WORKDIR)/documents
+
+# Exits with 0 when a server listens on COOLWSD_PORT, and with 1 otherwise.
+PORT_IN_USE = $(NODE) -e "require('net').connect($(COOLWSD_PORT), 'localhost') \
+	.on('connect', () => process.exit(0)).on('error', () => process.exit(1))"
+# Prints a port that no server listens on.
+FREE_PORT = $(NODE) -e "const server = require('net').createServer(); \
+	server.listen(0, () => { console.log(server.address().port); server.close(); })"
+
+build-integration: $(BUILD_MARKER)
+
+# The compiled tests go to the build tree, where node finds the modules they load.
+$(BUILD_MARKER): $(SRCS) $(srcdir)/tsconfig.json
+	$(TSC) --project $(srcdir)/tsconfig.json --outDir $(WORKDIR) \
+		--typeRoots $(NODE_MODULES)/@types
+	touch $(BUILD_MARKER)
+
+# Runs the tests against a coolwsd that already listens at COOLWSD_URL.
+check-integration: $(BUILD_MARKER)
+	COOLWSD_URL="$(COOLWSD_URL)" COOL_TEST_SAMPLES="$(abs_top_srcdir)/test/samples" \
+		COOL_TEST_WORKDIR="$(DOCUMENTS_DIR)" \
+		$(MOCHA) --config $(abs_srcdir)/.mocharc.json '$(WORKDIR)/**/*.test.js'
+
+# Starts coolwsd in the background and waits until it listens on COOLWSD_PORT. A coolwsd that
+# an earlier start left running is stopped first. Another server on the port is an error, since
+# the tests would run against it. A coolwsd that does not get ready in time is stopped again.
+start-coolwsd:
+	mkdir -p $(WORKDIR)
+	-test -f $(COOLWSD_PID) && kill `cat $(COOLWSD_PID)` 2>/dev/null || true
+	@for i in `seq 1 10`; do \
+		if ! $(PORT_IN_USE); then exit 0; fi; \
+		sleep 1; \
+	done; \
+	echo "Port $(COOLWSD_PORT) is in use. Stop that server or pass COOLWSD_PORT=<free port>."; \
+	exit 1
+	fc-cache "@LO_PATH@"/share/fonts/truetype >/dev/null 2>&1 || true
+	ulimit -n 1024; $(COOLWSD_BIN) \
+		--o:sys_template_path="@SYSTEMPLATE_PATH@" \
+		--o:child_root_path="@JAILS_PATH@" \
+		--o:cache_files.path="@CACHE_PATH@" \
+		--o:storage.filesystem[@allow]=true \
+		--disable-ssl --forcecaching \
+		--o:welcome.enable=false \
+		--o:logging.file[@enable]=true --o:logging.level=warning \
+		--port=$(COOLWSD_PORT) \
+		--pidfile=$(COOLWSD_PID) \
+		--unattended \
+		> $(COOLWSD_LOG) 2>&1 & echo $$! > $(COOLWSD_PID)
+	@for i in `seq 1 60`; do \
+		if $(PORT_IN_USE); then exit 0; fi; \
+		sleep 1; \
+	done; \
+	echo "coolwsd did not become ready, see $(COOLWSD_LOG)"; \
+	$(MAKE) stop-coolwsd; \
+	exit 1
+
+stop-coolwsd:
+	-test -f $(COOLWSD_PID) && kill `cat $(COOLWSD_PID)` 2>/dev/null || true
+	-rm -f $(COOLWSD_PID)
+
+# Starts coolwsd, runs the tests and stops coolwsd, also when the start or a test fails.
+check-with-server: $(BUILD_MARKER)
+	@trap '$(MAKE) stop-coolwsd' EXIT INT TERM; \
+		$(MAKE) start-coolwsd && \
+		$(MAKE) check-integration COOLWSD_URL=ws://localhost:$(COOLWSD_PORT)
+
+# Runs check-with-server with coolwsd on a port that no server listens on, so the run does not
+# clash with another server on the machine. make check runs this from the test folder, which
+# comes after coolwsd is built.
+check-on-free-port:
+	@$(MAKE) check-with-server COOLWSD_PORT=`$(FREE_PORT)`
+
+clean-local:
+	-$(MAKE) stop-coolwsd
+	rm -rf $(WORKDIR)
+
+.PHONY: build-integration check-integration start-coolwsd stop-coolwsd check-with-server \
+	check-on-free-port

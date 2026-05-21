@@ -1,0 +1,18 @@
+{
+	"compilerOptions": {
+		"module": "commonjs",
+		"moduleResolution": "node",
+		"target": "ES2018",
+		"lib": ["ES2018", "DOM"],
+		"esModuleInterop": true,
+		"strict": false,
+		"outDir": "workdir",
+		"rootDir": ".",
+		"sourceMap": true,
+		"declaration": false,
+		"resolveJsonModule": true,
+		"types": ["mocha", "node"]
+	},
+	"include": ["**/*.ts"],
+	"exclude": ["workdir"]
+}

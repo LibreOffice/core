@@ -12,6 +12,7 @@ component.json
 
 mocha.log
 mocha_tests/workdir/
+integration_tests/workdir/
 *.done
 duplication.log
 

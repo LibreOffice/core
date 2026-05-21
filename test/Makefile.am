@@ -503,6 +503,7 @@ check-local:
 	@$(CLEANUP_COMMAND)
 	@UNITTEST=1 ./fakesockettest 2> test.log || (cat test.log && /bin/false)
 	@fc-cache "@LO_PATH@"/share/fonts/truetype
+	@$(MAKE) -C $(top_builddir)/browser/integration_tests check-on-free-port
 	@echo "Done test check-local"
 
 # unittest and unithttplib are run in all-local (before TESTS).

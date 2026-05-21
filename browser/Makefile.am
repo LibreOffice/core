@@ -1128,7 +1128,7 @@ dist-hook:
 		-not -path './release/*' \
 		-exec cp -p --parents {} $(distdir) \;
 
-SUBDIRS = l10n images
+SUBDIRS = l10n images integration_tests
 
 COOL_JS_BUNDLE = $(patsubst %.tsx,%.js,$(patsubst %.ts,%.js,$(COOL_JS_LST)))
 

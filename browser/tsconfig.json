@@ -29,6 +29,7 @@
       "scripts",
       "admin",
       "mocha_tests",
+      "integration_tests",
       "docs",
       "test",
       "typescript_js",
