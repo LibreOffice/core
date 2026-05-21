@@ -1079,7 +1079,7 @@ adminIntegratorSettings:
 		$(srcdir)/admin/adminIntegratorSettings.html.m4 \
 		> $(DIST_FOLDER)/adminIntegratorSettings.html
 
-node_modules: package.json node_shrinkpack
+node_modules: package.json npm-shrinkwrap.json node_shrinkpack
 	@UV_USE_IO_URING=0 $(NPM) ci --offline
 	@touch node_modules
 
