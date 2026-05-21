@@ -978,8 +978,8 @@ void MsLangId::Conversion::convertLanguageToLocaleImpl( LanguageType nLang,
     {
         // Speed-up a gazillion fallback cases, not iterating through
         // aImplBcp47CountryEntries nor aImplIsoLangScriptEntries.
-        rLocale.Language = "en";
-        rLocale.Country = "US";
+        rLocale.Language = u"en"_ustr;
+        rLocale.Country = u"US"_ustr;
         rLocale.Variant.clear();
         return;
     }

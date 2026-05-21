@@ -708,17 +708,17 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
                break;
           case TEXT_NUMBER: // ordinal indicators (1st, 2nd, 3rd, ...)
                natNum = NativeNumberMode::NATNUM12;
-               sNatNumParams = "capitalize ordinal-number";
+               sNatNumParams = u"capitalize ordinal-number"_ustr;
                locale = aLocale;
                break;
           case TEXT_CARDINAL: // cardinal number names (One, Two, Three, ...)
                natNum = NativeNumberMode::NATNUM12;
-               sNatNumParams = "capitalize";
+               sNatNumParams = u"capitalize"_ustr;
                locale = aLocale;
                break;
           case TEXT_ORDINAL: // ordinal number names (First, Second, Third, ...)
                natNum = NativeNumberMode::NATNUM12;
-               sNatNumParams = "capitalize ordinal";
+               sNatNumParams = u"capitalize ordinal"_ustr;
                locale = aLocale;
                break;
           case ROMAN_UPPER:
@@ -771,42 +771,42 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
                 break;
           case NUMBER_LOWER_ZH:
                 natNum = NativeNumberMode::NATNUM12;
-                locale.Language = "zh";
+                locale.Language = u"zh"_ustr;
                 break;
           case NUMBER_UPPER_ZH:
                 natNum = NativeNumberMode::NATNUM5;
-                locale.Language = "zh";
+                locale.Language = u"zh"_ustr;
                 break;
           case NUMBER_UPPER_ZH_TW:
                 natNum = NativeNumberMode::NATNUM5;
-                locale.Language = "zh";
-                locale.Country = "TW";
+                locale.Language = u"zh"_ustr;
+                locale.Country = u"TW"_ustr;
                 break;
           case NUMBER_TRADITIONAL_JA:
                 natNum = NativeNumberMode::NATNUM8;
-                locale.Language = "ja";
+                locale.Language = u"ja"_ustr;
                 break;
           case NUMBER_UPPER_KO:
                 natNum = NativeNumberMode::NATNUM8;
-                locale.Language = "ko";
+                locale.Language = u"ko"_ustr;
                 break;
           case NUMBER_HANGUL_KO:
                 natNum = NativeNumberMode::NATNUM11;
-                locale.Language = "ko";
+                locale.Language = u"ko"_ustr;
                 break;
           case NUMBER_DIGITAL_KO:
               natNum = NativeNumberMode::NATNUM9;
-              locale.Language = "ko";
+              locale.Language = u"ko"_ustr;
               break;
           case NUMBER_DIGITAL2_KO:
               natNum = NativeNumberMode::NATNUM1;
-              locale.Language = "ko";
+              locale.Language = u"ko"_ustr;
               break;
           case NUMBER_LEGAL_KO:
               if (number < 1 || number >= 100)
               {
                   natNum = NativeNumberMode::NATNUM11;
-                  locale.Language = "ko";
+                  locale.Language = u"ko"_ustr;
               }
               else
               {
@@ -874,15 +874,15 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
               break;
           case NUMBER_ARABIC_INDIC:
               natNum = NativeNumberMode::NATNUM1;
-              locale.Language = "ar";
+              locale.Language = u"ar"_ustr;
               break;
           case NUMBER_EAST_ARABIC_INDIC:
               natNum = NativeNumberMode::NATNUM1;
-              locale.Language = "fa";
+              locale.Language = u"fa"_ustr;
               break;
           case NUMBER_INDIC_DEVANAGARI:
               natNum = NativeNumberMode::NATNUM1;
-              locale.Language = "hi";
+              locale.Language = u"hi"_ustr;
               break;
           case CHARS_THAI:
               lcl_formatChars(table_Alphabet_th, std::size(table_Alphabet_th), number - 1, result);
@@ -892,7 +892,7 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
               break;
           case NUMBER_HEBREW:
               natNum = NativeNumberMode::NATNUM1;
-              locale.Language = "he";
+              locale.Language = u"he"_ustr;
               break;
           case CHARS_NEPALI:
               lcl_formatChars(table_Alphabet_ne, std::size(table_Alphabet_ne), number - 1, result);
@@ -1037,7 +1037,7 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
 
           case SZEKELY_ROVAS: // Old Hungarian
                natNum = NativeNumberMode::NATNUM12;
-               locale.Language = "hu-Hung";
+               locale.Language = u"hu-Hung"_ustr;
                break;
 
           default:
@@ -1169,9 +1169,9 @@ OUString DefaultNumberingProvider::makeNumberingIdentifier(sal_Int16 index)
         Locale aLocale(u"en"_ustr, OUString(), OUString());
         Sequence<beans::PropertyValue> aProperties(2);
         auto aPropertiesRange = asNonConstRange(aProperties);
-        aPropertiesRange[0].Name = "NumberingType";
+        aPropertiesRange[0].Name = u"NumberingType"_ustr;
         aPropertiesRange[0].Value <<= aSupportedTypes[index].nType;
-        aPropertiesRange[1].Name = "Value";
+        aPropertiesRange[1].Name = u"Value"_ustr;
         for (sal_Int32 j = 1; j <= 3; j++) {
             aPropertiesRange[1].Value <<= j;
             result.append( makeNumberingString( aProperties, aLocale ) + ", " );

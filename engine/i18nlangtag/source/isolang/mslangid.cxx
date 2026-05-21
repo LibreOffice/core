@@ -202,8 +202,8 @@ css::lang::Locale MsLangId::Conversion::convertLanguageToLocale(
     if (aLocale.Language.isEmpty() && simplifySystemLanguages(nOrigLang) == LANGUAGE_SYSTEM)
     {
         // None found but resolve requested, last resort is "en-US".
-        aLocale.Language = "en";
-        aLocale.Country  = "US";
+        aLocale.Language = u"en"_ustr;
+        aLocale.Country  = u"US"_ustr;
         aLocale.Variant.clear();
     }
     return aLocale;

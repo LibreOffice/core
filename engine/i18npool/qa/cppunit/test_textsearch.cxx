@@ -104,7 +104,7 @@ void TestTextSearch::testSearches()
     util::SearchOptions aOptions;
     aOptions.algorithmType = util::SearchAlgorithms_REGEXP ;
     aOptions.searchFlag = util::SearchFlags::ALL_IGNORE_CASE;
-    aOptions.searchString = "(ab)*a(c|d)+";
+    aOptions.searchString = u"(ab)*a(c|d)+"_ustr;
     m_xSearch->setOptions( aOptions );
 
     util::SearchResult aRes;
@@ -123,7 +123,7 @@ void TestTextSearch::testSearches()
 
     aOptions.transliterateFlags = static_cast<int>(TransliterationFlags::IGNORE_CASE
                                 | TransliterationFlags::IGNORE_WIDTH);
-    aOptions.searchString = "([^ ]*)[ ]*([^ ]*)";
+    aOptions.searchString = u"([^ ]*)[ ]*([^ ]*)"_ustr;
     m_xSearch->setOptions(aOptions);
     aRes = m_xSearch->searchForward(u"11 22 33"_ustr, 2, 7);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), aRes.subRegExpressions);
@@ -146,9 +146,9 @@ void TestTextSearch::testWildcardSearch()
     // aOptions.searchFlag = ::css::util::SearchFlags::WILD_MATCH_SELECTION;
     // is not set, so substring match is allowed.
     aOptions.transliterateFlags = sal_Int32(::css::i18n::TransliterationModules::TransliterationModules_IGNORE_CASE);
-    aText = "abAca";
+    aText = u"abAca"_ustr;
 
-    aOptions.searchString = "a";
+    aOptions.searchString = u"a"_ustr;
     m_xSearch2->setOptions2( aOptions );
     // match first "a", [0,1)
     aRes = m_xSearch2->searchForward( aText, 0, aText.getLength());
@@ -161,7 +161,7 @@ void TestTextSearch::testWildcardSearch()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(5), aRes.startOffset[0]);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4), aRes.endOffset[0]);
 
-    aOptions.searchString = "a?";
+    aOptions.searchString = u"a?"_ustr;
     m_xSearch2->setOptions2( aOptions );
     // match "ab", [0,2)
     aRes = m_xSearch2->searchForward( aText, 0, aText.getLength());
@@ -174,7 +174,7 @@ void TestTextSearch::testWildcardSearch()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4), aRes.startOffset[0]);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aRes.endOffset[0]);
 
-    aOptions.searchString = "a*c";
+    aOptions.searchString = u"a*c"_ustr;
     m_xSearch2->setOptions2( aOptions );
     // match "abac", [0,4) XXX NOTE: first match forward
     aRes = m_xSearch2->searchForward( aText, 0, aText.getLength());
@@ -187,7 +187,7 @@ void TestTextSearch::testWildcardSearch()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4), aRes.startOffset[0]);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aRes.endOffset[0]);
 
-    aOptions.searchString = "b*a";
+    aOptions.searchString = u"b*a"_ustr;
     m_xSearch2->setOptions2( aOptions );
     // match "ba", [1,3) XXX NOTE: first match forward, not greedy
     aRes = m_xSearch2->searchForward( aText, 0, aText.getLength());
@@ -200,9 +200,9 @@ void TestTextSearch::testWildcardSearch()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(5), aRes.startOffset[0]);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aRes.endOffset[0]);
 
-    aText = "ab?ca";
+    aText = u"ab?ca"_ustr;
 
-    aOptions.searchString = "?~??";
+    aOptions.searchString = u"?~??"_ustr;
     m_xSearch2->setOptions2( aOptions );
     // match "b?c", [1,4)
     aRes = m_xSearch2->searchForward( aText, 0, aText.getLength());
@@ -215,9 +215,9 @@ void TestTextSearch::testWildcardSearch()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4), aRes.startOffset[0]);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aRes.endOffset[0]);
 
-    aText = "ab*ca";
+    aText = u"ab*ca"_ustr;
 
-    aOptions.searchString = "?~*?";
+    aOptions.searchString = u"?~*?"_ustr;
     m_xSearch2->setOptions2( aOptions );
     // match "b?c", [1,4)
     aRes = m_xSearch2->searchForward( aText, 0, aText.getLength());
@@ -230,7 +230,7 @@ void TestTextSearch::testWildcardSearch()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4), aRes.startOffset[0]);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aRes.endOffset[0]);
 
-    aOptions.searchString = "ca?";
+    aOptions.searchString = u"ca?"_ustr;
     m_xSearch2->setOptions2( aOptions );
     // no match
     aRes = m_xSearch2->searchForward( aText, 0, aText.getLength());
@@ -239,7 +239,7 @@ void TestTextSearch::testWildcardSearch()
     aRes = m_xSearch2->searchBackward( aText, aText.getLength(), 0);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), aRes.subRegExpressions);
 
-    aOptions.searchString = "ca*";
+    aOptions.searchString = u"ca*"_ustr;
     m_xSearch2->setOptions2( aOptions );
     // match "ca", [3,5)
     aRes = m_xSearch2->searchForward( aText, 0, aText.getLength());
@@ -252,7 +252,7 @@ void TestTextSearch::testWildcardSearch()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(5), aRes.startOffset[0]);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), aRes.endOffset[0]);
 
-    aOptions.searchString = "*ca*";
+    aOptions.searchString = u"*ca*"_ustr;
     m_xSearch2->setOptions2( aOptions );
     // match "abaca", [0,5)
     aRes = m_xSearch2->searchForward( aText, 0, aText.getLength());
@@ -265,8 +265,8 @@ void TestTextSearch::testWildcardSearch()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(5), aRes.startOffset[0]);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aRes.endOffset[0]);
 
-    aText = "123123";
-    aOptions.searchString = "*2?";
+    aText = u"123123"_ustr;
+    aOptions.searchString = u"*2?"_ustr;
     m_xSearch2->setOptions2( aOptions );
     // match first "123", [0,3)
     aRes = m_xSearch2->searchForward( aText, 0, aText.getLength());
@@ -303,7 +303,7 @@ void TestTextSearch::testApostropheSearch()
     util::SearchOptions aOptions;
     aOptions.algorithmType = util::SearchAlgorithms_ABSOLUTE;
     aOptions.searchFlag = util::SearchFlags::ALL_IGNORE_CASE;
-    aOptions.searchString = "'";
+    aOptions.searchString = u"'"_ustr;
     m_xSearch->setOptions( aOptions );
 
     util::SearchResult aRes;
@@ -416,7 +416,7 @@ void TestTextSearch::testQuotationMarkSearch()
     util::SearchOptions aOptions;
     aOptions.algorithmType = util::SearchAlgorithms_ABSOLUTE;
     aOptions.searchFlag = util::SearchFlags::ALL_IGNORE_CASE;
-    aOptions.searchString = "\"x\"";
+    aOptions.searchString = u"\"x\""_ustr;
     aOptions.transliterateFlags = static_cast<int>(TransliterationFlags::IGNORE_CASE
                                 | TransliterationFlags::IGNORE_WIDTH);
     m_xSearch->setOptions( aOptions );
@@ -438,7 +438,7 @@ void TestTextSearch::testQuotationMarkSearch()
     CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int32>(0), aRes.endOffset[0] );
 
     // B)
-    aOptions.searchString = "\"y\"";
+    aOptions.searchString = u"\"y\""_ustr;
     m_xSearch->setOptions( aOptions );
 
     // search forward
@@ -456,7 +456,7 @@ void TestTextSearch::testQuotationMarkSearch()
     CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int32>(5), aRes.endOffset[0] );
 
     // C)
-    aOptions.searchString = "'z'";
+    aOptions.searchString = u"'z'"_ustr;
     m_xSearch->setOptions( aOptions );
 
     // search forward
@@ -474,7 +474,7 @@ void TestTextSearch::testQuotationMarkSearch()
     CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int32>(10), aRes.endOffset[0] );
 
     // D)
-    aOptions.searchString = "'a'";
+    aOptions.searchString = u"'a'"_ustr;
     m_xSearch->setOptions( aOptions );
 
     // search forward

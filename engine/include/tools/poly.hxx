@@ -293,13 +293,13 @@ inline std::basic_ostream<charT, traits> & operator <<(
 
         OUString aFlag;
         if (poly.GetFlags(i) == PolyFlags::Normal)
-            aFlag = "Normal";
+            aFlag = u"Normal"_ustr;
         else if (poly.GetFlags(i) == PolyFlags::Smooth)
-            aFlag = "Smooth";
+            aFlag = u"Smooth"_ustr;
         else if (poly.GetFlags(i) == PolyFlags::Control)
-            aFlag = "Control";
+            aFlag = u"Control"_ustr;
         else if (poly.GetFlags(i) == PolyFlags::Symmetric)
-            aFlag = "Symmetric";
+            aFlag = u"Symmetric"_ustr;
 
         stream << ";f=" << aFlag;
     }

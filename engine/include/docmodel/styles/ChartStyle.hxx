@@ -45,7 +45,7 @@ struct FontOrStyleRef
                     sV = OUString::number(std::get<0>(*maStyleClr));
                     break;
                 case 1: // enum; only value "auto"
-                    sV = "auto";
+                    sV = u"auto"_ustr;
                     break;
                 case 2: // arbitrary string
                     sV = std::get<2>(*maStyleClr);

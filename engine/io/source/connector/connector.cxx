@@ -100,7 +100,7 @@ Reference< XConnection > SAL_CALL OConnector::connect( const OUString& sConnecti
             if (aDesc.hasParameter(u"host"_ustr))
                 aHost = aDesc.getParameter(u"host"_ustr);
             else
-                aHost = "localhost";
+                aHost = u"localhost"_ustr;
             sal_uInt16 nPort = static_cast< sal_uInt16 >(
                 aDesc.getParameter(u"port"_ustr).
                 toInt32());

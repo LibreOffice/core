@@ -70,13 +70,13 @@ public:
     static FontScheme getDefault()
     {
         FontScheme aDefault;
-        aDefault.maMinorLatin.maTypeface = "Arial";
-        aDefault.maMinorAsian.maTypeface = "DejaVu Sans";
-        aDefault.maMinorComplex.maTypeface = "DejaVu Sans";
+        aDefault.maMinorLatin.maTypeface = u"Arial"_ustr;
+        aDefault.maMinorAsian.maTypeface = u"DejaVu Sans"_ustr;
+        aDefault.maMinorComplex.maTypeface = u"DejaVu Sans"_ustr;
 
-        aDefault.maMajorLatin.maTypeface = "Arial";
-        aDefault.maMajorAsian.maTypeface = "DejaVu Sans";
-        aDefault.maMajorComplex.maTypeface = "DejaVu Sans";
+        aDefault.maMajorLatin.maTypeface = u"Arial"_ustr;
+        aDefault.maMajorAsian.maTypeface = u"DejaVu Sans"_ustr;
+        aDefault.maMajorComplex.maTypeface = u"DejaVu Sans"_ustr;
         return aDefault;
     }
 

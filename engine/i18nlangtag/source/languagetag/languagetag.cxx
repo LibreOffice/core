@@ -2471,7 +2471,7 @@ LanguageTagImpl::Extraction LanguageTagImpl::simpleExtract( const OUString& rBcp
     else if (nLen == 1 && rBcp47[0] == 'C')         // the 'C' locale
     {
         eRet = EXTRACTED_C_LOCALE;
-        rLanguage = "C";
+        rLanguage = u"C"_ustr;
         rScript.clear();
         rCountry.clear();
         rRegion.clear();
@@ -2611,11 +2611,11 @@ LanguageTagImpl::Extraction LanguageTagImpl::simpleExtract( const OUString& rBcp
              * table driven approach via isolang.cxx instead. */
             if (rBcp47.equalsIgnoreAsciiCase( "es-ES-u-co-trad"))
             {
-                rLanguage = "es";
+                rLanguage = u"es"_ustr;
                 rScript.clear();
-                rCountry  = "ES";
+                rCountry  = u"ES"_ustr;
                 rRegion.clear();
-                rVariants = "u-co-trad";    // not strictly a variant, but used to reconstruct the tag.
+                rVariants = u"u-co-trad"_ustr;    // not strictly a variant, but used to reconstruct the tag.
                 eRet = EXTRACTED_LV;
             }
         }
@@ -2671,22 +2671,22 @@ LanguageTagImpl::Extraction LanguageTagImpl::simpleExtract( const OUString& rBcp
             // Strictly not a variant, but so far we treat it as such.
             if (rBcp47.equalsIgnoreAsciiCase( "en-GB-oed"))
             {
-                rLanguage = "en";
+                rLanguage = u"en"_ustr;
                 rScript.clear();
-                rCountry  = "GB";
+                rCountry  = u"GB"_ustr;
                 rRegion.clear();
-                rVariants = "oed";
+                rVariants = u"oed"_ustr;
                 eRet = EXTRACTED_LV;
             }
             // Other known and handled odd cases.
             else if (rBcp47.equalsIgnoreAsciiCase( "es-ES_tradnl"))
             {
                 // Will get overridden, but needs to be recognized as known.
-                rLanguage = "es";
+                rLanguage = u"es"_ustr;
                 rScript.clear();
-                rCountry  = "ES";
+                rCountry  = u"ES"_ustr;
                 rRegion.clear();
-                rVariants = "tradnl";   // this is nonsense, but... ignored.
+                rVariants = u"tradnl"_ustr;   // this is nonsense, but... ignored.
                 eRet = EXTRACTED_KNOWN_BAD;
             }
         }

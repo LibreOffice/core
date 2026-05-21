@@ -29,8 +29,8 @@ protected:
 CPPUNIT_TEST_FIXTURE(TestCharacterClassification, testTitleCase)
 {
     lang::Locale aLocale;
-    aLocale.Language = "en";
-    aLocale.Country = "US";
+    aLocale.Language = u"en"_ustr;
+    aLocale.Country = u"US"_ustr;
 
     {
         //basic example
@@ -62,8 +62,8 @@ CPPUNIT_TEST_FIXTURE(TestCharacterClassification, testTitleCase)
 CPPUNIT_TEST_FIXTURE(TestCharacterClassification, testStringType)
 {
     lang::Locale aLocale;
-    aLocale.Language = "en";
-    aLocale.Country = "US";
+    aLocale.Language = u"en"_ustr;
+    aLocale.Country = u"US"_ustr;
 
     {
         //simple case

@@ -4824,7 +4824,7 @@ OUString HwpImportFilter::detect( css::uno::Sequence< css::beans::PropertyValue 
              detect_hwp_version(reinterpret_cast<const char*>(aData.getConstArray()))
            )
         {
-            sTypeName = "writer_MIZI_Hwp_97";
+            sTypeName = u"writer_MIZI_Hwp_97"_ustr;
         }
     }
 

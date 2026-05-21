@@ -1268,23 +1268,23 @@ LocaleDataImpl::getContinuousNumberingLevels( const lang::Locale& rLocale )
                 switch( j )
                 {
                     case 0:
-                        rVal.Name = "Prefix";
+                        rVal.Name = u"Prefix"_ustr;
                         rVal.Value <<= sVal;
                         break;
                     case 1:
-                        rVal.Name = "NumberingType";
+                        rVal.Name = u"NumberingType"_ustr;
                         rVal.Value <<= static_cast<sal_Int16>(sVal.toInt32());
                         break;
                     case 2:
-                        rVal.Name = "Suffix";
+                        rVal.Name = u"Suffix"_ustr;
                         rVal.Value <<= sVal;
                         break;
                     case 3:
-                        rVal.Name = "Transliteration";
+                        rVal.Name = u"Transliteration"_ustr;
                         rVal.Value <<= sVal;
                         break;
                     case 4:
-                        rVal.Name = "NatNum";
+                        rVal.Name = u"NatNum"_ustr;
                         rVal.Value <<= static_cast<sal_Int16>(sVal.toInt32());
                         break;
                     default:
@@ -1505,29 +1505,29 @@ Any OutlineNumbering::getByIndex( sal_Int32 nIndex )
 
     Sequence<PropertyValue> aOutlineNumbering(12);
     PropertyValue* pValues = aOutlineNumbering.getArray();
-    pValues[0].Name = "Prefix";
+    pValues[0].Name = u"Prefix"_ustr;
     pValues[0].Value <<= pTemp->sPrefix;
-    pValues[1].Name = "NumberingType";
+    pValues[1].Name = u"NumberingType"_ustr;
     pValues[1].Value <<= pTemp->nNumType;
-    pValues[2].Name = "Suffix";
+    pValues[2].Name = u"Suffix"_ustr;
     pValues[2].Value <<= pTemp->sSuffix;
-    pValues[3].Name = "BulletChar";
+    pValues[3].Name = u"BulletChar"_ustr;
     pValues[3].Value <<= OUString(&pTemp->cBulletChar, 1);
-    pValues[4].Name = "BulletFontName";
+    pValues[4].Name = u"BulletFontName"_ustr;
     pValues[4].Value <<= pTemp->sBulletFontName;
-    pValues[5].Name = "ParentNumbering";
+    pValues[5].Name = u"ParentNumbering"_ustr;
     pValues[5].Value <<= pTemp->nParentNumbering;
-    pValues[6].Name = "LeftMargin";
+    pValues[6].Name = u"LeftMargin"_ustr;
     pValues[6].Value <<= pTemp->nLeftMargin;
-    pValues[7].Name = "SymbolTextDistance";
+    pValues[7].Name = u"SymbolTextDistance"_ustr;
     pValues[7].Value <<= pTemp->nSymbolTextDistance;
-    pValues[8].Name = "FirstLineOffset";
+    pValues[8].Name = u"FirstLineOffset"_ustr;
     pValues[8].Value <<= pTemp->nFirstLineOffset;
-    pValues[9].Name = "Adjust";
+    pValues[9].Name = u"Adjust"_ustr;
     pValues[9].Value <<= pTemp->nAdjust;
-    pValues[10].Name = "Transliteration";
+    pValues[10].Name = u"Transliteration"_ustr;
     pValues[10].Value <<= pTemp->sTransliteration;
-    pValues[11].Name = "NatNum";
+    pValues[11].Name = u"NatNum"_ustr;
     pValues[11].Value <<= pTemp->nNatNum;
     aRet <<= aOutlineNumbering;
     return aRet;

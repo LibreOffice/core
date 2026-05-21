@@ -93,8 +93,8 @@ void TestBreakIterator::testLineBreaking()
     {
         OUString aTest(u"(some text here)"_ustr);
 
-        aLocale.Language = "en";
-        aLocale.Country = "US";
+        aLocale.Language = u"en"_ustr;
+        aLocale.Country = u"US"_ustr;
 
         {
             //Here we want the line break to leave text here) on the next line
@@ -114,8 +114,8 @@ void TestBreakIterator::testLineBreaking()
         static constexpr OUString aWord = u"\u05DE\u05D9\u05DC\u05D9\u05DD"_ustr;
         OUString aTest(aWord + " " + aWord);
 
-        aLocale.Language = "he";
-        aLocale.Country = "IL";
+        aLocale.Language = u"he"_ustr;
+        aLocale.Country = u"IL"_ustr;
 
         {
             //Here we want the line break to happen at the whitespace
@@ -126,8 +126,8 @@ void TestBreakIterator::testLineBreaking()
 
     //See https://bz.apache.org/ooo/show_bug.cgi?id=17155
     {
-        aLocale.Language = "en";
-        aLocale.Country = "US";
+        aLocale.Language = u"en"_ustr;
+        aLocale.Country = u"US"_ustr;
 
         {
             //Here we want the line break to leave /bar/ba clumped together on the next line
@@ -139,8 +139,8 @@ void TestBreakIterator::testLineBreaking()
 
     // i#22602: writer breaks word after dot immediately followed by a letter
     {
-        aLocale.Language = "en";
-        aLocale.Country = "US";
+        aLocale.Language = u"en"_ustr;
+        aLocale.Country = u"US"_ustr;
 
         {
             //Here we want the line break to leave ./bar/baz clumped together on the next line
@@ -153,8 +153,8 @@ void TestBreakIterator::testLineBreaking()
 
     // i#81448: slash and backslash make non-breaking spaces of preceding spaces
     {
-        aLocale.Language = "en";
-        aLocale.Country = "US";
+        aLocale.Language = u"en"_ustr;
+        aLocale.Country = u"US"_ustr;
 
         {
             // Per the bug, the line break should leave ...BE clumped together on the next line.
@@ -168,8 +168,8 @@ void TestBreakIterator::testLineBreaking()
 
     // i#81448: slash and backslash make non-breaking spaces of preceding spaces
     {
-        aLocale.Language = "en";
-        aLocale.Country = "US";
+        aLocale.Language = u"en"_ustr;
+        aLocale.Country = u"US"_ustr;
 
         {
             // The line break should leave /BE clumped together on the next line.
@@ -181,8 +181,8 @@ void TestBreakIterator::testLineBreaking()
 
     // i#80548: Bad word wrap between dash and word
     {
-        aLocale.Language = "fi";
-        aLocale.Country = "FI";
+        aLocale.Language = u"fi"_ustr;
+        aLocale.Country = u"FI"_ustr;
 
         {
             // Per the bug, the line break should leave -bar clumped together on the next line.
@@ -195,8 +195,8 @@ void TestBreakIterator::testLineBreaking()
 
     // i#80645: Line erroneously breaks at backslash
     {
-        aLocale.Language = "en";
-        aLocale.Country = "US";
+        aLocale.Language = u"en"_ustr;
+        aLocale.Country = u"US"_ustr;
 
         {
             // Note that the current behavior deviates from the original fix for this bug.
@@ -227,8 +227,8 @@ void TestBreakIterator::testLineBreaking()
 
     // i#80841: Words separated by hyphens will always break to next line
     {
-        aLocale.Language = "en";
-        aLocale.Country = "US";
+        aLocale.Language = u"en"_ustr;
+        aLocale.Country = u"US"_ustr;
 
         {
             // Here we want the line break to leave toll- on the first line
@@ -240,8 +240,8 @@ void TestBreakIterator::testLineBreaking()
 
     // i#83464: Line break between letter and $
     {
-        aLocale.Language = "en";
-        aLocale.Country = "US";
+        aLocale.Language = u"en"_ustr;
+        aLocale.Country = u"US"_ustr;
 
         {
             // Here we want the line break to leave US$ clumped on the next line.
@@ -253,8 +253,8 @@ void TestBreakIterator::testLineBreaking()
 
     // Unknown bug number: "fix line break problem of dot after letter and before number"
     {
-        aLocale.Language = "en";
-        aLocale.Country = "US";
+        aLocale.Language = u"en"_ustr;
+        aLocale.Country = u"US"_ustr;
 
         {
             // Here we want the line break to leave US$ clumped on the next line.
@@ -266,8 +266,8 @@ void TestBreakIterator::testLineBreaking()
 
     // i#83229: Wrong line break when word contains a hyphen
     {
-        aLocale.Language = "en";
-        aLocale.Country = "US";
+        aLocale.Language = u"en"_ustr;
+        aLocale.Country = u"US"_ustr;
 
         {
             // The root cause for this bug was the Unicode standard introducing special treatment
@@ -301,8 +301,8 @@ void TestBreakIterator::testLineBreaking()
             CPPUNIT_ASSERT_EQUAL(sal_Int32{9}, aResult.breakIndex);
         }
 
-        aLocale.Language = "de";
-        aLocale.Country = "DE";
+        aLocale.Language = u"de"_ustr;
+        aLocale.Country = u"DE"_ustr;
 
         {
             // From the same bug: "the leading minus must stay with numbers and strings"
@@ -347,8 +347,8 @@ void TestBreakIterator::testLineBreaking()
             // This uses the sample text provided in the bug report. Based on usage, it is assumed
             // they were in the de_DE locale.
 
-            aLocale.Language = "de";
-            aLocale.Country = "DE";
+            aLocale.Language = u"de"_ustr;
+            aLocale.Country = u"DE"_ustr;
 
             // Per the bug report, it is expected that »angetan werden« remains on the first line.
             const OUString str = u"»angetan werden« [Passiv]"_ustr;
@@ -378,8 +378,8 @@ void TestBreakIterator::testLineBreaking()
         {
             // The same behavior is seen in English
 
-            aLocale.Language = "en";
-            aLocale.Country = "US";
+            aLocale.Language = u"en"_ustr;
+            aLocale.Country = u"US"_ustr;
 
             const OUString str = u"\"angetan werden\" [Passiv]"_ustr;
             i18n::LineBreakResults aResult = m_xBreak->getLineBreak(
@@ -396,8 +396,8 @@ void TestBreakIterator::testLineBreaking()
     // i#72868: Writer/Impress line does not break after Chinese punctuation and Latin letters
     // tdf#130592: Fixed the regression. If this case fails, UI text will be laid out incorrectly.
     {
-        aLocale.Language = "zh";
-        aLocale.Country = "HK";
+        aLocale.Language = u"zh"_ustr;
+        aLocale.Country = u"HK"_ustr;
 
         {
             const OUString str = u"word word、word word"_ustr;
@@ -415,8 +415,8 @@ void TestBreakIterator::testLineBreaking()
 
     // i#80891: Character in the forbidden list sometimes appears at the start of line
     {
-        aLocale.Language = "zh";
-        aLocale.Country = "HK";
+        aLocale.Language = u"zh"_ustr;
+        aLocale.Country = u"HK"_ustr;
 
         {
             // Per the bug, the ideographic two-dot leader should be a forbidden character. However,
@@ -430,8 +430,8 @@ void TestBreakIterator::testLineBreaking()
 
     //See https://bz.apache.org/ooo/show_bug.cgi?id=19716
     {
-        aLocale.Language = "en";
-        aLocale.Country = "US";
+        aLocale.Language = u"en"_ustr;
+        aLocale.Country = u"US"_ustr;
 
         {
             OUString aTest(u"aaa]aaa"_ustr);
@@ -447,8 +447,8 @@ void TestBreakIterator::testLineBreaking()
         static constexpr OUStringLiteral aTest = u"\U0001f356\U0001f357\U0001f346"
                                        "\U0001f364\u2668\ufe0f\U0001f3c6";
 
-        aLocale.Language = "en";
-        aLocale.Country = "US";
+        aLocale.Language = u"en"_ustr;
+        aLocale.Country = u"US"_ustr;
 
         {
             //This must not assert/crash
@@ -461,8 +461,8 @@ void TestBreakIterator::testLineBreaking()
         static constexpr OUString aTest = u"\uc560\uad6D\uac00\uc758 \uac00"
                                        "\uc0ac\ub294"_ustr;
 
-        aLocale.Language = "ko";
-        aLocale.Country = "KR";
+        aLocale.Language = u"ko"_ustr;
+        aLocale.Country = u"KR"_ustr;
 
         {
             i18n::LineBreakResults aResult = m_xBreak->getLineBreak(aTest, aTest.getLength()-2, aLocale, 0,
@@ -474,8 +474,8 @@ void TestBreakIterator::testLineBreaking()
     // i#65267: Comma is badly broken at end of line
     // - The word should be wrapped along with the comma
     {
-        aLocale.Language = "de";
-        aLocale.Country = "DE";
+        aLocale.Language = u"de"_ustr;
+        aLocale.Country = u"DE"_ustr;
 
         {
             auto res = m_xBreak->getLineBreak(u"Wort -prinzessinnen, wort"_ustr,
@@ -487,8 +487,8 @@ void TestBreakIterator::testLineBreaking()
 
     // tdf#114160: ZWJ shouldn't be treated as a breaking character
     {
-        aLocale.Language = "mn";
-        aLocale.Country = "MN";
+        aLocale.Language = u"mn"_ustr;
+        aLocale.Country = u"MN"_ustr;
 
         {
             auto res = m_xBreak->getLineBreak(u"\u1828\u1820\u200d\u00a0\u200d\u1873\u1873"_ustr, 6,
@@ -496,8 +496,8 @@ void TestBreakIterator::testLineBreaking()
             CPPUNIT_ASSERT_EQUAL(sal_Int32(0), res.breakIndex);
         }
 
-        aLocale.Language = "en";
-        aLocale.Country = "US";
+        aLocale.Language = u"en"_ustr;
+        aLocale.Country = u"US"_ustr;
 
         {
             auto res = m_xBreak->getLineBreak(u"AB\u200d\u00a0\u200dCD"_ustr, 6, aLocale, 0,
@@ -511,8 +511,8 @@ void TestBreakIterator::testLineBreaking()
 void TestBreakIterator::testWordBoundaries()
 {
     lang::Locale aLocale;
-    aLocale.Language = "en";
-    aLocale.Country = "US";
+    aLocale.Language = u"en"_ustr;
+    aLocale.Country = u"US"_ustr;
 
     i18n::Boundary aBounds;
 
@@ -765,8 +765,8 @@ void TestBreakIterator::testWordBoundaries()
 
     //See https://bz.apache.org/ooo/show_bug.cgi?id=13451
     {
-        aLocale.Language = "ca";
-        aLocale.Country = "ES";
+        aLocale.Language = u"ca"_ustr;
+        aLocale.Country = u"ES"_ustr;
 
         OUString aTest(u"mirar-se comprar-vos donem-nos les mans aneu-vos-en!"_ustr);
 
@@ -792,16 +792,16 @@ void TestBreakIterator::testWordBoundaries()
         switch (j)
         {
             case 0:
-                aLocale.Language = "en";
-                aLocale.Country = "US";
+                aLocale.Language = u"en"_ustr;
+                aLocale.Country = u"US"_ustr;
                 break;
             case 1:
-                aLocale.Language = "ca";
-                aLocale.Country = "ES";
+                aLocale.Language = u"ca"_ustr;
+                aLocale.Country = u"ES"_ustr;
                 break;
             case 2:
-                aLocale.Language = "fi";
-                aLocale.Country = "FI";
+                aLocale.Language = u"fi"_ustr;
+                aLocale.Country = u"FI"_ustr;
                 break;
             default:
                 CPPUNIT_ASSERT(false);
@@ -834,11 +834,11 @@ void TestBreakIterator::testWordBoundaries()
         switch (j)
         {
             case 0:
-                aLocale.Language = "en";
-                aLocale.Country = "US";
+                aLocale.Language = u"en"_ustr;
+                aLocale.Country = u"US"_ustr;
                 break;
             case 1:
-                aLocale.Language = "grc";
+                aLocale.Language = u"grc"_ustr;
                 aLocale.Country.clear();
                 break;
             default:
@@ -870,8 +870,8 @@ void TestBreakIterator::testWordBoundaries()
     //See https://bz.apache.org/ooo/show_bug.cgi?id=58513
     //See https://bugs.libreoffice.org/show_bug.cgi?id=55707
     {
-        aLocale.Language = "fi";
-        aLocale.Country = "FI";
+        aLocale.Language = u"fi"_ustr;
+        aLocale.Country = u"FI"_ustr;
 
         OUString aTest(u"Kuorma-auto kaakkois- ja Keski-Suomi USA:n 90:n %:n"_ustr);
 
@@ -914,8 +914,8 @@ void TestBreakIterator::testWordBoundaries()
 
     //See https://bz.apache.org/ooo/show_bug.cgi?id=107843
     {
-        aLocale.Language = "en";
-        aLocale.Country = "US";
+        aLocale.Language = u"en"_ustr;
+        aLocale.Country = u"US"_ustr;
 
         static constexpr OUString aTest =
             u"ru\uFB00le \uFB01sh"_ustr;
@@ -931,8 +931,8 @@ void TestBreakIterator::testWordBoundaries()
 
     //See https://bz.apache.org/ooo/show_bug.cgi?id=113785
     {
-        aLocale.Language = "en";
-        aLocale.Country = "US";
+        aLocale.Language = u"en"_ustr;
+        aLocale.Country = u"US"_ustr;
 
         static constexpr OUString aTest =
             u"a\u2013b\u2014c"_ustr;
@@ -952,8 +952,8 @@ void TestBreakIterator::testWordBoundaries()
 
     // i#55778: Words containing numbers get broken up
     {
-        aLocale.Language = "en";
-        aLocale.Country = "US";
+        aLocale.Language = u"en"_ustr;
+        aLocale.Country = u"US"_ustr;
 
         static constexpr OUString aTest = u"first i18n third"_ustr;
 
@@ -967,8 +967,8 @@ void TestBreakIterator::testWordBoundaries()
     // i#56348: Special chars in first pos not handled by spell checking in Writer (Hungarian)
     // Rules for Hungarian affixes after numbers and certain symbols
     {
-        aLocale.Language = "hu";
-        aLocale.Country = "HU";
+        aLocale.Language = u"hu"_ustr;
+        aLocale.Country = u"HU"_ustr;
 
         OUString aTest = u"szavak 15 15-tel 15%-kal €-val szavak"_ustr;
 
@@ -1007,8 +1007,8 @@ void TestBreakIterator::testWordBoundaries()
 
     // tdf#49885: Upgrade CJ word boundary analysis to ICU frequency-based analysis
     {
-        aLocale.Language = "ja";
-        aLocale.Country = "JP";
+        aLocale.Language = u"ja"_ustr;
+        aLocale.Country = u"JP"_ustr;
 
         static constexpr OUString aTest = u"通産省工業技術院北海道工業開発試験所"_ustr;
 
@@ -1023,8 +1023,8 @@ void TestBreakIterator::testWordBoundaries()
 
     //  tdf#161737: narrow no-break space at the end of words resulted spelling mistakes
     {
-        aLocale.Language = "en";
-        aLocale.Country = "US";
+        aLocale.Language = u"en"_ustr;
+        aLocale.Country = u"US"_ustr;
 
         OUString aTest(u"L’espace fine insécable\u202F!"_ustr);
         aBounds
@@ -1039,8 +1039,8 @@ void TestBreakIterator::testWordBoundaries()
     //  TODO: remove NBSP by the linguistic module or by the spell checking dictionaries to allow
     //  to check numbers with thousand separators and with correct suffix
     {
-        aLocale.Language = "en";
-        aLocale.Country = "US";
+        aLocale.Language = u"en"_ustr;
+        aLocale.Country = u"US"_ustr;
 
         OUString aTest(u"1\u202F000\u202F000"_ustr);
         aBounds
@@ -1053,8 +1053,8 @@ void TestBreakIterator::testWordBoundaries()
 
     //  tdf#161737: narrow no-break space at the end of words resulted spelling mistakes
     {
-        aLocale.Language = "hu";
-        aLocale.Country = "HU";
+        aLocale.Language = u"hu"_ustr;
+        aLocale.Country = u"HU"_ustr;
 
         OUString aTest(u"L’espace fine insécable\u202F!"_ustr);
         aBounds
@@ -1069,8 +1069,8 @@ void TestBreakIterator::testWordBoundaries()
     //  TODO: remove NBSP by the linguistic module or by the spell checking dictionaries to allow
     //  to check numbers with thousand separators and with correct suffix
     {
-        aLocale.Language = "hu";
-        aLocale.Country = "HU";
+        aLocale.Language = u"hu"_ustr;
+        aLocale.Country = u"HU"_ustr;
 
         OUString aTest(u"1\u202F000\u202F000"_ustr);
         aBounds
@@ -1085,8 +1085,8 @@ void TestBreakIterator::testWordBoundaries()
 void TestBreakIterator::testSentenceBoundaries()
 {
     lang::Locale aLocale;
-    aLocale.Language = "en";
-    aLocale.Country = "US";
+    aLocale.Language = u"en"_ustr;
+    aLocale.Country = u"US"_ustr;
 
     // Trivial characteristic test for sentence boundary detection
     {
@@ -1124,13 +1124,13 @@ void TestBreakIterator::testSentenceBoundaries()
     {
         static constexpr OUString aTest = u"ว้อย โหลยโท่ยคอร์รัปชันโอเพ่นฮอตดอก โปรโมเตอร์"_ustr;
 
-        aLocale.Language = "en";
-        aLocale.Country = "US";
+        aLocale.Language = u"en"_ustr;
+        aLocale.Country = u"US"_ustr;
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0), m_xBreak->beginOfSentence(aTest, 23, aLocale));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(46), m_xBreak->endOfSentence(aTest, 23, aLocale));
 
-        aLocale.Language = "th";
-        aLocale.Country = "TH";
+        aLocale.Language = u"th"_ustr;
+        aLocale.Country = u"TH"_ustr;
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0), m_xBreak->beginOfSentence(aTest, 23, aLocale));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(46), m_xBreak->endOfSentence(aTest, 23, aLocale));
     }
@@ -1141,13 +1141,13 @@ void TestBreakIterator::testSentenceBoundaries()
     {
         static constexpr OUString aTest = u"ว้อย English usually ends with a period โปรโมเตอร์."_ustr;
 
-        aLocale.Language = "en";
-        aLocale.Country = "US";
+        aLocale.Language = u"en"_ustr;
+        aLocale.Country = u"US"_ustr;
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0), m_xBreak->beginOfSentence(aTest, 23, aLocale));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(51), m_xBreak->endOfSentence(aTest, 23, aLocale));
 
-        aLocale.Language = "th";
-        aLocale.Country = "TH";
+        aLocale.Language = u"th"_ustr;
+        aLocale.Country = u"TH"_ustr;
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0), m_xBreak->beginOfSentence(aTest, 23, aLocale));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(51), m_xBreak->endOfSentence(aTest, 23, aLocale));
     }
@@ -1157,13 +1157,13 @@ void TestBreakIterator::testSentenceBoundaries()
     {
         static constexpr OUString aTest = u"Englishโหลยโท่ยคอร์รัปชันโอเพ่นฮอตดอกEnglish"_ustr;
 
-        aLocale.Language = "en";
-        aLocale.Country = "US";
+        aLocale.Language = u"en"_ustr;
+        aLocale.Country = u"US"_ustr;
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0), m_xBreak->beginOfSentence(aTest, 23, aLocale));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(44), m_xBreak->endOfSentence(aTest, 23, aLocale));
 
-        aLocale.Language = "th";
-        aLocale.Country = "TH";
+        aLocale.Language = u"th"_ustr;
+        aLocale.Country = u"TH"_ustr;
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0), m_xBreak->beginOfSentence(aTest, 23, aLocale));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(44), m_xBreak->endOfSentence(aTest, 23, aLocale));
     }
@@ -1176,8 +1176,8 @@ void TestBreakIterator::testSentenceBoundaries()
 void TestBreakIterator::testGraphemeIteration()
 {
     lang::Locale aLocale;
-    aLocale.Language = "bn";
-    aLocale.Country = "IN";
+    aLocale.Language = u"bn"_ustr;
+    aLocale.Country = u"IN"_ustr;
 
     {
         static constexpr OUString aTest = u"\u09AC\u09CD\u09AF"_ustr; // BA HALANT LA
@@ -1220,8 +1220,8 @@ void TestBreakIterator::testGraphemeIteration()
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Should skip full grapheme", static_cast<sal_Int32>(0), nPos);
     }
 
-    aLocale.Language = "ta";
-    aLocale.Country = "IN";
+    aLocale.Language = u"ta"_ustr;
+    aLocale.Country = u"IN"_ustr;
 
     {
         static constexpr OUString aTest = u"\u0B9A\u0BBF\u0BA4\u0BCD\u0BA4\u0BBF\u0BB0\u0BC8"_ustr; // CA VOWELSIGNI TA VIRAMA TA VOWELSIGNI RA VOWELSIGNAI
@@ -1304,8 +1304,8 @@ void TestBreakIterator::testGraphemeIteration()
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be considered 1 grapheme", static_cast<sal_Int32>(1), nGraphemeCount);
     }
 
-    aLocale.Language = "hi";
-    aLocale.Country = "IN";
+    aLocale.Language = u"hi"_ustr;
+    aLocale.Country = u"IN"_ustr;
 
     {
         static constexpr OUString aTest = u"\u0936\u0940"_ustr; // SHA VOWELSIGNII
@@ -1323,8 +1323,8 @@ void TestBreakIterator::testGraphemeIteration()
 
     // tdf#49885: Replace custom Thai implementation with ICU
     {
-        aLocale.Language = "th";
-        aLocale.Country = "TH";
+        aLocale.Language = u"th"_ustr;
+        aLocale.Country = u"TH"_ustr;
 
         static constexpr OUString aTest = u"กำ"_ustr;
 
@@ -1344,8 +1344,8 @@ void TestBreakIterator::testGraphemeIteration()
 
     // Korean may also use grapheme clusters for character composition
     {
-        aLocale.Language = "ko";
-        aLocale.Country = "KR";
+        aLocale.Language = u"ko"_ustr;
+        aLocale.Country = u"KR"_ustr;
 
         static constexpr OUString aTest = u"각"_ustr;
 
@@ -1370,8 +1370,8 @@ void TestBreakIterator::testGraphemeIteration()
 void TestBreakIterator::testWeak()
 {
     lang::Locale aLocale;
-    aLocale.Language = "en";
-    aLocale.Country = "US";
+    aLocale.Language = u"en"_ustr;
+    aLocale.Country = u"US"_ustr;
 
     {
         static constexpr OUString aWeaks =
@@ -1412,8 +1412,8 @@ void TestBreakIterator::testWeak()
 void TestBreakIterator::testAsian()
 {
     lang::Locale aLocale;
-    aLocale.Language = "en";
-    aLocale.Country = "US";
+    aLocale.Language = u"en"_ustr;
+    aLocale.Country = u"US"_ustr;
 
     {
         static constexpr OUString aAsians =
@@ -1445,8 +1445,8 @@ void TestBreakIterator::testAsian()
 void TestBreakIterator::testLao()
 {
     lang::Locale aLocale;
-    aLocale.Language = "lo";
-    aLocale.Country = "LA";
+    aLocale.Language = u"lo"_ustr;
+    aLocale.Country = u"LA"_ustr;
 
     static constexpr OUString aTest = u"\u0e8d\u0eb4\u0e99\u0e94\u0eb5\u0e95\u0ec9\u0ead\u0e99\u0eae\u0eb1\u0e9a"_ustr;
     i18n::Boundary aBounds = m_xBreak->getWordBoundary(aTest, 0, aLocale,
@@ -1478,8 +1478,8 @@ void TestBreakIterator::testLao()
 void TestBreakIterator::testThai()
 {
     lang::Locale aLocale;
-    aLocale.Language = "th";
-    aLocale.Country = "TH";
+    aLocale.Language = u"th"_ustr;
+    aLocale.Country = u"TH"_ustr;
 
     //See http://lists.freedesktop.org/archives/libreoffice/2012-February/025959.html
     {
@@ -1594,8 +1594,8 @@ void TestBreakIterator::testKhmer()
 void TestBreakIterator::doTestJapanese(uno::Reference< i18n::XBreakIterator > const &xBreak)
 {
     lang::Locale aLocale;
-    aLocale.Language = "ja";
-    aLocale.Country = "JP";
+    aLocale.Language = u"ja"_ustr;
+    aLocale.Country = u"JP"_ustr;
     i18n::Boundary aBounds;
 
     {
@@ -1658,8 +1658,8 @@ void TestBreakIterator::testJapanese()
 void TestBreakIterator::testChinese()
 {
     lang::Locale stLocale;
-    stLocale.Language = "zh";
-    stLocale.Country = "CN";
+    stLocale.Language = u"zh"_ustr;
+    stLocale.Country = u"CN"_ustr;
 
     // Verify dictionary-based word breakiterator
     {
@@ -1778,8 +1778,8 @@ void TestBreakIterator::testChinese()
 void TestBreakIterator::testKorean()
 {
     lang::Locale stLocale;
-    stLocale.Language = "ko";
-    stLocale.Country = "KR";
+    stLocale.Language = u"ko"_ustr;
+    stLocale.Country = u"KR"_ustr;
 
     {
         i18n::LineBreakHyphenationOptions stHyphOptions;
@@ -1927,8 +1927,8 @@ void TestBreakIterator::testHebrewGereshGershaim()
 
     lang::Locale aLocale;
 
-    aLocale.Language = "he";
-    aLocale.Country = "IL";
+    aLocale.Language = u"he"_ustr;
+    aLocale.Country = u"IL"_ustr;
 
     // Unicode U+05F3 HEBREW PUNCTUATION GERESH
     {
@@ -2025,8 +2025,8 @@ void TestBreakIterator::testLegacySurrogatePairs()
 {
     lang::Locale aLocale;
 
-    aLocale.Language = "ja";
-    aLocale.Country = "JP";
+    aLocale.Language = u"ja"_ustr;
+    aLocale.Country = u"JP"_ustr;
 
     // i#75632: [surrogate pair] Japanese word break does not work properly for surrogate pairs.
     // and many others to address bugs: i#75631 i#75633 i#75412 etc.
@@ -2086,8 +2086,8 @@ void TestBreakIterator::testWordCount()
     // This is a characteristic test for word count using test data from the linked bug.
     {
         lang::Locale aLocale;
-        aLocale.Language = "en";
-        aLocale.Country = "US";
+        aLocale.Language = u"en"_ustr;
+        aLocale.Country = u"US"_ustr;
 
         const OUString aStr = u""
                               "test data for word count issue #80815\n"
@@ -2117,8 +2117,8 @@ void TestBreakIterator::testWordCount()
     // Test that the switch to upstream ICU for CJ word boundary analysis doesn't change word count.
     {
         lang::Locale aLocale;
-        aLocale.Language = "ja";
-        aLocale.Country = "JP";
+        aLocale.Language = u"ja"_ustr;
+        aLocale.Country = u"JP"_ustr;
 
         const OUString aStr = u"Wordの様にワード数をするのにTest\n植松町"_ustr;
 
@@ -2130,8 +2130,8 @@ void TestBreakIterator::testWordCount()
     // Per i#80815, the intention for the word count feature is to emulate the behavior of MS Word.
     {
         lang::Locale aLocale;
-        aLocale.Language = "ko";
-        aLocale.Country = "KR";
+        aLocale.Language = u"ko"_ustr;
+        aLocale.Country = u"KR"_ustr;
 
         // Basic case: Korean words are counted as space-delimited. In particular, grammatical
         // particles are treated as part of the previous word.

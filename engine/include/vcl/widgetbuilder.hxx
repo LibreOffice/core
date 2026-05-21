@@ -211,7 +211,7 @@ protected:
         // Internal-children default in glade to not having their visible bits set
         // even though they are visible (generally anyway)
         if (!sInternalChild.empty())
-            aProperties[u"visible"_ustr] = "True";
+            aProperties[u"visible"_ustr] = u"True"_ustr;
 
         WidgetPtr pCurrentChild = nullptr;
         while (true)
