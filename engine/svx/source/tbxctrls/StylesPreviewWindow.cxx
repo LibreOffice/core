@@ -24,6 +24,7 @@
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <utility>
+#include <vcl/commandinfoprovider.hxx>
 #include <vcl/svapp.hxx>
 #include <sfx2/objsh.hxx>
 #include <svl/itemset.hxx>
@@ -438,6 +439,7 @@ StylesPreviewWindow_Base::StylesPreviewWindow_Base(
     m_xStylesView->connect_item_activated(LINK(this, StylesPreviewWindow_Base, DoubleClick));
     m_xStylesView->connect_command(LINK(this, StylesPreviewWindow_Base, DoCommand));
     m_xStylesView->connect_get_image(LINK(this, StylesPreviewWindow_Base, GetPreviewImage));
+    m_xStylesView->connect_query_tooltip(LINK(this, StylesPreviewWindow_Base, QueryTooltip));
 
     const css::uno::Reference<css::frame::XDispatchProvider> xProvider(m_xFrame,
                                                                        css::uno::UNO_QUERY);
@@ -479,6 +481,18 @@ IMPL_LINK(StylesPreviewWindow_Base, DoubleClick, weld::IconView&, rIconView, boo
 IMPL_LINK(StylesPreviewWindow_Base, DoCommand, const CommandEvent&, rPos, bool)
 {
     return Command(rPos);
+}
+
+IMPL_LINK(StylesPreviewWindow_Base, QueryTooltip, const weld::TreeIter&, rIter, OUString)
+{
+    const OUString sStyleId = m_xStylesView->get_id(rIter);
+    const OUString sCommand
+        = ".uno:StyleApply?Style:string=" + sStyleId + "&FamilyName:string=ParagraphStyles";
+    const OUString sShortcut = vcl::CommandInfoProvider::GetCommandShortcut(sCommand, m_xFrame);
+    if (sShortcut.isEmpty())
+        return OUString();
+
+    return m_xStylesView->get_text(rIter) + " (" + sShortcut + ")";
 }
 
 StylesPreviewWindow_Base::~StylesPreviewWindow_Base()

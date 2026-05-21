@@ -122,6 +122,7 @@ protected:
     DECL_LINK(DoubleClick, weld::IconView&, bool);
     DECL_LINK(DoCommand, const CommandEvent&, bool);
     DECL_LINK(GetPreviewImage, const weld::encoded_image_query&, bool);
+    DECL_LINK(QueryTooltip, const weld::TreeIter&, OUString);
 
 public:
     StylesPreviewWindow_Base(weld::Builder& xBuilder, const StylePreviewList& rDefaultStyles,
