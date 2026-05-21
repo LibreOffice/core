@@ -85,7 +85,6 @@ $(eval $(call gb_Library_add_exception_objects,slideshow,\
     slideshow/source/engine/rehearsetimingsactivity \
     slideshow/source/engine/screenupdater \
     slideshow/source/engine/shapeattributelayer \
-    slideshow/source/engine/shapes/appletshape \
     slideshow/source/engine/shapes/backgroundshape \
     slideshow/source/engine/shapes/drawinglayeranimation \
     slideshow/source/engine/shapes/drawshape \
@@ -96,7 +95,6 @@ $(eval $(call gb_Library_add_exception_objects,slideshow,\
     slideshow/source/engine/shapes/mediashape \
     slideshow/source/engine/shapes/shapeimporter \
     slideshow/source/engine/shapesubset \
-    slideshow/source/engine/shapes/viewappletshape \
     slideshow/source/engine/shapes/viewbackgroundshape \
     slideshow/source/engine/shapes/viewmediashape \
     slideshow/source/engine/shapes/viewshape \
