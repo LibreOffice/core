@@ -165,7 +165,7 @@ class SvxOpticalSizingItem;
 #define SID_ATTR_PARA_AUTOFRAMEDIRECTION                TypedWhichId<SvxAutoFrameDirectionItem>( SID_SVX_START + 946 )
 #define SID_ATTR_PARA_LRSPACE_VERTICAL                  ( SID_SVX_START + 947 )
 #define SID_ATTR_PARA_LEFT_TO_RIGHT                     TypedWhichId<SfxBoolItem>( SID_SVX_START + 950 )
-#define SID_ATTR_PARA_RIGHT_TO_LEFT                     ( SID_SVX_START + 951 )
+#define SID_ATTR_PARA_RIGHT_TO_LEFT                     TypedWhichId<SfxBoolItem>( SID_SVX_START + 951 )
 #define SID_ATTR_CHAR_HIDDEN                            TypedWhichId<SvxCharHiddenItem>( SID_SVX_START + 989 )
 #define SID_ATTR_CHAR_LATIN_FONT                        ( SID_SVX_START + 994 )
 #define SID_ATTR_CHAR_LATIN_FONTHEIGHT                  TypedWhichId<SvxFontHeightItem>( SID_SVX_START + 995 )

@@ -602,8 +602,16 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
             const SfxPoolItem* pPoolItem;
             if( pNewAttrs && SfxItemState::SET == pNewAttrs->GetItemState( nSlot, true, &pPoolItem ) )
             {
-                if( !pPoolItem->StaticWhichCast(SID_ATTR_PARA_LEFT_TO_RIGHT).GetValue() )
-                    bLeftToRight = !bLeftToRight;
+                if (bLeftToRight)
+                {
+                    if( !pPoolItem->StaticWhichCast(SID_ATTR_PARA_LEFT_TO_RIGHT).GetValue() )
+                        bLeftToRight = !bLeftToRight;
+                }
+                else
+                {
+                    if( !pPoolItem->StaticWhichCast(SID_ATTR_PARA_RIGHT_TO_LEFT).GetValue() )
+                        bLeftToRight = !bLeftToRight;
+                }
             }
             SfxItemSet aAttr(SfxItemSet::makeFixedSfxItemSet<
                 EE_PARA_WRITINGDIR, EE_PARA_WRITINGDIR,
