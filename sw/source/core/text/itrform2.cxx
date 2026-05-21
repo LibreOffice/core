@@ -2435,7 +2435,7 @@ void SwTextFormatter::CalcRealHeight( bool bNewLine )
 
                         // extend line height by (nPropLineSpace - 100) percent of the font height
                         nTmp -= 100;
-                        nTmp *= m_pCurr->GetTextHeight();
+                        nTmp *= m_pCurr->GetLineSpacingBaseHeight();
                         nTmp /= 100;
                         nTmp += nLineHeight;
                         if (nTmp < 1)

@@ -111,7 +111,7 @@ void SwLineLayout::Height(const SwTwips nNew, const bool bText)
 {
     SwPositiveSize::Height(nNew);
     if (bText)
-        m_nTextHeight = nNew;
+        m_nLineSpacingBaseHeight = nNew;
 }
 
 // class SwLineLayout: This is the layout of a single line, which is made
@@ -465,6 +465,12 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
                                 // Just care about the portion height.
                                 Height(nPosHeight, pPos->IsUsedToCalcLineSpacingHeight(rIDSA));
                         }
+                        else if (GetLineSpacingBaseHeight() < nPosHeight
+                                 && pPos->IsUsedToCalcLineSpacingHeight(rIDSA))
+                        {
+                            SetLineSpacingBaseHeight(nPosHeight);
+                        }
+
                         SwFlyCntPortion* pAsFly(nullptr);
                         if(pPos->IsFlyCntPortion())
                             pAsFly = static_cast<SwFlyCntPortion*>(pPos);
@@ -812,9 +818,8 @@ void SwLineLayout::ResetFlags()
 }
 
 SwLineLayout::SwLineLayout()
-    : m_pNext( nullptr ),
-      m_nRealHeight( 0 ),
-      m_nTextHeight( 0 )
+    : m_pNext(nullptr)
+    , m_nRealHeight(0)
 {
     ResetFlags();
     SetWhichPor( PortionType::Lay );

@@ -83,7 +83,10 @@ private:
     std::unique_ptr<std::deque<sal_uInt16>> m_pKanaComp;  // Used for Kana compression
     std::vector<TextFrameIndex> m_aKashida;
     SwTwips m_nRealHeight;             // The height resulting from line spacing and register
-    SwTwips m_nTextHeight;             // The max height of all non-FlyCnt portions in this Line
+
+    // Height that would be appropriate as double-spacing for this line,
+    // based on the maximum height from a limited set of eligible line portion types.
+    SwTwips m_nLineSpacingBaseHeight = 0;
     SwTwips m_nExtraAscent = 0;
     SwTwips m_nExtraDescent = 0;
     sal_Int32 m_nSpaceCount = 0;       // space count in the line
@@ -179,7 +182,8 @@ public:
     void SetRealHeight( SwTwips nNew ) { m_nRealHeight = nNew; }
     SwTwips GetRealHeight() const { return m_nRealHeight; }
 
-    SwTwips GetTextHeight() const { return m_nTextHeight; }
+    SwTwips GetLineSpacingBaseHeight() const { return m_nLineSpacingBaseHeight; }
+    void SetLineSpacingBaseHeight(SwTwips nSet) { m_nLineSpacingBaseHeight = nSet; }
 
     void SetExtraAscent(SwTwips nNew) { m_nExtraAscent = nNew; }
     SwTwips GetExtraAscent() const { return m_nExtraAscent; }

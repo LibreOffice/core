@@ -79,6 +79,13 @@ DECLARE_OOXMLEXPORT_TEST(testTdf172169_linespacingFootnote, "tdf172169_linespaci
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf172169_linespacingSecondPortion,
+                         "tdf172169_linespacingSecondPortion.odt")
+{
+    // given a two page, double spaced document where enlarged text follows an even larger image
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf172169_intraLinespacing)
 {
     // given a six page, double-spaced document
