@@ -89,6 +89,26 @@ const std::string AI_SYSTEM_PROMPT =
     "without wrapping it in code fences (do NOT use ```markdown or ``` blocks). "
     "Just return the raw markdown content. Be concise and helpful.";
 
+const std::string TONE_NATURAL = " Respond in a natural, conversational tone - warm, human, plain.";
+const std::string TONE_FORMAL =
+    " Respond in a formal tone - structured, precise, avoid contractions and"
+    " colloquialisms.";
+const std::string TONE_SHORT =
+    " Keep your response brief and to the point. Use as few words as possible"
+    " while still answering the question.";
+const std::string TONE_FRIENDLY =
+    " Respond in a warm, friendly tone - approachable, encouraging, with"
+    " personable phrasing.";
+const std::string TONE_PROFESSIONAL =
+    " Respond in a professional tone - clear, polished, business-appropriate,"
+    " free of slang.";
+const std::string TONE_CASUAL =
+    " Respond in a casual, relaxed tone - conversational, easy-going, like"
+    " chatting with a friend.";
+const std::string EMOJIFY_PROMPT =
+    " Add tasteful emoji throughout your response to reinforce mood and key"
+    " points.";
+
 /// Helper to create an OpenAI function-calling tool object.
 Poco::JSON::Object::Ptr makeAITool(const std::string& name,
                                     const std::string& description,
@@ -353,6 +373,15 @@ bool AIChatSession::handleAction(const std::string& firstLine)
     if (docType != "text" && docType != "spreadsheet" && docType != "presentation" && docType != "drawing")
         docType.clear();
 
+    std::string tone;
+    JsonUtil::findJSONValue(requestObj, "tone", tone);
+    if (tone != "natural" && tone != "formal" && tone != "short" && tone != "friendly" &&
+        tone != "professional" && tone != "casual")
+        tone.clear();
+
+    bool emojify = false;
+    JsonUtil::findJSONValue(requestObj, "emojify", emojify);
+
     Poco::JSON::Array::Ptr messages = requestObj->getArray("messages");
     if (!messages || messages->size() == 0)
     {
@@ -470,6 +499,22 @@ bool AIChatSession::handleAction(const std::string& firstLine)
             " existing document layout before making changes."
             " When the user asks you to create new content from scratch (like a table"
             " or text), just generate it directly without extracting first.";
+
+    if (tone == "natural")
+        systemPrompt += TONE_NATURAL;
+    else if (tone == "formal")
+        systemPrompt += TONE_FORMAL;
+    else if (tone == "short")
+        systemPrompt += TONE_SHORT;
+    else if (tone == "friendly")
+        systemPrompt += TONE_FRIENDLY;
+    else if (tone == "professional")
+        systemPrompt += TONE_PROFESSIONAL;
+    else if (tone == "casual")
+        systemPrompt += TONE_CASUAL;
+
+    if (emojify)
+        systemPrompt += EMOJIFY_PROMPT;
 
     // Prepend system message: build a new array with system first, then the rest.
     Poco::JSON::Array::Ptr finalMessages = new Poco::JSON::Array();
