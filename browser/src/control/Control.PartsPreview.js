@@ -441,7 +441,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 					that._map._clip._execCopyCutPaste('copy', '.uno:CopySlide');
 					break;
 				case 'paste':
-					that._pasteSlide();
+					that._pasteSlide(part);
 					break;
 				case 'newslide':
 					that._map.insertPage();
