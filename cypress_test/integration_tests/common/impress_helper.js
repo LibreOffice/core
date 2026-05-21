@@ -270,21 +270,25 @@ function waitForSlideShowIdle(win) {
 	helper.waitForTimers(win, 'slideshowupdate');
 }
 
-// Click a slideshow-nav-container button. The nav container auto-hides
-// after 3s of inactivity via _showSlideControls' setTimeout - under
-// heavy CI load the gap between cypress steps can exceed that and the
-// click then fails with "visibility: hidden". Call the presenter's
-// _showSlideControls first to reset the timer and make the controls
-// visible before the click.
+// Click a slideshow-nav-container button. The nav container auto-hides after
+// 3s of inactivity via _showSlideControls' setTimeout. Under heavy CI load the
+// gap between cypress steps can be more than that and cypress's own retry
+// doesn't know about the auto-hide timer.
+// So re-call _showSlideControls each iteration and click as soon as the button
+// is visible.
 function clickSlideShowNav(win, buttonSelector) {
-	cy.then(function () {
-		var presenter = win.app && win.app.map && win.app.map.slideShowPresenter;
+	var presenter = win.app && win.app.map && win.app.map.slideShowPresenter;
+	cy.waitUntil(function () {
 		if (presenter && presenter._showSlideControls)
 			presenter._showSlideControls();
-	});
-	getSlideShowContent()
-		.find('.slideshow-nav-container ' + buttonSelector)
-		.click();
+		return getSlideShowContent()
+			.find('.slideshow-nav-container ' + buttonSelector)
+			.then(function ($el) {
+				if (!Cypress.dom.isVisible($el)) return false;
+				return cy.wrap($el).click().then(function () { return true; });
+			});
+	}, { interval: 500,
+		errorMsg: 'slideshow nav button "' + buttonSelector + '" never reachable' });
 }
 
 module.exports.assertNotInTextEditMode = assertNotInTextEditMode;
