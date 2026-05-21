@@ -32,6 +32,7 @@
 #include <unotxdoc.hxx>
 #include <ndtxt.hxx>
 #include <IDocumentLayoutAccess.hxx>
+#include <IDocumentRedlineAccess.hxx>
 #include <svx/svxids.hrc>
 
 namespace
@@ -621,6 +622,27 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest11, testResolveCommentThreadPartiallyResolved
     // i.e. the whole thread was unresolved.
     CPPUNIT_ASSERT(pRoot->GetResolved());
     CPPUNIT_ASSERT(pReply->GetResolved());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest11, testRedlineAutoCorrectInsertOverlap)
+{
+    createSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+
+    emulateTyping(u"tset");
+
+    RedlineFlags const nMode(pWrtShell->GetRedlineFlags() | RedlineFlags::On);
+    pWrtShell->SetRedlineFlags(nMode);
+    CPPUNIT_ASSERT(getSwDoc()->getIDocumentRedlineAccess().IsRedlineOn());
+
+    // The trailing space is a tracked insertion adjacent to the autocorrect
+    // word "tset". The replacement "tset" -> "test" must still fire.
+    emulateTyping(u" ");
+
+    // NOTE: whether the autocorrect replacement itself should be recorded
+    // as a tracked change is an open question.
+    CPPUNIT_ASSERT_EQUAL(u"tsettest "_ustr, getParagraph(1)->getString());
 }
 
 } // end of anonymous namespace
