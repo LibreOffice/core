@@ -71,8 +71,14 @@ window.L.Map.include({
 				button.on('click', function () {
 					that._requestFileCopy();
 				});
-			} else if ((!window.ThisIsAMobileApp && !this['wopi'].UserCanWrite) || (!this.options.canTryLock && (window.mode.isSmallScreenDevice() || window.mode.isTablet()))) {
+			} else if (!window.ThisIsAMobileApp && !this['wopi'].UserCanWrite) {
 				$('#mobile-edit-button').hide();
+			} else if (window.mode.isSmallScreenDevice() || window.mode.isTablet()) {
+				// Writeable user stepped back from edit to readonly: keep the FAB
+				// visible so they can re-enter edit mode.
+				button.on('click', function () {
+					that._switchToEditMode();
+				});
 			}
 
 			this._enterReadOnlyMode(perm);

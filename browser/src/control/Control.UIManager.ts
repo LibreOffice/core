@@ -1729,9 +1729,7 @@ class UIManager extends window.L.Control {
 	 */
 	enterReadonlyOrClose(): void {
 		if (this.map.isEditMode()) {
-			// in edit mode, passing 'edit' actually enters readonly mode
-			// and bring the blue circle editmode button back
-			this.map.setPermission('edit');
+			this.map.setPermission('readonly');
 			var toolbar = app.map.topToolbar;
 			if (toolbar) {
 				toolbar.selectItem('closemobile', false);
