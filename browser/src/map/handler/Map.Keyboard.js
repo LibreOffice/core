@@ -464,8 +464,6 @@ window.L.Map.Keyboard = window.L.Handler.extend({
 						this._map.deselectAll();
 						this._map.setPart(partToSelect);
 					}
-					if (app.file.fileBasedView)
-						this._map._docLayer._checkSelectedPart();
 				}
 				else if (this._map.isEditMode() && !app.file.fileBasedView &&
 						this._map.jsdialog &&

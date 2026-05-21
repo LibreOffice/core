@@ -243,8 +243,6 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 					document.activeElement.blur();
 				}
 			}
-			if (app.file.fileBasedView)
-				this._map._docLayer._checkSelectedPart();
 			img.focus();
 		}, this);
 
