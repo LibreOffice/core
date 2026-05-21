@@ -478,6 +478,10 @@ void SwView::NoRotate()
 
 void SwView::ToggleRotate()
 {
+    // no separate rotation mode in online, a rotation handle can be used after selecting the object
+    if (comphelper::COKit::isActive())
+        return;
+
     if ((m_pWrtShell->GetSelectedObjCount() &&
         m_pWrtShell->GetDrawView()->IsRotateAllowed()) ||
           (m_pWrtShell->IsRotationOfSwGrfNodePossible() &&
