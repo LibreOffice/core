@@ -161,10 +161,7 @@ JSDialog.Checkbox = function (
 
 	setDisabled(data.enabled === false);
 
-	JSDialog.SynchronizeDisabledState(
-		container,
-		[checkbox, label].filter(Boolean),
-	); // filter(Boolean) removes nulls
+	JSDialog.SynchronizeDisabledState(container, [checkbox]);
 
 	const toggleFunction = () => {
 		// Compound command read: data.commandField names a property within
