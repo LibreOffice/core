@@ -168,7 +168,6 @@ gb_MERGE_LIBRARY_LIST += \
 	$(call gb_Helper_optional,MARIADBC,$(call gb_Helper_optional,DBCONNECTIVITY,mysqlc)) \
 	$(call gb_Helper_optional,DBCONNECTIVITY,odbc) \
 	pdffilter \
-	$(if $(BUILD_POSTGRESQL_SDBC),postgresql-sdbc) \
 	pricing \
 	$(call gb_Helper_optional,SCRIPTING,protocolhandler) \
 	$(call gb_Helper_optional,DBCONNECTIVITY, \

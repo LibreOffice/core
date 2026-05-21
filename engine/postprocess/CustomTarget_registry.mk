@@ -469,14 +469,6 @@ postprocess_FILES_main += \
 postprocess_DRIVERS += mysqlc
 endif
 
-ifeq ($(BUILD_POSTGRESQL_SDBC),TRUE)
-postprocess_XCDS += postgresql.xcd
-postprocess_DEPS_postgresql := main
-postprocess_FILES_postgresql := \
-    $(call gb_XcuModuleTarget_get_target,connectivity/registry/postgresql)/org/openoffice/Office/DataAccess/Drivers-postgresql.xcu
-postprocess_DRIVERS += postgresql
-endif
-
 ifeq (MACOSX,$(OS))
 postprocess_FILES_main += \
 	$(call gb_XcuModuleTarget_get_target,connectivity/registry/macab)/org/openoffice/Office/DataAccess/Drivers-macab.xcu

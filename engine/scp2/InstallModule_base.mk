@@ -12,7 +12,6 @@ $(eval $(call gb_InstallModule_InstallModule,scp2/base))
 $(eval $(call gb_InstallModule_use_auto_install_libs,scp2/base,\
 	base \
 	base_brand \
-	postgresqlsdbc \
 ))
 
 $(eval $(call gb_InstallModule_define_if_set,scp2/base,\
@@ -29,7 +28,6 @@ $(eval $(call gb_InstallModule_add_scpfiles,scp2/base,\
 
 $(eval $(call gb_InstallModule_add_localized_scpfiles,scp2/base,\
     scp2/source/base/module_base \
-    scp2/source/base/postgresqlsdbc \
 ))
 
 # vim: set shiftwidth=4 tabstop=4 noexpandtab:

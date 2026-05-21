@@ -1,7 +1,0 @@
-PostgreSQL object-relational database management system
-
-We use some pieces of this code for the postgresql database connector.
-
-From [https://www.postgresql.org/].
-
-Release archives at [https://www.postgresql.org/ftp/source/].

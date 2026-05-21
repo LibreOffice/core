@@ -88,16 +88,6 @@ $(eval $(call gb_Module_add_check_targets,connectivity,\
 ))
 endif
 
-ifneq ($(BUILD_POSTGRESQL_SDBC),)
-$(eval $(call gb_Module_add_targets,connectivity,\
-	Configuration_postgresql \
-	Library_postgresql-sdbc \
-	Library_postgresql-sdbc-impl \
-	Package_postgresql-sdbc \
-	Rdb_postgresql-sdbc \
-))
-endif
-
 ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
 
 $(eval $(call gb_Module_add_targets,connectivity,\

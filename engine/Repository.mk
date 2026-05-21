@@ -521,12 +521,6 @@ $(eval $(call gb_Helper_register_plugins_for_install,OOOLIBS,ooo, \
     $(if $(filter $(OS)-$(USE_HEADLESS_CODE),MACOSX-),vclplug_osx) \
 ))
 
-$(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,postgresqlsdbc, \
-	$(if $(BUILD_POSTGRESQL_SDBC), \
-		postgresql-sdbc \
-		postgresql-sdbc-impl) \
-))
-
 ifneq ($(ENABLE_PDFIMPORT),)
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,pdfimport, \
 	pdfimport \
@@ -825,10 +819,6 @@ $(eval $(call gb_Helper_register_packages_for_install,ure,\
 		jvmfwk_jreproperties \
 		$(if $(filter MACOSX,$(OS)),bridges_jnilib_java_uno) \
 	) \
-))
-
-$(eval $(call gb_Helper_register_packages_for_install,postgresqlsdbc,\
-	$(if $(BUILD_POSTGRESQL_SDBC),connectivity_postgresql-sdbc) \
 ))
 
 ifneq ($(ENABLE_WASM_STRIP_PINGUSER),TRUE)

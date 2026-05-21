@@ -3038,65 +3038,6 @@ endef
 endif # SYSTEM_OPENLDAP
 
 
-ifneq ($(SYSTEM_POSTGRESQL),)
-
-define gb_LinkTarget__use_postgresql
-
-$(call gb_LinkTarget_set_include,$(1),\
-	$(POSTGRESQL_INC) \
-	$$(INCLUDE) \
-)
-
-$(call gb_LinkTarget_add_libs,$(1),\
-	-lpq \
-)
-
-$(call gb_LinkTarget_add_ldflags,$(1),\
-	$(POSTGRESQL_LIB) \
-)
-
-endef
-
-else # !SYSTEM_POSTGRESQL
-
-ifeq ($(OS),WNT)
-$(if $(MPL_SUBSET),,\
-$(eval $(call gb_Helper_register_packages_for_install,postgresqlsdbc,\
-	postgresql \
-)))
-endif # WNT
-
-define gb_LinkTarget__use_postgresql
-
-$(call gb_LinkTarget_use_external_project,$(1),postgresql,full)
-
-$(call gb_LinkTarget_set_include,$(1),\
-	-I$(gb_UnpackedTarball_workdir)/postgresql/src/include \
-	-I$(gb_UnpackedTarball_workdir)/postgresql/src/interfaces/libpq \
-	$$(INCLUDE) \
-)
-
-ifeq ($(OS),WNT)
-
-$(call gb_LinkTarget_add_libs,$(1),\
-	$(gb_UnpackedTarball_workdir)/postgresql/$(gb_MSBUILD_CONFIG)/libpq/libpq.lib \
-)
-
-else # !WNT
-
-$(call gb_LinkTarget_add_libs,$(1),\
-	$(gb_UnpackedTarball_workdir)/postgresql/src/interfaces/libpq/libpq$(gb_StaticLibrary_PLAINEXT) \
-	$(gb_UnpackedTarball_workdir)/postgresql/src/common/libpgcommon$(gb_StaticLibrary_PLAINEXT) \
-	$(gb_UnpackedTarball_workdir)/postgresql/src/port/libpgport$(gb_StaticLibrary_PLAINEXT) \
-    $(if $(WITH_GSSAPI),$(GSSAPI_LIBS)) \
-)
-
-endif # !WNT
-
-endef # gb_LinkTarget__use_postgresql
-
-endif # !SYSTEM_POSTGRESQL
-
 ifneq (,$(filter TRUE,$(ENABLE_KF5) $(ENABLE_GTK3_KDE5)))
 
 define gb_LinkTarget__use_kf5
