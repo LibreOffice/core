@@ -1212,6 +1212,7 @@ const std::map<std::u16string_view, KitUnoCommand>& GetKitUnoCommandList()
         { u"RightPara", { PayloadType::IsActivePayload, true } },
         { u"Shadowed", { PayloadType::IsActivePayload, true } },
         { u"SpellOnline", { PayloadType::IsActivePayload, true } },
+        { u"ShowBoundaries", { PayloadType::IsActivePayload, true } },
         { u"OnlineAutoFormat", { PayloadType::IsActivePayload, true } },
         { u"SubScript", { PayloadType::IsActivePayload, true } },
         { u"SuperScript", { PayloadType::IsActivePayload, true } },

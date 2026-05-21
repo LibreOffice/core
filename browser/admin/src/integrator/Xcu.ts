@@ -15,13 +15,19 @@ interface XcuObject {
 	[app: string]: any;
 }
 
+type XcuValue = string | boolean | XcuTree;
+
+interface XcuTree {
+	[key: string]: XcuValue;
+}
+
 const defaultXcuObj: Record<string, any> = {
 	Calc: {
 		Grid: {
+			ShowGrid: false,
 			Option: {
 				SnapToGrid: false,
 				SizeToGrid: true,
-				VisibleGrid: false,
 				Synchronize: true,
 			},
 		},
@@ -37,9 +43,9 @@ const defaultXcuObj: Record<string, any> = {
 	},
 	Draw: {
 		Grid: {
+			ShowGrid: false,
 			Option: {
 				SnapToGrid: true,
-				VisibleGrid: false,
 				Synchronize: false,
 			},
 			SnapGrid: {
@@ -68,9 +74,9 @@ const defaultXcuObj: Record<string, any> = {
 	},
 	Impress: {
 		Grid: {
+			ShowGrid: false,
 			Option: {
 				SnapToGrid: true,
-				VisibleGrid: false,
 				Synchronize: false,
 			},
 			SnapGrid: {
@@ -103,9 +109,9 @@ const defaultXcuObj: Record<string, any> = {
 	},
 	Writer: {
 		Grid: {
+			ShowGrid: false,
 			Option: {
 				SnapToGrid: false,
-				VisibleGrid: false,
 				Synchronize: false,
 			},
 		},
@@ -135,6 +141,11 @@ const defaultXcuObj: Record<string, any> = {
 			},
 			EmptyPages: true,
 		},
+		Content: {
+			Display: {
+				ShowBoundaries: true,
+			},
+		},
 	},
 };
 
@@ -146,10 +157,11 @@ class Xcu {
 		this.fileId = fileId;
 
 		try {
-			this.xcuDataObj =
+			const parsedObj =
 				XcuFileContent === null || XcuFileContent.length === 0
-					? defaultXcuObj
+					? {}
 					: this.parse(XcuFileContent);
+			this.xcuDataObj = this.mergeDefaults(defaultXcuObj, parsedObj);
 		} catch (error) {
 			(window as any).SettingIframe.showErrorModal(
 				_('Something went wrong while loading Document settings.'),
@@ -182,9 +194,6 @@ class Xcu {
 			const path = rawPath.startsWith(prefix)
 				? rawPath.slice(prefix.length)
 				: rawPath;
-
-			// Drop the deprecated Writer/Content/Display setting
-			if (path === 'Writer/Content/Display') return;
 
 			const keys = path.split('/').filter((key) => key.trim() !== '');
 
@@ -230,6 +239,32 @@ class Xcu {
 				}
 			});
 		});
+
+		return result;
+	}
+
+	// Returns an XcuTree with overrides merged over defaults. Keys not present
+	// in defaults are dropped, so removed/deprecated settings fall away.
+	private mergeDefaults(
+		defaults: XcuTree,
+		overrides: XcuValue | undefined,
+	): XcuTree {
+		const overrideTree: XcuTree | undefined =
+			overrides && typeof overrides === 'object' ? overrides : undefined;
+
+		const result: XcuTree = {};
+		for (const key in defaults) {
+			if (!Object.prototype.hasOwnProperty.call(defaults, key)) {
+				continue;
+			}
+			const def = defaults[key];
+			const parsedValue = overrideTree ? overrideTree[key] : undefined;
+			if (typeof def === 'object') {
+				result[key] = this.mergeDefaults(def, parsedValue);
+			} else {
+				result[key] = parsedValue === undefined ? def : parsedValue;
+			}
+		}
 
 		return result;
 	}

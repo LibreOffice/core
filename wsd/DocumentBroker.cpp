@@ -1821,6 +1821,7 @@ const std::vector<std::string>& getUploadableXcuPaths()
         "/org.openoffice.Office.Writer/Grid",
         "/org.openoffice.Office.Writer/Print",
         "/org.openoffice.Office.Writer/Content/Display/GraphicObject",
+        "/org.openoffice.Office.Writer/Content/Display/ShowBoundaries",
         "/org.openoffice.Office.Writer/Content/NonprintingCharacter",
 
         "/org.openoffice.Office.Common/BulletsNumbering",

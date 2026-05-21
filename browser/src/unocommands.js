@@ -597,6 +597,7 @@ var unoCommandsArray = {
 	'SheetRightToLeft':{spreadsheet:{context:_('Sheet R~ight-To-Left'),menu:_('R~ight-To-Left'),},},
 	'Show':{spreadsheet:{menu:_('~Show Sheet...'),},},
 	'ShowAnnotations':{global:{menu:_('Comments'),},},
+	'ShowBoundaries':{text:{context:_('Show boundaries for all types depending on settings at formatting aids.'),menu:_('Boundaries'),},},
 	'ShowColumn':{spreadsheet:{context:_('S~how Columns'),menu:_('~Show'),},},
 	'ShowDetail':{global:{menu:_('~Show Details'),},},
 	'ShowLicense':{global:{menu:_('License Information'),},},

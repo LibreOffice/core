@@ -1737,6 +1737,13 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 				'command': '.uno:ControlCodes',
 				'accessibility': { focusBack: true, combination: 'CC', de: null }
 			},
+			{
+				'id': 'view-show-boundaries',
+				'type': 'bigtoolitem',
+				'text': _UNO('.uno:ShowBoundaries', 'text'),
+				'command': '.uno:ShowBoundaries',
+				'accessibility': { focusBack: true, combination: 'BO', de: null }
+			},
 			{ type: 'separator', id: 'view-controlcodes-break', orientation: 'vertical' },
 			zoomOverflowGroup,
 			{ type: 'separator', id: 'view-zoomin-break', orientation: 'vertical' },

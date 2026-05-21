@@ -588,6 +588,8 @@ class SettingIframe {
 		AllSheets: _('All Sheets'),
 		Size: _('Size to grid'),
 		Content: _('Content'),
+		Display: _('Display'),
+		ShowBoundaries: _('Show Boundaries'),
 		Drawing: _('Drawing'),
 		Page: _('Page'),
 		PageSize: _('Fit to page'),

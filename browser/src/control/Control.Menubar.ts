@@ -189,6 +189,7 @@ class Menubar extends window.L.Control {
 					{name: _UNO('.uno:ShowAnnotations', 'text'), unoid: '.uno:ShowAnnotations', id: 'showannotations', type: 'action'},
 					{name: _UNO('.uno:ShowResolvedAnnotations', 'text'), unoid: '.uno:ShowResolvedAnnotations', id: 'showresolved', type: 'action'},
 					{uno: '.uno:ControlCodes'},
+					{uno: '.uno:ShowBoundaries', id: 'showboundaries'},
 				])},
 			{name: _UNO('.uno:InsertMenu', 'text'), id: 'insert', type: 'menu', accessibility: {combination: 'MN'}, menu: [
 				{name: _('Local Image...'), id: 'insertgraphic', type: 'action'},
