@@ -29,6 +29,13 @@
     "java.jdt.ls.java.home": "/usr/lib/jvm/java-17-openjdk-amd64",
     "java.codeGeneration.useBlocks": true,
     "java.inlayHints.parameterNames.enabled": "literals",
+    "java.import.exclusions": [
+      "**/node_modules/**",
+      "**/.metadata/**",
+      "**/archetype-resources/**",
+      "**/META-INF/maven/**",
+      "engine/qadevOOo/**"
+    ],
     "java.configuration.runtimes": [    
       { 
         "name": "JavaSE-17",
