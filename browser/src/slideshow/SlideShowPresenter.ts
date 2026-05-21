@@ -838,7 +838,6 @@ class SlideShowPresenter {
 			img.style.width = '48px';
 			img.style.height = '48px';
 			img.style.flex = '1 1 25%';
-			img.style.marginInlineStart = '5px';
 			img.style.maxWidth = '100%';
 			img.style.borderRadius = '100%';
 		};
@@ -848,7 +847,6 @@ class SlideShowPresenter {
 		closeImg.setAttribute('aria-label', slideshowCloseText);
 		closeImg.setAttribute('data-cooltip', slideshowCloseText);
 		setImgSize(closeImg);
-		closeImg.style.marginInlineStart = 0;
 		window.L.control.attachTooltipEventListener(closeImg, this._map);
 		closeImg.addEventListener('click', this._onQuit);
 
