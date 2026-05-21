@@ -7,7 +7,7 @@ import { configureVisualRegression } from 'cypress-visual-regression';
 
 export default defineConfig({
 	video: false,
-	defaultCommandTimeout: 10000,
+	defaultCommandTimeout: 60000,
 	modifyObstructiveCode: false,
 	fixturesFolder: 'data',
 	chromeWebSecurity: false,

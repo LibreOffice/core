@@ -34,8 +34,7 @@ describe('Interfering second user.', function() {
 					helper.loadDocument(getComponent(text) + '/' + text);
 				});
 
-			cy.get('#toolbar-up #userlist', { timeout: Cypress.config('defaultCommandTimeout') * 2.0 })
-				.should('be.visible');
+			cy.get('#toolbar-up #userlist').should('be.visible');
 
 			helper.doIfOnMobile(function() {
 				mobileHelper.enableEditingMobile();

@@ -18,7 +18,7 @@ describe.skip(['tagmobile'], 'Trigger hamburger menu options.', function() {
 		});
 	});
 
-	it('Save', { defaultCommandTimeout: 60000 }, function() {
+	it('Save', function() {
 		// Change the document content and save it
 		impressHelper.selectTextShapeInTheCenter();
 

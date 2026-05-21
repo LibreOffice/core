@@ -37,7 +37,7 @@ describe.skip(['tagmobile'], 'Trigger hamburger menu options.', function() {
 		cy.cGet('#mobile-wizard').should('not.be.visible');
 	}
 
-	it('Save', { defaultCommandTimeout: 60000 }, function() {
+	it('Save', function() {
 		// Change the document content and save it
 		writerHelper.selectAllTextOfDoc();
 		cy.wait(1000);

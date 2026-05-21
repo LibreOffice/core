@@ -36,31 +36,31 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Open different file types'
 		helper.assertImageSize(480, 122);
 	}
 
-	it.skip('Open doc file', { defaultCommandTimeout: 60000 }, function() {
+	it.skip('Open doc file', function() {
 		helper.setupAndLoadDocument('writer/testfile.doc');
 		assertData();
 	});
 
-	it.skip('Open docx file', { defaultCommandTimeout: 60000 }, function() {
+	it.skip('Open docx file', function() {
 		helper.setupAndLoadDocument('writer/testfile.docx');
 		assertData();
 	});
 
-	it.skip('Open docm file', { defaultCommandTimeout: 60000 }, function() {
+	it.skip('Open docm file', function() {
 		helper.setupAndLoadDocument('writer/testfile.docm');
 		assertData();
 	});
 
-	it.skip('Open fodt file', { defaultCommandTimeout: 60000 }, function() {
+	it.skip('Open fodt file', function() {
 		helper.setupAndLoadDocument('writer/testfile.fodt');
 		assertData();
 	});
 
-	it.skip('Open dot file', { defaultCommandTimeout: 60000 }, function() {
+	it.skip('Open dot file', function() {
 		desktopHelper.openReadOnlyFile('writer/testfile.dot');
 	});
 
-	it.skip('Open dotm file', { defaultCommandTimeout: 60000 }, function() {
+	it.skip('Open dotm file', function() {
 		desktopHelper.openReadOnlyFile('writer/testfile.dotm');
 	});
 

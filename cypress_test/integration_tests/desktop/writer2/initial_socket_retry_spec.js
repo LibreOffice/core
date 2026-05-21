@@ -37,10 +37,7 @@ describe(['tagdesktop'], 'Initial WebSocket connection retry', function() {
 		// initialization which can be disrupted by the socket
 		// retry flow (the notebookbar container is replaced during
 		// re-initialization but the initialized flag is not reset).
-		var timeout = Cypress.config('defaultCommandTimeout') * 2.0;
-		cy.cGet('#document-canvas', {timeout: timeout})
-			.should('be.visible');
-		cy.cGet('#map', {timeout: timeout})
-			.should('have.class', 'initialized');
+		cy.cGet('#document-canvas').should('be.visible');
+		cy.cGet('#map').should('have.class', 'initialized');
 	});
 });

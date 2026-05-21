@@ -144,8 +144,7 @@ function reloadDocument(filePath) {
 	// loadDocument skips full documentChecks on reload, but we still
 	// need to wait for the document canvas to be visible before
 	// callers start asserting on document content.
-	cy.cGet('#document-canvas', {timeout: Cypress.config('defaultCommandTimeout') * 2.0})
-		.should('be.visible');
+	cy.cGet('#document-canvas').should('be.visible');
 
 	cy.log('<< reloadDocument - end');
 }
@@ -234,7 +233,7 @@ function loadDocumentNextcloud(filePath) {
 	// Open test document
 	cy.cGet('tr[data-file=\'' + fileName + '\']').click();
 
-	cy.cGet('iframe#richdocumentsframe').should('be.visible', {timeout : Cypress.config('defaultCommandTimeout') * 2.0});
+	cy.cGet('iframe#richdocumentsframe').should('be.visible');
 
 	cy.wait(10000);
 
@@ -371,8 +370,7 @@ function upLoadFileToNextCloud(filePath, subsequentLoad) {
 function waitForInterferingUser() {
 	cy.log('>> waitForInterferingUser - start');
 
-	cy.cGet('#toolbar-up #userlist', { timeout: Cypress.config('defaultCommandTimeout') * 2.0 })
-		.should('be.visible');
+	cy.cGet('#toolbar-up #userlist').should('be.visible');
 
 	cy.wait(10000);
 
@@ -382,11 +380,10 @@ function waitForInterferingUser() {
 function documentChecks(skipInitializedCheck = false) {
 	cy.log('>> documentChecks - start');
 
-	var canvasCheck = cy.cGet('#document-canvas', {timeout : Cypress.config('defaultCommandTimeout') * 2.0});
+	var canvasCheck = cy.cGet('#document-canvas');
 	if (!skipInitializedCheck) {
 		canvasCheck.should('be.visible');
-		cy.cGet('#map', {timeout : Cypress.config('defaultCommandTimeout') * 2.0})
-			.should('have.class', 'initialized');
+		cy.cGet('#map').should('have.class', 'initialized');
 	}
 
 	// With php-proxy the client is irresponsive for some seconds after load, because of the incoming messages.
@@ -396,8 +393,7 @@ function documentChecks(skipInitializedCheck = false) {
 
 	if (!skipInitializedCheck /* TODO: if notebookbar mode */) {
 		doIfOnDesktop(() => {
-			cy.cGet('.notebookbar-scroll-wrapper', {timeout : Cypress.config('defaultCommandTimeout') * 2.0})
-				.should('have.class', 'initialized');
+			cy.cGet('.notebookbar-scroll-wrapper').should('have.class', 'initialized');
 		});
 	}
 
@@ -405,7 +401,7 @@ function documentChecks(skipInitializedCheck = false) {
 	if (Cypress.env('INTEGRATION') !== 'nextcloud') {
 		doIfOnDesktop(function() {
 			if (Cypress.env('pdf-view') !== true)
-				cy.cGet('#sidebar-panel', {timeout: Cypress.config('defaultCommandTimeout') * 2.0}).should('be.visible').should('not.be.empty');
+				cy.cGet('#sidebar-panel').should('be.visible').should('not.be.empty');
 
 			// Check that the document does not take the whole window width.
 			cy.window()
@@ -425,7 +421,7 @@ function documentChecks(skipInitializedCheck = false) {
 		// document-load checks rather than the default 10s.
 		doIfOnDesktop(() => {
 			doIfInWriter(() => {
-				cy.cGet('#stylesview.notebookbar .icon-view-item-container img', {timeout: Cypress.config('defaultCommandTimeout') * 2.0})
+				cy.cGet('#stylesview.notebookbar .icon-view-item-container img')
 					.should('exist');
 			});
 		});
@@ -1304,7 +1300,7 @@ function waitUntilCoreIsIdle(win) {
 		win.app.socket.sendMessage('uno .uno:ReportWhenIdle ' + JSON.stringify(idleArgs));
 	});
 
-	cy.wrap(null, { timeout: Cypress.config('defaultCommandTimeout') * 2.0 }).should(function() {
+	cy.wrap(null).should(function() {
 		var matchingCall = spy.getCalls().find(function(call) {
 			var evt = call.args && call.args[0];
 			var textMsg = evt && evt.textMsg;

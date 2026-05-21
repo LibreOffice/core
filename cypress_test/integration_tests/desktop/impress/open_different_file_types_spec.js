@@ -52,43 +52,43 @@ describe.skip(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Open different file t
 			.should('have.text', 'LibreOffice');
 	}
 
-	it('Open pptx file', { defaultCommandTimeout: 60000 }, function() {
+	it('Open pptx file', function() {
 		before('impress/testfile.pptx');
 
 		assertData();
 	});
 
-	it('Open ppt file', { defaultCommandTimeout: 60000 }, function() {
+	it('Open ppt file', function() {
 		before('impress/testfile.ppt');
 
 		assertData();
 	});
 
-	it('Open pptm file', { defaultCommandTimeout: 60000 }, function() {
+	it('Open pptm file', function() {
 		before('impress/testfile.pptm');
 
 		assertData();
 	});
 
-	it('Open pot file', { defaultCommandTimeout: 60000 }, function() {
+	it('Open pot file', function() {
 		desktopHelper.openReadOnlyFile('impress/testfile.pot');
 	});
 
-	it('Open potx file', { defaultCommandTimeout: 60000 }, function() {
+	it('Open potx file', function() {
 		desktopHelper.openReadOnlyFile('impress/testfile.potx');
 	});
 
-	it('Open potm file', { defaultCommandTimeout: 60000 }, function() {
+	it('Open potm file', function() {
 		desktopHelper.openReadOnlyFile('impress/testfile.potm');
 	});
 
-	it('Open fodp file', { defaultCommandTimeout: 60000 }, function() {
+	it('Open fodp file', function() {
 		before('impress/testfile.fodp');
 
 		assertData();
 	});
 
-	it('Open ppsx file', { defaultCommandTimeout: 60000 }, function() {
+	it('Open ppsx file', function() {
 		before('impress/testfile.ppsx');
 
 		assertData();

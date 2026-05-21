@@ -70,7 +70,7 @@ describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Change shape properties via
 		cy.cGet('body').contains('.menu-entry-with-icon', 'Shape').click();
 		cy.cGet('.basicshapes_right-triangle').click();
 		// Check that the shape is there
-		cy.cGet('#document-container svg g', { timeout: Cypress.config('defaultCommandTimeout') * 2.0 }).should('have.class', 'com.sun.star.drawing.CustomShape');
+		cy.cGet('#document-container svg g').should('have.class', 'com.sun.star.drawing.CustomShape');
 	});
 
 	function triggerNewSVG() {

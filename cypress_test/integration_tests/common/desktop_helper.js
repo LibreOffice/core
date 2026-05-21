@@ -465,7 +465,7 @@ function openReadOnlyFile(filePath) {
 	helper.loadDocument(filePath, true);
 
 	//check doc is loaded
-	cy.cGet('.leaflet-canvas-container canvas', {timeout : Cypress.config('defaultCommandTimeout') * 2.0});
+	cy.cGet('.leaflet-canvas-container canvas');
 
 	helper.isCanvasWhite(false);
 

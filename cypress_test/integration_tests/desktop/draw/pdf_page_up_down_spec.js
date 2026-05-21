@@ -38,7 +38,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'PDF View Tests', function(
 		cy.cGet('#preview-frame-part-5').should('be.visible');
 	});
 
-	it.skip('PDF insert comment', { env: { 'pdf-view': true }, defaultCommandTimeout: 60000 }, function() {
+	it.skip('PDF insert comment', { env: { 'pdf-view': true } }, function() {
 
 		// Insert some comment into the PDF.
 		desktopHelper.insertComment();

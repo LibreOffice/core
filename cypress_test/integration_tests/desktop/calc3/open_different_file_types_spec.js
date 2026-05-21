@@ -16,7 +16,7 @@ describe.skip(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Open different file t
 		calcHelper.assertSheetContents(expectedData);
 	}
 
-	it('Open xls file', { defaultCommandTimeout: 60000 }, function () {
+	it('Open xls file', function () {
 		helper.setupAndLoadDocument('calc/testfile.xls');
 
 		assertData();
@@ -24,13 +24,13 @@ describe.skip(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Open different file t
 		desktopHelper.insertImage();
 	});
 
-	it('Open xlsx file', { defaultCommandTimeout: 60000 }, function () {
+	it('Open xlsx file', function () {
 		helper.setupAndLoadDocument('calc/testfile.xlsx');
 
 		assertData();
 	});
 
-	it('Open csv file', { defaultCommandTimeout: 60000 }, function() {
+	it('Open csv file', function() {
 		//to fit csv jsdialog in window
 		cy.viewport(1280, 960);
 
@@ -53,7 +53,7 @@ describe.skip(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Open different file t
 		assertData();
 	});
 
-	it('Open xlsb file', { defaultCommandTimeout: 60000 }, function() {
+	it('Open xlsb file', function() {
 		desktopHelper.openReadOnlyFile('calc/testfile.xlsb');
 
 		cy.cGet('#mobile-edit-button').should('be.visible').click();
@@ -65,7 +65,7 @@ describe.skip(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Open different file t
 		cy.cGet('#PermissionMode').should('be.visible').should('have.text', ' Read-only ');
 	});
 
-	it('Open xlsm file', { defaultCommandTimeout: 60000 }, function() {
+	it('Open xlsm file', function() {
 		helper.setupAndLoadDocument('calc/testfile.xlsm');
 
 		assertData();
@@ -73,19 +73,19 @@ describe.skip(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Open different file t
 		desktopHelper.insertImage();
 	});
 
-	it('Open xltm file', { defaultCommandTimeout: 60000 }, function() {
+	it('Open xltm file', function() {
 		desktopHelper.openReadOnlyFile('calc/testfile.xltm');
 
 		cy.cGet('#mobile-edit-button').should('not.be.visible');
 	});
 
-	it('Open xltx file', { defaultCommandTimeout: 60000 }, function() {
+	it('Open xltx file', function() {
 		desktopHelper.openReadOnlyFile('calc/testfile.xltm');
 
 		cy.cGet('#mobile-edit-button').should('not.be.visible');
 	});
 
-	it('Open fods file', { defaultCommandTimeout: 60000 }, function() {
+	it('Open fods file', function() {
 		helper.setupAndLoadDocument('calc/testfile.fods');
 
 		//select all the content of doc

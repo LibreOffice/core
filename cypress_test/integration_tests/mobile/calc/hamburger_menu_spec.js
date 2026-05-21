@@ -7,7 +7,7 @@ var repairHelper = require('../../common/repair_document_helper');
 
 describe.skip(['tagmobile'], 'Trigger hamburger menu options.', function() {
 
-	it('Save', { defaultCommandTimeout: 60000 }, function() {
+	it('Save', function() {
 		var newFilePath = helper.setupAndLoadDocument('calc/hamburger_menu.ods');
 		mobileHelper.enableEditingMobile();
 

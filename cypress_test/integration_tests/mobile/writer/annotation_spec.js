@@ -24,7 +24,7 @@ describe(['tagmobile'], 'Annotation tests.', function() {
 		skipDocModifiedMessage();
 	});
 
-	it('Saving comment.', { defaultCommandTimeout: 60000 }, function() {
+	it('Saving comment.', function() {
 		mobileHelper.insertComment();
 		mobileHelper.selectHamburgerMenuItem(['File', 'Save']);
 		helper.reloadDocument(newFilePath);
