@@ -10282,8 +10282,6 @@ slideshow/source/engine/rehearsetimingsactivity.cxx
 slideshow/source/engine/rehearsetimingsactivity.hxx
 slideshow/source/engine/screenupdater.cxx
 slideshow/source/engine/shapeattributelayer.cxx
-slideshow/source/engine/shapes/appletshape.cxx
-slideshow/source/engine/shapes/appletshape.hxx
 slideshow/source/engine/shapes/backgroundshape.cxx
 slideshow/source/engine/shapes/backgroundshape.hxx
 slideshow/source/engine/shapes/drawinglayeranimation.cxx
@@ -10301,8 +10299,6 @@ slideshow/source/engine/shapes/intrinsicanimationactivity.hxx
 slideshow/source/engine/shapes/mediashape.cxx
 slideshow/source/engine/shapes/mediashape.hxx
 slideshow/source/engine/shapes/shapeimporter.cxx
-slideshow/source/engine/shapes/viewappletshape.cxx
-slideshow/source/engine/shapes/viewappletshape.hxx
 slideshow/source/engine/shapes/viewbackgroundshape.cxx
 slideshow/source/engine/shapes/viewbackgroundshape.hxx
 slideshow/source/engine/shapes/viewmediashape.cxx
