@@ -863,15 +863,52 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf140912_PicturePlaceholder)
     // Given a graphic placeholder with a custom prompt:
     createSdImpressDoc("pptx/tdfpictureplaceholder.pptx");
 
-    uno::Reference<beans::XPropertySet> xShapeProps(getShapeFromPage(0, 0));
-    bool isEmptyPresentationObject = false;
-    // Without the fix, it would not be imported as empty presentation object;
-    // the text would be treated as its content.
-    xShapeProps->getPropertyValue(u"IsEmptyPresentationObject"_ustr) >>= isEmptyPresentationObject;
-    CPPUNIT_ASSERT(isEmptyPresentationObject);
+    awt::Size aSizeBefore;
+    awt::Point aPosBefore;
+    {
+        uno::Reference<beans::XPropertySet> xShapeProps(getShapeFromPage(0, 0));
+        bool isEmptyPresentationObject = false;
+        // Without the fix, it would not be imported as empty presentation object;
+        // the text would be treated as its content.
+        xShapeProps->getPropertyValue(u"IsEmptyPresentationObject"_ustr)
+            >>= isEmptyPresentationObject;
+        CPPUNIT_ASSERT(isEmptyPresentationObject);
 
-    // If we supported custom prompt text, here we would also test "String" property,
-    // which would be equal to "Insert Image". See first tests: testCustomPromptTexts
+        // If we supported custom prompt text, here we would also test "String" property,
+        // which would be equal to "Insert Image". See first tests: testCustomPromptTexts
+
+        auto xShape = xShapeProps.queryThrow<drawing::XShape>();
+        aSizeBefore = xShape->getSize();
+        aPosBefore = xShape->getPosition();
+    }
+
+    // The picture placeholder must round-trip with its size and position (inherited from the layout
+    // via an empty <p:spPr/>), and must remain visible.
+    saveAndReload(TestFilter::PPTX);
+
+    {
+        // After reload, the saved markup should be <p:sp> with <p:ph type="pic"/>
+        // and an empty <p:spPr/>.
+        xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+        assertXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp/p:nvSpPr/p:nvPr/p:ph", "type", u"pic");
+        assertXPathChildren(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp/p:spPr", 0);
+
+        uno::Reference<beans::XPropertySet> xShapeProps(getShapeFromPage(0, 0));
+        bool bEmpty = false;
+        xShapeProps->getPropertyValue(u"IsEmptyPresentationObject"_ustr) >>= bEmpty;
+        CPPUNIT_ASSERT(bEmpty);
+
+        auto xShape = xShapeProps.queryThrow<drawing::XShape>();
+        const awt::Size aSizeAfter(xShape->getSize());
+        const awt::Point aPosAfter(xShape->getPosition());
+
+        // Size and position must survive the round-trip. Without proper layout inheritance in the
+        // reimport path the shape would be 0x0 at (0, 0) and visually disappear.
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(aSizeBefore.Width, aSizeAfter.Width, 1);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(aSizeBefore.Height, aSizeAfter.Height, 1);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(aPosBefore.X, aPosAfter.X, 1);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(aPosBefore.Y, aPosAfter.Y, 1);
+    }
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testEnhancedPathViewBox)

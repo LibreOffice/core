@@ -172,6 +172,7 @@ public:
     ShapeExport&        WriteNonVisualProperties(const Reference< XShape >& xShape) override;
     ShapeExport&        WriteTextShape(const Reference< XShape >& xShape) override;
     ShapeExport&        WriteUnknownShape(const Reference< XShape >& xShape) override;
+    ShapeExport&        WriteGraphicObjectShape(const Reference< XShape >& xShape) override;
     ShapeExport&        WritePlaceholderShape(const Reference< XShape >& xShape, PlaceholderType ePlaceholder);
     /** Writes a placeholder shape that references the placeholder on the master slide */
     ShapeExport&        WritePlaceholderReferenceShape(PlaceholderType ePlaceholder, sal_Int32 nReferencedPlaceholderIdx, PageType ePageType, const Reference<XPropertySet>& rXPagePropSet);
@@ -219,6 +220,8 @@ const char* getPlaceholderTypeName(PlaceholderType ePlaceholder)
             return "title";
         case Subtitle:
             return "subTitle";
+        case Picture:
+            return "pic";
         default:
             SAL_INFO("sd.eppt", "warning: unhandled placeholder type: " << ePlaceholder);
             return "";
@@ -387,6 +390,32 @@ ShapeExport& PowerPointShapeExport::WriteUnknownShape(const Reference< XShape >&
         SAL_WARN("sd.eppt", "unknown shape not handled: " << sShapeType.toUtf8());
 
     return *this;
+}
+
+ShapeExport& PowerPointShapeExport::WriteGraphicObjectShape(const Reference<XShape>& xShape)
+{
+    // Picture placeholders serialise as <p:sp> with <p:ph type="pic"/>: on
+    // a layout/master always, on a slide only while still empty (a
+    // user-inserted picture remains a <p:pic>).
+    if (xShape && xShape->getShapeType() == "com.sun.star.presentation.GraphicObjectShape")
+    {
+        if (auto xProps = xShape.query<XPropertySet>())
+        {
+            try
+            {
+                bool bIsEmpty = xProps->getPropertyValue(u"IsEmptyPresentationObject"_ustr) == true;
+                if ((mbMaster || bIsEmpty) && WritePlaceholder(xShape, Picture, mbMaster))
+                    return *this;
+            }
+            catch (const UnknownPropertyException&)
+            {
+                // Plain drawing.GraphicObjectShape has no
+                // IsEmptyPresentationObject; fall through.
+            }
+        }
+    }
+
+    return ShapeExport::WriteGraphicObjectShape(xShape);
 }
 
 PowerPointExport::PowerPointExport(const Reference< XComponentContext >& rContext, const uno::Sequence<uno::Any>& rArguments)
@@ -2550,38 +2579,51 @@ ShapeExport& PowerPointShapeExport::WritePlaceholderShape(const Reference< XShap
     mpFS->endElementNS(XML_p, XML_nvPr);
     mpFS->endElementNS(XML_p, XML_nvSpPr);
 
-    // visual shape properties
-    mpFS->startElementNS(XML_p, XML_spPr);
-    WriteShapeTransformation(xShape, XML_a);
-    WritePresetShape("rect"_ostr);
-    if (xProps.is())
+    if (ePlaceholder == Picture && !mbMaster)
     {
-        WriteBlipFill(xProps, u"Graphic"_ustr);
-        // Do not forget to export the visible properties.
-        WriteFill( xProps, xShape->getSize());
-        WriteOutline( xProps );
-        WriteShapeEffects( xProps );
-
-        bool bHas3DEffectinShape = false;
-        uno::Sequence<beans::PropertyValue> grabBag;
-        if (xProps->getPropertySetInfo()->hasPropertyByName(u"InteropGrabBag"_ustr))
-            xProps->getPropertyValue(u"InteropGrabBag"_ustr) >>= grabBag;
-
-        for (auto const& it : grabBag)
-            if (it.Name == "3DEffectProperties")
-                bHas3DEffectinShape = true;
-
-        if( bHas3DEffectinShape)
-            Write3DEffects( xProps, /*bIsText=*/false );
+        // An empty <p:spPr/> on the slide lets PowerPoint inherit geometry,
+        // fill and the custGeom polygon from the layout.
+        mpFS->singleElementNS(XML_p, XML_spPr);
     }
-    mpFS->endElementNS(XML_p, XML_spPr);
+    else
+    {
+        // visual shape properties
+        mpFS->startElementNS(XML_p, XML_spPr);
+        WriteShapeTransformation(xShape, XML_a);
+        WritePresetShape("rect"_ostr);
+        if (xProps.is())
+        {
+            // A picture placeholder's "Graphic" property is the internal
+            // placeholder icon; don't serialise it as a blipFill.
+            if (ePlaceholder != Picture)
+                WriteBlipFill(xProps, u"Graphic"_ustr);
+            // Do not forget to export the visible properties.
+            WriteFill( xProps, xShape->getSize());
+            WriteOutline( xProps );
+            WriteShapeEffects( xProps );
+
+            bool bHas3DEffectinShape = false;
+            uno::Sequence<beans::PropertyValue> grabBag;
+            if (xProps->getPropertySetInfo()->hasPropertyByName(u"InteropGrabBag"_ustr))
+                xProps->getPropertyValue(u"InteropGrabBag"_ustr) >>= grabBag;
+
+            for (auto const& it : grabBag)
+                if (it.Name == "3DEffectProperties")
+                    bHas3DEffectinShape = true;
+
+            if( bHas3DEffectinShape)
+                Write3DEffects( xProps, /*bIsText=*/false );
+        }
+        mpFS->endElementNS(XML_p, XML_spPr);
+    }
 
     bool bWritePropertiesAsLstStyles
         = (mePageType == PageType::MASTER)
           && (ePlaceholder == Title || ePlaceholder == Subtitle || ePlaceholder == Outliner);
 
-    WriteTextBox(xShape, XML_p,
-                 bUsePlaceholderIndex || bWritePropertiesAsLstStyles);
+    // A slide-side empty picture placeholder inherits the prompt from the layout.
+    if (ePlaceholder != Picture || mbMaster)
+        WriteTextBox(xShape, XML_p, bUsePlaceholderIndex || bWritePropertiesAsLstStyles);
 
     mpFS->endElementNS(XML_p, XML_sp);
 
@@ -3075,6 +3117,8 @@ Reference<XShape> PowerPointExport::GetReferencedPlaceholderXShape(const Placeho
             ePresObjKind = PresObjKind::Title;
             break;
         case oox::core::Subtitle:
+            break;
+        case oox::core::Picture:
             break;
     }
     if (ePresObjKind != PresObjKind::NONE)

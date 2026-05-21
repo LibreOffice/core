@@ -379,10 +379,10 @@ void PPTShape::addShape(
                         sServiceName = u"com.sun.star.presentation.TableShape"_ustr;
                 break;
                 case XML_pic :
-                    if (meShapeLocation == Layout)
-                        sServiceName = sOutlinerShapeService;
-                    else
-                        sServiceName = u"com.sun.star.presentation.GraphicObjectShape"_ustr;
+                    // <p:ph type="pic"/> is a real picture placeholder on both
+                    // slides and layouts, so the layout's type survives PPTX
+                    // round-trip and slide-side inheritance can resolve it.
+                    sServiceName = u"com.sun.star.presentation.GraphicObjectShape"_ustr;
                 break;
                 case XML_media :
                     if (meShapeLocation == Layout)
