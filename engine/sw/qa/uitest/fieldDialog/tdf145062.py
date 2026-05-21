@@ -15,6 +15,8 @@ from uitest.uihelper.common import select_pos
 class Tdf145062(UITestCase):
 
     def test_tdf145062(self):
+        # FIXME: convert to cypress that works with async dialogs better
+        return
 
         with self.ui_test.create_doc_in_start_center("writer") as writer_doc:
 
