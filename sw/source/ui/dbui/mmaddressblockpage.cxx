@@ -32,6 +32,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/Dialog.hxx>
+#include <vcl/weld/Grid.hxx>
 #include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/ScrolledWindow.hxx>
 #include <vcl/weld/weld.hxx>

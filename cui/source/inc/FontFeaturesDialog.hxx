@@ -14,6 +14,7 @@
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/DialogController.hxx>
+#include <vcl/weld/Grid.hxx>
 #include <vcl/weld/ScrolledWindow.hxx>
 #include <vcl/weld/Window.hxx>
 #include <vcl/weld/weld.hxx>

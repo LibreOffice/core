@@ -86,16 +86,6 @@ public:
     virtual void sort_native_button_order() = 0;
 };
 
-class VCL_DLLPUBLIC Grid : virtual public Container
-{
-public:
-    virtual void set_child_left_attach(weld::Widget& rWidget, int nAttach) = 0;
-    virtual int get_child_left_attach(weld::Widget& rWidget) const = 0;
-    virtual void set_child_column_span(weld::Widget& rWidget, int nCols) = 0;
-    virtual void set_child_top_attach(weld::Widget& rWidget, int nAttach) = 0;
-    virtual int get_child_top_attach(weld::Widget& rWidget) const = 0;
-};
-
 class VCL_DLLPUBLIC Frame : virtual public Container
 {
 public:

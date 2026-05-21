@@ -13,6 +13,8 @@
 
 #include "QtInstanceContainer.hxx"
 
+#include <vcl/weld/Grid.hxx>
+
 #include <QtWidgets/QGridLayout>
 
 class QtInstanceGrid : public QtInstanceContainer, public virtual weld::Grid

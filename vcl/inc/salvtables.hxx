@@ -22,6 +22,7 @@
 #include <vcl/weld/EntryTreeView.hxx>
 #include <vcl/weld/Expander.hxx>
 #include <vcl/weld/FormattedSpinButton.hxx>
+#include <vcl/weld/Grid.hxx>
 #include <vcl/weld/Image.hxx>
 #include <vcl/weld/LevelBar.hxx>
 #include <vcl/weld/LinkButton.hxx>
