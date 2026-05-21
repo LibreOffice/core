@@ -67,6 +67,13 @@ xmlDocUniquePtr XmlTestTools::parseXmlStream(SvStream* pStream)
     return xmlDocUniquePtr(xmlReadDoc(pCharBuffer, nullptr, nullptr, options));
 }
 
+void XmlTestTools::dumpToFile(const MetafileXmlDump& rDumper, const
+        GDIMetaFile& rGDIMetaFile, const OUString& rFileName)
+{
+    SvFileStream aStream(rFileName, StreamMode::WRITE);
+    rDumper.dump(rGDIMetaFile, aStream);
+}
+
 xmlDocUniquePtr XmlTestTools::dumpAndParse(const MetafileXmlDump& rDumper, const GDIMetaFile& rGDIMetaFile)
 {
     SvMemoryStream aStream;

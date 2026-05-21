@@ -266,6 +266,8 @@ HasAutoShowInfo
 HasColumnRowHeaders
 HasDataLabels
 HasExplicitFill
+HasExplicitSpPr
+HasExplicitTxPr
 HasGeography
 HasHorizontalScrollBar
 HasLayoutInfo

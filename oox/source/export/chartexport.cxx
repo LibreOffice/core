@@ -5517,21 +5517,27 @@ void ChartExport::exportOneAxis_chartex(
     }
 
     // ==== majorTickMarks
-    if (GetProperty( xAxisProp, u"Marks"_ustr ) )
+    if (GetProperty( xAxisProp, u"MajorTickmarks"_ustr ) )
     {
         sal_Int32 nValue = 0;
         mAny >>= nValue;
-        pFS->singleElement(FSNS(XML_cx, XML_majorTickMarks), XML_type,
-                getTickMarkLocStr(nValue));
+
+        if (nValue >= 0) {
+            pFS->singleElement(FSNS(XML_cx, XML_majorTickMarks), XML_type,
+                    getTickMarkLocStr(nValue));
+        }
     }
 
     // ==== minorTickMarks
-    if (GetProperty( xAxisProp, u"HelpMarks"_ustr ) )
+    if (GetProperty( xAxisProp, u"MinorTickmarks"_ustr ) )
     {
         sal_Int32 nValue = 0;
         mAny >>= nValue;
-        pFS->singleElement(FSNS(XML_cx, XML_minorTickMarks), XML_type,
-                getTickMarkLocStr(nValue));
+
+        if (nValue >= 0) {
+            pFS->singleElement(FSNS(XML_cx, XML_minorTickMarks), XML_type,
+                    getTickMarkLocStr(nValue));
+        }
     }
 
     // ==== tickLabels
@@ -5567,11 +5573,19 @@ void ChartExport::exportOneAxis_chartex(
             XML_formatCode, aNumberFormatString,
             XML_sourceLinked, bLinkedNumFmt ? "1" : "0");
 
-    // ==== spPr
-    exportShapeProps( xAxisProp, XML_cx );
+    // ==== spPr (only if the axis had one on import)
+    bool bHasSpPr = false;
+    if (xAxisProp.is())
+        xAxisProp->getPropertyValue(u"HasExplicitSpPr"_ustr) >>= bHasSpPr;
+    if (bHasSpPr)
+        exportShapeProps( xAxisProp, XML_cx );
 
-    // ==== txPr
-    exportTextProps(xAxisProp, true);
+    // ==== txPr (only if the axis had one on import)
+    bool bHasTxPr = false;
+    if (xAxisProp.is())
+        xAxisProp->getPropertyValue(u"HasExplicitTxPr"_ustr) >>= bHasTxPr;
+    if (bHasTxPr)
+        exportTextProps(xAxisProp, true);
 
     pFS->endElement( FSNS( XML_cx, XML_axis ) );
 }

@@ -98,10 +98,21 @@ xmlDocUniquePtr Chart2XShapeTest::getXShapeDumpXmlDoc()
 void Chart2XShapeTest::compareAgainstReference(std::u16string_view rDump,
                                                std::u16string_view rReferenceFile)
 {
+    OUString aReference = m_directories.getPathFromSrc(u"/chart2/qa/extras/xshape/data/reference/")
+                          + rReferenceFile;
+
+    // Set UPDATE_XSHAPE_REFERENCE=1 to overwrite the reference dumps
+    // with the live output instead of comparing.
+    if (getenv("UPDATE_XSHAPE_REFERENCE"))
+    {
+        std::ofstream aStream(OUStringToOString(aReference, RTL_TEXTENCODING_UTF8).getStr(),
+                              std::ios::trunc | std::ios::binary);
+        aStream << OUStringToOString(rDump, RTL_TEXTENCODING_UTF8);
+        return;
+    }
+
     checkDumpAgainstFile(
-        rDump,
-        Concat2View(m_directories.getPathFromSrc(u"/chart2/qa/extras/xshape/data/reference/")
-                    + rReferenceFile),
+        rDump, aReference,
         OUStringToOString(
             m_directories.getPathFromSrc(u"/chart2/qa/extras/xshape/data/reference/tolerance.xml"),
             RTL_TEXTENCODING_UTF8)

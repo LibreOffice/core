@@ -32,6 +32,8 @@ public:
 
     static xmlDocUniquePtr dumpAndParse(const MetafileXmlDump& rDumper, const GDIMetaFile& rGDIMetaFile);
     static xmlDocUniquePtr dumpAndParse(const GDIMetaFile& rGDIMetaFile); // using default dumper
+    static void dumpToFile(const MetafileXmlDump& rDumper, const
+        GDIMetaFile& rGDIMetaFile, const OUString& rFileName);
 
 protected:
     XmlTestTools();

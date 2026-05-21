@@ -74,7 +74,8 @@ public:
                             sal_Int32 nAxesSetIdx,
                             DataSourceCxModel::DataMap& raSourceMap,
                             bool bSupportsVaryColorsByPoint,
-                            bool bUseFixedInnerSize );
+                            bool bUseFixedInnerSize,
+                            ChartType eCT);
 
     /** Returns the automatic chart title if the axes set contains only one series. */
     const OUString& getAutomaticTitle() const { return maAutoTitle; }
@@ -104,11 +105,11 @@ AxesSetConverter::AxesSetConverter( const ConverterRoot& rParent, AxesSetModel& 
 {
 }
 
-ModelRef< AxisModel > lclGetOrCreateAxis( const AxesSetModel::AxisMap& rFromAxes, sal_Int32 nAxisIdx, sal_Int32 nDefTypeId, bool bMSO2007Doc )
+ModelRef< AxisModel > lclGetOrCreateAxis( const AxesSetModel::AxisMap& rFromAxes, sal_Int32 nAxisIdx, sal_Int32 nDefTypeId, ChartType eCT )
 {
     ModelRef< AxisModel > xAxis = rFromAxes.get( nAxisIdx );
     if( !xAxis )
-        xAxis.create( nDefTypeId, bMSO2007Doc ).mbDeleted = true;  // missing axis is invisible
+        xAxis.create( nDefTypeId, eCT ).mbDeleted = true;  // missing axis is invisible
     return xAxis;
 }
 
@@ -123,7 +124,8 @@ bool lclHasTypeGroupWithLayout(const AxesSetModel::TypeGroupVector& rTypeGroups,
 void AxesSetConverter::convertFromModel( const Reference< XDiagram >& rxDiagram,
                                         View3DModel& rView3DModel, sal_Int32 nAxesSetIdx,
                                         DataSourceCxModel::DataMap& raSourceMap,
-                                        bool bSupportsVaryColorsByPoint, bool bUseFixedInnerSize)
+                                        bool bSupportsVaryColorsByPoint, bool bUseFixedInnerSize,
+                                        ChartType eCT)
 {
     // chartex clusteredColumn + <cx:binning> is how a histogram is stored in OOXML.
     // But the same markup also appears on the clusteredColumn sub-chart of a
@@ -217,10 +219,12 @@ void AxesSetConverter::convertFromModel( const Reference< XDiagram >& rxDiagram,
                 typeGroup->convertFromModel( rxDiagram, xCoordSystem,
                         nAxesSetIdx,bSupportsVaryColorsByPoint );
 
-            bool bMSO2007Doc = getFilter().isMSO2007Document();
             // convert all axes (create missing axis models)
-            ModelRef< AxisModel > xXAxis = lclGetOrCreateAxis( mrModel.maAxes, API_X_AXIS, rFirstTypeGroup.getTypeInfo().mbCategoryAxis ? C_TOKEN( catAx ) : C_TOKEN( valAx ), bMSO2007Doc );
-            ModelRef< AxisModel > xYAxis = lclGetOrCreateAxis( mrModel.maAxes, API_Y_AXIS, C_TOKEN( valAx ), bMSO2007Doc );
+            ModelRef< AxisModel > xXAxis = lclGetOrCreateAxis( mrModel.maAxes,
+                    API_X_AXIS, rFirstTypeGroup.getTypeInfo().mbCategoryAxis ?
+                    C_TOKEN( catAx ) : C_TOKEN( valAx ), eCT );
+            ModelRef< AxisModel > xYAxis = lclGetOrCreateAxis( mrModel.maAxes,
+                    API_Y_AXIS, C_TOKEN( valAx ), eCT );
 
             AxisConverter aXAxisConv( *this, *xXAxis );
             aXAxisConv.convertFromModel(xCoordSystem, aTypeGroups, xYAxis.get(), nAxesSetIdx,
@@ -231,7 +235,8 @@ void AxesSetConverter::convertFromModel( const Reference< XDiagram >& rxDiagram,
 
             if( rFirstTypeGroup.isDeep3dChart() )
             {
-                ModelRef< AxisModel > xZAxis = lclGetOrCreateAxis( mrModel.maAxes, API_Z_AXIS, C_TOKEN( serAx ), bMSO2007Doc );
+                ModelRef< AxisModel > xZAxis = lclGetOrCreateAxis(
+                        mrModel.maAxes, API_Z_AXIS, C_TOKEN( serAx ), eCT );
                 AxisConverter aZAxisConv( *this, *xZAxis );
                 aZAxisConv.convertFromModel(xCoordSystem, aTypeGroups, nullptr, nAxesSetIdx,
                                             API_Z_AXIS, bUseFixedInnerSize);
@@ -471,7 +476,8 @@ void PlotAreaConverter::convertFromModel( View3DModel& rView3DModel,
     {
         AxesSetConverter aAxesSetConv(*this, *axesSet);
         aAxesSetConv.convertFromModel(xDiagram, rView3DModel, nAxesSetIdx,
-                rDataCxModel.maSourceMap, bSupportsVaryColorsByPoint, bUseFixedInnerSize);
+                rDataCxModel.maSourceMap, bSupportsVaryColorsByPoint,
+                bUseFixedInnerSize, mrModel.meCT);
         if(nAxesSetIdx == nStartAxesSetIdx)
         {
             maAutoTitle = aAxesSetConv.getAutomaticTitle();

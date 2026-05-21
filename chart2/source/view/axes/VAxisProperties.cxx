@@ -316,13 +316,13 @@ void AxisProperties::init( bool bCartesian )
         m_xAxisModel->getPropertyValue( u"MinorTickmarks"_ustr ) >>= m_nMinorTickmarks;
 
         sal_Int32 nMaxDepth = 0;
-        if(m_nMinorTickmarks!=0)
+        if (m_nMinorTickmarks !=0 )
             nMaxDepth=2;
-        else if(m_nMajorTickmarks!=0)
+        else if (m_nMajorTickmarks !=0 )
             nMaxDepth=1;
 
         m_aTickmarkPropertiesList.clear();
-        for( sal_Int32 nDepth=0; nDepth<nMaxDepth; nDepth++ )
+        for ( sal_Int32 nDepth=0; nDepth<nMaxDepth; nDepth++ )
         {
             TickmarkProperties aTickmarkProperties = makeTickmarkProperties( nDepth );
             m_aTickmarkPropertiesList.push_back( aTickmarkProperties );
