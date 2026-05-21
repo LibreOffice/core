@@ -693,6 +693,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 			id: 'renameSection',
 			type: 'comboboxentry',
 			text: _('Rename Section'),
+			img: 'renameslidesection',
 			pos: 0,
 		}];
 		if (sectionIndex > 0) {
@@ -700,6 +701,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 				id: 'moveSectionUp',
 				type: 'comboboxentry',
 				text: _('Move Section Up'),
+				img: 'movesectionup',
 				pos: 0,
 			});
 		}
@@ -708,6 +710,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 				id: 'moveSectionDown',
 				type: 'comboboxentry',
 				text: _('Move Section Down'),
+				img: 'movesectiondown',
 				pos: 0,
 			});
 		}
@@ -715,6 +718,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 			id: 'removeSection',
 			type: 'comboboxentry',
 			text: _('Remove Section'),
+			img: 'removeslidesection',
 			pos: 0,
 		});
 
