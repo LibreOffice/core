@@ -3153,8 +3153,7 @@ SwRedlineTable::size_type DocumentRedlineManager::GetRedlinePos( const SwNode& r
             SwNodeOffset nStart = pStart->GetNodeIndex(),
                          nEnd = pEnd->GetNodeIndex();
 
-            if( ( RedlineType::Any == nType || nType == pTmp->GetType()) &&
-                nStart <= nNdIdx && nNdIdx <= nEnd )
+            if( pTmp->ContainsType(nType) && nStart <= nNdIdx && nNdIdx <= nEnd )
                 return std::distance(maRedlineTable.begin(), it);
 
             if( nStart > nNdIdx )
@@ -3171,8 +3170,7 @@ SwRedlineTable::size_type DocumentRedlineManager::GetRedlinePos( const SwNode& r
             if( nPt < nMk )
                 std::swap( nMk, nPt );
 
-            if( ( RedlineType::Any == nType || nType == pTmp->GetType()) &&
-                nMk <= nNdIdx && nNdIdx <= nPt )
+            if( pTmp->ContainsType(nType) && nMk <= nNdIdx && nNdIdx <= nPt )
                 return std::distance(maRedlineTable.begin(), it);
 
             if( nMk > nNdIdx )
@@ -3199,7 +3197,7 @@ DocumentRedlineManager::GetRedlineEndPos(SwRedlineTable::size_type nStartPos, co
     while (nEndPosTry < maRedlineTable.size()
            && maRedlineTable[nEndPosTry]->Start()->GetNodeIndex() <= nNdIdx)
     {
-        if (RedlineType::Any == nType || nType == maRedlineTable[nEndPosTry]->GetType())
+        if (maRedlineTable[nEndPosTry]->ContainsType(nType))
         {
             nEndPos = nEndPosTry;
         }
@@ -3286,7 +3284,7 @@ bool DocumentRedlineManager::HasRedline( const SwPaM& rPam, RedlineType nType, b
         if ( pTmp->Start()->GetNode() > rEndNode )
             break;
 
-        if( RedlineType::Any != nType && nType != pTmp->GetType() )
+        if( !pTmp->ContainsType(nType) )
             continue;
 
         // redline over the range

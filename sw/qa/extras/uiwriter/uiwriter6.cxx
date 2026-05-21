@@ -2660,6 +2660,37 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testRedlineAutoCorrect)
     CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testStackedRedlineAutoCorrect)
+{
+    // Tests that the autocorrect capitalisation doesn’t capitalise text contained within in a
+    // stacked delete redline. This is the “weird” part of tdf#172185.
+    createSwDoc();
+
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+
+    pWrtShell->Insert(u"whello"_ustr);
+
+    // Turn on change tracking
+    dispatchCommand(mxComponent, ".uno:TrackChanges", {});
+    // Delete the “w”
+    pWrtShell->SttPara();
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 1, /*bBasicCall=*/false);
+    pWrtShell->Delete();
+    // Select everything
+    pWrtShell->SttPara();
+    pWrtShell->EndPara(true);
+    // Make everything bold. This stacks the format change on top of the delete redline.
+    dispatchCommand(mxComponent, u".uno:Bold"_ustr, {});
+
+    // Type a space at the end to trigger autocorrection
+    pWrtShell->EndPara();
+    emulateTyping(u" ");
+
+    // Checks that the deleted “w” wasn’t capitalised. If tdf#172185 gets fixed fully then the “h”
+    // should get capitalised.
+    CPPUNIT_ASSERT_EQUAL(u"whello "_ustr, getParagraph(1)->getString());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testRedlineAutoCorrect2)
 {
     createSwDoc("redline-autocorrect2.fodt");
