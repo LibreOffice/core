@@ -89,7 +89,6 @@ html[dir='rtl'] .sub-menu-arrow {
 	height: 0;
 	width: 100%;
 	margin: 0;
-	-webkit-overflow-scrolling: touch;
 	overflow: scroll;
 	z-index: 1010;
 	bottom: 34px !important;
@@ -118,8 +117,6 @@ html[dir='rtl'] .sub-menu-arrow {
 .spreadsheet-tab-scroll {
 	overflow-x: scroll;
 	scrollbar-width: none; /*css draft (firefox only)*/
-	-ms-scrollbar: none; /*ie*/
-	-webkit-overflow-scrolling: touch;
 	margin: 0;
 }
 
@@ -211,7 +208,6 @@ textarea.cool-annotation-textarea {
 .ui-scroll-wrapper {
 	overflow-x: scroll !important;
 	scrollbar-width: none; /*css draft (firefox only)*/
-	-ms-scrollbar: none; /*ie*/
 }
 .ui-scroll-wrapper::-webkit-scrollbar { /*webkit only*/
 	display: none;

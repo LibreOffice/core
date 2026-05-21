@@ -4,7 +4,6 @@
 .ui-scroll-wrapper {
 	overflow-x: scroll !important;
 	scrollbar-width: none; /*css draft (firefox only)*/
-	-ms-scrollbar: none; /*ie*/
 }
 .ui-scroll-wrapper::-webkit-scrollbar { /*webkit only*/
 	display: none;
@@ -35,7 +34,6 @@
 }
 .hasnotebookbar {
 	scrollbar-width: none;
-	-ms-overflow-style: none;
 }
 .hasnotebookbar::-webkit-scrollbar {
 	width: 0;
@@ -64,9 +62,6 @@
 	overflow-y: hidden;
 	display: inline-flex;
 	justify-content: flex-start;
-	-webkit-overflow-scrolling: touch;
-	-ms-overflow-style: -ms-autohiding-scrollbar;
-	-ms-autohiding-scrollbar: none;
 	scrollbar-width: none;
 	flex-wrap: nowrap;
 	word-wrap: nowrap;

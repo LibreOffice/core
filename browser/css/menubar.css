@@ -202,7 +202,6 @@ nav.hasnotebookbar [id^='save'].saved::after {
 	height: var(--header-height);
 	/* overflow is set dynamically */
 	scrollbar-width: none;
-	-ms-scrollbar: none;
 }
 
 .main-nav.hasnotebookbar:not(.readonly) {
@@ -216,7 +215,6 @@ nav.hasnotebookbar [id^='save'].saved::after {
 
 	.main-nav.hasnotebookbar {
 		scrollbar-width: unset;
-		-ms-scrollbar: unset;
 	}
 }
 

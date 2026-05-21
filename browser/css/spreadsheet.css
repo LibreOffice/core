@@ -26,7 +26,6 @@
 	overflow-y: hidden;
 	overflow-x: auto;
 	scrollbar-width: none; /* Firefox */
-	-ms-overflow-style: none; /* IE and Edge */
 	margin-left: 6px;
 }
 

@@ -230,8 +230,6 @@ p.mobile-wizard.ui-combobox-text.selected {
 }
 .ui-tabs-content > div[title='Layouts'] {
 	justify-content: center;
-	-ms-box-orient: horizontal !important;
-	display: -moz-flex;
 	display: flex;
 	align-self: center !important;
 	align-items: center !important;
@@ -747,8 +745,7 @@ div#mobile-wizard-content input[type='number'] {
 	width: 37%;
 	padding-left: 8%;
 	border: none;
-	-moz-appearance: textfield;
-	-webkit-appearance: textfield;
+	appearance: textfield;
 	background-color: var(--color-background-dark);
 }
 div#mobile-wizard-content .spinfieldcontainer {
@@ -834,7 +831,6 @@ div#mobile-wizard-content .spinfieldcontainer .spinfieldimage.disabled {
 	height: var(--btn-size);
 	margin: 10px 10px 10px auto !important;
 	float: right;
-	-o-appearance: none;
 	appearance: none;
 	border-radius: var(--border-radius);
 	border: 2px solid var(--color-border);
@@ -867,7 +863,6 @@ div#mobile-wizard-content .spinfieldcontainer .spinfieldimage.disabled {
 	width: var(--btn-size);
 	height: var(--btn-size);
 	margin: 10px 10px 10px auto !important;
-	-o-appearance: none;
 	appearance: none;
 	border: 2px solid var(--color-border);
 	outline: none;

@@ -147,13 +147,6 @@
 		black calc(100% - 12px),
 		transparent 100%
 	);
-	-webkit-mask-image: linear-gradient(
-		to bottom,
-		transparent 0,
-		black 12px,
-		black calc(100% - 12px),
-		transparent 100%
-	);
 }
 
 #aichat-messages-list {

@@ -8,7 +8,6 @@
 	--color-accent-background: var(--color-background-lighter);
 
 	user-select: none;
-	-webkit-user-select: none; /* Safari / WKWebView */
 
 	position: fixed;
 	top: 0;

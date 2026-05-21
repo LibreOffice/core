@@ -35,8 +35,6 @@
 	input[type='checkbox'].autofilter,
 	.jsdialog input[type='checkbox'] {
 		appearance: auto !important;
-		-webkit-appearance: auto !important;
-		-moz-appearance: auto !important;
 		background: none !important
 	}
 

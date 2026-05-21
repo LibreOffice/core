@@ -916,7 +916,6 @@ body button:not(.ui-corner-all):not(.button-primary):not(.unobutton):not(.form-f
 }
 
 input[type='checkbox'].autofilter, .jsdialog input[type='checkbox'] {
-	-o-appearance: none;
 	appearance: none;
 	width: 20px;
 	height: 20px;
@@ -2621,8 +2620,6 @@ button.has-img img {
 	overflow-x: scroll;
 	overflow-y: hidden;
 	scrollbar-width: none; /* Firefox >= 64 */
-	overflow: -moz-scrollbars-none; /* Firefox < 64 */
-	-ms-overflow-style: none;  /* Internet Explorer 10+ */
 	display: flex;
 	align-items: center;
 }

@@ -18,7 +18,6 @@
 	box-sizing: border-box;
 	scrollbar-color: transparent transparent;
 	scrollbar-width: 0;
-	-ms-overflow-style: none;
 }
 
 /* Hiding scroll bar */
@@ -52,7 +51,6 @@
 	overflow-x: auto;
 	scroll-snap-type: x mandatory;
 	scroll-behavior: smooth;
-	-webkit-overflow-scrolling: touch;
 }
 
 .slides::-webkit-scrollbar {
@@ -91,9 +89,6 @@
 	margin: 0 0 0.5rem 0.5rem;
 	position: relative;
 	color: transparent;
-	-webkit-user-select: none; /* Safari */
-	-moz-user-select: none; /* Firefox */
-	-ms-user-select: none; /* IE10+/Edge */
 	user-select: none; /* Standard */
 }
 
@@ -240,7 +235,6 @@ html:not([data-theme='dark']) #slide-1 fig {
 
 .arrow.left {
 	transform: rotate(135deg);
-	-webkit-transform: rotate(135deg);
 }
 
 .arrow.left.close {
