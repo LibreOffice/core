@@ -28,8 +28,11 @@ namespace sd
 */
 class ImpressViewShellBase : public ViewShellBase
 {
+private:
+    static std::map<SfxInterfaceId, std::unique_ptr<SfxViewFactory>> s_pFactories;
 public:
-    SFX_DECL_VIEWFACTORY(ImpressViewShellBase);
+    static SfxViewShell  *CreateInstance(SfxViewFrame& rFrame, SfxViewShell *pOldView);
+    static void           RegisterFactory( SfxInterfaceId nPrio );
 
     /** This constructor is used by the view factory of the SFX
         macros.

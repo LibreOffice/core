@@ -127,20 +127,21 @@ enum class KitDeviceFormFactor
 class SfxViewFactory;
 #define SFX_DECL_VIEWFACTORY(Class) \
 private: \
-    static SfxViewFactory *s_pFactory; \
+    static std::unique_ptr<SfxViewFactory> s_pFactory; \
 public: \
     static SfxViewShell  *CreateInstance(SfxViewFrame& rFrame, SfxViewShell *pOldView); \
     static void           RegisterFactory( SfxInterfaceId nPrio ); \
-    static SfxViewFactory*Factory() { return s_pFactory; } \
+    static SfxViewFactory*Factory() { return s_pFactory.get(); } \
     static void           InitFactory()
 
 #define SFX_IMPL_NAMED_VIEWFACTORY(Class, AsciiViewName) \
-    SfxViewFactory* Class::s_pFactory; \
+    std::unique_ptr<SfxViewFactory> Class::s_pFactory; \
     SfxViewShell* Class::CreateInstance(SfxViewFrame& rFrame, SfxViewShell *pOldView) \
     { return new Class(rFrame, pOldView); } \
     void Class::RegisterFactory( SfxInterfaceId nPrio ) \
     { \
-        s_pFactory = new SfxViewFactory(&CreateInstance,nPrio,AsciiViewName);\
+        assert(!s_pFactory && "initialising this twice will leak memory"); \
+        s_pFactory = std::make_unique<SfxViewFactory>(&CreateInstance,nPrio,AsciiViewName); \
         InitFactory(); \
     } \
     void Class::InitFactory()
