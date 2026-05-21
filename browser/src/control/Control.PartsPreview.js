@@ -768,6 +768,13 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 			img: 'renameslidesection',
 			pos: 0,
 		}];
+		entries.push({
+			id: 'removeSection',
+			type: 'comboboxentry',
+			text: _('Remove Section'),
+			img: 'removeslidesection',
+			pos: 0,
+		});
 		if (sectionIndex > 0) {
 			entries.push({
 				id: 'moveSectionUp',
@@ -786,13 +793,6 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 				pos: 0,
 			});
 		}
-		entries.push({
-			id: 'removeSection',
-			type: 'comboboxentry',
-			text: _('Remove Section'),
-			img: 'removeslidesection',
-			pos: 0,
-		});
 
 		var menuPosEl = this._getMenuPosEl();
 		var rect = this._container.getBoundingClientRect();
@@ -833,6 +833,8 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 			callback,
 			'',
 			false,
+			false,
+			true,
 		);
 	},
 
