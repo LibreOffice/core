@@ -184,7 +184,7 @@ public:
 
     virtual void dumpHppFile(FileStream& o, codemaker::cppumaker::Includes & includes) = 0;
 
-    OUString dumpHeaderDefine(FileStream& o, std::u16string_view extension) const;
+    static void dumpPragmaOnce(FileStream& o);
 
     void dumpGetCppuType(FileStream & out);
 
@@ -477,14 +477,9 @@ void CppuType::dumpDependedTypes(
     }
 }
 
-OUString CppuType::dumpHeaderDefine(
-    FileStream & out, std::u16string_view extension) const
+void CppuType::dumpPragmaOnce(FileStream & out)
 {
-    OUString def(
-        "INCLUDED_" + name_.replace('.', '_').toAsciiUpperCase() + "_"
-        + extension);
-    out << "#ifndef " << def << "\n#define " << def << "\n";
-    return def;
+    out << "#pragma once\n";
 }
 
 void CppuType::addDefaultHIncludes(codemaker::cppumaker::Includes & includes)
@@ -563,7 +558,7 @@ void CppuType::dumpHFileContent(
     FileStream & out, codemaker::cppumaker::Includes & includes)
 {
     addDefaultHIncludes(includes);
-    dumpHeaderDefine(out, u"HDL");
+    dumpPragmaOnce(out);
     out << "\n";
     includes.dump(out, nullptr, false);
         // 'exceptions = false' would be wrong for services/singletons, but
@@ -591,7 +586,7 @@ void CppuType::dumpHFileContent(
     out << "SAL_DEPRECATED(\"use cppu::UnoType\") inline ::css::uno::Type const & SAL_CALL getCppuType(";
     dumpType(out, name_, true);
     dumpTemplateParameters(out);
-    out << " *);\n\n#endif\n";
+    out << " *);\n\n";
 }
 
 void CppuType::dumpGetCppuType(FileStream & out)
@@ -1192,7 +1187,7 @@ void InterfaceType::dumpDeclaration(FileStream & out)
 void InterfaceType::dumpHppFile(
     FileStream & out, codemaker::cppumaker::Includes & includes)
 {
-    OUString headerDefine(dumpHeaderDefine(out, u"HPP"));
+    dumpPragmaOnce(out);
     out << "\n";
     addDefaultHxxIncludes(includes);
     includes.dump(out, &name_, !(m_cppuTypeLeak || m_cppuTypeDynamic));
@@ -1214,7 +1209,7 @@ void InterfaceType::dumpHppFile(
     }
     out << "template<> struct IsUnoInterfaceType<";
     dumpType(out, name_, false, false, true);
-    out << ">: ::std::true_type {};\n}\n#endif\n\n#endif // "<< headerDefine << "\n";
+    out << ">: ::std::true_type {};\n}\n#endif\n\n";
 }
 
 void InterfaceType::dumpAttributes(FileStream & out) const
@@ -1669,7 +1664,7 @@ private:
 void ConstantGroup::dumpHdlFile(
     FileStream & out, codemaker::cppumaker::Includes & includes)
 {
-    OUString headerDefine(dumpHeaderDefine(out, u"HDL"));
+    dumpPragmaOnce(out);
     out << "\n";
     addDefaultHIncludes(includes);
     includes.dump(out, nullptr, true);
@@ -1683,16 +1678,14 @@ void ConstantGroup::dumpHdlFile(
     if (codemaker::cppumaker::dumpNamespaceClose(out, name_, true)) {
         out << "\n";
     }
-    out << "\n#endif // "<< headerDefine << "\n";
 }
 
 void ConstantGroup::dumpHppFile(
     FileStream & out, codemaker::cppumaker::Includes &)
 {
-    OUString headerDefine(dumpHeaderDefine(out, u"HPP"));
+    dumpPragmaOnce(out);
     out << "\n";
     codemaker::cppumaker::Includes::dumpInclude(out, u2b(name_), false);
-    out << "\n#endif // "<< headerDefine << "\n";
 }
 
 void ConstantGroup::dumpDeclaration(FileStream & out)
@@ -1889,7 +1882,7 @@ void PlainStructType::dumpDeclaration(FileStream & out)
 void PlainStructType::dumpHppFile(
     FileStream & out, codemaker::cppumaker::Includes & includes)
 {
-    OUString headerDefine(dumpHeaderDefine(out, u"HPP"));
+    dumpPragmaOnce(out);
     out << "\n";
     includes.dump(out, &name_, true);
     out << "\n";
@@ -1974,7 +1967,6 @@ void PlainStructType::dumpHppFile(
     }
     out << "\n";
     dumpGetCppuType(out);
-    out << "\n#endif // "<< headerDefine << "\n";
 }
 
 void PlainStructType::dumpLightGetCppuType(FileStream & out)
@@ -2283,7 +2275,7 @@ void PolyStructType::dumpDeclaration(FileStream & out)
 void PolyStructType::dumpHppFile(
     FileStream & out, codemaker::cppumaker::Includes & includes)
 {
-    OUString headerDefine(dumpHeaderDefine(out, u"HPP"));
+    dumpPragmaOnce(out);
     out << "\n";
     includes.dump(out, &name_, true);
     out << "\n";
@@ -2413,7 +2405,6 @@ void PolyStructType::dumpHppFile(
     }
     out << "\n";
     dumpGetCppuType(out);
-    out << "\n#endif // "<< headerDefine << "\n";
 }
 
 void PolyStructType::dumpLightGetCppuType(FileStream & out)
@@ -2834,7 +2825,7 @@ void ExceptionType::addComprehensiveGetCppuTypeIncludes(
 void ExceptionType::dumpHppFile(
     FileStream & out, codemaker::cppumaker::Includes & includes)
 {
-    OUString headerDefine(dumpHeaderDefine(out, u"HPP"));
+    dumpPragmaOnce(out);
     out << "\n";
     addDefaultHxxIncludes(includes);
     includes.dump(out, &name_, true);
@@ -3007,7 +2998,6 @@ void ExceptionType::dumpHppFile(
     out << "\n";
 
     dumpGetCppuType(out);
-    out << "\n#endif // "<< headerDefine << "\n";
 }
 
 void ExceptionType::dumpLightGetCppuType(FileStream & out)
@@ -3349,7 +3339,7 @@ void EnumType::dumpDeclaration(FileStream& o)
 void EnumType::dumpHppFile(
     FileStream& o, codemaker::cppumaker::Includes & includes)
 {
-    OUString headerDefine(dumpHeaderDefine(o, u"HPP"));
+    dumpPragmaOnce(o);
     o << "\n";
 
     addDefaultHxxIncludes(includes);
@@ -3357,8 +3347,6 @@ void EnumType::dumpHppFile(
     o << "\n";
 
     dumpGetCppuType(o);
-
-    o << "\n#endif // "<< headerDefine << "\n";
 }
 
 void EnumType::dumpNormalGetCppuType(FileStream& o)
@@ -3483,7 +3471,7 @@ private:
 void Typedef::dumpHdlFile(
     FileStream& o, codemaker::cppumaker::Includes & includes)
 {
-    OUString headerDefine(dumpHeaderDefine(o, u"HDL"));
+    dumpPragmaOnce(o);
     o << "\n";
 
     addDefaultHIncludes(includes);
@@ -3499,8 +3487,6 @@ void Typedef::dumpHdlFile(
     if (codemaker::cppumaker::dumpNamespaceClose(o, name_, false)) {
         o << "\n";
     }
-
-    o << "#endif // "<< headerDefine << "\n";
 }
 
 void Typedef::dumpDeclaration(FileStream& o)
@@ -3513,14 +3499,12 @@ void Typedef::dumpDeclaration(FileStream& o)
 void Typedef::dumpHppFile(
     FileStream& o, codemaker::cppumaker::Includes & includes)
 {
-    OUString headerDefine(dumpHeaderDefine(o, u"HPP"));
+    dumpPragmaOnce(o);
     o << "\n";
 
     addDefaultHxxIncludes(includes);
     includes.dump(o, &name_, true);
     o << "\n";
-
-    o << "\n#endif // "<< headerDefine << "\n";
 }
 
 class ConstructiveType: public CppuType
@@ -3635,7 +3619,7 @@ void ServiceType::dumpHppFile(
     OString cppName(
         codemaker::cpp::translateUnoToCppIdentifier(
             u2b(id_), "service", isGlobal()));
-    OUString headerDefine(dumpHeaderDefine(o, u"HPP"));
+    dumpPragmaOnce(o);
     o << "\n";
     includes.dump(o, nullptr, true);
     if (!entity_->getConstructors().empty()) {
@@ -3889,7 +3873,6 @@ void ServiceType::dumpHppFile(
     if (codemaker::cppumaker::dumpNamespaceClose(o, name_, false)) {
         o << "\n";
     }
-    o << "\n#endif // "<< headerDefine << "\n";
 }
 
 void ServiceType::dumpCatchClauses(
@@ -3934,7 +3917,7 @@ void SingletonType::dumpHppFile(
             u2b(id_), "singleton", isGlobal()));
     OString baseName(u2b(entity_->getBase()));
     OString scopedBaseName(codemaker::cpp::scopedCppName(baseName));
-    OUString headerDefine(dumpHeaderDefine(o, u"HPP"));
+    dumpPragmaOnce(o);
     o << "\n";
     //TODO: Decide whether the types added to includes should rather be added to
     // m_dependencies (and thus be generated during dumpDependedTypes):
@@ -4013,7 +3996,6 @@ void SingletonType::dumpHppFile(
     if (codemaker::cppumaker::dumpNamespaceClose(o, name_, false)) {
         o << "\n";
     }
-    o << "\n#endif // "<< headerDefine << "\n";
 }
 
 }
