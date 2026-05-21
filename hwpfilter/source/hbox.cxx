@@ -442,7 +442,7 @@ static hchar olHanglJaso(unsigned int num, int type)
 
     if (type == OL_HANGL_JASO)
     {
-        num = num % (14 + SAL_N_ELEMENTS(jung));
+        num = num % (14 + std::size(jung));
 
         if (num < 14)
             hh = (han_init[num] << 8) | 'A';
@@ -455,7 +455,7 @@ static hchar olHanglJaso(unsigned int num, int type)
             hh = (han_init[num] << 8) | 'a';
         else
         {
-            int j = (num / 14) % SAL_N_ELEMENTS(jung2);
+            int j = (num / 14) % std::size(jung2);
 
             num = num % 14;
             hh = (han_init[num] << 8) | (jung2[j] << 5) | 1;
