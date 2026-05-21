@@ -173,6 +173,7 @@
                     <property name="vexpand">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="text-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes" context="inputfielddialog|text">Field value</property>
                         <property name="AtkObject::accessible-description" translatable="yes" context="inputfielddialog|extended_tip|text">This box displays the name that you entered in the Reference box on the Functions or Variables tab of the Fields dialog. The box underneath displays the contents of the field.</property>
                       </object>
                     </child>

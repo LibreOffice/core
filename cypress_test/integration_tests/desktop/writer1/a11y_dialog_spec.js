@@ -77,7 +77,7 @@ describe(['tagdesktop'], 'Accessibility Writer Dialog Tests', { testIsolation: f
 
         cy.get('@uicoverageResult').then(result => {
             expect(result.used, `used .ui files`).to.not.be.empty;
-            // expect(result.CompleteWriterDialogCoverage, `complete writer dialog coverage`).to.be.true;
+            expect(result.CompleteWriterDialogCoverage, `complete writer dialog coverage`).to.be.true;
             // TODO: make this true
             // expect(result.CompleteCommonDialogCoverage, `complete common dialog coverage`).to.be.true;
         });
@@ -427,6 +427,14 @@ describe(['tagdesktop'], 'Accessibility Writer Dialog Tests', { testIsolation: f
     it('DropdownField dialog', function () {
         helper.getBlinkingCursorPosition('P');
         helper.clickAt('P');
+        a11yHelper.handleDialog(win, 1);
+    });
+
+    it('InputField dialog', function () {
+        // SwFieldTypesEnum::Input == 16
+        cy.then(() => {
+            win.app.map.sendUnoCommand('.uno:InsertField?Type:short=16&Name:string=Question&Content:string=Default');
+        });
         a11yHelper.handleDialog(win, 1);
     });
 
