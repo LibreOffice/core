@@ -427,6 +427,8 @@ class UIManager extends window.L.Control {
 
 		this.permissionViewMode = new PermissionViewMode(this.map);
 		this.permissionViewMode.init();
+
+		app.UI.compactViewAccessibility.initialize();
 	}
 
 	/**
@@ -896,6 +898,8 @@ class UIManager extends window.L.Control {
 
 		if (this._menubarShouldBeHidden)
 			this.hideMenubar();
+
+		app.UI.compactViewAccessibility.initialize();
 	}
 
 	/**

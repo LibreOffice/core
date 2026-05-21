@@ -56,7 +56,7 @@ class FormulaBar {
 
 	createFormulabar(text) {
 		if (!window.mode.isSmallScreenDevice()) {
-			var data = [
+			this.data = [
 				{
 					id: 'formulabar-buttons-toolbox',
 					type: 'toolbox',
@@ -65,7 +65,8 @@ class FormulaBar {
 							id: 'functiondialog',
 							type: 'toolitem',
 							text: FUNCTION_WIZARD_TEXT,
-							command: '.uno:FunctionDialog'
+							command: '.uno:FunctionDialog',
+							accessibility: { focusBack: true, combination: 'ZF' }
 						},
 						{
 							id: 'AutoSumMenu:AutoSumMenu',
@@ -73,7 +74,8 @@ class FormulaBar {
 							class: 'AutoSumMenu',
 							noLabel: true,
 							text: _('Select Function'),
-							command: '.uno:AutoSumMenu'
+							command: '.uno:AutoSumMenu',
+							accessibility: { focusBack: true, combination: 'AS' }
 						},
 						{
 							id: 'startformula',
@@ -112,7 +114,7 @@ class FormulaBar {
 						}]
 				}];
 		} else {
-			var data = [
+			this.data = [
 				{
 					id: 'formulabar-toolbox',
 					type: 'toolbox',
@@ -137,7 +139,11 @@ class FormulaBar {
 		}
 
 		this.parentContainer.replaceChildren();
-		this.builder.build(this.parentContainer, data);
+		this.builder.build(this.parentContainer, this.data);
+	}
+
+	getFormulaItems() {
+		return this.data;
 	}
 
 	toggleMultiLine(input) {

@@ -82,6 +82,9 @@ var NotebookbarAccessibility = function() {
 	};
 
 	this.onDocumentKeyUp = function(event) {
+		if (document.body.dataset.userinterfacemode !== 'notebookbar')
+			return;
+
 		if (this.initialized) {
 			if (app.map && app.map.jsdialog && app.map.jsdialog.hasDialogOpened()) {
 				if (event.keyCode === 18)

@@ -407,6 +407,10 @@ window.L.Map.Keyboard = window.L.Handler.extend({
 			app.UI.notebookbarAccessibility.onDocumentKeyDown(ev);
 		}
 
+		if (app.UI.compactViewAccessibility) {
+			app.UI.compactViewAccessibility.onDocumentKeyDown(ev);
+		}
+
 		if (ev.shortCutActivated === true) {
 			window.app.console.log('Shortcut for: ' + ev.code + ' already handled');
 			return;
@@ -499,6 +503,11 @@ window.L.Map.Keyboard = window.L.Handler.extend({
 		if (app.UI.notebookbarAccessibility &&
 		    app.UI.notebookbarAccessibility.accessibilityInputElement !== document.activeElement) {
 			app.UI.notebookbarAccessibility.onDocumentKeyUp(ev);
+		}
+
+		if (app.UI.compactViewAccessibility &&
+			app.UI.compactViewAccessibility.accessibilityInputElement !== document.activeElement) {
+			app.UI.compactViewAccessibility.onDocumentKeyUp(ev);
 		}
 	},
 

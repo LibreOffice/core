@@ -19,6 +19,7 @@ class AddressInputField {
 	map: any;
 	parentContainer: HTMLElement;
 	builder: any;
+	data: any;
 
 	public constructor(map: any) {
 		this.map = map;
@@ -60,7 +61,7 @@ class AddressInputField {
 	}
 
 	private createAddressInputField() {
-		const data: any = [
+		this.data = [
 			{
 				id: 'pos_window',
 				type: 'combobox',
@@ -68,6 +69,7 @@ class AddressInputField {
 				enabled: true,
 				changeOnEnterOnly: true,
 				focusMapOnEnter: true,
+				accessibility: { focusBack: true, combination: 'CA' },
 				children: [
 					{
 						id: 'expand',
@@ -101,7 +103,11 @@ class AddressInputField {
 			},
 		];
 		this.parentContainer.replaceChildren();
-		this.builder.build(this.parentContainer, data);
+		this.builder.build(this.parentContainer, this.data);
+	}
+
+	public getAddressItems(): any[] {
+		return this.data;
 	}
 
 	private onJSUpdate(e: any) {
