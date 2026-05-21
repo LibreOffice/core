@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 -->
+<!-- Generated with glade 3.40.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.24"/>
   <object class="GtkAdjustment" id="adjustment-sps">
@@ -387,7 +387,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="squaremode">
-                    <property name="label" translatable="yes" context="optgeneralpage|squaremode">_Use square page mode for text grid</property>
+                    <property name="label" translatable="yes" context="optgeneralpage|squaremode">_Use CJK manuscript grid</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">False</property>
