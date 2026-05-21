@@ -920,7 +920,7 @@ function processStateChangedCommand(commandName, state) {
 		}
 	}
 	else if (commandName === '.uno:ModifiedStatus') {
-		const saveIcon = document.querySelector('[id^="save"]');
+		const saveIcon = document.querySelector('[id^="save"].unotoolbutton');
 		if (saveIcon) {
 			if (state === 'true' && map.saveState)
 				map.saveState.showModifiedStatus();
