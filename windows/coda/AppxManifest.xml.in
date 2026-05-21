@@ -7,9 +7,9 @@
   xmlns:desktop2="http://schemas.microsoft.com/appx/manifest/desktop/windows10/2"
   xmlns:com="http://schemas.microsoft.com/appx/manifest/com/windows10"
   IgnorableNamespaces="uap uap3 rescap desktop desktop2 com">
-  <Identity Name="CollaboraProductivityLtd.CollaboraOfficeDesktop" Version="%VER" Publisher="CN=E9F172FF-9203-4DB8-A589-184C7A58C071" ProcessorArchitecture="%ARCH"/>
+  <Identity Name="%IDENTITY" Version="%VER" Publisher="CN=E9F172FF-9203-4DB8-A589-184C7A58C071" ProcessorArchitecture="%ARCH"/>
   <Properties>
-    <DisplayName>Collabora Office Desktop</DisplayName>
+    <DisplayName>%DISPLAYNAME</DisplayName>
     <PublisherDisplayName>Collabora Productivity Ltd</PublisherDisplayName>
     <Logo>Assets/logo.png</Logo>
   </Properties>
@@ -25,8 +25,8 @@
     <rescap:Capability Name="runFullTrust"/>
   </Capabilities>
   <Applications>
-    <Application Id="CODA" Executable="program/Collabora Office.exe" EntryPoint="Windows.FullTrustApplication">
-      <uap:VisualElements DisplayName="Collabora Office Desktop" Description="sofficeUapDescription" Square150x150Logo="Assets/Square150x150Logo.png" Square44x44Logo="Assets/Square44x44Logo.png" BackgroundColor="white"/>
+    <Application Id="CODA" Executable="program/%EXE" EntryPoint="Windows.FullTrustApplication">
+      <uap:VisualElements DisplayName="%DISPLAYNAME" Description="sofficeUapDescription" Square150x150Logo="Assets/Square150x150Logo.png" Square44x44Logo="Assets/Square44x44Logo.png" BackgroundColor="white"/>
       <Extensions>
         <!-- Register the three shell-extension CLSIDs as in-proc DLLs hosted
              by the default COM surrogate (dllhost.exe). The shell picks the

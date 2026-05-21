@@ -253,6 +253,9 @@ def main():
     pfx = inifile['pfx'] if 'pfx' in inifile else None
     builddir = inifile['builddir'] if 'builddir' in inifile else None
     outdir = inifile['outdir'] if 'outdir' in inifile else os.path.join(os.getcwd(), 'out')
+    identity = inifile['identity'] if 'identity' in inifile else 'CollaboraProductivityLtd.CollaboraOfficeDesktop'
+    displayname = inifile['displayname'] if 'displayname' in inifile else 'Collabora Office Desktop'
+    exe = inifile['exe'] if 'exe' in inifile else 'Collabora Office.exe'
 
     parser = argparse.ArgumentParser()
     group = parser.add_argument_group('main arguments')
@@ -267,6 +270,9 @@ def main():
     group.add_argument('-password', default='', help='password for pfx')
     group.add_argument('-builddir', default=builddir, help='path to core.git build directory; used for collecting PDBs, defaults to ' + (pfx if pfx else 'source code repository path'))
     group.add_argument('-outdir', default=outdir, help='where the package is to be generated, defaults to ' + outdir)
+    group.add_argument('-identity', default=identity, help='manifest Identity/Name (Partner Center reservation), defaults to ' + identity)
+    group.add_argument('-displayname', default=displayname, help='manifest DisplayName / VisualElements DisplayName, defaults to ' + displayname)
+    group.add_argument('-exe', default=exe, help='basename of program/*.exe to launch (matches --with-app-name), defaults to ' + exe)
     args = parser.parse_args()
     if not args.builddir:
         args.builddir = args.repo
@@ -323,7 +329,12 @@ def main():
     # we need separate manifest files for package and individual APPX, with neutral arch for
     # package, and defined arch for APPX. Also only store extensions for individual APPX.
     with open(os.path.join(scriptPath, 'AppxManifest.xml.in'), encoding='utf8') as input:
-        manifest_xml = input.read().replace('%VER', args.ver).replace('%RES', resources)
+        manifest_xml = input.read() \
+            .replace('%IDENTITY', args.identity) \
+            .replace('%DISPLAYNAME', args.displayname) \
+            .replace('%EXE', args.exe) \
+            .replace('%VER', args.ver) \
+            .replace('%RES', resources)
     with open(os.path.join(workdir, 'AppxManifest.xml'), mode='w', encoding='utf8') as output:
         output.write(manifest_xml.replace('%ARCH', 'neutral').replace('%EXT', ''))
     manifest_xml = manifest_xml.replace('%EXT', extensions)
@@ -343,7 +354,7 @@ def main():
                                      .replace('%PRI', path2win(pri_file)))
 
     # create PRI
-    subprocess.run([makepri_exe, 'new', '/pr', path2win(assetsrootdir), '/cf', path2win(os.path.join(scriptPath, 'MakePri.xml')), '/in', 'CollaboraProductivityLtd.CollaboraOfficeDesktop', '/of', path2win(pri_file)]).check_returncode()
+    subprocess.run([makepri_exe, 'new', '/pr', path2win(assetsrootdir), '/cf', path2win(os.path.join(scriptPath, 'MakePri.xml')), '/in', args.identity, '/of', path2win(pri_file)]).check_returncode()
 
     fileBaseName = args.distname + '.' + args.ver + '.' + args.arch + '.'
 
