@@ -20,6 +20,8 @@
 #pragma once
 
 #include <sfx2/tabdlg.hxx>
+#include <vcl/weld/LinkButton.hxx>
+
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <com/sun/star/configuration/XReadWriteAccess.hpp>
 

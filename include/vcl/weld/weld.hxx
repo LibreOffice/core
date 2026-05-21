@@ -287,25 +287,6 @@ public:
     virtual void set_label_wrap(bool wrap) = 0;
 };
 
-class VCL_DLLPUBLIC LinkButton : virtual public Widget
-{
-    friend class ::LOKTrigger;
-
-    Link<LinkButton&, bool> m_aActivateLinkHdl;
-
-protected:
-    bool signal_activate_link() { return m_aActivateLinkHdl.Call(*this); }
-
-public:
-    virtual void set_label(const OUString& rText) = 0;
-    virtual OUString get_label() const = 0;
-    virtual void set_label_wrap(bool wrap) = 0;
-    virtual void set_uri(const OUString& rUri) = 0;
-    virtual OUString get_uri() const = 0;
-
-    void connect_activate_link(const Link<LinkButton&, bool>& rLink) { m_aActivateLinkHdl = rLink; }
-};
-
 class VCL_DLLPUBLIC Scale : virtual public Widget
 {
     Link<Scale&, void> m_aValueChangedHdl;

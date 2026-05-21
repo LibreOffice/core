@@ -14,6 +14,8 @@
 #include "QtHyperlinkLabel.hxx"
 #include "QtInstanceWidget.hxx"
 
+#include <vcl/weld/LinkButton.hxx>
+
 #include <QtWidgets/QLabel>
 
 class QtInstanceLinkButton : public QtInstanceWidget, public virtual weld::LinkButton
