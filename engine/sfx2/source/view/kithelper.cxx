@@ -689,7 +689,7 @@ void KitHelper::sendUnoStatus(const SfxViewShell* pShell, const SfxPoolItem* pIt
 
 void KitHelper::notifyViewRenderState(const SfxViewShell* pShell, vcl::ITiledRenderable* pDoc)
 {
-    pShell->viewCallback(KIT_CALLBACK_VIEW_RENDER_STATE, pDoc->getViewRenderState());
+    pShell->viewCallback(KIT_CALLBACK_VIEW_RENDER_STATE, pDoc->getViewRenderState(pShell));
 }
 
 void KitHelper::notifyWindow(const SfxViewShell* pThisView,
