@@ -252,9 +252,7 @@ class ContextMenuControl extends JSControl {
 					text: value.name,
 					img: command,
 					class: this._commandClass(command),
-					shortcut: shortcutText
-						? app.util.replaceCtrlAltInMac(shortcutText)
-						: undefined,
+					shortcut: JSDialog.ShortcutsUtil.getShortcutText(command),
 				});
 				continue;
 			}

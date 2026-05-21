@@ -101,43 +101,33 @@ class ShortcutsUtil {
 	}
 
 	public getTooltipLabel(text: string, command: string): string {
-		let shortcut = this.shortcutMap.get(command);
+		const shortcut = this.getShortcutText(command);
 		if (!shortcut) return text;
 
-		shortcut = this.localizeModifiers(shortcut);
-
-		var newText =
-			_(text).replace('~', '') +
-			' (' +
-			app.util.replaceCtrlAltInMac(shortcut) +
-			')';
-
-		return newText;
+		return _(text).replace('~', '') + ' (' + shortcut + ')';
 	}
 
 	public getMenuLabel(text: string, command: string): string {
-		let shortcut = this.shortcutMap.get(command);
+		const shortcut = this.getShortcutText(command);
 		if (!shortcut) return text;
 
-		shortcut = this.localizeModifiers(shortcut);
-
-		var newText =
+		return (
 			_(text).replace('~', '') +
 			' <span class="shortcut">' +
-			app.util.replaceCtrlAltInMac(shortcut) +
-			'</span>';
-
-		return newText;
+			shortcut +
+			'</span>'
+		);
 	}
 
 	/**
 	 * Return the locale-aware shortcut display string for a UNO command,
-	 * or undefined if none is registered.
+	 * or undefined if none is registered. On Mac, "Ctrl"/"Alt" are replaced
+	 * with the corresponding Mac symbols.
 	 */
 	public getShortcutText(command: string): string | undefined {
 		const shortcut = this.shortcutMap.get(command);
 		if (!shortcut) return undefined;
-		return this.localizeModifiers(shortcut);
+		return app.util.replaceCtrlAltInMac(this.localizeModifiers(shortcut));
 	}
 }
 
