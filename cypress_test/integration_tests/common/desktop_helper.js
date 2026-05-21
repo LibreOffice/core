@@ -242,6 +242,8 @@ function selectZoomLevel(zoomLevel, makeZoomVisible = true) {
 	if (makeZoomVisible)
 		makeZoomItemsVisible();
 	cy.cGet('#toolbar-down #zoom .arrowbackground').click();
+	// wait for fade-in animation end
+	cy.cGet('#zoom-dropdown').should('have.css', 'opacity', '1');
 	cy.cGet('#zoom-dropdown').contains('.ui-combobox-entry', zoomLevel).click();
 	shouldHaveZoomLevel(zoomLevel);
 
