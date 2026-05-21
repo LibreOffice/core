@@ -12,8 +12,14 @@
 #include <vcl/dllapi.h>
 #include <vcl/weld/ItemView.hxx>
 
+class OutputDevice;
 enum class SelectionMode;
 enum class TxtAlign;
+
+namespace vcl
+{
+typedef OutputDevice RenderContext;
+}
 
 namespace weld
 {

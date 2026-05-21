@@ -12,6 +12,13 @@
 #include <vcl/dllapi.h>
 #include <vcl/weld/weld.hxx>
 
+struct SystemEnvData;
+
+namespace vcl
+{
+enum class WindowDataMask;
+}
+
 namespace weld
 {
 class VCL_DLLPUBLIC Window : virtual public Container

@@ -12,6 +12,8 @@
 #include <vcl/dllapi.h>
 #include <vcl/weld/Entry.hxx>
 
+class Formatter;
+
 namespace weld
 {
 class EntryFormatter;

@@ -12,6 +12,27 @@
 #include <vcl/dllapi.h>
 #include <vcl/weld/weld.hxx>
 
+class InputContext;
+class OutputDevice;
+enum class PointerStyle;
+
+using a11yrelationset = css::uno::Reference<css::accessibility::XAccessibleRelationSet>;
+
+namespace comphelper
+{
+class OAccessible;
+}
+
+namespace rtl
+{
+template <class reference_type> class Reference;
+}
+
+namespace vcl
+{
+typedef OutputDevice RenderContext;
+}
+
 namespace weld
 {
 class VCL_DLLPUBLIC DrawingArea : virtual public Widget

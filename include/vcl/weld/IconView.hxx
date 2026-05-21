@@ -12,6 +12,8 @@
 #include <vcl/dllapi.h>
 #include <vcl/weld/ItemView.hxx>
 
+class Bitmap;
+
 namespace weld
 {
 typedef std::tuple<OUString&, const TreeIter&> encoded_image_query;

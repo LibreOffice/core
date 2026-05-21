@@ -12,6 +12,13 @@
 #include <vcl/dllapi.h>
 #include <vcl/weld/weld.hxx>
 
+class OutputDevice;
+
+namespace vcl
+{
+typedef OutputDevice RenderContext;
+}
+
 namespace weld
 {
 class Menu;

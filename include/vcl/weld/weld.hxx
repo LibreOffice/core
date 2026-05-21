@@ -13,7 +13,6 @@
 #include <rtl/ustring.hxx>
 #include <tools/gen.hxx>
 #include <tools/link.hxx>
-#include <vcl/vclptr.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/weld/Widget.hxx>
 #include <utility>
@@ -31,33 +30,13 @@ namespace com::sun::star::graphic
 {
 class XGraphic;
 }
-namespace rtl
-{
-template <class reference_type> class Reference;
-}
-typedef css::uno::Reference<css::accessibility::XAccessibleRelationSet> a11yrelationset;
-enum class PointerStyle;
-enum class VclSizeGroupMode;
 class Color;
-class CommandEvent;
-class Formatter;
-class InputContext;
-class KeyEvent;
-class MouseEvent;
-class TransferDataContainer;
-class OutputDevice;
 class VirtualDevice;
-struct SystemEnvData;
-class Bitmap;
 
 namespace vcl
 {
-class ILibreOfficeKitNotifier;
-typedef OutputDevice RenderContext;
 class Font;
-enum class WindowDataMask;
 }
-template <class reference_type> class VclPtr;
 
 namespace tools
 {
@@ -68,7 +47,6 @@ class LOKTrigger;
 
 namespace weld
 {
-class Container;
 class DialogController;
 class EntryTreeView;
 class IconView;
