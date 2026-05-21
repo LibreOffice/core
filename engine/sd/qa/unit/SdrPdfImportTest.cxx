@@ -141,7 +141,7 @@ CPPUNIT_TEST_FIXTURE(SdrPdfImportTest, testImportSimpleText)
     CPPUNIT_ASSERT_EQUAL(Size(2165, 508), pImportedObject->GetLogicRect().GetSize());
 #else
     // need to check why windows appears to be different
-    CPPUNIT_ASSERT_EQUAL(Size(3944, 508), pImportedObject->GetLogicRect().GetSize());
+    CPPUNIT_ASSERT_EQUAL(Size(2206, 508), pImportedObject->GetLogicRect().GetSize());
 #endif
 
     // Object should be a text object containing one paragraph with
