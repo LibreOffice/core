@@ -419,8 +419,8 @@ bool SwAutoCorrDoc::ChgAutoCorrWord( sal_Int32& rSttPos, sal_Int32 nEndPos,
             SwPosition aEndPos( pFrame->MapViewToModelPos(TextFrameIndex(nEndPos + (replaceLastChar ? 1 : 0))) );
             SwPaM aPam(aStartPos, aEndPos);
 
-            // don't replace, if a redline starts or ends within the original text
-            if ( pDoc->getIDocumentRedlineAccess().HasRedline( aPam, RedlineType::Any, /*bStartOrEndInRange=*/true ) )
+            // don't replace, if a tracked deletion starts or ends within the original text
+            if ( pDoc->getIDocumentRedlineAccess().HasRedline( aPam, RedlineType::Delete, /*bStartOrEndInRange=*/true ) )
             {
                 return bRet;
             }
