@@ -51,7 +51,8 @@ enum PlaceholderType
     DateAndTime,
     Outliner,
     Title,
-    Subtitle
+    Subtitle,
+    Picture
 };
 
 class PowerPointShapeExport;

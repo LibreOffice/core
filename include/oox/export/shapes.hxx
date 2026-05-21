@@ -123,7 +123,7 @@ public:
                         WriteCustomShape( const css::uno::Reference< css::drawing::XShape >& xShape );
     ShapeExport&
                         WriteEllipseShape( const css::uno::Reference< css::drawing::XShape >& xShape );
-    ShapeExport&
+    virtual ShapeExport&
                         WriteGraphicObjectShape( const css::uno::Reference< css::drawing::XShape >& xShape );
     ShapeExport&
                         WriteGroupShape( const css::uno::Reference< css::drawing::XShape >& xShape );
