@@ -62,18 +62,6 @@ constexpr AllHtmlFlags aHTMLOutFramePageFlyTable[][MAX_BROWSERS] =
         { HtmlOut::GraphicNode, HtmlPosition::Prefix, HtmlContainerFlags::Span }       // Netscape 4
     },
     {
-        // plug-in
-        { HtmlOut::OleNode, HtmlPosition::Prefix, HtmlContainerFlags::NONE },      // IE 4
-        { HtmlOut::OleNode, HtmlPosition::Prefix, HtmlContainerFlags::NONE },      // SW
-        { HtmlOut::OleNode, HtmlPosition::Prefix, HtmlContainerFlags::Span }       // Netscape 4
-    },
-    {
-        // applet
-        { HtmlOut::OleNode, HtmlPosition::Prefix, HtmlContainerFlags::NONE },      // IE 4
-        { HtmlOut::OleNode, HtmlPosition::Prefix, HtmlContainerFlags::NONE },      // SW
-        { HtmlOut::OleNode, HtmlPosition::Prefix, HtmlContainerFlags::Span }       // Netscape 4
-    },
-    {
         // floating frame
         { HtmlOut::OleNode,    HtmlPosition::Prefix, HtmlContainerFlags::NONE },      // IE 4
         { HtmlOut::OleNode,    HtmlPosition::Prefix, HtmlContainerFlags::NONE },      // SW
@@ -152,18 +140,6 @@ constexpr AllHtmlFlags aHTMLOutFrameParaFrameTable[][MAX_BROWSERS] =
         { HtmlOut::GraphicNode, HtmlPosition::Before, HtmlContainerFlags::NONE },      // IE 4
         { HtmlOut::GraphicNode, HtmlPosition::Before, HtmlContainerFlags::NONE },      // SW
         { HtmlOut::GraphicNode, HtmlPosition::Before, HtmlContainerFlags::NONE }       // Netscape 4
-    },
-    {
-        // plug-in
-        { HtmlOut::OleNode, HtmlPosition::Before, HtmlContainerFlags::NONE },      // IE 4
-        { HtmlOut::OleNode, HtmlPosition::Before, HtmlContainerFlags::NONE },      // SW
-        { HtmlOut::OleNode, HtmlPosition::Before, HtmlContainerFlags::NONE }       // Netscape 4
-    },
-    {
-        // applet
-        { HtmlOut::OleNode, HtmlPosition::Before, HtmlContainerFlags::NONE },      // IE 4
-        { HtmlOut::OleNode, HtmlPosition::Before, HtmlContainerFlags::NONE },      // SW
-        { HtmlOut::OleNode, HtmlPosition::Before, HtmlContainerFlags::NONE }       // Netscape 4
     },
     {
         // floating frame
@@ -247,18 +223,6 @@ constexpr AllHtmlFlags aHTMLOutFrameParaPrtAreaTable[][MAX_BROWSERS] =
         { HtmlOut::GraphicNode, HtmlPosition::Inside, HtmlContainerFlags::NONE }       // Netscape 4
     },
     {
-        // plug-in
-        { HtmlOut::OleNode, HtmlPosition::Inside, HtmlContainerFlags::NONE },      // IE 4
-        { HtmlOut::OleNode, HtmlPosition::Inside, HtmlContainerFlags::NONE },      // SW
-        { HtmlOut::OleNode, HtmlPosition::Inside, HtmlContainerFlags::NONE }       // Netscape 4
-    },
-    {
-        // applet
-        { HtmlOut::OleNode, HtmlPosition::Inside, HtmlContainerFlags::NONE },      // IE 4
-        { HtmlOut::OleNode, HtmlPosition::Inside, HtmlContainerFlags::NONE },      // SW
-        { HtmlOut::OleNode, HtmlPosition::Inside, HtmlContainerFlags::NONE }       // Netscape 4
-    },
-    {
         // floating frame
         { HtmlOut::OleNode,    HtmlPosition::Inside, HtmlContainerFlags::NONE },      // IE 4
         { HtmlOut::OleNode,    HtmlPosition::Inside, HtmlContainerFlags::NONE },      // SW
@@ -339,18 +303,6 @@ constexpr AllHtmlFlags aHTMLOutFrameParaOtherTable[][MAX_BROWSERS] =
         { HtmlOut::GraphicNode, HtmlPosition::Inside, HtmlContainerFlags::Span }       // Netscape 4
     },
     {
-        // plug-in
-        { HtmlOut::OleNode, HtmlPosition::Inside, HtmlContainerFlags::NONE },      // IE 4
-        { HtmlOut::OleNode, HtmlPosition::Inside, HtmlContainerFlags::NONE },      // SW
-        { HtmlOut::OleNode, HtmlPosition::Inside, HtmlContainerFlags::Span }       // Netscape 4
-    },
-    {
-        // applet
-        { HtmlOut::OleNode, HtmlPosition::Inside, HtmlContainerFlags::NONE },      // IE 4
-        { HtmlOut::OleNode, HtmlPosition::Inside, HtmlContainerFlags::NONE },      // SW
-        { HtmlOut::OleNode, HtmlPosition::Inside, HtmlContainerFlags::Span }       // Netscape 4
-    },
-    {
         // floating frame
         { HtmlOut::OleNode,    HtmlPosition::Inside, HtmlContainerFlags::NONE },      // IE 4
         { HtmlOut::OleNode,    HtmlPosition::Inside, HtmlContainerFlags::NONE },      // SW
@@ -429,18 +381,6 @@ constexpr AllHtmlFlags aHTMLOutFrameAsCharTable[][MAX_BROWSERS] =
         { HtmlOut::GraphicNode, HtmlPosition::Inside, HtmlContainerFlags::NONE },      // IE 4
         { HtmlOut::GraphicNode, HtmlPosition::Inside, HtmlContainerFlags::NONE },      // SW
         { HtmlOut::GraphicNode, HtmlPosition::Inside, HtmlContainerFlags::NONE }       // Netscape 4
-    },
-    {
-        // plug-in
-        { HtmlOut::OleNode, HtmlPosition::Inside, HtmlContainerFlags::NONE },      // IE 4
-        { HtmlOut::OleNode, HtmlPosition::Inside, HtmlContainerFlags::NONE },      // SW
-        { HtmlOut::OleNode, HtmlPosition::Inside, HtmlContainerFlags::NONE }       // Netscape 4
-    },
-    {
-        // applet
-        { HtmlOut::OleNode, HtmlPosition::Inside, HtmlContainerFlags::NONE },      // IE 4
-        { HtmlOut::OleNode, HtmlPosition::Inside, HtmlContainerFlags::NONE },      // SW
-        { HtmlOut::OleNode, HtmlPosition::Inside, HtmlContainerFlags::NONE }       // Netscape 4
     },
     {
         // floating frame

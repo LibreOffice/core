@@ -523,9 +523,6 @@ excludelist:
     sw/source/filter/basflt/iodetect.cxx:
     # Actually used
     - com/sun/star/embed/XStorage.hpp
-    sw/source/filter/html/SwAppletImpl.cxx:
-    # Needed for direct member access
-    - com/sun/star/embed/XEmbeddedObject.hpp
     sw/source/filter/html/htmlfld.cxx:
     # Needed for template
     - com/sun/star/frame/XModel.hpp

@@ -37,8 +37,6 @@ namespace com::sun::star::style { class XStyle; }
 
 class SwXMLTextParagraphExport : public XMLTextParagraphExport
 {
-    const SvGlobalName m_aAppletClassId;
-    const SvGlobalName m_aPluginClassId;
     const SvGlobalName m_aIFrameClassId;
 
     // Collected autostyles for use in exportTextAutoStyles

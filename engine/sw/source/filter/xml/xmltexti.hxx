@@ -55,19 +55,6 @@ public:
                                       const OUString& rStyleName,
                                       const OUString& rTableName,
                                       sal_Int32 nWidth, sal_Int32 nHeight ) override;
-    virtual css::uno::Reference<css::beans::XPropertySet>
-        createAndInsertApplet(
-            const OUString &rName,
-            const OUString &rCode,
-            bool bMayScript,
-            const OUString& rHRef,
-            sal_Int32 nWidth, sal_Int32 nHeight ) override;
-
-    virtual css::uno::Reference<css::beans::XPropertySet>
-        createAndInsertPlugin(
-            const OUString &rMimeType,
-            const OUString& rHRef,
-            sal_Int32 nWidth, sal_Int32 nHeight ) override;
 
     virtual css::uno::Reference<css::beans::XPropertySet>
         createAndInsertFloatingFrame(
@@ -75,10 +62,6 @@ public:
             const OUString &rHRef,
             const OUString &rStyleName,
             sal_Int32 nWidth, sal_Int32 nHeight ) override;
-
-    virtual void endAppletOrPlugin(
-        const css::uno::Reference < css::beans::XPropertySet > &rPropSet,
-        std::map < const OUString, OUString > &rParamMap) override;
 
     virtual bool IsInHeaderFooter() const override;
 
