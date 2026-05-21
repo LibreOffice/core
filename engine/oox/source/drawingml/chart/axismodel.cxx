@@ -31,7 +31,7 @@ AxisDispUnitsModel::~AxisDispUnitsModel()
 {
 }
 
-AxisModel::AxisModel( sal_Int32 nTypeId, bool bMSO2007Doc ) :
+AxisModel::AxisModel( sal_Int32 nTypeId, enum ChartType eCT) :
     mnAxisId( -1 ),
     mnAxisPos( XML_TOKEN_INVALID ),
     mnCrossAxisId( -1 ),
@@ -39,9 +39,13 @@ AxisModel::AxisModel( sal_Int32 nTypeId, bool bMSO2007Doc ) :
     mnCrossMode( XML_autoZero ),
     mnLabelAlign( XML_ctr ),
     mnLabelOffset( 100 ),
-    mnMajorTickMark( bMSO2007Doc ? XML_out : XML_cross ),
+    mnMajorTickMark( eCT == ChartType::C_2007 ? XML_out :
+                     eCT == ChartType::C_OTHER ? XML_cross :
+                     XML_none),
     mnMajorTimeUnit( XML_days ),
-    mnMinorTickMark( bMSO2007Doc ? XML_none : XML_cross ),
+    mnMinorTickMark( eCT == ChartType::C_2007 ? XML_out :
+                     eCT == ChartType::C_OTHER ? XML_cross :
+                     XML_none),
     mnMinorTimeUnit( XML_days ),
     mnOrientation( XML_minMax ),
     mnTickLabelPos( XML_nextTo ),

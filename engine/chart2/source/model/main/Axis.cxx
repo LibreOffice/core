@@ -77,7 +77,9 @@ enum
     PROP_AXIS_BUILTINUNIT,
 
     PROP_AXIS_TRY_STAGGERING_FIRST,
-    PROP_AXIS_MAJOR_ORIGIN
+    PROP_AXIS_MAJOR_ORIGIN,
+    PROP_AXIS_HAS_EXPLICIT_SPPR,
+    PROP_AXIS_HAS_EXPLICIT_TXPR
 };
 
 void lcl_AddPropertiesToVector(
@@ -200,6 +202,18 @@ void lcl_AddPropertiesToVector(
     rOutProperties.emplace_back( "MajorOrigin",
                   PROP_AXIS_MAJOR_ORIGIN,
                   cppu::UnoType<double>::get(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEVOID );
+
+    rOutProperties.emplace_back( "HasExplicitSpPr",
+                  PROP_AXIS_HAS_EXPLICIT_SPPR,
+                  cppu::UnoType<bool>::get(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEVOID );
+
+    rOutProperties.emplace_back( "HasExplicitTxPr",
+                  PROP_AXIS_HAS_EXPLICIT_TXPR,
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID );
 

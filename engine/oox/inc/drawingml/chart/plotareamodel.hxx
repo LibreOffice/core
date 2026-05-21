@@ -67,6 +67,7 @@ struct PlotAreaModel
     DataTableRef        mxDataTable;        /// Data table of the plot area.
 
     sal_Int32           mnCurSeriesIdx = 0; /// For populating the series index
+    ChartType           meCT = ChartType::C_OTHER;
 
     explicit            PlotAreaModel();
                         ~PlotAreaModel();

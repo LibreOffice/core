@@ -43,6 +43,12 @@ struct AxisDispUnitsModel
                         ~AxisDispUnitsModel();
 };
 
+enum class ChartType : sal_Int32 {
+    C_2007,     // 2007 chart
+    C_OTHER,    // later chart
+    CX          // later chartex
+};
+
 struct AxisModel
 {
     typedef ModelRef< Shape >               ShapeRef;
@@ -85,7 +91,7 @@ struct AxisModel
     bool                mbDeleted;          /// True = axis has been deleted manually.
     bool                mbNoMultiLevel;     /// True = no multi-level categories supported.
 
-    explicit            AxisModel( sal_Int32 nTypeId, bool bMSO2007Doc );
+    explicit            AxisModel( sal_Int32 nTypeId, enum ChartType eCT );
                         ~AxisModel();
 };
 

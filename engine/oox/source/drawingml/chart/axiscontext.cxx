@@ -331,10 +331,10 @@ ContextHandlerRef CxAxisContext::onCreateContext( sal_Int32 nElement, const Attr
         case CX_TOKEN(minorGridlines):
             return new ShapePrWrapperContext( *this, mrModel.mxMinorGridLines.create() );
         case CX_TOKEN(majorTickMarks):
-            mrModel.mnMajorTickMark = rAttribs.getToken( XML_type, XML_cross );
+            mrModel.mnMajorTickMark = rAttribs.getToken( XML_type, XML_none );
             return nullptr;
         case CX_TOKEN(minorTickMarks):
-            mrModel.mnMinorTickMark = rAttribs.getToken( XML_type, XML_cross );
+            mrModel.mnMinorTickMark = rAttribs.getToken( XML_type, XML_none );
             return nullptr;
         case CX_TOKEN(tickLabels) :
             mrModel.mnTickLabelPos = XML_nextTo;    // Is this the right default?

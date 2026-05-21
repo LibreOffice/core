@@ -221,6 +221,12 @@ void AxisConverter::convertFromModel(const Reference<XCoordinateSystem>& rxCoord
         // show axis labels
         aAxisProp.setProperty( PROP_DisplayLabels, mrModel.mnTickLabelPos != XML_none );
         aAxisProp.setProperty( PROP_LabelPosition, lclGetLabelPosition( mrModel.mnTickLabelPos ) );
+        // Track whether the axis had explicit spPr/txPr (before radar override creates one)
+        if (mrModel.mxShapeProp.is())
+            aAxisProp.setProperty(PROP_HasExplicitSpPr, true);
+        if (mrModel.mxTextProp.is())
+            aAxisProp.setProperty(PROP_HasExplicitTxPr, true);
+
         // no X axis line in radar charts
         if( (nAxisIdx == API_X_AXIS) && (rTypeInfo.meTypeCategory == TYPECATEGORY_RADAR) )
             mrModel.mxShapeProp.getOrCreate().getLineProperties().maLineFill.moFillType = XML_noFill;
@@ -230,8 +236,15 @@ void AxisConverter::convertFromModel(const Reference<XCoordinateSystem>& rxCoord
         ObjectFormatter::convertTextRotation( aAxisProp, mrModel.mxTextProp, true );
 
         // tick mark style
-        aAxisProp.setProperty( PROP_MajorTickmarks, lclGetTickMark( mrModel.mnMajorTickMark ) );
-        aAxisProp.setProperty( PROP_MinorTickmarks, lclGetTickMark( mrModel.mnMinorTickMark ) );
+        sal_Int32 nTickStyle = lclGetTickMark( mrModel.mnMajorTickMark );
+        if (nTickStyle != XML_none) {
+            aAxisProp.setProperty( PROP_MajorTickmarks, nTickStyle );
+        };
+        nTickStyle = lclGetTickMark( mrModel.mnMinorTickMark );
+        if (nTickStyle != XML_none) {
+            aAxisProp.setProperty( PROP_MinorTickmarks, nTickStyle );
+        };
+
         aAxisProp.setProperty( PROP_MarkPosition, cssc::ChartAxisMarkPosition_AT_AXIS );
 
         // main grid
