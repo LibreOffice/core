@@ -103,10 +103,16 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Scroll through document', 
 			var sidebarX = Math.floor(rect.right + 80);
 
 			// Hover the canvas so mouseIsInside is true on mousedown.
-			cy.cGet('body').realMouseMove(barX, barY);
-			cy.wrap(null).should(function() {
-				expect(win.app.sectionContainer.isMouseInside()).to.be.true;
-			});
+			// Under heavy CI load a single realMouseMove can race the
+			// section container's mouseenter handler, so re-fire on a
+			// polling loop until the flag flips.
+			cy.waitUntil(function() {
+				cy.cGet('body').realMouseMove(barX, barY);
+				return cy.wrap(null).then(function() {
+					return win.app.sectionContainer.isMouseInside();
+				});
+			}, { interval: 500,
+				errorMsg: 'mouse never registered as inside section container' });
 
 			cy.cGet('body').realMouseDown({
 				pointer: 'mouse', button: 'left',
