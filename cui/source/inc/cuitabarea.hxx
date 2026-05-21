@@ -32,6 +32,7 @@
 #include <vcl/weld/Entry.hxx>
 #include <vcl/weld/IconView.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
+#include <vcl/weld/Scale.hxx>
 #include <vcl/weld/SpinButton.hxx>
 
 class ColorListBox;

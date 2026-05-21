@@ -287,24 +287,6 @@ public:
     virtual void set_label_wrap(bool wrap) = 0;
 };
 
-class VCL_DLLPUBLIC Scale : virtual public Widget
-{
-    Link<Scale&, void> m_aValueChangedHdl;
-
-protected:
-    void signal_value_changed() { m_aValueChangedHdl.Call(*this); }
-
-public:
-    virtual void set_value(int value) = 0;
-    virtual int get_value() const = 0;
-    virtual void set_range(int min, int max) = 0;
-
-    virtual void set_increments(int step, int page) = 0;
-    virtual void get_increments(int& step, int& page) const = 0;
-
-    void connect_value_changed(const Link<Scale&, void>& rLink) { m_aValueChangedHdl = rLink; }
-};
-
 enum class LabelType
 {
     Normal,

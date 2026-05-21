@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SVX_DLGCTL3D_HXX
 #define INCLUDED_SVX_DLGCTL3D_HXX
 
+#include <vcl/weld/Scale.hxx>
 #include <vcl/weld/customweld.hxx>
 #include <vcl/weld/weld.hxx>
 #include <svl/itemset.hxx>

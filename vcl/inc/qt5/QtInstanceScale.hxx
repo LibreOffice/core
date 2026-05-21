@@ -13,6 +13,8 @@
 
 #include "QtInstanceWidget.hxx"
 
+#include <vcl/weld/Scale.hxx>
+
 #include <QtWidgets/QSlider>
 
 class QtInstanceScale : public QtInstanceWidget, public virtual weld::Scale
