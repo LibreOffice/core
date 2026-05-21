@@ -2385,6 +2385,23 @@ RedlineType SwRangeRedline::GetType( sal_uInt16 nPos ) const
     return GetRedlineData(nPos).m_eType;
 }
 
+bool SwRangeRedline::ContainsType(RedlineType nType) const
+{
+    if (nType == RedlineType::Any)
+        return true;
+
+    const SwRedlineData* pRedlineData = m_pRedlineData;
+
+    do
+    {
+        if (pRedlineData->GetType() == nType)
+            return true;
+        pRedlineData = pRedlineData->Next();
+    } while (pRedlineData);
+
+    return false;
+}
+
 bool SwRangeRedline::IsAnnotation() const
 {
     return GetText().getLength() == 1 && GetText()[0] == CH_TXTATR_INWORD;

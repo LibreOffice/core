@@ -226,6 +226,8 @@ public:
     sal_uInt32 GetMovedID(sal_uInt16 nPos = 0) const;
     const DateTime& GetTimeStamp(sal_uInt16 nPos = 0) const;
     SW_DLLPUBLIC RedlineType GetType( sal_uInt16 nPos = 0 ) const;
+    // Returns true if any redline in the stack matches nType
+    bool ContainsType( RedlineType nType ) const;
     // text content of the redline is only an annotation placeholder
     // (i.e. a comment, but don't confuse it with comment of the redline)
     bool IsAnnotation() const;
