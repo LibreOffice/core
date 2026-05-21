@@ -95,15 +95,17 @@ curl --no-progress-meter -S \
     -C - -O https://raw.githubusercontent.com/google/fuzzing/master/dictionaries/webp.dict \
     -C - -O https://raw.githubusercontent.com/google/fuzzing/master/dictionaries/zip.dict \
     -C - -O https://raw.githubusercontent.com/google/fuzzing/master/dictionaries/mathml.dict
+# upstream rtf.dict has an unescaped \h on line 90 that libFuzzer's ParseDictionaryFile rejects
+sed -i '/"\\headerr"/d' rtf.dict
 # build our own fuzz dict for odf, following the pattern of svg.dict
 echo "# Keywords taken from libreoffice/schema/odf1.3/OpenDocument-v1.3-schema.rng" > odf.dict
 echo "# and libreoffice/schema/libreoffice/OpenDocument-v1.4+libreoffice-schema.rng" >> odf.dict
 echo "# tags" >> odf.dict
-grep -h "rng:element name=" libreoffice/schema/odf1.3/OpenDocument-v1.3-schema.rng libreoffice/schema/libreoffice/OpenDocument-v1.4+libreoffice-schema.rng | sed 's#<rng:element name="#"<#;s#^[[:blank:]]*##;s#[[:blank:]>]*$##' >> odf.dict
+grep -h "rng:element name=" libreoffice/schema/odf1.3/OpenDocument-v1.3-schema.rng libreoffice/schema/libreoffice/OpenDocument-v1.4+libreoffice-schema.rng | sed -n 's#.*<rng:element name="\([^"]*\)".*#"<\1"#p' >> odf.dict
 echo "# attributes " >> odf.dict
-grep -h "rng:attribute name=" libreoffice/schema/odf1.3/OpenDocument-v1.3-schema.rng libreoffice/schema/libreoffice/OpenDocument-v1.4+libreoffice-schema.rng | sed 's#<rng:attribute name="#"#;s#^[[:blank:]]*##;s#[[:blank:]>]*$##' >> odf.dict
+grep -h "rng:attribute name=" libreoffice/schema/odf1.3/OpenDocument-v1.3-schema.rng libreoffice/schema/libreoffice/OpenDocument-v1.4+libreoffice-schema.rng | sed -n 's#.*<rng:attribute name="\([^"]*\)".*#"\1"#p' >> odf.dict
 echo "# attributes' values" >> odf.dict
-grep -h "rng:value" libreoffice/schema/odf1.3/OpenDocument-v1.3-schema.rng libreoffice/schema/libreoffice/OpenDocument-v1.4+libreoffice-schema.rng | sed 's#<rng:value>#"#;s#</rng:value>#"#;s#^[[:blank:]]*##;s#[[:blank:]>]*$##' | sort | uniq >> odf.dict
+grep -h "rng:value" libreoffice/schema/odf1.3/OpenDocument-v1.3-schema.rng libreoffice/schema/libreoffice/OpenDocument-v1.4+libreoffice-schema.rng | sed -n 's#.*<rng:value>\([^<]*\)</rng:value>.*#"\1"#p' | sort | uniq >> odf.dict
 
 #fuzzing corpuses
 #afl jpeg, gif, bmp, png, webp
