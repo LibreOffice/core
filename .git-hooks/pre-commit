@@ -131,6 +131,11 @@ sub check_author()
 
 sub check_prettier()
 {
+    my @files = split(/\n/, `git diff --cached --name-only`);
+    if (@files && !grep { !m{^engine/} } @files) {
+        # Skip prettier check, all changes are under engine/.
+        return;
+    }
     if (-e "Makefile") {
         my $red = "\033[0;31m";
         my $reset = "\033[0m";
