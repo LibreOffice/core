@@ -1,8 +1,11 @@
 /* Backstage View Styles */
 
 .backstage-view {
-	/* Using doc-type color based on document type */
-	--color-primary: rgb(var(--doc-type, 92, 41, 131));
+	/* Backstage-specific accent color, varies by document type. Not the
+	 * same as --color-primary, which stays as the global brand color so
+	 * that generic widgets (e.g. .button-primary) keep their app-wide look
+	 * when rendered inside the backstage. */
+	--doc-type-color: rgb(var(--doc-type, 92, 41, 131));
 	--color-on-primary: #ffffff;
 	--color-primary-text: #ffffff;
 	--color-accent-background: var(--color-background-lighter);
@@ -22,7 +25,7 @@
 }
 
 [data-theme='dark'] .backstage-view {
-	--color-accent-background: var(--color-primary);
+	--color-accent-background: var(--doc-type-color);
 }
 
 .backstage-view.hidden {
@@ -31,7 +34,7 @@
 
 .backstage-header {
 	height: 48px;
-	background-color: var(--color-primary);
+	background-color: var(--doc-type-color);
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
@@ -115,7 +118,7 @@
 	justify-content: flex-start;
 	width: auto;
 	margin: 0 24px;
-	color: var(--color-primary);
+	color: var(--doc-type-color);
 	cursor: pointer;
 	background: transparent;
 	padding-bottom: 1rem;
@@ -147,13 +150,13 @@
 	margin: 2px 8px;
 	border-radius: var(--border-radius);
 	--icon-primary-color: rgb(58, 58, 56);
-	--icon-secondary-color: var(--color-primary);
+	--icon-secondary-color: var(--doc-type-color);
 }
 
 .backstage-sidebar-item.active {
 	background-color: transparent;
 	color: var(--color-main-text);
-	--icon-primary-color: var(--color-primary);
+	--icon-primary-color: var(--doc-type-color);
 }
 
 .backstage-sidebar-item:hover {
@@ -296,7 +299,7 @@
 
 .backstage-home-more-button:hover {
 	background-color: var(--color-background-dark);
-	border-color: var(--color-primary);
+	border-color: var(--doc-type-color);
 }
 
 .backstage-templates-empty {
@@ -356,7 +359,7 @@
 }
 
 .backstage-template-card:hover .template-thumbnail img {
-	border-color: var(--color-primary);
+	border-color: var(--doc-type-color);
 }
 
 .template-name {
@@ -394,8 +397,8 @@
 
 .template-type-button.active,
 .template-type-button:hover {
-	background: var(--color-primary);
-	border-color: var(--color-primary);
+	background: var(--doc-type-color);
+	border-color: var(--doc-type-color);
 	color: var(--color-on-primary);
 }
 
@@ -416,8 +419,8 @@
 
 .template-search-input:focus {
 	outline: none;
-	border-color: var(--color-primary);
-	box-shadow: 0 0 0 1px var(--color-primary);
+	border-color: var(--doc-type-color);
+	box-shadow: 0 0 0 1px var(--doc-type-color);
 }
 
 .template-featured-row {
@@ -466,7 +469,7 @@
 
 .backstage-format-card:hover {
 	background-color: var(--color-background-dark);
-	border-color: var(--color-primary);
+	border-color: var(--doc-type-color);
 	box-shadow: 0 2px 6px var(--color-black-10);
 	transform: translateY(-1px);
 }
@@ -474,7 +477,7 @@
 .format-icon {
 	font-size: var(--medium-font-size);
 	font-weight: 600;
-	color: var(--color-primary);
+	color: var(--doc-type-color);
 	min-height: 24px;
 	display: flex;
 	align-items: center;
@@ -488,7 +491,7 @@
 }
 
 .backstage-action-button {
-	background: var(--color-primary);
+	background: var(--doc-type-color);
 	color: var(--color-primary-text);
 	border: none;
 	padding: 12px 32px;
@@ -502,7 +505,7 @@
 }
 
 .backstage-action-button:hover {
-	background-color: var(--color-primary);
+	background-color: var(--doc-type-color);
 	box-shadow: 0 3px 6px var(--color-black-15);
 	transform: translateY(-1px);
 	opacity: 0.9;
