@@ -29,6 +29,7 @@
 #include <vcl/weld/Expander.hxx>
 #include <vcl/weld/Image.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
+#include <vcl/weld/ProgressBar.hxx>
 #include <vcl/weld/Notebook.hxx>
 #include <vcl/weld/ScrolledWindow.hxx>
 #include <vcl/weld/SpinButton.hxx>

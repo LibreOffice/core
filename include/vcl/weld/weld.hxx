@@ -331,15 +331,6 @@ public:
     virtual void stop() = 0;
 };
 
-class VCL_DLLPUBLIC ProgressBar : virtual public Widget
-{
-public:
-    //0-100
-    virtual void set_percentage(int value) = 0;
-    virtual OUString get_text() const = 0;
-    virtual void set_text(const OUString& rText) = 0;
-};
-
 enum class LabelType
 {
     Normal,

@@ -13,6 +13,8 @@
 
 #include "QtInstanceWidget.hxx"
 
+#include <vcl/weld/ProgressBar.hxx>
+
 #include <QtWidgets/QProgressBar>
 
 class QtInstanceProgressBar : public QtInstanceWidget, public virtual weld::ProgressBar

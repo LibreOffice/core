@@ -28,6 +28,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <vcl/roadmapwizardmachine.hxx>
 #include <vcl/weld/ComboBox.hxx>
+#include <vcl/weld/ProgressBar.hxx>
 #include <vcl/weld/SpinButton.hxx>
 
 #define ITEM_ID_INTRODUCTION            0
