@@ -25,6 +25,7 @@
 #include <vcl/InterimItemWindow.hxx>
 #include <vcl/weld/weld.hxx>
 #include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Image.hxx>
 #include <svtools/miscopt.hxx>
 #include <svtools/imgdef.hxx>
 #include <framework/addonsoptions.hxx>

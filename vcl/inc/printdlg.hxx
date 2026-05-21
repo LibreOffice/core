@@ -27,6 +27,7 @@
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/Entry.hxx>
 #include <vcl/weld/Expander.hxx>
+#include <vcl/weld/Image.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
 #include <vcl/weld/Notebook.hxx>
 #include <vcl/weld/ScrolledWindow.hxx>

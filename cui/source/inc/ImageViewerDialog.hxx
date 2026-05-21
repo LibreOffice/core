@@ -10,7 +10,7 @@
 
 #include <vcl/bitmap.hxx>
 #include <vcl/weld/DialogController.hxx>
-#include <vcl/weld/weld.hxx>
+#include <vcl/weld/Image.hxx>
 
 class ImageViewerDialog : public weld::GenericDialogController
 {

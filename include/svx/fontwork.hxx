@@ -23,6 +23,7 @@
 #include <sfx2/ctrlitem.hxx>
 #include <svx/svxdllapi.h>
 #include <vcl/idle.hxx>
+#include <vcl/weld/Image.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
 #include <vcl/weld/Toolbar.hxx>
 #include <vcl/weld/weld.hxx>

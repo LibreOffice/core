@@ -340,14 +340,6 @@ public:
     virtual void set_text(const OUString& rText) = 0;
 };
 
-class VCL_DLLPUBLIC Image : virtual public Widget
-{
-public:
-    virtual void set_from_icon_name(const OUString& rIconName) = 0;
-    virtual void set_image(VirtualDevice* pDevice) = 0;
-    virtual void set_image(const css::uno::Reference<css::graphic::XGraphic>& rImage) = 0;
-};
-
 enum class LabelType
 {
     Normal,

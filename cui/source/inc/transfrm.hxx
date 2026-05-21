@@ -22,6 +22,7 @@
 #include <svx/dlgutil.hxx>
 #include <svx/dialcontrol.hxx>
 #include <svx/anchorid.hxx>
+#include <vcl/weld/Image.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
 #include <vcl/weld/Window.hxx>
 #include <basegfx/range/b2drange.hxx>

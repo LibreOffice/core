@@ -44,6 +44,7 @@
 #include <vcl/uitest/eventdescription.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/vclevent.hxx>
+#include <vcl/weld/Image.hxx>
 #include <vcl/weld/Menu.hxx>
 #include <splitwin.hxx>
 #include <comphelper/diagnose_ex.hxx>

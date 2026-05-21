@@ -13,6 +13,8 @@
 
 #include "QtInstanceWidget.hxx"
 
+#include <vcl/weld/Image.hxx>
+
 #include <QtWidgets/QLabel>
 
 class QtInstanceImage : public QtInstanceWidget, public virtual weld::Image

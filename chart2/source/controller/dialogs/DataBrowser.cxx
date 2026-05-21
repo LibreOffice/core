@@ -36,6 +36,7 @@
 
 #include <tools/mapunit.hxx>
 #include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Image.hxx>
 #include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weld.hxx>
 #include <vcl/settings.hxx>

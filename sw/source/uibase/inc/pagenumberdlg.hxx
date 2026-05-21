@@ -21,6 +21,7 @@
 
 #include <sfx2/basedlgs.hxx>
 #include <svx/pagenumberlistbox.hxx>
+#include <vcl/weld/Image.hxx>
 
 /// Page number wizard for easy header/footer page number insertion
 class SwPageNumberDlg final : public SfxDialogController

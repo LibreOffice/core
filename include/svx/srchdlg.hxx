@@ -29,6 +29,7 @@
 #include <vcl/timer.hxx>
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/Expander.hxx>
+#include <vcl/weld/Image.hxx>
 
 #include <memory>
 #include <vector>
