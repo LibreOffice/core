@@ -30,10 +30,6 @@ using namespace com::sun::star::uno;
 namespace cppu
 {
 
-#if defined _MSC_VER && !defined __clang__
-#pragma warning(pop)
-#endif
-
 namespace
 {
 sal_Int32 TypeSeqLen(const Sequence<Type>& s) { return s.getLength(); }
