@@ -35,7 +35,6 @@
 #include <unoframe.hxx>
 #include "xmlexp.hxx"
 #include "xmltexte.hxx"
-#include <SwAppletImpl.hxx>
 #include <ndindex.hxx>
 
 #include <tools/mapunit.hxx>
@@ -58,8 +57,6 @@ enum SvEmbeddedObjectTypes
 {
     SV_EMBEDDED_OWN,
     SV_EMBEDDED_OUTPLACE,
-    SV_EMBEDDED_APPLET,
-    SV_EMBEDDED_PLUGIN,
     SV_EMBEDDED_FRAME
 };
 
@@ -82,8 +79,6 @@ SwXMLTextParagraphExport::SwXMLTextParagraphExport(
         SwXMLExport& rExp,
          SvXMLAutoStylePoolP& _rAutoStylePool ) :
     XMLTextParagraphExport( rExp, _rAutoStylePool ),
-    m_aAppletClassId( SO3_APPLET_CLASSID ),
-    m_aPluginClassId( SO3_PLUGIN_CLASSID ),
     m_aIFrameClassId( SO3_IFRAME_CLASSID )
 {
 }
@@ -223,15 +218,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
     SvGlobalName aClassId( rObjRef->getClassID() );
 
     SvEmbeddedObjectTypes nType = SV_EMBEDDED_OWN;
-    if( m_aPluginClassId == aClassId )
-    {
-        nType = SV_EMBEDDED_PLUGIN;
-    }
-    else if( m_aAppletClassId == aClassId )
-    {
-        nType = SV_EMBEDDED_APPLET;
-    }
-    else if( m_aIFrameClassId == aClassId )
+    if( m_aIFrameClassId == aClassId )
     {
         nType = SV_EMBEDDED_FRAME;
     }
@@ -243,7 +230,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
     enum XMLTokenEnum eElementName = XML__UNKNOWN_;
     SvXMLExport &rXMLExport = GetExport();
 
-    // First the stuff common to each of Applet/Plugin/Floating Frame
+    // First the stuff common to Floating Frame
     OUString sStyle;
     Any aAny;
     if( rPropSetInfo->hasPropertyByName( gsFrameStyleName ) )
@@ -352,72 +339,6 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
         eElementName = SV_EMBEDDED_OUTPLACE==nType ? XML_OBJECT_OLE
                                                    : XML_OBJECT;
         break;
-    case SV_EMBEDDED_APPLET:
-        {
-            // It's an applet!
-            if( svt::EmbeddedObjectRef::TryRunningState( rObjRef.GetObject() ) )
-            {
-                uno::Reference < beans::XPropertySet > xSet( rObjRef->getComponent(), uno::UNO_QUERY );
-                OUString aStr;
-                Any aAny2 = xSet->getPropertyValue(u"AppletCodeBase"_ustr);
-                aAny2 >>= aStr;
-                if (!aStr.isEmpty() )
-                    lcl_addURL(rXMLExport, aStr);
-
-                aAny2 = xSet->getPropertyValue(u"AppletName"_ustr);
-                aAny2 >>= aStr;
-                if (!aStr.isEmpty())
-                    rXMLExport.AddAttribute( XML_NAMESPACE_DRAW, XML_APPLET_NAME, aStr );
-
-                aAny2 = xSet->getPropertyValue(u"AppletCode"_ustr);
-                aAny2 >>= aStr;
-                rXMLExport.AddAttribute( XML_NAMESPACE_DRAW, XML_CODE, aStr );
-
-                bool bScript = false;
-                aAny2 = xSet->getPropertyValue(u"AppletIsScript"_ustr);
-                aAny2 >>= bScript;
-                rXMLExport.AddAttribute( XML_NAMESPACE_DRAW, XML_MAY_SCRIPT, bScript ? XML_TRUE : XML_FALSE );
-
-                uno::Sequence < beans::PropertyValue > aProps;
-                aAny2 = xSet->getPropertyValue(u"AppletCommands"_ustr);
-                aAny2 >>= aProps;
-
-                sal_Int32 i = aProps.getLength();
-                while ( i > 0 )
-                {
-                    const beans::PropertyValue& aProp = aProps[--i];
-                    const SwHtmlOptType nType2 = SwApplet_Impl::GetOptionType( aProp.Name, true );
-                    if ( nType2 == SwHtmlOptType::TAG)
-                    {
-                        OUString aStr2;
-                        aProp.Value >>= aStr2;
-                        rXMLExport.AddAttribute( XML_NAMESPACE_DRAW, aProp.Name, aStr2);
-                    }
-                }
-
-                eElementName = XML_APPLET;
-            }
-        }
-        break;
-    case SV_EMBEDDED_PLUGIN:
-        {
-            // It's a plugin!
-            if ( svt::EmbeddedObjectRef::TryRunningState( rObjRef.GetObject() ) )
-            {
-                uno::Reference < beans::XPropertySet > xSet( rObjRef->getComponent(), uno::UNO_QUERY );
-                OUString aStr;
-                Any aAny2 = xSet->getPropertyValue(u"PluginURL"_ustr);
-                aAny2 >>= aStr;
-                lcl_addURL( rXMLExport, aStr );
-
-                aAny2 = xSet->getPropertyValue(u"PluginMimeType"_ustr);
-                aAny2 >>= aStr;
-                if (!aStr.isEmpty())
-                    rXMLExport.AddAttribute( XML_NAMESPACE_DRAW, XML_MIME_TYPE, aStr );
-                eElementName = XML_PLUGIN;
-            }
-        }
-        break;
     case SV_EMBEDDED_FRAME:
         {
             // It's a floating frame!
@@ -468,58 +389,6 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
                 rXMLExport.AddEmbeddedObjectAsBase64( sURL );
             }
             break;
-        case SV_EMBEDDED_APPLET:
-            {
-                if ( svt::EmbeddedObjectRef::TryRunningState( rObjRef.GetObject() ) )
-                {
-                    uno::Reference < beans::XPropertySet > xSet( rObjRef->getComponent(), uno::UNO_QUERY );
-                    uno::Sequence < beans::PropertyValue > aProps;
-                    aAny = xSet->getPropertyValue(u"AppletCommands"_ustr);
-                    aAny >>= aProps;
-
-                    sal_Int32 i = aProps.getLength();
-                    while ( i > 0 )
-                    {
-                        const beans::PropertyValue& aProp = aProps[--i];
-                        const SwHtmlOptType nType2 = SwApplet_Impl::GetOptionType( aProp.Name, true );
-                        if (SwHtmlOptType::PARAM == nType2 || SwHtmlOptType::SIZE == nType2 )
-                        {
-                            OUString aStr;
-                            aProp.Value >>= aStr;
-                            rXMLExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, aProp.Name );
-                            rXMLExport.AddAttribute( XML_NAMESPACE_DRAW, XML_VALUE, aStr );
-                            SvXMLElementExport aElementExport2( rXMLExport, XML_NAMESPACE_DRAW, XML_PARAM, false, true );
-                        }
-                    }
-                }
-            }
-            break;
-        case SV_EMBEDDED_PLUGIN:
-            {
-                if ( svt::EmbeddedObjectRef::TryRunningState( rObjRef.GetObject() ) )
-                {
-                    uno::Reference < beans::XPropertySet > xSet( rObjRef->getComponent(), uno::UNO_QUERY );
-                    uno::Sequence < beans::PropertyValue > aProps;
-                    aAny = xSet->getPropertyValue(u"PluginCommands"_ustr);
-                    aAny >>= aProps;
-
-                    sal_Int32 i = aProps.getLength();
-                    while ( i > 0 )
-                    {
-                        const beans::PropertyValue& aProp = aProps[--i];
-                        const SwHtmlOptType nType2 = SwApplet_Impl::GetOptionType( aProp.Name, false );
-                        if ( nType2 == SwHtmlOptType::TAG)
-                        {
-                            OUString aStr;
-                            aProp.Value >>= aStr;
-                            rXMLExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, aProp.Name );
-                            rXMLExport.AddAttribute( XML_NAMESPACE_DRAW, XML_VALUE, aStr );
-                            SvXMLElementExport aElementExport2( rXMLExport, XML_NAMESPACE_DRAW, XML_PARAM, false, true );
-                        }
-                    }
-                }
-            }
-            break;
         default:
             break;
         }
@@ -540,7 +409,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
             GetExport().AddEmbeddedObjectAsBase64( sURL );
     }
 
-    // Lastly the stuff common to each of Applet/Plugin/Floating Frame
+    // Lastly the stuff common to Floating Frame
     exportEvents( rPropSet );
     exportTitleAndDescription( rPropSet, rPropSetInfo );  // #i73249#
     exportContour( rPropSet, rPropSetInfo );

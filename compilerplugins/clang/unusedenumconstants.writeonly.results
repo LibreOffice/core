@@ -6176,8 +6176,6 @@ sw/inc/sortopt.hxx:27
     enum SwSortOrder Descending
 sw/inc/sortopt.hxx:28
     enum SwSortDirection Columns
-sw/inc/SwAppletImpl.hxx:30
-    enum SwHtmlOptType IGNORE
 sw/inc/swcrsr.hxx:65
     enum SwCursorSkipMode Chars
 sw/inc/swmodule.hxx:63

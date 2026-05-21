@@ -21,7 +21,6 @@
 
 #include <algorithm>
 #include <memory>
-#include <config_java.h>
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
@@ -112,7 +111,6 @@
 #include "wrthtml.hxx"
 #include <linkenum.hxx>
 #include <breakit.hxx>
-#include <SwAppletImpl.hxx>
 #include <swdll.hxx>
 #include <txatbase.hxx>
 
@@ -721,14 +719,6 @@ void SwHTMLParser::Continue( HtmlTokenId nToken )
                 InsertAttr( SwFormatField( aField ), false );
             }
 
-            if( m_pAppletImpl )
-            {
-                if( m_pAppletImpl->GetApplet().is() )
-                    EndApplet();
-                else
-                    EndObject();
-            }
-
             // maybe remove an existing LF after the last paragraph
             if( IsNewDoc() )
                 bLFStripped = StripTrailingLF() > 0;
@@ -1157,30 +1147,6 @@ void SwHTMLParser::NextToken( HtmlTokenId nToken )
 
             return;
         }
-        else if( m_pAppletImpl )
-        {
-            // in an applet only <PARAM> tags and the </APPLET> tag
-            // are of interest for us (for the moment)
-            // <SCRIPT> is ignored here (from Netscape)!
-
-            switch( nToken )
-            {
-            case HtmlTokenId::APPLET_OFF:
-                m_bCallNextToken = false;
-                EndApplet();
-                break;
-            case HtmlTokenId::OBJECT_OFF:
-                m_bCallNextToken = false;
-                EndObject();
-                break;
-            case HtmlTokenId::PARAM:
-                InsertParam();
-                break;
-            default: break;
-            }
-
-            return;
-        }
         else if( m_bTextArea )
         {
             // in a TextArea everything up to </TEXTAREA> is inserted as text.
@@ -1469,22 +1435,11 @@ void SwHTMLParser::NextToken( HtmlTokenId nToken )
                 InsertImage();
             break;
         }
-#if HAVE_FEATURE_JAVA
-        NewObject();
-        m_bCallNextToken = m_pAppletImpl!=nullptr && m_xTable;
-#endif
         break;
 
     case HtmlTokenId::OBJECT_OFF:
         if (!m_aEmbeds.empty())
             m_aEmbeds.pop();
-        break;
-
-    case HtmlTokenId::APPLET_ON:
-#if HAVE_FEATURE_JAVA
-        InsertApplet();
-        m_bCallNextToken = m_pAppletImpl!=nullptr && m_xTable;
-#endif
         break;
 
     case HtmlTokenId::IFRAME_ON:

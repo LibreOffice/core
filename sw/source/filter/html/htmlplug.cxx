@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <config_java.h>
-
 #include <hintids.hxx>
 #include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
@@ -37,7 +35,6 @@
 #include <tools/globname.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <IDocumentContentOperations.hxx>
-#include <SwAppletImpl.hxx>
 #include <fmtornt.hxx>
 #include <fmtfsize.hxx>
 #include <fmtsrnd.hxx>
@@ -90,36 +87,6 @@ using namespace com::sun::star;
 
 #define HTML_DFLT_APPLET_WIDTH (o3tl::toTwips(125, o3tl::Length::mm10))
 #define HTML_DFLT_APPLET_HEIGHT (o3tl::toTwips(125, o3tl::Length::mm10))
-
-
-const HtmlFrmOpts HTML_FRMOPTS_EMBED_ALL      =
-    HtmlFrmOpts::Alt |
-    HtmlFrmOpts::Size |
-    HtmlFrmOpts::Name;
-const HtmlFrmOpts HTML_FRMOPTS_EMBED_CNTNR    =
-    HTML_FRMOPTS_EMBED_ALL |
-    HtmlFrmOpts::AbsSize;
-const HtmlFrmOpts HTML_FRMOPTS_EMBED          =
-    HTML_FRMOPTS_EMBED_ALL |
-    HtmlFrmOpts::Align |
-    HtmlFrmOpts::Space |
-    HtmlFrmOpts::BrClear |
-    HtmlFrmOpts::Name;
-const HtmlFrmOpts HTML_FRMOPTS_HIDDEN_EMBED   =
-    HtmlFrmOpts::Alt |
-    HtmlFrmOpts::Name;
-
-const HtmlFrmOpts HTML_FRMOPTS_APPLET_ALL     =
-    HtmlFrmOpts::Alt |
-    HtmlFrmOpts::Size;
-const HtmlFrmOpts HTML_FRMOPTS_APPLET_CNTNR   =
-    HTML_FRMOPTS_APPLET_ALL |
-    HtmlFrmOpts::AbsSize;
-const HtmlFrmOpts HTML_FRMOPTS_APPLET         =
-    HTML_FRMOPTS_APPLET_ALL |
-    HtmlFrmOpts::Align |
-    HtmlFrmOpts::Space |
-    HtmlFrmOpts::BrClear;
 
 const HtmlFrmOpts HTML_FRMOPTS_IFRAME_ALL     =
     HtmlFrmOpts::Alt |
@@ -417,7 +384,7 @@ bool SwHTMLParser::InsertEmbed()
             break;
         case HtmlOptionId::UNKNOWN:
             if (rOption.GetTokenString().equalsIgnoreAsciiCase(
-                        OOO_STRING_SW_HTML_O_Hidden))
+                        "HIDDEN"))
             {
                 bHidden = !rOption.GetString().equalsIgnoreAsciiCase(
                                 "FALSE");
@@ -544,27 +511,7 @@ bool SwHTMLParser::InsertEmbed()
     comphelper::EmbeddedObjectContainer aCnt;
     OUString aObjName;
     uno::Reference < embed::XEmbeddedObject > xObj;
-    if (!bHasData)
-    {
-        xObj = aCnt.CreateEmbeddedObject( SvGlobalName( SO3_PLUGIN_CLASSID ).GetByteSequence(), aObjName );
-        if ( svt::EmbeddedObjectRef::TryRunningState( xObj ) )
-        {
-            uno::Reference < beans::XPropertySet > xSet( xObj->getComponent(), uno::UNO_QUERY );
-            if ( xSet.is() )
-            {
-                if( bHasURL )
-                    xSet->setPropertyValue(u"PluginURL"_ustr, uno::Any( aURL ) );
-                if( bHasType )
-                    xSet->setPropertyValue(u"PluginMimeType"_ustr, uno::Any( aType ) );
-
-                uno::Sequence < beans::PropertyValue > aProps;
-                aCmdLst.FillSequence( aProps );
-                xSet->setPropertyValue(u"PluginCommands"_ustr, uno::Any( aProps ) );
-
-            }
-        }
-    }
-    else if (SwDocShell* pDocSh = m_xDoc->GetDocShell())
+    if (SwDocShell* pDocSh = m_xDoc->GetDocShell())
     {
         // Has non-empty data attribute in XHTML: map that to an OLE object.
         uno::Reference<embed::XStorage> xStorage = pDocSh->GetStorage();
@@ -717,333 +664,6 @@ bool SwHTMLParser::InsertEmbed()
     m_aEmbeds.push(pOLENode);
 
     return true;
-}
-
-#if HAVE_FEATURE_JAVA
-void SwHTMLParser::NewObject()
-{
-    OUString aClassID;
-    OUString aStandBy, aId, aStyle, aClass;
-    Size aSize( USHRT_MAX, USHRT_MAX );
-    Size aSpace( 0, 0 );
-    sal_Int16 eVertOri = text::VertOrientation::TOP;
-    sal_Int16 eHoriOri = text::HoriOrientation::NONE;
-
-    bool bPercentWidth = false, bPercentHeight = false,
-             bDeclare = false;
-    // create a new Command list
-    m_pAppletImpl.reset(new SwApplet_Impl( m_xDoc->GetAttrPool() ));
-
-    const HTMLOptions& rHTMLOptions = GetOptions();
-    for (size_t i = rHTMLOptions.size(); i; )
-    {
-        const HTMLOption& rOption = rHTMLOptions[--i];
-        switch( rOption.GetToken() )
-        {
-        case HtmlOptionId::ID:
-            aId = rOption.GetString();
-            break;
-        case HtmlOptionId::STYLE:
-            aStyle = rOption.GetString();
-            break;
-        case HtmlOptionId::CLASS:
-            aClass = rOption.GetString();
-            break;
-        case HtmlOptionId::DECLARE:
-            bDeclare = true;
-            break;
-        case HtmlOptionId::CLASSID:
-            aClassID = rOption.GetString();
-            break;
-        case HtmlOptionId::CODEBASE:
-            break;
-        case HtmlOptionId::DATA:
-            break;
-        case HtmlOptionId::TYPE:
-            break;
-        case HtmlOptionId::CODETYPE:
-            break;
-        case HtmlOptionId::ARCHIVE:
-        case HtmlOptionId::UNKNOWN:
-            break;
-        case HtmlOptionId::STANDBY:
-            aStandBy = rOption.GetString();
-            break;
-        case HtmlOptionId::WIDTH:
-            bPercentWidth = (rOption.GetString().indexOf('%') != -1);
-            aSize.setWidth( static_cast<tools::Long>(rOption.GetNumber()) );
-            break;
-        case HtmlOptionId::HEIGHT:
-            bPercentHeight = (rOption.GetString().indexOf('%') != -1);
-            aSize.setHeight( static_cast<tools::Long>(rOption.GetNumber()) );
-            break;
-        case HtmlOptionId::ALIGN:
-            eVertOri = rOption.GetEnum( aHTMLImgVAlignTable, eVertOri );
-            eHoriOri = rOption.GetEnum( aHTMLImgHAlignTable, eHoriOri );
-            break;
-        case HtmlOptionId::USEMAP:
-            break;
-        case HtmlOptionId::NAME:
-            break;
-        case HtmlOptionId::HSPACE:
-            aSpace.setWidth( static_cast<tools::Long>(rOption.GetNumber()) );
-            break;
-        case HtmlOptionId::VSPACE:
-            aSpace.setHeight( static_cast<tools::Long>(rOption.GetNumber()) );
-            break;
-        case HtmlOptionId::BORDER:
-            break;
-
-        case HtmlOptionId::SDONCLICK:
-        case HtmlOptionId::ONCLICK:
-        case HtmlOptionId::SDONMOUSEOVER:
-        case HtmlOptionId::ONMOUSEOVER:
-        case HtmlOptionId::SDONMOUSEOUT:
-        case HtmlOptionId::ONMOUSEOUT:
-            break;
-        default: break;
-        }
-        // All parameters are passed to the applet.
-        m_pAppletImpl->AppendParam( rOption.GetTokenString(),
-                                  rOption.GetString() );
-
-    }
-
-    // Objects that are declared only are not evaluated. Moreover, only
-    // Java applets are supported.
-    bool bIsApplet = false;
-
-    if( !bDeclare && aClassID.getLength() == 42 &&
-        aClassID.startsWith("clsid:") )
-    {
-        aClassID = aClassID.copy(6);
-        SvGlobalName aCID;
-        if( aCID.MakeId( aClassID ) )
-        {
-            SvGlobalName aJavaCID( 0x8AD9C840UL, 0x044EU, 0x11D1U, 0xB3U, 0xE9U,
-                                   0x00U, 0x80U, 0x5FU, 0x49U, 0x9DU, 0x93U );
-
-            bIsApplet = aJavaCID == aCID;
-        }
-    }
-
-    if( !bIsApplet )
-    {
-        m_pAppletImpl.reset();
-        return;
-    }
-
-    m_pAppletImpl->SetAltText( aStandBy );
-
-    SfxItemSet aItemSet( m_xDoc->GetAttrPool(), m_pCSS1Parser->GetWhichMap() );
-    SvxCSS1PropertyInfo aPropInfo;
-    if( HasStyleOptions( aStyle, aId, aClass ) )
-        (void)ParseStyleOptions( aStyle, aId, aClass, aItemSet, aPropInfo );
-
-    SfxItemSet& rFrameSet = m_pAppletImpl->GetItemSet();
-    if( !IsNewDoc() )
-        Reader::ResetFrameFormatAttrs( rFrameSet );
-
-    // set the anchor and the adjustment
-    SetAnchorAndAdjustment( eVertOri, eHoriOri, aPropInfo, rFrameSet );
-
-    // and still the size of the frame
-    Size aDfltSz( HTML_DFLT_APPLET_WIDTH, HTML_DFLT_APPLET_HEIGHT );
-    SetFixSize( aSize, aDfltSz, bPercentWidth, bPercentHeight, aPropInfo, rFrameSet );
-    SetSpace( aSpace, aItemSet, aPropInfo, rFrameSet );
-}
-#endif
-
-void SwHTMLParser::EndObject()
-{
-#if HAVE_FEATURE_JAVA
-    if( !m_pAppletImpl )
-        return;
-    if( !m_pAppletImpl->CreateApplet( m_sBaseURL ) )
-        return;
-
-    m_pAppletImpl->FinishApplet();
-
-    // and insert into the document
-    SwFrameFormat* pFlyFormat =
-        m_xDoc->getIDocumentContentOperations().InsertEmbObject(*m_pPam,
-                ::svt::EmbeddedObjectRef( m_pAppletImpl->GetApplet(), embed::Aspects::MSOLE_CONTENT ),
-                &m_pAppletImpl->GetItemSet() );
-
-    // set the alternative name
-    SwNoTextNode *pNoTextNd =
-        m_xDoc->GetNodes()[ pFlyFormat->GetContent().GetContentIdx()
-                          ->GetIndex()+1 ]->GetNoTextNode();
-    pNoTextNd->SetTitle( m_pAppletImpl->GetAltText() );
-
-    // if applicable create frames and register auto-bound frames
-    RegisterFlyFrame( pFlyFormat );
-
-    m_pAppletImpl.reset();
-#else
-    (void) this;                // Silence loplugin:staticmethods
-#endif
-}
-
-#if HAVE_FEATURE_JAVA
-void SwHTMLParser::InsertApplet()
-{
-    OUString aCodeBase, aCode, aName, aAlt, aId, aStyle, aClass;
-    Size aSize( USHRT_MAX, USHRT_MAX );
-    Size aSpace( 0, 0 );
-    bool bPercentWidth = false, bPercentHeight = false, bMayScript = false;
-    sal_Int16 eVertOri = text::VertOrientation::TOP;
-    sal_Int16 eHoriOri = text::HoriOrientation::NONE;
-
-    // create a new Command list
-    m_pAppletImpl.reset(new SwApplet_Impl( m_xDoc->GetAttrPool() ));
-
-    const HTMLOptions& rHTMLOptions = GetOptions();
-    for (size_t i = rHTMLOptions.size(); i; )
-    {
-        const HTMLOption& rOption = rHTMLOptions[--i];
-        switch( rOption.GetToken() )
-        {
-        case HtmlOptionId::ID:
-            aId = rOption.GetString();
-            break;
-        case HtmlOptionId::STYLE:
-            aStyle = rOption.GetString();
-            break;
-        case HtmlOptionId::CLASS:
-            aClass = rOption.GetString();
-            break;
-        case HtmlOptionId::CODEBASE:
-            aCodeBase = rOption.GetString();
-            break;
-        case HtmlOptionId::CODE:
-            aCode = rOption.GetString();
-            break;
-        case HtmlOptionId::NAME:
-            aName = rOption.GetString();
-            break;
-        case HtmlOptionId::ALT:
-            aAlt = rOption.GetString();
-            break;
-        case HtmlOptionId::ALIGN:
-            eVertOri = rOption.GetEnum( aHTMLImgVAlignTable, eVertOri );
-            eHoriOri = rOption.GetEnum( aHTMLImgHAlignTable, eHoriOri );
-            break;
-        case HtmlOptionId::WIDTH:
-            bPercentWidth = (rOption.GetString().indexOf('%') != -1);
-            aSize.setWidth( static_cast<tools::Long>(rOption.GetNumber()) );
-            break;
-        case HtmlOptionId::HEIGHT:
-            bPercentHeight = (rOption.GetString().indexOf('%') != -1);
-            aSize.setHeight( static_cast<tools::Long>(rOption.GetNumber()) );
-            break;
-        case HtmlOptionId::HSPACE:
-            aSpace.setWidth( static_cast<tools::Long>(rOption.GetNumber()) );
-            break;
-        case HtmlOptionId::VSPACE:
-            aSpace.setHeight( static_cast<tools::Long>(rOption.GetNumber()) );
-            break;
-        case HtmlOptionId::MAYSCRIPT:
-            bMayScript = true;
-            break;
-        default: break;
-        }
-
-        // All parameters are passed to the applet.
-        m_pAppletImpl->AppendParam( rOption.GetTokenString(),
-                                  rOption.GetString() );
-    }
-
-    if( aCode.isEmpty() )
-    {
-        m_pAppletImpl.reset();
-        return;
-    }
-
-    if ( !aCodeBase.isEmpty() )
-        aCodeBase = INetURLObject::GetAbsURL( m_sBaseURL, aCodeBase );
-    m_pAppletImpl->CreateApplet( aCode, aName, bMayScript, aCodeBase, m_sBaseURL );//, aAlt );
-    m_pAppletImpl->SetAltText( aAlt );
-
-    SfxItemSet aItemSet( m_xDoc->GetAttrPool(), m_pCSS1Parser->GetWhichMap() );
-    SvxCSS1PropertyInfo aPropInfo;
-    if( HasStyleOptions( aStyle, aId, aClass ) )
-        (void)ParseStyleOptions( aStyle, aId, aClass, aItemSet, aPropInfo );
-
-    SfxItemSet& rFrameSet = m_pAppletImpl->GetItemSet();
-    if( !IsNewDoc() )
-        Reader::ResetFrameFormatAttrs( rFrameSet );
-
-    // set the anchor and the adjustment
-    SetAnchorAndAdjustment( eVertOri, eHoriOri, aPropInfo, rFrameSet );
-
-    // and still the size or the frame
-    Size aDfltSz( HTML_DFLT_APPLET_WIDTH, HTML_DFLT_APPLET_HEIGHT );
-    SetFixSize( aSize, aDfltSz, bPercentWidth, bPercentHeight, aPropInfo, rFrameSet );
-    SetSpace( aSpace, aItemSet, aPropInfo, rFrameSet );
-}
-#endif
-
-void SwHTMLParser::EndApplet()
-{
-#if HAVE_FEATURE_JAVA
-    if( !m_pAppletImpl )
-        return;
-
-    m_pAppletImpl->FinishApplet();
-
-    // and insert into the document
-    SwFrameFormat* pFlyFormat =
-        m_xDoc->getIDocumentContentOperations().InsertEmbObject(*m_pPam,
-                    ::svt::EmbeddedObjectRef( m_pAppletImpl->GetApplet(), embed::Aspects::MSOLE_CONTENT ),
-                    &m_pAppletImpl->GetItemSet());
-
-    // set the alternative name
-    SwNoTextNode *pNoTextNd =
-        m_xDoc->GetNodes()[ pFlyFormat->GetContent().GetContentIdx()
-                          ->GetIndex()+1 ]->GetNoTextNode();
-    pNoTextNd->SetTitle( m_pAppletImpl->GetAltText() );
-
-    // if applicable create frames and register auto-bound frames
-    RegisterFlyFrame( pFlyFormat );
-
-    m_pAppletImpl.reset();
-#else
-    (void) this;
-#endif
-}
-
-void SwHTMLParser::InsertParam()
-{
-#if HAVE_FEATURE_JAVA
-    if( !m_pAppletImpl )
-        return;
-
-    OUString aName, aValue;
-
-    const HTMLOptions& rHTMLOptions = GetOptions();
-    for (size_t i = rHTMLOptions.size(); i; )
-    {
-        const HTMLOption& rOption = rHTMLOptions[--i];
-        switch( rOption.GetToken() )
-        {
-        case HtmlOptionId::NAME:
-            aName = rOption.GetString();
-            break;
-        case HtmlOptionId::VALUE:
-            aValue = rOption.GetString();
-            break;
-        default: break;
-        }
-    }
-
-    if( aName.isEmpty() )
-        return;
-
-    m_pAppletImpl->AppendParam( aName, aValue );
-#else
-    (void) this;
-#endif
 }
 
 void SwHTMLParser::InsertFloatingFrame()
@@ -1199,20 +819,10 @@ SwHTMLFrameType SwHTMLWriter::GuessOLENodeFrameType( const SwNode& rNode )
 
     uno::Reference < embed::XClassifiedObject > xClass = rObj.GetOleRef();
     SvGlobalName aClass( xClass->getClassID() );
-    if( aClass == SvGlobalName( SO3_PLUGIN_CLASSID ) )
-    {
-        eType = HTML_FRMTYPE_PLUGIN;
-    }
-    else if( aClass == SvGlobalName( SO3_IFRAME_CLASSID ) )
+    if( aClass == SvGlobalName( SO3_IFRAME_CLASSID ) )
     {
         eType = HTML_FRMTYPE_IFRAME;
     }
-#if HAVE_FEATURE_JAVA
-    else if( aClass == SvGlobalName( SO3_APPLET_CLASSID ) )
-    {
-        eType = HTML_FRMTYPE_APPLET;
-    }
-#endif
 
     return eType;
 }
@@ -1252,124 +862,18 @@ SwHTMLWriter& OutHTML_FrameFormatOLENode( SwHTMLWriter& rWrt, const SwFrameForma
     if( !rFrameFormat.GetName().isEmpty() )
         rWrt.OutImplicitMark( rFrameFormat.GetName().toString(),
                                   "ole" );
-    uno::Any aAny;
-    SvGlobalName aGlobName( xObj->getClassID() );
     OStringBuffer sOut("<");
-    if( aGlobName == SvGlobalName( SO3_PLUGIN_CLASSID ) )
-    {
-        // first the plug-in specifics
-        sOut.append(rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_embed);
+    // or the Floating-Frame specifics
 
-        OUString aStr;
-        OUString aURL;
-        aAny = xSet->getPropertyValue(u"PluginURL"_ustr);
-        if( (aAny >>= aStr) && !aStr.isEmpty() )
-        {
-            aURL = rWrt.normalizeURL(aStr, false);
-        }
+    sOut.append(rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_iframe);
+    rWrt.Strm().WriteOString( sOut );
+    sOut.setLength(0);
 
-        if( !aURL.isEmpty() )
-        {
-            sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_src "=\"");
-            rWrt.Strm().WriteOString( sOut );
-            sOut.setLength(0);
-            HTMLOutFuncs::Out_String( rWrt.Strm(), aURL );
-            sOut.append('\"');
-        }
+    SfxFrameHTMLWriter::Out_FrameDescriptor( rWrt.Strm(), rWrt.GetBaseURL(),
+                                    xSet );
 
-        OUString aType;
-        aAny = xSet->getPropertyValue(u"PluginMimeType"_ustr);
-        if( (aAny >>= aType) && !aType.isEmpty() )
-        {
-            sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_type "=\"");
-            rWrt.Strm().WriteOString( sOut );
-            sOut.setLength(0);
-            HTMLOutFuncs::Out_String( rWrt.Strm(), aType );
-            sOut.append('\"');
-        }
-
-        if ((RndStdIds::FLY_AT_PARA == rFrameFormat.GetAnchor().GetAnchorId()) &&
-            css::text::WrapTextMode_THROUGH == rFrameFormat.GetSurround().GetSurround() )
-        {
-            // A HIDDEN plug-in
-            sOut.append(" " OOO_STRING_SW_HTML_O_Hidden);
-            nFrameOpts = HTML_FRMOPTS_HIDDEN_EMBED;
-            bHiddenEmbed = true;
-        }
-        else
-        {
-            nFrameOpts = bInCntnr ? HTML_FRMOPTS_EMBED_CNTNR
-                                : HTML_FRMOPTS_EMBED;
-        }
-    }
-    else if( aGlobName == SvGlobalName( SO3_APPLET_CLASSID ) )
-    {
-        // or the applet specifics
-
-        sOut.append(rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_applet);
-
-        // CODEBASE
-        OUString aCd;
-        aAny = xSet->getPropertyValue(u"AppletCodeBase"_ustr);
-        if( (aAny >>= aCd) && !aCd.isEmpty() )
-        {
-            OUString sCodeBase(rWrt.normalizeURL(aCd, false));
-            if( !sCodeBase.isEmpty() )
-            {
-                sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_codebase "=\"");
-                rWrt.Strm().WriteOString( sOut );
-                sOut.setLength(0);
-                HTMLOutFuncs::Out_String( rWrt.Strm(), sCodeBase );
-                sOut.append('\"');
-            }
-        }
-
-        // CODE
-        OUString aClass;
-        aAny = xSet->getPropertyValue(u"AppletCode"_ustr);
-        aAny >>= aClass;
-        sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_code "=\"");
-        rWrt.Strm().WriteOString( sOut );
-        sOut.setLength(0);
-        HTMLOutFuncs::Out_String( rWrt.Strm(), aClass );
-        sOut.append('\"');
-
-        // NAME
-        OUString aAppletName;
-        aAny = xSet->getPropertyValue(u"AppletName"_ustr);
-        aAny >>= aAppletName;
-        if( !aAppletName.isEmpty() )
-        {
-            sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_name "=\"");
-            rWrt.Strm().WriteOString( sOut );
-            sOut.setLength(0);
-            HTMLOutFuncs::Out_String( rWrt.Strm(), aAppletName );
-            sOut.append('\"');
-        }
-
-        bool bScript = false;
-        aAny = xSet->getPropertyValue(u"AppletIsScript"_ustr);
-        aAny >>= bScript;
-        if( bScript )
-            sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_mayscript);
-
-        nFrameOpts = bInCntnr ? HTML_FRMOPTS_APPLET_CNTNR
-                            : HTML_FRMOPTS_APPLET;
-    }
-    else
-    {
-        // or the Floating-Frame specifics
-
-        sOut.append(rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_iframe);
-        rWrt.Strm().WriteOString( sOut );
-        sOut.setLength(0);
-
-        SfxFrameHTMLWriter::Out_FrameDescriptor( rWrt.Strm(), rWrt.GetBaseURL(),
-                                        xSet );
-
-        nFrameOpts = bInCntnr ? HTML_FRMOPTS_IFRAME_CNTNR
-                            : HTML_FRMOPTS_IFRAME;
-    }
+    nFrameOpts = bInCntnr ? HTML_FRMOPTS_IFRAME_CNTNR
+                        : HTML_FRMOPTS_IFRAME;
 
     rWrt.Strm().WriteOString( sOut );
     sOut.setLength(0);
@@ -1381,93 +885,6 @@ SwHTMLWriter& OutHTML_FrameFormatOLENode( SwHTMLWriter& rWrt, const SwFrameForma
     if( rWrt.IsHTMLMode( HTMLMODE_ABS_POS_FLY ) && !bHiddenEmbed )
         rWrt.OutCSS1_FrameFormatOptions( rFrameFormat, nFrameOpts );
 
-    if( aGlobName == SvGlobalName( SO3_APPLET_CLASSID ) )
-    {
-        // output the parameters of applets as separate tags
-        // and write a </APPLET>
-
-        uno::Sequence < beans::PropertyValue > aProps;
-        aAny = xSet->getPropertyValue(u"AppletCommands"_ustr);
-        aAny >>= aProps;
-
-        SvCommandList aCommands;
-        aCommands.FillFromSequence( aProps );
-        std::vector<sal_uLong> aParams;
-        size_t i = aCommands.size();
-        while( i > 0 )
-        {
-            const SvCommand& rCommand = aCommands[ --i ];
-            const OUString& rName = rCommand.GetCommand();
-            SwHtmlOptType nType = SwApplet_Impl::GetOptionType( rName, true );
-            if( SwHtmlOptType::TAG == nType )
-            {
-                const OUString& rValue = rCommand.GetArgument();
-                rWrt.Strm().WriteChar( ' ' );
-                HTMLOutFuncs::Out_String( rWrt.Strm(), rName );
-                rWrt.Strm().WriteOString( "=\"" );
-                HTMLOutFuncs::Out_String( rWrt.Strm(), rValue ).WriteChar( '\"' );
-            }
-            else if( SwHtmlOptType::PARAM == nType )
-            {
-                aParams.push_back( i );
-            }
-        }
-
-        rWrt.Strm().WriteChar( '>' );
-
-        rWrt.IncIndentLevel(); // indent the applet content
-
-        size_t ii = aParams.size();
-        while( ii > 0  )
-        {
-            const SvCommand& rCommand = aCommands[ aParams[--ii] ];
-            const OUString& rName = rCommand.GetCommand();
-            const OUString& rValue = rCommand.GetArgument();
-            rWrt.OutNewLine();
-            sOut.append(
-                "<" + rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_param
-                " " OOO_STRING_SVTOOLS_HTML_O_name
-                "=\"");
-            rWrt.Strm().WriteOString( sOut );
-            sOut.setLength(0);
-            HTMLOutFuncs::Out_String( rWrt.Strm(), rName );
-            sOut.append("\" " OOO_STRING_SVTOOLS_HTML_O_value "=\"");
-            rWrt.Strm().WriteOString( sOut );
-            sOut.setLength(0);
-            HTMLOutFuncs::Out_String( rWrt.Strm(), rValue ).WriteOString( "\">" );
-        }
-
-        rWrt.DecIndentLevel(); // indent the applet content
-        if( aCommands.size() )
-            rWrt.OutNewLine();
-        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), Concat2View(rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_applet), false );
-    }
-    else if( aGlobName == SvGlobalName( SO3_PLUGIN_CLASSID ) )
-    {
-        // write plug-ins parameters as options
-
-        uno::Sequence < beans::PropertyValue > aProps;
-        aAny = xSet->getPropertyValue(u"PluginCommands"_ustr);
-        aAny >>= aProps;
-
-        SvCommandList aCommands;
-        aCommands.FillFromSequence( aProps );
-        for( size_t i = 0; i < aCommands.size(); i++ )
-        {
-            const SvCommand& rCommand = aCommands[ i ];
-            const OUString& rName = rCommand.GetCommand();
-
-            if( SwApplet_Impl::GetOptionType( rName, false ) == SwHtmlOptType::TAG )
-            {
-                const OUString& rValue = rCommand.GetArgument();
-                rWrt.Strm().WriteChar( ' ' );
-                HTMLOutFuncs::Out_String( rWrt.Strm(), rName );
-                rWrt.Strm().WriteOString( "=\"" );
-                HTMLOutFuncs::Out_String( rWrt.Strm(), rValue ).WriteChar( '\"' );
-            }
-        }
-        rWrt.Strm().WriteChar( '>' );
-    }
     else
     {
         // and for Floating-Frames just output another </IFRAME>
