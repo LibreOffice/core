@@ -158,11 +158,10 @@ XMLTextListAutoStylePool::XMLTextListAutoStylePool( SvXMLExport& rExp ) :
         m_sPrefix = "ML";
 
     Reference<XStyleFamiliesSupplier> xFamiliesSupp(m_rExport.GetModel(), UNO_QUERY);
-    SAL_WARN_IF(!xFamiliesSupp.is(), "xmloff", "getStyleFamilies() from XModel failed for export!");
-    Reference< XNameAccess > xFamilies;
-    if (xFamiliesSupp.is())
-        xFamilies = xFamiliesSupp->getStyleFamilies();
+    if (!xFamiliesSupp.is())
+        return;
 
+    Reference<XNameAccess> xFamilies = xFamiliesSupp->getStyleFamilies();
     Reference<XIndexAccess> xStyles;
     static constexpr OUString aNumberStyleName(u"NumberingStyles"_ustr);
     if (xFamilies.is() && xFamilies->hasByName(aNumberStyleName))
