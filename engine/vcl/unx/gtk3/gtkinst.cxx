@@ -23649,7 +23649,6 @@ void silence_gwarning(const gchar* /*log_domain*/,
                       gpointer /*user_data*/)
 {
 }
-#endif
 
 // VclCustomWidget is used by the jsdialog (online) for client-rendered
 // widgets; on the desktop GTK path it has no rendering, so register an empty
@@ -23675,6 +23674,7 @@ GType vcl_custom_widget_get_type()
     }
     return type;
 }
+#endif
 
 void load_ui_file(GtkBuilder* pBuilder, const OUString& rUri)
 {
