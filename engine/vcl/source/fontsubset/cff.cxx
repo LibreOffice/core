@@ -1914,7 +1914,9 @@ CffGlobal::CffGlobal()
 
 bool CffContext::initialCffRead()
 {
-    // get the CFFHeader
+    // Adobe Technical Note #5176 section 6 "Header": major, minor, hdrSize, offSize
+    if (mpBaseEnd - mpBasePtr < 4)
+        return false;
     mpReadPtr = mpBasePtr;
     const U8 nVerMajor = *(mpReadPtr++);
     const U8 nVerMinor = *(mpReadPtr++);
