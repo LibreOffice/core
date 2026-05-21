@@ -21,6 +21,7 @@
 #define INCLUDED_REPORTDESIGN_SOURCE_UI_INC_CONDFORMAT_HXX
 
 #include <com/sun/star/report/XReportControlModel.hpp>
+#include <vcl/weld/Box.hxx>
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/ScrolledWindow.hxx>
 #include <vcl/weld/Window.hxx>

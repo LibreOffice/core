@@ -9,24 +9,19 @@
 
 #pragma once
 
-#include <sal/config.h>
+#include <vcl/dllapi.h>
+#include <vcl/weld/weld.hxx>
 
-#include <vcl/weld/Box.hxx>
-
-#include "QtInstanceContainer.hxx"
-
-class QtInstanceBox : public QtInstanceContainer, public virtual weld::Box
+namespace weld
 {
-    Q_OBJECT
-
+class VCL_DLLPUBLIC Box : virtual public Container
+{
 public:
-    QtInstanceBox(QWidget* pWidget);
-
-    virtual void reorder_child(weld::Widget* pWidget, int nPosition) override;
-    virtual void sort_native_button_order() override;
-
-protected:
-    virtual QBoxLayout& getLayout() const override;
+    // Moves child to a new position in the list of children
+    virtual void reorder_child(weld::Widget* pWidget, int position) = 0;
+    // Sort ok/cancel etc buttons in platform order
+    virtual void sort_native_button_order() = 0;
 };
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

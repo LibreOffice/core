@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <vcl/weld/Box.hxx>
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/Image.hxx>

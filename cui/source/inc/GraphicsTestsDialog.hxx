@@ -9,6 +9,7 @@
 #pragma once
 
 #include <vcl/bitmap.hxx>
+#include <vcl/weld/Box.hxx>
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/Dialog.hxx>
 #include <vcl/weld/DialogController.hxx>

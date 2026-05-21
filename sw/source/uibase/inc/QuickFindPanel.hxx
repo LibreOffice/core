@@ -17,6 +17,7 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/weldutils.hxx>
 #include <svtools/acceleratorexecute.hxx>
+#include <vcl/weld/Box.hxx>
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/Entry.hxx>

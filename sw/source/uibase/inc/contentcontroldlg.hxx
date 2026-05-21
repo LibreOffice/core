@@ -20,6 +20,7 @@
 
 #include <sfx2/basedlgs.hxx>
 #include <vcl/abstdlg.hxx>
+#include <vcl/weld/Box.hxx>
 #include <vcl/weld/Entry.hxx>
 #include <vcl/weld/Frame.hxx>
 #include <vcl/weld/SpinButton.hxx>

@@ -19,6 +19,7 @@
 #pragma once
 
 #include <sfx2/sidebar/Theme.hxx>
+#include <vcl/weld/Box.hxx>
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/Image.hxx>
 #include <vcl/weld/Toolbar.hxx>

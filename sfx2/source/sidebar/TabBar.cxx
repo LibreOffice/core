@@ -32,6 +32,7 @@
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/Box.hxx>
 #include <vcl/weld/Menu.hxx>
 #include <vcl/weld/MenuButton.hxx>
 #include <vcl/weld/Toolbar.hxx>

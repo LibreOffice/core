@@ -20,6 +20,7 @@
 #pragma once
 
 #include <vcl/vclptr.hxx>
+#include <vcl/weld/Box.hxx>
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/Toolbar.hxx>
 #include <vcl/weld/Window.hxx>

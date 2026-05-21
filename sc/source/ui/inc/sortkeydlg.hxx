@@ -12,6 +12,7 @@
 #include <vector>
 #include <memory>
 
+#include <vcl/weld/Box.hxx>
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/Frame.hxx>
