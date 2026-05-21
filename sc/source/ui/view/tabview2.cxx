@@ -1293,17 +1293,16 @@ void ScTabView::SelectAll( bool bContinue )
     ScMarkData& rMark = aViewData.GetMarkData();
     SCTAB nTab = aViewData.CurrentTabForData();
 
+    // Check if entire sheet is already selected
+    const ScRange aScRange(0, 0, nTab, rDoc.MaxCol(), rDoc.MaxRow(), nTab);
     if (rMark.IsMarked())
     {
-        if ( rMark.GetMarkArea() == ScRange( 0,0,nTab, rDoc.MaxCol(),rDoc.MaxRow(),nTab ) )
+        if (rMark.GetMarkArea() == aScRange)
             return;
     }
 
-    DoneBlockMode( bContinue );
-    InitBlockMode( 0,0,nTab );
-    MarkCursor( rDoc.MaxCol(),rDoc.MaxRow(),nTab );
-
-    SelectionChanged();
+    // tdf#82404 - move active cell to A1 when whole sheet is selected
+    MarkRange(aScRange, true /* bSetCursor */, bContinue);
 }
 
 void ScTabView::SelectAllTables()
