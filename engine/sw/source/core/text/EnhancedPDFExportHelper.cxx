@@ -191,7 +191,7 @@ constexpr OUStringLiteral aDocumentString = u"Document";
 constexpr OUString aDivString = u"Div"_ustr;
 constexpr OUStringLiteral aSectString = u"Sect";
 constexpr OUStringLiteral aHString = u"H";
-constexpr OUStringLiteral aH1String = u"H1";
+constexpr OUString aH1String = u"H1"_ustr;
 constexpr OUStringLiteral aH2String = u"H2";
 constexpr OUStringLiteral aH3String = u"H3";
 constexpr OUStringLiteral aH4String = u"H4";
@@ -786,17 +786,17 @@ void SwTaggedPDFHelper::SetAttributes(vcl::pdf::StructElement eType)
                 break;
 
             case vcl::pdf::StructElement::Caption:
-                if (pFrame->IsSctFrame())
-                {
-                    break;
-                }
-                [[fallthrough]];
             case vcl::pdf::StructElement::H1:
             case vcl::pdf::StructElement::H2:
             case vcl::pdf::StructElement::H3:
             case vcl::pdf::StructElement::H4:
             case vcl::pdf::StructElement::H5:
             case vcl::pdf::StructElement::H6:
+                if (pFrame->IsSctFrame())
+                {
+                    break;
+                }
+                [[fallthrough]];
             case vcl::pdf::StructElement::Paragraph:
             case vcl::pdf::StructElement::Heading:
             case vcl::pdf::StructElement::BlockQuote:
@@ -1460,6 +1460,13 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                     }
                     for (auto it = parents.rbegin(); it != parents.rend(); ++it)
                     {
+                        // tdf#172153 For a ToxHeader, don't open the surrounding ToxContent here
+                        // The heading must be placed before the <TOC> (PDF/UA: only <TOCI> children allowed).
+                        if (pSection->GetType() == SectionType::ToxHeader
+                            && (*it)->GetType() == SectionType::ToxContent)
+                        {
+                            continue;
+                        }
                         // key is the SwSection - see lcl_GetKeyFromFrame()
                         OpenTagImpl(*it);
                     }
@@ -1472,11 +1479,6 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                     // when it is interrupted by nested section - reopen!
                     OpenTagImpl(pSection);
                     break;
-                }
-                else if (SectionType::ToxHeader == pSection->GetType())
-                {
-                    nPDFType = sal_uInt16(vcl::pdf::StructElement::Caption);
-                    aPDFType = aCaptionString;
                 }
                 else if (SectionType::ToxContent == pSection->GetType())
                 {
@@ -1538,6 +1540,24 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                 // <stylename> with role = P
                 nPDFType = sal_uInt16(vcl::pdf::StructElement::Paragraph);
                 aPDFType = sStyleName.toString();
+
+                // tdf#172153 Make sure table of contents headings are exported as headings
+                if (pTextFormat)
+                {
+                    const SwPoolFormatId nPoolFormatId = pTextFormat->GetPoolFormatId();
+                    if (nPoolFormatId == SwPoolFormatId::COLL_TOX_CNTNTH
+                        || nPoolFormatId == SwPoolFormatId::COLL_TOX_IDXH
+                        || nPoolFormatId == SwPoolFormatId::COLL_TOX_USERH
+                        || nPoolFormatId == SwPoolFormatId::COLL_TOX_ILLUSH
+                        || nPoolFormatId == SwPoolFormatId::COLL_TOX_OBJECTH
+                        || nPoolFormatId == SwPoolFormatId::COLL_TOX_TABLESH
+                        || nPoolFormatId == SwPoolFormatId::COLL_TOX_AUTHORITIESH)
+                    {
+                        nPDFType = sal_uInt16(vcl::pdf::StructElement::H1);
+                        aPDFType = aH1String;
+                    }
+                }
+
 
                 // Title
 

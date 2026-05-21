@@ -2075,32 +2075,53 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf157817)
     }
     CPPUNIT_ASSERT(pTOC);
 
+    // The ToC heading is a sibling of <TOC>, not a child (PDF/UA disallows
+    // non-TOCI children of <TOC>). Locate TOC's parent and find the entry
+    // immediately preceding TOC in its children list — that should be the
+    // <H1> "Table of Contents" heading.
+    auto pTOCParentRef = dynamic_cast<vcl::filter::PDFReferenceElement*>(pTOC->Lookup("P"_ostr));
+    CPPUNIT_ASSERT(pTOCParentRef);
+    auto pTOCParent = pTOCParentRef->LookupObject();
+    CPPUNIT_ASSERT(pTOCParent);
+    auto pParentKids = dynamic_cast<vcl::filter::PDFArrayElement*>(pTOCParent->Lookup("K"_ostr));
+    CPPUNIT_ASSERT(pParentKids);
+    auto pParentKidsV = pParentKids->GetElements();
+    size_t nTocIndex = 0;
+    bool bFoundTOC = false;
+    for (size_t i = 0; i < pParentKidsV.size(); ++i)
+    {
+        auto pRef = dynamic_cast<vcl::filter::PDFReferenceElement*>(pParentKidsV[i]);
+        if (pRef && pRef->LookupObject() == pTOC)
+        {
+            nTocIndex = i;
+            bFoundTOC = true;
+            break;
+        }
+    }
+    CPPUNIT_ASSERT(bFoundTOC);
+    CPPUNIT_ASSERT(nTocIndex > 0);
+    auto pHeadingRef = dynamic_cast<vcl::filter::PDFReferenceElement*>(pParentKidsV[nTocIndex - 1]);
+    CPPUNIT_ASSERT(pHeadingRef);
+    auto pHeading = pHeadingRef->LookupObject();
+    CPPUNIT_ASSERT(pHeading);
+    auto pHeadingType = dynamic_cast<vcl::filter::PDFNameElement*>(pHeading->Lookup("Type"_ostr));
+    CPPUNIT_ASSERT_EQUAL("StructElem"_ostr, pHeadingType->GetValue());
+    auto pHeadingS = dynamic_cast<vcl::filter::PDFNameElement*>(pHeading->Lookup("S"_ostr));
+    CPPUNIT_ASSERT_EQUAL("H1"_ostr, pHeadingS->GetValue());
+    // The H1 contains the heading text directly (an MCID), with no
+    // intermediate paragraph struct element.
+    auto pHeadingKids = dynamic_cast<vcl::filter::PDFArrayElement*>(pHeading->Lookup("K"_ostr));
+    CPPUNIT_ASSERT(pHeadingKids);
+    auto pHeadingKidsV = pHeadingKids->GetElements();
+    CPPUNIT_ASSERT(!pHeadingKidsV.empty());
+    auto pHeadingMcid = dynamic_cast<vcl::filter::PDFNumberElement*>(pHeadingKidsV[0]);
+    CPPUNIT_ASSERT(pHeadingMcid);
+
+    // <TOC>'s first child must be a <TOCI> — no headings inside.
     auto pKidsT = dynamic_cast<vcl::filter::PDFArrayElement*>(pTOC->Lookup("K"_ostr));
     CPPUNIT_ASSERT(pKidsT);
-    // assume there are no MCID ref at this level
     auto pKidsTv = pKidsT->GetElements();
-    auto pRefKidT0 = dynamic_cast<vcl::filter::PDFReferenceElement*>(pKidsTv[0]);
-    CPPUNIT_ASSERT(pRefKidT0);
-    auto pObjectT0 = pRefKidT0->LookupObject();
-    CPPUNIT_ASSERT(pObjectT0);
-    auto pTypeT0 = dynamic_cast<vcl::filter::PDFNameElement*>(pObjectT0->Lookup("Type"_ostr));
-    CPPUNIT_ASSERT_EQUAL("StructElem"_ostr, pTypeT0->GetValue());
-    auto pST0 = dynamic_cast<vcl::filter::PDFNameElement*>(pObjectT0->Lookup("S"_ostr));
-    CPPUNIT_ASSERT_EQUAL("Caption"_ostr, pST0->GetValue());
-
-    auto pKidsT0 = dynamic_cast<vcl::filter::PDFArrayElement*>(pObjectT0->Lookup("K"_ostr));
-    CPPUNIT_ASSERT(pKidsT0);
-    auto pKidsT0v = pKidsT0->GetElements();
-    auto pRefKidT00 = dynamic_cast<vcl::filter::PDFReferenceElement*>(pKidsT0v[0]);
-    CPPUNIT_ASSERT(pRefKidT00);
-    auto pObjectT00 = pRefKidT00->LookupObject();
-    CPPUNIT_ASSERT(pObjectT00);
-    auto pTypeT00 = dynamic_cast<vcl::filter::PDFNameElement*>(pObjectT00->Lookup("Type"_ostr));
-    CPPUNIT_ASSERT_EQUAL("StructElem"_ostr, pTypeT00->GetValue());
-    auto pST00 = dynamic_cast<vcl::filter::PDFNameElement*>(pObjectT00->Lookup("S"_ostr));
-    CPPUNIT_ASSERT_EQUAL("Contents Heading"_ostr, pST00->GetValue());
-
-    auto pRefKidT1 = dynamic_cast<vcl::filter::PDFReferenceElement*>(pKidsTv[1]);
+    auto pRefKidT1 = dynamic_cast<vcl::filter::PDFReferenceElement*>(pKidsTv[0]);
     CPPUNIT_ASSERT(pRefKidT1);
     auto pObjectT1 = pRefKidT1->LookupObject();
     CPPUNIT_ASSERT(pObjectT1);
@@ -2157,7 +2178,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf157817)
     auto pTypeT20 = dynamic_cast<vcl::filter::PDFNameElement*>(pObjectT20->Lookup("Type"_ostr));
     CPPUNIT_ASSERT_EQUAL("StructElem"_ostr, pTypeT20->GetValue());
     auto pST20 = dynamic_cast<vcl::filter::PDFNameElement*>(pObjectT20->Lookup("S"_ostr));
-    CPPUNIT_ASSERT_EQUAL("Contents 1"_ostr, pST20->GetValue());
+    CPPUNIT_ASSERT_EQUAL("Contents 2"_ostr, pST20->GetValue());
 
     auto pKidsT20 = dynamic_cast<vcl::filter::PDFArrayElement*>(pObjectT20->Lookup("K"_ostr));
     CPPUNIT_ASSERT(pKidsT20);
@@ -2174,7 +2195,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf157817)
     auto pST200 = dynamic_cast<vcl::filter::PDFNameElement*>(pObjectT200->Lookup("S"_ostr));
     CPPUNIT_ASSERT_EQUAL("Link"_ostr, pST200->GetValue());
 
-    auto pRefKidT3 = dynamic_cast<vcl::filter::PDFReferenceElement*>(pKidsTv[1]);
+    auto pRefKidT3 = dynamic_cast<vcl::filter::PDFReferenceElement*>(pKidsTv[2]);
     CPPUNIT_ASSERT(pRefKidT3);
     auto pObjectT3 = pRefKidT3->LookupObject();
     CPPUNIT_ASSERT(pObjectT3);
@@ -2194,7 +2215,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf157817)
     auto pTypeT30 = dynamic_cast<vcl::filter::PDFNameElement*>(pObjectT30->Lookup("Type"_ostr));
     CPPUNIT_ASSERT_EQUAL("StructElem"_ostr, pTypeT30->GetValue());
     auto pST30 = dynamic_cast<vcl::filter::PDFNameElement*>(pObjectT30->Lookup("S"_ostr));
-    CPPUNIT_ASSERT_EQUAL("Contents 1"_ostr, pST30->GetValue());
+    CPPUNIT_ASSERT_EQUAL("Contents 3"_ostr, pST30->GetValue());
 
     auto pKidsT30 = dynamic_cast<vcl::filter::PDFArrayElement*>(pObjectT30->Lookup("K"_ostr));
     CPPUNIT_ASSERT(pKidsT30);
