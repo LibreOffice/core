@@ -37,7 +37,7 @@ namespace sd {
 // We have to expand the SFX_IMPL_VIEWFACTORY macro to call LateInit() after a
 // new ImpressViewShellBase object has been constructed.
 
-SfxViewFactory* ImpressViewShellBase::s_pFactory;
+std::map<SfxInterfaceId, std::unique_ptr<SfxViewFactory>> ImpressViewShellBase::s_pFactories;
 SfxViewShell* ImpressViewShellBase::CreateInstance (
     SfxViewFrame& rFrame, SfxViewShell *pOldView)
 {
@@ -47,12 +47,9 @@ SfxViewShell* ImpressViewShellBase::CreateInstance (
 }
 void ImpressViewShellBase::RegisterFactory( SfxInterfaceId nPrio )
 {
-    s_pFactory = new SfxViewFactory(&CreateInstance,nPrio,"Default");
-    InitFactory();
-}
-void ImpressViewShellBase::InitFactory()
-{
-    SFX_VIEW_REGISTRATION(DrawDocShell);
+    assert(s_pFactories.find(nPrio) == s_pFactories.end());
+    s_pFactories[nPrio] = std::make_unique<SfxViewFactory>(&CreateInstance,nPrio,"Default");
+    DrawDocShell::Factory().RegisterViewFactory( *s_pFactories[nPrio] );
 }
 
 ImpressViewShellBase::ImpressViewShellBase (
