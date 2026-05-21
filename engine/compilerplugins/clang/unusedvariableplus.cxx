@@ -49,8 +49,6 @@ public:
             return false;
         if (loplugin::hasPathnamePrefix(fn, SRCDIR "/vcl/backendtest/"))
             return false;
-        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/lotuswordpro/"))
-            return false;
         if (loplugin::hasPathnamePrefix(fn, SRCDIR "/salhelper/qa/"))
             return false;
         if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sal/qa/"))

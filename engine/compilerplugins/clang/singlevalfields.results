@@ -406,9 +406,6 @@ kit/source/gtk/kitdocview.cxx:86
 lingucomponent/source/spellcheck/languagetool/languagetoolimp.hxx:39
     LanguageToolGrammarChecker mCachedResults
     10
-lotuswordpro/source/filter/lwppara.hxx:213
-    LwpPara m_AllText
-    
 ltInternals.h:1708
     _xsltTransformContext state
     2

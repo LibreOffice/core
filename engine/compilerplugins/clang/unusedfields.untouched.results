@@ -222,8 +222,6 @@ lingucomponent/source/languageguessing/simpleguesser.cxx:75
     (anonymous namespace)::textcat_t maxsize uint4
 lingucomponent/source/languageguessing/simpleguesser.cxx:77
     (anonymous namespace)::textcat_t output char[1024]
-lotuswordpro/source/filter/clone.hxx:23
-    detail::has_clone::no a char[2]
 oox/source/drawingml/scene3dhelper.cxx:476
     oox::(anonymous namespace)::MSOLight fScale double
 oox/source/drawingml/scene3dhelper.cxx:477

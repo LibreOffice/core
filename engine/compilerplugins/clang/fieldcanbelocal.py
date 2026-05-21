@@ -89,8 +89,6 @@ for d in definitionSet:
         continue
     if srcLoc.startswith("sd/source/filter/ppt/ppt97animations.hxx"):
         continue
-    if srcLoc.startswith("lotuswordpro/"):
-        continue
     if srcLoc.startswith("include/filter/msfilter/svdfppt.hxx"):
         continue
     if srcLoc.startswith("filter/source/graphicfilter/icgm/chart.hxx"):

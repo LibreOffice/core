@@ -71,7 +71,6 @@ for d in definitionSet:
         or srcLoc.startswith("vcl/source/filter/sgfbram.hxx")
         or srcLoc.startswith("vcl/inc/unx/gtk/gloactiongroup.h")
         or srcLoc.startswith("include/svl/svdde.hxx")
-        or srcLoc.startswith("lotuswordpro/source/filter/lwpsdwdrawheader.hxx")
         or srcLoc.startswith("hwpfilter/")
         or srcLoc.startswith("embeddedobj/source/inc/")
         or srcLoc.startswith("svtools/source/dialogs/insdlg.cxx")
@@ -113,7 +112,6 @@ for d in definitionSet:
         or srcLoc.startswith("vcl/source/filter/sgfbram.hxx")
         or srcLoc.startswith("vcl/inc/unx/gtk/gloactiongroup.h")
         or srcLoc.startswith("include/svl/svdde.hxx")
-        or srcLoc.startswith("lotuswordpro/source/filter/lwpsdwdrawheader.hxx")
         or srcLoc.startswith("hwpfilter/")
         or srcLoc.startswith("embeddedobj/source/inc/")
         or srcLoc.startswith("svtools/source/dialogs/insdlg.cxx")
@@ -151,7 +149,6 @@ for d in definitionSet:
         or srcLoc.startswith("vcl/source/filter/sgfbram.hxx")
         or srcLoc.startswith("vcl/inc/unx/gtk/gloactiongroup.h")
         or srcLoc.startswith("include/svl/svdde.hxx")
-        or srcLoc.startswith("lotuswordpro/source/filter/lwpsdwdrawheader.hxx")
         or srcLoc.startswith("svtools/source/dialogs/insdlg.cxx")):
         continue
     fieldType = definitionToTypeMap[d]
@@ -172,10 +169,6 @@ for d in definitionSet:
         continue
     # mutex locking
     if "Guard" in fieldType:
-        continue
-    # these are just all model classes
-    if (srcLoc.startswith("lotuswordpro/")
-        or srcLoc.startswith("hwpfilter/")):
         continue
     if "(lambda at " in d[0]:
         continue
@@ -206,8 +199,7 @@ for d in definitionSet:
         or srcLoc.startswith("include/svl/svdde.hxx")):
         continue
     # I really don't care about these ancient file formats
-    if (srcLoc.startswith("hwpfilter/")
-        or srcLoc.startswith("lotuswordpro/")):
+    if (srcLoc.startswith("hwpfilter/"):
         continue
     if "(lambda at " in d[0]:
         continue

@@ -1131,7 +1131,6 @@ ios*) # iOS
     enable_gpgmepp=no
     _os=iOS
     enable_mpl_subset=yes
-    enable_lotuswordpro=no
     disable_database_connectivity_dependencies
     enable_coinmp=no
     enable_lpsolve=no
@@ -1223,7 +1222,6 @@ linux-android*)
     test_webdav=no
     with_gssapi=no
     disable_database_connectivity_dependencies
-    enable_lotuswordpro=no
     enable_mpl_subset=yes
     enable_cairo_canvas=no
     enable_coinmp=yes
@@ -2176,11 +2174,6 @@ libo_FUZZ_ARG_ENABLE(mariadb-sdbc,
     AS_HELP_STRING([--disable-mariadb-sdbc],
         [Disable the build of the MariaDB/MySQL-SDBC driver.])
 )
-
-libo_FUZZ_ARG_ENABLE(lotuswordpro,
-    AS_HELP_STRING([--disable-lotuswordpro],
-        [Disable the build of the Lotus Word Pro filter.]),
-,test "${enable_lotuswordpro+set}" = set || enable_lotuswordpro=yes)
 
 AC_ARG_ENABLE(bogus-pkg-config,
     AS_HELP_STRING([--enable-bogus-pkg-config],
@@ -3366,7 +3359,6 @@ if test "$enable_wasm_strip" = "yes"; then
     enable_gio=no
     enable_gpgmepp=no
     enable_ldap=no
-    enable_lotuswordpro=no
     enable_lpsolve=no
     enable_nss=no
     enable_online_update=no
@@ -9742,12 +9734,6 @@ else
 fi
 AC_SUBST(EPM)
 
-ENABLE_LWP=
-if test "$enable_lotuswordpro" = "yes"; then
-    ENABLE_LWP="TRUE"
-fi
-AC_SUBST(ENABLE_LWP)
-
 dnl ==================================================================
 dnl libfuzzer
 dnl ==================================================================
@@ -15451,9 +15437,6 @@ if test "$enable_mpl_subset" = "yes"; then
     fi
     if test "$warn_report" = "true"; then
         mpl_error_string="$mpl_error_string$newline Need to --disable-report-builder - extended database report builder."
-    fi
-    if test "$enable_lotuswordpro" = "yes"; then
-        mpl_error_string="$mpl_error_string$newline Need to --disable-lotuswordpro - a Lotus Word Pro file format import filter."
     fi
     if test -n "$ENABLE_POPPLER"; then
         if test "x$SYSTEM_POPPLER" = "x"; then

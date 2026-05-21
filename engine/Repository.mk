@@ -136,7 +136,6 @@ $(eval $(call gb_Helper_register_executables_for_install,OOO,brand, \
 	$(call gb_Helper_optional,FUZZERS,tiffuzzer) \
 	$(call gb_Helper_optional,FUZZERS,hwpfuzzer) \
 	$(call gb_Helper_optional,FUZZERS,602fuzzer) \
-	$(call gb_Helper_optional,FUZZERS,lwpfuzzer) \
 	$(call gb_Helper_optional,FUZZERS,olefuzzer) \
 	$(call gb_Helper_optional,FUZZERS,pdf2fodgfuzzer) \
 	$(call gb_Helper_optional,FUZZERS,pptfuzzer) \
@@ -544,7 +543,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,reportbuilder, \
 
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,writer, \
 	hwp \
-	$(if $(ENABLE_LWP),lwpft) \
 	msword \
 	swd \
 	t602filter \

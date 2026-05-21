@@ -337,7 +337,6 @@ $(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_writer_types.xcu
 	writer_WriteNow \
 	writer_AbiWord_Document \
 	writer_T602_Document \
-	writer_LotusWordPro_Document \
 	generic_Text \
 	writer_MIZI_Hwp_97 \
 	writer_StarOffice_XML_Writer_Template \
@@ -388,7 +387,6 @@ $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_writer_filters
 	WriteNow \
 	AbiWord \
 	T602Document \
-	LotusWordPro \
 	Text \
 	Text__encoded_ \
 	writer_MIZI_Hwp_97 \

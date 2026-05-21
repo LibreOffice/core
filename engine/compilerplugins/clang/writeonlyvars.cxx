@@ -354,35 +354,7 @@ void WriteOnlyVars::run()
         if (loplugin::isSamePathname(fn, SRCDIR
                                      "/extensions/source/propctrlr/stringrepresentation.cxx"))
             return;
-        if (loplugin::isSamePathname(fn, SRCDIR "/lotuswordpro/source/filter/lwpcontent.cxx"))
-            return;
-        if (loplugin::isSamePathname(fn, SRCDIR "/lotuswordpro/source/filter/lwpdivinfo.cxx"))
-            return;
-        if (loplugin::isSamePathname(fn, SRCDIR "/lotuswordpro/source/filter/lwpdoc.cxx"))
-            return;
         if (loplugin::isSamePathname(fn, SRCDIR "/filter/source/pdf/impdialog.cxx"))
-            return;
-        if (loplugin::isSamePathname(fn, SRCDIR "/lotuswordpro/source/filter/lwplayout.cxx"))
-            return;
-        if (loplugin::isSamePathname(fn, SRCDIR "/lotuswordpro/source/filter/lwpoleobject.cxx"))
-            return;
-        if (loplugin::isSamePathname(fn, SRCDIR "/lotuswordpro/source/filter/lwprowlayout.cxx"))
-            return;
-        if (loplugin::isSamePathname(fn, SRCDIR "/lotuswordpro/source/filter/lwpfoundry.cxx"))
-            return;
-        if (loplugin::isSamePathname(fn, SRCDIR "/lotuswordpro/source/filter/lwpparastyle.cxx"))
-            return;
-        if (loplugin::isSamePathname(fn, SRCDIR "/lotuswordpro/source/filter/lwpnotes.cxx"))
-            return;
-        if (loplugin::isSamePathname(fn, SRCDIR "/lotuswordpro/source/filter/lwpfont.cxx"))
-            return;
-        if (loplugin::isSamePathname(fn, SRCDIR "/lotuswordpro/source/filter/lwptblcell.cxx"))
-            return;
-        if (loplugin::isSamePathname(fn, SRCDIR "/lotuswordpro/source/filter/lwpusrdicts.cxx"))
-            return;
-        if (loplugin::isSamePathname(fn, SRCDIR "/lotuswordpro/source/filter/lwpverdocument.cxx"))
-            return;
-        if (loplugin::isSamePathname(fn, SRCDIR "/lotuswordpro/source/filter/lwptblformula.cxx"))
             return;
         if (loplugin::isSamePathname(fn, SRCDIR "/vbahelper/source/vbahelper/vbafontbase.cxx"))
             return;

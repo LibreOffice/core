@@ -256,9 +256,6 @@ include/xmloff/shapeimport.hxx:150
 lingucomponent/source/languageguessing/simpleguesser.hxx:97
     SimpleGuesser h void *
     (anonymous namespace)::textcat_t
-lotuswordpro/source/filter/lwpframelayout.hxx:103
-    LwpFrame m_pLayout LwpPlacableLayout *
-    LwpFrameLayout
 package/source/xstor/owriteablestream.hxx:241
     OWriteStream m_xOutStream css::uno::Reference<css::io::XOutputStream>
     comphelper::ByteWriter

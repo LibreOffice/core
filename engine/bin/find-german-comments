@@ -297,7 +297,6 @@ class Parser:
             "kit" : 1,
             "lingucomponent" : 1,
             "linguistic" : 1,
-            "lotuswordpro" : 1,
             "mysqlc" : 1,
             "o3tl" : 1,
             "officecfg" : 1,

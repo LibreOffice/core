@@ -466,9 +466,6 @@ void UseUniquePtr::CheckDeleteLocalVar(const FunctionDecl* functionDecl, const C
     // complicated
     if (fn == SRCDIR "/cui/source/customize/cfg.cxx")
         return;
-    // linked list
-    if (fn == SRCDIR "/lotuswordpro/source/filter/lwpfribptr.cxx")
-        return;
     // complicated
     if (loplugin::hasPathnamePrefix(fn, SRCDIR "/connectivity/source/drivers/file/"))
         return;
@@ -772,10 +769,6 @@ void UseUniquePtr::CheckLoopDelete(const FunctionDecl* functionDecl, const CXXDe
         if (fn == SRCDIR "/filter/source/graphicfilter/idxf/dxfblkrd.cxx")
             return;
         if (fn == SRCDIR "/filter/source/graphicfilter/idxf/dxftblrd.cxx")
-            return;
-        if (fn == SRCDIR "/lotuswordpro/source/filter/utlist.cxx")
-            return;
-        if (fn == SRCDIR "/lotuswordpro/source/filter/lwpfribptr.cxx")
             return;
         // valid
         if (fn == SRCDIR "/sd/source/ui/sidebar/MasterPagesSelector.cxx")

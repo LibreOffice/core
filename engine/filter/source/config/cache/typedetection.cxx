@@ -249,7 +249,6 @@ int getFlatTypeRank(std::u16string_view rType)
         "draw_Publisher_Document",
         "draw_Corel_Presentation_Exchange",
         "draw_CorelDraw_Document",
-        "writer_LotusWordPro_Document",
         "writer_MIZI_Hwp_97", // Hanword (Hancom Office)
 
         // Non-compressed XML

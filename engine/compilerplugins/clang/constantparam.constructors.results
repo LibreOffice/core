@@ -514,50 +514,6 @@ include/xmloff/XMLFontStylesContext.hxx:51
     void XMLFontStylesContext::XMLFontStylesContext(class SvXMLImport &,unsigned short)
     unsigned short eDfltEnc
     osl_getThreadTextEncoding()
-lotuswordpro/inc/lwpoverride.hxx:189
-    void LwpBulletOverride::OverrideSkip(_Bool)
-    _Bool bOver
-    IsSkip()
-lotuswordpro/inc/lwpoverride.hxx:190
-    void LwpBulletOverride::OverrideRightAligned(_Bool)
-    _Bool bOver
-    IsRightAligned()
-lotuswordpro/inc/lwpoverride.hxx:399
-    void LwpIndentOverride::OverrideUseRelative(_Bool)
-    _Bool use
-    IsUseRelative()
-lotuswordpro/source/filter/lwpbreaksoverride.hxx:121
-    void LwpBreaksOverride::OverridePageBreakBefore(_Bool)
-    _Bool bVal
-    IsPageBreakBefore()
-lotuswordpro/source/filter/lwpbreaksoverride.hxx:122
-    void LwpBreaksOverride::OverridePageBreakAfter(_Bool)
-    _Bool bVal
-    IsPageBreakAfter()
-lotuswordpro/source/filter/lwpbreaksoverride.hxx:123
-    void LwpBreaksOverride::OverridePageBreakWithin(_Bool)
-    _Bool bVal
-    IsPageBreakWithin()
-lotuswordpro/source/filter/lwpbreaksoverride.hxx:124
-    void LwpBreaksOverride::OverrideColumnBreakBefore(_Bool)
-    _Bool bVal
-    IsColumnBreakBefore()
-lotuswordpro/source/filter/lwpbreaksoverride.hxx:125
-    void LwpBreaksOverride::OverrideColumnBreakAfter(_Bool)
-    _Bool bVal
-    IsColumnBreakAfter()
-lotuswordpro/source/filter/lwpbreaksoverride.hxx:126
-    void LwpBreaksOverride::OverrideKeepWithNext(_Bool)
-    _Bool bVal
-    IsKeepWithNext()
-lotuswordpro/source/filter/lwpbreaksoverride.hxx:127
-    void LwpBreaksOverride::OverrideKeepWithPrevious(_Bool)
-    _Bool bVal
-    IsKeepWithPrevious()
-lotuswordpro/source/filter/lwpbreaksoverride.hxx:128
-    void LwpBreaksOverride::OverrideUseNextStyle(_Bool)
-    _Bool bVal
-    IsUseNextStyle()
 o3tl/qa/test-lru_map.cxx:312
     unsigned long cost_is_value::operator()(int)
     int i

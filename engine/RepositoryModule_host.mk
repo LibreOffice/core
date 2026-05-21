@@ -105,7 +105,6 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	kit \
 	lingucomponent \
 	linguistic \
-	lotuswordpro \
 	$(call gb_Helper_optional,DESKTOP,l10ntools) \
 	$(call gb_Helper_optional,NLPSOLVER,nlpsolver) \
 	o3tl \

@@ -1770,38 +1770,6 @@ kit/qa/tilebench/tilebench.cxx:352
     int testJoinsAt(class kit::Document *,long,long,const long,const long)
     const long nTilePixelSize
     256
-lotuswordpro/inc/xfilter/xfdrawstyle.hxx:95
-    void XFDrawStyle::SetLineDashStyle(enum enumXFLineStyle,double,double,double)
-    enum enumXFLineStyle style
-    3
-lotuswordpro/inc/xfilter/xfdrawstyle.hxx:118
-    void XFDrawStyle::SetFontWorkStyle(enum enumXFFWStyle,enum enumXFFWAdjust)
-    enum enumXFFWStyle eStyle
-    4
-lotuswordpro/inc/xfilter/xffont.hxx:203
-    void XFFont::SetPosition(_Bool,short,short)
-    short pos
-    33
-lotuswordpro/inc/xfilter/xffont.hxx:203
-    void XFFont::SetPosition(_Bool,short,short)
-    short scale
-    58
-lotuswordpro/inc/xfilter/xfindex.hxx:100
-    void XFIndexTemplate::AddTabEntry(enum enumXFTab,double,char16_t,char16_t,const class rtl::OUString &)
-    enum enumXFTab type
-    3
-lotuswordpro/inc/xfilter/xfindex.hxx:100
-    void XFIndexTemplate::AddTabEntry(enum enumXFTab,double,char16_t,char16_t,const class rtl::OUString &)
-    char16_t delimiter
-    100
-lotuswordpro/source/filter/bento.hxx:213
-    void OpenStormBento::LtcBenContainer::SeekFromEnd(long)
-    long Offset
-    -24
-lotuswordpro/source/filter/tocread.hxx:87
-    enum OpenStormBento::BenError OpenStormBento::CBenTOCReader::GetData(void *,unsigned long)
-    unsigned long Amt
-    4
 o3tl/qa/cow_wrapper_clients.hxx:70
     void o3tltests::cow_wrapper_client2::cow_wrapper_client2(int)
     int nVal

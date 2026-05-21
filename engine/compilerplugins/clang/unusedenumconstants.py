@@ -61,7 +61,6 @@ def is_ignore(srcLoc):
          "include/filter/msfilter/svdfppt.hxx",
          "hwpfilter/",
          "include/registry/types.hxx",
-         "lotuswordpro/",
          "include/sot/formats.hxx",
          "include/svx/msdffdef.hxx",
          "sc/source/filter/inc/xlconst.hxx",

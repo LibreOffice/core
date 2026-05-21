@@ -658,7 +658,6 @@ certain functionality.
 @li @c jvmaccess
 @li @c lingucomponent
 @li @c linguistic
-@li @c lwp - lotuswordpro
 @li @c net
 @li @c opencl
 @li @c opencl.device

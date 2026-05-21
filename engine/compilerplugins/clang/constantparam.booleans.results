@@ -2086,62 +2086,6 @@ lingucomponent/source/spellcheck/languagetool/languagetoolimp.cxx:199
     class std::basic_string<char> makeHttpRequest(class std::basic_string_view<char16_t>,enum (anonymous namespace)::HTTP_METHOD,const class rtl::OString &,long &,CURLcode &)
     enum (anonymous namespace)::HTTP_METHOD method
     1
-lotuswordpro/inc/xfilter/xfborders.hxx:90
-    void XFBorder::SetDoubleLine(_Bool,_Bool)
-    _Bool dual
-    1
-lotuswordpro/inc/xfilter/xfborders.hxx:90
-    void XFBorder::SetDoubleLine(_Bool,_Bool)
-    _Bool bSameWidth
-    0
-lotuswordpro/inc/xfilter/xfcellstyle.hxx:108
-    void XFCellStyle::SetAlignType(enum enumXFAlignType,enum enumXFAlignType)
-    enum enumXFAlignType hori
-    0
-lotuswordpro/inc/xfilter/xfdrawstyle.hxx:118
-    void XFDrawStyle::SetFontWorkStyle(enum enumXFFWStyle,enum enumXFFWAdjust)
-    enum enumXFFWAdjust eAdjust
-    0
-lotuswordpro/inc/xfilter/xfframestyle.hxx:127
-    void XFFrameStyle::SetProtect(_Bool,_Bool,_Bool)
-    _Bool content
-    1
-lotuswordpro/inc/xfilter/xfframestyle.hxx:127
-    void XFFrameStyle::SetProtect(_Bool,_Bool,_Bool)
-    _Bool size
-    1
-lotuswordpro/inc/xfilter/xfframestyle.hxx:127
-    void XFFrameStyle::SetProtect(_Bool,_Bool,_Bool)
-    _Bool pos
-    1
-lotuswordpro/inc/xfilter/xfindex.hxx:100
-    void XFIndexTemplate::AddTabEntry(enum enumXFTab,double,char16_t,char16_t,const class rtl::OUString &)
-    double len
-    0
-lotuswordpro/inc/xfilter/xfparastyle.hxx:175
-    void XFParaStyle::SetDropCap(short,short,double)
-    double fDistance
-    0
-lotuswordpro/inc/xfilter/xfutil.hxx:91
-    class rtl::OUString GetColorMode(enum enumXFColorMode)
-    enum enumXFColorMode mode
-    0
-lotuswordpro/source/filter/bento.hxx:201
-    class OpenStormBento::CBenObject * OpenStormBento::LtcBenContainer::FindNextObjectWithProperty(class OpenStormBento::CBenObject *,unsigned int)
-    class OpenStormBento::CBenObject * pCurrObject
-    0
-lotuswordpro/source/filter/clone.hxx:26
-    char & detail::has_clone::check_sig(type-parameter-?-? *,test<type-parameter-?-? *(type-parameter-?-?::*)(void) const, &U::clone> *)
-    type-parameter-?-? * 
-    0
-lotuswordpro/source/filter/clone.hxx:26
-    char & detail::has_clone::check_sig(type-parameter-?-? *,test<type-parameter-?-? *(type-parameter-?-?::*)(void) const, &U::clone> *)
-    test<type-parameter-?-? *(type-parameter-?-?::*)(void) const, &U::clone> * 
-    0
-lotuswordpro/source/filter/lwpnumericfmt.hxx:113
-    void LwpCurrencyInfo::LwpCurrencyInfo(class rtl::OUString,_Bool,_Bool)
-    _Bool bShowSpace_
-    1
 o3tl/qa/cow_wrapper_clients.hxx:42
     void o3tltests::cow_wrapper_client1::cow_wrapper_client1(int)
     int nVal

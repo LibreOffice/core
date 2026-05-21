@@ -82,7 +82,6 @@ mimetypes = {
     'application/x-qpro': 'qpro',
     'application/x-dbase': 'dbf',
     'application/vnd.corel-draw': 'cdr',
-    'application/vnd.lotus-wordpro': 'lwp',
     'application/vnd.lotus-1-2-3': 'wks',
     'application/vnd.wordperfect': 'wpd',
     'application/wordperfect5.1': 'wpd',

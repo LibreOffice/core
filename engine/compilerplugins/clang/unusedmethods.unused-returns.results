@@ -996,12 +996,6 @@ include/xmloff/xmluconv.hxx:279
     _Bool SvXMLUnitConverter::convertNumFormat(short &,const rtl::OUString &,std::basic_string_view<char16_t>,_Bool) const
 linguistic/source/lngsvcmgr.hxx:114
     _Bool LngSvcMgr::SaveCfgSvcs(std::basic_string_view<char16_t>)
-lotuswordpro/inc/lwpsvstream.hxx:80
-    LwpSvStream & LwpSvStream::ReadUInt8(unsigned char &)
-lotuswordpro/inc/lwpsvstream.hxx:81
-    LwpSvStream & LwpSvStream::ReadUInt16(unsigned short &)
-lotuswordpro/inc/lwpsvstream.hxx:82
-    LwpSvStream & LwpSvStream::ReadUInt32(unsigned int &)
 sc/inc/attarray.hxx:235
     const ScPatternAttr * ScAttrArray::SetPatternAreaImpl(int,int,const CellAttributeHolder &,ScEditDataArray *)
 sc/inc/column.hxx:675

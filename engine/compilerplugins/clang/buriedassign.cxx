@@ -131,8 +131,6 @@ public:
             return;
         if (fn == SRCDIR "/sw/writerfilter/dmapper/DomainMapper_Impl.cxx")
             return;
-        if (fn == SRCDIR "/lotuswordpro/source/filter/lwptablelayout.cxx")
-            return;
         if (fn == SRCDIR "/i18npool/source/characterclassification/cclass_unicode_parser.cxx")
             return;
         if (fn == SRCDIR "/sd/source/filter/eppt/pptx-animations.cxx")
