@@ -19,6 +19,7 @@
 #include <docmodel/theme/ColorSet.hxx>
 #include <docmodel/theme/ThemeColorType.hxx>
 #include <o3tl/numeric.hxx>
+#include <osl/file.hxx>
 #include <tools/stream.hxx>
 #include <tools/XmlWalker.hxx>
 #include <tools/XmlWriter.hxx>
@@ -261,6 +262,12 @@ void ColorSets::writeToUserFolder(model::ColorSet const& rNewColorSet)
         { model::ThemeColorType::Hyperlink, "hyperlink" },
         { model::ThemeColorType::FollowedHyperlink, "followed-hyperlink" }
     });
+
+    // Create the user theme folder if it does not yet exist. On a fresh
+    // user profile (and in the COOL jail when the host advertised no
+    // existing themes) the SvFileStream open below would otherwise fail
+    // silently.
+    osl::Directory::createPath(maUserFolder);
 
     SvFileStream aFileStream(maUserFolder + "/" + rNewColorSet.getName() + ".theme", StreamMode::WRITE | StreamMode::TRUNC);
 
