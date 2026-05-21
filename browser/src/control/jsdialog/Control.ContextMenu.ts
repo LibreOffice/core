@@ -241,6 +241,10 @@ class ContextMenuControl extends JSControl {
 			}
 
 			if (!value.items) {
+				// Shortcut is set only on leaf entries. Submenu entries use the
+				// .ui-has-menu fixed-column grid with a chevron in the trailing
+				// column, leaving no room for a shortcut span.
+				const shortcutText = JSDialog.ShortcutsUtil.getShortcutText(command);
 				entries.push({
 					id: command,
 					uno: command,
@@ -248,6 +252,9 @@ class ContextMenuControl extends JSControl {
 					text: value.name,
 					img: command,
 					class: this._commandClass(command),
+					shortcut: shortcutText
+						? app.util.replaceCtrlAltInMac(shortcutText)
+						: undefined,
 				});
 				continue;
 			}

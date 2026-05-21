@@ -229,6 +229,7 @@ interface MenuDefinition extends WidgetJSON {
 	statusCommand?: string; // UNO command used to retrieve the status/value of the entry
 	pos?: number | string; // identifier of an entry
 	class?: string; // extra CSS class to add to the rendered entry
+	shortcut?: string; // keyboard shortcut to display right-aligned next to the entry
 }
 
 interface HtmlContentJson extends WidgetJSON {

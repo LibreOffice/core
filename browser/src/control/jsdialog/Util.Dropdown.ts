@@ -162,6 +162,7 @@ JSDialog.OpenDropdown = function (
 					pos: i,
 					text: entries[i].text,
 					hint: entries[i].hint,
+					shortcut: entries[i].shortcut,
 					w2icon: entries[i].icon, // FIXME: DEPRECATED
 					icon: entries[i].img,
 					checked: entries[i].checked || checkedValue,

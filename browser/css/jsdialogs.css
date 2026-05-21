@@ -1488,6 +1488,19 @@ img.context-menu-icon {
 	color: var(--color-text-darker) !important;
 }
 
+.ui-combobox-entry:has(> span.shortcut) > span:not(.shortcut) {
+	width: auto;
+}
+.ui-combobox-entry > span.shortcut {
+	margin-inline-start: auto;
+	width: auto;
+	padding-inline-start: 16px;
+	/* Compensate for the 15px scrollbar-padding overflow on
+	 * .ui-combobox-entry so the shortcut stays inside the visible area. */
+	padding-inline-end: 20px;
+	color: var(--color-text-light);
+}
+
 .ui-combobox-entry.selected:not(:hover):not(.checked):not(.notchecked) span,
 .margin-item.selected {
 	background-color: var(--color-background-darker);

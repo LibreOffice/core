@@ -59,6 +59,11 @@ JSDialog.comboboxEntry = function (parentContainer, data, builder) {
 	var content = window.L.DomUtil.create('span', '', entry);
 	content.innerText = data.text;
 
+	if (data.shortcut) {
+		var shortcut = window.L.DomUtil.create('span', 'shortcut', entry);
+		shortcut.innerText = data.shortcut;
+	}
+
     if (data.selected) {
         entry.setAttribute('aria-selected', 'true');
 		window.L.DomUtil.addClass(entry, 'selected');
