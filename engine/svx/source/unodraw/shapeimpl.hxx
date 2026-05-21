@@ -47,25 +47,6 @@ public:
     virtual void Create( SdrObject* pNewOpj, SvxDrawPage* pNewPage ) override;
 };
 
-class SvxAppletShape : public SvxOle2Shape
-{
-protected:
-    // override these for special property handling in subcasses. Return true if property is handled
-    virtual bool setPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, const css::uno::Any& rValue ) override;
-    virtual bool getPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, css::uno::Any& rValue ) override;
-
-public:
-    explicit SvxAppletShape(SdrObject* pObj, OUString referer);
-    virtual ~SvxAppletShape() noexcept override;
-
-    virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const css::uno::Any& aValue ) override;
-    using SvxUnoTextRangeBase::setPropertyValue;
-
-    virtual void SAL_CALL setPropertyValues( const css::uno::Sequence< OUString >& aPropertyNames, const css::uno::Sequence< css::uno::Any >& aValues ) override;
-
-    virtual void Create( SdrObject* pNewOpj, SvxDrawPage* pNewPage ) override;
-};
-
 class SvxFrameShape : public SvxOle2Shape
 {
 private:

@@ -524,40 +524,6 @@ static std::span<SfxItemPropertyMapEntry const> ImplGetSvxFramePropertyMap()
     return aFramePropertyMap_Impl;
 }
 
-static std::span<SfxItemPropertyMapEntry const> ImplGetSvxAppletPropertyMap()
-{
-    static SfxItemPropertyMapEntry const aAppletPropertyMap_Impl[] =
-    {
-        { u"AppletCodeBase"_ustr,           OWN_ATTR_APPLET_CODEBASE    , cppu::UnoType<OUString>::get(), 0, 0},
-        { u"AppletName"_ustr,               OWN_ATTR_APPLET_NAME        , cppu::UnoType<OUString>::get(), 0, 0},
-        { u"AppletCode"_ustr,               OWN_ATTR_APPLET_CODE        , cppu::UnoType<OUString>::get(), 0, 0},
-        { u"AppletCommands"_ustr,           OWN_ATTR_APPLET_COMMANDS    , cppu::UnoType<css::uno::Sequence< css::beans::PropertyValue >>::get(), 0, 0},
-        { u"AppletDocBase"_ustr,            OWN_ATTR_APPLET_DOCBASE     , cppu::UnoType<OUString>::get(), 0, 0},
-        { u"AppletIsScript"_ustr,           OWN_ATTR_APPLET_ISSCRIPT    , cppu::UnoType<bool>::get(), 0, 0 },
-        { u"Transformation"_ustr,           OWN_ATTR_TRANSFORMATION     , cppu::UnoType<css::drawing::HomogenMatrix3>::get(), 0, 0 },
-        { UNO_NAME_MISC_OBJ_ZORDER,   OWN_ATTR_ZORDER             , cppu::UnoType<sal_Int32>::get(),      0,      0},
-        { UNO_NAME_MISC_OBJ_LAYERID,  SDRATTR_LAYERID             , cppu::UnoType<sal_Int16>::get(),      0,  0},
-        { UNO_NAME_MISC_OBJ_LAYERNAME,SDRATTR_LAYERNAME           , cppu::UnoType<OUString>::get(),    0,  0},
-        { UNO_NAME_LINKDISPLAYBITMAP, OWN_ATTR_LDBITMAP           , cppu::UnoType<css::awt::XBitmap>::get(), css::beans::PropertyAttribute::READONLY, 0},
-        { UNO_NAME_LINKDISPLAYNAME,   OWN_ATTR_LDNAME             , cppu::UnoType<OUString>::get(),   css::beans::PropertyAttribute::READONLY, 0},
-        { UNO_NAME_OLE2_METAFILE,     OWN_ATTR_METAFILE           , cppu::UnoType<css::uno::Sequence<sal_Int8>>::get(), css::beans::PropertyAttribute::READONLY, 0},
-        { u"ThumbnailGraphic"_ustr,         OWN_ATTR_THUMBNAIL          , cppu::UnoType<css::graphic::XGraphic>::get(), 0, 0 },
-        { UNO_NAME_MISC_OBJ_MOVEPROTECT,      SDRATTR_OBJMOVEPROTECT, cppu::UnoType<bool>::get(),0, 0},
-        { UNO_NAME_MISC_OBJ_SIZEPROTECT,      SDRATTR_OBJSIZEPROTECT, cppu::UnoType<bool>::get(),0, 0},
-        { UNO_NAME_OLE2_PERSISTNAME,  OWN_ATTR_PERSISTNAME        , cppu::UnoType<OUString>::get(), 0, 0 },
-        { u"LinkURL"_ustr,                  OWN_ATTR_OLE_LINKURL        , cppu::UnoType<OUString>::get(), 0, 0 },
-        { UNO_NAME_MISC_OBJ_BOUNDRECT, OWN_ATTR_BOUNDRECT,            cppu::UnoType<css::awt::Rectangle>::get(), css::beans::PropertyAttribute::READONLY, 0},
-        { u"VisibleArea"_ustr,              OWN_ATTR_OLE_VISAREA        , cppu::UnoType<css::awt::Rectangle>::get(), 0, 0},
-        { u"UINameSingular"_ustr,               OWN_ATTR_UINAME_SINGULAR        , ::cppu::UnoType<OUString>::get(),    css::beans::PropertyAttribute::READONLY,   0},
-        // #i68101#
-        { UNO_NAME_MISC_OBJ_TITLE,        OWN_ATTR_MISC_OBJ_TITLE         , cppu::UnoType<OUString>::get(),    0,  0},
-        { UNO_NAME_MISC_OBJ_DESCRIPTION,  OWN_ATTR_MISC_OBJ_DESCRIPTION   , cppu::UnoType<OUString>::get(),    0,  0},
-        { u"Decorative"_ustr, OWN_ATTR_MISC_OBJ_DECORATIVE, ::cppu::UnoType<bool>::get(), 0,  0 },
-    };
-
-    return aAppletPropertyMap_Impl;
-}
-
 static std::span<SfxItemPropertyMapEntry const> ImplGetSvxControlShapePropertyMap()
 {
     static SfxItemPropertyMapEntry const aControlPropertyMap_Impl[] =
@@ -830,7 +796,6 @@ const UHashMapImpl& GetUHashImpl()
             { "com.sun.star.drawing.CaptionShape",         SdrObjKind::Caption },
             { "com.sun.star.drawing.FrameShape",           SdrObjKind::OLEPluginFrame },
             { "com.sun.star.drawing.PluginShape",          SdrObjKind::OLE2Plugin },
-            { "com.sun.star.drawing.AppletShape",          SdrObjKind::OLE2Applet },
             { "com.sun.star.drawing.CustomShape",          SdrObjKind::CustomShape },
             { "com.sun.star.drawing.MediaShape",           SdrObjKind::Media },
             { "com.sun.star.drawing.AnnotationShape",      SdrObjKind::Annotation },
@@ -917,7 +882,6 @@ std::span<const SfxItemPropertyMapEntry> SvxUnoPropertyMapProvider::GetMap(sal_u
             case SVXMAP_OLE2: m_aMapArr[SVXMAP_OLE2]=ImplGetSvxOle2PropertyMap(); break;
             case SVXMAP_PLUGIN: m_aMapArr[SVXMAP_PLUGIN]=ImplGetSvxPluginPropertyMap(); break;
             case SVXMAP_FRAME: m_aMapArr[SVXMAP_FRAME]=ImplGetSvxFramePropertyMap(); break;
-            case SVXMAP_APPLET: m_aMapArr[SVXMAP_APPLET]=ImplGetSvxAppletPropertyMap(); break;
             case SVXMAP_CONTROL: m_aMapArr[SVXMAP_CONTROL]=ImplGetSvxControlShapePropertyMap(); break;
             case SVXMAP_TEXT: m_aMapArr[SVXMAP_TEXT]=ImplGetSvxTextShapePropertyMap(); break;
             case SVXMAP_CUSTOMSHAPE: m_aMapArr[SVXMAP_CUSTOMSHAPE]=ImplGetSvxCustomShapePropertyMap(); break;

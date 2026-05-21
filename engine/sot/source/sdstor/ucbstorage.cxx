@@ -346,7 +346,6 @@ static SotClipboardFormatId GetFormatId_Impl( const SvGlobalName& aName )
     if ( aName == SvGlobalName( SO3_SM_CLASSID_60 ) )
         return SotClipboardFormatId::STARMATH_60;
     if ( aName == SvGlobalName( SO3_OUT_CLASSID ) ||
-         aName == SvGlobalName( SO3_APPLET_CLASSID ) ||
          aName == SvGlobalName( SO3_PLUGIN_CLASSID ) ||
          aName == SvGlobalName( SO3_IFRAME_CLASSID ) )
         // allowed, but not supported

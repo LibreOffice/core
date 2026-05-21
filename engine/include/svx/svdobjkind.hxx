@@ -55,7 +55,6 @@ enum class SdrObjKind : sal_uInt16
     Table = 35, /// table
     Annotation = 36, /// annotation object
 
-    OLE2Applet = 100,
     OLE2Plugin = 101,
 
     // engine3d, arbitrarily place at 200

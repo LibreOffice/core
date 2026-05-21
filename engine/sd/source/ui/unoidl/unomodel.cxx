@@ -2948,7 +2948,6 @@ SdXImpressDocument::createInstanceWithArguments(
 {
     OUString arg;
     if ((ServiceSpecifier == "com.sun.star.drawing.GraphicObjectShape"
-         || ServiceSpecifier == "com.sun.star.drawing.AppletShape"
          || ServiceSpecifier == "com.sun.star.drawing.FrameShape"
          || ServiceSpecifier == "com.sun.star.drawing.OLE2Shape"
          || ServiceSpecifier == "com.sun.star.drawing.MediaShape"

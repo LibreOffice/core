@@ -581,7 +581,6 @@ void SvxDrawPage::GetTypeAndInventor( SdrObjKind& rType, SdrInventor& rInventor,
         {
             case SdrObjKind::OLEPluginFrame:
             case SdrObjKind::OLE2Plugin:
-            case SdrObjKind::OLE2Applet:
                 rType = SdrObjKind::OLE2;
                 break;
             default:
@@ -681,9 +680,6 @@ rtl::Reference<SvxShape> SvxDrawPage::CreateShapeByTypeAndInventor( SdrObjKind n
                 case SdrObjKind::OLEPluginFrame:
                     pRet = new SvxFrameShape( pObj, referer );
                     break;
-                case SdrObjKind::OLE2Applet:
-                    pRet = new SvxAppletShape( pObj, referer );
-                    break;
                 case SdrObjKind::OLE2Plugin:
                     pRet = new SvxPluginShape( pObj, referer );
                     break;
@@ -707,7 +703,6 @@ rtl::Reference<SvxShape> SvxDrawPage::CreateShapeByTypeAndInventor( SdrObjKind n
                                     {
                                         SvGlobalName aClassId( xObject->getClassID() );
 
-                                        const SvGlobalName aAppletClassId( SO3_APPLET_CLASSID );
                                         const SvGlobalName aPluginClassId( SO3_PLUGIN_CLASSID );
                                         const SvGlobalName aIFrameClassId( SO3_IFRAME_CLASSID );
 
@@ -715,11 +710,6 @@ rtl::Reference<SvxShape> SvxDrawPage::CreateShapeByTypeAndInventor( SdrObjKind n
                                         {
                                             pRet = new SvxPluginShape( pObj, referer );
                                             nType = SdrObjKind::OLE2Plugin;
-                                        }
-                                        else if( aAppletClassId == aClassId )
-                                        {
-                                            pRet = new SvxAppletShape( pObj, referer );
-                                            nType = SdrObjKind::OLE2Applet;
                                         }
                                         else if( aIFrameClassId == aClassId )
                                         {

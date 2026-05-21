@@ -141,9 +141,6 @@ OUString
     ShapeTypeId nShapeType = ShapeTypeHandler::Instance().GetTypeId (mxShape);
     switch (nShapeType)
     {
-        case DRAWING_APPLET:
-            sName = u"AppletOLEShape"_ustr;
-            break;
         case DRAWING_FRAME:
             sName = u"FrameOLEShape"_ustr;
             break;
