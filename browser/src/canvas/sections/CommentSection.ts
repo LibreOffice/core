@@ -1787,10 +1787,7 @@ export class Comment extends CanvasSectionObject {
 			this.sectionProperties.commentListSection.selectById(this.sectionProperties.data.id);
 		}
 		else if (docType === 'text') {
-			const mousePoint = point.clone();
-			mousePoint.pX += this.myTopLeft[0];
-			mousePoint.pY += this.myTopLeft[1];
-			app.activeDocument.mouseControl.onClick(mousePoint, e);
+			app.activeDocument.mouseControl.onClick(this.toMouseControlLocal(point), e);
 		}
 		else if (docType === 'spreadsheet') {
 			point.pX += this.position[0];
@@ -1864,15 +1861,26 @@ export class Comment extends CanvasSectionObject {
 		}
 	}
 
+	// Comment-local + this.myTopLeft is the canvas-pixel coordinate; MouseControl
+	// is bound to the tiles section and expects its argument in that section's
+	// local frame, which is offset from canvas by the document anchor (e.g. the
+	// ruler height in Writer). Without removing the anchor, forwarded events
+	// drift by that amount.
+	private toMouseControlLocal(point: cool.SimplePoint): cool.SimplePoint {
+		const docAnchor = app.sectionContainer.getDocumentAnchor();
+		const result = point.clone();
+		result.pX += this.myTopLeft[0] - docAnchor[0];
+		result.pY += this.myTopLeft[1] - docAnchor[1];
+		return result;
+	}
+
 	// In Writer, a comment-highlighted region overlays the document. By default
 	// this section would swallow mouse events, so a text selection drag started
 	// on top of a commented passage never reaches core. Forward the drag
 	// lifecycle (down/move/up) to MouseControl while leaving click handling
 	// to the existing onClick path.
 	private forwardWriterMouseEventToCore(handler: 'onMouseDown' | 'onMouseMove' | 'onMouseUp', point: cool.SimplePoint, dragDistance: Array<number>, e: MouseEvent): void {
-		const mousePoint = point.clone();
-		mousePoint.pX += this.myTopLeft[0];
-		mousePoint.pY += this.myTopLeft[1];
+		const mousePoint = this.toMouseControlLocal(point);
 		const mouseControl = app.activeDocument.mouseControl;
 		if (handler === 'onMouseMove')
 			mouseControl.onMouseMove(mousePoint, dragDistance, e);
