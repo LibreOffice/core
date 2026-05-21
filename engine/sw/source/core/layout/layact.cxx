@@ -2453,18 +2453,12 @@ SwLayIdle::SwLayIdle( SwRootFrame *pRt, SwViewShellImp *pI ) :
                 bSdrModelIdle = pSdrModel->IsWriterIdle();
                 pSdrModel->SetWriterIdle(true);
             }
-            if (comphelper::COKit::isActive())
-            {
-                // Let the COKit anyInput() mechanism know that we're inside the idle layout.
-                comphelper::COKit::setIdleLayouting(true);
-            }
+            // Let the COKit anyInput() mechanism know that we're inside the idle layout.
+            comphelper::COKit::setIdleLayouting(true);
 
             aAction.Action(m_pImp->GetShell().GetOut());
 
-            if (comphelper::COKit::isActive())
-            {
-                comphelper::COKit::setIdleLayouting(false);
-            }
+            comphelper::COKit::setIdleLayouting(false);
             if (pSdrModel)
             {
                 pSdrModel->SetWriterIdle(bSdrModelIdle);
