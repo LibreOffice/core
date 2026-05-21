@@ -1848,7 +1848,7 @@ void ScTable::Sort(
                     pSheetView->addOrderIndices(aSortOrderInfo);
                     pSheetView->setSortParam(aSortParam);
                 }
-                else if (GetSheetViewManager())
+                else if (GetSheetViewManager() && pUndo)
                 {
                     GetSheetViewManager()->addOrderIndices(aSortOrderInfo);
                     GetSheetViewManager()->mergeReorderParameters(*pUndo);
