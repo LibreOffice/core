@@ -9,23 +9,17 @@
 
 #pragma once
 
-#include <sal/config.h>
+#include <vcl/dllapi.h>
+#include <vcl/weld/Widget.hxx>
 
-#include "QtInstanceWidget.hxx"
-
-#include <vcl/weld/Spinner.hxx>
-
-#include <QtWidgets/QProgressBar>
-
-class QtInstanceSpinner : public QtInstanceWidget, public virtual weld::Spinner
+namespace weld
 {
-    Q_OBJECT
-
+class VCL_DLLPUBLIC Spinner : virtual public Widget
+{
 public:
-    QtInstanceSpinner(QProgressBar* pProgressBar);
-
-    virtual void start() override;
-    virtual void stop() override;
+    virtual void start() = 0;
+    virtual void stop() = 0;
 };
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

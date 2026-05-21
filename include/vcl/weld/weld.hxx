@@ -324,13 +324,6 @@ public:
     void connect_value_changed(const Link<Scale&, void>& rLink) { m_aValueChangedHdl = rLink; }
 };
 
-class VCL_DLLPUBLIC Spinner : virtual public Widget
-{
-public:
-    virtual void start() = 0;
-    virtual void stop() = 0;
-};
-
 enum class LabelType
 {
     Normal,
