@@ -27,6 +27,7 @@
 #include <sfx2/tabdlg.hxx>
 #include <svl/macitem.hxx>
 #include <vcl/idle.hxx>
+#include <vcl/weld/Frame.hxx>
 #include <vcl/weld/TreeView.hxx>
 #include <vcl/weld/weld.hxx>
 #include <com/sun/star/frame/XFrame.hpp>

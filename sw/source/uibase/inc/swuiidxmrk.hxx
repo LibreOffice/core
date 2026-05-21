@@ -27,6 +27,7 @@
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/Dialog.hxx>
 #include <vcl/weld/Entry.hxx>
+#include <vcl/weld/Frame.hxx>
 #include <vcl/weld/SpinButton.hxx>
 #include <vcl/weld/weld.hxx>
 #include <toxe.hxx>

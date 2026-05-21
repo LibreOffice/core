@@ -21,6 +21,7 @@
 #include <svx/dlgctrl.hxx>
 #include <svx/svdobjkind.hxx>
 #include <vcl/weld/DrawingArea.hxx>
+#include <vcl/weld/Frame.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
 
 /*************************************************************************

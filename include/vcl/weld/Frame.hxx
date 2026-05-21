@@ -9,25 +9,17 @@
 
 #pragma once
 
-#include <sal/config.h>
+#include <vcl/dllapi.h>
+#include <vcl/weld/weld.hxx>
 
-#include "QtInstanceContainer.hxx"
-
-#include <vcl/weld/Frame.hxx>
-
-#include <QtWidgets/QGroupBox>
-
-class QtInstanceFrame : public QtInstanceContainer, public virtual weld::Frame
+namespace weld
 {
-    Q_OBJECT
-
-    QGroupBox* m_pGroupBox;
-
+class VCL_DLLPUBLIC Frame : virtual public Container
+{
 public:
-    QtInstanceFrame(QGroupBox* pGroupBox);
-
-    virtual void set_label(const OUString& rText) override;
-    virtual OUString get_label() const override;
+    virtual void set_label(const OUString& rText) = 0;
+    virtual OUString get_label() const = 0;
 };
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

@@ -35,6 +35,7 @@
 #include <vcl/idle.hxx>
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/Entry.hxx>
+#include <vcl/weld/Frame.hxx>
 #include <vcl/weld/FormattedSpinButton.hxx>
 #include <vcl/weld/Image.hxx>
 #include <vcl/weld/ScrolledWindow.hxx>

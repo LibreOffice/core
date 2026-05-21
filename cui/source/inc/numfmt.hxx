@@ -25,6 +25,7 @@
 #include <tools/color.hxx>
 #include <vcl/weld/DrawingArea.hxx>
 #include <vcl/weld/Entry.hxx>
+#include <vcl/weld/Frame.hxx>
 #include <vcl/weld/SpinButton.hxx>
 #include <vcl/weld/TreeView.hxx>
 #include <vcl/weld/customweld.hxx>

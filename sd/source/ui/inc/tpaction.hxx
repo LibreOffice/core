@@ -26,6 +26,7 @@
 #include <unotools/resmgr.hxx>
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/Entry.hxx>
+#include <vcl/weld/Frame.hxx>
 #include "sdtreelb.hxx"
 
 #include <vector>

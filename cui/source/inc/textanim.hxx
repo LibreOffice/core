@@ -22,6 +22,7 @@
 #include <svx/sdtakitm.hxx>
 #include <svx/sdtaditm.hxx>
 #include <vcl/weld/ComboBox.hxx>
+#include <vcl/weld/Frame.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
 #include <vcl/weld/Window.hxx>
 #include <vcl/weld/weld.hxx>

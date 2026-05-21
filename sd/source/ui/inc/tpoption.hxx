@@ -22,6 +22,7 @@
 #include <sfx2/tabdlg.hxx>
 #include <svx/optgrid.hxx>
 #include <vcl/weld/ComboBox.hxx>
+#include <vcl/weld/Frame.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
 
 /**

@@ -25,6 +25,7 @@
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/EntryTreeView.hxx>
+#include <vcl/weld/Frame.hxx>
 #include <vcl/weld/MenuButton.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
 #include <vcl/weld/ScrolledWindow.hxx>

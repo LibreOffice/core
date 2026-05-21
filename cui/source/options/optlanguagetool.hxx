@@ -21,6 +21,7 @@
 #include <sfx2/tabdlg.hxx>
 #include <rtl/ustring.hxx>
 #include <vcl/weld/Entry.hxx>
+#include <vcl/weld/Frame.hxx>
 
 class OptLanguageToolTabPage : public SfxTabPage
 {

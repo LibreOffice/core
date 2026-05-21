@@ -86,13 +86,6 @@ public:
     virtual void sort_native_button_order() = 0;
 };
 
-class VCL_DLLPUBLIC Frame : virtual public Container
-{
-public:
-    virtual void set_label(const OUString& rText) = 0;
-    virtual OUString get_label() const = 0;
-};
-
 class VCL_DLLPUBLIC ScreenShotEntry
 {
 public:
