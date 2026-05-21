@@ -9,6 +9,11 @@
 
 $(eval $(call gb_ExternalProject_ExternalProject,freetype))
 
+$(eval $(call gb_ExternalProject_use_externals,freetype,\
+	libpng \
+	zlib \
+))
+
 $(eval $(call gb_ExternalProject_register_targets,freetype,\
 	build \
 ))
