@@ -34,6 +34,7 @@
 	position: relative;
 	width: 30px;
 	height: 30px;
+	background-image: var(--doc-icon-url);
 	background-size: 16px 16px;
 	background-repeat: no-repeat;
 	background-position: center;
@@ -254,7 +255,7 @@ nav.hasnotebookbar [id^='save'].saved::after {
 	color: var(--color-main-text);
 }
 .lo-menu a:hover, .lo-menu a:focus, .lo-menu a:active, .lo-menu a.highlighted {
-	background: var(--color-background-darker);
+	background-color: var(--color-background-darker);
 	color: var(--color-text-darker);
 }
 .lo-menu > li, .lo-menu > li > .disabled {
@@ -266,10 +267,23 @@ nav.hasnotebookbar [id^='save'].saved::after {
 	color: var(--color-text-light);
 }
 .lo-menu > li > a:hover, .lo-menu > li > a:focus, .lo-menu > li > a:active, .lo-menu > li > a.highlighted {
-	background: var(--color-background-darker);
+	background-color: var(--color-background-darker);
 	color: var(--color-text-darker);
 	border-color: var(--color-border-darker);
 	border-bottom: 1px solid var(--color-border-darker);
+}
+.lo-menu > #document-header > a.document-logo,
+.lo-menu > #document-header > a.document-logo:hover,
+.lo-menu > #document-header > a.document-logo:focus,
+.lo-menu > #document-header > a.document-logo:active,
+.lo-menu > #document-header > a.document-logo.highlighted {
+	background-color: transparent;
+	background-image: var(--doc-icon-url);
+	background-size: 16px 16px;
+	background-repeat: no-repeat;
+	background-position: center;
+	border: 1px solid transparent;
+	padding: var(--spacing-m);
 }
 .lo-menu > li > a.highlighted {
 	border-bottom-color: var(--color-border-dark);
@@ -416,22 +430,19 @@ nav.hasnotebookbar [id^='save'].saved::after {
 }
 
 .writer-icon-img {
-	background-image: url('images/x-office-document.svg');
+	--doc-icon-url: url('images/x-office-document.svg');
 }
 
 .calc-icon-img {
-	background-image: url('images/x-office-spreadsheet.svg');
+	--doc-icon-url: url('images/x-office-spreadsheet.svg');
 }
 
 .impress-icon-img {
-	background-image: url('images/x-office-presentation.svg');
+	--doc-icon-url: url('images/x-office-presentation.svg');
 }
 
 .draw-icon-img {
-	background-image: url('images/x-office-drawing.svg');
-	background-size: 16px 16px;
-	background-repeat: no-repeat;
-	background-position: center;
+	--doc-icon-url: url('images/x-office-drawing.svg');
 }
 
 #menu-last-mod a {
