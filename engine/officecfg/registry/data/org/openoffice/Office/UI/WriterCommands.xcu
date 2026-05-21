@@ -3159,11 +3159,6 @@
           <value>1</value>
       </prop>
       </node>
-      <node oor:name=".uno:AddAllUnknownWords" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Add Unknown Words</value>
-        </prop>
-      </node>
       <node oor:name=".uno:HScroll" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Horizontal Scroll Bar</value>

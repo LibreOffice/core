@@ -87,23 +87,6 @@ SfxBoolItem TrackChangesBar SID_TRACK_CHANGES_BAR
     GroupId = SfxGroupId::Edit;
 ]
 
-SfxVoidItem AddAllUnknownWords FN_ADD_UNKNOWN
-()
-[
-    AutoUpdate = TRUE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = TRUE,
-    GroupId = SfxGroupId::Options;
-]
-
 SfxStringItem AlignBottom FN_FRAME_ALIGN_VERT_BOTTOM
 ()
 [
