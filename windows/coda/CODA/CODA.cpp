@@ -582,6 +582,22 @@ static void do_getrecentdocs(const WindowData& data, int id)
                                   ", '" + recentFiles.serialiseFiltered(currentlyOpenDocumens()) + "')").c_str()), 0);
 }
 
+// It happens that some other process opens the clipboard for a short time, and if we happen to try
+// during that time it will fail. Workaround for that: a function that tries a couple of times.
+
+static BOOL try_open_clipboard()
+{
+    const int NTRIES = 10;
+    for (int i = 0; i < NTRIES; i++)
+    {
+        if (OpenClipboard(NULL))
+            return TRUE;
+        Sleep(5);
+    }
+    LOG_ERR("OpenClipboard() failed repeatedly, last error: " << GetLastError());
+    return FALSE;
+}
+
 static void do_cut_or_copy(ClipboardOp op, WindowData& data)
 {
     // Tell core to copy the selection into its internal clipboard
@@ -595,7 +611,7 @@ static void do_cut_or_copy(ClipboardOp op, WindowData& data)
     // Get core's internal clipboard
     DocumentData::get(data.appDocId).loKitDocument->getClipboard(nullptr, &count, &mimeTypes, &sizes,
                                                             &streams);
-    if (!OpenClipboard(NULL))
+    if (!try_open_clipboard())
         return;
 
     if (!EmptyClipboard())
@@ -717,7 +733,7 @@ static void do_paste_or_read(ClipboardOp op, WindowData& data)
 {
     if (data.lastAnyonesClipboardModification > data.lastOwnClipboardModification)
     {
-        if (!OpenClipboard(NULL))
+        if (!try_open_clipboard())
             return;
 
         std::vector<const char*> mimeTypes;
@@ -2253,7 +2269,7 @@ static void processMessage(WindowData& data, wil::unique_cotaskmem_string& messa
         else if (s.starts_with(L"TEXTCLIPBOARD "))
         {
             std::wstring text = s.substr(14);
-            if (OpenClipboard(NULL))
+            if (try_open_clipboard())
             {
                 EmptyClipboard();
                 HGLOBAL hMem = GlobalAlloc(GMEM_MOVEABLE, (text.size() + 1) * sizeof(wchar_t));
