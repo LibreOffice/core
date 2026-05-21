@@ -737,7 +737,7 @@ SfxVoidItem DecrementIndentValue FN_DEC_INDENT_OFFSET
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
+    ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
@@ -1060,7 +1060,7 @@ SfxVoidItem EditGlossary FN_GLOSSARY_DLG
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
+    ReadOnlyDoc = FALSE,
     ViewerApp = FALSE,
     Toggle = FALSE,
     Container = FALSE,
@@ -1218,7 +1218,7 @@ SfxVoidItem ExecuteMacroField FN_EXECUTE_MACROFIELD
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
+    ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
@@ -2474,7 +2474,7 @@ SfxVoidItem IncrementIndentValue FN_INC_INDENT_OFFSET
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
+    ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
@@ -4779,7 +4779,7 @@ SfxStringItem NumberFormat FN_NUMBER_FORMAT
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
+    ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
@@ -4797,7 +4797,7 @@ SfxVoidItem NumberFormatCurrency FN_NUMBER_CURRENCY
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
+    ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
@@ -4814,7 +4814,7 @@ SfxVoidItem NumberFormatDate FN_NUMBER_DATE
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
+    ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
@@ -4831,7 +4831,7 @@ SfxVoidItem NumberFormatDecimal FN_NUMBER_TWODEC
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
+    ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
@@ -4848,7 +4848,7 @@ SfxVoidItem NumberFormatPercent FN_NUMBER_PERCENT
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
+    ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
@@ -4865,7 +4865,7 @@ SfxVoidItem NumberFormatScientific FN_NUMBER_SCIENTIFIC
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
+    ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
@@ -4882,7 +4882,7 @@ SfxVoidItem NumberFormatStandard FN_NUMBER_STANDARD
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
+    ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
@@ -4899,7 +4899,7 @@ SfxVoidItem NumberFormatTime FN_NUMBER_TIME
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
+    ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
@@ -5492,7 +5492,7 @@ SfxVoidItem SbaInsert FN_QRY_INSERT
 [
     AutoUpdate = FALSE,
     FastCall = TRUE,
-    ReadOnlyDoc = TRUE,
+    ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
@@ -5510,7 +5510,7 @@ SfxVoidItem SbaInsertField FN_QRY_INSERT_FIELD
 [
     AutoUpdate = FALSE,
     FastCall = TRUE,
-    ReadOnlyDoc = TRUE,
+    ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
@@ -7398,7 +7398,7 @@ SfxVoidItem SetDropCapText FN_DROP_TEXT
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
+    ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
@@ -7415,7 +7415,7 @@ SfxVoidItem SetDropCapCharStyleName FN_DROP_CHAR_STYLE_NAME
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
+    ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
@@ -7450,7 +7450,7 @@ SfxVoidItem InsertDBField FN_INSERT_DBFIELD
 [
     AutoUpdate = FALSE,
     FastCall = TRUE,
-    ReadOnlyDoc = TRUE,
+    ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
@@ -7553,7 +7553,7 @@ SfxBoolItem RowSplit FN_TABLE_ROW_SPLIT
 [
         AutoUpdate = FALSE,
         FastCall = FALSE,
-        ReadOnlyDoc = TRUE,
+        ReadOnlyDoc = FALSE,
         Toggle = TRUE,
         Container = FALSE,
         RecordAbsolute = FALSE,
@@ -7686,7 +7686,7 @@ SfxVoidItem HeadingRowsRepeat FN_TABLE_HEADLINE_REPEAT
 [
     AutoUpdate = FALSE,
     FastCall = TRUE,
-    ReadOnlyDoc = TRUE,
+    ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
@@ -8321,7 +8321,7 @@ SfxBoolItem SwPageHeaderItem SID_ATTR_PAGE_HEADER
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
+    ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
@@ -8339,7 +8339,7 @@ SvxLongLRSpaceItem SwPageHeaderLRMargin SID_ATTR_PAGE_HEADER_LRMARGIN
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
+    ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
@@ -8357,7 +8357,7 @@ SvxLongULSpaceItem SwPageHeaderSpacing SID_ATTR_PAGE_HEADER_SPACING
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
+    ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
@@ -8375,7 +8375,7 @@ SfxInt16Item SwPageHeaderLayout SID_ATTR_PAGE_HEADER_LAYOUT
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
+    ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
@@ -8393,7 +8393,7 @@ SfxBoolItem SwPageFooterItem SID_ATTR_PAGE_FOOTER
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
+    ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
@@ -8411,7 +8411,7 @@ SvxLongLRSpaceItem SwPageFooterLRMargin SID_ATTR_PAGE_FOOTER_LRMARGIN
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
+    ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
@@ -8429,7 +8429,7 @@ SvxLongULSpaceItem SwPageFooterSpacing SID_ATTR_PAGE_FOOTER_SPACING
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
+    ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
@@ -8447,7 +8447,7 @@ SfxInt16Item SwPageFooterLayout SID_ATTR_PAGE_FOOTER_LAYOUT
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
+    ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
