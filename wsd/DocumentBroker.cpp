@@ -1747,6 +1747,31 @@ PresetsInstallTask::PresetsInstallTask(const std::shared_ptr<SocketPoll>& poll,
     appendCallback(installFinishedCB);
 }
 
+// Preset groups whose files we round-trip back to the host on document
+// close. The first element is the preset directory name (matching the
+// addGroup() name and the engine's $(userurl)/<group> directory); the
+// second flag means "only upload files we already saw at install time,
+// plus 'standard.dic' as a one-off exception". Themes have no such
+// exception: every .theme file in the user dir is something the user
+// created or edited and is worth preserving.
+namespace
+{
+struct RoundTripPresetGroup
+{
+    std::string name;
+    bool onlyKnownOrStandardDic;
+};
+
+const std::vector<RoundTripPresetGroup>& getRoundTripPresetGroups()
+{
+    static const std::vector<RoundTripPresetGroup> sGroups = {
+        { "wordbook", true },
+        { "themes", false },
+    };
+    return sGroups;
+}
+} // namespace
+
 void PresetsInstallTask::install(const Poco::JSON::Object::Ptr& settings,
              const std::shared_ptr<ClientSession>& session)
 {
@@ -1764,6 +1789,15 @@ void PresetsInstallTask::install(const Poco::JSON::Object::Ptr& settings,
             addGroup(settings, "xcu", presets);
             addGroup(settings, "template", presets);
             addGroup(settings, "themes", presets);
+
+            // Ensure round-trip group directories exist in the jail even
+            // when the host advertised no entries for them. Without this
+            // a brand-new user (no themes/wordbook on the host yet) would
+            // hit a chicken-and-egg: the engine writes new files to
+            // $(userurl)/<group>/, that directory doesn't exist, the
+            // write silently fails, and nothing ever reaches the host.
+            for (const RoundTripPresetGroup& group : getRoundTripPresetGroups())
+                Poco::File(Poco::Path(_presetsPath, group.name)).createDirectories();
         }
 
         Cache::supplyConfigFiles(_configId, presets);
@@ -1896,31 +1930,6 @@ static std::string extractViewSettings(const std::string& viewSettingsPath,
     }
     return viewSettingsString;
 }
-
-// Preset groups whose files we round-trip back to the host on document
-// close. The first element is the preset directory name (matching the
-// addGroup() name and the engine's $(userurl)/<group> directory); the
-// second flag means "only upload files we already saw at install time,
-// plus 'standard.dic' as a one-off exception". Themes have no such
-// exception: every .theme file in the user dir is something the user
-// created or edited and is worth preserving.
-namespace
-{
-struct RoundTripPresetGroup
-{
-    std::string name;
-    bool onlyKnownOrStandardDic;
-};
-
-const std::vector<RoundTripPresetGroup>& getRoundTripPresetGroups()
-{
-    static const std::vector<RoundTripPresetGroup> sGroups = {
-        { "wordbook", true },
-        { "themes", false },
-    };
-    return sGroups;
-}
-} // namespace
 
 void DocumentBroker::asyncInstallPresets(const std::shared_ptr<ClientSession>& session,
                                          const std::string& configId,
