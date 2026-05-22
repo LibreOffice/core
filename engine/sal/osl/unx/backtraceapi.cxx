@@ -81,7 +81,7 @@ void process_file_addr2line( const char* file, std::vector<FrameData>& frameData
 #if defined __clang__
     // llvm-addr2line is faster than addr2line
     if(osl::detail::find_in_PATH(u"llvm-addr2line"_ustr, dummy))
-        binary = "llvm-addr2line";
+        binary = u"llvm-addr2line"_ustr;
 #endif
     if(!osl::detail::find_in_PATH(binary, dummy))
         return; // Will not work, avoid warnings from osl process code.

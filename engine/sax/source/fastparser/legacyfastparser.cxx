@@ -72,7 +72,7 @@ void NamespaceHandler::addNSDeclAttributes( rtl::Reference < comphelper::Attribu
         OUString& rNamespaceURI = aNamespaceDefine->m_aNamespaceURI;
         OUString sDecl;
         if ( rPrefix.isEmpty() )
-            sDecl = "xmlns";
+            sDecl = u"xmlns"_ustr;
         else
             sDecl = "xmlns:" + rPrefix;
         rAttrList->AddAttribute( sDecl, rNamespaceURI );

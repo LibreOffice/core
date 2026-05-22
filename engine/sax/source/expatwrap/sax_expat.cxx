@@ -541,73 +541,73 @@ OUString getErrorMessage( XML_Error xmlE, std::u16string_view sSystemId , sal_In
 {
     OUString Message;
     if( XML_ERROR_NONE == xmlE ) {
-        Message = "No";
+        Message = u"No"_ustr;
     }
     else if( XML_ERROR_NO_MEMORY == xmlE ) {
-        Message = "no memory";
+        Message = u"no memory"_ustr;
     }
     else if( XML_ERROR_SYNTAX == xmlE ) {
-        Message = "syntax";
+        Message = u"syntax"_ustr;
     }
     else if( XML_ERROR_NO_ELEMENTS == xmlE ) {
-        Message = "no elements";
+        Message = u"no elements"_ustr;
     }
     else if( XML_ERROR_INVALID_TOKEN == xmlE ) {
-        Message = "invalid token";
+        Message = u"invalid token"_ustr;
     }
     else if( XML_ERROR_UNCLOSED_TOKEN == xmlE ) {
-        Message = "unclosed token";
+        Message = u"unclosed token"_ustr;
     }
     else if( XML_ERROR_PARTIAL_CHAR == xmlE ) {
-        Message = "partial char";
+        Message = u"partial char"_ustr;
     }
     else if( XML_ERROR_TAG_MISMATCH == xmlE ) {
-        Message = "tag mismatch";
+        Message = u"tag mismatch"_ustr;
     }
     else if( XML_ERROR_DUPLICATE_ATTRIBUTE == xmlE ) {
-        Message = "duplicate attribute";
+        Message = u"duplicate attribute"_ustr;
     }
     else if( XML_ERROR_JUNK_AFTER_DOC_ELEMENT == xmlE ) {
-        Message = "junk after doc element";
+        Message = u"junk after doc element"_ustr;
     }
     else if( XML_ERROR_PARAM_ENTITY_REF == xmlE ) {
-        Message = "parameter entity reference";
+        Message = u"parameter entity reference"_ustr;
     }
     else if( XML_ERROR_UNDEFINED_ENTITY == xmlE ) {
-        Message = "undefined entity";
+        Message = u"undefined entity"_ustr;
     }
     else if( XML_ERROR_RECURSIVE_ENTITY_REF == xmlE ) {
-        Message = "recursive entity reference";
+        Message = u"recursive entity reference"_ustr;
     }
     else if( XML_ERROR_ASYNC_ENTITY == xmlE ) {
-        Message = "async entity";
+        Message = u"async entity"_ustr;
     }
     else if( XML_ERROR_BAD_CHAR_REF == xmlE ) {
-        Message = "bad char reference";
+        Message = u"bad char reference"_ustr;
     }
     else if( XML_ERROR_BINARY_ENTITY_REF == xmlE ) {
-        Message = "binary entity reference";
+        Message = u"binary entity reference"_ustr;
     }
     else if( XML_ERROR_ATTRIBUTE_EXTERNAL_ENTITY_REF == xmlE ) {
-        Message = "attribute external entity reference";
+        Message = u"attribute external entity reference"_ustr;
     }
     else if( XML_ERROR_MISPLACED_XML_PI == xmlE ) {
-        Message = "misplaced xml processing instruction";
+        Message = u"misplaced xml processing instruction"_ustr;
     }
     else if( XML_ERROR_UNKNOWN_ENCODING == xmlE ) {
-        Message = "unknown encoding";
+        Message = u"unknown encoding"_ustr;
     }
     else if( XML_ERROR_INCORRECT_ENCODING == xmlE ) {
-        Message = "incorrect encoding";
+        Message = u"incorrect encoding"_ustr;
     }
     else if( XML_ERROR_UNCLOSED_CDATA_SECTION == xmlE ) {
-        Message = "unclosed cdata section";
+        Message = u"unclosed cdata section"_ustr;
     }
     else if( XML_ERROR_EXTERNAL_ENTITY_HANDLING == xmlE ) {
-        Message = "external entity reference";
+        Message = u"external entity reference"_ustr;
     }
     else if( XML_ERROR_NOT_STANDALONE == xmlE ) {
-        Message = "not standalone";
+        Message = u"not standalone"_ustr;
     }
 
     OUString str = OUString::Concat("[") +

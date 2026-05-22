@@ -252,7 +252,7 @@ static OUString getIniFileName(bool overriding) {
                 fileName = fileName.copy(0, fileName.getLength() - progExt.getLength());
             }
 
-            progExt = ".exe";
+            progExt = u".exe"_ustr;
             if (fileName.getLength() > progExt.getLength()
                 && o3tl::equalsIgnoreAsciiCase(fileName.subView(fileName.getLength() - progExt.getLength()), progExt))
             {

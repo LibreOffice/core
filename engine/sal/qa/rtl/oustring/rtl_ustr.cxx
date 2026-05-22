@@ -358,15 +358,15 @@ namespace rtl_ustr
                 sal_Int32 nIndex = rtl_ustr_indexOfStr( aStr1.getStr(), suSearch.getStr() );
                 CPPUNIT_ASSERT_EQUAL_MESSAGE("index is wrong.", sal_Int32(0), nIndex);
 
-                suSearch = "for";
+                suSearch = u"for"_ustr;
                 nIndex = rtl_ustr_indexOfStr( aStr1.getStr(), suSearch.getStr() );
                 CPPUNIT_ASSERT_EQUAL_MESSAGE("index is wrong.", sal_Int32(5), nIndex);
 
-                suSearch = "a";
+                suSearch = u"a"_ustr;
                 /* sal_Int32 */ nIndex = rtl_ustr_indexOfStr( aStr1.getStr(), suSearch.getStr() );
                 CPPUNIT_ASSERT_EQUAL_MESSAGE("index is wrong.", sal_Int32(9), nIndex);
 
-                suSearch = "an index";
+                suSearch = u"an index"_ustr;
                 /* sal_Int32 */ nIndex = rtl_ustr_indexOfStr( aStr1.getStr(), suSearch.getStr() );
                 CPPUNIT_ASSERT_EQUAL_MESSAGE("index is wrong.", sal_Int32(9), nIndex);
             }

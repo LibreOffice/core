@@ -214,11 +214,11 @@ OUString getNamespaceValue( std::u16string_view rNamespacePrefix )
 {
     OUString aNamespaceURI;
     if (rNamespacePrefix == u"office")
-        aNamespaceURI = "urn:oasis:names:tc:opendocument:xmlns:office:1.0";
+        aNamespaceURI = u"urn:oasis:names:tc:opendocument:xmlns:office:1.0"_ustr;
     else if (rNamespacePrefix == u"text")
-        aNamespaceURI = "urn:oasis:names:tc:opendocument:xmlns:text:1.0";
+        aNamespaceURI = u"urn:oasis:names:tc:opendocument:xmlns:text:1.0"_ustr;
     else if (rNamespacePrefix == u"note")
-        aNamespaceURI = "urn:oasis:names:tc:opendocument:xmlns:text:1.0";
+        aNamespaceURI = u"urn:oasis:names:tc:opendocument:xmlns:text:1.0"_ustr;
     return aNamespaceURI;
 }
 
@@ -382,7 +382,7 @@ void XMLImportTest::parse()
     for (size_t i = 0; i < std::size( fileNames ); i++)
     {
         InputSource source;
-        source.sSystemId    = "internal";
+        source.sSystemId    = u"internal"_ustr;
 
         source.aInputStream = createStreamFromFile( m_sDirPath + fileNames[i] );
         m_xParser->parseStream(source);
@@ -411,7 +411,7 @@ void XMLImportTest::testMissingNamespaceDeclaration()
         try
         {
             InputSource source;
-            source.sSystemId    = "internal";
+            source.sSystemId    = u"internal"_ustr;
 
             source.aInputStream = createStreamFromFile( m_sDirPath + fileNames[i] );
             m_xParser->parseStream(source);
@@ -435,7 +435,7 @@ void XMLImportTest::testIllegalNamespaceUse()
     m_xNSDocumentHandler.set( new NSDocumentHandler() );
     m_xParser->setDocumentHandler( m_xNSDocumentHandler );
     InputSource source;
-    source.sSystemId    = "internal";
+    source.sSystemId    = u"internal"_ustr;
 
     source.aInputStream = createStreamFromFile( m_sDirPath + "multiplepfx.xml" );
     m_xParser->parseStream(source);

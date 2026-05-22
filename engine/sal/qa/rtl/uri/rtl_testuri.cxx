@@ -181,7 +181,7 @@ void Test::test_Uri() {
              u"\U000103FF" // 0xD800,0xDFFF -> %F0%90%8F%BF
              u"\xDFFF" // %ED%BF%BF
              u"A"_ustr; // A
-    aText2 = "%ED%A0%80" "%F0%90%8F%BF" "%ED%BF%BF" "A";
+    aText2 = u"%ED%A0%80"_ustr "%F0%90%8F%BF" "%ED%BF%BF" "A";
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
         "failure 11",
         aText2,
@@ -201,7 +201,7 @@ void Test::test_Uri() {
             aText1, rtl_UriCharClassUric, rtl_UriEncodeCheckEscapes,
             RTL_TEXTENCODING_UTF8));
 
-    aText1 = "%ed%a0%80" "%f0%90%8f%bf" "%ed%bf%bf" "A";
+    aText1 = u"%ed%a0%80"_ustr "%f0%90%8f%bf" "%ed%bf%bf" "A";
     aText2 = u"%ED%A0%80" u"\U000103FF" u"%ED%BF%BF" u"A"_ustr;
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
         "failure 14",
@@ -215,7 +215,7 @@ void Test::test_Uri() {
 
     // Check UTF-8 handling:
 
-    aText1 = "%E0%83%BF";
+    aText1 = u"%E0%83%BF"_ustr;
         // \U+00FF encoded with three instead of two bytes
     aText2 = aText1;
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
@@ -225,7 +225,7 @@ void Test::test_Uri() {
             aText1, rtl_UriCharClassUric, rtl_UriEncodeCheckEscapes,
             RTL_TEXTENCODING_UTF8));
 
-    aText1 = "%EF%BF%BF";
+    aText1 = u"%EF%BF%BF"_ustr;
         // \U+FFFF is no legal character
     aText2 = aText1;
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
@@ -237,7 +237,7 @@ void Test::test_Uri() {
 
     // Check IURI handling:
 
-    aText1 = "%30%C3%BF";
+    aText1 = u"%30%C3%BF"_ustr;
     aText2 = u"%30\u00FF"_ustr;
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
         "failure 18",
@@ -246,8 +246,8 @@ void Test::test_Uri() {
 
     // Check modified rtl_UriCharClassUnoParamValue (removed '[' and ']'):
 
-    aText1 = "[]%5B%5D";
-    aText2 = "%5B%5D%5B%5D";
+    aText1 = u"[]%5B%5D"_ustr;
+    aText2 = u"%5B%5D%5B%5D"_ustr;
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
         "failure 19",
         aText2,
@@ -350,7 +350,7 @@ void Test::test_Uri() {
     {
         static constexpr OUStringLiteral aText1U = u" !\u0401\u045F";
         aText1 = OUString(aText1U);
-        aText2 = "%20!%A1%FF";
+        aText2 = u"%20!%A1%FF"_ustr;
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
             "failure 20",
             aText2,
@@ -385,7 +385,7 @@ void Test::test_Uri() {
     {
         static constexpr OUStringLiteral aText1U = u" !\u028A\U00022513";
         aText1 = OUString(aText1U);
-        aText2 = "%20!%81%30%B1%33%95%39%C5%37";
+        aText2 = u"%20!%81%30%B1%33%95%39%C5%37"_ustr;
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
             "failure 22",
             aText2,
@@ -413,7 +413,7 @@ void Test::test_Uri() {
                 RTL_TEXTENCODING_ISO_8859_5));
     }
     {
-        aText1 = "%20%C4%80%FF";
+        aText1 = u"%20%C4%80%FF"_ustr;
         aText2 = OUString();
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
             "failure 24",
@@ -423,7 +423,7 @@ void Test::test_Uri() {
     }
 #if WITH_LOCALE_ALL || WITH_LOCALE_zh
     {
-        aText1 = "%81 ";
+        aText1 = u"%81 "_ustr;
         aText2 = OUString();
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
             "failure 25",
@@ -432,7 +432,7 @@ void Test::test_Uri() {
                 aText1, rtl_UriDecodeStrict, RTL_TEXTENCODING_GB_18030));
     }
     {
-        aText1 = "%81%20";
+        aText1 = u"%81%20"_ustr;
         aText2 = OUString();
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
             "failure 26",
@@ -441,7 +441,7 @@ void Test::test_Uri() {
                 aText1, rtl_UriDecodeStrict, RTL_TEXTENCODING_GB_18030));
     }
     {
-        aText1 = "%81%30%B1%33";
+        aText1 = u"%81%30%B1%33"_ustr;
         static constexpr OUStringLiteral aText2U = u"\u028A";
         aText2 = OUString(aText2U);
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
@@ -451,7 +451,7 @@ void Test::test_Uri() {
                 aText1, rtl_UriDecodeStrict, RTL_TEXTENCODING_GB_18030));
     }
     {
-        aText1 = "%810%B13";
+        aText1 = u"%810%B13"_ustr;
         static constexpr OUStringLiteral aText2U = u"\u028A";
         aText2 = OUString(aText2U);
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
@@ -464,8 +464,8 @@ void Test::test_Uri() {
     // Check rtl_UriEncodeStrictKeepEscapes mode:
 
     {
-        aText1 = "%%ea%c3%aa";
-        aText2 = "%25%EA%C3%AA";
+        aText1 = u"%%ea%c3%aa"_ustr;
+        aText2 = u"%25%EA%C3%AA"_ustr;
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
             "failure 29",
             aText2,
@@ -476,7 +476,7 @@ void Test::test_Uri() {
     {
         static constexpr OUStringLiteral aText1U = u"\u00EA";
         aText1 = OUString(aText1U);
-        aText2 = "%C3%AA";
+        aText2 = u"%C3%AA"_ustr;
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
             "failure 30",
             aText2,

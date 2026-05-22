@@ -913,7 +913,7 @@ void isEmpty::test() {
     OUString aString;
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Newly constructed string should be empty", true, aString.isEmpty() );
 
-    aString = "Not empty any more";
+    aString = u"Not empty any more"_ustr;
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "String should not be empty", false, aString.isEmpty() );
 
     aString.clear();
