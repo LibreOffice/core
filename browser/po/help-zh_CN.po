@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-11 14:06+0200\n"
-"PO-Revision-Date: 2025-05-14 20:12+0000\n"
-"Last-Translator: blueskyxxz <xinxizhe@163.com>\n"
+"PO-Revision-Date: 2026-05-21 10:12+0000\n"
+"Last-Translator: cookiespter <zoumayisi@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/collabora-online/help/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Translate Toolkit 3.6.0\n"
+"X-Generator: Weblate 2026.6.dev0\n"
 
 #: html/cool-help.html%2Bdiv.h1:9-5
 msgid "Keyboard Shortcuts"
@@ -1477,7 +1477,7 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:153-38
 msgid "Moves one screen page to the right."
-msgstr ""
+msgstr "向右移动一个屏幕页面。"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:153-100
 msgid ""
@@ -1689,11 +1689,11 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.h2:188-9
 msgid "Insert"
-msgstr ""
+msgstr "插入"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:190-38
 msgid "Insert date"
-msgstr ""
+msgstr "插入日期"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:190-76
 #, fuzzy
@@ -1992,7 +1992,7 @@ msgstr "<span class=\"def\">状态栏：</span>显示于底部，包含几个有
 msgid ""
 "Status bar showing page number, word count, insert mode, selection mode, "
 "language, edit mode, navigation, zoom, and search"
-msgstr ""
+msgstr "状态栏显示页码、字数、插入模式、选择模式、语言、编辑模式、导航、缩放和搜索"
 
 #: html/cool-help.html%2Bdiv.div.div.p:393-5
 msgid ""
@@ -2042,16 +2042,19 @@ msgid "Using the browser zoom affects the document and user interface areas."
 msgstr "使用浏览器的缩放功能会同时影响文档区和用户界面区。"
 
 #: html/cool-help.html%2Bdiv.div.div.p:406-5
+#, fuzzy
 msgid ""
 "<span class=\"def\">The information bar:</span> The information bar displays "
 "details about the current document. The actual information depends on the "
 "nature of the document."
 msgstr ""
+"<span class=\"def\">信息栏：</span> 信息栏显示当前文档的详细信息。具体信息取"
+"决于文档的性质"
 
 #: html/cool-help.html%2Bdiv.div.div.div.img[alt]:407-29
 msgid ""
 "Information bar showing page navigation arrows, zoom controls, and zoom level"
-msgstr ""
+msgstr "信息栏显示页面导航箭头、缩放控件和缩放级别"
 
 #: html/cool-help.html%2Bdiv.div.p:412-5
 msgid ""
@@ -2181,7 +2184,7 @@ msgstr "要跳回所选状态，请用鼠标选择该状态并点击<span class=
 msgid ""
 "Repair Document dialog listing past document states with columns for action "
 "type, author, and timestamp"
-msgstr ""
+msgstr "“修复文档”对话框，列出了过去的文档状态，包括操作类型、作者和时间戳等列"
 
 #: html/cool-help.html%2Bdiv.div.div.p:432-5
 msgid ""
@@ -2213,7 +2216,7 @@ msgstr ""
 msgid ""
 "Idle document overlay with the message: Idle document - please click to "
 "reload and resume editing"
-msgstr ""
+msgstr "空闲文档提示：空闲文档 - 请点击此处重新加载以恢复编辑"
 
 #: html/cool-help.html%2Bdiv.div.div.p:438-5
 msgid ""
@@ -2294,10 +2297,11 @@ msgstr ""
 ">图表</span>。在侧边栏中定制图表："
 
 #: html/cool-help.html%2Bdiv.div.div.ol.div.img[alt]:459-31
+#, fuzzy
 msgid ""
 "Chart Wizard dialog with chart type list on the left, chart style previews, "
 "3D and shape options"
-msgstr ""
+msgstr "“图表向导”对话框，左侧为图表类型列表，包含图表样式预览、3D 效果和形状选项"
 
 #: html/cool-help.html%2Bdiv.div.div.ol.li:460-7
 msgid "If no table or range was selected, a prototype chart is displayed."
@@ -2307,7 +2311,7 @@ msgstr "如果未选择表格或范围，则显示一张样例图表。"
 msgid ""
 "Column chart with grouped bars showing data for four rows across three "
 "columns"
-msgstr ""
+msgstr "带有分组条形图的柱状图，显示四行数据在三个列中的值"
 
 #: html/cool-help.html%2Bdiv.div.div.p:464-28
 msgid ""
@@ -2390,7 +2394,7 @@ msgstr ""
 msgid ""
 "Comment box showing author name, date, and the comment text, displayed "
 "beside the document"
-msgstr ""
+msgstr "评论框显示作者姓名、日期和评论文本，位于文档的旁边"
 
 #: html/cool-help.html%2Bdiv.div.div.p:478-5
 msgid ""
@@ -2417,7 +2421,7 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.img[alt]:483-29
 msgid "Text with a red wavy underline beneath a misspelled word"
-msgstr ""
+msgstr "拼写错误的单词下方会带有红色波浪下划线"
 
 #: html/cool-help.html%2Bdiv.div.div.p:484-5
 msgid ""
