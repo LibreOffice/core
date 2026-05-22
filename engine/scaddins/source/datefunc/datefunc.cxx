@@ -229,7 +229,7 @@ OUString SAL_CALL ScaDateAddIn::getDisplayArgumentName(
         if( nStr )
             aRet = GetFuncDescrStr( fDataIt->GetDescrID(), nStr );
         else
-            aRet = "internal";
+            aRet = u"internal"_ustr;
     }
 
     return aRet;
@@ -248,7 +248,7 @@ OUString SAL_CALL ScaDateAddIn::getArgumentDescription(
         if( nStr )
             aRet = GetFuncDescrStr( fDataIt->GetDescrID(), nStr + 1 );
         else
-            aRet = "for internal use only";
+            aRet = u"for internal use only"_ustr;
     }
 
     return aRet;
@@ -265,17 +265,17 @@ OUString SAL_CALL ScaDateAddIn::getProgrammaticCategoryName(
     {
         switch( fDataIt->GetCategory() )
         {
-            case ScaCategory::DateTime:   aRet = "Date&Time";    break;
-            case ScaCategory::Text:       aRet = "Text";         break;
-            case ScaCategory::Finance:    aRet = "Financial";    break;
-            case ScaCategory::Inf:        aRet = "Information";  break;
-            case ScaCategory::Math:       aRet = "Mathematical"; break;
-            case ScaCategory::Tech:       aRet = "Technical";    break;
+            case ScaCategory::DateTime:   aRet = u"Date&Time"_ustr;    break;
+            case ScaCategory::Text:       aRet = u"Text"_ustr;         break;
+            case ScaCategory::Finance:    aRet = u"Financial"_ustr;    break;
+            case ScaCategory::Inf:        aRet = u"Information"_ustr;  break;
+            case ScaCategory::Math:       aRet = u"Mathematical"_ustr; break;
+            case ScaCategory::Tech:       aRet = u"Technical"_ustr;    break;
         }
     }
 
     if( aRet.isEmpty() )
-        aRet = "Add-In";
+        aRet = u"Add-In"_ustr;
     return aRet;
 }
 

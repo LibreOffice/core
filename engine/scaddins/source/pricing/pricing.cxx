@@ -221,7 +221,7 @@ OUString SAL_CALL ScaPricingAddIn::getDisplayArgumentName(
         if( nStr )
             aRet = GetFuncDescrStr( fDataIt->GetDescrID(), nStr );
         else
-            aRet = "internal";
+            aRet = u"internal"_ustr;
     }
 
     return aRet;
@@ -240,7 +240,7 @@ OUString SAL_CALL ScaPricingAddIn::getArgumentDescription(
         if( nStr )
             aRet = GetFuncDescrStr( fDataIt->GetDescrID(), nStr + 1 );
         else
-            aRet = "for internal use only";
+            aRet = u"for internal use only"_ustr;
     }
 
     return aRet;
@@ -257,17 +257,17 @@ OUString SAL_CALL ScaPricingAddIn::getProgrammaticCategoryName(
     {
         switch( fDataIt->GetCategory() )
         {
-            case ScaCategory::DateTime:   aRet = "Date&Time";    break;
-            case ScaCategory::Text:       aRet = "Text";         break;
-            case ScaCategory::Finance:    aRet = "Financial";    break;
-            case ScaCategory::Inf:        aRet = "Information";  break;
-            case ScaCategory::Math:       aRet = "Mathematical"; break;
-            case ScaCategory::Tech:       aRet = "Technical";    break;
+            case ScaCategory::DateTime:   aRet = u"Date&Time"_ustr;    break;
+            case ScaCategory::Text:       aRet = u"Text"_ustr;         break;
+            case ScaCategory::Finance:    aRet = u"Financial"_ustr;    break;
+            case ScaCategory::Inf:        aRet = u"Information"_ustr;  break;
+            case ScaCategory::Math:       aRet = u"Mathematical"_ustr; break;
+            case ScaCategory::Tech:       aRet = u"Technical"_ustr;    break;
         }
     }
 
     if( aRet.isEmpty() )
-        aRet = "Add-In";
+        aRet = u"Add-In"_ustr;
     return aRet;
 }
 
@@ -318,7 +318,7 @@ bool getinput_putcall(bs::types::PutCall& pc, const uno::Any& anyval) {
     if(anyval.getValueTypeClass() == uno::TypeClass_STRING) {
         anyval >>= str;
     } else if(anyval.getValueTypeClass() == uno::TypeClass_VOID) {
-        str="c";        // call as default
+        str=u"c"_ustr;        // call as default
     } else {
         return false;
     }
@@ -374,7 +374,7 @@ bool getinput_greek(bs::types::Greeks& greek, const uno::Any& anyval) {
     if(anyval.getValueTypeClass() == uno::TypeClass_STRING) {
         anyval >>= str;
     } else if(anyval.getValueTypeClass() == uno::TypeClass_VOID) {
-        str="value";
+        str=u"value"_ustr;
     } else {
         return false;
     }

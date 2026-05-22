@@ -74,7 +74,7 @@ namespace basprov
                 StarBASIC* pBasic = static_cast< StarBASIC* >( pModule->GetParent() );
                 if ( pBasic )
                 {
-                    m_sURI = "vnd.sun.star.script:";
+                    m_sURI = u"vnd.sun.star.script:"_ustr;
                     m_sURI += pBasic->GetName();
                     m_sURI += ".";
                     m_sURI += pModule->GetName();

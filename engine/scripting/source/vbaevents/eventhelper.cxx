@@ -326,7 +326,7 @@ eventMethodToDescriptor( std::u16string_view rEventMethod, ScriptEventDescriptor
 
         // set this it VBAInterop, ensures that it doesn't
         // get persisted or shown in property editors
-        evtDesc.ScriptType = "VBAInterop";
+        evtDesc.ScriptType = u"VBAInterop"_ustr;
         return true;
     }
     return false;
@@ -801,7 +801,7 @@ EventListener::firing_Impl(const ScriptEvent& evt, Any* pRet )
     {
         //'Project' is a better default but I want to force failures
         //OUString sMacroLoc("Project");
-        sProject = "Standard";
+        sProject = u"Standard"_ustr;
 
         if (!pBasicManager->GetName().isEmpty())
         {

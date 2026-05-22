@@ -375,7 +375,7 @@ MasterScriptProvider::getName()
     }
     else
     {
-        m_sNodeName = "uno_packages";
+        m_sNodeName = u"uno_packages"_ustr;
     }
     return m_sNodeName;
 }

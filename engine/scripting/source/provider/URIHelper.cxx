@@ -110,24 +110,24 @@ ScriptingFrameworkURIHelper::initBaseURI()
     }
     else if ( m_sLocation == "user:uno_packages" )
     {
-        test = "uno_packages";
+        test = u"uno_packages"_ustr;
         uri = USER_URI + "/user/uno_packages/cache";
     }
     else if (m_sLocation == SHARE)
     {
         test = SHARE;
-        uri = "vnd.sun.star.expand:$BRAND_BASE_DIR";
+        uri = u"vnd.sun.star.expand:$BRAND_BASE_DIR"_ustr;
         bAppendScriptsPart = true;
     }
     else if (m_sLocation == "share:uno_packages")
     {
-        test = "uno_packages";
+        test = u"uno_packages"_ustr;
         uri = SHARE_UNO_PACKAGES_URI;
     }
     else if (m_sLocation.startsWith("vnd.sun.star.tdoc"))
     {
         m_sBaseURI = m_sLocation + SCRIPTS_PART;
-        m_sLocation = "document";
+        m_sLocation = u"document"_ustr;
         return true;
     }
     else

@@ -870,7 +870,7 @@ void StringResourcePersistenceImpl::implStoreAtStorage
                 OUString aPropName(u"MediaType"_ustr);
                 xProps->setPropertyValue( aPropName, uno::Any( u"text/plain"_ustr ) );
 
-                aPropName = "UseCommonStoragePasswordEncryption";
+                aPropName = u"UseCommonStoragePasswordEncryption"_ustr;
                 xProps->setPropertyValue( aPropName, uno::Any( true ) );
             }
 

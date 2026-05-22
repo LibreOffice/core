@@ -489,7 +489,7 @@ public:
         {
             m_vNodes.push_back( new DefaultBrowseNode( xCtx, xNode ) );
         }
-        m_Name = "Root";
+        m_Name = u"Root"_ustr;
     }
 
     virtual Sequence< Reference< browse::XBrowseNode > > SAL_CALL
