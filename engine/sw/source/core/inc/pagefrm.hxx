@@ -258,6 +258,16 @@ public:
     */
     Color GetDrawBackgroundColor() const;
 
+    /** SwPageFrame::IsTransparent
+
+        determine transparency to force paint of margin area to clear
+        the screen during scrolling also in the browse mode (Web View),
+        if the page has transparent background color or image
+
+        @return true, if the background is transparent
+    */
+    bool IsTransparent() const;
+
     /** paint margin area of a page
 
         implement paint of margin area; margin area will be painted for a

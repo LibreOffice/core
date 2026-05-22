@@ -6230,7 +6230,13 @@ void SwPageFrame::PaintGrid( OutputDevice const * pOut, SwRect const &rRect ) co
 void SwPageFrame::PaintMarginArea( const SwRect& _rOutputRect,
                                  SwViewShell const * _pViewShell ) const
 {
-    if (  !_pViewShell->GetWin() || _pViewShell->GetViewOptions()->getBrowseMode() )
+    if (  !_pViewShell->GetWin() )
+        return;
+
+    // no need for page margin in browse mode, except in the case of
+    // (scrolling with) transparent page background color or
+    // transparent page background image
+    if ( _pViewShell->GetViewOptions()->getBrowseMode() && !IsTransparent() )
         return;
 
     // Simplified paint with DrawingLayer FillStyle
@@ -7786,6 +7792,27 @@ Color SwPageFrame::GetDrawBackgroundColor() const
     }
 
     return aGlobalRetoucheColor;
+}
+
+/**
+ * For tdf#98598 and tdf#172186 (Web View scrolling regressions)
+ *
+ * @return isTransparent()
+ */
+bool SwPageFrame::IsTransparent() const
+{
+    const SvxBrushItem* pBrushItem;
+    std::optional<Color> xDummyColor;
+    SwRect aDummyRect;
+    drawinglayer::attribute::SdrAllFillAttributesHelperPtr aFillAttributes;
+
+    if ( GetBackgroundBrush( aFillAttributes, pBrushItem, xDummyColor, aDummyRect, true, /*bConsiderTextBox=*/false) )
+    {
+        if ( aFillAttributes && aFillAttributes->isUsed() )
+            return aFillAttributes->isTransparent();
+    }
+
+    return false;
 }
 
 /// create/return font used to paint the "empty page" string
