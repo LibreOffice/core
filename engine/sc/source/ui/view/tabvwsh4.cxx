@@ -97,6 +97,7 @@
 #include <svx/srchdlg.hxx>
 #include <svx/fillbitmaplink.hxx>
 #include <docpool.hxx>
+#include <drwlayer.hxx>
 
 using namespace com::sun::star;
 using namespace sfx2::sidebar;
@@ -1743,9 +1744,10 @@ void ScTabViewShell::Construct( TriState nForceDesignMode )
             if (!bLink)
             {
                 const sc::DocumentLinkManager& rMgr = rDoc.GetDocLinkManager();
+                const ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
                 if (rDoc.HasLinkFormulaNeedingCheck() || rDoc.HasAreaLinks()
                     || rMgr.hasExternalLinks()
-                    || hasDeferredFillBitmapLinks(*rDoc.GetPool())
+                    || (pDrawLayer && hasDeferredFillBitmapLinks(pDrawLayer->GetItemPool()))
                     || !pDocSh->GetDeferredFormControlImages().empty())
                     bLink = true;
             }
