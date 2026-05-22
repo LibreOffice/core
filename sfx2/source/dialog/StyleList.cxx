@@ -516,25 +516,26 @@ IMPL_LINK_NOARG(StyleList, NewMenuExecuteAction, void*, void)
     if (!m_pStyleSheetPool || m_nActFamily == 0xffff)
         return;
 
-    sal_uInt16 nActFilter = GetActiveFilter();
-
-    const SfxStyleFamilyItem* pFamilyItem = GetFamilyItem();
-    SfxStyleSearchBits nFilter(SfxStyleSearchBits::Auto);
-    if (pFamilyItem && nActFilter != 0xffff)
-        nFilter = pFamilyItem->GetFilterList()[nActFilter].nFlags;
-
-    // why? : FloatingWindow must not be parent of a modal dialog
-    const SfxStyleFamily eFam = pFamilyItem->GetFamily();
-    SfxNewStyleDlg aDlg(m_pContainer, *m_pStyleSheetPool, eFam);
-    auto nResult = aDlg.run();
-    if (nResult == RET_OK)
+    if (const SfxStyleFamilyItem* pFamilyItem = GetFamilyItem())
     {
-        const OUString aTemplName(aDlg.GetName());
-        m_pParentDialog->Execute_Impl(SID_STYLE_NEW_BY_EXAMPLE, aTemplName, u""_ustr,
-                                      static_cast<sal_uInt16>(eFam), *this, nFilter);
-        m_bHierarchical ? FillHierarchicalTreeView() : FillFlatTreeView();
-        m_pParentDialog->SelectStyle(aTemplName);
-        m_aUpdateFamily.Call(*this);
+        sal_uInt16 nActFilter = GetActiveFilter();
+        SfxStyleSearchBits nFilter(SfxStyleSearchBits::Auto);
+        if (nActFilter != 0xffff)
+            nFilter = pFamilyItem->GetFilterList()[nActFilter].nFlags;
+
+        // why? : FloatingWindow must not be parent of a modal dialog
+        const SfxStyleFamily eFam = pFamilyItem->GetFamily();
+        SfxNewStyleDlg aDlg(m_pContainer, *m_pStyleSheetPool, eFam);
+        auto nResult = aDlg.run();
+        if (nResult == RET_OK)
+        {
+            const OUString aTemplName(aDlg.GetName());
+            m_pParentDialog->Execute_Impl(SID_STYLE_NEW_BY_EXAMPLE, aTemplName, u""_ustr,
+                                          static_cast<sal_uInt16>(eFam), *this, nFilter);
+            m_bHierarchical ? FillHierarchicalTreeView() : FillFlatTreeView();
+            m_pParentDialog->SelectStyle(aTemplName);
+            m_aUpdateFamily.Call(*this);
+        }
     }
 }
 
