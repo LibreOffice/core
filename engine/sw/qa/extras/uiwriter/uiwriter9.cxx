@@ -1915,6 +1915,36 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testSplitFloattableGetCurWord)
     CPPUNIT_ASSERT_EQUAL(u"End"_ustr, pWrtShell->GetCurWord());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testStyleApplyForwardsOriginalName)
+{
+    // Given a fresh document, the first paragraph is "Standard".
+    createSwDoc();
+    emulateTyping(u"some text");
+    CPPUNIT_ASSERT_EQUAL(u"Standard"_ustr,
+                         getProperty<OUString>(getParagraph(1), u"ParaStyleName"_ustr));
+
+    // Dispatch StyleApply with a family name the XStyleFamiliesSupplier
+    // doesn't recognize. The try/catch in ExecStyleSheet swallows the
+    // resulting throw, which is the same code path the user-visible bug
+    // takes when the caller passes an already-localized DisplayName
+    // instead of the programmatic name (in a German build, "Überschrift 1"
+    // is not resolvable through XStyleFamily::getByName, which only knows
+    // programmatic names). The downstream lookup can still resolve it via
+    // SwStyleNameMapper.
+    dispatchCommand(mxComponent, u".uno:StyleApply"_ustr,
+                    comphelper::InitPropertySequence({
+                        { "Style", uno::Any(u"Heading 1"_ustr) },
+                        { "FamilyName", uno::Any(u"BogusFamily"_ustr) },
+                    }));
+    // Without the fix in place, this would have failed with
+    // - Expected: Heading 1
+    // - Actual  : Standard
+    // because the catch left no SID_STYLE_APPLY arg for the fallthrough
+    // and ApplyStyleSheetRequest returned without applying anything.
+    CPPUNIT_ASSERT_EQUAL(u"Heading 1"_ustr,
+                         getProperty<OUString>(getParagraph(1), u"ParaStyleName"_ustr));
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 

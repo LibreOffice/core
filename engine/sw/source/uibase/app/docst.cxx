@@ -427,6 +427,7 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
                 if ( pFamilyItem && pNameItem )
                 {
                     uno::Reference< style::XStyleFamiliesSupplier > xModel(GetModel(), uno::UNO_QUERY);
+                    OUString aUIName;
                     try
                     {
                         uno::Reference< container::XNameAccess > xStyles;
@@ -434,14 +435,15 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
                         xCont->getByName(pFamilyItem->GetValue()) >>= xStyles;
                         uno::Reference< beans::XPropertySet > xInfo;
                         xStyles->getByName( pNameItem->GetValue() ) >>= xInfo;
-                        OUString aUIName;
                         xInfo->getPropertyValue(u"DisplayName"_ustr) >>= aUIName;
-                        if ( !aUIName.isEmpty() )
-                            rReq.AppendItem( SfxStringItem( SID_STYLE_APPLY, aUIName ) );
                     }
                     catch (const uno::Exception&)
                     {
                     }
+                    // input may already be a localized UI name
+                    if ( aUIName.isEmpty() )
+                        aUIName = pNameItem->GetValue();
+                    rReq.AppendItem( SfxStringItem( SID_STYLE_APPLY, aUIName ) );
                 }
             }
 
