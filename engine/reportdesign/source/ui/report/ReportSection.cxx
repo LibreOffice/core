@@ -768,10 +768,10 @@ sal_Int8 OReportSection::ExecuteDrop( const ExecuteDropEvent& _rEvt )
                 pCurrent[nLength].Name = PROPERTY_POSITION;
                 pCurrent[nLength++].Value <<= vcl::unohelper::ConvertToAWTPoint(aDropPos);
                 // give also the DND Action (Shift|Ctrl) Key to really say what we want
-                pCurrent[nLength].Name = "DNDAction";
+                pCurrent[nLength].Name = u"DNDAction"_ustr;
                 pCurrent[nLength++].Value <<= _rEvt.mnAction;
 
-                pCurrent[nLength].Name = "Section";
+                pCurrent[nLength].Name = u"Section"_ustr;
                 pCurrent[nLength++].Value <<= getSection();
                 propVal.Value <<= aCurrent;
             }

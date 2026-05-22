@@ -1245,7 +1245,7 @@ void OReportDefinition::impl_loadFromStorage_nolck_throw( const uno::Reference< 
     sal_Int32 nPos = aDelegatorArguments.getLength();
     aDelegatorArguments.realloc(nPos+1);
     beans::PropertyValue aPropVal;
-    aPropVal.Name = "Storage";
+    aPropVal.Name = u"Storage"_ustr;
     aPropVal.Value <<= _xStorageToLoadFrom;
     aDelegatorArguments.getArray()[nPos] <<= aPropVal;
 

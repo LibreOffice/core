@@ -279,7 +279,7 @@ Reference < XNameContainer >
                 if( m_xTableStyles.is() )
                     xStyles.set(m_xTableStyles);
                 else
-                    sName = "TableStyles";
+                    sName = u"TableStyles"_ustr;
             }
             break;
             case XmlStyleFamily::TABLE_CELL:
@@ -287,7 +287,7 @@ Reference < XNameContainer >
                 if( m_xCellStyles.is() )
                     xStyles.set(m_xCellStyles);
                 else
-                    sName = "CellStyles";
+                    sName = u"CellStyles"_ustr;
             }
             break;
             case XmlStyleFamily::TABLE_COLUMN:
@@ -295,7 +295,7 @@ Reference < XNameContainer >
                 if( m_xColumnStyles.is() )
                     xStyles.set(m_xColumnStyles);
                 else
-                    sName = "ColumnStyles";
+                    sName = u"ColumnStyles"_ustr;
             }
             break;
             case XmlStyleFamily::TABLE_ROW:
@@ -303,7 +303,7 @@ Reference < XNameContainer >
                 if( m_xRowStyles.is() )
                     xStyles.set(m_xRowStyles);
                 else
-                    sName = "RowStyles";
+                    sName = u"RowStyles"_ustr;
             }
             break;
             case XmlStyleFamily::SD_GRAPHICS_ID:

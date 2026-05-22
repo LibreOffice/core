@@ -1384,35 +1384,35 @@ void ORptExport::exportGroupsExpressionAsFunction(const Reference< XGroups>& _xG
             switch(nGroupOn)
             {
                 case report::GroupOn::PREFIX_CHARACTERS:
-                    sFunction = "LEFT";
+                    sFunction = u"LEFT"_ustr;
                     sPrefix = ";" + OUString::number(xGroup->getGroupInterval());
                     break;
                 case report::GroupOn::YEAR:
-                    sFunction = "YEAR";
+                    sFunction = u"YEAR"_ustr;
                     break;
                 case report::GroupOn::QUARTAL:
-                    sFunction   = "INT((MONTH";
-                    sPostfix    = "-1)/3)+1";
+                    sFunction   = u"INT((MONTH"_ustr;
+                    sPostfix    = u"-1)/3)+1"_ustr;
                     sFunctionName = "QUARTAL_" + sExpression;
                     break;
                 case report::GroupOn::MONTH:
-                    sFunction = "MONTH";
+                    sFunction = u"MONTH"_ustr;
                     break;
                 case report::GroupOn::WEEK:
-                    sFunction = "WEEK";
+                    sFunction = u"WEEK"_ustr;
                     break;
                 case report::GroupOn::DAY:
-                    sFunction = "DAY";
+                    sFunction = u"DAY"_ustr;
                     break;
                 case report::GroupOn::HOUR:
-                    sFunction = "HOUR";
+                    sFunction = u"HOUR"_ustr;
                     break;
                 case report::GroupOn::MINUTE:
-                    sFunction = "MINUTE";
+                    sFunction = u"MINUTE"_ustr;
                     break;
                 case report::GroupOn::INTERVAL:
                     {
-                        sFunction = "INT";
+                        sFunction = u"INT"_ustr;
                         uno::Reference< XFunction> xCountFunction = xFunctions->createFunction();
                         xCountFunction->setInitialFormula(beans::Optional< OUString>(true,u"rpt:0"_ustr));
                         OUString sCountName = sFunction + "_count_"
@@ -1427,7 +1427,7 @@ void ORptExport::exportGroupsExpressionAsFunction(const Reference< XGroups>& _xG
                         sPrefix = " + 1) / " + OUString::number(xGroup->getGroupInterval());
                         sFunctionName = sFunction + "_" + sExpression;
                         sFunction += "(";
-                        sInitialFormula = "rpt:0";
+                        sInitialFormula = u"rpt:0"_ustr;
                     }
                     break;
                 default:

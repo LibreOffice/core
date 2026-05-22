@@ -274,15 +274,15 @@ uno::Reference< frame::XModel > OReportEngineJFree::createDocumentAlive( const u
     uno::Sequence < beans::PropertyValue > aArgs( _bHidden ? 3 : 2 );
     auto pArgs = aArgs.getArray();
     sal_Int32 nLen = 0;
-    pArgs[nLen].Name = "AsTemplate";
+    pArgs[nLen].Name = u"AsTemplate"_ustr;
     pArgs[nLen++].Value <<= false;
 
-    pArgs[nLen].Name = "ReadOnly";
+    pArgs[nLen].Name = u"ReadOnly"_ustr;
     pArgs[nLen++].Value <<= true;
 
     if ( _bHidden )
     {
-        pArgs[nLen].Name = "Hidden";
+        pArgs[nLen].Name = u"Hidden"_ustr;
         pArgs[nLen++].Value <<= true;
     }
 

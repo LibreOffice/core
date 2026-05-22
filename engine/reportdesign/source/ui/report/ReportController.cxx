@@ -1733,7 +1733,7 @@ void OReportController::impl_initialize( const ::comphelper::NamedValueCollectio
 
         if ( m_bShowProperties && m_nPageNum == -1 )
         {
-            m_sLastActivePage = "Data";
+            m_sLastActivePage = u"Data"_ustr;
             getDesignView()->setCurrentPage(m_sLastActivePage);
             executeUnChecked(SID_SELECT_REPORT,{});
         }
@@ -2876,7 +2876,7 @@ uno::Reference<frame::XModel> OReportController::executeReport()
                     if ( !m_bShowProperties )
                         executeUnChecked(SID_SHOW_PROPERTYBROWSER, {});
 
-                    m_sLastActivePage = "Data";
+                    m_sLastActivePage = u"Data"_ustr;
                     getDesignView()->setCurrentPage(m_sLastActivePage);
                     nCommand = SID_SELECT_REPORT;
                 }
@@ -3134,7 +3134,7 @@ void OReportController::createControl(const Sequence< PropertyValue >& _aArgs,co
         xShapeProp.set(pNewControl->getUnoShape(),uno::UNO_QUERY);
         OUString sCustomShapeType = getDesignView()->GetInsertObjString();
         if ( sCustomShapeType.isEmpty() )
-            sCustomShapeType = "diamond";
+            sCustomShapeType = u"diamond"_ustr;
         OReportSection::createDefault(sCustomShapeType,pNewControl.get());
         pNewControl->SetLogicRect(tools::Rectangle(3000,500,6000,3500)); // switch height and width
     }
@@ -3261,13 +3261,13 @@ void OReportController::createDateTime(const Sequence< PropertyValue >& _aArgs)
     bool bDate = aMap.getUnpackedValueOrDefault(PROPERTY_DATE_STATE, false);
     if ( bDate )
     {
-        sFunction = "TODAY()";
+        sFunction = u"TODAY()"_ustr;
         createControl(aMap.getAsConstPropertyValueList(),xSection,sFunction);
     }
     bool bTime = aMap.getUnpackedValueOrDefault(PROPERTY_TIME_STATE, false);
     if ( bTime )
     {
-        sFunction = "TIMEVALUE(NOW())";
+        sFunction = u"TIMEVALUE(NOW())"_ustr;
         aMap[PROPERTY_FORMATKEY] <<= aMap.getUnpackedValueOrDefault(PROPERTY_FORMATKEYTIME,sal_Int32(0));
         createControl(aMap.getAsConstPropertyValueList(),xSection,sFunction);
     }

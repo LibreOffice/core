@@ -1853,7 +1853,7 @@ bool GeometryHandler::impl_isDefaultFunction_nothrow( const uno::Reference< repo
         {
             sal_Int32 start = 0;
             sal_Int32 end = sFormula.getLength();
-            aSearchOptions.searchString = "\\[[:alpha:]+([:space:]*[:alnum:]*)*\\]";
+            aSearchOptions.searchString = u"\\[[:alpha:]+([:space:]*[:alnum:]*)*\\]"_ustr;
             utl::TextSearch aDataSearch( aSearchOptions);
             (void)aDataSearch.SearchForward(sFormula, &start, &end);
             ++start;
@@ -1876,34 +1876,34 @@ void GeometryHandler::loadDefaultFunctions()
 
     m_aCounterFunction.m_bPreEvaluated = false;
     m_aCounterFunction.m_sName = RptResId(RID_STR_F_COUNTER);
-    m_aCounterFunction.m_sFormula = "rpt:[%FunctionName] + 1";
-    m_aCounterFunction.m_sSearchString = "rpt:\\[[:alpha:]+([:space:]*[:alnum:]*)*\\][:space:]*\\+[:space:]*[:digit:]*";
+    m_aCounterFunction.m_sFormula = u"rpt:[%FunctionName] + 1"_ustr;
+    m_aCounterFunction.m_sSearchString = u"rpt:\\[[:alpha:]+([:space:]*[:alnum:]*)*\\][:space:]*\\+[:space:]*[:digit:]*"_ustr;
     m_aCounterFunction.m_sInitialFormula.IsPresent = true;
-    m_aCounterFunction.m_sInitialFormula.Value = "rpt:1";
+    m_aCounterFunction.m_sInitialFormula.Value = u"rpt:1"_ustr;
 
     DefaultFunction aDefault;
 
     aDefault.m_bPreEvaluated = true;
 
     aDefault.m_sName = RptResId(RID_STR_F_ACCUMULATION);
-    aDefault.m_sFormula = "rpt:[%Column] + [%FunctionName]";
-    aDefault.m_sSearchString = "rpt:\\[[:alpha:]+([:space:]*[:alnum:]*)*\\][:space:]*\\+[:space:]*\\[[:alpha:]+([:space:]*[:alnum:]*)*\\]";
+    aDefault.m_sFormula = u"rpt:[%Column] + [%FunctionName]"_ustr;
+    aDefault.m_sSearchString = u"rpt:\\[[:alpha:]+([:space:]*[:alnum:]*)*\\][:space:]*\\+[:space:]*\\[[:alpha:]+([:space:]*[:alnum:]*)*\\]"_ustr;
     aDefault.m_sInitialFormula.IsPresent = true;
-    aDefault.m_sInitialFormula.Value = "rpt:[%Column]";
+    aDefault.m_sInitialFormula.Value = u"rpt:[%Column]"_ustr;
     m_aDefaultFunctions.push_back(aDefault);
 
     aDefault.m_sName = RptResId(RID_STR_F_MINIMUM);
-    aDefault.m_sFormula = "rpt:IF([%Column] < [%FunctionName];[%Column];[%FunctionName])";
-    aDefault.m_sSearchString = "rpt:IF\\((\\[[:alpha:]+([:space:]*[:alnum:]*)*\\])[:space:]*<[:space:]*(\\[[:alpha:]+([:space:]*[:alnum:]*)*\\]);[:space:]*\\1[:space:]*;[:space:]*\\3[:space:]*\\)";
+    aDefault.m_sFormula = u"rpt:IF([%Column] < [%FunctionName];[%Column];[%FunctionName])"_ustr;
+    aDefault.m_sSearchString = u"rpt:IF\\((\\[[:alpha:]+([:space:]*[:alnum:]*)*\\])[:space:]*<[:space:]*(\\[[:alpha:]+([:space:]*[:alnum:]*)*\\]);[:space:]*\\1[:space:]*;[:space:]*\\3[:space:]*\\)"_ustr;
     aDefault.m_sInitialFormula.IsPresent = true;
-    aDefault.m_sInitialFormula.Value = "rpt:[%Column]";
+    aDefault.m_sInitialFormula.Value = u"rpt:[%Column]"_ustr;
     m_aDefaultFunctions.push_back(aDefault);
 
     aDefault.m_sName = RptResId(RID_STR_F_MAXIMUM);
-    aDefault.m_sFormula = "rpt:IF([%Column] > [%FunctionName];[%Column];[%FunctionName])";
-    aDefault.m_sSearchString = "rpt:IF\\((\\[[:alpha:]+([:space:]*[:alnum:]*)*\\])[:space:]*>[:space:]*(\\[[:alpha:]+([:space:]*[:alnum:]*)*\\]);[:space:]*\\1[:space:]*;[:space:]*\\3[:space:]*\\)";
+    aDefault.m_sFormula = u"rpt:IF([%Column] > [%FunctionName];[%Column];[%FunctionName])"_ustr;
+    aDefault.m_sSearchString = u"rpt:IF\\((\\[[:alpha:]+([:space:]*[:alnum:]*)*\\])[:space:]*>[:space:]*(\\[[:alpha:]+([:space:]*[:alnum:]*)*\\]);[:space:]*\\1[:space:]*;[:space:]*\\3[:space:]*\\)"_ustr;
     aDefault.m_sInitialFormula.IsPresent = true;
-    aDefault.m_sInitialFormula.Value = "rpt:[%Column]";
+    aDefault.m_sInitialFormula.Value = u"rpt:[%Column]"_ustr;
     m_aDefaultFunctions.push_back(aDefault);
 }
 
