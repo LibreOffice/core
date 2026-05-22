@@ -1237,10 +1237,12 @@ void SwXMLTextParagraphExport::exportTable(
                 if (!isAutoStylesCollected()
                     && (bExportStyles || !pFormat->GetDoc().IsInHeaderFooter(*pTableNd)))
                 {
-                    maTableNodes.push_back(pTableNd);
-                    m_TableFormats.try_emplace(pTableNd);
-                    // Collect all tables inside cells of this table, too
-                    CollectTableLinesAutoStyles(pTable->GetTabLines(), *pFormat, _bProgress);
+                    if (m_TableFormats.try_emplace(pTableNd).second)
+                    {
+                        maTableNodes.push_back(pTableNd);
+                        // Collect all tables inside cells of this table, too
+                        CollectTableLinesAutoStyles(pTable->GetTabLines(), *pFormat, _bProgress);
+                    }
                 }
             }
             else
