@@ -10,9 +10,17 @@ describe(['tagdesktop'], 'Image Operation Tests', function() {
 		helper.setupAndLoadDocument('impress/image_operation.odp');
 		desktopHelper.switchUIToNotebookbar();
 		cy.viewport(1920,1080);
+
+		// give some time to open fully the app
+		cy.wait(1000);
+
+		cy.getFrameWindow().then((win) => {
+			this.win = win;
+		});
 	});
 
 	it('Insert/Delete image',function() {
+		helper.processToIdle(this.win);
 		desktopHelper.insertImage();
 
 		//make sure that image is in focus
@@ -23,6 +31,7 @@ describe(['tagdesktop'], 'Image Operation Tests', function() {
 	});
 
 	it("Insert multimedia", function () {
+		helper.processToIdle(this.win);
 		desktopHelper.insertVideo();
 
 		// The video foreignObject lives inside a nested <svg> wrapper.
