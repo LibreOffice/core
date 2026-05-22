@@ -2142,6 +2142,17 @@ private:
         // ViewContactOfSdrPage fixed child order:
         //   0=Background, 1=Shadow, 2=Fill, 3=MasterPage
 
+        // PageBackground: emits a BackgroundColorPrimitive2D with the
+        // configured DOCCOLOR. Drawn first so the slide fill paints
+        // over it.
+        {
+            sdr::contact::ViewContact& rBackgroundVC = pPage->GetViewContact().GetViewContact(0);
+            drawinglayer::primitive2d::Primitive2DContainer aBackgroundPrimitives;
+            rBackgroundVC.getViewIndependentPrimitive2DContainer(aBackgroundPrimitives);
+            if (!aBackgroundPrimitives.empty())
+                maProcessor->decomposeAndWrite(aBackgroundPrimitives);
+        }
+
         // PageFill: always produces a solid fill for the slide background
         {
             sdr::contact::ViewContact& rPageFillVC = pPage->GetViewContact().GetViewContact(2);

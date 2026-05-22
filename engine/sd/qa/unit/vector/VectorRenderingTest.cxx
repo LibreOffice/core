@@ -124,10 +124,13 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testSingleRectangle)
     assertJsonPath(aJson, "/type", "vectortile");
     assertJsonPath(aJson, "/part", sal_Int64(0));
 
-    // Master page only has the slide-fill polyPolygonColor
-    CPPUNIT_ASSERT_EQUAL(size_t(1), aJson.getSize("/masterPage/primitives").value_or(0));
-    assertJsonPath(aJson, "/masterPage/primitives/0/type", "polyPolygonColor");
-    assertJsonPath(aJson, "/masterPage/primitives/0/color", "#ffffff");
+    // Master page has been cleared. PageBackground emits a
+    // backgroundcolor primitive first then PageFill emits the
+    // slide-fill polyPolygonColor.
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aJson.getSize("/masterPage/primitives").value_or(0));
+    assertJsonPath(aJson, "/masterPage/primitives/0/type", "backgroundcolor");
+    assertJsonPath(aJson, "/masterPage/primitives/1/type", "polyPolygonColor");
+    assertJsonPath(aJson, "/masterPage/primitives/1/color", "#ffffff");
 
     // Exactly one slide object, our rectangle
     CPPUNIT_ASSERT_EQUAL(size_t(1), aJson.getSize("/objects").value_or(0));

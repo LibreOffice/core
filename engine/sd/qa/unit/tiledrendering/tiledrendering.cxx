@@ -4679,8 +4679,9 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPaintVectorTile)
     // Check master page
     auto oMasterPrimitives = aJson.at("/masterPage/primitives");
     CPPUNIT_ASSERT(oMasterPrimitives.has_value());
-    // Master page: white fill + gradient background + 2 placeholder SdrRects.
+    // Master page: backgroundcolor + white fill + gradient background + 2 placeholder SdrRects.
     size_t nNumberOfMasterPrimitives = 0;
+    bool bHasBackgroundColor = false;
     bool bHasWhiteFill = false;
     bool bHasGradient = false;
     for (const auto& rPrimitive : oMasterPrimitives->tree())
@@ -4688,7 +4689,11 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPaintVectorTile)
         ++nNumberOfMasterPrimitives;
         tools::JsonPath aPrimitive = oMasterPrimitives->sub(rPrimitive.second);
         OString sType = aPrimitive.getString("type").value_or(OString());
-        if (sType == "polyPolygonColor")
+        if (sType == "backgroundcolor")
+        {
+            bHasBackgroundColor = true;
+        }
+        else if (sType == "polyPolygonColor")
         {
             if (aPrimitive.getString("color").value_or(OString()) == "#ffffff")
                 bHasWhiteFill = true;
@@ -4702,7 +4707,8 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPaintVectorTile)
             CPPUNIT_ASSERT(aPrimitive.has("gradient/colorStops"));
         }
     }
-    CPPUNIT_ASSERT_EQUAL(size_t(4), nNumberOfMasterPrimitives);
+    CPPUNIT_ASSERT_EQUAL(size_t(5), nNumberOfMasterPrimitives);
+    CPPUNIT_ASSERT_MESSAGE("Expecting page background color", bHasBackgroundColor);
     CPPUNIT_ASSERT_MESSAGE("Expecting white page fill", bHasWhiteFill);
     CPPUNIT_ASSERT_MESSAGE("Expecting gradient background", bHasGradient);
 
