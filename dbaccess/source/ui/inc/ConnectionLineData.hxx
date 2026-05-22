@@ -43,7 +43,6 @@ namespace dbaui
         OUString m_aDestFieldName;
 
         friend bool operator==(const OConnectionLineData& lhs, const OConnectionLineData& rhs);
-        friend bool operator!=(const OConnectionLineData& lhs, const OConnectionLineData& rhs) { return !(lhs == rhs); }
     protected:
         virtual ~OConnectionLineData() override;
     public:

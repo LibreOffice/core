@@ -81,7 +81,6 @@ namespace dbaui
         friend class OCharsetDisplay;
 
         friend bool operator==(const ExtendedCharsetIterator& lhs, const ExtendedCharsetIterator& rhs);
-        friend bool operator!=(const ExtendedCharsetIterator& lhs, const ExtendedCharsetIterator& rhs) { return !(lhs == rhs); }
 
         typedef ::dbtools::OCharsetMap      container;
         typedef container::CharsetIterator  base_iterator;
