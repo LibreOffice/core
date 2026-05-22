@@ -262,6 +262,10 @@ if (window.ThisIsTheEmscriptenApp) {
 				return;
 			var done = function() {
 				window.postMobileMessage('SAVECOMPLETED');
+				if (window._closeAfterSave) {
+					window._closeAfterSave = false;
+					window.postMobileMessage('CLOSE_WINDOW');
+				}
 			};
 			if (
 				!ev.success ||

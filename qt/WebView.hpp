@@ -140,6 +140,19 @@ public:
     /// valid - called from Window::closeEvent before owner_'s
     /// destruction tears _document down.  No-op for local-only docs.
     void sendCollabBye();
+    /// True after saveAndClose() has been initiated for this window;
+    /// the host window's closeEvent uses this to skip the save-if-
+    /// dirty path on the re-entry that runs after the JS-side
+    /// CLOSE_WINDOW round-trip.
+    bool isReadyToClose() const;
+    /// Set the ready-to-close flag without going through JS.  Used by
+    /// the save-in-flight defer path so the close that fires once the
+    /// in-flight save finishes skips the redundant save-if-dirty
+    /// round-trip.
+    void markReadyToClose();
+    /// Ask the page-JS to run _saveAndClose (saves if dirty, posts
+    /// CLOSE_WINDOW on completion).  No-op if no bridge is attached.
+    void saveAndClose();
     bool isStarterScreen() const { return _document._fakeClientFd == -1 && _document._appDocId == 0; }
     QMainWindow* getMainWindow() const { return _mainWindow; }
 

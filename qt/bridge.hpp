@@ -59,6 +59,12 @@ class Bridge : public QObject
     // until the in-flight save has fully completed.
     std::function<void()> _onSaveComplete;
 
+    // Sticky flag set on the first close click: tells the next
+    // re-entry of the host window's closeEvent that the save-if-dirty
+    // step (driven by _saveAndClose in JS) has already run, so the
+    // re-entry can proceed straight to teardown.
+    bool _readyToClose = false;
+
     void promptSaveLocation(std::function<void(const std::string&, const std::string&)> callback);
     void saveDocumentAs();
     void createAndStartMessagePumpThread();
@@ -113,6 +119,21 @@ public:
     /// WebSocket.  Must be called from the host window's closeEvent
     /// while the bridge is still alive.  No-op for local-only docs.
     void sendCollabBye();
+
+    /// True after _saveAndClose has run for this close click; the
+    /// host window's closeEvent re-entry uses this to skip the
+    /// save-if-dirty path and proceed with teardown.
+    bool isReadyToClose() const { return _readyToClose; }
+
+    /// Set _readyToClose so that the next closeEvent re-entry
+    /// proceeds with teardown.  Used by the save-in-flight defer
+    /// path to skip the save-if-dirty round-trip on the re-entry.
+    void markReadyToClose() { _readyToClose = true; }
+
+    /// Ask the page-JS to save if dirty and then post a CLOSE_WINDOW
+    /// message back, which the cool slot below turns into an actual
+    /// window close.
+    void saveAndClose();
 
 public slots: // called from JavaScript
     // Called from JS via window.postMobileMessage

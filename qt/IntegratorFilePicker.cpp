@@ -565,8 +565,23 @@ void IntegratorFilePicker::closeEvent(QCloseEvent* ev)
                 "    {label: window._('Saving...')});");
         _bridge->onSaveComplete([this]() {
             QApplication::restoreOverrideCursor();
+            if (_bridge)
+                _bridge->markReadyToClose();
             this->close();
         });
+        ev->ignore();
+        return;
+    }
+    // First close click on a dirty doc in embed-mode editor role:
+    // hand off to JS to save (uploads via collabUploadFile for the
+    // remote-doc case) and post CLOSE_WINDOW on completion, which
+    // trips _readyToClose so the re-entry below proceeds with
+    // teardown.  Picker-only mode (no _bridge attached) skips this.
+    if (_bridge && !_bridge->isReadyToClose())
+    {
+        LOG_TRC("IntegratorFilePicker::closeEvent: "
+                "save-if-dirty round-trip");
+        _bridge->saveAndClose();
         ev->ignore();
         return;
     }

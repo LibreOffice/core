@@ -498,6 +498,15 @@ void Bridge::onSaveComplete(std::function<void()> callback)
     _onSaveComplete = std::move(callback);
 }
 
+void Bridge::saveAndClose()
+{
+    evalJS(
+        "if (window.app && window.app.map "
+        "    && typeof window.app.map._saveAndClose === 'function')"
+        "  window.app.map._saveAndClose();"
+        "else window.postMobileMessage('CLOSE_WINDOW');");
+}
+
 void Bridge::saveDocumentAs()
 {
     promptSaveLocation(
@@ -1152,6 +1161,12 @@ QVariant Bridge::cool(const QString& messageStr)
             fakeSocketClose(_closeNotificationPipeForForwardingThread[0]);
             _closeNotificationPipeForForwardingThread[0] = -1;
         }
+
+        // After the swap the page's JS has muted postMobileMessage, so a subsequent closeEvent has
+        // no way to drive the JS-side _saveAndClose round-trip and would otherwise hang waiting for
+        // a CLOSE_WINDOW that can never arrive; the COOL server session handles save-on-disconnect
+        // like a plain-browser editor tab, so let teardown proceed straight away:
+        _readyToClose = true;
     }
     else if (tokens.equals(0, "SAVECOMPLETED"))
     {
@@ -1160,6 +1175,18 @@ QVariant Bridge::cool(const QString& messageStr)
         // Clear _saveInFlight and release any close that has been
         // waiting on us.
         saveCompleted();
+    }
+    else if (tokens.equals(0, "CLOSE_WINDOW"))
+    {
+        // Page-JS is done with the save-if-dirty step initiated by
+        // saveAndClose() (either because the save finished, or
+        // because the doc was clean).  Trip _readyToClose so the
+        // re-entry into the window's closeEvent proceeds with
+        // teardown instead of looping back here.
+        _readyToClose = true;
+        if (_window)
+            QMetaObject::invokeMethod(
+                _window, "close", Qt::QueuedConnection);
     }
     else
     {

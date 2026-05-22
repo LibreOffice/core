@@ -488,6 +488,21 @@ window.L.Map.include({
 		}
 	},
 
+	// Save any local-edit changes and then close the window.  Mirrors
+	// _saveAndSwitchToServerMode but the post-save action is window
+	// close, signalled to the native host via a CLOSE_WINDOW message
+	// in main.js's commandresult handler once the save (and, for
+	// remote docs, the subsequent integrator upload) completes.
+	_saveAndClose: function () {
+		if (this._permission === 'edit' && this._everModified) {
+			window._closeAfterSave = true;
+			this.save(true /* dontTerminateEdit */,
+				false /* dontSaveIfUnmodified */);
+		} else {
+			window.postMobileMessage('CLOSE_WINDOW');
+		}
+	},
+
 	// Another user wants to start collaborative editing.  Save
 	// local changes and switch to server mode.  If a dialog is
 	// already open (e.g., the edit choice dialog), do nothing -

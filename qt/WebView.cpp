@@ -276,8 +276,26 @@ private:
                     owner_->evalJS(
                         "if (window.app && window.app.map)"
                         "  window.app.map.fire('hidebusy');");
+                // The save we waited for is the one for this close;
+                // skip the redundant save-if-dirty round-trip below.
+                if (owner_)
+                    owner_->markReadyToClose();
                 this->close();
             });
+            ev->ignore();
+            return;
+        }
+
+        // First close click on a dirty doc: hand off to JS to save
+        // (writes through to disk locally and, for remote docs,
+        // uploads to the integrator via collabUploadFile) and post
+        // CLOSE_WINDOW on completion.  The CLOSE_WINDOW handler
+        // trips _readyToClose so this re-entry proceeds with
+        // teardown.  No-op for a clean doc or one with no bridge.
+        if (!owner_->isReadyToClose())
+        {
+            LOG_TRC("Window::closeEvent: save-if-dirty round-trip");
+            owner_->saveAndClose();
             ev->ignore();
             return;
         }
@@ -1018,6 +1036,23 @@ void WebView::onSaveComplete(std::function<void()> callback)
         _bridge->onSaveComplete(std::move(callback));
     else if (callback)
         callback();
+}
+
+bool WebView::isReadyToClose() const
+{
+    return !_bridge || _bridge->isReadyToClose();
+}
+
+void WebView::markReadyToClose()
+{
+    if (_bridge)
+        _bridge->markReadyToClose();
+}
+
+void WebView::saveAndClose()
+{
+    if (_bridge)
+        _bridge->saveAndClose();
 }
 
 void WebView::evalJS(const std::string& script)
