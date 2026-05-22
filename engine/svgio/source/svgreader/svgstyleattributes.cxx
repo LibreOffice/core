@@ -3286,22 +3286,16 @@ namespace svgio::svgreader
 
         SvgNumber SvgStyleAttributes::getBaselineShiftNumber() const
         {
-            // #122524# Handle SvgUnit::percent relative to parent BaselineShift
+            // baseline-shift is a percentage of the line-height; resolve
+            // it against the current font-size.
             if(SvgUnit::percent == maBaselineShiftNumber.getUnit())
             {
-                const SvgStyleAttributes* pSvgStyleAttributes = getCssStyleOrParentStyle();
+                const SvgNumber aFontSize(getFontSizeNumber());
 
-                if (pSvgStyleAttributes && maResolvingParent[8] < nStyleDepthLimit)
-                {
-                    ++maResolvingParent[8];
-                    const SvgNumber aParentNumber = pSvgStyleAttributes->getBaselineShiftNumber();
-                    --maResolvingParent[8];
-
-                    return SvgNumber(
-                        aParentNumber.getNumber() * maBaselineShiftNumber.getNumber() * 0.01,
-                        aParentNumber.getUnit(),
-                        true);
-                }
+                return SvgNumber(
+                    aFontSize.getNumber() * maBaselineShiftNumber.getNumber() * 0.01,
+                    aFontSize.getUnit(),
+                    true);
             }
 
             return maBaselineShiftNumber;
