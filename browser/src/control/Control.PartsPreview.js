@@ -757,9 +757,32 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 			this._applySectionCollapse(s);
 	},
 
+	// Collapse every section.
+	_collapseAllSections: function () {
+		const sections = app.impress.sections || [];
+		if (sections.length === 0)
+			return;
+		for (let i = 0; i < sections.length; i++)
+			this._collapsedSections.add(sections[i].name);
+		this._applyAllSectionsCollapse();
+	},
+
+	// Expand every section.
+	_expandAllSections: function () {
+		if (this._collapsedSections.size === 0)
+			return;
+		this._collapsedSections.clear();
+		this._applyAllSectionsCollapse();
+		// Expanding may reveal thumbnails whose images were never fetched.
+		this._ensureVisiblePreviews();
+	},
+
 	_openSectionContextMenu: function (section, sectionIndex, e) {
 		var that = this;
 		var sections = app.impress.sections || [];
+
+		const hasCollapsed = this._collapsedSections.size > 0;
+		const hasExpanded = this._collapsedSections.size < sections.length;
 
 		var entries = [{
 			id: 'renameSection',
@@ -793,6 +816,22 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 				pos: 0,
 			});
 		}
+		if (sections.length > 1 && hasExpanded) {
+			entries.push({
+				id: 'collapseAllSections',
+				type: 'comboboxentry',
+				text: _('Collapse All Sections'),
+				pos: 0,
+			});
+		}
+		if (sections.length > 1 && hasCollapsed) {
+			entries.push({
+				id: 'expandAllSections',
+				type: 'comboboxentry',
+				text: _('Expand All Sections'),
+				pos: 0,
+			});
+		}
 
 		var menuPosEl = this._getMenuPosEl();
 		var rect = this._container.getBoundingClientRect();
@@ -820,6 +859,12 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 				that._map.setPart(section.startIndex);
 				that._map.selectPart(section.startIndex, 1, false);
 				app.socket.sendMessage('uno .uno:RemoveSlideSection');
+				break;
+			case 'collapseAllSections':
+				that._collapseAllSections();
+				break;
+			case 'expandAllSections':
+				that._expandAllSections();
 				break;
 			}
 			JSDialog.CloseAllDropdowns();
