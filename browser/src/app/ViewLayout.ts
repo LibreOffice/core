@@ -488,6 +488,14 @@ class ViewLayoutBase {
 		pY: number,
 		userIsScrolling: boolean = false,
 	): void {
+		// While a zoom is waiting for its new tiles the canvas is not cleared (to
+		// avoid white flicker), so scrolling in that window leaves smears.
+		// Force a clear in that case; the flag is reset once the zoom finishes.
+		if (
+			app.sectionContainer.isZoomChanged() &&
+			!app.sectionContainer.isInZoomAnimation()
+		)
+			app.sectionContainer.setScrollingBeforeZoomSettled(true);
 		if (userIsScrolling) this.unselectCommentOnScroll();
 		this.refreshScrollProperties();
 		const documentAnchor = this.getDocumentAnchorSection();

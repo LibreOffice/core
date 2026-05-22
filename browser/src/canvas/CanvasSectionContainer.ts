@@ -191,6 +191,7 @@ class CanvasSectionContainer {
 	private inZoomAnimation: boolean = false;
 	private postZoomReplay: boolean = false;
 	private zoomChanged: boolean = false;
+	private scrollingBeforeZoomSettled: boolean = false;
 	private documentAnchorSectionName: string = null; // This section's top left point declares the point where document starts.
 	private documentAnchor: Array<number> = null; // This is the point where document starts inside canvas element. Initial value shouldn't be [0, 0].
 	// Above 2 properties can be used with documentBounds.
@@ -363,6 +364,12 @@ class CanvasSectionContainer {
 
 	public setZoomChanged (zoomChanged: boolean) {
 		this.zoomChanged = zoomChanged;
+		if (!zoomChanged)
+			this.scrollingBeforeZoomSettled = false;
+	}
+
+	public setScrollingBeforeZoomSettled (on: boolean) {
+		this.scrollingBeforeZoomSettled = on;
 	}
 
 	public isZoomChanged (): boolean {
@@ -1941,6 +1948,10 @@ class CanvasSectionContainer {
 	}
 
 	private shouldDrawSection (section: CanvasSectionObject) {
+	    // During a zoom animation app.twipsToPixels still holds the old zoom value,
+	    // so section would draw at the wrong size; skip them until it updates.
+	    if (this.inZoomAnimation && section.documentObject)
+	        return false;
 	    return section.isLocated && section.showSection && (!section.documentObject || section.isVisible);
 	}
 
@@ -1955,7 +1966,7 @@ class CanvasSectionContainer {
 
 		this.context.setTransform(1, 0, 0, 1, 0, 0);
 
-		if (!this.zoomChanged) {
+		if (!this.zoomChanged || this.scrollingBeforeZoomSettled) {
 			this.clearCanvas();
 		}
 
