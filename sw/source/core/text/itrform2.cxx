@@ -345,6 +345,11 @@ void SwTextFormatter::InsertPortion( SwTextFormatInfo &rInf,
 
         if( m_pCurr->Height() < pPor->Height() )
             m_pCurr->Height(pPor->Height(), pPor->IsUsedToCalcLineSpacingHeight(rIDSA));
+        else if (m_pCurr->GetLineSpacingBaseHeight() < pPor->Height()
+                 && pPor->IsUsedToCalcLineSpacingHeight(rIDSA))
+        {
+            m_pCurr->SetLineSpacingBaseHeight(pPor->Height());
+        }
         if( m_pCurr->GetAscent() < pPor->GetAscent() )
             m_pCurr->SetAscent( pPor->GetAscent() );
         if( m_pCurr->GetHangingBaseline() < pPor->GetHangingBaseline() )
