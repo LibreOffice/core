@@ -3123,12 +3123,24 @@ void ScTable::GetFilteredFilterEntries(
     if (nCol >= aCol.size())
         return;
 
-    sc::ColumnBlockConstPosition aBlockPos;
-    aCol[nCol].InitBlockPosition(aBlockPos);
-
     // remove the entry for this column from the query parameter
     ScQueryParam aParam( rParam );
     aParam.RemoveEntryByField(nCol);
+
+    // Fast path: when no active filter constraints remain after removing this
+    // column's entry, every row is "valid" by definition. Skip the O(rows)
+    // per-row ValidQuery loop and use the block-scan path, which is
+    // O(non-empty cells) for the data plus O(pattern runs) for the empty tail.
+    // Makes opening the autofilter dropdown on a huge but mostly-empty DB
+    // range near-instant instead of evaluating CF for a million empty rows.
+    if (aParam.GetEntryCount() == 0 || !aParam.GetEntry(0).bDoQuery)
+    {
+        GetFilterEntries(nCol, nRow1, nRow2, rFilterEntries, bFiltering);
+        return;
+    }
+
+    sc::ColumnBlockConstPosition aBlockPos;
+    aCol[nCol].InitBlockPosition(aBlockPos);
 
     lcl_PrepareQuery(&rDocument, this, aParam, true);
     ScQueryEvaluator queryEvaluator(GetDoc(), *this, aParam);
