@@ -464,6 +464,42 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Slide sections', function(
 				cy.cGet('#preview-frame-part-' + i).should('have.class', 'section-collapsed');
 			});
 		});
+
+		it('Expand All / Collapse All sections via context menu', function() {
+			helper.processToIdle(this.win);
+
+			// 3 sections, 13 slides. Section-1 (0-3), Section-2 (4-10), Section-3 (11-12).
+			assertSectionHeaders(['Section-1', 'Section-2', 'Section-3']);
+
+			// Collapse all sections from the first section's context menu.
+			rightClickSectionHeader(0);
+			clickContextMenuItem('Collapse All Sections');
+			helper.processToIdle(this.win);
+
+			// Every slide frame should now have the section-collapsed class.
+			for (var i = 0; i < 13; i++) {
+				cy.cGet('#preview-frame-part-' + i).should('have.class', 'section-collapsed');
+			}
+
+			// Now "Collapse All Sections" should no longer be offered.
+			helper.processToIdle(this.win);
+			rightClickSectionHeader(0);
+			cy.cGet('[id$="-dropdown"]:visible').should('not.contain', 'Collapse All Sections');
+			// Pick "Expand All Sections" to undo.
+			clickContextMenuItem('Expand All Sections');
+			helper.processToIdle(this.win);
+
+			// No slide frame should carry the section-collapsed class.
+			for (var j = 0; j < 13; j++) {
+				cy.cGet('#preview-frame-part-' + j).should('not.have.class', 'section-collapsed');
+			}
+
+			// And the menu should once again offer Collapse All Sections, not Expand All.
+			helper.processToIdle(this.win);
+			rightClickSectionHeader(0);
+			cy.cGet('[id$="-dropdown"]:visible').should('contain', 'Collapse All Sections');
+			cy.cGet('[id$="-dropdown"]:visible').should('not.contain', 'Expand All Sections');
+		});
 	});
 
 	describe('ODP format', function() {
