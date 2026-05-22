@@ -2724,98 +2724,79 @@ void ScColumn::GetBackColorFilterEntries(SCROW nRow1, SCROW nRow2, ScFilterEntri
     if (!GetDoc().ValidRow(nRow1) || !GetDoc().ValidRow(nRow2))
         return;
 
-    ScAddress aCell(GetCol(), 0, GetTab());
     ScDocument& rDoc = GetDoc();
-    ScConditionalFormatList* pCondFormList = rDoc.GetCondFormList(aCell.Tab());
-    // cache the output of GetCondResult
-    const ScPatternAttr* pPrevPattern = nullptr;
-    ScRefCellValue aPrevCellValue;
-    Color aPrevPatternColor;
+    ScConditionalFormatList* pCondFormList = rDoc.GetCondFormList(GetTab());
+
     Color aPrevInsertColor;
-    ScConditionalFormat* pCondFormat = nullptr;
-    const ScCondFormatIndexes* pCondFormats = nullptr;
-    Color aBackgroundBrushColor;
-    SCROW nPatternStartRow = -1;
-    SCROW nPatternEndRow = -1;
-    while (nRow1 <= nRow2)
+    bool bFirstInsert = true;
+
+    // Iterate by pattern run rather than row by row: every empty cell in the
+    // same pattern run resolves to the same background colour, so a single CF
+    // evaluation per run is enough. Same idiom as ScColumn::GetUnprotectedCells.
+    SCROW nRow = nRow1;
+    while (nRow <= nRow2)
     {
-        aCell.SetRow(nRow1);
+        SCROW nPatternStartRow = nRow;
+        SCROW nPatternEndRow = nRow2;
+        const ScPatternAttr* pPattern =
+            pAttrArray->GetPatternRange(nPatternStartRow, nPatternEndRow, nRow);
+        if (!pPattern)
+        {
+            nRow = nPatternEndRow + 1;
+            continue;
+        }
 
         Color aBackColor;
         bool bCondBackColor = false;
 
-        if (nRow1 <= nPatternEndRow)
-            ; // then the previous value of pPattern and pCondFormat and pCondFormats and aBackgroundBrushColor is still valid
-        else
-        {
-            if (const ScPatternAttr* pPattern = pAttrArray->GetPatternRange(nPatternStartRow, nPatternEndRow, nRow1))
-            {
-                pCondFormats = &pPattern->GetItem(ATTR_CONDITIONAL).GetCondFormatData();
-                sal_uInt32 nIndex = 0;
-                if(!pCondFormats->empty())
-                    nIndex = (*pCondFormats)[0];
-                if (nIndex)
-                {
-                    assert(pCondFormList);
-                    pCondFormat = pCondFormList->GetFormat( nIndex );
-                }
-                else
-                    pCondFormat = nullptr;
-                aBackgroundBrushColor = pPattern->GetItem(ATTR_BACKGROUND).GetColor();
+        const ScCondFormatIndexes& rCondFormats =
+            pPattern->GetItem(ATTR_CONDITIONAL).GetCondFormatData();
 
-                if (!pCondFormats->empty())
-                {
-                    // Speed up processing when dealing with runs of identical cells. This avoids
-                    // an expensive GetCondResult call.
-                    ScRefCellValue aCellValue = GetCellValue(nRow1);
-                    if (pPrevPattern == pPattern && aCellValue == aPrevCellValue)
-                    {
-                        aBackColor = aPrevPatternColor;
-                        bCondBackColor = true;
-                    }
-                    else
-                    {
-                        const SfxItemSet* pCondSet = rDoc.GetCondResult(GetCol(), nRow1, GetTab());
-                        const SvxBrushItem* pCondBrush = &pPattern->GetItem(ATTR_BACKGROUND, pCondSet);
-                        aBackColor = pCondBrush->GetColor();
-                        bCondBackColor = true;
-                        aPrevCellValue = aCellValue;
-                        pPrevPattern = pPattern;
-                        aPrevPatternColor = aBackColor;
-                    }
-                }
-            }
-        }
-
-        if (pCondFormat)
+        if (!rCondFormats.empty())
         {
-            for (size_t nFormat = 0; nFormat < pCondFormat->size(); nFormat++)
+            // Evaluate CF once for this pattern run.
+            const SfxItemSet* pCondSet = rDoc.GetCondResult(GetCol(), nRow, GetTab());
+            const SvxBrushItem* pCondBrush = &pPattern->GetItem(ATTR_BACKGROUND, pCondSet);
+            aBackColor = pCondBrush->GetColor();
+            bCondBackColor = true;
+
+            // ColorScale CF entries override the resolved background colour.
+            sal_uInt32 nIndex = rCondFormats[0];
+            if (nIndex && pCondFormList)
             {
-                auto aEntry = pCondFormat->GetEntry(nFormat);
-                if (aEntry->GetType() == ScFormatEntry::Type::Colorscale)
+                if (ScConditionalFormat* pCondFormat = pCondFormList->GetFormat(nIndex))
                 {
-                    const ScColorScaleFormat* pColFormat = static_cast<const ScColorScaleFormat*>(aEntry);
-                    std::optional<Color> oColor = pColFormat->GetColor(aCell);
-                    if (oColor)
+                    ScAddress aCell(GetCol(), nRow, GetTab());
+                    for (size_t nFormat = 0; nFormat < pCondFormat->size(); ++nFormat)
                     {
-                        aBackColor = *oColor;
-                        bCondBackColor = true;
+                        const ScFormatEntry* pEntry = pCondFormat->GetEntry(nFormat);
+                        if (pEntry->GetType() == ScFormatEntry::Type::Colorscale)
+                        {
+                            const ScColorScaleFormat* pColFormat =
+                                static_cast<const ScColorScaleFormat*>(pEntry);
+                            std::optional<Color> oColor = pColFormat->GetColor(aCell);
+                            if (oColor)
+                            {
+                                aBackColor = *oColor;
+                                bCondBackColor = true;
+                            }
+                        }
                     }
                 }
             }
         }
 
         if (!bCondBackColor)
-        {
-            aBackColor = aBackgroundBrushColor;
-        }
+            aBackColor = pPattern->GetItem(ATTR_BACKGROUND).GetColor();
 
-        if (aPrevInsertColor != aBackColor)
+        if (bFirstInsert || aPrevInsertColor != aBackColor)
         {
             rFilterEntries.addBackgroundColor(aBackColor);
             aPrevInsertColor = aBackColor;
+            bFirstInsert = false;
         }
-        nRow1++;
+
+        nRow = nPatternEndRow + 1;
     }
 }
 
