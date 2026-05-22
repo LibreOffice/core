@@ -83,3 +83,9 @@ leak:PK11_ImportDERPrivateKeyInfoAndReturnKey
 # Right now, xpdfimport has a lot of leaks, and merely printing that out takes a very long,
 # and we're not really interested in leaks in external programs.
 leak:instdir/program/xpdfimport
+
+# Objects created here are weak, by definition,
+# so they are never the source of the problem.
+# Filter them out to give a clearer picture.
+leak:cppu::OWeakObject::queryAdapter
+leak:com::sun::star::uno::WeakReferenceHelper::operator=
