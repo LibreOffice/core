@@ -1266,45 +1266,6 @@ void  ScTable::FillSparkline(bool bVertical, SCCOLROW nFixed,
     }
 }
 
-void ScTable::GetBackColorArea(SCCOL& rStartCol, SCROW& /*rStartRow*/,
-                               SCCOL& rEndCol, SCROW& rEndRow ) const
-{
-    const SvxBrushItem* pDefBackground = &rDocument.GetPool()->GetUserOrPoolDefaultItem(ATTR_BACKGROUND);
-
-    rStartCol = std::min<SCCOL>(rStartCol, aCol.size() - 1);
-    rEndCol = std::min<SCCOL>(rEndCol, aCol.size() - 1);
-
-    const SCROW nMaxRow = rDocument.MaxRow();
-
-    while (rEndRow < nMaxRow)
-    {
-        bool bExtend = false;
-        SCROW nMinRunEnd = nMaxRow;
-
-        for (SCCOL nCol = rStartCol; nCol <= rEndCol; ++nCol)
-        {
-            SCROW nTmpStartRow = 0, nTmpEndRow = nMaxRow;
-            const ScPatternAttr* pPattern =
-                GetColumnData(nCol).GetPatternRange(nTmpStartRow, nTmpEndRow, rEndRow + 1);
-            if (!pPattern)
-                continue;
-            const SvxBrushItem* pBackground = &pPattern->GetItem(ATTR_BACKGROUND);
-            if (!pPattern->GetItem(ATTR_CONDITIONAL).GetCondFormatData().empty() ||
-                (pBackground->GetColor() != COL_TRANSPARENT && pBackground != pDefBackground))
-            {
-                bExtend = true;
-            }
-            if (nTmpEndRow < nMinRunEnd)
-                nMinRunEnd = nTmpEndRow;
-        }
-
-        if (!bExtend)
-            break;
-
-        rEndRow = nMinRunEnd;
-    }
-}
-
 OUString ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW nEndY )
 {
     OUString aValue;
