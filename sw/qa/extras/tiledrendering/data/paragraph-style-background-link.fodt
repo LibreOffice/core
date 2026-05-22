@@ -7,8 +7,9 @@
     xmlns:xlink="http://www.w3.org/1999/xlink"
     office:version="1.3"
     office:mimetype="application/vnd.oasis.opendocument.text">
-  <office:automatic-styles>
-    <style:style style:name="P1" style:family="paragraph">
+  <office:styles>
+    <style:style style:name="LinkBackground" style:family="paragraph"
+                 style:parent-style-name="Default_20_Paragraph_20_Style">
       <style:paragraph-properties>
         <style:background-image
             xlink:href="http://192.0.2.1:12345/background.png"
@@ -16,13 +17,12 @@
             style:position="center" style:repeat="no-repeat"/>
       </style:paragraph-properties>
     </style:style>
-  </office:automatic-styles>
+  </office:styles>
   <office:body>
     <office:text>
-      <text:p text:style-name="P1">Paragraph with remote background image.</text:p>
-    </office:text>
-    <office:text>
-      <text:p text:style-name="P1">Another paragraph with remote background image.</text:p>
+      <text:p text:style-name="LinkBackground">First paragraph sharing the remote-background style.</text:p>
+      <text:p text:style-name="LinkBackground">Second paragraph sharing the remote-background style.</text:p>
+      <text:p text:style-name="LinkBackground">Third paragraph sharing the remote-background style.</text:p>
     </office:text>
   </office:body>
 </office:document>
