@@ -440,6 +440,12 @@ ScPostIt::ScPostIt( ScDocument& rDoc, const ScAddress& rPos, sal_uInt32 nPostItI
     mrDoc( rDoc ),
     maNoteData( false )
 {
+    if (rDoc.HasTabNotes(rPos.Tab()))
+    {
+        ScRangeList aRanges(ScRange(0, 0, rPos.Tab(), rDoc.MaxCol(), rDoc.MaxRow(), rPos.Tab()));
+        CommentCaptionState eState = rDoc.GetAllNoteCaptionsState(aRanges);
+        maNoteData.mbShown = (eState != ALLHIDDEN && eState != MIXED);
+    }
     mnPostItId = nPostItId == 0 ? mnLastPostItId++ : nPostItId;
     AutoStamp();
     CreateCaption( rPos );
