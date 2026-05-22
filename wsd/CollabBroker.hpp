@@ -115,6 +115,19 @@ class CollabBroker : public std::enable_shared_from_this<CollabBroker>
     };
     std::map<std::string, UserAvatar> _avatars;
 
+    /// Plain-COOL (/cool/ws) sessions for the same docKey, pushed
+    /// in by DocumentBroker.  Surfaced into the /co/collab
+    /// user_list so CODA/COWASM peers see live editors and run
+    /// the edit-choice dialog rather than silently editing
+    /// locally in parallel.
+    struct ExternalSession
+    {
+        std::string userId;
+        std::string username;
+        bool canWrite;
+    };
+    std::map<std::string, ExternalSession> _externalSessions;
+
 public:
     CollabBroker(const std::string& docKey, const std::string& wopiSrc);
     ~CollabBroker();
@@ -191,6 +204,19 @@ public:
     /// Look up registered avatar for a user.  Returns
     /// (url, accessToken) or empty if not registered.
     UserAvatar lookupAvatar(const std::string& userId) const;
+
+    /// Surface a plain-COOL (/cool/ws) session as a peer in the
+    /// user_list, and broadcast user_joined (plus editing_started
+    /// if canWrite) to existing handlers.  Pushed in from
+    /// DocumentBroker::addSession via a WebServerPoll callback.
+    void addExternalSession(const std::string& sessionId,
+                            const std::string& userId,
+                            const std::string& username,
+                            bool canWrite);
+
+    /// Drop a previously-added external session and broadcast
+    /// user_left.  Pushed in from DocumentBroker::removeSession.
+    void removeExternalSession(const std::string& sessionId);
 
 private:
     /// Generate a unique ID for a handler

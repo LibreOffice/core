@@ -13,6 +13,7 @@
 
 #include "CollabSocketHandler.hpp"
 #include "CollabBroker.hpp"
+#include "DocumentBroker.hpp"
 
 #include <COOLWSD.hpp>
 #include <Storage.hpp>
@@ -32,6 +33,9 @@
 #include <Poco/URI.h>
 
 #include <sstream>
+
+extern std::map<std::string, std::shared_ptr<DocumentBroker>> DocBrokers;
+extern std::mutex DocBrokersMutex;
 
 CollabSocketHandler::CollabSocketHandler(const std::shared_ptr<StreamSocket>& socket,
                                          const Poco::Net::HTTPRequest& request,
@@ -173,6 +177,27 @@ void CollabSocketHandler::onCheckFileInfoFinished(CheckFileInfo& cfi)
                     if (!_avatar.empty())
                         broker->registerAvatar(
                             _userId, _avatar, _accessToken);
+
+                    // If a plain-COOL DocBroker is already editing
+                    // the same docKey, surface its sessions as
+                    // external entries in the broker.  Posts a
+                    // callback onto the DocBroker's poll thread; the
+                    // resulting user_joined messages arrive on this
+                    // handler shortly after the initial user_list.
+                    std::shared_ptr<DocumentBroker> docBroker;
+                    {
+                        std::lock_guard<std::mutex> lock(DocBrokersMutex);
+                        auto it = DocBrokers.find(_docKey);
+                        if (it != DocBrokers.end())
+                            docBroker = it->second;
+                    }
+                    if (docBroker)
+                    {
+                        docBroker->addCallback([docBroker]
+                        {
+                            docBroker->pushSessionsToCollabBroker();
+                        });
+                    }
                 }
             }
 

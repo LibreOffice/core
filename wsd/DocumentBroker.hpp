@@ -575,6 +575,14 @@ public:
     /// For testing only [!]
     std::vector<std::shared_ptr<ClientSession>> getSessionsTestOnlyUnsafe();
 
+    /// Push the current ClientSessions into the matching /co/collab
+    /// CollabBroker (if any) as external sessions, so a /co/collab
+    /// handler that joined after a plain-COOL editor was already
+    /// active sees them in its user_list.  Runs on the DocBroker's
+    /// own poll thread; marshals the per-CollabBroker work onto the
+    /// WebServerPoll.
+    void pushSessionsToCollabBroker();
+
     /// Estimate memory usage / bytes
     std::size_t getMemorySize() const;
 

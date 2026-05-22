@@ -510,6 +510,13 @@ window.L.Map.include({
 	// viewing.  Offer to keep viewing locally or join the
 	// collaborative session.
 	_onOtherUserEditingStarted: function (userName, avatar) {
+		// We are editing ourselves: don't offer to switch (and risk
+		// dropping our in-progress local changes); the conflict gets
+		// resolved at next save.  This is reachable via the /cool/ws
+		// bridge in CollabBroker, since plain-COOL's editing_started
+		// can land here while we are mid-edit.
+		if (this.isEditMode())
+			return;
 		this._showCollabJoinDialog(
 			avatar
 				? { name: userName, rest: _('started editing') }

@@ -40,6 +40,9 @@
 #include <wsd/COOLWSD.hpp>
 #include <wsd/CacheUtil.hpp>
 #include <wsd/ClientSession.hpp>
+#if !MOBILEAPP
+#include <wsd/CollabBroker.hpp>
+#endif
 #include <wsd/Exceptions.hpp>
 #include <wsd/FileServer.hpp>
 #include <wsd/PlatformDesktop.hpp>
@@ -4444,6 +4447,28 @@ std::size_t DocumentBroker::addSession(const std::shared_ptr<ClientSession>& ses
             session->sendTextFrame("userpresetconfigid: " + Uri::encode(_userConfigId));
         }
 
+#if !MOBILEAPP
+        // Surface this session into any /co/collab CollabBroker for the
+        // same docKey so CODA/COWASM peers see plain-COOL editors and
+        // can prompt the user with the edit-choice dialog rather than
+        // silently editing locally in parallel.
+        if (auto poll = COOLWSD::getWebServerPoll())
+        {
+            const std::string sessionId = id;
+            const std::string userId = session->getUserId();
+            const std::string username = session->getUserName();
+            const bool canWrite = !session->isReadOnly();
+            const std::string docKey = _docKey;
+            poll->addCallback(
+                [sessionId, userId, username, canWrite, docKey]
+                {
+                    if (auto cb = findCollabBroker(docKey))
+                        cb->addExternalSession(sessionId, userId,
+                                               username, canWrite);
+                });
+        }
+#endif
+
         return count;
     }
     catch (const StorageSpaceLowException& exc)
@@ -4599,7 +4624,61 @@ std::size_t DocumentBroker::removeSession(const std::shared_ptr<ClientSession>& 
         LOG_ERR("Error while removing session [" << id << "]: " << ex.what());
     }
 
+#if !MOBILEAPP
+    // Mirror the addExternalSession hook in addSession.
+    if (auto poll = COOLWSD::getWebServerPoll())
+    {
+        const std::string docKey = _docKey;
+        poll->addCallback([docKey, id]
+        {
+            if (auto cb = findCollabBroker(docKey))
+                cb->removeExternalSession(id);
+        });
+    }
+#endif
+
     return _sessions.size();
+}
+
+void DocumentBroker::pushSessionsToCollabBroker()
+{
+    ASSERT_CORRECT_THREAD();
+
+#if !MOBILEAPP
+    struct Snapshot
+    {
+        std::string sessionId;
+        std::string userId;
+        std::string username;
+        bool canWrite;
+    };
+    std::vector<Snapshot> snapshot;
+    snapshot.reserve(_sessions.size());
+    for (const auto& [id, session] : _sessions)
+    {
+        if (!session)
+            continue;
+        snapshot.push_back({session->getId(), session->getUserId(),
+                            session->getUserName(),
+                            !session->isReadOnly()});
+    }
+    if (snapshot.empty())
+        return;
+
+    auto poll = COOLWSD::getWebServerPoll();
+    if (!poll)
+        return;
+    const std::string docKey = _docKey;
+    poll->addCallback([docKey, snapshot = std::move(snapshot)]
+    {
+        auto cb = findCollabBroker(docKey);
+        if (!cb)
+            return;
+        for (const auto& s : snapshot)
+            cb->addExternalSession(s.sessionId, s.userId,
+                                   s.username, s.canWrite);
+    });
+#endif
 }
 
 void DocumentBroker::disconnectSessionInternal(const std::shared_ptr<ClientSession>& session)

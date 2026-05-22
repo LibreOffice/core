@@ -24,6 +24,7 @@
 
 #include <algorithm>
 #include <atomic>
+#include <optional>
 #include <sstream>
 
 /// Global CollabBrokers map - keyed by docKey
@@ -233,6 +234,22 @@ void appendUserJson(std::ostringstream& oss,
             << (h->getUserCanWrite() ? "true" : "false");
     oss << '}';
 }
+
+/// Serialize an ExternalSession as a JSON user object.  No avatar
+/// field: we don't carry the WOPI token from the /cool/ws session
+/// over, so the cool.html renderer falls back to the default icon.
+std::string externalUserJson(const std::string& userId,
+                             const std::string& username,
+                             std::optional<bool> canWrite)
+{
+    std::ostringstream oss;
+    oss << "{\"id\":\"" << JsonUtil::escapeJSONValue(userId) << "\""
+        << ",\"name\":\"" << JsonUtil::escapeJSONValue(username) << "\"";
+    if (canWrite.has_value())
+        oss << ",\"canWrite\":" << (*canWrite ? "true" : "false");
+    oss << '}';
+    return oss.str();
+}
 } // namespace
 
 std::string CollabBroker::getUserListJson(const std::shared_ptr<CollabSocketHandler>& exclude) const
@@ -254,6 +271,15 @@ std::string CollabBroker::getUserListJson(const std::shared_ptr<CollabSocketHand
             first = false;
             appendUserJson(oss, _wopiSrc, tag, handler, true);
         }
+    }
+
+    for (const auto& [sid, ext] : _externalSessions)
+    {
+        if (!first)
+            oss << ',';
+        first = false;
+        oss << externalUserJson(
+            ext.userId, ext.username, ext.canWrite);
     }
 
     oss << "],\"editingActive\":" << (_editingStarted ? "true" : "false")
@@ -395,6 +421,65 @@ CollabBroker::lookupAvatar(const std::string& userId) const
     if (it == _avatars.end())
         return {};
     return it->second;
+}
+
+void CollabBroker::addExternalSession(const std::string& sessionId,
+                                      const std::string& userId,
+                                      const std::string& username,
+                                      bool canWrite)
+{
+    const std::string userJson = externalUserJson(
+        userId, username, canWrite);
+    const std::string joined =
+        "{\"type\":\"user_joined\",\"user\":" + userJson + "}";
+    const std::string editStarted = canWrite
+        ? "{\"type\":\"editing_started\",\"user\":" + userJson + "}"
+        : std::string();
+
+    std::lock_guard<std::mutex> lock(_mutex);
+    auto [it, inserted] = _externalSessions.emplace(
+        sessionId, ExternalSession{userId, username, canWrite});
+    if (!inserted)
+        return;
+
+    LOG_INF("CollabBroker [" << _docKey << "]: external session ["
+            << sessionId << "] joined, canWrite: " << canWrite);
+
+    if (canWrite)
+        _editingStarted = true;
+
+    for (auto& weakHandler : _handlers)
+    {
+        if (auto h = weakHandler.lock())
+        {
+            h->sendTextMessage(joined);
+            if (!editStarted.empty())
+                h->sendTextMessage(editStarted);
+        }
+    }
+}
+
+void CollabBroker::removeExternalSession(const std::string& sessionId)
+{
+    std::lock_guard<std::mutex> lock(_mutex);
+    auto it = _externalSessions.find(sessionId);
+    if (it == _externalSessions.end())
+        return;
+
+    const std::string userJson = externalUserJson(
+        it->second.userId, it->second.username, std::nullopt);
+    _externalSessions.erase(it);
+
+    LOG_INF("CollabBroker [" << _docKey << "]: external session ["
+            << sessionId << "] left");
+
+    const std::string msg =
+        "{\"type\":\"user_left\",\"user\":" + userJson + "}";
+    for (auto& weakHandler : _handlers)
+    {
+        if (auto h = weakHandler.lock())
+            h->sendTextMessage(msg);
+    }
 }
 
 std::shared_ptr<CollabBroker> findOrCreateCollabBroker(const std::string& docKey,
