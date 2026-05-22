@@ -148,9 +148,6 @@ OUString
         case DRAWING_OLE:
             sName = u"OLEShape"_ustr;
             break;
-        case DRAWING_PLUGIN:
-            sName = u"PluginOLEShape"_ustr;
-            break;
 
         default:
             sName = u"UnknownAccessibleOLEShape"_ustr;

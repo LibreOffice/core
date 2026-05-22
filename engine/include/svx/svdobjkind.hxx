@@ -55,8 +55,6 @@ enum class SdrObjKind : sal_uInt16
     Table = 35, /// table
     Annotation = 36, /// annotation object
 
-    OLE2Plugin = 101,
-
     // engine3d, arbitrarily place at 200
     E3D_Scene = 202,
     // E3D_OBJECT_ID should not be used, it's only a helper class for E3DScene and E3DCompoundObject

@@ -28,24 +28,6 @@ public:
     explicit SvxShapeCaption(SdrObject* pObj);
     virtual ~SvxShapeCaption() noexcept override;
 };
-class SvxPluginShape : public SvxOle2Shape
-{
-protected:
-    // override these for special property handling in subcasses. Return true if property is handled
-    virtual bool setPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, const cpo::uno::Any& rValue ) override;
-    virtual bool getPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, cpo::uno::Any& rValue ) override;
-
-public:
-    explicit SvxPluginShape(SdrObject* pObj, OUString referer);
-    virtual ~SvxPluginShape() noexcept override;
-
-    virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue ) override;
-    using SvxUnoTextRangeBase::setPropertyValue;
-
-    virtual void SAL_CALL setPropertyValues( const cpo::uno::Sequence< OUString >& aPropertyNames, const cpo::uno::Sequence< cpo::uno::Any >& aValues ) override;
-
-    virtual void Create( SdrObject* pNewOpj, SvxDrawPage* pNewPage ) override;
-};
 
 class SvxFrameShape : public SvxOle2Shape
 {

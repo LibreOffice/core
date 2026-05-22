@@ -501,7 +501,6 @@ void SdXMLShapeContext::AddShape(OUString const & serviceName)
                  || serviceName == "com.sun.star.drawing.FrameShape"
                  || serviceName == "com.sun.star.drawing.MediaShape"
                  || serviceName == "com.sun.star.drawing.OLE2Shape"
-                 || serviceName == "com.sun.star.drawing.PluginShape"
                  || serviceName == "com.sun.star.presentation.MediaShape")
         {
             // On adding another entry to this list of service names to pass an argument via the WithArguments variant
@@ -2865,8 +2864,6 @@ void SdXMLPluginShapeContext::startFastElement (sal_Int32 /*nElement*/,
             }
         }
     }
-    else
-        service = u"com.sun.star.drawing.PluginShape"_ustr;
 
     AddShape(service);
 

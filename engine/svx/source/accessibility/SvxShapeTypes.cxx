@@ -73,7 +73,6 @@ static rtl::Reference<AccessibleShape> CreateSvxAccessibleShape (
 
         case DRAWING_FRAME:
         case DRAWING_OLE:
-        case DRAWING_PLUGIN:
             return new AccessibleOLEShape (rShapeInfo, rShapeTreeInfo);
 
         case DRAWING_TABLE:
@@ -131,8 +130,6 @@ void RegisterDrawShapeTypes()
         ShapeTypeDescriptor ( DRAWING_CAPTION, u"com.sun.star.drawing.CaptionShape"_ustr,
             CreateSvxAccessibleShape ),
         ShapeTypeDescriptor ( DRAWING_FRAME, u"com.sun.star.drawing.FrameShape"_ustr,
-            CreateSvxAccessibleShape ),
-        ShapeTypeDescriptor ( DRAWING_PLUGIN, u"com.sun.star.drawing.PluginShape"_ustr,
             CreateSvxAccessibleShape ),
         ShapeTypeDescriptor ( DRAWING_3D_SCENE, u"com.sun.star.drawing.Shape3DSceneObject"_ustr,
             CreateSvxAccessibleShape ),

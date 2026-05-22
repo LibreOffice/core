@@ -1657,10 +1657,9 @@ static void findAutoLayoutShapesImpl( SdPage& rPage, const LayoutDescriptor& rDe
                                 {
                                     SvGlobalName aClassId( xObject->getClassID() );
 
-                                    const SvGlobalName aPluginClassId( SO3_PLUGIN_CLASSID );
                                     const SvGlobalName aIFrameClassId( SO3_IFRAME_CLASSID );
 
-                                    if( aPluginClassId != aClassId && aIFrameClassId != aClassId )
+                                    if( aIFrameClassId != aClassId )
                                     {
                                         bFound = true;
                                     }

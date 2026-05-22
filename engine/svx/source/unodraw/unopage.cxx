@@ -581,7 +581,6 @@ void SvxDrawPage::GetTypeAndInventor( SdrObjKind& rType, SdrInventor& rInventor,
         switch( rType )
         {
             case SdrObjKind::OLEPluginFrame:
-            case SdrObjKind::OLE2Plugin:
                 rType = SdrObjKind::OLE2;
                 break;
             default:
@@ -681,9 +680,6 @@ rtl::Reference<SvxShape> SvxDrawPage::CreateShapeByTypeAndInventor( SdrObjKind n
                 case SdrObjKind::OLEPluginFrame:
                     pRet = new SvxFrameShape( pObj, referer );
                     break;
-                case SdrObjKind::OLE2Plugin:
-                    pRet = new SvxPluginShape( pObj, referer );
-                    break;
                  case SdrObjKind::OLE2:
                      {
                         if( pObj && !pObj->IsEmptyPresObj() && mpPage )
@@ -704,15 +700,9 @@ rtl::Reference<SvxShape> SvxDrawPage::CreateShapeByTypeAndInventor( SdrObjKind n
                                     {
                                         SvGlobalName aClassId( xObject->getClassID() );
 
-                                        const SvGlobalName aPluginClassId( SO3_PLUGIN_CLASSID );
                                         const SvGlobalName aIFrameClassId( SO3_IFRAME_CLASSID );
 
-                                        if( aPluginClassId == aClassId )
-                                        {
-                                            pRet = new SvxPluginShape( pObj, referer );
-                                            nType = SdrObjKind::OLE2Plugin;
-                                        }
-                                        else if( aIFrameClassId == aClassId )
+                                        if( aIFrameClassId == aClassId )
                                         {
                                             pRet = new SvxFrameShape( pObj, referer );
                                             nType = SdrObjKind::OLEPluginFrame;

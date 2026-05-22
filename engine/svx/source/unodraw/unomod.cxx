@@ -208,8 +208,7 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawMSFactory::createInstanceWi
     if ((ServiceSpecifier == "com.sun.star.drawing.GraphicObjectShape"
          || ServiceSpecifier == "com.sun.star.drawing.FrameShape"
          || ServiceSpecifier == "com.sun.star.drawing.OLE2Shape"
-         || ServiceSpecifier == "com.sun.star.drawing.MediaShape"
-         || ServiceSpecifier == "com.sun.star.drawing.PluginShape")
+         || ServiceSpecifier == "com.sun.star.drawing.MediaShape")
         && Arguments.getLength() == 1 && (Arguments[0] >>= arg))
     {
         return create(ServiceSpecifier, arg);

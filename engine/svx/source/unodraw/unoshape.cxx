@@ -729,7 +729,6 @@ cpo::uno::Sequence< uno::Type > const & SvxShape::_getTypes()
     // shapes without text
     case SdrObjKind::Page:
     case SdrObjKind::OLEPluginFrame:
-    case SdrObjKind::OLE2Plugin:
     case SdrObjKind::E3D_Cube:
     case SdrObjKind::E3D_Sphere:
     case SdrObjKind::E3D_Lathe:
