@@ -666,8 +666,9 @@ static void MakeTree_Impl(StyleTreeArr_Impl& rArr, const OUString& aUIName)
               });
 }
 
-static void lcl_Update(weld::TreeView& rTreeView, const weld::TreeIter& rIter,
-                       const StyleTree_Impl& rEntry, SfxStyleFamily eFam, SfxViewShell* pViewSh)
+static void InsertSpotlightEntry(weld::TreeView& rTreeView, const weld::TreeIter& rIter,
+                                 const StyleTree_Impl& rEntry, SfxStyleFamily eFam,
+                                 SfxViewShell* pViewSh)
 {
     const OUString& rName = rEntry.getName();
 
@@ -741,22 +742,22 @@ static void RemoveHiddenEntriesWithNoVisibleChildren(StyleTreeArr_Impl& rTreeArr
 
 static void FillBox_Impl(weld::TreeView& rBox, StyleTreeArr_Impl& rTreeArray,
                          SfxStyleFamily eStyleFamily, const weld::TreeIter* pParent,
-                         bool blcl_insert, SfxViewShell* pViewShell,
+                         bool bSpotlightFill, SfxViewShell* pViewShell,
                          SfxStyleSheetBasePool* pStyleSheetPool)
 {
     if (rTreeArray.empty())
         return;
     rBox.bulk_insert_for_each(
         rTreeArray.size(),
-        [&rTreeArray, blcl_insert, pStyleSheetPool, eStyleFamily, &rBox,
+        [&rTreeArray, bSpotlightFill, pStyleSheetPool, eStyleFamily, &rBox,
          pViewShell](weld::TreeIter& rIter, int i) {
             StyleTree_Impl* pChildEntry = rTreeArray[i].get();
             const OUString& rChildName = pChildEntry->getName();
             const SfxStyleSheetBase* pStyle = pStyleSheetPool->Find(rChildName, eStyleFamily);
-            if (blcl_insert)
+            if (bSpotlightFill)
             {
                 if (pStyle && pStyle->IsUsed())
-                    lcl_Update(rBox, rIter, *pChildEntry, eStyleFamily, pViewShell);
+                    InsertSpotlightEntry(rBox, rIter, *pChildEntry, eStyleFamily, pViewShell);
                 else
                 {
                     rBox.set_id(rIter, rChildName);
@@ -773,7 +774,7 @@ static void FillBox_Impl(weld::TreeView& rBox, StyleTreeArr_Impl& rTreeArray,
                     rIter, Application::GetSettings().GetStyleSettings().GetDisableColor());
         },
         pParent, nullptr, /*bGoingToSetText*/ true,
-        /*ForceForwardInsert*/ blcl_insert ? true : false);
+        /*ForceForwardInsert*/ bSpotlightFill ? true : false);
 
     std::unique_ptr<weld::TreeIter> xChildParentIter = rBox.make_iterator(pParent);
     if (!pParent)
@@ -783,7 +784,7 @@ static void FillBox_Impl(weld::TreeView& rBox, StyleTreeArr_Impl& rTreeArray,
     for (size_t i = 0; i < rTreeArray.size(); ++i)
     {
         FillBox_Impl(rBox, rTreeArray[i]->getChildren(), eStyleFamily, xChildParentIter.get(),
-                     blcl_insert, pViewShell, pStyleSheetPool);
+                     bSpotlightFill, pViewShell, pStyleSheetPool);
         (void)rBox.iter_next_sibling(*xChildParentIter);
     }
 }
@@ -1078,11 +1079,11 @@ void StyleList::FillHierarchicalTreeView(bool bExpandRootParents)
         pSpotlightColorMap->clear();
     }
 
-    bool blcl_insert = pViewShell && m_bModuleHasStylesSpotlightFeature
-                       && ((eFam == SfxStyleFamily::Para && m_bSpotlightParaStyles)
-                           || (eFam == SfxStyleFamily::Char && m_bSpotlightCharStyles));
+    bool bSpotlightFill = pViewShell && m_bModuleHasStylesSpotlightFeature
+                          && ((eFam == SfxStyleFamily::Para && m_bSpotlightParaStyles)
+                              || (eFam == SfxStyleFamily::Char && m_bSpotlightCharStyles));
 
-    FillBox_Impl(*m_xTreeBox, aArr, eFam, nullptr, blcl_insert, pViewShell, m_pStyleSheetPool);
+    FillBox_Impl(*m_xTreeBox, aArr, eFam, nullptr, bSpotlightFill, pViewShell, m_pStyleSheetPool);
 
     m_xTreeBox->columns_autosize();
 
@@ -1315,7 +1316,7 @@ void StyleList::FillFlatTreeView()
                 const OUString& rName = aStyles[nIdx].getName();
                 auto pChildStyle = m_pStyleSheetPool->Find(rName, eFam);
                 if (pChildStyle && pChildStyle->IsUsed())
-                    lcl_Update(*m_xFmtLb, rIter, aStyles[nIdx], eFam, pViewShell);
+                    InsertSpotlightEntry(*m_xFmtLb, rIter, aStyles[nIdx], eFam, pViewShell);
                 else
                 {
                     m_xFmtLb->set_id(rIter, rName);
