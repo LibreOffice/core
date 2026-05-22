@@ -700,7 +700,8 @@ public:
         PageNameList *pExchangeList,
         bool bLink,
         sal_uInt16 nInsertPos,
-        ::sd::DrawDocShell* pBookmarkDocSh);
+        ::sd::DrawDocShell* pBookmarkDocSh,
+        std::optional<bool> oScaleObjects = std::nullopt);
 
     /**
      * Handle drag and drop operations

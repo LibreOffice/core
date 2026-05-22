@@ -84,7 +84,8 @@ public:
 
     void checkCurrentPageNumber(sal_uInt16 nNum);
     void insertStringToObject(sal_uInt16 nObj, std::u16string_view rStr, bool bUseEscape);
-    sd::slidesorter::SlideSorterViewShell* getSlideSorterViewShell();
+    sd::slidesorter::SlideSorterViewShell*
+    getSlideSorterViewShell(const css::uno::Reference<css::lang::XComponent>& xComp = nullptr);
     void lcl_search(const OUString& rKey, bool bFindAll = false, bool bBackwards = false);
 };
 
@@ -125,9 +126,11 @@ void SdUiImpressTest::insertStringToObject(sal_uInt16 nObj, std::u16string_view 
     }
 }
 
-sd::slidesorter::SlideSorterViewShell* SdUiImpressTest::getSlideSorterViewShell()
+sd::slidesorter::SlideSorterViewShell*
+SdUiImpressTest::getSlideSorterViewShell(const css::uno::Reference<css::lang::XComponent>& xComp)
 {
-    auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    auto pXImpressDocument
+        = dynamic_cast<SdXImpressDocument*>(xComp.is() ? xComp.get() : mxComponent.get());
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
     sd::slidesorter::SlideSorterViewShell* pSSVS = nullptr;
     // Same as in sd/qa/unit/misc-tests.cxx
@@ -702,6 +705,44 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testPasteTextboxBackgroundCrossProcess)
 
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE,
                          pDstShape->GetMergedItem(XATTR_FILLSTYLE).GetValue());
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testSlidePasteSizeMismatch)
+{
+    // Given a 4:3 presentation, with the first slide selected:
+    createSdImpressDoc("odp/4-3.odp");
+    sd::slidesorter::controller::SlideSorterController& rSrcCtl
+        = getSlideSorterViewShell()->GetSlideSorter().GetController();
+    auto pSrcImpress = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    SdPage* pSrcFirst = pSrcImpress->GetDoc()->GetSdPage(0, PageKind::Standard);
+    rSrcCtl.GetPageSelector().DeselectAllPages();
+    rSrcCtl.GetPageSelector().SelectPage(pSrcFirst);
+
+    // When copying that slide and pasting it into a 16:9 presentation:
+    rSrcCtl.GetClipboard().DoCopy();
+    // Disable internal paste to hit the clipboard save + load code-path.
+    SdModule::get()->pTransferClip = nullptr;
+    mxComponent2 = loadFromDesktop(createFileURL(u"odp/16-9.odp"),
+                                   u"com.sun.star.presentation.PresentationDocument"_ustr);
+    auto* pDstImpress = dynamic_cast<SdXImpressDocument*>(mxComponent2.get());
+    SdDrawDocument* pDstDoc = pDstImpress->GetDoc();
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(1), pDstDoc->GetSdPageCount(PageKind::Standard));
+    sd::slidesorter::SlideSorterViewShell* pDstSSVS = getSlideSorterViewShell(mxComponent2);
+    sd::slidesorter::controller::SlideSorterController& rDstCtl
+        = pDstSSVS->GetSlideSorter().GetController();
+    SdPage* pDstLast = pDstDoc->GetSdPage(0, PageKind::Standard);
+    rDstCtl.GetPageSelector().DeselectAllPages();
+    rDstCtl.GetPageSelector().SelectPage(pDstLast);
+    rDstCtl.GetClipboard().PasteSlidesFromSystemClipboard();
+
+    // Then make sure paste results in 2 slides:
+    sal_uInt16 nActualPageCount = pDstDoc->GetSdPageCount(PageKind::Standard);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 2
+    // - Actual  : 1
+    // i.e. an unexpected non-async dialog popped up, which gets cancelled in silent mode, so the
+    // paste fails.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(2), nActualPageCount);
 }
 
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf96206)

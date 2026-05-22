@@ -2475,7 +2475,8 @@ bool SdDrawDocument::InsertFileAsPage(
     PageNameList *pExchangeList,
     bool bLink,
     sal_uInt16 nInsertPos,
-    ::sd::DrawDocShell* pBookmarkDocSh)
+    ::sd::DrawDocShell* pBookmarkDocSh,
+    std::optional<bool> oScaleObjects)
 {
     // Use predefined options for file insert operation
     InsertBookmarkOptions options = InsertBookmarkOptions::ForFileInsert(bLink);
@@ -2502,8 +2503,15 @@ bool SdDrawDocument::InsertFileAsPage(
     getPageProperties(aInsertParams.mainProps, aInsertParams.notesProps, pageCounts.nDestPageCount);
 
     // Determine if objects need to be scaled
-    if (!determineScaleObjects(options.bNoDialogs, rBookmarkList, aInsertParams))
-        return false;
+    if (oScaleObjects)
+    {
+        aInsertParams.bScaleObjects = *oScaleObjects;
+    }
+    else
+    {
+        if (!determineScaleObjects(options.bNoDialogs, rBookmarkList, aInsertParams))
+            return false;
+    }
 
     // Get the necessary presentation stylesheets and transfer them before
     // the pages, else, the text objects won't reference their styles anymore.
