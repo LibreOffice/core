@@ -345,7 +345,6 @@ std::shared_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
                 SfxItemSetFixed<SCITEM_QUERYDATA, SCITEM_QUERYDATA> aArgSet( GetPool() );
 
                 pDBData->ExtendDataArea(rDoc);
-                pDBData->ExtendBackColorArea(rDoc);
                 pDBData->GetQueryParam( aQueryParam );
 
                 ScRange aArea;
