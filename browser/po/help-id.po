@@ -3,16 +3,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-11 14:06+0200\n"
-"PO-Revision-Date: 2026-04-05 01:12+0000\n"
+"PO-Revision-Date: 2026-05-21 10:12+0000\n"
 "Last-Translator: Arif Budiman <arifpedia@gmail.com>\n"
-"Language-Team: Indonesian <https://hosted.weblate.org/projects/"
-"collabora-online/help/id/>\n"
+"Language-Team: Indonesian <https://hosted.weblate.org/projects/collabora-"
+"online/help/id/>\n"
 "Language: id\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Translate Toolkit 3.6.0\n"
+"X-Generator: Weblate 2026.6.dev0\n"
 
 #: html/cool-help.html%2Bdiv.h1:9-5
 msgid "Keyboard Shortcuts"
@@ -2056,6 +2056,8 @@ msgid ""
 "Status bar showing page number, word count, insert mode, selection mode, "
 "language, edit mode, navigation, zoom, and search"
 msgstr ""
+"Bilah status yang menampilkan nomor halaman, jumlah kata, mode sisip, mode "
+"seleksi, bahasa, mode edit, navigasi, zum, dan pencarian"
 
 #: html/cool-help.html%2Bdiv.div.div.p:393-5
 msgid ""
@@ -2071,9 +2073,8 @@ msgstr ""
 "kotak pencarian:"
 
 #: html/cool-help.html%2Bdiv.div.div.ul.li:395-7
-#, fuzzy
 msgid "Search backwards"
-msgstr "Cari ke belakang>"
+msgstr "Cari ke belakang"
 
 #: html/cool-help.html%2Bdiv.div.div.ul.li:396-7
 msgid "Search forward"
@@ -2123,6 +2124,8 @@ msgstr ""
 msgid ""
 "Information bar showing page navigation arrows, zoom controls, and zoom level"
 msgstr ""
+"Bilah informasi yang menampilkan panah navigasi halaman, kontrol zoom, dan "
+"tingkat zoom"
 
 #: html/cool-help.html%2Bdiv.div.p:412-5
 msgid ""
@@ -2271,6 +2274,8 @@ msgid ""
 "Repair Document dialog listing past document states with columns for action "
 "type, author, and timestamp"
 msgstr ""
+"Dialog Perbaiki Dokumen yang menampilkan daftar status dokumen sebelumnya "
+"dengan kolom untuk jenis tindakan, penulis, dan stempel waktu"
 
 #: html/cool-help.html%2Bdiv.div.div.p:432-5
 msgid ""
@@ -2306,6 +2311,8 @@ msgid ""
 "Idle document overlay with the message: Idle document - please click to "
 "reload and resume editing"
 msgstr ""
+"Lapisan dokumen tidak aktif dengan pesan: Dokumen tidak aktif - silakan klik "
+"untuk memuat ulang dan melanjutkan pengeditan"
 
 #: html/cool-help.html%2Bdiv.div.div.p:438-5
 msgid ""
@@ -2403,6 +2410,8 @@ msgid ""
 "Chart Wizard dialog with chart type list on the left, chart style previews, "
 "3D and shape options"
 msgstr ""
+"Dialog Panduan Bagan dengan daftar jenis bagan di sebelah kiri, pratinjau "
+"gaya bagan, serta opsi 3D dan bentuk"
 
 #: html/cool-help.html%2Bdiv.div.div.ol.li:460-7
 msgid "If no table or range was selected, a prototype chart is displayed."
@@ -2415,6 +2424,8 @@ msgid ""
 "Column chart with grouped bars showing data for four rows across three "
 "columns"
 msgstr ""
+"Bagan kolom dengan batang berkelompok yang menampilkan data untuk empat "
+"baris di tiga kolom"
 
 #: html/cool-help.html%2Bdiv.div.div.p:464-28
 msgid ""
@@ -2507,6 +2518,8 @@ msgid ""
 "Comment box showing author name, date, and the comment text, displayed "
 "beside the document"
 msgstr ""
+"Kotak komentar yang menampilkan nama penulis, tanggal, dan teks komentar, "
+"ditampilkan di samping dokumen"
 
 #: html/cool-help.html%2Bdiv.div.div.p:478-5
 msgid ""
@@ -2534,7 +2547,7 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.img[alt]:483-29
 msgid "Text with a red wavy underline beneath a misspelled word"
-msgstr ""
+msgstr "Teks dengan garis bawah bergelombang merah di bawah kata yang salah eja"
 
 #: html/cool-help.html%2Bdiv.div.div.p:484-5
 msgid ""
@@ -2579,6 +2592,8 @@ msgid ""
 "Formula bar showing cell reference B1, function wizard icon, and the formula "
 "=SIN(PI()*A1/10)"
 msgstr ""
+"Bilah rumus yang menampilkan referensi sel B1, ikon bantuan fungsi, dan "
+"rumus =SIN(PI()*A1/10)"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:499-5
 msgid ""
@@ -2616,6 +2631,8 @@ msgid ""
 "Format Cells dialog on the Numbers tab with category list, format options, "
 "decimal places, and format code"
 msgstr ""
+"Dialog Format Sel pada tab Angka dengan daftar kategori, opsi format, jumlah "
+"desimal, dan kode format"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:511-30
 msgid ""
@@ -2655,6 +2672,9 @@ msgid ""
 "AutoFilter dropdown menu on a spreadsheet column with sort, filter by color, "
 "filter by condition, and checkboxes for individual values"
 msgstr ""
+"Menu tarik turun AutoFilter pada kolom spreadsheet dengan pengurutan, filter "
+"menurut warna, filter menurut kondisi, dan kotak centang untuk nilai "
+"individual"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:518-7
 msgid ""
@@ -2694,6 +2714,8 @@ msgid ""
 "Spreadsheet with row and column grouping controls showing outline level "
 "buttons and collapse/expand toggles"
 msgstr ""
+"Spreadsheet dengan kontrol pengelompokan baris dan kolom yang menampilkan "
+"tombol tingkat outline dan pengalih ciut/luas"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:527-5
 msgid ""
@@ -2718,6 +2740,8 @@ msgid ""
 "Validity dialog on the Criteria tab with Allow set to List, showing options "
 "for empty cells, selection list, and entry values"
 msgstr ""
+"Dialog Validitas pada tab Kriteria dengan Izinkan disetel ke Daftar, "
+"menampilkan opsi untuk sel kosong, daftar pilihan, dan nilai masukan"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:533-7
 msgid ""
@@ -2744,6 +2768,8 @@ msgid ""
 "Cell dropdown list showing validated entries such as Apple, Pear, Banana, "
 "Kiwi, and Lemon"
 msgstr ""
+"Daftar tarik turun sel yang menampilkan entri tervalidasi seperti Apple, "
+"Pear, Banana, Kiwi, dan Lemon"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:538-7
 msgid ""
@@ -2772,6 +2798,8 @@ msgid ""
 "Spreadsheet cell with a comment popup showing the author, date, comment "
 "text, and Save/Cancel buttons"
 msgstr ""
+"Sel spreadsheet dengan pop-up komentar yang menampilkan penulis, tanggal, "
+"teks komentar, serta tombol Simpan/Batal"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:546-5
 msgid ""
@@ -2792,6 +2820,8 @@ msgid ""
 "Conditional formatting icon set picker showing arrows, circles, traffic "
 "lights, stars, smiley faces, and bar chart symbol sets"
 msgstr ""
+"Pemilih set ikon pemformatan bersyarat yang menampilkan panah, lingkaran, "
+"lampu lalu lintas, bintang, wajah tersenyum, dan simbol diagram batang"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:555-30
 msgid ""
@@ -2886,6 +2916,8 @@ msgid ""
 "Paragraph dialog on the Indents and Spacing tab with settings for indent, "
 "spacing, and line spacing, and a preview on the right"
 msgstr ""
+"Dialog Paragraf pada tab Inden dan Spasi dengan pengaturan untuk inden, "
+"spasi, dan spasi baris, serta pratinjau di sebelah kanan"
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:576-5
 msgid "Handling Tables"
@@ -2908,6 +2940,8 @@ msgid ""
 "Insert Table picker showing a grid to select the number of rows and columns, "
 "currently showing 5 by 3"
 msgstr ""
+"Pemilih Sisipkan Tabel yang menampilkan kisi untuk memilih jumlah baris dan "
+"kolom, saat ini menunjukkan 5 kali 3"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:581-5
 msgid ""
@@ -2939,6 +2973,8 @@ msgid ""
 "Tracked change shown as a comment box beside the document with author name, "
 "date, and change description"
 msgstr ""
+"Perubahan terlacak yang ditampilkan sebagai kotak komentar di samping "
+"dokumen dengan nama penulis, tanggal, dan deskripsi perubahan"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:587-5
 msgid ""
@@ -3076,6 +3112,8 @@ msgid ""
 "Slide properties panel showing format, orientation, background, and master "
 "slide settings, with a layout gallery of thumbnail options below"
 msgstr ""
+"Panel properti slide yang menampilkan format, orientasi, latar belakang, dan "
+"pengaturan slide master, dengan galeri tata letak opsi thumbnail di bawahnya"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:626-30
 msgid ""
@@ -3263,6 +3301,8 @@ msgid ""
 "Thesaurus dialog for the word company, listing alternatives such as "
 "institution, establishment, and troupe, with a Replace with field"
 msgstr ""
+"Dialog Tesaurus untuk kata company, menampilkan alternatif seperti "
+"institution, establishment, dan troupe, dengan bidang Ganti dengan"
 
 #: html/cool-help.html%2Bdiv.div.div.h4:677-5
 msgid ""
@@ -3303,6 +3343,8 @@ msgid ""
 "Word Count dialog showing word and character counts for the current "
 "selection and for the whole document"
 msgstr ""
+"Dialog Jumlah Kata yang menampilkan jumlah kata dan karakter untuk pilihan "
+"saat ini dan untuk seluruh dokumen"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:688-5
 msgid ""
@@ -3348,6 +3390,9 @@ msgid ""
 "hexadecimal and decimal code inputs, and recent and favorite characters at "
 "the bottom"
 msgstr ""
+"Dialog Karakter Khusus dengan kisi karakter, bidang pencarian dan font, "
+"masukan kode heksadesimal dan desimal, serta karakter terbaru dan favorit di "
+"bagian bawah"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:699-7
 msgid ""
@@ -3458,6 +3503,9 @@ msgid ""
 "Manage Changes dialog with a list of tracked changes showing action, author, "
 "date, and comment columns, and Accept, Reject, Accept All, Reject All buttons"
 msgstr ""
+"Dialog Kelola Perubahan dengan daftar perubahan terlacak yang menampilkan "
+"kolom tindakan, penulis, tanggal, dan komentar, serta tombol Terima, Tolak, "
+"Terima Semua, dan Tolak Semua"
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:720-5
 msgid "How do I set the margins of the document?"
@@ -3492,6 +3540,9 @@ msgid ""
 "Page Style dialog on the Organizer tab showing style name, next style, "
 "inherit from, and category fields, with a summary of page properties"
 msgstr ""
+"Dialog Gaya Halaman pada tab Penyusun yang menampilkan nama gaya, gaya "
+"berikutnya, warisan dari, dan bidang kategori, beserta ringkasan properti "
+"halaman"
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:730-5
 msgid "How do I change the page orientation to landscape inside my document?"
@@ -3656,6 +3707,8 @@ msgid ""
 "Text Import dialog with character set, locale, separator options, and a "
 "preview of the imported CSV data"
 msgstr ""
+"Dialog Impor Teks dengan set karakter, lokal, opsi pemisah, dan pratinjau "
+"data CSV yang diimpor"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:778-7
 msgid ""
@@ -3766,6 +3819,8 @@ msgid ""
 "Area dialog on the Color tab with a color palette, active and new color "
 "previews, RGB value fields, and a custom palette section"
 msgstr ""
+"Dialog Area pada tab Warna dengan palet warna, pratinjau warna aktif dan "
+"baru, bidang nilai RGB, serta bagian palet khusus"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:819-7
 msgid "Set the properties of the element of the object."
