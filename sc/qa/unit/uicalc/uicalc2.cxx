@@ -2223,6 +2223,34 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf82404_SelectAllMoveActiveCell)
     checkCurrentCursorPosition(*pDocSh, u"A1");
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf107994_MoveActiveCellToFreezePaneSplitterPos)
+{
+    createScDoc();
+    ScDocShell* pDocSh = getScDocShell();
+
+    // Verify the default GoToStart behavior without frozen panes
+    goToCell(u"D5"_ustr);
+    dispatchCommand(mxComponent, u".uno:GoToStart"_ustr, {});
+    checkCurrentCursorPosition(*pDocSh, u"A1");
+
+    // Freeze panes at C3 and verify that GoToStart moves to the freeze pane splitter position
+    goToCell(u"C3"_ustr);
+    dispatchCommand(mxComponent, u".uno:FreezePanes"_ustr, {});
+    goToCell(u"D5"_ustr);
+    dispatchCommand(mxComponent, u".uno:GoToStart"_ustr, {});
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: C3
+    // - Actual  : A1
+    // i.e. the active cell was not moved to the freeze pane splitter position
+    checkCurrentCursorPosition(*pDocSh, u"C3");
+
+    // Unfreeze panes and verify the GoToStart default behaviour again
+    dispatchCommand(mxComponent, u".uno:FreezePanes"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:GoToStart"_ustr, {});
+    checkCurrentCursorPosition(*pDocSh, u"A1");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
