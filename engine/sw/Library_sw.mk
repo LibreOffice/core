@@ -227,6 +227,7 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/core/doc/DocumentChartDataProviderManager \
     sw/source/core/doc/DocumentTimerManager \
     sw/source/core/doc/DocumentLinksAdministrationManager \
+    sw/source/core/doc/FillBitmapLinkTracker \
     sw/source/core/doc/DocumentListItemsManager \
     sw/source/core/doc/DocumentListsManager \
     sw/source/core/doc/DocumentOutlineNodesManager \

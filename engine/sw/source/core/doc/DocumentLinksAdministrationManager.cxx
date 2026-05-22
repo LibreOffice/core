@@ -19,9 +19,12 @@
 
 #include <DocumentLinksAdministrationManager.hxx>
 
+#include <FillBitmapLinkTracker.hxx>
 #include <doc.hxx>
 #include <DocumentSettingManager.hxx>
+#include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <drawdoc.hxx>
 #include <IDocumentState.hxx>
 #include <IDocumentMarkAccess.hxx>
 #include <sfx2/objsh.hxx>
@@ -164,6 +167,7 @@ DocumentLinksAdministrationManager::DocumentLinksAdministrationManager( SwDoc& i
     : mbVisibleLinks(true)
     , mbLinksUpdated( false ) //#i38810#
     , m_pLinkMgr( new sfx2::LinkManager(nullptr) )
+    , m_pFillBitmapLinkTracker( new FillBitmapLinkTracker(i_rSwdoc) )
     , m_rDoc( i_rSwdoc )
 {
 }
@@ -204,25 +208,20 @@ void DocumentLinksAdministrationManager::UpdateLinks()
         return;
 
     // Register links for numbering rules with remote bullet images
-    // before checking whether the link list is empty
     for (SwNumRuleTable::size_type n = 0; n < m_rDoc.GetNumRuleTable().size(); ++n)
         m_rDoc.GetNumRuleTable()[n]->RegisterGrfLinks(m_rDoc);
 
-    // Register links for fill bitmap items (e.g. style:background-image)
-    // with remote URLs. Iterates unique pool items, not per-node.
-    registerFillBitmapLinks(m_rDoc.GetAttrPool(), GetLinkManager(),
-        [this]()
-        {
-            for (SwRootFrame* pLayout : m_rDoc.GetAllLayouts())
-                pLayout->InvalidateAllContent(SwInvalidateFlags::PrtArea);
-        });
+    // Register links for fill bitmap items in the SdrModel pool (e.g.
+    // draw:fill-image entries referenced by shapes). XATTR_FILLBITMAP
+    // items on sw's own SwFormat / SwContentNode hosts are tracked
+    // separately by FillBitmapLinkTracker via SwClientNotify.
+    if (SwDrawModel* pDrawModel = m_rDoc.getIDocumentDrawModelAccess().GetDrawModel())
+        registerFillBitmapLinks(*pDrawModel, GetLinkManager());
 
     // Register links for form controls with deferred remote ImageURL
     registerDeferredFormImageLinks(pShell->GetDeferredFormControlImages(), GetLinkManager());
     pShell->ClearDeferredFormControlImages();
 
-    if (GetLinkManager().GetLinks().empty())
-        return;
     sal_uInt16 nLinkMode = m_rDoc.GetDocumentSettingManager().getLinkUpdateMode(true);
     sal_uInt16 nUpdateDocMode = pShell->GetUpdateDocMode();
     if (nLinkMode == NEVER && nUpdateDocMode != document::UpdateDocMode::FULL_UPDATE)
@@ -420,6 +419,18 @@ void DocumentLinksAdministrationManager::SetLinksUpdated(const bool bNewLinksUpd
 bool DocumentLinksAdministrationManager::LinksUpdated() const
 {
     return mbLinksUpdated;
+}
+
+void DocumentLinksAdministrationManager::onFillBitmapURLChanged(SwFormat& rFormat,
+                                                                std::u16string_view rNewURL)
+{
+    m_pFillBitmapLinkTracker->onFillBitmapURLChanged(rFormat, rNewURL);
+}
+
+void DocumentLinksAdministrationManager::onFillBitmapURLChanged(SwContentNode& rNode,
+                                                                std::u16string_view rNewURL)
+{
+    m_pFillBitmapLinkTracker->onFillBitmapURLChanged(rNode, rNewURL);
 }
 
 DocumentLinksAdministrationManager::~DocumentLinksAdministrationManager()

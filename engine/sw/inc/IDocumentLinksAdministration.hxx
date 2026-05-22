@@ -24,6 +24,11 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 
+#include <string_view>
+
+class SwContentNode;
+class SwFormat;
+
 namespace com::sun::star::uno { class Any; }
 namespace sfx2 { class SvLinkSource;  class LinkManager; }
 
@@ -63,6 +68,14 @@ namespace sfx2 { class SvLinkSource;  class LinkManager; }
     virtual void SetLinksUpdated(const bool bNewLinksUpdated) = 0;
 
     virtual bool LinksUpdated() const = 0;
+
+    // Called by SwFormat::SwClientNotify / SwContentNode::SwClientNotify
+    // when XATTR_FILLBITMAP changes in the host's own attribute set, and
+    // from the registered SvBaseLink itself on host-Dying. rNewURL is the
+    // deferred origin URL of the new item, or empty if the item is absent,
+    // already resolved, or the host is being destroyed.
+    virtual void onFillBitmapURLChanged(SwFormat& rFormat, std::u16string_view rNewURL) = 0;
+    virtual void onFillBitmapURLChanged(SwContentNode& rNode, std::u16string_view rNewURL) = 0;
 
 protected:
     virtual ~IDocumentLinksAdministration() {};

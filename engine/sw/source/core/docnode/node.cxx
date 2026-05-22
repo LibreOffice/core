@@ -60,6 +60,7 @@
 #include <istyleaccess.hxx>
 #include <IDocumentListItems.hxx>
 #include <DocumentSettingManager.hxx>
+#include <FillBitmapNotify.hxx>
 #include <IDocumentLinksAdministration.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentLayoutAccess.hxx>
@@ -1153,6 +1154,9 @@ void SwContentNode::SwClientNotify( const SwModify&, const SfxHint& rHint)
                 && pChangeHint->m_pOld
                 && SfxItemState::SET == pChangeHint->m_pOld->GetChgSet()->GetItemState(RES_CHRATR_HIDDEN, false))
             static_cast<SwTextNode*>(this)->SetCalcHiddenCharFlags();
+        sw::notifyFillBitmapIfChanged(*this, GetpSwAttrSet(), pChangeHint->m_pOld,
+                                      pChangeHint->m_pNew);
+
         CallSwClientNotify(rHint);
     }
     else if (rHint.GetId() == SfxHintId::SwObjectDying)
@@ -1630,6 +1634,12 @@ bool SwContentNode::SetAttr( const SfxItemSet& rSet )
             std::shared_ptr<SfxItemSet> pItemSet = pFnd->GetStyleHandle();
             mpAttrSet = std::dynamic_pointer_cast<SwAttrSet>(pItemSet);
             assert(bool(pItemSet) == bool(mpAttrSet) && "types do not match");
+
+            // Wholesale mpAttrSet replacement bypasses SwClientNotify, so
+            // the link tracker would miss a deferred XFillBitmapItem
+            // carried in by the autostyle (typical ODF load path for
+            // paragraph fills). Notify it directly.
+            sw::notifyFillBitmapForPutSet(*this, *mpAttrSet, mpAttrSet.get());
         }
 
         if ( bSetParent )
