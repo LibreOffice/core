@@ -14,11 +14,13 @@
 #include <svx/svxdllapi.h>
 #include <com/sun/star/uno/Reference.hxx>
 #include <cppuhelper/weakref.hxx>
+#include <tools/ref.hxx>
 #include <functional>
 #include <vector>
 
 class SdrModel;
 class SfxItemPool;
+class XFillBitmapItem;
 
 namespace com::sun::star::beans
 {
@@ -28,7 +30,12 @@ class XPropertySet;
 namespace sfx2
 {
 class LinkManager;
+class SvBaseLink;
 }
+
+// Returns the origin URL if rItem carries a deferred graphic
+// (GraphicType::Default with non-empty originURL), otherwise empty.
+SVXCORE_DLLPUBLIC OUString getDeferredOriginURL(const XFillBitmapItem& rItem);
 
 // Returns true if the pool contains any XATTR_FILLBITMAP items with
 // unresolved remote URLs (GraphicType::Default with non-empty originURL).

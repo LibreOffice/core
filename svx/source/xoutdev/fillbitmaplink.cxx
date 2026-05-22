@@ -77,15 +77,12 @@ public:
 };
 }
 
-namespace
-{
 OUString getDeferredOriginURL(const XFillBitmapItem& rItem)
 {
     const Graphic& rGrf = rItem.GetGraphicObject().GetGraphic();
     if (rGrf.GetType() == GraphicType::Default)
         return rGrf.getOriginURL();
     return OUString();
-}
 }
 
 bool hasDeferredFillBitmapLinks(const SfxItemPool& rPool)
