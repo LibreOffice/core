@@ -42,6 +42,7 @@ $(call gb_ExternalProject_get_state_target,fontconfig,build) :
 			$(gb_CONFIGURE_PLATFORMS) \
 			$(if $(filter ANDROID,$(OS)), \
 				--disable-shared \
+				ac_cv_va_copy=no \
 			) \
 			$(if $(filter EMSCRIPTEN,$(OS)), \
 				--disable-shared \
@@ -60,7 +61,7 @@ $(call gb_ExternalProject_get_state_target,fontconfig,build) :
 					--with-cache-dir=/usr/lib/fontconfig/cache \
 				) \
 			) \
-		&& $(MAKE) -C src && $(MAKE) fonts.conf \
+		&& $(MAKE) -C fc-const && $(MAKE) -C src && $(MAKE) fonts.conf \
 		$(if $(filter MACOSX,$(OS)), \
 			&& $(INSTALL_NAME_TOOL) -id @__________________________________________________OOO/libfontconfig.1.dylib \
 				$(gb_UnpackedTarball_workdir)/fontconfig/src/.libs/libfontconfig.1.dylib \

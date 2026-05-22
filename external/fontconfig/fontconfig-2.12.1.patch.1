@@ -106,9 +106,9 @@ diff -up fontconfig/configure.dt fontconfig/configure
  	# Try to use the -exported_symbol ld option, if it does not
  	# work, assume that -exports_file does not work either and
  	# implicitly export all symbols.
-@@ -12386,7 +12386,7 @@ fi
- { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $lt_cv_irix_exported_symbol" >&5
- printf "%s\n" "$lt_cv_irix_exported_symbol" >&6; }
+@@ -13035,7 +13035,7 @@
+ { printf '%s\n' "$as_me:${as_lineno-$LINENO}: result: $lt_cv_irix_exported_symbol" >&5
+ printf '%s\n' "$lt_cv_irix_exported_symbol" >&6; }
  	if test yes = "$lt_cv_irix_exported_symbol"; then
 -          archive_expsym_cmds='$CC -shared $pic_flag $libobjs $deplibs $compiler_flags $wl-soname $wl$soname `test -n "$verstring" && func_echo_all "$wl-set_version $wl$verstring"` $wl-update_registry $wl$output_objdir/so_locations $wl-exports_file $wl$export_symbols -o $lib'
 +          archive_expsym_cmds='$CC -shared $pic_flag $libobjs $deplibs $compiler_flags `test -n "$verstring" && func_echo_all "$wl-set_version $wl$verstring"` $wl-update_registry $wl$output_objdir/so_locations $wl-exports_file $wl$export_symbols -o $lib'
