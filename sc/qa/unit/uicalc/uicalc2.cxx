@@ -2219,7 +2219,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf82404_SelectAllMoveActiveCell)
     // Without the fix in place, this test would have failed with
     // - Expected: A1
     // - Actual  : D5
-    // i.e. the active cell was not moved to A1
+    // i.e. the active cell was not moved to the start position
     checkCurrentCursorPosition(*pDocSh, u"A1");
 }
 
