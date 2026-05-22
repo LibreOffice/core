@@ -2551,6 +2551,8 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 			if (!this._map.wholeColumnSelected && !this._map.wholeRowSelected) {
 				const address = document.querySelector('#addressInput input').value;
 				if (!this._isWholeColumnSelected(address) && !this._isWholeRowSelected(address)) {
+					// Reset previous scroll for cell selection message. Because cell selection already includes latest position (shouldn't accumulate).
+					app.activeDocument.activeLayout.scrollProperties.moveBy = null;
 					app.activeDocument.activeLayout.scroll(scrollX, scrollY);
 				}
 			}
