@@ -21,10 +21,12 @@
 #include <undomanager.hxx>
 
 #include <docmodel/theme/Theme.hxx>
+#include <editeng/borderline.hxx>
+#include <editeng/boxitem.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/colritem.hxx>
-#include <editeng/borderline.hxx>
 #include <editeng/wghtitem.hxx>
+#include <fillinfo.hxx>
 #include <svx/svdpage.hxx>
 
 #include <ThemeColorChanger.hxx>
@@ -1104,6 +1106,43 @@ CPPUNIT_TEST_FIXTURE(TableStylesTest, testAutoExpandTwoStepUndoRedo)
     m_pDoc->DeleteTab(0);
 }
 
-CPPUNIT_PLUGIN_IMPLEMENT();
+CPPUNIT_TEST_FIXTURE(TableStylesTest, testTableStyleBorderEmptyCellOverride)
+{
+    // GIVEN a TableStyleMedium2 range with thin wholeTable borders, and
+    // a data cell inside it carrying an explicit but all-empty
+    // SvxBoxItem (as xlsx import plants for borderId=0 + applyBorder=1).
+    m_pDoc->InitDrawLayer();
+    m_pDoc->InsertTab(0, u"Test"_ustr);
 
+    auto pColorSet = createTestThemeA();
+    applyThemeToDocument(m_pDoc, pColorSet);
+    ScTableStyleGenerator::generateDefaultStyles(*m_pDoc, *pColorSet);
+
+    ScDBData* pDBData = createTestDBData(m_pDoc, u"TableStyleMedium2"_ustr);
+    CPPUNIT_ASSERT(pDBData);
+
+    constexpr SCCOL nCol = 1;
+    constexpr SCROW nRow = 5;
+    constexpr SCTAB nTab = 0;
+    SvxBoxItem aEmptyBox(ATTR_BORDER);
+    m_pDoc->ApplyAttr(nCol, nRow, nTab, aEmptyBox);
+
+    // WHEN ScDocument::FillInfo runs over the table.
+    ScTableInfo aTabInfo(0, 10, false);
+    m_pDoc->FillInfo(aTabInfo, 0, 0, 3, 10, nTab, 1, 1, false, false);
+
+    // THEN the resulting ScCellInfo carries the table style's
+    // wholeTable border, not the empty cell border.
+    // mpRowInfo[0] is the pre-row, [1] is the first content row, etc.
+    const ScCellInfo* pCellInfo = &aTabInfo.mpRowInfo[nRow + 1].cellInfo(nCol);
+    const SvxBoxItem* pBox = static_cast<const SvxBoxItem*>(pCellInfo->maLinesAttr.getItem());
+    CPPUNIT_ASSERT_MESSAGE("FillInfo must produce a border for table-style cells", pBox);
+    CPPUNIT_ASSERT_MESSAGE("table-style wholeTable border must not be masked by empty cell border",
+                           pBox->GetTop() || pBox->GetBottom() || pBox->GetLeft()
+                               || pBox->GetRight());
+
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_PLUGIN_IMPLEMENT();
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

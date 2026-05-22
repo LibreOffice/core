@@ -625,7 +625,13 @@ void ScDocument::FillInfo(
                                 pInfo->bFilterActive = bFilterActive;
                                 if (pInfo->maLinesAttr)
                                 {
-                                    if (pExplicitLinesAttr)
+                                    // pExplicitLinesAttr is "empty" when the cell xf set
+                                    // borderId=0 + applyBorder=1. Treat that as not-explicit
+                                    // so the table-style decoration survives.
+                                    const bool bExplicitNonEmpty = pExplicitLinesAttr
+                                        && (pExplicitLinesAttr->GetTop() || pExplicitLinesAttr->GetBottom()
+                                            || pExplicitLinesAttr->GetLeft() || pExplicitLinesAttr->GetRight());
+                                    if (bExplicitNonEmpty)
                                     {
                                         pInfo->maLinesAttr = SfxPoolItemHolder(*pPool, pExplicitLinesAttr);
                                     }

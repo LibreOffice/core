@@ -23,6 +23,7 @@
 
 #include <memory>
 
+#include "scdllapi.h"
 #include <svx/framelinkarray.hxx>
 #include "colorscale.hxx"
 #include "cellvalue.hxx"
@@ -276,8 +277,8 @@ struct ScTableInfo
     SCSIZE              mnArrCapacity;
     bool                mbPageMode;
 
-    explicit            ScTableInfo(SCROW nStartRow, SCROW nEndRow, bool bHintOnly);
-                        ~ScTableInfo();
+    SC_DLLPUBLIC explicit ScTableInfo(SCROW nStartRow, SCROW nEndRow, bool bHintOnly);
+    SC_DLLPUBLIC        ~ScTableInfo();
     ScTableInfo(const ScTableInfo&) = delete;
     const ScTableInfo& operator=(const ScTableInfo&) = delete;
 
