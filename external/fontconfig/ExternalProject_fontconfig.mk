@@ -42,6 +42,7 @@ $(call gb_ExternalProject_get_state_target,fontconfig,build) :
 			$(gb_CONFIGURE_PLATFORMS) \
 			$(if $(filter ANDROID,$(OS)), \
 				--disable-shared \
+				ac_cv_va_copy=no \
 			) \
 			$(if $(filter EMSCRIPTEN,$(OS)), \
 				--disable-shared \
@@ -61,7 +62,7 @@ $(call gb_ExternalProject_get_state_target,fontconfig,build) :
 				) \
 			) \
 			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
-		&& $(MAKE) -C src && $(MAKE) fonts.conf \
+		&& $(MAKE) -C fc-const && $(MAKE) -C src && $(MAKE) fonts.conf \
 	)
 	$(call gb_Trace_EndRange,fontconfig,EXTERNAL)
 
