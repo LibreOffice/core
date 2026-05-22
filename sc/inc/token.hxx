@@ -87,7 +87,7 @@ public:
     virtual FormulaToken*       Clone() const override { return new ScDoubleRefToken(*this); }
 };
 
-class ScMatrixToken : public formula::FormulaToken
+class SAL_DLLPUBLIC_RTTI ScMatrixToken : public formula::FormulaToken
 {
 private:
             ScMatrixRef         pMatrix;
