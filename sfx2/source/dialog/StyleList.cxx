@@ -772,7 +772,8 @@ static void FillBox_Impl(weld::TreeView& rBox, StyleTreeArr_Impl& rTreeArray,
                 rBox.set_font_color(
                     rIter, Application::GetSettings().GetStyleSettings().GetDisableColor());
         },
-        pParent, nullptr, /*bGoingToSetText*/ true);
+        pParent, nullptr, /*bGoingToSetText*/ true,
+        /*ForceForwardInsert*/ blcl_insert ? true : false);
 
     std::unique_ptr<weld::TreeIter> xChildParentIter = rBox.make_iterator(pParent);
     if (!pParent)
@@ -1324,7 +1325,7 @@ void StyleList::FillFlatTreeView()
                     m_xFmtLb->set_font_color(
                         rIter, Application::GetSettings().GetStyleSettings().GetDisableColor());
             },
-            nullptr, nullptr, /*bGoingToSetText*/ true);
+            nullptr, nullptr, /*bGoingToSetText*/ true, /*ForceForwardInsert*/ true);
     }
     else
     {

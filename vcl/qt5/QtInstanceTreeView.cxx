@@ -481,7 +481,7 @@ void QtInstanceTreeView::visible_foreach(const std::function<bool(weld::TreeIter
 
 void QtInstanceTreeView::bulk_insert_for_each(
     int nSourceCount, const std::function<void(weld::TreeIter&, int nSourceIndex)>& func,
-    const weld::TreeIter* pParent, const std::vector<int>* pFixedWidths, bool)
+    const weld::TreeIter* pParent, const std::vector<int>* pFixedWidths, bool, bool)
 {
     SolarMutexGuard g;
 

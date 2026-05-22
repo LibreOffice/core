@@ -366,7 +366,8 @@ public:
                                       const std::function<void(TreeIter&, int nSourceIndex)>& func,
                                       const weld::TreeIter* pParent = nullptr,
                                       const std::vector<int>* pFixedWidths = nullptr,
-                                      bool bGoingToSetText = false)
+                                      bool bGoingToSetText = false,
+                                      bool bForceForwardInsert = false)
         = 0;
 
     /* expanding on-demand node details

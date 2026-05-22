@@ -4053,7 +4053,7 @@ void SalInstanceTreeView::do_insert_separator(int pos, const OUString& /*rId*/)
 
 void SalInstanceTreeView::bulk_insert_for_each(
     int nSourceCount, const std::function<void(weld::TreeIter&, int nSourceIndex)>& func,
-    const weld::TreeIter* pParent, const std::vector<int>* pFixedWidths, bool bGoingToSetText)
+    const weld::TreeIter* pParent, const std::vector<int>* pFixedWidths, bool bGoingToSetText, bool)
 {
     const SalInstanceTreeIter* pVclIter = static_cast<const SalInstanceTreeIter*>(pParent);
     SvTreeListEntry* pVclParent = pVclIter ? pVclIter->iter : nullptr;

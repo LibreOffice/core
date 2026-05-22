@@ -14973,7 +14973,8 @@ public:
     virtual void bulk_insert_for_each(int nSourceCount, const std::function<void(weld::TreeIter&, int nSourceIndex)>& func,
                                       const weld::TreeIter* pParent,
                                       const std::vector<int>* pFixedWidths,
-                                      bool /*bGoingToSetText*/) override
+                                      bool /*bGoingToSetText*/,
+                                      bool bForceForwardInsert) override
     {
         GtkInstanceTreeIter* pGtkIter = const_cast<GtkInstanceTreeIter*>(static_cast<const GtkInstanceTreeIter*>(pParent));
 
@@ -14994,11 +14995,22 @@ public:
         if (pFixedWidths)
             set_column_fixed_widths(*pFixedWidths);
 
-        while (nSourceCount)
+        if (bForceForwardInsert)
         {
-            // tdf#125241 inserting backwards is massively faster
-            m_Prepend(m_pTreeModel, &aGtkIter.iter, pGtkIter ? &pGtkIter->iter : nullptr);
-            func(aGtkIter, --nSourceCount);
+            for (int i = 0; i < nSourceCount; ++i)
+            {
+                m_Insert(m_pTreeModel, &aGtkIter.iter, pGtkIter ? &pGtkIter->iter : nullptr, i);
+                func(aGtkIter, i);
+            }
+        }
+        else
+        {
+            while (nSourceCount)
+            {
+                // tdf#125241 inserting backwards is massively faster
+                m_Prepend(m_pTreeModel, &aGtkIter.iter, pGtkIter ? &pGtkIter->iter : nullptr);
+                func(aGtkIter, --nSourceCount);
+            }
         }
 
         thaw();

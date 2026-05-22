@@ -98,7 +98,7 @@ public:
     virtual void bulk_insert_for_each(
         int nSourceCount, const std::function<void(weld::TreeIter&, int nSourceIndex)>& func,
         const weld::TreeIter* pParent = nullptr, const std::vector<int>* pFixedWidths = nullptr,
-        bool bGoingToSetText = false) override;
+        bool bGoingToSetText = false, bool bForceForwardInsert = false) override;
 
     virtual bool get_row_expanded(const weld::TreeIter& rIter) const override;
     virtual void expand_row(const weld::TreeIter& rIter) override;
