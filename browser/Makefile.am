@@ -552,6 +552,7 @@ COOL_JS_LST =\
 	src/control/jsdialog/Widget.CustomWidget.ts \
 	src/control/jsdialog/Widget.CsvGrid.ts \
 	src/control/jsdialog/Widget.Edit.ts \
+	src/control/jsdialog/Widget.EmojiPicker.ts \
 	src/control/jsdialog/Widget.FormulabarEdit.js \
 	src/control/jsdialog/Widget.Frame.js \
 	src/control/jsdialog/Widget.HTMLContent.ts \

@@ -2125,6 +2125,74 @@ button.has-img img {
 	max-width: 75px;
 }
 
+/* emoji picker */
+.ui-emoji-picker {
+	display: flex;
+	flex-direction: column;
+	gap: var(--spacing-m);
+	padding: var(--spacing-s);
+	box-sizing: border-box;
+}
+
+.ui-emoji-picker-search {
+	width: 100%;
+	box-sizing: border-box;
+	padding: 6px 10px;
+	border: 1px solid var(--color-border);
+	border-radius: 999px;
+	font-size: 12px;
+	font-family: var(--cool-font);
+	color: var(--color-main-text);
+	background: var(--color-main-background);
+}
+
+.ui-emoji-picker-search:focus {
+	border-color: var(--color-primary);
+	outline: none;
+}
+
+.ui-emoji-picker-grid {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+}
+
+.ui-emoji-picker-heading {
+	font-size: 10.5px;
+	font-weight: 600;
+	letter-spacing: 0.03em;
+	text-transform: uppercase;
+	color: var(--color-text-lighter);
+	margin-top: 4px;
+}
+
+.ui-emoji-picker-row {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 2px;
+}
+
+.ui-emoji-picker-cell {
+	width: 28px;
+	height: 28px;
+	padding: 0;
+	font-size: 18px;
+	line-height: 1;
+	border: 0;
+	background: transparent;
+	border-radius: 6px;
+	cursor: pointer;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.ui-emoji-picker-cell:hover,
+.ui-emoji-picker-cell:focus-visible {
+	background: rgba(var(--color-primary-rgb, 11, 135, 231), 0.1);
+	outline: none;
+}
+
 /* busy popup */
 
 #busypopup.jsdialog-container {

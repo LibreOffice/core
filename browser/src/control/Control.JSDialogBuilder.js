@@ -158,6 +158,7 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 		this._controlHandlers['calendar'] = JSDialog.calendar;
 		this._controlHandlers['htmlcontent'] = JSDialog.htmlContent;
 		this._controlHandlers['colorpicker'] = JSDialog.colorPicker;
+		this._controlHandlers['emojipicker'] = JSDialog.emojiPicker;
 		this._controlHandlers['dropdown'] = JSDialog.Dropdown;
 		this._controlHandlers['menu'] = JSDialog.treeView;
 

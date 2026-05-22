@@ -478,6 +478,13 @@ interface EditWidgetJSON extends WidgetJSON {
 	widthInChars: number; // width hint in characters
 }
 
+// type: 'emojipicker'
+interface EmojiPickerWidgetJSON extends WidgetJSON {
+	recentsPrefsKey?: string; // window.prefs key for the "Recently used" row
+	maxRecents?: number; // cap on the recents row length (default 16)
+	searchPlaceholder?: string; // placeholder for the search input
+}
+
 // type: 'checkbox'
 interface CheckboxWidgetJSON extends WidgetJSON {
 	text: string;
