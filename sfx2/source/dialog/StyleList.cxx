@@ -684,7 +684,7 @@ static void lcl_Update(weld::TreeView& rTreeView, const weld::TreeIter& rIter,
         StylesSpotlightColorMap& rColorMap = (eFam == SfxStyleFamily::Para)
                                                  ? pViewSh->GetStylesSpotlightParaColorMap()
                                                  : pViewSh->GetStylesSpotlightCharColorMap();
-        nSpotlightId = rColorMap.size();
+        nSpotlightId = rColorMap.size() + 1;
         rColorMap[rName] = std::pair(aColor, nSpotlightId);
     }
 
