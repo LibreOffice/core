@@ -1345,6 +1345,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 
 	_handleTouchCancel: function(e) {
 		$('.preview-frame').removeClass('preview-img-dropsite');
+		$('.slide-section-dropsite').removeClass('slide-section-dropsite');
 		$(this.draggedSlide).remove();
 		this._removeDnDTouchHandlers(e);
 	},
@@ -1363,6 +1364,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 			}
 		}
 		$('.preview-frame').removeClass('preview-img-dropsite');
+		$('.slide-section-dropsite').removeClass('slide-section-dropsite');
 		$(this.draggedSlide).remove();
 		this._removeDnDTouchHandlers(e);
 		return false;
@@ -1431,6 +1433,9 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 
 	_handleDragEnd: function () {
 		this.classList.remove('preview-img-dropsite');
+		document.querySelectorAll('.slide-section-dropsite').forEach(function (el) {
+			el.classList.remove('slide-section-dropsite');
+		});
 	},
 
 	_invalidateParts: function () {
