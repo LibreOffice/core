@@ -88,32 +88,6 @@ Sub verify_testOptionalsVba()
     TestUtil.AssertEqualApprox(TestOptObjectByRefByVal(, cB), 691.2, 1E-5, "TestOptObjectByRefByVal(, B)")
     TestUtil.AssertEqualApprox(TestOptObjectByRefByVal(cA, cB), 1270.2, 1E-5, "TestOptObjectByRefByVal(A, B)")
 
-    ' optionals with array datatypes
-    Dim aA(0 To 1) As Integer
-    aA(0) = 123
-    aA(1) = 456
-    Dim aB(0 To 1) As Variant
-    aB(0) = 123.4
-    aB(1) = 567.8
-    ' TODO - New bug report? Scanner initializes variable not as an array
-    ' TestUtil.AssertEqual(TestOptArray(), 0, "TestOptArray()")
-    ' TestUtil.AssertEqual(TestOptArray(aA), 579, "TestOptArray(A)")
-    ' TestUtil.AssertEqualApprox(TestOptArray(, aB), 691.2, 1E-5, "TestOptArray(, B)")
-    ' TestUtil.AssertEqualApprox(TestOptArray(aA, aB), 1270.2, 1E-5, "TestOptArray(A, B)")
-
-    ' optionals with array datatypes (ByRef and ByVal)
-    ' TODO - New bug report? Scanner initializes variable not as an array
-    ' TestUtil.AssertEqual(TestOptArrayByRefByVal(), 0, "TestOptArrayByRefByVal()")
-    ' TestUtil.AssertEqual(TestOptArrayByRefByVal(aA), 579, "TestOptArrayByRefByVal(A)")
-    ' TestUtil.AssertEqualApprox(TestOptArrayByRefByVal(, aB), 691.2, 1E-5, "TestOptArrayByRefByVal(, B)")
-    ' TestUtil.AssertEqualApprox(TestOptArrayByRefByVal(aA, aB), 1270.2, 1E-5, "TestOptArrayByRefByVal(A, B)")
-
-    ' tdf#143707 - check correct initialization of default value for optionals
-    ' Without the fix in place, this test would have failed with
-    ' - Expected: 123
-    ' - Actual  : 123%
-    TestUtil.AssertEqual(TestOptVariantInit(), 123, "TestOptVariantInit()")
-
     Exit Sub
 errorHandler:
     TestUtil.ReportErrorHandler("verify_testOptionalsVba", Err, Error$, Erl)

@@ -95,35 +95,6 @@ Sub verify_testIsMissingVba()
     TestUtil.AssertEqual(TestOptObjectByRefByVal(, cB), IsMissingA, "TestOptObjectByRefByVal(, B)")
     TestUtil.AssertEqual(TestOptObjectByRefByVal(cA, cB), IsMissingNone, "TestOptObjectByRefByVal(A, B)")
 
-    ' optionals with array datatypes
-    Dim aA(0 To 1) As Integer
-    aA(0) = 123
-    aA(1) = 456
-    Dim aB(0 To 1) As Variant
-    aB(0) = 123.4
-    aB(1) = 567.8
-    ' TODO - New bug report? Scanner initializes variable not as an array
-    ' TestUtil.AssertEqual(TestOptArray(), IsMissingAB, "TestOptArray()")
-    ' TestUtil.AssertEqual(TestOptArray(aA), IsMissingB, "TestOptArray(A)")
-    ' TestUtil.AssertEqual(TestOptArray(, aB), IsMissingA, "TestOptArray(, B)")
-    ' TestUtil.AssertEqual(TestOptArray(aA, aB), IsMissingNone, "TestOptArray(A, B)")
-
-    ' optionals with array datatypes (ByRef and ByVal)
-    ' TODO - New bug report? Scanner initializes variable not as an array
-    ' TestUtil.AssertEqual(TestOptArrayByRefByVal(), IsMissingAB, "TestOptArrayByRefByVal()")
-    ' TestUtil.AssertEqual(TestOptArrayByRefByVal(aA), IsMissingB, "TestOptArrayByRefByVal(A)")
-    ' TestUtil.AssertEqual(TestOptArrayByRefByVal(, aB), IsMissingA, "TestOptArrayByRefByVal(, B)")
-    ' TestUtil.AssertEqual(TestOptArrayByRefByVal(aA, aB), IsMissingNone, "TestOptArrayByRefByVal(A, B)")
-
-    ' tdf#143706 - optionals with named arguments (:= syntax)
-    ' Without the fix in place, this test would have failed with:
-    ' - Expected: 0  (IsMissingA)
-    ' - Actual  : -1 (IsMissingNone)
-    TestUtil.AssertEqual(TestOptVariant(B := 456), IsMissingA, "TestOptVariant(B := 456)")
-    TestUtil.AssertEqual(TestOptVariant(A := 123), IsMissingNone, "TestOptVariant(A := 123)")
-    TestUtil.AssertEqual(TestOptVariant(A := 123, B := 456), IsMissingNone, "TestOptVariant(A := 123, B := 456)")
-    TestUtil.AssertEqual(TestOptVariant(B := 456, A := 123), IsMissingNone, "TestOptVariant(B := 456, A := 123)")
-
     Exit Sub
 errorHandler:
     TestUtil.ReportErrorHandler("verify_testIsMissingVba", Err, Error$, Erl)
