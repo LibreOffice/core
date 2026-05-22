@@ -901,12 +901,12 @@ Any Runtime::extractUnoException( const PyRef & excType, const PyRef &excValue, 
             }
             else
             {
-                str = "Couldn't find uno._uno_extract_printable_stacktrace";
+                str = u"Couldn't find uno._uno_extract_printable_stacktrace"_ustr;
             }
         }
         else
         {
-            str = "Could not load uno.py, no stacktrace available";
+            str = u"Could not load uno.py, no stacktrace available"_ustr;
             if ( !e.Message.isEmpty() )
             {
                 str += " (Error loading uno.py: " + e.Message + ")";
@@ -917,7 +917,7 @@ Any Runtime::extractUnoException( const PyRef & excType, const PyRef &excValue, 
     else
     {
         // it may occur, that no traceback is given (e.g. only native code below)
-        str = "no traceback available";
+        str = u"no traceback available"_ustr;
     }
 
     if( isInstanceOfStructOrException( excValue.get() ) )

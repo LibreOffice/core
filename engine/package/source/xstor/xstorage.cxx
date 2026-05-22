@@ -413,7 +413,7 @@ void OStorage_Impl::OpenOwnPackage()
             {
                 // let the package support only plain zip format
                 beans::NamedValue aNamedValue;
-                aNamedValue.Name = "StorageFormat";
+                aNamedValue.Name = u"StorageFormat"_ustr;
                 aNamedValue.Value <<= u"ZipFormat"_ustr;
                 aArguments.realloc( ++nArgNum );
                 pArguments = aArguments.getArray();
@@ -423,7 +423,7 @@ void OStorage_Impl::OpenOwnPackage()
             {
                 // let the package support OFOPXML media type handling
                 beans::NamedValue aNamedValue;
-                aNamedValue.Name = "StorageFormat";
+                aNamedValue.Name = u"StorageFormat"_ustr;
                 aNamedValue.Value <<= u"OFOPXMLFormat"_ustr;
                 aArguments.realloc( ++nArgNum );
                 pArguments = aArguments.getArray();
@@ -750,7 +750,7 @@ void OStorage_Impl::CopyStorageElement( SotElement_Impl* pElement,
                 {
                     aStrProps.realloc( ++nNum );
                     auto pStrProps = aStrProps.getArray();
-                    pStrProps[nNum-1].Name = "UseCommonStoragePasswordEncryption";
+                    pStrProps[nNum-1].Name = u"UseCommonStoragePasswordEncryption"_ustr;
                     pStrProps[nNum-1].Value <<= pElement->m_xStream->UsesCommonEncryption_Impl();
                 }
                 else if ( m_nStorageType == embed::StorageFormats::OFOPXML )

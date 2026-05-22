@@ -107,7 +107,7 @@ PyObject* PyUNO_service_constructor_call(PyObject* self, PyObject* args,
         OUString sConstructorName = me->members.xConstructor->getName();
 
         if (sConstructorName.isEmpty() && me->members.xConstructor->isDefaultConstructor())
-            sConstructorName = "create";
+            sConstructorName = u"create"_ustr;
 
         OUStringBuffer buf(me->members.xService->getName() + "::" + sConstructorName
                            + " requires ");

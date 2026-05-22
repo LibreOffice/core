@@ -53,7 +53,7 @@ Sequence< Sequence< PropertyValue > > SAL_CALL ManifestReader::readManifestSeque
         Reference < XDocumentHandler > xFilter = new ManifestImport( aManVector );
         InputSource aParserInput;
         aParserInput.aInputStream = rStream;
-        aParserInput.sSystemId = "META-INF/manifest.xml";
+        aParserInput.sSystemId = u"META-INF/manifest.xml"_ustr;
         xParser->setDocumentHandler ( xFilter );
         xParser->parseStream( aParserInput );
         aManifestSequence = comphelper::containerToSequence(aManVector);

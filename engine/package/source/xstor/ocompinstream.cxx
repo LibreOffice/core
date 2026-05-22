@@ -535,7 +535,7 @@ uno::Any SAL_CALL OInputCompStream::getPropertyValue( const OUString& aProp )
 
     OUString aPropertyName;
     if ( aProp == "IsEncrypted" )
-        aPropertyName = "Encrypted";
+        aPropertyName = u"Encrypted"_ustr;
     else
         aPropertyName = aProp;
 

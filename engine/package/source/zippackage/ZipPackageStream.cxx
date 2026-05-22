@@ -465,11 +465,11 @@ bool ZipPackageStream::saveChild(
     const bool bToBeCompressed = bToBeEncrypted || m_bToBeCompressed;
 
     auto pPropSet = aPropSet.getArray();
-    pPropSet[PKG_MNFST_MEDIATYPE].Name = "MediaType";
+    pPropSet[PKG_MNFST_MEDIATYPE].Name = u"MediaType"_ustr;
     pPropSet[PKG_MNFST_MEDIATYPE].Value <<= GetMediaType( );
-    pPropSet[PKG_MNFST_VERSION].Name = "Version";
+    pPropSet[PKG_MNFST_VERSION].Name = u"Version"_ustr;
     pPropSet[PKG_MNFST_VERSION].Value <<= OUString(); // no version is stored for streams currently
-    pPropSet[PKG_MNFST_FULLPATH].Name = "FullPath";
+    pPropSet[PKG_MNFST_FULLPATH].Name = u"FullPath"_ustr;
     pPropSet[PKG_MNFST_FULLPATH].Value <<= pTempEntry->sPath;
 
     OSL_ENSURE( m_nStreamMode != PACKAGE_STREAM_NOTSET, "Unacceptable ZipPackageStream mode!" );
@@ -611,15 +611,15 @@ bool ZipPackageStream::saveChild(
             // a magic header
             aPropSet.realloc(PKG_SIZE_ENCR_MNFST);
             pPropSet = aPropSet.getArray();
-            pPropSet[PKG_MNFST_INIVECTOR].Name = "InitialisationVector";
+            pPropSet[PKG_MNFST_INIVECTOR].Name = u"InitialisationVector"_ustr;
             pPropSet[PKG_MNFST_INIVECTOR].Value <<= m_xBaseEncryptionData->m_aInitVector;
-            pPropSet[PKG_MNFST_SALT].Name = "Salt";
+            pPropSet[PKG_MNFST_SALT].Name = u"Salt"_ustr;
             pPropSet[PKG_MNFST_SALT].Value <<= m_xBaseEncryptionData->m_aSalt;
             if (m_xBaseEncryptionData->m_oArgon2Args)
             {
-                pPropSet[PKG_MNFST_KDF].Name = "KeyDerivationFunction";
+                pPropSet[PKG_MNFST_KDF].Name = u"KeyDerivationFunction"_ustr;
                 pPropSet[PKG_MNFST_KDF].Value <<= xml::crypto::KDFID::Argon2id;
-                pPropSet[PKG_MNFST_ARGON2ARGS].Name = "Argon2Args";
+                pPropSet[PKG_MNFST_ARGON2ARGS].Name = u"Argon2Args"_ustr;
                 uno::Sequence<sal_Int32> const args{
                     ::std::get<0>(*m_xBaseEncryptionData->m_oArgon2Args),
                     ::std::get<1>(*m_xBaseEncryptionData->m_oArgon2Args),
@@ -628,20 +628,20 @@ bool ZipPackageStream::saveChild(
             }
             else if (m_xBaseEncryptionData->m_oPBKDFIterationCount)
             {
-                pPropSet[PKG_MNFST_KDF].Name = "KeyDerivationFunction";
+                pPropSet[PKG_MNFST_KDF].Name = u"KeyDerivationFunction"_ustr;
                 pPropSet[PKG_MNFST_KDF].Value <<= xml::crypto::KDFID::PBKDF2;
-                pPropSet[PKG_MNFST_ITERATION].Name = "IterationCount";
+                pPropSet[PKG_MNFST_ITERATION].Name = u"IterationCount"_ustr;
                 pPropSet[PKG_MNFST_ITERATION].Value <<= *m_xBaseEncryptionData->m_oPBKDFIterationCount;
             }
             else
             {
-                pPropSet[PKG_MNFST_KDF].Name = "KeyDerivationFunction";
+                pPropSet[PKG_MNFST_KDF].Name = u"KeyDerivationFunction"_ustr;
                 pPropSet[PKG_MNFST_KDF].Value <<= xml::crypto::KDFID::PGP_RSA_OAEP_MGF1P;
             }
 
             // Need to store the uncompressed size in the manifest
             OSL_ENSURE( m_nOwnStreamOrigSize >= 0, "The stream size was not correctly initialized!" );
-            pPropSet[PKG_MNFST_UCOMPSIZE].Name = "Size";
+            pPropSet[PKG_MNFST_UCOMPSIZE].Name = u"Size"_ustr;
             pPropSet[PKG_MNFST_UCOMPSIZE].Value <<= m_nOwnStreamOrigSize;
 
             if ( m_bRawStream || bTransportOwnEncrStreamAsRaw )

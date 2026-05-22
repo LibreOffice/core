@@ -112,7 +112,7 @@ void ManifestImport::doEncryptedCipherValue()
 {
     if ( aKeyInfoSequence.size() == 3 )
     {
-        aKeyInfoSequence[2].Name = "CipherValue";
+        aKeyInfoSequence[2].Name = u"CipherValue"_ustr;
         uno::Sequence < sal_Int8 > aDecodeBuffer;
         ::comphelper::Base64::decode(aDecodeBuffer, aCurrentCharacters);
         aKeyInfoSequence[2].Value <<= aDecodeBuffer;
@@ -126,7 +126,7 @@ void ManifestImport::doEncryptedKeyId()
 {
     if ( aKeyInfoSequence.size() == 3 )
     {
-        aKeyInfoSequence[0].Name = "KeyId";
+        aKeyInfoSequence[0].Name = u"KeyId"_ustr;
         uno::Sequence < sal_Int8 > aDecodeBuffer;
         ::comphelper::Base64::decode(aDecodeBuffer, aCurrentCharacters);
         aKeyInfoSequence[0].Value <<= aDecodeBuffer;
@@ -140,7 +140,7 @@ void ManifestImport::doEncryptedKeyPacket()
 {
     if ( aKeyInfoSequence.size() == 3 )
     {
-        aKeyInfoSequence[1].Name = "KeyPacket";
+        aKeyInfoSequence[1].Name = u"KeyPacket"_ustr;
         uno::Sequence < sal_Int8 > aDecodeBuffer;
         ::comphelper::Base64::decode(aDecodeBuffer, aCurrentCharacters);
         aKeyInfoSequence[1].Value <<= aDecodeBuffer;
@@ -237,7 +237,7 @@ void ManifestImport::doKeyDerivation(StringHashMap &rConvertedAttribs)
     if (aString == PBKDF2_NAME || aString == PBKDF2_URL
         || aString == ARGON2ID_URL || aString == ARGON2ID_URL_LO)
     {
-        aSequence[PKG_MNFST_KDF].Name = "KeyDerivationFunction";
+        aSequence[PKG_MNFST_KDF].Name = u"KeyDerivationFunction"_ustr;
         if (aString == ARGON2ID_URL || aString == ARGON2ID_URL_LO)
         {
             aSequence[PKG_MNFST_KDF].Value <<= xml::crypto::KDFID::Argon2id;
@@ -256,7 +256,7 @@ void ManifestImport::doKeyDerivation(StringHashMap &rConvertedAttribs)
             sal_Int32 const p(aString.toInt32());
             if (0 < t && 0 < m && 0 < p)
             {
-                aSequence[PKG_MNFST_ARGON2ARGS].Name = "Argon2Args";
+                aSequence[PKG_MNFST_ARGON2ARGS].Name = u"Argon2Args"_ustr;
                 aSequence[PKG_MNFST_ARGON2ARGS].Value <<= uno::Sequence{t,m,p};
             }
             else
@@ -294,7 +294,7 @@ void ManifestImport::doKeyDerivation(StringHashMap &rConvertedAttribs)
         aSequence[PKG_MNFST_DERKEYSIZE].Value <<= nDerivedKeySize;
     } else if ( bPgpEncryption ) {
         if (aString == "PGP") {
-            aSequence[PKG_MNFST_KDF].Name = "KeyDerivationFunction";
+            aSequence[PKG_MNFST_KDF].Name = u"KeyDerivationFunction"_ustr;
             aSequence[PKG_MNFST_KDF].Value <<= xml::crypto::KDFID::PGP_RSA_OAEP_MGF1P;
         } else {
             bIgnoreEncryptData = true;
@@ -467,7 +467,7 @@ void SAL_CALL ManifestImport::endElement( const OUString& aName )
         // the first entry gets KeyInfo element if any, for PGP encryption
         if (!bIgnoreEncryptData && !aKeys.empty() && rManVector.empty())
         {
-            aSequence[PKG_MNFST_KEYINFO].Name = "KeyInfo";
+            aSequence[PKG_MNFST_KEYINFO].Name = u"KeyInfo"_ustr;
             aSequence[PKG_MNFST_KEYINFO].Value <<= comphelper::containerToSequence(aKeys);
         }
         std::erase_if(aSequence, isEmpty);

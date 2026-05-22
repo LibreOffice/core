@@ -864,14 +864,14 @@ uno::Sequence< beans::PropertyValue > OWriteStream_Impl::InsertOwnProps(
 
     if ( m_nStorageType == embed::StorageFormats::PACKAGE )
     {
-        aPropVal.Name = "UseCommonStoragePasswordEncryption";
+        aPropVal.Name = u"UseCommonStoragePasswordEncryption"_ustr;
         aPropVal.Value <<= bUseCommonEncryption;
     }
     else if ( m_nStorageType == embed::StorageFormats::OFOPXML )
     {
         ReadRelInfoIfNecessary();
 
-        aPropVal.Name = "RelationsInfo";
+        aPropVal.Name = u"RelationsInfo"_ustr;
         if ( m_nRelInfoStatus == RELINFO_READ )
             aPropVal.Value <<= m_aOrigRelInfo;
         else if ( m_nRelInfoStatus == RELINFO_CHANGED_STREAM_READ || m_nRelInfoStatus == RELINFO_CHANGED )
@@ -1653,12 +1653,12 @@ void OWriteStream::CopyToStreamInternally_Impl( const uno::Reference< io::XStrea
     xDestProps->setPropertyValue( aPropName, getPropertyValue( aPropName ) );
     if ( m_nStorageType == embed::StorageFormats::PACKAGE || m_nStorageType == embed::StorageFormats::OFOPXML )
     {
-        aPropName = "MediaType";
+        aPropName = u"MediaType"_ustr;
         xDestProps->setPropertyValue( aPropName, getPropertyValue( aPropName ) );
 
         if ( m_nStorageType == embed::StorageFormats::PACKAGE )
         {
-            aPropName = "UseCommonStoragePasswordEncryption";
+            aPropName = u"UseCommonStoragePasswordEncryption"_ustr;
             xDestProps->setPropertyValue( aPropName, getPropertyValue( aPropName ) );
         }
     }
@@ -2767,7 +2767,7 @@ uno::Any SAL_CALL OWriteStream::getPropertyValue( const OUString& aProp )
 
     OUString aPropertyName;
     if ( aProp == "IsEncrypted" )
-        aPropertyName = "Encrypted";
+        aPropertyName = u"Encrypted"_ustr;
     else
         aPropertyName = aProp;
 

@@ -1165,7 +1165,7 @@ void ZipPackage::WriteManifest( ZipOutputStream& aZipOut, const std::vector< uno
     auto pEntry = std::make_unique<ZipEntry>();
     rtl::Reference<ZipPackageBuffer> pBuffer = new ZipPackageBuffer;
 
-    pEntry->sPath = "META-INF/manifest.xml";
+    pEntry->sPath = u"META-INF/manifest.xml"_ustr;
     pEntry->nMethod = DEFLATED;
     pEntry->nCrc = -1;
     pEntry->nCompressedSize = -1;
@@ -1192,7 +1192,7 @@ void ZipPackage::WriteContentTypes( ZipOutputStream& aZipOut, const std::vector<
     auto pEntry = std::make_unique<ZipEntry>();
     rtl::Reference<ZipPackageBuffer> pBuffer = new ZipPackageBuffer;
 
-    pEntry->sPath = "[Content_Types].xml";
+    pEntry->sPath = u"[Content_Types].xml"_ustr;
     pEntry->nMethod = DEFLATED;
     pEntry->nCrc = -1;
     pEntry->nCompressedSize = -1;
@@ -1381,7 +1381,7 @@ uno::Reference< io::XInputStream > ZipPackage::writeTempFile()
 
             if( bIsGpgEncrypt )
             {
-                pPropSeq[PKG_SIZE_NOENCR_MNFST].Name = "KeyInfo";
+                pPropSeq[PKG_SIZE_NOENCR_MNFST].Name = u"KeyInfo"_ustr;
                 pPropSeq[PKG_SIZE_NOENCR_MNFST].Value <<= m_aGpgProps;
             }
             aManList.push_back( aPropSeq );

@@ -345,29 +345,29 @@ void Test::createInstance(
     if (name == "com.sun.star.comp.configuration.ConfigurationProvider") {
         // Instantiating a ConfigurationProvider with no or empty args must
         // return theDefaultProvider:
-        expImpl = "com.sun.star.comp.configuration.DefaultProvider";
+        expImpl = u"com.sun.star.comp.configuration.DefaultProvider"_ustr;
         expServs = {u"com.sun.star.configuration.DefaultProvider"_ustr};
     } else if (name == "com.sun.star.datatransfer.clipboard.SystemClipboard") {
         // SystemClipboard is a wrapper returning either a platform-specific or
         // the generic VCLGenericClipboard:
-        expImpl = "com.sun.star.datatransfer.VCLGenericClipboard";
+        expImpl = u"com.sun.star.datatransfer.VCLGenericClipboard"_ustr;
     } else if (name == "com.sun.star.ui.dialogs.FolderPicker") {
         // FolderPicker is a wrapper returning either a platform-specific or the
         // generic OfficeFolderPicker. In headless mode it is always the
         // generic one.
-        expImpl = "com.sun.star.svtools.OfficeFolderPicker";
+        expImpl = u"com.sun.star.svtools.OfficeFolderPicker"_ustr;
         expServs = {u"com.sun.star.ui.dialogs.OfficeFolderPicker"_ustr};
     } else if (expImpl == "com.sun.star.comp.Calc.SpreadsheetDocument") {
-        expImpl = "ScModelObj";
+        expImpl = u"ScModelObj"_ustr;
     } else if (expImpl == "com.sun.star.comp.Draw.DrawingDocument"
                || expImpl == "com.sun.star.comp.Draw.PresentationDocument")
     {
-        expImpl = "SdXImpressDocument";
+        expImpl = u"SdXImpressDocument"_ustr;
     } else if (expImpl == "com.sun.star.comp.Writer.GlobalDocument"
                || expImpl == "com.sun.star.comp.Writer.TextDocument"
                || expImpl == "com.sun.star.comp.Writer.WebDocument")
     {
-        expImpl = "SwXTextDocument";
+        expImpl = u"SwXTextDocument"_ustr;
     }
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
         (OString(

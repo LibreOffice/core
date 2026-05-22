@@ -208,7 +208,7 @@ static PyRef createClassForService(
         if (sName.isEmpty())
         {
             if (xConstructor->isDefaultConstructor())
-                sName = "create";
+                sName = u"create"_ustr;
             else
                 continue;
         }

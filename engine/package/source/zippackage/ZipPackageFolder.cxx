@@ -246,11 +246,11 @@ bool ZipPackageFolder::saveChild(
     if ( !GetMediaType().isEmpty() )
     {
         auto pPropSet = aPropSet.getArray();
-        pPropSet[PKG_MNFST_MEDIATYPE].Name = "MediaType";
+        pPropSet[PKG_MNFST_MEDIATYPE].Name = u"MediaType"_ustr;
         pPropSet[PKG_MNFST_MEDIATYPE].Value <<= GetMediaType();
-        pPropSet[PKG_MNFST_VERSION].Name = "Version";
+        pPropSet[PKG_MNFST_VERSION].Name = u"Version"_ustr;
         pPropSet[PKG_MNFST_VERSION].Value <<= GetVersion();
-        pPropSet[PKG_MNFST_FULLPATH].Name = "FullPath";
+        pPropSet[PKG_MNFST_FULLPATH].Name = u"FullPath"_ustr;
         pPropSet[PKG_MNFST_FULLPATH].Value <<= sTempName;
     }
     else
