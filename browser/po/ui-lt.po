@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-11 14:06+0200\n"
-"PO-Revision-Date: 2026-05-17 10:11+0000\n"
+"PO-Revision-Date: 2026-05-22 17:11+0000\n"
 "Last-Translator: dukezas <dukezas@gmail.com>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/collabora-"
 "online/collabora-ui/lt/>\n"
@@ -2755,7 +2755,7 @@ msgstr "Lentelės dizainas"
 
 #: src/control/Notebookbar.CalcTableTab.ts:72
 msgid "Table Options"
-msgstr ""
+msgstr "Lentelės parinktys"
 
 #: src/control/Notebookbar.CalcTableTab.ts:85
 msgid "Header Row"
@@ -2881,7 +2881,7 @@ msgstr "Palieskite, kad sutrauktumėte"
 #: src/control/Control.NotebookbarBuilder.js:442
 #: src/control/Control.NotebookbarBuilder.js:475
 msgid "PDF Document (.pdf) with options"
-msgstr ""
+msgstr "PDF dokumentas (.pdf) su parinktimis"
 
 #: src/control/Control.NotebookbarBuilder.js:410
 #: src/control/Control.NotebookbarBuilder.js:433
@@ -2962,7 +2962,7 @@ msgstr "Paveikslėlis"
 #: src/control/Control.NotebookbarImpress.js:143
 #: src/control/Control.NotebookbarWriter.js:103
 msgid "Chart"
-msgstr ""
+msgstr "Diagrama"
 
 #: src/control/Control.NotebookbarCalc.js:99
 #: src/control/Control.NotebookbarDraw.js:122
@@ -3031,7 +3031,7 @@ msgstr "Iškarpinė"
 #: src/control/Control.NotebookbarWriter.js:648
 #: src/control/Control.TopToolbar.js:148
 msgid "Clone Formatting (double click to keep active)"
-msgstr ""
+msgstr "Formatavimo klonavimas (dukart spustelėkite, kad išliktų aktyvus)"
 
 #: src/control/Control.NotebookbarCalc.js:456
 #: src/control/Control.NotebookbarDraw.js:649
@@ -3040,6 +3040,8 @@ msgstr ""
 #: src/control/Control.TopToolbar.js:148
 msgid "Clone Formatting is active (click again or press Esc to exit)"
 msgstr ""
+"Formatavimo klonavimas aktyvus (spustelėkite dar kartą arba paspauskite Esc, "
+"kad išeitumėte)"
 
 #: src/control/Control.NotebookbarCalc.js:492
 #: src/control/Control.NotebookbarDraw.js:685
@@ -3296,15 +3298,16 @@ msgstr "Lentelė"
 #: src/control/Control.NotebookbarCalc.js:1787
 #: src/control/Control.NotebookbarCalc.js:1790
 msgid "Table styles are only available in .xlsx files"
-msgstr ""
+msgstr "Lentelių stiliai galimi tik .xlsx failuose"
 
 #: src/control/Control.NotebookbarCalc.js:1788
 msgid "Insert a styled table"
-msgstr ""
+msgstr "Įterpti stilizuotą lentelę"
 
 #: src/control/Control.NotebookbarCalc.js:1791
 msgid "Select a cell range first to insert a styled table"
 msgstr ""
+"Pirmiausia pasirinkite langelių diapazoną, kad įterptumėte stilizuotą lentelę"
 
 #: src/control/Control.NotebookbarCalc.js:1800
 #: src/control/Control.NotebookbarDraw.js:1027
@@ -3383,7 +3386,7 @@ msgstr "Filtruoti"
 #: src/control/Control.NotebookbarImpress.js:2042
 #: src/control/Control.NotebookbarWriter.js:2264
 msgid "Auto Spell Check"
-msgstr ""
+msgstr "Automatinis rašybos tikrinimas"
 
 #: src/control/Control.NotebookbarCalc.js:2644
 #: src/control/Control.NotebookbarImpress.js:2072
@@ -3451,7 +3454,7 @@ msgstr "Pagrindinė(is)"
 
 #: src/control/Control.NotebookbarImpress.js:479
 msgid "Start Slide Show"
-msgstr ""
+msgstr "Pradėti skaidrių demonstravimą"
 
 #: src/control/Control.NotebookbarImpress.js:484
 msgid "From Beginning"
@@ -3459,7 +3462,7 @@ msgstr "Nuo pradžių"
 
 #: src/control/Control.NotebookbarImpress.js:485
 msgid "Fullscreen, starting at slide 1"
-msgstr ""
+msgstr "Visas ekranas, pradedant nuo 1 skaidrės"
 
 #: src/control/Control.NotebookbarImpress.js:492
 msgid "From Current Slide"
@@ -3467,11 +3470,11 @@ msgstr "Nuo esamos skaidrės"
 
 #: src/control/Control.NotebookbarImpress.js:493
 msgid "Fullscreen, starting at this slide"
-msgstr ""
+msgstr "Visas ekranas, pradedant nuo šios skaidrės"
 
 #: src/control/Control.NotebookbarImpress.js:508
 msgid "Present"
-msgstr ""
+msgstr "Esamas"
 
 #: src/control/Control.NotebookbarImpress.js:514
 msgid "Present in Window"
@@ -3479,7 +3482,7 @@ msgstr "Pateikti lange"
 
 #: src/control/Control.NotebookbarImpress.js:515
 msgid "Plays inside the document window. Starts at slide 1"
-msgstr ""
+msgstr "Paleidžiama dokumento lange. Prasideda nuo 1 skaidrės"
 
 #: src/control/Control.NotebookbarImpress.js:523
 msgid "Presenter View"
@@ -3487,7 +3490,7 @@ msgstr "Pranešėjo rodinys"
 
 #: src/control/Control.NotebookbarImpress.js:524
 msgid "Shows your notes, next slide, and a timer"
-msgstr ""
+msgstr "Rodo jūsų užrašus, sekančią skaidrę ir laikmatį"
 
 #: src/control/Control.NotebookbarImpress.js:532
 msgid "Present to All"
@@ -3495,7 +3498,7 @@ msgstr "Rodyti Visiems"
 
 #: src/control/Control.NotebookbarImpress.js:533
 msgid "Starts a slideshow on every viewer's screen"
-msgstr ""
+msgstr "Pradeda skaidrių demonstraciją kiekvieno žiūrovo ekrane"
 
 #: src/control/Control.NotebookbarImpress.js:541
 #: src/slideshow/SlideShowPresenter.ts:1516
@@ -3504,11 +3507,11 @@ msgstr "Sekti pranešėją"
 
 #: src/control/Control.NotebookbarImpress.js:542
 msgid "View slides as the presenter advances them"
-msgstr ""
+msgstr "Skaidrių peržiūra pranešėjui jas keičiant"
 
 #: src/control/Control.NotebookbarImpress.js:552
 msgid "Set Up"
-msgstr ""
+msgstr "Nustatyti"
 
 #: src/control/Control.NotebookbarImpress.js:679
 msgid "Slide Views"
@@ -3551,7 +3554,7 @@ msgstr "Šis pristatymas"
 
 #: src/control/Control.NotebookbarImpress.js:1876
 msgid "Presentation Templates"
-msgstr ""
+msgstr "Prezentacijos šablonai"
 
 #: src/control/Control.NotebookbarImpress.js:1947
 msgid "Slide Size"
@@ -3629,11 +3632,11 @@ msgstr "Puslapio plotis"
 
 #: src/control/Control.NotebookbarWriter.js:2239
 msgid "Spellcheck"
-msgstr ""
+msgstr "Rašybos Tikrinimas"
 
 #: src/control/Control.NotebookbarWriter.js:2252
 msgid "Spelling Options"
-msgstr ""
+msgstr "Rašybos parinktys"
 
 #: src/control/Control.NotebookbarWriter.js:2292
 #: src/control/Control.NotebookbarWriter.js:2308
@@ -3668,28 +3671,28 @@ msgstr "Įklijuoti"
 
 #: src/control/Control.PartsPreview.js:422
 msgid "Add Section"
-msgstr ""
+msgstr "Pridėti skyrių"
 
 #: src/control/Control.PartsPreview.js:564
 #: src/control/Control.PartsPreview.js:637
 msgid "Rename Section"
-msgstr ""
+msgstr "Pervadinti skyrių"
 
 #: src/control/Control.PartsPreview.js:571
 msgid "Move Section Up"
-msgstr ""
+msgstr "Perkelti skyrių į viršų"
 
 #: src/control/Control.PartsPreview.js:579
 msgid "Move Section Down"
-msgstr ""
+msgstr "Perkelti skyrių žemyn"
 
 #: src/control/Control.PartsPreview.js:586
 msgid "Remove Section"
-msgstr ""
+msgstr "Pašalinti skyrių"
 
 #: src/control/Control.PartsPreview.js:638
 msgid "Enter new section name:"
-msgstr ""
+msgstr "Įveskite naują skyriaus pavadinimą:"
 
 #: src/control/Control.SaveState.ts:49
 msgid "Saving"
@@ -3888,11 +3891,11 @@ msgstr "Pasirinkimų skaičius"
 
 #: src/control/Control.StatusBar.js:267
 msgid "Previous Page"
-msgstr ""
+msgstr "Ankstenis puslapis"
 
 #: src/control/Control.StatusBar.js:269
 msgid "Next Page"
-msgstr ""
+msgstr "Sekantis puslapis"
 
 #: src/control/Control.StatusBar.js:275
 msgid "Zoom to Fit Page Width"
@@ -3900,7 +3903,7 @@ msgstr "Priartinti, kad tilptų į puslapį"
 
 #: src/control/Control.StatusBar.js:280
 msgid "Status Bar Menu"
-msgstr ""
+msgstr "Būsenos juostos meniu"
 
 #: src/control/Control.StatusBar.js:553
 msgid "The document is probably locked and has been opened as view-only"
@@ -4541,15 +4544,15 @@ msgstr "Labai išplėstas"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1802
 msgid "Inline"
-msgstr ""
+msgstr "Įterptinis"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1809
 msgid "Side by Side"
-msgstr ""
+msgstr "Vienas šalia kito"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1815
 msgid "Hidden"
-msgstr ""
+msgstr "Paslėptas"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1829
 msgid "All users"
@@ -4780,7 +4783,7 @@ msgstr "Automatiškas"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:253
 msgid "Palette"
-msgstr ""
+msgstr "Paletė"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:268
 msgid "Color palette"
@@ -4837,7 +4840,7 @@ msgstr "Pažymėta langelių sritis"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:44
 msgid "Cell Selection"
-msgstr ""
+msgstr "Langelių pasirinkimas"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:48
 msgid "Entering text mode"
@@ -4845,7 +4848,7 @@ msgstr "Įjungiamas teksto režimas"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:49
 msgid "Insert Mode"
-msgstr ""
+msgstr "Įterpties režimas"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:54
 msgid "Selection Mode"
@@ -4862,7 +4865,7 @@ msgstr "Funkcijų parinkimas"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:68
 msgid "Table Cell Functions"
-msgstr ""
+msgstr "Lentelės langelių funkcijos"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:73
 msgid "Your changes have been saved"
@@ -4890,11 +4893,11 @@ msgstr "atsakymai"
 
 #: src/control/jsdialog/Widget.SpinField.ts:275
 msgid "Increment value"
-msgstr ""
+msgstr "Padidinti reikšmę"
 
 #: src/control/jsdialog/Widget.SpinField.ts:284
 msgid "Decrement value"
-msgstr ""
+msgstr "Sumažinti reikšmę"
 
 #: src/control/jsdialog/Widget.SidebarContainers.ts:72
 msgid "More options for {1}"
@@ -5037,6 +5040,8 @@ msgstr "Serveris išsijungia"
 msgid ""
 "AI is not configured. Go to File > Options > View Settings to set it up."
 msgstr ""
+"Dirbtinis intelektas (DI) nesukonfigūruotas. Norėdami jį nustatyti, eikite į "
+"Failas > Parinktys > Rodinio nustatymai."
 
 #: src/docdispatcher.ts:607
 msgid "Are you sure you want to delete this slide?"
