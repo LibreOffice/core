@@ -28,11 +28,14 @@
 
 namespace sfx2 { class LinkManager; }
 class SwDoc;
+class SwContentNode;
+class SwFormat;
 class SwPaM;
 class SwNodeRange;
 
 namespace sw
 {
+class FillBitmapLinkTracker;
 
 class DocumentLinksAdministrationManager final : public IDocumentLinksAdministration
 {
@@ -62,6 +65,9 @@ public:
 
     bool LinksUpdated() const override;
 
+    void onFillBitmapURLChanged(SwFormat& rFormat, std::u16string_view rNewURL) override;
+    void onFillBitmapURLChanged(SwContentNode& rNode, std::u16string_view rNewURL) override;
+
     //Non-Interface method
     bool SelectServerObj( std::u16string_view rStr, SwPaM*& rpPam, std::optional<SwNodeRange>& rpRange ) const;
 
@@ -75,6 +81,9 @@ private:
     bool mbVisibleLinks; //< TRUE: Links are inserted visibly.
     bool mbLinksUpdated; //< #i38810# flag indicating, that the links have been updated.
     std::unique_ptr<sfx2::LinkManager> m_pLinkMgr; //< List of linked stuff (graphics/DDE/OLE).
+    // Tracker owns SvBaseLinks held by m_pLinkMgr and removes them on its
+    // own destruction, so it must be destroyed before the LinkManager.
+    std::unique_ptr<FillBitmapLinkTracker> m_pFillBitmapLinkTracker;
 
     SwDoc& m_rDoc;
 };

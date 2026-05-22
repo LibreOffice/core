@@ -18,6 +18,7 @@
  */
 
 #include <DocumentSettingManager.hxx> //For SwFmt::getIDocumentSettingAccess()
+#include <FillBitmapNotify.hxx>
 #include <IDocumentTimerAccess.hxx>
 #include <doc.hxx>
 #include <fmtcolfunc.hxx>
@@ -264,6 +265,7 @@ void SwFormat::SwClientNotify(const SwModify&, const SfxHint& rHint)
             else
                 oDependsHint.reset();
         }
+        sw::notifyFillBitmapIfChanged(*this, &m_aSet, pOldAttrSetChg, pNewAttrSetChg);
         if(oDependsHint)
         {
             InvalidateInSwFntCache();
@@ -566,6 +568,7 @@ bool SwFormat::SetFormatAttr( const SfxItemSet& rSet )
                 if( bRet )
                 {
                     m_aSet.SetModifyAtAttr( this );
+                    sw::notifyFillBitmapForPutSet(*this, aTempSet, &m_aSet);
                 }
             }
             else
@@ -595,7 +598,10 @@ bool SwFormat::SetFormatAttr( const SfxItemSet& rSet )
     {
         bRet = m_aSet.Put( aTempSet );
         if( bRet )
+        {
             m_aSet.SetModifyAtAttr( this );
+            sw::notifyFillBitmapForPutSet(*this, aTempSet, &m_aSet);
+        }
         // #i71574#
         if ( nFormatWhich == RES_TXTFMTCOLL )
         {
