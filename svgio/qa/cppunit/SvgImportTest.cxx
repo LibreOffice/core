@@ -1667,6 +1667,22 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf156837)
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]", "text", u"3");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testBaselineShiftPercent)
+{
+    xmlDocUniquePtr pDocument
+        = dumpAndParseSvg(u"/svgio/qa/cppunit/data/baseline-shift-percent.svg");
+
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion", 2);
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "text", u"Au");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "height", u"40");
+
+    // Without the fix the percentage collapsed to zero and the tspan
+    // sat on the same baseline as "Au" (y == 100).
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]", "text", u"3+");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]", "y", u"80");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]", "height", u"40");
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf160773)
 {
     xmlDocUniquePtr pDocument = dumpAndParseSvg(u"/svgio/qa/cppunit/data/tdf160773.svg");
