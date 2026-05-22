@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-11 14:06+0200\n"
-"PO-Revision-Date: 2024-04-23 16:51+0000\n"
-"Last-Translator: SC <lalocas@protonmail.com>\n"
+"PO-Revision-Date: 2026-05-22 17:11+0000\n"
+"Last-Translator: Gabriel <bloxgabriel18@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "collabora-online/help/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Translate Toolkit 3.6.0\n"
+"X-Generator: Weblate 2026.6.dev0\n"
 
 #: html/cool-help.html%2Bdiv.h1:9-5
 msgid "Keyboard Shortcuts"
@@ -60,17 +60,17 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:16-38
 msgid "Copy"
-msgstr ""
+msgstr "Cópia"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:16-69
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>C</kbd>,<br /><kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-"
 "hidden=\"true\">+</span><kbd>Insert</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Shift</kbd><span class="
-"\"kbd--plus\">+</span><kbd>Enter</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"C</kbd>,<br /><kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">"
+"+</span><kbd>Insert</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:17-38
 msgid "Paste as unformatted text"
@@ -1733,18 +1733,19 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.h2:188-9
 msgid "Insert"
-msgstr ""
+msgstr "Inserir"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:190-38
 msgid "Insert date"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:190-76
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>;</kbd> or <kbd>,</kbd>"
-msgstr "<kbd>Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>↑</kbd>"
+msgstr ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+";</kbd> or <kbd>,</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:214-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:279-38
@@ -2508,14 +2509,12 @@ msgid ""
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.p:478-5
-#, fuzzy
 msgid ""
 "Click on the submenu (<span class=\"cool-annotation-menu icon-size\"></span>)"
 " icon to reply, move and delete comments."
 msgstr ""
-"Clique no ícone do submenu (<span class=\"cool-annotation-menu\" style="
-"\"height:0.6cm;width:0.6cm;\"></span>) para responder, mover e excluir "
-"comentários."
+"Clique no ícone do submenu (<span class=\"cool-annotation-menu icon-size\"></"
+"span>) para responder, mover e excluir comentários."
 
 #: html/cool-help.html%2Bdiv.div.div.h4:481-5
 msgid "Spellchecking"
@@ -3500,7 +3499,9 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:730-5
 msgid "How do I change the page orientation to landscape inside my document?"
-msgstr "Como mudar a orientação da página para paisagem dentro do meu documento"
+msgstr ""
+"Como faço para alterar a orientação da página para paisagem dentro do meu "
+"documento?"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:732-7
 msgid ""
@@ -3556,15 +3557,14 @@ msgstr "Selecione o texto com o formato existente"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:745-7
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:787-7
-#, fuzzy
 msgid ""
 "Click on the clone formatting icon <img alt=\"format paintbrush\" class"
 "=\"icon-size\" src=\"images/lc_formatpaintbrush.svg\" />. The mouse pointer "
 "turns to a paint bucket."
 msgstr ""
-"Clique no ícone Clonar formatação <img style=\"height:0.6cm;width:0.6cm;\" "
-"alt=\"\" src=\"images/lc_formatpaintbrush.svg\">. O ponteiro do mouse muda "
-"para um balde de tinta."
+"Clique no ícone Clonar formatação <img alt=\"format paintbrush\" "
+"class=\"icon-size\" src=\"images/lc_formatpaintbrush.svg\" />. O ponteiro do "
+"mouse muda para um balde de tinta."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:746-7
 msgid "Select the text you want to apply the new format."

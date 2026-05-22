@@ -12,17 +12,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-11 14:06+0200\n"
-"PO-Revision-Date: 2026-04-08 21:56+0000\n"
-"Last-Translator: Leonardo Oliveira <oliveiraleo@users.noreply.hosted.weblate."
-"org>\n"
+"PO-Revision-Date: 2026-05-22 17:11+0000\n"
+"Last-Translator: Gabriel <bloxgabriel18@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
-"collabora-online/ui/pt_BR/>\n"
-"Language: \n"
+"collabora-online/collabora-ui/pt_BR/>\n"
+"Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.17-dev\n"
+"X-Generator: Weblate 2026.6.dev0\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -1603,7 +1602,7 @@ msgstr "Baixando conteúdo de área de transferência"
 #: src/control/Control.DownloadProgress.js:112
 #: src/control/Control.PartsPreview.js:346 src/map/Clipboard.js:1523
 msgid "Copy"
-msgstr "Copiar"
+msgstr "Cópia"
 
 #: src/control/Control.DownloadProgress.js:110
 msgid "Download completed and ready to be copied to clipboard."
@@ -2926,9 +2925,8 @@ msgid "Page Layout"
 msgstr "Layout de página"
 
 #: src/control/Control.NotebookbarCalc.js:54
-#, fuzzy
 msgid "Formulas"
-msgstr "Fórmula"
+msgstr "Fórmulas"
 
 #: src/control/Control.NotebookbarCalc.js:60
 msgid "Data"
@@ -5802,19 +5800,19 @@ msgstr ""
 
 #: templates/templates.js:266
 msgid "Sunset"
-msgstr ""
+msgstr "Pôr do sol"
 
 #: templates/templates.js:276
 msgid "Vintage"
-msgstr ""
+msgstr "Vintage"
 
 #: templates/templates.js:286
 msgid "Vivid"
-msgstr ""
+msgstr "Vívido"
 
 #: templates/templates.js:296
 msgid "Yellow Idea"
-msgstr ""
+msgstr "Ideia Amarela"
 
 #: welcome/welcome.html%2Bhtml.head.title:9-3
 msgid "Collabora Online Welcome"
@@ -5830,7 +5828,6 @@ msgid "Collabora Online Development Edition"
 msgstr "Collabora Online Edição Desenvolvimento"
 
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.p:28-7
-#, fuzzy
 msgid ""
 "Enjoy the latest developments in online productivity, free for you to use, "
 "to explore and to use with others in the browser. Various <a "
@@ -5840,26 +5837,24 @@ msgid ""
 msgstr ""
 "Aproveite os últimos desenvolvimentos em produtividade online, grátis para "
 "você usar, explorar e usar com outros no navegador. <a target=\"_blank\" "
-"href=\"https://www.collaboraonline.com/solutions/"
-"collabora-office-android-ios/\">Apps</a> também estão disponíveis para "
-"telemóvel."
+"rel=\"noopener\" href=\"https://www.collaboraonline.com/solutions/collabora-"
+"office-android-ios/\">Apps</a> também estão disponíveis para telemóvel."
 
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.h1:37-7
 msgid "Discover All The Changes"
 msgstr "Descubra todas as mudanças"
 
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.p:39-7
-#, fuzzy
 msgid ""
 "Check the <a target=\"_blank\" rel=\"noopener\" href=\"https://www."
 "collaboraonline.com/code-25-04-release-notes/\">release notes</a> and learn "
 "all about: The latest Collabora Online Development Edition, aimed at home "
 "users and small teams."
 msgstr ""
-"Verifique as <a target=\"_blank\" href=\"https://www.collaboraonline.com/"
-"code-25-04-release-notes/\">notas de lançamento</a> e saiba tudo sobre: A "
-"última edição do Collabora Online Development, destinada a utilizadores "
-"domésticos e pequenas equipas."
+"Verifique as <a target=\"_blank\" rel=\"noopener\" href=\"https://"
+"www.collaboraonline.com/code-25-04-release-notes/\">notas de lançamento</a> "
+"e saiba tudo sobre: A última edição do Collabora Online Development, "
+"destinada a utilizadores domésticos e pequenas equipas."
 
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.h1:48-7
 msgid "Get Involved"
@@ -5870,7 +5865,6 @@ msgid "https://www.collaboraonline.org/"
 msgstr "https://www.collaboraonline.org/"
 
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.p:50-7
-#, fuzzy
 msgid ""
 "Are you interested in contributing but don’t know where to start? Head over "
 "to the <a target=\"_blank\" rel=\"noopener\" href=\"https://collaboraonline."
@@ -5882,13 +5876,14 @@ msgid ""
 "report</a> with all the essential steps on how to reproduce it."
 msgstr ""
 "Você está interessado em contribuir, mas não sabe por onde começar? Acesse "
-"às <a target=\"_blank\" href=\"https://www.collaboraonline.org/post/"
-"build-code/\">instruções passo a passo</a> e construa CODE a partir do zero. "
-"Você também pode ajudar com <a target=\"_blank\" href=\"https"
-"://www.collaboraonline.org/post/translate/\">traduções</a> ou <a target="
-"\"_blank\" href=\"https://www.collaboraonline.org/post/filebugs/\""
-">preenchendo relatórios de erros</a> com todos os passos essenciais sobre "
-"como reproduzi-los."
+"às <a target=\"_blank\" rel=\"noopener\" href=\"https://"
+"collaboraonline.github.io/post/build-code/\">instruções passo a passo</a> e "
+"construa CODE a partir do zero. Você também pode ajudar com <a "
+"target=\"_blank\" rel=\"noopener\" href=\"https://www.collaboraonline.org/"
+"post/translate/\">traduções</a> ou <a target=\"_blank\" rel=\"noopener\" "
+"href=\"https://www.collaboraonline.org/post/filebugs/\">preenchendo "
+"relatórios de erros</a> com todos os passos essenciais sobre como reproduzi-"
+"los."
 
 #: welcome/welcome.html%2Bhtml.body.div.div:55-5
 msgid ""
