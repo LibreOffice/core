@@ -1186,6 +1186,10 @@ img.context-menu-icon {
 	color: var(--color-text-light);
 }
 
+.jsdialog input[type='checkbox'][disabled='disabled'] ~ label {
+	color: var(--color-text-light);
+}
+
 /* text label */
 
 .ui-dialog-content .jsdialog.ui-text {
