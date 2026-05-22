@@ -3942,6 +3942,13 @@ void SwTextFrame::CalcHeightOfLastLine( const bool _bUseFont )
                 }
                 if ( pLineLayout )
                 {
+                    if (pIDSA->get(DocumentSettingId::LINE_SPACING_AS_GAP_BELOW))
+                    {
+                        // last line's line-spacing gap calculated the same as all other lines...
+                        mnHeightOfLastLine = pLineLayout->GetLineSpacingBaseHeight();
+                        return;
+                    }
+
                     SwTwips nAscent, nDescent, nDummy1, nDummy2;
                     // i#47162 - suppress consideration of
                     // fly content portions and the line portion.
@@ -4001,8 +4008,6 @@ tools::Long SwTextFrame::GetLineSpace( const bool _bNoPropLineSpace ) const
                 break;
             }
 
-            // i#11860 - adjust spacing implementation for object positioning
-            // - compatibility to MS Word
             nRet = GetHeightOfLastLine();
 
             tools::Long nTmp = nRet;

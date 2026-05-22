@@ -934,14 +934,14 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testHiddenParaLineHeight)
         assertXPath(pXmlDoc, "/root/page[1]/body/txt[4]/infos/bounds", "height", u"767");
         assertXPath(pXmlDoc, "/root/page[1]/body/txt[5]/infos/bounds", "height", u"475");
         assertXPath(pXmlDoc, "/root/page[1]/body/txt[6]/infos/bounds", "height", u"450");
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[7]/infos/bounds", "height", u"475");
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[7]/infos/bounds", "height", u"450");
         // 4: this was using wrong node's character properties (height 767)
         assertXPath(pXmlDoc, "/root/page[1]/body/txt[8]/infos/bounds", "height", u"450");
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[9]/infos/bounds", "height", u"475");
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[9]/infos/bounds", "height", u"450");
         assertXPath(pXmlDoc, "/root/page[1]/body/txt[10]/infos/bounds", "height", u"767");
         assertXPath(pXmlDoc, "/root/page[1]/body/txt[11]/infos/bounds", "height", u"475");
         assertXPath(pXmlDoc, "/root/page[1]/body/txt[12]/infos/bounds", "height", u"450");
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[13]/infos/bounds", "height", u"475");
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[13]/infos/bounds", "height", u"450");
         assertXPath(pXmlDoc, "/root/page[1]/body/txt[14]/infos/bounds", "height", u"450");
         assertXPath(pXmlDoc, "/root/page[1]/body/txt[15]/infos/bounds", "height", u"450");
         assertXPath(pXmlDoc, "/root/page[1]/body/txt[16]/infos/bounds", "height", u"767");

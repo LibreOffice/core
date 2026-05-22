@@ -52,15 +52,23 @@ DECLARE_OOXMLEXPORT_TEST(testTdf137335_whitespaceLineHeight, "tdf137335_whitespa
     CPPUNIT_ASSERT_EQUAL(SwTwips(276), Height);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf137335_whitespaceLineHeight2,
+                         "tdf137335_whitespaceLineHeight2.docx")
+{
+    // given a double-spaced document where the last line contains some very large spaces,
+    // the calculated linespacing between paragraphs should also not be based on the space's height.
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf164835_nonDummyLineHeight, "tdf164835_nonDummyLineHeight.docx")
 {
     // given a document where whitespace-only lines wrap beside an image
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     auto pXmlDoc = parseLayoutDump();
 
     SwTwips nImageBottom = getXPath(pXmlDoc, "//fly/infos/bounds", "bottom").toInt32();
-    // CPPUNIT_ASSERT_EQUAL(1, getPages()); // should all be on a single page
-    assertXPathContent(pXmlDoc, "//page[2]/body/txt", u"Text below the picture");
-    SwTwips nTextTop = getXPath(pXmlDoc, "//page[2]/body/txt/infos/bounds", "top").toInt32();
+    assertXPathContent(pXmlDoc, "//page/body/txt[5]", u"Text below the picture");
+    SwTwips nTextTop = getXPath(pXmlDoc, "//page/body/txt[5]/infos/bounds", "top").toInt32();
     // Without the fix, the text in paragraph 5 was beside the image.
     CPPUNIT_ASSERT_GREATER(nImageBottom, nTextTop); // text is below the image
 }
@@ -69,6 +77,13 @@ DECLARE_OOXMLEXPORT_TEST(testTdf172113_linespacingComment, "tdf172113_linespacin
 {
     // given a two page document - triple spaced with a comment in an otherwise empty paragraph
     CPPUNIT_ASSERT_EQUAL(2, getPages());
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf172113_linespacingNumbering, "tdf172113_linespacingNumbering.odt")
+{
+    // given a 1 page, double spaced ODT created with the new LINE_SPACING_AS_GAP_BELOW
+    // containing 4 enlarged-numbering lines.
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf172169_linespacingFootnote, "tdf172169_linespacingFootnote.odt")
