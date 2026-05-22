@@ -277,7 +277,7 @@ void lcl_parseHandlePosition(std::vector<beans::PropertyValue>& rHandle, std::st
                                        aToken.size() - strlen(aExpectedPrefix) - strlen(" } }"));
 
                 beans::PropertyValue aPropertyValue;
-                aPropertyValue.Name = "Position";
+                aPropertyValue.Name = u"Position"_ustr;
                 aPropertyValue.Value <<= lcl_parseEnhancedCustomShapeParameterPair(aToken);
                 rHandle.push_back(aPropertyValue);
             }
@@ -484,7 +484,7 @@ void lcl_parsePathCoordinateValues(std::vector<beans::PropertyValue>& rPath,
     }
 
     beans::PropertyValue aPropertyValue;
-    aPropertyValue.Name = "Coordinates";
+    aPropertyValue.Name = u"Coordinates"_ustr;
     aPropertyValue.Value <<= comphelper::containerToSequence(aPairs);
     rPath.push_back(aPropertyValue);
 }
@@ -552,7 +552,7 @@ void lcl_parsePathGluePointsValues(std::vector<beans::PropertyValue>& rPath,
     }
 
     beans::PropertyValue aPropertyValue;
-    aPropertyValue.Name = "GluePoints";
+    aPropertyValue.Name = u"GluePoints"_ustr;
     aPropertyValue.Value <<= comphelper::containerToSequence(aPairs);
     rPath.push_back(aPropertyValue);
 }
@@ -618,7 +618,7 @@ void lcl_parsePathGluePointLeavingDirectionsValues(std::vector<beans::PropertyVa
     }
 
     beans::PropertyValue aPropertyValue;
-    aPropertyValue.Name = "GluePointLeavingDirections";
+    aPropertyValue.Name = u"GluePointLeavingDirections"_ustr;
     aPropertyValue.Value <<= comphelper::containerToSequence(aDirection);
     rPath.push_back(aPropertyValue);
 }
@@ -684,7 +684,7 @@ void lcl_parsePathSegmentValues(std::vector<beans::PropertyValue>& rPath, std::s
     }
 
     beans::PropertyValue aPropertyValue;
-    aPropertyValue.Name = "Segments";
+    aPropertyValue.Name = u"Segments"_ustr;
     aPropertyValue.Value <<= comphelper::containerToSequence(aSegments);
     rPath.push_back(aPropertyValue);
 }
@@ -751,7 +751,7 @@ void lcl_parsePathTextFrameValues(std::vector<beans::PropertyValue>& rPath, std:
     }
 
     beans::PropertyValue aPropertyValue;
-    aPropertyValue.Name = "TextFrames";
+    aPropertyValue.Name = u"TextFrames"_ustr;
     aPropertyValue.Value <<= comphelper::containerToSequence(aTextFrames);
     rPath.push_back(aPropertyValue);
 }
@@ -819,7 +819,7 @@ void lcl_parsePathSubViewSizeValues(std::vector<beans::PropertyValue>& rPath,
     }
 
     beans::PropertyValue aPropertyValue;
-    aPropertyValue.Name = "SubViewSize";
+    aPropertyValue.Name = u"SubViewSize"_ustr;
     aPropertyValue.Value <<= comphelper::containerToSequence(aSizes);
     rPath.push_back(aPropertyValue);
 }

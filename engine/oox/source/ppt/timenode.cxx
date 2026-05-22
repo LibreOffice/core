@@ -88,37 +88,37 @@ namespace oox::ppt {
             switch( nNodeType )
             {
             case AnimationNodeType::PAR:
-                sServiceName = "com.sun.star.animations.ParallelTimeContainer";
+                sServiceName = u"com.sun.star.animations.ParallelTimeContainer"_ustr;
                 break;
             case AnimationNodeType::SEQ:
-                sServiceName = "com.sun.star.animations.SequenceTimeContainer";
+                sServiceName = u"com.sun.star.animations.SequenceTimeContainer"_ustr;
                 break;
             case AnimationNodeType::ANIMATE:
-                sServiceName = "com.sun.star.animations.Animate";
+                sServiceName = u"com.sun.star.animations.Animate"_ustr;
                 break;
             case AnimationNodeType::ITERATE:
-                sServiceName = "com.sun.star.animations.IterateContainer";
+                sServiceName = u"com.sun.star.animations.IterateContainer"_ustr;
                 break;
             case AnimationNodeType::ANIMATECOLOR:
-                sServiceName = "com.sun.star.animations.AnimateColor";
+                sServiceName = u"com.sun.star.animations.AnimateColor"_ustr;
                 break;
             case AnimationNodeType::TRANSITIONFILTER:
-                sServiceName = "com.sun.star.animations.TransitionFilter";
+                sServiceName = u"com.sun.star.animations.TransitionFilter"_ustr;
                 break;
             case AnimationNodeType::ANIMATEMOTION:
-                sServiceName = "com.sun.star.animations.AnimateMotion";
+                sServiceName = u"com.sun.star.animations.AnimateMotion"_ustr;
                 break;
             case AnimationNodeType::ANIMATETRANSFORM:
-                sServiceName = "com.sun.star.animations.AnimateTransform";
+                sServiceName = u"com.sun.star.animations.AnimateTransform"_ustr;
                 break;
             case AnimationNodeType::COMMAND:
-                sServiceName = "com.sun.star.animations.Command";
+                sServiceName = u"com.sun.star.animations.Command"_ustr;
                 break;
             case AnimationNodeType::SET:
-                sServiceName = "com.sun.star.animations.AnimateSet";
+                sServiceName = u"com.sun.star.animations.AnimateSet"_ustr;
                 break;
             case AnimationNodeType::AUDIO:
-                sServiceName = "com.sun.star.animations.Audio";
+                sServiceName = u"com.sun.star.animations.Audio"_ustr;
                 break;
             default:
                 SAL_INFO("oox.ppt","OOX: unhandled type " << nNodeType );

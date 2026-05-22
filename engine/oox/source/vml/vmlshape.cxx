@@ -443,7 +443,7 @@ Reference< XShape > ShapeBase::convertAndInsert( const Reference< XShapes >& rxS
                         length = aGrabBag.getLength();
                         aGrabBag.realloc( length+1 );
                         auto pGrabBag = aGrabBag.getArray();
-                        pGrabBag[length].Name = "VML-Z-ORDER";
+                        pGrabBag[length].Name = u"VML-Z-ORDER"_ustr;
                         pGrabBag[length].Value <<= maTypeModel.maZIndex.toInt32();
 
                         if( !s_mso_next_textbox.isEmpty() )
@@ -451,7 +451,7 @@ Reference< XShape > ShapeBase::convertAndInsert( const Reference< XShapes >& rxS
                             length = aGrabBag.getLength();
                             aGrabBag.realloc( length+1 );
                             pGrabBag = aGrabBag.getArray();
-                            pGrabBag[length].Name = "mso-next-textbox";
+                            pGrabBag[length].Name = u"mso-next-textbox"_ustr;
                             pGrabBag[length].Value <<= s_mso_next_textbox;
                         }
 
@@ -460,13 +460,13 @@ Reference< XShape > ShapeBase::convertAndInsert( const Reference< XShapes >& rxS
                             length = aGrabBag.getLength();
                             aGrabBag.realloc( length+4 );
                             pGrabBag = aGrabBag.getArray();
-                            pGrabBag[length].Name   = "TxbxHasLink";
+                            pGrabBag[length].Name   = u"TxbxHasLink"_ustr;
                             pGrabBag[length].Value   <<= true;
-                            pGrabBag[length+1].Name = "Txbx-Id";
+                            pGrabBag[length+1].Name = u"Txbx-Id"_ustr;
                             pGrabBag[length+1].Value <<= id;
-                            pGrabBag[length+2].Name = "Txbx-Seq";
+                            pGrabBag[length+2].Name = u"Txbx-Seq"_ustr;
                             pGrabBag[length+2].Value <<= seq;
-                            pGrabBag[length+3].Name = "LinkChainName";
+                            pGrabBag[length+3].Name = u"LinkChainName"_ustr;
                             pGrabBag[length+3].Value <<= sLinkChainName;
                         }
                         propertySet->setPropertyValue( u"InteropGrabBag"_ustr, uno::Any(aGrabBag) );
@@ -926,7 +926,7 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
             } while (nIndex >= 0);
 
             css::beans::PropertyValue aProp;
-            aProp.Name = "AdjustmentValues";
+            aProp.Name = u"AdjustmentValues"_ustr;
             aProp.Value <<= comphelper::containerToSequence(aAdjustmentValues);
             aPropVec.push_back(aProp);
         }

@@ -78,7 +78,7 @@ ContextHandlerRef EffectPropertiesContext::onCreateContext( sal_Int32 nElement, 
     {
         case A_TOKEN( outerShdw ):
         {
-            mrEffectProperties.m_Effects[nPos]->msName = "outerShdw";
+            mrEffectProperties.m_Effects[nPos]->msName = u"outerShdw"_ustr;
             saveUnsupportedAttribs(*mrEffectProperties.m_Effects[nPos], rAttribs);
 
             mrEffectProperties.maShadow.moShadowDist = rAttribs.getInteger( XML_dist, 0 );
@@ -110,7 +110,7 @@ ContextHandlerRef EffectPropertiesContext::onCreateContext( sal_Int32 nElement, 
         break;
         case A_TOKEN( innerShdw ):
         {
-            mrEffectProperties.m_Effects[nPos]->msName = "innerShdw";
+            mrEffectProperties.m_Effects[nPos]->msName = u"innerShdw"_ustr;
             saveUnsupportedAttribs(*mrEffectProperties.m_Effects[nPos], rAttribs);
 
             mrEffectProperties.maShadow.moShadowDist = rAttribs.getInteger( XML_dist, 0 );
@@ -159,7 +159,7 @@ ContextHandlerRef EffectPropertiesContext::onCreateContext( sal_Int32 nElement, 
         }
         case A_TOKEN( reflection ):
         {
-            mrEffectProperties.m_Effects[nPos]->msName = "reflection";
+            mrEffectProperties.m_Effects[nPos]->msName = u"reflection"_ustr;
             saveUnsupportedAttribs(*mrEffectProperties.m_Effects[nPos], rAttribs);
 
             model::ComplexColor* pColor = nullptr;
@@ -190,7 +190,7 @@ ContextHandlerRef EffectPropertiesContext::onCreateContext( sal_Int32 nElement, 
         }
         case A_TOKEN( blur ):
         {
-            mrEffectProperties.m_Effects[nPos]->msName = "blur";
+            mrEffectProperties.m_Effects[nPos]->msName = u"blur"_ustr;
             saveUnsupportedAttribs(*mrEffectProperties.m_Effects[nPos], rAttribs);
 
             model::ComplexColor* pColor = nullptr;

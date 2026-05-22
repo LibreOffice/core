@@ -247,7 +247,7 @@ Reference< XGraphic > GraphicHelper::importGraphic( const Reference< XInputStrea
                 comphelper::makePropertyValue(u"ExternalHeight"_ustr, pExtHeader->yExt),
                 comphelper::makePropertyValue(u"ExternalMapMode"_ustr, pExtHeader->mapMode)
             };
-            pArgs[ 2 ].Name = "FilterData";
+            pArgs[ 2 ].Name = u"FilterData"_ustr;
             pArgs[ 2 ].Value <<= aFilterData;
         }
 

@@ -258,13 +258,13 @@ void PPTShape::addShape(
                 case XML_ctrTitle :
                 case XML_title :
                 {
-                    sServiceName = "com.sun.star.presentation.TitleTextShape";
+                    sServiceName = u"com.sun.star.presentation.TitleTextShape"_ustr;
                     aMasterTextListStyle = rSlidePersist.getMasterPersist() ? rSlidePersist.getMasterPersist()->getTitleTextStyle() : rSlidePersist.getTitleTextStyle();
                 }
                 break;
                 case XML_subTitle :
                 {
-                    sServiceName = "com.sun.star.presentation.SubtitleShape";
+                    sServiceName = u"com.sun.star.presentation.SubtitleShape"_ustr;
                     aMasterTextListStyle = rSlidePersist.getMasterPersist() ? rSlidePersist.getMasterPersist()->getBodyTextStyle() : rSlidePersist.getBodyTextStyle();
                 }
                 break;
@@ -279,7 +279,7 @@ void PPTShape::addShape(
                 {
                     if (rSlidePersist.isNotesPage())
                     {
-                        sServiceName = "com.sun.star.presentation.NotesShape";
+                        sServiceName = u"com.sun.star.presentation.NotesShape"_ustr;
                         aMasterTextListStyle = rSlidePersist.getMasterPersist() ? rSlidePersist.getMasterPersist()->getNotesTextStyle() : rSlidePersist.getNotesTextStyle();
                     }
                     else
@@ -318,11 +318,11 @@ void PPTShape::addShape(
                             }
                         }
                     }
-                    sServiceName = "com.sun.star.presentation.DateTimeShape";
+                    sServiceName = u"com.sun.star.presentation.DateTimeShape"_ustr;
                     bClearText = true;
                 break;
                 case XML_hdr :
-                    sServiceName = "com.sun.star.presentation.HeaderShape";
+                    sServiceName = u"com.sun.star.presentation.HeaderShape"_ustr;
                     bClearText = true;
                 break;
                 case XML_ftr :
@@ -340,7 +340,7 @@ void PPTShape::addShape(
                             return;
                         }
                     }
-                    sServiceName = "com.sun.star.presentation.FooterShape";
+                    sServiceName = u"com.sun.star.presentation.FooterShape"_ustr;
                     bClearText = true;
                 break;
                 case XML_sldNum :
@@ -360,35 +360,35 @@ void PPTShape::addShape(
                             return;
                         }
                     }
-                    sServiceName = "com.sun.star.presentation.SlideNumberShape";
+                    sServiceName = u"com.sun.star.presentation.SlideNumberShape"_ustr;
                     bClearText = true;
                 break;
                 case XML_sldImg :
-                    sServiceName = "com.sun.star.presentation.PageShape";
+                    sServiceName = u"com.sun.star.presentation.PageShape"_ustr;
                 break;
                 case XML_chart :
                     if (meShapeLocation == Layout)
                         sServiceName = sOutlinerShapeService;
                     else
-                        sServiceName = "com.sun.star.presentation.ChartShape";
+                        sServiceName = u"com.sun.star.presentation.ChartShape"_ustr;
                 break;
                 case XML_tbl :
                     if (meShapeLocation == Layout)
                         sServiceName = sOutlinerShapeService;
                     else
-                        sServiceName = "com.sun.star.presentation.TableShape";
+                        sServiceName = u"com.sun.star.presentation.TableShape"_ustr;
                 break;
                 case XML_pic :
                     if (meShapeLocation == Layout)
                         sServiceName = sOutlinerShapeService;
                     else
-                        sServiceName = "com.sun.star.presentation.GraphicObjectShape";
+                        sServiceName = u"com.sun.star.presentation.GraphicObjectShape"_ustr;
                 break;
                 case XML_media :
                     if (meShapeLocation == Layout)
                         sServiceName = sOutlinerShapeService;
                     else
-                        sServiceName = "com.sun.star.presentation.MediaShape";
+                        sServiceName = u"com.sun.star.presentation.MediaShape"_ustr;
                 break;
                 default:
                     if (mnSubType && meShapeLocation == Layout)
@@ -411,7 +411,7 @@ void PPTShape::addShape(
         bool convertInLayoutMode = meShapeLocation == Layout && (mnSubType == XML_body);
         if ((convertInSlideMode || convertInLayoutMode) && !mpCustomShapePropertiesPtr->representsDefaultShape())
         {
-            sServiceName = "com.sun.star.drawing.CustomShape";
+            sServiceName = u"com.sun.star.drawing.CustomShape"_ustr;
         }
 
         SAL_INFO("oox.ppt","shape service: " << sServiceName);
@@ -564,9 +564,9 @@ void PPTShape::addShape(
             {
                 OUString aFieldType;
                 if( mnSubType == XML_ftr )
-                    aFieldType = "com.sun.star.presentation.TextField.Footer";
+                    aFieldType = u"com.sun.star.presentation.TextField.Footer"_ustr;
                 else
-                    aFieldType = "com.sun.star.presentation.TextField.DateTime";
+                    aFieldType = u"com.sun.star.presentation.TextField.DateTime"_ustr;
                 Reference < XTextField > xField( xServiceFact->createInstance( aFieldType ), UNO_QUERY );
                 Reference < XText > xText(mxShape, UNO_QUERY);
                 if(xText.is())
@@ -665,13 +665,13 @@ void PPTShape::addShape(
                     aProperties.realloc(nPropertyCount);
                     beans::PropertyValue* pProperties = aProperties.getArray();
 
-                    pProperties->Name = "EventType";
+                    pProperties->Name = u"EventType"_ustr;
                     pProperties->Handle = -1;
                     pProperties->Value <<= u"Presentation"_ustr;
                     pProperties->State = beans::PropertyState_DIRECT_VALUE;
                     pProperties++;
 
-                    pProperties->Name = "ClickAction";
+                    pProperties->Name = u"ClickAction"_ustr;
                     pProperties->Handle = -1;
                     pProperties->Value <<= meClickAction;
                     pProperties->State = beans::PropertyState_DIRECT_VALUE;
@@ -681,7 +681,7 @@ void PPTShape::addShape(
                     {
                         case ClickAction_BOOKMARK:
                         case ClickAction_DOCUMENT:
-                            pProperties->Name = "Bookmark";
+                            pProperties->Name = u"Bookmark"_ustr;
                             pProperties->Handle = -1;
                             pProperties->Value <<= sURL;
                             pProperties->State = beans::PropertyState_DIRECT_VALUE;
@@ -690,7 +690,7 @@ void PPTShape::addShape(
                             break;
                     }
 
-                    sAPIEventName = "OnClick";
+                    sAPIEventName = u"OnClick"_ustr;
                     xEvents->replaceByName(sAPIEventName, uno::Any(aProperties));
                 }
             }

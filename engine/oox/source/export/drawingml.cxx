@@ -2080,31 +2080,31 @@ static OUString lclConvertRectanglePointToToken(RectanglePoint eRectanglePoint)
     switch (eRectanglePoint)
     {
         case RectanglePoint_LEFT_TOP:
-            sAlignment = "tl";
+            sAlignment = u"tl"_ustr;
             break;
         case RectanglePoint_MIDDLE_TOP:
-            sAlignment = "t";
+            sAlignment = u"t"_ustr;
             break;
         case RectanglePoint_RIGHT_TOP:
-            sAlignment = "tr";
+            sAlignment = u"tr"_ustr;
             break;
         case RectanglePoint_LEFT_MIDDLE:
-            sAlignment = "l";
+            sAlignment = u"l"_ustr;
             break;
         case RectanglePoint_MIDDLE_MIDDLE:
-            sAlignment = "ctr";
+            sAlignment = u"ctr"_ustr;
             break;
         case RectanglePoint_RIGHT_MIDDLE:
-            sAlignment = "r";
+            sAlignment = u"r"_ustr;
             break;
         case RectanglePoint_LEFT_BOTTOM:
-            sAlignment = "bl";
+            sAlignment = u"bl"_ustr;
             break;
         case RectanglePoint_MIDDLE_BOTTOM:
-            sAlignment = "b";
+            sAlignment = u"b"_ustr;
             break;
         case RectanglePoint_RIGHT_BOTTOM:
-            sAlignment = "br";
+            sAlignment = u"br"_ustr;
             break;
         default:
             break;
@@ -2978,15 +2978,15 @@ OUString DrawingML::GetFieldValue( const css::uno::Reference< css::text::XTextRa
                 SAL_INFO("oox.shape", "field kind: " << aFieldKind);
                 if( aFieldKind == "Page" )
                 {
-                    aFieldValue = "slidenum";
+                    aFieldValue = u"slidenum"_ustr;
                 }
                 else if( aFieldKind == "Pages" )
                 {
-                    aFieldValue = "slidecount";
+                    aFieldValue = u"slidecount"_ustr;
                 }
                 else if( aFieldKind == "PageName" )
                 {
-                    aFieldValue = "slidename";
+                    aFieldValue = u"slidename"_ustr;
                 }
                 else if( aFieldKind == "URL" )
                 {
@@ -3013,18 +3013,18 @@ OUString DrawingML::GetFieldValue( const css::uno::Reference< css::text::XTextRa
                     rXPropSet->getPropertyValue(UNO_TC_PROP_FILE_FORMAT) >>= nNumFmt;
                     switch(nNumFmt)
                     {
-                        case 0: aFieldValue = "file"; // Path/File name
+                        case 0: aFieldValue = u"file"_ustr; // Path/File name
                                 break;
-                        case 1: aFieldValue = "file1"; // Path
+                        case 1: aFieldValue = u"file1"_ustr; // Path
                                 break;
-                        case 2: aFieldValue = "file2"; // File name without extension
+                        case 2: aFieldValue = u"file2"_ustr; // File name without extension
                                 break;
-                        case 3: aFieldValue = "file3"; // File name with extension
+                        case 3: aFieldValue = u"file3"_ustr; // File name with extension
                     }
                 }
                 else if(aFieldKind == "Author")
                 {
-                    aFieldValue = "author";
+                    aFieldValue = u"author"_ustr;
                 }
             }
         }
@@ -3049,21 +3049,21 @@ OUString DrawingML::GetDatetimeTypeFromDateTime(SvxDateFormat eDate, SvxTimeForm
     {
         case SvxDateFormat::StdSmall:
         case SvxDateFormat::A:
-            aDateField = "datetime";
+            aDateField = u"datetime"_ustr;
             break;
         case SvxDateFormat::B:
-            aDateField = "datetime1"; // 13/02/1996
+            aDateField = u"datetime1"_ustr; // 13/02/1996
             break;
         case SvxDateFormat::C:
-            aDateField = "datetime5";
+            aDateField = u"datetime5"_ustr;
             break;
         case SvxDateFormat::D:
-            aDateField = "datetime3"; // 13 February 1996
+            aDateField = u"datetime3"_ustr; // 13 February 1996
             break;
         case SvxDateFormat::StdBig:
         case SvxDateFormat::E:
         case SvxDateFormat::F:
-            aDateField = "datetime2";
+            aDateField = u"datetime2"_ustr;
             break;
         default:
             break;
@@ -3075,20 +3075,20 @@ OUString DrawingML::GetDatetimeTypeFromDateTime(SvxDateFormat eDate, SvxTimeForm
         case SvxTimeFormat::Standard:
         case SvxTimeFormat::HH24_MM_SS:
         case SvxTimeFormat::HH24_MM_SS_00:
-            aTimeField = "datetime11"; // 13:49:38
+            aTimeField = u"datetime11"_ustr; // 13:49:38
             break;
         case SvxTimeFormat::HH24_MM:
-            aTimeField = "datetime10"; // 13:49
+            aTimeField = u"datetime10"_ustr; // 13:49
             break;
         case SvxTimeFormat::HH12_MM:
         case SvxTimeFormat::HH12_MM_AMPM:
-            aTimeField = "datetime12"; // 01:49 PM
+            aTimeField = u"datetime12"_ustr; // 01:49 PM
             break;
         case SvxTimeFormat::HH12_MM_SS:
         case SvxTimeFormat::HH12_MM_SS_AMPM:
         case SvxTimeFormat::HH12_MM_SS_00:
         case SvxTimeFormat::HH12_MM_SS_00_AMPM:
-            aTimeField = "datetime13"; // 01:49:38 PM
+            aTimeField = u"datetime13"_ustr; // 01:49:38 PM
             break;
         default:
             break;
@@ -3136,7 +3136,7 @@ void DrawingML::WriteRun( const Reference< XTextRange >& rRun,
 
     //if there is no text following the bullet, add a space after the bullet
     if (nLevel !=-1 && bNumberingIsNumber && sText.isEmpty() )
-         sText=" ";
+         sText=u" "_ustr;
 
     if ( bIsURLField )
         sText = sFieldValue;
@@ -3214,11 +3214,11 @@ static OUString GetAutoNumType(SvxNumType nNumberingType, bool bSDot, bool bPBeh
     OUString sPrefixSuffix;
 
     if (bPBoth)
-        sPrefixSuffix = "ParenBoth";
+        sPrefixSuffix = u"ParenBoth"_ustr;
     else if (bPBehind)
-        sPrefixSuffix = "ParenR";
+        sPrefixSuffix = u"ParenR"_ustr;
     else if (bSDot)
-        sPrefixSuffix = "Period";
+        sPrefixSuffix = u"Period"_ustr;
 
     // For some of these, there is no corresponding valid value, so we use val+"Period"
     switch( nNumberingType )

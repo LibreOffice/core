@@ -150,40 +150,40 @@ static OUString GetFormulaParameter( const EnhancedCustomShapeParameter& rParame
         }
         break;
         case EnhancedCustomShapeParameterType::LEFT :
-            aRet = "left";
+            aRet = u"left"_ustr;
         break;
         case EnhancedCustomShapeParameterType::TOP :
-            aRet = "top";
+            aRet = u"top"_ustr;
         break;
         case EnhancedCustomShapeParameterType::RIGHT :
-            aRet = "right";
+            aRet = u"right"_ustr;
         break;
         case EnhancedCustomShapeParameterType::BOTTOM :
-            aRet = "bottom";
+            aRet = u"bottom"_ustr;
         break;
         case EnhancedCustomShapeParameterType::XSTRETCH :
-            aRet = "xstretch";
+            aRet = u"xstretch"_ustr;
         break;
         case EnhancedCustomShapeParameterType::YSTRETCH :
-            aRet = "ystretch";
+            aRet = u"ystretch"_ustr;
         break;
         case EnhancedCustomShapeParameterType::HASSTROKE :
-            aRet = "hasstroke";
+            aRet = u"hasstroke"_ustr;
         break;
         case EnhancedCustomShapeParameterType::HASFILL :
-            aRet = "hasfill";
+            aRet = u"hasfill"_ustr;
         break;
         case EnhancedCustomShapeParameterType::WIDTH :
-            aRet = "width";
+            aRet = u"width"_ustr;
         break;
         case EnhancedCustomShapeParameterType::HEIGHT :
-            aRet = "height";
+            aRet = u"height"_ustr;
         break;
         case EnhancedCustomShapeParameterType::LOGWIDTH :
-            aRet = "logwidth";
+            aRet = u"logwidth"_ustr;
         break;
         case EnhancedCustomShapeParameterType::LOGHEIGHT :
-            aRet = "logheight";
+            aRet = u"logheight"_ustr;
         break;
     }
     return aRet;
@@ -217,7 +217,7 @@ static EnhancedCustomShapeParameter GetAdjCoordinate( CustomShapeProperties& rCu
                 {
                     CustomShapeGuide aGuide;
                     aGuide.maName = rValue;
-                    aGuide.maFormula = "logheight" ;
+                    aGuide.maFormula = u"logheight"_ustr ;
 
                     aRet.Value <<= rCustomShapeProperties.getGuideList().SetCustomShapeGuideValue( aGuide );
                     aRet.Type = EnhancedCustomShapeParameterType::EQUATION;
@@ -271,7 +271,7 @@ static EnhancedCustomShapeParameter GetAdjCoordinate( CustomShapeProperties& rCu
             {
                 CustomShapeGuide aGuide;
                 aGuide.maName = rValue;
-                aGuide.maFormula = "max(logwidth,logheight)";
+                aGuide.maFormula = u"max(logwidth,logheight)"_ustr;
 
                 aRet.Value <<= rCustomShapeProperties.getGuideList().SetCustomShapeGuideValue( aGuide );
                 aRet.Type = EnhancedCustomShapeParameterType::EQUATION;
@@ -281,7 +281,7 @@ static EnhancedCustomShapeParameter GetAdjCoordinate( CustomShapeProperties& rCu
             {
                 CustomShapeGuide aGuide;
                 aGuide.maName = rValue;
-                aGuide.maFormula = "min(logwidth,logheight)";
+                aGuide.maFormula = u"min(logwidth,logheight)"_ustr;
 
                 aRet.Value <<= rCustomShapeProperties.getGuideList().SetCustomShapeGuideValue( aGuide );
                 aRet.Type = EnhancedCustomShapeParameterType::EQUATION;
@@ -322,7 +322,7 @@ static EnhancedCustomShapeParameter GetAdjCoordinate( CustomShapeProperties& rCu
                 {
                     CustomShapeGuide aGuide;
                     aGuide.maName = rValue;
-                    aGuide.maFormula = "logwidth" ;
+                    aGuide.maFormula = u"logwidth"_ustr ;
 
                     aRet.Value <<= rCustomShapeProperties.getGuideList().SetCustomShapeGuideValue( aGuide );
                     aRet.Type = EnhancedCustomShapeParameterType::EQUATION;

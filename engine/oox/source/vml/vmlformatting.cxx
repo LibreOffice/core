@@ -975,7 +975,7 @@ static beans::PropertyValue lcl_createTextpathProps()
         }));
 
     beans::PropertyValue aRet;
-    aRet.Name = "TextPath";
+    aRet.Name = u"TextPath"_ustr;
     aRet.Value <<= aTextpathPropSeq;
     return aRet;
 }

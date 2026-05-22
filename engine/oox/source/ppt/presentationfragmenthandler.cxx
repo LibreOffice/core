@@ -838,37 +838,37 @@ void PresentationFragmentHandler::finalizeImport()
             switch (nAlgorithmSid)
             {
                 case 1:
-                    sAlgorithmName = "MD2";
+                    sAlgorithmName = u"MD2"_ustr;
                     break;
                 case 2:
-                    sAlgorithmName = "MD4";
+                    sAlgorithmName = u"MD4"_ustr;
                     break;
                 case 3:
-                    sAlgorithmName = "MD5";
+                    sAlgorithmName = u"MD5"_ustr;
                     break;
                 case 4:
-                    sAlgorithmName = "SHA-1";
+                    sAlgorithmName = u"SHA-1"_ustr;
                     break;
                 case 5:
-                    sAlgorithmName = "MAC";
+                    sAlgorithmName = u"MAC"_ustr;
                     break;
                 case 6:
-                    sAlgorithmName = "RIPEMD";
+                    sAlgorithmName = u"RIPEMD"_ustr;
                     break;
                 case 7:
-                    sAlgorithmName = "RIPEMD-160";
+                    sAlgorithmName = u"RIPEMD-160"_ustr;
                     break;
                 case 9:
-                    sAlgorithmName = "HMAC";
+                    sAlgorithmName = u"HMAC"_ustr;
                     break;
                 case 12:
-                    sAlgorithmName = "SHA-256";
+                    sAlgorithmName = u"SHA-256"_ustr;
                     break;
                 case 13:
-                    sAlgorithmName = "SHA-384";
+                    sAlgorithmName = u"SHA-384"_ustr;
                     break;
                 case 14:
-                    sAlgorithmName = "SHA-512";
+                    sAlgorithmName = u"SHA-512"_ustr;
                     break;
                 default:; // 8, 10, 11, any other value: Undefined.
             }

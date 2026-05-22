@@ -533,14 +533,14 @@ OUString lclAddRelation( const Reference< XRelationshipAccess >& rRelations, sal
 
     Sequence< StringPair > aEntry( bExternal ? 3 : 2 );
     auto pEntry = aEntry.getArray();
-    pEntry[0].First = "Type";
+    pEntry[0].First = u"Type"_ustr;
     pEntry[0].Second = rType;
-    pEntry[1].First = "Target";
+    pEntry[1].First = u"Target"_ustr;
     pEntry[1].Second = INetURLObject::decode(rTarget, INetURLObject::DecodeMechanism::ToIUri, RTL_TEXTENCODING_UTF8);
     if( bExternal )
     {
-        pEntry[2].First = "TargetMode";
-        pEntry[2].Second = "External";
+        pEntry[2].First = u"TargetMode"_ustr;
+        pEntry[2].Second = u"External"_ustr;
     }
     rRelations->insertRelationshipByID( sId, aEntry, true );
 
@@ -919,7 +919,7 @@ writeCustomProperties( XmlFilterBase& rSelf, const Reference< XDocumentPropertie
     {
         PropertyValue aPropertyValue;
         // MSO custom property for read-only documents
-        aPropertyValue.Name = "_MarkAsFinal";
+        aPropertyValue.Name = u"_MarkAsFinal"_ustr;
         aPropertyValue.Value <<= true;
         aprop.push_back(aPropertyValue);
     }

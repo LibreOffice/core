@@ -638,15 +638,15 @@ Reference< XLabeledDataSequence > ErrorBarConverter::createLabeledDataSequence( 
         case ErrorBarModel::PLUS:
             switch( mrModel.mnDirection )
             {
-                case XML_x: aRole = "error-bars-x-positive"; break;
-                case XML_y: aRole = "error-bars-y-positive"; break;
+                case XML_x: aRole = u"error-bars-x-positive"_ustr; break;
+                case XML_y: aRole = u"error-bars-y-positive"_ustr; break;
             }
         break;
         case ErrorBarModel::MINUS:
             switch( mrModel.mnDirection )
             {
-                case XML_x: aRole = "error-bars-x-negative"; break;
-                case XML_y: aRole = "error-bars-y-negative"; break;
+                case XML_x: aRole = u"error-bars-x-negative"_ustr; break;
+                case XML_y: aRole = u"error-bars-y-negative"_ustr; break;
             }
         break;
     }
@@ -687,22 +687,22 @@ void TrendlineConverter::convertFromModel( const Reference< XDataSeries >& rxDat
         switch( mrModel.mnTypeId )
         {
             case XML_exp:
-                aServiceName = "com.sun.star.chart2.ExponentialRegressionCurve";
+                aServiceName = u"com.sun.star.chart2.ExponentialRegressionCurve"_ustr;
             break;
             case XML_linear:
-                aServiceName = "com.sun.star.chart2.LinearRegressionCurve";
+                aServiceName = u"com.sun.star.chart2.LinearRegressionCurve"_ustr;
             break;
             case XML_log:
-                aServiceName = "com.sun.star.chart2.LogarithmicRegressionCurve";
+                aServiceName = u"com.sun.star.chart2.LogarithmicRegressionCurve"_ustr;
             break;
             case XML_movingAvg:
-                aServiceName = "com.sun.star.chart2.MovingAverageRegressionCurve";
+                aServiceName = u"com.sun.star.chart2.MovingAverageRegressionCurve"_ustr;
             break;
             case XML_poly:
-                aServiceName = "com.sun.star.chart2.PolynomialRegressionCurve";
+                aServiceName = u"com.sun.star.chart2.PolynomialRegressionCurve"_ustr;
             break;
             case XML_power:
-                aServiceName = "com.sun.star.chart2.PotentialRegressionCurve";
+                aServiceName = u"com.sun.star.chart2.PotentialRegressionCurve"_ustr;
             break;
             default:
                 OSL_FAIL( "TrendlineConverter::convertFromModel - unknown trendline type" );

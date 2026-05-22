@@ -42,7 +42,7 @@ DiagramDefinitionContext::DiagramDefinitionContext( SmartArtDiagram& rDgm,
     OUString sValue = rAttributes.getStringDefaulted( XML_minVer );
     if( sValue.isEmpty() )
     {
-        sValue = "http://schemas.openxmlformats.org/drawingml/2006/diagram";
+        sValue = u"http://schemas.openxmlformats.org/drawingml/2006/diagram"_ustr;
     }
     mpLayout->setMinVer( sValue );
     mpLayout->setUniqueId( rAttributes.getStringDefaulted( XML_uniqueId ) );

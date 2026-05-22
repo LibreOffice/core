@@ -89,33 +89,33 @@ void TextBox::convert(const uno::Reference<drawing::XShape>& xShape) const
         const TextFontModel& rFont = portion.maFont;
         if (rFont.moName.has_value())
         {
-            aPropertyValue.Name = "CharFontName";
+            aPropertyValue.Name = u"CharFontName"_ustr;
             aPropertyValue.Value <<= rFont.moName.value();
             aPropVec.push_back(aPropertyValue);
 
-            aPropertyValue.Name = "CharFontNameAsian";
+            aPropertyValue.Name = u"CharFontNameAsian"_ustr;
             aPropertyValue.Value <<= rFont.moNameAsian.value_or("");
             aPropVec.push_back(aPropertyValue);
 
-            aPropertyValue.Name = "CharFontNameComplex";
+            aPropertyValue.Name = u"CharFontNameComplex"_ustr;
             aPropertyValue.Value <<= rFont.moNameComplex.value_or("");
             aPropVec.push_back(aPropertyValue);
         }
         if (rFont.mobBold.has_value())
         {
-            aPropertyValue.Name = "CharWeight";
+            aPropertyValue.Name = u"CharWeight"_ustr;
             aPropertyValue.Value <<= rFont.mobBold.value() ? awt::FontWeight::BOLD : awt::FontWeight::NORMAL;
             aPropVec.push_back(aPropertyValue);
         }
         if (rFont.monSize.has_value())
         {
-            aPropertyValue.Name = "CharHeight";
+            aPropertyValue.Name = u"CharHeight"_ustr;
             aPropertyValue.Value <<= double(rFont.monSize.value()) / 2.;
             aPropVec.push_back(aPropertyValue);
         }
         if (rFont.monSpacing.has_value())
         {
-            aPropertyValue.Name = "CharKerning";
+            aPropertyValue.Name = u"CharKerning"_ustr;
             // Value is not converted to mm100: SvxKerningItem::PutValue() gets
             // called with nMemberId = 0, so no mm100 -> twips conversion will
             // be done there.
@@ -130,7 +130,7 @@ void TextBox::convert(const uno::Reference<drawing::XShape>& xShape) const
             else if (rParagraph.moParaAdjust.value() == "right")
                 eAdjust = style::ParagraphAdjust_RIGHT;
 
-            aPropertyValue.Name = "ParaAdjust";
+            aPropertyValue.Name = u"ParaAdjust"_ustr;
             aPropertyValue.Value <<= eAdjust;
             aPropVec.push_back(aPropertyValue);
         }
@@ -155,7 +155,7 @@ void TextBox::convert(const uno::Reference<drawing::XShape>& xShape) const
         }
         if (rFont.moColor.has_value())
         {
-            aPropertyValue.Name = "CharColor";
+            aPropertyValue.Name = u"CharColor"_ustr;
             aPropertyValue.Value <<= rFont.moColor.value().toUInt32(16);
             aPropVec.push_back(aPropertyValue);
         }

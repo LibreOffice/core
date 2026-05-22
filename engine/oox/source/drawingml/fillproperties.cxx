@@ -966,7 +966,7 @@ css::beans::PropertyValue ArtisticEffectProperties::getEffect()
             comphelper::makePropertyValue(u"Data"_ustr, mrOleObjectInfo.maEmbeddedData)
         };
 
-        pSeq[i].Name = "OriginalGraphic";
+        pSeq[i].Name = u"OriginalGraphic"_ustr;
         pSeq[i].Value <<= aGraphicSeq;
     }
 

@@ -45,7 +45,7 @@ DocumentEncryption::DocumentEncryption(const Reference< XComponentContext >& rxC
             rMediaEncData[i].Value >>= sCryptoType;
 
             if (sCryptoType == "Standard")
-                sCryptoType = "StrongEncryptionDataSpace";
+                sCryptoType = u"StrongEncryptionDataSpace"_ustr;
 
             Sequence<Any> aArguments;
             mxPackageEncryption.set(

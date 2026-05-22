@@ -1125,7 +1125,7 @@ void ObjectFormatter::convertNumberFormat( PropertySet& rPropSet, const NumberFo
     sal_Int32 nPropId = bPercent ? PROP_PercentageNumberFormat : PROP_NumberFormat;
     OUString sFormatCode(rNumberFormat.maFormatCode);
     if (bPercent && bGeneral)
-        sFormatCode = "0%";
+        sFormatCode = u"0%"_ustr;
     try
     {
         sal_Int32 nIndex = bGeneral && !bPercent ?

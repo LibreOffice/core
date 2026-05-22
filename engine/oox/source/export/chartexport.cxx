@@ -5633,7 +5633,7 @@ void writeCustomLabel( const FSHelperPtr& pFS, ChartExport* pChartExport,
             if (!rDLblsRange.hasLabel(nLabelIndex))
                 rDLblsRange.setLabel(nLabelIndex, rField->getString());
 
-            sContent = "[CELLRANGE]";
+            sContent = u"[CELLRANGE]"_ustr;
         }
         else
         {
@@ -6500,9 +6500,9 @@ Reference< chart2::data::XDataSequence>  getLabeledSequence(
 {
     OUString aDirection;
     if(bPositive)
-        aDirection = "positive";
+        aDirection = u"positive"_ustr;
     else
-        aDirection = "negative";
+        aDirection = u"negative"_ustr;
 
     for( const auto& rSequence : aSequences )
     {

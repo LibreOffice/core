@@ -1001,7 +1001,7 @@ bool FontworkHelpers::createPrstDashFromLineDash(const drawing::LineDash& rLineD
         else if (nDotLen == 300 && rLineDash.Dashes == 1 && nDashLen == 100 && nDistance == 100)
             rsPrstDash = u"sysDashDot"_ustr;
         else if (nDotLen == 300 && rLineDash.Dashes == 2 && nDashLen == 100 && nDistance == 100)
-            rsPrstDash = "sysDashDotDot";
+            rsPrstDash = u"sysDashDotDot"_ustr;
         else
             bIsConverted = false;
     }
@@ -1435,7 +1435,7 @@ void FontworkHelpers::createCharInteropGrabBagUpdatesFromShapeProps(
     }
     // resolve the stack and put resulting PropertyValue into the update vector
     beans::PropertyValue aCharTextFillTextEffect;
-    aCharTextFillTextEffect.Name = "CharTextFillTextEffect";
+    aCharTextFillTextEffect.Name = u"CharTextFillTextEffect"_ustr;
     aCharTextFillTextEffect.Value <<= pGrabBagStack->getRootProperty();
     rUpdatePropVec.push_back(aCharTextFillTextEffect);
 
@@ -1568,7 +1568,7 @@ void FontworkHelpers::createCharInteropGrabBagUpdatesFromShapeProps(
 
     // resolve the stack and put resulting PropertyValue into the update vector
     beans::PropertyValue aCharTextOutlineTextEffect;
-    aCharTextOutlineTextEffect.Name = "CharTextOutlineTextEffect";
+    aCharTextOutlineTextEffect.Name = u"CharTextOutlineTextEffect"_ustr;
     aCharTextOutlineTextEffect.Value <<= pGrabBagStack->getRootProperty();
     rUpdatePropVec.push_back(aCharTextOutlineTextEffect);
 

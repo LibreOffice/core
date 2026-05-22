@@ -341,7 +341,7 @@ void SlidePersist::applyTextStyles( const XmlFilterBase& rFilterBase )
                     {
                         pTextListStylePtr = maOtherTextStylePtr;
                         aStyle = sStandard;
-                        aFamily = "graphics";
+                        aFamily = u"graphics"_ustr;
                         break;
                     }
                     case 5 :    // subtitle

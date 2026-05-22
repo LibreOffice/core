@@ -289,7 +289,7 @@ namespace oox::ppt {
                     switch( maType )
                     {
                     case XML_verb:
-                        aParamValue.Name = "Verb";
+                        aParamValue.Name = u"Verb"_ustr;
                         // TODO make sure msCommand has what we want
                         aParamValue.Value <<= msCommand.toInt32();
                         nCommand = EffectCommands::VERB;
@@ -311,7 +311,7 @@ namespace oox::ppt {
                             double fMediaTime = ::rtl::math::stringToDouble( aMediaTime, u'.', u',', &eStatus );
                             if( eStatus == rtl_math_ConversionStatus_Ok )
                             {
-                                aParamValue.Name = "MediaTime";
+                                aParamValue.Name = u"MediaTime"_ustr;
                                 aParamValue.Value <<= fMediaTime;
                             }
                             nCommand = EffectCommands::PLAY;
@@ -330,7 +330,7 @@ namespace oox::ppt {
                     if( nCommand == EffectCommands::CUSTOM )
                     {
                         SAL_WARN("oox.ppt", "OOX: CmdTimeNodeContext::endFastElement(), unknown command!");
-                        aParamValue.Name = "UserDefined";
+                        aParamValue.Name = u"UserDefined"_ustr;
                         aParamValue.Value <<= msCommand;
                     }
                     if( aParamValue.Value.hasValue() )

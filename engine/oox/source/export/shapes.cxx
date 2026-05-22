@@ -120,93 +120,93 @@ static void lcl_ConvertProgID(std::u16string_view rProgID,
 {
     if (rProgID == u"Excel.Sheet.12")
     {
-        o_rMediaType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+        o_rMediaType = u"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"_ustr;
         o_rRelationType = oox::getRelationship(Relationship::PACKAGE);
-        o_rFileExtension = "xlsx";
+        o_rFileExtension = u"xlsx"_ustr;
     }
     else if (o3tl::starts_with(rProgID, u"Excel.SheetBinaryMacroEnabled.12") )
     {
-        o_rMediaType = "application/vnd.ms-excel.sheet.binary.macroEnabled.12";
+        o_rMediaType = u"application/vnd.ms-excel.sheet.binary.macroEnabled.12"_ustr;
         o_rRelationType = oox::getRelationship(Relationship::PACKAGE);
-        o_rFileExtension = "xlsb";
+        o_rFileExtension = u"xlsb"_ustr;
     }
     else if (o3tl::starts_with(rProgID, u"Excel.SheetMacroEnabled.12"))
     {
-        o_rMediaType = "application/vnd.ms-excel.sheet.macroEnabled.12";
+        o_rMediaType = u"application/vnd.ms-excel.sheet.macroEnabled.12"_ustr;
         o_rRelationType = oox::getRelationship(Relationship::PACKAGE);
-        o_rFileExtension = "xlsm";
+        o_rFileExtension = u"xlsm"_ustr;
     }
     else if (o3tl::starts_with(rProgID, u"Excel.Sheet"))
     {
-        o_rMediaType = "application/vnd.ms-excel";
+        o_rMediaType = u"application/vnd.ms-excel"_ustr;
         o_rRelationType = oox::getRelationship(Relationship::OLEOBJECT);
-        o_rFileExtension = "xls";
+        o_rFileExtension = u"xls"_ustr;
     }
     else if (rProgID == u"PowerPoint.Show.12")
     {
-        o_rMediaType = "application/vnd.openxmlformats-officedocument.presentationml.presentation";
+        o_rMediaType = u"application/vnd.openxmlformats-officedocument.presentationml.presentation"_ustr;
         o_rRelationType = oox::getRelationship(Relationship::PACKAGE);
-        o_rFileExtension = "pptx";
+        o_rFileExtension = u"pptx"_ustr;
     }
     else if (rProgID == u"PowerPoint.ShowMacroEnabled.12")
     {
-        o_rMediaType = "application/vnd.ms-powerpoint.presentation.macroEnabled.12";
+        o_rMediaType = u"application/vnd.ms-powerpoint.presentation.macroEnabled.12"_ustr;
         o_rRelationType = oox::getRelationship(Relationship::PACKAGE);
-        o_rFileExtension = "pptm";
+        o_rFileExtension = u"pptm"_ustr;
     }
     else if (o3tl::starts_with(rProgID, u"PowerPoint.Show"))
     {
-        o_rMediaType = "application/vnd.ms-powerpoint";
+        o_rMediaType = u"application/vnd.ms-powerpoint"_ustr;
         o_rRelationType = oox::getRelationship(Relationship::OLEOBJECT);
-        o_rFileExtension = "ppt";
+        o_rFileExtension = u"ppt"_ustr;
     }
     else if (o3tl::starts_with(rProgID, u"PowerPoint.Slide.12"))
     {
-       o_rMediaType = "application/vnd.openxmlformats-officedocument.presentationml.slide";
+       o_rMediaType = u"application/vnd.openxmlformats-officedocument.presentationml.slide"_ustr;
        o_rRelationType = oox::getRelationship(Relationship::PACKAGE);
-       o_rFileExtension = "sldx";
+       o_rFileExtension = u"sldx"_ustr;
     }
     else if (rProgID == u"PowerPoint.SlideMacroEnabled.12")
     {
-       o_rMediaType = "application/vnd.ms-powerpoint.slide.macroEnabled.12";
+       o_rMediaType = u"application/vnd.ms-powerpoint.slide.macroEnabled.12"_ustr;
        o_rRelationType = oox::getRelationship(Relationship::PACKAGE);
-       o_rFileExtension = "sldm";
+       o_rFileExtension = u"sldm"_ustr;
     }
     else if (rProgID == u"Word.DocumentMacroEnabled.12")
     {
-        o_rMediaType = "application/vnd.ms-word.document.macroEnabled.12";
+        o_rMediaType = u"application/vnd.ms-word.document.macroEnabled.12"_ustr;
         o_rRelationType = oox::getRelationship(Relationship::PACKAGE);
-        o_rFileExtension = "docm";
+        o_rFileExtension = u"docm"_ustr;
     }
     else if (rProgID == u"Word.Document.12")
     {
-        o_rMediaType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+        o_rMediaType = u"application/vnd.openxmlformats-officedocument.wordprocessingml.document"_ustr;
         o_rRelationType = oox::getRelationship(Relationship::PACKAGE);
-        o_rFileExtension = "docx";
+        o_rFileExtension = u"docx"_ustr;
     }
     else if (rProgID == u"Word.Document.8")
     {
-        o_rMediaType = "application/msword";
+        o_rMediaType = u"application/msword"_ustr;
         o_rRelationType = oox::getRelationship(Relationship::OLEOBJECT);
-        o_rFileExtension = "doc";
+        o_rFileExtension = u"doc"_ustr;
     }
     else if (rProgID == u"Excel.Chart.8")
     {
-        o_rMediaType = "application/vnd.ms-excel";
+        o_rMediaType = u"application/vnd.ms-excel"_ustr;
         o_rRelationType = oox::getRelationship(Relationship::OLEOBJECT);
-        o_rFileExtension = "xls";
+        o_rFileExtension = u"xls"_ustr;
     }
     else if (rProgID == u"AcroExch.Document.11")
     {
-        o_rMediaType = "application/pdf";
+        o_rMediaType = u"application/pdf"_ustr;
         o_rRelationType = oox::getRelationship(Relationship::OLEOBJECT);
-        o_rFileExtension = "pdf";
+        o_rFileExtension = u"pdf"_ustr;
     }
     else
     {
-        o_rMediaType = "application/vnd.openxmlformats-officedocument.oleObject";
+        o_rMediaType = u"application/vnd.openxmlformats-officedocument.oleObject"_ustr;
         o_rRelationType = oox::getRelationship(Relationship::OLEOBJECT);
-        o_rFileExtension = "bin";
+        o_rFileExtension = u"bin"_ustr;
     }
 }
 
@@ -1018,19 +1018,19 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
                 switch (eClickAction)
                 {
                     case presentation::ClickAction_STOPPRESENTATION:
-                        sPPAction = "ppaction://hlinkshowjump?jump=endshow";
+                        sPPAction = u"ppaction://hlinkshowjump?jump=endshow"_ustr;
                         break;
                     case presentation::ClickAction_NEXTPAGE:
-                        sPPAction = "ppaction://hlinkshowjump?jump=nextslide";
+                        sPPAction = u"ppaction://hlinkshowjump?jump=nextslide"_ustr;
                         break;
                     case presentation::ClickAction_LASTPAGE:
-                        sPPAction = "ppaction://hlinkshowjump?jump=lastslide";
+                        sPPAction = u"ppaction://hlinkshowjump?jump=lastslide"_ustr;
                         break;
                     case presentation::ClickAction_PREVPAGE:
-                        sPPAction = "ppaction://hlinkshowjump?jump=previousslide";
+                        sPPAction = u"ppaction://hlinkshowjump?jump=previousslide"_ustr;
                         break;
                     case presentation::ClickAction_FIRSTPAGE:
-                        sPPAction = "ppaction://hlinkshowjump?jump=firstslide";
+                        sPPAction = u"ppaction://hlinkshowjump?jump=firstslide"_ustr;
                         break;
                     case presentation::ClickAction_BOOKMARK:
                         sBookmark = "#" + sBookmark;
@@ -1494,19 +1494,19 @@ void ShapeExport::WriteGraphicObjectShapePart( const Reference< XShape >& xShape
         switch (eClickAction)
         {
             case presentation::ClickAction_STOPPRESENTATION:
-                sPPAction = "ppaction://hlinkshowjump?jump=endshow";
+                sPPAction = u"ppaction://hlinkshowjump?jump=endshow"_ustr;
                 break;
             case presentation::ClickAction_NEXTPAGE:
-                sPPAction = "ppaction://hlinkshowjump?jump=nextslide";
+                sPPAction = u"ppaction://hlinkshowjump?jump=nextslide"_ustr;
                 break;
             case presentation::ClickAction_LASTPAGE:
-                sPPAction = "ppaction://hlinkshowjump?jump=lastslide";
+                sPPAction = u"ppaction://hlinkshowjump?jump=lastslide"_ustr;
                 break;
             case presentation::ClickAction_PREVPAGE:
-                sPPAction = "ppaction://hlinkshowjump?jump=previousslide";
+                sPPAction = u"ppaction://hlinkshowjump?jump=previousslide"_ustr;
                 break;
             case presentation::ClickAction_FIRSTPAGE:
-                sPPAction = "ppaction://hlinkshowjump?jump=firstslide";
+                sPPAction = u"ppaction://hlinkshowjump?jump=firstslide"_ustr;
                 break;
             case presentation::ClickAction_BOOKMARK:
                 sBookmark = "#" + sBookmark;
@@ -1926,15 +1926,15 @@ ShapeExport& ShapeExport::WriteConnectorShape( const Reference< XShape >& xShape
 
     switch( eConnectorType ) {
         case ConnectorType_CURVE:
-            sGeometry = "curvedConnector";
+            sGeometry = u"curvedConnector"_ustr;
             break;
         case ConnectorType_LINES:
         case ConnectorType_STANDARD:
-            sGeometry = "bentConnector";
+            sGeometry = u"bentConnector"_ustr;
             break;
         default:
         case ConnectorType_LINE:
-            sGeometry = "straightConnector1";
+            sGeometry = u"straightConnector1"_ustr;
             break;
     }
 
@@ -2643,24 +2643,24 @@ void ShapeExport::WriteBorderLine(const sal_Int32 xml_line_element, const Border
         switch (*o3tl::doAccess<sal_Int16>(mAny))
         {
             case ::table::BorderLineStyle::SOLID:
-                sBorderStyle = "solid";
+                sBorderStyle = u"solid"_ustr;
                 break;
             case ::table::BorderLineStyle::DOTTED:
-                sBorderStyle = "dot";
+                sBorderStyle = u"dot"_ustr;
                 break;
             case ::table::BorderLineStyle::DASHED:
-                sBorderStyle = "dash";
+                sBorderStyle = u"dash"_ustr;
                 break;
             case ::table::BorderLineStyle::DASH_DOT:
-                sBorderStyle = "dashDot";
+                sBorderStyle = u"dashDot"_ustr;
                 break;
             case ::table::BorderLineStyle::DASH_DOT_DOT:
-                sBorderStyle = "sysDashDotDot";
+                sBorderStyle = u"sysDashDotDot"_ustr;
                 break;
             default:
                 // There is no equivalent so pick something else, since we cannot have empty.
                 // There are very few default styles for pptx.
-                sBorderStyle = "solid";
+                sBorderStyle = u"solid"_ustr;
                 break;
         }
         assert(!sBorderStyle.isEmpty() && "empty is not a valid value for PPTX");

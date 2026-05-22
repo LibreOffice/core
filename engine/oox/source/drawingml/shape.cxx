@@ -1086,7 +1086,7 @@ Reference< XShape > const & Shape::createAndInsert(
 
     if (bIsCroppedGraphic || bIs3DGraphic)
     {
-        aServiceName = "com.sun.star.drawing.CustomShape";
+        aServiceName = u"com.sun.star.drawing.CustomShape"_ustr;
         mpGraphicPropertiesPtr->mbIsCustomShape = true;
         mpGraphicPropertiesPtr->mbIsExtruded = bIs3DGraphic;
     }
@@ -1745,7 +1745,7 @@ Reference< XShape > const & Shape::createAndInsert(
                     sal_Int32 length = aGrabBag.getLength();
                     aGrabBag.realloc( length+1);
                     auto pGrabBag = aGrabBag.getArray();
-                    pGrabBag[length].Name = "mso-orig-shape-type";
+                    pGrabBag[length].Name = u"mso-orig-shape-type"_ustr;
                     pGrabBag[length].Value <<= mpCustomShapePropertiesPtr->getShapePresetTypeName();
                     propertySet->setPropertyValue(u"FrameInteropGrabBag"_ustr,uno::Any(aGrabBag));
                 }
@@ -1759,11 +1759,11 @@ Reference< XShape > const & Shape::createAndInsert(
                     sal_Int32 length = aGrabBag.getLength();
                     aGrabBag.realloc( length + 3 );
                     auto pGrabBag = aGrabBag.getArray();
-                    pGrabBag[length].Name = "TxbxHasLink";
+                    pGrabBag[length].Name = u"TxbxHasLink"_ustr;
                     pGrabBag[length].Value <<= isLinkedTxbx();
-                    pGrabBag[length + 1 ].Name = "Txbx-Id";
+                    pGrabBag[length + 1 ].Name = u"Txbx-Id"_ustr;
                     pGrabBag[length + 1 ].Value <<= getLinkedTxbxAttributes().id;
-                    pGrabBag[length + 2 ].Name = "Txbx-Seq";
+                    pGrabBag[length + 2 ].Name = u"Txbx-Seq"_ustr;
                     pGrabBag[length + 2 ].Value <<= getLinkedTxbxAttributes().seq;
                     propertySet->setPropertyValue(u"FrameInteropGrabBag"_ustr,uno::Any(aGrabBag));
                 }
@@ -1899,11 +1899,11 @@ Reference< XShape > const & Shape::createAndInsert(
                 sal_Int32 length = aGrabBag.getLength();
                 aGrabBag.realloc( length + 3 );
                 auto pGrabBag = aGrabBag.getArray();
-                pGrabBag[length].Name = "TxbxHasLink";
+                pGrabBag[length].Name = u"TxbxHasLink"_ustr;
                 pGrabBag[length].Value <<= isLinkedTxbx();
-                pGrabBag[length + 1 ].Name = "Txbx-Id";
+                pGrabBag[length + 1 ].Name = u"Txbx-Id"_ustr;
                 pGrabBag[length + 1 ].Value <<= getLinkedTxbxAttributes().id;
-                pGrabBag[length + 2 ].Name = "Txbx-Seq";
+                pGrabBag[length + 2 ].Name = u"Txbx-Seq"_ustr;
                 pGrabBag[length + 2 ].Value <<= getLinkedTxbxAttributes().seq;
                 propertySet->setPropertyValue(u"InteropGrabBag"_ustr,uno::Any(aGrabBag));
             }
@@ -2565,7 +2565,7 @@ OUString Shape::finalizeServiceName( XmlFilterBase& rFilter, const OUString& rSe
         {
             awt::Size aOleSize( rShapeRect.Width, rShapeRect.Height );
             if( rFilter.getOleObjectHelper().importOleObject( maShapeProperties, *mxOleObjectInfo, aOleSize ) )
-                aServiceName = "com.sun.star.drawing.OLE2Shape";
+                aServiceName = u"com.sun.star.drawing.OLE2Shape"_ustr;
 
             // get the path to the representation graphic
             OUString aGraphicPath;

@@ -507,10 +507,10 @@ void TypeGroupConverter::convertFromModel( const Reference< XDiagram >& rxDiagra
                     OUString aRole;
                     switch( nRoleIdx )
                     {
-                        case 0: aRole = "values-first";  break;
-                        case 1: aRole = "values-max";    break;
-                        case 2: aRole = "values-min";    break;
-                        case 3: aRole = "values-last";   break;
+                        case 0: aRole = u"values-first"_ustr;  break;
+                        case 1: aRole = u"values-max"_ustr;    break;
+                        case 2: aRole = u"values-min"_ustr;    break;
+                        case 3: aRole = u"values-last"_ustr;   break;
                     }
                     Reference< XLabeledDataSequence > xDataSeq = rxSeriesConv->createValueSequence( aRole );
                     if( xDataSeq.is() )

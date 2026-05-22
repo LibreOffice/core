@@ -87,7 +87,7 @@ ContextHandlerRef GraphicShapeContext::onCreateContext( sal_Int32 aElementToken,
             {
                 mpShapePtr->getGraphicProperties().m_xMediaStream = std::move(xMediaStream);
                 mpShapePtr->getGraphicProperties().m_sMediaPackageURL = lcl_GetMediaReference(path);
-                mpShapePtr->getGraphicProperties().m_sMediaMimeType = "audio/unknown";
+                mpShapePtr->getGraphicProperties().m_sMediaMimeType = u"audio/unknown"_ustr;
             }
         }
         break;
@@ -116,9 +116,9 @@ ContextHandlerRef GraphicShapeContext::onCreateContext( sal_Int32 aElementToken,
             }
 
             if (getBaseToken(aElementToken) == XML_audioFile)
-                mpShapePtr->getGraphicProperties().m_sMediaMimeType = "audio/unknown";
+                mpShapePtr->getGraphicProperties().m_sMediaMimeType = u"audio/unknown"_ustr;
             else
-                mpShapePtr->getGraphicProperties().m_sMediaMimeType = "video/unknown";
+                mpShapePtr->getGraphicProperties().m_sMediaMimeType = u"video/unknown"_ustr;
         }
         break;
     }
