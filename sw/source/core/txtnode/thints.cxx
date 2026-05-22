@@ -1103,6 +1103,8 @@ SwTextAttr* MakeTextAttr(
                     pField.SetName(SwMarkName());
 
                 pField.SetPostItId();
+                pField.SetParaId(0);
+                pField.SetParentId(0);
             }
         }
         break;

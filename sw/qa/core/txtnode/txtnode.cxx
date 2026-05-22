@@ -588,6 +588,79 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testCopyCommentsWithReplies)
                          comments[3]->GetParentName().toString());
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testCopyCommentsWithRepliesDocx)
+{
+    // Given a DOCX document with a comment thread (parent + 5 replies linked
+    // via commentsExtended.xml paraId/paraIdParent):
+    createSwDoc("comment-reply-copy.docx");
+
+    SwDocShell* pShell = getSwDocShell();
+    SwWrtShell* pWrtShell = pShell->GetWrtShell();
+    SwDoc* pDoc = pWrtShell->GetDoc();
+    SwDoc aClipboard;
+    pWrtShell->SelAll();
+    pWrtShell->Copy(aClipboard);
+    pWrtShell->SttEndDoc(/*bStart=*/false);
+    pWrtShell->Paste(aClipboard);
+
+    const SwFieldType* pPostitFieldType = nullptr;
+    for (const auto& pFieldType : *pDoc->getIDocumentFieldsAccess().GetFieldTypes())
+    {
+        if (pFieldType->Which() == SwFieldIds::Postit)
+        {
+            pPostitFieldType = pFieldType.get();
+            break;
+        }
+    }
+    CPPUNIT_ASSERT(pPostitFieldType);
+    std::vector<SwFormatField*> aFormatFields;
+    pPostitFieldType->GatherFields(aFormatFields);
+    // 6 original + 6 copied.
+    CPPUNIT_ASSERT_EQUAL(size_t(12), aFormatFields.size());
+
+    std::vector<const SwPostItField*> aOriginal, aCopied;
+    for (auto* pFF : aFormatFields)
+    {
+        auto* pField = static_cast<const SwPostItField*>(pFF->GetField());
+        if (pField->GetParaId() != 0)
+            aOriginal.push_back(pField);
+        else
+            aCopied.push_back(pField);
+    }
+    CPPUNIT_ASSERT_EQUAL(size_t(6), aOriginal.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(6), aCopied.size());
+
+    // Without the fix, copied fields retained stale OOXML ParaIds. When
+    // UpdatePostItsParentInfo ran (sidebar rebuild) or on OOXML re-export,
+    // the stale IDs caused replies to be matched to the wrong parent,
+    // breaking comment threads.
+
+    // Verify copied annotations have ParaId/ParentId reset.
+    for (const auto* pField : aCopied)
+    {
+        CPPUNIT_ASSERT_EQUAL(sal_uInt32(0), pField->GetParaId());
+        CPPUNIT_ASSERT_EQUAL(sal_uInt32(0), pField->GetParentId());
+    }
+
+    // Verify copied thread is linked correctly via PostItId.
+    const SwPostItField* pCopiedParent = nullptr;
+    for (const auto* pField : aCopied)
+    {
+        if (pField->GetParentPostItId() == 0)
+        {
+            pCopiedParent = pField;
+            break;
+        }
+    }
+    CPPUNIT_ASSERT(pCopiedParent);
+    for (const auto* pField : aCopied)
+    {
+        if (pField == pCopiedParent)
+            continue;
+        CPPUNIT_ASSERT_EQUAL(pCopiedParent->GetPostItId(), pField->GetParentPostItId());
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testNodeSplitStyleListLevel)
 {
     // Given a document with a 3rd paragraph where the list level as direct formatting differs from
