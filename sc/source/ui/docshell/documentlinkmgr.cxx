@@ -151,7 +151,7 @@ bool DocumentLinkManager::hasExternalLinks(bool bDde, bool bOle, bool bWebServic
             return true;
         if (bWebService && dynamic_cast<ScWebServiceLink*>(pBase))
             return true;
-        if (bGraphic && pBase->GetObjType() == sfx2::SvBaseLinkObjectType::ClientGraphic)
+        if (bGraphic && pBase && pBase->GetObjType() == sfx2::SvBaseLinkObjectType::ClientGraphic)
             return true;
     }
 
