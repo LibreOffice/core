@@ -400,12 +400,6 @@ SvXMLShapeContext* XMLShapeImportHelper::CreateFrameChildContext(
             pContext = new SdXMLFloatingFrameShapeContext( rImport, xCombinedAttrList, rShapes );
             break;
         }
-        case XML_ELEMENT(DRAW, XML_APPLET):
-        {
-            // draw:applet
-            pContext = new SdXMLAppletShapeContext( rImport, xCombinedAttrList, rShapes );
-            break;
-        }
         // add other shapes here...
         default:
             SAL_INFO("xmloff", "unknown element " << SvXMLImport::getPrefixAndNameFromToken(nElement));
