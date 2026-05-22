@@ -993,8 +993,10 @@ bool Clipboard::PasteSlidesFromSystemClipboard()
 
         auto insertPos = mrSlideSorter.GetModel().GetCoreIndex(
             mrSlideSorter.GetController().GetClipboard().GetInsertionPosition());
+        // Slide sorter paste: scale objects instead of asking.
         pDocument->InsertFileAsPage(aBookmarkList, &aExchangeList, false /*bLink*/,
-                                    insertPos /*nPos*/, xDocShRef.get());
+                                    insertPos /*nPos*/, xDocShRef.get(),
+                                    /*oScaleObjects=*/std::optional(true));
 
         std::vector<OUString> aObjectBookmarkList;
         pDocument->InsertBookmarkAsObject(aObjectBookmarkList, aExchangeList, xDocShRef.get(),

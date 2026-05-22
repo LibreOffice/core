@@ -133,7 +133,7 @@ public:
 
     /** Paste the slides copied from another instance of the LibreOffice
     */
-    bool PasteSlidesFromSystemClipboard();
+    SD_DLLPUBLIC bool PasteSlidesFromSystemClipboard();
 
 private:
     /** Paste the pages of the transferable of the sd module at the given
