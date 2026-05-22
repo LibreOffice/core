@@ -3539,7 +3539,7 @@ class MaxNumStringLenHandler
 
             // Simple number string with at most 15 decimals and trailing
             // decimal zeros eliminated.
-            aSep = ".";
+            aSep = u"."_ustr;
             aString = rtl::math::doubleToUString( fVal, rtl_math_StringFormat_F, nCellPrecision, '.', true);
             nPrec = SvNumberFormatter::UNLIMITED_PRECISION;
         }
@@ -3555,7 +3555,7 @@ class MaxNumStringLenHandler
             {
                 // For some reason we couldn't obtain a precision from the
                 // format, retry with simple number string.
-                aSep = ".";
+                aSep = u"."_ustr;
                 aString = rtl::math::doubleToUString( fVal, rtl_math_StringFormat_F, nCellPrecision, '.', true);
                 nLen = aString.getLength();
             }

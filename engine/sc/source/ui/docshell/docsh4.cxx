@@ -3227,7 +3227,7 @@ uno::Reference< frame::XModel > ScDocShell::LoadSharedDocument()
             {
                 aArgs.realloc( 2 );
                 auto pArgs = aArgs.getArray();
-                pArgs[1].Name = "Password";
+                pArgs[1].Name = u"Password"_ustr;
                 pArgs[1].Value <<= pPasswordItem->GetValue();
             }
             const SfxUnoAnyItem* pEncryptionItem = GetMedium()->GetItemSet().GetItem(SID_ENCRYPTIONDATA, false);
@@ -3235,7 +3235,7 @@ uno::Reference< frame::XModel > ScDocShell::LoadSharedDocument()
             {
                 aArgs.realloc(aArgs.getLength() + 1);
                 auto pArgs = aArgs.getArray();
-                pArgs[aArgs.getLength() - 1].Name = "EncryptionData";
+                pArgs[aArgs.getLength() - 1].Name = u"EncryptionData"_ustr;
                 pArgs[aArgs.getLength() - 1].Value = pEncryptionItem->GetValue();
             }
         }

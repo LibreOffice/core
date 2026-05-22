@@ -2391,7 +2391,7 @@ void ScInterpreter::ScCell()
                         else
                         {
                             // file name and table name: 'FILEPATH/FILENAME'#$TABLE
-                            aFuncResult = "'";
+                            aFuncResult = u"'"_ustr;
                             if (!comphelper::COKit::isActive())
                                 aFuncResult += rURLObj.GetMainURL(INetURLObject::DecodeMechanism::Unambiguous);
                             else

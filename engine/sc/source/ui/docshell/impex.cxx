@@ -2273,7 +2273,7 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
                             }
                             if( !bMyDoc || !bData )
                                 break;
-                            aText = "=";
+                            aText = u"="_ustr;
                             p = lcl_ScanSylkFormula( p, aText, eVersion);
 
                             if (bInvalidCol || bInvalidRow || (ch == 'M' && (bInvalidRefCol || bInvalidRefRow)))
@@ -2554,7 +2554,7 @@ bool ScImportExport::Doc2Sylk( SvStream& rStrm )
                             break;
                             default:
                                 // formula Expression
-                                aPrefix = ";E";
+                                aPrefix = u";E"_ustr;
                         }
                         rStrm.WriteUnicodeOrByteText(aPrefix);
                         if ( !aCellStr.isEmpty() )

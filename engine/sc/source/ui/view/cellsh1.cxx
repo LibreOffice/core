@@ -145,7 +145,7 @@ OUString FlagsToString( InsertDeleteFlags nFlags,
 
     if( nFlags == InsertDeleteFlags::ALL )
     {
-        aFlagsStr = "A";
+        aFlagsStr = u"A"_ustr;
     }
     else
     {
@@ -237,10 +237,10 @@ void InsertCells(ScTabViewShell* pTabViewShell, SfxRequest &rReq, InsCellCmd eCm
 
             switch( eCmd )
             {
-            case INS_CELLSDOWN: aParam = "V"; break;
-            case INS_CELLSRIGHT: aParam = ">"; break;
-            case INS_INSROWS_BEFORE: aParam = "R"; break;
-            case INS_INSCOLS_BEFORE: aParam = "C"; break;
+            case INS_CELLSDOWN: aParam = u"V"_ustr; break;
+            case INS_CELLSRIGHT: aParam = u">"_ustr; break;
+            case INS_INSROWS_BEFORE: aParam = u"R"_ustr; break;
+            case INS_INSCOLS_BEFORE: aParam = u"C"_ustr; break;
             default:
             {
                 // added to avoid warnings
@@ -264,10 +264,10 @@ void DeleteCells(ScTabViewShell* pTabViewShell, SfxRequest &rReq, DelCellCmd eCm
 
             switch( eCmd )
             {
-            case DelCellCmd::CellsUp: aParam = "U"; break;
-            case DelCellCmd::CellsLeft: aParam = "L"; break;
-            case DelCellCmd::Rows: aParam = "R"; break;
-            case DelCellCmd::Cols: aParam = "C"; break;
+            case DelCellCmd::CellsUp: aParam = u"U"_ustr; break;
+            case DelCellCmd::CellsLeft: aParam = u"L"_ustr; break;
+            case DelCellCmd::Rows: aParam = u"R"_ustr; break;
+            case DelCellCmd::Cols: aParam = u"C"_ustr; break;
             default:
             {
                 // added to avoid warnings
@@ -841,31 +841,31 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
                         switch( eFillDir )
                         {
-                        case FILL_TO_BOTTOM:    aPara = "B"; break;
-                        case FILL_TO_RIGHT:     aPara = "R"; break;
-                        case FILL_TO_TOP:       aPara = "T"; break;
-                        case FILL_TO_LEFT:      aPara = "L"; break;
+                        case FILL_TO_BOTTOM:    aPara = u"B"_ustr; break;
+                        case FILL_TO_RIGHT:     aPara = u"R"_ustr; break;
+                        case FILL_TO_TOP:       aPara = u"T"_ustr; break;
+                        case FILL_TO_LEFT:      aPara = u"L"_ustr; break;
                         default: break;
                         }
                         rReq.AppendItem( SfxStringItem( FID_FILL_SERIES, aPara ) );
 
                         switch( eFillCmd )
                         {
-                        case FILL_SIMPLE:       aPara = "S"; break;
-                        case FILL_LINEAR:       aPara = "L"; break;
-                        case FILL_GROWTH:       aPara = "G"; break;
-                        case FILL_DATE:         aPara = "D"; break;
-                        case FILL_AUTO:         aPara = "A"; break;
+                        case FILL_SIMPLE:       aPara = u"S"_ustr; break;
+                        case FILL_LINEAR:       aPara = u"L"_ustr; break;
+                        case FILL_GROWTH:       aPara = u"G"_ustr; break;
+                        case FILL_DATE:         aPara = u"D"_ustr; break;
+                        case FILL_AUTO:         aPara = u"A"_ustr; break;
                         default: break;
                         }
                         rReq.AppendItem( SfxStringItem( FN_PARAM_1, aPara ) );
 
                         switch( eFillDateCmd )
                         {
-                        case FILL_DAY:          aPara = "D"; break;
-                        case FILL_WEEKDAY:      aPara = "W"; break;
-                        case FILL_MONTH:        aPara = "M"; break;
-                        case FILL_YEAR:         aPara = "Y"; break;
+                        case FILL_DAY:          aPara = u"D"_ustr; break;
+                        case FILL_WEEKDAY:      aPara = u"W"_ustr; break;
+                        case FILL_MONTH:        aPara = u"M"_ustr; break;
+                        case FILL_YEAR:         aPara = u"Y"_ustr; break;
                         default: break;
                         }
                         rReq.AppendItem( SfxStringItem( FN_PARAM_2, aPara ) );
@@ -1731,11 +1731,11 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 rReq.SetSlot( FID_INS_CELL_CONTENTS );
                 OUString aFlags;
                 if ( nSlot == SID_PASTE_ONLY_VALUE )
-                    aFlags = "V";
+                    aFlags = u"V"_ustr;
                 else if ( nSlot == SID_PASTE_ONLY_TEXT )
-                    aFlags = "S";
+                    aFlags = u"S"_ustr;
                 else
-                    aFlags = "F";
+                    aFlags = u"F"_ustr;
                 rReq.AppendItem( SfxStringItem( FID_INS_CELL_CONTENTS, aFlags ) );
                 ExecuteSlot( rReq, GetInterface() );
                 rReq.SetReturnValue(SfxInt16Item(nSlot, 1));    // 1 = success
@@ -1903,7 +1903,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                                 OUString aName = aFormats.GetClipbrdFormatName( i );
                                 // special case for paste dialog: '*' is replaced by object type
                                 if ( nFormatId == SotClipboardFormatId::EMBED_SOURCE )
-                                    aName = "*";
+                                    aName = u"*"_ustr;
                                 pDlg->Insert( nFormatId, aName );
                             }
 
@@ -3986,7 +3986,7 @@ void ScCellShell::ExecuteFillSingleEdit()
 
         if (aCell.getType() == CELLTYPE_FORMULA)
         {
-            aInit = "=";
+            aInit = u"="_ustr;
             const ScTokenArray* pCode = aCell.getFormula()->GetCode();
             sc::TokenStringContext aCxt(rDoc, rDoc.GetGrammar());
             aInit += pCode->CreateString(aCxt, aCurPos);

@@ -2965,7 +2965,7 @@ void testInvalidateOnTextEditWithDifferentZoomLevels::TestBody(const ColRowZoom&
     if (nZoomLevel < 0)
     {
         nZoomLevel = -nZoomLevel;
-        sZoomUnoCmd = ".uno:ZoomMinus";
+        sZoomUnoCmd = u".uno:ZoomMinus"_ustr;
     }
     // view #1
     ScTestViewCallback aView1;
@@ -3398,7 +3398,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testStatusBarLocale)
         SfxSlotPool& rSlotPool = SfxSlotPool::GetSlotPool(&rFrame);
         uno::Reference<util::XURLTransformer> xParser(util::URLTransformer::create(m_xContext));
         util::URL aCommandURL;
-        aCommandURL.Complete = ".uno:RowColSelCount";
+        aCommandURL.Complete = u".uno:RowColSelCount"_ustr;
         xParser->parseStrict(aCommandURL);
         const SfxSlot* pSlot = rSlotPool.GetUnoSlot(aCommandURL.Path);
         rFrame.GetBindings().GetDispatch(pSlot, aCommandURL, false);

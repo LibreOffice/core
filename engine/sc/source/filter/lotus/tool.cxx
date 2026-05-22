@@ -269,7 +269,7 @@ SfxUInt32Item* FormCache::NewAttr( sal_uInt8 nFormat, sal_uInt8 nSt )
                 case 0x06:  // hidden
                     //wFlag |= paHideAll;bSetFormat = sal_False;
                     eType = SvNumFormatType::NUMBER;
-                    aFormString = "\"\"";
+                    aFormString = u"\"\""_ustr;
                     break;
                 case 0x07:  // Time: hour, min, sec
                     //fTime;tfHourMinSec24;

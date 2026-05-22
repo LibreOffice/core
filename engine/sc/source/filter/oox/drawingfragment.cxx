@@ -468,7 +468,7 @@ VmlControlMacroAttacher::VmlControlMacroAttacher( const OUString& rMacroName,
 void VmlControlMacroAttacher::attachMacro( const OUString& rMacroUrl )
 {
     ScriptEventDescriptor aEventDesc;
-    aEventDesc.ScriptType = "Script";
+    aEventDesc.ScriptType = u"Script"_ustr;
     aEventDesc.ScriptCode = rMacroUrl;
 
     // editable drop downs are treated like edit boxes
@@ -480,28 +480,28 @@ void VmlControlMacroAttacher::attachMacro( const OUString& rMacroUrl )
         case XML_Button:
         case XML_Checkbox:
         case XML_Radio:
-            aEventDesc.ListenerType = "XActionListener";
-            aEventDesc.EventMethod = "actionPerformed";
+            aEventDesc.ListenerType = u"XActionListener"_ustr;
+            aEventDesc.EventMethod = u"actionPerformed"_ustr;
         break;
         case XML_Label:
         case XML_GBox:
         case XML_Dialog:
-            aEventDesc.ListenerType = "XMouseListener";
-            aEventDesc.EventMethod = "mouseReleased";
+            aEventDesc.ListenerType = u"XMouseListener"_ustr;
+            aEventDesc.EventMethod = u"mouseReleased"_ustr;
         break;
         case XML_Edit:
-            aEventDesc.ListenerType = "XTextListener";
-            aEventDesc.EventMethod = "textChanged";
+            aEventDesc.ListenerType = u"XTextListener"_ustr;
+            aEventDesc.EventMethod = u"textChanged"_ustr;
         break;
         case XML_Spin:
         case XML_Scroll:
-            aEventDesc.ListenerType = "XAdjustmentListener";
-            aEventDesc.EventMethod = "adjustmentValueChanged";
+            aEventDesc.ListenerType = u"XAdjustmentListener"_ustr;
+            aEventDesc.EventMethod = u"adjustmentValueChanged"_ustr;
         break;
         case XML_List:
         case XML_Drop:
-            aEventDesc.ListenerType = "XChangeListener";
-            aEventDesc.EventMethod = "changed";
+            aEventDesc.ListenerType = u"XChangeListener"_ustr;
+            aEventDesc.EventMethod = u"changed"_ustr;
         break;
         default:
             OSL_ENSURE( false, "VmlControlMacroAttacher::attachMacro - unexpected object type" );
@@ -679,7 +679,7 @@ Reference< XShape > VmlDrawing::createAndInsertClientXShape( const ::oox::vml::S
                 AxOptionButtonModel& rAxModel = aControl.createModel< AxOptionButtonModel >();
 
                 // unique name to prevent autoGrouping with ActiveX controls and which a GroupBox may override - see vmldrawing.cxx.
-                rAxModel.maGroupName = "autoGroup_formControl";
+                rAxModel.maGroupName = u"autoGroup_formControl"_ustr;
                 convertControlText( rAxModel.maFontData, rAxModel.mnTextColor, rAxModel.maCaption, pTextBox, pClientData->mnTextHAlign );
                 convertControlBackground( rAxModel, rShape );
                 rAxModel.maValue = OUString::number( pClientData->mnChecked );
@@ -767,7 +767,7 @@ Reference< XShape > VmlDrawing::createAndInsertClientXShape( const ::oox::vml::S
                     sal_Int32 length = aGrabBag.getLength();
                     aGrabBag.realloc(length + 1);
                     auto pGrabBag = aGrabBag.getArray();
-                    pGrabBag[length].Name = "VMLStroked";
+                    pGrabBag[length].Name = u"VMLStroked"_ustr;
                     pGrabBag[length].Value
                         <<= rShape.getTypeModel().maStrokeModel.moStroked.value_or(true);
                     xShapeProps->setPropertyValue(u"InteropGrabBag"_ustr, Any(aGrabBag));

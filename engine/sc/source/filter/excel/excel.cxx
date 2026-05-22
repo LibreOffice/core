@@ -304,14 +304,14 @@ static ErrCode lcl_ExportExcelBiff( SfxMedium& rMedium, ScDocument *pDocument,
     if( bBiff8 )
     {
         aStrmName = EXC_STREAM_WORKBOOK;
-        aClipName = "Biff8";
-        aClassName = "Microsoft Excel 97-Tabelle";
+        aClipName = u"Biff8"_ustr;
+        aClassName = u"Microsoft Excel 97-Tabelle"_ustr;
     }
     else
     {
         aStrmName = EXC_STREAM_BOOK;
-        aClipName = "Biff5";
-        aClassName = "Microsoft Excel 5.0-Tabelle";
+        aClipName = u"Biff5"_ustr;
+        aClassName = u"Microsoft Excel 5.0-Tabelle"_ustr;
     }
 
     // open the "Book"/"Workbook" stream

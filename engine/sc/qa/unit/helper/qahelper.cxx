@@ -228,7 +228,7 @@ void ScModelTestBase::testFormats(ScDocument* pDoc,std::u16string_view sFormat)
         CPPUNIT_ASSERT_EQUAL( aKnownGoodStr, aTestStr );
         //test case for cell text with line breaks.
         aTestStr = pDoc->GetString(3,5,1);
-        aKnownGoodStr = "Hello,\nCalc!";
+        aKnownGoodStr = u"Hello,\nCalc!"_ustr;
         CPPUNIT_ASSERT_EQUAL( aKnownGoodStr, aTestStr );
     }
     pPattern = pDoc->GetPattern(1,4,1);
@@ -265,7 +265,7 @@ void ScModelTestBase::testFormats(ScDocument* pDoc,std::u16string_view sFormat)
             CPPUNIT_ASSERT_EQUAL_MESSAGE("'Excel Built-in Date' style should be aligned centre horizontally", SvxCellHorJustify::Center, eHorJustify);
             // check date format ( should be just month e.g. 29 )
             sResult =pDoc->GetString( 1,1,3 );
-            sExpected = "29";
+            sExpected = u"29"_ustr;
             CPPUNIT_ASSERT_EQUAL_MESSAGE("'Excel Built-in Date' style should just display month", sExpected, sResult );
 
             // check actual align applied to cell, should be the same as
@@ -719,7 +719,7 @@ void ScModelTestBase::initTestEnv([[maybe_unused]] std::u16string_view fileName)
     // and it crashes in tearDown
     std::vector<beans::PropertyValue> args;
     beans::PropertyValue aMacroValue;
-    aMacroValue.Name = "MacroExecutionMode";
+    aMacroValue.Name = u"MacroExecutionMode"_ustr;
     aMacroValue.Handle = -1;
     aMacroValue.Value <<= document::MacroExecMode::NEVER_EXECUTE;
     aMacroValue.State = beans::PropertyState_DIRECT_VALUE;

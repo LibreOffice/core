@@ -52,9 +52,9 @@ void ScFormulaOptions::GetDefaultFormulaSeparators(
     OUString& rSepArg, OUString& rSepArrayCol, OUString& rSepArrayRow)
 {
     // Defaults to the old separator values.
-    rSepArg = ";";
-    rSepArrayCol = ";";
-    rSepArrayRow = "|";
+    rSepArg = u";"_ustr;
+    rSepArrayCol = u";"_ustr;
+    rSepArrayRow = u"|"_ustr;
 
     const lang::Locale& rLocale = ScGlobal::GetLocale();
     const OUString& rLang = rLocale.Language;
@@ -99,12 +99,12 @@ void ScFormulaOptions::GetDefaultFormulaSeparators(
         // if the decimal and list separators are equal, set the
         // parameter separator to be ';', unless they are both
         // semicolon in which case don't change the decimal separator.
-        rSepArg = ";";
+        rSepArg = u";"_ustr;
 
-    rSepArrayCol = ",";
+    rSepArrayCol = u","_ustr;
     if (cDecSep == ',')
-        rSepArrayCol = ".";
-    rSepArrayRow = ";";
+        rSepArrayCol = u"."_ustr;
+    rSepArrayRow = u";"_ustr;
 }
 
 bool ScFormulaOptions::operator==( const ScFormulaOptions& rOpt ) const

@@ -764,7 +764,7 @@ uno::Reference < XNameContainer >
                 if( xTableStyles.is() )
                     xStyles.set(xTableStyles);
                 else
-                    sName = "TableStyles";
+                    sName = u"TableStyles"_ustr;
             }
             break;
             case XmlStyleFamily::TABLE_CELL:
@@ -772,7 +772,7 @@ uno::Reference < XNameContainer >
                 if( xCellStyles.is() )
                     xStyles.set(xCellStyles);
                 else
-                    sName = "CellStyles";
+                    sName = u"CellStyles"_ustr;
             }
             break;
             case XmlStyleFamily::TABLE_COLUMN:
@@ -780,7 +780,7 @@ uno::Reference < XNameContainer >
                 if( xColumnStyles.is() )
                     xStyles.set(xColumnStyles);
                 else
-                    sName = "ColumnStyles";
+                    sName = u"ColumnStyles"_ustr;
             }
             break;
             case XmlStyleFamily::TABLE_ROW:
@@ -788,7 +788,7 @@ uno::Reference < XNameContainer >
                 if( xRowStyles.is() )
                     xStyles.set(xRowStyles);
                 else
-                    sName = "RowStyles";
+                    sName = u"RowStyles"_ustr;
             }
             break;
             case XmlStyleFamily::SD_GRAPHICS_ID:
@@ -796,7 +796,7 @@ uno::Reference < XNameContainer >
                 if( xGraphicStyles.is() )
                     xStyles.set(xGraphicStyles);
                 else
-                    sName = "GraphicStyles";
+                    sName = u"GraphicStyles"_ustr;
             }
             break;
             default: break;

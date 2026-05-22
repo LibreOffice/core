@@ -134,7 +134,7 @@ void SAL_CALL ScXMLTableColContext::endFastElement( sal_Int32 /*nElement*/ )
     // #i57915# ScXMLImport::SetStyleToRange can't handle empty style names.
     // The default for a column if there is no attribute is the style "Default" (programmatic API name).
     if ( sCellStyleName.isEmpty() )
-        sCellStyleName = "Default";
+        sCellStyleName = u"Default"_ustr;
 
     GetScImport().GetTables().AddColStyle(nColCount, sCellStyleName);
 }

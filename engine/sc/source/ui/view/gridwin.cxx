@@ -929,12 +929,12 @@ public:
 void collectUIInformation(const OUString& aRow, const OUString& aCol , const OUString& aevent)
 {
     EventDescription aDescription;
-    aDescription.aAction = "LAUNCH";
-    aDescription.aID = "grid_window";
+    aDescription.aAction = u"LAUNCH"_ustr;
+    aDescription.aID = u"grid_window"_ustr;
     aDescription.aParameters = {{aevent, ""},
         {"ROW", aRow}, {"COL", aCol}};
-    aDescription.aParent = "MainWindow";
-    aDescription.aKeyWord = "ScGridWinUIObject";
+    aDescription.aParent = u"MainWindow"_ustr;
+    aDescription.aKeyWord = u"ScGridWinUIObject"_ustr;
 
     UITestLogger::getInstance().logEvent(aDescription);
 }

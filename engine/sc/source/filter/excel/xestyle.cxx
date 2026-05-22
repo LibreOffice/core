@@ -1268,7 +1268,7 @@ void XclExpFontBuffer::SaveXml( XclExpXmlStream& rStrm )
 void XclExpFontBuffer::InitDefaultFonts()
 {
     XclFontData aFontData;
-    aFontData.maName = "Arial";
+    aFontData.maName = u"Arial"_ustr;
     aFontData.SetScFamily( FAMILY_DONTKNOW );
     aFontData.SetFontEncoding( ScfTools::GetSystemTextEncoding() );
     aFontData.SetScHeight( 200 );   // 200 twips = 10 pt

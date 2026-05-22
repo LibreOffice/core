@@ -181,7 +181,7 @@ ScVbaFormatConditions::Add( ::sal_Int32 _nType, const uno::Any& _aOperator, cons
             beans::PropertyValue aProp( u"Formula2"_ustr, 0, uno::Any( getA1Formula( _aFormula2 ) ), beans::PropertyState_DIRECT_VALUE );
             aPropertyValueVector.push_back( aProp );
         }
-        aProperty.Name = "StyleName";
+        aProperty.Name = u"StyleName"_ustr;
         aProperty.Value <<= sStyleName;
 
         mxSheetConditionalEntries->addNew(comphelper::containerToSequence(aPropertyValueVector));

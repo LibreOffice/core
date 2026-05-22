@@ -307,7 +307,7 @@ bool ScTBC::ImportToolBarControl( ScCTBWrapper& rWrapper, const css::uno::Refere
                  else
                  {
                      beans::PropertyValue aProp;
-                     aProp.Name = "ItemDescriptorContainer";
+                     aProp.Name = u"ItemDescriptorContainer"_ustr;
                      aProp.Value <<= uno::Reference< container::XIndexContainer >(xMenuDesc);
                      props.push_back( aProp );
                  }

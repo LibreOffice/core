@@ -4277,7 +4277,7 @@ CPPUNIT_TEST_FIXTURE(Test, testRenameTable)
     CPPUNIT_ASSERT_MESSAGE("name same as another table is being set", !rDocFunc.RenameTable(1,nameToSet,false,true) );
 
     //test case 2 , simple rename to check name
-    nameToSet = "test1";
+    nameToSet = u"test1"_ustr;
     m_xDocShell->GetDocFunc().RenameTable(0,nameToSet,false,true);
     OUString nameJustSet;
     m_pDoc->GetName(0,nameJustSet);
@@ -4287,7 +4287,7 @@ CPPUNIT_TEST_FIXTURE(Test, testRenameTable)
     OUString anOldName;
     m_pDoc->GetName(0,anOldName);
 
-    nameToSet = "test2";
+    nameToSet = u"test2"_ustr;
     rDocFunc.RenameTable(0,nameToSet,false,true);
     m_pDoc->GetName(0,nameJustSet);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("table not renamed", nameToSet, nameJustSet);
@@ -6930,7 +6930,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPrecisionAsShown)
     OUString aCode;
     double fValue, fExpectedRoundVal;
     {   // decimal rounding
-        aCode = "0.00";
+        aCode = u"0.00"_ustr;
         fValue = 1.0/3.0;
         fExpectedRoundVal = 0.33;
         checkPrecisionAsShown( aCode,  fValue,  fExpectedRoundVal );
@@ -6941,19 +6941,19 @@ CPPUNIT_TEST_FIXTURE(Test, testPrecisionAsShown)
         checkPrecisionAsShown( aCode, -fValue, -fExpectedRoundVal );
     }
     {   // thousand rounding tdf#106253
-        aCode = "0,,";
+        aCode = u"0,,"_ustr;
         fValue = 4.0e9 / 7.0;
         fExpectedRoundVal = 571e6;
         checkPrecisionAsShown( aCode,  fValue,  fExpectedRoundVal );
         checkPrecisionAsShown( aCode, -fValue, -fExpectedRoundVal );
-        aCode = "\"k\"[$$-409]* #,;[RED]-\"k\"[$$-409]* #,";
+        aCode = u"\"k\"[$$-409]* #,;[RED]-\"k\"[$$-409]* #,"_ustr;
         fValue = 4.0e8 / 7.0;
         fExpectedRoundVal = 57.143e6;
         checkPrecisionAsShown( aCode,  fValue,  fExpectedRoundVal );
         checkPrecisionAsShown( aCode, -fValue, -fExpectedRoundVal );
     }
     {   // percent rounding
-        aCode = "0.00%";
+        aCode = u"0.00%"_ustr;
         fValue = 4.0 / 7.0;
         fExpectedRoundVal = 0.5714;
         checkPrecisionAsShown( aCode,  fValue,  fExpectedRoundVal );
@@ -6964,7 +6964,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPrecisionAsShown)
         checkPrecisionAsShown( aCode, -fValue, -fExpectedRoundVal );
     }
     {   // scientific rounding
-        aCode = "0.00E0";
+        aCode = u"0.00E0"_ustr;
         fValue = 400000.0 / 7.0;
         fExpectedRoundVal = 57100.0;
         checkPrecisionAsShown( aCode,  fValue,  fExpectedRoundVal );
@@ -6974,7 +6974,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPrecisionAsShown)
         checkPrecisionAsShown( aCode,  fValue,  fExpectedRoundVal );
         checkPrecisionAsShown( aCode, -fValue, -fExpectedRoundVal );
         // engineering rounding tdf#106252
-        aCode = "##0.000E0";
+        aCode = u"##0.000E0"_ustr;
         fValue = 400000.0 / 7.0;
         fExpectedRoundVal = 57.143e3;
         checkPrecisionAsShown( aCode,  fValue,  fExpectedRoundVal );
@@ -6999,7 +6999,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPrecisionAsShown)
         fExpectedRoundVal = 5.714e-3;
         checkPrecisionAsShown( aCode,  fValue,  fExpectedRoundVal );
         checkPrecisionAsShown( aCode, -fValue, -fExpectedRoundVal );
-        aCode = "##?0.0#E0";
+        aCode = u"##?0.0#E0"_ustr;
         fValue = 400000.0 / 7.0;
         fExpectedRoundVal = 5.71e4;
         checkPrecisionAsShown( aCode,  fValue,  fExpectedRoundVal );
@@ -7034,21 +7034,21 @@ CPPUNIT_TEST_FIXTURE(Test, testPrecisionAsShown)
         checkPrecisionAsShown( aCode, -fValue, -fExpectedRoundVal );
     }
     {   // fraction rounding tdf#105657
-        aCode = "# ?/?";
+        aCode = u"# ?/?"_ustr;
         fValue = 0.35;
         fExpectedRoundVal = 1.0/3.0;
         checkPrecisionAsShown( aCode,  fValue,  fExpectedRoundVal );
         checkPrecisionAsShown( aCode, -fValue, -fExpectedRoundVal );
     }
     {   // exact fraction
-        aCode = "# ?/??";
+        aCode = u"# ?/??"_ustr;
         fValue = 0.35;
         fExpectedRoundVal = 0.35;
         checkPrecisionAsShown( aCode,  fValue,  fExpectedRoundVal );
         checkPrecisionAsShown( aCode, -fValue, -fExpectedRoundVal );
     }
     {   // several sub-formats tdf#106052
-        aCode = "0.00;-0.000";
+        aCode = u"0.00;-0.000"_ustr;
         fValue = 1.0/3.0;
         fExpectedRoundVal = 0.33;
         checkPrecisionAsShown( aCode,  fValue,  fExpectedRoundVal );

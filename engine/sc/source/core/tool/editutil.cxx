@@ -277,7 +277,7 @@ OUString ScEditUtil::GetCellFieldValue(
                 }
             }
             if (aRet.isEmpty())
-                aRet = "?";
+                aRet = u"?"_ustr;
         }
         break;
         case text::textfield::Type::TABLE:
@@ -288,15 +288,15 @@ OUString ScEditUtil::GetCellFieldValue(
             if (pDoc && pDoc->GetName(nTab, aName))
                 aRet = aName;
             else
-                aRet = "?";
+                aRet = u"?"_ustr;
         }
         break;
         default:
-            aRet = "?";
+            aRet = u"?"_ustr;
     }
 
     if (aRet.isEmpty())        // empty is yuck
-        aRet = " ";         // space is default of EditEngine
+        aRet = u" "_ustr;         // space is default of EditEngine
 
     return aRet;
 }
@@ -876,7 +876,7 @@ OUString ScHeaderEditEngine::CalcFieldValue( const SvxFieldItem& rField,
             aRet = ScGlobal::getLocaleData().getDate(aData.aDateTime);
         break;
         default:
-            aRet = "?";
+            aRet = u"?"_ustr;
     }
 
     return aRet;

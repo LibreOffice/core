@@ -220,7 +220,7 @@ void SAL_CALL ScChartsObj::addNewByName( const OUString& rName,
         if( !sRangeStr.isEmpty() )
             xReceiver->attachDataProvider( xDataProvider );
         else
-            sRangeStr = "all";
+            sRangeStr = u"all"_ustr;
 
         uno::Reference< util::XNumberFormatsSupplier > xNumberFormatsSupplier( cppu::getXWeak(pDocShell->GetModel()), uno::UNO_QUERY );
         xReceiver->attachNumberFormatsSupplier( xNumberFormatsSupplier );

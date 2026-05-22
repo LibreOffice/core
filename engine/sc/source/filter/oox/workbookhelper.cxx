@@ -545,10 +545,10 @@ void WorkbookGlobals::useInternalChartDataTable( bool bInternal )
 
 void WorkbookGlobals::initialize()
 {
-    maCellStyles = "CellStyles";
-    maPageStyles = "PageStyles";
-    maCellStyleServ = "com.sun.star.style.CellStyle";
-    maPageStyleServ = "com.sun.star.style.PageStyle";
+    maCellStyles = u"CellStyles"_ustr;
+    maPageStyles = u"PageStyles"_ustr;
+    maCellStyleServ = u"com.sun.star.style.CellStyle"_ustr;
+    maPageStyleServ = u"com.sun.star.style.PageStyle"_ustr;
     mnCurrSheet = -1;
     mbGeneratorKnownGood = false;
     mbHasCalculatedFormulaCells = false;

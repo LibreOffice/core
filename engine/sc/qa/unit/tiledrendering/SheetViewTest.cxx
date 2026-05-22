@@ -152,13 +152,13 @@ protected:
             switch (aFont.GetWeight())
             {
                 case WEIGHT_NORMAL:
-                    aWeight = "N";
+                    aWeight = u"N"_ustr;
                     break;
                 case WEIGHT_BOLD:
-                    aWeight = "B";
+                    aWeight = u"B"_ustr;
                     break;
                 default:
-                    aWeight = "?";
+                    aWeight = u"?"_ustr;
                     break;
             }
 

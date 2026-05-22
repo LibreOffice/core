@@ -137,7 +137,7 @@ void fillOutputFieldFromSelection(FormatOutputField& rOutputField, Selection con
             rOutputField.nIndex = rSelection.nIndices[0];
 
         if (rOutputField.nDimension == constDataDimension)
-            rOutputField.aName = "DATA";
+            rOutputField.aName = u"DATA"_ustr;
         else
             rOutputField.aName
                 = rNameResolver.getNameForIndex(rOutputField.nIndex, rOutputField.nDimension);

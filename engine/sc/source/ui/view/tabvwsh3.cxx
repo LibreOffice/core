@@ -75,11 +75,11 @@ namespace
     void collectUIInformation(const OUString& aZoom)
     {
         EventDescription aDescription;
-        aDescription.aID = "grid_window";
+        aDescription.aID = u"grid_window"_ustr;
         aDescription.aParameters = {{"ZOOM", aZoom}};
-        aDescription.aAction = "SET";
-        aDescription.aKeyWord = "ScGridWinUIObject";
-        aDescription.aParent = "MainWindow";
+        aDescription.aAction = u"SET"_ustr;
+        aDescription.aKeyWord = u"ScGridWinUIObject"_ustr;
+        aDescription.aParent = u"MainWindow"_ustr;
         UITestLogger::getInstance().logEvent(aDescription);
     }
 

@@ -140,11 +140,11 @@ std::pair<SCTAB,SCTAB> getMarkedTableRange(const std::vector<ScTableUniquePtr>& 
 void collectUIInformation(std::map<OUString, OUString>&& aParameters, const OUString& rAction)
 {
     EventDescription aDescription;
-    aDescription.aID = "grid_window";
+    aDescription.aID = u"grid_window"_ustr;
     aDescription.aAction = rAction;
     aDescription.aParameters = std::move(aParameters);
-    aDescription.aParent = "MainWindow";
-    aDescription.aKeyWord = "ScGridWinUIObject";
+    aDescription.aParent = u"MainWindow"_ustr;
+    aDescription.aKeyWord = u"ScGridWinUIObject"_ustr;
 
     UITestLogger::getInstance().logEvent(aDescription);
 }

@@ -336,7 +336,7 @@ FormulaLogger::GroupScope FormulaLogger::enterGroup(
     if (pMedium)
         aName = pMedium->GetURLObject().GetLastName();
     if (aName.isEmpty())
-        aName = "-"; // unsaved document.
+        aName = u"-"_ustr; // unsaved document.
 
     OUString aGroupPrefix = aName + ": formula-group: " +
         rCell.aPos.Format(ScRefFlags::VALID | ScRefFlags::TAB_3D, &rDoc, rDoc.GetAddressConvention()) + ": ";

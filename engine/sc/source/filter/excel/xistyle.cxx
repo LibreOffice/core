@@ -532,12 +532,12 @@ XclImpFontBuffer::XclImpFontBuffer( const XclImpRoot& rRoot ) :
         case EXC_BIFF3:
         case EXC_BIFF4:
         case EXC_BIFF5:
-            aCtrlFontData.maName = "Helv";
+            aCtrlFontData.maName = u"Helv"_ustr;
             aCtrlFontData.mnHeight = 160;
             aCtrlFontData.mnWeight = EXC_FONTWGHT_BOLD;
         break;
         case EXC_BIFF8:
-            aCtrlFontData.maName = "Tahoma";
+            aCtrlFontData.maName = u"Tahoma"_ustr;
             aCtrlFontData.mnHeight = 160;
             aCtrlFontData.mnWeight = EXC_FONTWGHT_NORMAL;
         break;
@@ -553,7 +553,7 @@ void XclImpFontBuffer::Initialize()
 
     // application font for column width calculation, later filled with first font from font list
     XclFontData aAppFontData;
-    aAppFontData.maName = "Arial";
+    aAppFontData.maName = u"Arial"_ustr;
     aAppFontData.mnHeight = 200;
     aAppFontData.mnWeight = EXC_FONTWGHT_NORMAL;
     UpdateAppFont( aAppFontData, false );

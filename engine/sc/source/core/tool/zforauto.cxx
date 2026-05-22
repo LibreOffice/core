@@ -72,7 +72,7 @@ void ScNumFormatAbbrev::PutFormatIndex(sal_uInt32 nFormat,
         OSL_FAIL("SCNumFormatAbbrev:: unknown number format");
         eLanguage = LANGUAGE_SYSTEM;
         eSysLanguage = LANGUAGE_GERMAN;     // otherwise "Standard" does not fit
-        sFormatstring = "Standard";
+        sFormatstring = u"Standard"_ustr;
     }
 }
 

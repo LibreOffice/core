@@ -919,7 +919,7 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
                     }
                     catch(uno::Exception&)
                     {
-                        aLocalName = "###";
+                        aLocalName = u"###"_ustr;
                     }
 
                     OUString aDescription;
@@ -930,7 +930,7 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
                     }
                     catch(uno::Exception&)
                     {
-                        aDescription = "###";
+                        aDescription = u"###"_ustr;
                     }
 
                     std::unique_ptr<ScAddInArgDesc[]> pVisibleArgs;
@@ -954,7 +954,7 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
                                 }
                                 catch(uno::Exception&)
                                 {
-                                    aArgName = "###";
+                                    aArgName = u"###"_ustr;
                                 }
                                 OUString aArgDesc;
                                 try
@@ -964,7 +964,7 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
                                 }
                                 catch(uno::Exception&)
                                 {
-                                    aArgDesc = "###";
+                                    aArgDesc = u"###"_ustr;
                                 }
 
                                 bool bOptional =
@@ -1160,7 +1160,7 @@ void ScUnoAddInCollection::UpdateFromAddIn( const uno::Reference<uno::XInterface
                                     aDesc.aDescription = pOldArgDesc->aDescription;
                                 }
                                 else
-                                    aDesc.aName = aDesc.aDescription = "###";
+                                    aDesc.aName = aDesc.aDescription = u"###"_ustr;
 
                                 bool bOptional =
                                     ( eArgType == SC_ADDINARG_VALUE_OR_ARRAY ||

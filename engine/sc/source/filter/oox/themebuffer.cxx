@@ -29,7 +29,7 @@ ThemeBuffer::ThemeBuffer( const WorkbookHelper& rHelper ) :
     mxDefFontModel( new FontModel )
 {
     //! TODO: locale dependent font name
-    mxDefFontModel->maName = "Cambria";
+    mxDefFontModel->maName = u"Cambria"_ustr;
     mxDefFontModel->mfHeight = 11.0;
 }
 

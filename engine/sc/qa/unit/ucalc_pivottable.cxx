@@ -2020,9 +2020,9 @@ CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableFieldReference)
     ScDPSaveData aSaveData = *pDPObj->GetSaveData();
     sheet::DataPilotFieldReference aFieldRef;
     aFieldRef.ReferenceType = sheet::DataPilotFieldReferenceType::ITEM_DIFFERENCE;
-    aFieldRef.ReferenceField = "Name";
+    aFieldRef.ReferenceField = u"Name"_ustr;
     aFieldRef.ReferenceItemType = sheet::DataPilotFieldReferenceItemType::NAMED;
-    aFieldRef.ReferenceItemName = "A";
+    aFieldRef.ReferenceItemName = u"A"_ustr;
     ScDPSaveDimension* pDim = aSaveData.GetDimensionByName(u"Value"_ustr);
     CPPUNIT_ASSERT_MESSAGE("Failed to retrieve dimension 'Value'.", pDim);
     pDim->SetReferenceValue(&aFieldRef);

@@ -859,10 +859,10 @@ void CondFormatRule::finalizeImport()
         case XML_timePeriod:
         break;
         case XML_containsBlanks:
-            aReplaceFormula = "LEN(TRIM(#B))=0";
+            aReplaceFormula = u"LEN(TRIM(#B))=0"_ustr;
         break;
         case XML_notContainsBlanks:
-            aReplaceFormula = "LEN(TRIM(#B))>0";
+            aReplaceFormula = u"LEN(TRIM(#B))>0"_ustr;
         break;
         case XML_containsErrors:
             eOperator = ScConditionMode::Error;

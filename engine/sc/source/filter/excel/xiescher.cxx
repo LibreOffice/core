@@ -1569,7 +1569,7 @@ void XclImpTextObj::DoPreProcessSdrObj( XclImpDffConverter& rDffConv, SdrObject&
                     if( SdrObjCustomShape* pObjCustomShape = dynamic_cast< SdrObjCustomShape* >( &rSdrObj ) )
                     {
                         css::beans::PropertyValue aTextRotateAngle;
-                        aTextRotateAngle.Name = "TextRotateAngle";
+                        aTextRotateAngle.Name = u"TextRotateAngle"_ustr;
                         aTextRotateAngle.Value <<= 180.0;
                         SdrCustomShapeGeometryItem aGeometryItem(pObjCustomShape->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ));
                         aGeometryItem.SetPropertyValue( aTextRotateAngle );
@@ -4384,27 +4384,27 @@ void XclImpSheetDrawing::ReadNote8( XclImpStream& rStrm )
 XclImpObjectManager::XclImpObjectManager( const XclImpRoot& rRoot ) :
     XclImpRoot( rRoot )
 {
-    maDefObjNames[ EXC_OBJTYPE_GROUP ]          = "Group";
+    maDefObjNames[ EXC_OBJTYPE_GROUP ]          = u"Group"_ustr;
     maDefObjNames[ EXC_OBJTYPE_LINE ]           = ScResId( STR_SHAPE_LINE );
     maDefObjNames[ EXC_OBJTYPE_RECTANGLE ]      = ScResId( STR_SHAPE_RECTANGLE );
     maDefObjNames[ EXC_OBJTYPE_OVAL ]           = ScResId( STR_SHAPE_OVAL );
-    maDefObjNames[ EXC_OBJTYPE_ARC ]            = "Arc";
-    maDefObjNames[ EXC_OBJTYPE_CHART ]          = "Chart";
-    maDefObjNames[ EXC_OBJTYPE_TEXT ]           = "Text";
+    maDefObjNames[ EXC_OBJTYPE_ARC ]            = u"Arc"_ustr;
+    maDefObjNames[ EXC_OBJTYPE_CHART ]          = u"Chart"_ustr;
+    maDefObjNames[ EXC_OBJTYPE_TEXT ]           = u"Text"_ustr;
     maDefObjNames[ EXC_OBJTYPE_BUTTON ]         =  ScResId( STR_FORM_BUTTON );
-    maDefObjNames[ EXC_OBJTYPE_PICTURE ]        = "Picture";
-    maDefObjNames[ EXC_OBJTYPE_POLYGON ]        = "Freeform";
+    maDefObjNames[ EXC_OBJTYPE_PICTURE ]        = u"Picture"_ustr;
+    maDefObjNames[ EXC_OBJTYPE_POLYGON ]        = u"Freeform"_ustr;
     maDefObjNames[ EXC_OBJTYPE_CHECKBOX ]       = ScResId( STR_FORM_CHECKBOX );
     maDefObjNames[ EXC_OBJTYPE_OPTIONBUTTON ]   = ScResId( STR_FORM_OPTIONBUTTON );
-    maDefObjNames[ EXC_OBJTYPE_EDIT ]           = "Edit Box";
+    maDefObjNames[ EXC_OBJTYPE_EDIT ]           = u"Edit Box"_ustr;
     maDefObjNames[ EXC_OBJTYPE_LABEL ]          = ScResId( STR_FORM_LABEL );
-    maDefObjNames[ EXC_OBJTYPE_DIALOG ]         = "Dialog Frame";
+    maDefObjNames[ EXC_OBJTYPE_DIALOG ]         = u"Dialog Frame"_ustr;
     maDefObjNames[ EXC_OBJTYPE_SPIN ]           = ScResId( STR_FORM_SPINNER );
     maDefObjNames[ EXC_OBJTYPE_SCROLLBAR ]      = ScResId( STR_FORM_SCROLLBAR );
     maDefObjNames[ EXC_OBJTYPE_LISTBOX ]        = ScResId( STR_FORM_LISTBOX );
     maDefObjNames[ EXC_OBJTYPE_GROUPBOX ]       = ScResId( STR_FORM_GROUPBOX );
     maDefObjNames[ EXC_OBJTYPE_DROPDOWN ]       = ScResId( STR_FORM_DROPDOWN );
-    maDefObjNames[ EXC_OBJTYPE_NOTE ]           = "Comment";
+    maDefObjNames[ EXC_OBJTYPE_NOTE ]           = u"Comment"_ustr;
     maDefObjNames[ EXC_OBJTYPE_DRAWING ]        = ScResId( STR_SHAPE_AUTOSHAPE );
 }
 

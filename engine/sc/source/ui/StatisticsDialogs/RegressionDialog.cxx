@@ -330,7 +330,7 @@ OUString ScRegressionDialog::GetVariableNameFormula(bool bXVar, size_t nIndex, b
     if (bXVar)
         aDefaultVarName = "X" + OUString::number(nIndex);
     else
-        aDefaultVarName = "Y";
+        aDefaultVarName = u"Y"_ustr;
 
     return bWithLog ? OUString("=\"LN(" + aDefaultVarName + ")\"") :
         OUString("=\"" + aDefaultVarName + "\"");

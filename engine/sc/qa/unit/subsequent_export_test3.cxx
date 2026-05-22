@@ -645,7 +645,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testSharedFormulaExportXLS)
             }
 
             aActual = rDoc.GetString(1, 1, 0);
-            aExpected = "Response";
+            aExpected = u"Response"_ustr;
             if (aActual != aExpected)
             {
                 std::cerr << "Wrong content in B2: expected='" << aExpected << "', actual='"
@@ -675,7 +675,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testSharedFormulaExportXLS)
                 }
 
                 OUString aFormula = pFC->GetCode()->CreateString(aCxt, aPos);
-                aExpected = "Coefficients!RC[-1]";
+                aExpected = u"Coefficients!RC[-1]"_ustr;
                 if (aFormula != aExpected)
                 {
                     std::cerr << "Wrong formula in B" << (i + 2) << ": expected='" << aExpected

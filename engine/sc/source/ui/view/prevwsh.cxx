@@ -922,7 +922,7 @@ void ScPreviewShell::WriteUserDataSequence(uno::Sequence < beans::PropertyValue 
     pSeq[0].Value <<= SC_VIEW + OUString::number(nViewID);
     pSeq[1].Name = SC_ZOOMVALUE;
     pSeq[1].Value <<= sal_Int32 (pPreview->GetZoom());
-    pSeq[2].Name = "PageNumber";
+    pSeq[2].Name = u"PageNumber"_ustr;
     pSeq[2].Value <<= pPreview->GetPageNo();
 
     // Common SdrModel processing

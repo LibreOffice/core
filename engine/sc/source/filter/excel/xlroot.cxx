@@ -112,7 +112,7 @@ XclRootData::XclRootData( XclBiff eBiff, SfxMedium& rMedium,
     if (!comphelper::IsFuzzing())
         maUserName = SvtUserOptions().GetLastName();
     if (maUserName.isEmpty())
-        maUserName = "Calc";
+        maUserName = u"Calc"_ustr;
 
     switch( ScGlobal::GetDefaultScriptType() )
     {

@@ -1853,13 +1853,13 @@ OUString SAL_CALL ScDPHierarchy::getName()
     switch (nHier)
     {
         case SC_DAPI_HIERARCHY_FLAT:
-            aRet = "flat";
+            aRet = u"flat"_ustr;
             break;  //TODO: name ???????
         case SC_DAPI_HIERARCHY_QUARTER:
-            aRet = "Quarter";
+            aRet = u"Quarter"_ustr;
             break;  //TODO: name ???????
         case SC_DAPI_HIERARCHY_WEEK:
-            aRet = "Week";
+            aRet = u"Week"_ustr;
             break;  //TODO: name ???????
         default:
             OSL_FAIL( "ScDPHierarchy::getName: unexpected hierarchy" );
@@ -2128,16 +2128,16 @@ OUString SAL_CALL ScDPLevel::getName()
             switch ( nLev )
             {
                 case SC_DAPI_LEVEL_YEAR:
-                    aRet = "Year";
+                    aRet = u"Year"_ustr;
                     break;
                 case SC_DAPI_LEVEL_QUARTER:
-                    aRet = "Quarter";
+                    aRet = u"Quarter"_ustr;
                     break;
                 case SC_DAPI_LEVEL_MONTH:
-                    aRet = "Month";
+                    aRet = u"Month"_ustr;
                     break;
                 case SC_DAPI_LEVEL_DAY:
-                    aRet = "Day";
+                    aRet = u"Day"_ustr;
                     break;
                 default:
                     OSL_FAIL( "ScDPLevel::getName: unexpected level" );
@@ -2149,13 +2149,13 @@ OUString SAL_CALL ScDPLevel::getName()
             switch ( nLev )
             {
                 case SC_DAPI_LEVEL_YEAR:
-                    aRet = "Year";
+                    aRet = u"Year"_ustr;
                     break;
                 case SC_DAPI_LEVEL_WEEK:
-                    aRet = "Week";
+                    aRet = u"Week"_ustr;
                     break;
                 case SC_DAPI_LEVEL_WEEKDAY:
-                    aRet = "Weekday";
+                    aRet = u"Weekday"_ustr;
                     break;
                 default:
                     OSL_FAIL( "ScDPLevel::getName: unexpected level" );

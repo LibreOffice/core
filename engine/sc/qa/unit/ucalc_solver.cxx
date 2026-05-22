@@ -34,21 +34,21 @@ std::vector<ModelConstraint> SolverTest::CreateConstraintsModelA()
     std::vector<ModelConstraint> aConstraints;
 
     ModelConstraint aConstr1;
-    aConstr1.aLeftStr = "$C$1:$C$10";
+    aConstr1.aLeftStr = u"$C$1:$C$10"_ustr;
     aConstr1.nOperator = CO_LESS_EQUAL;
-    aConstr1.aRightStr = "100";
+    aConstr1.aRightStr = u"100"_ustr;
     aConstraints.push_back(aConstr1);
 
     ModelConstraint aConstr2;
-    aConstr2.aLeftStr = "$F$5";
+    aConstr2.aLeftStr = u"$F$5"_ustr;
     aConstr2.nOperator = CO_EQUAL;
-    aConstr2.aRightStr = "500";
+    aConstr2.aRightStr = u"500"_ustr;
     aConstraints.push_back(aConstr2);
 
     ModelConstraint aConstr3;
-    aConstr3.aLeftStr = "$D$1:$D$5";
+    aConstr3.aLeftStr = u"$D$1:$D$5"_ustr;
     aConstr3.nOperator = CO_BINARY;
-    aConstr3.aRightStr = "";
+    aConstr3.aRightStr = u""_ustr;
     aConstraints.push_back(aConstr3);
 
     return aConstraints;

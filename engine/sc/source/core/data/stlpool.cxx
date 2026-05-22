@@ -387,14 +387,14 @@ void ScStyleSheetPool::CreateStandardStyles()
     // Footer:
     // [\TABLE\ (\DATA\)][empty][\DATE\, \TIME\]
 
-    aStr = " ()";
+    aStr = u" ()"_ustr;
     aEdEngine.SetTextCurrentDefaults( aStr );
     aEdEngine.QuickInsertField( SvxFieldItem(SvxFileField(), EE_FEATURE_FIELD), ESelection(0,2) );
     aEdEngine.QuickInsertField( SvxFieldItem(SvxTableField(), EE_FEATURE_FIELD), ESelection() );
     pTxtObj = aEdEngine.CreateTextObject();
     aHeaderItem.SetLeftArea( *pTxtObj );
     aHeaderItem.SetCenterArea( *pEmptyTxtObj );
-    aStr = ", ";
+    aStr = u", "_ustr;
     aEdEngine.SetTextCurrentDefaults( aStr );
     aEdEngine.QuickInsertField( SvxFieldItem(SvxTimeField(), EE_FEATURE_FIELD), ESelection(0,2) );
     aEdEngine.QuickInsertField( SvxFieldItem(SvxDateField(Date( Date::SYSTEM ),SvxDateType::Var), EE_FEATURE_FIELD),

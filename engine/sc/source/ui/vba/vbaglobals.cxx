@@ -37,11 +37,11 @@ ScVbaGlobals::ScVbaGlobals( uno::Sequence< uno::Any > const& aArgs, uno::Referen
 {
     uno::Sequence< beans::PropertyValue > aInitArgs( aArgs.hasElements() ? 2 : 1 );
     auto pInitArgs = aInitArgs.getArray();
-    pInitArgs[ 0 ].Name = "Application";
+    pInitArgs[ 0 ].Name = u"Application"_ustr;
     pInitArgs[ 0 ].Value <<= getApplication();
     if ( aArgs.hasElements() )
     {
-        pInitArgs[ 1 ].Name = "ExcelDocumentContext";
+        pInitArgs[ 1 ].Name = u"ExcelDocumentContext"_ustr;
         pInitArgs[ 1 ].Value <<= getXSomethingFromArgs< frame::XModel >( aArgs, 0 );
     }
     init( aInitArgs );

@@ -60,11 +60,11 @@ namespace
 void collectUIInformation( const OUString& aevent )
 {
     EventDescription aDescription;
-    aDescription.aID =  "grid_window";
+    aDescription.aID =  u"grid_window"_ustr;
     aDescription.aParameters = {{ aevent ,  ""}};
-    aDescription.aAction = "COMMENT";
-    aDescription.aParent = "MainWindow";
-    aDescription.aKeyWord = "ScGridWinUIObject";
+    aDescription.aAction = u"COMMENT"_ustr;
+    aDescription.aParent = u"MainWindow"_ustr;
+    aDescription.aKeyWord = u"ScGridWinUIObject"_ustr;
     UITestLogger::getInstance().logEvent(aDescription);
 }
 

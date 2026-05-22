@@ -80,11 +80,11 @@ namespace {
 void collectUIInformation(std::map<OUString, OUString>&& aParameters, const OUString& action)
 {
     EventDescription aDescription;
-    aDescription.aID = "grid_window";
+    aDescription.aID = u"grid_window"_ustr;
     aDescription.aAction = action;
     aDescription.aParameters = std::move(aParameters);
-    aDescription.aParent = "MainWindow";
-    aDescription.aKeyWord = "ScGridWinUIObject";
+    aDescription.aParent = u"MainWindow"_ustr;
+    aDescription.aKeyWord = u"ScGridWinUIObject"_ustr;
 
     UITestLogger::getInstance().logEvent(aDescription);
 }

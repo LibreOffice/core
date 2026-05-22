@@ -360,11 +360,11 @@ bool ScXMLImportWrapper::Import( ImportFlags nMode, ErrCodeMsg& rError )
                 aName = pDocHierarchItem->GetValue();
         }
         else
-            aName = "dummyObjectName";
+            aName = u"dummyObjectName"_ustr;
 
         if( !aName.isEmpty() )
         {
-            sPropName = "StreamRelPath";
+            sPropName = u"StreamRelPath"_ustr;
             xInfoSet->setPropertyValue( sPropName, uno::Any( aName ) );
         }
     }
@@ -822,7 +822,7 @@ bool ScXMLImportWrapper::Export(bool bStylesOnly)
 
             if( !aName.isEmpty() )
             {
-                sPropName = "StreamRelPath";
+                sPropName = u"StreamRelPath"_ustr;
                 xInfoSet->setPropertyValue( sPropName, uno::Any( aName ) );
             }
         }

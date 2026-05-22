@@ -1892,7 +1892,7 @@ void ScTabViewShell::KitSendFormulabarUpdate(const EditView* pActiveView,
 void ScTabViewShell::SendFormulabarUpdate::Send()
 {
     std::unique_ptr<jsdialog::ActionDataMap> pData = std::make_unique<jsdialog::ActionDataMap>();
-    (*pData)["action_type"_ostr] = "setText";
+    (*pData)["action_type"_ostr] = u"setText"_ustr;
     (*pData)["text"_ostr] = m_aText;
     (*pData)["selection"_ostr] = m_aSelection;
     (*pData)["separator"_ostr] = m_separator;
@@ -4010,7 +4010,7 @@ bool ScInputHandler::KeyInput( const KeyEvent& rKEvt, bool bStartEdit /* = false
                         if (bStartEdit && nCellPercentFormatDecSep != 0 &&
                                 ((nChar >= '0' && nChar <= '9') || nChar == '-' || nChar == nCellPercentFormatDecSep))
                         {
-                            aStrLoP = "%";
+                            aStrLoP = u"%"_ustr;
                         }
 
                         if (pTableView)

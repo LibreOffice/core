@@ -92,13 +92,13 @@ void XclPCItem::SetError( sal_uInt16 nError )
     mnError = nError;
     switch( nError )
     {
-    case 0x00: maText = "#nullptr!"; break;
-    case 0x07: maText = "#DIV/0!"; break;
-    case 0x0F: maText = "#VALUE!"; break;
-    case 0x17: maText = "#REF!"; break;
-    case 0x1D: maText = "#NAME?"; break;
-    case 0x24: maText = "#NUM!"; break;
-    case 0x2A: maText = "#N/A"; break;
+    case 0x00: maText = u"#nullptr!"_ustr; break;
+    case 0x07: maText = u"#DIV/0!"_ustr; break;
+    case 0x0F: maText = u"#VALUE!"_ustr; break;
+    case 0x17: maText = u"#REF!"_ustr; break;
+    case 0x1D: maText = u"#NAME?"_ustr; break;
+    case 0x24: maText = u"#NUM!"_ustr; break;
+    case 0x2A: maText = u"#N/A"_ustr; break;
     default: break;
     }
 }

@@ -1015,16 +1015,16 @@ void ExcDocument::WriteXml( XclExpXmlStream& rStrm )
                 switch (nToken)
                 {
                     case XML_none:
-                        nValue = "none";
+                        nValue = u"none"_ustr;
                         break;
                     case XML_stored:
-                        nValue = "stored";
+                        nValue = u"stored"_ustr;
                         break;
                     case XML_prompt:
-                        nValue = "prompt";
+                        nValue = u"prompt"_ustr;
                         break;
                     default:
-                        nValue = "integrated";
+                        nValue = u"integrated"_ustr;
                         break;
                 }
 
@@ -1107,13 +1107,13 @@ void ExcDocument::WriteXml( XclExpXmlStream& rStrm )
                         switch (nToken)
                         {
                             case XML_all:
-                                nValue = "all";
+                                nValue = u"all"_ustr;
                                 break;
                             case XML_rtf:
-                                nValue = "rtf";
+                                nValue = u"rtf"_ustr;
                                 break;
                             default:
-                                nValue = "none";
+                                nValue = u"none"_ustr;
                                 break;
                         }
 

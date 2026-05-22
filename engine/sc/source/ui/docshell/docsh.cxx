@@ -1007,7 +1007,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                                             {
                                                 aValues.realloc( 2 );
                                                 auto pValues = aValues.getArray();
-                                                pValues[1].Name = "Password";
+                                                pValues[1].Name = u"Password"_ustr;
                                                 pValues[1].Value <<= pPasswordItem->GetValue();
                                             }
                                             const SfxUnoAnyItem* pEncryptionItem = GetMedium()->GetItemSet().GetItem(SID_ENCRYPTIONDATA, false);
@@ -1015,7 +1015,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                                             {
                                                 aValues.realloc(aValues.getLength() + 1);
                                                 auto pValues = aValues.getArray();
-                                                pValues[aValues.getLength() - 1].Name = "EncryptionData";
+                                                pValues[aValues.getLength() - 1].Name = u"EncryptionData"_ustr;
                                                 pValues[aValues.getLength() - 1].Value = pEncryptionItem->GetValue();
                                             }
 

@@ -261,9 +261,9 @@ void Comment::finalizeImport(const VmlDrawing::NoteShapesMap& rNoteShapesMap)
             xGenerator->maPropertyValues.realloc(nOldPropLen + 2);
             OUString* pNames = xGenerator->maPropertyNames.getArray();
             Any* pValues = xGenerator->maPropertyValues.getArray();
-            pNames[nOldPropLen] = "TextVerticalAdjust";
+            pNames[nOldPropLen] = u"TextVerticalAdjust"_ustr;
             pValues[nOldPropLen] <<= lcl_ToVertAlign(xClientData->mnTextVAlign);
-            pNames[nOldPropLen + 1] = "ParaAdjust";
+            pNames[nOldPropLen + 1] = u"ParaAdjust"_ustr;
             pValues[nOldPropLen + 1] <<= lcl_ToParaAlign( xClientData->mnTextHAlign);
         }
 

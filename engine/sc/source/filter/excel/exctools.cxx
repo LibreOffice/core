@@ -166,7 +166,7 @@ ExcScenario::ExcScenario( XclImpStream& rIn, const RootData& rR )
         aName = rIn.ReadUniString( nName );
     else
     {
-        aName = "Scenery";
+        aName = u"Scenery"_ustr;
         rIn.Ignore( 1 );
     }
 

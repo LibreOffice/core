@@ -1116,7 +1116,7 @@ void XclImpChText::ConvertDataLabel( ScfPropertySet& rPropSet, const XclChTypeIn
     rPropSet.SetProperty( EXC_CHPROP_LABEL, aPointLabel );
     OUString aSep = mxLabelProps ? mxLabelProps->maSeparator : OUString('\n');
     if( aSep.isEmpty() )
-        aSep = "; ";
+        aSep = u"; "_ustr;
     rPropSet.SetStringProperty( EXC_CHPROP_LABELSEPARATOR, aSep );
 
     // text properties of attached label

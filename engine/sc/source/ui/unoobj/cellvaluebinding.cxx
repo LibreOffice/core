@@ -442,10 +442,10 @@ namespace calc
     {
         Sequence< OUString > aServices( m_bListPos ? 3 : 2 );
         auto pServices = aServices.getArray();
-        pServices[ 0 ] = "com.sun.star.table.CellValueBinding";
-        pServices[ 1 ] = "com.sun.star.form.binding.ValueBinding";
+        pServices[ 0 ] = u"com.sun.star.table.CellValueBinding"_ustr;
+        pServices[ 1 ] = u"com.sun.star.form.binding.ValueBinding"_ustr;
         if ( m_bListPos )
-            pServices[ 2 ] = "com.sun.star.table.ListPositionCellBinding";
+            pServices[ 2 ] = u"com.sun.star.table.ListPositionCellBinding"_ustr;
         return aServices;
     }
 

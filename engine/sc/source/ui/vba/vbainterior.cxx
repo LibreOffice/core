@@ -254,7 +254,7 @@ uno::Any
 ScVbaInterior::SetAttributeData( sal_Int32 nValue )
 {
     xml::AttributeData aAttributeData;
-    aAttributeData.Type = "sal_Int32";
+    aAttributeData.Type = u"sal_Int32"_ustr;
     aAttributeData.Value = OUString::number( nValue );
     return uno::Any( aAttributeData );
 }

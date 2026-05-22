@@ -371,7 +371,7 @@ void SAL_CALL ScVbaControlObjectBase::setOnAction( const OUString& rMacroName )
     script::ScriptEventDescriptor aDescriptor;
     aDescriptor.ListenerType = gaListenerType;
     aDescriptor.EventMethod = gaEventMethod;
-    aDescriptor.ScriptType = "Script";
+    aDescriptor.ScriptType = u"Script"_ustr;
     aDescriptor.ScriptCode = makeMacroURL( aResolvedMacro.msResolvedMacro );
     NotifyMacroEventRead();
     xEventMgr->registerScriptEvent( nIndex, aDescriptor );

@@ -354,7 +354,7 @@ void setUpDocumentModules( const uno::Reference< sheet::XSpreadsheetDocument >& 
             OUString sCodeName = rDoc.GetCodeName();
             if ( sCodeName.isEmpty() )
             {
-                sCodeName = "ThisWorkbook";
+                sCodeName = u"ThisWorkbook"_ustr;
                 rDoc.SetCodeName( sCodeName );
             }
 

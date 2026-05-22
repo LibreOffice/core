@@ -613,11 +613,11 @@ CPPUNIT_TEST_FIXTURE(ScExportTest6, testCsvImportEmptyFilterOptions)
     // separator and set bOptInit=true, preventing the comma/UTF-8 fallback defaults.
     std::vector<css::beans::PropertyValue> aFilterOptions;
     css::beans::PropertyValue aFilterName;
-    aFilterName.Name = "FilterName";
+    aFilterName.Name = u"FilterName"_ustr;
     aFilterName.Value <<= u"Text - txt - csv (StarCalc)"_ustr;
     aFilterOptions.push_back(aFilterName);
     css::beans::PropertyValue aFilterOpts;
-    aFilterOpts.Name = "FilterOptions";
+    aFilterOpts.Name = u"FilterOptions"_ustr;
     aFilterOpts.Value <<= OUString();
     aFilterOptions.push_back(aFilterOpts);
     loadWithParams(aTempFile.GetURL(), comphelper::containerToSequence(aFilterOptions));

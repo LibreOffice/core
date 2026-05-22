@@ -272,7 +272,7 @@ ScPrintUIOptions::ScPrintUIOptions()
     m_aUIProperties.resize(nNumProps);
 
     // load the writer PrinterOptions into the custom tab
-    m_aUIProperties[nIdx].Name = "OptionsUIFile";
+    m_aUIProperties[nIdx].Name = u"OptionsUIFile"_ustr;
     m_aUIProperties[nIdx++].Value <<= u"modules/scalc/ui/printeroptions.ui"_ustr;
 
     // create Section for spreadsheet (results in an extra tab page in dialog)
@@ -291,7 +291,7 @@ ScPrintUIOptions::ScPrintUIOptions()
                                                   bSuppress);
     // show Subgroup for print content
     vcl::PrinterOptionsHelper::UIControlOptions aPrintRangeOpt;
-    aPrintRangeOpt.maGroupHint = "PrintRange";
+    aPrintRangeOpt.maGroupHint = u"PrintRange"_ustr;
     m_aUIProperties[nIdx++].Value = setSubgroupControlOpt(u"printrange"_ustr, ScResId( SCSTR_PRINTOPT_PAGES ),
                                                       OUString(),
                                                       aPrintRangeOpt);
@@ -3985,7 +3985,7 @@ void ScModelObj::NotifyChanges( const OUString& rOperation, const ScRangeList& r
         // FIXME: make sure it can be passed
         if (rOperation == "delete-content" || rOperation == "undo"
             || rOperation == "redo" || rOperation == "paste")
-            aOperation = "cell-change";
+            aOperation = u"cell-change"_ustr;
     }
 
     if ( pDocShell && HasChangesListeners() )

@@ -435,7 +435,7 @@ void SolverSettings::ReadEngine()
     if (!ReadParamValue(SP_LO_ENGINE, m_sLOEngineName, true))
     {
         // If no engine is defined, use CoinMP solver as default
-        m_sLOEngineName = "com.sun.star.comp.Calc.CoinMPSolver";
+        m_sLOEngineName = u"com.sun.star.comp.Calc.CoinMPSolver"_ustr;
     }
 
     if (SolverNamesToExcelEngines.count(m_sLOEngineName))
@@ -758,11 +758,11 @@ void SolverSettings::DeleteAllNamedRanges()
  */
 void SolverSettings::ResetToDefaults()
 {
-    m_sObjCell = "";
+    m_sObjCell = u""_ustr;
     m_eObjType = ObjectiveType::OT_MAXIMIZE;
-    m_sObjVal = "";
-    m_sVariableCells = "";
-    m_sMSEngineId = "1";
+    m_sObjVal = u""_ustr;
+    m_sVariableCells = u""_ustr;
+    m_sMSEngineId = u"1"_ustr;
 
     css::uno::Sequence<OUString> aEngineNames;
     css::uno::Sequence<OUString> aDescriptions;

@@ -325,7 +325,7 @@ void lclGetFormulaFromStringList( OUString& rFmlaStr, std::u16string_view rStrin
         while (nIdx>0);
     }
     if( rFmlaStr.isEmpty() )
-        rFmlaStr = "\"\"";
+        rFmlaStr = u"\"\""_ustr;
 }
 
 /** Converts formula with strings separated by semicolons to line feed separated string.

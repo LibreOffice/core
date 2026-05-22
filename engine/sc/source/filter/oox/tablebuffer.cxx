@@ -144,7 +144,7 @@ void Table::finalizeImport()
         switch (nToken)
         {
             case XML_xml:
-                sValue = "xml";
+                sValue = u"xml"_ustr;
                 break;
             // TODO: activate this case when we support query tables.
             // case XML_queryTable:

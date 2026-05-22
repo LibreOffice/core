@@ -1171,7 +1171,7 @@ void VBA_InsertModule( ScDocument& rDoc, SCTAB nTab, const OUString& sSource )
     uno::Any aSourceAny;
     OUString sTmpSource = sSource;
     if ( sTmpSource.isEmpty() )
-        sTmpSource = "Rem Attribute VBA_ModuleType=VBADocumentModule\nOption VBASupport 1\n";
+        sTmpSource = u"Rem Attribute VBA_ModuleType=VBADocumentModule\nOption VBASupport 1\n"_ustr;
     aSourceAny <<= sTmpSource;
     uno::Reference< script::vba::XVBAModuleInfo > xVBAModuleInfo( xLib, uno::UNO_QUERY );
     if ( xVBAModuleInfo.is() )

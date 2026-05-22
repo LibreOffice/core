@@ -396,7 +396,7 @@ ScXMLExport::ScXMLExport(
     // This name is reserved for the external ref cache tables.  This
     // should not conflict with user-defined styles since this name is
     // used for a table style which is not available in the UI.
-    sExternalRefTabStyleName = "ta_extref";
+    sExternalRefTabStyleName = u"ta_extref"_ustr;
     GetAutoStylePool()->RegisterName(XmlStyleFamily::TABLE_TABLE, sExternalRefTabStyleName);
 
     sAttrName = GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_TABLE, GetXMLToken(XML_NAME));
@@ -5286,36 +5286,36 @@ void ScXMLExport::GetChangeTrackViewSettings(const ScDocument& rDoc, uno::Sequen
 
     uno::Sequence<beans::PropertyValue> aChangeProps(SC_VIEWCHANGES_COUNT);
     beans::PropertyValue* pChangeProps(aChangeProps.getArray());
-    pChangeProps[SC_SHOW_CHANGES].Name = "ShowChanges";
+    pChangeProps[SC_SHOW_CHANGES].Name = u"ShowChanges"_ustr;
     pChangeProps[SC_SHOW_CHANGES].Value <<= pViewSettings->ShowChanges();
-    pChangeProps[SC_SHOW_ACCEPTED_CHANGES].Name = "ShowAcceptedChanges";
+    pChangeProps[SC_SHOW_ACCEPTED_CHANGES].Name = u"ShowAcceptedChanges"_ustr;
     pChangeProps[SC_SHOW_ACCEPTED_CHANGES].Value <<= pViewSettings->IsShowAccepted();
-    pChangeProps[SC_SHOW_REJECTED_CHANGES].Name = "ShowRejectedChanges";
+    pChangeProps[SC_SHOW_REJECTED_CHANGES].Name = u"ShowRejectedChanges"_ustr;
     pChangeProps[SC_SHOW_REJECTED_CHANGES].Value <<= pViewSettings->IsShowRejected();
-    pChangeProps[SC_SHOW_CHANGES_BY_DATETIME].Name = "ShowChangesByDatetime";
+    pChangeProps[SC_SHOW_CHANGES_BY_DATETIME].Name = u"ShowChangesByDatetime"_ustr;
     pChangeProps[SC_SHOW_CHANGES_BY_DATETIME].Value <<= pViewSettings->HasDate();
-    pChangeProps[SC_SHOW_CHANGES_BY_DATETIME_MODE].Name = "ShowChangesByDatetimeMode";
+    pChangeProps[SC_SHOW_CHANGES_BY_DATETIME_MODE].Name = u"ShowChangesByDatetimeMode"_ustr;
     pChangeProps[SC_SHOW_CHANGES_BY_DATETIME_MODE].Value <<= static_cast<sal_Int16>(pViewSettings->GetTheDateMode());
-    pChangeProps[SC_SHOW_CHANGES_BY_DATETIME_FIRST_DATETIME].Name = "ShowChangesByDatetimeFirstDatetime";
+    pChangeProps[SC_SHOW_CHANGES_BY_DATETIME_FIRST_DATETIME].Name = u"ShowChangesByDatetimeFirstDatetime"_ustr;
     pChangeProps[SC_SHOW_CHANGES_BY_DATETIME_FIRST_DATETIME].Value <<= pViewSettings->GetTheFirstDateTime().GetUNODateTime();
-    pChangeProps[SC_SHOW_CHANGES_BY_DATETIME_SECOND_DATETIME].Name = "ShowChangesByDatetimeSecondDatetime";
+    pChangeProps[SC_SHOW_CHANGES_BY_DATETIME_SECOND_DATETIME].Name = u"ShowChangesByDatetimeSecondDatetime"_ustr;
     pChangeProps[SC_SHOW_CHANGES_BY_DATETIME_SECOND_DATETIME].Value <<= pViewSettings->GetTheLastDateTime().GetUNODateTime();
-    pChangeProps[SC_SHOW_CHANGES_BY_AUTHOR].Name = "ShowChangesByAuthor";
+    pChangeProps[SC_SHOW_CHANGES_BY_AUTHOR].Name = u"ShowChangesByAuthor"_ustr;
     pChangeProps[SC_SHOW_CHANGES_BY_AUTHOR].Value <<= pViewSettings->HasAuthor();
-    pChangeProps[SC_SHOW_CHANGES_BY_AUTHOR_NAME].Name = "ShowChangesByAuthorName";
+    pChangeProps[SC_SHOW_CHANGES_BY_AUTHOR_NAME].Name = u"ShowChangesByAuthorName"_ustr;
     pChangeProps[SC_SHOW_CHANGES_BY_AUTHOR_NAME].Value <<= pViewSettings->GetTheAuthorToShow();
-    pChangeProps[SC_SHOW_CHANGES_BY_COMMENT].Name = "ShowChangesByComment";
+    pChangeProps[SC_SHOW_CHANGES_BY_COMMENT].Name = u"ShowChangesByComment"_ustr;
     pChangeProps[SC_SHOW_CHANGES_BY_COMMENT].Value <<= pViewSettings->HasComment();
-    pChangeProps[SC_SHOW_CHANGES_BY_COMMENT_TEXT].Name = "ShowChangesByCommentText";
+    pChangeProps[SC_SHOW_CHANGES_BY_COMMENT_TEXT].Name = u"ShowChangesByCommentText"_ustr;
     pChangeProps[SC_SHOW_CHANGES_BY_COMMENT_TEXT].Value <<= pViewSettings->GetTheComment();
-    pChangeProps[SC_SHOW_CHANGES_BY_RANGES].Name = "ShowChangesByRanges";
+    pChangeProps[SC_SHOW_CHANGES_BY_RANGES].Name = u"ShowChangesByRanges"_ustr;
     pChangeProps[SC_SHOW_CHANGES_BY_RANGES].Value <<= pViewSettings->HasRange();
     OUString sRangeList;
     ScRangeStringConverter::GetStringFromRangeList(sRangeList, &(pViewSettings->GetTheRangeList()), &rDoc, FormulaGrammar::CONV_OOO);
-    pChangeProps[SC_SHOW_CHANGES_BY_RANGES_LIST].Name = "ShowChangesByRangesList";
+    pChangeProps[SC_SHOW_CHANGES_BY_RANGES_LIST].Name = u"ShowChangesByRangesList"_ustr;
     pChangeProps[SC_SHOW_CHANGES_BY_RANGES_LIST].Value <<= sRangeList;
 
-    pProps[nChangePos].Name = "TrackedChangesViewSettings";
+    pProps[nChangePos].Name = u"TrackedChangesViewSettings"_ustr;
     pProps[nChangePos].Value <<= aChangeProps;
 }
 
@@ -5336,13 +5336,13 @@ void ScXMLExport::GetViewSettings(uno::Sequence<beans::PropertyValue>& rProps)
 
         tools::Rectangle aRect(pEmbeddedObj->GetVisArea());
         sal_uInt16 i(0);
-        pProps[i].Name = "VisibleAreaTop";
+        pProps[i].Name = u"VisibleAreaTop"_ustr;
         pProps[i].Value <<= static_cast<sal_Int32>(aRect.Top());
-        pProps[++i].Name = "VisibleAreaLeft";
+        pProps[++i].Name = u"VisibleAreaLeft"_ustr;
         pProps[i].Value <<= static_cast<sal_Int32>(aRect.Left());
-        pProps[++i].Name = "VisibleAreaWidth";
+        pProps[++i].Name = u"VisibleAreaWidth"_ustr;
         pProps[i].Value <<= static_cast<sal_Int32>(aRect.getOpenWidth());
-        pProps[++i].Name = "VisibleAreaHeight";
+        pProps[++i].Name = u"VisibleAreaHeight"_ustr;
         pProps[i].Value <<= static_cast<sal_Int32>(aRect.getOpenHeight());
     }
 
@@ -5406,19 +5406,19 @@ void ScXMLExport::GetConfigurationSettings(uno::Sequence<beans::PropertyValue>& 
     auto pProps = rProps.getArray();
     if (!aTrackedChangesKey.isEmpty())
     {
-        pProps[nCount].Name = "TrackedChangesProtectionKey";
+        pProps[nCount].Name = u"TrackedChangesProtectionKey"_ustr;
         pProps[nCount].Value <<= aTrackedChangesKey.makeStringAndClear();
         ++nCount;
     }
     if( bVBACompat )
     {
-        pProps[nCount].Name = "VBACompatibilityMode";
+        pProps[nCount].Name = u"VBACompatibilityMode"_ustr;
         pProps[nCount].Value <<= bVBACompat;
         ++nCount;
     }
     if( xCodeNameAccess.is() )
     {
-        pProps[nCount].Name = "ScriptConfiguration";
+        pProps[nCount].Name = u"ScriptConfiguration"_ustr;
         pProps[nCount].Value <<= uno::Reference<container::XNameAccess>(xCodeNameAccess);
         ++nCount;
     }
