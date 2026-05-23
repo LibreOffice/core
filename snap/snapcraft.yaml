@@ -304,9 +304,10 @@ parts:
       - libexpat1
       - libfontconfig1
       - libfreetype6
-      - libgraphite2-3
-      - libharfbuzz0b
-      - libharfbuzz-icu0
+      # libharfbuzz/libgraphite2 deliberately NOT staged: the engine is
+      # configured --without-system-harfbuzz --without-system-graphite, so
+      # it builds and bundles its own copies in instdir/program/. Qt picks
+      # up harfbuzz from the kde-qt6-core24 content snap at runtime.
       - libhunspell-1.7-0
       - libicu74
       - liblcms2-2
