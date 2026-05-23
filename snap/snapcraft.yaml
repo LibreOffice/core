@@ -128,7 +128,6 @@ parts:
         --disable-noto-font \
         --disable-online-update \
         --disable-poppler \
-        --disable-postgresql-sdbc \
         --disable-qt5 \
         --disable-randr \
         --disable-report-builder \
