@@ -419,10 +419,14 @@ parts:
       - mythes-sl
       - mythes-sv
       - mythes-uk
-    prime:
-      # Dictionary stage-packages pull in the system office stack from
-      # Ubuntu as a transitive dep; exclude its files to avoid conflicts
-      # with our own engine build.
+    stage:
+      # Dictionary stage-packages pull in Ubuntu's libreoffice-core as a
+      # transitive dep. Excluding from stage (not just prime) is what
+      # matters: snapcraft puts $CRAFT_STAGE/usr/lib/x86_64-linux-gnu/ on
+      # LD_LIBRARY_PATH during build, which outranks the engine's RPATH and
+      # causes build-time tools (e.g. svidl) to load Ubuntu's older
+      # libuno_sal.so.3 instead of the one we just built, breaking any
+      # symbol added since that Ubuntu release.
       - -usr/lib/libreoffice
       - -usr/lib/x86_64-linux-gnu/libuno*
       - -usr/share/doc/libreoffice*
