@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-11 14:06+0200\n"
-"PO-Revision-Date: 2026-05-18 07:01+0000\n"
-"Last-Translator: Libre <6n0n1m0s@proton.me>\n"
+"PO-Revision-Date: 2026-05-23 13:24+0000\n"
+"Last-Translator: Adolfo Jayme Barrientos <fitojb@ubuntu.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/es/>\n"
 "Language: es\n"
@@ -414,9 +414,8 @@ msgstr "Proveedor"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:433
 #: admin/src/integrator/AdminIntegratorSettings.ts:437
-#, fuzzy
 msgid "API Key"
-msgstr "Llave API"
+msgstr "Clave de API"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:434
 #: admin/src/integrator/AdminIntegratorSettings.ts:439
@@ -455,11 +454,11 @@ msgstr "Modo oscuro"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:446
 msgid "Smart Zoom"
-msgstr ""
+msgstr "Zum inteligente"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:447
 msgid "Default Zoom"
-msgstr ""
+msgstr "Zum predeterminado"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:448
 msgid "Compact layout"
@@ -863,12 +862,12 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1926
 msgid "Text Generation"
-msgstr ""
+msgstr "Generación de texto"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1976
 #: admin/src/integrator/AdminIntegratorSettings.ts:2082
 msgid "e.g."
-msgstr ""
+msgstr "p. ej."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1995
 #: admin/src/integrator/AdminIntegratorSettings.ts:2113
@@ -879,7 +878,7 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2024
 msgid "Image Generation"
-msgstr ""
+msgstr "Generación de imágenes"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2029
 msgid "Same as Text AI"
@@ -892,28 +891,28 @@ msgstr ""
 #: admin/src/integrator/AdminIntegratorSettings.ts:2360
 #: admin/src/integrator/AdminIntegratorSettings.ts:2447
 msgid "Fetching models..."
-msgstr ""
+msgstr "Recuperando modelos…"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2389
 #: admin/src/integrator/AdminIntegratorSettings.ts:2399
 #: admin/src/integrator/AdminIntegratorSettings.ts:2476
 #: admin/src/integrator/AdminIntegratorSettings.ts:2486
 msgid "No models found"
-msgstr ""
+msgstr "No se encontró ningún modelo"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2409
 #: admin/src/integrator/AdminIntegratorSettings.ts:2496
 msgid "Models fetched successfully"
-msgstr ""
+msgstr "Se recuperaron los modelos correctamente"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2415
 #: admin/src/integrator/AdminIntegratorSettings.ts:2502
 msgid "Failed to fetch models"
-msgstr ""
+msgstr "No se pudieron recuperar los modelos"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2425
 msgid "Invalid provider configuration"
-msgstr ""
+msgstr "Configuración de proveedor no válida"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2537
 msgid "None (disable image generation)"
@@ -921,7 +920,7 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2919
 msgid "Reset"
-msgstr ""
+msgstr "Restablecer"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3038
 #: src/map/handler/Map.WOPI.js:793
@@ -1057,22 +1056,21 @@ msgstr ""
 "{0}ms"
 
 #: src/app/TableStylesService.ts:101
-#, fuzzy
 msgid "Light"
-msgstr "Luces"
+msgstr "Claro"
 
 #: src/app/TableStylesService.ts:103
 msgid "Medium"
-msgstr ""
+msgstr "Medio"
 
 #: src/app/TableStylesService.ts:105
 msgid "Dark"
-msgstr ""
+msgstr "Oscuro"
 
 #: src/app/TableStylesService.ts:107
 #: src/control/jsdialog/Widget.ColorPicker.ts:334
 msgid "Custom"
-msgstr ""
+msgstr "Personalizado"
 
 #: src/app/TableStylesService.ts:195 src/app/TableStylesService.ts:207
 #: src/app/TableStylesService.ts:209
@@ -1250,7 +1248,7 @@ msgstr "Color automático"
 #: src/control/Control.AboutDialog.ts:89
 #: src/control/jsdialog/Widget.TreeView.ts:786
 msgid "(opens in new tab)"
-msgstr ""
+msgstr "(se abre en una pestaña nueva)"
 
 #: src/control/Control.AboutDialog.ts:148
 msgid "Served by: "
@@ -1521,7 +1519,7 @@ msgstr "Buscar plantillas"
 
 #: src/control/Control.BackstageView.ts:1187
 msgid "No templates match your search."
-msgstr ""
+msgstr "Ninguna plantilla coincide con su búsqueda."
 
 #: src/control/Control.BackstageView.ts:1284
 msgid "Blank Spreadsheet"
@@ -2769,7 +2767,7 @@ msgstr "Diseño de tabla"
 
 #: src/control/Notebookbar.CalcTableTab.ts:72
 msgid "Table Options"
-msgstr ""
+msgstr "Opciones de tabla"
 
 #: src/control/Notebookbar.CalcTableTab.ts:85
 msgid "Header Row"
@@ -2976,7 +2974,7 @@ msgstr "Imagen"
 #: src/control/Control.NotebookbarImpress.js:143
 #: src/control/Control.NotebookbarWriter.js:103
 msgid "Chart"
-msgstr ""
+msgstr "Gráfico"
 
 #: src/control/Control.NotebookbarCalc.js:99
 #: src/control/Control.NotebookbarDraw.js:122
@@ -3232,7 +3230,7 @@ msgstr "Vista predeterminada"
 
 #: src/control/Control.NotebookbarCalc.js:1445
 msgid "Open Views List"
-msgstr ""
+msgstr "Abrir lista de vistas"
 
 #: src/control/Control.NotebookbarCalc.js:1452
 msgid "New Sheet View"
@@ -3314,7 +3312,7 @@ msgstr "Los estilos de tabla solo están disponibles en archivos .xlsx"
 
 #: src/control/Control.NotebookbarCalc.js:1788
 msgid "Insert a styled table"
-msgstr ""
+msgstr "Insertar una tabla con estilo"
 
 #: src/control/Control.NotebookbarCalc.js:1791
 msgid "Select a cell range first to insert a styled table"
@@ -3397,7 +3395,7 @@ msgstr "Filtrar"
 #: src/control/Control.NotebookbarImpress.js:2042
 #: src/control/Control.NotebookbarWriter.js:2264
 msgid "Auto Spell Check"
-msgstr ""
+msgstr "Revisar ortografía automáticamente"
 
 #: src/control/Control.NotebookbarCalc.js:2644
 #: src/control/Control.NotebookbarImpress.js:2072
@@ -3465,7 +3463,7 @@ msgstr "Patrón"
 
 #: src/control/Control.NotebookbarImpress.js:479
 msgid "Start Slide Show"
-msgstr ""
+msgstr "Iniciar pase de diapositivas"
 
 #: src/control/Control.NotebookbarImpress.js:484
 msgid "From Beginning"
@@ -3485,7 +3483,7 @@ msgstr ""
 
 #: src/control/Control.NotebookbarImpress.js:508
 msgid "Present"
-msgstr ""
+msgstr "Presentar"
 
 #: src/control/Control.NotebookbarImpress.js:514
 msgid "Present in Window"
@@ -3682,28 +3680,28 @@ msgstr "Pegar"
 
 #: src/control/Control.PartsPreview.js:422
 msgid "Add Section"
-msgstr ""
+msgstr "Añadir sección"
 
 #: src/control/Control.PartsPreview.js:564
 #: src/control/Control.PartsPreview.js:637
 msgid "Rename Section"
-msgstr ""
+msgstr "Cambiar nombre de sección"
 
 #: src/control/Control.PartsPreview.js:571
 msgid "Move Section Up"
-msgstr ""
+msgstr "Subir sección"
 
 #: src/control/Control.PartsPreview.js:579
 msgid "Move Section Down"
-msgstr ""
+msgstr "Bajar sección"
 
 #: src/control/Control.PartsPreview.js:586
 msgid "Remove Section"
-msgstr ""
+msgstr "Quitar sección"
 
 #: src/control/Control.PartsPreview.js:638
 msgid "Enter new section name:"
-msgstr ""
+msgstr "Introduzca el nombre nuevo de la sección:"
 
 #: src/control/Control.SaveState.ts:49
 msgid "Saving"
@@ -3903,11 +3901,11 @@ msgstr "Recuento de selección"
 
 #: src/control/Control.StatusBar.js:267
 msgid "Previous Page"
-msgstr ""
+msgstr "Página anterior"
 
 #: src/control/Control.StatusBar.js:269
 msgid "Next Page"
-msgstr ""
+msgstr "Página siguiente"
 
 #: src/control/Control.StatusBar.js:275
 msgid "Zoom to Fit Page Width"
@@ -3915,7 +3913,7 @@ msgstr ""
 
 #: src/control/Control.StatusBar.js:280
 msgid "Status Bar Menu"
-msgstr ""
+msgstr "Menú de la barra de estado"
 
 #: src/control/Control.StatusBar.js:553
 msgid "The document is probably locked and has been opened as view-only"
@@ -4778,9 +4776,8 @@ msgid "Insert Comment"
 msgstr "Insertar comentario"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2401
-#, fuzzy
 msgid "Insert Note"
-msgstr "Insertar fecha"
+msgstr "Insertar nota"
 
 #: src/control/jsdialog/Util.SnackbarController.ts:122
 msgid "Dismiss"
@@ -4801,7 +4798,7 @@ msgstr "Automático"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:253
 msgid "Palette"
-msgstr ""
+msgstr "Paleta"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:268
 msgid "Color palette"
@@ -4856,7 +4853,7 @@ msgstr "Intervalo de celdas seleccionado"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:44
 msgid "Cell Selection"
-msgstr ""
+msgstr "Selección de celdas"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:48
 msgid "Entering text mode"
@@ -4864,7 +4861,7 @@ msgstr "Activación del modo de texto"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:49
 msgid "Insert Mode"
-msgstr ""
+msgstr "Modo de inserción"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:54
 msgid "Selection Mode"
@@ -4881,7 +4878,7 @@ msgstr "Elección de funciones"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:68
 msgid "Table Cell Functions"
-msgstr ""
+msgstr "Funciones de celda de tabla"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:73
 msgid "Your changes have been saved"
@@ -5477,11 +5474,11 @@ msgstr ""
 
 #: src/map/Clipboard.js:1567
 msgid "Paste from this document"
-msgstr "Pegue desde este documento"
+msgstr "Pegar desde este documento"
 
 #: src/map/Clipboard.js:1567
 msgid "Cancel paste special"
-msgstr "Cancelar el pegado especial"
+msgstr "Cancelar pegado especial"
 
 #: src/map/Clipboard.js:1589
 msgid "Your browser has very limited access to the clipboard"
@@ -5847,7 +5844,7 @@ msgstr "Vívido"
 
 #: templates/templates.js:296
 msgid "Yellow Idea"
-msgstr ""
+msgstr "Idea amarilla"
 
 #: welcome/welcome.html%2Bhtml.head.title:9-3
 msgid "Collabora Online Welcome"
