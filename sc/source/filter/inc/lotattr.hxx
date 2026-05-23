@@ -23,6 +23,7 @@
 #include <memory>
 
 #include <address.hxx>
+#include <patattr.hxx>
 
 class ScPatternAttr;
 class SvxColorItem;
@@ -106,7 +107,7 @@ private:
 
     struct ENTRY
     {
-        const ScPatternAttr* pPattAttr;
+        CellAttributeHolder pPattAttr;
         SCROW nFirstRow;
         SCROW nLastRow;
     };

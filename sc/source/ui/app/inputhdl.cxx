@@ -859,8 +859,7 @@ ScInputHandler::ScInputHandler()
         eAttrAdjust( SvxCellHorJustify::Standard ),
         fScaleX( 1.0 ),
         fScaleY( 1.0 ),
-        pRefViewSh( nullptr ),
-        pLastPattern( nullptr )
+        pRefViewSh( nullptr )
 {
     //  The InputHandler is constructed with the view, so SfxViewShell::Current
     //  doesn't have the right view yet. pActiveViewSh is updated in NotifyChange.
@@ -999,7 +998,7 @@ void ScInputHandler::UpdateSpellSettings( bool bFromStartTab )
         else
             nCntrl &= ~EEControlBits::ONLINESPELLING;
         // No AutoCorrect for Symbol Font (EditEngine does no evaluate Default)
-        if ( pLastPattern && pLastPattern->IsSymbolFont() )
+        if ( maLastPattern && maLastPattern.getScPatternAttr()->IsSymbolFont() )
             nCntrl &= ~EEControlBits::AUTOCORRECT;
         else
             nCntrl |= EEControlBits::AUTOCORRECT;
@@ -1019,7 +1018,7 @@ void ScInputHandler::UpdateSpellSettings( bool bFromStartTab )
         mpEditEngine->SetSpeller( xXSpellChecker1 );
     }
 
-    bool bHyphen = pLastPattern && pLastPattern->GetItem(ATTR_HYPHENATE).GetValue();
+    bool bHyphen = maLastPattern && maLastPattern.getScPatternAttr()->GetItem(ATTR_HYPHENATE).GetValue();
     if ( bHyphen ) {
         css::uno::Reference<css::linguistic2::XHyphenator> xXHyphenator( LinguMgr::GetHyphenator() );
         mpEditEngine->SetHyphenator( xXHyphenator );
@@ -2320,7 +2319,7 @@ void ScInputHandler::ViewShellGone(const ScTabViewShell* pViewSh) // Executed sy
     if ( pViewSh == pActiveViewSh )
     {
         pLastState.reset();
-        pLastPattern = nullptr;
+        maLastPattern.setScPatternAttr(nullptr);
     }
 
     ScModule* mod = ScModule::get();
@@ -2423,7 +2422,7 @@ EditView* ScInputHandler::GetActiveView()
 
 void ScInputHandler::ForgetLastPattern()
 {
-    pLastPattern = nullptr;
+    maLastPattern.setScPatternAttr(nullptr);
     if ( !pLastState && pActiveViewSh )
         pActiveViewSh->UpdateInputHandler( true ); // Get status again
     else
@@ -2491,9 +2490,9 @@ void ScInputHandler::UpdateAdjust( sal_Unicode cTyped )
                 }
 
                 // Cells with an explicit RTL writing direction are always right adjusted
-                if (pLastPattern)
+                if (maLastPattern)
                 {
-                    SvxFrameDirection eDir = pLastPattern->GetItem(ATTR_WRITINGDIR).GetValue();
+                    SvxFrameDirection eDir = maLastPattern.getScPatternAttr()->GetItem(ATTR_WRITINGDIR).GetValue();
                     if (eDir == SvxFrameDirection::Horizontal_RL_TB)
                     {
                         eSvxAdjust = SvxAdjust::Right;
@@ -2532,9 +2531,9 @@ void ScInputHandler::UpdateAdjust( sal_Unicode cTyped )
             break;
     }
 
-    bool bAsianVertical = pLastPattern &&
-        pLastPattern->GetItem( ATTR_STACKED ).GetValue() &&
-        pLastPattern->GetItem( ATTR_VERTICAL_ASIAN ).GetValue();
+    bool bAsianVertical = maLastPattern &&
+        maLastPattern.getScPatternAttr()->GetItem( ATTR_STACKED ).GetValue() &&
+        maLastPattern.getScPatternAttr()->GetItem( ATTR_VERTICAL_ASIAN ).GetValue();
     if ( bAsianVertical )
     {
         // Always edit at top of cell -> LEFT when editing vertically
@@ -2660,7 +2659,7 @@ bool ScInputHandler::StartTable(sal_Unicode cTyped, bool bFromCommand, bool bInp
             const ScPatternAttr* pPattern = rDoc.GetPattern( aCursorPos.Col(),
                                                               aCursorPos.Row(),
                                                               aCursorPos.Tab() );
-            if (!ScPatternAttr::areSame(pPattern, pLastPattern))
+            if (!ScPatternAttr::areSame(pPattern, maLastPattern.getScPatternAttr()))
             {
                 // Percent format?
                 const SfxItemSet& rAttrSet = pPattern->GetItemSet();
@@ -2693,7 +2692,7 @@ bool ScInputHandler::StartTable(sal_Unicode cTyped, bool bFromCommand, bool bInp
 
                 pPattern->FillEditItemSet( pEditDefaults.get() );
                 mpEditEngine->SetDefaults( *pEditDefaults );
-                pLastPattern = pPattern;
+                maLastPattern.setScPatternAttr(pPattern);
                 bLastIsSymbol = pPattern->IsSymbolFont();
 
                 //  Background color must be known for automatic font color.
@@ -3544,8 +3543,8 @@ void ScInputHandler::EnterHandler2(ScEnterMode nBlockMode, bool bForget, OUStrin
     StopInputWinEngine(true);
 
     // Text input (through number formats) or ApplySelectionPattern modify
-    // the cell's attributes, so pLastPattern is no longer valid
-    pLastPattern = nullptr;
+    // the cell's attributes, so the last pattern is no longer valid
+    maLastPattern.setScPatternAttr(nullptr);
 
     if (bOldMod && !bProtected && !bForget)
     {

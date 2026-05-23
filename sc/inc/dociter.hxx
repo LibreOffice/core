@@ -24,6 +24,7 @@
 #include "global.hxx"
 #include "scdllapi.h"
 #include "cellvalue.hxx"
+#include "patattr.hxx"
 #include "mtvelements.hxx"
 #include "queryparam.hxx"
 #include "attarray.hxx"
@@ -391,12 +392,12 @@ private:
     SCCOL                   nAttrCol1;
     SCCOL                   nAttrCol2;
     SCROW                   nAttrRow;
-    const ScPatternAttr*    pPattern;
+    CellAttributeHolder     maPattern;
 
     SCCOL                   nFoundStartCol;         // results after GetNext
     SCCOL                   nFoundEndCol;
     SCROW                   nFoundRow;
-    const ScPatternAttr*    pFoundPattern;
+    CellAttributeHolder     maFoundPattern;
 
     ScRefCellValue maFoundCell;
 
@@ -410,7 +411,7 @@ public:
     SCCOL                   GetStartCol() const     { return nFoundStartCol; }
     SCCOL                   GetEndCol() const       { return nFoundEndCol; }
     SCROW                   GetRow() const          { return nFoundRow; }
-    const ScPatternAttr*    GetPattern() const      { return pFoundPattern; }
+    const ScPatternAttr*    GetPattern() const      { return maFoundPattern.getScPatternAttr(); }
     const ScRefCellValue&   GetCell() const { return maFoundCell;}
 };
 

@@ -1524,10 +1524,9 @@ ScUsedAreaIterator::ScUsedAreaIterator( ScDocument& rDocument, SCTAB nTable,
     , nFoundStartCol( 0 )
     , nFoundEndCol( 0 )
     , nFoundRow( 0 )
-    , pFoundPattern( nullptr )
 {
     pCell    = aCellIter.GetNext( nCellCol, nCellRow );
-    pPattern = aAttrIter.GetNext( nAttrCol1, nAttrCol2, nAttrRow );
+    maPattern.setScPatternAttr(aAttrIter.GetNext( nAttrCol1, nAttrCol2, nAttrRow ));
 }
 
 ScUsedAreaIterator::~ScUsedAreaIterator()
@@ -1543,22 +1542,22 @@ bool ScUsedAreaIterator::GetNext()
     while (pCell && pCell->isEmpty())
         pCell = aCellIter.GetNext( nCellCol, nCellRow );
 
-    if ( pPattern && IsGreater( nNextCol, nNextRow, nAttrCol2, nAttrRow ) )
-        pPattern = aAttrIter.GetNext( nAttrCol1, nAttrCol2, nAttrRow );
+    if ( maPattern && IsGreater( nNextCol, nNextRow, nAttrCol2, nAttrRow ) )
+        maPattern.setScPatternAttr(aAttrIter.GetNext( nAttrCol1, nAttrCol2, nAttrRow ));
 
-    if ( pPattern && nAttrRow == nNextRow && nAttrCol1 < nNextCol )
+    if ( maPattern && nAttrRow == nNextRow && nAttrCol1 < nNextCol )
         nAttrCol1 = nNextCol;
 
     // Find next area
     bool bFound = true;
     bool bUseCell = false;
 
-    if ( pCell && pPattern )
+    if ( pCell && maPattern )
     {
         if ( IsGreater( nCellCol, nCellRow, nAttrCol1, nAttrRow ) ) // Only attributes at the beginning?
         {
             maFoundCell.clear();
-            pFoundPattern = pPattern;
+            maFoundPattern = maPattern;
             nFoundRow = nAttrRow;
             nFoundStartCol = nAttrCol1;
             if ( nCellRow == nAttrRow && nCellCol <= nAttrCol2 ) // Area also contains cell?
@@ -1570,20 +1569,20 @@ bool ScUsedAreaIterator::GetNext()
         {
             bUseCell = true;
             if ( nAttrRow == nCellRow && nAttrCol1 == nCellCol ) // Attributes on the cell?
-                pFoundPattern = pPattern;
+                maFoundPattern = maPattern;
             else
-                pFoundPattern = nullptr;
+                maFoundPattern.setScPatternAttr(nullptr);
         }
     }
     else if ( pCell ) // Just a cell -> take over right away
     {
-        pFoundPattern = nullptr;
+        maFoundPattern.setScPatternAttr(nullptr);
         bUseCell = true; // Cell position
     }
-    else if ( pPattern ) // Just attributes -> take over right away
+    else if ( maPattern ) // Just attributes -> take over right away
     {
         maFoundCell.clear();
-        pFoundPattern = pPattern;
+        maFoundPattern = maPattern;
         nFoundRow = nAttrRow;
         nFoundStartCol = nAttrCol1;
         nFoundEndCol = nAttrCol2;

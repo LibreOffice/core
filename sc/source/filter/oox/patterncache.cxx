@@ -22,7 +22,6 @@
 ScPatternCache::Entry::Entry()
     : nXfId(-1)
     , nNumFmtId(-1)
-    , pPattern(nullptr)
 {
 }
 
@@ -36,7 +35,7 @@ ScPatternAttr* ScPatternCache::query(sal_Int32 nXfId, sal_Int32 nNumFmtId) const
     for (const auto& entry : maEntries)
     {
         if (entry.nXfId == nXfId && entry.nNumFmtId == nNumFmtId)
-            return entry.pPattern;
+            return const_cast<ScPatternAttr*>(entry.pPattern.getScPatternAttr());
     }
 
     return nullptr;
@@ -48,5 +47,5 @@ void ScPatternCache::add(sal_Int32 nXfId, sal_Int32 nNumFmtId, ScPatternAttr* pP
     nNextPos = ((nNextPos + 1) % nPatternCacheSize);
     rEntry.nXfId = nXfId;
     rEntry.nNumFmtId = nNumFmtId;
-    rEntry.pPattern = pPattern;
+    rEntry.pPattern.setScPatternAttr(pPattern);
 }

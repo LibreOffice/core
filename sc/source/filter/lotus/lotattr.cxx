@@ -188,13 +188,13 @@ void LotAttrCol::SetAttr( const ScDocument* pDoc, const SCROW nRow, const ScPatt
 
     if(iterLast != aEntries.rend())
     {
-        if( ( (*iterLast)->nLastRow == nRow - 1 ) && ScPatternAttr::areSame( &rAttr, (*iterLast)->pPattAttr ) )
+        if( ( (*iterLast)->nLastRow == nRow - 1 ) && ScPatternAttr::areSame( &rAttr, (*iterLast)->pPattAttr.getScPatternAttr() ) )
             (*iterLast)->nLastRow = nRow;
         else
         {
             ENTRY *pCurrent = new ENTRY;
 
-            pCurrent->pPattAttr = &rAttr;
+            pCurrent->pPattAttr.setScPatternAttr(&rAttr);
             pCurrent->nFirstRow = pCurrent->nLastRow = nRow;
 
             aEntries.push_back(std::unique_ptr<ENTRY>(pCurrent));
@@ -203,7 +203,7 @@ void LotAttrCol::SetAttr( const ScDocument* pDoc, const SCROW nRow, const ScPatt
     else
     {   // first entry
         ENTRY *pCurrent = new ENTRY;
-        pCurrent->pPattAttr = &rAttr;
+        pCurrent->pPattAttr.setScPatternAttr(&rAttr);
         pCurrent->nFirstRow = pCurrent->nLastRow = nRow;
 
         aEntries.push_back(std::unique_ptr<ENTRY>(pCurrent));
@@ -217,7 +217,7 @@ void LotAttrCol::Apply(LotusContext& rContext, const SCCOL nColNum, const SCTAB 
     for (const auto& rxEntry : aEntries)
     {
         rDoc.ApplyPatternAreaTab(nColNum, rxEntry->nFirstRow, nColNum, rxEntry->nLastRow,
-                                 nTabNum, *(rxEntry->pPattAttr));
+                                 nTabNum, *(rxEntry->pPattAttr.getScPatternAttr()));
     }
 }
 
