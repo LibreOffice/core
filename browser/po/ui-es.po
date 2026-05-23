@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-11 14:06+0200\n"
-"PO-Revision-Date: 2026-05-23 13:24+0000\n"
-"Last-Translator: Adolfo Jayme Barrientos <fitojb@ubuntu.com>\n"
+"PO-Revision-Date: 2026-05-24 22:11+0000\n"
+"Last-Translator: Libre <6n0n1m0s@proton.me>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/es/>\n"
 "Language: es\n"
@@ -424,7 +424,6 @@ msgstr "Modelo"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:435
 #: admin/src/integrator/AdminIntegratorSettings.ts:438
-#, fuzzy
 msgid "Base URL"
 msgstr "URL base"
 
@@ -434,11 +433,11 @@ msgstr "Tamaño de imagen"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:441
 msgid "Request Timeout (seconds)"
-msgstr ""
+msgstr "Tiempo de espera de la solicitud (segundos)"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:444
 msgid "In-document Screen Reader"
-msgstr ""
+msgstr "Lector de pantalla integrado en el documento"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:445
 #: src/control/Control.Menubar.ts:176 src/control/Control.Menubar.ts:505
@@ -521,18 +520,16 @@ msgstr "Acoplar a retícula"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:465
 #: admin/src/integrator/AdminIntegratorSettings.ts:471
-#, fuzzy
 msgid "Size to grid"
-msgstr "Acoplar a retícula"
+msgstr "Tamaño a la cuadrícula"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:466
 msgid "Synchronize axes"
 msgstr "Sincronizar ejes"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:467
-#, fuzzy
 msgid "Snap grid"
-msgstr "Acoplar a retícula"
+msgstr "Cuadrícula de ajuste"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:468
 msgid "Empty Pages"
@@ -566,23 +563,23 @@ msgstr "Página"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:475
 msgid "Fit to page"
-msgstr ""
+msgstr "Ajustar a la página"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:476
 msgid "Tile pages"
-msgstr ""
+msgstr "Páginas de mosaicos"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:477
 msgid "Booklet"
-msgstr ""
+msgstr "Folleto"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:478
 msgid "Booklet front"
-msgstr ""
+msgstr "Portada del folleto"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:479
 msgid "Booklet back"
-msgstr ""
+msgstr "Parte posterior del folleto"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:480
 msgid "Page name"
@@ -631,7 +628,7 @@ msgstr "Notas"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:487
 msgid "Handouts"
-msgstr ""
+msgstr "Materiales de apoyo"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:488
 #: src/control/Control.NavigatorPanel.ts:213
@@ -640,7 +637,7 @@ msgstr "Esquema"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:489
 msgid "Handout horizontal"
-msgstr ""
+msgstr "Folleto horizontal"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:490
 msgid "Images"
@@ -684,7 +681,7 @@ msgstr "Prospecto"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:500
 msgid "Brochure Right to Left"
-msgstr ""
+msgstr "Folleto de derecha a izquierda"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:501
 msgid "Images and Objects"
@@ -841,6 +838,8 @@ msgid ""
 "To use document signing, specify your signing certificate, key and CA chain "
 "here."
 msgstr ""
+"Para utilizar la firma de documentos, especifique aquí su certificado de "
+"firma, clave y cadena de AC."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1821
 #: src/control/Control.Menubar.ts:224 src/control/Control.Menubar.ts:530
@@ -859,6 +858,8 @@ msgid ""
 "Configure AI provider credentials and model. Models are fetched "
 "automatically when credentials change."
 msgstr ""
+"Configure las credenciales y el modelo del proveedor de IA. Los modelos se "
+"actualizan automáticamente cuando cambian las credenciales."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1926
 msgid "Text Generation"
@@ -874,7 +875,7 @@ msgstr "p. ej."
 #: admin/src/integrator/AdminIntegratorSettings.ts:2557
 #: admin/src/integrator/AdminIntegratorSettings.ts:2573
 msgid "Fetch models to select"
-msgstr ""
+msgstr "Obtenga modelos para seleccionar"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2024
 msgid "Image Generation"
@@ -882,11 +883,11 @@ msgstr "Generación de imágenes"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2029
 msgid "Same as Text AI"
-msgstr ""
+msgstr "Lo mismo que Texto IA"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2098
 msgid "Leave empty to use Text AI key"
-msgstr ""
+msgstr "Dejar vacío para utilizar clave de Texto IA"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2360
 #: admin/src/integrator/AdminIntegratorSettings.ts:2447
@@ -916,7 +917,7 @@ msgstr "Configuración de proveedor no válida"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2537
 msgid "None (disable image generation)"
-msgstr ""
+msgstr "Ninguno (inhabilitar la generación de imágenes)"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2919
 msgid "Reset"
@@ -1139,9 +1140,8 @@ msgid "Resolved"
 msgstr "Resuelto"
 
 #: src/canvas/sections/CommentSection.ts:574
-#, fuzzy
 msgid "Removed"
-msgstr "Quitar"
+msgstr "Quitado"
 
 #: src/canvas/sections/CommentSection.ts:1160
 #: src/control/jsdialog/Widget.Comment.ts:177
@@ -1203,7 +1203,7 @@ msgstr "Guardado"
 
 #: src/canvas/sections/CompareChangesLabelSection.ts:118
 msgid "Last edited by %1 on %2"
-msgstr ""
+msgstr "Último editado por %1 en %2"
 
 #: src/canvas/sections/CompareChangesLabelSection.ts:193
 msgid "%1: Initial Version"
@@ -1256,7 +1256,7 @@ msgstr "Servido por: "
 
 #: src/control/Control.AboutDialog.ts:171
 msgid "View widgets"
-msgstr ""
+msgstr "Vista de los widget"
 
 #: src/control/Control.AboutDialog.ts:206
 msgid "\"Slow Proxy\""
@@ -1336,7 +1336,7 @@ msgstr ""
 #: src/control/Control.BackstageView.ts:179
 #: src/control/Control.BackstageView.ts:180
 msgid "Close backstage"
-msgstr ""
+msgstr "Cerrar bastidor"
 
 #: src/control/Control.BackstageView.ts:223
 #: src/control/Control.BackstageView.ts:224
@@ -1447,7 +1447,7 @@ msgstr "Exportar documento"
 
 #: src/control/Control.BackstageView.ts:801
 msgid "export your documents in different formats"
-msgstr ""
+msgstr "exporta tus documentos en diferentes formatos"
 
 #: src/control/Control.BackstageView.ts:855 src/control/Control.Menubar.ts:387
 #: src/control/Control.Menubar.ts:1380
@@ -1461,7 +1461,7 @@ msgstr "Propiedades"
 
 #: src/control/Control.BackstageView.ts:861
 msgid "More Property Info"
-msgstr ""
+msgstr "Más info sobre propiedad"
 
 #: src/control/Control.BackstageView.ts:940 templates/templates.js:50
 #: templates/templates.js:60 templates/templates.js:70
