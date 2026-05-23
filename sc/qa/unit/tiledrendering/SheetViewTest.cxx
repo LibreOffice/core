@@ -2393,7 +2393,7 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testUndo_DefaultView_DeleteContent)
         sortDescendingForCell(u"A1");
     }
 
-    // Default view and and sheet view state
+    // Default view and sheet view state
     CPPUNIT_ASSERT_EQUAL(expectedValues({ u"4", u"5", u"3", u"7" }),
                          getValues(pDocument, 0, 1, 4, 0));
     CPPUNIT_ASSERT_EQUAL(expectedValues({ u"7", u"5", u"4", u"3" }),
