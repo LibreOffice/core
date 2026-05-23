@@ -683,7 +683,7 @@ public:
     void        SetDirtyAfterLoad();
     void        SetDirtyVar();
     void        SetTableOpDirty( const ScRange& );
-    SC_DLLPUBLIC void CalcAll();
+    void        CalcAll();
     void CalcAfterLoad( sc::CompileFormulaContext& rCxt, bool bStartListening );
     void CompileAll( sc::CompileFormulaContext& rCxt );
     void CompileXML( sc::CompileFormulaContext& rCxt, ScProgress& rProgress );

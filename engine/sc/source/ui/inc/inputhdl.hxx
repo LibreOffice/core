@@ -30,6 +30,7 @@
 #include <vcl/vclptr.hxx>
 #include <editeng/svxenum.hxx>
 #include "viewdata.hxx"
+#include <patattr.hxx>
 
 #include <set>
 #include <memory>
@@ -119,7 +120,7 @@ private:
     ScTabViewShell*         pRefViewSh;
     ScTabViewShell*         pActiveViewSh;
 
-    const ScPatternAttr*    pLastPattern;
+    CellAttributeHolder     maLastPattern;
     std::unique_ptr<SfxItemSet>
                             pEditDefaults;
 

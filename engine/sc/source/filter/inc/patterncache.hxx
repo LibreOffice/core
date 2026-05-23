@@ -20,6 +20,7 @@
 #pragma once
 
 #include <sal/types.h>
+#include <patattr.hxx>
 
 class ScPatternAttr;
 
@@ -30,7 +31,7 @@ class ScPatternCache
     {
         sal_Int32 nXfId;
         sal_Int32 nNumFmtId;
-        ScPatternAttr* pPattern;
+        CellAttributeHolder pPattern;
 
         Entry();
     };
