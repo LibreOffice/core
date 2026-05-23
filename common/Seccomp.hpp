@@ -25,10 +25,16 @@ enum class Type : std::uint8_t
 bool lockdown(Type type);
 }; // namespace Seccomp
 
-namespace Rlimit {
-    /// Handles setconfig command with limit_... subcommands.
-    /// Returns true iff it handled the command, regardless of success/failure.
-    bool handleSetrlimitCommand(const StringVector& tokens);
-};
+namespace Rlimit
+{
+/// Lowest RLIMIT_NOFILE under which the kit can reasonably start.
+/// This must accommodate the hundreds of fds during init (shared libs,
+/// fonts, the user profile) before a document is even loaded.
+constexpr int MinRequiredOpenFiles = 4096;
+
+/// Handles setconfig command with limit_... subcommands.
+/// Returns true iff it handled the command, regardless of success/failure.
+bool handleSetrlimitCommand(const StringVector& tokens);
+}; // namespace Rlimit
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -297,35 +297,28 @@ void setRLimit(rlim_t confLim, int resource, const std::string& resourceText,
         std::signal(SIGXFSZ, SIG_IGN);
     }
 
-    if (resource != RLIMIT_NOFILE)
+    rlimit rlim = { lim, lim };
+    if (setrlimit(resource, &rlim) != 0)
     {
-        rlimit rlim = { lim, lim };
-        if (setrlimit(resource, &rlim) != 0)
+        // Infinity is the default, and it's not an error if we fail to set it
+        // as increasing limits are not valid. Error when the increase is intentional.
+        if (lim != RLIM_INFINITY)
             LOG_SYS("Failed to set " << resourceText << " to " << limTextWithUnit << '.');
-        if (getrlimit(resource, &rlim) == 0)
-        {
-            const std::string setLimTextWithUnit((rlim.rlim_max == RLIM_INFINITY) ? "unlimited" : std::to_string(rlim.rlim_max) + ' ' + unitText);
-            LOG_INF(resourceText << " is " << setLimTextWithUnit << " after setting it to " << limTextWithUnit << '.');
-        }
         else
-            LOG_SYS("Failed to get " << resourceText << " after trying to set it to "
-                                     << limTextWithUnit);
+            LOG_DBG("Failed to set " << resourceText << " to " << limTextWithUnit << '.');
+    }
+
+    if (getrlimit(resource, &rlim) == 0)
+    {
+        const std::string setLimTextWithUnit((rlim.rlim_max == RLIM_INFINITY)
+                                                 ? "unlimited"
+                                                 : std::to_string(rlim.rlim_max) + ' ' + unitText);
+        LOG_INF(resourceText << " is " << setLimTextWithUnit << " after setting it to "
+                             << limTextWithUnit << '.');
     }
     else
-    {
-        rlimit rlim = { 0, 0 };
-        if (getrlimit(resource, &rlim) == 0)
-        {
-            const std::string curLimTextWithUnit(
-                (rlim.rlim_max == RLIM_INFINITY) ? "unlimited"
-                                                 : std::to_string(rlim.rlim_max) + ' ' + unitText);
-            LOG_INF("Ignored setting " << resourceText << " to " << limTextWithUnit
-                                       << ", current limit is " << curLimTextWithUnit);
-        }
-        else
-            LOG_SYS("Failed to get " << resourceText << " while ignoring to set it to "
-                                     << limTextWithUnit);
-    }
+        LOG_SYS("Failed to get " << resourceText << " after trying to set it to "
+                                 << limTextWithUnit);
 }
 
 bool handleSetrlimitCommand(const StringVector& tokens)
