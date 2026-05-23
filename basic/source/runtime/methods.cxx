@@ -221,13 +221,8 @@ void SbRtl_Error(StarBASIC * pBasic, SbxArray & rPar, bool)
     {
         nCode = rPar.Get(1)->GetLong();
         if( nCode > 65535 )
-        {
-            StarBASIC::Error( ERRCODE_BASIC_CONVERSION );
-        }
-        else
-        {
-            nErr = StarBASIC::GetSfxFromVBError( static_cast<sal_uInt16>(nCode) );
-        }
+            return StarBASIC::Error( ERRCODE_BASIC_CONVERSION );
+        nErr = StarBASIC::GetSfxFromVBError( static_cast<sal_uInt16>(nCode) );
     }
     bool bVBA = SbiRuntime::isVBAEnabled();
     OUString tmpErrMsg;
