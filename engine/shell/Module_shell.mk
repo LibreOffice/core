@@ -89,10 +89,6 @@ endif
 
 endif
 
-$(eval $(call gb_Module_add_l10n_targets,shell,\
-    AllLangMoTarget_shell \
-))
-
 endif # $(gb_Side) == host
 
 # vim: set shiftwidth=4 tabstop=4 noexpandtab:
