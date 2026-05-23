@@ -202,6 +202,11 @@ void OControl::disposing()
 
     m_aWindowStateGuard.attach( nullptr, nullptr );
 
+    // Drop the kit window id assigned in createPeer before the aggregate disposes the peer
+    VclPtr<vcl::Window> pVclPeer = m_xControl ? VCLUnoHelper::GetWindow(m_xControl->getPeer()) : nullptr;
+    if (pVclPeer)
+        pVclPeer->ReleaseKitNotifier();
+
     if (auto xComp = query_aggregation<XComponent>(m_xAggregate))
         xComp->dispose();
 }
