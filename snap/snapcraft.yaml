@@ -247,7 +247,13 @@ parts:
         --with-vendor="Collabora Productivity Limited" \
         --with-app-name="Collabora Office" \
         --with-info-url="https://collaboraoffice.com/"
-      craftctl set version="$(sed -n 's/^S\["PACKAGE_VERSION"\]="\(.*\)"/\1/p' config.status)"
+      # craft-parts enforces set-once for project vars across the part's
+      # lifetime: if a previous build set version, re-running override-build
+      # (e.g. after a dirty stage-packages change triggers _update_build)
+      # would otherwise abort with "variable 'version' can be set only once".
+      if [ -z "$(craftctl get version 2>/dev/null)" ]; then
+        craftctl set version="$(sed -n 's/^S\["PACKAGE_VERSION"\]="\(.*\)"/\1/p' config.status)"
+      fi
       make
       make DESTDIR="$CRAFT_PART_INSTALL" install
     build-packages:
