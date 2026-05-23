@@ -32,6 +32,8 @@
 #include <Poco/Path.h>
 #include <Poco/URI.h>
 
+#include <cstdlib>
+
 #include <QApplication>
 #include <QByteArray>
 #include <QClipboard>
@@ -405,7 +407,15 @@ QVariant Bridge::cool(const QString& messageStr)
     }
     else if (tokens.equals(0, "LICENSE"))
     {
-        const std::string licensePath = LO_PATH "/LICENSE.html";
+        std::string licensePath = LO_PATH "/LICENSE.html";
+        // Inside a snap, LO_PATH is a bind-mount that exists only in the
+        // snap's mount namespace. xdg-desktop-portal hands the URL to the
+        // host browser, which can't resolve that path — translate to the
+        // host-visible $SNAP-rooted location.
+        if (const char* snapRoot = std::getenv("SNAP"))
+        {
+            licensePath = std::string(snapRoot) + licensePath;
+        }
         struct stat st;
         if (FileUtil::getStatOfFile(licensePath, st) == 0)
         {
