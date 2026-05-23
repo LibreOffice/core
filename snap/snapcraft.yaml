@@ -410,7 +410,11 @@ parts:
       - mythes-is
       - mythes-it
       - mythes-no
-      - mythes-pl
+      # mythes-pl is pulled in below as a separate part: its Debian
+      # packaging Depends on libreoffice-core, which would drag the
+      # entire Ubuntu office stack (and a stale libuno_sal.so.3) into
+      # stage. The .deb itself is just two data files with no real
+      # runtime tie to libreoffice.
       - mythes-pt-br
       - mythes-pt-pt
       - mythes-ro
@@ -480,3 +484,25 @@ parts:
       cp -a online-theme "$CRAFT_PART_INSTALL/usr/lib/collaboraoffice/share/theme_definitions/online/"
       mkdir -p "$CRAFT_PART_INSTALL/usr/share/coolwsd/browser/dist"
       cp -a branding* images welcome "$CRAFT_PART_INSTALL/usr/share/coolwsd/browser/dist/"
+
+  # mythes-pl shipped as a separate part because its Ubuntu .deb declares
+  # Depends: libreoffice-core (a Debian packaging quirk, not a runtime
+  # requirement: the .deb is just two thesaurus data files). Pulling it
+  # via stage-packages would drag in the entire system office stack and
+  # its stale libuno_sal.so.3, which then wins over our freshly-built one
+  # on LD_LIBRARY_PATH. Fetching the .deb directly and extracting only
+  # the data bypasses apt's dep resolver entirely.
+  mythes-pl:
+    plugin: nil
+    override-build: |
+      set -e
+      cd "$CRAFT_PART_BUILD"
+      apt-get download mythes-pl
+      dpkg-deb -x mythes-pl_*.deb extracted
+      mkdir -p "$CRAFT_PART_INSTALL/usr/share/mythes" \
+               "$CRAFT_PART_INSTALL/usr/share/myspell/dicts" \
+               "$CRAFT_PART_INSTALL/usr/share/myspell/infos/ooo"
+      cp -a extracted/usr/share/mythes/.            "$CRAFT_PART_INSTALL/usr/share/mythes/"
+      cp -a extracted/usr/share/myspell/dicts/.     "$CRAFT_PART_INSTALL/usr/share/myspell/dicts/"
+      cp -a extracted/usr/share/myspell/infos/ooo/. "$CRAFT_PART_INSTALL/usr/share/myspell/infos/ooo/"
+      rm -rf extracted mythes-pl_*.deb
