@@ -22,6 +22,7 @@
 #include <common/NumUtil.hpp>
 #include <common/SigUtil.hpp>
 
+#include <csignal>
 #include <dlfcn.h>
 #include <ftw.h>
 #include <sys/resource.h>
@@ -287,14 +288,17 @@ void setRLimit(rlim_t confLim, int resource, const std::string& resourceText,
     if (lim <= 0)
         lim = RLIM_INFINITY;
     const std::string limTextWithUnit((lim == RLIM_INFINITY) ? "unlimited" : std::to_string(lim) + ' ' + unitText);
-    if (resource != RLIMIT_FSIZE && resource != RLIMIT_NOFILE)
+    if (resource == RLIMIT_FSIZE)
     {
-        /* FIXME Currently the RLIMIT_FSIZE handling is non-ideal, and can
-         * lead to crashes of the kit processes due to not handling signal
-         * 25 gracefully.  Let's disable for now before there's a more
-         * concrete plan.
-         * Similar issues with RLIMIT_NOFILE
-         */
+        // Without this, a write past the limit terminates the kit with
+        // SIGXFSZ (default action: core dump). Ignoring the signal leaves
+        // write(2) returning EFBIG so LibreOffice's normal disk-full path
+        // can surface the error to the client.
+        std::signal(SIGXFSZ, SIG_IGN);
+    }
+
+    if (resource != RLIMIT_NOFILE)
+    {
         rlimit rlim = { lim, lim };
         if (setrlimit(resource, &rlim) != 0)
             LOG_SYS("Failed to set " << resourceText << " to " << limTextWithUnit << '.');

@@ -72,7 +72,7 @@
         <always_save_on_exit desc="On exiting the last editor, always perform a save and upload if the document had been modified. This is to allow the storage to store the document, if it had skipped doing so, previously, as an optimization." type="bool" default="false">false</always_save_on_exit>
         <limit_virt_mem_mb desc="The maximum virtual memory allowed to each document process. 0 for unlimited." type="uint">0</limit_virt_mem_mb>
         <limit_stack_mem_kb desc="The maximum stack size allowed to each document process. 0 for unlimited." type="uint">8000</limit_stack_mem_kb>
-        <limit_file_size_mb desc="The maximum file size allowed to each document process to write. 0 for unlimited." type="uint">0</limit_file_size_mb>
+        <limit_file_size_mb desc="The maximum file size allowed to each document process to write. Should accomodate the largest log file, if logging to file is enabled. 0 for unlimited." type="uint">0</limit_file_size_mb>
         <limit_num_open_files desc="The maximum number of files allowed to each document process to open. 0 for unlimited." type="uint">0</limit_num_open_files>
         <limit_load_secs desc="Maximum number of seconds to wait for a document load to succeed. 0 for unlimited." type="uint" default="100">100</limit_load_secs>
         <limit_store_failures desc="Maximum number of consecutive save-and-upload to storage failures when unloading the document. 0 for unlimited (not recommended)." type="uint" default="5">5</limit_store_failures>
