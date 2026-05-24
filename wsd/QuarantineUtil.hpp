@@ -16,11 +16,12 @@
 
 #pragma once
 
+#include <common/ContainerUtil.hpp>
+
 #include <cstddef>
 #include <cstdint>
 #include <mutex>
 #include <string>
-#include <unordered_map>
 #include <vector>
 
 class DocumentBroker;
@@ -92,7 +93,7 @@ private:
 
 private:
     /// DocKey to Quarantine Entries map.
-    static std::unordered_map<std::string, std::vector<Entry>> QuarantineMap;
+    static Util::UnorderedStringMap<std::vector<Entry>> QuarantineMap;
     /// Protects the shared QuarantineMap from concurrent modification.
     static std::mutex Mutex;
     static std::string QuarantinePath;

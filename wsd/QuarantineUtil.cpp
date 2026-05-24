@@ -46,7 +46,7 @@ std::size_t getSecondsSinceEpoch()
 } // namespace
 
 std::string Quarantine::QuarantinePath;
-std::unordered_map<std::string, std::vector<Quarantine::Entry>> Quarantine::QuarantineMap;
+Util::UnorderedStringMap<std::vector<Quarantine::Entry>> Quarantine::QuarantineMap;
 std::mutex Quarantine::Mutex;
 std::size_t Quarantine::MaxSizeBytes;
 std::size_t Quarantine::MaxAgeSecs;
