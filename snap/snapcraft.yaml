@@ -92,6 +92,13 @@ parts:
     after: [poco]
     build-snaps:
       - kde-qt6-core24-sdk
+    build-environment:
+      # The engine's configure auto-detects ccache on PATH and wraps gcc.
+      # Park the cache outside parts/<name>/ so it survives snapcraft
+      # dirty-cycle rebuilds and clean operations on the part.
+      - CCACHE_DIR: /build/.ccache
+      - CCACHE_MAXSIZE: 20G
+      - CCACHE_COMPRESS: "1"
     override-pull: |
       craftctl default
       # Translations live in their own gerrit repo and are gitignored in

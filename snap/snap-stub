@@ -1,0 +1,72 @@
+#!/bin/bash
+# Minimal snap CLI stub for snapcraft's pack flow. We avoid running
+# snapd in this container, but snapcraft calls `snap pack --check-skeleton`
+# to validate the prime tree and `snap pack [opts] <dir> <out-dir>` to
+# build the .snap. We implement those two with a sanity check and
+# mksquashfs respectively; nothing else is supported.
+set -e
+
+if [ "$1" != pack ]; then
+    echo "snap stub: only 'pack' is supported, got: $*" >&2
+    exit 1
+fi
+shift
+
+check_skeleton=0
+filename=""
+compression=""
+positional=()
+
+while [ "$#" -gt 0 ]; do
+    case "$1" in
+        --check-skeleton) check_skeleton=1; shift ;;
+        --filename)       filename="$2"; shift 2 ;;
+        --filename=*)     filename="${1#--filename=}"; shift ;;
+        --compression)    compression="$2"; shift 2 ;;
+        --compression=*)  compression="${1#--compression=}"; shift ;;
+        --)               shift; while [ "$#" -gt 0 ]; do positional+=("$1"); shift; done ;;
+        --*)              shift ;;  # ignore unknown long opts
+        *)                positional+=("$1"); shift ;;
+    esac
+done
+
+snap_dir="${positional[0]:-}"
+output_dir="${positional[1]:-.}"
+
+if [ ! -f "$snap_dir/meta/snap.yaml" ]; then
+    echo "snap stub: '$snap_dir/meta/snap.yaml' not found" >&2
+    exit 1
+fi
+
+if [ "$check_skeleton" = 1 ]; then
+    exit 0
+fi
+
+if [ -z "$filename" ]; then
+    name=$(awk -F': ' '/^name:/    { print $2; exit }' "$snap_dir/meta/snap.yaml" | sed "s/[\"' ]//g")
+    ver=$( awk -F': ' '/^version:/ { print $2; exit }' "$snap_dir/meta/snap.yaml" | sed "s/[\"' ]//g")
+    arch=$(dpkg --print-architecture)
+    filename="${name}_${ver}_${arch}.snap"
+fi
+
+mkdir -p "$output_dir"
+output="$output_dir/$filename"
+
+comp_args=()
+if [ -n "$compression" ]; then
+    comp_args=(-comp "$compression")
+fi
+
+# Mirror the squashfs options snapd's `snap pack` uses
+# (see snap/squashfs/squashfs.go in snapd). The Snap Store re-packs the
+# uploaded snap with these exact flags and rejects the upload if the
+# resulting squashfs metadata differs from ours (the
+# squashfs-package-v2_squashfs_repack_checksum review check). Missing
+# -no-xattrs in particular trips that check even when file content is
+# identical.
+mksquashfs "$snap_dir" "$output" \
+    -noappend -no-fragments -no-progress -no-xattrs -all-root \
+    "${comp_args[@]}" >&2
+
+# snapcraft parses our stdout as Path(stdout.partition(":")[2].strip()).name
+echo "built: $(readlink -f "$output")"

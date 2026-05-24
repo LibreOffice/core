@@ -1,0 +1,25 @@
+#!/bin/sh
+# Run the unpacked snapcraft snap without snapd. Sets the SNAP_* env vars
+# that the snap's app launcher and its dependencies (snaphelpers, craft-*)
+# expect, plus the PATH/env from the snap's snap.yaml. Classic-confined,
+# so no namespaces/mounts needed — just env.
+set -e
+
+SNAP=/snap/snapcraft/current
+export SNAP
+export SNAP_NAME=snapcraft
+export SNAP_INSTANCE_NAME=snapcraft
+export SNAP_REVISION=x1
+export SNAP_VERSION="$(cat "$SNAP/.snapcraft-version" 2>/dev/null || echo 0)"
+export SNAP_ARCH="$(dpkg --print-architecture 2>/dev/null || echo amd64)"
+export SNAP_USER_DATA="${HOME:-/root}/snap/snapcraft/x1"
+export SNAP_USER_COMMON="${HOME:-/root}/snap/snapcraft/common"
+export SNAP_DATA=/var/snap/snapcraft/x1
+export SNAP_COMMON=/var/snap/snapcraft/common
+export PATH="$SNAP/libexec/snapcraft:$PATH"
+export CRYPTOGRAPHY_OPENSSL_NO_LEGACY=1
+export PYLXD_WARNINGS=none
+
+mkdir -p "$SNAP_USER_DATA" "$SNAP_USER_COMMON" "$SNAP_DATA" "$SNAP_COMMON" 2>/dev/null || true
+
+exec "$SNAP/bin/snapcraft" "$@"
