@@ -1169,8 +1169,11 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 			this._map.lockAccessibilityOn();
 		}
 		else if (textMsg.startsWith('a11y')) {
-			if (!window.prefs.getBoolean('accessibilityState'))
-				throw 'A11y events come from the core while it is disabled in the client session.';
+			if (!window.prefs.getBoolean('accessibilityState')) {
+				window.app.console.warn(
+					'dropping a11y event received with accessibility disabled: ' + textMsg);
+				return;
+			}
 
 			if (textMsg.startsWith('a11yfocuschanged:')) {
 				obj = JSON.parse(textMsg.substring('a11yfocuschanged:'.length + 1));
