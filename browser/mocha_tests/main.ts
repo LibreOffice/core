@@ -29,6 +29,7 @@
 /// <reference path="./helper/util.ts"/>
 /// <reference path="./helper/CanvasRecorder.ts"/>
 /// <reference path="./helper/Path2DRecorder.ts"/>
+/// <reference path="./helper/VectorRenderingReference.ts"/>
 /// <reference path="./data/LOUtilTestData.ts"/>
 /// <reference path="./data/SheetGeometryTestData.ts" />
 

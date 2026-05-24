@@ -28,6 +28,8 @@
 #include <drawdoc.hxx>
 #include <unomodel.hxx>
 
+#include <osl/file.hxx>
+
 #include <fstream>
 #include <string_view>
 
@@ -92,12 +94,10 @@ protected:
         OString aResult = aJsonWriter.finishAndGetAsOString();
         CPPUNIT_ASSERT(!aResult.isEmpty());
 
-        // Write the raw JSON alongside the test source. This is the exact
-        // byte sequence a browser client would receive, so the reference
-        // file is used also as a fixture for browser-side tests
-        // TODO: compare the existing reference is the same as the test output
-        OUString aPath
-            = m_directories.getPathFromSrc(u"/sd/qa/unit/vector/reference/") + sName + u".json";
+        // Write the wire-format JSON to workdir.
+        static constexpr OUString sFolder = u"/VectorRenderingReference/"_ustr;
+        osl::Directory::createPath(m_directories.getURLFromWorkdir(sFolder));
+        OUString aPath = m_directories.getPathFromWorkdir(sFolder) + sName + u".json";
         std::ofstream aOut(OUStringToOString(aPath, RTL_TEXTENCODING_UTF8).getStr());
         CPPUNIT_ASSERT_MESSAGE("cannot open reference file for writing", aOut.is_open());
         aOut.write(aResult.getStr(), aResult.getLength());
@@ -124,9 +124,8 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testSingleRectangle)
     assertJsonPath(aJson, "/type", "vectortile");
     assertJsonPath(aJson, "/part", sal_Int64(0));
 
-    // Master page has been cleared. PageBackground emits a
-    // backgroundcolor primitive first then PageFill emits the
-    // slide-fill polyPolygonColor.
+    // The master page has been cleared, so it contributes only the
+    // page background fill and the page fill itself.
     CPPUNIT_ASSERT_EQUAL(size_t(2), aJson.getSize("/masterPage/primitives").value_or(0));
     assertJsonPath(aJson, "/masterPage/primitives/0/type", "backgroundcolor");
     assertJsonPath(aJson, "/masterPage/primitives/1/type", "polyPolygonColor");

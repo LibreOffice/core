@@ -12,16 +12,32 @@
 interface CanvasRecorderCall {
 	method: string;
 	args: any[];
+	/// Snapshot of canvas state at the moment the call was made. A
+	/// shallow copy of recorder.properties is stored here, so a test
+	/// can ask "what was strokeStyle at this stroke() call?" even
+	/// after later primitives overwrite it.
+	properties: Record<string, any>;
+	/// Save/restore nesting depth at the time of the call. Top-level
+	/// calls are depth 0. The save() call itself is recorded at the
+	/// outer depth, and restore() at the outer depth too. Everything
+	/// in between is at outer+1 (or deeper if nested saves happen).
+	depth: number;
 }
 
 /// Test helper that mimics a CanvasRenderingContext2D. Pass an instance of
 /// CanvasRecorder wherever production code expects a context. Every method
 /// invocation is recorded into calls, and every assigned drawing-state
 /// property is recorded into properties.
+///
+/// The properties field holds the live "last set" value of each tracked
+/// canvas property. Save/restore do not pop these back. For an accurate
+/// "what was the state at the time of this call" view, read the
+/// properties field on the call entry returned by findCall/callsOf.
 class CanvasRecorder {
 	public readonly calls: CanvasRecorderCall[] = [];
 	public readonly properties: Record<string, any> = {};
 	public readonly canvas: { width: number; height: number };
+	private _depth: number = 0;
 
 	private static readonly _PROPS = [
 		'fillStyle',
@@ -44,18 +60,23 @@ class CanvasRecorder {
 	constructor(width: number = 100, height: number = 100) {
 		this.canvas = { width: width, height: height };
 
-		for (const p of CanvasRecorder._PROPS) {
-			Object.defineProperty(this, p, {
-				get: () => this.properties[p],
-				set: (v) => {
-					this.properties[p] = v;
+		for (const property of CanvasRecorder._PROPS) {
+			Object.defineProperty(this, property, {
+				get: () => this.properties[property],
+				set: (value) => {
+					this.properties[property] = value;
 				},
 			});
 		}
 	}
 
 	private _record(method: string, args: any[]): void {
-		this.calls.push({ method: method, args: args });
+		this.calls.push({
+			method: method,
+			args: args,
+			properties: { ...this.properties },
+			depth: this._depth,
+		});
 	}
 
 	// inspection helpers
@@ -129,9 +150,15 @@ class CanvasRecorder {
 		this._record('clip', args);
 	}
 	save(): void {
+		// Record at the outer depth, then nest subsequent calls
+		// one level deeper.
 		this._record('save', []);
+		this._depth++;
 	}
 	restore(): void {
+		// Pop the level first so the restore() entry itself sits at
+		// the outer depth, matching the save() entry that opened it.
+		if (this._depth > 0) this._depth--;
 		this._record('restore', []);
 	}
 	translate(...args: any[]): void {
@@ -151,5 +178,8 @@ class CanvasRecorder {
 	}
 	resetTransform(): void {
 		this._record('resetTransform', []);
+	}
+	setLineDash(...args: any[]): void {
+		this._record('setLineDash', args);
 	}
 }

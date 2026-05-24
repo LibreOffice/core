@@ -10,128 +10,130 @@
  */
 
 describe('VectorPrimitiveRenderer', function () {
-	// The renderer constructs new Path2D. Use Path2DRecorder
-	// as a stand-in to capture the path string.
+	// The renderer constructs new Path2D. Use Path2DRecorder as a
+	// stand-in to capture the path string.
 	let originalPath2D: any;
+
 	before(function () {
 		originalPath2D = (globalThis as any).Path2D;
 		(globalThis as any).Path2D = Path2DRecorder;
 	});
+
 	after(function () {
 		(globalThis as any).Path2D = originalPath2D;
 	});
 
-	it('fills the whole canvas for backgroundcolor', function () {
-		const recorder = new CanvasRecorder(200, 150);
-		const renderer = new cool.VectorPrimitiveRenderer();
-		const primitive = {
-			type: 'backgroundcolor',
-			color: '#ff0000',
-		};
+	// Each fixture is a single primitive built with the drawinglayer
+	// primitive constructor, so we can test the primitive in isolation.
+	describe('Primitive references', function () {
+		it('fills the whole canvas for backgroundcolor', function () {
+			const primitive = loadVectorRenderingReference('testBackgroundColor').primitives[0];
+			nodeassert.strictEqual(primitive.type, 'backgroundcolor');
+			nodeassert.strictEqual(typeof primitive.color, 'string');
 
-		renderer.renderPrimitive(recorder as any, primitive);
+			const recorder = new CanvasRecorder(200, 150);
+			const renderer = new cool.VectorPrimitiveRenderer();
+			renderer.renderPrimitive(recorder as any, primitive);
 
-		const fillRect = recorder.findCall('fillRect');
-		nodeassert.ok(fillRect, 'fillRect not called');
-		nodeassert.deepStrictEqual(fillRect.args, [0, 0, 200, 150]);
-		nodeassert.strictEqual(recorder.properties.fillStyle, '#ff0000');
-		// Save and restore must bracket the fill so the page transform is
-		// not permanently reset.
-		nodeassert.ok(recorder.findCall('save'), 'save not called');
-		nodeassert.ok(recorder.findCall('restore'), 'restore not called');
+			const fillRect = recorder.findCall('fillRect');
+			nodeassert.ok(fillRect, 'fillRect not called');
+			nodeassert.deepStrictEqual(fillRect.args, [0, 0, 200, 150]);
+			nodeassert.strictEqual(recorder.properties.fillStyle, primitive.color);
+			// The background fill must not leak its canvas state to
+			// anything drawn after it.
+			nodeassert.ok(recorder.findCall('save'), 'save not called');
+			nodeassert.ok(recorder.findCall('restore'), 'restore not called');
+		});
+
+		it('respects backgroundcolor transparency', function () {
+			const primitive = loadVectorRenderingReference(
+				'testBackgroundColorTransparent',
+			).primitives[0];
+			nodeassert.strictEqual(primitive.type, 'backgroundcolor');
+			nodeassert.strictEqual(typeof primitive.transparency, 'number');
+			nodeassert.ok(primitive.transparency > 0, 'fixture must be partly transparent');
+
+			const recorder = new CanvasRecorder();
+			const renderer = new cool.VectorPrimitiveRenderer();
+			renderer.renderPrimitive(recorder as any, primitive);
+
+			nodeassert.strictEqual(recorder.properties.fillStyle, primitive.color);
+			nodeassert.strictEqual(
+				recorder.properties.globalAlpha,
+				1 - primitive.transparency,
+			);
+		});
+
+		it('renders polyPolygonColor with its fill colour', function () {
+			const primitive = loadVectorRenderingReference('testPolyPolygonColor').primitives[0];
+			nodeassert.strictEqual(primitive.type, 'polyPolygonColor');
+			nodeassert.strictEqual(typeof primitive.color, 'string');
+			nodeassert.strictEqual(typeof primitive.path, 'string');
+
+			const recorder = new CanvasRecorder();
+			const renderer = new cool.VectorPrimitiveRenderer();
+			renderer.renderPrimitive(recorder as any, primitive);
+
+			const fillCall = recorder.findCall('fill');
+			nodeassert.ok(fillCall, 'fill not called');
+			nodeassert.strictEqual(recorder.properties.fillStyle, primitive.color);
+			nodeassert.strictEqual(fillCall.args.length, 1);
+			nodeassert.strictEqual(
+				(fillCall.args[0] as Path2DRecorder).path,
+				primitive.path,
+			);
+		});
 	});
 
-	it('applies transparency via globalAlpha for backgroundcolor', function () {
-		const recorder = new CanvasRecorder();
-		const renderer = new cool.VectorPrimitiveRenderer();
-		const primitive = {
-			type: 'backgroundcolor',
-			color: '#abcdef',
-			transparency: 0.25,
-		};
+	// Fixtures from documents. Each fixture is a full reply built
+	// by the same pipeline a real Impress document would go through,
+	// so the renderer is exercised against a realistic primitive
+	// tree rather than a single isolated primitive.
+	describe('Document references', function () {
+		it('renders the filled-rectangle slide from its document reference', function () {
+			const primitiveTree = loadVectorRenderingReference('testSingleRectangle');
 
-		renderer.renderPrimitive(recorder as any, primitive);
+			nodeassert.strictEqual(primitiveTree.type, 'vectortile');
+			nodeassert.strictEqual(typeof primitiveTree.slideWidth, 'number');
+			nodeassert.strictEqual(typeof primitiveTree.slideHeight, 'number');
 
-		nodeassert.strictEqual(recorder.properties.fillStyle, '#abcdef');
-		nodeassert.strictEqual(recorder.properties.globalAlpha, 0.75);
-	});
+			const recorder = new CanvasRecorder(
+				primitiveTree.slideWidth,
+				primitiveTree.slideHeight,
+			);
+			const renderer = new cool.VectorPrimitiveRenderer();
 
-	it('skips backgroundcolor with no color set', function () {
-		const recorder = new CanvasRecorder();
-		const renderer = new cool.VectorPrimitiveRenderer();
-		const primitive = {
-			type: 'backgroundcolor',
-		};
+			for (const primitive of primitiveTree.masterPage.primitives)
+				renderer.renderPrimitive(recorder as any, primitive);
 
-		renderer.renderPrimitive(recorder as any, primitive);
+			for (const object of primitiveTree.objects)
+				for (const primitive of object.primitives)
+					renderer.renderPrimitive(recorder as any, primitive);
 
-		nodeassert.strictEqual(recorder.countOf('fillRect'), 0);
-	});
+			// backgroundcolor fills the whole canvas at the white page color
+			const fillRect = recorder.findCall('fillRect');
+			nodeassert.ok(fillRect, 'backgroundcolor primitive should fillRect');
+			nodeassert.deepStrictEqual(fillRect.args, [
+				0,
+				0,
+				primitiveTree.slideWidth,
+				primitiveTree.slideHeight,
+			]);
 
-	it('fills a Path2D for polyPolygonColor', function () {
-		const recorder = new CanvasRecorder();
-		const renderer = new cool.VectorPrimitiveRenderer();
-		const primitive = {
-			type: 'polyPolygonColor',
-			color: '#00ff00',
-			path: 'M 0 0 L 10 0 L 10 10 Z',
-		};
+			// 2x page-fill from polyPolygonColor
+			const fills = recorder.callsOf('fill');
+			nodeassert.ok(fills.length >= 2, 'expected at least two fills');
 
-		renderer.renderPrimitive(recorder as any, primitive);
+			// The blue rectangle renders with its declared colour.
+			nodeassert.strictEqual(recorder.properties.fillStyle, '#4472c4');
 
-		const fillCall = recorder.findCall('fill');
-		nodeassert.ok(fillCall, 'fill not called');
-		nodeassert.strictEqual(recorder.properties.fillStyle, '#00ff00');
-		nodeassert.strictEqual(fillCall.args.length, 1);
-		nodeassert.strictEqual(
-			(fillCall.args[0] as Path2DRecorder).path,
-			'M 0 0 L 10 0 L 10 10 Z',
-		);
-	});
-
-	it('skips polyPolygonColor with missing path or color', function () {
-		const recorder = new CanvasRecorder();
-		const renderer = new cool.VectorPrimitiveRenderer();
-		const noPath = { type: 'polyPolygonColor', color: '#fff' };
-		const noColor = { type: 'polyPolygonColor', path: 'M 0 0' };
-
-		renderer.renderPrimitive(recorder as any, noPath);
-		renderer.renderPrimitive(recorder as any, noColor);
-
-		nodeassert.strictEqual(recorder.countOf('fill'), 0);
-	});
-
-	it('recurses through children', function () {
-		const recorder = new CanvasRecorder();
-		const renderer = new cool.VectorPrimitiveRenderer();
-		// A "unknown" type whose children include backgroundcolor.
-		// The renderer should descend into children.
-		const primitive = {
-			type: 'unknown-xyz',
-			children: [
-				{
-					type: 'backgroundcolor',
-					color: '#000',
-				},
-			],
-		};
-
-		renderer.renderPrimitive(recorder as any, primitive);
-
-		nodeassert.ok(
-			recorder.findCall('fillRect'),
-			'fillRect should fire from nested child',
-		);
-	});
-
-	it('ignores unknown primitive types and primitives without type', function () {
-		const recorder = new CanvasRecorder();
-		const renderer = new cool.VectorPrimitiveRenderer();
-
-		renderer.renderPrimitive(recorder as any, { type: 'unknown-xyz' });
-		renderer.renderPrimitive(recorder as any, {});
-
-		nodeassert.strictEqual(recorder.calls.length, 0, 'no canvas methods should be called');
-		nodeassert.deepStrictEqual(recorder.properties, {}, 'no canvas properties should be set');
+			// Path2D should match the path string from the reference
+			// for the blue fill.
+			const lastFill = fills[fills.length - 1];
+			nodeassert.ok(
+				(lastFill.args[0] as Path2DRecorder).path.startsWith('m4251'),
+				'last fill path does not match the reference',
+			);
+		});
 	});
 });

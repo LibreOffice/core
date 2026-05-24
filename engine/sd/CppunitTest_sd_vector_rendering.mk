@@ -13,13 +13,16 @@ $(eval $(call gb_CppunitTest_use_common_precompiled_header,sd_vector_rendering))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,sd_vector_rendering, \
     sd/qa/unit/vector/VectorRenderingTest \
+    sd/qa/unit/vector/VectorPrimitiveReferenceTest \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,sd_vector_rendering, \
+    basegfx \
     comphelper \
     cppu \
     cppuhelper \
     drawinglayer \
+    drawinglayercore \
     editeng \
     sal \
     sfx \
