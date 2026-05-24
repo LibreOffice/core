@@ -10,6 +10,7 @@
 #pragma once
 
 #include <vcl/weld/DialogController.hxx>
+#include <vcl/weld/LinkButton.hxx>
 #include <vcl/weld/Window.hxx>
 
 class CrashReportDialog : public weld::GenericDialogController
