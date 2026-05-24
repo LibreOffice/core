@@ -21,6 +21,7 @@ class PresenterConsole {
 		this._map = map;
 		this._presenter = presenter;
 		this._active = false;
+		this._navigateSkipTransition = false;
 		this._map.on('presentationinfo', this._onPresentationInfo, this);
 		this._map.on('newpresentinconsole', this._onPresentInConsole, this);
 	}
@@ -31,6 +32,7 @@ class PresenterConsole {
 			nextSlide: _('Next Slide'),
 			previous: _('Previous'),
 			next: _('Next'),
+			skip: _('Disable Animations'),
 			notes: _('Notes'),
 			slides: _('Slides'),
 			exchange: _('Exchange'),
@@ -112,6 +114,9 @@ class PresenterConsole {
 												</button>
 											</div>
 											<div id="action-buttons-container">
+												<button type="button" id="skip" data-cooltip="${this.labels.skip}" aria-label="${this.labels.skip}">
+													<img src="${LOUtil.getImageURL('slideshow-transition.svg')}">
+												</button>
 												<button type="button" id="notes" data-cooltip="${this.labels.notes}" aria-label="${this.labels.notes}">
 													<img src="${LOUtil.getImageURL('presenterscreen-ButtonNotesNormal.svg')}">
 												</button>
@@ -1040,7 +1045,11 @@ class PresenterConsole {
 				break;
 			}
 			case 'next': {
-				this._presenter.getNavigator().dispatchEffect();
+				if (this._navigateSkipTransition) {
+					this._presenter.getNavigator().skipEffect();
+				} else {
+					this._presenter.getNavigator().dispatchEffect();
+				}
 				// if repeat after sec is set then do not close on last slide
 				if (isLastSlide && !this._presenter._presentationInfo.isEndless) {
 					this._onWindowClose();
@@ -1070,6 +1079,9 @@ class PresenterConsole {
 			case 'help':
 				// TODO. add help.collaboraonline.com
 				window.open('https://collaboraonline.com', '_blank', 'noopener');
+				break;
+			case 'skip':
+				this._onSkipTransitions();
 				break;
 			case 'notes':
 				if (this._proxyPresenter.document.contains(this._notes)) {
@@ -1125,6 +1137,18 @@ class PresenterConsole {
 				});
 			}
 		}
+	}
+
+	_onSkipTransitions() {
+		this._navigateSkipTransition = !this._navigateSkipTransition;
+
+		let elem = this._proxyPresenter.document.querySelector('#skip');
+		this.toggleButtonState(elem, this._navigateSkipTransition);
+		const slideshowAnimToggleText = this._navigateSkipTransition
+			? _('Enable Animations')
+			: _('Disable Animations');
+		elem.setAttribute('aria-label', slideshowAnimToggleText);
+		elem.setAttribute('data-cooltip', slideshowAnimToggleText);
 	}
 
 	_onShowSlides() {
