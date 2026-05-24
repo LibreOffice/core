@@ -17,6 +17,7 @@
 #pragma once
 
 #include <common/ConfigUtil.hpp>
+#include <common/ContainerUtil.hpp>
 #include <common/FileUtil.hpp>
 #include <net/HttpRequest.hpp>
 #include <net/Socket.hpp>
@@ -25,7 +26,6 @@
 #include <Poco/Net/PartHandler.h>
 
 #include <string>
-#include <unordered_map>
 
 class RequestDetails;
 
@@ -60,7 +60,7 @@ public:
     std::size_t size() const { return _size; }
 
     /// Substitute variables per the given map.
-    std::string substitute(const std::unordered_map<std::string, std::string>& values);
+    std::string substitute(const Util::UnorderedStringMap<std::string>& values);
 
 private:
     const std::string _filename; ///< Filename on disk, with extension.
@@ -246,7 +246,7 @@ public:
     void dumpState(std::ostream& os);
 
 private:
-    using FileHashMap_t = std::unordered_map<std::string, std::pair<std::string, std::string>>;
+    using FileHashMap_t = Util::UnorderedStringMap<std::pair<std::string, std::string>>;
     FileHashMap_t FileHash;
     static void sendError(http::StatusCode errorCode, const std::string& requestPath,
                           const std::shared_ptr<StreamSocket>& socket,

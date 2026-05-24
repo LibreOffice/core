@@ -143,7 +143,7 @@ PreProcessedFile::PreProcessedFile(std::string filename, const std::string& data
     }
 }
 
-std::string PreProcessedFile::substitute(const std::unordered_map<std::string, std::string>& values)
+std::string PreProcessedFile::substitute(const Util::UnorderedStringMap<std::string>& values)
 {
     std::string recon;
     recon.reserve(_size * 2);

@@ -1253,7 +1253,7 @@ public:
     }
 
 private:
-    std::unordered_map<std::string, std::string> _vars;
+    Util::UnorderedStringMap<std::string> _vars;
     const std::string _blank;
 };
 

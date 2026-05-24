@@ -17,6 +17,7 @@
 
 #include <wsd/ContentSecurityPolicy.hpp>
 #include <wsd/FileServer.hpp>
+#include <common/ContainerUtil.hpp>
 #include <common/FileUtil.hpp>
 #include <test/lokassert.hpp>
 
@@ -27,7 +28,6 @@
 
 #include <cstddef>
 #include <memory>
-#include <unordered_map>
 
 /// File-Serve White-Box unit-tests.
 class FileServeTests : public CPPUNIT_NS::TestFixture
@@ -48,13 +48,12 @@ class FileServeTests : public CPPUNIT_NS::TestFixture
     void testPreProcessedFileSubstitution();
     void testCSPMergeNewlines();
 
-    void
-    preProcessedFileSubstitution(const std::string_view testname,
-                                 const std::unordered_map<std::string, std::string>& variables);
+    void preProcessedFileSubstitution(const std::string_view testname,
+                                      const Util::UnorderedStringMap<std::string>& variables);
     // Helper replace each occurrence of from in str to variables[to_key] except if to_key is not in variables
     std::string& replaceIfExist(std::string& str, const std::string& from,
                                 const std::string& to_key,
-                                const std::unordered_map<std::string, std::string>& variables);
+                                const Util::UnorderedStringMap<std::string>& variables);
 };
 
 void FileServeTests::testUIDefaults()
@@ -385,7 +384,7 @@ void FileServeTests::testPreProcessedFileRoundtrip()
 }
 
 void FileServeTests::preProcessedFileSubstitution(
-    const std::string_view testname, const std::unordered_map<std::string, std::string>& variables)
+    const std::string_view testname, const Util::UnorderedStringMap<std::string>& variables)
 {
     const Poco::Path path(TDIST);
 
@@ -426,7 +425,7 @@ void FileServeTests::preProcessedFileSubstitution(
 
 std::string&
 FileServeTests::replaceIfExist(std::string& str, const std::string& from, const std::string& to_key,
-                               const std::unordered_map<std::string, std::string>& variables)
+                               const Util::UnorderedStringMap<std::string>& variables)
 {
     auto search = variables.find(to_key);
     if (search == variables.end())
@@ -441,7 +440,7 @@ void FileServeTests::testPreProcessedFileSubstitution()
 {
     constexpr std::string_view testname = __func__;
 
-    std::unordered_map<std::string, std::string> variables = {
+    Util::UnorderedStringMap<std::string> variables = {
         { "ACCESS_TOKEN", "alksjdfiwjksnsdkafnsdl" },
         { "ACCESS_TOKEN_TTL", "123" },
         { "ACCESS_HEADER", "8923rweyhjsnjfnwoejl" },
@@ -458,9 +457,9 @@ void FileServeTests::testPreProcessedFileSubstitution()
         { "BUYPRODUCT_URL", "https://buy.ourproduct.com/'" }
     };
 
-    preProcessedFileSubstitution(testname, std::move(variables));
+    preProcessedFileSubstitution(testname, variables);
     preProcessedFileSubstitution(std::string(testname) + "_empty",
-                                 std::unordered_map<std::string, std::string>());
+                                 Util::UnorderedStringMap<std::string>());
 }
 
 void FileServeTests::testCSPMergeNewlines()
