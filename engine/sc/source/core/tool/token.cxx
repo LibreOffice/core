@@ -563,7 +563,7 @@ FormulaTokenRef extendRangeReference( ScSheetLimits& rLimits, FormulaToken & rTo
         aRef.Ref2.SetFlag3D( false);
         aRef.Extend(rLimits, rRef2, rPos);
         if (bExternal)
-            xRes = new ScExternalDoubleRefToken( static_cast<ScExternalSingleRefToken&>(rTok1).GetFileId(), static_cast<ScExternalDoubleRefToken&>(rTok1).GetTableName(), aRef);
+            xRes = new ScExternalDoubleRefToken( static_cast<ScExternalSingleRefToken&>(rTok1).GetFileId(), static_cast<ScExternalSingleRefToken&>(rTok1).GetTableName(), aRef);
         else
             xRes = new ScDoubleRefToken(rLimits, aRef);
     }
