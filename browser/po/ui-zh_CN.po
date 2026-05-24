@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-11 14:06+0200\n"
-"PO-Revision-Date: 2026-05-21 10:11+0000\n"
-"Last-Translator: cookiespter <zoumayisi@163.com>\n"
+"PO-Revision-Date: 2026-05-24 22:11+0000\n"
+"Last-Translator: xzlhxc <xzlhxc@foxmail.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/collabora-online/collabora-ui/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -842,7 +842,7 @@ msgstr "AI助手"
 msgid ""
 "Configure AI provider credentials and model. Models are fetched "
 "automatically when credentials change."
-msgstr ""
+msgstr "配置 AI 提供商的凭证和模型。当凭证修改时，模型能自动获取。"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1926
 msgid "Text Generation"
@@ -858,7 +858,7 @@ msgstr "例如"
 #: admin/src/integrator/AdminIntegratorSettings.ts:2557
 #: admin/src/integrator/AdminIntegratorSettings.ts:2573
 msgid "Fetch models to select"
-msgstr ""
+msgstr "获取模型以供选择"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2024
 msgid "Image Generation"
@@ -896,15 +896,15 @@ msgstr "提取模型失败"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2425
 msgid "Invalid provider configuration"
-msgstr ""
+msgstr "无效的提供商凭证"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2537
 msgid "None (disable image generation)"
-msgstr ""
+msgstr "无（禁用图像生成）"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2919
 msgid "Reset"
-msgstr ""
+msgstr "重置"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3038
 #: src/map/handler/Map.WOPI.js:793
@@ -1035,9 +1035,8 @@ msgid "Event handling has been delayed for an unexpectedly long time: {0}ms"
 msgstr "事件处理延迟时间过长：{0}毫秒"
 
 #: src/app/TableStylesService.ts:101
-#, fuzzy
 msgid "Light"
-msgstr "紧凑"
+msgstr ""
 
 #: src/app/TableStylesService.ts:103
 msgid "Medium"
@@ -1055,7 +1054,7 @@ msgstr ""
 #: src/app/TableStylesService.ts:195 src/app/TableStylesService.ts:207
 #: src/app/TableStylesService.ts:209
 msgid "Table Styles"
-msgstr ""
+msgstr "表格样式"
 
 #: src/canvas/sections/CommentListSection.ts:1770
 #: src/canvas/sections/CommentListSection.ts:1783
@@ -1118,9 +1117,8 @@ msgid "Resolved"
 msgstr "已解决"
 
 #: src/canvas/sections/CommentSection.ts:574
-#, fuzzy
 msgid "Removed"
-msgstr "删除"
+msgstr "已删除"
 
 #: src/canvas/sections/CommentSection.ts:1160
 #: src/control/jsdialog/Widget.Comment.ts:177
@@ -1186,19 +1184,19 @@ msgstr ""
 
 #: src/canvas/sections/CompareChangesLabelSection.ts:193
 msgid "%1: Initial Version"
-msgstr ""
+msgstr "%1: 初始版本"
 
 #: src/canvas/sections/CompareChangesLabelSection.ts:197
 msgid "%1: Current Version"
-msgstr ""
+msgstr "%1: 当前版本"
 
 #: src/canvas/sections/CompareChangesLabelSection.ts:204
 msgid "Initial Version"
-msgstr ""
+msgstr "初始版本"
 
 #: src/canvas/sections/CompareChangesLabelSection.ts:208
 msgid "Current Version"
-msgstr ""
+msgstr "当前版本"
 
 #: src/canvas/sections/ShapeHandlesSection.ts:479
 msgid "Document contains unsupported media"
@@ -1227,7 +1225,7 @@ msgstr "自动颜色"
 #: src/control/Control.AboutDialog.ts:89
 #: src/control/jsdialog/Widget.TreeView.ts:786
 msgid "(opens in new tab)"
-msgstr ""
+msgstr "（在新标签页打开）"
 
 #: src/control/Control.AboutDialog.ts:148
 #, fuzzy
@@ -1236,7 +1234,7 @@ msgstr "服务提供方："
 
 #: src/control/Control.AboutDialog.ts:171
 msgid "View widgets"
-msgstr ""
+msgstr "显示组件"
 
 #: src/control/Control.AboutDialog.ts:206
 msgid "\"Slow Proxy\""
@@ -1252,7 +1250,7 @@ msgstr "以英文复制所有版本信息"
 
 #: src/control/Control.AboutDialog.ts:384
 msgid "Version information has been copied"
-msgstr ""
+msgstr "已复制版本信息"
 
 #: src/control/Control.AboutDialog.ts:424
 msgid "COOLWSD version:"
@@ -1311,12 +1309,12 @@ msgstr "服务器在处理 {1} 命令时遇到了 {0} 错误。"
 #: src/control/Control.BackstageView.ts:179
 #: src/control/Control.BackstageView.ts:180
 msgid "Close backstage"
-msgstr ""
+msgstr "关闭后台"
 
 #: src/control/Control.BackstageView.ts:223
 #: src/control/Control.BackstageView.ts:224
 msgid "Back to document"
-msgstr ""
+msgstr "返回文件"
 
 #: src/control/Control.BackstageView.ts:272
 #: src/control/Control.BackstageView.ts:406
@@ -1336,7 +1334,7 @@ msgstr "新建"
 
 #: src/control/Control.BackstageView.ts:288
 msgid "Open"
-msgstr ""
+msgstr "打开"
 
 #: src/control/Control.BackstageView.ts:296
 #: src/control/Control.Notebookbar.js:638
@@ -1355,7 +1353,7 @@ msgstr "共享"
 
 #: src/control/Control.BackstageView.ts:304
 msgid "Info"
-msgstr ""
+msgstr "信息"
 
 #: src/control/Control.BackstageView.ts:320
 #: src/control/Control.NotebookbarCalc.js:173
@@ -1369,7 +1367,7 @@ msgstr "保存为"
 
 #: src/control/Control.BackstageView.ts:336
 msgid "Export"
-msgstr ""
+msgstr "导出"
 
 #: src/control/Control.BackstageView.ts:350 src/control/Control.Menubar.ts:123
 #: src/control/Control.Menubar.ts:465 src/control/Control.Menubar.ts:641
@@ -1384,12 +1382,12 @@ msgstr "选项"
 
 #: src/control/Control.BackstageView.ts:407
 msgid "Start a new document from one of the following templates."
-msgstr ""
+msgstr "用下列模板新建文档"
 
 #: src/control/Control.BackstageView.ts:450
 #: src/control/Control.BackstageView.ts:453
 msgid "More Templates"
-msgstr ""
+msgstr "更多模板"
 
 #: src/control/Control.BackstageView.ts:479
 #: src/control/jsdialog/Widget.ColorPicker.ts:437
@@ -1398,31 +1396,31 @@ msgstr "最近"
 
 #: src/control/Control.BackstageView.ts:511
 msgid "Recently opened documents will appear here"
-msgstr ""
+msgstr "最近打开的文件会显示在这里"
 
 #: src/control/Control.BackstageView.ts:551
 msgid "Name"
-msgstr ""
+msgstr "名称"
 
 #: src/control/Control.BackstageView.ts:557
 msgid "Modified Date"
-msgstr ""
+msgstr "修改日期"
 
 #: src/control/Control.BackstageView.ts:783
 msgid "Document Info"
-msgstr ""
+msgstr "文件信息"
 
 #: src/control/Control.BackstageView.ts:784
 msgid "View document properties and information"
-msgstr ""
+msgstr "查看文档属性和信息"
 
 #: src/control/Control.BackstageView.ts:800
 msgid "Export Document"
-msgstr ""
+msgstr "导出文档"
 
 #: src/control/Control.BackstageView.ts:801
 msgid "export your documents in different formats"
-msgstr ""
+msgstr "用不同格式导出文档"
 
 #: src/control/Control.BackstageView.ts:855 src/control/Control.Menubar.ts:387
 #: src/control/Control.Menubar.ts:1380
@@ -1436,26 +1434,25 @@ msgstr "属性"
 
 #: src/control/Control.BackstageView.ts:861
 msgid "More Property Info"
-msgstr ""
+msgstr "更多属性信息"
 
 #: src/control/Control.BackstageView.ts:940 templates/templates.js:50
 #: templates/templates.js:60 templates/templates.js:70
 msgid "Text Document"
-msgstr ""
+msgstr "文本文档（txt）"
 
 #: src/control/Control.BackstageView.ts:940
 #: src/control/Control.BackstageView.ts:943
-#, fuzzy
 msgid "Pages"
-msgstr "页面"
+msgstr "Pages文稿"
 
 #: src/control/Control.BackstageView.ts:941
 msgid "Spreadsheet"
-msgstr ""
+msgstr "Spreadsheet电子表格"
 
 #: src/control/Control.BackstageView.ts:941
 msgid "Sheets"
-msgstr ""
+msgstr "表格"
 
 #: src/control/Control.BackstageView.ts:942
 #: src/control/Control.NavigatorPanel.ts:192
@@ -1475,44 +1472,43 @@ msgstr "类型"
 
 #: src/control/Control.BackstageView.ts:958
 msgid "Mode"
-msgstr ""
+msgstr "模式"
 
 #: src/control/Control.BackstageView.ts:959
 msgid "View Only"
-msgstr ""
+msgstr "只读"
 
 #: src/control/Control.BackstageView.ts:966
 msgid "File Name"
-msgstr ""
+msgstr "文件名"
 
 #: src/control/Control.BackstageView.ts:1073
 msgid "Loading templates…"
-msgstr ""
+msgstr "加载模板…"
 
 #: src/control/Control.BackstageView.ts:1119
 msgid "Search templates"
-msgstr ""
+msgstr "搜索模板"
 
 #: src/control/Control.BackstageView.ts:1187
 msgid "No templates match your search."
-msgstr ""
+msgstr "没有符合条件的模板。"
 
 #: src/control/Control.BackstageView.ts:1284
 msgid "Blank Spreadsheet"
-msgstr ""
+msgstr "空白Spreadsheet表格"
 
 #: src/control/Control.BackstageView.ts:1288
-#, fuzzy
 msgid "Blank Presentation"
-msgstr "结束演示"
+msgstr "空白演示文稿"
 
 #: src/control/Control.BackstageView.ts:1293
 msgid "Blank Document"
-msgstr ""
+msgstr "空白文档"
 
 #: src/control/Control.BackstageView.ts:1431
 msgid "Untitled"
-msgstr ""
+msgstr "未命名"
 
 #: src/control/Control.Command.js:90
 msgid "Unlock"
@@ -1520,7 +1516,7 @@ msgstr "解锁"
 
 #: src/control/Control.DocumentNameInput.js:27
 msgid "Document name"
-msgstr ""
+msgstr "文档名称"
 
 #: src/control/Control.DocumentNameInput.js:119
 msgid "Path"
@@ -2217,7 +2213,7 @@ msgstr "重置缩放"
 
 #: src/control/Control.Menubar.ts:168
 msgid "Fit to Screen"
-msgstr ""
+msgstr "适应屏幕"
 
 #: src/control/Control.Menubar.ts:171 src/control/Control.Menubar.ts:500
 #: src/control/Control.Menubar.ts:672 src/control/Control.Menubar.ts:822
@@ -2228,7 +2224,7 @@ msgstr "切换界面模式"
 #: src/control/Control.NotebookbarWriter.js:1737
 #: src/control/Control.StatusBar.js:264 src/control/Control.StatusBar.js:265
 msgid "Multi Page View"
-msgstr ""
+msgstr "多页面视图"
 
 #: src/control/Control.Menubar.ts:174 src/control/Control.Menubar.ts:502
 #: src/control/Control.Menubar.ts:677 src/control/Control.Menubar.ts:823
@@ -2708,7 +2704,7 @@ msgstr "渐变终点"
 
 #: src/control/Control.NavigatorPanel.ts:41
 msgid "Navigation Panel"
-msgstr ""
+msgstr "导航面板"
 
 #: src/control/Control.NavigatorPanel.ts:115
 msgid "Navigation"
