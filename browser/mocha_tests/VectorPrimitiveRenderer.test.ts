@@ -83,6 +83,52 @@ describe('VectorPrimitiveRenderer', function () {
 				primitive.path,
 			);
 		});
+
+		it('strokes a Path2D for polygonStroke', function () {
+			const primitive = loadVectorRenderingReference('testPolygonStroke').primitives[0];
+			nodeassert.strictEqual(primitive.type, 'polygonStroke');
+			nodeassert.strictEqual(typeof primitive.path, 'string');
+			nodeassert.strictEqual(typeof primitive.line?.color, 'string');
+			nodeassert.strictEqual(typeof primitive.line?.width, 'number');
+
+			const recorder = new CanvasRecorder();
+			const renderer = new cool.VectorPrimitiveRenderer();
+			renderer.renderPrimitive(recorder as any, primitive);
+
+			const stroke = recorder.findCall('stroke');
+			nodeassert.ok(stroke, 'stroke not called');
+			// Use the per-call snapshot so we see the stroke properties
+			// as they were when the renderer drew this primitive, not
+			// whatever state another primitive left behind.
+			nodeassert.strictEqual(stroke?.properties.strokeStyle, primitive.line.color);
+			nodeassert.strictEqual(stroke?.properties.lineWidth, primitive.line.width);
+			nodeassert.strictEqual(stroke?.properties.lineJoin, primitive.line.linejoin);
+			nodeassert.strictEqual(stroke?.properties.lineCap, primitive.line.linecap);
+			nodeassert.ok(stroke && stroke.depth > 0, 'stroke must be inside save/restore');
+			nodeassert.strictEqual(
+				(stroke?.args[0] as Path2DRecorder).path,
+				primitive.path,
+			);
+		});
+
+		it('applies dotDashArray for polygonStroke', function () {
+			const primitive = loadVectorRenderingReference(
+				'testPolygonStrokeDashed',
+			).primitives[0];
+			nodeassert.strictEqual(primitive.type, 'polygonStroke');
+			nodeassert.ok(
+				Array.isArray(primitive.stroke?.dotDashArray),
+				'fixture must carry a dotDashArray',
+			);
+
+			const recorder = new CanvasRecorder();
+			const renderer = new cool.VectorPrimitiveRenderer();
+			renderer.renderPrimitive(recorder as any, primitive);
+
+			const setLineDash = recorder.findCall('setLineDash');
+			nodeassert.ok(setLineDash, 'setLineDash not called');
+			nodeassert.deepStrictEqual(setLineDash.args, [primitive.stroke.dotDashArray]);
+		});
 	});
 
 	// Fixtures from documents. Each fixture is a full reply built
@@ -134,6 +180,37 @@ describe('VectorPrimitiveRenderer', function () {
 				(lastFill.args[0] as Path2DRecorder).path.startsWith('m4251'),
 				'last fill path does not match the reference',
 			);
+
+			// The black rectangle border should have stroked once.
+			const strokes = recorder.callsOf('stroke');
+			nodeassert.strictEqual(strokes.length, 1, 'expected one stroke');
+			nodeassert.strictEqual(recorder.properties.strokeStyle, '#000000');
+		});
+
+		it('renders primitives from testStrokedRectangle.json reference', function () {
+			// A stroke-only rectangle exercises polygonStroke against
+			// the full pipeline. The slide carries no fill, so the only
+			// stroke recorded is the rectangle's own border.
+			const primitiveTree = loadVectorRenderingReference('testStrokedRectangle');
+
+			const recorder = new CanvasRecorder(
+				primitiveTree.slideWidth,
+				primitiveTree.slideHeight,
+			);
+			const renderer = new cool.VectorPrimitiveRenderer();
+
+			for (const primitive of primitiveTree.masterPage.primitives)
+				renderer.renderPrimitive(recorder as any, primitive);
+			for (const object of primitiveTree.objects)
+				for (const primitive of object.primitives)
+					renderer.renderPrimitive(recorder as any, primitive);
+
+			const stroke = recorder.findCall('stroke');
+			nodeassert.ok(stroke, 'polygonStroke produced no stroke call');
+			nodeassert.strictEqual(stroke?.properties.strokeStyle, '#000000');
+			nodeassert.ok(stroke && stroke.depth > 0, 'stroke must be inside save/restore');
+			nodeassert.ok(recorder.findCall('save'), 'save not called');
+			nodeassert.ok(recorder.findCall('restore'), 'restore not called');
 		});
 	});
 });

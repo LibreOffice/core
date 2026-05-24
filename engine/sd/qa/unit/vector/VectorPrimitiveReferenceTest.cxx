@@ -18,7 +18,12 @@
 #include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
 #include <drawinglayer/primitive2d/backgroundcolorprimitive2d.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonColorPrimitive2D.hxx>
+#include <drawinglayer/primitive2d/PolygonStrokePrimitive2D.hxx>
 #include <drawinglayer/processor2d/Primitive2dJsonProcessor.hxx>
+#include <drawinglayer/attribute/lineattribute.hxx>
+#include <drawinglayer/attribute/strokeattribute.hxx>
+
+#include <com/sun/star/drawing/LineCap.hpp>
 
 #include <osl/file.hxx>
 
@@ -107,6 +112,52 @@ CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testPolyPolygonColor)
     assertJsonPath(aJson, "/primitives/0/type", "polyPolygonColor");
     assertJsonPath(aJson, "/primitives/0/color", "#00ff00");
     assertJsonPathExists(aJson, "/primitives/0/path");
+}
+
+CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testPolygonStroke)
+{
+    // polygonStroke carries color, width, line join and line cap on the wire.
+    basegfx::B2DPolygon aPolygon;
+    aPolygon.append(basegfx::B2DPoint(0.0, 0.0));
+    aPolygon.append(basegfx::B2DPoint(100.0, 0.0));
+
+    drawinglayer::attribute::LineAttribute aLine(basegfx::BColor(0.0, 0.0, 0.0), 2.0,
+                                                 basegfx::B2DLineJoin::Miter,
+                                                 css::drawing::LineCap_BUTT);
+
+    Primitive2DContainer aPrimitives;
+    aPrimitives.append(new PolygonStrokePrimitive2D(aPolygon, aLine));
+
+    auto aJson = writeReference(u"testPolygonStroke", aPrimitives);
+
+    assertJsonPath(aJson, "/primitives/0/type", "polygonStroke");
+    assertJsonPath(aJson, "/primitives/0/line/color", "#000000");
+    assertJsonPathDouble(aJson, "/primitives/0/line/width", 2.0, 1e-9);
+    assertJsonPath(aJson, "/primitives/0/line/linejoin", "miter");
+    assertJsonPath(aJson, "/primitives/0/line/linecap", "butt");
+    assertJsonPathExists(aJson, "/primitives/0/path");
+}
+
+CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testPolygonStrokeDashed)
+{
+    // A dot-dash stroke pattern reaches the wire as stroke.dotDashArray.
+    basegfx::B2DPolygon aPolygon;
+    aPolygon.append(basegfx::B2DPoint(0.0, 0.0));
+    aPolygon.append(basegfx::B2DPoint(100.0, 0.0));
+
+    drawinglayer::attribute::LineAttribute aLine(basegfx::BColor(0.0, 0.0, 0.0), 2.0,
+                                                 basegfx::B2DLineJoin::Miter,
+                                                 css::drawing::LineCap_BUTT);
+    drawinglayer::attribute::StrokeAttribute aStroke(std::vector<double>{ 4.0, 2.0 }, 6.0);
+
+    Primitive2DContainer aPrimitives;
+    aPrimitives.append(new PolygonStrokePrimitive2D(aPolygon, aLine, aStroke));
+
+    auto aJson = writeReference(u"testPolygonStrokeDashed", aPrimitives);
+
+    assertJsonPath(aJson, "/primitives/0/type", "polygonStroke");
+    assertJsonPathExists(aJson, "/primitives/0/stroke/dotDashArray");
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aJson.getSize("/primitives/0/stroke/dotDashArray").value_or(0));
 }
 
 } // namespace

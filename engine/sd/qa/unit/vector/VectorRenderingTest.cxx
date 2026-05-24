@@ -82,6 +82,19 @@ protected:
         pPage->NbcInsertObject(pRect.get());
     }
 
+    /// Add a stroke-only rectangle (no fill) to the first slide.
+    void addStrokedRectangle(const tools::Rectangle& rRect, Color aStrokeColor)
+    {
+        SdrPage* pPage = page(1);
+        rtl::Reference<SdrRectObj> pRect = new SdrRectObj(pPage->getSdrModelFromSdrPage(), rRect);
+
+        pRect->SetMergedItem(XFillStyleItem(drawing::FillStyle_NONE));
+        pRect->SetMergedItem(XLineStyleItem(drawing::LineStyle_SOLID));
+        pRect->SetMergedItem(XLineColorItem(OUString(), aStrokeColor));
+
+        pPage->NbcInsertObject(pRect.get());
+    }
+
     /// Request for the first slide. The raw JSON is written as a reference.
     tools::JsonPath getVectorTile(std::u16string_view sName)
     {
@@ -145,6 +158,25 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testSingleRectangle)
 
     // Stroke primitive.
     auto oStroke = aJson.at("/objects/0/primitives/0/children/0/children/1");
+    CPPUNIT_ASSERT(oStroke.has_value());
+    assertJsonPath(*oStroke, "type", "polygonStroke");
+    assertJsonPath(*oStroke, "line/color", "#000000");
+    assertJsonPathExists(*oStroke, "path");
+}
+
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testStrokedRectangle)
+{
+    // A stroke-only rectangle decomposes to a polygonStroke primitive
+    // under the slide object.
+    createBlankDoc();
+    addStrokedRectangle(tools::Rectangle(Point(5000, 5000), Size(5000, 3000)), COL_BLACK);
+
+    auto aJson = getVectorTile(u"testStrokedRectangle");
+
+    assertJsonPath(aJson, "/type", "vectortile");
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aJson.getSize("/objects").value_or(0));
+
+    auto oStroke = aJson.at("/objects/0/primitives/0/children/0/children/0");
     CPPUNIT_ASSERT(oStroke.has_value());
     assertJsonPath(*oStroke, "type", "polygonStroke");
     assertJsonPath(*oStroke, "line/color", "#000000");

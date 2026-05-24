@@ -31,6 +31,12 @@ namespace cool {
 						primitive as PolyPolygonColorPrimitive,
 					);
 					break;
+				case PolygonStrokePrimitive.type:
+					this._renderPolygonStroke(
+						context,
+						primitive as PolygonStrokePrimitive,
+					);
+					break;
 			}
 
 			if (primitive.children)
@@ -61,6 +67,36 @@ namespace cool {
 			const path = new Path2D(primitive.path);
 			context.fillStyle = primitive.color;
 			context.fill(path);
+		}
+
+		private _renderPolygonStroke(
+			context: CanvasRenderingContext2D,
+			primitive: PolygonStrokePrimitive,
+		): void {
+			if (!primitive.path) return;
+
+			const line = primitive.line ?? {};
+			const path = new Path2D(primitive.path);
+
+			context.save();
+			context.strokeStyle = line.color ?? '#000000';
+			// A zero-width stroke is invisible on canvas, so clamp to one device pixel.
+			context.lineWidth = Math.max(line.width ?? 0, 1);
+			// The wire format can carry "none" and "unknown" for linejoin
+			// and linecap. Canvas has no matching option, so fall back
+			// to "miter" and "butt".
+			context.lineJoin =
+				line.linejoin === 'round' || line.linejoin === 'bevel'
+					? line.linejoin
+					: 'miter';
+			context.lineCap =
+				line.linecap === 'round' || line.linecap === 'square'
+					? line.linecap
+					: 'butt';
+			if (primitive.stroke?.dotDashArray?.length)
+				context.setLineDash(primitive.stroke.dotDashArray);
+			context.stroke(path);
+			context.restore();
 		}
 
 		private _renderPrimitives(
