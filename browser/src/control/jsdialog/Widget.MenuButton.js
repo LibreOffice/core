@@ -116,7 +116,7 @@ function _menubuttonControl (parentContainer, data, builder) {
 					JSDialog.CloseDropdown(dropdownId, opensExternal);
 					return true;
 				} else if (eventType === 'selected' && entry && entry.id) {
-					builder.callback('menubutton', 'select', control.container, entry.id, builder);
+					builder.callback('menubutton', 'select', {id: dropdownId}, entry.id, builder);
 					JSDialog.CloseDropdown(dropdownId);
 					return true;
 				} else /* note: entry can be a builder instance as in regular JSDialog callback */ {
