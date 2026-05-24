@@ -734,6 +734,7 @@ namespace Util
 
     void LoadTimings::parse(std::string_view payload)
     {
+        std::lock_guard<std::mutex> guard(_mutex);
         std::size_t pos = payload.find(':');
         if (pos == std::string_view::npos)
             pos = 0;
@@ -755,8 +756,8 @@ namespace Util
             try
             {
                 const long long us = std::stoll(val);
-                record(std::move(key),
-                       std::chrono::steady_clock::time_point(std::chrono::microseconds(us)));
+                _stamps.push_back({ std::move(key),
+                    std::chrono::steady_clock::time_point(std::chrono::microseconds(us)) });
             }
             catch (const std::exception&)
             {
@@ -767,6 +768,7 @@ namespace Util
 
     std::string LoadTimings::format(std::string_view prefix) const
     {
+        std::lock_guard<std::mutex> guard(_mutex);
         if (_stamps.empty())
             return std::string();
 

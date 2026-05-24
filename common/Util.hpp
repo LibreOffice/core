@@ -175,7 +175,9 @@ namespace Util
         uint64_t _startSys;
     };
 
-    /// Simple class to log basic document bootstrap time-stamps
+    /// Simple class to log basic document bootstrap time-stamps.
+    /// Thread-safe: callers on the request-handling thread and the
+    /// DocumentBroker poll thread can both record() into the same instance.
     class LoadTimings
     {
     public:
@@ -186,6 +188,7 @@ namespace Util
 
         void record(std::string key, std::chrono::steady_clock::time_point t)
         {
+            std::lock_guard<std::mutex> guard(_mutex);
             _stamps.push_back({ std::move(key), t });
         }
 
@@ -195,7 +198,11 @@ namespace Util
         /// `prefix` should include the trailing colon, for e.g. "loadtiming:".
         std::string format(std::string_view prefix) const;
 
-        bool empty() const { return _stamps.empty(); }
+        bool empty() const
+        {
+            std::lock_guard<std::mutex> guard(_mutex);
+            return _stamps.empty();
+        }
 
     private:
         struct Stamp
@@ -203,6 +210,7 @@ namespace Util
             std::string key;
             std::chrono::steady_clock::time_point t;
         };
+        mutable std::mutex _mutex;
         std::vector<Stamp> _stamps;
     };
 
