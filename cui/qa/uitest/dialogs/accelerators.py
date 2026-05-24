@@ -11,6 +11,8 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 from uitest.uihelper.common import get_state_as_dict
 from com.sun.star.awt import KeyEvent
 from com.sun.star.awt import Key
+from com.sun.star.ui import GlobalAcceleratorConfiguration
+from com.sun.star.ui import ModuleAcceleratorConfiguration
 from com.sun.star.container import NoSuchElementException
 
 def select_key(xShortcuts, key_name):
@@ -73,8 +75,7 @@ class Test(UITestCase):
                 self.assign_key(xDialog, "office", "F7", ".uno:Credits")
 
             # Check that the key made it into the global config
-            xGlobalAccelCfg = self.xContext.ServiceManager.createInstance(
-                'com.sun.star.ui.GlobalAcceleratorConfiguration')
+            xGlobalAccelCfg = GlobalAcceleratorConfiguration.create(self.xContext)
             xKeyEvent = KeyEvent()
             xKeyEvent.KeyCode = Key.F7
             self.assertEqual(xGlobalAccelCfg.getCommandByKeyEvent(xKeyEvent), ".uno:Credits")
@@ -84,9 +85,9 @@ class Test(UITestCase):
                 self.assign_key(xDialog, "module", "F8", ".uno:EditBookmark")
 
             # Check that the key made it into the module config
-            xModuleAccelCfg = self.xContext.ServiceManager.createInstanceWithArguments(
-                'com.sun.star.ui.ModuleAcceleratorConfiguration',
-                ('com.sun.star.text.TextDocument',))
+            xModuleAccelCfg = ModuleAcceleratorConfiguration.createWithModuleIdentifier(
+                self.xContext,
+                'com.sun.star.text.TextDocument')
             xKeyEvent = KeyEvent()
             xKeyEvent.KeyCode = Key.F8
             self.assertEqual(xModuleAccelCfg.getCommandByKeyEvent(xKeyEvent), ".uno:EditBookmark")
@@ -206,15 +207,14 @@ class Test(UITestCase):
                                  "Spelling")
 
             # Check that all the accelerators made it into the configs
-            xGlobalAccelCfg = self.xContext.ServiceManager.createInstance(
-                'com.sun.star.ui.GlobalAcceleratorConfiguration')
+            xGlobalAccelCfg = GlobalAcceleratorConfiguration.create(self.xContext)
             xKeyEvent = KeyEvent()
             xKeyEvent.KeyCode = Key.F7
             self.assertEqual(xGlobalAccelCfg.getCommandByKeyEvent(xKeyEvent), ".uno:EditBookmark")
 
-            xModuleAccelCfg = self.xContext.ServiceManager.createInstanceWithArguments(
-                'com.sun.star.ui.ModuleAcceleratorConfiguration',
-                ('com.sun.star.text.TextDocument',))
+            xModuleAccelCfg = ModuleAcceleratorConfiguration.createWithModuleIdentifier(
+                self.xContext,
+                'com.sun.star.text.TextDocument')
             self.assertEqual(xModuleAccelCfg.getCommandByKeyEvent(xKeyEvent), ".uno:Credits")
 
             xDocAccelCfg = xDoc1.getUIConfigurationManager().getShortCutManager()
@@ -246,8 +246,7 @@ class Test(UITestCase):
             self.assign_key(xDialog, "office", "F7", "Edit Macros")
 
         # Check that the key made it into the global config
-        xGlobalAccelCfg = self.xContext.ServiceManager.createInstance(
-            'com.sun.star.ui.GlobalAcceleratorConfiguration')
+        xGlobalAccelCfg = GlobalAcceleratorConfiguration.create(self.xContext)
         xKeyEvent = KeyEvent()
         xKeyEvent.KeyCode = Key.F7
         self.assertEqual(xGlobalAccelCfg.getCommandByKeyEvent(xKeyEvent), ".uno:BasicIDEAppear")
