@@ -226,7 +226,7 @@ static bool AllowDim(tools::Long nDim)
     static bool bFuzzing = comphelper::IsFuzzing();
     if (bFuzzing)
     {
-        constexpr auto numCairoMax(1 << 23);
+        constexpr auto numCairoMax(1 << 22);
         if (nDim > numCairoMax || nDim < -numCairoMax)
         {
             SAL_WARN("vcl", "skipping huge dimension: " << nDim);
