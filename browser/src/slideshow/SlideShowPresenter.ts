@@ -601,7 +601,9 @@ class SlideShowPresenter {
 			'mousemove',
 			this._slideShowNavigator.onMouseMove.bind(this._slideShowNavigator),
 		);
-		canvas.addEventListener('mousemove', this._showSlideControls.bind(this));
+		if (!this._isWelcomePresentation && !presenterConsoleActive) {
+			canvas.addEventListener('mousemove', this._showSlideControls.bind(this));
+		}
 
 		if (this._hammer) {
 			this._hammer.off('swipe');
