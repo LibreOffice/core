@@ -25,7 +25,7 @@
 
 #include <Poco/URI.h>
 
-std::unordered_map<std::string, std::shared_ptr<http::Response>> ProxyRequestHandler::CacheFileHash;
+Util::UnorderedStringMap<std::shared_ptr<http::Response>> ProxyRequestHandler::CacheFileHash;
 std::chrono::system_clock::time_point ProxyRequestHandler::MaxAge;
 
 void ProxyRequestHandler::handleRequest(const std::string& relPath,

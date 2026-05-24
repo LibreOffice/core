@@ -57,13 +57,13 @@ void SlideLayerCacheMap::erase_all()
     insertion_order.clear();
 }
 
-std::unordered_map<std::string, std::vector<std::shared_ptr<Message>>>::const_iterator
+SlideLayerCacheMap::Map::const_iterator
 SlideLayerCacheMap::find(const std::string& key) const
 {
     return cache_map.find(key);
 }
 
-std::unordered_map<std::string, std::vector<std::shared_ptr<Message>>>::const_iterator
+SlideLayerCacheMap::Map::const_iterator
 SlideLayerCacheMap::end() const
 {
     return cache_map.end();

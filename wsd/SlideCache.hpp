@@ -16,12 +16,12 @@
 
 #pragma once
 
+#include <common/ContainerUtil.hpp>
 #include <common/Message.hpp>
 
 #include <string>
 #include <vector>
 #include <memory>
-#include <unordered_map>
 
 /**
  Used for caching rendered slide layers for slideshow
@@ -33,7 +33,9 @@
 */
 class SlideLayerCacheMap final
 {
-    std::unordered_map<std::string, std::vector<std::shared_ptr<Message>>> cache_map;
+    using Map = Util::UnorderedStringMap<std::vector<std::shared_ptr<Message>>>;
+
+    Map cache_map;
 
     // Helps if we want to clean older cache
     std::vector<std::string> insertion_order;
@@ -53,10 +55,9 @@ public:
 
     void erase_all();
 
-    std::unordered_map<std::string, std::vector<std::shared_ptr<Message>>>::const_iterator
-    find(const std::string& key) const;
+    Map::const_iterator find(const std::string& key) const;
 
-    std::unordered_map<std::string, std::vector<std::shared_ptr<Message>>>::const_iterator end() const;
+    Map::const_iterator end() const;
 
     std::size_t size() const;
 };

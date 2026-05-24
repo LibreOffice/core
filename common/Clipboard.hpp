@@ -15,6 +15,7 @@
 
 #include <common/ClipboardData.hpp>
 #include <common/Common.hpp>
+#include <common/ContainerUtil.hpp>
 #include <common/FileUtil.hpp>
 #include <common/JailUtil.hpp>
 #include <common/Log.hpp>
@@ -25,7 +26,6 @@
 #include <cstdlib>
 #include <mutex>
 #include <string>
-#include <unordered_map>
 #include <vector>
 
 /// Used to store expired view's clipboards
@@ -45,7 +45,7 @@ class ClipboardCache
         }
     };
     // clipboard key -> data
-    std::unordered_map<std::string, Entry> _cache;
+    Util::UnorderedStringMap<Entry> _cache;
     std::string _cacheDir;
     std::chrono::steady_clock::time_point _nextExpiryTime;
     int _cacheFileId;

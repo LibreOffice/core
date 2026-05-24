@@ -11,6 +11,8 @@
 
 #pragma once
 
+#include <common/ContainerUtil.hpp>
+
 /*
  * When the session is inactive, we need to record its state for a replay.
  */
@@ -43,7 +45,7 @@ class StateRecorder
 {
 private:
     bool _invalidate;
-    std::unordered_map<std::string, std::string> _recordedStates;
+    Util::UnorderedStringMap<std::string> _recordedStates;
     std::unordered_map<int, std::unordered_map<int, RecordedEvent>> _recordedViewEvents;
     std::unordered_map<int, RecordedEvent> _recordedEvents;
     std::vector<RecordedEvent> _recordedEventsVector;
@@ -59,7 +61,7 @@ public:
 
     bool isInvalidate() const { return _invalidate; }
 
-    const std::unordered_map<std::string, std::string>& getRecordedStates() const
+    const Util::UnorderedStringMap<std::string>& getRecordedStates() const
     {
         return _recordedStates;
     }

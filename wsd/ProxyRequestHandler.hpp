@@ -16,10 +16,11 @@
 
 #pragma once
 
+#include <common/ContainerUtil.hpp>
+
 #include <chrono>
 #include <memory>
 #include <string>
-#include <unordered_map>
 
 class StreamSocket;
 namespace http
@@ -36,7 +37,7 @@ public:
 
 private:
     static std::chrono::system_clock::time_point MaxAge;
-    static std::unordered_map<std::string, std::shared_ptr<http::Response>> CacheFileHash;
+    static Util::UnorderedStringMap<std::shared_ptr<http::Response>> CacheFileHash;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

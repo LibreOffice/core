@@ -11,11 +11,12 @@
 
 #pragma once
 
+#include <common/ContainerUtil.hpp>
+
 #include <cassert>
 #include <map>
 #include <set>
 #include <string>
-#include <unordered_map>
 
 namespace RegexUtil
 {
@@ -111,7 +112,7 @@ private:
     std::set<std::string> _allowed;
     std::set<std::string> _denied;
     /// Memoizes the result of match().
-    mutable std::unordered_map<std::string, bool> _matchedMemo;
+    mutable Util::UnorderedStringMap<bool> _matchedMemo;
     const bool _allowByDefault;
 };
 

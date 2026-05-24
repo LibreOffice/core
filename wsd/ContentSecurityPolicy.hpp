@@ -16,12 +16,12 @@
 
 #pragma once
 
+#include <common/ContainerUtil.hpp>
 #include <common/Log.hpp>
 #include <common/StringVector.hpp>
 #include <common/Util.hpp>
 #include <sstream>
 #include <string>
-#include <unordered_map>
 
 /// Manages the HTTP Content-Security-Policy Header.
 /// See https://www.w3.org/TR/CSP2/
@@ -123,7 +123,7 @@ public:
 
 private:
     /// The policy directives.
-    std::unordered_map<std::string, std::string> _directives;
+    Util::UnorderedStringMap<std::string> _directives;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -79,7 +79,7 @@
 std::map<std::string, std::string> ClientRequestDispatcher::StaticFileContentCache;
 
 std::size_t ClientRequestDispatcher::NextRvsCleanupSize = RvsLowWatermark;
-std::unordered_map<std::string, std::shared_ptr<RequestVettingStation>>
+Util::UnorderedStringMap<std::shared_ptr<RequestVettingStation>>
     ClientRequestDispatcher::RequestVettingStations;
 
 extern std::map<std::string, std::shared_ptr<DocumentBroker>> DocBrokers;
@@ -684,7 +684,7 @@ namespace
 /// yet, and we're proactively trying to authenticate the client.
 void launchAsyncCheckFileInfo(
     const std::string& id, const FileServerRequestHandler::ResourceAccessDetails& accessDetails,
-    std::unordered_map<std::string, std::shared_ptr<RequestVettingStation>>& requestVettingStations,
+    Util::UnorderedStringMap<std::shared_ptr<RequestVettingStation>>& requestVettingStations,
     const std::size_t highWatermark)
 {
     const std::string requestKey = RequestDetails::getRequestKey(

@@ -16,6 +16,7 @@
 
 #pragma once
 
+#include <common/ContainerUtil.hpp>
 #include <net/Socket.hpp>
 #include <wsd/RequestDetails.hpp>
 #include <wsd/RequestVettingStation.hpp>
@@ -230,8 +231,7 @@ private:
     /// This is a temporary storage until we get the WS upgrade. If we don't, we purge.
     /// Note: this is accessed exclusively from websrv_poll, through
     /// handleIncomingMessage and handleClientWsUpgrade. Do *not* access in the ctor/dtor!
-    static std::unordered_map<std::string, std::shared_ptr<RequestVettingStation>>
-        RequestVettingStations;
+    static Util::UnorderedStringMap<std::shared_ptr<RequestVettingStation>> RequestVettingStations;
 
     /// Cache for static files, to avoid reading and processing from disk.
     static std::map<std::string, std::string> StaticFileContentCache;

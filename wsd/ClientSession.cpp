@@ -22,6 +22,7 @@
 #include <common/CommandControl.hpp>
 #include <common/Common.hpp>
 #include <common/ConfigUtil.hpp>
+#include <common/ContainerUtil.hpp>
 #include <common/HexUtil.hpp>
 #include <common/JsonUtil.hpp>
 #include <common/NumUtil.hpp>
@@ -76,7 +77,7 @@ const int ProxyAccessTokenLengthBytes = 32;
 namespace
 {
 std::mutex GlobalSessionMapMutex;
-std::unordered_map<std::string, std::weak_ptr<ClientSession>> GlobalSessionMap;
+Util::UnorderedStringMap<std::weak_ptr<ClientSession>> GlobalSessionMap;
 
 } // namespace
 
@@ -3372,7 +3373,7 @@ ClientSession::handleOpenDocKitToClientMessage(const std::shared_ptr<Message>& p
 /// Map a file extension to a document type for password-protected icons.
 static std::string getDocTypeFromExtension(const std::string& ext)
 {
-    static const std::unordered_map<std::string, std::string> extToType = {
+    static const Util::UnorderedStringMap<std::string> extToType = {
         // Writer
         { "odt", "writer" }, { "fodt", "writer" }, { "doc", "writer" }, { "docx", "writer" },
         { "docm", "writer" }, { "dot", "writer" }, { "dotx", "writer" }, { "dotm", "writer" },

@@ -17,6 +17,7 @@
 #pragma once
 
 #include <common/ConfigUtil.hpp>
+#include <common/ContainerUtil.hpp>
 #include <common/FileUtil.hpp>
 #include <common/Unit.hpp>
 #include <common/Util.hpp>
@@ -135,7 +136,7 @@ public:
     /// Tracks the URIs that are switching to Disconnected (WASM) Mode.
     /// The time is when the switch request was made. We expire the request after a certain
     /// time, in case the user fails to load WASM, it will revert to Collaborative mode.
-    static std::unordered_map<std::string, std::chrono::steady_clock::time_point> Uri2WasmModeMap;
+    static Util::UnorderedStringMap<std::chrono::steady_clock::time_point> Uri2WasmModeMap;
 #endif
 
     static std::unordered_set<std::string> EditFileExtensions;
@@ -304,7 +305,7 @@ private:
     virtual std::string getJailRoot(int pid) override;
 
     /// Settings passed from the command-line to override those in the config file.
-    std::unordered_map<std::string, std::string> _overrideSettings;
+    Util::UnorderedStringMap<std::string> _overrideSettings;
 };
 
 int createForkit(const std::string& forKitPath, const StringVector& args);
