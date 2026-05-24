@@ -16,6 +16,7 @@
 
 #pragma once
 
+#include <common/ContainerUtil.hpp>
 #include <common/Log.hpp>
 #include <common/Util.hpp>
 
@@ -28,7 +29,6 @@
 #include <string>
 #include <map>
 #include <type_traits>
-#include <unordered_map>
 
 namespace ConfigUtil
 {
@@ -37,11 +37,14 @@ class AppConfigMap final : public Poco::Util::MapConfiguration
 {
 public:
     AppConfigMap() = default;
-    AppConfigMap(const std::unordered_map<std::string, std::string>& map)
+
+    /// Accepts any map-like container whose elements expose .first / .second
+    /// strings (std::unordered_map, std::map, Util::UnorderedStringMap, ...).
+    template <typename Map> explicit AppConfigMap(const Map& map)
     {
-        for (const auto& pair : map)
+        for (const auto& [key, value] : map)
         {
-            setRaw(pair.first, pair.second);
+            setRaw(key, value);
         }
     }
 
@@ -120,7 +123,7 @@ void initializeFromFile(const std::string& filename);
 bool isInitialized();
 
 /// Returns the default config.
-const std::unordered_map<std::string, std::string>& getDefaultAppConfig();
+const Util::UnorderedStringMap<std::string>& getDefaultAppConfig();
 
 /// Extract all entries as key-value pairs. We use map to have the entries sorted.
 std::map<std::string, std::string> extractAll(const Poco::Util::AbstractConfiguration& config);

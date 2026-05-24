@@ -1438,8 +1438,7 @@ void COOLWSD::innerInitialize(Poco::Util::Application& self)
     // Initialize the config subsystem.
     LayeredConfiguration& conf = config();
 
-    const std::unordered_map<std::string, std::string>& defAppConfig =
-        ConfigUtil::getDefaultAppConfig();
+    const auto& defAppConfig = ConfigUtil::getDefaultAppConfig();
 
     // Set default values, in case they are missing from the config file.
     Poco::AutoPtr<ConfigUtil::AppConfigMap> defConfig(new ConfigUtil::AppConfigMap(defAppConfig));

@@ -52,7 +52,7 @@ RuntimeConstant<bool> SslTermination;
 // NOTE: This is sorted, please keep it sorted as it's friendlier to readers,
 //       except for properties, which are sorted before the value, e.g.
 //       "setting[@name]" before "setting", which is more readable.
-static const std::unordered_map<std::string, std::string> DefAppConfig = {
+static const Util::UnorderedStringMap<std::string> DefAppConfig = {
 #if !MOBILEAPP
     { "accessibility.enable", "false" },
 #else
@@ -353,7 +353,7 @@ void initializeFromFile(const std::string& filename)
 
 bool isInitialized() { return Config != nullptr; }
 
-const std::unordered_map<std::string, std::string>& getDefaultAppConfig() { return DefAppConfig; }
+const Util::UnorderedStringMap<std::string>& getDefaultAppConfig() { return DefAppConfig; }
 
 /// Recursively extract the sub-keys of the given parent key.
 void extract(const std::string& parentKey, const Poco::Util::AbstractConfiguration& config,
