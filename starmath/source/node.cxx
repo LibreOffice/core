@@ -678,7 +678,14 @@ void SmUnHorNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     pOper->Arrange(rDev, rFormat);
     pBody->Arrange(rDev, rFormat);
 
-    tools::Long nDist = (pOper->GetRect().GetWidth() * rFormat.GetDistance(DIS_HORIZONTAL)) / 100;
+    tools::Long nMul;
+    if (o3tl::checked_multiply<tools::Long>(pOper->GetRect().GetWidth(), rFormat.GetDistance(DIS_HORIZONTAL), nMul))
+    {
+        SAL_WARN("starmath", "integer overflow");
+        return;
+    }
+
+    tools::Long nDist = nMul / 100;
 
     SmRect::operator = (*pNode0);
 
