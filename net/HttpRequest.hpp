@@ -1877,6 +1877,8 @@ private:
                     << HexUtil::dumpHex(
                            std::string(data.data(), std::min<size_t>(data.size(), 256UL))));
 
+#if !(defined QTAPP || defined _WIN32 || defined(MACOS))
+            // Response::readData is not build with CODA.
             const int64_t read = _response->readData(data.data(), data.size());
             if (read >= 0)
             {
@@ -1885,6 +1887,7 @@ private:
                     data.eraseFirst(read);
                 return;
             }
+#endif
         }
         else
         {
@@ -1909,11 +1912,14 @@ private:
             LOG_TRC("performWrites: sending request (buffered: "
                     << out.size() << " bytes, capacity: " << capacity << ')');
 
+#if !(defined QTAPP || defined _WIN32 || defined(MACOS))
+            // StreamSocket::send(...) is excluded in CODA.
             if (!socket->send(_request))
             {
                 _result = net::AsyncConnectResult::SocketError;
                 LOG_ERR("Error while writing to socket");
             }
+#endif
         }
     }
 
