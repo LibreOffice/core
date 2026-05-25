@@ -1632,6 +1632,40 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testTextAlignStartEnd)
                 1);
 }
 
+CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testTdf93716ScriptRunsFromScriptInfo)
+{
+    createSwDoc("tdf93716-use-scriptinfo.fodt");
+
+    save(TestFilter::HTML_WRITER);
+
+    xmlDocUniquePtr pDoc = parseXml(maTempFile);
+    CPPUNIT_ASSERT(pDoc);
+
+    // Without the fix, the text will be split into multiple runs:
+    // equality assertion failed
+    // - Expected: 1
+    // - Actual  : 2
+    // - In <>, XPath '/html/body/p/font' number of nodes is incorrect
+    assertXPath(pDoc, "/html/body/p/font", 1);
+}
+
+CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testTdf93716ScriptHints)
+{
+    createSwDoc("tdf93716-script-hints.fodt");
+
+    save(TestFilter::HTML_WRITER);
+
+    xmlDocUniquePtr pDoc = parseXml(maTempFile);
+    CPPUNIT_ASSERT(pDoc);
+
+    // Without the fix, the smart quotes will be part of the enclosing western paragraph.
+    // The fix makes them part of a language span.
+    assertXPath(pDoc, "/html/body/p/font/font/span", "lang", u"zh-CN");
+
+    auto aContent = getXPathContent(pDoc, "/html/body/p/font/font/span");
+    CPPUNIT_ASSERT_EQUAL(u"\u201C\u201D"_ustr, aContent.trim());
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
