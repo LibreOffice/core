@@ -22,6 +22,7 @@ $(eval $(call gb_Library_set_precompiled_header,chart2,chart2/inc/pch/precompile
 
 $(eval $(call gb_Library_use_externals,chart2,\
 	boost_headers \
+	frozen \
 	libxml2 \
 ))
 

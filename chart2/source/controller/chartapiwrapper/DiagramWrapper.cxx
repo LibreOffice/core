@@ -70,6 +70,10 @@
 #include <o3tl/string_view.hxx>
 #include <utility>
 
+#include <frozen/bits/defines.h>
+#include <frozen/bits/elsa_std.h>
+#include <frozen/unordered_map.h>
+
 using namespace ::com::sun::star;
 using namespace ::chart::wrapper;
 using namespace ::chart::DataSeriesProperties;
@@ -564,38 +568,33 @@ OUString lcl_getDiagramType( std::u16string_view rTemplateServiceName )
     return OUString();
 }
 
-typedef std::map< OUString, OUString > tMakeStringStringMap;
-
-const tMakeStringStringMap& lcl_getChartTypeNameMap()
-{
-    static tMakeStringStringMap g_aChartTypeNameMap{
-        {"com.sun.star.chart2.LineChartType", "com.sun.star.chart.LineDiagram"},
-        {"com.sun.star.chart2.AreaChartType", "com.sun.star.chart.AreaDiagram"},
-        {"com.sun.star.chart2.ColumnChartType", "com.sun.star.chart.BarDiagram"},
-        {"com.sun.star.chart2.HistogramChartType", "com.sun.star.chart.HistogramDiagram"},
-        {"com.sun.star.chart2.PieChartType", "com.sun.star.chart.PieDiagram"},
-        {"com.sun.star.chart2.DonutChartType", "com.sun.star.chart.DonutDiagram"},
-        {"com.sun.star.chart2.ScatterChartType", "com.sun.star.chart.XYDiagram"},
-        {"com.sun.star.chart2.FilledNetChartType", "com.sun.star.chart.FilledNetDiagram"},
-        {"com.sun.star.chart2.NetChartType", "com.sun.star.chart.NetDiagram"},
-        {"com.sun.star.chart2.CandleStickChartType", "com.sun.star.chart.StockDiagram"},
-        {"com.sun.star.chart2.BubbleChartType", "com.sun.star.chart.BubbleDiagram"},
-        {"com.sun.star.chart2.FunnelChartType", "com.sun.star.chart.FunnelDiagram"},
-        {"com.sun.star.chart2.BoxWhiskerChartType", "com.sun.star.chart.BoxWhiskerDiagram"},
-        {"com.sun.star.chart2.ClusteredColumnChartType", "com.sun.star.chart.ClusteredColumnDiagram"},
-        {"com.sun.star.chart2.SunburstChartType", "com.sun.star.chart.SunburstDiagram"},
-        {"com.sun.star.chart2.TreemapChartType", "com.sun.star.chart.TreemapDiagram"}
-    };
-    return g_aChartTypeNameMap;
-}
-
 OUString lcl_getOldChartTypeName( const OUString & rNewChartTypeName )
 {
     OUString aOld(rNewChartTypeName);
-
-    const tMakeStringStringMap& rMap = lcl_getChartTypeNameMap();
-    tMakeStringStringMap::const_iterator aIt( rMap.find( rNewChartTypeName ));
-    if( aIt != rMap.end())
+#ifdef _MSC_VER
+  static const auto aChartNameMap = frozen::make_unordered_map<std::u16string_view, OUString>({
+#else
+  static constexpr auto aChartNameMap = frozen::make_unordered_map<std::u16string_view, OUString>({
+#endif
+        {u"com.sun.star.chart2.LineChartType", u"com.sun.star.chart.LineDiagram"_ustr},
+        {u"com.sun.star.chart2.AreaChartType", u"com.sun.star.chart.AreaDiagram"_ustr},
+        {u"com.sun.star.chart2.ColumnChartType", u"com.sun.star.chart.BarDiagram"_ustr},
+        {u"com.sun.star.chart2.HistogramChartType", u"com.sun.star.chart.HistogramDiagram"_ustr},
+        {u"com.sun.star.chart2.PieChartType", u"com.sun.star.chart.PieDiagram"_ustr},
+        {u"com.sun.star.chart2.DonutChartType", u"com.sun.star.chart.DonutDiagram"_ustr},
+        {u"com.sun.star.chart2.ScatterChartType", u"com.sun.star.chart.XYDiagram"_ustr},
+        {u"com.sun.star.chart2.FilledNetChartType", u"com.sun.star.chart.FilledNetDiagram"_ustr},
+        {u"com.sun.star.chart2.NetChartType", u"com.sun.star.chart.NetDiagram"_ustr},
+        {u"com.sun.star.chart2.CandleStickChartType", u"com.sun.star.chart.StockDiagram"_ustr},
+        {u"com.sun.star.chart2.BubbleChartType", u"com.sun.star.chart.BubbleDiagram"_ustr},
+        {u"com.sun.star.chart2.FunnelChartType", u"com.sun.star.chart.FunnelDiagram"_ustr},
+        {u"com.sun.star.chart2.BoxWhiskerChartType", u"com.sun.star.chart.BoxWhiskerDiagram"_ustr},
+        {u"com.sun.star.chart2.ClusteredColumnChartType", u"com.sun.star.chart.ClusteredColumnDiagram"_ustr},
+        {u"com.sun.star.chart2.SunburstChartType", u"com.sun.star.chart.SunburstDiagram"_ustr},
+        {u"com.sun.star.chart2.TreemapChartType", u"com.sun.star.chart.TreemapDiagram"_ustr}
+    });
+    auto aIt( aChartNameMap.find( rNewChartTypeName ));
+    if( aIt != aChartNameMap.end())
     {
         aOld = aIt->second;
     }
