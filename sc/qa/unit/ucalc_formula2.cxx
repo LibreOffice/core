@@ -5227,7 +5227,7 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testSpillMatrixComplexScenario)
     CPPUNIT_ASSERT(pFormulaCell);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(FormulaError::Spill), sal_Int32(pFormulaCell->GetErrCode()));
 
-    // Change B4 to the same value as preceeding value, so UNIQUE shrinks to 3 rows
+    // Change B4 to the same value as preceding value, so UNIQUE shrinks to 3 rows
     rFunc.SetValueCell(ScAddress(1, 3, 0), 10.0, false);
 
     // Spill auto resolves. A4's "blocker" is outside the new range.
