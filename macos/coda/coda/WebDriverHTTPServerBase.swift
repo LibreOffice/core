@@ -42,11 +42,22 @@ class WebDriverHTTPServerBase {
     }
 
     func start() {
+        listener.stateUpdateHandler = { [weak self] state in
+            guard let self = self else { return }
+            switch state {
+            case .ready:            NSLog("%@: ready on port %d", self.label, self.listener.port?.rawValue ?? 0)
+            case .failed(let err):  NSLog("%@: listener failed: %@", self.label, err.localizedDescription)
+            case .waiting(let err): NSLog("%@: listener waiting: %@", self.label, err.localizedDescription)
+            case .cancelled:        NSLog("%@: listener cancelled", self.label)
+            default:
+                break
+            }
+        }
         listener.newConnectionHandler = { [weak self] connection in
             self?.handleConnection(connection)
         }
         listener.start(queue: .global(qos: .userInitiated))
-        NSLog("%@: listening on port %d", label, listener.port?.rawValue ?? 0)
+        NSLog("%@: starting on requested port %d", label, listener.port?.rawValue ?? 0)
     }
 
     func stop() {
