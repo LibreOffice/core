@@ -295,4 +295,293 @@ describe(['tagdesktop'], 'AI Chat Sidebar', function() {
 			cy.cGet('#aichat-input.ui-textarea').should('not.have.value', '');
 		});
 	});
+
+	describe('Tone picker - presets', function() {
+		beforeEach(function() {
+			cy.clearLocalStorage();
+			aichatHelper.enableAIAndStubSocket(this.win, {});
+			aichatHelper.openAIChat();
+		});
+
+		it('Picker opens on tone chip click', function() {
+			aichatHelper.openTonePicker();
+			cy.cGet('#aichat-tone-preset-natural').should('exist');
+			cy.cGet('#aichat-tone-preset-formal').should('exist');
+			cy.cGet('#aichat-tone-preset-short').should('exist');
+			cy.cGet('#aichat-tone-preset-friendly').should('exist');
+			cy.cGet('#aichat-tone-preset-professional').should('exist');
+			cy.cGet('#aichat-tone-preset-casual').should('exist');
+		});
+
+		it('Selecting a preset closes the picker and updates the chip', function() {
+			aichatHelper.openTonePicker();
+			cy.cGet('#aichat-tone-preset-formal .ui-chip-main').click();
+			helper.waitUntilLayoutingIsIdle(this.win);
+			cy.cGet('#aichat-tone-picker.aichat-tone-picker-open').should('not.exist');
+			cy.cGet('#aichat-tone-chip button.ui-pushbutton').should('contain.text', 'Formal');
+		});
+
+		it('Selection writes to localStorage', function() {
+			aichatHelper.openTonePicker();
+			cy.cGet('#aichat-tone-preset-friendly .ui-chip-main').click();
+			helper.waitUntilLayoutingIsIdle(this.win);
+			cy.then(() => {
+				expect(this.win.localStorage.getItem('aichat.selectedTone')).to.equal('friendly');
+			});
+		});
+
+		it('Selected preset is marked aria-pressed in the picker', function() {
+			aichatHelper.openTonePicker();
+			cy.cGet('#aichat-tone-preset-professional .ui-chip-main').click();
+			helper.waitUntilLayoutingIsIdle(this.win);
+			aichatHelper.openTonePicker();
+			cy.cGet('#aichat-tone-preset-professional .ui-chip-main')
+				.should('have.attr', 'aria-pressed', 'true');
+			cy.cGet('#aichat-tone-preset-natural .ui-chip-main')
+				.should('have.attr', 'aria-pressed', 'false');
+		});
+	});
+
+	describe('Tone picker - emojify', function() {
+		beforeEach(function() {
+			cy.clearLocalStorage();
+			aichatHelper.enableAIAndStubSocket(this.win, {});
+			aichatHelper.openAIChat();
+		});
+
+		it('Toggling Emojify flips aria-pressed', function() {
+			aichatHelper.openTonePicker();
+			cy.cGet('#aichat-tone-emojify button.ui-pushbutton')
+				.should('have.attr', 'aria-pressed', 'false');
+			cy.cGet('#aichat-tone-emojify button.ui-pushbutton').click();
+			helper.waitUntilLayoutingIsIdle(this.win);
+			cy.cGet('#aichat-tone-emojify button.ui-pushbutton')
+				.should('have.attr', 'aria-pressed', 'true');
+			cy.then(() => {
+				expect(this.win.localStorage.getItem('aichat.emojify')).to.equal('true');
+			});
+		});
+	});
+
+	describe('Tone picker - docload-failure regression', function() {
+		beforeEach(function() {
+			cy.clearLocalStorage();
+			aichatHelper.enableAIAndStubSocket(this.win, {});
+			aichatHelper.openAIChat();
+		});
+
+		// Direct regression guard for the resetVoiceState split:
+		// onDocLoaded(status: false) must NOT erase the persisted tone.
+		it('docloaded:false does not wipe persisted tone', function() {
+			aichatHelper.openTonePicker();
+			cy.cGet('#aichat-tone-preset-formal .ui-chip-main').click();
+			helper.waitUntilLayoutingIsIdle(this.win);
+			cy.then(() => {
+				expect(this.win.localStorage.getItem('aichat.selectedTone')).to.equal('formal');
+				this.win.app.map.fire('docloaded', { status: false });
+			});
+			helper.waitUntilLayoutingIsIdle(this.win);
+			cy.then(() => {
+				expect(this.win.localStorage.getItem('aichat.selectedTone')).to.equal('formal');
+			});
+		});
+	});
+
+	describe('Tone picker - custom tones', function() {
+		beforeEach(function() {
+			cy.clearLocalStorage();
+			aichatHelper.enableAIAndStubSocket(this.win, {});
+			aichatHelper.openAIChat();
+			aichatHelper.openTonePicker();
+		});
+
+		it('Add my own voice opens the form', function() {
+			cy.cGet('#aichat-tone-add button').click();
+			helper.waitUntilLayoutingIsIdle(this.win);
+			cy.cGet('#aichat-tone-form').should('exist');
+			cy.cGet('#aichat-tone-form-name input').should('exist');
+			cy.cGet('#aichat-tone-form-save button').should('have.attr', 'disabled');
+		});
+
+		it('Save enables once name and description are filled', function() {
+			cy.cGet('#aichat-tone-add button').click();
+			helper.waitUntilLayoutingIsIdle(this.win);
+			cy.cGet('#aichat-tone-form-name input').type('Curt');
+			cy.cGet('#aichat-tone-form-desc textarea').type('Be terse');
+			helper.waitUntilLayoutingIsIdle(this.win);
+			cy.cGet('#aichat-tone-form-save button').should('not.have.attr', 'disabled');
+		});
+
+		// After saveToneForm the picker stays open, so we do NOT re-click
+		// the tone chip (which would toggle it closed).
+		it('Saving adds a chip selected by aria-pressed', function() {
+			cy.cGet('#aichat-tone-add button').click();
+			helper.waitUntilLayoutingIsIdle(this.win);
+			cy.cGet('#aichat-tone-form-name input').type('Curt');
+			cy.cGet('#aichat-tone-form-desc textarea').type('Be terse');
+			helper.waitUntilLayoutingIsIdle(this.win);
+			cy.cGet('#aichat-tone-form-save button').click();
+			helper.waitUntilLayoutingIsIdle(this.win);
+			cy.cGet('[id^="aichat-tone-custom-"]').should('have.length', 1);
+			cy.cGet('[id^="aichat-tone-custom-"] .ui-chip-main')
+				.should('have.attr', 'aria-pressed', 'true');
+		});
+
+		it('Edit pencil reopens the form with prepopulated values', function() {
+			cy.cGet('#aichat-tone-add button').click();
+			helper.waitUntilLayoutingIsIdle(this.win);
+			cy.cGet('#aichat-tone-form-name input').type('Curt');
+			cy.cGet('#aichat-tone-form-desc textarea').type('Be terse');
+			cy.cGet('#aichat-tone-form-save button').click();
+			helper.waitUntilLayoutingIsIdle(this.win);
+			cy.cGet('[id^="aichat-tone-edit-"]').click();
+			helper.waitUntilLayoutingIsIdle(this.win);
+			cy.cGet('#aichat-tone-form-name input').should('have.value', 'Curt');
+			cy.cGet('#aichat-tone-form-desc textarea').should('have.value', 'Be terse');
+			cy.cGet('#aichat-tone-form-delete button').should('exist');
+		});
+
+		it('Delete removes the custom tone', function() {
+			cy.cGet('#aichat-tone-add button').click();
+			helper.waitUntilLayoutingIsIdle(this.win);
+			cy.cGet('#aichat-tone-form-name input').type('Curt');
+			cy.cGet('#aichat-tone-form-desc textarea').type('Be terse');
+			cy.cGet('#aichat-tone-form-save button').click();
+			helper.waitUntilLayoutingIsIdle(this.win);
+			cy.cGet('[id^="aichat-tone-edit-"]').click();
+			helper.waitUntilLayoutingIsIdle(this.win);
+			cy.cGet('#aichat-tone-form-delete button').click();
+			helper.waitUntilLayoutingIsIdle(this.win);
+			cy.cGet('[id^="aichat-tone-custom-"]').should('not.exist');
+		});
+	});
+
+	describe('Tone picker - emoji picker inside form', function() {
+		beforeEach(function() {
+			cy.clearLocalStorage();
+			aichatHelper.enableAIAndStubSocket(this.win, {});
+			aichatHelper.openAIChat();
+			aichatHelper.openTonePicker();
+			cy.cGet('#aichat-tone-add button').click();
+			helper.waitUntilLayoutingIsIdle(this.win);
+		});
+
+		it('Plus button opens the emoji picker', function() {
+			cy.cGet('#aichat-tone-form-emoji-more button').click();
+			helper.waitUntilLayoutingIsIdle(this.win);
+			cy.cGet('#aichat-tone-form-emoji-picker').should('exist');
+			cy.cGet('#aichat-tone-form-emoji-picker .ui-emoji-picker-search').should('exist');
+		});
+
+		it('Search filters cells by keyword', function() {
+			cy.cGet('#aichat-tone-form-emoji-more button').click();
+			helper.waitUntilLayoutingIsIdle(this.win);
+			cy.cGet('#aichat-tone-form-emoji-picker .ui-emoji-picker-search').type('smile');
+			helper.waitUntilLayoutingIsIdle(this.win);
+			// Smileys category - 😊 is keyworded "smile happy blush".
+			cy.cGet('#aichat-tone-form-emoji-picker .ui-emoji-picker-cell')
+				.contains('\u{1F60A}')
+				.should('exist');
+		});
+
+		it('Picking an emoji closes the picker and highlights the first slot', function() {
+			cy.cGet('#aichat-tone-form-emoji-more button').click();
+			helper.waitUntilLayoutingIsIdle(this.win);
+			cy.cGet('#aichat-tone-form-emoji-picker .ui-emoji-picker-search').type('smile');
+			helper.waitUntilLayoutingIsIdle(this.win);
+			cy.cGet('#aichat-tone-form-emoji-picker .ui-emoji-picker-cell')
+				.contains('\u{1F60A}')
+				.click();
+			helper.waitUntilLayoutingIsIdle(this.win);
+			cy.cGet('#aichat-tone-form-emoji-picker').should('not.exist');
+			cy.cGet('#aichat-tone-form-icon-0 button.ui-pushbutton')
+				.should('have.attr', 'aria-pressed', 'true')
+				.and('contain.text', '\u{1F60A}');
+		});
+	});
+
+	describe('Tone picker - request payload', function() {
+		beforeEach(function() {
+			cy.clearLocalStorage();
+			aichatHelper.enableAIWithCaptureSocket(this.win, { content: 'Reply' });
+			aichatHelper.openAIChat();
+		});
+
+		it('Selected preset is sent as tone in the payload', function() {
+			aichatHelper.openTonePicker();
+			cy.cGet('#aichat-tone-preset-formal .ui-chip-main').click();
+			helper.waitUntilLayoutingIsIdle(this.win);
+			aichatHelper.typeIntoAIInput('Hello');
+			aichatHelper.clickSend();
+			helper.waitUntilLayoutingIsIdle(this.win);
+			cy.then(() => {
+				var last = this.win.__aichatPayloads[this.win.__aichatPayloads.length - 1];
+				expect(last.tone).to.equal('formal');
+				expect(last.customToneDescription).to.equal(undefined);
+				expect(last.emojify).to.equal(false);
+			});
+		});
+
+		it('Custom tone is sent as tone=custom with the description', function() {
+			aichatHelper.openTonePicker();
+			cy.cGet('#aichat-tone-add button').click();
+			helper.waitUntilLayoutingIsIdle(this.win);
+			cy.cGet('#aichat-tone-form-name input').type('Curt');
+			cy.cGet('#aichat-tone-form-desc textarea').type('Be terse');
+			cy.cGet('#aichat-tone-form-save button').click();
+			helper.waitUntilLayoutingIsIdle(this.win);
+			aichatHelper.typeIntoAIInput('Hello');
+			aichatHelper.clickSend();
+			helper.waitUntilLayoutingIsIdle(this.win);
+			cy.then(() => {
+				var last = this.win.__aichatPayloads[this.win.__aichatPayloads.length - 1];
+				expect(last.tone).to.equal('custom');
+				expect(last.customToneDescription).to.equal('Be terse');
+			});
+		});
+	});
+
+	describe('Tone picker - escape layering', function() {
+		beforeEach(function() {
+			cy.clearLocalStorage();
+			aichatHelper.enableAIAndStubSocket(this.win, {});
+			aichatHelper.openAIChat();
+		});
+
+		it('Escape closes picker without closing the sidebar', function() {
+			aichatHelper.openTonePicker();
+			cy.cGet('#aichat-input.ui-textarea').type('{esc}');
+			helper.waitUntilLayoutingIsIdle(this.win);
+			cy.cGet('#aichat-tone-picker.aichat-tone-picker-open').should('not.exist');
+			cy.cGet('#aichat-dock-wrapper.visible').should('exist');
+		});
+
+		it('Escape unwinds emoji picker -> form -> picker -> sidebar', function() {
+			aichatHelper.openTonePicker();
+			cy.cGet('#aichat-tone-add button').click();
+			helper.waitUntilLayoutingIsIdle(this.win);
+			cy.cGet('#aichat-tone-form-emoji-more button').click();
+			helper.waitUntilLayoutingIsIdle(this.win);
+			cy.cGet('#aichat-tone-form-emoji-picker').should('exist');
+
+			cy.cGet('#aichat-input.ui-textarea').type('{esc}');
+			helper.waitUntilLayoutingIsIdle(this.win);
+			cy.cGet('#aichat-tone-form-emoji-picker').should('not.exist');
+			cy.cGet('#aichat-tone-form').should('exist');
+
+			cy.cGet('#aichat-input.ui-textarea').type('{esc}');
+			helper.waitUntilLayoutingIsIdle(this.win);
+			cy.cGet('#aichat-tone-form').should('not.exist');
+			cy.cGet('#aichat-tone-picker.aichat-tone-picker-open').should('exist');
+
+			cy.cGet('#aichat-input.ui-textarea').type('{esc}');
+			helper.waitUntilLayoutingIsIdle(this.win);
+			cy.cGet('#aichat-tone-picker.aichat-tone-picker-open').should('not.exist');
+			cy.cGet('#aichat-dock-wrapper.visible').should('exist');
+
+			cy.cGet('#aichat-input.ui-textarea').type('{esc}');
+			helper.waitUntilLayoutingIsIdle(this.win);
+			cy.cGet('#aichat-dock-wrapper.visible').should('not.exist');
+		});
+	});
 });
