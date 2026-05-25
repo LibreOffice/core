@@ -35,7 +35,9 @@ ReplacePivotTableOperation::ReplacePivotTableOperation(ScDocShell& rDocShell, Sc
 
 bool ReplacePivotTableOperation::runImplementation()
 {
-    OSL_ASSERT(mpDPObject && mpNewDPObject && mpDPObject != mpNewDPObject);
+    assert(mpDPObject);
+    assert(mpNewDPObject);
+    assert(mpDPObject != mpNewDPObject);
 
     ScDocShellModificator aModificator(mrDocShell);
     weld::WaitObject aWait(ScDocShell::GetActiveDialogParent());
