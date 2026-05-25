@@ -41,7 +41,6 @@
 		29F88F992A554D6D00C77A3F /* embeddedobj */ = {isa = PBXFileReference; lastKnownFileType = folder; name = embeddedobj; path = ../embeddedobj; sourceTree = "<group>"; };
 		29F88F9A2A554D6D00C77A3F /* schema */ = {isa = PBXFileReference; lastKnownFileType = folder; name = schema; path = ../schema; sourceTree = "<group>"; };
 		29F88F9B2A554D6E00C77A3F /* linguistic */ = {isa = PBXFileReference; lastKnownFileType = folder; name = linguistic; path = ../linguistic; sourceTree = "<group>"; };
-		29F88F9C2A554D6E00C77A3F /* lotuswordpro */ = {isa = PBXFileReference; lastKnownFileType = folder; name = lotuswordpro; path = ../lotuswordpro; sourceTree = "<group>"; };
 		29F88F9D2A554D6E00C77A3F /* fpicker */ = {isa = PBXFileReference; lastKnownFileType = folder; name = fpicker; path = ../fpicker; sourceTree = "<group>"; };
 		29F88F9E2A554D6E00C77A3F /* reportdesign */ = {isa = PBXFileReference; lastKnownFileType = folder; name = reportdesign; path = ../reportdesign; sourceTree = "<group>"; };
 		29F88F9F2A554D6E00C77A3F /* jvmfwk */ = {isa = PBXFileReference; lastKnownFileType = folder; name = jvmfwk; path = ../jvmfwk; sourceTree = "<group>"; };
@@ -207,7 +206,6 @@
 				29F88FBA2A554D7000C77A3F /* kit */,
 				29F88FAD2A554D6F00C77A3F /* lingucomponent */,
 				29F88F9B2A554D6E00C77A3F /* linguistic */,
-				29F88F9C2A554D6E00C77A3F /* lotuswordpro */,
 				29F88F802A554D6C00C77A3F /* msicreator */,
 				29F88FCF2A554D7300C77A3F /* nlpsolver */,
 				29F88FFC2A554D7B00C77A3F /* o3tl */,

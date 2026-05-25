@@ -130,7 +130,6 @@ parts:
         --disable-gui \
         --disable-kf5 \
         --disable-ldap \
-        --disable-lotuswordpro \
         --disable-lpsolve \
         --disable-noto-font \
         --disable-online-update \
