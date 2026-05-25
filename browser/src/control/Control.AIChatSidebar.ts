@@ -56,7 +56,6 @@ namespace cool {
 		private selectedTone: string | null = null;
 		private emojify: boolean = false;
 		private tonePickerOpen: boolean = false;
-		private _tonePickerKeyNavAttached: boolean = false;
 
 		private customTones: CustomTone[] = [];
 		private recentIcons: string[] = [];
@@ -318,9 +317,7 @@ namespace cool {
 			this.setTonePickerOpenClass(this.tonePickerOpen);
 			this.scrollToBottom();
 			this.attachContainerKeyboardHandler();
-			if (this.tonePickerOpen) {
-				this.setupTonePickerKeyboardNav();
-			} else if (!this.isProcessing) {
+			if (!this.tonePickerOpen && !this.isProcessing) {
 				this.focusInput();
 			}
 		}
@@ -450,8 +447,6 @@ namespace cool {
 			if (selCtx) {
 				selCtx.style.display = TextSelections.isActive() ? '' : 'none';
 			}
-
-			this.setupChipKeyboardNavigation();
 		}
 
 		private applyInputStyles(): void {
@@ -1050,14 +1045,10 @@ namespace cool {
 			// updateWidget may have recreated the DOM subtree, so re-apply the
 			// open-state class synchronously to avoid the picker flashing hidden.
 			this.setTonePickerOpenClass(this.tonePickerOpen);
-			this._tonePickerKeyNavAttached = false;
 			if (this.tonePickerOpen) {
-				app.layoutingService.onDrain(() => {
-					this.setTonePickerOpenClass(this.tonePickerOpen);
-					if (!this.formOpen) {
-						this.setupTonePickerKeyboardNav();
-					}
-				});
+				app.layoutingService.onDrain(() =>
+					this.setTonePickerOpenClass(this.tonePickerOpen),
+				);
 			}
 		}
 
@@ -1092,7 +1083,6 @@ namespace cool {
 			this.tonePickerOpen = true;
 			this.setTonePickerOpenClass(true);
 			this.updateToneChip();
-			this.setupTonePickerKeyboardNav();
 			this.focusInitialPreset();
 		}
 
@@ -1354,7 +1344,6 @@ namespace cool {
 			this.formOpen = true;
 			this.tonePickerOpen = true;
 			this.emojiPickerOpen = false;
-			this._tonePickerKeyNavAttached = false;
 			this.rebuildFormIconRow();
 			this.updateTonePicker();
 			this.focusFormName();
@@ -1364,7 +1353,6 @@ namespace cool {
 			this.formOpen = false;
 			this.formDraft = null;
 			this.closeEmojiPicker();
-			this._tonePickerKeyNavAttached = false;
 			this.updateTonePicker();
 		}
 
@@ -1486,14 +1474,12 @@ namespace cool {
 		private openEmojiPicker(): void {
 			if (this.emojiPickerOpen) return;
 			this.emojiPickerOpen = true;
-			this._tonePickerKeyNavAttached = false;
 			this.updateTonePicker();
 		}
 
 		private closeEmojiPicker(): void {
 			if (!this.emojiPickerOpen) return;
 			this.emojiPickerOpen = false;
-			this._tonePickerKeyNavAttached = false;
 			this.updateTonePicker();
 			this.focusEmojiMoreButton();
 		}
@@ -1525,47 +1511,6 @@ namespace cool {
 			this.saveRecentIcons();
 			this.rebuildFormIconRow();
 			this.closeEmojiPicker();
-		}
-
-		// Custom keyboard navigation for tone preset chips inside the picker.
-		// Mirrors setupChipKeyboardNavigation: jsdialog wraps each pushbutton
-		// in a div, so siblings cannot be found from the <button>.
-		private setupTonePickerKeyboardNav(): void {
-			if (this._tonePickerKeyNavAttached) return;
-			const picker = document.getElementById('aichat-tone-picker');
-			if (!picker) return;
-			this._tonePickerKeyNavAttached = true;
-
-			picker.addEventListener('keydown', (e: KeyboardEvent) => {
-				if (
-					e.key !== 'ArrowDown' &&
-					e.key !== 'ArrowUp' &&
-					e.key !== 'ArrowLeft' &&
-					e.key !== 'ArrowRight'
-				)
-					return;
-				const buttons = Array.from(
-					picker.querySelectorAll<HTMLButtonElement>(
-						'[id^="aichat-tone-preset-"] > .ui-chip-main,' +
-							' [id^="aichat-tone-custom-"] > .ui-chip-main',
-					),
-				);
-				if (!buttons.length) return;
-				const idx = buttons.indexOf(
-					document.activeElement as HTMLButtonElement,
-				);
-				if (idx < 0) return;
-				const forward = e.key === 'ArrowDown' || e.key === 'ArrowRight';
-				const next = forward
-					? idx < buttons.length - 1
-						? idx + 1
-						: 0
-					: idx > 0
-						? idx - 1
-						: buttons.length - 1;
-				e.preventDefault();
-				buttons[next].focus();
-			});
 		}
 
 		private getPromptChipsJSON(): any {
@@ -1999,7 +1944,6 @@ namespace cool {
 
 			if (this.tonePickerOpen) {
 				this.tonePickerOpen = false;
-				this._tonePickerKeyNavAttached = false;
 			}
 
 			this.hintText = '';
@@ -2223,7 +2167,6 @@ namespace cool {
 			this.hintText = '';
 			this.progressText = '';
 			this.showAllCards = false;
-			this._chipKeyNavAttached = false;
 			this.formOpen = false;
 			this.formDraft = null;
 			this.emojiPickerOpen = false;
@@ -2334,44 +2277,7 @@ namespace cool {
 			}
 		}
 
-		private _chipKeyNavAttached: boolean = false;
 		private _keyboardHandlerAttached: boolean = false;
-
-		// Custom keyboard navigation for prompt chips. We can't use
-		// JSDialog.KeyboardListNavigation() because the pushbutton handler
-		// wraps each button in a div.ui-pushbutton-wrapper, so
-		// nextElementSibling from a <button> is null (no siblings inside
-		// the wrapper). Modifying the shared utility would risk breaking
-		// other components, so this small handler is safer.
-		private setupChipKeyboardNavigation(): void {
-			if (this._chipKeyNavAttached) return;
-			const chips = document.getElementById('aichat-chips');
-			if (!chips) return;
-			this._chipKeyNavAttached = true;
-
-			chips.addEventListener('keydown', (e: KeyboardEvent) => {
-				if (e.key !== 'ArrowDown' && e.key !== 'ArrowUp') return;
-				const buttons = Array.from(
-					chips.querySelectorAll<HTMLButtonElement>(
-						'[id^="aichat-chip-"] > button.ui-pushbutton',
-					),
-				);
-				if (!buttons.length) return;
-				const idx = buttons.indexOf(
-					document.activeElement as HTMLButtonElement,
-				);
-				const next =
-					e.key === 'ArrowDown'
-						? idx < buttons.length - 1
-							? idx + 1
-							: 0
-						: idx > 0
-							? idx - 1
-							: buttons.length - 1;
-				e.preventDefault();
-				buttons[next].focus();
-			});
-		}
 
 		private attachContainerKeyboardHandler(): void {
 			if (this._keyboardHandlerAttached) return;
