@@ -420,8 +420,11 @@ describe(['tagdesktop'], 'AI Chat Sidebar', function() {
 			helper.waitUntilLayoutingIsIdle(this.win);
 			cy.cGet('#aichat-tone-form-save button').click();
 			helper.waitUntilLayoutingIsIdle(this.win);
-			cy.cGet('[id^="aichat-tone-custom-"]').should('have.length', 1);
-			cy.cGet('[id^="aichat-tone-custom-"] .ui-chip-main')
+			// Constrain to .ui-chip - the chip's main button also carries
+			// an id that starts with aichat-tone-custom-, so without the
+			// class filter the selector picks up both wrapper and button.
+			cy.cGet('.ui-chip[id^="aichat-tone-custom-"]').should('have.length', 1);
+			cy.cGet('.ui-chip[id^="aichat-tone-custom-"] .ui-chip-main')
 				.should('have.attr', 'aria-pressed', 'true');
 		});
 
@@ -450,7 +453,7 @@ describe(['tagdesktop'], 'AI Chat Sidebar', function() {
 			helper.waitUntilLayoutingIsIdle(this.win);
 			cy.cGet('#aichat-tone-form-delete button').click();
 			helper.waitUntilLayoutingIsIdle(this.win);
-			cy.cGet('[id^="aichat-tone-custom-"]').should('not.exist');
+			cy.cGet('.ui-chip[id^="aichat-tone-custom-"]').should('not.exist');
 		});
 	});
 
