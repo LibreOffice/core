@@ -168,6 +168,7 @@ JSDialog.OpenDropdown = function (
 					selected:
 						i === 0 && shouldSelectFirstEntry ? true : entries[i].selected,
 					hasSubMenu: !!entries[i].items,
+					class: entries[i].class,
 				} as ComboBoxEntry;
 				if ((entry as ComboBoxEntry).selected) initialSelectedId = entry.id;
 				break;

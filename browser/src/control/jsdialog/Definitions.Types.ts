@@ -228,6 +228,7 @@ interface MenuDefinition extends WidgetJSON {
 	selected?: boolean; // selected state for entry
 	statusCommand?: string; // UNO command used to retrieve the status/value of the entry
 	pos?: number | string; // identifier of an entry
+	class?: string; // extra CSS class to add to the rendered entry
 }
 
 interface HtmlContentJson extends WidgetJSON {

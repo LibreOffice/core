@@ -29,6 +29,8 @@
 JSDialog.comboboxEntry = function (parentContainer, data, builder) {
 	var entry = window.L.DomUtil.create('div', 'ui-combobox-entry ' + builder.options.cssClass, parentContainer);
 	entry.id = data.id;
+	if (data.class)
+		entry.classList.add(data.class);
 	entry.setAttribute('role', 'option');
 	entry.setAttribute('tabindex', '-1');
 	entry.setAttribute('data-filter-text', data.text.toLowerCase());

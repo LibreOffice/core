@@ -247,6 +247,7 @@ class ContextMenuControl extends JSControl {
 					type: 'comboboxentry',
 					text: value.name,
 					img: command,
+					class: this._commandClass(command),
 				});
 				continue;
 			}
@@ -259,10 +260,15 @@ class ContextMenuControl extends JSControl {
 				text: value.name,
 				items: items,
 				img: command,
+				class: this._commandClass(value.command || command),
 			});
 		}
 
 		return entries;
+	}
+
+	private _commandClass(command: string): string {
+		return command.replace(':', '').replace('.', '');
 	}
 
 	private _amendContextMenuData(obj: any): void {
