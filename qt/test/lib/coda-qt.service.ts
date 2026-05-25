@@ -137,10 +137,11 @@ export class CodaQtServiceLauncher {
 		cpSync(fixturesDir, join(this.#testHomeDir, 'Documents'), {
 			recursive: true,
 		});
-		process.env.CODA_QT_TEST_DOCUMENTS_DIR = join(
+		process.env.CODA_TEST_DOCUMENTS_DIR = join(
 			this.#testHomeDir,
 			'Documents',
 		);
+		process.env.CODA_PLATFORM = 'qt';
 
 		console.log('Starting coda-qt...');
 		this.#codaQtProcess = spawn(codaQtBinary, [], {

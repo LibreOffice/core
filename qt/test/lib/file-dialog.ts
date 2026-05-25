@@ -12,16 +12,31 @@ import { join } from 'path';
 import * as webview from './webview.js';
 
 /**
- * Open a file from the test fixtures directory via the native Qt file dialog.
+ * Open a file from the test fixtures directory via the native file dialog.
  *
- * Triggers .uno:Open, fills the filename field, clicks Open, switches to
- * the new WebView, and waits for the document to finish loading.
+ * Triggers .uno:Open, locates the dialog with platform-appropriate
+ * selectors, fills the path, clicks Open, switches to the new
+ * WebView, and waits for the document to finish loading.
+ *
+ * On Qt the selectors target QFileDialog's accessibility IDs.  On
+ * macOS they target NSOpenPanel by Obj-C class plus an "Open" button
+ * by title.  The post-conditions (switch to new webview + doc
+ * loaded) are the same on both platforms.
  */
 export async function openFixture(
 	webEngine: WebdriverIO.Browser,
 	native: WebdriverIO.Browser,
 	fileName: string,
 ): Promise<void> {
+	const onMacOS = process.env.CODA_PLATFORM === 'macos';
+
+	const fileSel = onMacOS
+		? '//*[@accessibility-id="open-panel"]'
+		: '//*[@accessibility-id="QApplication.QFileDialog.fileNameEdit"]';
+	const openSel = onMacOS
+		? '//*[@accessibility-id="OKButton"]'
+		: '//*[@accessibility-id="QApplication.QFileDialog.buttonBox.QPushButton"]';
+
 	// Use setTimeout so execute() returns before the modal dialog blocks.
 	await webEngine.execute(() => {
 		setTimeout(() => {
@@ -29,17 +44,13 @@ export async function openFixture(
 		}, 100);
 	});
 
-	const fileNameField = await native.$(
-		'//*[@accessibility-id="QApplication.QFileDialog.fileNameEdit"]',
-	);
-	await fileNameField.waitForExist({ timeout: 10000 });
+	const filePath = join(process.env.CODA_TEST_DOCUMENTS_DIR!, fileName);
 
-	const filePath = join(process.env.CODA_QT_TEST_DOCUMENTS_DIR!, fileName);
-	await fileNameField.setValue(filePath);
+	const fileTarget = await native.$(fileSel);
+	await fileTarget.waitForExist({ timeout: 10000 });
+	await fileTarget.setValue(filePath);
 
-	const openBtn = await native.$(
-		'//*[@accessibility-id="QApplication.QFileDialog.buttonBox.QPushButton"]',
-	);
+	const openBtn = await native.$(openSel);
 	await openBtn.waitForExist({ timeout: 5000 });
 	await openBtn.click();
 
