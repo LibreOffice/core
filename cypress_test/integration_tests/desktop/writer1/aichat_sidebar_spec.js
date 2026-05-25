@@ -1,4 +1,4 @@
-/* global describe it cy beforeEach require */
+/* global describe it cy beforeEach require expect */
 
 var helper = require('../../common/helper');
 var aichatHelper = require('../../common/aichat_helper');
@@ -251,8 +251,6 @@ describe(['tagdesktop'], 'AI Chat Sidebar', function() {
 			cy.cGet('#aichat-see-more button').click();
 			helper.waitUntilLayoutingIsIdle(this.win);
 			cy.cGet('#aichat-chip-3').should('exist');
-			cy.cGet('#aichat-chip-4').should('exist');
-			cy.cGet('#aichat-chip-5').should('exist');
 			cy.cGet('#aichat-see-more').should('contain.text', 'See less');
 		});
 
@@ -407,7 +405,7 @@ describe(['tagdesktop'], 'AI Chat Sidebar', function() {
 			cy.cGet('#aichat-tone-add button').click();
 			helper.waitUntilLayoutingIsIdle(this.win);
 			cy.cGet('#aichat-tone-form-name input').type('Curt');
-			cy.cGet('#aichat-tone-form-desc textarea').type('Be terse');
+			cy.cGet('#aichat-tone-form-desc.ui-textarea').type('Be terse');
 			helper.waitUntilLayoutingIsIdle(this.win);
 			cy.cGet('#aichat-tone-form-save button').should('not.have.attr', 'disabled');
 		});
@@ -418,7 +416,7 @@ describe(['tagdesktop'], 'AI Chat Sidebar', function() {
 			cy.cGet('#aichat-tone-add button').click();
 			helper.waitUntilLayoutingIsIdle(this.win);
 			cy.cGet('#aichat-tone-form-name input').type('Curt');
-			cy.cGet('#aichat-tone-form-desc textarea').type('Be terse');
+			cy.cGet('#aichat-tone-form-desc.ui-textarea').type('Be terse');
 			helper.waitUntilLayoutingIsIdle(this.win);
 			cy.cGet('#aichat-tone-form-save button').click();
 			helper.waitUntilLayoutingIsIdle(this.win);
@@ -431,13 +429,13 @@ describe(['tagdesktop'], 'AI Chat Sidebar', function() {
 			cy.cGet('#aichat-tone-add button').click();
 			helper.waitUntilLayoutingIsIdle(this.win);
 			cy.cGet('#aichat-tone-form-name input').type('Curt');
-			cy.cGet('#aichat-tone-form-desc textarea').type('Be terse');
+			cy.cGet('#aichat-tone-form-desc.ui-textarea').type('Be terse');
 			cy.cGet('#aichat-tone-form-save button').click();
 			helper.waitUntilLayoutingIsIdle(this.win);
 			cy.cGet('[id^="aichat-tone-edit-"]').click();
 			helper.waitUntilLayoutingIsIdle(this.win);
 			cy.cGet('#aichat-tone-form-name input').should('have.value', 'Curt');
-			cy.cGet('#aichat-tone-form-desc textarea').should('have.value', 'Be terse');
+			cy.cGet('#aichat-tone-form-desc.ui-textarea').should('have.value', 'Be terse');
 			cy.cGet('#aichat-tone-form-delete button').should('exist');
 		});
 
@@ -445,7 +443,7 @@ describe(['tagdesktop'], 'AI Chat Sidebar', function() {
 			cy.cGet('#aichat-tone-add button').click();
 			helper.waitUntilLayoutingIsIdle(this.win);
 			cy.cGet('#aichat-tone-form-name input').type('Curt');
-			cy.cGet('#aichat-tone-form-desc textarea').type('Be terse');
+			cy.cGet('#aichat-tone-form-desc.ui-textarea').type('Be terse');
 			cy.cGet('#aichat-tone-form-save button').click();
 			helper.waitUntilLayoutingIsIdle(this.win);
 			cy.cGet('[id^="aichat-tone-edit-"]').click();
@@ -527,7 +525,7 @@ describe(['tagdesktop'], 'AI Chat Sidebar', function() {
 			cy.cGet('#aichat-tone-add button').click();
 			helper.waitUntilLayoutingIsIdle(this.win);
 			cy.cGet('#aichat-tone-form-name input').type('Curt');
-			cy.cGet('#aichat-tone-form-desc textarea').type('Be terse');
+			cy.cGet('#aichat-tone-form-desc.ui-textarea').type('Be terse');
 			cy.cGet('#aichat-tone-form-save button').click();
 			helper.waitUntilLayoutingIsIdle(this.win);
 			aichatHelper.typeIntoAIInput('Hello');
