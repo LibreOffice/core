@@ -1064,10 +1064,14 @@ class UIManager extends window.L.Control {
 		// be sure we hide old scrollable markers
 		JSDialog.RefreshScrollables();
 
-		// Overflow layout reconciles itself: every newly built
-		// OverflowManager installs a one-shot ResizeObserver on its
-		// parent and fires refreshoverflows once the container has a
-		// measurable width.
+		// Recalculate overflow layout after all DOM modifications.
+		// RefreshScrollables dispatches a resize event, but the
+		// OverflowManager skips resize events when the window size
+		// is unchanged. Fire refreshoverflows explicitly with layouting service
+		// so the browser has time to lay out the new DOM before overflow is measured.
+		app.layoutingService.appendLayoutingTask(() => {
+			this.map.fire('refreshoverflows', { force: true });
+		});
 	}
 
 	// UI modification

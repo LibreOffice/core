@@ -16,9 +16,14 @@ describe(['tagdesktop'], 'Compact toolbar overflow groups', function() {
 		helper.setupAndLoadDocument('writer/top_toolbar.odt');
 		desktopHelper.switchUIToCompact();
 		cy.cGet('#toolbar-up').should('be.visible');
+		cy.getFrameWindow().then(function(win) {
+			this.win = win;
+		});
 	});
 
 	it('starts with every overflow group unfolded at a wide viewport', function() {
+		helper.processToIdle(this.win);
+
 		// There must be at least one overflow group to validate.
 		cy.cGet('#toolbar-up .ui-overflow-group').should('have.length.gte', 1);
 
@@ -35,6 +40,7 @@ describe(['tagdesktop'], 'Compact toolbar overflow groups', function() {
 		// a measurable width, a viewport too small for the toolbar must
 		// produce at least one folded group.
 		cy.viewport(640, 1080);
+		helper.processToIdle(this.win);
 		cy.cGet('#toolbar-up [id^="overflow-button-"]:visible')
 			.should('have.length.gte', 1);
 	});
