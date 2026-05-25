@@ -156,7 +156,7 @@ button.jsdialog[disabled] img {
 
 :not(.main-nav) .button-secondary,
 :not(.main-nav) .button-secondary:not(.arrowbackground),
-:not(.main-nav) > div:not(.toolbox) > button:not(.ui-tab):not(.ui-expander-btn):not(.ui-corner-all):not(.button-primary):not(.unobutton):not(.form-field-button):not(.col):not(.arrowbackground):not(.ui-combobox-button):not(.ui-linkbutton):not(.spinfieldbutton-up):not(.spinfieldbutton-down):not(.ui-treeview-header-button):not(.ui-emoji-picker-cell) {
+:not(.main-nav) > div:not(.toolbox) > button:not(.ui-tab):not(.ui-expander-btn):not(.ui-corner-all):not(.button-primary):not(.unobutton):not(.form-field-button):not(.col):not(.arrowbackground):not(.ui-combobox-button):not(.ui-linkbutton):not(.spinfieldbutton-up):not(.spinfieldbutton-down):not(.ui-treeview-header-button):not(.ui-emoji-picker-cell):not(.ui-chip-main):not(.ui-chip-action) {
 	box-sizing: border-box;
 	height: 32px;
 	line-height: normal;

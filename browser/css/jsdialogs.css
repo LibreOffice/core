@@ -2193,6 +2193,146 @@ button.has-img img {
 	outline: none;
 }
 
+/* chip widget - see Widget.Chip.ts for the JSON contract.
+   The outer .ui-chip carries the pill: a single rounded border and
+   background that the inner buttons inherit. The inner buttons
+   (.ui-chip-main and .ui-chip-action) are excluded from the
+   project-wide button catch-alls in btns.css and device-desktop.css
+   so they can stay transparent and the pill paints continuously. */
+.ui-chip {
+	display: inline-flex;
+	align-items: stretch;
+	gap: 0;
+	box-sizing: border-box;
+	max-width: 100%;
+	background: var(--color-main-background);
+	border: 1px solid var(--color-border);
+	border-radius: 999px;
+	overflow: hidden;
+	transition: background 0.15s ease,
+		border-color 0.15s ease;
+}
+
+.ui-chip:hover {
+	border-color: rgba(var(--color-primary-rgb, 11, 135, 231), 0.4);
+}
+
+.ui-chip:has(.ui-chip-main[aria-pressed='true']) {
+	background: var(--color-main-text);
+	border-color: var(--color-main-text);
+}
+
+.ui-chip-main,
+.ui-chip-action {
+	background: transparent;
+	border: 0;
+	border-radius: 0;
+	margin: 0;
+	color: var(--color-main-text);
+	font-family: var(--cool-font);
+	font-size: 12px;
+	line-height: 1;
+	cursor: pointer;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	transition: color 0.15s ease,
+		background 0.15s ease;
+}
+
+.ui-chip-main {
+	flex: 1 1 auto;
+	min-width: 0;
+	gap: 6px;
+	padding: 7px 4px 7px 12px;
+	height: 34px;
+	white-space: nowrap;
+}
+
+.ui-chip:has(.ui-chip-action) .ui-chip-main {
+	padding-right: 4px;
+}
+
+.ui-chip:not(:has(.ui-chip-action)) .ui-chip-main {
+	padding-right: 12px;
+}
+
+.ui-chip-icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 14px;
+	line-height: 1;
+}
+
+.ui-chip-icon img {
+	width: 14px;
+	height: 14px;
+}
+
+.ui-chip-text {
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+/* The inner spans must follow the button's color so the pressed-state
+   colour flip below reaches the visible text. The `.sidebar *` rule
+   in jssidebar.css would otherwise pin every descendant to
+   var(--color-main-text), which makes the label invisible against
+   the dark pressed pill. Two-class selectors here beat .sidebar *. */
+.ui-chip .ui-chip-text,
+.ui-chip .ui-chip-icon {
+	color: inherit;
+}
+
+.ui-chip-action {
+	flex: 0 0 auto;
+	padding: 0 10px 0 2px;
+	height: 34px;
+	min-width: 0;
+	color: var(--color-text-lighter);
+}
+
+.ui-chip-action img {
+	width: 14px;
+	height: 14px;
+	opacity: 0.7;
+}
+
+.ui-chip-action:hover {
+	color: var(--color-main-text);
+}
+
+.ui-chip-action:hover img {
+	opacity: 1;
+}
+
+.ui-chip:has(.ui-chip-main[aria-pressed='true']) .ui-chip-main,
+.ui-chip:has(.ui-chip-main[aria-pressed='true']) .ui-chip-action {
+	color: var(--color-main-background);
+}
+
+.ui-chip:has(.ui-chip-main[aria-pressed='true']) .ui-chip-action {
+	color: rgba(255, 255, 255, 0.7);
+}
+
+.ui-chip:has(.ui-chip-main[aria-pressed='true']) .ui-chip-action:hover {
+	color: #fff;
+}
+
+.ui-chip-main:focus-visible,
+.ui-chip-action:focus-visible {
+	outline: 2px solid rgb(var(--color-primary-rgb, 11, 135, 231));
+	outline-offset: -2px;
+}
+
+.ui-chip[disabled],
+.ui-chip-main[disabled],
+.ui-chip-action[disabled] {
+	cursor: default;
+	opacity: 0.5;
+}
+
 /* busy popup */
 
 #busypopup.jsdialog-container {

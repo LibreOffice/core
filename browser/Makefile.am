@@ -541,6 +541,7 @@ COOL_JS_LST =\
 	src/control/jsdialog/Widget.ButtonBox.ts \
 	src/control/jsdialog/Widget.Checkbox.ts \
 	src/control/jsdialog/Widget.Calendar.js \
+	src/control/jsdialog/Widget.Chip.ts \
 	src/control/jsdialog/Widget.ColorPickerButton.js \
 	src/control/jsdialog/Widget.ColorPicker.ts \
 	src/control/jsdialog/Widget.PageMarginEntry.ts \
