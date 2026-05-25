@@ -34,11 +34,32 @@ void ThemeColorsPaneBase::initColorSets(const model::Theme* pTheme)
 {
     maColorSets.clear();
 
+    OUString sDocumentThemeName;
     if (pTheme)
+    {
         maColorSets.push_back(*pTheme->getColorSet());
+        sDocumentThemeName = maColorSets.front().getName();
+    }
 
+    // Re-scan the configured theme paths each time the pane opens. In
+    // COKit/Online the singleton was first initialized during forkit
+    // preinit with a throwaway temp $(userurl), and the kit's
+    // asyncInstallPresets places user .theme files into the real
+    // $(userurl)/themes asynchronously, possibly after the kit's
+    // SECOND_INIT has already run. Re-scanning here ensures both the
+    // user theme folder and the list of available themes are current.
+    ColorSets::get().init();
+
+    // Skip the singleton entry that matches the document's current
+    // theme so it is not shown twice in the icon view: the document's
+    // (possibly customized) copy stays at index 0, the pristine
+    // singleton duplicate is dropped.
     auto const& rColorSetVector = ColorSets::get().getColorSetVector();
-    maColorSets.insert(maColorSets.end(), rColorSetVector.begin(), rColorSetVector.end());
+    for (model::ColorSet const& rColorSet : rColorSetVector)
+    {
+        if (rColorSet.getName() != sDocumentThemeName)
+            maColorSets.push_back(rColorSet);
+    }
 
     if (mxIconViewThemeColors)
     {

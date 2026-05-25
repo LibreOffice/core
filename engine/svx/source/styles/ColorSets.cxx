@@ -184,6 +184,11 @@ void ColorSets::init()
 {
     SAL_INFO("svx", "Initializing Color Sets.");
 
+    // Idempotent: contents are rebuilt from the configured paths each
+    // call, so re-running with a different $(userurl) drops stale
+    // entries from the previous scan.
+    maColorSets.clear();
+
     DocumentThemeScanner aScanner(maColorSets);
 
     if (!comphelper::IsFuzzing())

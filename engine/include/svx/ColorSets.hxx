@@ -23,8 +23,14 @@ private:
     OUString maUserFolder;
 
     ColorSets();
-    void init();
 public:
+    // Re-scans the configured theme paths. Idempotent. Online's COKit
+    // re-invokes this from ThemeColorsPaneBase::initColorSets() because
+    // the constructor's initial scan ran during forkit preinit, when
+    // $(UserInstallation) was a transient temp directory, and the
+    // kit's asyncInstallPresets places user .theme files only later.
+    void init();
+
     static ColorSets& get();
     static model::ColorSet const* getDefault();
 
