@@ -801,6 +801,13 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 			img: 'removeslidesection',
 			pos: 0,
 		});
+		entries.push({
+			id: 'removeSectionAndSlides',
+			type: 'comboboxentry',
+			text: _('Remove Section & Slides'),
+			img: 'removeslidesection',
+			pos: 0,
+		});
 		if (sectionIndex > 0) {
 			entries.push({
 				id: 'moveSectionUp',
@@ -863,6 +870,27 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 				that._map.selectPart(section.startIndex, 1, false);
 				app.socket.sendMessage('uno .uno:RemoveSlideSection');
 				break;
+			case 'removeSectionAndSlides': {
+				var n = section.slideCount;
+				var msg = _('Delete section "%1" and its %2 slide(s)?')
+					.replace('%1', section.name)
+					.replace('%2', String(n));
+				app.map.uiManager.showInfoModal(
+					'remove-section-slides-modal',
+					_('Delete'),
+					msg,
+					'',
+					_('OK'),
+					function () {
+						that._map.setPart(section.startIndex);
+						that._map.selectPart(section.startIndex, 1, false);
+						app.socket.sendMessage('uno .uno:RemoveSlideSectionAndSlides');
+					},
+					true,
+					'remove-section-slides-modal-response',
+				);
+				break;
+			}
 			case 'collapseAllSections':
 				that._collapseAllSections();
 				break;
