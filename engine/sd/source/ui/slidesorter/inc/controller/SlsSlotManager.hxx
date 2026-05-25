@@ -89,6 +89,7 @@ private:
 
     void AddSection();
     void RemoveSection();
+    void RemoveSectionAndSlides();
     void RenameSection();
     void MoveSectionUp();
     void MoveSectionDown();

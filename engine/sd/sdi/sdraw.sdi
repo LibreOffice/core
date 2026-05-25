@@ -4300,6 +4300,23 @@ SfxVoidItem RemoveSlideSection SID_REMOVE_SLIDE_SECTION
     GroupId = SfxGroupId::Format;
 ]
 
+SfxVoidItem RemoveSlideSectionAndSlides SID_REMOVE_SLIDE_SECTION_AND_SLIDES
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = FALSE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::Format;
+]
+
 SfxVoidItem RenameSlideSection SID_RENAME_SLIDE_SECTION
 (SfxInt32Item SectionIndex SID_RENAME_SLIDE_SECTION, SfxStringItem Name SID_RENAMEPAGE)
 [

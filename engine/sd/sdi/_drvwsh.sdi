@@ -202,6 +202,11 @@ interface DrawView
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
     ]
+    SID_REMOVE_SLIDE_SECTION_AND_SLIDES
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
     SID_RENAME_SLIDE_SECTION
     [
         ExecMethod = FuTemporary ;
