@@ -28,7 +28,6 @@ final class WebDriverManager {
     static let shared = WebDriverManager()
 
     private var server: WebDriverServer?
-    private var nativeServer: NativeUIServer?
 
     /// Insertion-ordered handles -> weak references to webviews.
     private var entries: [(handle: String, webView: Weak<WKWebView>)] = []
@@ -74,24 +73,6 @@ final class WebDriverManager {
                 NSLog("WebDriverManager: failed to start WebDriverServer: %@", error.localizedDescription)
             }
         }
-
-        if nativeServer == nil,
-           let port = readPort(from: args, prefix: "--nativeUIPort=") {
-            do {
-                let s = try NativeUIServer(port: port)
-                s.start()
-                nativeServer = s
-            } catch {
-                NSLog("WebDriverManager: failed to start NativeUIServer: %@", error.localizedDescription)
-            }
-        }
-    }
-
-    private func readPort(from args: [String], prefix: String) -> UInt16? {
-        args.lazy
-            .compactMap { $0.hasPrefix(prefix) ? String($0.dropFirst(prefix.count)) : nil }
-            .first
-            .flatMap { UInt16($0) }
     }
 
     /**
