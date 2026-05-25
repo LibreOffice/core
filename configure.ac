@@ -3,7 +3,7 @@
 
 AC_PREREQ([2.63])
 
-AC_INIT([coolwsd], [26.04.1.1], [https://github.com/CollaboraOnline/online/issues], [coolwsd], [https://www.collaboraonline.org/])
+AC_INIT([coolwsd], [26.04.1.1], [https://github.com/CollaboraOnline/online/issues], [coolwsd], [https://www.collaboraoffice.org/])
 LT_INIT([shared, disable-static, dlopen])
 
 AM_INIT_AUTOMAKE([1.10 foreign subdir-objects tar-pax -Wno-portability])
@@ -1098,7 +1098,7 @@ else
 fi
 AC_SUBST(VENDOR)
 
-INFO_URL='https://www.collaboraonline.org/'
+INFO_URL='https://www.collaboraoffice.org/'
 if test -n "$with_info_url" -a "$with_info_url" != "no"; then
     INFO_URL="$with_info_url"
 fi

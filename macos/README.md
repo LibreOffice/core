@@ -1,1 +1,1 @@
-Moved to https://www.collaboraonline.org/post/build-co-mac/
+Moved to https://www.collaboraoffice.org/post/build-co-mac/

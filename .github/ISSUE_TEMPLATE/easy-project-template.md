@@ -7,7 +7,7 @@ assignees: ''
 
 ---
 
-**This is an Easy Project, [idea for GSoC](https://www.collaboraonline.org/gsoc/).**
+**This is an Easy Project, [idea for GSoC](https://www.collaboraoffice.org/gsoc/).**
 Potential mentors: @USERNAMEOFMENTOR
 
 ### Detailed description and rationale
