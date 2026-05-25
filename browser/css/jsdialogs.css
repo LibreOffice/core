@@ -1845,8 +1845,16 @@ img.context-menu-icon {
 .autofilter-popup #check_list_box.ui-treeview,
 .autofilter-popup #check_tree_box.ui-treeview {
 	flex: 1 1 auto;
-	max-height: none !important;
+	max-height: 150px;
 	min-height: 0;
+}
+
+/* Once the user has dragged the resize handle, the browser writes an inline
+   height on .ui-dialog-content; drop the 150px cap so the listbox flexes to
+   fill the enlarged dialog. */
+.autofilter-popup .jsdialog.lokdialog.ui-dialog-content[style*='height'] #check_list_box.ui-treeview,
+.autofilter-popup .jsdialog.lokdialog.ui-dialog-content[style*='height'] #check_tree_box.ui-treeview {
+	max-height: none !important;
 }
 
 /* hide radio in filter by color */
