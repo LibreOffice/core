@@ -139,6 +139,7 @@
                         </items>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="min-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes" context="databaroptions|min-atkobject">Minimum type</property>
                             <property name="AtkObject::accessible-description" translatable="yes" context="databaroptions|extended_tip|min">Select the way the minimum is set</property>
                           </object>
                         </child>
@@ -164,6 +165,7 @@
                         </items>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="max-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes" context="databaroptions|max-atkobject">Maximum type</property>
                             <property name="AtkObject::accessible-description" translatable="yes" context="databaroptions|extended_tip|max">Select the way the maximum is set</property>
                           </object>
                         </child>
@@ -181,6 +183,7 @@
                         <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="min_value-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes" context="databaroptions|min_value-atkobject">Minimum value</property>
                             <property name="AtkObject::accessible-description" translatable="yes" context="datbaroptions|extended_tip|min_value">Enter the value for the minimum</property>
                           </object>
                         </child>
@@ -198,6 +201,7 @@
                         <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="max_value-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes" context="databaroptions|max_value-atkobject">Maximum value</property>
                             <property name="AtkObject::accessible-description" translatable="yes" context="datbaroptions|extended_tip|max_value">Enter the value for the maximum</property>
                           </object>
                         </child>
@@ -284,6 +288,7 @@
                         </child>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="positive_colour-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes" context="databaroptions|positive_colour-atkobject">Positive color</property>
                             <property name="AtkObject::accessible-description" translatable="yes" context="databaroptions|extended_tip|positive_colour">Select the color for the positive values</property>
                           </object>
                         </child>
@@ -306,6 +311,7 @@
                         </child>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="negative_colour-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes" context="databaroptions|negative_colour-atkobject">Negative color</property>
                             <property name="AtkObject::accessible-description" translatable="yes" context="datbaroptions|extended_tip|negative_colour">Select the color for the negative values</property>
                           </object>
                         </child>
@@ -339,6 +345,7 @@
                         </items>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="fill_type-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes" context="databaroptions|fill_type-atkobject">Fill type</property>
                             <property name="AtkObject::accessible-description" translatable="yes" context="databaroptions|extended_tip|fill_type">Select if the fill in color is solid or gradient.</property>
                           </object>
                         </child>
@@ -424,6 +431,7 @@
                         </items>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="axis_pos-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes" context="databaroptions|axis_pos-atkobject">Axis position</property>
                             <property name="AtkObject::accessible-description" translatable="yes" context="databaroptions|extended_tip|axis_pos">Select the positions of vertical axis in the cell to start fill.</property>
                           </object>
                         </child>
@@ -446,6 +454,7 @@
                         </child>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="axis_colour-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes" context="databaroptions|axis_colour-atkobject">Axis color</property>
                             <property name="AtkObject::accessible-description" translatable="yes" context="datbaroptions|extended_tip|axis_colour">Set the color of the vertical axis</property>
                           </object>
                         </child>
@@ -527,6 +536,7 @@
                         <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="min_length-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes" context="databaroptions|min_length-atkobject">Minimum bar length</property>
                             <property name="AtkObject::accessible-description" translatable="yes" context="databaroptions|extended_tip|min_length">Set the minimum bar length in percentage with respect to the cell</property>
                           </object>
                         </child>
@@ -544,6 +554,7 @@
                         <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="max_length-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes" context="databaroptions|max_length-atkobject">Maximum bar length</property>
                             <property name="AtkObject::accessible-description" translatable="yes" context="databaroptions|extended_tip|max_length">Set the maximum bar length in percentage with respect to the cell</property>
                           </object>
                         </child>

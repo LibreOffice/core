@@ -367,7 +367,7 @@ function handleDialog(win, level, command, isWarningDialog) {
 			    command == '.uno:SpellDialog' ||
 			    command == '.uno:SpellingAndGrammarDialog' ||
 			    command == '.uno:DataDataPilotRun:Field') {
-				cy.cGet('#options-button').click();
+				getActiveDialog(level).find('#options-button').click();
 				handleDialog(win, level + 1);
 			} else if (command == '.uno:InsertIndexesEntry') {
 				cy.cGet('#new-button').click();
@@ -407,6 +407,9 @@ function handleDialog(win, level, command, isWarningDialog) {
 				cy.cGet('#view-button').should('be.enabled').click();
 				handleDialog(win, level + 1);
 				cy.cGet('#sign-button').should('be.enabled').click();
+				handleDialog(win, level + 1);
+			} else if (command == '.uno:DataBarFormatDialog') {
+				cy.cGet('#options-button').should('be.visible').click();
 				handleDialog(win, level + 1);
 			} else if (command == '.uno:DataDataPilotRun') {
 				cy.cGet('#listbox-page .ui-treeview-entry > div:first-child').dblclick();

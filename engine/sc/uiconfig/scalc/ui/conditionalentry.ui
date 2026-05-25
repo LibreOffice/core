@@ -76,6 +76,11 @@
                       <item translatable="yes" context="conditionalentry|type">Formula is</item>
                       <item translatable="yes" context="conditionalentry|type">Date is</item>
                     </items>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="type-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes" context="conditionalentry|type-atkobject">Condition type</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
@@ -113,6 +118,11 @@
                       <item translatable="yes" context="conditionalentry|typeis">contains</item>
                       <item translatable="yes" context="conditionalentry|typeis">does not contain</item>
                     </items>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="typeis-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes" context="conditionalentry|typeis-atkobject">Comparison</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
@@ -137,6 +147,11 @@
                       <item translatable="yes" context="conditionalentry|datetype">Last year</item>
                       <item translatable="yes" context="conditionalentry|datetype">Next year</item>
                     </items>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="datetype-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes" context="conditionalentry|datetype-atkobject">Date condition</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
@@ -152,6 +167,11 @@
                       <item translatable="yes" context="conditionalentry|colorformat">Data Bar</item>
                       <item translatable="yes" context="conditionalentry|colorformat">Icon Set</item>
                     </items>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="colorformat-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes" context="conditionalentry|colorformat-atkobject">Format type</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
@@ -164,6 +184,11 @@
                     <property name="no-show-all">True</property>
                     <property name="hexpand">True</property>
                     <property name="truncate-multiline">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="formula-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes" context="conditionalentry|formula-atkobject">Formula</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
@@ -185,6 +210,11 @@
                         <property name="hexpand">True</property>
                         <property name="width-chars">5</property>
                         <property name="truncate-multiline">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="val1-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes" context="conditionalentry|val1-atkobject">Value</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left-attach">0</property>
@@ -198,6 +228,11 @@
                         <property name="hexpand">True</property>
                         <property name="width-chars">5</property>
                         <property name="truncate-multiline">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="val2-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes" context="conditionalentry|val2-atkobject">Second value</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left-attach">1</property>
@@ -238,6 +273,11 @@
                       <item translatable="yes" context="conditionalentry|iconsettype">5 Quarters</item>
                       <item translatable="yes" context="conditionalentry|iconsettype">5 Boxes</item>
                     </items>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="iconsettype-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes" context="conditionalentry|iconsettype-atkobject">Icon set type</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">2</property>
@@ -309,6 +349,11 @@
                     <property name="no-show-all">True</property>
                     <property name="activates-default">True</property>
                     <property name="truncate-multiline">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="edcolscalemin-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes" context="conditionalentry|edcolscalemin-atkobject">Minimum value</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
@@ -321,6 +366,11 @@
                     <property name="no-show-all">True</property>
                     <property name="activates-default">True</property>
                     <property name="truncate-multiline">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="edcolscalemiddle-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes" context="conditionalentry|edcolscalemiddle-atkobject">Middle value</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
@@ -333,6 +383,11 @@
                     <property name="no-show-all">True</property>
                     <property name="activates-default">True</property>
                     <property name="truncate-multiline">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="edcolscalemax-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes" context="conditionalentry|edcolscalemax-atkobject">Maximum value</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">2</property>
@@ -349,6 +404,11 @@
                     <property name="label" translatable="no"></property>
                     <child>
                       <placeholder/>
+                    </child>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="lbcolmin-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes" context="conditionalentry|lbcolmin-atkobject">Minimum color</property>
+                      </object>
                     </child>
                   </object>
                   <packing>
@@ -367,6 +427,11 @@
                     <child>
                       <placeholder/>
                     </child>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="lbcolmiddle-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes" context="conditionalentry|lbcolmiddle-atkobject">Middle color</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
@@ -383,6 +448,11 @@
                     <property name="label" translatable="no"></property>
                     <child>
                       <placeholder/>
+                    </child>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="lbcolmax-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes" context="conditionalentry|lbcolmax-atkobject">Maximum color</property>
+                      </object>
                     </child>
                   </object>
                   <packing>
@@ -434,6 +504,11 @@
                       <item id="percent" translatable="yes" context="conditionalentry|colscalemiddle">Percent</item>
                       <item id="formula" translatable="yes" context="conditionalentry|colscalemiddle">Formula</item>
                     </items>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="colscalemiddle-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes" context="conditionalentry|colscalemiddle-atkobject">Middle value type</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">1</property>

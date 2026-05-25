@@ -27,6 +27,11 @@
               <item translatable="no" context="conditionaliconset|conditionMode"> &gt;= </item>
               <item translatable="no" context="conditionaliconset|conditionMode"> &lt;&gt; </item>
             </items>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="conditionMode-atkobject">
+                <property name="AtkObject::accessible-name" translatable="yes" context="conditionaliconset|conditionMode-atkobject">Comparison mode</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="left-attach">1</property>
@@ -39,6 +44,11 @@
             <property name="can-focus">True</property>
             <property name="hexpand">True</property>
             <property name="truncate-multiline">True</property>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="entry-atkobject">
+                <property name="AtkObject::accessible-name" translatable="yes" context="conditionaliconset|entry-atkobject">Value</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="left-attach">2</property>
@@ -55,6 +65,11 @@
               <item translatable="yes" context="conditionaliconset|listbox">Percentile</item>
               <item translatable="yes" context="conditionaliconset|listbox">Formula</item>
             </items>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="listbox-atkobject">
+                <property name="AtkObject::accessible-name" translatable="yes" context="conditionaliconset|listbox-atkobject">Type</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="left-attach">3</property>

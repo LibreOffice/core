@@ -10,8 +10,12 @@ const allCalcDialogs = [
     '.uno:AnalysisOfVarianceDialog',
     '.uno:ChiSquareTestDialog',
     '.uno:ColumnWidth',
+    '.uno:ColorScaleFormatDialog',
+    '.uno:ConditionalFormatDialog',
     '.uno:ConditionalFormatEasy?FormatRule:short=0',
     '.uno:ConditionalFormatManagerDialog',
+    '.uno:DataBarFormatDialog',
+    '.uno:IconSetFormatDialog',
     '.uno:CorrelationDialog',
     '.uno:CovarianceDialog',
     '.uno:DataSort',
@@ -98,8 +102,8 @@ describe(['tagdesktop'], 'Accessibility Calc Dialog Tests', { testIsolation: fal
 
         cy.get('@uicoverageResult').then(result => {
             expect(result.used, `used .ui files`).to.not.be.empty;
-            // TODO: make this true
-            // expect(result.CompleteCalcDialogCoverage, `complete calc dialog coverage`).to.be.true;
+            expect(result.CompleteCalcDialogCoverage,
+                `complete calc dialog coverage; missing: ${JSON.stringify(result.MissingCalcDialogCoverage)}`).to.be.true;
             expect(result.CompleteCommonDialogCoverage,
                 `complete common dialog coverage; missing: ${JSON.stringify(result.MissingCommonDialogCoverage)}`).to.be.true;
         });
@@ -193,6 +197,16 @@ describe(['tagdesktop'], 'Accessibility Calc Dialog Tests', { testIsolation: fal
 
         // exit shape mode
         helper.typeIntoDocument('{esc}');
+    });
+
+    it('Sparkline data range dialog', function () {
+        cy.cGet('#spreadsheet-tab4').click();
+        helper.typeIntoInputField(helper.addressInputSelector, 'B1');
+        cy.then(() => {
+            win.app.map.sendUnoCommand('.uno:EditSparkline');
+        });
+        a11yHelper.handleDialog(win, 1, '.uno:EditSparkline');
+        cy.cGet('#spreadsheet-tab0').click();
     });
 
     it('Hatch Add name dialog and duplicate warning', function () {
@@ -324,13 +338,23 @@ describe(['tagdesktop'], 'Accessibility Calc Dialog Tests', { testIsolation: fal
         a11yHelper.handleDialog(win, 1);
     });
 
-    it.skip('Pivot Table Dialog (Buggy)', function () {
+    it('Pivot Table Dialog', function () {
         cy.cGet('#spreadsheet-tab3').click();
         helper.typeIntoInputField(helper.addressInputSelector, 'A1:B1')
         cy.then(() => {
             win.app.map.sendUnoCommand('.uno:DataDataPilotRun');
         });
         a11yHelper.handleDialog(win, 1, ".uno:DataDataPilotRun");
+        cy.cGet('#spreadsheet-tab0').click();
+    });
+
+    it('Pivot Calculated Field Dialog', function () {
+        cy.cGet('#spreadsheet-tab3').click();
+        helper.typeIntoInputField(helper.addressInputSelector, 'A1');
+        cy.then(() => {
+            win.app.map.sendUnoCommand('.uno:CalculatedFieldRun');
+        });
+        a11yHelper.handleDialog(win, 1);
         cy.cGet('#spreadsheet-tab0').click();
     });
 
