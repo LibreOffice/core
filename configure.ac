@@ -356,22 +356,14 @@ AC_ARG_WITH([poco-libs],
 AC_ARG_WITH([libpng-includes],
             AS_HELP_STRING([--with-libpng-includes=<path>],
                            [Path to the "include" directory with the libpng
-                            headers.  Not used on Android.]))
+                            headers. Not used on Android.
+                            Ignored for Windows, we always use the libpng built in engine.]))
 
 AC_ARG_WITH([libpng-libs],
             AS_HELP_STRING([--with-libpng-libs=<path>],
                            [Path to the "lib" directory with the libpng
-                            libraries.  Not used on Android.]))
-
-AC_ARG_WITH([zlib-includes],
-            AS_HELP_STRING([--with-zlib-includes=<path>],
-                           [Path to the "include" directory with the libpng
-                            headers. Only used on Windows.]))
-
-AC_ARG_WITH([zlib-libs],
-            AS_HELP_STRING([--with-zlib-libs=<path>],
-                           [Path to the "lib" directory with the zlib
-                            libraries. Only used on Windows.]))
+                            libraries. Not used on Android.
+                            Ignored for Windows, we always use the libpng built in engine.]))
 
 AC_ARG_WITH([cppunit-includes],
             AS_HELP_STRING([--with-cppunit-includes=<path>],
@@ -884,10 +876,10 @@ if test \( "$enable_iosapp" = "yes" -a `uname -s` = "Darwin" \) -o \( "$enable_m
    if test "$enable_windowsapp" = "yes"; then
       # We know that zstd has been unpacked and built in engine; no need to look for it.
       if test -n "$with_zstd_includes"; then
-         AC_MSG_ERROR([You MUST NOT use --with-zstd-includes when configuring the Windows app.])
+         AC_MSG_WARN([Ignoring --with-zstd-includes when configuring the Windows app.])
       fi
       if test -n "$with_zstd_libs"; then
-         AC_MSG_ERROR([You MUST NOT use --with-zstd-libs when configuring the Windows app.])
+         AC_MSG_WARN([Ignoring --with-zstd-libs when configuring the Windows app.])
       fi
    else
       AC_MSG_CHECKING([for zstd include directory to build against])
@@ -984,9 +976,19 @@ AC_SUBST([CORE_VERSION_HASH])
 
 AC_DEFINE_UNQUOTED([CORE_VERSION_HASH],[["$CORE_VERSION_HASH"]],[CollaboraOffice core git hash if present])
 
-LIBPNG_INCLUDES="$with_libpng_includes"
-LIBPNG_LIBS="$with_libpng_libs"
-LIBPNG_STATIC_LIB=""
+if test "$enable_windowsapp" = "yes"; then
+   # We know that libpng has been unpacked and built in engine; no need to look for it.
+   if test -n "$with_libpng_includes"; then
+      AC_MSG_WARN([Ignoring --with-libpng-includes when configuring the Windows app.])
+   fi
+   if test -n "$with_libpng_libs"; then
+      AC_MSG_WARN([Ignoring --with-libpng-libs when configuring the Windows app.])
+   fi
+else
+   LIBPNG_INCLUDES="$with_libpng_includes"
+   LIBPNG_LIBS="$with_libpng_libs"
+   LIBPNG_STATIC_LIB=""
+fi
 
 if test "$enable_macosapp" = "yes"; then
    AC_MSG_CHECKING([for libpng include directory to build against])
@@ -995,27 +997,9 @@ if test "$enable_macosapp" = "yes"; then
    CHK_FILE_VAR(LIBPNG_LIBS,libpng.a liblibpng.a,libpng,,LIBPNG_STATIC_LIB) dnl CollaboraOffice wrongly builds libpng as liblibpng.a
 fi
 
-if test "$enable_windowsapp" = "yes" ; then
-   LIBPNG_INCLUDES_WINDOWS=`cd "$LIBPNG_INCLUDES" && cmd.exe /c cd | tr '\\\\' '/' | tr -d '\r'`
-   LIBPNG_LIBS_WINDOWS=`cd "$LIBPNG_LIBS" && cmd.exe /c cd | tr '\\\\' '/' | tr -d '\r'`
-fi
-
 AC_SUBST(LIBPNG_INCLUDES)
-AC_SUBST(LIBPNG_INCLUDES_WINDOWS)
 AC_SUBST(LIBPNG_LIBS)
-AC_SUBST(LIBPNG_LIBS_WINDOWS)
 AC_SUBST(LIBPNG_STATIC_LIB)
-
-ZLIB_INCLUDES="$with_zlib_includes"
-ZLIB_LIBS="$with_zlib_libs"
-
-if test "$enable_windowsapp" = "yes" ; then
-   ZLIB_INCLUDES_WINDOWS=`cd "$ZLIB_INCLUDES" && cmd.exe /c cd | tr '\\\\' '/' | tr -d '\r'`
-   ZLIB_LIBS_WINDOWS=`cd "$ZLIB_LIBS" && cmd.exe /c cd | tr '\\\\' '/' | tr -d '\r'`
-fi
-
-AC_SUBST(ZLIB_INCLUDES_WINDOWS)
-AC_SUBST(ZLIB_LIBS_WINDOWS)
 
 if test "$enable_iosapp" != yes -a "$enable_windowsapp" != yes -a "$enable_androidapp" != yes; then
    if test -z "$with_lo_builddir"; then
