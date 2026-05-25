@@ -294,6 +294,11 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
             rRequest.Done();
             break;
 
+        case SID_REMOVE_SLIDE_SECTION_AND_SLIDES:
+            RemoveSectionAndSlides();
+            rRequest.Done();
+            break;
+
         case SID_RENAME_SLIDE_SECTION:
             RenameSection();
             rRequest.Done();
@@ -701,6 +706,7 @@ void SlotManager::GetMenuState (SfxItemSet& rSet)
 
     if (rSet.GetItemState(SID_ADD_SLIDE_SECTION) == SfxItemState::DEFAULT
         || rSet.GetItemState(SID_REMOVE_SLIDE_SECTION) == SfxItemState::DEFAULT
+        || rSet.GetItemState(SID_REMOVE_SLIDE_SECTION_AND_SLIDES) == SfxItemState::DEFAULT
         || rSet.GetItemState(SID_RENAME_SLIDE_SECTION) == SfxItemState::DEFAULT
         || rSet.GetItemState(SID_MOVE_SLIDE_SECTION_UP) == SfxItemState::DEFAULT
         || rSet.GetItemState(SID_MOVE_SLIDE_SECTION_DOWN) == SfxItemState::DEFAULT)
@@ -710,6 +716,7 @@ void SlotManager::GetMenuState (SfxItemSet& rSet)
         {
             rSet.DisableItem(SID_ADD_SLIDE_SECTION);
             rSet.DisableItem(SID_REMOVE_SLIDE_SECTION);
+            rSet.DisableItem(SID_REMOVE_SLIDE_SECTION_AND_SLIDES);
             rSet.DisableItem(SID_RENAME_SLIDE_SECTION);
             rSet.DisableItem(SID_MOVE_SLIDE_SECTION_UP);
             rSet.DisableItem(SID_MOVE_SLIDE_SECTION_DOWN);
@@ -736,6 +743,7 @@ void SlotManager::GetMenuState (SfxItemSet& rSet)
                 if (!rMgr.IsSectionStart(nPageIndex))
                 {
                     rSet.DisableItem(SID_REMOVE_SLIDE_SECTION);
+                    rSet.DisableItem(SID_REMOVE_SLIDE_SECTION_AND_SLIDES);
                     rSet.DisableItem(SID_RENAME_SLIDE_SECTION);
                     rSet.DisableItem(SID_MOVE_SLIDE_SECTION_UP);
                     rSet.DisableItem(SID_MOVE_SLIDE_SECTION_DOWN);
@@ -1206,6 +1214,30 @@ void SlotManager::RemoveSection()
             pDoc->AddUndo(std::move(pUndo));
         NotifySectionChange();
     }
+}
+
+void SlotManager::RemoveSectionAndSlides()
+{
+    auto oCtx = GetSelectedSectionContext(mrSlideSorter);
+    if (!oCtx)
+        return;
+    if (oCtx->nSectionIndex < 0 || !oCtx->pMgr->IsSectionStart(oCtx->nPageIndex))
+        return;
+
+    SdDrawDocument* pDoc = mrSlideSorter.GetModel().GetDocument();
+    if (!pDoc)
+        return;
+
+    const bool bUndo = pDoc->IsUndoEnabled();
+    if (bUndo)
+        pDoc->BegUndo(SdResId(STR_UNDO_REMOVE_SLIDE_SECTION_AND_SLIDES));
+
+    oCtx->pMgr->RemoveSectionSlides(oCtx->nSectionIndex);
+
+    if (bUndo)
+        pDoc->EndUndo();
+
+    mrSlideSorter.GetController().HandleModelChange();
 }
 
 void SlotManager::RenameSection()

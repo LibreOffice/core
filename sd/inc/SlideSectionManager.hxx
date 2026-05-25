@@ -65,6 +65,14 @@ public:
     /// Remove a section; its slides merge into the previous section.
     void RemoveSection(sal_Int32 nSectionIndex);
 
+    /// Delete every slide belonging to nSectionIndex via the document's
+    /// XDrawPages, iterating in reverse so that the indices of the slides
+    /// still to be deleted stay valid.  Never deletes the last remaining
+    /// slide in the document.  The caller owns undo grouping and view
+    /// refresh; the now-empty section metadata is auto-erased by
+    /// OnSlideRemoved as the slides are removed.
+    void RemoveSectionSlides(sal_Int32 nSectionIndex);
+
     /// Rename a section.
     void RenameSection(sal_Int32 nSectionIndex, const OUString& rNewName);
 

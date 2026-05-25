@@ -1244,6 +1244,11 @@
           <value xml:lang="en-US">Remove Section</value>
         </prop>
       </node>
+      <node oor:name=".uno:RemoveSlideSectionAndSlides" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Remove Section &amp; Slides</value>
+        </prop>
+      </node>
       <node oor:name=".uno:RenameSlideSection" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Rename Section...</value>

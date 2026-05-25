@@ -1613,6 +1613,32 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         }
         break;
 
+        case SID_REMOVE_SLIDE_SECTION_AND_SLIDES:
+        {
+            SdPage* pPage = GetActualPage();
+            if (pPage)
+            {
+                sal_uInt16 nPage = (pPage->GetPageNum() - 1) / 2;
+                sd::SlideSectionManager& rMgr = GetDoc()->GetSectionManager();
+                sal_Int32 nSectionIdx = rMgr.GetSectionIndexForSlide(nPage);
+                if (nSectionIdx >= 0 && rMgr.IsSectionStart(nPage))
+                {
+                    const bool bUndo = GetDoc()->IsUndoEnabled();
+                    if (bUndo)
+                        GetView()->BegUndo(
+                            SdResId(STR_UNDO_REMOVE_SLIDE_SECTION_AND_SLIDES));
+
+                    rMgr.RemoveSectionSlides(nSectionIdx);
+
+                    if (bUndo)
+                        GetView()->EndUndo();
+                    GetDocSh()->SetModified();
+                    ResetActualPage();
+                }
+            }
+        }
+        break;
+
         case SID_RENAME_SLIDE_SECTION:
         {
             sd::SlideSectionManager& rMgr = GetDoc()->GetSectionManager();

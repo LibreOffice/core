@@ -88,6 +88,7 @@
 #include <fuconcs.hxx>
 #include <fuformatpaintbrush.hxx>
 #include <stlsheet.hxx>
+#include <SlideSectionManager.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -1648,6 +1649,25 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
 
     if (!SdModule::get()->pTransferClip)
         rSet.DisableItem(SID_PASTE_SLIDE);
+
+    if (rSet.GetItemState(SID_REMOVE_SLIDE_SECTION) == SfxItemState::DEFAULT
+        || rSet.GetItemState(SID_REMOVE_SLIDE_SECTION_AND_SLIDES) == SfxItemState::DEFAULT)
+    {
+        bool bDisable = true;
+        SdPage* pPage = GetActualPage();
+        if (pPage && GetDoc())
+        {
+            sal_uInt16 nPageIdx = (pPage->GetPageNum() - 1) / 2;
+            sd::SlideSectionManager& rMgr = GetDoc()->GetSectionManager();
+            if (rMgr.IsSectionStart(nPageIdx))
+                bDisable = false;
+        }
+        if (bDisable)
+        {
+            rSet.DisableItem(SID_REMOVE_SLIDE_SECTION);
+            rSet.DisableItem(SID_REMOVE_SLIDE_SECTION_AND_SLIDES);
+        }
+    }
 
     GetModeSwitchingMenuState (rSet);
 }

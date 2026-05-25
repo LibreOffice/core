@@ -10,9 +10,12 @@
 #include <SlideSectionManager.hxx>
 #include <drawdoc.hxx>
 #include <sdpage.hxx>
+#include <unomodel.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/drawing/XDrawPages.hpp>
 
+#include <comphelper/diagnose_ex.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/xmltools.hxx>
@@ -193,6 +196,49 @@ void SlideSectionManager::RemoveSection(sal_Int32 nSectionIndex)
         return;
 
     maSections.erase(maSections.begin() + nSectionIndex);
+}
+
+void SlideSectionManager::RemoveSectionSlides(sal_Int32 nSectionIndex)
+{
+    if (nSectionIndex < 0 || nSectionIndex >= static_cast<sal_Int32>(maSections.size()))
+        return;
+
+    // Compute the [nStart, nEnd) range of slides in this section.  The
+    // section list is sorted by start index, so the next section's start
+    // (or the document's slide count) marks the end of this section.
+    const sal_Int32 nStart = maSections[nSectionIndex].mnStartIndex;
+    const sal_Int32 nEnd = (nSectionIndex + 1 < static_cast<sal_Int32>(maSections.size()))
+                               ? maSections[nSectionIndex + 1].mnStartIndex
+                               : static_cast<sal_Int32>(mrDoc.GetSdPageCount(PageKind::Standard));
+
+    try
+    {
+        rtl::Reference<SdXImpressDocument> xModel(mrDoc.getUnoModel());
+        if (!xModel.is())
+            return;
+
+        css::uno::Reference<css::drawing::XDrawPages> xPages(xModel->getDrawPages(),
+                                                             css::uno::UNO_SET_THROW);
+
+        // Iterate in reverse so that each remove() does not shift the
+        // indices of the slides we still have to delete.  OnSlideRemoved
+        // fires per page delete and auto-erases the now-empty section
+        // metadata, so we deliberately do not call RemoveSection() here.
+        for (sal_Int32 i = nEnd - 1; i >= nStart; --i)
+        {
+            // Do not delete the last slide in the document.
+            if (xPages->getCount() <= 1)
+                break;
+
+            css::uno::Reference<css::drawing::XDrawPage> xPage(xPages->getByIndex(i),
+                                                               css::uno::UNO_QUERY_THROW);
+            xPages->remove(xPage);
+        }
+    }
+    catch (const css::uno::Exception&)
+    {
+        TOOLS_WARN_EXCEPTION("sd", "SlideSectionManager::RemoveSectionSlides()");
+    }
 }
 
 void SlideSectionManager::RenameSection(sal_Int32 nSectionIndex, const OUString& rNewName)
