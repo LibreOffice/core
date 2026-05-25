@@ -118,50 +118,6 @@ configmgr/source/components.cxx:174
     configmgr::Components::WriteThread reference_ rtl::Reference<WriteThread> *
 connectivity/source/drivers/evoab2/NConnection.hxx:53
     connectivity::evoab::OEvoabConnection m_aPassword OString
-connectivity/source/drivers/postgresql/pq_statics.hxx:142
-    pq_sdbc_driver::Statics NO_NULLS OUString
-connectivity/source/drivers/postgresql/pq_statics.hxx:143
-    pq_sdbc_driver::Statics NULABLE OUString
-connectivity/source/drivers/postgresql/pq_statics.hxx:144
-    pq_sdbc_driver::Statics NULLABLE_UNKNOWN OUString
-connectivity/source/drivers/postgresql/pq_statics.hxx:145
-    pq_sdbc_driver::Statics SELECT OUString
-connectivity/source/drivers/postgresql/pq_statics.hxx:146
-    pq_sdbc_driver::Statics UPDATE OUString
-connectivity/source/drivers/postgresql/pq_statics.hxx:147
-    pq_sdbc_driver::Statics INSERT OUString
-connectivity/source/drivers/postgresql/pq_statics.hxx:148
-    pq_sdbc_driver::Statics DELETE OUString
-connectivity/source/drivers/postgresql/pq_statics.hxx:149
-    pq_sdbc_driver::Statics RULE OUString
-connectivity/source/drivers/postgresql/pq_statics.hxx:150
-    pq_sdbc_driver::Statics REFERENCES OUString
-connectivity/source/drivers/postgresql/pq_statics.hxx:151
-    pq_sdbc_driver::Statics TRIGGER OUString
-connectivity/source/drivers/postgresql/pq_statics.hxx:152
-    pq_sdbc_driver::Statics EXECUTE OUString
-connectivity/source/drivers/postgresql/pq_statics.hxx:153
-    pq_sdbc_driver::Statics USAGE OUString
-connectivity/source/drivers/postgresql/pq_statics.hxx:154
-    pq_sdbc_driver::Statics CREATE OUString
-connectivity/source/drivers/postgresql/pq_statics.hxx:155
-    pq_sdbc_driver::Statics TEMPORARY OUString
-connectivity/source/drivers/postgresql/pq_statics.hxx:188
-    pq_sdbc_driver::Statics KEY_COLUMN OUString
-connectivity/source/drivers/postgresql/pq_statics.hxx:194
-    pq_sdbc_driver::Statics CURSOR_NAME OUString
-connectivity/source/drivers/postgresql/pq_statics.hxx:195
-    pq_sdbc_driver::Statics ESCAPE_PROCESSING OUString
-connectivity/source/drivers/postgresql/pq_statics.hxx:196
-    pq_sdbc_driver::Statics FETCH_DIRECTION OUString
-connectivity/source/drivers/postgresql/pq_statics.hxx:197
-    pq_sdbc_driver::Statics FETCH_SIZE OUString
-connectivity/source/drivers/postgresql/pq_statics.hxx:198
-    pq_sdbc_driver::Statics IS_BOOKMARKABLE OUString
-connectivity/source/drivers/postgresql/pq_statics.hxx:200
-    pq_sdbc_driver::Statics RESULT_SET_TYPE OUString
-connectivity/source/drivers/postgresql/pq_statics.hxx:212
-    pq_sdbc_driver::Statics HELP_TEXT OUString
 connectivity/source/inc/calc/CConnection.hxx:49
     connectivity::calc::OCalcConnection::CloseVetoButTerminateListener m_pCloseListener std::unique_ptr<utl::CloseVeto>
 connectivity/source/inc/odbc/OConnection.hxx:54

@@ -216,42 +216,6 @@ namespace dbaui
         DECL_LINK(OnSetupModeSelected, weld::Toggleable&, void);
     };
 
-    // OPostgresPageSetup
-    class OPostgresConnectionPageSetup final : public OGenericAdministrationPage
-    {
-    public:
-        OPostgresConnectionPageSetup(weld::Container* pPage, weld::DialogController* pController
-                                        , const SfxItemSet& _rCoreAttrs
-                                        , sal_uInt16 _nPortId );
-    virtual ~OPostgresConnectionPageSetup() override;
-    static std::unique_ptr<OGenericAdministrationPage> CreatePostgresTabPage( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& _rAttrSet );
-    ::dbaccess::ODsnTypeCollection* m_pCollection;
-
-    private:
-        virtual bool FillItemSet( SfxItemSet* _rCoreAttrs ) override;
-        virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) override;
-        virtual void fillControls(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList) override;
-        virtual void fillWindows(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList) override;
-        virtual bool commitPage( ::vcl::WizardTypes::CommitPageReason _eReason ) override;
-
-        TypedWhichId<SfxInt32Item> m_nPortId;
-
-        std::unique_ptr<weld::Entry> m_xETDatabasename;
-        std::unique_ptr<weld::Entry> m_xETHostname;
-        std::unique_ptr<weld::SpinButton> m_xNFPortNumber;
-        std::unique_ptr<OConnectionURLEdit> m_xConnectionURL;
-
-        /** used for the connection URL
-            @param  _rURL
-                The URL to check.
-        */
-        void        impl_setURL( std::u16string_view _rURL, bool _bPrefix );
-        void        setURLNoPrefix( std::u16string_view _rURL );
-        void        setURL( std::u16string_view _rURL );
-        bool        commitURL();
-    };
-
-
     // OAuthentificationPageSetup
     class OAuthentificationPageSetup final : public OGenericAdministrationPage
     {

@@ -62,8 +62,6 @@ connectivity/source/drivers/evoab2/EApi.h:121
     EContactAddress address_format char *
 connectivity/source/drivers/evoab2/EApi.h:125
     EContactAddress ext char *
-connectivity/source/drivers/postgresql/pq_statics.hxx:105
-    pq_sdbc_driver::ImplementationStatics types css::uno::Sequence<css::uno::Type>
 connectivity/source/inc/component/CResultSet.hxx:41
     connectivity::component::OComponentResultSet m_bBookmarkable _Bool
 connectivity/source/inc/dbase/DResultSet.hxx:40

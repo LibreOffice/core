@@ -58,9 +58,8 @@ enum DATASOURCE_TYPE
     DST_EMBEDDED_HSQLDB     = 23,
     DST_MYSQL_NATIVE        = 24,
     DST_MYSQL_NATIVE_DIRECT = 25,
-    DST_POSTGRES            = 26,
-    DST_WRITER              = 27,
-    DST_EMBEDDED_UNKNOWN    = 28,    /// for all embedded addons driver
+    DST_WRITER              = 26,
+    DST_EMBEDDED_UNKNOWN    = 27,    /// for all embedded addons driver
 
 
     DST_USERDEFINE1,    /// first user defined driver
@@ -95,7 +94,6 @@ enum DATASOURCE_TYPE
 #define PAGE_DBSETUPWIZARD_FINAL                     16
 #define PAGE_DBSETUPWIZARD_USERDEFINED               17
 #define PAGE_DBSETUPWIZARD_MYSQL_NATIVE              18
-#define PAGE_DBSETUPWIZARD_POSTGRES                  19
 
 // ODsnTypeCollection
 class UNLESS_MERGELIBS_MORE(OOO_DLLPUBLIC_DBA) ODsnTypeCollection final

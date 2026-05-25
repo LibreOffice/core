@@ -230,18 +230,6 @@ connectivity/inc/sdbcx/VUser.hxx:62
     void connectivity::sdbcx::OUser::OUser(const class rtl::OUString &,_Bool)
     _Bool _bCase
     1
-connectivity/source/drivers/postgresql/pq_connection.cxx:353
-    void pq_sdbc_driver::(anonymous namespace)::cstr_vector::push_back(const char *,enum __sal_NoAcquire)
-    enum __sal_NoAcquire 
-    0
-connectivity/source/drivers/postgresql/pq_resultsetmetadata.hxx:88
-    _Bool pq_sdbc_driver::ResultSetMetaData::getBoolColumnProperty(const class rtl::OUString &,int,_Bool)
-    _Bool def
-    0
-connectivity/source/drivers/postgresql/pq_updateableresultset.hxx:163
-    class com::sun::star::uno::Sequence<class com::sun::star::uno::Type> pq_sdbc_driver::UpdateableResultSet::getStaticTypes(_Bool)
-    _Bool updateable
-    0
 connectivity/source/inc/dbase/DIndex.hxx:108
     _Bool connectivity::dbase::ODbaseIndex::Find(unsigned int,const class connectivity::ORowSetValue &)
     unsigned int nRec

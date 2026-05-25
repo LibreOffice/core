@@ -90,18 +90,6 @@ comphelper/qa/unit/variadictemplates.cxx:63
     void extract(const class com::sun::star::uno::Sequence<class com::sun::star::uno::Any> &,int,optional<type-parameter-?-?> &,const class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> &)
     int nArg
     4
-connectivity/source/drivers/postgresql/pq_connection.cxx:371
-    void properties2arrays(const class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> &,const class com::sun::star::uno::Reference<class com::sun::star::script::XTypeConverter> &,unsigned short,class pq_sdbc_driver::(anonymous namespace)::cstr_vector &,class pq_sdbc_driver::(anonymous namespace)::cstr_vector &)
-    unsigned short enc
-    76
-connectivity/source/drivers/postgresql/pq_statics.cxx:80
-    void pq_sdbc_driver::(anonymous namespace)::PropertyDefEx::PropertyDefEx(const class rtl::OUString &,const class com::sun::star::uno::Type &,int)
-    int a
-    16
-connectivity/source/drivers/postgresql/pq_statics.cxx:100
-    class cppu::IPropertyArrayHelper * createPropertyArrayHelper(const struct pq_sdbc_driver::(anonymous namespace)::PropertyDefEx *,int)
-    int count
-    12
 connectivity/source/inc/java/sql/ConnectionLog.hxx:105
     void connectivity::java::sql::ConnectionLog::log(const int,const class rtl::OUString &,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?) const
     const int _nLogLevel

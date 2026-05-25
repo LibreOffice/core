@@ -17,7 +17,6 @@ import argparse
 
 python_branch = ""
 openssl_branch = ""
-postgres_branch = ""
 mariadb_branch = ""
 rhino_branch = ""
 
@@ -94,10 +93,6 @@ def get_library_list(fileName):
             global python_branch
             python_branch = ''.join(re.findall("\d{1,2}\.\d{1,2}", libraryName)[0])
             print("Python is on branch: " + str(python_branch))
-        elif libraryName.startswith("postgres"):
-            global postgres_branch
-            postgres_branch = ''.join(re.findall("\d{1,2}", libraryName)[0])
-            print("Postgres is on branch: " + str(postgres_branch))
         elif libraryName.startswith("openssl"):
             global openssl_branch
             openssl_branch = ''.join(re.findall("\d{1,2}\.\d{1,2}", libraryName)[0])
@@ -122,9 +117,7 @@ def get_latest_version(libName):
             break
 
     if not bFound:
-        if libName.startswith("postgresql"):
-            libName = "postgresql%20" + str(postgres_branch) + ".x"
-        elif re.match("[0-9a-f]{5,40}", libName.split("-")[0]): # SHA1
+        if re.match("[0-9a-f]{5,40}", libName.split("-")[0]): # SHA1
             libName = libName.split("-")[1]
         else:
             libName = libName.split("-")[0]

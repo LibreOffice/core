@@ -330,8 +330,7 @@ static ItemInfoPackage& getItemInfoPackageAdminDlg()
             { DSID_NAMED_PIPE, new SfxStringItem(DSID_NAMED_PIPE, OUString()), 0, SFX_ITEMINFOFLAG_NONE },
             { DSID_PRIMARY_KEY_SUPPORT, new OptionalBoolItem( DSID_PRIMARY_KEY_SUPPORT ), 0, SFX_ITEMINFOFLAG_NONE },
             { DSID_MAX_ROW_SCAN, new SfxInt32Item(DSID_MAX_ROW_SCAN, 100), 0, SFX_ITEMINFOFLAG_NONE },
-            { DSID_RESPECTRESULTSETTYPE, new SfxBoolItem( DSID_RESPECTRESULTSETTYPE,false ), 0, SFX_ITEMINFOFLAG_NONE },
-            { DSID_POSTGRES_PORTNUMBER, new SfxInt32Item(DSID_POSTGRES_PORTNUMBER, 5432), 0, SFX_ITEMINFOFLAG_NONE }
+            { DSID_RESPECTRESULTSETTYPE, new SfxBoolItem( DSID_RESPECTRESULTSETTYPE,false ), 0, SFX_ITEMINFOFLAG_NONE }
         }};
 
         virtual const ItemInfoStatic& getItemInfoStatic(size_t nIndex) const override { return maItemInfos[nIndex]; }

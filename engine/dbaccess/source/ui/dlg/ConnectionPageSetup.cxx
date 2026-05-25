@@ -93,9 +93,6 @@ namespace dbaui
         //! TODO
         //if (  ::dbaccess::DST_ORACLE_JDBC == m_eType )
         //    m_eType =  ::dbaccess::DST_JDBC;
-        if(m_pCollection->determineType(m_eType) == ::dbaccess::DST_POSTGRES){
-            SetRoadmapStateValue(true);
-        }
 
         OConnectionHelper::implInitControls(_rSet, _bSaveValue);
 
@@ -127,8 +124,6 @@ namespace dbaui
 
     bool OConnectionTabPageSetup::checkTestConnection()
     {
-        if ( m_pCollection->determineType(m_eType) ==  ::dbaccess::DST_POSTGRES )
-            return true;
         return !m_xConnectionURL->get_visible() || !m_xConnectionURL->GetTextNoPrefix().isEmpty();
     }
 

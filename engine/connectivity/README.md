@@ -5,26 +5,6 @@ Contains database pieces, drivers, etc.
 `dbaccess` builds UI on top of this.
 
 ## Testing
-### PostgreSQL
-
-For testing, use:
-
-    podman pull postgres:latest
-    podman run --name=postgres -e POSTGRES_PASSWORD=foobarbaz -p 127.0.0.1:5432:5432 postgres:latest
-
-In Base, Connect to an existing database, select PostgreSQL:
-
-    URL: host=127.0.0.1 port=5432 dbname=postgres
-    User: postgres
-    Password: foobarbaz
-    
-    podman stop postgres
-    podman rm postgres
-
-In order to test SCRAM authentication, create the container like this:
-
-    podman run --name=postgres -e POSTGRES_PASSWORD=foobarbaz -e POSTGRES_INITDB_ARGS=--auth-host=scram-sha-256 -e POSTGRES_HOST_AUTH_METHOD=scram-sha-256 -p 127.0.0.1:5432:5432 postgres:latest
-
 ### MySQL
 
 For mysql_test:

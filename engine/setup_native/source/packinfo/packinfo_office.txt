@@ -1232,21 +1232,6 @@ End
 
 
 Start
-module = "gid_Module_Optional_PostgresqlSdbc"
-solarispackagename = "%BASISPACKAGEPREFIX-postgresql-sdbc"
-solarisrequires = "%BASISPACKAGEPREFIX-base"
-packagename = "%BASISPACKAGEPREFIX-postgresql-sdbc"
-freebsdrequires = "%BASISPACKAGEPREFIX-base"
-requires = "%BASISPACKAGEPREFIX-base %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
-copyright = "2026 Collabora Productivity Ltd."
-solariscopyright = "solariscopyrightfile"
-vendor = "Collabora Productivity Ltd."
-description = "PostgreSQL Connector driver for %PRODUCTNAME %PRODUCTVERSION"
-destpath = "/opt"
-packageversion = "%PACKAGEVERSION"
-End
-
-Start
 module = "gid_Module_Pdfimport"
 solarispackagename = "%BASISPACKAGEPREFIX-extension-pdf-import"
 solarisrequires = "%BASISPACKAGEPREFIX-core (Name="Core module for %PRODUCTNAME %PRODUCTVERSION")"

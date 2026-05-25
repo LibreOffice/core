@@ -365,7 +365,6 @@
 #define STR_PAGETITLE_JDBC                          NC_("STR_PAGETITLE_JDBC", "Set up JDBC connection" )
 #define STR_PAGETITLE_ORACLE                        NC_("STR_PAGETITLE_ORACLE", "Set up Oracle database connection" )
 #define STR_PAGETITLE_MYSQL                         NC_("STR_PAGETITLE_MYSQL", "Set up MySQL/MariaDB connection" )
-#define STR_PAGETITLE_POSTGRES                      NC_("STR_PAGETITLE_POSTGRES", "Set up PostgreSQL connection" )
 #define STR_PAGETITLE_ODBC                          NC_("STR_PAGETITLE_ODBC", "Set up ODBC connection" )
 #define STR_PAGETITLE_DOCUMENT_OR_SPREADSHEET       NC_("STR_PAGETITLE_DOCUMENT_OR_SPREADSHEET", "Set up Writer Document or Spreadsheet connection" )
 #define STR_PAGETITLE_AUTHENTIFICATION              NC_("STR_PAGETITLE_AUTHENTIFICATION", "Set up user authentication" )

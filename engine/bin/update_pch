@@ -59,7 +59,6 @@ DEFAULTS = \
     'connectivity.flat'                 : ( 2, EXCLUDE, INCLUDE, INCLUDE), #   4.6
     'connectivity.mysql'                : ( 4, EXCLUDE, INCLUDE, EXCLUDE), #   3.4
     'connectivity.odbc'                 : ( 2, EXCLUDE, EXCLUDE, INCLUDE), #   5.0
-    'connectivity.postgresql-sdbc-impl' : ( 3, EXCLUDE, EXCLUDE, EXCLUDE), #   6.7
     'cppcanvas.cppcanvas'               : (11, EXCLUDE, INCLUDE, INCLUDE), #   4.8
     'cppuhelper.cppuhelper'             : ( 3, EXCLUDE, EXCLUDE, EXCLUDE), #   4.6
     'cui.cui'                           : ( 8, EXCLUDE, INCLUDE, EXCLUDE), #  19.7

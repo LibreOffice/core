@@ -226,9 +226,6 @@ if test "z$OOO_VENDOR" != "zDebian" ; then
     # add the files from GAC if it was installed
     test -f mono_gac && cat mono_gac >>mono_list.txt
 
-    # postgresql subpackage
-    test -f $DESTDIR/gid_Module_Optional_PostgresqlSdbc && cp $DESTDIR/gid_Module_Optional_PostgresqlSdbc postgresql_list.txt || :
-
     # mailmerge
     if test "$SPLIT_OPT_FEATURES" = "TRUE" ; then
         if test "z$OOO_VENDOR" = "zMandriva" ; then

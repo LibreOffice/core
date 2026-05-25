@@ -324,7 +324,7 @@ OConnection::OConnection(ODatabaseSource& _rDB
             // do the same for MySQL/MariaDB since we're on it
             OUString strDbProductName = xMeta->getDatabaseProductName();
             if (!m_bSupportsViews && xMeta->getURL().startsWith("sdbc:odbc:") &&
-                 (strDbProductName == "PostgreSQL" || strDbProductName == "MySQL")
+                 strDbProductName == "MySQL"
                )
             {
                 m_bSupportsViews = true;

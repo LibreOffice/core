@@ -366,7 +366,6 @@ DATASOURCE_TYPE ODsnTypeCollection::determineType(std::u16string_view _rDsn) con
         KnownPrefix( u"sdbc:mysql:jdbc:"_ustr,    DST_MYSQL_JDBC,         false ),
         KnownPrefix( u"sdbc:mysql:mysqlc:"_ustr,  DST_MYSQL_NATIVE,       false ),
         KnownPrefix( u"sdbc:mysqlc:"_ustr,        DST_MYSQL_NATIVE_DIRECT,false ),
-        KnownPrefix( u"sdbc:postgresql:"_ustr,    DST_POSTGRES           ,false ),
 
         KnownPrefix( u"sdbc:address:mozilla:"_ustr,           DST_MOZILLA,            true ),
         KnownPrefix( u"sdbc:address:thunderbird:"_ustr,       DST_THUNDERBIRD,        true ),
@@ -429,9 +428,6 @@ void ODsnTypeCollection::fillPageIds(std::u16string_view _sURL,std::vector<sal_I
             break;
         case DST_ORACLE_JDBC:
             _rOutPathIds.push_back(PAGE_DBSETUPWIZARD_ORACLE);
-            break;
-        case DST_POSTGRES:
-            _rOutPathIds.push_back(PAGE_DBSETUPWIZARD_POSTGRES);
             break;
         case DST_LDAP:
             _rOutPathIds.push_back(PAGE_DBSETUPWIZARD_LDAP);

@@ -427,13 +427,6 @@
         "dest-filename": "@POPPLER_DATA_TARBALL@"
     },
     {
-        "url": "https://dev-www.libreoffice.org/src/@POSTGRESQL_TARBALL@",
-        "sha256": "@POSTGRESQL_SHA256SUM@",
-        "type": "file",
-        "dest": "external/tarballs",
-        "dest-filename": "@POSTGRESQL_TARBALL@"
-    },
-    {
         "url": "https://dev-www.libreoffice.org/src/@RAPTOR_TARBALL@",
         "sha256": "@RAPTOR_SHA256SUM@",
         "type": "file",
