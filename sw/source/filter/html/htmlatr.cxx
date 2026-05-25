@@ -63,6 +63,7 @@
 #include <paratr.hxx>
 #include <poolfmt.hxx>
 #include <pagedesc.hxx>
+#include <scriptinfo.hxx>
 #include <swtable.hxx>
 #include <fldbas.hxx>
 #include <breakit.hxx>
@@ -1165,10 +1166,9 @@ class HTMLEndPosLst
     void OutEndAttrs(SwHTMLWriter& rWrt, std::vector<HTMLStartEndPos*>& posItems);
 
 public:
-
-    HTMLEndPosLst( SwDoc *pDoc, SwDoc* pTemplate, std::optional<Color> xDfltColor,
-                   bool bOutStyles, sal_uLong nHTMLMode,
-                   const OUString& rText, std::set<UIName>& rStyles );
+    HTMLEndPosLst(SwDoc* pDoc, SwDoc* pTemplate, std::optional<Color> xDfltColor, bool bOutStyles,
+                  sal_uLong nHTMLMode, const OUString& rPrefixText, std::set<UIName>& rStyles,
+                  const SwScriptInfo& rSI);
     ~HTMLEndPosLst();
 
     // insert an attribute
@@ -1599,7 +1599,8 @@ const SwHTMLFormatInfo *HTMLEndPosLst::GetFormatInfo( const SwFormat& rFormat,
 }
 
 HTMLEndPosLst::HTMLEndPosLst(SwDoc* pD, SwDoc* pTempl, std::optional<Color> xDfltCol, bool bStyles,
-                             sal_uLong nMode, const OUString& rText, std::set<UIName>& rStyles)
+                             sal_uLong nMode, const OUString& rPrefixText,
+                             std::set<UIName>& rStyles, const SwScriptInfo& rSI)
     : m_pDoc(pD)
     , m_pTemplate(pTempl)
     , m_xDefaultColor(std::move(xDfltCol))
@@ -1607,14 +1608,20 @@ HTMLEndPosLst::HTMLEndPosLst(SwDoc* pD, SwDoc* pTempl, std::optional<Color> xDfl
     , m_nHTMLMode(nMode)
     , m_bOutStyles(bStyles)
 {
-    sal_Int32 nEndPos = rText.getLength();
+    sal_Int32 nEndPos = rPrefixText.getLength();
     sal_Int32 nPos = 0;
     while( nPos < nEndPos )
     {
-        sal_uInt16 nScript = g_pBreakIt->GetBreakIter()->getScriptType( rText, nPos );
-        nPos = g_pBreakIt->GetBreakIter()->endOfScript( rText, nPos, nScript );
+        sal_uInt16 nScript = g_pBreakIt->GetBreakIter()->getScriptType(rPrefixText, nPos);
+        nPos = g_pBreakIt->GetBreakIter()->endOfScript(rPrefixText, nPos, nScript);
         m_aScriptChgLst.push_back(nPos);
         m_aScriptLst.push_back(nScript);
+    }
+
+    for (size_t nIdx = 0; nIdx < rSI.CountScriptChg(); ++nIdx)
+    {
+        m_aScriptChgLst.push_back(static_cast<sal_Int32>(rSI.GetScriptChg(nIdx)) + nEndPos);
+        m_aScriptLst.push_back(rSI.GetScriptType(nIdx));
     }
 }
 
@@ -2287,7 +2294,7 @@ SwHTMLWriter& OutHTML_SwTextNode( SwHTMLWriter& rWrt, const SwContentNode& rNode
     // find text that originates from an outline numbering
     sal_Int32 nOffset = 0;
     OUString aOutlineText;
-    OUString aFullText;
+    OUString aPrefixText;
 
     // export numbering string as plain text only for the outline numbering,
     // because the outline numbering isn't exported as a numbering - see <SwHTMLNumRuleInfo::Set(..)>
@@ -2296,14 +2303,14 @@ SwHTMLWriter& OutHTML_SwTextNode( SwHTMLWriter& rWrt, const SwContentNode& rNode
     {
         aOutlineText = pNd->GetNumString();
         nOffset = nOffset + aOutlineText.getLength();
-        aFullText = aOutlineText;
+        aPrefixText = aOutlineText;
     }
     OUString aFootEndNoteSym;
     if( rWrt.m_pFormatFootnote )
     {
         aFootEndNoteSym = rWrt.GetFootEndNoteSym( *rWrt.m_pFormatFootnote );
         nOffset = nOffset + aFootEndNoteSym.getLength();
-        aFullText += aFootEndNoteSym;
+        aPrefixText += aFootEndNoteSym;
     }
 
     // Table of Contents or other paragraph with dot leaders?
@@ -2313,11 +2320,11 @@ SwHTMLWriter& OutHTML_SwTextNode( SwHTMLWriter& rWrt, const SwContentNode& rNode
         nEnd = nIndexTab;
 
     // are there any hard attributes that must be written as tags?
-    aFullText += rStr;
-    HTMLEndPosLst aEndPosLst( rWrt.m_pDoc, rWrt.m_xTemplate.get(),
-                              rWrt.m_xDfltColor, rWrt.m_bCfgOutStyles,
-                              rWrt.GetHTMLMode(), aFullText,
-                                 rWrt.m_aScriptTextStyles );
+    SwScriptInfo rSI;
+    rSI.InitScriptInfo(*pNd, /*merged para*/ nullptr);
+    HTMLEndPosLst aEndPosLst(rWrt.m_pDoc, rWrt.m_xTemplate.get(), rWrt.m_xDfltColor,
+                             rWrt.m_bCfgOutStyles, rWrt.GetHTMLMode(), aPrefixText,
+                             rWrt.m_aScriptTextStyles, rSI);
     if( aFormatInfo.moItemSet )
     {
         aEndPosLst.Insert( *aFormatInfo.moItemSet, 0, nEnd + nOffset,
