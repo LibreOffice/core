@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-11 14:06+0200\n"
+"POT-Creation-Date: 2026-05-26 00:18+0200\n"
 "PO-Revision-Date: 2026-05-22 17:11+0000\n"
 "Last-Translator: Gabriel <bloxgabriel18@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 2026.6.dev0\n"
+"X-Generator: Translate Toolkit 3.6.0\n"
 
 #. App name - 50 chars limit
 #: descriptions/google-play.html%2Bhtml.body.h3:5-1
@@ -68,8 +68,8 @@ msgid ""
 "Microsoft Office 2007/2010/2013/2016/2019 (.docx, .pptx, .xlsx, .dotx, ."
 "xltx, .ppsx)"
 msgstr ""
-"Microsoft Office 2007/2010/2013/2016/2019 (.docx, .pptx, .xlsx, .dotx, "
-".xltx, .ppsx)"
+"Microsoft Office 2007/2010/2013/2016/2019 (.docx, .pptx, .xlsx, .dotx, ."
+"xltx, .ppsx)"
 
 #: descriptions/google-play.html%2Bhtml.body.ul.li:28-5
 msgid "Microsoft Office 97/2000/XP/2003 (.doc, .ppt, .xls, .dot, .xlt, .pps)"

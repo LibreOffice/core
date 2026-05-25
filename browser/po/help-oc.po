@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-11 14:06+0200\n"
+"POT-Creation-Date: 2026-05-26 00:18+0200\n"
 "PO-Revision-Date: 2022-01-15 13:53+0000\n"
 "Last-Translator: Quentin PAGÈS <quentinantonin@free.fr>\n"
 "Language-Team: Occitan <https://hosted.weblate.org/projects/collabora-online/"
@@ -22,38 +22,17 @@ msgstr "Acorchis de clavièr"
 msgid "General Keyboard Shortcuts"
 msgstr "Acorchis de clavièr generals"
 
-#: html/cool-help.html%2Bdiv.div.table.tr.td:13-38
+#: html/cool-help.html%2Bdiv.div.table.tr.td:13-59
 msgid "Undo"
 msgstr "Anullar"
 
-#: html/cool-help.html%2Bdiv.div.table.tr.td:13-69
-#, fuzzy
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Z</kbd>"
-msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Z"
-
-#: html/cool-help.html%2Bdiv.div.table.tr.td:14-38
+#: html/cool-help.html%2Bdiv.div.table.tr.td:14-59
 msgid "Redo"
 msgstr "Restablir"
 
-#: html/cool-help.html%2Bdiv.div.table.tr.td:14-69
-#, fuzzy
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Y</kbd>"
-msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Y"
-
-#: html/cool-help.html%2Bdiv.div.table.tr.td:15-38
+#: html/cool-help.html%2Bdiv.div.table.tr.td:15-58
 msgid "Cut"
 msgstr "Talhar"
-
-#: html/cool-help.html%2Bdiv.div.table.tr.td:15-68
-#, fuzzy
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>X</kbd>"
-msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>X"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:16-38
 msgid "Copy"
@@ -95,30 +74,13 @@ msgid ""
 ">+</span><kbd>V</kbd>"
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.table.tr.td:19-38
+#: html/cool-help.html%2Bdiv.div.table.tr.td:19-60
 msgid "Print (Download as PDF)"
 msgstr "Imprimir (telecargar en PDF)"
 
-#: html/cool-help.html%2Bdiv.div.table.tr.td:19-88
-#, fuzzy
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>P</kbd>"
-msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>P"
-
-#: html/cool-help.html%2Bdiv.div.table.tr.td:20-38
+#: html/cool-help.html%2Bdiv.div.table.tr.td:20-72
 msgid "Display the Keyboard shortcuts help"
 msgstr "Aficha l'ajuda suls acorchis de clavièr"
-
-#: html/cool-help.html%2Bdiv.div.table.tr.td:20-100
-#, fuzzy
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>?</kbd>"
-msgstr ""
-"Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Maj</kbd><span class=\"kbd--"
-"plus\">+</span><kbd>Sageta cap amont"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:21-38
 msgid "Focus to notebookbar menu"
@@ -159,137 +121,54 @@ msgstr "Alt</kbd><span class=\"kbd--plus\">+</span><kbd>Supr"
 msgid "Text formatting"
 msgstr "Formatatge de tèxte"
 
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:30-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:165-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:198-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:263-38
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:30-59
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:165-59
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:198-59
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:263-59
 msgid "Bold"
 msgstr "Gras"
 
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:30-69
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:165-69
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:198-69
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:263-69
-#, fuzzy
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>B</kbd>"
-msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>B"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:31-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:166-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:199-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:264-38
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:31-61
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:166-61
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:199-61
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:264-61
 msgid "Italic"
 msgstr "Italica"
 
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:31-71
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:166-71
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:199-71
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:264-71
-#, fuzzy
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>I</kbd>"
-msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>I"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:32-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:167-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:200-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:265-38
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:32-64
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:167-64
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:200-64
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:265-64
 msgid "Underline"
 msgstr "Solinhat"
 
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:32-74
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:167-74
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:200-74
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:265-74
-#, fuzzy
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>U</kbd>"
-msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>U"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:33-38
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:33-70
 msgid "Double Underline"
 msgstr "Solinhament doble"
 
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:33-81
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:172-74
-#, fuzzy
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>D</kbd>"
-msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>D"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:34-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:168-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:201-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:266-38
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:34-64
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:168-64
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:201-64
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:266-64
 msgid "Strikethrough"
 msgstr "Raiat"
 
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:34-78
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:168-78
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:201-78
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:266-78
-#, fuzzy
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>5</kbd>"
-msgstr ""
-"Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Maj</kbd><span class=\"kbd--"
-"plus\">+</span><kbd>Sageta cap amont"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:35-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:202-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:267-38
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:35-66
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:202-66
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:267-66
 msgid "Superscript"
 msgstr "Exponent"
 
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:35-76
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:202-76
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:267-76
-#, fuzzy
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>P</kbd>"
-msgstr ""
-"Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Maj</kbd><span class=\"kbd--"
-"plus\">+</span><kbd>Sageta cap amont"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:36-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:203-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:268-38
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:36-64
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:203-64
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:268-64
 msgid "Subscript"
 msgstr "Indici"
 
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:36-74
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:203-74
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:268-74
-#, fuzzy
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>B</kbd>"
-msgstr ""
-"Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Maj</kbd><span class=\"kbd--"
-"plus\">+</span><kbd>Retorn arrièr"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:37-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:169-38
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:37-70
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:169-70
 msgid "Remove direct formatting"
 msgstr "Suprimir lo formatatge dirècte"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:37-89
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:169-89
-#, fuzzy
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>M</kbd>"
-msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>M"
 
 #: html/cool-help.html%2Bdiv.div.div.h2:41-9
 #: html/cool-help.html%2Bdiv.div.div.h2:208-9
@@ -297,73 +176,33 @@ msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>M"
 msgid "Paragraph formatting"
 msgstr "Formatatge de paragraf"
 
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:43-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:174-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:210-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:275-38
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:43-76
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:174-76
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:210-76
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:275-76
 msgid "Align Center"
 msgstr "Centrar"
 
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:43-77
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:174-77
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:210-77
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:275-77
-#, fuzzy
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>E</kbd>"
-msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Fin"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:44-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:175-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:211-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:276-38
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:44-64
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:175-64
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:211-64
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:276-64
 msgid "Align Left"
 msgstr "Alinhar a esquèrra"
 
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:44-75
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:175-75
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:211-75
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:276-75
-#, fuzzy
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>L</kbd>"
-msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>L"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:45-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:176-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:212-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:277-38
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:45-65
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:176-65
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:212-65
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:277-65
 msgid "Align Right"
 msgstr "Alinhar a dreita"
 
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:45-76
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:176-76
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:212-76
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:277-76
-#, fuzzy
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>R</kbd>"
-msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>R"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:46-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:177-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:213-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:278-38
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:46-65
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:177-65
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:213-65
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:278-65
 msgid "Justify"
 msgstr "Justificar"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:46-72
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:177-72
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:213-72
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:278-72
-#, fuzzy
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>J</kbd>"
-msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>J"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:47-38
 msgid "Apply Default paragraph style"
@@ -436,29 +275,14 @@ msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>5"
 msgid "Text selection and navigation in document"
 msgstr "Seleccion de tèxte e navigacion dins lo document"
 
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:58-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:173-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:204-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:221-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:269-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:286-38
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:58-64
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:173-64
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:204-64
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:221-64
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:269-64
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:286-64
 msgid "Select All"
 msgstr "Seleccionar tot"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:58-75
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:98-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:173-75
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:204-75
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:221-75
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:255-84
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:269-75
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:286-75
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:320-91
-#, fuzzy
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>A</kbd>"
-msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>A"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:59-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:222-38
@@ -938,6 +762,15 @@ msgstr ""
 msgid "Shortcut Keys for Tables"
 msgstr "Acorchis de clavièr pels tablèus"
 
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:98-38
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:255-84
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:320-91
+#, fuzzy
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
+">+</span><kbd>A</kbd>"
+msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>A"
+
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:98-144
 msgid ""
 "If the active cell is empty: selects the whole table. Otherwise: selects the "
@@ -1085,88 +918,30 @@ msgstr ""
 msgid "Word processor functions"
 msgstr "Foncions de tractament de tèxte"
 
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:117-38
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:117-69
 msgid "Insert footnote"
 msgstr "Inserir una nòta de pè de pagina"
 
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:117-80
-#, fuzzy
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>F</kbd>"
-msgstr ""
-"Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Maj</kbd><span class=\"kbd--"
-"plus\">+</span><kbd>Sageta cap amont"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:118-38
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:118-68
 msgid "Insert endnote"
 msgstr "Inserir una nòta de fin de document"
 
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:118-79
-#, fuzzy
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>D</kbd>"
-msgstr ""
-"Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Maj</kbd><span class=\"kbd--"
-"plus\">+</span><kbd>Sageta cap amont"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:119-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:170-38
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:119-71
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:170-71
 msgid "Insert comment"
 msgstr "Inserir un comentari"
 
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:119-79
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:170-79
-#, fuzzy
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>C</kbd>"
-msgstr ""
-"Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Maj</kbd><span class=\"kbd--"
-"plus\">+</span><kbd>Sageta cap amont"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:121-38
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:121-71
 msgid "Insert soft hyphen"
 msgstr "Inserir un jonhent"
 
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:121-83
-#, fuzzy
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>-</kbd>"
-msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>-"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:122-38
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:122-71
 msgid "Insert non-breaking hyphen"
 msgstr "Inserir un jonhent insecable"
 
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:122-91
-#, fuzzy
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>-</kbd>"
-msgstr ""
-"Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Maj</kbd><span class=\"kbd--"
-"plus\">+</span><kbd>Sageta cap amont"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:124-38
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:124-77
 msgid "Insert non-breaking space"
 msgstr "Apondre un espaci insecable"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:124-90
-#, fuzzy
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Space</kbd>"
-msgstr ""
-"Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Maj</kbd><span class=\"kbd--"
-"plus\">+</span><kbd>Retorn arrièr"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:125-38
 msgid "Insert line break"
@@ -1179,32 +954,13 @@ msgid ""
 ">+</span><kbd>Enter</kbd>"
 msgstr "Maj</kbd><span class=\"kbd--plus\">+</span><kbd>Entrada"
 
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:126-38
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:126-70
 msgid "Manual page break"
 msgstr "Saut de pagina manual"
 
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:126-82
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:254-98
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:319-105
-#, fuzzy
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Enter</kbd>"
-msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Entrada"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:127-38
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:127-72
 msgid "Column break (in multicolumnar text)"
 msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:127-101
-#, fuzzy
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Enter</kbd>"
-msgstr ""
-"Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Maj</kbd><span class=\"kbd--"
-"plus\">+</span><kbd>Sageta cap amont"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:128-38
 msgid ""
@@ -1507,93 +1263,40 @@ msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>F1"
 msgid "Fill Down"
 msgstr "Emplenar cap aval"
 
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:172-74
+#, fuzzy
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
+">+</span><kbd>D</kbd>"
+msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>D"
+
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:178-38
 msgid "Set Optimal Column Width"
 msgstr "Definir una largor de colomna optimala"
 
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:179-38
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:179-74
 msgid "Two decimal places, thousands separator"
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:179-104
-#, fuzzy
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>1</kbd>"
-msgstr ""
-"Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Maj</kbd><span class=\"kbd--"
-"plus\">+</span><kbd>Sageta cap amont"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:180-38
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:180-77
 msgid "Standard exponential format"
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:180-92
-#, fuzzy
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>2</kbd>"
-msgstr ""
-"Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Maj</kbd><span class=\"kbd--"
-"plus\">+</span><kbd>Sageta cap amont"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:181-38
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:181-71
 msgid "Standard date format"
 msgstr "Format de data estandard"
 
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:181-85
-#, fuzzy
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>3</kbd>"
-msgstr ""
-"Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Maj</kbd><span class=\"kbd--"
-"plus\">+</span><kbd>Sageta cap amont"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:182-38
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:182-75
 msgid "Standard currency format"
 msgstr "Format monetari estandar"
 
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:182-89
-#, fuzzy
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>4</kbd>"
-msgstr ""
-"Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Maj</kbd><span class=\"kbd--"
-"plus\">+</span><kbd>Sageta cap amont"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:183-38
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:183-74
 msgid "Standard percentage format (two decimal places)"
 msgstr "Format de percentatge estandard (de 2 decimalas)"
 
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:183-112
-#, fuzzy
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>5</kbd>"
-msgstr ""
-"Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Maj</kbd><span class=\"kbd--"
-"plus\">+</span><kbd>Sageta cap amont"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:184-38
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:184-75
 msgid "Standard format"
 msgstr "Format estandard"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:184-80
-#, fuzzy
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>6</kbd>"
-msgstr ""
-"Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Maj</kbd><span class=\"kbd--"
-"plus\">+</span><kbd>Sageta cap amont"
 
 #: html/cool-help.html%2Bdiv.div.div.h2:188-9
 msgid "Insert"
@@ -1681,6 +1384,14 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:254-38
 msgid "Move to next text object on slide"
 msgstr ""
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:254-98
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:319-105
+#, fuzzy
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
+">+</span><kbd>Enter</kbd>"
+msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Entrada"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:255-38
 msgid "Select all in slide"
@@ -3183,6 +2894,228 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:819-7
 msgid "Set the properties of the element of the object."
 msgstr ""
+
+#, fuzzy
+#~ msgid ""
+#~ "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
+#~ ">+</span><kbd>Z</kbd>"
+#~ msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Z"
+
+#, fuzzy
+#~ msgid ""
+#~ "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
+#~ ">+</span><kbd>Y</kbd>"
+#~ msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Y"
+
+#, fuzzy
+#~ msgid ""
+#~ "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
+#~ ">+</span><kbd>X</kbd>"
+#~ msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>X"
+
+#, fuzzy
+#~ msgid ""
+#~ "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
+#~ ">+</span><kbd>P</kbd>"
+#~ msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>P"
+
+#, fuzzy
+#~ msgid ""
+#~ "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
+#~ ">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
+#~ ">+</span><kbd>?</kbd>"
+#~ msgstr ""
+#~ "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Maj</kbd><span class=\"kbd--"
+#~ "plus\">+</span><kbd>Sageta cap amont"
+
+#, fuzzy
+#~ msgid ""
+#~ "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
+#~ ">+</span><kbd>B</kbd>"
+#~ msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>B"
+
+#, fuzzy
+#~ msgid ""
+#~ "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
+#~ ">+</span><kbd>I</kbd>"
+#~ msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>I"
+
+#, fuzzy
+#~ msgid ""
+#~ "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
+#~ ">+</span><kbd>U</kbd>"
+#~ msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>U"
+
+#, fuzzy
+#~ msgid ""
+#~ "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
+#~ ">+</span><kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
+#~ ">+</span><kbd>5</kbd>"
+#~ msgstr ""
+#~ "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Maj</kbd><span class=\"kbd--"
+#~ "plus\">+</span><kbd>Sageta cap amont"
+
+#, fuzzy
+#~ msgid ""
+#~ "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
+#~ ">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
+#~ ">+</span><kbd>P</kbd>"
+#~ msgstr ""
+#~ "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Maj</kbd><span class=\"kbd--"
+#~ "plus\">+</span><kbd>Sageta cap amont"
+
+#, fuzzy
+#~ msgid ""
+#~ "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
+#~ ">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
+#~ ">+</span><kbd>B</kbd>"
+#~ msgstr ""
+#~ "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Maj</kbd><span class=\"kbd--"
+#~ "plus\">+</span><kbd>Retorn arrièr"
+
+#, fuzzy
+#~ msgid ""
+#~ "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
+#~ ">+</span><kbd>M</kbd>"
+#~ msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>M"
+
+#, fuzzy
+#~ msgid ""
+#~ "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
+#~ ">+</span><kbd>E</kbd>"
+#~ msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Fin"
+
+#, fuzzy
+#~ msgid ""
+#~ "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
+#~ ">+</span><kbd>L</kbd>"
+#~ msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>L"
+
+#, fuzzy
+#~ msgid ""
+#~ "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
+#~ ">+</span><kbd>R</kbd>"
+#~ msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>R"
+
+#, fuzzy
+#~ msgid ""
+#~ "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
+#~ ">+</span><kbd>J</kbd>"
+#~ msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>J"
+
+#, fuzzy
+#~ msgid ""
+#~ "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
+#~ ">+</span><kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
+#~ ">+</span><kbd>F</kbd>"
+#~ msgstr ""
+#~ "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Maj</kbd><span class=\"kbd--"
+#~ "plus\">+</span><kbd>Sageta cap amont"
+
+#, fuzzy
+#~ msgid ""
+#~ "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
+#~ ">+</span><kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
+#~ ">+</span><kbd>D</kbd>"
+#~ msgstr ""
+#~ "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Maj</kbd><span class=\"kbd--"
+#~ "plus\">+</span><kbd>Sageta cap amont"
+
+#, fuzzy
+#~ msgid ""
+#~ "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
+#~ ">+</span><kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
+#~ ">+</span><kbd>C</kbd>"
+#~ msgstr ""
+#~ "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Maj</kbd><span class=\"kbd--"
+#~ "plus\">+</span><kbd>Sageta cap amont"
+
+#, fuzzy
+#~ msgid ""
+#~ "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
+#~ ">+</span><kbd>-</kbd>"
+#~ msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>-"
+
+#, fuzzy
+#~ msgid ""
+#~ "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
+#~ ">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
+#~ ">+</span><kbd>-</kbd>"
+#~ msgstr ""
+#~ "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Maj</kbd><span class=\"kbd--"
+#~ "plus\">+</span><kbd>Sageta cap amont"
+
+#, fuzzy
+#~ msgid ""
+#~ "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
+#~ ">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
+#~ ">+</span><kbd>Space</kbd>"
+#~ msgstr ""
+#~ "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Maj</kbd><span class=\"kbd--"
+#~ "plus\">+</span><kbd>Retorn arrièr"
+
+#, fuzzy
+#~ msgid ""
+#~ "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
+#~ ">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
+#~ ">+</span><kbd>Enter</kbd>"
+#~ msgstr ""
+#~ "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Maj</kbd><span class=\"kbd--"
+#~ "plus\">+</span><kbd>Sageta cap amont"
+
+#, fuzzy
+#~ msgid ""
+#~ "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
+#~ ">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
+#~ ">+</span><kbd>1</kbd>"
+#~ msgstr ""
+#~ "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Maj</kbd><span class=\"kbd--"
+#~ "plus\">+</span><kbd>Sageta cap amont"
+
+#, fuzzy
+#~ msgid ""
+#~ "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
+#~ ">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
+#~ ">+</span><kbd>2</kbd>"
+#~ msgstr ""
+#~ "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Maj</kbd><span class=\"kbd--"
+#~ "plus\">+</span><kbd>Sageta cap amont"
+
+#, fuzzy
+#~ msgid ""
+#~ "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
+#~ ">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
+#~ ">+</span><kbd>3</kbd>"
+#~ msgstr ""
+#~ "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Maj</kbd><span class=\"kbd--"
+#~ "plus\">+</span><kbd>Sageta cap amont"
+
+#, fuzzy
+#~ msgid ""
+#~ "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
+#~ ">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
+#~ ">+</span><kbd>4</kbd>"
+#~ msgstr ""
+#~ "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Maj</kbd><span class=\"kbd--"
+#~ "plus\">+</span><kbd>Sageta cap amont"
+
+#, fuzzy
+#~ msgid ""
+#~ "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
+#~ ">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
+#~ ">+</span><kbd>5</kbd>"
+#~ msgstr ""
+#~ "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Maj</kbd><span class=\"kbd--"
+#~ "plus\">+</span><kbd>Sageta cap amont"
+
+#, fuzzy
+#~ msgid ""
+#~ "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
+#~ ">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
+#~ ">+</span><kbd>6</kbd>"
+#~ msgstr ""
+#~ "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Maj</kbd><span class=\"kbd--"
+#~ "plus\">+</span><kbd>Sageta cap amont"
 
 #, fuzzy
 #~ msgid "inactive document"
