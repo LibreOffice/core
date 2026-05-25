@@ -69,6 +69,9 @@ public:
     // Access the browser (for message handler)
     CefRefPtr<CefBrowser> getBrowser() const { return m_browser; }
 
+    // Access the LO frame HWND (for keyboard handler key forwarding)
+    HWND getFrameHwnd() const { return m_hFrameWnd; }
+
     // Called by CefLifeSpanHandler when browser is created
     void onBrowserCreated(CefRefPtr<CefBrowser> browser);
 

@@ -58,6 +58,7 @@
 #include <sfx2/docfac.hxx>
 
 #include <include/cef_app.h>
+#include <include/cef_keyboard_handler.h>
 
 #include <functional>
 #include <cstdlib>
@@ -334,7 +335,8 @@ LRESULT CALLBACK WebViewPanel::FrameSubclassProc(
 // ============================================================
 class WebViewCefClient final : public CefClient,
                                 public CefLifeSpanHandler,
-                                public CefRequestHandler
+                                public CefRequestHandler,
+                                public CefKeyboardHandler
 {
 public:
     WebViewCefClient(WebViewPanel* pPanel,
@@ -353,6 +355,55 @@ public:
     // CefClient
     CefRefPtr<CefLifeSpanHandler> GetLifeSpanHandler() override { return this; }
     CefRefPtr<CefRequestHandler> GetRequestHandler() override { return this; }
+    CefRefPtr<CefKeyboardHandler> GetKeyboardHandler() override { return this; }
+
+    // CefKeyboardHandler — intercept LO-bound hotkeys before CEF handles them.
+    // When the AI sidebar has keyboard focus (user clicked into the chat input),
+    // keys like F5 would otherwise be consumed by CEF as browser shortcuts
+    // (F5 = page reload) instead of being dispatched to LibreOffice.
+    // We intercept the specific hotkeys that have LO accelerator bindings and
+    // re-post them to the LO frame HWND so the LO accelerator table fires.
+    bool OnPreKeyEvent(CefRefPtr<CefBrowser> /*browser*/,
+                       const CefKeyEvent& event,
+                       CefEventHandle /*os_event*/,
+                       bool* /*is_keyboard_shortcut*/) override
+    {
+        // Only act on physical key-down events (not char events or key-up).
+        if (event.type != KEYEVENT_RAWKEYDOWN && event.type != KEYEVENT_KEYDOWN)
+            return false;
+
+        const int vk = event.windows_key_code;
+
+        // F5  → .uno:Presentation (start slideshow from first slide)
+        // F5+Shift → .uno:PresentationCurrentSlide (start from current slide)
+        // Escape → stop running slideshow / close fullscreen presentation
+        if (vk != VK_F5 && vk != VK_ESCAPE)
+            return false;
+
+        WebViewPanel* pPanel = m_pPanel.load(std::memory_order_acquire);
+        if (!pPanel)
+            return false;
+
+        HWND hFrame = pPanel->getFrameHwnd();
+        if (!hFrame || !IsWindow(hFrame))
+            return false;
+
+        // Build WPARAM/LPARAM for WM_KEYDOWN as Windows would.
+        // Bit 29 (context code) = 0 for WM_KEYDOWN.  Other extended-key and
+        // repeat fields are left at 0 — the accelerator dispatcher only looks
+        // at the VK code.
+        WPARAM wp = static_cast<WPARAM>(vk);
+        LPARAM lp = 0;
+        if (event.modifiers & EVENTFLAG_SHIFT_DOWN)
+            lp |= (MapVirtualKey(VK_SHIFT, MAPVK_VK_TO_VSC) << 16);
+
+        // Bring the LO frame to foreground so its message loop receives input,
+        // then post the key message.  PostMessage is non-blocking and safe to
+        // call from the CEF UI thread.
+        SetForegroundWindow(hFrame);
+        PostMessage(hFrame, WM_KEYDOWN, wp, lp);
+        return true;  // prevent CEF from processing this key
+    }
 
     // CefLifeSpanHandler
     void OnAfterCreated(CefRefPtr<CefBrowser> browser) override
