@@ -1499,19 +1499,19 @@ void ChartExport::WriteChartObj( const Reference< XShape >& xShape, sal_Int32 nI
     if (!aCSS->maEntryList.empty()) {
         // use the stored data in the document model
 
-        static const std::map<model::ColorStyleMethod, std::string> aMethMap {
+        static constexpr auto aMethMap =  frozen::make_unordered_map<model::ColorStyleMethod, const char*> ({
                 { model::ColorStyleMethod::CYCLE, "cycle" },
                 { model::ColorStyleMethod::WITHIN_LINEAR, "withinLinear" },
                 { model::ColorStyleMethod::ACROSS_LINEAR, "acrossLinear" },
                 { model::ColorStyleMethod::WITHIN_LINEAR_REVERSED, "withinLinearReversed" },
                 { model::ColorStyleMethod::ACROSS_LINEAR_REVERSED, "acrossLinearReversed" }
-        };
+        });
 
         for (const model::ColorStyleEntry& rCStyleEntry : aCSS->maEntryList) {
             pFS->startElement(FSNS(XML_cs, XML_colorStyle),
                     FSNS( XML_xmlns, XML_cs ), pFB->getNamespaceURL(OOX_NS(cs)),
                     FSNS( XML_xmlns, XML_a ), pFB->getNamespaceURL(OOX_NS(dml)),
-                    XML_meth, aMethMap.at(rCStyleEntry.meMethod).c_str(),
+                    XML_meth, aMethMap.at(rCStyleEntry.meMethod),
                     XML_id, OUString::number(rCStyleEntry.mnId));
 
             ThemeExport aTE(mpFB, GetDocumentType(), pFS);
