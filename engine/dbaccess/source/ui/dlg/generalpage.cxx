@@ -357,6 +357,8 @@ namespace dbaui
     {
         // get the type from the entry data
         const sal_Int32 nSelected = _rBox.get_active();
+        if (nSelected == -1)
+            return;
         if (o3tl::make_unsigned(nSelected) >= m_aEmbeddedURLPrefixes.size() )
         {
             SAL_WARN("dbaccess.ui.generalpage", "Got out-of-range value '" << nSelected <<  "' from the DatasourceType selection ListBox's GetSelectedEntryPos(): no corresponding URL prefix");
