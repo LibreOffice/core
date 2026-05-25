@@ -1229,14 +1229,16 @@ IMPL_LINK_NOARG( ScDataBarFrmtEntry, OptionBtnHdl, weld::Button&, void )
                        *mxEdDataBarMin, mrDoc, maPos);
     SetColorScaleEntry(mpDataBarData->mpUpperLimit.get(), *mxLbDataBarMaxType,
                        *mxEdDataBarMax, mrDoc, maPos);
-    ScDataBarSettingsDlg aDlg(mpParent->GetFrameWeld(), *mpDataBarData, mrDoc, maPos);
-    if (aDlg.run() == RET_OK)
-    {
-        mpDataBarData.reset(aDlg.GetData());
+    auto pDlg = std::make_shared<ScDataBarSettingsDlg>(mpParent->GetFrameWeld(),
+                                                       *mpDataBarData, mrDoc, maPos);
+    weld::DialogController::runAsync(pDlg, [this, pDlg](sal_Int32 nResult) {
+        if (nResult != RET_OK)
+            return;
+        mpDataBarData.reset(pDlg->GetData());
         SetDataBarEntryTypes(*mpDataBarData->mpLowerLimit, *mxLbDataBarMinType, *mxEdDataBarMin, mrDoc);
         SetDataBarEntryTypes(*mpDataBarData->mpUpperLimit, *mxLbDataBarMaxType, *mxEdDataBarMax, mrDoc);
         DataBarTypeSelectHdl(*mxLbDataBarMinType);
-    }
+    });
 }
 
 ScDateFrmtEntry::ScDateFrmtEntry(ScCondFormatList* pParent, ScDocument& rDoc, const ScCondDateFormatEntry* pFormat)
