@@ -18,11 +18,9 @@ import WebKit
  * "active" handle is the one that `POST /session/{id}/execute/sync`
  * runs against; tests change it via `POST /session/{id}/window`.
  *
- * The first registered webview automatically becomes active.  When the
- * active webview is unregistered (e.g. the backstage closes after a
- * document opens), the most recently registered remaining webview
- * becomes active automatically.  This matches the Qt test pattern:
- * `getWindowHandles()` -> `switchToWindow(newHandle)`.
+ * Driving the native UI happens in a separate "coda-driver" helper
+ * process that holds the Accessibility permission grant - there is
+ * deliberately no AXUIElement use in the main app.
  */
 final class WebDriverManager {
     static let shared = WebDriverManager()
@@ -42,37 +40,40 @@ final class WebDriverManager {
     private init() {}
 
     /**
-     * Start the embedded WebDriver servers if requested via launch arguments:
-     *   --testDriverPort=<port>  starts the WebDriverServer (webEngine driver)
-     *   --nativeUIPort=<port>    starts the NativeUIServer (native driver)
-     * Idempotent.
+     * Start the embedded WebDriver server if requested via
+     * `--testDriverPort=<port>`.  Idempotent.
      */
     func startIfRequested() {
+        guard server == nil else { return }
         let args = ProcessInfo.processInfo.arguments
-
-        if server == nil,
-           let port = readPort(from: args, prefix: "--testDriverPort=") {
-            do {
-                let s = try WebDriverServer(port: port,
-                    jsExecutor: { [weak self] js, completion in
-                        self?.execute(js: js, completion: completion)
-                    },
-                    focusHandler: { [weak self] done in
-                        self?.focusActiveWebView(done: done)
-                    },
-                    handlesProvider: { [weak self] in
-                        self?.liveHandles() ?? []
-                    },
-                    switchHandler: { [weak self] handle in
-                        self?.switchTo(handle: handle) ?? false
-                    }
-                )
-                s.start()
-                server = s
-            } catch {
-                NSLog("WebDriverManager: failed to start WebDriverServer: %@", error.localizedDescription)
-            }
+        guard let port = readPort(from: args, prefix: "--testDriverPort=") else { return }
+        do {
+            let s = try WebDriverServer(port: port,
+                jsExecutor: { [weak self] js, completion in
+                    self?.execute(js: js, completion: completion)
+                },
+                focusHandler: { [weak self] done in
+                    self?.focusActiveWebView(done: done)
+                },
+                handlesProvider: { [weak self] in
+                    self?.liveHandles() ?? []
+                },
+                switchHandler: { [weak self] handle in
+                    self?.switchTo(handle: handle) ?? false
+                }
+            )
+            s.start()
+            server = s
+        } catch {
+            NSLog("WebDriverManager: failed to start WebDriverServer: %@", error.localizedDescription)
         }
+    }
+
+    private func readPort(from args: [String], prefix: String) -> UInt16? {
+        args.lazy
+            .compactMap { $0.hasPrefix(prefix) ? String($0.dropFirst(prefix.count)) : nil }
+            .first
+            .flatMap { UInt16($0) }
     }
 
     /**
@@ -84,13 +85,9 @@ final class WebDriverManager {
     func register(webView: WKWebView) -> String {
         let handle = UUID().uuidString
         entries.append((handle: handle, webView: Weak(value: webView)))
-        if activeHandle == nil {
-            activeHandle = handle
-        } else {
-            // A new webview replaces the active one (the typical
-            // pattern is backstage -> document).
-            activeHandle = handle
-        }
+        // A new webview replaces the active one (the typical pattern
+        // is backstage -> document).
+        activeHandle = handle
         return handle
     }
 
