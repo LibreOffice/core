@@ -164,28 +164,28 @@
     <message>
         <location filename="../WebView.cpp" line="156"/>
         <source>Presentation</source>
-        <translation type="unfinished"></translation>
+        <translation>Презентація</translation>
     </message>
     <message>
         <location filename="../WebView.cpp" line="161"/>
         <location filename="../WebView.cpp" line="177"/>
         <source>Text Document</source>
-        <translation type="unfinished"></translation>
+        <translation>Текстовий Документ</translation>
     </message>
     <message>
         <location filename="../WebView.cpp" line="166"/>
         <source>Spreadsheet</source>
-        <translation type="unfinished"></translation>
+        <translation>Електронна Таблиця</translation>
     </message>
     <message>
         <location filename="../WebView.cpp" line="171"/>
         <source>Drawing</source>
-        <translation type="unfinished"></translation>
+        <translation>Малюнок</translation>
     </message>
     <message>
         <location filename="../WebView.cpp" line="317"/>
         <source>Presenting</source>
-        <translation>Презентація</translation>
+        <translation type="unfinished">Презентація</translation>
     </message>
 </context>
 <context>
