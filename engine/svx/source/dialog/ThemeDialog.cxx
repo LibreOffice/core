@@ -60,9 +60,18 @@ void ThemeDialog::runThemeColorEditDialog()
             ColorSets::get().insert(aColorSet);
             initColorSets(mpTheme);
 
-            mxIconViewThemeColors->select(maColorSets.size() - 1);
-            mpCurrentColorSet
-                = std::make_shared<model::ColorSet>(maColorSets[maColorSets.size() - 1]);
+            // The new theme was appended to maColorSets, so it is the last
+            // entry the icon view received. initColorSets() may skip hidden
+            // entries (e.g. the legacy "LibreOffice" theme), so the icon
+            // view can have fewer rows than maColorSets — address the row
+            // via n_children() rather than the model size.
+            const int nLastVisiblePos = mxIconViewThemeColors->n_children() - 1;
+            if (nLastVisiblePos >= 0)
+            {
+                mxIconViewThemeColors->select(nLastVisiblePos);
+                mpCurrentColorSet
+                    = std::make_shared<model::ColorSet>(maColorSets[maColorSets.size() - 1]);
+            }
         }
         mxAdd->set_sensitive(true);
         mxSubDialog = nullptr;
