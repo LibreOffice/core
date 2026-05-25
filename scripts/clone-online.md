@@ -46,8 +46,8 @@ first. Open a terminal in the folder where you want the code to live
 and run:
 
 ```sh
-curl -fsSL "https://gerrit.collaboraoffice.com/plugins/gitiles/online/+/refs/heads/main/scripts/clone-online.sh?format=TEXT" \
-    | base64 -d > clone-online.sh
+curl -fsSL "https://github.com/CollaboraOnline/online.mirror/raw/main/scripts/clone-online.sh" \
+    -o clone-online.sh
 chmod +x clone-online.sh
 ./clone-online.sh
 ```

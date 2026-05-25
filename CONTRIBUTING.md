@@ -50,8 +50,8 @@ For a guided setup that handles SSH key generation, Gerrit
 registration, cloning, and the engine + online build, run:
 
 ```sh
-curl -fsSL "https://gerrit.collaboraoffice.com/plugins/gitiles/online/+/refs/heads/main/scripts/clone-online.sh?format=TEXT" \
-    | base64 -d > clone-online.sh
+curl -fsSL "https://github.com/CollaboraOnline/online.mirror/raw/main/scripts/clone-online.sh" \
+    -o clone-online.sh
 chmod +x clone-online.sh
 ./clone-online.sh
 ```
