@@ -235,9 +235,9 @@ struct WrapperData
 
 struct ModuleData
 {
-    ModuleData(JSContext* ctx, const OUString& name)
+    ModuleData(JSContext* ctx, const OUString& rName)
         : memberCache(ctx)
-        , name(name)
+        , name(rName)
     {
     }
 
