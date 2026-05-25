@@ -818,7 +818,7 @@ function showWelcomeSVG() {
 
 	global.prefs = {
 		_localStorageCache: {}, // TODO: change this to new Map() when JS version allows
-		_userBrowserSetting: new Map(),
+		_userBrowserSetting: {},
 		_settingUpdateJSON: {},
 		_pendingSettingUpdate: undefined,
 		useBrowserSetting: false,
@@ -1004,7 +1004,7 @@ function showWelcomeSVG() {
 
 		remove: function(key) {
 			if (global.prefs.useBrowserSetting) {
-				global.prefs._userBrowserSetting.delete(key);
+				delete global.prefs._userBrowserSetting[key];
 			}
 			if (global.prefs.canPersist) {
 				global.localStorage.removeItem(key);

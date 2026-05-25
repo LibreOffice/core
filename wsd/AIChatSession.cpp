@@ -376,8 +376,21 @@ bool AIChatSession::handleAction(const std::string& firstLine)
     std::string tone;
     JsonUtil::findJSONValue(requestObj, "tone", tone);
     if (tone != "natural" && tone != "formal" && tone != "short" && tone != "friendly" &&
-        tone != "professional" && tone != "casual")
+        tone != "professional" && tone != "casual" && tone != "custom")
         tone.clear();
+
+    std::string customToneDescription;
+    JsonUtil::findJSONValue(requestObj, "customToneDescription", customToneDescription);
+    if (customToneDescription.size() > 1000)
+        customToneDescription.resize(1000);
+    // Prevent the description from breaking out of the appended sentence by
+    // inserting fake role headers or fence markers. Replace CR/LF/NUL with a
+    // single space; the upstream prompt remains a one-line continuation.
+    for (char& c : customToneDescription)
+    {
+        if (c == '\n' || c == '\r' || c == '\0')
+            c = ' ';
+    }
 
     bool emojify = false;
     JsonUtil::findJSONValue(requestObj, "emojify", emojify);
@@ -512,6 +525,8 @@ bool AIChatSession::handleAction(const std::string& firstLine)
         systemPrompt += TONE_PROFESSIONAL;
     else if (tone == "casual")
         systemPrompt += TONE_CASUAL;
+    else if (tone == "custom" && !customToneDescription.empty())
+        systemPrompt += " " + customToneDescription;
 
     if (emojify)
         systemPrompt += EMOJIFY_PROMPT;

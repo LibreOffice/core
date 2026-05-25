@@ -345,6 +345,7 @@ interface Window {
 		get(key: string, defaultValue?: any): any;
 		_initializeBrowserSetting(msg: string): void;
 		set(key: string, value: any): void;
+		remove(key: string): void;
 		setMultiple(prefs: Record<string, string>): void;
 		sendPendingBrowserSettingsUpdate(): void;
 		canPersist: boolean;

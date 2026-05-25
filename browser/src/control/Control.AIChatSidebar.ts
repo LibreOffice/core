@@ -35,6 +35,13 @@ namespace cool {
 		approvalType?: 'inspect' | 'modify';
 	}
 
+	interface CustomTone {
+		id: string;
+		name: string;
+		icon: string;
+		description: string;
+	}
+
 	export class AIChatSidebar {
 		private messages: ChatMessage[] = [];
 		private isProcessing: boolean = false;
@@ -46,17 +53,22 @@ namespace cool {
 		private progressText: string = '';
 		private pendingFormulaContext: string = '';
 
-		private selectedTone:
-			| 'natural'
-			| 'formal'
-			| 'short'
-			| 'friendly'
-			| 'professional'
-			| 'casual'
-			| null = null;
+		private selectedTone: string | null = null;
 		private emojify: boolean = false;
 		private tonePickerOpen: boolean = false;
 		private _tonePickerKeyNavAttached: boolean = false;
+
+		private customTones: CustomTone[] = [];
+		private recentIcons: string[] = [];
+		private formOpen: boolean = false;
+		private formMode: 'add' | 'edit' = 'add';
+		private formDraft: CustomTone | null = null;
+		// The icon row rendered in the form. Stable for the lifetime of one
+		// form-open session so that clicks land on the same slot the user saw.
+		// Refreshed only when the form is (re-)opened or a new emoji is
+		// pulled in from the full picker.
+		private formIconRow: string[] = [];
+		private emojiPickerOpen: boolean = false;
 
 		private builder: any;
 		private container: HTMLElement;
@@ -110,6 +122,25 @@ namespace cool {
 		private readonly MAX_API_MESSAGES = 50;
 		private readonly MAX_MESSAGE_LENGTH = 100000; // 100K characters
 
+		private readonly MAX_CUSTOM_TONES = 20;
+		private readonly MAX_TONE_NAME_LEN = 50;
+		private readonly MAX_TONE_DESC_LEN = 1000;
+		private readonly ICON_ROW_LEN = 8;
+		private readonly DEFAULT_TONE_ICONS: string[] = [
+			'😊',
+			'✨',
+			'💼',
+			'🎯',
+			'💬',
+			'📝',
+			'🔥',
+			'🧘',
+		];
+		private readonly PREFS_CUSTOM_TONES = 'aichat.customTones';
+		private readonly PREFS_RECENT_ICONS = 'aichat.toneIconRecents';
+		private readonly PREFS_SELECTED_TONE = 'aichat.selectedTone';
+		private readonly PREFS_EMOJIFY = 'aichat.emojify';
+
 		constructor() {
 			this.container = document.getElementById('aichat-panel') as HTMLElement;
 			this.wrapper = document.getElementById(
@@ -118,6 +149,98 @@ namespace cool {
 			this.createBuilder();
 			this.setupCellRefNavigation();
 			this.registerChatHandlers();
+			this.loadPrefs();
+		}
+
+		private loadPrefs(): void {
+			try {
+				const raw = window.prefs.get(this.PREFS_CUSTOM_TONES, '[]');
+				const parsed = JSON.parse(raw);
+				this.customTones = Array.isArray(parsed)
+					? parsed.filter(this.isValidCustomTone)
+					: [];
+			} catch {
+				this.customTones = [];
+			}
+
+			try {
+				const raw = window.prefs.get(this.PREFS_RECENT_ICONS, 'null');
+				const parsed = JSON.parse(raw);
+				this.recentIcons =
+					Array.isArray(parsed) &&
+					parsed.length === this.ICON_ROW_LEN &&
+					parsed.every((s) => typeof s === 'string')
+						? parsed.slice()
+						: this.DEFAULT_TONE_ICONS.slice();
+			} catch {
+				this.recentIcons = this.DEFAULT_TONE_ICONS.slice();
+			}
+
+			const sel = window.prefs.get(this.PREFS_SELECTED_TONE, '');
+			this.selectedTone = sel || null;
+			this.emojify = window.prefs.getBoolean(this.PREFS_EMOJIFY, false);
+
+			if (this.selectedTone && !this.isKnownToneId(this.selectedTone)) {
+				this.selectedTone = null;
+				window.prefs.remove(this.PREFS_SELECTED_TONE);
+			}
+		}
+
+		private isValidCustomTone = (t: any): t is CustomTone => {
+			return (
+				t &&
+				typeof t.id === 'string' &&
+				typeof t.name === 'string' &&
+				typeof t.icon === 'string' &&
+				typeof t.description === 'string'
+			);
+		};
+
+		private isKnownToneId(id: string): boolean {
+			return (
+				this.TONE_PRESETS.some((p) => p.id === id) ||
+				this.customTones.some((t) => t.id === id)
+			);
+		}
+
+		private saveCustomTones(): void {
+			window.prefs.set(
+				this.PREFS_CUSTOM_TONES,
+				JSON.stringify(this.customTones),
+			);
+		}
+
+		private saveRecentIcons(): void {
+			window.prefs.set(
+				this.PREFS_RECENT_ICONS,
+				JSON.stringify(this.recentIcons),
+			);
+		}
+
+		private saveSelectedTone(): void {
+			if (this.selectedTone) {
+				window.prefs.set(this.PREFS_SELECTED_TONE, this.selectedTone);
+			} else {
+				window.prefs.remove(this.PREFS_SELECTED_TONE);
+			}
+		}
+
+		private saveEmojify(): void {
+			window.prefs.set(this.PREFS_EMOJIFY, this.emojify ? 'true' : 'false');
+		}
+
+		private generateToneId(): string {
+			const r =
+				typeof crypto !== 'undefined' && (crypto as any).randomUUID
+					? (crypto as any).randomUUID()
+					: Date.now().toString(36) +
+						'-' +
+						Math.random().toString(36).slice(2, 10);
+			return 'tone-' + r;
+		}
+
+		private findCustomTone(id: string): CustomTone | undefined {
+			return this.customTones.find((t) => t.id === id);
 		}
 
 		private createBuilder(): void {
@@ -143,7 +266,7 @@ namespace cool {
 		private onDocLoaded(e: any): void {
 			if (e.status === false && this._isActive) {
 				this.hide();
-				this.resetVoice();
+				this.resetVoiceState();
 				this.clearConversation();
 			}
 		}
@@ -747,25 +870,30 @@ namespace cool {
 				return _('Set tone') + ' ▾';
 			}
 			const preset = this.TONE_PRESETS.find((p) => p.id === this.selectedTone);
-			if (!preset) {
-				return _('Set tone') + ' ▾';
+			if (preset) {
+				if (this.emojify) {
+					return preset.icon + ' ' + preset.label + ' ▾';
+				}
+				return preset.label + ' ▾';
 			}
-			if (this.emojify) {
-				return preset.icon + ' ' + preset.label + ' ▾';
+			const custom = this.findCustomTone(this.selectedTone);
+			if (custom) {
+				return custom.icon + ' ' + custom.name + ' ▾';
 			}
-			return preset.label + ' ▾';
+			return _('Set tone') + ' ▾';
 		}
 
 		private getToneChipJSON(): any {
+			let name = '';
+			const preset = this.TONE_PRESETS.find((p) => p.id === this.selectedTone);
+			if (preset) name = preset.label;
+			else if (this.selectedTone)
+				name = this.findCustomTone(this.selectedTone)?.name || '';
 			const ariaLabel =
 				this.selectedTone === null
 					? _('Set tone of voice')
 					: _('Tone of voice: {0}{1}')
-							.replace(
-								'{0}',
-								this.TONE_PRESETS.find((p) => p.id === this.selectedTone)
-									?.label || '',
-							)
+							.replace('{0}', name)
 							.replace('{1}', this.emojify ? ' ' + _('with emoji') : '');
 			return {
 				id: 'aichat-tone-chip',
@@ -781,71 +909,135 @@ namespace cool {
 		}
 
 		private getTonePickerJSON(): any {
+			if (this.formOpen) {
+				// JSDialog only wraps a container with >1 children in its own
+				// <div>; without that wrapper, updateWidget would replace the
+				// picker element with the form element (and #aichat-tone-picker
+				// would vanish from the DOM, breaking later rebuilds and
+				// follow-up click handlers).
+				const children: any[] = [this.getToneFormJSON()];
+				this.ensureContainerChildren(children, 'aichat-tone-picker');
+				return {
+					id: 'aichat-tone-picker',
+					type: 'container',
+					vertical: true,
+					children: children,
+				};
+			}
+
 			const presetChildren = this.TONE_PRESETS.map((p) => ({
 				id: 'aichat-tone-preset-' + p.id,
-				type: 'pushbutton',
-				text: p.icon + ' ' + p.label,
+				type: 'chip',
+				text: p.label,
+				icon: p.icon,
+				pressed: this.selectedTone === p.id,
 				enabled: true,
 				aria: {
 					label: p.label + ' ' + _('tone'),
 				},
 			}));
 
+			const children: any[] = [
+				{
+					id: 'aichat-tone-picker-header',
+					type: 'container',
+					horizontal: true,
+					children: [
+						{
+							id: 'aichat-tone-title',
+							type: 'fixedtext',
+							text: _('Tone of voice'),
+							enabled: true,
+						},
+						{
+							id: 'aichat-tone-reset',
+							type: 'pushbutton',
+							text: _('Reset voice'),
+							image: app.LOUtil.getImageURL(this.ICON_CLOSE),
+							enabled: true,
+							aria: { label: _('Reset tone of voice') },
+						},
+					],
+				},
+				{
+					id: 'aichat-tone-presets',
+					type: 'container',
+					horizontal: true,
+					children: presetChildren,
+				},
+			];
+
+			if (this.customTones.length > 0) {
+				children.push({
+					id: 'aichat-tone-your-tones-label',
+					type: 'fixedtext',
+					text: _('Your tones'),
+					enabled: true,
+				});
+				const customChildren: any[] = [];
+				for (const t of this.customTones) {
+					customChildren.push({
+						id: 'aichat-tone-custom-' + t.id,
+						type: 'chip',
+						text: t.name,
+						icon: t.icon,
+						pressed: this.selectedTone === t.id,
+						enabled: true,
+						aria: { label: t.name + ' ' + _('tone') },
+						actions: [
+							{
+								id: 'aichat-tone-edit-' + t.id,
+								text: '✎',
+								aria: { label: _('Edit tone') },
+							},
+						],
+					});
+				}
+				children.push({
+					id: 'aichat-tone-customs',
+					type: 'container',
+					horizontal: true,
+					children: customChildren,
+				});
+			}
+
+			const canAddMore = this.customTones.length < this.MAX_CUSTOM_TONES;
+			children.push({
+				id: 'aichat-tone-add',
+				type: 'pushbutton',
+				text: _('+ Add my own voice'),
+				enabled: canAddMore && !this.isProcessing,
+				aria: { label: _('Add a custom tone of voice') },
+			});
+
+			children.push({
+				id: 'aichat-tone-emojify-row',
+				type: 'container',
+				horizontal: true,
+				children: [
+					{
+						id: 'aichat-tone-emojify-label',
+						type: 'fixedtext',
+						text: '😌  ' + _('Emojify'),
+						enabled: true,
+					},
+					{
+						id: 'aichat-tone-emojify',
+						type: 'pushbutton',
+						text: this.emojify ? _('On') : _('Off'),
+						enabled: true,
+						aria: {
+							label: _('Toggle emojify'),
+						},
+					},
+				],
+			});
+
 			return {
 				id: 'aichat-tone-picker',
 				type: 'container',
 				vertical: true,
-				children: [
-					{
-						id: 'aichat-tone-picker-header',
-						type: 'container',
-						horizontal: true,
-						children: [
-							{
-								id: 'aichat-tone-title',
-								type: 'fixedtext',
-								text: _('Tone of voice'),
-								enabled: true,
-							},
-							{
-								id: 'aichat-tone-reset',
-								type: 'pushbutton',
-								text: _('Reset voice'),
-								image: app.LOUtil.getImageURL(this.ICON_CLOSE),
-								enabled: true,
-								aria: { label: _('Reset tone of voice') },
-							},
-						],
-					},
-					{
-						id: 'aichat-tone-presets',
-						type: 'container',
-						horizontal: true,
-						children: presetChildren,
-					},
-					{
-						id: 'aichat-tone-emojify-row',
-						type: 'container',
-						horizontal: true,
-						children: [
-							{
-								id: 'aichat-tone-emojify-label',
-								type: 'fixedtext',
-								text: '😌  ' + _('Emojify'),
-								enabled: true,
-							},
-							{
-								id: 'aichat-tone-emojify',
-								type: 'pushbutton',
-								text: this.emojify ? _('On') : _('Off'),
-								enabled: true,
-								aria: {
-									label: _('Toggle emojify'),
-								},
-							},
-						],
-					},
-				],
+				children: children,
 			};
 		}
 
@@ -860,30 +1052,24 @@ namespace cool {
 			this.setTonePickerOpenClass(this.tonePickerOpen);
 			this.applyTonePickerStates();
 			this._tonePickerKeyNavAttached = false;
-			if (this.tonePickerOpen) {
+			if (this.tonePickerOpen && !this.formOpen) {
 				app.layoutingService.onDrain(() => {
 					this.setTonePickerOpenClass(this.tonePickerOpen);
 					this.applyTonePickerStates();
 					this.setupTonePickerKeyboardNav();
 				});
+			} else if (this.tonePickerOpen && this.formOpen) {
+				app.layoutingService.onDrain(() => {
+					this.setTonePickerOpenClass(this.tonePickerOpen);
+					this.applyTonePickerStates();
+				});
 			}
 		}
 
-		// Widget.PushButton.ts ignores data.aria.pressed, so set aria-pressed
-		// manually after render. Drives the CSS that highlights the active
-		// tone chip and the emojify toggle.
+		// The tone chips drive aria-pressed themselves from their `pressed`
+		// field. Widget.PushButton.ts ignores data.aria.pressed, so the
+		// emojify toggle still needs manual handling here.
 		private applyTonePickerStates(): void {
-			for (const p of this.TONE_PRESETS) {
-				const btn = document.querySelector(
-					'#aichat-tone-preset-' + p.id + ' button.ui-pushbutton',
-				) as HTMLButtonElement | null;
-				if (btn) {
-					btn.setAttribute(
-						'aria-pressed',
-						this.selectedTone === p.id ? 'true' : 'false',
-					);
-				}
-			}
 			const emojifyBtn = document.querySelector(
 				'#aichat-tone-emojify button.ui-pushbutton',
 			) as HTMLButtonElement | null;
@@ -892,6 +1078,9 @@ namespace cool {
 					'aria-pressed',
 					this.emojify ? 'true' : 'false',
 				);
+			}
+			if (this.formOpen) {
+				this.applyFormIconHighlight();
 			}
 		}
 
@@ -909,7 +1098,7 @@ namespace cool {
 				const targetId =
 					'aichat-tone-preset-' + (this.selectedTone || 'natural');
 				const btn = document.querySelector(
-					'#' + targetId + ' button.ui-pushbutton',
+					'#' + targetId + ' .ui-chip-main',
 				) as HTMLButtonElement | null;
 				if (btn) btn.focus();
 			});
@@ -933,7 +1122,11 @@ namespace cool {
 		private closeTonePicker(): void {
 			if (!this.tonePickerOpen) return;
 			this.tonePickerOpen = false;
+			this.formOpen = false;
+			this.formDraft = null;
+			this.closeEmojiPicker();
 			this.setTonePickerOpenClass(false);
+			this.updateTonePicker();
 			this.updateToneChip();
 			this.focusToneChip();
 		}
@@ -946,31 +1139,423 @@ namespace cool {
 			}
 		}
 
-		private selectTone(
-			tone:
-				| 'natural'
-				| 'formal'
-				| 'short'
-				| 'friendly'
-				| 'professional'
-				| 'casual',
-		): void {
+		private selectTone(tone: string): void {
 			this.selectedTone = tone;
+			this.saveSelectedTone();
 			this.updateTonePicker();
 			this.closeTonePicker();
 		}
 
 		private setEmojify(value: boolean): void {
 			this.emojify = value;
+			this.saveEmojify();
 			this.updateToneChip();
 			this.updateTonePicker();
 		}
 
-		private resetVoice(): void {
+		// In-memory clear only. Used when the sidebar needs to forget its
+		// current selection for the duration of the session (e.g. on a
+		// failed document load) without burning the user's persisted
+		// preference.
+		private resetVoiceState(): void {
 			this.selectedTone = null;
 			this.emojify = false;
 			this.updateToneChip();
 			this.updateTonePicker();
+		}
+
+		// Explicit user-driven reset: clears in-memory state AND persists
+		// the cleared values so the choice survives a reload.
+		private resetVoice(): void {
+			this.resetVoiceState();
+			this.saveSelectedTone();
+			this.saveEmojify();
+		}
+
+		// Build the visible icon row: pin the current draft icon to slot 0
+		// so the aria-pressed highlight is meaningful (especially in edit
+		// mode where the existing icon may not be in `recentIcons`), then
+		// fill the remaining slots from the persisted recents and defaults.
+		// The row is cached in `formIconRow` and only rebuilt when the form
+		// reopens or a new emoji is pulled in from the full picker - this
+		// prevents the row from reshuffling while the user is clicking on
+		// it, which would cause aria-pressed to land on the wrong DOM slot.
+		private rebuildFormIconRow(): void {
+			const draft = this.formDraft;
+			const row: string[] = [];
+			if (draft && draft.icon) row.push(draft.icon);
+			for (const e of this.recentIcons) {
+				if (row.length >= this.ICON_ROW_LEN) break;
+				if (!row.includes(e)) row.push(e);
+			}
+			while (row.length < this.ICON_ROW_LEN) {
+				const fallback = this.DEFAULT_TONE_ICONS.find((e) => !row.includes(e));
+				if (!fallback) break;
+				row.push(fallback);
+			}
+			this.formIconRow = row;
+		}
+
+		private getToneFormJSON(): any {
+			const draft = this.formDraft || {
+				id: '',
+				name: '',
+				icon: this.recentIcons[0] || this.DEFAULT_TONE_ICONS[0],
+				description: '',
+			};
+
+			const rowIcons = this.formIconRow;
+
+			const iconChildren: any[] = [];
+			for (let i = 0; i < rowIcons.length; i++) {
+				iconChildren.push({
+					id: 'aichat-tone-form-icon-' + i,
+					type: 'pushbutton',
+					text: rowIcons[i],
+					enabled: true,
+					aria: { label: _('Use icon') + ' ' + rowIcons[i] },
+				});
+			}
+			iconChildren.push({
+				id: 'aichat-tone-form-emoji-more',
+				type: 'pushbutton',
+				text: '+',
+				enabled: true,
+				aria: { label: _('Pick another emoji') },
+			});
+
+			const formChildren: any[] = [
+				{
+					id: 'aichat-tone-form-header',
+					type: 'container',
+					horizontal: true,
+					children: [
+						{
+							id: 'aichat-tone-form-back',
+							type: 'pushbutton',
+							text: '←',
+							enabled: true,
+							aria: { label: _('Back to tones') },
+						},
+						{
+							id: 'aichat-tone-form-title',
+							type: 'fixedtext',
+							text: _('Tone of voice'),
+							enabled: true,
+						},
+					],
+				},
+				{
+					id: 'aichat-tone-form-icon-label',
+					type: 'fixedtext',
+					text: _('Icon'),
+					enabled: true,
+				},
+				{
+					id: 'aichat-tone-form-icons',
+					type: 'container',
+					horizontal: true,
+					children: iconChildren,
+				},
+				{
+					id: 'aichat-tone-form-name-label',
+					type: 'fixedtext',
+					text: _('Name your tone'),
+					enabled: true,
+				},
+				{
+					id: 'aichat-tone-form-name',
+					type: 'edit',
+					text: draft.name,
+					placeholder: _('e.g. Quick reply'),
+					enabled: true,
+					aria: { label: _('Tone name') },
+				},
+				{
+					id: 'aichat-tone-form-desc-label',
+					type: 'fixedtext',
+					text: _('Describe how AI should write'),
+					enabled: true,
+				},
+				{
+					id: 'aichat-tone-form-desc',
+					type: 'multilineedit',
+					text: draft.description,
+					placeholder: _(
+						'Write short, direct sentences. Use plain language and skip the small talk.',
+					),
+					cursor: true,
+					enabled: true,
+					aria: { label: _('Tone description') },
+				},
+			];
+
+			const actionChildren: any[] = [];
+			if (this.formMode === 'edit') {
+				actionChildren.push({
+					id: 'aichat-tone-form-delete',
+					type: 'pushbutton',
+					text: _('Delete tone'),
+					enabled: true,
+					aria: { label: _('Delete this tone') },
+				});
+			}
+			actionChildren.push({
+				id: 'aichat-tone-form-cancel',
+				type: 'pushbutton',
+				text: _('Cancel'),
+				enabled: true,
+				aria: { label: _('Cancel') },
+			});
+			actionChildren.push({
+				id: 'aichat-tone-form-save',
+				type: 'pushbutton',
+				text: _('Save voice'),
+				enabled: this.canSaveForm(),
+				aria: { label: _('Save tone of voice') },
+			});
+
+			formChildren.push({
+				id: 'aichat-tone-form-actions',
+				type: 'container',
+				horizontal: true,
+				children: actionChildren,
+			});
+
+			if (this.emojiPickerOpen) {
+				formChildren.push({
+					id: 'aichat-tone-form-emoji-picker',
+					type: 'emojipicker',
+					recentsPrefsKey: 'aichat.emojiPickerRecents',
+					searchPlaceholder: _('Search emojis'),
+					aria: { label: _('Choose an emoji') },
+				});
+			}
+
+			return {
+				id: 'aichat-tone-form',
+				type: 'container',
+				vertical: true,
+				children: formChildren,
+			};
+		}
+
+		private canSaveForm(): boolean {
+			if (!this.formDraft) return false;
+			return (
+				this.formDraft.name.trim().length > 0 &&
+				this.formDraft.description.trim().length > 0
+			);
+		}
+
+		private openToneForm(mode: 'add' | 'edit', id?: string): void {
+			if (this.isProcessing) return;
+			if (mode === 'add' && this.customTones.length >= this.MAX_CUSTOM_TONES) {
+				this.hintText = _(
+					'You have reached the maximum of {0} custom tones.',
+				).replace('{0}', String(this.MAX_CUSTOM_TONES));
+				this.updateHint();
+				return;
+			}
+			if (mode === 'edit' && id) {
+				const existing = this.findCustomTone(id);
+				if (!existing) return;
+				this.formDraft = { ...existing };
+				this.formMode = 'edit';
+			} else {
+				this.formDraft = {
+					id: '',
+					name: '',
+					icon: this.recentIcons[0] || this.DEFAULT_TONE_ICONS[0],
+					description: '',
+				};
+				this.formMode = 'add';
+			}
+			this.formOpen = true;
+			this.tonePickerOpen = true;
+			this.emojiPickerOpen = false;
+			this._tonePickerKeyNavAttached = false;
+			this.rebuildFormIconRow();
+			this.updateTonePicker();
+			this.focusFormName();
+		}
+
+		private closeToneForm(): void {
+			this.formOpen = false;
+			this.formDraft = null;
+			this.closeEmojiPicker();
+			this._tonePickerKeyNavAttached = false;
+			this.updateTonePicker();
+		}
+
+		private saveToneForm(): void {
+			if (!this.formDraft || !this.canSaveForm()) return;
+			const name = this.formDraft.name.trim().slice(0, this.MAX_TONE_NAME_LEN);
+			const description = this.formDraft.description
+				.trim()
+				.slice(0, this.MAX_TONE_DESC_LEN);
+			const icon =
+				this.formDraft.icon ||
+				this.recentIcons[0] ||
+				this.DEFAULT_TONE_ICONS[0];
+
+			if (this.formMode === 'edit') {
+				const draftId = this.formDraft.id;
+				const idx = this.customTones.findIndex((t) => t.id === draftId);
+				if (idx >= 0) {
+					this.customTones[idx] = {
+						id: draftId,
+						name,
+						icon,
+						description,
+					};
+				}
+			} else {
+				if (this.customTones.length >= this.MAX_CUSTOM_TONES) {
+					this.hintText = _(
+						'You have reached the maximum of {0} custom tones.',
+					).replace('{0}', String(this.MAX_CUSTOM_TONES));
+					this.updateHint();
+					return;
+				}
+				const newTone: CustomTone = {
+					id: this.generateToneId(),
+					name,
+					icon,
+					description,
+				};
+				this.customTones.push(newTone);
+				this.selectedTone = newTone.id;
+				this.saveSelectedTone();
+			}
+			this.saveCustomTones();
+			this.formOpen = false;
+			this.formDraft = null;
+			this.updateToneChip();
+			this.updateTonePicker();
+		}
+
+		private deleteToneFromForm(): void {
+			if (!this.formDraft || this.formMode !== 'edit') return;
+			const id = this.formDraft.id;
+			this.customTones = this.customTones.filter((t) => t.id !== id);
+			this.saveCustomTones();
+			if (this.selectedTone === id) {
+				this.selectedTone = null;
+				this.saveSelectedTone();
+			}
+			this.formOpen = false;
+			this.formDraft = null;
+			this.updateToneChip();
+			this.updateTonePicker();
+		}
+
+		private focusFormName(): void {
+			app.layoutingService.onDrain(() => {
+				const el = document.querySelector(
+					'#aichat-tone-form-name input',
+				) as HTMLInputElement | null;
+				if (el) el.focus();
+			});
+		}
+
+		private handleToneFormInput(id: string, data: any): void {
+			if (!this.formDraft) return;
+			if (id === 'aichat-tone-form-name') {
+				const value = String(data).slice(0, this.MAX_TONE_NAME_LEN);
+				this.formDraft.name = value;
+				this.refreshFormSaveEnabled();
+			} else if (id === 'aichat-tone-form-desc') {
+				let value = String(data);
+				if (value.length > this.MAX_TONE_DESC_LEN) {
+					value = value.slice(0, this.MAX_TONE_DESC_LEN);
+					const ta = document.querySelector(
+						'#aichat-tone-form-desc.ui-textarea',
+					) as HTMLTextAreaElement | null;
+					if (ta) ta.value = value;
+				}
+				this.formDraft.description = value;
+				this.refreshFormSaveEnabled();
+			}
+		}
+
+		private refreshFormSaveEnabled(): void {
+			const btn = document.querySelector(
+				'#aichat-tone-form-save button.ui-pushbutton',
+			) as HTMLButtonElement | null;
+			if (!btn) return;
+			if (this.canSaveForm()) {
+				btn.removeAttribute('disabled');
+			} else {
+				btn.setAttribute('disabled', 'true');
+			}
+		}
+
+		private selectFormIcon(index: number): void {
+			if (!this.formDraft) return;
+			const icon = this.formIconRow[index];
+			if (!icon) return;
+			this.formDraft.icon = icon;
+			this.applyFormIconHighlight();
+		}
+
+		private applyFormIconHighlight(): void {
+			if (!this.formDraft) return;
+			for (let i = 0; i < this.formIconRow.length; i++) {
+				const btn = document.querySelector(
+					'#aichat-tone-form-icon-' + i + ' button.ui-pushbutton',
+				) as HTMLButtonElement | null;
+				if (btn) {
+					btn.setAttribute(
+						'aria-pressed',
+						this.formIconRow[i] === this.formDraft.icon ? 'true' : 'false',
+					);
+				}
+			}
+		}
+
+		private openEmojiPicker(): void {
+			if (this.emojiPickerOpen) return;
+			this.emojiPickerOpen = true;
+			this._tonePickerKeyNavAttached = false;
+			this.updateTonePicker();
+		}
+
+		private closeEmojiPicker(): void {
+			if (!this.emojiPickerOpen) return;
+			this.emojiPickerOpen = false;
+			this._tonePickerKeyNavAttached = false;
+			this.updateTonePicker();
+			this.focusEmojiMoreButton();
+		}
+
+		private focusEmojiMoreButton(): void {
+			app.layoutingService.onDrain(() => {
+				const btn = document.querySelector(
+					'#aichat-tone-form-emoji-more button.ui-pushbutton',
+				) as HTMLButtonElement | null;
+				if (btn) btn.focus();
+			});
+		}
+
+		private applyEmojiToForm(emoji: string): void {
+			if (!this.formDraft) return;
+			this.formDraft.icon = emoji;
+			// Promote to front of the 8-slot tone icon row, dedupe, cap, and
+			// top up from defaults if needed. The widget keeps its own
+			// (broader) recents bucket under aichat.emojiPickerRecents.
+			const next = [emoji, ...this.recentIcons.filter((e) => e !== emoji)];
+			this.recentIcons = next.slice(0, this.ICON_ROW_LEN);
+			while (this.recentIcons.length < this.ICON_ROW_LEN) {
+				const fallback = this.DEFAULT_TONE_ICONS.find(
+					(e) => !this.recentIcons.includes(e),
+				);
+				if (!fallback) break;
+				this.recentIcons.push(fallback);
+			}
+			this.saveRecentIcons();
+			this.rebuildFormIconRow();
+			this.closeEmojiPicker();
 		}
 
 		// Custom keyboard navigation for tone preset chips inside the picker.
@@ -992,7 +1577,8 @@ namespace cool {
 					return;
 				const buttons = Array.from(
 					picker.querySelectorAll<HTMLButtonElement>(
-						'[id^="aichat-tone-preset-"] > button.ui-pushbutton',
+						'[id^="aichat-tone-preset-"] > .ui-chip-main,' +
+							' [id^="aichat-tone-custom-"] > .ui-chip-main',
 					),
 				);
 				if (!buttons.length) return;
@@ -1131,6 +1717,12 @@ namespace cool {
 					this.closeTonePicker();
 				},
 				'aichat-tone-emojify': () => this.setEmojify(!this.emojify),
+				'aichat-tone-add': () => this.openToneForm('add'),
+				'aichat-tone-form-back': () => this.closeToneForm(),
+				'aichat-tone-form-cancel': () => this.closeToneForm(),
+				'aichat-tone-form-save': () => this.saveToneForm(),
+				'aichat-tone-form-delete': () => this.deleteToneFromForm(),
+				'aichat-tone-form-emoji-more': () => this.openEmojiPicker(),
 			};
 
 			if (exactActions[id]) {
@@ -1143,6 +1735,28 @@ namespace cool {
 				const preset = this.TONE_PRESETS.find((p) => p.id === toneId);
 				if (preset) {
 					this.selectTone(preset.id);
+				}
+				return;
+			}
+
+			if (id.startsWith('aichat-tone-edit-')) {
+				const toneId = id.substring('aichat-tone-edit-'.length);
+				this.openToneForm('edit', toneId);
+				return;
+			}
+
+			if (id.startsWith('aichat-tone-custom-')) {
+				const toneId = id.substring('aichat-tone-custom-'.length);
+				if (this.findCustomTone(toneId)) {
+					this.selectTone(toneId);
+				}
+				return;
+			}
+
+			if (id.startsWith('aichat-tone-form-icon-')) {
+				const idx = parseInt(id.substring('aichat-tone-form-icon-'.length), 10);
+				if (!isNaN(idx)) {
+					this.selectFormIcon(idx);
 				}
 				return;
 			}
@@ -1223,6 +1837,14 @@ namespace cool {
 		}
 
 		private handleInputChange(id: string, data: any): void {
+			if (id === 'aichat-tone-form-name' || id === 'aichat-tone-form-desc') {
+				this.handleToneFormInput(id, data);
+				return;
+			}
+			if (id === 'aichat-tone-form-emoji-picker') {
+				this.applyEmojiToForm(String(data));
+				return;
+			}
 			if (id !== 'aichat-input') return;
 
 			const prevEmpty = this.inputText.trim().length === 0;
@@ -1371,11 +1993,19 @@ namespace cool {
 		private dispatchRequest(): void {
 			this.currentRequestId = this.generateRequestId();
 
+			const isPreset =
+				this.selectedTone !== null &&
+				this.TONE_PRESETS.some((p) => p.id === this.selectedTone);
+			const customTone =
+				this.selectedTone && !isPreset
+					? this.findCustomTone(this.selectedTone)
+					: undefined;
 			const payload = JSON.stringify({
 				messages: this.buildApiMessages(),
 				requestId: this.currentRequestId,
 				docType: app.map.getDocType(),
-				tone: this.selectedTone,
+				tone: customTone ? 'custom' : this.selectedTone,
+				customToneDescription: customTone ? customTone.description : undefined,
 				emojify: this.emojify,
 			});
 			app.socket.sendMessage('aichat: ' + payload);
@@ -1625,6 +2255,9 @@ namespace cool {
 			this.progressText = '';
 			this.showAllCards = false;
 			this._chipKeyNavAttached = false;
+			this.formOpen = false;
+			this.formDraft = null;
+			this.emojiPickerOpen = false;
 			this.render();
 		}
 
@@ -1778,7 +2411,11 @@ namespace cool {
 			this.container.addEventListener('keydown', (e: KeyboardEvent) => {
 				if (e.key === 'Escape') {
 					e.preventDefault();
-					if (this.tonePickerOpen) {
+					if (this.emojiPickerOpen) {
+						this.closeEmojiPicker();
+					} else if (this.formOpen) {
+						this.closeToneForm();
+					} else if (this.tonePickerOpen) {
 						this.closeTonePicker();
 					} else {
 						this.hide();
