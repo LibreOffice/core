@@ -111,7 +111,7 @@ JSDialog.comboboxEntry = function (parentContainer, data, builder) {
 };
 
 JSDialog.mobileComboboxEntry = function(parentContainer, data, builder) {
-	var comboboxEntry = window.L.DomUtil.create('p', builder.options.cssClass, parentContainer);
+	var comboboxEntry = window.L.DomUtil.create('p', builder.options.cssClass + ' .ui-mobile-combobox-entry', parentContainer);
 	comboboxEntry.textContent = builder._cleanText(data.text);
 
 	comboboxEntry.parent = data.parent;
@@ -189,11 +189,23 @@ JSDialog.mobileCombobox = function (parentContainer, data, builder) {
 		$(container).hide();
 
 	container.onSelect = function (pos) {
-		console.error('Not implemented: select entry: ' + pos);
+		var nodeEntries = contentDiv.querySelectorAll('.ui-mobile-combobox-entry');
+		for (var i = 0; i < nodeEntries.length; i++)
+			window.L.DomUtil.removeClass(nodeEntries[i], 'selected');
+		if (nodeEntries[pos])
+			window.L.DomUtil.addClass(nodeEntries[pos], 'selected');
+	};
+
+	container.onUnSelect = function (pos) {
+		var nodeEntries = contentDiv.querySelectorAll('.ui-mobile-combobox-entry');
+		if (nodeEntries[pos])
+			window.L.DomUtil.removeClass(nodeEntries[pos], 'selected');
 	};
 
 	container.onSetText = function (text) {
-		console.error('Not implemented: setText: ' + text);
+		var input = leftDiv.querySelector('input.ui-edit');
+		if (input && document.activeElement !== input)
+			input.value = text;
 	};
 };
 

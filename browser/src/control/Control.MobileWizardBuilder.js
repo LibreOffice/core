@@ -264,6 +264,48 @@ window.L.Control.MobileWizardBuilder = window.L.Control.JSDialogBuilder.extend({
 
 		builder._explorableEntry(parentContainer, data, contentNode, builder, valueNode, iconPath);
 
+		// JSDialog action handlers for partial updates
+		var mainContainer = builder._getItemById(parentContainer, data.id);
+		if (mainContainer) {
+			var entryTexts = data.entries;
+			var updateHeaderText = function (text) {
+				if (valueNode) {
+					valueNode.textContent = text;
+				} else {
+					var titleSpan = mainContainer.querySelector('.ui-header-left span');
+					if (titleSpan)
+						titleSpan.textContent = text;
+				}
+			};
+
+			mainContainer.onSelect = function (pos) {
+				var content = mainContainer.querySelector('.ui-content');
+				if (content) {
+					var nodeEntries = content.querySelectorAll('p');
+					for (var i = 0; i < nodeEntries.length; i++)
+						window.L.DomUtil.removeClass(nodeEntries[i], 'selected');
+					if (nodeEntries[pos])
+						window.L.DomUtil.addClass(nodeEntries[pos], 'selected');
+				}
+
+				if (entryTexts && entryTexts[pos] !== undefined)
+					updateHeaderText(entryTexts[pos]);
+			};
+
+			mainContainer.onUnSelect = function (pos) {
+				var content = mainContainer.querySelector('.ui-content');
+				if (!content)
+					return;
+				var nodeEntries = content.querySelectorAll('p');
+				if (nodeEntries[pos])
+					window.L.DomUtil.removeClass(nodeEntries[pos], 'selected');
+			};
+
+			mainContainer.onSetText = function (text) {
+				updateHeaderText(text);
+			};
+		}
+
 		return false;
 	},
 
