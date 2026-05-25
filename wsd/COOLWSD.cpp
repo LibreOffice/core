@@ -97,6 +97,7 @@
 #include <map>
 #include <memory>
 #include <mutex>
+#include <set>
 #include <sstream>
 #include <string>
 #include <thread>
@@ -150,6 +151,8 @@ std::map<std::string, std::chrono::steady_clock::time_point> LastForkRequestTime
 using SubForKitMap = std::map<std::string, std::shared_ptr<ForKitProcess>>;
 SubForKitMap SubForKitProcs;
 std::map<std::string, std::chrono::steady_clock::time_point> LastSubForKitBrokerExitTimes;
+std::set<std::string> OutstandingSubForKitSpawns;
+std::map<std::string, std::chrono::steady_clock::time_point> LastSubForKitSpawnRequestTimes;
 Poco::AutoPtr<Poco::Util::XMLConfiguration> KitXmlConfig;
 std::string LoggableConfigEntries;
 
@@ -412,6 +415,8 @@ SubForKitMap::iterator dropSubForKit(SubForKitMap::iterator it)
 
     LastSubForKitBrokerExitTimes.erase(configId);
     OutstandingForks.erase(configId);
+    OutstandingSubForKitSpawns.erase(configId);
+    LastSubForKitSpawnRequestTimes.erase(configId);
     it = SubForKitProcs.erase(it);
     UNITWSD_CALL(killSubForKit(configId));
 
@@ -581,7 +586,25 @@ bool COOLWSD::ensureSubForKit(const std::string& configId)
         return false;
     }
 
+    const auto now = std::chrono::steady_clock::now();
+    if (OutstandingSubForKitSpawns.contains(configId))
+    {
+        const auto durationMs = std::chrono::duration_cast<std::chrono::milliseconds>(
+            now - LastSubForKitSpawnRequestTimes[configId]);
+        if (durationMs < ChildSpawnTimeoutMs.load())
+        {
+            LOG_TRC("subForKit " << configId << " spawn pending for " << durationMs
+                                 << ", waiting");
+            return false;
+        }
+        LOG_WRN("subForKit " << configId << " not responsive for " << durationMs
+                             << " while spawning. Resetting.");
+    }
+
     COOLWSD::checkDiskSpaceAndWarnClients(false);
+
+    OutstandingSubForKitSpawns.insert(configId);
+    LastSubForKitSpawnRequestTimes[configId] = now;
 
     const std::string answerMessage = "addforkit " + configId + '\n';
     LOG_DBG("MasterToForKit: " << answerMessage.substr(0, answerMessage.length() - 1));
@@ -2682,6 +2705,8 @@ bool COOLWSD::checkAndRestoreForKit()
                     LOG_DBG("dropping subforkit " << it->first);
                     it = dropSubForKit(it);
                 }
+                OutstandingSubForKitSpawns.clear();
+                LastSubForKitSpawnRequestTimes.clear();
 
                 // Spawn a new forkit and try to dust it off and resume.
                 if (!SigUtil::getShutdownRequestFlag() && !createForKit())
@@ -3170,14 +3195,24 @@ private:
                 else
                 {
                     LOG_INF("subforkit [" << configId << "], seen as created.");
-                    SubForKitProcs[configId] = std::make_shared<ForKitProcess>(pid, socket, request);
+                    auto [it, inserted] = SubForKitProcs.try_emplace(configId,
+                        std::make_shared<ForKitProcess>(pid, socket, request));
+                    if (!inserted)
+                    {
+                        LOG_ERR("subforkit [" << configId << "] arrived (pid " << pid
+                                << ") but slot already filled by pid " << it->second->getPid()
+                                << "; dropping duplicate");
+                        return;
+                    }
+                    OutstandingSubForKitSpawns.erase(configId);
+                    LastSubForKitSpawnRequestTimes.erase(configId);
                     LOG_ASSERT_MSG(socket->getInBuffer().empty(), "Unexpected data in prisoner socket");
                     socket->getInBuffer().clear();
                     // created subforkit for a reason, create spare early
                     std::unique_lock<std::mutex> lock(NewChildrenMutex);
                     rebalanceChildren(configId, COOLWSD::NumPreSpawnedChildren);
 
-                    UNITWSD_CALL(newSubForKit(SubForKitProcs[configId], configId));
+                    UNITWSD_CALL(newSubForKit(it->second, configId));
                 }
 
                 return;
