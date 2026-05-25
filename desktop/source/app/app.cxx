@@ -499,10 +499,21 @@ void Desktop::Init()
     comphelper::BackupFileHelper::reactOnSafeMode(Application::IsSafeModeEnabled());
 
     // tdf117100: do not try to re-install extensions after the requested restart
-    if (officecfg::Setup::Office::OfficeRestartInProgress::get())
+    // Wrap in try/catch: this is the first configmgr access; a corrupt or
+    // partially-written user profile can cause Components::Components() to throw
+    // a RuntimeException here, which would otherwise propagate uncaught through
+    // InitVCL() and kill the process silently before any window appears.
+    try
     {
-        if (!officecfg::Office::Common::Misc::FirstRun::get())
-            GetCommandLineArgs().RemoveFilesFromOpenListEndingWith(u".oxt"_ustr);
+        if (officecfg::Setup::Office::OfficeRestartInProgress::get())
+        {
+            if (!officecfg::Office::Common::Misc::FirstRun::get())
+                GetCommandLineArgs().RemoveFilesFromOpenListEndingWith(u".oxt"_ustr);
+        }
+    }
+    catch (css::uno::Exception & e)
+    {
+        SetBootstrapError( BE_OFFICECONFIG_BROKEN, e.Message );
     }
 
     try

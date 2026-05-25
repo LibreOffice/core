@@ -103,8 +103,18 @@ void Desktop::RegisterServices()
         Application::EnableHeadlessMode(false);
 
     // read accept string from configuration
-    OUString conDcpCfg(
-        officecfg::Setup::Office::ooSetupConnectionURL::get());
+    // Guard against RuntimeException: configmgr may throw if the user profile
+    // is corrupt; propagating here would silently kill the process in Desktop::Main().
+    OUString conDcpCfg;
+    try
+    {
+        conDcpCfg = officecfg::Setup::Office::ooSetupConnectionURL::get();
+    }
+    catch (css::uno::Exception & e)
+    {
+        SetBootstrapError( BE_OFFICECONFIG_BROKEN, e.Message );
+        return;
+    }
     if (!conDcpCfg.isEmpty()) {
         createAcceptor(conDcpCfg);
     }
@@ -117,7 +127,15 @@ void Desktop::RegisterServices()
 
     configureUcb();
 
-    CreateTemporaryDirectory();
+    try
+    {
+        CreateTemporaryDirectory();
+    }
+    catch (css::uno::Exception & e)
+    {
+        SetBootstrapError( BE_OFFICECONFIG_BROKEN, e.Message );
+        return;
+    }
     m_bServicesRegistered = true;
 }
 
