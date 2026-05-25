@@ -31,6 +31,29 @@
 		BE4C625E2D5A3DDA00047DF2 /* Kit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE4C625D2D5A3DDA00047DF2 /* Kit.cpp */; };
 		BE4C62612D5B736200047DF2 /* coolwsd.xml in Resources */ = {isa = PBXBuildFile; fileRef = BE4C62602D5B736200047DF2 /* coolwsd.xml */; };
 		BE5FDE372DAD3DCF00C48DB2 /* LogUI.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE5FDE362DAD3DCF00C48DB2 /* LogUI.cpp */; };
+		BE70D2422FC4F13200FA34B7 /* az.po in Resources */ = {isa = PBXBuildFile; fileRef = BE70D1CD2FC4F13200FA34B7 /* az.po */; };
+		BE70D2432FC4F13200FA34B7 /* brh.po in Resources */ = {isa = PBXBuildFile; fileRef = BE70D1CE2FC4F13200FA34B7 /* brh.po */; };
+		BE70D24A2FC4F13200FA34B7 /* en_AU.po in Resources */ = {isa = PBXBuildFile; fileRef = BE70D1D52FC4F13200FA34B7 /* en_AU.po */; };
+		BE70D24B2FC4F13200FA34B7 /* en_NZ.po in Resources */ = {isa = PBXBuildFile; fileRef = BE70D1D62FC4F13200FA34B7 /* en_NZ.po */; };
+		BE70D24E2FC4F13200FA34B7 /* et.po in Resources */ = {isa = PBXBuildFile; fileRef = BE70D1D92FC4F13200FA34B7 /* et.po */; };
+		BE70D25C2FC4F13200FA34B7 /* kab.po in Resources */ = {isa = PBXBuildFile; fileRef = BE70D1E72FC4F13200FA34B7 /* kab.po */; };
+		BE70D25F2FC4F13200FA34B7 /* lo.po in Resources */ = {isa = PBXBuildFile; fileRef = BE70D1EA2FC4F13200FA34B7 /* lo.po */; };
+		BE70D26D2FC4F13200FA34B7 /* ur.po in Resources */ = {isa = PBXBuildFile; fileRef = BE70D1F82FC4F13200FA34B7 /* ur.po */; };
+		BE70D26E2FC4F13200FA34B7 /* vi.po in Resources */ = {isa = PBXBuildFile; fileRef = BE70D1F92FC4F13200FA34B7 /* vi.po */; };
+		BE70D2722FC4F13200FA34B7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BE70D1FF2FC4F13200FA34B7 /* Assets.xcassets */; };
+		BE70D2742FC4F13200FA34B7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BE70D2392FC4F13200FA34B7 /* Main.storyboard */; };
+		BE70D2752FC4F13200FA34B7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE70D1FE2FC4F13200FA34B7 /* AppDelegate.swift */; };
+		BE70D2762FC4F13200FA34B7 /* BackstageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE70D2002FC4F13200FA34B7 /* BackstageViewController.swift */; };
+		BE70D2772FC4F13200FA34B7 /* COWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = BE70D2032FC4F13200FA34B7 /* COWrapper.mm */; };
+		BE70D2782FC4F13200FA34B7 /* Document.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE70D2042FC4F13200FA34B7 /* Document.swift */; };
+		BE70D2792FC4F13200FA34B7 /* DocumentController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE70D2052FC4F13200FA34B7 /* DocumentController.swift */; };
+		BE70D27A2FC4F13200FA34B7 /* macos.mm in Sources */ = {isa = PBXBuildFile; fileRef = BE70D2082FC4F13200FA34B7 /* macos.mm */; };
+		BE70D27B2FC4F13200FA34B7 /* RecentFiles.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE70D23A2FC4F13200FA34B7 /* RecentFiles.swift */; };
+		BE70D27C2FC4F13200FA34B7 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE70D23B2FC4F13200FA34B7 /* ViewController.swift */; };
+		BE70D27E2FC4F13200FA34B7 /* WebDriverManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE70D23D2FC4F13200FA34B7 /* WebDriverManager.swift */; };
+		BE70D27F2FC4F13200FA34B7 /* WebDriverServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE70D23E2FC4F13200FA34B7 /* WebDriverServer.swift */; };
+		BE70D2802FC4F13200FA34B7 /* WindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE70D23F2FC4F13200FA34B7 /* WindowController.swift */; };
+		BE70D2822FC4F1E400FA34B7 /* WebDriverHTTPServerBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE70D2812FC4F1E400FA34B7 /* WebDriverHTTPServerBase.swift */; };
 		BE862C4D2EB9066E0061664E /* templates in Resources */ = {isa = PBXBuildFile; fileRef = BE862C4C2EB9066E0061664E /* templates */; };
 		BE9115AE2CECBD3100C597B2 /* FileUtil-unix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE9115AD2CECBD3100C597B2 /* FileUtil-unix.cpp */; };
 		BE9115B02CECBECF00C597B2 /* Util-unix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE9115AF2CECBECF00C597B2 /* Util-unix.cpp */; };
@@ -123,6 +146,120 @@
 		BE5A7A282D2BE28200FE7D60 /* FileUtil.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = FileUtil.hpp; path = ../../../../common/FileUtil.hpp; sourceTree = "<group>"; };
 		BE5FDE352DAD3DCF00C48DB2 /* LogUI.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = LogUI.hpp; path = ../../../../kit/LogUI.hpp; sourceTree = "<group>"; };
 		BE5FDE362DAD3DCF00C48DB2 /* LogUI.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LogUI.cpp; path = ../../../../kit/LogUI.cpp; sourceTree = "<group>"; };
+		BE70D1CC2FC4F13200FA34B7 /* ar.po */ = {isa = PBXFileReference; lastKnownFileType = text; path = ar.po; sourceTree = "<group>"; };
+		BE70D1CD2FC4F13200FA34B7 /* az.po */ = {isa = PBXFileReference; lastKnownFileType = text; path = az.po; sourceTree = "<group>"; };
+		BE70D1CE2FC4F13200FA34B7 /* brh.po */ = {isa = PBXFileReference; lastKnownFileType = text; path = brh.po; sourceTree = "<group>"; };
+		BE70D1CF2FC4F13200FA34B7 /* ca.po */ = {isa = PBXFileReference; lastKnownFileType = text; path = ca.po; sourceTree = "<group>"; };
+		BE70D1D02FC4F13200FA34B7 /* cs.po */ = {isa = PBXFileReference; lastKnownFileType = text; path = cs.po; sourceTree = "<group>"; };
+		BE70D1D12FC4F13200FA34B7 /* cy.po */ = {isa = PBXFileReference; lastKnownFileType = text; path = cy.po; sourceTree = "<group>"; };
+		BE70D1D22FC4F13200FA34B7 /* da.po */ = {isa = PBXFileReference; lastKnownFileType = text; path = da.po; sourceTree = "<group>"; };
+		BE70D1D32FC4F13200FA34B7 /* de.po */ = {isa = PBXFileReference; lastKnownFileType = text; path = de.po; sourceTree = "<group>"; };
+		BE70D1D42FC4F13200FA34B7 /* el.po */ = {isa = PBXFileReference; lastKnownFileType = text; path = el.po; sourceTree = "<group>"; };
+		BE70D1D52FC4F13200FA34B7 /* en_AU.po */ = {isa = PBXFileReference; lastKnownFileType = text; path = en_AU.po; sourceTree = "<group>"; };
+		BE70D1D62FC4F13200FA34B7 /* en_NZ.po */ = {isa = PBXFileReference; lastKnownFileType = text; path = en_NZ.po; sourceTree = "<group>"; };
+		BE70D1D72FC4F13200FA34B7 /* en-GB.po */ = {isa = PBXFileReference; lastKnownFileType = text; path = "en-GB.po"; sourceTree = "<group>"; };
+		BE70D1D82FC4F13200FA34B7 /* es.po */ = {isa = PBXFileReference; lastKnownFileType = text; path = es.po; sourceTree = "<group>"; };
+		BE70D1D92FC4F13200FA34B7 /* et.po */ = {isa = PBXFileReference; lastKnownFileType = text; path = et.po; sourceTree = "<group>"; };
+		BE70D1DA2FC4F13200FA34B7 /* eu.po */ = {isa = PBXFileReference; lastKnownFileType = text; path = eu.po; sourceTree = "<group>"; };
+		BE70D1DB2FC4F13200FA34B7 /* fi.po */ = {isa = PBXFileReference; lastKnownFileType = text; path = fi.po; sourceTree = "<group>"; };
+		BE70D1DC2FC4F13200FA34B7 /* fr.po */ = {isa = PBXFileReference; lastKnownFileType = text; path = fr.po; sourceTree = "<group>"; };
+		BE70D1DD2FC4F13200FA34B7 /* ga.po */ = {isa = PBXFileReference; lastKnownFileType = text; path = ga.po; sourceTree = "<group>"; };
+		BE70D1DE2FC4F13200FA34B7 /* gl.po */ = {isa = PBXFileReference; lastKnownFileType = text; path = gl.po; sourceTree = "<group>"; };
+		BE70D1DF2FC4F13200FA34B7 /* he.po */ = {isa = PBXFileReference; lastKnownFileType = text; path = he.po; sourceTree = "<group>"; };
+		BE70D1E02FC4F13200FA34B7 /* hr.po */ = {isa = PBXFileReference; lastKnownFileType = text; path = hr.po; sourceTree = "<group>"; };
+		BE70D1E12FC4F13200FA34B7 /* hu.po */ = {isa = PBXFileReference; lastKnownFileType = text; path = hu.po; sourceTree = "<group>"; };
+		BE70D1E22FC4F13200FA34B7 /* hy.po */ = {isa = PBXFileReference; lastKnownFileType = text; path = hy.po; sourceTree = "<group>"; };
+		BE70D1E32FC4F13200FA34B7 /* id.po */ = {isa = PBXFileReference; lastKnownFileType = text; path = id.po; sourceTree = "<group>"; };
+		BE70D1E42FC4F13200FA34B7 /* is.po */ = {isa = PBXFileReference; lastKnownFileType = text; path = is.po; sourceTree = "<group>"; };
+		BE70D1E52FC4F13200FA34B7 /* it.po */ = {isa = PBXFileReference; lastKnownFileType = text; path = it.po; sourceTree = "<group>"; };
+		BE70D1E62FC4F13200FA34B7 /* ja.po */ = {isa = PBXFileReference; lastKnownFileType = text; path = ja.po; sourceTree = "<group>"; };
+		BE70D1E72FC4F13200FA34B7 /* kab.po */ = {isa = PBXFileReference; lastKnownFileType = text; path = kab.po; sourceTree = "<group>"; };
+		BE70D1E82FC4F13200FA34B7 /* kk.po */ = {isa = PBXFileReference; lastKnownFileType = text; path = kk.po; sourceTree = "<group>"; };
+		BE70D1E92FC4F13200FA34B7 /* ko.po */ = {isa = PBXFileReference; lastKnownFileType = text; path = ko.po; sourceTree = "<group>"; };
+		BE70D1EA2FC4F13200FA34B7 /* lo.po */ = {isa = PBXFileReference; lastKnownFileType = text; path = lo.po; sourceTree = "<group>"; };
+		BE70D1EB2FC4F13200FA34B7 /* Main.pot */ = {isa = PBXFileReference; lastKnownFileType = text; path = Main.pot; sourceTree = "<group>"; };
+		BE70D1EC2FC4F13200FA34B7 /* nl.po */ = {isa = PBXFileReference; lastKnownFileType = text; path = nl.po; sourceTree = "<group>"; };
+		BE70D1ED2FC4F13200FA34B7 /* pl.po */ = {isa = PBXFileReference; lastKnownFileType = text; path = pl.po; sourceTree = "<group>"; };
+		BE70D1EE2FC4F13200FA34B7 /* pt.po */ = {isa = PBXFileReference; lastKnownFileType = text; path = pt.po; sourceTree = "<group>"; };
+		BE70D1EF2FC4F13200FA34B7 /* pt-BR.po */ = {isa = PBXFileReference; lastKnownFileType = text; path = "pt-BR.po"; sourceTree = "<group>"; };
+		BE70D1F02FC4F13200FA34B7 /* ro.po */ = {isa = PBXFileReference; lastKnownFileType = text; path = ro.po; sourceTree = "<group>"; };
+		BE70D1F12FC4F13200FA34B7 /* ru.po */ = {isa = PBXFileReference; lastKnownFileType = text; path = ru.po; sourceTree = "<group>"; };
+		BE70D1F22FC4F13200FA34B7 /* sk.po */ = {isa = PBXFileReference; lastKnownFileType = text; path = sk.po; sourceTree = "<group>"; };
+		BE70D1F32FC4F13200FA34B7 /* sl.po */ = {isa = PBXFileReference; lastKnownFileType = text; path = sl.po; sourceTree = "<group>"; };
+		BE70D1F42FC4F13200FA34B7 /* sq.po */ = {isa = PBXFileReference; lastKnownFileType = text; path = sq.po; sourceTree = "<group>"; };
+		BE70D1F52FC4F13200FA34B7 /* sv.po */ = {isa = PBXFileReference; lastKnownFileType = text; path = sv.po; sourceTree = "<group>"; };
+		BE70D1F62FC4F13200FA34B7 /* tr.po */ = {isa = PBXFileReference; lastKnownFileType = text; path = tr.po; sourceTree = "<group>"; };
+		BE70D1F72FC4F13200FA34B7 /* uk.po */ = {isa = PBXFileReference; lastKnownFileType = text; path = uk.po; sourceTree = "<group>"; };
+		BE70D1F82FC4F13200FA34B7 /* ur.po */ = {isa = PBXFileReference; lastKnownFileType = text; path = ur.po; sourceTree = "<group>"; };
+		BE70D1F92FC4F13200FA34B7 /* vi.po */ = {isa = PBXFileReference; lastKnownFileType = text; path = vi.po; sourceTree = "<group>"; };
+		BE70D1FA2FC4F13200FA34B7 /* zh-Hans.po */ = {isa = PBXFileReference; lastKnownFileType = text; path = "zh-Hans.po"; sourceTree = "<group>"; };
+		BE70D1FB2FC4F13200FA34B7 /* zh-Hant.po */ = {isa = PBXFileReference; lastKnownFileType = text; path = "zh-Hant.po"; sourceTree = "<group>"; };
+		BE70D1FD2FC4F13200FA34B7 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
+		BE70D1FE2FC4F13200FA34B7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		BE70D1FF2FC4F13200FA34B7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		BE70D2002FC4F13200FA34B7 /* BackstageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackstageViewController.swift; sourceTree = "<group>"; };
+		BE70D2012FC4F13200FA34B7 /* coda.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = coda.entitlements; sourceTree = "<group>"; };
+		BE70D2022FC4F13200FA34B7 /* COWrapper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = COWrapper.h; sourceTree = "<group>"; };
+		BE70D2032FC4F13200FA34B7 /* COWrapper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = COWrapper.mm; sourceTree = "<group>"; };
+		BE70D2042FC4F13200FA34B7 /* Document.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Document.swift; sourceTree = "<group>"; };
+		BE70D2052FC4F13200FA34B7 /* DocumentController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentController.swift; sourceTree = "<group>"; };
+		BE70D2062FC4F13200FA34B7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		BE70D2072FC4F13200FA34B7 /* macos.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = macos.h; sourceTree = "<group>"; };
+		BE70D2082FC4F13200FA34B7 /* macos.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = macos.mm; sourceTree = "<group>"; };
+		BE70D2092FC4F13200FA34B7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Main.strings; sourceTree = "<group>"; };
+		BE70D20A2FC4F13200FA34B7 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/Main.strings; sourceTree = "<group>"; };
+		BE70D20B2FC4F13200FA34B7 /* az */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = az; path = az.lproj/Main.strings; sourceTree = "<group>"; };
+		BE70D20C2FC4F13200FA34B7 /* brh */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = brh; path = brh.lproj/Main.strings; sourceTree = "<group>"; };
+		BE70D20D2FC4F13200FA34B7 /* ca */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ca; path = ca.lproj/Main.strings; sourceTree = "<group>"; };
+		BE70D20E2FC4F13200FA34B7 /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cs; path = cs.lproj/Main.strings; sourceTree = "<group>"; };
+		BE70D20F2FC4F13200FA34B7 /* cy */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cy; path = cy.lproj/Main.strings; sourceTree = "<group>"; };
+		BE70D2102FC4F13200FA34B7 /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/Main.strings; sourceTree = "<group>"; };
+		BE70D2112FC4F13200FA34B7 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Main.strings; sourceTree = "<group>"; };
+		BE70D2122FC4F13200FA34B7 /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/Main.strings; sourceTree = "<group>"; };
+		BE70D2132FC4F13200FA34B7 /* en_AU */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en_AU; path = en_AU.lproj/Main.strings; sourceTree = "<group>"; };
+		BE70D2142FC4F13200FA34B7 /* en_NZ */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en_NZ; path = en_NZ.lproj/Main.strings; sourceTree = "<group>"; };
+		BE70D2152FC4F13200FA34B7 /* en-GB */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-GB"; path = "en-GB.lproj/Main.strings"; sourceTree = "<group>"; };
+		BE70D2162FC4F13200FA34B7 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Main.strings; sourceTree = "<group>"; };
+		BE70D2172FC4F13200FA34B7 /* et */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = et; path = et.lproj/Main.strings; sourceTree = "<group>"; };
+		BE70D2182FC4F13200FA34B7 /* eu */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = eu; path = eu.lproj/Main.strings; sourceTree = "<group>"; };
+		BE70D2192FC4F13200FA34B7 /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/Main.strings; sourceTree = "<group>"; };
+		BE70D21A2FC4F13200FA34B7 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Main.strings; sourceTree = "<group>"; };
+		BE70D21B2FC4F13200FA34B7 /* ga */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ga; path = ga.lproj/Main.strings; sourceTree = "<group>"; };
+		BE70D21C2FC4F13200FA34B7 /* gl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = gl; path = gl.lproj/Main.strings; sourceTree = "<group>"; };
+		BE70D21D2FC4F13200FA34B7 /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = he; path = he.lproj/Main.strings; sourceTree = "<group>"; };
+		BE70D21E2FC4F13200FA34B7 /* hr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hr; path = hr.lproj/Main.strings; sourceTree = "<group>"; };
+		BE70D21F2FC4F13200FA34B7 /* hu */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hu; path = hu.lproj/Main.strings; sourceTree = "<group>"; };
+		BE70D2202FC4F13200FA34B7 /* hy */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hy; path = hy.lproj/Main.strings; sourceTree = "<group>"; };
+		BE70D2212FC4F13200FA34B7 /* id */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = id; path = id.lproj/Main.strings; sourceTree = "<group>"; };
+		BE70D2222FC4F13200FA34B7 /* is */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = is; path = is.lproj/Main.strings; sourceTree = "<group>"; };
+		BE70D2232FC4F13200FA34B7 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Main.strings; sourceTree = "<group>"; };
+		BE70D2242FC4F13200FA34B7 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Main.strings; sourceTree = "<group>"; };
+		BE70D2252FC4F13200FA34B7 /* kab */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = kab; path = kab.lproj/Main.strings; sourceTree = "<group>"; };
+		BE70D2262FC4F13200FA34B7 /* kk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = kk; path = kk.lproj/Main.strings; sourceTree = "<group>"; };
+		BE70D2272FC4F13200FA34B7 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/Main.strings; sourceTree = "<group>"; };
+		BE70D2282FC4F13200FA34B7 /* lo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = lo; path = lo.lproj/Main.strings; sourceTree = "<group>"; };
+		BE70D2292FC4F13200FA34B7 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Main.strings; sourceTree = "<group>"; };
+		BE70D22A2FC4F13200FA34B7 /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/Main.strings; sourceTree = "<group>"; };
+		BE70D22B2FC4F13200FA34B7 /* pt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt; path = pt.lproj/Main.strings; sourceTree = "<group>"; };
+		BE70D22C2FC4F13200FA34B7 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/Main.strings"; sourceTree = "<group>"; };
+		BE70D22D2FC4F13200FA34B7 /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/Main.strings; sourceTree = "<group>"; };
+		BE70D22E2FC4F13200FA34B7 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Main.strings; sourceTree = "<group>"; };
+		BE70D22F2FC4F13200FA34B7 /* sk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sk; path = sk.lproj/Main.strings; sourceTree = "<group>"; };
+		BE70D2302FC4F13200FA34B7 /* sl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sl; path = sl.lproj/Main.strings; sourceTree = "<group>"; };
+		BE70D2312FC4F13200FA34B7 /* sq */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sq; path = sq.lproj/Main.strings; sourceTree = "<group>"; };
+		BE70D2322FC4F13200FA34B7 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/Main.strings; sourceTree = "<group>"; };
+		BE70D2332FC4F13200FA34B7 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Main.strings; sourceTree = "<group>"; };
+		BE70D2342FC4F13200FA34B7 /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uk; path = uk.lproj/Main.strings; sourceTree = "<group>"; };
+		BE70D2352FC4F13200FA34B7 /* ur */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ur; path = ur.lproj/Main.strings; sourceTree = "<group>"; };
+		BE70D2362FC4F13200FA34B7 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/Main.strings; sourceTree = "<group>"; };
+		BE70D2372FC4F13200FA34B7 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Main.strings"; sourceTree = "<group>"; };
+		BE70D2382FC4F13200FA34B7 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Main.strings"; sourceTree = "<group>"; };
+		BE70D23A2FC4F13200FA34B7 /* RecentFiles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentFiles.swift; sourceTree = "<group>"; };
+		BE70D23B2FC4F13200FA34B7 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		BE70D23D2FC4F13200FA34B7 /* WebDriverManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebDriverManager.swift; sourceTree = "<group>"; };
+		BE70D23E2FC4F13200FA34B7 /* WebDriverServer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebDriverServer.swift; sourceTree = "<group>"; };
+		BE70D23F2FC4F13200FA34B7 /* WindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowController.swift; sourceTree = "<group>"; };
+		BE70D2812FC4F1E400FA34B7 /* WebDriverHTTPServerBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = WebDriverHTTPServerBase.swift; path = "../../coda-driver/Sources/coda-driver/WebDriverHTTPServerBase.swift"; sourceTree = "<group>"; };
 		BE862C4C2EB9066E0061664E /* templates */ = {isa = PBXFileReference; lastKnownFileType = folder; name = templates; path = ../../../browser/dist/templates; sourceTree = "<group>"; };
 		BE9115AD2CECBD3100C597B2 /* FileUtil-unix.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "FileUtil-unix.cpp"; path = "../../../../common/FileUtil-unix.cpp"; sourceTree = "<group>"; };
 		BE9115AF2CECBECF00C597B2 /* Util-unix.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "Util-unix.cpp"; path = "../../../../common/Util-unix.cpp"; sourceTree = "<group>"; };
@@ -188,65 +325,7 @@
 		EC95AFDE75BD0C4A66FE4558 /* ProcUtil.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ProcUtil.cpp; path = ../../../../common/ProcUtil.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		BE862C8E2EBD05810061664E /* Exceptions for "coda" folder in "coda" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				.gitignore,
-				Info.plist,
-				po/ar.po,
-				po/ca.po,
-				po/cs.po,
-				po/cy.po,
-				po/da.po,
-				po/de.po,
-				po/el.po,
-				"po/en-GB.po",
-				po/es.po,
-				po/eu.po,
-				po/fi.po,
-				po/fr.po,
-				po/ga.po,
-				po/gl.po,
-				po/he.po,
-				po/hr.po,
-				po/hu.po,
-				po/hy.po,
-				po/id.po,
-				po/is.po,
-				po/it.po,
-				po/ja.po,
-				po/kk.po,
-				po/ko.po,
-				po/Main.pot,
-				po/nl.po,
-				po/pl.po,
-				"po/pt-BR.po",
-				po/pt.po,
-				po/ro.po,
-				po/ru.po,
-				po/sk.po,
-				po/sl.po,
-				po/sq.po,
-				po/sv.po,
-				po/tr.po,
-				po/uk.po,
-				"po/zh-Hans.po",
-				"po/zh-Hant.po",
-			);
-			target = BECC4BAA2CBD3FA300A120B3 /* coda */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
-
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		BECC4BAD2CBD3FA300A120B3 /* coda */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				BE862C8E2EBD05810061664E /* Exceptions for "coda" folder in "coda" target */,
-			);
-			path = coda;
-			sourceTree = "<group>";
-		};
 		BECC4BBF2CBD3FA400A120B3 /* codaTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = codaTests;
@@ -301,6 +380,88 @@
 				BE16C9EF2CD51F58005E5960 /* hello.odt */,
 			);
 			path = Resources;
+			sourceTree = "<group>";
+		};
+		BE70D1FC2FC4F13200FA34B7 /* po */ = {
+			isa = PBXGroup;
+			children = (
+				BE70D1CC2FC4F13200FA34B7 /* ar.po */,
+				BE70D1CD2FC4F13200FA34B7 /* az.po */,
+				BE70D1CE2FC4F13200FA34B7 /* brh.po */,
+				BE70D1CF2FC4F13200FA34B7 /* ca.po */,
+				BE70D1D02FC4F13200FA34B7 /* cs.po */,
+				BE70D1D12FC4F13200FA34B7 /* cy.po */,
+				BE70D1D22FC4F13200FA34B7 /* da.po */,
+				BE70D1D32FC4F13200FA34B7 /* de.po */,
+				BE70D1D42FC4F13200FA34B7 /* el.po */,
+				BE70D1D52FC4F13200FA34B7 /* en_AU.po */,
+				BE70D1D62FC4F13200FA34B7 /* en_NZ.po */,
+				BE70D1D72FC4F13200FA34B7 /* en-GB.po */,
+				BE70D1D82FC4F13200FA34B7 /* es.po */,
+				BE70D1D92FC4F13200FA34B7 /* et.po */,
+				BE70D1DA2FC4F13200FA34B7 /* eu.po */,
+				BE70D1DB2FC4F13200FA34B7 /* fi.po */,
+				BE70D1DC2FC4F13200FA34B7 /* fr.po */,
+				BE70D1DD2FC4F13200FA34B7 /* ga.po */,
+				BE70D1DE2FC4F13200FA34B7 /* gl.po */,
+				BE70D1DF2FC4F13200FA34B7 /* he.po */,
+				BE70D1E02FC4F13200FA34B7 /* hr.po */,
+				BE70D1E12FC4F13200FA34B7 /* hu.po */,
+				BE70D1E22FC4F13200FA34B7 /* hy.po */,
+				BE70D1E32FC4F13200FA34B7 /* id.po */,
+				BE70D1E42FC4F13200FA34B7 /* is.po */,
+				BE70D1E52FC4F13200FA34B7 /* it.po */,
+				BE70D1E62FC4F13200FA34B7 /* ja.po */,
+				BE70D1E72FC4F13200FA34B7 /* kab.po */,
+				BE70D1E82FC4F13200FA34B7 /* kk.po */,
+				BE70D1E92FC4F13200FA34B7 /* ko.po */,
+				BE70D1EA2FC4F13200FA34B7 /* lo.po */,
+				BE70D1EB2FC4F13200FA34B7 /* Main.pot */,
+				BE70D1EC2FC4F13200FA34B7 /* nl.po */,
+				BE70D1ED2FC4F13200FA34B7 /* pl.po */,
+				BE70D1EE2FC4F13200FA34B7 /* pt.po */,
+				BE70D1EF2FC4F13200FA34B7 /* pt-BR.po */,
+				BE70D1F02FC4F13200FA34B7 /* ro.po */,
+				BE70D1F12FC4F13200FA34B7 /* ru.po */,
+				BE70D1F22FC4F13200FA34B7 /* sk.po */,
+				BE70D1F32FC4F13200FA34B7 /* sl.po */,
+				BE70D1F42FC4F13200FA34B7 /* sq.po */,
+				BE70D1F52FC4F13200FA34B7 /* sv.po */,
+				BE70D1F62FC4F13200FA34B7 /* tr.po */,
+				BE70D1F72FC4F13200FA34B7 /* uk.po */,
+				BE70D1F82FC4F13200FA34B7 /* ur.po */,
+				BE70D1F92FC4F13200FA34B7 /* vi.po */,
+				BE70D1FA2FC4F13200FA34B7 /* zh-Hans.po */,
+				BE70D1FB2FC4F13200FA34B7 /* zh-Hant.po */,
+			);
+			path = po;
+			sourceTree = "<group>";
+		};
+		BE70D2402FC4F13200FA34B7 /* coda */ = {
+			isa = PBXGroup;
+			children = (
+				BE70D1FC2FC4F13200FA34B7 /* po */,
+				BE70D1FD2FC4F13200FA34B7 /* .gitignore */,
+				BE70D1FE2FC4F13200FA34B7 /* AppDelegate.swift */,
+				BE70D1FF2FC4F13200FA34B7 /* Assets.xcassets */,
+				BE70D2002FC4F13200FA34B7 /* BackstageViewController.swift */,
+				BE70D2012FC4F13200FA34B7 /* coda.entitlements */,
+				BE70D2022FC4F13200FA34B7 /* COWrapper.h */,
+				BE70D2032FC4F13200FA34B7 /* COWrapper.mm */,
+				BE70D2042FC4F13200FA34B7 /* Document.swift */,
+				BE70D2052FC4F13200FA34B7 /* DocumentController.swift */,
+				BE70D2062FC4F13200FA34B7 /* Info.plist */,
+				BE70D2072FC4F13200FA34B7 /* macos.h */,
+				BE70D2082FC4F13200FA34B7 /* macos.mm */,
+				BE70D2392FC4F13200FA34B7 /* Main.storyboard */,
+				BE70D23A2FC4F13200FA34B7 /* RecentFiles.swift */,
+				BE70D23B2FC4F13200FA34B7 /* ViewController.swift */,
+				BE70D2812FC4F1E400FA34B7 /* WebDriverHTTPServerBase.swift */,
+				BE70D23D2FC4F13200FA34B7 /* WebDriverManager.swift */,
+				BE70D23E2FC4F13200FA34B7 /* WebDriverServer.swift */,
+				BE70D23F2FC4F13200FA34B7 /* WindowController.swift */,
+			);
+			path = coda;
 			sourceTree = "<group>";
 		};
 		BEA2637C2CBE38FE0007435A /* common */ = {
@@ -431,7 +592,7 @@
 				BEB7CC172F332BF8006FCAE9 /* TestPlan.xctestplan */,
 				BE22492A2CC79AAC00385A9C /* Resources */,
 				BEA2637D2CBE39C30007435A /* Online */,
-				BECC4BAD2CBD3FA300A120B3 /* coda */,
+				BE70D2402FC4F13200FA34B7 /* coda */,
 				BECC4BBF2CBD3FA400A120B3 /* codaTests */,
 				BECC4BC92CBD3FA400A120B3 /* codaUITests */,
 				BECC4BAC2CBD3FA300A120B3 /* Products */,
@@ -467,9 +628,6 @@
 			buildRules = (
 			);
 			dependencies = (
-			);
-			fileSystemSynchronizedGroups = (
-				BECC4BAD2CBD3FA300A120B3 /* coda */,
 			);
 			name = coda;
 			packageProductDependencies = (
@@ -596,6 +754,10 @@
 				et,
 				en_NZ,
 				lo,
+				ur,
+				az,
+				kab,
+				brh,
 			);
 			mainGroup = BECC4BA22CBD3FA300A120B3;
 			minimizedProjectReferenceProxies = 1;
@@ -619,6 +781,17 @@
 				BE22AA9C2CC7AE7400385A9C /* images in Resources */,
 				BEB7CC182F332BF8006FCAE9 /* TestPlan.xctestplan in Resources */,
 				BE862C4D2EB9066E0061664E /* templates in Resources */,
+				BE70D2422FC4F13200FA34B7 /* az.po in Resources */,
+				BE70D2432FC4F13200FA34B7 /* brh.po in Resources */,
+				BE70D24A2FC4F13200FA34B7 /* en_AU.po in Resources */,
+				BE70D24B2FC4F13200FA34B7 /* en_NZ.po in Resources */,
+				BE70D24E2FC4F13200FA34B7 /* et.po in Resources */,
+				BE70D25C2FC4F13200FA34B7 /* kab.po in Resources */,
+				BE70D25F2FC4F13200FA34B7 /* lo.po in Resources */,
+				BE70D26D2FC4F13200FA34B7 /* ur.po in Resources */,
+				BE70D26E2FC4F13200FA34B7 /* vi.po in Resources */,
+				BE70D2722FC4F13200FA34B7 /* Assets.xcassets in Resources */,
+				BE70D2742FC4F13200FA34B7 /* Main.storyboard in Resources */,
 				BEF5CE8F2D633CE60006FD77 /* discovery.xml in Resources */,
 				BE4C62612D5B736200047DF2 /* coolwsd.xml in Resources */,
 				BE2252292CC79BAE00385A9C /* bundle.js in Resources */,
@@ -729,6 +902,17 @@
 				BEDAD86B2F5EF7BA00E82F00 /* WSDGlobals.cpp in Sources */,
 				BEF6F02D2DD1EC0200EA06BF /* RegexUtil.cpp in Sources */,
 				BEA2636E2CBE38E20007435A /* Util.cpp in Sources */,
+				BE70D2752FC4F13200FA34B7 /* AppDelegate.swift in Sources */,
+				BE70D2762FC4F13200FA34B7 /* BackstageViewController.swift in Sources */,
+				BE70D2772FC4F13200FA34B7 /* COWrapper.mm in Sources */,
+				BE70D2782FC4F13200FA34B7 /* Document.swift in Sources */,
+				BE70D2792FC4F13200FA34B7 /* DocumentController.swift in Sources */,
+				BE70D27A2FC4F13200FA34B7 /* macos.mm in Sources */,
+				BE70D27B2FC4F13200FA34B7 /* RecentFiles.swift in Sources */,
+				BE70D27C2FC4F13200FA34B7 /* ViewController.swift in Sources */,
+				BE70D27E2FC4F13200FA34B7 /* WebDriverManager.swift in Sources */,
+				BE70D27F2FC4F13200FA34B7 /* WebDriverServer.swift in Sources */,
+				BE70D2802FC4F13200FA34B7 /* WindowController.swift in Sources */,
 				BE44ACC22D7EFF1500BFA3B2 /* Util-mobile.cpp in Sources */,
 				BE252C5B2EC6667400349F71 /* SlideCache.cpp in Sources */,
 				BEA2636F2CBE38E20007435A /* Unit.cpp in Sources */,
@@ -758,6 +942,7 @@
 				BEA264B02CBE99340007435A /* ClientSession.cpp in Sources */,
 				BEA264B12CBE99340007435A /* RequestDetails.cpp in Sources */,
 				BE178EEA2E5C756000A1FCBF /* Log-common.cpp in Sources */,
+				BE70D2822FC4F1E400FA34B7 /* WebDriverHTTPServerBase.swift in Sources */,
 				BEA264B32CBE99340007435A /* DocumentBroker.cpp in Sources */,
 				BEA263772CBE38E20007435A /* ConfigUtil.cpp in Sources */,
 				BEA263782CBE38E20007435A /* StringVector.cpp in Sources */,
@@ -795,6 +980,64 @@
 			targetProxy = BECC4BC72CBD3FA400A120B3 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		BE70D2392FC4F13200FA34B7 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				BE70D2092FC4F13200FA34B7 /* Base */,
+				BE70D20A2FC4F13200FA34B7 /* ar */,
+				BE70D20B2FC4F13200FA34B7 /* az */,
+				BE70D20C2FC4F13200FA34B7 /* brh */,
+				BE70D20D2FC4F13200FA34B7 /* ca */,
+				BE70D20E2FC4F13200FA34B7 /* cs */,
+				BE70D20F2FC4F13200FA34B7 /* cy */,
+				BE70D2102FC4F13200FA34B7 /* da */,
+				BE70D2112FC4F13200FA34B7 /* de */,
+				BE70D2122FC4F13200FA34B7 /* el */,
+				BE70D2132FC4F13200FA34B7 /* en_AU */,
+				BE70D2142FC4F13200FA34B7 /* en_NZ */,
+				BE70D2152FC4F13200FA34B7 /* en-GB */,
+				BE70D2162FC4F13200FA34B7 /* es */,
+				BE70D2172FC4F13200FA34B7 /* et */,
+				BE70D2182FC4F13200FA34B7 /* eu */,
+				BE70D2192FC4F13200FA34B7 /* fi */,
+				BE70D21A2FC4F13200FA34B7 /* fr */,
+				BE70D21B2FC4F13200FA34B7 /* ga */,
+				BE70D21C2FC4F13200FA34B7 /* gl */,
+				BE70D21D2FC4F13200FA34B7 /* he */,
+				BE70D21E2FC4F13200FA34B7 /* hr */,
+				BE70D21F2FC4F13200FA34B7 /* hu */,
+				BE70D2202FC4F13200FA34B7 /* hy */,
+				BE70D2212FC4F13200FA34B7 /* id */,
+				BE70D2222FC4F13200FA34B7 /* is */,
+				BE70D2232FC4F13200FA34B7 /* it */,
+				BE70D2242FC4F13200FA34B7 /* ja */,
+				BE70D2252FC4F13200FA34B7 /* kab */,
+				BE70D2262FC4F13200FA34B7 /* kk */,
+				BE70D2272FC4F13200FA34B7 /* ko */,
+				BE70D2282FC4F13200FA34B7 /* lo */,
+				BE70D2292FC4F13200FA34B7 /* nl */,
+				BE70D22A2FC4F13200FA34B7 /* pl */,
+				BE70D22B2FC4F13200FA34B7 /* pt */,
+				BE70D22C2FC4F13200FA34B7 /* pt-BR */,
+				BE70D22D2FC4F13200FA34B7 /* ro */,
+				BE70D22E2FC4F13200FA34B7 /* ru */,
+				BE70D22F2FC4F13200FA34B7 /* sk */,
+				BE70D2302FC4F13200FA34B7 /* sl */,
+				BE70D2312FC4F13200FA34B7 /* sq */,
+				BE70D2322FC4F13200FA34B7 /* sv */,
+				BE70D2332FC4F13200FA34B7 /* tr */,
+				BE70D2342FC4F13200FA34B7 /* uk */,
+				BE70D2352FC4F13200FA34B7 /* ur */,
+				BE70D2362FC4F13200FA34B7 /* vi */,
+				BE70D2372FC4F13200FA34B7 /* zh-Hans */,
+				BE70D2382FC4F13200FA34B7 /* zh-Hant */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		BECC4BCE2CBD3FA400A120B3 /* Debug */ = {

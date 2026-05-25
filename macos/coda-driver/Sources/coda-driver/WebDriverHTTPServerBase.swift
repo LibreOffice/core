@@ -12,14 +12,12 @@ import Foundation
 import Network
 
 /**
- * Shared HTTP plumbing for the W3C WebDriver-style servers.
+ * Shared HTTP plumbing for the W3C WebDriver-style servers in the app.
  *
  * Subclasses implement `routeRequest(_:connection:)` to dispatch
  * parsed HTTP requests to W3C endpoints.  The base class handles
  * the NWListener, connection lifecycle, request parsing, and W3C
  * JSON response formatting.
- *
- * Mirrors the file of the same name in the main app target.
  */
 class WebDriverHTTPServerBase {
 
@@ -47,17 +45,10 @@ class WebDriverHTTPServerBase {
         listener.stateUpdateHandler = { [weak self] state in
             guard let self = self else { return }
             switch state {
-            case .ready:
-                NSLog("%@: ready on port %d", self.label,
-                      self.listener.port?.rawValue ?? 0)
-            case .failed(let err):
-                NSLog("%@: listener failed: %@", self.label,
-                      err.localizedDescription)
-            case .waiting(let err):
-                NSLog("%@: listener waiting: %@", self.label,
-                      err.localizedDescription)
-            case .cancelled:
-                NSLog("%@: listener cancelled", self.label)
+            case .ready:            NSLog("%@: ready on port %d", self.label, self.listener.port?.rawValue ?? 0)
+            case .failed(let err):  NSLog("%@: listener failed: %@", self.label, err.localizedDescription)
+            case .waiting(let err): NSLog("%@: listener waiting: %@", self.label, err.localizedDescription)
+            case .cancelled:        NSLog("%@: listener cancelled", self.label)
             default:
                 break
             }
@@ -66,8 +57,7 @@ class WebDriverHTTPServerBase {
             self?.handleConnection(connection)
         }
         listener.start(queue: .global(qos: .userInitiated))
-        NSLog("%@: starting on requested port %d", label,
-              listener.port?.rawValue ?? 0)
+        NSLog("%@: starting on requested port %d", label, listener.port?.rawValue ?? 0)
     }
 
     func stop() {
@@ -112,6 +102,10 @@ class WebDriverHTTPServerBase {
         }
     }
 
+    /**
+     * Try to parse a complete HTTP request from the accumulated data.
+     * Returns nil if more data is needed.
+     */
     private func parseHTTPRequest(_ data: Data) -> HTTPRequest? {
         guard let headerEnd = data.range(of: Data("\r\n\r\n".utf8)) else {
             return nil
