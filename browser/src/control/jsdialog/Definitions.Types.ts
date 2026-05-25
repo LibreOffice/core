@@ -515,6 +515,7 @@ interface AriaLabelAttributes {
 	label?: string;
 	description?: string;
 	role?: string;
+	pressed?: boolean; // drives aria-pressed on widgets that honour it (e.g. pushbutton)
 }
 
 interface SeparatorWidgetJSON extends WidgetJSON {

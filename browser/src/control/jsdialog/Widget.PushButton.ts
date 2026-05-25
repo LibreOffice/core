@@ -155,6 +155,16 @@ JSDialog.pushButton = function (
 		pushbutton.setAttribute('role', data.aria.role);
 	}
 
+	// Honour aria.pressed only when it's explicitly a boolean. `undefined`
+	// must not emit aria-pressed="false" - that would falsely advertise
+	// every regular pushbutton as a toggle to assistive tech.
+	if (data.aria && typeof data.aria.pressed === 'boolean') {
+		pushbutton.setAttribute(
+			'aria-pressed',
+			data.aria.pressed ? 'true' : 'false',
+		);
+	}
+
 	builder.map.hideRestrictedItems(data, wrapper, pushbutton);
 	builder.map.disableLockedItem(data, wrapper, pushbutton);
 	if (data.hidden) $(wrapper).hide(); // Both pushbutton and its wrapper needs to be hidden.

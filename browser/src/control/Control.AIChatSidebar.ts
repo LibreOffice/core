@@ -316,7 +316,6 @@ namespace cool {
 			this.applyInputStyles();
 			this.applyRatingBadge();
 			this.setTonePickerOpenClass(this.tonePickerOpen);
-			this.applyTonePickerStates();
 			this.scrollToBottom();
 			this.attachContainerKeyboardHandler();
 			if (this.tonePickerOpen) {
@@ -1028,6 +1027,7 @@ namespace cool {
 						enabled: true,
 						aria: {
 							label: _('Toggle emojify'),
+							pressed: this.emojify,
 						},
 					},
 				],
@@ -1050,37 +1050,14 @@ namespace cool {
 			// updateWidget may have recreated the DOM subtree, so re-apply the
 			// open-state class synchronously to avoid the picker flashing hidden.
 			this.setTonePickerOpenClass(this.tonePickerOpen);
-			this.applyTonePickerStates();
 			this._tonePickerKeyNavAttached = false;
-			if (this.tonePickerOpen && !this.formOpen) {
+			if (this.tonePickerOpen) {
 				app.layoutingService.onDrain(() => {
 					this.setTonePickerOpenClass(this.tonePickerOpen);
-					this.applyTonePickerStates();
-					this.setupTonePickerKeyboardNav();
+					if (!this.formOpen) {
+						this.setupTonePickerKeyboardNav();
+					}
 				});
-			} else if (this.tonePickerOpen && this.formOpen) {
-				app.layoutingService.onDrain(() => {
-					this.setTonePickerOpenClass(this.tonePickerOpen);
-					this.applyTonePickerStates();
-				});
-			}
-		}
-
-		// The tone chips drive aria-pressed themselves from their `pressed`
-		// field. Widget.PushButton.ts ignores data.aria.pressed, so the
-		// emojify toggle still needs manual handling here.
-		private applyTonePickerStates(): void {
-			const emojifyBtn = document.querySelector(
-				'#aichat-tone-emojify button.ui-pushbutton',
-			) as HTMLButtonElement | null;
-			if (emojifyBtn) {
-				emojifyBtn.setAttribute(
-					'aria-pressed',
-					this.emojify ? 'true' : 'false',
-				);
-			}
-			if (this.formOpen) {
-				this.applyFormIconHighlight();
 			}
 		}
 
@@ -1213,7 +1190,10 @@ namespace cool {
 					type: 'pushbutton',
 					text: rowIcons[i],
 					enabled: true,
-					aria: { label: _('Use icon') + ' ' + rowIcons[i] },
+					aria: {
+						label: _('Use icon') + ' ' + rowIcons[i],
+						pressed: rowIcons[i] === draft.icon,
+					},
 				});
 			}
 			iconChildren.push({
@@ -1496,22 +1476,11 @@ namespace cool {
 			const icon = this.formIconRow[index];
 			if (!icon) return;
 			this.formDraft.icon = icon;
-			this.applyFormIconHighlight();
-		}
-
-		private applyFormIconHighlight(): void {
-			if (!this.formDraft) return;
-			for (let i = 0; i < this.formIconRow.length; i++) {
-				const btn = document.querySelector(
-					'#aichat-tone-form-icon-' + i + ' button.ui-pushbutton',
-				) as HTMLButtonElement | null;
-				if (btn) {
-					btn.setAttribute(
-						'aria-pressed',
-						this.formIconRow[i] === this.formDraft.icon ? 'true' : 'false',
-					);
-				}
-			}
+			// The picker JSON now carries aria.pressed per icon, so a
+			// rebuild repaints the highlight. updateWidget restores focus
+			// to the clicked button via its preserved id, and the form
+			// fields' values come from formDraft so no typed input is lost.
+			this.updateTonePicker();
 		}
 
 		private openEmojiPicker(): void {
