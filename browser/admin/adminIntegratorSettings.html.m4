@@ -36,7 +36,6 @@ m4_dnl------------------------------------------------------------------------
     />
     <link rel="stylesheet" href="m4_ifelse(MOBILEAPP, [], [%SERVICE_ROOT%/browser/%VERSION%/])color-palette.css" />
     <link rel="stylesheet" href="m4_ifelse(MOBILEAPP, [], [%SERVICE_ROOT%/browser/%VERSION%/])color-palette-dark.css" />
-    m4_ifelse(MOBILEAPP, [], [<script src="%SERVICE_ROOT%/browser/%VERSION%/l10n.js" defer></script>])
     <link
       rel="stylesheet"
       href="m4_ifelse(MOBILEAPP, [], [%SERVICE_ROOT%/browser/%VERSION%/])admin/css/adminIntegratorSettings.css"
