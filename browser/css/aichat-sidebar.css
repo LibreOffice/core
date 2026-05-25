@@ -1004,6 +1004,94 @@ button.ui-pushbutton[aria-pressed='true']:hover {
 	cursor: default;
 }
 
+/* -- Inline delete-tone confirm panel -- */
+
+#aichat-tone-delete-confirm {
+	display: flex !important;
+	grid-auto-flow: unset !important;
+	flex-direction: column;
+	gap: 8px;
+	padding: 12px;
+	border: 1px solid var(--color-border);
+	border-radius: 10px;
+	background: var(--color-background-lighter);
+}
+
+#aichat-tone-delete-confirm-title {
+	font-weight: 600;
+	font-size: 14px;
+	color: var(--color-main-text);
+}
+
+#aichat-tone-delete-confirm-desc {
+	font-size: 12.5px;
+	color: var(--color-text-lighter);
+}
+
+#aichat-tone-delete-confirm-preview {
+	display: flex !important;
+	grid-auto-flow: unset !important;
+	align-items: center;
+	margin: 4px 0 8px;
+}
+
+#aichat-tone-delete-confirm-preview .ui-chip {
+	flex: 0 0 auto;
+	align-self: flex-start;
+	pointer-events: none;
+}
+
+#aichat-tone-delete-confirm-preview .ui-chip-main {
+	cursor: default;
+}
+
+#aichat-tone-delete-confirm-actions {
+	display: flex !important;
+	grid-auto-flow: unset !important;
+	justify-content: flex-end;
+	align-items: center;
+	gap: 8px;
+}
+
+#aichat-tone-delete-confirm-actions > .ui-pushbutton-wrapper {
+	flex: 0 0 auto;
+	margin: 0;
+}
+
+#aichat-tone-delete-confirm-cancel button.ui-pushbutton {
+	background: transparent;
+	border: 1px solid var(--color-border);
+	color: var(--color-main-text);
+	border-radius: 999px;
+	padding: 6px 14px;
+	font-size: 12px;
+	cursor: pointer;
+}
+
+#aichat-tone-delete-confirm-cancel button.ui-pushbutton:hover {
+	background: rgba(var(--aichat-accent), 0.06);
+	border-color: rgba(var(--aichat-accent), 0.4);
+}
+
+#aichat-tone-delete-confirm-ok button.ui-pushbutton {
+	background: rgb(220, 38, 38);
+	border: 1px solid rgb(220, 38, 38);
+	color: #fff;
+	border-radius: 999px;
+	padding: 6px 14px;
+	font-size: 12px;
+	cursor: pointer;
+}
+
+#aichat-tone-delete-confirm-ok button.ui-pushbutton:hover {
+	filter: brightness(0.94);
+}
+
+#aichat-tone-delete-confirm-ok button.ui-pushbutton:focus-visible {
+	outline: 2px solid var(--color-error);
+	outline-offset: 2px;
+}
+
 /* -- Emoji picker overlay (anchors the generic .ui-emoji-picker widget) -- */
 
 #aichat-tone-form-emoji-picker {

@@ -68,6 +68,7 @@ namespace cool {
 		// pulled in from the full picker.
 		private formIconRow: string[] = [];
 		private emojiPickerOpen: boolean = false;
+		private deleteConfirmOpen: boolean = false;
 
 		private builder: any;
 		private container: HTMLElement;
@@ -906,10 +907,13 @@ namespace cool {
 			if (this.formOpen) {
 				// JSDialog only wraps a container with >1 children in its own
 				// <div>; without that wrapper, updateWidget would replace the
-				// picker element with the form element (and #aichat-tone-picker
-				// would vanish from the DOM, breaking later rebuilds and
-				// follow-up click handlers).
-				const children: any[] = [this.getToneFormJSON()];
+				// picker element with the form/confirm element (and
+				// #aichat-tone-picker would vanish from the DOM, breaking
+				// later rebuilds and follow-up click handlers).
+				const inner = this.deleteConfirmOpen
+					? this.getToneDeleteConfirmJSON()
+					: this.getToneFormJSON();
+				const children: any[] = [inner];
 				this.ensureContainerChildren(children, 'aichat-tone-picker');
 				return {
 					id: 'aichat-tone-picker',
@@ -1091,6 +1095,7 @@ namespace cool {
 			this.tonePickerOpen = false;
 			this.formOpen = false;
 			this.formDraft = null;
+			this.deleteConfirmOpen = false;
 			this.closeEmojiPicker();
 			this.setTonePickerOpenClass(false);
 			this.updateTonePicker();
@@ -1310,6 +1315,73 @@ namespace cool {
 			};
 		}
 
+		private getToneDeleteConfirmJSON(): any {
+			const draft = this.formDraft || {
+				id: '',
+				name: '',
+				icon: this.DEFAULT_TONE_ICONS[0],
+				description: '',
+			};
+			return {
+				id: 'aichat-tone-delete-confirm',
+				type: 'container',
+				vertical: true,
+				allyRole: 'group',
+				aria: { label: _('Delete tone confirmation') },
+				children: [
+					{
+						id: 'aichat-tone-delete-confirm-title',
+						type: 'fixedtext',
+						text: _('Delete tone'),
+						enabled: true,
+					},
+					{
+						id: 'aichat-tone-delete-confirm-desc',
+						type: 'fixedtext',
+						text: _('This tone of voice will be deleted'),
+						enabled: true,
+					},
+					{
+						id: 'aichat-tone-delete-confirm-preview',
+						type: 'container',
+						horizontal: true,
+						children: [
+							{
+								id: 'aichat-tone-delete-confirm-chip',
+								type: 'chip',
+								text: draft.name,
+								icon: draft.icon,
+								pressed: false,
+								enabled: true,
+								aria: { label: draft.name + ' ' + _('tone') },
+							},
+						],
+					},
+					{
+						id: 'aichat-tone-delete-confirm-actions',
+						type: 'container',
+						horizontal: true,
+						children: [
+							{
+								id: 'aichat-tone-delete-confirm-cancel',
+								type: 'pushbutton',
+								text: _('Cancel'),
+								enabled: true,
+								aria: { label: _('Cancel delete') },
+							},
+							{
+								id: 'aichat-tone-delete-confirm-ok',
+								type: 'pushbutton',
+								text: _('Delete'),
+								enabled: true,
+								aria: { label: _('Delete tone') },
+							},
+						],
+					},
+				],
+			};
+		}
+
 		private canSaveForm(): boolean {
 			if (!this.formDraft) return false;
 			return (
@@ -1352,6 +1424,7 @@ namespace cool {
 		private closeToneForm(): void {
 			this.formOpen = false;
 			this.formDraft = null;
+			this.deleteConfirmOpen = false;
 			this.closeEmojiPicker();
 			this.updateTonePicker();
 		}
@@ -1403,7 +1476,23 @@ namespace cool {
 			this.updateTonePicker();
 		}
 
-		private deleteToneFromForm(): void {
+		private openDeleteConfirm(): void {
+			if (!this.formDraft || this.formMode !== 'edit') return;
+			if (this.deleteConfirmOpen) return;
+			this.deleteConfirmOpen = true;
+			this.closeEmojiPicker();
+			this.updateTonePicker();
+			this.focusDeleteConfirmCancel();
+		}
+
+		private closeDeleteConfirm(): void {
+			if (!this.deleteConfirmOpen) return;
+			this.deleteConfirmOpen = false;
+			this.updateTonePicker();
+			this.focusFormDeleteButton();
+		}
+
+		private confirmDeleteTone(): void {
 			if (!this.formDraft || this.formMode !== 'edit') return;
 			const id = this.formDraft.id;
 			this.customTones = this.customTones.filter((t) => t.id !== id);
@@ -1412,10 +1501,29 @@ namespace cool {
 				this.selectedTone = null;
 				this.saveSelectedTone();
 			}
+			this.deleteConfirmOpen = false;
 			this.formOpen = false;
 			this.formDraft = null;
 			this.updateToneChip();
 			this.updateTonePicker();
+		}
+
+		private focusDeleteConfirmCancel(): void {
+			app.layoutingService.onDrain(() => {
+				const btn = document.querySelector(
+					'#aichat-tone-delete-confirm-cancel button.ui-pushbutton',
+				) as HTMLButtonElement | null;
+				if (btn) btn.focus();
+			});
+		}
+
+		private focusFormDeleteButton(): void {
+			app.layoutingService.onDrain(() => {
+				const btn = document.querySelector(
+					'#aichat-tone-form-delete button.ui-pushbutton',
+				) as HTMLButtonElement | null;
+				if (btn) btn.focus();
+			});
 		}
 
 		private focusFormName(): void {
@@ -1635,8 +1743,10 @@ namespace cool {
 				'aichat-tone-form-back': () => this.closeToneForm(),
 				'aichat-tone-form-cancel': () => this.closeToneForm(),
 				'aichat-tone-form-save': () => this.saveToneForm(),
-				'aichat-tone-form-delete': () => this.deleteToneFromForm(),
+				'aichat-tone-form-delete': () => this.openDeleteConfirm(),
 				'aichat-tone-form-emoji-more': () => this.openEmojiPicker(),
+				'aichat-tone-delete-confirm-cancel': () => this.closeDeleteConfirm(),
+				'aichat-tone-delete-confirm-ok': () => this.confirmDeleteTone(),
 			};
 
 			if (exactActions[id]) {
@@ -2170,6 +2280,7 @@ namespace cool {
 			this.formOpen = false;
 			this.formDraft = null;
 			this.emojiPickerOpen = false;
+			this.deleteConfirmOpen = false;
 			this.render();
 		}
 
@@ -2286,7 +2397,9 @@ namespace cool {
 			this.container.addEventListener('keydown', (e: KeyboardEvent) => {
 				if (e.key === 'Escape') {
 					e.preventDefault();
-					if (this.emojiPickerOpen) {
+					if (this.deleteConfirmOpen) {
+						this.closeDeleteConfirm();
+					} else if (this.emojiPickerOpen) {
 						this.closeEmojiPicker();
 					} else if (this.formOpen) {
 						this.closeToneForm();

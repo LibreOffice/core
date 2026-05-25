@@ -453,7 +453,28 @@ describe(['tagdesktop'], 'AI Chat Sidebar', function() {
 			helper.waitUntilLayoutingIsIdle(this.win);
 			cy.cGet('#aichat-tone-form-delete button').click();
 			helper.waitUntilLayoutingIsIdle(this.win);
+			cy.cGet('#aichat-tone-delete-confirm').should('exist');
+			cy.cGet('#aichat-tone-delete-confirm-ok button').click();
+			helper.waitUntilLayoutingIsIdle(this.win);
 			cy.cGet('.ui-chip[id^="aichat-tone-custom-"]').should('not.exist');
+		});
+
+		it('Cancelling the delete confirm returns to the edit form', function() {
+			cy.cGet('#aichat-tone-add button').click();
+			helper.waitUntilLayoutingIsIdle(this.win);
+			cy.cGet('#aichat-tone-form-name input').type('Curt');
+			cy.cGet('#aichat-tone-form-desc.ui-textarea').type('Be terse');
+			cy.cGet('#aichat-tone-form-save button').click();
+			helper.waitUntilLayoutingIsIdle(this.win);
+			cy.cGet('[id^="aichat-tone-edit-"]').click();
+			helper.waitUntilLayoutingIsIdle(this.win);
+			cy.cGet('#aichat-tone-form-delete button').click();
+			helper.waitUntilLayoutingIsIdle(this.win);
+			cy.cGet('#aichat-tone-delete-confirm-cancel button').click();
+			helper.waitUntilLayoutingIsIdle(this.win);
+			cy.cGet('#aichat-tone-delete-confirm').should('not.exist');
+			cy.cGet('#aichat-tone-form-delete button').should('exist');
+			cy.cGet('#aichat-tone-form-name input').should('have.value', 'Curt');
 		});
 	});
 
