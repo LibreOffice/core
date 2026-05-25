@@ -37,7 +37,6 @@
 #include <map>
 
 class SdDrawDocument;
-class SdXImpressDocument;
 namespace com::sun::star::drawing { class XDrawView; }
 namespace sdtools { class EventMultiplexerEvent; }
 
@@ -93,7 +92,7 @@ private:
 
     ::sd::slidesorter::SharedPageSelection getSelectedPages() const;
 
-    void Initialize(SdDrawDocument* pDoc);
+    void Initialize();
 
     DECL_LINK( ApplyToAllButtonClicked, weld::Button&, void );
     DECL_LINK( PlayButtonClicked, weld::Button&, void );
@@ -134,13 +133,11 @@ private:
     std::unique_ptr<weld::CheckButton> mxCB_AUTO_PREVIEW;
 
     css::uno::Reference< css::drawing::XDrawView >             mxView;
-    rtl::Reference< SdXImpressDocument >                  mxModel;
 
     std::unordered_map<OUString, std::unique_ptr<TransitionEntry>> maTranstionMap;
 
     bool         mbHasSelection;
     bool         mbUpdatingControls;
-    bool         mbIsMainViewChangePending;
 
     std::vector<OUString>  maSoundList;
     mutable OUString maCurrentSoundFile;

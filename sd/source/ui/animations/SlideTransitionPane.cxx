@@ -27,6 +27,7 @@
 #include <DrawDocShell.hxx>
 #include <SlideSorterViewShell.hxx>
 #include <unomodel.hxx>
+#include <DrawController.hxx>
 #include <drawdoc.hxx>
 #include <sdmod.hxx>
 #include <sdpage.hxx>
@@ -376,10 +377,9 @@ SlideTransitionPane::SlideTransitionPane(
         mxRepeatAutoFrame(m_xBuilder->weld_frame("repeat_after_frame")),
         mbHasSelection( false ),
         mbUpdatingControls( false ),
-        mbIsMainViewChangePending( false ),
         maLateInitTimer("sd SlideTransitionPane maLateInitTimer")
 {
-    Initialize(mpDrawDoc);
+    Initialize();
 }
 
 css::ui::LayoutSize SlideTransitionPane::GetHeightForWidth(const sal_Int32 /*nWidth*/)
@@ -388,7 +388,7 @@ css::ui::LayoutSize SlideTransitionPane::GetHeightForWidth(const sal_Int32 /*nWi
     return css::ui::LayoutSize(nMinimumHeight, -1, nMinimumHeight);
 }
 
-void SlideTransitionPane::Initialize(SdDrawDocument* pDoc)
+void SlideTransitionPane::Initialize()
 {
     mxLB_VARIANT = m_xBuilder->weld_combo_box(u"variant_list"_ustr);
     mxCBX_duration = m_xBuilder->weld_metric_spin_button(u"transition_duration"_ustr, FieldUnit::SECOND);
@@ -414,11 +414,8 @@ void SlideTransitionPane::Initialize(SdDrawDocument* pDoc)
     mxMF_REPEAT_AUTO_AFTER->set_width_chars(nWidthChars);
     mxCBX_duration->set_width_chars(nWidthChars);
 
-    if( pDoc )
-        mxModel = pDoc->getUnoModel();
-    // TODO: get correct view
-    if( mxModel.is())
-        mxView.set( mxModel->getCurrentController(), uno::UNO_QUERY );
+    // Take the controller from the ViewShellBase directly.
+    mxView = mrBase.GetDrawController();
 
     // set defaults
     mxCB_AUTO_PREVIEW->set_active(true);      // automatic preview on
@@ -982,39 +979,27 @@ IMPL_LINK(SlideTransitionPane,EventMultiplexerListener,
             onChangeCurrentPage();
             break;
 
-        case EventMultiplexerEventId::MainViewRemoved:
-            mxView.clear();
-            onSelectionChanged();
-            onChangeCurrentPage();
-            break;
-
         case EventMultiplexerEventId::MainViewAdded:
-            mbIsMainViewChangePending = true;
-            break;
-
-        case EventMultiplexerEventId::ConfigurationUpdated:
-            if (mbIsMainViewChangePending)
+            // At this moment the controller may not yet been set at model
+            // or ViewShellBase.  Take it from the view shell passed with
+            // the event.
+            if (auto pMainViewShell = mrBase.GetMainViewShell().get())
             {
-                mbIsMainViewChangePending = false;
-
-                // At this moment the controller may not yet been set at
-                // model or ViewShellBase.  Take it from the view shell
-                // passed with the event.
-                if (mrBase.GetMainViewShell() != nullptr)
+                if (pMainViewShell->GetShellType() == ViewShell::ST_IMPRESS)
                 {
-                    mxView.set(mrBase.GetController(), css::uno::UNO_QUERY);
+                    mxView = mrBase.GetDrawController();
                     onSelectionChanged();
                     onChangeCurrentPage();
+                    break;
                 }
             }
+            [[fallthrough]];
+        case EventMultiplexerEventId::MainViewRemoved:
+            mxView.clear();
+            updateControls();
             break;
 
         default:
-            if (rEvent.meEventId != EventMultiplexerEventId::Disposing)
-            {
-                onSelectionChanged();
-                onChangeCurrentPage();
-            }
             break;
     }
 }
