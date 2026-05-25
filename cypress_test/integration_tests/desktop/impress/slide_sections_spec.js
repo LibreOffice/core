@@ -500,6 +500,40 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Slide sections', function(
 			cy.cGet('[id$="-dropdown"]:visible').should('contain', 'Collapse All Sections');
 			cy.cGet('[id$="-dropdown"]:visible').should('not.contain', 'Expand All Sections');
 		});
+
+		it('Remove Section and Slides via context menu in PPTX', function() {
+			helper.processToIdle(this.win);
+
+			// 3 sections, 13 slides: Section-1 (0-3, 4 slides), Section-2 (4-10, 7 slides), Section-3 (11-12, 2 slides).
+			assertSectionHeaders(['Section-1', 'Section-2', 'Section-3']);
+
+			// Wait until app.impress.sections and partList reflect the known layout.
+			cy.window().should(function(win) {
+				var s = win['0'].app.impress.sections;
+				expect(s).to.have.length(3);
+				expect(s[1].startIndex).to.equal(4);
+				expect(s[1].slideCount).to.equal(7);
+				expect(win['0'].app.impress.partList).to.have.length(13);
+			});
+
+			// Remove Section-2 (index 1) and its 7 slides.
+			rightClickSectionHeader(1);
+			clickContextMenuItem('Remove Section & Slides');
+			cy.cGet('#remove-section-slides-modal-response').click();
+			helper.processToIdle(this.win);
+
+			// Section count drops from 3 to 2, slide count drops from 13 to 6.
+			cy.window().should(function(win) {
+				expect(win['0'].app.impress.sections).to.have.length(2);
+				expect(win['0'].app.impress.partList).to.have.length(6);
+			});
+			assertSectionHeaders(['Section-1', 'Section-3']);
+
+			// Reload and verify the deletion persisted.
+			helper.processToIdle(this.win);
+			helper.reloadDocument(this.newFilePath);
+			assertSectionHeaders(['Section-1', 'Section-3']);
+		});
 	});
 
 	describe('ODP format', function() {
@@ -586,6 +620,40 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Slide sections', function(
 			helper.reloadDocument(this.newFilePath);
 
 			assertSectionHeaders(['Section-2', 'Section-1', 'Section-3']);
+		});
+
+		it('Remove Section and Slides via context menu in ODP', function() {
+			helper.processToIdle(this.win);
+
+			// 3 sections, 13 slides: Section-1 (0-3, 4 slides), Section-2 (4-10, 7 slides), Section-3 (11-12, 2 slides).
+			assertSectionHeaders(['Section-1', 'Section-2', 'Section-3']);
+
+			// Wait until app.impress.sections and partList reflect the known layout.
+			cy.window().should(function(win) {
+				var s = win['0'].app.impress.sections;
+				expect(s).to.have.length(3);
+				expect(s[1].startIndex).to.equal(4);
+				expect(s[1].slideCount).to.equal(7);
+				expect(win['0'].app.impress.partList).to.have.length(13);
+			});
+
+			// Remove Section-2 (index 1) and its 7 slides.
+			rightClickSectionHeader(1);
+			clickContextMenuItem('Remove Section & Slides');
+			cy.cGet('#remove-section-slides-modal-response').click();
+			helper.processToIdle(this.win);
+
+			// Section count drops from 3 to 2, slide count drops from 13 to 6.
+			cy.window().should(function(win) {
+				expect(win['0'].app.impress.sections).to.have.length(2);
+				expect(win['0'].app.impress.partList).to.have.length(6);
+			});
+			assertSectionHeaders(['Section-1', 'Section-3']);
+
+			// Reload and verify the deletion persisted.
+			helper.processToIdle(this.win);
+			helper.reloadDocument(this.newFilePath);
+			assertSectionHeaders(['Section-1', 'Section-3']);
 		});
 	});
 });
