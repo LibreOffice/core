@@ -87,9 +87,6 @@ enum class SfxHintId {
 
     ScriptDocumentChanged,
 
-// reportdesign
-    ReportDesignDlgEd,
-
 // SVX
     FmDesignModeChanged,
 // SVX edit source

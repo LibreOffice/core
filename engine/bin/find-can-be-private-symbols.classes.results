@@ -182,7 +182,6 @@
 12 FmXGridPeer
 12 FmFormShell
 11 sfx2::sidebar::Theme
-11 rptui::OOle2Obj
 11 property::OPropertySet
 11 oox::shape::ShapeContextHandler
 11 lucene::store::BufferedIndexInput

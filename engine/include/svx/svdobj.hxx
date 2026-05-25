@@ -1008,7 +1008,7 @@ private:
                                       mpViewContact;
 
     // do not use directly, always use getSvxShape() if you have to, because not all
-    // SdrObjects have an associated SvxShape subclass (e.g. reportdesign)
+    // SdrObjects have an associated SvxShape subclass (e.g. ???)
     SvxShape*                   mpSvxShape;
     css::uno::WeakReference< css::drawing::XShape >
                                 maWeakUnoShape;

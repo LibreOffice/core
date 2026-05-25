@@ -1092,20 +1092,6 @@ o3tl/qa/test-enumarray.cxx:28
     enum MyEnum TWO
 o3tl/qa/test-typed_flags.cxx:20
     enum (anonymous namespace)::ConfigurationChangedHint TWO
-reportdesign/inc/conditionalexpression.hxx:79
-    enum rptui::ComparisonOperation eNotBetween
-reportdesign/inc/conditionalexpression.hxx:80
-    enum rptui::ComparisonOperation eEqualTo
-reportdesign/inc/conditionalexpression.hxx:81
-    enum rptui::ComparisonOperation eNotEqualTo
-reportdesign/inc/conditionalexpression.hxx:82
-    enum rptui::ComparisonOperation eGreaterThan
-reportdesign/inc/conditionalexpression.hxx:83
-    enum rptui::ComparisonOperation eLessThan
-reportdesign/inc/conditionalexpression.hxx:84
-    enum rptui::ComparisonOperation eGreaterOrEqual
-reportdesign/inc/conditionalexpression.hxx:85
-    enum rptui::ComparisonOperation eLessOrEqual
 sal/qa/osl/file/osl_File.cxx:281
     enum (anonymous namespace)::oslCheckMode Exist
 sc/inc/queryiter.hxx:161

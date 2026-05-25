@@ -39,7 +39,6 @@
 
 // predefines
 namespace model { class Theme; }
-namespace reportdesign { class OSection; }
 namespace sdr::contact { class ViewContact; }
 namespace sdr::annotation { class Annotation; }
 class SdrPage;
@@ -384,10 +383,6 @@ class SVXCORE_DLLPUBLIC SdrPage : public SdrObjList, public cppu::OWeakObject
     // #i9076#
     friend class SdrModel;
     friend class SvxUnoDrawPagesAccess;
-
-    // this class uses its own UNO wrapper
-    // and thus has to set mxUnoPage (it also relies on mxUnoPage not being WeakRef)
-    friend class reportdesign::OSection;
 
     SdrPage& operator=(const SdrPage&) = delete;
     SdrPage(const SdrPage&) = delete;

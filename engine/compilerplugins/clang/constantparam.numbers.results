@@ -1790,22 +1790,6 @@ package/inc/ThreadedDeflater.hxx:53
     void ZipUtils::ThreadedDeflater::ThreadedDeflater(int)
     int nSetLevel
     -1
-reportdesign/source/filter/xml/xmlExport.hxx:120
-    void rptxml::ORptExport::collectStyleNames(enum XmlStyleFamily,const class std::vector<int> &,class std::vector<class rtl::OUString> &)
-    enum XmlStyleFamily _nFamily
-    202
-reportdesign/source/filter/xml/xmlExport.hxx:121
-    void rptxml::ORptExport::collectStyleNames(enum XmlStyleFamily,const class std::vector<int> &,const class std::vector<int> &,class std::vector<class rtl::OUString> &)
-    enum XmlStyleFamily _nFamily
-    203
-reportdesign/source/filter/xml/xmlStyleImport.hxx:60
-    void rptxml::OControlStyleContext::AddProperty(short,const class com::sun::star::uno::Any &)
-    short nContextID
-    28673
-reportdesign/source/ui/inc/UITools.hxx:142
-    class SdrObject * isOver(const class tools::Rectangle &,const class SdrPage &,const class SdrView &,_Bool,class rtl::Reference<class SdrUnoObj> *,int)
-    int _nIgnoreListLength
-    2
 sal/osl/unx/file_path_helper.cxx:175
     void (anonymous namespace)::path_list_iterator::path_list_iterator(class rtl::OUString,char16_t)
     char16_t list_separator

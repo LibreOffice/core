@@ -262,12 +262,6 @@ package/source/xstor/owriteablestream.hxx:241
 pyuno/inc/pyuno.hxx:165
     pyuno::Runtime impl RuntimeImpl *
     _object
-reportdesign/source/filter/xml/xmlImportDocumentHandler.hxx:83
-    rptxml::ImportDocumentHandler m_xDocumentHandler css::uno::Reference<css::xml::sax::XFastDocumentHandler>
-    SvXMLImport
-reportdesign/source/ui/inc/DesignView.hxx:57
-    rptui::ODesignView m_pTaskPane VclPtr<vcl::Window>
-    rptui::(anonymous namespace)::OTaskWindow
 sal/rtl/bootstrap.cxx:396
     (anonymous namespace)::FundamentalIniData ini rtlBootstrapHandle
     (anonymous namespace)::Bootstrap_Impl

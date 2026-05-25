@@ -124,22 +124,7 @@ private:
 };
 
 void Test::test() {
-    // On Windows, denylist the com.sun.star.comp.report.OReportDefinition
-    // implementation (reportdesign::OReportDefinition in
-    // reportdesign/source/core/api/ReportDefinition.cxx), as it spawns a thread
-    // that forever blocks in SendMessageW when no VCL event loop is running
-    // (reportdesign::<anon>::FactoryLoader::execute ->
-    // framework::Desktop::findFrame -> framework::TaskCreator::createTask ->
-    // <anon>::TaskCreatorService::createInstanceWithArguments ->
-    // <anon>::TaskCreatorService::impls_createContainerWindow ->
-    // <anon>::VCLXToolkit::createWindow ->
-    // <anon>::VCLXToolkit::ImplCreateWindow ->
-    // <anon>::VCLXToolkit::ImplCreateWindow -> WorkWindow::WorkWindow ->
-    // WorkWindow::ImplInit -> ImplBorderWindow::ImplBorderWindow ->
-    // ImplBorderWindow::ImplInit -> Window::ImplInit ->
-    // WinSalInstance::CreateFrame -> ImplSendMessage -> SendMessageW):
     std::vector<OUString> denylist;
-    denylist.emplace_back("com.sun.star.comp.report.OReportDefinition");
 
     // <https://bugs.documentfoundation.org/show_bug.cgi?id=89343>
     // "~SwXMailMerge() goes into endless SwCache::Check()":

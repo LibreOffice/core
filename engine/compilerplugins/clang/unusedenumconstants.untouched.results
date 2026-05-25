@@ -338,8 +338,6 @@ kit/source/gtk/kitdocview.cxx:310
     enum (unnamed at /home/noel/libo-plugin/kit/source/gtk/kitdocview.cxx:308:1) PROP_0
 lingucomponent/source/spellcheck/languagetool/languagetoolimp.cxx:123
     enum (anonymous namespace)::HTTP_METHOD HTTP_GET
-reportdesign/source/filter/xml/xmlEnums.hxx:42
-    enum rptxml::XMLReportToken XML_TOK_REPORT_ELEMENT
 sc/inc/lookupcache.hxx:61
     enum ScLookupCache::SearchMode SEARCHFWD
 sc/inc/lookupcache.hxx:62

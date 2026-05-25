@@ -2158,42 +2158,6 @@ pyuno/source/module/pyuno_impl.hxx:79
     void log(struct pyuno::RuntimeCargo *,int,class std::basic_string_view<char16_t>)
     int level
     1
-reportdesign/inc/RptModel.hxx:56
-    void rptui::OReportModel::OReportModel(class reportdesign::OReportDefinition *)
-    class reportdesign::OReportDefinition * _pReportDefinition
-    0
-reportdesign/source/core/inc/Tools.hxx:48
-    void throwIllegallArgumentException(class std::basic_string_view<char16_t>,const class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> &,short)
-    short ArgumentPosition_
-    1
-reportdesign/source/filter/xml/xmlFixedContent.cxx:54
-    void rptxml::(anonymous namespace)::OXMLCharContent::OXMLCharContent(class SvXMLImport &,class rptxml::OXMLFixedContent *,short)
-    short nControl
-    1
-reportdesign/source/filter/xml/xmlFormattedField.hxx:34
-    void rptxml::OXMLFormattedField::OXMLFormattedField(class rptxml::ORptFilter &,const class com::sun::star::uno::Reference<class com::sun::star::xml::sax::XFastAttributeList> &,const class com::sun::star::uno::Reference<class com::sun::star::report::XFormattedField> &,class rptxml::OXMLTable *,_Bool)
-    _Bool _bPageCount
-    0
-reportdesign/source/ui/inc/DesignView.hxx:228
-    void rptui::ODesignView::setMarked(const class com::sun::star::uno::Sequence<class com::sun::star::uno::Reference<class com::sun::star::report::XReportComponent> > &,_Bool)
-    _Bool _bMark
-    1
-reportdesign/source/ui/inc/GeometryHandler.hxx:96
-    void rptui::GeometryHandler::implCreateListLikeControl(const class com::sun::star::uno::Reference<class com::sun::star::inspection::XPropertyControlFactory> &,struct com::sun::star::inspection::LineDescriptor &,const struct TranslateId *,_Bool,_Bool)
-    _Bool _bReadOnlyControl
-    0
-reportdesign/source/ui/inc/GeometryHandler.hxx:96
-    void rptui::GeometryHandler::implCreateListLikeControl(const class com::sun::star::uno::Reference<class com::sun::star::inspection::XPropertyControlFactory> &,struct com::sun::star::inspection::LineDescriptor &,const struct TranslateId *,_Bool,_Bool)
-    _Bool _bTrueIfListBoxFalseIfComboBox
-    1
-reportdesign/source/ui/inc/UITools.hxx:142
-    class SdrObject * isOver(const class tools::Rectangle &,const class SdrPage &,const class SdrView &,_Bool,class rtl::Reference<class SdrUnoObj> *,int)
-    _Bool _bAllObjects
-    1
-reportdesign/source/ui/report/SectionWindow.cxx:360
-    void lcl_setOrigin(class vcl::Window &,long,long)
-    long _nY
-    0
 sal/osl/unx/file.cxx:122
     void (anonymous namespace)::FileHandle_Impl::FileHandle_Impl(int,enum (anonymous namespace)::FileHandle_Impl::Kind,class rtl::OString)
     enum (anonymous namespace)::FileHandle_Impl::Kind kind

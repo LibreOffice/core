@@ -526,10 +526,6 @@ opencl/source/openclwrapper.cxx:678
     struct _cl_device_id * findDeviceIdByDeviceString(class std::basic_string_view<char16_t>,const class std::vector<struct OpenCLPlatformInfo> &)
     const class std::vector<struct OpenCLPlatformInfo> & rPlatforms
     fillOpenCLInfo()
-reportdesign/source/ui/dlg/Condition.hxx:129
-    void rptui::Condition::setConditionIndex(unsigned long,unsigned long)
-    unsigned long _nCondCount
-    impl_getConditionCount()
 sal/qa/osl/file/osl_File.cxx:373
     class rtl::OString outputError(const class rtl::OString &,const class rtl::OString &,const char *)
     const char * msg

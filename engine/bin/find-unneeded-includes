@@ -387,8 +387,6 @@ def processIWYUOutput(iwyuOutput, moduleRules, fileName, noexclude, checknamespa
                                     'pdfi|pdfparse|'
                                     'ppt|'
                                     'pyuno|'
-                                    'reportdesign|'
-                                    'rptui|'
                                     'rtl|math|textenc|'
                                     'salhelper|'
                                     'sax_fastparser|'

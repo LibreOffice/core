@@ -662,7 +662,6 @@ certain functionality.
 @li @c opencl.device
 @li @c opencl.file
 @li @c registry
-@li @c reportdesign
 @li @c rsc
 @li @c sax
 @li @c scripting

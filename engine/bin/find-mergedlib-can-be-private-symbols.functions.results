@@ -20951,13 +20951,6 @@ row_decimals
 row_intstats
 rowdual
 rowprim
-rptui::OXUndoEnvironment::AddElement(com::sun::star::uno::Reference<com::sun::star::uno::XInterface> const&)
-rptui::OXUndoEnvironment::Lock()
-rptui::OXUndoEnvironment::RemoveElement(com::sun::star::uno::Reference<com::sun::star::uno::XInterface> const&)
-rptui::OXUndoEnvironment::SetUndoMode(bool)
-rptui::OXUndoEnvironment::UnLock()
-rptui::getPropertyNameMap(SdrObjKind)
-rptui::getUsedStyle(com::sun::star::uno::Reference<com::sun::star::report::XReportDefinition> const&)
 run_BB
 sal::backtrace_get(unsigned int)
 sal::backtrace_to_string(sal::BacktraceState*)

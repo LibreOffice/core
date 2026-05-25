@@ -426,7 +426,6 @@ namespace
                 || aFactoryShortName == "dbrelation"
                 || aFactoryShortName == "dbtable"
                 || aFactoryShortName == "dbapp"
-                || aFactoryShortName == "dbreport"
                 || aFactoryShortName == "dbtdata"
                 || aFactoryShortName == "swreport"
                 || aFactoryShortName == "swform" )

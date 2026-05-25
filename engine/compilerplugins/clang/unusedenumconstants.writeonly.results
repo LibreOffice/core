@@ -4580,40 +4580,6 @@ pyuno/inc/pyuno.hxx:65
     enum pyuno::NotNull NOT_NULL
 pyuno/inc/pyuno.hxx:153
     enum pyuno::ConversionMode REJECT_UNO_ANY
-reportdesign/inc/RptObject.hxx:42
-    enum rptui::DlgEdHintKind RPTUI_HINT_WINDOWSCROLLED
-reportdesign/source/filter/xml/xmlEnums.hxx:28
-    enum rptxml::XMLReportToken XML_TOK_REPORT_HEADER
-reportdesign/source/filter/xml/xmlEnums.hxx:29
-    enum rptxml::XMLReportToken XML_TOK_PAGE_HEADER
-reportdesign/source/filter/xml/xmlEnums.hxx:30
-    enum rptxml::XMLReportToken XML_TOK_GROUP
-reportdesign/source/filter/xml/xmlEnums.hxx:31
-    enum rptxml::XMLReportToken XML_TOK_DETAIL
-reportdesign/source/filter/xml/xmlEnums.hxx:32
-    enum rptxml::XMLReportToken XML_TOK_PAGE_FOOTER
-reportdesign/source/filter/xml/xmlEnums.hxx:33
-    enum rptxml::XMLReportToken XML_TOK_REPORT_FOOTER
-reportdesign/source/filter/xml/xmlEnums.hxx:34
-    enum rptxml::XMLReportToken XML_TOK_HEADER_ON_NEW_PAGE
-reportdesign/source/filter/xml/xmlEnums.hxx:35
-    enum rptxml::XMLReportToken XML_TOK_FOOTER_ON_NEW_PAGE
-reportdesign/source/filter/xml/xmlEnums.hxx:39
-    enum rptxml::XMLReportToken XML_TOK_CAPTION
-reportdesign/source/filter/xml/xmlEnums.hxx:41
-    enum rptxml::XMLReportToken XML_TOK_REPORT_FUNCTION
-reportdesign/source/filter/xml/xmlEnums.hxx:43
-    enum rptxml::XMLReportToken XML_TOK_REPORT_MIMETYPE
-reportdesign/source/filter/xml/xmlEnums.hxx:44
-    enum rptxml::XMLReportToken XML_TOK_REPORT_NAME
-reportdesign/source/filter/xml/xmlEnums.hxx:45
-    enum rptxml::XMLReportToken XML_TOK_MASTER_DETAIL_FIELDS
-reportdesign/source/filter/xml/xmlEnums.hxx:46
-    enum rptxml::XMLReportToken XML_TOK_SUB_FRAME
-reportdesign/source/filter/xml/xmlEnums.hxx:47
-    enum rptxml::XMLReportToken XML_TOK_SUB_BODY
-reportdesign/source/filter/xml/xmlEnums.hxx:52
-    enum rptxml::XMLSubDocument XML_TOK_MASTER_DETAIL_FIELD
 sal/osl/all/log.cxx:432
     enum Sense NEGATIVE
 sal/rtl/bootstrap.cxx:90

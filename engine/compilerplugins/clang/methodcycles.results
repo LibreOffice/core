@@ -46,20 +46,6 @@ found cycle
     filter/source/graphicfilter/icgm/cgm.hxx:137
 
 found cycle
-    bool ::operator()(weld::TreeIter &) const
-    reportdesign/source/ui/dlg/Navigator.cxx:234
-
-    void basctl::(anonymous namespace)::implCollapseModifiedObjectEntry(weld::TreeIter &,weld::TreeView &)
-    basctl/source/basicide/baside2b.cxx:2286
-
-found cycle
-    bool ::operator()(weld::TreeIter &) const
-    reportdesign/source/ui/dlg/Navigator.cxx:234
-
-    bool FmEntryData::IsEqualWithoutChildren(FmEntryData *)
-    svx/source/inc/fmexpl.hxx:159
-
-found cycle
     void sdext::presenter::PresenterToolBar::ProcessEntry(const com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> &,const sdext::presenter::PresenterToolBar::Context &)
     sdext/source/presenter/PresenterToolBar.hxx:183
 

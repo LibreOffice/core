@@ -236,8 +236,6 @@ pyuno/source/module/pyuno_impl.hxx:166
     pyuno::PyUNO_list_iterator ob_base PyObject
 pyuno/source/module/pyuno_impl.hxx:238
     pyuno::stRuntimeImpl ob_base PyObject
-reportdesign/source/ui/inc/ReportWindow.hxx:52
-    rptui::OReportWindow m_pObjFac std::unique_ptr<DlgEdFactory, o3tl::default_delete<DlgEdFactory> >
 sal/qa/osl/condition/osl_Condition.cxx:78
     osl_Condition::ctors bRes1 _Bool
 sal/qa/osl/condition/osl_Condition.cxx:208

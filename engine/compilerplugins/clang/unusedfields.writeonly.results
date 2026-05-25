@@ -970,8 +970,6 @@ registry/source/reflread.cxx:461
     (anonymous namespace)::ConstantPool::readDoubleConstant(sal_uInt16)::(anonymous union)::(unnamed struct at /home/noel/libo-plugin/registry/source/reflread.cxx:458:9) b2 sal_uInt32
 registry/source/reflread.cxx:462
     (unnamed union at /home/noel/libo-plugin/registry/source/reflread.cxx:455:5) b struct (unnamed struct at /home/noel/libo-plugin/registry/source/reflread.cxx:458:9)
-reportdesign/inc/RptObject.hxx:69
-    rptui::OObjectBase m_xKeepShapeAlive css::uno::Reference<css::uno::XInterface>
 sal/qa/rtl/strings/test_oustring_endswith.cxx:73
     Data str1 const char *
 sal/qa/rtl/strings/test_oustring_endswith.cxx:74

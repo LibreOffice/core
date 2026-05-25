@@ -464,7 +464,6 @@ merge comphelper::OPropertyChangeMultiplexer_Base with comphelper::OPropertyChan
 merge comphelper::OPropertyChangeMultiplexer_Base2 with comphelper::OPropertyChangeMultiplexer2
 merge comphelper::OProxyAggregation with comphelper::OComponentProxyAggregationHelper
 merge comphelper::OSeekableInputWrapper_BASE with comphelper::OSeekableInputWrapper
-maybe merge comphelper::OSelectionChangeListener with rptui::NavigatorTree, in modules comphelper and reportdesign
 merge comphelper::OSequenceOutputStream_Base with comphelper::OSequenceOutputStream
 maybe merge comphelper::OStatefulPropertySet with PropertySetBase, in modules comphelper and forms
 merge comphelper::OWeakListenerAdapterBase with comphelper::OWeakListenerAdapter
@@ -576,9 +575,6 @@ merge pcr::IPropertyInfoService with pcr::OPropertyInfoService
 merge pcr::IPropertyLineListener with pcr::OPropertyBrowserController
 merge pcr::ISQLCommandAdapter with pcr::(anonymous namespace)::ISQLCommandPropertyUI
 merge pcr::PropertyHandler with pcr::PropertyHandlerComponent
-merge reportdesign::ITraverseReport with rptui::NavigatorTree
-merge rptui::AnyConverter with rptui::(anonymous namespace)::ParaAdjust
-merge rptui::IConditionalFormatAction with rptui::ConditionalFormattingDialog
 maybe merge sax::DocumentHandlerAdapter with cppu::WeakImplHelper, in modules sax and cppuhelper
 maybe merge sax::ExtendedDocumentHandlerAdapter with cppu::WeakImplHelper, in modules sax and cppuhelper
 merge sax_fastparser::FastSaxSerializer::ForMerge with sax_fastparser::FastSaxSerializer::ForSort

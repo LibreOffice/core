@@ -496,8 +496,6 @@ oox/qa/unit/vba_compression.cxx:70
     TestVbaCompression m_directories test::Directories
 oox/source/drawingml/chart/objectformatter.cxx:722
     oox::drawingml::chart::ObjectFormatterData maFromLocale Locale
-reportdesign/source/ui/inc/ColorListener.hxx:35
-    rptui::OColorListener m_aColorConfig svtools::ColorConfig
 sal/osl/unx/process.cxx:836
     (anonymous namespace)::osl_procStat signal char[24]
 sal/osl/unx/process.cxx:837

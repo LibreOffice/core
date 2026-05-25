@@ -433,9 +433,6 @@ void WriteOnlyVars::run()
             return;
         if (loplugin::isSamePathname(fn, SRCDIR "/forms/source/component/DatabaseForm.cxx"))
             return;
-        if (loplugin::isSamePathname(fn,
-                                     SRCDIR "/reportdesign/source/ui/report/ReportController.cxx"))
-            return;
         if (loplugin::hasPathnamePrefix(fn, SRCDIR "/test/"))
             return;
         if (loplugin::isSamePathname(fn, SRCDIR "/i18npool/source/localedata/LocaleNode.cxx"))

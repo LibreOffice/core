@@ -221,8 +221,7 @@ void ScreenshotTest::dumpDialogToPath(std::string_view rUIXMLDescription)
                           rUIXMLDescription == "sfx/ui/helpsearchpage.ui" ||
                           rUIXMLDescription == "sfx/ui/startcenter.ui" ||
                           rUIXMLDescription == "svx/ui/datanavigator.ui" ||
-                          rUIXMLDescription == "svx/ui/xformspage.ui" ||
-                          rUIXMLDescription == "modules/dbreport/ui/conditionwin.ui";
+                          rUIXMLDescription == "svx/ui/xformspage.ui";
     if (bNonConforming) // skip these broken ones
         return;
     std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(mxParentWidget.get(), OStringToOUString(rUIXMLDescription, RTL_TEXTENCODING_UTF8)));

@@ -307,7 +307,6 @@ class Parser:
             "pyuno" : 1,
             "registry" : 1,
             "remotebridges" : 1,
-            "reportdesign" : 1,
             "rsc" : 1,
             "sal" : 1,
             "salhelper" : 1,

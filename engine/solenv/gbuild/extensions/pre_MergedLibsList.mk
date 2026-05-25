@@ -169,9 +169,6 @@ gb_MERGE_LIBRARY_LIST += \
 	pdffilter \
 	pricing \
 	$(call gb_Helper_optional,SCRIPTING,protocolhandler) \
-	$(call gb_Helper_optional,DBCONNECTIVITY, \
-		rpt \
-		rptui ) \
 	$(call gb_Helper_optional,SCRIPTING,scriptframe) \
 	$(call gb_Helper_optional,DBCONNECTIVITY,sdbc2) \
 	$(call gb_Helper_optional,DBCONNECTIVITY,sdbt) \

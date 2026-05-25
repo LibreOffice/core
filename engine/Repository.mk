@@ -535,12 +535,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,python, \
 	$(if $(filter-out WNT,$(OS)),pyuno_wrapper) \
 ))
 
-$(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,reportbuilder, \
-	$(call gb_Helper_optional,DBCONNECTIVITY, \
-		rpt \
-		rptui ) \
-))
-
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,writer, \
 	hwp \
 	msword \
@@ -1091,7 +1085,6 @@ $(eval $(call gb_Helper_register_mos,\
 	fwk \
 	oox \
 	pcr \
-	$(call gb_Helper_optional,DBCONNECTIVITY,rpt) \
 	$(call gb_Helper_optional,SCRIPTING,sb) \
 	sc \
 	sca \
@@ -1133,7 +1126,6 @@ $(eval $(call gb_Helper_register_uiconfigs,\
 		modules/dbquery \
 		modules/dbrelation \
 	) \
-	modules/dbreport \
 	$(call gb_Helper_optional,DBCONNECTIVITY,\
 		modules/dbtable \
 		modules/dbtdata \

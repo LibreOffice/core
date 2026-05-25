@@ -133,14 +133,6 @@ enum class SdrObjKind : sal_uInt16
     BasicDialogFormVerticalScroll = 433,
     BasicDialogFormHorizontalScroll = 434,
 
-    // reportdesign, arbitrarily place at 500
-    ReportDesignFixedText = 501,
-    ReportDesignImageControl = 502,
-    ReportDesignFormattedField = 503,
-    ReportDesignHorizontalFixedLine = 504,
-    ReportDesignVerticalFixedLine = 505,
-    ReportDesignSubReport = 506,
-
     // writer, arbitrarily place at 600
     SwFlyDrawObjIdentifier = 601,
     NewFrame = 602

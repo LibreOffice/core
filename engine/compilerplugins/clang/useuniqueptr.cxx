@@ -871,12 +871,6 @@ void UseUniquePtr::CheckCXXForRangeStmt(const FunctionDecl* functionDecl, const 
         // SfxPoolItem array
         if (fn == SRCDIR "/sw/source/core/bastyp/init.cxx")
             return;
-        // SfxPoolItem array
-        if (fn == SRCDIR "/reportdesign/source/ui/misc/UITools.cxx")
-            return;
-        // SfxPoolItem array
-        if (fn == SRCDIR "/reportdesign/source/ui/report/ReportController.cxx")
-            return;
         // complicated
         if (fn == SRCDIR "/svx/source/sdr/contact/viewcontact.cxx")
             return;

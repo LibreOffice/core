@@ -224,8 +224,6 @@ for subdir in sorted(os.listdir(".")):
                             # which use macros to declare constants, hiding them from a search
                             if "extensions/source/propctrlr" in line2:
                                 found_reason_to_exclude = True
-                            if "reportdesign/source/ui/inspection/inspection.src" in line2:
-                                found_reason_to_exclude = True
                     if idName.startswith("HID_"):
                             # is the constant being used as an identifier by entries in .src files
                             if ".src:" in line2 and "HelpId = " in line2:
@@ -247,10 +245,6 @@ for subdir in sorted(os.listdir(".")):
                         found_reason_to_exclude = True
                     # used via a macro that hides them from search
                     if "dbaccess/" in line2 and idName.startswith("PROPERTY_ID_"):
-                        found_reason_to_exclude = True
-                    if "reportdesign/" in line2 and idName.startswith("HID_RPT_PROP_"):
-                        found_reason_to_exclude = True
-                    if "reportdesign/" in line2 and idName.startswith("RID_STR_"):
                         found_reason_to_exclude = True
                     if "forms/" in line2 and idName.startswith("PROPERTY_"):
                         found_reason_to_exclude = True
