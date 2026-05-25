@@ -7,12 +7,12 @@ m4_define([_m4_foreachq],[m4_ifelse([$#],[3],[],[m4_define([$1],[$4])$2[]$0([$1]
 m4_define(_YEAR_,m4_esyscmd(date +%Y|tr -d '\n'))m4_dnl
 m4_dnl------------------------------------------------------------------------
 m4_dnl# Define MOBILEAPP as true if this is either for the iOS/Android app or for the Collabora Office apps
-m4_define([ MOBILEAPP],[])m4_dnl
-m4_ifelse(IOSAPP,[true],[m4_define([ MOBILEAPP],[true])])m4_dnl
-m4_ifelse(MACOSAPP,[true],[m4_define([ MOBILEAPP],[true])])m4_dnl
-m4_ifelse(WINDOWSAPP,[true],[m4_define([ MOBILEAPP],[true])])m4_dnl
-m4_ifelse(ANDROIDAPP,[true],[m4_define([ MOBILEAPP],[true])])m4_dnl
-m4_ifelse(QTAPP,[true],[m4_define([ MOBILEAPP],[true])])m4_dnl
+m4_define([MOBILEAPP],[])m4_dnl
+m4_ifelse(IOSAPP,[true],[m4_define([MOBILEAPP],[true])])m4_dnl
+m4_ifelse(MACOSAPP,[true],[m4_define([MOBILEAPP],[true])])m4_dnl
+m4_ifelse(WINDOWSAPP,[true],[m4_define([MOBILEAPP],[true])])m4_dnl
+m4_ifelse(ANDROIDAPP,[true],[m4_define([MOBILEAPP],[true])])m4_dnl
+m4_ifelse(QTAPP,[true],[m4_define([MOBILEAPP],[true])])m4_dnl
 m4_dnl
 m4_dnl# FIXME: This is temporary and not what we actually eventually want.
 m4_dnl# What we really want is not a separate HTML file (produced with M4 conditionals on the below
@@ -20,7 +20,7 @@ m4_dnl# EMSCRIPTENAPP) for a "WASM app". What we want is that the same cool.html
 m4_dnl# instead run locally using WASM, if the connection to the COOL server breaks. (And then
 m4_dnl# re-connects to the COOL server when possible.)
 m4_dnl
-m4_ifelse(EMSCRIPTENAPP,[true],[m4_define([ MOBILEAPP],[true])])m4_dnl
+m4_ifelse(EMSCRIPTENAPP,[true],[m4_define([MOBILEAPP],[true])])m4_dnl
 m4_dnl------------------------------------------------------------------------
 <!doctype html>
 <html data-theme="%UI_THEME%">
