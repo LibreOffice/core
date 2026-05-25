@@ -9,6 +9,9 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Track Changes', function (
 	beforeEach(function () {
 		cy.viewport(1400, 600);
 		helper.setupAndLoadDocument('writer/track_changes.odt');
+		cy.getFrameWindow().then((win) => {
+			this.win = win;
+		});
 		desktopHelper.switchUIToCompact();
 		cy.cGet('#toolbar-up [id^="sidebar"] button:visible').click();
 		desktopHelper.selectZoomLevel('50', false);
@@ -29,24 +32,23 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Track Changes', function (
 
 	it('Accept All', function () {
 		helper.typeIntoDocument('Hello World');
-		cy.wait(3000);
+		helper.processToIdle(this.win);
 		for (var n = 0; n < 2; n++) {
 			desktopHelper.getCompactIconArrow('DefaultNumbering').click();
 			cy.cGet('#insertannotation').click();
 			cy.cGet('#annotation-modify-textarea-new').type('some text' + n, { force: true });
 			cy.cGet('#annotation-save-new').click({force: true});
 			dismissOverflowOverlayIfPresent();
-			// Wait for animation
-			cy.wait(500);
+			helper.processToIdle(this.win);
 		}
-		redlineHelper.enableRecord();
+		redlineHelper.enableRecord(this.win);
 
 		desktopHelper.getCompactIconArrow('DefaultNumbering').click();
 		cy.cGet('#insertannotation').click();
 		cy.cGet('#annotation-modify-textarea-new').type('some text2', { force: true });
 		cy.cGet('#annotation-save-new').click({force: true});
 		dismissOverflowOverlayIfPresent();
-		cy.wait(500);
+		helper.processToIdle(this.win);
 		helper.typeIntoDocument('{home}');
 		cy.cGet('div.cool-annotation').should('have.length', 3);
 
@@ -57,7 +59,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Track Changes', function (
 		cy.cGet('#comment-container-2').should('contain','some text1');
 		cy.cGet('div.cool-annotation').should('have.length', 3);
 
-		redlineHelper.confirmChange('Accept All');
+		redlineHelper.confirmChange(this.win, 'Accept All');
 		cy.cGet('#comment-container-1').should('contain','some text0');
 		cy.cGet('#comment-container-2').should('not.exist');
 		cy.cGet('#comment-container-3').should('contain','some text2');
@@ -65,34 +67,32 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Track Changes', function (
 
 		helper.clearAllText();
 		helper.selectAllText();
-		cy.wait(500);
-		redlineHelper.confirmChange('Accept All');
+		helper.processToIdle(this.win);
+		redlineHelper.confirmChange(this.win, 'Accept All');
 		helper.typeIntoDocument('{ctrl}a');
-		cy.wait(500);
 		helper.textSelectionShouldNotExist();
 	});
 
 	it('Reject All', function () {
 		helper.setDummyClipboardForCopy();
 		helper.typeIntoDocument('Hello World');
-		cy.wait(3000);
+		helper.processToIdle(this.win);
 		for (var n = 0; n < 2; n++) {
 			desktopHelper.getCompactIconArrow('DefaultNumbering').click();
 			cy.cGet('#insertannotation').click();
 			cy.cGet('#annotation-modify-textarea-new').type('some text' + n, { force: true });
 			cy.cGet('#annotation-save-new').click({force: true});
 			dismissOverflowOverlayIfPresent();
-			// Wait for animation
-			cy.wait(500);
+			helper.processToIdle(this.win);
 		}
-		redlineHelper.enableRecord();
+		redlineHelper.enableRecord(this.win);
 
 		desktopHelper.getCompactIconArrow('DefaultNumbering').click();
 		cy.cGet('#insertannotation').click();
 		cy.cGet('#annotation-modify-textarea-new').type('some text2', { force: true });
 		cy.cGet('#annotation-save-new').click({force: true});
 		dismissOverflowOverlayIfPresent();
-		cy.wait(500);
+		helper.processToIdle(this.win);
 		helper.typeIntoDocument('{home}');
 		cy.cGet('div.cool-annotation').should('have.length', 3);
 
@@ -103,7 +103,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Track Changes', function (
 		cy.cGet('#comment-container-2').should('contain','some text1');
 		cy.cGet('div.cool-annotation').should('have.length', 3);
 
-		redlineHelper.confirmChange('Reject All');
+		redlineHelper.confirmChange(this.win, 'Reject All');
 		cy.cGet('#comment-container-1').should('contain','some text0');
 		cy.cGet('#comment-container-2').should('contain','some text1');
 		cy.cGet('#comment-container-2').should('not.have.class','tracked-deleted-comment-show');
@@ -112,11 +112,11 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Track Changes', function (
 
 		helper.clearAllText();
 		helper.selectAllText();
-		cy.wait(500);
-		redlineHelper.confirmChange('Reject All');
+		helper.processToIdle(this.win);
+		redlineHelper.confirmChange(this.win, 'Reject All');
 		cy.cGet('#document-container').click();
 		helper.selectAllText();
-		cy.wait(500);
+		helper.processToIdle(this.win);
 		helper.copy();
 		helper.expectTextForClipboard('Hello World');
 	});
@@ -402,7 +402,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Track Changes', function (
 			// Wait for animation
 			cy.wait(500);
 		}
-		redlineHelper.enableRecord();
+		redlineHelper.enableRecord(this.win);
 
 		desktopHelper.getCompactIconArrow('DefaultNumbering').click();
 		cy.cGet('#insertannotation').click();
