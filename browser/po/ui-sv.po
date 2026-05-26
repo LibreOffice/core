@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-26 00:18+0200\n"
-"PO-Revision-Date: 2026-05-12 14:11+0000\n"
-"Last-Translator: Leif-Jöran Olsson <info@friprogramvarusyndikatet.se>\n"
+"PO-Revision-Date: 2026-05-26 23:11+0000\n"
+"Last-Translator: bittin1ddc447d824349b2 <bittin@reimu.nl>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/sv/>\n"
-"Language: \n"
+"Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.5-dev\n"
+"X-Generator: Weblate 2026.6.dev0\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -735,17 +735,19 @@ msgstr "Ladda upp Xcu-inställningar"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:713
 msgid "Document themes"
-msgstr ""
+msgstr "Dokumentteman"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:715
 msgid ""
 "Upload custom document themes (.theme). These define color palettes "
 "available under Format > Theme."
 msgstr ""
+"Ladda upp anpassade dokumentteman (.theme). Dessa definierar färgpaletter "
+"tillgängliga under Format > Tema."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:721
 msgid "Upload Theme"
-msgstr ""
+msgstr "Ladda upp tema"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:776
 msgid "Something went wrong. Please try to refresh the page."
@@ -3050,6 +3052,8 @@ msgid ""
 "Clone Formatting is active (press Enter on a cell to apply, click again or "
 "press Esc to exit)"
 msgstr ""
+"Klonformatering är aktiv (tryck på Enter på en cell för att applicera, "
+"klicka igen eller tryck på Esc för att avsluta)"
 
 #: src/control/Control.NotebookbarCalc.js:492
 #: src/control/Control.NotebookbarDraw.js:685
@@ -3672,11 +3676,11 @@ msgstr "Visa ändringar"
 
 #: src/control/Control.NotebookbarWriter.js:2770
 msgid "Cell Background"
-msgstr ""
+msgstr "Cell bakgrund"
 
 #: src/control/Control.NotebookbarWriter.js:2853
 msgid "Protect"
-msgstr ""
+msgstr "Skydda"
 
 #: src/control/Control.PartsPreview.js:209
 msgid "preview of page %1"
@@ -3697,7 +3701,7 @@ msgstr "Lägga till avsnitt"
 
 #: src/control/Control.PartsPreview.js:599
 msgid "Toggle section %1"
-msgstr ""
+msgstr "Växla avsnitt %1"
 
 #: src/control/Control.PartsPreview.js:767
 #: src/control/Control.PartsPreview.js:846
@@ -3915,7 +3919,7 @@ msgstr "Antal i markering"
 
 #: src/control/Control.StatusBar.js:274
 msgid "Zoom to Fit Slide"
-msgstr ""
+msgstr "Zooma för att passa bilden"
 
 #: src/control/Control.StatusBar.js:275
 msgid "Zoom to Fit Page Width"
@@ -3967,7 +3971,7 @@ msgstr "Infoga blad efter detta"
 
 #: src/control/Control.Tabs.js:100 src/control/Control.Tabs.js:107
 msgid "Reset Tab Color"
-msgstr ""
+msgstr "Återställ flikfärg"
 
 #: src/control/Control.Tabs.js:127 src/control/Control.Tabs.js:131
 msgid "Move Sheet Left"
@@ -4892,17 +4896,15 @@ msgstr "Tabellcellsfunktioner"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:74
 msgid "Sheet Navigation"
-msgstr ""
+msgstr "Blad navigering"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:76
-#, fuzzy
 msgid "Slide Navigation"
-msgstr "Stäng navigering"
+msgstr "Bildnavigering"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:77
-#, fuzzy
 msgid "Page Navigation"
-msgstr "Stäng navigering"
+msgstr "Sidnavigering"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:83
 msgid "Your changes have been saved"
@@ -5902,12 +5904,10 @@ msgid "Get Involved"
 msgstr "Bli involverad"
 
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.h2:49-7
-#, fuzzy
 msgid "https://www.collaboraoffice.org/"
-msgstr "https://www.collaboraonline.org/"
+msgstr "https://www.collaboraoffice.org/"
 
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.p:50-7
-#, fuzzy
 msgid ""
 "Are you interested in contributing but don’t know where to start? Head over "
 "to the <a target=\"_blank\" rel=\"noopener\" href=\"https://www."
@@ -5918,14 +5918,14 @@ msgid ""
 "href=\"https://www.collaboraoffice.org/post/filebugs/\">filing a bug "
 "report</a> with all the essential steps on how to reproduce it."
 msgstr ""
-"Är du intresserad av att bidra men vet inte var du ska börja? Följ <a target="
-"\"_blank\" rel=\"noopener\" href=\"https://www.collaboraonline.org/post/"
-"build-code/\">steg-för-steg-instruktionerna </a> för att bygga CODE från "
-"början. Du kan också bidra till <a target=\"_blank\" rel=\"noopener\" href="
-"\"https://www.collaboraonline.org/post/translate/\">översättningen </a> "
-"eller genom att skriva <a target=\"_blank\" rel=\"noopener\" href=\"https"
-"://www.collaboraonline.org/post/filebugs/\">användbara buggrapporter </a> "
-"som har med alla viktiga steg för hur buggen kan reproduceras."
+"Är du intresserad av att bidra men vet inte var du ska börja? Följ <a "
+"target=\"_blank\" rel=\"noopener\" href=\"https://www.collaboraoffice.org/"
+"post/build-code/\">steg för steg instruktionerna</a> för att bygga CODE från "
+"början. Du kan också bidra till<a target=\"_blank\" rel=\"noopener\" "
+"href=\"https://www.collaboraoffice.org/post/translate/\">översättningen</a> "
+"eller genom att skriva <a target=\"_blank\" rel=\"noopener\" href=\"https://"
+"www.collaboraoffice.org/post/filebugs/\">användbara buggrapporter</a> som "
+"har med alla viktiga steg för hur buggen kan reproduceras."
 
 #: welcome/welcome.html%2Bhtml.body.div.div:55-5
 msgid ""
