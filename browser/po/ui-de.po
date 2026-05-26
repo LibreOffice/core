@@ -13,7 +13,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-26 00:18+0200\n"
 "PO-Revision-Date: 2026-05-26 23:12+0000\n"
-"Last-Translator: Ettore Atalan <atalanttore@googlemail.com>\n"
+"Last-Translator: Mr-Update <mr.update@yahoo.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/de/>\n"
 "Language: de\n"
@@ -745,17 +745,19 @@ msgstr "Xcu hochladen"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:713
 msgid "Document themes"
-msgstr ""
+msgstr "Dokumentdesigns"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:715
 msgid ""
 "Upload custom document themes (.theme). These define color palettes "
 "available under Format > Theme."
 msgstr ""
+"Laden Sie benutzerdefinierte Dokumentdesigns (.theme) hoch. Diese legen die "
+"Farbpaletten fest, die unter „Format → Design“ verfügbar sind."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:721
 msgid "Upload Theme"
-msgstr ""
+msgstr "Design hochladen"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:776
 msgid "Something went wrong. Please try to refresh the page."
@@ -3080,6 +3082,9 @@ msgid ""
 "Clone Formatting is active (press Enter on a cell to apply, click again or "
 "press Esc to exit)"
 msgstr ""
+"Die Formatierung kopieren ist aktiviert (drücken Sie Enter in einer Zelle, "
+"um die Formatierung zu übernehmen; klicken Sie erneut oder drücken Sie Esc, "
+"um sie zu beenden"
 
 #: src/control/Control.NotebookbarCalc.js:492
 #: src/control/Control.NotebookbarDraw.js:685
@@ -3442,7 +3447,7 @@ msgstr "Zellen formatieren"
 #: src/control/Control.NotebookbarCalc.js:2827
 #: src/control/Control.NotebookbarImpress.js:1890
 msgid "Themes"
-msgstr "Themen"
+msgstr "Designs"
 
 #: src/control/Control.NotebookbarCalc.js:2933
 #: src/control/Control.NotebookbarCalc.js:3290
@@ -3952,7 +3957,7 @@ msgstr "Anzahl der Auswahl"
 
 #: src/control/Control.StatusBar.js:274
 msgid "Zoom to Fit Slide"
-msgstr ""
+msgstr "Folie an Bildschirm anpassen"
 
 #: src/control/Control.StatusBar.js:275
 msgid "Zoom to Fit Page Width"
@@ -4005,7 +4010,7 @@ msgstr "Tabelle nach dieser einfügen"
 
 #: src/control/Control.Tabs.js:100 src/control/Control.Tabs.js:107
 msgid "Reset Tab Color"
-msgstr ""
+msgstr "Tab-Farbe zurücksetzen"
 
 #: src/control/Control.Tabs.js:127 src/control/Control.Tabs.js:131
 msgid "Move Sheet Left"
@@ -4935,7 +4940,7 @@ msgstr "Funktionen für Tabellenzellen"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:74
 msgid "Sheet Navigation"
-msgstr ""
+msgstr "Blattnavigation"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:76
 msgid "Slide Navigation"
@@ -5986,10 +5991,9 @@ msgstr "Machen Sie mit"
 
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.h2:49-7
 msgid "https://www.collaboraoffice.org/"
-msgstr ""
+msgstr "https://www.collaboraoffice.org/"
 
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.p:50-7
-#, fuzzy
 msgid ""
 "Are you interested in contributing but don’t know where to start? Head over "
 "to the <a target=\"_blank\" rel=\"noopener\" href=\"https://www."
@@ -6001,13 +6005,13 @@ msgid ""
 "report</a> with all the essential steps on how to reproduce it."
 msgstr ""
 "Sie möchten sich einbringen, wissen aber nicht, wo Sie anfangen sollen? "
-"Besuchen Sie die <a target=\"_blank\" rel=\"noopener\" href=\"https://www."
-"collaboraonline.org/post/build-code/\">Schritt-für-Schritt-Anleitung</a> und "
-"erzeugen Sie einen CODE-Build. Sie können auch mit <a target=\"_blank\" rel="
-"\"noopener\" href=\"https://www.collaboraonline.org/post/translate/\""
-">Übersetzungen</a> oder durch <a target=\"_blank\" rel=\"noopener\" href="
-"\"https://www.collaboraonline.org/post/filebugs/\">Meldung eines Bugs</a> "
-"mit allen wichtigen Schritten zur Reproduktion des Fehlers helfen."
+"Besuchen Sie die <a target=\"_blank\" rel=\"noopener\" href=\"https://"
+"www.collaboraonline.org/post/build-code/\">Schritt-für-Schritt-Anleitung</a> "
+"und erzeugen Sie einen CODE-Build. Sie können auch mit <a target=\"_blank\" "
+"rel=\"noopener\" href=\"https://www.collaboraonline.org/post/translate/\">"
+"Übersetzungen</a> oder durch <a target=\"_blank\" rel=\"noopener\" "
+"href=\"https://www.collaboraonline.org/post/filebugs/\">Meldung eines Bugs</"
+"a> mit allen wichtigen Schritten zur Reproduktion des Fehlers helfen."
 
 #: welcome/welcome.html%2Bhtml.body.div.div:55-5
 msgid ""
