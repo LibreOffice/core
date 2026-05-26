@@ -927,6 +927,7 @@ class TreeViewControl {
 				selectionElement,
 				expander,
 				clickFunction,
+				doubleClickFunction,
 				builder,
 				treeViewData,
 			);
@@ -1064,6 +1065,7 @@ class TreeViewControl {
 		selectionElement: HTMLInputElement,
 		expander: HTMLElement,
 		clickFunction: any,
+		doubleClickFunction: any,
 		builder: JSBuilder,
 		data: TreeWidgetJSON,
 	) {
@@ -1075,7 +1077,16 @@ class TreeViewControl {
 			if (event.key === ' ' && expander) {
 				expander.click();
 				preventDef = true;
-			} else if (event.key === 'Enter' || event.key === ' ') {
+			} else if (event.key === 'Enter') {
+				if (this._singleClickActivate) clickFunction(event);
+				else doubleClickFunction(event);
+
+				if (selectionElement) selectionElement.click();
+				if (expander) {
+					expander.click();
+				}
+				preventDef = true;
+			} else if (event.key === ' ') {
 				clickFunction(event);
 				if (selectionElement) selectionElement.click();
 				if (expander) {
