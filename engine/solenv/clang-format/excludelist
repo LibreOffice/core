@@ -8654,6 +8654,7 @@ sd/inc/unolayer.hxx
 sd/inc/unomodel.hxx
 sd/qa/unit/SVGExportTests.cxx
 sd/qa/unit/SdrPdfImportTest.cxx
+sd/qa/unit/SlideSectionTest.cxx
 sd/qa/unit/activex-controls-tests.cxx
 sd/qa/unit/dialogs-test.cxx
 sd/qa/unit/export-tests-ooxml4.cxx
@@ -8923,6 +8924,7 @@ sd/source/ui/inc/DrawSubController.hxx
 sd/source/ui/inc/DrawViewShell.hxx
 sd/source/ui/inc/FrameView.hxx
 sd/source/ui/inc/GraphicObjectBar.hxx
+sd/source/ui/inc/ImpressViewShellBase.hxx
 sd/source/ui/inc/LayerTabBar.hxx
 sd/source/ui/inc/MediaObjectBar.hxx
 sd/source/ui/inc/NavigatorChildWindow.hxx
@@ -11261,6 +11263,7 @@ sw/qa/core/uwriter.cxx
 sw/qa/extras/docbookexport/docbookexport.cxx
 sw/qa/extras/globalfilter/globalfilter.cxx
 sw/qa/extras/htmlimport/htmlimport.cxx
+sw/qa/extras/layout/layout6.cxx
 sw/qa/extras/mailmerge/mailmerge.cxx
 sw/qa/extras/mailmerge/mailmerge2.cxx
 sw/qa/extras/odfexport/odfexport.cxx
@@ -11276,6 +11279,7 @@ sw/qa/extras/ooxmlexport/ooxmlexport16.cxx
 sw/qa/extras/ooxmlexport/ooxmlexport17.cxx
 sw/qa/extras/ooxmlexport/ooxmlexport18.cxx
 sw/qa/extras/ooxmlexport/ooxmlexport2.cxx
+sw/qa/extras/ooxmlexport/ooxmlexport27.cxx
 sw/qa/extras/ooxmlexport/ooxmlexport3.cxx
 sw/qa/extras/ooxmlexport/ooxmlexport4.cxx
 sw/qa/extras/ooxmlexport/ooxmlexport5.cxx
@@ -13446,6 +13450,7 @@ vcl/inc/ppdparser.hxx
 vcl/inc/print.h
 vcl/inc/printdlg.hxx
 vcl/inc/printerinfomanager.hxx
+vcl/inc/qt5/QtInstance.hxx
 vcl/inc/quartz/common.h
 vcl/inc/quartz/salbmp.h
 vcl/inc/quartz/salgdi.h
@@ -13728,6 +13733,7 @@ vcl/qa/cppunit/graphicfilter/filters-tga-test.cxx
 vcl/qa/cppunit/lifecycle.cxx
 vcl/qa/cppunit/svm/svmtest.cxx
 vcl/qa/cppunit/timer.cxx
+vcl/qt5/QtInstance.cxx
 vcl/quartz/SystemFontList.cxx
 vcl/quartz/salbmp.cxx
 vcl/quartz/salgdi.cxx
@@ -14306,6 +14312,7 @@ vcl/workben/giffuzzer.cxx
 vcl/workben/hwpfuzzer.cxx
 vcl/workben/icontest.cxx
 vcl/workben/jpgfuzzer.cxx
+vcl/workben/lwpfuzzer.cxx
 vcl/workben/metfuzzer.cxx
 vcl/workben/mtfdemo.cxx
 vcl/workben/olefuzzer.cxx
