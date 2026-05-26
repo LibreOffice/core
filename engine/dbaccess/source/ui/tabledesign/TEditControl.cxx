@@ -1407,7 +1407,7 @@ void OTableEditorCtrl::Command(const CommandEvent& rEvt)
                         xContextMenu->remove(u"delete"_ustr);
                     // tdf#71224: WORKAROUND for the moment, we don't implement insert field at specific position
                     // It's not SQL standard and each database has made its choice (some use "BEFORE", other "FIRST" and "AFTER")
-                    // and some, like Postgresql, don't allow this.
+                    // and some databases don't allow this.
                     // So for the moment, test if the table already exists (and so it's an edition), in this case only
                     // we remove "Insert Fields" entry. Indeed, in case of new table, there's no pb.
                     //
