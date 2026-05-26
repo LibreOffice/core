@@ -1260,7 +1260,10 @@ class CanvasSectionContainer {
 	}
 
 	public onMouseDown (e: MouseEvent) { // Ignore this event, just rely on this.draggingSomething variable.
-		if (e.button === 0 && !this.touchEventInProgress && this.mouseIsInside ) { // So, we only handle left button (and only when mouse is inside).
+		if (e.button === 0 && !this.touchEventInProgress) {
+			// canvas.onmousedown only fires when the pointer is on the canvas,
+			// so by definition the mouse is inside.
+			this.mouseIsInside = true;
 			this.clearMousePositions();
 			this.positionOnMouseDown = this.convertPositionToCanvasLocale(e);
 
