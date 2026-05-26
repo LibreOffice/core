@@ -171,6 +171,37 @@ void lcl_removeEmptyChartTypeGroups( const uno::Reference< chart2::XChartDocumen
     }
 }
 
+void lcl_ApplyHistogramTemplate(const uno::Reference<chart2::XChartDocument>& xDoc)
+{
+    if (!xDoc.is())
+        return;
+
+    try
+    {
+        uno::Reference<chart2::XDiagram> xHistDiagram = xDoc->getFirstDiagram();
+        uno::Reference<chart2::XChartTypeManager> xChartTypeManager = xDoc->getChartTypeManager();
+        uno::Reference<lang::XMultiServiceFactory> xTemplateFactory(xChartTypeManager,
+                                                                    uno::UNO_QUERY);
+
+        uno::Reference<chart2::XChartTypeTemplate> xTemplate;
+        if (xTemplateFactory.is())
+        {
+            xTemplate.set(
+                xTemplateFactory->createInstance(u"com.sun.star.chart2.template.Histogram"_ustr),
+                uno::UNO_QUERY);
+        }
+
+        if (xHistDiagram.is() && xTemplate.is())
+        {
+            xTemplate->changeDiagram(xHistDiagram);
+        }
+    }
+    catch (const uno::Exception&)
+    {
+        TOOLS_WARN_EXCEPTION("xmloff.chart", "Failed to apply histogram template");
+    }
+}
+
 uno::Sequence< sal_Int32 > lcl_getNumberSequenceFromString( std::u16string_view rStr, bool bAddOneToEachOldIndex )
 {
     const sal_Unicode aSpace( ' ' );
@@ -454,33 +485,7 @@ void SchXMLChartContext::startFastElement( sal_Int32 /*nElement*/,
     // <style:chart-properties> and land on the real histogram chart type.
     if (maChartTypeServiceName == "com.sun.star.chart2.HistogramChartType")
     {
-        try
-        {
-            uno::Reference<chart2::XDiagram> xHistDiagram;
-            if (xNewDoc.is())
-                xHistDiagram = xNewDoc->getFirstDiagram();
-
-            uno::Reference<chart2::XChartTypeManager> xChartTypeManager;
-            if (xNewDoc.is())
-                xChartTypeManager = xNewDoc->getChartTypeManager();
-
-            uno::Reference<lang::XMultiServiceFactory> xTemplateFactory(
-                xChartTypeManager, uno::UNO_QUERY);
-            uno::Reference<chart2::XChartTypeTemplate> xTemplate;
-            if (xTemplateFactory.is())
-                xTemplate.set(
-                    xTemplateFactory->createInstance(
-                        u"com.sun.star.chart2.template.Histogram"_ustr),
-                    uno::UNO_QUERY);
-
-            if (xHistDiagram.is() && xTemplate.is())
-                xTemplate->changeDiagram(xHistDiagram);
-        }
-        catch (const uno::Exception&)
-        {
-            TOOLS_WARN_EXCEPTION("xmloff.chart",
-                                 "Failed to apply histogram template during startElement");
-        }
+        lcl_ApplyHistogramTemplate(xNewDoc);
     }
 
     if( bHasAddin )
@@ -930,6 +935,13 @@ void SchXMLChartContext::endFastElement(sal_Int32 )
     else
     {
         SAL_WARN("xmloff.chart", "Must not get here" );
+    }
+
+    if (maChartTypeServiceName == "com.sun.star.chart2.HistogramChartType")
+    {
+        // The early template call imports histogram properties, but runs before
+        // series data exists. Reapply now to rebuild bins from imported values-y.
+        lcl_ApplyHistogramTemplate(xNewDoc);
     }
 
     // now all series and data point properties are available and can be set
