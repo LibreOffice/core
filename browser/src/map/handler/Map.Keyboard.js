@@ -419,11 +419,10 @@ window.L.Map.Keyboard = window.L.Handler.extend({
 		if (window.KeyboardShortcuts.processEvent(app.UI.language.fromURL, ev)) {
 			return;
 		}
-
 		if (this._map.jsdialog
-			&& (this._map.jsdialog.hasDialogOpened() || this._map.jsdialog.hasSnackbarOpened() || this._map.jsdialog.hasDropdownOpened())
-			&& this._map.jsdialog.handleKeyEvent(ev)) {
-			ev.preventDefault();
+			&& (this._map.jsdialog.hasDialogOpened() || this._map.jsdialog.hasSnackbarOpened() || this._map.jsdialog.hasDropdownOpened())) {
+			if (this._map.jsdialog.handleKeyEvent(ev))
+				ev.preventDefault();
 			return;
 		}
 
