@@ -57,8 +57,12 @@
                     filename = decodedWopiSrc.substring(lastSlash + 1);
                 }
             }
-            window.document.title = window.document.title + " - " + filename;
-            document.getElementById("coolframe").title = filename + " - Collabora Online";
+            // Initial title carries the brand without a module suffix; the
+            // iframe will postMessage 'Doc_Title' once it knows the doc type
+            // and we refine to '<filename> - Collabora <Module>' then.
+            var initialTitle = filename + " - Collabora Online";
+            window.document.title = initialTitle;
+            document.getElementById("coolframe").title = initialTitle;
             if (req)
               localUrl += 'req=' + req + '&';
 
@@ -123,6 +127,12 @@
                 return;
               if (msg.Values.Status == 'Document_Loaded')
                 post({'MessageId': 'Host_PostmessageReady'});
+              break;
+            case 'Doc_Title':
+              if (msg.Values && msg.Values.Title) {
+                window.document.title = msg.Values.Title;
+                document.getElementById("coolframe").title = msg.Values.Title;
+              }
               break;
             case 'UI_Mention':
               if (!msg.Values)

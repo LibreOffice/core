@@ -12,7 +12,7 @@
  * L.WOPI contains WOPI related logic
  */
 
-/* global _ app _UNO JSDialog errorMessages URLPopUpSection */
+/* global _ app _UNO JSDialog errorMessages URLPopUpSection brandProductName */
 window.L.Map.WOPI = window.L.Handler.extend({
 	// If the CheckFileInfo call fails on server side, we won't have any PostMessageOrigin.
 	// So use '*' because we still needs to send 'close' message to the parent frame which
@@ -145,6 +145,7 @@ window.L.Map.WOPI = window.L.Handler.extend({
 		this.BreadcrumbDocName = wopiInfo['BreadcrumbDocName'];
 		if (this.BreadcrumbDocName === undefined)
 			this.BreadcrumbDocName = this.BaseFileName;
+		this._updateDocumentTitle();
 		this.HidePrintOption = !!wopiInfo['HidePrintOption'];
 		this.HideSaveOption = !!wopiInfo['HideSaveOption'];
 		this.HideExportOption = !!wopiInfo['HideExportOption'];
@@ -195,6 +196,56 @@ window.L.Map.WOPI = window.L.Handler.extend({
 		}
 
 		this.setupImageInsertionMenu();
+	},
+
+	_updateDocumentTitle: function() {
+		var docName = this.BreadcrumbDocName || this.BaseFileName;
+		if (!docName)
+			return;
+
+		var moduleByDocType = {
+			'text': 'Writer',
+			'spreadsheet': 'Calc',
+			'presentation': 'Impress',
+			'drawing': 'Draw',
+		};
+		var docType = this._map.getDocType();
+		var moduleName = moduleByDocType[docType];
+
+		var brand = (typeof brandProductName !== 'undefined' && brandProductName) ? brandProductName : 'Collabora Online';
+		var product = moduleName ? brand.replace(/Online$/, moduleName).trim() : brand;
+		if (moduleName && product === brand)
+			product = brand + ' ' + moduleName;
+
+		var title = docName + ' - ' + product;
+		if (title === this._lastDocTitle)
+			return;
+		this._lastDocTitle = title;
+		document.title = title;
+
+		this._map.fire('postMessage', {
+			msgId: 'Doc_Title',
+			args: {
+				Title: title,
+				DocName: docName,
+				DocType: docType || '',
+				ProductName: product,
+			},
+		});
+	},
+
+	// Called after an in-place rename so cached WOPI props and the page title
+	// refresh without waiting for a fresh CheckFileInfo round trip. Only
+	// update BreadcrumbDocName if it was the default fallback (== BaseFileName);
+	// a host-customized breadcrumb (friendly title, path prefix, extension-less
+	// name) is left alone and will be refreshed by the next CheckFileInfo.
+	onRenameFile: function(newName) {
+		if (!newName)
+			return;
+		if (this.BreadcrumbDocName === this.BaseFileName)
+			this.BreadcrumbDocName = newName;
+		this.BaseFileName = newName;
+		this._updateDocumentTitle();
 	},
 
 	sendFrameReady: function() {
@@ -271,6 +322,7 @@ window.L.Map.WOPI = window.L.Handler.extend({
 			}
 
 			this.DocumentLoadedTime = Date.now();
+			this._updateDocumentTitle();
 		}
 		this._appLoadedConditions[e.type] = true;
 		for (var key in this._appLoadedConditions) {

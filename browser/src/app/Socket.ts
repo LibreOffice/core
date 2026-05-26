@@ -1689,6 +1689,8 @@ class Socket {
 
 			if (textMsg.startsWith('renamefile:')) {
 				this._map.uiManager.documentNameInput.showLoadingAnimation();
+				if (command.filename)
+					this._map['wopi'].onRenameFile(decodeURIComponent(command.filename));
 				this._map.fire('postMessage', {
 					msgId: 'File_Rename',
 					args: {
