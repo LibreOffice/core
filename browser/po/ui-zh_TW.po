@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-26 00:18+0200\n"
-"PO-Revision-Date: 2026-05-14 03:11+0000\n"
+"PO-Revision-Date: 2026-05-26 23:11+0000\n"
 "Last-Translator: Jeff Huang <s8321414@gmail.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/collabora-online/collabora-ui/zh_Hant/>\n"
-"Language: \n"
+"Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 2026.5.dev0\n"
+"X-Generator: Weblate 2026.6.dev0\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -728,17 +728,19 @@ msgstr "上傳 Xcu"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:713
 msgid "Document themes"
-msgstr ""
+msgstr "文件佈景主題"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:715
 msgid ""
 "Upload custom document themes (.theme). These define color palettes "
 "available under Format > Theme."
 msgstr ""
+"上傳自訂文件佈景主題 (.theme)。這些主題會定義「格式」→「佈景主題」下可用的配"
+"色方案。"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:721
 msgid "Upload Theme"
-msgstr ""
+msgstr "上傳佈景主題"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:776
 msgid "Something went wrong. Please try to refresh the page."
@@ -3022,6 +3024,8 @@ msgid ""
 "Clone Formatting is active (press Enter on a cell to apply, click again or "
 "press Esc to exit)"
 msgstr ""
+"「拓製格式設定」功能已啟用（在儲存格上按下 Enter 鍵即可套用，再次點擊或按下 "
+"Esc 鍵即可退出）"
 
 #: src/control/Control.NotebookbarCalc.js:492
 #: src/control/Control.NotebookbarDraw.js:685
@@ -3643,11 +3647,11 @@ msgstr "檢視變更"
 
 #: src/control/Control.NotebookbarWriter.js:2770
 msgid "Cell Background"
-msgstr ""
+msgstr "儲存格背景"
 
 #: src/control/Control.NotebookbarWriter.js:2853
 msgid "Protect"
-msgstr ""
+msgstr "保護"
 
 #: src/control/Control.PartsPreview.js:209
 msgid "preview of page %1"
@@ -3668,7 +3672,7 @@ msgstr "新增區塊"
 
 #: src/control/Control.PartsPreview.js:599
 msgid "Toggle section %1"
-msgstr ""
+msgstr "切換區塊 %1"
 
 #: src/control/Control.PartsPreview.js:767
 #: src/control/Control.PartsPreview.js:846
@@ -3880,7 +3884,7 @@ msgstr "選取計數"
 
 #: src/control/Control.StatusBar.js:274
 msgid "Zoom to Fit Slide"
-msgstr ""
+msgstr "縮放以填滿投影片"
 
 #: src/control/Control.StatusBar.js:275
 msgid "Zoom to Fit Page Width"
@@ -3930,7 +3934,7 @@ msgstr "在這之後插入工作表"
 
 #: src/control/Control.Tabs.js:100 src/control/Control.Tabs.js:107
 msgid "Reset Tab Color"
-msgstr ""
+msgstr "重設頁面色彩"
 
 #: src/control/Control.Tabs.js:127 src/control/Control.Tabs.js:131
 msgid "Move Sheet Left"
@@ -4844,17 +4848,15 @@ msgstr "表格儲存格函式"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:74
 msgid "Sheet Navigation"
-msgstr ""
+msgstr "工作表導覽"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:76
-#, fuzzy
 msgid "Slide Navigation"
-msgstr "關閉導覽"
+msgstr "投影片導覽"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:77
-#, fuzzy
 msgid "Page Navigation"
-msgstr "關閉導覽"
+msgstr "頁面導覽"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:83
 msgid "Your changes have been saved"
@@ -5799,12 +5801,10 @@ msgid "Get Involved"
 msgstr "參與"
 
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.h2:49-7
-#, fuzzy
 msgid "https://www.collaboraoffice.org/"
 msgstr "https://www.collaboraonline.org/"
 
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.p:50-7
-#, fuzzy
 msgid ""
 "Are you interested in contributing but don’t know where to start? Head over "
 "to the <a target=\"_blank\" rel=\"noopener\" href=\"https://www."
@@ -5815,13 +5815,12 @@ msgid ""
 "href=\"https://www.collaboraoffice.org/post/filebugs/\">filing a bug "
 "report</a> with all the essential steps on how to reproduce it."
 msgstr ""
-"有興趣做出貢獻但不知道從哪裡開始？前往 <a target=\"_blank\" rel=\"noopener\" "
-"href=\"https://www.collaboraonline.org/post/build-code/\""
-">逐步說明</a>並從頭開始建立程式碼。您還可以幫忙<a target=\"_blank\" rel="
-"\"noopener\" href=\"https://www.collaboraonline.org/post/translate/\">翻譯</"
-"a>或透過<a target=\"_blank\" rel=\"noopener\" href=\"https://www."
-"collaboraonline.org/post/filebugs/\""
-">提交錯誤報告</a>以及如何重現它的所有基本步驟。"
+"有興趣做出貢獻但不知道從哪裡開始？前往<a target=\"_blank\" rel=\"noopener\" "
+"href=\"https://www.collaboraonline.org/post/build-code/\">逐步說明</a>並從頭"
+"開始建構 CODE。您還可以協助<a target=\"_blank\" rel=\"noopener\" "
+"href=\"https://www.collaboraonline.org/post/translate/\">翻譯</a>或透過<a "
+"target=\"_blank\" rel=\"noopener\" href=\"https://www.collaboraonline.org/"
+"post/filebugs/\">遞交錯誤報告</a>以及如何重現它的所有基本步驟。"
 
 #: welcome/welcome.html%2Bhtml.body.div.div:55-5
 msgid ""
