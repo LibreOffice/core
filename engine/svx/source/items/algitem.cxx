@@ -141,10 +141,10 @@ SvxMarginItem::SvxMarginItem( const TypedWhichId<SvxMarginItem> nId ) :
 
     SfxPoolItem( nId ),
 
-    nLeftMargin  ( 20 ),
-    nTopMargin   ( 20 ),
-    nRightMargin ( 20 ),
-    nBottomMargin( 20 )
+    m_nLeftMargin  ( 20 ),
+    m_nTopMargin   ( 20 ),
+    m_nRightMargin ( 20 ),
+    m_nBottomMargin( 20 )
 {
 }
 
@@ -156,10 +156,10 @@ SvxMarginItem::SvxMarginItem( sal_Int16 nLeft,
                               const TypedWhichId<SvxMarginItem> nId ) :
     SfxPoolItem( nId ),
 
-    nLeftMargin  ( nLeft ),
-    nTopMargin   ( nTop ),
-    nRightMargin ( nRight ),
-    nBottomMargin( nBottom )
+    m_nLeftMargin  ( nLeft ),
+    m_nTopMargin   ( nTop ),
+    m_nRightMargin ( nRight ),
+    m_nBottomMargin( nBottom )
 {
 }
 
@@ -178,31 +178,31 @@ bool SvxMarginItem::GetPresentation
     {
         case SfxItemPresentation::Nameless:
         {
-            rText = GetMetricText( static_cast<tools::Long>(nLeftMargin), eCoreUnit, ePresUnit, &rIntl ) +
+            rText = GetMetricText( static_cast<tools::Long>(m_nLeftMargin), eCoreUnit, ePresUnit, &rIntl ) +
                         cpDelimTmp +
-                        GetMetricText( static_cast<tools::Long>(nTopMargin), eCoreUnit, ePresUnit, &rIntl ) +
+                        GetMetricText( static_cast<tools::Long>(m_nTopMargin), eCoreUnit, ePresUnit, &rIntl ) +
                         cpDelimTmp +
-                        GetMetricText( static_cast<tools::Long>(nRightMargin), eCoreUnit, ePresUnit, &rIntl ) +
+                        GetMetricText( static_cast<tools::Long>(m_nRightMargin), eCoreUnit, ePresUnit, &rIntl ) +
                         cpDelimTmp +
-                        GetMetricText( static_cast<tools::Long>(nBottomMargin), eCoreUnit, ePresUnit, &rIntl );
+                        GetMetricText( static_cast<tools::Long>(m_nBottomMargin), eCoreUnit, ePresUnit, &rIntl );
             return true;
         }
         case SfxItemPresentation::Complete:
         {
             rText = SvxResId(RID_SVXITEMS_MARGIN_LEFT) +
-                        GetMetricText( static_cast<tools::Long>(nLeftMargin), eCoreUnit, ePresUnit, &rIntl ) +
+                        GetMetricText( static_cast<tools::Long>(m_nLeftMargin), eCoreUnit, ePresUnit, &rIntl ) +
                         " " + EditResId(GetMetricId(ePresUnit)) +
                         cpDelimTmp +
                         SvxResId(RID_SVXITEMS_MARGIN_TOP) +
-                        GetMetricText( static_cast<tools::Long>(nTopMargin), eCoreUnit, ePresUnit, &rIntl ) +
+                        GetMetricText( static_cast<tools::Long>(m_nTopMargin), eCoreUnit, ePresUnit, &rIntl ) +
                         " " + EditResId(GetMetricId(ePresUnit)) +
                         cpDelimTmp +
                         SvxResId(RID_SVXITEMS_MARGIN_RIGHT) +
-                        GetMetricText( static_cast<tools::Long>(nRightMargin), eCoreUnit, ePresUnit, &rIntl ) +
+                        GetMetricText( static_cast<tools::Long>(m_nRightMargin), eCoreUnit, ePresUnit, &rIntl ) +
                         " " + EditResId(GetMetricId(ePresUnit)) +
                         cpDelimTmp +
                         SvxResId(RID_SVXITEMS_MARGIN_BOTTOM) +
-                        GetMetricText( static_cast<tools::Long>(nBottomMargin), eCoreUnit, ePresUnit, &rIntl ) +
+                        GetMetricText( static_cast<tools::Long>(m_nBottomMargin), eCoreUnit, ePresUnit, &rIntl ) +
                         " " + EditResId(GetMetricId(ePresUnit));
             return true;
         }
@@ -216,10 +216,10 @@ bool SvxMarginItem::operator==( const SfxPoolItem& rItem ) const
 {
     assert(SfxPoolItem::operator==(rItem));
 
-    return ( ( nLeftMargin == static_cast<const SvxMarginItem&>(rItem).nLeftMargin )   &&
-             ( nTopMargin == static_cast<const SvxMarginItem&>(rItem).nTopMargin )     &&
-             ( nRightMargin == static_cast<const SvxMarginItem&>(rItem).nRightMargin ) &&
-             ( nBottomMargin == static_cast<const SvxMarginItem&>(rItem).nBottomMargin ) );
+    return ( ( m_nLeftMargin == static_cast<const SvxMarginItem&>(rItem).m_nLeftMargin )   &&
+             ( m_nTopMargin == static_cast<const SvxMarginItem&>(rItem).m_nTopMargin )     &&
+             ( m_nRightMargin == static_cast<const SvxMarginItem&>(rItem).m_nRightMargin ) &&
+             ( m_nBottomMargin == static_cast<const SvxMarginItem&>(rItem).m_nBottomMargin ) );
 }
 
 SvxMarginItem* SvxMarginItem::Clone( SfxItemPool* ) const
@@ -235,16 +235,16 @@ bool SvxMarginItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     {
         //  now sign everything
         case MID_MARGIN_L_MARGIN:
-            rVal <<= static_cast<sal_Int32>( bConvert ? convertTwipToMm100(nLeftMargin) : nLeftMargin );
+            rVal <<= static_cast<sal_Int32>( bConvert ? convertTwipToMm100(m_nLeftMargin) : m_nLeftMargin );
             break;
         case MID_MARGIN_R_MARGIN:
-            rVal <<= static_cast<sal_Int32>( bConvert ? convertTwipToMm100(nRightMargin) : nRightMargin );
+            rVal <<= static_cast<sal_Int32>( bConvert ? convertTwipToMm100(m_nRightMargin) : m_nRightMargin );
             break;
         case MID_MARGIN_UP_MARGIN:
-            rVal <<= static_cast<sal_Int32>( bConvert ? convertTwipToMm100(nTopMargin) : nTopMargin );
+            rVal <<= static_cast<sal_Int32>( bConvert ? convertTwipToMm100(m_nTopMargin) : m_nTopMargin );
             break;
         case MID_MARGIN_LO_MARGIN:
-            rVal <<= static_cast<sal_Int32>( bConvert ? convertTwipToMm100(nBottomMargin) : nBottomMargin );
+            rVal <<= static_cast<sal_Int32>( bConvert ? convertTwipToMm100(m_nBottomMargin) : m_nBottomMargin );
             break;
         default:
             OSL_FAIL("unknown MemberId");
@@ -266,16 +266,16 @@ bool SvxMarginItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     switch ( nMemberId & ~CONVERT_TWIPS )
     {
         case MID_MARGIN_L_MARGIN:
-            nLeftMargin = static_cast<sal_Int16>( bConvert ? o3tl::toTwips(nVal, o3tl::Length::mm100) : nVal );
+            m_nLeftMargin = static_cast<sal_Int16>( bConvert ? o3tl::toTwips(nVal, o3tl::Length::mm100) : nVal );
             break;
         case MID_MARGIN_R_MARGIN:
-            nRightMargin = static_cast<sal_Int16>( bConvert ? o3tl::toTwips(nVal, o3tl::Length::mm100) : nVal );
+            m_nRightMargin = static_cast<sal_Int16>( bConvert ? o3tl::toTwips(nVal, o3tl::Length::mm100) : nVal );
             break;
         case MID_MARGIN_UP_MARGIN:
-            nTopMargin = static_cast<sal_Int16>( bConvert ? o3tl::toTwips(nVal, o3tl::Length::mm100) : nVal );
+            m_nTopMargin = static_cast<sal_Int16>( bConvert ? o3tl::toTwips(nVal, o3tl::Length::mm100) : nVal );
             break;
         case MID_MARGIN_LO_MARGIN:
-            nBottomMargin = static_cast<sal_Int16>( bConvert ? o3tl::toTwips(nVal, o3tl::Length::mm100) : nVal );
+            m_nBottomMargin = static_cast<sal_Int16>( bConvert ? o3tl::toTwips(nVal, o3tl::Length::mm100) : nVal );
             break;
         default:
             OSL_FAIL("unknown MemberId");
@@ -288,28 +288,28 @@ bool SvxMarginItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 void SvxMarginItem::SetLeftMargin( sal_Int16 nLeft )
 {
     ASSERT_CHANGE_REFCOUNTED_ITEM;
-    nLeftMargin = nLeft;
+    m_nLeftMargin = nLeft;
 }
 
 
 void SvxMarginItem::SetTopMargin( sal_Int16 nTop )
 {
     ASSERT_CHANGE_REFCOUNTED_ITEM;
-    nTopMargin = nTop;
+    m_nTopMargin = nTop;
 }
 
 
 void SvxMarginItem::SetRightMargin( sal_Int16 nRight )
 {
     ASSERT_CHANGE_REFCOUNTED_ITEM;
-    nRightMargin = nRight;
+    m_nRightMargin = nRight;
 }
 
 
 void SvxMarginItem::SetBottomMargin( sal_Int16 nBottom )
 {
     ASSERT_CHANGE_REFCOUNTED_ITEM;
-    nBottomMargin = nBottom;
+    m_nBottomMargin = nBottom;
 }
 
 

@@ -58,10 +58,10 @@ public:
 
 class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxMarginItem final : public SfxPoolItem
 {
-    sal_Int16       nLeftMargin;
-    sal_Int16       nTopMargin;
-    sal_Int16       nRightMargin;
-    sal_Int16       nBottomMargin;
+    sal_Int16       m_nLeftMargin;
+    sal_Int16       m_nTopMargin;
+    sal_Int16       m_nRightMargin;
+    sal_Int16       m_nBottomMargin;
 public:
     static SfxPoolItem* CreateDefault();
     DECLARE_ITEM_TYPE_FUNCTION(SvxMarginItem)
@@ -81,13 +81,13 @@ public:
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
-            sal_Int16       GetLeftMargin() const {return nLeftMargin; }
+            sal_Int16       GetLeftMargin() const {return m_nLeftMargin; }
             void            SetLeftMargin(sal_Int16 nLeft);
-            sal_Int16       GetTopMargin() const {return nTopMargin; }
+            sal_Int16       GetTopMargin() const {return m_nTopMargin; }
             void            SetTopMargin(sal_Int16 nTop);
-            sal_Int16       GetRightMargin() const {return nRightMargin; }
+            sal_Int16       GetRightMargin() const {return m_nRightMargin; }
             void            SetRightMargin(sal_Int16 nRight);
-            sal_Int16       GetBottomMargin() const {return nBottomMargin; }
+            sal_Int16       GetBottomMargin() const {return m_nBottomMargin; }
             void            SetBottomMargin(sal_Int16 nBottom);
 };
 
