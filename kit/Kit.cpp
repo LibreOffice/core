@@ -3352,7 +3352,14 @@ void downloadAsFileSaveDialogCallback(const char* suggestedURI, char* result, si
 #endif
 
     const auto download = FileUtil::createDownloadJailPath(baseDir, filename);
-    const std::string outURI = "file://" + download.absolutePath;
+    // URL-encode the path: filename may contain characters (spaces, etc.) that
+    // are illegal in a file:// URI. Without encoding, the engine's URI parser
+    // either truncates at the first space or rejects the URI outright, and the
+    // resulting payload from KIT_CALLBACK_EXPORT_FILE breaks downstream
+    // space-delimited protocol messages.
+    std::string encodedPath;
+    Poco::URI::encode(download.absolutePath, "", encodedPath);
+    const std::string outURI = "file://" + encodedPath;
 
     if (outURI.size() + 1 > resultLen)
     {

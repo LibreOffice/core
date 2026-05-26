@@ -1406,6 +1406,14 @@ bool ChildSession::downloadAs(const StringVector& tokens)
         return false;
     }
 
+    // `name` arrives URL-encoded; validate the decoded form before the
+    // path-component strip below.
+    if (Uri::decode(name).find('/') != std::string::npos)
+    {
+        sendTextFrameAndLogError("error: cmd=downloadas kind=syntax");
+        return false;
+    }
+
     // Obfuscate the new name.
     if (Anonymizer::enabled())
     {
@@ -4211,13 +4219,22 @@ void ChildSession::loKitCallback(const int type, const std::string& payload)
         const std::string downloadId = urlInJail.substr(0, sep);
         const std::string filename = urlInJail.substr(sep + 1);
 
+        // Poco::URI(payload).getPath() above returned the decoded path, so
+        // urlInJail and filename may contain literal spaces (and other
+        // characters that need encoding). Both downstream protocol messages
+        // are space-delimited — the wsd-side handlers re-decode via
+        // Uri::decode() — so re-encode before embedding them.
+        std::string encodedUrlInJail, encodedFilename;
+        Poco::URI::encode(urlInJail, "", encodedUrlInJail);
+        Poco::URI::encode(filename, "", encodedFilename);
+
         // Register download id -> URL mapping in the DocumentBroker
         const std::string docBrokerMessage = "registerdownload: downloadid=" + downloadId
-                                             + " url=" + urlInJail + " clientid=" + getId();
+                                             + " url=" + encodedUrlInJail + " clientid=" + getId();
         _docManager->sendFrame(docBrokerMessage);
         sendTextFrame("downloadas: downloadid=" + downloadId
                       + " port=" + std::to_string(ClientPortNumber) + " id=export filename="
-                      + filename);
+                      + encodedFilename);
 #else
         // CODA-W / CODA-Q / CODA-M / Android: hand the exported file URL to JS,
         // which forwards it to the platform's native message handler for
