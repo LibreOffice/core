@@ -243,7 +243,7 @@ export class CodaMacOSServiceLauncher {
 				'--',
 				'--uitesting',
 				`--testDriverPort=${webDriverPort}`,
-				'-ApplePersistenceIgnoreState=YES',
+				'-ApplePersistenceIgnoreState', 'YES',
 			].join(' '),
 			{ stdio: ['ignore', 'inherit', 'inherit'] },
 		);
