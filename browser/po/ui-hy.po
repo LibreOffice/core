@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-26 00:18+0200\n"
-"PO-Revision-Date: 2026-05-12 14:12+0000\n"
+"PO-Revision-Date: 2026-05-26 23:11+0000\n"
 "Last-Translator: Tigran Zargaryan <tigranflib@gmail.com>\n"
-"Language-Team: Armenian <https://hosted.weblate.org/projects/"
-"collabora-online/collabora-ui/hy/>\n"
-"Language: \n"
+"Language-Team: Armenian <https://hosted.weblate.org/projects/collabora-"
+"online/collabora-ui/hy/>\n"
+"Language: hy\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 2026.5-dev\n"
+"X-Generator: Weblate 2026.6.dev0\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -741,17 +741,19 @@ msgstr "Վերբեռնեք Xcu"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:713
 msgid "Document themes"
-msgstr ""
+msgstr "Փաստաթղթի թեմաներ"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:715
 msgid ""
 "Upload custom document themes (.theme). These define color palettes "
 "available under Format > Theme."
 msgstr ""
+"Վերբեռնեք փաստաթղթերի հատուկ թեմաներ (.theme): Սրանք սահմանում են գունային "
+"ներկապնակները, որոնք հասանելի են Ձևաչափ > Թեմա բաժնում:"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:721
 msgid "Upload Theme"
-msgstr ""
+msgstr "Թեմայի վերբեռնում"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:776
 msgid "Something went wrong. Please try to refresh the page."
@@ -3062,6 +3064,8 @@ msgid ""
 "Clone Formatting is active (press Enter on a cell to apply, click again or "
 "press Esc to exit)"
 msgstr ""
+"Կլոնավորման ձևաչափումը ակտիվ է (կիրառելու համար բջջի վրա սեղմեք Enter, կրկին "
+"սեղմեք կամ սեղմեք Esc դուրս գալու համար)"
 
 #: src/control/Control.NotebookbarCalc.js:492
 #: src/control/Control.NotebookbarDraw.js:685
@@ -3685,11 +3689,11 @@ msgstr "Դիտել փոփոխությունները"
 
 #: src/control/Control.NotebookbarWriter.js:2770
 msgid "Cell Background"
-msgstr ""
+msgstr "Բջջի ֆոն"
 
 #: src/control/Control.NotebookbarWriter.js:2853
 msgid "Protect"
-msgstr ""
+msgstr "Պաշտպանել"
 
 #: src/control/Control.PartsPreview.js:209
 msgid "preview of page %1"
@@ -3710,7 +3714,7 @@ msgstr "Ավելացնել բաժին"
 
 #: src/control/Control.PartsPreview.js:599
 msgid "Toggle section %1"
-msgstr ""
+msgstr "Միացնել/անջատել %1 բաժինը"
 
 #: src/control/Control.PartsPreview.js:767
 #: src/control/Control.PartsPreview.js:846
@@ -3930,7 +3934,7 @@ msgstr "Ընտրությունների հաշվարկ"
 
 #: src/control/Control.StatusBar.js:274
 msgid "Zoom to Fit Slide"
-msgstr ""
+msgstr "Մեծացնել՝ սահիկին համապատասխանեցնելու համար"
 
 #: src/control/Control.StatusBar.js:275
 msgid "Zoom to Fit Page Width"
@@ -3982,7 +3986,7 @@ msgstr "Տեղադրեք թերթիկը սրանից հետո"
 
 #: src/control/Control.Tabs.js:100 src/control/Control.Tabs.js:107
 msgid "Reset Tab Color"
-msgstr ""
+msgstr "Վերագործարկեք ներդիրի գույնը"
 
 #: src/control/Control.Tabs.js:127 src/control/Control.Tabs.js:131
 msgid "Move Sheet Left"
@@ -4909,17 +4913,15 @@ msgstr "Աղյուսակի բջիջների ֆունկցիաներ"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:74
 msgid "Sheet Navigation"
-msgstr ""
+msgstr "Թերթի նավարկում"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:76
-#, fuzzy
 msgid "Slide Navigation"
-msgstr "Փակել Նավարկումը"
+msgstr "Սահիկի Նավարկում"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:77
-#, fuzzy
 msgid "Page Navigation"
-msgstr "Փակել Նավարկումը"
+msgstr "Էջի Նավարկում"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:83
 msgid "Your changes have been saved"
@@ -5928,12 +5930,10 @@ msgid "Get Involved"
 msgstr "Մասնակցեք"
 
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.h2:49-7
-#, fuzzy
 msgid "https://www.collaboraoffice.org/"
-msgstr "https://www.collaboraonline.org/"
+msgstr "https://www.collaboraoffice.org/"
 
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.p:50-7
-#, fuzzy
 msgid ""
 "Are you interested in contributing but don’t know where to start? Head over "
 "to the <a target=\"_blank\" rel=\"noopener\" href=\"https://www."
@@ -5945,11 +5945,11 @@ msgid ""
 "report</a> with all the essential steps on how to reproduce it."
 msgstr ""
 "Հետաքրքրվա՞ծ եք ներդրում ունենալով, բայց չգիտե՞ք որտեղից սկսել: Անցեք <a "
-"target=\"_blank\" rel=\"noopener\" href=\"https://www.collaboraonline.org/"
+"target=\"_blank\" rel=\"noopener\" href=\"https://www.collaboraoffice.org/"
 "post/build-code/\">քայլ առ քայլ հրահանգներ</a> և կառուցեք CODE-ը զրոյից։ "
-"Դուք կարող եք նաև օգնել <a target=\"_blank\" rel=\"noopener\" href=\"https"
-"://www.collaboraonline.org/post/translate/\">թարգմանություններ</a> կամ <a "
-"target=\"_blank\" rel=\"noopener\" href=\"https://www.collaboraonline.org/"
+"Դուք կարող եք նաև օգնել <a target=\"_blank\" rel=\"noopener\" href=\"https://"
+"www.collaboraoffice.org/post/translate/\">թարգմանություններ</a> կամ <a "
+"target=\"_blank\" rel=\"noopener\" href=\"https://www.collaboraoffice.org/"
 "post/filebugs/\">սխալի մասին հաղորդում ներկայացնելը</a> ՝ այն վերարտադրելու "
 "բոլոր անհրաժեշտ քայլերով:"
 
