@@ -510,4 +510,54 @@ describe('VectorPrimitiveRenderer', function () {
 			nodeassert.strictEqual(fill?.properties.fillStyle, '#4472c4');
 		});
 	});
+
+	it('renders polygonHairline from a document reference', function () {
+		// Fixture: a slide with a single polygonHairline outline.
+		const primitiveTree = loadVectorRenderingReference('testPolygonHairline');
+		const hairlineNode = primitiveTree.objects[0].primitives[0];
+		nodeassert.strictEqual(hairlineNode.type, 'polygonHairline');
+		nodeassert.ok(hairlineNode.path, 'hairline must carry a path string');
+
+		const recorder = new CanvasRecorder();
+		const renderer = new cool.VectorPrimitiveRenderer();
+		renderer.renderPrimitive(recorder as any, hairlineNode);
+
+		// The hairline strokes at one canvas pixel in the wire colour.
+		const stroke = recorder.findCall('stroke');
+		nodeassert.ok(stroke, 'stroke not called');
+		nodeassert.strictEqual(stroke?.properties.lineWidth, 1);
+		nodeassert.strictEqual(
+			stroke?.properties.strokeStyle,
+			hairlineNode.color,
+		);
+		nodeassert.strictEqual(
+			(stroke!.args[0] as Path2DRecorder).path,
+			hairlineNode.path,
+		);
+		// Stroke settings do not leak to anything drawn after.
+		nodeassert.ok(recorder.findCall('save'), 'save not called');
+		nodeassert.ok(recorder.findCall('restore'), 'restore not called');
+	});
+
+	it('defaults polygonHairline color to black', function () {
+		const recorder = new CanvasRecorder();
+		const renderer = new cool.VectorPrimitiveRenderer();
+		const primitive = { type: 'polygonHairline', path: 'M 0 0 L 1 1' };
+
+		renderer.renderPrimitive(recorder as any, primitive);
+
+		nodeassert.ok(recorder.findCall('stroke'), 'stroke not called');
+		nodeassert.strictEqual(recorder.properties.strokeStyle, '#000000');
+		nodeassert.strictEqual(recorder.properties.lineWidth, 1);
+	});
+
+	it('skips polygonHairline with missing path', function () {
+		const recorder = new CanvasRecorder();
+		const renderer = new cool.VectorPrimitiveRenderer();
+		const primitive = { type: 'polygonHairline', color: '#000' };
+
+		renderer.renderPrimitive(recorder as any, primitive);
+
+		nodeassert.strictEqual(recorder.countOf('stroke'), 0);
+	});
 });

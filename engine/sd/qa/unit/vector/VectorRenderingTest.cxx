@@ -18,6 +18,7 @@
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 
+#include <svx/svdopage.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdorect.hxx>
 #include <svx/xfillit0.hxx>
@@ -82,6 +83,18 @@ protected:
         pRect->SetMergedItem(XLineColorItem(OUString(), aStrokeColor));
 
         pPage->NbcInsertObject(pRect.get());
+    }
+
+    /// Add a page-object placeholder (slide embedded in slide) to the
+    /// first slide. Its view-independent decomposition is a single
+    /// polygonHairline outline (drawn yellow by the engine), which is
+    /// exactly what the vector tile pipeline emits.
+    void addPageObject(const tools::Rectangle& rRect)
+    {
+        SdrPage* pPage = page(1);
+        rtl::Reference<SdrPageObj> pPageObj
+            = new SdrPageObj(pPage->getSdrModelFromSdrPage(), rRect);
+        pPage->NbcInsertObject(pPageObj.get());
     }
 
     /// Add a stroke-only rectangle (no fill) to the first slide.
@@ -260,6 +273,27 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testObjectInfo)
     assertJsonPath(*oObjectInfo, "name", "Rectangle 1");
     assertJsonPath(*oObjectInfo, "title", "My title");
     assertJsonPath(*oObjectInfo, "desc", "My description");
+}
+
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testPolygonHairline)
+{
+    // An SdrPageObj's view-independent decomposition is a single
+    // yellow polygonHairline outline. The vector tile pipeline goes
+    // through that exact path, so the reference JSON for the browser
+    // mocha test gets a real polygonHairline emitted by the engine.
+    createBlankDoc();
+    addPageObject(tools::Rectangle(Point(5000, 5000), Size(5000, 3000)));
+
+    auto aJson = getVectorTile(u"testPolygonHairline");
+
+    assertJsonPath(aJson, "/type", "vectortile");
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aJson.getSize("/objects").value_or(0));
+
+    auto oHairline = aJson.at("/objects/0/primitives/0");
+    CPPUNIT_ASSERT(oHairline.has_value());
+    assertJsonPath(*oHairline, "type", "polygonHairline");
+    assertJsonPathExists(*oHairline, "color");
+    assertJsonPathExists(*oHairline, "path");
 }
 
 } // namespace

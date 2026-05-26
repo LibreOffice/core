@@ -37,6 +37,12 @@ namespace cool {
 						primitive as PolygonStrokePrimitive,
 					);
 					break;
+				case PolygonHairlinePrimitive.type:
+					this._renderPolygonHairline(
+						context,
+						primitive as PolygonHairlinePrimitive,
+					);
+					break;
 				case GroupPrimitive.type:
 				case ObjectInfoPrimitive.type:
 					// Pure container - recursion into children happens
@@ -113,7 +119,7 @@ namespace cool {
 
 			context.save();
 			context.strokeStyle = line.color ?? '#000000';
-			// A zero-width stroke is invisible on canvas, so clamp to one device pixel.
+			// A zero-width stroke is invisible on canvas, so clamp to one canvas pixel.
 			context.lineWidth = Math.max(line.width ?? 0, 1);
 			// The wire format can carry "none" and "unknown" for linejoin
 			// and linecap. Canvas has no matching option, so fall back
@@ -128,6 +134,21 @@ namespace cool {
 					: 'butt';
 			if (primitive.stroke?.dotDashArray?.length)
 				context.setLineDash(primitive.stroke.dotDashArray);
+			context.stroke(path);
+			context.restore();
+		}
+
+		private _renderPolygonHairline(
+			context: CanvasRenderingContext2D,
+			primitive: PolygonHairlinePrimitive,
+		): void {
+			if (!primitive.path) return;
+
+			const path = new Path2D(primitive.path);
+			context.save();
+			context.strokeStyle = primitive.color ?? '#000000';
+			// Hairlines render at one canvas pixel by definition.
+			context.lineWidth = 1;
 			context.stroke(path);
 			context.restore();
 		}
