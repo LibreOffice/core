@@ -29,6 +29,7 @@ interface Window {
 	cssVars?: string;
 	serviceRoot?: string;
 	versionHash?: string;
+	showLeftNav?: boolean;
 }
 
 interface ConfigItem {
@@ -631,6 +632,7 @@ class SettingIframe {
 		window.enableDebug = element.dataset.enableDebug === 'true';
 		window.enableAccessibility = element.dataset.enableAccessibility === 'true';
 		window.disableAISettings = element.dataset.disableAiSettings === 'true';
+		window.showLeftNav = element.dataset.showLeftNav === 'true';
 		window.wopiSettingBaseUrl = element.dataset.wopiSettingBaseUrl ?? '';
 		window.iframeType = element.dataset.iframeType || 'user';
 		window.cssVars = element.dataset.cssVars || '';
@@ -2797,6 +2799,7 @@ class SettingIframe {
 
 	private setupLeftNavbar(): void {
 		if (this.isAdmin()) return;
+		if (!window.showLeftNav) return;
 
 		// Prevent double scrollbars
 		document.body.style.margin = '0';

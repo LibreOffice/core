@@ -66,6 +66,7 @@ m4_dnl------------------------------------------------------------------------
         data-version-hash="%VERSION%"
         data-lang="%UI_LANG%"
         data-disable-ai-settings="%DISABLE_AI_SETTINGS%"
+        data-show-left-nav="%SHOW_LEFT_NAV%"
       />
     </div>
   </body>

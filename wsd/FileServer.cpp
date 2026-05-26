@@ -2209,6 +2209,14 @@ void FileServerRequestHandler::preprocessIntegratorAdminFile(const HTTPRequest& 
     Poco::replaceInPlace(adminFile, std::string("%DISABLE_AI_SETTINGS%"),
                          std::string(disableAISettings ? "true" : "false"));
 
+    // The in-document Options dialog renders the iframe in a modal and opts in
+    // to the section navigation sidebar. Other integrators (e.g. Nextcloud's
+    // own settings page) embed the iframe directly, so the sidebar would clash
+    // with the host's own navigation - default to off.
+    const std::string showLeftNav = form.get("show_left_nav", "false");
+    Poco::replaceInPlace(adminFile, std::string("%SHOW_LEFT_NAV%"),
+                         std::string(showLeftNav == "true" ? "true" : "false"));
+
     updateThemeResources(adminFile, responseRoot, urv[BRANDING_THEME], config);
 
     const std::string escapedLang = Uri::encode(requestDetails.getParam("lang"), "'");
