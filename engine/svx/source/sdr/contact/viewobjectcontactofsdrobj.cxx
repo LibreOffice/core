@@ -31,6 +31,8 @@
 #include <svx/svdview.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/canvastools.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 #include <fmobj.hxx>
 
@@ -164,6 +166,21 @@ bool ViewObjectContactOfSdrObj::isPrimitiveVisible(const DisplayInfo& rDisplayIn
     basegfx::B2DRange aObjRange = GetViewContact().getRange(rViewInfo);
     if (!aObjRange.isEmpty())
     {
+        // In Calc tiled rendering the object is painted shifted by the grid
+        // offset (the per-row/column pixel-rounding drift). The offset can be
+        // many rows for objects anchored far from the origin. The final
+        // primitive visibility test in getPrimitive2DSequenceHierarchy already
+        // accounts for it, but this earlier test uses the unshifted range, so
+        // a far-anchored object is treated as outside the tile it actually
+        // paints into and is skipped. Shift the range by the same grid offset
+        // so both tests agree.
+        if (GetObjectContact().supportsGridOffsets())
+        {
+            const basegfx::B2DVector& rGridOffset(getGridOffset());
+            if (0.0 != rGridOffset.getX() || 0.0 != rGridOffset.getY())
+                aObjRange.transform(basegfx::utils::createTranslateB2DHomMatrix(rGridOffset));
+        }
+
         const basegfx::B2DRange& rViewRange = rViewInfo.getViewport();
         bool bVisible = rViewRange.isEmpty() || rViewRange.overlaps(aObjRange);
         if (!bVisible)
