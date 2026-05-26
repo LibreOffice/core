@@ -91,6 +91,7 @@ constexpr auto CuiDialogList
         { u"cui/ui/linetabpage.ui" },
         { u"cui/ui/macroselectordialog.ui" },
         { u"cui/ui/namedialog.ui" },
+        { u"cui/ui/newtabledialog.ui" },
         { u"cui/ui/numberingformatpage.ui" },
         { u"cui/ui/numberingoptionspage.ui" },
         { u"cui/ui/numberingpositionpage.ui" },
@@ -869,8 +870,7 @@ std::vector<OUString> completeCommonDialogList(const o3tl::sorted_vector<OUStrin
             {
                 // Skip the dialogs that can't be reached in the absence of
                 // linguistic data. optlingupage is reached only via the
-                // Spelling dialog's Options... button, so it shares the same
-                // gate.
+                // Spelling dialog's Options... button
                 continue;
             }
 
@@ -915,7 +915,8 @@ std::vector<OUString> completeCommonDialogList(const o3tl::sorted_vector<OUStrin
                     continue;
                 }
                 // Reached only via writer-specific flows (header/footer
-                // "More..." button, image Compress/Crop, etc
+                // "More..." button, image Compress/Crop, .uno:Fieldnames or
+                // .uno:InsertMode confirmation, etc.).
                 if (entry == u"cui/ui/borderareatransparencydialog.ui" ||
                     entry == u"cui/ui/croppage.ui" ||
                     entry == u"cui/ui/formatnumberdialog.ui" ||
@@ -930,31 +931,11 @@ std::vector<OUString> completeCommonDialogList(const o3tl::sorted_vector<OUStrin
             {
                 // Not supported in Calc
                 if (entry == u"svx/ui/gotopagedialog.ui" ||
-                    entry == u"cui/ui/borderareatransparencydialog.ui" ||
                     entry == u"cui/ui/splitcellsdialog.ui" ||
                     entry == u"cui/ui/objectnamedialog.ui" ||
                     entry == u"cui/ui/objecttitledescdialog.ui" ||
-                    entry == u"cui/ui/croppage.ui" ||
-                    entry == u"cui/ui/spinbox.ui" ||
-                    entry == u"cui/ui/formatnumberdialog.ui" ||
-                    entry == u"cui/ui/numberingoptionspage.ui" ||
-                    entry == u"cui/ui/numberingpositionpage.ui" ||
-                    entry == u"cui/ui/pastespecial.ui" ||
-                    entry == u"cui/ui/textflowpage.ui" ||
-                    entry == u"cui/ui/twolinespage.ui" ||
-                    entry == u"cui/ui/pickbulletpage.ui" ||
-                    entry == u"cui/ui/pickgraphicpage.ui" ||
-                    entry == u"cui/ui/picknumberingpage.ui" ||
-                    entry == u"cui/ui/pickoutlinepage.ui" ||
-                    entry == u"sfx/ui/password.ui")
-                {
-                    continue;
-                }
-                // SvxSearchDialog hides the Format/Attribute search buttons in
-                // calc (only the writer m_bWriter branch shows them), so these
-                // subdialogs can't be reached.
-                if (entry == u"cui/ui/searchattrdialog.ui" ||
-                    entry == u"cui/ui/searchformatdialog.ui")
+                    entry == u"cui/ui/newtabledialog.ui" ||
+                    entry == u"cui/ui/pastespecial.ui")
                 {
                     continue;
                 }
@@ -962,8 +943,28 @@ std::vector<OUString> completeCommonDialogList(const o3tl::sorted_vector<OUStrin
 
             if (docType == KIT_DOCTYPE_TEXT)
             {
-                // Not supported in Calc
-                if (entry == u"cui/ui/borderbackgrounddialog.ui")
+                // Not supported in Writer
+                if (entry == u"cui/ui/borderbackgrounddialog.ui" ||
+                    entry == u"cui/ui/newtabledialog.ui")
+                    continue;
+            }
+
+            if (docType == KIT_DOCTYPE_PRESENTATION || docType == KIT_DOCTYPE_DRAWING)
+            {
+                // Impress doesn't use these, it has its own equivalents
+                if (entry == u"cui/ui/borderbackgrounddialog.ui" ||
+                    entry == u"svx/ui/headfootformatpage.ui")
+                {
+                    continue;
+                }
+                // .uno:StyleNewByExample doesn't seem to be enabled for impress
+                if (entry == u"sfx/ui/managestylepage.ui" ||
+                    entry == u"sfx/ui/newstyle.ui")
+                {
+                    continue;
+                }
+                // impress/draw doesn't use this
+                if (entry == u"cui/ui/numberingformatpage.ui")
                     continue;
             }
 

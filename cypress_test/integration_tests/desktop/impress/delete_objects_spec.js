@@ -90,10 +90,12 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Delete Objects', function(
 
 		cy.cGet('#menu-table').click();
 		cy.cGet('body').contains('Insert Table...').click();
-		cy.cGet('.lokdialog_canvas').click();
-		helper.processToIdle(this.win);
 
-		helper.typeIntoDocument('{shift}{enter}');
+		// Insert Table is now a common JSDialog rather than a lokdialog
+		// canvas, accept the default table via its OK button.
+		cy.cGet('#NewTableDialog').should('exist');
+		helper.processToIdle(this.win);
+		cy.cGet('#NewTableDialog #ok-button').click();
 		helper.processToIdle(this.win);
 
 		// Table is inserted with the markers shown
