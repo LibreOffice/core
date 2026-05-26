@@ -307,7 +307,7 @@ public:
     /// @see vcl::ITiledRenderable::setPaintTextEdit().
     virtual void setPaintTextEdit(bool bPaint) override { mbPaintTextEdit = bPaint; }
     /// @see vcl::ITiledRenderable::getViewRenderState().
-    SD_DLLPUBLIC OString getViewRenderState(SfxViewShell* pViewShell = nullptr) override;
+    SD_DLLPUBLIC OString getViewRenderState(const SfxViewShell* pViewShell = nullptr) override;
 
     /// @see vcl::ITiledRenderable::supportsCommand().
     SD_DLLPUBLIC virtual bool supportsCommand(std::u16string_view rCommand) override;

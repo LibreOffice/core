@@ -404,7 +404,7 @@ public:
     virtual void completeFunction(const OUString& rFunctionName) override;
 
     /// @see vcl::ITiledRenderable::getViewRenderState().
-    OString getViewRenderState(SfxViewShell* pViewShell = nullptr) override;
+    OString getViewRenderState(const SfxViewShell* pViewShell = nullptr) override;
 
     /// @see vcl::ITiledRenderable::supportsCommand().
     bool supportsCommand(std::u16string_view rCommand) override;
