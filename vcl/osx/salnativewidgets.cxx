@@ -259,9 +259,11 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
                                         const tools::Rectangle &rControlRegion,
                                         ControlState nState,
                                         const ImplControlValue &aValue,
-                                        const OUString &,
-                                        const Color&)
+                                        const OUString &sUnused,
+                                        const Color &rUnused)
 {
+    OSX_SALDATA_RUNINMAIN_UNION( drawNativeControl( nType, nPart, rControlRegion, nState, aValue, sUnused, rUnused), boolean )
+
     // tdf#165266 Force native controls to use current effective appearance
     // +[NSAppearance setCurrentAppearance:] is deprecated and calling
     // that appears to do less and less with each new version of macos
