@@ -1326,10 +1326,10 @@ if test "$enable_hardening" = no; then
 
     AC_MSG_CHECKING([whether $CC supports -D_FORTIFY_SOURCE=2])
     save_CFLAGS=$CFLAGS
-    CFLAGS="$CFLAGS -Werror -Wp,-U_FORTIFY_SOURCE,-D_FORTIFY_SOURCE=2"
+    CFLAGS="$CFLAGS -Werror -Wp,-U_FORTIFY_SOURCE -Wp,-D_FORTIFY_SOURCE=2"
     AC_LINK_IFELSE(
         [AC_LANG_PROGRAM([[#include <string.h>]], [[return 0;]])],
-        [AC_MSG_RESULT([yes]); HARDENING_CFLAGS="$HARDENING_CFLAGS -Wp,-U_FORTIFY_SOURCE,-D_FORTIFY_SOURCE=2"],
+        [AC_MSG_RESULT([yes]); HARDENING_CFLAGS="$HARDENING_CFLAGS -Wp,-U_FORTIFY_SOURCE -Wp,-D_FORTIFY_SOURCE=2"],
         [AC_MSG_RESULT([no])])
     CFLAGS=$save_CFLAGS
 
