@@ -16,16 +16,9 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,libmspub,0))
 # * external/libmspub/stdint.patch is upstream at <https://gerrit.libreoffice.org/#/c/73814/>
 #   "missing include":
 $(eval $(call gb_UnpackedTarball_add_patches,libmspub,\
-    external/libmspub/ubsan.patch \
     external/libmspub/stdint.patch \
 ))
 
 $(eval $(call gb_UnpackedTarball_update_autoconf_configs,libmspub))
-
-ifeq ($(ANDROID_APP_ABI),armeabi-v7a)
-$(eval $(call gb_UnpackedTarball_add_patches,libmspub, \
-    external/libmspub/libmspub_android_arm.patch.1 \
-))
-endif
 
 # vim: set noet sw=4 ts=4:

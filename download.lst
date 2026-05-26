@@ -507,8 +507,8 @@ MESON_TARBALL := meson-1.8.3.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-MSPUB_SHA256SUM := ef36c1a1aabb2ba3b0bedaaafe717bf4480be2ba8de6f3894be5fd3702b013ba
-MSPUB_TARBALL := libmspub-0.1.4.tar.xz
+MSPUB_SHA256SUM := 3671095f5a10bee8a755052a30576952c5b16d8b0f2ba9f2fb998338c18cb119
+MSPUB_TARBALL := libmspub-0.1.5.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
