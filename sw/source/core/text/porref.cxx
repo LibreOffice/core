@@ -26,10 +26,10 @@
 void SwRefPortion::Paint( const SwTextPaintInfo &rInf ) const
 {
     if( Width() )
-    {
         rInf.DrawViewOpt( *this, PortionType::Ref );
-        SwTextPortion::Paint( rInf );
-    }
+    // tdf#112256 - always paint text even for zero-width glyphs (combining diacritics)
+    if (Width() || GetLen())
+        SwTextPortion::Paint(rInf);
 }
 
 SwLinePortion *SwIsoRefPortion::Compress() { return this; }

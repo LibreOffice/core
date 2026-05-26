@@ -2265,6 +2265,24 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testInlineTableShiftDown)
     assertXPath(pXmlDoc, "//page[1]/body/tab", 0);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testTdf112256_paint_zero_width_glyphs)
+{
+    createSwDoc("tdf112256-diacritic-index-mark.fodt");
+    SwDocShell* pShell = getSwDocShell();
+
+    // Dump the rendering of the first page as an XML file.
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 2
+    // - Actual  : 1
+    // i.e. the combining character did not receive its own draw call
+    assertXPath(pXmlDoc, "//textarray", 2);
+}
+
 } // end of anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();

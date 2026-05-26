@@ -26,10 +26,10 @@
 void SwToxPortion::Paint( const SwTextPaintInfo &rInf ) const
 {
     if( Width() )
-    {
         rInf.DrawViewOpt( *this, PortionType::Tox );
-        SwTextPortion::Paint( rInf );
-    }
+    // tdf#112256 - always paint text even for zero-width glyphs (combining diacritics)
+    if (Width() || GetLen())
+        SwTextPortion::Paint(rInf);
 }
 
 SwLinePortion *SwIsoToxPortion::Compress() { return this; }
