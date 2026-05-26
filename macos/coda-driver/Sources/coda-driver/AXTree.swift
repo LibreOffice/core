@@ -10,6 +10,7 @@
 
 import AppKit
 import ApplicationServices
+import Carbon.HIToolbox
 import CoreGraphics
 import Foundation
 
@@ -148,8 +149,12 @@ final class AXTree {
         pasteboard.setString(path, forType: .string)
 
         // Cmd+Shift+G opens the "Go to folder" sheet on NSOpenPanel.
-        // kVK_ANSI_G = 5.
-        sendKey(virtualKey: 5, flags: [.maskCommand, .maskShift])
+        // Look up the physical key that produces 'g' in the current
+        // keyboard layout - hardcoding kVK_ANSI_G = 5 sends the wrong
+        // shortcut on non-QWERTY layouts (e.g. Dvorak, where the same
+        // physical key produces 'i' and so Cmd+Shift+G turns into
+        // Cmd+Shift+I = navigate to iCloud Drive sidebar item).
+        sendKey(virtualKey: keyCodeFor("g"), flags: [.maskCommand, .maskShift])
 
         // Wait for the sheet to actually appear before pasting; the
         // sheet animates in and Cmd+V sent too early lands in
@@ -172,8 +177,8 @@ final class AXTree {
         }
 
         // Cmd+V pastes the path into the sheet's path field.
-        // kVK_ANSI_V = 9.
-        sendKey(virtualKey: 9, flags: [.maskCommand])
+        // Same layout caveat as Cmd+Shift+G above.
+        sendKey(virtualKey: keyCodeFor("v"), flags: [.maskCommand])
         Thread.sleep(forTimeInterval: 0.2)
 
         // Read the path field's value back to verify the paste landed.
@@ -204,6 +209,79 @@ final class AXTree {
             up.flags = flags
             up.post(tap: .cghidEventTap)
         }
+    }
+
+    /// Return the physical key code that produces the given character
+    /// in the user's current keyboard layout.  CGEvent uses physical
+    /// key codes (kVK_ANSI_*), not characters; if we hardcoded
+    /// kVK_ANSI_G to mean 'g', we would actually send 'i' on a Dvorak
+    /// layout (where the QWERTY G position produces 'i'), so the
+    /// shortcut would be interpreted by macOS as Cmd+Shift+I instead
+    /// of Cmd+Shift+G.
+    ///
+    /// We query the active Text Input Source via Carbon's TIS and
+    /// UCKeyTranslate APIs, iterating physical key codes until we
+    /// find the one that yields the requested character.  Cached
+    /// across calls within a single layout.
+    private static var keyCodeCache: [Character: CGKeyCode] = [:]
+
+    private func keyCodeFor(_ character: Character) -> CGKeyCode {
+        if let cached = AXTree.keyCodeCache[character] {
+            return cached
+        }
+
+        // Fallback: hardcoded US QWERTY positions for the characters
+        // we actually use, so the driver still works if the TIS lookup
+        // fails for some reason.
+        let fallback: CGKeyCode = {
+            switch character {
+            case "g": return 5
+            case "v": return 9
+            default: return 0
+            }
+        }()
+
+        guard let sourceRef = TISCopyCurrentKeyboardLayoutInputSource()?
+                .takeRetainedValue(),
+              let dataPtr = TISGetInputSourceProperty(
+                  sourceRef, kTISPropertyUnicodeKeyLayoutData) else {
+            return fallback
+        }
+        let layoutData = Unmanaged<CFData>
+            .fromOpaque(dataPtr).takeUnretainedValue() as Data
+        let kbdType = UInt32(LMGetKbdType())
+        let target = String(character)
+
+        for kvk: CGKeyCode in 0..<128 {
+            var deadKeyState: UInt32 = 0
+            var charCount = 0
+            var chars = [UniChar](repeating: 0, count: 4)
+            let status = layoutData.withUnsafeBytes { bytes -> OSStatus in
+                let layoutPtr = bytes
+                    .bindMemory(to: UCKeyboardLayout.self).baseAddress!
+                return UCKeyTranslate(
+                    layoutPtr,
+                    UInt16(kvk),
+                    UInt16(kUCKeyActionDown),
+                    0,
+                    kbdType,
+                    OptionBits(kUCKeyTranslateNoDeadKeysBit),
+                    &deadKeyState,
+                    4,
+                    &charCount,
+                    &chars)
+            }
+            if status == noErr && charCount > 0 {
+                let produced = String(utf16CodeUnits: chars, count: charCount)
+                if produced == target {
+                    AXTree.keyCodeCache[character] = kvk
+                    return kvk
+                }
+            }
+        }
+
+        AXTree.keyCodeCache[character] = fallback
+        return fallback
     }
 
     func isHidden(_ elem: AXUIElement) -> Bool {
