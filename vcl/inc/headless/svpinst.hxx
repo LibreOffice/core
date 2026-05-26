@@ -90,7 +90,7 @@ public:
 class VCL_DLLPUBLIC SvpSalInstance : public SalGenericInstance, public SalUserEventList
 {
     sal_uInt64              m_nTimeout; // in microseconds
-    sal_uLong               m_nTimeoutMS;
+    sal_uInt64              m_nTimeoutMS;
     oslThreadIdentifier     m_MainThread;
 
     virtual void            TriggerUserEventProcessing() override;
