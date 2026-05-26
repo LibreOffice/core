@@ -101,7 +101,6 @@ if test "z$OOO_VENDOR" != "zDebian" ; then
         merge_flists gid_Module_Brand_Prg_Math    $FILELISTSDIR/math_list.txt
         merge_flists gid_Module_Brand_Prg_Impress $FILELISTSDIR/impress_list.txt
         merge_flists gid_Module_Brand_Prg_Wrt     $FILELISTSDIR/writer_list.txt
-        merge_flists gid_Module_Reportbuilder     $FILELISTSDIR/base_list.txt
         merge_flists gid_Module_Pdfimport         $FILELISTSDIR/draw_list.txt
 
     else
@@ -117,7 +116,6 @@ if test "z$OOO_VENDOR" != "zDebian" ; then
         merge_flists gid_Module_Brand_Prg_Math    $FILELISTSDIR/common_list.txt
         merge_flists gid_Module_Brand_Prg_Impress $FILELISTSDIR/common_list.txt
         merge_flists gid_Module_Brand_Prg_Wrt     $FILELISTSDIR/common_list.txt
-        merge_flists gid_Module_Reportbuilder     $FILELISTSDIR/common_list.txt
         merge_flists gid_Module_Pdfimport         $FILELISTSDIR/common_list.txt
     fi
 

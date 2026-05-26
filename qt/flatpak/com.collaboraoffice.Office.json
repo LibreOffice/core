@@ -693,7 +693,6 @@
         "--disable-poppler",
         "--disable-qt5",
         "--disable-randr",
-        "--disable-report-builder",
         "--disable-sal-log",
         "--disable-scripting-beanshell",
         "--disable-scripting-javascript",

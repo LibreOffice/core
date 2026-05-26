@@ -17,7 +17,6 @@ $(eval $(call gb_InstallModule_use_auto_install_libs,scp2/ooo,\
 	ooo_images \
 	ooobinarytable \
 	pdfimport \
-	reportbuilder \
 ))
 
 $(eval $(call gb_InstallModule_define_if_set,scp2/ooo,\
@@ -85,12 +84,6 @@ $(eval $(call gb_InstallModule_add_localized_scpfiles,scp2/ooo,\
 ifeq ($(ENABLE_PDFIMPORT),TRUE)
 $(eval $(call gb_InstallModule_add_scpfiles,scp2/ooo,\
     scp2/source/ooo/module_pdfimport \
-))
-endif
-
-ifeq ($(ENABLE_REPORTBUILDER),TRUE)
-$(eval $(call gb_InstallModule_add_localized_scpfiles,scp2/ooo,\
-    scp2/source/ooo/module_reportbuilder \
 ))
 endif
 

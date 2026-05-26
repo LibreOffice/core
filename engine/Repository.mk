@@ -738,10 +738,6 @@ $(eval $(call gb_Helper_register_jars_for_install,OOO,ooo, \
 	unoil \
 ))
 
-$(eval $(call gb_Helper_register_jars_for_install,OOO,reportbuilder, \
-	reportbuilder \
-))
-
 ifneq ($(ENABLE_SCRIPTING_BEANSHELL),)
 $(eval $(call gb_Helper_register_jars_for_install,OOO,extensions_bsh, \
 	ScriptProviderForBeanShell \
@@ -980,10 +976,6 @@ $(eval $(call gb_Helper_register_packages_for_install,pdfimport, \
 	sdext_pdfimport_pdf \
 ))
 endif
-
-$(eval $(call gb_Helper_register_packages_for_install,reportbuilder,\
-	reportbuilder_templates \
-))
 
 $(eval $(call gb_Helper_register_packages_for_install,xsltfilter,\
 	filter_docbook \

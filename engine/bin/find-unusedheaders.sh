@@ -41,7 +41,6 @@ for subdir in $(ls -d */ | grep -v \
                                 -e qadevOOo/ \
                                 -e readlicense_oo/ \
                                 -e remotebridges/ \
-                                -e reportbuilder/ \
                                 -e ridljar/ \
                                 -e schema/ \
                                 -e scp2/ \

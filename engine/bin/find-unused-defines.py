@@ -146,7 +146,6 @@ excludeDirs = {
     "qadevOOo",
     "readlicense_oo",
     "remotebridges",
-    "reportbuilder",
     "ridljar",
     "ridljar",
     "scp2",

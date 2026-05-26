@@ -65,7 +65,6 @@ gb_Configuration_LANGS := en-US $(filter-out en-US,$(gb_WITH_LANG))
 
 gb_Configuration_DISABLED_MODULES := \
     $(if $(filter LIBRELOGO,$(BUILD_TYPE)),,librelogo) \
-    $(if $(filter REPORTBUILDER,$(BUILD_TYPE)),,reportbuilder)
 
 gb_XcsTarget_XSLT_SchemaVal := $(SRCDIR)/officecfg/util/schema_val.xsl
 gb_XcsTarget_XSLT_SchemaTrim := $(SRCDIR)/officecfg/util/schema_trim.xsl

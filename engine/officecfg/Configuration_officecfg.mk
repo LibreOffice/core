@@ -63,16 +63,10 @@ $(eval $(call gb_Configuration_add_spool_modules,registry,officecfg/registry/dat
 	org/openoffice/Setup-base.xcu \
 	org/openoffice/Setup-math.xcu \
 	org/openoffice/Setup-report.xcu \
-	$(call gb_Helper_optional,REPORTBUILDER, \
-		org/openoffice/Setup-reportbuilder.xcu \
-	) \
 	org/openoffice/Setup-start.xcu \
 	org/openoffice/UserProfile-unixdesktop.xcu \
 	org/openoffice/VCL-unixdesktop.xcu \
 	org/openoffice/Office/Accelerators-macosx.xcu \
-	$(call gb_Helper_optional,REPORTBUILDER, \
-		org/openoffice/Office/Accelerators-reportbuilder.xcu \
-	) \
 	org/openoffice/Office/Accelerators-unxwnt.xcu \
 	$(call gb_Helper_optional,LIBRELOGO, \
 		org/openoffice/Office/Addons-librelogo.xcu \
@@ -96,9 +90,6 @@ $(eval $(call gb_Configuration_add_spool_modules,registry,officecfg/registry/dat
 	org/openoffice/Office/Common-ctl.xcu \
 	org/openoffice/Office/Common-ctlseqcheck.xcu \
 	org/openoffice/Office/DataAccess-evoab2.xcu \
-	$(call gb_Helper_optional,REPORTBUILDER, \
-		org/openoffice/Office/DataAccess-reportbuilder.xcu \
-	) \
 	org/openoffice/Office/Paths-macosx.xcu \
 	org/openoffice/Office/Paths-unxwnt.xcu \
 	org/openoffice/Office/Paths-unixdesktop.xcu \
@@ -113,16 +104,10 @@ $(eval $(call gb_Configuration_add_spool_modules,registry,officecfg/registry/dat
 	org/openoffice/Office/Embedding-impress.xcu \
 	org/openoffice/Office/Embedding-math.xcu \
 	org/openoffice/Office/Embedding-base.xcu \
-	$(call gb_Helper_optional,REPORTBUILDER, \
-		org/openoffice/Office/Embedding-reportbuilder.xcu \
-	) \
 	org/openoffice/Office/Embedding-writer.xcu \
 	$(call gb_Helper_optional,LIBRELOGO, \
 		org/openoffice/Office/UI/WriterCommands-librelogo.xcu \
 		org/openoffice/Office/UI/WriterWindowState-librelogo.xcu \
-	) \
-	$(call gb_Helper_optional,REPORTBUILDER, \
-		org/openoffice/Office/UI/Controller-reportbuilder.xcu \
 	) \
 	org/openoffice/Office/UI/Infobar-macosxsandbox.xcu \
 	org/openoffice/TypeDetection/UISort-writer.xcu \
@@ -152,9 +137,6 @@ $(eval $(call gb_Configuration_add_localized_datas,registry,officecfg/registry/d
 	    org/openoffice/Office/PresentationMinimizer.xcu) \
 	org/openoffice/Office/UI.xcu \
 	org/openoffice/Office/Embedding.xcu \
-	$(call gb_Helper_optional,REPORTBUILDER, \
-		org/openoffice/Office/ExtendedColorScheme.xcu \
-	) \
 	org/openoffice/Office/Writer.xcu \
 	org/openoffice/Office/UI/BasicIDECommands.xcu \
 	org/openoffice/Office/UI/BibliographyCommands.xcu \
@@ -168,9 +150,6 @@ $(eval $(call gb_Configuration_add_localized_datas,registry,officecfg/registry/d
 	org/openoffice/Office/UI/DbQueryWindowState.xcu \
 	org/openoffice/Office/UI/DbTableWindowState.xcu \
 	org/openoffice/Office/UI/DbRelationWindowState.xcu \
-	$(call gb_Helper_optional,REPORTBUILDER, \
-		org/openoffice/Office/UI/DbReportWindowState.xcu \
-	) \
 	org/openoffice/Office/UI/DbBrowserWindowState.xcu \
 	org/openoffice/Office/UI/DbTableDataWindowState.xcu \
 	org/openoffice/Office/UI/DrawImpressCommands.xcu \
@@ -185,9 +164,6 @@ $(eval $(call gb_Configuration_add_localized_datas,registry,officecfg/registry/d
 	    org/openoffice/Office/UI/DrawWindowState.xcu \
 	    org/openoffice/Office/UI/ImpressWindowState.xcu \
 	    org/openoffice/Office/UI/MathWindowState.xcu) \
-	$(call gb_Helper_optional,REPORTBUILDER, \
-		org/openoffice/Office/UI/ReportCommands.xcu \
-	) \
 	org/openoffice/Office/UI/Sidebar.xcu \
 	org/openoffice/Office/UI/StartModuleWindowState.xcu \
 	org/openoffice/Office/UI/WriterWindowState.xcu \

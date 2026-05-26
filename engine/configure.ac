@@ -952,7 +952,6 @@ disable_database_connectivity_dependencies()
 {
     enable_evolution2=no
     enable_mariadb_sdbc=no
-    enable_report_builder=no
 }
 
 # ===================================================================
@@ -1631,11 +1630,6 @@ AC_ARG_ENABLE(scripting,
 AC_ARG_ENABLE(dynamic-loading,
     AS_HELP_STRING([--disable-dynamic-loading],
         [Disable any use of dynamic loading of code. Work in progress, use only if you are hacking on it.])
-)
-
-libo_FUZZ_ARG_ENABLE(report-builder,
-    AS_HELP_STRING([--disable-report-builder],
-        [Disable the Report Builder.])
 )
 
 libo_FUZZ_ARG_ENABLE(ext-wiki-publisher,
@@ -2613,61 +2607,6 @@ AC_ARG_WITH(system-jfreereport,
         [Use JFreeReport already on system.]),,
     [with_system_jfreereport="$with_system_jars"])
 
-AC_ARG_WITH(sac-jar,
-    AS_HELP_STRING([--with-sac-jar=JARFILE],
-        [Specify path to jarfile manually.]),
-    SAC_JAR=$withval)
-
-AC_ARG_WITH(libxml-jar,
-    AS_HELP_STRING([--with-libxml-jar=JARFILE],
-        [Specify path to jarfile manually.]),
-    LIBXML_JAR=$withval)
-
-AC_ARG_WITH(flute-jar,
-    AS_HELP_STRING([--with-flute-jar=JARFILE],
-        [Specify path to jarfile manually.]),
-    FLUTE_JAR=$withval)
-
-AC_ARG_WITH(jfreereport-jar,
-    AS_HELP_STRING([--with-jfreereport-jar=JARFILE],
-        [Specify path to jarfile manually.]),
-    JFREEREPORT_JAR=$withval)
-
-AC_ARG_WITH(liblayout-jar,
-    AS_HELP_STRING([--with-liblayout-jar=JARFILE],
-        [Specify path to jarfile manually.]),
-    LIBLAYOUT_JAR=$withval)
-
-AC_ARG_WITH(libloader-jar,
-    AS_HELP_STRING([--with-libloader-jar=JARFILE],
-        [Specify path to jarfile manually.]),
-    LIBLOADER_JAR=$withval)
-
-AC_ARG_WITH(libformula-jar,
-    AS_HELP_STRING([--with-libformula-jar=JARFILE],
-        [Specify path to jarfile manually.]),
-    LIBFORMULA_JAR=$withval)
-
-AC_ARG_WITH(librepository-jar,
-    AS_HELP_STRING([--with-librepository-jar=JARFILE],
-        [Specify path to jarfile manually.]),
-    LIBREPOSITORY_JAR=$withval)
-
-AC_ARG_WITH(libfonts-jar,
-    AS_HELP_STRING([--with-libfonts-jar=JARFILE],
-        [Specify path to jarfile manually.]),
-    LIBFONTS_JAR=$withval)
-
-AC_ARG_WITH(libserializer-jar,
-    AS_HELP_STRING([--with-libserializer-jar=JARFILE],
-        [Specify path to jarfile manually.]),
-    LIBSERIALIZER_JAR=$withval)
-
-AC_ARG_WITH(libbase-jar,
-    AS_HELP_STRING([--with-libbase-jar=JARFILE],
-        [Specify path to jarfile manually.]),
-    LIBBASE_JAR=$withval)
-
 AC_ARG_WITH(system-odbc,
     AS_HELP_STRING([--with-system-odbc],
         [Use the odbc headers already on system.]),,
@@ -3361,7 +3300,6 @@ if test "$enable_wasm_strip" = "yes"; then
     enable_opencl=no
     enable_pdfimport=no
     enable_randr=no
-    enable_report_builder=no
     enable_scripting=no
     enable_sdremote=no
     enable_sdremote_bluetooth=no
@@ -6278,7 +6216,6 @@ if test "$cross_compiling" = "yes"; then
         OPENSSL
         ORCUS
         PYTHON
-        REPORTBUILDER
         SCRIPTING
         SKIA
         SQLITE3
@@ -13173,167 +13110,6 @@ else
 fi
 AC_SUBST(ENABLE_MEDIAWIKI)
 
-AC_MSG_CHECKING([whether to build the Report Builder])
-if test "$enable_report_builder" != "no" -a "$with_java" != "no"; then
-    AC_MSG_RESULT([yes])
-    ENABLE_REPORTBUILDER=TRUE
-    AC_MSG_CHECKING([which jfreereport libs to use])
-    if test "$with_system_jfreereport" = "yes"; then
-        SYSTEM_JFREEREPORT=TRUE
-        AC_MSG_RESULT([external])
-        if test -z $SAC_JAR; then
-            SAC_JAR=/usr/share/java/sac.jar
-        fi
-        if ! test -f $SAC_JAR; then
-             AC_MSG_ERROR(sac.jar not found.)
-        fi
-
-        if test -z $LIBXML_JAR; then
-            if test -f /usr/share/java/libxml-1.0.0.jar; then
-                LIBXML_JAR=/usr/share/java/libxml-1.0.0.jar
-            elif test -f /usr/share/java/libxml.jar; then
-                LIBXML_JAR=/usr/share/java/libxml.jar
-            else
-                AC_MSG_ERROR(libxml.jar replacement not found.)
-            fi
-        elif ! test -f $LIBXML_JAR; then
-            AC_MSG_ERROR(libxml.jar not found.)
-        fi
-
-        if test -z $FLUTE_JAR; then
-            if test -f /usr/share/java/flute-1.3.0.jar; then
-                FLUTE_JAR=/usr/share/java/flute-1.3.0.jar
-            elif test -f /usr/share/java/flute.jar; then
-                FLUTE_JAR=/usr/share/java/flute.jar
-            else
-                AC_MSG_ERROR(flute-1.3.0.jar replacement not found.)
-            fi
-        elif ! test -f $FLUTE_JAR; then
-            AC_MSG_ERROR(flute-1.3.0.jar not found.)
-        fi
-
-        if test -z $JFREEREPORT_JAR; then
-            if test -f /usr/share/java/flow-engine-0.9.2.jar; then
-                JFREEREPORT_JAR=/usr/share/java/flow-engine-0.9.2.jar
-            elif test -f /usr/share/java/flow-engine.jar; then
-                JFREEREPORT_JAR=/usr/share/java/flow-engine.jar
-            else
-                AC_MSG_ERROR(jfreereport.jar replacement not found.)
-            fi
-        elif ! test -f  $JFREEREPORT_JAR; then
-                AC_MSG_ERROR(jfreereport.jar not found.)
-        fi
-
-        if test -z $LIBLAYOUT_JAR; then
-            if test -f /usr/share/java/liblayout-0.2.9.jar; then
-                LIBLAYOUT_JAR=/usr/share/java/liblayout-0.2.9.jar
-            elif test -f /usr/share/java/liblayout.jar; then
-                LIBLAYOUT_JAR=/usr/share/java/liblayout.jar
-            else
-                AC_MSG_ERROR(liblayout.jar replacement not found.)
-            fi
-        elif ! test -f $LIBLAYOUT_JAR; then
-                AC_MSG_ERROR(liblayout.jar not found.)
-        fi
-
-        if test -z $LIBLOADER_JAR; then
-            if test -f /usr/share/java/libloader-1.0.0.jar; then
-                LIBLOADER_JAR=/usr/share/java/libloader-1.0.0.jar
-            elif test -f /usr/share/java/libloader.jar; then
-                LIBLOADER_JAR=/usr/share/java/libloader.jar
-            else
-                AC_MSG_ERROR(libloader.jar replacement not found.)
-            fi
-        elif ! test -f  $LIBLOADER_JAR; then
-            AC_MSG_ERROR(libloader.jar not found.)
-        fi
-
-        if test -z $LIBFORMULA_JAR; then
-            if test -f /usr/share/java/libformula-0.2.0.jar; then
-                LIBFORMULA_JAR=/usr/share/java/libformula-0.2.0.jar
-            elif test -f /usr/share/java/libformula.jar; then
-                LIBFORMULA_JAR=/usr/share/java/libformula.jar
-            else
-                AC_MSG_ERROR(libformula.jar replacement not found.)
-            fi
-        elif ! test -f $LIBFORMULA_JAR; then
-                AC_MSG_ERROR(libformula.jar not found.)
-        fi
-
-        if test -z $LIBREPOSITORY_JAR; then
-            if test -f /usr/share/java/librepository-1.0.0.jar; then
-                LIBREPOSITORY_JAR=/usr/share/java/librepository-1.0.0.jar
-            elif test -f /usr/share/java/librepository.jar; then
-                LIBREPOSITORY_JAR=/usr/share/java/librepository.jar
-            else
-                AC_MSG_ERROR(librepository.jar replacement not found.)
-            fi
-        elif ! test -f $LIBREPOSITORY_JAR; then
-            AC_MSG_ERROR(librepository.jar not found.)
-        fi
-
-        if test -z $LIBFONTS_JAR; then
-            if test -f /usr/share/java/libfonts-1.0.0.jar; then
-                LIBFONTS_JAR=/usr/share/java/libfonts-1.0.0.jar
-            elif test -f /usr/share/java/libfonts.jar; then
-                LIBFONTS_JAR=/usr/share/java/libfonts.jar
-            else
-                AC_MSG_ERROR(libfonts.jar replacement not found.)
-            fi
-        elif ! test -f $LIBFONTS_JAR; then
-                AC_MSG_ERROR(libfonts.jar not found.)
-        fi
-
-        if test -z $LIBSERIALIZER_JAR; then
-            if test -f /usr/share/java/libserializer-1.0.0.jar; then
-                LIBSERIALIZER_JAR=/usr/share/java/libserializer-1.0.0.jar
-            elif test -f /usr/share/java/libserializer.jar; then
-                LIBSERIALIZER_JAR=/usr/share/java/libserializer.jar
-            else
-                AC_MSG_ERROR(libserializer.jar replacement not found.)
-            fi
-        elif ! test -f $LIBSERIALIZER_JAR; then
-                AC_MSG_ERROR(libserializer.jar not found.)
-        fi
-
-        if test -z $LIBBASE_JAR; then
-            if test -f /usr/share/java/libbase-1.0.0.jar; then
-                LIBBASE_JAR=/usr/share/java/libbase-1.0.0.jar
-            elif test -f /usr/share/java/libbase.jar; then
-                LIBBASE_JAR=/usr/share/java/libbase.jar
-            else
-                AC_MSG_ERROR(libbase.jar replacement not found.)
-            fi
-        elif ! test -f $LIBBASE_JAR; then
-            AC_MSG_ERROR(libbase.jar not found.)
-        fi
-
-    else
-        AC_MSG_RESULT([internal])
-        SYSTEM_JFREEREPORT=
-        BUILD_TYPE="$BUILD_TYPE JFREEREPORT"
-        NEED_ANT=TRUE
-    fi
-    BUILD_TYPE="$BUILD_TYPE REPORTBUILDER"
-else
-    AC_MSG_RESULT([no])
-    ENABLE_REPORTBUILDER=
-    SYSTEM_JFREEREPORT=
-fi
-AC_SUBST(ENABLE_REPORTBUILDER)
-AC_SUBST(SYSTEM_JFREEREPORT)
-AC_SUBST(SAC_JAR)
-AC_SUBST(LIBXML_JAR)
-AC_SUBST(FLUTE_JAR)
-AC_SUBST(JFREEREPORT_JAR)
-AC_SUBST(LIBBASE_JAR)
-AC_SUBST(LIBLAYOUT_JAR)
-AC_SUBST(LIBLOADER_JAR)
-AC_SUBST(LIBFORMULA_JAR)
-AC_SUBST(LIBREPOSITORY_JAR)
-AC_SUBST(LIBFONTS_JAR)
-AC_SUBST(LIBSERIALIZER_JAR)
-
 # scripting provider for BeanShell?
 AC_MSG_CHECKING([whether to build support for scripts in BeanShell])
 if test "${enable_scripting_beanshell}" != "no" -a "x$with_java" != "xno"; then
@@ -15372,14 +15148,6 @@ if test "$enable_mpl_subset" = "yes"; then
     mpl_error_string=
     newline=$'\n    *'
     warn_report=false
-    if test "$enable_report_builder" != "no" -a "$with_java" != "no"; then
-        warn_report=true
-    elif test "$ENABLE_REPORTBUILDER" = "TRUE"; then
-        warn_report=true
-    fi
-    if test "$warn_report" = "true"; then
-        mpl_error_string="$mpl_error_string$newline Need to --disable-report-builder - extended database report builder."
-    fi
     if test -n "$ENABLE_POPPLER"; then
         if test "x$SYSTEM_POPPLER" = "x"; then
             mpl_error_string="$mpl_error_string$newline Need to disable PDF import via poppler (--disable-poppler) or use system library."

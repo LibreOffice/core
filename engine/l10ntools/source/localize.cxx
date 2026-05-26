@@ -329,7 +329,6 @@ bool includeProject(std::string_view rProject) {
         "nlpsolver",
         "officecfg",
         "oox",
-        "reportbuilder",
         "sc",
         "scaddins",
         "sccomp",
