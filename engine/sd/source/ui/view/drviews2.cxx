@@ -2402,22 +2402,27 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         {
             if( rMarkList.GetMarkCount() == 1 )
             {
-                SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
+                rtl::Reference<SdrObject> xObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
 
-                if( auto pGraphicObj = dynamic_cast<SdrGrafObj*>( pObj ) )
+                if( auto pGraphicObj = dynamic_cast<SdrGrafObj*>(xObj.get()) )
+                {
                     if( pGraphicObj->GetGraphicType() == GraphicType::Bitmap )
                     {
-                        CompressGraphicsDialog dialog(GetFrameWeld(), pGraphicObj, GetViewFrame()->GetBindings() );
-                        if (dialog.run() == RET_OK)
-                        {
-                            rtl::Reference<SdrGrafObj> pNewObject = dialog.GetCompressedSdrGrafObj();
-                            SdrPageView* pPageView = mpDrawView->GetSdrPageView();
-                            OUString aUndoString = rMarkList.GetMarkDescription() + " Compress";
-                            mpDrawView->BegUndo( aUndoString );
-                            mpDrawView->ReplaceObjectAtView( pObj, *pPageView, pNewObject.get() );
-                            mpDrawView->EndUndo();
-                        }
+                        auto xDialog = std::make_shared<CompressGraphicsDialog>(GetFrameWeld(), pGraphicObj, GetViewFrame()->GetBindings());
+                        OUString aUndoString = rMarkList.GetMarkDescription() + " Compress";
+                        ::sd::View* pView = mpDrawView.get();
+                        weld::DialogController::runAsync(xDialog, [pView, xObj, xDialog, aUndoString](sal_uInt32 nResult) {
+                            if (nResult == RET_OK)
+                            {
+                                rtl::Reference<SdrGrafObj> pNewObject = xDialog->GetCompressedSdrGrafObj();
+                                SdrPageView* pPageView = pView->GetSdrPageView();
+                                pView->BegUndo( aUndoString );
+                                pView->ReplaceObjectAtView( xObj.get(), *pPageView, pNewObject.get() );
+                                pView->EndUndo();
+                            }
+                        });
                     }
+                }
             }
             Cancel();
             rReq.Ignore();
