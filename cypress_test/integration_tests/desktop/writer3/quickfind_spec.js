@@ -55,6 +55,25 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Searching via quickfind in
         helper.assertFocus('id', 'navigator-search-input');
     });
 
+    it('Same-term search re-runs after focusing back into the document', function() {
+        writerHelper.openQuickFind();
+        writerHelper.searchInQuickFind('a');
+        writerHelper.assertQuickFindMatches(2);
+
+        // Focusing the document body invalidates the cached results, so
+        // the next Enter on the search field must re-run the search
+        // instead of stepping through the existing list.
+        cy.cGet('#document-container').click();
+        cy.cGet('input#navigator-search-input').type('{enter}');
+        cy.getFrameWindow().then(function(win) {
+            return helper.processToIdle(win);
+        });
+
+        // A re-search keeps the "N results" label. Stepping to the next
+        // match would replace it with "Match X of N matches found.".
+        writerHelper.assertQuickFindMatches(2);
+    });
+
     it('Results tab should be activated after a search', function() {
         helper.typeIntoDocument('{ctrl}f');
         cy.cGet('#quickfind-dock-wrapper').should('be.visible');

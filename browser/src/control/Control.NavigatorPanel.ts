@@ -26,6 +26,10 @@ class NavigatorPanel extends SidebarBase {
 	focusQuickFind: boolean;
 	dirtyWidth: boolean = true;
 	currentWidth: number = 0;
+	// Set when the document editor regains focus after a search, so the next
+	// Enter on the search field re-runs the search instead of stepping through
+	// possibly stale results.
+	searchResultsStale: boolean = false;
 
 	constructor(map: any) {
 		super(map, SidebarType.Navigator);
@@ -37,6 +41,7 @@ class NavigatorPanel extends SidebarBase {
 		this.map.on('navigator', this.onNavigator, this);
 		this.map.on('doclayerinit', this.onDocLayerInit, this);
 		this.map.on('focussearch', this.focusSearch, this);
+		this.map.on('editorgotfocus', this.markSearchResultsStale, this);
 		this.navigationPanel = document.getElementById(`navigation-sidebar`);
 		this.navigationPanel.setAttribute('aria-label', _('Navigation Panel'));
 		this.navigationPanel.setAttribute('tabindex', '-1');
@@ -63,7 +68,12 @@ class NavigatorPanel extends SidebarBase {
 		this.map.off('navigator');
 		this.map.off('zoomend');
 		this.map.off('doclayerinit');
+		this.map.off('editorgotfocus', this.markSearchResultsStale, this);
 		this.dirtyWidth = true;
+	}
+
+	markSearchResultsStale() {
+		this.searchResultsStale = true;
 	}
 
 	onDocLayerInit() {
@@ -588,7 +598,9 @@ class NavigatorPanel extends SidebarBase {
 
 		const termChanged = searchTerm !== this.highlightTerm;
 		this.highlightTerm = searchTerm;
-		const newSearch = termChanged || !nextButtonVisible;
+		const newSearch =
+			termChanged || !nextButtonVisible || this.searchResultsStale;
+		this.searchResultsStale = false;
 
 		if (newSearch) {
 			if (object.id === 'navigator-search-button')
