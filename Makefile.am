@@ -898,18 +898,15 @@ $(eval $(call file_targets,$(JSON_COMPILE_SRC)))
 $(abs_srcdir)/compile_commands.json: $(JSON_COMPILE_SRC)
 	@$(MAKE) -C test compile_commands
 	@echo -n "[" > $@
-	@for file in $(JSON_COMPILE_SRC) ; \
+	@sep=""; \
+	for file in $(JSON_COMPILE_SRC) $$(find test -name '*.cmd' 2>/dev/null) ; \
 	do \
+		printf '%s\n' "$$sep"; \
 		cat $$file; \
-		echo ","; \
 		rm -f $$file; \
+		sep=","; \
 	done >> $@
-	@for file in $$(find test -name '*.cmd' 2>/dev/null) ; \
-	do \
-		cat $$file; \
-		echo ","; \
-		rm -f $$file; \
-	done >> $@
+	@echo "" >> $@
 	@echo -n "]" >> $@
 
 compile_commands: $(abs_srcdir)/compile_commands.json
