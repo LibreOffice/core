@@ -1621,7 +1621,7 @@ public:
     /**
       Check whether this string starts with a given character.
 
-      @param str the character to be compared
+      @param ch the character to be compared
 
       @return true if and only if the given character appears at the start of this string
 
@@ -1635,7 +1635,7 @@ public:
     /**
       Check whether this string starts with a given character.
 
-      @param str the character to be compared
+      @param ch the character to be compared
 
       @param rest if this function returns true, then assign a
       copy of the remainder of this string to *rest.
@@ -1658,7 +1658,7 @@ public:
     /**
       Check whether this string starts with a given character.
 
-      @param str the character to be compared
+      @param ch the character to be compared
 
       @param rest if this function returns true, then assign a
       copy of the remainder of this string to *rest.
@@ -1888,7 +1888,7 @@ public:
     /**
       Check whether this string ends with a given character.
 
-      @param str the character to be compared
+      @param ch the character to be compared
 
       @return true if and only if the given character appears at the end of this string
 
@@ -1902,7 +1902,7 @@ public:
     /**
       Check whether this string ends with a given character.
 
-      @param str the character to be compared
+      @param ch the character to be compared
 
       @param rest if this function returns true, then assign a
       copy of the remainder of this string to *rest.
@@ -1925,7 +1925,7 @@ public:
     /**
       Check whether this string ends with a given character.
 
-      @param str the character to be compared
+      @param ch the character to be compared
 
       @param rest if this function returns true, then assign a
       copy of the remainder of this string to *rest.
