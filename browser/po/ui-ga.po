@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-26 00:18+0200\n"
-"PO-Revision-Date: 2026-05-17 10:11+0000\n"
+"PO-Revision-Date: 2026-05-26 23:11+0000\n"
 "Last-Translator: Aindriú Mac Giolla Eoin <aindriu80@gmail.com>\n"
 "Language-Team: Irish <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/ga/>\n"
-"Language: \n"
+"Language: ga\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : (n>2 && n<7) ? 2 :("
-"n>6 && n<11) ? 3 : 4;\n"
+"Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : (n>2 && n<7) ? 2 :(n>"
+"6 && n<11) ? 3 : 4;\n"
 "X-Generator: Weblate 2026.6.dev0\n"
 
 #: admin/admin.strings.js:15
@@ -737,17 +737,19 @@ msgstr "Uaslódáil Xcu"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:713
 msgid "Document themes"
-msgstr ""
+msgstr "Téamaí doiciméad"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:715
 msgid ""
 "Upload custom document themes (.theme). These define color palettes "
 "available under Format > Theme."
 msgstr ""
+"Uaslódáil téamaí doiciméad saincheaptha (.theme). Sainmhíníonn siad seo "
+"pailéid dathanna atá ar fáil faoi Formáid > Téama."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:721
 msgid "Upload Theme"
-msgstr ""
+msgstr "Uaslódáil Téama"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:776
 msgid "Something went wrong. Please try to refresh the page."
@@ -3063,6 +3065,8 @@ msgid ""
 "Clone Formatting is active (press Enter on a cell to apply, click again or "
 "press Esc to exit)"
 msgstr ""
+"Tá Formáidiú Clónála gníomhach (brúigh Iontráil ar chill le cur i bhfeidhm, "
+"cliceáil arís nó brúigh Esc le scoir)"
 
 #: src/control/Control.NotebookbarCalc.js:492
 #: src/control/Control.NotebookbarDraw.js:685
@@ -3685,11 +3689,11 @@ msgstr "Féach ar Athruithe"
 
 #: src/control/Control.NotebookbarWriter.js:2770
 msgid "Cell Background"
-msgstr ""
+msgstr "Cúlra Cealla"
 
 #: src/control/Control.NotebookbarWriter.js:2853
 msgid "Protect"
-msgstr ""
+msgstr "Cosain"
 
 #: src/control/Control.PartsPreview.js:209
 msgid "preview of page %1"
@@ -3710,7 +3714,7 @@ msgstr "Cuir Roinn leis"
 
 #: src/control/Control.PartsPreview.js:599
 msgid "Toggle section %1"
-msgstr ""
+msgstr "Scoraigh an roinn %1"
 
 #: src/control/Control.PartsPreview.js:767
 #: src/control/Control.PartsPreview.js:846
@@ -3933,7 +3937,7 @@ msgstr "Líon na roghanna"
 
 #: src/control/Control.StatusBar.js:274
 msgid "Zoom to Fit Slide"
-msgstr ""
+msgstr "Zúmáil chun an Sleamhnán a Oiriúnú"
 
 #: src/control/Control.StatusBar.js:275
 msgid "Zoom to Fit Page Width"
@@ -3987,7 +3991,7 @@ msgstr "Ionsáigh bileog i ndiaidh seo"
 
 #: src/control/Control.Tabs.js:100 src/control/Control.Tabs.js:107
 msgid "Reset Tab Color"
-msgstr ""
+msgstr "Athshocraigh Dath an Chluaisín"
 
 #: src/control/Control.Tabs.js:127 src/control/Control.Tabs.js:131
 msgid "Move Sheet Left"
@@ -4919,17 +4923,15 @@ msgstr "Feidhmeanna Cealla Tábla"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:74
 msgid "Sheet Navigation"
-msgstr ""
+msgstr "Nascleanúint Bileoige"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:76
-#, fuzzy
 msgid "Slide Navigation"
-msgstr "Dún Nascleanúint"
+msgstr "Nascleanúint Sleamhnán"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:77
-#, fuzzy
 msgid "Page Navigation"
-msgstr "Dún Nascleanúint"
+msgstr "Nascleanúint Leathanaigh"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:83
 msgid "Your changes have been saved"
@@ -5951,12 +5953,10 @@ msgid "Get Involved"
 msgstr "Glac páirt"
 
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.h2:49-7
-#, fuzzy
 msgid "https://www.collaboraoffice.org/"
 msgstr "https://www.collaboraonline.org/"
 
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.p:50-7
-#, fuzzy
 msgid ""
 "Are you interested in contributing but don’t know where to start? Head over "
 "to the <a target=\"_blank\" rel=\"noopener\" href=\"https://www."
@@ -5968,13 +5968,13 @@ msgid ""
 "report</a> with all the essential steps on how to reproduce it."
 msgstr ""
 "An bhfuil suim agat cur leis an obair ach níl a fhios agat cá háit le tosú? "
-"Téigh chuig na <a target=\"_blank\" rel=\"noopener\" href=\"https://www."
-"collaboraonline.org/post/build-code/\">treoracha céim ar chéim</a> agus tóg "
-"CÓD ón tús. Is féidir leat cabhrú freisin le <a target=\"_blank\" rel="
-"\"noopener\" href=\"https://www.collaboraonline.org/post/translate/\""
-">aistriúcháin</a> nó trí <a target=\"_blank\" rel=\"noopener\" href=\"https"
-"://www.collaboraonline.org/post/filebugs/\">thuairisc fabht a chomhdú</a> "
-"leis na céimeanna riachtanacha go léir maidir le conas é a atáirgeadh."
+"Téigh chuig na <a target=\"_blank\" rel=\"noopener\" href=\"https://"
+"www.collaboraoffice.org/post/build-code/\">treoracha céim ar chéim</a> agus "
+"tóg CÓD ón tús. Is féidir leat cabhrú freisin le <a target=\"_blank\" "
+"rel=\"noopener\" href=\"https://www.collaboraoffice.org/post/translate/\">"
+"aistriúcháin</a> nó trí <a target=\"_blank\" rel=\"noopener\" href=\"https://"
+"www.collaboraoffice.org/post/filebugs/\">thuairisc fabht a chomhdú</a> leis "
+"na céimeanna riachtanacha go léir maidir le conas é a atáirgeadh."
 
 #: welcome/welcome.html%2Bhtml.body.div.div:55-5
 msgid ""
