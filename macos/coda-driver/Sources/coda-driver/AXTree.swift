@@ -150,19 +150,35 @@ final class AXTree {
         // Cmd+Shift+G opens the "Go to folder" sheet on NSOpenPanel.
         // kVK_ANSI_G = 5.
         sendKey(virtualKey: 5, flags: [.maskCommand, .maskShift])
-        Thread.sleep(forTimeInterval: 0.3)
+
+        // Wait for the sheet to actually appear before pasting; the
+        // sheet animates in and Cmd+V sent too early lands in
+        // whatever has focus in the main panel (the file browser
+        // AXList), not the path field.
+        let pathFieldPredicate = SimpleXPath.Predicate(
+            attribute: "accessibility-id", value: "PathTextField")
+        var pathField: AXUIElement?
+        for _ in 0..<30 {
+            if let f = findElement(matching: pathFieldPredicate) {
+                pathField = f
+                break
+            }
+            Thread.sleep(forTimeInterval: 0.1)
+        }
+        guard let field = pathField else {
+            NSLog("navigateOpenPanel: Go-to-folder sheet never appeared after Cmd+Shift+G")
+            NSLog("navigateOpenPanel: AX tree:\n%@", dumpTree())
+            return
+        }
 
         // Cmd+V pastes the path into the sheet's path field.
         // kVK_ANSI_V = 9.
         sendKey(virtualKey: 9, flags: [.maskCommand])
         Thread.sleep(forTimeInterval: 0.2)
 
-        // Read back the focused field's value to verify the paste
-        // landed where we expected.
-        let focused = focusedElement()
-        let focusedRole = focused.flatMap { stringAttr($0, kAXRoleAttribute as String) }
-        let pastedValue = focused.flatMap { stringAttr($0, kAXValueAttribute as String) }
-        let pasteLanded = (pastedValue ?? "").contains(path)
+        // Read the path field's value back to verify the paste landed.
+        let pastedValue = stringAttr(field, kAXValueAttribute as String) ?? ""
+        let pasteLanded = pastedValue.contains(path)
 
         // Return commits the "Go to folder" sheet, navigating to the
         // parent directory and selecting the file (if path is a file)
@@ -171,20 +187,9 @@ final class AXTree {
         Thread.sleep(forTimeInterval: 0.3)
 
         if !pasteLanded {
-            NSLog("navigateOpenPanel: paste did not land in the expected text field")
+            NSLog("navigateOpenPanel: paste did not land in PathTextField")
             NSLog("navigateOpenPanel: AX tree at end:\n%@", dumpTree())
         }
-    }
-
-    private func focusedElement() -> AXUIElement? {
-        var value: CFTypeRef?
-        let err = AXUIElementCopyAttributeValue(
-            appElement,
-            kAXFocusedUIElementAttribute as CFString,
-            &value)
-        guard err == .success, let v = value,
-              CFGetTypeID(v) == AXUIElementGetTypeID() else { return nil }
-        return (v as! AXUIElement)
     }
 
     private func sendKey(virtualKey: CGKeyCode, flags: CGEventFlags) {
