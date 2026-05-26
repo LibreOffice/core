@@ -361,6 +361,30 @@ describe('VectorPrimitiveRenderer', function () {
 				primitive.children[0].color,
 			);
 		});
+
+		it('fills the bounds for filledRectangle', function () {
+			const primitive = loadVectorRenderingReference(
+				'testFilledRectangle',
+			).primitives[0];
+			nodeassert.strictEqual(primitive.type, 'filledRectangle');
+
+			const recorder = new CanvasRecorder();
+			const renderer = new cool.VectorPrimitiveRenderer();
+			renderer.renderPrimitive(recorder as any, primitive);
+
+			const fillRect = recorder.findCall('fillRect');
+			nodeassert.ok(fillRect, 'fillRect not called');
+			const [minX, minY, maxX, maxY] = primitive.bounds;
+			nodeassert.deepStrictEqual(fillRect.args, [
+				minX,
+				minY,
+				maxX - minX,
+				maxY - minY,
+			]);
+			nodeassert.strictEqual(recorder.properties.fillStyle, primitive.color);
+			nodeassert.ok(recorder.findCall('save'), 'save not called');
+			nodeassert.ok(recorder.findCall('restore'), 'restore not called');
+		});
 	});
 
 	// Fixtures from documents. Each fixture is a full reply built
@@ -560,4 +584,5 @@ describe('VectorPrimitiveRenderer', function () {
 
 		nodeassert.strictEqual(recorder.countOf('stroke'), 0);
 	});
+
 });

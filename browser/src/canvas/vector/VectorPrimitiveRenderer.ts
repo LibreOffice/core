@@ -43,6 +43,12 @@ namespace cool {
 						primitive as PolygonHairlinePrimitive,
 					);
 					break;
+				case FilledRectanglePrimitive.type:
+					this._renderFilledRectangle(
+						context,
+						primitive as FilledRectanglePrimitive,
+					);
+					break;
 				case GroupPrimitive.type:
 				case ObjectInfoPrimitive.type:
 					// Pure container - recursion into children happens
@@ -150,6 +156,19 @@ namespace cool {
 			// Hairlines render at one canvas pixel by definition.
 			context.lineWidth = 1;
 			context.stroke(path);
+			context.restore();
+		}
+
+		private _renderFilledRectangle(
+			context: CanvasRenderingContext2D,
+			primitive: FilledRectanglePrimitive,
+		): void {
+			if (!primitive.bounds || primitive.bounds.length < 4) return;
+
+			const [minX, minY, maxX, maxY] = primitive.bounds;
+			context.save();
+			context.fillStyle = primitive.color ?? '#000000';
+			context.fillRect(minX, minY, maxX - minX, maxY - minY);
 			context.restore();
 		}
 

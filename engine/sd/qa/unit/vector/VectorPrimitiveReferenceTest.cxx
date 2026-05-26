@@ -14,6 +14,7 @@
 #include <basegfx/color/bcolor.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <basegfx/range/b2drange.hxx>
 
 #include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
 #include <drawinglayer/primitive2d/backgroundcolorprimitive2d.hxx>
@@ -406,6 +407,21 @@ CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testModifiedColorReplace)
     assertJsonPath(aJson, "/primitives/0/type", "modifiedColor");
     assertJsonPath(aJson, "/primitives/0/modifier", "replace");
     assertJsonPath(aJson, "/primitives/0/color", "#ff0000");
+}
+
+CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testFilledRectangle)
+{
+    // A blue axis-aligned filled rectangle. The wire carries the
+    // colour and a four-value bounds array [minX, minY, maxX, maxY].
+    basegfx::B2DRange aRange(10.0, 20.0, 110.0, 70.0);
+    Primitive2DContainer aPrimitives;
+    aPrimitives.append(new FilledRectanglePrimitive2D(aRange, basegfx::BColor(0.0, 0.0, 1.0)));
+
+    auto aJson = writeReference(u"testFilledRectangle", aPrimitives);
+
+    assertJsonPath(aJson, "/primitives/0/type", "filledRectangle");
+    assertJsonPath(aJson, "/primitives/0/color", "#0000ff");
+    CPPUNIT_ASSERT_EQUAL(size_t(4), aJson.getSize("/primitives/0/bounds").value_or(0));
 }
 
 CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testPolygonStrokeDashed)
