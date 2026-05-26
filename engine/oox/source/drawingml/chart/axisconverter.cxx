@@ -35,6 +35,7 @@
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/chart2/XCoordinateSystem.hpp>
 #include <com/sun/star/chart2/XTitled.hpp>
+#include <com/sun/star/chart2/data/XLabeledDataSequence.hpp>
 #include <drawingml/chart/axismodel.hxx>
 #include <drawingml/chart/titleconverter.hxx>
 #include <drawingml/chart/typegroupconverter.hxx>
@@ -156,6 +157,20 @@ void AxisConverter::convertFromModel(const Reference<XCoordinateSystem>& rxCoord
         const TypeGroupInfo& rTypeInfo = rTypeGroups.front()->getTypeInfo();
         ObjectFormatter& rFormatter = getFormatter();
 
+        Reference< ::com::sun::star::chart2::data::XLabeledDataSequence > xHistogramCategories;
+        if( nAxisIdx == API_X_AXIS && rTypeInfo.meTypeId == TYPEID_HISTO && rxCoordSystem.is() )
+        {
+            try
+            {
+                Reference< XAxis > xExistingAxis = rxCoordSystem->getAxisByDimension( nAxisIdx, nAxesSetIdx );
+                if( xExistingAxis.is() )
+                    xHistogramCategories = xExistingAxis->getScaleData().Categories;
+            }
+            catch( const Exception& )
+            {
+            }
+        }
+
         // create the axis object (always)
         xAxis.set( createInstance( u"com.sun.star.chart2.Axis"_ustr ), UNO_QUERY_THROW );
         PropertySet aAxisProp( xAxis );
@@ -214,7 +229,14 @@ void AxisConverter::convertFromModel(const Reference<XCoordinateSystem>& rxCoord
                     /* TODO: create main category axis labels once, while InternalDataProvider
                     can not handle different category names on the primary and secondary category axis. */
                     if( nAxesSetIdx == 0 )
-                        aScaleData.Categories = rTypeGroups.front()->createCategorySequence();
+                    {
+                        // Histogram labels are generated bin ranges, not OOXML category data
+                        // Preserve them instead of synthesizing generic "1", "2", ... labels
+                        if( rTypeInfo.meTypeId == TYPEID_HISTO && xHistogramCategories.is() )
+                            aScaleData.Categories = xHistogramCategories;
+                        else
+                            aScaleData.Categories = rTypeGroups.front()->createCategorySequence();
+                    }
                     /* set default ShiftedCategoryPosition values for some charttype,
                        because the XML can contain wrong CrossBetween value, if came from MSO */
                     if( rTypeGroups.front()->is3dChart() && (rTypeInfo.meTypeId == TYPEID_BAR || rTypeInfo.meTypeId == TYPEID_HORBAR || rTypeInfo.meTypeId == TYPEID_STOCK) )
