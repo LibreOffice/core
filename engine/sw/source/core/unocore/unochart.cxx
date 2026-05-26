@@ -965,10 +965,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
     sal_Int32 nNumDS_LDS = aDS_LDS.getLength();
 
     if (nNumDS_LDS == 0)
-    {
-        OSL_FAIL( "XLabeledDataSequence in data source contains 0 entries" );
         return aResult;
-    }
 
     SwFrameFormat *pTableFormat = nullptr;
     SwTable  *pTable    = nullptr;
