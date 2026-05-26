@@ -136,5 +136,6 @@ interface DocLayerInterface {
 	): WidgetJSON;
 
 	_resetReferencesMarks(type?: string): void;
+	_clearReferences(): void;
 	_clearSelections(calledFromSetPartHandler?: boolean): void;
 }

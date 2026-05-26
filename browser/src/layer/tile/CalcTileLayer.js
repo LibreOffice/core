@@ -931,6 +931,8 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 				var grid = document.getElementById('document-canvas');
 				grid.classList.add('spreadsheet-cursor');
 				grid.style.cursor = '';
+				// More of a workaround, clear displayed references outside insert mode
+				this._map._docLayer._clearReferences();
 			}
 		}
 		else if (e.commandName === '.uno:ToggleSheetGrid') {
