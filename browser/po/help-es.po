@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-26 00:18+0200\n"
-"PO-Revision-Date: 2026-05-23 13:24+0000\n"
-"Last-Translator: Adolfo Jayme Barrientos <fitojb@ubuntu.com>\n"
+"PO-Revision-Date: 2026-05-26 23:12+0000\n"
+"Last-Translator: Libre <6n0n1m0s@proton.me>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/collabora-online/"
 "help/es/>\n"
 "Language: es\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Translate Toolkit 3.6.0\n"
+"X-Generator: Weblate 2026.6.dev0\n"
 
 #: html/cool-help.html%2Bdiv.h1:9-5
 msgid "Keyboard Shortcuts"
@@ -1722,6 +1722,14 @@ msgid ""
 "click the show icon <span class=\"w2ui-icon unfold icon-size\" role=\"img\" "
 "aria-label=\"show menu bar\" title=\"Show menu bar\"></span>."
 msgstr ""
+"<span class=\"def\">La barra del menú:</span> El menú principal se encuentra "
+"en la parte superior e incluye muchas opciones, como comandos para imprimir, "
+"editar, visualizar y otros comandos avanzados. Puede ocultar la barra de "
+"menú haciendo clic en el icono de ocultar <span class=\"w2ui-icon fold icon-"
+"size\" role=\"img\" aria-label=\"hide menu bar\" title=\"Barra ocultar "
+"menú\"></span> a la derecha al fondo. Para mostrarlo de nuevo, pulse el "
+"icono mostrar <span class=\"w2ui-icon unfold icon-size\" role=\"img\" aria-"
+"label=\"show menu bar\" title=\"Barra de menú mostrar\"></span>."
 
 #: html/cool-help.html%2Bdiv.div.div.p:383-5
 msgid ""
@@ -1756,6 +1764,9 @@ msgid ""
 "Status bar showing page number, word count, insert mode, selection mode, "
 "language, edit mode, navigation, zoom, and search"
 msgstr ""
+"Barra de estado que muestra el número de página, el recuento de palabras, el "
+"modo de inserción, el modo de selección, el idioma, el modo de edición, la "
+"navegación, el zoom y la búsqueda"
 
 #: html/cool-help.html%2Bdiv.div.div.p:393-5
 msgid ""
@@ -1771,7 +1782,6 @@ msgstr ""
 "búsqueda:"
 
 #: html/cool-help.html%2Bdiv.div.div.ul.li:395-7
-#, fuzzy
 msgid "Search backwards"
 msgstr "Búsqueda hacia atrás"
 
@@ -1784,32 +1794,31 @@ msgid "Cancel the search (appears only when a text has been searched)"
 msgstr "Cancelar la búsqueda (aparece solo cuando se ha buscado texto)"
 
 #: html/cool-help.html%2Bdiv.div.div.p:401-5
-#, fuzzy
 msgid ""
 "<span class=\"def\">The zoom bar:</span> The zoom bar includes buttons to "
 "reset zoom to 100%, zoom out and zoom in. The zoom applies to the document "
 "area, the user interface is not affected. The current level of zoom is shown "
 "in this area."
 msgstr ""
-"<span class=\"def\">La barra de zum:</span> a la derecha de la barra de "
-"estado hay un conjunto de botones para ampliar, disminuir y volver al 100 % "
-"de la vista. El zum actúa en el área del documento y la interfaz de usuario "
-"no se ve afectada. El nivel de zum actual se indica en esta zona."
+"<span class=\"def\">La barra de zoom:</span> a la derecha de la barra de "
+"estado hay un conjunto de botones para ampliar, disminuir y volver al 100% "
+"de la vista. El zoom actúa en el área del documento y la interfaz de usuario "
+"no se ve afectada. El nivel de zoom actual se indica en esta zona."
 
 #: html/cool-help.html%2Bdiv.div.div.p:402-5
 msgid ""
 "Text, charts, shapes and svg images will stay sharp, when zooming in, you "
 "will only see pixels appear at inserted images, such as jpg’s or png’s."
 msgstr ""
-"El texto, los gráficos, las formas de dibujo y las imágenes SVG permanecen "
+"El texto, los gráficos, las formas de dibujo y las imágenes svg permanecen "
 "geométricamente precisos al escalarse. Las imágenes insertadas en formato "
-"PNG y JPG pueden pixelarse en la ampliación."
+"png y jpg pueden pixelarse en la ampliación."
 
 #: html/cool-help.html%2Bdiv.div.div.p:403-5
 msgid "Using the browser zoom affects the document and user interface areas."
 msgstr ""
-"El uso del zum del propio navegador web afecta el documento y la interfaz de "
-"usuario."
+"El uso del zoom del propio navegador web afecta el documento y la interfaz "
+"de usuario."
 
 #: html/cool-help.html%2Bdiv.div.div.p:406-5
 msgid ""
@@ -1817,13 +1826,16 @@ msgid ""
 "details about the current document. The actual information depends on the "
 "nature of the document."
 msgstr ""
+"<span class=\"def\">La barra de información:</span> La barra de información "
+"exhibe detalles sobre el documento actual. La información real depende de la "
+"naturaleza del documento."
 
 #: html/cool-help.html%2Bdiv.div.div.div.img[alt]:407-29
 msgid ""
 "Information bar showing page navigation arrows, zoom controls, and zoom level"
 msgstr ""
 "Barra de información que muestra las flechas de navegación, los controles de "
-"zum y el nivel de zum"
+"zoom y el nivel de zoom"
 
 #: html/cool-help.html%2Bdiv.div.p:412-5
 msgid ""
@@ -1971,6 +1983,8 @@ msgid ""
 "Repair Document dialog listing past document states with columns for action "
 "type, author, and timestamp"
 msgstr ""
+"Diálogo de reparación de documentos que muestra los estados anteriores del "
+"documento con columnas para el tipo de acción, autor y marca de tiempo"
 
 #: html/cool-help.html%2Bdiv.div.div.p:432-5
 msgid ""
@@ -2006,6 +2020,8 @@ msgid ""
 "Idle document overlay with the message: Idle document - please click to "
 "reload and resume editing"
 msgstr ""
+"Superposición de documento inactivo con el mensaje: Documento inactivo: "
+"pulse para recargar y reanudar la edición"
 
 #: html/cool-help.html%2Bdiv.div.div.p:438-5
 msgid ""
@@ -2102,6 +2118,9 @@ msgid ""
 "Chart Wizard dialog with chart type list on the left, chart style previews, "
 "3D and shape options"
 msgstr ""
+"Cuadro de diálogo del Asistente para gráficos con lista de tipos de gráficos "
+"a la izquierda, vistas previas de estilos de gráficos, opciones 3D y de "
+"formas"
 
 #: html/cool-help.html%2Bdiv.div.div.ol.li:460-7
 msgid "If no table or range was selected, a prototype chart is displayed."
@@ -2114,6 +2133,8 @@ msgid ""
 "Column chart with grouped bars showing data for four rows across three "
 "columns"
 msgstr ""
+"Gráfico de columnas con barras agrupadas que muestra datos de cuatro filas "
+"en tres columnas"
 
 #: html/cool-help.html%2Bdiv.div.div.p:464-28
 msgid ""
@@ -2209,6 +2230,8 @@ msgid ""
 "Comment box showing author name, date, and the comment text, displayed "
 "beside the document"
 msgstr ""
+"Caja de comentario mostrando el nombre del autor, fecha, y el texto de "
+"comentario, exhibido al lado del documento"
 
 #: html/cool-help.html%2Bdiv.div.div.p:478-5
 msgid ""
@@ -2236,7 +2259,7 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.img[alt]:483-29
 msgid "Text with a red wavy underline beneath a misspelled word"
-msgstr ""
+msgstr "Texto con un subrayado ondulado rojo debajo de una palabra mal escrita"
 
 #: html/cool-help.html%2Bdiv.div.div.p:484-5
 msgid ""
@@ -2284,6 +2307,8 @@ msgid ""
 "Formula bar showing cell reference B1, function wizard icon, and the formula "
 "=SIN(PI()*A1/10)"
 msgstr ""
+"Barra de fórmulas que muestra la referencia de celda B1, el icono del "
+"asistente de funciones y la fórmula =SIN(PI()*A1/10)"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:499-5
 msgid ""
@@ -2322,6 +2347,8 @@ msgid ""
 "Format Cells dialog on the Numbers tab with category list, format options, "
 "decimal places, and format code"
 msgstr ""
+"Formato de Celdas del diálogo en la lengüeta de Números con listado de "
+"categoría, opciones de formato, lugares decimales, y código de formato"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:511-30
 msgid ""
@@ -2361,6 +2388,9 @@ msgid ""
 "AutoFilter dropdown menu on a spreadsheet column with sort, filter by color, "
 "filter by condition, and checkboxes for individual values"
 msgstr ""
+"Menú desplegable AutoFiltrador en una columna hoja de cálculo con ordenar, "
+"filtrar por color, filtrar por condición y casillas de verificación para "
+"valores individuales"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:518-7
 msgid ""
@@ -2380,7 +2410,7 @@ msgid ""
 "filter conditions. With advanced filters you enter the conditions directly "
 "into the sheet."
 msgstr ""
-"El <span class=\"ui\">filtro avanzado</span> permite hasta ocho condiciones. "
+"El <span class=\"ui\">Filtro Avanzado</span> permite hasta ocho condiciones. "
 "Con los filtros avanzados usted inserta las condiciones directamente en la "
 "hoja de cálculo."
 
@@ -2400,6 +2430,8 @@ msgid ""
 "Spreadsheet with row and column grouping controls showing outline level "
 "buttons and collapse/expand toggles"
 msgstr ""
+"Hoja de cálculo con fila y columna agrupándose controla mostrar botones del "
+"nivel externo a línea y conmutadores colapsar/expandir"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:527-5
 msgid ""
@@ -2426,6 +2458,9 @@ msgid ""
 "Validity dialog on the Criteria tab with Allow set to List, showing options "
 "for empty cells, selection list, and entry values"
 msgstr ""
+"Cuadro de diálogo de validez en la pestaña Criterios con Permitir "
+"configurado en Lista, que muestra opciones para celdas vacías, lista de "
+"selección y valores de entrada"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:533-7
 msgid ""
@@ -2453,6 +2488,8 @@ msgid ""
 "Cell dropdown list showing validated entries such as Apple, Pear, Banana, "
 "Kiwi, and Lemon"
 msgstr ""
+"Lista desplegable de celdas que muestra las entradas validadas, como "
+"manzana, pera, plátano, kiwi y limón"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:538-7
 msgid ""
@@ -2483,6 +2520,9 @@ msgid ""
 "Spreadsheet cell with a comment popup showing the author, date, comment "
 "text, and Save/Cancel buttons"
 msgstr ""
+"Celda de hoja de cálculo con una ventana emergente para comentarios que "
+"muestra el autor, la fecha, el texto del comentario y los botones Guardar/"
+"Cancelar"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:546-5
 msgid ""
@@ -2504,6 +2544,9 @@ msgid ""
 "Conditional formatting icon set picker showing arrows, circles, traffic "
 "lights, stars, smiley faces, and bar chart symbol sets"
 msgstr ""
+"Selector de conjuntos de iconos de formato condicional que muestra flechas, "
+"círculos, semáforos, estrellas, caras sonrientes y conjuntos de símbolos de "
+"gráficos de barras"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:555-30
 msgid ""
@@ -2599,6 +2642,8 @@ msgid ""
 "Paragraph dialog on the Indents and Spacing tab with settings for indent, "
 "spacing, and line spacing, and a preview on the right"
 msgstr ""
+"Cuadro de diálogo de párrafo en la pestaña Sangrado y espaciado con ajustes "
+"para sangrado, espaciado y interlineado, y una vista previa a la derecha"
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:576-5
 msgid "Handling Tables"
@@ -2622,6 +2667,8 @@ msgid ""
 "Insert Table picker showing a grid to select the number of rows and columns, "
 "currently showing 5 by 3"
 msgstr ""
+"Selector de tabla que muestra una cuadrícula para seleccionar el número de "
+"filas y columnas; actualmente muestra 5 por 3"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:581-5
 msgid ""
@@ -2654,6 +2701,8 @@ msgid ""
 "Tracked change shown as a comment box beside the document with author name, "
 "date, and change description"
 msgstr ""
+"Los cambios registrados se muestran como un cuadro de comentarios junto al "
+"documento con el nombre del autor, la fecha y la descripción del cambio"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:587-5
 msgid ""
@@ -2791,6 +2840,9 @@ msgid ""
 "Slide properties panel showing format, orientation, background, and master "
 "slide settings, with a layout gallery of thumbnail options below"
 msgstr ""
+"Panel de propiedades de diapositivas que muestra el formato, la orientación, "
+"el fondo y la configuración de la diapositiva maestra, con una galería de "
+"opciones de diseño en miniatura a continuación"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:626-30
 msgid ""
@@ -2986,6 +3038,8 @@ msgid ""
 "Thesaurus dialog for the word company, listing alternatives such as "
 "institution, establishment, and troupe, with a Replace with field"
 msgstr ""
+"Diálogo del tesauro para la palabra compañía, que enumera alternativas como "
+"institución, establecimiento y grupo. con un campo Reemplazar"
 
 #: html/cool-help.html%2Bdiv.div.div.h4:677-5
 msgid ""
@@ -3026,6 +3080,8 @@ msgid ""
 "Word Count dialog showing word and character counts for the current "
 "selection and for the whole document"
 msgstr ""
+"Cuadro de diálogo de recuento de palabras que muestra el número de palabras "
+"y caracteres de la selección actual y del documento completo"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:688-5
 msgid ""
@@ -3068,11 +3124,15 @@ msgstr ""
 "herramientas. Aparecerá un cuadro de diálogo."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:698-31
+#, fuzzy
 msgid ""
 "Special Characters dialog with a character grid, search and font fields, "
 "hexadecimal and decimal code inputs, and recent and favorite characters at "
 "the bottom"
 msgstr ""
+"Personajes especiales dialogan con una cuadrícula de caracteres, campos de "
+"búsqueda y fuentes, entradas hexadecimales y decimales, y caracteres "
+"recientes y favoritos en la parte inferior"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:699-7
 msgid ""
@@ -3181,10 +3241,14 @@ msgstr ""
 "cambios filtrados. Utilice los botones de acuerdo con su juicio."
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:717-29
+#, fuzzy
 msgid ""
 "Manage Changes dialog with a list of tracked changes showing action, author, "
 "date, and comment columns, and Accept, Reject, Accept All, Reject All buttons"
 msgstr ""
+"Administrar Cambios diálogo con una lista de cambios rastreados que muestran "
+"las columnas de acción, autor, fecha y comentario, y Aceptar, Rechazar, "
+"Aceptar todo, Rechazar Todos los botones"
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:720-5
 msgid "How do I set the margins of the document?"
@@ -3215,14 +3279,18 @@ msgid "Set the page margins in the dialog."
 msgstr "Ajuste los márgenes de la página en el diálogo."
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:727-29
+#, fuzzy
 msgid ""
 "Page Style dialog on the Organizer tab showing style name, next style, "
 "inherit from, and category fields, with a summary of page properties"
 msgstr ""
+"Diálogo de Moda de la página en el tabulador de Organizador que asoma nombre "
+"de moda, moda próxima, hereda de, y campos de categoría, con un resumen de "
+"haciendas de página"
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:730-5
 msgid "How do I change the page orientation to landscape inside my document?"
-msgstr "Cómo cambiar la orientación de la página a horizontal en mi documento"
+msgstr "¿Cómo cambiar la orientación de la página a horizontal en mi documento?"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:732-7
 msgid ""
@@ -3278,15 +3346,14 @@ msgstr "Seleccione el texto con el formato deseado"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:745-7
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:787-7
-#, fuzzy
 msgid ""
 "Click on the clone formatting icon <img alt=\"format paintbrush\" class"
 "=\"icon-size\" src=\"images/lc_formatpaintbrush.svg\" />. The mouse pointer "
 "turns to a paint bucket."
 msgstr ""
-"Haz clic en el icono de formato de clonación <img class=\"icon-size\" src="
-"\"images/lc_formatpaintbrush.svg\" />. El puntero del ratón se convierte en "
-"un bote de pintura."
+"Haz clic en el icono de formato de clonación <img alt=\"format paintbrush\" "
+"class=\"icon-size\" src=\"images/lc_formatpaintbrush.svg\" />. El puntero "
+"del ratón se convierte en un bote de pintura."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:746-7
 msgid "Select the text you want to apply the new format."
@@ -3377,10 +3444,13 @@ msgstr ""
 "especificar a detalle el formato de los datos CSV."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:777-31
+#, fuzzy
 msgid ""
 "Text Import dialog with character set, locale, separator options, and a "
 "preview of the imported CSV data"
 msgstr ""
+"Diálogo de Importación del texto con conjunto de carácter, locale, separator "
+"opciones, y un preestreno del importado CSV dato"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:778-7
 msgid ""
@@ -3496,10 +3566,14 @@ msgstr ""
 "tamaño</span>). Se abre un cuadro de diálogo."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:818-31
+#, fuzzy
 msgid ""
 "Area dialog on the Color tab with a color palette, active and new color "
 "previews, RGB value fields, and a custom palette section"
 msgstr ""
+"Diálogo de área en el tabulador de Color con una paleta de color, color "
+"activo y nuevo preestrenos, RGB campos de valor, y una sección de paleta "
+"adaptada"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:819-7
 msgid "Set the properties of the element of the object."
