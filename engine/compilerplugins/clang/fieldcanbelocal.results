@@ -31,9 +31,6 @@ include/o3tl/enumarray.hxx:130
 include/oox/dump/oledumper.hxx:743
     oox::dump::VbaDirStreamObject mnCurrOffset sal_Int32
     void oox::dump::VbaDirStreamObject::implDumpRecordBody()
-include/salhelper/dynload.hxx:82
-    salhelper::ORealDynamicLoader m_refCount sal_uInt32
-     salhelper::ORealDynamicLoader::ORealDynamicLoader(class salhelper::ORealDynamicLoader **,const class rtl::OUString &,const class rtl::OUString &,void *,void *)
 include/sfx2/msg.hxx:104
     SfxType createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
     class std::unique_ptr<class SfxPoolItem> SfxType::CreateItem() const

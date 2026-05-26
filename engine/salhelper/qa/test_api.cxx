@@ -20,7 +20,6 @@
 #include <sal/config.h>
 #include <osl/mutex.hxx>
 #include <salhelper/condition.hxx>
-#include <salhelper/dynload.hxx>
 #include <salhelper/simplereferenceobject.hxx>
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
@@ -49,8 +48,6 @@ public:
 
     void testConditionWaiterTimedout();
 
-    void testORealDynamicLoader();
-
     void testSimpleReferenceObject();
 
     void testDerivedCondition();
@@ -62,7 +59,6 @@ public:
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testCondition);
     CPPUNIT_TEST(testConditionWaiterTimedout);
-    CPPUNIT_TEST(testORealDynamicLoader);
     CPPUNIT_TEST(testSimpleReferenceObject);
     CPPUNIT_TEST(testDerivedCondition);
     CPPUNIT_TEST(testDerivedConditionWaiterTimedout);
@@ -85,10 +81,6 @@ void Test::testConditionWaiterTimedout() {
     } catch (...) {
         CPPUNIT_FAIL("not caught");
     }
-}
-
-void Test::testORealDynamicLoader() {
-    [[maybe_unused]] volatile auto const rtti = &typeid(salhelper::ORealDynamicLoader);
 }
 
 void Test::testSimpleReferenceObject() {
