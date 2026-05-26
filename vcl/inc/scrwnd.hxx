@@ -49,8 +49,8 @@ private:
     sal_uInt64          mnRepaintTime;
     sal_uInt64          mnTimeout;
     WheelMode           mnWheelMode;
-    sal_uLong           mnMaxWidth;
-    sal_uLong           mnActDist;
+    tools::Long         mnMaxWidth;
+    tools::Long         mnActDist;
     tools::Long         mnStepDeltaX;       // x component of scroll direction
     tools::Long         mnStepDeltaY;       // y component of scroll direction
     tools::Long         mnActDeltaX;        // x component of scroll distance

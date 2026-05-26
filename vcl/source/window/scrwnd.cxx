@@ -60,7 +60,7 @@ ImplWheelWindow::ImplWheelWindow( vcl::Window* pParent ) :
     const bool      bVert( nFlags & StartAutoScrollFlags::Vert );
 
     // calculate maximum speed distance
-    mnMaxWidth = static_cast<sal_uLong>( 0.4 * hypot( static_cast<double>(aSize.Width()), aSize.Height() ) );
+    mnMaxWidth = static_cast<tools::Long>( 0.4 * hypot( static_cast<double>(aSize.Width()), aSize.Height() ) );
 
     // create wheel window
     SetTitleType( FloatWinTitleType::NONE );
@@ -309,7 +309,7 @@ void ImplWheelWindow::MouseMove( const MouseEvent& rMEvt )
     const tools::Long  nDistX = aMousePos.X() - maCenter.X();
     const tools::Long  nDistY = aMousePos.Y() - maCenter.Y();
 
-    mnActDist = static_cast<sal_uLong>(hypot( static_cast<double>(nDistX), nDistY ));
+    mnActDist = static_cast<tools::Long>(hypot( static_cast<double>(nDistX), nDistY ));
 
     const PointerStyle  eActStyle = ImplGetMousePointer( nDistX, nDistY );
     const StartAutoScrollFlags nFlags = ImplGetSVData()->mpWinData->mnAutoScrollFlags;
