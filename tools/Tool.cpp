@@ -72,12 +72,7 @@ protected:
 
 using namespace COOLProtocol;
 
-using Poco::Net::HTTPClientSession;
-using Poco::Net::HTTPRequest;
-using Poco::Net::HTTPResponse;
 using Poco::Runnable;
-using Poco::URI;
-using Poco::Util::Application;
 using Poco::Util::OptionSet;
 
 /// Thread class which performs the conversion.

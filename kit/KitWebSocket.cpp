@@ -40,7 +40,6 @@
 #include <sysexits.h>
 #endif
 
-using Poco::Exception;
 
 void KitWebSocketHandler::handleMessage(const std::vector<char>& data)
 {

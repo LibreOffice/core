@@ -59,7 +59,6 @@
 
 using namespace COOLProtocol;
 
-using Poco::JSON::Object;
 
 void StatelessBatchBroker::removeFile(const std::string& uriOrig)
 {
