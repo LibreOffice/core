@@ -683,8 +683,8 @@ TWAIN_DSM_TARBALL := twaindsm_2.4.1.orig.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-VISIO_SHA256SUM := 9e9eff75112d4d92d92262ad7fc2599c21e26f8fc5ba54900efdc83c0501e472
-VISIO_TARBALL := libvisio-0.1.10.tar.xz
+VISIO_SHA256SUM := 2a6efd40b6d9dbcb70fba3be53112366882ba97b57151df3698dfa478c8d8dd3
+VISIO_TARBALL := libvisio-0.1.11.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
