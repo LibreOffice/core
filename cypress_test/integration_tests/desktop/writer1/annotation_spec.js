@@ -284,7 +284,12 @@ describe(['tagdesktop'], 'Annotation Tests', function() {
 
 		cy.cGet('.cool-annotation-content-wrapper').click();
 
-		cy.cGet('body').type('{ctrl}p');
+		cy.getFrameWindow().then(function(win) {
+			win.document.dispatchEvent(new win.KeyboardEvent('keydown', {
+				key: 'p', code: 'KeyP', keyCode: 80,
+				ctrlKey: true, bubbles: true, cancelable: true
+			}));
+		});
 
 
 		const downloadAsMessage = 'downloadas ' +
@@ -593,6 +598,82 @@ describe(['tagdesktop'], 'Annotation Tests', function() {
 		// All comments in the thread are unresolved again.
 		cy.cGet('#comment-container-1 .cool-annotation-content-resolved').should('have.text', '');
 		cy.cGet('#comment-container-2 .cool-annotation-content-resolved').should('have.text', '');
+	});
+
+	it('Preserves thread layout on copy paste', function() {
+		desktopHelper.selectZoomLevel('100', false);
+		cy.getFrameWindow().then(function(win) {
+			return helper.processToIdle(win);
+		});
+
+		helper.typeIntoDocument('Hello');
+		helper.typeIntoDocument('{home}');
+		for (var i = 0; i < 5; i++)
+			helper.typeIntoDocument('{shift}{rightArrow}');
+		helper.textSelectionShouldExist();
+
+		desktopHelper.insertComment('root comment');
+		cy.cGet('#annotation-content-area-1').should('contain', 'root comment');
+
+		cy.cGet('#comment-annotation-menu-1').click();
+		cy.cGet('body').contains('.ui-combobox-entry.jsdialog.ui-grid-cell', 'Reply').click();
+		cy.cGet('#annotation-reply-textarea-1').type('reply text');
+		cy.cGet('#annotation-reply-1').click();
+		cy.cGet('#annotation-content-area-2').should('contain', 'reply text');
+
+		cy.getFrameWindow().then(function(win) {
+			return helper.processToIdle(win);
+		});
+
+		helper.typeIntoDocument('{home}');
+		helper.typeIntoDocument('{shift}{end}');
+
+		cy.getFrameWindow().then(function(win) {
+			win.app.socket.sendMessage('uno .uno:Copy');
+		});
+		cy.getFrameWindow().then(function(win) {
+			return helper.processToIdle(win);
+		});
+
+		helper.typeIntoDocument('{end}{enter}');
+
+		cy.getFrameWindow().then(function(win) {
+			win.app.socket.sendMessage('uno .uno:Paste');
+		});
+		cy.getFrameWindow().then(function(win) {
+			return helper.processToIdle(win);
+		});
+
+		cy.cGet('.cool-annotation-content-wrapper').should('have.length', 4);
+
+		cy.cGet('.cool-annotation-content-wrapper').each(function($el) {
+			cy.wrap($el).should('be.visible');
+		});
+
+		cy.getFrameWindow().then(function(win) {
+			var commentSection = win.app.sectionContainer.getSectionWithName(
+				win.app.CSections.CommentList.name);
+			var comments = commentSection.sectionProperties.commentList;
+
+			var threadsFound = 0;
+			for (var i = 0; i < comments.length; i++) {
+				var comment = comments[i];
+				if (comment.sectionProperties.children.length > 0) {
+					threadsFound++;
+					var parentY = comment.getContainerPosY();
+					var parentHeight = comment.getCommentHeight(false);
+					for (var j = 0; j < comment.sectionProperties.children.length; j++) {
+						var child = comment.sectionProperties.children[j];
+						var childY = child.getContainerPosY();
+						expect(childY - parentY,
+							'child ' + child.sectionProperties.data.id +
+							' too far from parent ' + comment.sectionProperties.data.id
+						).to.be.lessThan(parentHeight + 200);
+					}
+				}
+			}
+			expect(threadsFound, 'should have at least 2 comment threads').to.be.at.least(2);
+		});
 	});
 });
 

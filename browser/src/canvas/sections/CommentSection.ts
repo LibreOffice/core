@@ -507,11 +507,9 @@ export class Comment extends CanvasSectionObject {
 			this.sectionProperties.childLines[i].style.height = (childPositions[i].posY + 24 - lastPosY) + 'px';
 			lastPosY = childPositions[i].posY + 24;
 		}
-		if (i < this.sectionProperties.childLines.length) {
-			for (let j = i; j < this.sectionProperties.childLines.length; j++) {
-				this.sectionProperties.childLinesNode.removeChild(this.sectionProperties.childLines[i]);
-				this.sectionProperties.childLines.splice(i);
-			}
+		while (i < this.sectionProperties.childLines.length) {
+			this.sectionProperties.childLinesNode.removeChild(this.sectionProperties.childLines[i]);
+			this.sectionProperties.childLines.splice(i, 1);
 		}
 
 	}

@@ -1078,6 +1078,9 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 			this._handleSheetGeometryDataMsg(values, differentSheet);
 			this._syncTileContainerSize();
 		} else if (values.comments) {
+			values.comments.forEach(function(comment) {
+				comment.id = String(comment.id);
+			});
 			app.sectionContainer.getSectionWithName(app.CSections.CommentList.name).importComments(values.comments);
 		} else if (values.commentsPos) {
 			var section = app.sectionContainer.getSectionWithName(app.CSections.CommentList.name);
@@ -1087,7 +1090,7 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 			});
 			for (var index in values.commentsPos) {
 				comment = values.commentsPos[index];
-				var commentObject = section.getComment(comment.id);
+				var commentObject = section.getComment(String(comment.id));
 				if (commentObject) {
 					if (commentObject.sectionProperties.data.tab !== comment.tab) {
 						// tabs can be moved around and we need to update the tab because the id is still valid.

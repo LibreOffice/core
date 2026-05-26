@@ -396,7 +396,15 @@ window.L.ImpressTileLayer = window.L.CanvasTileLayer.extend({
 		}
 
 		if (values.comments) {
-			app.sectionContainer.getSectionWithName(app.CSections.CommentList.name).importComments(values.comments);
+			var comments = Array.isArray(values.comments)
+				? values.comments
+				: Object.values(values.comments);
+			comments.forEach(function(comment) {
+				comment.id = String(comment.id);
+				if (comment.parentId !== undefined)
+					comment.parentId = String(comment.parentId);
+			});
+			app.sectionContainer.getSectionWithName(app.CSections.CommentList.name).importComments(comments);
 		} else {
 			window.L.CanvasTileLayer.prototype._onCommandValuesMsg.call(this, textMsg);
 		}

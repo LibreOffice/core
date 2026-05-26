@@ -1928,6 +1928,10 @@ export class CommentSection extends CanvasSectionObject {
 
 	public onACKComment (obj: any): void {
 		var id;
+
+		if (!obj.redline && obj.comment.id !== undefined && obj.comment.id !== 'new')
+			obj.comment.id = String(obj.comment.id);
+
 		const anyEdit = Comment.isAnyEdit();
 		if (anyEdit
 			&& !this.checkIfOnlyAnchorPosChanged(obj, anyEdit)
@@ -2018,6 +2022,7 @@ export class CommentSection extends CanvasSectionObject {
 					}
 				}
 			}
+			this.update();
 			if (this.sectionProperties.selectedComment && !this.sectionProperties.selectedComment.isEdit()) {
 				this.map.focus();
 			}
@@ -2296,6 +2301,8 @@ export class CommentSection extends CanvasSectionObject {
 	private layoutUp (subList: Array<Comment>, actualPosition: Array<number>, lastY: number, relayout: boolean = true): number {
 		var height: number;
 		for (var i = 0; i < subList.length; i++) {
+			if (this.sectionProperties.show != false && !subList[i].isEdit())
+				subList[i].show();
 			height = subList[i].getCommentHeight(relayout);
 			lastY = subList[i].sectionProperties.data.anchorSPoint.vY + height < lastY ? subList[i].sectionProperties.data.anchorSPoint.vY: lastY - (height * app.dpiScale);
 
@@ -2305,9 +2312,6 @@ export class CommentSection extends CanvasSectionObject {
 				actualPosition[0] / app.dpiScale,
 				lastY / app.dpiScale
 			);
-
-			if (this.sectionProperties.show != false && !subList[i].isEdit())
-				subList[i].show();
 		}
 		return lastY;
 	}
@@ -2370,9 +2374,9 @@ export class CommentSection extends CanvasSectionObject {
 				subList[i].setContainerPos(false, this.sectionProperties.canvasContainerBounds, actualPosition[0] / app.dpiScale, lastY / app.dpiScale);
 			}
 
-			lastY += (subList[i].getCommentHeight(relayout) * app.dpiScale);
 			if (this.sectionProperties.show != false && !subList[i].isEdit())
 				subList[i].show();
+			lastY += (subList[i].getCommentHeight(relayout) * app.dpiScale);
 		}
 		return lastY;
 	}
