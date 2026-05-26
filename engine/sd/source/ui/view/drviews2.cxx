@@ -4592,9 +4592,11 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         {
             VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
             const uno::Reference<frame::XModel> xModel = GetViewShellBase().GetController()->getModel();
-            ScopedVclPtr<AbstractQrCodeGenDialog> pDlg(pFact->CreateQrCodeGenDialog(
+            VclPtr<AbstractQrCodeGenDialog> pDlg(pFact->CreateQrCodeGenDialog(
                 GetFrameWeld(), xModel, rReq.GetSlot() == SID_EDIT_QRCODE));
-            pDlg->Execute();
+            pDlg->StartExecuteAsync([pDlg](sal_Int32) {
+                pDlg->disposeOnce();
+            });
             Cancel();
             rReq.Ignore ();
         }
