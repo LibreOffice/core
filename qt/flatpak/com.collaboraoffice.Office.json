@@ -872,7 +872,8 @@
       "buildsystem": "autotools",
       "config-opts": [
         "--disable-static",
-        "--enable-shared"
+        "--enable-shared",
+        "--disable-doxygen"
       ],
       "sources": [
         {
