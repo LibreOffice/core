@@ -36,6 +36,11 @@
     <service name="com.sun.star.datatransfer.clipboard.SystemClipboard"/>
     <optional/>
   </implementation>
+  <implementation name="com.sun.star.datatransfer.clipboard.ClipboardW32"
+      constructor="vcl_SystemClipboard_get_implementation">
+    <service name="com.sun.star.datatransfer.clipboard.SystemClipboard"/>
+    <optional/>
+  </implementation>
   <implementation name="com.sun.star.datatransfer.clipboard.iOSClipboard"
       constructor="vcl_SystemClipboard_get_implementation">
     <service name="com.sun.star.datatransfer.clipboard.SystemClipboard"/>

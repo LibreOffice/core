@@ -21,6 +21,8 @@
 
 #include <sal/config.h>
 
+#include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
+#include <com/sun/star/uno/Reference.hxx>
 #include <osl/conditn.hxx>
 
 #include <salinst.hxx>
@@ -37,6 +39,8 @@ public:
     HWND                mhComWnd;
 
     osl::Condition      maWaitingYieldCond;
+
+    css::uno::Reference<css::datatransfer::clipboard::XClipboard> mxClipboard;
 
 public:
     WinSalInstance();
@@ -82,6 +86,8 @@ public:
 
     static int WorkaroundExceptionHandlingInUSER32Lib(int nExcept, LPEXCEPTION_POINTERS pExceptionInfo);
 
+    virtual css::uno::Reference<css::datatransfer::clipboard::XClipboard>
+    CreateClipboard(const css::uno::Sequence<css::uno::Any>& i_rArguments) override;
     virtual css::uno::Reference<css::datatransfer::dnd::XDragSource>
     ImplCreateDragSource(const SystemEnvData& rSysEnv) override;
     virtual css::uno::Reference<css::datatransfer::dnd::XDropTarget>

@@ -21,16 +21,18 @@
 
 #include <o3tl/test_info.hxx>
 #include <osl/diagnose.h>
+#include <tools/debug.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <comphelper/processfactory.hxx>
 #include <com/sun/star/datatransfer/clipboard/ClipboardEvent.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/supportsservice.hxx>
-#include <cppuhelper/weak.hxx>
 #include <vcl/svapp.hxx>
 #include <svdata.hxx>
 #include <salinst.hxx>
+#include <win/salinst.h>
 
 #include <com/sun/star/datatransfer/clipboard/RenderingCapabilities.hpp>
 #include "XNotifyingDataObject.hxx"
@@ -357,26 +359,26 @@ uno::Sequence<OUString> SAL_CALL CWinClipboard::getSupportedServiceNames()
     return { "com.sun.star.datatransfer.clipboard.SystemClipboard" };
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-dtrans_CWinClipboard_get_implementation(css::uno::XComponentContext* context,
-                                        css::uno::Sequence<css::uno::Any> const& args)
+css::uno::Reference<css::datatransfer::clipboard::XClipboard>
+WinSalInstance::CreateClipboard(const css::uno::Sequence<css::uno::Any>& arguments)
 {
-    // We run unit tests in parallel, which is a problem when touching a shared resource
-    // like the system clipboard, so rather use the dummy GenericClipboard.
-    static const bool bRunningUnitTest = o3tl::IsRunningUnitTest() || o3tl::IsRunningUITest();
+    // Tests run in parallel; sharing the real Windows clipboard between them would race. Headless
+    // runs have no system clipboard. In both cases, return the dummy GenericClipboard from the base
+    // implementation.
+    if (Application::IsHeadlessModeEnabled() || o3tl::IsRunningUnitTest()
+        || o3tl::IsRunningUITest())
+        return SalInstance::CreateClipboard(arguments);
 
-    if (bRunningUnitTest)
-    {
-        SolarMutexGuard aGuard;
-        auto xClipboard = ImplGetSVData()->mpDefInst->CreateClipboard(args);
-        if (xClipboard.is())
-            xClipboard->acquire();
-        return xClipboard.get();
-    }
-    else
-    {
-        return cppu::acquire(new CWinClipboard(context, ""));
-    }
+    if (arguments.hasElements())
+        throw css::lang::IllegalArgumentException(
+            u"non-empty WinSalInstance::CreateClipboard arguments"_ustr, {}, -1);
+
+    // CWinClipboard registers a process-wide clipboard viewer and keeps a
+    // singleton pointer in s_pCWinClipbImpl, so cache and reuse the instance.
+    DBG_TESTSOLARMUTEX();
+    if (!mxClipboard)
+        mxClipboard = new CWinClipboard(comphelper::getProcessComponentContext(), {});
+    return mxClipboard;
 }
 
 void CWinClipboard::onReleaseDataObject(CXNotifyingDataObject& theCaller)
