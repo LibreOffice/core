@@ -199,6 +199,7 @@ class CanvasSectionContainer {
 	private drawingPaused: number = 0;
 	private drawingEnabled: boolean = true;
 	private deferredDrawCallback: () => void = null;
+	private inRedrawCallback: boolean = false;
 	private sectionsDirty: boolean = false;
 	private framesRendered: number = 0; // Total frame count for debugging
 
@@ -709,6 +710,8 @@ class CanvasSectionContainer {
 			return;
 		}
 
+		this.inRedrawCallback = true;
+
 		this.flushLayoutingTasks();
 		this.resizeCanvas();
 		this.drawSections();
@@ -716,6 +719,8 @@ class CanvasSectionContainer {
 
 		// need to check if we should continue animation
 		this.animate(timestamp);
+
+		this.inRedrawCallback = false;
 
 		app.exitRAF();
 	}
@@ -726,6 +731,11 @@ class CanvasSectionContainer {
 			this.deferredDrawCallback();
 			return;
 		}
+		// A redraw requested from inside the current paint is dropped.
+		// Sections must reach their final state before their onDraw runs;
+		// asking for another frame from within a draw indicates the
+		// section has state to settle that should happen before paint.
+		if (this.inRedrawCallback) return;
 		if (this.drawRequest === null)
 			this.drawRequest = requestAnimationFrame(this.redrawCallback.bind(this));
 	}
