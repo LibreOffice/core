@@ -71,12 +71,6 @@
 
 using namespace ::com::sun::star;
 
-bool ScDBDocFunc::CheckSheetViewProtection(sc::OperationType eOperation)
-{
-    sc::SheetViewOperationsTester aSheetViewTester(ScDocShell::GetViewData());
-    return aSheetViewTester.check(eOperation);
-}
-
 bool ScDBDocFunc::AddDBTable(const OUString& rName, const ScRange& rRange, bool bHeader,
                              bool bRecord, bool bApi, const OUString& rStyleName)
 {

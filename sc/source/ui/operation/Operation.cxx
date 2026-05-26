@@ -453,7 +453,7 @@ void Operation::syncMarkPatternToSheetViews(const ScMarkData& rDefaultViewMark,
                     }
                 }
             }
-            for (auto& [nColumn, nRow] : aMarkedCells)
+            for (auto & [ nColumn, nRow ] : aMarkedCells)
             {
                 SCROW nMappedRow = rSheetView.reverseDefaultViewToSheetView(nRow, nColumn);
                 ScRange aCellRange(nColumn, nMappedRow, nSheetViewTab, nColumn, nMappedRow,
@@ -469,8 +469,6 @@ void Operation::syncMarkPatternToSheetViews(const ScMarkData& rDefaultViewMark,
         rDocument.ApplySelectionPattern(rPattern, aSheetViewMark, nullptr);
     }
 }
-
-bool Operation::isInputOnSheetView() const { return getCurrentSheetView(mpViewData) != nullptr; }
 
 bool Operation::isInputOnSheetViewAutoFilter(ScRange const& rRange) const
 {

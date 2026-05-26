@@ -125,9 +125,6 @@ public:
     OString const& GetFilterGUID() const { return maFilterGUID; }
     void SetFilterGUID(OString const& rGUID) { maFilterGUID = rGUID; }
 
-    /** A sheet view is valid if the pointer to the table is set */
-    bool isValid() const;
-
     SortOrderReverser const* getSortOrder() const;
     void resetSortOrder();
 
@@ -141,7 +138,6 @@ public:
     /** Merges the reorder parameters */
     void mergeReorderParameters(ReorderParam const& rReorderParameters);
     ReorderParam const* getReorderParameters() const;
-    void restoreReorderParameters(ReorderParam const& rParams);
 
     /** Reverses the complete (sheet view and default view) sorting order for the input row */
     SCROW reverseSortingToDefaultView(SCROW nRow, SCCOL nColumn) const;

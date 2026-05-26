@@ -231,8 +231,6 @@ public:
     ScDPDimCalcSaveData();
     ScDPDimCalcSaveData(const ScDPDimCalcSaveData&) = default;
 
-    bool operator==(const ScDPDimCalcSaveData& r) const;
-
     void WriteToCache(ScDPCache& rCache,
                       const std::vector<OUString>& rGroupFieldNames = {}) const;
 

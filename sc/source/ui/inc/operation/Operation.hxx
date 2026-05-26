@@ -80,9 +80,6 @@ protected:
     void syncMarkPatternToSheetViews(const ScMarkData& rDefaultViewMark,
                                      const ScPatternAttr& rPattern);
 
-    /** Check if the input is on a sheet view tab */
-    bool isInputOnSheetView() const;
-
     /** Check if a range is on a sheet view tab and intersects with any autofilter */
     bool isInputOnSheetViewAutoFilter(ScRange const& rRange) const;
 

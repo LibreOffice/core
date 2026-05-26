@@ -31,24 +31,6 @@ using namespace css;
 
 namespace sc
 {
-namespace pivot
-{
-uno::Any getMemberForLevel(uno::Reference<uno::XInterface> const& xLevel, OUString const& rName)
-{
-    uno::Reference<sheet::XMembersSupplier> xMembersSupplier(xLevel, uno::UNO_QUERY);
-    if (xMembersSupplier.is())
-    {
-        uno::Reference<sheet::XMembersAccess> xMembers = xMembersSupplier->getMembers();
-        if (xMembers.is())
-        {
-            if (xMembers->hasByName(rName))
-                return xMembers->getByName(rName);
-        }
-    }
-    return uno::Any();
-}
-}
-
 // PivotTableResultTraverser
 
 void PivotTableResultTraverser::traverse()

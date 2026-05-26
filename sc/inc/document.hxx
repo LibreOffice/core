@@ -2483,7 +2483,6 @@ public:
     /** Return the sheet view table for the ID */
     SCTAB GetSheetViewNumber(SCTAB nTab, sc::SheetViewID nID);
 
-    bool HasSheetViews(SCTAB nTab) const;
     SC_DLLPUBLIC std::shared_ptr<sc::SheetViewManager> GetSheetViewManager(SCTAB nTable);
 
     /** Is a holder of the sheet view data */
@@ -2815,7 +2814,6 @@ public:
     void                    DeleteBroadcasters( sc::ColumnBlockPosition& rBlockPos, const ScAddress& rTopPos, SCROW nLength );
 
     std::optional<sc::ColumnIterator> GetColumnIterator( SCTAB nTab, SCCOL nCol, SCROW nRow1, SCROW nRow2 ) const;
-    void CreateColumnIfNotExists( SCTAB nTab, SCCOL nCol );
 
     SC_DLLPUBLIC void StoreTabToCache(SCTAB nTab, SvStream& rStrm) const;
     SC_DLLPUBLIC void RestoreTabFromCache(SCTAB nTab, SvStream& rStream);

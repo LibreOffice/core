@@ -59,8 +59,6 @@ class PivotTableFormats
 public:
     void add(PivotTableFormat const& rPivotTableFormat) { maFormats.push_back(rPivotTableFormat); }
 
-    size_t size() const { return maFormats.size(); }
-
     std::vector<PivotTableFormat> const& getVector() const { return maFormats; }
 };
 }

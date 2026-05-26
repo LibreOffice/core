@@ -74,13 +74,11 @@ struct SC_DLLPUBLIC ScSubTotalParam
         // Total Functions
         std::span<FuncPair> custfuncs() { return std::span(pCustFuncs.get(), nCustFuncs); }
         std::span<const FuncPair> custfuncs() const { return std::span(pCustFuncs.get(), nCustFuncs); }
-        SCCOL& colcust(SCCOL n) { return custfuncs()[n].first; }
         SCCOL colcust(SCCOL n) const { return custfuncs()[n].first; }
         ScTokenArray* custToken(SCCOL n) const { return custfuncs()[n].second.get(); }
         // Labels
         std::span<LabelPair> sublabels() { return std::span(pSubLabels.get(), nSubLabels); }
         std::span<const LabelPair> sublabels() const { return std::span(pSubLabels.get(), nSubLabels); }
-        SCCOL& collabels(SCCOL n) { return sublabels()[n].first; }
         SCCOL collabels(SCCOL n) const { return sublabels()[n].first; }
         rtl::OUString label(SCCOL n) const { return sublabels()[n].second; }
     };

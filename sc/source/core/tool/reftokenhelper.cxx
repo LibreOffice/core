@@ -539,9 +539,4 @@ ScSingleRefData* ScRefTokenHelper::getSingleRef(formula::FormulaToken* t)
         return nullptr;
 }
 
-const ScSingleRefData* ScRefTokenHelper::getSingleRef(const formula::FormulaToken* t)
-{
-    return getSingleRef(const_cast<formula::FormulaToken*>(t));
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

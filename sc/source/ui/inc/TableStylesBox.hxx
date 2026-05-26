@@ -23,8 +23,6 @@ public:
 
     void Update(const ScDatabaseSettingItem* pItem);
 
-    weld::ComboBox* getWidget() { return m_xCmbStyle.get(); }
-
 private:
     std::unique_ptr<weld::CheckButton> m_xChkHeaderRow;
     std::unique_ptr<weld::CheckButton> m_xChkTotalRow;

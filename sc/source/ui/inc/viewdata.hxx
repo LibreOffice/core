@@ -146,7 +146,6 @@ public:
     void invalidateByPosition(tools::Long nPos);
     const value_type& getNearestByIndex(index_type nIndex) const;
     const value_type& getNearestByPosition(tools::Long nPos) const;
-    tools::Long getPosition(index_type nIndex) const;
     tools::Long computePosition(index_type nIndex, const std::function<long (index_type)>& getSizePx);
 };
 

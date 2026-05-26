@@ -91,7 +91,6 @@ public:
 
     void ClearAllInvalids();
 
-    SfxViewShell* getViewShell() { return mpViewShell; }
     ScTabViewShell* getTabViewShell() { return dynamic_cast<ScTabViewShell*>(mpViewShell); }
     int getViewID() { return mnView; }
 };

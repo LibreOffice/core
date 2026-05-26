@@ -829,11 +829,6 @@ ScDPDimCalcSaveData::ScDPDimCalcSaveData()
 {
 }
 
-bool ScDPDimCalcSaveData::operator==(const ScDPDimCalcSaveData&) const
-{
-    return false;
-}
-
 void ScDPDimCalcSaveData::WriteToCache(ScDPCache& rCache,
                                        const std::vector<OUString>& rGroupFieldNames) const
 {

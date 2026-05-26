@@ -239,8 +239,6 @@ public:
 
     void                    CountChanged();
 
-    void                    InsertEmptyDimension( sal_Int32 nPos );
-
                             // XNameAccess
     virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
@@ -288,7 +286,6 @@ public:
                             ScDPDimension(const ScDPDimension&) = delete;
     ScDPDimension&          operator=(const ScDPDimension&) = delete;
 
-    void                    SetDimension(sal_Int32 nPos) { nDim = nPos; }
     sal_Int32               GetDimension() const    { return nDim; }        // dimension index in source
     sal_Int32               GetSourceDim() const    { return nSourceDim; }  // >=0 if dup'ed
 
@@ -297,8 +294,6 @@ public:
 
     const std::optional<OUString> & GetLayoutName() const;
     const std::optional<OUString> & GetSubtotalName() const;
-
-    const std::optional<OUString>& getCalculation() const;
 
                             // XNamed
     virtual OUString SAL_CALL getName() override;

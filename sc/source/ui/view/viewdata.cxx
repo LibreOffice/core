@@ -250,13 +250,6 @@ ScPositionHelper::getNearestByPosition(tools::Long nPos) const
     }
 }
 
-tools::Long ScPositionHelper::getPosition(index_type nIndex) const
-{
-    auto it = mData.find(std::make_pair(nIndex, 0));
-    if (it == mData.end()) return -1;
-    return it->second;
-}
-
 tools::Long ScPositionHelper::computePosition(index_type nIndex, const std::function<long (index_type)>& getSizePx)
 {
     assert(MAX_INDEX > 0);

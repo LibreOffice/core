@@ -57,21 +57,6 @@ inline void createUndoDoc(ScDocumentUniquePtr& pUndoDoc, ScDocument& rDocument,
     rDocument.CopyToDocument(rRange, InsertDeleteFlags::ALL, false, *pUndoDoc);
 }
 
-inline bool lcl_EmptyExcept(ScDocument& rDoc, const ScRange& rRange, const ScRange& rExcept)
-{
-    ScCellIterator aIter(rDoc, rRange);
-    for (bool bHasCell = aIter.first(); bHasCell; bHasCell = aIter.next())
-    {
-        if (!aIter.isEmpty()) // real content?
-        {
-            if (!rExcept.Contains(aIter.GetPos()))
-                return false; // cell found
-        }
-    }
-
-    return true; // nothing found - empty
-}
-
 inline bool checkNewOutputRange(ScDPObject& rDPObj, ScDocShell& rDocShell, ScRange& rNewOut,
                                 bool bApi, sc::EditAction eAction = sc::EditAction::Unknown)
 {

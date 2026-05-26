@@ -127,9 +127,6 @@ public:
     /** Remove the sheet view with the ID. True if successful. */
     bool remove(SheetViewID nID);
 
-    /** Remove all sheet views. */
-    void removeAll();
-
     /** Returns a range that iterates only over valid (non-null) sheet views. */
     SheetViewRange iterateValidSheetViews() const { return SheetViewRange(maViews); }
 

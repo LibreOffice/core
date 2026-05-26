@@ -27,8 +27,6 @@ public:
 
     void Update(ScViewData& rViewData);
 
-    weld::ComboBox* getWidget() { return m_xWidget.get(); }
-
 private:
     std::unique_ptr<weld::ComboBox> m_xWidget;
 

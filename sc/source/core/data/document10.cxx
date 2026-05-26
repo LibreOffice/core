@@ -1010,15 +1010,6 @@ std::optional<sc::ColumnIterator> ScDocument::GetColumnIterator( SCTAB nTab, SCC
     return pTab->GetColumnIterator(nCol, nRow1, nRow2);
 }
 
-void ScDocument::CreateColumnIfNotExists( SCTAB nTab, SCCOL nCol )
-{
-    ScTable* pTab = FetchTable(nTab);
-    if (!pTab)
-        return;
-
-    pTab->CreateColumnIfNotExists(nCol);
-}
-
 bool ScDocument::EnsureFormulaCellResults( const ScRange& rRange, bool bSkipRunning )
 {
     bool bAnyDirty = false;
@@ -1184,15 +1175,6 @@ std::pair<sc::SheetViewID, SCTAB> ScDocument::CreateNewSheetView(SCTAB nTab)
         }
     }
     return { sc::InvalidSheetViewID, -1 };
-}
-
-bool ScDocument::HasSheetViews(SCTAB nTab) const
-{
-    if (ScTable const* pTable = FetchTable(nTab))
-    {
-        return !pTable->GetSheetViewManager()->isEmpty();
-    }
-    return false;
 }
 
 std::shared_ptr<sc::SheetViewManager> ScDocument::GetSheetViewManager(SCTAB nTable)

@@ -332,11 +332,6 @@ ReorderParam const* SheetView::getReorderParameters() const
     return &mpSortData->maOriginalReorderParams;
 }
 
-void SheetView::restoreReorderParameters(ReorderParam const& rParams)
-{
-    ensureSortData().maOriginalReorderParams = rParams;
-}
-
 SCROW SheetView::reverseSortingToDefaultView(SCROW nRow, SCCOL nColumn) const
 {
     SCROW nUnsortedRow = nRow;

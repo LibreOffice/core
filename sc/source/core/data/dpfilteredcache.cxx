@@ -98,26 +98,11 @@ sal_Int32 ScDPFilteredCache::getCalculatedColumnCount() const
     return mrCache.GetCalculatedFieldCount();
 }
 
-void ScDPFilteredCache::addCalculatedField(const std::shared_ptr<ScDPCache::CalculatedField>& pField)
-{
-    maCalcFields.emplace_back(pField);
-}
-
 bool ScDPFilteredCache::isCalculatedField(sal_Int32 nDim) const
 {
     return std::any_of(maCalcFields.begin(), maCalcFields.end(),
                        [nDim](const auto& pCalcF)
                        { return nDim == pCalcF->mnIndex; });
-}
-
-OUString ScDPFilteredCache::getCalculatedFieldName(sal_Int32 nDim) const
-{
-    for (const auto& pCalcField : maCalcFields)
-    {
-        if (pCalcField->mnIndex == nDim)
-            return pCalcField->maFieldName;
-    }
-    return OUString(); // Empty string
 }
 
 OUString ScDPFilteredCache::getCalculation(sal_Int32 nDim) const

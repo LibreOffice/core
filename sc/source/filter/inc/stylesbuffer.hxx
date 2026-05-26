@@ -218,8 +218,6 @@ public:
 
     /** Sets font formatting attributes for the passed element. */
     void                importAttribs( sal_Int32 nElement, const AttributeList& rAttribs );
-    /** Sets font formatting attributes for OOXML default table styles. */
-    void                setFontElements( const XlsColor& rColor, bool bWeight );
 
     /** Imports the FONT record from the passed stream. */
     void                importFont( SequenceInputStream& rStrm );
@@ -474,9 +472,6 @@ public:
     /** Imports a border from a DXF record from the passed stream. */
     void                importDxfBorder( sal_Int32 nElement, SequenceInputStream& rStrm );
 
-    // for OOXML default table styles
-    void                setBorderElement(sal_Int32 nElement, const XlsColor& rColor, sal_Int32 nStyle);
-
     /** Final processing after import of all style settings. */
     void                finalizeImport( bool bRTL );
 
@@ -587,9 +582,6 @@ public:
     void                importDxfGradient( SequenceInputStream& rStrm );
     /** Imports gradient stop settings from a DXF record. */
     void                importDxfStop( SequenceInputStream& rStrm );
-
-    // for dealing with OOXML default table styles
-    void                setFillColors(const XlsColor& rFgColor, const XlsColor& rBgColor);
 
     /** Final processing after import of all style settings. */
     void                finalizeImport();
@@ -715,11 +707,6 @@ public:
     FillRef const &     createFill( bool bAlwaysNew = true );
     /** Creates a new empty protection object. */
     ProtectionRef const & createProtection( bool bAlwaysNew = true );
-
-    // methods for OOXML default table style import
-    void setFill(const FillRef& xFill);
-    void setBorder(const BorderRef& xBorder);
-    void setFont(const FontRef& xFont);
 
     /** Inserts a new number format code. */
     void                importNumFmt( const AttributeList& rAttribs );
@@ -869,12 +856,8 @@ public:
     explicit TableStyle( const WorkbookHelper& rHelper, bool bDefaultOOXMLStyle );
 
     void setName(const OUString& rName);
-    void setUIName(const OUString& rName);
     void importTableStyleElement(const AttributeList& rAttribs);
     void finalizeImport(const DxfVector& mrDxfs);
-
-    // for OOXML default table styles
-    void setTableStyleElement(ScTableStyleElement eTableStyleElement, sal_Int32  nDxfId);
 };
 
 typedef std::shared_ptr< TableStyle > TableStyleRef;

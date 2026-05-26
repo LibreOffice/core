@@ -70,7 +70,6 @@ namespace tools
 class ScDocFunc
 {
     ScDocShell&     rDocShell;
-    static bool CheckSheetViewProtection(sc::OperationType eOperation);
 
 protected:
     void            CreateOneName( ScRangeName& rList,

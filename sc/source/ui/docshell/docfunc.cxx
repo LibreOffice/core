@@ -145,12 +145,6 @@
 
 using namespace com::sun::star;
 
-bool ScDocFunc::CheckSheetViewProtection(sc::OperationType eOperation)
-{
-    sc::SheetViewOperationsTester aSheetViewTester(ScDocShell::GetViewData());
-    return aSheetViewTester.check(eOperation);
-}
-
 void ScDocFunc::NotifyDrawUndo( std::unique_ptr<SdrUndoAction> pUndoAction)
 {
     // #i101118# if drawing layer collects the undo actions, add it there
