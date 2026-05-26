@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-26 00:18+0200\n"
-"PO-Revision-Date: 2026-05-12 14:11+0000\n"
-"Last-Translator: Sebastiaan Veld <notify@virtfields.nl>\n"
+"PO-Revision-Date: 2026-05-26 23:12+0000\n"
+"Last-Translator: Stephan Paternotte <stephan@paternottes.net>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/nl/>\n"
-"Language: \n"
+"Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.5-dev\n"
+"X-Generator: Weblate 2026.6.dev0\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -543,7 +543,7 @@ msgstr "Einden forceren"
 #: src/control/Control.Menubar.ts:795 src/control/Control.TopToolbar.js:139
 #: src/control/jsdialog/Definitions.Menu.ts:1588
 msgid "All Sheets"
-msgstr "Alle bladen"
+msgstr "Alle werkbladen"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:473
 msgid "Content"
@@ -738,17 +738,19 @@ msgstr "Upload Xcu"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:713
 msgid "Document themes"
-msgstr ""
+msgstr "Documentthema's"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:715
 msgid ""
 "Upload custom document themes (.theme). These define color palettes "
 "available under Format > Theme."
 msgstr ""
+"Upload aangepaste documentthema's (.thema). Deze definiëren kleurenpaletten "
+"die beschikbaar zijn onder Opmaak > Thema."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:721
 msgid "Upload Theme"
-msgstr ""
+msgstr "Thema uploaden"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:776
 msgid "Something went wrong. Please try to refresh the page."
@@ -976,7 +978,7 @@ msgstr "Toevoegen"
 
 #: admin/src/integrator/WordBook.ts:466
 msgid "Invalid dictionary format. Please check the file."
-msgstr "Ongeldig woordenboek formaat. Controleer het bestand."
+msgstr "Ongeldig woordenboekformaat. Controleer het bestand."
 
 #: admin/src/integrator/WordBook.ts:486
 msgid "Something went wrong while uploading dictionary file"
@@ -1455,11 +1457,11 @@ msgstr "Pagina's"
 
 #: src/control/Control.BackstageView.ts:541
 msgid "Spreadsheet"
-msgstr "Rekenblad"
+msgstr "Werkblad"
 
 #: src/control/Control.BackstageView.ts:541
 msgid "Sheets"
-msgstr "Bladen"
+msgstr "Werkbladen"
 
 #: src/control/Control.BackstageView.ts:542
 #: src/control/Control.NavigatorPanel.ts:192
@@ -1491,7 +1493,7 @@ msgstr "Bestandsnaam"
 
 #: src/control/Control.BackstageView.ts:711
 msgid "Blank Spreadsheet"
-msgstr "Blanco rekenblad"
+msgstr "Blanco werkblad"
 
 #: src/control/Control.BackstageView.ts:715
 msgid "Blank Presentation"
@@ -2576,7 +2578,7 @@ msgstr "CSV bestand (.csv)"
 #: src/control/Control.Menubar.ts:794
 #: src/control/jsdialog/Definitions.Menu.ts:1587
 msgid "Active sheet"
-msgstr "Actief blad"
+msgstr "Actief werkblad"
 
 #: src/control/Control.Menubar.ts:833
 #: src/control/Control.NotebookbarCalc.js:1544
@@ -3068,6 +3070,8 @@ msgid ""
 "Clone Formatting is active (press Enter on a cell to apply, click again or "
 "press Esc to exit)"
 msgstr ""
+"Opmaak kopiëren is ingeschakeld (druk op Enter op een cel om toe te passen, "
+"klik opnieuw of druk op Esc om af te sluiten)"
 
 #: src/control/Control.NotebookbarCalc.js:492
 #: src/control/Control.NotebookbarDraw.js:685
@@ -3239,7 +3243,7 @@ msgstr "Ordenen"
 
 #: src/control/Control.NotebookbarCalc.js:1431
 msgid "Sheet View"
-msgstr "Bladweergave"
+msgstr "Werkbladweergave"
 
 #: src/control/Control.NotebookbarCalc.js:1445
 msgid "Default View"
@@ -3251,15 +3255,15 @@ msgstr "Weergavenlijst openen"
 
 #: src/control/Control.NotebookbarCalc.js:1469
 msgid "New Sheet View"
-msgstr "Nieuw bladweergave"
+msgstr "Nieuwe werkbladweergave"
 
 #: src/control/Control.NotebookbarCalc.js:1476
 msgid "Remove Sheet View"
-msgstr "Bladweergave verwijderen"
+msgstr "Werkbladweergave verwijderen"
 
 #: src/control/Control.NotebookbarCalc.js:1483
 msgid "Exit Sheet View"
-msgstr "Bladweergave verlaten"
+msgstr "Werkbladweergave verlaten"
 
 #: src/control/Control.NotebookbarCalc.js:1498
 msgid "Freeze"
@@ -3691,11 +3695,11 @@ msgstr "Wijzigingen weergeven"
 
 #: src/control/Control.NotebookbarWriter.js:2770
 msgid "Cell Background"
-msgstr ""
+msgstr "Celachtergrond"
 
 #: src/control/Control.NotebookbarWriter.js:2853
 msgid "Protect"
-msgstr ""
+msgstr "Beveiligen"
 
 #: src/control/Control.PartsPreview.js:209
 msgid "preview of page %1"
@@ -3716,7 +3720,7 @@ msgstr "Sectie toevoegen"
 
 #: src/control/Control.PartsPreview.js:599
 msgid "Toggle section %1"
-msgstr ""
+msgstr "Selectie %1 schakelen"
 
 #: src/control/Control.PartsPreview.js:767
 #: src/control/Control.PartsPreview.js:846
@@ -3872,7 +3876,7 @@ msgstr "OPEN"
 
 #: src/control/Control.SheetsBar.js:51
 msgid "Scroll to the first sheet"
-msgstr "Scroll naar het eerste blad"
+msgstr "Naar het eerste werkblad bladeren"
 
 #: src/control/Control.SheetsBar.js:58
 msgid "Scroll left"
@@ -3884,15 +3888,15 @@ msgstr "Scroll rechts"
 
 #: src/control/Control.SheetsBar.js:74
 msgid "Scroll to the last sheet"
-msgstr "Scroll naar het laatste blad"
+msgstr "Naar het laatste werkblad bladeren"
 
 #: src/control/Control.SheetsBar.js:81
 msgid "Insert sheet"
-msgstr "Blad invoegen"
+msgstr "Werkblad invoegen"
 
 #: src/control/Control.SheetsBar.js:88
 msgid "Show sheet list"
-msgstr "Lijst met bladen weergeven"
+msgstr "Lijst met werkbladen weergeven"
 
 #: src/control/Control.StatusBar.js:162
 msgid "On"
@@ -3936,7 +3940,7 @@ msgstr "Aantal selecties"
 
 #: src/control/Control.StatusBar.js:274
 msgid "Zoom to Fit Slide"
-msgstr ""
+msgstr "Zoom naar dia"
 
 #: src/control/Control.StatusBar.js:275
 msgid "Zoom to Fit Page Width"
@@ -3981,39 +3985,39 @@ msgstr "Taal instellen voor selectie"
 
 #: src/control/Control.Tabs.js:53 src/control/Control.Tabs.js:56
 msgid "Insert sheet before this"
-msgstr "Blad invoegen voor deze"
+msgstr "Werkblad invoegen voor deze"
 
 #: src/control/Control.Tabs.js:60 src/control/Control.Tabs.js:63
 msgid "Insert sheet after this"
-msgstr "Blad invoegen na deze"
+msgstr "Werkblad invoegen na deze"
 
 #: src/control/Control.Tabs.js:100 src/control/Control.Tabs.js:107
 msgid "Reset Tab Color"
-msgstr ""
+msgstr "Tabkleur herstellen"
 
 #: src/control/Control.Tabs.js:127 src/control/Control.Tabs.js:131
 msgid "Move Sheet Left"
-msgstr "Blad naar links verplaatsen"
+msgstr "Werkblad naar links verplaatsen"
 
 #: src/control/Control.Tabs.js:135 src/control/Control.Tabs.js:139
 msgid "Move Sheet Right"
-msgstr "Blad naar rechts verplaatsen"
+msgstr "Werkblad naar rechts verplaatsen"
 
 #: src/control/Control.Tabs.js:149 src/control/Control.Tabs.js:155
 msgid "Copy Sheet..."
-msgstr "Kopieer blad..."
+msgstr "Werkblad kopiëren…"
 
 #: src/control/Control.Tabs.js:545
 msgid "Are you sure you want to delete sheet, {sheet}?"
-msgstr "Weet u zeker dat u blad {sheet} wilt verwijderen?"
+msgstr "Weet u zeker dat u werkblad {sheet} wilt verwijderen?"
 
 #: src/control/Control.Tabs.js:556
 msgid "Rename sheet"
-msgstr "Blad hernoemen"
+msgstr "Werkblad hernoemen"
 
 #: src/control/Control.Tabs.js:556
 msgid "Enter new sheet name"
-msgstr "Voer een nieuwe bladnaam in"
+msgstr "Voer een nieuwe werkbladnaam in"
 
 #: src/control/Control.Toolbar.js:1008
 msgid ""
@@ -4025,7 +4029,7 @@ msgstr ""
 
 #: src/control/Control.TopToolbar.js:138
 msgid "Active Sheet"
-msgstr "Actieve Blad"
+msgstr "Actieve werkblad"
 
 #: src/control/Control.TopToolbar.js:152 templates/templates.js:46
 msgid "Default Style"
@@ -4286,7 +4290,7 @@ msgstr "Tabstop verwijderen"
 
 #: src/control/Parts.js:529
 msgid "Show sheets"
-msgstr "Bladen tonen"
+msgstr "Werkbladen tonen"
 
 #: src/control/Permission.js:27 src/control/Permission.js:28
 msgid "Edit document"
@@ -4880,7 +4884,7 @@ msgstr "Aantal woorden"
 #: src/control/jsdialog/Widget.HTMLContent.ts:38
 #: src/control/jsdialog/Widget.HTMLContent.ts:39
 msgid "Number of Sheets"
-msgstr "Aantal bladen"
+msgstr "Aantal werkbladen"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:43
 msgid "Selected range of cells"
@@ -4917,17 +4921,15 @@ msgstr "Functies van tabelcellen"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:74
 msgid "Sheet Navigation"
-msgstr ""
+msgstr "Werkblad-navigatie"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:76
-#, fuzzy
 msgid "Slide Navigation"
-msgstr "Navigatie Sluiten"
+msgstr "Dia-navigatie"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:77
-#, fuzzy
 msgid "Page Navigation"
-msgstr "Navigatie Sluiten"
+msgstr "Pagina-navigatie"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:83
 msgid "Your changes have been saved"
@@ -5942,12 +5944,10 @@ msgid "Get Involved"
 msgstr "Help mee"
 
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.h2:49-7
-#, fuzzy
 msgid "https://www.collaboraoffice.org/"
 msgstr "https://www.collaboraonline.org/"
 
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.p:50-7
-#, fuzzy
 msgid ""
 "Are you interested in contributing but don’t know where to start? Head over "
 "to the <a target=\"_blank\" rel=\"noopener\" href=\"https://www."
@@ -5959,13 +5959,13 @@ msgid ""
 "report</a> with all the essential steps on how to reproduce it."
 msgstr ""
 "Ben je geïnteresseerd om bij te dragen, maar weet je niet waar je moet "
-"beginnen? Ga naar de <a target=\"_blank\" rel=\"noopener\" href=\"https://www"
-".collaboraonline.org/post/build-code/\">stap-voor-stap instructies</a> en "
-"bouw CODE aan de hand daarvan helemaal opnieuw. Je kunt ook helpen met <a "
-"target=\"_blank\" rel=\"noopener\" href=\"https://collaboraonline.github.io/"
-"post/translate/\">vertalen</a> of met het <a target=\"_blank\" rel=\"noopener"
-"\" href=\"https://www.collaboraonline.org/post/filebugs/\">rapporteren van "
-"fouten</a> of het toevoegen van essentiële stappen om die te reproduceren."
+"beginnen? Ga naar de <a target=\"_blank\" rel=\"noopener\" href=\"https://"
+"www.collaboraonline.org/post/build-code/\">stapsgewijze instructies</a> en "
+"bouw CODE vanaf de grond. Je kunt ook helpen met <a target=\"_blank\" "
+"rel=\"noopener\" href=\"https://collaboraonline.github.io/post/translate/\">"
+"vertalen</a> of met het <a target=\"_blank\" rel=\"noopener\" href=\"https://"
+"www.collaboraonline.org/post/filebugs/\">rapporteren van fouten</a> met "
+"essentiële stappen om die te reproduceren."
 
 #: welcome/welcome.html%2Bhtml.body.div.div:55-5
 msgid ""
