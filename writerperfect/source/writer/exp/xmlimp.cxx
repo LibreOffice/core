@@ -48,6 +48,7 @@ OUString GetMimeType(std::u16string_view rExtension)
     static const auto vMimeTypes = frozen::make_unordered_map<std::u16string_view, OUString>({
         { u"gif", u"image/gif"_ustr },
         { u"jpg", u"image/jpeg"_ustr },
+        { u"jpeg", u"image/jpeg"_ustr },
         { u"png", u"image/png"_ustr },
         { u"svg", u"image/svg+xml"_ustr },
     });
@@ -109,7 +110,8 @@ OUString FindCoverImage(const OUString& rDocumentBaseURL, OUString& rMimeType,
     if (rDocumentBaseURL.isEmpty())
         return aRet;
 
-    static constexpr std::u16string_view vExtensions[] = { u"gif", u"jpg", u"png", u"svg" };
+    static constexpr std::u16string_view vExtensions[]
+        = { u"gif", u"jpg", u"jpeg", u"png", u"svg" };
 
     OUString aMediaDir = FindMediaDir(rDocumentBaseURL, rFilterData);
     for (const auto& rExtension : vExtensions)
