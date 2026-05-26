@@ -9,7 +9,7 @@
     <string name="storage_permission_required">Необхідний дозвіл на збереження</string>
     <string name="temp_file_saving_disabled">Цей файл лише для читання, збереження неможливе.</string>
     <string name="exiting">Виходимо...</string>
-    <string name="rate_our_app_text">Якщо Вам це подобається, будь ласка, поставте нам 5 зірочок в Google Play. Ваші гарні відгуки - наша найкраща мотивація.</string>
+    <string name="rate_our_app_text">Якщо вам це подобається, будь ласка, поставте нам 5 зірочок в Google Play. Ваші гарні відгуки - наша найкраща мотивація.</string>
     <string name="rate_our_app_title">Дякуємо за використання %1$s!</string>
     <string name="later">Пізніше</string>
     <string name="rate_now">Оцінити зараз</string>
@@ -20,7 +20,7 @@
     <string name="restarting">Перезапуск...</string>
     <string name="cant_open_the_document">Не вдалося відкрити документ</string>
     <string name="convert_odf_message">Цей документ може містити форматування або вміст, який не можна зберегти у вибраному форматі файлу \"Текст\".</string>
-    <string name="ask_for_convert_odf">Підтвердьте формат файлу</string>
-    <string name="use_odf">Використати формат ODF</string>
-    <string name="use_text">Використати текстовий формат</string>
+    <string name="ask_for_convert_odf">Підтвердьте Формат Файлу</string>
+    <string name="use_odf">Використати Формат ODF</string>
+    <string name="use_text">Використати Текстовий Формат</string>
 </resources>
