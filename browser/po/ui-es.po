@@ -7,11 +7,11 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-26 00:18+0200\n"
-"PO-Revision-Date: 2026-05-24 22:11+0000\n"
+"PO-Revision-Date: 2026-05-26 23:11+0000\n"
 "Last-Translator: Libre <6n0n1m0s@proton.me>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/es/>\n"
-"Language: \n"
+"Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -735,21 +735,23 @@ msgstr "Ajuste el comportamiento de los documentos de oficina."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:707
 msgid "Upload Xcu"
-msgstr "Cargar XCU"
+msgstr "Cargar Xcu"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:713
 msgid "Document themes"
-msgstr ""
+msgstr "Temas documentales"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:715
 msgid ""
 "Upload custom document themes (.theme). These define color palettes "
 "available under Format > Theme."
 msgstr ""
+"Subir temas documentales personales (.theme). Estas paletas de color definen "
+"colores disponibles en Formato > Tema."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:721
 msgid "Upload Theme"
-msgstr ""
+msgstr "Subir Tema"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:776
 msgid "Something went wrong. Please try to refresh the page."
@@ -2073,7 +2075,7 @@ msgstr "Desplegable"
 
 #: src/control/Control.JSDialogBuilder.js:1572
 msgid "Apply action dropdown"
-msgstr ""
+msgstr "Aplicar menú desplegable de acción"
 
 #: src/control/Control.JSDialogBuilder.js:1598
 msgid "Open {name}"
@@ -2111,7 +2113,7 @@ msgstr "Idioma"
 
 #: src/control/Control.Mention.ts:185
 msgid "No search results found!"
-msgstr "No se encontró ningún resultado."
+msgstr "No se ha encontrado ningún resultado."
 
 #: src/control/Control.Menubar.ts:101 src/control/Control.Menubar.ts:116
 #: src/control/Control.Menubar.ts:1090
@@ -2251,7 +2253,7 @@ msgstr "Restablecer zum"
 
 #: src/control/Control.Menubar.ts:169
 msgid "Fit to Screen"
-msgstr ""
+msgstr "Ajustar a la pantalla"
 
 #: src/control/Control.Menubar.ts:172 src/control/Control.Menubar.ts:501
 #: src/control/Control.Menubar.ts:673 src/control/Control.Menubar.ts:823
@@ -3052,13 +3054,15 @@ msgstr "Portapapeles"
 #: src/control/Control.NotebookbarWriter.js:648
 #: src/control/Control.TopToolbar.js:148
 msgid "Clone Formatting (double click to keep active)"
-msgstr ""
+msgstr "Formato de clonación (pulsación doble para mantenerse activo)"
 
 #: src/control/Control.NotebookbarCalc.js:456
 msgid ""
 "Clone Formatting is active (press Enter on a cell to apply, click again or "
 "press Esc to exit)"
 msgstr ""
+"El formato de clonación está activo (presione Entrar en una celda para "
+"aplicarlo, pulse de nuevo o presione Esc para salir)"
 
 #: src/control/Control.NotebookbarCalc.js:492
 #: src/control/Control.NotebookbarDraw.js:685
@@ -3325,6 +3329,7 @@ msgstr "Insertar una tabla con estilo"
 #: src/control/Control.NotebookbarCalc.js:1808
 msgid "Select a cell range first to insert a styled table"
 msgstr ""
+"Primero, seleccione un rango de celdas para insertar una tabla con formato"
 
 #: src/control/Control.NotebookbarCalc.js:1817
 #: src/control/Control.NotebookbarDraw.js:1027
@@ -3456,6 +3461,7 @@ msgstr "Regla"
 #: src/control/Control.TopToolbar.js:148
 msgid "Clone Formatting is active (click again or press Esc to exit)"
 msgstr ""
+"Clonado de Formateo está activo (pulse de nuevo o presione Esc para salir)"
 
 #: src/control/Control.NotebookbarDraw.js:913
 #: src/control/Control.NotebookbarImpress.js:1049
@@ -3487,7 +3493,7 @@ msgstr "Desde el inicio"
 
 #: src/control/Control.NotebookbarImpress.js:485
 msgid "Fullscreen, starting at slide 1"
-msgstr ""
+msgstr "Pantalla completa, a partir de la diapositiva 1"
 
 #: src/control/Control.NotebookbarImpress.js:492
 msgid "From Current Slide"
@@ -3495,7 +3501,7 @@ msgstr "Desde la diapositiva actual"
 
 #: src/control/Control.NotebookbarImpress.js:493
 msgid "Fullscreen, starting at this slide"
-msgstr ""
+msgstr "Pantalla completa, comenzando en esta diapositiva"
 
 #: src/control/Control.NotebookbarImpress.js:508
 msgid "Present"
@@ -3508,35 +3514,37 @@ msgstr "Presentar en ventana"
 #: src/control/Control.NotebookbarImpress.js:515
 msgid "Plays inside the document window. Starts at slide 1"
 msgstr ""
+"Se reproduce dentro de la ventana del documento. Comienza en la diapositiva 1"
 
 #: src/control/Control.NotebookbarImpress.js:523
 msgid "Presenter View"
-msgstr ""
+msgstr "Vista del presentador"
 
 #: src/control/Control.NotebookbarImpress.js:524
 msgid "Shows your notes, next slide, and a timer"
-msgstr ""
+msgstr "Muestra tus notas, la siguiente diapositiva y un cronómetro"
 
 #: src/control/Control.NotebookbarImpress.js:532
 msgid "Present to All"
-msgstr ""
+msgstr "Presente para Todos"
 
 #: src/control/Control.NotebookbarImpress.js:533
 msgid "Starts a slideshow on every viewer's screen"
 msgstr ""
+"Inicia una presentación de diapositivas en la pantalla de cada espectador"
 
 #: src/control/Control.NotebookbarImpress.js:541
 #: src/slideshow/SlideShowPresenter.ts:1525
 msgid "Follow Presenter"
-msgstr ""
+msgstr "Seguir al presentador"
 
 #: src/control/Control.NotebookbarImpress.js:542
 msgid "View slides as the presenter advances them"
-msgstr ""
+msgstr "Vea las diapositivas a medida que el presentador las avanza"
 
 #: src/control/Control.NotebookbarImpress.js:552
 msgid "Set Up"
-msgstr ""
+msgstr "Configurar"
 
 #: src/control/Control.NotebookbarImpress.js:679
 msgid "Slide Views"
@@ -3680,11 +3688,11 @@ msgstr "Ver cambios"
 
 #: src/control/Control.NotebookbarWriter.js:2770
 msgid "Cell Background"
-msgstr ""
+msgstr "Fondo de celda"
 
 #: src/control/Control.NotebookbarWriter.js:2853
 msgid "Protect"
-msgstr ""
+msgstr "Proteger"
 
 #: src/control/Control.PartsPreview.js:209
 msgid "preview of page %1"
@@ -3705,7 +3713,7 @@ msgstr "Añadir sección"
 
 #: src/control/Control.PartsPreview.js:599
 msgid "Toggle section %1"
-msgstr ""
+msgstr "Conmutar sección %1"
 
 #: src/control/Control.PartsPreview.js:767
 #: src/control/Control.PartsPreview.js:846
@@ -3769,7 +3777,7 @@ msgstr ""
 
 #: src/control/Control.ServerAuditDialog.ts:88
 msgid "System call security filtering enabled"
-msgstr ""
+msgstr "Filtrado de seguridad de invocación al sistema habilitada"
 
 #: src/control/Control.ServerAuditDialog.ts:95
 msgid ""
@@ -3786,18 +3794,22 @@ msgstr "Los recursos de hardware son suficientes para un rendimiento óptimo"
 #: src/control/Control.ServerAuditDialog.ts:109
 msgid "Slow Kit jail setup with copying, cannot bind-mount."
 msgstr ""
+"Configuración lenta de la jaula de Kit con copia, no se puede montar el "
+"enlace."
 
 #: src/control/Control.ServerAuditDialog.ts:114
 msgid "Fast kit jail bind mounting enabled"
-msgstr ""
+msgstr "Montaje de enlace del Kit Jaula Rápido habilitado"
 
 #: src/control/Control.ServerAuditDialog.ts:119
 msgid "Fast kit jail bind mounting not configured"
-msgstr ""
+msgstr "Montaje de enlace de Fast Kit Jail no configurado"
 
 #: src/control/Control.ServerAuditDialog.ts:127
 msgid "Poorly performing proxying of all network requests."
 msgstr ""
+"El proxy para todas las solicitudes de red presenta un rendimiento "
+"deficiente."
 
 #: src/control/Control.ServerAuditDialog.ts:131
 msgid "Direct network connection"
@@ -3837,7 +3849,7 @@ msgstr "No se usan espacios de nombres"
 
 #: src/control/Control.ServerAuditDialog.ts:248
 msgid "Document container started in {1} ms"
-msgstr ""
+msgstr "Contenedor de documentos iniciado en {1} ms"
 
 #: src/control/Control.ServerAuditDialog.ts:318
 msgid "Status"
@@ -3852,9 +3864,8 @@ msgid "Alerts:"
 msgstr "Alertas:"
 
 #: src/control/Control.ServerAuditDialog.ts:396
-#, fuzzy
 msgid "Check warnings of your server"
-msgstr "Compruebe los avisos de seguridad del servidor"
+msgstr "Compruebe los avisos de su servidor"
 
 #: src/control/Control.ServerAuditDialog.ts:397
 msgid "OPEN"
@@ -3926,11 +3937,11 @@ msgstr "Recuento de selección"
 
 #: src/control/Control.StatusBar.js:274
 msgid "Zoom to Fit Slide"
-msgstr ""
+msgstr "Ampliar/reducir para ajustar diapositiva"
 
 #: src/control/Control.StatusBar.js:275
 msgid "Zoom to Fit Page Width"
-msgstr ""
+msgstr "Ajustar al ancho de la página"
 
 #: src/control/Control.StatusBar.js:280
 msgid "Status Bar Menu"
@@ -3980,7 +3991,7 @@ msgstr "Insertar la hoja después de esta"
 
 #: src/control/Control.Tabs.js:100 src/control/Control.Tabs.js:107
 msgid "Reset Tab Color"
-msgstr ""
+msgstr "Restablecer color de lengüeta"
 
 #: src/control/Control.Tabs.js:127 src/control/Control.Tabs.js:131
 msgid "Move Sheet Left"
@@ -4036,7 +4047,7 @@ msgstr "Insertar conectores"
 
 #: src/control/Control.UIManager.ts:182
 msgid "You are currently in View mode"
-msgstr ""
+msgstr "Actualmente está en modo Vista"
 
 #: src/control/Control.UIManager.ts:393
 msgid "Enter new name"
@@ -4395,7 +4406,7 @@ msgstr "Modo de edición"
 #: src/control/PermissionMode.ts:141 src/control/PermissionMode.ts:215
 #: src/control/PermissionMode.ts:221 src/control/PermissionMode.ts:227
 msgid "Viewing"
-msgstr ""
+msgstr "Vista"
 
 #: src/control/jsdialog/Definitions.Menu.ts:111
 #: src/control/jsdialog/Definitions.Menu.ts:1774
@@ -4592,7 +4603,7 @@ msgstr "Lado a lado"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1815
 msgid "Hidden"
-msgstr ""
+msgstr "Oculto"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1829
 msgid "All users"
@@ -4907,17 +4918,15 @@ msgstr "Funciones de celda de tabla"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:74
 msgid "Sheet Navigation"
-msgstr ""
+msgstr "Navegación de hoja"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:76
-#, fuzzy
 msgid "Slide Navigation"
-msgstr "Cerrar navegación"
+msgstr "Diapositiva de navegación"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:77
-#, fuzzy
 msgid "Page Navigation"
-msgstr "Cerrar navegación"
+msgstr "Página de navegación"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:83
 msgid "Your changes have been saved"
@@ -4945,11 +4954,11 @@ msgstr "respuestas"
 
 #: src/control/jsdialog/Widget.SpinField.ts:275
 msgid "Increment value"
-msgstr ""
+msgstr "Incrementar valor"
 
 #: src/control/jsdialog/Widget.SpinField.ts:284
 msgid "Decrement value"
-msgstr ""
+msgstr "Decrementar valor"
 
 #: src/control/jsdialog/Widget.SidebarContainers.ts:72
 msgid "More options for {1}"
@@ -5090,6 +5099,8 @@ msgstr "El servidor se está cerrando"
 msgid ""
 "AI is not configured. Go to File > Options > View Settings to set it up."
 msgstr ""
+"La IA no está configurada. Vaya a Archivo > Opciones > Configuración de "
+"vista para configurarla."
 
 #: src/docdispatcher.ts:612
 msgid "Are you sure you want to delete this slide?"
@@ -5283,11 +5294,10 @@ msgid "Failed to load document."
 msgstr "Falló la carga del documento."
 
 #: src/errormessages.js:45
-#, fuzzy
 msgid "Save failed due to no disk space left. Document will now be read-only."
 msgstr ""
-"Falló el guardado debido a que no queda espacio en disco. El documento será "
-"ahora de solo lectura."
+"Guardado incorrecto debido a que no queda espacio en disco. El documento "
+"ahora será de solo lectura."
 
 #: src/errormessages.js:46
 msgid ""
@@ -5541,7 +5551,7 @@ msgstr "Guardado por última vez:"
 
 #: src/map/Map.js:1545
 msgid "Please wait!"
-msgstr "Espere un momento"
+msgstr "Espere un momento."
 
 #: src/map/handler/Map.Feedback.js:95
 msgid "Please send us your feedback"
@@ -5705,7 +5715,7 @@ msgstr "Reanudar"
 
 #: src/slideshow/PresenterConsole.js:40
 msgid "Present to all"
-msgstr ""
+msgstr "Presente para todos"
 
 #: src/slideshow/PresenterConsole.js:41
 msgid "Go Back"
@@ -5746,7 +5756,7 @@ msgstr "Está en la primera diapositiva"
 
 #: src/slideshow/SlideShowPresenter.ts:817
 msgid "Waiting for presenter to advance"
-msgstr ""
+msgstr "Esperando a que el presentador avance"
 
 #: src/slideshow/SlideShowPresenter.ts:846
 msgid "End Show"
@@ -5767,15 +5777,15 @@ msgstr "Dejar de seguir"
 
 #: templates/templates.js:6
 msgid "Modern Business Letter (sans-serif)"
-msgstr ""
+msgstr "Carta Comercial Moderna (sans-serif)"
 
 #: templates/templates.js:10 templates/templates.js:20
 msgid "Business Letter"
-msgstr ""
+msgstr "Carta Comercial"
 
 #: templates/templates.js:16
 msgid "Modern Business Letter (serif)"
-msgstr ""
+msgstr "Carta Comercial Moderna (serif)"
 
 #: templates/templates.js:26 templates/templates.js:30
 msgid "CV"
@@ -5783,7 +5793,7 @@ msgstr "CV"
 
 #: templates/templates.js:36
 msgid "Resume (one-page)"
-msgstr ""
+msgstr "Resumen (una página)"
 
 #: templates/templates.js:56
 msgid "Modern Style"
@@ -5799,11 +5809,11 @@ msgstr "Colmena"
 
 #: templates/templates.js:86
 msgid "Blue Curve"
-msgstr ""
+msgstr "Curva Azul"
 
 #: templates/templates.js:96
 msgid "Blueprint Plans"
-msgstr ""
+msgstr "Planos de Diseño"
 
 #: templates/templates.js:106
 msgid "Candy"
@@ -5827,11 +5837,11 @@ msgstr "Frescura"
 
 #: templates/templates.js:156
 msgid "Grey Elegant"
-msgstr ""
+msgstr "Gris Elegante"
 
 #: templates/templates.js:166
 msgid "Growing Liberty"
-msgstr ""
+msgstr "Crecimiento en Libertad"
 
 #: templates/templates.js:176
 msgid "Inspiration"
@@ -5847,11 +5857,11 @@ msgstr "Metrópoli"
 
 #: templates/templates.js:206
 msgid "Midnight Blue"
-msgstr ""
+msgstr "Azul medianoche"
 
 #: templates/templates.js:216
 msgid "Nature Illustration"
-msgstr ""
+msgstr "Ilustración de Naturaleza"
 
 #: templates/templates.js:226
 msgid "Pencil"
@@ -5899,7 +5909,6 @@ msgid "Collabora Online Development Edition"
 msgstr "Collabora Online, edición de desarrollo"
 
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.p:28-7
-#, fuzzy
 msgid ""
 "Enjoy the latest developments in online productivity, free for you to use, "
 "to explore and to use with others in the browser. Various <a "
@@ -5908,39 +5917,36 @@ msgid ""
 "mobile."
 msgstr ""
 "Aproveche los avances más recientes en productividad en línea, sin ningún "
-"costo para usted y con la posibilidad de explorar y compartir, todo a través "
-"del navegador. Además, existen <a target=\"_blank\" href=\"https://www."
-"collaboraonline.com/solutions/collabora-office-android-ios/\">aplicaciones</"
-"a> para dispositivos móviles."
+"costo para utilizar, y con la posibilidad de explorar y compartir, todo a "
+"través del navegador. Además, existen <a target=\"_blank\" rel=\"noopener\" "
+"href=\"https://www.collaboraonline.com/solutions/collabora-office-android-"
+"ios/\">aplicaciones</a> también disponibles para dispositivos móviles."
 
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.h1:37-7
 msgid "Discover All The Changes"
 msgstr "Descubra todos los cambios"
 
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.p:39-7
-#, fuzzy
 msgid ""
 "Check the <a target=\"_blank\" rel=\"noopener\" href=\"https://www."
 "collaboraonline.com/code-25-04-release-notes/\">release notes</a> and learn "
 "all about: The latest Collabora Online Development Edition, aimed at home "
 "users and small teams."
 msgstr ""
-"Revise las <a target=\"_blank\" href=\"https://www.collaboraonline.com/"
-"code-25-04-release-notes/\">novedades de la versión</a> y conozca todo sobre "
-"la última Collabora Online, edición de desarrollo, destinada a usuarios "
-"particulares y equipos de trabajo pequeños."
+"Revise las <a target=\"_blank\" rel=\"noopener\" href=\"https://"
+"www.collaboraonline.com/code-25-04-release-notes/\">novedades de la versión</"
+"a> y conozca todo sobre la última Collabora Online, edición de desarrollo, "
+"destinada a usuarios particulares y equipos de trabajo pequeños."
 
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.h1:48-7
 msgid "Get Involved"
 msgstr "Participe"
 
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.h2:49-7
-#, fuzzy
 msgid "https://www.collaboraoffice.org/"
 msgstr "https://www.collaboraonline.org/ (en inglés)"
 
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.p:50-7
-#, fuzzy
 msgid ""
 "Are you interested in contributing but don’t know where to start? Head over "
 "to the <a target=\"_blank\" rel=\"noopener\" href=\"https://www."
@@ -5951,13 +5957,14 @@ msgid ""
 "href=\"https://www.collaboraoffice.org/post/filebugs/\">filing a bug "
 "report</a> with all the essential steps on how to reproduce it."
 msgstr ""
-"¿Quiere contribuir pero no sabe por dónde empezar? Consulte las <a target="
-"\"_blank\" href=\"https://www.collaboraonline.org/post/build-code/\""
-">instrucciones paso a paso</a> y compile CODE desde cero. También puede "
-"ayudar con las <a target=\"_blank\" href=\"https://www.collaboraonline.org/"
-"post/translate/\">traducciones</a> o <a target=\"_blank\" href=\"https://www."
-"collaboraonline.org/post/filebugs/\">enviando informes de defectos</a> que "
-"incluyan todos los pasos esenciales para reproducirlos."
+"¿Quiere contribuir pero no sabe por dónde empezar? Consulte las <a "
+"target=\"_blank\" rel=\"noopener\" href=\"https://www.collaboraoffice.org/"
+"post/build-code/\">instrucciones paso a paso</a> y compile CODE desde "
+"inicio. También puede ayudar con las <a target=\"_blank\" rel=\"noopener\" "
+"href=\"https://www.collaboraoffice.org/post/translate/\">traducciones</a> o "
+"<a target=\"_blank\" rel=\"noopener\" href=\"https://www.collaboraoffice.org/"
+"post/filebugs/\">enviando informes de defectos</a> que incluyan todos los "
+"pasos esenciales para reproducirlos."
 
 #: welcome/welcome.html%2Bhtml.body.div.div:55-5
 msgid ""
