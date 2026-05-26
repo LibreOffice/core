@@ -261,7 +261,7 @@ bool SslStreamSocket::verifyCertificate()
         const std::string issuerName = X509_NAME_to_utf8(X509_get_issuer_name(x509));
         const std::string subjectName = X509_NAME_to_utf8(X509_get_subject_name(x509));
         std::string serialNumber;
-        BIGNUM* bigNumber = ASN1_INTEGER_to_BN(X509_get_serialNumber(const_cast<X509*>(x509)), 0);
+        BIGNUM* bigNumber = ASN1_INTEGER_to_BN(X509_get_serialNumber(x509), 0);
         if (bigNumber)
         {
             char* Sn = BN_bn2hex(bigNumber);

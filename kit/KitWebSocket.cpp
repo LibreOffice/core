@@ -67,7 +67,7 @@ void KitWebSocketHandler::handleMessage(const std::vector<char>& data)
             std::string::size_type pos = tokenStr.find("\"Author\":{\"type\":\"string\",\"value\":\"");
             if (pos != std::string::npos) {
                 auto start = tokenStr.find("\"value\":\"", pos) + 9;
-                auto end = tokenStr.find("\"", start);
+                auto end = tokenStr.find('\"', start);
                 std::string value = tokenStr.substr(start, end - start);
                 tokenStr.replace(start, end - start, Anonymizer::anonymize(value));
             }

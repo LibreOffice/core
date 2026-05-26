@@ -2831,7 +2831,7 @@ bool ChildSession::renderWindow(const StringVector& tokens)
     {
         // Just so that we might see in the client console log that no PNG was included.
         response += " nopng";
-        sendTextFrame(response.c_str());
+        sendTextFrame(response);
         return true;
     }
 
