@@ -142,7 +142,7 @@ private:
     static std::pair<std::string, std::string> parseImageGenResponse(
         const std::shared_ptr<const http::Response>& httpResponse);
     void processTransformImageGenerations(const std::shared_ptr<DocumentBroker>& docBroker);
-    void generateNextTransformImage(std::shared_ptr<DocumentBroker> docBroker);
+    void generateNextTransformImage(const std::shared_ptr<DocumentBroker>& docBroker);
     std::string appendImageGenFailures(const std::string& result) const;
 
     ClientSession& _session;

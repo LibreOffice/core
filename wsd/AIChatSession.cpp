@@ -112,7 +112,7 @@ const std::string EMOJIFY_PROMPT =
 /// Helper to create an OpenAI function-calling tool object.
 Poco::JSON::Object::Ptr makeAITool(const std::string& name,
                                     const std::string& description,
-                                    Poco::JSON::Object::Ptr parameters)
+                                    const Poco::JSON::Object::Ptr& parameters)
 {
     Poco::JSON::Object::Ptr fn = new Poco::JSON::Object();
     fn->set("name", name);
@@ -1762,7 +1762,7 @@ std::string AIChatSession::appendImageGenFailures(const std::string& result) con
     return augmented;
 }
 
-void AIChatSession::generateNextTransformImage(std::shared_ptr<DocumentBroker> docBroker)
+void AIChatSession::generateNextTransformImage(const std::shared_ptr<DocumentBroker>& docBroker)
 {
     if (!_toolLoop)
         return;

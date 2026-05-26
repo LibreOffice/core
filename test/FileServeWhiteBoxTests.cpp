@@ -48,12 +48,13 @@ class FileServeTests : public CPPUNIT_NS::TestFixture
     void testPreProcessedFileSubstitution();
     void testCSPMergeNewlines();
 
-    void preProcessedFileSubstitution(const std::string_view testname,
-                                      const std::unordered_map<std::string, std::string> variables);
+    void
+    preProcessedFileSubstitution(const std::string_view testname,
+                                 const std::unordered_map<std::string, std::string>& variables);
     // Helper replace each occurrence of from in str to variables[to_key] except if to_key is not in variables
     std::string& replaceIfExist(std::string& str, const std::string& from,
                                 const std::string& to_key,
-                                const std::unordered_map<std::string, std::string> variables);
+                                const std::unordered_map<std::string, std::string>& variables);
 };
 
 void FileServeTests::testUIDefaults()
@@ -384,7 +385,7 @@ void FileServeTests::testPreProcessedFileRoundtrip()
 }
 
 void FileServeTests::preProcessedFileSubstitution(
-    const std::string_view testname, const std::unordered_map<std::string, std::string> variables)
+    const std::string_view testname, const std::unordered_map<std::string, std::string>& variables)
 {
     const Poco::Path path(TDIST);
 
@@ -425,7 +426,7 @@ void FileServeTests::preProcessedFileSubstitution(
 
 std::string&
 FileServeTests::replaceIfExist(std::string& str, const std::string& from, const std::string& to_key,
-                               const std::unordered_map<std::string, std::string> variables)
+                               const std::unordered_map<std::string, std::string>& variables)
 {
     auto search = variables.find(to_key);
     if (search == variables.end())
