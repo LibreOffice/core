@@ -109,9 +109,12 @@ public:
         // to empty and the surface stays at the initial transparent
         // state, so the red channel would be 0.
         const BitmapColor aCenter(aAccess->GetColor(Point(50, 50)));
-        CPPUNIT_ASSERT_MESSAGE("mask far down: center pixel must be red",
-                               aCenter.GetRed() > 200 && aCenter.GetGreen() < 50
-                                   && aCenter.GetBlue() < 50);
+        CPPUNIT_ASSERT_MESSAGE("mask far down: center pixel red channel high",
+                               aCenter.GetRed() > 200);
+        CPPUNIT_ASSERT_MESSAGE("mask far down: center pixel green channel low",
+                               aCenter.GetGreen() < 50);
+        CPPUNIT_ASSERT_MESSAGE("mask far down: center pixel blue channel low",
+                               aCenter.GetBlue() < 50);
 
         // Outside the mask region the surface stays at the initial
         // transparent state regardless of whether the fix is active.
