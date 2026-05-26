@@ -206,7 +206,7 @@ bool SdPPTFilter::Export()
         //OUString sBaseURI( "BaseURI");
         std::vector< PropertyValue > aProperties;
         PropertyValue aProperty;
-        aProperty.Name = "BaseURI";
+        aProperty.Name = u"BaseURI"_ustr;
         aProperty.Value <<= mrMedium.GetBaseURL( true );
         aProperties.push_back( aProperty );
 

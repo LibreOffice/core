@@ -441,7 +441,7 @@ void CustomAnimationEffect::setPresetClassAndId( sal_Int16 nPresetClass, const O
     {
         aUserData.realloc( nLength + 1);
         auto& el = aUserData.getArray()[nLength];
-        el.Name = "preset-class";
+        el.Name = u"preset-class"_ustr;
         el.Value <<= mnPresetClass;
         ++nLength;
     }
@@ -450,7 +450,7 @@ void CustomAnimationEffect::setPresetClassAndId( sal_Int16 nPresetClass, const O
     {
         aUserData.realloc( nLength + 1);
         auto& el = aUserData.getArray()[nLength];
-        el.Name = "preset-id";
+        el.Name = u"preset-id"_ustr;
         el.Value <<= maPresetId;
     }
 
@@ -488,7 +488,7 @@ void CustomAnimationEffect::setNodeType( sal_Int16 nNodeType )
     {
         aUserData.realloc( nLength + 1);
         auto& el = aUserData.getArray()[nLength];
-        el.Name = "node-type";
+        el.Name = u"node-type"_ustr;
         el.Value <<= mnNodeType;
     }
 
@@ -523,7 +523,7 @@ void CustomAnimationEffect::setGroupId( sal_Int32 nGroupId )
     {
         aUserData.realloc( nLength + 1);
         auto& el = aUserData.getArray()[nLength];
-        el.Name = "group-id";
+        el.Name = u"group-id"_ustr;
         el.Value <<= mnGroupId;
     }
 
@@ -958,12 +958,12 @@ Reference< XAnimationNode > CustomAnimationEffect::createAfterEffectNode() const
     if( maDimColor.hasValue() )
     {
         aTo = maDimColor;
-        aAttributeName = "DimColor";
+        aAttributeName = u"DimColor"_ustr;
     }
     else
     {
         aTo <<= false;
-        aAttributeName = "Visibility";
+        aAttributeName = u"Visibility"_ustr;
     }
 
     Any aBegin;
@@ -2002,7 +2002,7 @@ void stl_process_after_effect_node_func(AfterEffectNode const & rNode)
             sal_Int32 nSize = aUserData.getLength();
             aUserData.realloc(nSize+1);
             auto pUserData = aUserData.getArray();
-            pUserData[nSize].Name = "master-element";
+            pUserData[nSize].Name = u"master-element"_ustr;
             pUserData[nSize].Value <<= xMasterNode;
             rNode.mxNode->setUserData( aUserData );
 

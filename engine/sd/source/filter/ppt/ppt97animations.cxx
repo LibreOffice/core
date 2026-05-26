@@ -245,22 +245,22 @@ void Ppt97Animation::UpdateCacheData() const
     switch( m_aAtom.nFlyMethod )
     {
         case 0x0:
-            m_aPresetId = "ooo-entrance-appear";                  // --- appear ---
+            m_aPresetId = u"ooo-entrance-appear"_ustr;                  // --- appear ---
         break;
         case 0x01:
-            m_aPresetId = "ooo-entrance-random";                  // --- random ---
+            m_aPresetId = u"ooo-entrance-random"_ustr;                  // --- random ---
         break;
         case 0x02:                                                                                  // --- blinds effect ---
         {
             switch ( m_aAtom.nFlyDirection )
             {
                 case 0x0:
-                    m_aPresetId = "ooo-entrance-venetian-blinds";
-                    m_aSubType = "horizontal";                    // horizontal
+                    m_aPresetId = u"ooo-entrance-venetian-blinds"_ustr;
+                    m_aSubType = u"horizontal"_ustr;                    // horizontal
                 break;
                 case 0x1:
-                    m_aPresetId = "ooo-entrance-venetian-blinds";
-                    m_aSubType = "vertical";                      // vertical
+                    m_aPresetId = u"ooo-entrance-venetian-blinds"_ustr;
+                    m_aSubType = u"vertical"_ustr;                      // vertical
                 break;
             }
         }
@@ -270,30 +270,30 @@ void Ppt97Animation::UpdateCacheData() const
             switch ( m_aAtom.nFlyDirection )
             {
                 case 0x0:
-                    m_aPresetId = "ooo-entrance-checkerboard";
-                    m_aSubType = "across";                        // vertical ???
+                    m_aPresetId = u"ooo-entrance-checkerboard"_ustr;
+                    m_aSubType = u"across"_ustr;                        // vertical ???
                 break;
                 case 0x1:
-                    m_aPresetId = "ooo-entrance-checkerboard";
-                    m_aSubType = "downward";                      // horizontal ???
+                    m_aPresetId = u"ooo-entrance-checkerboard"_ustr;
+                    m_aSubType = u"downward"_ustr;                      // horizontal ???
                 break;
             }
         }
         break;
         case 0x05:
-            m_aPresetId = "ooo-entrance-dissolve-in";
+            m_aPresetId = u"ooo-entrance-dissolve-in"_ustr;
         break;
         case 0x08:                                                                                  // --- (hor/ver) lines ---
         {
             switch ( m_aAtom.nFlyDirection )
             {
                 case 0x0:
-                    m_aPresetId = "ooo-entrance-random-bars";
-                    m_aSubType = "vertical";                      // horizontal ???
+                    m_aPresetId = u"ooo-entrance-random-bars"_ustr;
+                    m_aSubType = u"vertical"_ustr;                      // horizontal ???
                 break;
                 case 0x1:
-                    m_aPresetId = "ooo-entrance-random-bars";
-                    m_aSubType = "horizontal";                      // vertical ???
+                    m_aPresetId = u"ooo-entrance-random-bars"_ustr;
+                    m_aSubType = u"horizontal"_ustr;                      // vertical ???
                 break;
             }
         }
@@ -303,20 +303,20 @@ void Ppt97Animation::UpdateCacheData() const
             switch ( m_aAtom.nFlyDirection )
             {
                 case 0x4:
-                    m_aPresetId = "ooo-entrance-diagonal-squares";
-                    m_aSubType = "left-to-top";                     // to left top
+                    m_aPresetId = u"ooo-entrance-diagonal-squares"_ustr;
+                    m_aSubType = u"left-to-top"_ustr;                     // to left top
                 break;
                 case 0x5:
-                    m_aPresetId = "ooo-entrance-diagonal-squares";
-                    m_aSubType = "right-to-top";                    // to right top
+                    m_aPresetId = u"ooo-entrance-diagonal-squares"_ustr;
+                    m_aSubType = u"right-to-top"_ustr;                    // to right top
                 break;
                 case 0x6:
-                    m_aPresetId = "ooo-entrance-diagonal-squares";
-                    m_aSubType = "left-to-bottom";                  // to left bottom
+                    m_aPresetId = u"ooo-entrance-diagonal-squares"_ustr;
+                    m_aSubType = u"left-to-bottom"_ustr;                  // to left bottom
                 break;
                 case 0x7:
-                    m_aPresetId = "ooo-entrance-diagonal-squares";
-                    m_aSubType = "right-to-bottom";                 // to right bottom
+                    m_aPresetId = u"ooo-entrance-diagonal-squares"_ustr;
+                    m_aSubType = u"right-to-bottom"_ustr;                 // to right bottom
                 break;
             }
         }
@@ -326,20 +326,20 @@ void Ppt97Animation::UpdateCacheData() const
             switch ( m_aAtom.nFlyDirection )
             {
                 case 0x0:
-                    m_aPresetId = "ooo-entrance-wipe";
-                    m_aSubType = "from-right";                      // from right
+                    m_aPresetId = u"ooo-entrance-wipe"_ustr;
+                    m_aSubType = u"from-right"_ustr;                      // from right
                 break;
                 case 0x1:
-                    m_aPresetId = "ooo-entrance-wipe";
-                    m_aSubType = "from-bottom";                     // from bottom
+                    m_aPresetId = u"ooo-entrance-wipe"_ustr;
+                    m_aSubType = u"from-bottom"_ustr;                     // from bottom
                 break;
                 case 0x2:
-                    m_aPresetId = "ooo-entrance-wipe";
-                    m_aSubType = "from-left";                       // from left
+                    m_aPresetId = u"ooo-entrance-wipe"_ustr;
+                    m_aSubType = u"from-left"_ustr;                       // from left
                 break;
                 case 0x3:
-                    m_aPresetId = "ooo-entrance-wipe";
-                    m_aSubType = "from-top";                        // from top
+                    m_aPresetId = u"ooo-entrance-wipe"_ustr;
+                    m_aSubType = u"from-top"_ustr;                        // from top
                 break;
             }
         }
@@ -349,12 +349,12 @@ void Ppt97Animation::UpdateCacheData() const
             switch ( m_aAtom.nFlyDirection )
             {
                 case 0x0:
-                    m_aPresetId = "ooo-entrance-box";
-                    m_aSubType = "out";                             // from center
+                    m_aPresetId = u"ooo-entrance-box"_ustr;
+                    m_aSubType = u"out"_ustr;                             // from center
                 break;
                 case 0x1:
-                    m_aPresetId = "ooo-entrance-box";
-                    m_aSubType = "in";                              // to center
+                    m_aPresetId = u"ooo-entrance-box"_ustr;
+                    m_aSubType = u"in"_ustr;                              // to center
                 break;
             }
         }
@@ -364,128 +364,128 @@ void Ppt97Animation::UpdateCacheData() const
             switch ( m_aAtom.nFlyDirection )
             {
                 case 0x0:
-                    m_aPresetId = "ooo-entrance-fly-in";
-                    m_aSubType = "from-left";
+                    m_aPresetId = u"ooo-entrance-fly-in"_ustr;
+                    m_aSubType = u"from-left"_ustr;
 
                 break;
                 case 0x1:
-                    m_aPresetId = "ooo-entrance-fly-in";
-                    m_aSubType = "from-top";
+                    m_aPresetId = u"ooo-entrance-fly-in"_ustr;
+                    m_aSubType = u"from-top"_ustr;
                 break;
                 case 0x2:
-                    m_aPresetId = "ooo-entrance-fly-in";
-                    m_aSubType = "from-right";
+                    m_aPresetId = u"ooo-entrance-fly-in"_ustr;
+                    m_aSubType = u"from-right"_ustr;
                 break;
                 case 0x3:
-                    m_aPresetId = "ooo-entrance-fly-in";
-                    m_aSubType = "from-bottom";
+                    m_aPresetId = u"ooo-entrance-fly-in"_ustr;
+                    m_aSubType = u"from-bottom"_ustr;
                 break;
                 case 0x4:
-                    m_aPresetId = "ooo-entrance-fly-in";
-                    m_aSubType = "from-top-left";
+                    m_aPresetId = u"ooo-entrance-fly-in"_ustr;
+                    m_aSubType = u"from-top-left"_ustr;
                 break;
                 case 0x5:
-                    m_aPresetId = "ooo-entrance-fly-in";
-                    m_aSubType = "from-top-right";
+                    m_aPresetId = u"ooo-entrance-fly-in"_ustr;
+                    m_aSubType = u"from-top-right"_ustr;
                 break;
                 case 0x6:
-                    m_aPresetId = "ooo-entrance-fly-in";
-                    m_aSubType = "from-bottom-left";
+                    m_aPresetId = u"ooo-entrance-fly-in"_ustr;
+                    m_aSubType = u"from-bottom-left"_ustr;
                 break;
                 case 0x7:
-                    m_aPresetId = "ooo-entrance-fly-in";
-                    m_aSubType = "from-bottom-right";
+                    m_aPresetId = u"ooo-entrance-fly-in"_ustr;
+                    m_aSubType = u"from-bottom-right"_ustr;
                 break;
                 case 0x8:                                                                               // -- short text effects --
-                    m_aPresetId = "ooo-entrance-peek-in";
-                    m_aSubType = "from-left";
+                    m_aPresetId = u"ooo-entrance-peek-in"_ustr;
+                    m_aSubType = u"from-left"_ustr;
                 break;
                 case 0x9:
-                    m_aPresetId = "ooo-entrance-peek-in";
-                    m_aSubType = "from-bottom";
+                    m_aPresetId = u"ooo-entrance-peek-in"_ustr;
+                    m_aSubType = u"from-bottom"_ustr;
                 break;
                 case 0xa:
-                    m_aPresetId = "ooo-entrance-peek-in";
-                    m_aSubType = "from-right";
+                    m_aPresetId = u"ooo-entrance-peek-in"_ustr;
+                    m_aSubType = u"from-right"_ustr;
                 break;
                 case 0xb:
-                    m_aPresetId = "ooo-entrance-peek-in";
-                    m_aSubType = "from-top";
+                    m_aPresetId = u"ooo-entrance-peek-in"_ustr;
+                    m_aSubType = u"from-top"_ustr;
                 break;
                 case 0xc:                                                                               // -- slow text effects --
                 {
-                    m_aPresetId = "ooo-entrance-fly-in-slow";
-                    m_aSubType = "from-left";
+                    m_aPresetId = u"ooo-entrance-fly-in-slow"_ustr;
+                    m_aSubType = u"from-left"_ustr;
                 }
                 break;
                 case 0xd:
                 {
-                    m_aPresetId = "ooo-entrance-fly-in-slow";
-                    m_aSubType = "from-top";
+                    m_aPresetId = u"ooo-entrance-fly-in-slow"_ustr;
+                    m_aSubType = u"from-top"_ustr;
                 }
                 break;
                 case 0xe:
                 {
-                    m_aPresetId = "ooo-entrance-fly-in-slow";
-                    m_aSubType = "from-right";
+                    m_aPresetId = u"ooo-entrance-fly-in-slow"_ustr;
+                    m_aSubType = u"from-right"_ustr;
                 }
                 break;
                 case 0xf:
                 {
-                    m_aPresetId = "ooo-entrance-fly-in-slow";
-                    m_aSubType = "from-bottom";
+                    m_aPresetId = u"ooo-entrance-fly-in-slow"_ustr;
+                    m_aSubType = u"from-bottom"_ustr;
                 }
                 break;
                 case 0x10:                                                                              // --- zoom ---
-                    m_aPresetId = "ooo-entrance-zoom";
-                    m_aSubType = "in";
+                    m_aPresetId = u"ooo-entrance-zoom"_ustr;
+                    m_aSubType = u"in"_ustr;
                 break;
                 case 0x11:
-                    m_aPresetId = "ooo-entrance-zoom";
-                    m_aSubType = "in-slightly";
+                    m_aPresetId = u"ooo-entrance-zoom"_ustr;
+                    m_aSubType = u"in-slightly"_ustr;
                 break;
                 case 0x12:
-                    m_aPresetId = "ooo-entrance-zoom";
-                    m_aSubType = "out";
+                    m_aPresetId = u"ooo-entrance-zoom"_ustr;
+                    m_aSubType = u"out"_ustr;
                 break;
                 case 0x13:
-                    m_aPresetId = "ooo-entrance-zoom";
-                    m_aSubType = "out-slightly";
+                    m_aPresetId = u"ooo-entrance-zoom"_ustr;
+                    m_aSubType = u"out-slightly"_ustr;
                 break;
                 case 0x14:
-                    m_aPresetId = "ooo-entrance-zoom";
-                    m_aSubType = "in-from-screen-center";
+                    m_aPresetId = u"ooo-entrance-zoom"_ustr;
+                    m_aSubType = u"in-from-screen-center"_ustr;
                 break;
                 case 0x15:
-                    m_aPresetId = "ooo-entrance-zoom";
-                    m_aSubType = "out-from-screen-center";
+                    m_aPresetId = u"ooo-entrance-zoom"_ustr;
+                    m_aSubType = u"out-from-screen-center"_ustr;
                 break;
                 case 0x16:                                                                              // --- stretch ---
-                    m_aPresetId = "ooo-entrance-stretchy";
-                    m_aSubType = "across";
+                    m_aPresetId = u"ooo-entrance-stretchy"_ustr;
+                    m_aSubType = u"across"_ustr;
                 break;
                 case 0x17:
-                    m_aPresetId = "ooo-entrance-stretchy";
-                    m_aSubType = "from-left";
+                    m_aPresetId = u"ooo-entrance-stretchy"_ustr;
+                    m_aSubType = u"from-left"_ustr;
                 break;
                 case 0x18:
-                    m_aPresetId = "ooo-entrance-stretchy";
-                    m_aSubType = "from-top";
+                    m_aPresetId = u"ooo-entrance-stretchy"_ustr;
+                    m_aSubType = u"from-top"_ustr;
                 break;
                 case 0x19:
-                    m_aPresetId = "ooo-entrance-stretchy";
-                    m_aSubType = "from-right";
+                    m_aPresetId = u"ooo-entrance-stretchy"_ustr;
+                    m_aSubType = u"from-right"_ustr;
                 break;
                 case 0x1a:
-                    m_aPresetId = "ooo-entrance-stretchy";
-                    m_aSubType = "from-bottom";
+                    m_aPresetId = u"ooo-entrance-stretchy"_ustr;
+                    m_aSubType = u"from-bottom"_ustr;
                 break;
                 case 0x1b:                                                                              // --- rotate ---
-                    m_aPresetId = "ooo-entrance-swivel";
-                    m_aSubType = "vertical";
+                    m_aPresetId = u"ooo-entrance-swivel"_ustr;
+                    m_aSubType = u"vertical"_ustr;
                 break;
                 case 0x1c:                                                                              // --- spirale ---
-                    m_aPresetId = "ooo-entrance-spiral-in";
+                    m_aPresetId = u"ooo-entrance-spiral-in"_ustr;
                 break;
             }
         }
@@ -495,27 +495,27 @@ void Ppt97Animation::UpdateCacheData() const
             switch ( m_aAtom.nFlyDirection )
             {
                 case 0x0:
-                    m_aPresetId = "ooo-entrance-split";
-                    m_aSubType = "horizontal-out";                      //horizontal open
+                    m_aPresetId = u"ooo-entrance-split"_ustr;
+                    m_aSubType = u"horizontal-out"_ustr;                      //horizontal open
                 break;
                 case 0x1:
-                    m_aPresetId = "ooo-entrance-split";
-                    m_aSubType = "horizontal-in";                       //horizontal close
+                    m_aPresetId = u"ooo-entrance-split"_ustr;
+                    m_aSubType = u"horizontal-in"_ustr;                       //horizontal close
                 break;
                 case 0x2:
-                    m_aPresetId = "ooo-entrance-split";
-                    m_aSubType = "vertical-out";                        // vertical open
+                    m_aPresetId = u"ooo-entrance-split"_ustr;
+                    m_aSubType = u"vertical-out"_ustr;                        // vertical open
                 break;
                 case 0x3:
-                    m_aPresetId = "ooo-entrance-split";
-                    m_aSubType = "vertical-in";                         // vertical close
+                    m_aPresetId = u"ooo-entrance-split"_ustr;
+                    m_aSubType = u"vertical-in"_ustr;                         // vertical close
                 break;
             }
         }
         break;
         case 0x0e:                                                                                      // --- blink ---
         {
-            m_aPresetId = "ooo-entrance-flash-once";
+            m_aPresetId = u"ooo-entrance-flash-once"_ustr;
             switch ( m_aAtom.nFlyDirection )
             {
                 case 0x0: //fast
@@ -535,7 +535,7 @@ void Ppt97Animation::UpdateCacheData() const
         break;
         default:
         {
-            m_aPresetId = "ooo-entrance-appear";
+            m_aPresetId = u"ooo-entrance-appear"_ustr;
             OSL_FAIL("no effect mapped");
         }
         break;

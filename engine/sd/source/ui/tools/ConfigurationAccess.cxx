@@ -57,9 +57,9 @@ void ConfigurationAccess::Initialize (
 
         OUString sAccessService;
         if (eMode == READ_ONLY)
-            sAccessService = "com.sun.star.configuration.ConfigurationAccess";
+            sAccessService = u"com.sun.star.configuration.ConfigurationAccess"_ustr;
         else
-            sAccessService = "com.sun.star.configuration.ConfigurationUpdateAccess";
+            sAccessService = u"com.sun.star.configuration.ConfigurationUpdateAccess"_ustr;
 
         mxRoot = rxProvider->createInstanceWithArguments(
             sAccessService,

@@ -100,7 +100,7 @@ static void ImplTranslateAttribute( OUString& rString, const TranslateMode eTran
         {
             if ( eTranslateMode & TRANSLATE_VALUE )
             {
-                rString = "#";
+                rString = u"#"_ustr;
                 rString += OUString::createFromAscii( p->mpMSName );
             }
             else
@@ -1659,7 +1659,7 @@ void AnimationExporter::exportAnimateTarget( SvStream& rStrm, const Reference< X
         {
             if( nForceAttributeNames == 1 )
             {
-                aAttributeName = "r";
+                aAttributeName = u"r"_ustr;
             }
         }
         sal_Int32 nIndex = 0;

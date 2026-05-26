@@ -1036,7 +1036,7 @@ OUString SdDrawDocument::CreatePageNumValue(sal_uInt16 nNum) const
             aPageNumValue += SvxNumberFormat::CreateRomanString(nNum, bUpper);
             break;
         case css::style::NumberingType::NUMBER_NONE:
-            aPageNumValue = " ";
+            aPageNumValue = u" "_ustr;
             break;
         default:
             aPageNumValue += OUString::number(nNum);

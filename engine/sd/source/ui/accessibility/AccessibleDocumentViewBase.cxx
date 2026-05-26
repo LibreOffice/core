@@ -613,7 +613,7 @@ OUString SAL_CALL AccessibleDocumentViewBase::getExtendedAttributes()
             + ";";
         if(pDrViewSh->IsLayerModeActive() && pDrViewSh->GetLayerTabControl()) // #i87182#
         {
-            sName = "page-name:";
+            sName = u"page-name:"_ustr;
             sValue = sName;
             OUString sLayerName(pDrViewSh->GetLayerTabControl()->GetLayerName(pDrViewSh->GetLayerTabControl()->GetCurPageId()) );
             sDisplay = pDrViewSh->GetLayerTabControl()->GetPageText(pDrViewSh->GetLayerTabControl()->GetCurPageId());
@@ -626,7 +626,7 @@ OUString SAL_CALL AccessibleDocumentViewBase::getExtendedAttributes()
                     const OUString& layerAltText = aSdrLayer->GetTitle();
                     if (!layerAltText.isEmpty())
                     {
-                        sName = " ";
+                        sName = u" "_ustr;
                         sDisplay += sName + layerAltText;
                     }
                 }

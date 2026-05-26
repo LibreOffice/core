@@ -233,16 +233,16 @@ Size PageObjectLayouter::GetPageNumberAreaSize (const int nPageCount)
 
     OUString sPageNumberTemplate;
     if (nPageCount < 10)
-        sPageNumberTemplate = "9";
+        sPageNumberTemplate = u"9"_ustr;
     else if (nPageCount < 100)
-        sPageNumberTemplate = "99";
+        sPageNumberTemplate = u"99"_ustr;
     else if (nPageCount < 200)
         // Just for the case that 1 is narrower than 9.
-        sPageNumberTemplate = "199";
+        sPageNumberTemplate = u"199"_ustr;
     else if (nPageCount < 1000)
-        sPageNumberTemplate = "999";
+        sPageNumberTemplate = u"999"_ustr;
     else
-        sPageNumberTemplate = "9999";
+        sPageNumberTemplate = u"9999"_ustr;
     // More than 9999 pages are not handled.
 
     const Size aSize (

@@ -400,7 +400,7 @@ namespace {
         {
             // load the impress or draw PrinterOptions into the custom tab
             beans::PropertyValue aOptionsUIFile;
-            aOptionsUIFile.Name = "OptionsUIFile";
+            aOptionsUIFile.Name = u"OptionsUIFile"_ustr;
             if( mbImpress )
                 aOptionsUIFile.Value <<= u"modules/simpress/ui/impressprinteroptions.ui"_ustr;
             else
@@ -557,7 +557,7 @@ namespace {
                             );
 
             vcl::PrinterOptionsHelper::UIControlOptions aBrochureOpt;
-            aBrochureOpt.maGroupHint = "LayoutPage" ;
+            aBrochureOpt.maGroupHint = u"LayoutPage"_ustr ;
             AddDialogControl( vcl::PrinterOptionsHelper::setSubgroupControlOpt(u"pagesides"_ustr,
                                SdResId(STR_IMPRESS_PRINT_UI_PAGE_SIDES), u""_ustr,
                                aBrochureOpt ) );
@@ -582,7 +582,7 @@ namespace {
                                                         SdResId(STR_IMPRESS_PRINT_UI_RIGHT_SCRIPT) };
                 vcl::PrinterOptionsHelper::UIControlOptions
                     aIncludeOpt( u"PrintProspect"_ustr , -1, true );
-                aIncludeOpt.maGroupHint =  "LayoutPage" ;
+                aIncludeOpt.maGroupHint =  u"LayoutPage"_ustr ;
                 aHelpIds = { u".HelpID:vcl:PrintDialog:PrintProspectRTL:ListBox"_ustr };
                 AddDialogControl( vcl::PrinterOptionsHelper::setChoiceListControlOpt(
                                 u"scriptdirection"_ustr,
@@ -598,7 +598,7 @@ namespace {
             }
             // paper tray (on options page)
             vcl::PrinterOptionsHelper::UIControlOptions aPaperTrayOpt;
-            aPaperTrayOpt.maGroupHint = "OptionsPageOptGroup" ;
+            aPaperTrayOpt.maGroupHint = u"OptionsPageOptGroup"_ustr ;
             AddDialogControl( vcl::PrinterOptionsHelper::setBoolControlOpt(u"printpaperfromsetup"_ustr,
                                 SdResId(STR_IMPRESS_PRINT_UI_PAPER_TRAY),
                                 u".HelpID:vcl:PrintDialog:PrintPaperFromSetup:CheckBox"_ustr ,
@@ -610,7 +610,7 @@ namespace {
             // print range selection
             vcl::PrinterOptionsHelper::UIControlOptions aPrintRangeOpt;
             aPrintRangeOpt.mbInternalOnly = true;
-            aPrintRangeOpt.maGroupHint = "PrintRange" ;
+            aPrintRangeOpt.maGroupHint = u"PrintRange"_ustr ;
             AddDialogControl( vcl::PrinterOptionsHelper::setSubgroupControlOpt(u"printrange"_ustr,
                                 mbImpress ? SdResId(STR_IMPRESS_PRINT_UI_SLIDE_RANGE) : SdResId(STR_IMPRESS_PRINT_UI_PAGE_RANGE),
                                 u""_ustr,

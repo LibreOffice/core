@@ -1331,52 +1331,52 @@ static OUString enumtoString(AutoLayout aut)
     switch (aut)
     {
         case AUTOLAYOUT_TITLE_CONTENT:
-            retstr="AUTOLAYOUT_TITLE_CONTENT";
+            retstr=u"AUTOLAYOUT_TITLE_CONTENT"_ustr;
             break;
         case AUTOLAYOUT_TITLE_CONTENT_OVER_CONTENT:
-            retstr="AUTOLAYOUT_TITLE_CONTENT_OVER_CONTENT";
+            retstr=u"AUTOLAYOUT_TITLE_CONTENT_OVER_CONTENT"_ustr;
             break;
         case AUTOLAYOUT_TITLE_CONTENT_2CONTENT:
-            retstr="AUTOLAYOUT_TITLE_CONTENT_2CONTENT";
+            retstr=u"AUTOLAYOUT_TITLE_CONTENT_2CONTENT"_ustr;
             break;
         case AUTOLAYOUT_TITLE_4CONTENT:
-            retstr="AUTOLAYOUT_TITLE_4CONTENT";
+            retstr=u"AUTOLAYOUT_TITLE_4CONTENT"_ustr;
             break;
         case AUTOLAYOUT_ONLY_TEXT:
-            retstr="AUTOLAYOUT_ONLY_TEXT";
+            retstr=u"AUTOLAYOUT_ONLY_TEXT"_ustr;
             break;
         case AUTOLAYOUT_TITLE_ONLY:
-            retstr="AUTOLAYOUT_TITLE_ONLY";
+            retstr=u"AUTOLAYOUT_TITLE_ONLY"_ustr;
             break;
         case AUTOLAYOUT_TITLE_6CONTENT:
-            retstr="AUTOLAYOUT_TITLE_6CONTENT";
+            retstr=u"AUTOLAYOUT_TITLE_6CONTENT"_ustr;
             break;
         case AUTOLAYOUT_START:
-            retstr="AUTOLAYOUT_START";
+            retstr=u"AUTOLAYOUT_START"_ustr;
             break;
         case AUTOLAYOUT_TITLE_2CONTENT_CONTENT:
-            retstr="AUTOLAYOUT_TITLE_2CONTENT_CONTENT";
+            retstr=u"AUTOLAYOUT_TITLE_2CONTENT_CONTENT"_ustr;
             break;
         case AUTOLAYOUT_TITLE_2CONTENT_OVER_CONTENT:
-            retstr="AUTOLAYOUT_TITLE_2CONTENT_OVER_CONTENT";
+            retstr=u"AUTOLAYOUT_TITLE_2CONTENT_OVER_CONTENT"_ustr;
             break;
         case AUTOLAYOUT_TITLE_2CONTENT:
-            retstr="AUTOLAYOUT_TITLE_2CONTENT";
+            retstr=u"AUTOLAYOUT_TITLE_2CONTENT"_ustr;
             break;
         case AUTOLAYOUT_VTITLE_VCONTENT:
-            retstr="AUTOLAYOUT_VTITLE_VCONTENT";
+            retstr=u"AUTOLAYOUT_VTITLE_VCONTENT"_ustr;
             break;
         case AUTOLAYOUT_VTITLE_VCONTENT_OVER_VCONTENT:
-            retstr="AUTOLAYOUT_VTITLE_VCONTENT_OVER_VCONTENT";
+            retstr=u"AUTOLAYOUT_VTITLE_VCONTENT_OVER_VCONTENT"_ustr;
             break;
         case AUTOLAYOUT_TITLE_VCONTENT:
-            retstr="AUTOLAYOUT_TITLE_VCONTENT";
+            retstr=u"AUTOLAYOUT_TITLE_VCONTENT"_ustr;
             break;
         case AUTOLAYOUT_TITLE_2VTEXT:
-            retstr="AUTOLAYOUT_TITLE_2VTEXT";
+            retstr=u"AUTOLAYOUT_TITLE_2VTEXT"_ustr;
             break;
         default:
-            retstr="unknown";
+            retstr=u"unknown"_ustr;
             break;
         // case AUTOLAYOUT_TITLE_4SCONTENT:            return "AUTOLAYOUT_TITLE_4SCONTENT";
     }

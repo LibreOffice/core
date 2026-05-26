@@ -144,13 +144,13 @@ void FuInsertFile::DoExecute( SfxRequest& rReq )
 
         if( mrDoc.GetDocumentType() == DocumentType::Impress )
         {
-            aOwnCont = "simpress";
-            aOtherCont = "sdraw";
+            aOwnCont = u"simpress"_ustr;
+            aOtherCont = u"sdraw"_ustr;
         }
         else
         {
-            aOtherCont = "simpress";
-            aOwnCont = "sdraw" ;
+            aOtherCont = u"simpress"_ustr;
+            aOwnCont = u"sdraw"_ustr ;
         }
 
         SfxFilterMatcher aMatch( aOwnCont );

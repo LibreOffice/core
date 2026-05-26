@@ -589,8 +589,8 @@ bool OptimizerDialog::onFinish()
     if ( bSuccessfullyExecuted )
     {
         URL aURL;
-        aURL.Protocol = "vnd.com.sun.star.comp.PPPOptimizer:";
-        aURL.Path = "optimize";
+        aURL.Protocol = u"vnd.com.sun.star.comp.PPPOptimizer:"_ustr;
+        aURL.Path = u"optimize"_ustr;
 
         Sequence< PropertyValue > lArguments{
             comphelper::makePropertyValue(u"Settings"_ustr, GetConfigurationSequence()),

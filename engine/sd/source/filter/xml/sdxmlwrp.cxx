@@ -567,7 +567,7 @@ bool SdXMLFilter::Import( ErrCode& nError )
         if ( pDocHierarchItem )
             aName = pDocHierarchItem->GetValue();
         else
-            aName = "dummyObjectName" ;
+            aName = u"dummyObjectName"_ustr ;
 
         if( !aName.isEmpty() )
             xInfoSet->setPropertyValue( u"StreamRelPath"_ustr, Any( aName ) );
@@ -824,7 +824,7 @@ bool SdXMLFilter::Export()
 
             if( !aName.isEmpty() )
             {
-                sPropName = "StreamRelPath";
+                sPropName = u"StreamRelPath"_ustr;
                 xInfoSet->setPropertyValue( sPropName, Any( aName ) );
             }
         }
@@ -833,7 +833,7 @@ bool SdXMLFilter::Export()
         uno::Sequence< beans::PropertyValue > aDescriptor( 1 );
         beans::PropertyValue* pProps = aDescriptor.getArray();
 
-        pProps[0].Name = "FileName";
+        pProps[0].Name = u"FileName"_ustr;
         pProps[0].Value <<= mrMedium.GetName();
 
         {

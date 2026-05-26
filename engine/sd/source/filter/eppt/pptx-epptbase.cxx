@@ -535,25 +535,25 @@ bool PPTWriterBase::GetStyleSheets()
                     case EPP_TEXTTYPE_CenterTitle :
                     case EPP_TEXTTYPE_Title :
                     {
-                        aStyle = "title";
+                        aStyle = u"title"_ustr;
                         aFamily = aXNamed->getName();
                     }
                     break;
                     case EPP_TEXTTYPE_Body :
                     {
-                        aStyle = "outline1";      // SD_LT_SEPARATOR
+                        aStyle = u"outline1"_ustr;      // SD_LT_SEPARATOR
                         aFamily = aXNamed->getName();
                     }
                     break;
                     case EPP_TEXTTYPE_Other :
                     {
-                        aStyle = "standard";
-                        aFamily = "graphics";
+                        aStyle = u"standard"_ustr;
+                        aFamily = u"graphics"_ustr;
                     }
                     break;
                     case EPP_TEXTTYPE_CenterBody :
                     {
-                        aStyle = "subtitle";
+                        aStyle = u"subtitle"_ustr;
                         aFamily = aXNamed->getName();
                     }
                     break;

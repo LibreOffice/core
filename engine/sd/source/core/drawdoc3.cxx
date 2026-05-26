@@ -568,7 +568,7 @@ void SdDrawDocument::copyStyles(bool bReplace, bool bNoDialogs,
     // Depending on whether pages are being replaced and dialog mode,
     // decide on a renaming string and then copy graphic, cell, and table styles.
     if (!bReplace && !bNoDialogs)
-        rStyleContext.aRenameString = "_";
+        rStyleContext.aRenameString = u"_"_ustr;
     rStyleSheetPool.RenameAndCopyGraphicSheets(rBookmarkStyleSheetPool, rStyleContext.aGraphicStyles, rStyleContext.aRenameString);
     rStyleSheetPool.CopyCellSheets(rBookmarkStyleSheetPool, rStyleContext.aCellStyles);
     // TODO handle undo of table styles too

@@ -159,9 +159,9 @@ OUString HtmlState::SetWeight( bool bWeight )
     OUString aStr;
 
     if(bWeight && !mbWeight)
-        aStr = "<b>";
+        aStr = u"<b>"_ustr;
     else if(!bWeight && mbWeight)
-        aStr = "</b>";
+        aStr = u"</b>"_ustr;
 
     mbWeight = bWeight;
     return aStr;
@@ -174,9 +174,9 @@ OUString HtmlState::SetItalic( bool bItalic )
     OUString aStr;
 
     if(bItalic && !mbItalic)
-        aStr = "<i>";
+        aStr = u"<i>"_ustr;
     else if(!bItalic && mbItalic)
-        aStr = "</i>";
+        aStr = u"</i>"_ustr;
 
     mbItalic = bItalic;
     return aStr;
@@ -189,9 +189,9 @@ OUString HtmlState::SetUnderline( bool bUnderline )
     OUString aStr;
 
     if(bUnderline && !mbUnderline)
-        aStr = "<u>";
+        aStr = u"<u>"_ustr;
     else if(!bUnderline && mbUnderline)
-        aStr = "</u>";
+        aStr = u"</u>"_ustr;
 
     mbUnderline = bUnderline;
     return aStr;
@@ -203,9 +203,9 @@ OUString HtmlState::SetStrikeout( bool bStrike )
     OUString aStr;
 
     if(bStrike && !mbStrike)
-        aStr = "<strike>";
+        aStr = u"<strike>"_ustr;
     else if(!bStrike && mbStrike)
-        aStr = "</strike>";
+        aStr = u"</strike>"_ustr;
 
     mbStrike = bStrike;
     return aStr;
@@ -221,7 +221,7 @@ OUString HtmlState::SetColor( Color aColor )
 
     if(mbColor)
     {
-        aStr = "</font>";
+        aStr = u"</font>"_ustr;
         mbColor = false;
     }
 
@@ -245,7 +245,7 @@ OUString HtmlState::SetLink( const OUString& aLink, const OUString& aTarget )
 
     if(mbLink)
     {
-        aStr = "</a>";
+        aStr = u"</a>"_ustr;
         mbLink = false;
     }
 
@@ -277,7 +277,7 @@ OUString getParagraphStyle( const SdrOutliner* pOutliner, sal_Int32 nPara )
     if( aParaSet.GetItem<SvxFrameDirectionItem>( EE_PARA_WRITINGDIR )->GetValue() == SvxFrameDirection::Horizontal_RL_TB )
     {
 
-        sStyle = "direction: rtl;";
+        sStyle = u"direction: rtl;"_ustr;
     }
     else
     {

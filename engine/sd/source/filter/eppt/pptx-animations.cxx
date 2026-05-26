@@ -801,7 +801,7 @@ void PPTXAnimationExport::WriteAnimationNodeAnimateInside(bool bSimple, bool bWr
     // The attribute name of AnimateTransform is "Transform", we have to fix it.
     OUString sNewAttr;
     if (xTransform.is() && xTransform->getTransformType() == AnimationTransformType::ROTATE)
-        sNewAttr = "Rotate";
+        sNewAttr = u"Rotate"_ustr;
 
     WriteAnimationAttributeName(mpFS, xTransform.is() ? sNewAttr : rXAnimate->getAttributeName());
 

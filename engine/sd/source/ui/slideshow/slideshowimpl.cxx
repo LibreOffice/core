@@ -864,12 +864,12 @@ void SlideshowImpl::startInteractivePreview( const Reference< XDrawPage >& xDraw
         nPropertyCount++;
     Sequence< beans::PropertyValue > aProperties(nPropertyCount);
     auto pProperties = aProperties.getArray();
-    pProperties[0].Name = "AutomaticAdvancement";
+    pProperties[0].Name = u"AutomaticAdvancement"_ustr;
     pProperties[0].Value <<= 1.0; // one second timeout
 
     if( xAnimationNode.is() )
     {
-        pProperties[1].Name = "NoSlideTransitions";
+        pProperties[1].Name = u"NoSlideTransitions"_ustr;
         pProperties[1].Value <<= true;
     }
 
@@ -1012,12 +1012,12 @@ bool SlideshowImpl::startPreview(
 
         Sequence< beans::PropertyValue > aProperties(nPropertyCount);
         auto pProperties = aProperties.getArray();
-        pProperties[0].Name = "AutomaticAdvancement";
+        pProperties[0].Name = u"AutomaticAdvancement"_ustr;
         pProperties[0].Value <<= 1.0; // one second timeout
 
         if( mxPreviewAnimationNode.is() )
         {
-            pProperties[1].Name = "NoSlideTransitions";
+            pProperties[1].Name = u"NoSlideTransitions"_ustr;
             pProperties[1].Value <<= true;
         }
 
@@ -2787,7 +2787,7 @@ void SlideshowImpl::setAutoSaveState( bool bOn)
 
         uno::Reference< util::XURLTransformer > xParser(util::URLTransformer::create(xContext));
         util::URL aURL;
-        aURL.Complete = "vnd.sun.star.autorecovery:/setAutoSaveState";
+        aURL.Complete = u"vnd.sun.star.autorecovery:/setAutoSaveState"_ustr;
         xParser->parseStrict(aURL);
 
         Sequence< beans::PropertyValue > aArgs{ comphelper::makePropertyValue(u"AutoSaveState"_ustr, bOn) };
@@ -2907,7 +2907,7 @@ void SAL_CALL SlideshowImpl::setUsePen( sal_Bool bMouseAsPen )
     {
         // For Pencolor;
         beans::PropertyValue aPenProp;
-        aPenProp.Name = "UserPaintColor";
+        aPenProp.Name = u"UserPaintColor"_ustr;
         if( mbUsePen )
             aPenProp.Value <<= mnUserPaintColor;
         mxShow->setProperty( aPenProp );
@@ -2916,13 +2916,13 @@ void SAL_CALL SlideshowImpl::setUsePen( sal_Bool bMouseAsPen )
         if( mbUsePen )
         {
             beans::PropertyValue aPenPropWidth;
-            aPenPropWidth.Name = "UserPaintStrokeWidth";
+            aPenPropWidth.Name = u"UserPaintStrokeWidth"_ustr;
             aPenPropWidth.Value <<= mdUserPaintStrokeWidth;
             mxShow->setProperty( aPenPropWidth );
 
             // for Pen Mode
             beans::PropertyValue aPenPropSwitchPenMode;
-            aPenPropSwitchPenMode.Name = "SwitchPenMode";
+            aPenPropSwitchPenMode.Name = u"SwitchPenMode"_ustr;
             aPenPropSwitchPenMode.Value <<= true;
             mxShow->setProperty( aPenPropSwitchPenMode );
         }
@@ -2971,7 +2971,7 @@ void SAL_CALL SlideshowImpl::setEraseAllInk(sal_Bool bEraseAllInk)
     try
     {
         beans::PropertyValue aPenPropEraseAllInk;
-        aPenPropEraseAllInk.Name = "EraseAllInk";
+        aPenPropEraseAllInk.Name = u"EraseAllInk"_ustr;
         aPenPropEraseAllInk.Value <<= bEraseAllInk;
         mxShow->setProperty( aPenPropEraseAllInk );
     }

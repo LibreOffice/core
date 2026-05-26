@@ -300,9 +300,9 @@ bool SlideSorterController::Command (
                 if (pPage != nullptr)
                 {
                     if (pPage->IsCanvasPage())
-                        aPopupId = "pagepanecanvas";
+                        aPopupId = u"pagepanecanvas"_ustr;
                     else
-                        aPopupId = "pagepane";
+                        aPopupId = u"pagepane"_ustr;
                 }
                 else
                 {
@@ -342,12 +342,12 @@ bool SlideSorterController::Command (
             else if (pPage != nullptr)
             {
                 if (pPage->IsCanvasMasterPage())
-                    aPopupId = "pagepanecanvasmaster";
+                    aPopupId = u"pagepanecanvasmaster"_ustr;
                 else
-                    aPopupId = "pagepanemaster";
+                    aPopupId = u"pagepanemaster"_ustr;
             }
             else
-                aPopupId = "pagepanenoselmaster";
+                aPopupId = u"pagepanenoselmaster"_ustr;
 
             std::unique_ptr<InsertionIndicatorHandler::ForceShowContext, o3tl::default_delete<InsertionIndicatorHandler::ForceShowContext>> xContext;
             if (pPage == nullptr && aPopupId != "sectionheader")

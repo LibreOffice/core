@@ -227,9 +227,9 @@ LayoutToolbarMenu::LayoutToolbarMenu(SlideLayoutController* pControl, weld::Widg
     OUString sSlotStr;
 
     if( bInsertPage )
-        sSlotStr = ".uno:DuplicatePage";
+        sSlotStr = u".uno:DuplicatePage"_ustr;
     else
-        sSlotStr = ".uno:Undo";
+        sSlotStr = u".uno:Undo"_ustr;
 
     css::uno::Reference<css::graphic::XGraphic> xSlotImage = vcl::CommandInfoProvider::GetXGraphicForCommand(sSlotStr, m_xFrame);
 
@@ -270,7 +270,7 @@ void LayoutToolbarMenu::SelectHdl(AutoLayout eLayout)
     }
     else if( mbInsertPage )
     {
-        sCommandURL = ".uno:DuplicatePage";
+        sCommandURL = u".uno:DuplicatePage"_ustr;
     }
 
     mxControl->dispatchCommand( sCommandURL, aArgs );

@@ -54,16 +54,16 @@ OUString AccessiblePresentationOLEShape::CreateAccessibleBaseName()
     switch (nShapeType)
     {
         case PRESENTATION_OLE:
-            sName = "ImpressOLE";
+            sName = u"ImpressOLE"_ustr;
             break;
         case PRESENTATION_CHART:
-            sName = "ImpressChart";
+            sName = u"ImpressChart"_ustr;
             break;
         case PRESENTATION_TABLE:
-            sName = "ImpressTable";
+            sName = u"ImpressTable"_ustr;
             break;
         default:
-            sName = "UnknownAccessibleImpressOLEShape";
+            sName = u"UnknownAccessibleImpressOLEShape"_ustr;
             if (mxShape.is())
                 sName += ": " + mxShape->getShapeType();
     }

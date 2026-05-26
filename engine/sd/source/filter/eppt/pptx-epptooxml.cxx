@@ -492,30 +492,30 @@ bool PowerPointExport::exportDocument()
     {
         if (mbExportTemplate)
         {
-            aMediaType = "application/vnd.ms-powerpoint.template.macroEnabled.main+xml";
+            aMediaType = u"application/vnd.ms-powerpoint.template.macroEnabled.main+xml"_ustr;
         }
         else if (mbSlideShow)
         {
-            aMediaType = "application/vnd.ms-powerpoint.slideshow.macroEnabled.main+xml";
+            aMediaType = u"application/vnd.ms-powerpoint.slideshow.macroEnabled.main+xml"_ustr;
         }
         else
         {
-            aMediaType = "application/vnd.ms-powerpoint.presentation.macroEnabled.main+xml";
+            aMediaType = u"application/vnd.ms-powerpoint.presentation.macroEnabled.main+xml"_ustr;
         }
     }
     else
     {
         if (mbExportTemplate)
         {
-            aMediaType = "application/vnd.openxmlformats-officedocument.presentationml.template.main+xml";
+            aMediaType = u"application/vnd.openxmlformats-officedocument.presentationml.template.main+xml"_ustr;
         }
         else if (mbSlideShow)
         {
-            aMediaType = "application/vnd.openxmlformats-officedocument.presentationml.slideshow.main+xml";
+            aMediaType = u"application/vnd.openxmlformats-officedocument.presentationml.slideshow.main+xml"_ustr;
         }
         else
         {
-            aMediaType = "application/vnd.openxmlformats-officedocument.presentationml.presentation.main+xml";
+            aMediaType = u"application/vnd.openxmlformats-officedocument.presentationml.presentation.main+xml"_ustr;
         }
     }
 
@@ -536,7 +536,7 @@ bool PowerPointExport::exportDocument()
 
     std::vector< PropertyValue > aProperties;
     PropertyValue aProperty;
-    aProperty.Name = "BaseURI";
+    aProperty.Name = u"BaseURI"_ustr;
     aProperty.Value <<= getFileUrl();
     aProperties.push_back(aProperty);
 
@@ -2680,7 +2680,7 @@ ShapeExport& PowerPointShapeExport::WritePlaceholderReferenceTextBody(
             OUString aFooterText;
             if (ePageType == LAYOUT)
             {
-                aFooterText = "Footer";
+                aFooterText = u"Footer"_ustr;
             }
             else
             {
@@ -2699,7 +2699,7 @@ ShapeExport& PowerPointShapeExport::WritePlaceholderReferenceTextBody(
             sal_Int32 nSlideNum = 0;
             if (ePageType == LAYOUT)
             {
-                aSlideNum = "<#>";
+                aSlideNum = u"<#>"_ustr;
             }
             else
             {
@@ -2735,7 +2735,7 @@ ShapeExport& PowerPointShapeExport::WritePlaceholderReferenceTextBody(
                 aDateTimeType = GetDatetimeTypeFromDateTime(eDate, eTime);
 
                 if (aDateTimeType == "datetime")
-                    aDateTimeType = "datetime1";
+                    aDateTimeType = u"datetime1"_ustr;
 
                 ::DateTime aDateTime( ::DateTime::SYSTEM );
 

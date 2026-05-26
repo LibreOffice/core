@@ -309,26 +309,26 @@ void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, bool bGe
     {
         case css::i18n::ScriptType::ASIAN :
         {
-            aCharHeightName  = "CharHeightAsian";
-            aCharWeightName  = "CharWeightAsian";
-            aCharLocaleName  = "CharLocaleAsian";
-            aCharPostureName = "CharPostureAsian";
+            aCharHeightName  = u"CharHeightAsian"_ustr;
+            aCharWeightName  = u"CharWeightAsian"_ustr;
+            aCharLocaleName  = u"CharLocaleAsian"_ustr;
+            aCharPostureName = u"CharPostureAsian"_ustr;
             break;
         }
         case css::i18n::ScriptType::COMPLEX :
         {
-            aCharHeightName  = "CharHeightComplex";
-            aCharWeightName  = "CharWeightComplex";
-            aCharLocaleName  = "CharLocaleComplex";
-            aCharPostureName = "CharPostureComplex";
+            aCharHeightName  = u"CharHeightComplex"_ustr;
+            aCharWeightName  = u"CharWeightComplex"_ustr;
+            aCharLocaleName  = u"CharLocaleComplex"_ustr;
+            aCharPostureName = u"CharPostureComplex"_ustr;
             break;
         }
         default:
         {
-            aCharHeightName  = "CharHeight";
-            aCharWeightName  = "CharWeight";
-            aCharLocaleName  = "CharLocale";
-            aCharPostureName = "CharPosture";
+            aCharHeightName  = u"CharHeight"_ustr;
+            aCharWeightName  = u"CharWeight"_ustr;
+            aCharLocaleName  = u"CharLocale"_ustr;
+            aCharPostureName = u"CharPosture"_ustr;
             break;
         }
     }

@@ -589,7 +589,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
         else if( mpDrawView->PickGluePoint( aMPos, pObj, nPickId, pPV ) &&
                  mpDrawView->IsGluePointMarked( pObj, nPickId ) )
         {
-            aPopupId = "gluepoint";
+            aPopupId = u"gluepoint"_ustr;
         }
         // field command?
         else if( pFldItem && (nullptr != dynamic_cast< const SvxDateField *>( pFldItem->GetField() ) ||
@@ -648,7 +648,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                 pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
                 if( HasCurrentFunction(SID_BEZIER_EDIT) && (dynamic_cast< SdrPathObj * >( pObj ) != nullptr ) )
                 {
-                    aPopupId = "bezier";
+                    aPopupId = u"bezier"_ustr;
                 }
                 else
                 {
@@ -686,11 +686,11 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                             {
                                 if( (pObj->GetObjInventor() == SdrInventor::Default) && (pObj->GetObjIdentifier() == SdrObjKind::Table) )
                                 {
-                                    aPopupId = "table";
+                                    aPopupId = u"table"_ustr;
                                 }
                                 else
                                 {
-                                    aPopupId = "drawtext";
+                                    aPopupId = u"drawtext"_ustr;
                                 }
                             }
                         }
@@ -708,25 +708,25 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                                 case SdrObjKind::Caption:
                                 case SdrObjKind::TitleText:
                                 case SdrObjKind::Text:
-                                    aPopupId = "textbox";
+                                    aPopupId = u"textbox"_ustr;
                                     break;
 
                                 case SdrObjKind::PathLine:
                                 case SdrObjKind::PolyLine:
-                                    aPopupId = "curve";
+                                    aPopupId = u"curve"_ustr;
                                     break;
 
                                 case SdrObjKind::FreehandLine:
                                 case SdrObjKind::Edge:
-                                    aPopupId = "connector";
+                                    aPopupId = u"connector"_ustr;
                                     break;
 
                                 case SdrObjKind::Line:
-                                    aPopupId = "line";
+                                    aPopupId = u"line"_ustr;
                                     break;
 
                                 case SdrObjKind::Measure:
-                                    aPopupId = "measure";
+                                    aPopupId = u"measure"_ustr;
                                     break;
 
                                 case SdrObjKind::Rectangle:
@@ -738,28 +738,28 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                                 case SdrObjKind::CircleArc:
                                 case SdrObjKind::CircleCut:
                                 case SdrObjKind::CustomShape:
-                                    aPopupId = "draw";
+                                    aPopupId = u"draw"_ustr;
                                     break;
 
                                 case SdrObjKind::Group:
-                                    aPopupId = "group";
+                                    aPopupId = u"group"_ustr;
                                     break;
 
                                 case SdrObjKind::Graphic:
-                                    aPopupId = "graphic";
+                                    aPopupId = u"graphic"_ustr;
                                     break;
 
                                 case SdrObjKind::OLE2:
-                                    aPopupId = "oleobject";
+                                    aPopupId = u"oleobject"_ustr;
                                     break;
                                 case SdrObjKind::Media:
-                                    aPopupId = "media";
+                                    aPopupId = u"media"_ustr;
                                     break;
                                 case SdrObjKind::Table:
-                                    aPopupId = "table";
+                                    aPopupId = u"table"_ustr;
                                     break;
                                 case SdrObjKind::Annotation:
-                                    aPopupId = "annotation";
+                                    aPopupId = u"annotation"_ustr;
                                     break;
                                 default: ;
                             }
@@ -769,16 +769,16 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                             if( nId == SdrObjKind::E3D_Scene )
                             {
                                 if( !mpDrawView->IsGroupEntered() )
-                                    aPopupId = "3dscene";
+                                    aPopupId = u"3dscene"_ustr;
                                 else
-                                    aPopupId = "3dscene2";
+                                    aPopupId = u"3dscene2"_ustr;
                             }
                             else
-                                aPopupId = "3dobject";
+                                aPopupId = u"3dobject"_ustr;
                         }
                         else if( nInv == SdrInventor::FmForm )
                         {
-                            aPopupId = "form";
+                            aPopupId = u"form"_ustr;
                         }
                     }
                 }
@@ -787,7 +787,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
             // multiple selection
             else if (rMarkList.GetMarkCount() > 1)
             {
-                aPopupId = "multiselect";
+                aPopupId = u"multiselect"_ustr;
             }
 
             // nothing selected
@@ -798,7 +798,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                 // EditView work normally, but use the "page" standard context menu
                 // fallback only when SlideShow is not running to get the
                 // SlideShow popup menu - as expected when SlideShow is running
-                aPopupId = "page";
+                aPopupId = u"page"_ustr;
             }
         }
         // show Popup-Menu

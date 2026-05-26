@@ -786,7 +786,7 @@ void SAL_CALL SlideShow::end()
                 if( xProvider.is() )
                 {
                     util::URL aURL;
-                    aURL.Complete = ".uno:CloseFrame";
+                    aURL.Complete = u".uno:CloseFrame"_ustr;
 
                     uno::Reference< frame::XDispatch > xDispatch(
                         xProvider->queryDispatch(

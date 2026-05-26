@@ -4526,8 +4526,8 @@ class MarkdownTransferable : public cppu::WeakImplHelper<css::datatransfer::XTra
 public:
     MarkdownTransferable(std::string_view rMarkdown)
     {
-        m_aFlavor.MimeType = "text/markdown";
-        m_aFlavor.HumanPresentableName = "text/markdown";
+        m_aFlavor.MimeType = u"text/markdown"_ustr;
+        m_aFlavor.HumanPresentableName = u"text/markdown"_ustr;
         m_aFlavor.DataType = cppu::UnoType<OUString>::get();
         m_aString = OUString(rMarkdown.data(), rMarkdown.size(), RTL_TEXTENCODING_UTF8);
     }

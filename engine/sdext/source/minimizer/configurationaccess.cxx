@@ -146,7 +146,7 @@ ConfigurationAccess::ConfigurationAccess( const Reference< uno::XComponentContex
     mxContext( rxContext )
 {
     maSettings.emplace_back( );
-    maSettings.back().maName = "LastUsedSettings";
+    maSettings.back().maName = u"LastUsedSettings"_ustr;
     LoadConfiguration();
 };
 
@@ -252,10 +252,10 @@ Reference< XInterface > ConfigurationAccess::OpenConfiguration( bool bReadOnly )
         }));
         OUString sAccessService;
         if ( bReadOnly )
-            sAccessService = "com.sun.star.configuration.ConfigurationAccess";
+            sAccessService = u"com.sun.star.configuration.ConfigurationAccess"_ustr;
         else
             sAccessService =
-                "com.sun.star.configuration.ConfigurationUpdateAccess";
+                u"com.sun.star.configuration.ConfigurationUpdateAccess"_ustr;
 
         xRoot = xProvider->createInstanceWithArguments(
             sAccessService, aCreationArguments );

@@ -699,7 +699,7 @@ void AnnotationManagerImpl::ExecuteReplyToAnnotation( SfxRequest const & rReq )
     OUString sQuote( pTextApi->GetText() );
 
     if( sQuote.isEmpty() )
-        sQuote = "...";
+        sQuote = u"..."_ustr;
     aStr += sQuote + "\"\n";
 
     for( sal_Int32 nIdx = 0; nIdx >= 0; )

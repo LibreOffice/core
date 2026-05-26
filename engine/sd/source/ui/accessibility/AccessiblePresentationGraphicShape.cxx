@@ -54,10 +54,10 @@ OUString AccessiblePresentationGraphicShape::CreateAccessibleBaseName()
     switch (nShapeType)
     {
         case PRESENTATION_GRAPHIC_OBJECT:
-            sName = "ImpressGraphicObject";
+            sName = u"ImpressGraphicObject"_ustr;
             break;
         default:
-            sName = "UnknownAccessibleImpressShape";
+            sName = u"UnknownAccessibleImpressShape"_ustr;
             if (mxShape.is())
                 sName += ": " + mxShape->getShapeType();
     }

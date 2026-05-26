@@ -558,7 +558,7 @@ OUString AccessibleDrawDocumentView::CreateAccessibleName()
     }
     else
     {
-        sName = "AccessibleDrawDocumentView";
+        sName = u"AccessibleDrawDocumentView"_ustr;
     }
     return sName;
 }

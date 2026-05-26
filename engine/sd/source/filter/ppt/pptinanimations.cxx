@@ -683,7 +683,7 @@ void AnimationImporter::fillNode( Reference< XAnimationNode > const & xNode, con
             sal_Int32 nSize = aUserData.getLength();
             aUserData.realloc(nSize+1);
             auto pUserData = aUserData.getArray();
-            pUserData[nSize].Name = "node-type";
+            pUserData[nSize].Name = u"node-type"_ustr;
             pUserData[nSize].Value <<= nNodeType;
         }
     }
@@ -696,7 +696,7 @@ void AnimationImporter::fillNode( Reference< XAnimationNode > const & xNode, con
             sal_Int32 nSize = aUserData.getLength();
             aUserData.realloc(nSize+1);
             auto pUserData = aUserData.getArray();
-            pUserData[nSize].Name = "group-id";
+            pUserData[nSize].Name = u"group-id"_ustr;
             pUserData[nSize].Value <<= nGroupId;
         }
     }
@@ -721,7 +721,7 @@ void AnimationImporter::fillNode( Reference< XAnimationNode > const & xNode, con
             sal_Int32 nSize = aUserData.getLength();
             aUserData.realloc(nSize+1);
             auto pUserData = aUserData.getArray();
-            pUserData[nSize].Name = "preset-class";
+            pUserData[nSize].Name = u"preset-class"_ustr;
             pUserData[nSize].Value <<= nEffectPresetClass;
         }
     }
@@ -733,7 +733,7 @@ void AnimationImporter::fillNode( Reference< XAnimationNode > const & xNode, con
             sal_Int32 nSize = aUserData.getLength();
             aUserData.realloc(nSize+1);
             auto pUserData = aUserData.getArray();
-            pUserData[nSize].Name = "preset-id";
+            pUserData[nSize].Name = u"preset-id"_ustr;
 
             const oox::ppt::preset_mapping* p = oox::ppt::preset_mapping::getList();
             while( p->mpStrPresetId && ((p->mnPresetClass != nEffectPresetClass) || (p->mnPresetId != nPresetId )) )
@@ -772,7 +772,7 @@ void AnimationImporter::fillNode( Reference< XAnimationNode > const & xNode, con
                 sal_Int32 nSize = aUserData.getLength();
                 aUserData.realloc(nSize+1);
                 auto pUserData = aUserData.getArray();
-                pUserData[nSize].Name = "preset-sub-type";
+                pUserData[nSize].Name = u"preset-sub-type"_ustr;
                 pUserData[nSize].Value <<= oox::ppt::getConvertedSubType( nEffectPresetClass, nPresetId, nPresetSubType );
             }
         }
@@ -785,7 +785,7 @@ void AnimationImporter::fillNode( Reference< XAnimationNode > const & xNode, con
             sal_Int32 nSize = aUserData.getLength();
             aUserData.realloc(nSize+1);
             auto pUserData = aUserData.getArray();
-            pUserData[nSize].Name = "after-effect";
+            pUserData[nSize].Name = u"after-effect"_ustr;
             pUserData[nSize].Value <<= bAfterEffect;
         }
     }
@@ -798,7 +798,7 @@ void AnimationImporter::fillNode( Reference< XAnimationNode > const & xNode, con
             sal_Int32 nSize = aUserData.getLength();
             aUserData.realloc(nSize+1);
             auto pUserData = aUserData.getArray();
-            pUserData[nSize].Name = "master-rel";
+            pUserData[nSize].Name = u"master-rel"_ustr;
             pUserData[nSize].Value <<= nMasterRel;
         }
     }
@@ -1731,7 +1731,7 @@ void AnimationImporter::importCommandContainer( const Atom* pAtom, const Referen
         double fMediaTime = ::rtl::math::stringToDouble( aMediaTime, u'.', u',', &eStatus );
         if( eStatus == rtl_math_ConversionStatus_Ok )
         {
-            aParamValue.Name = "MediaTime";
+            aParamValue.Name = u"MediaTime"_ustr;
             aParamValue.Value <<= fMediaTime;
         }
         nCommand = EffectCommands::PLAY;
@@ -1749,7 +1749,7 @@ void AnimationImporter::importCommandContainer( const Atom* pAtom, const Referen
     if( nCommand == EffectCommands::CUSTOM )
     {
         OSL_FAIL("sd::AnimationImporter::importCommandContainer(), unknown command!");
-        aParamValue.Name = "UserDefined";
+        aParamValue.Name = u"UserDefined"_ustr;
         aParamValue.Value <<= aParam;
     }
 

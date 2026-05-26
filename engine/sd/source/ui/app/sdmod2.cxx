@@ -427,7 +427,7 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo, void)
         }
 
         if( aRepresentation.isEmpty() )                // TODO: Edit engine doesn't handle empty fields?
-            aRepresentation = " ";
+            aRepresentation = u" "_ustr;
         pInfo->SetRepresentation( aRepresentation );
     }
 }

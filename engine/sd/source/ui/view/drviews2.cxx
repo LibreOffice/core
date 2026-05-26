@@ -260,7 +260,7 @@ OUString getWeightString(SfxItemSet const & rItemSet)
     {
         const SvxWeightItem* pWeightItem = dynamic_cast<const SvxWeightItem*>(pItem);
         if (pWeightItem && pWeightItem->GetWeight() == WEIGHT_BOLD)
-            sWeightString = "BOLD";
+            sWeightString = u"BOLD"_ustr;
     }
     return sWeightString;
 }
@@ -4408,13 +4408,13 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
             OUString panelId;
             if (nSId == SID_CUSTOM_ANIMATION_PANEL)
-                panelId = "SdCustomAnimationPanel";
+                panelId = u"SdCustomAnimationPanel"_ustr;
             else if (nSId == SID_GALLERY)
-                panelId = "GalleryPanel";
+                panelId = u"GalleryPanel"_ustr;
             else if (nSId == SID_SLIDE_TRANSITIONS_PANEL)
-                panelId = "SdSlideTransitionPanel";
+                panelId = u"SdSlideTransitionPanel"_ustr;
             else if (nSId == SID_MASTER_SLIDES_PANEL)
-                panelId = "SdAllMasterPagesPanel";
+                panelId = u"SdAllMasterPagesPanel"_ustr;
 
             ::sfx2::sidebar::Sidebar::TogglePanel(
                 panelId,
@@ -4533,7 +4533,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if (xProvider.is())
             {
                 util::URL aURL;
-                aURL.Complete = "vnd.com.sun.star.comp.PresentationMinimizer:execute";
+                aURL.Complete = u"vnd.com.sun.star.comp.PresentationMinimizer:execute"_ustr;
                 xParser->parseStrict(aURL);
                 uno::Reference<frame::XDispatch> xDispatch(xProvider->queryDispatch(aURL, OUString(), 0));
                 if (xDispatch.is())

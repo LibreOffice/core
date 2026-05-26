@@ -291,7 +291,7 @@ static Reference< XGraphic > ImpCompressGraphic( const Reference< XComponentCont
                             OUString aDestMimeType( u"image/png"_ustr  );
                             if (rGraphicSettings.mbJPEGCompression && !bTransparent && !bAlpha)
                             {
-                                aDestMimeType = "image/jpeg";
+                                aDestMimeType = u"image/jpeg"_ustr;
 //                                      if( aSourceMimeType != aDestMimeType )
                                 bNeedsOptimizing = true;
                             }
@@ -477,8 +477,8 @@ void ImpOptimizer::DispatchStatus()
     if ( mxStatusDispatcher.is() )
     {
         URL aURL;
-        aURL.Protocol = "vnd.com.sun.star.comp.PresentationMinimizer:";
-        aURL.Path = "statusupdate";
+        aURL.Protocol = u"vnd.com.sun.star.comp.PresentationMinimizer:"_ustr;
+        aURL.Path = u"statusupdate"_ustr;
         mxStatusDispatcher->dispatch( aURL, GetStatusSequence() );
     }
 }
@@ -627,7 +627,7 @@ void ImpOptimizer::Optimize( const Sequence< PropertyValue >& rArguments )
                 int nLength = aArguments.getLength();
                 aArguments.realloc( nLength + 1 );
                 auto pArguments = aArguments.getArray();
-                pArguments[ nLength ].Name = "FilterName";
+                pArguments[ nLength ].Name = u"FilterName"_ustr;
                 pArguments[ nLength ].Value <<= maFilterName;
             }
             xStorable->storeToURL( maSaveAsURL, aArguments );

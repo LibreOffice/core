@@ -578,7 +578,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf100348_convert_Fontwork2TextWarp
     CPPUNIT_ASSERT_MESSAGE("No TextPath", aIterator != aGeomPropVec.end());
 
     // Type has to be same as in original document on roundtrip.
-    sName = "Type";
+    sName = u"Type"_ustr;
     auto aIterator2 = std::find_if(
         aGeomPropVec.begin(), aGeomPropVec.end(),
         [sName](const beans::PropertyValue& rValue) { return rValue.Name == sName; });
@@ -588,7 +588,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf100348_convert_Fontwork2TextWarp
     CPPUNIT_ASSERT_EQUAL(u"fontwork-wave"_ustr, sOwnName);
 
     // Adjustmentvalues need to be the same.
-    sName = "AdjustmentValues";
+    sName = u"AdjustmentValues"_ustr;
     auto aIterator3 = std::find_if(
         aGeomPropVec.begin(), aGeomPropVec.end(),
         [sName](const beans::PropertyValue& rValue) { return rValue.Name == sName; });

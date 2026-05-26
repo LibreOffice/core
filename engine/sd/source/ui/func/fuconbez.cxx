@@ -251,13 +251,13 @@ bool FuConstructBezierPolygon::MouseButtonUp(const MouseEvent& rMEvt )
                     switch(nSlotId)
                     {
                         case SID_DRAW_BEZIER_NOFILL:
-                            sPresetId = "libo-motionpath-curve";
+                            sPresetId = u"libo-motionpath-curve"_ustr;
                             break;
                         case SID_DRAW_POLYGON_NOFILL:
-                            sPresetId = "libo-motionpath-polygon";
+                            sPresetId = u"libo-motionpath-polygon"_ustr;
                             break;
                         case SID_DRAW_FREELINE_NOFILL:
-                            sPresetId = "libo-motionpath-freeform-line";
+                            sPresetId = u"libo-motionpath-freeform-line"_ustr;
                             break;
                     }
 

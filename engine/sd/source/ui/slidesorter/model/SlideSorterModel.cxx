@@ -106,11 +106,11 @@ namespace {
 void collectUIInformation(const OUString& num, const OUString& rAction)
 {
     EventDescription aDescription;
-    aDescription.aID = "impress_win_or_draw_win";
+    aDescription.aID = u"impress_win_or_draw_win"_ustr;
     aDescription.aParameters = {{"POS", num}};
     aDescription.aAction = rAction;
-    aDescription.aKeyWord = "ImpressWindowUIObject";
-    aDescription.aParent = "MainWindow";
+    aDescription.aKeyWord = u"ImpressWindowUIObject"_ustr;
+    aDescription.aParent = u"MainWindow"_ustr;
 
     UITestLogger::getInstance().logEvent(aDescription);
 }
