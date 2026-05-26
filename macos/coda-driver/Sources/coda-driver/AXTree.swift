@@ -138,19 +138,53 @@ final class AXTree {
         }
         Thread.sleep(forTimeInterval: 0.2)
 
+        // Put the path on the general pasteboard so a Cmd+V into the
+        // Go-to-folder sheet pastes it as a single operation, rather
+        // than typing it character by character via CGEvent (which
+        // turned out to be unreliable - the keystrokes were dropped
+        // or interleaved unexpectedly).
+        let pasteboard = NSPasteboard.general
+        pasteboard.clearContents()
+        pasteboard.setString(path, forType: .string)
+
         // Cmd+Shift+G opens the "Go to folder" sheet on NSOpenPanel.
         // kVK_ANSI_G = 5.
         sendKey(virtualKey: 5, flags: [.maskCommand, .maskShift])
         Thread.sleep(forTimeInterval: 0.3)
 
-        typeUnicode(path)
-        Thread.sleep(forTimeInterval: 0.1)
+        // Cmd+V pastes the path into the sheet's path field.
+        // kVK_ANSI_V = 9.
+        sendKey(virtualKey: 9, flags: [.maskCommand])
+        Thread.sleep(forTimeInterval: 0.2)
+
+        // Read back the focused field's value to verify the paste
+        // landed where we expected.
+        let focused = focusedElement()
+        let focusedRole = focused.flatMap { stringAttr($0, kAXRoleAttribute as String) }
+        let pastedValue = focused.flatMap { stringAttr($0, kAXValueAttribute as String) }
+        let pasteLanded = (pastedValue ?? "").contains(path)
 
         // Return commits the "Go to folder" sheet, navigating to the
         // parent directory and selecting the file (if path is a file)
         // or just navigating (if it is a directory).  kVK_Return = 36.
         sendKey(virtualKey: 36, flags: [])
         Thread.sleep(forTimeInterval: 0.3)
+
+        if !pasteLanded {
+            NSLog("navigateOpenPanel: paste did not land in the expected text field")
+            NSLog("navigateOpenPanel: AX tree at end:\n%@", dumpTree())
+        }
+    }
+
+    private func focusedElement() -> AXUIElement? {
+        var value: CFTypeRef?
+        let err = AXUIElementCopyAttributeValue(
+            appElement,
+            kAXFocusedUIElementAttribute as CFString,
+            &value)
+        guard err == .success, let v = value,
+              CFGetTypeID(v) == AXUIElementGetTypeID() else { return nil }
+        return (v as! AXUIElement)
     }
 
     private func sendKey(virtualKey: CGKeyCode, flags: CGEventFlags) {
@@ -164,27 +198,6 @@ final class AXTree {
                             virtualKey: virtualKey, keyDown: false) {
             up.flags = flags
             up.post(tap: .cghidEventTap)
-        }
-    }
-
-    private func typeUnicode(_ s: String) {
-        let src = CGEventSource(stateID: .combinedSessionState)
-        for scalar in s.unicodeScalars {
-            // Use a 16-bit code unit.  Scalars outside the BMP would
-            // need surrogate pairs, but file paths are ASCII / BMP.
-            var unit = UniChar(scalar.value & 0xFFFF)
-            if let down = CGEvent(keyboardEventSource: src,
-                                  virtualKey: 0, keyDown: true) {
-                down.keyboardSetUnicodeString(stringLength: 1,
-                                              unicodeString: &unit)
-                down.post(tap: .cghidEventTap)
-            }
-            if let up = CGEvent(keyboardEventSource: src,
-                                virtualKey: 0, keyDown: false) {
-                up.keyboardSetUnicodeString(stringLength: 1,
-                                            unicodeString: &unit)
-                up.post(tap: .cghidEventTap)
-            }
         }
     }
 
