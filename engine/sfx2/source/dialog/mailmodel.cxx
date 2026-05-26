@@ -311,9 +311,9 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
                 // Retrieve filter from type
                 css::uno::Sequence< css::beans::NamedValue > aQuery( bSendAsPDF ? 3 : 2 );
                 auto pQuery = aQuery.getArray();
-                pQuery[0].Name  = "Type";
+                pQuery[0].Name  = u"Type"_ustr;
                 pQuery[0].Value <<= aTypeName;
-                pQuery[1].Name  = "DocumentService";
+                pQuery[1].Name  = u"DocumentService"_ustr;
                 pQuery[1].Value <<= aModule;
                 if( bSendAsPDF )
                 {
@@ -322,7 +322,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
                     // exact flag value as detailed in the filter configuration to get it
                     // this seems to be a bug
                     // without flags we get an import filter here, which is also unwanted
-                    pQuery[2].Name  = "Flags";
+                    pQuery[2].Name  = u"Flags"_ustr;
                     pQuery[2].Value <<= sal_Int32(0x80042); // SfxFilterFlags: EXPORT ALIEN 3RDPARTY
                 }
 
@@ -435,7 +435,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
                 if ( !bHasLocation )
                 {
                     // Create a noname file name with the correct extension
-                    aFileName = "noname";
+                    aFileName = u"noname"_ustr;
                 }
                 else
                 {
@@ -490,7 +490,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
                 {
                     // check if the document needs to be prepared for sending as mail (embedding of links, removal of invisible content)
 
-                    aPrepareURL.Complete = ".uno:PrepareMailExport";
+                    aPrepareURL.Complete = u".uno:PrepareMailExport"_ustr;
                     xURLTransformer->parseStrict( aPrepareURL );
 
                     if ( xDispatchProvider.is() )
@@ -554,7 +554,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
                     {
                         css::util::URL aURL;
                         // #i30432# notify that export is finished - the Writer may want to restore removed content
-                        aURL.Complete = ".uno:MailExportFinished";
+                        aURL.Complete = u".uno:MailExportFinished"_ustr;
                         xURLTransformer->parseStrict( aURL );
 
                         if ( xDispatchProvider.is() )
@@ -602,7 +602,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
                 // We need 1:1 copy of the document to preserve an added signature.
                 aArgs.realloc( ++nNumArgs );
                 auto pArgs = aArgs.getArray();
-                pArgs[nNumArgs-1].Name = "CopyStreamIfPossible";
+                pArgs[nNumArgs-1].Name = u"CopyStreamIfPossible"_ustr;
                 pArgs[nNumArgs-1].Value <<= true;
 
                 try

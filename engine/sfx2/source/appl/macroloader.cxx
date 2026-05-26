@@ -157,7 +157,7 @@ uno::Any SAL_CALL SfxMacroLoader::dispatchWithReturnValue(
     {
         beans::PropertyValue aErrorCode;
 
-        aErrorCode.Name = "ErrorCode";
+        aErrorCode.Name = u"ErrorCode"_ustr;
         aErrorCode.Value <<= sal_uInt32(nErr);
 
         aRet <<= aErrorCode;

@@ -2466,9 +2466,9 @@ FileDialogHelper::FileDialogHelper(
     if ( aExtName.find( '*' ) != 0 )
     {
         if ( !aExtName.empty() && aExtName.find( '.' ) != 0 )
-            aWildcard = "*.";
+            aWildcard = u"*."_ustr;
         else
-            aWildcard = "*";
+            aWildcard = u"*"_ustr;
     }
 
     aWildcard += aExtName;

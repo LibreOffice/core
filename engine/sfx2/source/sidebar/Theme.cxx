@@ -427,52 +427,52 @@ void Theme::SetupPropertyMaps()
     maBooleans.resize(Post_Bool_ - Int_Bool_ - 1);
 
     maPropertyNameToIdMap[u"Color_Highlight"_ustr]=Color_Highlight;
-    maPropertyIdToNameMap[Color_Highlight]="Color_Highlight";
+    maPropertyIdToNameMap[Color_Highlight]=u"Color_Highlight"_ustr;
 
     maPropertyNameToIdMap[u"Color_HighlightText"_ustr]=Color_HighlightText;
-    maPropertyIdToNameMap[Color_HighlightText]="Color_HighlightText";
+    maPropertyIdToNameMap[Color_HighlightText]=u"Color_HighlightText"_ustr;
 
 
     maPropertyNameToIdMap[u"Color_DeckBackground"_ustr]=Color_DeckBackground;
-    maPropertyIdToNameMap[Color_DeckBackground]="Color_DeckBackground";
+    maPropertyIdToNameMap[Color_DeckBackground]=u"Color_DeckBackground"_ustr;
 
     maPropertyNameToIdMap[u"Color_DeckTitleBarBackground"_ustr]=Color_DeckTitleBarBackground;
-    maPropertyIdToNameMap[Color_DeckTitleBarBackground]="Color_DeckTitleBarBackground";
+    maPropertyIdToNameMap[Color_DeckTitleBarBackground]=u"Color_DeckTitleBarBackground"_ustr;
 
     maPropertyNameToIdMap[u"Color_PanelBackground"_ustr]=Color_PanelBackground;
-    maPropertyIdToNameMap[Color_PanelBackground]="Color_PanelBackground";
+    maPropertyIdToNameMap[Color_PanelBackground]=u"Color_PanelBackground"_ustr;
 
     maPropertyNameToIdMap[u"Color_PanelTitleBarBackground"_ustr]=Color_PanelTitleBarBackground;
-    maPropertyIdToNameMap[Color_PanelTitleBarBackground]="Color_PanelTitleBarBackground";
+    maPropertyIdToNameMap[Color_PanelTitleBarBackground]=u"Color_PanelTitleBarBackground"_ustr;
 
     maPropertyNameToIdMap[u"Color_TabBarBackground"_ustr]=Color_TabBarBackground;
-    maPropertyIdToNameMap[Color_TabBarBackground]="Color_TabBarBackground";
+    maPropertyIdToNameMap[Color_TabBarBackground]=u"Color_TabBarBackground"_ustr;
 
 
     maPropertyNameToIdMap[u"Int_DeckBorderSize"_ustr]=Int_DeckBorderSize;
-    maPropertyIdToNameMap[Int_DeckBorderSize]="Int_DeckBorderSize";
+    maPropertyIdToNameMap[Int_DeckBorderSize]=u"Int_DeckBorderSize"_ustr;
 
     maPropertyNameToIdMap[u"Int_DeckSeparatorHeight"_ustr]=Int_DeckSeparatorHeight;
-    maPropertyIdToNameMap[Int_DeckSeparatorHeight]="Int_DeckSeparatorHeight";
+    maPropertyIdToNameMap[Int_DeckSeparatorHeight]=u"Int_DeckSeparatorHeight"_ustr;
 
     maPropertyNameToIdMap[u"Int_DeckLeftPadding"_ustr]=Int_DeckLeftPadding;
-    maPropertyIdToNameMap[Int_DeckLeftPadding]="Int_DeckLeftPadding";
+    maPropertyIdToNameMap[Int_DeckLeftPadding]=u"Int_DeckLeftPadding"_ustr;
 
     maPropertyNameToIdMap[u"Int_DeckTopPadding"_ustr]=Int_DeckTopPadding;
-    maPropertyIdToNameMap[Int_DeckTopPadding]="Int_DeckTopPadding";
+    maPropertyIdToNameMap[Int_DeckTopPadding]=u"Int_DeckTopPadding"_ustr;
 
     maPropertyNameToIdMap[u"Int_DeckRightPadding"_ustr]=Int_DeckRightPadding;
-    maPropertyIdToNameMap[Int_DeckRightPadding]="Int_DeckRightPadding";
+    maPropertyIdToNameMap[Int_DeckRightPadding]=u"Int_DeckRightPadding"_ustr;
 
     maPropertyNameToIdMap[u"Int_DeckBottomPadding"_ustr]=Int_DeckBottomPadding;
-    maPropertyIdToNameMap[Int_DeckBottomPadding]="Int_DeckBottomPadding";
+    maPropertyIdToNameMap[Int_DeckBottomPadding]=u"Int_DeckBottomPadding"_ustr;
 
 
     maPropertyNameToIdMap[u"Bool_UseSystemColors"_ustr]=Bool_UseSystemColors;
-    maPropertyIdToNameMap[Bool_UseSystemColors]="Bool_UseSystemColors";
+    maPropertyIdToNameMap[Bool_UseSystemColors]=u"Bool_UseSystemColors"_ustr;
 
     maPropertyNameToIdMap[u"Bool_IsHighContrastModeActive"_ustr]=Bool_IsHighContrastModeActive;
-    maPropertyIdToNameMap[Bool_IsHighContrastModeActive]="Bool_IsHighContrastModeActive";
+    maPropertyIdToNameMap[Bool_IsHighContrastModeActive]=u"Bool_IsHighContrastModeActive"_ustr;
 
     maRawValues.resize(maPropertyIdToNameMap.size());
 }

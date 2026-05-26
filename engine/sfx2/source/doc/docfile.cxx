@@ -1421,7 +1421,7 @@ SfxMedium::LockFileResult SfxMedium::LockOrigFileOnDemand(bool bLoading, bool bN
                                 // when activating the lock.
                                 // See http://tools.ietf.org/html/rfc4918#section-14.17 for details
                                 LockFileEntry aLockData;
-                                aLockData[LockFileComponent::OOOUSERNAME] = "Unknown user";
+                                aLockData[LockFileComponent::OOOUSERNAME] = u"Unknown user"_ustr;
                                 // This solution works right when the LO user name and the WebDAV user
                                 // name are the same.
                                 // A better thing to do would be to obtain the 'real' WebDAV user name,

@@ -94,15 +94,15 @@ Reference<frame::XToolbarController> ControllerFactory::CreateToolBoxController(
         beans::PropertyValue aPropValue;
         std::vector<Any> aPropertyVector;
 
-        aPropValue.Name = "Frame";
+        aPropValue.Name = u"Frame"_ustr;
         aPropValue.Value <<= rxFrame;
         aPropertyVector.push_back(Any(aPropValue));
 
-        aPropValue.Name = "ServiceManager";
+        aPropValue.Name = u"ServiceManager"_ustr;
         aPropValue.Value <<= ::comphelper::getProcessServiceFactory();
         aPropertyVector.push_back(Any(aPropValue));
 
-        aPropValue.Name = "CommandURL";
+        aPropValue.Name = u"CommandURL"_ustr;
         aPropValue.Value <<= rsCommandName;
         aPropertyVector.push_back(Any(aPropValue));
 
@@ -203,29 +203,29 @@ Reference<frame::XToolbarController> ControllerFactory::CreateToolBarController(
             beans::PropertyValue aPropValue;
             std::vector<Any> aPropertyVector;
 
-            aPropValue.Name = "ModuleIdentifier";
+            aPropValue.Name = u"ModuleIdentifier"_ustr;
             aPropValue.Value <<= sModuleName;
             aPropertyVector.push_back( Any( aPropValue ));
 
-            aPropValue.Name = "Frame";
+            aPropValue.Name = u"Frame"_ustr;
             aPropValue.Value <<= rxFrame;
             aPropertyVector.push_back( Any( aPropValue ));
 
-            aPropValue.Name = "ServiceManager";
+            aPropValue.Name = u"ServiceManager"_ustr;
             aPropValue.Value <<= comphelper::getProcessServiceFactory();
             aPropertyVector.push_back( Any( aPropValue ));
 
-            aPropValue.Name = "ParentWindow";
+            aPropValue.Name = u"ParentWindow"_ustr;
             aPropValue.Value <<= rxToolbar;
             aPropertyVector.push_back( Any( aPropValue ));
 
-            aPropValue.Name = "IsSidebar";
+            aPropValue.Name = u"IsSidebar"_ustr;
             aPropValue.Value <<= bSideBar;
             aPropertyVector.push_back( Any( aPropValue ));
 
             if (nWidth > 0)
             {
-                aPropValue.Name = "Width";
+                aPropValue.Name = u"Width"_ustr;
                 aPropValue.Value <<= nWidth;
                 aPropertyVector.push_back( Any( aPropValue ));
             }

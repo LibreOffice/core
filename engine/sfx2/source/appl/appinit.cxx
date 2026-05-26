@@ -96,7 +96,7 @@ void SAL_CALL SfxTerminateListener_Impl::notifyTermination( const EventObject& a
     css::uno::Reference< css::document::XDocumentEventListener > xGlobalBroadcaster(css::frame::theGlobalEventBroadcaster::get(xContext), css::uno::UNO_QUERY_THROW);
 
     css::document::DocumentEvent aEvent2;
-    aEvent2.EventName = "OnCloseApp";
+    aEvent2.EventName = u"OnCloseApp"_ustr;
     xGlobalBroadcaster->documentEventOccured(aEvent2);
 
     delete pApp;

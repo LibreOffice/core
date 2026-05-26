@@ -1291,7 +1291,7 @@ bool ModelData_Impl::ShowDocumentInfoDialog()
             if ( xFrameDispatch.is() )
             {
                 util::URL aURL;
-                aURL.Complete = ".uno:SetDocumentProperties";
+                aURL.Complete = u".uno:SetDocumentProperties"_ustr;
 
                 uno::Reference < util::XURLTransformer > xTransformer( util::URLTransformer::create( comphelper::getProcessComponentContext() ) );
                 if ( xTransformer->parseStrict( aURL ) )

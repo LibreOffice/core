@@ -97,19 +97,19 @@ OUString getTypeID(RedactionTargetType nType)
     switch (nType)
     {
         case RedactionTargetType::REDACTION_TARGET_TEXT:
-            sTypeID = "text";
+            sTypeID = u"text"_ustr;
             break;
         case RedactionTargetType::REDACTION_TARGET_REGEX:
-            sTypeID = "regex";
+            sTypeID = u"regex"_ustr;
             break;
         case RedactionTargetType::REDACTION_TARGET_PREDEFINED:
-            sTypeID = "predefined";
+            sTypeID = u"predefined"_ustr;
             break;
         case RedactionTargetType::REDACTION_TARGET_IMAGE:
-            sTypeID = "image";
+            sTypeID = u"image"_ustr;
             break;
         case RedactionTargetType::REDACTION_TARGET_UNKNOWN:
-            sTypeID = "unknown";
+            sTypeID = u"unknown"_ustr;
             break;
     }
 

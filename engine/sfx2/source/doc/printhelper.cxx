@@ -606,7 +606,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
                 // and append the local filename
                 aCheckedArgs.realloc( aCheckedArgs.getLength()+1 );
                 pCheckedArgs = aCheckedArgs.getArray();
-                pCheckedArgs[nProps].Name = "LocalFileName";
+                pCheckedArgs[nProps].Name = u"LocalFileName"_ustr;
                 pCheckedArgs[nProps++].Value <<= sTemp;
             }
             else
@@ -623,7 +623,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
                 // and append the local filename
                 aCheckedArgs.realloc( aCheckedArgs.getLength()+1 );
                 pCheckedArgs = aCheckedArgs.getArray();
-                pCheckedArgs[nProps].Name = "LocalFileName";
+                pCheckedArgs[nProps].Name = u"LocalFileName"_ustr;
                 pCheckedArgs[nProps++].Value <<= sPath;
             }
             else
@@ -642,7 +642,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
                 pUCBPrintTempFile->EnableKillingFile();
 
                 //FIXME: does it work?
-                pCheckedArgs[nProps].Name = "LocalFileName";
+                pCheckedArgs[nProps].Name = u"LocalFileName"_ustr;
                 pCheckedArgs[nProps++].Value <<= pUCBPrintTempFile->GetFileName();
                 sUcbUrl = sURL;
             }
@@ -665,7 +665,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
             bool bTemp;
             if ( !(rProp.Value >>= bTemp) )
                 throw css::lang::IllegalArgumentException();
-            pCheckedArgs[nProps].Name = "Collate";
+            pCheckedArgs[nProps].Name = u"Collate"_ustr;
             pCheckedArgs[nProps++].Value <<= bTemp;
         }
 
@@ -674,7 +674,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
             bool bTemp;
             if ( !(rProp.Value >>= bTemp) )
                 throw css::lang::IllegalArgumentException();
-            pCheckedArgs[nProps].Name = "SinglePrintJobs";
+            pCheckedArgs[nProps].Name = u"SinglePrintJobs"_ustr;
             pCheckedArgs[nProps++].Value <<= bTemp;
         }
 

@@ -1995,7 +1995,7 @@ bool SfxHelpTextWindow_Impl::PreNotify( NotifyEvent& rNEvt )
             xMenu->append_separator(u"separator3"_ustr);
             xMenu->append_check(u"selectionmode"_ustr, SfxResId(STR_HELP_MENU_TEXT_SELECTION_MODE));
             URL aURL;
-            aURL.Complete = ".uno:SelectTextMode";
+            aURL.Complete = u".uno:SelectTextMode"_ustr;
             Reference< util::XURLTransformer > xTrans( util::URLTransformer::create( ::comphelper::getProcessComponentContext() ) );
             xTrans->parseStrict(aURL);
             Reference < XDispatch > xDisp = xFrame->queryDispatch( aURL, OUString(), 0 );
@@ -2536,9 +2536,9 @@ void SfxHelpWindow_Impl::DoAction(std::u16string_view  rActionId)
     else if (rActionId == u"backward" || rActionId == u"forward")
     {
         URL aURL;
-        aURL.Complete = ".uno:Backward";
+        aURL.Complete = u".uno:Backward"_ustr;
         if (rActionId == u"forward")
-            aURL.Complete = ".uno:Forward";
+            aURL.Complete = u".uno:Forward"_ustr;
         Reference< util::XURLTransformer > xTrans( util::URLTransformer::create( ::comphelper::getProcessComponentContext() ) );
         xTrans->parseStrict(aURL);
         pHelpInterceptor->dispatch( aURL, Sequence < PropertyValue >() );
@@ -2554,13 +2554,13 @@ void SfxHelpWindow_Impl::DoAction(std::u16string_view  rActionId)
         {
             URL aURL;
             if (rActionId == u"print")
-                aURL.Complete = ".uno:Print";
+                aURL.Complete = u".uno:Print"_ustr;
             else if (rActionId == u"sourceview")
-                aURL.Complete = ".uno:SourceView";
+                aURL.Complete = u".uno:SourceView"_ustr;
             else if (rActionId == u"copy")
-                aURL.Complete = ".uno:Copy";
+                aURL.Complete = u".uno:Copy"_ustr;
             else // rActionId == "selectionmode"
-                aURL.Complete = ".uno:SelectTextMode";
+                aURL.Complete = u".uno:SelectTextMode"_ustr;
             Reference< util::XURLTransformer > xTrans( util::URLTransformer::create( ::comphelper::getProcessComponentContext() ) );
             xTrans->parseStrict(aURL);
             Reference < XDispatch > xDisp = xProv->queryDispatch( aURL, OUString(), 0 );

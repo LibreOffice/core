@@ -79,9 +79,9 @@ css::uno::Sequence<OUString> BuildContextList (const ContextList& rContextList)
 
         OUString visibility;
         if (entry.mbIsInitiallyVisible)
-            visibility = "visible";
+            visibility = u"visible"_ustr;
         else
-            visibility = "hidden";
+            visibility = u"hidden"_ustr;
 
         OUString element = appName + ", " + contextName +", " + visibility;
 

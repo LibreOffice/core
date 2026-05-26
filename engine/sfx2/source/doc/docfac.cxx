@@ -213,7 +213,7 @@ void SfxObjectFactory::SetSystemTemplate( const OUString& rServiceName, const OU
 
             aArgs.realloc( 2 );
             auto pArgs = aArgs.getArray();
-            pArgs[1].Name = "Overwrite";
+            pArgs[1].Name = u"Overwrite"_ustr;
             pArgs[1].Value <<= true;
 
             uno::Reference< frame::XStorable > xStorable( xLoadable, uno::UNO_QUERY );

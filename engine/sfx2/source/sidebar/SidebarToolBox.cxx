@@ -40,17 +40,17 @@ namespace {
     void lcl_RTLizeCommandURL( OUString& rCommandURL )
     {
         if (rCommandURL == ".uno:ParaLeftToRight")
-            rCommandURL = ".uno:ParaRightToLeft";
+            rCommandURL = u".uno:ParaRightToLeft"_ustr;
         else if (rCommandURL == ".uno:ParaRightToLeft")
-            rCommandURL = ".uno:ParaLeftToRight";
+            rCommandURL = u".uno:ParaLeftToRight"_ustr;
         else if (rCommandURL == ".uno:LeftPara")
-            rCommandURL = ".uno:RightPara";
+            rCommandURL = u".uno:RightPara"_ustr;
         else if (rCommandURL == ".uno:RightPara")
-            rCommandURL = ".uno:LeftPara";
+            rCommandURL = u".uno:LeftPara"_ustr;
         else if (rCommandURL == ".uno:AlignLeft")
-            rCommandURL = ".uno:AlignRight";
+            rCommandURL = u".uno:AlignRight"_ustr;
         else if (rCommandURL == ".uno:AlignRight")
-            rCommandURL = ".uno:AlignLeft";
+            rCommandURL = u".uno:AlignLeft"_ustr;
     }
 }
 

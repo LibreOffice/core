@@ -128,7 +128,7 @@ OUString const & getHelpRootURL()
         if (tmp.isEmpty())
         {
             // try to determine path from default
-            tmp = "$(instpath)/" LIBO_SHARE_HELP_FOLDER;
+            tmp = u"$(instpath)/"_ustr LIBO_SHARE_HELP_FOLDER;
         }
 
         // replace anything like $(instpath);
@@ -357,21 +357,21 @@ static OUString getDefaultModule_Impl()
     OUString sDefaultModule;
     SvtModuleOptions aModOpt;
     if (aModOpt.IsWriterInstalled())
-        sDefaultModule = "swriter";
+        sDefaultModule = u"swriter"_ustr;
     else if (aModOpt.IsCalcInstalled())
-        sDefaultModule = "scalc";
+        sDefaultModule = u"scalc"_ustr;
     else if (aModOpt.IsImpressInstalled())
-        sDefaultModule = "simpress";
+        sDefaultModule = u"simpress"_ustr;
     else if (aModOpt.IsDrawInstalled())
-        sDefaultModule = "sdraw";
+        sDefaultModule = u"sdraw"_ustr;
     else if (aModOpt.IsMathInstalled())
-        sDefaultModule = "smath";
+        sDefaultModule = u"smath"_ustr;
     else if (aModOpt.IsChartInstalled())
-        sDefaultModule = "schart";
+        sDefaultModule = u"schart"_ustr;
     else if (SvtModuleOptions::IsBasicIDEInstalled())
-        sDefaultModule = "sbasic";
+        sDefaultModule = u"sbasic"_ustr;
     else if (aModOpt.IsDataBaseInstalled())
-        sDefaultModule = "sdatabase";
+        sDefaultModule = u"sdatabase"_ustr;
     else
     {
         SAL_WARN( "sfx.appl", "getDefaultModule_Impl(): no module installed" );
@@ -414,13 +414,13 @@ namespace
 
         // Map some module identifiers to their "real" help module string.
         if ( aFactoryShortName == "chart2" )
-            aFactoryShortName = "schart" ;
+            aFactoryShortName = u"schart"_ustr ;
         else if ( aFactoryShortName == "BasicIDE" )
-            aFactoryShortName = "sbasic";
+            aFactoryShortName = u"sbasic"_ustr;
         else if ( aFactoryShortName == "sweb"
                 || aFactoryShortName == "sglobal"
                 || aFactoryShortName == "swxform" )
-            aFactoryShortName = "swriter" ;
+            aFactoryShortName = u"swriter"_ustr ;
         else if ( aFactoryShortName == "dbquery"
                 || aFactoryShortName == "dbbrowser"
                 || aFactoryShortName == "dbrelation"
@@ -429,7 +429,7 @@ namespace
                 || aFactoryShortName == "dbtdata"
                 || aFactoryShortName == "swreport"
                 || aFactoryShortName == "swform" )
-            aFactoryShortName = "sdatabase";
+            aFactoryShortName = u"sdatabase"_ustr;
         else if ( aFactoryShortName == "sbibliography"
                 || aFactoryShortName == "sabpilot"
                 || aFactoryShortName == "scanner"

@@ -2330,58 +2330,58 @@ Sequence< datatransfer::DataFlavor > SAL_CALL SfxBaseModel::getTransferDataFlavo
     auto pFlavorSeq = aFlavorSeq.getArray();
 
     pFlavorSeq[0].MimeType =
-        "application/x-openoffice-gdimetafile;windows_formatname=\"GDIMetaFile\"";
-    pFlavorSeq[0].HumanPresentableName =  "GDIMetaFile";
+        u"application/x-openoffice-gdimetafile;windows_formatname=\"GDIMetaFile\""_ustr;
+    pFlavorSeq[0].HumanPresentableName =  u"GDIMetaFile"_ustr;
     pFlavorSeq[0].DataType = cppu::UnoType<Sequence< sal_Int8 >>::get();
 
     pFlavorSeq[1].MimeType =
-        "application/x-openoffice-highcontrast-gdimetafile;windows_formatname=\"GDIMetaFile\"";
-    pFlavorSeq[1].HumanPresentableName = "GDIMetaFile";
+        u"application/x-openoffice-highcontrast-gdimetafile;windows_formatname=\"GDIMetaFile\""_ustr;
+    pFlavorSeq[1].HumanPresentableName = u"GDIMetaFile"_ustr;
     pFlavorSeq[1].DataType = cppu::UnoType<Sequence< sal_Int8 >>::get();
 
     pFlavorSeq[2].MimeType =
-        "application/x-openoffice-emf;windows_formatname=\"Image EMF\"" ;
-    pFlavorSeq[2].HumanPresentableName = "Enhanced Windows MetaFile";
+        u"application/x-openoffice-emf;windows_formatname=\"Image EMF\""_ustr ;
+    pFlavorSeq[2].HumanPresentableName = u"Enhanced Windows MetaFile"_ustr;
     pFlavorSeq[2].DataType = cppu::UnoType<Sequence< sal_Int8 >>::get();
 
     pFlavorSeq[3].MimeType =
-        "application/x-openoffice-wmf;windows_formatname=\"Image WMF\"";
-    pFlavorSeq[3].HumanPresentableName = "Windows MetaFile";
+        u"application/x-openoffice-wmf;windows_formatname=\"Image WMF\""_ustr;
+    pFlavorSeq[3].HumanPresentableName = u"Windows MetaFile"_ustr;
     pFlavorSeq[3].DataType = cppu::UnoType<Sequence< sal_Int8 >>::get();
 
     pFlavorSeq[4].MimeType =
-        "application/x-openoffice-objectdescriptor-xml;windows_formatname=\"Star Object Descriptor (XML)\"";
-    pFlavorSeq[4].HumanPresentableName = "Star Object Descriptor (XML)";
+        u"application/x-openoffice-objectdescriptor-xml;windows_formatname=\"Star Object Descriptor (XML)\""_ustr;
+    pFlavorSeq[4].HumanPresentableName = u"Star Object Descriptor (XML)"_ustr;
     pFlavorSeq[4].DataType = cppu::UnoType<Sequence< sal_Int8 >>::get();
 
     pFlavorSeq[5].MimeType =
-        "application/x-openoffice-embed-source-xml;windows_formatname=\"Star Embed Source (XML)\"";
-    pFlavorSeq[5].HumanPresentableName = "Star Embed Source (XML)";
+        u"application/x-openoffice-embed-source-xml;windows_formatname=\"Star Embed Source (XML)\""_ustr;
+    pFlavorSeq[5].HumanPresentableName = u"Star Embed Source (XML)"_ustr;
     pFlavorSeq[5].DataType = cppu::UnoType<Sequence< sal_Int8 >>::get();
 
     pFlavorSeq[6].MimeType =
-        "application/x-openoffice-bitmap;windows_formatname=\"Bitmap\"";
-    pFlavorSeq[6].HumanPresentableName = "Bitmap";
+        u"application/x-openoffice-bitmap;windows_formatname=\"Bitmap\""_ustr;
+    pFlavorSeq[6].HumanPresentableName = u"Bitmap"_ustr;
     pFlavorSeq[6].DataType = cppu::UnoType<Sequence< sal_Int8 >>::get();
 
-    pFlavorSeq[7].MimeType = "image/png";
-    pFlavorSeq[7].HumanPresentableName = "PNG";
+    pFlavorSeq[7].MimeType = u"image/png"_ustr;
+    pFlavorSeq[7].HumanPresentableName = u"PNG"_ustr;
     pFlavorSeq[7].DataType = cppu::UnoType<Sequence< sal_Int8 >>::get();
 
-    pFlavorSeq[8].MimeType = "image/svg+xml";
-    pFlavorSeq[8].HumanPresentableName = "SVG";
+    pFlavorSeq[8].MimeType = u"image/svg+xml"_ustr;
+    pFlavorSeq[8].HumanPresentableName = u"SVG"_ustr;
     pFlavorSeq[8].DataType = cppu::UnoType<Sequence< sal_Int8 >>::get();
 
     if ( nSuppFlavors == 11 )
     {
         pFlavorSeq[9].MimeType =
-            "application/x-openoffice-emf;windows_formatname=\"Image EMF\"";
-        pFlavorSeq[9].HumanPresentableName = "Enhanced Windows MetaFile";
+            u"application/x-openoffice-emf;windows_formatname=\"Image EMF\""_ustr;
+        pFlavorSeq[9].HumanPresentableName = u"Enhanced Windows MetaFile"_ustr;
         pFlavorSeq[9].DataType = cppu::UnoType<sal_uInt64>::get();
 
         pFlavorSeq[10].MimeType =
-            "application/x-openoffice-wmf;windows_formatname=\"Image WMF\"";
-        pFlavorSeq[10].HumanPresentableName = "Windows MetaFile";
+            u"application/x-openoffice-wmf;windows_formatname=\"Image WMF\""_ustr;
+        pFlavorSeq[10].HumanPresentableName = u"Windows MetaFile"_ustr;
         pFlavorSeq[10].DataType = cppu::UnoType<sal_uInt64>::get();
     }
 
@@ -2915,7 +2915,7 @@ static void addTitle_Impl( Sequence < beans::PropertyValue >& rSeq, const OUStri
         sal_Int32 nCount = rSeq.getLength();
         rSeq.realloc( nCount+1 );
         auto& el = rSeq.getArray()[nCount];
-        el.Name = "Title";
+        el.Name = u"Title"_ustr;
         el.Value <<= rTitle;
     }
 }

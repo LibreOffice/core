@@ -123,7 +123,7 @@ void DeckTitleBar::HandleToolBoxItemClick()
             maCloserAction();
     }
     // Reset the toolbox response id
-    msToolBoxRId = "";
+    msToolBoxRId = u""_ustr;
 }
 
 void DeckTitleBar::DataChanged()

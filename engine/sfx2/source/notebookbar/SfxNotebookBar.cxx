@@ -451,7 +451,7 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
 
         OUString sFile;
         if (bIsKit)
-            sFile = "notebookbar_online.ui";
+            sFile = u"notebookbar_online.ui"_ustr;
         else
             sFile = lcl_getNotebookbarFileName( eApp );
 

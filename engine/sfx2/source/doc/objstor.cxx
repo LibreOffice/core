@@ -900,7 +900,7 @@ void SfxObjectShell::DetectCsvSeparators(SvStream& stream, rtl_TextEncoding eCha
     for (sal_Int32 nComSepIdx = sCommonSeps.getLength() - 1; nComSepIdx >= 0; nComSepIdx --)
         usetCommonSeps.insert(sCommonSeps[nComSepIdx]);
     aLinesCharsCount.reserve(128);
-    separators = "";
+    separators = u""_ustr;
 
     stream.StartReadingUnicodeText(eCharSet);
     stream.SetStreamEncoding(eCharSet);
@@ -1057,7 +1057,7 @@ void SfxObjectShell::DetectCsvFilterOptions(SvStream& stream, OUString& aFilterO
     //Detect separators
     if (aSeps == aDetect)
     {
-        aFilterOptions = "";
+        aFilterOptions = u""_ustr;
         OUString separators;
         DetectCsvSeparators(stream, eCharSet, separators, static_cast<sal_Unicode>(o3tl::toInt32(aDelimiter)));
 

@@ -1003,7 +1003,7 @@ void SfxDockingWindow::FillInfo(SfxChildWinInfo& rInfo) const
         pImpl->aWinState = GetFloatingWindow()->GetWindowState();
 
     rInfo.aWinState = pImpl->aWinState;
-    rInfo.aExtraString = "AL:(";
+    rInfo.aExtraString = u"AL:("_ustr;
     rInfo.aExtraString += OUString::number(static_cast<sal_uInt16>(GetAlignment()));
     rInfo.aExtraString += ",";
     rInfo.aExtraString += OUString::number (static_cast<sal_uInt16>(pImpl->GetLastAlignment()));

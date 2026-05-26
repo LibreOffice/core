@@ -446,7 +446,7 @@ void SfxEvents_Impl::NormalizeMacro( const ::comphelper::NamedValueCollection& i
     }
     else if ( !aMacroName.isEmpty() )
     {
-        aScript = "macro://";
+        aScript = u"macro://"_ustr;
         if ( aLibrary != SfxGetpApp()->GetName() && aLibrary != "StarDesktop" && aLibrary != "application" )
             aScript += ".";
         aScript += "/" + aMacroName + "()";
@@ -458,9 +458,9 @@ void SfxEvents_Impl::NormalizeMacro( const ::comphelper::NamedValueCollection& i
     if (aLibrary != "document")
     {
         if ( aLibrary.isEmpty() || (pDoc && ( aLibrary == pDoc->GetTitle( SFX_TITLE_APINAME ) || aLibrary == pDoc->GetTitle() )) )
-            aLibrary = "document";
+            aLibrary = u"document"_ustr;
         else
-            aLibrary = "application";
+            aLibrary = u"application"_ustr;
     }
 
     o_normalizedDescriptor.put( PROP_SCRIPT, aScript );

@@ -682,7 +682,7 @@ void aboutTextFormatting(std::string msg, const uno::Reference<css::accessibilit
                     if (sAttributes != "{ ")
                         sAttributes += ", ";
                     sAttributes += attribute.Name + ": " + sValue;
-                    sValue = "";
+                    sValue = u""_ustr;
                 }
             }
             sAttributes += " }";
@@ -1085,7 +1085,7 @@ void KitDocumentFocusListener::notifySelectionChanged(const uno::Reference<acces
         OUString sName = xContext->getAccessibleName();
         sName = sName.trim();
         if (sName == "GraphicObjectShape")
-            sName = "Graphic";
+            sName = u"Graphic"_ustr;
 
         // check for text content and send it with some limitations:
         // no more than 10 paragraphs, no more than 1000 chars
@@ -1231,7 +1231,7 @@ void KitDocumentFocusListener::updateAndNotifyParagraph(
 
 void KitDocumentFocusListener::resetParagraphInfo()
 {
-    m_sFocusedParagraph = "";
+    m_sFocusedParagraph = u""_ustr;
     m_nCaretPosition = 0;
     m_nSelectionStart = -1;
     m_nSelectionEnd = -1;
@@ -1853,7 +1853,7 @@ void KitDocumentFocusListener::detachRecursive(
         m_bIsEditingCell = !sName.startsWith("Cell");
         if (!m_bIsEditingCell)
         {
-            m_sFocusedParagraph = "";
+            m_sFocusedParagraph = u""_ustr;
             m_nCaretPosition = 0;
             notifyFocusedParagraphChanged();
         }
@@ -1989,29 +1989,29 @@ static OUString impl_searchFormatTypeForApp(const css::uno::Reference< css::fram
             case E_MS_DOC:
             {
                 if ( sModule == "com.sun.star.text.TextDocument" )
-                    sType = "writer_MS_Word_2007";
+                    sType = u"writer_MS_Word_2007"_ustr;
                 else
                 if ( sModule == "com.sun.star.sheet.SpreadsheetDocument" )
-                    sType = "MS Excel 2007 XML";
+                    sType = u"MS Excel 2007 XML"_ustr;
                 else
                 if ( sModule == "com.sun.star.presentation.PresentationDocument" )
-                    sType = "MS PowerPoint 2007 XML";
+                    sType = u"MS PowerPoint 2007 XML"_ustr;
             }
             break;
 
             case E_OOO_DOC:
             {
                 if ( sModule == "com.sun.star.text.TextDocument" )
-                    sType = "writer8";
+                    sType = u"writer8"_ustr;
                 else
                 if ( sModule == "com.sun.star.sheet.SpreadsheetDocument" )
-                    sType = "calc8";
+                    sType = u"calc8"_ustr;
                 else
                 if ( sModule == "com.sun.star.drawing.DrawingDocument" )
-                    sType = "draw8";
+                    sType = u"draw8"_ustr;
                 else
                 if ( sModule == "com.sun.star.presentation.PresentationDocument" )
-                    sType = "impress8";
+                    sType = u"impress8"_ustr;
             }
             break;
         }
@@ -2269,7 +2269,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
                 if ( !bHasLocation )
                 {
                     // Create a default file name with the correct extension
-                    aFileName = "webpreview";
+                    aFileName = u"webpreview"_ustr;
                 }
                 else
                 {

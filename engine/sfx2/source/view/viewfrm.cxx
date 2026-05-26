@@ -3576,7 +3576,7 @@ void SfxViewFrame::ChildWindowExecute( SfxRequest &rReq )
         else
         {
             css::util::URL aTargetURL;
-            aTargetURL.Complete = ".component:DB/DataSourceBrowser";
+            aTargetURL.Complete = u".component:DB/DataSourceBrowser"_ustr;
             Reference < css::util::XURLTransformer > xTrans(
                     css::util::URLTransformer::create(
                          ::comphelper::getProcessComponentContext() ) );
@@ -3590,7 +3590,7 @@ void SfxViewFrame::ChildWindowExecute( SfxRequest &rReq )
             {
                 Sequence < css::beans::PropertyValue > aArgs(1);
                 css::beans::PropertyValue* pArg = aArgs.getArray();
-                pArg[0].Name = "Referer";
+                pArg[0].Name = u"Referer"_ustr;
                 pArg[0].Value <<= u"private:user"_ustr;
                 xDisp->dispatch( aTargetURL, aArgs );
             }

@@ -1172,7 +1172,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                     pViewFrame->ShowChildWindow( SID_SIDEBAR );
 
                     if (comphelper::COKit::isActive())
-                        aSidebarMode = "Opened";
+                        aSidebarMode = u"Opened"_ustr;
 
                     sfx2::sidebar::SidebarController* pSidebar =
                             sfx2::sidebar::SidebarController::GetSidebarControllerForFrame( xFrame );

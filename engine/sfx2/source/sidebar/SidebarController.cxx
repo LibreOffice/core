@@ -643,10 +643,10 @@ namespace {
 void collectUIInformation(const OUString& rDeckId)
 {
     EventDescription aDescription;
-    aDescription.aAction = "SIDEBAR";
-    aDescription.aParent = "MainWindow";
+    aDescription.aAction = u"SIDEBAR"_ustr;
+    aDescription.aParent = u"MainWindow"_ustr;
     aDescription.aParameters = {{"PANEL", rDeckId}};
-    aDescription.aKeyWord = "CurrentApp";
+    aDescription.aKeyWord = u"CurrentApp"_ustr;
 
     UITestLogger::getInstance().logEvent(aDescription);
 }

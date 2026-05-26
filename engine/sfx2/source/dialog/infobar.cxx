@@ -86,16 +86,16 @@ OUString GetInfoBarIconName(InfobarType ibType)
     switch (ibType)
     {
         case InfobarType::INFO:
-            aRet = "vcl/res/infobox.png";
+            aRet = u"vcl/res/infobox.png"_ustr;
             break;
         case InfobarType::SUCCESS:
-            aRet = "vcl/res/successbox.png";
+            aRet = u"vcl/res/successbox.png"_ustr;
             break;
         case InfobarType::WARNING:
-            aRet = "vcl/res/warningbox.png";
+            aRet = u"vcl/res/warningbox.png"_ustr;
             break;
         case InfobarType::DANGER:
-            aRet = "vcl/res/errorbox.png";
+            aRet = u"vcl/res/errorbox.png"_ustr;
             break;
     }
 

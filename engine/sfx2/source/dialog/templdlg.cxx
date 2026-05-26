@@ -852,12 +852,12 @@ void SfxTemplateDialog_Impl::InsertFamilyItem(sal_uInt16 nId, const SfxStyleFami
     OUString sHelpId;
     switch( rItem.GetFamily() )
     {
-        case SfxStyleFamily::Char:     sHelpId = ".uno:CharStyle"; break;
-        case SfxStyleFamily::Para:     sHelpId = ".uno:ParaStyle"; break;
-        case SfxStyleFamily::Frame:    sHelpId = ".uno:FrameStyle"; break;
-        case SfxStyleFamily::Page:     sHelpId = ".uno:PageStyle"; break;
-        case SfxStyleFamily::Pseudo:   sHelpId = ".uno:ListStyle"; break;
-        case SfxStyleFamily::Table:    sHelpId = ".uno:TableStyle"; break;
+        case SfxStyleFamily::Char:     sHelpId = u".uno:CharStyle"_ustr; break;
+        case SfxStyleFamily::Para:     sHelpId = u".uno:ParaStyle"_ustr; break;
+        case SfxStyleFamily::Frame:    sHelpId = u".uno:FrameStyle"_ustr; break;
+        case SfxStyleFamily::Page:     sHelpId = u".uno:PageStyle"_ustr; break;
+        case SfxStyleFamily::Pseudo:   sHelpId = u".uno:ListStyle"_ustr; break;
+        case SfxStyleFamily::Table:    sHelpId = u".uno:TableStyle"_ustr; break;
         default: OSL_FAIL("unknown StyleFamily"); break;
     }
 

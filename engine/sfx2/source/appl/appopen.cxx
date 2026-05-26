@@ -1035,12 +1035,12 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
     {
         const SfxBoolItem* pNewViewItem = rReq.GetArg(SID_OPEN_NEW_VIEW);
         if ( pNewViewItem && pNewViewItem->GetValue() )
-            aTarget = "_blank" ;
+            aTarget = u"_blank"_ustr ;
     }
 
     if ( bHidden )
     {
-        aTarget = "_blank";
+        aTarget = u"_blank"_ustr;
         DBG_ASSERT( rReq.IsSynchronCall() || pLinkItem, "Hidden load process must be done synchronously!" );
     }
 

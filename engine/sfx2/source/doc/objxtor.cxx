@@ -981,46 +981,46 @@ OUString SfxObjectShell::GetServiceNameFromFactory( const OUString& rFact )
 
     if ( aFact == "swriter" )
     {
-        aServiceName = "com.sun.star.text.TextDocument";
+        aServiceName = u"com.sun.star.text.TextDocument"_ustr;
     }
     else if ( aFact == "sweb" || aFact == "swriter/web" )
     {
-        aServiceName = "com.sun.star.text.WebDocument";
+        aServiceName = u"com.sun.star.text.WebDocument"_ustr;
     }
     else if ( aFact == "sglobal" || aFact == "swriter/globaldocument" )
     {
-        aServiceName = "com.sun.star.text.GlobalDocument";
+        aServiceName = u"com.sun.star.text.GlobalDocument"_ustr;
     }
     else if ( aFact == "scalc" )
     {
-        aServiceName = "com.sun.star.sheet.SpreadsheetDocument";
+        aServiceName = u"com.sun.star.sheet.SpreadsheetDocument"_ustr;
     }
     else if ( aFact == "sdraw" )
     {
-        aServiceName = "com.sun.star.drawing.DrawingDocument";
+        aServiceName = u"com.sun.star.drawing.DrawingDocument"_ustr;
     }
     else if ( aFact == "simpress" )
     {
-        aServiceName = "com.sun.star.presentation.PresentationDocument";
+        aServiceName = u"com.sun.star.presentation.PresentationDocument"_ustr;
     }
     else if ( aFact == "schart" )
     {
-        aServiceName = "com.sun.star.chart.ChartDocument";
+        aServiceName = u"com.sun.star.chart.ChartDocument"_ustr;
     }
     else if ( aFact == "smath" )
     {
-        aServiceName = "com.sun.star.formula.FormulaProperties";
+        aServiceName = u"com.sun.star.formula.FormulaProperties"_ustr;
     }
 #if HAVE_FEATURE_SCRIPTING
     else if ( aFact == "sbasic" )
     {
-        aServiceName = "com.sun.star.script.BasicIDE";
+        aServiceName = u"com.sun.star.script.BasicIDE"_ustr;
     }
 #endif
 #if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
     else if ( aFact == "sdatabase" )
     {
-        aServiceName = "com.sun.star.sdb.OfficeDatabaseDocument";
+        aServiceName = u"com.sun.star.sdb.OfficeDatabaseDocument"_ustr;
     }
 #endif
 

@@ -1399,7 +1399,7 @@ void KitHelper::postExtTextEventAsync(const VclPtr<vcl::Window> &xWindow,
         break;
     case KIT_EXT_TEXTINPUT_END:
         pKitEv->mnEvent = VclEventId::EndExtTextInput;
-        pKitEv->maText = "";
+        pKitEv->maText = u""_ustr;
         break;
     default:
         assert(false);

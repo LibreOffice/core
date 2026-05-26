@@ -1191,7 +1191,7 @@ void SfxObjectShell::FinishedLoading( SfxLoadedFlags nFlags )
                 if (xHandler.is())
                 {
                     beans::NamedValue aLoadReadOnlyRequest;
-                    aLoadReadOnlyRequest.Name = "LoadReadOnlyRequest";
+                    aLoadReadOnlyRequest.Name = u"LoadReadOnlyRequest"_ustr;
                     aLoadReadOnlyRequest.Value <<= aFileName;
 
                     Any aRequest(aLoadReadOnlyRequest);

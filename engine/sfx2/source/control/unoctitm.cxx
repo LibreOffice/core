@@ -661,7 +661,7 @@ void SfxDispatchController_Impl::dispatch( const css::util::URL& aURL,
         // so we must retrieve this as an argument from the parsed URL
         lNewArgs.realloc( lNewArgs.getLength()+1 );
         auto& el = lNewArgs.getArray()[lNewArgs.getLength()-1];
-        el.Name = "Bookmark";
+        el.Name = u"Bookmark"_ustr;
         el.Value <<= aURL.Mark;
     }
 

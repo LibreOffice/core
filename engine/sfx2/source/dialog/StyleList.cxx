@@ -1203,11 +1203,11 @@ OUString StyleList::getDefaultStyleName(const SfxStyleFamily eFam)
     OUString sDefaultStyle;
     OUString aFamilyName = lcl_GetStyleFamilyName(eFam);
     if (aFamilyName == "TableStyles")
-        sDefaultStyle = "Default Style";
+        sDefaultStyle = u"Default Style"_ustr;
     else if (aFamilyName == "NumberingStyles")
-        sDefaultStyle = "No List";
+        sDefaultStyle = u"No List"_ustr;
     else
-        sDefaultStyle = "Standard";
+        sDefaultStyle = u"Standard"_ustr;
     uno::Reference<style::XStyleFamiliesSupplier> xModel(m_pCurObjShell->GetModel(),
                                                          uno::UNO_QUERY);
     OUString aUIName;
