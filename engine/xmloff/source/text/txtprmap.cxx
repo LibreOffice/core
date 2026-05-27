@@ -850,7 +850,7 @@ XMLPropertyMapEntry constexpr aXMLFramePropMap[] =
     MG_ED( PROP_BottomBorder, XML_NAMESPACE_FO, XML_BORDER_BOTTOM, XML_TYPE_BORDER,                         CTF_BOTTOMBORDER ),
     // RES_SHADOW
     MG_E( PROP_ShadowFormat,       XML_NAMESPACE_STYLE, XML_SHADOW,         XML_TYPE_TEXT_SHADOW, 0 ),
-    MG_E( PROP_ShadowTransparence, XML_NAMESPACE_DRAW,  XML_SHADOW_OPACITY, XML_TYPE_NEG_PERCENT, 0 ),
+    MG_E( PROP_ShadowTransparence, XML_NAMESPACE_DRAW,  XML_SHADOW_OPACITY, XML_TYPE_NEG_PERCENT16, 0 ),
     // RES_FRMMACRO
     // TODO
     // RES_COL

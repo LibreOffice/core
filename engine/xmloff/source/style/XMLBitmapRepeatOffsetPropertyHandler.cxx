@@ -60,7 +60,10 @@ bool XMLBitmapRepeatOffsetPropertyHandler::importXML(
             {
                 if( ( mbX && ( aToken == msHorizontal ) ) || ( !mbX && ( aToken == msVertical ) ) )
                 {
-                    rValue <<= nValue;
+                    // The repeat offset is a 0-100 percentage stored in a
+                    // sal_uInt16 item. Emit a 16-bit value so it extracts
+                    // directly, instead of a sal_Int32 the item cannot take.
+                    rValue <<= static_cast<sal_Int16>(nValue);
                     return true;
                 }
             }
