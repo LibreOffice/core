@@ -1093,6 +1093,10 @@ class SettingIframe {
 	private createBrowserSettingActions(
 		sharedConfigsContainer: HTMLElement,
 	): HTMLDivElement {
+		// In the dialog (left nav present) the modal's own Save/Cancel handles
+		// saving, so skip these redundant per-section actions.
+		if (window.showLeftNav) return document.createElement('div');
+
 		const actionsContainer = document.createElement('div');
 		actionsContainer.classList.add('browser-settings-editor-actions');
 
@@ -2979,6 +2983,10 @@ class SettingIframe {
 		getCurrentSettings: () => any,
 		uploadSettings: (settings: any) => Promise<void>,
 	): HTMLDivElement {
+		// In the dialog (left nav present) the modal's own Save/Cancel handles
+		// saving, so skip these redundant per-section actions.
+		if (window.showLeftNav) return document.createElement('div');
+
 		const actionsContainer = document.createElement('div');
 		actionsContainer.classList.add('xcu-editor-actions');
 
