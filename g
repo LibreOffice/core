@@ -65,8 +65,12 @@ if [ "$1" == "review" ]; then
         wip_output=$(git push $GERRIT_REMOTE HEAD~1:refs/for/$TRACKED_BRANCH%wip 2>&1)
         wip_status=$?
         set -e
-        echo "$wip_output"
-        if [ $wip_status -ne 0 ] && ! echo "$wip_output" | grep -q "no new changes"; then
+        if [ $wip_status -eq 0 ]; then
+            echo "$wip_output"
+        elif echo "$wip_output" | grep -q "no new changes"; then
+            echo "Note: old (WIP) commits unchanged on the server - error message suppressed."
+        else
+            echo "$wip_output"
             exit $wip_status
         fi
     fi
