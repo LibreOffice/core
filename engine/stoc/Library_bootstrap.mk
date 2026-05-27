@@ -40,9 +40,6 @@ $(eval $(call gb_Library_add_exception_objects,bootstrap,\
     stoc/source/implementationregistration/implreg \
     stoc/source/implementationregistration/mergekeys \
     stoc/source/loader/dllcomponentloader \
-    stoc/source/security/access_controller \
-    stoc/source/security/file_policy \
-    stoc/source/security/permissions \
     stoc/source/servicemanager/servicemanager \
     stoc/source/simpleregistry/simpleregistry \
 ))

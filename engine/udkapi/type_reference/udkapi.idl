@@ -1707,37 +1707,6 @@ module com {
     published exception AccessControlException: ::com::sun::star::uno::SecurityException {
      any LackingPermission;
     };
-    published interface XAccessControlContext;
-    published interface XAction;
-    published interface XAccessController {
-     interface ::com::sun::star::uno::XInterface;
-     void checkPermission([in] any perm) raises (::com::sun::star::security::AccessControlException);
-     any doRestricted([in] ::com::sun::star::security::XAction action, [in] ::com::sun::star::security::XAccessControlContext restriction) raises (::com::sun::star::uno::Exception);
-     any doPrivileged([in] ::com::sun::star::security::XAction action, [in] ::com::sun::star::security::XAccessControlContext restriction) raises (::com::sun::star::uno::Exception);
-     ::com::sun::star::security::XAccessControlContext getContext();
-    };
-    published service AccessController: ::com::sun::star::security::XAccessController;
-    published struct AllPermission {
-     byte dummy;
-    };
-    published interface XPolicy {
-     interface ::com::sun::star::uno::XInterface;
-     sequence< any > getPermissions([in] string userId);
-     sequence< any > getDefaultPermissions();
-     void refresh();
-    };
-    published service Policy: ::com::sun::star::security::XPolicy;
-    published struct RuntimePermission {
-     string Name;
-    };
-    published interface XAccessControlContext {
-     interface ::com::sun::star::uno::XInterface;
-     void checkPermission([in] any perm) raises (::com::sun::star::security::AccessControlException);
-    };
-    published interface XAction {
-     interface ::com::sun::star::uno::XInterface;
-     any run() raises (::com::sun::star::uno::Exception);
-    };
    };
    module task {
     published interface XInteractionContinuation {

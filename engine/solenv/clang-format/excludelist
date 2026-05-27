@@ -2020,7 +2020,6 @@ cppuhelper/qa/propertysetmixin/comp_propertysetmixin.cxx
 cppuhelper/qa/propertysetmixin/test_propertysetmixin.cxx
 cppuhelper/qa/unourl/cppu_unourl.cxx
 cppuhelper/qa/weak/test_weak.cxx
-cppuhelper/source/access_control.cxx
 cppuhelper/source/bootstrap.cxx
 cppuhelper/source/compat.cxx
 cppuhelper/source/component.cxx
@@ -4688,7 +4687,6 @@ include/cppu/helper/purpenv/Environment.hxx
 include/cppu/helper/purpenv/Mapping.hxx
 include/cppu/macros.hxx
 include/cppu/unotype.hxx
-include/cppuhelper/access_control.hxx
 include/cppuhelper/basemutex.hxx
 include/cppuhelper/bootstrap.hxx
 include/cppuhelper/compbase.hxx
@@ -5202,7 +5200,6 @@ include/sal/main.h
 include/sal/mathconf.h
 include/sal/types.h
 include/salhelper/condition.hxx
-include/salhelper/dynload.hxx
 include/salhelper/linkhelper.hxx
 include/salhelper/refobj.hxx
 include/salhelper/simplereferenceobject.hxx
@@ -6964,14 +6961,9 @@ sal/textenc/textcvt.cxx
 sal/textenc/textenc.cxx
 salhelper/qa/test_api.cxx
 salhelper/source/condition.cxx
-salhelper/source/dynload.cxx
 salhelper/source/simplereferenceobject.cxx
 salhelper/source/thread.cxx
 salhelper/source/timer.cxx
-salhelper/test/Symbols/loader.cxx
-salhelper/test/Symbols/samplelib.cxx
-salhelper/test/dynamicloader/loader.cxx
-salhelper/test/dynamicloader/samplelib.cxx
 salhelper/test/rtti/samplelibrtti.cxx
 sax/inc/xml2utf.hxx
 sax/qa/cppunit/attributes.cxx
@@ -10024,11 +10016,6 @@ stoc/source/javavm/jvmargs.hxx
 stoc/source/loader/dllcomponentloader.cxx
 stoc/source/namingservice/namingservice.cxx
 stoc/source/proxy_factory/proxyfac.cxx
-stoc/source/security/access_controller.cxx
-stoc/source/security/file_policy.cxx
-stoc/source/security/lru_cache.h
-stoc/source/security/permissions.cxx
-stoc/source/security/permissions.h
 stoc/source/servicemanager/servicemanager.cxx
 stoc/source/simpleregistry/simpleregistry.cxx
 stoc/source/typeconv/convert.cxx

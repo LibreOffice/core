@@ -45,12 +45,4 @@
       constructor="com_sun_star_comp_stoc_SimpleRegistry_get_implementation">
     <service name="com.sun.star.registry.SimpleRegistry"/>
   </implementation>
-  <implementation name="com.sun.star.security.comp.stoc.AccessController"
-      constructor="com_sun_star_security_comp_stoc_AccessController_get_implementation">
-    <service name="com.sun.star.security.AccessController"/>
-  </implementation>
-  <implementation name="com.sun.star.security.comp.stoc.FilePolicy"
-      constructor="com_sun_star_security_comp_stoc_FilePolicy_get_implementation">
-    <service name="com.sun.star.security.Policy"/>
-  </implementation>
 </component>

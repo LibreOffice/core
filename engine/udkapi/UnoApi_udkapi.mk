@@ -111,10 +111,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,udkapi,com/sun/star/registry,\
 	ImplementationRegistration \
 	SimpleRegistry \
 ))
-$(eval $(call gb_UnoApi_add_idlfiles_nohdl,udkapi,com/sun/star/security,\
-	AccessController \
-	Policy \
-))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,udkapi,com/sun/star/script,\
 	AllListenerAdapter \
 	Converter \
@@ -471,12 +467,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,udkapi,com/sun/star/script,\
 ))
 $(eval $(call gb_UnoApi_add_idlfiles,udkapi,com/sun/star/security,\
 	AccessControlException \
-	AllPermission \
-	RuntimePermission \
-	XAccessControlContext \
-	XAccessController \
-	XAction \
-	XPolicy \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles,udkapi,com/sun/star/task,\
 	XInteractionAbort \

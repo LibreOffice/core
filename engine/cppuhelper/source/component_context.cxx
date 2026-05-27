@@ -46,7 +46,6 @@
 
 constexpr OUString SMGR_SINGLETON = u"/singletons/com.sun.star.lang.theServiceManager"_ustr;
 constexpr OUStringLiteral TDMGR_SINGLETON = u"/singletons/com.sun.star.reflection.theTypeDescriptionManager";
-constexpr OUStringLiteral AC_SINGLETON = u"/singletons/com.sun.star.security.theAccessController";
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
@@ -385,7 +384,7 @@ Reference< lang::XMultiComponentFactory > ComponentContext::getServiceManager()
 
 void ComponentContext::disposing(std::unique_lock<std::mutex>& rGuard)
 {
-    Reference< lang::XComponent > xTDMgr, xAC; // to be disposed separately
+    Reference< lang::XComponent > xTDMgr; // to be disposed separately
 
     // dispose all context objects
     for ( auto& [rName, rEntry] : m_map )
@@ -409,10 +408,6 @@ void ComponentContext::disposing(std::unique_lock<std::mutex>& rGuard)
                 {
                     xTDMgr = std::move(xComp);
                 }
-                else if ( rName == AC_SINGLETON )
-                {
-                    xAC = std::move(xComp);
-                }
                 else // dispose immediately
                 {
                     rGuard.unlock();
@@ -426,8 +421,6 @@ void ComponentContext::disposing(std::unique_lock<std::mutex>& rGuard)
     // dispose service manager
     try_dispose( rGuard, m_xSMgr );
     m_xSMgr.clear();
-    // dispose ac
-    try_dispose( rGuard, xAC );
     // dispose tdmgr; revokes callback from cppu runtime
     try_dispose( rGuard, xTDMgr );
 

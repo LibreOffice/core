@@ -78,16 +78,6 @@ cppu::defaultBootstrap_InitialComponentContext(OUString const & iniUri)
             true)
     };
     smgr->addSingletonContextEntries(&context_values);
-    context_values.push_back(
-        cppu::ContextEntry_Init(
-            u"/services/com.sun.star.security.AccessController/mode"_ustr,
-            css::uno::Any(u"off"_ustr), false));
-    context_values.push_back(
-        cppu::ContextEntry_Init(
-            u"/singletons/com.sun.star.security.theAccessController"_ustr,
-            css::uno::Any(
-                u"com.sun.star.security.AccessController"_ustr),
-            true));
     css::uno::Reference< css::uno::XComponentContext > context(
         createComponentContext(context_values.data(), context_values.size()));
     smgr->setContext(context);
