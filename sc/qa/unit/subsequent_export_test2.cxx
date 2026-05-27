@@ -1822,8 +1822,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testArrayFormulaSpillRoundtripODS)
         ScDocument* pDocument = getScDoc();
         ScFormulaCell* pFormulaCell = pDocument->GetFormulaCell(ScAddress(0, 0, 0));
         CPPUNIT_ASSERT_MESSAGE("UNIQUE result should be #SPILL!", pFormulaCell != nullptr);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(FormulaError::Spill),
-                             sal_Int32(pFormulaCell->GetErrCode()));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(FormulaError::Spill), sal_Int32(pFormulaCell->GetErrCode()));
     }
 
     saveAndReload(TestFilter::ODS);
@@ -1835,15 +1834,13 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testArrayFormulaSpillRoundtripODS)
     ScFormulaCell* pFormulaCell = pDocument->GetFormulaCell(ScAddress(0, 0, 0));
     CPPUNIT_ASSERT_MESSAGE("Expected a formula cell at A1", pFormulaCell != nullptr);
     CPPUNIT_ASSERT_EQUAL(ScMatrixMode::Formula, pFormulaCell->GetMatrixFlag());
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(FormulaError::Spill),
-                         sal_Int32(pFormulaCell->GetErrCode()));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(FormulaError::Spill), sal_Int32(pFormulaCell->GetErrCode()));
     CPPUNIT_ASSERT_MESSAGE("UNIQUE token array must keep its dynamic array flag",
                            pFormulaCell->GetCode()->HasDynamicArrayFunction());
 
     clearCell(u"A2"_ustr);
 
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(FormulaError::NONE),
-                         sal_Int32(pFormulaCell->GetErrCode()));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(FormulaError::NONE), sal_Int32(pFormulaCell->GetErrCode()));
     SCCOL nCols = 0;
     SCROW nRows = 0;
     pFormulaCell->GetMatColsRows(nCols, nRows);
