@@ -8,34 +8,46 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-// Handles seen before the most recent transition; new handles are detected by absence.
-let knownHandles = new Set<string>();
-
 /**
- * Initialize the tracker with all currently live handles. Called from
- * the wdio `before` hook - tests never need to call this.
- */
-export async function init(webEngine: WebdriverIO.Browser): Promise<void> {
-	const handles = await webEngine.getWindowHandles();
-	knownHandles = new Set(handles);
-}
-
-/**
- * Wait for coda-qt to open a new WebView, then switch the session to it.
+ * Wait for a new WebView to appear (relative to the snapshot in
+ * `beforeHandles`) and switch the WebDriver session to it.
+ *
+ * The native side registers WebViews asynchronously and may also
+ * auto-activate the new one when register() runs.  That means we
+ * cannot reliably remember "which handles we have already seen"
+ * across switchToNewWebView() calls: a new WebView can register
+ * before, during, or after the polling loop, and if it lands after
+ * the loop has returned we would silently leave it out of our
+ * remembered set and then mistake it for "new" on the next call.
+ *
+ * Instead, every caller takes a snapshot of the handle set right
+ * before it triggers the action that creates the new WebView and
+ * passes it in here.  The diff is then unambiguous.
+ *
+ * If the action creates more than one WebView (it normally creates
+ * exactly one) we pick the most recently registered, which is at
+ * the end of getWindowHandles() because the native manager preserves
+ * insertion order.
  */
 export async function switchToNewWebView(
 	webEngine: WebdriverIO.Browser,
+	beforeHandles: string[],
 	timeoutMs = 30000,
 	intervalMs = 300,
 ): Promise<void> {
+	const before = new Set(beforeHandles);
 	let newHandle: string | null = null;
-	let latestHandles: string[] = [];
 
 	await webEngine.waitUntil(
 		async () => {
-			latestHandles = await webEngine.getWindowHandles();
-			newHandle = latestHandles.find((h) => !knownHandles.has(h)) ?? null;
-			return newHandle !== null;
+			const handles = await webEngine.getWindowHandles();
+			for (let i = handles.length - 1; i >= 0; i--) {
+				if (!before.has(handles[i])) {
+					newHandle = handles[i];
+					return true;
+				}
+			}
+			return false;
 		},
 		{
 			timeout: timeoutMs,
@@ -45,5 +57,4 @@ export async function switchToNewWebView(
 	);
 
 	await webEngine.switchToWindow(newHandle!);
-	knownHandles = new Set(latestHandles);
 }

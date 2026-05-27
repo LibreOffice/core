@@ -23,6 +23,11 @@ describe('Document lifecycle', () => {
 			},
 		);
 
+		// Snapshot WebView handles before triggering the click; the new
+		// document WebView is identified by switchToNewWebView() as the
+		// handle that wasn't in this set.
+		const beforeHandles = await browser.webEngine.getWindowHandles();
+
 		// Click the first template card (Blank Document). Use setTimeout so execute() returns
 		// before coda-qt tears down the backstage WebView and creates a new
 		// document WebView - otherwise webenginedriver never receives the
@@ -35,7 +40,7 @@ describe('Document lifecycle', () => {
 		});
 
 		// Wait for a new WebView to replace the backstage, then switch to it.
-		await webview.switchToNewWebView(browser.webEngine);
+		await webview.switchToNewWebView(browser.webEngine, beforeHandles);
 
 		// Wait for the document editor to finish loading
 		await browser.webEngine.waitForCondition(

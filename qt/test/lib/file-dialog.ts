@@ -37,6 +37,13 @@ export async function openFixture(
 		? '//*[@accessibility-id="OKButton"]'
 		: '//*[@accessibility-id="QApplication.QFileDialog.buttonBox.QPushButton"]';
 
+	// Snapshot the current WebView handles BEFORE dispatching .uno:Open.
+	// switchToNewWebView() below uses this snapshot to identify the
+	// WebView created by this action; the native side may register it
+	// at any point between now and the document load completing, so the
+	// snapshot has to be taken up front.
+	const beforeHandles = await webEngine.getWindowHandles();
+
 	// Use setTimeout so execute() returns before the modal dialog blocks.
 	await webEngine.execute(() => {
 		setTimeout(() => {
@@ -54,7 +61,7 @@ export async function openFixture(
 	await openBtn.waitForExist({ timeout: 5000 });
 	await openBtn.click();
 
-	await webview.switchToNewWebView(webEngine);
+	await webview.switchToNewWebView(webEngine, beforeHandles);
 
 	await (webEngine as any).waitForCondition(
 		() =>

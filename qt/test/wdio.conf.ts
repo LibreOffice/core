@@ -131,12 +131,8 @@ export const config = {
 		timeout: 150000,
 	},
 
-	// Runs in the worker process before any spec file - seeds the WebView
-	// tracker with the current window handle so it can detect transitions.
+	// Runs in the worker process before any spec file.
 	before: async function () {
-		const { init } = await import('./lib/webview.js');
-		await init(browser.webEngine);
-
 		// Convenience command: poll a JS predicate inside the WebView.
 		browser.webEngine.addCommand(
 			'waitForCondition',
