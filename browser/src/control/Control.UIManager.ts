@@ -138,6 +138,14 @@ class UIManager extends window.L.Control {
 		window.addEventListener('browsersettingchanged', () => {
 			this.initDarkModeFromSettings();
 		});
+		// Cross-window live update: desktop windows share one profile, so a dark
+		// mode change in another window fires a 'storage' event here. Drop the
+		// cached value and re-apply from the (updated) localStorage.
+		window.addEventListener('storage', (e) => {
+			if (e.key !== 'darkTheme') return;
+			delete (window.prefs as any)._localStorageCache['darkTheme'];
+			this.initDarkModeFromSettings();
+		});
 	}
 
 	// UI initialization
