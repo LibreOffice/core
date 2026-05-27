@@ -25,6 +25,7 @@
 #include <string>
 #include <common/Clipboard.hpp>
 #include <common/LangUtil.hpp>
+#include <common/SettingsStorage.hpp>
 #include <common/Log.hpp>
 #include <common/ProcUtil.hpp>
 #include <common/MobileApp.hpp>
@@ -372,6 +373,19 @@ static std::atomic<int> appDocIdCounter(1);
 
 + (bool)isRtlLanguage:(NSString *)language {
     return LangUtil::isRtlLanguage(std::string([language UTF8String]));
+}
+
++ (bool)darkModeWithSystemDefault:(bool)systemDefault {
+    // TODO: persist via Desktop::getDarkMode() once common/SettingsStorage.cpp
+    // is added to coda.xcodeproj (it isn't today, so we can't link the
+    // Desktop:: layer here). For now follow the system theme on every launch.
+    return systemDefault;
+}
+
++ (void)setDarkMode:(bool)value {
+    // TODO: persist via Desktop::setDarkMode() once SettingsStorage.cpp is in
+    // the Xcode project. Silently no-op for now.
+    (void)value;
 }
 
 @end

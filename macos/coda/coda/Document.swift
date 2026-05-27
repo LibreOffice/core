@@ -477,10 +477,10 @@ class Document: NSDocument {
         components.queryItems?.append(URLQueryItem(name: "lang", value: lang))
         components.queryItems?.append(URLQueryItem(name: "dir", value: COWrapper.isRtlLanguage(lang) ? "rtl" : ""))
 
-        // Add darkTheme parameter if user has dark mode enabled
-        if NSApp.effectiveAppearance.bestMatch(from: [.darkAqua, .aqua]) == .darkAqua {
-            components.queryItems?.append(URLQueryItem(name: "darkTheme", value: "true"))
-        }
+        // Dark mode: the saved choice wins, otherwise follow the system appearance.
+        let systemDark = NSApp.effectiveAppearance.bestMatch(from: [.darkAqua, .aqua]) == .darkAqua
+        let dark = COWrapper.darkMode(systemDefault: systemDark)
+        components.queryItems?.append(URLQueryItem(name: "darkTheme", value: dark ? "true" : "false"))
     }
 
     /**

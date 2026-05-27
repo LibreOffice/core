@@ -38,4 +38,7 @@
 
 + (bool)isRtlLanguage:(NSString *_Nonnull)language;
 
++ (bool)darkModeWithSystemDefault:(bool)systemDefault NS_SWIFT_NAME(darkMode(systemDefault:));
++ (void)setDarkMode:(bool)value NS_SWIFT_NAME(setDarkMode(_:));
+
 @end

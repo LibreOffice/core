@@ -351,6 +351,10 @@ class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavig
                     // TODO implement
                     return (nil, nil)
                 }
+                else if body.hasPrefix("SETDARKMODE ") {
+                    COWrapper.setDarkMode(body == "SETDARKMODE true")
+                    return (nil, nil)
+                }
                 else if body.hasPrefix("downloadas ") {
                     let messageBodyItems = body.components(separatedBy: " ")
                     var format: String?
