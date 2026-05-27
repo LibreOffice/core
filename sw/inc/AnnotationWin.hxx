@@ -24,6 +24,7 @@
 #include <tools/date.hxx>
 #include <tools/time.hxx>
 #include <vcl/InterimItemWindow.hxx>
+#include <vcl/weld/Label.hxx>
 #include <vcl/weld/MenuButton.hxx>
 #include <vcl/weld/ScrolledWindow.hxx>
 #include <vcl/weld/customweld.hxx>

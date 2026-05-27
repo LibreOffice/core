@@ -23,6 +23,8 @@
 #include <FltCallDialogParameter.hxx>
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/DialogController.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Label.hxx>
 #include <vcl/weld/Scale.hxx>
 #include <vcl/weld/SpinButton.hxx>
 #include <vcl/weld/weld.hxx>

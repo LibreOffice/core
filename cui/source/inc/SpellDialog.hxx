@@ -30,6 +30,7 @@
 #include <editeng/SpellPortions.hxx>
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/DrawingArea.hxx>
+#include <vcl/weld/Label.hxx>
 #include <vcl/weld/LinkButton.hxx>
 #include <vcl/weld/MenuButton.hxx>
 #include <vcl/weld/ScrolledWindow.hxx>

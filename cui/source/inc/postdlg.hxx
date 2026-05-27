@@ -24,6 +24,7 @@
 
 #include <sfx2/basedlgs.hxx>
 #include <vcl/weld/Dialog.hxx>
+#include <vcl/weld/Label.hxx>
 #include <vcl/weld/TextView.hxx>
 
 // class SvxPostItDialog -------------------------------------------------

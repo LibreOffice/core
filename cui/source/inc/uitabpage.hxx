@@ -11,6 +11,7 @@
 
 #include <sfx2/tabdlg.hxx>
 #include <vcl/weld/Image.hxx>
+#include <vcl/weld/Label.hxx>
 
 #include <uimode.hrc>
 

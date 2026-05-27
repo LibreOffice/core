@@ -20,6 +20,7 @@
 #pragma once
 
 #include <vcl/weld/Expander.hxx>
+#include <vcl/weld/Label.hxx>
 
 #include <vector>
 #include "anyrefdg.hxx"

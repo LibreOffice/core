@@ -29,6 +29,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Label.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
 #include <rtl/ustrbuf.hxx>
 

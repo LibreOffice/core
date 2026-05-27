@@ -12,6 +12,7 @@
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/Entry.hxx>
 #include <vcl/weld/Grid.hxx>
+#include <vcl/weld/Label.hxx>
 #include <vcl/weld/ScrolledWindow.hxx>
 #include <vcl/weld/weld.hxx>
 #include <types.hxx>

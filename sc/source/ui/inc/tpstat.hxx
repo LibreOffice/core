@@ -21,6 +21,7 @@
 
 #include <sfx2/tabdlg.hxx>
 #include <vcl/weld/Frame.hxx>
+#include <vcl/weld/Label.hxx>
 
 class ScDocStatPage: public SfxTabPage
 {

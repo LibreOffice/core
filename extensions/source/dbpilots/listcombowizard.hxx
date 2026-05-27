@@ -23,6 +23,7 @@
 #include "commonpagesdbp.hxx"
 
 #include <vcl/weld/Entry.hxx>
+#include <vcl/weld/Label.hxx>
 
 using vcl::WizardTypes::WizardState;
 using vcl::WizardTypes::CommitPageReason;

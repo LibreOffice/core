@@ -12,6 +12,7 @@
 
 #include <sal/config.h>
 
+#include <vcl/weld/Label.hxx>
 #include <vcl/weld/SpinButton.hxx>
 
 #include <optional>

@@ -34,6 +34,7 @@
 #include <svtools/unitconv.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Label.hxx>
 
 ScTpContentOptions::ScTpContentOptions(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet&  rArgSet)
     : SfxTabPage(pPage, pController, u"modules/scalc/ui/tpviewpage.ui"_ustr, u"TpViewPage"_ustr, &rArgSet)

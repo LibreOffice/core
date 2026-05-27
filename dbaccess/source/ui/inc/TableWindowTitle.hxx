@@ -20,7 +20,7 @@
 
 #include <vcl/InterimItemWindow.hxx>
 #include <vcl/weld/Image.hxx>
-#include <vcl/weld/weld.hxx>
+#include <vcl/weld/Label.hxx>
 
 namespace dbaui
 {

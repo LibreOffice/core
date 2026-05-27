@@ -13,6 +13,8 @@
 
 #include "QtInstanceWidget.hxx"
 
+#include <vcl/weld/Label.hxx>
+
 #include <QtCore/QObject>
 #include <QtWidgets/QLabel>
 

@@ -22,6 +22,7 @@
 #include <sal/config.h>
 #include <sfx2/charmapcontainer.hxx>
 #include <svtools/toolbarmenu.hxx>
+#include <vcl/weld/Label.hxx>
 
 class CharmapPopup;
 

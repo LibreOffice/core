@@ -35,6 +35,7 @@
 #include <svx/svxdllapi.h>
 #include <vcl/EnumContext.hxx>
 #include <vcl/weld/ComboBox.hxx>
+#include <vcl/weld/Label.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
 #include <vcl/weld/Scale.hxx>
 #include <vcl/weld/Toolbar.hxx>

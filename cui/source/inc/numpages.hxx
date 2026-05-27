@@ -28,6 +28,7 @@
 #include <svx/numberingpreview.hxx>
 #include <vcl/weld/Entry.hxx>
 #include <vcl/weld/Image.hxx>
+#include <vcl/weld/Label.hxx>
 #include <vcl/weld/Menu.hxx>
 #include <vcl/weld/MenuButton.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>

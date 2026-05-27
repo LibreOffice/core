@@ -23,6 +23,7 @@
 #include "namemgrtable.hxx"
 
 #include <vcl/weld/Expander.hxx>
+#include <vcl/weld/Label.hxx>
 
 #include <memory>
 #include <map>

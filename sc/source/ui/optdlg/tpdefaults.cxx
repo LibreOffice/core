@@ -17,6 +17,7 @@
 #include <officecfg/Office/Calc.hxx>
 #include <config_features.h>
 #include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Label.hxx>
 
 ScTpDefaultsOptions::ScTpDefaultsOptions(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet &rCoreSet)
     : SfxTabPage(pPage, pController, u"modules/scalc/ui/optdefaultpage.ui"_ustr, u"OptDefaultPage"_ustr, &rCoreSet)

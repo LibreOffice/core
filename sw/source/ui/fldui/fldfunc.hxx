@@ -20,6 +20,7 @@
 
 #include <sfx2/tabdlg.hxx>
 #include <vcl/weld/Entry.hxx>
+#include <vcl/weld/Label.hxx>
 
 #include <condedit.hxx>
 #include "fldpage.hxx"

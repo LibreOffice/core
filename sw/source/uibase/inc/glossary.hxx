@@ -21,6 +21,7 @@
 
 #include <vcl/textfilter.hxx>
 #include <vcl/weld/Entry.hxx>
+#include <vcl/weld/Label.hxx>
 #include <vcl/weld/TreeView.hxx>
 #include <vcl/weld/customweld.hxx>
 #include <vcl/weld/MenuButton.hxx>

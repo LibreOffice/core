@@ -20,6 +20,7 @@
 #define INCLUDED_SW_SOURCE_UI_DBUI_MMOUTPUTTYPEPAGE_HXX
 
 #include <vcl/wizardmachine.hxx>
+#include <vcl/weld/Label.hxx>
 #include <vcl/weld/weld.hxx>
 class SwMailMergeWizard;
 

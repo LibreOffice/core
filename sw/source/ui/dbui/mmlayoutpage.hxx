@@ -21,6 +21,7 @@
 
 #include <vcl/wizardmachine.hxx>
 #include <vcl/weld/ComboBox.hxx>
+#include <vcl/weld/Label.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
 #include <mailmergehelper.hxx>
 #include <com/sun/star/uno/Reference.h>

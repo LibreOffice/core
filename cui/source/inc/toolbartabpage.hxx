@@ -14,6 +14,7 @@
 
 #include <sfx2/tabdlg.hxx>
 #include <vcl/weld/weld.hxx>
+#include <vcl/weld/Label.hxx>
 #include <vcl/weld/TreeView.hxx>
 
 class ToolbarTabPage : public SfxTabPage

@@ -22,6 +22,7 @@
 #include <svx/txencbox.hxx>
 #include <svx/langbox.hxx>
 #include <tools/lineend.hxx>
+#include <vcl/weld/Label.hxx>
 
 class SwAsciiOptions;
 class SvStream;

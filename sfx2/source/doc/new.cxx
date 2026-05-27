@@ -41,6 +41,7 @@
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/Dialog.hxx>
 #include <vcl/weld/Expander.hxx>
+#include <vcl/weld/Label.hxx>
 #include <vcl/weld/TreeView.hxx>
 
 void SfxPreviewWin_Impl::SetObjectShell(SfxObjectShell const * pObj)

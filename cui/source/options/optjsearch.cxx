@@ -22,6 +22,7 @@
 #include <i18nutil/transliteration.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Label.hxx>
 #include "optjsearch.hxx"
 
 

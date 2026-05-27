@@ -32,6 +32,7 @@
 #include <tools/link.hxx>
 #include <vcl/weld/Box.hxx>
 #include <vcl/weld/Expander.hxx>
+#include <vcl/weld/Label.hxx>
 #include <vcl/weld/TextView.hxx>
 #include <vcl/weld/weld.hxx>
 #include <PostItMgr.hxx>

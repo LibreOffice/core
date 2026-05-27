@@ -26,6 +26,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/weld/weld.hxx>
 #include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Label.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

@@ -15,6 +15,7 @@
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/Entry.hxx>
 #include <vcl/weld/Grid.hxx>
+#include <vcl/weld/Label.hxx>
 #include <vcl/weld/weld.hxx>
 #include <svl/lstner.hxx>
 #include <svx/fntctrl.hxx>

@@ -23,6 +23,7 @@
 #include <vcl/themecolors.hxx>
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/Dialog.hxx>
+#include <vcl/weld/Label.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <map>
 

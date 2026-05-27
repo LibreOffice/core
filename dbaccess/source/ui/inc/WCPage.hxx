@@ -21,6 +21,7 @@
 #include "WTabPage.hxx"
 
 #include <vcl/weld/Entry.hxx>
+#include <vcl/weld/Label.hxx>
 
 namespace dbaui
 {

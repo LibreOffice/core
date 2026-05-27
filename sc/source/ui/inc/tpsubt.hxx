@@ -21,6 +21,7 @@
 
 #include <sfx2/tabdlg.hxx>
 #include <vcl/weld/ComboBox.hxx>
+#include <vcl/weld/Label.hxx>
 #include <vcl/weld/TreeView.hxx>
 #include <global.hxx>
 

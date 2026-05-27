@@ -13,6 +13,7 @@
 #include <svl/lstner.hxx>
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/Entry.hxx>
+#include <vcl/weld/Label.hxx>
 #include <conditio.hxx>
 
 class ScViewData;

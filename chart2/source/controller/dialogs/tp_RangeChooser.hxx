@@ -22,6 +22,7 @@
 #include <RangeSelectionListener.hxx>
 
 #include <vcl/weld/Entry.hxx>
+#include <vcl/weld/Label.hxx>
 #include <vcl/wizardmachine.hxx>
 
 namespace chart { class TabPageNotifiable; }

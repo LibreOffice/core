@@ -21,6 +21,7 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_MULTMRK_HXX
 
 #include <vcl/weld/DialogController.hxx>
+#include <vcl/weld/Label.hxx>
 #include <vcl/weld/TreeView.hxx>
 #include <vcl/weld/Window.hxx>
 #include <vcl/weld/weld.hxx>

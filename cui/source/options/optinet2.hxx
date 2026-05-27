@@ -23,6 +23,7 @@
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/Entry.hxx>
 #include <vcl/weld/Image.hxx>
+#include <vcl/weld/Label.hxx>
 
 namespace svx {
     class SecurityOptionsDialog;

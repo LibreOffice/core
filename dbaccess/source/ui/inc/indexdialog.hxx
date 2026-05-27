@@ -25,6 +25,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <vcl/vclptr.hxx>
 #include <vcl/weld/DialogController.hxx>
+#include <vcl/weld/Label.hxx>
 #include <vcl/weld/Toolbar.hxx>
 #include <vcl/weld/TreeView.hxx>
 #include <vcl/weld/Window.hxx>

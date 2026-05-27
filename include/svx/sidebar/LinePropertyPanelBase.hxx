@@ -18,6 +18,7 @@
  */
 #pragma once
 
+#include <vcl/weld/Label.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
 #include <vcl/weld/Toolbar.hxx>
 #include <vcl/weld/weld.hxx>

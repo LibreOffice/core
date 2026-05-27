@@ -22,7 +22,7 @@
 #include "bastype2.hxx"
 #include "bastypes.hxx"
 
-#include <vcl/weld/weld.hxx>
+#include <vcl/weld/Label.hxx>
 
 namespace basctl
 {

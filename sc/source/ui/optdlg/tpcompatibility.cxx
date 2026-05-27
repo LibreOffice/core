@@ -14,6 +14,7 @@
 #include <svl/eitem.hxx>
 #include <officecfg/Office/Calc.hxx>
 #include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Label.hxx>
 
 #include <tpcompatibility.hxx>
 #include <sc.hrc>

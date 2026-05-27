@@ -23,6 +23,7 @@
 #include <vcl/print.hxx>
 #include <vcl/weld/Dialog.hxx>
 #include <vcl/weld/DialogController.hxx>
+#include <vcl/weld/Label.hxx>
 #include <vcl/timer.hxx>
 
 class QueueInfo;

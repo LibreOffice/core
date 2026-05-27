@@ -18,8 +18,10 @@
  */
 #pragma once
 
-#include <sfx2/basedlgs.hxx>
 #include "dbtree.hxx"
+
+#include <sfx2/basedlgs.hxx>
+#include <vcl/weld/Label.hxx>
 
 class SwView;
 class SwWrtShell;

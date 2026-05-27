@@ -10,6 +10,7 @@
 
 #include <sfx2/devtools/ObjectInspectorWidgets.hxx>
 #include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Label.hxx>
 #include <vcl/weld/Notebook.hxx>
 #include <vcl/weld/Paned.hxx>
 #include <vcl/weld/TextView.hxx>

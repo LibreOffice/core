@@ -13,6 +13,7 @@
 
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/Expander.hxx>
+#include <vcl/weld/Label.hxx>
 
 #include <map>
 

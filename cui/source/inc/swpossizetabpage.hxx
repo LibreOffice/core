@@ -22,6 +22,7 @@
 #include <svx/swframeexample.hxx>
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/Image.hxx>
+#include <vcl/weld/Label.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
 #include <vcl/weld/weld.hxx>
 #include <svx/dlgutil.hxx>

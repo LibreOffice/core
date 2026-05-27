@@ -31,6 +31,7 @@
 #include <vcl/weld/Expander.hxx>
 #include <vcl/weld/Frame.hxx>
 #include <vcl/weld/Image.hxx>
+#include <vcl/weld/Label.hxx>
 
 #include <memory>
 #include <vector>

@@ -21,6 +21,7 @@
 
 #include <sfx2/basedlgs.hxx>
 #include <tools/fract.hxx>
+#include <vcl/weld/Label.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
 #include <vcl/weld/SpinButton.hxx>
 

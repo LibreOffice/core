@@ -12,6 +12,7 @@
 
 #include "StatisticsInputOutputDialog.hxx"
 
+#include <vcl/weld/Label.hxx>
 #include <vcl/weld/SpinButton.hxx>
 
 class ScFourierAnalysisDialog : public ScStatisticsInputOutputDialog

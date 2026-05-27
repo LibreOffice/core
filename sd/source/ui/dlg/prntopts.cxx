@@ -26,6 +26,7 @@
 #include <officecfg/Office/Impress.hxx>
 #include <officecfg/Office/Draw.hxx>
 #include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Label.hxx>
 
 /**
  *  dialog to adjust print options

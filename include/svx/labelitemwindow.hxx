@@ -11,8 +11,8 @@
 
 #include <vcl/weld/Box.hxx>
 #include <vcl/weld/Image.hxx>
+#include <vcl/weld/Label.hxx>
 #include <vcl/InterimItemWindow.hxx>
-#include <vcl/weld/weld.hxx>
 #include <svx/svxdllapi.h>
 
 enum class LabelItemWindowType

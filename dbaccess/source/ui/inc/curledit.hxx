@@ -20,7 +20,8 @@
 #pragma once
 
 #include <vcl/weld/Entry.hxx>
-#include <vcl/weld/weld.hxx>
+#include <vcl/weld/Label.hxx>
+
 #include <dsntypes.hxx>
 
 namespace dbaui

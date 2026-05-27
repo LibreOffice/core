@@ -30,6 +30,7 @@
 #include <basegfx/range/b2drange.hxx>
 #include <vcl/EnumContext.hxx>
 #include <vcl/weld/Image.hxx>
+#include <vcl/weld/Label.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
 #include <vcl/weld/Toolbar.hxx>
 #include <vcl/weld/customweld.hxx>

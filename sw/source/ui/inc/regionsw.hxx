@@ -30,6 +30,7 @@
 #include <vcl/weld/Entry.hxx>
 #include <vcl/weld/EntryTreeView.hxx>
 #include <vcl/weld/Frame.hxx>
+#include <vcl/weld/Label.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
 #include <vcl/weld/SpinButton.hxx>
 #include <vcl/weld/TreeView.hxx>

@@ -27,6 +27,7 @@
 #include <svx/svxids.hrc>
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/Dialog.hxx>
+#include <vcl/weld/Label.hxx>
 #include <officecfg/Office/Calc.hxx>
 
 #include <opredlin.hxx>

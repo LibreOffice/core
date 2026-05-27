@@ -14,6 +14,7 @@
 #include "anyrefdg.hxx"
 #include "viewdata.hxx"
 
+#include <vcl/weld/Label.hxx>
 #include <vcl/weld/SpinButton.hxx>
 
 class ScSamplingDialog : public ScAnyRefDlgController

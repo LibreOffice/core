@@ -22,6 +22,7 @@
 #include <sfx2/tabdlg.hxx>
 #include <vcl/weld/Box.hxx>
 #include <vcl/weld/Frame.hxx>
+#include <vcl/weld/Label.hxx>
 #include <vcl/weld/LinkButton.hxx>
 
 #include <com/sun/star/container/XNameReplace.hpp>

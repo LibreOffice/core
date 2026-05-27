@@ -26,6 +26,7 @@
 #include <svl/poolitem.hxx>
 #include <svl/eitem.hxx>
 #include <svx/rulritem.hxx>
+#include <vcl/weld/Label.hxx>
 
 namespace sw::sidebar {
 

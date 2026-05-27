@@ -17,6 +17,7 @@
 #include <vcl/weld/Entry.hxx>
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/Image.hxx>
+#include <vcl/weld/Label.hxx>
 #include <vcl/weld/LinkButton.hxx>
 #include <vcl/weld/MenuButton.hxx>
 #include <vcl/weld/ScrolledWindow.hxx>

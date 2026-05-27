@@ -27,6 +27,7 @@
 #include <sc.hrc>
 #include <officecfg/Office/Calc.hxx>
 #include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Label.hxx>
 
 ScTpPrintOptions::ScTpPrintOptions( weld::Container* pPage, weld::DialogController* pController,
                                     const SfxItemSet& rCoreAttrs )

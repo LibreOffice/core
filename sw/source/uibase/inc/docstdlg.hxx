@@ -19,8 +19,10 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_DOCSTDLG_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_DOCSTDLG_HXX
 
-#include <sfx2/tabdlg.hxx>
 #include <docstat.hxx>
+
+#include <sfx2/tabdlg.hxx>
+#include <vcl/weld/Label.hxx>
 
 // DocInfo now as page
 class SwDocStatPage final : public SfxTabPage

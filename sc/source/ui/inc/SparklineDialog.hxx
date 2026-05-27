@@ -18,6 +18,7 @@
 
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/FormattedSpinButton.hxx>
+#include <vcl/weld/Label.hxx>
 #include <vcl/weld/SpinButton.hxx>
 
 class ColorListBox;

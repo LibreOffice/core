@@ -20,6 +20,7 @@
 #include <vcl/metric.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld/Dialog.hxx>
+#include <vcl/weld/Label.hxx>
 #include <sfx2/watermarkitem.hxx>
 #include <svtools/ctrltool.hxx>
 #include <comphelper/lok.hxx>

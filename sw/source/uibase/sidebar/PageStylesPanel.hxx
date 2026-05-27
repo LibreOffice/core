@@ -31,6 +31,7 @@
 #include <svx/xflhtit.hxx>
 #include <svx/pageitem.hxx>
 #include <svx/pagenumberlistbox.hxx>
+#include <vcl/weld/Label.hxx>
 
 class ColorListBox;
 namespace sw::sidebar {

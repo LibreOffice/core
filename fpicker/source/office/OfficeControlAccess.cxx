@@ -29,6 +29,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/debug.hxx>
+#include <vcl/weld/Label.hxx>
 
 #include <algorithm>
 #include <utility>

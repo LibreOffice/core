@@ -22,6 +22,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Label.hxx>
 #include <vcl/weld/ScrolledWindow.hxx>
 #include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weld.hxx>

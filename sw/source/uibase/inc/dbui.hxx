@@ -20,8 +20,8 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_DBUI_HXX
 
 #include <vcl/weld/DialogController.hxx>
+#include <vcl/weld/Label.hxx>
 #include <vcl/weld/Window.hxx>
-#include <vcl/weld/weld.hxx>
 
 #include <swdllapi.h>
 

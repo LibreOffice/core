@@ -28,6 +28,7 @@
 #include <curledit.hxx>
 
 #include <vcl/weld/Entry.hxx>
+#include <vcl/weld/Label.hxx>
 
 namespace dbaui
 {

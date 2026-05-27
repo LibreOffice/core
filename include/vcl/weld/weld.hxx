@@ -261,30 +261,6 @@ public:
     virtual void set_label_wrap(bool wrap) = 0;
 };
 
-enum class LabelType
-{
-    Normal,
-    Warning,
-    Error,
-    Title, // this is intended to be used against the background set by set_title_background
-};
-
-class VCL_DLLPUBLIC Label : virtual public Widget
-{
-public:
-    virtual void set_label(const OUString& rText) = 0;
-    virtual OUString get_label() const = 0;
-    virtual void set_mnemonic_widget(Widget* pTarget) = 0;
-    // font size is in points, not pixels, e.g. see Window::[G]etPointFont
-    virtual void set_font(const vcl::Font& rFont) = 0;
-    virtual void set_label_type(LabelType eType) = 0;
-    /*
-       If you want to set a warning or error state, see set_label_type
-       instead.
-    */
-    virtual void set_font_color(const Color& rColor) = 0;
-};
-
 enum class Placement
 {
     Under,

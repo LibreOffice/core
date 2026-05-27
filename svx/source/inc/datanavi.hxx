@@ -28,6 +28,7 @@
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/Entry.hxx>
 #include <vcl/weld/Frame.hxx>
+#include <vcl/weld/Label.hxx>
 #include <vcl/weld/MenuButton.hxx>
 #include <vcl/weld/Notebook.hxx>
 #include <vcl/weld/TextView.hxx>

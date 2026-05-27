@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include <vcl/weld/Label.hxx>
 #include <vcl/weld/weld.hxx>
 #include <vcl/timer.hxx>
 #include "hyperlinktabpagebase.hxx"

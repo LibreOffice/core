@@ -25,6 +25,7 @@
 #include <vcl/weld/Dialog.hxx>
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/Entry.hxx>
+#include <vcl/weld/Label.hxx>
 #include <vcl/weld/LinkButton.hxx>
 #include <vcl/weld/ProgressBar.hxx>
 #include <vcl/weld/TextView.hxx>

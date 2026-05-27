@@ -21,9 +21,9 @@
 
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/DialogController.hxx>
+#include <vcl/weld/Label.hxx>
 #include <vcl/weld/SpinButton.hxx>
 #include <vcl/weld/Window.hxx>
-#include <vcl/weld/weld.hxx>
 
 namespace chart
 {

@@ -23,6 +23,7 @@
 #include <com/sun/star/ucb/XContent.hpp>
 #include <com/sun/star/sdb/application/NamedDatabaseObject.hpp>
 #include <vcl/mnemonic.hxx>
+#include <vcl/weld/Label.hxx>
 #include <vcl/weld/Paned.hxx>
 #include <vcl/weld/TextView.hxx>
 #include <vcl/weld/TreeIter.hxx>

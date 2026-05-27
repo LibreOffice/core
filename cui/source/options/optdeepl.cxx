@@ -21,6 +21,7 @@
 #include <officecfg/Office/Linguistic.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Label.hxx>
 #include <vcl/weld/LinkButton.hxx>
 
 OptDeeplTabPage::OptDeeplTabPage(weld::Container* pPage, weld::DialogController* pController,

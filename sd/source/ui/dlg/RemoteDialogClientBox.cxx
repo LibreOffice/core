@@ -24,6 +24,7 @@
 #include <RemoteServer.hxx>
 
 #include <vcl/svapp.hxx>
+#include <vcl/weld/Label.hxx>
 
 namespace sd {
 

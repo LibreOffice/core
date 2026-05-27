@@ -21,6 +21,7 @@
 
 #include <sal/config.h>
 #include <vcl/weld/DialogController.hxx>
+#include <vcl/weld/Label.hxx>
 #include <vcl/weld/ProgressBar.hxx>
 #include <vcl/weld/TextView.hxx>
 #include <vcl/weld/Window.hxx>

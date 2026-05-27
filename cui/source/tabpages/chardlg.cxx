@@ -68,6 +68,7 @@
 #include <o3tl/string_view.hxx>
 #include <tools/debug.hxx>
 #include <vcl/weld/EntryTreeView.hxx>
+#include <vcl/weld/Label.hxx>
 
 using namespace ::com::sun::star;
 

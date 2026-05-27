@@ -23,6 +23,7 @@
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
 #include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Label.hxx>
 
 // class SvxCTLOptionsPage -----------------------------------------------------
 

@@ -17,9 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <core_resource.hxx>
-#include <vcl/svapp.hxx>
 #include "AppTitleWindow.hxx"
+
+#include <core_resource.hxx>
+
+#include <vcl/svapp.hxx>
+#include <vcl/weld/Label.hxx>
 
 namespace dbaui
 {

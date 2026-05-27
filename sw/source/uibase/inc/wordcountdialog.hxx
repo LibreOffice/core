@@ -18,10 +18,13 @@
  */
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_WORDCOUNTDIALOG_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_WORDCOUNTDIALOG_HXX
-#include <sfx2/basedlgs.hxx>
+
 #include <docstat.hxx>
-#include <sfx2/childwin.hxx>
 #include <swabstdlg.hxx>
+
+#include <sfx2/basedlgs.hxx>
+#include <sfx2/childwin.hxx>
+#include <vcl/weld/Label.hxx>
 
 class SwWordCountFloatDlg final : public SfxModelessDialogController
 {

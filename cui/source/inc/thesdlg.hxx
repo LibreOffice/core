@@ -24,6 +24,7 @@
 #include <vcl/idle.hxx>
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/Entry.hxx>
+#include <vcl/weld/Label.hxx>
 #include <vcl/weld/TreeView.hxx>
 #include <sfx2/basedlgs.hxx>
 

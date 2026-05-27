@@ -24,6 +24,7 @@
 #include <vcl/wizardmachine.hxx>
 #include <vcl/weld/Entry.hxx>
 #include <vcl/weld/ItemView.hxx>
+#include <vcl/weld/Label.hxx>
 
 #include <RangeSelectionListener.hxx>
 

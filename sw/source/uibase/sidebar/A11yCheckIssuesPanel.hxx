@@ -18,6 +18,7 @@
 #include <tools/link.hxx>
 #include <vcl/weld/Box.hxx>
 #include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Label.hxx>
 #include <vcl/weld/LinkButton.hxx>
 #include <vcl/weld/weld.hxx>
 

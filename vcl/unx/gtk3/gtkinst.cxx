@@ -49,6 +49,7 @@
 #include <vcl/weld/Frame.hxx>
 #include <vcl/weld/Grid.hxx>
 #include <vcl/weld/Image.hxx>
+#include <vcl/weld/Label.hxx>
 #include <vcl/weld/LevelBar.hxx>
 #include <vcl/weld/LinkButton.hxx>
 #include <vcl/weld/Menu.hxx>
