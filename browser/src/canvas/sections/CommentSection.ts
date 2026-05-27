@@ -136,6 +136,7 @@ export class Comment extends CanvasSectionObject {
 		this.sectionProperties.replyButton = null;
 		this.sectionProperties.cancelReplyButton = null;
 		this.sectionProperties.contentText = null;
+		this.sectionProperties.lastContentRaw = '';
 		this.sectionProperties.nodeReply = null;
 		this.sectionProperties.nodeReplyText = null;
 		this.sectionProperties.contextMenu = false;
@@ -644,7 +645,22 @@ export class Comment extends CanvasSectionObject {
 	}
 
 	private updateContent (): void {
-		if(this.sectionProperties.data.html)
+		let contentModified = true;
+		let contentRaw = '';
+
+		if (this.sectionProperties.data.html)
+			contentRaw = app.LOUtil.sanitize(this.sectionProperties.data.html);
+		else
+			contentRaw = this.sectionProperties.data.text ? this.sectionProperties.data.text: '';
+
+		if (this.sectionProperties.lastContentRaw === contentRaw) contentModified = false;
+
+		// happens when comment anchor is moved due to typing in the same paragraph
+		if (!contentModified) return;
+
+		this.sectionProperties.lastContentRaw = contentRaw;
+
+		if (this.sectionProperties.data.html)
 			this.sectionProperties.contentText.innerHTML = app.LOUtil.sanitize(this.sectionProperties.data.html);
 		else
 			this.sectionProperties.contentText.innerText = this.sectionProperties.data.text ? this.sectionProperties.data.text: '';
@@ -658,6 +674,9 @@ export class Comment extends CanvasSectionObject {
 		if (this.sectionProperties.data.html) {
 			this.sectionProperties.nodeModifyText.innerHTML = app.LOUtil.sanitize(this.sectionProperties.data.html);
 		}
+	}
+
+	private updateMetadata (): void {
 		this.sectionProperties.contentAuthor.innerText = this.sectionProperties.data.author;
 
 		this.updateResolvedField(this.sectionProperties.data.resolved);
@@ -926,6 +945,7 @@ export class Comment extends CanvasSectionObject {
 
 	public update (): void {
 		this.updateContent();
+		this.updateMetadata();
 		this.updateLayout();
 		this.updatePosition();
 	}
@@ -1465,6 +1485,7 @@ export class Comment extends CanvasSectionObject {
 		this.sectionProperties.data.text = this.sectionProperties.nodeModifyText.innerText;
 		this.sectionProperties.data.html = this.sectionProperties.nodeModifyText.innerHTML;
 		this.updateContent();
+		this.updateMetadata();
 		if (!cool.CommentSection.autoSavedComment)
 			this.show();
 		this.sectionProperties.commentListSection.save(this);
