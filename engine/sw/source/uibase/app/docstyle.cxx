@@ -2876,6 +2876,11 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
     m_bFirstCalled = true;
     m_nLastPos = 0;
     m_aLst.clear();
+    // Drop the per-traversal name -> format caches; AppendStyleList
+    // rebuilds whichever one it needs on demand.
+    m_oTxtCollNameMap.reset();
+    m_oCharFormatNameMap.reset();
+    m_oFrameFormatNameMap.reset();
 
     // Delete current
     mxIterSheet->Reset();
@@ -3330,15 +3335,17 @@ SfxStyleSheetBase* SwStyleSheetIterator::Find(const OUString& rName)
     return nullptr;
 }
 
-static std::map<UIName, const SwFormat*> MakeNameToFormatMap(const SwFormatsBase& rFormats)
+static std::unordered_map<UIName, const SwFormat*>
+MakeNameToFormatMap(const SwFormatsBase& rFormats)
 {
-    std::map<UIName, const SwFormat*> ret;
+    std::unordered_map<UIName, const SwFormat*> aMap;
+    aMap.reserve(rFormats.GetFormatCount());
     for( size_t n = 0; n < rFormats.GetFormatCount(); ++n )
     {
         auto pFormat = rFormats.GetFormat(n);
-        ret.insert( { pFormat->GetName(), pFormat } );
+        aMap.emplace( pFormat->GetName(), pFormat );
     }
-    return ret;
+    return aMap;
 }
 
 void SwStyleSheetIterator::AppendStyleList(const std::vector<OUString>& rList,
@@ -3348,19 +3355,25 @@ void SwStyleSheetIterator::AppendStyleList(const std::vector<OUString>& rList,
     const SwDoc& rDoc = static_cast<const SwDocStyleSheetPool*>(pBasePool)->GetDoc();
     bool bUsed = false;
 
-    // Most of the searching for formats uses a linear search, so to avoid an O(n^2) loop, build
-    // a map of name->SwFormat.
-    std::map<UIName, const SwFormat*> aNameToFormatMap;
+    // Pick (and lazily populate) the right per-traversal lookup map;
+    // First() resets all three.
+    const NameToFormatMap* pNameMap = nullptr;
     switch ( nSection )
     {
         case SwGetPoolIdFromName::TxtColl:
-            aNameToFormatMap = MakeNameToFormatMap(*rDoc.GetTextFormatColls());
+            if (!m_oTxtCollNameMap)
+                m_oTxtCollNameMap = MakeNameToFormatMap(*rDoc.GetTextFormatColls());
+            pNameMap = &*m_oTxtCollNameMap;
             break;
         case SwGetPoolIdFromName::ChrFmt:
-            aNameToFormatMap = MakeNameToFormatMap(*rDoc.GetCharFormats());
+            if (!m_oCharFormatNameMap)
+                m_oCharFormatNameMap = MakeNameToFormatMap(*rDoc.GetCharFormats());
+            pNameMap = &*m_oCharFormatNameMap;
             break;
         case SwGetPoolIdFromName::FrmFmt:
-            aNameToFormatMap = MakeNameToFormatMap(*rDoc.GetFrameFormats());
+            if (!m_oFrameFormatNameMap)
+                m_oFrameFormatNameMap = MakeNameToFormatMap(*rDoc.GetFrameFormats());
+            pNameMap = &*m_oFrameFormatNameMap;
             break;
         case SwGetPoolIdFromName::PageDesc:
             // do nothing
@@ -3372,10 +3385,11 @@ void SwStyleSheetIterator::AppendStyleList(const std::vector<OUString>& rList,
             OSL_ENSURE( false, "unknown PoolFormat-Id" );
     }
 
-    auto findByName = [&aNameToFormatMap] (const UIName& rName) -> const SwFormat*
+    auto findByName = [pNameMap] (const UIName& rName) -> const SwFormat*
         {
-            auto it = aNameToFormatMap.find(rName);
-            if (it == aNameToFormatMap.end())
+            assert(pNameMap && "findByName invoked without a populated map");
+            auto it = pNameMap->find(rName);
+            if (it == pNameMap->end())
                 return nullptr;
             return it->second;
         };

@@ -32,6 +32,7 @@
 
 class SwDoc;
 class SwDocStyleSheetPool;
+class SwFormat;
 class SwPageDesc;
 class SwCharFormat;
 class SwTextFormatColl;
@@ -178,6 +179,13 @@ class SwStyleSheetIterator final : public SfxStyleSheetIterator, public SfxListe
     SwPoolFormatList       m_aLst;
     sal_uInt32          m_nLastPos;
     bool                m_bFirstCalled;
+
+    // Per-traversal name -> SwFormat lookup caches: built lazily on
+    // first use within a First() traversal, reset at its top.
+    typedef std::unordered_map<UIName, const SwFormat*> NameToFormatMap;
+    std::optional<NameToFormatMap> m_oTxtCollNameMap;
+    std::optional<NameToFormatMap> m_oCharFormatNameMap;
+    std::optional<NameToFormatMap> m_oFrameFormatNameMap;
 
     bool IsUsedInComments(const UIName& rName) const;
     void                AppendStyleList(const std::vector<OUString>& rLst,
