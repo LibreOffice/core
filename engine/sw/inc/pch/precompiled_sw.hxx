@@ -301,7 +301,6 @@
 #include <officecfg/Office/Common.hxx>
 #include <salhelper/salhelperdllapi.h>
 #include <salhelper/simplereferenceobject.hxx>
-#include <salhelper/singletonref.hxx>
 #include <sax/fastattribs.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/basedlgs.hxx>

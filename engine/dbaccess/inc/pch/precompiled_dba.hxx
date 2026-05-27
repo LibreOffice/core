@@ -235,7 +235,6 @@
 #include <o3tl/underlyingenumvalue.hxx>
 #include <salhelper/salhelperdllapi.h>
 #include <salhelper/simplereferenceobject.hxx>
-#include <salhelper/singletonref.hxx>
 #include <salhelper/thread.hxx>
 #include <sfx2/dllapi.h>
 #include <svl/hint.hxx>

@@ -143,7 +143,6 @@
 
 #include <unotools/syslocaleoptions.hxx>
 #include <i18nlangtag/mslangid.hxx>
-#include <salhelper/singletonref.hxx>
 #include <sfx2/event.hxx>
 #include <memory>
 

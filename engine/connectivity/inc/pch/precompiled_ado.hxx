@@ -92,7 +92,6 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <resource/sharedresources.hxx>
-#include <salhelper/singletonref.hxx>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
 #include <OColumn.hxx>

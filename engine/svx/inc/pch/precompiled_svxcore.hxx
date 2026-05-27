@@ -366,7 +366,6 @@
 #include <o3tl/unit_conversion.hxx>
 #include <salhelper/salhelperdllapi.h>
 #include <salhelper/simplereferenceobject.hxx>
-#include <salhelper/singletonref.hxx>
 #include <salhelper/thread.hxx>
 #include <sax/fastattribs.hxx>
 #include <sax/saxdllapi.h>
