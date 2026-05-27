@@ -65,7 +65,7 @@ std::optional<OUString> SwUndoInsert::GetTextFromDoc() const
     SwNodeIndex aNd( m_rDoc.GetNodes(), m_nNode);
     SwContentNode* pCNd = aNd.GetNode().GetContentNode();
 
-    if( pCNd->IsTextNode() )
+    if( pCNd && pCNd->IsTextNode() )
     {
         OUString sText = pCNd->GetTextNode()->GetText();
 
@@ -230,50 +230,58 @@ void SwUndoInsert::UndoImpl(::sw::UndoRedoContext & rContext)
         {
             SwNodeIndex aNd( pTmpDoc->GetNodes(), m_nNode);
             SwContentNode* pCNd = aNd.GetNode().GetContentNode();
-            SwPaM aPaM( *pCNd, m_nContent );
-
-            aPaM.SetMark();
-
-            SwTextNode * const pTextNode( pCNd->GetTextNode() );
-            if ( pTextNode )
+            if (!pCNd)
             {
-                aPaM.GetPoint()->AdjustContent( - m_nLen );
-                if( IDocumentRedlineAccess::IsRedlineOn( GetRedlineFlags() ))
-                    pTmpDoc->getIDocumentRedlineAccess().DeleteRedline( aPaM, true, RedlineType::Any );
-                if (m_bWithRsid)
+                SAL_WARN("sw.core", "SwUndoInsert::UndoImpl: node " << m_nNode
+                    << " is not a content node, skipping undo");
+            }
+            else
+            {
+                SwPaM aPaM( *pCNd, m_nContent );
+
+                aPaM.SetMark();
+
+                SwTextNode * const pTextNode( pCNd->GetTextNode() );
+                if ( pTextNode )
                 {
-                    // RSID was added: remove any CHARFMT/AUTOFMT that may be
-                    // set on the deleted text; EraseText will leave empty
-                    // ones behind otherwise
-                    pTextNode->DeleteAttributes(RES_TXTATR_AUTOFMT,
-                        aPaM.GetPoint()->GetContentIndex(),
-                        aPaM.GetMark()->GetContentIndex());
-                    pTextNode->DeleteAttributes(RES_TXTATR_CHARFMT,
-                        aPaM.GetPoint()->GetContentIndex(),
-                        aPaM.GetMark()->GetContentIndex());
+                    aPaM.GetPoint()->AdjustContent( - m_nLen );
+                    if( IDocumentRedlineAccess::IsRedlineOn( GetRedlineFlags() ))
+                        pTmpDoc->getIDocumentRedlineAccess().DeleteRedline( aPaM, true, RedlineType::Any );
+                    if (m_bWithRsid)
+                    {
+                        // RSID was added: remove any CHARFMT/AUTOFMT that may be
+                        // set on the deleted text; EraseText will leave empty
+                        // ones behind otherwise
+                        pTextNode->DeleteAttributes(RES_TXTATR_AUTOFMT,
+                            aPaM.GetPoint()->GetContentIndex(),
+                            aPaM.GetMark()->GetContentIndex());
+                        pTextNode->DeleteAttributes(RES_TXTATR_CHARFMT,
+                            aPaM.GetPoint()->GetContentIndex(),
+                            aPaM.GetMark()->GetContentIndex());
+                    }
+                    RemoveIdxFromRange( aPaM, false );
+                    maText = pTextNode->GetText().copy(m_nContent-m_nLen, m_nLen);
+                    pTextNode->EraseText( *aPaM.GetPoint(), m_nLen );
                 }
-                RemoveIdxFromRange( aPaM, false );
-                maText = pTextNode->GetText().copy(m_nContent-m_nLen, m_nLen);
-                pTextNode->EraseText( *aPaM.GetPoint(), m_nLen );
-            }
-            else                // otherwise Graphics/OLE/Text/...
-            {
-                aPaM.Move(fnMoveBackward);
-                if( IDocumentRedlineAccess::IsRedlineOn( GetRedlineFlags() ))
-                    pTmpDoc->getIDocumentRedlineAccess().DeleteRedline( aPaM, true, RedlineType::Any );
-                RemoveIdxFromRange( aPaM, false );
-            }
+                else                // otherwise Graphics/OLE/Text/...
+                {
+                    aPaM.Move(fnMoveBackward);
+                    if( IDocumentRedlineAccess::IsRedlineOn( GetRedlineFlags() ))
+                        pTmpDoc->getIDocumentRedlineAccess().DeleteRedline( aPaM, true, RedlineType::Any );
+                    RemoveIdxFromRange( aPaM, false );
+                }
 
-            nNd = aPaM.GetPoint()->GetNodeIndex();
-            nCnt = aPaM.GetPoint()->GetContentIndex();
+                nNd = aPaM.GetPoint()->GetNodeIndex();
+                nCnt = aPaM.GetPoint()->GetContentIndex();
 
-            if (!maText)
-            {
-                m_oUndoNodeIndex.emplace(m_rDoc.GetNodes().GetEndOfContent());
-                MoveToUndoNds(aPaM, &*m_oUndoNodeIndex);
+                if (!maText)
+                {
+                    m_oUndoNodeIndex.emplace(m_rDoc.GetNodes().GetEndOfContent());
+                    MoveToUndoNds(aPaM, &*m_oUndoNodeIndex);
+                }
+                m_nNode = aPaM.GetPoint()->GetNodeIndex();
+                m_nContent = aPaM.GetPoint()->GetContentIndex();
             }
-            m_nNode = aPaM.GetPoint()->GetNodeIndex();
-            m_nContent = aPaM.GetPoint()->GetContentIndex();
         }
 
         // set cursor to Undo range
