@@ -387,6 +387,8 @@ void ItemSetToPageDesc(const SfxItemSet& rSet, SwPageDesc& rPageDesc, bool bAppl
             rPageDesc.ChgHeaderShare(rHeaderSet.Get(SID_ATTR_PAGE_SHARED).GetValue());
             rPageDesc.ChgFirstShare(static_cast<const SfxBoolItem&>(
                             rHeaderSet.Get(SID_ATTR_PAGE_SHARED_FIRST)).GetValue());
+            rPageDesc.ChgWithoutFirst(static_cast<const SfxBoolItem&>(
+                            rHeaderSet.Get(SID_ATTR_PAGE_NO_FIRST)).GetValue());
             bFirstShare = true;
         }
         else
@@ -422,6 +424,8 @@ void ItemSetToPageDesc(const SfxItemSet& rSet, SwPageDesc& rPageDesc, bool bAppl
             {
                 rPageDesc.ChgFirstShare(static_cast<const SfxBoolItem&>(
                             rFooterSet.Get(SID_ATTR_PAGE_SHARED_FIRST)).GetValue());
+                rPageDesc.ChgWithoutFirst(static_cast<const SfxBoolItem&>(
+                            rFooterSet.Get(SID_ATTR_PAGE_NO_FIRST)).GetValue());
             }
         }
         else
@@ -562,7 +566,8 @@ void PageDescToItemSet( const SwPageDesc& rPageDesc, SfxItemSet& rSet)
             SID_ATTR_BORDER_INNER,SID_ATTR_BORDER_INNER,    // [10023
             SID_ATTR_PAGE_SIZE,SID_ATTR_PAGE_SIZE,          // [10051
             SID_ATTR_PAGE_ON,SID_ATTR_PAGE_SHARED,          // [10060
-            SID_ATTR_PAGE_SHARED_FIRST,SID_ATTR_PAGE_SHARED_FIRST>(*rSet.GetPool()));
+            SID_ATTR_PAGE_SHARED_FIRST,SID_ATTR_PAGE_SHARED_FIRST,
+            SID_ATTR_PAGE_NO_FIRST,SID_ATTR_PAGE_NO_FIRST>(*rSet.GetPool()));
 
         // set correct parent to get the XFILL_NONE FillStyle as needed
         aHeaderSet.SetParent(&rMaster.GetDoc().GetDfltFrameFormat()->GetAttrSet());
@@ -581,6 +586,8 @@ void PageDescToItemSet( const SwPageDesc& rPageDesc, SfxItemSet& rSet)
         aHeaderSet.Put(aShared);
         SfxBoolItem aFirstShared(SID_ATTR_PAGE_SHARED_FIRST, rPageDesc.IsFirstShared());
         aHeaderSet.Put(aFirstShared);
+        SfxBoolItem aWithoutFirst(SID_ATTR_PAGE_NO_FIRST, rPageDesc.IsWithoutFirst());
+        aHeaderSet.Put(aWithoutFirst);
 
         // Size
         SvxSizeItem aSize(SID_ATTR_PAGE_SIZE, rFrameSize.GetSize());
@@ -611,7 +618,8 @@ void PageDescToItemSet( const SwPageDesc& rPageDesc, SfxItemSet& rSet)
             SID_ATTR_BORDER_INNER,SID_ATTR_BORDER_INNER,    // [10023
             SID_ATTR_PAGE_SIZE,SID_ATTR_PAGE_SIZE,          // [10051
             SID_ATTR_PAGE_ON,SID_ATTR_PAGE_SHARED,          // [10060
-            SID_ATTR_PAGE_SHARED_FIRST,SID_ATTR_PAGE_SHARED_FIRST>(*rSet.GetPool()));
+            SID_ATTR_PAGE_SHARED_FIRST,SID_ATTR_PAGE_SHARED_FIRST,
+            SID_ATTR_PAGE_NO_FIRST,SID_ATTR_PAGE_NO_FIRST>(*rSet.GetPool()));
 
         // set correct parent to get the XFILL_NONE FillStyle as needed
         aFooterSet.SetParent(&rMaster.GetDoc().GetDfltFrameFormat()->GetAttrSet());
@@ -630,6 +638,8 @@ void PageDescToItemSet( const SwPageDesc& rPageDesc, SfxItemSet& rSet)
         aFooterSet.Put(aShared);
         SfxBoolItem aFirstShared(SID_ATTR_PAGE_SHARED_FIRST, rPageDesc.IsFirstShared());
         aFooterSet.Put(aFirstShared);
+        SfxBoolItem aWithoutFirst(SID_ATTR_PAGE_NO_FIRST, rPageDesc.IsWithoutFirst());
+        aFooterSet.Put(aWithoutFirst);
 
         // Size
         SvxSizeItem aSize(SID_ATTR_PAGE_SIZE, rFrameSize.GetSize());

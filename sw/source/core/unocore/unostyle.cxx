@@ -853,7 +853,7 @@ static bool lcl_GetHeaderFooterItem(
         bFooter ? SID_ATTR_PAGE_FOOTERSET : SID_ATTR_PAGE_HEADERSET,
         false);
     if (!o_rpItem &&
-        rPropName == UNO_NAME_FIRST_IS_SHARED)
+        (rPropName == UNO_NAME_FIRST_IS_SHARED || rPropName == UNO_NAME_NO_FIRST))
     {   // fdo#79269 header may not exist, check footer then
         o_rpItem = rSet.GetItemIfSet(
             (!bFooter) ? SID_ATTR_PAGE_FOOTERSET : SID_ATTR_PAGE_HEADERSET,
@@ -2604,7 +2604,8 @@ static const SfxItemSet* lcl_GetItemsetForProperty(const SfxItemSet& rSet, SfxSt
     if(eFamily != SfxStyleFamily::Page)
         return &rSet;
     const bool isFooter = o3tl::starts_with(rPropertyName, u"Footer");
-    if(!isFooter && !o3tl::starts_with(rPropertyName, u"Header") && rPropertyName != UNO_NAME_FIRST_IS_SHARED)
+    if(!isFooter && !o3tl::starts_with(rPropertyName, u"Header") &&
+        rPropertyName != UNO_NAME_FIRST_IS_SHARED && rPropertyName != UNO_NAME_NO_FIRST)
         return &rSet;
     const SvxSetItem* pSetItem;
     if(!lcl_GetHeaderFooterItem(rSet, rPropertyName, isFooter, pSetItem))
@@ -3011,7 +3012,9 @@ void SwXPageStyle::SetPropertyValues_Impl(const uno::Sequence<OUString>& rProper
         const bool bHeader(rPropName.startsWith("Header"));
         const bool bFooter(rPropName.startsWith("Footer"));
         const bool bFirstIsShared(rPropName == UNO_NAME_FIRST_IS_SHARED);
-        if(bHeader || bFooter || bFirstIsShared)
+        const bool bNoFirst(rPropName == UNO_NAME_NO_FIRST);
+
+        if(bHeader || bFooter || bFirstIsShared || bNoFirst)
         {
             switch(pEntry->nWID)
             {
@@ -3024,6 +3027,7 @@ void SwXPageStyle::SetPropertyValues_Impl(const uno::Sequence<OUString>& rProper
                 case SID_ATTR_PAGE_DYNAMIC:
                 case SID_ATTR_PAGE_SHARED:
                 case SID_ATTR_PAGE_SHARED_FIRST:
+                case SID_ATTR_PAGE_NO_FIRST:
                 case SID_ATTR_PAGE_SIZE:
                 case RES_HEADER_FOOTER_EAT_SPACING:
                 {
@@ -3033,7 +3037,7 @@ void SwXPageStyle::SetPropertyValues_Impl(const uno::Sequence<OUString>& rProper
                     {
                         PutItemToSet(pSetItem, *pPropSet, *pEntry, rValues[nProp], aBaseImpl);
 
-                        if (pEntry->nWID == SID_ATTR_PAGE_SHARED_FIRST)
+                        if (pEntry->nWID == SID_ATTR_PAGE_SHARED_FIRST || pEntry->nWID == SID_ATTR_PAGE_NO_FIRST)
                         {
                             // Need to add this to the other as well
                             pSetItem = aBaseImpl.GetItemSet().GetItemIfSet(
@@ -3057,7 +3061,8 @@ void SwXPageStyle::SetPropertyValues_Impl(const uno::Sequence<OUString>& rProper
                             SID_ATTR_BORDER_INNER,SID_ATTR_BORDER_INNER,    // [10023
                             SID_ATTR_PAGE_SIZE,SID_ATTR_PAGE_SIZE,          // [10051
                             SID_ATTR_PAGE_ON,SID_ATTR_PAGE_SHARED,          // [10060
-                            SID_ATTR_PAGE_SHARED_FIRST,SID_ATTR_PAGE_SHARED_FIRST>
+                            SID_ATTR_PAGE_SHARED_FIRST,SID_ATTR_PAGE_SHARED_FIRST,
+                            SID_ATTR_PAGE_NO_FIRST,SID_ATTR_PAGE_NO_FIRST>
                                 (*aBaseImpl.GetItemSet().GetPool()));
 
                         // set correct parent to get the XFILL_NONE FillStyle as needed
@@ -3070,6 +3075,7 @@ void SwXPageStyle::SetPropertyValues_Impl(const uno::Sequence<OUString>& rProper
                         aTempSet.Put(SvxULSpaceItem(RES_UL_SPACE));
                         aTempSet.Put(SfxBoolItem(SID_ATTR_PAGE_SHARED, true));
                         aTempSet.Put(SfxBoolItem(SID_ATTR_PAGE_SHARED_FIRST, true));
+                        aTempSet.Put(SfxBoolItem(SID_ATTR_PAGE_NO_FIRST, false));
                         aTempSet.Put(SfxBoolItem(SID_ATTR_PAGE_DYNAMIC, true));
 
                         SvxSetItem aNewSetItem(bFooter ? SID_ATTR_PAGE_FOOTERSET : SID_ATTR_PAGE_HEADERSET, aTempSet);
@@ -3128,6 +3134,9 @@ void SwXPageStyle::SetPropertyValues_Impl(const uno::Sequence<OUString>& rProper
                     }
                 }
                 continue;
+                //case SID_ATTR_PAGE_NO_FIRST:
+                //    aBaseImpl.GetItemSet().Put(SfxBoolItem(SID_ATTR_PAGE_NO_FIRST, rValues[nProp].get<bool>()));
+                //    break;
                 default: ;
             }
         }
@@ -3136,6 +3145,7 @@ void SwXPageStyle::SetPropertyValues_Impl(const uno::Sequence<OUString>& rProper
             case SID_ATTR_PAGE_DYNAMIC:
             case SID_ATTR_PAGE_SHARED:
             case SID_ATTR_PAGE_SHARED_FIRST:
+            case SID_ATTR_PAGE_NO_FIRST:
             case SID_ATTR_PAGE_ON:
             case RES_HEADER_FOOTER_EAT_SPACING:
                 // these slots are exclusive to Header/Footer, thus this is an error
@@ -3256,7 +3266,8 @@ uno::Sequence<uno::Any> SwXPageStyle::GetPropertyValues_Impl(const uno::Sequence
         const bool bHeader(rPropName.startsWith("Header"));
         const bool bFooter(rPropName.startsWith("Footer"));
         const bool bFirstIsShared(rPropName == UNO_NAME_FIRST_IS_SHARED);
-        if(bHeader || bFooter || bFirstIsShared)
+        const bool bNoFirst(rPropName == UNO_NAME_NO_FIRST);
+        if(bHeader || bFooter || bFirstIsShared || bNoFirst)
         {
             switch(pEntry->nWID)
             {
@@ -3269,6 +3280,7 @@ uno::Sequence<uno::Any> SwXPageStyle::GetPropertyValues_Impl(const uno::Sequence
                 case SID_ATTR_PAGE_DYNAMIC:
                 case SID_ATTR_PAGE_SHARED:
                 case SID_ATTR_PAGE_SHARED_FIRST:
+                case SID_ATTR_PAGE_NO_FIRST:
                 case SID_ATTR_PAGE_SIZE:
                 case RES_HEADER_FOOTER_EAT_SPACING:
                 {
@@ -3341,6 +3353,7 @@ uno::Sequence<uno::Any> SwXPageStyle::GetPropertyValues_Impl(const uno::Sequence
             case SID_ATTR_PAGE_DYNAMIC:
             case SID_ATTR_PAGE_SHARED:
             case SID_ATTR_PAGE_SHARED_FIRST:
+            case SID_ATTR_PAGE_NO_FIRST:
             case SID_ATTR_PAGE_ON:
             case RES_HEADER_FOOTER_EAT_SPACING:
                 throw beans::UnknownPropertyException( "Unknown property: " + rPropName, getXWeak() );

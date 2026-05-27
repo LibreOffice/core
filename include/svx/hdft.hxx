@@ -69,6 +69,7 @@ protected:
     std::unique_ptr<weld::CheckButton> m_xTurnOnBox;
     std::unique_ptr<weld::CheckButton> m_xCntSharedBox;
     std::unique_ptr<weld::CheckButton> m_xCntSharedFirstBox;
+    std::unique_ptr<weld::CheckButton> m_xCntNoFirstBox;
     std::unique_ptr<weld::Label> m_xLMLbl;
     std::unique_ptr<weld::MetricSpinButton>m_xLMEdit;
     std::unique_ptr<weld::Label> m_xRMLbl;
@@ -86,6 +87,7 @@ protected:
     void            InitHandler();
     void TurnOn(const weld::Toggleable* pButton);
     DECL_LINK(TurnOnHdl, weld::Toggleable&, void);
+    DECL_LINK(FirstPageHdl, weld::Toggleable&, void);
     DECL_DLLPRIVATE_LINK(BackgroundHdl, weld::Button&, void);
     DECL_DLLPRIVATE_LINK(ValueChangeHdl, weld::MetricSpinButton&, void);
     void RangeHdl();

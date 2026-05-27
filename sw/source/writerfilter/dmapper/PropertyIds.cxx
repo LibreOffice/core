@@ -20,6 +20,7 @@
 #include <svl/sharedstring.hxx>
 #include "PropertyIds.hxx"
 #include <unordered_map>
+#include <unoprnms.hxx>
 
 namespace writerfilter::dmapper{
 
@@ -204,6 +205,7 @@ const OUString & getPropertyName( PropertyIds eId )
         { PROP_HEADER_IS_SHARED, u"HeaderIsShared"_ustr},
         { PROP_HEADER_IS_ON, u"HeaderIsOn"_ustr},
         { PROP_FIRST_IS_SHARED, u"FirstIsShared"_ustr},
+        { PROP_FIRST_EMPTY, UNO_NAME_NO_FIRST},
         { PROP_FOOTER_TEXT_LEFT, u"FooterTextLeft"_ustr},
         { PROP_FOOTER_TEXT_FIRST, u"FooterTextFirst"_ustr},
         { PROP_FOOTER_TEXT, u"FooterText"_ustr},

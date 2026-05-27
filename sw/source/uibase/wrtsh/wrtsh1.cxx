@@ -2327,10 +2327,17 @@ void SwWrtShell::ChangeHeaderOrFooter(
             {
                 bChgd = true;
                 SwFrameFormat &rMaster = aDesc.GetMaster();
-                if(bHeader)
-                    rMaster.SetFormatAttr( SwFormatHeader( bOn ));
+                if (bOn && aDesc.IsWithoutFirst())
+                {
+                    aDesc.ChgWithoutFirst(false);
+                }
                 else
-                    rMaster.SetFormatAttr( SwFormatFooter( bOn ));
+                {
+                    if (bHeader)
+                        rMaster.SetFormatAttr( SwFormatHeader( bOn ));
+                    else
+                        rMaster.SetFormatAttr( SwFormatFooter( bOn ));
+                }
                 if( bOn )
                 {
                     // keep in sync with FN_PGNUMBER_WIZARD

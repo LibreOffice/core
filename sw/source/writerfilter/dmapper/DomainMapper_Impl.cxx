@@ -4147,7 +4147,10 @@ void DomainMapper_Impl::PushPageHeaderFooter(PagePartType ePagePartType, PageTyp
                 pSectionContext->m_bHadFirstHeader = true;
             }
             else
+            {
                 pSectionContext->m_bFirstFooter = true;
+                pSectionContext->m_bHadFirstFooter = true;
+            }
 
             prepareHeaderFooterContent(xPageStyle, ePagePartType, ePropTextFirst, true);
         }

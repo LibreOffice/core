@@ -447,6 +447,7 @@ public:
     bool m_bRightHeader = false;
     bool m_bRightFooter = false;
     bool m_bHadFirstHeader = false;
+    bool m_bHadFirstFooter = false;
     bool m_bHadLeftHeader = false;
     bool m_bHadRightHeader = false;
 
