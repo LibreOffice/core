@@ -12,6 +12,22 @@ interface ParsedJSONResult {
 	[name: string]: any;
 }
 
+// One argument of a UNO command as carried over postMessage: the UNO value
+// type (e.g. 'string', 'int32', 'boolean') and the value itself.
+interface UnoCommandValue {
+	type: string;
+	value: string | number | boolean;
+}
+
+// Arguments for insertCommentInteractive(): the inserted comment's UNO command
+// arguments (Text, Author, ...) keyed by argument name, plus the
+// InteractiveAnchor flag that asks the browser to let the user pick the anchor
+// before the command is dispatched.
+interface InteractiveCommentArgs {
+	InteractiveAnchor?: boolean;
+	[arg: string]: UnoCommandValue | boolean | undefined;
+}
+
 interface CRSInterface {
 	scale(zoom: number): number;
 }
@@ -208,7 +224,7 @@ interface MapInterface extends Evented {
 	): void;
 	insertComment(): void;
 	insertThreadedComment(): void;
-	insertCommentInteractive(command: string, args: any): void;
+	insertCommentInteractive(command: string, args: InteractiveCommentArgs): void;
 	zoomIn(delta: number, options?: any, animate?: boolean): MapInterface;
 	zoomOut(delta: number, options?: any, animate?: boolean): MapInterface;
 	cancelSearch(): void;

@@ -108,7 +108,7 @@ window.L.Map.include({
 	// PositionX/Y (and Width/Height when the user dragged a rectangle) merged
 	// in. Outside fileBasedView there is no picker, so we just strip and
 	// dispatch as-is.
-	insertCommentInteractive: function(command: string, args: any) {
+	insertCommentInteractive: function(command: string, args: InteractiveCommentArgs) {
 		const { blocked, commentSection } = this._beginCommentInsertion();
 		if (blocked)
 			return;
