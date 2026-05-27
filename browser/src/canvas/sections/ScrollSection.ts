@@ -60,10 +60,9 @@ export class ScrollSection extends CanvasSectionObject {
 		this.sectionProperties.drawScrollBarRailway = true;
 		this.sectionProperties.scrollBarRailwayThickness = 6 * app.roundedDpiScale;
 		this.sectionProperties.scrollBarRailwayAlpha = this.map._docLayer._docType === 'spreadsheet' ? 1.0 : 0.5;
-		this.sectionProperties.scrollBarRailwayColor = '#EFEFEF';
 
-		this.refreshScrollBarThumbColor();
-		this.map.on('darkmodechanged', this.refreshScrollBarThumbColor, this);
+		this.refreshScrollBarColors();
+		this.map.on('darkmodechanged', this.refreshScrollBarColors, this);
 
 		this.sectionProperties.drawVerticalScrollBar = ((<any>window).mode.isDesktop() ? true: false);
 		this.sectionProperties.drawHorizontalScrollBar = ((<any>window).mode.isDesktop() ? true: false);
@@ -122,9 +121,12 @@ export class ScrollSection extends CanvasSectionObject {
 		}
 	}
 
-	private refreshScrollBarThumbColor(): void {
-		const value = getComputedStyle(document.documentElement).getPropertyValue('--color-scrollbar-thumb').trim();
-		this.sectionProperties.scrollBarThumbColor = value || '#7E8182';
+	private refreshScrollBarColors(): void {
+		const style = getComputedStyle(document.documentElement);
+		this.sectionProperties.scrollBarThumbColor =
+			style.getPropertyValue('--color-scrollbar-thumb').trim() || '#7E8182';
+		this.sectionProperties.scrollBarRailwayColor =
+			style.getPropertyValue('--color-scrollbar-railway').trim() || '#EFEFEF';
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
