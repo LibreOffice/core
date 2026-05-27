@@ -804,6 +804,22 @@ SYSTEM_STAMP =
 
 endif
 
+.PHONY: cleanup setup-wsd
+
+if ENABLE_FUZZERS
+ALL_LOCAL_DEPS=
+else
+ALL_LOCAL_DEPS=coolwsd
+endif
+
+all-local: $(ALL_LOCAL_DEPS) @JAILS_PATH@ @CACHE_PATH@ $(SYSTEM_STAMP)
+	@abs_srcdir='$(abs_top_srcdir)' $(abs_top_srcdir)/scripts/refresh-git-hooks
+
+# just run the build without any tests
+build-nocheck: all-am
+
+endif
+
 distclean-local:
 	rm -rf $(top_srcdir)/scripts/__pycache__
 
@@ -832,22 +848,6 @@ maintainer-clean: maintainer-clean-recursive
 	rm -rf $(EMPTY_DEPDIRS)
 	rm -f $(top_srcdir)/Makefile.in $(top_srcdir)/aclocal.m4 $(top_srcdir)/compile $(top_srcdir)/config.guess $(top_srcdir)/config.sub $(top_srcdir)/config_unused.h.in $(top_srcdir)/configure $(top_srcdir)/configure~ $(top_srcdir)/depcomp $(top_srcdir)/install-sh $(top_srcdir)/ltmain.sh $(top_srcdir)/missing
 	rm -rf $(top_srcdir)/m4
-
-.PHONY: cleanup setup-wsd
-
-if ENABLE_FUZZERS
-ALL_LOCAL_DEPS=
-else
-ALL_LOCAL_DEPS=coolwsd
-endif
-
-all-local: $(ALL_LOCAL_DEPS) @JAILS_PATH@ @CACHE_PATH@ $(SYSTEM_STAMP)
-	@abs_srcdir='$(abs_top_srcdir)' $(abs_top_srcdir)/scripts/refresh-git-hooks
-
-# just run the build without any tests
-build-nocheck: all-am
-
-endif
 
 define file_target
 $(1): $(2)
