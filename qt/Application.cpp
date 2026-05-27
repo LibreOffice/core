@@ -35,10 +35,12 @@ void Application::initialize()
     {
         globalProfile = new QWebEngineProfile(QStringLiteral("PersistentProfile"));
 
-        QString appData = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+        // Keep the WebEngine's persistent data (localStorage, cookies) under the
+        // same directory as our settings instead of a separate data location.
+        QString configData = QString::fromStdString(Desktop::getConfigPath().toString());
         QString cacheData = QStandardPaths::writableLocation(QStandardPaths::CacheLocation);
 
-        globalProfile->setPersistentStoragePath(appData);
+        globalProfile->setPersistentStoragePath(configData);
         globalProfile->setCachePath(cacheData);
         globalProfile->setHttpCacheType(QWebEngineProfile::DiskHttpCache);
 
