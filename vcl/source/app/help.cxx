@@ -420,7 +420,7 @@ void HelpTextWindow::Paint( vcl::RenderContext& rRenderContext, const tools::Rec
 
 void HelpTextWindow::ShowHelp(bool bNoDelay)
 {
-    sal_uLong nTimeout = 0;
+    sal_uInt64 nTimeout = 0;
     if (!bNoDelay)
     {
         // In case of ExtendedHelp display help sooner
