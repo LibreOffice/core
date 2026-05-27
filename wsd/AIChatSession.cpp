@@ -531,7 +531,13 @@ bool AIChatSession::handleAction(const std::string& firstLine)
         " extract_document_structure with filter=\"text\" to read the body text"
         " (Writer prose, or the active Calc sheet) as markdown. If the result is"
         " marked truncated, ask the user to select the relevant part (Writer) or"
-        " to give a cell range via the range argument (Calc).";
+        " to give a cell range via the range argument (Calc)."
+        " If your earlier responses in this conversation already contain the"
+        " document content needed to answer a follow-up question, rely on them"
+        " instead of calling extract_document_structure to read the body again."
+        " Read the body again when the user asks about content your earlier"
+        " responses do not already cover, or when the user indicates they have"
+        " edited or changed the document.";
 
     if (hasSelectedText)
         systemPrompt +=
