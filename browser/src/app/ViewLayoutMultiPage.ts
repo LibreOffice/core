@@ -175,73 +175,15 @@ class ViewLayoutMultiPage extends ViewLayoutNewBase {
 	}
 
 	protected refreshVisibleAreaRectangle(): void {
-		const documentAnchor = this.getDocumentAnchorSection();
-
-		// When the document container is hidden (e.g. BackstageView in CODA), the
-		// anchor section has zero size - bail out to avoid an infinite retry loop.
-		if (documentAnchor.size[0] <= 0 || documentAnchor.size[1] <= 0) return;
-
-		const view = cool.SimpleRectangle.fromCorePixels([
-			this.scrollProperties.viewX,
-			this.scrollProperties.viewY,
-			documentAnchor.size[0],
-			documentAnchor.size[1],
-		]);
-		const resultingRectangle: cool.SimpleRectangle = new cool.SimpleRectangle(
-			Number.POSITIVE_INFINITY,
-			Number.POSITIVE_INFINITY,
-			-10000,
-			-10000,
+		this.refreshVisibleAreaRectangleImpl(
+			this.documentRectangles,
+			this.viewRectangles,
+			'x',
 		);
-
-		for (let i = 0; i < this.documentRectangles.length; i++) {
-			const documentRectangle = this.documentRectangles[i];
-			const viewRectangle = this.viewRectangles[i];
-
-			if (view.intersectsRectangle(viewRectangle.toArray())) {
-				if (resultingRectangle.pX1 > documentRectangle.pX1)
-					resultingRectangle.pX1 = documentRectangle.pX1;
-
-				if (resultingRectangle.pY1 > documentRectangle.pY1)
-					resultingRectangle.pY1 = documentRectangle.pY1;
-
-				if (resultingRectangle.pX2 < documentRectangle.pX2)
-					resultingRectangle.pX2 = documentRectangle.pX2;
-
-				if (resultingRectangle.pY2 < documentRectangle.pY2)
-					resultingRectangle.pY2 = documentRectangle.pY2;
-			}
-		}
-
-		if (
-			resultingRectangle.pX1 === Number.POSITIVE_INFINITY ||
-			resultingRectangle.pY1 === Number.POSITIVE_INFINITY
-		) {
-			app.layoutingService.appendLayoutingTask(() => {
-				this.scrollProperties.viewX = 0;
-				this.refreshVisibleAreaRectangle();
-			});
-		} else {
-			this._viewedRectangle = resultingRectangle;
-
-			app.sectionContainer.onNewDocumentTopLeft();
-			app.sectionContainer.requestReDraw();
-		}
 	}
 
 	protected override refreshCurrentCoordList() {
-		this.currentCoordList.length = 0;
-		const zoom = Math.round(app.map.getZoom());
-		const tileSize = TileManager.tileSize;
-
-		const documentAnchor = this.getDocumentAnchorSection();
-		const view = cool.SimpleRectangle.fromCorePixels([
-			this.scrollProperties.viewX,
-			this.scrollProperties.viewY,
-			documentAnchor.size[0],
-			documentAnchor.size[1],
-		]);
-
+		const { zoom, tileSize, view } = this.beginCoordList();
 		const added: Set<string> = new Set();
 
 		for (let i = 0; i < this.documentRectangles.length; i++) {
@@ -250,47 +192,29 @@ class ViewLayoutMultiPage extends ViewLayoutNewBase {
 			if (!view.intersectsRectangle(viewRect.toArray())) continue;
 
 			const docRect = this.documentRectangles[i];
-
-			// Compute the visible portion of this page in view coordinates.
-			const visibleVX1 = Math.max(view.pX1, viewRect.pX1);
-			const visibleVY1 = Math.max(view.pY1, viewRect.pY1);
-			const visibleVX2 = Math.min(
-				view.pX1 + view.pWidth,
-				viewRect.pX1 + viewRect.pWidth,
-			);
-			const visibleVY2 = Math.min(
-				view.pY1 + view.pHeight,
-				viewRect.pY1 + viewRect.pHeight,
-			);
+			const { vx1, vy1, vx2, vy2 } = this.getVisibleViewBounds(view, viewRect);
 
 			// Map the visible view portion back to document coordinates.
-			const docVisX1 = docRect.pX1 + (visibleVX1 - viewRect.pX1);
-			const docVisY1 = docRect.pY1 + (visibleVY1 - viewRect.pY1);
-			const docVisX2 = docRect.pX1 + (visibleVX2 - viewRect.pX1);
-			const docVisY2 = docRect.pY1 + (visibleVY2 - viewRect.pY1);
+			const docVisX1 = docRect.pX1 + (vx1 - viewRect.pX1);
+			const docVisY1 = docRect.pY1 + (vy1 - viewRect.pY1);
+			const docVisX2 = docRect.pX1 + (vx2 - viewRect.pX1);
+			const docVisY2 = docRect.pY1 + (vy2 - viewRect.pY1);
 
 			const startX = Math.floor(docVisX1 / tileSize) * tileSize;
 			const startY = Math.floor(docVisY1 / tileSize) * tileSize;
 			const columnCount = Math.ceil((docVisX2 - startX) / tileSize);
 			const rowCount = Math.ceil((docVisY2 - startY) / tileSize);
 
-			for (let c = 0; c <= columnCount; c++) {
-				for (let r = 0; r <= rowCount; r++) {
-					const coords = new TileCoordData(
-						startX + c * tileSize,
-						startY + r * tileSize,
-						zoom,
-						0,
-					);
-
-					const key = coords.key();
-					if (added.has(key)) continue;
-					added.add(key);
-
-					if (TileManager.isValidTile(coords))
-						this.currentCoordList.push(coords);
-				}
-			}
+			this.pushTileGrid(
+				startX,
+				startY,
+				columnCount,
+				rowCount,
+				zoom,
+				tileSize,
+				0,
+				added,
+			);
 		}
 	}
 

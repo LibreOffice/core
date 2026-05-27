@@ -166,4 +166,138 @@ class ViewLayoutNewBase extends ViewLayoutBase {
 	public set viewedRectangle(rectangle: cool.SimpleRectangle) {
 		return; // Disable setting the viewed rectangle externally.
 	}
+
+	// Shared visible-area computation for the stacked-page layouts
+	// (ViewLayoutMultiPage, ViewLayoutFileBased). Builds the bounding document
+	// rectangle of every part whose view rectangle intersects the viewport.
+	// When no part is visible (e.g. before reset finishes) the view is snapped
+	// back to the start of `snapAxis` and the computation retried.
+	protected refreshVisibleAreaRectangleImpl(
+		documentRectangles: cool.SimpleRectangle[],
+		viewRectangles: cool.SimpleRectangle[],
+		snapAxis: 'x' | 'y',
+	): void {
+		const documentAnchor = this.getDocumentAnchorSection();
+
+		// When the document container is hidden (e.g. BackstageView in CODA), the
+		// anchor section has zero size - bail out to avoid an infinite retry loop.
+		if (documentAnchor.size[0] <= 0 || documentAnchor.size[1] <= 0) return;
+
+		const view = cool.SimpleRectangle.fromCorePixels([
+			this.scrollProperties.viewX,
+			this.scrollProperties.viewY,
+			documentAnchor.size[0],
+			documentAnchor.size[1],
+		]);
+
+		const resultingRectangle: cool.SimpleRectangle = new cool.SimpleRectangle(
+			Number.POSITIVE_INFINITY,
+			Number.POSITIVE_INFINITY,
+			-10000,
+			-10000,
+		);
+
+		for (let i = 0; i < documentRectangles.length; i++) {
+			const documentRectangle = documentRectangles[i];
+			const viewRectangle = viewRectangles[i];
+
+			if (view.intersectsRectangle(viewRectangle.toArray())) {
+				if (resultingRectangle.pX1 > documentRectangle.pX1)
+					resultingRectangle.pX1 = documentRectangle.pX1;
+				if (resultingRectangle.pY1 > documentRectangle.pY1)
+					resultingRectangle.pY1 = documentRectangle.pY1;
+				if (resultingRectangle.pX2 < documentRectangle.pX2)
+					resultingRectangle.pX2 = documentRectangle.pX2;
+				if (resultingRectangle.pY2 < documentRectangle.pY2)
+					resultingRectangle.pY2 = documentRectangle.pY2;
+			}
+		}
+
+		if (
+			resultingRectangle.pX1 === Number.POSITIVE_INFINITY ||
+			resultingRectangle.pY1 === Number.POSITIVE_INFINITY
+		) {
+			app.layoutingService.appendLayoutingTask(() => {
+				if (snapAxis === 'x') this.scrollProperties.viewX = 0;
+				else this.scrollProperties.viewY = 0;
+				this.refreshVisibleAreaRectangle();
+			});
+		} else {
+			this._viewedRectangle = resultingRectangle;
+
+			app.sectionContainer.onNewDocumentTopLeft();
+			app.sectionContainer.requestReDraw();
+		}
+	}
+
+	protected refreshVisibleAreaRectangle(): void {
+		// Subclasses override to recompute the viewed rectangle.
+	}
+
+	// Reset currentCoordList and return the per-frame constants shared by the
+	// tile-queue builders: rounded zoom, tile size and the viewport rectangle.
+	protected beginCoordList(): {
+		zoom: number;
+		tileSize: number;
+		view: cool.SimpleRectangle;
+	} {
+		this.currentCoordList.length = 0;
+		const zoom = Math.round(app.map.getZoom());
+		const tileSize = TileManager.tileSize;
+
+		const documentAnchor = this.getDocumentAnchorSection();
+		const view = cool.SimpleRectangle.fromCorePixels([
+			this.scrollProperties.viewX,
+			this.scrollProperties.viewY,
+			documentAnchor.size[0],
+			documentAnchor.size[1],
+		]);
+
+		return { zoom, tileSize, view };
+	}
+
+	// Visible portion of one part's view rectangle, clipped to the viewport,
+	// in view coordinates.
+	protected getVisibleViewBounds(
+		view: cool.SimpleRectangle,
+		viewRect: cool.SimpleRectangle,
+	): { vx1: number; vy1: number; vx2: number; vy2: number } {
+		return {
+			vx1: Math.max(view.pX1, viewRect.pX1),
+			vy1: Math.max(view.pY1, viewRect.pY1),
+			vx2: Math.min(view.pX1 + view.pWidth, viewRect.pX1 + viewRect.pWidth),
+			vy2: Math.min(view.pY1 + view.pHeight, viewRect.pY1 + viewRect.pHeight),
+		};
+	}
+
+	// Enqueue every tile of one part's grid into currentCoordList, skipping
+	// duplicates (tracked in `added`) and invalid tiles.
+	protected pushTileGrid(
+		startX: number,
+		startY: number,
+		columnCount: number,
+		rowCount: number,
+		zoom: number,
+		tileSize: number,
+		part: number,
+		added: Set<string>,
+	): void {
+		for (let c = 0; c <= columnCount; c++) {
+			for (let r = 0; r <= rowCount; r++) {
+				const coords = new TileCoordData(
+					startX + c * tileSize,
+					startY + r * tileSize,
+					zoom,
+					part,
+					0,
+				);
+
+				const key = coords.key();
+				if (added.has(key)) continue;
+				added.add(key);
+
+				if (TileManager.isValidTile(coords)) this.currentCoordList.push(coords);
+			}
+		}
+	}
 }
