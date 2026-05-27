@@ -1,4 +1,4 @@
-/* global describe it cy beforeEach require expect */
+/* global describe it cy beforeEach require */
 
 var helper = require('../../common/helper');
 var desktopHelper = require('../../common/desktop_helper');

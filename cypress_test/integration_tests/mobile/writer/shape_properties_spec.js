@@ -1,4 +1,4 @@
-/* global describe it cy beforeEach require Cypress expect */
+/* global describe it cy beforeEach require expect */
 
 var helper = require('../../common/helper');
 var mobileHelper = require('../../common/mobile_helper');
