@@ -2634,7 +2634,7 @@ const TranslateId SC_OPCODE_T_DIST_ARY[] =
     NC_("SC_OPCODE_T_DIST", "Returns the t-distribution."),
     NC_("SC_OPCODE_T_DIST", "Number"),
     NC_("SC_OPCODE_T_DIST", "The value for which the T distribution is to be calculated."),
-    NC_("SC_OPCODE_T_DIST", "Degrees freedom"),
+    NC_("SC_OPCODE_T_DIST", "Degrees of freedom"),
     NC_("SC_OPCODE_T_DIST", "The degrees of freedom of the T distribution."),
     NC_("SC_OPCODE_T_DIST", "Mode"),
     NC_("SC_OPCODE_T_DIST", "Mode = 1 calculates the one-tailed test, 2 = two-tailed distribution.")
@@ -2646,7 +2646,7 @@ const TranslateId SC_OPCODE_T_DIST_2T_ARY[] =
     NC_("SC_OPCODE_T_DIST_2T", "Returns the two-tailed t-distribution."),
     NC_("SC_OPCODE_T_DIST_2T", "Number"),
     NC_("SC_OPCODE_T_DIST_2T", "The value for which the T distribution is to be calculated."),
-    NC_("SC_OPCODE_T_DIST_2T", "Degrees freedom"),
+    NC_("SC_OPCODE_T_DIST_2T", "Degrees of freedom"),
     NC_("SC_OPCODE_T_DIST_2T", "The degrees of freedom of the T distribution.")
 };
 
@@ -2656,7 +2656,7 @@ const TranslateId SC_OPCODE_T_DIST_MS_ARY[] =
     NC_("SC_OPCODE_T_DIST_MS", "Returns the t-distribution."),
     NC_("SC_OPCODE_T_DIST_MS", "Number"),
     NC_("SC_OPCODE_T_DIST_MS", "The value for which the T distribution is to be calculated."),
-    NC_("SC_OPCODE_T_DIST_MS", "Degrees freedom"),
+    NC_("SC_OPCODE_T_DIST_MS", "Degrees of freedom"),
     NC_("SC_OPCODE_T_DIST_MS", "The degrees of freedom of the T distribution."),
     NC_("SC_OPCODE_T_DIST_MS", "Cumulative"),
     NC_("SC_OPCODE_T_DIST_MS", "True calculates the cumulative distribution function, false the probability density function.")
@@ -2668,7 +2668,7 @@ const TranslateId SC_OPCODE_T_DIST_RT_ARY[] =
     NC_("SC_OPCODE_T_DIST_RT", "Returns the right-tailed t-distribution."),
     NC_("SC_OPCODE_T_DIST_RT", "Number"),
     NC_("SC_OPCODE_T_DIST_RT", "The value for which the T distribution is to be calculated."),
-    NC_("SC_OPCODE_T_DIST_RT", "Degrees freedom"),
+    NC_("SC_OPCODE_T_DIST_RT", "Degrees of freedom"),
     NC_("SC_OPCODE_T_DIST_RT", "The degrees of freedom of the T distribution.")
 };
 
@@ -2678,7 +2678,7 @@ const TranslateId SC_OPCODE_T_INV_ARY[] =
     NC_("SC_OPCODE_T_INV", "Values of the inverse t-distribution."),
     NC_("SC_OPCODE_T_INV", "Number"),
     NC_("SC_OPCODE_T_INV", "The probability value for which the inverse T distribution is to be calculated."),
-    NC_("SC_OPCODE_T_INV", "Degrees freedom"),
+    NC_("SC_OPCODE_T_INV", "Degrees of freedom"),
     NC_("SC_OPCODE_T_INV", "The degrees of freedom of the T distribution.")
 };
 
@@ -2688,7 +2688,7 @@ const TranslateId SC_OPCODE_T_INV_MS_ARY[] =
     NC_("SC_OPCODE_T_INV_MS", "Values of the left-tailed inverse t-distribution."),
     NC_("SC_OPCODE_T_INV_MS", "Number"),
     NC_("SC_OPCODE_T_INV_MS", "The probability value for which the inverse T distribution is to be calculated."),
-    NC_("SC_OPCODE_T_INV_MS", "Degrees freedom"),
+    NC_("SC_OPCODE_T_INV_MS", "Degrees of freedom"),
     NC_("SC_OPCODE_T_INV_MS", "The degrees of freedom of the T distribution.")
 };
 
@@ -2698,7 +2698,7 @@ const TranslateId SC_OPCODE_T_INV_2T_ARY[] =
     NC_("SC_OPCODE_T_INV_2T", "Values of the two-tailed inverse t-distribution."),
     NC_("SC_OPCODE_T_INV_2T", "Number"),
     NC_("SC_OPCODE_T_INV_2T", "The probability value for which the inverse T distribution is to be calculated."),
-    NC_("SC_OPCODE_T_INV_2T", "Degrees freedom"),
+    NC_("SC_OPCODE_T_INV_2T", "Degrees of freedom"),
     NC_("SC_OPCODE_T_INV_2T", "The degrees of freedom of the T distribution.")
 };
 
@@ -2708,9 +2708,9 @@ const TranslateId SC_OPCODE_F_DIST_ARY[] =
     NC_("SC_OPCODE_F_DIST", "Values of the F probability distribution."),
     NC_("SC_OPCODE_F_DIST", "Number"),
     NC_("SC_OPCODE_F_DIST", "The value for which the F distribution is to be calculated."),
-    NC_("SC_OPCODE_F_DIST", "Degrees freedom 1"),
+    NC_("SC_OPCODE_F_DIST", "Degrees of freedom 1"),
     NC_("SC_OPCODE_F_DIST", "The degrees of freedom in the numerator of the F distribution."),
-    NC_("SC_OPCODE_F_DIST", "Degrees freedom 2"),
+    NC_("SC_OPCODE_F_DIST", "Degrees of freedom 2"),
     NC_("SC_OPCODE_F_DIST", "The degrees of freedom in the denominator of the F distribution.")
 };
 
@@ -2720,9 +2720,9 @@ const TranslateId SC_OPCODE_F_DIST_LT_ARY[] =
     NC_("SC_OPCODE_F_DIST_LT", "Values of the left tail F probability distribution."),
     NC_("SC_OPCODE_F_DIST_LT", "Number"),
     NC_("SC_OPCODE_F_DIST_LT", "The value for which the F distribution is to be calculated."),
-    NC_("SC_OPCODE_F_DIST_LT", "Degrees freedom 1"),
+    NC_("SC_OPCODE_F_DIST_LT", "Degrees of freedom 1"),
     NC_("SC_OPCODE_F_DIST_LT", "The degrees of freedom in the numerator of the F distribution."),
-    NC_("SC_OPCODE_F_DIST_LT", "Degrees freedom 2"),
+    NC_("SC_OPCODE_F_DIST_LT", "Degrees of freedom 2"),
     NC_("SC_OPCODE_F_DIST_LT", "The degrees of freedom in the denominator of the F distribution."),
     NC_("SC_OPCODE_F_DIST_LT", "Cumulative"),
     NC_("SC_OPCODE_F_DIST_LT", "Cumulative distribution function (TRUE) or probability density function (FALSE).")
@@ -2734,9 +2734,9 @@ const TranslateId SC_OPCODE_F_DIST_RT_ARY[] =
     NC_("SC_OPCODE_F_DIST_RT", "Values of the right tail F probability distribution."),
     NC_("SC_OPCODE_F_DIST_RT", "Number"),
     NC_("SC_OPCODE_F_DIST_RT", "The value for which the F distribution is to be calculated."),
-    NC_("SC_OPCODE_F_DIST_RT", "Degrees freedom 1"),
+    NC_("SC_OPCODE_F_DIST_RT", "Degrees of freedom 1"),
     NC_("SC_OPCODE_F_DIST_RT", "The degrees of freedom in the numerator of the F distribution."),
-    NC_("SC_OPCODE_F_DIST_RT", "Degrees freedom 2"),
+    NC_("SC_OPCODE_F_DIST_RT", "Degrees of freedom 2"),
     NC_("SC_OPCODE_F_DIST_RT", "The degrees of freedom in the denominator of the F distribution.")
 };
 
@@ -2746,9 +2746,9 @@ const TranslateId SC_OPCODE_F_INV_ARY[] =
     NC_("SC_OPCODE_F_INV", "Values of the inverse F distribution."),
     NC_("SC_OPCODE_F_INV", "Number"),
     NC_("SC_OPCODE_F_INV", "The probability value for which the inverse F distribution is to be calculated."),
-    NC_("SC_OPCODE_F_INV", "Degrees freedom 1"),
+    NC_("SC_OPCODE_F_INV", "Degrees of freedom 1"),
     NC_("SC_OPCODE_F_INV", "The degrees of freedom in the numerator of the F distribution."),
-    NC_("SC_OPCODE_F_INV", "Degrees freedom 2"),
+    NC_("SC_OPCODE_F_INV", "Degrees of freedom 2"),
     NC_("SC_OPCODE_F_INV", "The degrees of freedom in the denominator of the F distribution.")
 };
 
@@ -2758,9 +2758,9 @@ const TranslateId SC_OPCODE_F_INV_LT_ARY[] =
     NC_("SC_OPCODE_F_INV_LT", "Values of the inverse left tail F distribution."),
     NC_("SC_OPCODE_F_INV_LT", "Number"),
     NC_("SC_OPCODE_F_INV_LT", "The probability value for which the inverse F distribution is to be calculated."),
-    NC_("SC_OPCODE_F_INV_LT", "Degrees freedom 1"),
+    NC_("SC_OPCODE_F_INV_LT", "Degrees of freedom 1"),
     NC_("SC_OPCODE_F_INV_LT", "The degrees of freedom in the numerator of the F distribution."),
-    NC_("SC_OPCODE_F_INV_LT", "Degrees freedom 2"),
+    NC_("SC_OPCODE_F_INV_LT", "Degrees of freedom 2"),
     NC_("SC_OPCODE_F_INV_LT", "The degrees of freedom in the denominator of the F distribution.")
 };
 
@@ -2770,9 +2770,9 @@ const TranslateId SC_OPCODE_F_INV_RT_ARY[] =
     NC_("SC_OPCODE_F_INV_RT", "Values of the inverse right tail F distribution."),
     NC_("SC_OPCODE_F_INV_RT", "Number"),
     NC_("SC_OPCODE_F_INV_RT", "The probability value for which the inverse F distribution is to be calculated."),
-    NC_("SC_OPCODE_F_INV_RT", "Degrees freedom 1"),
+    NC_("SC_OPCODE_F_INV_RT", "Degrees of freedom 1"),
     NC_("SC_OPCODE_F_INV_RT", "The degrees of freedom in the numerator of the F distribution."),
-    NC_("SC_OPCODE_F_INV_RT", "Degrees freedom 2"),
+    NC_("SC_OPCODE_F_INV_RT", "Degrees of freedom 2"),
     NC_("SC_OPCODE_F_INV_RT", "The degrees of freedom in the denominator of the F distribution.")
 };
 
@@ -2782,7 +2782,7 @@ const TranslateId SC_OPCODE_CHI_DIST_ARY[] =
     NC_("SC_OPCODE_CHI_DIST", "Returns the right-tail probability of the chi-square distribution."),
     NC_("SC_OPCODE_CHI_DIST", "Number"),
     NC_("SC_OPCODE_CHI_DIST", "The value for which the chi square distribution is to be calculated."),
-    NC_("SC_OPCODE_CHI_DIST", "Degrees freedom"),
+    NC_("SC_OPCODE_CHI_DIST", "Degrees of freedom"),
     NC_("SC_OPCODE_CHI_DIST", "The degrees of freedom of the chi square distribution.")
 };
 
@@ -2792,7 +2792,7 @@ const TranslateId SC_OPCODE_CHI_DIST_MS_ARY[] =
     NC_("SC_OPCODE_CHI_DIST_MS", "Returns the right-tail probability of the chi-square distribution."),
     NC_("SC_OPCODE_CHI_DIST_MS", "Number"),
     NC_("SC_OPCODE_CHI_DIST_MS", "The value for which the chi square distribution is to be calculated."),
-    NC_("SC_OPCODE_CHI_DIST_MS", "Degrees freedom"),
+    NC_("SC_OPCODE_CHI_DIST_MS", "Degrees of freedom"),
     NC_("SC_OPCODE_CHI_DIST_MS", "The degrees of freedom of the chi square distribution.")
 };
 
@@ -2803,7 +2803,7 @@ const TranslateId SC_OPCODE_CHISQ_DIST_ARY[] =
     NC_("SC_OPCODE_CHISQ_DIST", "Returns left-tail probability of the cumulative distribution function or values of the probability density function of the chi-square distribution."),
     NC_("SC_OPCODE_CHISQ_DIST", "Number"),
     NC_("SC_OPCODE_CHISQ_DIST", "The value for which the probability density function or cumulative distribution function is to be calculated."),
-    NC_("SC_OPCODE_CHISQ_DIST", "Degrees of Freedom"),
+    NC_("SC_OPCODE_CHISQ_DIST", "Degrees of freedom"),
     NC_("SC_OPCODE_CHISQ_DIST", "The degrees of freedom of the chi-square distribution."),
     NC_("SC_OPCODE_CHISQ_DIST", "Cumulative"),
     NC_("SC_OPCODE_CHISQ_DIST", "0 or FALSE calculates the probability density function. Any other value or TRUE or omitted calculates the cumulative distribution function.")
@@ -2816,7 +2816,7 @@ const TranslateId SC_OPCODE_CHISQ_DIST_MS_ARY[] =
     NC_("SC_OPCODE_CHISQ_DIST_MS", "Returns left-tail probability of the cumulative distribution function or values of the probability density function of the chi-square distribution."),
     NC_("SC_OPCODE_CHISQ_DIST_MS", "Number"),
     NC_("SC_OPCODE_CHISQ_DIST_MS", "The value for which the probability density function or cumulative distribution function is to be calculated."),
-    NC_("SC_OPCODE_CHISQ_DIST_MS", "Degrees of Freedom"),
+    NC_("SC_OPCODE_CHISQ_DIST_MS", "Degrees of freedom"),
     NC_("SC_OPCODE_CHISQ_DIST_MS", "The degrees of freedom of the chi-square distribution."),
     NC_("SC_OPCODE_CHISQ_DIST_MS", "Cumulative"),
     NC_("SC_OPCODE_CHISQ_DIST_MS", "0 or FALSE calculates the probability density function. Any other value or TRUE calculates the cumulative distribution function.")
@@ -2829,7 +2829,7 @@ const TranslateId SC_OPCODE_CHI_INV_ARY[] =
     NC_("SC_OPCODE_CHI_INV", "Values of the inverse of CHIDIST(x; DegreesOfFreedom)."),
     NC_("SC_OPCODE_CHI_INV", "Number"),
     NC_("SC_OPCODE_CHI_INV", "The probability value for which the inverse chi square distribution is to be calculated."),
-    NC_("SC_OPCODE_CHI_INV", "Degrees freedom"),
+    NC_("SC_OPCODE_CHI_INV", "Degrees of freedom"),
     NC_("SC_OPCODE_CHI_INV", "The degrees of freedom of the chi square distribution.")
 };
 
@@ -2840,7 +2840,7 @@ const TranslateId SC_OPCODE_CHI_INV_MS_ARY[] =
     NC_("SC_OPCODE_CHI_INV_MS", "Values of the inverse of CHIDIST(x; DegreesOfFreedom)."),
     NC_("SC_OPCODE_CHI_INV_MS", "Number"),
     NC_("SC_OPCODE_CHI_INV_MS", "The probability value for which the inverse chi square distribution is to be calculated."),
-    NC_("SC_OPCODE_CHI_INV_MS", "Degrees freedom"),
+    NC_("SC_OPCODE_CHI_INV_MS", "Degrees of freedom"),
     NC_("SC_OPCODE_CHI_INV_MS", "The degrees of freedom of the chi square distribution.")
 };
 
@@ -2851,7 +2851,7 @@ const TranslateId SC_OPCODE_CHISQ_INV_ARY[] =
     NC_("SC_OPCODE_CHISQ_INV", "Values of the inverse of CHISQDIST(x;DegreesOfFreedom;TRUE())."),
     NC_("SC_OPCODE_CHISQ_INV", "Probability"),
     NC_("SC_OPCODE_CHISQ_INV", "The probability value for which the inverse of the chi square distribution is to be calculated."),
-    NC_("SC_OPCODE_CHISQ_INV", "Degrees of Freedom"),
+    NC_("SC_OPCODE_CHISQ_INV", "Degrees of freedom"),
     NC_("SC_OPCODE_CHISQ_INV", "The degrees of freedom of the chi square distribution.")
 };
 
@@ -2862,7 +2862,7 @@ const TranslateId SC_OPCODE_CHISQ_INV_MS_ARY[] =
     NC_("SC_OPCODE_CHISQ_INV_MS", "Values of the inverse of CHISQ.DIST(x;DegreesOfFreedom;TRUE())."),
     NC_("SC_OPCODE_CHISQ_INV_MS", "Probability"),
     NC_("SC_OPCODE_CHISQ_INV_MS", "The probability value for which the inverse of the chi square distribution is to be calculated."),
-    NC_("SC_OPCODE_CHISQ_INV_MS", "Degrees of Freedom"),
+    NC_("SC_OPCODE_CHISQ_INV_MS", "Degrees of freedom"),
     NC_("SC_OPCODE_CHISQ_INV_MS", "The degrees of freedom of the chi square distribution.")
 };
 
