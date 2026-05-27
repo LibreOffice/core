@@ -544,8 +544,22 @@ uno::Reference< linguistic2::XProofreader > GrammarCheckingIterator::GetGrammarC
         m_bGCServicesChecked = true;
     }
 
-    if (const auto [aSvcImplName, oFallbackBcp47] = getServiceForLocale(rLocale);
-        !aSvcImplName.isEmpty()) // matching configured language found?
+    // Fast path: paragraphs in a document overwhelmingly share the
+    // same locale, use a cache. The cache key is
+    // the *incoming* locale (before any fallback rewrite below).
+    const lang::Locale aRequestedLocale(rLocale);
+    if (m_xLastGC.is()
+        && m_aLastGCLocale.Language == aRequestedLocale.Language
+        && m_aLastGCLocale.Country == aRequestedLocale.Country
+        && m_aLastGCLocale.Variant == aRequestedLocale.Variant)
+    {
+        if (m_oLastGCFallback)
+            rLocale = LanguageTag::convertToLocale(*m_oLastGCFallback, false);
+        return m_xLastGC;
+    }
+
+    const auto [aSvcImplName, oFallbackBcp47] = getServiceForLocale(rLocale);
+    if (!aSvcImplName.isEmpty()) // matching configured language found?
     {
         if (oFallbackBcp47)
             rLocale = LanguageTag::convertToLocale(*oFallbackBcp47, false);
@@ -588,6 +602,16 @@ uno::Reference< linguistic2::XProofreader > GrammarCheckingIterator::GetGrammarC
     {
         SAL_INFO("linguistic", "No grammar checker found for \""
                                    << LanguageTag::convertToBcp47(rLocale, false) << "\"");
+    }
+
+    // Refresh the one-shot cache. The key is the incoming locale
+    // (aRequestedLocale, captured at entry before any fallback
+    // rewrite)
+    if (xRes.is())
+    {
+        m_aLastGCLocale = aRequestedLocale;
+        m_xLastGC = xRes;
+        m_oLastGCFallback = oFallbackBcp47;
     }
     // ---- THREAD SAFE END ----
 
@@ -1048,6 +1072,10 @@ void SAL_CALL GrammarCheckingIterator::dispose()
         m_aGCReferencesByService.swap( aTmpEmpty1 );
         m_aDocIdMap.swap( aTmpEmpty2 );
         m_aFPEntriesQueue.swap( aTmpEmpty3 );
+
+        // the cache holds a reference into m_aGCReferencesByService
+        m_xLastGC.clear();
+        m_oLastGCFallback.reset();
     }
     // ---- THREAD SAFE END ----
 }
@@ -1162,6 +1190,9 @@ void GrammarCheckingIterator::GetConfiguredGCSvcs_Impl()
         // ---- THREAD SAFE START ----
         ::osl::Guard< ::osl::Mutex > aGuard( MyMutex() );
         m_aGCImplNamesByLang.swap(aTmpGCImplNamesByLang);
+        // the locale->impl mapping just changed; invalidate the cache
+        m_xLastGC.clear();
+        m_oLastGCFallback.reset();
         // ---- THREAD SAFE END ----
     }
 }

@@ -107,6 +107,11 @@ class GrammarCheckingIterator:
     typedef std::map< OUString, css::uno::Reference< css::linguistic2::XProofreader > > GCReferences_t;
     GCReferences_t  m_aGCReferencesByService;
 
+    // Last GetGrammarChecker result cached
+    css::lang::Locale m_aLastGCLocale;
+    css::uno::Reference< css::linguistic2::XProofreader > m_xLastGC;
+    std::optional<OUString> m_oLastGCFallback;
+
     OUString m_aCurCheckedDocId;
     bool        m_bGCServicesChecked;
     sal_Int32       m_nDocIdCounter;
