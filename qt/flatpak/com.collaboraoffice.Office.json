@@ -735,6 +735,7 @@
         "--with-theme=colibre colibre_svg",
         "--with-vendor=Collabora Productivity Limited",
         "--without-buildconfig-recorded",
+        "--without-export-validation",
         "--without-help",
         "--without-java",
         "--without-junit",
@@ -784,7 +785,6 @@
         "--without-system-xmlsec",
         "--without-system-zxcvbn",
         "--without-system-zxing",
-        "--without-export-validation",
         "--without-templates"
       ],
       "install-rule": "distro-pack-install",
