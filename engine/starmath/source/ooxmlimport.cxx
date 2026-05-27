@@ -154,6 +154,9 @@ OUString SmOoxmlImport::readOMathArgInElement( int token )
     m_rStream.ensureOpeningTag( token );
     OUString ret = readOMathArg( token );
     m_rStream.ensureClosingTag( token );
+    // A bare operator alone in braces (e.g. rsup {+}) is a StarMath parse error.
+    if (ret.getLength() == 1 && isSingleCharMathOperator(ret[0]))
+        ret = "\"" + ret + "\"";
     return ret;
 }
 

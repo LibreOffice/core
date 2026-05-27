@@ -227,7 +227,7 @@ CPPUNIT_TEST_FIXTURE(Test, testMathEqarray)
     saveAndReload(TestFilter::RTF);
     OUString aActual = getFormula(getRun(getParagraph(1), 1));
     CPPUNIT_ASSERT_EQUAL(
-        u"y \"=\" left lbrace stack { 0 , x \"<\" 0 # 1 , x \"=\" 0 # {x} ^ {2} , x \">\" 0 } right none"_ustr,
+        u"y = left lbrace stack { 0 , x < 0 # 1 , x = 0 # {x} ^ {2} , x > 0 } right none"_ustr,
         aActual);
 }
 
@@ -293,49 +293,49 @@ CPPUNIT_TEST_FIXTURE(Test, testMathMso2007)
     createSwDoc("math-mso2007.rtf");
     saveAndReload(TestFilter::RTF);
     OUString aActual = getFormula(getRun(getParagraph(1), 1));
-    OUString aExpected(u"A \"=\" \u03C0 {r} ^ {2}"_ustr);
+    OUString aExpected(u"A = \u03C0 {r} ^ {2}"_ustr);
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
 
     aActual = getFormula(getRun(getParagraph(2), 1));
     aExpected
-        = u"{left (x \"+\" a right )} ^ {n} \"=\" sum from {k \"=\" 0} to {n} {left (stack { n "
+        = u"{left (x + a right )} ^ {n} = sum from {k = 0} to {n} {left (stack { n "
           u"# k } right ) {x} ^ {k} {a} ^ {n \u2212 k}}"_ustr;
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
 
     aActual = getFormula(getRun(getParagraph(3), 1));
-    aExpected = u"{left (1 \"+\" x right )} ^ {n} \"=\" 1 \"+\" {nx} over {1 !} \"+\" {n left (n "
+    aExpected = u"{left (1 + x right )} ^ {n} = 1 + {nx} over {1 !} + {n left (n "
                 u"\u2212 1 "
-                u"right ) {x} ^ {2}} over {2 !} \"+\" \u2026"_ustr;
+                u"right ) {x} ^ {2}} over {2 !} + \u2026"_ustr;
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
 
     aActual = getFormula(getRun(getParagraph(4), 1));
     aExpected
-        = u"f left (x right ) \"=\" {a} rsub {0} \"+\" sum from {n \"=\" 1} to {\u221E} {left "
-          u"({a} rsub {n} cos {n\u03C0x} over {L} \"+\" {b} rsub {n} sin {n\u03C0x} "
+        = u"f left (x right ) = {a} rsub {0} + sum from {n = 1} to {\u221E} {left "
+          u"({a} rsub {n} cos {n\u03C0x} over {L} + {b} rsub {n} sin {n\u03C0x} "
           u"over {L} right )}"_ustr;
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
 
     aActual = getFormula(getRun(getParagraph(5), 1));
-    aExpected = "{a} ^ {2} \"+\" {b} ^ {2} \"=\" {c} ^ {2}";
+    aExpected = u"{a} ^ {2} + {b} ^ {2} = {c} ^ {2}"_ustr;
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
 
     aActual = getFormula(getRun(getParagraph(6), 1));
-    aExpected = u"x \"=\" {\u2212 b \u00B1 sqrt {{b} ^ {2} \u2212 4 ac}} over {2 a}"_ustr;
+    aExpected = u"x = {\u2212 b \u00B1 sqrt {{b} ^ {2} \u2212 4 ac}} over {2 a}"_ustr;
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
 
     aActual = getFormula(getRun(getParagraph(7), 1));
     aExpected
-        = u"{e} ^ {x} \"=\" 1 \"+\" {x} over {1 !} \"+\" {{x} ^ {2}} over {2 !} \"+\" {{x} ^ {3}} "
-          u"over {3 !} \"+\" \u2026 , \u2212 \u221E \"<\" x \"<\" \u221E"_ustr;
+        = u"{e} ^ {x} = 1 + {x} over {1 !} + {{x} ^ {2}} over {2 !} + {{x} ^ {3}} "
+          u"over {3 !} + \u2026 , \u2212 \u221E < x < \u221E"_ustr;
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
 
     aActual = getFormula(getRun(getParagraph(8), 1));
-    aExpected = u"sin \u03B1 \u00B1 sin \u03B2 \"=\" 2 sin {1} over {2} left (\u03B1 \u00B1 "
+    aExpected = u"sin \u03B1 \u00B1 sin \u03B2 = 2 sin {1} over {2} left (\u03B1 \u00B1 "
                 u"\u03B2 right ) cos {1} over {2} left (\u03B1 \u2213 \u03B2 right )"_ustr;
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
 
     aActual = getFormula(getRun(getParagraph(9), 1));
-    aExpected = u"cos \u03B1 \"+\" cos \u03B2 \"=\" 2 cos {1} over {2} left (\u03B1 \"+\" \u03B2 "
+    aExpected = u"cos \u03B1 + cos \u03B2 = 2 cos {1} over {2} left (\u03B1 + \u03B2 "
                 u"right ) cos {1} over {2} left (\u03B1 \u2212 \u03B2 right )"_ustr;
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
 }
@@ -346,7 +346,7 @@ CPPUNIT_TEST_FIXTURE(Test, testMathNary)
     saveAndReload(TestFilter::RTF);
     OUString aActual = getFormula(getRun(getParagraph(1), 1));
     CPPUNIT_ASSERT_EQUAL(
-        u"lllint from {1} to {2} {x \"+\" 1} prod from {a} {b} sum to {2} {x}"_ustr, aActual);
+        u"lllint from {1} to {2} {x + 1} prod from {a} {b} sum to {2} {x}"_ustr, aActual);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testMathLimupp)
@@ -393,7 +393,7 @@ CPPUNIT_TEST_FIXTURE(Test, testMathRad)
     createSwDoc("math-rad.rtf");
     saveAndReload(TestFilter::RTF);
     OUString aActual = getFormula(getRun(getParagraph(1), 1));
-    CPPUNIT_ASSERT_EQUAL(u"sqrt {4} nroot {3} {x \"+\" 1}"_ustr, aActual);
+    CPPUNIT_ASSERT_EQUAL(u"sqrt {4} nroot {3} {x + 1}"_ustr, aActual);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testMathSepchr)
@@ -413,9 +413,9 @@ CPPUNIT_TEST_FIXTURE(Test, testMathSubscripts)
     auto verify = [this]() {
         OUString aActual = getFormula(getRun(getParagraph(1), 1));
         CPPUNIT_ASSERT_EQUAL(
-            u"{x} ^ {y} \"+\" {e} ^ {x} {x} ^ {b} {x} rsub {b} {a} rsub {c} rsup {b} "
-            "{x} lsub {2} lsup {1} {{x csup {6} csub {3}} lsub {4} lsup {5}} rsub "
-            "{2} rsup {1}"_ustr,
+            u"{x} ^ {y} + {e} ^ {x} {x} ^ {b} {x} rsub {b} {a} rsub {c} rsup {b} "
+            u"{x} lsub {2} lsup {1} {{x csup {6} csub {3}} lsub {4} lsup {5}} rsub "
+            u"{2} rsup {1}"_ustr,
             aActual);
     };
     createSwDoc("math-subscripts.rtf");
@@ -651,7 +651,7 @@ CPPUNIT_TEST_FIXTURE(Test, testMnor)
         // \mnor wasn't handled, leading to missing quotes around "divF" and so on.
         OUString aActual = getFormula(getRun(getParagraph(1), 1));
         CPPUNIT_ASSERT_EQUAL(
-            u"iiint from {V} to <?> {\"divF\"} dV \"=\" llint from {S} to <?> {\"F\" \u2219 \"n\" dS}"_ustr,
+            u"iiint from {V} to <?> {\"divF\"} dV = llint from {S} to <?> {\"F\" \u2219 \"n\" dS}"_ustr,
             aActual);
     };
     createSwDoc("mnor.rtf");
