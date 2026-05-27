@@ -43,6 +43,322 @@
   },
   "modules": [
     {
+      "name": "poco",
+      "buildsystem": "cmake-ninja",
+      "builddir": true,
+      "config-opts": [
+        "-DCMAKE_BUILD_TYPE=Release",
+        "-DCMAKE_POSITION_INDEPENDENT_CODE=ON",
+        "-DBUILD_SHARED_LIBS=OFF",
+        "-DENABLE_TESTS=OFF",
+        "-DENABLE_ACTIVERECORD=OFF",
+        "-DENABLE_ACTIVERECORD_COMPILER=OFF",
+        "-DENABLE_APACHECONNECTOR=OFF",
+        "-DENABLE_DATA=OFF",
+        "-DENABLE_DATA_MYSQL=OFF",
+        "-DENABLE_DATA_ODBC=OFF",
+        "-DENABLE_DATA_POSTGRESQL=OFF",
+        "-DENABLE_DATA_SQLITE=OFF",
+        "-DENABLE_ENCODINGS=OFF",
+        "-DENABLE_JWT=OFF",
+        "-DENABLE_MONGODB=OFF",
+        "-DENABLE_PAGECOMPILER=OFF",
+        "-DENABLE_PAGECOMPILER_FILE2PAGE=OFF",
+        "-DENABLE_PROMETHEUS=OFF",
+        "-DENABLE_REDIS=OFF",
+        "-DPOCO_UNBUNDLED=ON"
+      ],
+      "sources": [
+        {
+          "type": "git",
+          "url": "https://github.com/pocoproject/poco.git",
+          "tag": "poco-1.12.5-release",
+          "commit": "c04dfdbc37882f298d3178b3875cd67c38ea7d78"
+        }
+      ],
+      "cleanup": [ "*" ]
+    },
+    {
+      "name": "python3-lxml",
+      "buildsystem": "simple",
+      "build-commands": [
+        "pip3 install --verbose --exists-action=i --no-index --find-links=\"file://${PWD}\" --prefix=${FLATPAK_DEST} \"lxml==5.2.2\" --no-build-isolation"
+      ],
+      "sources": [
+        {
+          "type": "file",
+          "url": "https://files.pythonhosted.org/packages/63/f7/ffbb6d2eb67b80a45b8a0834baa5557a14a5ffce0979439e7cd7f0c4055b/lxml-5.2.2.tar.gz",
+          "sha256": "bb2dc4898180bea79863d5487e5f9c7c34297414bad54bcd0f0852aee9cfdb87"
+        }
+      ],
+      "cleanup": [ "*" ]
+    },
+    {
+      "name": "python3-polib",
+      "buildsystem": "simple",
+      "build-commands": [
+        "pip3 install --verbose --exists-action=i --no-index --find-links=\"file://${PWD}\" --prefix=${FLATPAK_DEST} \"polib>=1.2,<1.3\" --no-build-isolation"
+      ],
+      "sources": [
+        {
+          "type": "file",
+          "url": "https://files.pythonhosted.org/packages/6b/99/45bb1f9926efe370c6dbe324741c749658e44cb060124f28dad201202274/polib-1.2.0-py2.py3-none-any.whl",
+          "sha256": "1c77ee1b81feb31df9bca258cbc58db1bbb32d10214b173882452c73af06d62d"
+        }
+      ],
+      "cleanup": [ "*" ]
+    },
+    {
+      "name": "cppunit",
+      "buildsystem": "autotools",
+      "config-opts": [
+        "--disable-static",
+        "--enable-shared",
+        "--disable-doxygen"
+      ],
+      "sources": [
+        {
+          "type": "git",
+          "url": "https://git.libreoffice.org/cppunit",
+          "tag": "cppunit-1.15.1",
+          "commit": "7e1c90fa717eb2253ca1901d4065f06b2469cfa2"
+        }
+      ],
+      "cleanup": [ "*" ]
+    },
+    {
+      "name": "rsync",
+      "buildsystem": "autotools",
+      "sources": [
+        {
+          "type": "archive",
+          "url": "https://download.samba.org/pub/rsync/src/rsync-3.4.1.tar.gz",
+          "sha256": "2924bcb3a1ed8b551fc101f740b9f0fe0a202b115027647cf69850d65fd88c52"
+        }
+      ],
+      "cleanup": [ "*" ]
+    },
+    {
+      "name": "dbus",
+      "buildsystem": "meson",
+      "config-opts": [
+        "-Dsystemd=disabled"
+      ],
+      "sources": [
+        {
+          "type": "git",
+          "url": "https://gitlab.freedesktop.org/dbus/dbus.git",
+          "tag": "dbus-1.16.2",
+          "commit": "958bf9db2100553bcd2fe2a854e1ebb42e886054"
+        }
+      ],
+      "cleanup": [ "*" ]
+    },
+    {
+      "name": "at-spi2-core",
+      "buildsystem": "meson",
+      "config-opts": [
+        "-Ddbus_daemon=/app/bin/dbus-daemon"
+      ],
+      "sources": [
+        {
+          "type": "git",
+          "url": "https://gitlab.gnome.org/GNOME/at-spi2-core.git",
+          "tag": "2.58.3",
+          "commit": "06ff5b19f6ec5b504267dbb8f0dad484fe7c8a16"
+        }
+      ],
+      "cleanup": [ "*" ]
+    },
+    {
+      "name": "libseat",
+      "buildsystem": "meson",
+      "config-opts": [
+        "-Dlibseat-builtin=enabled"
+      ],
+      "sources": [
+        {
+          "type": "git",
+          "url": "https://git.sr.ht/~kennylevinsen/seatd",
+          "tag": "0.9.3",
+          "commit": "daa8196e10b180b8b0caeafa8e5f860eb1bd6706"
+        }
+      ],
+      "cleanup": [ "*" ]
+    },
+    {
+      "name": "mtdev",
+      "buildsystem": "autotools",
+      "sources": [
+        {
+          "type": "archive",
+          "url": "https://bitmath.org/code/mtdev/mtdev-1.1.7.tar.gz",
+          "sha256": "a55bd02a9af4dd266c0042ec608744fff3a017577614c057da09f1f4566ea32c"
+        }
+      ],
+      "cleanup": [ "*" ]
+    },
+    {
+      "name": "libevdev",
+      "buildsystem": "meson",
+      "config-opts": [
+        "-Dtests=disabled"
+      ],
+      "sources": [
+        {
+          "type": "git",
+          "url": "https://gitlab.freedesktop.org/libevdev/libevdev.git",
+          "tag": "libevdev-1.13.6",
+          "commit": "139b58e135184f66a35c2401771f3d8134f097ad"
+        }
+      ],
+      "cleanup": [ "*" ]
+    },
+    {
+      "name": "libinput",
+      "buildsystem": "meson",
+      "config-opts": [
+        "-Dlibwacom=false",
+        "-Dtests=false"
+      ],
+      "sources": [
+        {
+          "type": "git",
+          "url": "https://gitlab.freedesktop.org/libinput/libinput.git",
+          "tag": "1.19.4",
+          "commit": "6062273489fb49c6c01946f1c32d0bba0b485b90"
+        }
+      ],
+      "cleanup": [ "*" ]
+    },
+    {
+      "name": "hwdata",
+      "buildsystem": "simple",
+      "build-commands": [
+        "./configure --prefix=${FLATPAK_DEST} --disable-blacklist",
+        "make install"
+      ],
+      "sources": [
+        {
+          "type": "git",
+          "url": "https://github.com/vcrhonek/hwdata.git",
+          "tag": "v0.393",
+          "commit": "2b7f8370a5b3b1552d8264b8665ed99ddfea0b57"
+        }
+      ],
+      "cleanup": [ "*" ]
+    },
+    {
+      "name": "libdisplay-info",
+      "buildsystem": "meson",
+      "sources": [
+        {
+          "type": "git",
+          "url": "https://gitlab.freedesktop.org/emersion/libdisplay-info.git",
+          "tag": "0.3.0",
+          "commit": "47a5590e9c4eb35d67651b8c05a55f1a48259329"
+        }
+      ],
+      "cleanup": [ "*" ]
+    },
+    {
+      "name": "wayland-protocols",
+      "buildsystem": "meson",
+      "sources": [
+        {
+          "type": "git",
+          "url": "https://gitlab.freedesktop.org/wayland/wayland-protocols.git",
+          "tag": "1.47",
+          "commit": "88223018d1b578d0d8869866da66d9608e05f928"
+        }
+      ],
+      "cleanup": [ "*" ]
+    },
+    {
+      "name": "weston",
+      "buildsystem": "meson",
+      "config-opts": [
+        "-Dbackend-default=headless",
+        "-Dbackend-rdp=false",
+        "-Dbackend-vnc=false",
+        "-Dshell-lua=false"
+      ],
+      "sources": [
+        {
+          "type": "git",
+          "url": "https://gitlab.freedesktop.org/wayland/weston.git",
+          "tag": "15.0.0",
+          "commit": "c9c305121cfb3427182eaf3761961094b1196b99"
+        }
+      ],
+      "cleanup": [ "*" ]
+    },
+    {
+      "name": "pycairo",
+      "buildsystem": "meson",
+      "sources": [
+        {
+          "type": "git",
+          "url": "https://github.com/pygobject/pycairo.git",
+          "tag": "v1.29.0",
+          "commit": "f2c40870be2d5e9d15ecee339e1d5e30d82c7959"
+        }
+      ],
+      "cleanup": [ "*" ]
+    },
+    {
+      "name": "pygobject",
+      "buildsystem": "meson",
+      "sources": [
+        {
+          "type": "archive",
+          "url": "https://download.gnome.org/sources/pygobject/3.56/pygobject-3.56.1.tar.gz",
+          "sha256": "2ec1cc8c55c7ffeebb97e58a9bba7aa1e74611f1173628084685446804a8881a"
+        }
+      ],
+      "cleanup": [ "*" ]
+    },
+    {
+      "name": "python3-test-deps",
+      "buildsystem": "simple",
+      "build-options": {
+        "build-args": [ "--share=network" ]
+      },
+      "build-commands": [
+        "pip3 install --prefix=${FLATPAK_DEST} numpy==2.2.4 Flask==3.0.0"
+      ],
+      "cleanup": [ "*" ]
+    },
+    {
+      "name": "pyatspi",
+      "buildsystem": "meson",
+      "sources": [
+        {
+          "type": "git",
+          "url": "https://gitlab.gnome.org/GNOME/pyatspi2.git",
+          "tag": "2.58.1",
+          "commit": "25badea274e4891a93e5c4255370e28fd7d4f7fd"
+        }
+      ],
+      "cleanup": [ "*" ]
+    },
+    {
+      "name": "selenium-webdriver-at-spi",
+      "buildsystem": "simple",
+      "build-commands": [
+        "install -Dm755 selenium-webdriver-at-spi.py ${FLATPAK_DEST}/lib/selenium-webdriver-at-spi/selenium-webdriver-at-spi.py",
+        "install -Dm644 app_roles.py ${FLATPAK_DEST}/lib/selenium-webdriver-at-spi/app_roles.py"
+      ],
+      "sources": [
+        {
+          "type": "git",
+          "url": "https://invent.kde.org/sdk/selenium-webdriver-at-spi.git",
+          "commit": "48435224b551f3f65666688a560d770e92d7cbab"
+        }
+      ],
+      "cleanup": [ "*" ]
+    },
+    {
       "name": "libreoffice",
       "sources": [
         {
@@ -208,13 +524,6 @@
           "type": "file",
           "dest": "external/tarballs",
           "dest-filename": "CoinMP-1.8.4.tgz"
-        },
-        {
-          "url": "https://dev-www.libreoffice.org/src/cppunit-1.15.1.tar.gz",
-          "sha256": "89c5c6665337f56fd2db36bc3805a5619709d51fb136e51937072f63fcc717a7",
-          "type": "file",
-          "dest": "external/tarballs",
-          "dest-filename": "cppunit-1.15.1.tar.gz"
         },
         {
           "url": "https://dev-www.libreoffice.org/src/glm-1.0.3.zip",
@@ -712,6 +1021,7 @@
         "--with-lang=ar bg ca cs cy da de el en-US en-GB eo es eu fi fr ga gl he hr hu hy id is it ja kk ko lo nb nl oc pl pt pt-BR ro ru sk sl sq sv tr uk vi zh-CN zh-TW",
         "--with-linker-hash-style=both",
         "--with-system-altlinuxhyph",
+        "--with-system-cppunit",
         "--with-system-curl",
         "--with-system-dicts",
         "--with-system-expat",
@@ -747,7 +1057,6 @@
         "--without-system-cairo",
         "--without-system-clucene",
         "--without-system-coinmp",
-        "--without-system-cppunit",
         "--without-system-dragonbox",
         "--without-system-frozen",
         "--without-system-glm",
@@ -799,322 +1108,6 @@
         "/share/appdata",
         "/share/applications"
       ]
-    },
-    {
-      "name": "poco",
-      "buildsystem": "cmake-ninja",
-      "builddir": true,
-      "config-opts": [
-        "-DCMAKE_BUILD_TYPE=Release",
-        "-DCMAKE_POSITION_INDEPENDENT_CODE=ON",
-        "-DBUILD_SHARED_LIBS=OFF",
-        "-DENABLE_TESTS=OFF",
-        "-DENABLE_ACTIVERECORD=OFF",
-        "-DENABLE_ACTIVERECORD_COMPILER=OFF",
-        "-DENABLE_APACHECONNECTOR=OFF",
-        "-DENABLE_DATA=OFF",
-        "-DENABLE_DATA_MYSQL=OFF",
-        "-DENABLE_DATA_ODBC=OFF",
-        "-DENABLE_DATA_POSTGRESQL=OFF",
-        "-DENABLE_DATA_SQLITE=OFF",
-        "-DENABLE_ENCODINGS=OFF",
-        "-DENABLE_JWT=OFF",
-        "-DENABLE_MONGODB=OFF",
-        "-DENABLE_PAGECOMPILER=OFF",
-        "-DENABLE_PAGECOMPILER_FILE2PAGE=OFF",
-        "-DENABLE_PROMETHEUS=OFF",
-        "-DENABLE_REDIS=OFF",
-        "-DPOCO_UNBUNDLED=ON"
-      ],
-      "sources": [
-        {
-          "type": "git",
-          "url": "https://github.com/pocoproject/poco.git",
-          "tag": "poco-1.12.5-release",
-          "commit": "c04dfdbc37882f298d3178b3875cd67c38ea7d78"
-        }
-      ],
-      "cleanup": [ "*" ]
-    },
-    {
-      "name": "python3-lxml",
-      "buildsystem": "simple",
-      "build-commands": [
-        "pip3 install --verbose --exists-action=i --no-index --find-links=\"file://${PWD}\" --prefix=${FLATPAK_DEST} \"lxml==5.2.2\" --no-build-isolation"
-      ],
-      "sources": [
-        {
-          "type": "file",
-          "url": "https://files.pythonhosted.org/packages/63/f7/ffbb6d2eb67b80a45b8a0834baa5557a14a5ffce0979439e7cd7f0c4055b/lxml-5.2.2.tar.gz",
-          "sha256": "bb2dc4898180bea79863d5487e5f9c7c34297414bad54bcd0f0852aee9cfdb87"
-        }
-      ],
-      "cleanup": [ "*" ]
-    },
-    {
-      "name": "python3-polib",
-      "buildsystem": "simple",
-      "build-commands": [
-        "pip3 install --verbose --exists-action=i --no-index --find-links=\"file://${PWD}\" --prefix=${FLATPAK_DEST} \"polib>=1.2,<1.3\" --no-build-isolation"
-      ],
-      "sources": [
-        {
-          "type": "file",
-          "url": "https://files.pythonhosted.org/packages/6b/99/45bb1f9926efe370c6dbe324741c749658e44cb060124f28dad201202274/polib-1.2.0-py2.py3-none-any.whl",
-          "sha256": "1c77ee1b81feb31df9bca258cbc58db1bbb32d10214b173882452c73af06d62d"
-        }
-      ],
-      "cleanup": [ "*" ]
-    },
-    {
-      "name": "cppunit",
-      "buildsystem": "autotools",
-      "config-opts": [
-        "--disable-static",
-        "--enable-shared",
-        "--disable-doxygen"
-      ],
-      "sources": [
-        {
-          "type": "git",
-          "url": "https://git.libreoffice.org/cppunit",
-          "tag": "cppunit-1.15.1",
-          "commit": "7e1c90fa717eb2253ca1901d4065f06b2469cfa2"
-        }
-      ],
-      "cleanup": [ "*" ]
-    },
-    {
-      "name": "rsync",
-      "buildsystem": "autotools",
-      "sources": [
-        {
-          "type": "archive",
-          "url": "https://download.samba.org/pub/rsync/src/rsync-3.4.1.tar.gz",
-          "sha256": "2924bcb3a1ed8b551fc101f740b9f0fe0a202b115027647cf69850d65fd88c52"
-        }
-      ],
-      "cleanup": [ "*" ]
-    },
-    {
-      "name": "dbus",
-      "buildsystem": "meson",
-      "config-opts": [
-        "-Dsystemd=disabled"
-      ],
-      "sources": [
-        {
-          "type": "git",
-          "url": "https://gitlab.freedesktop.org/dbus/dbus.git",
-          "tag": "dbus-1.16.2",
-          "commit": "958bf9db2100553bcd2fe2a854e1ebb42e886054"
-        }
-      ],
-      "cleanup": [ "*" ]
-    },
-    {
-      "name": "at-spi2-core",
-      "buildsystem": "meson",
-      "config-opts": [
-        "-Ddbus_daemon=/app/bin/dbus-daemon"
-      ],
-      "sources": [
-        {
-          "type": "git",
-          "url": "https://gitlab.gnome.org/GNOME/at-spi2-core.git",
-          "tag": "2.58.3",
-          "commit": "06ff5b19f6ec5b504267dbb8f0dad484fe7c8a16"
-        }
-      ],
-      "cleanup": [ "*" ]
-    },
-    {
-      "name": "libseat",
-      "buildsystem": "meson",
-      "config-opts": [
-        "-Dlibseat-builtin=enabled"
-      ],
-      "sources": [
-        {
-          "type": "git",
-          "url": "https://git.sr.ht/~kennylevinsen/seatd",
-          "tag": "0.9.3",
-          "commit": "daa8196e10b180b8b0caeafa8e5f860eb1bd6706"
-        }
-      ],
-      "cleanup": [ "*" ]
-    },
-    {
-      "name": "mtdev",
-      "buildsystem": "autotools",
-      "sources": [
-        {
-          "type": "archive",
-          "url": "https://bitmath.org/code/mtdev/mtdev-1.1.7.tar.gz",
-          "sha256": "a55bd02a9af4dd266c0042ec608744fff3a017577614c057da09f1f4566ea32c"
-        }
-      ],
-      "cleanup": [ "*" ]
-    },
-    {
-      "name": "libevdev",
-      "buildsystem": "meson",
-      "config-opts": [
-        "-Dtests=disabled"
-      ],
-      "sources": [
-        {
-          "type": "git",
-          "url": "https://gitlab.freedesktop.org/libevdev/libevdev.git",
-          "tag": "libevdev-1.13.6",
-          "commit": "139b58e135184f66a35c2401771f3d8134f097ad"
-        }
-      ],
-      "cleanup": [ "*" ]
-    },
-    {
-      "name": "libinput",
-      "buildsystem": "meson",
-      "config-opts": [
-        "-Dlibwacom=false",
-        "-Dtests=false"
-      ],
-      "sources": [
-        {
-          "type": "git",
-          "url": "https://gitlab.freedesktop.org/libinput/libinput.git",
-          "tag": "1.19.4",
-          "commit": "6062273489fb49c6c01946f1c32d0bba0b485b90"
-        }
-      ],
-      "cleanup": [ "*" ]
-    },
-    {
-      "name": "hwdata",
-      "buildsystem": "simple",
-      "build-commands": [
-        "./configure --prefix=${FLATPAK_DEST} --disable-blacklist",
-        "make install"
-      ],
-      "sources": [
-        {
-          "type": "git",
-          "url": "https://github.com/vcrhonek/hwdata.git",
-          "tag": "v0.393",
-          "commit": "2b7f8370a5b3b1552d8264b8665ed99ddfea0b57"
-        }
-      ],
-      "cleanup": [ "*" ]
-    },
-    {
-      "name": "libdisplay-info",
-      "buildsystem": "meson",
-      "sources": [
-        {
-          "type": "git",
-          "url": "https://gitlab.freedesktop.org/emersion/libdisplay-info.git",
-          "tag": "0.3.0",
-          "commit": "47a5590e9c4eb35d67651b8c05a55f1a48259329"
-        }
-      ],
-      "cleanup": [ "*" ]
-    },
-    {
-      "name": "wayland-protocols",
-      "buildsystem": "meson",
-      "sources": [
-        {
-          "type": "git",
-          "url": "https://gitlab.freedesktop.org/wayland/wayland-protocols.git",
-          "tag": "1.47",
-          "commit": "88223018d1b578d0d8869866da66d9608e05f928"
-        }
-      ],
-      "cleanup": [ "*" ]
-    },
-    {
-      "name": "weston",
-      "buildsystem": "meson",
-      "config-opts": [
-        "-Dbackend-default=headless",
-        "-Dbackend-rdp=false",
-        "-Dbackend-vnc=false",
-        "-Dshell-lua=false"
-      ],
-      "sources": [
-        {
-          "type": "git",
-          "url": "https://gitlab.freedesktop.org/wayland/weston.git",
-          "tag": "15.0.0",
-          "commit": "c9c305121cfb3427182eaf3761961094b1196b99"
-        }
-      ],
-      "cleanup": [ "*" ]
-    },
-    {
-      "name": "pycairo",
-      "buildsystem": "meson",
-      "sources": [
-        {
-          "type": "git",
-          "url": "https://github.com/pygobject/pycairo.git",
-          "tag": "v1.29.0",
-          "commit": "f2c40870be2d5e9d15ecee339e1d5e30d82c7959"
-        }
-      ],
-      "cleanup": [ "*" ]
-    },
-    {
-      "name": "pygobject",
-      "buildsystem": "meson",
-      "sources": [
-        {
-          "type": "archive",
-          "url": "https://download.gnome.org/sources/pygobject/3.56/pygobject-3.56.1.tar.gz",
-          "sha256": "2ec1cc8c55c7ffeebb97e58a9bba7aa1e74611f1173628084685446804a8881a"
-        }
-      ],
-      "cleanup": [ "*" ]
-    },
-    {
-      "name": "python3-test-deps",
-      "buildsystem": "simple",
-      "build-options": {
-        "build-args": [ "--share=network" ]
-      },
-      "build-commands": [
-        "pip3 install --prefix=${FLATPAK_DEST} numpy==2.2.4 Flask==3.0.0"
-      ],
-      "cleanup": [ "*" ]
-    },
-    {
-      "name": "pyatspi",
-      "buildsystem": "meson",
-      "sources": [
-        {
-          "type": "git",
-          "url": "https://gitlab.gnome.org/GNOME/pyatspi2.git",
-          "tag": "2.58.1",
-          "commit": "25badea274e4891a93e5c4255370e28fd7d4f7fd"
-        }
-      ],
-      "cleanup": [ "*" ]
-    },
-    {
-      "name": "selenium-webdriver-at-spi",
-      "buildsystem": "simple",
-      "build-commands": [
-        "install -Dm755 selenium-webdriver-at-spi.py ${FLATPAK_DEST}/lib/selenium-webdriver-at-spi/selenium-webdriver-at-spi.py",
-        "install -Dm644 app_roles.py ${FLATPAK_DEST}/lib/selenium-webdriver-at-spi/app_roles.py"
-      ],
-      "sources": [
-        {
-          "type": "git",
-          "url": "https://invent.kde.org/sdk/selenium-webdriver-at-spi.git",
-          "commit": "48435224b551f3f65666688a560d770e92d7cbab"
-        }
-      ],
-      "cleanup": [ "*" ]
     },
     {
       "name": "collabora-office",
