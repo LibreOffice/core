@@ -15,9 +15,4 @@ $(eval $(call gb_UnpackedTarball_update_autoconf_configs,libqxp))
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,libqxp,0))
 
-$(eval $(call gb_UnpackedTarball_add_patches,libqxp, \
-	external/libqxp/android-workaround.patch.1 \
-	external/libqxp/ax_gcc_func_attribute.m4.patch \
-))
-
 # vim: set noet sw=4 ts=4:
