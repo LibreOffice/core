@@ -17,6 +17,7 @@
 declare var JSDialog: any;
 
 let pendingTask: TaskId | null = null;
+let resizePriorityTask: TaskId | null = null;
 
 function createScrollButtons(parent: Element, scrollable: Element) {
 	window.L.DomUtil.addClass(scrollable, 'ui-scroll-wrapper');
@@ -111,7 +112,8 @@ function setupResizeHandler(container: Element, scrollable: Element) {
 }
 
 function setupPriorityStatusHandler(scrollable: Element, toolItems: any[]) {
-	const handler = function () {
+	const handlerImpl = function () {
+		resizePriorityTask = null;
 		const rootContainer = scrollable.querySelector('div');
 		if (!rootContainer) return;
 
@@ -184,6 +186,11 @@ function setupPriorityStatusHandler(scrollable: Element, toolItems: any[]) {
 		}
 	}.bind(this);
 
+	const handler = () => {
+		if (resizePriorityTask)
+			app.layoutingService.cancelLayoutingTask(resizePriorityTask);
+		resizePriorityTask = app.layoutingService.appendLayoutingTask(handlerImpl);
+	};
 	window.addEventListener('resize', handler);
 }
 
