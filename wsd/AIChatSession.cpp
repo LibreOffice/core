@@ -30,6 +30,7 @@
 #include <common/Util.hpp>
 #include <common/base64.hpp>
 #include <net/Socket.hpp>
+#include <wsd/AIUtil.hpp>
 #include <wsd/COOLWSD.hpp>
 #include <wsd/DocumentBroker.hpp>
 #include <wsd/DocumentToolDescriptions.hpp>
@@ -54,6 +55,7 @@
 #include <fstream>
 #include <initializer_list>
 #include <iostream>
+#include <optional>
 #include <sstream>
 #include <string_view>
 #include <utility>
@@ -155,6 +157,29 @@ Poco::JSON::Object::Ptr makeParamSchema(
     return schema;
 }
 
+/// Compose the transform_document_structure description for the open document
+/// type, advertising only the relevant grammar. Unknown type gets the full
+/// grammar (previous behaviour).
+std::string transformDescription(const std::string& docType)
+{
+    std::string desc =
+        "Transform the currently-open document's structure using a JSON command "
+        "sequence.\n\n";
+    desc += DocumentToolDescriptions::TRANSFORM_INTRO;
+
+    const bool isImpress = (docType == "presentation");
+    const bool unknownType = docType.empty();
+
+    if (isImpress || unknownType)
+        desc += DocumentToolDescriptions::TRANSFORM_IMPRESS;
+
+    // Writer (text/drawing), Calc, and unknown types use content controls.
+    if (!isImpress)
+        desc += DocumentToolDescriptions::TRANSFORM_WRITER_CALC;
+
+    return desc;
+}
+
 namespace AIToolNames
 {
 constexpr std::string_view GenerateImage              = "generate_image";
@@ -166,48 +191,9 @@ constexpr std::string_view EvaluateFormula            = "evaluate_formula";
 constexpr std::string_view SetCellFormula             = "set_cell_formula";
 }
 
-// Parse a tool's argument JSON. Most models emit a single object
-// ({...}), but some small models emit a JSON array of objects
-// ([{...},{...}]); when that happens, merge all element objects into
-// one so downstream lookups by key continue to work.
-bool parseLenientArgs(const std::string& argsJson,
-                      Poco::JSON::Object::Ptr& argsObj)
-{
-    if (JsonUtil::parseJSON(argsJson, argsObj))
-        return true;
-
-    try
-    {
-        Poco::JSON::Parser parser;
-        Poco::Dynamic::Var v = parser.parse(argsJson);
-        if (v.type() != typeid(Poco::JSON::Array::Ptr))
-            return false;
-
-        auto arr = v.extract<Poco::JSON::Array::Ptr>();
-        Poco::JSON::Object::Ptr merged = new Poco::JSON::Object();
-        for (unsigned i = 0; arr && i < arr->size(); ++i)
-        {
-            Poco::JSON::Object::Ptr el = arr->getObject(i);
-            if (!el)
-                continue;
-            std::vector<std::string> keys;
-            el->getNames(keys);
-            for (const auto& k : keys)
-                merged->set(k, el->get(k));
-        }
-        argsObj = merged;
-        return true;
-    }
-    catch (const std::exception& e)
-    {
-        LOG_ERR("parseLenientArgs: JSON parser threw while parsing tool args: "
-                << e.what() << "; argsSize=" << argsJson.size()
-                << " argsHead=" << argsJson.substr(0, 200));
-        return false;
-    }
-}
-
 } // anonymous namespace
+
+using AIUtil::parseLenientArgs;
 
 AIChatSession::AIChatSession(ClientSession& session)
     : _session(session)
@@ -257,9 +243,12 @@ std::string AIChatSession::mapHttpStatusToError(
     }
 }
 
-Poco::JSON::Array::Ptr AIChatSession::buildToolDefinitions() const
+Poco::JSON::Array::Ptr AIChatSession::buildToolDefinitions(const std::string& docType) const
 {
     Poco::JSON::Array::Ptr tools = new Poco::JSON::Array();
+
+    const bool isCalc = (docType == "spreadsheet");
+    const bool unknownType = docType.empty();
 
     // generate_image - existing tool
     tools->add(makeAITool(
@@ -281,14 +270,12 @@ Poco::JSON::Array::Ptr AIChatSession::buildToolDefinitions() const
                 "Omit to get the full structure."}}},
             {})));
 
-    // transform_document_structure - modify the open document
+    // transform_document_structure - modify the open document. The DSL is
+    // scoped to the open document type so a Writer/Calc doc does not carry the
+    // large Impress slide grammar, and vice versa.
     tools->add(makeAITool(
         std::string(AIToolNames::TransformDocumentStructure),
-        std::string(
-            "Transform the currently-open document's structure using a JSON command "
-            "sequence. Supports Impress slide operations, Writer/Calc content control "
-            "updates, and arbitrary UNO commands.\n\n")
-            + DocumentToolDescriptions::TRANSFORM_PARAM_DESCRIPTION,
+        transformDescription(docType),
         makeParamSchema(
             {{"transform", {"string", "JSON transformation commands"}},
              {"summary", {"string",
@@ -297,11 +284,17 @@ Poco::JSON::Array::Ptr AIChatSession::buildToolDefinitions() const
                 "key content points."}}},
             {"transform"})));
 
-    // extract_link_targets - get link targets from the open document
-    tools->add(makeAITool(
-        std::string(AIToolNames::ExtractLinkTargets),
-        DocumentToolDescriptions::EXTRACT_LINK_TARGETS_DESCRIPTION,
-        makeParamSchema({}, {})));
+    // extract_link_targets - Writer/Impress navigation (not relevant to Calc)
+    if (!isCalc)
+        tools->add(makeAITool(
+            std::string(AIToolNames::ExtractLinkTargets),
+            DocumentToolDescriptions::EXTRACT_LINK_TARGETS_DESCRIPTION,
+            makeParamSchema({}, {})));
+
+    // Calc-only tools. Skip entirely for Writer/Impress; include for unknown
+    // type to preserve the previous all-tools behaviour.
+    if (!isCalc && !unknownType)
+        return tools;
 
     // list_calc_functions - discover available spreadsheet functions
     tools->add(makeAITool(
@@ -593,6 +586,7 @@ bool AIChatSession::handleAction(const std::string& firstLine)
     _toolLoop->model = model;
     _toolLoop->requestUrl = std::move(requestUrl);
     _toolLoop->apiKey = apiKey;
+    _toolLoop->docType = std::move(docType);
 
     callLLMAPI();
     return true;
@@ -641,7 +635,11 @@ void AIChatSession::callLLMAPI()
     Poco::JSON::Object::Ptr payload = new Poco::JSON::Object();
     payload->set("model", _toolLoop->model);
     payload->set("messages", _toolLoop->messages);
-    payload->set("tools", buildToolDefinitions());
+    payload->set("tools", buildToolDefinitions(_toolLoop->docType));
+    // Low temperature for deterministic, format-adherent output; explicit
+    // auto so the model still chooses between a tool call and a text answer.
+    payload->set("temperature", 0.1);
+    payload->set("tool_choice", "auto");
 
     std::ostringstream payloadStream;
     payload->stringify(payloadStream);
@@ -831,7 +829,16 @@ void AIChatSession::handleLLMResponse(const std::string& responseBody)
                 continue;
 
             JsonUtil::findJSONValue(fn, "name", pending.functionName);
-            JsonUtil::findJSONValue(fn, "arguments", pending.arguments);
+
+            // arguments is a JSON string per the OpenAI spec, but some models
+            // emit it as an inline object - normalize both to a string.
+            const Poco::Dynamic::Var argsVar = fn->get("arguments");
+            if (argsVar.type() == typeid(Poco::JSON::Object::Ptr))
+                pending.arguments =
+                    JsonUtil::jsonToString(argsVar.extract<Poco::JSON::Object::Ptr>());
+            else if (!argsVar.isEmpty())
+                pending.arguments = argsVar.toString();
+
             _toolLoop->pendingToolCalls.push_back(std::move(pending));
         }
 
@@ -1168,6 +1175,25 @@ bool AIChatSession::executeToolCall(const std::string& toolCallId,
                 "Transforms object. Use InsertMasterSlide to add slides within "
                 "the same array.\"}");
             return true;
+        }
+
+        // Structural validation before bothering the user with an approval
+        // dialog. On failure, feed a precise error back so the model can
+        // self-correct silently, drawing from a budget separate from the
+        // multi-step tool-round budget.
+        if (auto structErr = AIUtil::validateTransformStructure(transformObj))
+        {
+            if (_toolLoop->validationRetriesRemaining > 0)
+            {
+                --_toolLoop->validationRetriesRemaining;
+                Poco::JSON::Object::Ptr err = new Poco::JSON::Object();
+                err->set("error", *structErr);
+                continueToolLoop(toolCallId, JsonUtil::jsonToString(err));
+                return true;
+            }
+            // Budget exhausted: fall through to approval and let the user decide.
+            LOG_WRN("AIToolLoop: transform still structurally invalid after retries ["
+                    << requestId << "]: " << *structErr);
         }
 
         // Navigation-only transforms (JumpToSlide) do not modify the document

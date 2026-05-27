@@ -74,7 +74,9 @@ struct AIToolLoopState
     std::string model;
     std::string requestUrl;
     std::string apiKey;
+    std::string docType;             // text|spreadsheet|presentation|drawing, or empty
     int toolRoundsRemaining = 5;     // max rounds to prevent infinite loops
+    int validationRetriesRemaining = 3; // silent re-prompts for malformed payloads
     bool awaitingKitResponse = false;
     bool awaitingApproval = false;
     std::string pendingToolCallId;
@@ -125,7 +127,7 @@ private:
     static std::string mapHttpStatusToError(int statusCode,
                                             const std::string& reasonPhrase,
                                             const std::string& context = "");
-    Poco::JSON::Array::Ptr buildToolDefinitions() const;
+    Poco::JSON::Array::Ptr buildToolDefinitions(const std::string& docType) const;
 #if MOBILEAPP
     /// Desktop transport: POST via the registered ai::HttpPostFn and deliver the
     /// result to \p onResponse on \p docBroker's polling thread (statusCode is an
