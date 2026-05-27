@@ -387,7 +387,17 @@ class InitializerBase {
 
 	initializeViewMode() {
 		const darkTheme = window.coolParams.get('darkTheme');
-		if (darkTheme) { window.uiDefaults = { 'darkTheme': 'true' }; }
+		if (window.mode.isCODesktop()) {
+			// The desktop app passes the saved (or system) dark-mode choice here.
+			// prefs isn't constructed yet at this point in init, so write
+			// localStorage directly - prefs reads it from there once it is set up.
+			if (darkTheme === 'true' || darkTheme === 'false') {
+				try { window.localStorage.setItem('darkTheme', darkTheme); }
+				catch (e) { /* localStorage may be unavailable */ }
+			}
+		} else if (darkTheme) {
+			window.uiDefaults = { 'darkTheme': 'true' };
+		}
 	}
 
 	afterInitialization() {
@@ -856,6 +866,13 @@ function showWelcomeSVG() {
 			};
 
 			processObject(settingJSON);
+
+			if (global.mode.isCODesktop()) {
+				// Dark mode is native-owned (preferences.json) on the desktop, so
+				// don't let browsersetting.json shadow it - browser settings take
+				// priority over localStorage in prefs.get().
+				delete global.prefs._userBrowserSetting['darkTheme'];
+			}
 
 			global.prefs._localStorageCache = {};
 			global.prefs.useBrowserSetting = true;

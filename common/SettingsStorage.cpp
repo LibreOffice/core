@@ -279,4 +279,80 @@ void processIntegratorAdminFile(const std::string& payload)
     ofs << adminFile;
 }
 
+static Poco::Path preferencesPath()
+{
+    Poco::Path path = getConfigPath();
+    path.append("preferences.json");
+    return path;
+}
+
+std::optional<bool> getDarkMode()
+{
+    try
+    {
+        const Poco::Path path = preferencesPath();
+        if (!Poco::File(path).exists())
+            return std::nullopt;
+
+        std::ifstream in(path.toString(), std::ios::binary);
+        if (!in.is_open())
+            return std::nullopt;
+        std::ostringstream ss;
+        ss << in.rdbuf();
+
+        Poco::JSON::Parser parser;
+        const auto obj = parser.parse(ss.str()).extract<Poco::JSON::Object::Ptr>();
+        if (obj && obj->has("darkMode"))
+            return obj->getValue<bool>("darkMode");
+    }
+    catch (const std::exception& ex)
+    {
+        LOG_ERR("getDarkMode failed: " << ex.what());
+    }
+    return std::nullopt;
+}
+
+void setDarkMode(bool value)
+{
+    try
+    {
+        const Poco::Path path = preferencesPath();
+
+        // Merge into any existing preferences so other keys are preserved.
+        Poco::JSON::Object::Ptr obj;
+        if (Poco::File(path).exists())
+        {
+            std::ifstream in(path.toString(), std::ios::binary);
+            std::ostringstream ss;
+            ss << in.rdbuf();
+            try
+            {
+                Poco::JSON::Parser parser;
+                obj = parser.parse(ss.str()).extract<Poco::JSON::Object::Ptr>();
+            }
+            catch (const std::exception&)
+            {
+                obj = nullptr;
+            }
+        }
+        if (!obj)
+            obj = new Poco::JSON::Object();
+
+        obj->set("darkMode", value);
+
+        Poco::File(path.parent()).createDirectories();
+        std::ofstream out(path.toString(), std::ios::trunc);
+        if (!out.is_open())
+        {
+            LOG_ERR("setDarkMode failed: could not open " << path.toString());
+            return;
+        }
+        obj->stringify(out);
+    }
+    catch (const std::exception& ex)
+    {
+        LOG_ERR("setDarkMode failed: " << ex.what());
+    }
+}
+
 } // namespace Desktop

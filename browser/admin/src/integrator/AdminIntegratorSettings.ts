@@ -945,8 +945,10 @@ class SettingIframe {
 		const commonTogglesData: Record<string, boolean> = {};
 
 		for (const [key, value] of Object.entries(this.browserSettingOptions)) {
-			// CODA supports only Notebookbar mode, so hide the layout toggle.
-			if (key === 'compactMode' && isCODesktop) continue;
+			// On CODA the layout is always Notebookbar and dark mode is toggled
+			// from the Notebookbar, so hide both toggles here.
+			if ((key === 'compactMode' || key === 'darkTheme') && isCODesktop)
+				continue;
 			// Include:
 			// - plain booleans
 			// - objects that have a customType (like compactToggle and defaultZoom)

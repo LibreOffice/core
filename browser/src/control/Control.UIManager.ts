@@ -345,6 +345,12 @@ class UIManager extends window.L.Control {
 			this.loadDarkMode();
 			this.activateDarkModeInCore(true);
 		}
+
+		// On the desktop the native app owns the dark-mode setting (persists it
+		// and broadcasts it to other windows).
+		if (window.mode.isCODesktop())
+			window.postMobileMessage('SETDARKMODE ' + window.prefs.getBoolean('darkTheme'));
+
 		this.applyInvert();
 		this.setCanvasColorAfterModeChange();
 		if (!window.mode.isSmallScreenDevice())
@@ -371,7 +377,14 @@ class UIManager extends window.L.Control {
 			this.loadLightMode();
 		}
 
-		this.applyInvert(true);
+		// On the desktop the load-time render option doesn't reliably override the
+		// engine's persisted theme, so apply it to the engine here too - but not in
+		// the starter screen, which has no document (and no socket) yet.
+		const pushToEngine =
+			window.mode.isCODesktop() && !(window as any).starterScreen;
+		if (pushToEngine)
+			this.activateDarkModeInCore(inDarkTheme);
+		this.applyInvert(!pushToEngine);
 	}
 
 	/**

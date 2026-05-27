@@ -45,6 +45,7 @@
 #include <QStandardPaths>
 #include <QUrl>
 #include <QVariant>
+#include <common/SettingsStorage.hpp>
 #include <QWebChannel>
 #include <QWebEngineFullScreenRequest>
 #include <QWebEngineSettings>
@@ -578,8 +579,10 @@ void WebView::load(const Poco::URI& fileURL, bool newFile, bool isStarterMode)
         urlAndQuery.addQueryParameter("userinterfacemode", "notebookbar");
     }
 
-    if (portalPrefersDark())
-        urlAndQuery.addQueryParameter("darkTheme", "true");
+    // Dark mode: the user's saved choice wins, otherwise follow the system theme.
+    const bool darkMode =
+        Desktop::getDarkMode().value_or(portalPrefersDark().value_or(false));
+    urlAndQuery.addQueryParameter("darkTheme", darkMode ? "true" : "false");
 
     if (!isStarterMode)
     {
