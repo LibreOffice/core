@@ -241,3 +241,77 @@ describe(['tagdesktop'], 'Threaded Comment', function() {
 		});
 	});
 });
+
+describe(['tagdesktop'], 'Comment-only Threaded Comment', function() {
+
+	beforeEach(function() {
+		// copyCertificates=true to copy focus.ods.wopi.json, which sets
+		// UserCanOnlyComment, so the session opens comment-only. Skip the
+		// standard load checks - they wait for the notebookbar, which a
+		// read-only session does not initialize - and wait on the canvas/map
+		// instead.
+		const file = helper.setupDocument('calc/focus.ods', true);
+		helper.loadDocument(file, true);
+		cy.cGet('#document-canvas').should('be.visible');
+		cy.cGet('#map').should('have.class', 'initialized');
+		cy.getFrameWindow().then((win) => {
+			helper.processToIdle(win);
+		});
+	});
+
+	// .uno:InsertThreadedComment must be allowed in the comment-only mode.
+	it('comment-only mode accepts a posted .uno:InsertThreadedComment', function() {
+		cy.getFrameWindow().should(function(win) {
+			expect(win.app.map.isEditMode(), 'session must be read-only').to.be.false;
+			expect(win.app.isCommentEditingAllowed(), 'comment editing must be allowed').to.be.true;
+		});
+
+		const commentText = 'comment-only-insert ' + Date.now();
+		cy.getFrameWindow().then(function(win) {
+			win.postMessage(JSON.stringify({
+				MessageId: 'Send_UNO_Command',
+				Values: {
+					Command: '.uno:InsertThreadedComment',
+					Args: { Text: { type: 'string', value: commentText } },
+				},
+			}), '*');
+		});
+
+		cy.getFrameWindow().then(function(win) { return helper.processToIdle(win); });
+		cy.getFrameWindow().should(function(win) {
+			const section = win.app.sectionContainer.getSectionWithName(
+				win.app.CSections.CommentList.name);
+			const found = section.sectionProperties.commentList.find(function(c) {
+				return c.sectionProperties.data.text === commentText;
+			});
+			expect(found, 'the posted comment must be inserted').to.exist;
+			expect(found.sectionProperties.data.resolved,
+				'the new comment must start unresolved').to.not.equal('true');
+		});
+
+		// Resolving must work in comment-only mode too.
+		cy.getFrameWindow().then(function(win) {
+			const section = win.app.sectionContainer.getSectionWithName(
+				win.app.CSections.CommentList.name);
+			const found = section.sectionProperties.commentList.find(function(c) {
+				return c.sectionProperties.data.text === commentText;
+			});
+			win.postMessage(JSON.stringify({
+				MessageId: 'Action_ResolveComment',
+				Values: { Id: found.sectionProperties.data.id },
+			}), '*');
+		});
+
+		cy.getFrameWindow().then(function(win) { return helper.processToIdle(win); });
+		cy.getFrameWindow().should(function(win) {
+			const section = win.app.sectionContainer.getSectionWithName(
+				win.app.CSections.CommentList.name);
+			const found = section.sectionProperties.commentList.find(function(c) {
+				return c.sectionProperties.data.text === commentText;
+			});
+			expect(found, 'the comment must still be present').to.exist;
+			expect(found.sectionProperties.data.resolved,
+				'the comment must be resolved').to.equal('true');
+		});
+	});
+});

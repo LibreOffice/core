@@ -304,7 +304,7 @@ window.L.Map.include({
 			allowedCommands.push('.uno:InsertAnnotation','.uno:DeleteCommentThread', '.uno:DeleteAnnotation', '.uno:DeleteNote',
 				'.uno:DeleteComment', '.uno:ReplyComment', '.uno:ReplyToAnnotation', '.uno:PromoteComment', '.uno:ResolveComment',
 				'.uno:ResolveCommentThread', '.uno:ResolveComment', '.uno:EditAnnotation', '.uno:ExportToEPUB', '.uno:ExportToPDF',
-				'.uno:ExportDirectToPDF');
+				'.uno:ExportDirectToPDF', '.uno:InsertThreadedComment');
 
 			const graphicInfo = GraphicSelection.extraInfo;
 			if (graphicInfo && graphicInfo.isSignature)

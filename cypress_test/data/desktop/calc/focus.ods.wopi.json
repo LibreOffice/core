@@ -1,0 +1,4 @@
+{
+  "_comment": "Only used when setupAndLoadDocument is called with copyCertificates=true. Opens the file comment-only (read-only, comment editing allowed).",
+  "UserCanOnlyComment": true
+}
