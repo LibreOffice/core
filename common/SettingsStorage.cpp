@@ -208,11 +208,6 @@ void syncSettings(const std::function<void(const std::vector<char>&)>& sendFileC
 
 void processIntegratorAdminFile(const std::string& payload)
 {
-    static bool alreadyProcessed = false;
-    if (alreadyProcessed)
-        return;
-    alreadyProcessed = true;
-
     const std::string subFolder =
 #if defined(_WIN32)
         "cool"
@@ -225,6 +220,12 @@ void processIntegratorAdminFile(const std::string& payload)
     const std::string filePath =
         getDataDir() + "/" + subFolder + "/adminIntegratorSettings.html";
 
+    // The substitution below is destructive, so keep a pristine ".in" copy and
+    // always render from it - that lets the dialog re-bake on every open (e.g. on
+    // theme change). A freshly built file still has its placeholders: refresh the
+    // copy from it; otherwise render from the kept copy.
+    const std::string templatePath = filePath + ".in";
+
     std::string adminFile;
     {
         Poco::FileInputStream fis(filePath);
@@ -233,6 +234,18 @@ void processIntegratorAdminFile(const std::string& payload)
 
         std::ostringstream oss;
         Poco::StreamCopier::copyStream(fis, oss);
+        adminFile = oss.str();
+    }
+
+    if (adminFile.find("%UI_THEME%") != std::string::npos)
+    {
+        Poco::File(filePath).copyTo(templatePath);
+    }
+    else if (Poco::File(templatePath).exists())
+    {
+        Poco::FileInputStream tis(templatePath);
+        std::ostringstream oss;
+        Poco::StreamCopier::copyStream(tis, oss);
         adminFile = oss.str();
     }
 
