@@ -1863,10 +1863,6 @@ AC_ARG_ENABLE(gtk4,
     AS_HELP_STRING([--enable-gtk4],
         [Determines whether to use Gtk+ 4.0 vclplug on platforms where Gtk+ 4.0 is available.]))
 
-AC_ARG_ENABLE(atspi-tests,
-    AS_HELP_STRING([--disable-atspi-tests],
-        [Determines whether to enable AT-SPI2 tests for the GTK3 vclplug.]))
-
 AC_ARG_ENABLE(introspection,
     AS_HELP_STRING([--enable-introspection],
         [Generate files for GObject introspection.  Requires --enable-gtk3.  (Typically used by
@@ -12233,60 +12229,6 @@ if test "$enable_introspection" = yes; then
     fi
 fi
 
-# AT-SPI2 tests require gtk3, xvfb-run, dbus-launch and atspi-2
-if ! test "$ENABLE_GTK3" = TRUE; then
-    if test "$enable_atspi_tests" = yes; then
-        AC_MSG_ERROR([--enable-atspi-tests requires --enable-gtk3])
-    fi
-    enable_atspi_tests=no
-fi
-if ! test "$enable_atspi_tests" = no; then
-    AC_PATH_PROGS([XVFB_RUN], [xvfb-run], no)
-    if ! test "$XVFB_RUN" = no; then
-        dnl make sure the found xvfb-run actually works
-        AC_MSG_CHECKING([whether $XVFB_RUN works...])
-        if $XVFB_RUN --auto-servernum true >&AS_MESSAGE_LOG_FD 2>&AS_MESSAGE_LOG_FD; then
-            AC_MSG_RESULT([yes])
-        else
-            AC_MSG_RESULT([no])
-            XVFB_RUN=no
-        fi
-    fi
-    if test "$XVFB_RUN" = no; then
-        if test "$enable_atspi_tests" = yes; then
-            AC_MSG_ERROR([xvfb-run required by --enable-atspi-tests not found])
-        fi
-        enable_atspi_tests=no
-    fi
-fi
-if ! test "$enable_atspi_tests" = no; then
-    AC_PATH_PROGS([DBUS_LAUNCH], [dbus-launch], no)
-    if test "$DBUS_LAUNCH" = no; then
-        if test "$enable_atspi_tests" = yes; then
-            AC_MSG_ERROR([dbus-launch required by --enable-atspi-tests not found])
-        fi
-        enable_atspi_tests=no
-    fi
-fi
-if ! test "$enable_atspi_tests" = no; then
-    PKG_CHECK_MODULES([ATSPI2], [atspi-2 gobject-2.0],,
-                      [if test "$enable_atspi_tests" = yes; then
-                           AC_MSG_ERROR([$ATSPI2_PKG_ERRORS])
-                       else
-                           enable_atspi_tests=no
-                       fi])
-fi
-if ! test "x$enable_atspi_tests" = xno; then
-    PKG_CHECK_MODULES([ATSPI2_2_32], [atspi-2 >= 2.32],
-                      [have_atspi_scroll_to=1],
-                      [have_atspi_scroll_to=0])
-    AC_DEFINE_UNQUOTED([HAVE_ATSPI2_SCROLL_TO], [$have_atspi_scroll_to],
-                       [Whether AT-SPI2 has the scrollTo API])
-fi
-ENABLE_ATSPI_TESTS=
-test "$enable_atspi_tests" = no || ENABLE_ATSPI_TESTS=TRUE
-AC_SUBST([ENABLE_ATSPI_TESTS])
-
 dnl ===================================================================
 dnl check for dbus support
 dnl ===================================================================
@@ -15850,7 +15792,6 @@ AC_CONFIG_FILES([vs-code.code-workspace.template:.vscode/vs-code-template.code-w
     fi], [WSL_ONLY_AS_HELPER=$WSL_ONLY_AS_HELPER])
 
 AC_CONFIG_HEADERS([config_host/config_afdko.h])
-AC_CONFIG_HEADERS([config_host/config_atspi.h])
 AC_CONFIG_HEADERS([config_host/config_buildconfig.h])
 AC_CONFIG_HEADERS([config_host/config_buildid.h])
 AC_CONFIG_HEADERS([config_host/config_box2d.h])
