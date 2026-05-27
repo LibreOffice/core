@@ -96,6 +96,12 @@ private:
         OutputDevice& rDevice,
         const Theme::GradientColorType eColorType,
         const ::tools::Rectangle& rBox) const;
+    void PaintPageName (
+        PageObjectLayouter *pPageObjectLayouter,
+        OutputDevice& rDevice,
+        const model::SharedPageDescriptor& rpDescriptor) const;
+    Color GetPageTextColor (
+        const model::SharedPageDescriptor& rpDescriptor) const;
     void PaintBackgroundDetail(
         PageObjectLayouter *pPageObjectLayouter,
         OutputDevice& rDevice,

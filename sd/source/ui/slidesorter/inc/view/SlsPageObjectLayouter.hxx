@@ -67,7 +67,9 @@ public:
         TransitionEffectIndicator,
         // Indicator whether or not there is a custom animation associated
         // with this slide.
-        CustomAnimationEffectIndicator
+        CustomAnimationEffectIndicator,
+        // Bounding box of the slide name when the slide was renamed
+        PageName
     };
     /** Two coordinate systems are supported.  They differ only in
         translation not in scale.  Both relate to pixel values in the window.
@@ -128,6 +130,8 @@ private:
     ::tools::Rectangle maPreviewBoundingBox;
     ::tools::Rectangle maTransitionEffectBoundingBox;
     ::tools::Rectangle maCustomAnimationEffectBoundingBox;
+    ::tools::Rectangle maPageNameAreaBoundingBox;
+    ::tools::Rectangle maPreviewWithNameBoundingBox;
     const Image maTransitionEffectIcon;
     const Image maCustomAnimationEffectIcon;
     const std::shared_ptr<vcl::Font> mpPageNumberFont;

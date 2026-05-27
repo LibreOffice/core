@@ -77,6 +77,7 @@ void PageObjectPainter::PaintPageObject (
     PaintBackground(pPageObjectLayouter, rDevice, rpDescriptor);
     PaintPreview(pPageObjectLayouter, rDevice, rpDescriptor);
     PaintPageNumber(pPageObjectLayouter, rDevice, rpDescriptor);
+    PaintPageName(pPageObjectLayouter, rDevice, rpDescriptor);
     PaintTransitionEffect(pPageObjectLayouter, rDevice, rpDescriptor);
     if (rpDescriptor->GetPage()->hasAnimationNode())
         PaintCustomAnimationEffect(pPageObjectLayouter, rDevice, rpDescriptor);
@@ -210,6 +211,39 @@ Bitmap PageObjectPainter::GetPreviewBitmap (
     }
 }
 
+Color PageObjectPainter::GetPageTextColor(const model::SharedPageDescriptor& rpDescriptor) const
+{
+    Color aColor(mpTheme->GetColor(Theme::Color_PageNumberDefault));
+    if (rpDescriptor->HasState(model::PageDescriptor::ST_MouseOver)
+        || rpDescriptor->HasState(model::PageDescriptor::ST_Selected))
+    {
+        aColor = mpTheme->GetColor(Theme::Color_PageNumberHover);
+    }
+    else
+    {
+        const Color aBackgroundColor(mpTheme->GetColor(Theme::Color_Background));
+        const sal_Int32 nBackgroundLuminance(aBackgroundColor.GetLuminance());
+        // When the background color is black then this is interpreted as
+        // high contrast mode and the font color is set to white.
+        if (nBackgroundLuminance == 0)
+            aColor = mpTheme->GetColor(Theme::Color_PageNumberHighContrast);
+        else
+        {
+            // When the font and background luminance are too similar, switch to
+            // a darker (preferred) or brighter color for legibility.
+            const sal_Int32 nFontLuminance(aColor.GetLuminance());
+            if (abs(nBackgroundLuminance - nFontLuminance) < 60)
+            {
+                if (nBackgroundLuminance > nFontLuminance - 30)
+                    aColor = mpTheme->GetColor(Theme::Color_PageNumberBrightBackground);
+                else
+                    aColor = mpTheme->GetColor(Theme::Color_PageNumberDarkBackground);
+            }
+        }
+    }
+    return aColor;
+}
+
 void PageObjectPainter::PaintPageNumber (
     PageObjectLayouter *pPageObjectLayouter,
     OutputDevice& rDevice,
@@ -220,47 +254,32 @@ void PageObjectPainter::PaintPageNumber (
         PageObjectLayouter::Part::PageNumber,
         PageObjectLayouter::ModelCoordinateSystem));
 
-    // Determine the color of the page number.
-    Color aPageNumberColor (mpTheme->GetColor(Theme::Color_PageNumberDefault));
-    if (rpDescriptor->HasState(model::PageDescriptor::ST_MouseOver) ||
-        rpDescriptor->HasState(model::PageDescriptor::ST_Selected))
-    {
-        // Page number is painted on background for hover or selection or
-        // both.  Each of these background colors has a predefined luminance
-        // which is compatible with the PageNumberHover color.
-        aPageNumberColor = mpTheme->GetColor(Theme::Color_PageNumberHover);
-    }
-    else
-    {
-        const Color aBackgroundColor (mpTheme->GetColor(Theme::Color_Background));
-        const sal_Int32 nBackgroundLuminance (aBackgroundColor.GetLuminance());
-        // When the background color is black then this is interpreted as
-        // high contrast mode and the font color is set to white.
-        if (nBackgroundLuminance == 0)
-            aPageNumberColor = mpTheme->GetColor(Theme::Color_PageNumberHighContrast);
-        else
-        {
-            // Compare luminance of default page number color and background
-            // color.  When the two are similar then use a darker
-            // (preferred) or brighter font color.
-            const sal_Int32 nFontLuminance (aPageNumberColor.GetLuminance());
-            if (abs(nBackgroundLuminance - nFontLuminance) < 60)
-            {
-                if (nBackgroundLuminance > nFontLuminance-30)
-                    aPageNumberColor = mpTheme->GetColor(Theme::Color_PageNumberBrightBackground);
-                else
-                    aPageNumberColor = mpTheme->GetColor(Theme::Color_PageNumberDarkBackground);
-            }
-        }
-    }
-
-    // Paint the page number.
     OSL_ASSERT(rpDescriptor->GetPage()!=nullptr);
     const sal_Int32 nPageNumber ((rpDescriptor->GetPage()->GetPageNum() - 1) / 2 + 1);
     const OUString sPageNumber(OUString::number(nPageNumber));
     rDevice.SetFont(*mpPageNumberFont);
-    rDevice.SetTextColor(aPageNumberColor);
+    rDevice.SetTextColor(GetPageTextColor(rpDescriptor));
     rDevice.DrawText(aBox, sPageNumber, DrawTextFlags::Right | DrawTextFlags::VCenter);
+}
+
+void PageObjectPainter::PaintPageName (
+    PageObjectLayouter *pPageObjectLayouter,
+    OutputDevice& rDevice,
+    const model::SharedPageDescriptor& rpDescriptor) const
+{
+    const SdPage* pPage = rpDescriptor->GetPage();
+    if (!pPage || pPage->GetRealName().isEmpty())
+        return;
+
+    const ::tools::Rectangle aBox(
+        pPageObjectLayouter->GetBoundingBox(rpDescriptor, PageObjectLayouter::Part::PageName,
+                                            PageObjectLayouter::ModelCoordinateSystem));
+
+    rDevice.SetFont(*mpPageNumberFont);
+    rDevice.SetTextColor(GetPageTextColor(rpDescriptor));
+    rDevice.DrawText(aBox, pPage->GetRealName(),
+                     DrawTextFlags::Left | DrawTextFlags::VCenter | DrawTextFlags::Clip
+                         | DrawTextFlags::EndEllipsis);
 }
 
 void PageObjectPainter::PaintTransitionEffect (

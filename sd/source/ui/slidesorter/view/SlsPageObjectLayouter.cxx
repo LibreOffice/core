@@ -24,6 +24,7 @@
 #include <tools/IconCache.hxx>
 #include <Window.hxx>
 
+#include <sdpage.hxx>
 #include <bitmaps.hlst>
 #include <osl/diagnose.h>
 
@@ -74,6 +75,18 @@ PageObjectLayouter::PageObjectLayouter (
                 - aPageNumberAreaSize.Width())),
             nMaximumBorderWidth),
         aPageNumberAreaSize);
+
+    // Position the page name right of the page number, extending to the page edge
+    maPageNameAreaBoundingBox = ::tools::Rectangle(
+        Point(maPageNumberAreaBoundingBox.Right() + gnRightPageNumberOffset,
+              maPageNumberAreaBoundingBox.Top()),
+        Point(maPageObjectBoundingBox.Right(), maPageNumberAreaBoundingBox.Bottom()));
+
+    // Move the page preview below the custom page name to avoid any overlapping
+    const tools::Long nNameBottom = maPageNumberAreaBoundingBox.Bottom() + 1;
+    const tools::Long nNewTop = std::max<tools::Long>(nNameBottom, maPreviewBoundingBox.Top());
+    maPreviewWithNameBoundingBox = ::tools::Rectangle(Point(maPreviewBoundingBox.Left(), nNewTop),
+                                                      maPreviewBoundingBox.BottomRight());
 
     const Size aIconSize (maTransitionEffectIcon.GetSizePixel());
     maTransitionEffectBoundingBox = ::tools::Rectangle(
@@ -165,6 +178,19 @@ PageObjectLayouter::~PageObjectLayouter()
     Point aLocation(0,0);
     if (rpPageDescriptor)
         aLocation = rpPageDescriptor->GetLocation( bIgnoreLocation );
+
+    // Shift the preview of the page down when there is a custom name
+    if (ePart == Part::Preview && rpPageDescriptor && rpPageDescriptor->GetPage()
+        && !rpPageDescriptor->GetPage()->GetRealName().isEmpty())
+    {
+        // Adapt coordinates to the requested coordinate system
+        Point aAdjustedLocation(aLocation);
+        if (eCoordinateSystem == WindowCoordinateSystem)
+            aAdjustedLocation += mpWindow->GetMapMode().GetOrigin();
+        return ::tools::Rectangle(maPreviewWithNameBoundingBox.TopLeft() + aAdjustedLocation,
+                                  maPreviewWithNameBoundingBox.BottomRight() + aAdjustedLocation);
+    }
+
     return GetBoundingBox(aLocation, ePart, eCoordinateSystem);
 }
 
@@ -197,6 +223,9 @@ PageObjectLayouter::~PageObjectLayouter()
             break;
         case Part::CustomAnimationEffectIndicator:
             aBoundingBox = maCustomAnimationEffectBoundingBox;
+            break;
+        case Part::PageName:
+            aBoundingBox = maPageNameAreaBoundingBox;
             break;
     }
 
