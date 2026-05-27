@@ -2199,9 +2199,9 @@ static void openCOOLWindow(const FilenameAndUri& filenameAndUri, DocumentMode mo
                             coolURL += "&lang=" + uiLanguage;
                             coolURL += "&dir=" + std::string(LangUtil::isRtlLanguage(uiLanguage) ? "rtl" : "");
 
-                            if (!isLightTheme())
-                                coolURL +=
-                                    "&darkTheme=true";
+                            // Saved choice wins, otherwise follow the system theme.
+                            const bool darkMode = Desktop::getDarkMode().value_or(!isLightTheme());
+                            coolURL += darkMode ? "&darkTheme=true" : "&darkTheme=false";
 
                             if (data.mode != DocumentMode::STARTER)
                                 coolURL +=
@@ -2316,6 +2316,10 @@ static void processMessage(WindowData& data, wil::unique_cotaskmem_string& messa
         else if (s.starts_with(L"UPLOADSETTINGS "))
         {
             Desktop::uploadSettings(Util::wide_string_to_string(s.substr(strlen("UPLOADSETTINGS "))));
+        }
+        else if (s.starts_with(L"SETDARKMODE "))
+        {
+            Desktop::setDarkMode(s.substr(strlen("SETDARKMODE ")) == L"true");
         }
         else if (s.starts_with(L"PROCESSINTEGRATORADMINFILE "))
         {
