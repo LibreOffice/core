@@ -386,6 +386,8 @@ const SmTokenTableEntry* GetTokenTableEntry(const OUString& rName)
 
 OUString encloseOrEscapeLiteral(const OUString& string, bool force)
 {
+    if (string.getLength() == 1 && isSingleCharMathOperator(string[0]))
+        return string;
     if (force)
         return "\"" + string + "\"";
     OUStringBuffer result;

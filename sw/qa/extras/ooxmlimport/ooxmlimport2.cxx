@@ -1406,9 +1406,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf170171_equation_without_opening_brackets)
 {
     createSwDoc("tdf170171.docx");
     // Without the fix in place, this test would have failed with
-    // - Expected: left [0; "+" ∞ right [
-    // - Actual  : left [0; "+" ∞[
-    CPPUNIT_ASSERT_EQUAL(u"left [0; \"+\" ∞ right ["_ustr, getFormula(getRun(getParagraph(1), 1)));
+    // - Expected: left [0; + ∞ right [
+    // - Actual  : left [0; + ∞[
+    CPPUNIT_ASSERT_EQUAL(u"left [0; + ∞ right ["_ustr, getFormula(getRun(getParagraph(1), 1)));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf169173)

@@ -123,4 +123,9 @@ const SmTokenTableEntry* GetTokenTableEntry(const OUString& rName);
 
 OUString encloseOrEscapeLiteral(const OUString& string, bool force);
 
+inline bool isSingleCharMathOperator(sal_Unicode c)
+{
+    return c == '+' || c == '-' || c == '*' || c == '/' || c == '=' || c == '<' || c == '>';
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
