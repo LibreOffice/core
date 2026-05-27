@@ -13,7 +13,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-26 00:18+0200\n"
 "PO-Revision-Date: 2026-05-28 02:08+0000\n"
-"Last-Translator: scudo <96631443+scudo005@users.noreply.github.com>\n"
+"Last-Translator: Tomiri EXPT <tomiriexpt@gmail.com>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/it/>\n"
 "Language: it\n"
@@ -642,12 +642,13 @@ msgstr "Handouts"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:489
 #: src/control/Control.NavigatorPanel.ts:213
+#, fuzzy
 msgid "Outline"
-msgstr ""
+msgstr "Riassunto"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:490
 msgid "Handout horizontal"
-msgstr ""
+msgstr "Handout orizzontale"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:491
 msgid "Images"
@@ -659,7 +660,7 @@ msgstr "Tabelle"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:493
 msgid "Controls"
-msgstr ""
+msgstr "Controlli"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:494
 msgid "Background"
@@ -749,17 +750,19 @@ msgstr "Carica xcu"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:713
 msgid "Document themes"
-msgstr ""
+msgstr "Temi dei documenti"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:715
 msgid ""
 "Upload custom document themes (.theme). These define color palettes "
 "available under Format > Theme."
 msgstr ""
+"Carica temi personalizzati (.theme). Questi includono delle palettes di "
+"colori disponibili sotto Formato > Tema."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:721
 msgid "Upload Theme"
-msgstr ""
+msgstr "Carica Tema"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:776
 msgid "Something went wrong. Please try to refresh the page."
@@ -882,68 +885,70 @@ msgid ""
 "Configure AI provider credentials and model. Models are fetched "
 "automatically when credentials change."
 msgstr ""
+"Configura provider di credenziali IA e il modello. Il fetch dei modelli si "
+"fa automaticamente quando le credenziali cambiano."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1979
 msgid "Text Generation"
-msgstr ""
+msgstr "Generazione del testo"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2029
 #: admin/src/integrator/AdminIntegratorSettings.ts:2135
 msgid "e.g."
-msgstr ""
+msgstr "ad es."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2048
 #: admin/src/integrator/AdminIntegratorSettings.ts:2166
 #: admin/src/integrator/AdminIntegratorSettings.ts:2610
 #: admin/src/integrator/AdminIntegratorSettings.ts:2626
 msgid "Fetch models to select"
-msgstr ""
+msgstr "Porta modelli da selezionare"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2077
 msgid "Image Generation"
-msgstr ""
+msgstr "Generazione Immagini"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2082
 msgid "Same as Text AI"
-msgstr ""
+msgstr "Uguale al Testo IA"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2151
 msgid "Leave empty to use Text AI key"
-msgstr ""
+msgstr "Lavorare vuoto per usare la chiave Testo IA"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2413
 #: admin/src/integrator/AdminIntegratorSettings.ts:2500
 msgid "Fetching models..."
-msgstr ""
+msgstr "Ottenimento modelli…"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2442
 #: admin/src/integrator/AdminIntegratorSettings.ts:2452
 #: admin/src/integrator/AdminIntegratorSettings.ts:2529
 #: admin/src/integrator/AdminIntegratorSettings.ts:2539
 msgid "No models found"
-msgstr ""
+msgstr "Nessun modello trovato"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2462
 #: admin/src/integrator/AdminIntegratorSettings.ts:2549
 msgid "Models fetched successfully"
-msgstr ""
+msgstr "Modelli ottenuti correttamente"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2468
 #: admin/src/integrator/AdminIntegratorSettings.ts:2555
 msgid "Failed to fetch models"
-msgstr ""
+msgstr "Non è riuscito l'ottenimento dei modelli"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2478
 msgid "Invalid provider configuration"
-msgstr ""
+msgstr "Configurazione invalida del provider"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2590
 msgid "None (disable image generation)"
-msgstr ""
+msgstr "Nessuno (spegni la generazione delle immagini)"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2973
 msgid "Reset"
-msgstr ""
+msgstr "Reimposta"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3092
 #: src/map/handler/Map.WOPI.js:805
@@ -1089,21 +1094,21 @@ msgstr "Stretto"
 
 #: src/app/TableStylesService.ts:102
 msgid "Medium"
-msgstr ""
+msgstr "Medio"
 
 #: src/app/TableStylesService.ts:104
 msgid "Dark"
-msgstr ""
+msgstr "Scuro"
 
 #: src/app/TableStylesService.ts:106
 #: src/control/jsdialog/Widget.ColorPicker.ts:334
 msgid "Custom"
-msgstr ""
+msgstr "Personalizzato"
 
 #: src/app/TableStylesService.ts:231 src/app/TableStylesService.ts:243
 #: src/app/TableStylesService.ts:245
 msgid "Table Styles"
-msgstr ""
+msgstr "Stili tabella"
 
 #: src/canvas/sections/CommentListSection.ts:1785
 #: src/canvas/sections/CommentListSection.ts:1798
@@ -1232,23 +1237,23 @@ msgstr "Salvato"
 
 #: src/canvas/sections/CompareChangesLabelSection.ts:118
 msgid "Last edited by %1 on %2"
-msgstr ""
+msgstr "Modificato l'ultima volta da %1 il %2"
 
 #: src/canvas/sections/CompareChangesLabelSection.ts:193
 msgid "%1: Initial Version"
-msgstr ""
+msgstr "%1: Versione iniziale"
 
 #: src/canvas/sections/CompareChangesLabelSection.ts:197
 msgid "%1: Current Version"
-msgstr ""
+msgstr "%1: Versione attuale"
 
 #: src/canvas/sections/CompareChangesLabelSection.ts:204
 msgid "Initial Version"
-msgstr ""
+msgstr "Versione iniziale"
 
 #: src/canvas/sections/CompareChangesLabelSection.ts:208
 msgid "Current Version"
-msgstr ""
+msgstr "Versione attuale"
 
 #: src/canvas/sections/ShapeHandlesSection.ts:489
 #, fuzzy
@@ -1278,7 +1283,7 @@ msgstr "Colore automatico"
 #: src/control/Control.AboutDialog.ts:89
 #: src/control/jsdialog/Widget.TreeView.ts:786
 msgid "(opens in new tab)"
-msgstr ""
+msgstr "(si apre nella nuova scheda)"
 
 #: src/control/Control.AboutDialog.ts:155
 msgid "Served by: "
@@ -1286,7 +1291,7 @@ msgstr "Servito da: "
 
 #: src/control/Control.AboutDialog.ts:178
 msgid "View widgets"
-msgstr ""
+msgstr "Visualizza widget"
 
 #: src/control/Control.AboutDialog.ts:213
 msgid "\"Slow Proxy\""
@@ -1302,7 +1307,7 @@ msgstr "Copia tutte le informazioni sulla versione in inglese"
 
 #: src/control/Control.AboutDialog.ts:391
 msgid "Version information has been copied"
-msgstr ""
+msgstr "Le informazioni di versione sono state copiate"
 
 #: src/control/Control.AboutDialog.ts:431
 msgid "COOLWSD version:"
