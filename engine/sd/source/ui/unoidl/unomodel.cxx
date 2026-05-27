@@ -1555,6 +1555,11 @@ void AnimationsExporter::exportAnimate(const Reference<XAnimate>& xAnimate)
 
         switch (nNodeType)
         {
+            case AnimationNodeType::ANIMATE:
+            case AnimationNodeType::SET:
+                // All data is exported by the common code above. These node
+                // types carry no type-specific properties to add here.
+                break;
             case AnimationNodeType::ANIMATEMOTION:
             {
                 Reference<XAnimateMotion> xAnimateMotion(xAnimate, UNO_QUERY_THROW);
