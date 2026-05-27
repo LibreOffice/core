@@ -680,8 +680,6 @@ void AIChatSession::callLLMAPI()
 
         if (statusCode != 200)
         {
-            std::cerr << "AIToolLoop: API returned " << statusCode << ' ' << reason
-                << " body: " << body.substr(0, 500) << std::endl;
             self->sendChatResult(false, mapHttpStatusToError(statusCode, reason), requestId);
             self->_toolLoop.reset();
             return;
