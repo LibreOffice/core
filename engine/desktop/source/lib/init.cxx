@@ -17,6 +17,7 @@
 #include <config_features.h>
 #include <config_vclplug.h>
 #include <editeng/unolingu.hxx>
+#include <boost/property_tree/ptree_fwd.hpp>
 
 #if HAVE_FEATURE_QUICKJS
 #include <jsuno/jsuno.hxx>
@@ -6823,7 +6824,12 @@ static char* getComponentStyles(const css::uno::Reference<css::lang::XComponent>
                 aChildren.push_back(std::make_pair("", aChild));
             }
         }
-        aValues.add_child(sStyleFam.toUtf8().getStr(), aChildren);
+
+        // Swap into an empty child instead of `add_child(key, aChildren)`;
+        // the latter deep-copies, which is O(n^2) for a large style family and
+        // dominates load time for documents with thousands of cell styles.
+        aValues.add_child(sStyleFam.toUtf8().getStr(), boost::property_tree::ptree())
+            .swap(aChildren);
     }
 
     // Header & Footer Styles
@@ -6849,7 +6855,7 @@ static char* getComponentStyles(const css::uno::Reference<css::lang::XComponent>
                     aChildren.push_back(std::make_pair("", aChild));
                 }
             }
-            aValues.add_child("HeaderFooter", aChildren);
+            aValues.add_child("HeaderFooter", boost::property_tree::ptree()).swap(aChildren);
         }
     }
 
@@ -6872,10 +6878,10 @@ static char* getComponentStyles(const css::uno::Reference<css::lang::XComponent>
             aCommandList.push_back(std::make_pair("", aChild));
         }
 
-        aValues.add_child("Commands", aCommandList);
+        aValues.add_child("Commands", boost::property_tree::ptree()).swap(aCommandList);
     }
 
-    aTree.add_child("commandValues", aValues);
+    aTree.add_child("commandValues", boost::property_tree::ptree()).swap(aValues);
     std::stringstream aStream;
     boost::property_tree::write_json(aStream, aTree, false /* pretty */);
     char* pJson = static_cast<char*>(malloc(aStream.str().size() + 1));
