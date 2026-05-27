@@ -3480,6 +3480,8 @@ void copyCertificateDatabaseToTmp(Poco::Path const& jailPath)
 
 #if defined(QTAPP) || defined(MACOS) || defined(_WIN32)
 
+#include <SettingsStorage.hpp> // Desktop::getConfigPath()
+
 // with "unipoll" thread that calls cok_init_2 ends up holding the yield mutex in InitVCL()
 // kit::Office:runLoop then spawned in another thread ends up stuck. To prevent that call cok_init_2
 // and runLoop in the same thread.
@@ -3495,13 +3497,18 @@ std::future<COKit*> initKitRunLoopThread(const std::shared_ptr<KitSocketPoll>& m
             {
                 ProcUtil::setThreadName("lokit_runloop");
                 setupKitEnvironment("notebookbar");
+                // Put the engine's user profile under our config directory (like
+                // macOS does) instead of letting it default to a separate
+                // ~/.config/collaboraoffice/<ver>.
                 COKit* kit =
 #if defined(QTAPP)
-                    cok_init_2(LO_PATH "/program", nullptr);
+                    cok_init_2(LO_PATH "/program",
+                               Poco::URI(Desktop::getConfigPath()).toString().c_str());
 #elif defined(MACOS)
                     cok_init_2((getBundlePath() + "/Contents/Frameworks").c_str(), getAppSupportURL().c_str());
 #elif defined(_WIN32)
-                    cok_init_2(app_installation_path.c_str(), nullptr);
+                    cok_init_2(app_installation_path.c_str(),
+                               Poco::URI(Desktop::getConfigPath()).toString().c_str());
 #endif
                 p.set_value(kit);
 
