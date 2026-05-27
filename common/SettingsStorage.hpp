@@ -45,6 +45,11 @@ namespace Desktop
     // getDarkMode() returns nullopt when the user has not chosen yet.
     std::optional<bool> getDarkMode();
     void setDarkMode(bool value);
+
+    // Fetch the AI provider's model list (proxy for the desktop, which has no
+    // server). payload is {"provider","apiKey","baseUrl"}; returns the provider's
+    // JSON body or {"error":...}.
+    std::string fetchAIModels(const std::string& payload);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

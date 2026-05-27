@@ -2402,30 +2402,46 @@ class SettingIframe {
 		this.setAIImageStatus(_('Fetching models...'), false);
 
 		try {
-			const formData = new FormData();
-			formData.append('provider', provider ? provider.id : effectiveProviderId);
-			formData.append('apiKey', effectiveKey);
-			formData.append('baseUrl', effectiveUrl);
+			const providerId = provider ? provider.id : effectiveProviderId;
+			let json: any;
+			if (isCODesktop) {
+				// No server proxy on the desktop; the native app fetches the models.
+				const body = await (window.parent as any).postMobileCall(
+					'FETCHAIMODELS ' +
+						JSON.stringify({
+							provider: providerId,
+							apiKey: effectiveKey,
+							baseUrl: effectiveUrl,
+						}),
+				);
+				json = JSON.parse(body);
+				if (json.error) throw new Error(json.error);
+			} else {
+				const formData = new FormData();
+				formData.append('provider', providerId);
+				formData.append('apiKey', effectiveKey);
+				formData.append('baseUrl', effectiveUrl);
 
-			const response = await fetch(this.getAPIEndpoints().fetchModels, {
-				method: 'POST',
-				body: formData,
-				signal: this._aiImageModelFetchAbort.signal,
-			});
+				const response = await fetch(this.getAPIEndpoints().fetchModels, {
+					method: 'POST',
+					body: formData,
+					signal: this._aiImageModelFetchAbort.signal,
+				});
 
-			if (!response.ok) {
-				const errorCode = response.status;
-				const errorText = await response.text();
-				const fallbackMsg =
-					AI_ERROR_MESSAGES[errorCode] ||
-					_(`API error (${errorCode}): ${response.statusText}`);
-				const errorMsg = errorText
-					? `${fallbackMsg}. ${errorText}`
-					: fallbackMsg;
-				throw new Error(errorMsg);
+				if (!response.ok) {
+					const errorCode = response.status;
+					const errorText = await response.text();
+					const fallbackMsg =
+						AI_ERROR_MESSAGES[errorCode] ||
+						_(`API error (${errorCode}): ${response.statusText}`);
+					const errorMsg = errorText
+						? `${fallbackMsg}. ${errorText}`
+						: fallbackMsg;
+					throw new Error(errorMsg);
+				}
+
+				json = await response.json();
 			}
-
-			const json = await response.json();
 			const models: Array<{ id: string }> = json.data || [];
 			if (!Array.isArray(models) || models.length === 0) {
 				this.setAIImageStatus(_('No models found'), true);
@@ -2489,30 +2505,41 @@ class SettingIframe {
 		this.setAIStatus(_('Fetching models...'), false);
 
 		try {
-			const formData = new FormData();
-			formData.append('provider', provider.id);
-			formData.append('apiKey', apiKey);
-			formData.append('baseUrl', baseUrl);
+			let json: any;
+			if (isCODesktop) {
+				// No server proxy on the desktop; the native app fetches the models.
+				const body = await (window.parent as any).postMobileCall(
+					'FETCHAIMODELS ' +
+						JSON.stringify({ provider: provider.id, apiKey, baseUrl }),
+				);
+				json = JSON.parse(body);
+				if (json.error) throw new Error(json.error);
+			} else {
+				const formData = new FormData();
+				formData.append('provider', provider.id);
+				formData.append('apiKey', apiKey);
+				formData.append('baseUrl', baseUrl);
 
-			const response = await fetch(this.getAPIEndpoints().fetchModels, {
-				method: 'POST',
-				body: formData,
-				signal: this._aiModelFetchAbort.signal,
-			});
+				const response = await fetch(this.getAPIEndpoints().fetchModels, {
+					method: 'POST',
+					body: formData,
+					signal: this._aiModelFetchAbort.signal,
+				});
 
-			if (!response.ok) {
-				const errorCode = response.status;
-				const errorText = await response.text();
-				const fallbackMsg =
-					AI_ERROR_MESSAGES[errorCode] ||
-					_(`API error (${errorCode}): ${response.statusText}`);
-				const errorMsg = errorText
-					? `${fallbackMsg}. ${errorText}`
-					: fallbackMsg;
-				throw new Error(errorMsg);
+				if (!response.ok) {
+					const errorCode = response.status;
+					const errorText = await response.text();
+					const fallbackMsg =
+						AI_ERROR_MESSAGES[errorCode] ||
+						_(`API error (${errorCode}): ${response.statusText}`);
+					const errorMsg = errorText
+						? `${fallbackMsg}. ${errorText}`
+						: fallbackMsg;
+					throw new Error(errorMsg);
+				}
+
+				json = await response.json();
 			}
-
-			const json = await response.json();
 			const models: Array<{ id: string }> = json.data || [];
 			if (!Array.isArray(models) || models.length === 0) {
 				this.setAIStatus(_('No models found'), true);

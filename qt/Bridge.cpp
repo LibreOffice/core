@@ -526,6 +526,10 @@ QVariant Bridge::cool(const QString& messageStr)
         Desktop::setDarkMode(tokens.equals(1, "true"));
         return {};
     }
+    else if (tokens.equals(0, "FETCHAIMODELS"))
+    {
+        return QString::fromStdString(Desktop::fetchAIModels(tokens.substrFromToken(1)));
+    }
     else if (tokens.equals(0, "BYE"))
     {
         LOG_TRC_NOFILE("Document window terminating on JavaScript side → closing fake socket");

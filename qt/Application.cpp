@@ -23,7 +23,15 @@
 #include <Poco/Path.h>
 
 #include <QDir>
+#include <QEventLoop>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QMap>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include <QNetworkRequest>
 #include <QStandardPaths>
+#include <QUrl>
 #include <QWebEngineProfile>
 
 QWebEngineProfile* Application::globalProfile = nullptr;
@@ -70,6 +78,62 @@ Poco::Path Desktop::getConfigPath()
 std::string Desktop::getDataDir()
 {
     return ::getDataDir();
+}
+
+std::string Desktop::fetchAIModels(const std::string& payload)
+{
+    const QJsonObject obj =
+        QJsonDocument::fromJson(QByteArray::fromStdString(payload)).object();
+    const QString provider = obj.value("provider").toString();
+    const QString apiKey = obj.value("apiKey").toString();
+    QString baseUrl = obj.value("baseUrl").toString();
+
+    if (provider.isEmpty() || apiKey.isEmpty())
+        return R"({"error":"Missing provider or apiKey"})";
+
+    if (provider != "custom")
+    {
+        // Keep in sync with preCannedAIProviderBaseUrl() in wsd/FileServer.cpp.
+        static const QMap<QString, QString> preCanned = {
+            { "openai", "https://api.openai.com" },
+            { "groq", "https://api.groq.com/openai" },
+            { "together", "https://api.together.xyz" },
+            { "mistral", "https://api.mistral.ai" },
+        };
+        baseUrl = preCanned.value(provider);
+        if (baseUrl.isEmpty())
+            return R"({"error":"Unknown provider"})";
+    }
+    else if (baseUrl.isEmpty())
+    {
+        return R"({"error":"Missing baseUrl for custom provider"})";
+    }
+
+    if (baseUrl.endsWith('/'))
+        baseUrl.chop(1);
+    baseUrl += "/v1/models";
+
+    QNetworkAccessManager manager;
+    QNetworkRequest request{ QUrl(baseUrl) };
+    request.setRawHeader("Authorization", "Bearer " + apiKey.toUtf8());
+    request.setRawHeader("Content-Type", "application/json");
+
+    // Runs on the bridge call, so block (processing events) until the request
+    // finishes and postMobileCall resolves with the result.
+    QNetworkReply* reply = manager.get(request);
+    QEventLoop loop;
+    QObject::connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
+    loop.exec();
+
+    const QByteArray body = reply->readAll();
+    const bool failed = reply->error() != QNetworkReply::NoError;
+    reply->deleteLater();
+
+    if (failed && body.isEmpty())
+        return R"({"error":"Failed to reach the AI provider"})";
+
+    // Return the provider's body verbatim ({"data":[...]} or its own error JSON).
+    return body.toStdString();
 }
 
 QWebEngineProfile* Application::getProfile() { return globalProfile; }
