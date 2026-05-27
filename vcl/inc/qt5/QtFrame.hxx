@@ -26,7 +26,7 @@
 #include "QtWidget.hxx"
 
 #include <salframe.hxx>
-#if defined LINUX || defined __sun || defined FREEBSD || defined OPENBSD
+#if !defined __EMSCRIPTEN__
 #include <unx/sessioninhibitor.hxx>
 #endif
 #include <vclpluginapi.h>
@@ -100,7 +100,7 @@ class VCLPLUG_QT_PUBLIC QtFrame : public QObject, public SalFrame
     sal_uInt32 m_nRestoreScreen;
     QRect m_aRestoreGeometry;
 
-#if defined LINUX || defined __sun || defined FREEBSD || defined OPENBSD
+#if !defined __EMSCRIPTEN__
     SessionManagerInhibitor m_SessionManagerInhibitor;
 #endif
 #if CHECK_ANY_QT_USING_X11
