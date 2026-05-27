@@ -143,7 +143,9 @@ window.L.Map.Settings = window.L.Handler.extend({
 			this._iframeDialog.postMessage(data);
 		} else if (data.MessageId === 'settings-save-complete') {
 			this.removeIframe();
-			if (data.viewSettings) {
+			// Apps persist settings through the native bridge; the server only
+			// handles updateviewsettings in non-MOBILEAPP builds.
+			if (data.viewSettings && !window.ThisIsAMobileApp) {
 				app.socket.sendMessage(
 					'updateviewsettings ' + JSON.stringify(data.viewSettings),
 				);
