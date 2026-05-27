@@ -180,6 +180,29 @@ std::string transformDescription(const std::string& docType)
     return desc;
 }
 
+/// Compose the extract_document_structure description for the open document
+/// type, advertising only the filters that work for it. filter="text" is only
+/// implemented for Writer and Calc, so it is omitted for Impress. Unknown type
+/// gets every fragment (previous all-types behaviour).
+std::string extractDescription(const std::string& docType)
+{
+    std::string desc = DocumentToolDescriptions::EXTRACT_INTRO;
+
+    const bool isCalc = (docType == "spreadsheet");
+    const bool isImpress = (docType == "presentation");
+    const bool isWriter = (docType == "text");
+    const bool unknownType = docType.empty();
+
+    if (isWriter || unknownType)
+        desc += DocumentToolDescriptions::EXTRACT_WRITER;
+    if (isCalc || unknownType)
+        desc += DocumentToolDescriptions::EXTRACT_CALC;
+    if (isImpress || unknownType)
+        desc += DocumentToolDescriptions::EXTRACT_IMPRESS;
+
+    return desc;
+}
+
 namespace AIToolNames
 {
 constexpr std::string_view GenerateImage              = "generate_image";
@@ -259,15 +282,22 @@ Poco::JSON::Array::Ptr AIChatSession::buildToolDefinitions(const std::string& do
             {{"prompt", {"string", "A detailed description of the image to generate"}}},
             {"prompt"})));
 
-    // extract_document_structure - inspect the open document
+    // extract_document_structure - inspect the open document. The description is
+    // scoped to the open document type so each only advertises filters that work.
     tools->add(makeAITool(
-        std::string(AIToolNames::ExtractDocumentStructure),
-        DocumentToolDescriptions::EXTRACT_DOC_STRUCTURE_DESCRIPTION,
+        std::string(AIToolNames::ExtractDocumentStructure), extractDescription(docType),
         makeParamSchema(
-            {{"filter", {"string",
-                "Filter results to a specific structure type. "
-                "For Impress: 'slides'. For Writer: 'contentcontrol'. "
-                "Omit to get the full structure."}}},
+            { { "filter",
+                { "string", "Filter results to a specific structure type. "
+                            "Use 'text' to read the document body as markdown (Writer: the "
+                            "full prose; Calc: the active sheet) for summarizing or answering "
+                            "questions about the content. "
+                            "For Impress: 'slides'. For Writer: 'contentcontrol'. "
+                            "Omit to get the full structure." } },
+              { "range",
+                { "string", "Calc only, used with filter='text': limit reading to a cell "
+                            "range like 'A1:D100'. Omit to read the active sheet's used "
+                            "range." } } },
             {})));
 
     // transform_document_structure - modify the open document. The DSL is
@@ -496,7 +526,12 @@ bool AIChatSession::handleAction(const std::string& firstLine)
 
     systemPrompt +=
         " You have tools to inspect and modify the document."
-        " Use transform_document_structure to make changes.";
+        " Use transform_document_structure to make changes."
+        " To summarize or answer questions about the document's content, call"
+        " extract_document_structure with filter=\"text\" to read the body text"
+        " (Writer prose, or the active Calc sheet) as markdown. If the result is"
+        " marked truncated, ask the user to select the relevant part (Writer) or"
+        " to give a cell range via the range argument (Calc).";
 
     if (hasSelectedText)
         systemPrompt +=
@@ -931,10 +966,19 @@ bool AIChatSession::executeToolCall(const std::string& toolCallId,
     // extract_document_structure - requires user approval
     if (fnName == AIToolNames::ExtractDocumentStructure)
     {
-        std::string filter;
+        std::string filter, range;
         Poco::JSON::Object::Ptr argsObj = new Poco::JSON::Object();
         if (parseLenientArgs(argsJson, argsObj))
+        {
             JsonUtil::findJSONValue(argsObj, "filter", filter);
+            JsonUtil::findJSONValue(argsObj, "range", range);
+        }
+
+        const bool bTextFilter = filter.starts_with("text");
+
+        // A Calc range is carried as a sub-arg of the text filter.
+        if (bTextFilter && !range.empty())
+            filter += ",range:" + range;
 
         std::string command = "extractdocumentstructure url=interactive";
         if (!filter.empty())
@@ -944,6 +988,12 @@ bool AIChatSession::executeToolCall(const std::string& toolCallId,
         _toolLoop->pendingToolCallId = toolCallId;
         _toolLoop->pendingToolName = fnName;
         _toolLoop->pendingForwardCommand = std::move(command);
+
+        // The approval copy is read from pendingSummary by the sidebar. Reading
+        // the body text sends the whole document to the external model, so make
+        // the consent explicit; structural inspection keeps the default copy.
+        _toolLoop->pendingSummary =
+            bTextFilter ? "Read the full text of your document to answer your request." : "";
 
         sendToolApproval(fnName, "");
         return true;

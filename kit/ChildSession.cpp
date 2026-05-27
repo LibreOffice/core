@@ -381,17 +381,42 @@ bool ChildSession::_handleInput(const char *buffer, int length)
             getTokenString(tokens[2], "filter", filter);
         }
 
-        LOKitHelper::ScopedString data(_docManager->getLOKit()->extractDocumentStructureRequest(getJailedFilePath().c_str(),
-                                                                              filter.c_str()));
-        if (!data)
+        std::string json;
+        // TODO: route every filter through the live document (the branch below),
+        // not just text, so structure and text reflect the same unsaved state.
+        // Needs: add ExtractDocumentStructure to SdXImpressDocument::supportsCommand,
+        // confirm the trackchanges/slides extractors are side-effect-free on the
+        // live doc, and re-test each filter. The reload path stays for the HTTP
+        // /cool/extract-document-structure endpoint, which has no live session.
+        // See docs/adr/0001-filter-text-reads-live-document.md.
+        if (filter.starts_with("text"))
+        {
+            // The body-text filter reads the live in-memory document so it
+            // reflects unsaved edits and (for Calc) the active sheet and an
+            // optional cell range. The other structure filters run against an
+            // on-disk reload via extractDocumentStructureRequest.
+            const std::string command = ".uno:ExtractDocumentStructure?filter=" + filter;
+            LOKitHelper::ScopedString data(getLOKitDocument()->getCommandValues(command.c_str()));
+            if (data)
+                json = data.get();
+        }
+        else
+        {
+            LOKitHelper::ScopedString data(_docManager->getLOKit()->extractDocumentStructureRequest(
+                getJailedFilePath().c_str(), filter.c_str()));
+            if (data)
+                json = data.get();
+        }
+
+        if (json.empty())
         {
             LOG_TRC("extractDocumentStructureRequest returned no data.");
             sendTextFrame("extracteddocumentstructure: { }");
             return false;
         }
 
-        LOG_TRC("Extracted document structure: " << data);
-        bool success = sendTextFrame("extracteddocumentstructure: " + std::string(data.get()));
+        LOG_TRC("Extracted document structure: " << json);
+        bool success = sendTextFrame("extracteddocumentstructure: " + json);
 
         return success;
     }

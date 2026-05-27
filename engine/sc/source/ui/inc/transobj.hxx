@@ -98,6 +98,11 @@ public:
     void                SetDragWasInternal();
     SC_DLLPUBLIC void   SetUseInApi( bool bSet );
 
+    // Render a cell range as a markdown table. When bAnnotated is set, a
+    // leading "Row" column and column-letter headers are emitted so the AI
+    // assistant can resolve cell addresses.
+    static OUString GetMarkdownFromRange(ScDocument& rDoc, const ScRange& rRange, bool bAnnotated);
+
     static  SC_DLLPUBLIC ScTransferObj* GetOwnClipboard(const css::uno::Reference<css::datatransfer::XTransferable2>&);
 
     static SfxObjectShell* SetDrawClipDoc(bool bAnyOle, const std::shared_ptr<ScDocument>& = {} );     // update ScGlobal::xDrawClipDocShellRef

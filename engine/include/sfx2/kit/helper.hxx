@@ -86,6 +86,12 @@ namespace com::sun::star::ui { struct ContextChangeEventObject; };
 class SFX2_DLLPUBLIC KitHelper
 {
 public:
+    /// Cap on the body text returned for extract_document_structure filter=text.
+    /// Shared by the Writer and Calc extractors so both truncate at the same
+    /// size. Must stay below the online MAX_AI_MESSAGE_LENGTH guard (100 KiB) so
+    /// the result fits in one tool-loop message with room for the conversation.
+    static constexpr sal_Int32 AIBodyTextMaxChars = 60 * 1024;
+
     /// Gets the short cut accelerators.
     static std::unordered_map<OUString, css::uno::Reference<css::ui::XAcceleratorConfiguration>>& getAcceleratorConfs();
     /// Create a new view shell from the current view frame.

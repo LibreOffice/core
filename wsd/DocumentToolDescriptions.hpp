@@ -31,13 +31,26 @@ inline constexpr const char* EXTRACT_LINK_TARGETS_DESCRIPTION =
     "(e.g. \"Table1\": \"Table1|table\"). These targets can be used to open the "
     "document at a specific position.";
 
-/// Description for the extract_document_structure tool.
-inline constexpr const char* EXTRACT_DOC_STRUCTURE_DESCRIPTION =
-    "Extract the structural outline of a document as JSON. "
-    "For Writer: headings, sections, tables, frames, images, bookmarks, content controls. "
-    "For Calc: sheet names. "
-    "For Impress: slide names, object names per slide. "
-    "Useful for understanding document layout before applying transformations.";
+/// extract_document_structure descriptions, split per document type so each
+/// open document advertises only the filters that work for it. The caller
+/// composes the intro with the matching document-type fragment(s).
+inline constexpr const char* EXTRACT_INTRO = "Inspect the open document as JSON.";
+
+inline constexpr const char* EXTRACT_WRITER =
+    " With filter=\"text\" it returns the document body as markdown for "
+    "summarizing or answering questions about the content. It can also return "
+    "content controls (filter=\"contentcontrol\"), charts, document properties, "
+    "and tracked changes. To list headings, bookmarks, tables, frames or images "
+    "for navigation, use extract_link_targets instead.";
+
+inline constexpr const char* EXTRACT_CALC =
+    " For a spreadsheet, filter=\"text\" returns the active sheet as markdown, "
+    "optionally limited to a cell range, for summarizing or answering questions "
+    "about the data.";
+
+inline constexpr const char* EXTRACT_IMPRESS =
+    " With filter=\"slides\" it returns slide names, per-slide object names, and "
+    "slide text.";
 
 /// Shared intro for the transform parameter, valid for every document type.
 inline constexpr const char* TRANSFORM_INTRO =

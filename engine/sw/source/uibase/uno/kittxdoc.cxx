@@ -29,6 +29,7 @@
 #include <comphelper/sequence.hxx>
 #include <o3tl/string_view.hxx>
 #include <tools/json_writer.hxx>
+#include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
 #include <xmloff/odffields.hxx>
 #include <sfx2/kit/helper.hxx>
@@ -38,6 +39,7 @@
 #include <doc.hxx>
 #include <docsh.hxx>
 #include <fmtrfmrk.hxx>
+#include <shellio.hxx>
 #include <wrtsh.hxx>
 #include <txtrfmrk.hxx>
 #include <ndtxt.hxx>
@@ -1070,6 +1072,62 @@ void GetDocStructureTrackChanges(tools::JsonWriter& rJsonWriter, SwDocShell* pDo
     }
 }
 
+/// Implements getCommandValues(".uno:ExtractDocumentStructure?filter=text").
+///
+/// Exports the whole document body as markdown so the AI assistant can
+/// summarize or answer questions about it. Reads the live document (the caller
+/// routes filter=text to the in-memory doc, not the on-disk reload), so unsaved
+/// edits are reflected. The result is capped and flags truncation.
+void GetDocStructureBodyText(tools::JsonWriter& rJsonWriter, SwDocShell* pDocShell)
+{
+    auto aNode = rJsonWriter.startNode("BodyText");
+    rJsonWriter.put("format", "markdown");
+
+    SwDoc* pDoc = pDocShell ? pDocShell->GetDoc() : nullptr;
+    WriterRef xWrt;
+    if (pDoc)
+        GetMDWriter(std::u16string_view(), OUString(), xWrt);
+    if (!pDoc || !xWrt.is())
+    {
+        rJsonWriter.put("text", "");
+        rJsonWriter.put("truncated", false);
+        return;
+    }
+
+    xWrt->SetShowProgress(false);
+
+    SvMemoryStream aStream;
+    OUString aText;
+    bool bTruncated = false;
+    SwWriter aWrt(aStream, *pDoc);
+    const bool bWriteOk = !aWrt.Write(xWrt).IsError();
+    if (bWriteOk)
+    {
+        const sal_uInt64 nSize = aStream.TellEnd();
+        aStream.Seek(0);
+        const OString aRaw = read_uInt8s_ToOString(aStream, nSize);
+        aText = OStringToOUString(aRaw, RTL_TEXTENCODING_UTF8);
+        if (aText.getLength() > KitHelper::AIBodyTextMaxChars)
+        {
+            aText = aText.copy(0, KitHelper::AIBodyTextMaxChars);
+            bTruncated = true;
+        }
+    }
+
+    // Emit the status and an explicit instruction before the text, so the model
+    // acts on it rather than overlooking a flag buried after a large body of
+    // markdown. An export failure is flagged distinctly from an empty document.
+    rJsonWriter.put("truncated", bTruncated);
+    if (!bWriteOk)
+        rJsonWriter.put("error", "Failed to export the document text.");
+    else if (bTruncated)
+        rJsonWriter.put("note",
+                        "The document is large, so only the first part of the text is included "
+                        "here. Tell the user the summary is based on a truncated portion and ask "
+                        "them to select the section they want summarized.");
+    rJsonWriter.put("text", aText);
+}
+
 /// Implements getCommandValues(".uno:ExtractDocumentStructures").
 ///
 /// Parameters:
@@ -1095,6 +1153,12 @@ void GetDocStructure(tools::JsonWriter& rJsonWriter, SwDocShell* pDocShell,
 
     if (std::u16string_view rest; filter.isEmpty() || filter.startsWith("trackchanges", &rest))
         GetDocStructureTrackChanges(rJsonWriter, pDocShell, o3tl::trim(rest));
+
+    // Body text is only emitted on an explicit filter=text request, which the
+    // caller routes to the live document. It is deliberately excluded from the
+    // empty "extract everything" filter, which runs against the on-disk reload.
+    if (filter == "text")
+        GetDocStructureBodyText(rJsonWriter, pDocShell);
 }
 
 /// Implements getCommandValues(".uno:Sections").
@@ -1132,9 +1196,16 @@ void GetSections(tools::JsonWriter& rJsonWriter, SwDocShell* pDocShell,
 bool SwXTextDocument::supportsCommand(std::u16string_view rCommand)
 {
     static const std::initializer_list<std::u16string_view> vForward
-        = { u"TextFormFields", u"TextFormField", u"SetDocumentProperties",
-            u"Bookmarks",      u"Fields",        u"Sections",
-            u"Bookmark",       u"Field",         u"Layout" };
+        = { u"TextFormFields",
+            u"TextFormField",
+            u"SetDocumentProperties",
+            u"Bookmarks",
+            u"Fields",
+            u"Sections",
+            u"Bookmark",
+            u"Field",
+            u"Layout",
+            u"ExtractDocumentStructure" };
 
     return std::find(vForward.begin(), vForward.end(), rCommand) != vForward.end();
 }

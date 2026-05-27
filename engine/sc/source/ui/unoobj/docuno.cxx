@@ -1394,7 +1394,7 @@ OString ScModelObj::getViewRenderState(const SfxViewShell* pViewShell)
 bool ScModelObj::supportsCommand(std::u16string_view rCommand)
 {
     return rCommand == u"FormulaDepChain" || rCommand == u"CalcFunctionList"
-        || rCommand == u"EvaluateFormula";
+           || rCommand == u"EvaluateFormula" || rCommand == u"ExtractDocumentStructure";
 }
 
 void ScModelObj::getCommandValues(tools::JsonWriter& rJsonWriter, std::string_view rCommand)
@@ -1557,6 +1557,72 @@ void ScModelObj::getCommandValues(tools::JsonWriter& rJsonWriter, std::string_vi
                 rJsonWriter.put("result", sResult);
             }
         }
+    }
+    else if (aCommand.startsWith(".uno:ExtractDocumentStructure"))
+    {
+        auto aStructNode = rJsonWriter.startNode("DocStructure");
+
+        if (!pDocShell)
+            return;
+
+        // Parse the filter argument, e.g. ?filter=text[,range:A1:D100]
+        const std::map<OUString, OUString> aArgs
+            = KitHelper::parseCommandParameters(OUString::fromUtf8(aCommand));
+        OUString filterStr;
+        if (auto it = aArgs.find(u"filter"_ustr); it != aArgs.end())
+            filterStr = it->second;
+
+        // Only the text filter is implemented for Calc; the other structure
+        // types are Writer/Impress-only.
+        if (filterStr != u"text" && !filterStr.startsWith(u"text,"))
+            return;
+
+        OUString rangeStr;
+        sal_Int32 nComma = filterStr.indexOf(',');
+        if (nComma >= 0)
+        {
+            OUString args = filterStr.copy(nComma + 1); // e.g. "range:A1:D100"
+            if (args.startsWith(u"range:"))
+                rangeStr = args.copy(6);
+        }
+
+        ScDocument& rDoc = pDocShell->GetDocument();
+        ScTabViewShell* pViewShell = pDocShell->GetBestViewShell(false);
+        const SCTAB nActiveTab = pViewShell ? pViewShell->GetViewData().GetTabNumber() : SCTAB(0);
+
+        ScRange aRange;
+        bool bHaveRange = false;
+        if (!rangeStr.isEmpty())
+            bHaveRange = bool(aRange.Parse(rangeStr, rDoc) & ScRefFlags::VALID);
+        if (!bHaveRange)
+        {
+            SCCOL nEndCol = 0;
+            SCROW nEndRow = 0;
+            rDoc.GetCellArea(nActiveTab, nEndCol, nEndRow);
+            aRange = ScRange(0, 0, nActiveTab, nEndCol, nEndRow, nActiveTab);
+        }
+
+        OUString aText = ScTransferObj::GetMarkdownFromRange(rDoc, aRange, /*bAnnotated*/ true);
+        bool bTruncated = false;
+        if (aText.getLength() > KitHelper::AIBodyTextMaxChars)
+        {
+            aText = aText.copy(0, KitHelper::AIBodyTextMaxChars);
+            bTruncated = true;
+        }
+
+        // Emit the truncation flag and an explicit instruction before the text,
+        // so the model acts on it rather than overlooking a flag buried after a
+        // large markdown table.
+        auto aBodyNode = rJsonWriter.startNode("BodyText");
+        rJsonWriter.put("format", "markdown");
+        rJsonWriter.put("truncated", bTruncated);
+        if (bTruncated)
+            rJsonWriter.put(
+                "note", "The sheet is large, so only the first part is included here. Tell the "
+                        "user the summary is based on a truncated portion and offer to read a "
+                        "specific area by calling this tool again with the range argument, e.g. "
+                        "range=\"A1:D100\".");
+        rJsonWriter.put("text", aText);
     }
 }
 

@@ -278,6 +278,74 @@ static ScRange lcl_reduceBlock(const ScDocument& rDoc, ScRange aReducedBlock, bo
     return aReducedBlock;
 }
 
+OUString ScTransferObj::GetMarkdownFromRange(ScDocument& rDoc, const ScRange& rRange,
+                                             bool bAnnotated)
+{
+    const SCTAB nTab = rRange.aStart.Tab();
+    const SCCOL nStartCol = rRange.aStart.Col();
+    const SCROW nStartRow = rRange.aStart.Row();
+    const SCCOL nEndCol = rRange.aEnd.Col();
+    const SCROW nEndRow = rRange.aEnd.Row();
+
+    // Escape pipe and newline in cell values
+    auto fnEscapeCell = [](const OUString& rStr) -> OString
+    {
+        OUString aEscaped = rStr.replaceAll(u"\\", u"\\\\")
+                                .replaceAll(u"|", u"\\|")
+                                .replaceAll(u"\n", u" ")
+                                .replaceAll(u"\r", u"");
+        return OUStringToOString(aEscaped, RTL_TEXTENCODING_UTF8);
+    };
+
+    OStringBuffer aBuf;
+
+    // Header row
+    if (bAnnotated)
+    {
+        aBuf.append("| Row |");
+        for (SCCOL nCol = nStartCol; nCol <= nEndCol; nCol++)
+            aBuf.append(OString::Concat(" ")
+                        + OUStringToOString(ScColToAlpha(nCol), RTL_TEXTENCODING_UTF8) + " |");
+    }
+    else
+    {
+        aBuf.append("|");
+        for (SCCOL nCol = nStartCol; nCol <= nEndCol; nCol++)
+        {
+            OUString aCellStr = rDoc.GetString(nCol, nStartRow, nTab);
+            aBuf.append(" " + fnEscapeCell(aCellStr) + " |");
+        }
+    }
+    aBuf.append("\n");
+
+    // Separator
+    if (bAnnotated)
+        aBuf.append("| --- |");
+    else
+        aBuf.append("|");
+    for (SCCOL nCol = nStartCol; nCol <= nEndCol; nCol++)
+        aBuf.append(" --- |");
+    aBuf.append("\n");
+
+    // Data rows
+    SCROW nDataStart = bAnnotated ? nStartRow : nStartRow + 1;
+    for (SCROW nRow = nDataStart; nRow <= nEndRow; nRow++)
+    {
+        if (bAnnotated)
+            aBuf.append(OString::Concat("| ") + OString::number(static_cast<int>(nRow + 1)) + " |");
+        else
+            aBuf.append("|");
+        for (SCCOL nCol = nStartCol; nCol <= nEndCol; nCol++)
+        {
+            OUString aCellStr = rDoc.GetString(nCol, nRow, nTab);
+            aBuf.append(" " + fnEscapeCell(aCellStr) + " |");
+        }
+        aBuf.append("\n");
+    }
+
+    return OStringToOUString(aBuf.makeStringAndClear(), RTL_TEXTENCODING_UTF8);
+}
+
 bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor, const OUString& /*rDestDoc*/ )
 {
     SotClipboardFormatId nFormat = SotExchange::GetFormat( rFlavor );
@@ -360,74 +428,9 @@ bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor, const OUSt
         {
             // Markdown table from multi-cell range
             ScRange aRange = lcl_reduceBlock(*m_pDoc, m_aBlock);
-            SCTAB nTab = aRange.aStart.Tab();
-            SCCOL nStartCol = aRange.aStart.Col();
-            SCROW nStartRow = aRange.aStart.Row();
-            SCCOL nEndCol = aRange.aEnd.Col();
-            SCROW nEndRow = aRange.aEnd.Row();
-
-            // Helper to escape pipe and newline in cell values
-            auto fnEscapeCell = [](const OUString& rStr) -> OString {
-                OUString aEscaped = rStr.replaceAll(u"\\", u"\\\\")
-                                        .replaceAll(u"|", u"\\|")
-                                        .replaceAll(u"\n", u" ")
-                                        .replaceAll(u"\r", u"");
-                return OUStringToOString(aEscaped, RTL_TEXTENCODING_UTF8);
-            };
-
-            OStringBuffer aBuf;
             bool bAnnotated = (nFormat == SotClipboardFormatId::MARKDOWN_ANNOTATED);
-
-            // Header row
-            if (bAnnotated)
-            {
-                aBuf.append("| Row |");
-                for (SCCOL nCol = nStartCol; nCol <= nEndCol; nCol++)
-                {
-                    aBuf.append(OString::Concat(" ") + OUStringToOString(ScColToAlpha(nCol), RTL_TEXTENCODING_UTF8) + " |");
-                }
-            }
-            else
-            {
-                aBuf.append("|");
-                for (SCCOL nCol = nStartCol; nCol <= nEndCol; nCol++)
-                {
-                    OUString aCellStr = m_pDoc->GetString(nCol, nStartRow, nTab);
-                    aBuf.append(" " + fnEscapeCell(aCellStr) + " |");
-                }
-            }
-            aBuf.append("\n");
-
-            // Separator
-            if (bAnnotated)
-                aBuf.append("| --- |");
-            else
-                aBuf.append("|");
-            for (SCCOL nCol = nStartCol; nCol <= nEndCol; nCol++)
-            {
-                aBuf.append(" --- |");
-            }
-            aBuf.append("\n");
-
-            // Data rows
-            SCROW nDataStart = bAnnotated ? nStartRow : nStartRow + 1;
-            for (SCROW nRow = nDataStart; nRow <= nEndRow; nRow++)
-            {
-                if (bAnnotated)
-                    aBuf.append(OString::Concat("| ") + OString::number(static_cast<int>(nRow + 1)) + " |");
-                else
-                    aBuf.append("|");
-                for (SCCOL nCol = nStartCol; nCol <= nEndCol; nCol++)
-                {
-                    OUString aCellStr = m_pDoc->GetString(nCol, nRow, nTab);
-                    aBuf.append(" " + fnEscapeCell(aCellStr) + " |");
-                }
-                aBuf.append("\n");
-            }
-
-            OString aResult = aBuf.makeStringAndClear();
-            bOK = SetAny(
-                uno::Any(OStringToOUString(aResult, RTL_TEXTENCODING_UTF8)));
+            bOK = SetAny(uno::Any(
+                ScTransferObj::GetMarkdownFromRange(*m_pDoc, aRange, bAnnotated)));
         }
         else if ( ( nFormat == SotClipboardFormatId::RTF || nFormat == SotClipboardFormatId::RICHTEXT ||
             nFormat == SotClipboardFormatId::EDITENGINE_ODF_TEXT_FLAT ) && m_aBlock.aStart == m_aBlock.aEnd )
