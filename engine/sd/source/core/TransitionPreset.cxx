@@ -317,7 +317,10 @@ bool TransitionPreset::importTransitionsFile( TransitionPresetList& rList,
                             SAL_WARN("sd.transitions", "set node " << sSet << " not found");
                     }
                     else
-                        SAL_WARN("sd.transitions", "transition node " << aPresetId << " not found");
+                        // transitions.xml is a superset of the UI-registered
+                        // transitions; an engine-only preset with no Effects.xcu
+                        // entry is expected, not an error.
+                        SAL_INFO("sd.transitions", "transition node " << aPresetId << " has no UI registration, skipping");
                 }
             }
             else
