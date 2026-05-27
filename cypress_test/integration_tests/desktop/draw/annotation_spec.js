@@ -205,9 +205,9 @@ describe(['tagdesktop'], 'PDF Threaded Comments', function() {
 		});
 
 		cy.getFrameWindow().should(function(win) {
-			expect(win.document.getElementById('document-canvas').style.cursor,
+			expect(win.document.getElementById('document-canvas').classList.contains('comment-placement-cursor'),
 				'placement mode must switch the canvas cursor to crosshair')
-				.to.equal('crosshair');
+				.to.be.true;
 
 			const section = win.app.sectionContainer.getSectionWithName(
 				win.app.CSections.CommentList.name);
@@ -261,9 +261,9 @@ describe(['tagdesktop'], 'PDF Threaded Comments', function() {
 
 		// Local 'new' comment exists with the expected on-screen anchor.
 		cy.getFrameWindow().should(function(win) {
-			expect(win.document.getElementById('document-canvas').style.cursor,
+			expect(win.document.getElementById('document-canvas').classList.contains('comment-placement-cursor'),
 				'cursor must be restored after placement finishes')
-				.to.not.equal('crosshair');
+				.to.be.false;
 
 			const section = win.app.sectionContainer.getSectionWithName(
 				win.app.CSections.CommentList.name);
@@ -339,15 +339,52 @@ describe(['tagdesktop'], 'PDF Threaded Comments', function() {
 		});
 
 		cy.getFrameWindow().should(function(win) {
-			expect(win.document.getElementById('document-canvas').style.cursor,
+			expect(win.document.getElementById('document-canvas').classList.contains('comment-placement-cursor'),
 				'placement mode must switch the canvas cursor to crosshair')
-				.to.equal('crosshair');
+				.to.be.true;
 
 			const section = win.app.sectionContainer.getSectionWithName(
 				win.app.CSections.CommentList.name);
 			expect(section.sectionProperties.commentList.length,
 				'no comment should be created until the user picks a position')
 				.to.equal(initialCount);
+		});
+	});
+
+	// The crosshair must survive pointer movement. MouseControl rewrites the
+	// inline canvas cursor on hover/enter, which used to drop the crosshair
+	// on the first move.
+	it('Insert Comment placement keeps the crosshair while the pointer moves', { env: { 'pdf-view': true } }, function() {
+		cy.getFrameWindow().then(function(win) {
+			win.app.map.insertComment();
+		});
+
+		cy.getFrameWindow().should(function(win) {
+			const canvas = win.document.getElementById('document-canvas');
+			expect(canvas.classList.contains('comment-placement-cursor'),
+				'placement mode must add the crosshair class').to.be.true;
+			expect(win.getComputedStyle(canvas).cursor,
+				'effective cursor must be crosshair').to.equal('crosshair');
+		});
+
+		// Emulate MouseControl writing an inline cursor on hover, plus a real
+		// pointer move, then confirm the crosshair still wins.
+		cy.getFrameWindow().then(function(win) {
+			const canvas = win.document.getElementById('document-canvas');
+			canvas.style.cursor = 'text';
+			const rect = canvas.getBoundingClientRect();
+			canvas.dispatchEvent(new win.MouseEvent('mousemove', {
+				clientX: rect.left + 40, clientY: rect.top + 40, bubbles: true,
+			}));
+		});
+
+		cy.getFrameWindow().should(function(win) {
+			const canvas = win.document.getElementById('document-canvas');
+			expect(canvas.classList.contains('comment-placement-cursor'),
+				'crosshair class must persist through pointer movement').to.be.true;
+			expect(win.getComputedStyle(canvas).cursor,
+				'effective cursor must remain crosshair despite the inline cursor')
+				.to.equal('crosshair');
 		});
 	});
 
@@ -378,9 +415,9 @@ describe(['tagdesktop'], 'PDF Threaded Comments', function() {
 		});
 
 		cy.getFrameWindow().should(function(win) {
-			expect(win.document.getElementById('document-canvas').style.cursor,
+			expect(win.document.getElementById('document-canvas').classList.contains('comment-placement-cursor'),
 				'placement mode must switch the canvas cursor to crosshair')
-				.to.equal('crosshair');
+				.to.be.true;
 		});
 
 		// Click at ~25%/25% of page 1 (CSS pixels computed from twips so the
@@ -415,9 +452,9 @@ describe(['tagdesktop'], 'PDF Threaded Comments', function() {
 		// The host-text path bypasses newAnnotation, so no local 'new'
 		// comment appears and no in-place editor is ever opened.
 		cy.getFrameWindow().should(function(win) {
-			expect(win.document.getElementById('document-canvas').style.cursor,
+			expect(win.document.getElementById('document-canvas').classList.contains('comment-placement-cursor'),
 				'cursor must be restored once the pick completes')
-				.to.not.equal('crosshair');
+				.to.be.false;
 			const section = win.app.sectionContainer.getSectionWithName(
 				win.app.CSections.CommentList.name);
 			const stray = section.sectionProperties.commentList.find(
@@ -478,8 +515,8 @@ describe(['tagdesktop'], 'PDF Threaded Comments', function() {
 		});
 
 		cy.getFrameWindow().should(function(win) {
-			expect(win.document.getElementById('document-canvas').style.cursor)
-				.to.equal('crosshair');
+			expect(win.document.getElementById('document-canvas').classList.contains('comment-placement-cursor'))
+				.to.be.true;
 		});
 
 		let expectedW = 0, expectedH = 0;
@@ -561,8 +598,8 @@ describe(['tagdesktop'], 'PDF Threaded Comments', function() {
 		});
 
 		cy.getFrameWindow().should(function(win) {
-			expect(win.document.getElementById('document-canvas').style.cursor)
-				.to.equal('crosshair');
+			expect(win.document.getElementById('document-canvas').classList.contains('comment-placement-cursor'))
+				.to.be.true;
 		});
 
 		// Off-page click. Compute an X past the page's right edge from
@@ -594,9 +631,9 @@ describe(['tagdesktop'], 'PDF Threaded Comments', function() {
 
 		cy.getFrameWindow().then(function(win) { return helper.processToIdle(win); });
 		cy.getFrameWindow().should(function(win) {
-			expect(win.document.getElementById('document-canvas').style.cursor,
+			expect(win.document.getElementById('document-canvas').classList.contains('comment-placement-cursor'),
 				'placement mode should remain active after an off-page click')
-				.to.equal('crosshair');
+				.to.be.true;
 
 			const section = win.app.sectionContainer.getSectionWithName(
 				win.app.CSections.CommentList.name);
@@ -644,9 +681,9 @@ describe(['tagdesktop'], 'PDF Threaded Comments', function() {
 		});
 
 		cy.getFrameWindow().should(function(win) {
-			expect(win.document.getElementById('document-canvas').style.cursor,
+			expect(win.document.getElementById('document-canvas').classList.contains('comment-placement-cursor'),
 				'cursor must be restored after the on-page click')
-				.to.not.equal('crosshair');
+				.to.be.false;
 
 			const section = win.app.sectionContainer.getSectionWithName(
 				win.app.CSections.CommentList.name);
@@ -693,9 +730,9 @@ describe(['tagdesktop'], 'PDF Threaded Comments', function() {
 		});
 
 		cy.getFrameWindow().should(function(win) {
-			expect(win.document.getElementById('document-canvas').style.cursor,
+			expect(win.document.getElementById('document-canvas').classList.contains('comment-placement-cursor'),
 				'placement mode must switch the canvas cursor to crosshair')
-				.to.equal('crosshair');
+				.to.be.true;
 		});
 
 		// Drag a rectangle from ~25%/25% to ~50%/40% of page 1. Compute the
@@ -758,9 +795,9 @@ describe(['tagdesktop'], 'PDF Threaded Comments', function() {
 		// Local 'new' comment exists with anchor at the rectangle's top-left
 		// and a marker rectangle that reflects the dragged size.
 		cy.getFrameWindow().should(function(win) {
-			expect(win.document.getElementById('document-canvas').style.cursor,
+			expect(win.document.getElementById('document-canvas').classList.contains('comment-placement-cursor'),
 				'cursor must be restored after placement finishes')
-				.to.not.equal('crosshair');
+				.to.be.false;
 
 			const section = win.app.sectionContainer.getSectionWithName(
 				win.app.CSections.CommentList.name);
@@ -931,8 +968,8 @@ describe(['tagdesktop'], 'PDF Threaded Comments', function() {
 		});
 
 		cy.getFrameWindow().should(function(win) {
-			expect(win.document.getElementById('document-canvas').style.cursor,
-				'placement mode must be active').to.equal('crosshair');
+			expect(win.document.getElementById('document-canvas').classList.contains('comment-placement-cursor'),
+				'placement mode must be active').to.be.true;
 		});
 
 		cy.getFrameWindow().then(function(win) {

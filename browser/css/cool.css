@@ -652,6 +652,12 @@ body {
 	z-index: 11;
 }
 
+/* While picking a comment anchor, keep the crosshair regardless of the inline
+   cursor MouseControl writes on hover/enter; !important beats that inline style. */
+.comment-placement-cursor {
+	cursor: crosshair !important;
+}
+
 .cool-annotation.annotation-pop-up {
 	/* Make sure the comment card is not cropped if the window is narrow: */
 	max-width: 95%;

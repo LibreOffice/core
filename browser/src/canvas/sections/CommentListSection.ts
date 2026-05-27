@@ -242,7 +242,6 @@ export class CommentSection extends CanvasSectionObject {
 	// either opens the in-place editor (toolbar/menu Insert Comment) or
 	// dispatches a ready UNO command (host-driven insertCommentInteractive).
 	private placementOnPicked: ((pick: CommentPlacementPick) => void) | null = null;
-	private placementSavedCursor: string | null = null;
 	private placementStart: { cX: number; cY: number } | null = null;
 	private placementOverlay: HTMLDivElement | null = null;
 	private static readonly DRAG_THRESHOLD_PX = 5;
@@ -892,8 +891,7 @@ export class CommentSection extends CanvasSectionObject {
 			return;
 
 		this.placementOnPicked = onPicked;
-		this.placementSavedCursor = canvas.style.cursor;
-		canvas.style.cursor = 'crosshair';
+		canvas.classList.add('comment-placement-cursor');
 
 		// Capture phase, before CanvasSectionContainer's onmousedown property
 		// handler dispatches to MouseControl/etc.
@@ -907,13 +905,11 @@ export class CommentSection extends CanvasSectionObject {
 			canvas.removeEventListener('mousedown', this.onPlacementMouseDown, true);
 			canvas.removeEventListener('mousemove', this.onPlacementMouseMove, true);
 			canvas.removeEventListener('mouseup', this.onPlacementMouseUp, true);
-			if (this.placementSavedCursor !== null)
-				canvas.style.cursor = this.placementSavedCursor;
+			canvas.classList.remove('comment-placement-cursor');
 		}
 		document.removeEventListener('keydown', this.onPlacementKeyDown, true);
 		this.removePlacementOverlay();
 		this.placementOnPicked = null;
-		this.placementSavedCursor = null;
 		this.placementStart = null;
 	}
 
