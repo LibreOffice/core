@@ -1701,16 +1701,6 @@ img.context-menu-icon {
 
 /* Autofilter dropdown */
 
-.autofilter.row {
-	display: table-row;
-}
-
-.autofilter.cell {
-	display: table-cell;
-	vertical-align: middle;
-	padding: var(--spacing-xs);
-}
-
 .autofilter-container {
 	background-color: var(--color-main-background);
 	border: 1px solid var(--color-border);
@@ -1720,16 +1710,25 @@ img.context-menu-icon {
 	font-family: var(--cool-font);
 }
 
-.autofilter-container > .root-container,
-.autofilter-container .cell,
-.autofilter-container .row {
+.autofilter-container > .root-container {
 	margin: 0;
 	padding: 0;
 }
 
+/* start: layouting has less cost when we have thousands of entries */
+.autofilter.ui-treeview-entry:not(.ui-treeview-tree) {
+	display: table-row !important;
+}
+.autofilter.ui-treeview-entry:not(.ui-treeview-tree) > div,
+.autofilter.ui-treeview-entry:not(.ui-treeview-tree) > div:last-child {
+	display: table-cell !important;
+}
+/* end: layouting optimization */
+
 .autofilter-container .ui-treeview {
 	border: none;
 }
+
 .autofilter-container #menu.ui-treeview {
 	height: auto;
 	width: 100%;
