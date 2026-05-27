@@ -2745,7 +2745,16 @@ window.L.Control.NotebookbarImpress = window.L.Control.NotebookbarWriter.extend(
 						'type': 'bigtoolitem',
 						'text': _UNO('.uno:FormatGroup'),
 						'command': '.uno:FormatGroup',
+						'hideWhenEnabled': '.uno:FormatUngroup',
 						'accessibility': { focusBack: true, combination: 'FG', de: null }
+					},
+					{
+						'id': 'shape-format-ungroup',
+						'type': 'bigtoolitem',
+						'text': _UNO('.uno:FormatUngroup'),
+						'command': '.uno:FormatUngroup',
+						'hideWhenDisabled': true,
+						'accessibility': { focusBack: true, combination: 'UG', de: null }
 					},
 					{
 						'type': 'container',
@@ -3049,7 +3058,16 @@ window.L.Control.NotebookbarImpress = window.L.Control.NotebookbarWriter.extend(
 						'type': 'bigtoolitem',
 						'text': _UNO('.uno:FormatGroup'),
 						'command': '.uno:FormatGroup',
+						'hideWhenEnabled': '.uno:FormatUngroup',
 						'accessibility': { focusBack: true, combination: 'FG', de: null }
+					},
+					{
+						'id': 'picture-format-ungroup',
+						'type': 'bigtoolitem',
+						'text': _UNO('.uno:FormatUngroup'),
+						'command': '.uno:FormatUngroup',
+						'hideWhenDisabled': true,
+						'accessibility': { focusBack: true, combination: 'UG', de: null }
 					},
 					{
 						'type': 'container',

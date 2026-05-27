@@ -1312,6 +1312,7 @@ const std::map<std::u16string_view, KitUnoCommand>& GetKitUnoCommandList()
         { u"NextTrackedChange", { PayloadType::EnabledPayload, true } },
         { u"PreviousTrackedChange", { PayloadType::EnabledPayload, true } },
         { u"FormatGroup", { PayloadType::EnabledPayload, true } },
+        { u"FormatUngroup", { PayloadType::EnabledPayload, true } },
         { u"ObjectBackOne", { PayloadType::EnabledPayload, true } },
         { u"SendToBack", { PayloadType::EnabledPayload, true } },
         { u"ObjectForwardOne", { PayloadType::EnabledPayload, true } },

@@ -467,6 +467,7 @@ class LOUtil {
 			alignhorizontalcenter: 'centerpara',
 			alignblock: 'justifypara',
 			formatsparklinemenu: 'insertsparkline',
+			formatungroup: 'ungroup',
 			insertdatecontentcontrol: 'datefield',
 			editheaderandfooter: 'headerandfooter',
 			insertfooter: 'insertpagefooter',

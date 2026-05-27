@@ -3184,7 +3184,14 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 					{
 						'type': 'bigtoolitem',
 						'text': _UNO('.uno:FormatGroup'),
-						'command': '.uno:FormatGroup'
+						'command': '.uno:FormatGroup',
+						'hideWhenEnabled': '.uno:FormatUngroup'
+					},
+					{
+						'type': 'bigtoolitem',
+						'text': _UNO('.uno:FormatUngroup'),
+						'command': '.uno:FormatUngroup',
+						'hideWhenDisabled': true
 					},
 					{
 						'type': 'container',
@@ -3507,7 +3514,14 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 					{
 						'type': 'bigtoolitem',
 						'text': _UNO('.uno:FormatGroup'),
-						'command': '.uno:FormatGroup'
+						'command': '.uno:FormatGroup',
+						'hideWhenEnabled': '.uno:FormatUngroup'
+					},
+					{
+						'type': 'bigtoolitem',
+						'text': _UNO('.uno:FormatUngroup'),
+						'command': '.uno:FormatUngroup',
+						'hideWhenDisabled': true
 					},
 					{
 						'type': 'container',

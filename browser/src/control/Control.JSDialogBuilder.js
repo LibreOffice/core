@@ -1511,7 +1511,28 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 					}
 				};
 
+				// A button can drop out of the layout based on command state
+				// instead of just greying out:
+				//   hideWhenDisabled - hide while its own command is disabled
+				//   hideWhenEnabled  - hide while the named command is enabled
+				// The Group/Ungroup pair uses this: Ungroup is hidden unless a
+				// group is selected (hideWhenDisabled), while Group stays
+				// visible (greyed when not applicable) and only hides once a
+				// group is selected (hideWhenEnabled FormatUngroup).
+				const updateVisibility = () => {
+					if (!data.hideWhenDisabled && !data.hideWhenEnabled)
+						return;
+					const items = builder.map['stateChangeHandler'];
+					let hide = false;
+					if (data.hideWhenDisabled && items.getItemValue(data.command) === 'disabled')
+						hide = true;
+					if (data.hideWhenEnabled && items.getItemValue(data.hideWhenEnabled) === 'enabled')
+						hide = true;
+					div.classList.toggle('hidden', hide);
+				};
+
 				updateFunction();
+				updateVisibility();
 				setDisabled(data.enabled === false);
 
 				builder.map.on('commandstatechanged', function(e) {
@@ -1521,6 +1542,10 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 						// in some cases we will get both property like state and disabled
 						// to handle it we will set disable var based on INCOMING info (ex: .uno:ParaRightToLft)
 						setDisabled(e.disabled || e.state == 'disabled');
+						updateVisibility();
+					}
+					else if (data.hideWhenEnabled && e.commandName === data.hideWhenEnabled) {
+						updateVisibility();
 					}
 				}, this);
 			}
