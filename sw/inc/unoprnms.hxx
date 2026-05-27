@@ -862,6 +862,7 @@ inline constexpr OUString UNO_NAME_LINE_WIDTH = u"LineWidth"_ustr;
 inline constexpr OUString UNO_NAME_PARA_CONTEXT_MARGIN = u"ParaContextMargin"_ustr;
 inline constexpr OUString UNO_NAME_PARAGRAPH_STYLE_NAME = u"ParagraphStyleName"_ustr;
 inline constexpr OUString UNO_NAME_FIRST_IS_SHARED = u"FirstIsShared"_ustr;
+inline constexpr OUString UNO_NAME_NO_FIRST = u"NoFirst"_ustr;
 inline constexpr OUString UNO_NAME_HEADER_TEXT_FIRST = u"HeaderTextFirst"_ustr;
 inline constexpr OUString UNO_NAME_FOOTER_TEXT_FIRST = u"FooterTextFirst"_ustr;
 inline constexpr OUString UNO_NAME_INITIALS = u"Initials"_ustr;

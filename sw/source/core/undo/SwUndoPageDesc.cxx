@@ -70,6 +70,11 @@ SwUndoPageDesc::SwUndoPageDesc(const SwPageDesc & _aOld,
         m_bExchange = false;
     if( ( rOldHead.IsActive() || rOldFoot.IsActive() ) && ( rOldDesc.IsFirstShared() != rNewDesc.IsFirstShared() ) )
         m_bExchange = false;
+    if( ( rOldHead.IsActive() || rOldFoot.IsActive() ) && ( rOldDesc.IsWithoutFirst() != rNewDesc.IsWithoutFirst() ) )
+        m_bExchange = false;
+    if (!rNewDesc.IsFirstShared() && rOldDesc.IsWithoutFirst() == rNewDesc.IsWithoutFirst())
+        m_bExchange = false;
+
     if( !m_bExchange )
         return;
 
@@ -163,12 +168,15 @@ void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDes
         if (!rDest.IsFirstShared())
         {
             // Same procedure for unshared header...
-            const SwFormatHeader& rSourceFirstMasterHead = rSource.GetFirstMaster().GetHeader();
-            pItem = rDest.GetFirstMaster().GetAttrSet().GetItemIfSet( RES_HEADER, false );
+            const SwFrameFormat & rSourceMasterHead =
+                rSource.IsWithoutFirst() ? rSource.GetMaster() :
+                rSource.GetFirstMaster();
+            const SwFormatHeader& rSourceFirstMasterHead = rSourceMasterHead.GetHeader();
+            pItem = rSourceMasterHead.GetAttrSet().GetItemIfSet( RES_HEADER, false );
             pNewItem.reset(pItem->Clone());
             pNewFormat = pNewItem->GetHeaderFormat();
             pNewFormat->SetFormatAttr( rSourceFirstMasterHead.GetHeaderFormat()->GetContent() );
-            pItem = rSource.GetFirstMaster().GetAttrSet().GetItemIfSet( RES_HEADER, false );
+            pItem = rSourceMasterHead.GetAttrSet().GetItemIfSet( RES_HEADER, false );
             pNewItem.reset(pItem->Clone());
             pNewFormat = pNewItem->GetHeaderFormat();
             pNewFormat->SetFormatAttr( SwFormatContent() );
@@ -206,12 +214,16 @@ void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDes
     if (rDest.IsFirstShared())
         return;
 
-    const SwFormatFooter& rSourceFirstMasterFoot = rSource.GetFirstMaster().GetFooter();
-    pItem = rDest.GetFirstMaster().GetAttrSet().GetItemIfSet( RES_FOOTER, false );
+    const SwFrameFormat & rSourceMasterFoot =
+        rSource.IsWithoutFirst() ? rSource.GetMaster() :
+        rSource.GetFirstMaster();
+
+    const SwFormatFooter& rSourceFirstMasterFoot = rSourceMasterFoot.GetFooter();
+    pItem = rSourceMasterFoot.GetAttrSet().GetItemIfSet( RES_FOOTER, false );
     pNewItem.reset(pItem->Clone());
     pNewFormat = pNewItem->GetFooterFormat();
     pNewFormat->SetFormatAttr( rSourceFirstMasterFoot.GetFooterFormat()->GetContent() );
-    pItem = rSource.GetFirstMaster().GetAttrSet().GetItemIfSet( RES_FOOTER, false );
+    pItem = rSourceMasterFoot.GetAttrSet().GetItemIfSet( RES_FOOTER, false );
     pNewItem.reset(pItem->Clone());
     pNewFormat = pNewItem->GetFooterFormat();
     pNewFormat->SetFormatAttr( SwFormatContent() );

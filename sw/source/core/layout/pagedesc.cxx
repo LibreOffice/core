@@ -415,6 +415,19 @@ void SwPageDesc::ChgFirstShare( bool bNew )
         m_eUse &= UseOnPage::NoFirstShare;
 }
 
+bool SwPageDesc::IsWithoutFirst() const
+{
+    return bool(m_eUse & UseOnPage::WithoutFirst);
+}
+
+void SwPageDesc::ChgWithoutFirst( bool bNew )
+{
+    if ( bNew )
+        m_eUse |= UseOnPage::WithoutFirst;
+    else
+        m_eUse &= UseOnPage::NotWithoutFirst;
+}
+
 void SwPageDesc::StashFrameFormat(const SwFrameFormat& rFormat, bool bHeader, bool bLeft, bool bFirst)
 {
     assert(rFormat.GetRegisteredIn());

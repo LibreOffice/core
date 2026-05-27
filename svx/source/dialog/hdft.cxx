@@ -127,6 +127,7 @@ SvxHFPage::SvxHFPage(weld::Container* pPage, weld::DialogController* pController
     , mbEnableDrawingLayerFillStyles(false)
     , m_xCntSharedBox(m_xBuilder->weld_check_button(u"checkSameLR"_ustr))
     , m_xCntSharedFirstBox(m_xBuilder->weld_check_button(u"checkSameFP"_ustr))
+    , m_xCntNoFirstBox(m_xBuilder->weld_check_button(u"checkNoFP"_ustr))
     , m_xLMLbl(m_xBuilder->weld_label(u"labelLeftMarg"_ustr))
     , m_xLMEdit(m_xBuilder->weld_metric_spin_button(u"spinMargLeft"_ustr, FieldUnit::CM))
     , m_xRMLbl(m_xBuilder->weld_label(u"labelRightMarg"_ustr))
@@ -156,6 +157,7 @@ SvxHFPage::SvxHFPage(weld::Container* pPage, weld::DialogController* pController
         on both the Header and Footer tabs */
         m_xCntSharedBox->set_help_id( u"SVX_HID_FOOTER_CHECKSAMELR"_ustr );
         m_xCntSharedFirstBox->set_help_id( u"SVX_HID_FOOTER_CHECKSAMEFP"_ustr );
+        m_xCntNoFirstBox->set_help_id( u"SVX_HID_FOOTER_CHECKNOFP"_ustr );
         m_xLMEdit->set_help_id( u"SVX_HID_FOOTER_SPINMARGLEFT"_ustr );
         m_xRMEdit->set_help_id( u"SVX_HID_FOOTER_SPINMARGRIGHT"_ustr );
         m_xDistEdit->set_help_id( u"SVX_HID_FOOTER_SPINSPACING"_ustr );
@@ -170,6 +172,9 @@ SvxHFPage::SvxHFPage(weld::Container* pPage, weld::DialogController* pController
         m_xPageLbl = m_xBuilder->weld_label(u"labelHeaderFormat"_ustr);
         m_xTurnOnBox = m_xBuilder->weld_check_button(u"checkHeaderOn"_ustr);
     }
+    //TODO: hide only or move following controls?
+    if (m_bIsCalc)
+        m_xCntNoFirstBox->hide();
     m_xTurnOnBox->show();
     m_xPageLbl->show();
 
@@ -201,6 +206,7 @@ bool SvxHFPage::FillItemSet( SfxItemSet* rSet )
     const sal_uInt16 nWDynSpacing = GetWhich(SID_ATTR_HDFT_DYNAMIC_SPACING);
     const sal_uInt16 nWShared = GetWhich(SID_ATTR_PAGE_SHARED);
     const sal_uInt16 nWSharedFirst = GetWhich( SID_ATTR_PAGE_SHARED_FIRST );
+    const sal_uInt16 nWNoFirst = GetWhich( SID_ATTR_PAGE_NO_FIRST );
     const sal_uInt16 nWBrush = GetWhich(SID_ATTR_BRUSH);
     const sal_uInt16 nWBox = GetWhich(SID_ATTR_BORDER_OUTER);
     const sal_uInt16 nWBoxInfo = GetWhich(SID_ATTR_BORDER_INNER);
@@ -220,6 +226,7 @@ bool SvxHFPage::FillItemSet( SfxItemSet* rSet )
     aSet.MergeRange(nWDynamic, nWDynamic);
     aSet.MergeRange(nWShared, nWShared);
     aSet.MergeRange(nWSharedFirst, nWSharedFirst);
+    aSet.MergeRange(nWNoFirst, nWNoFirst);
     aSet.MergeRange(nWBrush, nWBrush);
     aSet.MergeRange(nWBoxInfo, nWBoxInfo);
     aSet.MergeRange(nWBox, nWBox);
@@ -238,14 +245,15 @@ bool SvxHFPage::FillItemSet( SfxItemSet* rSet )
     aSet.Put( SfxBoolItem( nWDynamic, m_xHeightDynBtn->get_active() ) );
     aSet.Put( SfxBoolItem( nWShared,  m_xCntSharedBox->get_active() ) );
     if(m_xCntSharedFirstBox->get_visible())
-        aSet.Put(SfxBoolItem(nWSharedFirst,  m_xCntSharedFirstBox->get_active()));
+        aSet.Put(SfxBoolItem(nWSharedFirst, m_xCntSharedFirstBox->get_active()));
+    if (m_xCntNoFirstBox->get_visible())
+        aSet.Put(SfxBoolItem(nWNoFirst, m_xCntNoFirstBox->get_active()));
     if (m_xDynSpacingCB->get_visible() && SfxItemPool::IsWhich(nWDynSpacing))
     {
         std::unique_ptr<SfxBoolItem> pBoolItem(static_cast<SfxBoolItem*>(pPool->GetUserOrPoolDefaultItem(nWDynSpacing).Clone()));
         pBoolItem->SetValue(m_xDynSpacingCB->get_active());
         aSet.Put(std::move(pBoolItem));
     }
-
     // Size
     SvxSizeItem aSizeItem( static_cast<const SvxSizeItem&>(rOldSet.Get( nWSize )) );
     Size        aSize( aSizeItem.GetSize() );
@@ -425,6 +433,10 @@ void SvxHFPage::Reset( const SfxItemSet* rSet )
 void SvxHFPage::InitHandler()
 {
     m_xTurnOnBox->connect_toggled(LINK(this, SvxHFPage, TurnOnHdl));
+
+    m_xCntSharedFirstBox->connect_toggled(LINK(this, SvxHFPage, FirstPageHdl));
+    m_xCntNoFirstBox->connect_toggled(LINK(this, SvxHFPage, FirstPageHdl));
+
     m_xDistEdit->connect_value_changed(LINK(this, SvxHFPage, ValueChangeHdl));
     m_xHeightEdit->connect_value_changed(LINK(this,SvxHFPage,ValueChangeHdl));
 
@@ -456,6 +468,8 @@ void SvxHFPage::TurnOn(const weld::Toggleable* pBox)
         {
             m_xCntSharedBox->set_sensitive(true);
             m_xCntSharedFirstBox->set_sensitive(true);
+            m_xCntNoFirstBox->set_sensitive(true);
+            FirstPageHdl(*m_xCntNoFirstBox);
         }
         m_xBackgroundBtn->set_sensitive(true);
     }
@@ -496,6 +510,7 @@ void SvxHFPage::TurnOn(const weld::Toggleable* pBox)
             m_xCntSharedBox->set_sensitive(false);
             m_xBackgroundBtn->set_sensitive(false);
             m_xCntSharedFirstBox->set_sensitive(false);
+            m_xCntNoFirstBox->set_sensitive(false);
         }
         else
             m_xTurnOnBox->set_active(true);
@@ -506,6 +521,12 @@ void SvxHFPage::TurnOn(const weld::Toggleable* pBox)
 IMPL_LINK(SvxHFPage, TurnOnHdl, weld::Toggleable&, rBox, void)
 {
     TurnOn(&rBox);
+}
+
+IMPL_LINK_NOARG(SvxHFPage, FirstPageHdl, weld::Toggleable&, void)
+{
+    m_xCntSharedFirstBox->set_sensitive(!m_xCntNoFirstBox->get_active());
+    m_xCntNoFirstBox->set_sensitive(!m_bIsCalc && !m_xCntSharedFirstBox->get_active());
 }
 
 IMPL_LINK_NOARG(SvxHFPage, BackgroundHdl, weld::Button&, void)
@@ -825,6 +846,7 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
     {
         m_xCntSharedBox->set_sensitive(true);
         m_xCntSharedFirstBox->set_sensitive(true);
+        m_xCntNoFirstBox->set_sensitive(true);
     }
     pItem = GetItem( rSet, SID_ATTR_PAGE_SIZE );
 
@@ -841,6 +863,9 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
     std::optional<bool> oNonActivatedFirstShared; // only used by Writer
     bool bActivatedFirstShared = true; // default value
     const sal_uInt16 nSidAttrPageSharedFirst = GetWhich(SID_ATTR_PAGE_SHARED_FIRST);
+    std::optional<bool> oNonActivatedNoFirst; // only used by Writer
+    bool bActivatedNoFirst = false; // default value
+    const sal_uInt16 nSidAttrPageNoFirst = GetWhich(SID_ATTR_PAGE_NO_FIRST);
 
     // Evaluate Header attribute
     const SvxSetItem* pSetItem = nullptr;
@@ -877,6 +902,17 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
                 else
                     oNonActivatedFirstShared = pSharedFirst->GetValue();
             }
+            const SfxBoolItem* pNoFirst = nullptr;
+            if (rHeaderSet.HasItem(nSidAttrPageNoFirst))
+                 pNoFirst
+                    = static_cast<const SfxBoolItem*>(&rHeaderSet.Get(nSidAttrPageNoFirst));
+            if (pNoFirst)
+            {
+                if (SID_ATTR_PAGE_HEADERSET == nId)
+                    bActivatedNoFirst = pNoFirst->GetValue();
+                else
+                    oNonActivatedNoFirst = pNoFirst->GetValue();
+            }
         }
         else
             pSetItem = nullptr;
@@ -890,6 +926,7 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
         {
             m_xCntSharedBox->set_sensitive(false);
             m_xCntSharedFirstBox->set_sensitive(false);
+            m_xCntNoFirstBox->set_sensitive(false);
         }
     }
     pSetItem = nullptr;
@@ -926,6 +963,17 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
                 else
                     oNonActivatedFirstShared = pSharedFirst->GetValue();
             }
+            const SfxBoolItem* pNoFirst = nullptr;
+            if (rFooterSet.HasItem(nSidAttrPageNoFirst))
+                 pNoFirst
+                    = static_cast<const SfxBoolItem*>(&rFooterSet.Get(nSidAttrPageNoFirst));
+            if (pNoFirst)
+            {
+                if (SID_ATTR_PAGE_FOOTERSET == nId)
+                    bActivatedNoFirst = pNoFirst->GetValue();
+                else
+                    oNonActivatedNoFirst = pNoFirst->GetValue();
+            }
         }
         else
             pSetItem = nullptr;
@@ -939,12 +987,21 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
         {
             m_xCntSharedBox->set_sensitive(false);
             m_xCntSharedFirstBox->set_sensitive(false);
+            m_xCntNoFirstBox->set_sensitive(false);
         }
     }
 
     // Priority: non-active tab's FirstBox - then this tab's First - otherwise default is shared
     m_xCntSharedFirstBox->set_active(
         oNonActivatedFirstShared.has_value() ? *oNonActivatedFirstShared : bActivatedFirstShared);
+
+    m_xCntNoFirstBox->set_active(
+        oNonActivatedNoFirst.has_value() ? *oNonActivatedNoFirst : bActivatedNoFirst);
+
+    m_xCntSharedFirstBox->set_sensitive(m_xTurnOnBox->get_active() &&
+        !m_xCntNoFirstBox->get_active());
+    m_xCntNoFirstBox->set_sensitive(m_xTurnOnBox->get_active() &&
+        !m_xCntSharedFirstBox->get_active());
 
     pItem = GetItem( rSet, SID_ATTR_PAGE_EXT1 );
 

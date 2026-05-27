@@ -98,7 +98,7 @@
               </packing>
             </child>
             <child>
-              <!-- n-columns=1 n-rows=1 -->
+              <!-- n-columns=2 n-rows=10 -->
               <object class="GtkGrid" id="grid5">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
@@ -139,7 +139,23 @@
                     <property name="width">2</property>
                   </packing>
                 </child>
-                <child>
+                  <child>
+                      <object class="GtkCheckButton" id="checkNoFP">
+                          <property name="label" translatable="yes" context="headfootformatpage|checkNoFP">No content on first page</property>
+                          <property name="visible">True</property>
+                          <property name="can-focus">True</property>
+                          <property name="receives-default">False</property>
+                          <property name="hexpand">True</property>
+                          <property name="use-underline">True</property>
+                          <property name="draw-indicator">True</property>
+                      </object>
+                      <packing>
+                          <property name="left-attach">0</property>
+                          <property name="top-attach">2</property>
+                          <property name="width">2</property>
+                      </packing>
+                  </child>
+                  <child>
                   <object class="GtkLabel" id="labelLeftMarg">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
@@ -150,8 +166,8 @@
                     <property name="xalign">0</property>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">2</property>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">3</property>
                   </packing>
                 </child>
                 <child>
@@ -165,8 +181,8 @@
                     <property name="digits">2</property>
                   </object>
                   <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">2</property>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">3</property>
                   </packing>
                 </child>
                 <child>
@@ -180,8 +196,8 @@
                     <property name="xalign">0</property>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">3</property>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">4</property>
                   </packing>
                 </child>
                 <child>
@@ -195,8 +211,8 @@
                     <property name="digits">2</property>
                   </object>
                   <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">3</property>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">4</property>
                   </packing>
                 </child>
                 <child>
@@ -210,8 +226,8 @@
                     <property name="xalign">0</property>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">4</property>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">5</property>
                   </packing>
                 </child>
                 <child>
@@ -225,8 +241,8 @@
                     <property name="digits">2</property>
                   </object>
                   <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">4</property>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">5</property>
                   </packing>
                 </child>
                 <child>
@@ -239,8 +255,8 @@
                     <property name="draw_indicator">True</property>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">5</property>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">6</property>
                     <property name="width">2</property>
                   </packing>
                 </child>
@@ -256,8 +272,8 @@
                     <property name="xalign">0</property>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">6</property>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">7</property>
                   </packing>
                 </child>
                 <child>
@@ -271,8 +287,8 @@
                     <property name="digits">2</property>
                   </object>
                   <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">6</property>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">7</property>
                   </packing>
                 </child>
                 <child>
@@ -286,8 +302,8 @@
                     <property name="draw_indicator">True</property>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">7</property>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">8</property>
                     <property name="width">2</property>
                   </packing>
                 </child>
@@ -327,8 +343,8 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">8</property>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">9</property>
                     <property name="width">2</property>
                   </packing>
                 </child>

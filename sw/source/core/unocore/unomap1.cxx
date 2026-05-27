@@ -507,6 +507,7 @@ std::span<const SfxItemPropertyMapEntry> SwUnoPropertyMapProvider::GetPageStyleP
 
 
         { UNO_NAME_FIRST_IS_SHARED, SID_ATTR_PAGE_SHARED_FIRST,   cppu::UnoType<bool>::get(), PROPERTY_NONE, 0 },
+        { UNO_NAME_NO_FIRST, SID_ATTR_PAGE_NO_FIRST,   cppu::UnoType<bool>::get(), PROPERTY_NONE, 0 },
 
         //UUU use real WhichIDs for Footer, see Header (above) for more infos
         { UNO_NAME_FOOTER_BACK_COLOR, RES_BACKGROUND,   cppu::UnoType<sal_Int32>::get(),           PROPERTY_NONE ,MID_BACK_COLOR        },

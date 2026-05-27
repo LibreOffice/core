@@ -115,11 +115,9 @@ CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testHeaderFooterWithSpecialFirstPage_OOXM
 
     {
         xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-        // check first page
-        assertXPath(pXmlDoc, "/root/page[1]/header"_ostr);
-        assertXPath(pXmlDoc, "/root/page[1]/footer"_ostr);
-        assertXPath(pXmlDoc, "/root/page[1]/header/txt/text()"_ostr, 0);
-        assertXPath(pXmlDoc, "/root/page[1]/footer/txt/text()"_ostr, 0);
+        // check first page -> no header and footer
+        assertXPath(pXmlDoc, "/root/page[1]/header", 0);
+        assertXPath(pXmlDoc, "/root/page[1]/footer", 0);
         // check second page in the same way
         assertXPath(pXmlDoc, "/root/page[2]/header"_ostr);
         assertXPath(pXmlDoc, "/root/page[2]/footer"_ostr);
@@ -657,10 +655,7 @@ CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testFirstPageFooterEnabled)
     // Footer shouldn't be enabled on first page, but then on the other pages
     auto verify = [this]() {
         xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-        // TODO
-        // It's currently not possible to disable the header on first page only.
-        //assertXPath(pXmlDoc, "/root/page[1]/footer/txt"_ostr, 0);
-        assertXPath(pXmlDoc, "/root/page[1]/footer/txt"_ostr);
+        assertXPath(pXmlDoc, "/root/page[1]/footer/txt", 0);
     };
     createSwDoc("TestFirstFooterDisabled.docx");
     verify();

@@ -19,6 +19,7 @@
 #include <rtl/ustring.hxx>
 #include "PropertyIds.hxx"
 #include <unordered_map>
+#include <unoprnms.hxx>
 
 namespace writerfilter::dmapper{
 
@@ -194,6 +195,7 @@ OUString getPropertyName( PropertyIds eId )
         { PROP_HEADER_IS_SHARED, u"HeaderIsShared"},
         { PROP_HEADER_IS_ON, u"HeaderIsOn"},
         { PROP_FIRST_IS_SHARED, u"FirstIsShared"},
+        { PROP_FIRST_EMPTY, UNO_NAME_NO_FIRST},
         { PROP_FOOTER_TEXT_LEFT, u"FooterTextLeft"},
         { PROP_FOOTER_TEXT_FIRST, u"FooterTextFirst"},
         { PROP_FOOTER_TEXT, u"FooterText"},

@@ -835,6 +835,7 @@ fontwork-start
 fontwork-style
 footer
 footer-first
+is-first-page-footer-shared
 footer-left
 footer-style
 footer-visible
@@ -933,6 +934,7 @@ hatch-table
 triple
 header
 header-first
+is-first-page-header-shared
 header-left
 header-style
 headers

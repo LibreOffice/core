@@ -539,6 +539,7 @@ void SectionPropertyMap::setHeaderFooterProperties(DomainMapper_Impl& rDM_Impl)
 
     const OUString& sHeaderIsOn = getPropertyName(PROP_HEADER_IS_ON);
     const OUString& sFooterIsOn = getPropertyName(PROP_FOOTER_IS_ON);
+    const OUString& sFirstEmpty = getPropertyName(PROP_FIRST_EMPTY);
 
     m_aPageStyle->getPropertyValue(sHeaderIsOn) >>= bHasHeader;
     m_aPageStyle->getPropertyValue(sFooterIsOn) >>= bHasFooter;
@@ -585,6 +586,11 @@ void SectionPropertyMap::setHeaderFooterProperties(DomainMapper_Impl& rDM_Impl)
     if (bHasHeader && !bHadFirstHeader && !m_bHadLeftHeader && !m_bHadRightHeader)
     {
         m_aPageStyle->setPropertyValue(sHeaderIsOn, uno::Any(false));
+    }
+    else if (m_bTitlePage && !m_bHadFirstHeader && !m_bHadFirstFooter)
+    {
+        m_aPageStyle->setPropertyValue(sFirstIsShared, uno::Any(false));
+        m_aPageStyle->setPropertyValue(sFirstEmpty, uno::Any(true));
     }
 }
 
@@ -1063,7 +1069,10 @@ void copyHeaderFooter(const DomainMapper_Impl& rDM_Impl,
         if (bCopyLeftHeader && bEvenAndOdd)
             copyHeaderFooterTextProperty(xPreviousStyle, xStyle, PROP_HEADER_TEXT_LEFT);
         if (bCopyFirstHeader && bTitlePage)
+        {
+            xStyle->setPropertyValue(getPropertyName(PROP_FIRST_EMPTY), uno::Any(false));
             copyHeaderFooterTextProperty(xPreviousStyle, xStyle, PROP_HEADER_TEXT_FIRST);
+        }
     }
 
     if (bPreviousHasFooter && bCopyFooter)
@@ -1073,7 +1082,10 @@ void copyHeaderFooter(const DomainMapper_Impl& rDM_Impl,
         if (bCopyLeftFooter && bEvenAndOdd)
             copyHeaderFooterTextProperty(xPreviousStyle, xStyle, PROP_FOOTER_TEXT_LEFT);
         if (bCopyFirstFooter && bTitlePage)
+        {
+            xStyle->setPropertyValue(getPropertyName(PROP_FIRST_EMPTY), uno::Any(false));
             copyHeaderFooterTextProperty(xPreviousStyle, xStyle, PROP_FOOTER_TEXT_FIRST);
+        }
     }
 
     // Set all properties at once after the copy, to avoid needless SwPageDesc copying.

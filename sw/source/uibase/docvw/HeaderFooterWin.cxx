@@ -279,6 +279,7 @@ void SwHeaderFooterWin::SetOffset(Point aOffset)
     // Compute the text to show
     const SwPageFrame* pPageFrame = SwFrameMenuButtonBase::GetPageFrame(m_pFrame);
     const SwPageDesc* pDesc = pPageFrame->GetPageDesc();
+    //TODO: handle on/off state first vs. follow pages
     bool bIsFirst = !pDesc->IsFirstShared() && pPageFrame->OnFirstPage();
     bool bIsLeft  = !pDesc->IsHeaderShared() && !pPageFrame->OnRightPage();
     bool bIsRight = !pDesc->IsHeaderShared() && pPageFrame->OnRightPage();
