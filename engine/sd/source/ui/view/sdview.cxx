@@ -691,7 +691,8 @@ bool View::SdrBeginTextEdit(
         pOutl->SetCalcFieldValueHdl(LINK(SdModule::get(), SdModule, CalcFieldValueHdl));
         EEControlBits nCntrl = pOutl->GetControlWord();
         nCntrl |= EEControlBits::ALLOWBIGOBJS;
-        nCntrl |= EEControlBits::MARKFIELDS;
+        nCntrl |= EEControlBits::MARKNONURLFIELDS;
+        nCntrl &= ~EEControlBits::MARKURLFIELDS;     // do not shade URL/hyperlink fields
         nCntrl |= EEControlBits::AUTOCORRECT;
 
         nCntrl &= ~EEControlBits::ULSPACESUMMATION;

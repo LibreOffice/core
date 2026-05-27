@@ -190,7 +190,8 @@ SdOutliner::SdOutliner( SdDrawDocument& rDoc, OutlinerMode nMode )
 
     EEControlBits nCntrl = GetControlWord();
     nCntrl |= EEControlBits::ALLOWBIGOBJS;
-    nCntrl |= EEControlBits::MARKFIELDS;
+    nCntrl |= EEControlBits::MARKNONURLFIELDS;
+    nCntrl &= ~EEControlBits::MARKURLFIELDS;     // do not shade URL/hyperlink fields
     nCntrl |= EEControlBits::AUTOCORRECT;
 
     bool bOnlineSpell = false;
