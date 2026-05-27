@@ -525,6 +525,18 @@ window.L.Map.WOPI = window.L.Handler.extend({
 					return;
 				}
 			}
+			// Same commands shipped with full args plus an InteractiveAnchor
+			// sentinel: the host has the text ready and wants the browser to
+			// pick the anchor (PDF picker), then dispatch the command with the
+			// picked PositionX/Y (and Width/Height for a drag) substituted in.
+			// The sentinel is browser-directed (stripped before dispatch), not
+			// a UNO arg, so any truthy value enables it.
+			else if (msg.Values.Args.InteractiveAnchor
+				&& (msg.Values.Command === '.uno:InsertAnnotation'
+					|| msg.Values.Command === '.uno:InsertThreadedComment')) {
+				this._map.insertCommentInteractive(msg.Values.Command, msg.Values.Args);
+				return;
+			}
 			this._map.sendUnoCommand(msg.Values.Command, msg.Values.Args || '');
 			return;
 		}

@@ -351,6 +351,201 @@ describe(['tagdesktop'], 'PDF Threaded Comments', function() {
 		});
 	});
 
+	// Same Send_UNO_Command path, but the host also ships Text/Author plus
+	// an InteractiveAnchor sentinel. The browser must run the picker, then
+	// dispatch the command with the picked PositionX/Y substituted in - the
+	// in-place editor must not open because the text is already known.
+	it('Send_UNO_Command .uno:InsertAnnotation with InteractiveAnchor dispatches with picked point', { env: { 'pdf-view': true } }, function() {
+		const commentText = 'interactive-anchor-point ' + Date.now();
+		let initialCount = 0;
+
+		cy.getFrameWindow().then(function(win) {
+			const section = win.app.sectionContainer.getSectionWithName(
+				win.app.CSections.CommentList.name);
+			initialCount = section.sectionProperties.commentList.length;
+
+			win.postMessage(JSON.stringify({
+				MessageId: 'Send_UNO_Command',
+				Values: {
+					Command: '.uno:InsertAnnotation',
+					Args: {
+						Author: { type: 'string', value: 'PostMessageBot' },
+						Text: { type: 'string', value: commentText },
+						InteractiveAnchor: true,
+					},
+				},
+			}), '*');
+		});
+
+		cy.getFrameWindow().should(function(win) {
+			expect(win.document.getElementById('document-canvas').style.cursor,
+				'placement mode must switch the canvas cursor to crosshair')
+				.to.equal('crosshair');
+		});
+
+		// Click at ~25%/25% of page 1 (CSS pixels computed from twips so the
+		// test is zoom-independent).
+		let expectedX = 0, expectedY = 0;
+		cy.getFrameWindow().then(function(win) {
+			const canvas = win.document.getElementById('document-canvas');
+			const rect = canvas.getBoundingClientRect();
+			const docLayer = win.app.map._docLayer;
+			const targetTwipsX = docLayer._partWidthTwips / 4;
+			const targetTwipsY = docLayer._partHeightTwips / 4;
+			const cssX = (targetTwipsX * win.app.twipsToPixels) / win.app.dpiScale;
+			const cssY = (targetTwipsY * win.app.twipsToPixels) / win.app.dpiScale;
+
+			const point = new win.cool.SimplePoint(0, 0);
+			point.cX = cssX;
+			point.cY = cssY;
+			const docPoint = win.app.activeDocument.activeLayout.canvasToDocumentPoint(point);
+			expectedX = docPoint.x;
+			expectedY = docPoint.y;
+
+			canvas.dispatchEvent(new win.MouseEvent('mousedown', {
+				clientX: rect.left + cssX, clientY: rect.top + cssY,
+				button: 0, bubbles: true,
+			}));
+			canvas.dispatchEvent(new win.MouseEvent('mouseup', {
+				clientX: rect.left + cssX, clientY: rect.top + cssY,
+				button: 0, bubbles: true,
+			}));
+		});
+
+		// The host-text path bypasses newAnnotation, so no local 'new'
+		// comment appears and no in-place editor is ever opened.
+		cy.getFrameWindow().should(function(win) {
+			expect(win.document.getElementById('document-canvas').style.cursor,
+				'cursor must be restored once the pick completes')
+				.to.not.equal('crosshair');
+			const section = win.app.sectionContainer.getSectionWithName(
+				win.app.CSections.CommentList.name);
+			const stray = section.sectionProperties.commentList.find(
+				function(c) { return c.sectionProperties.data.id === 'new'; });
+			expect(stray,
+				'no editor-driven \'new\' comment should be created').to.not.exist;
+		});
+		cy.cGet('#annotation-modify-textarea-new').should('not.exist');
+
+		cy.getFrameWindow().then(function(win) { return helper.processToIdle(win); });
+
+		// After the engine ack: the comment lands in the list carrying the
+		// host text and an engine-assigned id, anchored at the picked point.
+		cy.getFrameWindow().should(function(win) {
+			const section = win.app.sectionContainer.getSectionWithName(
+				win.app.CSections.CommentList.name);
+			expect(section.sectionProperties.commentList.length,
+				'commentList must grow by one after the engine ack')
+				.to.equal(initialCount + 1);
+			const acked = section.sectionProperties.commentList.find(function(c) {
+				return c.sectionProperties.data.text === commentText;
+			});
+			expect(acked, 'a comment with the host text must be present').to.exist;
+			expect(acked.sectionProperties.data.id,
+				'core must assign a real (non-\'new\') id').to.not.equal('new');
+			// Round-trip goes twips -> mm/100 (core) -> twips, so allow a few
+			// twips of rounding slack.
+			expect(acked.sectionProperties.data.anchorPos[0],
+				'anchor X must match the picked point').to.be.closeTo(expectedX, 5);
+			expect(acked.sectionProperties.data.anchorPos[1],
+				'anchor Y must match the picked point').to.be.closeTo(expectedY, 5);
+		});
+	});
+
+	// Drag variant of the InteractiveAnchor path: the gesture passes the
+	// drag threshold, so Width/Height reach engine alongside PositionX/Y and
+	// the resulting comment owns an anchor-area sub-section.
+	it('Send_UNO_Command .uno:InsertAnnotation with InteractiveAnchor dispatches with picked rectangle', { env: { 'pdf-view': true } }, function() {
+		const commentText = 'interactive-anchor-drag ' + Date.now();
+		let initialCount = 0;
+
+		cy.getFrameWindow().then(function(win) {
+			const section = win.app.sectionContainer.getSectionWithName(
+				win.app.CSections.CommentList.name);
+			initialCount = section.sectionProperties.commentList.length;
+
+			win.postMessage(JSON.stringify({
+				MessageId: 'Send_UNO_Command',
+				Values: {
+					Command: '.uno:InsertAnnotation',
+					Args: {
+						Author: { type: 'string', value: 'PostMessageBot' },
+						Text: { type: 'string', value: commentText },
+						InteractiveAnchor: true,
+					},
+				},
+			}), '*');
+		});
+
+		cy.getFrameWindow().should(function(win) {
+			expect(win.document.getElementById('document-canvas').style.cursor)
+				.to.equal('crosshair');
+		});
+
+		let expectedW = 0, expectedH = 0;
+		cy.getFrameWindow().then(function(win) {
+			const canvas = win.document.getElementById('document-canvas');
+			const rect = canvas.getBoundingClientRect();
+			const docLayer = win.app.map._docLayer;
+			const startTwipsX = docLayer._partWidthTwips / 4;
+			const startTwipsY = docLayer._partHeightTwips / 4;
+			const endTwipsX = docLayer._partWidthTwips / 2;
+			const endTwipsY = docLayer._partHeightTwips * 0.4;
+			const startCssX = (startTwipsX * win.app.twipsToPixels) / win.app.dpiScale;
+			const startCssY = (startTwipsY * win.app.twipsToPixels) / win.app.dpiScale;
+			const endCssX = (endTwipsX * win.app.twipsToPixels) / win.app.dpiScale;
+			const endCssY = (endTwipsY * win.app.twipsToPixels) / win.app.dpiScale;
+
+			const tlPoint = new win.cool.SimplePoint(0, 0);
+			tlPoint.cX = Math.min(startCssX, endCssX);
+			tlPoint.cY = Math.min(startCssY, endCssY);
+			const docTL = win.app.activeDocument.activeLayout.canvasToDocumentPoint(tlPoint);
+			const brPoint = new win.cool.SimplePoint(0, 0);
+			brPoint.cX = Math.max(startCssX, endCssX);
+			brPoint.cY = Math.max(startCssY, endCssY);
+			const docBR = win.app.activeDocument.activeLayout.canvasToDocumentPoint(brPoint);
+			expectedW = docBR.x - docTL.x;
+			expectedH = docBR.y - docTL.y;
+
+			canvas.dispatchEvent(new win.MouseEvent('mousedown', {
+				clientX: rect.left + startCssX, clientY: rect.top + startCssY,
+				button: 0, bubbles: true,
+			}));
+			canvas.dispatchEvent(new win.MouseEvent('mousemove', {
+				clientX: rect.left + endCssX, clientY: rect.top + endCssY,
+				button: 0, bubbles: true,
+			}));
+			canvas.dispatchEvent(new win.MouseEvent('mouseup', {
+				clientX: rect.left + endCssX, clientY: rect.top + endCssY,
+				button: 0, bubbles: true,
+			}));
+		});
+
+		cy.cGet('#annotation-modify-textarea-new').should('not.exist');
+		cy.getFrameWindow().then(function(win) { return helper.processToIdle(win); });
+
+		cy.getFrameWindow().should(function(win) {
+			const section = win.app.sectionContainer.getSectionWithName(
+				win.app.CSections.CommentList.name);
+			expect(section.sectionProperties.commentList.length,
+				'commentList must grow by one after the engine ack')
+				.to.equal(initialCount + 1);
+			const acked = section.sectionProperties.commentList.find(function(c) {
+				return c.sectionProperties.data.text === commentText;
+			});
+			expect(acked, 'a comment with the host text must be present').to.exist;
+			expect(acked.sectionProperties.data.id,
+				'core must assign a real id').to.not.equal('new');
+			const ackRect = acked.sectionProperties.data.rectangle;
+			expect(ackRect[2],
+				'round-tripped marker width must match the dragged area').to.be.closeTo(expectedW, 5);
+			expect(ackRect[3],
+				'round-tripped marker height must match the dragged area').to.be.closeTo(expectedH, 5);
+			expect(acked.sectionProperties.data.hasArea,
+				'core must report hasArea for an explicit-size comment').to.equal('true');
+		});
+	});
+
 	// Negative path through placement mode: enter placement, miss the page
 	// (no comment), then click on the page (anchor visible at the click
 	// point), then cancel the editor before saving (no comment ends up in

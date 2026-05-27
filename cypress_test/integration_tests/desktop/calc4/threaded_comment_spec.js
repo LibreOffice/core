@@ -34,6 +34,42 @@ describe(['tagdesktop'], 'Threaded Comment', function() {
 			.should('exist');
 	});
 
+	// Variant where the host ships full Args plus an InteractiveAnchor sentinel.
+	// Outside PDF there is no anchor picker, so the browser strips the sentinel
+	// and dispatches the command verbatim; engine inserts the threaded comment
+	// with the host-provided text and no in-place editor is opened.
+	it('Send_UNO_Command .uno:InsertThreadedComment with InteractiveAnchor inserts directly', function() {
+		const commentText = 'interactive-anchor-calc ' + Date.now();
+		cy.getFrameWindow().then(function(win) {
+			win.postMessage(JSON.stringify({
+				MessageId: 'Send_UNO_Command',
+				Values: {
+					Command: '.uno:InsertThreadedComment',
+					Args: {
+						Author: { type: 'string', value: 'PostMessageBot' },
+						Text: { type: 'string', value: commentText },
+						InteractiveAnchor: true,
+					},
+				},
+			}), '*');
+		});
+
+		// Engine acks a real (non-'new') comment carrying the host text -
+		// no #comment-container-new is ever created because newAnnotation
+		// is skipped.
+		cy.cGet('#comment-container-1').should('exist');
+		cy.cGet('#annotation-modify-textarea-new').should('not.exist');
+		cy.getFrameWindow().then(function(win) { return helper.processToIdle(win); });
+		cy.getFrameWindow().should(function(win) {
+			const section = win.app.sectionContainer.getSectionWithName(
+				win.app.CSections.CommentList.name);
+			const comments = section.sectionProperties.commentList;
+			expect(comments.length).to.equal(1);
+			expect(comments[0].sectionProperties.data.text).to.contain(commentText);
+			expect(comments[0].sectionProperties.data.threaded).to.equal('true');
+		});
+	});
+
 	it('Insert, resolve, unresolve, and remove threaded comment', function() {
 		// Click the "Insert Comment" button on the Insert tab.
 		cy.cGet('#Insert-tab-label').click();

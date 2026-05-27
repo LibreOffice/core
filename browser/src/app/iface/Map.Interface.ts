@@ -207,6 +207,7 @@ interface MapInterface extends Evented {
 	): void;
 	insertComment(): void;
 	insertThreadedComment(): void;
+	insertCommentInteractive(command: string, args: any): void;
 	zoomIn(delta: number, options?: any, animate?: boolean): MapInterface;
 	zoomOut(delta: number, options?: any, animate?: boolean): MapInterface;
 	cancelSearch(): void;

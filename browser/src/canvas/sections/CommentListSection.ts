@@ -47,7 +47,7 @@ window.L.Map.include({
 		if (author in this._viewInfoByUserName) {
 			avatar = this._viewInfoByUserName[author].userextrainfo.avatar;
 		}
-		const commentData = {
+		const commentData: any = {
 			text: '',
 			textrange: '',
 			author: author,
@@ -55,9 +55,21 @@ window.L.Map.include({
 			id: 'new', // 'new' only when added by us
 			avatar: avatar
 		};
-		// In PDF, enter a click-to-place mode and let the user pick the spot.
+		// In PDF, enter a click-to-place mode and let the user pick the spot,
+		// then open the in-place editor anchored there. Switching the active
+		// part keeps save()'s setPart wrapper consistent and lets newAnnotation
+		// pick up the correct parthash; yAddition lets save() back the per-page
+		// offset out before sending PositionY.
 		if (app.file.fileBasedView && commentSection) {
-			commentSection.startCommentPlacement(commentData);
+			commentSection.startCommentPlacement((pick: cool.CommentPlacementPick) => {
+				commentData.yAddition = pick.partIndex * pick.additionPerPart;
+				this.setPart(pick.partIndex, false);
+				commentData.position = [pick.docTL.x, pick.docTL.y];
+				if (pick.docBR)
+					commentData.size = [pick.docBR.x - pick.docTL.x,
+						pick.docBR.y - pick.docTL.y];
+				this._docLayer.newAnnotation(commentData);
+			});
 			return;
 		}
 		this._docLayer.newAnnotation(commentData);
@@ -91,6 +103,57 @@ window.L.Map.include({
 		});
 	},
 
+	// Host-driven insertion: the host has the comment text ready and asks the
+	// browser to pick the anchor interactively (PDF only). Args carries the
+	// final UNO payload plus an InteractiveAnchor sentinel; we strip the
+	// sentinel, run the click-to-place picker, then dispatch the command with
+	// PositionX/Y (and Width/Height when the user dragged a rectangle) merged
+	// in. Outside fileBasedView there is no picker, so we just strip and
+	// dispatch as-is.
+	insertCommentInteractive: function(command: string, args: any) {
+		if (this.stateChangeHandler.getItemValue('InsertAnnotation') === 'disabled')
+			return;
+
+		const editingComment = cool.Comment.isAnyEdit();
+		const commentSection = app.sectionContainer.getSectionWithName(
+			app.CSections.CommentList.name
+		) as cool.CommentSection;
+		if (commentSection && editingComment) {
+			commentSection.navigateAndFocusComment(editingComment);
+			return;
+		}
+
+		const cleanArgs: any = {};
+		for (const key in args) {
+			if (key !== 'InteractiveAnchor')
+				cleanArgs[key] = args[key];
+		}
+
+		if (!app.file.fileBasedView || !commentSection) {
+			this.sendUnoCommand(command, cleanArgs, true);
+			return;
+		}
+
+		commentSection.startCommentPlacement((pick: cool.CommentPlacementPick) => {
+			// docTL is stacked-document twips; the engine wants the page-local
+			// Y, so back out the per-page offset. Width/Height follow when the
+			// user dragged a rectangle.
+			const partTop = pick.partIndex * pick.additionPerPart;
+			const finalArgs: any = {
+				...cleanArgs,
+				PositionX: { type: 'int32', value: pick.docTL.x },
+				PositionY: { type: 'int32', value: pick.docTL.y - partTop },
+			};
+			if (pick.docBR) {
+				finalArgs.Width = { type: 'int32', value: pick.docBR.x - pick.docTL.x };
+				finalArgs.Height = { type: 'int32', value: pick.docBR.y - pick.docTL.y };
+			}
+			this.setPart(pick.partIndex, false);
+			this.sendUnoCommand(command, finalArgs, true);
+			this.setPart(0, false);
+		});
+	},
+
 	showResolvedComments: function(on: boolean = false) {
 		const unoCommand = '.uno:ShowResolvedAnnotations';
 		this.sendUnoCommand(unoCommand);
@@ -110,6 +173,17 @@ window.L.Map.include({
 declare var JSDialog: any;
 
 namespace cool {
+
+// Geometry a placement-mode pick hands back to its caller: the validated
+// anchor in stacked-document twips (docTL, plus docBR when a rectangle was
+// dragged), and the containing page so the caller can derive page-local
+// coordinates or switch the active part.
+export type CommentPlacementPick = {
+	partIndex: number;
+	additionPerPart: number;
+	docTL: { x: number; y: number };
+	docBR: { x: number; y: number } | null;
+};
 
 export class CommentSection extends CanvasSectionObject {
 	backgroundColor: string = app.sectionContainer.getClearColor();
@@ -169,10 +243,15 @@ export class CommentSection extends CanvasSectionObject {
 
 	// Active "click anywhere on the page to place a new comment" mode for PDF.
 	// When non-null, the next document mousedown is consumed to position a new
-	// comment at that point instead of being forwarded to core. A click+drag
-	// instead of a plain click captures an anchor area; if the drag stays
-	// below DRAG_THRESHOLD_PX the click is treated as a point placement.
-	private placementCommentData: any = null;
+	// comment at that point instead of being forwarded to the engine. A
+	// click+drag instead of a plain click captures an anchor area; if the drag
+	// stays below DRAG_THRESHOLD_PX the click is treated as a point placement.
+	//
+	// finishCommentPlacement reports the picked geometry (in stacked-document
+	// twips) here and stays out of what happens next: the caller's routine
+	// either opens the in-place editor (toolbar/menu Insert Comment) or
+	// dispatches a ready UNO command (host-driven insertCommentInteractive).
+	private placementOnPicked: ((pick: CommentPlacementPick) => void) | null = null;
 	private placementSavedCursor: string | null = null;
 	private placementStart: { cX: number; cY: number } | null = null;
 	private placementOverlay: HTMLDivElement | null = null;
@@ -812,17 +891,17 @@ export class CommentSection extends CanvasSectionObject {
 		app.map.fire('deleteannotation');
 	}
 
-	public startCommentPlacement(commentData: any): void {
+	public startCommentPlacement(onPicked: (pick: CommentPlacementPick) => void): void {
 		// An additional Insert Comment trigger while placement is already
 		// pending is a no-op.
-		if (this.placementCommentData)
+		if (this.placementOnPicked)
 			return;
 
 		const canvas = document.getElementById('document-canvas') as HTMLCanvasElement | null;
 		if (!canvas)
 			return;
 
-		this.placementCommentData = commentData;
+		this.placementOnPicked = onPicked;
 		this.placementSavedCursor = canvas.style.cursor;
 		canvas.style.cursor = 'crosshair';
 
@@ -843,7 +922,7 @@ export class CommentSection extends CanvasSectionObject {
 		}
 		document.removeEventListener('keydown', this.onPlacementKeyDown, true);
 		this.removePlacementOverlay();
-		this.placementCommentData = null;
+		this.placementOnPicked = null;
 		this.placementSavedCursor = null;
 		this.placementStart = null;
 	}
@@ -925,7 +1004,7 @@ export class CommentSection extends CanvasSectionObject {
 
 	private finishCommentPlacement(canvas: HTMLCanvasElement,
 		end: { cX: number; cY: number }): void {
-		const commentData = this.placementCommentData;
+		const onPicked = this.placementOnPicked;
 		const start = this.placementStart;
 		// Treat the gesture as a drag-to-area when the user moved past the
 		// threshold; otherwise it's a plain click and we anchor a 5x5 mm
@@ -976,17 +1055,12 @@ export class CommentSection extends CanvasSectionObject {
 			docBR.y = Math.min(docBR.y, partTop + docLayer._partHeightTwips);
 		}
 
-		// Switching the active part keeps save()'s setPart wrapper consistent
-		// and lets newAnnotation pick up the correct parthash; yAddition lets
-		// save() back the per-page offset out before sending PositionY.
-		commentData.yAddition = partIndex * additionPerPart;
-		this.map.setPart(partIndex, false);
-
-		commentData.position = [docTL.x, docTL.y];
-		if (docBR)
-			commentData.size = [docBR.x - docTL.x, docBR.y - docTL.y];
+		// Tear down placement mode, then hand the validated geometry to the
+		// caller's routine. docTL/docBR are stacked-document twips; partIndex
+		// and additionPerPart let the caller derive page-local coordinates or
+		// switch the active part as it needs.
 		this.exitCommentPlacement();
-		this.sectionProperties.docLayer.newAnnotation(commentData);
+		onPicked({ partIndex, additionPerPart, docTL, docBR });
 	}
 
 	public click (annotation: any): void {
