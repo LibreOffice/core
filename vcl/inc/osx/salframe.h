@@ -19,10 +19,6 @@
 
 #pragma once
 
-#include <premac.h>
-#include <IOKit/pwr_mgt/IOPMLib.h>
-#include <postmac.h>
-
 #include <tools/long.hxx>
 #include <vcl/sysdata.hxx>
 
@@ -30,6 +26,7 @@
 #include <osx/salmenu.h>
 #include <osx/saldata.hxx>
 #include <osx/osxvcltypes.h>
+#include <osx/sessioninhibitor.hxx>
 
 #include <salframe.hxx>
 
@@ -85,7 +82,7 @@ public:
     InputContextFlags               mnICOptions;
 
     // To prevent display sleep during presentation
-    IOPMAssertionID                 mnAssertionID;
+    SessionManagerInhibitor         mSessionManagerInhibitor;
 
     NSRect                          maFrameRect;
     NSRect                          maContentRect;

@@ -27,7 +27,11 @@
 
 #include <salframe.hxx>
 #if !defined __EMSCRIPTEN__
+#if defined MACOSX
+#include <osx/sessioninhibitor.hxx>
+#else
 #include <unx/sessioninhibitor.hxx>
+#endif
 #endif
 #include <vclpluginapi.h>
 
