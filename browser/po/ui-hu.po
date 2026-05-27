@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-26 00:18+0200\n"
-"PO-Revision-Date: 2026-05-26 23:11+0000\n"
+"PO-Revision-Date: 2026-05-28 02:08+0000\n"
 "Last-Translator: Andras Timar <andras.timar@collabora.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/collabora-"
 "online/collabora-ui/hu/>\n"
@@ -5931,7 +5931,6 @@ msgid "Get Involved"
 msgstr "Vegyen részt"
 
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.h2:49-7
-#, fuzzy
 msgid "https://www.collaboraoffice.org/"
 msgstr "https://www.collaboraoffice.org/"
 
