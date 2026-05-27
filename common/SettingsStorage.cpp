@@ -259,6 +259,7 @@ void processIntegratorAdminFile(const std::string& payload)
         config.getBool("accessibility.enable", false) ? "true" : "false";
 
     Poco::replaceInPlace(adminFile, std::string("%ENABLE_ACCESSIBILITY%"), enableAccessibility);
+    Poco::replaceInPlace(adminFile, std::string("%SHOW_LEFT_NAV%"), std::string("true"));
     std::ofstream ofs(filePath, std::ios::binary | std::ios::trunc);
     if (!ofs.good())
         throw Poco::FileAccessDeniedException(filePath);
