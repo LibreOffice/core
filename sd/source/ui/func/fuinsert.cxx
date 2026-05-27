@@ -85,6 +85,8 @@
 
 #include <comphelper/lok.hxx>
 
+#include <com/sun/star/uno/Sequence.hxx>
+
 using namespace com::sun::star;
 
 namespace sd {
@@ -112,7 +114,8 @@ rtl::Reference<FuPoor> FuInsertGraphic::Create( ViewShell& rViewSh, ::sd::Window
 
 void FuInsertGraphic::DoExecute( SfxRequest& rReq )
 {
-    OUString aFileName;
+    css::uno::Sequence < OUString > aFileNames;
+    INetURLObject aURL;
     Graphic aGraphic;
 
     bool bAsLink = false;
@@ -124,7 +127,8 @@ void FuInsertGraphic::DoExecute( SfxRequest& rReq )
     if ( pArgs &&
          pArgs->GetItemState( SID_INSERT_GRAPHIC, true, &pItem ) == SfxItemState::SET )
     {
-        aFileName = static_cast<const SfxStringItem*>(pItem)->GetValue();
+        OUString aFileName = static_cast<const SfxStringItem*>(pItem)->GetValue();
+        aFileNames = css::uno::Sequence<OUString>(&aFileName, 1);
 
         OUString aFilterName;
         if ( const SfxStringItem* pFilterItem = pArgs->GetItemIfSet( FN_PARAM_FILTER ) )
@@ -135,74 +139,83 @@ void FuInsertGraphic::DoExecute( SfxRequest& rReq )
 
         if (comphelper::LibreOfficeKit::isActive())
         {
-            INetURLObject aURL(aFileName);
+            aURL = INetURLObject(aFileNames[0]);
             if (INetProtocol::File != aURL.GetProtocol() && HostFilter::isForbidden(aURL.GetHost()))
                 SfxLokHelper::sendNetworkAccessError("insert");
         }
-
-        nError = GraphicFilter::LoadGraphic( aFileName, aFilterName, aGraphic, &GraphicFilter::GetGraphicFilter() );
+        nError = GraphicFilter::LoadGraphic( aFileNames[0], aFilterName, aGraphic, &GraphicFilter::GetGraphicFilter() );
+        if (nError == ERRCODE_GRFILTER_FORMATERROR)
+            nError = GraphicFilter::LoadGraphic( aFileNames[0], OUString(), aGraphic,
+                                                 &GraphicFilter::GetGraphicFilter() );
     }
     else
     {
         SvxOpenGraphicDialog aDlg(SdResId(STR_INSERTGRAPHIC), mpWindow ? mpWindow->GetFrameWeld() : nullptr);
 
+        aDlg.setMultiSelect(true);
         if( aDlg.Execute() != ERRCODE_NONE )
             return; // cancel dialog
 
-        nError = aDlg.GetGraphic(aGraphic);
         bAsLink = aDlg.IsAsLink();
-        aFileName = aDlg.GetPath();
+        aFileNames = aDlg.GetSelectedFiles();
+        aDlg.setMultiSelect(false);
     }
 
-    if( nError == ERRCODE_NONE )
+    for (const auto& aFileName : aFileNames)
     {
-        GraphicNativeMetadata aMetadata;
-        if ( aMetadata.read(aGraphic) )
+        aURL = INetURLObject(aFileName);
+        nError =  GraphicFilter::GetGraphicFilter().ImportGraphic( aGraphic, aURL );
+        if( nError == ERRCODE_NONE )
         {
-            const Degree10 aRotation = aMetadata.getRotation();
-            if (aRotation)
+            GraphicNativeMetadata aMetadata;
+            if ( aMetadata.read(aGraphic) )
             {
-                GraphicNativeTransform aTransform( aGraphic );
-                aTransform.rotate( aRotation );
+                const Degree10 aRotation = aMetadata.getRotation();
+                if (aRotation)
+                {
+                    GraphicNativeTransform aTransform( aGraphic );
+                    aTransform.rotate( aRotation );
+                }
             }
-        }
-        if( dynamic_cast< DrawViewShell *>( &mrViewShell ) )
-        {
-            sal_Int8    nAction = DND_ACTION_COPY;
-            SdrObject* pPickObj = nullptr;
-            if (mbReplaceExistingImage)
-                pPickObj = mpView->GetSelectedSingleObject( mpView->GetPage() );
-            if (pPickObj)
-                nAction = DND_ACTION_LINK;
-            else
+            if( dynamic_cast< DrawViewShell *>( &mrViewShell ) )
             {
-                pPickObj = mpView->GetEmptyPresentationObject( PresObjKind::Graphic );
+                sal_Int8    nAction = DND_ACTION_COPY;
+                SdrObject* pPickObj = nullptr;
+                bool bSingleInsert = (aFileNames.getLength() == 1);
+                if (mbReplaceExistingImage || bSingleInsert)
+                    pPickObj = mpView->GetSelectedSingleObject( mpView->GetPage() );
                 if (pPickObj)
                     nAction = DND_ACTION_LINK;
-            }
-
-            Point aPos = mpWindow->GetVisibleCenter();
-            SdrGrafObj* pGrafObj = mpView->InsertGraphic(aGraphic, nAction, aPos, pPickObj, nullptr);
-
-            if(pGrafObj && bAsLink )
-            {
-                // really store as link only?
-                if( officecfg::Office::Common::Misc::ShowLinkWarningDialog::get() )
+                else
                 {
-                    SvxLinkWarningDialog aWarnDlg(mpWindow->GetFrameWeld(), aFileName);
-                    if (aWarnDlg.run() != RET_OK)
-                        return; // don't store as link
+                    pPickObj = mpView->GetEmptyPresentationObject( PresObjKind::Graphic );
+                    if (pPickObj)
+                        nAction = DND_ACTION_LINK;
                 }
 
-                // store as link
-                pGrafObj->SetGraphicLink(aFileName);
+                Point aPos = mpWindow->GetVisibleCenter();
+                SdrGrafObj* pGrafObj = mpView->InsertGraphic(aGraphic, nAction, aPos, pPickObj, nullptr);
+
+                if(pGrafObj && bAsLink )
+                {
+                    // really store as link only?
+                    if( officecfg::Office::Common::Misc::ShowLinkWarningDialog::get() )
+                    {
+                        SvxLinkWarningDialog aWarnDlg(mpWindow->GetFrameWeld(), aFileName);
+                        if (aWarnDlg.run() != RET_OK)
+                            return; // don't store as link
+                    }
+
+                    // store as link
+                    pGrafObj->SetGraphicLink(aFileName);
+                }
             }
         }
-    }
-    else if (!comphelper::LibreOfficeKit::isActive())
-    {
-        // TODO: enable in LOK, it contains synchronous error window without LOKNotifier
-        SdGRFFilter::HandleGraphicFilterError( nError, GraphicFilter::GetGraphicFilter().GetLastError() );
+        else if (!comphelper::LibreOfficeKit::isActive())
+        {
+            // TODO: enable in LOK, it contains synchronous error window without LOKNotifier
+            SdGRFFilter::HandleGraphicFilterError( nError, GraphicFilter::GetGraphicFilter().GetLastError() );
+        }
     }
 }
 

@@ -450,7 +450,23 @@ IMPL_LINK_NOARG(View, DropInsertFileHdl, Timer *, void)
             {
                 sal_Int8    nTempAction = ( aIter == maDropFileVector.begin() ) ? mnAction : 0;
                 const bool bLink = ( ( nTempAction & DND_ACTION_LINK ) != 0 );
-                SdrGrafObj* pGrafObj = InsertGraphic( aGraphic, nTempAction, maDropPos, nullptr, nullptr );
+                SdrObject* pTargetObj = nullptr;
+                SdrPageView* pPageView = GetSdrPageView();
+                bool bSingleInsert = (maDropFileVector.size() == 1);
+
+                if (pPageView && bSingleInsert)
+                {
+                    pTargetObj = PickObj(maDropPos, getHitTolLog(), pPageView);
+
+                    if (pTargetObj)
+                    {
+                        if (dynamic_cast<SdrGrafObj*>(pTargetObj) || pTargetObj->IsClosedObj())
+                            nTempAction = DND_ACTION_LINK;
+                        else
+                            nTempAction = DND_ACTION_MOVE;
+                    }
+                }
+                SdrGrafObj* pGrafObj = InsertGraphic( aGraphic, nTempAction, maDropPos, pTargetObj, nullptr );
                 if(pGrafObj && bLink)
                 {
                     pGrafObj->SetGraphicLink( aCurrentDropFile );
