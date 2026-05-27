@@ -59,6 +59,47 @@ class Sidebar extends SidebarBase {
 		this.map.uiManager.setDocTypeMultiplePrefs(deckPref);
 	}
 
+	/// The presentation sidebar/panel toolbar buttons are mutually exclusive, so
+	/// only the button of the active deck stays highlighted. Core reports the
+	/// state of its own decks, but the transitions and animations panels live in
+	/// the notebookbar and core is never told they took over the sidebar. Their
+	/// highlight, and clearing the core deck button they replace, is driven here.
+	updatePresentationDeckHighlight(currentDeck: string) {
+		if (this.map.getDocType() !== 'presentation') return;
+
+		const panelCommandForDeck: { [key: string]: string } = {
+			'transitions-deck': 'transitiondeck',
+			'animations-deck': 'animationdeck',
+		};
+		const coreDeckCommands = [
+			'.uno:SidebarDeck.PropertyDeck',
+			'.uno:ModifyPage',
+			'.uno:CustomAnimation',
+			'.uno:MasterSlidesPanel',
+		];
+
+		const activePanelCommand = panelCommandForDeck[currentDeck];
+		const stateHandler = this.map['stateChangeHandler'];
+
+		const setHighlight = (command: string, active: boolean) => {
+			const value = active ? 'true' : 'false';
+			if (stateHandler && stateHandler.getItemValue(command) === value) return;
+			this.map.fire('commandstatechanged', {
+				commandName: command,
+				state: value,
+			});
+		};
+
+		Object.values(panelCommandForDeck).forEach((command) =>
+			setHighlight(command, command === activePanelCommand),
+		);
+
+		// A notebookbar panel has taken over the sidebar: core still thinks its
+		// last deck is open and keeps reporting it active, so clear those buttons.
+		if (activePanelCommand)
+			coreDeckCommands.forEach((command) => setHighlight(command, false));
+	}
+
 	commandForDeck(deckId: string): string {
 		// No longer used:
 		// if (deckId === 'SdSlideTransitionDeck') return '.uno:SlideChangeWindow';
@@ -123,6 +164,7 @@ class Sidebar extends SidebarBase {
 				) {
 					var currentDeck = sidebarData.children[0].id;
 					this.updateSidebarPrefs(currentDeck);
+					this.updatePresentationDeckHighlight(currentDeck);
 					if (this.targetDeckCommand) {
 						var stateHandler = this.map['stateChangeHandler'];
 						var isCurrent = stateHandler

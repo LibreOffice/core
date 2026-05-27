@@ -101,7 +101,8 @@ class SidebarFromNotebookbarPanel extends Sidebar {
 		// we need to clean the core based sidebars
 		this.closeSidebar();
 		this.setupTargetDeck(null);
-		// TODO: change state of old sidebar uno commands
+		// toolbar button highlight is updated in Sidebar.onSidebar once the
+		// transitions deck is shown, which also clears the core deck buttons
 
 		this.openSidebar(
 			NotebookbarBasedSidebarId.Transitions,
@@ -114,7 +115,8 @@ class SidebarFromNotebookbarPanel extends Sidebar {
 		// we need to clean the core based sidebars
 		this.closeSidebar();
 		this.setupTargetDeck(null);
-		// TODO: change state of old sidebar uno commands
+		// toolbar button highlight is updated in Sidebar.onSidebar once the
+		// animations deck is shown, which also clears the core deck buttons
 
 		this.openSidebar(
 			NotebookbarBasedSidebarId.Animations,

@@ -2153,6 +2153,12 @@ class Menubar extends window.L.Control {
 						itemState = app.map.uiManager.getHighlightMode();
 						if (itemState) $(aItem).addClass(constChecked);
 						else $(aItem).removeClass(constChecked);
+					} else if (id === 'transitiondeck') {
+						// notebookbar-based panel, highlighted from the command
+						// state set in Sidebar.updatePresentationDeckHighlight
+						itemState = this._map['stateChangeHandler'].getItemValue('transitiondeck');
+						if (itemState === 'true') $(aItem).addClass(constChecked);
+						else $(aItem).removeClass(constChecked);
 					} else {
 						$(aItem).removeClass('disabled');
 					}
