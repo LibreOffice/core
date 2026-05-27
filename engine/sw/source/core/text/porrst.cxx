@@ -56,6 +56,9 @@
 #include <flyfrms.hxx>
 #include <bodyfrm.hxx>
 
+// font height limit for the RDF metadata labels
+constexpr SwTwips nMaxLabelHeight = 240;
+
 SwTmpEndPortion::SwTmpEndPortion( const SwLinePortion &rPortion,
                 const FontLineStyle eUL,
                 const FontStrikeout eStrkout,
@@ -706,16 +709,42 @@ bool SwControlCharPortion::DoPaint(SwTextPaintInfo const& rTextPaintInfo,
 bool SwBookmarkPortion::DoPaint(SwTextPaintInfo const& rTextPaintInfo,
         OUString & rOutString, SwFont & rFont, int & rDeltaY) const
 {
-    // custom color is visible without field shading, too
-    if (!rTextPaintInfo.GetOpt().IsShowBookmarks())
+    // custom color or label is visible without field shading, too
+    if ( !rTextPaintInfo.GetOpt().IsShowBookmarks(!m_aColors.empty()) )
     {
         return false;
+    }
+
+    // without field shading, show only custom color or label,
+    // but not plain bookmark boundary marks
+    bool bHasCustomColorOrLabel = false;
+    if ( !rTextPaintInfo.GetOpt().IsShowBookmarks() )
+    {
+        for ( const auto& it : m_aColors )
+        {
+            if ( COL_TRANSPARENT != std::get<1>(it) ||
+                 !std::get<3>(it).isEmpty() )
+            {
+                bHasCustomColorOrLabel = true;
+                break;
+            }
+        }
+
+        if ( !bHasCustomColorOrLabel )
+            return false;
     }
 
     rOutString = OUStringChar(mcChar);
 
     // init font: we want OpenSymbol to ensure it doesn't look too crazy;
     // thin and a bit higher than the surrounding text
+    // (except in the case of metadata colors and labels, because
+    // 1) not only fixed line height needs more place, but the normal one:
+    // editing the line doesn't update the place between the lines immediately,
+    // i.e. top and bottom parts of the higher glyphs aren't moved with the
+    // scrolled text;
+    // 2) enlarged brackets of the different height neighborous annotated
+    // text portions can overlap more seriously.)
     auto const nOrigAscent(rFont.GetAscent(rTextPaintInfo.GetVsh(), *rTextPaintInfo.GetOut()));
     rFont.SetName(u"OpenSymbol"_ustr, rFont.GetActual());
     Size aSize(rFont.GetSize(rFont.GetActual()));
@@ -723,7 +752,7 @@ bool SwBookmarkPortion::DoPaint(SwTextPaintInfo const& rTextPaintInfo,
     // 100% of it because i can't figure out how to baseline align that
     assert(aSize.Height() != 0);
     auto const nFactor = aSize.Height() > 0 ? (Height() * 95) / aSize.Height() : Height();
-    rFont.SetProportion(nFactor);
+    rFont.SetProportion(bHasCustomColorOrLabel ? 100 : nFactor);
     rFont.SetWeight(WEIGHT_THIN, rFont.GetActual());
     rFont.SetColor(rTextPaintInfo.GetOpt().GetFieldShadingsColor());
     // reset these to default...
@@ -741,7 +770,7 @@ bool SwBookmarkPortion::DoPaint(SwTextPaintInfo const& rTextPaintInfo,
 
     // adjust Y position to account for different baselines of the fonts
     auto const nOSAscent(rFont.GetAscent(rTextPaintInfo.GetVsh(), *rTextPaintInfo.GetOut()));
-    rDeltaY = nOSAscent - nOrigAscent;
+    rDeltaY = bHasCustomColorOrLabel ? 0 : nOSAscent - nOrigAscent;
 
     return true;
 }
@@ -813,12 +842,18 @@ void SwBookmarkPortion::Paint( const SwTextPaintInfo &rInf ) const
         && DoPaint(rInf, aOutString, aTmpFont, deltaY)))
         return;
 
+    // to paint label background
+    vcl::RenderContext* pRenderContext =
+        rInf.GetTextFrame()->getRootFrame()->GetCurrShell()->GetOut();
+
     SwFontSave aFontSave( rInf, &aTmpFont );
 
     if ( !mnHalfCharWidth )
         mnHalfCharWidth = rInf.GetTextSize( aOutString ).Width() / 2;
 
-    auto nHeight = rInf.GetTextSize( aOutString ).Height();
+    SwTwips nLineHeight = rInf.GetTextFrame()->FirstLineHeight();
+    SwTwips nHeight = Height();
+    const bool bLowHeight = nLineHeight < nHeight;
 
     Point aOldPos = rInf.GetPos();
     Point aNewPos( aOldPos );
@@ -864,16 +899,28 @@ void SwBookmarkPortion::Paint( const SwTextPaintInfo &rInf ) const
     bool bStart = true;
     for ( const auto& it : m_aColors )
     {
+        // thick bracket needs more space
+        bool bHasCustomColor = COL_TRANSPARENT != std::get<1>(it);
+        if ( bStart && bHasCustomColor )
+        {
+            aNewPos.AdjustX(-mnHalfCharWidth / 2);
+            const_cast< SwTextPaintInfo& >( rInf ).SetPos( aNewPos );
+        }
+
         // set bold for custom colored bookmark symbol
         // and draw multiple symbols showing all custom colors
-        aTmpFont.SetWeight( COL_TRANSPARENT == std::get<1>(it) ? WEIGHT_THIN : WEIGHT_BOLD, aTmpFont.GetActual() );
-        aTmpFont.SetColor( COL_TRANSPARENT == std::get<1>(it) ? rInf.GetOpt().GetFieldShadingsColor() : std::get<1>(it) );
+        aTmpFont.SetWeight( bHasCustomColor
+                        ? WEIGHT_BOLD
+                        : WEIGHT_THIN, aTmpFont.GetActual() );
+        aTmpFont.SetColor( bHasCustomColor
+                        ? std::get<1>(it)
+                        : rInf.GetOpt().GetFieldShadingsColor() );
         aOutString = OUString(std::get<0>(it) == SwScriptInfo::MarkKind::Start ? '[' : ']');
 
         if (nDirection == -1 && std::get<0>(it) != SwScriptInfo::MarkKind::End)
         {
             nDirection = 1;
-            nTypePos = mnHalfCharWidth * 2; // start label after the opening bracket
+            nTypePos = mnHalfCharWidth * 3/4; // start label on the opening bracket
         }
 
         // MarkKind::Point: drawn I-beam (e.g. U+2336) as overlapping ][
@@ -891,24 +938,29 @@ void SwBookmarkPortion::Paint( const SwTextPaintInfo &rInf ) const
         }
         rInf.DrawText( aOutString, *this );
 
-        // show rdf:type labels, left-aligned top position after the opening brackets
-        // right-aligned bottom position before the closing brackets
+        // show rdf:type labels, left-aligned bottom position after the opening brackets
+        // right-aligned top position before the closing brackets
         // if there are multiple opening or closing brackets, collect
         // their length in nTypePos to show non-overlapping labels
         OUString sType = std::get<3>(it);
         if ( !sType.isEmpty() )
         {
+            // not bold label font type
+            aTmpFont.SetWeight( WEIGHT_THIN, aTmpFont.GetActual() );
+            // add narrow spaces for more label-like layout with the
+            // custom color or gray background
+            sType = OUStringChar(CHAR_NNBSP) + sType + OUStringChar(CHAR_NNBSP);
             Size aTmpSz = aTmpFont.GetSize( SwFontScript::Latin );
             auto origSize = aTmpSz;
 
             // calculate label size
-            aTmpSz.setHeight( std::min( tools::Long(60), 100 * aTmpSz.Height() / 250 ) );
-            aTmpSz.setWidth( std::min( tools::Long(60), 100 * aTmpSz.Width() / 250 ) );
+            aTmpSz.setHeight( std::min( nMaxLabelHeight, 100 * aTmpSz.Height() / 250 ) );
+            aTmpSz.setWidth( std::min(nMaxLabelHeight, 100 * aTmpSz.Width() / 250 ) );
 
             // vertical rdf:type label position for the opening and closing brackets
             sal_Int32 fPos = std::get<0>(it) == SwScriptInfo::MarkKind::Start
-                    ? -0.65 * nHeight
-                    : aTmpSz.Height();
+                    ? aTmpSz.Height() * 0.65
+                    : -0.65 * ( ( bLowHeight ? nLineHeight : nHeight ) - aTmpSz.Height() * 0.65 );
 
             if ( aTmpSz.Width() || aTmpSz.Height() )
             {
@@ -920,7 +972,8 @@ void SwBookmarkPortion::Paint( const SwTextPaintInfo &rInf ) const
                 {
                     if (bStart)
                     {
-                        nTypePos += aTextSize.Width();
+                        // the first label covers the first closing bracket
+                        nTypePos += aTextSize.Width() - mnHalfCharWidth * 1.9;
                         bStart = false;
                     }
                     else
@@ -932,8 +985,17 @@ void SwBookmarkPortion::Paint( const SwTextPaintInfo &rInf ) const
                 const_cast< SwTextPaintInfo& >( rInf ).SetPos( aNewPos );
 
                 SwRect aRect( rInf.GetPos(), Size(aTextSize.Width(), -aTextSize.Height() * 0.8) );
-                rInf.DrawRect( aRect, true );  // white background
-                rInf.DrawText( sType, *this ); // label
+
+                // label: black letters on custom color (or gray) background
+                if ( pRenderContext )
+                {
+                    pRenderContext->SetFillColor( aTmpFont.GetColor() );
+                    pRenderContext->SetLineColor( COL_TRANSPARENT );
+                }
+                rInf.DrawRect( aRect, true );
+                // TODO Use COL_AUTO on label background
+                aTmpFont.SetColor( COL_BLACK );
+                rInf.DrawText( sType, *this );  // label
 
                 // restore original position
                 aNewPos.AdjustX( -nDirection * nTypePos );

@@ -2391,8 +2391,15 @@ void SwTextFormatter::CalcRealHeight( bool bNewLine )
                 {
                     nLineHeight = pSpace->GetLineHeight();
                     const SwTwips nAsc = (4 * nLineHeight) / 5; // 80%
-                    if( nAsc < m_pCurr->GetAscent() ||
-                        nLineHeight - nAsc < m_pCurr->Height() - m_pCurr->GetAscent() )
+                    if( ( nAsc < m_pCurr->GetAscent() ||
+                        nLineHeight - nAsc < m_pCurr->Height() - m_pCurr->GetAscent() ) &&
+                        // don't clip bookmark boundary marks at fixed line height
+                        // (clipping is both vertical and horizontal, too: e.g.
+                        // vertical clipping removed the bookmark boundary marks
+                        // in line starting and ending positions, horizontal
+                        // clipping removed the top of the enlarged brackets
+                        // (the plain bookmark boundary marks)
+                        !GetInfo().GetOpt().IsShowBookmarks(/*bHard=*/true) )
                         m_pCurr->SetClipping( true );
                     m_pCurr->Height( nLineHeight, false );
                     m_pCurr->SetAscent( nAsc );
