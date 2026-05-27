@@ -2073,9 +2073,10 @@ export class Comment extends CanvasSectionObject {
 		if (this.sectionProperties.collapsedInfoNode.innerText != innerText)
 			this.sectionProperties.collapsedInfoNode.innerText = innerText;
 
-		if (innerText === '' || this.isContainerVisible())
+		const containerVisible = this.isContainerVisible();
+		if (innerText === '' || containerVisible)
 			this.sectionProperties.collapsedInfoNode.style.display = 'none';
-		else if ((!this.isContainerVisible() && this.sectionProperties.collapsedInfoNode.innerText !== ''))
+		else if (!containerVisible && innerText !== '')
 			this.sectionProperties.collapsedInfoNode.style.display = '';
 	}
 
