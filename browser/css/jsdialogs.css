@@ -1806,57 +1806,6 @@ img.context-menu-icon {
 	border-color: transparent;
 }
 
-/* Make the autofilter popup user-resizable. */
-.autofilter-popup .jsdialog.lokdialog.ui-dialog-content {
-	resize: both;
-	overflow: auto;
-	min-width: 220px;
-	min-height: 200px;
-	max-width: 95vw;
-	max-height: 90vh;
-	display: flex;
-	flex-direction: column;
-}
-
-/* Stretch the autofilter content chain so the check list grows with the
-   resized dialog instead of being clamped to its default max-height. */
-.autofilter-popup .jsdialog.lokdialog.ui-dialog-content > .root-container,
-.autofilter-popup .jsdialog.lokdialog.ui-dialog-content > .root-container > .vertical {
-	flex: 1 1 auto;
-	display: flex;
-	flex-direction: column;
-	min-height: 0;
-}
-
-/* The direct child of .vertical that contains the check list, together with
-   every intermediate descendant on the way down, becomes a flex column so the
-   listbox can fill the remaining height. */
-.autofilter-popup .vertical > *:has(#check_list_box, #check_tree_box),
-.autofilter-popup .vertical > *:has(#check_list_box, #check_tree_box) *:has(#check_list_box, #check_tree_box) {
-	flex: 1 1 auto;
-	display: flex;
-	flex-direction: column;
-	min-height: 0;
-	max-height: none;
-	/* Override inline height that the scrollwindow handler may have set. */
-	height: auto !important;
-}
-
-.autofilter-popup #check_list_box.ui-treeview,
-.autofilter-popup #check_tree_box.ui-treeview {
-	flex: 1 1 auto;
-	max-height: 150px;
-	min-height: 0;
-}
-
-/* Once the user has dragged the resize handle, the browser writes an inline
-   height on .ui-dialog-content; drop the 150px cap so the listbox flexes to
-   fill the enlarged dialog. */
-.autofilter-popup .jsdialog.lokdialog.ui-dialog-content[style*='height'] #check_list_box.ui-treeview,
-.autofilter-popup .jsdialog.lokdialog.ui-dialog-content[style*='height'] #check_tree_box.ui-treeview {
-	max-height: none !important;
-}
-
 /* hide radio in filter by color */
 .jsdialog.autofilter #background .ui-treeview-entry div:nth-of-type(1),
 .jsdialog.autofilter #textcolor .ui-treeview-entry div:nth-of-type(1),
