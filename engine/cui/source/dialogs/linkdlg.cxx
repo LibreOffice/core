@@ -289,7 +289,8 @@ IMPL_LINK_NOARG(SvBaseLinksDlg, UpdateNowClickHdl, weld::Button&, void)
     if (nE != nSelEntry)
         m_xTbLinks->unselect(nSelEntry);
     m_xTbLinks->select(nE);
-    m_xTbLinks->scroll_to_row(nE);
+    if (nE != -1)
+        m_xTbLinks->scroll_to_row(nE);
 
     pNewMgr->CloseCachedComps();
 }
