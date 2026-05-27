@@ -216,6 +216,7 @@ coolwsd_sources = \
                   wsd/Admin.cpp \
                   wsd/AdminModel.cpp \
                   wsd/AIChatSession.cpp \
+                  wsd/AIUtil.cpp \
                   wsd/Auth.cpp \
                   wsd/COOLWSD.cpp \
                   wsd/CacheUtil.cpp \
@@ -416,6 +417,7 @@ wsd_headers = \
               wsd/Admin.hpp \
               wsd/AdminModel.hpp \
               wsd/AIChatSession.hpp \
+              wsd/AIUtil.hpp \
               wsd/Auth.hpp \
               wsd/COOLWSD.hpp \
               wsd/COOLWSDServer.hpp \

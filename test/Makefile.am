@@ -151,6 +151,7 @@ wsd_sources = \
 	../wsd/Admin.cpp \
 	../wsd/AdminModel.cpp \
 	../wsd/AIChatSession.cpp \
+	../wsd/AIUtil.cpp \
 	../wsd/Auth.cpp \
 	../wsd/COOLWSD.cpp \
 	../wsd/CacheUtil.cpp \
@@ -180,6 +181,7 @@ wsd_sources = \
 	../wsd/wopi/WopiStorage.cpp
 
 test_base_sources = \
+	AIUtilTests.cpp \
 	DeltaTests.cpp \
 	FileServeWhiteBoxTests.cpp \
 	HexUtilTests.cpp \
@@ -246,6 +248,7 @@ unittest_SOURCES = \
 	$(common_sources) \
 	$(test_base_sources) \
 	$(kit_sources) \
+	../wsd/AIUtil.cpp \
 	../wsd/FileServerUtil.cpp \
 	../wsd/HostUtil.cpp \
 	../wsd/ProofKey.cpp \
