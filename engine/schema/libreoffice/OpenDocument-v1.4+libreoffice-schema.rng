@@ -4391,4 +4391,19 @@ xmlns:coext="urn:com:collaboraoffice:names:experimental:office:xmlns:coext:1.0"
       <rng:ref name="office-change-info"/>
     </rng:element>
   </rng:define>
+    <!-- TODO: no proposal for coext:is-first-page-header-shared and coext:is-first-page-footer-shared -->
+    <!-- enables empty header/footer on first page -->
+    <rng:define name="style-master-page-attlist" combine="interleave">
+      <rng:optional>
+        <rng:attribute name="coext:is-first-page-header-shared">
+          <!-- default value: false -->
+          <rng:ref name="boolean"/>
+        </rng:attribute>
+      </rng:optional>
+      <rng:optional>
+        <rng:attribute name="coext:is-first-page-footer-shared">
+          <rng:ref name="boolean"/>
+        </rng:attribute>
+      </rng:optional>
+    </rng:define>
 </rng:grammar>

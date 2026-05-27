@@ -273,6 +273,54 @@ CPPUNIT_TEST_FIXTURE(Test, testFrameprPagebreakStyle)
     // i.e. the page break was lost, the document didn't have the correct page count.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(2), pLastPage->GetPhyPageNum());
 }
+
+CPPUNIT_TEST_FIXTURE(Test, emptyHeaderFirstPageRtf)
+{
+    // Given a document with <w:sectPr> containing  <w:titlePg/>
+    // but no
+    // <w:headerReference w:type="first" r:id=".."/>
+    // <w:footerReference w:type="first" r:id=".."/>
+
+    createSwDoc("NoFirstPageHeadFooter.rtf");
+
+    uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(mxComponent,
+                                                                         uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xStyleFamilies
+        = xStyleFamiliesSupplier->getStyleFamilies();
+    uno::Reference<container::XNameAccess> xStyleFamily(
+        xStyleFamilies->getByName(u"PageStyles"_ustr), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPageStyle(xStyleFamily->getByName(u"Standard"_ustr),
+                                                   uno::UNO_QUERY);
+    bool bNoFirstHeader;
+    bool bShareFirstHeader;
+    xPageStyle->getPropertyValue(u"FirstIsShared"_ustr) >>= bShareFirstHeader;
+    CPPUNIT_ASSERT(!bShareFirstHeader);
+    xPageStyle->getPropertyValue(u"NoFirst"_ustr) >>= bNoFirstHeader;
+    CPPUNIT_ASSERT(bNoFirstHeader);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, emptyHeaderFirstPageDocx)
+{
+    // Given a document with <w:sectPr> containing  <w:titlePg/>
+    // but no
+    // <w:headerReference w:type="first" r:id=".."/>
+    // <w:footerReference w:type="first" r:id=".."/>
+    createSwDoc("NoFirstPageHeadFooter.docx");
+
+    uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(mxComponent,
+                                                                         uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xStyleFamilies
+        = xStyleFamiliesSupplier->getStyleFamilies();
+    uno::Reference<container::XNameAccess> xStyleFamily(
+        xStyleFamilies->getByName(u"PageStyles"_ustr), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPageStyle(xStyleFamily->getByName(u"Standard"_ustr),
+                                                   uno::UNO_QUERY);
+    bool bNoFirstHeader;
+    bool bShareFirstHeader;
+    xPageStyle->getPropertyValue(u"FirstIsShared"_ustr) >>= bShareFirstHeader;
+    CPPUNIT_ASSERT(!bShareFirstHeader);
+    xPageStyle->getPropertyValue(u"NoFirst"_ustr) >>= bNoFirstHeader;
+    CPPUNIT_ASSERT(bNoFirstHeader);
+}
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
