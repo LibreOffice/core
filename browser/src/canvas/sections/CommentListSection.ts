@@ -15,17 +15,48 @@
 /* See CanvasSectionContainer.ts for explanations. */
 
 window.L.Map.include({
-	insertComment: function() {
-		if (this.stateChangeHandler.getItemValue('InsertAnnotation') === 'disabled')
-			return;
-		const editingComment = cool.Comment.isAnyEdit();
+	// Shared entry guard for the new-comment actions. Looks up the comment
+	// list section and reports whether a fresh insertion may begin.
+	_beginCommentInsertion: function(): { blocked: boolean; commentSection: cool.CommentSection } {
 		const commentSection = app.sectionContainer.getSectionWithName(
 			app.CSections.CommentList.name
 		) as cool.CommentSection;
+		// insertion is disabled -> block
+		if (this.stateChangeHandler.getItemValue('InsertAnnotation') === 'disabled')
+			return { blocked: true, commentSection };
+		const editingComment = cool.Comment.isAnyEdit();
+		// unsaved comment is already open -> focus it and block
 		if (commentSection && editingComment) {
 			commentSection.navigateAndFocusComment(editingComment);
-			return;
+			return { blocked: true, commentSection };
 		}
+		return { blocked: false, commentSection };
+	},
+
+	// Data for a brand-new local comment authored by the current view; the
+	// 'new' id marks it as one we added. threaded tags it as a threaded one.
+	_newCommentData: function(threaded?: boolean): any {
+		let avatar = undefined;
+		const author = this.getViewName(this._docLayer._viewId);
+		if (author in this._viewInfoByUserName)
+			avatar = this._viewInfoByUserName[author].userextrainfo.avatar;
+		const data: any = {
+			text: '',
+			textrange: '',
+			author: author,
+			dateTime: new Date().toISOString(),
+			id: 'new',
+			avatar: avatar,
+		};
+		if (threaded)
+			data.threaded = 'true';
+		return data;
+	},
+
+	insertComment: function() {
+		const { blocked, commentSection } = this._beginCommentInsertion();
+		if (blocked)
+			return;
 
 		/*
 			if the user inserts a new comment when all the comments
@@ -42,19 +73,7 @@ window.L.Map.include({
 		if (app.map._docLayer._docType !== 'spreadsheet')
 			app.map.showComments(true);
 
-		var avatar = undefined;
-		var author = this.getViewName(this._docLayer._viewId);
-		if (author in this._viewInfoByUserName) {
-			avatar = this._viewInfoByUserName[author].userextrainfo.avatar;
-		}
-		const commentData: any = {
-			text: '',
-			textrange: '',
-			author: author,
-			dateTime: new Date().toISOString(),
-			id: 'new', // 'new' only when added by us
-			avatar: avatar
-		};
+		const commentData = this._newCommentData();
 		// In PDF, enter a click-to-place mode and let the user pick the spot,
 		// then open the in-place editor anchored there. Switching the active
 		// part keeps save()'s setPart wrapper consistent and lets newAnnotation
@@ -76,31 +95,10 @@ window.L.Map.include({
 	},
 
 	insertThreadedComment: function() {
-		if (this.stateChangeHandler.getItemValue('InsertAnnotation') === 'disabled')
+		const { blocked } = this._beginCommentInsertion();
+		if (blocked)
 			return;
-		const editingComment = cool.Comment.isAnyEdit();
-		const commentSection = app.sectionContainer.getSectionWithName(
-			app.CSections.CommentList.name
-		) as cool.CommentSection;
-		if (commentSection && editingComment) {
-			commentSection.navigateAndFocusComment(editingComment);
-			return;
-		}
-
-		var avatar = undefined;
-		var author = this.getViewName(this._docLayer._viewId);
-		if (author in this._viewInfoByUserName) {
-			avatar = this._viewInfoByUserName[author].userextrainfo.avatar;
-		}
-		this._docLayer.newAnnotation({
-			text: '',
-			textrange: '',
-			author: author,
-			dateTime: new Date().toISOString(),
-			id: 'new',
-			avatar: avatar,
-			threaded: 'true',
-		});
+		this._docLayer.newAnnotation(this._newCommentData(true));
 	},
 
 	// Host-driven insertion: the host has the comment text ready and asks the
@@ -111,17 +109,9 @@ window.L.Map.include({
 	// in. Outside fileBasedView there is no picker, so we just strip and
 	// dispatch as-is.
 	insertCommentInteractive: function(command: string, args: any) {
-		if (this.stateChangeHandler.getItemValue('InsertAnnotation') === 'disabled')
+		const { blocked, commentSection } = this._beginCommentInsertion();
+		if (blocked)
 			return;
-
-		const editingComment = cool.Comment.isAnyEdit();
-		const commentSection = app.sectionContainer.getSectionWithName(
-			app.CSections.CommentList.name
-		) as cool.CommentSection;
-		if (commentSection && editingComment) {
-			commentSection.navigateAndFocusComment(editingComment);
-			return;
-		}
 
 		const cleanArgs: any = {};
 		for (const key in args) {
