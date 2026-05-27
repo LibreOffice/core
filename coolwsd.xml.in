@@ -32,7 +32,7 @@
         <enabled desc="Master switch for AI features. When false, AI is disabled server-wide regardless of WOPI or per-user settings." type="bool" default="false">false</enabled>
         <api_url desc="Default AI provider base URL (e.g. http://localhost:11434 for local Ollama, or https://api.openai.com for OpenAI). Must support the /v1/chat/completions endpoint." type="string" default=""></api_url>
         <api_key desc="Default API key for the AI provider." type="string" default=""></api_key>
-        <model desc="Default AI model name (e.g. llama3, gpt-4, mistral)." type="string" default=""></model>
+        <model desc="Default AI model name. For tool use (inspecting and editing the document) the model must support native function/tool calling - e.g. gpt-4o, llama3.1, qwen2.5. Models without it (e.g. base llama3, gemma) can still chat but cannot drive document tools." type="string" default=""></model>
         <image_api_url desc="Default AI image-generation provider base URL (e.g. https://api.openai.com). Leave empty to reuse the text-AI endpoint if the same provider is used. Must support the /v1/images/generations endpoint." type="string" default=""></image_api_url>
         <image_api_key desc="Default API key for the image-generation provider. Leave empty to reuse the text-AI key if the same provider is used." type="string" default=""></image_api_key>
         <image_model desc="Default image-generation model name (e.g. dall-e-3, stable-diffusion-3, flux-schnell)." type="string" default=""></image_model>

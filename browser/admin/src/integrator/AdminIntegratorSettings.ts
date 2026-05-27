@@ -2187,6 +2187,14 @@ class SettingIframe {
 		);
 		modelSelect.disabled = true;
 		modelField.appendChild(modelSelect);
+
+		const modelNote = document.createElement('div');
+		modelNote.className = 'view-setting-description';
+		modelNote.textContent = _(
+			'For document actions (inspecting and editing), choose a model with native function/tool calling, such as gpt-4o, llama3.1, or qwen2.5. Models without it (e.g. base llama3, gemma) can still chat but cannot use document tools.',
+		);
+		modelField.appendChild(modelNote);
+
 		group.appendChild(modelField);
 
 		const status = document.createElement('div');
