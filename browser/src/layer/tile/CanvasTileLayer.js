@@ -4223,16 +4223,38 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 			found = false;
 		}
 
+		const layout = app.activeDocument.activeLayout;
+		const useLayoutRects = layout.viewRectangles && layout.viewRectangles.length === this._parts;
 		var partHeightPixels = Math.round((this._partHeightTwips + this._spaceBetweenParts) * app.twipsToPixels);
 		var partWidthPixels = Math.round(this._partWidthTwips * app.twipsToPixels);
 
 		var rectangle;
 		var maxArea = -1;
-		const viewedRectangle = app.activeDocument.activeLayout.viewedRectangle.pToArray();
+		// Use the actual canvas viewport instead of layout.viewedRectangle:
+		// ViewLayoutFileBased inflates viewedRectangle to the full bounds of every
+		// intersecting page, which would make all visible parts report the same
+		// area here and freeze the selection on _selectedPart.
+		let visibleRect;
+		if (useLayoutRects) {
+			const documentAnchor = app.sectionContainer.getSectionWithName(app.CSections.Tiles.name);
+			visibleRect = [
+				layout.scrollProperties.viewX,
+				layout.scrollProperties.viewY,
+				documentAnchor.size[0],
+				documentAnchor.size[1],
+			];
+		} else {
+			visibleRect = layout.viewedRectangle.pToArray();
+		}
 		const candidates = [];
 		for (i = 0; i < parts.length; i++) {
-			rectangle = [0, partHeightPixels * parts[i].part, partWidthPixels, Math.round(this._partHeightTwips * app.twipsToPixels)];
-			rectangle = app.LOUtil._getIntersectionRectangle(rectangle, viewedRectangle);
+			if (useLayoutRects) {
+				const vr = layout.viewRectangles[parts[i].part];
+				rectangle = [vr.pX1, vr.pY1, vr.pWidth, vr.pHeight];
+			} else {
+				rectangle = [0, partHeightPixels * parts[i].part, partWidthPixels, Math.round(this._partHeightTwips * app.twipsToPixels)];
+			}
+			rectangle = app.LOUtil._getIntersectionRectangle(rectangle, visibleRect);
 			if (rectangle) {
 				const currentArea = rectangle[2] * rectangle[3];
 				if (currentArea > maxArea) {

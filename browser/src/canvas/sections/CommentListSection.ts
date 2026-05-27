@@ -81,7 +81,7 @@ window.L.Map.include({
 		// offset out before sending PositionY.
 		if (app.file.fileBasedView && commentSection) {
 			commentSection.startCommentPlacement((pick: cool.CommentPlacementPick) => {
-				commentData.yAddition = pick.partIndex * pick.additionPerPart;
+				commentData.yAddition = pick.partTopTwips;
 				this.setPart(pick.partIndex, false);
 				commentData.position = [pick.docTL.x, pick.docTL.y];
 				if (pick.docBR)
@@ -128,7 +128,7 @@ window.L.Map.include({
 			// docTL is stacked-document twips; the engine wants the page-local
 			// Y, so back out the per-page offset. Width/Height follow when the
 			// user dragged a rectangle.
-			const partTop = pick.partIndex * pick.additionPerPart;
+			const partTop = pick.partTopTwips;
 			const finalArgs: any = {
 				...cleanArgs,
 				PositionX: { type: 'int32', value: pick.docTL.x },
@@ -166,11 +166,12 @@ namespace cool {
 
 // Geometry a placement-mode pick hands back to its caller: the validated
 // anchor in stacked-document twips (docTL, plus docBR when a rectangle was
-// dragged), and the containing page so the caller can derive page-local
-// coordinates or switch the active part.
+// dragged), the containing page index, and partTopTwips - the page-top
+// offset in stacked-document twips, so the caller can derive page-local
+// coordinates without assuming uniform page spacing.
 export type CommentPlacementPick = {
 	partIndex: number;
-	additionPerPart: number;
+	partTopTwips: number;
 	docTL: { x: number; y: number };
 	docBR: { x: number; y: number } | null;
 };
@@ -1025,28 +1026,56 @@ export class CommentSection extends CanvasSectionObject {
 		// in an inter-page gap, or past the last page - the user should stay
 		// in placement mode and try again on a real page.
 		const docLayer = app.map._docLayer;
-		const additionPerPart = docLayer._partHeightTwips + docLayer._spaceBetweenParts;
-		const partIndex = Math.floor(docTL.y / additionPerPart);
-		const yInPart = docTL.y - partIndex * additionPerPart;
-		if (partIndex < 0 || partIndex >= docLayer._parts
-			|| docTL.x < 0 || docTL.x > docLayer._partWidthTwips
-			|| yInPart > docLayer._partHeightTwips)
-			return;
+		const fbLayout =
+			layout && layout.type === 'ViewLayoutFileBased'
+				? (layout as ViewLayoutFileBased)
+				: null;
+		const docRects = fbLayout?.documentRectangles;
+		const haveRects = docRects && docRects.length === docLayer._parts;
+		let partIndex = -1;
+		let yInPart = 0;
+		let partTopTwips = 0;
+		let partWidthTwips = docLayer._partWidthTwips;
+		let partHeightTwips = docLayer._partHeightTwips;
+		if (haveRects) {
+			for (let i = 0; i < docRects.length; i++) {
+				const r = docRects[i];
+				if (docTL.y >= r.y1 && docTL.y < r.y1 + r.height) {
+					partIndex = i;
+					partTopTwips = r.y1;
+					yInPart = docTL.y - r.y1;
+					partWidthTwips = r.width;
+					partHeightTwips = r.height;
+					break;
+				}
+			}
+			if (partIndex < 0) return;
+			if (docTL.x < 0 || docTL.x > partWidthTwips || yInPart > partHeightTwips)
+				return;
+		} else {
+			const additionPerPart = docLayer._partHeightTwips + docLayer._spaceBetweenParts;
+			partIndex = Math.floor(docTL.y / additionPerPart);
+			yInPart = docTL.y - partIndex * additionPerPart;
+			partTopTwips = partIndex * additionPerPart;
+			if (partIndex < 0 || partIndex >= docLayer._parts
+				|| docTL.x < 0 || docTL.x > docLayer._partWidthTwips
+				|| yInPart > docLayer._partHeightTwips)
+				return;
+		}
 
 		// For a drag, clamp the bottom-right to the same page so a comment
 		// that overshot the page boundary still produces a valid in-page area.
 		if (docBR) {
-			const partTop = partIndex * additionPerPart;
-			docBR.x = Math.min(docBR.x, docLayer._partWidthTwips);
-			docBR.y = Math.min(docBR.y, partTop + docLayer._partHeightTwips);
+			docBR.x = Math.min(docBR.x, partWidthTwips);
+			docBR.y = Math.min(docBR.y, partTopTwips + partHeightTwips);
 		}
 
 		// Tear down placement mode, then hand the validated geometry to the
 		// caller's routine. docTL/docBR are stacked-document twips; partIndex
-		// and additionPerPart let the caller derive page-local coordinates or
+		// and partTopTwips let the caller derive page-local coordinates or
 		// switch the active part as it needs.
 		this.exitCommentPlacement();
-		onPicked({ partIndex, additionPerPart, docTL, docBR });
+		onPicked({ partIndex, partTopTwips, docTL, docBR });
 	}
 
 	public click (annotation: any): void {
@@ -2144,10 +2173,20 @@ export class CommentSection extends CanvasSectionObject {
 	// We will add their part's position to comment's variables.
 	// When we are saving their position, we will remove the additions before sending the information.
 	private adjustCommentFileBasedView (comment: any): void {
-		// Below calculations are the same with the ones we do while drawing tiles in fileBasedView.
-		var partHeightTwips = app.map._docLayer._partHeightTwips + app.map._docLayer._spaceBetweenParts;
 		var index = app.impress.getIndexFromSlideHash(parseInt(comment.parthash));
-		var yAddition = index * partHeightTwips;
+		const layout = app.activeDocument.activeLayout;
+		const fbLayout =
+			layout && layout.type === 'ViewLayoutFileBased'
+				? (layout as ViewLayoutFileBased)
+				: null;
+		const partRect = fbLayout?.getDocumentPartRect(index);
+		var yAddition;
+		if (partRect) {
+			yAddition = partRect.y1;
+		} else {
+			var partHeightTwips = app.map._docLayer._partHeightTwips + app.map._docLayer._spaceBetweenParts;
+			yAddition = index * partHeightTwips;
+		}
 		comment.yAddition = yAddition; // We'll use this while we save the new position of the comment.
 
 		comment.trackchange = false;

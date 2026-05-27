@@ -602,17 +602,20 @@ describe(['tagdesktop'], 'PDF Threaded Comments', function() {
 				.to.be.true;
 		});
 
-		// Off-page click. Compute an X past the page's right edge from
-		// _partWidthTwips so it's guaranteed off-page regardless of zoom or
-		// scroll. mousedown+mouseup at the same point keeps the gesture
-		// below DRAG_THRESHOLD_PX so finishCommentPlacement runs and
-		// rejects the off-page point.
+		// Off-page click. Use the layout's centered page rect
+		// (viewRectangles[0]) so the X stays past the page's right edge
+		// regardless of how the file-based view centers the stack within
+		// the canvas - anchoring on _partWidthTwips alone would land back
+		// inside the page once the canvas is wider than the page.
+		// mousedown+mouseup at the same point keeps the gesture below
+		// DRAG_THRESHOLD_PX so finishCommentPlacement runs and rejects the
+		// off-page point.
 		cy.getFrameWindow().then(function(win) {
 			const canvas = win.document.getElementById('document-canvas');
 			const rect = canvas.getBoundingClientRect();
-			const docLayer = win.app.map._docLayer;
-			const offPageCssX = (docLayer._partWidthTwips
-				* win.app.twipsToPixels) / win.app.dpiScale + 50;
+			const viewRect = win.app.activeDocument.activeLayout.viewRectangles[0];
+			const offPageCssX = (viewRect.pX1 + viewRect.pWidth)
+				/ win.app.dpiScale + 50;
 			const downEv = new win.MouseEvent('mousedown', {
 				clientX: rect.left + offPageCssX,
 				clientY: rect.top + 200,
@@ -919,11 +922,16 @@ describe(['tagdesktop'], 'PDF Threaded Comments', function() {
 		cy.getFrameWindow().then(function(win) {
 			const canvas = win.document.getElementById('document-canvas');
 			const rect = canvas.getBoundingClientRect();
-			const docLayer = win.app.map._docLayer;
-			const sx = (docLayer._partWidthTwips * 0.10 * win.app.twipsToPixels) / win.app.dpiScale;
-			const sy = (docLayer._partHeightTwips * 0.10 * win.app.twipsToPixels) / win.app.dpiScale;
-			const ex = (docLayer._partWidthTwips * 0.30 * win.app.twipsToPixels) / win.app.dpiScale;
-			const ey = (docLayer._partHeightTwips * 0.20 * win.app.twipsToPixels) / win.app.dpiScale;
+			// Anchor the drag fractions on the layout's centered page rect:
+			// with the file-based view centering the stack within a wider
+			// canvas, a fraction of _partWidthTwips alone can fall in the
+			// horizontal gutter (docTL.x < 0) and finishCommentPlacement
+			// will reject the gesture.
+			const viewRect = win.app.activeDocument.activeLayout.viewRectangles[0];
+			const sx = (viewRect.pX1 + 0.10 * viewRect.pWidth) / win.app.dpiScale;
+			const sy = (viewRect.pY1 + 0.10 * viewRect.pHeight) / win.app.dpiScale;
+			const ex = (viewRect.pX1 + 0.30 * viewRect.pWidth) / win.app.dpiScale;
+			const ey = (viewRect.pY1 + 0.20 * viewRect.pHeight) / win.app.dpiScale;
 			canvas.dispatchEvent(new win.MouseEvent('mousedown', {
 				clientX: rect.left + sx, clientY: rect.top + sy, button: 0, bubbles: true,
 			}));

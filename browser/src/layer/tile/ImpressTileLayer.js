@@ -12,7 +12,7 @@
  * Impress tile layer is used to display a presentation document
  */
 
-/* global app $ cool TileManager */
+/* global app $ cool TileManager ViewLayoutBase ViewLayoutFileBased */
 
 window.L.ImpressTileLayer = window.L.CanvasTileLayer.extend({
 
@@ -54,6 +54,7 @@ window.L.ImpressTileLayer = window.L.CanvasTileLayer.extend({
 		this._partWidthTwips = 0; // Single part's width. These values are equal to app.activeDocument.fileSize.x & app.activeDocument.fileSize.y when app.file.partBasedView is true.
 
 		this._partDimensions = []; // Width & Height of all the parts
+		this._fbCachedFileSize = null; // Cached filebased fileSize from the last status that carried partdimensions; used to prevent shrinking when a later message omits the field.
 
 		app.events.on('contextchange', this._onContextChange.bind(this));
 	},
@@ -263,36 +264,57 @@ window.L.ImpressTileLayer = window.L.CanvasTileLayer.extend({
 
 	_switchToPartBasedView: function () {
 		app.file.fileBasedView = false;
+		this._fbCachedFileSize = null;
 
 		// Collapse the stacked canvas back to a single slide
 		app.activeDocument.fileSize = new cool.SimplePoint(
 			this._partWidthTwips,
 			this._partHeightTwips,
 		);
+		app.activeDocument.swapLayout(new ViewLayoutBase());
 		app.activeDocument.activeLayout.viewSize =
 			app.activeDocument.fileSize.clone();
 		this._updateMaxBounds(true, true);
 	},
 
-	_switchToFileBasedView: function () {
-		app.file.fileBasedView = true;
-
-		// Rebuild the stacked-slide total height (mirrors _onStatusMsg).
-		var totalHeight = 0;
-		if (this._partDimensions.length === this._parts) {
-			for (var i = 0; i < this._parts; i++)
+	// Total fileSize for filebased view: width = max width across parts (so
+	// landscape pages aren't clipped by Leaflet's maxBounds), height = sum of
+	// per-part heights plus _spaceBetweenParts between each pair.
+	_computeFileBasedFileSize: function () {
+		// Prefer per-part dimensions when available. _partWidthTwips and
+		// _partHeightTwips reflect the current selected page (the caller in
+		// _onStatusMsg overwrites them from statusJSON.width/height) and must
+		// not seed maxWidth here - otherwise switching to a narrower page
+		// would shrink fileSize.x and clip wider pages.
+		if (this._partDimensions.length === this._parts && this._parts > 0) {
+			var maxWidth = 0;
+			var totalHeight = 0;
+			for (var i = 0; i < this._parts; i++) {
+				maxWidth = Math.max(maxWidth, this.getPartWidth(i));
 				totalHeight += this.getPartHeight(i);
-		} else {
-			totalHeight = this._parts * this._partHeightTwips;
+			}
+			totalHeight += this._parts * this._spaceBetweenParts;
+			this._fbCachedFileSize = new cool.SimplePoint(maxWidth, totalHeight);
+			return this._fbCachedFileSize.clone();
 		}
-		totalHeight += this._parts * this._spaceBetweenParts;
-
-		app.activeDocument.fileSize = new cool.SimplePoint(
+		if (this._fbCachedFileSize)
+			return this._fbCachedFileSize.clone();
+		// First message before partdimensions from statusMsg ever arrives.
+		return new cool.SimplePoint(
 			this._partWidthTwips,
-			totalHeight,
+			this._parts * (this._partHeightTwips + this._spaceBetweenParts),
 		);
-		app.activeDocument.activeLayout.viewSize =
-			app.activeDocument.fileSize.clone();
+	},
+
+	_switchToFileBasedView: function () {
+		// fileSize stays as the canonical "total document extent" in twips for
+		// the consumers that still read it directly. The new ViewLayoutFileBased
+		// owns its own viewSize, computed from the per-part rectangles.
+		app.activeDocument.fileSize = this._computeFileBasedFileSize();
+		app.activeDocument.swapLayout(new ViewLayoutFileBased());
+		// Flip the flag after swapLayout so paint code never sees the flag true
+		// while activeLayout still points at the previous ViewLayoutBase.
+		app.file.fileBasedView = true;
 		this._updateMaxBounds(true, true);
 		TileManager.updateFileBasedView();
 	},
@@ -381,19 +403,23 @@ window.L.ImpressTileLayer = window.L.CanvasTileLayer.extend({
 			this._partWidthTwips = app.activeDocument.fileSize.x;
 
 			if (app.file.fileBasedView) {
-				let totalHeight = 0; // Total height in twips.
-				if (this._partDimensions.length === this._parts) {
-					for (let i = 0; i < this._parts; i++) {
-						totalHeight += this.getPartHeight(i);
-					}
-				}
-				else
-					totalHeight = this._parts * app.activeDocument.fileSize.y;
-				totalHeight += (this._parts) * this._spaceBetweenParts; // Space between parts.
-				app.activeDocument.fileSize.y = totalHeight;
+				// Rebuild the full filebased fileSize: max width across parts
+				// and the stacked total height. Both must be set before
+				// _updateMaxBounds below so Leaflet's max bounds cover the
+				// widest page.
+				app.activeDocument.fileSize = this._computeFileBasedFileSize();
 			}
 
 			app.activeDocument.activeLayout.viewSize = app.activeDocument.fileSize.clone();
+
+			// Rebuild the per-part rectangles in the filebased layout whenever
+			// part dimensions arrive (or any status update reshapes the parts).
+			if (
+				app.file.fileBasedView &&
+				app.activeDocument.activeLayout.type === 'ViewLayoutFileBased'
+			) {
+				app.activeDocument.activeLayout.reset();
+			}
 
 			let allPagesResized = !statusJSON.currentpageresized;
 			this._updateMaxBounds(true, allPagesResized);

@@ -33,6 +33,8 @@ class DocumentBase {
 
 		if (app.map._docLayer._docType === 'text') {
 			this.activeLayout = new ViewLayoutWriter();
+		} else if (app.file.fileBasedView) {
+			this.activeLayout = new ViewLayoutFileBased();
 		} else {
 			this.activeLayout = new ViewLayoutBase();
 		}
@@ -56,6 +58,15 @@ class DocumentBase {
 			getComputedStyle(dummyDiv).getPropertyValue('background-color');
 		this.activeView.setColor(this.activeViewSelectionColor);
 		dummyDiv.remove();
+	}
+
+	// Swap the layout at runtime (e.g. mobile Impress toggling fileBasedView
+	// when switching between read-only and edit). Preserves scroll-x position
+	// where possible; pY is rebuilt from scratch by the new layout.
+	public swapLayout(newLayout: ViewLayoutBase): void {
+		this.activeLayout = newLayout;
+		app.sectionContainer.onNewDocumentTopLeft();
+		app.sectionContainer.requestReDraw();
 	}
 
 	public setActiveViewID(activeViewID: number) {

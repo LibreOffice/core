@@ -96,6 +96,7 @@ interface DocLayerInterface {
 	_spaceBetweenParts: number;
 	_partWidthTwips: number;
 	_parts: number;
+	_partDimensions?: cool.SimplePoint[];
 	_fitWidthZoom(
 		e?: { oldSize: number; newsize: number },
 		maxZoom?: number,

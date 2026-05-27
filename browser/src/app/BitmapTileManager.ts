@@ -2168,63 +2168,77 @@ class BitmapTileManager {
 		var relScale = currZoom == zoom ? 1 : app.map.getZoomScale(zoom, currZoom);
 
 		var ratio = (this.tileSize * relScale) / app.tile.size.y;
-		var partHeightPixels = Math.round(
-			(app.map._docLayer._partHeightTwips +
-				app.map._docLayer._spaceBetweenParts) *
-				ratio,
-		);
-		var partWidthPixels = Math.round(app.map._docLayer._partWidthTwips * ratio);
 		var mode = 0; // mode is different only in Impress MasterPage mode so far
 
+		const layout = app.activeDocument.activeLayout;
+		if (!(layout && layout.type === 'ViewLayoutFileBased')) return [];
+		const fbLayout = layout as ViewLayoutFileBased;
+		const partCount = app.map._docLayer._parts;
+
+		// Read per-part rectangles from the layout (X=0 baseline, cumulative Y)
+		// at the queried zoom's pixel ratio.
+		const rects: { x: number; y: number; w: number; h: number }[] = [];
+		for (let p = 0; p < partCount; p++) {
+			const r = fbLayout.getDocumentPartRectAtRatio(p, ratio);
+			if (!r) return [];
+			rects.push(r);
+		}
+
+		// Stacked extent is maintained in twips on app.activeDocument.fileSize
+		// (refreshed on status / part-dimension changes); scale by ratio rather
+		// than recomputing across rects every call.
+		const fileSize = app.activeDocument.fileSize;
+		const maxWidthPx = Math.round(fileSize.x * ratio);
+		const totalHeightPx = Math.round(fileSize.y * ratio);
+
 		var intersectionAreaRectangle = app.LOUtil._getIntersectionRectangle(
-			app.activeDocument.activeLayout.viewedRectangle.pToArray(),
-			[0, 0, partWidthPixels, partHeightPixels * app.map._docLayer._parts],
+			fbLayout.viewedRectangle.pToArray(),
+			[0, 0, maxWidthPx, totalHeightPx],
 		);
 
 		var queue = [];
 
 		if (intersectionAreaRectangle) {
-			var minLocalX =
-				Math.floor(intersectionAreaRectangle[0] / app.tile.size.pX) *
-				app.tile.size.pX;
-			var maxLocalX =
-				Math.floor(
-					(intersectionAreaRectangle[0] + intersectionAreaRectangle[2]) /
-						app.tile.size.pX,
-				) * app.tile.size.pX;
+			const viewX1 = intersectionAreaRectangle[0];
+			const viewY1 = intersectionAreaRectangle[1];
+			const viewX2 = viewX1 + intersectionAreaRectangle[2];
+			const viewY2 = viewY1 + intersectionAreaRectangle[3];
 
-			var startPart = Math.floor(
-				intersectionAreaRectangle[1] / partHeightPixels,
-			);
-			var startY =
-				app.activeDocument.activeLayout.viewedRectangle.pY1 -
-				startPart * partHeightPixels;
-			startY = Math.floor(startY / app.tile.size.pY) * app.tile.size.pY;
+			for (let i = 0; i < partCount; i++) {
+				const partX1 = rects[i].x;
+				const partY1 = rects[i].y;
+				const partX2 = partX1 + rects[i].w;
+				const partY2 = partY1 + rects[i].h;
 
-			var endPart = Math.ceil(
-				(intersectionAreaRectangle[1] + intersectionAreaRectangle[3]) /
-					partHeightPixels,
-			);
-			var endY =
-				app.activeDocument.activeLayout.viewedRectangle.pY1 +
-				app.activeDocument.activeLayout.viewedRectangle.pY2 -
-				endPart * partHeightPixels;
-			endY = Math.floor(endY / app.tile.size.pY) * app.tile.size.pY;
+				if (partY2 <= viewY1 || partY1 >= viewY2) continue;
+				if (partX2 <= viewX1 || partX1 >= viewX2) continue;
 
-			var vTileCountPerPart = Math.ceil(partHeightPixels / app.tile.size.pY);
+				// Visible region of this part in stacked-view core pixels.
+				const visX1 = Math.max(viewX1, partX1);
+				const visY1 = Math.max(viewY1, partY1);
+				const visX2 = Math.min(viewX2, partX2);
+				const visY2 = Math.min(viewY2, partY2);
 
-			for (var i = startPart; i <= endPart; i++) {
-				for (var j = minLocalX; j <= maxLocalX; j += app.tile.size.pX) {
-					for (
-						var k = 0;
-						k <= vTileCountPerPart * app.tile.size.pX;
-						k += app.tile.size.pY
-					)
-						if (
-							(i !== startPart || k >= startY) &&
-							(i !== endPart || k <= endY)
-						)
-							queue.push(new TileCoordData(j, k, zoom, i, mode));
+				// Convert to per-part local coords (tile.x/y are page-local for
+				// fileBasedView).
+				const localX1 = visX1 - partX1;
+				const localY1 = visY1 - partY1;
+				const localX2 = visX2 - partX1;
+				const localY2 = visY2 - partY1;
+
+				const startX =
+					Math.floor(localX1 / app.tile.size.pX) * app.tile.size.pX;
+				const endX =
+					Math.floor((localX2 - 1) / app.tile.size.pX) * app.tile.size.pX;
+				const startY =
+					Math.floor(localY1 / app.tile.size.pY) * app.tile.size.pY;
+				const endY =
+					Math.floor((localY2 - 1) / app.tile.size.pY) * app.tile.size.pY;
+
+				for (let j = startX; j <= endX; j += app.tile.size.pX) {
+					for (let k = startY; k <= endY; k += app.tile.size.pY) {
+						queue.push(new TileCoordData(j, k, zoom, i, mode));
+					}
 				}
 			}
 

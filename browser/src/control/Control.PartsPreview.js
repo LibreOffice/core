@@ -947,10 +947,19 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		if (partNumber < 0) partNumber = 0;
 		if (partNumber >= this._map._docLayer._parts) partNumber = this._map._docLayer._parts - 1;
 
-		var partHeightPixels = Math.round((this._map._docLayer._partHeightTwips + this._map._docLayer._spaceBetweenParts) * app.twipsToPixels);
-		var scrollTop = partHeightPixels * partNumber;
 		var viewHeight = app.sectionContainer.getViewSize()[1];
 		var currentScrollX = app.activeDocument.activeLayout.viewedRectangle.pX1;
+
+		var layout = app.activeDocument.activeLayout;
+		var scrollTop;
+		var partHeightPixels;
+		if (layout.viewRectangles && layout.viewRectangles[partNumber]) {
+			scrollTop = layout.viewRectangles[partNumber].pY1;
+			partHeightPixels = layout.viewRectangles[partNumber].pHeight + Math.round(this._map._docLayer._spaceBetweenParts * app.twipsToPixels);
+		} else {
+			partHeightPixels = Math.round((this._map._docLayer._partHeightTwips + this._map._docLayer._spaceBetweenParts) * app.twipsToPixels);
+			scrollTop = partHeightPixels * partNumber;
+		}
 
 		if (viewHeight > partHeightPixels && partNumber > 0)
 			scrollTop -= Math.round((viewHeight - partHeightPixels) * 0.5);

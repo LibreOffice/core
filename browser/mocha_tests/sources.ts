@@ -33,6 +33,7 @@
 /// <reference path="../src/app/ViewLayoutNewBase.ts" />
 /// <reference path="../src/app/ViewLayoutWriter.ts" />
 /// <reference path="../src/app/ViewLayoutMultiPage.ts" />
+/// <reference path="../src/app/ViewLayoutFileBased.ts" />
 /// <reference path="../src/app/DocumentBase.ts" />
 /// <reference path="../src/app/DocumentView.ts" />
 /// <reference path="../src/app/TilesMiddleware.ts" />
