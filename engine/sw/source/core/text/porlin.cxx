@@ -337,6 +337,12 @@ bool SwLinePortion::IsUsedToCalcLineSpacingHeight(const IDocumentSettingAccess& 
     if (!rIDSA.get(DocumentSettingId::LINE_SPACING_AS_GAP_BELOW))
         return false; // LO legacy format
 
+    // include text-like portions that LO does not considered to be InTextGrp
+    if (IsMultiPortion()) // Bidi, Rotated text, Double-Line text, Rubies
+    {
+        return true;
+    }
+
     // exclude anything else that isn't considered to be text
     if (!InTextGrp()) // excludes flys, tab-stops, bookmarks, Hole, etc
         return false;
