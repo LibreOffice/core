@@ -170,6 +170,74 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf172169_intraLinespacing)
     CPPUNIT_ASSERT_DOUBLES_EQUAL(2484, nTextHeight, 100);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf172169_linespacingBidi)
+{
+    // given a double spaced document containing multiportion bidi characters
+    createSwDoc("tdf172169_linespacingBidi.odt");
+
+    // NOTE that before LO 7.1 this was 2 pages, but it changed without a compatibility flag...
+    // Ensure the current implementation doesn't change unintentionally.
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+
+    auto pXmlDoc = parseLayoutDump();
+
+    SwTwips nTextHeight = getXPath(pXmlDoc, "//page/body/txt/infos/bounds", "height").toInt32();
+    // The paragraph fills the page
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(3634, nTextHeight, 100);
+
+    saveAndReload(TestFilter::DOCX);
+    pXmlDoc = parseLayoutDump();
+
+    // The ODT behaviour is buggy. Line spacing should be based on the tallest, not smallest text.
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+
+    nTextHeight = getXPath(pXmlDoc, "//page[1]/body/txt/infos/bounds", "height").toInt32();
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(3312, nTextHeight, 100);
+    nTextHeight = getXPath(pXmlDoc, "//page[2]/body/txt/infos/bounds", "height").toInt32();
+    CPPUNIT_ASSERT_EQUAL(SwTwips(552), nTextHeight);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf172169_linespacingDoubleLineText)
+{
+    // given a double spaced document containing Asian double-line text as a mid-portion
+
+    createSwDoc("tdf172169_linespacingDoubleLineText.odt");
+
+    // NOTE that before LO 7.1 this was 2 pages, but it changed without a compatibility flag...
+    // Ensure the current implementation doesn't change unintentionally.
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+
+    saveAndReload(TestFilter::DOCX);
+
+    // DOCX does use the height of the double-line text to inform the line-spacing
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf172169_linespacingVerticalText)
+{
+    // given a double spaced document containing vertical text (as first portion and mid-portion)
+    createSwDoc("tdf172169_linespacingVerticalText.odt");
+
+    // NOTE that before LO 7.1 this was 3 pages, but it changed without a compatibility flag...
+    // Ensure the current implementation doesn't change unintentionally.
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+
+    auto pXmlDoc = parseLayoutDump();
+
+    SwTwips nTextHeight = getXPath(pXmlDoc, "//page[2]/body/txt/infos/bounds", "height").toInt32();
+    // No extra line-spacing gap is produced by the rotated text in ODT
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(2543, nTextHeight, 100);
+
+    saveAndReload(TestFilter::DOCX);
+    pXmlDoc = parseLayoutDump();
+
+    // DOCX does use the height of the rotated text to inform the line-spacing!
+    CPPUNIT_ASSERT_EQUAL(3, getPages());
+
+    nTextHeight = getXPath(pXmlDoc, "//page[2]/body/txt/infos/bounds", "height").toInt32();
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(3154, nTextHeight, 100); // will be 1991
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf148057_columnBreak, "tdf148057_columnBreak.docx")
 {
     // given a document with a linefeed immediately following a column break (in non-column section)
