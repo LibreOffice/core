@@ -2301,15 +2301,14 @@ export class CommentSection extends CanvasSectionObject {
 
 	private layoutDown (subList: any, actualPosition: Array<number>, lastY: number, relayout: boolean = true): number {
 		const selectedComment = subList[0] === this.sectionProperties.selectedComment;
+		const documentCanvasWidth = parseInt((document.getElementById('document-canvas') as any).style.width);
+		const isRTL = document.documentElement.dir === 'rtl';
+
 		for (var i = 0; i < subList.length; i++) {
 			lastY = subList[i].sectionProperties.data.anchorSPoint.vY > lastY ? subList[i].sectionProperties.data.anchorSPoint.vY: lastY;
-
-			var isRTL = document.documentElement.dir === 'rtl';
-
 			if (selectedComment) {
 				const commentWidth = (this.sectionProperties.showSelectedBigger ? this.sectionProperties.commentWidthBigger: this.sectionProperties.commentWidth) / app.dpiScale;
-				const documentCanvasWidth = parseInt((document.getElementById('document-canvas') as any).style.width);
-				let posX = (this.sectionProperties.showSelectedBigger ?
+								let posX = (this.sectionProperties.showSelectedBigger ?
 								Math.round((documentCanvasWidth - commentWidth)/2) :
 								Math.round(actualPosition[0] / app.dpiScale) - this.sectionProperties.deflectionOfSelectedComment * (isRTL ? -1 : 1));
 				// if on selection full comment is not visible bring it fully inside view, helps in narrow windows and tablets
