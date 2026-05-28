@@ -139,7 +139,7 @@ class AboutDialog {
 					.toLowerCase(),
 		);
 
-		// COOLWSD version
+		// Version
 		elements.coolwsdVersion.textContent = info.coolwsdVersion;
 		this.appendSpanAndLink(
 			elements.coolwsdVersion,
@@ -343,7 +343,7 @@ class AboutDialog {
 
 		let coolwsdLine = info.coolwsdVersion;
 		coolwsdLine += ` (git hash: ${info.coolwsdHash} ${info.wsdOptions})`;
-		addLine('COOLWSD version', coolwsdLine);
+		addLine('Version', coolwsdLine);
 
 		if (!window.mode.isCODesktop()) {
 			addLine('Served by', info.osInfo);
@@ -430,7 +430,7 @@ class AboutDialog {
 		const coolwsdLabel = AboutDialog.createElement('div', {
 			id: 'coolwsd-version-label',
 		});
-		coolwsdLabel.textContent = _('COOLWSD version:');
+		coolwsdLabel.textContent = _('Version:');
 		infoDiv.appendChild(coolwsdLabel);
 
 		const coolwsdVersionContainer = AboutDialog.createElement('div', {
