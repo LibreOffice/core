@@ -21,12 +21,11 @@
 
 #include <config.h>
 
-#if !MOBILEAPP
-
 #include <Poco/JSON/Array.h>
 #include <Poco/JSON/Object.h>
 
 #include <cstddef>
+#include <functional>
 #include <memory>
 #include <string>
 #include <utility>
@@ -35,12 +34,14 @@
 class ClientSession;
 class DocumentBroker;
 class Message;
-namespace http { class Session; class Response; enum class StatusCode : unsigned; }
+// A forward declaration is all that's needed to hold a shared_ptr<http::Session>;
+// the type is only completed (and used) in the server's #if !MOBILEAPP code paths.
+namespace http { class Session; }
 
 /// Result of preparing an AI image generation HTTP request.
 struct ImageGenRequest
 {
-    std::shared_ptr<http::Session> httpSession; // null on error
+    std::shared_ptr<http::Session> httpSession; // server transport; null on the desktop/error
     std::string requestUrl;
     std::string apiKey;
     std::string payloadStr;
@@ -120,10 +121,20 @@ public:
 private:
     void sendChatResult(bool success, const std::string& text,
                         const std::string& requestId);
-    static std::string mapHttpStatusToError(http::StatusCode statusCode,
+    /// Maps an HTTP status (or an ai::Http* sentinel) to a user-facing message.
+    static std::string mapHttpStatusToError(int statusCode,
                                             const std::string& reasonPhrase,
                                             const std::string& context = "");
     Poco::JSON::Array::Ptr buildToolDefinitions() const;
+#if MOBILEAPP
+    /// Desktop transport: POST via the registered ai::HttpPostFn and deliver the
+    /// result to \p onResponse on \p docBroker's polling thread (statusCode is an
+    /// HTTP code or an ai::Http* sentinel).
+    void postViaTransport(const std::shared_ptr<DocumentBroker>& docBroker,
+                          const std::string& url, const std::string& authHeader,
+                          std::string body,
+                          std::function<void(int statusCode, std::string body)> onResponse);
+#endif
     void callLLMAPI();
     void handleLLMResponse(const std::string& responseBody);
     bool executeToolCall(const std::string& toolCallId,
@@ -139,17 +150,17 @@ private:
     bool handleImageGeneration(const std::string& prompt,
                                const std::string& requestId);
     ImageGenRequest createImageGenRequest(const std::string& prompt);
+    /// Parses an image-generation response into {base64Image, errorMessage};
+    /// exactly one is non-empty. statusCode may be an ai::Http* sentinel.
     static std::pair<std::string, std::string> parseImageGenResponse(
-        const std::shared_ptr<const http::Response>& httpResponse);
+        int statusCode, const std::string& body);
     void processTransformImageGenerations(const std::shared_ptr<DocumentBroker>& docBroker);
     void generateNextTransformImage(const std::shared_ptr<DocumentBroker>& docBroker);
     std::string appendImageGenFailures(const std::string& result) const;
 
     ClientSession& _session;
-    std::shared_ptr<http::Session> _activeChatSession;
+    std::shared_ptr<http::Session> _activeChatSession; // server transport; unused on the desktop
     std::unique_ptr<AIToolLoopState> _toolLoop;
 };
-
-#endif // !MOBILEAPP
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

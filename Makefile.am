@@ -172,6 +172,7 @@ AM_CTAGSFLAGS = $(AM_ETAGSFLAGS)
 
 shared_sources = \
                  $(util_platform_cpp) \
+                 common/AIHttpTransport.cpp \
                  common/Authorization.cpp \
                  common/CommandControl.cpp \
                  common/ConfigUtil.cpp \
@@ -458,6 +459,7 @@ wsd_headers = \
               wsd/wopi/WopiStorage.hpp
 
 shared_headers = \
+                 common/AIHttpTransport.hpp \
                  common/Anonymizer.hpp \
                  common/Authorization.hpp \
                  common/CharacterConverter.hpp \

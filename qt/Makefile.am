@@ -23,6 +23,7 @@ AM_LDFLAGS = -pthread ${QT6_LIBS} -ldl $(ZSTD_LIBS) ${PNG_LIBS} -lPocoZip
 # Android's CMakefile list re-worked:
 
 cmake_list= \
+            ../common/AIHttpTransport.cpp \
             ../common/Authorization.cpp \
             ../common/ConfigUtil.cpp \
             ../common/SettingsStorage.cpp \
@@ -57,6 +58,7 @@ cmake_list= \
             ../kit/KitWebSocket.cpp \
             ../net/FakeSocket.cpp \
             ../net/Socket.cpp \
+            ../wsd/AIChatSession.cpp \
             ../wsd/ClientSession.cpp \
             ../wsd/DocumentBroker.cpp \
             ../wsd/COOLWSD.cpp \
@@ -87,7 +89,7 @@ coda_qt_CXXFLAGS += -mno-direct-extern-access
 endif
 endif
 
-coda_qt_SOURCES = coda-qt.cpp Application.cpp Bridge.cpp CoolUrlSchemeHandler.cpp QtClipboard.cpp DocumentOperations.cpp WebView.cpp DBusService.cpp Document.cpp $(cmake_list)
+coda_qt_SOURCES = coda-qt.cpp Application.cpp AIHttpTransport.cpp Bridge.cpp CoolUrlSchemeHandler.cpp QtClipboard.cpp DocumentOperations.cpp WebView.cpp DBusService.cpp Document.cpp $(cmake_list)
 nodist_coda_qt_SOURCES = $(BUILT_SOURCES)
 
 metainfodir = $(datadir)/metainfo

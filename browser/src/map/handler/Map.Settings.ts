@@ -143,9 +143,10 @@ window.L.Map.Settings = window.L.Handler.extend({
 			this._iframeDialog.postMessage(data);
 		} else if (data.MessageId === 'settings-save-complete') {
 			this.removeIframe();
-			// Apps persist settings through the native bridge; the server only
-			// handles updateviewsettings in non-MOBILEAPP builds.
-			if (data.viewSettings && !window.ThisIsAMobileApp) {
+			// updateviewsettings applies these to the session (e.g. AI credentials
+			// so the AI assistant can authenticate). The apps persist settings
+			// separately, through the native bridge.
+			if (data.viewSettings) {
 				app.socket.sendMessage(
 					'updateviewsettings ' + JSON.stringify(data.viewSettings),
 				);

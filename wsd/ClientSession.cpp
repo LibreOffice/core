@@ -37,7 +37,7 @@
 #include <wsd/COOLWSD.hpp>
 #include <wsd/DocumentBroker.hpp>
 #include <wsd/FileServer.hpp>
-#if !MOBILEAPP
+#if !MOBILEAPP || defined(QTAPP)
 #include <wsd/AIChatSession.hpp>
 #endif
 #include <wsd/TileDesc.hpp>
@@ -143,7 +143,7 @@ ClientSession::ClientSession(const std::shared_ptr<ProtocolHandlerInterface>& ws
 
     _browserSettingsJSON = new Poco::JSON::Object();
 
-#if !MOBILEAPP
+#if !MOBILEAPP || defined(QTAPP)
     _aiChat = std::make_unique<AIChatSession>(*this);
 #endif
 }
@@ -1355,7 +1355,7 @@ bool ClientSession::_handleInput(const char *buffer, int length)
     {
         return forwardToChild(std::string(buffer, length), docBroker);
     }
-#if !MOBILEAPP
+#if !MOBILEAPP || defined(QTAPP)
     else if (tokens.equals(0, "aichat:"))
     {
         return _aiChat->handleAction(firstLine);
@@ -1518,14 +1518,16 @@ bool ClientSession::_handleInput(const char *buffer, int length)
     {
         return handleGetSlideRequest(tokens, docBroker);
     }
+    else if (tokens.equals(0, "updateviewsettings") && tokens.size() >= 2)
+    {
+        // Applies the AI/Zotero/signature credentials to this session (WOPI-free).
+        // On the desktop apps this is how the native settings reach the session.
+        return handleUpdateViewSettings(firstLine);
+    }
 #if !MOBILEAPP
     else if (tokens.equals(0, "routetokensanitycheck"))
     {
         Admin::instance().routeTokenSanityCheck();
-    }
-    else if (tokens.equals(0, "updateviewsettings") && tokens.size() >= 2)
-    {
-        return handleUpdateViewSettings(firstLine);
     }
     else if (tokens.equals(0, "browsersetting") && tokens.size() >= 3)
     {
@@ -1652,10 +1654,20 @@ void ClientSession::uploadViewSettingsToWopiHost()
         LOG_ERR("Failed to upload viewsetting to WOPI host: " << e.what());
     }
 }
+#endif // !MOBILEAPP
+
+// The AI credential resolution below (and the helpers it uses) is needed on the
+// desktop apps too: handleUpdateViewSettings applies the native AI settings to
+// the session so the AI proxy can authenticate.
 
 bool ClientSession::isDisableAISettings() const
 {
+#if MOBILEAPP
+    // No WOPI host on the desktop apps, so nothing disables AI settings here.
+    return false;
+#else
     return _wopiFileInfo && _wopiFileInfo->getDisableAISettings();
+#endif
 }
 
 namespace
@@ -1758,8 +1770,13 @@ bool ClientSession::resolveAndApplyAICredentials(Poco::JSON::Object::Ptr& viewSe
     setAIProviderModel(model);
     setAIProviderURL(url);
 
-    const bool configured = ConfigUtil::getConfigValue<bool>("ai.enabled", false) &&
-                            !disableAISettings && !apiKey.empty() && !model.empty() && !url.empty();
+    const bool configured =
+#if !MOBILEAPP
+        // The desktop apps enable AI per-user via the Options dialog, not the
+        // server-wide ai.enabled switch.
+        ConfigUtil::getConfigValue<bool>("ai.enabled", false) &&
+#endif
+        !disableAISettings && !apiKey.empty() && !model.empty() && !url.empty();
     outModel = configured ? model : std::string{};
     outRating = configured ? computeEthicalRating(model, url) : "U";
     return configured;
@@ -1852,6 +1869,7 @@ bool ClientSession::handleUpdateViewSettings(const std::string& firstLine)
     return true;
 }
 
+#if !MOBILEAPP
 void ClientSession::updateBrowserSettingsJSON(const std::string& json)
 {
     Poco::JSON::Parser parser;
@@ -2698,13 +2716,13 @@ bool ClientSession::handleKitToClientMessage(const std::shared_ptr<Message>& pay
                 abortConversion(docBroker, saveAsSocket, std::move(errorKind));
                 return false;
             }
-#if !MOBILEAPP
+#if !MOBILEAPP || defined(QTAPP)
             else if (_aiChat->tryConsumeKitError(errorCommand, errorKind))
             {
                 return true;
             }
-            else
 #endif
+            else
             {
                 LOG_ERR(errorCommand << " error failure: " << errorKind);
             }
@@ -3126,7 +3144,7 @@ ClientSession::handleOpenDocKitToClientMessage(const std::shared_ptr<Message>& p
     }
     else if (tokens.equals(0, "commandvalues:"))
     {
-#if !MOBILEAPP
+#if !MOBILEAPP || defined(QTAPP)
         if (_aiChat->tryConsumeCommandValues(payload))
             return true;
 #endif
@@ -3259,7 +3277,7 @@ ClientSession::handleOpenDocKitToClientMessage(const std::shared_ptr<Message>& p
 #endif
     else if (tokens.equals(0, "extractedlinktargets:"))
     {
-#if !MOBILEAPP
+#if !MOBILEAPP || defined(QTAPP)
         if (_aiChat->tryConsumeExtractedLinkTargets(payload))
             return true;
 #endif
@@ -3283,7 +3301,7 @@ ClientSession::handleOpenDocKitToClientMessage(const std::shared_ptr<Message>& p
     }
     else if (tokens.equals(0, "extracteddocumentstructure:"))
     {
-#if !MOBILEAPP
+#if !MOBILEAPP || defined(QTAPP)
         if (_aiChat->tryConsumeExtractedDocumentStructure(payload))
             return true;
 #endif
@@ -3307,7 +3325,7 @@ ClientSession::handleOpenDocKitToClientMessage(const std::shared_ptr<Message>& p
     }
     else if (tokens.equals(0, "transformeddocumentstructure:"))
     {
-#if !MOBILEAPP
+#if !MOBILEAPP || defined(QTAPP)
         if (_aiChat->tryConsumeTransformedDocumentStructure(payload))
             return true;
 #endif

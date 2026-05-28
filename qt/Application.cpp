@@ -59,6 +59,10 @@ void Application::initialize()
     // Initialize recent files
     Poco::Path configDir = Desktop::getConfigPath();
     recentFiles.load(configDir.append("RecentDocuments.conf").toString(), 15);
+
+    // Provide AIChatSession with an HTTP transport (the COOL http::Session stack
+    // isn't available here).
+    registerAIHttpTransport();
 }
 
 Poco::Path Desktop::getConfigPath()

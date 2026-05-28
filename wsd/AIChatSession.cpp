@@ -18,10 +18,9 @@
 
 #include "AIChatSession.hpp"
 
-#if !MOBILEAPP
-
 #include "ClientSession.hpp"
 
+#include <common/AIHttpTransport.hpp>
 #include <common/Common.hpp>
 #include <common/ConfigUtil.hpp>
 #include <common/FileUtil.hpp>
@@ -30,10 +29,16 @@
 #include <common/Message.hpp>
 #include <common/Util.hpp>
 #include <common/base64.hpp>
-#include <net/HttpServer.hpp>
+#include <net/Socket.hpp>
 #include <wsd/COOLWSD.hpp>
 #include <wsd/DocumentBroker.hpp>
 #include <wsd/DocumentToolDescriptions.hpp>
+
+#if !MOBILEAPP
+// The COOL HTTP client stack (http::Session) is server-only; the desktop apps
+// use the registered ai::HttpPostFn transport instead.
+#include <net/HttpServer.hpp>
+#endif
 
 #include <Poco/File.h>
 #include <Poco/JSON/Array.h>
@@ -228,23 +233,23 @@ void AIChatSession::sendChatResult(bool success, const std::string& text,
 }
 
 std::string AIChatSession::mapHttpStatusToError(
-    http::StatusCode statusCode, const std::string& reasonPhrase,
+    int statusCode, const std::string& reasonPhrase,
     const std::string& context)
 {
     switch (statusCode)
     {
-        case http::StatusCode::BadRequest:
+        case 400 /* Bad Request */:
             return context.empty() ? "Invalid request"
                                    : "Invalid " + context + " request";
-        case http::StatusCode::Unauthorized:     return "Invalid API key";
-        case http::StatusCode::Forbidden:        return "API key lacks permissions";
-        case http::StatusCode::TooManyRequests:  return "Rate limited - please wait a moment and retry";
-        case http::StatusCode::InternalServerError: return "API server error - try again later";
-        case http::StatusCode::ServiceUnavailable:  return "Service temporarily unavailable";
+        case 401 /* Unauthorized */:        return "Invalid API key";
+        case 403 /* Forbidden */:           return "API key lacks permissions";
+        case 429 /* Too Many Requests */:   return "Rate limited - please wait a moment and retry";
+        case 500 /* Internal Server Error */: return "API server error - try again later";
+        case 503 /* Service Unavailable */:   return "Service temporarily unavailable";
         default:
         {
             std::string err = "API error (";
-            err.append(std::to_string(static_cast<int>(statusCode)));
+            err.append(std::to_string(statusCode));
             err.append("): ");
             err.append(reasonPhrase);
             return err;
@@ -550,11 +555,15 @@ bool AIChatSession::handleAction(const std::string& firstLine)
     const std::string model = _session.getAIProviderModel();
     std::string baseUrl = _session.getAIProviderURL();
 
+#if !MOBILEAPP
+    // The desktop apps have no server-wide admin switch; AI is configured per-user
+    // through the Options dialog, so this gate only applies to the WSD server.
     if (!ConfigUtil::getConfigValue<bool>("ai.enabled", false))
     {
         sendChatResult(false, "AI features are disabled by the administrator", requestId);
         return true;
     }
+#endif
 
     if (_session.isDisableAISettings())
     {
@@ -589,6 +598,41 @@ bool AIChatSession::handleAction(const std::string& firstLine)
     return true;
 }
 
+#if MOBILEAPP
+void AIChatSession::postViaTransport(
+    const std::shared_ptr<DocumentBroker>& docBroker, const std::string& url,
+    const std::string& authHeader, std::string body,
+    std::function<void(int statusCode, std::string body)> onResponse)
+{
+    const ai::HttpPostFn& post = ai::httpPostFn();
+    if (!post)
+    {
+        LOG_WRN("AIChat: no HTTP transport registered for the desktop app");
+        onResponse(ai::HttpConnectFailed, std::string());
+        return;
+    }
+
+    std::weak_ptr<DocumentBroker> docBrokerWeak = docBroker;
+    post(url, authHeader, std::move(body), _session.getAIRequestTimeoutSeconds(),
+         [docBrokerWeak, onResponse = std::move(onResponse)](int statusCode, std::string body)
+    {
+        // The transport may complete on another thread (e.g. the Qt GUI thread);
+        // hop back onto the polling thread the rest of AIChatSession runs on.
+        auto docBroker = docBrokerWeak.lock();
+        if (!docBroker)
+            return;
+        auto poll = docBroker->getPoll().lock();
+        if (!poll)
+            return;
+        poll->addCallback(
+            [onResponse, statusCode, body = std::move(body)]() mutable
+        {
+            onResponse(statusCode, std::move(body));
+        });
+    });
+}
+#endif
+
 void AIChatSession::callLLMAPI()
 {
     if (!_toolLoop)
@@ -603,6 +647,63 @@ void AIChatSession::callLLMAPI()
     payload->stringify(payloadStream);
     std::string payloadStr = payloadStream.str();
 
+    auto clientSessionPtr = _session.client_from_this();
+    AIChatSession* self = this;
+
+    // Shared completion handler, invoked on the document broker's polling thread.
+    // statusCode is an HTTP code or an ai::Http* sentinel; body is the response
+    // body (empty when there was no response); reason is the HTTP reason phrase.
+    auto onResponse = [clientSessionPtr, self](int statusCode, const std::string& body,
+                                               const std::string& reason)
+    {
+        self->_activeChatSession.reset();
+
+        if (!self->_toolLoop)
+            return;
+
+        const std::string& requestId = self->_toolLoop->requestId;
+
+        if (statusCode == ai::HttpConnectFailed)
+        {
+            self->sendChatResult(
+                false, "Network error - please check your connection", requestId);
+            self->_toolLoop.reset();
+            return;
+        }
+
+        if (statusCode == ai::HttpNoResponse)
+        {
+            self->sendChatResult(false, "Request timeout", requestId);
+            self->_toolLoop.reset();
+            return;
+        }
+
+        if (statusCode != 200)
+        {
+            std::cerr << "AIToolLoop: API returned " << statusCode << ' ' << reason
+                << " body: " << body.substr(0, 500) << std::endl;
+            self->sendChatResult(false, mapHttpStatusToError(statusCode, reason), requestId);
+            self->_toolLoop.reset();
+            return;
+        }
+
+        self->handleLLMResponse(body);
+    };
+
+    std::string authHeader = "Bearer ";
+    authHeader.append(_toolLoop->apiKey);
+
+    LOG_DBG("AIToolLoop: sending request [" << _toolLoop->requestId
+            << "] round " << (6 - _toolLoop->toolRoundsRemaining)
+            << " to " << _toolLoop->requestUrl);
+
+    std::shared_ptr<DocumentBroker> docBroker = _session.getDocumentBroker();
+
+#if MOBILEAPP
+    postViaTransport(docBroker, _toolLoop->requestUrl, authHeader, std::move(payloadStr),
+                     [onResponse](int statusCode, std::string body)
+                     { onResponse(statusCode, body, std::string()); });
+#else
     std::shared_ptr<http::Session> httpSession =
         http::Session::create(_toolLoop->requestUrl);
     if (!httpSession)
@@ -615,76 +716,28 @@ void AIChatSession::callLLMAPI()
 
     httpSession->setTimeout(std::chrono::seconds(_session.getAIRequestTimeoutSeconds()));
 
-    auto clientSessionPtr = _session.client_from_this();
-    AIChatSession* self = this;
-
-    http::Session::FinishedCallback finishedCallback =
-        [clientSessionPtr, self](const std::shared_ptr<http::Session>& session)
+    httpSession->setFinishedHandler(
+        [onResponse](const std::shared_ptr<http::Session>& session)
     {
-        self->_activeChatSession.reset();
-
-        if (!self->_toolLoop)
-            return;
-
-        const std::string& requestId = self->_toolLoop->requestId;
-        const std::shared_ptr<const http::Response> httpResponse = session->response();
-        const http::StatusCode statusCode = httpResponse->statusLine().statusCode();
-
-        if (statusCode == http::StatusCode::None)
-        {
-            self->sendChatResult(false, "Request timeout", requestId);
-            self->_toolLoop.reset();
-            return;
-        }
-
-        if (statusCode != http::StatusCode::OK)
-        {
-            const std::string& body = httpResponse->getBody();
-            std::cerr << "AIToolLoop: API returned "
-                << static_cast<int>(statusCode) << ' '
-                << httpResponse->statusLine().reasonPhrase()
-                << " body: " << body.substr(0, 500) << std::endl;
-            const std::string errorMessage = mapHttpStatusToError(
-                statusCode, httpResponse->statusLine().reasonPhrase());
-            self->sendChatResult(false, errorMessage, requestId);
-            self->_toolLoop.reset();
-            return;
-        }
-
-        self->handleLLMResponse(httpResponse->getBody());
-    };
-
-    httpSession->setFinishedHandler(std::move(finishedCallback));
-
-    http::Session::ConnectFailCallback connectFailCallback =
-        [clientSessionPtr = std::move(clientSessionPtr), self](const std::shared_ptr<http::Session>& /*session*/)
+        const std::shared_ptr<const http::Response> r = session->response();
+        onResponse(static_cast<int>(r->statusLine().statusCode()), r->getBody(),
+                   r->statusLine().reasonPhrase());
+    });
+    httpSession->setConnectFailHandler(
+        [onResponse](const std::shared_ptr<http::Session>& /*session*/)
     {
-        self->_activeChatSession.reset();
-        if (self->_toolLoop)
-        {
-            self->sendChatResult(
-                false, "Network error - please check your connection",
-                self->_toolLoop->requestId);
-            self->_toolLoop.reset();
-        }
-    };
-    httpSession->setConnectFailHandler(std::move(connectFailCallback));
+        onResponse(ai::HttpConnectFailed, std::string(), std::string());
+    });
 
     http::Request httpRequest(Poco::URI(_toolLoop->requestUrl).getPathAndQuery());
     httpRequest.setVerb(http::Request::VERB_POST);
     httpRequest.set("Content-Type", "application/json");
-    std::string authHeader = "Bearer ";
-    authHeader.append(_toolLoop->apiKey);
-    httpRequest.set("Authorization", std::move(authHeader));
+    httpRequest.set("Authorization", authHeader);
     httpRequest.setBody(std::move(payloadStr), "application/json");
 
-    LOG_DBG("AIToolLoop: sending request [" << _toolLoop->requestId
-            << "] round " << (6 - _toolLoop->toolRoundsRemaining)
-            << " to " << _toolLoop->requestUrl);
-
     _activeChatSession = httpSession;
-    std::shared_ptr<DocumentBroker> docBroker = _session.getDocumentBroker();
     httpSession->asyncRequest(httpRequest, docBroker->getPoll());
+#endif
 }
 
 void AIChatSession::handleLLMResponse(const std::string& responseBody)
@@ -1389,12 +1442,16 @@ bool AIChatSession::handleCancel(const std::string& firstLine)
     const std::string cancelRequestId = firstLine.substr(strlen("aichatcancel: "));
     LOG_DBG("AIChatCancel: cancelling request [" << cancelRequestId << ']');
 
+#if !MOBILEAPP
     if (_activeChatSession)
     {
         _activeChatSession->asyncShutdown();
         _activeChatSession.reset();
     }
+#endif
 
+    // Dropping the tool-loop state makes any in-flight response a no-op: the
+    // transport callbacks bail out once _toolLoop is null.
     _toolLoop.reset();
 
     return true;
@@ -1444,6 +1501,7 @@ ImageGenRequest AIChatSession::createImageGenRequest(const std::string& prompt)
     payload->stringify(payloadStream);
     req.payloadStr = payloadStream.str();
 
+#if !MOBILEAPP
     req.httpSession = http::Session::create(req.requestUrl);
     if (!req.httpSession)
     {
@@ -1452,23 +1510,24 @@ ImageGenRequest AIChatSession::createImageGenRequest(const std::string& prompt)
     }
 
     req.httpSession->setTimeout(std::chrono::seconds(_session.getAIRequestTimeoutSeconds()));
+#endif
     return req;
 }
 
 std::pair<std::string, std::string> AIChatSession::parseImageGenResponse(
-    const std::shared_ptr<const http::Response>& httpResponse)
+    int statusCode, const std::string& body)
 {
-    const http::StatusCode statusCode = httpResponse->statusLine().statusCode();
+    if (statusCode == ai::HttpConnectFailed)
+        return {"", "Network error - please check your connection"};
 
-    if (statusCode == http::StatusCode::None)
+    if (statusCode == ai::HttpNoResponse)
         return {"", "Request timeout"};
 
-    if (statusCode != http::StatusCode::OK)
+    if (statusCode != 200)
     {
-        const std::string& body = httpResponse->getBody();
-        LOG_WRN_S("AIImageGeneration: HTTP " << static_cast<int>(statusCode) << ": " << body);
+        LOG_WRN_S("AIImageGeneration: HTTP " << statusCode << ": " << body);
 
-        std::string errorMsg = "HTTP " + std::to_string(static_cast<int>(statusCode));
+        std::string errorMsg = "HTTP " + std::to_string(statusCode);
         Poco::JSON::Object::Ptr errObj;
         if (JsonUtil::parseJSON(body, errObj))
         {
@@ -1484,9 +1543,8 @@ std::pair<std::string, std::string> AIChatSession::parseImageGenResponse(
         return {"", errorMsg};
     }
 
-    const std::string& responseBody = httpResponse->getBody();
     Poco::JSON::Object::Ptr responseObject = new Poco::JSON::Object();
-    if (!JsonUtil::parseJSON(responseBody, responseObject))
+    if (!JsonUtil::parseJSON(body, responseObject))
         return {"", "Failed to parse response"};
 
     Poco::JSON::Array::Ptr dataArray = responseObject->getArray("data");
@@ -1539,12 +1597,12 @@ bool AIChatSession::handleImageGeneration(const std::string& prompt,
 
     AIChatSession* self = this;
 
-    http::Session::FinishedCallback finishedCallback =
-        [clientSessionPtr, self, sendImageResult](const std::shared_ptr<http::Session>& session)
+    // Shared completion handler, invoked on the document broker's polling thread.
+    auto onResponse = [self, sendImageResult](int statusCode, const std::string& body)
     {
         self->_activeChatSession.reset();
 
-        auto [b64Json, error] = parseImageGenResponse(session->response());
+        auto [b64Json, error] = parseImageGenResponse(statusCode, body);
         if (!error.empty())
         {
             sendImageResult(false, "", error);
@@ -1554,17 +1612,26 @@ bool AIChatSession::handleImageGeneration(const std::string& prompt,
         sendImageResult(true, b64Json, "");
     };
 
-    req.httpSession->setFinishedHandler(std::move(finishedCallback));
+    LOG_DBG("AIImageGeneration: sending request [" << requestId << "] to "
+            << req.requestUrl);
 
-    http::Session::ConnectFailCallback connectFailCallback =
-        [clientSessionPtr = std::move(clientSessionPtr), self,
-         sendImageResult = std::move(sendImageResult)](
-            const std::shared_ptr<http::Session>& /*session*/)
+    std::shared_ptr<DocumentBroker> docBroker = _session.getDocumentBroker();
+
+#if MOBILEAPP
+    postViaTransport(docBroker, req.requestUrl, "Bearer " + req.apiKey,
+                     req.payloadStr, onResponse);
+#else
+    req.httpSession->setFinishedHandler(
+        [onResponse](const std::shared_ptr<http::Session>& session)
     {
-        self->_activeChatSession.reset();
-        sendImageResult(false, "", "Network error - please check your connection");
-    };
-    req.httpSession->setConnectFailHandler(std::move(connectFailCallback));
+        const std::shared_ptr<const http::Response> r = session->response();
+        onResponse(static_cast<int>(r->statusLine().statusCode()), r->getBody());
+    });
+    req.httpSession->setConnectFailHandler(
+        [onResponse](const std::shared_ptr<http::Session>& /*session*/)
+    {
+        onResponse(ai::HttpConnectFailed, std::string());
+    });
 
     http::Request httpRequest(Poco::URI(req.requestUrl).getPathAndQuery());
     httpRequest.setVerb(http::Request::VERB_POST);
@@ -1572,12 +1639,9 @@ bool AIChatSession::handleImageGeneration(const std::string& prompt,
     httpRequest.set("Authorization", "Bearer " + req.apiKey);
     httpRequest.setBody(req.payloadStr, "application/json");
 
-    LOG_DBG("AIImageGeneration: sending request [" << requestId << "] to "
-            << req.requestUrl);
-
     _activeChatSession = req.httpSession;
-    std::shared_ptr<DocumentBroker> docBroker = _session.getDocumentBroker();
     req.httpSession->asyncRequest(httpRequest, docBroker->getPoll());
+#endif
     return true;
 }
 
@@ -1796,16 +1860,17 @@ void AIChatSession::generateNextTransformImage(const std::shared_ptr<DocumentBro
             self->generateNextTransformImage(docBroker);
         };
 
-        http::Session::FinishedCallback finishedCallback =
-            [clientSessionPtr, self, docBroker, idx, onImageFail](
-                const std::shared_ptr<http::Session>& session)
+        // Shared completion handler, invoked on the document broker's polling thread.
+        auto onResponse =
+            [clientSessionPtr, self, docBroker, idx, onImageFail](int statusCode,
+                                                                  const std::string& body)
         {
             self->_activeChatSession.reset();
 
             if (!self->_toolLoop)
                 return;
 
-            auto [b64Json, error] = parseImageGenResponse(session->response());
+            auto [b64Json, error] = parseImageGenResponse(statusCode, body);
             if (!error.empty())
             {
                 LOG_WRN_S("TransformImageGen: " << error);
@@ -1868,21 +1933,24 @@ void AIChatSession::generateNextTransformImage(const std::shared_ptr<DocumentBro
             self->generateNextTransformImage(docBroker);
         };
 
-        req.httpSession->setFinishedHandler(std::move(finishedCallback));
+        LOG_DBG("TransformImageGen: generating image " << (idx + 1) << " of " << total
+                                                       << ", prompt: " << gen.prompt);
 
-        http::Session::ConnectFailCallback connectFailCallback =
-            [clientSessionPtr = std::move(clientSessionPtr), self,
-             onImageFail = std::move(onImageFail)](const std::shared_ptr<http::Session>& /*session*/)
+#if MOBILEAPP
+        postViaTransport(docBroker, req.requestUrl, "Bearer " + req.apiKey,
+                         req.payloadStr, onResponse);
+#else
+        req.httpSession->setFinishedHandler(
+            [onResponse](const std::shared_ptr<http::Session>& session)
         {
-            self->_activeChatSession.reset();
-
-            if (!self->_toolLoop)
-                return;
-
-            LOG_WRN_S("TransformImageGen: connection failed");
-            onImageFail();
-        };
-        req.httpSession->setConnectFailHandler(std::move(connectFailCallback));
+            const std::shared_ptr<const http::Response> r = session->response();
+            onResponse(static_cast<int>(r->statusLine().statusCode()), r->getBody());
+        });
+        req.httpSession->setConnectFailHandler(
+            [onResponse](const std::shared_ptr<http::Session>& /*session*/)
+        {
+            onResponse(ai::HttpConnectFailed, std::string());
+        });
 
         http::Request httpRequest(Poco::URI(req.requestUrl).getPathAndQuery());
         httpRequest.setVerb(http::Request::VERB_POST);
@@ -1890,11 +1958,9 @@ void AIChatSession::generateNextTransformImage(const std::shared_ptr<DocumentBro
         httpRequest.set("Authorization", "Bearer " + req.apiKey);
         httpRequest.setBody(req.payloadStr, "application/json");
 
-        LOG_DBG("TransformImageGen: generating image " << (idx + 1) << " of " << total
-                                                       << ", prompt: " << gen.prompt);
-
         _activeChatSession = req.httpSession;
         req.httpSession->asyncRequest(httpRequest, docBroker->getPoll());
+#endif
         return; // async request launched, callbacks will call back into this function
     }
 
@@ -2021,7 +2087,5 @@ bool AIChatSession::tryConsumeTransformedDocumentStructure(const std::shared_ptr
 
     return false;
 }
-
-#endif // !MOBILEAPP
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

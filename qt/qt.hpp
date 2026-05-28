@@ -11,9 +11,21 @@
 #include <QWebEngineProfile>
 #include "common/RecentFiles.hpp"
 
+#include <Poco/File.h>
+#include <Poco/Path.h>
+
+// lo_kit is an opaque COKit handle; a forward declaration is all this header needs
+// (matches kit/Kit.hpp).
+struct COKitStruct;
+using COKit = COKitStruct;
+
 extern int coolwsd_server_socket_fd;
 extern const char* user_name;
 extern COKit* lo_kit;
+
+/// Registers the QNetworkAccessManager-based HTTP transport used by the AI proxy
+/// (AIChatSession) on the desktop. Call once at startup on the GUI thread.
+void registerAIHttpTransport();
 
 class Application
 {
