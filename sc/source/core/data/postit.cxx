@@ -23,6 +23,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <unotools/useroptions.hxx>
+#include <unotools/datetime.hxx>
 #include <svx/svdocapt.hxx>
 #include <svx/svdpage.hxx>
 #include <editeng/outlobj.hxx>
@@ -49,8 +50,6 @@
 
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/XTextAppend.hpp>
-#include <com/sun/star/awt/FontWeight.hpp>
-#include <comphelper/propertyvalue.hxx>
 
 using namespace com::sun::star;
 
@@ -63,6 +62,32 @@ const tools::Long SC_NOTECAPTION_CELLDIST          =   600;    /// Default dista
 const tools::Long SC_NOTECAPTION_OFFSET_Y          = -1500;    /// Default Y offset of note captions to top border of anchor cell.
 const tools::Long SC_NOTECAPTION_OFFSET_X          =  1500;    /// Default X offset of note captions to left border of anchor cell.
 const tools::Long SC_NOTECAPTION_BORDERDIST_TEMP   =   100;    /// Distance of temporary note captions to visible sheet area.
+
+/// Footer band height in 1/100 mm: author + date.
+const sal_Int32 SC_NOTE_FOOTER_HEIGHT_FULL          =   580;
+/// Footer band height in 1/100 mm: author only (XLSX has no date).
+const sal_Int32 SC_NOTE_FOOTER_HEIGHT_AUTHOR_ONLY   =   320;
+
+/// Footer-band height for the given author/date; 0 disables the band.
+sal_Int32 lcl_ComputeFooterHeight(std::u16string_view rAuthor, std::u16string_view rDate)
+{
+    if (rAuthor.empty() && rDate.empty())
+        return 0;
+    if (rDate.empty())
+        return SC_NOTE_FOOTER_HEIGHT_AUTHOR_ONLY;
+    return SC_NOTE_FOOTER_HEIGHT_FULL;
+}
+
+/// Format a note's stored date for display (parse ISO 8601, else pass-through).
+OUString lcl_FormatNoteDate(std::u16string_view rDate)
+{
+    if (rDate.find('T') == std::u16string_view::npos)
+        return OUString(rDate);
+    css::util::DateTime aUnoDT;
+    if (!utl::ISO8601parseDateTime(rDate, aUnoDT))
+        return OUString(rDate);
+    return utl::GetDateTimeString(aUnoDT);
+}
 
 /** Static helper functions for caption objects. */
 class ScCaptionUtil
@@ -106,7 +131,8 @@ void ScCaptionUtil::SetExtraItems( SdrCaptionObj& rCaption, const SfxItemSet& rE
     SfxItemSet aItemSet = rCaption.GetMergedItemSet();
 
     aItemSet.Put(rExtraItemSet);
-    // reset shadow visibility (see also ScNoteUtil::CreateNoteFromCaption)
+    // Clear so the shadow inherits from the style — setting explicitly to
+    // true would corrupt the shadow when opened in older versions.
     aItemSet.ClearItem(SDRATTR_SHADOW);
     // ... but not distance, as that will fallback to wrong values
     // if the comment is shown and then opened in older versions:
@@ -488,11 +514,39 @@ std::unique_ptr<ScPostIt> ScPostIt::Clone( const ScAddress& rOwnPos, ScDocument&
 void ScPostIt::SetDate( const OUString& rDate )
 {
     maNoteData.maDate = rDate;
+    RefreshCaptionData();
 }
 
 void ScPostIt::SetAuthor( const OUString& rAuthor )
 {
     maNoteData.maAuthor = rAuthor;
+    RefreshCaptionData();
+}
+
+void ScPostIt::RefreshCaptionData() const
+{
+    if (!maNoteData.mxCaption)
+        return;
+
+    // SC cell-note captions are built with SDRATTR_TEXT_LOWERDIST = 100
+    // (see ScDrawLayer caption template); hand that value to ClearExtraFooter
+    // as the pre-footer LowerDist to restore.
+    constexpr sal_Int32 nLowerDist = 100;
+
+    // Gate on the "Comment authorship" officecfg toggle.
+    if (!officecfg::Office::Calc::Content::Display::NoteAuthor::get())
+    {
+        maNoteData.mxCaption->ClearExtraFooter(nLowerDist);
+        return;
+    }
+
+    const OUString sAuthor = maNoteData.maAuthor;
+    const OUString sDate   = lcl_FormatNoteDate(maNoteData.maDate);
+    const sal_Int32 nHeight = lcl_ComputeFooterHeight(sAuthor, sDate);
+    if (nHeight > 0)
+        maNoteData.mxCaption->SetExtraFooter(sAuthor, sDate, nHeight);
+    else
+        maNoteData.mxCaption->ClearExtraFooter(nLowerDist);
 }
 
 void ScPostIt::AutoStamp(bool bCreate)
@@ -502,10 +556,12 @@ void ScPostIt::AutoStamp(bool bCreate)
         maNoteData.maDate = ScGlobal::getLocaleData().getDate(Date(Date::SYSTEM)) + " "
                             + ScGlobal::getLocaleData().getTime(DateTime(DateTime::SYSTEM), false);
     }
-    if (!maNoteData.maAuthor.isEmpty())
-        return;
-    const OUString aAuthor = SvtUserOptions().GetFullName();
-    maNoteData.maAuthor = !aAuthor.isEmpty() ? aAuthor : ScResId(STR_CHG_UNKNOWN_AUTHOR);
+    if (maNoteData.maAuthor.isEmpty())
+    {
+        const OUString aAuthor = SvtUserOptions().GetFullName();
+        maNoteData.maAuthor = !aAuthor.isEmpty() ? aAuthor : ScResId(STR_CHG_UNKNOWN_AUTHOR);
+    }
+    RefreshCaptionData();
 }
 
 const OutlinerParaObject* ScPostIt::GetOutlinerObject() const
@@ -706,6 +762,10 @@ void ScPostIt::CreateCaptionFromInitData( const ScAddress& rPos ) const
     // End prevent triple change broadcasts of the same object.
     maNoteData.mxCaption->getSdrModelFromSdrObject().setLock(bWasLocked);
     maNoteData.mxCaption->BroadcastObjectChange();
+
+    // Caption was materialized after SetDate/SetAuthor fired with no caption
+    // (e.g. Show Comment toggle on a hidden note); refresh the decoration.
+    RefreshCaptionData();
 }
 
 void ScPostIt::CreateCaption( const ScAddress& rPos, const SdrCaptionObj* pCaption )
@@ -809,37 +869,30 @@ void ScPostIt::RemoveCaption()
     }
 }
 
-static void lcl_FormatAndInsertAuthorAndDatepara(SdrCaptionObj* pCaption, OUStringBuffer& aUserData, bool bUserWithTrackText)
+/// Prepend the track-changes preamble (edit description + "--------") at the
+/// top of a temp/hover caption's body. The plain author/date case is handled
+/// by SdrCaptionObj's ExtraFooter band, not here.
+static void lcl_PrependTrackChangesPreamble(SdrCaptionObj* pCaption, OUStringBuffer& aUserData)
 {
     uno::Reference<drawing::XShape> xShape = pCaption->getUnoShape();
     uno::Reference<text::XText> xText(xShape, uno::UNO_QUERY);
     uno::Reference<text::XTextAppend> xBodyTextAppend(xText, uno::UNO_QUERY);
+    if (!xBodyTextAppend.is())
+        return;
 
-    if (xBodyTextAppend.is())
-    {
-        uno::Sequence< beans::PropertyValue > aArgs;
-        if (bUserWithTrackText)
-        {
-            xBodyTextAppend->insertTextPortion(aUserData.makeStringAndClear(), aArgs, xText->getStart());
-        }
-        else
-        {
-            xBodyTextAppend->insertTextPortion(u"\n--------\n"_ustr, aArgs, xText->getStart());
-            aArgs = {
-                comphelper::makePropertyValue(u"CharWeight"_ustr, uno::Any(awt::FontWeight::BOLD)),
-            };
-            xBodyTextAppend->insertTextPortion(aUserData.makeStringAndClear(), aArgs, xText->getStart());
-        }
-    }
+    xBodyTextAppend->insertTextPortion(
+        aUserData.makeStringAndClear(),
+        uno::Sequence<beans::PropertyValue>(),
+        xText->getStart());
 }
 
 rtl::Reference<SdrCaptionObj> ScNoteUtil::CreateTempCaption(
         ScDocument& rDoc, const ScAddress& rPos, SdrPage& rDrawPage,
         std::u16string_view rUserText, const tools::Rectangle& rVisRect, bool bTailFront )
 {
+    // Track-changes hover may pass rUserText to prepend.
     bool bUserWithTrackText = false;
     OUStringBuffer aBuffer( rUserText );
-    // add plain text of invisible (!) cell note (no formatting etc.)
     SdrCaptionObj* pNoteCaption = nullptr;
     const ScPostIt* pNote = rDoc.GetNote( rPos );
     if( pNote && !pNote->IsCaptionShown() )
@@ -848,11 +901,6 @@ rtl::Reference<SdrCaptionObj> ScNoteUtil::CreateTempCaption(
         {
             bUserWithTrackText = true;
             aBuffer.append("\n--------\n");
-        }
-        else
-        {
-            aBuffer.append(pNote->GetAuthor()
-                           + (!pNote->GetDate().isEmpty() ? ", " + pNote->GetDate() : OUString()));
         }
         pNoteCaption = pNote->GetOrCreateCaption( rPos );
     }
@@ -871,14 +919,25 @@ rtl::Reference<SdrCaptionObj> ScNoteUtil::CreateTempCaption(
     rtl::Reference<SdrCaptionObj> pCaption = aCreator.GetCaption();  // just for ease of use
     rDrawPage.InsertObject( pCaption.get() );
 
-    // clone the edit text object, then seta and format the Author and date text
+    // Tag with the anchor cell, then push footer state if the toggle is on
+    // (the SetExtraFooter call also pins MinFrameHeight so
+    // AdjustTextFrameWidthAndHeight doesn't reshape the rect).
+    ScCaptionUtil::SetCaptionUserData( *pCaption, rPos );
+    if (pNote && officecfg::Office::Calc::Content::Display::NoteAuthor::get())
+    {
+        const OUString sAuthor = pNote->GetAuthor();
+        const OUString sDate   = lcl_FormatNoteDate(pNote->GetDate());
+        const sal_Int32 nHeight = lcl_ComputeFooterHeight(sAuthor, sDate);
+        if (nHeight > 0)
+            pCaption->SetExtraFooter(sAuthor, sDate, nHeight);
+    }
+
     if (pNoteCaption)
     {
         if( OutlinerParaObject* pOPO = pNoteCaption->GetOutlinerParaObject() )
             pCaption->SetOutlinerParaObject( *pOPO );
-        // Setting and formatting rUserText: Author name and date time
-        if (officecfg::Office::Calc::Content::Display::NoteAuthor::get())
-           lcl_FormatAndInsertAuthorAndDatepara(pCaption.get(), aBuffer, bUserWithTrackText);
+        if (bUserWithTrackText)
+            lcl_PrependTrackChangesPreamble(pCaption.get(), aBuffer);
         // set formatting (must be done after setting text) and resize the box to fit the text
         if (auto pStyleSheet = pNoteCaption->GetStyleSheet())
             pCaption->SetStyleSheet(pStyleSheet, true);
@@ -904,33 +963,6 @@ rtl::Reference<SdrCaptionObj> ScNoteUtil::CreateTempCaption(
 
     // XXX Note it is already inserted to the draw page.
     return aCreator.GetCaption();
-}
-
-ScPostIt* ScNoteUtil::CreateNoteFromCaption(
-        ScDocument& rDoc, const ScAddress& rPos, SdrCaptionObj* pCaption, bool bHasStyle )
-{
-    ScNoteData aNoteData( true/*bShown*/ );
-    aNoteData.mxCaption = pCaption;
-    ScPostIt* pNote = new ScPostIt( rDoc, rPos, aNoteData, false );
-    pNote->AutoStamp();
-
-    rDoc.SetNote(rPos, std::unique_ptr<ScPostIt>(pNote));
-
-    // ScNoteCaptionCreator c'tor updates the caption object to be part of a note
-    ScNoteCaptionCreator aCreator( rDoc, rPos, aNoteData.mxCaption, true/*bShown*/ );
-
-    if (!bHasStyle)
-    {
-        if (auto pStyleSheet = rDoc.GetStyleSheetPool()->Find(ScResId(STR_STYLENAME_NOTE), SfxStyleFamily::Frame))
-            aNoteData.mxCaption->SetStyleSheet(static_cast<SfxStyleSheet*>(pStyleSheet), true);
-
-        /* We used to show a shadow despite of the shadow item being set to false.
-           Clear the existing item, so it inherits the true setting from the style.
-           Setting explicitly to true would corrupt the shadow when opened in older versions. */
-        aNoteData.mxCaption->ClearMergedItem(SDRATTR_SHADOW);
-    }
-
-    return pNote;
 }
 
 ScNoteData ScNoteUtil::CreateNoteData(ScDocument& rDoc, const ScAddress& rPos,
@@ -996,6 +1028,9 @@ ScPostIt* ScNoteUtil::InsertNote(ScDocument& rDoc, const ScAddress& rPos, ScNote
     pNote->AutoStamp(bShouldAutoStamp);
     //insert takes ownership
     rDoc.SetNote(rPos, std::unique_ptr<ScPostIt>(pNote));
+    // AutoStamp's refresh above ran before SetNote, so pDoc->GetNote returned
+    // null. Refresh again now — XLSX importers don't re-trigger afterwards.
+    pNote->RefreshCaptionData();
     return pNote;
 }
 

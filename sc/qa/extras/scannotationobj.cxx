@@ -24,6 +24,9 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 
+#include <comphelper/configuration.hxx>
+#include <officecfg/Office/Calc.hxx>
+
 using namespace css;
 
 namespace sc_apitest
@@ -120,6 +123,12 @@ uno::Reference<uno::XInterface> ScAnnontationObj::init()
 void ScAnnontationObj::setUp()
 {
     UnoApiTest::setUp();
+
+    // Disable the NoteAuthor footer (tdf#161973) so caption dimensions
+    // asserted by XSheetAnnotationShapeSupplier reflect the body alone.
+    auto pBatch(comphelper::ConfigurationChanges::create());
+    officecfg::Office::Calc::Content::Display::NoteAuthor::set(false, pBatch);
+    pBatch->commit();
 
     // get the test file
     loadFromFile(u"ScAnnotationObj.ods");

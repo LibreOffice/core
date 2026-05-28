@@ -116,7 +116,7 @@
         <prop oor:name="NoteAuthor" oor:type="xs:boolean" oor:nillable="false">
           <!-- UIHints: Tools - Options -Spreadsheets - Contents - [Section] Display -->
           <info>
-            <desc>Indicates whether authorship metadata for comments on hover are shown.</desc>
+            <desc>Indicates whether the author/date footer band is shown on cell-note captions and on hover popups.</desc>
             <label>Comment authorship</label>
           </info>
           <value>true</value>

@@ -261,6 +261,7 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/sdr/contact/viewobjectcontactofgraphic \
     $(call gb_Helper_optional,AVMEDIA,svx/source/sdr/contact/sdrmediawindow) \
     svx/source/sdr/contact/viewobjectcontactofsdrmediaobj \
+    svx/source/sdr/contact/extrafooterpainter \
     svx/source/sdr/contact/viewcontactofsdrcaptionobj \
     svx/source/sdr/contact/viewcontactofvirtobj \
     svx/source/sdr/contact/viewcontactofe3dsphere \

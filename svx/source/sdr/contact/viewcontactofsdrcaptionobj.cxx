@@ -24,9 +24,7 @@
 #include <sdr/primitive2d/sdrcaptionprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
-
 // includes for special text box shadow (SC)
-
 #include <svl/itemset.hxx>
 #include <svx/xhatch.hxx>
 #include <svx/xfillit0.hxx>
@@ -41,6 +39,9 @@
 #include <sdr/primitive2d/sdrdecompositiontools.hxx>
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
 #include <vcl/canvastools.hxx>
+
+// include for special note/comment footer (SC)
+#include <sdr/contact/extrafooterpainter.hxx>
 
 using namespace com::sun::star;
 
@@ -185,6 +186,9 @@ namespace sdr::contact
             }
 
             rVisitor.visit(std::move(xReference));
+            if (drawinglayer::primitive2d::Primitive2DReference xFooter
+                    = createExtraFooterPrimitive(rCaptionObj))
+                rVisitor.visit(std::move(xFooter));
         }
 
 } // end of namespace

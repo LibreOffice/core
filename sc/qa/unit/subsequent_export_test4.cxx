@@ -1839,7 +1839,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testCommentStyles)
         CPPUNIT_ASSERT(pCaption);
 
         // Check that we don't keep the shadow attribute as DF
-        // (see ScNoteUtil::CreateNoteFromCaption)
+        // (see ScCaptionUtil::SetExtraItems, which clears SDRATTR_SHADOW)
         CPPUNIT_ASSERT_LESSEQUAL(SfxItemState::DEFAULT,
                                  pCaption->GetMergedItemSet().GetItemState(SDRATTR_SHADOW, false));
 

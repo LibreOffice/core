@@ -207,6 +207,7 @@ public:
 
     // positions for detective lines
     SC_DLLPUBLIC static ScDrawObjData* GetObjData( SdrObject* pObj, bool bCreate=false );
+    SC_DLLPUBLIC static const ScDrawObjData* GetObjData( const SdrObject* pObj );
     SC_DLLPUBLIC static ScDrawObjData* GetNonRotatedObjData( SdrObject* pObj, bool bCreate=false );
 
     // The sheet information in ScDrawObjData isn't updated when sheets are inserted/deleted.

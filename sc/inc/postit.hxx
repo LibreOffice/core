@@ -115,6 +115,10 @@ public:
     /** Sets date and author from system settings. */
     void AutoStamp(bool bCreate = true);
 
+    /// Push the author/date footer band onto the linked caption (if any),
+    /// gated by the "Comment authorship" officecfg toggle.
+    void RefreshCaptionData() const;
+
     /** Returns the pointer to the current outliner object, or null. */
     const OutlinerParaObject* GetOutlinerObject() const;
     /** Returns the pointer to the current edit text object, or null. */
@@ -197,28 +201,6 @@ public:
     static rtl::Reference<SdrCaptionObj> CreateTempCaption( ScDocument& rDoc, const ScAddress& rPos,
                             SdrPage& rDrawPage, std::u16string_view rUserText,
                             const tools::Rectangle& rVisRect, bool bTailFront );
-
-    /** Creates a cell note using the passed caption drawing object.
-
-        This function is used in import filters to reuse the imported drawing
-        object as note caption object.
-
-        @param pCaption  The drawing object for the cell note. This object MUST
-            be inserted into the document at the correct drawing page already.
-            The underlying ScPostIt::ScNoteData::ScCaptionPtr takes managing
-            ownership of the pointer.
-
-        @param bHasStyle  Is there a drawing style set for the note.
-
-        @return  Pointer to the new cell note object if insertion was
-            successful (i.e. the passed cell position was valid), null
-            otherwise. The Calc document is the owner of the note object. The
-            passed item set and outliner object are deleted automatically if
-            creation of the note was not successful.
-     */
-    static ScPostIt*    CreateNoteFromCaption(
-                            ScDocument& rDoc, const ScAddress& rPos,
-                            SdrCaptionObj* pCaption, bool bHasStyle );
 
     /** Creates a cell note based on the passed caption object data.
 

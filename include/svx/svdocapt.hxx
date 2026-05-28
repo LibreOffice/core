@@ -61,6 +61,14 @@ private:
     bool            mbSuppressGetBitmap;    // tdf#118662
     Point           maFixedTailPos;         // for calc note box fixed tail position.
 
+    // for calc: non-editable footer band drawn below the outliner area.
+    // Lines + height are pushed in by the model side (Calc), painted by
+    // ViewContactOfSdrCaptionObj. svx stores opaque strings — it doesn't
+    // know they represent author/date.
+    OUString        maExtraFooterLine1;     // bold line (Calc fills with author)
+    OUString        maExtraFooterLine2;     // regular line (Calc fills with date; may be empty)
+    sal_Int32       mnExtraFooterHeight;     // 0 disables the band
+
     SVX_DLLPRIVATE void ImpGetCaptParams(ImpCaptParams& rPara) const;
     SVX_DLLPRIVATE static void ImpCalcTail1(const ImpCaptParams& rPara, tools::Polygon& rPoly, tools::Rectangle const & rRect);
     SVX_DLLPRIVATE static void ImpCalcTail2(const ImpCaptParams& rPara, tools::Polygon& rPoly, tools::Rectangle const & rRect);
@@ -149,6 +157,20 @@ public:
 
     // geometry access
     ::basegfx::B2DPolygon getTailPolygon() const;
+
+    /// Set the extra footer band content (nHeight must be > 0). Reserves
+    /// space via SDRATTR_TEXT_LOWERDIST and pins SDRATTR_TEXT_MINFRAMEHEIGHT
+    /// so AdjustTextFrameWidthAndHeight doesn't reshape the rect.
+    void SetExtraFooter(const OUString& rLine1, const OUString& rLine2, sal_Int32 nHeight);
+    /// Clear the extra footer data. If the footer was previously set via
+    /// SetExtraFooter, also restores LowerDist to the caller-supplied
+    /// pre-footer value and resizes MinFrameHeight from the current rect
+    /// (mirroring SdrTextObj::AdaptTextMinSize) so the inner text frame
+    /// tracks the outer rect.
+    void ClearExtraFooter(sal_Int32 nLowerDist);
+    const OUString& GetExtraFooterLine1() const  { return maExtraFooterLine1; }
+    const OUString& GetExtraFooterLine2() const  { return maExtraFooterLine2; }
+    sal_Int32       GetExtraFooterHeight() const { return mnExtraFooterHeight; }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

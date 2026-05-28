@@ -107,7 +107,7 @@ void FuText::StopEditMode()
         deletion by passing sal_True to this function. The return value changes
         from SdrEndTextEditKind::Deleted to SdrEndTextEditKind::ShouldBeDeleted in this
         case. */
-    /*SdrEndTextEditKind eResult =*/ pView->SdrEndTextEdit( pNote != nullptr );
+    SdrEndTextEditKind eResult = pView->SdrEndTextEdit( pNote != nullptr );
 
     vcl::Cursor* pCur = pWindow->GetCursor();
     if( pCur && pCur->IsVisible() )
@@ -121,8 +121,10 @@ void FuText::StopEditMode()
     // hide the caption object if it is in hidden state
     pNote->ShowCaptionTemp( aNotePos, false );
 
-    // update author and date
-    pNote->AutoStamp();
+    // Stamp the date only if the text actually changed; entering+exiting
+    // edit mode without changes shouldn't bump the timestamp. Author-fill
+    // still runs inside AutoStamp regardless of bCreate.
+    pNote->AutoStamp(/*bCreate*/ eResult == SdrEndTextEditKind::Changed);
 
     /*  If the entire text has been cleared, the cell note and its caption
         object have to be removed. */

@@ -36,6 +36,8 @@
 #include <sdr/properties/captionproperties.hxx>
 #include <svx/sdrhittesthelper.hxx>
 #include <svx/sdooitm.hxx>
+#include <svx/sdtditm.hxx>
+#include <svx/sdtmfitm.hxx>
 #include <svx/svddrag.hxx>
 #include <svx/svdhdl.hxx>
 #include <svx/svdmodel.hxx>
@@ -184,18 +186,24 @@ SdrCaptionObj::SdrCaptionObj(SdrModel& rSdrModel)
     aTailPoly(3),  // default size: 3 points = 2 lines
     mbSpecialTextBoxShadow(false),
     mbFixedTail(false),
-    mbSuppressGetBitmap(false)
+    mbSuppressGetBitmap(false),
+    mnExtraFooterHeight(0)
 {
 }
 
+
 SdrCaptionObj::SdrCaptionObj(SdrModel& rSdrModel, SdrCaptionObj const & rSource)
 :   SdrRectObj(rSdrModel, rSource),
-    mbSuppressGetBitmap(false)
+    mbSuppressGetBitmap(false),
+    mnExtraFooterHeight(0)
 {
     aTailPoly = rSource.aTailPoly;
     mbSpecialTextBoxShadow = rSource.mbSpecialTextBoxShadow;
     mbFixedTail = rSource.mbFixedTail;
     maFixedTailPos = rSource.maFixedTailPos;
+    maExtraFooterLine1 = rSource.maExtraFooterLine1;
+    maExtraFooterLine2 = rSource.maExtraFooterLine2;
+    mnExtraFooterHeight = rSource.mnExtraFooterHeight;
 }
 
 SdrCaptionObj::SdrCaptionObj(
@@ -206,7 +214,8 @@ SdrCaptionObj::SdrCaptionObj(
     aTailPoly(3),  // default size: 3 points = 2 lines
     mbSpecialTextBoxShadow(false),
     mbFixedTail(false),
-    mbSuppressGetBitmap(false)
+    mbSuppressGetBitmap(false),
+    mnExtraFooterHeight(0)
 {
     aTailPoly[0]=maFixedTailPos=rTail;
 }
@@ -754,6 +763,58 @@ void SdrCaptionObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, cons
 basegfx::B2DPolygon SdrCaptionObj::getTailPolygon() const
 {
     return aTailPoly.getB2DPolygon();
+}
+
+void SdrCaptionObj::SetExtraFooter(
+    const OUString& rLine1, const OUString& rLine2, sal_Int32 nHeight)
+{
+    if (nHeight <= 0)
+        return;  // use ClearExtraFooter() to clear
+    maExtraFooterLine1 = rLine1;
+    maExtraFooterLine2 = rLine2;
+    mnExtraFooterHeight = nHeight;
+
+    // Reserve the footer via SDRATTR_TEXT_LOWERDIST, and pin
+    // SDRATTR_TEXT_MINFRAMEHEIGHT to (savedRect.Height - upper - newLower).
+    // Otherwise AdjustTextFrameWidthAndHeight reshapes the rect to fit
+    // MinFrameHeight: ODS captions (MinH=1600 from file) grow 1800 -> 2200
+    // on first keystroke; XLSX captions (MinH=0) shrink 1780 -> 777 to fit
+    // text content. Pinning satisfies upper + body + lower = rect.Height
+    // so autogrow no-ops.
+    const tools::Rectangle aSavedRect = GetLogicRect();
+    const sal_Int32 nUpper   = GetTextUpperDistance();
+    const sal_Int32 nNewMinH = std::max<sal_Int32>(
+        0, aSavedRect.GetHeight() - nUpper - nHeight);
+
+    SetMergedItem(makeSdrTextLowerDistItem(nHeight));
+    SetMergedItem(makeSdrTextMinFrameHeightItem(nNewMinH));
+
+    // Undo only SHRINKS (the unwanted reflow). Growth is legitimate: when
+    // the footer grows and the user's text exceeds the new body, autogrow
+    // expands the rect to fit -- restoring would clip text.
+    if (GetLogicRect().GetHeight() < aSavedRect.GetHeight())
+        NbcSetLogicRect(aSavedRect);
+}
+
+void SdrCaptionObj::ClearExtraFooter(sal_Int32 nLowerDist)
+{
+    const bool bWasOn = mnExtraFooterHeight > 0;
+    maExtraFooterLine1.clear();
+    maExtraFooterLine2.clear();
+    mnExtraFooterHeight = 0;
+    if (bWasOn)
+    {
+        // Restore the caller-supplied LowerDist and resize MinFrameHeight
+        // to match the current outer rect (same pattern as
+        // SdrTextObj::AdaptTextMinSize), so the inner text frame fills the
+        // caption after the footer is cleared.
+        const tools::Rectangle aRectBefore = GetLogicRect();
+        SetMergedItem(makeSdrTextLowerDistItem(nLowerDist));
+        const sal_Int32 nUpper = GetTextUpperDistance();
+        const sal_Int32 nNewMinH = std::max<sal_Int32>(
+            0, aRectBefore.GetHeight() - nUpper - nLowerDist);
+        SetMergedItem(makeSdrTextMinFrameHeightItem(nNewMinH));
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

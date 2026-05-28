@@ -2870,6 +2870,13 @@ ScDrawObjData* ScDrawLayer::GetObjData( SdrObject* pObj, bool bCreate )
     return nullptr;
 }
 
+const ScDrawObjData* ScDrawLayer::GetObjData( const SdrObject* pObj )
+{
+    if (SdrObjUserData* pData = GetFirstUserDataOfType(pObj, SC_UD_OBJDATA))
+        return static_cast<const ScDrawObjData*>(pData);
+    return nullptr;
+}
+
 ScDrawObjData* ScDrawLayer::GetObjDataTab( SdrObject* pObj, SCTAB nTab )
 {
     ScDrawObjData* pData = GetObjData( pObj );

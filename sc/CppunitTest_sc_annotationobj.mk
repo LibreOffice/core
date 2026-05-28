@@ -11,4 +11,6 @@
 
 $(eval $(call sc_unoapi_common,annotationobj))
 
+$(eval $(call gb_CppunitTest_use_custom_headers,sc_annotationobj,officecfg/registry))
+
 # vim: set noet sw=4 ts=4:

@@ -54,7 +54,10 @@
 
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
+#include <comphelper/configuration.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <comphelper/scopeguard.hxx>
+#include <officecfg/Office/Calc.hxx>
 
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -1621,6 +1624,20 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testTdf150599)
 
 CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testCommentSize)
 {
+    // Disable the NoteAuthor footer (tdf#161973) so caption dimensions
+    // reflect the body alone.
+    const bool bOriginalNoteAuthor = officecfg::Office::Calc::Content::Display::NoteAuthor::get();
+    comphelper::ScopeGuard g([bOriginalNoteAuthor] {
+        auto pBatch(comphelper::ConfigurationChanges::create());
+        officecfg::Office::Calc::Content::Display::NoteAuthor::set(bOriginalNoteAuthor, pBatch);
+        pBatch->commit();
+    });
+    {
+        auto pBatch(comphelper::ConfigurationChanges::create());
+        officecfg::Office::Calc::Content::Display::NoteAuthor::set(false, pBatch);
+        pBatch->commit();
+    }
+
     createScDoc("ods/comment.ods");
     ScDocument* pDoc = getScDoc();
 

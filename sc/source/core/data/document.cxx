@@ -6735,6 +6735,9 @@ ScPostIt* ScDocument::CreateNote(const ScAddress& rPos)
 {
     ScPostIt* pPostIt = new ScPostIt(*this, rPos);
     SetNote(rPos, std::unique_ptr<ScPostIt>(pPostIt));
+    // AutoStamp in the ctor ran before the caption existed and before the
+    // note was registered; sync now so pDoc->GetNote succeeds.
+    pPostIt->RefreshCaptionData();
     return pPostIt;
 }
 

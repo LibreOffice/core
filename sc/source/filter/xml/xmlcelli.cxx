@@ -853,20 +853,6 @@ void ScXMLTableRowCellContext::SetAnnotation(const ScAddress& rPos)
         SdrObject* pObject = SdrObject::getSdrObjectFromXShape(mxAnnotationData->mxShape);
         OSL_ENSURE( pObject, "ScXMLTableRowCellContext::SetAnnotation - cannot get SdrObject from shape" );
 
-        /*  Try to reuse the drawing object already created (but only if the
-            note is visible, and the object is a caption object). */
-        if( mxAnnotationData->mbShown && mxAnnotationData->mbUseShapePos && !comphelper::LibreOfficeKit::isActive())
-        {
-            if( SdrCaptionObj* pCaption = dynamic_cast< SdrCaptionObj* >( pObject ) )
-            {
-                OSL_ENSURE( !pCaption->GetLogicRect().IsEmpty(), "ScXMLTableRowCellContext::SetAnnotation - invalid caption rectangle" );
-                // create the cell note with the caption object
-                pNote = ScNoteUtil::CreateNoteFromCaption( *pDoc, rPos, pCaption, !aStyleName.isEmpty() );
-                // forget pointer to object (do not create note again below)
-                pObject = nullptr;
-            }
-        }
-
         // drawing object has not been used to create a note -> use shape data
         if( pObject )
         {
