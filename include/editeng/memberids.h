@@ -218,8 +218,7 @@
 #define MID_COLOR_TINT_OR_SHADE 5
 #define MID_COLOR_LUM_MOD       6
 #define MID_COLOR_LUM_OFF       7
-#define MID_COMPLEX_COLOR_JSON  8
-#define MID_COMPLEX_COLOR       9
+#define MID_COMPLEX_COLOR       8
 
 // SvxRubyItem and SwFormatRuby
 #define MID_RUBY_TEXT           0

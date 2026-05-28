@@ -14,7 +14,6 @@
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
 #include <docmodel/theme/ColorSet.hxx>
-#include <docmodel/color/ComplexColorJSON.hxx>
 #include <tools/json_writer.hxx>
 
 #include <array>
@@ -92,38 +91,6 @@ svx::ThemePaletteCollection ThemeColorPaletteManager::generate()
     }
     return aThemePaletteCollection;
 }
-
-void ThemeColorPaletteManager::generateJSON(tools::JsonWriter& aTree)
-{
-    svx::ThemePaletteCollection aThemePaletteCollection = generate();
-
-    auto aColorListTree = aTree.startArray("ThemeColors");
-
-    for (size_t nEffect = 0; nEffect < 6; ++nEffect)
-    {
-        auto aColorRowTree = aTree.startAnonArray();
-        for (size_t nIndex = 0; nIndex < 12; ++nIndex)
-        {
-            auto aColorTree = aTree.startStruct();
-
-            auto const& rColorData = aThemePaletteCollection.maColors[nIndex];
-            auto const& rEffectData = rColorData.maEffects[nEffect];
-
-            aTree.put("Value", rEffectData.maColor.AsRGBHexString().toUtf8());
-            aTree.put("Name", rEffectData.maColorName.toUtf8());
-
-            model::ComplexColor aComplexColor;
-            aComplexColor.setThemeColor(rColorData.meThemeColorType);
-            aComplexColor.addTransformation(
-                { model::TransformationType::LumMod, rEffectData.mnLumMod });
-            aComplexColor.addTransformation(
-                { model::TransformationType::LumOff, rEffectData.mnLumOff });
-            auto aDataTree = aTree.startNode("Data");
-            model::color::convertToJSONTree(aTree, aComplexColor);
-        }
-    }
-}
-
 } // end svx namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

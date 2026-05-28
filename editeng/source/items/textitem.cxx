@@ -84,7 +84,6 @@
 #include <editeng/eerdll.hxx>
 #include <editeng/fontvariationsitem.hxx>
 #include <editeng/opticalsizingitem.hxx>
-#include <docmodel/color/ComplexColorJSON.hxx>
 #include <docmodel/uno/UnoComplexColor.hxx>
 #include <docmodel/color/ComplexColor.hxx>
 #include <libxml/xmlwriter.h>
@@ -1640,11 +1639,6 @@ bool SvxColorItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             rVal <<= nValue;
             break;
         }
-        case MID_COMPLEX_COLOR_JSON:
-        {
-            rVal <<= OStringToOUString(model::color::convertToJSON(maComplexColor), RTL_TEXTENCODING_UTF8);
-            break;
-        }
         case MID_COMPLEX_COLOR:
         {
             auto xComplexColor = model::color::createXComplexColor(maComplexColor);
@@ -1725,20 +1719,6 @@ bool SvxColorItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 return false;
             maComplexColor.removeTransformations(model::TransformationType::LumOff);
             maComplexColor.addTransformation({model::TransformationType::LumOff, nLumOff});
-        }
-        break;
-        case MID_COMPLEX_COLOR_JSON:
-        {
-            OUString sComplexColorJson;
-            if (!(rVal >>= sComplexColorJson))
-                return false;
-
-            if (sComplexColorJson.isEmpty())
-                return false;
-
-            OString aJSON = OUStringToOString(sComplexColorJson, RTL_TEXTENCODING_ASCII_US);
-            if (!model::color::convertFromJSON(aJSON, maComplexColor))
-                return false;
         }
         break;
         case MID_COMPLEX_COLOR:

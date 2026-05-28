@@ -171,16 +171,13 @@ void updateSdrObject(model::ColorSet const& rColorSet, SdrObject* pObject, SdrVi
         updateEditEngTextSections(rColorSet, pObject, *pView);
 }
 
-void notifyLOK(std::shared_ptr<model::ColorSet> const& pColorSet,
+void notifyLOK(std::shared_ptr<model::ColorSet> const& /*pColorSet*/,
                const std::set<Color>& rDocumentColors)
 {
     if (comphelper::LibreOfficeKit::isActive())
     {
-        svx::ThemeColorPaletteManager aManager(pColorSet);
         tools::JsonWriter aTree;
 
-        if (pColorSet)
-            aManager.generateJSON(aTree);
         if (rDocumentColors.size())
             PaletteManager::generateJSON(aTree, rDocumentColors);
 

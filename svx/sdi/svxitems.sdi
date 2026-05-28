@@ -181,7 +181,7 @@ item BOOL                   SvxAutoKernItem;
 struct SvxColor
 {
     INT32  Color            MID_COLOR_RGB;
-    String ComplexColorJSON MID_COMPLEX_COLOR_JSON;
+    String ComplexColor     MID_COMPLEX_COLOR;
 };
 item SvxColor SvxColorItem;
 
@@ -225,7 +225,7 @@ item String                 avmedia_MediaItem;
 struct XColor
 {
     INT32  Color            MID_COLOR_RGB;
-    String ComplexColorJSON MID_COMPLEX_COLOR_JSON;
+    String ComplexColor     MID_COMPLEX_COLOR;
 };
 item XColor XColorItem;
 

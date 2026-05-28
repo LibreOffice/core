@@ -27,7 +27,7 @@ item XFillBitmap XFillBitmapItem;
 struct XFillColor
 {
     INT32 Color MID_COLOR_RGB;
-    String ComplexColorJSON MID_COMPLEX_COLOR_JSON;
+    String ComplexColor MID_COMPLEX_COLOR;
 };
 
 item XFillColor XFillColorItem; // XColorItem
@@ -93,7 +93,7 @@ item SvxFillStyle XFillStyleItem;
 struct XLineColor
 {
     INT32  Color MID_COLOR_RGB;
-    String ComplexColorJSON MID_COMPLEX_COLOR_JSON;
+    String ComplexColor MID_COMPLEX_COLOR;
 };
 
 item XLineColor XLineColorItem;

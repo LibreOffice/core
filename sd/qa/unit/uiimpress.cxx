@@ -57,7 +57,6 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <docmodel/uno/UnoTheme.hxx>
 #include <docmodel/theme/Theme.hxx>
-#include <docmodel/color/ComplexColorJSON.hxx>
 
 #include <drawdoc.hxx>
 #include <DrawDocShell.hxx>
@@ -2028,14 +2027,13 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testCharColorTheme)
         aComplexColor.addTransformation({ model::TransformationType::LumMod, 2000 });
         aComplexColor.addTransformation({ model::TransformationType::LumOff, 8000 });
 
-        OUString aJSON
-            = OStringToOUString(model::color::convertToJSON(aComplexColor), RTL_TEXTENCODING_UTF8);
-
         // When setting the fill color of that shape, with theme metadata & effects:
         uno::Sequence<beans::PropertyValue> aColorArgs = {
             comphelper::makePropertyValue(u"Color.Color"_ustr,
                                           sal_Int32(0xdae3f3)), // 80% light blue
-            comphelper::makePropertyValue(u"Color.ComplexColorJSON"_ustr, uno::Any(aJSON)),
+            comphelper::makePropertyValue(
+                u"Color.ComplexColor"_ustr,
+                uno::Any(model::color::createXComplexColor(aComplexColor))),
         };
         dispatchCommand(mxComponent, u".uno:Color"_ustr, aColorArgs);
     }
@@ -2085,14 +2083,12 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testFillColorTheme)
         aComplexColor.addTransformation({ model::TransformationType::LumMod, 4000 });
         aComplexColor.addTransformation({ model::TransformationType::LumOff, 6000 });
 
-        OUString aJSON
-            = OStringToOUString(model::color::convertToJSON(aComplexColor), RTL_TEXTENCODING_UTF8);
-
         // When setting the fill color of that shape, with theme metadata & effects:
         uno::Sequence<beans::PropertyValue> aColorArgs = {
             comphelper::makePropertyValue(u"FillColor.Color"_ustr, sal_Int32(0xed7d31)), // orange
-            comphelper::makePropertyValue(u"FillColor.ComplexColorJSON"_ustr,
-                                          uno::Any(aJSON)), // accent 1
+            comphelper::makePropertyValue(
+                u"FillColor.ComplexColor"_ustr,
+                uno::Any(model::color::createXComplexColor(aComplexColor))), // accent 1
         };
         dispatchCommand(mxComponent, u".uno:FillColor"_ustr, aColorArgs);
     }

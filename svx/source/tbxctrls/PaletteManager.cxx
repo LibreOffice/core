@@ -41,7 +41,7 @@
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <docmodel/color/ComplexColor.hxx>
-#include <docmodel/color/ComplexColorJSON.hxx>
+#include <docmodel/uno/UnoComplexColor.hxx>
 
 #include <palettes.hxx>
 
@@ -445,9 +445,9 @@ void PaletteManager::DispatchColorCommand(const OUString& aCommand, const NamedC
             aComplexColor.addTransformation({model::TransformationType::LumOff, rColor.m_nLumOff});
 
         uno::Any aAny;
-        aAny <<= OStringToOUString(model::color::convertToJSON(aComplexColor), RTL_TEXTENCODING_UTF8);
+        aAny <<= model::color::createXComplexColor(aComplexColor);
 
-        aArgs.push_back(comphelper::makePropertyValue(aObj.GetURLPath() + ".ComplexColorJSON", aAny));
+        aArgs.push_back(comphelper::makePropertyValue(aObj.GetURLPath() + ".ComplexColor", aAny));
     }
 
     URL aTargetURL;

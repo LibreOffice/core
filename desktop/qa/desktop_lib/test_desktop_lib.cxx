@@ -219,7 +219,6 @@ public:
     void testRenderSearchResult_CommonNode();
     void testNoDuplicateTableSelection();
     void testMultiViewTableSelection();
-    void testColorPaletteCallback();
     void testABI();
 
     CPPUNIT_TEST_SUITE(DesktopLOKTest);
@@ -301,7 +300,6 @@ public:
     CPPUNIT_TEST(testRenderSearchResult_CommonNode);
     CPPUNIT_TEST(testNoDuplicateTableSelection);
     CPPUNIT_TEST(testMultiViewTableSelection);
-    CPPUNIT_TEST(testColorPaletteCallback);
     CPPUNIT_TEST(testABI);
     CPPUNIT_TEST_SUITE_END();
 
@@ -4165,34 +4163,6 @@ void DesktopLOKTest::testMultiViewTableSelection()
     // View2 should not get any table selection.
     CPPUNIT_ASSERT_EQUAL(0, aView2.m_nTableSelectionCount);
     CPPUNIT_ASSERT(!aView1.m_bEmptyTableSelection);
-}
-
-void DesktopLOKTest::testColorPaletteCallback()
-{
-    LibLODocument_Impl* pDocument = loadDoc("ThemeDocument.docx");
-
-    // Create view 1.
-    pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
-    ViewCallback aView1(pDocument);
-    Scheduler::ProcessEventsToIdle();
-    {
-        CPPUNIT_ASSERT_EQUAL(1, aView1.m_nColorPaletteCallbackCount);
-        boost::property_tree::ptree aValues = aView1.m_aColorPaletteCallbackResult.get_child("ThemeColors");
-        CPPUNIT_ASSERT(!aValues.empty());
-        CPPUNIT_ASSERT_EQUAL(size_t(6), aValues.size());
-    }
-
-    // Create view 2.
-    pDocument->m_pDocumentClass->createView(pDocument);
-    pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
-    ViewCallback aView2(pDocument);
-    Scheduler::ProcessEventsToIdle();
-    {
-        CPPUNIT_ASSERT_EQUAL(1, aView2.m_nColorPaletteCallbackCount);
-        boost::property_tree::ptree aValues = aView1.m_aColorPaletteCallbackResult.get_child("ThemeColors");
-        CPPUNIT_ASSERT(!aValues.empty());
-        CPPUNIT_ASSERT_EQUAL(size_t(6), aValues.size());
-    }
 }
 
 namespace {

@@ -65,7 +65,6 @@ class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) ThemeColorPaletteManager final
 public:
     ThemeColorPaletteManager(std::shared_ptr<model::ColorSet> const& pColorSet);
     ThemePaletteCollection generate();
-    void generateJSON(tools::JsonWriter& aTree);
 };
 
 } // end svx namespace
