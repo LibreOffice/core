@@ -2452,11 +2452,21 @@ class SettingIframe {
 				return;
 			}
 
-			const modelIds = models.map((m) => m.id).filter(Boolean);
-			if (modelIds.length === 0) {
+			const allModelIds = models.map((m) => m.id).filter(Boolean);
+			if (allModelIds.length === 0) {
 				this.setAIImageStatus(_('No models found'), true);
 				return;
 			}
+
+			// /v1/models is undifferentiated; keep only ids that look like image
+			// models, but fall back to the full list if nothing matches (custom
+			// providers may use their own naming).
+			const imageModelIds = allModelIds.filter((id) =>
+				/dall-e|gpt-image|stable-diffusion|sdxl|sd3|flux|imagen|ideogram/i.test(
+					id,
+				),
+			);
+			const modelIds = imageModelIds.length > 0 ? imageModelIds : allModelIds;
 
 			const selectedModel = modelIds.includes(data.aiImageModel)
 				? data.aiImageModel
