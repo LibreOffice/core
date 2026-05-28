@@ -278,7 +278,10 @@ class InitializerBase {
 		window.useStatusbarSaveIndicator = false;
 		window.checkFileInfoOverride = {};
 		window.deeplEnabled = false;
-		window.zoteroEnabled = false;
+		// Match COOL's zotero.enable default (true). On the desktop the plugin
+		// is still gated on a user-provided API key (and !isSmallScreenDevice)
+		// so this only surfaces the feature where it makes sense.
+		window.zoteroEnabled = true;
 		window.savedUIState = true;
 		window.extraExportFormats = [];
 		window.wasmEnabled = false;
