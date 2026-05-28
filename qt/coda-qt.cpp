@@ -15,6 +15,7 @@
 #include <qt/DBusService.hpp>
 #include <net/FakeSocket.hpp>
 #include <common/Log.hpp>
+#include <common/SettingsStorage.hpp>
 #include <common/Util.hpp>
 #include <qt/WebView.hpp>
 #include <qt/qt.hpp>
@@ -257,6 +258,20 @@ int main(int argc, char** argv)
     {
         // Successfully forwarded to existing instance, exit
         return 0;
+    }
+
+    // The engine's xmlsecurity initializes NSS at startup and fails ("Error
+    // initializing security context") when no Mozilla profile is available. We
+    // don't have one on the desktop, so point NSS at a dedicated directory
+    // under the app's config and let it create an empty database there. The
+    // 'sql:' prefix forces the modern SQLite-based store (the legacy DBM format
+    // NSS would otherwise default to is read-only/deprecated on most distros).
+    {
+        Poco::Path nssdb = Desktop::getConfigPath();
+        nssdb.append("nssdb");
+        Poco::File(nssdb).createDirectories();
+        const std::string nssEnv = "sql:" + nssdb.toString();
+        setenv("MOZILLA_CERTIFICATE_FOLDER", nssEnv.c_str(), 1);
     }
 
     // COOLWSD in a background thread
