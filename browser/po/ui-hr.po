@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-26 00:18+0200\n"
-"PO-Revision-Date: 2026-05-28 02:08+0000\n"
+"PO-Revision-Date: 2026-05-29 05:43+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: Croatian <https://hosted.weblate.org/projects/collabora-"
 "online/collabora-ui/hr/>\n"
@@ -746,6 +746,8 @@ msgid ""
 "Upload custom document themes (.theme). These define color palettes "
 "available under Format > Theme."
 msgstr ""
+"Prenesi prilagođene teme za dokumente (.theme). One definiraju palete boja "
+"koje su dostupne u Format > Tema."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:721
 msgid "Upload Theme"
@@ -1559,7 +1561,7 @@ msgstr "Staza"
 #: src/control/Control.DocumentRepair.js:27
 #: src/control/Control.DocumentRepair.js:28
 msgid "Repair Document"
-msgstr "Popravak dokumenta"
+msgstr "Popravljanje dokumenta"
 
 #: src/control/Control.DocumentRepair.js:124
 #: src/control/Control.UserList.ts:393
@@ -3060,6 +3062,8 @@ msgid ""
 "Clone Formatting is active (press Enter on a cell to apply, click again or "
 "press Esc to exit)"
 msgstr ""
+"Kloniranje formatiranja je aktivno (pritisni tipku Enter na polje kako bi se "
+"primijenilo, klikni ponovo ili pritisni tipku Esc za neprimjenjivanje"
 
 #: src/control/Control.NotebookbarCalc.js:492
 #: src/control/Control.NotebookbarDraw.js:685
@@ -3686,7 +3690,7 @@ msgstr "Pozadina polja"
 
 #: src/control/Control.NotebookbarWriter.js:2853
 msgid "Protect"
-msgstr ""
+msgstr "Zaštiti"
 
 #: src/control/Control.PartsPreview.js:209
 msgid "preview of page %1"
@@ -3707,7 +3711,7 @@ msgstr "Dodaj odjeljak"
 
 #: src/control/Control.PartsPreview.js:599
 msgid "Toggle section %1"
-msgstr ""
+msgstr "Ujkluči/Isključi odjeljak %1"
 
 #: src/control/Control.PartsPreview.js:767
 #: src/control/Control.PartsPreview.js:846
@@ -3929,7 +3933,7 @@ msgstr "Broj odabira"
 
 #: src/control/Control.StatusBar.js:274
 msgid "Zoom to Fit Slide"
-msgstr ""
+msgstr "Zumiraj na veličinu slajda"
 
 #: src/control/Control.StatusBar.js:275
 msgid "Zoom to Fit Page Width"
@@ -3981,7 +3985,7 @@ msgstr "Umetni list iza ovoga"
 
 #: src/control/Control.Tabs.js:100 src/control/Control.Tabs.js:107
 msgid "Reset Tab Color"
-msgstr ""
+msgstr "Resetiraj boju kartice"
 
 #: src/control/Control.Tabs.js:127 src/control/Control.Tabs.js:131
 msgid "Move Sheet Left"
@@ -5919,12 +5923,10 @@ msgid "Get Involved"
 msgstr "Uključi se u rad"
 
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.h2:49-7
-#, fuzzy
 msgid "https://www.collaboraoffice.org/"
-msgstr "https://www.collaboraonline.org/"
+msgstr "https://www.collaboraoffice.org/"
 
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.p:50-7
-#, fuzzy
 msgid ""
 "Are you interested in contributing but don’t know where to start? Head over "
 "to the <a target=\"_blank\" rel=\"noopener\" href=\"https://www."
@@ -5935,14 +5937,14 @@ msgid ""
 "href=\"https://www.collaboraoffice.org/post/filebugs/\">filing a bug "
 "report</a> with all the essential steps on how to reproduce it."
 msgstr ""
-"Želiš doprinijeti, ali ne znaš gdje početi? Prijeđi na stranicu s <a target="
-"\"_blank\" rel=\"noopener\" href=\"https://www.collaboraonline.org/post/"
-"build-code/\">uputama</a> i programiraj razvojno Collabora Online izdanje "
-"(CODE) od nule. Pomoći možeš i putem <a target=\"_blank\" rel=\"noopener\" "
-"href=\"https://www.collaboraonline.org/post/translate/\">prevođenja</a> "
-"aplikacije ili <a target=\"_blank\" rel=\"noopener\" href=\"https://www."
-"collaboraonline.org/post/filebugs/\">slanjem izvještaja o greškama</a> sa "
-"svim bitnim koracima za reproduciranje greške."
+"Želiš doprinijeti, ali ne znaš gdje početi? Prijeđi na stranicu s <a "
+"target=\"_blank\" rel=\"noopener\" href=\"https://www.collaboraoffice.org/"
+"post/build-code/\">uputama</a> i programiraj razvojno Collabora Online "
+"izdanje (CODE) od nule. Pomoći možeš i putem <a target=\"_blank\" "
+"rel=\"noopener\" href=\"https://www.collaboraoffice.org/post/translate/\">"
+"prevođenja</a> aplikacije ili <a target=\"_blank\" rel=\"noopener\" "
+"href=\"https://www.collaboraoffice.org/post/filebugs/\">slanjem izvještaja o "
+"greškama</a> sa svim bitnim koracima za reproduciranje greške."
 
 #: welcome/welcome.html%2Bhtml.body.div.div:55-5
 msgid ""
