@@ -1450,7 +1450,7 @@ SvxBorderLineStyle SvtLineListBox::GetSelectEntryStyle() const
     if (m_xLineSet->IsNoSelection())
         return SvxBorderLineStyle::NONE;
     auto nId = m_xLineSet->GetSelectedItemId();
-    return static_cast<SvxBorderLineStyle>(nId - 1);
+    return m_vLineList.at(nId - 1)->GetStyle();
 }
 
 namespace
@@ -1609,9 +1609,17 @@ OUString SvtLineListBox::GetLineStyleName(SvxBorderLineStyle eStyle)
 void SvtLineListBox::SelectEntry(SvxBorderLineStyle nStyle)
 {
     if (nStyle == SvxBorderLineStyle::NONE)
+    {
         m_xLineSet->SetNoSelection();
+    }
     else
-        m_xLineSet->SelectItem(static_cast<sal_Int16>(nStyle) + 1);
+    {
+        auto it = std::ranges::find_if(m_vLineList,
+                                       [nStyle](const std::unique_ptr<ImpLineListData>& rpData)
+                                       { return rpData->GetStyle() == nStyle; });
+        if (it != m_vLineList.end())
+            m_xLineSet->SelectItem(std::distance(m_vLineList.begin(), it) + 1);
+    }
     UpdatePreview();
 }
 
@@ -1635,7 +1643,7 @@ void SvtLineListBox::UpdateEntries()
     {
         ScopedVclPtr<VirtualDevice> pImage = GetLineImage(i);
         const std::unique_ptr<ImpLineListData>& pData = m_vLineList.at(i);
-        sal_Int16 nItemId = static_cast<sal_Int16>(pData->GetStyle()) + 1;
+        sal_Int16 nItemId = i + 1;
         const Image aLineImage(pImage->GetBitmap(Point(), pImage->GetOutputSizePixel()));
         m_xLineSet->InsertItem(nItemId, aLineImage, GetLineStyleName(pData->GetStyle()));
         if (pData->GetStyle() == eSelected)

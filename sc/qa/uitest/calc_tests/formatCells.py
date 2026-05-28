@@ -269,7 +269,7 @@ class formatCell(UITestCase):
                     self.assertEqual(widthVal, '0.75 pt')
 
                     # set line style to "double" (minimal width is taken)
-                    xLineSet.executeAction("CHOOSE", mkPropertyValues({"POS": '16'}))
+                    xLineSet.executeAction("CHOOSE", mkPropertyValues({"POS": '7'}))
                     widthVal = get_state_as_dict(linewidthmf)["Text"]
                     # minimum predefined width is Medium (1.50 pt)
                     self.assertEqual(widthVal, '1.50 pt')
@@ -287,7 +287,7 @@ class formatCell(UITestCase):
                     self.assertEqual(widthVal, '2.25 pt')
 
                     # set line style to "double" (minimal width is not taken)
-                    xLineSet.executeAction("CHOOSE", mkPropertyValues({"POS": "8"}))
+                    xLineSet.executeAction("CHOOSE", mkPropertyValues({"POS": "7"}))
                     widthVal = get_state_as_dict(linewidthmf)["Text"]
                     self.assertEqual(widthVal, '2.25 pt')
 
