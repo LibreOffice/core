@@ -31,8 +31,11 @@
 #include <appoptio.hxx>
 #include <scmod.hxx>
 #include <svl/eitem.hxx>
+#include <svtools/restartdialog.hxx>
 #include <svtools/unitconv.hxx>
 #include <unotools/localedatawrapper.hxx>
+#include <comphelper/processfactory.hxx>
+#include <vcl/svapp.hxx>
 
 ScTpContentOptions::ScTpContentOptions(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet&  rArgSet)
     : SfxTabPage(pPage, pController, u"modules/scalc/ui/tpviewpage.ui"_ustr, u"TpViewPage"_ustr, &rArgSet)
@@ -158,7 +161,6 @@ bool    ScTpContentOptions::FillItemSet( SfxItemSet* rCoreSet )
     if( m_xFormulaCB->get_state_changed_from_saved() ||
         m_xNilCB->get_state_changed_from_saved() ||
         m_xAnnotCB->get_state_changed_from_saved() ||
-        m_xNoteAuthorCB->get_state_changed_from_saved() ||
         m_xFormulaMarkCB->get_state_changed_from_saved() ||
         m_xValueCB->get_state_changed_from_saved() ||
         m_xAnchorCB->get_state_changed_from_saved() ||
@@ -203,6 +205,22 @@ bool    ScTpContentOptions::FillItemSet( SfxItemSet* rCoreSet )
         pChange->commit();
         bRet = true;
     }
+    if (m_xNoteAuthorCB->get_state_changed_from_saved())
+    {
+        auto pChange(comphelper::ConfigurationChanges::create());
+        officecfg::Office::Calc::Content::Display::NoteAuthor::set(m_xNoteAuthorCB->get_active(), pChange);
+        pChange->commit();
+        bRet = true;
+
+        // Existing on-screen captions have SDRATTR_TEXT_LOWERDIST baked into
+        // them at construction; the toggle only takes full effect after a
+        // rebuild. Prompt for restart rather than ship a half-applied state.
+        SolarMutexGuard aGuard;
+        if (svtools::executeRestartDialog(
+                comphelper::getProcessComponentContext(), GetFrameWeld(),
+                svtools::RESTART_REASON_UI_CHANGE))
+            GetDialogController()->response(RET_OK);
+    }
 
     return bRet;
 }
@@ -216,7 +234,7 @@ void    ScTpContentOptions::Reset( const SfxItemSet* rCoreSet )
     m_xFormulaCB ->set_active(m_xLocalOptions->GetOption(VOPT_FORMULAS));
     m_xNilCB     ->set_active(m_xLocalOptions->GetOption(VOPT_NULLVALS));
     m_xAnnotCB   ->set_active(m_xLocalOptions->GetOption(VOPT_NOTES));
-    m_xNoteAuthorCB->set_active(m_xLocalOptions->GetOption(VOPT_NOTEAUTHOR));
+    m_xNoteAuthorCB->set_active(officecfg::Office::Calc::Content::Display::NoteAuthor::get());
     m_xFormulaMarkCB->set_active(m_xLocalOptions->GetOption(VOPT_FORMULAS_MARKS));
     m_xValueCB   ->set_active(m_xLocalOptions->GetOption(VOPT_SYNTAX));
     m_xColRowHighCB->set_active(officecfg::Office::Calc::Content::Display::ColumnRowHighlighting::get());
@@ -402,13 +420,20 @@ IMPL_LINK( ScTpContentOptions, SelLbObjHdl, weld::ComboBox&, rLb, void )
 
 IMPL_LINK( ScTpContentOptions, CBHdl, weld::Toggleable&, rBtn, void )
 {
+    // Checkboxes stored directly in officecfg via FillItemSet (not through
+    // ScViewOptions) must short-circuit here — otherwise the fall-through
+    // default eOption below would mis-write FORMULAS in m_xLocalOptions.
+    if (m_xColRowHighCB.get() == &rBtn
+        || m_xEditCellBgHighCB.get() == &rBtn
+        || m_xNoteAuthorCB.get() == &rBtn)
+        return;
+
     ScViewOption eOption = VOPT_FORMULAS;
     bool         bChecked = rBtn.get_active();
 
     if (m_xFormulaCB.get() == &rBtn )   eOption = VOPT_FORMULAS;
     else if ( m_xNilCB.get() == &rBtn )   eOption = VOPT_NULLVALS;
     else if ( m_xAnnotCB.get() == &rBtn )   eOption = VOPT_NOTES;
-    else if ( m_xNoteAuthorCB.get() == &rBtn )   eOption = VOPT_NOTEAUTHOR;
     else if ( m_xFormulaMarkCB.get() == &rBtn )   eOption = VOPT_FORMULAS_MARKS;
     else if ( m_xValueCB.get() == &rBtn )   eOption = VOPT_SYNTAX;
     else if ( m_xAnchorCB.get() == &rBtn )   eOption = VOPT_ANCHOR;

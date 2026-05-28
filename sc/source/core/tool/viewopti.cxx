@@ -101,7 +101,6 @@ void ScViewOptions::SetDefaults()
     aOptArr[ VOPT_HELPLINES    ] = false;
     aOptArr[ VOPT_GRID_ONTOP   ] = false;
     aOptArr[ VOPT_NOTES        ] = true;
-    aOptArr[ VOPT_NOTEAUTHOR   ] = true;
     aOptArr[ VOPT_FORMULAS_MARKS ] = false;
     aOptArr[ VOPT_NULLVALS     ] = true;
     aOptArr[ VOPT_VSCROLL      ] = true;
@@ -214,13 +213,12 @@ constexpr OUStringLiteral CFGPATH_DISPLAY = u"Office.Calc/Content/Display";
 #define SCDISPLAYOPT_FORMULA        0
 #define SCDISPLAYOPT_ZEROVALUE      1
 #define SCDISPLAYOPT_NOTETAG        2
-#define SCDISPLAYOPT_NOTEAUTHOR     3
-#define SCDISPLAYOPT_FORMULAMARK    4
-#define SCDISPLAYOPT_VALUEHI        5
-#define SCDISPLAYOPT_ANCHOR         6
-#define SCDISPLAYOPT_OBJECTGRA      7
-#define SCDISPLAYOPT_CHART          8
-#define SCDISPLAYOPT_DRAWING        9
+#define SCDISPLAYOPT_FORMULAMARK    3
+#define SCDISPLAYOPT_VALUEHI        4
+#define SCDISPLAYOPT_ANCHOR         5
+#define SCDISPLAYOPT_OBJECTGRA      6
+#define SCDISPLAYOPT_CHART          7
+#define SCDISPLAYOPT_DRAWING        8
 
 constexpr OUStringLiteral CFGPATH_GRID = u"Office.Calc/Grid";
 
@@ -254,7 +252,6 @@ Sequence<OUString> ScViewCfg::GetDisplayPropertyNames()
     return {u"Formula"_ustr,                  // SCDISPLAYOPT_FORMULA
             u"ZeroValue"_ustr,                // SCDISPLAYOPT_ZEROVALUE
             u"NoteTag"_ustr,                  // SCDISPLAYOPT_NOTETAG
-            u"NoteAuthor"_ustr,               // SCDISPLAYOPT_NOTEAUTHOR
             u"FormulaMark"_ustr,              // SCDISPLAYOPT_FORMULAMARK
             u"ValueHighlighting"_ustr,        // SCDISPLAYOPT_VALUEHI
             u"Anchor"_ustr,                   // SCDISPLAYOPT_ANCHOR
@@ -368,9 +365,6 @@ ScViewCfg::ScViewCfg() :
                         break;
                     case SCDISPLAYOPT_NOTETAG:
                         SetOption( VOPT_NOTES, ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
-                        break;
-                    case SCDISPLAYOPT_NOTEAUTHOR:
-                        SetOption( VOPT_NOTEAUTHOR, ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
                         break;
                     case SCDISPLAYOPT_FORMULAMARK:
                         SetOption( VOPT_FORMULAS_MARKS, ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
@@ -530,9 +524,6 @@ IMPL_LINK_NOARG(ScViewCfg, DisplayCommitHdl, ScLinkConfigItem&, void)
                 break;
             case SCDISPLAYOPT_NOTETAG:
                 pValues[nProp] <<= GetOption( VOPT_NOTES );
-                break;
-            case SCDISPLAYOPT_NOTEAUTHOR:
-                pValues[nProp] <<= GetOption( VOPT_NOTEAUTHOR );
                 break;
             case SCDISPLAYOPT_FORMULAMARK:
                 pValues[nProp] <<= GetOption( VOPT_FORMULAS_MARKS );
