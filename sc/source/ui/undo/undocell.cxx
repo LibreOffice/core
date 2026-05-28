@@ -827,6 +827,57 @@ void ScUndoReplaceNote::DoRemoveNote( const ScNoteData& rNoteData )
     }
 }
 
+ScUndoNoteMetadata::ScUndoNoteMetadata( ScDocShell& rDocSh, const ScAddress& rPos,
+        OUString aOldDate, OUString aNewDate ) :
+    ScSimpleUndo( &rDocSh ),
+    maPos( rPos ),
+    maOldDate( std::move(aOldDate) ),
+    maNewDate( std::move(aNewDate) )
+{
+}
+
+ScUndoNoteMetadata::~ScUndoNoteMetadata() = default;
+
+void ScUndoNoteMetadata::Undo()
+{
+    BeginUndo();
+    ApplyDate( maOldDate );
+    EndUndo();
+}
+
+void ScUndoNoteMetadata::Redo()
+{
+    BeginRedo();
+    ApplyDate( maNewDate );
+    EndRedo();
+}
+
+void ScUndoNoteMetadata::Repeat( SfxRepeatTarget& /*rTarget*/ )
+{
+}
+
+bool ScUndoNoteMetadata::CanRepeat( SfxRepeatTarget& /*rTarget*/ ) const
+{
+    return false;
+}
+
+OUString ScUndoNoteMetadata::GetComment() const
+{
+    return ScResId( STR_UNDO_EDITNOTE );
+}
+
+void ScUndoNoteMetadata::ApplyDate( const OUString& rDate )
+{
+    ScDocument& rDoc = pDocShell->GetDocument();
+    ScPostIt* pNote = rDoc.GetNote( maPos );
+    if (!pNote)
+        return;
+    pNote->SetDate( rDate );  // auto-refreshes the caption footer
+    pDocShell->PostPaintCell( maPos );
+    // Notify LOK clients so their comment view reflects the restored date.
+    ScDocShell::LOKCommentNotify( LOKCommentNotificationType::Modify, rDoc, maPos, pNote );
+}
+
 ScUndoShowHideNote::ScUndoShowHideNote( ScDocShell& rDocShell, const ScAddress& rPos, bool bShow ) :
     ScSimpleUndo( &rDocShell ),
     maPos( rPos ),

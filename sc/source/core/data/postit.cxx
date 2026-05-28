@@ -37,9 +37,11 @@
 #include <tools/gen.hxx>
 
 #include <document.hxx>
+#include <docsh.hxx>
 #include <stlpool.hxx>
 #include <stylehelper.hxx>
 #include <drwlayer.hxx>
+#include <undocell.hxx>
 #include <userdat.hxx>
 #include <editutil.hxx>
 #include <globstr.hrc>
@@ -47,6 +49,7 @@
 #include <utility>
 #include <strings.hrc>
 #include <officecfg/Office/Calc.hxx>
+#include <svl/undo.hxx>
 
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/XTextAppend.hpp>
@@ -551,6 +554,9 @@ void ScPostIt::RefreshCaptionData() const
 
 void ScPostIt::AutoStamp(bool bCreate)
 {
+    // Snapshot pre-change date for the undo push below.
+    const OUString sOldDate = maNoteData.maDate;
+
     if (bCreate)
     {
         maNoteData.maDate = ScGlobal::getLocaleData().getDate(Date(Date::SYSTEM)) + " "
@@ -561,6 +567,26 @@ void ScPostIt::AutoStamp(bool bCreate)
         const OUString aAuthor = SvtUserOptions().GetFullName();
         maNoteData.maAuthor = !aAuthor.isEmpty() ? aAuthor : ScResId(STR_CHG_UNKNOWN_AUTHOR);
     }
+
+    if (maNoteData.maDate != sOldDate && mrDoc.IsUndoEnabled())
+    {
+        ScDocShell* pDocSh = mrDoc.GetDocumentShell();
+        SfxUndoManager* pUndoMgr = pDocSh ? pDocSh->GetUndoManager() : nullptr;
+        if (pUndoMgr && pUndoMgr->GetMaxUndoActionCount())
+        {
+            // Push only when the caption is attached AND the note is already
+            // registered in the document — skips the ctor / InsertNote paths
+            // where the enclosing ScUndoReplaceNote (if any) covers the whole
+            // insertion. ScAddress::IsValid() can't guard this (accepts 0,0,0).
+            const ScDrawObjData* pData = maNoteData.mxCaption
+                ? ScDrawLayer::GetObjData(maNoteData.mxCaption.get())
+                : nullptr;
+            if (pData && mrDoc.GetNote(pData->maStart) == this)
+                pUndoMgr->AddUndoAction( std::make_unique<ScUndoNoteMetadata>(
+                    *pDocSh, pData->maStart, sOldDate, maNoteData.maDate ) );
+        }
+    }
+
     RefreshCaptionData();
 }
 

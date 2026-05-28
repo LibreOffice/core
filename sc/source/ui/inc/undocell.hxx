@@ -282,6 +282,34 @@ private:
     std::unique_ptr<SdrUndoAction> mpDrawUndo;
 };
 
+/** Undo action for an AutoStamp date change on a cell note. Grouped with
+    the surrounding text-edit undo by FuText::StopEditMode so a single
+    Ctrl+Z reverts text and date together. */
+class ScUndoNoteMetadata : public ScSimpleUndo
+{
+public:
+                    ScUndoNoteMetadata( ScDocShell& rDocShell,
+                                        const ScAddress& rPos,
+                                        OUString aOldDate, OUString aNewDate );
+    virtual         ~ScUndoNoteMetadata() override;
+
+    virtual void    Undo() override;
+    virtual void    Redo() override;
+    virtual void    Repeat( SfxRepeatTarget& rTarget ) override;
+    virtual bool    CanRepeat( SfxRepeatTarget& rTarget ) const override;
+
+    virtual OUString GetComment() const override;
+
+    virtual std::optional<ScRange> getAffectedRange() const override { return ScRange(maPos); }
+
+private:
+    void            ApplyDate( const OUString& rDate );
+
+    ScAddress       maPos;
+    OUString        maOldDate;
+    OUString        maNewDate;
+};
+
 /** Undo action for showing or hiding a cell note caption. */
 class ScUndoShowHideNote : public ScSimpleUndo
 {

@@ -70,14 +70,17 @@ void FuText::StopEditMode()
     if( pNote && pUndoMgr )
     {
         /*  Put all undo actions already collected (e.g. create caption object)
-            and all following undo actions (text changed) together into a ListAction. */
-        std::unique_ptr<SdrUndoGroup> pCalcUndo = pDrawLayer->GetCalcUndo();
+            and all following undo actions (text changed, AutoStamp date) all
+            together into a ListAction. Opened unconditionally so the text
+            edit pushed by SdrEndTextEdit and the AutoStamp metadata undo
+            also get grouped for an existing-note edit (where pCalcUndo from
+            the pre-edit phase is empty). */
+        const OUString aUndoStr = ScResId( STR_UNDO_EDITNOTE );
+        pUndoMgr->EnterListAction( aUndoStr, aUndoStr, 0, rViewShell.GetViewShellId() );
 
+        std::unique_ptr<SdrUndoGroup> pCalcUndo = pDrawLayer->GetCalcUndo();
         if(pCalcUndo)
         {
-            const OUString aUndoStr = ScResId( STR_UNDO_EDITNOTE );
-            pUndoMgr->EnterListAction( aUndoStr, aUndoStr, 0, rViewShell.GetViewShellId() );
-
             /*  Note has been created before editing, if first undo action is
                 an insert action. Needed below to decide whether to drop the
                 undo if editing a new note has been cancelled. */
