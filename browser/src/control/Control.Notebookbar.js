@@ -21,6 +21,10 @@ window.L.Control.Notebookbar = window.L.Control.extend({
 	_lastContexts: null,
 	_lastSelectedTabName: null,
 
+	// Contexts whose exit shouldn't snap back to the surrounding contextual
+	// tab — entering them is a modal toggle, not a navigation.
+	_inPlaceEditingContexts: ['EditCell'],
+
 	container: null,
 	builder: null, // see NotebookbarBase
 	model: null, // see NotebookbarBase
@@ -613,11 +617,16 @@ window.L.Control.Notebookbar = window.L.Control.extend({
 			return;
 		}
 
+		// Skip auto-snap when exiting an in-place edit (cell-edit roundtrip).
+		const returningFromEdit =
+			this._inPlaceEditingContexts.includes(this._lastContext);
+
 		if (contextTab) {
 			// Switch to the tab of the context, unless we currently show the review tab
 			// for text documents, where jumping to the next change would possibly
 			// switch to the Home or Table tabs, which is not wanted.
-			if (docType !== 'text' || currentlySelectedTabName !== 'Review') {
+			if ((docType !== 'text' || currentlySelectedTabName !== 'Review') &&
+				!returningFromEdit) {
 				contextTab.click();
 			}
 			const tabId = contextTab.attr('id');

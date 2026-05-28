@@ -918,6 +918,15 @@ void ScTabViewShell::SetCurSubShell(ObjectSelectionType eOST, bool bForce)
     bool bCellBrush = false;    // "format paint brush" allowed for cells
     bool bDrawBrush = false;    // "format paint brush" allowed for drawing objects
 
+    // Suppress the stray "Cell" broadcast emitted by AddSubShell(*pCellShell)
+    // when pCellShell is pushed as the base of a multi-shell stack on the way
+    // to a non-Cell target (Editing/Table/Sparkline/Pivot/Auditing all push
+    // pCellShell first, then their real shell on top).
+    const bool bWasCellBroadcasterEnabled =
+        pCellShell->SetContextBroadcasterEnabled(eOST == OST_Cell);
+    comphelper::ScopeGuard aCellBroadcasterGuard(
+        [&] { pCellShell->SetContextBroadcasterEnabled(bWasCellBroadcasterEnabled); });
+
     if(eCurOST!=OST_NONE) RemoveSubShell();
 
     if (pFormShell && !bFormShellAtTop)
