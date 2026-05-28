@@ -2771,6 +2771,15 @@ button.has-img img {
 	margin-block: 7px;
 }
 
+#ZoteroDialog-search-container.jsdialog {
+	/* Refresh button (shorter) and Search input (32px tall) sit side by side
+	   - vertically center them instead of top-aligning. */
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	gap: 8px;
+}
+
 #ZoteroDialog-locale-container.jsdialog {
 	width: fit-content;
 }
