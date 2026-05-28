@@ -26,7 +26,7 @@
         <property name="row-spacing">3</property>
         <property name="column-spacing">6</property>
         <child>
-          <object class="GtkLabel">
+          <object class="GtkLabel" id="lbTextGlow">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="halign">start</property>
