@@ -86,6 +86,24 @@ DECLARE_OOXMLEXPORT_TEST(testTdf172169_linespacingSecondPortion,
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf172233_linespacingGap)
+{
+    // given a double-spaced document created by an older version of LibreOffice
+    // with a very large font on the last line.
+    createSwDoc("tdf172233_linespacingGap.odt");
+
+    // The last-line gap is applied twice - so the content doesn't fit on one page.
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+
+    saveAndReload(TestFilter::DOCX);
+
+    // MS Word places the gap after the line, so only one large gap exists - and all fits on 1 page.
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+
+    saveAndReload(TestFilter::ODT);
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf172169_intraLinespacing)
 {
     // given a six page, double-spaced document
@@ -192,7 +210,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf172169_linespacingBidi)
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 
     nTextHeight = getXPath(pXmlDoc, "//page[1]/body/txt/infos/bounds", "height").toInt32();
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(3312, nTextHeight, 100);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(3036, nTextHeight, 100);
     nTextHeight = getXPath(pXmlDoc, "//page[2]/body/txt/infos/bounds", "height").toInt32();
     CPPUNIT_ASSERT_EQUAL(SwTwips(552), nTextHeight);
 }
@@ -235,7 +253,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf172169_linespacingVerticalText)
     CPPUNIT_ASSERT_EQUAL(3, getPages());
 
     nTextHeight = getXPath(pXmlDoc, "//page[2]/body/txt/infos/bounds", "height").toInt32();
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(3154, nTextHeight, 100); // will be 1991
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1991, nTextHeight, 100);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf172169_linespacingFirstPortion)
