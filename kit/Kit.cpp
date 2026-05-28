@@ -4499,13 +4499,13 @@ bool globalPreinit(const std::string &loTemplate)
     // Disable problematic components that may be present from a
     // desktop or developer's install if env. var not set.
     ::setenv("UNODISABLELIBRARY",
-             "abp avmediagst avmediavlc cmdmail losessioninstall OGLTrans "
-             "syssh ucpftp1 ucpgio1 ucpimage updatecheckui updatefeed updchk"
+             "abp avmediagst cmdmail losessioninstall "
+             "syssh ucpgio1 ucpimage updatecheckui updatefeed updchk "
              // Database
-             "dbaxml dbmm dbp dbu deployment mork "
-             "mysql mysqlc odbc postgresql-sdbc postgresql-sdbc-impl sdbc2 sdbt"
+             "dbaxml dbp dbu deployment "
+             "mysqlc odbc sdbc2 sdbt "
              // Java
-             "javaloader javavm jdbc rpt rptui rptxml ",
+             "javaloader javavm jdbc",
              0 /* no overwrite */);
 
 #ifndef __APPLE__
