@@ -47,7 +47,6 @@ constexpr auto IgnoredList
 constexpr auto MobileDialogList
     = frozen::make_unordered_set<std::u16string_view>({
         { u"modules/swriter/ui/watermarkdialog.ui" },
-        { u"modules/swriter/ui/wordcount-mobile.ui" },
         { u"svx/ui/findreplacedialog-mobile.ui" }
     });
 

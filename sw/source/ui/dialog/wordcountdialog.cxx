@@ -32,17 +32,8 @@
 #include <vcl/svapp.hxx>
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/Dialog.hxx>
-#include <comphelper/lok.hxx>
 #include <com/sun/star/i18n/WordType.hpp>
 #include <PostItMgr.hxx>
-
-static bool isLOKMobilePhone()
-{
-    if (!comphelper::LibreOfficeKit::isActive())
-        return false;
-    SfxViewShell* pCurrent = SfxViewShell::Current();
-    return pCurrent && pCurrent->isLOKMobilePhone();
-}
 
 SwWordCountFloatDlg::~SwWordCountFloatDlg()
 {
@@ -99,8 +90,6 @@ void SwWordCountFloatDlg::showCJK(bool bShowCJK)
 {
     m_xCurrentCjkcharsFT->set_visible(bShowCJK);
     m_xDocCjkcharsFT->set_visible(bShowCJK);
-    if (isLOKMobilePhone() && m_xCjkcharsLabelFT2)
-        m_xCjkcharsLabelFT2->set_visible(bShowCJK);
     m_xCjkcharsLabelFT->set_visible(bShowCJK);
 }
 
@@ -108,8 +97,6 @@ void SwWordCountFloatDlg::showStandardizedPages(bool bShowStandardizedPages)
 {
     m_xCurrentStandardizedPagesFT->set_visible(bShowStandardizedPages);
     m_xDocStandardizedPagesFT->set_visible(bShowStandardizedPages);
-    if (isLOKMobilePhone() && m_xStandardizedPagesLabelFT2)
-        m_xStandardizedPagesLabelFT2->set_visible(bShowStandardizedPages);
     m_xStandardizedPagesLabelFT->set_visible(bShowStandardizedPages);
 }
 
@@ -117,7 +104,7 @@ SwWordCountFloatDlg::SwWordCountFloatDlg(SfxBindings* _pBindings,
                                          SfxChildWindow* pChild,
                                          weld::Window *pParent,
                                          SfxChildWinInfo const * pInfo)
-    : SfxModelessDialogController(_pBindings, pChild, pParent, isLOKMobilePhone() ? u"modules/swriter/ui/wordcount-mobile.ui"_ustr : u"modules/swriter/ui/wordcount.ui"_ustr, u"WordCountDialog"_ustr)
+    : SfxModelessDialogController(_pBindings, pChild, pParent, u"modules/swriter/ui/wordcount.ui"_ustr, u"WordCountDialog"_ustr)
     , m_xCurrentWordFT(m_xBuilder->weld_label(u"selectwords"_ustr))
     , m_xCurrentCharacterFT(m_xBuilder->weld_label(u"selectchars"_ustr))
     , m_xCurrentCharacterExcludingSpacesFT(m_xBuilder->weld_label(u"selectcharsnospaces"_ustr))
@@ -129,9 +116,7 @@ SwWordCountFloatDlg::SwWordCountFloatDlg(SfxBindings* _pBindings,
     , m_xDocCjkcharsFT(m_xBuilder->weld_label(u"doccjkchars"_ustr))
     , m_xDocStandardizedPagesFT(m_xBuilder->weld_label(u"docstandardizedpages"_ustr))
     , m_xCjkcharsLabelFT(m_xBuilder->weld_label(u"cjkcharsft"_ustr))
-    , m_xCjkcharsLabelFT2(m_xBuilder->weld_label(u"cjkcharsft2"_ustr))
     , m_xStandardizedPagesLabelFT(m_xBuilder->weld_label(u"standardizedpages"_ustr))
-    , m_xStandardizedPagesLabelFT2(m_xBuilder->weld_label(u"standardizedpages2"_ustr))
     , m_xDocComments(m_xBuilder->weld_label(u"docComments"_ustr))
     , m_xWordsCursorFT(m_xBuilder->weld_label(u"wordscursor"_ustr))
 {
@@ -161,24 +146,20 @@ void SwWordCountFloatDlg::UpdateCounts()
         aCurrCnt.nComments = pPostItMgr->end() - pPostItMgr->begin();
         SetValues(aCurrCnt, aDocStat);
 
-        if (!isLOKMobilePhone())
-        {
-            // Only recalculate at word boundaries — keeps count frozen
-            // while cursor is inside a word, regardless of direction.
-            const sal_Int16 nWordType = css::i18n::WordType::WORD_COUNT;
-            bool bAtBoundary = rSh.IsStartWord(nWordType)
-                            || rSh.IsEndWord(nWordType)
-                            || !rSh.IsInWord(nWordType);
+        // Only recalculate at word boundaries — keeps count frozen
+        // while cursor is inside a word, regardless of direction.
+        const sal_Int16 nWordType = css::i18n::WordType::WORD_COUNT;
+        bool bAtBoundary
+            = rSh.IsStartWord(nWordType) || rSh.IsEndWord(nWordType) || !rSh.IsInWord(nWordType);
 
-            if (bAtBoundary || !m_bCursorValuesInitialized)
-            {
-                m_aCachedBefore = SwDocStat();
-                m_aCachedAfter = SwDocStat();
-                rSh.CountWordsBeforeAfterCursor(m_aCachedBefore, m_aCachedAfter);
-                m_bCursorValuesInitialized = true;
-            }
-            SetCursorValues(m_aCachedBefore, m_aCachedAfter);
+        if (bAtBoundary || !m_bCursorValuesInitialized)
+        {
+            m_aCachedBefore = SwDocStat();
+            m_aCachedAfter = SwDocStat();
+            rSh.CountWordsBeforeAfterCursor(m_aCachedBefore, m_aCachedAfter);
+            m_bCursorValuesInitialized = true;
         }
+        SetCursorValues(m_aCachedBefore, m_aCachedAfter);
     }
 }
 
