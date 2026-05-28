@@ -40,6 +40,7 @@
 #include <vcl/weld/Popover.hxx>
 #include <vcl/weld/customweld.hxx>
 #include <vcl/weld/ScrolledWindow.hxx>
+#include <vcl/weld/TreeView.hxx>
 #include <vcl/weld/weldutils.hxx>
 #include <rtl/math.hxx>
 #include <sal/macros.h>
@@ -1447,10 +1448,10 @@ int FontSizeBox::get_value() const
 
 SvxBorderLineStyle SvtLineListBox::GetSelectEntryStyle() const
 {
-    if (m_xLineSet->IsNoSelection())
+    const int nSelectedIndex = m_xLineTreeView->get_selected_index();
+    if (nSelectedIndex < 0)
         return SvxBorderLineStyle::NONE;
-    auto nId = m_xLineSet->GetSelectedItemId();
-    return m_vLineList.at(nId - 1)->GetStyle();
+    return m_vLineList.at(nSelectedIndex)->GetStyle();
 }
 
 namespace
@@ -1530,15 +1531,12 @@ SvtLineListBox::SvtLineListBox(std::unique_ptr<weld::MenuButton> pControl)
     : WeldToolbarPopup(css::uno::Reference<css::frame::XFrame>(), pControl.get(), u"svt/ui/linewindow.ui"_ustr, u"line_popup_window"_ustr)
     , m_xControl(std::move(pControl))
     , m_xNoneButton(m_xBuilder->weld_button(u"none_line_button"_ustr))
-    , m_xLineSet(new ValueSet(nullptr))
-    , m_xLineSetWin(new weld::CustomWeld(*m_xBuilder, u"lineset"_ustr, *m_xLineSet))
+    , m_xLineTreeView(m_xBuilder->weld_tree_view(u"linetreeview"_ustr))
     , m_nWidth( 5 )
     , aVirDev(VclPtr<VirtualDevice>::Create())
     , aColor(COL_BLACK)
 {
-    m_xLineSet->SetStyle(WinBits(WB_FLATVALUESET | WB_NO_DIRECTSELECT | WB_TABSTOP));
-    m_xLineSet->SetColCount(1);
-    m_xLineSet->SetSelectHdl(LINK(this, SvtLineListBox, ValueSelectHdl));
+    m_xLineTreeView->connect_item_activated(LINK(this, SvtLineListBox, ItemActivatedHdl));
 
     m_xNoneButton->connect_clicked(LINK(this, SvtLineListBox, NoneHdl));
 
@@ -1567,7 +1565,7 @@ void SvtLineListBox::GrabFocus()
     if (GetSelectEntryStyle() == SvxBorderLineStyle::NONE)
         m_xNoneButton->grab_focus();
     else
-        m_xLineSet->GrabFocus();
+        m_xLineTreeView->grab_focus();
 }
 
 IMPL_LINK(SvtLineListBox, ToggleHdl, weld::Toggleable&, rButton, void)
@@ -1610,7 +1608,7 @@ void SvtLineListBox::SelectEntry(SvxBorderLineStyle nStyle)
 {
     if (nStyle == SvxBorderLineStyle::NONE)
     {
-        m_xLineSet->SetNoSelection();
+        m_xLineTreeView->unselect_all();
     }
     else
     {
@@ -1618,7 +1616,7 @@ void SvtLineListBox::SelectEntry(SvxBorderLineStyle nStyle)
                                        [nStyle](const std::unique_ptr<ImpLineListData>& rpData)
                                        { return rpData->GetStyle() == nStyle; });
         if (it != m_vLineList.end())
-            m_xLineSet->SelectItem(std::distance(m_vLineList.begin(), it) + 1);
+            m_xLineTreeView->select(std::distance(m_vLineList.begin(), it));
     }
     UpdatePreview();
 }
@@ -1636,26 +1634,27 @@ void SvtLineListBox::UpdateEntries()
     SvxBorderLineStyle eSelected = GetSelectEntryStyle();
 
     // Remove the old entries
-    m_xLineSet->Clear();
+    m_xLineTreeView->clear();
 
     // Add the new entries based on the defined width
     for (size_t i = 0; i < m_vLineList.size(); ++i)
     {
         ScopedVclPtr<VirtualDevice> pImage = GetLineImage(i);
         const std::unique_ptr<ImpLineListData>& pData = m_vLineList.at(i);
-        sal_Int16 nItemId = i + 1;
-        const Image aLineImage(pImage->GetBitmap(Point(), pImage->GetOutputSizePixel()));
-        m_xLineSet->InsertItem(nItemId, aLineImage, GetLineStyleName(pData->GetStyle()));
+        m_xLineTreeView->append();
+        m_xLineTreeView->set_image(i, *pImage, 0);
+        m_xLineTreeView->set_text(i, GetLineStyleName(pData->GetStyle()), 1);
         if (pData->GetStyle() == eSelected)
-            m_xLineSet->SelectItem(nItemId);
+            m_xLineTreeView->select(i);
     }
 
-    m_xLineSet->SetOptimalSize();
+    m_xLineTreeView->columns_autosize();
 }
 
-IMPL_LINK_NOARG(SvtLineListBox, ValueSelectHdl, ValueSet*, void)
+IMPL_LINK_NOARG(SvtLineListBox, ItemActivatedHdl, const weld::TreeIter&, bool)
 {
     HandleEntrySelection();
+    return true;
 }
 
 void SvtLineListBox::HandleEntrySelection()
@@ -1666,14 +1665,12 @@ void SvtLineListBox::HandleEntrySelection()
         m_xControl->set_active(false);
 }
 
-ScopedVclPtr<VirtualDevice> SvtLineListBox::GetLineImage(const size_t nIndex)
+ScopedVclPtr<VirtualDevice> SvtLineListBox::GetLineImage(int nIndex)
 {
     ScopedVclPtr<VirtualDevice> pVDev = VclPtr<VirtualDevice>::Create();
     pVDev->SetOutputSizePixel(getPreviewSize(*m_xControl));
 
-    const Image aImage = nIndex != VALUESET_ITEM_NOTFOUND
-                             ? GetLineImage(*m_vLineList.at(nIndex))
-                             : Image();
+    const Image aImage = nIndex >= 0 ? GetLineImage(*m_vLineList.at(nIndex)) : Image();
     const auto nPos = (pVDev->GetOutputSizePixel().Height() - aImage.GetSizePixel().Height()) / 2;
     pVDev->SetMapMode(MapMode(MapUnit::MapPixel));
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
@@ -1703,7 +1700,7 @@ void SvtLineListBox::UpdatePreview()
     }
     else
     {
-        const size_t nSelectedIndex = m_xLineSet->GetItemPos(m_xLineSet->GetSelectedItemId());
+        const int nSelectedIndex = m_xLineTreeView->get_selected_index();
         ScopedVclPtr<VirtualDevice> pImageDev = GetLineImage(nSelectedIndex);
         m_xControl->set_label(u""_ustr);
         m_xControl->set_image(pImageDev.get());

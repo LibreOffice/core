@@ -32,8 +32,13 @@
 
 #include <memory>
 
-namespace weld { class Builder; }
-namespace weld { class CustomWeld; }
+namespace weld
+{
+class Builder;
+class CustomWeld;
+class TreeIter;
+class TreeView;
+}
 
 class Bitmap;
 class FontList;
@@ -254,9 +259,9 @@ public:
 
 private:
     SVT_DLLPRIVATE Image GetLineImage(const ImpLineListData& rLineListData);
-    SVT_DLLPRIVATE ScopedVclPtr<VirtualDevice> GetLineImage(const size_t nIndex);
+    SVT_DLLPRIVATE ScopedVclPtr<VirtualDevice> GetLineImage(int nIndex);
 
-    DECL_DLLPRIVATE_LINK(ValueSelectHdl, ValueSet*, void);
+    DECL_DLLPRIVATE_LINK(ItemActivatedHdl, const weld::TreeIter&, bool);
     DECL_DLLPRIVATE_LINK(ToggleHdl, weld::Toggleable&, void);
     DECL_DLLPRIVATE_LINK(NoneHdl, weld::Button&, void);
     DECL_DLLPRIVATE_LINK(StyleUpdatedHdl, weld::Widget&, void);
@@ -271,8 +276,7 @@ private:
 
     std::unique_ptr<weld::MenuButton> m_xControl;
     std::unique_ptr<weld::Button> m_xNoneButton;
-    std::unique_ptr<ValueSet> m_xLineSet;
-    std::unique_ptr<weld::CustomWeld> m_xLineSetWin;
+    std::unique_ptr<weld::TreeView> m_xLineTreeView;
 
     std::vector<std::unique_ptr<ImpLineListData>> m_vLineList;
     tools::Long            m_nWidth;
