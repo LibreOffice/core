@@ -24,7 +24,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,fontconfig,\
 ))
 endif
 
-ifeq ($(COM),MSC)
+ifeq ($(OS)-$(ENABLE_HEADLESS),WNT-TRUE)
 
 $(eval $(call gb_UnpackedTarball_add_patches,fontconfig,\
 	external/fontconfig/windowsfonts.patch \
