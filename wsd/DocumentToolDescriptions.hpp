@@ -38,10 +38,21 @@ inline constexpr const char* EXTRACT_INTRO = "Inspect the open document as JSON.
 
 inline constexpr const char* EXTRACT_WRITER =
     " With filter=\"text\" it returns the document body as markdown for "
-    "summarizing or answering questions about the content. It can also return "
-    "content controls (filter=\"contentcontrol\"), charts, document properties, "
-    "and tracked changes. To list headings, bookmarks, tables, frames or images "
-    "for navigation, use extract_link_targets instead.";
+    "summarizing or answering questions about the content. To answer about a "
+    "specific part without reading the whole body, first call "
+    "extract_link_targets to get the heading or section target, then call this "
+    "with filter=\"text\" and the target argument set to that target string "
+    "(e.g. \"Introduction|outline\" for a heading's section, \"Summary|region\" "
+    "for a named section). If the document is too large to read in full, "
+    "filter=\"text\" with no target returns no body text and instead supplies "
+    "link_targets and an instruction: show the listed sections to the user, "
+    "wait for their pick, then call this tool again with the chosen target. If "
+    "link_targets is empty the document has no navigable structure - the "
+    "instruction will tell you to ask the user to select text in the document. "
+    "It can also return content controls (filter=\"contentcontrol\"), charts, "
+    "document properties, and tracked changes. To list headings, bookmarks, "
+    "tables, frames or images for navigation, use extract_link_targets "
+    "instead.";
 
 inline constexpr const char* EXTRACT_CALC =
     " For a spreadsheet, filter=\"text\" returns the active sheet as markdown, "

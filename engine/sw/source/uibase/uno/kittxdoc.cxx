@@ -39,7 +39,10 @@
 #include <doc.hxx>
 #include <docsh.hxx>
 #include <fmtrfmrk.hxx>
+#include <ndarr.hxx>
+#include <section.hxx>
 #include <shellio.hxx>
+#include <unocrsr.hxx>
 #include <wrtsh.hxx>
 #include <txtrfmrk.hxx>
 #include <ndtxt.hxx>
@@ -65,6 +68,9 @@
 #include <com/sun/star/chart2/XTitled.hpp>
 #include <com/sun/star/document/XDocumentProperties2.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <com/sun/star/document/XLinkTargetSupplier.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
 
 #include <sax/tools/converter.hxx>
 
@@ -1072,13 +1078,142 @@ void GetDocStructureTrackChanges(tools::JsonWriter& rJsonWriter, SwDocShell* pDo
     }
 }
 
+/// Resolves a heading subtree to a node range: the heading whose canonical
+/// link-target name matches rName, plus every following node up to the next
+/// heading of the same or a higher outline level (mirrors
+/// SwCursorShell::MakeOutlineSel with children). The canonical name is built
+/// by SwGetOutlineLinkName - the same string the XLinkTargetSupplier emits
+/// through extract_link_targets - so a target identifier the model received
+/// round-trips exactly, including chapter numbering and layout-rendered prefix
+/// or trailing fields.
+bool FindOutlineScope(SwDoc& rDoc, std::u16string_view rName, SwNodeOffset& rStart,
+                      SwNodeOffset& rEnd)
+{
+    const SwOutlineNodes& rOutlNds = rDoc.GetNodes().GetOutLineNds();
+    for (SwOutlineNodes::size_type i = 0; i < rOutlNds.size(); ++i)
+    {
+        if (SwGetOutlineLinkName(i, &rDoc) != rName)
+            continue;
+
+        const SwTextNode* pTextNd = rOutlNds[i]->GetTextNode();
+        if (!pTextNd)
+            continue;
+
+        rStart = rOutlNds[i]->GetIndex();
+        const int nLevel = pTextNd->GetAttrOutlineLevel() - 1;
+        SwOutlineNodes::size_type nEnd = i + 1;
+        for (; nEnd < rOutlNds.size(); ++nEnd)
+        {
+            const SwTextNode* pNext = rOutlNds[nEnd]->GetTextNode();
+            if (pNext && pNext->GetAttrOutlineLevel() - 1 <= nLevel)
+                break;
+        }
+        rEnd = (nEnd < rOutlNds.size()) ? rOutlNds[nEnd]->GetIndex()
+                                        : rDoc.GetNodes().GetEndOfContent().GetIndex();
+        return true;
+    }
+    return false;
+}
+
+/// Resolves a named text section to its node range.
+bool FindSectionScope(SwDoc& rDoc, std::u16string_view rName, SwNodeOffset& rStart,
+                      SwNodeOffset& rEnd)
+{
+    for (const SwSectionFormat* pFormat : rDoc.GetSections())
+    {
+        const SwSection* pSect = pFormat->GetSection();
+        if (!pSect || pSect->GetSectionName().toString() != rName)
+            continue;
+        const SwSectionNode* pSectNd = pFormat->GetSectionNode();
+        if (!pSectNd)
+            return false;
+        rStart = pSectNd->GetIndex();
+        rEnd = pSectNd->EndOfSectionIndex();
+        return true;
+    }
+    return false;
+}
+
+/// Walks the XLinkTargetSupplier name access and writes the same nested
+/// category JSON shape that the disk-reload path produces in init.cxx's
+/// extractLinks, so the model sees an identical structure whether the call
+/// runs against a live document or a hidden read-only reload. Returns the number of
+/// leaf entries written, which lets callers distinguish a document that has
+/// navigation targets from one that has none.
+sal_Int32 WriteLinkTargets(const uno::Reference<container::XNameAccess>& xLinks, bool bSubcontent,
+                           tools::JsonWriter& rJsonWriter)
+{
+    if (!xLinks.is())
+        return 0;
+    sal_Int32 nLeaves = 0;
+    for (const OUString& aLink : xLinks->getElementNames())
+    {
+        uno::Any aAny;
+        try
+        {
+            aAny = xLinks->getByName(aLink);
+        }
+        catch (const uno::Exception&)
+        {
+            continue;
+        }
+        uno::Reference<beans::XPropertySet> xTarget;
+        if (!(aAny >>= xTarget))
+            continue;
+        try
+        {
+            OUString aDisplayName;
+            xTarget->getPropertyValue(u"LinkDisplayName"_ustr) >>= aDisplayName;
+            if (bSubcontent)
+            {
+                // The live document expands Table of Contents paragraphs as
+                // outline nodes whose rendered text carries the ToC layout's
+                // tab separators ("N \tHeading\tPage"). These duplicate the
+                // real headings the model already has and confuse the picker,
+                // so skip them. Disk-reload extractRequest never saw these
+                // because the hidden read-only load does not expand the ToC.
+                // Genuine headings never contain a tab in their node text.
+                if (aLink.indexOf(u'\t') >= 0)
+                    continue;
+                rJsonWriter.put(aDisplayName, aLink);
+                ++nLeaves;
+                continue;
+            }
+            uno::Reference<lang::XServiceInfo> xSI(xTarget, uno::UNO_QUERY_THROW);
+            if (xSI->supportsService(u"com.sun.star.document.LinkTarget"_ustr))
+            {
+                rJsonWriter.put(aDisplayName, aLink);
+                ++nLeaves;
+                continue;
+            }
+            auto aNode
+                = rJsonWriter.startNode(OUStringToOString(aDisplayName, RTL_TEXTENCODING_UTF8));
+            uno::Reference<document::XLinkTargetSupplier> xLTS(xTarget, uno::UNO_QUERY);
+            if (xLTS.is())
+                nLeaves += WriteLinkTargets(xLTS->getLinks(), /*subcontent*/ true, rJsonWriter);
+        }
+        catch (...)
+        {
+            // a target with a missing display name or service info is skipped
+        }
+    }
+    return nLeaves;
+}
+
 /// Implements getCommandValues(".uno:ExtractDocumentStructure?filter=text").
 ///
-/// Exports the whole document body as markdown so the AI assistant can
-/// summarize or answer questions about it. Reads the live document (the caller
-/// routes filter=text to the in-memory doc, not the on-disk reload), so unsaved
-/// edits are reflected. The result is capped and flags truncation.
-void GetDocStructureBodyText(tools::JsonWriter& rJsonWriter, SwDocShell* pDocShell)
+/// Exports the document body as markdown so the AI assistant can summarize or
+/// answer questions about it. Reads the live document (the caller routes
+/// filter=text to the in-memory doc, not the on-disk reload), so unsaved edits
+/// are reflected. The result is capped and flags truncation.
+///
+/// When rTarget is set it names a single slice to read instead of the whole
+/// body. It is one of the values from extract_link_targets, in the form
+/// "name|type": type "outline" reads that heading's section, "region" reads a
+/// named text section. This lets a follow-up read one slice rather than the
+/// whole body.
+void GetDocStructureBodyText(tools::JsonWriter& rJsonWriter, SwDocShell* pDocShell,
+                             std::u16string_view rTarget)
 {
     auto aNode = rJsonWriter.startNode("BodyText");
     rJsonWriter.put("format", "markdown");
@@ -1096,11 +1231,46 @@ void GetDocStructureBodyText(tools::JsonWriter& rJsonWriter, SwDocShell* pDocShe
 
     xWrt->SetShowProgress(false);
 
+    // Resolve an optional scope so only one slice is exported.
+    std::shared_ptr<SwUnoCursor> pScopePam;
+    if (!rTarget.empty())
+    {
+        const size_t nSep = rTarget.rfind(u'|');
+        const std::u16string_view aName
+            = (nSep == std::u16string_view::npos) ? rTarget : rTarget.substr(0, nSep);
+        const std::u16string_view aType = (nSep == std::u16string_view::npos)
+                                              ? std::u16string_view()
+                                              : rTarget.substr(nSep + 1);
+
+        SwNodeOffset nStart(0), nEnd(0);
+        const bool bFound = (aType == u"region") ? FindSectionScope(*pDoc, aName, nStart, nEnd)
+                                                 : FindOutlineScope(*pDoc, aName, nStart, nEnd);
+        if (!bFound)
+        {
+            rJsonWriter.put("truncated", false);
+            rJsonWriter.put("error",
+                            "Target not found in the document. Call extract_link_targets to list "
+                            "valid targets, or omit target to read the whole body.");
+            rJsonWriter.put("text", "");
+            return;
+        }
+        pScopePam = Writer::NewUnoCursor(*pDoc, nStart, nEnd);
+    }
+
     SvMemoryStream aStream;
     OUString aText;
     bool bTruncated = false;
-    SwWriter aWrt(aStream, *pDoc);
-    const bool bWriteOk = !aWrt.Write(xWrt).IsError();
+    bool bWriteOk = false;
+    if (pScopePam)
+    {
+        SwWriter aWrt(aStream, *pScopePam, /*bWriteAll*/ false);
+        bWriteOk = !aWrt.Write(xWrt).IsError();
+    }
+    else
+    {
+        SwWriter aWrt(aStream, *pDoc);
+        bWriteOk = !aWrt.Write(xWrt).IsError();
+    }
     if (bWriteOk)
     {
         const sal_uInt64 nSize = aStream.TellEnd();
@@ -1119,12 +1289,42 @@ void GetDocStructureBodyText(tools::JsonWriter& rJsonWriter, SwDocShell* pDocShe
     // markdown. An export failure is flagged distinctly from an empty document.
     rJsonWriter.put("truncated", bTruncated);
     if (!bWriteOk)
+    {
         rJsonWriter.put("error", "Failed to export the document text.");
-    else if (bTruncated)
-        rJsonWriter.put("note",
-                        "The document is large, so only the first part of the text is included "
-                        "here. Tell the user the summary is based on a truncated portion and ask "
-                        "them to select the section they want summarized.");
+        rJsonWriter.put("text", aText);
+        return;
+    }
+    // A whole-body read that would truncate gets replaced with the live link
+    // target list and a direct instruction. The model has no body to summarize
+    // from in this branch, so the prior approach (returning the partial body
+    // with a hint to ask the user) is removed: weak models ignored the hint
+    // and summarized the truncated head anyway. With no text and an explicit
+    // instruction, the model must show the link_targets to the user and wait
+    // for a pick.
+    // Scoped reads (rTarget set) keep their current shape and still report
+    // truncation through the existing flag.
+    if (bTruncated && rTarget.empty())
+    {
+        sal_Int32 nLeaves = 0;
+        {
+            auto aLinkNode = rJsonWriter.startNode("link_targets");
+            rtl::Reference<SwXTextDocument> xDoc = pDocShell ? pDocShell->GetBaseModel() : nullptr;
+            if (xDoc.is())
+                nLeaves = WriteLinkTargets(xDoc->getLinks(), /*subcontent*/ false, rJsonWriter);
+        }
+        rJsonWriter.put(
+            "instruction",
+            nLeaves > 0 ? "Document is too large to read in full. Show the user the headings and "
+                          "sections from link_targets and ask which one to summarize. Do not "
+                          "guess - wait for the user's choice, then call this tool again with the "
+                          "selected target."
+                        : "Document is too large to read in full and has no headings or named "
+                          "sections to scope the read by. Ask the user to select the relevant "
+                          "text in the document and resend the request; the selection will be "
+                          "delivered with the next message.");
+        rJsonWriter.put("text", "");
+        return;
+    }
     rJsonWriter.put("text", aText);
 }
 
@@ -1157,8 +1357,35 @@ void GetDocStructure(tools::JsonWriter& rJsonWriter, SwDocShell* pDocShell,
     // Body text is only emitted on an explicit filter=text request, which the
     // caller routes to the live document. It is deliberately excluded from the
     // empty "extract everything" filter, which runs against the on-disk reload.
-    if (filter == "text")
-        GetDocStructureBodyText(rJsonWriter, pDocShell);
+    // An optional ",target:name|type" sub-arg scopes the read to one slice.
+    if (filter == "text" || filter.startsWith("text,"))
+    {
+        OUString target;
+        if (const sal_Int32 nPos = filter.indexOf(u"target:"); nPos >= 0)
+            target = filter.copy(nPos + 7);
+        GetDocStructureBodyText(rJsonWriter, pDocShell, target);
+    }
+}
+
+/// Implements getCommandValues(".uno:ExtractLinkTargets").
+///
+/// Enumerates link targets from the live document (headings, sections,
+/// bookmarks, tables, frames, graphics, OLE objects, drawing objects),
+/// producing the same JSON shape as the disk-reload extractRequest path in
+/// init.cxx so callers can switch between the two without observing a
+/// difference beyond unsaved-edit visibility. Used by the interactive
+/// extractlinktargets handler in the kit and by GetDocStructureBodyText to
+/// inline navigation targets when a whole-body read would overflow the
+/// AIBodyTextMaxChars cap.
+void GetExtractLinkTargets(tools::JsonWriter& rJsonWriter, SwDocShell* pDocShell)
+{
+    auto aNode = rJsonWriter.startNode("Targets");
+    if (!pDocShell)
+        return;
+    rtl::Reference<SwXTextDocument> xDoc = pDocShell->GetBaseModel();
+    if (!xDoc.is())
+        return;
+    WriteLinkTargets(xDoc->getLinks(), /*subcontent*/ false, rJsonWriter);
 }
 
 /// Implements getCommandValues(".uno:Sections").
@@ -1205,7 +1432,8 @@ bool SwXTextDocument::supportsCommand(std::u16string_view rCommand)
             u"Bookmark",
             u"Field",
             u"Layout",
-            u"ExtractDocumentStructure" };
+            u"ExtractDocumentStructure",
+            u"ExtractLinkTargets" };
 
     return std::find(vForward.begin(), vForward.end(), rCommand) != vForward.end();
 }
@@ -1298,6 +1526,10 @@ void SwXTextDocument::getCommandValues(tools::JsonWriter& rJsonWriter, std::stri
     else if (o3tl::starts_with(rCommand, ".uno:ExtractDocumentStructure"sv))
     {
         GetDocStructure(rJsonWriter, m_pDocShell, aMap);
+    }
+    else if (o3tl::starts_with(rCommand, ".uno:ExtractLinkTargets"sv))
+    {
+        GetExtractLinkTargets(rJsonWriter, m_pDocShell);
     }
     else if (o3tl::starts_with(rCommand, ".uno:Layout"sv))
     {

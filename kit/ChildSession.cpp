@@ -345,16 +345,37 @@ bool ChildSession::_handleInput(const char *buffer, int length)
         assert(!getDocURL().empty());
         assert(!getJailedFilePath().empty());
 
-        LOKitHelper::ScopedString data(_docManager->getLOKit()->extractRequest(getJailedFilePath().c_str()));
-        if (!data)
+        std::string json;
+        // Interactive AI calls run against the live in-memory document so the
+        // result reflects unsaved edits (a heading the user just typed must
+        // appear in the picker, since the subsequent filter=text scoped read
+        // would see it too). Writer wires .uno:ExtractLinkTargets through
+        // getCommandValues; document types without that command fall back to
+        // the disk-reload path below. Non-interactive callers (the HTTP
+        // /cool/extract-link-targets endpoint) always use the reload.
+        if (tokens.equals(1, "url=interactive"))
+        {
+            LOKitHelper::ScopedString data(
+                getLOKitDocument()->getCommandValues(".uno:ExtractLinkTargets"));
+            if (data && data.get()[0] != '\0')
+                json = data.get();
+        }
+        if (json.empty())
+        {
+            LOKitHelper::ScopedString data(
+                _docManager->getLOKit()->extractRequest(getJailedFilePath().c_str()));
+            if (data)
+                json = data.get();
+        }
+        if (json.empty())
         {
             LOG_TRC("extractRequest returned no data.");
             sendTextFrame("extractedlinktargets: { }");
             return false;
         }
 
-        LOG_TRC("Extracted link targets: " << data);
-        bool success = sendTextFrame("extractedlinktargets: " + std::string(data.get()));
+        LOG_TRC("Extracted link targets: " << json);
+        bool success = sendTextFrame("extractedlinktargets: " + json);
 
         return success;
     }
@@ -388,7 +409,6 @@ bool ChildSession::_handleInput(const char *buffer, int length)
         // confirm the trackchanges/slides extractors are side-effect-free on the
         // live doc, and re-test each filter. The reload path stays for the HTTP
         // /cool/extract-document-structure endpoint, which has no live session.
-        // See docs/adr/0001-filter-text-reads-live-document.md.
         if (filter.starts_with("text"))
         {
             // The body-text filter reads the live in-memory document so it

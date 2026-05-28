@@ -27,6 +27,7 @@
 #include <common/JsonUtil.hpp>
 #include <common/Log.hpp>
 #include <common/Message.hpp>
+#include <common/Uri.hpp>
 #include <common/Util.hpp>
 #include <common/base64.hpp>
 #include <net/Socket.hpp>
@@ -297,7 +298,13 @@ Poco::JSON::Array::Ptr AIChatSession::buildToolDefinitions(const std::string& do
               { "range",
                 { "string", "Calc only, used with filter='text': limit reading to a cell "
                             "range like 'A1:D100'. Omit to read the active sheet's used "
-                            "range." } } },
+                            "range." } },
+              { "target",
+                { "string", "Writer only, used with filter='text': read only one slice of "
+                            "the document instead of the whole body. Pass a target string "
+                            "from extract_link_targets, e.g. 'Introduction|outline' for a "
+                            "heading's section or 'Summary|region' for a named section. "
+                            "Omit to read the whole body." } } },
             {})));
 
     // transform_document_structure - modify the open document. The DSL is
@@ -524,20 +531,34 @@ bool AIChatSession::handleAction(const std::string& firstLine)
         }
     }
 
-    systemPrompt +=
-        " You have tools to inspect and modify the document."
-        " Use transform_document_structure to make changes."
-        " To summarize or answer questions about the document's content, call"
-        " extract_document_structure with filter=\"text\" to read the body text"
-        " (Writer prose, or the active Calc sheet) as markdown. If the result is"
-        " marked truncated, ask the user to select the relevant part (Writer) or"
-        " to give a cell range via the range argument (Calc)."
-        " If your earlier responses in this conversation already contain the"
-        " document content needed to answer a follow-up question, rely on them"
-        " instead of calling extract_document_structure to read the body again."
-        " Read the body again when the user asks about content your earlier"
-        " responses do not already cover, or when the user indicates they have"
-        " edited or changed the document.";
+    systemPrompt += " You have tools to inspect and modify the document."
+                    " Use transform_document_structure to make changes."
+                    " To summarize or answer questions about the document's content, call"
+                    " extract_document_structure with filter=\"text\" to read the body text"
+                    " (Writer prose, or the active Calc sheet) as markdown."
+                    " If a Writer whole-body read returns no text and instead carries"
+                    " link_targets and an instruction, the document is too large to read"
+                    " in full: show the headings and sections from link_targets to the"
+                    " user and ask which one to summarize. Do not guess and do not"
+                    " summarize from prior context - wait for the user's choice, then call"
+                    " this tool again with filter=\"text\" and the chosen target string."
+                    " If link_targets is empty, follow the instruction and ask the user to"
+                    " select the relevant text in the document, then resend the request."
+                    " For Calc, if the result is marked truncated, ask the user to give a"
+                    " cell range via the range argument."
+                    " If your earlier responses in this conversation already contain the"
+                    " document content needed to answer a follow-up question, rely on them"
+                    " instead of calling extract_document_structure to read the body again."
+                    " Read the body again when the user asks about content your earlier"
+                    " responses do not already cover, or when the user indicates they have"
+                    " edited or changed the document."
+                    " When you do need to read content for a question about a specific part"
+                    " of a Writer document, do not read the whole body: first call"
+                    " extract_link_targets to get the relevant heading or section target,"
+                    " then call extract_document_structure with filter=\"text\" and that"
+                    " target string in the target argument to read only that slice. Read the"
+                    " whole body only for genuine whole-document tasks. For a spreadsheet,"
+                    " pass the range argument to read only the relevant cells.";
 
     if (hasSelectedText)
         systemPrompt +=
@@ -972,19 +993,25 @@ bool AIChatSession::executeToolCall(const std::string& toolCallId,
     // extract_document_structure - requires user approval
     if (fnName == AIToolNames::ExtractDocumentStructure)
     {
-        std::string filter, range;
+        std::string filter, range, target;
         Poco::JSON::Object::Ptr argsObj = new Poco::JSON::Object();
         if (parseLenientArgs(argsJson, argsObj))
         {
             JsonUtil::findJSONValue(argsObj, "filter", filter);
             JsonUtil::findJSONValue(argsObj, "range", range);
+            JsonUtil::findJSONValue(argsObj, "target", target);
         }
 
         const bool bTextFilter = filter.starts_with("text");
 
-        // A Calc range is carried as a sub-arg of the text filter.
+        // A Calc range or a Writer scope target is carried as a sub-arg of the
+        // text filter. The target may contain spaces and the '|' separator, so
+        // percent-encode it: the command is space-delimited and the value is
+        // later split as a URL query, then decoded, on the core side.
         if (bTextFilter && !range.empty())
             filter += ",range:" + range;
+        if (bTextFilter && !target.empty())
+            filter += ",target:" + Uri::encode(target, "%|,/?:@&=+$#");
 
         std::string command = "extractdocumentstructure url=interactive";
         if (!filter.empty())
@@ -996,10 +1023,21 @@ bool AIChatSession::executeToolCall(const std::string& toolCallId,
         _toolLoop->pendingForwardCommand = std::move(command);
 
         // The approval copy is read from pendingSummary by the sidebar. Reading
-        // the body text sends the whole document to the external model, so make
-        // the consent explicit; structural inspection keeps the default copy.
-        _toolLoop->pendingSummary =
-            bTextFilter ? "Read the full text of your document to answer your request." : "";
+        // the body text sends document content to the external model, so make
+        // the consent explicit; structural inspection keeps the default copy. A
+        // scoped read names the slice so the user knows only part is sent.
+        if (!bTextFilter)
+            _toolLoop->pendingSummary = "";
+        else if (target.empty())
+            _toolLoop->pendingSummary = "Read the full text of your document to answer your request.";
+        else
+        {
+            std::string name = target;
+            if (const auto bar = name.rfind('|'); bar != std::string::npos)
+                name = name.substr(0, bar);
+            _toolLoop->pendingSummary =
+                "Read the \"" + name + "\" section of your document to answer your request.";
+        }
 
         sendToolApproval(fnName, "");
         return true;

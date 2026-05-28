@@ -1017,7 +1017,13 @@ static sal_uInt32 lcl_Any_To_ULONG(const Any& rValue, bool& bException)
     return nRet;
 }
 
-static OUString lcl_CreateOutlineString(const size_t nIndex, const SwDoc* pDoc)
+/// Builds the canonical display name of an outline node for the
+/// XLinkTargetSupplier name access. The string is "<level1>.<level2>... <text>",
+/// where the text comes from getOutlineText (so any layout-rendered prefix or
+/// trailing chapter-end fields are included). This is the form that the AI
+/// assistant's extract_link_targets surfaces and that the kittxdoc.cxx
+/// FindOutlineScope must match when resolving a target back to a node range.
+OUString SwGetOutlineLinkName(const size_t nIndex, const SwDoc* pDoc)
 {
     OUStringBuffer sEntry;
     const SwOutlineNodes& rOutlineNodes = pDoc->GetNodes().GetOutLineNds();
@@ -4556,7 +4562,7 @@ Any SwXLinkNameAccessWrapper::getByName(const OUString& rName)
 
                     for (size_t i = 0; i < nOutlineCount && !bFound; ++i)
                     {
-                        if(sParam == lcl_CreateOutlineString(i, pDoc))
+                        if(sParam == SwGetOutlineLinkName(i, pDoc))
                         {
                             OUString sOutlineText =
                                     pDoc->getIDocumentOutlineNodes().getOutlineText(
@@ -4621,7 +4627,7 @@ Sequence< OUString > SwXLinkNameAccessWrapper::getElementNames()
             OUString* pResArr = aRet.getArray();
             for (size_t i = 0; i < nOutlineCount; ++i)
             {
-                pResArr[i] = lcl_CreateOutlineString(i, pDoc) + "|outline";
+                pResArr[i] = SwGetOutlineLinkName(i, pDoc) + "|outline";
             }
         }
         else if (m_sLinkSuffix == "|drawingobject")
@@ -4674,7 +4680,7 @@ sal_Bool SwXLinkNameAccessWrapper::hasByName(const OUString& rName)
 
                     for (size_t i = 0; i < nOutlineCount && !bRet; ++i)
                     {
-                        if(sParam == lcl_CreateOutlineString(i, pDoc))
+                        if(sParam == SwGetOutlineLinkName(i, pDoc))
                         {
                             bRet = true;
                         }

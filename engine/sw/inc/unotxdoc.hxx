@@ -124,6 +124,10 @@ class SwXDocumentIndex;
 class SvNumberFormatsSupplierObj;
 namespace com::sun::star::frame { class XController; }
 
+/// Returns the canonical display name of an outline node, as used by the
+/// XLinkTargetSupplier name access and surfaced through extract_link_targets.
+SW_DLLPUBLIC OUString SwGetOutlineLinkName(const size_t nIndex, const SwDoc* pDoc);
+
 typedef cppu::ImplInheritanceHelper
 <
     SfxBaseModel,
