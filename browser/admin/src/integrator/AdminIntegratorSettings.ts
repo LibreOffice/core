@@ -93,6 +93,17 @@ const initTranslationStr = () => {
 		document.documentElement.getAttribute('lang') || String.defaultLocale;
 };
 
+const getIntegratorOrigin = (): string => {
+	try {
+		if (window.wopiSettingBaseUrl) {
+			return new URL(window.wopiSettingBaseUrl).origin;
+		}
+	} catch (e) {
+		console.warn('Invalid wopiSettingBaseUrl, falling back to window.origin');
+	}
+	return window.origin;
+};
+
 const onLoaded = () => {
 	window.addEventListener('message', onMessage, false);
 	window.parent.postMessage('{"MessageId":"settings-ready"}', window.origin);
@@ -3164,7 +3175,7 @@ document.addEventListener('DOMContentLoaded', () => {
 						ContentHeight: document.documentElement.offsetHeight + 'px',
 					},
 				},
-				window.origin,
+				getIntegratorOrigin(),
 			);
 		};
 
