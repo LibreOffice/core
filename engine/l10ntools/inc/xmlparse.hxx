@@ -23,6 +23,7 @@
 #include <sal/config.h>
 
 #include <cstddef>
+#include <fstream>
 #include <memory>
 #include <utility>
 #include <vector>
