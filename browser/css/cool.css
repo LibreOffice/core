@@ -93,6 +93,10 @@ body {
 	user-select: none;
 }
 
+#doc-clipboard-container {
+	pointer-events: none;
+}
+
 #insertgraphic, #insertmultimedia {
 	position: fixed;
 	top: -100em;

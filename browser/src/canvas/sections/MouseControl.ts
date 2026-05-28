@@ -197,15 +197,24 @@ class MouseControl extends CanvasSectionObject {
 	}
 
 	private setCursorType() {
-		// If the core has set a specific pointer (e.g. 'pointer' for hyperlinks),
-		// let it take precedence over our client-side cursor.
 		const corePointer = app.map._docLayer._coreMousePointer;
-		if (corePointer && corePointer !== 'default') return;
 
-		// If we have blinking cursor visible
-		// we need to change cursor from default style
-		if (app.file.textCursor.visible) this.context.canvas.style.cursor = 'text';
-		else if (app.map._docLayer._docType === 'spreadsheet') {
+		if (app.map._docLayer._docType === 'spreadsheet') {
+			// Core asks for a hand cursor over hyperlinks etc. The
+			// 'spreadsheet-cursor' class ('cursor: cell !important') would
+			// override the inline pointer core sets, so drop the class to let
+			// it show.
+			if (corePointer === 'pointer') {
+				const change =
+					this.context.canvas.style.cursor !== 'pointer' ||
+					this.context.canvas.classList.contains('spreadsheet-cursor');
+				if (change) {
+					this.context.canvas.classList.remove('spreadsheet-cursor');
+					this.context.canvas.style.cursor = 'pointer';
+				}
+				return;
+			}
+
 			const textCursor =
 				app.file.textCursor.visible &&
 				app.calc.cellCursorRectangle &&
@@ -230,6 +239,17 @@ class MouseControl extends CanvasSectionObject {
 					this.context.canvas.classList.add('spreadsheet-cursor');
 				}
 			}
+			return;
+		}
+
+		// If the core has set a specific pointer (e.g. 'pointer' for
+		// hyperlinks), let it take precedence over our client-side cursor.
+		if (corePointer && corePointer !== 'default') return;
+
+		// If we have blinking cursor visible
+		// we need to change cursor from default style.
+		if (app.file.textCursor.visible) {
+			this.context.canvas.style.cursor = 'text';
 		} else if (app.map._docLayer._docType === 'presentation') {
 			this.context.canvas.style.cursor = '';
 		}
@@ -311,9 +331,11 @@ class MouseControl extends CanvasSectionObject {
 		dragDistance: Array<number>,
 		e: MouseEvent,
 	): void {
-		this.setCursorType();
-
+		// Update the position first so the cursor type is computed for the
+		// current mouse location.
 		this.refreshPosition(point);
+
+		this.setCursorType();
 
 		if (this.clickTimer) return;
 
