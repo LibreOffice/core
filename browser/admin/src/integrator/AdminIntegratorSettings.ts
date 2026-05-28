@@ -1771,10 +1771,20 @@ class SettingIframe {
 		);
 		zoteroDescription.className = 'view-setting-description';
 
+		const zoteroAccountHref = 'https://www.zotero.org/settings/keys';
 		const zoteroAccountLink = document.createElement('a');
-		zoteroAccountLink.href = 'https://www.zotero.org/settings/keys';
+		zoteroAccountLink.href = zoteroAccountHref;
 		zoteroAccountLink.target = '_blank';
 		zoteroAccountLink.textContent = _('Zotero account API settings');
+		// The dialog is in an iframe, and global.js's window.open override
+		// (which reroutes external links through the HYPERLINK bridge) lives
+		// on the parent window only - call through window.parent so CODA
+		// (Qt/Windows/macOS) hands the URL off to the system browser instead
+		// of letting the embedded webview navigate target=_blank itself.
+		zoteroAccountLink.addEventListener('click', (e: MouseEvent) => {
+			e.preventDefault();
+			window.parent.open(zoteroAccountHref, '_blank');
+		});
 
 		zoteroDescription.appendChild(zoteroAccountLink);
 		zoteroContainer.appendChild(zoteroDescription);
