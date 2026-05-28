@@ -1,0 +1,14 @@
+#!/bin/bash
+#
+# Snap configure hook. Initialises default values for snapctl-settable
+# options, called by snapd on install, refresh, and `snap set/unset`.
+#
+set -euo pipefail
+
+# Disable GPU acceleration in QtWebEngine by default. The gpu-2404
+# content snap's Mesa stack crashes on systems with proprietary Nvidia
+# drivers and on WSL2; users with a known-good GL stack can enable it
+# with:  snap set collabora-office enable-gpu=true
+if [[ -z "$(snapctl get enable-gpu 2>/dev/null || true)" ]]; then
+    snapctl set enable-gpu=false
+fi

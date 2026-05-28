@@ -1,0 +1,42 @@
+#!/bin/bash
+#
+# command-chain wrapper that prepares QTWEBENGINE_CHROMIUM_FLAGS before
+# coda-qt runs. Disables Chromium's inner sandbox (snap is already a
+# sandbox and snap's seccomp filter denies unshare()), and disables GPU
+# acceleration by default because the gpu-2404 content snap's Mesa stack
+# crashes deep inside libgallium on systems with proprietary Nvidia
+# drivers, and on WSL2's dxgkrnl-backed Mesa. See
+# https://github.com/electron/electron/issues/48321 for the upstream
+# Electron/Chromium issue covering the same crash shape.
+#
+# A user who has working hardware acceleration can opt back in with:
+#   snap set collabora-office enable-gpu=true
+#
+set -euo pipefail
+
+# Defensive: make sure snap config defaults exist if the configure hook
+# hasn't run yet (e.g. very first launch right after install).
+if [[ -x "${SNAP}/meta/hooks/configure" ]]; then
+    "${SNAP}/meta/hooks/configure" || true
+fi
+
+enable_gpu="$(snapctl get enable-gpu 2>/dev/null || true)"
+
+flags=(
+    # Snap is already a sandbox; Chromium's nested user-namespace setup
+    # in credentials.cc aborts under snap's seccomp filter.
+    "--no-sandbox"
+
+    # We do not use VA-API anywhere; suppress the libva probe errors
+    # that fire on systems without hardware video decode (e.g. VMs).
+    "--disable-features=VaapiVideoDecoder,VaapiVideoEncoder"
+)
+
+if [[ "${enable_gpu}" != "true" ]]; then
+    flags+=("--disable-gpu" "--disable-gpu-compositing")
+fi
+
+existing="${QTWEBENGINE_CHROMIUM_FLAGS:-}"
+export QTWEBENGINE_CHROMIUM_FLAGS="${flags[*]}${existing:+ ${existing}}"
+
+exec "$@"

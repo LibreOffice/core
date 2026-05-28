@@ -32,6 +32,7 @@ config.guess
 config.status
 config.sub
 configure
+!snap/hooks/configure
 compile
 depcomp
 install-sh
