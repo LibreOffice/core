@@ -24,6 +24,7 @@
 #include <comphelper/propertysetinfo.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <svtools/DocumentToGraphicRenderer.hxx>
 #include <vcl/filter/SvmWriter.hxx>
 #include <vcl/gdimtf.hxx>
@@ -128,7 +129,22 @@ sal_Bool EPUBExportFilter::filter(const uno::Sequence<beans::PropertyValue>& rDe
     xExporter->setSourceDocument(mxSourceDocument);
     uno::Reference<document::XFilter> xFilter(xInitialization, uno::UNO_QUERY);
 
-    return xFilter->filter(rDescriptor);
+    // tdf#119112: when svg format is used, the image appears twice in the generated epub
+    // it's because by default LO also insert replacement image since svg is a vector format
+    // but for epub we shouldn't use this mechanism.
+    // So retrieve the old value of AddReplacementImages option and set it to false temporarily
+    bool bOldValue = officecfg::Office::Common::Save::Graphic::AddReplacementImages::get();
+
+    auto xChanges = comphelper::ConfigurationChanges::create();
+    officecfg::Office::Common::Save::Graphic::AddReplacementImages::set(false, xChanges);
+    xChanges->commit();
+
+    bool bReturn = xFilter->filter(rDescriptor);
+
+    officecfg::Office::Common::Save::Graphic::AddReplacementImages::set(bOldValue, xChanges);
+    xChanges->commit();
+
+    return bReturn;
 }
 
 void EPUBExportFilter::CreateMetafiles(std::vector<exp::FixedLayoutPage>& rPageMetafiles)
