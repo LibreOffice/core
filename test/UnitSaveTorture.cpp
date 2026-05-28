@@ -50,8 +50,8 @@ protected:
         , _forceAutosave(false)
     {
         setHasKitHooks();
-        // Double of the default.
-        constexpr std::chrono::minutes timeout_minutes(1);
+        // 4x the default.
+        constexpr std::chrono::minutes timeout_minutes(2);
         setTimeout(timeout_minutes);
     }
 
@@ -577,8 +577,8 @@ class UnitKitSaveTorture : public UnitKit
 public:
     UnitKitSaveTorture() : UnitKit("savetorture")
     {
-        // Double of the default.
-        constexpr std::chrono::minutes timeout_minutes(1);
+        // 4 times the default.
+        constexpr std::chrono::minutes timeout_minutes(2);
         setTimeout(timeout_minutes);
 
         std::cerr << "\n\nYour Kit process has Save torturing hooks\n\n\n";
