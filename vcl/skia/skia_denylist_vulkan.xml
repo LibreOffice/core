@@ -33,6 +33,9 @@
         <entry os="windows" vendor="intel" compare="less_equal" version="0.404.4032"> <!-- tdf#158945 -->
             <device id="0xa7a0"/>
         </entry>
+        <entry os="windows" vendor="intel"> <!-- tdf#172008 Blank black window with Intel Iris Xe Graphics -->
+            <device id="0x46a8"/>
+        </entry>
         <entry os="all" vendor="amd" compare="less" version="2.0.198"> <!-- tdf#146402 -->
             <device id="all"/>
         </entry>
