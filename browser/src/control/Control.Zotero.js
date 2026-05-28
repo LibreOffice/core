@@ -211,8 +211,7 @@ window.L.Control.Zotero = window.L.Control.extend({
 							text: _('Refresh')
 						}
 					],
-					vertical: false,
-					layoutstyle: 'end'
+					vertical: false
 				},
 				{
 					type: 'edit',
