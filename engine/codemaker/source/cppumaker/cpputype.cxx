@@ -1159,12 +1159,11 @@ void InterfaceType::dumpDeclaration(FileStream & out)
     }
     out << "\n{\npublic:\n";
     inc();
-    out << "#if defined LIBO_INTERNAL_ONLY\n"
-        << indent() << id_ << "() = default;\n"
+    out << indent() << id_ << "() = default;\n"
         << indent() << id_ << "(" << id_ << " const &) = default;\n"
         << indent() << id_ << "(" << id_ << " &&) = default;\n"
         << indent() << id_ << " & operator =(" << id_ << " const &) = default;\n"
-        << indent() << id_ << " & operator =(" << id_ << " &&) = default;\n#endif\n\n";
+        << indent() << id_ << " & operator =(" << id_ << " &&) = default;\n\n";
     dumpAttributes(out);
     dumpMethods(out);
     out << "\n" << indent()
@@ -1187,7 +1186,7 @@ void InterfaceType::dumpHppFile(
     out << "\n";
     addDefaultHxxIncludes(includes);
     includes.dump(out, &name_, !(m_cppuTypeLeak || m_cppuTypeDynamic));
-    out << "\n#if defined LIBO_INTERNAL_ONLY\n#include <type_traits>\n#endif\n\n";
+    out << "\n#include <type_traits>\n\n";
     dumpGetCppuType(out);
     out << "\n::css::uno::Type const & "
         << codemaker::cpp::scopedCppName(u2b(name_))
@@ -1197,7 +1196,7 @@ void InterfaceType::dumpHppFile(
     dumpType(out, name_, false, false, true);
     out << " >::get();\n";
     dec();
-    out << "}\n\n#if defined LIBO_INTERNAL_ONLY\nnamespace cppu::detail {\n";
+    out << "}\n\nnamespace cppu::detail {\n";
     if (name_ == "com.sun.star.uno.XInterface") {
         out << "template<typename> struct IsUnoInterfaceType: ::std::false_type {};\n"
                "template<typename T> inline constexpr auto isUnoInterfaceType ="
@@ -1205,7 +1204,7 @@ void InterfaceType::dumpHppFile(
     }
     out << "template<> struct IsUnoInterfaceType<";
     dumpType(out, name_, false, false, true);
-    out << ">: ::std::true_type {};\n}\n#endif\n\n";
+    out << ">: ::std::true_type {};\n}\n\n";
 }
 
 void InterfaceType::dumpAttributes(FileStream & out) const
@@ -2415,8 +2414,6 @@ void PolyStructType::dumpLightGetCppuType(FileStream & out)
         << indent() << "if (the_type == 0) {\n";
     inc();
 
-    out << "#ifdef LIBO_INTERNAL_ONLY\n";
-
     out << indent() << "::rtl::OString the_buffer = \"" << name_
         << "<\" +\n";
     for (std::vector< OUString >::const_iterator i(
@@ -2433,27 +2430,6 @@ void PolyStructType::dumpLightGetCppuType(FileStream & out)
         }
     }
     out << indent() << "\">\";\n";
-
-    out << "#else\n";
-
-    out << indent() << "::rtl::OStringBuffer the_buffer(\"" << name_
-        << "<\");\n";
-    for (std::vector< OUString >::const_iterator i(
-             entity_->getTypeParameters().begin());
-         i != entity_->getTypeParameters().end();) {
-        out << indent()
-            << ("the_buffer.append(::rtl::OUStringToOString("
-                "::cppu::getTypeFavourChar(static_cast< ");
-        dumpTypeParameterName(out, *i);
-        out << " * >(0)).getTypeName(), RTL_TEXTENCODING_UTF8));\n";
-        ++i;
-        if (i != entity_->getTypeParameters().end()) {
-            out << indent() << "the_buffer.append(',');\n";
-        }
-    }
-    out << indent() << "the_buffer.append('>');\n";
-
-    out << "#endif\n";
 
     out << indent()
         << "::typelib_static_type_init(&the_type, " << getTypeClass(name_, true)
@@ -2548,7 +2524,6 @@ void PolyStructType::dumpComprehensiveGetCppuType(FileStream & out)
         << indent() << "{\n";
     inc();
 
-    out << "#ifdef LIBO_INTERNAL_ONLY\n";
     out << indent()
         << "::rtl::OUString the_name =\n";
     out << indent() << "\"" << name_ << "<\" +\n";
@@ -2567,27 +2542,6 @@ void PolyStructType::dumpComprehensiveGetCppuType(FileStream & out)
     }
     out << indent()
         << "\">\";\n";
-    out << "#else\n";
-    out << indent() << "::rtl::OUStringBuffer the_buffer;\n" << indent()
-        << "the_buffer.append(\"" << name_ << "<\");\n";
-    for (std::vector< OUString >::const_iterator i(
-             entity_->getTypeParameters().begin());
-         i != entity_->getTypeParameters().end();) {
-        out << indent()
-            << "the_buffer.append(::cppu::getTypeFavourChar(static_cast< ";
-        dumpTypeParameterName(out, *i);
-        out << " * >(0)).getTypeName());\n";
-        ++i;
-        if (i != entity_->getTypeParameters().end()) {
-            out << indent()
-                << ("the_buffer.append("
-                    "static_cast< ::sal_Unicode >(','));\n");
-        }
-    }
-    out << indent() << "the_buffer.append(static_cast< ::sal_Unicode >('>'));\n";
-    out << indent()
-        << "::rtl::OUString the_name(the_buffer.makeStringAndClear());\n";
-    out << "#endif\n";
     std::map< OUString, sal_uInt32 > parameters;
     std::map< OUString, sal_uInt32 > types;
     std::vector< unoidl::PolymorphicStructTypeTemplateEntity::Member >::
@@ -2801,7 +2755,7 @@ void ExceptionType::dumpHdlFile(
 {
     if (name_ == "com.sun.star.uno.Exception")
     {
-        includes.addCustom(u"#if defined(LIBO_INTERNAL_ONLY) && OSL_DEBUG_LEVEL > 0"_ustr);
+        includes.addCustom(u"#if OSL_DEBUG_LEVEL > 0"_ustr);
         includes.addCustom(u"#include <o3tl/source_location.hxx>"_ustr);
         includes.addCustom(u"#endif"_ustr);
         includes.addCustom(u"#if defined LIBO_USE_SOURCE_LOCATION"_ustr);
@@ -2829,10 +2783,8 @@ void ExceptionType::dumpHppFile(
     // for the output operator below
     if (name_ == "com.sun.star.uno.Exception")
     {
-        out << "#if defined LIBO_INTERNAL_ONLY\n";
         out << "#include <ostream>\n";
         out << "#include <typeinfo>\n";
-        out << "#endif\n";
     }
 
     out << "\n";
@@ -2939,41 +2891,10 @@ void ExceptionType::dumpHppFile(
         }
         out << "}\n\n";
     }
-    out << "#if !defined LIBO_INTERNAL_ONLY\n" << indent() << id_ << "::" << id_
-        << "(" << id_ << " const & the_other)";
-    bFirst = true;
-    if (!base.isEmpty()) {
-        out << ": " << codemaker::cpp::scopedCppName(u2b(base))
-            << "(the_other)";
-        bFirst = false;
-    }
-    for (const unoidl::ExceptionTypeEntity::Member& member : entity_->getDirectMembers()) {
-        out << (bFirst ? ":" : ",") << " " << member.name << "(the_other." << member.name
-            << ")";
-        bFirst = false;
-    }
-    out << indent() << " {}\n\n" << indent() << id_ << "::~" << id_
-        << "() {}\n\n" << indent() << id_ << " & " << id_ << "::operator =("
-        << id_ << " const & the_other) {\n";
-    inc();
-    out << indent()
-        << ("//TODO: Just like its implicitly-defined counterpart, this"
-            " function definition is not exception-safe\n");
-    if (!base.isEmpty()) {
-        out << indent() << codemaker::cpp::scopedCppName(u2b(base))
-            << "::operator =(the_other);\n";
-    }
-    for (const unoidl::ExceptionTypeEntity::Member& member : entity_->getDirectMembers()) {
-        out << indent() << member.name << " = the_other." << member.name << ";\n";
-    }
-    out << indent() << "return *this;\n";
-    dec();
-    out << indent() << "}\n#endif\n\n";
 
     // Provide an output operator for printing Exception information to SAL_WARN/SAL_INFO.
     if (name_ == "com.sun.star.uno.Exception")
     {
-        out << "#if defined LIBO_INTERNAL_ONLY\n";
         out << "template< typename charT, typename traits >\n";
         out << "inline ::std::basic_ostream<charT, traits> & operator<<(\n";
         out << "    ::std::basic_ostream<charT, traits> & os, ::com::sun::star::uno::Exception const & exception)\n";
@@ -2984,7 +2905,6 @@ void ExceptionType::dumpHppFile(
         out << "      os << \" msg: \" << exception.Message;\n";
         out << "    return os;\n";
         out << "}\n";
-        out << "#endif\n";
         out << "\n";
     }
 
@@ -3181,11 +3101,6 @@ void ExceptionType::dumpDeclaration(FileStream & out)
         out << "#endif\n";
         out << "    );\n\n";
     }
-    out << "#if !defined LIBO_INTERNAL_ONLY\n" << indent()
-        << "inline CPPU_GCC_DLLPRIVATE " << id_ << "(" << id_
-        << " const &);\n\n" << indent() << "inline CPPU_GCC_DLLPRIVATE ~"
-        << id_ << "();\n\n" << indent() << "inline CPPU_GCC_DLLPRIVATE " << id_
-        << " & operator =(" << id_ << " const &);\n#endif\n\n";
     for (std::vector< unoidl::ExceptionTypeEntity::Member >::const_iterator i(
              entity_->getDirectMembers().begin());
          i != entity_->getDirectMembers().end(); ++i) {
@@ -3300,14 +3215,10 @@ void EnumType::addComprehensiveGetCppuTypeIncludes(
 
 void EnumType::dumpDeclaration(FileStream& o)
 {
-    o << "\n#if defined LIBO_INTERNAL_ONLY\n";
     o << "\n#if defined __GNUC__\n"; // gcc does not like visibility annotation on enum
     o << "\nenum class " << id_ << "\n{\n";
     o << "\n#else\n";
     o << "\nenum class SAL_DLLPUBLIC_RTTI " << id_ << "\n{\n";
-    o << "\n#endif\n";
-    o << "\n#else\n";
-    o << "\nenum SAL_DLLPUBLIC_RTTI " << id_ << "\n{\n";
     o << "\n#endif\n";
     inc();
 
@@ -3322,14 +3233,12 @@ void EnumType::dumpDeclaration(FileStream& o)
     o << "};\n\n";
 
     // use constexpr to create a kind of type-alias so we don't have to modify existing code
-    o << "#if defined LIBO_INTERNAL_ONLY\n";
     for (const unoidl::EnumTypeEntity::Member& member : entity_->getMembers()) {
         o << "constexpr auto " << id_ << "_" << u2b(member.name)
           << " = "
           << id_ << "::" << id_ << "_" << u2b(member.name)
           << ";\n";
     }
-    o << "#endif\n";
 }
 
 void EnumType::dumpHppFile(
