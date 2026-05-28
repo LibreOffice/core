@@ -166,11 +166,14 @@ QObject* QtBuilder::insertObject(QObject* pParent, const OUString& rClass, std::
                 pBoxParentWidget = pLayoutParentWidget;
             }
 
+            QBoxLayout* pBoxLayout;
             const bool bVertical = hasOrientationVertical(rProps);
             if (bVertical)
-                pObject = new QVBoxLayout(pBoxParentWidget);
+                pBoxLayout = new QVBoxLayout(pBoxParentWidget);
             else
-                pObject = new QHBoxLayout(pBoxParentWidget);
+                pBoxLayout = new QHBoxLayout(pBoxParentWidget);
+            setBoxLayoutProperties(*pBoxLayout, rProps);
+            pObject = pBoxLayout;
         }
     }
     else if (rClass == u"GtkButtonBox")
@@ -1232,6 +1235,14 @@ void QtBuilder::setGridLayoutProperties(QGridLayout& rGridLayout, stringmap& rPr
         rGridLayout.setHorizontalSpacing(aIt->second.toUInt32());
 
     rGridLayout.setContentsMargins(0, 0, 0, 0);
+}
+
+void QtBuilder::setBoxLayoutProperties(QBoxLayout& rBoxLayout, stringmap& rProps)
+{
+    auto aIt = rProps.find(u"spacing"_ustr);
+    if (aIt != rProps.end())
+        rBoxLayout.setSpacing(aIt->second.toUInt32());
+    rBoxLayout.setContentsMargins(0, 0, 0, 0);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
