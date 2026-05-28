@@ -118,7 +118,8 @@ void QtBuilder::insertComboBoxOrListBoxItems(QObject* pObject,
 }
 
 QObject* QtBuilder::insertObject(QObject* pParent, const OUString& rClass, std::string_view sType,
-                                 const OUString& rId, stringmap& rProps, stringmap&, stringmap&)
+                                 const OUString& rId, stringmap& rProps, stringmap& rPango,
+                                 stringmap&)
 {
     // ignore placeholders
     if (rClass.isEmpty())
@@ -282,7 +283,7 @@ QObject* QtBuilder::insertObject(QObject* pParent, const OUString& rClass, std::
     {
         QLabel* pLabel = new QLabel(pParentWidget);
         pLabel->setTextFormat(Qt::TextFormat::PlainText);
-        setLabelProperties(*pLabel, rProps);
+        setLabelProperties(*pLabel, rProps, rPango);
         extractMnemonicWidget(rId, rProps);
         pObject = pLabel;
     }
@@ -1023,7 +1024,7 @@ static Qt::Alignment toAlign(OUString rValue, bool bHorizontal)
     return eRet;
 }
 
-void QtBuilder::setLabelProperties(QLabel& rLabel, stringmap& rProps)
+void QtBuilder::setLabelProperties(QLabel& rLabel, stringmap& rProps, stringmap& rPango)
 {
     for (auto const & [ rKey, rValue ] : rProps)
     {
@@ -1049,6 +1050,22 @@ void QtBuilder::setLabelProperties(QLabel& rLabel, stringmap& rProps)
             rLabel.setAlignment(eAlign);
         }
     }
+
+    QString sFontStyle;
+    auto aIt = rPango.find("weight");
+    if (aIt != rPango.end())
+        sFontStyle += "font-weight: " + toQString(aIt->second) + ";";
+
+    aIt = rPango.find("style");
+    if (aIt != rPango.end())
+        sFontStyle += "font-style: " + toQString(aIt->second) + ";";
+
+    aIt = rPango.find("underline");
+    if (aIt != rPango.end() && toBool(aIt->second))
+        sFontStyle += "text-decoration: underline;";
+
+    if (sFontStyle.size())
+        rLabel.setStyleSheet("QLabel {" + sFontStyle + "}");
 }
 
 void QtBuilder::setMenuButtonProperties(QToolButton& rButton, const OUString& rId,
