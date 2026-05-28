@@ -963,6 +963,10 @@ class SettingIframe {
 		}
 	}
 	private createBrowserSettingForm(sharedConfigsContainer: HTMLElement): void {
+		// On CODA the Interface Settings duplicate what the View menu / sidebar
+		// / zoom slider already persist via localStorage (and the dialog can't
+		// reach the engine's xcu anyway), so skip the whole section.
+		if (isCODesktop) return;
 		const editorContainer = document.createElement('div');
 		editorContainer.id = 'browser-setting';
 		editorContainer.className = 'section';

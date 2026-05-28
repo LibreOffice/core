@@ -881,7 +881,13 @@ function showWelcomeSVG() {
 			}
 
 			global.prefs._localStorageCache = {};
-			global.prefs.useBrowserSetting = true;
+			// On the desktop apps the Interface Settings dialog is gone and the
+			// browsersetting action=update protocol message is #if !MOBILEAPP in
+			// WSD, so leaving useBrowserSetting=true would let stale synced
+			// values shadow per-toggle changes the View menu writes to
+			// localStorage. Keep localStorage authoritative here.
+			if (!global.ThisIsAMobileApp)
+				global.prefs.useBrowserSetting = true;
 
 			// make sure set accessibilityState for cypress
 			global.getAccessibilityState();
