@@ -423,6 +423,37 @@ const AI_ERROR_MESSAGES: Record<number, string> = {
 	503: 'Service temporarily unavailable',
 };
 
+// Some providers add capability metadata to /v1/models entries: Together uses
+// `type` ("chat" | "image" | "embedding" | ...), Fireworks uses `kind`
+// ("image-generation-model" | "chat-completion-model" | ...), Mistral uses a
+// `capabilities` object. Trust those when present; otherwise fall back to
+// matching common model-name patterns.
+type AIModelEntry = {
+	id: string;
+	type?: string;
+	kind?: string;
+	capabilities?: { completion_chat?: boolean };
+};
+
+const IMAGE_MODEL_NAME =
+	/dall-e|gpt-image|stable-diffusion|sdxl|sd3|flux|imagen|ideogram/i;
+const NON_CHAT_MODEL_NAME =
+	/embedding|whisper|tts|moderation|rerank|audio|dall-e|gpt-image|stable-diffusion|sdxl|sd3|flux|imagen|ideogram/i;
+
+const isImageModel = (m: AIModelEntry): boolean => {
+	if (typeof m.type === 'string') return /^image$/i.test(m.type);
+	if (typeof m.kind === 'string') return /image/i.test(m.kind);
+	return IMAGE_MODEL_NAME.test(m.id);
+};
+
+const isChatModel = (m: AIModelEntry): boolean => {
+	if (typeof m.type === 'string') return /^chat$/i.test(m.type);
+	if (typeof m.kind === 'string') return /chat/i.test(m.kind);
+	if (m.capabilities && typeof m.capabilities === 'object')
+		return m.capabilities.completion_chat === true;
+	return !NON_CHAT_MODEL_NAME.test(m.id);
+};
+
 class SettingIframe {
 	private settingsStorage: SettingsStorage;
 	private wordbook;
@@ -2442,8 +2473,8 @@ class SettingIframe {
 
 				json = await response.json();
 			}
-			const models: Array<{ id: string }> = json.data || [];
-			if (!Array.isArray(models) || models.length === 0) {
+			const allModels = (json.data || []) as AIModelEntry[];
+			if (!Array.isArray(allModels) || allModels.length === 0) {
 				this.setAIImageStatus(_('No models found'), true);
 				return;
 			}
@@ -2452,21 +2483,16 @@ class SettingIframe {
 				return;
 			}
 
-			const allModelIds = models.map((m) => m.id).filter(Boolean);
-			if (allModelIds.length === 0) {
+			// Filter to image-capable models; fall back to everything if that
+			// would leave the dropdown empty (a custom provider may use a name
+			// we don't recognise).
+			const imageModels = allModels.filter(isImageModel);
+			const filtered = imageModels.length > 0 ? imageModels : allModels;
+			const modelIds = filtered.map((m) => m.id).filter(Boolean);
+			if (modelIds.length === 0) {
 				this.setAIImageStatus(_('No models found'), true);
 				return;
 			}
-
-			// /v1/models is undifferentiated; keep only ids that look like image
-			// models, but fall back to the full list if nothing matches (custom
-			// providers may use their own naming).
-			const imageModelIds = allModelIds.filter((id) =>
-				/dall-e|gpt-image|stable-diffusion|sdxl|sd3|flux|imagen|ideogram/i.test(
-					id,
-				),
-			);
-			const modelIds = imageModelIds.length > 0 ? imageModelIds : allModelIds;
 
 			const selectedModel = modelIds.includes(data.aiImageModel)
 				? data.aiImageModel
@@ -2550,8 +2576,8 @@ class SettingIframe {
 
 				json = await response.json();
 			}
-			const models: Array<{ id: string }> = json.data || [];
-			if (!Array.isArray(models) || models.length === 0) {
+			const allModels = (json.data || []) as AIModelEntry[];
+			if (!Array.isArray(allModels) || allModels.length === 0) {
 				this.setAIStatus(_('No models found'), true);
 				return;
 			}
@@ -2560,7 +2586,11 @@ class SettingIframe {
 				return;
 			}
 
-			const modelIds = models.map((m) => m.id).filter(Boolean);
+			// Filter to chat-capable models; fall back to everything if that
+			// would leave the dropdown empty.
+			const chatModels = allModels.filter(isChatModel);
+			const filtered = chatModels.length > 0 ? chatModels : allModels;
+			const modelIds = filtered.map((m) => m.id).filter(Boolean);
 			if (modelIds.length === 0) {
 				this.setAIStatus(_('No models found'), true);
 				return;
