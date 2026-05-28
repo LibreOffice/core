@@ -113,6 +113,13 @@ button.ui-tab.notebookbar {
 	transition: box-shadow 0.3s ease;
 }
 
+/* Tint contextual tabs (Table Design, Sparkline, Picture, Chart, Shape,
+   Math, MasterPage, ...) with the doc-type accent while they're visible
+   but not the active tab. */
+.ui-tab.notebookbar.contextual:not(.selected) {
+	color: rgb(var(--doc-type));
+}
+
 .ui-tab.notebookbar:hover {
 	cursor: pointer !important;
 	color: var(--color-text-darker) !important;

@@ -557,8 +557,11 @@ window.L.Control.Notebookbar = window.L.Control.extend({
 				currentlySelectedTabName = tabs[tab].name;
 			}
 			if (tabs[tab].context) {
-				tabElement.hide();
 				var contexts = tabs[tab].context.split('|');
+				// Mark contextual tabs (no 'default' fallback) for CSS tinting.
+				if (contexts.indexOf('default') < 0) {
+					tabElement.addClass('contextual');
+				}
 				var tabMatched = false;
 
 				for (var context in contexts) {
