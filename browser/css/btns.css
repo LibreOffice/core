@@ -82,25 +82,29 @@
 	animation: viewmode-attention 200ms cubic-bezier(0.2, 0, 0, 1) 2;
 }
 
-/* toolbuttons non selected hover */
-.hasnotebookbar .ui-content.unotoolbutton.has-label:hover,
-.hasnotebookbar .ui-content.unotoolbutton.inline:hover,
-.hasnotebookbar .ui-content.unotoolbutton:not(.has-label):not(.inline):hover,
-.unotoolbutton:hover,
-.close-navigation-wrapper:hover,
-#readonlyMode:hover {
-	border: 1px solid var(--color-btn-border);
-	color: var(--color-text-darker);
-	border-radius: var(--border-radius);
-	background-color: var(--color-background-tabs-group);
-}
+/* Gated to real pointers - on touch, :hover sticks after a tap and would
+   mask the .selected styling until the user taps elsewhere. */
+@media (hover: hover) {
+	/* toolbuttons non selected hover */
+	.hasnotebookbar .ui-content.unotoolbutton.has-label:hover,
+	.hasnotebookbar .ui-content.unotoolbutton.inline:hover,
+	.hasnotebookbar .ui-content.unotoolbutton:not(.has-label):not(.inline):hover,
+	.unotoolbutton:hover,
+	.close-navigation-wrapper:hover,
+	#readonlyMode:hover {
+		border: 1px solid var(--color-btn-border);
+		color: var(--color-text-darker);
+		border-radius: var(--border-radius);
+		background-color: var(--color-background-tabs-group);
+	}
 
-/* Scoped to notebookbar: applied broadly, overflow:hidden creates a new BFC
-   on hover and resizes sidebar/jsdialog/mobile toolbuttons. */
-.hasnotebookbar .ui-content.unotoolbutton.has-label:hover,
-.hasnotebookbar .ui-content.unotoolbutton.inline:hover,
-.hasnotebookbar .ui-content.unotoolbutton:not(.has-label):not(.inline):hover {
-	overflow: hidden;
+	/* Scoped to notebookbar: applied broadly, overflow:hidden creates a new BFC
+	   on hover and resizes sidebar/jsdialog/mobile toolbuttons. */
+	.hasnotebookbar .ui-content.unotoolbutton.has-label:hover,
+	.hasnotebookbar .ui-content.unotoolbutton.inline:hover,
+	.hasnotebookbar .ui-content.unotoolbutton:not(.has-label):not(.inline):hover {
+		overflow: hidden;
+	}
 }
 
 /* toolbuttons selected */
@@ -127,16 +131,18 @@
 
 /* toolbuttons selected hover */
 /* toolbuttons have .unobuttons as children */
-.hasnotebookbar .ui-content.unotoolbutton.has-label:hover,
-.hasnotebookbar .ui-content.unotoolbutton.selected:hover,
-.hasnotebookbar .ui-content.unotoolbutton.selected:not(.has-label):not(.inline):hover,
-.sidebar.unotoolbutton.selected:hover,
-.ui-overflow-group-more.unotoolbutton:hover,
-.notebookbar.unotoolbutton.selected:hover,
-.jsdialog.unotoolbutton.selected:hover {
-	color: var(--color-text-darker);
-	border-radius: var(--border-radius);
-	background-color: var(--color-background-tabs-group);
+@media (hover: hover) {
+	.hasnotebookbar .ui-content.unotoolbutton.has-label:hover,
+	.hasnotebookbar .ui-content.unotoolbutton.selected:hover,
+	.hasnotebookbar .ui-content.unotoolbutton.selected:not(.has-label):not(.inline):hover,
+	.sidebar.unotoolbutton.selected:hover,
+	.ui-overflow-group-more.unotoolbutton:hover,
+	.notebookbar.unotoolbutton.selected:hover,
+	.jsdialog.unotoolbutton.selected:hover {
+		color: var(--color-text-darker);
+		border-radius: var(--border-radius);
+		background-color: var(--color-background-tabs-group);
+	}
 }
 
 /* if menubutton has text - be sure it is fully visible */

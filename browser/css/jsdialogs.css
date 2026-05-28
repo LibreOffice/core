@@ -2811,20 +2811,24 @@ button.has-img img {
 	background-color: var(--color-background-lighter);
 	border: 1px solid var(--color-border-darker);
 }
-#toolbar-down .jsdialog.menubutton:not([disabled]):hover,
-#toolbar-down .ui-listbox:not([disabled]):hover,
-#toolbar-down .jsdialog.ui-edit:not([disabled]):hover,
-#toolbar-down .jsdialog.ui-textarea:not([disabled]):hover {
-	color: var(--color-text-darker);
-	background-color: transparent !important;
-	border-color: transparent;
-}
 #toolbar-down .unobutton .unolabel {
 	cursor: pointer;
 }
-#toolbar-down .unotoolbutton:hover {
-	background-color: transparent !important;
-	border-color: transparent;
+/* Gated to real pointers - on touch, :hover sticks after a tap and the
+   transparent !important below would mask .selected until the next tap. */
+@media (hover: hover) {
+	#toolbar-down .jsdialog.menubutton:not([disabled]):hover,
+	#toolbar-down .ui-listbox:not([disabled]):hover,
+	#toolbar-down .jsdialog.ui-edit:not([disabled]):hover,
+	#toolbar-down .jsdialog.ui-textarea:not([disabled]):hover {
+		color: var(--color-text-darker);
+		background-color: transparent !important;
+		border-color: transparent;
+	}
+	#toolbar-down .unotoolbutton:hover {
+		background-color: transparent !important;
+		border-color: transparent;
+	}
 }
 
 #toolbar-down  .jsdialog .ui-edit-container {
