@@ -1591,6 +1591,10 @@ void ScModelObj::getCommandValues(tools::JsonWriter& rJsonWriter, std::string_vi
         const SCTAB nActiveTab = pViewShell ? pViewShell->GetViewData().GetTabNumber() : SCTAB(0);
 
         ScRange aRange;
+        // Default to the active sheet so an unprefixed range like B5:B10 parses
+        // against the sheet the user is viewing rather than always sheet 0.
+        aRange.aStart.SetTab(nActiveTab);
+        aRange.aEnd.SetTab(nActiveTab);
         bool bHaveRange = false;
         if (!rangeStr.isEmpty())
             bHaveRange = bool(aRange.Parse(rangeStr, rDoc) & ScRefFlags::VALID);
