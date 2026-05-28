@@ -668,6 +668,8 @@ ul {
 
 .toggle-image {
 	width: 300px;
+	/* reserve the 3:2 box before the SVG loads, so it doesn't shift layout */
+	aspect-ratio: 3 / 2;
 	height: auto;
 	border: 2px solid transparent;
 	border-radius: 6px;

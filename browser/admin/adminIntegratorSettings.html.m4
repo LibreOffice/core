@@ -40,6 +40,11 @@ m4_dnl------------------------------------------------------------------------
       rel="stylesheet"
       href="m4_ifelse(MOBILEAPP, [], [%SERVICE_ROOT%/browser/%VERSION%/])admin/css/adminIntegratorSettings.css"
     />
+    <link
+      id="settings-css"
+      rel="stylesheet"
+      href="m4_ifelse(MOBILEAPP, [], [%SERVICE_ROOT%/browser/%VERSION%/])settings.css"
+    />
     <script
       src="m4_ifelse(MOBILEAPP, [], [%SERVICE_ROOT%/browser/%VERSION%/])admin-bundle.js"
       defer

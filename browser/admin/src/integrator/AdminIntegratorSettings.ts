@@ -81,6 +81,7 @@ interface SectionConfig {
 	uploadPath: string;
 	enabledFor?: string;
 	debugOnly?: boolean;
+	element: HTMLElement | null;
 }
 
 const initTranslationStr = () => {
@@ -573,6 +574,13 @@ class SettingIframe {
 	private _sectionObserver: IntersectionObserver | null = null;
 	private _visibleSections: Set<Element> = new Set();
 
+	private _browserSettingSection: HTMLElement | null = null;
+	private _xcuSection: HTMLElement | null = null;
+	private _aiSection: HTMLElement | null = null;
+	private _docSigningSection: HTMLElement | null = null;
+	private _zoteroSection: HTMLElement | null = null;
+	private _configSections: SectionConfig[] | null = null;
+
 	private getAPIEndpoints() {
 		return {
 			uploadSettings: window.serviceRoot + '/browser/dist/upload-settings',
@@ -608,11 +616,10 @@ class SettingIframe {
 		const saves: Promise<void>[] = [];
 
 		// Browser settings
-		const browserSettingEl = document.getElementById('browser-setting');
-		if (browserSettingEl) {
+		if (this._browserSettingSection) {
 			saves.push(
 				(async () => {
-					this.collectBrowserSettingsFromUI(browserSettingEl);
+					this.collectBrowserSettingsFromUI(this._browserSettingSection!);
 					const file = new File(
 						[JSON.stringify(this.browserSettingOptions)],
 						'browsersetting.json',
@@ -645,6 +652,9 @@ class SettingIframe {
 	init(): void {
 		this._allConfigSection = document.getElementById('allConfigSection');
 		this.initWindowVariables();
+		if (this.isAdmin()) {
+			document.getElementById('settings-css')?.remove();
+		}
 		if (isCODesktop) {
 			this.settingsStorage = new DesktopSettingsStorage();
 		} else {
@@ -752,10 +762,10 @@ class SettingIframe {
 		});
 	}
 
-	private insertConfigSections(): void {
-		if (!this._allConfigSection) return;
+	private getConfigSections(): SectionConfig[] {
+		if (this._configSections) return this._configSections;
 
-		const configSections: SectionConfig[] = [
+		this._configSections = [
 			{
 				id: 'autotext',
 				sectionTitle: _('Autotext'),
@@ -768,6 +778,7 @@ class SettingIframe {
 				fileAccept: '.bau',
 				buttonText: _('Upload Autotext'),
 				uploadPath: this.PATH.autoTextUpload(),
+				element: null,
 			},
 			{
 				id: 'wordbook',
@@ -781,6 +792,7 @@ class SettingIframe {
 				fileAccept: '.dic',
 				buttonText: _('Upload Wordbook'),
 				uploadPath: this.PATH.wordBookUpload(),
+				element: null,
 			},
 			{
 				id: 'themes',
@@ -794,15 +806,31 @@ class SettingIframe {
 				fileAccept: '.theme',
 				buttonText: _('Upload Theme'),
 				uploadPath: this.PATH.themesUpload(),
+				element: null,
 			},
 		];
 
-		configSections.forEach((cfg) => {
+		return this._configSections;
+	}
+
+	private insertConfigSections(data: ConfigData | null): void {
+		if (!this._allConfigSection) return;
+
+		this.getConfigSections().forEach((cfg) => {
 			if (cfg.enabledFor && cfg.enabledFor !== this.getConfigType()) {
 				return;
 			}
 
 			if (cfg.debugOnly && !window.enableDebug) {
+				return;
+			}
+
+			if (!data) {
+				cfg.element = this.createEmptySection(
+					cfg.element,
+					cfg.id,
+					cfg.sectionTitle,
+				);
 				return;
 			}
 
@@ -836,12 +864,18 @@ class SettingIframe {
 				});
 			}
 
-			this._allConfigSection!.appendChild(sectionEl);
+			cfg.element = this.mountConfigSection(
+				this._allConfigSection!,
+				cfg.element,
+				sectionEl,
+			);
 		});
 	}
 
 	private async fetchAndPopulateSharedConfigs(): Promise<void> {
 		try {
+			this.populateSharedConfigUI(null);
+			this.setupLeftNavbar();
 			const data = await this.settingsStorage.fetchSettingsConfig();
 			await this.populateSharedConfigUI(data);
 			console.debug('Shared config data: ', data);
@@ -869,6 +903,36 @@ class SettingIframe {
 		);
 
 		return sectionEl;
+	}
+
+	private createEmptySection(
+		current: HTMLElement | null,
+		id: string,
+		heading: string,
+	): HTMLElement {
+		if (current) return current;
+
+		const section = document.createElement('div');
+		section.classList.add('section');
+		section.id = id;
+		section.style.display = 'none';
+		section.appendChild(this.createHeading(heading, 'h3'));
+
+		this._allConfigSection!.appendChild(section);
+		return section;
+	}
+
+	private mountConfigSection(
+		container: HTMLElement,
+		current: HTMLElement | null,
+		next: HTMLElement,
+	): HTMLElement {
+		if (current && current.parentNode === container) {
+			current.replaceWith(next);
+		} else {
+			container.appendChild(next);
+		}
+		return next;
 	}
 
 	private createHeading(text: string, level: 'h1' | 'h2' | 'h3' = 'h3') {
@@ -1064,12 +1128,11 @@ class SettingIframe {
 		editorContainer.appendChild(contentsContainer);
 		editorContainer.appendChild(actionsContainer);
 
-		const oldEditor = sharedConfigsContainer.querySelector('#browser-setting');
-		if (oldEditor && oldEditor.parentNode === sharedConfigsContainer) {
-			sharedConfigsContainer.replaceChild(editorContainer, oldEditor);
-		} else {
-			sharedConfigsContainer.appendChild(editorContainer);
-		}
+		this._browserSettingSection = this.mountConfigSection(
+			sharedConfigsContainer,
+			this._browserSettingSection,
+			editorContainer,
+		);
 
 		setTimeout(() => {
 			const defaultTab = navContainer.querySelector(
@@ -1212,9 +1275,7 @@ class SettingIframe {
 			['button-primary'],
 			async (button) => {
 				button.disabled = true;
-				this.collectBrowserSettingsFromUI(
-					sharedConfigsContainer.querySelector('#browser-setting')!,
-				);
+				this.collectBrowserSettingsFromUI(this._browserSettingSection!);
 
 				const file = new File(
 					[JSON.stringify(this.browserSettingOptions)],
@@ -1808,8 +1869,6 @@ class SettingIframe {
 	}
 
 	private generateZoteroUI(data: ViewSettings, settingsContainer: HTMLElement) {
-		const oldZoteroContainer = document.getElementById('zotero-section');
-
 		const zoteroContainer = document.createElement('div');
 		zoteroContainer.id = 'zotero-section';
 		zoteroContainer.classList.add('section');
@@ -1868,21 +1927,17 @@ class SettingIframe {
 					),
 			),
 		);
-		if (oldZoteroContainer) {
-			oldZoteroContainer.replaceWith(zoteroContainer);
-		} else {
-			settingsContainer.appendChild(zoteroContainer);
-		}
+		this._zoteroSection = this.mountConfigSection(
+			settingsContainer,
+			this._zoteroSection,
+			zoteroContainer,
+		);
 	}
 
 	private generateDocSigningUI(
 		data: ViewSettings,
 		settingsContainer: HTMLElement,
 	) {
-		const oldDocSigningContainer = document.getElementById(
-			'doc-signing-section',
-		);
-
 		const docSigningContainer = document.createElement('div');
 		docSigningContainer.id = 'doc-signing-section';
 		docSigningContainer.classList.add('section');
@@ -1931,11 +1986,11 @@ class SettingIframe {
 					),
 			),
 		);
-		if (oldDocSigningContainer) {
-			oldDocSigningContainer.replaceWith(docSigningContainer);
-		} else {
-			settingsContainer.appendChild(docSigningContainer);
-		}
+		this._docSigningSection = this.mountConfigSection(
+			settingsContainer,
+			this._docSigningSection,
+			docSigningContainer,
+		);
 	}
 
 	private generateAISettingsUI(
@@ -1945,8 +2000,6 @@ class SettingIframe {
 		if (window.disableAISettings) {
 			return;
 		}
-
-		const oldAIContainer = document.getElementById('ai-section');
 
 		const aiContainer = document.createElement('div');
 		aiContainer.id = 'ai-section';
@@ -1993,11 +2046,11 @@ class SettingIframe {
 					),
 			),
 		);
-		if (oldAIContainer) {
-			oldAIContainer.replaceWith(aiContainer);
-		} else {
-			settingsContainer.appendChild(aiContainer);
-		}
+		this._aiSection = this.mountConfigSection(
+			settingsContainer,
+			this._aiSection,
+			aiContainer,
+		);
 	}
 
 	private createViewSettingsTextBox(
@@ -2786,15 +2839,21 @@ class SettingIframe {
 		status.classList.toggle('ui-state-error-text', isError);
 	}
 
-	private async populateSharedConfigUI(data: ConfigData): Promise<void> {
+	// Runs twice: first with `data === null` to drop in empty, hidden
+	// sections (heading only) so the left navbar can be built straight away,
+	// then with the real data to fill each section in. The headings are there
+	// from the start, so the navbar doesn't change as each section loads.
+	private async populateSharedConfigUI(data: ConfigData | null): Promise<void> {
 		const settingsContainer = this._allConfigSection;
 		if (!settingsContainer) return;
+
+		const isUserConfig = data ? data.kind === 'user' : !this.isAdmin();
 
 		const browserSettingButton = document.getElementById(
 			'uploadBrowserSettingsButton',
 		) as HTMLButtonElement | null;
 
-		if (browserSettingButton) {
+		if (browserSettingButton && data) {
 			if (data.browsersetting && data.browsersetting.length > 0) {
 				browserSettingButton.style.display = 'none';
 			} else {
@@ -2803,27 +2862,41 @@ class SettingIframe {
 		}
 
 		// Interface settings
-		if (data.kind === 'user') {
-			if (data.browsersetting && data.browsersetting.length > 0) {
-				const browserSettingContent =
-					await this.settingsStorage.fetchSettingFile(
-						data.browsersetting[0].uri,
-					);
-				this.browserSettingOptions = browserSettingContent
-					? this.mergeWithDefault(
-							defaultBrowserSetting,
-							JSON.parse(browserSettingContent),
-						)
-					: defaultBrowserSetting;
+		if (isUserConfig) {
+			if (!data) {
+				this._browserSettingSection = this.createEmptySection(
+					this._browserSettingSection,
+					'browser-setting',
+					_('Interface Settings'),
+				);
 			} else {
-				this.browserSettingOptions = defaultBrowserSetting;
+				if (data.browsersetting && data.browsersetting.length > 0) {
+					const browserSettingContent =
+						await this.settingsStorage.fetchSettingFile(
+							data.browsersetting[0].uri,
+						);
+					this.browserSettingOptions = browserSettingContent
+						? this.mergeWithDefault(
+								defaultBrowserSetting,
+								JSON.parse(browserSettingContent),
+							)
+						: defaultBrowserSetting;
+				} else {
+					this.browserSettingOptions = defaultBrowserSetting;
+				}
+				this.createBrowserSettingForm(settingsContainer);
 			}
-			this.createBrowserSettingForm(settingsContainer);
 		}
 
 		// Document settings (xcu)
 		if (!isCODesktop) {
-			if (data.xcu && data.xcu.length > 0) {
+			if (!data) {
+				this._xcuSection = this.createEmptySection(
+					this._xcuSection,
+					'xcu-section',
+					_('Document Settings'),
+				);
+			} else if (data.xcu && data.xcu.length > 0) {
 				const xcuFileContent = await this.settingsStorage.fetchSettingFile(
 					data.xcu[0].uri,
 				);
@@ -2838,12 +2911,11 @@ class SettingIframe {
 				const xcuSection = this.xcuEditor.createXcuEditorUI(xcuContainer);
 				this.appendXcuDebugUploadControls(xcuContainer, data);
 
-				const existingXcuSection = document.getElementById('xcu-section');
-				if (existingXcuSection) {
-					existingXcuSection.replaceWith(xcuSection);
-				} else {
-					settingsContainer.appendChild(xcuSection);
-				}
+				this._xcuSection = this.mountConfigSection(
+					settingsContainer,
+					this._xcuSection,
+					xcuSection,
+				);
 			} else {
 				// If user doesn't have any xcu file, we generate with default settings...
 				try {
@@ -2853,7 +2925,8 @@ class SettingIframe {
 						await this.xcuEditor.generateXcuAndUpload();
 						return await this.fetchAndPopulateSharedConfigs();
 					} else {
-						document.getElementById('xcu-section')?.remove();
+						this._xcuSection?.remove();
+						this._xcuSection = null;
 						console.warn('XCU file not found and automatic creation failed.');
 					}
 				} catch (error) {
@@ -2861,52 +2934,76 @@ class SettingIframe {
 						'Something went wrong while generating or uploading xcu file:',
 						error,
 					);
-					document.getElementById('xcu-section')?.remove();
+					this._xcuSection?.remove();
+					this._xcuSection = null;
 				}
 			}
 		}
 
 		// AI settings
-		if (data.kind === 'user') {
-			let viewSetting = this.getDefaultViewSettings();
-			if (data.viewsetting && data.viewsetting.length > 0) {
-				const fetchContent = await this.settingsStorage.fetchSettingFile(
-					data.viewsetting[0].uri,
+		if (isUserConfig) {
+			if (!data && !window.disableAISettings) {
+				this._aiSection = this.createEmptySection(
+					this._aiSection,
+					'ai-section',
+					_('AI Assistant'),
 				);
-				if (fetchContent) {
-					// Merge with default values to ensure all fields are present
-					viewSetting = this.mergeWithDefault(
-						viewSetting,
-						JSON.parse(fetchContent),
+			} else if (data) {
+				let viewSetting = this.getDefaultViewSettings();
+				if (data.viewsetting && data.viewsetting.length > 0) {
+					const fetchContent = await this.settingsStorage.fetchSettingFile(
+						data.viewsetting[0].uri,
 					);
+					if (fetchContent) {
+						// Merge with default values to ensure all fields are present
+						viewSetting = this.mergeWithDefault(
+							viewSetting,
+							JSON.parse(fetchContent),
+						);
+					}
 				}
+				this._viewSetting = viewSetting;
+				this._viewSetting.aiProviderURL =
+					this.normalizeBaseUrl(viewSetting.aiProviderURL || '') ||
+					this.getDefaultAIProviderURL();
+				this.generateAISettingsUI(viewSetting, settingsContainer);
 			}
-			this._viewSetting = viewSetting;
-			this._viewSetting.aiProviderURL =
-				this.normalizeBaseUrl(viewSetting.aiProviderURL || '') ||
-				this.getDefaultAIProviderURL();
-			this.generateAISettingsUI(viewSetting, settingsContainer);
 		}
 
-		// Autotext and Custom dictionaries
-		if (!isCODesktop && !document.getElementById('autotext')) {
-			this.insertConfigSections();
+		// Autotext, Custom dictionaries and Document themes
+		if (!isCODesktop) {
+			this.insertConfigSections(data);
 		}
 
 		// Document Signing and Zotero
-		if (data.kind === 'user') {
-			this.generateDocSigningUI(this._viewSetting, settingsContainer);
-			this.generateZoteroUI(this._viewSetting, settingsContainer);
+		if (isUserConfig) {
+			if (!data) {
+				this._docSigningSection = this.createEmptySection(
+					this._docSigningSection,
+					'doc-signing-section',
+					_('Document Signing'),
+				);
+				this._zoteroSection = this.createEmptySection(
+					this._zoteroSection,
+					'zotero-section',
+					'Zotero',
+				);
+			} else {
+				this.generateDocSigningUI(this._viewSetting, settingsContainer);
+				this.generateZoteroUI(this._viewSetting, settingsContainer);
+			}
 		}
 
 		this.setupLeftNavbar();
 
-		if (data.autotext)
-			this.populateList('autotextList', data.autotext, '/autotext');
-		if (data.wordbook)
-			this.populateList('wordbookList', data.wordbook, '/wordbook');
-		if (data.xcu) this.populateList('XcuList', data.xcu, '/xcu');
-		if (data.themes) this.populateList('themesList', data.themes, '/themes');
+		if (data) {
+			if (data.autotext)
+				this.populateList('autotextList', data.autotext, '/autotext');
+			if (data.wordbook)
+				this.populateList('wordbookList', data.wordbook, '/wordbook');
+			if (data.xcu) this.populateList('XcuList', data.xcu, '/xcu');
+			if (data.themes) this.populateList('themesList', data.themes, '/themes');
+		}
 
 		var navItem = document.querySelector<HTMLElement>(
 			'#settings-nav .settings-nav-item',

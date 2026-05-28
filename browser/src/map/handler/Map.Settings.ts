@@ -71,7 +71,6 @@ window.L.Map.Settings = window.L.Handler.extend({
 
 		const options = {
 			prefix: 'iframe-settings',
-			stylesheets: [app.LOUtil.getURL('settings.css')],
 			titlebar: _('Options'),
 			modalButtons: [
 				{
