@@ -232,6 +232,26 @@ describe(['tagdesktop'], 'Top toolbar tests.', function() {
 		cy.cGet('#copy-paste-container table td font').should('have.attr', 'color', '#FFB66C');
 	});
 
+	it('Color palette marks the current color as checked.', function() {
+		desktopHelper.getCompactIconArrow('Color').click();
+		desktopHelper.selectColorFromPalette('3FAF46');
+		desktopHelper.getCompactIconArrow('Color').click();
+		cy.cGet('.ui-color-picker').should('be.visible');
+		cy.cGet('.ui-color-picker-entry[value="3FAF46"]').should('be.checked');
+		cy.realPress('Escape');
+	});
+
+	it('Font color indicator keeps the last applied color across cells.', function() {
+		desktopHelper.getCompactIconArrow('Color').click();
+		desktopHelper.selectColorFromPalette('FF0000');
+		cy.cGet('#toolbar-up .unoColor .selected-color')
+			.should('have.css', 'background-color', 'rgb(255, 0, 0)');
+		helper.typeIntoInputField(helper.addressInputSelector, 'B1');
+		helper.processToIdle(this.win);
+		cy.cGet('#toolbar-up .unoColor .selected-color')
+			.should('have.css', 'background-color', 'rgb(255, 0, 0)');
+	});
+
 	it('Add/Delete decimal places', function() {
 		helper.setDummyClipboardForCopy();
 		// Add decimal place

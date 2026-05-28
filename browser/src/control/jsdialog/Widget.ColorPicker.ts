@@ -136,7 +136,7 @@ function createColor(
 	color.value = colorItem;
 	color.style.backgroundColor = '#' + colorItem;
 	color.setAttribute('index', index);
-	color.innerHTML = isCurrent ? '&#149;' : '&#160;';
+	color.checked = isCurrent;
 	if (themeData) color.setAttribute('theme', themeData);
 
 	// Set color tooltips
