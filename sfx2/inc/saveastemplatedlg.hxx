@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SFX2_INC_SAVEASTEMPLATEDLG_HXX
-#define INCLUDED_SFX2_INC_SAVEASTEMPLATEDLG_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <sfx2/doctempl.hxx>
@@ -55,7 +54,5 @@ public:
 public:
     SfxSaveAsTemplateDialog(weld::Window* pParent, css::uno::Reference<css::frame::XModel> xModel);
 };
-
-#endif // INCLUDED_SFX2_INC_SAVEASTEMPLATEDLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
