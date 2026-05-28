@@ -1270,6 +1270,7 @@ pot:
 		js/global.js \
 		src/app/Debug.ts \
 		src/app/IconUtil.ts \
+		src/app/LOUtil.ts \
 		src/app/TableStylesService.ts \
 		src/canvas/sections/CommentListSection.ts \
 		src/canvas/sections/CommentSection.ts \
@@ -1280,10 +1281,15 @@ pot:
 		src/canvas/sections/GenericButtonSection.ts \
 		src/canvas/sections/ChartContextButtonSection.ts \
 		src/canvas/sections/DiagramButtonSection.ts \
+		src/canvas/sections/FormFieldButton.ts \
+		src/canvas/sections/FormulaErrorHelpSection.ts \
+		src/canvas/sections/HeaderFooterBoundarySection.ts \
 		src/control/jsdialog/Definitions.MenuCommands.ts \
+		src/control/CalcNotifications.ts \
 		src/control/ColorPicker.ts \
 		src/control/Control.AboutDialog.ts \
 		src/control/Control.AddressInputField.ts \
+		src/control/Control.AIChatSidebar.ts \
 		src/control/Control.AlertDialog.js \
 		src/control/Control.BackstageView.ts \
 		src/control/backstage/Common.tsx \
@@ -1316,6 +1322,7 @@ pot:
 		src/control/Notebookbar.WriterReferencesTab.ts \
 		src/control/Sidebar.FromNotebookbarPanel.ts \
 		src/control/Control.Notebookbar.js \
+		src/control/Control.NotebookbarBase.ts \
 		src/control/Control.NotebookbarBuilder.js \
 		src/control/Control.NotebookbarCalc.js \
 		src/control/Control.NotebookbarDraw.js \
@@ -1336,20 +1343,27 @@ pot:
 		src/control/Control.UserList.ts \
 		src/control/Control.Zotero.js \
 		src/control/HRuler.ts \
+		src/control/IFrameDialog.js \
 		src/control/Parts.js \
 		src/control/Permission.js \
 		src/control/Signing.js \
 		src/control/Toolbar.js \
 		src/control/VRuler.ts \
 		src/control/PermissionMode.ts \
+		src/control/jsdialog/Control.ContextMenu.ts \
+		src/control/jsdialog/Definitions.DialogModification.ts \
 		src/control/jsdialog/Definitions.Menu.ts \
 		src/control/jsdialog/Util.SnackbarController.ts \
 		src/control/jsdialog/Widget.ColorPicker.ts \
+		src/control/jsdialog/Widget.Combobox.js \
+		src/control/jsdialog/Widget.CsvGrid.ts \
+		src/control/jsdialog/Widget.EmojiPicker.ts \
 		src/control/jsdialog/Widget.PageMarginEntry.ts \
 		src/control/jsdialog/Widget.PageSizeEntry.ts \
 		src/control/jsdialog/Widget.HTMLContent.ts \
 		src/control/jsdialog/Widget.MobileBorderSelector.js \
 		src/control/jsdialog/Widget.NewSlideLayoutEntry.ts \
+		src/control/jsdialog/Widget.NotebookbarIconView.ts \
 		src/control/jsdialog/Widget.RadioButton.ts \
 		src/control/jsdialog/Widget.PushButton.ts \
 		src/control/jsdialog/Widget.Comment.ts \
@@ -1377,10 +1391,12 @@ pot:
 		src/map/handler/Map.Keyboard.js \
 		src/map/handler/Map.Print.js \
 		src/map/handler/Map.SlideShow.js \
+		src/map/handler/Map.StateChanges.js \
 		src/map/handler/Map.VersionBar.js \
 		src/map/handler/Map.WOPI.js \
 		src/map/handler/Map.Welcome.js \
 		src/map/handler/Map.Settings.ts \
+		src/slideshow/engine/SlideShowHandler.ts \
 		src/slideshow/PauseTimer.ts \
 		src/slideshow/PresenterConsole.js \
 		src/slideshow/SlideShowPresenter.ts \
