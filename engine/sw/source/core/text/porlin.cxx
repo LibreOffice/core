@@ -321,6 +321,39 @@ void SwLinePortion::HandlePortion( SwPortionHandler& rPH ) const
     rPH.Special( GetLen(), OUString(), GetWhichPor() );
 }
 
+bool SwLinePortion::IsUsedToCalcLineSpacingHeight(const IDocumentSettingAccess& rIDSA) const
+{
+    // For inside-the-paragraph line-spacing, LO 7.1 accidentally changed the implementation
+    // from 'everything informs line-spacing' to 'usually only plain text informs line-spacing'.
+    // That was 5 years ago, so at this point legacy LO has no 'correct' implementation.
+
+    if (IsTextPortion())
+    {
+        // NOTE: MSO exception for HasOnlyBlankPortions is handled later in SwLineLayout::CalcLine
+        return true;
+    }
+
+    // Use new (2027) implementation to identify an interoperable set of line-space-defining content
+    if (!rIDSA.get(DocumentSettingId::LINE_SPACING_AS_GAP_BELOW))
+        return false; // LO legacy format
+
+    // exclude anything else that isn't considered to be text
+    if (!InTextGrp()) // excludes flys, tab-stops, bookmarks, Hole, etc
+        return false;
+
+    // exclude the following text-like portions
+    if (InNumberGrp() // bullets and numbering, FootnoteNum, GrfNum
+        || IsFootnotePortion() // numbering of the actual footnote
+        || IsPostItsPortion() // comment marker
+        || GetWhichPor() == PortionType::Hidden // hidden field
+        || GetWhichPor() == PortionType::FieldMark) // the fieldmark commands
+    {
+        return false;
+    }
+
+    return true;
+}
+
 void SwLinePortion::dumpAsXml(xmlTextWriterPtr pWriter, const OUString& rText, TextFrameIndex& nOffset) const
 {
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwLinePortion"));
