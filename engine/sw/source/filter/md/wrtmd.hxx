@@ -76,6 +76,13 @@ public:
     int GetTaskListItems() const { return m_nTaskListItems; }
     o3tl::sorted_vector<SwMDFly>& GetFlys() { return m_aFlys; }
 
+    /// When set, the writer drops anchored and inline images instead of
+    /// emitting them as markdown image references. Selected by the
+    /// "NoImages" filter option so a text-extraction caller does not have
+    /// to receive multi-megabyte base64 data URIs it cannot use.
+    void SetSkipImages(bool b) { m_bSkipImages = b; }
+    bool IsSkipImages() const { return m_bSkipImages; }
+
 protected:
     ErrCode WriteStream() override;
 
@@ -92,6 +99,7 @@ private:
     int m_nTaskListItems = 0;
     /// Anchored fly frames, e.g. images.
     o3tl::sorted_vector<SwMDFly> m_aFlys;
+    bool m_bSkipImages = false;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

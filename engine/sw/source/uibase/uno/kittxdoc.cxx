@@ -1220,8 +1220,11 @@ void GetDocStructureBodyText(tools::JsonWriter& rJsonWriter, SwDocShell* pDocShe
 
     SwDoc* pDoc = pDocShell ? pDocShell->GetDoc() : nullptr;
     WriterRef xWrt;
+    // NoImages: the AI text-extraction path discards image markup
+    // anyway, and inline base64 graphics would otherwise blow past the
+    // text budget on documents with embedded pictures.
     if (pDoc)
-        GetMDWriter(std::u16string_view(), OUString(), xWrt);
+        GetMDWriter(u"NoImages", OUString(), xWrt);
     if (!pDoc || !xWrt.is())
     {
         rJsonWriter.put("text", "");

@@ -157,6 +157,12 @@ struct NodePositions
 void ApplyFlyFrameFormat(const SwFlyFrameFormat& rFrameFormat, SwMDWriter& rWrt,
                          FormattingStatus& rChange)
 {
+    // Caller selected the NoImages filter option: drop image and OLE flys
+    // so the produced markdown stays text. Non-image fly content is
+    // currently not rendered by this writer either way.
+    if (rWrt.IsSkipImages())
+        return;
+
     const SwFormatContent& rFlyContent = rFrameFormat.GetContent();
     const SwNodeIndex* pContentIdx = rFlyContent.GetContentIdx();
     if (!pContentIdx)
@@ -1133,9 +1139,12 @@ void SwMDWriter::SetListLevelPrefixSize(int nListLevel, int nPrefixSize)
     m_aListLevelPrefixSizes[nListLevel] = nPrefixSize;
 }
 
-void GetMDWriter(std::u16string_view /*rFilterOptions*/, const OUString& rBaseURL, WriterRef& xRet)
+void GetMDWriter(std::u16string_view rFilterOptions, const OUString& rBaseURL, WriterRef& xRet)
 {
-    xRet = new SwMDWriter(rBaseURL);
+    auto* pWrt = new SwMDWriter(rBaseURL);
+    if (rFilterOptions.find(u"NoImages") != std::u16string_view::npos)
+        pWrt->SetSkipImages(true);
+    xRet = pWrt;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
