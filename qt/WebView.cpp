@@ -455,6 +455,10 @@ WebView::WebView(QWebEngineProfile* profile, bool isWelcome, QMainWindow* parent
     _webView->setPage(page);
 
     page->settings()->setAttribute(QWebEngineSettings::FullScreenSupportEnabled, true);
+    // JS-driven clipboard access is off by default in QtWebEngine - enable it so
+    // copy/paste buttons (e.g. the AI chat sidebar's "Copy to clipboard") work.
+    page->settings()->setAttribute(QWebEngineSettings::JavascriptCanAccessClipboard, true);
+    page->settings()->setAttribute(QWebEngineSettings::JavascriptCanPaste, true);
 
     QObject::connect(page, &QWebEnginePage::fullScreenRequested,
                      [this](QWebEngineFullScreenRequest request)
