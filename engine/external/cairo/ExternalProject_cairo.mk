@@ -81,7 +81,7 @@ $(call gb_ExternalProject_get_state_target,cairo,build) :
 		PYTHONWARNINGS= \
 		PKG_CONFIG_TOP_BUILD_DIR= \
 		PKG_CONFIG_PATH="${PKG_CONFIG_PATH}:$(gb_UnpackedTarball_workdir)/pixman/builddir/meson-uninstalled" \
-		$(if $(SYSTEM_FREETYPE),,PKG_CONFIG_PATH="$$PKG_CONFIG_PATH:$(gb_UnpackedTarball_workdir)/freetype/instdir/lib/pkgconfig") \
+		$(if $(SYSTEM_FREETYPE),,PKG_CONFIG_PATH="$$PKG_CONFIG_PATH:$(gb_UnpackedTarball_workdir)/freetype/instdir/lib/pkgconfig:$(gb_UnpackedTarball_workdir)/freetype/instdir/lib64/pkgconfig") \
 		$(if $(SYSTEM_FONTCONFIG),,PKG_CONFIG_PATH="$$PKG_CONFIG_PATH:$(gb_UnpackedTarball_workdir)/fontconfig") \
 		$(comment # on android we use system provided libz, but there is no .pc file, so create one for cairo) \
 		$(if $(filter ANDROID,$(OS)), \
