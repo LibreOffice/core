@@ -317,8 +317,7 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testGetPivotDataXLS)
     // F3:F20.
 
     for (SCROW nRow = 2; nRow <= 19; ++nRow)
-        CPPUNIT_ASSERT_EQUAL(pDoc->GetValue(ScAddress(4, nRow, 1)),
-                             pDoc->GetValue(ScAddress(5, nRow, 1)));
+        CPPUNIT_ASSERT_EQUAL(pDoc->GetValue(4, nRow, 1), pDoc->GetValue(5, nRow, 1));
 }
 
 CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableSharedGroupXLSX)
@@ -328,22 +327,22 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableSharedGroupXLSX)
 
     // Check whether right group names are imported for both tables
     // First table
-    CPPUNIT_ASSERT_EQUAL(u"a2"_ustr, pDoc->GetString(ScAddress(0, 0, 0)));
-    CPPUNIT_ASSERT_EQUAL(u"Csoport1"_ustr, pDoc->GetString(ScAddress(0, 1, 0)));
-    CPPUNIT_ASSERT_EQUAL(u"Csoport2"_ustr, pDoc->GetString(ScAddress(0, 2, 0)));
-    CPPUNIT_ASSERT_EQUAL(u"Csoport3"_ustr, pDoc->GetString(ScAddress(0, 3, 0)));
-    CPPUNIT_ASSERT_EQUAL(u"16"_ustr, pDoc->GetString(ScAddress(0, 4, 0)));
-    CPPUNIT_ASSERT_EQUAL(u"17"_ustr, pDoc->GetString(ScAddress(0, 5, 0)));
-    CPPUNIT_ASSERT_EQUAL(u"18"_ustr, pDoc->GetString(ScAddress(0, 6, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"a2"_ustr, pDoc->GetString(0, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(u"Csoport1"_ustr, pDoc->GetString(0, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(u"Csoport2"_ustr, pDoc->GetString(0, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(u"Csoport3"_ustr, pDoc->GetString(0, 3, 0));
+    CPPUNIT_ASSERT_EQUAL(u"16"_ustr, pDoc->GetString(0, 4, 0));
+    CPPUNIT_ASSERT_EQUAL(u"17"_ustr, pDoc->GetString(0, 5, 0));
+    CPPUNIT_ASSERT_EQUAL(u"18"_ustr, pDoc->GetString(0, 6, 0));
 
     // Second table
-    CPPUNIT_ASSERT_EQUAL(u"a2"_ustr, pDoc->GetString(ScAddress(0, 10, 0)));
-    CPPUNIT_ASSERT_EQUAL(u"Csoport1"_ustr, pDoc->GetString(ScAddress(0, 11, 0)));
-    CPPUNIT_ASSERT_EQUAL(u"Csoport2"_ustr, pDoc->GetString(ScAddress(0, 12, 0)));
-    CPPUNIT_ASSERT_EQUAL(u"Csoport3"_ustr, pDoc->GetString(ScAddress(0, 13, 0)));
-    CPPUNIT_ASSERT_EQUAL(u"16"_ustr, pDoc->GetString(ScAddress(0, 14, 0)));
-    CPPUNIT_ASSERT_EQUAL(u"17"_ustr, pDoc->GetString(ScAddress(0, 15, 0)));
-    CPPUNIT_ASSERT_EQUAL(u"18"_ustr, pDoc->GetString(ScAddress(0, 16, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"a2"_ustr, pDoc->GetString(0, 10, 0));
+    CPPUNIT_ASSERT_EQUAL(u"Csoport1"_ustr, pDoc->GetString(0, 11, 0));
+    CPPUNIT_ASSERT_EQUAL(u"Csoport2"_ustr, pDoc->GetString(0, 12, 0));
+    CPPUNIT_ASSERT_EQUAL(u"Csoport3"_ustr, pDoc->GetString(0, 13, 0));
+    CPPUNIT_ASSERT_EQUAL(u"16"_ustr, pDoc->GetString(0, 14, 0));
+    CPPUNIT_ASSERT_EQUAL(u"17"_ustr, pDoc->GetString(0, 15, 0));
+    CPPUNIT_ASSERT_EQUAL(u"18"_ustr, pDoc->GetString(0, 16, 0));
 
     // There should be exactly 2 pivot tables and 1 cache.
     ScDPCollection* pDPs = pDoc->GetDPCollection();
@@ -363,20 +362,20 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableSharedDateGroupXLSX)
     auto testThis = [](ScDocument& rDoc) {
         // Check whether right date labels are imported for both tables
         // First table
-        CPPUNIT_ASSERT_EQUAL(u"a"_ustr, rDoc.GetString(ScAddress(0, 2, 1)));
-        CPPUNIT_ASSERT_EQUAL(u"1965"_ustr, rDoc.GetString(ScAddress(0, 3, 1)));
-        CPPUNIT_ASSERT_EQUAL(u"1989"_ustr, rDoc.GetString(ScAddress(0, 4, 1)));
-        CPPUNIT_ASSERT_EQUAL(u"2000"_ustr, rDoc.GetString(ScAddress(0, 5, 1)));
-        CPPUNIT_ASSERT_EQUAL(u"2004"_ustr, rDoc.GetString(ScAddress(0, 6, 1)));
+        CPPUNIT_ASSERT_EQUAL(u"a"_ustr, rDoc.GetString(0, 2, 1));
+        CPPUNIT_ASSERT_EQUAL(u"1965"_ustr, rDoc.GetString(0, 3, 1));
+        CPPUNIT_ASSERT_EQUAL(u"1989"_ustr, rDoc.GetString(0, 4, 1));
+        CPPUNIT_ASSERT_EQUAL(u"2000"_ustr, rDoc.GetString(0, 5, 1));
+        CPPUNIT_ASSERT_EQUAL(u"2004"_ustr, rDoc.GetString(0, 6, 1));
         // TODO: check why this fails with 2005
         // CPPUNIT_ASSERT_EQUAL(OUString("2007"), rDoc.GetString(ScAddress(0,7,1)));
 
         // Second table
-        CPPUNIT_ASSERT_EQUAL(u"a"_ustr, rDoc.GetString(ScAddress(5, 2, 1)));
-        CPPUNIT_ASSERT_EQUAL(u"1965"_ustr, rDoc.GetString(ScAddress(5, 3, 1)));
-        CPPUNIT_ASSERT_EQUAL(u"1989"_ustr, rDoc.GetString(ScAddress(5, 4, 1)));
-        CPPUNIT_ASSERT_EQUAL(u"2000"_ustr, rDoc.GetString(ScAddress(5, 5, 1)));
-        CPPUNIT_ASSERT_EQUAL(u"2004"_ustr, rDoc.GetString(ScAddress(5, 6, 1)));
+        CPPUNIT_ASSERT_EQUAL(u"a"_ustr, rDoc.GetString(5, 2, 1));
+        CPPUNIT_ASSERT_EQUAL(u"1965"_ustr, rDoc.GetString(5, 3, 1));
+        CPPUNIT_ASSERT_EQUAL(u"1989"_ustr, rDoc.GetString(5, 4, 1));
+        CPPUNIT_ASSERT_EQUAL(u"2000"_ustr, rDoc.GetString(5, 5, 1));
+        CPPUNIT_ASSERT_EQUAL(u"2004"_ustr, rDoc.GetString(5, 6, 1));
         // TODO: check why this fails with 2005
         // CPPUNIT_ASSERT_EQUAL(OUString("2007"), rDoc.GetString(ScAddress(5,7,1)));
 
@@ -404,19 +403,19 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableSharedNestedDateGrou
         // Check whether right date groups are imported for both tables
         // First table
         // Years, Quarters, 'a' have compact layout so the only header contains a multi-field filter.
-        CPPUNIT_ASSERT_EQUAL(u"1965"_ustr, rDoc.GetString(ScAddress(0, 3, 1)));
-        CPPUNIT_ASSERT_EQUAL(u"1989"_ustr, rDoc.GetString(ScAddress(0, 10, 1)));
-        CPPUNIT_ASSERT_EQUAL(u"2000"_ustr, rDoc.GetString(ScAddress(0, 17, 1)));
-        CPPUNIT_ASSERT_EQUAL(u"2004"_ustr, rDoc.GetString(ScAddress(0, 20, 1)));
+        CPPUNIT_ASSERT_EQUAL(u"1965"_ustr, rDoc.GetString(0, 3, 1));
+        CPPUNIT_ASSERT_EQUAL(u"1989"_ustr, rDoc.GetString(0, 10, 1));
+        CPPUNIT_ASSERT_EQUAL(u"2000"_ustr, rDoc.GetString(0, 17, 1));
+        CPPUNIT_ASSERT_EQUAL(u"2004"_ustr, rDoc.GetString(0, 20, 1));
         // TODO: check why this fails with the empty string
         //CPPUNIT_ASSERT_EQUAL(OUString("2007"), rDoc.GetString(ScAddress(0,32,1)));
 
         // Second table
         // Years, Quarters, 'a' have compact layout so the only row header contains a multi-field filter.
-        CPPUNIT_ASSERT_EQUAL(u"1965"_ustr, rDoc.GetString(ScAddress(6, 3, 1)));
-        CPPUNIT_ASSERT_EQUAL(u"1989"_ustr, rDoc.GetString(ScAddress(6, 10, 1)));
-        CPPUNIT_ASSERT_EQUAL(u"2000"_ustr, rDoc.GetString(ScAddress(6, 17, 1)));
-        CPPUNIT_ASSERT_EQUAL(u"2004"_ustr, rDoc.GetString(ScAddress(6, 20, 1)));
+        CPPUNIT_ASSERT_EQUAL(u"1965"_ustr, rDoc.GetString(6, 3, 1));
+        CPPUNIT_ASSERT_EQUAL(u"1989"_ustr, rDoc.GetString(6, 10, 1));
+        CPPUNIT_ASSERT_EQUAL(u"2000"_ustr, rDoc.GetString(6, 17, 1));
+        CPPUNIT_ASSERT_EQUAL(u"2004"_ustr, rDoc.GetString(6, 20, 1));
         // TODO: check why this fails with the empty string
         //CPPUNIT_ASSERT_EQUAL(OUString("2007"), rDoc.GetString(ScAddress(6,31,1)));
 
@@ -448,20 +447,20 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableSharedNumGroupXLSX)
 
     // Check whether right number groups are imported for both tables
     // First table
-    CPPUNIT_ASSERT_EQUAL(u"f"_ustr, pDoc->GetString(ScAddress(0, 2, 1)));
-    CPPUNIT_ASSERT_EQUAL(u"32674-47673"_ustr, pDoc->GetString(ScAddress(0, 3, 1)));
-    CPPUNIT_ASSERT_EQUAL(u"47674-62673"_ustr, pDoc->GetString(ScAddress(0, 4, 1)));
-    CPPUNIT_ASSERT_EQUAL(u"62674-77673"_ustr, pDoc->GetString(ScAddress(0, 5, 1)));
-    CPPUNIT_ASSERT_EQUAL(u"77674-92673"_ustr, pDoc->GetString(ScAddress(0, 6, 1)));
-    CPPUNIT_ASSERT_EQUAL(u"92674-107673"_ustr, pDoc->GetString(ScAddress(0, 7, 1)));
+    CPPUNIT_ASSERT_EQUAL(u"f"_ustr, pDoc->GetString(0, 2, 1));
+    CPPUNIT_ASSERT_EQUAL(u"32674-47673"_ustr, pDoc->GetString(0, 3, 1));
+    CPPUNIT_ASSERT_EQUAL(u"47674-62673"_ustr, pDoc->GetString(0, 4, 1));
+    CPPUNIT_ASSERT_EQUAL(u"62674-77673"_ustr, pDoc->GetString(0, 5, 1));
+    CPPUNIT_ASSERT_EQUAL(u"77674-92673"_ustr, pDoc->GetString(0, 6, 1));
+    CPPUNIT_ASSERT_EQUAL(u"92674-107673"_ustr, pDoc->GetString(0, 7, 1));
 
     // Second table
-    CPPUNIT_ASSERT_EQUAL(u"f"_ustr, pDoc->GetString(ScAddress(5, 2, 1)));
-    CPPUNIT_ASSERT_EQUAL(u"32674-47673"_ustr, pDoc->GetString(ScAddress(5, 3, 1)));
-    CPPUNIT_ASSERT_EQUAL(u"47674-62673"_ustr, pDoc->GetString(ScAddress(5, 4, 1)));
-    CPPUNIT_ASSERT_EQUAL(u"62674-77673"_ustr, pDoc->GetString(ScAddress(5, 5, 1)));
-    CPPUNIT_ASSERT_EQUAL(u"77674-92673"_ustr, pDoc->GetString(ScAddress(5, 6, 1)));
-    CPPUNIT_ASSERT_EQUAL(u"92674-107673"_ustr, pDoc->GetString(ScAddress(5, 7, 1)));
+    CPPUNIT_ASSERT_EQUAL(u"f"_ustr, pDoc->GetString(5, 2, 1));
+    CPPUNIT_ASSERT_EQUAL(u"32674-47673"_ustr, pDoc->GetString(5, 3, 1));
+    CPPUNIT_ASSERT_EQUAL(u"47674-62673"_ustr, pDoc->GetString(5, 4, 1));
+    CPPUNIT_ASSERT_EQUAL(u"62674-77673"_ustr, pDoc->GetString(5, 5, 1));
+    CPPUNIT_ASSERT_EQUAL(u"77674-92673"_ustr, pDoc->GetString(5, 6, 1));
+    CPPUNIT_ASSERT_EQUAL(u"92674-107673"_ustr, pDoc->GetString(5, 7, 1));
 
     // There should be exactly 2 pivot tables and 1 cache.
     ScDPCollection* pDPs = pDoc->GetDPCollection();
@@ -1937,7 +1936,7 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableBoolFieldFilterXLSX)
     ScDocument* pDoc = getScDoc();
     ScDPCollection* pDPs = pDoc->GetDPCollection();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pDPs->GetCount());
-    CPPUNIT_ASSERT_EQUAL(u"TRUE"_ustr, pDoc->GetString(ScAddress(0, 1, 0))); //A2
+    CPPUNIT_ASSERT_EQUAL(u"TRUE"_ustr, pDoc->GetString(0, 1, 0)); //A2
 
     // Reload and check filtering of row dimensions
     saveAndReload(TestFilter::XLSX);
@@ -2519,7 +2518,7 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableCompactLayoutXLSX)
         CPPUNIT_ASSERT_MESSAGE("The show expand/collapse buttons option must be true",
                                pSaveData->GetExpandCollapse());
 
-        CPPUNIT_ASSERT_EQUAL(u"Row Labels"_ustr, rDoc.GetString(ScAddress(10, 1, 0)));
+        CPPUNIT_ASSERT_EQUAL(u"Row Labels"_ustr, rDoc.GetString(10, 1, 0));
 
         // Check some row fields
         const std::tuple<OUString, ScAddress, bool> aCases[] = {
@@ -2546,8 +2545,8 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableCompactLayoutXLSX)
         }
 
         // check col fields
-        CPPUNIT_ASSERT_EQUAL(u"ddd"_ustr, rDoc.GetString(ScAddress(11, 1, 0)));
-        CPPUNIT_ASSERT_EQUAL(u"ddx"_ustr, rDoc.GetString(ScAddress(12, 1, 0)));
+        CPPUNIT_ASSERT_EQUAL(u"ddd"_ustr, rDoc.GetString(11, 1, 0));
+        CPPUNIT_ASSERT_EQUAL(u"ddx"_ustr, rDoc.GetString(12, 1, 0));
     };
 
     createScDoc("xlsx/pivot-table/pivotcompact.xlsx");
@@ -2649,24 +2648,24 @@ static void verifyCalcFields(ScDocument* pDoc, bool bBIFF12 = false)
 {
     // Verify cell values
     // "SUM - Field1"
-    CPPUNIT_ASSERT_EQUAL(u"480"_ustr, pDoc->GetString(ScAddress(3, 2, 1)));
-    CPPUNIT_ASSERT_EQUAL(u"640"_ustr, pDoc->GetString(ScAddress(3, 3, 1)));
-    CPPUNIT_ASSERT_EQUAL(u"1160"_ustr, pDoc->GetString(ScAddress(3, 4, 1)));
-    CPPUNIT_ASSERT_EQUAL(u"2280"_ustr, pDoc->GetString(ScAddress(3, 5, 1)));
+    CPPUNIT_ASSERT_EQUAL(u"480"_ustr, pDoc->GetString(3, 2, 1));
+    CPPUNIT_ASSERT_EQUAL(u"640"_ustr, pDoc->GetString(3, 3, 1));
+    CPPUNIT_ASSERT_EQUAL(u"1160"_ustr, pDoc->GetString(3, 4, 1));
+    CPPUNIT_ASSERT_EQUAL(u"2280"_ustr, pDoc->GetString(3, 5, 1));
     // "SUM - Field2"
-    CPPUNIT_ASSERT_EQUAL(u"30"_ustr, pDoc->GetString(ScAddress(4, 2, 1)));
-    CPPUNIT_ASSERT_EQUAL(u"42"_ustr, pDoc->GetString(ScAddress(4, 3, 1)));
-    CPPUNIT_ASSERT_EQUAL(u"60"_ustr, pDoc->GetString(ScAddress(4, 4, 1)));
-    CPPUNIT_ASSERT_EQUAL(u"132"_ustr, pDoc->GetString(ScAddress(4, 5, 1)));
+    CPPUNIT_ASSERT_EQUAL(u"30"_ustr, pDoc->GetString(4, 2, 1));
+    CPPUNIT_ASSERT_EQUAL(u"42"_ustr, pDoc->GetString(4, 3, 1));
+    CPPUNIT_ASSERT_EQUAL(u"60"_ustr, pDoc->GetString(4, 4, 1));
+    CPPUNIT_ASSERT_EQUAL(u"132"_ustr, pDoc->GetString(4, 5, 1));
     // "SUM - Field3"
-    CPPUNIT_ASSERT_EQUAL(u"0"_ustr, pDoc->GetString(ScAddress(5, 2, 1)));
-    CPPUNIT_ASSERT_EQUAL(u"0"_ustr, pDoc->GetString(ScAddress(5, 5, 1)));
+    CPPUNIT_ASSERT_EQUAL(u"0"_ustr, pDoc->GetString(5, 2, 1));
+    CPPUNIT_ASSERT_EQUAL(u"0"_ustr, pDoc->GetString(5, 5, 1));
     // "SUM - Field4"
-    CPPUNIT_ASSERT_EQUAL(u"#VALUE!"_ustr, pDoc->GetString(ScAddress(6, 2, 1)));
-    CPPUNIT_ASSERT_EQUAL(u"#VALUE!"_ustr, pDoc->GetString(ScAddress(6, 5, 1)));
+    CPPUNIT_ASSERT_EQUAL(u"#VALUE!"_ustr, pDoc->GetString(6, 2, 1));
+    CPPUNIT_ASSERT_EQUAL(u"#VALUE!"_ustr, pDoc->GetString(6, 5, 1));
     // "SUM - Field5"  (Field5 = 'Field4'/1 — must propagate #VALUE!, not give 0)
-    CPPUNIT_ASSERT_EQUAL(u"#VALUE!"_ustr, pDoc->GetString(ScAddress(7, 2, 1)));
-    CPPUNIT_ASSERT_EQUAL(u"#VALUE!"_ustr, pDoc->GetString(ScAddress(7, 5, 1)));
+    CPPUNIT_ASSERT_EQUAL(u"#VALUE!"_ustr, pDoc->GetString(7, 2, 1));
+    CPPUNIT_ASSERT_EQUAL(u"#VALUE!"_ustr, pDoc->GetString(7, 5, 1));
 
     // Verify calculated field definitions
     ScDPCollection* pDPs = pDoc->GetDPCollection();
@@ -2815,17 +2814,17 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testCalcFields2XLSX)
 
     // "SUM - Field1"
     {
-        CPPUNIT_ASSERT_EQUAL(u"144"_ustr, pDoc->GetString(ScAddress(1, 4, 1)));
-        CPPUNIT_ASSERT_EQUAL(u"320"_ustr, pDoc->GetString(ScAddress(1, 5, 1)));
-        CPPUNIT_ASSERT_EQUAL(u"116"_ustr, pDoc->GetString(ScAddress(1, 6, 1)));
-        CPPUNIT_ASSERT_EQUAL(u"2052"_ustr, pDoc->GetString(ScAddress(1, 7, 1)));
+        CPPUNIT_ASSERT_EQUAL(u"144"_ustr, pDoc->GetString(1, 4, 1));
+        CPPUNIT_ASSERT_EQUAL(u"320"_ustr, pDoc->GetString(1, 5, 1));
+        CPPUNIT_ASSERT_EQUAL(u"116"_ustr, pDoc->GetString(1, 6, 1));
+        CPPUNIT_ASSERT_EQUAL(u"2052"_ustr, pDoc->GetString(1, 7, 1));
     }
     // "SUM - Field2"
     {
-        CPPUNIT_ASSERT_EQUAL(u"288"_ustr, pDoc->GetString(ScAddress(2, 4, 1)));
-        CPPUNIT_ASSERT_EQUAL(u"640"_ustr, pDoc->GetString(ScAddress(2, 5, 1)));
-        CPPUNIT_ASSERT_EQUAL(u"232"_ustr, pDoc->GetString(ScAddress(2, 6, 1)));
-        CPPUNIT_ASSERT_EQUAL(u"4104"_ustr, pDoc->GetString(ScAddress(2, 7, 1)));
+        CPPUNIT_ASSERT_EQUAL(u"288"_ustr, pDoc->GetString(2, 4, 1));
+        CPPUNIT_ASSERT_EQUAL(u"640"_ustr, pDoc->GetString(2, 5, 1));
+        CPPUNIT_ASSERT_EQUAL(u"232"_ustr, pDoc->GetString(2, 6, 1));
+        CPPUNIT_ASSERT_EQUAL(u"4104"_ustr, pDoc->GetString(2, 7, 1));
     }
 }
 
@@ -2841,34 +2840,34 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testGroupAndCalcFieldXLSX)
 
     // "a2 - group"
     {
-        CPPUNIT_ASSERT_EQUAL(u"a2"_ustr, pDoc->GetString(ScAddress(0, 3, 0)));
-        CPPUNIT_ASSERT_EQUAL(u"Group1"_ustr, pDoc->GetString(ScAddress(0, 4, 0)));
-        CPPUNIT_ASSERT_EQUAL(u"Group2"_ustr, pDoc->GetString(ScAddress(0, 5, 0)));
-        CPPUNIT_ASSERT_EQUAL(u"Total Result"_ustr, pDoc->GetString(ScAddress(0, 6, 0)));
+        CPPUNIT_ASSERT_EQUAL(u"a2"_ustr, pDoc->GetString(0, 3, 0));
+        CPPUNIT_ASSERT_EQUAL(u"Group1"_ustr, pDoc->GetString(0, 4, 0));
+        CPPUNIT_ASSERT_EQUAL(u"Group2"_ustr, pDoc->GetString(0, 5, 0));
+        CPPUNIT_ASSERT_EQUAL(u"Total Result"_ustr, pDoc->GetString(0, 6, 0));
     }
     // "SUM of a"
     {
-        CPPUNIT_ASSERT_EQUAL(u"45"_ustr, pDoc->GetString(ScAddress(1, 4, 0)));
-        CPPUNIT_ASSERT_EQUAL(u"126"_ustr, pDoc->GetString(ScAddress(1, 5, 0)));
-        CPPUNIT_ASSERT_EQUAL(u"171"_ustr, pDoc->GetString(ScAddress(1, 6, 0)));
+        CPPUNIT_ASSERT_EQUAL(u"45"_ustr, pDoc->GetString(1, 4, 0));
+        CPPUNIT_ASSERT_EQUAL(u"126"_ustr, pDoc->GetString(1, 5, 0));
+        CPPUNIT_ASSERT_EQUAL(u"171"_ustr, pDoc->GetString(1, 6, 0));
     }
     // "SUM of b"
     {
-        CPPUNIT_ASSERT_EQUAL(u"54"_ustr, pDoc->GetString(ScAddress(2, 4, 0)));
-        CPPUNIT_ASSERT_EQUAL(u"135"_ustr, pDoc->GetString(ScAddress(2, 5, 0)));
-        CPPUNIT_ASSERT_EQUAL(u"189"_ustr, pDoc->GetString(ScAddress(2, 6, 0)));
+        CPPUNIT_ASSERT_EQUAL(u"54"_ustr, pDoc->GetString(2, 4, 0));
+        CPPUNIT_ASSERT_EQUAL(u"135"_ustr, pDoc->GetString(2, 5, 0));
+        CPPUNIT_ASSERT_EQUAL(u"189"_ustr, pDoc->GetString(2, 6, 0));
     }
     // "SUM of c"
     {
-        CPPUNIT_ASSERT_EQUAL(u"63"_ustr, pDoc->GetString(ScAddress(3, 4, 0)));
-        CPPUNIT_ASSERT_EQUAL(u"144"_ustr, pDoc->GetString(ScAddress(3, 5, 0)));
-        CPPUNIT_ASSERT_EQUAL(u"207"_ustr, pDoc->GetString(ScAddress(3, 6, 0)));
+        CPPUNIT_ASSERT_EQUAL(u"63"_ustr, pDoc->GetString(3, 4, 0));
+        CPPUNIT_ASSERT_EQUAL(u"144"_ustr, pDoc->GetString(3, 5, 0));
+        CPPUNIT_ASSERT_EQUAL(u"207"_ustr, pDoc->GetString(3, 6, 0));
     }
     // "SUM - Field1"
     {
-        CPPUNIT_ASSERT_EQUAL(u"3402"_ustr, pDoc->GetString(ScAddress(4, 4, 0)));
-        CPPUNIT_ASSERT_EQUAL(u"19440"_ustr, pDoc->GetString(ScAddress(4, 5, 0)));
-        CPPUNIT_ASSERT_EQUAL(u"39123"_ustr, pDoc->GetString(ScAddress(4, 6, 0)));
+        CPPUNIT_ASSERT_EQUAL(u"3402"_ustr, pDoc->GetString(4, 4, 0));
+        CPPUNIT_ASSERT_EQUAL(u"19440"_ustr, pDoc->GetString(4, 5, 0));
+        CPPUNIT_ASSERT_EQUAL(u"39123"_ustr, pDoc->GetString(4, 6, 0));
     }
 
     save(TestFilter::XLSX);
@@ -3010,10 +3009,10 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testCalcFieldSingleDataDimXLSX)
     CPPUNIT_ASSERT(pDoc->HasPivotTable());
 
     // Verify pivot output values at B4:B7 on sheet 0
-    CPPUNIT_ASSERT_EQUAL(u"8976"_ustr, pDoc->GetString(ScAddress(1, 3, 0)));
-    CPPUNIT_ASSERT_EQUAL(u"9936"_ustr, pDoc->GetString(ScAddress(1, 4, 0)));
-    CPPUNIT_ASSERT_EQUAL(u"37408"_ustr, pDoc->GetString(ScAddress(1, 5, 0)));
-    CPPUNIT_ASSERT_EQUAL(u"168168"_ustr, pDoc->GetString(ScAddress(1, 6, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"8976"_ustr, pDoc->GetString(1, 3, 0));
+    CPPUNIT_ASSERT_EQUAL(u"9936"_ustr, pDoc->GetString(1, 4, 0));
+    CPPUNIT_ASSERT_EQUAL(u"37408"_ustr, pDoc->GetString(1, 5, 0));
+    CPPUNIT_ASSERT_EQUAL(u"168168"_ustr, pDoc->GetString(1, 6, 0));
 }
 
 CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testCalcFieldDiffAggregationXLSX)
@@ -3033,23 +3032,23 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testCalcFieldDiffAggregationXLSX)
 
     // Sheet2 (SUM pivot): B3:C5 on sheet 1
     // SUM of Spend: 2010=78, 2011=87, total=165
-    CPPUNIT_ASSERT_EQUAL(u"78"_ustr, pDoc->GetString(ScAddress(1, 2, 1)));
-    CPPUNIT_ASSERT_EQUAL(u"87"_ustr, pDoc->GetString(ScAddress(1, 3, 1)));
-    CPPUNIT_ASSERT_EQUAL(u"165"_ustr, pDoc->GetString(ScAddress(1, 4, 1)));
+    CPPUNIT_ASSERT_EQUAL(u"78"_ustr, pDoc->GetString(1, 2, 1));
+    CPPUNIT_ASSERT_EQUAL(u"87"_ustr, pDoc->GetString(1, 3, 1));
+    CPPUNIT_ASSERT_EQUAL(u"165"_ustr, pDoc->GetString(1, 4, 1));
     // Field1 = Spend * 2: 2010=156, 2011=174, total=330
-    CPPUNIT_ASSERT_EQUAL(u"156"_ustr, pDoc->GetString(ScAddress(2, 2, 1)));
-    CPPUNIT_ASSERT_EQUAL(u"174"_ustr, pDoc->GetString(ScAddress(2, 3, 1)));
-    CPPUNIT_ASSERT_EQUAL(u"330"_ustr, pDoc->GetString(ScAddress(2, 4, 1)));
+    CPPUNIT_ASSERT_EQUAL(u"156"_ustr, pDoc->GetString(2, 2, 1));
+    CPPUNIT_ASSERT_EQUAL(u"174"_ustr, pDoc->GetString(2, 3, 1));
+    CPPUNIT_ASSERT_EQUAL(u"330"_ustr, pDoc->GetString(2, 4, 1));
 
     // Sheet3 (COUNT pivot): B3:C5 on sheet 2
     // COUNT of Spend: 2010=3, 2011=3, total=6
-    CPPUNIT_ASSERT_EQUAL(u"3"_ustr, pDoc->GetString(ScAddress(1, 2, 2)));
-    CPPUNIT_ASSERT_EQUAL(u"3"_ustr, pDoc->GetString(ScAddress(1, 3, 2)));
-    CPPUNIT_ASSERT_EQUAL(u"6"_ustr, pDoc->GetString(ScAddress(1, 4, 2)));
+    CPPUNIT_ASSERT_EQUAL(u"3"_ustr, pDoc->GetString(1, 2, 2));
+    CPPUNIT_ASSERT_EQUAL(u"3"_ustr, pDoc->GetString(1, 3, 2));
+    CPPUNIT_ASSERT_EQUAL(u"6"_ustr, pDoc->GetString(1, 4, 2));
     // Field1 must still use SUM(Spend) * 2, not COUNT(Spend) * 2
-    CPPUNIT_ASSERT_EQUAL(u"156"_ustr, pDoc->GetString(ScAddress(2, 2, 2)));
-    CPPUNIT_ASSERT_EQUAL(u"174"_ustr, pDoc->GetString(ScAddress(2, 3, 2)));
-    CPPUNIT_ASSERT_EQUAL(u"330"_ustr, pDoc->GetString(ScAddress(2, 4, 2)));
+    CPPUNIT_ASSERT_EQUAL(u"156"_ustr, pDoc->GetString(2, 2, 2));
+    CPPUNIT_ASSERT_EQUAL(u"174"_ustr, pDoc->GetString(2, 3, 2));
+    CPPUNIT_ASSERT_EQUAL(u"330"_ustr, pDoc->GetString(2, 4, 2));
 }
 
 CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testCalcFieldNameErrorXLSX)

@@ -247,7 +247,7 @@ CPPUNIT_TEST_FIXTURE(ScPDFExportTest, testExportRange_Tdf120161)
         ScDocument& rDoc = xDocSh->GetDocument();
         for (unsigned int r = 0; r < 1; ++r)
             for (unsigned int c = 0; c < 14; ++c)
-                rDoc.SetValue(ScAddress(c, r, 0), (r + 1) * (c + 1));
+                rDoc.SetValue(c, r, 0, (r + 1) * (c + 1));
 
         // set "Text" to H1 cell with "DejaVuSans" font
         ScFieldEditEngine& rEE = rDoc.GetEditEngine();
@@ -307,7 +307,7 @@ CPPUNIT_TEST_FIXTURE(ScPDFExportTest, testExportFitToPage_Tdf103516)
         ScDocument& rDoc = xDocSh->GetDocument();
         for (unsigned int r = 0; r < 80; ++r)
             for (unsigned int c = 0; c < 12; ++c)
-                rDoc.SetValue(ScAddress(c, r, 0), (r + 1) * (c + 1));
+                rDoc.SetValue(c, r, 0, (r + 1) * (c + 1));
     }
 
     // A1:G50: 2-page export

@@ -543,8 +543,8 @@ CPPUNIT_TEST_FIXTURE(CondFormatTest, testTdf64401)
     }
 
     // Update values in B4 and B5
-    pDoc->SetValue(ScAddress(1, 3, 0), 2.0);
-    pDoc->SetValue(ScAddress(1, 4, 0), 9.0);
+    pDoc->SetValue(1, 3, 0, 2.0);
+    pDoc->SetValue(1, 4, 0, 9.0);
 
     for (size_t i = 0; i < 10; ++i)
     {

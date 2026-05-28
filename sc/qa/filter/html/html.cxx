@@ -188,8 +188,8 @@ CPPUNIT_TEST_FIXTURE(Test, testPasteSingleCell)
     // Given a document with '1' in A1 and '2' in B1:
     createScDoc();
     ScDocument* pDoc = getScDoc();
-    pDoc->SetValue(ScAddress(0, 0, 0), 1.0);
-    pDoc->SetValue(ScAddress(1, 0, 0), 2.0);
+    pDoc->SetValue(0, 0, 0, 1.0);
+    pDoc->SetValue(1, 0, 0, 2.0);
 
     // When pasting SUM(A1:B1) into C1:
     ScAddress aCellPos(/*nColP=*/2, /*nRowP=*/0, /*nTabP=*/0);
@@ -223,7 +223,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf79298_strikeout_variants)
     // Verify HTML strikeout tags (<del>, <s>, and <strike>)
     for (size_t nCol = 0; nCol < 3; ++nCol)
     {
-        const ScPatternAttr* pAttr = pDoc->GetPattern(ScAddress(0, nCol, 0));
+        const ScPatternAttr* pAttr = pDoc->GetPattern(0, nCol, 0);
         CPPUNIT_ASSERT_MESSAGE("Failed to get cell attribute.", pAttr);
         const SvxCrossedOutItem& rCrossedOutItem = pAttr->GetItem(ATTR_FONT_CROSSEDOUT);
         CPPUNIT_ASSERT_EQUAL(FontStrikeout::STRIKEOUT_SINGLE, rCrossedOutItem.GetStrikeout());
@@ -242,7 +242,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf132770_inserted_text)
 
     // Verify HTML inserted text tag <ins>
     ScDocument* pDoc = getScDoc();
-    const ScPatternAttr* pAttr = pDoc->GetPattern(ScAddress(0, 0, 0));
+    const ScPatternAttr* pAttr = pDoc->GetPattern(0, 0, 0);
     CPPUNIT_ASSERT_MESSAGE("Failed to get cell attribute.", pAttr);
     const SvxUnderlineItem& rUnderlineItem = pAttr->GetItem(ATTR_FONT_UNDERLINE);
     // Without the accompanying fix in place, this tests would have failed with:

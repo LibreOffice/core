@@ -124,14 +124,14 @@ CPPUNIT_TEST_FIXTURE(ScGoalSeekTest, testTdf161616_GoalSeek_no_error_set_upon_fa
     CPPUNIT_ASSERT_EQUAL(DBL_MAX, res.Divergence);
 
     ScDocument* pDoc = getScDoc();
-    CPPUNIT_ASSERT_EQUAL(u"250"_ustr, pDoc->GetString(ScAddress(0, 0, 0)));
-    CPPUNIT_ASSERT_EQUAL(u"0.25"_ustr, pDoc->GetString(ScAddress(1, 0, 0)));
-    CPPUNIT_ASSERT_EQUAL(u"200"_ustr, pDoc->GetString(ScAddress(2, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"250"_ustr, pDoc->GetString(0, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(u"0.25"_ustr, pDoc->GetString(1, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(u"200"_ustr, pDoc->GetString(2, 0, 0));
 
     // Without the fix in place, this test would have failed with
     // - Expected: 0.3125
     // - Actual  : #N/A
-    CPPUNIT_ASSERT_EQUAL(u"0.3125"_ustr, pDoc->GetString(ScAddress(3, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"0.3125"_ustr, pDoc->GetString(3, 0, 0));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
