@@ -71,6 +71,14 @@ DECLARE_OOXMLEXPORT_TEST(testTdf172113_linespacingComment, "tdf172113_linespacin
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf172169_linespacingFootnote, "tdf172169_linespacingFootnote.odt")
+{
+    // given what should be a single page, double spaced document
+    // where a line starts with a large non-text item and then later has a footnote marker.
+
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf148057_columnBreak, "tdf148057_columnBreak.docx")
 {
     // given a document with a linefeed immediately following a column break (in non-column section)

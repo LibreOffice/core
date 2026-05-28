@@ -822,7 +822,7 @@ SwFootnotePortion *SwTextFormatter::NewFootnotePortion( SwTextFormatInfo &rInf,
         if( nReal < nOldReal )
             nReal = nOldReal;
         m_pCurr->SetRealHeight( nOldReal );
-        m_pCurr->Height( nOldHeight );
+        m_pCurr->Height(nOldHeight, false);
         m_pCurr->SetAscent( nOldAscent );
     }
 
