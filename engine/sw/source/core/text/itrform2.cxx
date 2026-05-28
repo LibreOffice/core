@@ -2260,6 +2260,7 @@ void SwTextFormatter::RecalcRealHeight()
 
 void SwTextFormatter::CalcRealHeight( bool bNewLine )
 {
+    const IDocumentSettingAccess& rIDSA = m_pFrame->GetDoc().getIDocumentSettingAccess();
     SwTwips nLineHeight = m_pCurr->Height();
     m_pCurr->SetClipping( false );
 
@@ -2268,8 +2269,7 @@ void SwTextFormatter::CalcRealHeight( bool bNewLine )
     {
         // tdf#88752 tdf#167583: Grid base height is conditionally ignored for tables
         if (m_pFrame->IsInTab()
-            && !m_pFrame->GetDoc().getIDocumentSettingAccess().get(
-                DocumentSettingId::ADJUST_TABLE_LINE_HEIGHTS_TO_GRID_HEIGHT))
+            && !rIDSA.get(DocumentSettingId::ADJUST_TABLE_LINE_HEIGHTS_TO_GRID_HEIGHT))
         {
             m_pCurr->SetRealHeight(nLineHeight);
             return;
@@ -2359,7 +2359,7 @@ void SwTextFormatter::CalcRealHeight( bool bNewLine )
                     // shrink first line of paragraph too on spacing < 100%
                     if (IsParaLine() &&
                         pSpace->GetInterLineSpaceRule() == SvxInterLineSpaceRule::Prop
-                        && GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(DocumentSettingId::PROP_LINE_SPACING_SHRINKS_FIRST_LINE))
+                        && rIDSA.get(DocumentSettingId::PROP_LINE_SPACING_SHRINKS_FIRST_LINE))
                     {
                         tools::Long nTmp = pSpace->GetPropLineSpace();
                         // Word will render < 50% too but it's just not readable
@@ -2431,8 +2431,15 @@ void SwTextFormatter::CalcRealHeight( bool bNewLine )
                         bool bPropLineShrinks = (nTmp < 100);
 
                         // extend line height by (nPropLineSpace - 100) percent of the font height
+                        const SwLineLayout* pTextHeightLine = m_pCurr;
+                        if (rIDSA.get(DocumentSettingId::LINE_SPACING_AS_GAP_BELOW))
+                        {
+                            // Like Microsoft Word, apply the line spacing gap after the line.
+                            // Since we always put it above a line, use the previous line's height.
+                            pTextHeightLine = GetPrev();
+                        }
                         nTmp -= 100;
-                        nTmp *= m_pCurr->GetLineSpacingBaseHeight();
+                        nTmp *= pTextHeightLine->GetLineSpacingBaseHeight();
                         nTmp /= 100;
                         nTmp += nLineHeight;
                         if (nTmp < 1)
@@ -2443,7 +2450,7 @@ void SwTextFormatter::CalcRealHeight( bool bNewLine )
                         // adjusted above. In order to have consistent line spacing when rendering,
                         // the same adjustments must be made to the following lines.
                         if (bPropLineShrinks
-                            && GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(
+                            && rIDSA.get(
                                 DocumentSettingId::PROP_LINE_SPACING_SHRINKS_FIRST_LINE))
                         {
                             SwTwips nAsc = (4 * nLineHeight) / 5; // 80%
