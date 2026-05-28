@@ -81,9 +81,6 @@ protected:
         TST_LOG("create stamp " << name << ": " << path);
         std::ofstream stamp(path);
         stamp.close();
-        std::this_thread::sleep_for(StampFileCheckPeriodMs);
-        sync(); // Flush the filesystem as sometimes the kit doesn't see the stamp file.
-        std::this_thread::sleep_for(StampFileCheckPeriodMs);
     }
 
     void removeStamp(const std::string& name)
