@@ -121,8 +121,12 @@ public:
     bool tryConsumeTransformedDocumentStructure(const std::shared_ptr<Message>& payload);
 
 private:
-    void sendChatResult(bool success, const std::string& text,
-                        const std::string& requestId);
+    /// Send an aichatresult: frame. When success is true and displayText
+    /// is non-empty, the message carries a separate user-facing
+    /// rendering (displayContent) distinct from the model-facing text;
+    /// otherwise the single text is used for both.
+    void sendChatResult(bool success, const std::string& text, const std::string& requestId,
+                        const std::string& displayText = std::string());
     /// Maps an HTTP status (or an ai::Http* sentinel) to a user-facing message.
     static std::string mapHttpStatusToError(int statusCode,
                                             const std::string& reasonPhrase,
@@ -149,6 +153,15 @@ private:
                           const std::string& status);
     void sendToolApproval(const std::string& toolName,
                           const std::string& description);
+    /// If the kit's extract_document_structure result describes the
+    /// big-document truncation branch (link_targets present in the
+    /// BodyText payload with at least one heading or named section),
+    /// short-circuit the tool loop: forward the picks as an
+    /// aichatchoices: message and a synthetic assistant reply, then
+    /// end the loop instead of paying for a model round-trip that
+    /// would just rewrite the heading list. Returns true when the
+    /// short-circuit fired; the caller then skips continueToolLoop.
+    bool tryShortCircuitBigDocumentRead(const std::string& payloadJson);
     bool handleImageGeneration(const std::string& prompt,
                                const std::string& requestId);
     ImageGenRequest createImageGenRequest(const std::string& prompt);

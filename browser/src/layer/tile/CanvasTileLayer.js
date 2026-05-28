@@ -1023,6 +1023,14 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 				window.app.console.error('Failed to parse aichatapproval: ' + e);
 			}
 		}
+		else if (textMsg.startsWith('aichatchoices:')) {
+			try {
+				var json = JSON.parse(textMsg.substring('aichatchoices:'.length));
+				this._map.fire('aichatchoices', json);
+			} catch (e) {
+				window.app.console.error('Failed to parse aichatchoices: ' + e);
+			}
+		}
 		else if (textMsg.startsWith('hrulerupdate:')) {
 			this._onRulerUpdate(textMsg);
 		}

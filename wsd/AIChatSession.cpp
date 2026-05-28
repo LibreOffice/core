@@ -204,6 +204,43 @@ std::string extractDescription(const std::string& docType)
     return desc;
 }
 
+/// Walk a link_targets subtree (as emitted by core's WriteLinkTargets) and add
+/// one {label,value} entry per summarizable leaf to outChoices. A leaf is
+/// summarizable when its target string ends in |outline (a heading) or
+/// |region (a named section); tables, frames, bookmarks, and images are
+/// skipped because the model has no way to summarize them as a slice.
+void collectSectionChoices(const Poco::JSON::Object::Ptr& node, Poco::JSON::Array::Ptr& outChoices)
+{
+    if (!node)
+        return;
+    std::vector<std::string> keys;
+    node->getNames(keys);
+    for (const std::string& key : keys)
+    {
+        Poco::JSON::Object::Ptr sub = node->getObject(key);
+        if (sub)
+        {
+            collectSectionChoices(sub, outChoices);
+            continue;
+        }
+        std::string target;
+        try
+        {
+            target = node->getValue<std::string>(key);
+        }
+        catch (const std::exception&)
+        {
+            continue;
+        }
+        if (!target.ends_with("|outline") && !target.ends_with("|region"))
+            continue;
+        Poco::JSON::Object::Ptr choice = new Poco::JSON::Object();
+        choice->set("label", key);
+        choice->set("value", target);
+        outChoices->add(choice);
+    }
+}
+
 namespace AIToolNames
 {
 constexpr std::string_view GenerateImage              = "generate_image";
@@ -227,12 +264,16 @@ AIChatSession::AIChatSession(ClientSession& session)
 AIChatSession::~AIChatSession() = default;
 
 void AIChatSession::sendChatResult(bool success, const std::string& text,
-                                   const std::string& requestId)
+                                   const std::string& requestId, const std::string& displayText)
 {
     Poco::JSON::Object::Ptr result = new Poco::JSON::Object();
     result->set("success", success);
     if (success)
+    {
         result->set("content", text);
+        if (!displayText.empty())
+            result->set("displayContent", displayText);
+    }
     else
         result->set("error", text);
     result->set("requestId", requestId);
@@ -1419,6 +1460,84 @@ void AIChatSession::sendToolApproval(const std::string& toolName,
     _session.sendTextFrame("aichatapproval: " + oss.str());
 }
 
+bool AIChatSession::tryShortCircuitBigDocumentRead(const std::string& payloadJson)
+{
+    if (!_toolLoop)
+        return false;
+
+    Poco::JSON::Object::Ptr root;
+    if (!JsonUtil::parseJSON(payloadJson, root))
+        return false;
+
+    // The kit's extracteddocumentstructure payload wraps everything in
+    // a DocStructure root; for filter=text it puts a BodyText node
+    // underneath that, and the truncated whole-body Writer branch adds
+    // link_targets inside BodyText. Walk both layers.
+    Poco::JSON::Object::Ptr docStructure = root->getObject("DocStructure");
+    if (!docStructure)
+        return false;
+
+    Poco::JSON::Object::Ptr body = docStructure->getObject("BodyText");
+    if (!body)
+        return false;
+
+    Poco::JSON::Object::Ptr linkTargets = body->getObject("link_targets");
+    if (!linkTargets)
+        return false;
+
+    Poco::JSON::Array::Ptr choices = new Poco::JSON::Array();
+    collectSectionChoices(linkTargets, choices);
+    if (choices->size() == 0)
+        return false;
+
+    // Send the choices so the frontend can render the picks as inline
+    // clickable text in the upcoming assistant message.
+    {
+        Poco::JSON::Object::Ptr msg = new Poco::JSON::Object();
+        msg->set("requestId", _toolLoop->requestId);
+        msg->set("context", "writer-section");
+        msg->set("choices", choices);
+
+        std::ostringstream oss;
+        msg->stringify(oss);
+        _session.sendTextFrame("aichatchoices: " + oss.str());
+    }
+
+    // Compose two parallel views of the synthetic reply: a markdown
+    // list for the user (rendered as <li> items that the sidebar
+    // decorator turns into clickable links), and a hidden instruction
+    // for the model that lists the canonical target strings so it can
+    // call extract_document_structure correctly when the user picks.
+    std::ostringstream displayMd;
+    displayMd << "This document is too large to read in full. Pick a section "
+                 "to focus on:\n\n";
+    std::ostringstream modelTxt;
+    modelTxt << "The document is too large to read in full. The user is "
+                "picking which section to scope the read by. Available "
+                "section target strings: ";
+    for (unsigned i = 0; i < choices->size(); ++i)
+    {
+        Poco::JSON::Object::Ptr c = choices->getObject(i);
+        if (!c)
+            continue;
+        std::string label, value;
+        JsonUtil::findJSONValue(c, "label", label);
+        JsonUtil::findJSONValue(c, "value", value);
+        displayMd << "- " << label << "\n";
+        if (i > 0)
+            modelTxt << ", ";
+        modelTxt << value;
+    }
+    modelTxt << ". When the user picks one, call extract_document_structure "
+                "with that exact target string as the target argument. Then "
+                "answer the user's earlier request using only the content of "
+                "the chosen section.";
+
+    sendChatResult(true, modelTxt.str(), _toolLoop->requestId, displayMd.str());
+    _toolLoop.reset();
+    return true;
+}
+
 bool AIChatSession::handleApprove(const std::string& firstLine)
 {
     const std::string jsonPayload = firstLine.substr(strlen("aichatapprove: "));
@@ -2136,7 +2255,13 @@ bool AIChatSession::tryConsumeExtractedDocumentStructure(const std::shared_ptr<M
         return false;
 
     _toolLoop->awaitingKitResponse = false;
-    continueToolLoop(_toolLoop->pendingToolCallId, payload->jsonString());
+    const std::string payloadJson = payload->jsonString();
+    // On the big-document truncation branch we already have everything
+    // we need to ask the user which section to read; skip a wasted LLM
+    // round-trip that would just re-emit the heading list as prose.
+    if (tryShortCircuitBigDocumentRead(payloadJson))
+        return true;
+    continueToolLoop(_toolLoop->pendingToolCallId, payloadJson);
     return true;
 }
 

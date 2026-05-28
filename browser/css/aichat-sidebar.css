@@ -1346,6 +1346,28 @@ button.ui-pushbutton[aria-pressed='true']:hover {
 	outline-offset: 2px;
 }
 
+/* -- Inline clickable section/range names in an assistant reply -- */
+
+.aichat-choice-link {
+	color: rgb(var(--aichat-accent));
+	cursor: pointer;
+	text-decoration: underline;
+	text-decoration-style: dotted;
+	text-decoration-color: rgba(var(--aichat-accent), 0.5);
+	text-underline-offset: 2px;
+	border-radius: 2px;
+}
+
+.aichat-choice-link:hover {
+	text-decoration-style: solid;
+	text-decoration-color: rgb(var(--aichat-accent));
+}
+
+.aichat-choice-link:focus-visible {
+	outline: 2px solid rgb(var(--aichat-accent));
+	outline-offset: 2px;
+}
+
 /* -- Approval card (tool call requiring user action) -- */
 
 [id^='aichat-msg-'].aichat-msg-approval {

@@ -42,6 +42,12 @@ namespace cool {
 		description: string;
 	}
 
+	interface ChoicePayload {
+		requestId: string;
+		context: 'writer-section' | 'calc-range';
+		choices: { label: string; value: string }[];
+	}
+
 	export class AIChatSidebar {
 		private messages: ChatMessage[] = [];
 		private isProcessing: boolean = false;
@@ -52,6 +58,11 @@ namespace cool {
 		private hintText: string = '';
 		private progressText: string = '';
 		private pendingFormulaContext: string = '';
+		// Buttons-to-attach for the in-flight request. Set when the
+		// backend forwards an aichatchoices: payload (big-document
+		// branch of extract_document_structure); consumed when the
+		// matching assistant reply lands.
+		private pendingChoices: ChoicePayload | null = null;
 
 		private selectedTone: string | null = null;
 		private emojify: boolean = false;
@@ -259,6 +270,7 @@ namespace cool {
 			app.map.on('aichatresult', this.onAIChatResult, this);
 			app.map.on('aichatprogress', this.onAIChatProgress, this);
 			app.map.on('aichatapproval', this.onAIChatApproval, this);
+			app.map.on('aichatchoices', this.onAIChatChoices, this);
 			app.map.on('docloaded', this.onDocLoaded, this);
 			app.map.on('textselectionchange', this.onTextSelectionChange, this);
 		}
@@ -2108,12 +2120,20 @@ namespace cool {
 			}
 
 			this.updateLoadingDots();
-			this.appendMessage(
-				this.messages[this.messages.length - 1],
-				this.messages.length - 1,
-			);
+			const replyIndex = this.messages.length - 1;
+			this.appendMessage(this.messages[replyIndex], replyIndex);
 			this.updateInputArea();
 			this.updateHeader();
+
+			if (
+				data.success &&
+				this.pendingChoices &&
+				this.pendingChoices.requestId === data.requestId
+			) {
+				const choices = this.pendingChoices;
+				this.pendingChoices = null;
+				this.decorateMessageWithChoices(replyIndex, choices);
+			}
 		}
 
 		private onAIChatResult(data: any): void {
@@ -2131,6 +2151,7 @@ namespace cool {
 					return {
 						role: 'assistant',
 						content: d.content,
+						displayContent: d.displayContent || undefined,
 						timestamp: Date.now(),
 					};
 				},
@@ -2268,6 +2289,91 @@ namespace cool {
 			}
 		}
 
+		private onAIChatChoices(data: ChoicePayload): void {
+			if (!data || data.requestId !== this.currentRequestId) return;
+			if (!Array.isArray(data.choices) || data.choices.length === 0) return;
+			this.pendingChoices = data;
+		}
+
+		private decorateMessageWithChoices(
+			index: number,
+			payload: ChoicePayload,
+		): void {
+			app.layoutingService.onDrain(() => {
+				const msgBody = document.getElementById('aichat-msg-text-' + index);
+				if (!msgBody) return;
+
+				// Strip leading section numbers ("1.", "1.1.", "1.1.1") and
+				// surrounding whitespace, then case-fold, so that the model's
+				// "1. Introduction" matches the canonical "1.Introduction" the
+				// document gave us.
+				const normalize = (s: string): string =>
+					s
+						.trim()
+						.replace(/^\d+(\.\d+)*\.?\s*/, '')
+						.toLowerCase()
+						.replace(/\s+/g, ' ');
+
+				const byNormalized: { [k: string]: { label: string; value: string } } =
+					{};
+				for (const c of payload.choices) {
+					byNormalized[normalize(c.label)] = c;
+				}
+
+				// Each heading shown in the model's prose lands as the leaf text
+				// of an <li> (or, rarely, a <p>). Walk those and, when their
+				// non-list text matches a known choice, wrap that text in a
+				// clickable anchor. Nested sublists stay outside the anchor so
+				// only the heading itself is the click target.
+				const candidates = msgBody.querySelectorAll('li, p');
+				candidates.forEach((item) => {
+					const clone = item.cloneNode(true) as HTMLElement;
+					clone.querySelectorAll('ul, ol').forEach((n) => n.remove());
+					const text = (clone.textContent || '').trim();
+					if (!text) return;
+					const choice = byNormalized[normalize(text)];
+					if (!choice) return;
+
+					const link = document.createElement('a');
+					link.className = 'aichat-choice-link';
+					link.setAttribute('role', 'button');
+					link.setAttribute('tabindex', '0');
+					link.setAttribute('aria-label', choice.label);
+					const activate = (e: Event) => {
+						e.preventDefault();
+						this.sendChoiceAsUserMessage(payload.context, choice);
+					};
+					link.onclick = activate;
+					link.onkeydown = (e) => {
+						if (e.key === 'Enter' || e.key === ' ') activate(e);
+					};
+
+					const movable = Array.from(item.childNodes).filter((n) => {
+						if (n.nodeType === Node.ELEMENT_NODE) {
+							const tag = (n as Element).tagName;
+							return tag !== 'UL' && tag !== 'OL';
+						}
+						return true;
+					});
+					for (const child of movable) link.appendChild(child);
+					item.insertBefore(link, item.firstChild);
+				});
+			});
+		}
+
+		private sendChoiceAsUserMessage(
+			context: ChoicePayload['context'],
+			choice: { label: string; value: string },
+		): void {
+			if (this.isProcessing) return;
+			const text =
+				context === 'calc-range'
+					? _('Use range: ') + choice.value
+					: _('Use section: ') + choice.label;
+			this.inputText = text;
+			void this.sendMessage();
+		}
+
 		clearConversation(): void {
 			this.messages = [];
 			this.isProcessing = false;
@@ -2281,6 +2387,7 @@ namespace cool {
 			this.formDraft = null;
 			this.emojiPickerOpen = false;
 			this.deleteConfirmOpen = false;
+			this.pendingChoices = null;
 			this.render();
 		}
 
