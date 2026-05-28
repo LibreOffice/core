@@ -25,6 +25,9 @@
 #include <common/ContainerUtil.hpp>
 #include <common/HexUtil.hpp>
 #include <common/JsonUtil.hpp>
+#if defined(QTAPP)
+#include <common/SettingsStorage.hpp>
+#endif
 #include <common/NumUtil.hpp>
 #include <common/Log.hpp>
 #include <common/Protocol.hpp>
@@ -1850,6 +1853,25 @@ bool ClientSession::handleUpdateViewSettings(const std::string& firstLine)
     setSignatureKey(signatureKey);
     setSignatureCa(signatureCa);
 
+    // ChildSession::unoSignatureCommand reads the signing cert/key/ca from
+    // getUserPrivateInfo() at dispatch time. On COOL the WOPI flow seeds
+    // _userPrivateInfo with whatever the host provides; on the desktop apps
+    // nothing else populates it, so the kit would fall back to NSS and complain
+    // about a missing Mozilla profile. Mirror the dialog's values into
+    // _userPrivateInfo so the kit picks them up regardless of platform.
+    if (!signatureCert.empty() || !signatureKey.empty() || !signatureCa.empty())
+    {
+        Poco::JSON::Object::Ptr upi;
+        if (!getUserPrivateInfo().empty())
+            JsonUtil::parseJSON(getUserPrivateInfo(), upi);
+        if (!upi)
+            upi = new Poco::JSON::Object();
+        upi->set("SignatureCert", signatureCert);
+        upi->set("SignatureKey", signatureKey);
+        upi->set("SignatureCa", signatureCa);
+        setUserPrivateInfo(JsonUtil::jsonToString(upi));
+    }
+
     // Strip sensitive fields before sending sanitized version to client
     viewSettings->remove("aiProviderAPIKey");
     viewSettings->remove("aiProviderModel");
@@ -1975,6 +1997,44 @@ bool ClientSession::loadDocument(const char* /*buffer*/, int /*length*/,
         int loadPart = -1;
         parseDocOptions(tokens, loadPart, timestamp);
         overrideDocOption();
+
+#if defined(QTAPP)
+        // The kit reads SignatureCert/Key/Ca from authorprivateinfo (set at load
+        // time and frozen there). On the desktop apps there is no WOPI host to
+        // seed _userPrivateInfo, so the engine would fall back to NSS and
+        // complain about a missing Mozilla profile. Hydrate it from the user's
+        // viewsetting.json so the kit sees the credentials when building the
+        // .uno:Signature arguments. CODA-Q (QTAPP) is the only MOBILEAPP build
+        // that links common/SettingsStorage.cpp today; the others stay without
+        // signing support until they pick the Desktop:: layer up.
+        {
+            const Desktop::FileResult vs = Desktop::fetchSettingsFile(
+                "settings/userconfig/viewsetting/viewsetting.json");
+            if (!vs.content.empty())
+            {
+                Poco::JSON::Object::Ptr viewSettings;
+                if (JsonUtil::parseJSON(vs.content, viewSettings))
+                {
+                    std::string cert, key, ca;
+                    JsonUtil::findJSONValue(viewSettings, "signatureCert", cert);
+                    JsonUtil::findJSONValue(viewSettings, "signatureKey", key);
+                    JsonUtil::findJSONValue(viewSettings, "signatureCa", ca);
+                    if (!cert.empty() || !key.empty() || !ca.empty())
+                    {
+                        Poco::JSON::Object::Ptr upi;
+                        if (!getUserPrivateInfo().empty())
+                            JsonUtil::parseJSON(getUserPrivateInfo(), upi);
+                        if (!upi)
+                            upi = new Poco::JSON::Object();
+                        upi->set("SignatureCert", cert);
+                        upi->set("SignatureKey", key);
+                        upi->set("SignatureCa", ca);
+                        setUserPrivateInfo(JsonUtil::jsonToString(upi));
+                    }
+                }
+            }
+        }
+#endif
 
         auto publicUri = docBroker->getPublicUri();
 #ifdef _WIN32
