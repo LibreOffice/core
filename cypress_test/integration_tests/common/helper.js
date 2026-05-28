@@ -164,10 +164,7 @@ function setupAndLoadTwoDocuments(filePath1, filePath2, lang) {
 	cy.cSetActiveFrame('#iframe1');
 	documentChecks();
 	cy.cSetActiveFrame('#iframe2');
-	// iframe2 takes longer to fully initialize; skip the strict
-	// 'initialized' wait here and let the test rely on cy.cGet's
-	// auto-retry against the elements it actually touches.
-	documentChecks(true);
+	documentChecks();
 
 	cy.log('<< setupAndLoadTwoDocuments - end');
 	return [newFilePath1, newFilePath2];
