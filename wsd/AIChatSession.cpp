@@ -1069,9 +1069,7 @@ bool AIChatSession::executeToolCall(const std::string& toolCallId,
         // scoped read names the slice so the user knows only part is sent.
         if (!bTextFilter)
             _toolLoop->pendingSummary = "";
-        else if (target.empty())
-            _toolLoop->pendingSummary = "Read the full text of your document to answer your request.";
-        else
+        else if (!target.empty())
         {
             std::string name = target;
             if (const auto bar = name.rfind('|'); bar != std::string::npos)
@@ -1079,6 +1077,12 @@ bool AIChatSession::executeToolCall(const std::string& toolCallId,
             _toolLoop->pendingSummary =
                 "Read the \"" + name + "\" section of your document to answer your request.";
         }
+        else if (!range.empty())
+            _toolLoop->pendingSummary =
+                "Read the \"" + range + "\" range of your document to answer your request.";
+        else
+            _toolLoop->pendingSummary =
+                "Read the full text of your document to answer your request.";
 
         sendToolApproval(fnName, "");
         return true;
@@ -1469,10 +1473,9 @@ bool AIChatSession::tryShortCircuitBigDocumentRead(const std::string& payloadJso
     if (!JsonUtil::parseJSON(payloadJson, root))
         return false;
 
-    // The kit's extracteddocumentstructure payload wraps everything in
-    // a DocStructure root; for filter=text it puts a BodyText node
-    // underneath that, and the truncated whole-body Writer branch adds
-    // link_targets inside BodyText. Walk both layers.
+    // The kit's extracteddocumentstructure payload wraps everything in a
+    // DocStructure root; for filter=text it puts a BodyText node underneath
+    // that, with a truncated flag both Writer and Calc emit.
     Poco::JSON::Object::Ptr docStructure = root->getObject("DocStructure");
     if (!docStructure)
         return false;
@@ -1481,61 +1484,99 @@ bool AIChatSession::tryShortCircuitBigDocumentRead(const std::string& payloadJso
     if (!body)
         return false;
 
-    Poco::JSON::Object::Ptr linkTargets = body->getObject("link_targets");
-    if (!linkTargets)
+    bool isTruncated = false;
+    if (!JsonUtil::findJSONValue(body, "truncated", isTruncated) || !isTruncated)
         return false;
 
-    Poco::JSON::Array::Ptr choices = new Poco::JSON::Array();
-    collectSectionChoices(linkTargets, choices);
-    if (choices->size() == 0)
-        return false;
-
-    // Send the choices so the frontend can render the picks as inline
-    // clickable text in the upcoming assistant message.
+    // Writer renders clickable section picks from the link_targets the kit
+    // inlines on a truncated whole-body read. Calc has no equivalent
+    // structure, so it nudges the user toward the two existing paths to
+    // narrow the read. Other doc types fall through unchanged.
+    if (_toolLoop->docType == "text")
     {
-        Poco::JSON::Object::Ptr msg = new Poco::JSON::Object();
-        msg->set("requestId", _toolLoop->requestId);
-        msg->set("context", "writer-section");
-        msg->set("choices", choices);
+        Poco::JSON::Object::Ptr linkTargets = body->getObject("link_targets");
+        if (!linkTargets)
+            return false;
 
-        std::ostringstream oss;
-        msg->stringify(oss);
-        _session.sendTextFrame("aichatchoices: " + oss.str());
+        Poco::JSON::Array::Ptr choices = new Poco::JSON::Array();
+        collectSectionChoices(linkTargets, choices);
+        if (choices->size() == 0)
+            return false;
+
+        // Send the choices so the frontend can render the picks as inline
+        // clickable text in the upcoming assistant message.
+        {
+            Poco::JSON::Object::Ptr msg = new Poco::JSON::Object();
+            msg->set("requestId", _toolLoop->requestId);
+            msg->set("context", "writer-section");
+            msg->set("choices", choices);
+
+            std::ostringstream oss;
+            msg->stringify(oss);
+            _session.sendTextFrame("aichatchoices: " + oss.str());
+        }
+
+        // Compose two parallel views of the synthetic reply: a markdown
+        // list for the user (rendered as <li> items that the sidebar
+        // decorator turns into clickable links), and a hidden instruction
+        // for the model that lists the canonical target strings so it can
+        // call extract_document_structure correctly when the user picks.
+        std::ostringstream displayMd;
+        displayMd << "This document is too large to read in full. Pick a section "
+                     "to focus on:\n\n";
+        std::ostringstream modelTxt;
+        modelTxt << "The document is too large to read in full. The user is "
+                    "picking which section to scope the read by. Available "
+                    "section target strings: ";
+        for (unsigned i = 0; i < choices->size(); ++i)
+        {
+            Poco::JSON::Object::Ptr c = choices->getObject(i);
+            if (!c)
+                continue;
+            std::string label, value;
+            JsonUtil::findJSONValue(c, "label", label);
+            JsonUtil::findJSONValue(c, "value", value);
+            displayMd << "- " << label << "\n";
+            if (i > 0)
+                modelTxt << ", ";
+            modelTxt << value;
+        }
+        modelTxt << ". When the user picks one, call extract_document_structure "
+                    "with that exact target string as the target argument. Then "
+                    "answer the user's earlier request using only the content of "
+                    "the chosen section.";
+
+        sendChatResult(true, modelTxt.str(), _toolLoop->requestId, displayMd.str());
+        _toolLoop.reset();
+        return true;
     }
 
-    // Compose two parallel views of the synthetic reply: a markdown
-    // list for the user (rendered as <li> items that the sidebar
-    // decorator turns into clickable links), and a hidden instruction
-    // for the model that lists the canonical target strings so it can
-    // call extract_document_structure correctly when the user picks.
-    std::ostringstream displayMd;
-    displayMd << "This document is too large to read in full. Pick a section "
-                 "to focus on:\n\n";
-    std::ostringstream modelTxt;
-    modelTxt << "The document is too large to read in full. The user is "
-                "picking which section to scope the read by. Available "
-                "section target strings: ";
-    for (unsigned i = 0; i < choices->size(); ++i)
+    if (_toolLoop->docType == "spreadsheet")
     {
-        Poco::JSON::Object::Ptr c = choices->getObject(i);
-        if (!c)
-            continue;
-        std::string label, value;
-        JsonUtil::findJSONValue(c, "label", label);
-        JsonUtil::findJSONValue(c, "value", value);
-        displayMd << "- " << label << "\n";
-        if (i > 0)
-            modelTxt << ", ";
-        modelTxt << value;
-    }
-    modelTxt << ". When the user picks one, call extract_document_structure "
-                "with that exact target string as the target argument. Then "
-                "answer the user's earlier request using only the content of "
-                "the chosen section.";
+        // Calc has no clickable picks. Point the user at the two existing
+        // narrowing paths: a multi-cell selection is inlined into the next
+        // message by buildUserMessage with no further tool call, or a typed
+        // range argument lets the model call this tool again with range=.
+        const std::string displayMd =
+            "This sheet is too large to read in full. To narrow it down, you can:\n\n"
+            "- Select a range of cells in the sheet, then ask your question again\n"
+            "- Reply with a range to focus on, like `A1:D100`";
+        const std::string modelTxt =
+            "The sheet is too large to read in full. The user is choosing how to "
+            "narrow the read. They will either select a range and resend their "
+            "question (in which case the selection content is attached inline as "
+            "[Selected text from document: ...] and you can answer directly without "
+            "another tool call), or reply with a range like 'A1:D100' (in which "
+            "case call extract_document_structure with filter='text' and "
+            "range='<their range>'). Do not call extract_document_structure with "
+            "no range argument again on this document.";
 
-    sendChatResult(true, modelTxt.str(), _toolLoop->requestId, displayMd.str());
-    _toolLoop.reset();
-    return true;
+        sendChatResult(true, modelTxt, _toolLoop->requestId, displayMd);
+        _toolLoop.reset();
+        return true;
+    }
+
+    return false;
 }
 
 bool AIChatSession::handleApprove(const std::string& firstLine)

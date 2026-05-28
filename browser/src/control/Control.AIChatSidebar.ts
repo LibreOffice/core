@@ -44,7 +44,7 @@ namespace cool {
 
 	interface ChoicePayload {
 		requestId: string;
-		context: 'writer-section' | 'calc-range';
+		context: 'writer-section';
 		choices: { label: string; value: string }[];
 	}
 
@@ -2341,7 +2341,7 @@ namespace cool {
 					link.setAttribute('aria-label', choice.label);
 					const activate = (e: Event) => {
 						e.preventDefault();
-						this.sendChoiceAsUserMessage(payload.context, choice);
+						this.sendChoiceAsUserMessage(choice);
 					};
 					link.onclick = activate;
 					link.onkeydown = (e) => {
@@ -2361,16 +2361,12 @@ namespace cool {
 			});
 		}
 
-		private sendChoiceAsUserMessage(
-			context: ChoicePayload['context'],
-			choice: { label: string; value: string },
-		): void {
+		private sendChoiceAsUserMessage(choice: {
+			label: string;
+			value: string;
+		}): void {
 			if (this.isProcessing) return;
-			const text =
-				context === 'calc-range'
-					? _('Use range: ') + choice.value
-					: _('Use section: ') + choice.label;
-			this.inputText = text;
+			this.inputText = _('Use section: ') + choice.label;
 			void this.sendMessage();
 		}
 
