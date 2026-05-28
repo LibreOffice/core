@@ -371,6 +371,10 @@ export class Comment extends CanvasSectionObject {
 		if (this.isAuthor()) {
 			const edit = window.L.DomUtil.create('div', 'cool-annotation-menu-edit', tdMenu);
 			edit.id = 'comment-annotation-menu-edit-' + this.sectionProperties.data.id;
+			// Honor an earlier Hide_Command for .uno:EditAnnotation; the class
+			// is toggled symmetrically by UIManager.showCommand later.
+			if (!app.map.uiManager.isCommandVisible('.uno:EditAnnotation'))
+				edit.classList.add('hidden-by-command');
 			edit.tabIndex = 0;
 			edit.onclick = this.onEditComment.bind(this);
 			edit.onkeypress = this.editOnKeyPress.bind(this);
@@ -1168,6 +1172,11 @@ export class Comment extends CanvasSectionObject {
 		const docLayer = app.map._docLayer;
 		const entries: Array<any> = [];
 		let pos = 0;
+		// Honor Hide_Command for entries that map to a UNO command, so a host
+		// can suppress comment-dialog actions the same way it suppresses
+		// menubar / toolbar items.
+		const isShown = (uno: string): boolean =>
+			app.map.uiManager.isCommandVisible(uno);
 
 		if (data.trackchange) {
 			entries.push({ text: _('Comment'), type: 'action', id: 'modify', pos: String(pos++) });
@@ -1175,34 +1184,41 @@ export class Comment extends CanvasSectionObject {
 			const isAuthor = this.isAuthor();
 			const canRemove = this.canRemove();
 			const canModerate = this.canModerate();
+			const removeUno = docLayer._docType === 'text' ? '.uno:DeleteComment'
+				: (docLayer._docType === 'spreadsheet' ? '.uno:DeleteNote'
+					: '.uno:DeleteAnnotation');
 
-			if (isAuthor)
+			if (isAuthor && isShown('.uno:EditAnnotation'))
 				entries.push({ text: _('Modify'), type: 'action', id: 'modify', pos: String(pos++) });
 
-			if (docLayer._docType === 'text')
+			if (docLayer._docType === 'text' && isShown('.uno:ReplyComment'))
 				entries.push({ text: _('Reply'), type: 'action', id: 'reply', pos: String(pos++) });
 
-			if (canRemove)
+			if (canRemove && isShown(removeUno))
 				entries.push({ text: _('Remove'), type: 'action', id: 'remove', pos: String(pos++) });
 
-			if (docLayer._docType === 'text' && this.isRootComment() && canRemove)
+			if (docLayer._docType === 'text' && this.isRootComment() && canRemove
+				&& isShown('.uno:DeleteCommentThread'))
 				entries.push({ text: _('Remove Thread'), type: 'action', id: 'removeThread', pos: String(pos++) });
 
 			const isNonWriterComponent = ['spreadsheet', 'drawing', 'presentation'].includes(docLayer._docType);
 			if (canModerate
-				&& (docLayer._docType === 'text' || (isNonWriterComponent && data.threaded)))
+				&& (docLayer._docType === 'text' || (isNonWriterComponent && data.threaded))
+				&& isShown('.uno:ResolveComment'))
 				entries.push({
 					text: data.resolved === 'false' ? _('Resolve') : _('Unresolve'),
 					type: 'action', id: 'resolve', pos: String(pos++),
 				});
 
-			if (docLayer._docType === 'text' && this.isRootComment() && canModerate)
+			if (docLayer._docType === 'text' && this.isRootComment() && canModerate
+				&& isShown('.uno:ResolveCommentThread'))
 				entries.push({
 					text: listSection.isThreadResolved(this) ? _('Unresolve Thread') : _('Resolve Thread'),
 					type: 'action', id: 'resolveThread', pos: String(pos++),
 				});
 
-			if (docLayer._docType === 'text' && !this.isRootComment() && isAuthor)
+			if (docLayer._docType === 'text' && !this.isRootComment() && isAuthor
+				&& isShown('.uno:PromoteComment'))
 				entries.push({ text: _('Promote to top comment'), type: 'action', id: 'promote', pos: String(pos++) });
 
 			if (docLayer._docType === 'text' && !window.mode.isSmallScreenDevice()) {

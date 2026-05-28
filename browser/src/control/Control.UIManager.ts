@@ -1299,6 +1299,18 @@ class UIManager extends window.L.Control {
 			this.hiddenCommands[command] = true;
 
 		var found = false;
+
+		// The standalone edit affordance on the comment dialog is keyed to
+		// .uno:EditAnnotation. Toggle it for any comments already on screen;
+		// createMenu also consults isCommandVisible for ones built later.
+		// Done before the toolbar/menubar/notebookbar branches so a failure
+		// in one of them cannot skip the comment-dialog update.
+		if (command === '.uno:EditAnnotation') {
+			document.querySelectorAll<HTMLElement>('.cool-annotation-menu-edit')
+				.forEach(el => { el.classList.toggle('hidden-by-command', !show); });
+			found = true;
+		}
+
 		if (this.getCurrentMode() === 'classic') {
 			if (this.showCommandInClassicToolbar(command, show)) {
 				found = true;

@@ -70,6 +70,65 @@ describe(['tagdesktop'], 'Threaded Comment', function() {
 		});
 	});
 
+	// Hide_Command should also suppress the standalone edit affordance on the
+	// comment dialog and entries inside its three-dot dropdown.
+	it('Hide_Command suppresses comment dialog edit + dropdown entries', function() {
+		// Insert via the toolbar so the current view is the author and the
+		// standalone edit affordance is present.
+		cy.cGet('#Insert-tab-label').click();
+		cy.cGet('#insert-insert-threaded-comment').click();
+		cy.cGet('#comment-container-new').should('exist');
+		cy.cGet('.cool-annotation').last().find('#annotation-modify-textarea-new')
+			.should('exist');
+		cy.getFrameWindow().then(function(win) { helper.processToIdle(win); });
+		cy.cGet('#comment-container-new').then(function(el) {
+			el[0].style.visibility = '';
+			el[0].style.display = '';
+		});
+		cy.cGet('.cool-annotation').last().find('.modify-annotation .cool-annotation-textarea')
+			.should('not.have.attr', 'disabled');
+		cy.cGet('.cool-annotation').last().find('.modify-annotation .cool-annotation-textarea')
+			.type('to be hidden', { force: true });
+		cy.cGet('.cool-annotation').last().find('[value="Save"]').click({ force: true });
+		cy.cGet('#comment-container-1').should('exist');
+		cy.getFrameWindow().then(function(win) { helper.processToIdle(win); });
+
+		// Standalone edit affordance is present initially (the Calc comment
+		// container is hidden until hover, so check the button's own display
+		// rather than be.visible).
+		cy.cGet('#comment-annotation-menu-edit-1').should('exist')
+			.should('not.have.css', 'display', 'none');
+
+		// Hide both commands.
+		cy.getFrameWindow().then(function(win) {
+			win.postMessage(JSON.stringify({
+				MessageId: 'Hide_Command', Values: { id: '.uno:ResolveComment' } }), '*');
+			win.postMessage(JSON.stringify({
+				MessageId: 'Hide_Command', Values: { id: '.uno:EditAnnotation' } }), '*');
+		});
+
+		// Standalone edit affordance is hidden (check inline display, since
+		// the Calc comment container is hidden until hover and that would
+		// confuse be.visible).
+		cy.cGet('#comment-annotation-menu-edit-1')
+			.should('have.css', 'display', 'none');
+
+		// Dropdown's Resolve entry is gone; Remove is still there (so we
+		// know the dropdown opened, not that it is empty).
+		cy.getFrameWindow().then(function(win) {
+			const section = win.app.sectionContainer.getSectionWithName(
+				win.app.CSections.CommentList.name);
+			section.sectionProperties.commentList[0].onMouseEnter();
+		});
+		cy.cGet('#comment-annotation-menu-1').click();
+		cy.cGet('#comment-menu-1-dropdown')
+			.contains('.ui-combobox-entry.jsdialog.ui-grid-cell', 'Remove')
+			.should('exist');
+		cy.cGet('#comment-menu-1-dropdown')
+			.contains('.ui-combobox-entry.jsdialog.ui-grid-cell', 'Resolve')
+			.should('not.exist');
+	});
+
 	it('Insert, resolve, unresolve, and remove threaded comment', function() {
 		// Click the "Insert Comment" button on the Insert tab.
 		cy.cGet('#Insert-tab-label').click();

@@ -953,6 +953,13 @@ body {
 	box-sizing: border-box;
 }
 
+/* Marker added by UIManager.showCommand on elements the host has asked to
+   hide via Hide_Command. !important so it wins over any non-important
+   display rule on the element it is applied to. */
+.hidden-by-command {
+	display: none !important;
+}
+
 .cool-redline-accept-button {
 	background: url('images/lc_acceptchanges.svg') no-repeat center !important;
 }
