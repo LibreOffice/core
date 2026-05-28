@@ -1234,6 +1234,10 @@ void QtBuilder::setGridLayoutProperties(QGridLayout& rGridLayout, stringmap& rPr
     if (aIt != rProps.end())
         rGridLayout.setHorizontalSpacing(aIt->second.toUInt32());
 
+    aIt = rProps.find(u"halign"_ustr);
+    if (aIt != rProps.end())
+        rGridLayout.setAlignment(toAlign(aIt->second, true));
+
     rGridLayout.setContentsMargins(0, 0, 0, 0);
 }
 
