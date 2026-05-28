@@ -49,6 +49,9 @@ namespace
 
     /// Reissue count at which log line is promoted for a tile
     constexpr int STALE_REISSUE_WARN_AT = 3;
+
+    /// Cancel a stuck tile after this many reissues.
+    constexpr int MAX_STALE_REISSUE_TOTAL = 8;
 }
 
 TileCache::TileCache(std::string docURL, const std::chrono::system_clock::time_point& modifiedTime,
@@ -124,6 +127,7 @@ struct TileCache::TileBeingRendered
 
     int getReissueCount() const { return _reissueCount; }
     void bumpReissue() { ++_reissueCount; }
+    void resetReissueCount() { _reissueCount = 0; }
 
     std::vector<std::weak_ptr<ClientSession>>& getSubscribers() { return _subscribers; }
 
@@ -250,6 +254,15 @@ TileCache::takeStaleRendersForReissue(std::chrono::steady_clock::time_point now)
     {
         auto& tbr = candidates[i]->second;
         const TileDesc& tile = candidates[i]->first;
+
+        if (tbr->getReissueCount() >= MAX_STALE_REISSUE_TOTAL)
+        {
+            LOG_WRN("Abandoning stalled tile after " << tbr->getReissueCount()
+                    << " reissues for " << tbr->getSubscribers().size()
+                    << " subscribers: " << tile.serialize());
+            _tilesBeingRendered.erase(candidates[i]);
+            continue;
+        }
 
         tbr->bumpReissue();
         const int count = tbr->getReissueCount();
@@ -567,6 +580,9 @@ bool TileCache::subscribeToTileRendering(const TileDesc& tile,
     {
         if (tileBeingRendered->isStale(now))
             LOG_DBG("Painting stalled; need to re-issue on tile " << tile.debugName());
+
+        if (tile.getVersion() > tileBeingRendered->getVersion())
+            tileBeingRendered->resetReissueCount();
 
         for (const auto &s : tileBeingRendered->getSubscribers())
         {

@@ -49,6 +49,8 @@ class KitQueueTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testSenderQueueTileDedupReportsDroppedWireId);
     CPPUNIT_TEST(testTileCacheKitHangBecomesStale);
     CPPUNIT_TEST(testTileCacheStaleRenderIsReissued);
+    CPPUNIT_TEST(testTileCacheStaleRenderAbandonAfterMaxReissues);
+    CPPUNIT_TEST(testTileCacheReissueCountResetsOnNewVersion);
     CPPUNIT_TEST(testInvalidateViewCursorDeduplication);
     CPPUNIT_TEST(testCallbackModifiedStatusIsSkipped);
     CPPUNIT_TEST(testCallbackInvalidation);
@@ -96,6 +98,8 @@ class KitQueueTests : public CPPUNIT_NS::TestFixture
     void testSenderQueueTileDedupReportsDroppedWireId();
     void testTileCacheKitHangBecomesStale();
     void testTileCacheStaleRenderIsReissued();
+    void testTileCacheStaleRenderAbandonAfterMaxReissues();
+    void testTileCacheReissueCountResetsOnNewVersion();
     void testInvalidateViewCursorDeduplication();
     void testCallbackModifiedStatusIsSkipped();
     void testCallbackInvalidation();
@@ -870,6 +874,125 @@ void KitQueueTests::testTileCacheStaleRenderIsReissued()
         const auto staleAgain = stale + std::chrono::milliseconds(COMMAND_TIMEOUT_MS + 1);
         auto reissue = cache.takeStaleRendersForReissue(staleAgain);
         LOK_ASSERT_EQUAL(static_cast<size_t>(1), reissue.size());
+    }
+}
+
+// After MAX_STALE_REISSUE_TOTAL futile reissues, the sweep must abandon
+// the entry rather than keep re-asking the kit forever.
+void KitQueueTests::testTileCacheStaleRenderAbandonAfterMaxReissues()
+{
+    constexpr std::string_view testname = __func__;
+
+    // if it changes in TileCache.cpp, update this constant.
+    constexpr int kMaxReissue = 8;
+
+    TileCache cache("dummy://test-doc.odt", std::chrono::system_clock::now(),
+                    /*dontCache=*/true);
+
+    const TileDesc tile = TileDesc::parse(
+        "tile nviewid=0 part=0 width=256 height=256 tileposx=0 tileposy=0 "
+        "tilewidth=3840 tileheight=3840");
+
+    int sessionId = 0;
+    auto liveSubscriber = std::shared_ptr<ClientSession>(
+        reinterpret_cast<ClientSession*>(&sessionId), [](ClientSession*) {});
+
+    const auto t0 = std::chrono::steady_clock::now();
+    cache.injectTileBeingRenderedForTest(tile, t0, liveSubscriber);
+
+    // The kit never replies. Run kMaxReissue stale sweeps;
+    // each must reissue the tile and keep the entry alive.
+    auto t = t0;
+    for (int i = 0; i < kMaxReissue; ++i)
+    {
+        t += std::chrono::milliseconds(COMMAND_TIMEOUT_MS + 1);
+        auto reissue = cache.takeStaleRendersForReissue(t);
+        LOK_ASSERT_EQUAL(static_cast<size_t>(1), reissue.size());
+        LOK_ASSERT_EQUAL_STR(true, cache.hasTileBeingRendered(tile));
+    }
+
+    // One more sweep: count has reached the max.
+    // The entry is abandoned and not reissued.
+    t += std::chrono::milliseconds(COMMAND_TIMEOUT_MS + 1);
+    {
+        auto reissue = cache.takeStaleRendersForReissue(t);
+        LOK_ASSERT_EQUAL(static_cast<size_t>(0), reissue.size());
+        LOK_ASSERT_EQUAL_STR(false, cache.hasTileBeingRendered(tile));
+    }
+}
+
+// When a client re-subscribes with a newer wireId
+// (the content was invalidated and new content is now wanted for the same
+// tile slot), the reissue counter must reset so a once-stuck tile is
+// not abandoned prematurely against its new content.
+void KitQueueTests::testTileCacheReissueCountResetsOnNewVersion()
+{
+    constexpr std::string_view testname = __func__;
+    constexpr int kMaxReissue = 8;
+
+    TileCache cache("dummy://test-doc.odt", std::chrono::system_clock::now(),
+                    /*dontCache=*/true);
+
+    TileDesc tile = TileDesc::parse(
+        "tile nviewid=0 part=0 width=256 height=256 tileposx=0 tileposy=0 "
+        "tilewidth=3840 tileheight=3840");
+    tile.setVersion(1);
+
+    int sessionId = 0;
+    auto liveSubscriber = std::shared_ptr<ClientSession>(
+        reinterpret_cast<ClientSession*>(&sessionId), [](ClientSession*) {});
+
+    const auto t0 = std::chrono::steady_clock::now();
+    cache.injectTileBeingRenderedForTest(tile, t0, liveSubscriber);
+
+    // Run kMaxReissue - 1 reissues so we almost abandoned it
+    auto t = t0;
+    for (int i = 0; i < kMaxReissue - 1; ++i)
+    {
+        t += std::chrono::milliseconds(COMMAND_TIMEOUT_MS + 1);
+        auto reissue = cache.takeStaleRendersForReissue(t);
+        LOK_ASSERT_EQUAL(static_cast<size_t>(1), reissue.size());
+    }
+
+    // The client requests the same tile slot at a newer wireId.
+    TileDesc newer = tile;
+    newer.setVersion(2);
+    t += std::chrono::milliseconds(10);
+    cache.subscribeToTileRendering(newer, liveSubscriber, t);
+
+    // After reset, the entry survives another full kMaxReissue sweeps.
+    for (int i = 0; i < kMaxReissue; ++i)
+    {
+        t += std::chrono::milliseconds(COMMAND_TIMEOUT_MS + 1);
+        auto reissue = cache.takeStaleRendersForReissue(t);
+        LOK_ASSERT_EQUAL(static_cast<size_t>(1), reissue.size());
+        LOK_ASSERT_EQUAL_STR(true, cache.hasTileBeingRendered(tile));
+    }
+
+    // Limit reached against the new wireId; the next sweep abandons.
+    t += std::chrono::milliseconds(COMMAND_TIMEOUT_MS + 1);
+    {
+        auto reissue = cache.takeStaleRendersForReissue(t);
+        LOK_ASSERT_EQUAL(static_cast<size_t>(0), reissue.size());
+        LOK_ASSERT_EQUAL_STR(false, cache.hasTileBeingRendered(tile));
+    }
+
+    // Resubscribing with the same version (no content change) must NOT
+    // reset the counter.
+    cache.injectTileBeingRenderedForTest(tile, t, liveSubscriber);
+    auto t2 = t;
+    for (int i = 0; i < kMaxReissue; ++i)
+    {
+        t2 += std::chrono::milliseconds(COMMAND_TIMEOUT_MS + 1);
+        auto reissue = cache.takeStaleRendersForReissue(t2);
+        LOK_ASSERT_EQUAL(static_cast<size_t>(1), reissue.size());
+    }
+    cache.subscribeToTileRendering(tile, liveSubscriber, t2); // same ver=1
+    t2 += std::chrono::milliseconds(COMMAND_TIMEOUT_MS + 1);
+    {
+        auto reissue = cache.takeStaleRendersForReissue(t2);
+        LOK_ASSERT_EQUAL(static_cast<size_t>(0), reissue.size());
+        LOK_ASSERT_EQUAL_STR(false, cache.hasTileBeingRendered(tile));
     }
 }
 
