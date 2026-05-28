@@ -33,7 +33,8 @@ interface BackstageTabConfig {
 		| 'properties'
 		| 'history'
 		| 'options'
-		| 'about';
+		| 'about'
+		| 'sign';
 }
 
 interface TemplateTypeMap {

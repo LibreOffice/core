@@ -282,6 +282,9 @@ class InitializerBase {
 		// is still gated on a user-provided API key (and !isSmallScreenDevice)
 		// so this only surfaces the feature where it makes sense.
 		window.zoteroEnabled = true;
+		// Match COOL's document_signing.enable default (true). Without this the
+		// Sign UI (Backstage entry, notebookbar File-tab button) stays hidden.
+		window.documentSigningEnabled = true;
 		window.savedUIState = true;
 		window.extraExportFormats = [];
 		window.wasmEnabled = false;

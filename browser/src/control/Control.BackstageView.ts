@@ -45,6 +45,7 @@ class BackstageView extends window.L.Class {
 		history: () => this.executeRevisionHistory(),
 		options: () => this.executeOptions(),
 		about: () => this.executeAbout(),
+		sign: () => this.executeSign(),
 	};
 
 	constructor(map: any) {
@@ -161,6 +162,14 @@ class BackstageView extends window.L.Class {
 				viewType: 'export',
 				icon: 'lc_exportto.svg',
 				visible: !this.isStarterMode,
+			},
+			{
+				id: 'sign',
+				label: _('Sign'),
+				type: 'action',
+				actionType: 'sign',
+				icon: 'lc_signature.svg',
+				visible: !this.isStarterMode && !!window.documentSigningEnabled,
 			},
 			{
 				type: 'separator',
@@ -834,6 +843,11 @@ class BackstageView extends window.L.Class {
 
 	private executeRepair(): void {
 		this.sendUnoCommand('.uno:Repair');
+		this.hide();
+	}
+
+	private executeSign(): void {
+		this.sendUnoCommand('.uno:Signature');
 		this.hide();
 	}
 

@@ -164,6 +164,7 @@ BACKSTAGE_SVG_NAMES = \
 	lc_printpreview.svg \
 	lc_save.svg \
 	lc_saveacopy.svg \
+	lc_signature.svg \
 	lc_printlayout.svg \
 	lc_exportto.svg
 
