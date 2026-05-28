@@ -1017,18 +1017,21 @@ void Document::renderTiles(TileCombined &tileCombined)
     if (!session)
     {
         LOG_ERR("Session is not found. Maybe exited after rendering request.");
+        sendTextFrame("error: cmd=tile kind=nosession");
         return;
     }
 
     if (!_loKitDocument)
     {
         LOG_ERR("Tile rendering requested before loading document.");
+        session->sendTextFrameAndLogError("error: cmd=tile kind=notloaded");
         return;
     }
 
     if (_loKitDocument->getViewsCount() <= 0)
     {
         LOG_ERR("Tile rendering requested without views.");
+        session->sendTextFrameAndLogError("error: cmd=tile kind=noviews");
         return;
     }
 
@@ -1047,8 +1050,11 @@ void Document::renderTiles(TileCombined &tileCombined)
     const auto postMessageFunc = [&](const char* buffer, std::size_t length)
     { postMessage(std::string_view(buffer, length), WSOpCode::Binary); };
 
+    const auto errorMessageFunc = [&](const std::string_view msg)
+    { session->sendTextFrameAndLogError(msg); };
+
     if (!RenderTiles::doRender(_loKitDocument, *_deltaGen, tileCombined, _deltaPool,
-                               blenderFunc, postMessageFunc, _mobileAppDocId,
+                               blenderFunc, postMessageFunc, errorMessageFunc, _mobileAppDocId,
                                session->getCanonicalViewId(), session->getDumpTiles()))
     {
         LOG_DBG("All tiles skipped, not producing empty tilecombine: message");

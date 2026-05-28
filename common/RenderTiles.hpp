@@ -64,6 +64,7 @@ namespace RenderTiles
                                  size_t pixmapHeight, int pixelWidth, int pixelHeight,
                                  COKitTileMode mode)>& blendWatermark,
         const std::function<void(const char* buffer, size_t length)>& outputMessage,
+        const std::function<void(std::string_view msg)>& errorMessage,
         [[maybe_unused]] unsigned mobileAppDocId, CanonicalViewId canonicalViewId, bool dumpTiles)
     {
         const auto& tiles = tileCombined.getTiles();
@@ -101,6 +102,7 @@ namespace RenderTiles
         if (areaWidth <= 0 || areaHeight <= 0)
         {
             LOG_ERR("Invalid render area " << areaWidth << 'x' << areaHeight);
+            errorMessage("error: cmd=tile kind=invalidarea");
             return false;
         }
 
@@ -211,9 +213,8 @@ namespace RenderTiles
                             if (!Png::encodeSubBufferToPNG(pixmap.data(), offsetX, offsetY, pixelWidth, pixelHeight,
                                                            pixmapWidth, pixmapHeight, data, mode))
                             {
-                                // FIXME: Return error.
-                                // sendTextFrameAndLogError("error: cmd=tile kind=failure");
                                 LOG_ERR("Failed to encode tile into PNG.");
+                                errorMessage("error: cmd=tile kind=pngencode");
                                 return;
                             }
                         }
@@ -238,7 +239,11 @@ namespace RenderTiles
                 << " took " << elapsed << " (" << area / elapsed.count() << " MP/s).");
 
         if (tileIndex == 0)
+        {
+            LOG_ERR("No tiles produced for render area " << areaWidth << 'x' << areaHeight);
+            errorMessage("error: cmd=tile kind=empty");
             return false;
+        }
 
         std::string tileMsg;
         if (tileCombined.getCombined())
