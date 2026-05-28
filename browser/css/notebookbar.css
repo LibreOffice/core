@@ -572,7 +572,7 @@ label.notebookbar.ui-checkbox-label {
  */
 .jsdialog #stylesview,
 .notebookbar #stylesview {
-	width: 36.8vw !important;
+	width: 36.8vw;
 	/* Preview base64's width = 100px + container border's etc */
 	grid-template-columns: repeat(auto-fit, minmax(122px, 1fr));
 	/* Preview base64's height = 30px  + container border's etc */
@@ -582,6 +582,11 @@ label.notebookbar.ui-checkbox-label {
 #stylesview {
 	min-width: 36.8vw !important;
 	justify-content: center;
+}
+
+.jsdialog #stylesview {
+	background-color: var(--color-stylesview-background);
+	width: auto;
 }
 
 #masterpagenb-iconview-list-dropdown,

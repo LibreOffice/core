@@ -65,7 +65,6 @@ describe(['tagdesktop'], 'Stylesview Iconview Tests', function() {
 		// - the open styles sidebar button should be visible.
 		cy.viewport(650, 454);
 		cy.cGet('.jsdialog #stylesview_4').should('exist').should('be.visible');
-		cy.cGet('.jsdialog #stylesview_5').should('exist').should('not.be.visible');
 		cy.cGet('#format-style-list-dialog-button').should('exist').should('be.visible');
 	});
 });
