@@ -191,8 +191,11 @@ void VclProcessor2D::RenderTextSimpleOrDecoratedPortionPrimitive2D(
 
             const sal_uInt8 nProportionalFontSize(rTextCandidate.getProportionalFontSize());
             assert(nProportionalFontSize > 0);
+            const double fMaxAscentFrac(rTextCandidate.getFillColorMaxAscentFraction());
             const bool bManualBackground(!aFillColor.IsTransparent()
-                                         && nProportionalFontSize != 100);
+                                         && (nProportionalFontSize != 100
+                                             || fMaxAscentFrac > 0.0));
+
             if (bManualBackground)
             {
                 aFont.SetTransparent(true);
@@ -464,6 +467,17 @@ void VclProcessor2D::RenderTextSimpleOrDecoratedPortionPrimitive2D(
                     = rTextCandidate.getEscapement() / -100.0 * aResultFontSize.Height() * fScale;
                 tools::Long nAdjAsc = basegfx::fround<tools::Long>(fEscOff + nPropAsc * fScale);
                 tools::Long nAdjDesc = basegfx::fround<tools::Long>(nPropDesc * fScale - fEscOff);
+
+                if (fMaxAscentFrac > 0.0 && nProportionalFontSize == 100)
+                {
+                    tools::Long nMaxAsc = basegfx::fround<tools::Long>(
+                        fMaxAscentFrac * aResultFontSize.Height());
+                    if (nAdjAsc > nMaxAsc)
+                    {
+                        nAdjDesc = nAdjDesc * nMaxAsc / nAdjAsc;
+                        nAdjAsc = nMaxAsc;
+                    }
+                }
                 tools::Long nTextWidth
                     = !aDXArray.empty()
                           ? basegfx::fround<tools::Long>(aDXArray.back())
@@ -498,9 +512,31 @@ void VclProcessor2D::RenderTextSimpleOrDecoratedPortionPrimitive2D(
                                                               | vcl::PushFlags::LINECOLOR);
                 mpOutputDevice->SetFillColor(aFillColor);
                 mpOutputDevice->SetLineColor();
-                mpOutputDevice->DrawRect(
-                    tools::Rectangle(aStartPoint.X(), aStartPoint.Y() - nAdjAsc,
-                                     aStartPoint.X() + nTextWidth, aStartPoint.Y() + nAdjDesc));
+                if (!basegfx::fTools::equalZero(fRotate))
+                {
+                    const double fCos = cos(fRotate);
+                    const double fSin = sin(fRotate);
+                    tools::Polygon aPoly(4);
+                    aPoly[0] = Point(
+                        aStartPoint.X() + basegfx::fround<tools::Long>(nAdjAsc * fSin),
+                        aStartPoint.Y() + basegfx::fround<tools::Long>(-nAdjAsc * fCos));
+                    aPoly[1] = Point(
+                        aStartPoint.X() + basegfx::fround<tools::Long>(nTextWidth * fCos + nAdjAsc * fSin),
+                        aStartPoint.Y() + basegfx::fround<tools::Long>(nTextWidth * fSin - nAdjAsc * fCos));
+                    aPoly[2] = Point(
+                        aStartPoint.X() + basegfx::fround<tools::Long>(nTextWidth * fCos - nAdjDesc * fSin),
+                        aStartPoint.Y() + basegfx::fround<tools::Long>(nTextWidth * fSin + nAdjDesc * fCos));
+                    aPoly[3] = Point(
+                        aStartPoint.X() + basegfx::fround<tools::Long>(-nAdjDesc * fSin),
+                        aStartPoint.Y() + basegfx::fround<tools::Long>(nAdjDesc * fCos));
+                    mpOutputDevice->DrawPolygon(aPoly);
+                }
+                else
+                {
+                    mpOutputDevice->DrawRect(
+                        tools::Rectangle(aStartPoint.X(), aStartPoint.Y() - nAdjAsc,
+                                         aStartPoint.X() + nTextWidth, aStartPoint.Y() + nAdjDesc));
+                }
             }
 
             if (!aDXArray.empty())

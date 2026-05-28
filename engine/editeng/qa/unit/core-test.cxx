@@ -14,7 +14,9 @@
 #include <cppunit/extensions/HelperMacros.h>
 
 #include <editdoc.hxx>
+#include <EditLine.hxx>
 #include <EditSelection.hxx>
+#include <ParagraphPortion.hxx>
 #include <ParagraphPortionList.hxx>
 
 #include <sfx2/app.hxx>
@@ -30,7 +32,9 @@
 #include <editeng/editobj.hxx>
 #include <editeng/flditem.hxx>
 #include <editeng/udlnitem.hxx>
+#include <editeng/colritem.hxx>
 #include <editeng/escapementitem.hxx>
+#include <editeng/StripPortionsHelper.hxx>
 #include <svl/srchitem.hxx>
 #include <svl/voiditem.hxx>
 #include <editeng/fontitem.hxx>
@@ -42,6 +46,9 @@
 #include <svtools/stringtransfer.hxx>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/text/textfield/Type.hpp>
+
+#include <drawinglayer/primitive2d/textprimitive2d.hxx>
+#include <drawinglayer/primitive2d/texthierarchyprimitive2d.hxx>
 
 #include <memory>
 #include <vector>
@@ -138,6 +145,11 @@ public:
     void testTdf162803StaleKashidaArray();
     void testEscapementNotPreservedOnParaBreak();
 
+#if HAVE_MORE_FONTS
+    void testAscentCompressedWithLineSpacing();
+    void testFillColorMaxAscentFraction();
+#endif
+
     /// Test pasting a URL over selected text creates a hyperlink field
     void testPasteURLOverSelection();
 
@@ -175,6 +187,10 @@ public:
     CPPUNIT_TEST(testTdf151748StaleKashidaArray);
     CPPUNIT_TEST(testTdf162803StaleKashidaArray);
     CPPUNIT_TEST(testEscapementNotPreservedOnParaBreak);
+#if HAVE_MORE_FONTS
+    CPPUNIT_TEST(testAscentCompressedWithLineSpacing);
+    CPPUNIT_TEST(testFillColorMaxAscentFraction);
+#endif
     CPPUNIT_TEST(testPasteURLOverSelection);
     CPPUNIT_TEST_SUITE_END();
 
@@ -2464,6 +2480,153 @@ void Test::testPasteURLOverSelection()
     CPPUNIT_ASSERT_EQUAL(u"Click here for details"_ustr,
                          rDoc.GetParaAsString(sal_Int32(0)));
 }
+
+#if HAVE_MORE_FONTS
+void Test::testAscentCompressedWithLineSpacing()
+{
+    // Proportional line spacing below 100% compresses MaxAscent on each
+    // EditLine. Spacing at or above 100% must not set the flag.
+    EditEngine aEditEngine(mpItemPool.get());
+
+    if (aEditEngine.GetRefDevice()->GetDPIY() != 96
+        || aEditEngine.GetRefDevice()->GetDPIScaleFactor() != 1.0)
+        return;
+
+    OUString aText = u"Line spacing test"_ustr;
+    aEditEngine.SetText(aText);
+    ESelection aSel(0, 0, 0, aText.getLength());
+
+    auto setSpacing = [&](sal_uInt16 nProp) {
+        std::unique_ptr<SfxItemSet> pSet(new SfxItemSet(aEditEngine.GetEmptyItemSet()));
+        SvxLineSpacingItem aLineSpacing(LINE_SPACE_DEFAULT_HEIGHT, EE_PARA_SBL);
+        aLineSpacing.SetPropLineSpace(nProp);
+        pSet->Put(aLineSpacing);
+
+        SvxFontItem aFont(EE_CHAR_FONTINFO);
+        aFont.SetFamilyName(u"Liberation Sans"_ustr);
+        pSet->Put(aFont);
+        SvxFontHeightItem aFontSize(240, 100, EE_CHAR_FONTHEIGHT);
+        pSet->Put(aFontSize);
+
+        aEditEngine.QuickSetAttribs(*pSet, aSel);
+    };
+
+    // 60% spacing compresses the ascent.
+    setSpacing(60);
+    aEditEngine.GetLineHeight(0);
+    {
+        ParaPortion const& rPara = aEditEngine.GetParaPortions().getRef(0);
+        EditLine const& rLine = rPara.GetLines()[0];
+        CPPUNIT_ASSERT_EQUAL(true, rLine.IsAscentCompressed());
+    }
+
+    // 100% spacing leaves the ascent unchanged.
+    setSpacing(100);
+    aEditEngine.GetLineHeight(0);
+    {
+        ParaPortion const& rPara = aEditEngine.GetParaPortions().getRef(0);
+        EditLine const& rLine = rPara.GetLines()[0];
+        CPPUNIT_ASSERT_EQUAL(false, rLine.IsAscentCompressed());
+    }
+
+    // 150% spacing also leaves the ascent unchanged.
+    setSpacing(150);
+    aEditEngine.GetLineHeight(0);
+    {
+        ParaPortion const& rPara = aEditEngine.GetParaPortions().getRef(0);
+        EditLine const& rLine = rPara.GetLines()[0];
+        CPPUNIT_ASSERT_EQUAL(false, rLine.IsAscentCompressed());
+    }
+}
+
+void Test::testFillColorMaxAscentFraction()
+{
+    // When text has a fill color and the line spacing compresses the ascent,
+    // the text primitive must carry a non-zero ascent fraction so the
+    // highlight rectangle does not overlap the preceding line.
+    EditEngine aEditEngine(mpItemPool.get());
+
+    if (aEditEngine.GetRefDevice()->GetDPIY() != 96
+        || aEditEngine.GetRefDevice()->GetDPIScaleFactor() != 1.0)
+        return;
+
+    OUString aText = u"Highlighted text"_ustr;
+    aEditEngine.SetText(aText);
+    ESelection aSel(0, 0, 0, aText.getLength());
+
+    auto setupAndGetFraction = [&](sal_uInt16 nProp, bool bWithFillColor) -> double {
+        aEditEngine.SetText(aText);
+
+        std::unique_ptr<SfxItemSet> pSet(new SfxItemSet(aEditEngine.GetEmptyItemSet()));
+        SvxLineSpacingItem aLineSpacing(LINE_SPACE_DEFAULT_HEIGHT, EE_PARA_SBL);
+        aLineSpacing.SetPropLineSpace(nProp);
+        pSet->Put(aLineSpacing);
+
+        SvxFontItem aFont(EE_CHAR_FONTINFO);
+        aFont.SetFamilyName(u"Liberation Sans"_ustr);
+        pSet->Put(aFont);
+        SvxFontHeightItem aFontSize(240, 100, EE_CHAR_FONTHEIGHT);
+        pSet->Put(aFontSize);
+
+        if (bWithFillColor)
+        {
+            SvxColorItem aBkgColor(COL_YELLOW, EE_CHAR_BKGCOLOR);
+            pSet->Put(aBkgColor);
+        }
+
+        aEditEngine.QuickSetAttribs(*pSet, aSel);
+
+        TextHierarchyBreakup aHelper;
+        aEditEngine.StripPortions(aHelper);
+
+        double fMaxFraction = 0.0;
+        const drawinglayer::primitive2d::Primitive2DContainer& rPrimitives
+            = aHelper.getTextPortionPrimitives();
+        for (const auto& rPrim : rPrimitives)
+        {
+            auto* pPara
+                = dynamic_cast<drawinglayer::primitive2d::TextHierarchyParagraphPrimitive2D*>(
+                    rPrim.get());
+            if (!pPara)
+                continue;
+            for (const auto& rLinePrim : pPara->getChildren())
+            {
+                auto* pLine
+                    = dynamic_cast<drawinglayer::primitive2d::TextHierarchyLinePrimitive2D*>(
+                        rLinePrim.get());
+                if (!pLine)
+                    continue;
+                for (const auto& rTextPrim : pLine->getChildren())
+                {
+                    auto* pText
+                        = dynamic_cast<drawinglayer::primitive2d::TextSimplePortionPrimitive2D*>(
+                            rTextPrim.get());
+                    if (!pText)
+                        continue;
+                    double fFrac = pText->getFillColorMaxAscentFraction();
+                    if (fFrac > fMaxFraction)
+                        fMaxFraction = fFrac;
+                }
+            }
+        }
+        return fMaxFraction;
+    };
+
+    // Fill color + compressed spacing: fraction must be positive and below 1.0.
+    double fFrac60 = setupAndGetFraction(60, true);
+    CPPUNIT_ASSERT_GREATER(0.0, fFrac60);
+    CPPUNIT_ASSERT_LESS(1.0, fFrac60);
+
+    // Fill color + normal spacing: no clamping needed, fraction stays at 0.
+    double fFrac100 = setupAndGetFraction(100, true);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, fFrac100, 1e-10);
+
+    // Compressed spacing but no fill color: fraction stays at 0 because
+    // there is no background rectangle to clamp.
+    double fFrac60NoFill = setupAndGetFraction(60, false);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, fFrac60NoFill, 1e-10);
+}
+#endif
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 }

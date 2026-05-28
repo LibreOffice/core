@@ -1516,6 +1516,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
         if ( nLineHeight > pLine->GetHeight() )
             pLine->SetHeight( nLineHeight );
         pLine->SetMaxAscent( aFormatterMetrics.nMaxAscent );
+        pLine->SetAscentCompressed(false);
 
         bSameLineAgain = false;
         if ( GetTextRanger() && ( pLine->GetHeight() > nTextLineHeight ) )
@@ -1547,6 +1548,8 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
 
                 sal_uInt16 nTxtHeight = pLine->GetHeight();
                 pLine->SetMaxAscent( static_cast<sal_uInt16>(pLine->GetMaxAscent() + ( nFixHeight - nTxtHeight ) ) );
+                if (nFixHeight < nTxtHeight)
+                    pLine->SetAscentCompressed(true);
                 pLine->SetHeight( nFixHeight, nTxtHeight );
             }
             else if ( rLSItem.GetInterLineSpaceRule() == SvxInterLineSpaceRule::Prop )
@@ -1563,7 +1566,10 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                     sal_uInt16 nAscent = pLine->GetMaxAscent();
                     sal_uInt16 nNewAscent = basegfx::fround(pLine->GetTxtHeight() * fSpacingFactor * fProportionalScale * f80Percent);
                     if (!nAscent || nAscent > nNewAscent)
+                    {
                         pLine->SetMaxAscent(nNewAscent);
+                        pLine->SetAscentCompressed(true);
+                    }
                     sal_uInt16 nHeight = basegfx::fround(pLine->GetHeight() * fProportionalScale * fSpacingFactor);
 
                     pLine->SetHeight(nHeight, pLine->GetTxtHeight());
@@ -1590,7 +1596,10 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                         sal_uInt16 nAscent = pLine->GetMaxAscent();
                         sal_uInt16 nNewAscent = basegfx::fround(pLine->GetTxtHeight() * fSpacingFactor);
                         if (!nAscent || nAscent > nNewAscent)
+                        {
                             pLine->SetMaxAscent(nNewAscent);
+                            pLine->SetAscentCompressed(true);
+                        }
                         sal_uInt16 nHeight = basegfx::fround(pLine->GetHeight() * fSpacingFactor);
 
                         pLine->SetHeight(nHeight, pLine->GetTxtHeight());
@@ -1944,6 +1953,8 @@ void ImpEditEngine::CreateAndInsertEmptyLine(ParaPortion& rParaPortion)
             sal_uInt16 nTxtHeight = pTmpLine->GetHeight();
 
             pTmpLine->SetMaxAscent( static_cast<sal_uInt16>(pTmpLine->GetMaxAscent() + ( nFixHeight - nTxtHeight ) ) );
+            if (nFixHeight < nTxtHeight)
+                pTmpLine->SetAscentCompressed(true);
             pTmpLine->SetHeight( nFixHeight, nTxtHeight );
         }
         else if ( rLSItem.GetInterLineSpaceRule() == SvxInterLineSpaceRule::Prop )
@@ -1964,6 +1975,8 @@ void ImpEditEngine::CreateAndInsertEmptyLine(ParaPortion& rParaPortion)
                     if ( nDiff > pTmpLine->GetMaxAscent() )
                         nDiff = pTmpLine->GetMaxAscent();
                     pTmpLine->SetMaxAscent( static_cast<sal_uInt16>(pTmpLine->GetMaxAscent() - nDiff) );
+                    if (nDiff > 0)
+                        pTmpLine->SetAscentCompressed(true);
                     pTmpLine->SetHeight( static_cast<sal_uInt16>(nH), nTxtHeight );
                 }
             }
@@ -3992,7 +4005,8 @@ void ImpEditEngine::StripAllPortions( OutputDevice& rOutDev, tools::Rectangle aC
                                     bEndOfLine, bEndOfParagraph, false, // support for EOL/EOP TEXT comments
                                     &aLocale,
                                     aOverlineColor,
-                                    aTextLineColor);
+                                    aTextLineColor,
+                                    pLine->IsAscentCompressed() ? pLine->GetMaxAscent() : 0);
                                 rStripPortionsHelper.processDrawPortionInfo(aInfo);
 
                                 // #108052# remember that EOP is written already for this ParaPortion

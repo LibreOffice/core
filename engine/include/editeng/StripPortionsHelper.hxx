@@ -60,6 +60,7 @@ public:
     const com::sun::star::lang::Locale* mpLocale;
     const Color maOverlineColor;
     const Color maTextLineColor;
+    sal_uInt16 mnLineMaxAscent;
 
     bool IsRTL() const { return mnBiDiLevel % 2 == 1; }
 
@@ -69,7 +70,8 @@ public:
                     const EEngineData::WrongSpellVector* pWrongSpellVector,
                     const SvxFieldData* pFieldData, bool bEndOfLine, bool bEndOfParagraph,
                     bool bEndOfBullet, const com::sun::star::lang::Locale* pLocale,
-                    const Color& rOverlineColor, const Color& rTextLineColor)
+                    const Color& rOverlineColor, const Color& rTextLineColor,
+                    sal_uInt16 nLineMaxAscent = 0)
         : mrStartPos(rPos)
         , maText(std::move(aTxt))
         , mnTextStart(nTxtStart)
@@ -87,6 +89,7 @@ public:
         , mpLocale(pLocale)
         , maOverlineColor(rOverlineColor)
         , maTextLineColor(rTextLineColor)
+        , mnLineMaxAscent(nLineMaxAscent)
     {
     }
 };

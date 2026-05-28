@@ -147,6 +147,9 @@ private:
     /// Optical sizing
     bool mbOpticalSizing;
 
+    /// Fill color background ascent as fraction of font height (0.0 = unconstrained)
+    double mfFillColorMaxAscentFraction{ 0.0 };
+
 protected:
     /// local decomposition.
     virtual Primitive2DReference
@@ -168,7 +171,8 @@ public:
                                  const basegfx::BColor& rFontColor,
                                  const Color& rTextFillColor = COL_TRANSPARENT,
                                  short nLetterSpacing = 0, sal_uInt8 nProportionalFontSize = 100,
-                                 short nEscapement = 0, bool bOpticalSizing = false);
+                                 short nEscapement = 0, bool bOpticalSizing = false,
+                                 double fFillColorMaxAscentFraction = 0.0);
 
     /** get text outlines as polygons and their according ObjectTransformation. Handles all
         the necessary VCL outline extractions, scaling adaptations and other stuff.
@@ -191,6 +195,7 @@ public:
     sal_Int32 getProportionalFontSize() const { return mnProportionalFontSize; }
     sal_Int32 getEscapement() const { return mnEscapement; }
     bool getOpticalSizing() const { return mbOpticalSizing; }
+    double getFillColorMaxAscentFraction() const { return mfFillColorMaxAscentFraction; }
 
     /// helpers for determining various decoration states
     virtual bool hasTextRelief() const;

@@ -43,6 +43,7 @@ private:
     sal_uInt16 mnMaxAscent = 0;
     bool mbHangingPunctuation : 1 = false;
     bool mbInvalid : 1 = true; // for skillful formatting
+    bool mbAscentCompressed : 1 = false;
 
 public:
     EditLine() = default;
@@ -87,6 +88,8 @@ public:
 
     void SetMaxAscent(sal_uInt16 nMaxAscent) { mnMaxAscent = nMaxAscent; }
     sal_uInt16 GetMaxAscent() const { return mnMaxAscent; }
+    void SetAscentCompressed(bool b) { mbAscentCompressed = b; }
+    bool IsAscentCompressed() const { return mbAscentCompressed; }
 
     void SetHangingPunctuation(bool bHangingPunctuation)
     {

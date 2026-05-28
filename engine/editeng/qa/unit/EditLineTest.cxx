@@ -25,6 +25,19 @@ CPPUNIT_TEST_FIXTURE(EditLineTest, testConstruction)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aNew.GetEndPortion());
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(0), aNew.GetMaxAscent());
     CPPUNIT_ASSERT_EQUAL(false, aNew.IsValid());
+    CPPUNIT_ASSERT_EQUAL(false, aNew.IsAscentCompressed());
+}
+
+CPPUNIT_TEST_FIXTURE(EditLineTest, testAscentCompressed)
+{
+    EditLine aLine;
+    CPPUNIT_ASSERT_EQUAL(false, aLine.IsAscentCompressed());
+
+    aLine.SetAscentCompressed(true);
+    CPPUNIT_ASSERT_EQUAL(true, aLine.IsAscentCompressed());
+
+    aLine.SetAscentCompressed(false);
+    CPPUNIT_ASSERT_EQUAL(false, aLine.IsAscentCompressed());
 }
 
 CPPUNIT_TEST_FIXTURE(EditLineTest, testCopyConstructor)

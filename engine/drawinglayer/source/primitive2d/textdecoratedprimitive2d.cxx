@@ -480,7 +480,8 @@ namespace drawinglayer::primitive2d
             bool bEmphasisMarkAbove,
             bool bEmphasisMarkBelow,
             TextRelief eTextRelief,
-            bool bShadow)
+            bool bShadow,
+            double fFillColorMaxAscentFraction)
         :   TextSimplePortionPrimitive2D(
                 rNewTransform,
                 rText,
@@ -495,7 +496,8 @@ namespace drawinglayer::primitive2d
                 nLetterSpacing,
                 nProportionalFontSize,
                 nEscapement,
-                bOpticalSizing),
+                bOpticalSizing,
+                fFillColorMaxAscentFraction),
             maBufferedBrokenUpText(),
             maBufferedDecorationGeometry(),
             maOverlineColor(rOverlineColor),

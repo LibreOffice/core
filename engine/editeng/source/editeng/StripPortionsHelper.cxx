@@ -88,7 +88,8 @@ rtl::Reference<drawinglayer::primitive2d::BasePrimitive2D>
 buildTextPortionPrimitive(const DrawPortionInfo& rInfo, const OUString& rText,
                           const drawinglayer::attribute::FontAttribute& rFontAttribute,
                           const std::vector<double>& rDXArray,
-                          const basegfx::B2DHomMatrix& rNewTransform)
+                          const basegfx::B2DHomMatrix& rNewTransform,
+                          double fFillColorMaxAscentFraction = 0.0)
 {
     ::std::vector<sal_Bool> aKashidaArray;
 
@@ -206,7 +207,7 @@ buildTextPortionPrimitive(const DrawPortionInfo& rInfo, const OUString& rText,
             // attributes for TextDecoratedPortionPrimitive2D
             aBOverlineColor, aBUnderlineColor, eFontOverline, eFontLineStyle, bUnderlineAbove,
             eTextStrikeout, bWordLineMode, eTextEmphasisMark, bEmphasisMarkAbove,
-            bEmphasisMarkBelow, eTextRelief, bShadow);
+            bEmphasisMarkBelow, eTextRelief, bShadow, fFillColorMaxAscentFraction);
     }
     else
     {
@@ -216,7 +217,7 @@ buildTextPortionPrimitive(const DrawPortionInfo& rInfo, const OUString& rText,
             std::move(aKashidaArray), rFontAttribute,
             rInfo.mpLocale ? *rInfo.mpLocale : css::lang::Locale(), aBFontColor, aTextFillColor,
             rInfo.mrFont.GetFixKerning(), rInfo.mrFont.GetPropr(), rInfo.mrFont.GetEscapement(),
-            rInfo.mrFont.GetOpticalSizing());
+            rInfo.mrFont.GetOpticalSizing(), fFillColorMaxAscentFraction);
     }
 
     return pNewPrimitive;
@@ -345,9 +346,18 @@ void CreateTextPortionPrimitivesFromDrawPortionInfo(
         }
     }
 
+    double fFillColorMaxAscentFraction = 0.0;
+    if (rInfo.mnLineMaxAscent > 0 && !rInfo.mrFont.GetFillColor().IsTransparent()
+        && aFontScaling.getY() > 0)
+    {
+        fFillColorMaxAscentFraction
+            = static_cast<double>(rInfo.mnLineMaxAscent) / aFontScaling.getY();
+    }
+
     OUString caseMappedText = rInfo.mrFont.CalcCaseMap(rInfo.maText);
     rtl::Reference<drawinglayer::primitive2d::BasePrimitive2D> pNewPrimitive(
-        buildTextPortionPrimitive(rInfo, caseMappedText, aFontAttribute, aDXArray, aNewTransform));
+        buildTextPortionPrimitive(rInfo, caseMappedText, aFontAttribute, aDXArray, aNewTransform,
+                                  fFillColorMaxAscentFraction));
 
     bool bSmallCaps = rInfo.mrFont.IsCapital();
     if (bSmallCaps && rInfo.mpDXArray.empty())
@@ -530,7 +540,8 @@ void DoCapitalsDrawPortionInfo::Do(const OUString& rSpanTxt, const sal_Int32 nSp
         aStartPos, rSpanTxt, nSpanIdx, nSpanLen, aDXArray, aKashidaArray, m_aFont, m_rInfo.mnPara,
         m_rInfo.mnBiDiLevel, nullptr, /* no spelling in subportion, handled outside */
         nullptr, /* no field in subportion, handled outside */
-        false, false, false, m_rInfo.mpLocale, m_rInfo.maOverlineColor, m_rInfo.maTextLineColor);
+        false, false, false, m_rInfo.mpLocale, m_rInfo.maOverlineColor, m_rInfo.maTextLineColor,
+        m_rInfo.mnLineMaxAscent);
 
     CreateTextPortionPrimitivesFromDrawPortionInfo(mrTarget, mrNewTransformA, mrNewTransformB,
                                                    aInfo);

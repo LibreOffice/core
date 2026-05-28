@@ -106,7 +106,8 @@ namespace drawinglayer::primitive2d
                 bool bEmphasisMarkAbove = true,
                 bool bEmphasisMarkBelow = false,
                 TextRelief eTextRelief = TEXT_RELIEF_NONE,
-                bool bShadow = false);
+                bool bShadow = false,
+                double fFillColorMaxAscentFraction = 0.0);
 
             /// data read access
             TextLine getFontOverline() const { return meFontOverline; }

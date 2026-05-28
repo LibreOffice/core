@@ -3953,6 +3953,17 @@ void CairoPixelProcessor2D::renderTextSimpleOrDecoratedPortionPrimitive2D(
             }
         }
 
+        const double fMaxAscentFrac(rTextCandidate.getFillColorMaxAscentFraction());
+        if (fMaxAscentFrac > 0.0 && nProportionalFontSize == 100)
+        {
+            const double fMaxAscent = fMaxAscentFrac * aDecTrans.getScale().getY();
+            if (fAscent > fMaxAscent)
+            {
+                fDescent *= fMaxAscent / fAscent;
+                fAscent = fMaxAscent;
+            }
+        }
+
         renderTextBackground(rTextCandidate, fAscent, fDescent, aFullTextTransform, fBgWidth);
     }
 

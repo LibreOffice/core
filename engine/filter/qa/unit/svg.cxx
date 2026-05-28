@@ -415,15 +415,19 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, testTdf168135)
     save(TestFilter::SVG_IMPRESS);
     xmlDocUniquePtr pXmlDoc = parseExportedFile();
 
-    assertXPath(pXmlDoc, "//svg:g[@class='TextShape']//svg:rect[@fill='rgb(255,255,0)']", 2);
-    // The absolute height varies slightly between platforms due to font metrics
-    // (776 on Linux, 775 on Windows); what tdf#168135 actually fixed is that
-    // both highlights have the same height.
-    OUString aHeight1 = getXPath(
-        pXmlDoc, "(//svg:g[@class='TextShape']//svg:rect[@fill='rgb(255,255,0)'])[1]", "height");
+    // Three rects: the first is the normal-text highlight that gets its own
+    // manual background when line-spacing compression (shrink-to-fit) is
+    // active. The second and third are the subscript and superscript
+    // highlights.
+    assertXPath(pXmlDoc, "//svg:g[@class='TextShape']//svg:rect[@fill='rgb(255,255,0)']", 3);
+    // The absolute height varies slightly between platforms due to font
+    // metrics. The tdf#168135 invariant is that the superscript and
+    // subscript highlights share the same height.
     OUString aHeight2 = getXPath(
         pXmlDoc, "(//svg:g[@class='TextShape']//svg:rect[@fill='rgb(255,255,0)'])[2]", "height");
-    CPPUNIT_ASSERT_EQUAL(aHeight1, aHeight2);
+    OUString aHeight3 = getXPath(
+        pXmlDoc, "(//svg:g[@class='TextShape']//svg:rect[@fill='rgb(255,255,0)'])[3]", "height");
+    CPPUNIT_ASSERT_EQUAL(aHeight2, aHeight3);
 }
 
 CPPUNIT_TEST_FIXTURE(SvgFilterTest, testExportControllerFromModel)
