@@ -117,6 +117,35 @@ void QtBuilder::insertComboBoxOrListBoxItems(QObject* pObject,
     assert(false && "list boxes are not supported yet");
 }
 
+static const char* getWidgetColor(const OUString rClass)
+{
+    typedef struct
+    {
+        OUString rClass;
+        const char* color;
+    } WidgetColor;
+
+    static const WidgetColor colors[] = {
+        { u"GtkBox"_ustr, "orange" },
+        { u"GtkButton"_ustr, "cyan" },
+        { u"GtkDrawingArea"_ustr, "dark-green" },
+        { u"GtkEntry"_ustr, "blue" },
+        { u"GtkFrame"_ustr, "light-purple" },
+        { u"GtkGrid"_ustr, "red" },
+        { u"GtkLabel"_ustr, "pink" },
+    };
+
+    unsigned int i;
+
+    for (i = 0; i < sizeof(colors) / sizeof(colors[0]); i++)
+    {
+        if (rClass == colors[i].rClass)
+            return colors[i].color;
+    }
+
+    return "green";
+}
+
 QObject* QtBuilder::insertObject(QObject* pParent, const OUString& rClass, std::string_view sType,
                                  const OUString& rId, stringmap& rProps, stringmap& rPango,
                                  stringmap&)
@@ -498,6 +527,14 @@ QObject* QtBuilder::insertObject(QObject* pParent, const OUString& rClass, std::
 
     if (pWidget)
     {
+        if (getenv("SAL_QT_SHOW_BORDERS"))
+        {
+            const char* color = getWidgetColor(rClass);
+            SAL_WARN("vcl.qt", "###### " << rClass << " => " << color);
+            QString sStyle = QString("QWidget {border: 1px solid %s;}").arg(color);
+            pWidget->setStyleSheet(sStyle);
+        }
+
         if (!pParentLayout && pParentWidget)
         {
             // if the parent is a widget, use the widget's layout, and ensure it has one set
