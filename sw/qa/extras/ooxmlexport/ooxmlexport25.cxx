@@ -79,6 +79,90 @@ DECLARE_OOXMLEXPORT_TEST(testTdf172169_linespacingFootnote, "tdf172169_linespaci
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf172169_intraLinespacing)
+{
+    // given a six page, double-spaced document
+    // with various different 60pt SwLinePortions affecting intra-paragraph line spacing
+    createSwDoc("tdf172169_intraLinespacing.odt");
+
+    // NOTE that before LO 7.1 this was 8 pages, but it changed without a compatibility flag...
+    CPPUNIT_ASSERT_EQUAL(6, getPages());
+
+    // Test that the 'broken' layout remains broken in older ODT files
+    auto pXmlDoc = parseLayoutDump();
+
+    OUString sText = getXPathContent(pXmlDoc, "//page[2]/body/txt");
+    CPPUNIT_ASSERT(sText.startsWith("The change is not limited to footnotes.")); // testing field
+    SwTwips nTextHeight = getXPath(pXmlDoc, "//page[2]/body/txt/infos/bounds", "height").toInt32();
+    // The text only fills half the page.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(2484, nTextHeight, 100);
+
+    sText = getXPathContent(pXmlDoc, "//page[3]/body/txt");
+    CPPUNIT_ASSERT(sText.startsWith("How about hidden stuff."));
+    nTextHeight = getXPath(pXmlDoc, "//page[3]/body/txt/infos/bounds", "height").toInt32();
+    // The text only fills about a third of the page
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1380, nTextHeight, 100);
+
+    sText = getXPathContent(pXmlDoc, "//page[4]/body/txt");
+    CPPUNIT_ASSERT(sText.startsWith("How about FieldMark stuff."));
+    nTextHeight = getXPath(pXmlDoc, "//page[4]/body/txt/infos/bounds", "height").toInt32();
+    // The text only fills half the page.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(2484, nTextHeight, 100);
+
+    sText = getXPathContent(pXmlDoc, "//page[5]/body/txt");
+    CPPUNIT_ASSERT(sText.startsWith("Also explicitly test for content controls,"));
+    nTextHeight = getXPath(pXmlDoc, "//page[5]/body/txt/infos/bounds", "height").toInt32();
+    // The text only fills half the page.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(2484, nTextHeight, 100);
+
+    sText = getXPathContent(pXmlDoc, "//page[6]/body/txt");
+    CPPUNIT_ASSERT(sText.startsWith("Let us also explicitly test for tabstops."));
+    nTextHeight = getXPath(pXmlDoc, "//page[6]/body/txt/infos/bounds", "height").toInt32();
+    // The text basically fills the entire page
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(3588, nTextHeight, 100);
+
+    saveAndReload(TestFilter::DOCX);
+
+    CPPUNIT_ASSERT_EQUAL(6, getPages());
+
+    saveAndReload(TestFilter::ODT);
+
+    CPPUNIT_ASSERT_EQUAL(6, getPages());
+
+    // This formatting should be the same for DOCX and ODT - only testing ODT
+    pXmlDoc = parseLayoutDump();
+
+    sText = getXPathContent(pXmlDoc, "//page[2]/body/txt");
+    CPPUNIT_ASSERT(sText.startsWith("The change is not limited to footnotes."));
+    nTextHeight = getXPath(pXmlDoc, "//page[2]/body/txt/infos/bounds", "height").toInt32();
+    // The text basically fills the entire page. (was 2484)
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(3588, nTextHeight, 100);
+
+    sText = getXPathContent(pXmlDoc, "//page[3]/body/txt");
+    CPPUNIT_ASSERT(sText.startsWith("How about hidden stuff."));
+    nTextHeight = getXPath(pXmlDoc, "//page[3]/body/txt/infos/bounds", "height").toInt32();
+    // The text only fills about a third of the page
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1380, nTextHeight, 100);
+
+    sText = getXPathContent(pXmlDoc, "//page[4]/body/txt");
+    CPPUNIT_ASSERT(sText.startsWith("How about FieldMark stuff."));
+    nTextHeight = getXPath(pXmlDoc, "//page[4]/body/txt/infos/bounds", "height").toInt32();
+    // The text basically fills the entire page. (was 2484)
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(3588, nTextHeight, 100);
+
+    sText = getXPathContent(pXmlDoc, "//page[5]/body/txt");
+    CPPUNIT_ASSERT(sText.startsWith("Also explicitly test for content controls,"));
+    nTextHeight = getXPath(pXmlDoc, "//page[5]/body/txt/infos/bounds", "height").toInt32();
+    // The text basically fills the entire page. (was 2484)
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(3588, nTextHeight, 100);
+
+    sText = getXPathContent(pXmlDoc, "//page[6]/body/txt");
+    CPPUNIT_ASSERT(sText.startsWith("Let us also explicitly test for tabstops."));
+    nTextHeight = getXPath(pXmlDoc, "//page[6]/body/txt/infos/bounds", "height").toInt32();
+    // The text only fills about two thirds of the page
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(2484, nTextHeight, 100);
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf148057_columnBreak, "tdf148057_columnBreak.docx")
 {
     // given a document with a linefeed immediately following a column break (in non-column section)

@@ -20,6 +20,7 @@
 
 #include <libxml/xmlwriter.h>
 
+#include <IDocumentSettingAccess.hxx>
 #include "possiz.hxx"
 #include <txttypes.hxx>
 #include <TextFrameIndex.hxx>
@@ -183,6 +184,8 @@ public:
     void SetJoinBorderWithPrev( const bool bJoinPrev ) { m_bJoinBorderWithPrev = bJoinPrev; }
     void SetJoinBorderWithNext( const bool bJoinNext ) { m_bJoinBorderWithNext = bJoinNext; }
     void SetFieldmarkText(bool bSet) { m_bIsFieldmarkText = bSet; }
+
+    bool IsUsedToCalcLineSpacingHeight(const IDocumentSettingAccess& rIDSA) const;
 
     virtual void dumpAsXml(xmlTextWriterPtr pWriter, const OUString& rText,
                            TextFrameIndex& rOffset) const;

@@ -255,6 +255,8 @@ static bool lcl_HasOnlyBlanks(std::u16string_view rText, TextFrameIndex nStt, Te
 // Swapped out from FormatLine()
 void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
 {
+    const IDocumentSettingAccess& rIDSA = rInf.GetTextFrame()->GetDoc().getIDocumentSettingAccess();
+
     const SwTwips nLineWidth = rInf.RealWidth();
 
     sal_uInt16 nFlyAscent = 0;
@@ -271,9 +273,8 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
     SwFlyCntPortion* pFlyCnt = nullptr;
 
     // #i3952#
-    const bool bIgnoreBlanksAndTabsForLineHeightCalculation =
-        rInf.GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(
-            DocumentSettingId::IGNORE_TABS_AND_BLANKS_FOR_LINE_CALCULATION);
+    const bool bIgnoreBlanksAndTabsForLineHeightCalculation
+        = rIDSA.get(DocumentSettingId::IGNORE_TABS_AND_BLANKS_FOR_LINE_CALCULATION);
 
     bool bHasBlankPortion = false;
     bool bHasOnlyBlankPortions = true; // paragraph line contains only tabstops and spaces
@@ -378,8 +379,7 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
                 if ((pPos->IsDropPortion() && static_cast<SwDropPortion*>(pPos)->GetLines() > 1)
                     || pPos->GetWhichPor() == PortionType::Bookmark
                     || (pPos->GetWhichPor() == PortionType::HiddenText
-                        && rInf.GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(
-                            DocumentSettingId::IGNORE_HIDDEN_CHARS_FOR_LINE_CALCULATION)))
+                        && rIDSA.get(DocumentSettingId::IGNORE_HIDDEN_CHARS_FOR_LINE_CALCULATION)))
                 {
                     pLast = pPos;
                     pPos = pPos->GetNextPortion();
@@ -463,7 +463,7 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
                                 Height(std::max(nPosHeight, nLineHeight), false);
                             else
                                 // Just care about the portion height.
-                                Height(nPosHeight, pPos->IsTextPortion());
+                                Height(nPosHeight, pPos->IsUsedToCalcLineSpacingHeight(rIDSA));
                         }
                         SwFlyCntPortion* pAsFly(nullptr);
                         if(pPos->IsFlyCntPortion())
@@ -575,7 +575,7 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
     if (!rInf.IsNewLine()
         && TextFrameIndex(rInf.GetText().getLength()) <= rInf.GetIdx()
         && bHasOnlyBlankPortions
-        && rInf.GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(
+        && rIDSA.get(
             DocumentSettingId::APPLY_PARAGRAPH_MARK_FORMAT_TO_EMPTY_LINE_AT_END_OF_PARAGRAPH))
     {
         // Word: for empty last line, line height is based on paragraph marker

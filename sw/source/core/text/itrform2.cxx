@@ -331,6 +331,7 @@ void SwTextFormatter::InsertPortion( SwTextFormatInfo &rInf,
     }
     else
     {
+        const IDocumentSettingAccess& rIDSA = GetTextFrame()->GetDoc().getIDocumentSettingAccess();
         pLast = rInf.GetLast();
         if( pLast->GetNextPortion() )
         {
@@ -342,15 +343,14 @@ void SwTextFormatter::InsertPortion( SwTextFormatInfo &rInf,
 
         rInf.SetOtherThanFootnoteInside( rInf.IsOtherThanFootnoteInside() || !pPor->IsFootnotePortion() );
 
-        // Adjust maxima
         if( m_pCurr->Height() < pPor->Height() )
-            m_pCurr->Height( pPor->Height(), pPor->IsTextPortion() );
+            m_pCurr->Height(pPor->Height(), pPor->IsUsedToCalcLineSpacingHeight(rIDSA));
         if( m_pCurr->GetAscent() < pPor->GetAscent() )
             m_pCurr->SetAscent( pPor->GetAscent() );
         if( m_pCurr->GetHangingBaseline() < pPor->GetHangingBaseline() )
             m_pCurr->SetHangingBaseline( pPor->GetHangingBaseline() );
 
-        if (GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(DocumentSettingId::MS_WORD_COMP_MIN_LINE_HEIGHT_BY_FLY))
+        if (rIDSA.get(DocumentSettingId::MS_WORD_COMP_MIN_LINE_HEIGHT_BY_FLY))
         {
             // For DOCX with compat=14 the only shape in line defines height of the line in spite of used font
             if (pLast->IsFlyCntPortion() && pPor->IsTextPortion() && pPor->GetLen() == TextFrameIndex(0))

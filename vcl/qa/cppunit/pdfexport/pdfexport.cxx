@@ -3740,7 +3740,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf142806)
                 CPPUNIT_ASSERT_DOUBLES_EQUAL(56.643, pNumL->GetValue(), 1e-3);
                 const auto* pNumT = dynamic_cast<vcl::filter::PDFNumberElement*>(rElements[1]);
                 CPPUNIT_ASSERT(pNumT);
-                CPPUNIT_ASSERT_DOUBLES_EQUAL(140.005, pNumT->GetValue(), 1e-3);
+                CPPUNIT_ASSERT_DOUBLES_EQUAL(125.505, pNumT->GetValue(), 1e-3);
                 const auto* pNumR = dynamic_cast<vcl::filter::PDFNumberElement*>(rElements[2]);
                 CPPUNIT_ASSERT(pNumR);
                 CPPUNIT_ASSERT_DOUBLES_EQUAL(241.007, pNumR->GetValue(), 1e-3);
@@ -3872,7 +3872,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf142806)
                 CPPUNIT_ASSERT_DOUBLES_EQUAL(56.643, pNumL->GetValue(), 1e-3);
                 const auto* pNumT = dynamic_cast<vcl::filter::PDFNumberElement*>(rElements[1]);
                 CPPUNIT_ASSERT(pNumT);
-                CPPUNIT_ASSERT_DOUBLES_EQUAL(140.005, pNumT->GetValue(), 1e-3);
+                CPPUNIT_ASSERT_DOUBLES_EQUAL(125.505, pNumT->GetValue(), 1e-3);
                 const auto* pNumR = dynamic_cast<vcl::filter::PDFNumberElement*>(rElements[2]);
                 CPPUNIT_ASSERT(pNumR);
                 CPPUNIT_ASSERT_DOUBLES_EQUAL(184.707, pNumR->GetValue(), 1e-3);
