@@ -136,6 +136,9 @@
 
 #include <sfx2/passwd.hxx>
 #include <svl/PasswordHelper.hxx>
+#include <frozen/bits/defines.h>
+#include <frozen/bits/elsa_std.h>
+#include <frozen/unordered_map.h>
 
 #define CTYPE_CNT   0
 #define CTYPE_CTT   1
@@ -6008,27 +6011,28 @@ void SwContentTree::ExecuteContextMenuAction(const OUString& rSelectedPopupEntry
     }
 
     {
-        std::map<OUString, ContentTypeId> mPopupEntryToContentTypeId
+        static auto constexpr mPopupEntryToContentTypeId = frozen::make_unordered_map<std::u16string_view, ContentTypeId>(
         {
-            {"tabletracking", ContentTypeId::TABLE},
-            {"frametracking", ContentTypeId::FRAME},
-            {"imagetracking", ContentTypeId::GRAPHIC},
-            {"oleobjecttracking", ContentTypeId::OLE},
-            {"bookmarktracking", ContentTypeId::BOOKMARK},
-            {"sectiontracking", ContentTypeId::REGION},
-            {"hyperlinktracking", ContentTypeId::URLFIELD},
-            {"referencetracking", ContentTypeId::REFERENCE},
-            {"indextracking", ContentTypeId::INDEX},
-            {"commenttracking", ContentTypeId::POSTIT},
-            {"drawingobjecttracking", ContentTypeId::DRAWOBJECT},
-            {"fieldtracking", ContentTypeId::TEXTFIELD},
-            {"footnotetracking", ContentTypeId::FOOTNOTE},
-            {"endnotetracking", ContentTypeId::ENDNOTE}
-        };
+            {u"tabletracking", ContentTypeId::TABLE},
+            {u"frametracking", ContentTypeId::FRAME},
+            {u"imagetracking", ContentTypeId::GRAPHIC},
+            {u"oleobjecttracking", ContentTypeId::OLE},
+            {u"bookmarktracking", ContentTypeId::BOOKMARK},
+            {u"sectiontracking", ContentTypeId::REGION},
+            {u"hyperlinktracking", ContentTypeId::URLFIELD},
+            {u"referencetracking", ContentTypeId::REFERENCE},
+            {u"indextracking", ContentTypeId::INDEX},
+            {u"commenttracking", ContentTypeId::POSTIT},
+            {u"drawingobjecttracking", ContentTypeId::DRAWOBJECT},
+            {u"fieldtracking", ContentTypeId::TEXTFIELD},
+            {u"footnotetracking", ContentTypeId::FOOTNOTE},
+            {u"endnotetracking", ContentTypeId::ENDNOTE}
+        });
 
-        if (mPopupEntryToContentTypeId.count(rSelectedPopupEntry))
+        auto it = mPopupEntryToContentTypeId.find(rSelectedPopupEntry);
+        if (it != mPopupEntryToContentTypeId.end())
         {
-            ContentTypeId eCntTypeId = mPopupEntryToContentTypeId[rSelectedPopupEntry];
+            ContentTypeId eCntTypeId = it->second;
             SetContentTypeTracking(eCntTypeId, !mTrackContentType[eCntTypeId]);
             return;
         }
