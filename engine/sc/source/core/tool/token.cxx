@@ -559,7 +559,9 @@ FormulaTokenRef extendRangeReference( ScSheetLimits& rLimits, FormulaToken & rTo
             return nullptr;
 
         ScComplexRefData aRef;
-        aRef.Ref1 = aRef.Ref2 = static_cast<ScSingleRefToken&>(rTok1).GetSingleRef();
+        aRef.Ref1 = aRef.Ref2 = bExternal
+            ? static_cast<ScExternalSingleRefToken&>(rTok1).GetSingleRef()
+            : static_cast<ScSingleRefToken&>(rTok1).GetSingleRef();
         aRef.Ref2.SetFlag3D( false);
         aRef.Extend(rLimits, rRef2, rPos);
         if (bExternal)
