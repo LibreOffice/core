@@ -208,7 +208,8 @@ window.L.Control.Zotero = window.L.Control.extend({
 						{
 							type: 'pushbutton',
 							id: 'zoterorefresh',
-							text: _('Refresh')
+							text: _('Refresh'),
+							enabled: !app.isReadOnly() && !this.map.isReadOnlyMode()
 						}
 					],
 					vertical: false
@@ -1441,6 +1442,15 @@ window.L.Control.Zotero = window.L.Control.extend({
 			return;
 		}
 
+		// Citation update dispatches doc-modifying UNO commands
+		// (.uno:TextFormFields / .uno:UpdateFields); skip in any read-only
+		// state so we don't waste an api.zotero.org round-trip and a snackbar
+		// on updates the engine would just drop. app.isReadOnly() covers the
+		// session read-only state; map.isReadOnlyMode() also catches the
+		// "Viewing" UI mode that mobile/some-desktop sessions start in (the
+		// session is writable but the user hasn't opted into editing yet).
+		if (app.isReadOnly() || (this.map && this.map.isReadOnlyMode()))
+			return;
 
 		var that = this;
 		var citationKeys = this.getCitationKeys();
