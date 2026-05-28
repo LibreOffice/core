@@ -2337,13 +2337,21 @@ namespace cool {
 		}
 
 		private insertAtCursor(markdownText: string): void {
-			// Same paste mechanism - pastes at current cursor position
+			// Same paste mechanism - pastes at current cursor position.
 			const cleaned = this.stripCodeFences(markdownText);
-			const blob = new Blob([
-				'paste mimetype=text/markdown;charset=utf-8\n',
-				cleaned,
-			]);
-			app.socket.sendMessage(blob);
+			const header = 'paste mimetype=text/markdown;charset=utf-8\n';
+			if (window.ThisIsTheQtApp || window.ThisIsTheWindowsApp) {
+				// qtwebchannel can't carry a binary payload through, so base64-
+				// encode it; the kit's ChildSession::paste decodes on CODA-Q/-W.
+				// Mirrors L.Clipboard._pasteTypedBlob in browser/src/map/Clipboard.js.
+				const utf8 = new TextEncoder().encode(cleaned);
+				const b64 = window.btoa(
+					Array.from(utf8, (b) => String.fromCodePoint(b)).join(''),
+				);
+				app.socket.sendMessage(header + b64);
+			} else {
+				app.socket.sendMessage(new Blob([header, cleaned]));
+			}
 			app.map.fire('editorgotfocus');
 			app.map.focus();
 		}
@@ -2358,9 +2366,14 @@ namespace cool {
 		}
 
 		private insertImageAtCursor(base64Data: string): void {
-			const bytes = this.base64ToUint8Array(base64Data);
-			const blob = new Blob(['paste mimetype=image/png\n', bytes.buffer]);
-			app.socket.sendMessage(blob);
+			const header = 'paste mimetype=image/png\n';
+			if (window.ThisIsTheQtApp || window.ThisIsTheWindowsApp) {
+				// The kit base64-decodes on CODA-Q/-W; the image is already base64.
+				app.socket.sendMessage(header + base64Data);
+			} else {
+				const bytes = this.base64ToUint8Array(base64Data);
+				app.socket.sendMessage(new Blob([header, bytes.buffer]));
+			}
 			app.map.fire('editorgotfocus');
 			app.map.focus();
 		}
