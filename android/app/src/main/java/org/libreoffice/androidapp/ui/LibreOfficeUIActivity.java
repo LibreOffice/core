@@ -973,6 +973,7 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
         Log.d(LOGTAG, "onResume");
         Log.d(LOGTAG, "sortMode=" + sortMode + " filterMode=" + filterMode);
         createUI();
+        ViewCompat.requestApplyInsets(findViewById(R.id.drawer_layout));
     }
 
     @Override
