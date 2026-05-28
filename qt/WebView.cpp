@@ -459,6 +459,9 @@ WebView::WebView(QWebEngineProfile* profile, bool isWelcome, QMainWindow* parent
     // copy/paste buttons (e.g. the AI chat sidebar's "Copy to clipboard") work.
     page->settings()->setAttribute(QWebEngineSettings::JavascriptCanAccessClipboard, true);
     page->settings()->setAttribute(QWebEngineSettings::JavascriptCanPaste, true);
+    // cool.html is loaded over file://; without this, JS fetch() to https:// is
+    // blocked (Zotero queries api.zotero.org directly from the page).
+    page->settings()->setAttribute(QWebEngineSettings::LocalContentCanAccessRemoteUrls, true);
 
     QObject::connect(page, &QWebEnginePage::fullScreenRequested,
                      [this](QWebEngineFullScreenRequest request)
