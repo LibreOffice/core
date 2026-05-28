@@ -345,9 +345,11 @@ class AboutDialog {
 		coolwsdLine += ` (git hash: ${info.coolwsdHash} ${info.wsdOptions})`;
 		addLine('COOLWSD version', coolwsdLine);
 
-		addLine('Served by', info.osInfo);
-		addLine('Server ID', info.serverId);
-		addLine('WOPI host', window.wopiHostId);
+		if (!window.mode.isCODesktop()) {
+			addLine('Served by', info.osInfo);
+			addLine('Server ID', info.serverId);
+			addLine('WOPI host', window.wopiHostId);
+		}
 
 		text = text.replace(/\u00A0/g, ' ');
 
