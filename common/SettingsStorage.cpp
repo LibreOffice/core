@@ -198,7 +198,11 @@ void syncSettings(const std::function<void(const std::vector<char>&)>& sendFileC
         };
 
         sendFile("viewsetting");
-        sendFile("browsersetting");
+        // browsersetting.json is unused on the desktop apps: the Options
+        // dialog's Interface Settings section is hidden, View-menu toggles
+        // persist via localStorage, and AI/Zotero/signature credentials live
+        // in viewsetting.json. Skip the sync to avoid stale values shadowing
+        // anything.
     }
     catch (const std::exception& ex)
     {
