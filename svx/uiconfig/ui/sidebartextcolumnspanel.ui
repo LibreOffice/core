@@ -8,45 +8,47 @@
     <property name="step-increment">1</property>
   </object>
   <object class="GtkAdjustment" id="adjustmentColSpacing">
-    <property name="lower">0</property>
     <property name="upper">2147483647</property>
     <property name="step-increment">1</property>
   </object>
-  <object class="GtkAdjustment" id="adjustmentPaddingLeft">
-    <property name="lower">0</property>
+  <object class="GtkAdjustment" id="adjustmentPaddingBottom">
     <property name="upper">1000</property>
-    <property name="step-increment">0.1</property>
+    <property name="step-increment">0.10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustmentPaddingLeft">
+    <property name="upper">1000</property>
+    <property name="step-increment">0.10</property>
   </object>
   <object class="GtkAdjustment" id="adjustmentPaddingRight">
-    <property name="lower">0</property>
     <property name="upper">1000</property>
-    <property name="step-increment">0.1</property>
+    <property name="step-increment">0.10</property>
   </object>
   <object class="GtkAdjustment" id="adjustmentPaddingTop">
-    <property name="lower">0</property>
     <property name="upper">1000</property>
-    <property name="step-increment">0.1</property>
+    <property name="step-increment">0.10</property>
   </object>
-  <object class="GtkAdjustment" id="adjustmentPaddingBottom">
-    <property name="lower">0</property>
-    <property name="upper">1000</property>
-    <property name="step-increment">0.1</property>
-  </object>
+  <!-- n-columns=2 n-rows=4 -->
   <object class="GtkGrid" id="TextColumnsPropertyPanel">
     <property name="visible">True</property>
-    <property name="column-spacing">12</property>
-    <property name="row-spacing">6</property>
-    <property name="border-width">6</property>
+    <property name="can-focus">False</property>
     <property name="hexpand">True</property>
+    <property name="border-width">6</property>
+    <property name="row-spacing">6</property>
+    <property name="column-spacing">12</property>
     <child>
+      <!-- n-columns=3 n-rows=3 -->
       <object class="GtkGrid" id="gridTextFitting">
         <property name="visible">True</property>
-        <property name="row-spacing">6</property>
+        <property name="can-focus">False</property>
         <property name="hexpand">True</property>
+        <property name="row-spacing">6</property>
         <child>
           <object class="GtkCheckButton" id="CBX_FIT_WIDTH">
             <property name="label" translatable="yes" context="sidebartextcolumns|fitWidth">Fit width to text</property>
             <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="receives-default">False</property>
+            <property name="draw-indicator">False</property>
           </object>
           <packing>
             <property name="left-attach">0</property>
@@ -57,6 +59,9 @@
           <object class="GtkCheckButton" id="CBX_FIT_HEIGHT">
             <property name="label" translatable="yes" context="sidebartextcolumns|fitHeight">Fit height to text</property>
             <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="receives-default">False</property>
+            <property name="draw-indicator">False</property>
           </object>
           <packing>
             <property name="left-attach">0</property>
@@ -67,11 +72,32 @@
           <object class="GtkCheckButton" id="CBX_FIT_FRAME">
             <property name="label" translatable="yes" context="sidebartextcolumns|fitFrame">Fit text to frame</property>
             <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="receives-default">False</property>
+            <property name="draw-indicator">False</property>
           </object>
           <packing>
             <property name="left-attach">0</property>
             <property name="top-attach">2</property>
           </packing>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
         </child>
       </object>
       <packing>
@@ -82,10 +108,11 @@
     </child>
     <child>
       <object class="GtkLabel" id="labelPaddingSection">
-        <property name="label" translatable="yes" context="sidebartextcolumns|framePadding">Spacing to borders:</property>
         <property name="visible">True</property>
-        <property name="xalign">0</property>
+        <property name="can-focus">False</property>
         <property name="margin-top">6</property>
+        <property name="label" translatable="yes" context="sidebartextcolumns|framePadding">Spacing to borders:</property>
+        <property name="xalign">0</property>
       </object>
       <packing>
         <property name="left-attach">0</property>
@@ -94,19 +121,22 @@
       </packing>
     </child>
     <child>
+      <!-- n-columns=4 n-rows=2 -->
       <object class="GtkGrid" id="gridPadding">
         <property name="visible">True</property>
-        <property name="column-spacing">12</property>
-        <property name="row-spacing">6</property>
-        <property name="hexpand">True</property>
-        <property name="margin-top">6</property>
+        <property name="can-focus">False</property>
         <property name="margin-start">12</property>
+        <property name="margin-top">6</property>
+        <property name="hexpand">True</property>
+        <property name="row-spacing">6</property>
+        <property name="column-spacing">12</property>
         <child>
           <object class="GtkLabel" id="labelPaddingLeft">
-            <property name="label" translatable="yes" context="sidebartextcolumns|paddingLeft">Left:</property>
-            <property name="xalign">0</property>
             <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="label" translatable="yes" context="sidebartextcolumns|paddingLeft">Left:</property>
             <property name="mnemonic-widget">MTR_PADDING_LEFT</property>
+            <property name="xalign">0</property>
           </object>
           <packing>
             <property name="left-attach">0</property>
@@ -115,10 +145,11 @@
         </child>
         <child>
           <object class="GtkSpinButton" id="MTR_PADDING_LEFT">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="hexpand">True</property>
             <property name="adjustment">adjustmentPaddingLeft</property>
             <property name="digits">2</property>
-            <property name="visible">True</property>
-            <property name="hexpand">True</property>
           </object>
           <packing>
             <property name="left-attach">1</property>
@@ -127,10 +158,11 @@
         </child>
         <child>
           <object class="GtkLabel" id="labelPaddingRight">
-            <property name="label" translatable="yes" context="sidebartextcolumns|paddingRight">Right:</property>
-            <property name="xalign">0</property>
             <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="label" translatable="yes" context="sidebartextcolumns|paddingRight">Right:</property>
             <property name="mnemonic-widget">MTR_PADDING_RIGHT</property>
+            <property name="xalign">0</property>
           </object>
           <packing>
             <property name="left-attach">2</property>
@@ -139,10 +171,11 @@
         </child>
         <child>
           <object class="GtkSpinButton" id="MTR_PADDING_RIGHT">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="hexpand">True</property>
             <property name="adjustment">adjustmentPaddingRight</property>
             <property name="digits">2</property>
-            <property name="visible">True</property>
-            <property name="hexpand">True</property>
           </object>
           <packing>
             <property name="left-attach">3</property>
@@ -151,10 +184,11 @@
         </child>
         <child>
           <object class="GtkLabel" id="labelPaddingTop">
-            <property name="label" translatable="yes" context="sidebartextcolumns|paddingTop">Top:</property>
-            <property name="xalign">0</property>
             <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="label" translatable="yes" context="sidebartextcolumns|paddingTop">Top:</property>
             <property name="mnemonic-widget">MTR_PADDING_TOP</property>
+            <property name="xalign">0</property>
           </object>
           <packing>
             <property name="left-attach">0</property>
@@ -163,10 +197,11 @@
         </child>
         <child>
           <object class="GtkSpinButton" id="MTR_PADDING_TOP">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="hexpand">True</property>
             <property name="adjustment">adjustmentPaddingTop</property>
             <property name="digits">2</property>
-            <property name="visible">True</property>
-            <property name="hexpand">True</property>
           </object>
           <packing>
             <property name="left-attach">1</property>
@@ -175,10 +210,11 @@
         </child>
         <child>
           <object class="GtkLabel" id="labelPaddingBottom">
-            <property name="label" translatable="yes" context="sidebartextcolumns|paddingBottom">Bottom:</property>
-            <property name="xalign">0</property>
             <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="label" translatable="yes" context="sidebartextcolumns|paddingBottom">Bottom:</property>
             <property name="mnemonic-widget">MTR_PADDING_BOTTOM</property>
+            <property name="xalign">0</property>
           </object>
           <packing>
             <property name="left-attach">2</property>
@@ -187,10 +223,11 @@
         </child>
         <child>
           <object class="GtkSpinButton" id="MTR_PADDING_BOTTOM">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="hexpand">True</property>
             <property name="adjustment">adjustmentPaddingBottom</property>
             <property name="digits">2</property>
-            <property name="visible">True</property>
-            <property name="hexpand">True</property>
           </object>
           <packing>
             <property name="left-attach">3</property>
@@ -205,17 +242,20 @@
       </packing>
     </child>
     <child>
+      <!-- n-columns=2 n-rows=2 -->
       <object class="GtkGrid" id="gridColumns">
         <property name="visible">True</property>
+        <property name="can-focus">False</property>
         <property name="margin-top">6</property>
-        <property name="column-spacing">12</property>
         <property name="row-spacing">6</property>
+        <property name="column-spacing">12</property>
         <child>
           <object class="GtkLabel" id="labelColNumber">
-            <property name="label" translatable="yes" context="sidebartextcolumns|colNumber">Number of columns:</property>
-            <property name="xalign">0</property>
             <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="label" translatable="yes" context="sidebartextcolumns|colNumber">Number of columns:</property>
             <property name="mnemonic-widget">FLD_COL_NUMBER</property>
+            <property name="xalign">0</property>
           </object>
           <packing>
             <property name="left-attach">0</property>
@@ -224,9 +264,10 @@
         </child>
         <child>
           <object class="GtkSpinButton" id="FLD_COL_NUMBER">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
             <property name="adjustment">adjustmentColNumber</property>
             <property name="value">1</property>
-            <property name="visible">True</property>
           </object>
           <packing>
             <property name="left-attach">1</property>
@@ -235,10 +276,11 @@
         </child>
         <child>
           <object class="GtkLabel" id="labelColSpacing">
-            <property name="label" translatable="yes" context="sidebartextcolumns|colSpacing">Spacing between columns:</property>
-            <property name="xalign">0</property>
             <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="label" translatable="yes" context="sidebartextcolumns|colSpacing">Spacing between columns:</property>
             <property name="mnemonic-widget">MTR_FLD_COL_SPACING</property>
+            <property name="xalign">0</property>
           </object>
           <packing>
             <property name="left-attach">0</property>
@@ -247,9 +289,10 @@
         </child>
         <child>
           <object class="GtkSpinButton" id="MTR_FLD_COL_SPACING">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
             <property name="adjustment">adjustmentColSpacing</property>
             <property name="digits">2</property>
-            <property name="visible">True</property>
           </object>
           <packing>
             <property name="left-attach">1</property>
