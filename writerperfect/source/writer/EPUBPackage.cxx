@@ -141,7 +141,7 @@ void EPUBPackage::insertRule(const librevenge::RVNGString& rSelector,
     librevenge::RVNGPropertyList::Iter it(rProperties);
     for (it.rewind(); it.next();)
     {
-        if (it())
+        if (it() && it.key() != std::string_view("direction"))
             aStream << "  " << it.key() << ": " << it()->getStr().cstr() << ";\n";
     }
 
