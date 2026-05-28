@@ -585,8 +585,8 @@ namespace
                 new OutputWrapString(aOutput),
                 nullptr));
             // This ensures that the imported image arrives properly flipped
-            auto str1 = "draw:transform=\"matrix(-21488.4 0 0 -27978.1 21488.4 27978.1)\"";
-            auto str2 = "draw:transform=\"matrix(-21488.4 0 -0 -27978.1 21488.4 27978.1)\""; // sometimes we get -0
+            auto const str1 = "draw:transform=\"matrix(-21488.4 0 0 -27978.1 21488.4 27978.1)\"";
+            auto const str2 = "draw:transform=\"matrix(-21488.4 0 -0 -27978.1 21488.4 27978.1)\""; // sometimes we get -0
             CPPUNIT_ASSERT(aOutput.indexOf(str1) != -1 || aOutput.indexOf(str2) != -1);
 #endif
         }
