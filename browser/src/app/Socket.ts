@@ -1353,6 +1353,15 @@ class Socket {
 				textMsg.substring('viewsetting:'.length + 1),
 			);
 			app.serverConnectionService.onViewSetting(settingJSON);
+
+			// Desktop bootstrap: the native bridge syncs the raw
+			// viewsetting.json at startup (no aiConfigured/aiModelName yet).
+			// Push it back via updateviewsettings so the session applies the
+			// AI credentials. The handleUpdateViewSettings echo carries
+			// aiConfigured, which is how we avoid re-sending and looping.
+			if (window.ThisIsAMobileApp && settingJSON.aiConfigured === undefined) {
+				this.sendMessage('updateviewsettings ' + JSON.stringify(settingJSON));
+			}
 		}
 
 		if (textMsg.startsWith('downloadas:') || textMsg.startsWith('exportas:')) {
