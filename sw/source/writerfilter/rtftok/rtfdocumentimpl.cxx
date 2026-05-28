@@ -513,6 +513,25 @@ static void lcl_copyFlatten(RTFReferenceProperties& rProps, RTFSprms& rStyleAttr
         rStyleAttributes.set(rAttribute.first, rAttribute.second);
 }
 
+namespace
+{
+auto EnsureDefaultStyle(RTFReferenceTable::Entries_t& rStyleTableEntries)
+{
+    auto it{ rStyleTableEntries.find(0) };
+    if (it == rStyleTableEntries.end())
+    {
+        RTFSprms aAttributes;
+        auto pValue = new RTFValue(NS_ooxml::LN_Value_ST_StyleType_paragraph);
+        aAttributes.set(NS_ooxml::LN_CT_Style_type, pValue); // paragraph style
+        writerfilter::Reference<Properties>::Pointer_t const pProps(
+            new RTFReferenceProperties(aAttributes));
+        it = rStyleTableEntries.insert(std::make_pair(0, pProps)).first;
+    }
+    return it;
+}
+
+} // namespace
+
 writerfilter::Reference<Properties>::Pointer_t
 RTFDocumentImpl::getProperties(const RTFSprms& rAttributes, RTFSprms const& rSprms, Id nStyleType,
                                bool bReplay)
@@ -547,21 +566,23 @@ RTFDocumentImpl::getProperties(const RTFSprms& rAttributes, RTFSprms const& rSpr
     int nStyle = 0;
     if (!m_aStates.empty())
         nStyle = m_aStates.top().getCurrentStyleIndex();
-    auto it = m_pStyleTableEntries->find(nStyle);
-    if (!nStyle && it == m_pStyleTableEntries->end())
-    {
-        writerfilter::Reference<Properties>::Pointer_t pProps(
-            new RTFReferenceProperties(RTFSprms()));
-        m_pStyleTableEntries->insert(std::make_pair(0, pProps));
-        it = m_pStyleTableEntries->find(nStyle);
-    }
+    auto it = (nStyle == 0) ? EnsureDefaultStyle(*m_pStyleTableEntries)
+                            : m_pStyleTableEntries->find(nStyle);
 
     if (it != m_pStyleTableEntries->end())
     {
         // cloneAndDeduplicate() wants to know about only a single "style", so
         // let's merge paragraph and character style properties here.
         auto itChar = m_pStyleTableEntries->end();
-        if (!m_aStates.empty())
+        auto rItAttributes{ static_cast<RTFReferenceProperties&>(*it->second).getAttributes() };
+        auto const pType{ rItAttributes.find(NS_ooxml::LN_CT_Style_type) };
+        assert(pType.is());
+        if (pType->getInt() == NS_ooxml::LN_Value_ST_StyleType_character)
+        { // `\s` may apply a character style; paragraph properties come from
+            itChar = it; // default, not a "linked" style
+            it = EnsureDefaultStyle(*m_pStyleTableEntries);
+        }
+        else if (!m_aStates.empty())
         {
             int nCharStyle = -1;
             if (bReplay)
@@ -1568,7 +1589,7 @@ void RTFDocumentImpl::text(OUString& rString)
                             m_aStates.top().getTableSprms().set(NS_ooxml::LN_CT_Style_name, pValue);
 
                             writerfilter::Reference<Properties>::Pointer_t const pProp(
-                                createStyleProperties());
+                                createStyleProperties(pType->getInt()));
                             m_pStyleTableEntries->insert(
                                 std::make_pair(m_nCurrentStyleIndex, pProp));
                         }
@@ -2326,7 +2347,8 @@ RTFError RTFDocumentImpl::pushState()
     return RTFError::OK;
 }
 
-writerfilter::Reference<Properties>::Pointer_t RTFDocumentImpl::createStyleProperties()
+writerfilter::Reference<Properties>::Pointer_t
+RTFDocumentImpl::createStyleProperties(int const nType)
 {
     RTFValue::Pointer_t pBasedOn
         = m_aStates.top().getTableSprms().find(NS_ooxml::LN_CT_Style_basedOn);
@@ -2352,7 +2374,10 @@ writerfilter::Reference<Properties>::Pointer_t RTFDocumentImpl::createStylePrope
                                                   m_aStates.top().getCharacterSprms());
 
     // resetSprms will clean up this modification
-    m_aStates.top().getTableSprms().set(NS_ooxml::LN_CT_Style_pPr, pParaProps);
+    if (nType != NS_ooxml::LN_Value_ST_StyleType_character) // e.g. table style may contain these?
+    {
+        m_aStates.top().getTableSprms().set(NS_ooxml::LN_CT_Style_pPr, pParaProps);
+    }
     m_aStates.top().getTableSprms().set(NS_ooxml::LN_CT_Style_rPr, pCharProps);
 
     writerfilter::Reference<Properties>::Pointer_t pProps(new RTFReferenceProperties(

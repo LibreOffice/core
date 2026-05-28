@@ -762,6 +762,30 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf104085)
     verify();
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testLowerSpacingInTable)
+{
+    auto verify = [this](char const* const msg) {
+        uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+        uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(),
+                                                        uno::UNO_QUERY);
+        uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+        uno::Reference<text::XText> xCell{ xTable->getCellByName(u"A2"_ustr),
+                                           uno::UNO_QUERY_THROW };
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(msg, int(2), getParagraphs(xCell));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(
+            msg, sal_Int32(0),
+            getProperty<sal_Int32>(getParagraphOrTable(1, xCell), u"ParaBottomMargin"_ustr));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(
+            msg, sal_Int32(0),
+            getProperty<sal_Int32>(getParagraphOrTable(2, xCell), u"ParaBottomMargin"_ustr));
+    };
+
+    createSwDoc("min-3.rtf");
+    verify("load");
+    saveAndReload(TestFilter::RTF);
+    verify("reload");
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testIgnoreTableDefinition)
 {
     createSwDoc("4010_min.rtf");
