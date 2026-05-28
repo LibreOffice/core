@@ -344,10 +344,27 @@
     <Image Include="CODA.ico" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.3719.77" />
+    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.3719.77" GeneratePathProperty="true" />
     <PackageReference Include="Microsoft.Windows.ImplementationLibrary" Version="1.0.260126.7" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
+  <!--
+    Place WebView2Loader.dll next to the executable. The exe imports it at
+    load time, so it must sit in the output (program) directory. With the
+    PackageReference build the WebView2 package only deposits it under the
+    RID subtree (runtimes\win-<arch>\native\), so copy it flat ourselves.
+  -->
+  <PropertyGroup>
+    <WebView2Rid Condition="'$(Platform)'=='x64'">win-x64</WebView2Rid>
+    <WebView2Rid Condition="'$(Platform)'=='ARM64'">win-arm64</WebView2Rid>
+  </PropertyGroup>
+  <Target Name="CopyWebView2Loader" AfterTargets="Build"
+          Inputs="$(PkgMicrosoft_Web_WebView2)\runtimes\$(WebView2Rid)\native\WebView2Loader.dll"
+          Outputs="$(OutDir)WebView2Loader.dll">
+    <Copy SourceFiles="$(PkgMicrosoft_Web_WebView2)\runtimes\$(WebView2Rid)\native\WebView2Loader.dll"
+          DestinationFolder="$(OutDir)"
+          SkipUnchangedFiles="true" />
+  </Target>
 </Project>
