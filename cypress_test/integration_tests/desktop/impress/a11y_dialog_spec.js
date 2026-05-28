@@ -58,8 +58,8 @@ describe(['tagdesktop'], 'Accessibility Impress Dialog Tests', { testIsolation: 
 
         cy.get('@uicoverageResult').then(result => {
             expect(result.used, `used .ui files`).to.not.be.empty;
-            // TODO: make this true
-            // expect(result.CompleteImpressDialogCoverage, `complete impress dialog coverage`).to.be.true;
+            expect(result.CompleteImpressDialogCoverage,
+                `complete impress dialog coverage; missing: ${JSON.stringify(result.MissingImpressDialogCoverage)}`).to.be.true;
             expect(result.CompleteCommonDialogCoverage,
                 `complete common dialog coverage; missing: ${JSON.stringify(result.MissingCommonDialogCoverage)}`).to.be.true;
         });
@@ -346,6 +346,77 @@ describe(['tagdesktop'], 'Accessibility Impress Dialog Tests', { testIsolation: 
         });
         a11yHelper.handleDialog(win, 1, '.uno:ObjectTitleDescription');
 
+        helper.typeIntoDocument('{esc}');
+    });
+
+    it('Interaction dialog', function () {
+        cy.then(() => {
+            win.app.map.sendUnoCommand('.uno:BasicShapes.octagon');
+        });
+        cy.cGet('#test-div-shapeHandlesSection').should('exist');
+
+        cy.then(() => {
+            win.app.map.sendUnoCommand('.uno:AnimationEffects');
+        });
+        a11yHelper.handleDialog(win, 1, '.uno:AnimationEffects');
+
+        helper.typeIntoDocument('{esc}');
+    });
+
+    it('Custom Animation dialog', function () {
+        // afterEach left us inside a table cell on slide 1. Escape out so
+        // BasicShapes.octagon adds a shape at slide level rather than
+        // inside the table.
+        helper.typeIntoDocument('{esc}{esc}{esc}');
+
+        cy.then(() => {
+            win.app.map.sendUnoCommand('.uno:BasicShapes.octagon');
+        });
+        cy.cGet('#test-div-shapeHandlesSection').should('exist');
+        cy.then(() => helper.processToIdle(win));
+
+        // Enter the shape and add some text so the dialog adds its
+        // text-animation tab (customanimationtexttab.ui), then escape back
+        // to shape selection so Add Effect remains applicable.
+        helper.typeIntoDocument('{enter}');
+        helper.typeIntoDocument('text');
+        helper.typeIntoDocument('{esc}');
+        cy.cGet('#test-div-shapeHandlesSection').should('exist');
+        cy.then(() => helper.processToIdle(win));
+
+        // Open the Custom Animation sidebar deck. .uno:CustomAnimation
+        // is the SidebarController binding for SdCustomAnimationDeck.
+        cy.then(() => {
+            win.app.map.sendUnoCommand('.uno:CustomAnimation');
+        });
+        cy.cGet('#sidebar-dock-wrapper').should('be.visible');
+        cy.cGet('#add_effect').should('be.visible');
+        cy.then(() => helper.processToIdle(win));
+
+        // The pane re-broadcasts enable/disable as the kit replays selection
+        // and state-cache messages. Clear the disabled attribute on the
+        // pushbutton inner element before clicking so the JSDialog click
+        // handler fires regardless of what the kit just set.
+        function clickSidebarPushButton(id) {
+            cy.cGet('#' + id).should('be.visible');
+            cy.cGet('#' + id + ' button').then($btn => {
+                const btn = $btn[0];
+                btn.removeAttribute('disabled');
+                btn.disabled = false;
+                btn.click();
+            });
+        }
+
+        clickSidebarPushButton('add_effect');
+        cy.then(() => helper.processToIdle(win));
+
+        clickSidebarPushButton('more_properties');
+        a11yHelper.handleDialog(win, 1, '.uno:CustomAnimationDialog');
+
+        // restore the default impress sidebar deck and drop the shape selection
+        cy.then(() => {
+            win.app.map.sendUnoCommand('.uno:ModifyPage');
+        });
         helper.typeIntoDocument('{esc}');
     });
 
