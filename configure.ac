@@ -1531,7 +1531,7 @@ else
     AC_MSG_RESULT([no])
 fi
 ENABLE_RUNTIME_OPTIMIZATIONS=
-for i in $CC; do
+for i in $CXX $CXXFLAGS; do
     case $i in
     -fsanitize=*)
         ENABLE_RUNTIME_OPTIMIZATIONS=no
