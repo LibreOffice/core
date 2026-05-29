@@ -38,7 +38,6 @@
 #include <editeng/fhgtitem.hxx>
 #include <svx/svdlayer.hxx>
 #include <svx/svdoutl.hxx>
-#include <svx/fillbitmaplink.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdotext.hxx>
@@ -128,12 +127,10 @@ void DocumentDrawModelManager::InitDrawModel()
 
     // Set the LinkManager in the model so that linked graphics can be inserted.
     // The WinWord import needs it too.
+    // Setting it also installs the draw model's fill bitmap link tracker, so
+    // deferred remote fills on draw-layer shapes are registered per SdrObject
+    // as they are set.
     mpDrawModel->SetLinkManager( & m_rDoc.getIDocumentLinksAdministration().GetLinkManager() );
-
-    // Track deferred remote fill bitmaps on draw-layer shapes as they are set,
-    // registering one SvBaseLink per SdrObject in place of a pool scan.
-    mpDrawModel->SetFillBitmapLinkTracker(
-        std::make_unique<sdr::FillBitmapLinkTracker>(*mpDrawModel));
     mpDrawModel->SetAddExtLeading( m_rDoc.getIDocumentSettingAccess().get(DocumentSettingId::ADD_EXT_LEADING) );
 
     OutputDevice* pRefDev = m_rDoc.getIDocumentDeviceAccess().getReferenceDevice( false );
