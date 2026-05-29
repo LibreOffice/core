@@ -11,7 +11,7 @@
   <menu:menuitem menu:id=".uno:Cut"/>
   <menu:menuitem menu:id=".uno:Copy"/>
   <menu:menuitem menu:id=".uno:Paste"/>
-  <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:SelectAll"/>
+  <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:InsertSymbol"/>
 </menu:menupopup>
