@@ -8,7 +8,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-29 07:49+0200\n"
 "PO-Revision-Date: 2026-05-29 21:05+0000\n"
-"Last-Translator: Adolfo Jayme Barrientos <fitojb@ubuntu.com>\n"
+"Last-Translator: fsadfsdfs <iv9v7t65@rf5tgy6ju7.anonaddy.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/es/>\n"
 "Language: es\n"
@@ -1921,32 +1921,40 @@ msgid ""
 "Read row numbers from the \"Row\" column — do not count or estimate row "
 "positions."
 msgstr ""
+"Lea los números de fila de la columna «Fila» —no cuente ni calcule las "
+"posiciones de las filas."
 
 #: src/control/Control.AIChatSidebar.ts:2867
 msgid ""
 "To identify a cell's column, match the value to the column letter in the "
 "header row — do not guess."
 msgstr ""
+"Para identificar la columna de una celda compare el valor con la letra de la "
+"columna que aparece en la fila de encabezado — no lo adivine."
 
 #: src/control/Control.AIChatSidebar.ts:2871
 msgid ""
 "Reference a cell by combining its column header with the row number (e.g., "
 "column B + row 2 = B2)."
 msgstr ""
+"Para hacer referencia a una celda combine el encabezado de la columna con el "
+"número de fila (ej, columna B + fila 2 = B2)."
 
 #: src/control/Control.AIChatSidebar.ts:2874
 msgid ""
 "When referencing specific cells, format each cell as a clickable link: [B2]"
 "(cell://B2)."
 msgstr ""
+"Cuando haga referencia a celdas concretas, configura cada celda como un "
+"enlace en el que se pueda hacer clic: [B2](cell://B2)."
 
 #: src/control/Control.AIChatSidebar.ts:2880
 msgid "Sanity check the following spreadsheet data."
-msgstr ""
+msgstr "Compruebe que los datos de la siguiente hoja de cálculo sean correctos."
 
 #: src/control/Control.AIChatSidebar.ts:2881
 msgid "Please analyze this data for:"
-msgstr ""
+msgstr "Por favor analice estos datos para:"
 
 #: src/control/Control.AIChatSidebar.ts:2885
 msgid ""
@@ -1954,18 +1962,26 @@ msgid ""
 "values deviates significantly from the expected distribution, which may "
 "suggest data manipulation."
 msgstr ""
+"Incumplimientos de la ley de Benford Law — compruebe si la distribución de "
+"los dígitos iniciales de los valores numéricos se desvía significativamente "
+"de la distribución esperada, lo que podría indicar una manipulación de los "
+"datos."
 
 #: src/control/Control.AIChatSidebar.ts:2891
 msgid ""
 "Statistical outliers — identify values that deviate significantly from "
 "their column or group."
 msgstr ""
+"Valores atípicos — identifique los valores que se desvían significativamente "
+"de su columna o grupo."
 
 #: src/control/Control.AIChatSidebar.ts:2897
 msgid ""
 "General anomalies — suspicious patterns, unexpected duplicates, "
 "inconsistencies, or formatting issues."
 msgstr ""
+"Anomalías generales — patrones sospechosos, duplicados inesperados, "
+"incoherencias o problemas de formato."
 
 #: src/control/Control.AlertDialog.js:55
 msgid "External link"
@@ -4096,7 +4112,7 @@ msgstr "Filtrar"
 
 #: src/control/Control.NotebookbarCalc.js:2616
 msgid "Proofing"
-msgstr ""
+msgstr "Revisión"
 
 #: src/control/Control.NotebookbarCalc.js:2644
 #: src/control/Control.NotebookbarImpress.js:2049
@@ -5557,13 +5573,12 @@ msgid "Color palette"
 msgstr "Paleta de colores"
 
 #: src/control/jsdialog/Widget.Combobox.js:241
-#, fuzzy
 msgid "Open "
-msgstr "Abrir"
+msgstr "Abrir . "
 
 #: src/control/jsdialog/Widget.Combobox.js:241
 msgid " list"
-msgstr ""
+msgstr " . list"
 
 #: src/control/jsdialog/Widget.Combobox.js:242
 msgid "Open list"
@@ -5576,6 +5591,8 @@ msgstr "Filtrar entradas"
 #: src/control/jsdialog/Widget.CsvGrid.ts:186
 msgid "CSV column ruler: click to toggle a column split"
 msgstr ""
+"Regla de columnas CSV: haga clic para activar o desactivar la división de "
+"una columna"
 
 #: src/control/jsdialog/Widget.CsvGrid.ts:315
 msgid "CSV import preview"
@@ -5611,7 +5628,7 @@ msgstr "Usados recientemente"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:384
 msgid "No emojis match \"{0}\""
-msgstr ""
+msgstr "No hay emojis que coincidan con \"{0}\""
 
 #: src/control/jsdialog/Widget.PageMarginEntry.ts:139
 msgid "Top: {top}"
