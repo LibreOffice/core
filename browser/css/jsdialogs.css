@@ -3712,6 +3712,34 @@ div [id^='themeview'].ui-iconview-entry, div [id^='themeview1col'].ui-iconview-e
 	width: 100%;
 	min-height: inherit;
 }
+/* In the chart data grid we navigate cell-by-cell, so the whole-row
+   blue selection (.ui-treeview-entry.selected) would clash with and
+   hide the active-cell marker. Neutralise the row fill here and let
+   the active cell carry the highlight instead. */
+#ChartDataDialog .ui-treeview-entry.selected {
+	background-color: transparent;
+	color: inherit;
+	border-color: transparent;
+}
+/* Keyboard "active cell" marker. The row carries DOM focus; this
+   class shows which cell within the row is currently active for
+   Tab/Arrow navigation and is the target of inline editing. */
+#ChartDataDialog .ui-treeview-entry > [role='gridcell'].ui-treeview-cell-active,
+#ChartDataDialog .ui-treeview-entry > [role='rowheader'].ui-treeview-cell-active {
+	background-color: var(--color-primary, #005da0);
+	color: var(--color-text-darker, #fff);
+	outline: 2px solid var(--color-primary, #005da0);
+	outline-offset: -2px;
+}
+/* The active cell carries DOM focus; its marker above is the focus
+   indicator, so suppress the browser's default ring on the cell. */
+#ChartDataDialog .ui-treeview-entry > [role='gridcell']:focus,
+#ChartDataDialog .ui-treeview-entry > [role='rowheader']:focus,
+#ChartDataDialog .ui-treeview-entry > [role='gridcell']:focus-visible,
+#ChartDataDialog .ui-treeview-entry > [role='rowheader']:focus-visible {
+	outline: 2px solid var(--color-primary, #005da0);
+	outline-offset: -2px;
+}
 
 /* Writer - Review - Tracking - Manage */
 #writerchanges .ui-treeview-cell-text-content {
