@@ -505,11 +505,11 @@
           "dest-filename": "edc4d741888bc0d38e32dbaa17149596-source-sans-pro-2.010R-ro-1.065R-it.tar.gz"
         },
         {
-          "url": "https://dev-www.libreoffice.org/src/boost_1_90_0.tar.xz",
-          "sha256": "b1f3cd4a82b59dd66e02c2ebae6334df18043a050d2d8eb83d12ad88b95b5e86",
+          "url": "https://dev-www.libreoffice.org/src/boost_1_91_0.tar.xz",
+          "sha256": "2f975c10da79511c2f218189fc8a12eef1a92e3bd18206e9841d406296d065eb",
           "type": "file",
           "dest": "external/tarballs",
-          "dest-filename": "boost_1_90_0.tar.xz"
+          "dest-filename": "boost_1_91_0.tar.xz"
         },
         {
           "url": "https://dev-www.libreoffice.org/src/48d647fbd8ef8889e5a7f422c1bfda94-clucene-core-2.3.3.4.tar.gz",

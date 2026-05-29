@@ -2,7 +2,7 @@
 +++ boost/config/workaround.hpp
 @@ -264,6 +264,10 @@
  #else
- #define BOOST_CLANG_VERSION_WORKAROUND_GUARD 0
+ #define BOOST_LIBSTDCXX_VERSION_WORKAROUND_GUARD 0
  #endif
 +
 +#if !defined BOOST_LIBSTDCXX_VERSION_WORKAROUND_GUARD
