@@ -13,7 +13,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-29 07:49+0200\n"
 "PO-Revision-Date: 2026-05-29 12:37+0000\n"
-"Last-Translator: alxhu <hosted.weblate.org@alxhu.de>\n"
+"Last-Translator: Mr-Update <mr.update@yahoo.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/de/>\n"
 "Language: de\n"
@@ -1383,14 +1383,12 @@ msgid "Natural"
 msgstr "Natürlich"
 
 #: src/control/Control.AIChatSidebar.ts:108
-#, fuzzy
 msgid "Formal"
-msgstr "Format"
+msgstr "Formell"
 
 #: src/control/Control.AIChatSidebar.ts:109
-#, fuzzy
 msgid "Short"
-msgstr "Sortierung"
+msgstr "Kurz"
 
 #: src/control/Control.AIChatSidebar.ts:110
 msgid "Friendly"
@@ -1398,7 +1396,7 @@ msgstr "Freundlich"
 
 #: src/control/Control.AIChatSidebar.ts:111
 msgid "Professional"
-msgstr "Profiessionell"
+msgstr "Professionell"
 
 #: src/control/Control.AIChatSidebar.ts:112
 msgid "Casual"
@@ -1513,9 +1511,8 @@ msgstr "mit Emoji"
 #: src/control/Control.AIChatSidebar.ts:934
 #: src/control/Control.AIChatSidebar.ts:984
 #: src/control/Control.AIChatSidebar.ts:1356
-#, fuzzy
 msgid "tone"
-msgstr "Keine"
+msgstr "Ton"
 
 #: src/control/Control.AIChatSidebar.ts:947
 #: src/control/Control.AIChatSidebar.ts:1218
@@ -1535,9 +1532,8 @@ msgid "Your tones"
 msgstr "Deine Töne"
 
 #: src/control/Control.AIChatSidebar.ts:989
-#, fuzzy
 msgid "Edit tone"
-msgstr "Bearbeitungsmodus"
+msgstr "Ton bearbeiten"
 
 #: src/control/Control.AIChatSidebar.ts:1006
 msgid "+ Add my own voice"
@@ -1635,7 +1631,7 @@ msgstr "Emojis suchen"
 #: src/control/Control.AIChatSidebar.ts:1306
 #: src/control/jsdialog/Widget.EmojiPicker.ts:401
 msgid "Choose an emoji"
-msgstr "Einen Emoji auswählen"
+msgstr "Ein Emoji auswählen"
 
 #: src/control/Control.AIChatSidebar.ts:1330
 msgid "Delete tone confirmation"
@@ -1819,9 +1815,8 @@ msgid "I have a formula error in my spreadsheet."
 msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:2627
-#, fuzzy
 msgid "Cell"
-msgstr "Zellen"
+msgstr "Zelle"
 
 #: src/control/Control.AIChatSidebar.ts:2631
 #, fuzzy
