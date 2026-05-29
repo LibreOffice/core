@@ -54,38 +54,6 @@ namespace comphelper
 
     //= OSelectionChangeMultiplexer
 
-    /// multiplexer for selection changes
-    class UNLESS_MERGELIBS_MORE(COMPHELPER_DLLPUBLIC) OSelectionChangeMultiplexer final : public cppu::WeakImplHelper< css::view::XSelectionChangeListener>
-    {
-        friend class OSelectionChangeListener;
-        css::uno::Reference< css::view::XSelectionSupplier>  m_xSet;
-        OSelectionChangeListener*                            m_pListener;
-        sal_Int32                                            m_nLockCount;
-
-        OSelectionChangeMultiplexer(const OSelectionChangeMultiplexer&) = delete;
-        OSelectionChangeMultiplexer& operator=(const OSelectionChangeMultiplexer&) = delete;
-
-        virtual ~OSelectionChangeMultiplexer() override;
-    public:
-        OSelectionChangeMultiplexer(OSelectionChangeListener* _pListener, const  css::uno::Reference< css::view::XSelectionSupplier>& _rxSet);
-
-    // XEventListener
-        virtual void SAL_CALL disposing( const  css::lang::EventObject& Source ) override;
-
-    // XSelectionChangeListener
-        virtual void SAL_CALL selectionChanged( const css::lang::EventObject& aEvent ) override;
-
-        /// incremental lock
-        void        lock();
-        /// incremental unlock
-        void        unlock();
-        /// get the lock count
-        sal_Int32   locked() const { return m_nLockCount; }
-
-        void dispose();
-    };
-
-
 }   // namespace comphelper
 
 

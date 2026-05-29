@@ -48,18 +48,6 @@ using namespace com::sun::star;
 namespace svtools
 {
 
-static sal_Int32            nExtendedColorRefCount_Impl = 0;
-namespace
-{
-    std::mutex& ColorMutex_Impl()
-    {
-        static std::mutex SINGLETON;
-        return SINGLETON;
-    }
-}
-
-ExtendedColorConfig_Impl*    ExtendedColorConfig::m_pImpl = nullptr;
-
 class ExtendedColorConfig_Impl : public utl::ConfigItem, public SfxBroadcaster
 {
     typedef std::map<OUString, OUString> TDisplayNames;
@@ -72,7 +60,6 @@ class ExtendedColorConfig_Impl : public utl::ConfigItem, public SfxBroadcaster
     ::std::vector<TComponents::iterator> m_aConfigValuesPos;
 
     OUString        m_sLoadedScheme;
-    bool            m_bIsBroadcastEnabled;
     static bool     m_bLockBroadcast;
     static bool     m_bBroadcastWhenUnlocked;
 
@@ -94,26 +81,9 @@ public:
 
     sal_Int32                       GetComponentCount() const;
     OUString                 GetComponentName(sal_uInt32 _nPos) const;
-    OUString                 GetComponentDisplayName(const OUString& _sComponentName) const;
     sal_Int32                       GetComponentColorCount(const OUString& _sName) const;
     ExtendedColorConfigValue        GetComponentColorConfigValue(const OUString& _sName,sal_uInt32 _nPos) const;
 
-    ExtendedColorConfigValue GetColorConfigValue(const OUString& _sComponentName,const OUString& _sName)
-    {
-        TComponents::iterator aFind = m_aConfigValues.find(_sComponentName);
-        if ( aFind != m_aConfigValues.end() )
-        {
-            TConfigValues::iterator aFind2 = aFind->second.first.find(_sName);
-            if ( aFind2 != aFind->second.first.end() )
-                return aFind2->second;
-        }
-#if OSL_DEBUG_LEVEL > 0
-        SAL_WARN( "svtools", "Could find the required config:\n"
-                  "component: " << _sComponentName
-                  << "\nname: " << _sName );
-#endif
-        return ExtendedColorConfigValue();
-    }
     void                            SetColorConfigValue(const OUString& _sName,
                                                             const ExtendedColorConfigValue& rValue );
 
@@ -171,15 +141,6 @@ ExtendedColorConfigValue ExtendedColorConfig_Impl::GetComponentColorConfigValue(
     return ExtendedColorConfigValue();
 }
 
-OUString ExtendedColorConfig_Impl::GetComponentDisplayName(const OUString& _sComponentName) const
-{
-    OUString sRet;
-    TDisplayNames::const_iterator aFind = m_aComponentDisplayNames.find(_sComponentName);
-    if ( aFind != m_aComponentDisplayNames.end() )
-        sRet = aFind->second;
-    return sRet;
-}
-
 OUString ExtendedColorConfig_Impl::GetComponentName(sal_uInt32 _nPos) const
 {
     OUString sRet;
@@ -191,8 +152,7 @@ OUString ExtendedColorConfig_Impl::GetComponentName(sal_uInt32 _nPos) const
 bool ExtendedColorConfig_Impl::m_bLockBroadcast = false;
 bool ExtendedColorConfig_Impl::m_bBroadcastWhenUnlocked = false;
 ExtendedColorConfig_Impl::ExtendedColorConfig_Impl() :
-    ConfigItem(u"Office.ExtendedColorScheme"_ustr),
-    m_bIsBroadcastEnabled(true)
+    ConfigItem(u"Office.ExtendedColorScheme"_ustr)
 {
     //try to register on the root node - if possible
     uno::Sequence < OUString > aNames(1);
@@ -210,14 +170,10 @@ ExtendedColorConfig_Impl::~ExtendedColorConfig_Impl()
 
 void ExtendedColorConfig_Impl::DisableBroadcast()
 {
-    if ( ExtendedColorConfig::m_pImpl )
-        ExtendedColorConfig::m_pImpl->m_bIsBroadcastEnabled = false;
 }
 
 void ExtendedColorConfig_Impl::EnableBroadcast()
 {
-    if ( ExtendedColorConfig::m_pImpl )
-        ExtendedColorConfig::m_pImpl->m_bIsBroadcastEnabled = true;
 }
 
 static void lcl_addString(uno::Sequence < OUString >& _rSeq,std::u16string_view _sAdd)
@@ -479,18 +435,6 @@ void ExtendedColorConfig_Impl::LockBroadcast()
 
 void ExtendedColorConfig_Impl::UnlockBroadcast()
 {
-    if ( m_bBroadcastWhenUnlocked )
-    {
-        m_bBroadcastWhenUnlocked = ExtendedColorConfig::m_pImpl != nullptr;
-        if ( m_bBroadcastWhenUnlocked )
-        {
-            if (ExtendedColorConfig::m_pImpl->m_bIsBroadcastEnabled)
-            {
-                m_bBroadcastWhenUnlocked = false;
-                ExtendedColorConfig::m_pImpl->Broadcast(SfxHint(SfxHintId::ColorsChanged));
-            }
-        }
-    }
     m_bLockBroadcast = false;
 }
 
@@ -508,62 +452,6 @@ IMPL_LINK( ExtendedColorConfig_Impl, DataChangedEventListener, VclSimpleEvent&, 
 }
 
 
-ExtendedColorConfig::ExtendedColorConfig()
-{
-    std::unique_lock aGuard( ColorMutex_Impl() );
-    if ( !m_pImpl )
-        m_pImpl = new ExtendedColorConfig_Impl;
-    ++nExtendedColorRefCount_Impl;
-    StartListening( *m_pImpl);
-}
-
-ExtendedColorConfig::~ExtendedColorConfig()
-{
-    std::unique_lock aGuard( ColorMutex_Impl() );
-    EndListening( *m_pImpl);
-    if(!--nExtendedColorRefCount_Impl)
-    {
-        delete m_pImpl;
-        m_pImpl = nullptr;
-    }
-}
-
-ExtendedColorConfigValue ExtendedColorConfig::GetColorValue(const OUString& _sComponentName,const OUString& _sName)const
-{
-    return m_pImpl->GetColorConfigValue(_sComponentName,_sName);
-}
-
-sal_Int32 ExtendedColorConfig::GetComponentCount() const
-{
-    return m_pImpl->GetComponentCount();
-}
-
-sal_Int32 ExtendedColorConfig::GetComponentColorCount(const OUString& _sName) const
-{
-    return m_pImpl->GetComponentColorCount(_sName);
-}
-
-ExtendedColorConfigValue ExtendedColorConfig::GetComponentColorConfigValue(const OUString& _sName,sal_uInt32 _nPos) const
-{
-    return m_pImpl->GetComponentColorConfigValue(_sName,_nPos);
-}
-
-OUString ExtendedColorConfig::GetComponentName(sal_uInt32 _nPos) const
-{
-    return m_pImpl->GetComponentName(_nPos);
-}
-
-OUString ExtendedColorConfig::GetComponentDisplayName(const OUString& _sComponentName) const
-{
-    return m_pImpl->GetComponentDisplayName(_sComponentName);
-}
-
-void ExtendedColorConfig::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
-{
-    SolarMutexGuard aVclGuard;
-
-    Broadcast( rHint );
-}
 
 EditableExtendedColorConfig::EditableExtendedColorConfig() :
     m_pImpl(new ExtendedColorConfig_Impl),

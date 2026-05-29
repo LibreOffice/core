@@ -818,15 +818,12 @@ Reference< drawing::XShape >  SvxDrawPage::CreateShape( SdrObject *pObj ) const
 rtl::Reference<SdrObject> SvxDrawPage::CreateSdrObject( const Reference< drawing::XShape > & xShape, bool bBeginning ) noexcept
 {
     rtl::Reference<SdrObject> pObj = CreateSdrObject_( xShape );
-    if( pObj)
+    if( pObj && !pObj->IsInserted() )
     {
-        if ( !pObj->IsInserted() && !pObj->IsDoNotInsertIntoPageAutomatically() )
-        {
-            if(bBeginning)
-                mpPage->InsertObject( pObj.get(), 0 );
-            else
-                mpPage->InsertObject( pObj.get() );
-        }
+        if(bBeginning)
+            mpPage->InsertObject( pObj.get(), 0 );
+        else
+            mpPage->InsertObject( pObj.get() );
     }
 
     return pObj;

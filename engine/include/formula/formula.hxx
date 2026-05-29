@@ -53,32 +53,6 @@ class RefEdit;
 class RefButton;
 class FormEditData;
 
-class UNLESS_MERGELIBS_MORE(FORMULA_DLLPUBLIC) FormulaModalDialog
-    : public weld::GenericDialogController, public formula::IFormulaEditorHelper
-{
-    friend class FormulaDlg_Impl;
-public:
-    FormulaModalDialog(weld::Window* pParent, IFunctionManager const * _pFunctionMgr,
-                       IControlReferenceHandler* _pDlg);
-    virtual ~FormulaModalDialog() override;
-
-private:
-    std::unique_ptr<FormulaDlg_Impl, o3tl::default_delete<FormulaDlg_Impl>> m_pImpl;
-
-protected:
-
-    ::std::pair<RefButton*,RefEdit*> RefInputStartBefore( RefEdit* pEdit, RefButton* pButton );
-    void            RefInputStartAfter();
-    void            RefInputDoneAfter();
-
-    void            SetMeText(const OUString& _sText);
-    void            Update();
-    void            CheckMatrix(OUString& aFormula /*IN/OUT*/);
-    void            Update(const OUString& _sExp);
-
-    void            StoreFormEditData(FormEditData* pData);
-};
-
 class FORMULA_DLLPUBLIC FormulaDlg:
     public SfxModelessDialogController, public IFormulaEditorHelper
 {

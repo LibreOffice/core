@@ -1347,8 +1347,7 @@ SdrPage::SdrPage(SdrModel& rModel, bool bMasterPage)
     m_nPageNum(0),
     mbMaster(bMasterPage),
     mbInserted(false),
-    mbObjectsNotPersistent(false),
-    mbPageBorderOnlyLeftRight(false)
+    mbObjectsNotPersistent(false)
 {
     mpSdrPageProperties.reset(new SdrPageProperties(*this));
 }
@@ -1398,7 +1397,6 @@ void SdrPage::lateInit(const SdrPage& rSrcPage)
     // a valid copy of source page before copying and inserting
     // the contained objects
     mbMaster = rSrcPage.mbMaster;
-    mbPageBorderOnlyLeftRight = rSrcPage.mbPageBorderOnlyLeftRight;
     mnWidth = rSrcPage.mnWidth;
     mnHeight = rSrcPage.mnHeight;
     mnBorderLeft = rSrcPage.mnBorderLeft;
@@ -1776,11 +1774,6 @@ void SdrPage::SetInserted( bool bIns )
                 pOleObj->Disconnect();
         }
     }
-}
-
-void SdrPage::SetUnoPage(uno::Reference<drawing::XDrawPage> const& xNewPage)
-{
-    mxUnoPage = xNewPage;
 }
 
 uno::Reference< uno::XInterface > const & SdrPage::getUnoPage()

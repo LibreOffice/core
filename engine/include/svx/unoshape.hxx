@@ -597,7 +597,6 @@ protected:
 
     SvGlobalName GetClassName_Impl(OUString& rHexCLSID);
 public:
-    SvxOle2Shape(SdrObject* pObj, OUString referer);
     SvxOle2Shape(SdrObject* pObject, OUString referer, std::span<const SfxItemPropertyMapEntry> pPropertyMap, const SvxItemPropertySet* pPropertySet);
     virtual ~SvxOle2Shape() noexcept override;
 

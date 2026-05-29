@@ -188,8 +188,6 @@ public:
     // handy to get the empty replacement graphic without accessing all the old stuff
     static Graphic GetEmptyOLEReplacementGraphic();
 
-    void SetWindow(const css::uno::Reference < css::awt::XWindow >& _xWindow);
-
     // #i118485# missing converter added
     virtual rtl::Reference<SdrObject> DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
 

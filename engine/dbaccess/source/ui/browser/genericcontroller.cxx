@@ -944,22 +944,6 @@ sal_Bool SAL_CALL OGenericUnoController::attachModel(const Reference< XModel > &
     return false;
 }
 
-void OGenericUnoController::executeUnChecked(sal_uInt16 _nCommandId, const Sequence< PropertyValue >& aArgs)
-{
-    Execute(_nCommandId, aArgs);
-}
-
-void OGenericUnoController::executeUnChecked(const util::URL& _rCommand, const Sequence< PropertyValue >& aArgs)
-{
-    OSL_PRECOND( !m_aSupportedFeatures.empty(), "OGenericUnoController::executeUnChecked: shouldn't this be filled at construction time?" );
-    if ( m_aSupportedFeatures.empty() )
-        fillSupportedFeatures();
-
-    SupportedFeatures::const_iterator aIter = m_aSupportedFeatures.find( _rCommand.Complete );
-    if (aIter != m_aSupportedFeatures.end())
-        Execute( aIter->second.nFeatureId, aArgs );
-}
-
 void OGenericUnoController::executeChecked(const util::URL& _rCommand, const Sequence< PropertyValue >& aArgs)
 {
     OSL_PRECOND( !m_aSupportedFeatures.empty(), "OGenericUnoController::executeChecked: shouldn't this be filled at construction time?" );
@@ -1090,13 +1074,6 @@ Reference< XController > OGenericUnoController::getXController()
 bool OGenericUnoController::interceptUserInput( const NotifyEvent& _rEvent )
 {
     return m_aUserInputInterception.handleNotifyEvent( _rEvent );
-}
-
-bool OGenericUnoController::isCommandChecked(sal_uInt16 _nCommandId) const
-{
-    FeatureState aState = GetState( _nCommandId );
-
-    return aState.bChecked.has_value() && *aState.bChecked;
 }
 
 bool OGenericUnoController::isCommandEnabled( const OUString& _rCompleteCommandURL ) const

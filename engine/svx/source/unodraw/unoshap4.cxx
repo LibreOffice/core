@@ -66,14 +66,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 
-
-SvxOle2Shape::SvxOle2Shape(SdrObject* pObject, OUString referer)
-    : SvxShapeText(pObject, getSvxMapProvider().GetMap(SVXMAP_OLE2),
-                getSvxMapProvider().GetPropertySet(SVXMAP_OLE2,SdrObject::GetGlobalDrawObjectItemPool()))
-    , m_referer(std::move(referer))
-{
-}
-
 SvxOle2Shape::SvxOle2Shape(SdrObject* pObject, OUString referer, std::span<const SfxItemPropertyMapEntry> pPropertyMap, const SvxItemPropertySet* pPropertySet)
     : SvxShapeText(pObject, pPropertyMap, pPropertySet)
     , m_referer(std::move(referer))

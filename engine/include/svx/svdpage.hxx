@@ -447,10 +447,6 @@ protected:
     bool                mbInserted : 1;
     bool                mbObjectsNotPersistent : 1;
 
-    // #i93597#
-    bool                mbPageBorderOnlyLeftRight : 1;
-
-    void SetUnoPage(css::uno::Reference<css::drawing::XDrawPage> const&);
     virtual css::uno::Reference< css::uno::XInterface > createUnoPage();
 
     // Copying of pages is split into two parts: construction and copying of page objects,
@@ -476,11 +472,6 @@ public:
     // #i68775# React on PageNum changes (from Model in most cases)
     void SetPageNum(sal_uInt16 nNew);
     sal_uInt16 GetPageNum() const;
-
-    // #i93597# Allow page border definition to not be the full rectangle but to
-    // use only the left and right vertical edges (reportdesigner)
-    void setPageBorderOnlyLeftRight(bool bNew) { mbPageBorderOnlyLeftRight = bNew; }
-    bool getPageBorderOnlyLeftRight() const { return mbPageBorderOnlyLeftRight; }
 
     virtual void SetSize(const Size& aSiz);
     Size GetSize() const;

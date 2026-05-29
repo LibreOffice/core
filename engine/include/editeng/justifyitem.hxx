@@ -31,7 +31,6 @@ public:
     static SfxPoolItem* CreateDefault();
 
     DECLARE_ITEM_TYPE_FUNCTION(SvxHorJustifyItem)
-    explicit SvxHorJustifyItem( const sal_uInt16 nId );
 
     SvxHorJustifyItem(
         const SvxCellHorJustify eJustify /*= SvxCellHorJustify::Standard*/,
@@ -58,7 +57,6 @@ public:
     static SfxPoolItem* CreateDefault();
 
     DECLARE_ITEM_TYPE_FUNCTION(SvxVerJustifyItem)
-    explicit SvxVerJustifyItem( const sal_uInt16 nId  );
 
     SvxVerJustifyItem(
         const SvxCellVerJustify eJustify,

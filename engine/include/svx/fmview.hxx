@@ -87,24 +87,6 @@ public:
     virtual void AddDeviceToPaintView(OutputDevice& rNewDev) override;
     virtual void DeleteDeviceFromPaintView(OutputDevice& rOldDev) override;
 
-    static void createControlLabelPair(
-        OutputDevice const * _pOutDev,
-        sal_Int32 _nXOffsetMM,
-        sal_Int32 _nYOffsetMM,
-        const css::uno::Reference< css::beans::XPropertySet >& _rxField,
-        const css::uno::Reference< css::util::XNumberFormats >& _rxNumberFormats,
-        SdrObjKind _nControlObjectID,
-        SdrInventor _nInventor,
-        SdrObjKind _nLabelObjectID,
-
-        // tdf#118963 Need a SdrModel for SdrObject creation. To make the
-        // demand clear, hand over a SdrMldel&
-        SdrModel& _rModel,
-
-        rtl::Reference<SdrUnoObj>& _rpLabel,
-        rtl::Reference<SdrUnoObj>& _rpControl
-    );
-
     virtual SdrPageView* ShowSdrPage(SdrPage* pPage) override;
     virtual void HideSdrPage() override;
 

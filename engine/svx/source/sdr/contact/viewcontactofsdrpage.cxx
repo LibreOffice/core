@@ -289,26 +289,8 @@ void ViewContactOfOuterPageBorder::createViewIndependentPrimitive2DSequence(draw
         aRGBBorderColor = aBorderColor.getBColor();
     }
 
-    if(rPage.getPageBorderOnlyLeftRight())
-    {
-        // #i93597# for Report Designer, the page border shall be only displayed right and left,
-        // but not top and bottom. Create simplified geometry.
-        basegfx::B2DPolygon aLeft, aRight;
-
-        aLeft.append(basegfx::B2DPoint(aPageBorderRange.getMinX(), aPageBorderRange.getMinY()));
-        aLeft.append(basegfx::B2DPoint(aPageBorderRange.getMinX(), aPageBorderRange.getMaxY()));
-
-        aRight.append(basegfx::B2DPoint(aPageBorderRange.getMaxX(), aPageBorderRange.getMinY()));
-        aRight.append(basegfx::B2DPoint(aPageBorderRange.getMaxX(), aPageBorderRange.getMaxY()));
-
-        rVisitor.visit(new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(std::move(aLeft), aRGBBorderColor));
-        rVisitor.visit(new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(std::move(aRight), aRGBBorderColor));
-    }
-    else
-    {
-        basegfx::B2DPolygon aPageBorderPolygon(basegfx::utils::createPolygonFromRect(aPageBorderRange));
-        rVisitor.visit(new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(std::move(aPageBorderPolygon), aRGBBorderColor));
-    }
+    basegfx::B2DPolygon aPageBorderPolygon(basegfx::utils::createPolygonFromRect(aPageBorderRange));
+    rVisitor.visit(new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(std::move(aPageBorderPolygon), aRGBBorderColor));
 }
 
 ViewContactOfOuterPageBorder::ViewContactOfOuterPageBorder(ViewContactOfSdrPage& rParentViewContactOfSdrPage)

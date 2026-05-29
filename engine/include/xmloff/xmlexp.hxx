@@ -186,8 +186,6 @@ class XMLOFF_DLLPUBLIC SvXMLExport : public cppu::WeakImplHelper<
     std::unordered_set<OUString> getUsedFontList();
 
 protected:
-    void setExportFlags( SvXMLExportFlags nExportFlags ) { mnExportFlags = nExportFlags; }
-
     // Get (modifiable) namespace map
     SvXMLNamespaceMap& GetNamespaceMap_() { return *mpNamespaceMap; }
 

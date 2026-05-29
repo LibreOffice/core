@@ -41,7 +41,6 @@
 #include <fmtcntnt.hxx>
 #include <frmfmt.hxx>
 
-#include <svl/ownlist.hxx>
 #include <unotools/streamwrap.hxx>
 #include <pam.hxx>
 #include <doc.hxx>
@@ -316,7 +315,6 @@ bool SwHTMLParser::InsertEmbed()
     bool bPercentWidth = false, bPercentHeight = false, bHidden = false;
     sal_Int16 eVertOri = text::VertOrientation::NONE;
     sal_Int16 eHoriOri = text::HoriOrientation::NONE;
-    SvCommandList aCmdLst;
     const HTMLOptions& rHTMLOptions = GetOptions();
 
     // The options are read forwards, because the plug-ins expect them in this
@@ -391,9 +389,6 @@ bool SwHTMLParser::InsertEmbed()
             break;
         default: break;
         }
-
-        // All parameters are passed to the plug-in.
-        aCmdLst.Append( rOption.GetTokenString(), rOption.GetString() );
     }
 
     static const std::set<std::u16string_view> vAllowlist = {

@@ -49,63 +49,19 @@ public:
     sal_Int32       GetNumerator() const;
     sal_Int32       GetDenominator() const;
 
-    explicit operator sal_Int32() const;
-#if SAL_TYPES_SIZEOFPOINTER == 8
-    explicit operator ::tools::Long() const { return operator sal_Int32(); }
-#endif
     explicit operator double() const;
 
     Fraction&       operator=( const Fraction& rfrFrac ) = default;
     Fraction&       operator=( Fraction&& rfrFrac ) = default;
     Fraction&       operator=( double v ) { return operator=(Fraction(v)); }
 
-    Fraction&       operator+=( const Fraction& rfrFrac );
-    Fraction&       operator-=( const Fraction& rfrFrac );
     Fraction&       operator*=( const Fraction& rfrFrac );
-    Fraction&       operator/=( const Fraction& rfrFrac );
-    Fraction&       operator+=( double v ) { return operator+=(Fraction(v)); }
-    Fraction&       operator-=( double v ) { return operator-=(Fraction(v)); }
     Fraction&       operator*=( double v ) { return operator*=(Fraction(v)); }
-    Fraction&       operator/=( double v ) { return operator/=(Fraction(v)); }
 
     void            ReduceInaccurate( unsigned nSignificantBits );
 
-    /// Multiply the two fractions represented here and reduce inaccuracy to 32-bits, used by vcl
-    static Fraction MakeFraction(tools::Long nN1, tools::Long nN2, tools::Long nD1, tools::Long nD2);
-
-    // Compute value usable as hash.
-    size_t GetHashValue() const;
-
-    TOOLS_DLLPUBLIC friend Fraction operator+( const Fraction& rVal1, const Fraction& rVal2 );
-    TOOLS_DLLPUBLIC friend Fraction operator-( const Fraction& rVal1, const Fraction& rVal2 );
-    TOOLS_DLLPUBLIC friend Fraction operator*( const Fraction& rVal1, const Fraction& rVal2 );
-    TOOLS_DLLPUBLIC friend Fraction operator/( const Fraction& rVal1, const Fraction& rVal2 );
-
-    TOOLS_DLLPUBLIC friend bool operator==( const Fraction& rVal1, const Fraction& rVal2 );
-    TOOLS_DLLPUBLIC friend bool operator!=( const Fraction& rVal1, const Fraction& rVal2 );
-    TOOLS_DLLPUBLIC friend bool operator< ( const Fraction& rVal1, const Fraction& rVal2 );
     TOOLS_DLLPUBLIC friend bool operator> ( const Fraction& rVal1, const Fraction& rVal2 );
-    TOOLS_DLLPUBLIC friend bool operator<=( const Fraction& rVal1, const Fraction& rVal2 );
-    TOOLS_DLLPUBLIC friend bool operator>=( const Fraction& rVal1, const Fraction& rVal2 );
 };
-
-TOOLS_DLLPUBLIC Fraction operator+( const Fraction& rVal1, const Fraction& rVal2 );
-TOOLS_DLLPUBLIC Fraction operator-( const Fraction& rVal1, const Fraction& rVal2 );
-TOOLS_DLLPUBLIC Fraction operator*( const Fraction& rVal1, const Fraction& rVal2 );
-TOOLS_DLLPUBLIC Fraction operator/( const Fraction& rVal1, const Fraction& rVal2 );
-TOOLS_DLLPUBLIC bool operator !=( const Fraction& rVal1, const Fraction& rVal2 );
-TOOLS_DLLPUBLIC bool operator <=( const Fraction& rVal1, const Fraction& rVal2 );
-TOOLS_DLLPUBLIC bool operator >=( const Fraction& rVal1, const Fraction& rVal2 );
-
-inline Fraction operator+( double v1, const Fraction& rVal2 ) { return Fraction(v1) + rVal2; }
-inline Fraction operator-( double v1, const Fraction& rVal2 ) { return Fraction(v1) - rVal2; }
-inline Fraction operator*( double v1, const Fraction& rVal2 ) { return Fraction(v1) * rVal2; }
-inline Fraction operator/( double v1, const Fraction& rVal2 ) { return Fraction(v1) / rVal2; }
-
-inline Fraction operator+( const Fraction& rVal1, double v2 ) { return rVal1 + Fraction(v2); }
-inline Fraction operator-( const Fraction& rVal1, double v2 ) { return rVal1 - Fraction(v2); }
-inline Fraction operator*( const Fraction& rVal1, double v2 ) { return rVal1 * Fraction(v2); }
-inline Fraction operator/( const Fraction& rVal1, double v2 ) { return rVal1 / Fraction(v2); }
 
 template<typename charT, typename traits>
 inline std::basic_ostream<charT, traits> & operator <<(

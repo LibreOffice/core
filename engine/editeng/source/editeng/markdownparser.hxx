@@ -34,8 +34,6 @@ public:
 
     const EditPaM& Parse(const OString& rMarkdown);
 
-    const EditSelection& GetCurSelection() const { return maCurSel; }
-
 private:
     static int EnterBlockCb(MD_BLOCKTYPE nType, void* pDetail, void* pUserData);
     static int LeaveBlockCb(MD_BLOCKTYPE nType, void* pDetail, void* pUserData);

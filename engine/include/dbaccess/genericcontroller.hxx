@@ -392,18 +392,13 @@ namespace dbaui
         static css::uno::Reference< css::frame::XLayoutManager > getLayoutManager(const css::uno::Reference< css::frame::XFrame >& _xFrame);
 
         // IController
-        virtual void executeUnChecked(const css::util::URL& _rCommand, const css::uno::Sequence< css::beans::PropertyValue>& aArgs) override;
         virtual void executeChecked(const css::util::URL& _rCommand, const css::uno::Sequence< css::beans::PropertyValue>& aArgs) override;
-        virtual void executeUnChecked(sal_uInt16 _nCommandId, const css::uno::Sequence< css::beans::PropertyValue>& aArgs) override;
         virtual void executeChecked(sal_uInt16 _nCommandId, const css::uno::Sequence< css::beans::PropertyValue>& aArgs) override;
         virtual bool isCommandEnabled(sal_uInt16 _nCommandId) const override;
         virtual bool isCommandEnabled(const OUString& _rCompleteCommandURL) const override;
         virtual bool isDataSourceReadOnly() const override;
         virtual css::uno::Reference< css::frame::XController > getXController() override;
         virtual bool interceptUserInput( const NotifyEvent& _rEvent ) override;
-
-        // misc
-        bool isCommandChecked(sal_uInt16 _nCommandId) const;
 
         // css::lang::XEventListener
         virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;

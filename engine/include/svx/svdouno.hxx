@@ -117,7 +117,6 @@ public:
         ) const;
 
     const OUString& GetUnoControlTypeName() const { return m_aUnoControlTypeName; }
-    const OUString& getUnoControlModelTypeName() const { return m_aUnoControlModelTypeName; }
 
     virtual void SetUnoControlModel( const css::uno::Reference< css::awt::XControlModel >& xModel );
 

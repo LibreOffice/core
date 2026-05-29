@@ -1065,13 +1065,6 @@ void DockingWindow::SetMinOutputSizePixel( const Size& rSize )
     maMinOutSize = rSize;
 }
 
-const Size& DockingWindow::GetMinOutputSizePixel() const
-{
-    if ( mpFloatWin )
-        return mpFloatWin->GetMinOutputSizePixel();
-    return maMinOutSize;
-}
-
 void DockingWindow::SetFloatingPos( const Point& rNewPos )
 {
     if ( mpFloatWin )

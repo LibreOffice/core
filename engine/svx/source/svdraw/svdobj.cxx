@@ -470,7 +470,6 @@ SdrObject::SdrObject(SdrModel& rSdrModel)
     , mnNavigationPosition(SAL_MAX_UINT32)
     , mnLayerID(0)
     , mpSvxShape( nullptr )
-    , mbDoNotInsertIntoPageAutomatically(false)
     , msHyperlink()
 {
     m_bVirtObj         =false;
@@ -507,7 +506,6 @@ SdrObject::SdrObject(SdrModel& rSdrModel, SdrObject const & rSource)
     , mnNavigationPosition(SAL_MAX_UINT32)
     , mnLayerID(0)
     , mpSvxShape( nullptr )
-    , mbDoNotInsertIntoPageAutomatically(false)
     , msHyperlink()
 {
     m_bVirtObj         =false;
@@ -3258,12 +3256,6 @@ void SdrObject::SetContextWritingMode( const sal_Int16 /*_nContextWritingMode*/ 
 {
     // this base class does not support different writing modes, so ignore the call
 }
-
-void SdrObject::SetDoNotInsertIntoPageAutomatically(const bool bSet)
-{
-    mbDoNotInsertIntoPageAutomatically = bSet;
-}
-
 
 // #i121917#
 bool SdrObject::HasText() const

@@ -58,26 +58,6 @@ public:
     void            setColor(Color _nColor) { m_nColor = _nColor; }
 };
 
-class UNLESS_MERGELIBS_MORE(SVT_DLLPUBLIC) ExtendedColorConfig final : public SfxBroadcaster, public SfxListener
-{
-    friend class ExtendedColorConfig_Impl;
-private:
-    static ExtendedColorConfig_Impl* m_pImpl;
-public:
-    ExtendedColorConfig();
-    virtual ~ExtendedColorConfig() override;
-
-    virtual void                    Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
-
-    // get the configured value
-    ExtendedColorConfigValue        GetColorValue(const OUString& _sComponentName,const OUString& _sName)const;
-    sal_Int32                       GetComponentCount() const;
-    OUString                        GetComponentName(sal_uInt32 _nPos) const;
-    OUString                        GetComponentDisplayName(const OUString& _sComponentName) const;
-    sal_Int32                       GetComponentColorCount(const OUString& _sName) const;
-    ExtendedColorConfigValue        GetComponentColorConfigValue(const OUString& _sComponentName,sal_uInt32 _nPos) const;
-};
-
 class SVT_DLLPUBLIC EditableExtendedColorConfig
 {
     std::unique_ptr<ExtendedColorConfig_Impl> m_pImpl;

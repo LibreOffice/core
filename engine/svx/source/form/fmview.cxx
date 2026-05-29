@@ -569,22 +569,6 @@ FmFormObj* FmFormView::getMarkedGrid() const
     return pFormObject;
 }
 
-void FmFormView::createControlLabelPair( OutputDevice const * _pOutDev, sal_Int32 _nXOffsetMM, sal_Int32 _nYOffsetMM,
-    const Reference< XPropertySet >& _rxField, const Reference< XNumberFormats >& _rxNumberFormats,
-    SdrObjKind _nControlObjectID, SdrInventor _nInventor, SdrObjKind _nLabelObjectID,
-    SdrModel& _rModel,
-    rtl::Reference<SdrUnoObj>& _rpLabel,
-    rtl::Reference<SdrUnoObj>& _rpControl )
-{
-    FmXFormView::createControlLabelPair(
-        *_pOutDev, _nXOffsetMM, _nYOffsetMM,
-        _rxField, _rxNumberFormats,
-        _nControlObjectID, u"", _nInventor, _nLabelObjectID,
-        _rModel,
-        _rpLabel, _rpControl
-    );
-}
-
 Reference< runtime::XFormController > FmFormView::GetFormController( const Reference< XForm >& _rxForm, const OutputDevice& _rDevice ) const
 {
     return m_pImpl->getFormController( _rxForm, _rDevice );

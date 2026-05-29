@@ -95,9 +95,7 @@ public:
     // the default is 10% of the reference window's width/height
     void                SetKeyboardStepSize( tools::Long nStepSize );
 
-    void                SetStartSplitHdl( const Link<Splitter*,void>& rLink ) { maStartSplitHdl = rLink; }
     void                SetSplitHdl( const Link<Splitter*,void>& rLink ) { maSplitHdl = rLink; }
-    void                SetEndSplitHdl( const Link<Splitter*,void>& rLink ) { maEndSplitHdl = rLink; }
 };
 
 #endif // INCLUDED_VCL_SPLIT_HXX

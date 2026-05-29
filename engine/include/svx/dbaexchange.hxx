@@ -236,40 +236,6 @@ namespace svx
                         ,const OUString& _sActiveCommand);
     };
 
-
-    //= OMultiColumnTransferable
-
-    /** class for transferring multiple columns
-    */
-    class SAL_WARN_UNUSED UNLESS_MERGELIBS_MORE(SVXCORE_DLLPUBLIC) OMultiColumnTransferable final : public TransferDataContainer
-    {
-    public:
-        OMultiColumnTransferable();
-
-        void setDescriptors(const css::uno::Sequence< css::beans::PropertyValue >& rDescriptors);
-
-        /** checks whether or not an object descriptor can be extracted from the data flavor vector given
-            @param _rFlavors
-                available flavors
-            @param _nFormats
-                formats to accept
-        */
-        static bool canExtractDescriptor(const DataFlavorExVector& _rFlavors);
-
-        /** extracts an object descriptor from the transferable given
-        */
-        static css::uno::Sequence< css::beans::PropertyValue > extractDescriptor(const TransferableDataHelper& _rData);
-
-    private:
-        virtual void        AddSupportedFormats() override;
-        virtual bool GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) override;
-        virtual void        ObjectReleased() override;
-        static SotClipboardFormatId  getDescriptorFormatId();
-
-        css::uno::Sequence< css::beans::PropertyValue >   m_aDescriptors;
-    };
-
-
 }
 
 

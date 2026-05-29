@@ -29,7 +29,6 @@
 #include <layeroptionsdlg.hxx>
 #include <inspagob.hxx>
 #include <morphdlg.hxx>
-#include <OutlineBulletDlg.hxx>
 #include <paragr.hxx>
 #include <present.hxx>
 #include "RemoteDialog.hxx"
@@ -270,29 +269,6 @@ public:
 VclPtr<AbstractMorphDlg> SdAbstractDialogFactory_Impl::CreateMorphDlg(weld::Window* pParent, const SdrObject* pObj1, const SdrObject* pObj2)
 {
     return VclPtr<AbstractMorphDlg_Impl>::Create(pParent, pObj1, pObj2);
-}
-
-namespace
-{
-class AbstractBulletDialog_Impl
-    : public ScreenshottedDialog_Impl_Async<SfxAbstractTabDialog, sd::OutlineBulletDlg>
-{
-public:
-    using ScreenshottedDialog_Impl_BASE::ScreenshottedDialog_Impl_BASE;
-    void SetCurPageId(const OUString& rName) override { m_pDlg->SetCurPageId(rName); }
-    const SfxItemSet* GetOutputItemSet() const override { return m_pDlg->GetBulletOutputItemSet(); }
-    WhichRangesContainer GetInputRanges(const SfxItemPool& pItem) override
-    {
-        return m_pDlg->GetInputRanges(pItem);
-    }
-    void SetInputSet(const SfxItemSet* pInSet) override { m_pDlg->SetInputSet(pInSet); }
-    void SetText(const OUString& rStr) override { m_pDlg->set_title(rStr); }
-};
-}
-
-VclPtr<SfxAbstractTabDialog>  SdAbstractDialogFactory_Impl::CreateSdOutlineBulletTabDlg(weld::Window* pParent, const SfxItemSet* pAttr, ::sd::View* pView)
-{
-    return VclPtr<AbstractBulletDialog_Impl>::Create(pParent, pAttr, pView);
 }
 
 VclPtr<SfxAbstractTabDialog> SdAbstractDialogFactory_Impl::CreateSdParagraphTabDlg(weld::Window* pParent, const SfxItemSet* pAttr )

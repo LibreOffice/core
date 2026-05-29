@@ -46,22 +46,11 @@ namespace dbaui
     class DBACCESS_DLLPUBLIC IController
     {
     public:
-        /** executes the given command without checking if it is allowed
-            @param  _rCommand   the URL of the command
-        */
-        virtual void executeUnChecked(const css::util::URL& _rCommand, const css::uno::Sequence< css::beans::PropertyValue>& aArgs) = 0;
-
         /** executes the given command only when it is allowed
             @param  _rCommand
                 the URL of the command
         */
         virtual void executeChecked(const css::util::URL& _rCommand, const css::uno::Sequence< css::beans::PropertyValue>& aArgs) = 0;
-
-        /** executes the given command without checking if it is allowed
-            @param  _nCommandId
-                the id of the command URL
-        */
-        virtual void executeUnChecked(sal_uInt16 _nCommandId, const css::uno::Sequence< css::beans::PropertyValue>& aArgs) = 0;
 
         /** executes the given command only when it is allowed
             @param  _nCommandId

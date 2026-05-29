@@ -194,7 +194,6 @@ public:
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
 
     void            SetMinOutputSizePixel( const Size& rSize );
-    const Size&     GetMinOutputSizePixel() const;
 
     SAL_DLLPRIVATE void SetMaxOutputSizePixel( const Size& rSize );
 

@@ -178,8 +178,6 @@ public:
     void                ShowFadeOutButton();
     tools::Long                GetFadeInSize() const;
     bool                IsFadeNoButtonMode() const { return mbFadeNoButtonMode; }
-
-    void                SetSplitHdl( const Link<SplitWindow*,void>& rLink ) { maSplitHdl = rLink; }
 };
 
 #endif // INCLUDED_VCL_SPLITWIN_HXX

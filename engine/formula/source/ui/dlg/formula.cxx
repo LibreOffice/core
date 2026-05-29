@@ -1784,59 +1784,6 @@ void FormulaDlg_Impl::SetEdSelection()
     } // if ( pEd )
 }
 
-FormulaModalDialog::FormulaModalDialog(weld::Window* pParent,
-                                       IFunctionManager const * _pFunctionMgr,
-                                       IControlReferenceHandler* _pDlg)
-    : GenericDialogController(pParent, u"formula/ui/formuladialog.ui"_ustr, u"FormulaDialog"_ustr)
-    , m_pImpl(new FormulaDlg_Impl(*m_xDialog, *m_xBuilder, false/*_bSupportFunctionResult*/,
-                                  false/*_bSupportResult*/, false/*_bSupportMatrix*/,
-                                  this, _pFunctionMgr, _pDlg))
-{
-    m_xDialog->set_title(m_pImpl->m_aTitle1);
-}
-
-FormulaModalDialog::~FormulaModalDialog() { }
-
-void FormulaModalDialog::Update(const OUString& _sExp)
-{
-    m_pImpl->Update(_sExp);
-}
-
-void FormulaModalDialog::SetMeText(const OUString& _sText)
-{
-    m_pImpl->SetMeText(_sText);
-}
-
-void FormulaModalDialog::CheckMatrix(OUString& aFormula)
-{
-    m_pImpl->CheckMatrix(aFormula);
-}
-
-void FormulaModalDialog::Update()
-{
-    m_pImpl->Update();
-}
-
-::std::pair<RefButton*, RefEdit*> FormulaModalDialog::RefInputStartBefore( RefEdit* pEdit, RefButton* pButton )
-{
-    return m_pImpl->RefInputStartBefore( pEdit, pButton );
-}
-
-void FormulaModalDialog::RefInputStartAfter()
-{
-    m_pImpl->RefInputStartAfter();
-}
-
-void FormulaModalDialog::RefInputDoneAfter()
-{
-    m_pImpl->RefInputDoneAfter( true/*bForced*/ );
-}
-
-void FormulaModalDialog::StoreFormEditData(FormEditData* pData)
-{
-    m_pImpl->StoreFormEditData(pData);
-}
-
 //      Initialisation / General functions  for Dialog
 FormulaDlg::FormulaDlg(SfxBindings* pB, SfxChildWindow* pCW,
                        weld::Window* pParent,

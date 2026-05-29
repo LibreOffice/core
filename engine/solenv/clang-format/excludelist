@@ -5344,7 +5344,6 @@ include/svl/metitem.hxx
 include/svl/nfkeytab.hxx
 include/svl/nfsymbol.hxx
 include/svl/numuno.hxx
-include/svl/ownlist.hxx
 include/svl/pickerhistoryaccess.hxx
 include/svl/poolitem.hxx
 include/svl/ptitem.hxx
@@ -8772,7 +8771,6 @@ sd/source/ui/dlg/custsdlg.cxx
 sd/source/ui/dlg/diactrl.cxx
 sd/source/ui/dlg/dlgchar.cxx
 sd/source/ui/dlg/dlgfield.cxx
-sd/source/ui/dlg/dlgolbul.cxx
 sd/source/ui/dlg/dlgsnap.cxx
 sd/source/ui/dlg/filedlg.cxx
 sd/source/ui/dlg/gluectrl.cxx
@@ -10179,7 +10177,6 @@ svl/source/misc/inethist.cxx
 svl/source/misc/inettype.cxx
 svl/source/misc/lngmisc.cxx
 svl/source/misc/lockfilecommon.cxx
-svl/source/misc/ownlist.cxx
 svl/source/misc/sharecontrolfile.cxx
 svl/source/misc/sharedstring.cxx
 svl/source/misc/strmadpt.cxx

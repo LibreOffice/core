@@ -846,10 +846,6 @@ public:
     bool IsNotVisibleAsMaster() const { return m_bNotVisibleAsMaster;}
     void SetUserCall(SdrObjUserCall* pUser);
     SdrObjUserCall* GetUserCall() const { return m_pUserCall;}
-    /// @see mbDoNotInsertIntoPageAutomatically
-    void SetDoNotInsertIntoPageAutomatically(bool bSet);
-    /// @see mbDoNotInsertIntoPageAutomatically
-    bool IsDoNotInsertIntoPageAutomatically() const { return mbDoNotInsertIntoPageAutomatically;}
 
     // Warning: this method should only be used if you really know what you're doing
     sal_uInt32 GetOrdNumDirect() const { return m_nOrdNum;}
@@ -1012,10 +1008,6 @@ private:
     SvxShape*                   mpSvxShape;
     css::uno::WeakReference< css::drawing::XShape >
                                 maWeakUnoShape;
-
-    // HACK: Do not automatically insert newly created object into a page.
-    // The user needs to do it manually later.
-    bool                        mbDoNotInsertIntoPageAutomatically;
 
     // Hyperlink for the whole shape
     OUString msHyperlink;

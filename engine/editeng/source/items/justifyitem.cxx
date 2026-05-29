@@ -35,11 +35,6 @@ SfxPoolItem* SvxVerJustifyItem::CreateDefault() { return new  SvxVerJustifyItem(
 using namespace ::com::sun::star;
 
 
-SvxHorJustifyItem::SvxHorJustifyItem( const sal_uInt16 nId ) :
-    SfxEnumItem( nId, SvxCellHorJustify::Standard )
-{
-}
-
 SvxHorJustifyItem::SvxHorJustifyItem( const SvxCellHorJustify eJustify,
                                       const sal_uInt16 nId ) :
     SfxEnumItem( nId, eJustify )
@@ -167,11 +162,6 @@ SvxHorJustifyItem* SvxHorJustifyItem::Clone( SfxItemPool* ) const
 }
 
 
-
-SvxVerJustifyItem::SvxVerJustifyItem( const sal_uInt16 nId ) :
-    SfxEnumItem( nId, SvxCellVerJustify::Standard )
-{
-}
 
 SvxVerJustifyItem::SvxVerJustifyItem( const SvxCellVerJustify eJustify,
                                       const sal_uInt16 nId ) :

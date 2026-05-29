@@ -110,7 +110,6 @@ class SdrLightEmbeddedClient_Impl : public ::cppu::WeakImplHelper
                                                             , embed::XWindowSupplier
                                                             >
 {
-    uno::Reference< awt::XWindow > m_xWindow;
     SdrOle2Obj* mpObj;
 
     double m_aScaleWidth { 0.0 };
@@ -129,8 +128,6 @@ public:
 
     double GetScaleWidth() const { return m_aScaleWidth; }
     double GetScaleHeight() const { return m_aScaleHeight; }
-
-    void setWindow(const uno::Reference< awt::XWindow >& _xWindow);
 
     void disconnect();
 private:
@@ -527,19 +524,10 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::changedPlacement( const awt::Rectangl
 uno::Reference< awt::XWindow > SAL_CALL SdrLightEmbeddedClient_Impl::getWindow()
 {
     SolarMutexGuard aGuard;
-    uno::Reference< awt::XWindow > xCurrent = m_xWindow;
-    if ( !xCurrent.is() )
-    {
-        if ( !mpObj )
-            throw uno::RuntimeException();
-        uno::Reference< frame::XFrame> xFrame(lcl_getFrame_throw(mpObj),uno::UNO_QUERY_THROW);
-        xCurrent = xFrame->getComponentWindow();
-    } // if ( !xCurrent.is() )
-    return xCurrent;
-}
-void SdrLightEmbeddedClient_Impl::setWindow(const uno::Reference< awt::XWindow >& _xWindow)
-{
-    m_xWindow = _xWindow;
+    if ( !mpObj )
+        throw uno::RuntimeException();
+    uno::Reference< frame::XFrame> xFrame(lcl_getFrame_throw(mpObj),uno::UNO_QUERY_THROW);
+    return xFrame->getComponentWindow();
 }
 
 SdrEmbedObjectLink::SdrEmbedObjectLink(SdrOle2Obj* pObject):
@@ -2070,14 +2058,6 @@ bool SdrOle2Obj::AddOwnLightClient()
 Graphic SdrOle2Obj::GetEmptyOLEReplacementGraphic()
 {
     return Graphic(Bitmap(BMP_SVXOLEOBJ));
-}
-
-void SdrOle2Obj::SetWindow(const css::uno::Reference < css::awt::XWindow >& _xWindow)
-{
-    if ( mpImpl->mxObjRef.is() && mpImpl->mxLightClient.is() )
-    {
-        mpImpl->mxLightClient->setWindow(_xWindow);
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

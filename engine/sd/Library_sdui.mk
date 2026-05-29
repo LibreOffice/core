@@ -70,7 +70,6 @@ $(eval $(call gb_Library_add_exception_objects,sdui,\
     sd/source/ui/dlg/custsdlg \
     sd/source/ui/dlg/dlgchar \
     sd/source/ui/dlg/dlgfield \
-    sd/source/ui/dlg/dlgolbul \
     sd/source/ui/dlg/dlgpage \
     sd/source/ui/dlg/dlgsnap \
     sd/source/ui/dlg/headerfooterdlg \

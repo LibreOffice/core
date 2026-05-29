@@ -219,18 +219,17 @@ void SdDialogsTest::registerKnownDialogsByID(mapType& rKnownDialogs)
     rKnownDialogs["modules/sdraw/ui/insertlayer.ui"_ostr] = 7;
     rKnownDialogs["modules/sdraw/ui/insertslidesdialog.ui"_ostr] = 8;
     rKnownDialogs["modules/sdraw/ui/crossfadedialog.ui"_ostr] = 9;
-    rKnownDialogs["modules/sdraw/ui/bulletsandnumbering.ui"_ostr] = 10;
-    rKnownDialogs["modules/sdraw/ui/drawparadialog.ui"_ostr] = 11;
-    rKnownDialogs["modules/simpress/ui/presentationdialog.ui"_ostr] = 12;
-    rKnownDialogs["modules/simpress/ui/remotedialog.ui"_ostr] = 13;
-    rKnownDialogs["modules/sdraw/ui/drawprtldialog.ui"_ostr] = 14;
-    rKnownDialogs["modules/simpress/ui/slidedesigndialog.ui"_ostr] = 15;
-    rKnownDialogs["modules/simpress/ui/templatedialog.ui"_ostr] = 16;
-    rKnownDialogs["modules/simpress/ui/interactiondialog.ui"_ostr] = 17;
-    rKnownDialogs["modules/sdraw/ui/vectorize.ui"_ostr] = 18;
-    rKnownDialogs["modules/simpress/ui/photoalbum.ui"_ostr] = 19;
-    rKnownDialogs["modules/simpress/ui/masterlayoutdlg.ui"_ostr] = 20;
-    rKnownDialogs["modules/simpress/ui/headerfooterdialog.ui"_ostr] = 21;
+    rKnownDialogs["modules/sdraw/ui/drawparadialog.ui"_ostr] = 10;
+    rKnownDialogs["modules/simpress/ui/presentationdialog.ui"_ostr] = 11;
+    rKnownDialogs["modules/simpress/ui/remotedialog.ui"_ostr] = 12;
+    rKnownDialogs["modules/sdraw/ui/drawprtldialog.ui"_ostr] = 13;
+    rKnownDialogs["modules/simpress/ui/slidedesigndialog.ui"_ostr] = 14;
+    rKnownDialogs["modules/simpress/ui/templatedialog.ui"_ostr] = 15;
+    rKnownDialogs["modules/simpress/ui/interactiondialog.ui"_ostr] = 16;
+    rKnownDialogs["modules/sdraw/ui/vectorize.ui"_ostr] = 17;
+    rKnownDialogs["modules/simpress/ui/photoalbum.ui"_ostr] = 18;
+    rKnownDialogs["modules/simpress/ui/masterlayoutdlg.ui"_ostr] = 19;
+    rKnownDialogs["modules/simpress/ui/headerfooterdialog.ui"_ostr] = 20;
 }
 
 VclPtr<VclAbstractDialog> SdDialogsTest::createDialogByID(sal_uInt32 nID)
@@ -372,22 +371,13 @@ VclPtr<VclAbstractDialog> SdDialogsTest::createDialogByID(sal_uInt32 nID)
         }
         case 10:
         {
-            // CreateSdOutlineBulletTabDlg(const SfxItemSet* pAttr, ::sd::View* pView = nullptr) override;
-            pRetval = getSdAbstractDialogFactory()->CreateSdOutlineBulletTabDlg(
-                Application::GetDefDialogParent(),
-                &getEmptySfxItemSet(),
-                getDrawView());
-            break;
-        }
-        case 11:
-        {
             // CreateSdParagraphTabDlg(const SfxItemSet* pAttr) override;
             pRetval = getSdAbstractDialogFactory()->CreateSdParagraphTabDlg(
                 getViewShell()->GetFrameWeld(),
                 &getEmptySfxItemSet());
             break;
         }
-        case 12:
+        case 11:
         {
             // CreateSdStartPresentationDlg(weld::Window* pWindow, const SfxItemSet& rInAttrs, const std::vector<OUString> &rPageNames, SdCustomShowList* pCSList) override;
             SdDrawDocument* pDrawDoc = getSdXImpressDocument()->GetDoc();
@@ -418,14 +408,14 @@ VclPtr<VclAbstractDialog> SdDialogsTest::createDialogByID(sal_uInt32 nID)
                 nullptr);
             break;
         }
-        case 13:
+        case 12:
         {
             // CreateRemoteDialog(vcl::Window* pWindow) override; // ad for RemoteDialog
             pRetval = getSdAbstractDialogFactory()->CreateRemoteDialog(
                 Application::GetDefDialogParent());
             break;
         }
-        case 14:
+        case 13:
         {
             // CreateSdPresLayoutTemplateDlg(SfxObjectShell* pDocSh, weld::Window* pParent, const SdResId& DlgId, SfxStyleSheetBase& rStyleBase, PresentationObjects ePO, SfxStyleSheetBasePool* pSSPool) override;
             // use STR_PSEUDOSHEET_TITLE configuration, see futempl.cxx for more possible configurations
@@ -443,7 +433,7 @@ VclPtr<VclAbstractDialog> SdDialogsTest::createDialogByID(sal_uInt32 nID)
                 pStyleSheetPool);
             break;
         }
-        case 15:
+        case 14:
         {
             // CreateSdPresLayoutDlg(::sd::DrawDocShell* pDocShell, vcl::Window* pWindow, const SfxItemSet& rInAttrs) override;
             pRetval = getSdAbstractDialogFactory()->CreateSdPresLayoutDlg(
@@ -452,7 +442,7 @@ VclPtr<VclAbstractDialog> SdDialogsTest::createDialogByID(sal_uInt32 nID)
                 getEmptySfxItemSet());
             break;
         }
-        case 16:
+        case 15:
         {
             // CreateSdTabTemplateDlg(const SfxObjectShell* pDocShell, SfxStyleSheetBase& rStyleBase, SdrModel* pModel, SdrView* pView) override;
             // pretty similar to CreateSdPresLayoutTemplateDlg, see above
@@ -471,7 +461,7 @@ VclPtr<VclAbstractDialog> SdDialogsTest::createDialogByID(sal_uInt32 nID)
                 getDrawView());
             break;
         }
-        case 17:
+        case 16:
         {
             // CreatSdActionDialog(const SfxItemSet& rAttr, ::sd::View* pView) override;
             SdDrawDocument* pDrawDoc = getSdXImpressDocument()->GetDoc();
@@ -499,7 +489,7 @@ VclPtr<VclAbstractDialog> SdDialogsTest::createDialogByID(sal_uInt32 nID)
                 getDrawView());
             break;
         }
-        case 18:
+        case 17:
         {
             // CreateSdVectorizeDlg(weld::Window* pParent, const Bitmap& rBmp, ::sd::DrawDocShell* pDocShell) override;
             // works well with empty Bitmap, but my be nicer with setting one
@@ -510,7 +500,7 @@ VclPtr<VclAbstractDialog> SdDialogsTest::createDialogByID(sal_uInt32 nID)
                 getDocShell());
             break;
         }
-        case 19:
+        case 18:
         {
             // CreateSdPhotoAlbumDialog(weld::Window* pWindow, SdDrawDocument* pDoc) override;
             SdDrawDocument* pDrawDoc = getSdXImpressDocument()->GetDoc();
@@ -520,7 +510,7 @@ VclPtr<VclAbstractDialog> SdDialogsTest::createDialogByID(sal_uInt32 nID)
                 *pDrawDoc);
             break;
         }
-        case 20:
+        case 19:
         {
             // CreateMasterLayoutDialog(weld::Window* pParent, SdDrawDocument* pDoc, SdPage*) override;
             SdDrawDocument* pDrawDoc = getSdXImpressDocument()->GetDoc();
@@ -533,7 +523,7 @@ VclPtr<VclAbstractDialog> SdDialogsTest::createDialogByID(sal_uInt32 nID)
                 pSdPage);
             break;
         }
-        case 21:
+        case 20:
         {
             // CreateHeaderFooterDialog(sd::ViewShell* pViewShell, weld::Window* pParent, SdDrawDocument* pDoc, SdPage* pCurrentPage) override;
             // This is a hard case, for two reasons:

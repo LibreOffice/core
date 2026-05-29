@@ -188,10 +188,6 @@ private:
         return maBullet.maText;
     }
 
-    BulletInfo const& GetBullet()
-    {
-        return maBullet;
-    }
                         Paragraph( sal_Int16 nDepth );
                         Paragraph( const Paragraph& ) = delete;
                         Paragraph( const ParagraphData& );
