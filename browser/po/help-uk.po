@@ -3,17 +3,17 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-29 07:49+0200\n"
-"PO-Revision-Date: 2026-05-21 10:11+0000\n"
+"PO-Revision-Date: 2026-05-29 21:05+0000\n"
 "Last-Translator: Ardev Prisec <prisecardev@gmail.com>\n"
-"Language-Team: Ukrainian <https://hosted.weblate.org/projects/"
-"collabora-online/help/uk/>\n"
+"Language-Team: Ukrainian <https://hosted.weblate.org/projects/collabora-"
+"online/help/uk/>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Translate Toolkit 3.6.0\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Weblate 2026.6.dev0\n"
 
 #: html/cool-help.html%2Bdiv.h1:9-5
 msgid "Keyboard Shortcuts"
@@ -208,7 +208,7 @@ msgstr "Вирівняти по правому краю"
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:213-65
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:278-65
 msgid "Justify"
-msgstr "За шириною тексту"
+msgstr "Вирівнювання"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:47-38
 msgid "Apply Default paragraph style"
@@ -294,7 +294,7 @@ msgstr "Вибір тексту і навігація по документу"
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:269-64
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:286-64
 msgid "Select All"
-msgstr "Вибрати все"
+msgstr "Вибрати Все"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:59-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:222-38
@@ -306,7 +306,7 @@ msgstr "Перемістити курсор вліво"
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:222-88
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:287-88
 msgid "Arrow Left"
-msgstr "Стрілка вліво"
+msgstr "Стрілка Вліво"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:60-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:223-38
@@ -368,7 +368,7 @@ msgstr "Перемістити курсор вправо"
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:226-89
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:291-89
 msgid "Arrow Right"
-msgstr "Стрілка вправо"
+msgstr "Стрілка Вправо"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:64-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:227-38
@@ -430,7 +430,7 @@ msgstr "Перемістити курсор на один рядок вгору"
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:230-88
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:295-88
 msgid "Arrow Up"
-msgstr "Стрілка вгору"
+msgstr "Стрілка Вгору"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:68-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:231-38
@@ -492,7 +492,7 @@ msgstr "Перемістити курсор вниз на один рядок"
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:234-90
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:299-90
 msgid "Arrow Down"
-msgstr "Стрілка вниз"
+msgstr "Стрілка Вниз"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:72-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:235-38
@@ -689,20 +689,20 @@ msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>PageUp</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>PageUp </kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"PageUp</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:85-38
 msgid "Extend the selection up one page"
-msgstr "Перегорнути сторінку вгору з виділенням"
+msgstr "Розширити виділення на одну сторінку вгору"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:85-97
 msgid ""
 "<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>PageUp</kbd>"
 msgstr ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>PageUp </kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"PageUp</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:86-38
 msgid "Move the view down one page"
@@ -721,20 +721,20 @@ msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>PageDown</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>PageDown </kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"PageDown</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:88-38
 msgid "Extend the selection down one page"
-msgstr "Перегорнути сторінку вниз з виділенням"
+msgstr "Розширити виділення на одну сторінку вниз"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:88-99
 msgid ""
 "<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>PageDown</kbd>"
 msgstr ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>PageDown </kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"PageDown</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:89-38
 msgid "Delete to beginning of word"
@@ -845,9 +845,9 @@ msgid ""
 "<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Tab</kbd> may be used instead."
 msgstr ""
-"Вставляє символ табуляції (лише в таблицях). Залежно від віконного менеджера "
-"може застосовуватися <kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden="
-"\"true\">+</span><kbd>Tab</kbd>."
+"Вставляє символ табуляції (лише в таблицях). В залежності від віконного "
+"менеджера який застосовується, <kbd>Alt</kbd><span class=\"kbd--plus\" aria-"
+"hidden=\"true\">+</span><kbd>Tab</kbd>."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:102-38
 msgid ""
@@ -919,8 +919,8 @@ msgid ""
 "class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Arrow Key</kbd> "
 "inserts cell"
 msgstr ""
-"3 секунди в режимі вставляння, стрілки вставляють рядок/стовпець, <kbd>Ctrl</"
-"kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>стрілка</"
+"3 секунди в режимі вставляння, Стрілки вставляють рядок/стовпець, <kbd>Ctrl</"
+"kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Стрілка</"
 "kbd> — комірку"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:107-38
@@ -937,9 +937,9 @@ msgid ""
 "class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Arrow key</kbd> merges "
 "cell with neighboring cell"
 msgstr ""
-"3 секунди режиму видалення, стрілки видаляють рядок/стовпець, <kbd>Ctrl</"
-"kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>стрілки</"
-"kbd> об'єднують комірки з сусідньою"
+"3 секунди в режимі Видалення, стрілки видаляють рядок/стовпець, <kbd>Ctrl</"
+"kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Стрілки</"
+"kbd> об'єднують комірки з сусідньою коміркою"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:108-38
 msgid ""
@@ -1053,7 +1053,7 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.h2:135-9
 msgid "Navigating in Spreadsheets"
-msgstr "Навігація в електронних таблицях"
+msgstr "Навігація в Електронних Таблицях"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:137-38
 msgid "Moves the cursor to the first cell in the sheet (A1)."
@@ -1087,7 +1087,7 @@ msgid ""
 "Selects cells from the current cell up to one page in the current column or "
 "extends the existing selection one page up."
 msgstr ""
-"Виділяє клітинки від поточної комірки вгору до однієї сторінки в поточному "
+"Виділяє комірки від поточної комірки вгору до однієї сторінки в поточному "
 "стовпці або розширює наявну виділену сторінку на одну сторінку вгору."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:143-184
@@ -1129,8 +1129,8 @@ msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Left Arrow</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Стрілка вліва</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Стрілка Вліво</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:146-38
 msgid ""
@@ -1520,7 +1520,7 @@ msgstr "Вибрати все на слайді"
 
 #: html/cool-help.html%2Bdiv.div.div.h2:314-9
 msgid "Draw page keyboard shortcuts"
-msgstr "Комбінації клавіш"
+msgstr "Намалювати сторінкові комбінації клавіш"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:319-38
 msgid "Move to next text object on drawing page"
@@ -1650,7 +1650,7 @@ msgid ""
 "directly in your browser, in a simple and straight-forward way. You can work "
 "alone on a document, or collaboratively as part of a team."
 msgstr ""
-"<span class=\"productname\">{productname}</span> дозволяє Вам створювати та "
+"<span class=\"productname\">{productname}</span> дозволяє вам створювати та "
 "редагувати офісні текстові документи, таблиці та презентації прямо у Вашому "
 "браузері, просто і зрозуміло. Ви можете працювати над документом самостійно "
 "або спільно, у складі команди."
@@ -1712,6 +1712,13 @@ msgid ""
 "click the show icon <span class=\"w2ui-icon unfold icon-size\" role=\"img\" "
 "aria-label=\"show menu bar\" title=\"Show menu bar\"></span>."
 msgstr ""
+"<span class=\"def\">Панель меню:</span> Головне меню зверху і має багато "
+"опцій, таких як команди для друку, реагування, перегляду та інші додаткові "
+"команди. Ви можете приховати панель меню натиснувши по іконці сховати <span "
+"class=\"w2ui-icon fold icon-size\" role=\"img\" aria-label=\"hide menu bar\" "
+"title=\"Hide menu bar\"></span> далеко справа. Щоб відобразити її знову, "
+"натисніть по іконці показати <span class=\"w2ui-icon unfold icon-size\" "
+"role=\"img\" aria-label=\"show menu bar\" title=\"Show menu bar\"></span>."
 
 #: html/cool-help.html%2Bdiv.div.div.p:383-5
 msgid ""
@@ -1745,6 +1752,8 @@ msgid ""
 "Status bar showing page number, word count, insert mode, selection mode, "
 "language, edit mode, navigation, zoom, and search"
 msgstr ""
+"Панель статусу відображає номер сторінки, кількість слів, режим вставлення, "
+"режим виділення, мову, режим редагування, навігацію, масштабування та пошук"
 
 #: html/cool-help.html%2Bdiv.div.div.p:393-5
 msgid ""
@@ -1759,9 +1768,8 @@ msgstr ""
 "Біля поля пошуку є три кнопки:"
 
 #: html/cool-help.html%2Bdiv.div.div.ul.li:395-7
-#, fuzzy
 msgid "Search backwards"
-msgstr "Пошук у зворотному напрямку>"
+msgstr "Пошук у зворотному напрямку"
 
 #: html/cool-help.html%2Bdiv.div.div.ul.li:396-7
 msgid "Search forward"
@@ -1789,8 +1797,8 @@ msgid ""
 "will only see pixels appear at inserted images, such as jpg’s or png’s."
 msgstr ""
 "Текст, діаграми, форми та векторні зображення залишатимуться чіткими при "
-"збільшенні, пікселі з'являться лише на вставлених зображеннях, типу JPG або "
-"PNG."
+"збільшенні, пікселі з'являться лише на вставлених зображеннях, типу jpg або "
+"png."
 
 #: html/cool-help.html%2Bdiv.div.div.p:403-5
 msgid "Using the browser zoom affects the document and user interface areas."
@@ -1812,6 +1820,8 @@ msgstr ""
 msgid ""
 "Information bar showing page navigation arrows, zoom controls, and zoom level"
 msgstr ""
+"Інформаційна панель відображає навігаційні стрілки, елементи керування "
+"масштабом та рівень масштабування"
 
 #: html/cool-help.html%2Bdiv.div.p:412-5
 msgid ""
@@ -1828,8 +1838,8 @@ msgid ""
 "download formats available depends on the application. All applications "
 "exports documents in PDF format."
 msgstr ""
-"Щоб звантажити документ, зробіть це з меню <span class=\"ui\">Файл</span> "
-"програми <span class=\"productname\">{productname}</span>. Формати для "
+"Щоб звантажити документ, зробіть це з меню <span class=\"productname\">"
+"{productname}</span> програми <span class=\"ui\">Файл</span>. Формати для "
 "звантаження залежать від програми. Всі програми можуть зберігати у форматі "
 "PDF."
 
@@ -1860,8 +1870,8 @@ msgid ""
 "favorite PDF reader."
 msgstr ""
 "Залежно від можливостей вашого браузера може з'явитись вікно друку або "
-"повідомлення \"Звантажити інструмент експорту PDF?\". Ви можете надрукувати "
-"цей документ PDF у вашому улюбленому переглядачі PDF."
+"повідомлення \"Звантажити експорт PDF?\". Ви можете надрукувати цей документ "
+"PDF у вашому улюбленому переглядачі PDF."
 
 #: html/cool-help.html%2Bdiv.div.div.p:417-30
 msgid ""
@@ -1941,7 +1951,7 @@ msgid ""
 msgstr ""
 "Коли кілька людей одночасно редагують один документ, може виникнути "
 "ситуація, коли їхні зміни викличуть програмний конфлікт. Функція "
-"\"Відновлення документа\" дозволяє користувачам скасувати зміни, зроблені "
+"\"Полагодження документа\" дозволяє користувачам скасувати зміни, зроблені "
 "іншими редакторами, і повернути документ до попереднього стану."
 
 #: html/cool-help.html%2Bdiv.div.div.p:430-5
