@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-29 07:49+0200\n"
-"PO-Revision-Date: 2026-05-29 10:17+0000\n"
+"PO-Revision-Date: 2026-05-29 12:37+0000\n"
 "Last-Translator: Matthaiks <kitynska@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/pl/>\n"
@@ -1583,16 +1583,17 @@ msgstr "Opisz, jak AI powinna pisać"
 msgid ""
 "Write short, direct sentences. Use plain language and skip the small talk."
 msgstr ""
+"Pisz krótkie, bezpośrednie zdania. Używaj prostego języka i unikaj pogawędek."
 
 #: src/control/Control.AIChatSidebar.ts:1264
 msgid "Tone description"
-msgstr ""
+msgstr "Opis tonu"
 
 #: src/control/Control.AIChatSidebar.ts:1273
 #: src/control/Control.AIChatSidebar.ts:1335
 #: src/control/Control.AIChatSidebar.ts:1377
 msgid "Delete tone"
-msgstr ""
+msgstr "Usuń ton"
 
 #: src/control/Control.AIChatSidebar.ts:1275
 msgid "Delete this tone"
@@ -1798,14 +1799,12 @@ msgid "I have a formula error in my spreadsheet."
 msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:2627
-#, fuzzy
 msgid "Cell"
-msgstr "Komórki"
+msgstr "Komórka"
 
 #: src/control/Control.AIChatSidebar.ts:2631
-#, fuzzy
 msgid "Sheet"
-msgstr "Arkusze"
+msgstr "Arkusz"
 
 #: src/control/Control.AIChatSidebar.ts:2635
 msgid "contains"
@@ -1841,9 +1840,8 @@ msgid ""
 msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:2672
-#, fuzzy
 msgid "formula"
-msgstr "Formuła"
+msgstr "formuła"
 
 #: src/control/Control.AIChatSidebar.ts:2674
 msgid "ERROR"
@@ -1854,18 +1852,16 @@ msgid "value"
 msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:2698
-#, fuzzy
 msgid "text"
-msgstr "Tekst"
+msgstr "tekst"
 
 #: src/control/Control.AIChatSidebar.ts:2703
 msgid "empty"
 msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:2705
-#, fuzzy
 msgid "range"
-msgstr "Zakres"
+msgstr "zakres"
 
 #: src/control/Control.AIChatSidebar.ts:2707
 msgid "errors in"
@@ -5539,18 +5535,16 @@ msgid "Color palette"
 msgstr "Paleta kolorów"
 
 #: src/control/jsdialog/Widget.Combobox.js:241
-#, fuzzy
 msgid "Open "
-msgstr "Otwórz"
+msgstr "Otwórz "
 
 #: src/control/jsdialog/Widget.Combobox.js:241
 msgid " list"
 msgstr ""
 
 #: src/control/jsdialog/Widget.Combobox.js:242
-#, fuzzy
 msgid "Open list"
-msgstr "Otwórz łącze"
+msgstr "Otwórz listę"
 
 #: src/control/jsdialog/Widget.Combobox.js:373
 msgid "Filter entries"
@@ -6478,14 +6472,12 @@ msgid "Next Slide"
 msgstr "Następny slajd"
 
 #: src/slideshow/engine/SlideShowHandler.ts:109
-#, fuzzy
 msgid "Previous Slide"
 msgstr "Poprzedni slajd"
 
 #: src/slideshow/engine/SlideShowHandler.ts:110
-#, fuzzy
 msgid "Last Slide"
-msgstr "Wklej slajd"
+msgstr "Ostatni slajd"
 
 #: src/slideshow/engine/SlideShowHandler.ts:111
 #: src/slideshow/SlideShowPresenter.ts:846
