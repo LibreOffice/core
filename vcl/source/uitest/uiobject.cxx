@@ -1785,23 +1785,6 @@ IconViewUIObject::IconViewUIObject(const VclPtr<SvTreeListBox>& xIconView):
 {
 }
 
-StringMap IconViewUIObject::get_state()
-{
-    StringMap aMap = TreeListUIObject::get_state();
-
-    SvTreeListEntry* pEntry = mxTreeList->FirstSelected();
-
-    OUString* pId = pEntry->GetUserData();
-    if (pId)
-        aMap[u"SelectedItemId"_ustr] = *pId;
-
-    SvTreeList* pModel = mxTreeList->GetModel();
-    if (pModel)
-        aMap[u"SelectedItemPos"_ustr] = OUString::number(pModel->GetAbsPos(pEntry));
-
-    return aMap;
-}
-
 OUString IconViewUIObject::get_name() const
 {
     return u"IconViewUIObject"_ustr;

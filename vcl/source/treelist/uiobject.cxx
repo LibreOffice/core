@@ -43,6 +43,15 @@ StringMap TreeListUIObject::get_state()
     aMap[u"SelectEntryText"_ustr] = pEntry ? mxTreeList->GetEntryText(pEntry) : OUString();
     aMap[u"SelectedEntryTooltip"_ustr] = pEntry ? mxTreeList->GetEntryTooltip(*pEntry) : OUString();
 
+    if (!pEntry)
+        return aMap;
+
+    if (const OUString* pId = pEntry->GetUserData())
+        aMap[u"SelectedItemId"_ustr] = *pId;
+
+    if (const SvTreeList* pModel = mxTreeList->GetModel())
+        aMap[u"SelectedItemPos"_ustr] = OUString::number(pModel->GetAbsPos(pEntry));
+
     return aMap;
 }
 

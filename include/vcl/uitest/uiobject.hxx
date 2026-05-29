@@ -527,8 +527,6 @@ class IconViewUIObject final : public TreeListUIObject
 public:
     IconViewUIObject(const VclPtr<SvTreeListBox>& xIconView);
 
-    virtual StringMap get_state() override;
-
     static std::unique_ptr<UIObject> create(vcl::Window* pWindow);
 
 private:
