@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-29 07:49+0200\n"
-"PO-Revision-Date: 2026-05-29 21:05+0000\n"
+"PO-Revision-Date: 2026-05-29 22:53+0000\n"
 "Last-Translator: Matthaiks <kitynska@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/pl/>\n"
@@ -1738,67 +1738,67 @@ msgstr "%1 chce ustawić formułę w arkuszu kalkulacyjnym:"
 
 #: src/control/Control.AIChatSidebar.ts:2194
 msgid "%1 wants to perform an action. Do you want to proceed?"
-msgstr "%1 chce wykonać czynność. Czy chcesz kontynuować?"
+msgstr "%1 chce wykonać działanie. Czy chcesz kontynuować?"
 
 #: src/control/Control.AIChatSidebar.ts:2225
 msgid "Approve"
-msgstr ""
+msgstr "Zatwierdź"
 
 #: src/control/Control.AIChatSidebar.ts:2227
 msgid "Approve action"
-msgstr ""
+msgstr "Zatwierdź działanie"
 
 #: src/control/Control.AIChatSidebar.ts:2234
 msgid "Reject"
-msgstr ""
+msgstr "Odrzuć"
 
 #: src/control/Control.AIChatSidebar.ts:2236
 msgid "Reject action"
-msgstr ""
+msgstr "Odrzuć działanie"
 
 #: src/control/Control.AIChatSidebar.ts:2255
 msgid "Applying changes..."
-msgstr ""
+msgstr "Wprowadzanie zmian..."
 
 #: src/control/Control.AIChatSidebar.ts:2258
 msgid "Change rejected"
-msgstr ""
+msgstr "Zmiana odrzucona"
 
 #: src/control/Control.AIChatSidebar.ts:2304
 msgid "Selection fetch timeout"
-msgstr ""
+msgstr "Przekroczono limit czasu pobierania zaznaczenia"
 
 #: src/control/Control.AIChatSidebar.ts:2323
 msgid "Failed to parse selection content"
-msgstr ""
+msgstr "Nie udało się przeanalizować zawartości zaznaczenia"
 
 #: src/control/Control.AIChatSidebar.ts:2556
 msgid "Formula analysis timeout"
-msgstr ""
+msgstr "Przekroczono limit czasu analizy formuły"
 
 #: src/control/Control.AIChatSidebar.ts:2575
 msgid "Analyzing formula dependencies..."
-msgstr ""
+msgstr "Analizowanie zależności formuł..."
 
 #: src/control/Control.AIChatSidebar.ts:2583
 msgid "Failed to analyze formula."
-msgstr ""
+msgstr "Nie udało się przeanalizować formuły."
 
 #: src/control/Control.AIChatSidebar.ts:2593
 msgid "The selected cell does not contain a formula."
-msgstr ""
+msgstr "Zaznaczona komórka nie zawiera formuły."
 
 #: src/control/Control.AIChatSidebar.ts:2595
 msgid "The selected cell does not have a formula error."
-msgstr ""
+msgstr "Zaznaczona komórka nie zawiera błędu formuły."
 
 #: src/control/Control.AIChatSidebar.ts:2604
 msgid "Diagnose formula error in"
-msgstr ""
+msgstr "Diagnozuj błąd formuły w"
 
 #: src/control/Control.AIChatSidebar.ts:2625
 msgid "I have a formula error in my spreadsheet."
-msgstr ""
+msgstr "W moim arkuszu kalkulacyjnym jest błąd formuły."
 
 #: src/control/Control.AIChatSidebar.ts:2627
 msgid "Cell"
@@ -1810,7 +1810,7 @@ msgstr "Arkusz"
 
 #: src/control/Control.AIChatSidebar.ts:2635
 msgid "contains"
-msgstr ""
+msgstr "zawiera"
 
 #: src/control/Control.AIChatSidebar.ts:2637
 #: src/control/Control.FormulaBarJSDialog.js:83
@@ -1821,25 +1821,27 @@ msgstr "Formuła"
 
 #: src/control/Control.AIChatSidebar.ts:2641
 msgid "Referenced cells"
-msgstr ""
+msgstr "Komórki odwołania"
 
 #: src/control/Control.AIChatSidebar.ts:2647
 msgid "Please diagnose why this formula produces the"
-msgstr ""
+msgstr "Zdiagnozuj, dlaczego ta formuła generuje"
 
 #: src/control/Control.AIChatSidebar.ts:2651
 msgid "error."
-msgstr ""
+msgstr "błąd."
 
 #: src/control/Control.AIChatSidebar.ts:2653
 msgid "Explain the root cause and suggest how to fix it."
-msgstr ""
+msgstr "Wyjaśnij przyczynę problemu i zaproponuj sposób jego rozwiązania."
 
 #: src/control/Control.AIChatSidebar.ts:2657
 msgid ""
 "When referencing specific cells, format each cell address as a clickable "
 "link: [A1](cell://A1)."
 msgstr ""
+"Odwołując się do konkretnych komórek, sformatuj adres każdej komórki jako "
+"klikalne łącze: [A1](cell://A1)."
 
 #: src/control/Control.AIChatSidebar.ts:2672
 msgid "formula"
@@ -1847,11 +1849,11 @@ msgstr "formuła"
 
 #: src/control/Control.AIChatSidebar.ts:2674
 msgid "ERROR"
-msgstr ""
+msgstr "BŁĄD"
 
 #: src/control/Control.AIChatSidebar.ts:2688
 msgid "value"
-msgstr ""
+msgstr "wartość"
 
 #: src/control/Control.AIChatSidebar.ts:2698
 msgid "text"
@@ -1859,7 +1861,7 @@ msgstr "tekst"
 
 #: src/control/Control.AIChatSidebar.ts:2703
 msgid "empty"
-msgstr ""
+msgstr "puste"
 
 #: src/control/Control.AIChatSidebar.ts:2705
 msgid "range"
@@ -1867,75 +1869,87 @@ msgstr "zakres"
 
 #: src/control/Control.AIChatSidebar.ts:2707
 msgid "errors in"
-msgstr ""
+msgstr "błędy w"
 
 #: src/control/Control.AIChatSidebar.ts:2710
 msgid "only partially scanned"
-msgstr ""
+msgstr "tylko częściowo zeskanowane"
 
 #: src/control/Control.AIChatSidebar.ts:2719
 msgid "circular reference"
-msgstr ""
+msgstr "odwołanie cykliczne"
 
 #: src/control/Control.AIChatSidebar.ts:2769
 msgid "Select the data you want to sanity-check first."
-msgstr ""
+msgstr "Zaznacz dane, których poprawność chcesz najpierw sprawdzić."
 
 #: src/control/Control.AIChatSidebar.ts:2774
 msgid "Analyzing selected data..."
-msgstr ""
+msgstr "Analiza zaznaczonych danych..."
 
 #: src/control/Control.AIChatSidebar.ts:2787
 msgid "Failed to extract spreadsheet data."
-msgstr ""
+msgstr "Nie udało się wyodrębnić danych z arkusza kalkulacyjnego."
 
 #: src/control/Control.AIChatSidebar.ts:2796
 msgid "No data found in selection."
-msgstr ""
+msgstr "Nie znaleziono danych w zaznaczeniu."
 
 #: src/control/Control.AIChatSidebar.ts:2826
 msgid ""
 "Describe the slides you want to create. For example: \"A 5-slide overview "
 "of renewable energy\" or \"An introduction to our team\"."
 msgstr ""
+"Opisz slajdy, które chcesz utworzyć. Na przykład: „5-slajdowy przegląd "
+"energii odnawialnej” lub „Przedstawienie naszego zespołu”."
 
 #: src/control/Control.AIChatSidebar.ts:2853
 msgid ""
 "Describe what formula you need. For example: \"Calculate the average of "
 "column B\" or \"Sum all values where column A is greater than 100\"."
 msgstr ""
+"Opisz, jakiej formuły potrzebujesz. Na przykład: „Oblicz średnią z kolumny B"
+"” lub „Zsumuj wszystkie wartości, w których kolumna A jest większa niż 100”."
 
 #: src/control/Control.AIChatSidebar.ts:2863
 msgid ""
 "Read row numbers from the \"Row\" column — do not count or estimate row "
 "positions."
 msgstr ""
+"Odczytaj numery wierszy w kolumnie „Wiersz” — nie licz ani nie obliczaj "
+"pozycji wierszy."
 
 #: src/control/Control.AIChatSidebar.ts:2867
 msgid ""
 "To identify a cell's column, match the value to the column letter in the "
 "header row — do not guess."
 msgstr ""
+"Aby zidentyfikować kolumnę komórki, dopasuj wartość do litery kolumny w "
+"wierszu główki — nie zgaduj."
 
 #: src/control/Control.AIChatSidebar.ts:2871
 msgid ""
 "Reference a cell by combining its column header with the row number (e.g., "
 "column B + row 2 = B2)."
 msgstr ""
+"Aby odwołać się do komórki, należy połączyć główkę jej kolumny z numerem "
+"wiersza (np. kolumna B + wiersz 2 = B2)."
 
 #: src/control/Control.AIChatSidebar.ts:2874
 msgid ""
 "When referencing specific cells, format each cell as a clickable link: [B2]"
 "(cell://B2)."
 msgstr ""
+"Odwołując się do konkretnych komórek, sformatuj każdą komórkę jako klikalne "
+"łącze: [B2](cell://B2)."
 
 #: src/control/Control.AIChatSidebar.ts:2880
 msgid "Sanity check the following spreadsheet data."
-msgstr ""
+msgstr "Sprawdź poprawność poniższych danych w arkuszu kalkulacyjnym."
 
 #: src/control/Control.AIChatSidebar.ts:2881
 msgid "Please analyze this data for:"
-msgstr ""
+msgstr "Przeanalizuj te dane pod kątem:"
 
 #: src/control/Control.AIChatSidebar.ts:2885
 msgid ""
@@ -1943,18 +1957,25 @@ msgid ""
 "values deviates significantly from the expected distribution, which may "
 "suggest data manipulation."
 msgstr ""
+"Naruszenia prawa Benforda — sprawdź, czy rozkład cyfr wiodących wartości "
+"liczbowych znacząco odbiega od oczekiwanego rozkładu, co może sugerować "
+"manipulację danymi."
 
 #: src/control/Control.AIChatSidebar.ts:2891
 msgid ""
 "Statistical outliers — identify values that deviate significantly from "
 "their column or group."
 msgstr ""
+"Wartości odstające od normy statystycznej — identyfikuj wartości, które "
+"znacząco odbiegają od swojej kolumny lub grupy."
 
 #: src/control/Control.AIChatSidebar.ts:2897
 msgid ""
 "General anomalies — suspicious patterns, unexpected duplicates, "
 "inconsistencies, or formatting issues."
 msgstr ""
+"Ogólne anomalie — podejrzane wzorce, nieoczekiwane duplikaty, niespójności "
+"lub problemy z formatowaniem."
 
 #: src/control/Control.AlertDialog.js:55
 msgid "External link"
@@ -3044,7 +3065,7 @@ msgstr "Lektor"
 #: src/control/Control.NotebookbarImpress.js:169
 #: src/control/Control.NotebookbarWriter.js:122
 msgid "Extensions"
-msgstr ""
+msgstr "Rozszerzenia"
 
 #: src/control/Control.Menubar.ts:422 src/control/Control.Menubar.ts:610
 #: src/control/Control.Menubar.ts:755 src/control/Control.Menubar.ts:1061
@@ -3355,7 +3376,7 @@ msgstr "Więcej..."
 
 #: src/control/Control.Menubar.ts:1720
 msgid "(No extensions installed)"
-msgstr ""
+msgstr "(Brak zainstalowanych rozszerzeń)"
 
 #: src/control/Control.Menubar.ts:2074
 msgid "Use Compact view"
@@ -3549,11 +3570,11 @@ msgstr "Animacje"
 
 #: src/control/Control.Notebookbar.js:292
 msgid "No extensions are installed."
-msgstr ""
+msgstr "Nie zainstalowano żadnych rozszerzeń."
 
 #: src/control/Control.NotebookbarBase.ts:149
 msgid "Outline %OutlineLevel%"
-msgstr ""
+msgstr "Konspekt %OutlineLevel%"
 
 #: src/control/Control.NotebookbarBuilder.js:238
 msgid "Click to expand"
@@ -4079,7 +4100,7 @@ msgstr "Filtr"
 
 #: src/control/Control.NotebookbarCalc.js:2616
 msgid "Proofing"
-msgstr ""
+msgstr "Korekta"
 
 #: src/control/Control.NotebookbarCalc.js:2644
 #: src/control/Control.NotebookbarImpress.js:2049
@@ -4095,7 +4116,7 @@ msgstr "Komentarze"
 
 #: src/control/Control.NotebookbarCalc.js:2727
 msgid "Protection"
-msgstr ""
+msgstr "Ochrona"
 
 #: src/control/Control.NotebookbarCalc.js:2790
 msgid "Format Cells"
@@ -4414,11 +4435,11 @@ msgstr "Przesuń sekcję w dół"
 
 #: src/control/Control.PartsPreview.js:822
 msgid "Collapse All Sections"
-msgstr ""
+msgstr "Zwiń wszystkie sekcje"
 
 #: src/control/Control.PartsPreview.js:830
 msgid "Expand All Sections"
-msgstr ""
+msgstr "Rozwiń wszystkie sekcje"
 
 #: src/control/Control.PartsPreview.js:891
 msgid "Enter new section name:"
@@ -5090,7 +5111,7 @@ msgstr "Wyświetlanie"
 
 #: src/control/jsdialog/Control.ContextMenu.ts:306
 msgid "Save Image to Server"
-msgstr ""
+msgstr "Zapisz obraz na serwerze"
 
 #: src/control/jsdialog/Control.ContextMenu.ts:344
 msgid "Paste Special"
@@ -5542,7 +5563,7 @@ msgstr "Otwórz "
 
 #: src/control/jsdialog/Widget.Combobox.js:241
 msgid " list"
-msgstr ""
+msgstr " listę"
 
 #: src/control/jsdialog/Widget.Combobox.js:242
 msgid "Open list"
@@ -5550,47 +5571,47 @@ msgstr "Otwórz listę"
 
 #: src/control/jsdialog/Widget.Combobox.js:373
 msgid "Filter entries"
-msgstr ""
+msgstr "Filtruj wpisy"
 
 #: src/control/jsdialog/Widget.CsvGrid.ts:186
 msgid "CSV column ruler: click to toggle a column split"
-msgstr ""
+msgstr "Linijka kolumn CSV: kliknij, aby przełączyć podział kolumn"
 
 #: src/control/jsdialog/Widget.CsvGrid.ts:315
 msgid "CSV import preview"
-msgstr ""
+msgstr "Podgląd importu CSV"
 
 #: src/control/jsdialog/Widget.CsvGrid.ts:337
 msgid "Line number"
-msgstr ""
+msgstr "Numer wiersza"
 
 #: src/control/jsdialog/Widget.CsvGrid.ts:349
 msgid "Column {index}"
-msgstr ""
+msgstr "Kolumna {indeks}"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:54
 msgid "Smileys"
-msgstr ""
+msgstr "Emotikony"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:100
 msgid "People & gestures"
-msgstr ""
+msgstr "Ludzie i gesty"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:136
 msgid "Objects"
-msgstr ""
+msgstr "Obiekty"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:218
 msgid "Nature & food"
-msgstr ""
+msgstr "Przyroda i jedzenie"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:364
 msgid "Recently used"
-msgstr ""
+msgstr "Ostatnio używane"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:384
 msgid "No emojis match \"{0}\""
-msgstr ""
+msgstr "Brak emoji pasujących do „{0}”"
 
 #: src/control/jsdialog/Widget.PageMarginEntry.ts:139
 msgid "Top: {top}"
@@ -5694,7 +5715,7 @@ msgstr "Krawędzie komórek"
 
 #: src/control/jsdialog/Widget.NotebookbarIconView.ts:98
 msgid "Open Styles Sidebar"
-msgstr ""
+msgstr "Otwórz panel boczny stylów"
 
 #: src/control/jsdialog/Widget.NotebookbarIconView.ts:202
 msgid "Scroll up"
@@ -5706,7 +5727,7 @@ msgstr "Przewiń w dół"
 
 #: src/control/jsdialog/Widget.NotebookbarIconView.ts:222
 msgid "More options"
-msgstr ""
+msgstr "Więcej opcji"
 
 #: src/control/jsdialog/Widget.PushButton.ts:19
 msgid "Select range"
@@ -6421,11 +6442,11 @@ msgstr "Tryb prezentacji został wyłączony dla tego dokumentu"
 
 #: src/map/handler/Map.StateChanges.js:132
 msgid "Apply this order to your presentation?"
-msgstr ""
+msgstr "Czy zastosować tę kolejność w prezentacji?"
 
 #: src/map/handler/Map.StateChanges.js:132
 msgid "Update Slides"
-msgstr ""
+msgstr "Zaktualizuj slajdy"
 
 #: src/map/handler/Map.VersionBar.js:50
 msgid "Your Collabora Online server needs updating. Version {0} is available."
@@ -6454,19 +6475,19 @@ msgstr "Okno dialogowe powitania"
 
 #: src/slideshow/engine/SlideShowHandler.ts:104
 msgid "Skip"
-msgstr ""
+msgstr "Pomiń"
 
 #: src/slideshow/engine/SlideShowHandler.ts:105
 msgid "First"
-msgstr ""
+msgstr "Pierwszy"
 
 #: src/slideshow/engine/SlideShowHandler.ts:106
 msgid "Skip All"
-msgstr ""
+msgstr "Pomiń wszystkie"
 
 #: src/slideshow/engine/SlideShowHandler.ts:107
 msgid "First Slide"
-msgstr ""
+msgstr "Pierwszy slajd"
 
 #: src/slideshow/engine/SlideShowHandler.ts:108
 #: src/slideshow/PresenterConsole.js:31
@@ -6488,15 +6509,15 @@ msgstr "Zakończ pokaz"
 
 #: src/slideshow/engine/SlideShowHandler.ts:318
 msgid "Animation Start: "
-msgstr ""
+msgstr "Początek animacji: "
 
 #: src/slideshow/engine/SlideShowHandler.ts:420
 msgid "Transition Start: "
-msgstr ""
+msgstr "Początek przejścia: "
 
 #: src/slideshow/engine/SlideShowHandler.ts:439
 msgid "Transition End: "
-msgstr ""
+msgstr "Koniec przejścia: "
 
 #: src/slideshow/PauseTimer.ts:141
 msgid "Pause... ( %SECONDS% )"
@@ -6583,7 +6604,7 @@ msgstr "Zakończ obserwowanie"
 
 #: src/control/Control.Extension.ts:237
 msgid "Close extension"
-msgstr ""
+msgstr "Zamknij rozszerzenie"
 
 #: templates/templates.js:6
 msgid "Modern Business Letter (sans-serif)"
