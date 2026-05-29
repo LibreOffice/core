@@ -211,12 +211,10 @@ void DocumentLinksAdministrationManager::UpdateLinks()
     for (SwNumRuleTable::size_type n = 0; n < m_rDoc.GetNumRuleTable().size(); ++n)
         m_rDoc.GetNumRuleTable()[n]->RegisterGrfLinks(m_rDoc);
 
-    // Register links for fill bitmap items in the SdrModel pool (e.g.
-    // draw:fill-image entries referenced by shapes). XATTR_FILLBITMAP
-    // items on sw's own SwFormat / SwContentNode hosts are tracked
-    // separately by FillBitmapLinkTracker via SwClientNotify.
-    if (SwDrawModel* pDrawModel = m_rDoc.getIDocumentDrawModelAccess().GetDrawModel())
-        registerFillBitmapLinks(*pDrawModel, GetLinkManager());
+    // Draw-layer fill bitmaps (draw:fill-image entries on shapes) are tracked
+    // per SdrObject by the model's sdr::FillBitmapLinkTracker as they are set.
+    // XATTR_FILLBITMAP items on sw's own SwFormat / SwContentNode hosts are
+    // tracked separately by sw's FillBitmapLinkTracker via SwClientNotify.
 
     // Register links for form controls with deferred remote ImageURL
     registerDeferredFormImageLinks(pShell->GetDeferredFormControlImages(), GetLinkManager());
