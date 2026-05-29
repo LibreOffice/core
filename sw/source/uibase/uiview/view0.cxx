@@ -420,6 +420,7 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
     bool bSet = false;
     bool bBrowseModeChanged = false;
     bool bDraftViewChanged = false;
+    bool bIsHideWhiteSpaceMode = false;
 
     const SfxItemSet *pArgs = rReq.GetArgs();
     sal_uInt16 nSlot = rReq.GetSlot();
@@ -547,6 +548,7 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
             bFlag = !pOpt->IsHideWhitespaceMode();
 
         pOpt->SetHideWhitespaceMode(bFlag);
+        bIsHideWhiteSpaceMode = bFlag;
 
         // tdf#98446 - switch to single-page view when selecting hide whitespaces option
         if (bFlag && !pOpt->CanHideWhitespace())
@@ -561,6 +563,7 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
             bFlag = pOpt->IsHideWhitespaceMode();
 
         pOpt->SetHideWhitespaceMode(!bFlag);
+        bIsHideWhiteSpaceMode = !bFlag;
 
         // tdf#98446 - switch to single-page view when deselecting show whitespaces option
         if (!bFlag && !pOpt->CanHideWhitespace())
@@ -918,7 +921,8 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
     const bool bLockedView = rSh.IsViewLocked();
     rSh.LockView( true );    //lock visible section
     GetWrtShell().EndAction();
-    if( ( bBrowseModeChanged || bDraftViewChanged ) && !bFlag )
+    // tdf#170869 - recalculate visible area when hiding whitespace since pages become more compact
+    if (bIsHideWhiteSpaceMode || ((bBrowseModeChanged || bDraftViewChanged) && !bFlag))
         CalcVisArea( GetEditWin().GetOutputSizePixel() );
     rSh.LockView( bLockedView );
 
