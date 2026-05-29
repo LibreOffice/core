@@ -40,6 +40,7 @@
 #include <docsh.hxx>
 #include <table.hxx>
 #include <drwlayer.hxx>
+#include <svx/fillbitmaplink.hxx>
 #include <markdata.hxx>
 #include <patattr.hxx>
 #include <rechead.hxx>
@@ -131,9 +132,16 @@ void ScDocument::InitDrawLayer( ScDocShell* pDocShell )
         aName = mpShell->GetTitle();
     mpDrawLayer.reset(new ScDrawLayer( this, aName ));
 
-    sfx2::LinkManager* pMgr = GetDocLinkManager().getLinkManager(bAutoCalc);
+    // Create the LinkManager up front (not gated on bAutoCalc) so the draw
+    // layer can register per-object fill bitmap links as shapes are imported,
+    // and install the tracker that AttributeProperties::ItemChange feeds.
+    sfx2::LinkManager* pMgr = GetDocLinkManager().getLinkManager(true);
     if (pMgr)
+    {
         mpDrawLayer->SetLinkManager(pMgr);
+        mpDrawLayer->SetFillBitmapLinkTracker(
+            std::make_unique<sdr::FillBitmapLinkTracker>(*mpDrawLayer));
+    }
 
     // set DrawingLayer's SfxItemPool at Calc's SfxItemPool as
     // secondary pool to support DrawingLayer FillStyle ranges (and similar)
