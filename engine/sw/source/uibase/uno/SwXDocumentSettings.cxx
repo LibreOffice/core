@@ -170,6 +170,7 @@ enum SwDocumentSettingsPropertyHandles
     HANDLE_MS_WORD_COMP_GRID_METRICS,
     HANDLE_NO_CLIPPING_WITH_WRAP_POLYGON,
     HANDLE_MS_WORD_UL_TRAIL_SPACE,
+    HANDLE_LINE_SPACING_AS_GAP_BELOW,
     HANDLE_BALANCE_SPACES_AND_IDEOGRAPHIC_SPACES,
     HANDLE_FORCE_TOP_ALIGNMENT_IN_CELL_WITH_FLOATING_ANCHOR,
     HANDLE_ADJUST_TABLE_LINE_HEIGHTS_TO_GRID_HEIGHT,
@@ -289,6 +290,7 @@ static rtl::Reference<MasterPropertySetInfo> lcl_createSettingsInfo()
         { u"MsWordCompGridMetrics"_ustr, HANDLE_MS_WORD_COMP_GRID_METRICS, cppu::UnoType<bool>::get(), 0 },
         { u"NoClippingWithWrapPolygon"_ustr, HANDLE_NO_CLIPPING_WITH_WRAP_POLYGON, cppu::UnoType<bool>::get(), 0 },
         { u"MsWordUlTrailSpace"_ustr, HANDLE_MS_WORD_UL_TRAIL_SPACE, cppu::UnoType<bool>::get(), 0 },
+        { u"LineSpacingAsGapBelow"_ustr, HANDLE_LINE_SPACING_AS_GAP_BELOW, cppu::UnoType<bool>::get(), 0 },
         { u"BalanceSpacesAndIdeographicSpaces"_ustr, HANDLE_BALANCE_SPACES_AND_IDEOGRAPHIC_SPACES, cppu::UnoType<bool>::get(), 0 },
         { u"ForceTopAlignmentInCellWithFloatingAnchor"_ustr, HANDLE_FORCE_TOP_ALIGNMENT_IN_CELL_WITH_FLOATING_ANCHOR, cppu::UnoType<bool>::get(), 0 },
         { u"AdjustTableLineHeightsToGridHeight"_ustr, HANDLE_ADJUST_TABLE_LINE_HEIGHTS_TO_GRID_HEIGHT, cppu::UnoType<bool>::get(), 0 },
@@ -1243,6 +1245,13 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
                                                        bTmp);
             }
             break;
+        case HANDLE_LINE_SPACING_AS_GAP_BELOW:
+            if (bool bTmp; rValue >>= bTmp)
+            {
+                mpDoc->getIDocumentSettingAccess().set(DocumentSettingId::LINE_SPACING_AS_GAP_BELOW,
+                                                       bTmp);
+            }
+            break;
         case HANDLE_BALANCE_SPACES_AND_IDEOGRAPHIC_SPACES:
             if (bool bTmp; rValue >>= bTmp)
             {
@@ -1892,6 +1901,12 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         {
             rValue <<= mpDoc->getIDocumentSettingAccess().get(
                 DocumentSettingId::MS_WORD_UL_TRAIL_SPACE);
+        }
+        break;
+        case HANDLE_LINE_SPACING_AS_GAP_BELOW:
+        {
+            rValue <<= mpDoc->getIDocumentSettingAccess().get(
+                DocumentSettingId::LINE_SPACING_AS_GAP_BELOW);
         }
         break;
         case HANDLE_BALANCE_SPACES_AND_IDEOGRAPHIC_SPACES:

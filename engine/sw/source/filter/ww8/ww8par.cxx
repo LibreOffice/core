@@ -2025,6 +2025,7 @@ void SwWW8ImplReader::ImportDop()
     m_rDoc.getIDocumentSettingAccess().set(DocumentSettingId::APPLY_PARAGRAPH_MARK_FORMAT_TO_EMPTY_LINE_AT_END_OF_PARAGRAPH, true);
     m_rDoc.getIDocumentSettingAccess().set(DocumentSettingId::HIDDEN_PARAGRAPH_MARK_PER_LINE_PROPERTIES, true);
     // rely on default for IGNORE_HIDDEN_CHARS_FOR_LINE_CALCULATION=true
+    // rely on default for LINE_SPACING_AS_GAP_BELOW=true
 
     IDocumentSettingAccess& rIDSA = m_rDoc.getIDocumentSettingAccess();
     if (m_xWDop->fDontBreakWrappedTables)
