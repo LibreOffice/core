@@ -229,6 +229,13 @@ protected:
         dispatchCommand(mxComponent, u".uno:NewSheetView"_ustr, {});
     }
 
+    void insertSheet(OUString const& rName, sal_Int16 nIndex)
+    {
+        dispatchCommand(mxComponent, u".uno:Insert"_ustr,
+                        comphelper::InitPropertySequence(
+                            { { "Name", uno::Any(rName) }, { "Index", uno::Any(nIndex) } }));
+    }
+
     void removeSheetViewInCurrentView()
     {
         dispatchCommand(mxComponent, u".uno:RemoveSheetView"_ustr, {});
@@ -846,6 +853,51 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testRemoveTableWithSheetViews)
         CPPUNIT_ASSERT_EQUAL(SCTAB(1), rDocument.GetTableCount());
         CPPUNIT_ASSERT_EQUAL(u"Hoja1"_ustr, rDocument.GetAllTableNames()[0]);
     }
+}
+
+CPPUNIT_TEST_FIXTURE(SheetViewTest, testNewSheetViewKeepsOthersUnchanged)
+{
+    // Regression: SC_TAB_INSERTED was broadcast twice in MakeNewSheetView,
+    // making every passive view shift its active tab twice and land on the
+    // wrong sheet.
+
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    ScDocument& rDocument = *pModelObj->GetDocument();
+
+    ScTestViewCallback aView1;
+    ScTabViewShell* pTabView1 = aView1.getTabViewShell();
+
+    // 4 sheets is the minimum that keeps a buggy double shift of 2 -> 4
+    // from being clamped back to 3 by tableCount - 1.
+    insertSheet(u"Sheet2"_ustr, 2);
+    insertSheet(u"Sheet3"_ustr, 3);
+    insertSheet(u"Sheet4"_ustr, 4);
+    CPPUNIT_ASSERT_EQUAL(SCTAB(4), rDocument.GetTableCount());
+    pTabView1->SetTabNo(0);
+
+    // Setup View #2 on Sheet3.
+    SfxLokHelper::createView();
+    Scheduler::ProcessEventsToIdle();
+    ScTestViewCallback aView2;
+    ScTabViewShell* pTabView2 = aView2.getTabViewShell();
+    SfxLokHelper::setView(aView2.getViewID());
+    Scheduler::ProcessEventsToIdle();
+    pTabView2->SetTabNo(2);
+    CPPUNIT_ASSERT_EQUAL(SCTAB(2), pTabView2->GetViewData().GetTabNumber());
+
+    // View #1 creates a new sheet view of Sheet1: one tab is inserted at
+    // index 1.
+    SfxLokHelper::setView(aView1.getViewID());
+    Scheduler::ProcessEventsToIdle();
+    createNewSheetViewInCurrentView();
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(SCTAB(5), rDocument.GetTableCount());
+    // View #1 lands on its new sheet view at tab 1
+    CPPUNIT_ASSERT_EQUAL(SCTAB(1), pTabView1->GetViewData().GetTabNumber());
+    // View #2 must follow Sheet3 from tab 2 to tab 3.
+    CPPUNIT_ASSERT_EQUAL(SCTAB(3), pTabView2->GetViewData().GetTabNumber());
 }
 
 CPPUNIT_TEST_FIXTURE(SheetViewTest, testRemoveSheetViewHolderTable)

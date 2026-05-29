@@ -2268,9 +2268,6 @@ void ScViewFunc::MakeNewSheetView()
         return;
     }
 
-    GetViewData().GetDocShell()->Broadcast(ScTablesHint(SC_TAB_INSERTED, nSheetViewTab));
-    SfxGetpApp()->Broadcast(SfxHint(SfxHintId::ScTablesChanged));
-
     SetTabNo(nSheetViewTab);
 
     SheetViewChanged();
