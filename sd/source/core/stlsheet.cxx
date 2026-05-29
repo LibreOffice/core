@@ -39,6 +39,9 @@
 #include <svl/intitem.hxx>
 #include <svl/itemset.hxx>
 
+#include <svx/fillbitmaplink.hxx>
+#include <svx/xbtmpit.hxx>
+#include <svx/xdef.hxx>
 #include <svx/xflbmtit.hxx>
 #include <svx/xflbstit.hxx>
 #include <svx/xlnclit.hxx>
@@ -1074,6 +1077,25 @@ void SdStyleSheet::setPropertyValue_Impl(const OUString& aPropertyName, const cs
     }
 
     rStyleSet.Put( aSet );
+
+    // Track a deferred remote fill bitmap landing on this style sheet, so a
+    // shared background (e.g. an Impress slide Background style) is registered
+    // per style as the item is set, the drawing-layer counterpart of the
+    // SwFormat::SetFormatAttr hook for Writer paragraph styles.
+    if (auto* pPool = dynamic_cast<SdStyleSheetPool*>(GetPool()))
+    {
+        if (SdDrawDocument* pDoc = pPool->GetDoc())
+        {
+            if (sdr::FillBitmapLinkTracker* pTracker = pDoc->GetFillBitmapLinkTracker())
+            {
+                OUString aURL;
+                if (const XFillBitmapItem* pItem
+                    = rStyleSet.GetItemIfSet(XATTR_FILLBITMAP, false))
+                    aURL = getDeferredOriginURL(*pItem);
+                pTracker->onFillBitmapURLChanged(*this, aURL);
+            }
+        }
+    }
 }
 
 // Must be guarded by solar mutex; must not be disposed
