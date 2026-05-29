@@ -130,6 +130,12 @@ void SendAction(const OUString& nWindowId, const OUString& rWidget,
         pJSWidget->sendAction(std::move(pData));
 }
 
+void SendAction(weld::Widget& rWidget, std::unique_ptr<ActionDataMap> pData)
+{
+    if (auto pJSWidget = dynamic_cast<BaseJSWidget*>(&rWidget))
+        pJSWidget->sendAction(std::move(pData));
+}
+
 bool ExecuteAction(const OUString& nWindowId, const OUString& rWidget, const StringMap& rData)
 {
     auto aWidgetMap = JSInstanceBuilder::Widgets().Find(nWindowId);
