@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-29 07:49+0200\n"
-"PO-Revision-Date: 2026-05-29 10:17+0000\n"
+"PO-Revision-Date: 2026-05-29 12:37+0000\n"
 "Last-Translator: Leif-Jöran Olsson <info@friprogramvarusyndikatet.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/sv/>\n"
@@ -3569,11 +3569,11 @@ msgstr "Animeringar"
 
 #: src/control/Control.Notebookbar.js:292
 msgid "No extensions are installed."
-msgstr ""
+msgstr "Inga tillägg är installerade."
 
 #: src/control/Control.NotebookbarBase.ts:149
 msgid "Outline %OutlineLevel%"
-msgstr ""
+msgstr "Översiktsnivå %OutlineLevel%"
 
 #: src/control/Control.NotebookbarBuilder.js:238
 msgid "Click to expand"
@@ -4099,7 +4099,7 @@ msgstr "Filter"
 
 #: src/control/Control.NotebookbarCalc.js:2616
 msgid "Proofing"
-msgstr ""
+msgstr "Korrläser"
 
 #: src/control/Control.NotebookbarCalc.js:2644
 #: src/control/Control.NotebookbarImpress.js:2049
@@ -4115,7 +4115,7 @@ msgstr "Kommentarer"
 
 #: src/control/Control.NotebookbarCalc.js:2727
 msgid "Protection"
-msgstr ""
+msgstr "Skydd"
 
 #: src/control/Control.NotebookbarCalc.js:2790
 msgid "Format Cells"
@@ -4433,11 +4433,11 @@ msgstr "Flytta avsnittet neråt"
 
 #: src/control/Control.PartsPreview.js:822
 msgid "Collapse All Sections"
-msgstr ""
+msgstr "Fäll ihop alla avsnitt"
 
 #: src/control/Control.PartsPreview.js:830
 msgid "Expand All Sections"
-msgstr ""
+msgstr "Fäll ut alla avsnitt"
 
 #: src/control/Control.PartsPreview.js:891
 msgid "Enter new section name:"
@@ -5100,7 +5100,7 @@ msgstr "Visning"
 
 #: src/control/jsdialog/Control.ContextMenu.ts:306
 msgid "Save Image to Server"
-msgstr ""
+msgstr "Spara bild till servern"
 
 #: src/control/jsdialog/Control.ContextMenu.ts:344
 msgid "Paste Special"
@@ -5547,62 +5547,60 @@ msgid "Color palette"
 msgstr "Färgpalett"
 
 #: src/control/jsdialog/Widget.Combobox.js:241
-#, fuzzy
 msgid "Open "
-msgstr "Öppna"
+msgstr "Öppna "
 
 #: src/control/jsdialog/Widget.Combobox.js:241
 msgid " list"
-msgstr ""
+msgstr " lista"
 
 #: src/control/jsdialog/Widget.Combobox.js:242
-#, fuzzy
 msgid "Open list"
-msgstr "Öppna länk"
+msgstr "Öppen lista"
 
 #: src/control/jsdialog/Widget.Combobox.js:373
 msgid "Filter entries"
-msgstr ""
+msgstr "Filtrera poster"
 
 #: src/control/jsdialog/Widget.CsvGrid.ts:186
 msgid "CSV column ruler: click to toggle a column split"
-msgstr ""
+msgstr "CSV-kolumnindelare: klicka för att växla en kolumndelning"
 
 #: src/control/jsdialog/Widget.CsvGrid.ts:315
 msgid "CSV import preview"
-msgstr ""
+msgstr "CSV-import med förhandsgranskning"
 
 #: src/control/jsdialog/Widget.CsvGrid.ts:337
 msgid "Line number"
-msgstr ""
+msgstr "Radnummer"
 
 #: src/control/jsdialog/Widget.CsvGrid.ts:349
 msgid "Column {index}"
-msgstr ""
+msgstr "Kolumn {index}"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:54
 msgid "Smileys"
-msgstr ""
+msgstr "Smileygubbar"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:100
 msgid "People & gestures"
-msgstr ""
+msgstr "Människor och gester"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:136
 msgid "Objects"
-msgstr ""
+msgstr "Föremål"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:218
 msgid "Nature & food"
-msgstr ""
+msgstr "Natur och mat"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:364
 msgid "Recently used"
-msgstr ""
+msgstr "Senast använda"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:384
 msgid "No emojis match \"{0}\""
-msgstr ""
+msgstr "Inga emojisar matchar \"{0}\""
 
 #: src/control/jsdialog/Widget.PageMarginEntry.ts:139
 msgid "Top: {top}"
@@ -5706,7 +5704,7 @@ msgstr "Kantlinjer"
 
 #: src/control/jsdialog/Widget.NotebookbarIconView.ts:98
 msgid "Open Styles Sidebar"
-msgstr ""
+msgstr "Öppna stilpanelen"
 
 #: src/control/jsdialog/Widget.NotebookbarIconView.ts:202
 msgid "Scroll up"
@@ -5718,7 +5716,7 @@ msgstr "Scrolla nedåt"
 
 #: src/control/jsdialog/Widget.NotebookbarIconView.ts:222
 msgid "More options"
-msgstr ""
+msgstr "Fler alternativ"
 
 #: src/control/jsdialog/Widget.PushButton.ts:19
 msgid "Select range"
@@ -6425,11 +6423,11 @@ msgstr "Presentationsläge har inaktiverats för detta dokumentet"
 
 #: src/map/handler/Map.StateChanges.js:132
 msgid "Apply this order to your presentation?"
-msgstr ""
+msgstr "Använd denna ordning i din presentation?"
 
 #: src/map/handler/Map.StateChanges.js:132
 msgid "Update Slides"
-msgstr ""
+msgstr "Uppdatera presentationsbilderna"
 
 #: src/map/handler/Map.VersionBar.js:50
 msgid "Your Collabora Online server needs updating. Version {0} is available."
@@ -6457,19 +6455,19 @@ msgstr "Dialogrutan välkommen"
 
 #: src/slideshow/engine/SlideShowHandler.ts:104
 msgid "Skip"
-msgstr ""
+msgstr "Hoppa över"
 
 #: src/slideshow/engine/SlideShowHandler.ts:105
 msgid "First"
-msgstr ""
+msgstr "Första"
 
 #: src/slideshow/engine/SlideShowHandler.ts:106
 msgid "Skip All"
-msgstr ""
+msgstr "Hoppa över alla"
 
 #: src/slideshow/engine/SlideShowHandler.ts:107
 msgid "First Slide"
-msgstr ""
+msgstr "Första bilden"
 
 #: src/slideshow/engine/SlideShowHandler.ts:108
 #: src/slideshow/PresenterConsole.js:31
@@ -6477,14 +6475,12 @@ msgid "Next Slide"
 msgstr "Nästa bild"
 
 #: src/slideshow/engine/SlideShowHandler.ts:109
-#, fuzzy
 msgid "Previous Slide"
 msgstr "Föregående bild"
 
 #: src/slideshow/engine/SlideShowHandler.ts:110
-#, fuzzy
 msgid "Last Slide"
-msgstr "Klistra in bild"
+msgstr "Sista bilden"
 
 #: src/slideshow/engine/SlideShowHandler.ts:111
 #: src/slideshow/SlideShowPresenter.ts:846
@@ -6493,15 +6489,15 @@ msgstr "Avsluta showen"
 
 #: src/slideshow/engine/SlideShowHandler.ts:318
 msgid "Animation Start: "
-msgstr ""
+msgstr "Animationsstart: "
 
 #: src/slideshow/engine/SlideShowHandler.ts:420
 msgid "Transition Start: "
-msgstr ""
+msgstr "Övergångsstart: "
 
 #: src/slideshow/engine/SlideShowHandler.ts:439
 msgid "Transition End: "
-msgstr ""
+msgstr "Övergångsslut: "
 
 #: src/slideshow/PauseTimer.ts:141
 msgid "Pause... ( %SECONDS% )"
@@ -6588,7 +6584,7 @@ msgstr "Sluta följa"
 
 #: src/control/Control.Extension.ts:237
 msgid "Close extension"
-msgstr ""
+msgstr "Stäng tillägget"
 
 #: templates/templates.js:6
 msgid "Modern Business Letter (sans-serif)"
