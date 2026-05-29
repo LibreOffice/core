@@ -35,10 +35,32 @@ var NotebookbarAccessibilityDefinitions = function() {
 					// instead of the JS definition ids (e.g. home-number-format-currency).
 					if (!overflow && !arrow && !element && rawList[i].command) {
 						var commandId = rawList[i].command.replace('.uno:', '');
-						var byModelId = document.querySelector('[modelid="' + commandId + '"]');
-						if (byModelId) {
-							id = commandId;
-							arrow = byModelId.querySelector('.arrowbackground');
+						var selector = '[modelid="' + id + '"], [modelid="' + commandId + '"]';
+						var widgets = document.querySelectorAll(selector);
+						if (widgets.length > 0) {
+							for (var k = 0; k < widgets.length; k++) {
+								var widget = widgets[k];
+								if (!widget.id) {
+									console.debug('Skipping accesskey for', commandId,
+										      '- widget has no id');
+									continue;
+								}
+								var widgetArrow = widget.querySelector('.arrowbackground');
+								var targetId;
+								if (widgetArrow) {
+									targetId = widget.id;
+								} else if (document.getElementById(widget.id + '-button')) {
+									targetId = widget.id + '-button';
+								} else {
+									targetId = widget.id;
+								}
+								list.push({
+									id: targetId,
+									focusBack: rawList[i].accessibility.focusBack,
+									combination: combination
+								});
+							}
+							continue;
 						}
 					}
 
