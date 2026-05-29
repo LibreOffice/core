@@ -120,6 +120,7 @@ private:
     DECL_LINK( EditingStartedHdl, const weld::TreeIter&, bool );
     DECL_LINK( EditingDoneHdl, const weld::TreeView::iter_string&, bool );
     DECL_LINK( SelectionChangedHdl, weld::TreeView&, void );
+    DECL_LINK( KeyPressHdl, const KeyEvent&, bool );
 
     DataBrowser( const DataBrowser & ) = delete;
 };

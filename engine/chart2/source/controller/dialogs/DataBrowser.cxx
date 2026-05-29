@@ -35,6 +35,7 @@
 #include <ChartType.hxx>
 
 #include <vcl/weld.hxx>
+#include <vcl/event.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
@@ -455,6 +456,7 @@ DataBrowser::DataBrowser(weld::TreeView& rTreeView, weld::Box* pColumns, weld::B
         LINK(this, DataBrowser, EditingDoneHdl));
     m_rTreeView.connect_selection_changed(LINK(this, DataBrowser, SelectionChangedHdl));
     m_rTreeView.connect_header_name_changed(LINK(this, DataBrowser, HeaderNameChangedHdl));
+    m_rTreeView.connect_key_press(LINK(this, DataBrowser, KeyPressHdl));
     RenewTable();
 }
 
@@ -1212,6 +1214,54 @@ IMPL_LINK_NOARG( DataBrowser, SelectionChangedHdl, weld::TreeView&, void )
     }
 
     m_aCursorMovedHdlLink.Call(this);
+}
+
+// Drive the column cursor from the keyboard. weld::TreeView's native
+// handling moves the row cursor on Arrow Up/Down but does nothing for
+// Arrow Left/Right in grid-style usage, which leaves the column cursor
+// stuck on whatever a mouse click last set. Without this, the
+// "insert/remove/move column" toolbar buttons act on the wrong column
+// after keyboard-only navigation.
+//
+// Tab is intentionally NOT handled here: per the WAI-ARIA grid pattern,
+// the grid is a single tab stop and Tab must exit it. Returning false
+// lets GTK's default Tab traversal take over.
+IMPL_LINK( DataBrowser, KeyPressHdl, const KeyEvent&, rKEvt, bool )
+{
+    const sal_uInt16 nCode = rKEvt.GetKeyCode().GetCode();
+    if (rKEvt.GetKeyCode().IsMod1() || rKEvt.GetKeyCode().IsMod2())
+        return false;
+
+    const sal_Int32 nDataCols = GetColumnCount();
+    if (GetRowCount() <= 0 || nDataCols <= 0)
+        return false;
+
+    // TreeView column space: 0 = row number, 1..nDataCols = data columns.
+    // Column 0 is the rowheader (non-editable row number with no other
+    // interaction), so keyboard navigation starts at column 1.
+    const sal_Int32 nMinTreeCol = 1;
+    const sal_Int32 nLastTreeCol = nDataCols; // inclusive
+    sal_Int32 nTreeCol = m_rTreeView.get_cursor_column();
+    if (nTreeCol < nMinTreeCol)
+        nTreeCol = std::max<sal_Int32>(nMinTreeCol, m_nCurCol + 1);
+
+    int colDelta = 0;
+    if (nCode == KEY_LEFT)
+        colDelta = -1;
+    else if (nCode == KEY_RIGHT)
+        colDelta = 1;
+    else
+        return false;
+
+    const sal_Int32 nNewCol = nTreeCol + colDelta;
+    // Arrow Left/Right: stop at the row edge.
+    if (nNewCol < nMinTreeCol || nNewCol > nLastTreeCol)
+        return true; // consume but don't move
+
+    m_rTreeView.set_cursor_column(nNewCol);
+    m_nCurCol = nNewCol - 1;
+    m_aCursorMovedHdlLink.Call(this);
+    return true;
 }
 
 } // namespace chart
