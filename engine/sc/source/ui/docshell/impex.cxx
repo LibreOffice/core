@@ -2735,6 +2735,7 @@ ScFormatFilterPlugin &ScFormatFilter::Get()
         if (bLoaded)
         {
             oslGenericFunction fn = aModule.getFunctionSymbol( "ScFilterCreate" );
+            aModule.release();
             if (fn != nullptr)
                 return reinterpret_cast<FilterFn>(fn)();
         }
