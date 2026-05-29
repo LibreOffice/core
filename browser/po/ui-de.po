@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-29 07:49+0200\n"
-"PO-Revision-Date: 2026-05-29 21:05+0000\n"
+"PO-Revision-Date: 2026-05-29 22:53+0000\n"
 "Last-Translator: Mr-Update <mr.update@yahoo.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/de/>\n"
@@ -1496,15 +1496,15 @@ msgstr "Nachricht senden"
 #: src/control/Control.AIChatSidebar.ts:865
 #: src/control/Control.AIChatSidebar.ts:878
 msgid "Set tone"
-msgstr "Tonfall setzen"
+msgstr "Ton festlegen"
 
 #: src/control/Control.AIChatSidebar.ts:889
 msgid "Set tone of voice"
-msgstr "Stimmenklang setzen"
+msgstr "Tonfall festlegen"
 
 #: src/control/Control.AIChatSidebar.ts:890
 msgid "Tone of voice: {0}{1}"
-msgstr "Stimmenklang: {0}{1}"
+msgstr "Tonfall: {0}{1}"
 
 #: src/control/Control.AIChatSidebar.ts:892
 msgid "with emoji"
@@ -1519,7 +1519,7 @@ msgstr "Ton"
 #: src/control/Control.AIChatSidebar.ts:947
 #: src/control/Control.AIChatSidebar.ts:1218
 msgid "Tone of voice"
-msgstr "Stimmenklang"
+msgstr "Tonfall"
 
 #: src/control/Control.AIChatSidebar.ts:953
 msgid "Reset voice"
@@ -1527,7 +1527,7 @@ msgstr "Stimme zurücksetzen"
 
 #: src/control/Control.AIChatSidebar.ts:956
 msgid "Reset tone of voice"
-msgstr "Stimmenklang zurücksetzen"
+msgstr "Tonfall zurücksetzen"
 
 #: src/control/Control.AIChatSidebar.ts:972
 msgid "Your tones"
@@ -1543,7 +1543,7 @@ msgstr "+ Eigene Stimme hinzufügen"
 
 #: src/control/Control.AIChatSidebar.ts:1008
 msgid "Add a custom tone of voice"
-msgstr "Benutzerdefinierten Stimmenklang hinzufügen"
+msgstr "Benutzerdefinierten Tonfall hinzufügen"
 
 #: src/control/Control.AIChatSidebar.ts:1019
 msgid "Emojify"
@@ -1582,7 +1582,7 @@ msgstr "Symbol"
 
 #: src/control/Control.AIChatSidebar.ts:1238
 msgid "Name your tone"
-msgstr "Tonfall benennen"
+msgstr "Benennen Sie Ihren Ton"
 
 #: src/control/Control.AIChatSidebar.ts:1245
 msgid "e.g. Quick reply"
@@ -1590,7 +1590,7 @@ msgstr "z. B. schnelle Antwort"
 
 #: src/control/Control.AIChatSidebar.ts:1247
 msgid "Tone name"
-msgstr "Tonfallbezeichnung"
+msgstr "Name des Tons"
 
 #: src/control/Control.AIChatSidebar.ts:1252
 msgid "Describe how AI should write"
@@ -1605,17 +1605,17 @@ msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:1264
 msgid "Tone description"
-msgstr "Tonfallbeschreibung"
+msgstr "Tonbeschreibung"
 
 #: src/control/Control.AIChatSidebar.ts:1273
 #: src/control/Control.AIChatSidebar.ts:1335
 #: src/control/Control.AIChatSidebar.ts:1377
 msgid "Delete tone"
-msgstr "Tonfall löschen"
+msgstr "Ton löschen"
 
 #: src/control/Control.AIChatSidebar.ts:1275
 msgid "Delete this tone"
-msgstr "Diesen Tonfall löschen"
+msgstr "Diesen Ton löschen"
 
 #: src/control/Control.AIChatSidebar.ts:1288
 msgid "Save voice"
@@ -1623,7 +1623,7 @@ msgstr "Stimme speichern"
 
 #: src/control/Control.AIChatSidebar.ts:1290
 msgid "Save tone of voice"
-msgstr "Stimmenklang speichern"
+msgstr "Tonfall speichern"
 
 #: src/control/Control.AIChatSidebar.ts:1305
 #: src/control/jsdialog/Widget.EmojiPicker.ts:410
@@ -1637,11 +1637,11 @@ msgstr "Ein Emoji auswählen"
 
 #: src/control/Control.AIChatSidebar.ts:1330
 msgid "Delete tone confirmation"
-msgstr "Tonfall-Löschung bestätigen"
+msgstr "Bestätigungston löschen"
 
 #: src/control/Control.AIChatSidebar.ts:1341
 msgid "This tone of voice will be deleted"
-msgstr ""
+msgstr "Dieser Tonfall wird gelöscht"
 
 #: src/control/Control.AIChatSidebar.ts:1370
 msgid "Cancel delete"
@@ -1845,7 +1845,7 @@ msgstr "Referenzierte Zellen"
 
 #: src/control/Control.AIChatSidebar.ts:2647
 msgid "Please diagnose why this formula produces the"
-msgstr ""
+msgstr "Bitte ermitteln Sie, warum diese Formel erzeugt den"
 
 #: src/control/Control.AIChatSidebar.ts:2651
 msgid "error."
@@ -1853,13 +1853,15 @@ msgstr "Fehler."
 
 #: src/control/Control.AIChatSidebar.ts:2653
 msgid "Explain the root cause and suggest how to fix it."
-msgstr ""
+msgstr "Erläutern Sie die Ursache und schlagen Sie eine Lösung vor."
 
 #: src/control/Control.AIChatSidebar.ts:2657
 msgid ""
 "When referencing specific cells, format each cell address as a clickable "
 "link: [A1](cell://A1)."
 msgstr ""
+"Wenn Sie auf bestimmte Zellen verweisen, formatieren Sie jede Zelladresse "
+"als anklickbaren Link: [A1](cell://A1)."
 
 #: src/control/Control.AIChatSidebar.ts:2672
 msgid "formula"
@@ -1900,62 +1902,78 @@ msgstr "Zirkelbezug"
 #: src/control/Control.AIChatSidebar.ts:2769
 msgid "Select the data you want to sanity-check first."
 msgstr ""
+"Wählen Sie zuerst die Daten aus, die Sie auf Plausibilität überprüfen "
+"möchten."
 
 #: src/control/Control.AIChatSidebar.ts:2774
 msgid "Analyzing selected data..."
-msgstr ""
+msgstr "Ausgewählte Daten werden analysiert …"
 
 #: src/control/Control.AIChatSidebar.ts:2787
 msgid "Failed to extract spreadsheet data."
-msgstr ""
+msgstr "Fehler beim Extrahieren der Tabellendaten."
 
 #: src/control/Control.AIChatSidebar.ts:2796
 msgid "No data found in selection."
-msgstr ""
+msgstr "In der Auswahl wurden keine Daten gefunden."
 
 #: src/control/Control.AIChatSidebar.ts:2826
 msgid ""
 "Describe the slides you want to create. For example: \"A 5-slide overview "
 "of renewable energy\" or \"An introduction to our team\"."
 msgstr ""
+"Beschreiben Sie die Folien, die Sie erstellen möchten. Zum Beispiel: „Eine 5-"
+"seitige Übersicht über erneuerbare Energien“ oder „Eine Vorstellung unseres "
+"Teams“."
 
 #: src/control/Control.AIChatSidebar.ts:2853
 msgid ""
 "Describe what formula you need. For example: \"Calculate the average of "
 "column B\" or \"Sum all values where column A is greater than 100\"."
 msgstr ""
+"Beschreiben Sie, welche Formel Sie benötigen. Zum Beispiel: „Berechne den "
+"Durchschnitt von Spalte B“ oder „Summiere alle Werte, bei denen Spalte A "
+"größer als 100 ist“."
 
 #: src/control/Control.AIChatSidebar.ts:2863
 msgid ""
 "Read row numbers from the \"Row\" column — do not count or estimate row "
 "positions."
 msgstr ""
+"Lesen Sie die Zeilennummern aus der Spalte „Zeile“ ab – zählen oder schätzen "
+"Sie die Zeilenpositionen nicht."
 
 #: src/control/Control.AIChatSidebar.ts:2867
 msgid ""
 "To identify a cell's column, match the value to the column letter in the "
 "header row — do not guess."
 msgstr ""
+"Um die Spalte einer Zelle zu bestimmen, vergleichen Sie den Wert mit dem "
+"Spaltenbuchstaben in der Kopfzeile – raten Sie nicht."
 
 #: src/control/Control.AIChatSidebar.ts:2871
 msgid ""
 "Reference a cell by combining its column header with the row number (e.g., "
 "column B + row 2 = B2)."
 msgstr ""
+"Beziehen Sie sich auf eine Zelle, indem Sie die Spaltenüberschrift mit der "
+"Zeilennummer kombinieren (z. B. Spalte B + Zeile 2 = B2)."
 
 #: src/control/Control.AIChatSidebar.ts:2874
 msgid ""
 "When referencing specific cells, format each cell as a clickable link: [B2]"
 "(cell://B2)."
 msgstr ""
+"Wenn Sie auf bestimmte Zellen verweisen, formatieren Sie jede Zelle als "
+"anklickbaren Link: [B2](cell://B2)."
 
 #: src/control/Control.AIChatSidebar.ts:2880
 msgid "Sanity check the following spreadsheet data."
-msgstr ""
+msgstr "Überprüfen Sie die folgenden Tabellendaten auf Plausibilität."
 
 #: src/control/Control.AIChatSidebar.ts:2881
 msgid "Please analyze this data for:"
-msgstr ""
+msgstr "Bitte analysieren Sie diese Daten hinsichtlich:"
 
 #: src/control/Control.AIChatSidebar.ts:2885
 msgid ""
@@ -1963,18 +1981,25 @@ msgid ""
 "values deviates significantly from the expected distribution, which may "
 "suggest data manipulation."
 msgstr ""
+"Verstöße gegen das Benford-Gesetz – Überprüfung, ob die Verteilung der "
+"führenden Ziffern numerischer Werte signifikant von der erwarteten "
+"Verteilung abweicht, was auf Datenmanipulation hindeuten kann."
 
 #: src/control/Control.AIChatSidebar.ts:2891
 msgid ""
 "Statistical outliers — identify values that deviate significantly from "
 "their column or group."
 msgstr ""
+"Statistische Ausreißer – Werte identifizieren, die erheblich von ihrer "
+"Spalte oder Gruppe abweichen."
 
 #: src/control/Control.AIChatSidebar.ts:2897
 msgid ""
 "General anomalies — suspicious patterns, unexpected duplicates, "
 "inconsistencies, or formatting issues."
 msgstr ""
+"Allgemeine Unregelmäßigkeiten – verdächtige Muster, unerwartete Duplikate, "
+"Unstimmigkeiten oder Formatierungsprobleme."
 
 #: src/control/Control.AlertDialog.js:55
 msgid "External link"
@@ -3073,7 +3098,7 @@ msgstr "Bildschirmlesen"
 #: src/control/Control.NotebookbarImpress.js:169
 #: src/control/Control.NotebookbarWriter.js:122
 msgid "Extensions"
-msgstr ""
+msgstr "Erweiterungen"
 
 #: src/control/Control.Menubar.ts:422 src/control/Control.Menubar.ts:610
 #: src/control/Control.Menubar.ts:755 src/control/Control.Menubar.ts:1061
@@ -3384,7 +3409,7 @@ msgstr "Mehr …"
 
 #: src/control/Control.Menubar.ts:1720
 msgid "(No extensions installed)"
-msgstr ""
+msgstr "(Keine Erweiterungen installiert)"
 
 #: src/control/Control.Menubar.ts:2074
 msgid "Use Compact view"
@@ -3581,11 +3606,11 @@ msgstr "Animationen"
 
 #: src/control/Control.Notebookbar.js:292
 msgid "No extensions are installed."
-msgstr ""
+msgstr "Es sind keine Erweiterungen installiert."
 
 #: src/control/Control.NotebookbarBase.ts:149
 msgid "Outline %OutlineLevel%"
-msgstr ""
+msgstr "Gliederung %OutlineLevel%"
 
 #: src/control/Control.NotebookbarBuilder.js:238
 msgid "Click to expand"
@@ -3597,12 +3622,12 @@ msgstr "Antippen zum Erweitern"
 
 #: src/control/Control.NotebookbarBuilder.js:239
 msgid "Click to collapse"
-msgstr "Klicken zum Zuklappen"
+msgstr "Zum Ausblenden anklicken"
 
 #: src/control/Control.NotebookbarBuilder.js:239
 #: src/control/Control.NotebookbarBuilder.js:313
 msgid "Tap to collapse"
-msgstr "Antippen zum Zuklappen"
+msgstr "Zum Ausblenden antippen"
 
 #: src/control/Control.NotebookbarBuilder.js:405
 #: src/control/Control.NotebookbarBuilder.js:442
@@ -3985,7 +4010,7 @@ msgstr "Lesemodus"
 #: src/control/Control.NotebookbarImpress.js:679
 #: src/control/Control.NotebookbarWriter.js:1783
 msgid "Collapse Tabs"
-msgstr "Registerkarten einklappen"
+msgstr "Registerkarten ausblenden"
 
 #: src/control/Control.NotebookbarCalc.js:1646
 #: src/control/Control.NotebookbarDraw.js:523
@@ -4114,7 +4139,7 @@ msgstr "Filtern"
 
 #: src/control/Control.NotebookbarCalc.js:2616
 msgid "Proofing"
-msgstr ""
+msgstr "Korrektur"
 
 #: src/control/Control.NotebookbarCalc.js:2644
 #: src/control/Control.NotebookbarImpress.js:2049
@@ -4130,7 +4155,7 @@ msgstr "Kommentare"
 
 #: src/control/Control.NotebookbarCalc.js:2727
 msgid "Protection"
-msgstr ""
+msgstr "Schutz"
 
 #: src/control/Control.NotebookbarCalc.js:2790
 msgid "Format Cells"
@@ -4449,11 +4474,11 @@ msgstr "Bereich nach unten verschieben"
 
 #: src/control/Control.PartsPreview.js:822
 msgid "Collapse All Sections"
-msgstr ""
+msgstr "Alle Abschnitte ausblenden"
 
 #: src/control/Control.PartsPreview.js:830
 msgid "Expand All Sections"
-msgstr ""
+msgstr "Alle Abschnitte erweitern"
 
 #: src/control/Control.PartsPreview.js:891
 msgid "Enter new section name:"
@@ -5124,7 +5149,7 @@ msgstr "Anzeigen"
 
 #: src/control/jsdialog/Control.ContextMenu.ts:306
 msgid "Save Image to Server"
-msgstr ""
+msgstr "Bild auf Server speichern"
 
 #: src/control/jsdialog/Control.ContextMenu.ts:344
 msgid "Paste Special"
@@ -5576,7 +5601,7 @@ msgstr "Öffnen "
 
 #: src/control/jsdialog/Widget.Combobox.js:241
 msgid " list"
-msgstr ""
+msgstr " Liste"
 
 #: src/control/jsdialog/Widget.Combobox.js:242
 msgid "Open list"
@@ -5588,7 +5613,7 @@ msgstr "Einträge filtern"
 
 #: src/control/jsdialog/Widget.CsvGrid.ts:186
 msgid "CSV column ruler: click to toggle a column split"
-msgstr ""
+msgstr "CSV-Spaltenlineal: Zum Umschalten der Spaltenteilung anklicken"
 
 #: src/control/jsdialog/Widget.CsvGrid.ts:315
 msgid "CSV import preview"
@@ -5624,7 +5649,7 @@ msgstr "Zuletzt verwendet"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:384
 msgid "No emojis match \"{0}\""
-msgstr ""
+msgstr "Keine Emojis entsprechen „{0}“"
 
 #: src/control/jsdialog/Widget.PageMarginEntry.ts:139
 msgid "Top: {top}"
@@ -5730,7 +5755,7 @@ msgstr "Zellumrandung"
 
 #: src/control/jsdialog/Widget.NotebookbarIconView.ts:98
 msgid "Open Styles Sidebar"
-msgstr ""
+msgstr "Seitenleiste „Stile“ öffnen"
 
 #: src/control/jsdialog/Widget.NotebookbarIconView.ts:202
 msgid "Scroll up"
@@ -6561,11 +6586,11 @@ msgstr "Start der Animation: "
 
 #: src/slideshow/engine/SlideShowHandler.ts:420
 msgid "Transition Start: "
-msgstr ""
+msgstr "Übergangsbeginn: "
 
 #: src/slideshow/engine/SlideShowHandler.ts:439
 msgid "Transition End: "
-msgstr ""
+msgstr "Übergangsende: "
 
 #: src/slideshow/PauseTimer.ts:141
 msgid "Pause... ( %SECONDS% )"
