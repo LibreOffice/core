@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-29 07:49+0200\n"
-"PO-Revision-Date: 2026-05-29 12:37+0000\n"
+"PO-Revision-Date: 2026-05-29 21:05+0000\n"
 "Last-Translator: Matthaiks <kitynska@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/pl/>\n"
@@ -1597,86 +1597,86 @@ msgstr "Usuń ton"
 
 #: src/control/Control.AIChatSidebar.ts:1275
 msgid "Delete this tone"
-msgstr ""
+msgstr "Usuń ten ton"
 
 #: src/control/Control.AIChatSidebar.ts:1288
 msgid "Save voice"
-msgstr ""
+msgstr "Zapisz głos"
 
 #: src/control/Control.AIChatSidebar.ts:1290
 msgid "Save tone of voice"
-msgstr ""
+msgstr "Zapisz ton głosu"
 
 #: src/control/Control.AIChatSidebar.ts:1305
 #: src/control/jsdialog/Widget.EmojiPicker.ts:410
 msgid "Search emojis"
-msgstr ""
+msgstr "Wyszukaj emoji"
 
 #: src/control/Control.AIChatSidebar.ts:1306
 #: src/control/jsdialog/Widget.EmojiPicker.ts:401
 msgid "Choose an emoji"
-msgstr ""
+msgstr "Wybierz emoji"
 
 #: src/control/Control.AIChatSidebar.ts:1330
 msgid "Delete tone confirmation"
-msgstr ""
+msgstr "Potwierdzenie usunięcia tonu"
 
 #: src/control/Control.AIChatSidebar.ts:1341
 msgid "This tone of voice will be deleted"
-msgstr ""
+msgstr "Ten ton głosu zostanie usunięty"
 
 #: src/control/Control.AIChatSidebar.ts:1370
 msgid "Cancel delete"
-msgstr ""
+msgstr "Anuluj usunięcie"
 
 #: src/control/Control.AIChatSidebar.ts:1397
 #: src/control/Control.AIChatSidebar.ts:1457
 msgid "You have reached the maximum of {0} custom tones."
-msgstr ""
+msgstr "Osiągnięto maksymalną liczbę {0} niestandardowych dźwięków."
 
 #: src/control/Control.AIChatSidebar.ts:1631
 msgid "Using selected text as context"
-msgstr ""
+msgstr "Wykorzystanie zaznaczonego tekstu jako kontekstu"
 
 #: src/control/Control.AIChatSidebar.ts:1639
 msgid "Diagnose formula error"
-msgstr ""
+msgstr "Diagnozuj błąd formuły"
 
 #: src/control/Control.AIChatSidebar.ts:1645
 msgid "Sanity check data"
-msgstr ""
+msgstr "Dane kontroli poprawności"
 
 #: src/control/Control.AIChatSidebar.ts:1651
 msgid "Create a formula"
-msgstr ""
+msgstr "Utwórz formułę"
 
 #: src/control/Control.AIChatSidebar.ts:1658
 msgid "Create slides"
-msgstr ""
+msgstr "Utwórz slajdy"
 
 #: src/control/Control.AIChatSidebar.ts:1690
 msgid "See less"
-msgstr ""
+msgstr "Zobacz mniej"
 
 #: src/control/Control.AIChatSidebar.ts:1690
 msgid "See more"
-msgstr ""
+msgstr "Zobacz więcej"
 
 #: src/control/Control.AIChatSidebar.ts:1800
 msgid "Image inserted at cursor"
-msgstr ""
+msgstr "Obraz wstawiony przy kursorze"
 
 #: src/control/Control.AIChatSidebar.ts:1819
 msgid "Text inserted at cursor"
-msgstr ""
+msgstr "Tekst wstawiony przy kursorze"
 
 #: src/control/Control.AIChatSidebar.ts:1893
 msgid "Approaching message length limit"
-msgstr ""
+msgstr "Zbliża się limit długości wiadomości"
 
 #: src/control/Control.AIChatSidebar.ts:1947
 msgid "Request timeout"
-msgstr ""
+msgstr "Przekroczono limit czasu żądania"
 
 #: src/control/Control.AIChatSidebar.ts:1962
 #: src/control/Control.AIChatSidebar.ts:2784
@@ -1684,59 +1684,61 @@ msgid ""
 "The selection contains images or other non-text content that cannot be sent "
 "as context."
 msgstr ""
+"Zaznaczenie zawiera obrazy lub inną treść inną niż tekst, której nie można "
+"przesłać jako kontekstu."
 
 #: src/control/Control.AIChatSidebar.ts:2049
 msgid "Message is too long. Please shorten it and try again."
-msgstr ""
+msgstr "Wiadomość jest za długa. Skróć ją i spróbuj ponownie."
 
 #: src/control/Control.AIChatSidebar.ts:2104
 msgid "Error: "
-msgstr ""
+msgstr "Błąd: "
 
 #: src/control/Control.AIChatSidebar.ts:2126
 msgid "Generated image"
-msgstr ""
+msgstr "Wygenerowany obraz"
 
 #: src/control/Control.AIChatSidebar.ts:2137
 msgid "AI request failed"
-msgstr ""
+msgstr "Żądanie AI się nie powiodło"
 
 #: src/control/Control.AIChatSidebar.ts:2154
 msgid "The AI assistant"
-msgstr ""
+msgstr "Asystent AI"
 
 #: src/control/Control.AIChatSidebar.ts:2167
 msgid "Do you want to proceed?"
-msgstr ""
+msgstr "Czy chcesz kontynuować?"
 
 #: src/control/Control.AIChatSidebar.ts:2170
 msgid "%1 wants to inspect your document. Do you want to proceed?"
-msgstr ""
+msgstr "%1 chce sprawdzić dokument. Czy chcesz kontynuować?"
 
 #: src/control/Control.AIChatSidebar.ts:2174
 msgid "Modify document structure"
-msgstr ""
+msgstr "Zmodyfikuj strukturę dokumentu"
 
 #: src/control/Control.AIChatSidebar.ts:2176
 msgid "%1 wants to modify your document:"
-msgstr ""
+msgstr "%1 chce zmodyfikować dokument:"
 
 #: src/control/Control.AIChatSidebar.ts:2180
 #: src/control/Control.AIChatSidebar.ts:2191
 msgid "Do you want to apply this change?"
-msgstr ""
+msgstr "Czy chcesz zastosować tę zmianę?"
 
 #: src/control/Control.AIChatSidebar.ts:2182
 msgid "Set cell formula"
-msgstr ""
+msgstr "Ustaw formułę komórki"
 
 #: src/control/Control.AIChatSidebar.ts:2184
 msgid "%1 wants to set a formula in your spreadsheet:"
-msgstr ""
+msgstr "%1 chce ustawić formułę w arkuszu kalkulacyjnym:"
 
 #: src/control/Control.AIChatSidebar.ts:2194
 msgid "%1 wants to perform an action. Do you want to proceed?"
-msgstr ""
+msgstr "%1 chce wykonać czynność. Czy chcesz kontynuować?"
 
 #: src/control/Control.AIChatSidebar.ts:2225
 msgid "Approve"
