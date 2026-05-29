@@ -13,9 +13,12 @@
 #include <sfx2/lnkbase.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <svx/svdmodel.hxx>
+#include <svx/svdobj.hxx>
 #include <svx/svdpage.hxx>
+#include <svx/sdrobjectuser.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <svl/itempool.hxx>
+#include <svl/itemset.hxx>
 #include <svx/xbtmpit.hxx>
 #include <svx/xdef.hxx>
 #include <vcl/GraphicObject.hxx>
@@ -116,6 +119,112 @@ void registerFillBitmapLinks(SdrModel& rModel, sfx2::LinkManager& rLinkMgr)
         for (sal_uInt16 nPage = 0; nPage < rModel.GetMasterPageCount(); ++nPage)
             rModel.GetMasterPage(nPage)->GetViewContact().flushViewObjectContacts();
     });
+}
+
+namespace
+{
+// Per-host fill bitmap link for a single SdrObject. Unlike FillBitmapLink,
+// which patches every pool surrogate sharing the URL, this writes the fetched
+// graphic back only to its own host. It listens to the host via sdr::ObjectUser
+// and asks the tracker to drop it when the host is destroyed, so it never
+// outlives the object.
+class SdrObjectFillBitmapLink final : public sfx2::SvBaseLink, public sdr::ObjectUser
+{
+    sdr::FillBitmapLinkTracker& m_rTracker;
+    SdrObject* m_pObj;
+    sfx2::LinkManager& m_rLinkMgr;
+
+public:
+    SdrObjectFillBitmapLink(sdr::FillBitmapLinkTracker& rTracker, SdrObject& rObj,
+                            sfx2::LinkManager& rLinkMgr)
+        : SvBaseLink(SfxLinkUpdateMode::ONCALL, SotClipboardFormatId::SVXB)
+        , m_rTracker(rTracker)
+        , m_pObj(&rObj)
+        , m_rLinkMgr(rLinkMgr)
+    {
+        m_pObj->AddObjectUser(*this);
+    }
+
+    virtual ~SdrObjectFillBitmapLink() override
+    {
+        if (m_pObj)
+            m_pObj->RemoveObjectUser(*this);
+    }
+
+    virtual UpdateResult DataChanged(const OUString& rMimeType,
+                                     const css::uno::Any& rValue) override
+    {
+        tools::SvRef<SvBaseLink> xSelf(this);
+
+        if (!m_pObj)
+            return ERROR_GENERAL;
+
+        Graphic aGrf;
+        if (!m_rLinkMgr.GetGraphicFromAny(rMimeType, rValue, aGrf, nullptr))
+            return ERROR_GENERAL;
+        if (aGrf.GetType() == GraphicType::Default)
+            return ERROR_GENERAL;
+
+        // Write the resolved graphic back to this one host. The write re-enters
+        // AttributeProperties::ItemChange with a now-resolved item, so tell the
+        // tracker to ignore the resulting empty-URL notification for this host
+        // and keep us registered (like the other resolved links).
+        const OUString aName = m_pObj->GetMergedItem(XATTR_FILLBITMAP).GetName();
+        SfxItemSetFixed<XATTR_FILLBITMAP, XATTR_FILLBITMAP> aSet(m_pObj->GetObjectItemPool());
+        aSet.Put(XFillBitmapItem(aName, aGrf));
+        m_rTracker.setUpdatingObject(m_pObj);
+        m_pObj->SetMergedItemSetAndBroadcast(aSet);
+        m_rTracker.setUpdatingObject(nullptr);
+        return SUCCESS;
+    }
+
+    virtual void ObjectInDestruction(const SdrObject& rObject) override
+    {
+        // do not RemoveObjectUser here, the host clears its list itself
+        m_pObj = nullptr;
+        tools::SvRef<SvBaseLink> xSelf(this);
+        m_rTracker.onFillBitmapURLChanged(const_cast<SdrObject&>(rObject), u"");
+    }
+};
+}
+
+namespace sdr
+{
+FillBitmapLinkTracker::FillBitmapLinkTracker(SdrModel& rModel)
+    : m_rModel(rModel)
+{
+}
+
+FillBitmapLinkTracker::~FillBitmapLinkTracker()
+{
+    if (sfx2::LinkManager* pLinkMgr = m_rModel.GetLinkManager())
+        for (const auto& rEntry : m_aObjLinks)
+            pLinkMgr->Remove(rEntry.second.get());
+    m_aObjLinks.clear();
+}
+
+void FillBitmapLinkTracker::onFillBitmapURLChanged(SdrObject& rObj, std::u16string_view rNewURL)
+{
+    // ignore the write-back of a graphic this tracker just resolved for rObj
+    if (&rObj == m_pUpdatingObj)
+        return;
+
+    sfx2::LinkManager* pLinkMgr = m_rModel.GetLinkManager();
+    if (!pLinkMgr)
+        return;
+
+    auto it = m_aObjLinks.find(&rObj);
+    if (it != m_aObjLinks.end())
+    {
+        pLinkMgr->Remove(it->second.get());
+        m_aObjLinks.erase(it);
+    }
+    if (rNewURL.empty())
+        return;
+    tools::SvRef<sfx2::SvBaseLink> xLink(new SdrObjectFillBitmapLink(*this, rObj, *pLinkMgr));
+    pLinkMgr->InsertFileLink(*xLink, sfx2::SvBaseLinkObjectType::ClientGraphic, rNewURL);
+    m_aObjLinks.emplace(&rObj, std::move(xLink));
+}
 }
 
 namespace

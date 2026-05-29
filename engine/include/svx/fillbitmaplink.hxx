@@ -16,9 +16,12 @@
 #include <cppuhelper/weakref.hxx>
 #include <tools/ref.hxx>
 #include <functional>
+#include <map>
+#include <string_view>
 #include <vector>
 
 class SdrModel;
+class SdrObject;
 class SfxItemPool;
 class XFillBitmapItem;
 
@@ -51,6 +54,37 @@ SVXCORE_DLLPUBLIC void registerFillBitmapLinks(SfxItemPool& rPool, sfx2::LinkMan
 // Convenience overload for the drawing layer: registers fill bitmap links
 // and flushes all ViewObjectContacts on all pages when the graphic arrives.
 SVXCORE_DLLPUBLIC void registerFillBitmapLinks(SdrModel& rModel, sfx2::LinkManager& rLinkMgr);
+
+namespace sdr
+{
+// Owns one sfx2::SvBaseLink per SdrObject that currently holds a deferred
+// remote XFillBitmapItem, registered as soon as the item is set on the object
+// (via AttributeProperties::ItemChange) rather than by a later pool scan. A
+// model that wants this enables it by holding a tracker; SdrObject attribute
+// changes then route through onFillBitmapURLChanged. Each link writes the
+// fetched graphic back only to its own host and is bound to the host lifetime
+// via sdr::ObjectUser, so it never outlives the object and the entry can be
+// updated or broken individually in Edit, Links to External Files.
+class SVXCORE_DLLPUBLIC FillBitmapLinkTracker
+{
+public:
+    explicit FillBitmapLinkTracker(SdrModel& rModel);
+    ~FillBitmapLinkTracker();
+
+    // rNewURL is the deferred origin URL of the new item, or empty when the
+    // item is absent, already resolved, or the host is going away.
+    void onFillBitmapURLChanged(SdrObject& rObj, std::u16string_view rNewURL);
+
+    // Suppress the onFillBitmapURLChanged that the link's own write-back of the
+    // resolved graphic would otherwise raise for rObj.
+    void setUpdatingObject(SdrObject* pObj) { m_pUpdatingObj = pObj; }
+
+private:
+    SdrModel& m_rModel;
+    SdrObject* m_pUpdatingObj = nullptr;
+    std::map<SdrObject*, tools::SvRef<sfx2::SvBaseLink>> m_aObjLinks;
+};
+}
 
 // Register links for form controls with deferred remote image URLs.
 // Each entry is a (weak control reference, URL) pair. Dead references

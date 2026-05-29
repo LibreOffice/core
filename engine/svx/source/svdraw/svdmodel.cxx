@@ -18,6 +18,7 @@
  */
 
 #include <svx/svdmodel.hxx>
+#include <svx/fillbitmaplink.hxx>
 #include <cassert>
 #include <sal/log.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -221,6 +222,11 @@ void SdrModel::implDtorClearModel()
     m_pCurrentUndoGroup.reset();
 
     ClearModel(true);
+}
+
+void SdrModel::SetFillBitmapLinkTracker(std::unique_ptr<sdr::FillBitmapLinkTracker> pTracker)
+{
+    m_pFillBitmapLinkTracker = std::move(pTracker);
 }
 
 SdrModel::~SdrModel()

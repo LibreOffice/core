@@ -78,6 +78,11 @@ namespace model
 class Theme;
 }
 
+namespace sdr
+{
+class FillBitmapLinkTracker;
+}
+
 constexpr const sal_Unicode DEGREE_CHAR = u'\x00B0'; /* U+00B0 DEGREE SIGN */
 
 
@@ -176,6 +181,7 @@ protected:
     SfxStyleSheet*  m_pDefaultStyleSheet;
     SfxStyleSheet* mpDefaultStyleSheetForSdrGrafObjAndSdrOle2Obj; // #i119287#
     sfx2::LinkManager* m_pLinkManager;   // LinkManager
+    std::unique_ptr<sdr::FillBitmapLinkTracker> m_pFillBitmapLinkTracker;
     std::deque<std::unique_ptr<SfxUndoAction>> m_aUndoStack;
     std::deque<std::unique_ptr<SfxUndoAction>> m_aRedoStack;
     std::unique_ptr<SdrUndoGroup> m_pCurrentUndoGroup;  // For multi-level
@@ -353,6 +359,12 @@ public:
 
     sfx2::LinkManager*   GetLinkManager()                         { return m_pLinkManager; }
     void                 SetLinkManager( sfx2::LinkManager* pLinkMgr ) { m_pLinkManager = pLinkMgr; }
+
+    // Opt-in per-host tracking of deferred remote fill bitmap links. When set,
+    // AttributeProperties::ItemChange routes XATTR_FILLBITMAP changes here so a
+    // link is registered as the item is set rather than by a later pool scan.
+    sdr::FillBitmapLinkTracker* GetFillBitmapLinkTracker() const { return m_pFillBitmapLinkTracker.get(); }
+    void                 SetFillBitmapLinkTracker( std::unique_ptr<sdr::FillBitmapLinkTracker> pTracker );
 
     ::comphelper::IEmbeddedHelper*     GetPersist() const               { return m_pEmbeddedHelper; }
     void                 SetPersist( ::comphelper::IEmbeddedHelper *p ) { m_pEmbeddedHelper = p; }

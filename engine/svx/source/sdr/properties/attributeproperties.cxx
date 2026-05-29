@@ -26,6 +26,7 @@
 #include <svl/whiter.hxx>
 #include <svl/poolitem.hxx>
 #include <svx/svdobj.hxx>
+#include <svx/fillbitmaplink.hxx>
 #include <svx/xbtmpit.hxx>
 #include <svx/xlndsit.hxx>
 #include <svx/xlnstit.hxx>
@@ -354,6 +355,21 @@ namespace sdr::properties
                 if(HasSfxItemSet())
                 {
                     moItemSet->ClearItem(nWhich);
+                }
+            }
+
+            // route a deferred remote fill bitmap appearing/changing/clearing on
+            // this object to the model's link tracker, so the link is registered
+            // as the item is set rather than by a later pool scan
+            if (nWhich == XATTR_FILLBITMAP)
+            {
+                SdrModel& rFillModel(GetSdrObject().getSdrModelFromSdrObject());
+                if (sdr::FillBitmapLinkTracker* pTracker = rFillModel.GetFillBitmapLinkTracker())
+                {
+                    OUString aURL;
+                    if (pNewItem)
+                        aURL = getDeferredOriginURL(static_cast<const XFillBitmapItem&>(*pNewItem));
+                    pTracker->onFillBitmapURLChanged(GetSdrObject(), aURL);
                 }
             }
         }

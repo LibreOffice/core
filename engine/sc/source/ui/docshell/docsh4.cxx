@@ -212,13 +212,10 @@ void ScDocShell::ReloadAllLinks()
 
     m_pDocument->UpdateAreaLinks();
 
-    // update linked graphics from the draw layer
+    // Draw-layer fill bitmap host links are registered when SID_UPDATETABLINKS
+    // runs at load, so they are not re-scanned here, only updated.
     if (sfx2::LinkManager* pLinkMgr = m_pDocument->GetDocLinkManager().getLinkManager(false))
     {
-        if (ScDrawLayer* pDrawLayer = m_pDocument->GetDrawLayer())
-        {
-            registerFillBitmapLinks(*pDrawLayer, *pLinkMgr);
-        }
         registerDeferredFormImageLinks(GetDeferredFormControlImages(), *pLinkMgr);
         ClearDeferredFormControlImages();
         pLinkMgr->UpdateAllLinks(false, nullptr, u""_ustr);
@@ -499,7 +496,9 @@ void ScDocShell::Execute( SfxRequest& rReq )
             break;
         case SID_UPDATETABLINKS:
             {
-                // Register links for form controls with deferred remote ImageURL
+                // Draw-layer fill bitmap links are registered as the shapes are
+                // imported, via the draw model's link tracker. Form control
+                // images are collected during import and registered here.
                 if (sfx2::LinkManager* pLinkMgr = m_pDocument->GetDocLinkManager().getLinkManager(false))
                 {
                     registerDeferredFormImageLinks(GetDeferredFormControlImages(), *pLinkMgr);
