@@ -87,7 +87,9 @@ bool FormulaToken::IsFunction() const
         return true;
     if (eOp == ocWhitespace)
         return (static_cast<const FormulaSpaceToken*>(this)->GetByte() != 0); // x parameters
-    return (static_cast<const FormulaByteToken*>(this)->GetByte() != 0); // x parameters
+    if (eType == svByte)
+        return (static_cast<const FormulaByteToken*>(this)->GetByte() != 0); // x parameters
+    return false;
 }
 
 
