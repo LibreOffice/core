@@ -1131,7 +1131,12 @@ void SdrOle2Obj::SyncObjVisualArea(const uno::Reference<embed::XEmbeddedObject>&
     {
         Size aSize = aRect.GetSize();
         awt::Size aSz(aSize.Width(), aSize.Height());
-        xObj->setVisualAreaSize(GetAspect(), aSz);
+        try
+        {
+            xObj->setVisualAreaSize(GetAspect(), aSz);
+        }
+        catch (const uno::Exception&)
+        {}
     }
 }
 
