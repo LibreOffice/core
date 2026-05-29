@@ -273,11 +273,10 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
 
     if (mpDocSh)
     {
+        // Setting the LinkManager also installs the fill bitmap link tracker,
+        // so deferred remote fills on shapes, page backgrounds and the
+        // Background style are registered per host as they are set.
         SetLinkManager( new sfx2::LinkManager(mpDocSh) );
-        // Track deferred remote fill bitmaps on shapes and page backgrounds as
-        // they are set, registering one SvBaseLink per host in place of a pool
-        // scan.
-        SetFillBitmapLinkTracker(std::make_unique<sdr::FillBitmapLinkTracker>(*this));
     }
 
     EEControlBits nCntrl = rOutliner.GetControlWord();

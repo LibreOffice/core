@@ -358,13 +358,13 @@ public:
     void SetDefaultStyleSheetForSdrGrafObjAndSdrOle2Obj(SfxStyleSheet* pDefSS) { mpDefaultStyleSheetForSdrGrafObjAndSdrOle2Obj = pDefSS; }
 
     sfx2::LinkManager*   GetLinkManager()                         { return m_pLinkManager; }
-    void                 SetLinkManager( sfx2::LinkManager* pLinkMgr ) { m_pLinkManager = pLinkMgr; }
+    // Setting a LinkManager also creates the per-host fill bitmap link tracker,
+    // so any drawing model with a LinkManager tracks deferred remote fill
+    // bitmaps (registered as the item is set via AttributeProperties::ItemChange
+    // / SdrPageProperties::PutItem) rather than by a later pool scan.
+    void                 SetLinkManager( sfx2::LinkManager* pLinkMgr );
 
-    // Opt-in per-host tracking of deferred remote fill bitmap links. When set,
-    // AttributeProperties::ItemChange routes XATTR_FILLBITMAP changes here so a
-    // link is registered as the item is set rather than by a later pool scan.
     sdr::FillBitmapLinkTracker* GetFillBitmapLinkTracker() const { return m_pFillBitmapLinkTracker.get(); }
-    void                 SetFillBitmapLinkTracker( std::unique_ptr<sdr::FillBitmapLinkTracker> pTracker );
 
     ::comphelper::IEmbeddedHelper*     GetPersist() const               { return m_pEmbeddedHelper; }
     void                 SetPersist( ::comphelper::IEmbeddedHelper *p ) { m_pEmbeddedHelper = p; }

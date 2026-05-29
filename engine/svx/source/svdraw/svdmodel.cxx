@@ -224,9 +224,11 @@ void SdrModel::implDtorClearModel()
     ClearModel(true);
 }
 
-void SdrModel::SetFillBitmapLinkTracker(std::unique_ptr<sdr::FillBitmapLinkTracker> pTracker)
+void SdrModel::SetLinkManager(sfx2::LinkManager* pLinkMgr)
 {
-    m_pFillBitmapLinkTracker = std::move(pTracker);
+    m_pLinkManager = pLinkMgr;
+    if (pLinkMgr && !m_pFillBitmapLinkTracker)
+        m_pFillBitmapLinkTracker.reset(new sdr::FillBitmapLinkTracker(*this));
 }
 
 SdrModel::~SdrModel()
