@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-29 07:49+0200\n"
-"PO-Revision-Date: 2026-05-29 12:37+0000\n"
-"Last-Translator: Eloy Crespo <eloy.crespo@collabora.com>\n"
+"PO-Revision-Date: 2026-05-29 21:05+0000\n"
+"Last-Translator: Adolfo Jayme Barrientos <fitojb@ubuntu.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/es/>\n"
 "Language: es\n"
@@ -1078,7 +1078,7 @@ msgstr ""
 
 #: src/app/LOUtil.ts:981
 msgid "{0} website, opens in new tab"
-msgstr "{0} website, se abre en una pestaña nueva"
+msgstr "Sitio web {0}; se abre en una pestaña nueva"
 
 #: src/app/LOUtil.ts:984
 msgid "file type icon"
@@ -1275,7 +1275,7 @@ msgstr "Ayuda con este error"
 
 #: src/canvas/sections/FormulaErrorHelpSection.ts:85
 msgid "Inspect with Function Wizard"
-msgstr "Inspeccionar con el Asistente de Funciones"
+msgstr "Inspeccionar con el Asistente para funciones"
 
 #: src/canvas/sections/FormulaErrorHelpSection.ts:90
 msgid "Edit in Formula Bar"
@@ -1287,7 +1287,7 @@ msgstr "Ayuda a solucionar este error con IA"
 
 #: src/canvas/sections/HeaderFooterBoundarySection.ts:152
 msgid "Header"
-msgstr "Encabezmiento"
+msgstr "Cabecera"
 
 #: src/canvas/sections/HeaderFooterBoundarySection.ts:160
 msgid "Footer"
@@ -1296,12 +1296,12 @@ msgstr "Pie de página"
 #: src/control/CalcNotifications.ts:42
 msgid "Deletion created #REF! errors in other formulas. Undo to restore."
 msgstr ""
-"La eliminación generó errores #REF! en otras fórmulas. Deshacer para "
+"La eliminación generó errores #¡REF! en otras fórmulas. Deshaga para "
 "restaurar."
 
 #: src/control/CalcNotifications.ts:43
 msgid "Find First"
-msgstr "Encuentra primero"
+msgstr "Encontrar primero"
 
 #: src/control/ColorPicker.ts:269
 msgid "No color"
@@ -1334,7 +1334,7 @@ msgstr "Huso horario:"
 
 #: src/control/Control.AboutDialog.ts:275
 msgid "Copy all version information in English"
-msgstr "Copia toda la información de la versión en inglés"
+msgstr "Copiar información de la versión en inglés"
 
 #: src/control/Control.AboutDialog.ts:391
 msgid "Version information has been copied"
@@ -1402,7 +1402,7 @@ msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:423
 msgid "Your message"
-msgstr "Tu mensaje"
+msgstr "Su mensaje"
 
 #: src/control/Control.AIChatSidebar.ts:425
 msgid "Action requiring approval"
@@ -1431,11 +1431,11 @@ msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:583
 msgid "New conversation"
-msgstr "Nueva conversación"
+msgstr "Conversación nueva"
 
 #: src/control/Control.AIChatSidebar.ts:614
 msgid "Ask AI anything about your document..."
-msgstr "Pregúntale a la IA cualquier cosa sobre tu documento..."
+msgstr "Pregunte a la IA cualquier cosa sobre su documento…"
 
 #: src/control/Control.AIChatSidebar.ts:672
 msgid "Loading"
@@ -1443,7 +1443,7 @@ msgstr "Cargando"
 
 #: src/control/Control.AIChatSidebar.ts:685
 msgid "Chat messages"
-msgstr "Mensajes de Chat"
+msgstr "Mensajes de chat"
 
 #: src/control/Control.AIChatSidebar.ts:711
 msgid "AI generated image"
@@ -1465,7 +1465,7 @@ msgstr "Copiar al portapapeles"
 
 #: src/control/Control.AIChatSidebar.ts:831
 msgid "Ask AI..."
-msgstr "Pregúntale a la IA..."
+msgstr "Preguntar a la IA…"
 
 #: src/control/Control.AIChatSidebar.ts:834
 msgid "Message input"
@@ -1473,7 +1473,7 @@ msgstr "Entrada de mensaje"
 
 #: src/control/Control.AIChatSidebar.ts:850
 msgid "Stop generating"
-msgstr "Deja de generar"
+msgstr "Dejar de generar"
 
 #: src/control/Control.AIChatSidebar.ts:851
 msgid "Send message"
@@ -1517,7 +1517,7 @@ msgstr "Restablecer el tono de voz"
 
 #: src/control/Control.AIChatSidebar.ts:972
 msgid "Your tones"
-msgstr "Tus tonos"
+msgstr "Sus tonos"
 
 #: src/control/Control.AIChatSidebar.ts:989
 msgid "Edit tone"
@@ -1533,7 +1533,7 @@ msgstr "Añade un tono de voz personalizado"
 
 #: src/control/Control.AIChatSidebar.ts:1019
 msgid "Emojify"
-msgstr "Emojify"
+msgstr "Emoyificar"
 
 #: src/control/Control.AIChatSidebar.ts:1025
 #: src/control/Control.StatusBar.js:162
@@ -1548,7 +1548,7 @@ msgstr "Desactivado"
 
 #: src/control/Control.AIChatSidebar.ts:1028
 msgid "Toggle emojify"
-msgstr "Activar/desactivar emojis"
+msgstr "Activar/desactivar emoyificación"
 
 #: src/control/Control.AIChatSidebar.ts:1189
 msgid "Use icon"
@@ -1556,7 +1556,7 @@ msgstr "Usar icono"
 
 #: src/control/Control.AIChatSidebar.ts:1199
 msgid "Pick another emoji"
-msgstr "Elige otro emoji"
+msgstr "Elija otro emoyi"
 
 #: src/control/Control.AIChatSidebar.ts:1213
 msgid "Back to tones"
@@ -1614,12 +1614,12 @@ msgstr "Conservar el tono de voz"
 #: src/control/Control.AIChatSidebar.ts:1305
 #: src/control/jsdialog/Widget.EmojiPicker.ts:410
 msgid "Search emojis"
-msgstr "Buscar emojis"
+msgstr "Buscar emoyis"
 
 #: src/control/Control.AIChatSidebar.ts:1306
 #: src/control/jsdialog/Widget.EmojiPicker.ts:401
 msgid "Choose an emoji"
-msgstr "Elige un emoji"
+msgstr "Elija un emoyi"
 
 #: src/control/Control.AIChatSidebar.ts:1330
 msgid "Delete tone confirmation"
@@ -1627,16 +1627,16 @@ msgstr "Eliminar confirmación de tono"
 
 #: src/control/Control.AIChatSidebar.ts:1341
 msgid "This tone of voice will be deleted"
-msgstr "Este tono de voz será eliminado"
+msgstr "Este tono de voz se eliminará"
 
 #: src/control/Control.AIChatSidebar.ts:1370
 msgid "Cancel delete"
-msgstr "Cancelar eliminar"
+msgstr "Cancelar eliminación"
 
 #: src/control/Control.AIChatSidebar.ts:1397
 #: src/control/Control.AIChatSidebar.ts:1457
 msgid "You have reached the maximum of {0} custom tones."
-msgstr "Has alcanzado el máximo de {0} tonos personalizados."
+msgstr "Ha alcanzado el máximo de {0} tonos personalizados."
 
 #: src/control/Control.AIChatSidebar.ts:1631
 msgid "Using selected text as context"
@@ -1693,8 +1693,7 @@ msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:2049
 msgid "Message is too long. Please shorten it and try again."
-msgstr ""
-"El mensaje es demasiado largo. Por favor, acórtalo e inténtalo de nuevo."
+msgstr "El mensaje es demasiado largo. Acórtelo e inténtelo de nuevo."
 
 #: src/control/Control.AIChatSidebar.ts:2104
 msgid "Error: "
@@ -1726,7 +1725,7 @@ msgstr "Modificar la estructura del documento"
 
 #: src/control/Control.AIChatSidebar.ts:2176
 msgid "%1 wants to modify your document:"
-msgstr "%1 quiere modificar tu documento:"
+msgstr "%1 quiere modificar su documento:"
 
 #: src/control/Control.AIChatSidebar.ts:2180
 #: src/control/Control.AIChatSidebar.ts:2191
@@ -1807,11 +1806,11 @@ msgstr "Tengo un error de fórmula en mi hoja de cálculo."
 
 #: src/control/Control.AIChatSidebar.ts:2627
 msgid "Cell"
-msgstr "Celdas"
+msgstr "Celda"
 
 #: src/control/Control.AIChatSidebar.ts:2631
 msgid "Sheet"
-msgstr "Hojas"
+msgstr "Hoja"
 
 #: src/control/Control.AIChatSidebar.ts:2635
 msgid "contains"
@@ -1890,27 +1889,32 @@ msgstr "Seleccione primero los datos que desea verificar."
 
 #: src/control/Control.AIChatSidebar.ts:2774
 msgid "Analyzing selected data..."
-msgstr ""
+msgstr "Analizando datos seleccionados…"
 
 #: src/control/Control.AIChatSidebar.ts:2787
 msgid "Failed to extract spreadsheet data."
-msgstr ""
+msgstr "No se pudieron extraer los datos de la hoja de cálculo."
 
 #: src/control/Control.AIChatSidebar.ts:2796
 msgid "No data found in selection."
-msgstr ""
+msgstr "No se encontró ningún dato en la selección."
 
 #: src/control/Control.AIChatSidebar.ts:2826
 msgid ""
 "Describe the slides you want to create. For example: \"A 5-slide overview "
 "of renewable energy\" or \"An introduction to our team\"."
 msgstr ""
+"Describa las diapositivas que quiere crear. Por ejemplo: «Una presentación "
+"de 5 diapositivas sobre las energías renovables» o «Una presentación de "
+"nuestro equipo»."
 
 #: src/control/Control.AIChatSidebar.ts:2853
 msgid ""
 "Describe what formula you need. For example: \"Calculate the average of "
 "column B\" or \"Sum all values where column A is greater than 100\"."
 msgstr ""
+"Describa qué fórmula necesita. Por ejemplo: «Calcula la media de la columna B"
+"» o «Suma todos los valores en los que la columna A sea mayor que 100»."
 
 #: src/control/Control.AIChatSidebar.ts:2863
 msgid ""
@@ -1991,7 +1995,7 @@ msgstr ""
 
 #: src/control/Control.AlertDialog.js:74
 msgid "External data source not allowed"
-msgstr "Fuente de datos externa no permitida"
+msgstr "Origen de datos externo no permitido"
 
 #: src/control/Control.AlertDialog.js:75
 msgid "It seems you have tried to insert external data."
@@ -2002,7 +2006,7 @@ msgid ""
 "Selected external data source is forbidden. Please contact the system "
 "administrator."
 msgstr ""
-"La fuente de datos externa seleccionada está prohibida. Póngase en contacto "
+"El origen de datos externo seleccionado está prohibido. Póngase en contacto "
 "con el personal técnico."
 
 #: src/control/Control.AlertDialog.js:88 src/map/Clipboard.js:1471
@@ -2080,7 +2084,7 @@ msgstr "Opciones"
 
 #: src/control/Control.BackstageView.ts:231
 msgid "Start a new document from one of the following templates."
-msgstr "Inicie un nuevo documento a partir de una de las siguiente plantillas."
+msgstr "Inicie un documento nuevo a partir de una de las plantillas siguientes."
 
 #: src/control/Control.BackstageView.ts:269
 #: src/control/jsdialog/Widget.ColorPicker.ts:441
@@ -2101,7 +2105,7 @@ msgstr "Exportar documento"
 
 #: src/control/Control.BackstageView.ts:508
 msgid "export your documents in different formats"
-msgstr "exporta tus documentos en diferentes formatos"
+msgstr "exporte sus documentos en diferentes formatos"
 
 #: src/control/Control.BackstageView.ts:540 templates/templates.js:50
 #: templates/templates.js:60 templates/templates.js:70
@@ -3054,7 +3058,7 @@ msgstr "Lectura de pantalla"
 #: src/control/Control.NotebookbarImpress.js:169
 #: src/control/Control.NotebookbarWriter.js:122
 msgid "Extensions"
-msgstr ""
+msgstr "Extensiones"
 
 #: src/control/Control.Menubar.ts:422 src/control/Control.Menubar.ts:610
 #: src/control/Control.Menubar.ts:755 src/control/Control.Menubar.ts:1061
@@ -3365,7 +3369,7 @@ msgstr "Más…"
 
 #: src/control/Control.Menubar.ts:1720
 msgid "(No extensions installed)"
-msgstr ""
+msgstr "(No se instaló ninguna extensión)"
 
 #: src/control/Control.Menubar.ts:2074
 msgid "Use Compact view"
@@ -3561,11 +3565,11 @@ msgstr "Animaciones"
 
 #: src/control/Control.Notebookbar.js:292
 msgid "No extensions are installed."
-msgstr ""
+msgstr "No está instalada ninguna extensión."
 
 #: src/control/Control.NotebookbarBase.ts:149
 msgid "Outline %OutlineLevel%"
-msgstr ""
+msgstr "Esquema %OutlineLevel%"
 
 #: src/control/Control.NotebookbarBuilder.js:238
 msgid "Click to expand"
@@ -4108,7 +4112,7 @@ msgstr "Comentarios"
 
 #: src/control/Control.NotebookbarCalc.js:2727
 msgid "Protection"
-msgstr ""
+msgstr "Protección"
 
 #: src/control/Control.NotebookbarCalc.js:2790
 msgid "Format Cells"
@@ -4154,7 +4158,8 @@ msgstr "Regla"
 #: src/control/Control.TopToolbar.js:148
 msgid "Clone Formatting is active (click again or press Esc to exit)"
 msgstr ""
-"Clonado de Formateo está activo (pulse de nuevo o presione Esc para salir)"
+"La clonación de formato está activa (pulse de nuevo o presione Esc para "
+"salir)"
 
 #: src/control/Control.NotebookbarDraw.js:920
 #: src/control/Control.NotebookbarImpress.js:1056
@@ -4428,11 +4433,11 @@ msgstr "Bajar sección"
 
 #: src/control/Control.PartsPreview.js:822
 msgid "Collapse All Sections"
-msgstr ""
+msgstr "Contraer todas las secciones"
 
 #: src/control/Control.PartsPreview.js:830
 msgid "Expand All Sections"
-msgstr ""
+msgstr "Expandir todas las secciones"
 
 #: src/control/Control.PartsPreview.js:891
 msgid "Enter new section name:"
@@ -5105,7 +5110,7 @@ msgstr "Vista"
 
 #: src/control/jsdialog/Control.ContextMenu.ts:306
 msgid "Save Image to Server"
-msgstr ""
+msgstr "Guardar imagen en servidor"
 
 #: src/control/jsdialog/Control.ContextMenu.ts:344
 msgid "Paste Special"
@@ -5561,13 +5566,12 @@ msgid " list"
 msgstr ""
 
 #: src/control/jsdialog/Widget.Combobox.js:242
-#, fuzzy
 msgid "Open list"
-msgstr "Abrir enlace"
+msgstr "Abrir lista"
 
 #: src/control/jsdialog/Widget.Combobox.js:373
 msgid "Filter entries"
-msgstr ""
+msgstr "Filtrar entradas"
 
 #: src/control/jsdialog/Widget.CsvGrid.ts:186
 msgid "CSV column ruler: click to toggle a column split"
@@ -5575,35 +5579,35 @@ msgstr ""
 
 #: src/control/jsdialog/Widget.CsvGrid.ts:315
 msgid "CSV import preview"
-msgstr ""
+msgstr "Previsualización de importación de CSV"
 
 #: src/control/jsdialog/Widget.CsvGrid.ts:337
 msgid "Line number"
-msgstr ""
+msgstr "Número de renglón"
 
 #: src/control/jsdialog/Widget.CsvGrid.ts:349
 msgid "Column {index}"
-msgstr ""
+msgstr "Columna {index}"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:54
 msgid "Smileys"
-msgstr ""
+msgstr "Emoticonos"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:100
 msgid "People & gestures"
-msgstr ""
+msgstr "Personas y gestos"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:136
 msgid "Objects"
-msgstr ""
+msgstr "Objetos"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:218
 msgid "Nature & food"
-msgstr ""
+msgstr "Naturaleza y alimentos"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:364
 msgid "Recently used"
-msgstr ""
+msgstr "Usados recientemente"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:384
 msgid "No emojis match \"{0}\""
@@ -5687,15 +5691,15 @@ msgstr "Funciones de celda de tabla"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:74
 msgid "Sheet Navigation"
-msgstr "Navegación de hoja"
+msgstr "Navegación por hojas"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:76
 msgid "Slide Navigation"
-msgstr "Diapositiva de navegación"
+msgstr "Navegación por diapositivas"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:77
 msgid "Page Navigation"
-msgstr "Página de navegación"
+msgstr "Navegación por páginas"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:83
 msgid "Your changes have been saved"
@@ -5703,7 +5707,7 @@ msgstr "Se guardaron los cambios"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:118
 msgid "Edit mode"
-msgstr "Modo edición"
+msgstr "Modo de edición"
 
 #: src/control/jsdialog/Widget.MobileBorderSelector.js:96
 msgid "Cell borders"
@@ -5711,7 +5715,7 @@ msgstr "Bordes de celda"
 
 #: src/control/jsdialog/Widget.NotebookbarIconView.ts:98
 msgid "Open Styles Sidebar"
-msgstr ""
+msgstr "Abrir barra lateral Estilos"
 
 #: src/control/jsdialog/Widget.NotebookbarIconView.ts:202
 msgid "Scroll up"
@@ -5723,7 +5727,7 @@ msgstr "Desplazarse hacia abajo"
 
 #: src/control/jsdialog/Widget.NotebookbarIconView.ts:222
 msgid "More options"
-msgstr ""
+msgstr "Más opciones"
 
 #: src/control/jsdialog/Widget.PushButton.ts:19
 msgid "Select range"
@@ -6445,11 +6449,11 @@ msgstr "El modo de presentación se ha desactivado en este documento"
 
 #: src/map/handler/Map.StateChanges.js:132
 msgid "Apply this order to your presentation?"
-msgstr ""
+msgstr "¿Quiere aplicar este orden a su presentación?"
 
 #: src/map/handler/Map.StateChanges.js:132
 msgid "Update Slides"
-msgstr ""
+msgstr "Actualizar diapositivas"
 
 #: src/map/handler/Map.VersionBar.js:50
 msgid "Your Collabora Online server needs updating. Version {0} is available."
@@ -6479,19 +6483,19 @@ msgstr "Ventana de bienvenida"
 
 #: src/slideshow/engine/SlideShowHandler.ts:104
 msgid "Skip"
-msgstr ""
+msgstr "Omitir"
 
 #: src/slideshow/engine/SlideShowHandler.ts:105
 msgid "First"
-msgstr ""
+msgstr "Primero"
 
 #: src/slideshow/engine/SlideShowHandler.ts:106
 msgid "Skip All"
-msgstr ""
+msgstr "Omitir todo"
 
 #: src/slideshow/engine/SlideShowHandler.ts:107
 msgid "First Slide"
-msgstr ""
+msgstr "Primera diapositiva"
 
 #: src/slideshow/engine/SlideShowHandler.ts:108
 #: src/slideshow/PresenterConsole.js:31
@@ -6499,14 +6503,12 @@ msgid "Next Slide"
 msgstr "Diapositiva siguiente"
 
 #: src/slideshow/engine/SlideShowHandler.ts:109
-#, fuzzy
 msgid "Previous Slide"
 msgstr "Diapositiva anterior"
 
 #: src/slideshow/engine/SlideShowHandler.ts:110
-#, fuzzy
 msgid "Last Slide"
-msgstr "Pegar diapositiva"
+msgstr "Última diapositiva"
 
 #: src/slideshow/engine/SlideShowHandler.ts:111
 #: src/slideshow/SlideShowPresenter.ts:846
@@ -6515,15 +6517,15 @@ msgstr "Finalizar pase"
 
 #: src/slideshow/engine/SlideShowHandler.ts:318
 msgid "Animation Start: "
-msgstr ""
+msgstr "Inicio de animación: "
 
 #: src/slideshow/engine/SlideShowHandler.ts:420
 msgid "Transition Start: "
-msgstr ""
+msgstr "Inicio de transición: "
 
 #: src/slideshow/engine/SlideShowHandler.ts:439
 msgid "Transition End: "
-msgstr ""
+msgstr "Fin de transición: "
 
 #: src/slideshow/PauseTimer.ts:141
 msgid "Pause... ( %SECONDS% )"
@@ -6552,7 +6554,7 @@ msgstr "Reanudar"
 
 #: src/slideshow/PresenterConsole.js:40
 msgid "Present to all"
-msgstr "Presente para todos"
+msgstr "Presentar para todos"
 
 #: src/slideshow/PresenterConsole.js:41
 msgid "Go Back"
@@ -6610,7 +6612,7 @@ msgstr "Dejar de seguir"
 
 #: src/control/Control.Extension.ts:237
 msgid "Close extension"
-msgstr ""
+msgstr "Cerrar extensión"
 
 #: templates/templates.js:6
 msgid "Modern Business Letter (sans-serif)"
