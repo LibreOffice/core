@@ -1648,6 +1648,36 @@ class TreeViewControl {
 			);
 	}
 
+	// Reactive handler for core's 'reedit_cell' action: after a rejected
+	// numeric edit, Tab has already optimistically moved focus to the next
+	// cell; once the user dismisses the warning popup, core asks us to put
+	// the user back on the rejected cell (row, col) in edit mode.
+	reeditCell(
+		row: number,
+		col: number,
+		builder: JSBuilder,
+		data: TreeWidgetJSON,
+	): void {
+		if (!this._gridMode) return;
+
+		// Close any editor the optimistic Tab opened on the next cell.
+		const openInput = this._container.querySelector(
+			'.ui-treeview-inline-edit',
+		) as HTMLInputElement;
+		if (openInput) openInput.blur();
+
+		const rowElement = this._rows.get(String(row));
+		if (!rowElement) return;
+		const entry = this.findEntryWithRow(data.entries, row);
+		if (!entry) return;
+
+		// Select the target row and mark/focus the rejected cell.
+		this.setActiveColumn(col);
+		this.selectEntryByRow(row, true);
+		this.updateActiveCellMarker(rowElement, col, true);
+		this.startEditingActiveCell(rowElement, entry, builder, data);
+	}
+
 	startEditing(
 		builder: JSBuilder,
 		cell: Element,
@@ -2640,6 +2670,9 @@ class TreeViewControl {
 		this._tbody = this._container;
 		(this._container as any).onSelect = (position: number) => {
 			this.selectEntryByRow(position, false);
+		};
+		(this._container as any).onReeditCell = (row: number, col: number) => {
+			this.reeditCell(row, col, builder, data);
 		};
 		(this._container as any).filterEntries = this.filterEntries.bind(this);
 		(this._container as any).highlightEntries =

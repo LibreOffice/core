@@ -1973,6 +1973,11 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 				window.app.console.warn('widget "' + data.control_id + '" doesn\'t support "unselect" action');
 			break;
 
+		case 'reedit_cell':
+			if (typeof control.onReeditCell === 'function')
+				control.onReeditCell(parseInt(data.row), parseInt(data.col));
+			break;
+
 		case 'show':
 			$(control).removeClass('hidden');
 			$(control).show();
