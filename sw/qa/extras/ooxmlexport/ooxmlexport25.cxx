@@ -238,6 +238,33 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf172169_linespacingVerticalText)
     CPPUNIT_ASSERT_DOUBLES_EQUAL(3154, nTextHeight, 100); // will be 1991
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf172169_linespacingFirstPortion)
+{
+    // given a 2 page, double spaced document containing non-text elements as first portions
+    createSwDoc("tdf172169_linespacingFirstPortion.odt");
+
+    // Ensure the current implementation doesn't change unintentionally.
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+
+    auto pXmlDoc = parseLayoutDump();
+
+    SwTwips nTextHeight = getXPath(pXmlDoc, "//page[1]/body/txt/infos/bounds", "height").toInt32();
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(3036, nTextHeight, 100);
+    nTextHeight = getXPath(pXmlDoc, "//page[2]/body/txt/infos/bounds", "height").toInt32();
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(3588, nTextHeight, 100);
+
+    saveAndReload(TestFilter::DOCX);
+    pXmlDoc = parseLayoutDump();
+
+    // DOCX doesn't use the height of footnotes or numbering to inform line-spacing.
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+
+    nTextHeight = getXPath(pXmlDoc, "//page[1]/body/txt/infos/bounds", "height").toInt32();
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1932, nTextHeight, 100);
+    nTextHeight = getXPath(pXmlDoc, "//page[2]/body/txt/infos/bounds", "height").toInt32();
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(3588, nTextHeight, 100);
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf148057_columnBreak, "tdf148057_columnBreak.docx")
 {
     // given a document with a linefeed immediately following a column break (in non-column section)
