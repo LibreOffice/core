@@ -327,8 +327,8 @@
 #define STR_MACROS                              NC_("STR_MACROS", "Show Macros")
 #define STR_SECURITY_OPTIONS                    NC_("STR_MACROS", "Show Security Options")
 #define STR_EVENTS                              NC_("STR_EVENTS", "Show Events")
-#define STR_VCLGEN_TITLE                        NC_("STR_VCLGEN_TITLE", "You are using generic controls!")
-#define STR_VCLGEN_TEXT                         NC_("STR_VCLGEN_TEXT", "Please check whether your distribution offers a better integration.")
+#define STR_VCLGEN_TITLE                        NC_("STR_VCLGEN_TITLE", "Fallback UI controls in use")
+#define STR_VCLGEN_TEXT                         NC_("STR_VCLGEN_TEXT", "Look for a desktop environment integration package offered by your distribution.")
 
 // Translators: default Impress template names
 #define STR_TEMPLATE_NAME1                      NC_("STR_TEMPLATE_NAME1", "Grey Elegant")
