@@ -265,52 +265,6 @@ endef
 endif # SYSTEM_CPPUNIT
 
 
-ifeq ($(ENABLE_EPOXY),TRUE)
-ifeq ($(SYSTEM_EPOXY),TRUE)
-
-define gb_LinkTarget__use_epoxy
-$(call gb_LinkTarget_set_include,$(1),\
-	$$(INCLUDE) \
-    $(EPOXY_CFLAGS) \
-)
-$(call gb_LinkTarget_add_libs,$(1),$(EPOXY_LIBS))
-
-endef
-
-gb_ExternalProject__use_epoxy :=
-
-else # !SYSTEM_EPOXY
-
-define gb_LinkTarget__use_epoxy
-$(call gb_LinkTarget_set_include,$(1),\
-       -I$(gb_UnpackedTarball_workdir)/epoxy/include \
-       $$(INCLUDE) \
-)
-
-$(call gb_LinkTarget_use_libraries,$(1),\
-    epoxy \
-)
-
-endef
-
-$(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo,\
-	epoxy \
-))
-
-define gb_ExternalProject__use_epoxy
-$(call gb_ExternalProject_use_external_project,$(1),epoxy)
-
-endef
-
-endif # !SYSTEM_EPOXY
-else # !ENABLE_EPOXY
-
-gb_LinkTarget__use_epoxy :=
-gb_ExternalProject__use_epoxy :=
-
-endif # !ENABLE_EPOXY
-
-
 define gb_LinkTarget__use_iconv
 ifeq ($(COM),MSC)
 $(call gb_LinkTarget_add_libs,$(1),libiconv.lib)

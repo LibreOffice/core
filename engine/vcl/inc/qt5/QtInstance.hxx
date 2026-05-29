@@ -197,11 +197,6 @@ public:
     virtual std::unique_ptr<weld::ColorChooserDialog>
     CreateColorChooserDialog(weld::Window* pParent, vcl::ColorPickerMode eMode) override;
 
-// so we fall back to the default abort, instead of duplicating it...
-#ifndef __EMSCRIPTEN__
-    virtual OpenGLContext* CreateOpenGLContext() override;
-#endif
-
     virtual void AddToRecentDocumentList(const OUString& rFileUrl, const OUString& rMimeType,
                                          const OUString& rDocumentService) override;
 

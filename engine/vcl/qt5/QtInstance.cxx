@@ -32,7 +32,6 @@
 #include <QtInstanceColorChooserDialog.hxx>
 #include <QtMenu.hxx>
 #include <QtObject.hxx>
-#include <QtOpenGLContext.hxx>
 #include "QtSvpVirtualDevice.hxx"
 #include <QtSystem.hxx>
 #include <QtTimer.hxx>
@@ -319,7 +318,7 @@ QtInstance::QtInstance(std::unique_ptr<QApplication>& pQApp)
 #endif
 
 #ifndef __EMSCRIPTEN__
-    m_bSupportsOpenGL = true;
+    ;
 #elif !HAVE_EMSCRIPTEN_JSPI
     ImplGetSVData()->maAppData.m_bUseSystemLoop = true;
 #endif
@@ -573,10 +572,6 @@ bool QtInstance::AnyInput(VclInputFlags nType)
 }
 
 void QtInstance::AddToRecentDocumentList(const OUString&, const OUString&, const OUString&) {}
-
-#ifndef __EMSCRIPTEN__
-OpenGLContext* QtInstance::CreateOpenGLContext() { return new QtOpenGLContext; }
-#endif
 
 bool QtInstance::IsMainThread() const
 {

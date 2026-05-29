@@ -74,7 +74,6 @@ $(eval $(call gb_Library_use_libraries,vclplug_gtk4,\
 
 $(eval $(call gb_Library_use_externals,vclplug_gtk4,\
 	boost_headers \
-	epoxy \
 	dbus \
 	graphite \
 	harfbuzz \

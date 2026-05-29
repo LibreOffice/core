@@ -43,12 +43,6 @@ will be used to write the log under `instdir/uitest/`.
 * `VCL_NO_THREAD_IMPORT` - disable threaded bitmap import
 * `EMF_PLUS_DISABLE` - use EMF rendering and ignore EMF+ specifics
 
-## OpenGL
-
-* `SAL_DISABLEGL` - disable OpenGL use
-* `SAL_GL_NO_SWAP` - disable buffer swapping if set (should show nothing)
-* `SAL_GL_SLEEP_ON_SWAP` - sleep for half a second on each swap-buffers.
-
 ## Skia
 
 * `SAL_DISABLESKIA=1` - force disabled Skia
@@ -58,7 +52,7 @@ will be used to write the log under `instdir/uitest/`.
 * `SAL_DISABLE_SKIA_CACHE=1` - disable caching of complex images
 * `SAL_SKIA_KEEP_BITMAP_BUFFER=1` - `SkiaSalBitmap` will keep its bitmap buffer even after storing in `SkImage`
 
-## OpenGL,Skia
+## Skia
 
 * `SAL_WITHOUT_WIDGET_CACHE` - disable LRU caching of native widget textures
 

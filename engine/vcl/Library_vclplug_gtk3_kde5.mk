@@ -79,7 +79,6 @@ $(eval $(call gb_Library_use_libraries,vclplug_gtk3_kde5,\
 $(eval $(call gb_Library_use_externals,vclplug_gtk3_kde5,\
 	boost_headers \
 	boost_filesystem \
-	epoxy \
 	dbus \
 	graphite \
 	harfbuzz \

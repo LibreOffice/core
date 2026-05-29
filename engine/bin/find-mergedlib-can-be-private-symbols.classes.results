@@ -524,7 +524,6 @@
 11 ScRangePairList
 11 ScQueryParamBase
 11 QtFilePicker
-11 OpenGLHelper
 11 GrBackendRenderTarget
 11 DocumentToGraphicRenderer
 11 DdeTopic

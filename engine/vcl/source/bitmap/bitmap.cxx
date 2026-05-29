@@ -903,7 +903,7 @@ bool Bitmap::Convert( BmpConversion eConversion )
             if (xImpBmp->Create(*mxSalBmp) && xImpBmp->InterpretAs8Bit())
             {
                 ImplSetSalBitmap(xImpBmp);
-                SAL_INFO( "vcl.opengl", "Ref count: " << mxSalBmp.use_count() );
+                SAL_INFO( "vcl", "Ref count: " << mxSalBmp.use_count() );
                 return true;
             }
         }
@@ -913,7 +913,7 @@ bool Bitmap::Convert( BmpConversion eConversion )
             if (xImpBmp->Create(*mxSalBmp) && xImpBmp->ConvertToGreyscale())
             {
                 ImplSetSalBitmap(xImpBmp);
-                SAL_INFO( "vcl.opengl", "Ref count: " << mxSalBmp.use_count() );
+                SAL_INFO( "vcl", "Ref count: " << mxSalBmp.use_count() );
                 return true;
             }
         }
@@ -1418,7 +1418,7 @@ bool Bitmap::Scale( const double& rScaleX, const double& rScaleY, BmpScaleFlag n
         if (xImpBmp->Create(*mxSalBmp) && xImpBmp->Scale(rScaleX, rScaleY, nScaleFlag))
         {
             ImplSetSalBitmap(xImpBmp);
-            SAL_INFO( "vcl.opengl", "Ref count: " << mxSalBmp.use_count() );
+            SAL_INFO( "vcl", "Ref count: " << mxSalBmp.use_count() );
             maPrefMapMode = MapMode( MapUnit::MapPixel );
             maPrefSize = xImpBmp->GetSize();
             return true;

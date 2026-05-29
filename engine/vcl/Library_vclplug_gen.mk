@@ -54,7 +54,6 @@ $(eval $(call gb_Library_use_externals,vclplug_gen,\
 	boost_headers \
 	cairo \
 	graphite \
-	epoxy \
 	expat \
 	harfbuzz \
 	icu_headers \
@@ -104,7 +103,6 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_gen,\
     vcl/unx/generic/window/salobj \
     vcl/unx/x11/x11sys \
     vcl/unx/x11/xlimits \
-    vcl/source/opengl/x11/context \
     $(if $(filter SKIA,$(BUILD_TYPE)), \
         vcl/skia/x11/gdiimpl \
         vcl/skia/x11/salvd \

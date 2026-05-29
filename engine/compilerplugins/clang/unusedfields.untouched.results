@@ -370,12 +370,6 @@ sfx2/source/doc/doctempl.cxx:103
     DocTempl::(anonymous namespace)::DocTempl_EntryData_Impl mxObjShell SfxObjectShellLock
 sfx2/source/inc/sfxpicklist.hxx:31
     SfxPickList mxImpl std::unique_ptr<SfxPickListImpl>
-slideshow/source/engine/opengl/TransitionImpl.cxx:1991
-    (anonymous namespace)::ThreeFloats x GLfloat
-slideshow/source/engine/opengl/TransitionImpl.cxx:1991
-    (anonymous namespace)::ThreeFloats y GLfloat
-slideshow/source/engine/opengl/TransitionImpl.cxx:1991
-    (anonymous namespace)::ThreeFloats z GLfloat
 starmath/inc/mathml/mathmlMo.hxx:64
     moOperatorData m_motxt OUString
 starmath/inc/mathml/mathmlMo.hxx:65

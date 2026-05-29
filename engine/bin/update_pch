@@ -406,16 +406,11 @@ def filter_ignore(line, module):
             'accmgr.hxx',   # redefines ImplAccelList
             'image.h',
             'jobset.h',
-            'opengl/gdiimpl.hxx',
-            'opengl/salbmp.hxx',
-            'openglgdiimpl',   # ReplaceTextA
             'printdlg.hxx',
             'salinst.hxx',  # GetDefaultPrinterA
             'salprn.hxx',   # SetPrinterDataA
             'vcl/jobset.hxx',
             'vcl/oldprintadaptor.hxx',
-            'vcl/opengl/OpenGLContext.hxx',
-            'vcl/opengl/OpenGLHelper.hxx',  # Conflicts with X header on *ix
             'vcl/print.hxx',
             'vcl/prntypes.hxx', # redefines Orientation from filter/jpeg/Exif.hxx
             'vcl/sysdata.hxx',

@@ -8,8 +8,7 @@ Think of impress as a hack on top of draw.
 of `ppt` and `pptx` filter, few other filters too.
 
 the slideshow UI lives here as well, the slideshow engine is in
-`slideshow` module though (including the 3D transitions engine
-`slideshow/source/engine/opengl`).
+`slideshow` module though.
 
 the most used filters are ODF's `odp`, binary ppt and OOXML's
 `pptx`. their locations are listed below:

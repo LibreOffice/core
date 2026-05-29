@@ -3162,22 +3162,6 @@ vcl/inc/canvasbitmap.hxx:58
     void vcl::unotools::VclCanvasBitmap::setComponentInfo(unsigned int,unsigned int,unsigned int)
     unsigned int greenShift
     65280
-vcl/inc/driverblocklist.hxx:152
-    unsigned long OpenGLVersion(unsigned int,unsigned int,unsigned int,unsigned int)
-    unsigned int a
-    10
-vcl/inc/driverblocklist.hxx:152
-    unsigned long OpenGLVersion(unsigned int,unsigned int,unsigned int,unsigned int)
-    unsigned int b
-    20
-vcl/inc/driverblocklist.hxx:152
-    unsigned long OpenGLVersion(unsigned int,unsigned int,unsigned int,unsigned int)
-    unsigned int c
-    30
-vcl/inc/driverblocklist.hxx:152
-    unsigned long OpenGLVersion(unsigned int,unsigned int,unsigned int,unsigned int)
-    unsigned int d
-    40
 vcl/inc/FileDefinitionWidgetDraw.hxx:60
     void vcl::FileDefinitionWidgetDraw::drawPolyLine(class SalGraphics &,const class basegfx::B2DHomMatrix &,const class basegfx::B2DPolygon &,double,double,const class std::vector<double> *,enum basegfx::B2DLineJoin,enum com::sun::star::drawing::LineCap,double,_Bool)
     enum basegfx::B2DLineJoin i_eLineJoin

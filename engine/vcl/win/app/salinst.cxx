@@ -35,7 +35,6 @@
 
 #include <dndhelper.hxx>
 #include <vcl/inputtypes.hxx>
-#include <vcl/opengl/OpenGLContext.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/timer.hxx>
 #include <vclpluginapi.h>
@@ -93,8 +92,6 @@ SalYieldMutex::SalYieldMutex()
 
 void SalYieldMutex::BeforeReleaseHandler()
 {
-    OpenGLContext::prepareForYield();
-
     if ( GetSalData()->mnAppThreadId != GetCurrentThreadId() )
     {
         // If we don't call these message, the Output from the
@@ -371,7 +368,6 @@ WinSalInstance::WinSalInstance()
 {
     ImplSVData* pSVData = ImplGetSVData();
     pSVData->maAppData.mxToolkitName = OUString("win");
-    m_bSupportsOpenGL = true;
     WinSkiaSalGraphicsImpl::prepareSkia();
 }
 
@@ -718,7 +714,6 @@ SalFrame* WinSalInstance::CreateFrame( SalFrame* pParent, SalFrameStyleFlags nSa
 
 void WinSalInstance::DestroyFrame( SalFrame* pFrame )
 {
-    OpenGLContext::prepareForYield();
     SendComWndMessage(SAL_MSG_DESTROYFRAME, 0, reinterpret_cast<LPARAM>(pFrame));
 }
 

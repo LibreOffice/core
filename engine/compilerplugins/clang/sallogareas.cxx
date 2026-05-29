@@ -180,7 +180,7 @@ void SalLogAreas::checkArea( StringRef area, SourceLocation location )
                 || area == "sw.docappend" || area == "sw.mailmerge"
                 || area == "sw.uno"
                 || area == "vcl.layout" || area == "vcl.a11y"
-                || area == "vcl.gdi.fontmetric" || area == "vcl.opengl"
+                || area == "vcl.gdi.fontmetric"
                 || area == "vcl.harfbuzz"
                 || area == "vcl.schedule" || area == "vcl.unity"
                 || area == "xmlsecurity.comp"

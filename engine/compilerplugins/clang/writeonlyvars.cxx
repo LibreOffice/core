@@ -424,9 +424,6 @@ void WriteOnlyVars::run()
         if (loplugin::isSamePathname(fn, SRCDIR
                                      "/shell/source/sessioninstall/SyncDbusSessionHelper.cxx"))
             return;
-        if (loplugin::isSamePathname(fn,
-                                     SRCDIR "/slideshow/source/engine/opengl/TransitionerImpl.cxx"))
-            return;
         if (loplugin::isSamePathname(fn, SRCDIR "/forms/source/component/FormattedField.cxx"))
             return;
         if (loplugin::isSamePathname(fn, SRCDIR "/forms/source/component/DatabaseForm.cxx"))

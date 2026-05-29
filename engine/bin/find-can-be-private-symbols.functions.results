@@ -709,7 +709,6 @@ FrameDeleteWatch::Notify(SfxHint const&)
 FreeTypeTextRenderImpl::ClearDevFontCache()
 FuConstUnoControl::Activate()
 GDIMetaFile::dumpAsXml(char const*) const
-GLWindow::Synchronize(bool) const
 GUB_count
 GalleryExplorer::BeginLocking(std::basic_string_view<char16_t, std::char_traits<char16_t> >)
 GalleryExplorer::EndLocking(std::basic_string_view<char16_t, std::char_traits<char16_t> >)
@@ -1461,14 +1460,6 @@ Op(SkPath const&, SkPath const&, SkPathOp, SkPath*)
 OpenCLConfig::OpenCLConfig()
 OpenCLConfig::checkImplementation(OpenCLPlatformInfo const&, OpenCLDeviceInfo const&) const
 OpenCLConfig::operator==(OpenCLConfig const&) const
-OpenGLContext::isCurrent()
-OpenGLHelper::LoadShaders(rtl::OUString const&, rtl::OUString const&, rtl::OUString const&, std::basic_string_view<char, std::char_traits<char> >, std::basic_string_view<char, std::char_traits<char> >)
-OpenGLHelper::debugMsgPrint(int, char const*, ...)
-OpenGLHelper::debugMsgStreamWarn(std::__cxx11::basic_ostringstream<char, std::char_traits<char>, std::allocator<char> > const&)
-OpenGLZone::checkDebug(int, CrashWatchdogTimingsValues const&)
-OpenGLZone::getCrashWatchdogTimingsValues()
-OpenGLZone::hardDisable()
-OpenGLZone::relaxWatchdogTimings()
 Outliner::GetBulletsNumberingStatus(int, int) const
 OutlinerParaObjData::OutlinerParaObjData(OutlinerParaObjData const&)
 OutlinerParaObjData::OutlinerParaObjData(std::unique_ptr<EditTextObject, std::default_delete<EditTextObject> >, std::__debug::vector<ParagraphData, std::allocator<ParagraphData> >&&, bool)
@@ -1719,7 +1710,6 @@ SalInfoPrinter::~SalInfoPrinter()
 SalInstance::AcquireYieldMutex(unsigned int)
 SalInstance::CreateDragSource(SystemEnvData const*)
 SalInstance::CreateDropTarget(SystemEnvData const*)
-SalInstance::CreateOpenGLContext()
 SalInstance::ImplCreateDragSource(SystemEnvData const*)
 SalInstance::ImplCreateDropTarget(SystemEnvData const*)
 SalInstance::ReleaseYieldMutexAll()

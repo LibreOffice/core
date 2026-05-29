@@ -68,7 +68,6 @@ curl --no-progress-meter -S \
     -C - -O https://dev-www.libreoffice.org/src/$HUNSPELL_TARBALL \
     -C - -O https://dev-www.libreoffice.org/src/$FREETYPE_TARBALL \
     -C - -O https://dev-www.libreoffice.org/src/$FONTCONFIG_TARBALL \
-    -C - -O https://dev-www.libreoffice.org/src/$EPOXY_TARBALL \
     -C - -O https://dev-www.libreoffice.org/src/$EPUBGEN_TARBALL \
     -C - -O https://dev-www.libreoffice.org/src/$LIBNUMBERTEXT_TARBALL \
     -C - -O https://dev-www.libreoffice.org/src/$QXP_TARBALL \

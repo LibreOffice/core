@@ -90,11 +90,6 @@ EBOOK_TARBALL := libe-book-0.1.3.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-EPOXY_SHA256SUM := a7ced37f4102b745ac86d6a70a9da399cc139ff168ba6b8002b4d8d43c900c15
-EPOXY_TARBALL := libepoxy-1.5.10.tar.gz
-# three static lines
-# so that git cherry-pick
-# will not run into conflicts
 EPM_SHA256SUM := b3fc4c5445de6c9a801504a3ea3efb2d4ea9d5a622c9427e716736e7713ddb91
 EPM_TARBALL := 3ade8cfe7e59ca8e65052644fed9fca4-epm-3.7.tar.gz
 # three static lines

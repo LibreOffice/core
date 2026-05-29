@@ -252,12 +252,6 @@
       <info>
         <desc>Contains settings for VCL.</desc>
       </info>
-      <prop oor:name="DisableOpenGL" oor:type="xs:boolean" oor:nillable="false">
-        <info>
-           <desc>Specifies if all OpenGL usage should be disabled.</desc>
-        </info>
-        <value>false</value>
-      </prop>
       <prop oor:name="UseSkia" oor:type="xs:boolean" oor:nillable="false">
         <info>
            <desc>Specifies if Skia rendering should be used in VCL backends

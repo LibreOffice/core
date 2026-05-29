@@ -466,10 +466,6 @@ include/vcl/graphictools.hxx:278
     void SvtGraphicFill::SvtGraphicFill(class tools::PolyPolygon,class Color,double,enum SvtGraphicFill::FillRule,enum SvtGraphicFill::FillType,const struct SvtGraphicFill::Transform &,_Bool,enum SvtGraphicFill::HatchType,class Color,enum SvtGraphicFill::GradientType,class Color,class Color,int,class Graphic)
     class Color aFillColor
     Color()
-include/vcl/opengl/OpenGLHelper.hxx:57
-    int OpenGLHelper::LoadShaders(const class rtl::OUString &,const class rtl::OUString &,class std::basic_string_view<char>,class std::basic_string_view<char>)
-    class std::basic_string_view<char> rDigest
-    ""
 include/vcl/print.hxx:615
     class com::sun::star::uno::Any vcl::PrinterOptionsHelper::setRangeControlOpt(const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,int,int,int,const struct vcl::PrinterOptionsHelper::UIControlOptions &)
     const class rtl::OUString & i_rTitle

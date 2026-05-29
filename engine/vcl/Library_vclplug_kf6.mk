@@ -59,7 +59,6 @@ $(eval $(call gb_Library_use_externals,vclplug_kf6,\
 	harfbuzz \
 	icuuc \
 	kf6 \
-	epoxy \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,vclplug_kf6,\

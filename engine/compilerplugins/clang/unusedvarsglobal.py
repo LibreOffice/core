@@ -56,13 +56,13 @@ for d in definitionSet:
         continue
     if varname.startswith("autoRegister"): # auto-generated CPPUNIT stuff
         continue
-    if vartype in ["css::uno::ContextLayer", "SolarMutexGuard", "SolarMutexReleaser", "OpenGLZone"]:
+    if vartype in ["css::uno::ContextLayer", "SolarMutexGuard", "SolarMutexReleaser"]:
         continue
-    if vartype in ["PreDefaultWinNoOpenGLZone", "SchedulerGuard", "SkiaZone", "OpenGLVCLContextZone"]:
+    if vartype in ["SchedulerGuard", "SkiaZone"]:
         continue
     if vartype in ["SwXDispatchProviderInterceptor::DispatchMutexLock_Impl", "SfxObjectShellLock", "OpenCLZone"]:
         continue
-    if vartype in ["OpenCLInitialZone", "pyuno::PyThreadDetach", "SortRefUpdateSetter", "oglcanvas::TransformationPreserver"]:
+    if vartype in ["OpenCLInitialZone", "pyuno::PyThreadDetach", "SortRefUpdateSetter"]:
         continue
     if vartype in ["StackHack", "osl::MutexGuard", "accessibility::SolarMethodGuard"]:
         continue

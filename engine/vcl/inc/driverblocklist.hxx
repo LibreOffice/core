@@ -20,7 +20,6 @@ namespace DriverBlocklist
 // Details of how to treat a version number.
 enum class VersionType
 {
-    OpenGL, // a.b.c.d, 1.98 > 1.978
     Vulkan // a.b.c , 1.98 < 1.978
 };
 
@@ -147,26 +146,6 @@ bool VCL_DLLPUBLIC FindBlocklistedDeviceInList(std::vector<DriverInfo>& aDeviceI
 
 #define GFX_DRIVER_VERSION(a, b, c, d)                                                             \
     ((uint64_t(a) << 48) | (uint64_t(b) << 32) | (uint64_t(c) << 16) | uint64_t(d))
-
-inline uint64_t OpenGLVersion(uint32_t a, uint32_t b, uint32_t c, uint32_t d)
-{
-    // We make sure every driver number is padded by 0s, this will allow us the
-    // easiest 'compare as if decimals' approach. See ParseDriverVersion for a
-    // more extensive explanation of this approach.
-    while (b > 0 && b < 1000)
-    {
-        b *= 10;
-    }
-    while (c > 0 && c < 1000)
-    {
-        c *= 10;
-    }
-    while (d > 0 && d < 1000)
-    {
-        d *= 10;
-    }
-    return GFX_DRIVER_VERSION(a, b, c, d);
-}
 
 } // namespace
 

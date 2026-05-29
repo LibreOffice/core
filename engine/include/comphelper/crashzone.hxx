@@ -25,7 +25,7 @@ struct CrashWatchdogTimingsValues
 
 /**
  * A generic class for detecting if a given crash or a lock-up came from a specific
- * area of code (such as OpenGL).
+ * area of code (such as Skia).
  * Use this helper to track that.
  * The class is a template so that there can be multiple instances of static variables.
  */

@@ -30,8 +30,6 @@ $(eval $(call gb_Module_add_targets,vcl,\
     Package_theme_definitions \
     Package_toolbarmode \
     UIConfig_vcl \
-    $(if $(filter WNT,$(OS)), \
-        Package_opengl_denylist ) \
     $(if $(filter SKIA,$(BUILD_TYPE)), \
         Package_skia_denylist ) \
     $(if $(filter DESKTOP FUZZERS,$(BUILD_TYPE)), \
@@ -248,7 +246,6 @@ $(eval $(call gb_Module_add_check_targets,vcl,\
     CppunitTest_vcl_png_test \
     CppunitTest_vcl_widget_definition_reader_test \
     CppunitTest_vcl_backend_test \
-    CppunitTest_vcl_blocklistparser_test \
     CppunitTest_vcl_type_serializer_test \
     CppunitTest_vcl_animation \
     $(call gb_Helper_optional, PDFIUM, \

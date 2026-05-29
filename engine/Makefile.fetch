@@ -123,7 +123,6 @@ fetch_SRC_TARBALLS := \
 	$(call fetch_Optional,FREEHAND,FREEHAND_TARBALL) \
 	$(call fetch_Optional,FREETYPE,FREETYPE_TARBALL) \
 	$(call fetch_Optional,FROZEN,FROZEN_TARBALL) \
-	$(call fetch_Optional,EPOXY,EPOXY_TARBALL) \
 	$(call fetch_Optional,GLM,GLM_TARBALL) \
 	$(call fetch_Optional,GPGMEPP,GPGME_TARBALL) \
 	$(call fetch_Optional,GRAPHITE,GRAPHITE_TARBALL) \

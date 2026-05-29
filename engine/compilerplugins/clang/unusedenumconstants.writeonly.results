@@ -7854,8 +7854,6 @@ vcl/source/gdi/region.cxx:1546
     enum RegionType REGION_RECTANGLE
 vcl/source/gdi/regionband.cxx:200
     enum (anonymous namespace)::StreamEntryType STREAMENTRY_SEPARATION
-vcl/source/opengl/OpenGLHelper.cxx:766
-    enum (anonymous namespace)::CrashWatchdogTimingMode NORMAL
 vcl/source/treelist/iconviewimpl.hxx:67
     enum IconViewImpl::CallbackResult Continue
 vcl/unx/generic/app/sm.cxx:189

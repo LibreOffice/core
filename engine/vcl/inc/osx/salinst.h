@@ -130,7 +130,6 @@ public:
     virtual bool            AnyInput( VclInputFlags nType ) override;
     virtual std::unique_ptr<SalMenu>     CreateMenu( bool bMenuBar, Menu* pVCLMenu ) override;
     virtual std::unique_ptr<SalMenuItem> CreateMenuItem( const SalItemParams & rItemData ) override;
-    virtual OpenGLContext*  CreateOpenGLContext() override;
     virtual void            AddToRecentDocumentList(const OUString& rFileUrl, const OUString& rMimeType,
                                                     const OUString& rDocumentService) override;
 

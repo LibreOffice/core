@@ -44,7 +44,6 @@
 #include <vcl/window.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/svmain.hxx>
-#include <vcl/opengl/OpenGLContext.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
 
@@ -362,7 +361,6 @@ AquaSalInstance::AquaSalInstance()
 
     ImplSVData* pSVData = ImplGetSVData();
     pSVData->maAppData.mxToolkitName = OUString("osx");
-    m_bSupportsOpenGL = true;
 
     mpButtonCell = [[NSButtonCell alloc] init];
     mpCheckCell = [[NSButtonCell alloc] init];

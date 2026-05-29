@@ -52,7 +52,6 @@ class SystemChildWindow;
 struct SystemParentData;
 struct SalPrinterQueueInfo;
 class ImplJobSetup;
-class OpenGLContext;
 class SalGraphics;
 class SalFrame;
 class SalObject;
@@ -85,7 +84,6 @@ private:
     o3tl::sorted_vector<OUString> m_usedUI;
 
 protected:
-    bool m_bSupportsOpenGL = false;
 
 #ifdef MACOSX
     static void MacStartupWorkarounds();
@@ -94,8 +92,6 @@ protected:
 public:
     SalInstance(std::unique_ptr<comphelper::SolarMutex> pMutex);
     virtual ~SalInstance();
-
-    bool supportsOpenGL() const { return m_bSupportsOpenGL; }
 
     o3tl::sorted_vector<OUString>& getUsedUIList() { return m_usedUI; }
 
@@ -176,9 +172,6 @@ public:
 
     // may return NULL to disable session management, only used by X11 backend
     virtual std::unique_ptr<SalSession> CreateSalSession();
-
-    // also needs to set m_bSupportsOpenGL = true in your SalInstance implementation!
-    virtual OpenGLContext*  CreateOpenGLContext();
 
     virtual std::unique_ptr<weld::Builder> CreateBuilder(weld::Widget* pParent, const OUString& rUIRoot, const OUString& rUIFile);
     virtual std::unique_ptr<weld::Builder> CreateInterimBuilder(vcl::Window* pParent, const OUString& rUIRoot, const OUString& rUIFile,

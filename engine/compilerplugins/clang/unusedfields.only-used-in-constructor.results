@@ -618,16 +618,6 @@ sfx2/source/doc/doctempl.cxx:103
     DocTempl::(anonymous namespace)::DocTempl_EntryData_Impl mxObjShell SfxObjectShellLock
 slideshow/source/engine/animationnodes/animationbasenode.hxx:88
     slideshow::internal::AnimationBaseNode mpSubsetManager SubsettableShapeManagerSharedPtr
-slideshow/source/engine/opengl/TransitionImpl.cxx:1991
-    (anonymous namespace)::ThreeFloats x GLfloat
-slideshow/source/engine/opengl/TransitionImpl.cxx:1991
-    (anonymous namespace)::ThreeFloats y GLfloat
-slideshow/source/engine/opengl/TransitionImpl.cxx:1991
-    (anonymous namespace)::ThreeFloats z GLfloat
-slideshow/source/engine/opengl/TransitionImpl.hxx:297
-    Vertex normal glm::vec3
-slideshow/source/engine/opengl/TransitionImpl.hxx:298
-    Vertex texcoord glm::vec2
 slideshow/source/engine/slide/slideimpl.cxx:206
     slideshow::internal::(anonymous namespace)::SlideImpl mpBox2DWorld box2d::utils::Box2DWorldSharedPtr
 slideshow/source/engine/smilfunctionparser.cxx:494

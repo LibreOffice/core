@@ -61,7 +61,6 @@ $(eval $(call gb_Library_use_libraries,vclplug_osx,\
 
 $(eval $(call gb_Library_use_externals,vclplug_osx,\
     boost_headers \
-    epoxy \
     harfbuzz \
     $(if $(filter SKIA,$(BUILD_TYPE)), \
         skia \

@@ -21,11 +21,9 @@
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
-#include <epoxy/glx.h>
 
 #include <rtl/string.hxx>
 #include <unx/saltype.h>
-#include <vcl/opengl/OpenGLContext.hxx>
 #include <vcl/ptrstyle.hxx>
 #include <sal/types.h>
 #include <cassert>
@@ -175,23 +173,6 @@ class SalI18N_KeyboardExtension;
 extern "C" {
     typedef Bool(*X_if_predicate)(Display*,XEvent*,XPointer);
 }
-
-class GLX11Window final : public GLWindow
-{
-public:
-    Display*           dpy;
-    int                screen;
-    Window             win;
-    XVisualInfo*       vi;
-    GLXContext         ctx;
-    OString            GLXExtensions;
-
-    bool HasGLXExtension(const char* name) const;
-
-    GLX11Window();
-    virtual bool Synchronize(bool bOnoff) const override;
-    virtual ~GLX11Window() override;
-};
 
 class VCLPLUG_GEN_PUBLIC SalDisplay : public SalGenericDisplay
 {

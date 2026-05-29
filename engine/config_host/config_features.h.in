@@ -97,11 +97,6 @@
 #define HAVE_FEATURE_BACKTRACE 0
 
 /*
- *  Whether OpenGL is enabled
- */
-#define HAVE_FEATURE_OPENGL 0
-
-/*
  * Whether Skia is enabled
  */
 #define HAVE_FEATURE_SKIA 0

@@ -99,7 +99,6 @@
 #include <uno/current_context.hxx>
 
 #include <opencl/OpenCLZone.hxx>
-#include <opengl/zone.hxx>
 #include <skia/zone.hxx>
 #include <watchdog.hxx>
 
@@ -136,10 +135,6 @@ static oslSignalAction VCLExceptionSignal_impl( void* /*pData*/, oslSignalInfo* 
          (pInfo->Signal == osl_Signal_DebugBreak) )
     {
         nVCLException = ExceptionCategory::System;
-#if HAVE_FEATURE_OPENGL
-        if (OpenGLZone::isInZone())
-            OpenGLZone::hardDisable();
-#endif
 #if HAVE_FEATURE_SKIA
         if (SkiaZone::isInZone())
             SkiaZone::hardDisable();

@@ -6,9 +6,6 @@ customAssumeFilenames:
     # Needs -isystem /usr/include/x86_64-linux-gnu/qt6
     vcl/inc/qt6: vcl/qt6/QtInstance.cxx
 excludelist:
-    vcl/inc/unx/saldisp.hxx:
-    # Don't replace with generated header
-    - epoxy/glx.h
     vcl/inc/unx/svsys.h:
     # Empty header, but keep intact for nice system abstraction
     - X11/Xlib.h

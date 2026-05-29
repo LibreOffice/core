@@ -486,7 +486,7 @@ void UseUniquePtr::CheckDeleteLocalVar(const FunctionDecl* functionDecl, const C
     if (parentName == "ScFunctionList" || parentName == "SwNodes"
         || parentName == "SwUnoCursor" || parentName == "SortedResultSet"
         || parentName == "Atom" || parentName == "RegionBand" || parentName == "WMFWriter"
-        || parentName == "Scheduler" || parentName == "OpenGLContext"
+        || parentName == "Scheduler"
         || parentName == "WizardDialog")
         return;
     // manual ref counting
@@ -537,7 +537,7 @@ void UseUniquePtr::CheckDeleteLocalVar(const FunctionDecl* functionDecl, const C
         if (any_equal(name, "UCBStorage::OpenStorage_Impl", "SdTransferable::GetData"))
             return;
         // complicated ownership
-        if (any_equal(name, "ParseCMAP", "OpenGLSalBitmap::CreateTexture", "X11SalGraphicsImpl::drawAlphaBitmap"
+        if (any_equal(name, "ParseCMAP", "X11SalGraphicsImpl::drawAlphaBitmap"
             "SvEmbedTransferHelper::GetData", "ORoadmap::dispose",
             "BrowseBox::SetMode", "ExportDialog::GetFilterData", "disposeComVariablesForBasic",
             "ImpEditEngine::ImpRemoveParagraph", "FactoryImpl::createAdapter",

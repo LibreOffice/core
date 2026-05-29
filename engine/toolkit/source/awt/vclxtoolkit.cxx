@@ -136,9 +136,6 @@
 #include <vcl/toolkit/spin.hxx>
 #include <vcl/toolkit/tabdlg.hxx>
 #include <vcl/toolkit/throbber.hxx>
-#if HAVE_FEATURE_OPENGL
-#include <vcl/opengl/OpenGLWrapper.hxx>
-#endif
 #include <awt/vclxspinbutton.hxx>
 #include <tools/debug.hxx>
 #include <comphelper/kit.hxx>
@@ -476,8 +473,6 @@ public:
 
     // css::awt::XToolkitExperimental
     virtual void SAL_CALL processEventsToIdle() override;
-
-    virtual sal_Int64 SAL_CALL getOpenGLBufferSwapCounter() override;
 
     virtual void SAL_CALL setDeterministicScheduling(sal_Bool bDeterministicMode) override;
 
@@ -2460,15 +2455,6 @@ void SAL_CALL VCLXToolkit::processEventsToIdle()
     SolarMutexGuard aSolarGuard;
     comphelper::ProfileZone aZone("processEvents");
     Scheduler::ProcessEventsToIdle();
-}
-
-sal_Int64 SAL_CALL VCLXToolkit::getOpenGLBufferSwapCounter()
-{
-#if HAVE_FEATURE_OPENGL
-    return OpenGLWrapper::getBufferSwapCounter();
-#else
-    return 0;
-#endif
 }
 
 void SAL_CALL VCLXToolkit::setDeterministicScheduling(sal_Bool bDeterministicMode)

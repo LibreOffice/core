@@ -57,7 +57,6 @@ $(eval $(call gb_Library_use_libraries,vclplug_qt6,\
 $(eval $(call gb_Library_use_externals,vclplug_qt6,\
     boost_headers \
     cairo \
-    epoxy \
     graphite \
     harfbuzz \
     icu_headers \
@@ -142,7 +141,6 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_qt6,\
     vcl/qt6/QtMainWindow \
     vcl/qt6/QtMenu \
     vcl/qt6/QtObject \
-    vcl/qt6/QtOpenGLContext \
     vcl/qt6/QtPainter \
     vcl/qt6/QtPrinter \
     vcl/qt6/QtSvpGraphics \

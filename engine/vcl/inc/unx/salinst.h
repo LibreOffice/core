@@ -72,7 +72,6 @@ public:
     virtual SalSystem*          CreateSalSystem() override;
     virtual std::shared_ptr<SalBitmap>  CreateSalBitmap() override;
     virtual std::unique_ptr<SalSession> CreateSalSession() override;
-    virtual OpenGLContext*      CreateOpenGLContext() override;
 
     virtual bool                DoYield(bool bWait, bool bHandleAllCurrentEvents) override;
     virtual bool                AnyInput( VclInputFlags nType ) override;

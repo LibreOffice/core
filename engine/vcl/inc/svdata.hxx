@@ -108,7 +108,6 @@ class SalTimer;
 class DockingManager;
 class VclEventListeners2;
 class SalData;
-class OpenGLContext;
 class UITestLogger;
 
 #define SV_ICON_ID_OFFICE                               1
@@ -230,7 +229,6 @@ struct ImplSVGDIData
     VclPtr<Printer>         mpFirstPrnGraphics;             // First OutputDevice with an InfoPrinter Graphics
     VclPtr<Printer>         mpLastPrnGraphics;              // Last OutputDevice with an InfoPrinter Graphics
     VclPtr<VirtualDevice>   mpFirstVirDev;                  // First VirtualDevice
-    OpenGLContext*          mpLastContext = nullptr;        // Last OpenGLContext
     VclPtr<Printer>         mpFirstPrinter;                 // First Printer
     std::unique_ptr<ImplPrnQueueList> mpPrinterQueueList;   // List of all printer queue
     std::shared_ptr<vcl::font::PhysicalFontCollection> mxScreenFontList; // Screen-Font-List

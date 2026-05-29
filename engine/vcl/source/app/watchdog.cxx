@@ -16,7 +16,6 @@
 #include <rtl/string.hxx>
 #include <sal/log.hxx>
 #include <comphelper/debuggerinfo.hxx>
-#include <opengl/zone.hxx>
 #include <skia/zone.hxx>
 
 #include <stdlib.h>
@@ -108,9 +107,6 @@ void WatchdogThread::execute()
     TimeValue aQuarterSecond(0, 1000 * 1000 * 1000 * 0.25);
     do
     {
-#if HAVE_FEATURE_OPENGL
-        WatchdogHelper<OpenGLZone>::setLastEnters();
-#endif
 #if HAVE_FEATURE_SKIA
         WatchdogHelper<SkiaZone>::setLastEnters();
 #endif
@@ -126,9 +122,6 @@ void WatchdogThread::execute()
             continue;
 #endif
 
-#if HAVE_FEATURE_OPENGL
-        WatchdogHelper<OpenGLZone>::check();
-#endif
 #if HAVE_FEATURE_SKIA
         WatchdogHelper<SkiaZone>::check();
 #endif

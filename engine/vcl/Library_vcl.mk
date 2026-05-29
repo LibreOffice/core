@@ -690,8 +690,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
 else # !DISABLE_GUI
 
 $(eval $(call gb_Library_add_exception_objects,vcl,\
-    vcl/source/opengl/OpenGLContext \
-    vcl/source/opengl/OpenGLHelper \
     $(if $(filter SKIA,$(BUILD_TYPE)), \
         vcl/skia/salbmp \
         vcl/skia/zone \
@@ -703,7 +701,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
 ))
 
 $(eval $(call gb_Library_use_externals,vcl,\
-    epoxy \
     $(if $(filter SKIA,$(BUILD_TYPE)),skia) \
 ))
 endif # !DISABLE_GUI
@@ -823,7 +820,6 @@ endif
 
 ifeq ($(OS),WNT)
 $(eval $(call gb_Library_add_exception_objects,vcl,\
-    vcl/source/opengl/win/WinDeviceInfo \
     vcl/win/app/fileregistration \
 ))
 
@@ -840,7 +836,6 @@ $(eval $(call gb_Library_add_nativeres,vcl,vcl/salsrc))
 # HACK: dependency on icon themes so running unit tests don't
 # prevent delivering these by having open file handles on WNT
 $(eval $(call gb_Library_use_packages,vcl, \
-    vcl_opengl_denylist \
     $(if $(filter host,$(gb_Side)),postprocess_images) \
 ))
 endif # WNT

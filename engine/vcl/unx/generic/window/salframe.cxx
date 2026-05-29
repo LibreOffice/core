@@ -29,7 +29,6 @@
 #include <vcl/keycodes.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/BitmapReadAccess.hxx>
-#include <vcl/opengl/OpenGLContext.hxx>
 #include <vcl/BitmapTools.hxx>
 
 #include <X11/Xlib.h>
@@ -46,7 +45,6 @@
 #include <unx/wmadaptor.hxx>
 #include <unx/i18n_ic.hxx>
 #include <unx/i18n_keysym.hxx>
-#include <opengl/zone.hxx>
 
 #include <unx/gensys.h>
 #include <window.h>
@@ -812,15 +810,6 @@ X11SalFrame::~X11SalFrame()
 
     pGraphics_.reset();
     pFreeGraphics_.reset();
-
-    // reset all OpenGL contexts using this window
-    rtl::Reference<OpenGLContext> pContext = ImplGetSVData()->maGDIData.mpLastContext;
-    while( pContext.is() )
-    {
-        if (static_cast<const GLX11Window&>(pContext->getOpenGLWindow()).win == mhWindow)
-            pContext->reset();
-        pContext = pContext->mpPrevContext;
-    }
 
     if (mpSurface)
         cairo_surface_destroy(mpSurface);

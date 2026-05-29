@@ -133,9 +133,6 @@ include/vcl/accessibletable.hxx:92
 include/vcl/dndhelp.hxx:62
     void vcl::unohelper::DragAndDropClient::dragExit(const struct com::sun::star::datatransfer::dnd::DropTargetEvent &,)
     0
-include/vcl/opengl/OpenGLContext.hxx:101
-    struct SystemWindowData OpenGLContext::generateWinData(class vcl::Window *,_Bool,)
-    10
 include/xmloff/txtimp.hxx:108
     class SvXMLImportContext * XMLTextImportHelper::CreateTableChildContext(class SvXMLImport &,int,const class com::sun::star::uno::Reference<class com::sun::star::xml::sax::XFastAttributeList> &,)
     101

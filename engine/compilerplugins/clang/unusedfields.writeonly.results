@@ -784,8 +784,6 @@ include/vcl/notebookbar/NotebookBarAddonsMerger.hxx:45
     AddonNotebookBarItem sControlType OUString
 include/vcl/notebookbar/NotebookBarAddonsMerger.hxx:46
     AddonNotebookBarItem nWidth sal_uInt16
-include/vcl/opengl/OpenGLContext.hxx:27
-    GLWindow bMultiSampleSupported _Bool
 include/vcl/pdfextoutdevdata.hxx:87
     vcl::PDFExtOutDevData mbSinglePageSheets _Bool
 include/vcl/salnativewidgets.hxx:470
@@ -1240,10 +1238,6 @@ sfx2/source/view/classificationcontroller.cxx:73
     sfx2::(anonymous namespace)::ClassificationCategoriesController m_aPropertyListener ClassificationPropertyListener
 sfx2/source/view/viewsh.cxx:748
     KitDocumentFocusListener m_aRefList std::unordered_set<uno::Reference<uno::XInterface> >
-slideshow/source/engine/opengl/TransitionImpl.hxx:297
-    Vertex normal glm::vec3
-slideshow/source/engine/opengl/TransitionImpl.hxx:298
-    Vertex texcoord glm::vec2
 slideshow/source/engine/slideshowimpl.cxx:447
     (anonymous namespace)::SlideShowImpl mpNavigationPrev std::shared_ptr<SlideOverlayButton>
 slideshow/source/engine/slideshowimpl.cxx:448

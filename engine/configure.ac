@@ -2227,11 +2227,6 @@ AC_ARG_ENABLE(opencl,
         [Disable OpenCL support.]),
 ,enable_opencl=yes)
 
-AC_ARG_ENABLE(opengl,
-    AS_HELP_STRING([--disable-opengl],
-        [Disable OpenGL support.]),
-,enable_opengl=yes)
-
 libo_FUZZ_ARG_ENABLE(librelogo,
     AS_HELP_STRING([--disable-librelogo],
         [Do not build LibreLogo.]),
@@ -2439,12 +2434,6 @@ AC_ARG_WITH(system-cairo,
     AS_HELP_STRING([--with-system-cairo],
         [Use cairo libraries already on system.  Happens automatically for
          (implicit) --enable-gtk3.]))
-
-AC_ARG_WITH(system-epoxy,
-    AS_HELP_STRING([--with-system-epoxy],
-        [Use epoxy libraries already on system.  Happens automatically for
-         (implicit) --enable-gtk3.]),,
-       [with_system_epoxy="$with_system_libs"])
 
 AC_ARG_WITH(myspell-dicts,
     AS_HELP_STRING([--with-myspell-dicts],
@@ -6184,7 +6173,6 @@ if test "$cross_compiling" = "yes"; then
         DESKTOP
         DRAGONBOX
         DYNLOADING
-        EPOXY
         EXPAT
         FAST_FLOAT
         FROZEN
@@ -12030,12 +12018,6 @@ if ! "$TOUCH" -h "$WARNINGS_FILE" 2>/dev/null > /dev/null; then
 fi
 
 dnl ===================================================================
-dnl Check for system epoxy
-dnl ===================================================================
-EPOXY_CFLAGS_internal="-I${WORKDIR}/UnpackedTarball/epoxy/include"
-libo_CHECK_SYSTEM_MODULE([epoxy], [EPOXY], [epoxy >= 1.2])
-
-dnl ===================================================================
 dnl Show which vclplugs will be built.
 dnl ===================================================================
 R=""
@@ -12343,30 +12325,6 @@ fi
 AC_SUBST(GSTREAMER_1_0_CFLAGS)
 AC_SUBST(GSTREAMER_1_0_LIBS)
 AC_SUBST(ENABLE_GSTREAMER_1_0)
-
-dnl =================================================
-dnl Check whether to build with OpenGL support.
-dnl =================================================
-
-ENABLE_OPENGL_CANVAS=
-if test $_os = iOS -o $_os = Android -o "$ENABLE_FUZZERS" = "TRUE" -o "$enable_opengl" != "yes"; then
-   : # disable
-elif test "$_os" = "Darwin"; then
-    # We use frameworks on macOS, no need for detail checks
-    AC_DEFINE(HAVE_FEATURE_OPENGL,1)
-    ENABLE_OPENGL_CANVAS=TRUE
-elif test $_os = WINNT; then
-    AC_DEFINE(HAVE_FEATURE_OPENGL,1)
-    ENABLE_OPENGL_CANVAS=TRUE
-else
-    if test "$USING_X11" = TRUE; then
-        AC_CHECK_LIB(GL, glBegin, [:], AC_MSG_ERROR([libGL required.]))
-        AC_DEFINE(HAVE_FEATURE_OPENGL,1)
-        ENABLE_OPENGL_CANVAS=TRUE
-    fi
-fi
-
-AC_SUBST(ENABLE_OPENGL_CANVAS)
 
 dnl =================================================
 dnl Check whether to build with OpenCL support.

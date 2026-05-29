@@ -342,7 +342,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	canvasfactory \
 	cppcanvas \
 	$(if $(filter WNT,$(OS)),directx9canvas) \
-	$(if $(ENABLE_OPENGL_CANVAS),oglcanvas) \
 	$(if $(filter WNT,$(OS)),gdipluscanvas) \
 	simplecanvas \
 	vclcanvas \
@@ -807,12 +806,6 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 ))
 endif
 
-ifneq ($(ENABLE_WASM_STRIP_CANVAS),TRUE)
-$(eval $(call gb_Helper_register_packages_for_install,ooo,\
-	$(if $(ENABLE_OPENGL_CANVAS),canvas_opengl_shader) \
-))
-endif
-
 $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 	$(if $(SYSTEM_LIBEXTTEXTCAT),,libexttextcat_fingerprint) \
 	officecfg_misc \
@@ -876,9 +869,6 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 	$(if $(filter $(OS),MACOSX),sysui_osxicons) \
 	toolbarmode_images \
 	vcl_theme_definitions \
-	$(if $(filter WNT,$(OS)), \
-		vcl_opengl_denylist \
-	) \
 	$(if $(filter SKIA,$(BUILD_TYPE)), \
 		vcl_skia_denylist ) \
 	$(if $(DISABLE_PYTHON),, \

@@ -1880,8 +1880,6 @@ namespace comphelper
         uno::Reference< XDocument > xDocument = xBuilder->parseURI(aRegistryModifications);
         uno::Reference< XElement > xRootElement = xDocument->getDocumentElement();
 
-        xRootElement->appendChild(lcl_getConfigElement(xDocument, u"/org.openoffice.Office.Common/VCL"_ustr,
-                                                       u"DisableOpenGL"_ustr, u"true"_ustr));
         xRootElement->appendChild(lcl_getConfigElement(xDocument, u"/org.openoffice.Office.Common/Misc"_ustr,
                                                        u"UseOpenCL"_ustr, u"false"_ustr));
         // Do not disable Skia entirely, just force its CPU-based raster mode.

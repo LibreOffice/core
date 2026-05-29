@@ -3474,26 +3474,6 @@ sfx2/source/inc/workwin.hxx:276
     void SfxWorkWindow::SetChildWindowVisible_Impl(unsigned int,_Bool,enum SfxVisibilityFlags)
     _Bool 
     1
-slideshow/source/engine/opengl/Operation.hxx:226
-    class std::shared_ptr<class SEllipseTranslate> makeSEllipseTranslate(double,double,double,double,_Bool,double,double)
-    _Bool bInter
-    1
-slideshow/source/engine/opengl/Operation.hxx:226
-    class std::shared_ptr<class SEllipseTranslate> makeSEllipseTranslate(double,double,double,double,_Bool,double,double)
-    double T0
-    0
-slideshow/source/engine/opengl/Operation.hxx:226
-    class std::shared_ptr<class SEllipseTranslate> makeSEllipseTranslate(double,double,double,double,_Bool,double,double)
-    double T1
-    1
-slideshow/source/engine/opengl/Operation.hxx:262
-    class std::shared_ptr<class RotateAndScaleDepthByHeight> makeRotateAndScaleDepthByHeight(const struct glm::vec<3, float> &,const struct glm::vec<3, float> &,double,_Bool,_Bool,double,double)
-    _Bool bScale
-    1
-slideshow/source/engine/opengl/Operation.hxx:262
-    class std::shared_ptr<class RotateAndScaleDepthByHeight> makeRotateAndScaleDepthByHeight(const struct glm::vec<3, float> &,const struct glm::vec<3, float> &,double,_Bool,_Bool,double,double)
-    _Bool bInter
-    1
 slideshow/source/engine/slide/layer.hxx:220
     void slideshow::internal::Layer::Layer(enum slideshow::internal::Layer::Dummy)
     enum slideshow::internal::Layer::Dummy eFlag

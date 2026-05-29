@@ -1186,10 +1186,6 @@ include/vcl/metric.hxx:53
     double FontMetric::GetHorCJKAdvance() const
 include/vcl/metric.hxx:54
     double FontMetric::GetVertCJKAdvance() const
-include/vcl/opengl/OpenGLHelper.hxx:71
-    void OpenGLHelper::renderToFile(long,long,const rtl::OUString &)
-include/vcl/opengl/OpenGLHelper.hxx:104
-    void OpenGLHelper::debugMsgStreamWarn(const std::basic_ostringstream<char> &)
 include/vcl/outdev.hxx:1542
     void OutputDevice::DrawMask(const Point &,const Size &,const Point &,const Size &,const Bitmap &,const Color &)
 include/vcl/outdev.hxx:1632
@@ -2262,8 +2258,6 @@ vcl/inc/jsdialog/jsdialogbuilder.hxx:70
     void JSDropTarget::fire_dragEnter(const struct com::sun::star::datatransfer::dnd::DropTargetDragEnterEvent &)
 vcl/inc/jsdialog/jsdialogbuilder.hxx:592
     void JSFormattedSpinButton::set_text_without_notify(const rtl::OUString &)
-vcl/inc/opengl/zone.hxx:24
-    void OpenGLZone::relaxWatchdogTimings()
 vcl/inc/ppdparser.hxx:166
      psp::PPDParser::PPDParser(rtl::OUString,const std::vector<psp::PPDKey *> &)
 vcl/inc/qt5/QtFontFace.hxx:41

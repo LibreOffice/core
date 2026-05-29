@@ -164,7 +164,7 @@ namespace comphelper
         static bool isTryResetBundledExtensionsPossible();
         static void tryResetBundledExtensions();
 
-        /// Disables OpenGL and OpenCL
+        /// Disables OpenCL
         static void tryDisableHWAcceleration();
 
         /** resets User-Customizations like Settings and UserInterface modifications

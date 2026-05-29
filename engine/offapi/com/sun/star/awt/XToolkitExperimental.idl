@@ -18,10 +18,6 @@ interface XToolkitExperimental : XToolkit3
      */
     void processEventsToIdle();
 
-    /** Get the number of OpenGL buffer swaps.
-     */
-    hyper getOpenGLBufferSwapCounter();
-
     /** Turn on or off deterministic scheduling (off is the default).
      */
     void setDeterministicScheduling([in] boolean bDeterministicMode);

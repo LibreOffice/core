@@ -197,27 +197,6 @@ bool Parser::parse()
     return true;
 }
 
-// This allows us to pad driver version 'substrings' with 0s, this
-// effectively allows us to treat the version numbers as 'decimals'. This is
-// a little strange but this method seems to do the right thing for all
-// different vendor's driver strings. i.e. .98 will become 9800, which is
-// larger than .978 which would become 9780.
-static void PadDriverDecimal(char* aString)
-{
-    for (int i = 0; i < 4; i++)
-    {
-        if (!aString[i])
-        {
-            for (int c = i; c < 4; c++)
-            {
-                aString[c] = '0';
-            }
-            break;
-        }
-    }
-    aString[4] = 0;
-}
-
 // All destination string storage needs to have at least 5 bytes available.
 static bool SplitDriverVersion(const char* aSource, char* aAStr, char* aBStr, char* aCStr,
                                char* aDStr, VersionType versionType)
@@ -277,13 +256,6 @@ static bool ParseDriverVersion(std::u16string_view aVersion, uint64_t& rNumericV
     OString aOVersion = OUStringToOString(aVersion, RTL_TEXTENCODING_UTF8);
     if (!SplitDriverVersion(aOVersion.getStr(), aStr, bStr, cStr, dStr, versionType))
         return false;
-
-    if (versionType == VersionType::OpenGL)
-    {
-        PadDriverDecimal(bStr);
-        PadDriverDecimal(cStr);
-        PadDriverDecimal(dStr);
-    }
 
     a = atoi(aStr);
     b = atoi(bStr);
