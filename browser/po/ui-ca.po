@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-29 07:49+0200\n"
-"PO-Revision-Date: 2026-05-02 04:09+0000\n"
+"PO-Revision-Date: 2026-05-29 21:05+0000\n"
 "Last-Translator: Adolfo Jayme Barrientos <fitojb@ubuntu.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/collabora-online/"
-"ui/ca/>\n"
-"Language: \n"
+"collabora-ui/ca/>\n"
+"Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.17.1\n"
+"X-Generator: Weblate 2026.6.dev0\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -413,29 +413,27 @@ msgstr "CA de signatura"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:434
 #: admin/src/integrator/AdminIntegratorSettings.ts:438
-#, fuzzy
 msgid "Provider"
-msgstr "Proveïdor:"
+msgstr "Proveïdor"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:435
 #: admin/src/integrator/AdminIntegratorSettings.ts:439
 msgid "API Key"
-msgstr ""
+msgstr "Clau de l'API"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:436
 #: admin/src/integrator/AdminIntegratorSettings.ts:441
-#, fuzzy
 msgid "Model"
-msgstr "Mode"
+msgstr "Model"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:437
 #: admin/src/integrator/AdminIntegratorSettings.ts:440
 msgid "Base URL"
-msgstr ""
+msgstr "URL de base"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:442
 msgid "Image Size"
-msgstr ""
+msgstr "Mida de la imatge"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:443
 msgid "Request Timeout (seconds)"
@@ -1231,14 +1229,12 @@ msgid "Last edited by %1 on %2"
 msgstr ""
 
 #: src/canvas/sections/CompareChangesLabelSection.ts:193
-#, fuzzy
 msgid "%1: Initial Version"
-msgstr "Versió inicial"
+msgstr "%1: versió inicial"
 
 #: src/canvas/sections/CompareChangesLabelSection.ts:197
-#, fuzzy
 msgid "%1: Current Version"
-msgstr "Versió actual"
+msgstr "%1: versió actual"
 
 #: src/canvas/sections/CompareChangesLabelSection.ts:204
 msgid "Initial Version"
@@ -1286,11 +1282,11 @@ msgstr ""
 
 #: src/canvas/sections/HeaderFooterBoundarySection.ts:152
 msgid "Header"
-msgstr ""
+msgstr "Capçalera"
 
 #: src/canvas/sections/HeaderFooterBoundarySection.ts:160
 msgid "Footer"
-msgstr ""
+msgstr "Peu"
 
 #: src/control/CalcNotifications.ts:42
 msgid "Deletion created #REF! errors in other formulas. Undo to restore."
@@ -1364,7 +1360,7 @@ msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:107
 msgid "Natural"
-msgstr ""
+msgstr "Natural"
 
 #: src/control/Control.AIChatSidebar.ts:108
 #, fuzzy
@@ -1390,7 +1386,7 @@ msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:338
 msgid "Unknown"
-msgstr ""
+msgstr "Desconegut"
 
 #: src/control/Control.AIChatSidebar.ts:340
 msgid ""
@@ -1400,7 +1396,7 @@ msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:423
 msgid "Your message"
-msgstr ""
+msgstr "El vostre missatge"
 
 #: src/control/Control.AIChatSidebar.ts:425
 msgid "Action requiring approval"
@@ -1408,11 +1404,11 @@ msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:427
 msgid "Error message"
-msgstr ""
+msgstr "Missatge d'error"
 
 #: src/control/Control.AIChatSidebar.ts:428
 msgid "AI response"
-msgstr ""
+msgstr "Resposta de la IA"
 
 #: src/control/Control.AIChatSidebar.ts:502
 msgid ""
@@ -1425,7 +1421,7 @@ msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:583
 msgid "New conversation"
-msgstr ""
+msgstr "Conversa nova"
 
 #: src/control/Control.AIChatSidebar.ts:614
 msgid "Ask AI anything about your document..."
@@ -1433,19 +1429,19 @@ msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:672
 msgid "Loading"
-msgstr ""
+msgstr "S'està carregant"
 
 #: src/control/Control.AIChatSidebar.ts:685
 msgid "Chat messages"
-msgstr ""
+msgstr "Missatges del xat"
 
 #: src/control/Control.AIChatSidebar.ts:711
 msgid "AI generated image"
-msgstr ""
+msgstr "Imatge generada per IA"
 
 #: src/control/Control.AIChatSidebar.ts:746
 msgid "Retry"
-msgstr ""
+msgstr "Torna a provar"
 
 #: src/control/Control.AIChatSidebar.ts:770
 #: src/control/Control.AIChatSidebar.ts:803
@@ -1455,7 +1451,7 @@ msgstr ""
 #: src/control/Control.AIChatSidebar.ts:779
 #: src/control/Control.AIChatSidebar.ts:810
 msgid "Copy to clipboard"
-msgstr ""
+msgstr "Copia al porta-retalls"
 
 #: src/control/Control.AIChatSidebar.ts:831
 msgid "Ask AI..."
@@ -1476,15 +1472,15 @@ msgstr ""
 #: src/control/Control.AIChatSidebar.ts:865
 #: src/control/Control.AIChatSidebar.ts:878
 msgid "Set tone"
-msgstr ""
+msgstr "Defineix el to"
 
 #: src/control/Control.AIChatSidebar.ts:889
 msgid "Set tone of voice"
-msgstr ""
+msgstr "Defineix el to de veu"
 
 #: src/control/Control.AIChatSidebar.ts:890
 msgid "Tone of voice: {0}{1}"
-msgstr ""
+msgstr "To de veu: {0}{1}"
 
 #: src/control/Control.AIChatSidebar.ts:892
 msgid "with emoji"
@@ -1493,31 +1489,29 @@ msgstr ""
 #: src/control/Control.AIChatSidebar.ts:934
 #: src/control/Control.AIChatSidebar.ts:984
 #: src/control/Control.AIChatSidebar.ts:1356
-#, fuzzy
 msgid "tone"
-msgstr "Cap"
+msgstr "to"
 
 #: src/control/Control.AIChatSidebar.ts:947
 #: src/control/Control.AIChatSidebar.ts:1218
 msgid "Tone of voice"
-msgstr ""
+msgstr "To de veu"
 
 #: src/control/Control.AIChatSidebar.ts:953
 msgid "Reset voice"
-msgstr ""
+msgstr "Reinicialitza la veu"
 
 #: src/control/Control.AIChatSidebar.ts:956
 msgid "Reset tone of voice"
-msgstr ""
+msgstr "Reinicialitza el to de veu"
 
 #: src/control/Control.AIChatSidebar.ts:972
 msgid "Your tones"
-msgstr ""
+msgstr "Els vostres tons"
 
 #: src/control/Control.AIChatSidebar.ts:989
-#, fuzzy
 msgid "Edit tone"
-msgstr "Mode d'edició"
+msgstr "Edita el to"
 
 #: src/control/Control.AIChatSidebar.ts:1006
 msgid "+ Add my own voice"
@@ -1529,7 +1523,7 @@ msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:1019
 msgid "Emojify"
-msgstr ""
+msgstr "Emojifica"
 
 #: src/control/Control.AIChatSidebar.ts:1025
 #: src/control/Control.StatusBar.js:162
@@ -1556,11 +1550,11 @@ msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:1213
 msgid "Back to tones"
-msgstr ""
+msgstr "Torna als tons"
 
 #: src/control/Control.AIChatSidebar.ts:1226
 msgid "Icon"
-msgstr ""
+msgstr "Icona"
 
 #: src/control/Control.AIChatSidebar.ts:1238
 msgid "Name your tone"
@@ -1746,7 +1740,7 @@ msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:2234
 msgid "Reject"
-msgstr ""
+msgstr "Rebutja"
 
 #: src/control/Control.AIChatSidebar.ts:2236
 msgid "Reject action"
@@ -1797,18 +1791,16 @@ msgid "I have a formula error in my spreadsheet."
 msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:2627
-#, fuzzy
 msgid "Cell"
-msgstr "Cel·les"
+msgstr "Cel·la"
 
 #: src/control/Control.AIChatSidebar.ts:2631
-#, fuzzy
 msgid "Sheet"
-msgstr "Fulls"
+msgstr "Full"
 
 #: src/control/Control.AIChatSidebar.ts:2635
 msgid "contains"
-msgstr ""
+msgstr "conté"
 
 #: src/control/Control.AIChatSidebar.ts:2637
 #: src/control/Control.FormulaBarJSDialog.js:83
@@ -1840,31 +1832,28 @@ msgid ""
 msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:2672
-#, fuzzy
 msgid "formula"
-msgstr "Fórmula"
+msgstr "fórmula"
 
 #: src/control/Control.AIChatSidebar.ts:2674
 msgid "ERROR"
-msgstr ""
+msgstr "ERROR"
 
 #: src/control/Control.AIChatSidebar.ts:2688
 msgid "value"
-msgstr ""
+msgstr "valor"
 
 #: src/control/Control.AIChatSidebar.ts:2698
-#, fuzzy
 msgid "text"
-msgstr "Text"
+msgstr "text"
 
 #: src/control/Control.AIChatSidebar.ts:2703
 msgid "empty"
-msgstr ""
+msgstr "buit"
 
 #: src/control/Control.AIChatSidebar.ts:2705
-#, fuzzy
 msgid "range"
-msgstr "Interval"
+msgstr "interval"
 
 #: src/control/Control.AIChatSidebar.ts:2707
 msgid "errors in"
@@ -2147,9 +2136,8 @@ msgid "Blank Spreadsheet"
 msgstr ""
 
 #: src/control/Control.BackstageView.ts:715
-#, fuzzy
 msgid "Blank Presentation"
-msgstr "Finalitza la presentació"
+msgstr "Presentació buida"
 
 #: src/control/Control.BackstageView.ts:720
 msgid "Blank Document"
@@ -3559,7 +3547,7 @@ msgstr ""
 
 #: src/control/Control.NotebookbarBase.ts:149
 msgid "Outline %OutlineLevel%"
-msgstr ""
+msgstr "Esquema %OutlineLevel%"
 
 #: src/control/Control.NotebookbarBuilder.js:238
 msgid "Click to expand"
@@ -4099,7 +4087,7 @@ msgstr "Comentaris"
 
 #: src/control/Control.NotebookbarCalc.js:2727
 msgid "Protection"
-msgstr ""
+msgstr "Protecció"
 
 #: src/control/Control.NotebookbarCalc.js:2790
 msgid "Format Cells"
@@ -5500,9 +5488,8 @@ msgid "Insert Comment"
 msgstr "Insereix un comentari"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2401
-#, fuzzy
 msgid "Insert Note"
-msgstr "Insereix una data"
+msgstr "Insereix una nota"
 
 #: src/control/jsdialog/Util.SnackbarController.ts:122
 msgid "Dismiss"
@@ -5539,9 +5526,8 @@ msgid " list"
 msgstr ""
 
 #: src/control/jsdialog/Widget.Combobox.js:242
-#, fuzzy
 msgid "Open list"
-msgstr "Obre l'enllaç"
+msgstr "Obre la llista"
 
 #: src/control/jsdialog/Widget.Combobox.js:373
 msgid "Filter entries"
@@ -5573,7 +5559,7 @@ msgstr ""
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:136
 msgid "Objects"
-msgstr ""
+msgstr "Objectes"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:218
 msgid "Nature & food"
@@ -5581,7 +5567,7 @@ msgstr ""
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:364
 msgid "Recently used"
-msgstr ""
+msgstr "Usats recentment"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:384
 msgid "No emojis match \"{0}\""
@@ -5644,9 +5630,8 @@ msgid "Entering text mode"
 msgstr "Entrada en mode de text"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:49
-#, fuzzy
 msgid "Insert Mode"
-msgstr "Insereix una data"
+msgstr "Mode d'inserció"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:54
 msgid "Selection Mode"
@@ -5666,19 +5651,16 @@ msgid "Table Cell Functions"
 msgstr ""
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:74
-#, fuzzy
 msgid "Sheet Navigation"
-msgstr "Tanca la navegació"
+msgstr "Navegació per fulls"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:76
-#, fuzzy
 msgid "Slide Navigation"
-msgstr "Tanca la navegació"
+msgstr "Navegació per diapositives"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:77
-#, fuzzy
 msgid "Page Navigation"
-msgstr "Tanca la navegació"
+msgstr "Navegació per pàgines"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:83
 msgid "Your changes have been saved"
@@ -6427,11 +6409,11 @@ msgstr "Diàleg de benvinguda"
 
 #: src/slideshow/engine/SlideShowHandler.ts:104
 msgid "Skip"
-msgstr ""
+msgstr "Omet"
 
 #: src/slideshow/engine/SlideShowHandler.ts:105
 msgid "First"
-msgstr ""
+msgstr "Primer"
 
 #: src/slideshow/engine/SlideShowHandler.ts:106
 msgid "Skip All"
@@ -6439,7 +6421,7 @@ msgstr ""
 
 #: src/slideshow/engine/SlideShowHandler.ts:107
 msgid "First Slide"
-msgstr ""
+msgstr "Primera diapositiva"
 
 #: src/slideshow/engine/SlideShowHandler.ts:108
 #: src/slideshow/PresenterConsole.js:31
@@ -6447,14 +6429,12 @@ msgid "Next Slide"
 msgstr "Diapositiva següent"
 
 #: src/slideshow/engine/SlideShowHandler.ts:109
-#, fuzzy
 msgid "Previous Slide"
 msgstr "Diapositiva anterior"
 
 #: src/slideshow/engine/SlideShowHandler.ts:110
-#, fuzzy
 msgid "Last Slide"
-msgstr "Enganxa una diapositiva"
+msgstr "Última diapositiva"
 
 #: src/slideshow/engine/SlideShowHandler.ts:111
 #: src/slideshow/SlideShowPresenter.ts:846
@@ -6463,15 +6443,15 @@ msgstr "Finalitza la presentació"
 
 #: src/slideshow/engine/SlideShowHandler.ts:318
 msgid "Animation Start: "
-msgstr ""
+msgstr "Inici de l'animació: "
 
 #: src/slideshow/engine/SlideShowHandler.ts:420
 msgid "Transition Start: "
-msgstr ""
+msgstr "Inici de la transició: "
 
 #: src/slideshow/engine/SlideShowHandler.ts:439
 msgid "Transition End: "
-msgstr ""
+msgstr "Fi de la transició: "
 
 #: src/slideshow/PauseTimer.ts:141
 msgid "Pause... ( %SECONDS% )"
