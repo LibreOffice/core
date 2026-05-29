@@ -7,12 +7,12 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-26 00:18+0200\n"
+"POT-Creation-Date: 2026-05-29 07:49+0200\n"
 "PO-Revision-Date: 2026-05-26 23:11+0000\n"
 "Last-Translator: Jeff Huang <s8321414@gmail.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/collabora-online/collabora-ui/zh_Hant/>\n"
-"Language: zh_TW\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -144,19 +144,19 @@ msgid "Network Graph"
 msgstr "網路圖表"
 
 #: admin/admin.strings.js:45
-#: admin/src/integrator/AdminIntegratorSettings.ts:1124
-#: admin/src/integrator/AdminIntegratorSettings.ts:2993
+#: admin/src/integrator/AdminIntegratorSettings.ts:1126
+#: admin/src/integrator/AdminIntegratorSettings.ts:2996
 #: admin/src/integrator/WordBook.ts:394 admin/src/integrator/Xcu.ts:411
-#: src/canvas/sections/CommentListSection.ts:676
+#: src/canvas/sections/CommentListSection.ts:744
 #: src/canvas/sections/CommentSection.ts:190
-#: src/canvas/sections/CommentSection.ts:635
-#: src/canvas/sections/CommentSection.ts:1574
+#: src/canvas/sections/CommentSection.ts:639
+#: src/canvas/sections/CommentSection.ts:1590
 #: src/control/Control.BackstageView.ts:135
-#: src/control/Control.Notebookbar.js:275
+#: src/control/Control.Notebookbar.js:343
 #: src/control/Control.NotebookbarDraw.js:29
-#: src/control/Control.NotebookbarDraw.js:171
+#: src/control/Control.NotebookbarDraw.js:178
 #: src/control/Control.NotebookbarImpress.js:30
-#: src/map/handler/Map.Settings.ts:93
+#: src/map/handler/Map.Settings.ts:94
 msgid "Save"
 msgstr "儲存"
 
@@ -223,7 +223,7 @@ msgstr "頻道篩選："
 
 #: admin/admin.strings.js:61 src/app/TableStylesService.ts:264
 #: src/app/TableStylesService.ts:418
-#: src/control/Control.JSDialogBuilder.js:385
+#: src/control/Control.JSDialogBuilder.js:387
 #: src/control/Control.StatusBar.js:211 src/control/Control.StatusBar.js:216
 msgid "None"
 msgstr "無"
@@ -236,11 +236,11 @@ msgstr "設定紀錄層級"
 msgid "Log Levels"
 msgstr "紀錄層級"
 
-#: admin/admin.strings.js:64 src/control/Control.AlertDialog.js:32
-#: src/control/Control.AlertDialog.js:38
+#: admin/admin.strings.js:64 src/control/Control.AIChatSidebar.ts:590
+#: src/control/Control.AlertDialog.js:32 src/control/Control.AlertDialog.js:38
 #: src/control/Control.AlertDialog.js:103
 #: src/control/Control.AlertDialog.js:110 src/control/Control.Zotero.js:191
-#: src/app/Socket.ts:935 src/app/Socket.ts:2324 src/app/Socket.ts:2335
+#: src/app/Socket.ts:935 src/app/Socket.ts:2326 src/app/Socket.ts:2337
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.div:51-7
 msgid "Close"
 msgstr "關閉"
@@ -258,11 +258,11 @@ msgid "License"
 msgstr "授權條款"
 
 #: admin/admin.strings.js:68 src/control/Control.BackstageView.ts:180
-#: src/control/Control.Menubar.ts:432 src/control/Control.Menubar.ts:619
-#: src/control/Control.Menubar.ts:763 src/control/Control.Menubar.ts:1068
-#: src/control/Control.Menubar.ts:1136 src/control/Control.Menubar.ts:1201
-#: src/control/Control.Menubar.ts:1256 src/control/Control.Menubar.ts:1331
-#: src/control/Control.NotebookbarWriter.js:583
+#: src/control/Control.Menubar.ts:433 src/control/Control.Menubar.ts:621
+#: src/control/Control.Menubar.ts:766 src/control/Control.Menubar.ts:1072
+#: src/control/Control.Menubar.ts:1140 src/control/Control.Menubar.ts:1205
+#: src/control/Control.Menubar.ts:1260 src/control/Control.Menubar.ts:1335
+#: src/control/Control.NotebookbarWriter.js:590
 msgid "About"
 msgstr "關於"
 
@@ -297,26 +297,26 @@ msgstr "警告"
 #: admin/src/AdminClusterOverview.js:560 admin/src/AdminSocketBase.js:63
 #: admin/src/AdminSocketBase.js:74 admin/src/AdminSocketOverview.js:108
 #: admin/src/AdminSocketOverview.js:431 admin/src/AdminSocketSettings.js:47
-#: admin/src/integrator/AdminIntegratorSettings.ts:3104 src/app/Debug.ts:1580
-#: src/canvas/sections/CommentListSection.ts:1787
+#: admin/src/integrator/AdminIntegratorSettings.ts:3107 src/app/Debug.ts:1580
+#: src/canvas/sections/CommentListSection.ts:1847
 #: src/control/Control.AboutDialog.ts:245
 #: src/control/Control.AlertDialog.js:56
 #: src/control/Control.DocumentRepair.js:77
 #: src/control/Control.ESignatureDialog.ts:132
 #: src/control/Control.LanguageDialog.js:120
-#: src/control/Control.PartsPreview.js:849
+#: src/control/Control.PartsPreview.js:893
 #: src/control/Control.ServerAuditDialog.ts:342
 #: src/control/Control.Tabs.js:547 src/control/Control.Tabs.js:556
 #: src/control/Control.Zotero.js:365 src/control/Control.Zotero.js:411
 #: src/control/Parts.js:529 src/control/Permission.js:98
 #: src/control/Permission.js:108 src/control/Permission.js:165
 #: src/control/Toolbar.js:728 src/app/Socket.ts:1001 src/app/Socket.ts:1647
-#: src/app/Socket.ts:1820 src/app/Socket.ts:2281 src/app/Socket.ts:2381
+#: src/app/Socket.ts:1822 src/app/Socket.ts:2283 src/app/Socket.ts:2383
 #: src/docdispatcher.ts:622 src/main.js:108 src/main.js:111 src/main.js:148
 #: src/map/Clipboard.js:1470 src/map/handler/Map.Feedback.js:96
 #: src/map/handler/Map.SlideShow.js:60 src/map/handler/Map.SlideShow.js:169
 #: src/map/handler/Map.SlideShow.js:297 src/map/handler/Map.SlideShow.js:308
-#: src/map/handler/Map.WOPI.js:805 src/slideshow/SlideShowPresenter.ts:1294
+#: src/map/handler/Map.WOPI.js:869 src/slideshow/SlideShowPresenter.ts:1294
 #: src/slideshow/SlideShowPresenter.ts:1309
 #: src/slideshow/SlideShowPresenter.ts:1324
 #: src/slideshow/SlideShowPresenter.ts:1347
@@ -326,19 +326,22 @@ msgstr "確定"
 #: admin/src/AdminClusterOverview.js:561 admin/src/AdminSocketOverview.js:109
 #: admin/src/AdminSocketOverview.js:432 admin/src/AdminSocketSettings.js:48
 #: admin/src/integrator/WordBook.ts:386
-#: src/canvas/sections/CommentListSection.ts:671
+#: src/canvas/sections/CommentListSection.ts:739
 #: src/canvas/sections/CommentSection.ts:189
 #: src/canvas/sections/CommentSection.ts:192
-#: src/canvas/sections/CommentSection.ts:1575
-#: src/canvas/sections/CommentSection.ts:1580
+#: src/canvas/sections/CommentSection.ts:1591
+#: src/canvas/sections/CommentSection.ts:1596
+#: src/control/Control.AIChatSidebar.ts:1281
+#: src/control/Control.AIChatSidebar.ts:1283
+#: src/control/Control.AIChatSidebar.ts:1368
 #: src/control/Control.DocumentRepair.js:71
 #: src/control/Control.DownloadProgress.js:81
 #: src/control/Control.LanguageDialog.js:114
 #: src/control/Control.MobileTopBar.ts:43
-#: src/control/Control.UIManager.ts:2092 src/control/Control.UIManager.ts:2173
-#: src/control/Control.UIManager.ts:2327 src/control/Control.UIManager.ts:2505
+#: src/control/Control.UIManager.ts:2108 src/control/Control.UIManager.ts:2189
+#: src/control/Control.UIManager.ts:2343 src/control/Control.UIManager.ts:2521
 #: src/control/Control.Zotero.js:360 src/app/Socket.ts:1592
-#: src/map/handler/Map.Settings.ts:88
+#: src/map/handler/Map.Settings.ts:89
 msgid "Cancel"
 msgstr "取消"
 
@@ -374,231 +377,231 @@ msgstr "您確定要終止此工作階段？"
 msgid "Are you sure you want to shut down the server?"
 msgstr "您確定要讓伺服器關機？"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:244
+#: admin/src/integrator/AdminIntegratorSettings.ts:245
 msgid "Shared Config URL is missing in initial variables."
 msgstr "初始變數中缺少共享設定網址。"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:248
+#: admin/src/integrator/AdminIntegratorSettings.ts:249
 msgid "Access token is missing in initial variables."
 msgstr "初始變數中缺少共享存取權杖。"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:326
+#: admin/src/integrator/AdminIntegratorSettings.ts:327
 msgid ""
 "Something went wrong while fetching setting file. Please try to refresh the "
 "page."
 msgstr "擷取檔案時發生錯誤。請嘗試重新整理頁面。"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:430
+#: admin/src/integrator/AdminIntegratorSettings.ts:431
 msgid "Signature Certificate"
 msgstr "簽章憑證"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:431
+#: admin/src/integrator/AdminIntegratorSettings.ts:432
 msgid "Signature Key"
 msgstr "簽章金鑰"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:432
+#: admin/src/integrator/AdminIntegratorSettings.ts:433
 msgid "Signature CA"
 msgstr "簽章憑證授權機構"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:433
-#: admin/src/integrator/AdminIntegratorSettings.ts:437
+#: admin/src/integrator/AdminIntegratorSettings.ts:434
+#: admin/src/integrator/AdminIntegratorSettings.ts:438
 msgid "Provider"
 msgstr "提供者"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:434
-#: admin/src/integrator/AdminIntegratorSettings.ts:438
+#: admin/src/integrator/AdminIntegratorSettings.ts:435
+#: admin/src/integrator/AdminIntegratorSettings.ts:439
 msgid "API Key"
 msgstr "API 金鑰"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:435
-#: admin/src/integrator/AdminIntegratorSettings.ts:440
+#: admin/src/integrator/AdminIntegratorSettings.ts:436
+#: admin/src/integrator/AdminIntegratorSettings.ts:441
 msgid "Model"
 msgstr "模型"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:436
-#: admin/src/integrator/AdminIntegratorSettings.ts:439
+#: admin/src/integrator/AdminIntegratorSettings.ts:437
+#: admin/src/integrator/AdminIntegratorSettings.ts:440
 msgid "Base URL"
 msgstr "基礎 URL"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:441
+#: admin/src/integrator/AdminIntegratorSettings.ts:442
 msgid "Image Size"
 msgstr "影像大小"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:442
+#: admin/src/integrator/AdminIntegratorSettings.ts:443
 msgid "Request Timeout (seconds)"
 msgstr "請求逾時（秒）"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:445
+#: admin/src/integrator/AdminIntegratorSettings.ts:446
 msgid "In-document Screen Reader"
 msgstr "文件內螢幕閱讀程式"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:446
-#: src/control/Control.Menubar.ts:177 src/control/Control.Menubar.ts:506
-#: src/control/Control.Menubar.ts:674 src/control/Control.Menubar.ts:826
-#: src/control/Control.Menubar.ts:1120 src/control/Control.Menubar.ts:1173
-#: src/control/Control.Menubar.ts:1234 src/control/Control.Menubar.ts:1294
-#: src/control/Control.NotebookbarCalc.js:1652
-#: src/control/Control.NotebookbarDraw.js:564
-#: src/control/Control.NotebookbarImpress.js:731
-#: src/control/Control.NotebookbarWriter.js:1784
+#: admin/src/integrator/AdminIntegratorSettings.ts:447
+#: src/control/Control.Menubar.ts:177 src/control/Control.Menubar.ts:507
+#: src/control/Control.Menubar.ts:676 src/control/Control.Menubar.ts:829
+#: src/control/Control.Menubar.ts:1124 src/control/Control.Menubar.ts:1177
+#: src/control/Control.Menubar.ts:1238 src/control/Control.Menubar.ts:1298
+#: src/control/Control.NotebookbarCalc.js:1659
+#: src/control/Control.NotebookbarDraw.js:571
+#: src/control/Control.NotebookbarImpress.js:738
+#: src/control/Control.NotebookbarWriter.js:1791
 msgid "Dark Mode"
 msgstr "深色模式"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:447
+#: admin/src/integrator/AdminIntegratorSettings.ts:448
 msgid "Smart Zoom"
 msgstr "智慧型縮放"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:448
+#: admin/src/integrator/AdminIntegratorSettings.ts:449
 msgid "Default Zoom"
 msgstr "預設縮放"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:449
+#: admin/src/integrator/AdminIntegratorSettings.ts:450
 msgid "Compact layout"
 msgstr "精簡介面"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:450
+#: admin/src/integrator/AdminIntegratorSettings.ts:451
 msgid "Show status bar"
 msgstr "顯示狀態列"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:451
-#: src/control/Control.Menubar.ts:174 src/control/Control.Menubar.ts:502
+#: admin/src/integrator/AdminIntegratorSettings.ts:452
+#: src/control/Control.Menubar.ts:174 src/control/Control.Menubar.ts:503
 msgid "Show Ruler"
 msgstr "顯示尺規"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:452
+#: admin/src/integrator/AdminIntegratorSettings.ts:453
 msgid "Accessibility Checker"
 msgstr "無障礙檢查程式"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:453
+#: admin/src/integrator/AdminIntegratorSettings.ts:454
 #: src/control/Control.NavigatorPanel.ts:292
 msgid "Navigator"
 msgstr "助手"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:454
+#: admin/src/integrator/AdminIntegratorSettings.ts:455
 msgid "Show Sidebar"
 msgstr "顯示側邊欄"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:455
+#: admin/src/integrator/AdminIntegratorSettings.ts:456
 msgid "Custom Animation"
 msgstr "自訂動畫"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:458
+#: admin/src/integrator/AdminIntegratorSettings.ts:459
 msgid "Style List"
 msgstr "樣式清單"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:461
-#: src/control/Control.NotebookbarCalc.js:1179
-#: src/control/Control.NotebookbarDraw.js:535
-#: src/control/Control.NotebookbarImpress.js:702
+#: admin/src/integrator/AdminIntegratorSettings.ts:462
+#: src/control/Control.NotebookbarCalc.js:1186
+#: src/control/Control.NotebookbarDraw.js:542
+#: src/control/Control.NotebookbarImpress.js:709
 msgid "Grid"
 msgstr "網格"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:462
+#: admin/src/integrator/AdminIntegratorSettings.ts:463
 #: src/control/Control.BackstageView.ts:151
 msgid "Print"
 msgstr "列印"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:463
+#: admin/src/integrator/AdminIntegratorSettings.ts:464
 msgid "Other"
 msgstr "其他"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:464
-#: src/control/Control.NotebookbarImpress.js:711
+#: admin/src/integrator/AdminIntegratorSettings.ts:465
+#: src/control/Control.NotebookbarImpress.js:718
 msgid "Show Grid"
 msgstr "顯示網格"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:465
+#: admin/src/integrator/AdminIntegratorSettings.ts:466
 msgid "Snap to grid"
 msgstr "貼齊網格"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:466
-#: admin/src/integrator/AdminIntegratorSettings.ts:472
+#: admin/src/integrator/AdminIntegratorSettings.ts:467
+#: admin/src/integrator/AdminIntegratorSettings.ts:473
 msgid "Size to grid"
 msgstr "貼齊網格"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:467
+#: admin/src/integrator/AdminIntegratorSettings.ts:468
 msgid "Synchronize axes"
 msgstr "同步座標軸"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:468
+#: admin/src/integrator/AdminIntegratorSettings.ts:469
 msgid "Snap grid"
 msgstr "貼齊網格"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:469
+#: admin/src/integrator/AdminIntegratorSettings.ts:470
 msgid "Empty Pages"
 msgstr "空白頁"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:470
+#: admin/src/integrator/AdminIntegratorSettings.ts:471
 msgid "Force Breaks"
 msgstr "強制換行"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:471
-#: src/control/Control.Menubar.ts:795 src/control/Control.TopToolbar.js:139
+#: admin/src/integrator/AdminIntegratorSettings.ts:472
+#: src/control/Control.Menubar.ts:798 src/control/Control.TopToolbar.js:139
 #: src/control/jsdialog/Definitions.Menu.ts:1588
 msgid "All Sheets"
 msgstr "所有工作表"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:473
+#: admin/src/integrator/AdminIntegratorSettings.ts:474
 msgid "Content"
 msgstr "內容"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:474
+#: admin/src/integrator/AdminIntegratorSettings.ts:475
 #: src/control/Control.BackstageView.ts:543
 msgid "Drawing"
 msgstr "繪圖"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:475
-#: src/control/Control.NotebookbarDraw.js:1238
-#: src/control/Control.NotebookbarDraw.js:1438
-#: src/control/Control.NotebookbarWriter.js:1235
+#: admin/src/integrator/AdminIntegratorSettings.ts:476
+#: src/control/Control.NotebookbarDraw.js:1245
+#: src/control/Control.NotebookbarDraw.js:1445
+#: src/control/Control.NotebookbarWriter.js:1242
 msgid "Page"
 msgstr "頁"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:476
+#: admin/src/integrator/AdminIntegratorSettings.ts:477
 msgid "Fit to page"
 msgstr "符合頁面尺寸"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:477
+#: admin/src/integrator/AdminIntegratorSettings.ts:478
 msgid "Tile pages"
 msgstr "書名頁"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:478
+#: admin/src/integrator/AdminIntegratorSettings.ts:479
 msgid "Booklet"
 msgstr "小手冊"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:479
+#: admin/src/integrator/AdminIntegratorSettings.ts:480
 msgid "Booklet front"
 msgstr "小手冊封面"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:480
+#: admin/src/integrator/AdminIntegratorSettings.ts:481
 msgid "Booklet back"
 msgstr "小手冊封底"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:481
+#: admin/src/integrator/AdminIntegratorSettings.ts:482
 msgid "Page name"
 msgstr "頁面名稱"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:482
-#: src/control/Control.NotebookbarCalc.js:810
-#: src/control/Control.NotebookbarWriter.js:1638
+#: admin/src/integrator/AdminIntegratorSettings.ts:483
+#: src/control/Control.NotebookbarCalc.js:817
+#: src/control/Control.NotebookbarWriter.js:1645
 #: src/control/Control.Zotero.js:1153 src/control/Control.Zotero.js:1605
 msgid "Date"
 msgstr "日期"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:483
-#: src/control/Control.NotebookbarCalc.js:811
+#: admin/src/integrator/AdminIntegratorSettings.ts:484
+#: src/control/Control.NotebookbarCalc.js:818
 msgid "Time"
 msgstr "時間"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:484
+#: admin/src/integrator/AdminIntegratorSettings.ts:485
 msgid "Hidden pages"
 msgstr "隱藏頁面"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:485
+#: admin/src/integrator/AdminIntegratorSettings.ts:486
 msgid "From printer setup"
 msgstr "取自印表機"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:486
+#: admin/src/integrator/AdminIntegratorSettings.ts:487
 #: src/control/Control.BackstageView.ts:542 templates/templates.js:80
 #: templates/templates.js:90 templates/templates.js:100
 #: templates/templates.js:110 templates/templates.js:120
@@ -614,310 +617,314 @@ msgstr "取自印表機"
 msgid "Presentation"
 msgstr "簡報"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:487
+#: admin/src/integrator/AdminIntegratorSettings.ts:488
 #: src/control/Control.Zotero.js:1341 src/slideshow/PresenterConsole.js:34
 msgid "Notes"
 msgstr "備註"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:488
+#: admin/src/integrator/AdminIntegratorSettings.ts:489
 msgid "Handouts"
 msgstr "講義"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:489
+#: admin/src/integrator/AdminIntegratorSettings.ts:490
 #: src/control/Control.NavigatorPanel.ts:213
 msgid "Outline"
 msgstr "大綱"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:490
+#: admin/src/integrator/AdminIntegratorSettings.ts:491
 msgid "Handout horizontal"
 msgstr "橫向講義"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:491
+#: admin/src/integrator/AdminIntegratorSettings.ts:492
 msgid "Images"
 msgstr "影像"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:492
+#: admin/src/integrator/AdminIntegratorSettings.ts:493
 msgid "Tables"
 msgstr "表格"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:493
+#: admin/src/integrator/AdminIntegratorSettings.ts:494
 msgid "Controls"
 msgstr "控制項"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:494
+#: admin/src/integrator/AdminIntegratorSettings.ts:495
 msgid "Background"
 msgstr "背景"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:495
+#: admin/src/integrator/AdminIntegratorSettings.ts:496
 msgid "Print Black"
 msgstr "黑色列印"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:496
+#: admin/src/integrator/AdminIntegratorSettings.ts:497
 msgid "Hidden text"
 msgstr "隱藏文字"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:497
+#: admin/src/integrator/AdminIntegratorSettings.ts:498
 msgid "Placeholders"
 msgstr "佔位字串"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:498
+#: admin/src/integrator/AdminIntegratorSettings.ts:499
 msgid "Left pages"
 msgstr "偶數頁"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:499
+#: admin/src/integrator/AdminIntegratorSettings.ts:500
 msgid "Right pages"
 msgstr "奇數頁"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:500
+#: admin/src/integrator/AdminIntegratorSettings.ts:501
 msgid "Brochure"
 msgstr "小手冊"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:501
+#: admin/src/integrator/AdminIntegratorSettings.ts:502
 msgid "Brochure Right to Left"
 msgstr "由右至左的小手冊"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:658
+#: admin/src/integrator/AdminIntegratorSettings.ts:660
 msgid "Invalid JSON file"
 msgstr "無效 JSON 檔案"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:662
+#: admin/src/integrator/AdminIntegratorSettings.ts:664
 msgid "Error reading file"
 msgstr "讀取檔案時發生錯誤"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:674
+#: admin/src/integrator/AdminIntegratorSettings.ts:676
 msgid "Autotext"
 msgstr "自動圖文集"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:676
+#: admin/src/integrator/AdminIntegratorSettings.ts:678
 msgid ""
 "Upload reusable text snippets (.bau). To insert the text in your document, "
 "type the shortcut for an AutoText entry and press F3."
 msgstr "上傳可重複使用的文字片段 (.bau)。要在文件中插入文字，"
 "請輸入自動圖文集的快捷鍵並按下 F3 鍵。"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:682
+#: admin/src/integrator/AdminIntegratorSettings.ts:684
 msgid "Upload Autotext"
 msgstr "上傳自動圖文集"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:687
+#: admin/src/integrator/AdminIntegratorSettings.ts:689
 msgid "Custom dictionaries"
 msgstr "自訂字典"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:689
+#: admin/src/integrator/AdminIntegratorSettings.ts:691
 msgid ""
 "Add or edit words in a spell check dictionary. Words in your wordbook (."
 "dic) will be available for spelling checks."
 msgstr "在拼寫檢查字典中新增或編輯單字。您字典檔 (.dic) 中的單字將可用於拼寫檢查。"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:695
+#: admin/src/integrator/AdminIntegratorSettings.ts:697
 msgid "Upload Wordbook"
 msgstr "上傳字典檔"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:700
+#: admin/src/integrator/AdminIntegratorSettings.ts:702
 msgid "Document settings"
 msgstr "文件設定"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:701
+#: admin/src/integrator/AdminIntegratorSettings.ts:703
 #: admin/src/integrator/Xcu.ts:314
 msgid "Adjust how office documents behave."
 msgstr "調整辦公室文件的運作方式。"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:707
+#: admin/src/integrator/AdminIntegratorSettings.ts:709
 msgid "Upload Xcu"
 msgstr "上傳 Xcu"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:713
+#: admin/src/integrator/AdminIntegratorSettings.ts:715
 msgid "Document themes"
 msgstr "文件佈景主題"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:715
+#: admin/src/integrator/AdminIntegratorSettings.ts:717
 msgid ""
 "Upload custom document themes (.theme). These define color palettes "
 "available under Format > Theme."
-msgstr ""
-"上傳自訂文件佈景主題 (.theme)。這些主題會定義「格式」→「佈景主題」下可用的配"
-"色方案。"
+msgstr "上傳自訂文件佈景主題 (."
+"theme)。這些主題會定義「格式」→「佈景主題」下可用的配色方案。"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:721
+#: admin/src/integrator/AdminIntegratorSettings.ts:723
 msgid "Upload Theme"
 msgstr "上傳佈景主題"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:776
+#: admin/src/integrator/AdminIntegratorSettings.ts:778
 msgid "Something went wrong. Please try to refresh the page."
 msgstr "發生錯誤。請嘗試重新整理頁面。"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:932
+#: admin/src/integrator/AdminIntegratorSettings.ts:934
 msgid ""
 "Something went wrong while fetching wordbook. Please try to refresh the "
 "page."
 msgstr "擷取字典檔時發生錯誤。請嘗試重新整理頁面。"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:942
+#: admin/src/integrator/AdminIntegratorSettings.ts:944
 msgid "Interface Settings"
 msgstr "介面設定"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:944
+#: admin/src/integrator/AdminIntegratorSettings.ts:946
 msgid "Set default interface preferences."
 msgstr "設定預設介面偏好設定。"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:1091
+#: admin/src/integrator/AdminIntegratorSettings.ts:1093
 msgid "Select a tab to browser settings."
 msgstr "選取分頁以瀏覽設定。"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:1104
+#: admin/src/integrator/AdminIntegratorSettings.ts:1106
 #: admin/src/integrator/Xcu.ts:374
 msgid "Reset to default Document settings"
 msgstr "重設為預設文件設定"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:1108
+#: admin/src/integrator/AdminIntegratorSettings.ts:1110
 #: admin/src/integrator/Xcu.ts:388
 msgid "Are you sure you want to reset Document settings?"
 msgstr "您確定您想要重設文件設定嗎？"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:1125
+#: admin/src/integrator/AdminIntegratorSettings.ts:1127
 #: admin/src/integrator/Xcu.ts:403
 msgid "Save Document settings"
 msgstr "儲存文件設定"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:1402
+#: admin/src/integrator/AdminIntegratorSettings.ts:1404
 msgid "(Warning: Server accessibility must be enabled to toggle)"
 msgstr "（警告：必須啟用伺服器存取權方可切換）"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:1499
+#: admin/src/integrator/AdminIntegratorSettings.ts:1501
 msgid "Notebookbar view"
 msgstr "Notebookbar 檢視"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:1506
-#: src/control/Control.NotebookbarCalc.js:1613
-#: src/control/Control.NotebookbarDraw.js:489
-#: src/control/Control.NotebookbarImpress.js:633
-#: src/control/Control.NotebookbarWriter.js:1730
+#: admin/src/integrator/AdminIntegratorSettings.ts:1508
+#: src/control/Control.NotebookbarCalc.js:1620
+#: src/control/Control.NotebookbarDraw.js:496
+#: src/control/Control.NotebookbarImpress.js:640
+#: src/control/Control.NotebookbarWriter.js:1737
 msgid "Compact view"
 msgstr "緊湊式顯示"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:1612
+#: admin/src/integrator/AdminIntegratorSettings.ts:1614
 msgid "Something went wrong while uploading the file. Please try again."
 msgstr "上傳檔案時發生錯誤。請重試。"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:1688
-#: src/canvas/sections/CommentSection.ts:1488
-#: src/canvas/sections/CommentSection.ts:1493 src/docdispatcher.ts:619
+#: admin/src/integrator/AdminIntegratorSettings.ts:1690
+#: src/canvas/sections/CommentSection.ts:1504
+#: src/canvas/sections/CommentSection.ts:1509
+#: src/control/Control.AIChatSidebar.ts:1375
+#: src/control/jsdialog/Control.ContextMenu.ts:287
+#: src/control/jsdialog/Definitions.DialogModification.ts:155
+#: src/docdispatcher.ts:619
 msgid "Delete"
 msgstr "刪除"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:1699
+#: admin/src/integrator/AdminIntegratorSettings.ts:1701
 msgid ""
 "Something went wrong while deleting the file. Please try refreshing the "
 "page."
 msgstr "刪除檔案時發生錯誤。請嘗試重新整理頁面。"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:1714
+#: admin/src/integrator/AdminIntegratorSettings.ts:1716
 #: src/control/Control.BackstageView.ts:559
 msgid "Edit"
 msgstr "編輯"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:1749
+#: admin/src/integrator/AdminIntegratorSettings.ts:1751
 msgid ""
 "To use Zotero specify your API key here. You can create your API key in "
 "your "
 msgstr "若要使用 Zotero，請在此處指定您的 API 金鑰。您可以建立 API 金鑰，在您的 "
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:1757
+#: admin/src/integrator/AdminIntegratorSettings.ts:1759
 msgid "Zotero account API settings"
 msgstr "Zotero 帳號 API 設定"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:1809
+#: admin/src/integrator/AdminIntegratorSettings.ts:1811
 msgid "Document Signing"
 msgstr "文件簽署"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:1813
+#: admin/src/integrator/AdminIntegratorSettings.ts:1815
 msgid ""
 "To use document signing, specify your signing certificate, key and CA chain "
 "here."
 msgstr "要使用文件簽署，請在此處指定您的簽署憑證、金鑰與 CA 憑證鏈。"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:1874
-#: src/control/Control.Menubar.ts:225 src/control/Control.Menubar.ts:531
-#: src/control/Control.Menubar.ts:690 src/control/Control.Menubar.ts:856
-#: src/control/Control.NotebookbarCalc.js:1680
-#: src/control/Control.NotebookbarCalc.js:1681
-#: src/control/Control.NotebookbarImpress.js:752
-#: src/control/Control.NotebookbarImpress.js:753
-#: src/control/Control.NotebookbarWriter.js:1812
-#: src/control/Control.NotebookbarWriter.js:1813
+#: admin/src/integrator/AdminIntegratorSettings.ts:1876
+#: src/control/Control.AIChatSidebar.ts:575 src/control/Control.Menubar.ts:225
+#: src/control/Control.Menubar.ts:532 src/control/Control.Menubar.ts:692
+#: src/control/Control.Menubar.ts:859
+#: src/control/Control.NotebookbarCalc.js:1687
+#: src/control/Control.NotebookbarCalc.js:1688
+#: src/control/Control.NotebookbarImpress.js:759
+#: src/control/Control.NotebookbarImpress.js:760
+#: src/control/Control.NotebookbarWriter.js:1819
+#: src/control/Control.NotebookbarWriter.js:1820
 msgid "AI Assistant"
 msgstr "人工智慧小幫手"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:1878
+#: admin/src/integrator/AdminIntegratorSettings.ts:1880
 msgid ""
 "Configure AI provider credentials and model. Models are fetched "
 "automatically when credentials change."
 msgstr "設定人工智慧服務供應商的憑證與模型。當憑證變更時，系統會自動取得模型。"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:1979
+#: admin/src/integrator/AdminIntegratorSettings.ts:1981
 msgid "Text Generation"
 msgstr "文字產生"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:2029
-#: admin/src/integrator/AdminIntegratorSettings.ts:2135
+#: admin/src/integrator/AdminIntegratorSettings.ts:2031
+#: admin/src/integrator/AdminIntegratorSettings.ts:2137
 msgid "e.g."
 msgstr "例如"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:2048
-#: admin/src/integrator/AdminIntegratorSettings.ts:2166
-#: admin/src/integrator/AdminIntegratorSettings.ts:2610
-#: admin/src/integrator/AdminIntegratorSettings.ts:2626
+#: admin/src/integrator/AdminIntegratorSettings.ts:2050
+#: admin/src/integrator/AdminIntegratorSettings.ts:2168
+#: admin/src/integrator/AdminIntegratorSettings.ts:2612
+#: admin/src/integrator/AdminIntegratorSettings.ts:2628
 msgid "Fetch models to select"
 msgstr "擷取待選取的模型"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:2077
+#: admin/src/integrator/AdminIntegratorSettings.ts:2079
 msgid "Image Generation"
 msgstr "影像產生"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:2082
+#: admin/src/integrator/AdminIntegratorSettings.ts:2084
 msgid "Same as Text AI"
 msgstr "與文字人工智慧相同"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:2151
+#: admin/src/integrator/AdminIntegratorSettings.ts:2153
 msgid "Leave empty to use Text AI key"
 msgstr "留空以使用文字人工智慧金鑰"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:2413
-#: admin/src/integrator/AdminIntegratorSettings.ts:2500
+#: admin/src/integrator/AdminIntegratorSettings.ts:2415
+#: admin/src/integrator/AdminIntegratorSettings.ts:2502
 msgid "Fetching models..."
 msgstr "正在擷取模型……"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:2442
-#: admin/src/integrator/AdminIntegratorSettings.ts:2452
-#: admin/src/integrator/AdminIntegratorSettings.ts:2529
-#: admin/src/integrator/AdminIntegratorSettings.ts:2539
+#: admin/src/integrator/AdminIntegratorSettings.ts:2444
+#: admin/src/integrator/AdminIntegratorSettings.ts:2454
+#: admin/src/integrator/AdminIntegratorSettings.ts:2531
+#: admin/src/integrator/AdminIntegratorSettings.ts:2541
 msgid "No models found"
 msgstr "找不到模型"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:2462
-#: admin/src/integrator/AdminIntegratorSettings.ts:2549
+#: admin/src/integrator/AdminIntegratorSettings.ts:2464
+#: admin/src/integrator/AdminIntegratorSettings.ts:2551
 msgid "Models fetched successfully"
 msgstr "擷取模型成功"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:2468
-#: admin/src/integrator/AdminIntegratorSettings.ts:2555
+#: admin/src/integrator/AdminIntegratorSettings.ts:2470
+#: admin/src/integrator/AdminIntegratorSettings.ts:2557
 msgid "Failed to fetch models"
 msgstr "擷取模型失敗"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:2478
+#: admin/src/integrator/AdminIntegratorSettings.ts:2480
 msgid "Invalid provider configuration"
 msgstr "無效的提供者組態"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:2590
+#: admin/src/integrator/AdminIntegratorSettings.ts:2592
 msgid "None (disable image generation)"
 msgstr "無（停用影像產生）"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:2973
+#: admin/src/integrator/AdminIntegratorSettings.ts:2976
 msgid "Reset"
 msgstr "重設"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:3092
-#: src/map/handler/Map.WOPI.js:805
+#: admin/src/integrator/AdminIntegratorSettings.ts:3095
+#: src/control/Control.AIChatSidebar.ts:2638 src/map/handler/Map.WOPI.js:869
 msgid "Error"
 msgstr "錯誤"
 
@@ -1044,6 +1051,14 @@ msgstr "Ctrl+Shift+Alt+D 退出"
 msgid "Event handling has been delayed for an unexpectedly long time: {0}ms"
 msgstr "事件處理意外延遲了很長的時間：{0}毫秒"
 
+#: src/app/LOUtil.ts:981
+msgid "{0} website, opens in new tab"
+msgstr ""
+
+#: src/app/LOUtil.ts:984
+msgid "file type icon"
+msgstr "檔案類型圖示"
+
 #: src/app/TableStylesService.ts:100
 msgid "Light"
 msgstr "淺色"
@@ -1066,26 +1081,26 @@ msgstr "自訂"
 msgid "Table Styles"
 msgstr "表格樣式"
 
-#: src/canvas/sections/CommentListSection.ts:1785
-#: src/canvas/sections/CommentListSection.ts:1798
+#: src/canvas/sections/CommentListSection.ts:1845
+#: src/canvas/sections/CommentListSection.ts:1858
 msgid "Comments Updated"
 msgstr "評註已更新"
 
-#: src/canvas/sections/CommentListSection.ts:1786
+#: src/canvas/sections/CommentListSection.ts:1846
 msgid "Another user has removed this comment."
 msgstr "其他使用者已移除此評註。"
 
-#: src/canvas/sections/CommentListSection.ts:1799
+#: src/canvas/sections/CommentListSection.ts:1859
 msgid ""
 "Another user has updated the comment. Would you like to overwrite those "
 "changes?"
 msgstr "其他使用者更新了評註。您想要覆寫那些變更嗎？"
 
-#: src/canvas/sections/CommentListSection.ts:1800 src/app/Socket.ts:1596
+#: src/canvas/sections/CommentListSection.ts:1860 src/app/Socket.ts:1596
 msgid "Overwrite"
 msgstr "覆寫"
 
-#: src/canvas/sections/CommentListSection.ts:1801
+#: src/canvas/sections/CommentListSection.ts:1861
 msgid "Update"
 msgstr "更新"
 
@@ -1102,88 +1117,88 @@ msgid "Open menu"
 msgstr "開啟選單"
 
 #: src/canvas/sections/CommentSection.ts:193
-#: src/canvas/sections/CommentSection.ts:639
-#: src/canvas/sections/CommentSection.ts:1183
-#: src/canvas/sections/CommentSection.ts:1579
+#: src/canvas/sections/CommentSection.ts:643
+#: src/canvas/sections/CommentSection.ts:1195
+#: src/canvas/sections/CommentSection.ts:1595
 msgid "Reply"
 msgstr "回覆"
 
-#: src/canvas/sections/CommentSection.ts:461
+#: src/canvas/sections/CommentSection.ts:465
 msgid "Press Ctrl + Enter to post"
 msgstr "按 Ctrl + Enter 以張貼"
 
-#: src/canvas/sections/CommentSection.ts:534
-#: src/canvas/sections/CommentSection.ts:535
+#: src/canvas/sections/CommentSection.ts:538
+#: src/canvas/sections/CommentSection.ts:539
 msgid "Accept change"
 msgstr "接受變更"
 
-#: src/canvas/sections/CommentSection.ts:541
-#: src/canvas/sections/CommentSection.ts:542
+#: src/canvas/sections/CommentSection.ts:545
+#: src/canvas/sections/CommentSection.ts:546
 msgid "Reject change"
 msgstr "拒絕變更"
 
-#: src/canvas/sections/CommentSection.ts:566
+#: src/canvas/sections/CommentSection.ts:570
 msgid "Resolved"
 msgstr "已解決"
 
-#: src/canvas/sections/CommentSection.ts:576
+#: src/canvas/sections/CommentSection.ts:580
 msgid "Removed"
 msgstr "已移除"
 
-#: src/canvas/sections/CommentSection.ts:1173
+#: src/canvas/sections/CommentSection.ts:1182
 #: src/control/jsdialog/Widget.Comment.ts:177
-#: src/layer/tile/CanvasTileLayer.js:3576
-#: src/layer/tile/CanvasTileLayer.js:3587
+#: src/layer/tile/CanvasTileLayer.js:3592
+#: src/layer/tile/CanvasTileLayer.js:3603
 msgid "Comment"
 msgstr "評註"
 
-#: src/canvas/sections/CommentSection.ts:1180
+#: src/canvas/sections/CommentSection.ts:1192
 msgid "Modify"
 msgstr "修改"
 
-#: src/canvas/sections/CommentSection.ts:1186
+#: src/canvas/sections/CommentSection.ts:1198
 #: src/control/Notebookbar.ImpressAnimationTab.ts:83
 msgid "Remove"
 msgstr "移除"
 
-#: src/canvas/sections/CommentSection.ts:1189
+#: src/canvas/sections/CommentSection.ts:1202
 msgid "Remove Thread"
 msgstr "移除討論串"
 
-#: src/canvas/sections/CommentSection.ts:1195
+#: src/canvas/sections/CommentSection.ts:1209
 msgid "Resolve"
 msgstr "解決"
 
-#: src/canvas/sections/CommentSection.ts:1195
+#: src/canvas/sections/CommentSection.ts:1209
 msgid "Unresolve"
 msgstr "未解決"
 
-#: src/canvas/sections/CommentSection.ts:1201
+#: src/canvas/sections/CommentSection.ts:1216
 msgid "Unresolve Thread"
 msgstr "將討論串標記為未解決"
 
-#: src/canvas/sections/CommentSection.ts:1201
+#: src/canvas/sections/CommentSection.ts:1216
 msgid "Resolve Thread"
 msgstr "解決討論串"
 
-#: src/canvas/sections/CommentSection.ts:1206
+#: src/canvas/sections/CommentSection.ts:1222
 msgid "Promote to top comment"
 msgstr "提昇至評註頂部"
 
-#: src/canvas/sections/CommentSection.ts:1211
+#: src/canvas/sections/CommentSection.ts:1227
 msgid "Show on the side"
 msgstr "側邊顯示"
 
-#: src/canvas/sections/CommentSection.ts:1211
+#: src/canvas/sections/CommentSection.ts:1227
 msgid "Open in full view"
 msgstr "在完整檢視中開啟"
 
-#: src/canvas/sections/CommentSection.ts:1218
+#: src/canvas/sections/CommentSection.ts:1234
 msgid "Show in navigator"
 msgstr "在助手中顯示"
 
-#: src/canvas/sections/CommentSection.ts:1487
-#: src/canvas/sections/CommentSection.ts:1492
+#: src/canvas/sections/CommentSection.ts:1503
+#: src/canvas/sections/CommentSection.ts:1508
 #: src/control/Control.SaveState.ts:67
 msgid "Saved"
 msgstr "已儲存"
@@ -1223,6 +1238,42 @@ msgstr "編輯連結"
 #: src/canvas/sections/URLPopUpSection.ts:116
 msgid "Remove link"
 msgstr "刪除連結"
+
+#: src/canvas/sections/FormFieldButton.ts:106
+msgid "Unfold"
+msgstr ""
+
+#: src/canvas/sections/FormulaErrorHelpSection.ts:80
+msgid "Help on this error"
+msgstr ""
+
+#: src/canvas/sections/FormulaErrorHelpSection.ts:85
+msgid "Inspect with Function Wizard"
+msgstr ""
+
+#: src/canvas/sections/FormulaErrorHelpSection.ts:90
+msgid "Edit in Formula Bar"
+msgstr ""
+
+#: src/canvas/sections/FormulaErrorHelpSection.ts:98
+msgid "Help fix this error with AI"
+msgstr ""
+
+#: src/canvas/sections/HeaderFooterBoundarySection.ts:152
+msgid "Header"
+msgstr ""
+
+#: src/canvas/sections/HeaderFooterBoundarySection.ts:160
+msgid "Footer"
+msgstr ""
+
+#: src/control/CalcNotifications.ts:42
+msgid "Deletion created #REF! errors in other formulas. Undo to restore."
+msgstr ""
+
+#: src/control/CalcNotifications.ts:43
+msgid "Find First"
+msgstr ""
 
 #: src/control/ColorPicker.ts:269
 msgid "No color"
@@ -1268,6 +1319,617 @@ msgstr "COOLWSD 版本："
 #: src/control/Control.AddressInputField.ts:68
 msgid "cell address"
 msgstr "儲存格位址"
+
+#: src/control/Control.AIChatSidebar.ts:79
+msgid "Make the following text more concise"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:83
+msgid "Summarize the key points of this text"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:87
+msgid "Expand and add more detail to this text"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:91
+msgid "Fix grammar, spelling, and punctuation errors"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:107
+msgid "Natural"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:108
+#, fuzzy
+msgid "Formal"
+msgstr "格式"
+
+#: src/control/Control.AIChatSidebar.ts:109
+#, fuzzy
+msgid "Short"
+msgstr "排序"
+
+#: src/control/Control.AIChatSidebar.ts:110
+msgid "Friendly"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:111
+msgid "Professional"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:112
+msgid "Casual"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:338
+msgid "Unknown"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:340
+msgid ""
+"Ethical AI rating: {0} ({1}). Based on open-source licensing, self-hosting, "
+"and training data."
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:423
+msgid "Your message"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:425
+msgid "Action requiring approval"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:427
+msgid "Error message"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:428
+msgid "AI response"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:502
+msgid ""
+"Content generated by an external AI service ({0}). Please review before use."
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:505
+msgid "Content generated by an external AI service. Please review before use."
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:583
+msgid "New conversation"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:614
+msgid "Ask AI anything about your document..."
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:672
+msgid "Loading"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:685
+msgid "Chat messages"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:711
+msgid "AI generated image"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:746
+msgid "Retry"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:770
+#: src/control/Control.AIChatSidebar.ts:803
+msgid "Insert at cursor"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:779
+#: src/control/Control.AIChatSidebar.ts:810
+msgid "Copy to clipboard"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:831
+msgid "Ask AI..."
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:834
+msgid "Message input"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:850
+msgid "Stop generating"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:851
+msgid "Send message"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:865
+#: src/control/Control.AIChatSidebar.ts:878
+msgid "Set tone"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:889
+msgid "Set tone of voice"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:890
+msgid "Tone of voice: {0}{1}"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:892
+msgid "with emoji"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:934
+#: src/control/Control.AIChatSidebar.ts:984
+#: src/control/Control.AIChatSidebar.ts:1356
+#, fuzzy
+msgid "tone"
+msgstr "無"
+
+#: src/control/Control.AIChatSidebar.ts:947
+#: src/control/Control.AIChatSidebar.ts:1218
+msgid "Tone of voice"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:953
+msgid "Reset voice"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:956
+msgid "Reset tone of voice"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:972
+msgid "Your tones"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:989
+#, fuzzy
+msgid "Edit tone"
+msgstr "編輯模式"
+
+#: src/control/Control.AIChatSidebar.ts:1006
+msgid "+ Add my own voice"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:1008
+msgid "Add a custom tone of voice"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:1019
+msgid "Emojify"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:1025
+#: src/control/Control.StatusBar.js:162
+msgid "On"
+msgstr "開啟"
+
+#: src/control/Control.AIChatSidebar.ts:1025
+#: src/control/Control.StatusBar.js:164
+#: src/control/jsdialog/Definitions.Menu.ts:1824
+msgid "Off"
+msgstr "關閉"
+
+#: src/control/Control.AIChatSidebar.ts:1028
+msgid "Toggle emojify"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:1189
+msgid "Use icon"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:1199
+msgid "Pick another emoji"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:1213
+msgid "Back to tones"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:1226
+msgid "Icon"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:1238
+msgid "Name your tone"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:1245
+msgid "e.g. Quick reply"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:1247
+msgid "Tone name"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:1252
+msgid "Describe how AI should write"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:1260
+msgid ""
+"Write short, direct sentences. Use plain language and skip the small talk."
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:1264
+msgid "Tone description"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:1273
+#: src/control/Control.AIChatSidebar.ts:1335
+#: src/control/Control.AIChatSidebar.ts:1377
+msgid "Delete tone"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:1275
+msgid "Delete this tone"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:1288
+msgid "Save voice"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:1290
+msgid "Save tone of voice"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:1305
+#: src/control/jsdialog/Widget.EmojiPicker.ts:410
+msgid "Search emojis"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:1306
+#: src/control/jsdialog/Widget.EmojiPicker.ts:401
+msgid "Choose an emoji"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:1330
+msgid "Delete tone confirmation"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:1341
+msgid "This tone of voice will be deleted"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:1370
+msgid "Cancel delete"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:1397
+#: src/control/Control.AIChatSidebar.ts:1457
+msgid "You have reached the maximum of {0} custom tones."
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:1631
+msgid "Using selected text as context"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:1639
+msgid "Diagnose formula error"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:1645
+msgid "Sanity check data"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:1651
+msgid "Create a formula"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:1658
+msgid "Create slides"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:1690
+msgid "See less"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:1690
+msgid "See more"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:1800
+msgid "Image inserted at cursor"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:1819
+msgid "Text inserted at cursor"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:1893
+msgid "Approaching message length limit"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:1947
+msgid "Request timeout"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:1962
+#: src/control/Control.AIChatSidebar.ts:2784
+msgid ""
+"The selection contains images or other non-text content that cannot be sent "
+"as context."
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:2049
+msgid "Message is too long. Please shorten it and try again."
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:2104
+msgid "Error: "
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:2126
+msgid "Generated image"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:2137
+msgid "AI request failed"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:2154
+msgid "The AI assistant"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:2167
+msgid "Do you want to proceed?"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:2170
+msgid "%1 wants to inspect your document. Do you want to proceed?"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:2174
+msgid "Modify document structure"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:2176
+msgid "%1 wants to modify your document:"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:2180
+#: src/control/Control.AIChatSidebar.ts:2191
+msgid "Do you want to apply this change?"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:2182
+msgid "Set cell formula"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:2184
+msgid "%1 wants to set a formula in your spreadsheet:"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:2194
+msgid "%1 wants to perform an action. Do you want to proceed?"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:2225
+msgid "Approve"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:2227
+msgid "Approve action"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:2234
+msgid "Reject"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:2236
+msgid "Reject action"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:2255
+msgid "Applying changes..."
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:2258
+msgid "Change rejected"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:2304
+msgid "Selection fetch timeout"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:2323
+msgid "Failed to parse selection content"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:2556
+msgid "Formula analysis timeout"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:2575
+msgid "Analyzing formula dependencies..."
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:2583
+msgid "Failed to analyze formula."
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:2593
+msgid "The selected cell does not contain a formula."
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:2595
+msgid "The selected cell does not have a formula error."
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:2604
+msgid "Diagnose formula error in"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:2625
+msgid "I have a formula error in my spreadsheet."
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:2627
+#, fuzzy
+msgid "Cell"
+msgstr "儲存格"
+
+#: src/control/Control.AIChatSidebar.ts:2631
+#, fuzzy
+msgid "Sheet"
+msgstr "工作表"
+
+#: src/control/Control.AIChatSidebar.ts:2635
+msgid "contains"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:2637
+#: src/control/Control.FormulaBarJSDialog.js:83
+#: src/control/Control.NotebookbarWriter.js:128
+#: src/control/Control.NotebookbarWriter.js:1585
+msgid "Formula"
+msgstr "公式"
+
+#: src/control/Control.AIChatSidebar.ts:2641
+msgid "Referenced cells"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:2647
+msgid "Please diagnose why this formula produces the"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:2651
+msgid "error."
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:2653
+msgid "Explain the root cause and suggest how to fix it."
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:2657
+msgid ""
+"When referencing specific cells, format each cell address as a clickable "
+"link: [A1](cell://A1)."
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:2672
+#, fuzzy
+msgid "formula"
+msgstr "公式"
+
+#: src/control/Control.AIChatSidebar.ts:2674
+msgid "ERROR"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:2688
+msgid "value"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:2698
+#, fuzzy
+msgid "text"
+msgstr "文字"
+
+#: src/control/Control.AIChatSidebar.ts:2703
+msgid "empty"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:2705
+#, fuzzy
+msgid "range"
+msgstr "範圍"
+
+#: src/control/Control.AIChatSidebar.ts:2707
+msgid "errors in"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:2710
+msgid "only partially scanned"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:2719
+msgid "circular reference"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:2769
+msgid "Select the data you want to sanity-check first."
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:2774
+msgid "Analyzing selected data..."
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:2787
+msgid "Failed to extract spreadsheet data."
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:2796
+msgid "No data found in selection."
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:2826
+msgid ""
+"Describe the slides you want to create. For example: \"A 5-slide overview "
+"of renewable energy\" or \"An introduction to our team\"."
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:2853
+msgid ""
+"Describe what formula you need. For example: \"Calculate the average of "
+"column B\" or \"Sum all values where column A is greater than 100\"."
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:2863
+msgid ""
+"Read row numbers from the \"Row\" column — do not count or estimate row "
+"positions."
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:2867
+msgid ""
+"To identify a cell's column, match the value to the column letter in the "
+"header row — do not guess."
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:2871
+msgid ""
+"Reference a cell by combining its column header with the row number (e.g., "
+"column B + row 2 = B2)."
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:2874
+msgid ""
+"When referencing specific cells, format each cell as a clickable link: [B2]"
+"(cell://B2)."
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:2880
+msgid "Sanity check the following spreadsheet data."
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:2881
+msgid "Please analyze this data for:"
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:2885
+msgid ""
+"Benford's Law violations — check if leading digit distribution of numeric "
+"values deviates significantly from the expected distribution, which may "
+"suggest data manipulation."
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:2891
+msgid ""
+"Statistical outliers — identify values that deviate significantly from "
+"their column or group."
+msgstr ""
+
+#: src/control/Control.AIChatSidebar.ts:2897
+msgid ""
+"General anomalies — suspicious patterns, unexpected duplicates, "
+"inconsistencies, or formatting issues."
+msgstr ""
 
 #: src/control/Control.AlertDialog.js:55
 msgid "External link"
@@ -1326,8 +1988,8 @@ msgstr "首頁"
 
 #: src/control/Control.BackstageView.ts:103
 #: src/control/Control.BackstageView.ts:425
-#: src/control/Control.NotebookbarImpress.js:866
-#: src/control/Control.NotebookbarImpress.js:1475
+#: src/control/Control.NotebookbarImpress.js:873
+#: src/control/Control.NotebookbarImpress.js:1482
 msgid "New"
 msgstr "新增"
 
@@ -1336,16 +1998,16 @@ msgid "Open"
 msgstr "開啟"
 
 #: src/control/Control.BackstageView.ts:119
-#: src/control/Control.Notebookbar.js:638
-#: src/control/Control.NotebookbarCalc.js:210
-#: src/control/Control.NotebookbarCalc.js:244
-#: src/control/Control.NotebookbarDraw.js:217
-#: src/control/Control.NotebookbarDraw.js:251
+#: src/control/Control.Notebookbar.js:706
+#: src/control/Control.NotebookbarCalc.js:217
+#: src/control/Control.NotebookbarCalc.js:251
+#: src/control/Control.NotebookbarDraw.js:224
+#: src/control/Control.NotebookbarDraw.js:258
 #: src/control/Control.NotebookbarImpress.js:64
-#: src/control/Control.NotebookbarImpress.js:265
-#: src/control/Control.NotebookbarImpress.js:299
-#: src/control/Control.NotebookbarWriter.js:226
-#: src/control/Control.NotebookbarWriter.js:259
+#: src/control/Control.NotebookbarImpress.js:272
+#: src/control/Control.NotebookbarImpress.js:306
+#: src/control/Control.NotebookbarWriter.js:233
+#: src/control/Control.NotebookbarWriter.js:266
 #: src/control/PermissionMode.ts:150
 msgid "Share"
 msgstr "分享"
@@ -1355,12 +2017,12 @@ msgid "Info"
 msgstr "資訊"
 
 #: src/control/Control.BackstageView.ts:143
-#: src/control/Control.NotebookbarCalc.js:173
-#: src/control/Control.NotebookbarCalc.js:314
-#: src/control/Control.NotebookbarImpress.js:226
-#: src/control/Control.NotebookbarImpress.js:371
-#: src/control/Control.NotebookbarWriter.js:187
-#: src/control/Control.NotebookbarWriter.js:332
+#: src/control/Control.NotebookbarCalc.js:180
+#: src/control/Control.NotebookbarCalc.js:321
+#: src/control/Control.NotebookbarImpress.js:233
+#: src/control/Control.NotebookbarImpress.js:378
+#: src/control/Control.NotebookbarWriter.js:194
+#: src/control/Control.NotebookbarWriter.js:339
 msgid "Save As"
 msgstr "另存為"
 
@@ -1369,13 +2031,13 @@ msgid "Export"
 msgstr "匯出"
 
 #: src/control/Control.BackstageView.ts:173 src/control/Control.Menubar.ts:124
-#: src/control/Control.Menubar.ts:466 src/control/Control.Menubar.ts:642
-#: src/control/Control.Menubar.ts:791
-#: src/control/Control.NotebookbarCalc.js:391
-#: src/control/Control.NotebookbarDraw.js:414
-#: src/control/Control.NotebookbarImpress.js:448
-#: src/control/Control.NotebookbarWriter.js:424
-#: src/map/handler/Map.Settings.ts:84
+#: src/control/Control.Menubar.ts:467 src/control/Control.Menubar.ts:644
+#: src/control/Control.Menubar.ts:794
+#: src/control/Control.NotebookbarCalc.js:398
+#: src/control/Control.NotebookbarDraw.js:421
+#: src/control/Control.NotebookbarImpress.js:455
+#: src/control/Control.NotebookbarWriter.js:431 src/control/IFrameDialog.js:35
+#: src/map/handler/Map.Settings.ts:85
 msgid "Options"
 msgstr "選項"
 
@@ -1424,7 +2086,7 @@ msgstr "工作表"
 
 #: src/control/Control.BackstageView.ts:542
 #: src/control/Control.NavigatorPanel.ts:192
-#: src/control/Control.NotebookbarImpress.js:1468
+#: src/control/Control.NotebookbarImpress.js:1475
 #: src/slideshow/PresenterConsole.js:35
 msgid "Slides"
 msgstr "投影片"
@@ -1503,12 +2165,12 @@ msgid "Search templates"
 msgstr "搜尋範本"
 
 #: src/control/backstage/InfoView.tsx:31 src/control/Control.Menubar.ts:388
-#: src/control/Control.Menubar.ts:1381
-#: src/control/Control.NotebookbarCalc.js:344
-#: src/control/Control.NotebookbarDraw.js:364
-#: src/control/Control.NotebookbarImpress.js:401
-#: src/control/Control.NotebookbarWriter.js:362
-#: src/control/Control.NotebookbarWriter.js:1646
+#: src/control/Control.Menubar.ts:1385
+#: src/control/Control.NotebookbarCalc.js:351
+#: src/control/Control.NotebookbarDraw.js:371
+#: src/control/Control.NotebookbarImpress.js:408
+#: src/control/Control.NotebookbarWriter.js:369
+#: src/control/Control.NotebookbarWriter.js:1653
 msgid "Properties"
 msgstr "屬性"
 
@@ -1573,10 +2235,10 @@ msgid ""
 msgstr "如果您想在 {productname} 之外分享大型元素，則必須先下載它們。"
 
 #: src/control/Control.DownloadProgress.js:61
-#: src/control/Control.NotebookbarCalc.js:312
-#: src/control/Control.NotebookbarDraw.js:306
-#: src/control/Control.NotebookbarImpress.js:369
-#: src/control/Control.NotebookbarWriter.js:330
+#: src/control/Control.NotebookbarCalc.js:319
+#: src/control/Control.NotebookbarDraw.js:313
+#: src/control/Control.NotebookbarImpress.js:376
+#: src/control/Control.NotebookbarWriter.js:337
 msgid "Download"
 msgstr "下載"
 
@@ -1936,12 +2598,6 @@ msgstr "函式精靈"
 msgid "Select Function"
 msgstr "選取函式"
 
-#: src/control/Control.FormulaBarJSDialog.js:83
-#: src/control/Control.NotebookbarWriter.js:122
-#: src/control/Control.NotebookbarWriter.js:1578
-msgid "Formula"
-msgstr "公式"
-
 #: src/control/Control.FormulaBarJSDialog.js:89
 #: src/control/Control.MobileTopBar.ts:42
 msgid "Accept"
@@ -1963,108 +2619,108 @@ msgstr "閒置文件 - 請輕觸以重新載入並繼續編輯"
 msgid "Close dialog"
 msgstr "關閉對話方塊"
 
-#: src/control/Control.JSDialogBuilder.js:388
+#: src/control/Control.JSDialogBuilder.js:390
 msgid "Solid"
 msgstr "實心"
 
-#: src/control/Control.JSDialogBuilder.js:391
+#: src/control/Control.JSDialogBuilder.js:393
 msgid "Linear"
 msgstr "線形"
 
-#: src/control/Control.JSDialogBuilder.js:394
+#: src/control/Control.JSDialogBuilder.js:396
 msgid "Axial"
 msgstr "軸向"
 
-#: src/control/Control.JSDialogBuilder.js:397
+#: src/control/Control.JSDialogBuilder.js:399
 msgid "Radial"
 msgstr "放射"
 
-#: src/control/Control.JSDialogBuilder.js:400
+#: src/control/Control.JSDialogBuilder.js:402
 msgid "Ellipsoid"
 msgstr "橢圓體"
 
-#: src/control/Control.JSDialogBuilder.js:404
+#: src/control/Control.JSDialogBuilder.js:406
 msgid "Quadratic"
 msgstr "立方形"
 
-#: src/control/Control.JSDialogBuilder.js:407
+#: src/control/Control.JSDialogBuilder.js:409
 msgid "Square"
 msgstr "正方形"
 
-#: src/control/Control.JSDialogBuilder.js:410
+#: src/control/Control.JSDialogBuilder.js:412
 msgid "Fixed size"
 msgstr "固定大小"
 
-#: src/control/Control.JSDialogBuilder.js:1135
+#: src/control/Control.JSDialogBuilder.js:1137
 msgid "From"
 msgstr "從"
 
-#: src/control/Control.JSDialogBuilder.js:1138
+#: src/control/Control.JSDialogBuilder.js:1140
 msgid "To"
 msgstr "到"
 
-#: src/control/Control.JSDialogBuilder.js:1141
+#: src/control/Control.JSDialogBuilder.js:1143
 #: src/control/jsdialog/Widget.ColorPicker.ts:226
 msgid "Color"
 msgstr "色彩"
 
-#: src/control/Control.JSDialogBuilder.js:1176
+#: src/control/Control.JSDialogBuilder.js:1178
 #: src/control/Control.NotebookbarBuilder.js:165
 msgid "Font Name"
 msgstr "字型名稱"
 
-#: src/control/Control.JSDialogBuilder.js:1178
+#: src/control/Control.JSDialogBuilder.js:1180
 msgid "Font Size"
 msgstr "字型大小"
 
-#: src/control/Control.JSDialogBuilder.js:1180
-#: src/control/Control.NotebookbarCalc.js:975
-#: src/control/Control.NotebookbarCalc.js:2730
-#: src/control/Control.NotebookbarDraw.js:1766
-#: src/control/Control.NotebookbarImpress.js:1369
-#: src/control/Control.NotebookbarWriter.js:1075
+#: src/control/Control.JSDialogBuilder.js:1182
+#: src/control/Control.NotebookbarCalc.js:982
+#: src/control/Control.NotebookbarCalc.js:2753
+#: src/control/Control.NotebookbarDraw.js:1773
+#: src/control/Control.NotebookbarImpress.js:1376
+#: src/control/Control.NotebookbarWriter.js:1082
 msgid "Style"
 msgstr "樣式"
 
-#: src/control/Control.JSDialogBuilder.js:1566
+#: src/control/Control.JSDialogBuilder.js:1568
 msgid "Toggle dropdown"
 msgstr "切換下拉式選單"
 
-#: src/control/Control.JSDialogBuilder.js:1568
+#: src/control/Control.JSDialogBuilder.js:1570
 msgid "Dialog dropdown"
 msgstr "對話方塊下拉式選單"
 
-#: src/control/Control.JSDialogBuilder.js:1570
-#: src/control/Control.NotebookbarWriter.js:1622
+#: src/control/Control.JSDialogBuilder.js:1572
+#: src/control/Control.NotebookbarWriter.js:1629
 msgid "Dropdown"
 msgstr "下拉式選單"
 
-#: src/control/Control.JSDialogBuilder.js:1572
+#: src/control/Control.JSDialogBuilder.js:1574
 msgid "Apply action dropdown"
 msgstr "套用動作下拉式選單"
 
-#: src/control/Control.JSDialogBuilder.js:1598
+#: src/control/Control.JSDialogBuilder.js:1600
 msgid "Open {name}"
 msgstr "開啟 {name}"
 
-#: src/control/Control.JSDialogBuilder.js:1885
-#: src/control/Control.Menubar.ts:957
+#: src/control/Control.JSDialogBuilder.js:1887
+#: src/control/Control.Menubar.ts:960
 msgid "Rows"
 msgstr "列"
 
-#: src/control/Control.JSDialogBuilder.js:1886
-#: src/control/Control.Menubar.ts:960
+#: src/control/Control.JSDialogBuilder.js:1888
+#: src/control/Control.Menubar.ts:963
 msgid "Columns"
 msgstr "欄"
 
-#: src/control/Control.JSDialogBuilder.js:1906
+#: src/control/Control.JSDialogBuilder.js:1908
 msgid "Insert Table"
 msgstr "插入表格"
 
 #: src/control/Control.LanguageDialog.js:64 src/control/Control.Menubar.ts:400
 #: src/control/Control.Menubar.ts:402 src/control/Control.Menubar.ts:404
-#: src/control/Control.Menubar.ts:602 src/control/Control.Menubar.ts:749
-#: src/control/Control.Menubar.ts:1050 src/control/Control.StatusBar.js:713
+#: src/control/Control.Menubar.ts:603 src/control/Control.Menubar.ts:751
+#: src/control/Control.Menubar.ts:1053 src/control/Control.StatusBar.js:713
 msgid "None (Do not check spelling)"
 msgstr "無 (不檢查拼字)"
 
@@ -2082,55 +2738,55 @@ msgid "No search results found!"
 msgstr "找不到搜尋結果！"
 
 #: src/control/Control.Menubar.ts:101 src/control/Control.Menubar.ts:116
-#: src/control/Control.Menubar.ts:1090
+#: src/control/Control.Menubar.ts:1094
 #: src/control/Control.NotebookbarBuilder.js:379
 #: src/control/Control.NotebookbarBuilder.js:531
 msgid "ODF text document (.odt)"
 msgstr "ODF 文字文件 (.odt)"
 
 #: src/control/Control.Menubar.ts:102 src/control/Control.Menubar.ts:117
-#: src/control/Control.Menubar.ts:1091
+#: src/control/Control.Menubar.ts:1095
 #: src/control/Control.NotebookbarBuilder.js:391
 #: src/control/Control.NotebookbarBuilder.js:543
 msgid "Word 2003 Document (.doc)"
 msgstr "Word 2003 文件 (.doc)"
 
 #: src/control/Control.Menubar.ts:103 src/control/Control.Menubar.ts:118
-#: src/control/Control.Menubar.ts:1092
+#: src/control/Control.Menubar.ts:1096
 #: src/control/Control.NotebookbarBuilder.js:387
 #: src/control/Control.NotebookbarBuilder.js:539
 msgid "Word Document (.docx)"
 msgstr "Word 文件 (.docx)"
 
 #: src/control/Control.Menubar.ts:104 src/control/Control.Menubar.ts:119
-#: src/control/Control.Menubar.ts:1093
+#: src/control/Control.Menubar.ts:1097
 #: src/control/Control.NotebookbarBuilder.js:383
 #: src/control/Control.NotebookbarBuilder.js:535
 msgid "Rich Text (.rtf)"
 msgstr "豐富文字 (.rtf)"
 
 #: src/control/Control.Menubar.ts:106 src/control/Control.Menubar.ts:113
-#: src/control/Control.Menubar.ts:445 src/control/Control.Menubar.ts:451
-#: src/control/Control.Menubar.ts:628 src/control/Control.Menubar.ts:635
-#: src/control/Control.Menubar.ts:776 src/control/Control.Menubar.ts:781
-#: src/control/Control.Menubar.ts:1078 src/control/Control.Menubar.ts:1087
-#: src/control/Control.Menubar.ts:1144 src/control/Control.Menubar.ts:1152
-#: src/control/Control.Menubar.ts:1209 src/control/Control.Menubar.ts:1216
-#: src/control/Control.Menubar.ts:1264 src/control/Control.Menubar.ts:1274
-#: src/control/Control.NotebookbarCalc.js:313
-#: src/control/Control.NotebookbarImpress.js:370
-#: src/control/Control.NotebookbarWriter.js:331
+#: src/control/Control.Menubar.ts:446 src/control/Control.Menubar.ts:452
+#: src/control/Control.Menubar.ts:630 src/control/Control.Menubar.ts:637
+#: src/control/Control.Menubar.ts:779 src/control/Control.Menubar.ts:784
+#: src/control/Control.Menubar.ts:1082 src/control/Control.Menubar.ts:1091
+#: src/control/Control.Menubar.ts:1148 src/control/Control.Menubar.ts:1156
+#: src/control/Control.Menubar.ts:1213 src/control/Control.Menubar.ts:1220
+#: src/control/Control.Menubar.ts:1268 src/control/Control.Menubar.ts:1278
+#: src/control/Control.NotebookbarCalc.js:320
+#: src/control/Control.NotebookbarImpress.js:377
+#: src/control/Control.NotebookbarWriter.js:338
 msgid "Export as"
 msgstr "匯出為"
 
 #: src/control/Control.Menubar.ts:107 src/control/Control.Menubar.ts:114
-#: src/control/Control.Menubar.ts:446 src/control/Control.Menubar.ts:452
-#: src/control/Control.Menubar.ts:629 src/control/Control.Menubar.ts:636
-#: src/control/Control.Menubar.ts:777 src/control/Control.Menubar.ts:782
-#: src/control/Control.Menubar.ts:1079 src/control/Control.Menubar.ts:1088
-#: src/control/Control.Menubar.ts:1145 src/control/Control.Menubar.ts:1153
-#: src/control/Control.Menubar.ts:1210 src/control/Control.Menubar.ts:1217
-#: src/control/Control.Menubar.ts:1265 src/control/Control.Menubar.ts:1275
+#: src/control/Control.Menubar.ts:447 src/control/Control.Menubar.ts:453
+#: src/control/Control.Menubar.ts:631 src/control/Control.Menubar.ts:638
+#: src/control/Control.Menubar.ts:780 src/control/Control.Menubar.ts:785
+#: src/control/Control.Menubar.ts:1083 src/control/Control.Menubar.ts:1092
+#: src/control/Control.Menubar.ts:1149 src/control/Control.Menubar.ts:1157
+#: src/control/Control.Menubar.ts:1214 src/control/Control.Menubar.ts:1221
+#: src/control/Control.Menubar.ts:1269 src/control/Control.Menubar.ts:1279
 #: src/control/Control.NotebookbarBuilder.js:400
 #: src/control/Control.NotebookbarBuilder.js:437
 #: src/control/Control.NotebookbarBuilder.js:470
@@ -2138,12 +2794,12 @@ msgstr "匯出為"
 #: src/control/Control.NotebookbarBuilder.js:603
 #: src/control/Control.NotebookbarBuilder.js:610
 #: src/control/Control.NotebookbarBuilder.js:617
-#: src/control/Control.NotebookbarDraw.js:320
+#: src/control/Control.NotebookbarDraw.js:327
 msgid "PDF Document (.pdf)"
 msgstr "PDF 文件 (.pdf)"
 
 #: src/control/Control.Menubar.ts:108 src/control/Control.Menubar.ts:120
-#: src/control/Control.Menubar.ts:1080 src/control/Control.Menubar.ts:1094
+#: src/control/Control.Menubar.ts:1084 src/control/Control.Menubar.ts:1098
 #: src/control/Control.NotebookbarBuilder.js:395
 #: src/control/Control.NotebookbarBuilder.js:596
 msgid "EPUB (.epub)"
@@ -2153,52 +2809,52 @@ msgstr "EPUB (.epub)"
 msgid "Rename Document"
 msgstr "重新命名"
 
-#: src/control/Control.Menubar.ts:111 src/control/Control.Menubar.ts:449
-#: src/control/Control.Menubar.ts:632 src/control/Control.Menubar.ts:779
-#: src/control/Control.Menubar.ts:1082 src/control/Control.Menubar.ts:1147
-#: src/control/Control.Menubar.ts:1212 src/control/Control.Menubar.ts:1267
+#: src/control/Control.Menubar.ts:111 src/control/Control.Menubar.ts:450
+#: src/control/Control.Menubar.ts:634 src/control/Control.Menubar.ts:782
+#: src/control/Control.Menubar.ts:1086 src/control/Control.Menubar.ts:1151
+#: src/control/Control.Menubar.ts:1216 src/control/Control.Menubar.ts:1271
 msgid "Share..."
 msgstr "分享……"
 
-#: src/control/Control.Menubar.ts:112 src/control/Control.Menubar.ts:450
-#: src/control/Control.Menubar.ts:634 src/control/Control.Menubar.ts:780
-#: src/control/Control.Menubar.ts:1083 src/control/Control.Menubar.ts:1148
-#: src/control/Control.Menubar.ts:1214 src/control/Control.Menubar.ts:1268
+#: src/control/Control.Menubar.ts:112 src/control/Control.Menubar.ts:451
+#: src/control/Control.Menubar.ts:636 src/control/Control.Menubar.ts:783
+#: src/control/Control.Menubar.ts:1087 src/control/Control.Menubar.ts:1152
+#: src/control/Control.Menubar.ts:1218 src/control/Control.Menubar.ts:1272
 msgid "See revision history"
 msgstr "檢視修訂記錄"
 
-#: src/control/Control.Menubar.ts:113 src/control/Control.Menubar.ts:451
-#: src/control/Control.Menubar.ts:635 src/control/Control.Menubar.ts:781
-#: src/control/Control.Menubar.ts:1087 src/control/Control.Menubar.ts:1152
-#: src/control/Control.Menubar.ts:1216 src/control/Control.Menubar.ts:1274
+#: src/control/Control.Menubar.ts:113 src/control/Control.Menubar.ts:452
+#: src/control/Control.Menubar.ts:637 src/control/Control.Menubar.ts:784
+#: src/control/Control.Menubar.ts:1091 src/control/Control.Menubar.ts:1156
+#: src/control/Control.Menubar.ts:1220 src/control/Control.Menubar.ts:1278
 msgid "Download as"
 msgstr "下載為"
 
-#: src/control/Control.Menubar.ts:115 src/control/Control.Menubar.ts:453
-#: src/control/Control.Menubar.ts:637 src/control/Control.Menubar.ts:783
-#: src/control/Control.Menubar.ts:1089 src/control/Control.Menubar.ts:1154
-#: src/control/Control.Menubar.ts:1218 src/control/Control.Menubar.ts:1276
+#: src/control/Control.Menubar.ts:115 src/control/Control.Menubar.ts:454
+#: src/control/Control.Menubar.ts:639 src/control/Control.Menubar.ts:786
+#: src/control/Control.Menubar.ts:1093 src/control/Control.Menubar.ts:1158
+#: src/control/Control.Menubar.ts:1222 src/control/Control.Menubar.ts:1280
 msgid "PDF Document (.pdf) as..."
 msgstr "PDF 文件 (.pdf) 為……"
 
-#: src/control/Control.Menubar.ts:121 src/control/Control.Menubar.ts:788
+#: src/control/Control.Menubar.ts:121 src/control/Control.Menubar.ts:791
 msgid "HTML file (.html)"
 msgstr "HTML 檔案 (.html)"
 
-#: src/control/Control.Menubar.ts:127 src/control/Control.Menubar.ts:472
-#: src/control/Control.Menubar.ts:644 src/control/Control.Menubar.ts:797
+#: src/control/Control.Menubar.ts:127 src/control/Control.Menubar.ts:473
+#: src/control/Control.Menubar.ts:646 src/control/Control.Menubar.ts:800
 #: src/control/Control.Toolbar.js:1176
 msgid "Close document"
 msgstr "關閉文件"
 
-#: src/control/Control.Menubar.ts:132 src/control/Control.Menubar.ts:477
-#: src/control/Control.Menubar.ts:649 src/control/Control.Menubar.ts:802
-#: src/control/Control.Menubar.ts:1099 src/control/Control.Menubar.ts:1163
-#: src/control/Control.Menubar.ts:1224 src/control/Control.Menubar.ts:1284
-#: src/control/Control.NotebookbarCalc.js:329
-#: src/control/Control.NotebookbarDraw.js:350
-#: src/control/Control.NotebookbarImpress.js:386
-#: src/control/Control.NotebookbarWriter.js:347
+#: src/control/Control.Menubar.ts:132 src/control/Control.Menubar.ts:478
+#: src/control/Control.Menubar.ts:651 src/control/Control.Menubar.ts:805
+#: src/control/Control.Menubar.ts:1103 src/control/Control.Menubar.ts:1167
+#: src/control/Control.Menubar.ts:1228 src/control/Control.Menubar.ts:1288
+#: src/control/Control.NotebookbarCalc.js:336
+#: src/control/Control.NotebookbarDraw.js:357
+#: src/control/Control.NotebookbarImpress.js:393
+#: src/control/Control.NotebookbarWriter.js:354
 msgid "Repair"
 msgstr "修復"
 
@@ -2206,13 +2862,13 @@ msgstr "修復"
 msgid "Compare Changes"
 msgstr "比較變更"
 
-#: src/control/Control.Menubar.ts:163 src/control/Control.Menubar.ts:489
-#: src/control/Control.Menubar.ts:495 src/control/Control.Menubar.ts:661
-#: src/control/Control.Menubar.ts:667 src/control/Control.Menubar.ts:814
-#: src/control/Control.Menubar.ts:820
-#: src/control/Control.NotebookbarCalc.js:1573
-#: src/control/Control.NotebookbarDraw.js:449
-#: src/control/Control.NotebookbarImpress.js:593
+#: src/control/Control.Menubar.ts:163 src/control/Control.Menubar.ts:490
+#: src/control/Control.Menubar.ts:496 src/control/Control.Menubar.ts:663
+#: src/control/Control.Menubar.ts:669 src/control/Control.Menubar.ts:817
+#: src/control/Control.Menubar.ts:823
+#: src/control/Control.NotebookbarCalc.js:1580
+#: src/control/Control.NotebookbarDraw.js:456
+#: src/control/Control.NotebookbarImpress.js:600
 #: src/control/Control.StatusBar.js:276
 msgid "Reset zoom"
 msgstr "重設縮放"
@@ -2221,62 +2877,62 @@ msgstr "重設縮放"
 msgid "Fit to Screen"
 msgstr "調整至螢幕大小"
 
-#: src/control/Control.Menubar.ts:172 src/control/Control.Menubar.ts:501
-#: src/control/Control.Menubar.ts:673 src/control/Control.Menubar.ts:823
+#: src/control/Control.Menubar.ts:172 src/control/Control.Menubar.ts:502
+#: src/control/Control.Menubar.ts:675 src/control/Control.Menubar.ts:826
 msgid "Toggle UI Mode"
 msgstr "切換 UI 模式"
 
 #: src/control/Control.Menubar.ts:173
-#: src/control/Control.NotebookbarWriter.js:1737
+#: src/control/Control.NotebookbarWriter.js:1744
 #: src/control/Control.StatusBar.js:264 src/control/Control.StatusBar.js:265
 msgid "Multi Page View"
 msgstr "多頁檢視"
 
-#: src/control/Control.Menubar.ts:175 src/control/Control.Menubar.ts:503
-#: src/control/Control.Menubar.ts:678 src/control/Control.Menubar.ts:824
+#: src/control/Control.Menubar.ts:175 src/control/Control.Menubar.ts:504
+#: src/control/Control.Menubar.ts:680 src/control/Control.Menubar.ts:827
 msgid "Show Status Bar"
 msgstr "顯示狀態列"
 
-#: src/control/Control.Menubar.ts:176 src/control/Control.Menubar.ts:505
-#: src/control/Control.Menubar.ts:679 src/control/Control.Menubar.ts:825
+#: src/control/Control.Menubar.ts:176 src/control/Control.Menubar.ts:506
+#: src/control/Control.Menubar.ts:681 src/control/Control.Menubar.ts:828
 msgid "Hide Menu Bar"
 msgstr "隱藏選單列"
 
-#: src/control/Control.Menubar.ts:178 src/control/Control.Menubar.ts:507
-#: src/control/Control.Menubar.ts:675 src/control/Control.Menubar.ts:827
-#: src/control/Control.Menubar.ts:1121 src/control/Control.Menubar.ts:1174
-#: src/control/Control.Menubar.ts:1235 src/control/Control.Menubar.ts:1295
-#: src/control/Control.NotebookbarCalc.js:1659
-#: src/control/Control.NotebookbarDraw.js:571
-#: src/control/Control.NotebookbarImpress.js:738
-#: src/control/Control.NotebookbarWriter.js:1791
+#: src/control/Control.Menubar.ts:178 src/control/Control.Menubar.ts:508
+#: src/control/Control.Menubar.ts:677 src/control/Control.Menubar.ts:830
+#: src/control/Control.Menubar.ts:1125 src/control/Control.Menubar.ts:1178
+#: src/control/Control.Menubar.ts:1239 src/control/Control.Menubar.ts:1299
+#: src/control/Control.NotebookbarCalc.js:1666
+#: src/control/Control.NotebookbarDraw.js:578
+#: src/control/Control.NotebookbarImpress.js:745
+#: src/control/Control.NotebookbarWriter.js:1798
 msgid "Invert Background"
 msgstr "反轉背景"
 
-#: src/control/Control.Menubar.ts:180 src/control/Control.Menubar.ts:830
-#: src/control/Control.NotebookbarCalc.js:2757
-#: src/control/Control.NotebookbarWriter.js:1102
+#: src/control/Control.Menubar.ts:180 src/control/Control.Menubar.ts:833
+#: src/control/Control.NotebookbarCalc.js:2780
+#: src/control/Control.NotebookbarWriter.js:1109
 msgid "Style list"
 msgstr "樣式清單"
 
-#: src/control/Control.Menubar.ts:188 src/control/Control.Menubar.ts:519
-#: src/control/Control.Menubar.ts:682 src/control/Control.Menubar.ts:841
-#: src/control/Control.Menubar.ts:1337 src/control/Control.Menubar.ts:1387
-#: src/control/Control.Menubar.ts:1401 src/control/Control.Menubar.ts:1424
+#: src/control/Control.Menubar.ts:188 src/control/Control.Menubar.ts:520
+#: src/control/Control.Menubar.ts:684 src/control/Control.Menubar.ts:844
+#: src/control/Control.Menubar.ts:1341 src/control/Control.Menubar.ts:1391
+#: src/control/Control.Menubar.ts:1405 src/control/Control.Menubar.ts:1428
 msgid "Local Image..."
 msgstr "本機影像……"
 
 #: src/control/Control.Menubar.ts:212 src/control/Control.Menubar.ts:214
-#: src/control/Control.Menubar.ts:1354 src/control/Control.Menubar.ts:1356
+#: src/control/Control.Menubar.ts:1358 src/control/Control.Menubar.ts:1360
 msgid "All"
 msgstr "所有"
 
-#: src/control/Control.Menubar.ts:224 src/control/Control.Menubar.ts:530
-#: src/control/Control.Menubar.ts:689 src/control/Control.Menubar.ts:855
-#: src/control/Control.NotebookbarCalc.js:1917
-#: src/control/Control.NotebookbarDraw.js:1597
-#: src/control/Control.NotebookbarImpress.js:1659
-#: src/control/Control.NotebookbarWriter.js:1358
+#: src/control/Control.Menubar.ts:224 src/control/Control.Menubar.ts:531
+#: src/control/Control.Menubar.ts:691 src/control/Control.Menubar.ts:858
+#: src/control/Control.NotebookbarCalc.js:1924
+#: src/control/Control.NotebookbarDraw.js:1604
+#: src/control/Control.NotebookbarImpress.js:1666
+#: src/control/Control.NotebookbarWriter.js:1365
 msgid "Smart Picker"
 msgstr "智慧型選取程式"
 
@@ -2325,355 +2981,368 @@ msgstr "解除連結引用"
 msgid "Citation Preferences"
 msgstr "引用偏好設定"
 
-#: src/control/Control.Menubar.ts:383 src/control/Control.Menubar.ts:1376
+#: src/control/Control.Menubar.ts:383 src/control/Control.Menubar.ts:1380
 msgid "Insert Rich Text"
 msgstr "插入豐富文字"
 
-#: src/control/Control.Menubar.ts:384 src/control/Control.Menubar.ts:1377
+#: src/control/Control.Menubar.ts:384 src/control/Control.Menubar.ts:1381
 msgid "Insert Checkbox"
 msgstr "插入核取方塊"
 
-#: src/control/Control.Menubar.ts:385 src/control/Control.Menubar.ts:1378
+#: src/control/Control.Menubar.ts:385 src/control/Control.Menubar.ts:1382
 msgid "Insert Dropdown"
 msgstr "插入下拉式選單"
 
-#: src/control/Control.Menubar.ts:386 src/control/Control.Menubar.ts:1379
+#: src/control/Control.Menubar.ts:386 src/control/Control.Menubar.ts:1383
 msgid "Insert Picture"
 msgstr "插入圖片"
 
-#: src/control/Control.Menubar.ts:387 src/control/Control.Menubar.ts:1380
+#: src/control/Control.Menubar.ts:387 src/control/Control.Menubar.ts:1384
 msgid "Insert Date"
 msgstr "插入日期"
 
-#: src/control/Control.Menubar.ts:408 src/control/Control.Menubar.ts:1125
-#: src/control/Control.NotebookbarWriter.js:544
+#: src/control/Control.Menubar.ts:408 src/control/Control.Menubar.ts:1129
+#: src/control/Control.NotebookbarWriter.js:551
 msgid "Screen Reading"
 msgstr "螢幕閱讀"
 
-#: src/control/Control.Menubar.ts:421 src/control/Control.Menubar.ts:608
-#: src/control/Control.Menubar.ts:752 src/control/Control.Menubar.ts:1057
-#: src/control/Control.NotebookbarWriter.js:449
+#: src/control/Control.Menubar.ts:420 src/control/Control.Menubar.ts:608
+#: src/control/Control.Menubar.ts:753 src/control/Control.Menubar.ts:1059
+#: src/control/Control.NotebookbarCalc.js:119
+#: src/control/Control.NotebookbarDraw.js:134
+#: src/control/Control.NotebookbarImpress.js:169
+#: src/control/Control.NotebookbarWriter.js:122
+msgid "Extensions"
+msgstr ""
+
+#: src/control/Control.Menubar.ts:422 src/control/Control.Menubar.ts:610
+#: src/control/Control.Menubar.ts:755 src/control/Control.Menubar.ts:1061
+#: src/control/Control.NotebookbarWriter.js:456
 msgid "Online Help"
 msgstr "線上說明"
 
-#: src/control/Control.Menubar.ts:423 src/control/Control.Menubar.ts:610
-#: src/control/Control.Menubar.ts:754 src/control/Control.Menubar.ts:1059
-#: src/control/Control.NotebookbarWriter.js:462
+#: src/control/Control.Menubar.ts:424 src/control/Control.Menubar.ts:612
+#: src/control/Control.Menubar.ts:757 src/control/Control.Menubar.ts:1063
+#: src/control/Control.NotebookbarWriter.js:469
 msgid "Keyboard shortcuts"
 msgstr "鍵盤快捷鍵"
 
-#: src/control/Control.Menubar.ts:425 src/control/Control.Menubar.ts:612
-#: src/control/Control.Menubar.ts:756 src/control/Control.Menubar.ts:1061
-#: src/control/Control.NotebookbarWriter.js:475
+#: src/control/Control.Menubar.ts:426 src/control/Control.Menubar.ts:614
+#: src/control/Control.Menubar.ts:759 src/control/Control.Menubar.ts:1065
+#: src/control/Control.NotebookbarWriter.js:482
 msgid "Forum"
 msgstr "論壇"
 
-#: src/control/Control.Menubar.ts:426 src/control/Control.Menubar.ts:613
-#: src/control/Control.Menubar.ts:757 src/control/Control.Menubar.ts:1062
-#: src/control/Control.NotebookbarWriter.js:487
+#: src/control/Control.Menubar.ts:427 src/control/Control.Menubar.ts:615
+#: src/control/Control.Menubar.ts:760 src/control/Control.Menubar.ts:1066
+#: src/control/Control.NotebookbarWriter.js:494
 msgid "Report an issue"
 msgstr "回報問題"
 
-#: src/control/Control.Menubar.ts:427 src/control/Control.Menubar.ts:614
-#: src/control/Control.Menubar.ts:758 src/control/Control.Menubar.ts:1063
-#: src/control/Control.Menubar.ts:1134 src/control/Control.Menubar.ts:1199
-#: src/control/Control.Menubar.ts:1254 src/control/Control.Menubar.ts:1329
-#: src/control/Control.NotebookbarWriter.js:500
+#: src/control/Control.Menubar.ts:428 src/control/Control.Menubar.ts:616
+#: src/control/Control.Menubar.ts:761 src/control/Control.Menubar.ts:1067
+#: src/control/Control.Menubar.ts:1138 src/control/Control.Menubar.ts:1203
+#: src/control/Control.Menubar.ts:1258 src/control/Control.Menubar.ts:1333
+#: src/control/Control.NotebookbarWriter.js:507
 msgid "Latest Updates"
 msgstr "最新更新"
 
-#: src/control/Control.Menubar.ts:428 src/control/Control.Menubar.ts:615
-#: src/control/Control.Menubar.ts:759 src/control/Control.Menubar.ts:1064
-#: src/control/Control.Menubar.ts:1135 src/control/Control.Menubar.ts:1200
-#: src/control/Control.Menubar.ts:1255 src/control/Control.Menubar.ts:1330
-#: src/control/Control.NotebookbarWriter.js:514
+#: src/control/Control.Menubar.ts:429 src/control/Control.Menubar.ts:617
+#: src/control/Control.Menubar.ts:762 src/control/Control.Menubar.ts:1068
+#: src/control/Control.Menubar.ts:1139 src/control/Control.Menubar.ts:1204
+#: src/control/Control.Menubar.ts:1259 src/control/Control.Menubar.ts:1334
+#: src/control/Control.NotebookbarWriter.js:521
 msgid "Send Feedback"
 msgstr "傳送意見回饋"
 
-#: src/control/Control.Menubar.ts:430 src/control/Control.Menubar.ts:617
-#: src/control/Control.Menubar.ts:761 src/control/Control.Menubar.ts:1066
-#: src/control/Control.NotebookbarWriter.js:530
+#: src/control/Control.Menubar.ts:431 src/control/Control.Menubar.ts:619
+#: src/control/Control.Menubar.ts:764 src/control/Control.Menubar.ts:1070
+#: src/control/Control.NotebookbarWriter.js:537
 #: src/control/Control.ServerAuditDialog.ts:299
 #: src/control/Control.ServerAuditDialog.ts:300
 msgid "Server audit"
 msgstr "伺服器稽核"
 
-#: src/control/Control.Menubar.ts:434 src/control/Control.Menubar.ts:621
-#: src/control/Control.Menubar.ts:765 src/control/Control.Menubar.ts:1070
+#: src/control/Control.Menubar.ts:435 src/control/Control.Menubar.ts:623
+#: src/control/Control.Menubar.ts:768 src/control/Control.Menubar.ts:1074
 msgid "Last modification"
 msgstr "上次修改"
 
-#: src/control/Control.Menubar.ts:441 src/control/Control.Menubar.ts:454
-#: src/control/Control.Menubar.ts:1155
+#: src/control/Control.Menubar.ts:442 src/control/Control.Menubar.ts:455
+#: src/control/Control.Menubar.ts:1159
 #: src/control/Control.NotebookbarBuilder.js:450
 #: src/control/Control.NotebookbarBuilder.js:565
 msgid "ODF presentation (.odp)"
 msgstr "ODF 簡報 (.odp)"
 
-#: src/control/Control.Menubar.ts:442 src/control/Control.Menubar.ts:455
-#: src/control/Control.Menubar.ts:1156
+#: src/control/Control.Menubar.ts:443 src/control/Control.Menubar.ts:456
+#: src/control/Control.Menubar.ts:1160
 #: src/control/Control.NotebookbarBuilder.js:462
 #: src/control/Control.NotebookbarBuilder.js:573
 msgid "PowerPoint 2003 Presentation (.ppt)"
 msgstr "PowerPoint 2003 簡報 (.ppt)"
 
-#: src/control/Control.Menubar.ts:443 src/control/Control.Menubar.ts:456
-#: src/control/Control.Menubar.ts:1157
+#: src/control/Control.Menubar.ts:444 src/control/Control.Menubar.ts:457
+#: src/control/Control.Menubar.ts:1161
 #: src/control/Control.NotebookbarBuilder.js:458
 #: src/control/Control.NotebookbarBuilder.js:569
 msgid "PowerPoint Presentation (.pptx)"
 msgstr "PowerPoint 簡報 (.pptx)"
 
-#: src/control/Control.Menubar.ts:448 src/control/Control.Menubar.ts:631
+#: src/control/Control.Menubar.ts:449 src/control/Control.Menubar.ts:633
 msgid "Save Comments"
 msgstr "儲存評註"
 
-#: src/control/Control.Menubar.ts:457
+#: src/control/Control.Menubar.ts:458
 #: src/control/Control.NotebookbarBuilder.js:466
 msgid "HTML Document (.html)"
 msgstr "HTML 文件 (.html)"
 
-#: src/control/Control.Menubar.ts:458
+#: src/control/Control.Menubar.ts:459
 #: src/control/Control.NotebookbarBuilder.js:482
 msgid "Scalable Vector Graphics (.svg)"
 msgstr "可縮放向量圖形 (.svg)"
 
-#: src/control/Control.Menubar.ts:459
+#: src/control/Control.Menubar.ts:460
 #: src/control/Control.NotebookbarBuilder.js:487
 msgid "Current slide as Bitmap (.bmp)"
 msgstr "目前投影片為點陣圖 (.bmp)"
 
-#: src/control/Control.Menubar.ts:460
+#: src/control/Control.Menubar.ts:461
 #: src/control/Control.NotebookbarBuilder.js:492
 msgid "Current slide as Graphics Interchange Format (.gif)"
 msgstr "目前投影片為 GIF (.gif)"
 
-#: src/control/Control.Menubar.ts:461
+#: src/control/Control.Menubar.ts:462
 #: src/control/Control.NotebookbarBuilder.js:497
 msgid "Current slide as Portable Network Graphics (.png)"
 msgstr "目前投影片為可攜式網路圖形 (.png)"
 
-#: src/control/Control.Menubar.ts:462
+#: src/control/Control.Menubar.ts:463
 #: src/control/Control.NotebookbarBuilder.js:502
 msgid "Current slide as Tag Image File Format (.tiff)"
 msgstr "目前投影片為 TIFF (.tiff)"
 
-#: src/control/Control.Menubar.ts:469
+#: src/control/Control.Menubar.ts:470
 #: src/control/Control.NotebookbarBuilder.js:636
 msgid "Full Page Slides"
 msgstr "全頁投影片"
 
-#: src/control/Control.Menubar.ts:470
+#: src/control/Control.Menubar.ts:471
 #: src/control/Control.NotebookbarBuilder.js:640
 msgid "Notes Pages"
 msgstr "備註頁面"
 
-#: src/control/Control.Menubar.ts:504
-#: src/control/Control.NotebookbarImpress.js:686
+#: src/control/Control.Menubar.ts:505
+#: src/control/Control.NotebookbarImpress.js:693
 msgid "Notes View"
 msgstr "備註檢視"
 
-#: src/control/Control.Menubar.ts:508
-#: src/control/Control.NotebookbarImpress.js:692
+#: src/control/Control.Menubar.ts:509
+#: src/control/Control.NotebookbarImpress.js:699
 msgid "Master View"
 msgstr "母片檢視"
 
-#: src/control/Control.Menubar.ts:521
+#: src/control/Control.Menubar.ts:522
 msgid "Local Multimedia..."
 msgstr "本機多媒體……"
 
-#: src/control/Control.Menubar.ts:590 src/control/Control.Menubar.ts:1198
+#: src/control/Control.Menubar.ts:591 src/control/Control.Menubar.ts:1202
 #: src/control/Control.PresentationBar.js:128
 msgid "Fullscreen presentation"
 msgstr "全螢幕展示"
 
-#: src/control/Control.Menubar.ts:591
+#: src/control/Control.Menubar.ts:592
 msgid "Present current slide"
 msgstr "展示目前投影片"
 
-#: src/control/Control.Menubar.ts:592
+#: src/control/Control.Menubar.ts:593
 msgid "Present in new window"
 msgstr "在新視窗展示"
 
-#: src/control/Control.Menubar.ts:594 src/slideshow/PresenterConsole.js:270
+#: src/control/Control.Menubar.ts:595 src/slideshow/PresenterConsole.js:270
 msgid "Presenter Console"
 msgstr "演講者主控台"
 
-#: src/control/Control.Menubar.ts:638 src/control/Control.Menubar.ts:1158
-#: src/control/Control.Menubar.ts:1219
+#: src/control/Control.Menubar.ts:640 src/control/Control.Menubar.ts:1162
+#: src/control/Control.Menubar.ts:1223
 #: src/control/Control.NotebookbarBuilder.js:454
 #: src/control/Control.NotebookbarBuilder.js:508
 msgid "ODF Drawing (.odg)"
 msgstr "ODF 繪圖 (.odg)"
 
-#: src/control/Control.Menubar.ts:772 src/control/Control.Menubar.ts:784
-#: src/control/Control.Menubar.ts:1277
+#: src/control/Control.Menubar.ts:775 src/control/Control.Menubar.ts:787
+#: src/control/Control.Menubar.ts:1281
 #: src/control/Control.NotebookbarBuilder.js:417
 #: src/control/Control.NotebookbarBuilder.js:550
 msgid "ODF spreadsheet (.ods)"
 msgstr "ODF 試算表 (.ods)"
 
-#: src/control/Control.Menubar.ts:773 src/control/Control.Menubar.ts:785
-#: src/control/Control.Menubar.ts:1278
+#: src/control/Control.Menubar.ts:776 src/control/Control.Menubar.ts:788
+#: src/control/Control.Menubar.ts:1282
 #: src/control/Control.NotebookbarBuilder.js:425
 #: src/control/Control.NotebookbarBuilder.js:558
 msgid "Excel 2003 Spreadsheet (.xls)"
 msgstr "Excel 2003 試算表 (.xls)"
 
-#: src/control/Control.Menubar.ts:774 src/control/Control.Menubar.ts:786
-#: src/control/Control.Menubar.ts:1279
+#: src/control/Control.Menubar.ts:777 src/control/Control.Menubar.ts:789
+#: src/control/Control.Menubar.ts:1283
 #: src/control/Control.NotebookbarBuilder.js:421
 #: src/control/Control.NotebookbarBuilder.js:554
 msgid "Excel Spreadsheet (.xlsx)"
 msgstr "Excel 試算表 (.xlsx)"
 
-#: src/control/Control.Menubar.ts:787
+#: src/control/Control.Menubar.ts:790
 msgid "CSV file (.csv)"
 msgstr "CSV 檔案 (.csv)"
 
-#: src/control/Control.Menubar.ts:794
+#: src/control/Control.Menubar.ts:797
 #: src/control/jsdialog/Definitions.Menu.ts:1587
 msgid "Active sheet"
 msgstr "現行工作表"
 
-#: src/control/Control.Menubar.ts:833
-#: src/control/Control.NotebookbarCalc.js:1544
+#: src/control/Control.Menubar.ts:836
+#: src/control/Control.NotebookbarCalc.js:1551
 msgid "Focus Cell"
 msgstr "聚焦儲存格"
 
-#: src/control/Control.Menubar.ts:929
+#: src/control/Control.Menubar.ts:932
 #: src/control/jsdialog/Definitions.Menu.ts:1877
 msgid "Highlight cells with..."
 msgstr "突顯儲存格以……"
 
-#: src/control/Control.Menubar.ts:930
+#: src/control/Control.Menubar.ts:933
 #: src/control/jsdialog/Definitions.Menu.ts:1880
 msgid "Values greater than..."
 msgstr "值大於……"
 
-#: src/control/Control.Menubar.ts:931
+#: src/control/Control.Menubar.ts:934
 #: src/control/jsdialog/Definitions.Menu.ts:1884
 msgid "Values less than..."
 msgstr "值小於……"
 
-#: src/control/Control.Menubar.ts:932
+#: src/control/Control.Menubar.ts:935
 #: src/control/jsdialog/Definitions.Menu.ts:1888
 msgid "Values equal to..."
 msgstr "值等於……"
 
-#: src/control/Control.Menubar.ts:933
+#: src/control/Control.Menubar.ts:936
 #: src/control/jsdialog/Definitions.Menu.ts:1892
 msgid "Values between..."
 msgstr "值介於……"
 
-#: src/control/Control.Menubar.ts:934
+#: src/control/Control.Menubar.ts:937
 #: src/control/jsdialog/Definitions.Menu.ts:1896
 msgid "Values duplicate..."
 msgstr "值重複與……"
 
-#: src/control/Control.Menubar.ts:935
+#: src/control/Control.Menubar.ts:938
 #: src/control/jsdialog/Definitions.Menu.ts:1900
 msgid "Containing text..."
 msgstr "包含文字……"
 
-#: src/control/Control.Menubar.ts:937 src/control/Control.Menubar.ts:947
+#: src/control/Control.Menubar.ts:940 src/control/Control.Menubar.ts:950
 #: src/control/jsdialog/Definitions.Menu.ts:1904
 #: src/control/jsdialog/Definitions.Menu.ts:1935
 msgid "More highlights..."
 msgstr "更多突顯……"
 
-#: src/control/Control.Menubar.ts:939
+#: src/control/Control.Menubar.ts:942
 #: src/control/jsdialog/Definitions.Menu.ts:1908
 msgid "Top/Bottom Rules..."
 msgstr "頂部/底部規則……"
 
-#: src/control/Control.Menubar.ts:940
+#: src/control/Control.Menubar.ts:943
 #: src/control/jsdialog/Definitions.Menu.ts:1911
 msgid "Top N elements..."
 msgstr "前 N 個元素……"
 
-#: src/control/Control.Menubar.ts:941
+#: src/control/Control.Menubar.ts:944
 #: src/control/jsdialog/Definitions.Menu.ts:1915
 msgid "Top N percent..."
 msgstr "前百分之 N……"
 
-#: src/control/Control.Menubar.ts:942
+#: src/control/Control.Menubar.ts:945
 #: src/control/jsdialog/Definitions.Menu.ts:1919
 msgid "Bottom N elements..."
 msgstr "後 N 個元素……"
 
-#: src/control/Control.Menubar.ts:943
+#: src/control/Control.Menubar.ts:946
 #: src/control/jsdialog/Definitions.Menu.ts:1923
 msgid "Bottom N percent..."
 msgstr "後百分之 N……"
 
-#: src/control/Control.Menubar.ts:944
+#: src/control/Control.Menubar.ts:947
 #: src/control/jsdialog/Definitions.Menu.ts:1927
 msgid "Above Average..."
 msgstr "大於平均值……"
 
-#: src/control/Control.Menubar.ts:945
+#: src/control/Control.Menubar.ts:948
 #: src/control/jsdialog/Definitions.Menu.ts:1931
 msgid "Below Average..."
 msgstr "低於平均值……"
 
-#: src/control/Control.Menubar.ts:1074 src/control/Control.Menubar.ts:1140
-#: src/control/Control.Menubar.ts:1205 src/control/Control.Menubar.ts:1260
+#: src/control/Control.Menubar.ts:1078 src/control/Control.Menubar.ts:1144
+#: src/control/Control.Menubar.ts:1209 src/control/Control.Menubar.ts:1264
 #: src/control/Control.MobileSearchBar.ts:30
-#: src/control/Control.NavigatorPanel.ts:522
-#: src/control/Control.NotebookbarCalc.js:1065
-#: src/control/Control.NotebookbarDraw.js:1185
-#: src/control/Control.NotebookbarDraw.js:1198
-#: src/control/Control.NotebookbarImpress.js:1324
-#: src/control/Control.NotebookbarImpress.js:1337
-#: src/control/Control.NotebookbarWriter.js:1030
-#: src/control/Control.NotebookbarWriter.js:1043
+#: src/control/Control.NavigatorPanel.ts:532
+#: src/control/Control.NotebookbarCalc.js:1072
+#: src/control/Control.NotebookbarDraw.js:1192
+#: src/control/Control.NotebookbarDraw.js:1205
+#: src/control/Control.NotebookbarImpress.js:1331
+#: src/control/Control.NotebookbarImpress.js:1344
+#: src/control/Control.NotebookbarWriter.js:1037
+#: src/control/Control.NotebookbarWriter.js:1050
 #: src/control/Control.Zotero.js:220 src/control/Toolbar.js:526
 #: src/control/Toolbar.js:527 src/control/Toolbar.js:565
 msgid "Search"
 msgstr "搜尋"
 
-#: src/control/Control.Menubar.ts:1127
-#: src/control/Control.NotebookbarCalc.js:1130
-#: src/control/Control.NotebookbarWriter.js:1828
+#: src/control/Control.Menubar.ts:1131
+#: src/control/Control.NotebookbarCalc.js:1137
+#: src/control/Control.NotebookbarWriter.js:1835
 msgid "Page Setup"
 msgstr "頁面設定"
 
-#: src/control/Control.Menubar.ts:1271
+#: src/control/Control.Menubar.ts:1275
 msgid "Define print area"
 msgstr "定義列印區域"
 
-#: src/control/Control.Menubar.ts:1272
+#: src/control/Control.Menubar.ts:1276
 msgid "Remove print area"
 msgstr "移除列印區域"
 
-#: src/control/Control.Menubar.ts:1632 src/control/Control.StatusBar.js:712
+#: src/control/Control.Menubar.ts:1636 src/control/Control.StatusBar.js:712
 msgid "Reset to Default Language"
 msgstr "重設回預設語言"
 
-#: src/control/Control.Menubar.ts:1663 src/control/Control.Menubar.ts:1664
-#: src/control/Control.Menubar.ts:1665 src/control/Control.Toolbar.js:256
+#: src/control/Control.Menubar.ts:1667 src/control/Control.Menubar.ts:1668
+#: src/control/Control.Menubar.ts:1669 src/control/Control.Toolbar.js:256
 #: src/control/jsdialog/Definitions.Menu.ts:2157
 msgid "More..."
 msgstr "其他……"
 
-#: src/control/Control.Menubar.ts:2026
+#: src/control/Control.Menubar.ts:1720
+msgid "(No extensions installed)"
+msgstr ""
+
+#: src/control/Control.Menubar.ts:2074
 msgid "Use Compact view"
 msgstr "使用精簡介面"
 
-#: src/control/Control.Menubar.ts:2028
+#: src/control/Control.Menubar.ts:2076
 msgid "Use Tabbed view"
 msgstr "使用分頁介面"
 
-#: src/control/Control.Menubar.ts:2260
+#: src/control/Control.Menubar.ts:2308
 msgid "Insert Shape"
 msgstr "插入形狀"
 
-#: src/control/Control.Menubar.ts:2344
+#: src/control/Control.Menubar.ts:2393
 msgid "The signature line can now be moved or resized as needed."
 msgstr "簽名線現在可以根據需求移動或調整大小。"
 
-#: src/control/Control.Menubar.ts:2349
+#: src/control/Control.Menubar.ts:2398
 msgid "Finish electronic signing"
 msgstr "結束電子簽署"
 
@@ -2684,7 +3353,7 @@ msgid "Show the search bar"
 msgstr "顯示搜尋列"
 
 #: src/control/Control.MobileBottomBar.js:37
-#: src/control/Control.NotebookbarWriter.js:2757
+#: src/control/Control.NotebookbarWriter.js:2764
 #: src/control/Control.TopToolbar.js:174
 msgid "Borders"
 msgstr "邊框"
@@ -2697,15 +3366,15 @@ msgstr "隱藏搜尋列"
 msgid "Clear the search field"
 msgstr "清除搜尋欄位"
 
-#: src/control/Control.MobileWizardBuilder.js:569
+#: src/control/Control.MobileWizardBuilder.js:611
 msgid "Background Color"
 msgstr "背景色彩"
 
-#: src/control/Control.MobileWizardBuilder.js:571
+#: src/control/Control.MobileWizardBuilder.js:613
 msgid "Gradient Start"
 msgstr "漸層起始"
 
-#: src/control/Control.MobileWizardBuilder.js:573
+#: src/control/Control.MobileWizardBuilder.js:615
 msgid "Gradient End"
 msgstr "漸層終止"
 
@@ -2725,8 +3394,9 @@ msgstr "關閉導覽"
 msgid "Results"
 msgstr "結果"
 
-#: src/control/Control.NavigatorPanel.ts:508
-#: src/control/jsdialog/Widget.TreeView.ts:2043
+#: src/control/Control.NavigatorPanel.ts:518
+#: src/control/jsdialog/Widget.Combobox.js:372
+#: src/control/jsdialog/Widget.TreeView.ts:2054
 msgid "Search..."
 msgstr "搜尋……"
 
@@ -2836,14 +3506,22 @@ msgid "Footnote/Endnote"
 msgstr "註腳/尾註"
 
 #: src/control/Notebookbar.WriterReferencesTab.ts:312
-#: src/control/Control.NotebookbarDraw.js:1590
-#: src/control/Control.NotebookbarImpress.js:1695
+#: src/control/Control.NotebookbarDraw.js:1597
+#: src/control/Control.NotebookbarImpress.js:1702
 msgid "Field"
 msgstr "欄位"
 
 #: src/control/Sidebar.FromNotebookbarPanel.ts:121
 msgid "Animations"
 msgstr "動畫"
+
+#: src/control/Control.Notebookbar.js:292
+msgid "No extensions are installed."
+msgstr ""
+
+#: src/control/Control.NotebookbarBase.ts:149
+msgid "Outline %OutlineLevel%"
+msgstr ""
 
 #: src/control/Control.NotebookbarBuilder.js:238
 msgid "Click to expand"
@@ -2889,19 +3567,19 @@ msgid "File"
 msgstr "檔案"
 
 #: src/control/Control.NotebookbarCalc.js:42
-#: src/control/Control.NotebookbarCalc.js:1224
+#: src/control/Control.NotebookbarCalc.js:1231
 #: src/control/Control.NotebookbarDraw.js:70
-#: src/control/Control.NotebookbarDraw.js:1146
+#: src/control/Control.NotebookbarDraw.js:1153
 #: src/control/Control.NotebookbarImpress.js:90
-#: src/control/Control.NotebookbarImpress.js:2161
+#: src/control/Control.NotebookbarImpress.js:2168
 #: src/control/Control.NotebookbarWriter.js:51
-#: src/control/Control.NotebookbarWriter.js:979
-#: src/control/Control.NotebookbarWriter.js:2547
+#: src/control/Control.NotebookbarWriter.js:986
+#: src/control/Control.NotebookbarWriter.js:2554
 msgid "Insert"
 msgstr "插入"
 
 #: src/control/Control.NotebookbarCalc.js:48
-#: src/control/Control.NotebookbarDraw.js:1296
+#: src/control/Control.NotebookbarDraw.js:1303
 msgid "Page Layout"
 msgstr "頁面版面配置"
 
@@ -2924,7 +3602,7 @@ msgstr "校閱"
 #: src/control/Control.NotebookbarDraw.js:88
 #: src/control/Control.NotebookbarImpress.js:116
 #: src/control/Control.NotebookbarWriter.js:70
-#: src/control/Control.NotebookbarWriter.js:2785
+#: src/control/Control.NotebookbarWriter.js:2792
 msgid "Format"
 msgstr "格式"
 
@@ -2939,7 +3617,7 @@ msgstr "圖形"
 #: src/control/Control.NotebookbarDraw.js:108
 #: src/control/Control.NotebookbarImpress.js:136
 #: src/control/Control.NotebookbarWriter.js:96
-#: src/control/Control.NotebookbarWriter.js:1630
+#: src/control/Control.NotebookbarWriter.js:1637
 msgid "Picture"
 msgstr "圖片"
 
@@ -2958,8 +3636,8 @@ msgid "View"
 msgstr "檢視"
 
 #: src/control/Control.NotebookbarCalc.js:105
-#: src/control/Control.NotebookbarCalc.js:1830
-#: src/control/Control.NotebookbarCalc.js:2818
+#: src/control/Control.NotebookbarCalc.js:1837
+#: src/control/Control.NotebookbarCalc.js:2841
 msgid "Sparkline"
 msgstr "走勢圖"
 
@@ -2971,434 +3649,441 @@ msgstr "走勢圖"
 msgid "Help"
 msgstr "說明"
 
-#: src/control/Control.NotebookbarCalc.js:192
-#: src/control/Control.NotebookbarDraw.js:198
-#: src/control/Control.NotebookbarImpress.js:246
-#: src/control/Control.NotebookbarWriter.js:207
+#: src/control/Control.NotebookbarCalc.js:199
+#: src/control/Control.NotebookbarDraw.js:205
+#: src/control/Control.NotebookbarImpress.js:253
+#: src/control/Control.NotebookbarWriter.js:214
 msgid "Export As"
 msgstr "匯出為"
 
-#: src/control/Control.NotebookbarCalc.js:218
-#: src/control/Control.NotebookbarCalc.js:267
-#: src/control/Control.NotebookbarDraw.js:225
-#: src/control/Control.NotebookbarDraw.js:275
-#: src/control/Control.NotebookbarImpress.js:273
-#: src/control/Control.NotebookbarImpress.js:322
-#: src/control/Control.NotebookbarWriter.js:234
-#: src/control/Control.NotebookbarWriter.js:283
+#: src/control/Control.NotebookbarCalc.js:225
+#: src/control/Control.NotebookbarCalc.js:274
+#: src/control/Control.NotebookbarDraw.js:232
+#: src/control/Control.NotebookbarDraw.js:282
+#: src/control/Control.NotebookbarImpress.js:280
+#: src/control/Control.NotebookbarImpress.js:329
+#: src/control/Control.NotebookbarWriter.js:241
+#: src/control/Control.NotebookbarWriter.js:290
 msgid "See history"
 msgstr "瀏覽歷史"
 
-#: src/control/Control.NotebookbarCalc.js:357
-#: src/control/Control.NotebookbarDraw.js:378
-#: src/control/Control.NotebookbarImpress.js:414
-#: src/control/Control.NotebookbarWriter.js:375
+#: src/control/Control.NotebookbarCalc.js:364
+#: src/control/Control.NotebookbarDraw.js:385
+#: src/control/Control.NotebookbarImpress.js:421
+#: src/control/Control.NotebookbarWriter.js:382
 msgid "Signature"
 msgstr "簽章"
 
-#: src/control/Control.NotebookbarCalc.js:373
-#: src/control/Control.NotebookbarDraw.js:395
-#: src/control/Control.NotebookbarImpress.js:430
-#: src/control/Control.NotebookbarWriter.js:391
+#: src/control/Control.NotebookbarCalc.js:380
+#: src/control/Control.NotebookbarDraw.js:402
+#: src/control/Control.NotebookbarImpress.js:437
+#: src/control/Control.NotebookbarWriter.js:398
 #: src/control/Control.UIManager.ts:393
 msgid "Rename"
 msgstr "重新命名"
 
-#: src/control/Control.NotebookbarCalc.js:427
-#: src/control/Control.NotebookbarDraw.js:621
-#: src/control/Control.NotebookbarImpress.js:790
-#: src/control/Control.NotebookbarWriter.js:621
+#: src/control/Control.NotebookbarCalc.js:434
+#: src/control/Control.NotebookbarDraw.js:628
+#: src/control/Control.NotebookbarImpress.js:797
+#: src/control/Control.NotebookbarWriter.js:628
 msgid "Clipboard"
 msgstr "剪貼簿"
 
-#: src/control/Control.NotebookbarCalc.js:455
-#: src/control/Control.NotebookbarDraw.js:648
-#: src/control/Control.NotebookbarImpress.js:817
-#: src/control/Control.NotebookbarWriter.js:648
+#: src/control/Control.NotebookbarCalc.js:462
+#: src/control/Control.NotebookbarDraw.js:655
+#: src/control/Control.NotebookbarImpress.js:824
+#: src/control/Control.NotebookbarWriter.js:655
 #: src/control/Control.TopToolbar.js:148
 msgid "Clone Formatting (double click to keep active)"
 msgstr "拓製格式設定（雙擊以維持啟用）"
 
-#: src/control/Control.NotebookbarCalc.js:456
+#: src/control/Control.NotebookbarCalc.js:463
 msgid ""
 "Clone Formatting is active (press Enter on a cell to apply, click again or "
 "press Esc to exit)"
-msgstr ""
-"「拓製格式設定」功能已啟用（在儲存格上按下 Enter 鍵即可套用，再次點擊或按下 "
+msgstr "「拓製格式設定」功能已啟用（在儲存格上按下 Enter 鍵即可套用，再次點擊或按下 "
 "Esc 鍵即可退出）"
 
-#: src/control/Control.NotebookbarCalc.js:492
-#: src/control/Control.NotebookbarDraw.js:685
-#: src/control/Control.NotebookbarWriter.js:684
+#: src/control/Control.NotebookbarCalc.js:499
+#: src/control/Control.NotebookbarDraw.js:692
+#: src/control/Control.NotebookbarWriter.js:691
 msgid "Font"
 msgstr "字型"
 
-#: src/control/Control.NotebookbarCalc.js:637
-#: src/control/Control.NotebookbarDraw.js:826
-#: src/control/Control.NotebookbarImpress.js:2267
-#: src/control/Control.NotebookbarWriter.js:2659
+#: src/control/Control.NotebookbarCalc.js:644
+#: src/control/Control.NotebookbarDraw.js:833
+#: src/control/Control.NotebookbarImpress.js:2274
+#: src/control/Control.NotebookbarWriter.js:2666
 msgid "Alignment"
 msgstr "對齊"
 
-#: src/control/Control.NotebookbarCalc.js:776
+#: src/control/Control.NotebookbarCalc.js:783
 msgid "Merge & Center"
 msgstr "合併置中"
 
-#: src/control/Control.NotebookbarCalc.js:791
-#: src/control/Control.NotebookbarCalc.js:807
+#: src/control/Control.NotebookbarCalc.js:798
+#: src/control/Control.NotebookbarCalc.js:814
 msgid "Number"
 msgstr "數字"
 
-#: src/control/Control.NotebookbarCalc.js:806
+#: src/control/Control.NotebookbarCalc.js:813
 msgid "General"
 msgstr "一般"
 
-#: src/control/Control.NotebookbarCalc.js:808
+#: src/control/Control.NotebookbarCalc.js:815
 msgid "Percent"
 msgstr "百分比"
 
-#: src/control/Control.NotebookbarCalc.js:809
+#: src/control/Control.NotebookbarCalc.js:816
 msgid "Currency"
 msgstr "貨幣"
 
-#: src/control/Control.NotebookbarCalc.js:812
+#: src/control/Control.NotebookbarCalc.js:819
 msgid "Scientific"
 msgstr "科學記號"
 
-#: src/control/Control.NotebookbarCalc.js:813
+#: src/control/Control.NotebookbarCalc.js:820
 msgid "Fraction"
 msgstr "分數"
 
-#: src/control/Control.NotebookbarCalc.js:814
+#: src/control/Control.NotebookbarCalc.js:821
 msgid "Boolean Value"
 msgstr "布林值"
 
-#: src/control/Control.NotebookbarCalc.js:815
-#: src/control/Control.NotebookbarCalc.js:1996
-#: src/control/Control.NotebookbarCalc.js:2170
-#: src/control/Control.NotebookbarDraw.js:1680
-#: src/control/Control.NotebookbarImpress.js:1769
-#: src/control/Control.NotebookbarWriter.js:1507
+#: src/control/Control.NotebookbarCalc.js:822
+#: src/control/Control.NotebookbarCalc.js:2003
+#: src/control/Control.NotebookbarCalc.js:2177
+#: src/control/Control.NotebookbarDraw.js:1687
+#: src/control/Control.NotebookbarImpress.js:1776
+#: src/control/Control.NotebookbarWriter.js:1514
 msgid "Text"
 msgstr "文字"
 
-#: src/control/Control.NotebookbarCalc.js:821
+#: src/control/Control.NotebookbarCalc.js:828
 msgid "Number Format"
 msgstr "數字格式"
 
-#: src/control/Control.NotebookbarCalc.js:894
+#: src/control/Control.NotebookbarCalc.js:901
 msgid "Cells"
 msgstr "儲存格"
 
-#: src/control/Control.NotebookbarCalc.js:996
+#: src/control/Control.NotebookbarCalc.js:1003
 #: src/control/jsdialog/Definitions.Menu.ts:2363
 msgid "Default"
 msgstr "預設"
 
-#: src/control/Control.NotebookbarCalc.js:1003
+#: src/control/Control.NotebookbarCalc.js:1010
 msgid "Heading 1"
 msgstr "標題 1"
 
-#: src/control/Control.NotebookbarCalc.js:1010
+#: src/control/Control.NotebookbarCalc.js:1017
 msgid "Heading 2"
 msgstr "標題 2"
 
-#: src/control/Control.NotebookbarCalc.js:1023
+#: src/control/Control.NotebookbarCalc.js:1030
 msgid "Good"
 msgstr "優良"
 
-#: src/control/Control.NotebookbarCalc.js:1030
+#: src/control/Control.NotebookbarCalc.js:1037
 msgid "Neutral"
 msgstr "中立"
 
-#: src/control/Control.NotebookbarCalc.js:1037
+#: src/control/Control.NotebookbarCalc.js:1044
 msgid "Bad"
 msgstr "不佳"
 
-#: src/control/Control.NotebookbarCalc.js:1052
+#: src/control/Control.NotebookbarCalc.js:1059
 #: src/control/PermissionMode.ts:212
 msgid "Editing"
 msgstr "編輯"
 
-#: src/control/Control.NotebookbarCalc.js:1076
-#: src/control/Control.NotebookbarDraw.js:1209
-#: src/control/Control.NotebookbarImpress.js:1348
-#: src/control/Control.NotebookbarWriter.js:1054
+#: src/control/Control.NotebookbarCalc.js:1083
+#: src/control/Control.NotebookbarDraw.js:1216
+#: src/control/Control.NotebookbarImpress.js:1355
+#: src/control/Control.NotebookbarWriter.js:1061
 msgid "Replace"
 msgstr "取代"
 
-#: src/control/Control.NotebookbarCalc.js:1140
-#: src/control/Control.NotebookbarWriter.js:1838
+#: src/control/Control.NotebookbarCalc.js:1147
+#: src/control/Control.NotebookbarWriter.js:1845
 msgid "Margin"
 msgstr "邊界"
 
-#: src/control/Control.NotebookbarCalc.js:1147
-#: src/control/Control.NotebookbarWriter.js:1845
+#: src/control/Control.NotebookbarCalc.js:1154
+#: src/control/Control.NotebookbarWriter.js:1852
 msgid "Size"
 msgstr "大小"
 
-#: src/control/Control.NotebookbarCalc.js:1208
+#: src/control/Control.NotebookbarCalc.js:1215
 msgid "Row Height"
 msgstr "列高"
 
-#: src/control/Control.NotebookbarCalc.js:1216
+#: src/control/Control.NotebookbarCalc.js:1223
 msgid "Column Width"
 msgstr "欄寬"
 
-#: src/control/Control.NotebookbarCalc.js:1236
+#: src/control/Control.NotebookbarCalc.js:1243
 msgid "Insert Rows Above"
 msgstr "於上方插入列"
 
-#: src/control/Control.NotebookbarCalc.js:1243
+#: src/control/Control.NotebookbarCalc.js:1250
 msgid "Insert Rows Below"
 msgstr "於下方插入列"
 
-#: src/control/Control.NotebookbarCalc.js:1250
+#: src/control/Control.NotebookbarCalc.js:1257
 msgid "Delete Rows"
 msgstr "刪除列"
 
-#: src/control/Control.NotebookbarCalc.js:1262
+#: src/control/Control.NotebookbarCalc.js:1269
 msgid "Insert Columns Before"
 msgstr "於前方插入欄"
 
-#: src/control/Control.NotebookbarCalc.js:1269
+#: src/control/Control.NotebookbarCalc.js:1276
 msgid "Insert Columns After"
 msgstr "於後方插入欄"
 
-#: src/control/Control.NotebookbarCalc.js:1276
+#: src/control/Control.NotebookbarCalc.js:1283
 msgid "Delete Columns"
 msgstr "刪除欄"
 
-#: src/control/Control.NotebookbarCalc.js:1299
-#: src/control/Control.NotebookbarCalc.js:3000
-#: src/control/Control.NotebookbarCalc.js:3357
-#: src/control/Control.NotebookbarDraw.js:1312
-#: src/control/Control.NotebookbarImpress.js:2406
-#: src/control/Control.NotebookbarImpress.js:2613
-#: src/control/Control.NotebookbarImpress.js:2917
-#: src/control/Control.NotebookbarWriter.js:2069
-#: src/control/Control.NotebookbarWriter.js:3066
-#: src/control/Control.NotebookbarWriter.js:3389
+#: src/control/Control.NotebookbarCalc.js:1306
+#: src/control/Control.NotebookbarCalc.js:3023
+#: src/control/Control.NotebookbarCalc.js:3380
+#: src/control/Control.NotebookbarDraw.js:1319
+#: src/control/Control.NotebookbarImpress.js:2413
+#: src/control/Control.NotebookbarImpress.js:2620
+#: src/control/Control.NotebookbarImpress.js:2924
+#: src/control/Control.NotebookbarWriter.js:2076
+#: src/control/Control.NotebookbarWriter.js:3073
+#: src/control/Control.NotebookbarWriter.js:3396
 msgid "Align"
 msgstr "對齊"
 
-#: src/control/Control.NotebookbarCalc.js:1369
-#: src/control/Control.NotebookbarCalc.js:3067
-#: src/control/Control.NotebookbarCalc.js:3424
-#: src/control/Control.NotebookbarDraw.js:1379
-#: src/control/Control.NotebookbarImpress.js:2473
-#: src/control/Control.NotebookbarImpress.js:2680
-#: src/control/Control.NotebookbarImpress.js:2984
-#: src/control/Control.NotebookbarWriter.js:2140
-#: src/control/Control.NotebookbarWriter.js:3125
-#: src/control/Control.NotebookbarWriter.js:3448
+#: src/control/Control.NotebookbarCalc.js:1376
+#: src/control/Control.NotebookbarCalc.js:3090
+#: src/control/Control.NotebookbarCalc.js:3447
+#: src/control/Control.NotebookbarDraw.js:1386
+#: src/control/Control.NotebookbarImpress.js:2480
+#: src/control/Control.NotebookbarImpress.js:2687
+#: src/control/Control.NotebookbarImpress.js:2991
+#: src/control/Control.NotebookbarWriter.js:2147
+#: src/control/Control.NotebookbarWriter.js:3132
+#: src/control/Control.NotebookbarWriter.js:3455
 msgid "Arrange"
 msgstr "排列"
 
-#: src/control/Control.NotebookbarCalc.js:1431
+#: src/control/Control.NotebookbarCalc.js:1438
 msgid "Sheet View"
 msgstr "工作表檢視"
 
-#: src/control/Control.NotebookbarCalc.js:1445
+#: src/control/Control.NotebookbarCalc.js:1452
 msgid "Default View"
 msgstr "預設檢視"
 
-#: src/control/Control.NotebookbarCalc.js:1462
+#: src/control/Control.NotebookbarCalc.js:1469
 msgid "Open Views List"
 msgstr "開啟檢視清單"
 
-#: src/control/Control.NotebookbarCalc.js:1469
+#: src/control/Control.NotebookbarCalc.js:1476
 msgid "New Sheet View"
 msgstr "新增工作表檢視"
 
-#: src/control/Control.NotebookbarCalc.js:1476
+#: src/control/Control.NotebookbarCalc.js:1483
 msgid "Remove Sheet View"
 msgstr "移除工作表檢視"
 
-#: src/control/Control.NotebookbarCalc.js:1483
+#: src/control/Control.NotebookbarCalc.js:1490
 msgid "Exit Sheet View"
 msgstr "結束工作表檢視"
 
-#: src/control/Control.NotebookbarCalc.js:1498
+#: src/control/Control.NotebookbarCalc.js:1505
 msgid "Freeze"
 msgstr "凍結"
 
-#: src/control/Control.NotebookbarCalc.js:1552
-#: src/control/Control.NotebookbarDraw.js:428
-#: src/control/Control.NotebookbarImpress.js:579
-#: src/control/Control.NotebookbarWriter.js:1676
+#: src/control/Control.NotebookbarCalc.js:1559
+#: src/control/Control.NotebookbarDraw.js:435
+#: src/control/Control.NotebookbarImpress.js:586
+#: src/control/Control.NotebookbarWriter.js:1683
 msgid "Zoom"
 msgstr "縮放"
 
-#: src/control/Control.NotebookbarCalc.js:1559
-#: src/control/Control.NotebookbarDraw.js:435
-#: src/control/Control.NotebookbarImpress.js:473
-#: src/control/Control.NotebookbarWriter.js:1662
+#: src/control/Control.NotebookbarCalc.js:1566
+#: src/control/Control.NotebookbarDraw.js:442
+#: src/control/Control.NotebookbarImpress.js:480
+#: src/control/Control.NotebookbarWriter.js:1669
 msgid "Read mode"
 msgstr "閱讀模式"
 
-#: src/control/Control.NotebookbarCalc.js:1626
-#: src/control/Control.NotebookbarDraw.js:528
-#: src/control/Control.NotebookbarImpress.js:672
-#: src/control/Control.NotebookbarWriter.js:1776
+#: src/control/Control.NotebookbarCalc.js:1633
+#: src/control/Control.NotebookbarDraw.js:535
+#: src/control/Control.NotebookbarImpress.js:679
+#: src/control/Control.NotebookbarWriter.js:1783
 msgid "Collapse Tabs"
 msgstr "折疊頁面"
 
-#: src/control/Control.NotebookbarCalc.js:1639
-#: src/control/Control.NotebookbarDraw.js:516
-#: src/control/Control.NotebookbarImpress.js:660
-#: src/control/Control.NotebookbarWriter.js:1764
+#: src/control/Control.NotebookbarCalc.js:1646
+#: src/control/Control.NotebookbarDraw.js:523
+#: src/control/Control.NotebookbarImpress.js:667
+#: src/control/Control.NotebookbarWriter.js:1771
 msgid "Status Bar"
 msgstr "狀態列"
 
-#: src/control/Control.NotebookbarCalc.js:1710
-#: src/control/Control.NotebookbarCalc.js:2485
-#: src/control/Control.NotebookbarCalc.js:3120
-#: src/control/Control.NotebookbarCalc.js:3477
-#: src/control/Control.NotebookbarImpress.js:2733
-#: src/control/Control.NotebookbarImpress.js:3037
-#: src/control/Control.NotebookbarWriter.js:3174
-#: src/control/Control.NotebookbarWriter.js:3497
+#: src/control/Control.NotebookbarCalc.js:1717
+#: src/control/Control.NotebookbarCalc.js:2492
+#: src/control/Control.NotebookbarCalc.js:3143
+#: src/control/Control.NotebookbarCalc.js:3500
+#: src/control/Control.NotebookbarImpress.js:2740
+#: src/control/Control.NotebookbarImpress.js:3044
+#: src/control/Control.NotebookbarWriter.js:3181
+#: src/control/Control.NotebookbarWriter.js:3504
 msgid "Group"
 msgstr "群組"
 
-#: src/control/Control.NotebookbarCalc.js:1717
+#: src/control/Control.NotebookbarCalc.js:1724
 msgid "Ungroup"
 msgstr "取消群組"
 
-#: src/control/Control.NotebookbarCalc.js:1739
+#: src/control/Control.NotebookbarCalc.js:1746
 msgid "Pivot Table"
 msgstr "樞紐分析表"
 
-#: src/control/Control.NotebookbarCalc.js:1795
+#: src/control/Control.NotebookbarCalc.js:1802
 #: src/control/Control.NotebookbarDraw.js:94
-#: src/control/Control.NotebookbarDraw.js:1504
+#: src/control/Control.NotebookbarDraw.js:1511
 #: src/control/Control.NotebookbarImpress.js:122
-#: src/control/Control.NotebookbarImpress.js:1562
+#: src/control/Control.NotebookbarImpress.js:1569
 #: src/control/Control.NotebookbarWriter.js:82
-#: src/control/Control.NotebookbarWriter.js:1258
+#: src/control/Control.NotebookbarWriter.js:1265
 msgid "Table"
 msgstr "表格"
 
-#: src/control/Control.NotebookbarCalc.js:1804
-#: src/control/Control.NotebookbarCalc.js:1807
+#: src/control/Control.NotebookbarCalc.js:1811
+#: src/control/Control.NotebookbarCalc.js:1814
 msgid "Table styles are only available in .xlsx files"
 msgstr "表格樣式僅適用於 .xlsx 檔案"
 
-#: src/control/Control.NotebookbarCalc.js:1805
+#: src/control/Control.NotebookbarCalc.js:1812
 msgid "Insert a styled table"
 msgstr "插入包含樣式的表格"
 
-#: src/control/Control.NotebookbarCalc.js:1808
+#: src/control/Control.NotebookbarCalc.js:1815
 msgid "Select a cell range first to insert a styled table"
 msgstr "請先選取儲存格範圍，才能插入包含樣式的表格"
 
-#: src/control/Control.NotebookbarCalc.js:1817
-#: src/control/Control.NotebookbarDraw.js:1027
-#: src/control/Control.NotebookbarDraw.js:1484
-#: src/control/Control.NotebookbarImpress.js:1235
-#: src/control/Control.NotebookbarImpress.js:1515
-#: src/control/Control.NotebookbarWriter.js:1266
+#: src/control/Control.NotebookbarCalc.js:1824
+#: src/control/Control.NotebookbarDraw.js:1034
+#: src/control/Control.NotebookbarDraw.js:1491
+#: src/control/Control.NotebookbarImpress.js:1242
+#: src/control/Control.NotebookbarImpress.js:1522
+#: src/control/Control.NotebookbarWriter.js:1273
 msgid "Illustrations"
 msgstr "插圖"
 
-#: src/control/Control.NotebookbarCalc.js:1880
-#: src/control/Control.NotebookbarDraw.js:1041
-#: src/control/Control.NotebookbarDraw.js:1535
-#: src/control/Control.NotebookbarImpress.js:1249
-#: src/control/Control.NotebookbarImpress.js:1593
-#: src/control/Control.NotebookbarWriter.js:1311
+#: src/control/Control.NotebookbarCalc.js:1887
+#: src/control/Control.NotebookbarDraw.js:1048
+#: src/control/Control.NotebookbarDraw.js:1542
+#: src/control/Control.NotebookbarImpress.js:1256
+#: src/control/Control.NotebookbarImpress.js:1600
+#: src/control/Control.NotebookbarWriter.js:1318
 msgid "Shapes"
 msgstr "形狀"
 
-#: src/control/Control.NotebookbarCalc.js:1925
-#: src/control/Control.NotebookbarDraw.js:1605
-#: src/control/Control.NotebookbarImpress.js:1680
-#: src/control/Control.NotebookbarWriter.js:1379
+#: src/control/Control.NotebookbarCalc.js:1932
+#: src/control/Control.NotebookbarDraw.js:1612
+#: src/control/Control.NotebookbarImpress.js:1687
+#: src/control/Control.NotebookbarWriter.js:1386
 msgid "Assistant"
 msgstr "小幫手"
 
-#: src/control/Control.NotebookbarCalc.js:2105
+#: src/control/Control.NotebookbarCalc.js:2112
 msgid "Insert Function"
 msgstr "插入函式"
 
-#: src/control/Control.NotebookbarCalc.js:2113
+#: src/control/Control.NotebookbarCalc.js:2120
 msgid "Function Library"
 msgstr "函式精靈"
 
-#: src/control/Control.NotebookbarCalc.js:2127
+#: src/control/Control.NotebookbarCalc.js:2134
 msgid "AutoSum"
 msgstr "自動加總"
 
-#: src/control/Control.NotebookbarCalc.js:2140
+#: src/control/Control.NotebookbarCalc.js:2147
 msgid "Financial"
 msgstr "財務"
 
-#: src/control/Control.NotebookbarCalc.js:2158
+#: src/control/Control.NotebookbarCalc.js:2165
 msgid "Logical"
 msgstr "邏輯"
 
-#: src/control/Control.NotebookbarCalc.js:2188
+#: src/control/Control.NotebookbarCalc.js:2195
 msgid "Date & Time"
 msgstr "日期與時間"
 
-#: src/control/Control.NotebookbarCalc.js:2200
+#: src/control/Control.NotebookbarCalc.js:2207
 msgid "Lookup & Reference"
 msgstr "查詢與參照"
 
-#: src/control/Control.NotebookbarCalc.js:2218
+#: src/control/Control.NotebookbarCalc.js:2225
 msgid "Math & Trig"
 msgstr "數學與三角函數"
 
-#: src/control/Control.NotebookbarCalc.js:2230
+#: src/control/Control.NotebookbarCalc.js:2237
 msgid "More Functions"
 msgstr "更多函式"
 
-#: src/control/Control.NotebookbarCalc.js:2275
+#: src/control/Control.NotebookbarCalc.js:2282
 msgid "Range"
 msgstr "範圍"
 
-#: src/control/Control.NotebookbarCalc.js:2358
-#: src/control/Control.NotebookbarWriter.js:2837
+#: src/control/Control.NotebookbarCalc.js:2365
+#: src/control/Control.NotebookbarWriter.js:2844
 msgid "Sort"
 msgstr "排序"
 
-#: src/control/Control.NotebookbarCalc.js:2409
+#: src/control/Control.NotebookbarCalc.js:2416
 msgid "Filter"
 msgstr "篩選"
 
-#: src/control/Control.NotebookbarCalc.js:2631
-#: src/control/Control.NotebookbarImpress.js:2042
-#: src/control/Control.NotebookbarWriter.js:2264
+#: src/control/Control.NotebookbarCalc.js:2616
+msgid "Proofing"
+msgstr ""
+
+#: src/control/Control.NotebookbarCalc.js:2644
+#: src/control/Control.NotebookbarImpress.js:2049
+#: src/control/Control.NotebookbarWriter.js:2271
 msgid "Auto Spell Check"
 msgstr "自動拼字檢查"
 
-#: src/control/Control.NotebookbarCalc.js:2661
-#: src/control/Control.NotebookbarImpress.js:2072
+#: src/control/Control.NotebookbarCalc.js:2676
+#: src/control/Control.NotebookbarImpress.js:2079
 #: src/control/jsdialog/Widget.HTMLContent.ts:52
 msgid "Comments"
 msgstr "評註"
 
-#: src/control/Control.NotebookbarCalc.js:2767
+#: src/control/Control.NotebookbarCalc.js:2727
+msgid "Protection"
+msgstr ""
+
+#: src/control/Control.NotebookbarCalc.js:2790
 msgid "Format Cells"
 msgstr "設定儲存格格式"
 
-#: src/control/Control.NotebookbarCalc.js:2827
-#: src/control/Control.NotebookbarImpress.js:1890
+#: src/control/Control.NotebookbarCalc.js:2850
+#: src/control/Control.NotebookbarImpress.js:1897
 msgid "Themes"
 msgstr "佈景主題"
 
-#: src/control/Control.NotebookbarCalc.js:2933
-#: src/control/Control.NotebookbarCalc.js:3290
-#: src/control/Control.NotebookbarWriter.js:1971
-#: src/control/Control.NotebookbarWriter.js:3011
-#: src/control/Control.NotebookbarWriter.js:3334
+#: src/control/Control.NotebookbarCalc.js:2956
+#: src/control/Control.NotebookbarCalc.js:3313
+#: src/control/Control.NotebookbarWriter.js:1978
+#: src/control/Control.NotebookbarWriter.js:3018
+#: src/control/Control.NotebookbarWriter.js:3341
 msgid "Wrap"
 msgstr "換行"
 
-#: src/control/Control.NotebookbarCalc.js:3172
-#: src/control/Control.NotebookbarImpress.js:2793
-#: src/control/Control.NotebookbarWriter.js:3220
+#: src/control/Control.NotebookbarCalc.js:3195
+#: src/control/Control.NotebookbarImpress.js:2800
+#: src/control/Control.NotebookbarWriter.js:3227
 msgid "Image Controls"
 msgstr "影像控制項"
 
@@ -3407,32 +4092,32 @@ msgstr "影像控制項"
 msgid "Layout"
 msgstr "版面配置"
 
-#: src/control/Control.NotebookbarDraw.js:329
+#: src/control/Control.NotebookbarDraw.js:336
 msgid "PDF Document (.pdf) - Expert"
 msgstr "PDF 文件 (.pdf) - 專家"
 
-#: src/control/Control.NotebookbarDraw.js:503
-#: src/control/Control.NotebookbarImpress.js:647
-#: src/control/Control.NotebookbarWriter.js:1751
+#: src/control/Control.NotebookbarDraw.js:510
+#: src/control/Control.NotebookbarImpress.js:654
+#: src/control/Control.NotebookbarWriter.js:1758
 msgid "Ruler"
 msgstr "尺規"
 
-#: src/control/Control.NotebookbarDraw.js:649
-#: src/control/Control.NotebookbarImpress.js:818
-#: src/control/Control.NotebookbarWriter.js:649
+#: src/control/Control.NotebookbarDraw.js:656
+#: src/control/Control.NotebookbarImpress.js:825
+#: src/control/Control.NotebookbarWriter.js:656
 #: src/control/Control.TopToolbar.js:148
 msgid "Clone Formatting is active (click again or press Esc to exit)"
 msgstr "拓製格式設定已啟用（再次點擊或按 Esc 即可退出）"
 
-#: src/control/Control.NotebookbarDraw.js:913
-#: src/control/Control.NotebookbarImpress.js:1049
-#: src/control/Control.NotebookbarWriter.js:829
+#: src/control/Control.NotebookbarDraw.js:920
+#: src/control/Control.NotebookbarImpress.js:1056
+#: src/control/Control.NotebookbarWriter.js:836
 msgid "Paragraph"
 msgstr "段落"
 
 #: src/control/Control.NotebookbarImpress.js:96
-#: src/control/Control.NotebookbarImpress.js:2354
-#: src/control/Control.NotebookbarWriter.js:2733
+#: src/control/Control.NotebookbarImpress.js:2361
+#: src/control/Control.NotebookbarWriter.js:2740
 msgid "Design"
 msgstr "設計"
 
@@ -3444,129 +4129,129 @@ msgstr "投影片放映"
 msgid "Master"
 msgstr "母片"
 
-#: src/control/Control.NotebookbarImpress.js:479
+#: src/control/Control.NotebookbarImpress.js:486
 msgid "Start Slide Show"
 msgstr "開始投影片放映"
 
-#: src/control/Control.NotebookbarImpress.js:484
+#: src/control/Control.NotebookbarImpress.js:491
 msgid "From Beginning"
 msgstr "從第一張投影片開始"
 
-#: src/control/Control.NotebookbarImpress.js:485
+#: src/control/Control.NotebookbarImpress.js:492
 msgid "Fullscreen, starting at slide 1"
 msgstr "全螢幕，從第一張投影片開始"
 
-#: src/control/Control.NotebookbarImpress.js:492
+#: src/control/Control.NotebookbarImpress.js:499
 msgid "From Current Slide"
 msgstr "從目前投影片開始"
 
-#: src/control/Control.NotebookbarImpress.js:493
+#: src/control/Control.NotebookbarImpress.js:500
 msgid "Fullscreen, starting at this slide"
 msgstr "全螢幕，從此投影片開始"
 
-#: src/control/Control.NotebookbarImpress.js:508
+#: src/control/Control.NotebookbarImpress.js:515
 msgid "Present"
 msgstr "展示"
 
-#: src/control/Control.NotebookbarImpress.js:514
+#: src/control/Control.NotebookbarImpress.js:521
 msgid "Present in Window"
 msgstr "在新視窗展示"
 
-#: src/control/Control.NotebookbarImpress.js:515
+#: src/control/Control.NotebookbarImpress.js:522
 msgid "Plays inside the document window. Starts at slide 1"
 msgstr "在文件視窗中播放。從第一張投影片開始"
 
-#: src/control/Control.NotebookbarImpress.js:523
+#: src/control/Control.NotebookbarImpress.js:530
 msgid "Presenter View"
 msgstr "演講者檢視"
 
-#: src/control/Control.NotebookbarImpress.js:524
+#: src/control/Control.NotebookbarImpress.js:531
 msgid "Shows your notes, next slide, and a timer"
 msgstr "顯示您的備註、下一張投影片、計時器"
 
-#: src/control/Control.NotebookbarImpress.js:532
+#: src/control/Control.NotebookbarImpress.js:539
 msgid "Present to All"
 msgstr "向全員簡報"
 
-#: src/control/Control.NotebookbarImpress.js:533
+#: src/control/Control.NotebookbarImpress.js:540
 msgid "Starts a slideshow on every viewer's screen"
 msgstr "在所有觀眾的螢幕上開始放映投影片"
 
-#: src/control/Control.NotebookbarImpress.js:541
+#: src/control/Control.NotebookbarImpress.js:548
 #: src/slideshow/SlideShowPresenter.ts:1525
 msgid "Follow Presenter"
 msgstr "跟隨演講者"
 
-#: src/control/Control.NotebookbarImpress.js:542
+#: src/control/Control.NotebookbarImpress.js:549
 msgid "View slides as the presenter advances them"
 msgstr "隨著簡報者翻頁，同步檢視投影片"
 
-#: src/control/Control.NotebookbarImpress.js:552
+#: src/control/Control.NotebookbarImpress.js:559
 msgid "Set Up"
 msgstr "設定"
 
-#: src/control/Control.NotebookbarImpress.js:679
+#: src/control/Control.NotebookbarImpress.js:686
 msgid "Slide Views"
 msgstr "投影片檢視"
 
-#: src/control/Control.NotebookbarImpress.js:718
+#: src/control/Control.NotebookbarImpress.js:725
 msgid "Snap to Grid"
 msgstr "貼齊網格"
 
-#: src/control/Control.NotebookbarImpress.js:855
-#: src/control/Control.NotebookbarImpress.js:1918
+#: src/control/Control.NotebookbarImpress.js:862
+#: src/control/Control.NotebookbarImpress.js:1925
 msgid "Slide Layout"
 msgstr "投影片版面配置"
 
-#: src/control/Control.NotebookbarImpress.js:877
-#: src/control/Control.NotebookbarImpress.js:1928
+#: src/control/Control.NotebookbarImpress.js:884
+#: src/control/Control.NotebookbarImpress.js:1935
 msgid "Change Layout"
 msgstr "變更版面配置"
 
-#: src/control/Control.NotebookbarImpress.js:885
-#: src/control/Control.NotebookbarImpress.js:1935
+#: src/control/Control.NotebookbarImpress.js:892
+#: src/control/Control.NotebookbarImpress.js:1942
 msgid "Reset Layout"
 msgstr "重設版面配置"
 
-#: src/control/Control.NotebookbarImpress.js:899
+#: src/control/Control.NotebookbarImpress.js:906
 msgid "Character"
 msgstr "字元"
 
-#: src/control/Control.NotebookbarImpress.js:1165
+#: src/control/Control.NotebookbarImpress.js:1172
 msgid "Spacing & Color"
 msgstr "間距與色彩"
 
-#: src/control/Control.NotebookbarImpress.js:1855
+#: src/control/Control.NotebookbarImpress.js:1862
 msgid "Master Slide Templates"
 msgstr "母片範本"
 
-#: src/control/Control.NotebookbarImpress.js:1867
+#: src/control/Control.NotebookbarImpress.js:1874
 msgid "This Presentation"
 msgstr "此簡報"
 
-#: src/control/Control.NotebookbarImpress.js:1876
+#: src/control/Control.NotebookbarImpress.js:1883
 msgid "Presentation Templates"
 msgstr "簡報範本"
 
-#: src/control/Control.NotebookbarImpress.js:1947
+#: src/control/Control.NotebookbarImpress.js:1954
 msgid "Slide Size"
 msgstr "投影片大小"
 
-#: src/control/Control.NotebookbarImpress.js:1970
+#: src/control/Control.NotebookbarImpress.js:1977
 msgid "Background Image"
 msgstr "背景影像"
 
-#: src/control/Control.NotebookbarImpress.js:2101
-#: src/control/Control.NotebookbarWriter.js:2487
+#: src/control/Control.NotebookbarImpress.js:2108
+#: src/control/Control.NotebookbarWriter.js:2494
 msgid "Select"
 msgstr "選取"
 
-#: src/control/Control.NotebookbarImpress.js:2228
-#: src/control/Control.NotebookbarWriter.js:2614
+#: src/control/Control.NotebookbarImpress.js:2235
+#: src/control/Control.NotebookbarWriter.js:2621
 msgid "Merge & Split"
 msgstr "合併與分割"
 
-#: src/control/Control.NotebookbarImpress.js:2826
+#: src/control/Control.NotebookbarImpress.js:2833
 msgid "Effects"
 msgstr "效果"
 
@@ -3574,82 +4259,83 @@ msgstr "效果"
 msgid "Form"
 msgstr "表單"
 
-#: src/control/Control.NotebookbarWriter.js:407
+#: src/control/Control.NotebookbarWriter.js:414
 msgid "Go Online"
 msgstr "上線"
 
-#: src/control/Control.NotebookbarWriter.js:407
+#: src/control/Control.NotebookbarWriter.js:414
 msgid "Go Offline"
 msgstr "離線"
 
-#: src/control/Control.NotebookbarWriter.js:559
+#: src/control/Control.NotebookbarWriter.js:566
 msgid "Validate Sidebar"
 msgstr "驗證側邊欄"
 
-#: src/control/Control.NotebookbarWriter.js:566
+#: src/control/Control.NotebookbarWriter.js:573
 msgid "Validate Dialog"
 msgstr "驗證對話方塊"
 
-#: src/control/Control.NotebookbarWriter.js:959
+#: src/control/Control.NotebookbarWriter.js:966
 #: src/control/Control.Zotero.js:828
 msgid "Styles"
 msgstr "樣式"
 
-#: src/control/Control.NotebookbarWriter.js:1112
+#: src/control/Control.NotebookbarWriter.js:1119
 msgid "Lists/Bullets"
 msgstr "清單/項目符號"
 
-#: src/control/Control.NotebookbarWriter.js:1399
+#: src/control/Control.NotebookbarWriter.js:1406
 msgid "Header & Footer"
 msgstr "頁首與頁尾"
 
-#: src/control/Control.NotebookbarWriter.js:1468
+#: src/control/Control.NotebookbarWriter.js:1475
 msgid "Section"
 msgstr "區段"
 
-#: src/control/Control.NotebookbarWriter.js:1553
+#: src/control/Control.NotebookbarWriter.js:1560
+#: src/control/jsdialog/Widget.EmojiPicker.ts:182
 msgid "Symbols"
 msgstr "符號"
 
-#: src/control/Control.NotebookbarWriter.js:1606
+#: src/control/Control.NotebookbarWriter.js:1613
 msgid "Rich Text"
 msgstr "豐富文字"
 
-#: src/control/Control.NotebookbarWriter.js:1614
+#: src/control/Control.NotebookbarWriter.js:1621
 msgid "Checkbox"
 msgstr "核取方塊"
 
-#: src/control/Control.NotebookbarWriter.js:1690
+#: src/control/Control.NotebookbarWriter.js:1697
 msgid "Page Width"
 msgstr "頁面寬度"
 
-#: src/control/Control.NotebookbarWriter.js:2239
+#: src/control/Control.NotebookbarWriter.js:2246
 msgid "Spellcheck"
 msgstr "拼字檢查"
 
-#: src/control/Control.NotebookbarWriter.js:2252
+#: src/control/Control.NotebookbarWriter.js:2259
 msgid "Spelling Options"
 msgstr "拼字選項"
 
-#: src/control/Control.NotebookbarWriter.js:2292
-#: src/control/Control.NotebookbarWriter.js:2308
+#: src/control/Control.NotebookbarWriter.js:2299
+#: src/control/Control.NotebookbarWriter.js:2315
 #: src/control/jsdialog/Widget.HTMLContent.ts:52
 msgid "Show Comments"
 msgstr "顯示評註"
 
-#: src/control/Control.NotebookbarWriter.js:2363
+#: src/control/Control.NotebookbarWriter.js:2370
 msgid "Tracking"
 msgstr "追蹤"
 
-#: src/control/Control.NotebookbarWriter.js:2377
+#: src/control/Control.NotebookbarWriter.js:2384
 msgid "View Changes"
 msgstr "檢視變更"
 
-#: src/control/Control.NotebookbarWriter.js:2770
+#: src/control/Control.NotebookbarWriter.js:2777
 msgid "Cell Background"
 msgstr "儲存格背景"
 
-#: src/control/Control.NotebookbarWriter.js:2853
+#: src/control/Control.NotebookbarWriter.js:2860
 msgid "Protect"
 msgstr "保護"
 
@@ -3670,28 +4356,36 @@ msgstr "貼上"
 msgid "Add Section"
 msgstr "新增區塊"
 
-#: src/control/Control.PartsPreview.js:599
+#: src/control/Control.PartsPreview.js:598
 msgid "Toggle section %1"
 msgstr "切換區塊 %1"
 
-#: src/control/Control.PartsPreview.js:767
-#: src/control/Control.PartsPreview.js:846
+#: src/control/Control.PartsPreview.js:789
+#: src/control/Control.PartsPreview.js:890
 msgid "Rename Section"
 msgstr "重新命名區塊"
 
-#: src/control/Control.PartsPreview.js:774
+#: src/control/Control.PartsPreview.js:796
 msgid "Remove Section"
 msgstr "移除區塊"
 
-#: src/control/Control.PartsPreview.js:782
+#: src/control/Control.PartsPreview.js:804
 msgid "Move Section Up"
 msgstr "將區塊向上移動"
 
-#: src/control/Control.PartsPreview.js:791
+#: src/control/Control.PartsPreview.js:813
 msgid "Move Section Down"
 msgstr "將區塊向下移動"
 
-#: src/control/Control.PartsPreview.js:847
+#: src/control/Control.PartsPreview.js:822
+msgid "Collapse All Sections"
+msgstr ""
+
+#: src/control/Control.PartsPreview.js:830
+msgid "Expand All Sections"
+msgstr ""
+
+#: src/control/Control.PartsPreview.js:891
 msgid "Enter new section name:"
 msgstr "輸入新區塊名稱："
 
@@ -3842,15 +4536,6 @@ msgstr "插入工作表"
 msgid "Show sheet list"
 msgstr "顯示工作表清單"
 
-#: src/control/Control.StatusBar.js:162
-msgid "On"
-msgstr "開啟"
-
-#: src/control/Control.StatusBar.js:164
-#: src/control/jsdialog/Definitions.Menu.ts:1824
-msgid "Off"
-msgstr "關閉"
-
 #: src/control/Control.StatusBar.js:204
 #: src/control/jsdialog/Definitions.Menu.ts:175
 msgid "Average"
@@ -3994,11 +4679,11 @@ msgstr "您目前處於檢視模式"
 msgid "Enter new name"
 msgstr "輸入新名稱"
 
-#: src/control/Control.UIManager.ts:1346
+#: src/control/Control.UIManager.ts:1362
 msgid "Hide Menu"
 msgstr "隱藏選單"
 
-#: src/control/Control.UIManager.ts:1373
+#: src/control/Control.UIManager.ts:1389
 msgid "Show Menu"
 msgstr "顯示選單"
 
@@ -4069,11 +4754,12 @@ msgid ""
 msgstr "該文件包含一些可能無法透過 Web API "
 "存取的引用。編輯引用或參考文獻時可能會出現一些問題。"
 
-#: src/control/Control.Zotero.js:246 src/app/Socket.ts:2469
+#: src/control/Control.Zotero.js:246 src/app/Socket.ts:2471
 msgid "Loading..."
 msgstr "正在載入……"
 
 #: src/control/Control.Zotero.js:257 src/control/Control.Zotero.js:454
+#: src/slideshow/engine/SlideShowHandler.ts:102
 #: src/slideshow/PresenterConsole.js:32
 #: src/slideshow/SlideShowPresenter.ts:809
 #: src/slideshow/SlideShowPresenter.ts:857
@@ -4081,6 +4767,7 @@ msgid "Previous"
 msgstr "前一個"
 
 #: src/control/Control.Zotero.js:270 src/control/Control.Zotero.js:469
+#: src/slideshow/engine/SlideShowHandler.ts:103
 #: src/slideshow/PresenterConsole.js:33
 #: src/slideshow/SlideShowPresenter.ts:815
 #: src/slideshow/SlideShowPresenter.ts:868
@@ -4337,6 +5024,22 @@ msgstr "編輯模式"
 #: src/control/PermissionMode.ts:221 src/control/PermissionMode.ts:227
 msgid "Viewing"
 msgstr "檢視"
+
+#: src/control/jsdialog/Control.ContextMenu.ts:306
+msgid "Save Image to Server"
+msgstr ""
+
+#: src/control/jsdialog/Control.ContextMenu.ts:344
+msgid "Paste Special"
+msgstr "選擇性貼上"
+
+#: src/control/jsdialog/Control.ContextMenu.ts:355
+msgid "Copy Cells"
+msgstr "複製儲存格"
+
+#: src/control/jsdialog/Control.ContextMenu.ts:364
+msgid "Fill Series"
+msgstr "填入序列"
 
 #: src/control/jsdialog/Definitions.Menu.ts:111
 #: src/control/jsdialog/Definitions.Menu.ts:1774
@@ -4770,6 +5473,64 @@ msgstr "調色盤"
 msgid "Color palette"
 msgstr "色彩調色盤"
 
+#: src/control/jsdialog/Widget.Combobox.js:241
+#, fuzzy
+msgid "Open "
+msgstr "開啟"
+
+#: src/control/jsdialog/Widget.Combobox.js:241
+msgid " list"
+msgstr ""
+
+#: src/control/jsdialog/Widget.Combobox.js:242
+#, fuzzy
+msgid "Open list"
+msgstr "開啟連結"
+
+#: src/control/jsdialog/Widget.Combobox.js:373
+msgid "Filter entries"
+msgstr ""
+
+#: src/control/jsdialog/Widget.CsvGrid.ts:186
+msgid "CSV column ruler: click to toggle a column split"
+msgstr ""
+
+#: src/control/jsdialog/Widget.CsvGrid.ts:315
+msgid "CSV import preview"
+msgstr ""
+
+#: src/control/jsdialog/Widget.CsvGrid.ts:337
+msgid "Line number"
+msgstr ""
+
+#: src/control/jsdialog/Widget.CsvGrid.ts:349
+msgid "Column {index}"
+msgstr ""
+
+#: src/control/jsdialog/Widget.EmojiPicker.ts:54
+msgid "Smileys"
+msgstr ""
+
+#: src/control/jsdialog/Widget.EmojiPicker.ts:100
+msgid "People & gestures"
+msgstr ""
+
+#: src/control/jsdialog/Widget.EmojiPicker.ts:136
+msgid "Objects"
+msgstr ""
+
+#: src/control/jsdialog/Widget.EmojiPicker.ts:218
+msgid "Nature & food"
+msgstr ""
+
+#: src/control/jsdialog/Widget.EmojiPicker.ts:364
+msgid "Recently used"
+msgstr ""
+
+#: src/control/jsdialog/Widget.EmojiPicker.ts:384
+msgid "No emojis match \"{0}\""
+msgstr ""
+
 #: src/control/jsdialog/Widget.PageMarginEntry.ts:139
 msgid "Top: {top}"
 msgstr "上：{top}"
@@ -4870,6 +5631,22 @@ msgstr "編輯模式"
 msgid "Cell borders"
 msgstr "儲存格邊框"
 
+#: src/control/jsdialog/Widget.NotebookbarIconView.ts:98
+msgid "Open Styles Sidebar"
+msgstr ""
+
+#: src/control/jsdialog/Widget.NotebookbarIconView.ts:202
+msgid "Scroll up"
+msgstr "向上捲動"
+
+#: src/control/jsdialog/Widget.NotebookbarIconView.ts:212
+msgid "Scroll down"
+msgstr "向下捲動"
+
+#: src/control/jsdialog/Widget.NotebookbarIconView.ts:222
+msgid "More options"
+msgstr ""
+
 #: src/control/jsdialog/Widget.PushButton.ts:19
 msgid "Select range"
 msgstr "選取範圍"
@@ -4894,11 +5671,11 @@ msgstr "遞減值"
 msgid "More options for {1}"
 msgstr "{1} 的更多選項"
 
-#: src/control/jsdialog/Widget.TreeView.ts:1993
+#: src/control/jsdialog/Widget.TreeView.ts:2004
 msgid "Headings and objects that you add to the document will appear here"
 msgstr "您新增至文件中的標題和物件將顯示在此處"
 
-#: src/control/jsdialog/Widget.TreeView.ts:2041
+#: src/control/jsdialog/Widget.TreeView.ts:2052
 msgid "Search items"
 msgstr "搜尋項目"
 
@@ -4946,79 +5723,79 @@ msgid ""
 "unsaved changes?"
 msgstr "儲存空間中的文件已變更。您希望如何處理未儲存的變更？"
 
-#: src/app/Socket.ts:1778
+#: src/app/Socket.ts:1780
 msgid "Server is now reachable. We have to refresh the page now."
 msgstr "可以連線到伺服器了。現在我們會重新整理頁面。"
 
-#: src/app/Socket.ts:1781
+#: src/app/Socket.ts:1783
 msgid "Server is now reachable..."
 msgstr "可以連線到伺服器了……"
 
-#: src/app/Socket.ts:1789
+#: src/app/Socket.ts:1791
 msgid "RELOAD"
 msgstr "重新載入"
 
-#: src/app/Socket.ts:1817
+#: src/app/Socket.ts:1819
 msgid "Cluster configuration warning"
 msgstr "叢集設定警告"
 
-#: src/app/Socket.ts:1826
+#: src/app/Socket.ts:1828
 msgid "Wrong server, reconnecting..."
 msgstr "錯誤的伺服器，正在重新連線……"
 
-#: src/app/Socket.ts:1844
+#: src/app/Socket.ts:1846
 msgid "Unsupported server version."
 msgstr "不支援的伺服器版本。"
 
-#: src/app/Socket.ts:1988
+#: src/app/Socket.ts:1990
 msgid "Document is getting migrated"
 msgstr "文件正在遷移"
 
-#: src/app/Socket.ts:2227
+#: src/app/Socket.ts:2229
 msgid "Document requires password to view."
 msgstr "文件需要密碼才能檢視。"
 
-#: src/app/Socket.ts:2229
+#: src/app/Socket.ts:2231
 msgid "Document requires password to modify."
 msgstr "文件需要密碼才能修改。"
 
-#: src/app/Socket.ts:2231
+#: src/app/Socket.ts:2233
 msgid "Hit Cancel to open in view-only mode."
 msgstr "按「取消」以唯讀模式開啟。"
 
-#: src/app/Socket.ts:2235
+#: src/app/Socket.ts:2237
 msgid "Wrong password provided. Please try again."
 msgstr "提供的密碼錯誤。請重試。"
 
-#: src/app/Socket.ts:2280
+#: src/app/Socket.ts:2282
 msgid "Only the document owner can change the password."
 msgstr "只有文件擁有者才能更改密碼。"
 
-#: src/app/Socket.ts:2321 src/app/Socket.ts:2332
+#: src/app/Socket.ts:2323 src/app/Socket.ts:2334
 msgid "Missing Fonts"
 msgstr "缺少字型"
 
-#: src/app/Socket.ts:2370
+#: src/app/Socket.ts:2372
 msgid "Someone"
 msgstr "某人"
 
-#: src/app/Socket.ts:2372
+#: src/app/Socket.ts:2374
 msgid "{username} saved this document as {filename}. Do you want to join?"
 msgstr "{username} 將此文件另存為 {filename}。您想要加入嗎？"
 
-#: src/app/Socket.ts:2395
+#: src/app/Socket.ts:2397
 msgid "The document is being renamed and will reload shortly"
 msgstr "該文件正在重新命名，稍後將重新載入"
 
-#: src/app/Socket.ts:2398
+#: src/app/Socket.ts:2400
 msgid "The document is switching to Offline mode and will reload shortly"
 msgstr "該文件正在切換為離線模式，稍後將重新載入"
 
-#: src/app/Socket.ts:2469
+#: src/app/Socket.ts:2471
 msgid "Connecting..."
 msgstr "連線中……"
 
-#: src/app/Socket.ts:2485
+#: src/app/Socket.ts:2487
 msgid "Server is shutting down"
 msgstr "伺服器正在關閉"
 
@@ -5332,15 +6109,15 @@ msgstr "「檢視」選單"
 msgid "Online Editor"
 msgstr "線上編輯器"
 
-#: src/layer/tile/CanvasTileLayer.js:1529
+#: src/layer/tile/CanvasTileLayer.js:1535
 msgid "Functions"
 msgstr "函式"
 
-#: src/layer/tile/CanvasTileLayer.js:1806
+#: src/layer/tile/CanvasTileLayer.js:1812
 msgid "Named Range"
 msgstr "已命名的範圍"
 
-#: src/layer/tile/CanvasTileLayer.js:3604
+#: src/layer/tile/CanvasTileLayer.js:3620
 msgid "No Comments"
 msgstr "暫無評註"
 
@@ -5520,29 +6297,85 @@ msgstr "已停用簡報"
 msgid "Presentation mode has been disabled for this document"
 msgstr "此文件的簡報模式已停用"
 
+#: src/map/handler/Map.StateChanges.js:132
+msgid "Apply this order to your presentation?"
+msgstr ""
+
+#: src/map/handler/Map.StateChanges.js:132
+msgid "Update Slides"
+msgstr ""
+
 #: src/map/handler/Map.VersionBar.js:50
 msgid "Your Collabora Online server needs updating. Version {0} is available."
 msgstr "您的 Collabora Online 伺服器需要更新。已有版本 {0}。"
 
-#: src/map/handler/Map.WOPI.js:193
+#: src/map/handler/Map.WOPI.js:194
 msgid "Creating new file from template..."
 msgstr "從範本建立新檔案……"
 
-#: src/map/handler/Map.WOPI.js:245
+#: src/map/handler/Map.WOPI.js:296
 msgid "Compare Document..."
 msgstr "比較文件……"
 
-#: src/map/handler/Map.WOPI.js:805
+#: src/map/handler/Map.WOPI.js:869
 msgid "File name should contain an extension."
 msgstr "檔案名稱應包含副檔名。"
 
-#: src/map/handler/Map.WOPI.js:814
+#: src/map/handler/Map.WOPI.js:878
 msgid "Creating copy..."
 msgstr "製作副本中……"
 
 #: src/map/handler/Map.Welcome.js:118
 msgid "Welcome Dialog"
 msgstr "歡迎對話方塊"
+
+#: src/slideshow/engine/SlideShowHandler.ts:104
+msgid "Skip"
+msgstr ""
+
+#: src/slideshow/engine/SlideShowHandler.ts:105
+msgid "First"
+msgstr ""
+
+#: src/slideshow/engine/SlideShowHandler.ts:106
+msgid "Skip All"
+msgstr ""
+
+#: src/slideshow/engine/SlideShowHandler.ts:107
+msgid "First Slide"
+msgstr ""
+
+#: src/slideshow/engine/SlideShowHandler.ts:108
+#: src/slideshow/PresenterConsole.js:31
+msgid "Next Slide"
+msgstr "下一張投影片"
+
+#: src/slideshow/engine/SlideShowHandler.ts:109
+#, fuzzy
+msgid "Previous Slide"
+msgstr "上一張投影片"
+
+#: src/slideshow/engine/SlideShowHandler.ts:110
+#, fuzzy
+msgid "Last Slide"
+msgstr "貼上投影片"
+
+#: src/slideshow/engine/SlideShowHandler.ts:111
+#: src/slideshow/SlideShowPresenter.ts:846
+msgid "End Show"
+msgstr "結束放映"
+
+#: src/slideshow/engine/SlideShowHandler.ts:318
+msgid "Animation Start: "
+msgstr ""
+
+#: src/slideshow/engine/SlideShowHandler.ts:420
+msgid "Transition Start: "
+msgstr ""
+
+#: src/slideshow/engine/SlideShowHandler.ts:439
+msgid "Transition End: "
+msgstr ""
 
 #: src/slideshow/PauseTimer.ts:141
 msgid "Pause... ( %SECONDS% )"
@@ -5551,10 +6384,6 @@ msgstr "暫停…… ( %SECONDS% )"
 #: src/slideshow/PresenterConsole.js:30
 msgid "Current Slide"
 msgstr "目前投影片"
-
-#: src/slideshow/PresenterConsole.js:31
-msgid "Next Slide"
-msgstr "下一張投影片"
 
 #: src/slideshow/PresenterConsole.js:36
 #: src/slideshow/SlideShowPresenter.ts:912
@@ -5618,10 +6447,6 @@ msgstr "您目前位於第一張投影片"
 msgid "Waiting for presenter to advance"
 msgstr "等待簡報者切換投影片"
 
-#: src/slideshow/SlideShowPresenter.ts:846
-msgid "End Show"
-msgstr "結束放映"
-
 #: src/slideshow/SlideShowPresenter.ts:883
 #: src/slideshow/SlideShowPresenter.ts:896
 msgid "Disable Animations"
@@ -5634,6 +6459,10 @@ msgstr "啟用動畫"
 #: src/slideshow/SlideShowPresenter.ts:1520
 msgid "Stop Following"
 msgstr "停止追蹤"
+
+#: src/control/Control.Extension.ts:237
+msgid "Close extension"
+msgstr ""
 
 #: templates/templates.js:6
 msgid "Modern Business Letter (sans-serif)"
@@ -5816,8 +6645,8 @@ msgid ""
 "report</a> with all the essential steps on how to reproduce it."
 msgstr ""
 "有興趣做出貢獻但不知道從哪裡開始？前往<a target=\"_blank\" rel=\"noopener\" "
-"href=\"https://www.collaboraonline.org/post/build-code/\">逐步說明</a>並從頭"
-"開始建構 CODE。您還可以協助<a target=\"_blank\" rel=\"noopener\" "
+"href=\"https://www.collaboraonline.org/post/build-code/\">逐步說明</"
+"a>並從頭開始建構 CODE。您還可以協助<a target=\"_blank\" rel=\"noopener\" "
 "href=\"https://www.collaboraonline.org/post/translate/\">翻譯</a>或透過<a "
 "target=\"_blank\" rel=\"noopener\" href=\"https://www.collaboraonline.org/"
 "post/filebugs/\">遞交錯誤報告</a>以及如何重現它的所有基本步驟。"
@@ -5861,29 +6690,14 @@ msgstr ""
 #~ msgid "LOKit version:"
 #~ msgstr "LOKit 版本："
 
-#~ msgid "Paste Special"
-#~ msgstr "選擇性貼上"
-
-#~ msgid "Copy Cells"
-#~ msgstr "複製儲存格"
-
-#~ msgid "Fill Series"
-#~ msgstr "填入序列"
-
 #~ msgid "Shockwave Flash (.swf)"
 #~ msgstr "Shockwave Flash (.swf)"
-
-#~ msgid "file type icon"
-#~ msgstr "檔案類型圖示"
 
 #~ msgid "Table Style Options"
 #~ msgstr "表格樣式選項"
 
 #~ msgid "Enter custom color in hex format"
 #~ msgstr "以十六進位格式輸入自訂色彩"
-
-#~ msgid "Paste Slide"
-#~ msgstr "貼上投影片"
 
 #~ msgid "Page margin options"
 #~ msgstr "頁面邊距選項"
@@ -5902,12 +6716,6 @@ msgstr ""
 
 #~ msgid "Follow Presentation"
 #~ msgstr "跟隨簡報"
-
-#~ msgid "Scroll up"
-#~ msgstr "向上捲動"
-
-#~ msgid "Scroll down"
-#~ msgstr "向下捲動"
 
 #~ msgid "Session terminated by document owner"
 #~ msgstr "工作階段由文件擁有者終止"
@@ -6068,9 +6876,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "ODF Text Document (.odt)"
 #~ msgstr "ODF 文字文件 (.odt)"
-
-#~ msgid "Previous slide"
-#~ msgstr "上一張投影片"
 
 #~ msgid "Readonly"
 #~ msgstr "唯讀"
