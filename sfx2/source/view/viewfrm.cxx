@@ -1343,6 +1343,7 @@ void SfxViewFrame::AppendAutoCorrLeadTrailInfobar()
     {
         weld::Button& rDontShowAgain = pInfoBar->addButton();
         rDontShowAgain.set_label(SfxResId(STR_NOSHOWAGAIN));
+        rDontShowAgain.set_buildable_name(u"autocorr_leadtrail"_ustr); // id in click handler
         rDontShowAgain.connect_clicked(LINK(this, SfxViewFrame, DontShowAgainHdl));
 
         weld::Button& rChangeOptions = pInfoBar->addButton();
@@ -1476,6 +1477,20 @@ void SfxViewFrame::AppendContainsMacrosInfobar()
     }
 }
 
+bool SfxViewFrame::AppendGenericVCLInfobar()
+{
+    auto pInfoBar = AppendInfoBar(u"VCL_gen"_ustr, SfxResId(STR_VCLGEN_TITLE),
+                                  SfxResId(STR_VCLGEN_TEXT), InfobarType::INFO);
+    if (pInfoBar) // false if not created in AppendInfoBar() after checking ::WarnGenericVCL::get()
+    {
+        weld::Button& rDontShowAgain = pInfoBar->addButton();
+        rDontShowAgain.set_label(SfxResId(STR_NOSHOWAGAIN));
+        rDontShowAgain.set_buildable_name(u"VCL_gen"_ustr); // id in click handler
+        rDontShowAgain.connect_clicked(LINK(this, SfxViewFrame, DontShowAgainHdl));
+    }
+
+    return pInfoBar;
+}
 namespace
 {
 css::uno::Reference<css::frame::XLayoutManager> getLayoutManager(const SfxFrame& rFrame)
@@ -1615,6 +1630,9 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                     SfxClassificationHelper aHelper(m_xObjSh->getDocProperties());
                     aHelper.UpdateInfobar(*this);
                 }
+
+                if (Application::GetToolkit() == Toolkit::Gen)
+                    bIsInfobarShown = AppendGenericVCLInfobar();
 
                 // Add pending infobars
                 std::vector<InfobarData>& aPendingInfobars = m_xObjSh->getPendingInfobars();
@@ -2037,14 +2055,17 @@ IMPL_STATIC_LINK_NOARG(SfxViewFrame, HelpMasterPasswordHdl, weld::Button&, void)
         pHelp->Start(u"cui/ui/optsecuritypage/savepassword"_ustr);
 }
 
-IMPL_LINK_NOARG(SfxViewFrame, DontShowAgainHdl, weld::Button&, void)
+IMPL_LINK(SfxViewFrame, DontShowAgainHdl, weld::Button&, rButton, void)
 {
     std::shared_ptr<comphelper::ConfigurationChanges> batch(
         comphelper::ConfigurationChanges::create());
-    officecfg::Office::UI::Infobar::Enabled::AutoCorrLeadTrail::set(false, batch);
+    if (rButton.get_buildable_name() == u"VCL_gen")
+        officecfg::Office::UI::Infobar::Enabled::WarnGenericVCL::set(false, batch);
+    else if (rButton.get_buildable_name() == u"autocorr_leadtrail")
+        officecfg::Office::UI::Infobar::Enabled::AutoCorrLeadTrail::set(false, batch);
     batch->commit();
 
-    RemoveInfoBar(u"autocorr_leadtrail");
+    RemoveInfoBar(rButton.get_buildable_name());
 }
 
 IMPL_LINK_NOARG(SfxViewFrame, ChangeOptionsHdl, weld::Button&, void)

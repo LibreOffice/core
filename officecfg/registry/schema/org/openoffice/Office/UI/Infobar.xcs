@@ -72,6 +72,12 @@
         </info>
         <value>true</value>
       </prop>
+      <prop oor:name="WarnGenericVCL" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Whether an Infobar is shown when the generic VCL is used.</desc>
+        </info>
+        <value>true</value>
+      </prop>
     </group>
   </component>
 </oor:component-schema>

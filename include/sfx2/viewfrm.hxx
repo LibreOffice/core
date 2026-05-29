@@ -92,6 +92,7 @@ private:
     SAL_DLLPRIVATE static void InitInterface_Impl();
 
     SAL_DLLPRIVATE void AppendContainsMacrosInfobar();
+    SAL_DLLPRIVATE bool AppendGenericVCLInfobar();
 public:
 
     SAL_DLLPRIVATE static void SetViewFrame( SfxViewFrame* );
