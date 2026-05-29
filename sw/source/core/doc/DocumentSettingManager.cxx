@@ -290,6 +290,7 @@ bool sw::DocumentSettingManager::get(/*[in]*/ DocumentSettingId id) const
         case DocumentSettingId::MS_WORD_COMP_GRID_METRICS: return mbMsWordCompGridMetrics;
         case DocumentSettingId::NO_CLIPPING_WITH_WRAP_POLYGON: return mbNoClippingWithWrapPolygon;
         case DocumentSettingId::MS_WORD_UL_TRAIL_SPACE: return mbMsWordUlTrailSpace;
+        case DocumentSettingId::LINE_SPACING_AS_GAP_BELOW: return mbLineSpacingAsGapBelow;
         case DocumentSettingId::BALANCE_SPACES_AND_IDEOGRAPHIC_SPACES:
             return mbBalanceSpacesAndIdeographicSpaces;
         case DocumentSettingId::FORCE_TOP_ALIGNMENT_IN_CELL_WITH_FLOATING_ANCHOR:
@@ -635,6 +636,9 @@ void sw::DocumentSettingManager::set(/*[in]*/ DocumentSettingId id, /*[in]*/ boo
         case DocumentSettingId::MS_WORD_UL_TRAIL_SPACE:
             mbMsWordUlTrailSpace = value;
             break;
+        case DocumentSettingId::LINE_SPACING_AS_GAP_BELOW:
+            mbLineSpacingAsGapBelow = value;
+            break;
         case DocumentSettingId::BALANCE_SPACES_AND_IDEOGRAPHIC_SPACES:
             mbBalanceSpacesAndIdeographicSpaces = value;
             break;
@@ -781,12 +785,14 @@ void sw::DocumentSettingManager::ReplaceCompatibilityOptions(const DocumentSetti
     mbUseHiResolutionVirtualDevice = rSource.mbUseHiResolutionVirtualDevice;
     mbOldLineSpacing = rSource.mbOldLineSpacing;
     mbAddParaSpacingToTableCells = rSource.mbAddParaSpacingToTableCells;
+    // assume MISSING mApplyParagraphMarkFormatToNumbering = rSource.mApplyParagraphMarkFormatToNumbering;
     mbAddParaLineSpacingToTableCells = rSource.mbAddParaLineSpacingToTableCells;
     mbUseFormerObjectPos = rSource.mbUseFormerObjectPos;
     mbUseFormerTextWrapping = rSource.mbUseFormerTextWrapping;
     mbConsiderWrapOnObjPos = rSource.mbConsiderWrapOnObjPos;
     mbMathBaselineAlignment = rSource.mbMathBaselineAlignment;
     mbStylesNoDefault = rSource.mbStylesNoDefault;
+    // assume not compatibility settings: mEmbedFonts, mEmbedUsedFonts, mEmbedLatinScriptFonts, mEmbedAsianScriptFonts, mEmbedComplexScriptFonts, mEmbedSystemFonts
     mbOldNumbering = rSource.mbOldNumbering;
     mbIgnoreFirstLineIndentInNumbering = rSource.mbIgnoreFirstLineIndentInNumbering;
     mbNoGapAfterNoteNumber = rSource.mbNoGapAfterNoteNumber;
@@ -823,12 +829,28 @@ void sw::DocumentSettingManager::ReplaceCompatibilityOptions(const DocumentSetti
     // No mbProtectFields: this is false by default everywhere
     mbHeaderSpacingBelowLastPara = rSource.mbHeaderSpacingBelowLastPara;
     mbFrameAutowidthWithMorePara = rSource.mbFrameAutowidthWithMorePara;
+    // assume MISSING mbGutterAtTop = rSource.mbGutterAtTop;
+    // assume No mnImagePreferredDPI: not a compatibility setting
+    // assume No mbAutoFirstLineIndentDisregardLineSpace: this is true by default everywhere
+    // assume No mbHyphenateURLs: this is false by default everywhere
+    // assume MISSING mbDoNotBreakWrappedTables = rSource.mbDoNotBreakWrappedTables;
+    // assume MISSING mbAllowTextAfterFloatingTableBreak = rSource.mbAllowTextAfterFloatingTableBreak;
+    // assume MISSING mbJustifyLinesWithShrinking = rSource.mbJustifyLinesWithShrinking;
+    // assume No mbApplyTextAttrToEmptyLineAtEndOfParagraph: this is false by default everywhere
+    // assume MISSING mbApplyParagraphMarkFormatToEmptyLineAtEndOfParagraph = rSource.mbApplyParagraphMarkFormatToEmptyLineAtEndOfParagraph;
+    // assume MISSING mbHiddenParagraphMarkPerLineProperties = rSource.mbHiddenParagraphMarkPerLineProperties;
+    // assume No mbIgnoreHiddenCharsForLineCalculation: this is true by default everywhere
+    // assume MISSING mbDoNotMirrorRtlDrawObjs = rSource.mbDoNotMirrorRtlDrawObjs;
+    // assume MISSING mbNoNumberingShowFollowBy = rSource.mbNoNumberingShowFollowBy;
     mbFootnoteInColumnToPageEnd = rSource.mbFootnoteInColumnToPageEnd;
     mbDropCapPunctuation = rSource.mbDropCapPunctuation;
     mbUseVariableWidthNBSP = rSource.mbUseVariableWidthNBSP;
+    // assume MISSING mbPaintHellOverHeaderFooter = rSource.mbPaintHellOverHeaderFooter;
+    // assume MISSING mbMinRowHeightInclBorder = rSource.mbMinRowHeightInclBorder;
     mbMsWordCompGridMetrics = rSource.mbMsWordCompGridMetrics;
     mbNoClippingWithWrapPolygon = rSource.mbNoClippingWithWrapPolygon;
     mbMsWordUlTrailSpace = rSource.mbMsWordUlTrailSpace;
+    mbLineSpacingAsGapBelow = rSource.mbLineSpacingAsGapBelow;
     mbBalanceSpacesAndIdeographicSpaces = rSource.mbBalanceSpacesAndIdeographicSpaces;
     mbForceTopAlignmentInCellWithFloatingAnchor = rSource.mbForceTopAlignmentInCellWithFloatingAnchor;
     mbAdjustTableLineHeightsToGridHeight = rSource.mbAdjustTableLineHeightsToGridHeight;
@@ -1237,6 +1259,11 @@ void sw::DocumentSettingManager::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("mbMsWordUlTrailSpace"));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
                                 BAD_CAST(OString::boolean(mbMsWordUlTrailSpace).getStr()));
+    (void)xmlTextWriterEndElement(pWriter);
+
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("mbLineSpacingAsGapBelow"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
+                                BAD_CAST(OString::boolean(mbLineSpacingAsGapBelow).getStr()));
     (void)xmlTextWriterEndElement(pWriter);
 
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("mbBalanceSpacesAndIdeographicSpaces"));

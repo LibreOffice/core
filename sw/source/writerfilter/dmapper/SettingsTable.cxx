@@ -680,6 +680,7 @@ void SettingsTable::ApplyProperties(rtl::Reference<SwXTextDocument> const& xDoc)
                                 uno::Any(true));
     // rely on default for HyphenateURLs=false
     // rely on default for IgnoreHiddenCharsForLineCalculation=true
+    // rely on default for LineSpacingAsGapBelow=true
 
     if (GetWordCompatibilityMode() <= 14)
     {

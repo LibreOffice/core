@@ -1321,6 +1321,7 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     bool bDropCapPunctuation = false;
     bool bDoNotMirrorRtlDrawObjs = false;
     bool bIgnoreHiddenCharsForLineCalculation = false;
+    bool bLineSpacingAsGapBelow = false;
     bool bListLabelAlignmentIgnoresDirection = false;
 
     const PropertyValue* currentDatabaseDataSource = nullptr;
@@ -1437,6 +1438,8 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
                 {
                     bIgnoreHiddenCharsForLineCalculation = true;
                 }
+                else if (rValue.Name == "LineSpacingAsGapBelow")
+                    bLineSpacingAsGapBelow = true;
                 else if (rValue.Name == "ListLabelAlignmentIgnoresDirection")
                 {
                     bListLabelAlignmentIgnoresDirection = true;
@@ -1612,6 +1615,9 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     {
         xProps->setPropertyValue(u"IgnoreHiddenCharsForLineCalculation"_ustr, Any(false));
     }
+
+    if (!bLineSpacingAsGapBelow)
+        xProps->setPropertyValue(u"LineSpacingAsGapBelow"_ustr, Any(false));
 
     if (bDoNotMirrorRtlDrawObjs)
     {
