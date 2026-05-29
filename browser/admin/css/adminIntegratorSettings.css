@@ -338,9 +338,176 @@ ul {
   text-decoration: underline;
 }
 
+/* AI model-fetch status. A compact inline alert, deliberately distinct from the
+   neutral .view-setting-description help text it sits below: an accent bar, a
+   tinted ground and a state indicator carry the meaning at a glance. Hidden
+   until a state is set; shown via the [data-state] attribute. */
+.ai-model-status {
+  display: none;
+  gap: 8px;
+  align-items: flex-start;
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+  padding: 10px 12px;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  border-radius: var(--border-radius-element, 6px);
+  border-inline-start: 3px solid var(--ai-status-color);
+  background-color: color-mix(in srgb, var(--ai-status-color) 10%, transparent);
+  color: color-mix(in srgb, var(--ai-status-color) 62%, var(--settings-text));
+  /* Break long unbreakable tokens (masked keys, URLs) so the message stays
+     inside the panel; "anywhere" also lets the text flex item shrink. */
+  overflow-wrap: anywhere;
+}
+
+.ai-model-status[data-state] {
+  display: flex;
+}
+
+/* State indicator: a filled dot, sized to align with the first text line. */
+.ai-model-status::before {
+  content: '';
+  box-sizing: border-box;
+  flex: 0 0 auto;
+  width: 12px;
+  height: 12px;
+  margin-top: 0.18em;
+  border-radius: 50%;
+  background-color: var(--ai-status-color);
+}
+
+.ai-model-status[data-state='error'] {
+  --ai-status-color: var(--color-error);
+}
+
+.ai-model-status[data-state='success'] {
+  --ai-status-color: var(--color-success);
+}
+
+.ai-model-status[data-state='info'],
+.ai-model-status[data-state='loading'] {
+  --ai-status-color: var(--color-warning);
+}
+
+/* Loading: the dot becomes a spinner so the "Fetching models..." moment reads
+   as work-in-progress rather than a settled success. */
+.ai-model-status[data-state='loading']::before {
+  background-color: transparent;
+  border: 2px solid color-mix(in srgb, var(--ai-status-color) 28%, transparent);
+  border-top-color: var(--ai-status-color);
+  animation: ai-status-spin 0.7s linear infinite;
+}
+
+@keyframes ai-status-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .view-setting-small-label {
   font-size: 0.85rem !important;
   font-weight: 500 !important;
+}
+
+/* Label row carrying a heading plus an inline info affordance. */
+.ai-label-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+/* Zero the heading's margins (including the UA default top margin) so it
+   centers against the info icon on the shared flex line. */
+.ai-label-row h3 {
+  margin: 0;
+  line-height: 1.2;
+}
+
+/* Info tooltip: a muted icon that reveals long guidance on hover/focus,
+   keeping the form uncluttered. The bubble is positioned relative to the wrap. */
+.ai-tip-wrap {
+  position: relative;
+  display: inline-flex;
+}
+
+.ai-info-tip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--settings-text);
+  opacity: 0.55;
+  cursor: help;
+  transition: opacity 0.15s ease;
+}
+
+.ai-info-tip:hover,
+.ai-info-tip:focus-visible {
+  opacity: 1;
+}
+
+.ai-info-tip .material-design-icon svg {
+  display: block;
+  width: 16px;
+  height: 16px;
+}
+
+.ai-tip-bubble {
+  position: absolute;
+  top: calc(100% + 8px);
+  inset-inline-start: 0;
+  z-index: 10;
+  width: max-content;
+  max-width: 280px;
+  padding: 10px 12px;
+  font-size: 0.8rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--settings-text);
+  background-color: var(--settings-background);
+  border: 1px solid var(--settings-border);
+  border-radius: var(--border-radius-element, 6px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-2px);
+  transition:
+    opacity 0.15s ease,
+    transform 0.15s ease,
+    visibility 0.15s;
+}
+
+/* Bordered caret pointing up to the icon. */
+.ai-tip-bubble::before,
+.ai-tip-bubble::after {
+  content: '';
+  position: absolute;
+  bottom: 100%;
+  border: 6px solid transparent;
+}
+
+.ai-tip-bubble::before {
+  inset-inline-start: 8px;
+  border-bottom-color: var(--settings-border);
+}
+
+.ai-tip-bubble::after {
+  inset-inline-start: 9px;
+  border-width: 5px;
+  border-bottom-color: var(--settings-background);
+}
+
+.ai-tip-wrap:hover .ai-tip-bubble,
+.ai-tip-wrap:focus-within .ai-tip-bubble {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
 }
 
 .view-input-container input[type='text'],

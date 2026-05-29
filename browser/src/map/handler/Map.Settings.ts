@@ -140,6 +140,10 @@ window.L.Map.Settings = window.L.Handler.extend({
 					'updateviewsettings ' + JSON.stringify(data.viewSettings),
 				);
 			}
+			app.map.uiManager.showSnackbar(_('Settings saved'));
+			// Defer the View-tab / AI-sidebar payoff until isAIConfigured is
+			// updated from the viewsetting: reply (see ServerConnectionService).
+			app.map._aiJustConfigured = !!data.aiJustConfigured;
 		}
 	},
 });

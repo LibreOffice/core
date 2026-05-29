@@ -1991,8 +1991,10 @@ void FileServerRequestHandler::fetchModels(const Poco::Net::HTTPRequest& request
     {
         LOG_WRN("Rejected fetch-models request to host not in KIT allowlist ["
                 << Anonymizer::anonymizeUrl(baseUrl) << ']');
-        sendError(http::StatusCode::Forbidden, getRequestPath(request), socket, shortMessage,
-                  "Target host is not in the allowed host list");
+        // Use 421 rather than 403 so the browser can tell this local allowlist
+        // refusal apart from a genuine 403 forwarded from the upstream provider.
+        sendError(http::StatusCode::MisdirectedRequest, getRequestPath(request), socket,
+                  shortMessage, "Target host is not in the allowed host list");
         return;
     }
 

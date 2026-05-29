@@ -319,6 +319,18 @@ namespace cool {
 			return this._isActive;
 		}
 
+		// Refresh just the model name and ethical-rating badge in place, without
+		// rebuilding the whole sidebar. Used after the AI provider is
+		// reconfigured while the sidebar is open, so an active chat is left
+		// untouched.
+		refreshModelAndRating(): void {
+			if (!this._isActive) return;
+			this.builder.updateWidget(this.container, this.getEUNoticeJSON());
+			app.layoutingService.onDrain(() => {
+				this.applyRatingBadge();
+			});
+		}
+
 		private render(): void {
 			if (!this._isActive) return;
 			this.container.innerHTML = '';

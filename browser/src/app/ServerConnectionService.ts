@@ -75,6 +75,23 @@ class ServerConnectionService {
 		app.map.aiModelName = viewSetting.aiModelName || '';
 		app.map.aiEthicalRating = viewSetting.aiEthicalRating || 'U';
 
+		// The user just changed the AI provider from the settings dialog. Now
+		// that isAIConfigured / aiModelName / aiEthicalRating reflect the new
+		// state, give them the payoff.
+		if (app.map._aiJustConfigured) {
+			app.map._aiJustConfigured = false;
+			if (app.map.isAIConfigured) {
+				const sidebar = JSDialog.getAIChatSidebar();
+				if (sidebar.isVisible()) {
+					sidebar.refreshModelAndRating();
+				} else {
+					const viewTab = document.getElementById('View-tab-label');
+					if (viewTab) viewTab.click();
+					sidebar.show();
+				}
+			}
+		}
+
 		let zoteroPlugin = app.map.zotero;
 		const zoteroAPIKey = viewSetting.zoteroAPIKey;
 		if (

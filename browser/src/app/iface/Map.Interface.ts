@@ -259,6 +259,9 @@ interface MapInterface extends Evented {
 	aiRequestTimeout?: number;
 	aiModelName?: string;
 	aiEthicalRating?: string;
+	// Set when a valid AI provider was just saved from the settings dialog;
+	// consumed once isAIConfigured updates to open the AI sidebar.
+	_aiJustConfigured?: boolean;
 
 	_controlCorners: Record<string, Node>;
 	_contextMenu: ContextMenuControl;

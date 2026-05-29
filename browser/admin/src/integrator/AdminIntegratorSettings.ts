@@ -69,6 +69,17 @@ interface AIProvider {
 	isCustom?: boolean;
 }
 
+// Outcome of saveAll, reported back to the parent. aiJustConfigured means the
+// user configured a chat AI provider in this save, so the View tab / AI sidebar
+// payoff should fire once the settings are applied.
+interface SaveAllResult {
+	aiJustConfigured: boolean;
+}
+
+// Visual state of an AI model-fetch status line. 'hidden' (or an empty message)
+// clears it; the rest map to the alert styling in adminIntegratorSettings.css.
+type AIStatusState = 'info' | 'loading' | 'success' | 'error' | 'hidden';
+
 interface SectionConfig {
 	id: string;
 	sectionTitle: string;
@@ -131,11 +142,12 @@ const onMessage = (e) => {
 			} else if (data.MessageId === 'settings-save-all') {
 				const settingIframe = (window as any).settingIframe as SettingIframe;
 				if (settingIframe) {
-					settingIframe.saveAll().then(() => {
+					settingIframe.saveAll().then((result) => {
 						window.parent.postMessage(
 							JSON.stringify({
 								MessageId: 'settings-save-complete',
 								viewSettings: settingIframe.getViewSettings(),
+								aiJustConfigured: result.aiJustConfigured,
 							}),
 							window.origin,
 						);
@@ -434,6 +446,7 @@ const AI_ERROR_MESSAGES: Record<number, string> = {
 	400: 'Invalid request',
 	401: 'Invalid API key',
 	403: 'API key lacks permissions',
+	421: "This AI host is not in the server's allowed host list (lok_allow.host). Ask your administrator to permit it.",
 	429: 'Rate limited - please wait a moment and retry',
 	500: 'API server error - try again later',
 	503: 'Service temporarily unavailable',
@@ -475,6 +488,11 @@ class SettingIframe {
 	private wordbook;
 	private xcuEditor;
 	private _viewSetting!: ViewSettings;
+	// Set when the user edits a chat AI field in this dialog session. Drives the
+	// View-tab / sidebar payoff so it fires on a real change, not on every save
+	// that happens to have a key already set. Set only by user input handlers,
+	// never by the load-time model auto-fetch.
+	private _aiConfigDirty = false;
 	private xcuInitializationAttempted = false;
 	private _aiModelFetchTimeout: number | null = null;
 	private _aiModelFetchAbort: AbortController | null = null;
@@ -569,6 +587,7 @@ class SettingIframe {
 		reset: `<svg fill="currentColor" width="24" height="24" viewBox="0 0 24 24"><path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 .34-.03.67-.08 1h2.02c.05-.33.06-.66.06-1 0-4.42-3.58-8-8-8zm-6 7c0-.34.03-.67.08-1H4.06c-.05.33-.06.66-.06 1 0 4.42 3.58 8 8 8v3l4-4-4-4v3c-3.31 0-6-2.69-6-6z"></path></svg>`,
 		checkboxMarked: `<svg fill="currentColor" width="24" height="24" viewBox="0 0 24 24"><path d="M10,17L5,12L6.41,10.58L10,14.17L17.59,6.58L19,8M19,3H5C3.89,3 3,3.89 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5C21,3.89 20.1,3 19,3Z"></path></svg>`,
 		checkboxBlankOutline: `<svg fill="currentColor" width="24" height="24" viewBox="0 0 24 24"><path d="M19,3H5C3.89,3 3,3.89 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5C21,3.89 20.1,3 19,3M19,5V19H5V5H19Z"></path></svg>`,
+		info: `<svg fill="currentColor" width="24" height="24" viewBox="0 0 24 24"><path d="M11,9H13V7H11M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M11,17H13V11H11V17Z"></path></svg>`,
 	};
 	private _allConfigSection: HTMLElement | null;
 	private _sectionObserver: IntersectionObserver | null = null;
@@ -612,7 +631,14 @@ class SettingIframe {
 		return this._viewSetting;
 	}
 
-	public async saveAll(): Promise<void> {
+	public async saveAll(): Promise<SaveAllResult> {
+		// The View-tab / AI-sidebar payoff should fire only when the user
+		// actually changed the chat AI configuration in this dialog session (not
+		// on every save that happens to have a key already set). We do not
+		// validate the key - if it is wrong, that surfaces at AI use time.
+		const aiJustConfigured =
+			this._aiConfigDirty && !!this._viewSetting.aiProviderAPIKey;
+
 		const saves: Promise<void>[] = [];
 
 		// Browser settings
@@ -647,6 +673,8 @@ class SettingIframe {
 		);
 
 		await Promise.all(saves);
+
+		return { aiJustConfigured };
 	}
 
 	init(): void {
@@ -1309,6 +1337,33 @@ class SettingIframe {
 
 		return materialIconContainer;
 	}
+	// A small focusable info affordance that reveals explanatory text on hover
+	// or keyboard focus, keeping long guidance out of the form flow. The bubble
+	// is linked via aria-describedby so assistive tech reads it on focus.
+	private createInfoTooltip(text: string, bubbleId: string): HTMLElement {
+		const wrap = document.createElement('span');
+		wrap.classList.add('ai-tip-wrap');
+
+		const button = document.createElement('button');
+		button.type = 'button';
+		button.classList.add('ai-info-tip');
+		button.setAttribute('aria-label', text);
+		button.setAttribute('aria-describedby', bubbleId);
+		button.appendChild(
+			this.createMaterialDesignIconContainer(this.SVG_ICONS.info),
+		);
+
+		const bubble = document.createElement('span');
+		bubble.id = bubbleId;
+		bubble.setAttribute('role', 'tooltip');
+		bubble.classList.add('ai-tip-bubble');
+		bubble.textContent = text;
+
+		wrap.appendChild(button);
+		wrap.appendChild(bubble);
+		return wrap;
+	}
+
 	private createButtonWithIcon(
 		id: string,
 		iconKey: keyof typeof this.SVG_ICONS, // Use a type-safe key
@@ -2175,7 +2230,19 @@ class SettingIframe {
 			this._viewSettingLabels.aiProviderModel,
 		);
 		modelHeading.classList.add('view-setting-small-label');
-		modelField.appendChild(modelHeading);
+
+		const modelLabelRow = document.createElement('div');
+		modelLabelRow.classList.add('ai-label-row');
+		modelLabelRow.appendChild(modelHeading);
+		modelLabelRow.appendChild(
+			this.createInfoTooltip(
+				_(
+					'For document actions (inspecting and editing), choose a model with native function/tool calling, such as gpt-4o, llama3.1, or qwen2.5. Models without it (e.g. base llama3, gemma) can still chat but cannot use document tools.',
+				),
+				'aiModelTip',
+			),
+		);
+		modelField.appendChild(modelLabelRow);
 
 		const modelSelect = this.createSelectInput(
 			'aiProviderModel',
@@ -2188,19 +2255,11 @@ class SettingIframe {
 		modelSelect.disabled = true;
 		modelField.appendChild(modelSelect);
 
-		const modelNote = document.createElement('div');
-		modelNote.className = 'view-setting-description';
-		modelNote.textContent = _(
-			'For document actions (inspecting and editing), choose a model with native function/tool calling, such as gpt-4o, llama3.1, or qwen2.5. Models without it (e.g. base llama3, gemma) can still chat but cannot use document tools.',
-		);
-		modelField.appendChild(modelNote);
-
 		group.appendChild(modelField);
 
 		const status = document.createElement('div');
 		status.id = 'ai-model-status';
-		status.className = 'view-setting-description';
-		status.style.display = 'none';
+		status.className = 'ai-model-status';
 		group.appendChild(status);
 
 		if (this.getProviderIdFromUrl(data.aiProviderURL) === 'custom') {
@@ -2317,8 +2376,7 @@ class SettingIframe {
 
 		const status = document.createElement('div');
 		status.id = 'ai-image-model-status';
-		status.className = 'view-setting-description';
-		status.style.display = 'none';
+		status.className = 'ai-model-status';
 		group.appendChild(status);
 
 		group.appendChild(
@@ -2386,6 +2444,7 @@ class SettingIframe {
 		) as HTMLSelectElement | null;
 
 		const queueFetch = () => {
+			this._aiConfigDirty = true;
 			this.scheduleAIModelFetch(data);
 			// Re-fetch image models too when image inherits chat credentials
 			this.scheduleAIImageModelFetch(data);
@@ -2425,6 +2484,7 @@ class SettingIframe {
 		});
 
 		modelSelect?.addEventListener('change', () => {
+			this._aiConfigDirty = true;
 			data.aiProviderModel = modelSelect.value;
 		});
 	}
@@ -2541,7 +2601,7 @@ class SettingIframe {
 		const provider = this.getProviderById(effectiveProviderId);
 
 		if (!effectiveKey || !effectiveUrl) {
-			this.setAIImageStatus('', false, true);
+			this.setAIImageStatus('', 'hidden');
 			this.resetAIImageModelSelect();
 			return;
 		}
@@ -2552,7 +2612,7 @@ class SettingIframe {
 		this._aiImageModelFetchAbort?.abort();
 		this._aiImageModelFetchAbort = new AbortController();
 
-		this.setAIImageStatus(_('Fetching models...'), false);
+		this.setAIImageStatus(_('Fetching models...'), 'loading');
 
 		try {
 			const providerId = provider ? provider.id : effectiveProviderId;
@@ -2582,22 +2642,19 @@ class SettingIframe {
 				});
 
 				if (!response.ok) {
-					const errorCode = response.status;
-					const errorText = await response.text();
-					const fallbackMsg =
-						AI_ERROR_MESSAGES[errorCode] ||
-						_(`API error (${errorCode}): ${response.statusText}`);
-					const errorMsg = errorText
-						? `${fallbackMsg}. ${errorText}`
-						: fallbackMsg;
-					throw new Error(errorMsg);
+					throw new Error(
+						this.describeModelFetchError(
+							response.status,
+							await response.text(),
+						),
+					);
 				}
 
 				json = await response.json();
 			}
 			const allModels = (json.data || []) as AIModelEntry[];
 			if (!Array.isArray(allModels) || allModels.length === 0) {
-				this.setAIImageStatus(_('No models found'), true);
+				this.setAIImageStatus(_('No models found'), 'error');
 				return;
 			}
 
@@ -2612,7 +2669,7 @@ class SettingIframe {
 			const filtered = imageModels.length > 0 ? imageModels : allModels;
 			const modelIds = filtered.map((m) => m.id).filter(Boolean);
 			if (modelIds.length === 0) {
-				this.setAIImageStatus(_('No models found'), true);
+				this.setAIImageStatus(_('No models found'), 'error');
 				return;
 			}
 
@@ -2622,14 +2679,14 @@ class SettingIframe {
 			data.aiImageModel = selectedModel;
 			this.updateAIImageModelSelect(modelIds, selectedModel);
 
-			this.setAIImageStatus(_('Models fetched successfully'), false);
+			this.setAIImageStatus(_('Models fetched successfully'), 'success');
 		} catch (error) {
 			if ((error as any)?.name === 'AbortError') {
 				return;
 			}
 			const message =
 				error instanceof Error ? error.message : _('Failed to fetch models');
-			this.setAIImageStatus(message, true);
+			this.setAIImageStatus(message, 'error');
 			this.resetAIImageModelSelect();
 		}
 	}
@@ -2638,7 +2695,7 @@ class SettingIframe {
 		const providerId = this.getSelectedProviderId(data);
 		const provider = this.getProviderById(providerId);
 		if (!provider) {
-			this.setAIStatus(_('Invalid provider configuration'), true);
+			this.setAIStatus(_('Invalid provider configuration'), 'error');
 			return;
 		}
 
@@ -2649,7 +2706,7 @@ class SettingIframe {
 		const apiKey = data.aiProviderAPIKey || '';
 
 		if (!apiKey || (isCustom && !baseUrl)) {
-			this.setAIStatus('', false, true);
+			this.setAIStatus('', 'hidden');
 			this.resetAIModelSelect();
 			return;
 		}
@@ -2660,7 +2717,7 @@ class SettingIframe {
 		this._aiModelFetchAbort?.abort();
 		this._aiModelFetchAbort = new AbortController();
 
-		this.setAIStatus(_('Fetching models...'), false);
+		this.setAIStatus(_('Fetching models...'), 'loading');
 
 		try {
 			let json: any;
@@ -2685,22 +2742,19 @@ class SettingIframe {
 				});
 
 				if (!response.ok) {
-					const errorCode = response.status;
-					const errorText = await response.text();
-					const fallbackMsg =
-						AI_ERROR_MESSAGES[errorCode] ||
-						_(`API error (${errorCode}): ${response.statusText}`);
-					const errorMsg = errorText
-						? `${fallbackMsg}. ${errorText}`
-						: fallbackMsg;
-					throw new Error(errorMsg);
+					throw new Error(
+						this.describeModelFetchError(
+							response.status,
+							await response.text(),
+						),
+					);
 				}
 
 				json = await response.json();
 			}
 			const allModels = (json.data || []) as AIModelEntry[];
 			if (!Array.isArray(allModels) || allModels.length === 0) {
-				this.setAIStatus(_('No models found'), true);
+				this.setAIStatus(_('No models found'), 'error');
 				return;
 			}
 
@@ -2714,7 +2768,7 @@ class SettingIframe {
 			const filtered = chatModels.length > 0 ? chatModels : allModels;
 			const modelIds = filtered.map((m) => m.id).filter(Boolean);
 			if (modelIds.length === 0) {
-				this.setAIStatus(_('No models found'), true);
+				this.setAIStatus(_('No models found'), 'error');
 				return;
 			}
 
@@ -2724,14 +2778,14 @@ class SettingIframe {
 			data.aiProviderModel = selectedModel;
 			this.updateAIModelSelect(modelIds, selectedModel);
 
-			this.setAIStatus(_('Models fetched successfully'), false);
+			this.setAIStatus(_('Models fetched successfully'), 'success');
 		} catch (error) {
 			if ((error as any)?.name === 'AbortError') {
 				return;
 			}
 			const message =
 				error instanceof Error ? error.message : _('Failed to fetch models');
-			this.setAIStatus(message, true);
+			this.setAIStatus(message, 'error');
 			this.resetAIModelSelect();
 		}
 	}
@@ -2807,44 +2861,51 @@ class SettingIframe {
 		modelSelect.disabled = true;
 	}
 
-	private setAIStatus(
-		message: string,
-		isError: boolean,
-		hide: boolean = false,
-	): void {
-		const status = document.getElementById('ai-model-status');
-		if (!status) {
-			return;
+	// Build a concise, user-facing message for a failed model fetch. The raw
+	// response body (which can be a verbose error page echoing the key and
+	// internal paths) is logged for diagnostics rather than shown to the user.
+	private describeModelFetchError(status: number, body: string): string {
+		if (body) {
+			console.warn(`fetch-models failed (HTTP ${status}): ${body}`);
 		}
-		if (hide) {
-			status.textContent = '';
-			status.style.display = 'none';
-			status.classList.remove('ui-state-error-text');
-			return;
-		}
-		status.textContent = message;
-		status.style.display = message ? 'block' : 'none';
-		status.classList.toggle('ui-state-error-text', isError);
+		return (
+			AI_ERROR_MESSAGES[status] ||
+			_(
+				'Could not fetch models (HTTP {0}). Check the provider URL and API key.',
+			).replace('{0}', String(status))
+		);
+	}
+
+	private setAIStatus(message: string, state: AIStatusState = 'info'): void {
+		this.applyModelStatus('ai-model-status', message, state);
 	}
 
 	private setAIImageStatus(
 		message: string,
-		isError: boolean,
-		hide: boolean = false,
+		state: AIStatusState = 'info',
 	): void {
-		const status = document.getElementById('ai-image-model-status');
+		this.applyModelStatus('ai-image-model-status', message, state);
+	}
+
+	// Drive a model-fetch status line. The data-state attribute selects the
+	// alert styling and, by its presence, whether the line shows at all; a
+	// 'hidden' state or empty message clears it.
+	private applyModelStatus(
+		id: string,
+		message: string,
+		state: AIStatusState,
+	): void {
+		const status = document.getElementById(id);
 		if (!status) {
 			return;
 		}
-		if (hide) {
+		if (state === 'hidden' || !message) {
 			status.textContent = '';
-			status.style.display = 'none';
-			status.classList.remove('ui-state-error-text');
+			status.removeAttribute('data-state');
 			return;
 		}
 		status.textContent = message;
-		status.style.display = message ? 'block' : 'none';
-		status.classList.toggle('ui-state-error-text', isError);
+		status.setAttribute('data-state', state);
 	}
 
 	// Runs twice: first with `data === null` to drop in empty, hidden
@@ -2974,6 +3035,7 @@ class SettingIframe {
 				this._viewSetting.aiProviderURL =
 					this.normalizeBaseUrl(viewSetting.aiProviderURL || '') ||
 					this.getDefaultAIProviderURL();
+				this._aiConfigDirty = false;
 				this.generateAISettingsUI(viewSetting, settingsContainer);
 			}
 		}
