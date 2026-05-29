@@ -44,6 +44,9 @@
 #include <svx/svdlayer.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdundo.hxx>
+#include <svx/fillbitmaplink.hxx>
+#include <svx/xbtmpit.hxx>
+#include <svx/xdef.hxx>
 #include <svx/xfillit0.hxx>
 
 #include <sdr/contact/viewcontactofsdrpage.hxx>
@@ -1254,11 +1257,24 @@ bool SdrPageProperties::isUsedByModel() const
 }
 
 
+static void lcl_notifyFillBitmapLink(SdrPage& rPage, const SfxItemSet& rProps)
+{
+    sdr::FillBitmapLinkTracker* pTracker
+        = rPage.getSdrModelFromSdrPage().GetFillBitmapLinkTracker();
+    if (!pTracker)
+        return;
+    OUString aURL;
+    if (const XFillBitmapItem* pItem = rProps.GetItemIfSet(XATTR_FILLBITMAP, false))
+        aURL = getDeferredOriginURL(*pItem);
+    pTracker->onFillBitmapURLChanged(rPage, aURL);
+}
+
 void SdrPageProperties::PutItemSet(const SfxItemSet& rSet)
 {
     OSL_ENSURE(!mrSdrPage.IsMasterPage(), "Item set at MasterPage Attributes (!)");
     maProperties.Put(rSet);
     ImpPageChange(mrSdrPage);
+    lcl_notifyFillBitmapLink(mrSdrPage, maProperties);
 }
 
 void SdrPageProperties::PutItem(const SfxPoolItem& rItem)
@@ -1266,12 +1282,14 @@ void SdrPageProperties::PutItem(const SfxPoolItem& rItem)
     OSL_ENSURE(!mrSdrPage.IsMasterPage(), "Item set at MasterPage Attributes (!)");
     maProperties.Put(rItem);
     ImpPageChange(mrSdrPage);
+    lcl_notifyFillBitmapLink(mrSdrPage, maProperties);
 }
 
 void SdrPageProperties::ClearItem(const sal_uInt16 nWhich)
 {
     maProperties.ClearItem(nWhich);
     ImpPageChange(mrSdrPage);
+    lcl_notifyFillBitmapLink(mrSdrPage, maProperties);
 }
 
 void SdrPageProperties::SetStyleSheet(SfxStyleSheet* pStyleSheet)
