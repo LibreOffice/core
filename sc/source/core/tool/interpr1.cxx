@@ -607,8 +607,8 @@ bool ScInterpreter::JumpMatrix( short nStackLevel )
                         // Do not modify the original range because we use it
                         // to adjust the size of the result matrix if necessary.
                         ScAddress aAdr( aRange.aStart);
-                        sal_uLong nCol = static_cast<sal_uLong>(aAdr.Col()) + nC;
-                        sal_uLong nRow = static_cast<sal_uLong>(aAdr.Row()) + nR;
+                        sal_uInt16 nCol = static_cast<sal_uInt16>(aAdr.Col()) + nC;
+                        sal_uInt32 nRow = static_cast<sal_uInt32>(aAdr.Row()) + nR;
                         if ((nCol > o3tl::make_unsigned(aRange.aEnd.Col()) &&
                                     aRange.aEnd.Col() != aRange.aStart.Col())
                                 || (nRow > o3tl::make_unsigned(aRange.aEnd.Row()) &&
