@@ -101,6 +101,10 @@ private:
     bool m_bIsReadOnly;
     bool m_bDataValid;
 
+    // Held alive while the "Numbers are required" async warning popup is
+    // shown after a rejected inline edit. Reset in the runAsync callback.
+    std::shared_ptr<weld::MessageDialog> m_xInvalidNumberBox;
+
     Link<DataBrowser*,void> m_aCursorMovedHdlLink;
 
     void clearHeaders();

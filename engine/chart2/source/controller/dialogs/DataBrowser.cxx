@@ -36,6 +36,7 @@
 
 #include <vcl/weld.hxx>
 #include <vcl/event.hxx>
+#include <vcl/jsdialog/executor.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
@@ -1193,6 +1194,34 @@ IMPL_LINK( DataBrowser, EditingDoneHdl, const weld::TreeView::iter_string&, rIte
     {
         m_bDataValid = false;
         m_aCursorMovedHdlLink.Call(this);
+
+        // Notify the user immediately that the value was rejected.
+        // runAsync (not run) so the host's non-async-dialog guard
+        // doesn't pop a second warning on top. The dialog is held
+        // alive by m_xInvalidNumberBox until the callback resets it.
+        if (m_xInvalidNumberBox)
+            return bValid; // a previous warning is still pending
+        m_xInvalidNumberBox.reset(Application::CreateMessageDialog(
+                                      &m_rTreeView,
+                                      VclMessageType::Warning, VclButtonsType::Ok,
+                                      SchResId(STR_INVALID_NUMBER))
+                                      .release());
+        // After the user dismisses the warning, ask the client (online)
+        // to re-enter edit mode on the cell that was rejected, so the
+        // user lands back where the bad input is instead of on the next
+        // cell the Tab optimistically moved to. nTreeCol is in TreeView
+        // column space (0 = row number), matching the client's column.
+        m_xInvalidNumberBox->runAsync(
+            m_xInvalidNumberBox,
+            [this, nRow, nTreeCol](sal_Int32 /*nResult*/) {
+                m_xInvalidNumberBox.reset();
+                std::unique_ptr<jsdialog::ActionDataMap> pData
+                    = std::make_unique<jsdialog::ActionDataMap>();
+                (*pData)["action_type"_ostr] = u"reedit_cell"_ustr;
+                (*pData)["row"_ostr] = OUString::number(nRow);
+                (*pData)["col"_ostr] = OUString::number(nTreeCol);
+                jsdialog::SendAction(m_rTreeView, std::move(pData));
+            });
     }
 
     return bValid;
