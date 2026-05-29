@@ -2732,23 +2732,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
                         ScGlobal::OpenURL(aUrl, aTarget, isTiledRendering);
                         return;
                 }
-                // On a mobile device view there is no ctrl+click and for hyperlink popup
-                // the cell coordinates must be sent along with click position for elegance
-                ScTabViewShell* pViewShell = mrViewData.GetViewShell();
-                if (isTiledRendering && pViewShell && pViewShell->isLOKTablet())
-                {
-                    aPos = rMEvt.GetPosPixel();
-                    mrViewData.GetPosFromPixel( aPos.X(), aPos.Y(), eWhich, nPosX, nPosY );
-                    OString aCursor
-                        = pViewShell->GetViewData().describeCellCursorAt(nUrlCellX, nPosY);
-                    double fPPTX = pViewShell->GetViewData().GetPPTX();
-                    int mouseX = aPos.X() / fPPTX;
-                    int mouseY = aPos.Y() / fPPTX;
-                    OString aMsg(aUrl.toUtf8() + " coordinates: " + aCursor + ", "
-                                 + OString::number(mouseX) + ", " + OString::number(mouseY));
-                    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_HYPERLINK_CLICKED, aMsg);
-                } else
-                    ScGlobal::OpenURL(aUrl, aTarget);
+                ScGlobal::OpenURL(aUrl, aTarget);
             }
             else
             {

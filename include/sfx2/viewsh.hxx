@@ -118,8 +118,7 @@ namespace o3tl
 enum class LOKDeviceFormFactor
 {
     UNKNOWN     = 0,
-    DESKTOP     = 1,
-    TABLET      = 2
+    DESKTOP     = 1
 };
 
 class SfxViewFactory;
@@ -476,8 +475,6 @@ public:
     CalendarWrapper& GetLOKCalendar();
     /// Check if the lok client is running on a desktop machine.
     bool isLOKDesktop() const { return maLOKDeviceFormFactor == LOKDeviceFormFactor::DESKTOP; }
-    /// Check if the lok client is running on a tablet.
-    bool isLOKTablet() const  { return maLOKDeviceFormFactor == LOKDeviceFormFactor::TABLET; }
 
     virtual tools::Rectangle getLOKVisibleArea() const { return tools::Rectangle(); }
 

@@ -524,9 +524,6 @@ void FuText::ImpSetAttributesForNewTextObject(SdrTextObj* pTxtObj)
         aSet.Put(makeSdrTextAutoGrowHeightItem(true));
         pTxtObj->SetMergedItemSet(aSet);
         pTxtObj->AdjustTextFrameWidthAndHeight();
-        const SfxViewShell* pCurrentViewShell = SfxViewShell::Current();
-        if (pCurrentViewShell && (pCurrentViewShell->isLOKTablet()))
-            pTxtObj->SetText(SdResId(STR_PRESOBJ_TEXT_EDIT_MOBILE));
     }
     else if( nSlotId == SID_ATTR_CHAR_VERTICAL )
     {
