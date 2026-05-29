@@ -23,6 +23,7 @@
 
 class SdrModel;
 class SdrObject;
+class SdrPage;
 class SfxItemPool;
 class XFillBitmapItem;
 
@@ -57,14 +58,15 @@ SVXCORE_DLLPUBLIC void registerFillBitmapLinks(SdrModel& rModel, sfx2::LinkManag
 
 namespace sdr
 {
-// Owns one sfx2::SvBaseLink per SdrObject that currently holds a deferred
-// remote XFillBitmapItem, registered as soon as the item is set on the object
-// (via AttributeProperties::ItemChange) rather than by a later pool scan. A
-// model that wants this enables it by holding a tracker; SdrObject attribute
-// changes then route through onFillBitmapURLChanged. Each link writes the
-// fetched graphic back only to its own host and is bound to the host lifetime
-// via sdr::ObjectUser, so it never outlives the object and the entry can be
-// updated or broken individually in Edit, Links to External Files.
+// Owns one sfx2::SvBaseLink per host (SdrObject or SdrPage background) that
+// currently holds a deferred remote XFillBitmapItem, registered as soon as the
+// item is set on the host (SdrObject via AttributeProperties::ItemChange,
+// SdrPage via SdrPageProperties::PutItem) rather than by a later pool scan. A
+// model that wants this enables it by holding a tracker; host attribute changes
+// then route through onFillBitmapURLChanged. Each link writes the fetched
+// graphic back only to its own host and is bound to the host lifetime via
+// sdr::ObjectUser / sdr::PageUser, so it never outlives the host and the entry
+// can be updated or broken individually in Edit, Links to External Files.
 class SVXCORE_DLLPUBLIC FillBitmapLinkTracker
 {
 public:
@@ -74,15 +76,21 @@ public:
     // rNewURL is the deferred origin URL of the new item, or empty when the
     // item is absent, already resolved, or the host is going away.
     void onFillBitmapURLChanged(SdrObject& rObj, std::u16string_view rNewURL);
+    void onFillBitmapURLChanged(SdrPage& rPage, std::u16string_view rNewURL);
 
-    // Suppress the onFillBitmapURLChanged that the link's own write-back of the
-    // resolved graphic would otherwise raise for rObj.
-    void setUpdatingObject(SdrObject* pObj) { m_pUpdatingObj = pObj; }
+    // Suppress the onFillBitmapURLChanged that a link's own write-back of the
+    // resolved graphic would otherwise raise for its host.
+    void setUpdatingHost(const void* pHost) { m_pUpdatingHost = pHost; }
 
 private:
+    template <typename Host, typename Link>
+    void onURLChangedImpl(std::map<Host*, tools::SvRef<sfx2::SvBaseLink>>& rMap, Host& rHost,
+                          std::u16string_view rNewURL);
+
     SdrModel& m_rModel;
-    SdrObject* m_pUpdatingObj = nullptr;
+    const void* m_pUpdatingHost = nullptr;
     std::map<SdrObject*, tools::SvRef<sfx2::SvBaseLink>> m_aObjLinks;
+    std::map<SdrPage*, tools::SvRef<sfx2::SvBaseLink>> m_aPageLinks;
 };
 }
 

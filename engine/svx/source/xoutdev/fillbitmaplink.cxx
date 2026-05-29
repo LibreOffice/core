@@ -16,6 +16,7 @@
 #include <svx/svdobj.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/sdrobjectuser.hxx>
+#include <svx/sdrpageuser.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
@@ -123,11 +124,11 @@ void registerFillBitmapLinks(SdrModel& rModel, sfx2::LinkManager& rLinkMgr)
 
 namespace
 {
-// Per-host fill bitmap link for a single SdrObject. Unlike FillBitmapLink,
-// which patches every pool surrogate sharing the URL, this writes the fetched
-// graphic back only to its own host. It listens to the host via sdr::ObjectUser
-// and asks the tracker to drop it when the host is destroyed, so it never
-// outlives the object.
+// Per-host fill bitmap link. Unlike FillBitmapLink, which patches every pool
+// surrogate sharing the URL, this writes the fetched graphic back only to its
+// own host. It listens to the host (SdrObject via sdr::ObjectUser, SdrPage via
+// sdr::PageUser) and asks the tracker to drop it when the host is destroyed, so
+// it never outlives the host.
 class SdrObjectFillBitmapLink final : public sfx2::SvBaseLink, public sdr::ObjectUser
 {
     sdr::FillBitmapLinkTracker& m_rTracker;
@@ -172,9 +173,9 @@ public:
         const OUString aName = m_pObj->GetMergedItem(XATTR_FILLBITMAP).GetName();
         SfxItemSetFixed<XATTR_FILLBITMAP, XATTR_FILLBITMAP> aSet(m_pObj->GetObjectItemPool());
         aSet.Put(XFillBitmapItem(aName, aGrf));
-        m_rTracker.setUpdatingObject(m_pObj);
+        m_rTracker.setUpdatingHost(m_pObj);
         m_pObj->SetMergedItemSetAndBroadcast(aSet);
-        m_rTracker.setUpdatingObject(nullptr);
+        m_rTracker.setUpdatingHost(nullptr);
         return SUCCESS;
     }
 
@@ -184,6 +185,65 @@ public:
         m_pObj = nullptr;
         tools::SvRef<SvBaseLink> xSelf(this);
         m_rTracker.onFillBitmapURLChanged(const_cast<SdrObject&>(rObject), u"");
+    }
+};
+
+// Page-background counterpart of SdrObjectFillBitmapLink, bound to the page via
+// sdr::PageUser and writing the resolved graphic back through SdrPageProperties.
+class SdrPageFillBitmapLink final : public sfx2::SvBaseLink, public sdr::PageUser
+{
+    sdr::FillBitmapLinkTracker& m_rTracker;
+    SdrPage* m_pPage;
+    sfx2::LinkManager& m_rLinkMgr;
+
+public:
+    SdrPageFillBitmapLink(sdr::FillBitmapLinkTracker& rTracker, SdrPage& rPage,
+                          sfx2::LinkManager& rLinkMgr)
+        : SvBaseLink(SfxLinkUpdateMode::ONCALL, SotClipboardFormatId::SVXB)
+        , m_rTracker(rTracker)
+        , m_pPage(&rPage)
+        , m_rLinkMgr(rLinkMgr)
+    {
+        m_pPage->AddPageUser(*this);
+    }
+
+    virtual ~SdrPageFillBitmapLink() override
+    {
+        if (m_pPage)
+            m_pPage->RemovePageUser(*this);
+    }
+
+    virtual UpdateResult DataChanged(const OUString& rMimeType,
+                                     const css::uno::Any& rValue) override
+    {
+        tools::SvRef<SvBaseLink> xSelf(this);
+
+        if (!m_pPage)
+            return ERROR_GENERAL;
+
+        Graphic aGrf;
+        if (!m_rLinkMgr.GetGraphicFromAny(rMimeType, rValue, aGrf, nullptr))
+            return ERROR_GENERAL;
+        if (aGrf.GetType() == GraphicType::Default)
+            return ERROR_GENERAL;
+
+        SdrPageProperties& rProps = m_pPage->getSdrPageProperties();
+        OUString aName;
+        if (const XFillBitmapItem* pItem
+            = rProps.GetItemSet().GetItemIfSet(XATTR_FILLBITMAP, false))
+            aName = pItem->GetName();
+        m_rTracker.setUpdatingHost(m_pPage);
+        rProps.PutItem(XFillBitmapItem(aName, aGrf));
+        m_rTracker.setUpdatingHost(nullptr);
+        return SUCCESS;
+    }
+
+    virtual void PageInDestruction(const SdrPage& rPage) override
+    {
+        // do not RemovePageUser here, the host clears its list itself
+        m_pPage = nullptr;
+        tools::SvRef<SvBaseLink> xSelf(this);
+        m_rTracker.onFillBitmapURLChanged(const_cast<SdrPage&>(rPage), u"");
     }
 };
 }
@@ -198,32 +258,49 @@ FillBitmapLinkTracker::FillBitmapLinkTracker(SdrModel& rModel)
 FillBitmapLinkTracker::~FillBitmapLinkTracker()
 {
     if (sfx2::LinkManager* pLinkMgr = m_rModel.GetLinkManager())
+    {
         for (const auto& rEntry : m_aObjLinks)
             pLinkMgr->Remove(rEntry.second.get());
+        for (const auto& rEntry : m_aPageLinks)
+            pLinkMgr->Remove(rEntry.second.get());
+    }
     m_aObjLinks.clear();
+    m_aPageLinks.clear();
 }
 
-void FillBitmapLinkTracker::onFillBitmapURLChanged(SdrObject& rObj, std::u16string_view rNewURL)
+template <typename Host, typename Link>
+void FillBitmapLinkTracker::onURLChangedImpl(std::map<Host*, tools::SvRef<sfx2::SvBaseLink>>& rMap,
+                                             Host& rHost, std::u16string_view rNewURL)
 {
-    // ignore the write-back of a graphic this tracker just resolved for rObj
-    if (&rObj == m_pUpdatingObj)
+    // ignore the write-back of a graphic this tracker just resolved for rHost
+    if (static_cast<const void*>(&rHost) == m_pUpdatingHost)
         return;
 
     sfx2::LinkManager* pLinkMgr = m_rModel.GetLinkManager();
     if (!pLinkMgr)
         return;
 
-    auto it = m_aObjLinks.find(&rObj);
-    if (it != m_aObjLinks.end())
+    auto it = rMap.find(&rHost);
+    if (it != rMap.end())
     {
         pLinkMgr->Remove(it->second.get());
-        m_aObjLinks.erase(it);
+        rMap.erase(it);
     }
     if (rNewURL.empty())
         return;
-    tools::SvRef<sfx2::SvBaseLink> xLink(new SdrObjectFillBitmapLink(*this, rObj, *pLinkMgr));
+    tools::SvRef<sfx2::SvBaseLink> xLink(new Link(*this, rHost, *pLinkMgr));
     pLinkMgr->InsertFileLink(*xLink, sfx2::SvBaseLinkObjectType::ClientGraphic, rNewURL);
-    m_aObjLinks.emplace(&rObj, std::move(xLink));
+    rMap.emplace(&rHost, std::move(xLink));
+}
+
+void FillBitmapLinkTracker::onFillBitmapURLChanged(SdrObject& rObj, std::u16string_view rNewURL)
+{
+    onURLChangedImpl<SdrObject, SdrObjectFillBitmapLink>(m_aObjLinks, rObj, rNewURL);
+}
+
+void FillBitmapLinkTracker::onFillBitmapURLChanged(SdrPage& rPage, std::u16string_view rNewURL)
+{
+    onURLChangedImpl<SdrPage, SdrPageFillBitmapLink>(m_aPageLinks, rPage, rNewURL);
 }
 }
 
