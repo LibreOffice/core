@@ -298,6 +298,8 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
         {
             const SwTwips nLineHeight = Height();
             Init( GetNextPortion() );
+            if (rIDSA.get(DocumentSettingId::LINE_SPACING_AS_GAP_BELOW))
+                SetLineSpacingBaseHeight(0);
             SwLinePortion *pPos = mpNextPortion;
             SwLinePortion *pLast = this;
             sal_uInt16 nMaxDescent = 0;
@@ -449,6 +451,11 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
                                     nPosHeight = nTmp;
                             }
                             Height( nPosHeight, false );
+                            if (GetLineSpacingBaseHeight() < nPosHeight
+                                 && pPos->IsUsedToCalcLineSpacingHeight(rIDSA))
+                            {
+                                SetLineSpacingBaseHeight(nPosHeight);
+                            }
                             mnAscent = nPosAscent;
                             nMaxDescent = nPosHeight - nPosAscent;
                         }
@@ -634,6 +641,13 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
     // Robust:
     if( nLineWidth < Width() )
         Width( nLineWidth );
+
+    if (!GetLineSpacingBaseHeight())
+    {
+        rLine.SeekAndChg(rInf);
+        SetLineSpacingBaseHeight(rInf.GetTextHeight());
+    }
+
     SAL_WARN_IF( nLineWidth < Width(), "sw.core", "SwLineLayout::CalcLine: line is bursting" );
     SetDummy( bTmpDummy );
     std::pair<SwTextNode const*, sal_Int32> const start(
