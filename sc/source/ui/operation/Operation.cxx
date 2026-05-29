@@ -257,7 +257,7 @@ void Operation::syncSheetViews(UndoSheetViewSortData* pUndoSortData)
 
     // Invalidate every sheet view tab whose content was just rewritten.
     // SyncSheetViews re-applies the stored sort and query/filter on the sheet
-    // view tab, which can change row visibility. Therefor we need to apply
+    // view tab, which can change row visibility. Therefore we need to apply
     // Left, Top and Size paint part flags.
     if (pManager)
     {
