@@ -1253,8 +1253,21 @@ void SwFlyAtContentFrame::SetAbsPos( const Point &rNew )
     const SwRect aOld( GetObjRectWithSpaces() );
     Point aNew( rNew );
 
+    // tdf#56412: SetAbsPos() may be called as part of a resize operation.
+    tools::Long nFlyWidth = 0;
+    if (isFrameAreaSizeValid())
+    {
+        nFlyWidth = getFrameArea().Width();
+    }
+    else
+    {
+        SwFrameFormat* pFormat = GetFormat();
+        SwFormatFrameSize aSz = pFormat->GetFrameSize();
+        nFlyWidth = aSz.GetWidth();
+    }
+
     if( ( GetAnchorFrame()->IsVertical() && !GetAnchorFrame()->IsVertLR() ) || GetAnchorFrame()->IsRightToLeft() )
-        aNew.setX(aNew.getX() + getFrameArea().Width());
+        aNew.setX(aNew.getX() + nFlyWidth);
     SwContentFrame *pCnt = const_cast<SwContentFrame*>(::FindAnchor( GetAnchorFrame(), aNew ));
     if( pCnt->IsProtected() )
         pCnt = const_cast<SwContentFrame*>(static_cast<const SwContentFrame*>(GetAnchorFrame()));
@@ -1269,9 +1282,9 @@ void SwFlyAtContentFrame::SetAbsPos( const Point &rNew )
         ( !bRTL !=  !GetAnchorFrame()->IsRightToLeft() ) )
     {
         if( bVert || bRTL )
-            aNew.setX(aNew.getX() + getFrameArea().Width());
+            aNew.setX(aNew.getX() + nFlyWidth);
         else
-            aNew.setX(aNew.getX() - getFrameArea().Width());
+            aNew.setX(aNew.getX() - nFlyWidth);
     }
 
     if ( pCnt->IsInDocBody() )
@@ -1299,7 +1312,7 @@ void SwFlyAtContentFrame::SetAbsPos( const Point &rNew )
             if ( bVertL2R )
                 nY = -nY;
             else
-                nY += pCnt->getFrameArea().Width() - getFrameArea().Width();
+                nY += pCnt->getFrameArea().Width() - nFlyWidth;
             nY -= pCnt->GetUpperSpaceAmountConsideredForPrevFrameAndPageGrid();
         }
         else
@@ -1388,14 +1401,14 @@ void SwFlyAtContentFrame::SetAbsPos( const Point &rNew )
         if( !pFrame )
         {
             if ( pCnt->IsRightToLeft() )
-                nX += pCnt->getFrameArea().Right() - rNew.X() - getFrameArea().Width();
+                nX += pCnt->getFrameArea().Right() - rNew.X() - nFlyWidth;
             else
                 nX += rNew.X() - pCnt->getFrameArea().Left();
         }
         else
         {
             if ( pFrame->IsRightToLeft() )
-                nX += pFrame->getFrameArea().Right() - rNew.X() - getFrameArea().Width();
+                nX = pFrame->getFrameArea().Right() - rNew.X() - nFlyWidth;
             else
                 nX = rNew.X() - pFrame->getFrameArea().Left();
         }

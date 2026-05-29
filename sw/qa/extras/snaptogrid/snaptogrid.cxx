@@ -859,6 +859,43 @@ CPPUNIT_TEST_FIXTURE(SwSnapToGridTest, testMoveImageOnGrid)
     checkShapeOpenSize(pObject, aStartSize.Width, aStartSize.Height);
 }
 
+CPPUNIT_TEST_FIXTURE(SwSnapToGridTest, testResizeImageRtl)
+{
+    // Apply grid options
+    const sal_Int32 nGridSize = 1016;
+    applyGridOptions(true, nGridSize, nGridSize, 0, 0);
+
+    // Load a document with an image
+    createSwDoc("imageAnchoredToRtl.fodt");
+
+    // Check the original position and size of the image (it is aligned to the grid)
+    SdrObject* pObject = getShapeObject(0);
+    checkShapePosition(pObject, 4064, 1016);
+    checkShapeOpenSize(pObject, 1016, 1016);
+
+    // Without the fix for tdf#56412, resizing from the right would make the image
+    // appear to resize from the left side instead.
+    resizeShape(pObject, DragPoint::RightCenter, 100, 0);
+
+    // This would fail with:
+    // equality assertion failed
+    // - Expected: 4378
+    // - Actual  : 4062
+    checkShapePosition(pObject, 4378, 1016);
+    checkShapeOpenSize(pObject, 700, 1016);
+
+    // Without the fix for tdf#56412, resizing from the left would also shift the
+    // image rightward on the page.
+    resizeShape(pObject, DragPoint::LeftCenter, 100, 0);
+
+    // This would fail with
+    // equality assertion failed
+    // - Expected: 4376
+    // - Actual  : 3678
+    checkShapePosition(pObject, 4376, 1016);
+    checkShapeOpenSize(pObject, 1018, 1016);
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
