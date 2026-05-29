@@ -1671,6 +1671,57 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testCommentSize)
     CPPUNIT_ASSERT_EQUAL(rOldRect.getOpenHeight(), pCaption->GetLogicRect().getOpenHeight());
 }
 
+CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testCommentSizeWithFooter)
+{
+    // Counterpart to testCommentSize: with the NoteAuthor footer (tdf#161973)
+    // enabled, the caption grows to host the author/date band and the footer
+    // state on the caption reflects the file's stored metadata.
+    const bool bOriginalNoteAuthor = officecfg::Office::Calc::Content::Display::NoteAuthor::get();
+    comphelper::ScopeGuard g([bOriginalNoteAuthor] {
+        auto pBatch(comphelper::ConfigurationChanges::create());
+        officecfg::Office::Calc::Content::Display::NoteAuthor::set(bOriginalNoteAuthor, pBatch);
+        pBatch->commit();
+    });
+    {
+        auto pBatch(comphelper::ConfigurationChanges::create());
+        officecfg::Office::Calc::Content::Display::NoteAuthor::set(true, pBatch);
+        pBatch->commit();
+    }
+
+    createScDoc("ods/comment.ods");
+    ScDocument* pDoc = getScDoc();
+
+    ScAddress aPos(0, 0, 0);
+    ScPostIt* pNote = pDoc->GetNote(aPos);
+    CPPUNIT_ASSERT(pNote);
+
+    pNote->ShowCaption(aPos, true);
+    CPPUNIT_ASSERT(pNote->IsCaptionShown());
+
+    SdrCaptionObj* pCaption = pNote->GetCaption();
+    CPPUNIT_ASSERT(pCaption);
+
+    // Footer state pushed from the file's stored author/date.
+    CPPUNIT_ASSERT_EQUAL(u"BAKO"_ustr, pCaption->GetExtraFooterLine1());
+    CPPUNIT_ASSERT(!pCaption->GetExtraFooterLine2().isEmpty());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(580), pCaption->GetExtraFooterHeight());
+
+    // Caption grows by the footer band height vs the no-footer case (939).
+    const tools::Rectangle& rOldRect = pCaption->GetLogicRect();
+    CPPUNIT_ASSERT_EQUAL(tools::Long(2899), rOldRect.getOpenWidth());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(1079), rOldRect.getOpenHeight());
+
+    // After body text grows, caption stretches but footer state is preserved
+    // (MinFrameHeight pin honors the reserved band).
+    pNote->SetText(aPos, u"first\nsecond\nthird"_ustr);
+
+    const tools::Rectangle& rNewRect = pCaption->GetLogicRect();
+    CPPUNIT_ASSERT_EQUAL(rOldRect.getOpenWidth(), rNewRect.getOpenWidth());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(1866), rNewRect.getOpenHeight());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(580), pCaption->GetExtraFooterHeight());
+    CPPUNIT_ASSERT_EQUAL(u"BAKO"_ustr, pCaption->GetExtraFooterLine1());
+}
+
 static void testEnhancedProtectionImpl(const ScDocument& rDoc)
 {
     const ScTableProtection* pProt = rDoc.GetTabProtection(0);
