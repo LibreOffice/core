@@ -2754,7 +2754,6 @@ SfxViewShell::SfxViewShell
 ,   mbPrinterSettingsModified(false)
 ,   maLOKLanguageTag(LANGUAGE_NONE)
 ,   maLOKLocale(LANGUAGE_NONE)
-,   maLOKDeviceFormFactor(LOKDeviceFormFactor::UNKNOWN)
 ,   mbLOKAccessibilityEnabled(false)
 ,   mbLOKColorPreviewEnabled(false)
 {
@@ -2775,8 +2774,6 @@ SfxViewShell::SfxViewShell
         const auto [isTimezoneSet, aTimezone] = SfxLokHelper::getDefaultTimezone();
         maLOKIsTimezoneSet = isTimezoneSet;
         maLOKTimezone = aTimezone;
-
-        maLOKDeviceFormFactor = SfxLokHelper::getDeviceFormFactor();
 
         vcl::Window* pFrameWin = rViewFrame.GetWindow().GetFrameWindow();
         if (pFrameWin && !pFrameWin->GetLOKNotifier())

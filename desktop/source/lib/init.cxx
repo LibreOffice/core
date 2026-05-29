@@ -2945,9 +2945,6 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
             }
         }
 
-        const OUString aDeviceFormFactor = extractParameter(aOptions, u"DeviceFormFactor");
-        SfxLokHelper::setDeviceFormFactor(aDeviceFormFactor);
-
         const OUString aBatch = extractParameter(aOptions, u"Batch");
         if (!aBatch.isEmpty())
         {
@@ -7167,9 +7164,6 @@ static int doc_createViewWithOptions(LibreOfficeKitDocument* pThis,
         comphelper::LibreOfficeKit::setLanguageTag(LanguageTag(aLanguage));
         comphelper::LibreOfficeKit::setLocale(LanguageTag(aLanguage));
     }
-
-    const OUString aDeviceFormFactor = extractParameter(aOptions, u"DeviceFormFactor");
-    SfxLokHelper::setDeviceFormFactor(aDeviceFormFactor);
 
     LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
     const int nId = SfxLokHelper::createView(pDocument->mnDocumentId);

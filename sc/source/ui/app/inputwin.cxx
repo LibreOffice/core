@@ -426,12 +426,6 @@ void ScInputWindow::StartFormula()
             if (comphelper::LibreOfficeKit::isActive())
             {
                 TextGrabFocus();
-                if (pViewSh && !pViewSh->isLOKDesktop())
-                {
-                    nStartPara = nEndPara = pView->getEditEngine().GetParagraphCount() ?
-                        (pView->getEditEngine().GetParagraphCount() - 1) : 0;
-                    nStartPos = nEndPos = pView->getEditEngine().GetTextLen(nStartPara);
-                }
             }
             pView->SetSelection(ESelection(nStartPara, nStartPos, nEndPara, nEndPos));
             pScMod->InputChanged(pView);

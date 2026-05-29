@@ -108,19 +108,6 @@ namespace o3tl
     template<> struct typed_flags<SfxViewShellFlags> : is_typed_flags<SfxViewShellFlags, 0x0110> {};
 }
 
-/*  [Description]
-
-    The SfxViewShell flags control the behavior of SfxViewShell for the
-    duration of its lifetime. They are defined in the constructor of
-    <SfxViewShell>.
-*/
-
-enum class LOKDeviceFormFactor
-{
-    UNKNOWN     = 0,
-    DESKTOP     = 1
-};
-
 class SfxViewFactory;
 #define SFX_DECL_VIEWFACTORY(Class) \
 private: \
@@ -170,7 +157,6 @@ friend class SfxPrinterController;
     LanguageTag                 maLOKLanguageTag;
     LanguageTag                 maLOKLocale;
     std::unique_ptr<CalendarWrapper> mpCalendar;
-    LOKDeviceFormFactor         maLOKDeviceFormFactor;
     bool                        mbLOKAccessibilityEnabled;
     rtl::Reference<LOKDocumentFocusListener>   mpLOKDocumentFocusListener;
     std::unordered_set<OUString>    mvLOKBlockedCommandList;
@@ -473,8 +459,6 @@ public:
     void SetLOKLanguageAndLocale(const OUString& rBcp47LanguageTag);
     /// Get the LibreOfficeKit calendar of this view.
     CalendarWrapper& GetLOKCalendar();
-    /// Check if the lok client is running on a desktop machine.
-    bool isLOKDesktop() const { return maLOKDeviceFormFactor == LOKDeviceFormFactor::DESKTOP; }
 
     virtual tools::Rectangle getLOKVisibleArea() const { return tools::Rectangle(); }
 

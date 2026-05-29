@@ -95,7 +95,6 @@ namespace
 {
 LanguageTag g_defaultLanguageTag(u"en-US"_ustr, true);
 LanguageTag g_loadLanguageTag(u"en-US"_ustr, true); //< The language used to load.
-LOKDeviceFormFactor g_deviceFormFactor = LOKDeviceFormFactor::UNKNOWN;
 bool g_isDefaultTimezoneSet = false;
 OUString g_DefaultTimezone;
 const std::size_t g_logNotifierCacheMaxSize = 50;
@@ -447,19 +446,6 @@ void SfxLokHelper::setViewLocale(int nId, const OUString& rBcp47LanguageTag)
             return;
         }
     }
-}
-
-LOKDeviceFormFactor SfxLokHelper::getDeviceFormFactor()
-{
-    return g_deviceFormFactor;
-}
-
-void SfxLokHelper::setDeviceFormFactor(std::u16string_view rDeviceFormFactor)
-{
-    if (rDeviceFormFactor == u"desktop")
-        g_deviceFormFactor = LOKDeviceFormFactor::DESKTOP;
-    else
-        g_deviceFormFactor = LOKDeviceFormFactor::UNKNOWN;
 }
 
 void SfxLokHelper::setColorPreviewState(int nId, bool nEnabled)
