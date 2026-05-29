@@ -368,7 +368,7 @@ bool SheetDataContext::importCell( const AttributeList& rAttribs )
         maCellData.mnCellType     = rAttribs.getToken( XML_t, XML_n );
         maCellData.mnXfId         = rAttribs.getInteger( XML_s, -1 );
         maCellData.mbShowPhonetic = rAttribs.getBool( XML_ph, false );
-        // cm attributre marks a dynamic array master cell that points at a
+        // cm attribute marks a dynamic array master cell that points at a
         // cellMetadata block in xl/metadata.xml. The actual metadata index
         // is irrelevant for us currently - we only need to know it's a dynamic
         //  array master.
