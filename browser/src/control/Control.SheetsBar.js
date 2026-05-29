@@ -148,7 +148,7 @@ class SheetsBar {
 		}
 		
 		JSDialog.MenuDefinitions.set('SheetListMenu', sheetEntries);
-
+		this.enableSheetList(sheetEntries.length > 1);
 	}
 
 	onSelectSheet(objectType, eventType, object, data, builder) {
@@ -169,6 +169,13 @@ class SheetsBar {
 	enableInsertion(enable) {
 		this.builder.executeAction(this.parentContainer, {
 			'control_id': 'insertsheet',
+			'action_type': enable ? 'enable' : 'disable'
+		});
+	}
+
+	enableSheetList(enable) {
+		this.builder.executeAction(this.parentContainer, {
+			'control_id': 'sheetlist',
 			'action_type': enable ? 'enable' : 'disable'
 		});
 	}
