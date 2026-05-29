@@ -28,14 +28,6 @@
 #include <svl/itemset.hxx>
 #include <vcl/weld/Builder.hxx>
 
-static bool isLOKMobilePhone()
-{
-    if (!comphelper::LibreOfficeKit::isActive())
-        return false;
-    SfxViewShell* pCurrent = SfxViewShell::Current();
-    return pCurrent && pCurrent->isLOKMobilePhone();
-}
-
 SwWatermarkDialog::SwWatermarkDialog(weld::Window* pParent, SfxBindings& rBindings)
     : SfxDialogController(pParent, u"modules/swriter/ui/watermarkdialog.ui"_ustr, u"WatermarkDialog"_ustr)
     , m_rBindings(rBindings)
@@ -47,14 +39,6 @@ SwWatermarkDialog::SwWatermarkDialog(weld::Window* pParent, SfxBindings& rBindin
     , m_xColor(new ColorListBox(m_xBuilder->weld_menu_button(u"Color"_ustr), [this]{ return m_xDialog.get(); }))
 {
     InitFields();
-
-    if (isLOKMobilePhone())
-    {
-        m_xBuilder->weld_label(u"ColorLabel"_ustr)->hide();
-        m_xColor->hide();
-        m_xBuilder->weld_button(u"cancel"_ustr)->hide();
-        m_xBuilder->weld_button(u"help"_ustr)->hide();
-    }
 }
 
 SwWatermarkDialog::~SwWatermarkDialog()

@@ -42,14 +42,6 @@ constexpr auto IgnoredList
         { u"sfx/ui/quickfind.ui" },
     });
 
-// ========== MOBILE DIALOGS ================================================= //
-
-constexpr auto MobileDialogList
-    = frozen::make_unordered_set<std::u16string_view>({
-        { u"modules/swriter/ui/watermarkdialog.ui" },
-        { u"svx/ui/findreplacedialog-mobile.ui" }
-    });
-
 // ========== DIALOGS ======================================================= //
 // Split into few - to allow constexpr and manage order
 
@@ -560,15 +552,8 @@ bool isIgnored(std::u16string_view rUIFile)
     return isInMap(IgnoredList, rUIFile);
 }
 
-bool isBuilderEnabled(std::u16string_view rUIFile, bool bMobile)
+bool isBuilderEnabled(std::u16string_view rUIFile)
 {
-    // mobile only dialogs
-    if (bMobile)
-    {
-        if (isInMap(MobileDialogList, rUIFile))
-            return true;
-    }
-
     if (isInMap(CuiDialogList, rUIFile))
         return true;
 

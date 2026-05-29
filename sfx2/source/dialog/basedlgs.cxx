@@ -203,17 +203,9 @@ void SfxModelessDialogController::Close()
     SfxDialogController::Close();
 }
 
-static bool isLOKMobilePhone()
-{
-    if (!comphelper::LibreOfficeKit::isActive())
-        return false;
-    const SfxViewShell* pCurrentShell = SfxViewShell::Current();
-    return pCurrentShell && pCurrentShell->isLOKMobilePhone();
-}
-
 SfxDialogController::SfxDialogController(weld::Widget* pParent, const OUString& rUIFile,
                                          const OUString& rDialogId)
-    : GenericDialogController(pParent, rUIFile, rDialogId, isLOKMobilePhone())
+    : GenericDialogController(pParent, rUIFile, rDialogId)
 {
     m_xDialog->SetInstallLOKNotifierHdl(LINK(this, SfxDialogController, InstallLOKNotifierHdl));
     m_xDialog->connect_container_focus_changed(LINK(this, SfxDialogController, FocusChangeHdl));

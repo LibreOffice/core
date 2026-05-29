@@ -1846,21 +1846,6 @@ bool ScGridWindow::TestMouse( const MouseEvent& rMEvt, bool bAction )
 
 void ScGridWindow::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    if (SfxLokHelper::getDeviceFormFactor() == LOKDeviceFormFactor::MOBILE)
-    {
-        ScViewFunc* pView = mrViewData.GetView();
-        ScTabViewShell* pViewShell = mrViewData.GetViewShell();
-        bool bRefMode = pViewShell && pViewShell->IsRefInputMode();
-
-        Point aPos(rMEvt.GetPosPixel());
-        SCCOL nPosX;
-        SCROW nPosY;
-        mrViewData.GetPosFromPixel(aPos.X(), aPos.Y(), eWhich, nPosX, nPosY);
-
-        if (bRefMode && pView->GetFunctionSet().CheckRefBounds(nPosX, nPosY))
-            return;
-    }
-
     nNestedButtonState = ScNestedButtonState::Down;
 
     MouseEventState aState;
@@ -2750,8 +2735,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
                 // On a mobile device view there is no ctrl+click and for hyperlink popup
                 // the cell coordinates must be sent along with click position for elegance
                 ScTabViewShell* pViewShell = mrViewData.GetViewShell();
-                if (isTiledRendering && pViewShell &&
-                    (pViewShell->isLOKMobilePhone() || pViewShell->isLOKTablet()))
+                if (isTiledRendering && pViewShell && pViewShell->isLOKTablet())
                 {
                     aPos = rMEvt.GetPosPixel();
                     mrViewData.GetPosFromPixel( aPos.X(), aPos.Y(), eWhich, nPosX, nPosY );

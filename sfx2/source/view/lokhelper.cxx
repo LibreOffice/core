@@ -460,8 +460,6 @@ void SfxLokHelper::setDeviceFormFactor(std::u16string_view rDeviceFormFactor)
         g_deviceFormFactor = LOKDeviceFormFactor::DESKTOP;
     else if (rDeviceFormFactor == u"tablet")
         g_deviceFormFactor = LOKDeviceFormFactor::TABLET;
-    else if (rDeviceFormFactor == u"mobile")
-        g_deviceFormFactor = LOKDeviceFormFactor::MOBILE;
     else
         g_deviceFormFactor = LOKDeviceFormFactor::UNKNOWN;
 }

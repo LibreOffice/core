@@ -1002,7 +1002,7 @@ namespace sw::mark
         if (!comphelper::LibreOfficeKit::isActive())
             return;
 
-        if (!pViewShell || pViewShell->isLOKMobilePhone())
+        if (!pViewShell)
             return;
 
         if (m_aPortionPaintArea.IsEmpty())

@@ -420,17 +420,11 @@ IMPL_LINK( ScCondFormatList, EntrySelectHdl, ScCondFrmtEntry&, rEntry, void )
     RecalcAll();
 }
 
-static bool isLOKMobilePhone()
-{
-    SfxViewShell* pCurrent = SfxViewShell::Current();
-    return pCurrent && pCurrent->isLOKMobilePhone();
-}
-
 ScCondFormatDlg::ScCondFormatDlg(SfxBindings* pB, SfxChildWindow* pCW,
     weld::Window* pParent, ScViewData& rViewData,
     const std::shared_ptr<ScCondFormatDlgData>& rItem)
         : ScAnyRefDlgController(pB, pCW, pParent,
-                        isLOKMobilePhone()?u"modules/scalc/ui/conditionalformatdialogmobile.ui"_ustr:u"modules/scalc/ui/conditionalformatdialog.ui"_ustr,
+                        u"modules/scalc/ui/conditionalformatdialog.ui"_ustr,
                         u"ConditionalFormatDialog"_ustr)
     , mrViewData(rViewData)
     // previous version based on SfxPoolItem used SfxPoolItem::Clone here, so make a copy

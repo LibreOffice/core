@@ -86,15 +86,6 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star;
 using namespace comphelper;
 
-
-static bool IsMobile()
-{
-    if (!comphelper::LibreOfficeKit::isActive())
-        return false;
-    SfxViewShell* pCurrent = SfxViewShell::Current();
-    return pCurrent && pCurrent->isLOKMobilePhone();
-}
-
 enum class ModifyFlags {
     NONE         = 0x000000,
     Search       = 0x000001,
@@ -244,7 +235,7 @@ void SearchAttrItemList::Remove(size_t nPos)
 
 SvxSearchDialog::SvxSearchDialog(weld::Window* pParent, SfxChildWindow* pChildWin, SfxBindings& rBind)
     : SfxModelessDialogController(&rBind, pChildWin, pParent,
-                                  IsMobile() ? u"svx/ui/findreplacedialog-mobile.ui"_ustr : u"svx/ui/findreplacedialog.ui"_ustr,
+                                  u"svx/ui/findreplacedialog.ui"_ustr,
                                   u"FindReplaceDialog"_ustr)
     , m_rBindings(rBind)
     , m_aPresentIdle("Bring SvxSearchDialog to Foreground")
@@ -324,10 +315,7 @@ SvxSearchDialog::SvxSearchDialog(weld::Window* pParent, SfxChildWindow* pChildWi
     m_xSearchAttrText->hide();
 
     this->SetSearchLabel(u""_ustr); // hide the message but keep the box height
-
-    //weird findreplacedialog-mobile.ui case doesn't have searchicon or searchbox
-    if (m_xSearchIcon)
-        m_xSearchIcon->set_size_request(24, 24); // vcl/res/infobar.png is 32x32 - too large here
+    m_xSearchIcon->set_size_request(24, 24); // vcl/res/infobar.png is 32x32 - too large here
 
     m_xReplaceTmplLB->make_sorted();
     m_xReplaceAttrText->hide();
@@ -573,26 +561,20 @@ void SvxSearchDialog::SetSearchLabel(const OUString& rStr)
     if (!rStr.isEmpty())
     {
         m_xSearchLabel->show();
-        if (m_xSearchIcon)
-        {
-            m_xSearchIcon->show();
-            const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-            if (rStyleSettings.GetDialogColor().IsDark())
-                m_xSearchBox->set_background(Color(0x00, 0x56, 0x80));
-            else
-                m_xSearchBox->set_background(Color(0xBD, 0xE5, 0xF8)); // same as InfobarType::INFO
-        }
+        m_xSearchIcon->show();
+        const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+        if (rStyleSettings.GetDialogColor().IsDark())
+            m_xSearchBox->set_background(Color(0x00, 0x56, 0x80));
+        else
+            m_xSearchBox->set_background(Color(0xBD, 0xE5, 0xF8)); // same as InfobarType::INFO
     }
     else
     {
         m_xSearchLabel->hide();
-        if (m_xSearchIcon)
-        {
-            const Size aSize = m_xSearchBox->get_preferred_size();
-            m_xSearchIcon->hide();
-            m_xSearchBox->set_size_request(-1, aSize.Height());
-            m_xSearchBox->set_background(COL_TRANSPARENT);
-        }
+        const Size aSize = m_xSearchBox->get_preferred_size();
+        m_xSearchIcon->hide();
+        m_xSearchBox->set_size_request(-1, aSize.Height());
+        m_xSearchBox->set_background(COL_TRANSPARENT);
     }
 
     if (rStr == SvxResId(RID_SVXSTR_SEARCH_NOT_FOUND))

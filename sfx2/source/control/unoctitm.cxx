@@ -1020,22 +1020,9 @@ OString Int32Payload(sal_uInt16, SfxViewFrame*, const css::frame::FeatureStateEv
     return aBuffer.makeStringAndClear();
 }
 
-OString TransformPayload(sal_uInt16 nSID, SfxViewFrame* pViewFrame,
+OString TransformPayload(sal_uInt16, SfxViewFrame*,
                          const css::frame::FeatureStateEvent& aEvent, const SfxPoolItem*)
 {
-    if (aEvent.IsEnabled && pViewFrame->GetViewShell()->isLOKMobilePhone())
-    {
-        boost::property_tree::ptree aTree;
-        boost::property_tree::ptree aState;
-
-        aTree.put("commandName", aEvent.FeatureURL.Complete);
-        pViewFrame->GetBindings().QueryControlState(nSID, aState);
-        aTree.add_child("state", aState);
-
-        std::stringstream aStream;
-        boost::property_tree::write_json(aStream, aTree);
-        return OString(aStream.str());
-    }
     return aEvent.FeatureURL.Complete.toUtf8() + "="; // Should an empty string be returned?
 }
 

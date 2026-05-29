@@ -26,9 +26,9 @@
 #include <vcl/weld/weldutils.hxx>
 
 BuilderPage::BuilderPage(weld::Widget* pParent, weld::DialogController* pController,
-                         const OUString& rUIXMLDescription, const OUString& rID, bool bIsMobile)
+                         const OUString& rUIXMLDescription, const OUString& rID)
     : m_pDialogController(pController)
-    , m_xBuilder(Application::CreateBuilder(pParent, rUIXMLDescription, bIsMobile))
+    , m_xBuilder(Application::CreateBuilder(pParent, rUIXMLDescription))
     , m_xContainer(m_xBuilder->weld_container(rID))
 {
 }

@@ -196,10 +196,7 @@ ScInputWindow::ScInputWindow( vcl::Window* pParent, const SfxBindings* pBind ) :
         InsertItem      (SID_INPUT_FUNCTION, Image(StockImage::Yes, RID_BMP_INPUT_FUNCTION), ToolBoxItemBits::NONE, 2);
     }
 
-    const bool bIsLOKMobilePhone = mpViewShell && mpViewShell->isLOKMobilePhone();
-
     // sigma and equal buttons
-    if (!bIsLOKMobilePhone)
     {
         InsertItem      (SID_INPUT_SUM,      Image(StockImage::Yes, RID_BMP_INPUT_SUM), ToolBoxItemBits::DROPDOWN, 3);
         InsertItem      (SID_INPUT_EQUAL,    Image(StockImage::Yes, RID_BMP_INPUT_EQUAL), ToolBoxItemBits::NONE, 4);
@@ -224,7 +221,6 @@ ScInputWindow::ScInputWindow( vcl::Window* pParent, const SfxBindings* pBind ) :
     }
 
     // sigma and equal buttons
-    if (!bIsLOKMobilePhone)
     {
         SetHelpId   (SID_INPUT_SUM, HID_INSWIN_SUM);
         SetHelpId   (SID_INPUT_EQUAL, HID_INSWIN_FUNC);
@@ -883,10 +879,7 @@ ScInputBarGroup::ScInputBarGroup(vcl::Window* pParent, ScTabViewShell* pViewSh)
     mxButtonUp->set_size_request(-1, nHeight);
     mxButtonDown->set_size_request(-1, nHeight);
 
-    // disable the multiline toggle on the mobile phones
-    const SfxViewShell* pViewShell = SfxViewShell::Current();
-    if (!comphelper::LibreOfficeKit::isActive() || !(pViewShell && pViewShell->isLOKMobilePhone()))
-        mxButtonDown->show();
+    mxButtonDown->show();
 
     // tdf#154042 Use an initial height of one row so the Toolbar positions
     // this in the same place regardless of how many rows it eventually shows

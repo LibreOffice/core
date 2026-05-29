@@ -16,7 +16,7 @@ namespace jsdialog
 {
 /// used to not warn about it
 bool isIgnored(std::u16string_view rUIFile);
-bool isBuilderEnabled(std::u16string_view rUIFile, bool bMobile);
+bool isBuilderEnabled(std::u16string_view rUIFile);
 bool isBuilderEnabledForPopup(std::u16string_view rUIFile);
 bool isBuilderEnabledForMenu(std::u16string_view rUIFile);
 bool isBuilderEnabledForSidebar(std::u16string_view rUIFile);

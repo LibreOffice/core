@@ -425,11 +425,8 @@ std::shared_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
         }
         case SID_OPENDLG_FUNCTION:
         {
-            if (!isLOKMobilePhone())
-            {
-                // dialog checks, what is in the cell
-                xResult = std::make_shared<ScFormulaDlg>(pB, pCW, pParent, GetViewData(), ScGlobal::GetStarCalcFunctionMgr());
-            }
+            // dialog checks, what is in the cell
+            xResult = std::make_shared<ScFormulaDlg>(pB, pCW, pParent, GetViewData(), ScGlobal::GetStarCalcFunctionMgr());
             break;
         }
         case WID_CONDFRMT_REF:

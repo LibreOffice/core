@@ -81,14 +81,6 @@ const WhichRangesContainer ScTPValidationValue::pValueRanges(svl::Items<
     FID_VALID_MODE, FID_VALID_ERRTEXT
 >);
 
-static bool isLOKMobilePhone()
-{
-    if (!comphelper::LibreOfficeKit::isActive())
-        return false;
-    SfxViewShell* pViewShell = SfxViewShell::Current();
-    return pViewShell && pViewShell->isLOKMobilePhone();
-}
-
 ScValidationDlg::ScValidationDlg(weld::Window* pParent, const SfxItemSet* pArgSet,
     ScTabViewShell *pTabViewSh)
     : ScValidationDlgBase(pParent,
@@ -105,12 +97,6 @@ ScValidationDlg::ScValidationDlg(weld::Window* pParent, const SfxItemSet* pArgSe
                ScTPValidationHelp::Create, RID_L + RID_TAB_VALIDITY_INPUT.sIconName);
     AddTabPage(u"erroralert"_ustr, TabResId(RID_TAB_VALIDITY_ERROR.aLabel),
                ScTPValidationError::Create, RID_L + RID_TAB_VALIDITY_ERROR.sIconName);
-
-    if (isLOKMobilePhone())
-    {
-        m_xBuilder->weld_button(u"cancel"_ustr)->hide();
-        m_xBuilder->weld_button(u"help"_ustr)->hide();
-    }
 }
 
 void ScValidationDlg::EndDialog(int nResponse)

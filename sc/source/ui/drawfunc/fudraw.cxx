@@ -271,15 +271,6 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
                 if( !pView->IsTextEdit() && 1 == rMarkList.GetMarkCount() )
                 {
                     SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
-                    bool isMobilePhone = comphelper::LibreOfficeKit::isActive() && rViewShell.isLOKMobilePhone();
-                    // Double tapping on charts on phone may result in activating the edit mode which is not wanted.
-                    // It happens due to the delay of selection message of the object from kit to javascript
-                    // in that case F2 is sent instead of double click
-                    if (isMobilePhone && ScDocument::IsChart(pObj))
-                    {
-                        rViewShell.ActivateObject(static_cast<SdrOle2Obj*>(pObj), css::embed::EmbedVerbs::MS_OLEVERB_PRIMARY);
-                        break;
-                    }
                     if ( lcl_KeyEditMode( pObj, rViewShell, nullptr ) )            // start text edit for suitable object
                         bReturn = true;
                 }

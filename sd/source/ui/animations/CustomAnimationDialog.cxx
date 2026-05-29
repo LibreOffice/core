@@ -90,7 +90,7 @@ namespace sd {
 
 SdPropertySubControl::SdPropertySubControl(weld::Container* pParent)
     : mxBuilder(Application::CreateBuilder(pParent, u"modules/simpress/ui/customanimationfragment.ui"_ustr,
-        false, reinterpret_cast<sal_uInt64>(SfxViewShell::Current())))
+        reinterpret_cast<sal_uInt64>(SfxViewShell::Current())))
     , mxContainer(mxBuilder->weld_container(u"EffectFragment"_ustr))
     , mpParent(pParent)
 {

@@ -119,8 +119,7 @@ enum class LOKDeviceFormFactor
 {
     UNKNOWN     = 0,
     DESKTOP     = 1,
-    TABLET      = 2,
-    MOBILE      = 3
+    TABLET      = 2
 };
 
 class SfxViewFactory;
@@ -479,8 +478,6 @@ public:
     bool isLOKDesktop() const { return maLOKDeviceFormFactor == LOKDeviceFormFactor::DESKTOP; }
     /// Check if the lok client is running on a tablet.
     bool isLOKTablet() const  { return maLOKDeviceFormFactor == LOKDeviceFormFactor::TABLET; }
-    /// Check if the lok client is running on a mobile device.
-    bool isLOKMobilePhone() const { return maLOKDeviceFormFactor == LOKDeviceFormFactor::MOBILE; }
 
     virtual tools::Rectangle getLOKVisibleArea() const { return tools::Rectangle(); }
 

@@ -241,13 +241,6 @@ void Deck::RequestLayout()
         aParentSize.setHeight(mnMinimalHeight);
         bChangeNeeded = true;
     }
-    const SfxViewShell* pViewShell = SfxViewShell::Current();
-    if (mnMinimalWidth > 0 && (mnMinimalWidth != aParentSize.Width() || GetSizePixel().Width() != mnMinimalWidth)
-            && pViewShell && pViewShell->isLOKMobilePhone())
-    {
-        aParentSize.setWidth(mnMinimalWidth);
-        bChangeNeeded = true;
-    }
 
     if (bChangeNeeded)
     {

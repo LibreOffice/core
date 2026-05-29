@@ -28,7 +28,7 @@ PanelLayout::PanelLayout(weld::Widget* pParent, const OUString& rID,
 
 PanelLayout::PanelLayout(weld::Widget* pParent, const OUString& rID,
                          const OUString& rUIXMLDescription, sal_uInt64 nWindowId)
-    : m_xBuilder(Application::CreateBuilder(pParent, rUIXMLDescription, false, nWindowId))
+    : m_xBuilder(Application::CreateBuilder(pParent, rUIXMLDescription, nWindowId))
     , m_xContainer(m_xBuilder->weld_container(rID))
     , m_pPanel(nullptr)
 {

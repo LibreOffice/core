@@ -266,7 +266,7 @@ void Application::UICoverageReport(tools::JsonWriter& rJson,
     }
 }
 
-std::unique_ptr<weld::Builder> Application::CreateBuilder(weld::Widget* pParent, const OUString &rUIFile, bool bMobile, sal_uInt64 nLOKWindowId)
+std::unique_ptr<weld::Builder> Application::CreateBuilder(weld::Widget* pParent, const OUString &rUIFile, sal_uInt64 nLOKWindowId)
 {
     SalInstance* pSalInstance = GetSalInstance();
 
@@ -285,7 +285,7 @@ std::unique_ptr<weld::Builder> Application::CreateBuilder(weld::Widget* pParent,
             return JSInstanceBuilder::CreateSidebarBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile, "navigator", nLOKWindowId);
         else if (jsdialog::isBuilderEnabledForQuickFind(rUIFile))
             return JSInstanceBuilder::CreateSidebarBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile, "quickfind", nLOKWindowId);
-        else if (jsdialog::isBuilderEnabled(rUIFile, bMobile))
+        else if (jsdialog::isBuilderEnabled(rUIFile))
             return JSInstanceBuilder::CreateDialogBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile);
         // this is notebookbar widget but converted from sidebar panel
         else if (jsdialog::isInterimBuilderEnabledForNotebookbar(rUIFile))

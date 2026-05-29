@@ -49,7 +49,7 @@ protected:
 
 public:
     GenericDialogController(weld::Widget* pParent, const OUString& rUIFile,
-                            const OUString& rDialogId, bool bMobile = false);
+                            const OUString& rDialogId);
     virtual Dialog* getDialog() override;
     virtual ~GenericDialogController() override;
 };

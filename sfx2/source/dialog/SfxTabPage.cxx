@@ -34,16 +34,8 @@ css::uno::Reference< css::frame::XFrame > SfxTabPage::GetFrame() const
     return mxFrame;
 }
 
-static bool isLOKMobilePhone()
-{
-    if (!comphelper::LibreOfficeKit::isActive())
-        return false;
-    const SfxViewShell* pCurrentShell = SfxViewShell::Current();
-    return pCurrentShell && pCurrentShell->isLOKMobilePhone();
-}
-
 SfxTabPage::SfxTabPage(weld::Container* pPage, weld::DialogController* pController, const OUString& rUIXMLDescription, const OUString& rID, const SfxItemSet *rAttrSet)
-    : BuilderPage(pPage, pController, rUIXMLDescription, rID, isLOKMobilePhone())
+    : BuilderPage(pPage, pController, rUIXMLDescription, rID)
     , mpSet(rAttrSet)
     , mbHasExchangeSupport(false)
     , mbCancel(false)

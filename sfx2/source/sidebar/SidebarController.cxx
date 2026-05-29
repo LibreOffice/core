@@ -1227,17 +1227,7 @@ void SidebarController::RequestCloseDeck()
     if (comphelper::LibreOfficeKit::isActive() && mpCurrentDeck)
     {
         const SfxViewShell* pViewShell = SfxViewShell::Current();
-        if (pViewShell && pViewShell->isLOKMobilePhone())
-        {
-            // Mobile phone - TODO: unify with desktop
-            tools::JsonWriter aJsonWriter;
-            aJsonWriter.put("id", mpParentWindow->get_id());
-            aJsonWriter.put("type", "dockingwindow");
-            aJsonWriter.put("text", mpParentWindow->GetText());
-            aJsonWriter.put("enabled", false);
-            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_JSDIALOG, aJsonWriter.finishAndGetAsOString());
-        }
-        else if (pViewShell)
+        if (pViewShell)
         {
             tools::JsonWriter aJsonWriter;
             aJsonWriter.put("id", mpParentWindow->get_id());
