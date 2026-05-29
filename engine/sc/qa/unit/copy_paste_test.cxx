@@ -68,6 +68,7 @@ public:
     void testMarkdownExportSingleRow();
     void testMarkdownExportEscaping();
     void testMarkdownExportSingleCell();
+    void testMarkdownExportMultiRangeColumns();
     void testMarkdownRoundtripFormattedText();
     void testMarkdownRoundtripTable();
     void testRTFFontHeight();
@@ -103,6 +104,7 @@ public:
     CPPUNIT_TEST(testMarkdownExportSingleRow);
     CPPUNIT_TEST(testMarkdownExportEscaping);
     CPPUNIT_TEST(testMarkdownExportSingleCell);
+    CPPUNIT_TEST(testMarkdownExportMultiRangeColumns);
     CPPUNIT_TEST(testMarkdownRoundtripFormattedText);
     CPPUNIT_TEST(testMarkdownRoundtripTable);
     CPPUNIT_TEST(testRTFFontHeight);
@@ -1242,6 +1244,55 @@ void ScCopyPasteTest::testMarkdownExportSingleCell()
     // Then output should contain the text without table markup:
     CPPUNIT_ASSERT(aResult.indexOf("Hello world") >= 0);
     CPPUNIT_ASSERT(aResult.indexOf("|") < 0);
+}
+
+void ScCopyPasteTest::testMarkdownExportMultiRangeColumns()
+{
+    // Given data in two non-adjacent columns (A and C), with column B
+    // left in place as the "gap" column:
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+    ScTabViewShell* pViewShell = getViewShell();
+
+    pDoc->SetString(ScAddress(0, 0, 0), u"Name"_ustr);
+    pDoc->SetString(ScAddress(0, 1, 0), u"Alice"_ustr);
+    pDoc->SetString(ScAddress(0, 2, 0), u"Bob"_ustr);
+    pDoc->SetString(ScAddress(2, 0, 0), u"Age"_ustr);
+    pDoc->SetString(ScAddress(2, 1, 0), u"30"_ustr);
+    pDoc->SetString(ScAddress(2, 2, 0), u"25"_ustr);
+
+    // Select columns A and C non-contiguously (simulates ctrl-clicking
+    // both column headers). MarkToSimple cannot merge the disjoint
+    // ranges, so this stays SC_MARK_MULTI through GetSimpleArea.
+    ScMarkData& rMark = pViewShell->GetViewData().GetMarkData();
+    rMark.SetMultiMarkArea(ScRange(0, 0, 0, 0, pDoc->MaxRow(), 0));
+    rMark.SetMultiMarkArea(ScRange(2, 0, 0, 2, pDoc->MaxRow(), 0));
+    CPPUNIT_ASSERT(rMark.IsMultiMarked());
+
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
+    CPPUNIT_ASSERT(pModelObj);
+
+    // When exporting as annotated markdown:
+    OString aAnnotated = lcl_getAnnotatedMarkdownExport(pModelObj);
+
+    // Then both selected columns' data must appear. Without the
+    // multi-range fix in ScViewFunc::CopyToTransferable the export
+    // collapsed to an empty string because the cursor-cell aRange was
+    // routed through the single-range copy path and the single-cell
+    // markdown branch ran on an empty clip cell.
+    CPPUNIT_ASSERT(!aAnnotated.isEmpty());
+    CPPUNIT_ASSERT(aAnnotated.indexOf("Name") >= 0);
+    CPPUNIT_ASSERT(aAnnotated.indexOf("Age") >= 0);
+    CPPUNIT_ASSERT(aAnnotated.indexOf("Alice") >= 0);
+    CPPUNIT_ASSERT(aAnnotated.indexOf("Bob") >= 0);
+    CPPUNIT_ASSERT(aAnnotated.indexOf("30") >= 0);
+    CPPUNIT_ASSERT(aAnnotated.indexOf("25") >= 0);
+
+    // And the gap column (B) must not leak into the table - it would
+    // appear as a header letter "B" with empty cells underneath, which
+    // confuses LLM consumers about which columns the user selected.
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("annotated markdown leaked gap column B", sal_Int32(-1),
+                                 aAnnotated.indexOf("| B |"));
 }
 
 void ScCopyPasteTest::testMarkdownRoundtripFormattedText()

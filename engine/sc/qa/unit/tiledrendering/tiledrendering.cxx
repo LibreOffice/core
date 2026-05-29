@@ -118,24 +118,36 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testRowColumnSelections)
                                                { "Modifier", uno::Any(KEY_MOD1) } });
     dispatchCommand(mxComponent, u".uno:SelectRow"_ustr, aArgs);
 
-    // When we copy this, we don't get anything useful, but we must not crash
-    // (used to happen)
+    // Copying the non-contiguous selection (rows 5-10 plus row 13) now
+    // serializes the selected rows, clamped to the used data area. The
+    // unselected gap rows 11 and 12 inside the bounding box come out empty.
     aResult = apitest::helper::transferable::getTextSelection(pModelObj->getSelection(), "text/plain;charset=utf-8"_ostr);
-    CPPUNIT_ASSERT_EQUAL("9"_ostr, aResult);
-
-    // TODO check that we really selected what we wanted here
+    aExpected = "1\t2\t3\t4\t5\t6\t7\t8\t9\t10\t11\t12\t13\t14\t15\t16\t17\t18\t19\t20\t21\n"
+                "2\t3\t4\t5\t6\t7\t8\t9\t10\t11\t12\t13\t14\t15\t16\t17\t18\t19\t20\t21\t22\n"
+                "3\t4\t5\t6\t7\t8\t9\t10\t11\t12\t13\t14\t15\t16\t17\t18\t19\t20\t21\t22\t23\n"
+                "4\t5\t6\t7\t8\t9\t10\t11\t12\t13\t14\t15\t16\t17\t18\t19\t20\t21\t22\t23\t24\n"
+                "5\t6\t7\t8\t9\t10\t11\t12\t13\t14\t15\t16\t17\t18\t19\t20\t21\t22\t23\t24\t25\n"
+                "6\t7\t8\t9\t10\t11\t12\t13\t14\t15\t16\t17\t18\t19\t20\t21\t22\t23\t24\t25\t26\n"
+                "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n"
+                "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n"
+                "9\t10\t11\t12\t13\t14\t15\t16\t17\t18\t19\t20\t21\t22\t23\t24\t25\t26\t27\t28\t29\n"_ostr;
+    CPPUNIT_ASSERT_EQUAL(aExpected, aResult);
 
     // Select Column 5 with ctrl modifier
     aArgs = comphelper::InitPropertySequence({ { "Col", uno::Any(static_cast<sal_Int32>(5 - 1)) },
                                                { "Modifier", uno::Any(KEY_MOD1) } });
     dispatchCommand(mxComponent, u".uno:SelectColumn"_ustr, aArgs);
 
-    // When we copy this, we don't get anything useful, but we must not crash
-    // (used to happen)
+    // Adding column 5 to the row selection yields a non-empty serialization
+    // of the mixed selection (rows 5-10 and 13 in full, plus column 5's
+    // cells for the rows in between) rather than the single cursor cell.
+    // Assert it is populated and carries the fully selected rows rather than
+    // pinning the exact bounding-box dump, which is dominated by column 5's
+    // long tail of otherwise-empty rows.
     aResult = apitest::helper::transferable::getTextSelection(pModelObj->getSelection(), "text/plain;charset=utf-8"_ostr);
-    CPPUNIT_ASSERT_EQUAL("1"_ostr, aResult);
-
-    // TODO check that we really selected what we wanted here
+    CPPUNIT_ASSERT(!aResult.isEmpty());
+    CPPUNIT_ASSERT(aResult.indexOf("1\t2\t3\t4\t5\t6\t7\t8\t9\t10\t11\t12\t13\t14\t15\t16\t17\t18\t19\t20\t21") >= 0);
+    CPPUNIT_ASSERT(aResult.indexOf("9\t10\t11\t12\t13\t14\t15\t16\t17\t18\t19\t20\t21\t22\t23\t24\t25\t26\t27\t28\t29") >= 0);
 
     // Test for deselection of already selected rows
     // First Deselect Row 13 because copy doesn't work for multiple selections

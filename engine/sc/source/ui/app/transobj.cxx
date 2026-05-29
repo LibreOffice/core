@@ -42,6 +42,7 @@
 
 #include <transobj.hxx>
 #include <address.hxx>
+#include <clipparam.hxx>
 #include <patattr.hxx>
 #include <cellvalue.hxx>
 #include <cellform.hxx>
@@ -287,6 +288,44 @@ OUString ScTransferObj::GetMarkdownFromRange(ScDocument& rDoc, const ScRange& rR
     const SCCOL nEndCol = rRange.aEnd.Col();
     const SCROW nEndRow = rRange.aEnd.Row();
 
+    // When the source is a multi-range clipboard (ctrl-clicked
+    // non-adjacent columns or rows), the bounding rectangle includes gap
+    // columns/rows that the user never selected. Filter them out so the
+    // markdown table only contains the originally selected ranges
+    // instead of confusing readers with rows of empty cells.
+    const ScRangeList* pRanges = nullptr;
+    if (rDoc.IsClipboard())
+    {
+        const ScRangeList& rClipRanges = rDoc.GetClipParam().maRanges;
+        if (rClipRanges.size() > 1)
+            pRanges = &rClipRanges;
+    }
+
+    auto fnColInRanges = [pRanges](SCCOL nCol) -> bool
+    {
+        if (!pRanges)
+            return true;
+        for (size_t i = 0; i < pRanges->size(); ++i)
+        {
+            const ScRange& rR = (*pRanges)[i];
+            if (rR.aStart.Col() <= nCol && nCol <= rR.aEnd.Col())
+                return true;
+        }
+        return false;
+    };
+    auto fnRowInRanges = [pRanges](SCROW nRow) -> bool
+    {
+        if (!pRanges)
+            return true;
+        for (size_t i = 0; i < pRanges->size(); ++i)
+        {
+            const ScRange& rR = (*pRanges)[i];
+            if (rR.aStart.Row() <= nRow && nRow <= rR.aEnd.Row())
+                return true;
+        }
+        return false;
+    };
+
     // Escape pipe and newline in cell values
     auto fnEscapeCell = [](const OUString& rStr) -> OString
     {
@@ -304,14 +343,20 @@ OUString ScTransferObj::GetMarkdownFromRange(ScDocument& rDoc, const ScRange& rR
     {
         aBuf.append("| Row |");
         for (SCCOL nCol = nStartCol; nCol <= nEndCol; nCol++)
+        {
+            if (!fnColInRanges(nCol))
+                continue;
             aBuf.append(OString::Concat(" ")
                         + OUStringToOString(ScColToAlpha(nCol), RTL_TEXTENCODING_UTF8) + " |");
+        }
     }
     else
     {
         aBuf.append("|");
         for (SCCOL nCol = nStartCol; nCol <= nEndCol; nCol++)
         {
+            if (!fnColInRanges(nCol))
+                continue;
             OUString aCellStr = rDoc.GetString(nCol, nStartRow, nTab);
             aBuf.append(" " + fnEscapeCell(aCellStr) + " |");
         }
@@ -324,19 +369,27 @@ OUString ScTransferObj::GetMarkdownFromRange(ScDocument& rDoc, const ScRange& rR
     else
         aBuf.append("|");
     for (SCCOL nCol = nStartCol; nCol <= nEndCol; nCol++)
+    {
+        if (!fnColInRanges(nCol))
+            continue;
         aBuf.append(" --- |");
+    }
     aBuf.append("\n");
 
     // Data rows
     SCROW nDataStart = bAnnotated ? nStartRow : nStartRow + 1;
     for (SCROW nRow = nDataStart; nRow <= nEndRow; nRow++)
     {
+        if (!fnRowInRanges(nRow))
+            continue;
         if (bAnnotated)
             aBuf.append(OString::Concat("| ") + OString::number(static_cast<int>(nRow + 1)) + " |");
         else
             aBuf.append("|");
         for (SCCOL nCol = nStartCol; nCol <= nEndCol; nCol++)
         {
+            if (!fnColInRanges(nCol))
+                continue;
             OUString aCellStr = rDoc.GetString(nCol, nRow, nTab);
             aBuf.append(" " + fnEscapeCell(aCellStr) + " |");
         }

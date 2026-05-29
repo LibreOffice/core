@@ -626,10 +626,56 @@ rtl::Reference<ScTransferObj> ScViewFunc::CopyToTransferable()
     }
     else if (eMarkType == SC_MARK_MULTI)
     {
+        // GetSimpleArea returns the cursor cell for SC_MARK_MULTI rather
+        // than a range covering the marks, so build the real ScRangeList
+        // here from the mark and drive ScDocument::CopyToClip with it.
+        // CopyToClipMultiRange rejects calls that supply a clip doc and
+        // also writes to the system clipboard, neither of which fits a
+        // get-transferable caller (e.g. the AI sidebar fetching markdown
+        // for a ctrl-clicked multi-column selection).
+        ScDocument& rDoc = GetViewData().GetDocument();
+        ScMarkData& rMark = GetViewData().GetMarkData();
+
+        ScRangeList aRangeList;
+        rMark.MarkToSimple();
+        rMark.FillRangeListWithMarks(&aRangeList, false);
+        if (aRangeList.empty())
+            return nullptr;
+
+        // Entire-row and entire-column marks span the full sheet width or
+        // height. Clamp each range to the used data area so the clip - and
+        // the text and markdown serializations built from it - covers only
+        // populated cells rather than the whole 16384-column / 1048576-row
+        // span. GetSimpleArea trims the contiguous SC_MARK_SIMPLE path the
+        // same way.
+        for (size_t i = 0; i < aRangeList.size(); ++i)
+        {
+            ScRange& rR = aRangeList[i];
+            SCCOL nCol1 = rR.aStart.Col();
+            SCROW nRow1 = rR.aStart.Row();
+            SCCOL nCol2 = rR.aEnd.Col();
+            SCROW nRow2 = rR.aEnd.Row();
+            bool bShrunk = false;
+            if (rDoc.ShrinkToUsedDataArea(bShrunk, rR.aStart.Tab(), nCol1, nRow1, nCol2,
+                                          nRow2, /*bColumnsOnly=*/false))
+            {
+                rR.aStart.SetCol(nCol1);
+                rR.aStart.SetRow(nRow1);
+                rR.aEnd.SetCol(nCol2);
+                rR.aEnd.SetRow(nRow2);
+            }
+        }
+
+        ScClipParam aClipParam(aRangeList[0], /*bCut=*/false);
+        aClipParam.maRanges = aRangeList;
+
         ScDocumentUniquePtr pClipDoc(new ScDocument(SCDOCMODE_CLIP));
-        // This takes care of the input line and calls CopyToClipMultiRange() for us.
-        CopyToClip(pClipDoc.get(), aRange, /*bCut=*/false, /*bApi=*/true);
+        rDoc.CopyToClip(aClipParam, pClipDoc.get(), &rMark, false, false);
+
+        ScDocShell* pDocSh = GetViewData().GetDocShell();
         TransferableObjectDescriptor aObjDesc;
+        pDocSh->FillTransferableObjectDescriptor(aObjDesc);
+        aObjDesc.maDisplayName = pDocSh->GetMedium()->GetURLObject().GetURLNoPass();
         return new ScTransferObj(std::move(pClipDoc), std::move(aObjDesc));
     }
 
