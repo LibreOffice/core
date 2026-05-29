@@ -17,69 +17,16 @@
 #include <svx/svdpage.hxx>
 #include <svx/sdrobjectuser.hxx>
 #include <svx/sdrpageuser.hxx>
-#include <svx/sdr/contact/viewcontact.hxx>
+#include <svl/hint.hxx>
 #include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
+#include <svl/lstner.hxx>
+#include <svl/style.hxx>
 #include <svx/xbtmpit.hxx>
 #include <svx/xdef.hxx>
 #include <vcl/GraphicObject.hxx>
 #include <vcl/graph.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
-
-namespace
-{
-// Link class for fill bitmap items with remote URLs.
-// DataChanged receives the fetched graphic and updates the actual
-// XFillBitmapItem in the attribute pool so the drawing layer picks up
-// the resolved image on the next repaint.
-class FillBitmapLink final : public sfx2::SvBaseLink
-{
-    SfxItemPool& m_rPool;
-    sfx2::LinkManager& m_rLinkMgr;
-    std::function<void()> m_fnInvalidate;
-
-public:
-    FillBitmapLink(SfxItemPool& rPool, sfx2::LinkManager& rLinkMgr,
-                   std::function<void()> fnInvalidate)
-        : SvBaseLink(SfxLinkUpdateMode::ONCALL, SotClipboardFormatId::SVXB)
-        , m_rPool(rPool)
-        , m_rLinkMgr(rLinkMgr)
-        , m_fnInvalidate(std::move(fnInvalidate))
-    {
-    }
-
-    virtual UpdateResult DataChanged(const OUString& rMimeType,
-                                     const css::uno::Any& rValue) override
-    {
-        Graphic aGrf;
-        if (!m_rLinkMgr.GetGraphicFromAny(rMimeType, rValue, aGrf, nullptr))
-            return ERROR_GENERAL;
-        if (aGrf.GetType() == GraphicType::Default)
-            return ERROR_GENERAL;
-
-        OUString aURL;
-        sfx2::LinkManager::GetDisplayNames(this, nullptr, &aURL);
-        GraphicObject aGrfObj(aGrf);
-
-        // Replace the item in all attribute sets via pool surrogates
-        m_rPool.iterateItemSurrogates(
-            XATTR_FILLBITMAP, [&aURL, &aGrfObj](SfxItemPool::SurrogateData& rData) -> bool {
-                auto& rItem = static_cast<const XFillBitmapItem&>(rData.getItem());
-                const Graphic& rGrf = rItem.GetGraphicObject().GetGraphic();
-                if (rGrf.GetType() == GraphicType::Default && rGrf.getOriginURL() == aURL)
-                {
-                    rData.setItem(std::make_unique<XFillBitmapItem>(aGrfObj));
-                }
-                return true;
-            });
-
-        if (m_fnInvalidate)
-            m_fnInvalidate();
-
-        return SUCCESS;
-    }
-};
-}
 
 OUString getDeferredOriginURL(const XFillBitmapItem& rItem)
 {
@@ -97,29 +44,6 @@ bool hasDeferredFillBitmapLinks(const SfxItemPool& rPool)
             return true;
     }
     return false;
-}
-
-void registerFillBitmapLinks(SfxItemPool& rPool, sfx2::LinkManager& rLinkMgr,
-                             std::function<void()> fnInvalidate)
-{
-    for (const SfxPoolItem* pItem : rPool.GetItemSurrogates(XATTR_FILLBITMAP))
-    {
-        OUString aURL = getDeferredOriginURL(static_cast<const XFillBitmapItem&>(*pItem));
-        if (aURL.isEmpty())
-            continue;
-        tools::SvRef<sfx2::SvBaseLink> xLink(new FillBitmapLink(rPool, rLinkMgr, fnInvalidate));
-        rLinkMgr.InsertFileLink(*xLink, sfx2::SvBaseLinkObjectType::ClientGraphic, aURL);
-    }
-}
-
-void registerFillBitmapLinks(SdrModel& rModel, sfx2::LinkManager& rLinkMgr)
-{
-    registerFillBitmapLinks(rModel.GetItemPool(), rLinkMgr, [&rModel]() {
-        for (sal_uInt16 nPage = 0; nPage < rModel.GetPageCount(); ++nPage)
-            rModel.GetPage(nPage)->GetViewContact().flushViewObjectContacts();
-        for (sal_uInt16 nPage = 0; nPage < rModel.GetMasterPageCount(); ++nPage)
-            rModel.GetMasterPage(nPage)->GetViewContact().flushViewObjectContacts();
-    });
 }
 
 namespace
@@ -246,6 +170,62 @@ public:
         m_rTracker.onFillBitmapURLChanged(const_cast<SdrPage&>(rPage), u"");
     }
 };
+
+// Style-sheet counterpart, for a fill shared by every host using the style
+// (e.g. an Impress slide background on the Background pseudo-style). Listens to
+// the style sheet's broadcaster for SfxHintId::Dying and writes the resolved
+// graphic back into the style sheet's item set so all users repaint.
+class SdrStyleSheetFillBitmapLink final : public sfx2::SvBaseLink, public SfxListener
+{
+    sdr::FillBitmapLinkTracker& m_rTracker;
+    SfxStyleSheet* m_pStyle;
+    sfx2::LinkManager& m_rLinkMgr;
+
+public:
+    SdrStyleSheetFillBitmapLink(sdr::FillBitmapLinkTracker& rTracker, SfxStyleSheet& rStyle,
+                                sfx2::LinkManager& rLinkMgr)
+        : SvBaseLink(SfxLinkUpdateMode::ONCALL, SotClipboardFormatId::SVXB)
+        , m_rTracker(rTracker)
+        , m_pStyle(&rStyle)
+        , m_rLinkMgr(rLinkMgr)
+    {
+        StartListening(rStyle);
+    }
+
+    virtual UpdateResult DataChanged(const OUString& rMimeType,
+                                     const css::uno::Any& rValue) override
+    {
+        tools::SvRef<SvBaseLink> xSelf(this);
+
+        if (!m_pStyle)
+            return ERROR_GENERAL;
+
+        Graphic aGrf;
+        if (!m_rLinkMgr.GetGraphicFromAny(rMimeType, rValue, aGrf, nullptr))
+            return ERROR_GENERAL;
+        if (aGrf.GetType() == GraphicType::Default)
+            return ERROR_GENERAL;
+
+        SfxItemSet& rSet = m_pStyle->GetItemSet();
+        OUString aName;
+        if (const XFillBitmapItem* pItem = rSet.GetItemIfSet(XATTR_FILLBITMAP, false))
+            aName = pItem->GetName();
+        rSet.Put(XFillBitmapItem(aName, aGrf));
+        m_pStyle->Broadcast(SfxHint(SfxHintId::DataChanged));
+        return SUCCESS;
+    }
+
+    virtual void Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint) override
+    {
+        if (rHint.GetId() != SfxHintId::Dying)
+            return;
+        SfxStyleSheet* pStyle = m_pStyle;
+        m_pStyle = nullptr;
+        tools::SvRef<SvBaseLink> xSelf(this);
+        if (pStyle)
+            m_rTracker.onFillBitmapURLChanged(*pStyle, u"");
+    }
+};
 }
 
 namespace sdr
@@ -263,9 +243,12 @@ FillBitmapLinkTracker::~FillBitmapLinkTracker()
             pLinkMgr->Remove(rEntry.second.get());
         for (const auto& rEntry : m_aPageLinks)
             pLinkMgr->Remove(rEntry.second.get());
+        for (const auto& rEntry : m_aStyleLinks)
+            pLinkMgr->Remove(rEntry.second.get());
     }
     m_aObjLinks.clear();
     m_aPageLinks.clear();
+    m_aStyleLinks.clear();
 }
 
 template <typename Host, typename Link>
@@ -301,6 +284,12 @@ void FillBitmapLinkTracker::onFillBitmapURLChanged(SdrObject& rObj, std::u16stri
 void FillBitmapLinkTracker::onFillBitmapURLChanged(SdrPage& rPage, std::u16string_view rNewURL)
 {
     onURLChangedImpl<SdrPage, SdrPageFillBitmapLink>(m_aPageLinks, rPage, rNewURL);
+}
+
+void FillBitmapLinkTracker::onFillBitmapURLChanged(SfxStyleSheet& rStyle,
+                                                   std::u16string_view rNewURL)
+{
+    onURLChangedImpl<SfxStyleSheet, SdrStyleSheetFillBitmapLink>(m_aStyleLinks, rStyle, rNewURL);
 }
 }
 

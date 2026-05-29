@@ -17,7 +17,6 @@
 #include <rtl/ustring.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/objsh.hxx>
-#include <svx/fillbitmaplink.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/sdr/contact/viewobjectcontact.hxx>
@@ -184,7 +183,9 @@ CPPUNIT_TEST_FIXTURE(SdrTest, testSlideBackground)
 
     // Allow link updates and resolve the linked background image via the
     // LinkManager before rendering, so createNewSdrFillGraphicAttribute
-    // sees a Bitmap and not a deferred GraphicType::Default item.
+    // sees a Bitmap and not a deferred GraphicType::Default item. The link
+    // was registered per style sheet by the model's FillBitmapLinkTracker as
+    // the background was set on the Background style during load.
     SfxObjectShell* pShell = SfxObjectShell::GetShellFromComponent(mxComponent);
     CPPUNIT_ASSERT(pShell);
     pShell->getEmbeddedObjectContainer().setUserAllowsLinkUpdate(true);
@@ -193,7 +194,6 @@ CPPUNIT_TEST_FIXTURE(SdrTest, testSlideBackground)
     SdrModel& rModel = pSvxDrawPage->GetSdrPage()->getSdrModelFromSdrPage();
     sfx2::LinkManager* pLinkMgr = rModel.GetLinkManager();
     CPPUNIT_ASSERT(pLinkMgr);
-    registerFillBitmapLinks(rModel.GetItemPool(), *pLinkMgr, []() {});
     pLinkMgr->UpdateAllLinks(false, nullptr, u""_ustr);
 
     // When rendering that document:

@@ -16,7 +16,6 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <tools/ref.hxx>
-#include <functional>
 #include <map>
 #include <string_view>
 #include <vector>
@@ -25,6 +24,7 @@ class SdrModel;
 class SdrObject;
 class SdrPage;
 class SfxItemPool;
+class SfxStyleSheet;
 class XFillBitmapItem;
 
 namespace com::sun::star::beans
@@ -45,17 +45,6 @@ SVXCORE_DLLPUBLIC OUString getDeferredOriginURL(const XFillBitmapItem& rItem);
 // unresolved remote URLs (GraphicType::Default with non-empty originURL).
 SVXCORE_DLLPUBLIC bool hasDeferredFillBitmapLinks(const SfxItemPool& rPool);
 
-// Scan pool surrogates for XATTR_FILLBITMAP items with unresolved remote
-// URLs (GraphicType::Default with non-empty originURL) and register an
-// sfx2::SvBaseLink for each. When the link is updated, the fetched graphic
-// replaces the pool item and fnInvalidate is called to trigger a repaint.
-SVXCORE_DLLPUBLIC void registerFillBitmapLinks(SfxItemPool& rPool, sfx2::LinkManager& rLinkMgr,
-                                               std::function<void()> fnInvalidate);
-
-// Convenience overload for the drawing layer: registers fill bitmap links
-// and flushes all ViewObjectContacts on all pages when the graphic arrives.
-SVXCORE_DLLPUBLIC void registerFillBitmapLinks(SdrModel& rModel, sfx2::LinkManager& rLinkMgr);
-
 namespace sdr
 {
 // Owns one sfx2::SvBaseLink per host (SdrObject or SdrPage background) that
@@ -74,9 +63,13 @@ public:
     ~FillBitmapLinkTracker();
 
     // rNewURL is the deferred origin URL of the new item, or empty when the
-    // item is absent, already resolved, or the host is going away.
+    // item is absent, already resolved, or the host is going away. The
+    // SfxStyleSheet host covers a fill shared by every object or page using
+    // that style (e.g. an Impress slide background on the Background style),
+    // the drawing-layer counterpart of a fill on a Writer paragraph style.
     void onFillBitmapURLChanged(SdrObject& rObj, std::u16string_view rNewURL);
     void onFillBitmapURLChanged(SdrPage& rPage, std::u16string_view rNewURL);
+    void onFillBitmapURLChanged(SfxStyleSheet& rStyle, std::u16string_view rNewURL);
 
     // Suppress the onFillBitmapURLChanged that a link's own write-back of the
     // resolved graphic would otherwise raise for its host.
@@ -91,6 +84,7 @@ private:
     const void* m_pUpdatingHost = nullptr;
     std::map<SdrObject*, tools::SvRef<sfx2::SvBaseLink>> m_aObjLinks;
     std::map<SdrPage*, tools::SvRef<sfx2::SvBaseLink>> m_aPageLinks;
+    std::map<SfxStyleSheet*, tools::SvRef<sfx2::SvBaseLink>> m_aStyleLinks;
 };
 }
 
