@@ -5130,7 +5130,7 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testSequenceFormulaResolveAfterBlockerIsDelet
     // Blocker at A2
     rFunc.SetStringCell(ScAddress(0, 1, 0), u"blocker"_ustr, true);
 
-    // SEQUENCE(4) entered, blocked by the bloker in A2
+    // SEQUENCE(4) entered, blocked by the blocker in A2
     rFunc.EnterMatrix(ScRange(0, 0, 0, 0, 3, 0), &aMark, nullptr, u"=SEQUENCE(4)"_ustr, true, false,
                       OUString(), formula::FormulaGrammar::GRAM_DEFAULT, true);
 
