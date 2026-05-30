@@ -80,7 +80,8 @@ void XclExpTablesImpl8::SaveXml( XclExpXmlStream& rStrm )
         const ScDBData& rData = *it.mpData;
         ScRange aRange(ScAddress::UNINITIALIZED);
         rData.GetArea(aRange);
-        // minimal height of a valid table, don't export if less than that, Excel won't accept it
+        // a valid table has to have at least 1 data row
+        // don't export if less than that, Excel won't accept it
         const SCROW nMinHeight = (rData.HasHeader() ? 1 : 0) + (rData.HasTotals() ? 1 : 0) + 1;
         if (aRange.aEnd.Row() - aRange.aStart.Row() + 1 < nMinHeight)
             continue;
