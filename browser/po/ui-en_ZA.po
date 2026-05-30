@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-29 07:49+0200\n"
-"PO-Revision-Date: 2026-05-04 13:07+0000\n"
+"PO-Revision-Date: 2026-05-30 02:02+0000\n"
 "Last-Translator: Rob Pearson <rob.dunedin@gmail.com>\n"
 "Language-Team: English (South Africa) <https://hosted.weblate.org/projects/"
-"collabora-online/ui/en_ZA/>\n"
-"Language: \n"
+"collabora-online/collabora-ui/en_ZA/>\n"
+"Language: en_ZA\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.17.1\n"
+"X-Generator: Weblate 2026.6.dev0\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -407,33 +407,31 @@ msgstr "Signature CA"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:434
 #: admin/src/integrator/AdminIntegratorSettings.ts:438
-#, fuzzy
 msgid "Provider"
-msgstr "Provider:"
+msgstr "Provider"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:435
 #: admin/src/integrator/AdminIntegratorSettings.ts:439
 msgid "API Key"
-msgstr ""
+msgstr "API Key"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:436
 #: admin/src/integrator/AdminIntegratorSettings.ts:441
-#, fuzzy
 msgid "Model"
-msgstr "Mode"
+msgstr "Model"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:437
 #: admin/src/integrator/AdminIntegratorSettings.ts:440
 msgid "Base URL"
-msgstr ""
+msgstr "Base URL"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:442
 msgid "Image Size"
-msgstr ""
+msgstr "Image Size"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:443
 msgid "Request Timeout (seconds)"
-msgstr ""
+msgstr "Request Timeout (seconds)"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:446
 msgid "In-document Screen Reader"
@@ -453,11 +451,11 @@ msgstr "Dark Mode"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:448
 msgid "Smart Zoom"
-msgstr ""
+msgstr "Smart Zoom"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:449
 msgid "Default Zoom"
-msgstr ""
+msgstr "Default Zoom"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:450
 msgid "Compact layout"
@@ -738,17 +736,19 @@ msgstr "Upload Xcu"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:715
 msgid "Document themes"
-msgstr ""
+msgstr "Document themes"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:717
 msgid ""
 "Upload custom document themes (.theme). These define color palettes "
 "available under Format > Theme."
 msgstr ""
+"Upload custom document themes (.theme). These define colour palettes "
+"available under Format > Theme."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:723
 msgid "Upload Theme"
-msgstr ""
+msgstr "Upload Theme"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:778
 msgid "Something went wrong. Please try to refresh the page."
@@ -871,68 +871,70 @@ msgid ""
 "Configure AI provider credentials and model. Models are fetched "
 "automatically when credentials change."
 msgstr ""
+"Configure AI provider credentials and model. Models are fetched "
+"automatically when credentials change."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1981
 msgid "Text Generation"
-msgstr ""
+msgstr "Text Generation"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2031
 #: admin/src/integrator/AdminIntegratorSettings.ts:2137
 msgid "e.g."
-msgstr ""
+msgstr "e.g."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2050
 #: admin/src/integrator/AdminIntegratorSettings.ts:2168
 #: admin/src/integrator/AdminIntegratorSettings.ts:2612
 #: admin/src/integrator/AdminIntegratorSettings.ts:2628
 msgid "Fetch models to select"
-msgstr ""
+msgstr "Fetch models to select"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2079
 msgid "Image Generation"
-msgstr ""
+msgstr "Image Generation"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2084
 msgid "Same as Text AI"
-msgstr ""
+msgstr "Same as Text AI"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2153
 msgid "Leave empty to use Text AI key"
-msgstr ""
+msgstr "Leave empty to use Text AI key"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2415
 #: admin/src/integrator/AdminIntegratorSettings.ts:2502
 msgid "Fetching models..."
-msgstr ""
+msgstr "Fetching models..."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2444
 #: admin/src/integrator/AdminIntegratorSettings.ts:2454
 #: admin/src/integrator/AdminIntegratorSettings.ts:2531
 #: admin/src/integrator/AdminIntegratorSettings.ts:2541
 msgid "No models found"
-msgstr ""
+msgstr "No models found"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2464
 #: admin/src/integrator/AdminIntegratorSettings.ts:2551
 msgid "Models fetched successfully"
-msgstr ""
+msgstr "Models fetched successfully"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2470
 #: admin/src/integrator/AdminIntegratorSettings.ts:2557
 msgid "Failed to fetch models"
-msgstr ""
+msgstr "Failed to fetch models"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2480
 msgid "Invalid provider configuration"
-msgstr ""
+msgstr "Invalid provider configuration"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2592
 msgid "None (disable image generation)"
-msgstr ""
+msgstr "None (disable image generation)"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2976
 msgid "Reset"
-msgstr ""
+msgstr "Reset"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3095
 #: src/control/Control.AIChatSidebar.ts:2638 src/map/handler/Map.WOPI.js:869
@@ -1066,29 +1068,28 @@ msgstr "Event handling has been delayed for an unexpectedly long time: {0}ms"
 
 #: src/app/LOUtil.ts:981
 msgid "{0} website, opens in new tab"
-msgstr ""
+msgstr "{0} website, opens in new tab"
 
 #: src/app/LOUtil.ts:984
 msgid "file type icon"
 msgstr "file type icon"
 
 #: src/app/TableStylesService.ts:100
-#, fuzzy
 msgid "Light"
-msgstr "Lights"
+msgstr "Light"
 
 #: src/app/TableStylesService.ts:102
 msgid "Medium"
-msgstr ""
+msgstr "Medium"
 
 #: src/app/TableStylesService.ts:104
 msgid "Dark"
-msgstr ""
+msgstr "Dark"
 
 #: src/app/TableStylesService.ts:106
 #: src/control/jsdialog/Widget.ColorPicker.ts:334
 msgid "Custom"
-msgstr ""
+msgstr "Custom"
 
 #: src/app/TableStylesService.ts:231 src/app/TableStylesService.ts:243
 #: src/app/TableStylesService.ts:245
@@ -1158,9 +1159,8 @@ msgid "Resolved"
 msgstr "Resolved"
 
 #: src/canvas/sections/CommentSection.ts:580
-#, fuzzy
 msgid "Removed"
-msgstr "Remove"
+msgstr "Removed"
 
 #: src/canvas/sections/CommentSection.ts:1182
 #: src/control/jsdialog/Widget.Comment.ts:177
@@ -1258,39 +1258,39 @@ msgstr "Remove link"
 
 #: src/canvas/sections/FormFieldButton.ts:106
 msgid "Unfold"
-msgstr ""
+msgstr "Unfold"
 
 #: src/canvas/sections/FormulaErrorHelpSection.ts:80
 msgid "Help on this error"
-msgstr ""
+msgstr "Help on this error"
 
 #: src/canvas/sections/FormulaErrorHelpSection.ts:85
 msgid "Inspect with Function Wizard"
-msgstr ""
+msgstr "Inspect with Function Wizard"
 
 #: src/canvas/sections/FormulaErrorHelpSection.ts:90
 msgid "Edit in Formula Bar"
-msgstr ""
+msgstr "Edit in Formula Bar"
 
 #: src/canvas/sections/FormulaErrorHelpSection.ts:98
 msgid "Help fix this error with AI"
-msgstr ""
+msgstr "Help fix this error with AI"
 
 #: src/canvas/sections/HeaderFooterBoundarySection.ts:152
 msgid "Header"
-msgstr ""
+msgstr "Header"
 
 #: src/canvas/sections/HeaderFooterBoundarySection.ts:160
 msgid "Footer"
-msgstr ""
+msgstr "Footer"
 
 #: src/control/CalcNotifications.ts:42
 msgid "Deletion created #REF! errors in other formulas. Undo to restore."
-msgstr ""
+msgstr "Deletion created #REF! errors in other formulas. Undo to restore."
 
 #: src/control/CalcNotifications.ts:43
 msgid "Find First"
-msgstr ""
+msgstr "Find First"
 
 #: src/control/ColorPicker.ts:269
 msgid "No color"
@@ -1303,7 +1303,7 @@ msgstr "Automatic colour"
 #: src/control/Control.AboutDialog.ts:89
 #: src/control/jsdialog/Widget.TreeView.ts:786
 msgid "(opens in new tab)"
-msgstr ""
+msgstr "(opens in new tab)"
 
 #: src/control/Control.AboutDialog.ts:155
 msgid "Served by: "
@@ -1339,188 +1339,187 @@ msgstr "cell address"
 
 #: src/control/Control.AIChatSidebar.ts:79
 msgid "Make the following text more concise"
-msgstr ""
+msgstr "Make the following text more concise"
 
 #: src/control/Control.AIChatSidebar.ts:83
 msgid "Summarize the key points of this text"
-msgstr ""
+msgstr "Summarise the key points of this text"
 
 #: src/control/Control.AIChatSidebar.ts:87
 msgid "Expand and add more detail to this text"
-msgstr ""
+msgstr "Expand and add more detail to this text"
 
 #: src/control/Control.AIChatSidebar.ts:91
 msgid "Fix grammar, spelling, and punctuation errors"
-msgstr ""
+msgstr "Fix grammar, spelling, and punctuation errors"
 
 #: src/control/Control.AIChatSidebar.ts:107
 msgid "Natural"
-msgstr ""
+msgstr "Natural"
 
 #: src/control/Control.AIChatSidebar.ts:108
-#, fuzzy
 msgid "Formal"
-msgstr "Format"
+msgstr "Formal"
 
 #: src/control/Control.AIChatSidebar.ts:109
-#, fuzzy
 msgid "Short"
-msgstr "Sort"
+msgstr "Short"
 
 #: src/control/Control.AIChatSidebar.ts:110
 msgid "Friendly"
-msgstr ""
+msgstr "Friendly"
 
 #: src/control/Control.AIChatSidebar.ts:111
 msgid "Professional"
-msgstr ""
+msgstr "Professional"
 
 #: src/control/Control.AIChatSidebar.ts:112
 msgid "Casual"
-msgstr ""
+msgstr "Casual"
 
 #: src/control/Control.AIChatSidebar.ts:338
 msgid "Unknown"
-msgstr ""
+msgstr "Unknown"
 
 #: src/control/Control.AIChatSidebar.ts:340
 msgid ""
 "Ethical AI rating: {0} ({1}). Based on open-source licensing, self-hosting, "
 "and training data."
 msgstr ""
+"Ethical AI rating: {0} ({1}). Based on open-source licensing, self-hosting, "
+"and training data."
 
 #: src/control/Control.AIChatSidebar.ts:423
 msgid "Your message"
-msgstr ""
+msgstr "Your message"
 
 #: src/control/Control.AIChatSidebar.ts:425
 msgid "Action requiring approval"
-msgstr ""
+msgstr "Action requiring approval"
 
 #: src/control/Control.AIChatSidebar.ts:427
 msgid "Error message"
-msgstr ""
+msgstr "Error message"
 
 #: src/control/Control.AIChatSidebar.ts:428
 msgid "AI response"
-msgstr ""
+msgstr "AI response"
 
 #: src/control/Control.AIChatSidebar.ts:502
 msgid ""
 "Content generated by an external AI service ({0}). Please review before use."
 msgstr ""
+"Content generated by an external AI service ({0}). Please review before use."
 
 #: src/control/Control.AIChatSidebar.ts:505
 msgid "Content generated by an external AI service. Please review before use."
-msgstr ""
+msgstr "Content generated by an external AI service. Please review before use."
 
 #: src/control/Control.AIChatSidebar.ts:583
 msgid "New conversation"
-msgstr ""
+msgstr "New conversation"
 
 #: src/control/Control.AIChatSidebar.ts:614
 msgid "Ask AI anything about your document..."
-msgstr ""
+msgstr "Ask AI anything about your document..."
 
 #: src/control/Control.AIChatSidebar.ts:672
 msgid "Loading"
-msgstr ""
+msgstr "Loading"
 
 #: src/control/Control.AIChatSidebar.ts:685
 msgid "Chat messages"
-msgstr ""
+msgstr "Chat messages"
 
 #: src/control/Control.AIChatSidebar.ts:711
 msgid "AI generated image"
-msgstr ""
+msgstr "AI generated image"
 
 #: src/control/Control.AIChatSidebar.ts:746
 msgid "Retry"
-msgstr ""
+msgstr "Retry"
 
 #: src/control/Control.AIChatSidebar.ts:770
 #: src/control/Control.AIChatSidebar.ts:803
 msgid "Insert at cursor"
-msgstr ""
+msgstr "Insert at cursor"
 
 #: src/control/Control.AIChatSidebar.ts:779
 #: src/control/Control.AIChatSidebar.ts:810
 msgid "Copy to clipboard"
-msgstr ""
+msgstr "Copy to clipboard"
 
 #: src/control/Control.AIChatSidebar.ts:831
 msgid "Ask AI..."
-msgstr ""
+msgstr "Ask AI..."
 
 #: src/control/Control.AIChatSidebar.ts:834
 msgid "Message input"
-msgstr ""
+msgstr "Message input"
 
 #: src/control/Control.AIChatSidebar.ts:850
 msgid "Stop generating"
-msgstr ""
+msgstr "Stop generating"
 
 #: src/control/Control.AIChatSidebar.ts:851
 msgid "Send message"
-msgstr ""
+msgstr "Send message"
 
 #: src/control/Control.AIChatSidebar.ts:865
 #: src/control/Control.AIChatSidebar.ts:878
 msgid "Set tone"
-msgstr ""
+msgstr "Set tone"
 
 #: src/control/Control.AIChatSidebar.ts:889
 msgid "Set tone of voice"
-msgstr ""
+msgstr "Set tone of voice"
 
 #: src/control/Control.AIChatSidebar.ts:890
 msgid "Tone of voice: {0}{1}"
-msgstr ""
+msgstr "Tone of voice: {0}{1}"
 
 #: src/control/Control.AIChatSidebar.ts:892
 msgid "with emoji"
-msgstr ""
+msgstr "with emoji"
 
 #: src/control/Control.AIChatSidebar.ts:934
 #: src/control/Control.AIChatSidebar.ts:984
 #: src/control/Control.AIChatSidebar.ts:1356
-#, fuzzy
 msgid "tone"
-msgstr "None"
+msgstr "tone"
 
 #: src/control/Control.AIChatSidebar.ts:947
 #: src/control/Control.AIChatSidebar.ts:1218
 msgid "Tone of voice"
-msgstr ""
+msgstr "Tone of voice"
 
 #: src/control/Control.AIChatSidebar.ts:953
 msgid "Reset voice"
-msgstr ""
+msgstr "Reset voice"
 
 #: src/control/Control.AIChatSidebar.ts:956
 msgid "Reset tone of voice"
-msgstr ""
+msgstr "Reset tone of voice"
 
 #: src/control/Control.AIChatSidebar.ts:972
 msgid "Your tones"
-msgstr ""
+msgstr "Your tones"
 
 #: src/control/Control.AIChatSidebar.ts:989
-#, fuzzy
 msgid "Edit tone"
-msgstr "Edit mode"
+msgstr "Edit tone"
 
 #: src/control/Control.AIChatSidebar.ts:1006
 msgid "+ Add my own voice"
-msgstr ""
+msgstr "+ Add my own voice"
 
 #: src/control/Control.AIChatSidebar.ts:1008
 msgid "Add a custom tone of voice"
-msgstr ""
+msgstr "Add a custom tone of voice"
 
 #: src/control/Control.AIChatSidebar.ts:1019
 msgid "Emojify"
-msgstr ""
+msgstr "Emojify"
 
 #: src/control/Control.AIChatSidebar.ts:1025
 #: src/control/Control.StatusBar.js:162
@@ -1535,137 +1534,138 @@ msgstr "Off"
 
 #: src/control/Control.AIChatSidebar.ts:1028
 msgid "Toggle emojify"
-msgstr ""
+msgstr "Toggle emojify"
 
 #: src/control/Control.AIChatSidebar.ts:1189
 msgid "Use icon"
-msgstr ""
+msgstr "Use icon"
 
 #: src/control/Control.AIChatSidebar.ts:1199
 msgid "Pick another emoji"
-msgstr ""
+msgstr "Pick another emoji"
 
 #: src/control/Control.AIChatSidebar.ts:1213
 msgid "Back to tones"
-msgstr ""
+msgstr "Back to tones"
 
 #: src/control/Control.AIChatSidebar.ts:1226
 msgid "Icon"
-msgstr ""
+msgstr "Icon"
 
 #: src/control/Control.AIChatSidebar.ts:1238
 msgid "Name your tone"
-msgstr ""
+msgstr "Name your tone"
 
 #: src/control/Control.AIChatSidebar.ts:1245
 msgid "e.g. Quick reply"
-msgstr ""
+msgstr "e.g. Quick reply"
 
 #: src/control/Control.AIChatSidebar.ts:1247
 msgid "Tone name"
-msgstr ""
+msgstr "Tone name"
 
 #: src/control/Control.AIChatSidebar.ts:1252
 msgid "Describe how AI should write"
-msgstr ""
+msgstr "Describe how AI should write"
 
 #: src/control/Control.AIChatSidebar.ts:1260
 msgid ""
 "Write short, direct sentences. Use plain language and skip the small talk."
 msgstr ""
+"Write short, direct sentences. Use plain language and skip the small talk."
 
 #: src/control/Control.AIChatSidebar.ts:1264
 msgid "Tone description"
-msgstr ""
+msgstr "Tone description"
 
 #: src/control/Control.AIChatSidebar.ts:1273
 #: src/control/Control.AIChatSidebar.ts:1335
 #: src/control/Control.AIChatSidebar.ts:1377
 msgid "Delete tone"
-msgstr ""
+msgstr "Delete tone"
 
 #: src/control/Control.AIChatSidebar.ts:1275
 msgid "Delete this tone"
-msgstr ""
+msgstr "Delete this tone"
 
 #: src/control/Control.AIChatSidebar.ts:1288
 msgid "Save voice"
-msgstr ""
+msgstr "Save voice"
 
 #: src/control/Control.AIChatSidebar.ts:1290
 msgid "Save tone of voice"
-msgstr ""
+msgstr "Save tone of voice"
 
 #: src/control/Control.AIChatSidebar.ts:1305
 #: src/control/jsdialog/Widget.EmojiPicker.ts:410
 msgid "Search emojis"
-msgstr ""
+msgstr "Search emojis"
 
 #: src/control/Control.AIChatSidebar.ts:1306
 #: src/control/jsdialog/Widget.EmojiPicker.ts:401
 msgid "Choose an emoji"
-msgstr ""
+msgstr "Choose an emoji"
 
 #: src/control/Control.AIChatSidebar.ts:1330
 msgid "Delete tone confirmation"
-msgstr ""
+msgstr "Delete tone confirmation"
 
 #: src/control/Control.AIChatSidebar.ts:1341
 msgid "This tone of voice will be deleted"
-msgstr ""
+msgstr "This tone of voice will be deleted"
 
 #: src/control/Control.AIChatSidebar.ts:1370
 msgid "Cancel delete"
-msgstr ""
+msgstr "Cancel delete"
 
 #: src/control/Control.AIChatSidebar.ts:1397
 #: src/control/Control.AIChatSidebar.ts:1457
 msgid "You have reached the maximum of {0} custom tones."
-msgstr ""
+msgstr "You have reached the maximum of {0} custom tones."
 
 #: src/control/Control.AIChatSidebar.ts:1631
 msgid "Using selected text as context"
-msgstr ""
+msgstr "Using selected text as context"
 
 #: src/control/Control.AIChatSidebar.ts:1639
 msgid "Diagnose formula error"
-msgstr ""
+msgstr "Diagnose formula error"
 
 #: src/control/Control.AIChatSidebar.ts:1645
 msgid "Sanity check data"
-msgstr ""
+msgstr "Sanity check data"
 
 #: src/control/Control.AIChatSidebar.ts:1651
 msgid "Create a formula"
-msgstr ""
+msgstr "Create a formula"
 
 #: src/control/Control.AIChatSidebar.ts:1658
 msgid "Create slides"
-msgstr ""
+msgstr "Create slides"
 
 #: src/control/Control.AIChatSidebar.ts:1690
 msgid "See less"
-msgstr ""
+msgstr "See less"
 
 #: src/control/Control.AIChatSidebar.ts:1690
 msgid "See more"
-msgstr ""
+msgstr "See more"
 
 #: src/control/Control.AIChatSidebar.ts:1800
 msgid "Image inserted at cursor"
-msgstr ""
+msgstr "Image inserted at cursor"
 
 #: src/control/Control.AIChatSidebar.ts:1819
 msgid "Text inserted at cursor"
-msgstr ""
+msgstr "Text inserted at cursor"
 
 #: src/control/Control.AIChatSidebar.ts:1893
 msgid "Approaching message length limit"
-msgstr ""
+msgstr "Approaching message length limit"
 
 #: src/control/Control.AIChatSidebar.ts:1947
 msgid "Request timeout"
-msgstr ""
+msgstr "Request timeout"
 
 #: src/control/Control.AIChatSidebar.ts:1962
 #: src/control/Control.AIChatSidebar.ts:2784
@@ -1673,133 +1673,133 @@ msgid ""
 "The selection contains images or other non-text content that cannot be sent "
 "as context."
 msgstr ""
+"The selection contains images or other non-text content that cannot be sent "
+"as context."
 
 #: src/control/Control.AIChatSidebar.ts:2049
 msgid "Message is too long. Please shorten it and try again."
-msgstr ""
+msgstr "Message is too long. Please shorten it and try again."
 
 #: src/control/Control.AIChatSidebar.ts:2104
 msgid "Error: "
-msgstr ""
+msgstr "Error: "
 
 #: src/control/Control.AIChatSidebar.ts:2126
 msgid "Generated image"
-msgstr ""
+msgstr "Generated image"
 
 #: src/control/Control.AIChatSidebar.ts:2137
 msgid "AI request failed"
-msgstr ""
+msgstr "AI request failed"
 
 #: src/control/Control.AIChatSidebar.ts:2154
 msgid "The AI assistant"
-msgstr ""
+msgstr "The AI assistant"
 
 #: src/control/Control.AIChatSidebar.ts:2167
 msgid "Do you want to proceed?"
-msgstr ""
+msgstr "Do you want to proceed?"
 
 #: src/control/Control.AIChatSidebar.ts:2170
 msgid "%1 wants to inspect your document. Do you want to proceed?"
-msgstr ""
+msgstr "%1 wants to inspect your document. Do you want to proceed?"
 
 #: src/control/Control.AIChatSidebar.ts:2174
 msgid "Modify document structure"
-msgstr ""
+msgstr "Modify document structure"
 
 #: src/control/Control.AIChatSidebar.ts:2176
 msgid "%1 wants to modify your document:"
-msgstr ""
+msgstr "%1 wants to modify your document:"
 
 #: src/control/Control.AIChatSidebar.ts:2180
 #: src/control/Control.AIChatSidebar.ts:2191
 msgid "Do you want to apply this change?"
-msgstr ""
+msgstr "Do you want to apply this change?"
 
 #: src/control/Control.AIChatSidebar.ts:2182
 msgid "Set cell formula"
-msgstr ""
+msgstr "Set cell formula"
 
 #: src/control/Control.AIChatSidebar.ts:2184
 msgid "%1 wants to set a formula in your spreadsheet:"
-msgstr ""
+msgstr "%1 wants to set a formula in your spreadsheet:"
 
 #: src/control/Control.AIChatSidebar.ts:2194
 msgid "%1 wants to perform an action. Do you want to proceed?"
-msgstr ""
+msgstr "%1 wants to perform an action. Do you want to proceed?"
 
 #: src/control/Control.AIChatSidebar.ts:2225
 msgid "Approve"
-msgstr ""
+msgstr "Approve"
 
 #: src/control/Control.AIChatSidebar.ts:2227
 msgid "Approve action"
-msgstr ""
+msgstr "Approve action"
 
 #: src/control/Control.AIChatSidebar.ts:2234
 msgid "Reject"
-msgstr ""
+msgstr "Reject"
 
 #: src/control/Control.AIChatSidebar.ts:2236
 msgid "Reject action"
-msgstr ""
+msgstr "Reject action"
 
 #: src/control/Control.AIChatSidebar.ts:2255
 msgid "Applying changes..."
-msgstr ""
+msgstr "Applying changes..."
 
 #: src/control/Control.AIChatSidebar.ts:2258
 msgid "Change rejected"
-msgstr ""
+msgstr "Change rejected"
 
 #: src/control/Control.AIChatSidebar.ts:2304
 msgid "Selection fetch timeout"
-msgstr ""
+msgstr "Selection fetch timeout"
 
 #: src/control/Control.AIChatSidebar.ts:2323
 msgid "Failed to parse selection content"
-msgstr ""
+msgstr "Failed to parse selection content"
 
 #: src/control/Control.AIChatSidebar.ts:2556
 msgid "Formula analysis timeout"
-msgstr ""
+msgstr "Formula analysis timeout"
 
 #: src/control/Control.AIChatSidebar.ts:2575
 msgid "Analyzing formula dependencies..."
-msgstr ""
+msgstr "Analysing formula dependencies..."
 
 #: src/control/Control.AIChatSidebar.ts:2583
 msgid "Failed to analyze formula."
-msgstr ""
+msgstr "Failed to analyse formula."
 
 #: src/control/Control.AIChatSidebar.ts:2593
 msgid "The selected cell does not contain a formula."
-msgstr ""
+msgstr "The selected cell does not contain a formula."
 
 #: src/control/Control.AIChatSidebar.ts:2595
 msgid "The selected cell does not have a formula error."
-msgstr ""
+msgstr "The selected cell does not have a formula error."
 
 #: src/control/Control.AIChatSidebar.ts:2604
 msgid "Diagnose formula error in"
-msgstr ""
+msgstr "Diagnose formula error in"
 
 #: src/control/Control.AIChatSidebar.ts:2625
 msgid "I have a formula error in my spreadsheet."
-msgstr ""
+msgstr "I have a formula error in my spreadsheet."
 
 #: src/control/Control.AIChatSidebar.ts:2627
-#, fuzzy
 msgid "Cell"
-msgstr "Cells"
+msgstr "Cell"
 
 #: src/control/Control.AIChatSidebar.ts:2631
-#, fuzzy
 msgid "Sheet"
-msgstr "Sheets"
+msgstr "Sheet"
 
 #: src/control/Control.AIChatSidebar.ts:2635
 msgid "contains"
-msgstr ""
+msgstr "contains"
 
 #: src/control/Control.AIChatSidebar.ts:2637
 #: src/control/Control.FormulaBarJSDialog.js:83
@@ -1810,124 +1810,135 @@ msgstr "Formula"
 
 #: src/control/Control.AIChatSidebar.ts:2641
 msgid "Referenced cells"
-msgstr ""
+msgstr "Referenced cells"
 
 #: src/control/Control.AIChatSidebar.ts:2647
 msgid "Please diagnose why this formula produces the"
-msgstr ""
+msgstr "Please diagnose why this formula produces the"
 
 #: src/control/Control.AIChatSidebar.ts:2651
 msgid "error."
-msgstr ""
+msgstr "error."
 
 #: src/control/Control.AIChatSidebar.ts:2653
 msgid "Explain the root cause and suggest how to fix it."
-msgstr ""
+msgstr "Explain the root cause and suggest how to fix it."
 
 #: src/control/Control.AIChatSidebar.ts:2657
 msgid ""
 "When referencing specific cells, format each cell address as a clickable "
 "link: [A1](cell://A1)."
 msgstr ""
+"When referencing specific cells, format each cell address as a clickable "
+"link: [A1](cell://A1)."
 
 #: src/control/Control.AIChatSidebar.ts:2672
-#, fuzzy
 msgid "formula"
-msgstr "Formula"
+msgstr "formula"
 
 #: src/control/Control.AIChatSidebar.ts:2674
 msgid "ERROR"
-msgstr ""
+msgstr "ERROR"
 
 #: src/control/Control.AIChatSidebar.ts:2688
 msgid "value"
-msgstr ""
+msgstr "value"
 
 #: src/control/Control.AIChatSidebar.ts:2698
-#, fuzzy
 msgid "text"
-msgstr "Text"
+msgstr "text"
 
 #: src/control/Control.AIChatSidebar.ts:2703
 msgid "empty"
-msgstr ""
+msgstr "empty"
 
 #: src/control/Control.AIChatSidebar.ts:2705
-#, fuzzy
 msgid "range"
-msgstr "Range"
+msgstr "range"
 
 #: src/control/Control.AIChatSidebar.ts:2707
 msgid "errors in"
-msgstr ""
+msgstr "errors in"
 
 #: src/control/Control.AIChatSidebar.ts:2710
 msgid "only partially scanned"
-msgstr ""
+msgstr "only partially scanned"
 
 #: src/control/Control.AIChatSidebar.ts:2719
 msgid "circular reference"
-msgstr ""
+msgstr "circular reference"
 
 #: src/control/Control.AIChatSidebar.ts:2769
 msgid "Select the data you want to sanity-check first."
-msgstr ""
+msgstr "Select the data you want to sanity-check first."
 
 #: src/control/Control.AIChatSidebar.ts:2774
 msgid "Analyzing selected data..."
-msgstr ""
+msgstr "Analysing selected data..."
 
 #: src/control/Control.AIChatSidebar.ts:2787
 msgid "Failed to extract spreadsheet data."
-msgstr ""
+msgstr "Failed to extract spreadsheet data."
 
 #: src/control/Control.AIChatSidebar.ts:2796
 msgid "No data found in selection."
-msgstr ""
+msgstr "No data found in selection."
 
 #: src/control/Control.AIChatSidebar.ts:2826
 msgid ""
 "Describe the slides you want to create. For example: \"A 5-slide overview "
 "of renewable energy\" or \"An introduction to our team\"."
 msgstr ""
+"Describe the slides you want to create. For example: \"A 5-slide overview of "
+"renewable energy\" or \"An introduction to our team\"."
 
 #: src/control/Control.AIChatSidebar.ts:2853
 msgid ""
 "Describe what formula you need. For example: \"Calculate the average of "
 "column B\" or \"Sum all values where column A is greater than 100\"."
 msgstr ""
+"Describe what formula you need. For example: \"Calculate the average of "
+"column B\" or \"Sum all values where column A is greater than 100\"."
 
 #: src/control/Control.AIChatSidebar.ts:2863
 msgid ""
 "Read row numbers from the \"Row\" column — do not count or estimate row "
 "positions."
 msgstr ""
+"Read row numbers from the \"Row\" column — do not count or estimate row "
+"positions."
 
 #: src/control/Control.AIChatSidebar.ts:2867
 msgid ""
 "To identify a cell's column, match the value to the column letter in the "
 "header row — do not guess."
 msgstr ""
+"To identify a cell's column, match the value to the column letter in the "
+"header row — do not guess."
 
 #: src/control/Control.AIChatSidebar.ts:2871
 msgid ""
 "Reference a cell by combining its column header with the row number (e.g., "
 "column B + row 2 = B2)."
 msgstr ""
+"Reference a cell by combining its column header with the row number (e.g., "
+"column B + row 2 = B2)."
 
 #: src/control/Control.AIChatSidebar.ts:2874
 msgid ""
 "When referencing specific cells, format each cell as a clickable link: [B2]"
 "(cell://B2)."
 msgstr ""
+"When referencing specific cells, format each cell as a clickable link: [B2]"
+"(cell://B2)."
 
 #: src/control/Control.AIChatSidebar.ts:2880
 msgid "Sanity check the following spreadsheet data."
-msgstr ""
+msgstr "Sanity check the following spreadsheet data."
 
 #: src/control/Control.AIChatSidebar.ts:2881
 msgid "Please analyze this data for:"
-msgstr ""
+msgstr "Please analyse this data for:"
 
 #: src/control/Control.AIChatSidebar.ts:2885
 msgid ""
@@ -1935,18 +1946,25 @@ msgid ""
 "values deviates significantly from the expected distribution, which may "
 "suggest data manipulation."
 msgstr ""
+"Benford's Law violations — check if leading digit distribution of numeric "
+"values deviates significantly from the expected distribution, which may "
+"suggest data manipulation."
 
 #: src/control/Control.AIChatSidebar.ts:2891
 msgid ""
 "Statistical outliers — identify values that deviate significantly from "
 "their column or group."
 msgstr ""
+"Statistical outliers — identify values that deviate significantly from their "
+"column or group."
 
 #: src/control/Control.AIChatSidebar.ts:2897
 msgid ""
 "General anomalies — suspicious patterns, unexpected duplicates, "
 "inconsistencies, or formatting issues."
 msgstr ""
+"General anomalies — suspicious patterns, unexpected duplicates, "
+"inconsistencies, or formatting issues."
 
 #: src/control/Control.AlertDialog.js:55
 msgid "External link"
@@ -2045,7 +2063,7 @@ msgstr "Info"
 #: src/control/Control.NotebookbarWriter.js:194
 #: src/control/Control.NotebookbarWriter.js:339
 msgid "Save As"
-msgstr "Save As"
+msgstr "Save as"
 
 #: src/control/Control.BackstageView.ts:159
 msgid "Export"
@@ -2571,7 +2589,7 @@ msgstr "Turkey"
 
 #: src/control/Control.ESignature.ts:196
 msgid "Taiwan, Province of China"
-msgstr "Taiwan, Province of China"
+msgstr "Taiwan, Republic of China"
 
 #: src/control/Control.ESignature.ts:197
 msgid "Ukraine"
@@ -3037,7 +3055,7 @@ msgstr "Screen Reading"
 #: src/control/Control.NotebookbarImpress.js:169
 #: src/control/Control.NotebookbarWriter.js:122
 msgid "Extensions"
-msgstr ""
+msgstr "Extensions"
 
 #: src/control/Control.Menubar.ts:422 src/control/Control.Menubar.ts:610
 #: src/control/Control.Menubar.ts:755 src/control/Control.Menubar.ts:1061
@@ -3174,7 +3192,7 @@ msgstr "Local Multimedia..."
 #: src/control/Control.Menubar.ts:591 src/control/Control.Menubar.ts:1202
 #: src/control/Control.PresentationBar.js:128
 msgid "Fullscreen presentation"
-msgstr "Fullscreen presentation"
+msgstr "Full-screen presentation"
 
 #: src/control/Control.Menubar.ts:592
 msgid "Present current slide"
@@ -3348,7 +3366,7 @@ msgstr "More..."
 
 #: src/control/Control.Menubar.ts:1720
 msgid "(No extensions installed)"
-msgstr ""
+msgstr "(No extensions installed)"
 
 #: src/control/Control.Menubar.ts:2074
 msgid "Use Compact view"
@@ -3434,7 +3452,7 @@ msgstr "Table Design"
 
 #: src/control/Notebookbar.CalcTableTab.ts:72
 msgid "Table Options"
-msgstr ""
+msgstr "Table Options"
 
 #: src/control/Notebookbar.CalcTableTab.ts:86
 msgid "Header Row"
@@ -3541,11 +3559,11 @@ msgstr "Animations"
 
 #: src/control/Control.Notebookbar.js:292
 msgid "No extensions are installed."
-msgstr ""
+msgstr "No extensions are installed."
 
 #: src/control/Control.NotebookbarBase.ts:149
 msgid "Outline %OutlineLevel%"
-msgstr ""
+msgstr "Outline %OutlineLevel%"
 
 #: src/control/Control.NotebookbarBuilder.js:238
 msgid "Click to expand"
@@ -3650,7 +3668,7 @@ msgstr "Picture"
 #: src/control/Control.NotebookbarImpress.js:143
 #: src/control/Control.NotebookbarWriter.js:103
 msgid "Chart"
-msgstr ""
+msgstr "Chart"
 
 #: src/control/Control.NotebookbarCalc.js:99
 #: src/control/Control.NotebookbarDraw.js:122
@@ -3719,13 +3737,15 @@ msgstr "Clipboard"
 #: src/control/Control.NotebookbarWriter.js:655
 #: src/control/Control.TopToolbar.js:148
 msgid "Clone Formatting (double click to keep active)"
-msgstr ""
+msgstr "Clone Formatting (double click to keep active)"
 
 #: src/control/Control.NotebookbarCalc.js:463
 msgid ""
 "Clone Formatting is active (press Enter on a cell to apply, click again or "
 "press Esc to exit)"
 msgstr ""
+"Clone Formatting is active (press Enter on a cell to apply, click again or "
+"press Esc to exit)"
 
 #: src/control/Control.NotebookbarCalc.js:499
 #: src/control/Control.NotebookbarDraw.js:692
@@ -3742,7 +3762,7 @@ msgstr "Alignment"
 
 #: src/control/Control.NotebookbarCalc.js:783
 msgid "Merge & Center"
-msgstr "Merge & Centre"
+msgstr "Merge & Center"
 
 #: src/control/Control.NotebookbarCalc.js:798
 #: src/control/Control.NotebookbarCalc.js:814
@@ -4069,7 +4089,7 @@ msgstr "Filter"
 
 #: src/control/Control.NotebookbarCalc.js:2616
 msgid "Proofing"
-msgstr ""
+msgstr "Proofing"
 
 #: src/control/Control.NotebookbarCalc.js:2644
 #: src/control/Control.NotebookbarImpress.js:2049
@@ -4085,7 +4105,7 @@ msgstr "Comments"
 
 #: src/control/Control.NotebookbarCalc.js:2727
 msgid "Protection"
-msgstr ""
+msgstr "Protection"
 
 #: src/control/Control.NotebookbarCalc.js:2790
 msgid "Format Cells"
@@ -4130,7 +4150,7 @@ msgstr "Ruler"
 #: src/control/Control.NotebookbarWriter.js:656
 #: src/control/Control.TopToolbar.js:148
 msgid "Clone Formatting is active (click again or press Esc to exit)"
-msgstr ""
+msgstr "Clone Formatting is active (click again or press Esc to exit)"
 
 #: src/control/Control.NotebookbarDraw.js:920
 #: src/control/Control.NotebookbarImpress.js:1056
@@ -4154,7 +4174,7 @@ msgstr "Master"
 
 #: src/control/Control.NotebookbarImpress.js:486
 msgid "Start Slide Show"
-msgstr ""
+msgstr "Start Slide Show"
 
 #: src/control/Control.NotebookbarImpress.js:491
 msgid "From Beginning"
@@ -4174,7 +4194,7 @@ msgstr "Fullscreen, starting at this slide"
 
 #: src/control/Control.NotebookbarImpress.js:515
 msgid "Present"
-msgstr ""
+msgstr "Present"
 
 #: src/control/Control.NotebookbarImpress.js:521
 msgid "Present in Window"
@@ -4211,7 +4231,7 @@ msgstr "View slides as the presenter advances them"
 
 #: src/control/Control.NotebookbarImpress.js:559
 msgid "Set Up"
-msgstr ""
+msgstr "Set Up"
 
 #: src/control/Control.NotebookbarImpress.js:686
 msgid "Slide Views"
@@ -4296,7 +4316,7 @@ msgstr "Validate Sidebar"
 
 #: src/control/Control.NotebookbarWriter.js:573
 msgid "Validate Dialog"
-msgstr "Validate Dialogue"
+msgstr "Validate Dialog"
 
 #: src/control/Control.NotebookbarWriter.js:966
 #: src/control/Control.Zotero.js:828
@@ -4356,11 +4376,11 @@ msgstr "View Changes"
 
 #: src/control/Control.NotebookbarWriter.js:2777
 msgid "Cell Background"
-msgstr ""
+msgstr "Cell Background"
 
 #: src/control/Control.NotebookbarWriter.js:2860
 msgid "Protect"
-msgstr ""
+msgstr "Protect"
 
 #: src/control/Control.PartsPreview.js:209
 msgid "preview of page %1"
@@ -4377,40 +4397,40 @@ msgstr "Paste"
 
 #: src/control/Control.PartsPreview.js:423
 msgid "Add Section"
-msgstr ""
+msgstr "Add Section"
 
 #: src/control/Control.PartsPreview.js:598
 msgid "Toggle section %1"
-msgstr ""
+msgstr "Toggle section %1"
 
 #: src/control/Control.PartsPreview.js:789
 #: src/control/Control.PartsPreview.js:890
 msgid "Rename Section"
-msgstr ""
+msgstr "Rename Section"
 
 #: src/control/Control.PartsPreview.js:796
 msgid "Remove Section"
-msgstr ""
+msgstr "Remove Section"
 
 #: src/control/Control.PartsPreview.js:804
 msgid "Move Section Up"
-msgstr ""
+msgstr "Move Section Up"
 
 #: src/control/Control.PartsPreview.js:813
 msgid "Move Section Down"
-msgstr ""
+msgstr "Move Section Down"
 
 #: src/control/Control.PartsPreview.js:822
 msgid "Collapse All Sections"
-msgstr ""
+msgstr "Collapse All Sections"
 
 #: src/control/Control.PartsPreview.js:830
 msgid "Expand All Sections"
-msgstr ""
+msgstr "Expand All Sections"
 
 #: src/control/Control.PartsPreview.js:891
 msgid "Enter new section name:"
-msgstr ""
+msgstr "Enter new section name:"
 
 #: src/control/Control.SaveState.ts:49
 msgid "Saving"
@@ -4504,7 +4524,7 @@ msgstr "The IsAdminUser user property is set by integration"
 
 #: src/control/Control.ServerAuditDialog.ts:157
 msgid "PostMessage API is initialized"
-msgstr "PostMessage API is initialized"
+msgstr "PostMessage API is initialised"
 
 #: src/control/Control.ServerAuditDialog.ts:162
 msgid "Integrator is not ready for PostMessage calls"
@@ -4599,7 +4619,7 @@ msgstr "Selection count"
 
 #: src/control/Control.StatusBar.js:274
 msgid "Zoom to Fit Slide"
-msgstr ""
+msgstr "Zoom to Fit Slide"
 
 #: src/control/Control.StatusBar.js:275
 msgid "Zoom to Fit Page Width"
@@ -4607,7 +4627,7 @@ msgstr "Zoom to Fit Page Width"
 
 #: src/control/Control.StatusBar.js:280
 msgid "Status Bar Menu"
-msgstr ""
+msgstr "Status Bar Menu"
 
 #: src/control/Control.StatusBar.js:557
 msgid "The document is probably locked and has been opened as view-only"
@@ -4651,7 +4671,7 @@ msgstr "Insert sheet after this"
 
 #: src/control/Control.Tabs.js:100 src/control/Control.Tabs.js:107
 msgid "Reset Tab Color"
-msgstr ""
+msgstr "Reset Tab Colour"
 
 #: src/control/Control.Tabs.js:127 src/control/Control.Tabs.js:131
 msgid "Move Sheet Left"
@@ -4790,7 +4810,7 @@ msgstr ""
 
 #: src/control/Control.Zotero.js:246 src/app/Socket.ts:2471
 msgid "Loading..."
-msgstr "Loading..."
+msgstr "Loading…"
 
 #: src/control/Control.Zotero.js:257 src/control/Control.Zotero.js:454
 #: src/slideshow/engine/SlideShowHandler.ts:102
@@ -5068,7 +5088,7 @@ msgstr "Viewing"
 
 #: src/control/jsdialog/Control.ContextMenu.ts:306
 msgid "Save Image to Server"
-msgstr ""
+msgstr "Save Image to Server"
 
 #: src/control/jsdialog/Control.ContextMenu.ts:344
 msgid "Paste Special"
@@ -5277,7 +5297,7 @@ msgstr "Side by Side"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1815
 msgid "Hidden"
-msgstr ""
+msgstr "Hidden"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1829
 msgid "All users"
@@ -5486,7 +5506,6 @@ msgid "Insert Comment"
 msgstr "Insert Comment"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2401
-#, fuzzy
 msgid "Insert Note"
 msgstr "Insert Date"
 
@@ -5509,69 +5528,67 @@ msgstr "Automatic"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:253
 msgid "Palette"
-msgstr ""
+msgstr "Palette"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:268
 msgid "Color palette"
 msgstr "Colour palette"
 
 #: src/control/jsdialog/Widget.Combobox.js:241
-#, fuzzy
 msgid "Open "
-msgstr "Open"
+msgstr "Open "
 
 #: src/control/jsdialog/Widget.Combobox.js:241
 msgid " list"
-msgstr ""
+msgstr " list"
 
 #: src/control/jsdialog/Widget.Combobox.js:242
-#, fuzzy
 msgid "Open list"
-msgstr "Open link"
+msgstr "Open list"
 
 #: src/control/jsdialog/Widget.Combobox.js:373
 msgid "Filter entries"
-msgstr ""
+msgstr "Filter entries"
 
 #: src/control/jsdialog/Widget.CsvGrid.ts:186
 msgid "CSV column ruler: click to toggle a column split"
-msgstr ""
+msgstr "CSV column ruler: click to toggle a column split"
 
 #: src/control/jsdialog/Widget.CsvGrid.ts:315
 msgid "CSV import preview"
-msgstr ""
+msgstr "CSV import preview"
 
 #: src/control/jsdialog/Widget.CsvGrid.ts:337
 msgid "Line number"
-msgstr ""
+msgstr "Line number"
 
 #: src/control/jsdialog/Widget.CsvGrid.ts:349
 msgid "Column {index}"
-msgstr ""
+msgstr "Column {index}"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:54
 msgid "Smileys"
-msgstr ""
+msgstr "Smileys"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:100
 msgid "People & gestures"
-msgstr ""
+msgstr "People & gestures"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:136
 msgid "Objects"
-msgstr ""
+msgstr "Objects"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:218
 msgid "Nature & food"
-msgstr ""
+msgstr "Nature & food"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:364
 msgid "Recently used"
-msgstr ""
+msgstr "Recently used"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:384
 msgid "No emojis match \"{0}\""
-msgstr ""
+msgstr "No emojis match \"{0}\""
 
 #: src/control/jsdialog/Widget.PageMarginEntry.ts:139
 msgid "Top: {top}"
@@ -5622,16 +5639,15 @@ msgstr "Selected range of cells"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:44
 msgid "Cell Selection"
-msgstr ""
+msgstr "Cell Selection"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:48
 msgid "Entering text mode"
 msgstr "Entering text mode"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:49
-#, fuzzy
 msgid "Insert Mode"
-msgstr "Insert Date"
+msgstr "Insert Mode"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:54
 msgid "Selection Mode"
@@ -5648,22 +5664,19 @@ msgstr "Choice of functions"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:68
 msgid "Table Cell Functions"
-msgstr ""
+msgstr "Table Cell Functions"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:74
-#, fuzzy
 msgid "Sheet Navigation"
-msgstr "Close Navigation"
+msgstr "Sheet Navigation"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:76
-#, fuzzy
 msgid "Slide Navigation"
-msgstr "Close Navigation"
+msgstr "Slide Navigation"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:77
-#, fuzzy
 msgid "Page Navigation"
-msgstr "Close Navigation"
+msgstr "Page Navigation"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:83
 msgid "Your changes have been saved"
@@ -5679,7 +5692,7 @@ msgstr "Cell borders"
 
 #: src/control/jsdialog/Widget.NotebookbarIconView.ts:98
 msgid "Open Styles Sidebar"
-msgstr ""
+msgstr "Open Styles Sidebar"
 
 #: src/control/jsdialog/Widget.NotebookbarIconView.ts:202
 msgid "Scroll up"
@@ -5691,7 +5704,7 @@ msgstr "Scroll down"
 
 #: src/control/jsdialog/Widget.NotebookbarIconView.ts:222
 msgid "More options"
-msgstr ""
+msgstr "More options"
 
 #: src/control/jsdialog/Widget.PushButton.ts:19
 msgid "Select range"
@@ -5727,7 +5740,7 @@ msgstr "Search items"
 
 #: src/app/Socket.ts:300
 msgid "Oops, there is a problem connecting to {productname}: "
-msgstr "Oops, there is a problem connecting the document "
+msgstr "Oops, there is a problem connecting to {productname}: "
 
 #: src/app/Socket.ts:566
 msgid ""
@@ -5853,6 +5866,7 @@ msgstr "Server is shutting down"
 msgid ""
 "AI is not configured. Go to File > Options > View Settings to set it up."
 msgstr ""
+"AI is not configured. Go to File > Options > View Settings to set it up."
 
 #: src/docdispatcher.ts:612
 msgid "Are you sure you want to delete this slide?"
@@ -6277,7 +6291,7 @@ msgstr "Close popup to ignore paste special"
 
 #: src/map/Map.js:204
 msgid "Initializing..."
-msgstr "Initializing..."
+msgstr "Initialising…"
 
 #: src/map/Map.js:536 src/map/Map.js:539 src/map/Map.js:542 src/map/Map.js:545
 msgid "Last saved:"
@@ -6393,11 +6407,11 @@ msgstr "Presentation mode has been disabled for this document"
 
 #: src/map/handler/Map.StateChanges.js:132
 msgid "Apply this order to your presentation?"
-msgstr ""
+msgstr "Apply this order to your presentation?"
 
 #: src/map/handler/Map.StateChanges.js:132
 msgid "Update Slides"
-msgstr ""
+msgstr "Update Slides"
 
 #: src/map/handler/Map.VersionBar.js:50
 msgid "Your Collabora Online server needs updating. Version {0} is available."
@@ -6425,19 +6439,19 @@ msgstr "Welcome Dialogue"
 
 #: src/slideshow/engine/SlideShowHandler.ts:104
 msgid "Skip"
-msgstr ""
+msgstr "Skip"
 
 #: src/slideshow/engine/SlideShowHandler.ts:105
 msgid "First"
-msgstr ""
+msgstr "First"
 
 #: src/slideshow/engine/SlideShowHandler.ts:106
 msgid "Skip All"
-msgstr ""
+msgstr "Skip All"
 
 #: src/slideshow/engine/SlideShowHandler.ts:107
 msgid "First Slide"
-msgstr ""
+msgstr "First Slide"
 
 #: src/slideshow/engine/SlideShowHandler.ts:108
 #: src/slideshow/PresenterConsole.js:31
@@ -6445,14 +6459,12 @@ msgid "Next Slide"
 msgstr "Next Slide"
 
 #: src/slideshow/engine/SlideShowHandler.ts:109
-#, fuzzy
 msgid "Previous Slide"
-msgstr "Previous slide"
+msgstr "Previous Slide"
 
 #: src/slideshow/engine/SlideShowHandler.ts:110
-#, fuzzy
 msgid "Last Slide"
-msgstr "Paste Slide"
+msgstr "Last Slide"
 
 #: src/slideshow/engine/SlideShowHandler.ts:111
 #: src/slideshow/SlideShowPresenter.ts:846
@@ -6461,15 +6473,15 @@ msgstr "End Show"
 
 #: src/slideshow/engine/SlideShowHandler.ts:318
 msgid "Animation Start: "
-msgstr ""
+msgstr "Animation Start: "
 
 #: src/slideshow/engine/SlideShowHandler.ts:420
 msgid "Transition Start: "
-msgstr ""
+msgstr "Transition Start: "
 
 #: src/slideshow/engine/SlideShowHandler.ts:439
 msgid "Transition End: "
-msgstr ""
+msgstr "Transition End: "
 
 #: src/slideshow/PauseTimer.ts:141
 msgid "Pause... ( %SECONDS% )"
@@ -6556,7 +6568,7 @@ msgstr "Stop Following"
 
 #: src/control/Control.Extension.ts:237
 msgid "Close extension"
-msgstr ""
+msgstr "Close extension"
 
 #: templates/templates.js:6
 msgid "Modern Business Letter (sans-serif)"
@@ -6725,12 +6737,10 @@ msgid "Get Involved"
 msgstr "Get Involved"
 
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.h2:49-7
-#, fuzzy
 msgid "https://www.collaboraoffice.org/"
-msgstr "https://www.collaboraonline.org/"
+msgstr "https://www.collaboraoffice.org/"
 
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.p:50-7
-#, fuzzy
 msgid ""
 "Are you interested in contributing but don’t know where to start? Head over "
 "to the <a target=\"_blank\" rel=\"noopener\" href=\"https://www."
@@ -6742,13 +6752,13 @@ msgid ""
 "report</a> with all the essential steps on how to reproduce it."
 msgstr ""
 "Are you interested in contributing but don’t know where to start? Head over "
-"to the <a target=\"_blank\" rel=\"noopener\" href=\"https://collaboraonline."
-"github.io/post/build-code/\">step-by-step instructions</a> and build CODE "
-"from scratch. You can also help out with <a target=\"_blank\" rel=\"noopener"
-"\" href=\"https://www.collaboraonline.org/post/translate/\">translations</a> "
-"or by <a target=\"_blank\" rel=\"noopener\" href=\"https://collaboraonline."
-"github.io/post/filebugs/\">filing a bug report</a> with all the essential "
-"steps on how to reproduce it."
+"to the <a target=\"_blank\" rel=\"noopener\" href=\"https://"
+"www.collaboraoffice.org/post/build-code/\">step-by-step instructions</a> and "
+"build CODE from scratch. You can also help out with <a target=\"_blank\" "
+"rel=\"noopener\" href=\"https://www.collaboraoffice.org/post/translate/\">"
+"translations</a> or by <a target=\"_blank\" rel=\"noopener\" href=\"https://"
+"www.collaboraoffice.org/post/filebugs/\">filing a bug report</a> with all "
+"the essential steps on how to reproduce it."
 
 #: welcome/welcome.html%2Bhtml.body.div.div:55-5
 msgid ""
