@@ -2354,13 +2354,6 @@
     </div>
     <h1><a id="a__Extensions" name="a__Extensions">Extensions</a></h1>
     <p>Only third party extensions are listed here whose source code is not in the LibreOffice tree.</p>
-    <div class="NLPSOLVER">
-        <h2>Solver for Nonlinear Programming</h2>
-        <p>The following software may be included in this product: Solver for Nonlinear Programming. Use of any of this
-        software is governed by the terms of the license below:</p>
-        <p>Copyright 2009 by Sun Microsystems, Inc.</p>
-        <p><a href="#a__LGPL_version_3">Jump to LGPL Version 3</a></p>
-    </div>
     <div class="MORE_FONTS">
         <hr />
         <h1><a id="a__Fonts" name="a__Fonts">Fonts</a></h1>

@@ -31,7 +31,6 @@ for subdir in $(ls -d */ | grep -v \
                                 -e librelogo/ \
                                 -e m4/ \
                                 -e msicreator/ \
-                                -e nlpsolver/ \
                                 -e offapi/ \
                                 -e officecfg/ \
                                 -e oovbaapi/ \

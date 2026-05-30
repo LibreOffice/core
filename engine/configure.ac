@@ -13675,10 +13675,6 @@ dnl There are standalone tests for each of these below.
 WITH_EXTRA_EXTENSIONS=
 AC_SUBST([WITH_EXTRA_EXTENSIONS])
 
-if test "x$with_java" != "xno"; then
-    libo_CHECK_EXTENSION([NLPSolver],[NLPSOLVER],[nlpsolver],[nlpsolver],[])
-fi
-
 AC_MSG_CHECKING([whether to build opens___.ttf])
 if test "$enable_build_opensymbol" = "yes"; then
     AC_MSG_RESULT([yes])

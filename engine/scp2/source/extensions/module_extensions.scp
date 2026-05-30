@@ -45,20 +45,6 @@ Module gid_Module_Optional_Extensions_MEDIAWIKI
 End
 #endif
 
-/* ** NLPSolver ** */
-
-#ifdef WITH_EXTENSION_NLPSOLVER
-Module gid_Module_Optional_Extensions_NLPSolver
-    PackageInfo = "packinfo_extensions.txt";
-    MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS_NLPSOLVER);
-    ParentID = gid_Module_Optional_Extensions;
-    Files = (
-        gid_File_Oxt_NLPSolver );
-    Default = YES;
-    Styles = ( );
-End
-#endif
-
 /* ** Script provider for BeanShell ** */
 
 #if defined ENABLE_JAVA && !defined WITHOUT_SCRIPTING_BEANSHELL

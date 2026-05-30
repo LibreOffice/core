@@ -136,7 +136,6 @@ excludeDirs = {
     "librelogo",
     "m4",
     "msicreator",
-    "nlpsolver",
     "offapi",
     "officecfg",
     "oovbaapi",

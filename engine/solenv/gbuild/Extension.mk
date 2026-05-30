@@ -94,7 +94,7 @@ endif
 # rule to create oxt package in workdir
 # --filesync makes sure that all files in the oxt package will be removed that no longer are in $(FILES)
 # TODO: kinda pointless/ineffective to copy from one point in workdir to another, also makes the command
-# very long when building with all languages (nlpsolver extension for example), hence read list via pipe
+# very long when building with all languages, hence read list via pipe
 $(call gb_Extension_get_target,%) : \
 		$(gb_Extension_workdir)/%/description.xml
 	$(call gb_Output_announce,$*,$(true),OXT,3)

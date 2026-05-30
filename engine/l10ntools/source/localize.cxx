@@ -326,7 +326,6 @@ bool includeProject(std::string_view rProject) {
         "instsetoo_native",
         "librelogo",
         "mysqlc",
-        "nlpsolver",
         "officecfg",
         "oox",
         "sc",

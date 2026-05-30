@@ -232,8 +232,6 @@ private:
         { "com.sun.star.comp.Calc.CoinMPSolver", "2" }, // Simplex LP
         { "com.sun.star.comp.Calc.LpsolveSolver", "2" }, // Simplex LP
         { "com.sun.star.comp.Calc.SwarmSolver", "1" }, // GRG Nonlinear
-        { "com.sun.star.comp.Calc.NLPSolver.DEPSSolverImpl", "3" }, // DEPS
-        { "com.sun.star.comp.Calc.NLPSolver.SCOSolverImpl", "3" } // SCO
     };
 
     // Maps MS solver engine codes to LO solver implementation names

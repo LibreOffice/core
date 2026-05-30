@@ -35,19 +35,6 @@ End
 
 #endif
 
-/* ** NLPSolver ** */
-
-#ifdef WITH_EXTENSION_NLPSOLVER
-
-File gid_File_Oxt_NLPSolver
-    TXT_FILE_BODY;
-    Styles = (PACKED, FILELIST);
-    Dir = FILELIST_DIR;
-    Name = "Extension/nlpsolver.filelist";
-End
-
-#endif
-
 /* ** Script provider for BeanShell ** */
 
 #if defined ENABLE_JAVA && !defined WITHOUT_SCRIPTING_BEANSHELL
