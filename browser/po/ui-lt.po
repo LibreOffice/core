@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-29 07:49+0200\n"
-"PO-Revision-Date: 2026-05-22 17:11+0000\n"
+"PO-Revision-Date: 2026-05-30 01:35+0000\n"
 "Last-Translator: dukezas <dukezas@gmail.com>\n"
-"Language-Team: Lithuanian <https://hosted.weblate.org/projects/"
-"collabora-online/collabora-ui/lt/>\n"
-"Language: \n"
+"Language-Team: Lithuanian <https://hosted.weblate.org/projects/collabora-"
+"online/collabora-ui/lt/>\n"
+"Language: lt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n"
-"%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"(n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Weblate 2026.6.dev0\n"
 
 #: admin/admin.strings.js:15
@@ -557,7 +557,7 @@ msgstr "Piešinys"
 #: src/control/Control.NotebookbarDraw.js:1445
 #: src/control/Control.NotebookbarWriter.js:1242
 msgid "Page"
-msgstr "Lapas"
+msgstr "Puslapis"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:477
 msgid "Fit to page"
@@ -737,17 +737,19 @@ msgstr "Įkelti Xcu"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:715
 msgid "Document themes"
-msgstr ""
+msgstr "Dokumento temos"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:717
 msgid ""
 "Upload custom document themes (.theme). These define color palettes "
 "available under Format > Theme."
 msgstr ""
+"Įkelkite pasirinktines dokumentų temas (.theme). Jos apibrėžia spalvų "
+"paletes, pasiekiamas skiltyje Formatas > Tema."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:723
 msgid "Upload Theme"
-msgstr ""
+msgstr "Įkelti temą"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:778
 msgid "Something went wrong. Please try to refresh the page."
@@ -1066,7 +1068,7 @@ msgstr "Įvykių apdorojimas buvo atidėtas netikėtai ilgam: {0}ms"
 
 #: src/app/LOUtil.ts:981
 msgid "{0} website, opens in new tab"
-msgstr ""
+msgstr "{0} svetainė, atsidaro naujame skirtuke"
 
 #: src/app/LOUtil.ts:984
 msgid "file type icon"
@@ -1255,39 +1257,40 @@ msgstr "Pašalinti nuorodą"
 
 #: src/canvas/sections/FormFieldButton.ts:106
 msgid "Unfold"
-msgstr ""
+msgstr "Išskleisti"
 
 #: src/canvas/sections/FormulaErrorHelpSection.ts:80
 msgid "Help on this error"
-msgstr ""
+msgstr "Pagalba su šia klaida"
 
 #: src/canvas/sections/FormulaErrorHelpSection.ts:85
 msgid "Inspect with Function Wizard"
-msgstr ""
+msgstr "Tikrinti naudojant funkcijų vedlį"
 
 #: src/canvas/sections/FormulaErrorHelpSection.ts:90
 msgid "Edit in Formula Bar"
-msgstr ""
+msgstr "Redaguoti formulių juostoj"
 
 #: src/canvas/sections/FormulaErrorHelpSection.ts:98
 msgid "Help fix this error with AI"
-msgstr ""
+msgstr "Pagalba taisant klaidą panaudojant DI"
 
 #: src/canvas/sections/HeaderFooterBoundarySection.ts:152
 msgid "Header"
-msgstr ""
+msgstr "Antraštė"
 
 #: src/canvas/sections/HeaderFooterBoundarySection.ts:160
 msgid "Footer"
-msgstr ""
+msgstr "Poraštė"
 
 #: src/control/CalcNotifications.ts:42
 msgid "Deletion created #REF! errors in other formulas. Undo to restore."
 msgstr ""
+"Ištrynus kitose formulėse atsirado #REF! klaidos. Atšaukti norint atkurti."
 
 #: src/control/CalcNotifications.ts:43
 msgid "Find First"
-msgstr ""
+msgstr "Rasti pirmą"
 
 #: src/control/ColorPicker.ts:269
 msgid "No color"
@@ -1336,188 +1339,187 @@ msgstr "celės adresas"
 
 #: src/control/Control.AIChatSidebar.ts:79
 msgid "Make the following text more concise"
-msgstr ""
+msgstr "Padarykite toliau pateiktą tekstą glaustesnį"
 
 #: src/control/Control.AIChatSidebar.ts:83
 msgid "Summarize the key points of this text"
-msgstr ""
+msgstr "Apibendrinkite pagrindinius šio teksto punktus"
 
 #: src/control/Control.AIChatSidebar.ts:87
 msgid "Expand and add more detail to this text"
-msgstr ""
+msgstr "Išplėsti ir pridėti daugiau informacijos prie šio teksto"
 
 #: src/control/Control.AIChatSidebar.ts:91
 msgid "Fix grammar, spelling, and punctuation errors"
-msgstr ""
+msgstr "Gramatikos, rašybos ir skyrybos klaidų taisymas"
 
 #: src/control/Control.AIChatSidebar.ts:107
 msgid "Natural"
-msgstr ""
+msgstr "Natūralus"
 
 #: src/control/Control.AIChatSidebar.ts:108
-#, fuzzy
 msgid "Formal"
-msgstr "Formatas"
+msgstr "Oficialus"
 
 #: src/control/Control.AIChatSidebar.ts:109
-#, fuzzy
 msgid "Short"
-msgstr "Rūšiuoti"
+msgstr "Trumpas"
 
 #: src/control/Control.AIChatSidebar.ts:110
 msgid "Friendly"
-msgstr ""
+msgstr "Draugiškas"
 
 #: src/control/Control.AIChatSidebar.ts:111
 msgid "Professional"
-msgstr ""
+msgstr "Profesionalus"
 
 #: src/control/Control.AIChatSidebar.ts:112
 msgid "Casual"
-msgstr ""
+msgstr "Paprastas"
 
 #: src/control/Control.AIChatSidebar.ts:338
 msgid "Unknown"
-msgstr ""
+msgstr "Nežinomas"
 
 #: src/control/Control.AIChatSidebar.ts:340
 msgid ""
 "Ethical AI rating: {0} ({1}). Based on open-source licensing, self-hosting, "
 "and training data."
 msgstr ""
+"Etiško DI įvertinimas: {0} ({1}). Remiantis atvirojo kodo licencijavimo, "
+"savarankiško talpinimo ir mokymo duomenimis."
 
 #: src/control/Control.AIChatSidebar.ts:423
 msgid "Your message"
-msgstr ""
+msgstr "Jūsų žinutė"
 
 #: src/control/Control.AIChatSidebar.ts:425
 msgid "Action requiring approval"
-msgstr ""
+msgstr "Veiksmas reikalaujantis patvirtinimo"
 
 #: src/control/Control.AIChatSidebar.ts:427
 msgid "Error message"
-msgstr ""
+msgstr "Klaidos žinutė"
 
 #: src/control/Control.AIChatSidebar.ts:428
 msgid "AI response"
-msgstr ""
+msgstr "DI atsakas"
 
 #: src/control/Control.AIChatSidebar.ts:502
 msgid ""
 "Content generated by an external AI service ({0}). Please review before use."
 msgstr ""
+"Išorinio DI paslaugos ({0}) sukurtas turinys. Prieš naudojimą peržiūrėkite."
 
 #: src/control/Control.AIChatSidebar.ts:505
 msgid "Content generated by an external AI service. Please review before use."
-msgstr ""
+msgstr "Išorinio DI paslaugos sukurtas turinys. Peržiūrėkite prieš naudojimą."
 
 #: src/control/Control.AIChatSidebar.ts:583
 msgid "New conversation"
-msgstr ""
+msgstr "Naujas pokalbis"
 
 #: src/control/Control.AIChatSidebar.ts:614
 msgid "Ask AI anything about your document..."
-msgstr ""
+msgstr "Klauskite DI bet ko apie savo dokumentą..."
 
 #: src/control/Control.AIChatSidebar.ts:672
 msgid "Loading"
-msgstr ""
+msgstr "Kraunama"
 
 #: src/control/Control.AIChatSidebar.ts:685
 msgid "Chat messages"
-msgstr ""
+msgstr "Pokalbio žinutės"
 
 #: src/control/Control.AIChatSidebar.ts:711
 msgid "AI generated image"
-msgstr ""
+msgstr "DI sugeneruotas vaizdas"
 
 #: src/control/Control.AIChatSidebar.ts:746
 msgid "Retry"
-msgstr ""
+msgstr "Bandyti iš naujo"
 
 #: src/control/Control.AIChatSidebar.ts:770
 #: src/control/Control.AIChatSidebar.ts:803
 msgid "Insert at cursor"
-msgstr ""
+msgstr "Įterpti ties kursorium"
 
 #: src/control/Control.AIChatSidebar.ts:779
 #: src/control/Control.AIChatSidebar.ts:810
 msgid "Copy to clipboard"
-msgstr ""
+msgstr "Kopijuoti į iškarpinę"
 
 #: src/control/Control.AIChatSidebar.ts:831
 msgid "Ask AI..."
-msgstr ""
+msgstr "Klausk DI..."
 
 #: src/control/Control.AIChatSidebar.ts:834
 msgid "Message input"
-msgstr ""
+msgstr "Žinutės įvestis"
 
 #: src/control/Control.AIChatSidebar.ts:850
 msgid "Stop generating"
-msgstr ""
+msgstr "Nustoti generuoti"
 
 #: src/control/Control.AIChatSidebar.ts:851
 msgid "Send message"
-msgstr ""
+msgstr "Siųsti žinutę"
 
 #: src/control/Control.AIChatSidebar.ts:865
 #: src/control/Control.AIChatSidebar.ts:878
 msgid "Set tone"
-msgstr ""
+msgstr "Nustatyti toną"
 
 #: src/control/Control.AIChatSidebar.ts:889
 msgid "Set tone of voice"
-msgstr ""
+msgstr "Nustatyti balso tembrą"
 
 #: src/control/Control.AIChatSidebar.ts:890
 msgid "Tone of voice: {0}{1}"
-msgstr ""
+msgstr "Balso tembras: {0}{1}"
 
 #: src/control/Control.AIChatSidebar.ts:892
 msgid "with emoji"
-msgstr ""
+msgstr "su jaustuku (emodžiu)"
 
 #: src/control/Control.AIChatSidebar.ts:934
 #: src/control/Control.AIChatSidebar.ts:984
 #: src/control/Control.AIChatSidebar.ts:1356
-#, fuzzy
 msgid "tone"
-msgstr "Nieko"
+msgstr "tonas/atspalvis"
 
 #: src/control/Control.AIChatSidebar.ts:947
 #: src/control/Control.AIChatSidebar.ts:1218
 msgid "Tone of voice"
-msgstr ""
+msgstr "Balso tonas"
 
 #: src/control/Control.AIChatSidebar.ts:953
 msgid "Reset voice"
-msgstr ""
+msgstr "Nustatyti balsą iš naujo"
 
 #: src/control/Control.AIChatSidebar.ts:956
 msgid "Reset tone of voice"
-msgstr ""
+msgstr "Nustatyti balso toną iš naujo"
 
 #: src/control/Control.AIChatSidebar.ts:972
 msgid "Your tones"
-msgstr ""
+msgstr "Jūsų tonai"
 
 #: src/control/Control.AIChatSidebar.ts:989
-#, fuzzy
 msgid "Edit tone"
-msgstr "Redagavimo režimas"
+msgstr "Redaguoti toną"
 
 #: src/control/Control.AIChatSidebar.ts:1006
 msgid "+ Add my own voice"
-msgstr ""
+msgstr "+ Mano balsas"
 
 #: src/control/Control.AIChatSidebar.ts:1008
 msgid "Add a custom tone of voice"
-msgstr ""
+msgstr "Pridėti pasirinktinį balso toną"
 
 #: src/control/Control.AIChatSidebar.ts:1019
 msgid "Emojify"
-msgstr ""
+msgstr "Jaustukunti (emojify)"
 
 #: src/control/Control.AIChatSidebar.ts:1025
 #: src/control/Control.StatusBar.js:162
@@ -1532,137 +1534,139 @@ msgstr "Išjungta"
 
 #: src/control/Control.AIChatSidebar.ts:1028
 msgid "Toggle emojify"
-msgstr ""
+msgstr "Perjungti jaustukų keitimą"
 
 #: src/control/Control.AIChatSidebar.ts:1189
 msgid "Use icon"
-msgstr ""
+msgstr "Naudoti piktogramą"
 
 #: src/control/Control.AIChatSidebar.ts:1199
 msgid "Pick another emoji"
-msgstr ""
+msgstr "Pasirinkti kitą jaustuką"
 
 #: src/control/Control.AIChatSidebar.ts:1213
 msgid "Back to tones"
-msgstr ""
+msgstr "Grįžti prie tonų"
 
 #: src/control/Control.AIChatSidebar.ts:1226
 msgid "Icon"
-msgstr ""
+msgstr "Piktograma"
 
 #: src/control/Control.AIChatSidebar.ts:1238
 msgid "Name your tone"
-msgstr ""
+msgstr "Pavadinkite savo toną"
 
 #: src/control/Control.AIChatSidebar.ts:1245
 msgid "e.g. Quick reply"
-msgstr ""
+msgstr "pvz., greitas atsakymas"
 
 #: src/control/Control.AIChatSidebar.ts:1247
 msgid "Tone name"
-msgstr ""
+msgstr "Tono pavadinimas"
 
 #: src/control/Control.AIChatSidebar.ts:1252
 msgid "Describe how AI should write"
-msgstr ""
+msgstr "Apibūdinkite, kaip DI turėtų rašyti"
 
 #: src/control/Control.AIChatSidebar.ts:1260
 msgid ""
 "Write short, direct sentences. Use plain language and skip the small talk."
 msgstr ""
+"Rašykite trumpus, aiškius sakinius. Vartokite aiškią kalbą ir venkite "
+"tuščiažodžiavimo."
 
 #: src/control/Control.AIChatSidebar.ts:1264
 msgid "Tone description"
-msgstr ""
+msgstr "Tono aprašymas"
 
 #: src/control/Control.AIChatSidebar.ts:1273
 #: src/control/Control.AIChatSidebar.ts:1335
 #: src/control/Control.AIChatSidebar.ts:1377
 msgid "Delete tone"
-msgstr ""
+msgstr "Ištrinti toną"
 
 #: src/control/Control.AIChatSidebar.ts:1275
 msgid "Delete this tone"
-msgstr ""
+msgstr "Ištrinti šį toną"
 
 #: src/control/Control.AIChatSidebar.ts:1288
 msgid "Save voice"
-msgstr ""
+msgstr "Išsaugoti balsą"
 
 #: src/control/Control.AIChatSidebar.ts:1290
 msgid "Save tone of voice"
-msgstr ""
+msgstr "Išsaugoti balso toną"
 
 #: src/control/Control.AIChatSidebar.ts:1305
 #: src/control/jsdialog/Widget.EmojiPicker.ts:410
 msgid "Search emojis"
-msgstr ""
+msgstr "Ieškoti jaustukų"
 
 #: src/control/Control.AIChatSidebar.ts:1306
 #: src/control/jsdialog/Widget.EmojiPicker.ts:401
 msgid "Choose an emoji"
-msgstr ""
+msgstr "Pasirinkti jaustuką"
 
 #: src/control/Control.AIChatSidebar.ts:1330
 msgid "Delete tone confirmation"
-msgstr ""
+msgstr "Ištrinti tono patvirtinimą"
 
 #: src/control/Control.AIChatSidebar.ts:1341
 msgid "This tone of voice will be deleted"
-msgstr ""
+msgstr "Šis balso tonas bus ištrintas"
 
 #: src/control/Control.AIChatSidebar.ts:1370
 msgid "Cancel delete"
-msgstr ""
+msgstr "Atšaukti ištrynimą"
 
 #: src/control/Control.AIChatSidebar.ts:1397
 #: src/control/Control.AIChatSidebar.ts:1457
 msgid "You have reached the maximum of {0} custom tones."
-msgstr ""
+msgstr "Pasiekėte maksimalų {0} pasirinktinių tonų skaičių."
 
 #: src/control/Control.AIChatSidebar.ts:1631
 msgid "Using selected text as context"
-msgstr ""
+msgstr "Pasirinkto teksto naudojimas kaip konteksto"
 
 #: src/control/Control.AIChatSidebar.ts:1639
 msgid "Diagnose formula error"
-msgstr ""
+msgstr "Nustatyti formulės klaidą"
 
 #: src/control/Control.AIChatSidebar.ts:1645
 msgid "Sanity check data"
-msgstr ""
+msgstr "Duomenų \"Sveiko proto\" patikrinimas"
 
 #: src/control/Control.AIChatSidebar.ts:1651
 msgid "Create a formula"
-msgstr ""
+msgstr "Sukurti formulę"
 
 #: src/control/Control.AIChatSidebar.ts:1658
 msgid "Create slides"
-msgstr ""
+msgstr "Sukurti skaidres"
 
 #: src/control/Control.AIChatSidebar.ts:1690
 msgid "See less"
-msgstr ""
+msgstr "Rodyti mažiau"
 
 #: src/control/Control.AIChatSidebar.ts:1690
 msgid "See more"
-msgstr ""
+msgstr "Rodyti daugiau"
 
 #: src/control/Control.AIChatSidebar.ts:1800
 msgid "Image inserted at cursor"
-msgstr ""
+msgstr "Paveikslėlis įterptas ties kursorium"
 
 #: src/control/Control.AIChatSidebar.ts:1819
 msgid "Text inserted at cursor"
-msgstr ""
+msgstr "Tekstas įterptas ties kursorium"
 
 #: src/control/Control.AIChatSidebar.ts:1893
 msgid "Approaching message length limit"
-msgstr ""
+msgstr "Artėja pranešimo ilgio riba"
 
 #: src/control/Control.AIChatSidebar.ts:1947
 msgid "Request timeout"
-msgstr ""
+msgstr "Užklausai skirtas laikas"
 
 #: src/control/Control.AIChatSidebar.ts:1962
 #: src/control/Control.AIChatSidebar.ts:2784
@@ -1670,91 +1674,93 @@ msgid ""
 "The selection contains images or other non-text content that cannot be sent "
 "as context."
 msgstr ""
+"Pasirinkime yra vaizdų arba kito netekstinio turinio, kurio negalima siųsti "
+"kaip konteksto."
 
 #: src/control/Control.AIChatSidebar.ts:2049
 msgid "Message is too long. Please shorten it and try again."
-msgstr ""
+msgstr "Per ilga žinutė. Prašome sutrumpinti ir bandyti vėl."
 
 #: src/control/Control.AIChatSidebar.ts:2104
 msgid "Error: "
-msgstr ""
+msgstr "Klaida: "
 
 #: src/control/Control.AIChatSidebar.ts:2126
 msgid "Generated image"
-msgstr ""
+msgstr "Sugeneruotas vaizdas"
 
 #: src/control/Control.AIChatSidebar.ts:2137
 msgid "AI request failed"
-msgstr ""
+msgstr "DI užklausa nepavyko"
 
 #: src/control/Control.AIChatSidebar.ts:2154
 msgid "The AI assistant"
-msgstr ""
+msgstr "DI asistentas"
 
 #: src/control/Control.AIChatSidebar.ts:2167
 msgid "Do you want to proceed?"
-msgstr ""
+msgstr "Ar norite tęsti?"
 
 #: src/control/Control.AIChatSidebar.ts:2170
 msgid "%1 wants to inspect your document. Do you want to proceed?"
-msgstr ""
+msgstr "%1 nori peržiūrėti jūsų dokumentą. Ar norite tęsti?"
 
 #: src/control/Control.AIChatSidebar.ts:2174
 msgid "Modify document structure"
-msgstr ""
+msgstr "Keisti dokumento struktūrą"
 
 #: src/control/Control.AIChatSidebar.ts:2176
 msgid "%1 wants to modify your document:"
-msgstr ""
+msgstr "%1 nori modifikuoti jūsų dokumentą:"
 
 #: src/control/Control.AIChatSidebar.ts:2180
 #: src/control/Control.AIChatSidebar.ts:2191
 msgid "Do you want to apply this change?"
-msgstr ""
+msgstr "Ar norite pritaikyti šį pakeitimą?"
 
 #: src/control/Control.AIChatSidebar.ts:2182
 msgid "Set cell formula"
-msgstr ""
+msgstr "Nustatyti langelio formulę"
 
 #: src/control/Control.AIChatSidebar.ts:2184
 msgid "%1 wants to set a formula in your spreadsheet:"
-msgstr ""
+msgstr "%1 nori nustatyti formulę jūsų skaičiuoklėje:"
 
 #: src/control/Control.AIChatSidebar.ts:2194
 msgid "%1 wants to perform an action. Do you want to proceed?"
-msgstr ""
+msgstr "%1 nori atlikti veiksmą. Ar norite tęsti?"
 
 #: src/control/Control.AIChatSidebar.ts:2225
 msgid "Approve"
-msgstr ""
+msgstr "Tvirtinti"
 
 #: src/control/Control.AIChatSidebar.ts:2227
 msgid "Approve action"
-msgstr ""
+msgstr "Patvirtinti veiksmą"
 
 #: src/control/Control.AIChatSidebar.ts:2234
 msgid "Reject"
-msgstr ""
+msgstr "Atmesti"
 
 #: src/control/Control.AIChatSidebar.ts:2236
 msgid "Reject action"
-msgstr ""
+msgstr "Atmesti veiksmą"
 
 #: src/control/Control.AIChatSidebar.ts:2255
 msgid "Applying changes..."
-msgstr ""
+msgstr "Taikomi pakeitimai..."
 
 #: src/control/Control.AIChatSidebar.ts:2258
 msgid "Change rejected"
-msgstr ""
+msgstr "Pakeitimas atmestas"
 
 #: src/control/Control.AIChatSidebar.ts:2304
 msgid "Selection fetch timeout"
-msgstr ""
+msgstr "Pasirinkimo gavimui skirtas laikas"
 
 #: src/control/Control.AIChatSidebar.ts:2323
 msgid "Failed to parse selection content"
-msgstr ""
+msgstr "Nepavyko išanalizuoti pasirinkimo turinio"
 
 #: src/control/Control.AIChatSidebar.ts:2556
 msgid "Formula analysis timeout"
@@ -1785,14 +1791,12 @@ msgid "I have a formula error in my spreadsheet."
 msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:2627
-#, fuzzy
 msgid "Cell"
-msgstr "Langeliai"
+msgstr "Langelis"
 
 #: src/control/Control.AIChatSidebar.ts:2631
-#, fuzzy
 msgid "Sheet"
-msgstr "Lapai"
+msgstr "Lapas"
 
 #: src/control/Control.AIChatSidebar.ts:2635
 msgid "contains"
@@ -1828,9 +1832,8 @@ msgid ""
 msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:2672
-#, fuzzy
 msgid "formula"
-msgstr "Formulė"
+msgstr "formulė"
 
 #: src/control/Control.AIChatSidebar.ts:2674
 msgid "ERROR"
@@ -1841,18 +1844,16 @@ msgid "value"
 msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:2698
-#, fuzzy
 msgid "text"
-msgstr "Tekstas"
+msgstr "tekstas"
 
 #: src/control/Control.AIChatSidebar.ts:2703
 msgid "empty"
 msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:2705
-#, fuzzy
 msgid "range"
-msgstr "Diapazonas"
+msgstr "diapazonas"
 
 #: src/control/Control.AIChatSidebar.ts:2707
 msgid "errors in"
@@ -5520,18 +5521,16 @@ msgid "Color palette"
 msgstr "Spalvų paletė"
 
 #: src/control/jsdialog/Widget.Combobox.js:241
-#, fuzzy
 msgid "Open "
-msgstr "Atidaryti"
+msgstr "Atidaryti "
 
 #: src/control/jsdialog/Widget.Combobox.js:241
 msgid " list"
 msgstr ""
 
 #: src/control/jsdialog/Widget.Combobox.js:242
-#, fuzzy
 msgid "Open list"
-msgstr "Atidaryti nuorodą"
+msgstr "Atidaryti sąrašą"
 
 #: src/control/jsdialog/Widget.Combobox.js:373
 msgid "Filter entries"
@@ -5656,19 +5655,16 @@ msgid "Table Cell Functions"
 msgstr "Lentelės langelių funkcijos"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:74
-#, fuzzy
 msgid "Sheet Navigation"
-msgstr "Uždaryti navigaciją"
+msgstr "Lapo navigaciją"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:76
-#, fuzzy
 msgid "Slide Navigation"
-msgstr "Uždaryti navigaciją"
+msgstr "Skaidrės navigaciją"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:77
-#, fuzzy
 msgid "Page Navigation"
-msgstr "Uždaryti navigaciją"
+msgstr "Puslapio navigaciją"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:83
 msgid "Your changes have been saved"
@@ -6460,14 +6456,12 @@ msgid "Next Slide"
 msgstr "Sekanti skaidrė"
 
 #: src/slideshow/engine/SlideShowHandler.ts:109
-#, fuzzy
 msgid "Previous Slide"
 msgstr "Ankstesnė skaidrė"
 
 #: src/slideshow/engine/SlideShowHandler.ts:110
-#, fuzzy
 msgid "Last Slide"
-msgstr "Įklijuoti skaidrę"
+msgstr "Paskutinė skaidrė"
 
 #: src/slideshow/engine/SlideShowHandler.ts:111
 #: src/slideshow/SlideShowPresenter.ts:846
@@ -6741,12 +6735,10 @@ msgid "Get Involved"
 msgstr "Įsitraukite"
 
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.h2:49-7
-#, fuzzy
 msgid "https://www.collaboraoffice.org/"
 msgstr "https://www.collaboraonline.org/"
 
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.p:50-7
-#, fuzzy
 msgid ""
 "Are you interested in contributing but don’t know where to start? Head over "
 "to the <a target=\"_blank\" rel=\"noopener\" href=\"https://www."
@@ -6757,13 +6749,13 @@ msgid ""
 "href=\"https://www.collaboraoffice.org/post/filebugs/\">filing a bug "
 "report</a> with all the essential steps on how to reproduce it."
 msgstr ""
-"Norėtumėte prisidėti, bet nežinote, nuo ko pradėti? Peržiūrėkite <a target="
-"\"_blank\" rel=\"noopener\" href=\"https://www.collaboraonline.org/post/"
-"build-code/\">žingsnis po žingsnio instrukcijas</a> ir sukurkite KODĄ nuo "
-"nulio. Taip pat galite padėti su <a target=\"_blank\" rel=\"noopener\" href="
-"\"https://www.collaboraonline.org/post/translate/\">vertimais</a> arba <a "
+"Norėtumėte prisidėti, bet nežinote, nuo ko pradėti? Peržiūrėkite <a "
 "target=\"_blank\" rel=\"noopener\" href=\"https://www.collaboraonline.org/"
-"post/filebugs/\">pateikdami klaidos ataskaitą</a> su visais svarbiausiais "
+"post/build-code/\">žingsnis po žingsnio instrukcijas</a> ir sukurkite KODĄ "
+"nuo nulio. Taip pat galite padėti su <a target=\"_blank\" rel=\"noopener\" "
+"href=\"https://www.collaboraonline.org/post/translate/\">vertimais</a> arba "
+"<a target=\"_blank\" rel=\"noopener\" href=\"https://www.collaboraonline.org/"
+"post/filebugs/\">pateikdami klaidos pranešimą</a> su visais svarbiausiais "
 "veiksmais, kaip ją atkurti."
 
 #: welcome/welcome.html%2Bhtml.body.div.div:55-5
