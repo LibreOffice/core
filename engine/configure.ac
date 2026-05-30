@@ -2549,22 +2549,6 @@ AC_ARG_WITH(hsqldb-jar,
         [Specify path to jarfile manually.]),
     HSQLDB_JAR=$withval)
 
-libo_FUZZ_ARG_ENABLE(scripting-beanshell,
-    AS_HELP_STRING([--disable-scripting-beanshell],
-        [Disable support for scripts in BeanShell.]),
-,
-)
-
-AC_ARG_WITH(system-beanshell,
-    AS_HELP_STRING([--with-system-beanshell],
-        [Use beanshell already on system.]),,
-    [with_system_beanshell="$with_system_jars"])
-
-AC_ARG_WITH(beanshell-jar,
-    AS_HELP_STRING([--with-beanshell-jar=JARFILE],
-        [Specify path to jarfile manually.]),
-    BSH_JAR=$withval)
-
 libo_FUZZ_ARG_ENABLE(scripting-javascript,
     AS_HELP_STRING([--disable-scripting-javascript],
         [Disable support for scripts in JavaScript.]),
@@ -13031,39 +13015,6 @@ else
     SCPDEFS="$SCPDEFS -DWITHOUT_EXTENSION_MEDIAWIKI"
 fi
 AC_SUBST(ENABLE_MEDIAWIKI)
-
-# scripting provider for BeanShell?
-AC_MSG_CHECKING([whether to build support for scripts in BeanShell])
-if test "${enable_scripting_beanshell}" != "no" -a "x$with_java" != "xno"; then
-    AC_MSG_RESULT([yes])
-    ENABLE_SCRIPTING_BEANSHELL=TRUE
-
-    dnl ===================================================================
-    dnl Check for system beanshell
-    dnl ===================================================================
-    AC_MSG_CHECKING([which beanshell to use])
-    if test "$with_system_beanshell" = "yes"; then
-        AC_MSG_RESULT([external])
-        SYSTEM_BSH=TRUE
-        if test -z $BSH_JAR; then
-            BSH_JAR=/usr/share/java/bsh.jar
-        fi
-        if ! test -f $BSH_JAR; then
-            AC_MSG_ERROR(bsh.jar not found.)
-        fi
-    else
-        AC_MSG_RESULT([internal])
-        SYSTEM_BSH=
-        BUILD_TYPE="$BUILD_TYPE BSH"
-    fi
-else
-    AC_MSG_RESULT([no])
-    ENABLE_SCRIPTING_BEANSHELL=
-    SCPDEFS="$SCPDEFS -DWITHOUT_SCRIPTING_BEANSHELL"
-fi
-AC_SUBST(ENABLE_SCRIPTING_BEANSHELL)
-AC_SUBST(SYSTEM_BSH)
-AC_SUBST(BSH_JAR)
 
 # scripting provider for JavaScript?
 AC_MSG_CHECKING([whether to build support for scripts in JavaScript])

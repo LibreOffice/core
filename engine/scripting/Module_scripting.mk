@@ -17,10 +17,6 @@ $(eval $(call gb_Module_add_targets,scripting,\
 		Jar_Highlight \
 		Jar_MemoryUsage \
 		Jar_ScriptFramework \
-		$(if $(ENABLE_SCRIPTING_BEANSHELL),\
-			Jar_ScriptProviderForBeanShell \
-			Rdb_scriptproviderforbeanshell \
-		) \
 		Jar_ScriptProviderForJava \
 		$(if $(ENABLE_SCRIPTING_JAVASCRIPT),\
 			Jar_ScriptProviderForJavaScript \
@@ -28,7 +24,6 @@ $(eval $(call gb_Module_add_targets,scripting,\
 		) \
 		Package_java \
 		Package_java_jars \
-		$(if $(ENABLE_SCRIPTING_BEANSHELL),Package_ScriptsBeanShell) \
 		$(if $(ENABLE_SCRIPTING_JAVASCRIPT),Package_ScriptsJavaScript) \
 	) \
 	Package_scriptbindinglib \

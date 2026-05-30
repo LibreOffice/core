@@ -42,8 +42,6 @@ public class DebugRunner {
 
         if (language.equals("JavaScript")) {
             debugger = new OORhinoDebugger();
-        } else if (language.equals("BeanShell")) {
-            debugger = new OOBeanShellDebugger();
         } else {
             return;
         }

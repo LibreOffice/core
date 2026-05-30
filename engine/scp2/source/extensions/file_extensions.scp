@@ -35,19 +35,6 @@ End
 
 #endif
 
-/* ** Script provider for BeanShell ** */
-
-#if defined ENABLE_JAVA && !defined WITHOUT_SCRIPTING_BEANSHELL
-
-File gid_File_Rdb_Scriptproviderforbeanshell
-    TXT_FILE_BODY;
-    Name = "scriptproviderforbeanshell.rdb";
-    Dir = gid_Brand_Dir_Program_Services;
-    Styles = (PACKED);
-End
-
-#endif
-
 /* ** Script provider for JavaScript ** */
 
 #if defined ENABLE_JAVA && !defined WITHOUT_SCRIPTING_JAVASCRIPT

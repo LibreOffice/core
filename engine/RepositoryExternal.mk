@@ -3607,30 +3607,6 @@ endef
 endif # SYSTEM_HSQLDB
 
 
-ifeq ($(ENABLE_SCRIPTING_BEANSHELL),TRUE)
-
-ifneq ($(SYSTEM_BSH),)
-
-define gb_Jar__use_bsh
-$(call gb_Jar_use_system_jar,$(1),$(BSH_JAR))
-endef
-
-else # !SYSTEM_BSH
-
-ifeq ($(ENABLE_JAVA),TRUE)
-$(eval $(call gb_Helper_register_jars_for_install,OOO,extensions_bsh, \
-	bsh \
-))
-endif
-
-define gb_Jar__use_bsh
-$(call gb_Jar_use_jar,$(1),bsh)
-endef
-
-endif # SYSTEM_BSH
-
-endif
-
 ifeq ($(ENABLE_SCRIPTING_JAVASCRIPT),TRUE)
 
 ifneq ($(SYSTEM_RHINO),)

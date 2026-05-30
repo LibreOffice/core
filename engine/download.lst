@@ -29,11 +29,6 @@ BREAKPAD_TARBALL := breakpad-b324760c7f53667af128a6b77b790323da04fcb9.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-BSH_SHA256SUM := 2248387ceaa319840434a3547a8b2fec12f95a8418ee039ce5ff5726053a139c
-BSH_TARBALL := bsh-2.1.1-src.zip
-# three static lines
-# so that git cherry-pick
-# will not run into conflicts
 BZIP2_SHA256SUM := ab5a03176ee106d3f0fa90e381da478ddae405918153cca248e682cd0c4a2269
 BZIP2_TARBALL := bzip2-1.0.8.tar.gz
 # three static lines

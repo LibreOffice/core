@@ -45,24 +45,6 @@ Module gid_Module_Optional_Extensions_MEDIAWIKI
 End
 #endif
 
-/* ** Script provider for BeanShell ** */
-
-#if defined ENABLE_JAVA && !defined WITHOUT_SCRIPTING_BEANSHELL
-
-#include "AutoInstall/extensions_bsh"
-
-Module gid_Module_Optional_Extensions_Script_Provider_For_BS
-    PackageInfo = "packinfo_extensions.txt";
-    MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS_SCRIPT_PROVIDER_FOR_BEANSHELL);
-    ParentID = gid_Module_Optional_Extensions;
-    Files = (auto_extensions_bsh_ALL,
-        gid_File_Rdb_Scriptproviderforbeanshell );
-    Default = YES;
-    Styles = ( );
-End
-
-#endif
-
 /* ** Script provider for JavaScript ** */
 
 #if defined ENABLE_JAVA && !defined WITHOUT_SCRIPTING_JAVASCRIPT

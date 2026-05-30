@@ -731,12 +731,6 @@ $(eval $(call gb_Helper_register_jars_for_install,OOO,ooo, \
 	unoil \
 ))
 
-ifneq ($(ENABLE_SCRIPTING_BEANSHELL),)
-$(eval $(call gb_Helper_register_jars_for_install,OOO,extensions_bsh, \
-	ScriptProviderForBeanShell \
-))
-endif
-
 ifneq ($(ENABLE_SCRIPTING_JAVASCRIPT),)
 $(eval $(call gb_Helper_register_jars_for_install,OOO,extensions_rhino, \
 	ScriptProviderForJavaScript \
@@ -862,7 +856,6 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 	$(if $(ENABLE_JAVA),\
 		scripting_java \
 		scripting_java_jars \
-		$(if $(ENABLE_SCRIPTING_BEANSHELL),scripting_ScriptsBeanShell) \
 		$(if $(ENABLE_SCRIPTING_JAVASCRIPT),scripting_ScriptsJavaScript) \
 	) \
 	$(call gb_Helper_optional,SCRIPTING,scripting_scriptbindinglib) \

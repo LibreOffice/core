@@ -1046,7 +1046,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/script/provide
 	MasterScriptProvider \
 	ScriptProvider \
 	ScriptProviderForBasic \
-	ScriptProviderForBeanShell \
 	ScriptProviderForJava \
 	ScriptProviderForJavaScript \
 ))

@@ -271,7 +271,7 @@ namespace sfx2
             or macros.
 
             Effectively, the method checks for the presence of a sub-storage name "Scripts" (where
-            BeanShell-/JavaScript-/Python-Scripts are stored, and a sub storage named "Basic" (where
+            JavaScript-/Python-Scripts are stored, and a sub storage named "Basic" (where
             Basic scripts are stored).
         */
         static bool storageHasMacros( const css::uno::Reference< css::embed::XStorage >& _rxStorage );

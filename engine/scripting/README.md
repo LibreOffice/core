@@ -47,7 +47,7 @@ core methods for implementing Java based `LanguageScriptProvider` implementation
 
 - `java/com/sun/star/script/framework/provider/*`
 
-`BeanShell`, JavaScript and Java `LanguageScriptProvider` implementations
+JavaScript and Java `LanguageScriptProvider` implementations
 
 - `java/com/sun/star/script/framework/browse/*`
 
@@ -60,7 +60,7 @@ Classes for performing script IO
 
 - `examples`
 
-Example scripts in BeanShell, JavaScript, Java and Python
+Example scripts in JavaScript, Java and Python
 
 
 ## Deprecated Code

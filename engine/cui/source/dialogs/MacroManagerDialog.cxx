@@ -2229,7 +2229,7 @@ void MacroManagerDialog::ScriptingFrameworkScriptsCreateEntry(InputDialogMode eI
         = getBrowseNode(rTreeView, *xSelectedIter);
     css::uno::Reference<css::script::XInvocation> xInv(xBrowseNode, css::uno::UNO_QUERY);
 
-    // Currently, invocation is not implemented for python, only beanshell, javascript, and java.
+    // Currently, invocation is not implemented for python, only javascript and java.
     if (xInv.is())
     {
         OUString aNewName;

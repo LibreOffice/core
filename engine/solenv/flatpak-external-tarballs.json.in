@@ -539,13 +539,6 @@
         "dest-filename": "@FONT_LUNASIMA_TARBALL@"
     },
     {
-        "url": "https://dev-www.libreoffice.org/src/@BSH_TARBALL@",
-        "sha256": "@BSH_SHA256SUM@",
-        "type": "file",
-        "dest": "external/tarballs",
-        "dest-filename": "@BSH_TARBALL@"
-    },
-    {
         "url": "https://dev-www.libreoffice.org/src/@JFREEREPORT_FLOW_ENGINE_TARBALL@",
         "sha256": "@JFREEREPORT_FLOW_ENGINE_SHA256SUM@",
         "type": "file",

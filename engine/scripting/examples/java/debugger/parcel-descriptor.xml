@@ -21,7 +21,7 @@
   <script language="Java">
     <locale lang="en">
       <displayname value="Scripting Framework Debugger" />
-      <description>Script that starts debuggers for JavaScript and BeanShell
+      <description>Script that starts debuggers for JavaScript
       </description>
     </locale>
     <logicalname value="org.libreoffice.example.java_scripts._$DebugRunner.Debug" />
