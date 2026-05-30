@@ -79,6 +79,7 @@ class KitQueueTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testPreviewTilesNoCombine);
     CPPUNIT_TEST(testTileDeduplicationOnPush);
     CPPUNIT_TEST(testMultiViewTileQueues);
+    CPPUNIT_TEST(testTileQueueFairnessUnderReRequest);
     CPPUNIT_TEST(testGetCallbackBoolOverload);
     CPPUNIT_TEST(testCallbackInvalidationEmptyMode);
 
@@ -128,6 +129,7 @@ class KitQueueTests : public CPPUNIT_NS::TestFixture
     void testPreviewTilesNoCombine();
     void testTileDeduplicationOnPush();
     void testMultiViewTileQueues();
+    void testTileQueueFairnessUnderReRequest();
     void testGetCallbackBoolOverload();
     void testCallbackInvalidationEmptyMode();
 
@@ -1607,6 +1609,45 @@ void KitQueueTests::testMultiViewTileQueues()
     TileCombined c2 = queue.popTileQueue(prio);
     LOK_ASSERT_EQUAL(static_cast<size_t>(1), c2.getTiles().size());
     LOK_ASSERT_EQUAL(static_cast<size_t>(0), queue.getTileQueueSize());
+}
+
+// When several views share one canonical-view queue, a view that keeps
+// re-requesting tiles for its own row must not hold the front of the queue and
+// starve a row that another view is waiting for. popTileQueue advances its
+// service position over the rows rather than always taking the front.
+void KitQueueTests::testTileQueueFairnessUnderReRequest()
+{
+    constexpr std::string_view testname = __func__;
+
+    // Two rows far enough apart that they are not combined into one render.
+    const std::string reqTop = "tile nviewid=0 part=0 width=256 height=256 tileposx=0 tileposy=0 tilewidth=3840 tileheight=3840";
+    const std::string reqBottom = "tile nviewid=0 part=0 width=256 height=256 tileposx=0 tileposy=253440 tilewidth=3840 tileheight=3840";
+
+    TilePrioritizer dummy;
+    KitQueue queue(dummy);
+    TilePrioritizer::Priority prio;
+
+    queue.put(reqTop);
+    queue.put(reqBottom);
+
+    // First pop services the top row.
+    TileCombined c1 = queue.popTileQueue(prio);
+    LOK_ASSERT_EQUAL(static_cast<size_t>(1), c1.getTiles().size());
+    LOK_ASSERT_EQUAL(0, c1.getTiles()[0].getTilePosY());
+
+    // The top view re-requests its row. Taking the front again would render the
+    // top row a second time and never reach the bottom row; the bottom row must
+    // be serviced instead.
+    queue.put(reqTop);
+    TileCombined c2 = queue.popTileQueue(prio);
+    LOK_ASSERT_EQUAL(static_cast<size_t>(1), c2.getTiles().size());
+    LOK_ASSERT_EQUAL(253440, c2.getTiles()[0].getTilePosY());
+
+    // Past the last row the service position wraps back to the top row.
+    queue.put(reqBottom);
+    TileCombined c3 = queue.popTileQueue(prio);
+    LOK_ASSERT_EQUAL(static_cast<size_t>(1), c3.getTiles().size());
+    LOK_ASSERT_EQUAL(0, c3.getTiles()[0].getTilePosY());
 }
 
 void KitQueueTests::testGetCallbackBoolOverload()

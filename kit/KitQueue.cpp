@@ -628,6 +628,20 @@ TileCombined KitQueue::popTileQueue(std::vector<TileDesc>& tileQueue, TilePriori
         }
     }
 
+    // Among equal priority tiles advance past the last row we serviced, only
+    // falling back to that front tile once we run off the end, so one busy row
+    // cannot hold the front of a shared queue.
+    for (std::size_t i = 0; i < tileQueue.size(); ++i)
+    {
+        if (_prio.getTilePriority(tileQueue[i]) == priority &&
+            tileQueue[i].getTilePosY() > _lastServicedPosY)
+        {
+            prioritized = static_cast<int>(i);
+            break;
+        }
+    }
+    _lastServicedPosY = tileQueue[prioritized].getTilePosY();
+
     const TileDesc msg = tileQueue[prioritized];
 
     LOG_TRC("Priority tile: " << msg.serialize() <<

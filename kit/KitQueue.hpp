@@ -48,6 +48,7 @@ public:
 
     explicit KitQueue(const TilePrioritizer& prio)
         : _prio(prio)
+        , _lastServicedPosY(-1)
     {
     }
     ~KitQueue() = default;
@@ -190,6 +191,9 @@ private:
     /// Queues of incoming tile requests from coolwsd
     using viewTileQueue = std::pair<CanonicalViewId, std::vector<TileDesc>>;
     std::deque<viewTileQueue> _tileQueues;
+
+    /// Tile y-position last picked for rendering; popTileQueue resumes below it.
+    int _lastServicedPosY;
 
     /// Queue of callbacks from Kit to send out to coolwsd
     std::deque<Callback> _callbacks;
