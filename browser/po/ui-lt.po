@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-29 07:49+0200\n"
-"PO-Revision-Date: 2026-05-30 01:35+0000\n"
+"PO-Revision-Date: 2026-05-30 02:01+0000\n"
 "Last-Translator: dukezas <dukezas@gmail.com>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/collabora-"
 "online/collabora-ui/lt/>\n"
@@ -1764,31 +1764,31 @@ msgstr "Nepavyko išanalizuoti pasirinkimo turinio"
 
 #: src/control/Control.AIChatSidebar.ts:2556
 msgid "Formula analysis timeout"
-msgstr ""
+msgstr "Formulės analizei skirtas laikas"
 
 #: src/control/Control.AIChatSidebar.ts:2575
 msgid "Analyzing formula dependencies..."
-msgstr ""
+msgstr "Analizuojamos formulės priklausomybės..."
 
 #: src/control/Control.AIChatSidebar.ts:2583
 msgid "Failed to analyze formula."
-msgstr ""
+msgstr "Nepavyko išanalizuoti formulės."
 
 #: src/control/Control.AIChatSidebar.ts:2593
 msgid "The selected cell does not contain a formula."
-msgstr ""
+msgstr "Pasirinktame langelyje nėra formulės."
 
 #: src/control/Control.AIChatSidebar.ts:2595
 msgid "The selected cell does not have a formula error."
-msgstr ""
+msgstr "Pasirinktame langelyje esanti formulė yra be klaidų."
 
 #: src/control/Control.AIChatSidebar.ts:2604
 msgid "Diagnose formula error in"
-msgstr ""
+msgstr "Diagnozuoti formulės klaidą"
 
 #: src/control/Control.AIChatSidebar.ts:2625
 msgid "I have a formula error in my spreadsheet."
-msgstr ""
+msgstr "Mano skaičiuoklėje yra formulės klaida."
 
 #: src/control/Control.AIChatSidebar.ts:2627
 msgid "Cell"
@@ -1800,7 +1800,7 @@ msgstr "Lapas"
 
 #: src/control/Control.AIChatSidebar.ts:2635
 msgid "contains"
-msgstr ""
+msgstr "sudėtyje yra"
 
 #: src/control/Control.AIChatSidebar.ts:2637
 #: src/control/Control.FormulaBarJSDialog.js:83
@@ -1811,25 +1811,27 @@ msgstr "Formulė"
 
 #: src/control/Control.AIChatSidebar.ts:2641
 msgid "Referenced cells"
-msgstr ""
+msgstr "Nuorodos langeliai"
 
 #: src/control/Control.AIChatSidebar.ts:2647
 msgid "Please diagnose why this formula produces the"
-msgstr ""
+msgstr "Prašome nustatyti, kodėl ši formulė sukuria"
 
 #: src/control/Control.AIChatSidebar.ts:2651
 msgid "error."
-msgstr ""
+msgstr "klaida(ą)."
 
 #: src/control/Control.AIChatSidebar.ts:2653
 msgid "Explain the root cause and suggest how to fix it."
-msgstr ""
+msgstr "Paaiškinkite pagrindinę priežastį ir patarkite, kaip ją išspręsti."
 
 #: src/control/Control.AIChatSidebar.ts:2657
 msgid ""
 "When referencing specific cells, format each cell address as a clickable "
 "link: [A1](cell://A1)."
 msgstr ""
+"Kai nurodote konkrečius langelius, kiekvieno langelio adresą formatuokite "
+"kaip paspaudžiamą nuorodą: [A1](langelis://A1)."
 
 #: src/control/Control.AIChatSidebar.ts:2672
 msgid "formula"
@@ -1837,11 +1839,11 @@ msgstr "formulė"
 
 #: src/control/Control.AIChatSidebar.ts:2674
 msgid "ERROR"
-msgstr ""
+msgstr "KLAIDA"
 
 #: src/control/Control.AIChatSidebar.ts:2688
 msgid "value"
-msgstr ""
+msgstr "vertė/reikšmė"
 
 #: src/control/Control.AIChatSidebar.ts:2698
 msgid "text"
@@ -1849,7 +1851,7 @@ msgstr "tekstas"
 
 #: src/control/Control.AIChatSidebar.ts:2703
 msgid "empty"
-msgstr ""
+msgstr "tusčia(s)"
 
 #: src/control/Control.AIChatSidebar.ts:2705
 msgid "range"
@@ -1857,75 +1859,88 @@ msgstr "diapazonas"
 
 #: src/control/Control.AIChatSidebar.ts:2707
 msgid "errors in"
-msgstr ""
+msgstr "klaidos"
 
 #: src/control/Control.AIChatSidebar.ts:2710
 msgid "only partially scanned"
-msgstr ""
+msgstr "tik dalinai nuskenuota"
 
 #: src/control/Control.AIChatSidebar.ts:2719
 msgid "circular reference"
-msgstr ""
+msgstr "žiedinė nuoroda"
 
 #: src/control/Control.AIChatSidebar.ts:2769
 msgid "Select the data you want to sanity-check first."
-msgstr ""
+msgstr "Pirmiausia pasirinkite duomenis, kurių teisingumą norite patikrinti."
 
 #: src/control/Control.AIChatSidebar.ts:2774
 msgid "Analyzing selected data..."
-msgstr ""
+msgstr "Analizuojami pasirinkti duomenys..."
 
 #: src/control/Control.AIChatSidebar.ts:2787
 msgid "Failed to extract spreadsheet data."
-msgstr ""
+msgstr "Nepavyko ištraukti skaičiuoklės duomenų."
 
 #: src/control/Control.AIChatSidebar.ts:2796
 msgid "No data found in selection."
-msgstr ""
+msgstr "Pasirinkime nerasta jokių duomenų."
 
 #: src/control/Control.AIChatSidebar.ts:2826
 msgid ""
 "Describe the slides you want to create. For example: \"A 5-slide overview "
 "of renewable energy\" or \"An introduction to our team\"."
 msgstr ""
+"Aprašykite norimas sukurti skaidres. Pavyzdžiui: „Atsinaujinančios energijos "
+"5 skaidrių apžvalga“ arba „Mūsų komandos pristatymas“."
 
 #: src/control/Control.AIChatSidebar.ts:2853
 msgid ""
 "Describe what formula you need. For example: \"Calculate the average of "
 "column B\" or \"Sum all values where column A is greater than 100\"."
 msgstr ""
+"Aprašykite, kokios formulės jums reikia. Pavyzdžiui: „Apskaičiuokite B "
+"stulpelio vidurkį“ arba „Sudėkite visas reikšmes, kurių A stulpelio vertė "
+"yra didesnė nei 100“."
 
 #: src/control/Control.AIChatSidebar.ts:2863
 msgid ""
 "Read row numbers from the \"Row\" column — do not count or estimate row "
 "positions."
 msgstr ""
+"Skaitykite eilučių numerius iš stulpelio „Eilutė“ – neskaičiuokite ir "
+"neįvertinkite eilučių pozicijų."
 
 #: src/control/Control.AIChatSidebar.ts:2867
 msgid ""
 "To identify a cell's column, match the value to the column letter in the "
 "header row — do not guess."
 msgstr ""
+"Nespėliokite norėdami identifikuoti langelio stulpelį, suderinkite reikšmę "
+"su stulpelio raide antraštės eilutėje."
 
 #: src/control/Control.AIChatSidebar.ts:2871
 msgid ""
 "Reference a cell by combining its column header with the row number (e.g., "
 "column B + row 2 = B2)."
 msgstr ""
+"Nuorodai į langelį sujunkite jo stulpelio antraštę su eilutės numeriu (pvz., "
+"B stulpelis + 2 eilutė = B2)."
 
 #: src/control/Control.AIChatSidebar.ts:2874
 msgid ""
 "When referencing specific cells, format each cell as a clickable link: [B2]"
 "(cell://B2)."
 msgstr ""
+"Kai nurodote konkrečius langelius, kiekvieną langelį formatuokite kaip "
+"paspaudžiamą nuorodą: [B2](langelis://B2)."
 
 #: src/control/Control.AIChatSidebar.ts:2880
 msgid "Sanity check the following spreadsheet data."
-msgstr ""
+msgstr "Šiems skaičiuoklės duomenims atlikite \"sveiko proto\" patikrą."
 
 #: src/control/Control.AIChatSidebar.ts:2881
 msgid "Please analyze this data for:"
-msgstr ""
+msgstr "Prašome išanalizuoti šiuos duomenis dėl:"
 
 #: src/control/Control.AIChatSidebar.ts:2885
 msgid ""
@@ -1933,18 +1948,25 @@ msgid ""
 "values deviates significantly from the expected distribution, which may "
 "suggest data manipulation."
 msgstr ""
+"Benfordo dėsnio pažeidimai – patikrinkite, ar skaitinių reikšmių pirmųjų "
+"skaitmenų skirstinys reikšmingai nukrypsta nuo laukiamo skirstinio, o tai "
+"gali rodyti duomenų manipuliavimą."
 
 #: src/control/Control.AIChatSidebar.ts:2891
 msgid ""
 "Statistical outliers — identify values that deviate significantly from "
 "their column or group."
 msgstr ""
+"Statistiniai išskirtiniai dydžiai – identifikuoja reikšmes, kurios "
+"reikšmingai nukrypsta nuo savo stulpelio ar grupės."
 
 #: src/control/Control.AIChatSidebar.ts:2897
 msgid ""
 "General anomalies — suspicious patterns, unexpected duplicates, "
 "inconsistencies, or formatting issues."
 msgstr ""
+"Bendri nukrypimai nuo normos – įtartini modeliai, netikėti dublikatai, "
+"neatitikimai arba formatavimo problemos."
 
 #: src/control/Control.AlertDialog.js:55
 msgid "External link"
@@ -3038,7 +3060,7 @@ msgstr "Ekrano skaitymas"
 #: src/control/Control.NotebookbarImpress.js:169
 #: src/control/Control.NotebookbarWriter.js:122
 msgid "Extensions"
-msgstr ""
+msgstr "Plėtiniai"
 
 #: src/control/Control.Menubar.ts:422 src/control/Control.Menubar.ts:610
 #: src/control/Control.Menubar.ts:755 src/control/Control.Menubar.ts:1061
