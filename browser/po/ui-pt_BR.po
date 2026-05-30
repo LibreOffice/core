@@ -12,11 +12,11 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-29 07:49+0200\n"
-"PO-Revision-Date: 2026-05-22 17:11+0000\n"
-"Last-Translator: Gabriel <bloxgabriel18@gmail.com>\n"
+"PO-Revision-Date: 2026-05-30 21:25+0000\n"
+"Last-Translator: teste celular <teste.aparelho.mail@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "collabora-online/collabora-ui/pt_BR/>\n"
-"Language: \n"
+"Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -390,60 +390,63 @@ msgstr "Tem certeza que quer desligar o servidor?"
 #: admin/src/integrator/AdminIntegratorSettings.ts:245
 msgid "Shared Config URL is missing in initial variables."
 msgstr ""
+"O URL de configuração compartilhada está ausente nas variáveis iniciais."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:249
 msgid "Access token is missing in initial variables."
-msgstr ""
+msgstr "O token de acesso está ausente nas variáveis iniciais."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:327
 msgid ""
 "Something went wrong while fetching setting file. Please try to refresh the "
 "page."
 msgstr ""
+"Algo deu errado ao buscar o arquivo de configuração. Por favor, tente "
+"atualizar a página."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:431
 msgid "Signature Certificate"
-msgstr ""
+msgstr "Certificado de Assinatura"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:432
 msgid "Signature Key"
-msgstr ""
+msgstr "Chave de assinatura"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:433
 msgid "Signature CA"
-msgstr ""
+msgstr "Assinatura do CA"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:434
 #: admin/src/integrator/AdminIntegratorSettings.ts:438
 msgid "Provider"
-msgstr ""
+msgstr "Provedor"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:435
 #: admin/src/integrator/AdminIntegratorSettings.ts:439
 msgid "API Key"
-msgstr ""
+msgstr "Chave de API"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:436
 #: admin/src/integrator/AdminIntegratorSettings.ts:441
 msgid "Model"
-msgstr ""
+msgstr "Modelo"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:437
 #: admin/src/integrator/AdminIntegratorSettings.ts:440
 msgid "Base URL"
-msgstr ""
+msgstr "URL base"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:442
 msgid "Image Size"
-msgstr ""
+msgstr "Tamanho da imagem"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:443
 msgid "Request Timeout (seconds)"
-msgstr ""
+msgstr "Tempo limite de solicitação (segundos)"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:446
 msgid "In-document Screen Reader"
-msgstr ""
+msgstr "Leitor de tela no documento"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:447
 #: src/control/Control.Menubar.ts:177 src/control/Control.Menubar.ts:507
@@ -459,15 +462,15 @@ msgstr "Modo escuro"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:448
 msgid "Smart Zoom"
-msgstr ""
+msgstr "Zoom inteligente"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:449
 msgid "Default Zoom"
-msgstr ""
+msgstr "Zoom padrão"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:450
 msgid "Compact layout"
-msgstr ""
+msgstr "Layout compacto"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:451
 #, fuzzy
@@ -481,70 +484,70 @@ msgstr "Mostrar régua"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:453
 msgid "Accessibility Checker"
-msgstr ""
+msgstr "Verificador de acessibilidade"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:454
 #: src/control/Control.NavigatorPanel.ts:292
 msgid "Navigator"
-msgstr ""
+msgstr "Navegador"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:455
 msgid "Show Sidebar"
-msgstr ""
+msgstr "Mostrar barra lateral"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:456
 msgid "Custom Animation"
-msgstr ""
+msgstr "Animação personalizada"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:459
 msgid "Style List"
-msgstr ""
+msgstr "Lista de estilos"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:462
 #: src/control/Control.NotebookbarCalc.js:1186
 #: src/control/Control.NotebookbarDraw.js:542
 #: src/control/Control.NotebookbarImpress.js:709
 msgid "Grid"
-msgstr ""
+msgstr "Grade"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:463
 #: src/control/Control.BackstageView.ts:151
 msgid "Print"
-msgstr ""
+msgstr "Imprimir"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:464
 msgid "Other"
-msgstr ""
+msgstr "Outro"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:465
 #: src/control/Control.NotebookbarImpress.js:718
 msgid "Show Grid"
-msgstr ""
+msgstr "Mostrar grade"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:466
 msgid "Snap to grid"
-msgstr ""
+msgstr "Encaixar na grade"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:467
 #: admin/src/integrator/AdminIntegratorSettings.ts:473
 msgid "Size to grid"
-msgstr ""
+msgstr "Redimensionar para grade"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:468
 msgid "Synchronize axes"
-msgstr ""
+msgstr "Sincronizar eixos"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:469
 msgid "Snap grid"
-msgstr ""
+msgstr "Grade instantânea"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:470
 msgid "Empty Pages"
-msgstr ""
+msgstr "Páginas vazias"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:471
 msgid "Force Breaks"
-msgstr ""
+msgstr "Forçar quebras"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:472
 #: src/control/Control.Menubar.ts:798 src/control/Control.TopToolbar.js:139
@@ -554,12 +557,12 @@ msgstr "Todas as folhas"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:474
 msgid "Content"
-msgstr ""
+msgstr "Conteúdo"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:475
 #: src/control/Control.BackstageView.ts:543
 msgid "Drawing"
-msgstr ""
+msgstr "Desenho"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:476
 #: src/control/Control.NotebookbarDraw.js:1245
