@@ -132,14 +132,14 @@ IMPL_LINK(TextUnderlineControl, PBClickHdl, weld::Button&, rButton, void)
 
             css::uno::Sequence<css::beans::PropertyValue> aArgs(3);
             css::beans::PropertyValue* pArgs = aArgs.getArray();
-            pArgs[0].Name = "Underline.LineStyle";
+            pArgs[0].Name = u"Underline.LineStyle"_ustr;
             pArgs[0].Value <<= sal_Int32(eUnderline);
 
             Color aColor(GetUnderlineColor());
-            pArgs[1].Name = "Underline.HasColor";
+            pArgs[1].Name = u"Underline.HasColor"_ustr;
             pArgs[1].Value <<= (aColor.GetAlpha() == 255);
 
-            pArgs[2].Name = "Underline.Color";
+            pArgs[2].Name = u"Underline.Color"_ustr;
             pArgs[2].Value <<= aColor;
             const css::uno::Reference<com::sun::star::frame::XDispatchProvider> xProvider(
                 m_xFrame, css::uno::UNO_QUERY);

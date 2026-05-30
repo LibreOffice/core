@@ -31,7 +31,7 @@ OUString ClassificationEditEngine::CalcFieldValue(const SvxFieldItem& rField, sa
     if (pClassificationField)
         aString = pClassificationField->msDescription;
     else
-        aString = "Unknown";
+        aString = u"Unknown"_ustr;
     return aString;
 }
 

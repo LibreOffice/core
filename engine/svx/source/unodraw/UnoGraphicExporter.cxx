@@ -277,7 +277,7 @@ IMPL_LINK(GraphicExporter, CalcFieldValueHdl, EditFieldInfo*, pInfo, void)
                         aPageNumValue += SvxNumberFormat::CreateRomanString(mnPageNumber, bUpper);
                         break;
                     case css::style::NumberingType::NUMBER_NONE:
-                        aPageNumValue = " ";
+                        aPageNumValue = u" "_ustr;
                         break;
                     default:
                         aPageNumValue += OUString::number( mnPageNumber );
@@ -479,12 +479,12 @@ void GraphicExporter::ParseSettings(const Sequence<PropertyValue>& rDescriptor,
                 else if( rDataValue.Name == "Width" )  // for compatibility reasons, deprecated
                 {
                     rDataValue.Value >>= rSettings.mnWidth;
-                    rDataValue.Name = "PixelWidth";
+                    rDataValue.Name = u"PixelWidth"_ustr;
                 }
                 else if( rDataValue.Name == "Height" ) // for compatibility reasons, deprecated
                 {
                     rDataValue.Value >>= rSettings.mnHeight;
-                    rDataValue.Name = "PixelHeight";
+                    rDataValue.Name = u"PixelHeight"_ustr;
                 }
                 else if ( rDataValue.Name == "ExportOnlyBackground" )
                 {
@@ -554,7 +554,7 @@ void GraphicExporter::ParseSettings(const Sequence<PropertyValue>& rDescriptor,
         int i = rSettings.maFilterData.getLength();
         rSettings.maFilterData.realloc( i + 1 );
         auto pFilterData = rSettings.maFilterData.getArray();
-        pFilterData[ i ].Name = "StatusIndicator";
+        pFilterData[ i ].Name = u"StatusIndicator"_ustr;
         pFilterData[ i ].Value <<= rSettings.mxStatusIndicator;
     }
 }

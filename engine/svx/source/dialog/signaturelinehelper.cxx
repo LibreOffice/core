@@ -45,7 +45,7 @@ OUString getSignatureImage(const OUString& rType)
     OUString aType = rType;
     if (aType.isEmpty())
     {
-        aType = "signature-line.svg";
+        aType = u"signature-line.svg"_ustr;
     }
     OUString aPath("$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/filter/" + aType);
     rtl::Bootstrap::expandMacros(aPath);

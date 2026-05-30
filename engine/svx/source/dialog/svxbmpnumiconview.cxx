@@ -245,7 +245,7 @@ ScopedVclPtr<VirtualDevice> SvxBmpNumIconView::CreatePreviewFromUserDraw(
                     {
                         aLevel.realloc(aLevel.getLength() + 1);
                         PropertyValue& rValue = aLevel.getArray()[aLevel.getLength() - 1];
-                        rValue.Name = "Value";
+                        rValue.Name = u"Value"_ustr;
                         rValue.Value <<= static_cast<sal_Int32>(i + 1);
                         sText = xFormatter->makeNumberingString(aLevel, rLocale);
                     }
@@ -313,9 +313,9 @@ ScopedVclPtr<VirtualDevice> SvxBmpNumIconView::CreatePreviewFromUserDraw(
                     // Generate numbering text using formatter
                     Sequence<PropertyValue> aProperties(2);
                     PropertyValue* pProperties = aProperties.getArray();
-                    pProperties[0].Name = "NumberingType";
+                    pProperties[0].Name = u"NumberingType"_ustr;
                     pProperties[0].Value <<= aNumberingTypes[i];
-                    pProperties[1].Name = "Value";
+                    pProperties[1].Name = u"Value"_ustr;
                     pProperties[1].Value <<= sal_Int32(1);
 
                     try
@@ -324,7 +324,7 @@ ScopedVclPtr<VirtualDevice> SvxBmpNumIconView::CreatePreviewFromUserDraw(
                     }
                     catch(Exception&)
                     {
-                        sLevelTexts[i] = "1";
+                        sLevelTexts[i] = u"1"_ustr;
                     }
 
                     aLeft.AdjustY(-(pVDev->GetTextHeight()/2));

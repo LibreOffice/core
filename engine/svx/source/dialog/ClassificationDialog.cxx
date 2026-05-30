@@ -535,7 +535,7 @@ std::vector<ClassificationResult> ClassificationDialog::getResult()
             // Font weight to string
             OUString sWeightProperty = u"NORMAL"_ustr;
             if (eFontWeight == WEIGHT_BOLD)
-                sWeightProperty = "BOLD";
+                sWeightProperty = u"BOLD"_ustr;
             // Insert into collection
             OUString sBlank;
             aClassificationResults.emplace_back(ClassificationType::PARAGRAPH, sWeightProperty, sBlank, sBlank);

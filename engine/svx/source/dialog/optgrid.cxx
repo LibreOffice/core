@@ -94,7 +94,7 @@ bool  SvxGridItem::GetPresentation
     OUString&           rText, const IntlWrapper&
 )   const
 {
-    rText = "SvxGridItem";
+    rText = u"SvxGridItem"_ustr;
     return true;
 }
 

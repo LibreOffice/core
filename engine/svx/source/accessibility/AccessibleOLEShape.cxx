@@ -142,20 +142,20 @@ OUString
     switch (nShapeType)
     {
         case DRAWING_APPLET:
-            sName = "AppletOLEShape";
+            sName = u"AppletOLEShape"_ustr;
             break;
         case DRAWING_FRAME:
-            sName = "FrameOLEShape";
+            sName = u"FrameOLEShape"_ustr;
             break;
         case DRAWING_OLE:
-            sName = "OLEShape";
+            sName = u"OLEShape"_ustr;
             break;
         case DRAWING_PLUGIN:
-            sName = "PluginOLEShape";
+            sName = u"PluginOLEShape"_ustr;
             break;
 
         default:
-            sName = "UnknownAccessibleOLEShape";
+            sName = u"UnknownAccessibleOLEShape"_ustr;
             uno::Reference<drawing::XShapeDescriptor> xDescriptor (mxShape);
             if (xDescriptor.is())
                 sName += ": " + xDescriptor->getShapeType();

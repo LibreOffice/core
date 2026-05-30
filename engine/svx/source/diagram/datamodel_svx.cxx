@@ -736,7 +736,7 @@ std::pair<OUString, DomMapFlags> DiagramData_svx::addDiagramNode()
     svx::diagram::Point aDataPoint;
     aDataPoint.mnXMLType = TypeConstant::XML_node;
     aDataPoint.msModelId = sNewNodeId;
-    aDataPoint.msPlaceholderText = "[Text]";
+    aDataPoint.msPlaceholderText = u"[Text]"_ustr;
 
     OUString sDataSibling;
     for (const auto& aCxn : maConnections)

@@ -338,14 +338,14 @@ ChineseDictionaryDialog::ChineseDictionaryDialog(weld::Window* pParent)
                     OUString aNameTo_Simplified(u"ChineseT2S"_ustr);
                     OUString aNameTo_Traditional(u"ChineseS2T"_ustr);
                     lang::Locale aLocale;
-                    aLocale.Language = "zh";
+                    aLocale.Language = u"zh"_ustr;
 
                     if( xContainer->hasByName( aNameTo_Simplified ) )
                         xDictionary_To_Simplified.set(
                                 xContainer->getByName( aNameTo_Simplified ), UNO_QUERY );
                     else
                     {
-                        aLocale.Country = "TW";
+                        aLocale.Country = u"TW"_ustr;
                         xDictionary_To_Simplified =
                                 xDictionaryList->addNewDictionary( aNameTo_Simplified
                                     , aLocale, linguistic2::ConversionDictionaryType::SCHINESE_TCHINESE
@@ -360,7 +360,7 @@ ChineseDictionaryDialog::ChineseDictionaryDialog(weld::Window* pParent)
                                 xContainer->getByName( aNameTo_Traditional ), UNO_QUERY );
                     else
                     {
-                        aLocale.Country = "CN";
+                        aLocale.Country = u"CN"_ustr;
                         xDictionary_To_Traditional =
                                 xDictionaryList->addNewDictionary( aNameTo_Traditional
                                     ,aLocale, linguistic2::ConversionDictionaryType::SCHINESE_TCHINESE);

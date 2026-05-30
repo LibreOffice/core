@@ -47,11 +47,11 @@ void SAL_CALL SvxTbxCtlDraw::initialize( const css::uno::Sequence< css::uno::Any
      * difference.
      */
     if( m_aCommandURL==".uno:TrackChangesBar")
-        m_sToolboxName="private:resource/toolbar/changes";
+        m_sToolboxName=u"private:resource/toolbar/changes"_ustr;
     else if ( m_sModuleName == "com.sun.star.presentation.PresentationDocument" || m_sModuleName == "com.sun.star.drawing.DrawingDocument" )
-        m_sToolboxName="private:resource/toolbar/toolbar";
+        m_sToolboxName=u"private:resource/toolbar/toolbar"_ustr;
     else
-        m_sToolboxName="private:resource/toolbar/drawbar";
+        m_sToolboxName=u"private:resource/toolbar/drawbar"_ustr;
 }
 
 

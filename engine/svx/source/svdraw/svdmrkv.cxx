@@ -2453,9 +2453,9 @@ namespace {
 void collectUIInformation(const SdrObject* pObj)
 {
     EventDescription aDescription;
-    aDescription.aAction = "SELECT";
-    aDescription.aParent = "MainWindow";
-    aDescription.aKeyWord = "CurrentApp";
+    aDescription.aAction = u"SELECT"_ustr;
+    aDescription.aParent = u"MainWindow"_ustr;
+    aDescription.aKeyWord = u"CurrentApp"_ustr;
 
     if (!pObj->GetName().isEmpty())
         aDescription.aParameters = {{"OBJECT", pObj->GetName()}};

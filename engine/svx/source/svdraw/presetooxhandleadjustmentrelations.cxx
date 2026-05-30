@@ -316,9 +316,9 @@ void PresetOOXHandleAdj::GetOOXHandleAdjRelation(
 
     std::u16string_view sKey;
     OUString sValue;
-    rFirstRefType = "na";
+    rFirstRefType = u"na"_ustr;
     rFirstAdjValueIndex = -1;
-    rSecondRefType = "na";
+    rSecondRefType = u"na"_ustr;
     rSecondAdjValueIndex = -1;
     if (o3tl::starts_with(sFullOOXShapeName, u"ooxml-", &sKey))
     {

@@ -114,7 +114,7 @@ ShapeTypeHandler::ShapeTypeHandler()
     // Make sure that at least the UNKNOWN entry is present.
     // Resize the list, if necessary, so that the new type can be inserted.
     maShapeTypeDescriptorList[0].mnShapeTypeId = UNKNOWN_SHAPE_TYPE;
-    maShapeTypeDescriptorList[0].msServiceName = "UNKNOWN_SHAPE_TYPE";
+    maShapeTypeDescriptorList[0].msServiceName = u"UNKNOWN_SHAPE_TYPE"_ustr;
     maShapeTypeDescriptorList[0].maCreateFunction = CreateEmptyShapeReference;
     maServiceNameToSlotId[maShapeTypeDescriptorList[0].msServiceName] = 0;
 }
@@ -265,7 +265,7 @@ OUString ShapeTypeHandler::CreateAccessibleBaseName (const uno::Reference<drawin
             break;
         default:
             pResourceId = {};
-            sName = "UnknownAccessibleShape";
+            sName = u"UnknownAccessibleShape"_ustr;
             if (rxShape.is())
                 sName += ": " + rxShape->getShapeType();
             break;

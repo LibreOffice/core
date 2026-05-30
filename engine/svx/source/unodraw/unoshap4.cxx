@@ -452,7 +452,7 @@ void SvxOle2Shape::createLink( const OUString& aLinkURL )
     {
         aMediaDescr.realloc( 3 );
         auto pMediaDescr = aMediaDescr.getArray();
-        pMediaDescr[2].Name = "InteractionHandler";
+        pMediaDescr[2].Name = u"InteractionHandler"_ustr;
         pMediaDescr[2].Value <<= xInteraction;
     }
 

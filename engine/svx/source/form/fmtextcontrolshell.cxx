@@ -422,9 +422,9 @@ namespace svx
                 // we nevertheless need to transport via UNO mechanisms, so we need a name
                 switch ( _nSlotId )
                 {
-                case SID_ATTR_PARA_HANGPUNCTUATION: sUnoName = ".uno:AllowHangingPunctuation"; break;
-                case SID_ATTR_PARA_FORBIDDEN_RULES: sUnoName = ".uno:ApplyForbiddenCharacterRules"; break;
-                case SID_ATTR_PARA_SCRIPTSPACE: sUnoName = ".uno:UseScriptSpacing"; break;
+                case SID_ATTR_PARA_HANGPUNCTUATION: sUnoName = u".uno:AllowHangingPunctuation"_ustr; break;
+                case SID_ATTR_PARA_FORBIDDEN_RULES: sUnoName = u".uno:ApplyForbiddenCharacterRules"_ustr; break;
+                case SID_ATTR_PARA_SCRIPTSPACE: sUnoName = u".uno:UseScriptSpacing"_ustr; break;
                 }
             }
 
@@ -558,7 +558,7 @@ namespace svx
             if ( SfxGetpApp() )
                 sUnoSlotName = lcl_getUnoSlotName( nSlotId );
             else
-                sUnoSlotName = "<unknown>";
+                sUnoSlotName = u"<unknown>"_ustr;
             OString sUnoSlotNameAscii = "\"" +
                 OUStringToOString( sUnoSlotName, RTL_TEXTENCODING_ASCII_US ) +
                 "\"";
@@ -700,7 +700,7 @@ namespace svx
                     {
                         OUString sUnoSlotName = lcl_getUnoSlotName( nSlotForItemSet );
                         if ( sUnoSlotName.isEmpty() )
-                            sUnoSlotName = "unknown (no SfxSlot)";
+                            sUnoSlotName = u"unknown (no SfxSlot)"_ustr;
                         SAL_WARN( "svx", "FmTextControShell::executeAttributeDialog: Could not handle the following item:"
                                 "\n  SlotID: " << nSlotForItemSet
                                 << "\n  WhichID: " << nWhich

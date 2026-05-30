@@ -1064,18 +1064,18 @@ void SvxStyleBox_Base::Select(bool bNonTravelSelect)
     Sequence< PropertyValue > aArgs( 2 );
     auto pArgs = aArgs.getArray();
     pArgs[0].Value  <<= aSearchEntry;
-    pArgs[1].Name   = "Family";
+    pArgs[1].Name   = u"Family"_ustr;
     pArgs[1].Value  <<= sal_Int16( eStyleFamily );
 
     const Reference<XDispatchProvider> xProvider(m_xFrame, UNO_QUERY);
     if( bCreateNew )
     {
-        pArgs[0].Name   = "Param";
+        pArgs[0].Name   = u"Param"_ustr;
         SfxToolBoxControl::Dispatch(xProvider, u".uno:StyleNewByExample"_ustr, aArgs);
     }
     else
     {
-        pArgs[0].Name   = "Template";
+        pArgs[0].Name   = u"Template"_ustr;
         SfxToolBoxControl::Dispatch(xProvider, m_aCommand, aArgs);
     }
 }
@@ -1897,7 +1897,7 @@ IMPL_LINK(SvxFontNameBox_Base, LivePreviewHdl, const FontMetric&, rFontMetric, v
                           SID_ATTR_CHAR_FONT);
     PropertyValue* pArgs = aArgs.getArray();
     aFontItem.QueryValue(pArgs[0].Value);
-    pArgs[0].Name = "CharPreviewFontName";
+    pArgs[0].Name = u"CharPreviewFontName"_ustr;
     const Reference<XDispatchProvider> xProvider(m_xFrame, UNO_QUERY);
     SfxToolBoxControl::Dispatch(xProvider, u".uno:CharPreviewFontName"_ustr, aArgs);
 }
@@ -2013,7 +2013,7 @@ void SvxFontNameBox_Base::Select(bool bNonTravelSelect)
         EndPreview();
         if (pFontItem)
         {
-            pArgs[0].Name   = "CharFontName";
+            pArgs[0].Name   = u"CharFontName"_ustr;
             SfxToolBoxControl::Dispatch(xProvider, u".uno:CharFontName"_ustr, aArgs);
         }
     }
@@ -2021,7 +2021,7 @@ void SvxFontNameBox_Base::Select(bool bNonTravelSelect)
     {
         if (pFontItem)
         {
-            pArgs[0].Name   = "CharPreviewFontName";
+            pArgs[0].Name   = u"CharPreviewFontName"_ustr;
             SfxToolBoxControl::Dispatch(xProvider, u".uno:CharPreviewFontName"_ustr, aArgs);
         }
     }
@@ -3957,7 +3957,7 @@ void SvxColorToolBoxControl::execute(sal_Int16 /*nSelectModifier*/)
     switch( m_nSlotId )
     {
         case SID_ATTR_CHAR_COLOR2 :
-            aCommand    = ".uno:CharColorExt";
+            aCommand    = u".uno:CharColorExt"_ustr;
             break;
     }
 

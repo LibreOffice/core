@@ -468,7 +468,7 @@ void SdrObjCustomShape::SetMirroredX( const bool bMirrorX )
 {
     SdrCustomShapeGeometryItem aGeometryItem( GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
     beans::PropertyValue aPropVal;
-    aPropVal.Name = "MirroredX";
+    aPropVal.Name = u"MirroredX"_ustr;
     aPropVal.Value <<= bMirrorX;
     aGeometryItem.SetPropertyValue( aPropVal );
     SetMergedItem( aGeometryItem );
@@ -477,7 +477,7 @@ void SdrObjCustomShape::SetMirroredY( const bool bMirrorY )
 {
     SdrCustomShapeGeometryItem aGeometryItem( GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
     beans::PropertyValue aPropVal;
-    aPropVal.Name = "MirroredY";
+    aPropVal.Name = u"MirroredY"_ustr;
     aPropVal.Value <<= bMirrorY;
     aGeometryItem.SetPropertyValue( aPropVal );
     SetMergedItem( aGeometryItem );
@@ -693,22 +693,22 @@ static void lcl_ShapePropertiesFromDFF( const SvxMSDffHandle* pData, beans::Prop
         drawing::EnhancedCustomShapeParameterPair aPosition;
         EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aPosition.First, pData->nPositionX, true, true );
         EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aPosition.Second, pData->nPositionY, true, false );
-        pPropValues[ n ].Name = "Position";
+        pPropValues[ n ].Name = u"Position"_ustr;
         pPropValues[ n++ ].Value <<= aPosition;
     }
     if ( nFlags & SvxMSDffHandleFlags::MIRRORED_X )
     {
-        pPropValues[ n ].Name = "MirroredX";
+        pPropValues[ n ].Name = u"MirroredX"_ustr;
         pPropValues[ n++ ].Value <<= true;
     }
     if ( nFlags & SvxMSDffHandleFlags::MIRRORED_Y )
     {
-        pPropValues[ n ].Name = "MirroredY";
+        pPropValues[ n ].Name = u"MirroredY"_ustr;
         pPropValues[ n++ ].Value <<= true;
     }
     if ( nFlags & SvxMSDffHandleFlags::SWITCHED )
     {
-        pPropValues[ n ].Name = "Switched";
+        pPropValues[ n ].Name = u"Switched"_ustr;
         pPropValues[ n++ ].Value <<= true;
     }
     if ( nFlags & SvxMSDffHandleFlags::POLAR )
@@ -718,7 +718,7 @@ static void lcl_ShapePropertiesFromDFF( const SvxMSDffHandle* pData, beans::Prop
                            bool( nFlags & SvxMSDffHandleFlags::CENTER_X_IS_SPECIAL ), true  );
         EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aCenter.Second, pData->nCenterY,
                            bool( nFlags & SvxMSDffHandleFlags::CENTER_Y_IS_SPECIAL ), false );
-        pPropValues[ n ].Name = "Polar";
+        pPropValues[ n ].Name = u"Polar"_ustr;
         pPropValues[ n++ ].Value <<= aCenter;
         if ( nFlags & SvxMSDffHandleFlags::RADIUS_RANGE )
         {
@@ -727,7 +727,7 @@ static void lcl_ShapePropertiesFromDFF( const SvxMSDffHandle* pData, beans::Prop
                 drawing::EnhancedCustomShapeParameter aRadiusRangeMinimum;
                 EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aRadiusRangeMinimum, pData->nRangeXMin,
                            bool( nFlags & SvxMSDffHandleFlags::RANGE_X_MIN_IS_SPECIAL ), true  );
-                pPropValues[ n ].Name = "RadiusRangeMinimum";
+                pPropValues[ n ].Name = u"RadiusRangeMinimum"_ustr;
                 pPropValues[ n++ ].Value <<= aRadiusRangeMinimum;
             }
             if ( pData->nRangeXMax != DEFAULT_MAXIMUM_SIGNED_COMPARE )
@@ -735,7 +735,7 @@ static void lcl_ShapePropertiesFromDFF( const SvxMSDffHandle* pData, beans::Prop
                 drawing::EnhancedCustomShapeParameter aRadiusRangeMaximum;
                 EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aRadiusRangeMaximum, pData->nRangeXMax,
                            bool( nFlags & SvxMSDffHandleFlags::RANGE_X_MAX_IS_SPECIAL ), false );
-                pPropValues[ n ].Name = "RadiusRangeMaximum";
+                pPropValues[ n ].Name = u"RadiusRangeMaximum"_ustr;
                 pPropValues[ n++ ].Value <<= aRadiusRangeMaximum;
             }
         }
@@ -747,7 +747,7 @@ static void lcl_ShapePropertiesFromDFF( const SvxMSDffHandle* pData, beans::Prop
             drawing::EnhancedCustomShapeParameter aRangeXMinimum;
             EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aRangeXMinimum, pData->nRangeXMin,
                            bool( nFlags & SvxMSDffHandleFlags::RANGE_X_MIN_IS_SPECIAL ), true  );
-            pPropValues[ n ].Name = "RangeXMinimum";
+            pPropValues[ n ].Name = u"RangeXMinimum"_ustr;
             pPropValues[ n++ ].Value <<= aRangeXMinimum;
         }
         if ( pData->nRangeXMax != DEFAULT_MAXIMUM_SIGNED_COMPARE )
@@ -755,7 +755,7 @@ static void lcl_ShapePropertiesFromDFF( const SvxMSDffHandle* pData, beans::Prop
             drawing::EnhancedCustomShapeParameter aRangeXMaximum;
             EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aRangeXMaximum, pData->nRangeXMax,
                            bool( nFlags & SvxMSDffHandleFlags::RANGE_X_MAX_IS_SPECIAL ), false );
-            pPropValues[ n ].Name = "RangeXMaximum";
+            pPropValues[ n ].Name = u"RangeXMaximum"_ustr;
             pPropValues[ n++ ].Value <<= aRangeXMaximum;
         }
         if ( pData->nRangeYMin != DEFAULT_MINIMUM_SIGNED_COMPARE )
@@ -763,7 +763,7 @@ static void lcl_ShapePropertiesFromDFF( const SvxMSDffHandle* pData, beans::Prop
             drawing::EnhancedCustomShapeParameter aRangeYMinimum;
             EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aRangeYMinimum, pData->nRangeYMin,
                              bool( nFlags & SvxMSDffHandleFlags::RANGE_Y_MIN_IS_SPECIAL ), true );
-            pPropValues[ n ].Name = "RangeYMinimum";
+            pPropValues[ n ].Name = u"RangeYMinimum"_ustr;
             pPropValues[ n++ ].Value <<= aRangeYMinimum;
         }
         if ( pData->nRangeYMax != DEFAULT_MAXIMUM_SIGNED_COMPARE )
@@ -771,7 +771,7 @@ static void lcl_ShapePropertiesFromDFF( const SvxMSDffHandle* pData, beans::Prop
             drawing::EnhancedCustomShapeParameter aRangeYMaximum;
             EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aRangeYMaximum, pData->nRangeYMax,
                              bool( nFlags & SvxMSDffHandleFlags::RANGE_Y_MAX_IS_SPECIAL ), false );
-            pPropValues[ n ].Name = "RangeYMaximum";
+            pPropValues[ n ].Name = u"RangeYMaximum"_ustr;
             pPropValues[ n++ ].Value <<= aRangeYMaximum;
         }
     }
@@ -2907,7 +2907,7 @@ void SdrObjCustomShape::RestoreGeoData(const SdrObjGeoData& rGeo)
 
     SdrCustomShapeGeometryItem rGeometryItem = GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
     beans::PropertyValue aPropVal;
-    aPropVal.Name = "AdjustmentValues";
+    aPropVal.Name = u"AdjustmentValues"_ustr;
     aPropVal.Value <<= rAGeo.aAdjustmentSeq;
     rGeometryItem.SetPropertyValue( aPropVal );
     SetMergedItem( rGeometryItem );

@@ -496,8 +496,8 @@ bool IsSearchableControl( const css::uno::Reference< css::uno::XInterface>& _rxC
         {
             switch ( static_cast<::TriState>(xCheckBox->getState()) )
             {
-                case TRISTATE_FALSE: *_pCurrentText = "0"; break;
-                case TRISTATE_TRUE: *_pCurrentText = "1"; break;
+                case TRISTATE_FALSE: *_pCurrentText = u"0"_ustr; break;
+                case TRISTATE_TRUE: *_pCurrentText = u"1"_ustr; break;
                 default: _pCurrentText->clear(); break;
             }
         }
@@ -3332,7 +3332,7 @@ void FmXFormShell::CreateExternalView_Lock()
                 aColumnProps.realloc(pColumnProps - aColumnProps.getArray());
 
                 // columns props are a dispatch argument
-                pDispatchArgs->Name = "ColumnProperties"; // TODO : fmurl.*
+                pDispatchArgs->Name = u"ColumnProperties"_ustr; // TODO : fmurl.*
                 pDispatchArgs->Value <<= aColumnProps;
                 ++pDispatchArgs;
                 DBG_ASSERT(nDispatchArgs == (pDispatchArgs - aDispatchArgs.getConstArray()),
@@ -3411,7 +3411,7 @@ void FmXFormShell::CreateExternalView_Lock()
                 ++pDispatchArgs;
 
                 // the
-                pDispatchArgs->Name = "ColumnProperties"; // TODO : fmurl.*
+                pDispatchArgs->Name = u"ColumnProperties"_ustr; // TODO : fmurl.*
                 pDispatchArgs->Value <<= aListBoxDescription;
                 ++pDispatchArgs;
                 DBG_ASSERT(nDispatchArgs == (pDispatchArgs - aDispatchArgs.getConstArray()),

@@ -239,32 +239,32 @@ rtl::Reference< FastPropertySetInfo > TableColumn::getStaticPropertySetInfo()
     static rtl::Reference<FastPropertySetInfo> xInfo = []() {
         PropertyVector aProperties(6);
 
-        aProperties[0].Name = "Width";
+        aProperties[0].Name = u"Width"_ustr;
         aProperties[0].Handle = Property_Width;
         aProperties[0].Type = ::cppu::UnoType<sal_Int32>::get();
         aProperties[0].Attributes = 0;
 
-        aProperties[1].Name = "OptimalWidth";
+        aProperties[1].Name = u"OptimalWidth"_ustr;
         aProperties[1].Handle = Property_OptimalWidth;
         aProperties[1].Type = cppu::UnoType<bool>::get();
         aProperties[1].Attributes = 0;
 
-        aProperties[2].Name = "IsVisible";
+        aProperties[2].Name = u"IsVisible"_ustr;
         aProperties[2].Handle = Property_IsVisible;
         aProperties[2].Type = cppu::UnoType<bool>::get();
         aProperties[2].Attributes = 0;
 
-        aProperties[3].Name = "IsStartOfNewPage";
+        aProperties[3].Name = u"IsStartOfNewPage"_ustr;
         aProperties[3].Handle = Property_IsStartOfNewPage;
         aProperties[3].Type = cppu::UnoType<bool>::get();
         aProperties[3].Attributes = 0;
 
-        aProperties[4].Name = "Size";
+        aProperties[4].Name = u"Size"_ustr;
         aProperties[4].Handle = Property_Width;
         aProperties[4].Type = ::cppu::UnoType<sal_Int32>::get();
         aProperties[4].Attributes = 0;
 
-        aProperties[5].Name = "OptimalSize";
+        aProperties[5].Name = u"OptimalSize"_ustr;
         aProperties[5].Handle = Property_OptimalWidth;
         aProperties[5].Type = cppu::UnoType<bool>::get();
         aProperties[5].Attributes = 0;

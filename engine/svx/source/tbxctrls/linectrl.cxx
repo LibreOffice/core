@@ -331,12 +331,12 @@ IMPL_LINK_NOARG(SvxLineEndWindow, ItemActivatedHdl, weld::IconView&, bool)
 
     if ( pLineStartItem )
     {
-        name = "LineStart";
+        name = u"LineStart"_ustr;
         pLineStartItem->QueryValue( a );
     }
     else
     {
-        name = "LineEnd";
+        name = u"LineEnd"_ustr;
         pLineEndItem->QueryValue( a );
     }
     Sequence< PropertyValue > aArgs{ comphelper::makePropertyValue(name, a) };

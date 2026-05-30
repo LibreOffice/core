@@ -446,7 +446,7 @@ void SdrGrafObj::SetGraphic( const Graphic& rGraphic )
     {
         ImpDeregisterLink();
         m_aFileName = rGraphic.getOriginURL();
-        m_aFilterName = "";
+        m_aFilterName = u""_ustr;
     }
     NbcSetGraphic(rGraphic);
     if (!rGraphic.getOriginURL().isEmpty())

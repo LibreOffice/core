@@ -174,7 +174,7 @@ void SvxFmTbxCtlRecTotal::StateChangedAtToolBoxControl( sal_uInt16 nSID, SfxItem
     if (pState)
         aText = static_cast<const SfxStringItem*>(pState)->GetValue();
     else
-        aText = "?";
+        aText = u"?"_ustr;
 
     m_xFixedText->set_label(aText);
 

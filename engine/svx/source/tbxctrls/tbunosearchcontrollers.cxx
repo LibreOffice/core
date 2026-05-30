@@ -136,7 +136,7 @@ void impl_executeSearch( const css::uno::Reference< css::uno::XComponentContext 
 {
     css::uno::Reference< css::util::XURLTransformer > xURLTransformer( css::util::URLTransformer::create( rxContext ) );
     css::util::URL aURL;
-    aURL.Complete = ".uno:ExecuteSearch";
+    aURL.Complete = u".uno:ExecuteSearch"_ustr;
     xURLTransformer->parseStrict(aURL);
 
     OUString sFindText;
@@ -875,7 +875,7 @@ void SAL_CALL UpDownSearchToolboxController::execute( sal_Int16 /*KeyModifier*/ 
     impl_executeSearch(m_xContext, m_xFrame, pToolBox, meType == UP );
 
     css::frame::FeatureStateEvent aEvent;
-    aEvent.FeatureURL.Complete = "AppendSearchHistory";
+    aEvent.FeatureURL.Complete = u"AppendSearchHistory"_ustr;
     css::uno::Reference< css::frame::XStatusListener > xStatusListener = SearchToolbarControllersManager::createControllersManager().findController(m_xFrame, COMMAND_FINDTEXT);
     if (xStatusListener.is())
         xStatusListener->statusChanged( aEvent );

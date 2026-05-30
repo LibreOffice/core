@@ -131,7 +131,7 @@ void PaletteManager::LoadPalettes()
                             else if (aFNameWithoutExt == "material")
                                 aFNameWithoutExt = SvxResId(RID_SVXSTR_COLOR_PALETTE_MATERIAL);
                             else if (aFNameWithoutExt == "libreoffice")
-                                aFNameWithoutExt = "LibreOffice";
+                                aFNameWithoutExt = u"LibreOffice"_ustr;
                             else if (aFNameWithoutExt == "freecolour-hlc")
                                 aFNameWithoutExt = SvxResId(RID_SVXSTR_COLOR_PALETTE_FREECOLOURHLC);
                             pPalette.reset(new PaletteSOC(aFileStat.getFileURL(), aFNameWithoutExt));

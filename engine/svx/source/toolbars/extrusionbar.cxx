@@ -257,7 +257,7 @@ static void impl_execute( SfxRequest const & rReq, SdrCustomShapeGeometryItem& r
 
             css::beans::PropertyValue aPropValue;
 
-            aPropValue.Name = "ViewPoint";
+            aPropValue.Name = u"ViewPoint"_ustr;
             aPropValue.Value <<= aViewPoint;
             rGeometryItem.SetPropertyValue( sExtrusion,  aPropValue );
 
@@ -267,7 +267,7 @@ static void impl_execute( SfxRequest const & rReq, SdrCustomShapeGeometryItem& r
             aOriginPropPair.First.Type = EnhancedCustomShapeParameterType::NORMAL;
             aOriginPropPair.Second.Value <<= fOriginY;
             aOriginPropPair.Second.Type = EnhancedCustomShapeParameterType::NORMAL;
-            aPropValue.Name = "Origin";
+            aPropValue.Name = u"Origin"_ustr;
             aPropValue.Value <<= aOriginPropPair;
             rGeometryItem.SetPropertyValue( sExtrusion,  aPropValue );
 
@@ -276,7 +276,7 @@ static void impl_execute( SfxRequest const & rReq, SdrCustomShapeGeometryItem& r
             aSkewPropPair.First.Type = EnhancedCustomShapeParameterType::NORMAL;
             aSkewPropPair.Second.Value <<= fSkewAngle;
             aSkewPropPair.Second.Type = EnhancedCustomShapeParameterType::NORMAL;
-            aPropValue.Name = "Skew";
+            aPropValue.Name = u"Skew"_ustr;
             aPropValue.Value <<= aSkewPropPair;
             rGeometryItem.SetPropertyValue( sExtrusion, aPropValue );
         }
@@ -290,7 +290,7 @@ static void impl_execute( SfxRequest const & rReq, SdrCustomShapeGeometryItem& r
             sal_Int32 nProjection = pExtrusionItem->GetValue();
             ProjectionMode eProjectionMode = nProjection == 1 ? ProjectionMode_PARALLEL : ProjectionMode_PERSPECTIVE;
             css::beans::PropertyValue aPropValue;
-            aPropValue.Name = "ProjectionMode";
+            aPropValue.Name = u"ProjectionMode"_ustr;
             aPropValue.Value <<= eProjectionMode;
             rGeometryItem.SetPropertyValue( sExtrusion,  aPropValue );
         }
@@ -309,7 +309,7 @@ static void impl_execute( SfxRequest const & rReq, SdrCustomShapeGeometryItem& r
             aDepthPropPair.Second.Type = EnhancedCustomShapeParameterType::NORMAL;
 
             css::beans::PropertyValue aPropValue;
-            aPropValue.Name = "Depth";
+            aPropValue.Name = u"Depth"_ustr;
             aPropValue.Value <<= aDepthPropPair;
             rGeometryItem.SetPropertyValue( sExtrusion,  aPropValue );
         }
@@ -324,7 +324,7 @@ static void impl_execute( SfxRequest const & rReq, SdrCustomShapeGeometryItem& r
             const bool bAuto = aColor == COL_AUTO;
 
             css::beans::PropertyValue aPropValue;
-            aPropValue.Name = "Color";
+            aPropValue.Name = u"Color"_ustr;
             aPropValue.Value <<= !bAuto;
             rGeometryItem.SetPropertyValue( sExtrusion,  aPropValue );
 
@@ -413,17 +413,17 @@ static void impl_execute( SfxRequest const & rReq, SdrCustomShapeGeometryItem& r
             }
 
             css::beans::PropertyValue aPropValue;
-            aPropValue.Name = "ShadeMode";
+            aPropValue.Name = u"ShadeMode"_ustr;
             aPropValue.Value <<= eShadeMode;
             rGeometryItem.SetPropertyValue( sExtrusion, aPropValue );
 
-            aPropValue.Name = "Metal";
+            aPropValue.Name = u"Metal"_ustr;
             aPropValue.Value <<= nSurface == 3 || nSurface == 4;
             rGeometryItem.SetPropertyValue(sExtrusion, aPropValue);
 
             if (nSurface == 3 || nSurface == 4)
             {
-                aPropValue.Name = "MetalType";
+                aPropValue.Name = u"MetalType"_ustr;
                 aPropValue.Value <<= nSurface == 4
                                          ? EnhancedCustomShapeMetalType::MetalMSCompatible
                                          : EnhancedCustomShapeMetalType::MetalODF;
@@ -432,14 +432,14 @@ static void impl_execute( SfxRequest const & rReq, SdrCustomShapeGeometryItem& r
 
             if (!basegfx::fTools::equalZero(fOldSpecularity - fSpecularity, 0.0001))
             {
-                aPropValue.Name = "Specularity";
+                aPropValue.Name = u"Specularity"_ustr;
                 aPropValue.Value <<= fSpecularity;
                 rGeometryItem.SetPropertyValue(sExtrusion, aPropValue);
             }
 
             if (!basegfx::fTools::equalZero(fOldDiffusion - fDiffusion, 0.0001))
             {
-                aPropValue.Name = "Diffusion";
+                aPropValue.Name = u"Diffusion"_ustr;
                 aPropValue.Value <<= fDiffusion;
                 rGeometryItem.SetPropertyValue(sExtrusion, aPropValue);
             }
@@ -478,21 +478,21 @@ static void impl_execute( SfxRequest const & rReq, SdrCustomShapeGeometryItem& r
             }
 
             css::beans::PropertyValue aPropValue;
-            aPropValue.Name = "Brightness";
+            aPropValue.Name = u"Brightness"_ustr;
             aPropValue.Value <<= fBrightness;
             rGeometryItem.SetPropertyValue( sExtrusion,  aPropValue );
 
-            aPropValue.Name = "FirstLightLevel";
+            aPropValue.Name = u"FirstLightLevel"_ustr;
             aPropValue.Value <<= fLevel1;
             rGeometryItem.SetPropertyValue( sExtrusion,  aPropValue );
 
-            aPropValue.Name = "SecondLightLevel";
+            aPropValue.Name = u"SecondLightLevel"_ustr;
             aPropValue.Value <<= fLevel2;
             rGeometryItem.SetPropertyValue( sExtrusion,  aPropValue );
 
             // If a user sets light preset 'Dim' in MS Office, MS Office sets second light to harsh.
             // In other cases it is soft.
-            aPropValue.Name = "SecondLightHarsh";
+            aPropValue.Name = u"SecondLightHarsh"_ustr;
             aPropValue.Value <<= nLevel == 2;
             rGeometryItem.SetPropertyValue(sExtrusion, aPropValue);
         }
@@ -513,11 +513,11 @@ static void impl_execute( SfxRequest const & rReq, SdrCustomShapeGeometryItem& r
                 getLightingDirectionDefaults( &pLighting1Defaults, &pLighting2Defaults );
 
                 css::beans::PropertyValue aPropValue;
-                aPropValue.Name = "FirstLightDirection";
+                aPropValue.Name = u"FirstLightDirection"_ustr;
                 aPropValue.Value <<= pLighting1Defaults[nDirection];
                 rGeometryItem.SetPropertyValue( sExtrusion,  aPropValue );
 
-                aPropValue.Name = "SecondLightDirection";
+                aPropValue.Name = u"SecondLightDirection"_ustr;
                 aPropValue.Value <<= pLighting2Defaults[nDirection];
                 rGeometryItem.SetPropertyValue( sExtrusion,  aPropValue );
             }

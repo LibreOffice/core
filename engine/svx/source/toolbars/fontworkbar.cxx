@@ -248,7 +248,7 @@ static void impl_execute( SfxRequest const & rReq, SdrCustomShapeGeometryItem& r
                 (*pAny) >>= bOn;
             bOn = !bOn;
             css::beans::PropertyValue aPropValue;
-            aPropValue.Name = "SameLetterHeights";
+            aPropValue.Name = u"SameLetterHeights"_ustr;
             aPropValue.Value <<= bOn;
             rGeometryItem.SetPropertyValue(u"TextPath"_ustr, aPropValue);
         }

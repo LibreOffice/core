@@ -713,7 +713,7 @@ void SvxRubyDialog::Update()
     if (nPosition > -1)
         m_xPositionLB->set_active(nPosition);
     if (!nLen || (bCharStyleEqual && sCharStyleName.isEmpty()))
-        sCharStyleName = "Rubies";
+        sCharStyleName = u"Rubies"_ustr;
     if (!sCharStyleName.isEmpty())
     {
         for (int i = 0, nEntryCount = m_xCharStyleLB->get_count(); i < nEntryCount; i++)

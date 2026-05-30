@@ -288,10 +288,10 @@ OUString AccessibleControlShape::CreateAccessibleBaseName()
     switch (nShapeType)
     {
         case DRAWING_CONTROL:
-            sName = "ControlShape";
+            sName = u"ControlShape"_ustr;
             break;
         default:
-            sName = "UnknownAccessibleControlShape";
+            sName = u"UnknownAccessibleControlShape"_ustr;
             if (mxShape.is())
                 sName += ": " + mxShape->getShapeType();
     }

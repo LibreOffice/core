@@ -127,19 +127,19 @@ bool SvxUnoDrawMSFactory::createEvent( const SdrModel* pDoc, const SdrHint* pSdr
 //          pPage = pSdrHint->GetPage();
 //          break;
         case SdrHintKind::PageOrderChange:         // draw or master page order changed (Insert/Remove/ChangePos)
-            aEvent.EventName = "PageOrderModified";
+            aEvent.EventName = u"PageOrderModified"_ustr;
             pPage = pSdrHint->GetPage();
             break;
         case SdrHintKind::ObjectChange:               // object changed
-            aEvent.EventName = "ShapeModified";
+            aEvent.EventName = u"ShapeModified"_ustr;
             pObj = pSdrHint->GetObject();
             break;
         case SdrHintKind::ObjectInserted:          // add new draw object
-            aEvent.EventName = "ShapeInserted";
+            aEvent.EventName = u"ShapeInserted"_ustr;
             pObj = pSdrHint->GetObject();
             break;
         case SdrHintKind::ObjectRemoved:           // removed draw object from list
-            aEvent.EventName = "ShapeRemoved";
+            aEvent.EventName = u"ShapeRemoved"_ustr;
             pObj = pSdrHint->GetObject();
             break;
 //                SdrHintKind::DefaultTabChange,   // default tab width changed

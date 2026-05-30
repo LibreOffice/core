@@ -143,12 +143,12 @@ struct SearchDlg_Impl
         : bSaveToModule(true)
         , bFocusOnSearch(true)
     {
-        aCommand1URL.Complete = aCommand1URL.Main = "vnd.sun.search:SearchViaComponent1";
-        aCommand1URL.Protocol = "vnd.sun.search:";
-        aCommand1URL.Path = "SearchViaComponent1";
-        aCommand2URL.Complete = aCommand2URL.Main = "vnd.sun.search:SearchViaComponent2";
-        aCommand2URL.Protocol = "vnd.sun.search:";
-        aCommand2URL.Path = "SearchViaComponent2";
+        aCommand1URL.Complete = aCommand1URL.Main = u"vnd.sun.search:SearchViaComponent1"_ustr;
+        aCommand1URL.Protocol = u"vnd.sun.search:"_ustr;
+        aCommand1URL.Path = u"SearchViaComponent1"_ustr;
+        aCommand2URL.Complete = aCommand2URL.Main = u"vnd.sun.search:SearchViaComponent2"_ustr;
+        aCommand2URL.Protocol = u"vnd.sun.search:"_ustr;
+        aCommand2URL.Path = u"SearchViaComponent2"_ustr;
     }
 };
 
@@ -1456,9 +1456,9 @@ IMPL_LINK(SvxSearchDialog, CommandHdl_Impl, weld::Button&, rBtn, void)
     {
         uno::Sequence < beans::PropertyValue > aArgs(2);
         beans::PropertyValue* pArgs = aArgs.getArray();
-        pArgs[0].Name = "SearchString";
+        pArgs[0].Name = u"SearchString"_ustr;
         pArgs[0].Value <<= m_xSearchLB->get_active_text();
-        pArgs[1].Name = "ParentWindow";
+        pArgs[1].Name = u"ParentWindow"_ustr;
         pArgs[1].Value <<= m_xDialog->GetXWindow();
         if (&rBtn == m_xSearchComponent1PB.get())
         {

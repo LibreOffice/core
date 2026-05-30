@@ -1802,19 +1802,19 @@ boost::property_tree::ptree XFillStyleItem::dumpAsJSON() const
     switch( GetValue() )
     {
         case drawing::FillStyle_NONE:
-            sValue = "NONE";
+            sValue = u"NONE"_ustr;
             break;
         case drawing::FillStyle_SOLID:
-            sValue = "SOLID";
+            sValue = u"SOLID"_ustr;
             break;
         case drawing::FillStyle_GRADIENT:
-            sValue = "GRADIENT";
+            sValue = u"GRADIENT"_ustr;
             break;
         case drawing::FillStyle_HATCH:
-            sValue = "HATCH";
+            sValue = u"HATCH"_ustr;
             break;
         case drawing::FillStyle_BITMAP:
-            sValue = "BITMAP";
+            sValue = u"BITMAP"_ustr;
             break;
         default: break;
     }

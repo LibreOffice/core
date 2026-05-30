@@ -537,32 +537,32 @@ IMPL_LINK(GalleryBrowser, KeyInputHdl1, const KeyEvent&, rKEvt, bool)
         case KEY_U:
         {
             if( bMod1 )
-                sExecuteIdent = "update";
+                sExecuteIdent = u"update"_ustr;
         }
         break;
 
         case KEY_DELETE:
-            sExecuteIdent = "delete";
+            sExecuteIdent = u"delete"_ustr;
         break;
 
         case KEY_D:
         {
             if( bMod1 )
-                sExecuteIdent = "delete";
+                sExecuteIdent = u"delete"_ustr;
         }
         break;
 
         case KEY_R:
         {
             if( bMod1 )
-                sExecuteIdent = "rename";
+                sExecuteIdent = u"rename"_ustr;
         }
         break;
 
         case KEY_RETURN:
         {
             if( bMod1 )
-                sExecuteIdent = "properties";
+                sExecuteIdent = u"properties"_ustr;
         }
         break;
     }
@@ -813,14 +813,14 @@ bool GalleryBrowser::KeyInput(const KeyEvent& rKEvt)
             case KEY_D:
             {
                 if( bDelete )
-                    sExecuteIdent = "delete";
+                    sExecuteIdent = u"delete"_ustr;
             }
             break;
 
             case KEY_T:
             {
                 if( bTitle )
-                    sExecuteIdent = "title";
+                    sExecuteIdent = u"title"_ustr;
             }
             break;
 
@@ -1287,7 +1287,7 @@ void GalleryBrowser::DispatchAdd(
         if ( !xDispatchProvider.is() || !m_xTransformer.is() )
             return;
 
-        aURL.Complete = ".uno:InsertGalleryPic";
+        aURL.Complete = u".uno:InsertGalleryPic"_ustr;
         m_xTransformer->parseStrict( aURL );
         xDispatch = xDispatchProvider->queryDispatch(
             aURL,
@@ -1393,7 +1393,7 @@ void GalleryBrowser::Execute(std::u16string_view rIdent)
                 if( ( aNewTitle.isEmpty() && !pObj->GetTitle().isEmpty() ) || ( aNewTitle != aOldTitle ) )
                 {
                     if( aNewTitle.isEmpty() )
-                        aNewTitle = "__<empty>__";
+                        aNewTitle = u"__<empty>__"_ustr;
 
                     pObj->SetTitle( aNewTitle );
                     mpCurTheme->InsertObject( *pObj );

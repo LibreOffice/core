@@ -161,7 +161,7 @@ OUString SdrMeasureObj::TakeRepresentation(SdrMeasureFieldKind eMeasureFieldKind
         {
             if(bTextRota90)
             {
-                aStr = " ";
+                aStr = u" "_ustr;
             }
 
             break;

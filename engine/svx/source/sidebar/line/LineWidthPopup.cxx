@@ -48,14 +48,14 @@ LineWidthPopup::LineWidthPopup(weld::Widget* pParent, LinePropertyPanelBase& rPa
     , m_xIVWidth(m_xBuilder->weld_icon_view(u"line_iconview"_ustr))
     , aPreviewSize(300, 20)
 {
-    maStrUnits[0] = "0.5";
-    maStrUnits[1] = "0.8";
-    maStrUnits[2] = "1.0";
-    maStrUnits[3] = "1.5";
-    maStrUnits[4] = "2.3";
-    maStrUnits[5] = "3.0";
-    maStrUnits[6] = "4.5";
-    maStrUnits[7] = "6.0";
+    maStrUnits[0] = u"0.5"_ustr;
+    maStrUnits[1] = u"0.8"_ustr;
+    maStrUnits[2] = u"1.0"_ustr;
+    maStrUnits[3] = u"1.5"_ustr;
+    maStrUnits[4] = u"2.3"_ustr;
+    maStrUnits[5] = u"3.0"_ustr;
+    maStrUnits[6] = u"4.5"_ustr;
+    maStrUnits[7] = u"6.0"_ustr;
     maStrUnits[8] = SvxResId(RID_SVXSTR_WIDTH_LAST_CUSTOM);
 
     const LocaleDataWrapper& rLocaleWrapper(Application::GetSettings().GetLocaleDataWrapper());

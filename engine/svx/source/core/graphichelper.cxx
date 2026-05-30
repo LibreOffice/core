@@ -197,7 +197,7 @@ OUString GraphicHelper::ExportGraphicToTempFile(const Graphic& rGraphic, std::u1
     aURL.SetSmartURL(rGraphicName);
     OUString aBaseName = aURL.GetLastName();
     if (aBaseName.isEmpty())
-        aBaseName = "image";
+        aBaseName = u"image"_ustr;
 
     // Strip existing extension from basename
     sal_Int32 nDotPos = aBaseName.lastIndexOf('.');

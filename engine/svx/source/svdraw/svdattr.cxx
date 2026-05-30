@@ -1966,22 +1966,22 @@ OUString SdrGrafModeItem::GetValueTextByPos(sal_uInt16 nPos)
     {
         case 1:
         {
-            aStr = "Greys";
+            aStr = u"Greys"_ustr;
             break;
         }
         case 2:
         {
-            aStr = "Black/White";
+            aStr = u"Black/White"_ustr;
             break;
         }
         case 3:
         {
-            aStr = "Watermark";
+            aStr = u"Watermark"_ustr;
             break;
         }
         default:
         {
-            aStr = "Standard";
+            aStr = u"Standard"_ustr;
             break;
         }
     }

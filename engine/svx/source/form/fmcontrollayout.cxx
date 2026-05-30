@@ -108,20 +108,20 @@ namespace svxform
                    || xDocumentSI->supportsService(u"com.sun.star.text.WebDocument"_ustr)
                    )
                 {
-                    _rFamilyName = "ParagraphStyles";
-                    _rStyleName = "Standard";
+                    _rFamilyName = u"ParagraphStyles"_ustr;
+                    _rStyleName = u"Standard"_ustr;
                 }
                 else if ( xDocumentSI->supportsService(u"com.sun.star.sheet.SpreadsheetDocument"_ustr) )
                 {
-                    _rFamilyName = "CellStyles";
-                    _rStyleName = "Default";
+                    _rFamilyName = u"CellStyles"_ustr;
+                    _rStyleName = u"Default"_ustr;
                 }
                 else if (  xDocumentSI->supportsService(u"com.sun.star.drawing.DrawingDocument"_ustr)
                         || xDocumentSI->supportsService(u"com.sun.star.presentation.PresentationDocument"_ustr)
                         )
                 {
-                    _rFamilyName = "graphics";
-                    _rStyleName = "standard";
+                    _rFamilyName = u"graphics"_ustr;
+                    _rStyleName = u"standard"_ustr;
                 }
                 else
                     bSuccess = false;
@@ -169,7 +169,7 @@ namespace svxform
                 // fall back to CharLocale property at the style
                 if ( aDocumentCharLocale.Language.isEmpty() )
                 {
-                    sCharLocalePropertyName = "CharLocale";
+                    sCharLocalePropertyName = u"CharLocale"_ustr;
                     if ( xStylePSI->hasPropertyByName( sCharLocalePropertyName ) )
                     {
                         OSL_VERIFY( xStyle->getPropertyValue( sCharLocalePropertyName ) >>= aDocumentCharLocale );

@@ -128,11 +128,11 @@ OUString
     switch (nShapeType)
     {
         case DRAWING_GRAPHIC_OBJECT:
-            sName = "GraphicObjectShape";
+            sName = u"GraphicObjectShape"_ustr;
             break;
 
         default:
-            sName = "UnknownAccessibleGraphicShape";
+            sName = u"UnknownAccessibleGraphicShape"_ustr;
             uno::Reference<drawing::XShapeDescriptor> xDescriptor (mxShape);
             if (xDescriptor.is())
                 sName += ": " + xDescriptor->getShapeType();

@@ -419,7 +419,7 @@ OUString SvXMLEmbeddedObjectHelper::ImplInsertEmbeddedObjectURL(
     else
     {
         // Objects are written using ::comphelper::IEmbeddedHelper::SaveAs
-        sRetURL = "./";
+        sRetURL = u"./"_ustr;
         if( !aContainerStorageName.isEmpty() )
         {
             sRetURL += aContainerStorageName + "/";
@@ -600,7 +600,7 @@ Any SAL_CALL SvXMLEmbeddedObjectHelper::getByName(
                                 {
                                     aEmbDescr.realloc( 2 );
                                     auto pEmbDescr = aEmbDescr.getArray();
-                                    pEmbDescr[1].Name = "VisualReplacement";
+                                    pEmbDescr[1].Name = u"VisualReplacement"_ustr;
                                     pEmbDescr[1].Value <<= xGrInStream;
                                 }
                             }

@@ -168,7 +168,7 @@ void TextCharacterSpacingControl::ExecuteCharacterSpacing(tools::Long nValue, bo
 
     css::uno::Sequence<css::beans::PropertyValue> aArgs(1);
     css::beans::PropertyValue* pArgs = aArgs.getArray();
-    pArgs[0].Name = "Spacing";
+    pArgs[0].Name = u"Spacing"_ustr;
     pArgs[0].Value <<= sal_Int16(nSign * nKern);
     const css::uno::Reference<com::sun::star::frame::XDispatchProvider> xProvider(
         m_xFrame, css::uno::UNO_QUERY);

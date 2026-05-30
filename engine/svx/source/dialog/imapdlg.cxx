@@ -420,17 +420,17 @@ bool SvxIMapDlg::DoSave()
         if ( aFilter == aBinFilter )
         {
             nFormat = IMapFormat::Binary;
-            aExt = "sip";
+            aExt = u"sip"_ustr;
         }
         else if ( aFilter == aCERNFilter )
         {
             nFormat = IMapFormat::CERN;
-            aExt = "map";
+            aExt = u"map"_ustr;
         }
         else if ( aFilter == aNCSAFilter )
         {
             nFormat = IMapFormat::NCSA;
-            aExt = "map";
+            aExt = u"map"_ustr;
         }
         else
         {

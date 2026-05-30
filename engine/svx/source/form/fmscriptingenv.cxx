@@ -884,9 +884,9 @@ namespace svxform
             {
                 // legacy format: use the app-wide Basic, if it has a respective method, otherwise fall back to the doc's Basic
                 if ( SfxApplication::GetBasicManager()->HasMacro( sScriptCode ) )
-                    sMacroLocation = "application";
+                    sMacroLocation = u"application"_ustr;
                 else
-                    sMacroLocation = "document";
+                    sMacroLocation = u"document"_ustr;
             }
 
             OUString sScriptURI = "vnd.sun.star.script:" +

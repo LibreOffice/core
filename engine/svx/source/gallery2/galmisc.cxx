@@ -331,7 +331,7 @@ GalleryProgress::GalleryProgress( const GraphicFilter* pFilter )
 //                                                                                     // be changed to use the XStatusIndicator instead of XProgressMonitor
     }
     else
-        aProgressText = "Gallery";
+        aProgressText = u"Gallery"_ustr;
 
     xMonitor->addText( u"Gallery"_ustr, aProgressText, false ) ;
     mxProgressBar->setRange( 0, GALLERY_PROGRESS_RANGE );

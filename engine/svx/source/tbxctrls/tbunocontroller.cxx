@@ -494,7 +494,7 @@ void FontHeightToolBoxControl::dispatchCommand(
         uno::Reference< frame::XDispatch >      xDispatch;
         uno::Reference< util::XURLTransformer > xURLTransformer = getURLTransformer();
 
-        aURL.Complete = ".uno:FontHeight";
+        aURL.Complete = u".uno:FontHeight"_ustr;
         xURLTransformer->parseStrict( aURL );
         xDispatch = xDispatchProvider->queryDispatch( aURL, OUString(), 0 );
         if ( xDispatch.is() )

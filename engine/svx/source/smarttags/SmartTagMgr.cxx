@@ -378,7 +378,7 @@ void SmartTagMgr::LoadLibraries()
 void SmartTagMgr::PrepareConfiguration( std::u16string_view rConfigurationGroupName )
 {
     beans::PropertyValue aPathArgument;
-    aPathArgument.Name = "nodepath";
+    aPathArgument.Name = u"nodepath"_ustr;
     aPathArgument.Value <<= OUString::Concat("/org.openoffice.Office.Common/SmartTags/") + rConfigurationGroupName;
     Sequence< Any > aArguments{ Any(aPathArgument) };
     Reference< lang::XMultiServiceFactory > xConfProv = configuration::theDefaultProvider::get( mxContext );

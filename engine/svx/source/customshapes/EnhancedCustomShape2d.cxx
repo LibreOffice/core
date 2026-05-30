@@ -1963,7 +1963,7 @@ bool EnhancedCustomShape2d::SetHandleControllerPosition( const sal_uInt32 nIndex
             // and writing them back into the GeometryItem
             SdrCustomShapeGeometryItem aGeometryItem(mrSdrObjCustomShape.GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ));
             css::beans::PropertyValue aPropVal;
-            aPropVal.Name = "AdjustmentValues";
+            aPropVal.Name = u"AdjustmentValues"_ustr;
             aPropVal.Value <<= m_seqAdjustmentValues;
             aGeometryItem.SetPropertyValue( aPropVal );
             mrSdrObjCustomShape.SetMergedItem( aGeometryItem );

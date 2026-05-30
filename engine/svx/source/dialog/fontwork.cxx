@@ -320,10 +320,10 @@ void SvxFontWorkDialog::SetStyle_Impl(const XFormTextStyleItem* pItem)
 
         switch ( pItem->GetValue() )
         {
-            case XFormTextStyle::Rotate : sId = "rotate";   break;
-            case XFormTextStyle::Upright: sId = "upright";  break;
-            case XFormTextStyle::SlantX : sId = "hori";   break;
-            case XFormTextStyle::SlantY : sId = "vert";   break;
+            case XFormTextStyle::Rotate : sId = u"rotate"_ustr;   break;
+            case XFormTextStyle::Upright: sId = u"upright"_ustr;  break;
+            case XFormTextStyle::SlantX : sId = u"hori"_ustr;   break;
+            case XFormTextStyle::SlantY : sId = u"vert"_ustr;   break;
             default: ;//prevent warning
         }
         m_xTbxStyle->set_sensitive(true);
@@ -364,17 +364,17 @@ void SvxFontWorkDialog::SetAdjust_Impl(const XFormTextAdjustItem* pItem)
         if ( pItem->GetValue() == XFormTextAdjust::Left || pItem->GetValue() == XFormTextAdjust::Right )
         {
             if (pItem->GetValue() == XFormTextAdjust::Left)
-                sId = "left";
+                sId = u"left"_ustr;
             else
-                sId = "right";
+                sId = u"right"_ustr;
             m_xMtrFldTextStart->set_sensitive(true);
         }
         else
         {
             if (pItem->GetValue() == XFormTextAdjust::Center)
-                sId = "center";
+                sId = u"center"_ustr;
             else
-                sId = "autosize";
+                sId = u"autosize"_ustr;
             m_xMtrFldTextStart->set_sensitive(false);
         }
 
@@ -448,7 +448,7 @@ void SvxFontWorkDialog::SetShadow_Impl(const XFormTextShadowItem* pItem,
 
         if ( pItem->GetValue() == XFormTextShadow::NONE )
         {
-            sId = "noshadow";
+            sId = u"noshadow"_ustr;
             m_xFbShadowX->hide();
             m_xFbShadowY->hide();
             m_xMtrFldShadowX->set_sensitive(false);
@@ -465,7 +465,7 @@ void SvxFontWorkDialog::SetShadow_Impl(const XFormTextShadowItem* pItem,
 
             if ( pItem->GetValue() == XFormTextShadow::Normal )
             {
-                sId = "vertical";
+                sId = u"vertical"_ustr;
                 const FieldUnit eDlgUnit = m_rBindings.GetDispatcher()->GetModule()->GetFieldUnit();
 
                 m_xMtrFldShadowX->set_unit( eDlgUnit );
@@ -501,7 +501,7 @@ void SvxFontWorkDialog::SetShadow_Impl(const XFormTextShadowItem* pItem,
             }
             else
             {
-                sId = "slant";
+                sId = u"slant"_ustr;
 
                 m_xMtrFldShadowX->set_unit(FieldUnit::DEGREE);
                 m_xMtrFldShadowX->set_digits(1);

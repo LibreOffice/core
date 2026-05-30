@@ -1548,7 +1548,7 @@ namespace svxform
                 if (sName.isEmpty())
                 {
                     SAL_WARN( "svx.form", "DataNavigatorWindow::CreateInstancePage(): instance without name" );
-                    sName = "untitled";
+                    sName = u"untitled"_ustr;
                 }
 
                 OUString sURL = aDlg.GetURL();
@@ -1931,7 +1931,7 @@ namespace svxform
         if ( sInstName.isEmpty() )
         {
             SAL_WARN( "svx.form", "DataNavigatorWindow::CreateInstancePage(): instance without name" );
-            sInstName = "untitled";
+            sInstName = u"untitled"_ustr;
         }
         m_xTabCtrl->insert_page(sPageId, sInstName, m_xTabCtrl->get_n_pages() - 2);
     }
