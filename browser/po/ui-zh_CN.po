@@ -8,11 +8,11 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-29 07:49+0200\n"
-"PO-Revision-Date: 2026-05-24 22:11+0000\n"
-"Last-Translator: xzlhxc <xzlhxc@foxmail.com>\n"
+"PO-Revision-Date: 2026-05-30 08:44+0000\n"
+"Last-Translator: Poesty Li <poesty7450@gmail.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/collabora-online/collabora-ui/zh_Hans/>\n"
-"Language: \n"
+"Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -405,9 +405,8 @@ msgstr "签名CA"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:434
 #: admin/src/integrator/AdminIntegratorSettings.ts:438
-#, fuzzy
 msgid "Provider"
-msgstr "提供商："
+msgstr "提供商"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:435
 #: admin/src/integrator/AdminIntegratorSettings.ts:439
@@ -733,17 +732,17 @@ msgstr "上传 XCU"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:715
 msgid "Document themes"
-msgstr ""
+msgstr "文档主题"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:717
 msgid ""
 "Upload custom document themes (.theme). These define color palettes "
 "available under Format > Theme."
-msgstr ""
+msgstr "上传自定义文档主题（.theme）。这些定义了格式 > 主题下的可用颜色调色板。"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:723
 msgid "Upload Theme"
-msgstr ""
+msgstr "上传主题"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:778
 msgid "Something went wrong. Please try to refresh the page."
@@ -884,11 +883,11 @@ msgstr "图像生成"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2084
 msgid "Same as Text AI"
-msgstr ""
+msgstr "与文本 AI 相同"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2153
 msgid "Leave empty to use Text AI key"
-msgstr ""
+msgstr "留空以使用文本 AI 密钥"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2415
 #: admin/src/integrator/AdminIntegratorSettings.ts:2502
@@ -1054,29 +1053,28 @@ msgstr "事件处理延迟时间过长：{0}毫秒"
 
 #: src/app/LOUtil.ts:981
 msgid "{0} website, opens in new tab"
-msgstr ""
+msgstr "{0} 网站，在新标签页中打开"
 
 #: src/app/LOUtil.ts:984
 msgid "file type icon"
 msgstr "文件类型图标"
 
 #: src/app/TableStylesService.ts:100
-#, fuzzy
 msgid "Light"
-msgstr "紧凑"
+msgstr "浅色"
 
 #: src/app/TableStylesService.ts:102
 msgid "Medium"
-msgstr ""
+msgstr "中等"
 
 #: src/app/TableStylesService.ts:104
 msgid "Dark"
-msgstr ""
+msgstr "深色"
 
 #: src/app/TableStylesService.ts:106
 #: src/control/jsdialog/Widget.ColorPicker.ts:334
 msgid "Custom"
-msgstr ""
+msgstr "自定义"
 
 #: src/app/TableStylesService.ts:231 src/app/TableStylesService.ts:243
 #: src/app/TableStylesService.ts:245
@@ -1207,7 +1205,7 @@ msgstr "已保存"
 
 #: src/canvas/sections/CompareChangesLabelSection.ts:118
 msgid "Last edited by %1 on %2"
-msgstr ""
+msgstr "最后编辑者 %1，时间 %2"
 
 #: src/canvas/sections/CompareChangesLabelSection.ts:193
 msgid "%1: Initial Version"
@@ -1243,39 +1241,39 @@ msgstr "移除链接"
 
 #: src/canvas/sections/FormFieldButton.ts:106
 msgid "Unfold"
-msgstr ""
+msgstr "展开"
 
 #: src/canvas/sections/FormulaErrorHelpSection.ts:80
 msgid "Help on this error"
-msgstr ""
+msgstr "此错误的帮助"
 
 #: src/canvas/sections/FormulaErrorHelpSection.ts:85
 msgid "Inspect with Function Wizard"
-msgstr ""
+msgstr "使用函数向导检查"
 
 #: src/canvas/sections/FormulaErrorHelpSection.ts:90
 msgid "Edit in Formula Bar"
-msgstr ""
+msgstr "在公式栏中编辑"
 
 #: src/canvas/sections/FormulaErrorHelpSection.ts:98
 msgid "Help fix this error with AI"
-msgstr ""
+msgstr "使用 AI 帮助修复此错误"
 
 #: src/canvas/sections/HeaderFooterBoundarySection.ts:152
 msgid "Header"
-msgstr ""
+msgstr "页眉"
 
 #: src/canvas/sections/HeaderFooterBoundarySection.ts:160
 msgid "Footer"
-msgstr ""
+msgstr "页脚"
 
 #: src/control/CalcNotifications.ts:42
 msgid "Deletion created #REF! errors in other formulas. Undo to restore."
-msgstr ""
+msgstr "删除操作在其他公式中产生了 #REF! 错误。撤销以恢复。"
 
 #: src/control/CalcNotifications.ts:43
 msgid "Find First"
-msgstr ""
+msgstr "查找第一个"
 
 #: src/control/ColorPicker.ts:269
 msgid "No color"
@@ -1291,9 +1289,8 @@ msgid "(opens in new tab)"
 msgstr "（在新标签页打开）"
 
 #: src/control/Control.AboutDialog.ts:155
-#, fuzzy
 msgid "Served by: "
-msgstr "服务提供方："
+msgstr "由以下提供： "
 
 #: src/control/Control.AboutDialog.ts:178
 msgid "View widgets"
@@ -1325,188 +1322,184 @@ msgstr "单元格地址"
 
 #: src/control/Control.AIChatSidebar.ts:79
 msgid "Make the following text more concise"
-msgstr ""
+msgstr "使以下文本更简洁"
 
 #: src/control/Control.AIChatSidebar.ts:83
 msgid "Summarize the key points of this text"
-msgstr ""
+msgstr "总结本文的关键点"
 
 #: src/control/Control.AIChatSidebar.ts:87
 msgid "Expand and add more detail to this text"
-msgstr ""
+msgstr "扩展并为本文添加更多细节"
 
 #: src/control/Control.AIChatSidebar.ts:91
 msgid "Fix grammar, spelling, and punctuation errors"
-msgstr ""
+msgstr "修正语法、拼写和标点错误"
 
 #: src/control/Control.AIChatSidebar.ts:107
 msgid "Natural"
-msgstr ""
+msgstr "自然"
 
 #: src/control/Control.AIChatSidebar.ts:108
-#, fuzzy
 msgid "Formal"
-msgstr "格式"
+msgstr "正式"
 
 #: src/control/Control.AIChatSidebar.ts:109
-#, fuzzy
 msgid "Short"
-msgstr "排序"
+msgstr "简短"
 
 #: src/control/Control.AIChatSidebar.ts:110
 msgid "Friendly"
-msgstr ""
+msgstr "友好"
 
 #: src/control/Control.AIChatSidebar.ts:111
 msgid "Professional"
-msgstr ""
+msgstr "专业"
 
 #: src/control/Control.AIChatSidebar.ts:112
 msgid "Casual"
-msgstr ""
+msgstr "随意"
 
 #: src/control/Control.AIChatSidebar.ts:338
 msgid "Unknown"
-msgstr ""
+msgstr "未知"
 
 #: src/control/Control.AIChatSidebar.ts:340
 msgid ""
 "Ethical AI rating: {0} ({1}). Based on open-source licensing, self-hosting, "
 "and training data."
-msgstr ""
+msgstr "AI 伦理评级：{0}（{1}）。基于开源许可、自托管和训练数据。"
 
 #: src/control/Control.AIChatSidebar.ts:423
 msgid "Your message"
-msgstr ""
+msgstr "您的消息"
 
 #: src/control/Control.AIChatSidebar.ts:425
 msgid "Action requiring approval"
-msgstr ""
+msgstr "需要批准的操作"
 
 #: src/control/Control.AIChatSidebar.ts:427
 msgid "Error message"
-msgstr ""
+msgstr "错误消息"
 
 #: src/control/Control.AIChatSidebar.ts:428
 msgid "AI response"
-msgstr ""
+msgstr "AI 响应"
 
 #: src/control/Control.AIChatSidebar.ts:502
 msgid ""
 "Content generated by an external AI service ({0}). Please review before use."
-msgstr ""
+msgstr "由外部 AI 服务生成的内容（{0}）。使用前请审阅。"
 
 #: src/control/Control.AIChatSidebar.ts:505
 msgid "Content generated by an external AI service. Please review before use."
-msgstr ""
+msgstr "由外部 AI 服务生成的内容。使用前请审阅。"
 
 #: src/control/Control.AIChatSidebar.ts:583
 msgid "New conversation"
-msgstr ""
+msgstr "新对话"
 
 #: src/control/Control.AIChatSidebar.ts:614
 msgid "Ask AI anything about your document..."
-msgstr ""
+msgstr "向 AI 询问有关文档的任何问题..."
 
 #: src/control/Control.AIChatSidebar.ts:672
 msgid "Loading"
-msgstr ""
+msgstr "加载中"
 
 #: src/control/Control.AIChatSidebar.ts:685
 msgid "Chat messages"
-msgstr ""
+msgstr "聊天消息"
 
 #: src/control/Control.AIChatSidebar.ts:711
 msgid "AI generated image"
-msgstr ""
+msgstr "AI 生成的图像"
 
 #: src/control/Control.AIChatSidebar.ts:746
 msgid "Retry"
-msgstr ""
+msgstr "重试"
 
 #: src/control/Control.AIChatSidebar.ts:770
 #: src/control/Control.AIChatSidebar.ts:803
 msgid "Insert at cursor"
-msgstr ""
+msgstr "在光标处插入"
 
 #: src/control/Control.AIChatSidebar.ts:779
 #: src/control/Control.AIChatSidebar.ts:810
 msgid "Copy to clipboard"
-msgstr ""
+msgstr "复制到剪贴板"
 
 #: src/control/Control.AIChatSidebar.ts:831
 msgid "Ask AI..."
-msgstr ""
+msgstr "询问 AI..."
 
 #: src/control/Control.AIChatSidebar.ts:834
 msgid "Message input"
-msgstr ""
+msgstr "消息输入"
 
 #: src/control/Control.AIChatSidebar.ts:850
 msgid "Stop generating"
-msgstr ""
+msgstr "停止生成"
 
 #: src/control/Control.AIChatSidebar.ts:851
 msgid "Send message"
-msgstr ""
+msgstr "发送消息"
 
 #: src/control/Control.AIChatSidebar.ts:865
 #: src/control/Control.AIChatSidebar.ts:878
 msgid "Set tone"
-msgstr ""
+msgstr "设置语气"
 
 #: src/control/Control.AIChatSidebar.ts:889
 msgid "Set tone of voice"
-msgstr ""
+msgstr "设置语气风格"
 
 #: src/control/Control.AIChatSidebar.ts:890
 msgid "Tone of voice: {0}{1}"
-msgstr ""
+msgstr "语气风格：{0}{1}"
 
 #: src/control/Control.AIChatSidebar.ts:892
 msgid "with emoji"
-msgstr ""
+msgstr "带表情符号"
 
 #: src/control/Control.AIChatSidebar.ts:934
 #: src/control/Control.AIChatSidebar.ts:984
 #: src/control/Control.AIChatSidebar.ts:1356
-#, fuzzy
 msgid "tone"
-msgstr "无"
+msgstr "语气"
 
 #: src/control/Control.AIChatSidebar.ts:947
 #: src/control/Control.AIChatSidebar.ts:1218
 msgid "Tone of voice"
-msgstr ""
+msgstr "语气风格"
 
 #: src/control/Control.AIChatSidebar.ts:953
 msgid "Reset voice"
-msgstr ""
+msgstr "重置风格"
 
 #: src/control/Control.AIChatSidebar.ts:956
 msgid "Reset tone of voice"
-msgstr ""
+msgstr "重置语气风格"
 
 #: src/control/Control.AIChatSidebar.ts:972
 msgid "Your tones"
-msgstr ""
+msgstr "您的语气"
 
 #: src/control/Control.AIChatSidebar.ts:989
-#, fuzzy
 msgid "Edit tone"
-msgstr "编辑模式"
+msgstr "编辑语气"
 
 #: src/control/Control.AIChatSidebar.ts:1006
 msgid "+ Add my own voice"
-msgstr ""
+msgstr "+ 添加自己的风格"
 
 #: src/control/Control.AIChatSidebar.ts:1008
 msgid "Add a custom tone of voice"
-msgstr ""
+msgstr "添加自定义语气风格"
 
 #: src/control/Control.AIChatSidebar.ts:1019
 msgid "Emojify"
-msgstr ""
+msgstr "表情化"
 
 #: src/control/Control.AIChatSidebar.ts:1025
 #: src/control/Control.StatusBar.js:162
@@ -1521,271 +1514,269 @@ msgstr "关闭"
 
 #: src/control/Control.AIChatSidebar.ts:1028
 msgid "Toggle emojify"
-msgstr ""
+msgstr "切换表情化"
 
 #: src/control/Control.AIChatSidebar.ts:1189
 msgid "Use icon"
-msgstr ""
+msgstr "使用图标"
 
 #: src/control/Control.AIChatSidebar.ts:1199
 msgid "Pick another emoji"
-msgstr ""
+msgstr "选择另一个表情符号"
 
 #: src/control/Control.AIChatSidebar.ts:1213
 msgid "Back to tones"
-msgstr ""
+msgstr "返回语气"
 
 #: src/control/Control.AIChatSidebar.ts:1226
 msgid "Icon"
-msgstr ""
+msgstr "图标"
 
 #: src/control/Control.AIChatSidebar.ts:1238
 msgid "Name your tone"
-msgstr ""
+msgstr "为语气命名"
 
 #: src/control/Control.AIChatSidebar.ts:1245
 msgid "e.g. Quick reply"
-msgstr ""
+msgstr "例如：快速回复"
 
 #: src/control/Control.AIChatSidebar.ts:1247
 msgid "Tone name"
-msgstr ""
+msgstr "语气名称"
 
 #: src/control/Control.AIChatSidebar.ts:1252
 msgid "Describe how AI should write"
-msgstr ""
+msgstr "描述 AI 的写作方式"
 
 #: src/control/Control.AIChatSidebar.ts:1260
 msgid ""
 "Write short, direct sentences. Use plain language and skip the small talk."
-msgstr ""
+msgstr "写简短直接的句子。使用通俗语言，避免客套话。"
 
 #: src/control/Control.AIChatSidebar.ts:1264
 msgid "Tone description"
-msgstr ""
+msgstr "语气描述"
 
 #: src/control/Control.AIChatSidebar.ts:1273
 #: src/control/Control.AIChatSidebar.ts:1335
 #: src/control/Control.AIChatSidebar.ts:1377
 msgid "Delete tone"
-msgstr ""
+msgstr "删除语气"
 
 #: src/control/Control.AIChatSidebar.ts:1275
 msgid "Delete this tone"
-msgstr ""
+msgstr "删除此语气"
 
 #: src/control/Control.AIChatSidebar.ts:1288
 msgid "Save voice"
-msgstr ""
+msgstr "保存风格"
 
 #: src/control/Control.AIChatSidebar.ts:1290
 msgid "Save tone of voice"
-msgstr ""
+msgstr "保存语气风格"
 
 #: src/control/Control.AIChatSidebar.ts:1305
 #: src/control/jsdialog/Widget.EmojiPicker.ts:410
 msgid "Search emojis"
-msgstr ""
+msgstr "搜索表情符号"
 
 #: src/control/Control.AIChatSidebar.ts:1306
 #: src/control/jsdialog/Widget.EmojiPicker.ts:401
 msgid "Choose an emoji"
-msgstr ""
+msgstr "选择表情符号"
 
 #: src/control/Control.AIChatSidebar.ts:1330
 msgid "Delete tone confirmation"
-msgstr ""
+msgstr "删除语气确认"
 
 #: src/control/Control.AIChatSidebar.ts:1341
 msgid "This tone of voice will be deleted"
-msgstr ""
+msgstr "此语气风格将被删除"
 
 #: src/control/Control.AIChatSidebar.ts:1370
 msgid "Cancel delete"
-msgstr ""
+msgstr "取消删除"
 
 #: src/control/Control.AIChatSidebar.ts:1397
 #: src/control/Control.AIChatSidebar.ts:1457
 msgid "You have reached the maximum of {0} custom tones."
-msgstr ""
+msgstr "您已达到 {0} 个自定义语气的上限。"
 
 #: src/control/Control.AIChatSidebar.ts:1631
 msgid "Using selected text as context"
-msgstr ""
+msgstr "使用所选文本作为上下文"
 
 #: src/control/Control.AIChatSidebar.ts:1639
 msgid "Diagnose formula error"
-msgstr ""
+msgstr "诊断公式错误"
 
 #: src/control/Control.AIChatSidebar.ts:1645
 msgid "Sanity check data"
-msgstr ""
+msgstr "检查数据合理性"
 
 #: src/control/Control.AIChatSidebar.ts:1651
 msgid "Create a formula"
-msgstr ""
+msgstr "创建公式"
 
 #: src/control/Control.AIChatSidebar.ts:1658
 msgid "Create slides"
-msgstr ""
+msgstr "创建幻灯片"
 
 #: src/control/Control.AIChatSidebar.ts:1690
 msgid "See less"
-msgstr ""
+msgstr "收起"
 
 #: src/control/Control.AIChatSidebar.ts:1690
 msgid "See more"
-msgstr ""
+msgstr "查看更多"
 
 #: src/control/Control.AIChatSidebar.ts:1800
 msgid "Image inserted at cursor"
-msgstr ""
+msgstr "图片已插入到光标处"
 
 #: src/control/Control.AIChatSidebar.ts:1819
 msgid "Text inserted at cursor"
-msgstr ""
+msgstr "文本已插入到光标处"
 
 #: src/control/Control.AIChatSidebar.ts:1893
 msgid "Approaching message length limit"
-msgstr ""
+msgstr "接近消息长度限制"
 
 #: src/control/Control.AIChatSidebar.ts:1947
 msgid "Request timeout"
-msgstr ""
+msgstr "请求超时"
 
 #: src/control/Control.AIChatSidebar.ts:1962
 #: src/control/Control.AIChatSidebar.ts:2784
 msgid ""
 "The selection contains images or other non-text content that cannot be sent "
 "as context."
-msgstr ""
+msgstr "所选内容包含图像或其他无法作为上下文发送的非文本内容。"
 
 #: src/control/Control.AIChatSidebar.ts:2049
 msgid "Message is too long. Please shorten it and try again."
-msgstr ""
+msgstr "消息过长。请缩短后重试。"
 
 #: src/control/Control.AIChatSidebar.ts:2104
 msgid "Error: "
-msgstr ""
+msgstr "错误： "
 
 #: src/control/Control.AIChatSidebar.ts:2126
 msgid "Generated image"
-msgstr ""
+msgstr "生成的图像"
 
 #: src/control/Control.AIChatSidebar.ts:2137
 msgid "AI request failed"
-msgstr ""
+msgstr "AI 请求失败"
 
 #: src/control/Control.AIChatSidebar.ts:2154
 msgid "The AI assistant"
-msgstr ""
+msgstr "AI 助手"
 
 #: src/control/Control.AIChatSidebar.ts:2167
 msgid "Do you want to proceed?"
-msgstr ""
+msgstr "是否要继续？"
 
 #: src/control/Control.AIChatSidebar.ts:2170
 msgid "%1 wants to inspect your document. Do you want to proceed?"
-msgstr ""
+msgstr "%1 想要检查您的文档。是否要继续？"
 
 #: src/control/Control.AIChatSidebar.ts:2174
 msgid "Modify document structure"
-msgstr ""
+msgstr "修改文档结构"
 
 #: src/control/Control.AIChatSidebar.ts:2176
 msgid "%1 wants to modify your document:"
-msgstr ""
+msgstr "%1 想要修改您的文档："
 
 #: src/control/Control.AIChatSidebar.ts:2180
 #: src/control/Control.AIChatSidebar.ts:2191
 msgid "Do you want to apply this change?"
-msgstr ""
+msgstr "是否要应用此更改？"
 
 #: src/control/Control.AIChatSidebar.ts:2182
 msgid "Set cell formula"
-msgstr ""
+msgstr "设置单元格公式"
 
 #: src/control/Control.AIChatSidebar.ts:2184
 msgid "%1 wants to set a formula in your spreadsheet:"
-msgstr ""
+msgstr "%1 想要在您的电子表格中设置公式："
 
 #: src/control/Control.AIChatSidebar.ts:2194
 msgid "%1 wants to perform an action. Do you want to proceed?"
-msgstr ""
+msgstr "%1 想要执行一个操作。是否要继续？"
 
 #: src/control/Control.AIChatSidebar.ts:2225
 msgid "Approve"
-msgstr ""
+msgstr "批准"
 
 #: src/control/Control.AIChatSidebar.ts:2227
 msgid "Approve action"
-msgstr ""
+msgstr "批准操作"
 
 #: src/control/Control.AIChatSidebar.ts:2234
 msgid "Reject"
-msgstr ""
+msgstr "拒绝"
 
 #: src/control/Control.AIChatSidebar.ts:2236
 msgid "Reject action"
-msgstr ""
+msgstr "拒绝操作"
 
 #: src/control/Control.AIChatSidebar.ts:2255
 msgid "Applying changes..."
-msgstr ""
+msgstr "正在应用更改..."
 
 #: src/control/Control.AIChatSidebar.ts:2258
 msgid "Change rejected"
-msgstr ""
+msgstr "更改已拒绝"
 
 #: src/control/Control.AIChatSidebar.ts:2304
 msgid "Selection fetch timeout"
-msgstr ""
+msgstr "选区获取超时"
 
 #: src/control/Control.AIChatSidebar.ts:2323
 msgid "Failed to parse selection content"
-msgstr ""
+msgstr "解析选区内容失败"
 
 #: src/control/Control.AIChatSidebar.ts:2556
 msgid "Formula analysis timeout"
-msgstr ""
+msgstr "公式分析超时"
 
 #: src/control/Control.AIChatSidebar.ts:2575
 msgid "Analyzing formula dependencies..."
-msgstr ""
+msgstr "正在分析公式依赖关系..."
 
 #: src/control/Control.AIChatSidebar.ts:2583
 msgid "Failed to analyze formula."
-msgstr ""
+msgstr "分析公式失败。"
 
 #: src/control/Control.AIChatSidebar.ts:2593
 msgid "The selected cell does not contain a formula."
-msgstr ""
+msgstr "所选单元格不包含公式。"
 
 #: src/control/Control.AIChatSidebar.ts:2595
 msgid "The selected cell does not have a formula error."
-msgstr ""
+msgstr "所选单元格没有公式错误。"
 
 #: src/control/Control.AIChatSidebar.ts:2604
 msgid "Diagnose formula error in"
-msgstr ""
+msgstr "诊断公式错误位于"
 
 #: src/control/Control.AIChatSidebar.ts:2625
 msgid "I have a formula error in my spreadsheet."
-msgstr ""
+msgstr "我的电子表格中有一个公式错误。"
 
 #: src/control/Control.AIChatSidebar.ts:2627
-#, fuzzy
 msgid "Cell"
 msgstr "单元格"
 
 #: src/control/Control.AIChatSidebar.ts:2631
-#, fuzzy
 msgid "Sheet"
-msgstr "表格"
+msgstr "工作表"
 
 #: src/control/Control.AIChatSidebar.ts:2635
 msgid "contains"
-msgstr ""
+msgstr "包含"
 
 #: src/control/Control.AIChatSidebar.ts:2637
 #: src/control/Control.FormulaBarJSDialog.js:83
@@ -1796,124 +1787,125 @@ msgstr "公式"
 
 #: src/control/Control.AIChatSidebar.ts:2641
 msgid "Referenced cells"
-msgstr ""
+msgstr "引用的单元格"
 
 #: src/control/Control.AIChatSidebar.ts:2647
 msgid "Please diagnose why this formula produces the"
-msgstr ""
+msgstr "请诊断此公式为何产生"
 
 #: src/control/Control.AIChatSidebar.ts:2651
 msgid "error."
-msgstr ""
+msgstr "错误。"
 
 #: src/control/Control.AIChatSidebar.ts:2653
 msgid "Explain the root cause and suggest how to fix it."
-msgstr ""
+msgstr "解释根本原因并提出修复建议。"
 
 #: src/control/Control.AIChatSidebar.ts:2657
 msgid ""
 "When referencing specific cells, format each cell address as a clickable "
 "link: [A1](cell://A1)."
-msgstr ""
+msgstr "当引用特定单元格时，将每个单元格地址格式化为可点击链接：[A1](cell://A1)。"
 
 #: src/control/Control.AIChatSidebar.ts:2672
-#, fuzzy
 msgid "formula"
 msgstr "公式"
 
 #: src/control/Control.AIChatSidebar.ts:2674
 msgid "ERROR"
-msgstr ""
+msgstr "错误"
 
 #: src/control/Control.AIChatSidebar.ts:2688
 msgid "value"
-msgstr ""
+msgstr "值"
 
 #: src/control/Control.AIChatSidebar.ts:2698
-#, fuzzy
 msgid "text"
 msgstr "文本"
 
 #: src/control/Control.AIChatSidebar.ts:2703
 msgid "empty"
-msgstr ""
+msgstr "空"
 
 #: src/control/Control.AIChatSidebar.ts:2705
-#, fuzzy
 msgid "range"
 msgstr "范围"
 
 #: src/control/Control.AIChatSidebar.ts:2707
 msgid "errors in"
-msgstr ""
+msgstr "中的错误"
 
 #: src/control/Control.AIChatSidebar.ts:2710
 msgid "only partially scanned"
-msgstr ""
+msgstr "仅部分扫描"
 
 #: src/control/Control.AIChatSidebar.ts:2719
 msgid "circular reference"
-msgstr ""
+msgstr "循环引用"
 
 #: src/control/Control.AIChatSidebar.ts:2769
 msgid "Select the data you want to sanity-check first."
-msgstr ""
+msgstr "请先选择要检查的数据。"
 
 #: src/control/Control.AIChatSidebar.ts:2774
 msgid "Analyzing selected data..."
-msgstr ""
+msgstr "正在分析所选数据..."
 
 #: src/control/Control.AIChatSidebar.ts:2787
 msgid "Failed to extract spreadsheet data."
-msgstr ""
+msgstr "提取电子表格数据失败。"
 
 #: src/control/Control.AIChatSidebar.ts:2796
 msgid "No data found in selection."
-msgstr ""
+msgstr "选区中未找到数据。"
 
 #: src/control/Control.AIChatSidebar.ts:2826
 msgid ""
 "Describe the slides you want to create. For example: \"A 5-slide overview "
 "of renewable energy\" or \"An introduction to our team\"."
 msgstr ""
+"描述您想要创建的幻灯片。例如：「可再生能源概述，5 张幻灯片」或「我们的团队介"
+"绍」。"
 
 #: src/control/Control.AIChatSidebar.ts:2853
 msgid ""
 "Describe what formula you need. For example: \"Calculate the average of "
 "column B\" or \"Sum all values where column A is greater than 100\"."
 msgstr ""
+"描述您需要的公式。例如：「计算 B 列的平均值」或「对 A 列大于 100 的所有值求和"
+"」。"
 
 #: src/control/Control.AIChatSidebar.ts:2863
 msgid ""
 "Read row numbers from the \"Row\" column — do not count or estimate row "
 "positions."
-msgstr ""
+msgstr "从「行」列读取行号——不要计数或估算行位置。"
 
 #: src/control/Control.AIChatSidebar.ts:2867
 msgid ""
 "To identify a cell's column, match the value to the column letter in the "
 "header row — do not guess."
-msgstr ""
+msgstr "要识别单元格的列，将值与标题行中的列字母匹配——不要猜测。"
 
 #: src/control/Control.AIChatSidebar.ts:2871
 msgid ""
 "Reference a cell by combining its column header with the row number (e.g., "
 "column B + row 2 = B2)."
-msgstr ""
+msgstr "通过将列标题与行号组合来引用单元格（例如，B 列 + 第 2 行 = B2）。"
 
 #: src/control/Control.AIChatSidebar.ts:2874
 msgid ""
 "When referencing specific cells, format each cell as a clickable link: [B2]"
 "(cell://B2)."
-msgstr ""
+msgstr "当引用特定单元格时，将每个单元格格式化为可点击链接：[B2](cell://B2)。"
 
 #: src/control/Control.AIChatSidebar.ts:2880
 msgid "Sanity check the following spreadsheet data."
-msgstr ""
+msgstr "检查以下电子表格数据的合理性。"
 
 #: src/control/Control.AIChatSidebar.ts:2881
 msgid "Please analyze this data for:"
-msgstr ""
+msgstr "请分析此数据的以下方面："
 
 #: src/control/Control.AIChatSidebar.ts:2885
 msgid ""
@@ -1921,18 +1913,20 @@ msgid ""
 "values deviates significantly from the expected distribution, which may "
 "suggest data manipulation."
 msgstr ""
+"本福特定律违例——检查数值的首位数字分布是否显著偏离预期分布，这可能表明数据被"
+"操纵。"
 
 #: src/control/Control.AIChatSidebar.ts:2891
 msgid ""
 "Statistical outliers — identify values that deviate significantly from "
 "their column or group."
-msgstr ""
+msgstr "统计异常值——识别与其列或组显著偏离的值。"
 
 #: src/control/Control.AIChatSidebar.ts:2897
 msgid ""
 "General anomalies — suspicious patterns, unexpected duplicates, "
 "inconsistencies, or formatting issues."
-msgstr ""
+msgstr "一般异常——可疑模式、意外的重复项、不一致或格式问题。"
 
 #: src/control/Control.AlertDialog.js:55
 msgid "External link"
@@ -2096,7 +2090,7 @@ msgstr "幻灯片"
 
 #: src/control/Control.BackstageView.ts:548
 msgid "Parts"
-msgstr ""
+msgstr "部件"
 
 #: src/control/Control.BackstageView.ts:552
 #: src/control/Control.DocumentRepair.js:140
@@ -2687,11 +2681,11 @@ msgstr "样式"
 
 #: src/control/Control.JSDialogBuilder.js:1568
 msgid "Toggle dropdown"
-msgstr ""
+msgstr "切换下拉菜单"
 
 #: src/control/Control.JSDialogBuilder.js:1570
 msgid "Dialog dropdown"
-msgstr ""
+msgstr "对话框下拉菜单"
 
 #: src/control/Control.JSDialogBuilder.js:1572
 #: src/control/Control.NotebookbarWriter.js:1629
@@ -2700,7 +2694,7 @@ msgstr "下拉"
 
 #: src/control/Control.JSDialogBuilder.js:1574
 msgid "Apply action dropdown"
-msgstr ""
+msgstr "应用操作下拉菜单"
 
 #: src/control/Control.JSDialogBuilder.js:1600
 msgid "Open {name}"
@@ -2863,7 +2857,7 @@ msgstr "修复"
 
 #: src/control/Control.Menubar.ts:144
 msgid "Compare Changes"
-msgstr ""
+msgstr "比较更改"
 
 #: src/control/Control.Menubar.ts:163 src/control/Control.Menubar.ts:490
 #: src/control/Control.Menubar.ts:496 src/control/Control.Menubar.ts:663
@@ -3016,7 +3010,7 @@ msgstr "屏幕阅读"
 #: src/control/Control.NotebookbarImpress.js:169
 #: src/control/Control.NotebookbarWriter.js:122
 msgid "Extensions"
-msgstr ""
+msgstr "扩展"
 
 #: src/control/Control.Menubar.ts:422 src/control/Control.Menubar.ts:610
 #: src/control/Control.Menubar.ts:755 src/control/Control.Menubar.ts:1061
@@ -3327,7 +3321,7 @@ msgstr "更多…"
 
 #: src/control/Control.Menubar.ts:1720
 msgid "(No extensions installed)"
-msgstr ""
+msgstr "（未安装扩展）"
 
 #: src/control/Control.Menubar.ts:2074
 msgid "Use Compact view"
@@ -3409,39 +3403,39 @@ msgstr "在搜索框中输入以查找文档中的任何内容"
 
 #: src/control/Notebookbar.CalcTableTab.ts:43
 msgid "Table Design"
-msgstr ""
+msgstr "表格设计"
 
 #: src/control/Notebookbar.CalcTableTab.ts:72
 msgid "Table Options"
-msgstr ""
+msgstr "表格选项"
 
 #: src/control/Notebookbar.CalcTableTab.ts:86
 msgid "Header Row"
-msgstr ""
+msgstr "标题行"
 
 #: src/control/Notebookbar.CalcTableTab.ts:101
 msgid "Total Row"
-msgstr ""
+msgstr "汇总行"
 
 #: src/control/Notebookbar.CalcTableTab.ts:123
 msgid "Banded Rows"
-msgstr ""
+msgstr "隔行着色"
 
 #: src/control/Notebookbar.CalcTableTab.ts:139
 msgid "Banded Columns"
-msgstr ""
+msgstr "隔列着色"
 
 #: src/control/Notebookbar.CalcTableTab.ts:161
 msgid "First Column"
-msgstr ""
+msgstr "第一列"
 
 #: src/control/Notebookbar.CalcTableTab.ts:177
 msgid "Last Column"
-msgstr ""
+msgstr "最后一列"
 
 #: src/control/Notebookbar.CalcTableTab.ts:199
 msgid "Filter Buttons"
-msgstr ""
+msgstr "筛选按钮"
 
 #: src/control/Notebookbar.ImpressAnimationTab.ts:24
 msgid "Animation"
@@ -3498,7 +3492,7 @@ msgstr "之后"
 
 #: src/control/Notebookbar.ImpressTransitionTab.ts:146
 msgid "Apply to All Slides"
-msgstr ""
+msgstr "应用于所有幻灯片"
 
 #: src/control/Notebookbar.WriterReferencesTab.ts:41
 msgid "Table of content"
@@ -3520,11 +3514,11 @@ msgstr "动画"
 
 #: src/control/Control.Notebookbar.js:292
 msgid "No extensions are installed."
-msgstr ""
+msgstr "未安装任何扩展。"
 
 #: src/control/Control.NotebookbarBase.ts:149
 msgid "Outline %OutlineLevel%"
-msgstr ""
+msgstr "大纲 %OutlineLevel%"
 
 #: src/control/Control.NotebookbarBuilder.js:238
 msgid "Click to expand"
@@ -3547,7 +3541,7 @@ msgstr "点击折叠"
 #: src/control/Control.NotebookbarBuilder.js:442
 #: src/control/Control.NotebookbarBuilder.js:475
 msgid "PDF Document (.pdf) with options"
-msgstr ""
+msgstr "PDF 文档 (.pdf)（含选项）"
 
 #: src/control/Control.NotebookbarBuilder.js:410
 #: src/control/Control.NotebookbarBuilder.js:433
@@ -3629,7 +3623,7 @@ msgstr "图片"
 #: src/control/Control.NotebookbarImpress.js:143
 #: src/control/Control.NotebookbarWriter.js:103
 msgid "Chart"
-msgstr ""
+msgstr "图表"
 
 #: src/control/Control.NotebookbarCalc.js:99
 #: src/control/Control.NotebookbarDraw.js:122
@@ -3698,13 +3692,13 @@ msgstr "剪贴板"
 #: src/control/Control.NotebookbarWriter.js:655
 #: src/control/Control.TopToolbar.js:148
 msgid "Clone Formatting (double click to keep active)"
-msgstr ""
+msgstr "克隆格式（双击保持激活）"
 
 #: src/control/Control.NotebookbarCalc.js:463
 msgid ""
 "Clone Formatting is active (press Enter on a cell to apply, click again or "
 "press Esc to exit)"
-msgstr ""
+msgstr "克隆格式已激活（按 Enter 键应用到单元格，再次点击或按 Esc 退出）"
 
 #: src/control/Control.NotebookbarCalc.js:499
 #: src/control/Control.NotebookbarDraw.js:692
@@ -3884,7 +3878,7 @@ msgstr "默认视图"
 
 #: src/control/Control.NotebookbarCalc.js:1469
 msgid "Open Views List"
-msgstr ""
+msgstr "打开视图列表"
 
 #: src/control/Control.NotebookbarCalc.js:1476
 msgid "New Sheet View"
@@ -3962,15 +3956,15 @@ msgstr "表格"
 #: src/control/Control.NotebookbarCalc.js:1811
 #: src/control/Control.NotebookbarCalc.js:1814
 msgid "Table styles are only available in .xlsx files"
-msgstr ""
+msgstr "表格样式仅适用于 .xlsx 文件"
 
 #: src/control/Control.NotebookbarCalc.js:1812
 msgid "Insert a styled table"
-msgstr ""
+msgstr "插入带样式的表格"
 
 #: src/control/Control.NotebookbarCalc.js:1815
 msgid "Select a cell range first to insert a styled table"
-msgstr ""
+msgstr "请先选择单元格范围以插入带样式的表格"
 
 #: src/control/Control.NotebookbarCalc.js:1824
 #: src/control/Control.NotebookbarDraw.js:1034
@@ -4048,13 +4042,13 @@ msgstr "筛选"
 
 #: src/control/Control.NotebookbarCalc.js:2616
 msgid "Proofing"
-msgstr ""
+msgstr "校对"
 
 #: src/control/Control.NotebookbarCalc.js:2644
 #: src/control/Control.NotebookbarImpress.js:2049
 #: src/control/Control.NotebookbarWriter.js:2271
 msgid "Auto Spell Check"
-msgstr ""
+msgstr "自动拼写检查"
 
 #: src/control/Control.NotebookbarCalc.js:2676
 #: src/control/Control.NotebookbarImpress.js:2079
@@ -4064,7 +4058,7 @@ msgstr "批注"
 
 #: src/control/Control.NotebookbarCalc.js:2727
 msgid "Protection"
-msgstr ""
+msgstr "保护"
 
 #: src/control/Control.NotebookbarCalc.js:2790
 msgid "Format Cells"
@@ -4073,7 +4067,7 @@ msgstr "设置单元格格式"
 #: src/control/Control.NotebookbarCalc.js:2850
 #: src/control/Control.NotebookbarImpress.js:1897
 msgid "Themes"
-msgstr ""
+msgstr "主题"
 
 #: src/control/Control.NotebookbarCalc.js:2956
 #: src/control/Control.NotebookbarCalc.js:3313
@@ -4109,7 +4103,7 @@ msgstr "标尺"
 #: src/control/Control.NotebookbarWriter.js:656
 #: src/control/Control.TopToolbar.js:148
 msgid "Clone Formatting is active (click again or press Esc to exit)"
-msgstr ""
+msgstr "克隆格式已激活（再次点击或按 Esc 退出）"
 
 #: src/control/Control.NotebookbarDraw.js:920
 #: src/control/Control.NotebookbarImpress.js:1056
@@ -4133,7 +4127,7 @@ msgstr "主要"
 
 #: src/control/Control.NotebookbarImpress.js:486
 msgid "Start Slide Show"
-msgstr ""
+msgstr "开始幻灯片放映"
 
 #: src/control/Control.NotebookbarImpress.js:491
 msgid "From Beginning"
@@ -4141,7 +4135,7 @@ msgstr "从头"
 
 #: src/control/Control.NotebookbarImpress.js:492
 msgid "Fullscreen, starting at slide 1"
-msgstr ""
+msgstr "全屏，从第 1 张幻灯片开始"
 
 #: src/control/Control.NotebookbarImpress.js:499
 msgid "From Current Slide"
@@ -4149,11 +4143,11 @@ msgstr "从当前幻灯片"
 
 #: src/control/Control.NotebookbarImpress.js:500
 msgid "Fullscreen, starting at this slide"
-msgstr ""
+msgstr "全屏，从当前幻灯片开始"
 
 #: src/control/Control.NotebookbarImpress.js:515
 msgid "Present"
-msgstr ""
+msgstr "演示"
 
 #: src/control/Control.NotebookbarImpress.js:521
 msgid "Present in Window"
@@ -4161,36 +4155,36 @@ msgstr "显示在窗口中"
 
 #: src/control/Control.NotebookbarImpress.js:522
 msgid "Plays inside the document window. Starts at slide 1"
-msgstr ""
+msgstr "在文档窗口内播放。从第 1 张幻灯片开始"
 
 #: src/control/Control.NotebookbarImpress.js:530
 msgid "Presenter View"
-msgstr ""
+msgstr "演示者视图"
 
 #: src/control/Control.NotebookbarImpress.js:531
 msgid "Shows your notes, next slide, and a timer"
-msgstr ""
+msgstr "显示您的备注、下一张幻灯片和计时器"
 
 #: src/control/Control.NotebookbarImpress.js:539
 msgid "Present to All"
-msgstr ""
+msgstr "向所有人演示"
 
 #: src/control/Control.NotebookbarImpress.js:540
 msgid "Starts a slideshow on every viewer's screen"
-msgstr ""
+msgstr "在每个观看者的屏幕上启动幻灯片放映"
 
 #: src/control/Control.NotebookbarImpress.js:548
 #: src/slideshow/SlideShowPresenter.ts:1525
 msgid "Follow Presenter"
-msgstr ""
+msgstr "跟随演示者"
 
 #: src/control/Control.NotebookbarImpress.js:549
 msgid "View slides as the presenter advances them"
-msgstr ""
+msgstr "随着演示者前进查看幻灯片"
 
 #: src/control/Control.NotebookbarImpress.js:559
 msgid "Set Up"
-msgstr ""
+msgstr "设置"
 
 #: src/control/Control.NotebookbarImpress.js:686
 msgid "Slide Views"
@@ -4228,13 +4222,12 @@ msgid "Master Slide Templates"
 msgstr "母版幻灯片模板"
 
 #: src/control/Control.NotebookbarImpress.js:1874
-#, fuzzy
 msgid "This Presentation"
-msgstr "关闭演示"
+msgstr "此演示文稿"
 
 #: src/control/Control.NotebookbarImpress.js:1883
 msgid "Presentation Templates"
-msgstr ""
+msgstr "演示文稿模板"
 
 #: src/control/Control.NotebookbarImpress.js:1954
 msgid "Slide Size"
@@ -4272,11 +4265,11 @@ msgstr "脱机"
 
 #: src/control/Control.NotebookbarWriter.js:566
 msgid "Validate Sidebar"
-msgstr ""
+msgstr "验证侧边栏"
 
 #: src/control/Control.NotebookbarWriter.js:573
 msgid "Validate Dialog"
-msgstr ""
+msgstr "验证对话框"
 
 #: src/control/Control.NotebookbarWriter.js:966
 #: src/control/Control.Zotero.js:828
@@ -4310,15 +4303,15 @@ msgstr "复选框"
 
 #: src/control/Control.NotebookbarWriter.js:1697
 msgid "Page Width"
-msgstr ""
+msgstr "页面宽度"
 
 #: src/control/Control.NotebookbarWriter.js:2246
 msgid "Spellcheck"
-msgstr ""
+msgstr "拼写检查"
 
 #: src/control/Control.NotebookbarWriter.js:2259
 msgid "Spelling Options"
-msgstr ""
+msgstr "拼写选项"
 
 #: src/control/Control.NotebookbarWriter.js:2299
 #: src/control/Control.NotebookbarWriter.js:2315
@@ -4332,15 +4325,15 @@ msgstr "修订"
 
 #: src/control/Control.NotebookbarWriter.js:2384
 msgid "View Changes"
-msgstr ""
+msgstr "查看更改"
 
 #: src/control/Control.NotebookbarWriter.js:2777
 msgid "Cell Background"
-msgstr ""
+msgstr "单元格背景"
 
 #: src/control/Control.NotebookbarWriter.js:2860
 msgid "Protect"
-msgstr ""
+msgstr "保护"
 
 #: src/control/Control.PartsPreview.js:209
 msgid "preview of page %1"
@@ -4357,40 +4350,40 @@ msgstr "粘贴"
 
 #: src/control/Control.PartsPreview.js:423
 msgid "Add Section"
-msgstr ""
+msgstr "添加节"
 
 #: src/control/Control.PartsPreview.js:598
 msgid "Toggle section %1"
-msgstr ""
+msgstr "切换节 %1"
 
 #: src/control/Control.PartsPreview.js:789
 #: src/control/Control.PartsPreview.js:890
 msgid "Rename Section"
-msgstr ""
+msgstr "重命名节"
 
 #: src/control/Control.PartsPreview.js:796
 msgid "Remove Section"
-msgstr ""
+msgstr "删除节"
 
 #: src/control/Control.PartsPreview.js:804
 msgid "Move Section Up"
-msgstr ""
+msgstr "上移节"
 
 #: src/control/Control.PartsPreview.js:813
 msgid "Move Section Down"
-msgstr ""
+msgstr "下移节"
 
 #: src/control/Control.PartsPreview.js:822
 msgid "Collapse All Sections"
-msgstr ""
+msgstr "折叠所有节"
 
 #: src/control/Control.PartsPreview.js:830
 msgid "Expand All Sections"
-msgstr ""
+msgstr "展开所有节"
 
 #: src/control/Control.PartsPreview.js:891
 msgid "Enter new section name:"
-msgstr ""
+msgstr "输入新节名称："
 
 #: src/control/Control.SaveState.ts:49
 msgid "Saving"
@@ -4451,7 +4444,7 @@ msgstr "已启用快速 Kit jail 绑定挂载"
 
 #: src/control/Control.ServerAuditDialog.ts:119
 msgid "Fast kit jail bind mounting not configured"
-msgstr ""
+msgstr "Fast kit jail bind mounting 未配置"
 
 #: src/control/Control.ServerAuditDialog.ts:127
 msgid "Poorly performing proxying of all network requests."
@@ -4572,19 +4565,19 @@ msgstr "选中范围计数"
 
 #: src/control/Control.StatusBar.js:274
 msgid "Zoom to Fit Slide"
-msgstr ""
+msgstr "缩放以适合幻灯片"
 
 #: src/control/Control.StatusBar.js:275
 msgid "Zoom to Fit Page Width"
-msgstr ""
+msgstr "缩放以适合页面宽度"
 
 #: src/control/Control.StatusBar.js:280
 msgid "Status Bar Menu"
-msgstr ""
+msgstr "状态栏菜单"
 
 #: src/control/Control.StatusBar.js:557
 msgid "The document is probably locked and has been opened as view-only"
-msgstr ""
+msgstr "文档可能已被锁定，已以只读方式打开"
 
 #: src/control/Control.StatusBar.js:566
 msgid ""
@@ -4622,7 +4615,7 @@ msgstr "在后面插入工作表"
 
 #: src/control/Control.Tabs.js:100 src/control/Control.Tabs.js:107
 msgid "Reset Tab Color"
-msgstr ""
+msgstr "重置标签颜色"
 
 #: src/control/Control.Tabs.js:127 src/control/Control.Tabs.js:131
 msgid "Move Sheet Left"
@@ -4676,7 +4669,7 @@ msgstr "插入连接器"
 
 #: src/control/Control.UIManager.ts:182
 msgid "You are currently in View mode"
-msgstr ""
+msgstr "您当前处于查看模式"
 
 #: src/control/Control.UIManager.ts:393
 msgid "Enter new name"
@@ -4888,9 +4881,8 @@ msgid "Updating citations"
 msgstr "正在更新引文"
 
 #: src/control/Control.Zotero.js:1528
-#, fuzzy
 msgid "Unlinked citations"
-msgstr "取消引用链接"
+msgstr "未链接的引文"
 
 #: src/control/Control.Zotero.js:1533
 msgid ""
@@ -5018,20 +5010,20 @@ msgstr "只读"
 
 #: src/control/PermissionMode.ts:125
 msgid "Viewing Mode"
-msgstr ""
+msgstr "查看模式"
 
 #: src/control/PermissionMode.ts:131
 msgid "Editing Mode"
-msgstr ""
+msgstr "编辑模式"
 
 #: src/control/PermissionMode.ts:141 src/control/PermissionMode.ts:215
 #: src/control/PermissionMode.ts:221 src/control/PermissionMode.ts:227
 msgid "Viewing"
-msgstr ""
+msgstr "查看中"
 
 #: src/control/jsdialog/Control.ContextMenu.ts:306
 msgid "Save Image to Server"
-msgstr ""
+msgstr "保存图像到服务器"
 
 #: src/control/jsdialog/Control.ContextMenu.ts:344
 msgid "Paste Special"
@@ -5212,7 +5204,7 @@ msgstr "插入本地多媒体"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1766
 msgid "Compare Local Document"
-msgstr ""
+msgstr "比较本地文档"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1772
 msgid "Very Tight"
@@ -5232,15 +5224,15 @@ msgstr "非常宽松"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1802
 msgid "Inline"
-msgstr ""
+msgstr "内联"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1809
 msgid "Side by Side"
-msgstr ""
+msgstr "并排"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1815
 msgid "Hidden"
-msgstr ""
+msgstr "隐藏"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1829
 msgid "All users"
@@ -5449,9 +5441,8 @@ msgid "Insert Comment"
 msgstr "插入批注"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2401
-#, fuzzy
 msgid "Insert Note"
-msgstr "插入日期"
+msgstr "插入批注"
 
 #: src/control/jsdialog/Util.SnackbarController.ts:122
 msgid "Dismiss"
@@ -5472,69 +5463,67 @@ msgstr "自动"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:253
 msgid "Palette"
-msgstr ""
+msgstr "调色板"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:268
 msgid "Color palette"
-msgstr ""
+msgstr "颜色调色板"
 
 #: src/control/jsdialog/Widget.Combobox.js:241
-#, fuzzy
 msgid "Open "
-msgstr "打开"
+msgstr "打开 "
 
 #: src/control/jsdialog/Widget.Combobox.js:241
 msgid " list"
-msgstr ""
+msgstr " 列表"
 
 #: src/control/jsdialog/Widget.Combobox.js:242
-#, fuzzy
 msgid "Open list"
-msgstr "打开链接"
+msgstr "打开列表"
 
 #: src/control/jsdialog/Widget.Combobox.js:373
 msgid "Filter entries"
-msgstr ""
+msgstr "筛选条目"
 
 #: src/control/jsdialog/Widget.CsvGrid.ts:186
 msgid "CSV column ruler: click to toggle a column split"
-msgstr ""
+msgstr "CSV 列标尺：点击切换列分隔"
 
 #: src/control/jsdialog/Widget.CsvGrid.ts:315
 msgid "CSV import preview"
-msgstr ""
+msgstr "CSV 导入预览"
 
 #: src/control/jsdialog/Widget.CsvGrid.ts:337
 msgid "Line number"
-msgstr ""
+msgstr "行号"
 
 #: src/control/jsdialog/Widget.CsvGrid.ts:349
 msgid "Column {index}"
-msgstr ""
+msgstr "列 {index}"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:54
 msgid "Smileys"
-msgstr ""
+msgstr "笑脸"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:100
 msgid "People & gestures"
-msgstr ""
+msgstr "人物与手势"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:136
 msgid "Objects"
-msgstr ""
+msgstr "物品"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:218
 msgid "Nature & food"
-msgstr ""
+msgstr "自然与食物"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:364
 msgid "Recently used"
-msgstr ""
+msgstr "最近使用"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:384
 msgid "No emojis match \"{0}\""
-msgstr ""
+msgstr "没有表情符号匹配「{0}」"
 
 #: src/control/jsdialog/Widget.PageMarginEntry.ts:139
 msgid "Top: {top}"
@@ -5585,16 +5574,15 @@ msgstr "选定的单元格区域"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:44
 msgid "Cell Selection"
-msgstr ""
+msgstr "单元格选择"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:48
 msgid "Entering text mode"
 msgstr "正在进入文本模式"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:49
-#, fuzzy
 msgid "Insert Mode"
-msgstr "插入日期"
+msgstr "插入模式"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:54
 msgid "Selection Mode"
@@ -5611,22 +5599,19 @@ msgstr "函数选择"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:68
 msgid "Table Cell Functions"
-msgstr ""
+msgstr "表格单元格函数"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:74
-#, fuzzy
 msgid "Sheet Navigation"
-msgstr "关闭导航"
+msgstr "工作表导航"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:76
-#, fuzzy
 msgid "Slide Navigation"
-msgstr "关闭导航"
+msgstr "幻灯片导航"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:77
-#, fuzzy
 msgid "Page Navigation"
-msgstr "关闭导航"
+msgstr "页面导航"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:83
 msgid "Your changes have been saved"
@@ -5642,7 +5627,7 @@ msgstr "单元格边框"
 
 #: src/control/jsdialog/Widget.NotebookbarIconView.ts:98
 msgid "Open Styles Sidebar"
-msgstr ""
+msgstr "打开样式侧边栏"
 
 #: src/control/jsdialog/Widget.NotebookbarIconView.ts:202
 msgid "Scroll up"
@@ -5654,7 +5639,7 @@ msgstr "向下滚动"
 
 #: src/control/jsdialog/Widget.NotebookbarIconView.ts:222
 msgid "More options"
-msgstr ""
+msgstr "更多选项"
 
 #: src/control/jsdialog/Widget.PushButton.ts:19
 msgid "Select range"
@@ -5670,11 +5655,11 @@ msgstr "回复"
 
 #: src/control/jsdialog/Widget.SpinField.ts:275
 msgid "Increment value"
-msgstr ""
+msgstr "增加数值"
 
 #: src/control/jsdialog/Widget.SpinField.ts:284
 msgid "Decrement value"
-msgstr ""
+msgstr "减少数值"
 
 #: src/control/jsdialog/Widget.SidebarContainers.ts:72
 msgid "More options for {1}"
@@ -5686,7 +5671,7 @@ msgstr "您添加到文档中的标题和对象将显示在此处"
 
 #: src/control/jsdialog/Widget.TreeView.ts:2052
 msgid "Search items"
-msgstr ""
+msgstr "搜索项目"
 
 #: src/app/Socket.ts:300
 msgid "Oops, there is a problem connecting to {productname}: "
@@ -5811,7 +5796,7 @@ msgstr "服务器正在关闭"
 #: src/docdispatcher.ts:378 src/docdispatcher.ts:391
 msgid ""
 "AI is not configured. Go to File > Options > View Settings to set it up."
-msgstr ""
+msgstr "AI 未配置。请前往文件 > 选项 > 视图设置进行配置。"
 
 #: src/docdispatcher.ts:612
 msgid "Are you sure you want to delete this slide?"
@@ -5973,9 +5958,8 @@ msgid "Failed to load document."
 msgstr "载入文档失败。"
 
 #: src/errormessages.js:45
-#, fuzzy
 msgid "Save failed due to no disk space left. Document will now be read-only."
-msgstr "磁盘空间不足导致保存失败。文档现在处于只读模式。"
+msgstr "保存失败，因为磁盘空间不足。文档现在将变为只读。"
 
 #: src/errormessages.js:46
 msgid ""
@@ -6089,7 +6073,7 @@ msgstr "已删除{0}个"
 
 #: src/layer/marker/TextInput.js:431
 msgid "Clipboard area"
-msgstr ""
+msgstr "剪贴板区域"
 
 #: src/layer/marker/TextInput.js:481
 msgid "Screen reader support for text content is disabled. "
@@ -6117,7 +6101,7 @@ msgstr "视图菜单"
 
 #: src/layer/tile/CanvasTileLayer.js:461
 msgid "Online Editor"
-msgstr ""
+msgstr "在线编辑器"
 
 #: src/layer/tile/CanvasTileLayer.js:1535
 msgid "Functions"
@@ -6162,11 +6146,11 @@ msgstr "您的浏览器对剪贴板的访问权限受限，请改用屏幕键盘
 msgid ""
 "Your browser has very limited access to the clipboard, so use these "
 "keyboard shortcuts:"
-msgstr ""
+msgstr "您的浏览器对剪贴板的访问非常有限，请使用以下键盘快捷键："
 
 #: src/map/Clipboard.js:1532
 msgid "Cut"
-msgstr ""
+msgstr "剪切"
 
 #: src/map/Clipboard.js:1548
 msgid ""
@@ -6234,7 +6218,7 @@ msgstr "文件上传失败，状态为 {0}"
 
 #: src/map/handler/Map.FileInserter.js:281
 msgid "Failed to read the selected file."
-msgstr ""
+msgstr "读取所选文件失败。"
 
 #: src/map/handler/Map.Print.js:44
 msgid "Print dialog"
@@ -6248,7 +6232,7 @@ msgstr "空白演示文稿"
 #: src/map/handler/Map.SlideShow.js:60
 #: src/slideshow/SlideShowPresenter.ts:1292
 msgid "All slides are hidden!"
-msgstr ""
+msgstr "所有幻灯片均已隐藏！"
 
 #: src/map/handler/Map.SlideShow.js:167
 #: src/slideshow/SlideShowPresenter.ts:1319
@@ -6309,11 +6293,11 @@ msgstr "该文档演示模式已被禁用"
 
 #: src/map/handler/Map.StateChanges.js:132
 msgid "Apply this order to your presentation?"
-msgstr ""
+msgstr "将此顺序应用于您的演示文稿？"
 
 #: src/map/handler/Map.StateChanges.js:132
 msgid "Update Slides"
-msgstr ""
+msgstr "更新幻灯片"
 
 #: src/map/handler/Map.VersionBar.js:50
 msgid "Your Collabora Online server needs updating. Version {0} is available."
@@ -6325,7 +6309,7 @@ msgstr "使用模版创建新文件…"
 
 #: src/map/handler/Map.WOPI.js:296
 msgid "Compare Document..."
-msgstr ""
+msgstr "比较文档..."
 
 #: src/map/handler/Map.WOPI.js:869
 msgid "File name should contain an extension."
@@ -6341,19 +6325,19 @@ msgstr "欢迎对话框"
 
 #: src/slideshow/engine/SlideShowHandler.ts:104
 msgid "Skip"
-msgstr ""
+msgstr "跳过"
 
 #: src/slideshow/engine/SlideShowHandler.ts:105
 msgid "First"
-msgstr ""
+msgstr "首页"
 
 #: src/slideshow/engine/SlideShowHandler.ts:106
 msgid "Skip All"
-msgstr ""
+msgstr "全部跳过"
 
 #: src/slideshow/engine/SlideShowHandler.ts:107
 msgid "First Slide"
-msgstr ""
+msgstr "第一张幻灯片"
 
 #: src/slideshow/engine/SlideShowHandler.ts:108
 #: src/slideshow/PresenterConsole.js:31
@@ -6361,14 +6345,12 @@ msgid "Next Slide"
 msgstr "下一张幻灯片"
 
 #: src/slideshow/engine/SlideShowHandler.ts:109
-#, fuzzy
 msgid "Previous Slide"
 msgstr "上一张幻灯片"
 
 #: src/slideshow/engine/SlideShowHandler.ts:110
-#, fuzzy
 msgid "Last Slide"
-msgstr "粘贴幻灯片"
+msgstr "最后一张幻灯片"
 
 #: src/slideshow/engine/SlideShowHandler.ts:111
 #: src/slideshow/SlideShowPresenter.ts:846
@@ -6377,15 +6359,15 @@ msgstr "结束放映"
 
 #: src/slideshow/engine/SlideShowHandler.ts:318
 msgid "Animation Start: "
-msgstr ""
+msgstr "动画开始： "
 
 #: src/slideshow/engine/SlideShowHandler.ts:420
 msgid "Transition Start: "
-msgstr ""
+msgstr "切换开始： "
 
 #: src/slideshow/engine/SlideShowHandler.ts:439
 msgid "Transition End: "
-msgstr ""
+msgstr "切换结束： "
 
 #: src/slideshow/PauseTimer.ts:141
 msgid "Pause... ( %SECONDS% )"
@@ -6398,7 +6380,7 @@ msgstr "当前幻灯片"
 #: src/slideshow/PresenterConsole.js:36
 #: src/slideshow/SlideShowPresenter.ts:912
 msgid "Exchange"
-msgstr ""
+msgstr "交换"
 
 #: src/slideshow/PresenterConsole.js:37
 msgid "Pause"
@@ -6414,7 +6396,7 @@ msgstr "继续"
 
 #: src/slideshow/PresenterConsole.js:40
 msgid "Present to all"
-msgstr ""
+msgstr "向所有人演示"
 
 #: src/slideshow/PresenterConsole.js:41
 msgid "Go Back"
@@ -6451,11 +6433,11 @@ msgstr "点击以退出演示…"
 
 #: src/slideshow/SlideShowPresenter.ts:809
 msgid "You are on the first slide"
-msgstr ""
+msgstr "您在第一张幻灯片上"
 
 #: src/slideshow/SlideShowPresenter.ts:817
 msgid "Waiting for presenter to advance"
-msgstr ""
+msgstr "等待演示者前进"
 
 #: src/slideshow/SlideShowPresenter.ts:883
 #: src/slideshow/SlideShowPresenter.ts:896
@@ -6467,134 +6449,132 @@ msgid "Enable Animations"
 msgstr "启用动画"
 
 #: src/slideshow/SlideShowPresenter.ts:1520
-#, fuzzy
 msgid "Stop Following"
 msgstr "停止跟随"
 
 #: src/control/Control.Extension.ts:237
 msgid "Close extension"
-msgstr ""
+msgstr "关闭扩展"
 
 #: templates/templates.js:6
 msgid "Modern Business Letter (sans-serif)"
-msgstr ""
+msgstr "现代商务信函（无衬线）"
 
 #: templates/templates.js:10 templates/templates.js:20
 msgid "Business Letter"
-msgstr ""
+msgstr "商务信函"
 
 #: templates/templates.js:16
 msgid "Modern Business Letter (serif)"
-msgstr ""
+msgstr "现代商务信函（衬线）"
 
 #: templates/templates.js:26 templates/templates.js:30
 msgid "CV"
-msgstr ""
+msgstr "简历"
 
 #: templates/templates.js:36
 msgid "Resume (one-page)"
-msgstr ""
+msgstr "个人简历（一页）"
 
 #: templates/templates.js:56
 msgid "Modern Style"
-msgstr ""
+msgstr "现代风格"
 
 #: templates/templates.js:66
 msgid "Simple Style"
-msgstr ""
+msgstr "简单风格"
 
 #: templates/templates.js:76
 msgid "Beehive"
-msgstr ""
+msgstr "蜂巢"
 
 #: templates/templates.js:86
 msgid "Blue Curve"
-msgstr ""
+msgstr "蓝色曲线"
 
 #: templates/templates.js:96
 msgid "Blueprint Plans"
-msgstr ""
+msgstr "蓝图计划"
 
 #: templates/templates.js:106
 msgid "Candy"
-msgstr ""
+msgstr "糖果"
 
 #: templates/templates.js:116
 msgid "DNA"
-msgstr ""
+msgstr "DNA"
 
 #: templates/templates.js:126
 msgid "Focus"
-msgstr ""
+msgstr "焦点"
 
 #: templates/templates.js:136
 msgid "Forestbird"
-msgstr ""
+msgstr "森林鸟"
 
 #: templates/templates.js:146
 msgid "Freshes"
-msgstr ""
+msgstr "清新"
 
 #: templates/templates.js:156
 msgid "Grey Elegant"
-msgstr ""
+msgstr "灰色优雅"
 
 #: templates/templates.js:166
 msgid "Growing Liberty"
-msgstr ""
+msgstr "成长自由"
 
 #: templates/templates.js:176
 msgid "Inspiration"
-msgstr ""
+msgstr "灵感"
 
 #: templates/templates.js:186
-#, fuzzy
 msgid "Lights"
-msgstr "紧凑"
+msgstr "灯光"
 
 #: templates/templates.js:196
 msgid "Metropolis"
-msgstr ""
+msgstr "大都会"
 
 #: templates/templates.js:206
 msgid "Midnight Blue"
-msgstr ""
+msgstr "午夜蓝"
 
 #: templates/templates.js:216
 msgid "Nature Illustration"
-msgstr ""
+msgstr "自然插画"
 
 #: templates/templates.js:226
 msgid "Pencil"
-msgstr ""
+msgstr "铅笔"
 
 #: templates/templates.js:236
 msgid "Piano"
-msgstr ""
+msgstr "钢琴"
 
 #: templates/templates.js:246
 msgid "Portfolio"
-msgstr ""
+msgstr "作品集"
 
 #: templates/templates.js:256
 msgid "Progress"
-msgstr ""
+msgstr "进步"
 
 #: templates/templates.js:266
 msgid "Sunset"
-msgstr ""
+msgstr "日落"
 
 #: templates/templates.js:276
 msgid "Vintage"
-msgstr ""
+msgstr "复古"
 
 #: templates/templates.js:286
 msgid "Vivid"
-msgstr ""
+msgstr "鲜艳"
 
 #: templates/templates.js:296
 msgid "Yellow Idea"
-msgstr ""
+msgstr "黄色创意"
 
 #: welcome/welcome.html%2Bhtml.head.title:9-3
 msgid "Collabora Online Welcome"
@@ -6642,12 +6622,10 @@ msgid "Get Involved"
 msgstr "加入"
 
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.h2:49-7
-#, fuzzy
 msgid "https://www.collaboraoffice.org/"
-msgstr "https://www.collaboraonline.org/"
+msgstr "https://www.collaboraoffice.org/"
 
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.p:50-7
-#, fuzzy
 msgid ""
 "Are you interested in contributing but don’t know where to start? Head over "
 "to the <a target=\"_blank\" rel=\"noopener\" href=\"https://www."
@@ -6658,13 +6636,12 @@ msgid ""
 "href=\"https://www.collaboraoffice.org/post/filebugs/\">filing a bug "
 "report</a> with all the essential steps on how to reproduce it."
 msgstr ""
-"如果您有兴趣参与项目但不知道从何开始，请查看<a target=\"_blank\" rel="
-"\"noopener\" href=\"https://www.collaboraonline.org/post/build-code/\""
-">逐步说明</a>，从头开始构建 CODE。您也可以通过参与<a target=\"_blank\" rel="
-"\"noopener\" href=\"https://www.collaboraonline.org/post/translate/\">翻译</"
-"a>或通过<a target=\"_blank\" rel=\"noopener\" href=\"https://www."
-"collaboraonline.org/post/filebugs/\""
-">提交错误报告</a>（报告中应包含问题如何重现的关键步骤）来加入到项目中。"
+"您有兴趣贡献但不知从何入手？请前往<a target=\"_blank\" rel=\"noopener\" "
+"href=\"https://www.collaboraoffice.org/post/build-code/\">分步说明</a>从零开"
+"始构建 CODE。您还可以帮助<a target=\"_blank\" rel=\"noopener\" "
+"href=\"https://www.collaboraoffice.org/post/translate/\">翻译</a>，或通过<a "
+"target=\"_blank\" rel=\"noopener\" href=\"https://www.collaboraoffice.org/"
+"post/filebugs/\">提交错误报告</a>（附上重现问题的关键步骤）来提供帮助。"
 
 #: welcome/welcome.html%2Bhtml.body.div.div:55-5
 msgid ""
