@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-29 07:49+0200\n"
 "PO-Revision-Date: 2026-05-30 21:25+0000\n"
-"Last-Translator: Sebastiaan Veld <notify@virtfields.nl>\n"
+"Last-Translator: Stephan Paternotte <stephan@paternottes.net>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/nl/>\n"
 "Language: nl\n"
@@ -1473,7 +1473,7 @@ msgstr "Naar klembord kopiëren"
 
 #: src/control/Control.AIChatSidebar.ts:831
 msgid "Ask AI..."
-msgstr "Vraag het aan de AI..."
+msgstr "Vraag het aan AI..."
 
 #: src/control/Control.AIChatSidebar.ts:834
 msgid "Message input"
@@ -1533,15 +1533,15 @@ msgstr "Toon bewerken"
 
 #: src/control/Control.AIChatSidebar.ts:1006
 msgid "+ Add my own voice"
-msgstr ""
+msgstr "+ Mijn eigen stem toevoegen"
 
 #: src/control/Control.AIChatSidebar.ts:1008
 msgid "Add a custom tone of voice"
-msgstr ""
+msgstr "Een aangepaste toon van stem toevoegen"
 
 #: src/control/Control.AIChatSidebar.ts:1019
 msgid "Emojify"
-msgstr ""
+msgstr "Emojifiseren"
 
 #: src/control/Control.AIChatSidebar.ts:1025
 #: src/control/Control.StatusBar.js:162
@@ -1556,137 +1556,137 @@ msgstr "Uit"
 
 #: src/control/Control.AIChatSidebar.ts:1028
 msgid "Toggle emojify"
-msgstr ""
+msgstr "Emojifisering schakelen"
 
 #: src/control/Control.AIChatSidebar.ts:1189
 msgid "Use icon"
-msgstr ""
+msgstr "Pictogram gebruiken"
 
 #: src/control/Control.AIChatSidebar.ts:1199
 msgid "Pick another emoji"
-msgstr ""
+msgstr "Andere emoji kiezen"
 
 #: src/control/Control.AIChatSidebar.ts:1213
 msgid "Back to tones"
-msgstr ""
+msgstr "Terug naar tonen"
 
 #: src/control/Control.AIChatSidebar.ts:1226
 msgid "Icon"
-msgstr ""
+msgstr "Pictogram"
 
 #: src/control/Control.AIChatSidebar.ts:1238
 msgid "Name your tone"
-msgstr ""
+msgstr "Geef uw toon een naam"
 
 #: src/control/Control.AIChatSidebar.ts:1245
 msgid "e.g. Quick reply"
-msgstr ""
+msgstr "bijv. Snel antwoord"
 
 #: src/control/Control.AIChatSidebar.ts:1247
 msgid "Tone name"
-msgstr ""
+msgstr "Toonnaam"
 
 #: src/control/Control.AIChatSidebar.ts:1252
 msgid "Describe how AI should write"
-msgstr ""
+msgstr "Beschrijf hoe AI zou moeten schrijven"
 
 #: src/control/Control.AIChatSidebar.ts:1260
 msgid ""
 "Write short, direct sentences. Use plain language and skip the small talk."
-msgstr ""
+msgstr "Schrijf korte, directe zinnen. Gebruik gewone taal zonder prietpraat."
 
 #: src/control/Control.AIChatSidebar.ts:1264
 msgid "Tone description"
-msgstr ""
+msgstr "Toonbeschrijving"
 
 #: src/control/Control.AIChatSidebar.ts:1273
 #: src/control/Control.AIChatSidebar.ts:1335
 #: src/control/Control.AIChatSidebar.ts:1377
 msgid "Delete tone"
-msgstr ""
+msgstr "Toon verwijderen"
 
 #: src/control/Control.AIChatSidebar.ts:1275
 msgid "Delete this tone"
-msgstr ""
+msgstr "Deze toon verwijderen"
 
 #: src/control/Control.AIChatSidebar.ts:1288
 msgid "Save voice"
-msgstr ""
+msgstr "Stem opslaan"
 
 #: src/control/Control.AIChatSidebar.ts:1290
 msgid "Save tone of voice"
-msgstr ""
+msgstr "Stemtoon opslaan"
 
 #: src/control/Control.AIChatSidebar.ts:1305
 #: src/control/jsdialog/Widget.EmojiPicker.ts:410
 msgid "Search emojis"
-msgstr ""
+msgstr "Emoji's zoeken"
 
 #: src/control/Control.AIChatSidebar.ts:1306
 #: src/control/jsdialog/Widget.EmojiPicker.ts:401
 msgid "Choose an emoji"
-msgstr ""
+msgstr "Kies een emoji"
 
 #: src/control/Control.AIChatSidebar.ts:1330
 msgid "Delete tone confirmation"
-msgstr ""
+msgstr "Toonbevestiging verwijderen"
 
 #: src/control/Control.AIChatSidebar.ts:1341
 msgid "This tone of voice will be deleted"
-msgstr ""
+msgstr "Deze toon van stem zal worden verwijderd"
 
 #: src/control/Control.AIChatSidebar.ts:1370
 msgid "Cancel delete"
-msgstr ""
+msgstr "Verwijdering annuleren"
 
 #: src/control/Control.AIChatSidebar.ts:1397
 #: src/control/Control.AIChatSidebar.ts:1457
 msgid "You have reached the maximum of {0} custom tones."
-msgstr ""
+msgstr "U heeft het maximum van {0} aangepaste tonen bereikt."
 
 #: src/control/Control.AIChatSidebar.ts:1631
 msgid "Using selected text as context"
-msgstr ""
+msgstr "Geselecteerde tekst als context gebruiken"
 
 #: src/control/Control.AIChatSidebar.ts:1639
 msgid "Diagnose formula error"
-msgstr ""
+msgstr "Formulefout diagnosticeren"
 
 #: src/control/Control.AIChatSidebar.ts:1645
 msgid "Sanity check data"
-msgstr ""
+msgstr "Gegevens op waarschijnlijkheid controleren"
 
 #: src/control/Control.AIChatSidebar.ts:1651
 msgid "Create a formula"
-msgstr ""
+msgstr "Formule aanmaken"
 
 #: src/control/Control.AIChatSidebar.ts:1658
 msgid "Create slides"
-msgstr ""
+msgstr "Dia's aanmaken"
 
 #: src/control/Control.AIChatSidebar.ts:1690
 msgid "See less"
-msgstr ""
+msgstr "Minder weergeven"
 
 #: src/control/Control.AIChatSidebar.ts:1690
 msgid "See more"
-msgstr ""
+msgstr "Meer weergeven"
 
 #: src/control/Control.AIChatSidebar.ts:1800
 msgid "Image inserted at cursor"
-msgstr ""
+msgstr "Afbeelding bij cursor ingevoegd"
 
 #: src/control/Control.AIChatSidebar.ts:1819
 msgid "Text inserted at cursor"
-msgstr ""
+msgstr "Tekst bij cursor ingevoegd"
 
 #: src/control/Control.AIChatSidebar.ts:1893
 msgid "Approaching message length limit"
-msgstr ""
+msgstr "Bijna bij max. berichtlengte"
 
 #: src/control/Control.AIChatSidebar.ts:1947
 msgid "Request timeout"
-msgstr ""
+msgstr "Time-out aanvragen"
 
 #: src/control/Control.AIChatSidebar.ts:1962
 #: src/control/Control.AIChatSidebar.ts:2784
@@ -1694,67 +1694,69 @@ msgid ""
 "The selection contains images or other non-text content that cannot be sent "
 "as context."
 msgstr ""
+"De selectie bevat afbeeldingen of andere niet-tekstuele inhoud die niet als "
+"context kan worden verzonden."
 
 #: src/control/Control.AIChatSidebar.ts:2049
 msgid "Message is too long. Please shorten it and try again."
-msgstr ""
+msgstr "Bericht is te lang. Kort het in en probeer het opnieuw."
 
 #: src/control/Control.AIChatSidebar.ts:2104
 msgid "Error: "
-msgstr ""
+msgstr "Fout: "
 
 #: src/control/Control.AIChatSidebar.ts:2126
 msgid "Generated image"
-msgstr ""
+msgstr "Gegenereerde afbeelding"
 
 #: src/control/Control.AIChatSidebar.ts:2137
 msgid "AI request failed"
-msgstr ""
+msgstr "AI-aanvraag is mislukt"
 
 #: src/control/Control.AIChatSidebar.ts:2154
 msgid "The AI assistant"
-msgstr ""
+msgstr "De AI-assistent"
 
 #: src/control/Control.AIChatSidebar.ts:2167
 msgid "Do you want to proceed?"
-msgstr ""
+msgstr "Wilt u verder gaan?"
 
 #: src/control/Control.AIChatSidebar.ts:2170
 msgid "%1 wants to inspect your document. Do you want to proceed?"
-msgstr ""
+msgstr "%1 wil uw document doorzoeken. Wilt u dit toestaan?"
 
 #: src/control/Control.AIChatSidebar.ts:2174
 msgid "Modify document structure"
-msgstr ""
+msgstr "Documentstructuur wijzigen"
 
 #: src/control/Control.AIChatSidebar.ts:2176
 msgid "%1 wants to modify your document:"
-msgstr ""
+msgstr "%1 wil uw document aanpassen:"
 
 #: src/control/Control.AIChatSidebar.ts:2180
 #: src/control/Control.AIChatSidebar.ts:2191
 msgid "Do you want to apply this change?"
-msgstr ""
+msgstr "Wilt u deze aanpassing doorvoeren?"
 
 #: src/control/Control.AIChatSidebar.ts:2182
 msgid "Set cell formula"
-msgstr ""
+msgstr "Celformule instellen"
 
 #: src/control/Control.AIChatSidebar.ts:2184
 msgid "%1 wants to set a formula in your spreadsheet:"
-msgstr ""
+msgstr "%1 wil in uw werkblad een formule instellen:"
 
 #: src/control/Control.AIChatSidebar.ts:2194
 msgid "%1 wants to perform an action. Do you want to proceed?"
-msgstr ""
+msgstr "%1 wil een actie uitvoeren. Wilt u verder gaan?"
 
 #: src/control/Control.AIChatSidebar.ts:2225
 msgid "Approve"
-msgstr ""
+msgstr "Goedkeuren"
 
 #: src/control/Control.AIChatSidebar.ts:2227
 msgid "Approve action"
-msgstr ""
+msgstr "Actie goedkeuren"
 
 #: src/control/Control.AIChatSidebar.ts:2234
 msgid "Reject"
@@ -6513,7 +6515,6 @@ msgid "Next Slide"
 msgstr "Volgende dia"
 
 #: src/slideshow/engine/SlideShowHandler.ts:109
-#, fuzzy
 msgid "Previous Slide"
 msgstr "Vorige dia"
 
