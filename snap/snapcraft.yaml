@@ -244,6 +244,12 @@ parts:
         curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
         apt-get install -y nodejs
       fi
+      # Expose Qt6 from the kde-qt6-core24-sdk build-snap. The kde-neon-6
+      # extension auto-wires this for cmake/meson plugins but not for
+      # plugin: nil parts that use override-build.
+      QT6_SDK=/snap/kde-qt6-core24-sdk/current
+      export PATH="$QT6_SDK/usr/bin:$PATH"
+      export PKG_CONFIG_PATH="$QT6_SDK/usr/lib/x86_64-linux-gnu/pkgconfig:$QT6_SDK/usr/share/pkgconfig${PKG_CONFIG_PATH:+:$PKG_CONFIG_PATH}"
       autoreconf -vfi
       ./configure \
         --prefix=/usr \
