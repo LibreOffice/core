@@ -497,7 +497,7 @@ msgstr "Lefelé nyíl"
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:235-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:300-38
 msgid "Select lines in downwards direction"
-msgstr "Sorok kijelölése felfelé"
+msgstr "Sorok kijelölése lefelé"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:72-100
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:235-100
@@ -817,7 +817,7 @@ msgid ""
 msgstr ""
 "Ha az aktív cella üres: a táblázat elejére ugrik. Egyébként: első alkalommal "
 "történő megnyomásakor az aktív cella elejére, másodszorra az aktuális "
-"táblázat ugrik, harmadszorra a dokumentum elejére ugrik."
+"táblázat elejére, harmadszorra a dokumentum elejére ugrik."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:100-146
 msgid ""
@@ -1157,8 +1157,8 @@ msgid ""
 "row that contains data."
 msgstr ""
 "A kurzort az aktuális adattartomány felső szélére mozgatja. Ha a kurzort "
-"tartalmazó cella feletti oszlop üres, a kurzor a következő, adatot "
-"tartalmazó oszlopba mozog."
+"tartalmazó cella feletti sor üres, a kurzor a következő, adatot "
+"tartalmazó sorba mozog."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:147-241
 msgid ""
@@ -1175,7 +1175,7 @@ msgid ""
 "the next row that contains data."
 msgstr ""
 "A kurzort az aktuális adattartomány alsó szélére mozgatja. Ha a kurzort "
-"tartalmazó cella alatti oszlop üres, a kurzor a következő, adatot tartalmazó "
+"tartalmazó cella alatti sor üres, a kurzor a következő, adatot tartalmazó "
 "sorba mozog."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:148-246
@@ -1397,7 +1397,7 @@ msgstr "Két tizedesjegy, ezreselválasztó"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:180-77
 msgid "Standard exponential format"
-msgstr "Szabványos exponenciális-formátum"
+msgstr "Szabványos exponenciális formátum"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:181-71
 msgid "Standard date format"
@@ -1562,7 +1562,7 @@ msgstr "Dokumentumok szerkesztése"
 #: html/cool-help.html%2Bdiv.div.div.h3:510-5
 #: html/cool-help.html%2Bdiv.div.div.h3:621-5
 msgid "Advanced features"
-msgstr "Advankált featúrák"
+msgstr "Speciális funkciók"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:335-13
 #: html/cool-help.html%2Bdiv.div.h3:488-5
@@ -1757,6 +1757,9 @@ msgid ""
 "Status bar showing page number, word count, insert mode, selection mode, "
 "language, edit mode, navigation, zoom, and search"
 msgstr ""
+"Állapotsor az oldalszámmal, a szószámmal, a beszúrási móddal, a kijelölési "
+"móddal, a nyelvvel, a szerkesztési móddal, a navigációval, a nagyítással és "
+"a kereséssel"
 
 #: html/cool-help.html%2Bdiv.div.div.p:393-5
 msgid ""
@@ -1771,7 +1774,6 @@ msgstr ""
 "nagybetűket. A keresőmező mellett három gomb található:"
 
 #: html/cool-help.html%2Bdiv.div.div.ul.li:395-7
-#, fuzzy
 msgid "Search backwards"
 msgstr "Keresés visszafelé"
 
@@ -1825,6 +1827,8 @@ msgstr ""
 msgid ""
 "Information bar showing page navigation arrows, zoom controls, and zoom level"
 msgstr ""
+"Információs sáv az oldalnavigációs nyilakkal, a nagyítási vezérlőkkel és a "
+"nagyítási szinttel"
 
 #: html/cool-help.html%2Bdiv.div.p:412-5
 msgid ""
@@ -1971,6 +1975,8 @@ msgid ""
 "Repair Document dialog listing past document states with columns for action "
 "type, author, and timestamp"
 msgstr ""
+"Dokumentum javítása párbeszédablak a korábbi dokumentumállapotok listájával, "
+"a művelet típusa, a szerző és az időbélyeg oszlopokkal"
 
 #: html/cool-help.html%2Bdiv.div.div.p:432-5
 msgid ""
@@ -2005,6 +2011,8 @@ msgid ""
 "Idle document overlay with the message: Idle document - please click to "
 "reload and resume editing"
 msgstr ""
+"Tétlen dokumentum réteg az üzenettel: Tétlen dokumentum – kattintson az "
+"újratöltéshez és a szerkesztés folytatásához"
 
 #: html/cool-help.html%2Bdiv.div.div.p:438-5
 msgid ""
@@ -2102,6 +2110,8 @@ msgid ""
 "Chart Wizard dialog with chart type list on the left, chart style previews, "
 "3D and shape options"
 msgstr ""
+"Diagramtündér párbeszédablak a diagramtípusok listájával a bal oldalon, a "
+"diagramstílusok előnézeteivel, valamint 3D- és alakzatbeállításokkal"
 
 #: html/cool-help.html%2Bdiv.div.div.ol.li:460-7
 msgid "If no table or range was selected, a prototype chart is displayed."
@@ -2113,6 +2123,8 @@ msgid ""
 "Column chart with grouped bars showing data for four rows across three "
 "columns"
 msgstr ""
+"Oszlopdiagram csoportosított oszlopokkal, amely három oszlopra vonatkozóan "
+"négy sor adatait jeleníti meg"
 
 #: html/cool-help.html%2Bdiv.div.div.p:464-28
 msgid ""
@@ -2207,6 +2219,8 @@ msgid ""
 "Comment box showing author name, date, and the comment text, displayed "
 "beside the document"
 msgstr ""
+"Megjegyzésdoboz a szerző nevével, a dátummal és a megjegyzés szövegével, a "
+"dokumentum mellett megjelenítve"
 
 #: html/cool-help.html%2Bdiv.div.div.p:478-5
 msgid ""
@@ -2235,7 +2249,7 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.img[alt]:483-29
 msgid "Text with a red wavy underline beneath a misspelled word"
-msgstr ""
+msgstr "Szöveg piros hullámos aláhúzással egy elgépelt szó alatt"
 
 #: html/cool-help.html%2Bdiv.div.div.p:484-5
 msgid ""
@@ -2283,6 +2297,8 @@ msgid ""
 "Formula bar showing cell reference B1, function wizard icon, and the formula "
 "=SIN(PI()*A1/10)"
 msgstr ""
+"Képletsor a B1 cellahivatkozással, a függvénytündér ikonnal és a "
+"=SIN(PI()*A1/10) képlettel"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:499-5
 msgid ""
@@ -2320,6 +2336,8 @@ msgid ""
 "Format Cells dialog on the Numbers tab with category list, format options, "
 "decimal places, and format code"
 msgstr ""
+"Cellák formázása párbeszédablak a Számok lapon a kategórialistával, a "
+"formátumbeállításokkal, a tizedesjegyekkel és a formátumkóddal"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:511-30
 msgid ""
@@ -2359,6 +2377,9 @@ msgid ""
 "AutoFilter dropdown menu on a spreadsheet column with sort, filter by color, "
 "filter by condition, and checkboxes for individual values"
 msgstr ""
+"Automatikus szűrő legördülő menü egy munkalaposzlopon rendezéssel, szín "
+"szerinti szűréssel, feltétel szerinti szűréssel és az egyes értékekhez "
+"tartozó jelölőnégyzetekkel"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:518-7
 msgid ""
@@ -2398,6 +2419,8 @@ msgid ""
 "Spreadsheet with row and column grouping controls showing outline level "
 "buttons and collapse/expand toggles"
 msgstr ""
+"Munkalap sor- és oszlopcsoportosító vezérlőkkel, amelyek a tagolási szint "
+"gombokat és az összecsukás/kibontás kapcsolókat jelenítik meg"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:527-5
 msgid ""
@@ -2423,6 +2446,9 @@ msgid ""
 "Validity dialog on the Criteria tab with Allow set to List, showing options "
 "for empty cells, selection list, and entry values"
 msgstr ""
+"Érvényesség párbeszédablak a Feltételek lapon, ahol az Engedélyezés Listára "
+"van állítva, megjelenítve az üres cellákra, a kijelölési listára és a bevitt "
+"értékekre vonatkozó beállításokat"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:533-7
 msgid ""
@@ -2450,6 +2476,8 @@ msgid ""
 "Cell dropdown list showing validated entries such as Apple, Pear, Banana, "
 "Kiwi, and Lemon"
 msgstr ""
+"Cella legördülő lista az érvényesített bejegyzésekkel, mint például Alma, "
+"Körte, Banán, Kivi és Citrom"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:538-7
 msgid ""
@@ -2480,6 +2508,8 @@ msgid ""
 "Spreadsheet cell with a comment popup showing the author, date, comment "
 "text, and Save/Cancel buttons"
 msgstr ""
+"Munkalapcella megjegyzés-felugró ablakkal, amely a szerzőt, a dátumot, a "
+"megjegyzés szövegét, valamint a Mentés/Mégse gombokat jeleníti meg"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:546-5
 msgid ""
@@ -2500,6 +2530,9 @@ msgid ""
 "Conditional formatting icon set picker showing arrows, circles, traffic "
 "lights, stars, smiley faces, and bar chart symbol sets"
 msgstr ""
+"Feltételes formázás ikonkészlet-választó, amely nyilakat, köröket, "
+"közlekedési lámpákat, csillagokat, mosolygó arcokat és oszlopdiagram-"
+"szimbólumkészleteket jelenít meg"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:555-30
 msgid ""
@@ -2595,6 +2628,8 @@ msgid ""
 "Paragraph dialog on the Indents and Spacing tab with settings for indent, "
 "spacing, and line spacing, and a preview on the right"
 msgstr ""
+"Bekezdés párbeszédablak a Behúzás és térköz lapon a behúzás, a térköz és a "
+"sortávolság beállításaival, valamint előnézettel a jobb oldalon"
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:576-5
 msgid "Handling Tables"
@@ -2617,6 +2652,8 @@ msgid ""
 "Insert Table picker showing a grid to select the number of rows and columns, "
 "currently showing 5 by 3"
 msgstr ""
+"Táblázat beszúrása választó egy ráccsal a sorok és oszlopok számának "
+"kiválasztásához, jelenleg 5×3 méretet mutatva"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:581-5
 msgid ""
@@ -2649,6 +2686,8 @@ msgid ""
 "Tracked change shown as a comment box beside the document with author name, "
 "date, and change description"
 msgstr ""
+"Követett változtatás megjegyzésdobozként megjelenítve a dokumentum mellett, a "
+"szerző nevével, a dátummal és a változtatás leírásával"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:587-5
 msgid ""
@@ -2783,6 +2822,9 @@ msgid ""
 "Slide properties panel showing format, orientation, background, and master "
 "slide settings, with a layout gallery of thumbnail options below"
 msgstr ""
+"Dia tulajdonságai panel a formátum, a tájolás, a háttér és a diaminta "
+"beállításaival, alatta pedig egy elrendezésgaléria a bélyegkép-"
+"lehetőségekkel"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:626-30
 msgid ""
@@ -2966,7 +3008,7 @@ msgid ""
 "for replacements."
 msgstr ""
 "Igen. Kattintson a kívánt szóba, és válassza az <span class=\"ui\">Eszközök</"
-"span> → <span class=\"ui\">Szinonimaszótár</span> menüpontot. Megnyílik egy "
+"span> → <span class=\"ui\">Szókincstár</span> menüpontot. Megnyílik egy "
 "párbeszédablak számos helyettesítési javaslattal."
 
 #: html/cool-help.html%2Bdiv.div.div.div.img[alt]:674-29
@@ -2974,6 +3016,9 @@ msgid ""
 "Thesaurus dialog for the word company, listing alternatives such as "
 "institution, establishment, and troupe, with a Replace with field"
 msgstr ""
+"Szókincstár párbeszédablak a „vállalat” szóhoz, amely alternatívákat sorol "
+"fel, mint például intézmény, létesítmény és társulat, valamint egy Csere "
+"erre mezővel"
 
 #: html/cool-help.html%2Bdiv.div.div.h4:677-5
 msgid ""
@@ -3015,6 +3060,8 @@ msgid ""
 "Word Count dialog showing word and character counts for the current "
 "selection and for the whole document"
 msgstr ""
+"Szavak száma párbeszédablak, amely az aktuális kijelölés és a teljes "
+"dokumentum szó- és karakterszámát jeleníti meg"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:688-5
 msgid ""
@@ -3062,6 +3109,9 @@ msgid ""
 "hexadecimal and decimal code inputs, and recent and favorite characters at "
 "the bottom"
 msgstr ""
+"Különleges karakterek párbeszédablak egy karakterráccsal, keresés és "
+"betűkészlet mezőkkel, hexadecimális és decimális kódbeviteli mezőkkel, "
+"valamint a legutóbbi és kedvenc karakterekkel alul"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:699-7
 msgid ""
@@ -3174,6 +3224,10 @@ msgid ""
 "Manage Changes dialog with a list of tracked changes showing action, author, "
 "date, and comment columns, and Accept, Reject, Accept All, Reject All buttons"
 msgstr ""
+"Változások kezelése párbeszédablak a követett változtatások listájával, amely "
+"a műveletet, a szerzőt, a dátumot és a megjegyzést tartalmazó oszlopokat, "
+"valamint az Elfogadás, Elutasítás, Összes elfogadása, Összes elutasítása "
+"gombokat jeleníti meg"
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:720-5
 msgid "How do I set the margins of the document?"
@@ -3208,6 +3262,9 @@ msgid ""
 "Page Style dialog on the Organizer tab showing style name, next style, "
 "inherit from, and category fields, with a summary of page properties"
 msgstr ""
+"Oldalstílus párbeszédablak a Szervező lapon, amely a stílus nevét, a "
+"következő stílust, az öröklés forrását és a kategória mezőket jeleníti meg, "
+"az oldal tulajdonságainak összefoglalásával"
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:730-5
 msgid "How do I change the page orientation to landscape inside my document?"
@@ -3371,6 +3428,8 @@ msgid ""
 "Text Import dialog with character set, locale, separator options, and a "
 "preview of the imported CSV data"
 msgstr ""
+"Szöveg importálása párbeszédablak a karakterkészlet, a területi beállítás és "
+"az elválasztó beállításaival, valamint az importált CSV-adatok előnézetével"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:778-7
 msgid ""
@@ -3485,6 +3544,8 @@ msgid ""
 "Area dialog on the Color tab with a color palette, active and new color "
 "previews, RGB value fields, and a custom palette section"
 msgstr ""
+"Kitöltés párbeszédablak a Szín lapon egy színpalettával, az aktív és az új "
+"szín előnézetével, RGB-értékmezőkkel és egy egyéni paletta szakasszal"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:819-7
 msgid "Set the properties of the element of the object."
