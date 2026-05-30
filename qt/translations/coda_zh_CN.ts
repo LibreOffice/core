@@ -125,53 +125,59 @@
         <translation>无法打印文档。请检查打印机设置。</translation>
     </message>
     <message>
-        <location filename="../Bridge.cpp" line="739"/>
+        <location filename="../Bridge.cpp" line="737"/>
+        <location filename="../Bridge.cpp" line="805"/>
         <source>All Files (*)</source>
         <translation>所有文件 (*)</translation>
     </message>
     <message>
-        <location filename="../Bridge.cpp" line="249"/>
+        <location filename="../Bridge.cpp" line="228"/>
         <source>Save Document</source>
         <translation>保存文档</translation>
     </message>
     <message>
-        <location filename="../Bridge.cpp" line="625"/>
+        <location filename="../Bridge.cpp" line="637"/>
         <source>Open File</source>
         <translation>打开文件</translation>
     </message>
     <message>
-        <location filename="../Bridge.cpp" line="626"/>
+        <location filename="../Bridge.cpp" line="638"/>
         <source>All Files (*);;Text Documents (*.odt *.ott *.doc *.docx *.rtf *.txt);;Spreadsheets (*.ods *.ots *.xls *.xlsx *.csv);;Presentations (*.odp *.otp *.ppt *.pptx)</source>
         <translation>所有文件 (*);;文本文档 (*.odt *.ott *.doc *.docx *.rtf *.txt);;电子表格 (*.ods *.ots *.xls *.xlsx *.csv);;演示文稿 (*.odp *.otp *.ppt *.pptx)</translation>
     </message>
     <message>
-        <location filename="../Bridge.cpp" line="737"/>
+        <location filename="../Bridge.cpp" line="735"/>
         <source>Export As</source>
         <translation>导出为</translation>
     </message>
     <message>
-        <location filename="../WebView.cpp" line="156"/>
+        <location filename="../Bridge.cpp" line="803"/>
+        <source>Save File</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../WebView.cpp" line="158"/>
         <source>Presentation</source>
         <translation>演示文稿</translation>
     </message>
     <message>
-        <location filename="../WebView.cpp" line="161"/>
-        <location filename="../WebView.cpp" line="177"/>
+        <location filename="../WebView.cpp" line="163"/>
+        <location filename="../WebView.cpp" line="179"/>
         <source>Text Document</source>
         <translation>文本文档</translation>
     </message>
     <message>
-        <location filename="../WebView.cpp" line="166"/>
+        <location filename="../WebView.cpp" line="168"/>
         <source>Spreadsheet</source>
         <translation>电子表格</translation>
     </message>
     <message>
-        <location filename="../WebView.cpp" line="171"/>
+        <location filename="../WebView.cpp" line="173"/>
         <source>Drawing</source>
         <translation>绘图</translation>
     </message>
     <message>
-        <location filename="../WebView.cpp" line="317"/>
+        <location filename="../WebView.cpp" line="304"/>
         <source>Presenting</source>
         <translation>演示中</translation>
     </message>
@@ -179,17 +185,15 @@
 <context>
     <name>WebView</name>
     <message>
-        <location filename="../WebView.cpp" line="233"/>
         <source>Unsaved Changes</source>
-        <translation>未保存的更改</translation>
+        <translation type="vanished">未保存的更改</translation>
     </message>
     <message>
-        <location filename="../WebView.cpp" line="234"/>
         <source>The document has unsaved changes. Do you want to close anyway?</source>
-        <translation>文档有未保存的更改。是否仍要关闭？</translation>
+        <translation type="vanished">文档有未保存的更改。是否仍要关闭？</translation>
     </message>
     <message>
-        <location filename="../WebView.cpp" line="609"/>
+        <location filename="../WebView.cpp" line="599"/>
         <source>Start</source>
         <translation>开始</translation>
     </message>

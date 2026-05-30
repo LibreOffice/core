@@ -137,53 +137,59 @@
         <translation type="vanished">Շնորհանդեսներ(*.odp);;Բոլոր նիշքերը (*)</translation>
     </message>
     <message>
-        <location filename="../Bridge.cpp" line="739"/>
+        <location filename="../Bridge.cpp" line="737"/>
+        <location filename="../Bridge.cpp" line="805"/>
         <source>All Files (*)</source>
         <translation>Բոլոր նիշքերը (*)</translation>
     </message>
     <message>
-        <location filename="../Bridge.cpp" line="249"/>
+        <location filename="../Bridge.cpp" line="228"/>
         <source>Save Document</source>
         <translation>Պահպանել փաստաթուղթը</translation>
     </message>
     <message>
-        <location filename="../Bridge.cpp" line="625"/>
+        <location filename="../Bridge.cpp" line="637"/>
         <source>Open File</source>
         <translation>Բացել նիշքը</translation>
     </message>
     <message>
-        <location filename="../Bridge.cpp" line="626"/>
+        <location filename="../Bridge.cpp" line="638"/>
         <source>All Files (*);;Text Documents (*.odt *.ott *.doc *.docx *.rtf *.txt);;Spreadsheets (*.ods *.ots *.xls *.xlsx *.csv);;Presentations (*.odp *.otp *.ppt *.pptx)</source>
         <translation>Բոլոր նիշքերը (*);;Տեքստային փաստաթղթեր (*.odt *.ott *.doc *.docx *.rtf *.txt);;Էլ․ աղյուսակներ (*.ods *.ots *.xls *.xlsx *.csv);;Շնորհանդեսներ (*.odp *.otp *.ppt *.pptx)</translation>
     </message>
     <message>
-        <location filename="../Bridge.cpp" line="737"/>
+        <location filename="../Bridge.cpp" line="735"/>
         <source>Export As</source>
         <translation>Արտահանել որպես</translation>
     </message>
     <message>
-        <location filename="../WebView.cpp" line="156"/>
+        <location filename="../Bridge.cpp" line="803"/>
+        <source>Save File</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../WebView.cpp" line="158"/>
         <source>Presentation</source>
         <translation>Շնորհանդես</translation>
     </message>
     <message>
-        <location filename="../WebView.cpp" line="161"/>
-        <location filename="../WebView.cpp" line="177"/>
+        <location filename="../WebView.cpp" line="163"/>
+        <location filename="../WebView.cpp" line="179"/>
         <source>Text Document</source>
         <translation>Տեքստային փաստաթուղթ</translation>
     </message>
     <message>
-        <location filename="../WebView.cpp" line="166"/>
+        <location filename="../WebView.cpp" line="168"/>
         <source>Spreadsheet</source>
         <translation>Աղյուսակաթերթիկ</translation>
     </message>
     <message>
-        <location filename="../WebView.cpp" line="171"/>
+        <location filename="../WebView.cpp" line="173"/>
         <source>Drawing</source>
         <translation>Նկարչություն</translation>
     </message>
     <message>
-        <location filename="../WebView.cpp" line="317"/>
+        <location filename="../WebView.cpp" line="304"/>
         <source>Presenting</source>
         <translation>Ներկայացնում է</translation>
     </message>
@@ -191,17 +197,15 @@
 <context>
     <name>WebView</name>
     <message>
-        <location filename="../WebView.cpp" line="233"/>
         <source>Unsaved Changes</source>
-        <translation>Չպահպանված փոփոխություններ</translation>
+        <translation type="vanished">Չպահպանված փոփոխություններ</translation>
     </message>
     <message>
-        <location filename="../WebView.cpp" line="234"/>
         <source>The document has unsaved changes. Do you want to close anyway?</source>
-        <translation>Փաստաթուղթը պարունակում է չպահպանված փոփոխություններ: Ցանկանո՞ւմ եք այնուամենայնիվ փակել:</translation>
+        <translation type="vanished">Փաստաթուղթը պարունակում է չպահպանված փոփոխություններ: Ցանկանո՞ւմ եք այնուամենայնիվ փակել:</translation>
     </message>
     <message>
-        <location filename="../WebView.cpp" line="609"/>
+        <location filename="../WebView.cpp" line="599"/>
         <source>Start</source>
         <translation>Սկսել</translation>
     </message>

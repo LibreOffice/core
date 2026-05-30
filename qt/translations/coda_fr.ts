@@ -137,53 +137,59 @@
         <translation type="vanished">Présentations (*.odp);;Tous les fichiers (*)</translation>
     </message>
     <message>
-        <location filename="../Bridge.cpp" line="739"/>
+        <location filename="../Bridge.cpp" line="737"/>
+        <location filename="../Bridge.cpp" line="805"/>
         <source>All Files (*)</source>
         <translation>Tous les fichiers (*)</translation>
     </message>
     <message>
-        <location filename="../Bridge.cpp" line="249"/>
+        <location filename="../Bridge.cpp" line="228"/>
         <source>Save Document</source>
         <translation>Enregistrer le document</translation>
     </message>
     <message>
-        <location filename="../Bridge.cpp" line="625"/>
+        <location filename="../Bridge.cpp" line="637"/>
         <source>Open File</source>
         <translation>Ouvrir un fichier</translation>
     </message>
     <message>
-        <location filename="../Bridge.cpp" line="626"/>
+        <location filename="../Bridge.cpp" line="638"/>
         <source>All Files (*);;Text Documents (*.odt *.ott *.doc *.docx *.rtf *.txt);;Spreadsheets (*.ods *.ots *.xls *.xlsx *.csv);;Presentations (*.odp *.otp *.ppt *.pptx)</source>
         <translation>Tous les Fichiers (*);;Documents textes (*.odt *.ott *.doc *.docx *.rtf *.txt);;Tableurs (*.ods *.ots *.xls *.xlsx *.csv);;Présentations (*.odp *.otp *.ppt *.pptx)</translation>
     </message>
     <message>
-        <location filename="../Bridge.cpp" line="737"/>
+        <location filename="../Bridge.cpp" line="735"/>
         <source>Export As</source>
         <translation>Exporter sous</translation>
     </message>
     <message>
-        <location filename="../WebView.cpp" line="156"/>
+        <location filename="../Bridge.cpp" line="803"/>
+        <source>Save File</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../WebView.cpp" line="158"/>
         <source>Presentation</source>
         <translation>Présentation</translation>
     </message>
     <message>
-        <location filename="../WebView.cpp" line="161"/>
-        <location filename="../WebView.cpp" line="177"/>
+        <location filename="../WebView.cpp" line="163"/>
+        <location filename="../WebView.cpp" line="179"/>
         <source>Text Document</source>
         <translation>Document texte</translation>
     </message>
     <message>
-        <location filename="../WebView.cpp" line="166"/>
+        <location filename="../WebView.cpp" line="168"/>
         <source>Spreadsheet</source>
         <translation>Tableur</translation>
     </message>
     <message>
-        <location filename="../WebView.cpp" line="171"/>
+        <location filename="../WebView.cpp" line="173"/>
         <source>Drawing</source>
         <translation>Dessin</translation>
     </message>
     <message>
-        <location filename="../WebView.cpp" line="317"/>
+        <location filename="../WebView.cpp" line="304"/>
         <source>Presenting</source>
         <translation>En cours de présentation</translation>
     </message>
@@ -191,17 +197,15 @@
 <context>
     <name>WebView</name>
     <message>
-        <location filename="../WebView.cpp" line="233"/>
         <source>Unsaved Changes</source>
-        <translation>Changements non enregistrés</translation>
+        <translation type="vanished">Changements non enregistrés</translation>
     </message>
     <message>
-        <location filename="../WebView.cpp" line="234"/>
         <source>The document has unsaved changes. Do you want to close anyway?</source>
-        <translation>Le document a des changements non-enregistrés. Voulez-vous fermer malgré tout&#x202f;?</translation>
+        <translation type="vanished">Le document a des changements non-enregistrés. Voulez-vous fermer malgré tout&#x202f;?</translation>
     </message>
     <message>
-        <location filename="../WebView.cpp" line="609"/>
+        <location filename="../WebView.cpp" line="599"/>
         <source>Start</source>
         <translation>Démarrer</translation>
     </message>

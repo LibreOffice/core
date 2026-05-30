@@ -137,53 +137,59 @@
         <translation type="vanished">Prezentacje (*.odp);;Wszystkie pliki (*)</translation>
     </message>
     <message>
-        <location filename="../Bridge.cpp" line="739"/>
+        <location filename="../Bridge.cpp" line="737"/>
+        <location filename="../Bridge.cpp" line="805"/>
         <source>All Files (*)</source>
         <translation>Wszystkie pliki (*)</translation>
     </message>
     <message>
-        <location filename="../Bridge.cpp" line="249"/>
+        <location filename="../Bridge.cpp" line="228"/>
         <source>Save Document</source>
         <translation>Zapisz dokument</translation>
     </message>
     <message>
-        <location filename="../Bridge.cpp" line="625"/>
+        <location filename="../Bridge.cpp" line="637"/>
         <source>Open File</source>
         <translation>Otwórz plik</translation>
     </message>
     <message>
-        <location filename="../Bridge.cpp" line="626"/>
+        <location filename="../Bridge.cpp" line="638"/>
         <source>All Files (*);;Text Documents (*.odt *.ott *.doc *.docx *.rtf *.txt);;Spreadsheets (*.ods *.ots *.xls *.xlsx *.csv);;Presentations (*.odp *.otp *.ppt *.pptx)</source>
         <translation>Wszystkie pliki (*);;Dokumenty tekstowe (*.odt *.ott *.doc *.docx *.rtf *.txt);;Arkusze kalkulacyjne (*.ods *.ots *.xls *.xlsx *.csv);;Prezentacje (*.odp *.otp *.ppt *.pptx)</translation>
     </message>
     <message>
-        <location filename="../Bridge.cpp" line="737"/>
+        <location filename="../Bridge.cpp" line="735"/>
         <source>Export As</source>
         <translation>Eksportuj jako</translation>
     </message>
     <message>
-        <location filename="../WebView.cpp" line="156"/>
+        <location filename="../Bridge.cpp" line="803"/>
+        <source>Save File</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../WebView.cpp" line="158"/>
         <source>Presentation</source>
         <translation>Prezentacja</translation>
     </message>
     <message>
-        <location filename="../WebView.cpp" line="161"/>
-        <location filename="../WebView.cpp" line="177"/>
+        <location filename="../WebView.cpp" line="163"/>
+        <location filename="../WebView.cpp" line="179"/>
         <source>Text Document</source>
         <translation>Dokument tekstowy</translation>
     </message>
     <message>
-        <location filename="../WebView.cpp" line="166"/>
+        <location filename="../WebView.cpp" line="168"/>
         <source>Spreadsheet</source>
         <translation>Arkusz kalkulacyjny</translation>
     </message>
     <message>
-        <location filename="../WebView.cpp" line="171"/>
+        <location filename="../WebView.cpp" line="173"/>
         <source>Drawing</source>
         <translation>Rysunek</translation>
     </message>
     <message>
-        <location filename="../WebView.cpp" line="317"/>
+        <location filename="../WebView.cpp" line="304"/>
         <source>Presenting</source>
         <translation>Prezentowanie</translation>
     </message>
@@ -191,17 +197,15 @@
 <context>
     <name>WebView</name>
     <message>
-        <location filename="../WebView.cpp" line="233"/>
         <source>Unsaved Changes</source>
-        <translation>Niezapisane zmiany</translation>
+        <translation type="vanished">Niezapisane zmiany</translation>
     </message>
     <message>
-        <location filename="../WebView.cpp" line="234"/>
         <source>The document has unsaved changes. Do you want to close anyway?</source>
-        <translation>Dokument zawiera niezapisane zmiany. Czy mimo to chcesz go zamknąć?</translation>
+        <translation type="vanished">Dokument zawiera niezapisane zmiany. Czy mimo to chcesz go zamknąć?</translation>
     </message>
     <message>
-        <location filename="../WebView.cpp" line="609"/>
+        <location filename="../WebView.cpp" line="599"/>
         <source>Start</source>
         <translation>Rozpocznij</translation>
     </message>

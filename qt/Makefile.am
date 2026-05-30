@@ -124,9 +124,9 @@ QM_FILES = $(TS_FILES:.ts=.qm)
 	mkdir -p $(dir $@)
 	@$(LRELEASE) $< -qm $@
 
-# Update .ts files from source code
+# Update .ts files from source code (Qt app only)
 update-translations:
-	@$(LUPDATE) $(top_srcdir) -ts $(TS_FILES)
+	@$(LUPDATE) $(srcdir) -ts $(TS_FILES)
 
 # Build all translations
 translations: $(QM_FILES)

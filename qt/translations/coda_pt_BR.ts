@@ -125,53 +125,59 @@
         <translation>Falha ao imprimir o documento. Verifique as configurações da sua impressora.</translation>
     </message>
     <message>
-        <location filename="../Bridge.cpp" line="739"/>
+        <location filename="../Bridge.cpp" line="737"/>
+        <location filename="../Bridge.cpp" line="805"/>
         <source>All Files (*)</source>
         <translation>Todos os arquivos (*)</translation>
     </message>
     <message>
-        <location filename="../Bridge.cpp" line="249"/>
+        <location filename="../Bridge.cpp" line="228"/>
         <source>Save Document</source>
         <translation>Salvar documento</translation>
     </message>
     <message>
-        <location filename="../Bridge.cpp" line="625"/>
+        <location filename="../Bridge.cpp" line="637"/>
         <source>Open File</source>
         <translation>Abrir arquivo</translation>
     </message>
     <message>
-        <location filename="../Bridge.cpp" line="626"/>
+        <location filename="../Bridge.cpp" line="638"/>
         <source>All Files (*);;Text Documents (*.odt *.ott *.doc *.docx *.rtf *.txt);;Spreadsheets (*.ods *.ots *.xls *.xlsx *.csv);;Presentations (*.odp *.otp *.ppt *.pptx)</source>
         <translation>Todos os arquivos (*);;Documentos de texto (*.odt *.ott *.doc *.docx *.rtf *.txt);;Planilhas (*.ods *.ots *.xls *.xlsx *.csv);;Apresentações (*.odp *.otp *.ppt *.pptx)</translation>
     </message>
     <message>
-        <location filename="../Bridge.cpp" line="737"/>
+        <location filename="../Bridge.cpp" line="735"/>
         <source>Export As</source>
         <translation>Exportar como</translation>
     </message>
     <message>
-        <location filename="../WebView.cpp" line="156"/>
+        <location filename="../Bridge.cpp" line="803"/>
+        <source>Save File</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../WebView.cpp" line="158"/>
         <source>Presentation</source>
         <translation>Apresentação</translation>
     </message>
     <message>
-        <location filename="../WebView.cpp" line="161"/>
-        <location filename="../WebView.cpp" line="177"/>
+        <location filename="../WebView.cpp" line="163"/>
+        <location filename="../WebView.cpp" line="179"/>
         <source>Text Document</source>
         <translation>Documento de texto</translation>
     </message>
     <message>
-        <location filename="../WebView.cpp" line="166"/>
+        <location filename="../WebView.cpp" line="168"/>
         <source>Spreadsheet</source>
         <translation>Planilha</translation>
     </message>
     <message>
-        <location filename="../WebView.cpp" line="171"/>
+        <location filename="../WebView.cpp" line="173"/>
         <source>Drawing</source>
         <translation>Desenho</translation>
     </message>
     <message>
-        <location filename="../WebView.cpp" line="317"/>
+        <location filename="../WebView.cpp" line="304"/>
         <source>Presenting</source>
         <translation>Apresentando</translation>
     </message>
@@ -179,17 +185,15 @@
 <context>
     <name>WebView</name>
     <message>
-        <location filename="../WebView.cpp" line="233"/>
         <source>Unsaved Changes</source>
-        <translation>Alterações não salvas</translation>
+        <translation type="vanished">Alterações não salvas</translation>
     </message>
     <message>
-        <location filename="../WebView.cpp" line="234"/>
         <source>The document has unsaved changes. Do you want to close anyway?</source>
-        <translation>O documento contém alterações não salvas. Deseja fechá-lo mesmo assim?</translation>
+        <translation type="vanished">O documento contém alterações não salvas. Deseja fechá-lo mesmo assim?</translation>
     </message>
     <message>
-        <location filename="../WebView.cpp" line="609"/>
+        <location filename="../WebView.cpp" line="599"/>
         <source>Start</source>
         <translation>Começar</translation>
     </message>
