@@ -12,6 +12,8 @@
 #include "XMLTextListContext.hxx"
 #include "txtparai.hxx"
 
+#include "xmlimp.hxx"
+
 using namespace com::sun::star;
 
 namespace writerperfect::exp
@@ -29,6 +31,18 @@ rtl::Reference<XMLImportContext> XMLTextListItemContext::CreateChildContext(
     if (rName == "text:list")
         return new XMLTextListContext(GetImport());
     return nullptr;
+}
+
+void XMLTextListItemContext::startElement(
+    const OUString& /*rName*/,
+    const css::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
+{
+    GetImport().GetGenerator().openListElement(librevenge::RVNGPropertyList());
+}
+
+void XMLTextListItemContext::endElement(const OUString& /*rName*/)
+{
+    GetImport().GetGenerator().closeListElement();
 }
 
 } // namespace writerperfect::exp
