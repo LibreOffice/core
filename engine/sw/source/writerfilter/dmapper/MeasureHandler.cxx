@@ -56,7 +56,7 @@ void MeasureHandler::lcl_attribute(Id rName, const Value & rVal)
             if (!m_aInteropGrabBagName.isEmpty())
             {
                 beans::PropertyValue aValue;
-                aValue.Name = "type";
+                aValue.Name = u"type"_ustr;
                 switch (nIntValue)
                 {
                     case NS_ooxml::LN_Value_ST_TblWidth_nil: aValue.Value <<= u"nil"_ustr; break;
@@ -80,7 +80,7 @@ void MeasureHandler::lcl_attribute(Id rName, const Value & rVal)
             if (!m_aInteropGrabBagName.isEmpty())
             {
                 beans::PropertyValue aValue;
-                aValue.Name = "w";
+                aValue.Name = u"w"_ustr;
                 aValue.Value <<= nIntValue;
                 m_aInteropGrabBag.push_back(aValue);
             }

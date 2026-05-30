@@ -2423,7 +2423,7 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                         if( 3 == nRet )
                             aFillText = aText;
                         else if ((4 == nRet) || (2 == nRet))
-                            aFillText = "\t";
+                            aFillText = u"\t"_ustr;
                         else
                             aFillText.clear();
                     }
@@ -3376,7 +3376,7 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
                     bWriteExpand = true;
                     break;
                 case ww::eSTYLEREF:
-                    sExtraFlags = ""; // styleref fields do not work if they have a hyperlink
+                    sExtraFlags = u""_ustr; // styleref fields do not work if they have a hyperlink
 
                     {
                         sal_uInt16 stylerefFlags = static_cast<const SwGetRefField*>(pField)->GetFlags();

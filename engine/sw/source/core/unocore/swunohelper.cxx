@@ -196,9 +196,9 @@ bool UCB_GetFileListOfFolder( const OUString& rURL,
         const sal_Int32 nSeqSize = pDateTimeList ? 2 : 1;
         css::uno::Sequence < OUString > aProps( nSeqSize );
         OUString* pProps = aProps.getArray();
-        pProps[ 0 ] = "Title";
+        pProps[ 0 ] = u"Title"_ustr;
         if( pDateTimeList )
-            pProps[ 1 ] = "DateModified";
+            pProps[ 1 ] = u"DateModified"_ustr;
 
         try
         {

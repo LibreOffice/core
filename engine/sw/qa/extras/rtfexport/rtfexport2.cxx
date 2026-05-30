@@ -489,8 +489,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo48037)
         uno::Reference<util::XNumberFormatsSupplier> xNumberSupplier(mxComponent,
                                                                      uno::UNO_QUERY_THROW);
         lang::Locale aUSLocale, aFRLocale;
-        aUSLocale.Language = "en";
-        aFRLocale.Language = "fr";
+        aUSLocale.Language = u"en"_ustr;
+        aFRLocale.Language = u"fr"_ustr;
         sal_Int32 nExpected = xNumberSupplier->getNumberFormats()->addNewConverted(
             u"d MMMM yyyy"_ustr, aUSLocale, aFRLocale);
 

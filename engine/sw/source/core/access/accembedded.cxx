@@ -48,7 +48,7 @@ OUString SAL_CALL SwAccessibleEmbeddedObject::getExtendedAttributes()
 
     if (pFFrame)
     {
-        style = "style:";
+        style = u"style:"_ustr;
         SwContentFrame* pCFrame;
         pCFrame = pFFrame->ContainsContent();
         if (pCFrame)

@@ -1875,9 +1875,9 @@ static SwHTMLWriter & OutHTML_FrameFormatAsImage( SwHTMLWriter& rWrt, const SwFr
         if (rWrt.mbReqIF && !bWritePNGFallback)
         {
             // Writing image without fallback PNG in ReqIF mode: force PNG output.
-            aFilterName = "PNG";
+            aFilterName = u"PNG"_ustr;
             nFlags = XOutFlags::NONE;
-            aMimeType = "image/png";
+            aMimeType = u"image/png"_ustr;
         }
         else if (rWrt.mbReqIF)
         {
@@ -1996,7 +1996,7 @@ static SwHTMLWriter& OutHTML_FrameFormatGrfNode( SwHTMLWriter& rWrt, const SwFra
                     // output.
                     // But don't force it when writing the original format and we'll write PNG inside
                     // that.
-                    aFilterName = "PNG";
+                    aFilterName = u"PNG"_ustr;
                     nFlags &= ~XOutFlags::UseNativeIfPossible;
                 }
             }
@@ -2013,19 +2013,19 @@ static SwHTMLWriter& OutHTML_FrameFormatGrfNode( SwHTMLWriter& rWrt, const SwFra
                 const std::shared_ptr<VectorGraphicData>& pVectorGraphicData = rGraphic.getVectorGraphicData();
                 if (pVectorGraphicData && pVectorGraphicData->getType() == VectorGraphicDataType::Svg)
                 {
-                    aFilterName = "svg";
+                    aFilterName = u"svg"_ustr;
                 }
                 else if (rGraphic.GetGfxLink().IsEMF())
                 {
-                    aFilterName = "emf";
+                    aFilterName = u"emf"_ustr;
                 }
                 else if (pVectorGraphicData && pVectorGraphicData->getType() == VectorGraphicDataType::Wmf)
                 {
-                    aFilterName = "wmf";
+                    aFilterName = u"wmf"_ustr;
                 }
                 else if (rGraphic.GetGfxLink().GetType() == GfxLinkType::NativeTif)
                 {
-                    aFilterName = "tif";
+                    aFilterName = u"tif"_ustr;
                 }
             }
 

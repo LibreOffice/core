@@ -1030,7 +1030,7 @@ public:
                     }
 
                     if (!SfxPoolItem::areSame(static_cast<const SvxWeightItem*>(pItem), pStyleItem))
-                        sFormattingType = "Weight";
+                        sFormattingType = u"Weight"_ustr;
                 }
                 break;
 
@@ -1061,7 +1061,7 @@ public:
                     if (!SfxPoolItem::areSame(static_cast<const SvxPostureItem*>(pItem),
                                               pStyleItem))
                     {
-                        sFormattingType = "Posture";
+                        sFormattingType = u"Posture"_ustr;
                     }
                 }
                 break;
@@ -1088,7 +1088,7 @@ public:
                     if (!SfxPoolItem::areSame(static_cast<const SvxShadowedItem*>(pItem),
                                               pStyleItem))
                     {
-                        sFormattingType = "Shadowed";
+                        sFormattingType = u"Shadowed"_ustr;
                     }
                 }
                 break;
@@ -1113,7 +1113,7 @@ public:
                     }
 
                     if (!SfxPoolItem::areSame(static_cast<const SvxColorItem*>(pItem), pStyleItem))
-                        sFormattingType = "Font Color";
+                        sFormattingType = u"Font Color"_ustr;
                 }
                 break;
 
@@ -1145,7 +1145,7 @@ public:
                     if (!SfxPoolItem::areSame(static_cast<const SvxFontHeightItem*>(pItem),
                                               pStyleItem))
                     {
-                        sFormattingType = "Font Size";
+                        sFormattingType = u"Font Size"_ustr;
                     }
                 }
                 break;
@@ -1176,7 +1176,7 @@ public:
                     }
 
                     if (!SfxPoolItem::areSame(static_cast<const SvxFontItem*>(pItem), pStyleItem))
-                        sFormattingType = "Font";
+                        sFormattingType = u"Font"_ustr;
                 }
                 break;
 
@@ -1202,7 +1202,7 @@ public:
                     if (!SfxPoolItem::areSame(static_cast<const SvxEmphasisMarkItem*>(pItem),
                                               pStyleItem))
                     {
-                        sFormattingType = "Emphasis Mark";
+                        sFormattingType = u"Emphasis Mark"_ustr;
                     }
                 }
                 break;
@@ -1229,7 +1229,7 @@ public:
                     if (!SfxPoolItem::areSame(static_cast<const SvxUnderlineItem*>(pItem),
                                               pStyleItem))
                     {
-                        sFormattingType = "Underline";
+                        sFormattingType = u"Underline"_ustr;
                     }
                 }
                 break;
@@ -1256,7 +1256,7 @@ public:
                     if (!SfxPoolItem::areSame(static_cast<const SvxOverlineItem*>(pItem),
                                               pStyleItem))
                     {
-                        sFormattingType = "Overline";
+                        sFormattingType = u"Overline"_ustr;
                     }
                 }
                 break;
@@ -1283,7 +1283,7 @@ public:
                     if (!SfxPoolItem::areSame(static_cast<const SvxCrossedOutItem*>(pItem),
                                               pStyleItem))
                     {
-                        sFormattingType = "Strikethrough";
+                        sFormattingType = u"Strikethrough"_ustr;
                     }
                 }
                 break;
@@ -1310,7 +1310,7 @@ public:
                     if (!SfxPoolItem::areSame(static_cast<const SvxCharReliefItem*>(pItem),
                                               pStyleItem))
                     {
-                        sFormattingType = "Relief";
+                        sFormattingType = u"Relief"_ustr;
                     }
                 }
                 break;
@@ -1337,7 +1337,7 @@ public:
                     if (!SfxPoolItem::areSame(static_cast<const SvxContourItem*>(pItem),
                                               pStyleItem))
                     {
-                        sFormattingType = "Outline";
+                        sFormattingType = u"Outline"_ustr;
                     }
                 }
                 break;
@@ -1364,7 +1364,7 @@ public:
                     if (!SfxPoolItem::areSame(static_cast<const SvxNoHyphenItem*>(pItem),
                                               pStyleItem))
                     {
-                        sFormattingType = "No Hyphenation";
+                        sFormattingType = u"No Hyphenation"_ustr;
                     }
                 }
                 break;

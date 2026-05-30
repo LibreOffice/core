@@ -60,17 +60,17 @@ void SwVbaListHelper::Init()
     {
         case word::WdListGalleryType::wdBulletGallery:
         {
-            msStyleName = "WdBullet";
+            msStyleName = u"WdBullet"_ustr;
             break;
         }
         case word::WdListGalleryType::wdNumberGallery:
         {
-            msStyleName = "WdNumber";
+            msStyleName = u"WdNumber"_ustr;
             break;
         }
         case word::WdListGalleryType::wdOutlineNumberGallery:
         {
-            msStyleName = "WdOutlineNumber";
+            msStyleName = u"WdOutlineNumber"_ustr;
             break;
         }
         default:
@@ -202,43 +202,43 @@ void SwVbaListHelper::CreateNumberListTemplate()
         case 1:
         {
             nNumberingType = style::NumberingType::ARABIC;
-            sSuffix = ".";
+            sSuffix = u"."_ustr;
             break;
         }
         case 2:
         {
             nNumberingType = style::NumberingType::ARABIC;
-            sSuffix = ")";
+            sSuffix = u")"_ustr;
             break;
         }
         case 3:
         {
             nNumberingType = style::NumberingType::ROMAN_UPPER;
-            sSuffix = ".";
+            sSuffix = u"."_ustr;
             break;
         }
         case 4:
         {
             nNumberingType = style::NumberingType::CHARS_UPPER_LETTER;
-            sSuffix = ".";
+            sSuffix = u"."_ustr;
             break;
         }
         case 5:
         {
             nNumberingType = style::NumberingType::CHARS_LOWER_LETTER;
-            sSuffix = ")";
+            sSuffix = u")"_ustr;
             break;
         }
         case 6:
         {
             nNumberingType = style::NumberingType::CHARS_LOWER_LETTER;
-            sSuffix = ".";
+            sSuffix = u"."_ustr;
             break;
         }
         case 7:
         {
             nNumberingType = style::NumberingType::ROMAN_LOWER;
-            sSuffix = ".";
+            sSuffix = u"."_ustr;
             break;
         }
         default:
@@ -317,56 +317,56 @@ void SwVbaListHelper::CreateOutlineNumberForType1()
             {
                 nNumberingType = style::NumberingType::ARABIC;
                 sPrefix.clear();
-                sSuffix = ")";
+                sSuffix = u")"_ustr;
                 break;
             }
             case 2:
             {
                 nNumberingType = style::NumberingType::ROMAN_LOWER;
                 sPrefix.clear();
-                sSuffix = ")";
+                sSuffix = u")"_ustr;
                 break;
             }
             case 3:
             {
                 nNumberingType = style::NumberingType::ARABIC;
-                sPrefix = "(";
-                sSuffix = ")";
+                sPrefix = u"("_ustr;
+                sSuffix = u")"_ustr;
                 break;
             }
             case 4:
             {
                 nNumberingType = style::NumberingType::CHARS_LOWER_LETTER;
-                sPrefix = "(";
-                sSuffix = ")";
+                sPrefix = u"("_ustr;
+                sSuffix = u")"_ustr;
                 break;
             }
             case 5:
             {
                 nNumberingType = style::NumberingType::ROMAN_LOWER;
-                sPrefix = "(";
-                sSuffix = ")";
+                sPrefix = u"("_ustr;
+                sSuffix = u")"_ustr;
                 break;
             }
             case 6:
             {
                 nNumberingType = style::NumberingType::ARABIC;
                 sPrefix.clear();
-                sSuffix = ".";
+                sSuffix = u"."_ustr;
                 break;
             }
             case 7:
             {
                 nNumberingType = style::NumberingType::CHARS_LOWER_LETTER;
                 sPrefix.clear();
-                sSuffix = ".";
+                sSuffix = u"."_ustr;
                 break;
             }
             case 8:
             {
                 nNumberingType = style::NumberingType::ROMAN_LOWER;
                 sPrefix.clear();
-                sSuffix = ".";
+                sSuffix = u"."_ustr;
                 break;
             }
         }
@@ -460,64 +460,64 @@ void SwVbaListHelper::CreateOutlineNumberForType4()
             {
                 nNumberingType = style::NumberingType::ROMAN_UPPER;
                 sPrefix.clear();
-                sSuffix = ".";
+                sSuffix = u"."_ustr;
                 break;
             }
             case 1:
             {
                 nNumberingType = style::NumberingType::ARABIC;
                 sPrefix.clear();
-                sSuffix = ".";
+                sSuffix = u"."_ustr;
                 setOrAppendPropertyValue( aPropertyValues, UNO_NAME_PARENT_NUMBERING, uno::Any( sal_Int16(0) ) );
                 break;
             }
             case 2:
             {
                 nNumberingType = style::NumberingType::CHARS_LOWER_LETTER;
-                sPrefix = "(";
-                sSuffix = ")";
+                sPrefix = u"("_ustr;
+                sSuffix = u")"_ustr;
                 break;
             }
             case 3:
             {
                 nNumberingType = style::NumberingType::ROMAN_LOWER;
-                sPrefix = "(";
-                sSuffix = ")";
+                sPrefix = u"("_ustr;
+                sSuffix = u")"_ustr;
                 break;
             }
             case 4:
             {
                 nNumberingType = style::NumberingType::ARABIC;
                 sPrefix.clear();
-                sSuffix = ")";
+                sSuffix = u")"_ustr;
                 break;
             }
             case 5:
             {
                 nNumberingType = style::NumberingType::CHARS_LOWER_LETTER;
                 sPrefix.clear();
-                sSuffix = ")";
+                sSuffix = u")"_ustr;
                 break;
             }
             case 6:
             {
                 nNumberingType = style::NumberingType::ROMAN_LOWER;
                 sPrefix.clear();
-                sSuffix = ")";
+                sSuffix = u")"_ustr;
                 break;
             }
             case 7:
             {
                 nNumberingType = style::NumberingType::CHARS_LOWER_LETTER;
                 sPrefix.clear();
-                sSuffix = ".";
+                sSuffix = u"."_ustr;
                 break;
             }
             case 8:
             {
                 nNumberingType = style::NumberingType::ROMAN_LOWER;
                 sPrefix.clear();
-                sSuffix = ".";
+                sSuffix = u"."_ustr;
                 break;
             }
         }
@@ -562,63 +562,63 @@ void SwVbaListHelper::CreateOutlineNumberForType6()
             {
                 nNumberingType = style::NumberingType::ROMAN_UPPER;
                 sPrefix.clear();
-                sSuffix = ".";
+                sSuffix = u"."_ustr;
                 break;
             }
             case 1:
             {
                 nNumberingType = style::NumberingType::CHARS_UPPER_LETTER;
                 sPrefix.clear();
-                sSuffix = ".";
+                sSuffix = u"."_ustr;
                 break;
             }
             case 2:
             {
                 nNumberingType = style::NumberingType::ARABIC;
                 sPrefix.clear();
-                sSuffix = ")";
+                sSuffix = u")"_ustr;
                 break;
             }
             case 3:
             {
                 nNumberingType = style::NumberingType::CHARS_LOWER_LETTER;
                 sPrefix.clear();
-                sSuffix = ")";
+                sSuffix = u")"_ustr;
                 break;
             }
             case 4:
             {
                 nNumberingType = style::NumberingType::ARABIC;
-                sPrefix = "(";
-                sSuffix = ")";
+                sPrefix = u"("_ustr;
+                sSuffix = u")"_ustr;
                 break;
             }
             case 5:
             {
                 nNumberingType = style::NumberingType::CHARS_LOWER_LETTER;
-                sPrefix = "(";
-                sSuffix = ")";
+                sPrefix = u"("_ustr;
+                sSuffix = u")"_ustr;
                 break;
             }
             case 6:
             {
                 nNumberingType = style::NumberingType::ROMAN_LOWER;
-                sPrefix = "(";
-                sSuffix = ")";
+                sPrefix = u"("_ustr;
+                sSuffix = u")"_ustr;
                 break;
             }
             case 7:
             {
                 nNumberingType = style::NumberingType::CHARS_LOWER_LETTER;
-                sPrefix = "(";
-                sSuffix = ".";
+                sPrefix = u"("_ustr;
+                sSuffix = u"."_ustr;
                 break;
             }
             case 8:
             {
                 nNumberingType = style::NumberingType::ROMAN_LOWER;
-                sPrefix = "(";
-                sSuffix = ".";
+                sPrefix = u"("_ustr;
+                sSuffix = u"."_ustr;
                 break;
             }
         }

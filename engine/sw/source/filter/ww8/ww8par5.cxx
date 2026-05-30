@@ -3423,7 +3423,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, OUString& rStr )
                                         if ( aIt != aPattern.end() )
                                         {
                                             SwFormToken aNumberEntrySeparator( TOKEN_TEXT );
-                                            aNumberEntrySeparator.sText = " ";
+                                            aNumberEntrySeparator.sText = u" "_ustr;
                                             aPattern.insert( ++aIt, aNumberEntrySeparator );
                                             pForm->SetPattern( nStyleLevel, std::move(aPattern) );
                                         }
@@ -3598,7 +3598,7 @@ eF_ResT SwWW8ImplReader::Read_F_Hyperlink( WW8FieldDesc* /*pF*/, OUString& rStr 
                 break;
 
             case 'n':
-                sTarget = "_blank";
+                sTarget = u"_blank"_ustr;
                 bOptions = true;
                 break;
 

@@ -713,7 +713,7 @@ SwWebColorConfig::SwWebColorConfig(SwMasterUsrPref& rPar)
     , m_rParent(rPar)
     , m_aPropNames(1)
 {
-    m_aPropNames.getArray()[0] = "Color";
+    m_aPropNames.getArray()[0] = u"Color"_ustr;
     Load();
     EnableNotification(m_aPropNames);
 }

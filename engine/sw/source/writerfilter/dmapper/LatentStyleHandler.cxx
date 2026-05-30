@@ -28,22 +28,22 @@ void LatentStyleHandler::lcl_attribute(Id nId, const Value& rVal)
     switch (nId)
     {
         case NS_ooxml::LN_CT_LsdException_name:
-            aValue.Name = "name";
+            aValue.Name = u"name"_ustr;
             break;
         case NS_ooxml::LN_CT_LsdException_locked:
-            aValue.Name = "locked";
+            aValue.Name = u"locked"_ustr;
             break;
         case NS_ooxml::LN_CT_LsdException_uiPriority:
-            aValue.Name = "uiPriority";
+            aValue.Name = u"uiPriority"_ustr;
             break;
         case NS_ooxml::LN_CT_LsdException_semiHidden:
-            aValue.Name = "semiHidden";
+            aValue.Name = u"semiHidden"_ustr;
             break;
         case NS_ooxml::LN_CT_LsdException_unhideWhenUsed:
-            aValue.Name = "unhideWhenUsed";
+            aValue.Name = u"unhideWhenUsed"_ustr;
             break;
         case NS_ooxml::LN_CT_LsdException_qFormat:
-            aValue.Name = "qFormat";
+            aValue.Name = u"qFormat"_ustr;
             break;
         default:
             bFound = false;

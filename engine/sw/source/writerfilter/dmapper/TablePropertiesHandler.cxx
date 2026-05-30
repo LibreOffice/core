@@ -172,15 +172,15 @@ namespace writerfilter::dmapper {
                     OUString aVertOrient;
                     switch( nIntValue )
                     {
-                        case NS_ooxml::LN_Value_ST_VerticalJc_top: aVertOrient = "top"; break;
-                        case NS_ooxml::LN_Value_ST_VerticalJc_center: aVertOrient = "center"; break;
-                        case NS_ooxml::LN_Value_ST_VerticalJc_both: aVertOrient = "both"; break;
-                        case NS_ooxml::LN_Value_ST_VerticalJc_bottom: aVertOrient = "bottom"; break;
+                        case NS_ooxml::LN_Value_ST_VerticalJc_top: aVertOrient = u"top"_ustr; break;
+                        case NS_ooxml::LN_Value_ST_VerticalJc_center: aVertOrient = u"center"_ustr; break;
+                        case NS_ooxml::LN_Value_ST_VerticalJc_both: aVertOrient = u"both"_ustr; break;
+                        case NS_ooxml::LN_Value_ST_VerticalJc_bottom: aVertOrient = u"bottom"_ustr; break;
                     }
                     if (!aVertOrient.isEmpty())
                     {
                         beans::PropertyValue aValue;
-                        aValue.Name = "vAlign";
+                        aValue.Name = u"vAlign"_ustr;
                         aValue.Value <<= aVertOrient;
                         m_pCurrentInteropGrabBag->push_back(aValue);
                     }

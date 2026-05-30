@@ -111,7 +111,7 @@ void SwHTMLParser::EndScript()
         if( !m_aBasicLib.isEmpty() )
             aLibName = m_aBasicLib;
         else
-            aLibName = "Standard";
+            aLibName = u"Standard"_ustr;
 
         // get module library container
         Reference< script::XStorageBasedLibraryContainer > xModLibContainer = pDocSh->GetBasicContainer();

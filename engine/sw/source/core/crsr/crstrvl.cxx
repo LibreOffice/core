@@ -2161,7 +2161,7 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
             else
                 pTextNd->SwContentNode::GetAttr( aSet );
 
-            rContentAtPos.sStr = "Pos: (";
+            rContentAtPos.sStr = u"Pos: ("_ustr;
             rContentAtPos.sStr += OUString::number( sal_Int32(aPos.GetNodeIndex()));
             rContentAtPos.sStr += ":";
             rContentAtPos.sStr += OUString::number( aPos.GetContentIndex());

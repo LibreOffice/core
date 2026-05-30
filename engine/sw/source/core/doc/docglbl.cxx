@@ -226,7 +226,7 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
     OUString sExt = pFilter->GetSuffixes().getToken(0, ',');
     if( sExt.isEmpty() )
     {
-        sExt = ".sxw";
+        sExt = u".sxw"_ustr;
     }
     else
     {

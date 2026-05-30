@@ -511,14 +511,14 @@ static uno::Sequence< beans::PropertyValue > lcl_buildLinkMediaDescriptor(
         {
             aMediaDescriptor.realloc( 2 );
             auto pMediaDescriptor = aMediaDescriptor.getArray();
-            pMediaDescriptor[1].Name = "InteractionHandler";
+            pMediaDescriptor[1].Name = u"InteractionHandler"_ustr;
             pMediaDescriptor[1].Value <<= xInteraction;
         }
 
         const auto nLen = aMediaDescriptor.getLength() + 1;
         aMediaDescriptor.realloc(nLen);
         auto pMediaDescriptor = aMediaDescriptor.getArray();
-        pMediaDescriptor[nLen - 1].Name = "Referer";
+        pMediaDescriptor[nLen - 1].Name = u"Referer"_ustr;
         pMediaDescriptor[nLen - 1].Value <<= pMedium->GetName();
     }
 

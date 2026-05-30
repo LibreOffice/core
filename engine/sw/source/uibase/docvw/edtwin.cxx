@@ -1792,7 +1792,7 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
                     rSh.MoveSection( GoCurrSection, fnSectionEnd );
                     rSh.Pop();
                     rSh.EndSelect();
-                    sFormulaEntry = "=";
+                    sFormulaEntry = u"="_ustr;
                 }
                 else
                     rSh.Pop(SwCursorShell::PopMode::DeleteCurrent);

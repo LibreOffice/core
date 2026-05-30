@@ -352,7 +352,7 @@ bool SwTextPortion::CreateHyphen( SwTextFormatInfo &rInf, SwTextGuess const &rGu
 
 bool SwHyphPortion::GetExpText( const SwTextSizeInfo &/*rInf*/, OUString &rText ) const
 {
-    rText = "-";
+    rText = u"-"_ustr;
     return true;
 }
 

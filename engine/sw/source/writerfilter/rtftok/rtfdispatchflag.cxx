@@ -43,13 +43,13 @@ bool RTFDocumentImpl::dispatchFloatingTableFlag(RTFKeyword nKeyword)
     switch (nKeyword)
     {
         case RTFKeyword::TPVPARA:
-            aParam = "text";
+            aParam = u"text"_ustr;
             break;
         case RTFKeyword::TPVMRG:
-            aParam = "margin";
+            aParam = u"margin"_ustr;
             break;
         case RTFKeyword::TPVPG:
-            aParam = "page";
+            aParam = u"page"_ustr;
             break;
         default:
             break;
@@ -63,13 +63,13 @@ bool RTFDocumentImpl::dispatchFloatingTableFlag(RTFKeyword nKeyword)
     switch (nKeyword)
     {
         case RTFKeyword::TPHCOL:
-            aParam = "text";
+            aParam = u"text"_ustr;
             break;
         case RTFKeyword::TPHMRG:
-            aParam = "margin";
+            aParam = u"margin"_ustr;
             break;
         case RTFKeyword::TPHPG:
-            aParam = "page";
+            aParam = u"page"_ustr;
             break;
         default:
             break;
@@ -83,10 +83,10 @@ bool RTFDocumentImpl::dispatchFloatingTableFlag(RTFKeyword nKeyword)
     switch (nKeyword)
     {
         case RTFKeyword::TPOSYC:
-            aParam = "center";
+            aParam = u"center"_ustr;
             break;
         case RTFKeyword::TPOSYB:
-            aParam = "bottom";
+            aParam = u"bottom"_ustr;
             break;
         default:
             break;
@@ -100,10 +100,10 @@ bool RTFDocumentImpl::dispatchFloatingTableFlag(RTFKeyword nKeyword)
     switch (nKeyword)
     {
         case RTFKeyword::TPOSXC:
-            aParam = "center";
+            aParam = u"center"_ustr;
             break;
         case RTFKeyword::TPOSXR:
-            aParam = "right";
+            aParam = u"right"_ustr;
             break;
         default:
             break;
@@ -1170,7 +1170,7 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         case RTFKeyword::DOBYPARA:
         {
             beans::PropertyValue aPropertyValue;
-            aPropertyValue.Name = "VertOrientRelation";
+            aPropertyValue.Name = u"VertOrientRelation"_ustr;
             aPropertyValue.Value <<= text::RelOrientation::FRAME;
             m_aStates.top().getDrawingObject().getPendingProperties().push_back(aPropertyValue);
         }

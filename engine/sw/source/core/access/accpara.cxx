@@ -1004,7 +1004,7 @@ OUString SwAccessibleParagraph::GetFieldTypeNameAtIndex(sal_Int32 nIndex)
         else if (pHt->Which() == RES_TXTATR_REFMARK
                  && (nFieldIndex-- == 0))
         {
-            strTypeName = "set reference";
+            strTypeName = u"set reference"_ustr;
         }
     }
 
@@ -1032,27 +1032,27 @@ OUString SwAccessibleParagraph::GetFieldTypeNameAtIndex(sal_Int32 nIndex)
             case ReferencesSubtype::Bookmark:
                 {
                     if (  pRefField->IsRefToHeadingCrossRefBookmark() )
-                        sEntry = "Headings";
+                        sEntry = u"Headings"_ustr;
                     else if (  pRefField->IsRefToNumItemCrossRefBookmark() )
-                        sEntry = "Numbered Paragraphs";
+                        sEntry = u"Numbered Paragraphs"_ustr;
                     else
-                        sEntry = "Bookmarks";
+                        sEntry = u"Bookmarks"_ustr;
                 }
                 break;
             case ReferencesSubtype::Footnote:
-                sEntry = "Footnotes";
+                sEntry = u"Footnotes"_ustr;
                 break;
             case ReferencesSubtype::Endnote:
-                sEntry = "Endnotes";
+                sEntry = u"Endnotes"_ustr;
                 break;
             case ReferencesSubtype::SetRefAttr:
-                sEntry = "Insert Reference";
+                sEntry = u"Insert Reference"_ustr;
                 break;
             case ReferencesSubtype::SequenceField:
                 sEntry = pRefField->GetSetRefName().toString();
                 break;
             case ReferencesSubtype::Style:
-                sEntry = "StyleRef";
+                sEntry = u"StyleRef"_ustr;
                 break;
             default: break; // ReferencesSubtype::Outline not handled?
             }
@@ -1233,7 +1233,7 @@ uno::Sequence<PropertyValue> SwAccessibleParagraph::getCharacterAttributes(
         {
             aValues.emplace_back();
             PropertyValue& rValueFT = aValues.back();
-            rValueFT.Name = "FieldType";
+            rValueFT.Name = u"FieldType"_ustr;
             rValueFT.Value <<= strTypeName.toAsciiLowerCase();
             rValueFT.Handle = -1;
             rValueFT.State = PropertyState_DIRECT_VALUE;

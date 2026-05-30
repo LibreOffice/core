@@ -524,13 +524,13 @@ std::optional<bool> SwContentControl::GetLock(bool bControl) const
 void SwContentControl::SetLock(bool bLockContent, bool bLockControl)
 {
     if (!bLockContent && !bLockControl)
-        m_aLock = "unlocked";
+        m_aLock = u"unlocked"_ustr;
     else if (bLockContent && bLockControl)
-        m_aLock = "sdtContentLocked";
+        m_aLock = u"sdtContentLocked"_ustr;
     else if (bLockContent)
-        m_aLock = "contentLocked";
+        m_aLock = u"contentLocked"_ustr;
     else
-        m_aLock = "sdtLocked";
+        m_aLock = u"sdtLocked"_ustr;
 }
 
 SwContentControlType SwContentControl::GetType() const

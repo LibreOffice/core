@@ -1089,7 +1089,7 @@ void SdtBlockHelper::GetSdtParamsFromGrabBag(const uno::Sequence<beans::Property
                 {
                     OUString sValue = rProp.Value.get<OUString>();
                     if (sValue.isEmpty())
-                        sValue = "true";
+                        sValue = u"true"_ustr;
                     DocxAttributeOutput::AddToAttrList(m_pTokenChildren, FSNS(XML_w, XML_docPartUnique),
                         sValue);
                 }
@@ -6036,13 +6036,13 @@ void DocxAttributeOutput::WritePostponedFormControl(const SdrObject* pObject)
             Date aDate(aUNODate.Day, aUNODate.Month, aUNODate.Year);
             sDate = DateToOString(aDate);
             aContentText = DateToDDMMYYYYOUString(aDate);
-            sDateFormat = "dd/MM/yyyy";
+            sDateFormat = u"dd/MM/yyyy"_ustr;
         }
         else
         {
             aContentText = xPropertySet->getPropertyValue(u"HelpText"_ustr).get<OUString>();
             if(sDateFormat.isEmpty())
-                sDateFormat = "dd/MM/yyyy"; // Need to set date format even if there is no date set
+                sDateFormat = u"dd/MM/yyyy"_ustr; // Need to set date format even if there is no date set
         }
 
         // output component
@@ -6270,10 +6270,10 @@ void DocxAttributeOutput::WriteOLE( SwOLENode& rNode, const Size& rSize, const S
     OUString sProgID, sDrawAspect;
     switch (rNode.GetAspect())
     {
-        case embed::Aspects::MSOLE_CONTENT: sDrawAspect = "Content"; break;
-        case embed::Aspects::MSOLE_DOCPRINT: sDrawAspect = "DocPrint"; break;
-        case embed::Aspects::MSOLE_ICON: sDrawAspect = "Icon"; break;
-        case embed::Aspects::MSOLE_THUMBNAIL: sDrawAspect = "Thumbnail"; break;
+        case embed::Aspects::MSOLE_CONTENT: sDrawAspect = u"Content"_ustr; break;
+        case embed::Aspects::MSOLE_DOCPRINT: sDrawAspect = u"DocPrint"_ustr; break;
+        case embed::Aspects::MSOLE_ICON: sDrawAspect = u"Icon"_ustr; break;
+        case embed::Aspects::MSOLE_THUMBNAIL: sDrawAspect = u"Thumbnail"_ustr; break;
         default:
             SAL_WARN("sw.ww8", "DocxAttributeOutput::WriteOLE: invalid aspect value");
     }

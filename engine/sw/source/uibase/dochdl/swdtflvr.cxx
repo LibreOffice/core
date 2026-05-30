@@ -171,9 +171,9 @@ void collectUIInformation(const OUString& rAction, const OUString& aParameters)
     EventDescription aDescription;
     aDescription.aAction = rAction;
     aDescription.aParameters = {{"parameters", aParameters}};
-    aDescription.aID = "writer_edit";
-    aDescription.aKeyWord = "SwEditWinUIObject";
-    aDescription.aParent = "MainWindow";
+    aDescription.aID = u"writer_edit"_ustr;
+    aDescription.aKeyWord = u"SwEditWinUIObject"_ustr;
+    aDescription.aParent = u"MainWindow"_ustr;
     UITestLogger::getInstance().logEvent(aDescription);
 }
 
@@ -1343,7 +1343,7 @@ SwPasteContext::~SwPasteContext()
                 if (!pFormat)
                     return;
 
-                aPropertyValue.Name = "TextGraphicObject";
+                aPropertyValue.Name = u"TextGraphicObject"_ustr;
                 aPropertyValue.Value
                     <<= uno::Reference<text::XTextContent>(SwXTextGraphicObject::CreateXTextGraphicObject(pFormat->GetDoc(), pFormat));
                 break;
@@ -1374,7 +1374,7 @@ SwPasteContext::~SwPasteContext()
 
                 m_oPaM->GetPoint()->SetContent(m_nStartContent);
 
-                aPropertyValue.Name = "TextRange";
+                aPropertyValue.Name = u"TextRange"_ustr;
                 const rtl::Reference<SwXTextRange> xTextRange = SwXTextRange::CreateXTextRange(
                     m_oPaM->GetDoc(), *m_oPaM->GetPoint(), m_oPaM->GetMark());
                 aPropertyValue.Value <<= uno::Reference<text::XTextRange>(xTextRange);

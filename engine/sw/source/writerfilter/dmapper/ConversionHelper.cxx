@@ -403,8 +403,8 @@ OUString ConvertMSFormatStringToSO(
 
     if (bForceJapanese)
     {
-        rLocale.Language = "ja";
-        rLocale.Country = "JP";
+        rLocale.Language = u"ja"_ustr;
+        rLocale.Country = u"JP"_ustr;
     }
 
     if (bForceNatNum)

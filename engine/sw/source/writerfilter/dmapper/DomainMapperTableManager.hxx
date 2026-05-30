@@ -160,9 +160,9 @@ public:
             m_aMoved[m_aMoved.size() - 1] = sMoved;
         else if ( m_aMoved.size() >= 2 )
             // next table rows weren't moved
-            m_aMoved[m_aMoved.size() - 2] = "";
+            m_aMoved[m_aMoved.size() - 2] = u""_ustr;
         else
-            m_aMoved[m_aMoved.size() - 1] = "";
+            m_aMoved[m_aMoved.size() - 1] = u""_ustr;
     }
 
     const OUString & getMoved() const

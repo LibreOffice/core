@@ -274,53 +274,53 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
                         switch(aToken.eTokenType)
                         {
                             case TOKEN_ENTRY_NO     :
-                                sTokenType = "TokenEntryNumber";
+                                sTokenType = u"TokenEntryNumber"_ustr;
                                 // numbering for content index
                             break;
                             case TOKEN_ENTRY_TEXT   :
                             case TOKEN_ENTRY        :
-                                sTokenType = "TokenEntryText";
+                                sTokenType = u"TokenEntryText"_ustr;
                             break;
                             case TOKEN_TAB_STOP     :
                                 nParamCount += 3;
-                                sTokenType = "TokenTabStop";
+                                sTokenType = u"TokenTabStop"_ustr;
                             break;
                             case TOKEN_TEXT         :
-                                sTokenType = "TokenText";
+                                sTokenType = u"TokenText"_ustr;
                                 nParamCount += 1;
                             break;
                             case TOKEN_PAGE_NUMS    :
-                                sTokenType = "TokenPageNumber";
+                                sTokenType = u"TokenPageNumber"_ustr;
                             break;
                             case TOKEN_CHAPTER_INFO :
-                                sTokenType = "TokenChapterInfo";
+                                sTokenType = u"TokenChapterInfo"_ustr;
                             break;
                             case TOKEN_LINK_START   :
-                                sTokenType = "TokenHyperlinkStart";
+                                sTokenType = u"TokenHyperlinkStart"_ustr;
                             break;
                             case TOKEN_LINK_END     :
-                                sTokenType = "TokenHyperlinkEnd";
+                                sTokenType = u"TokenHyperlinkEnd"_ustr;
                             break;
                             case TOKEN_AUTHORITY :
                             {
-                                sTokenType = "TokenBibliographyDataField";
+                                sTokenType = u"TokenBibliographyDataField"_ustr;
                             }
                             break;
                             default:; //prevent warning
                         }
                         beans::PropertyValues aPropVals(nParamCount);
                         beans::PropertyValue* pPropValArr = aPropVals.getArray();
-                        pPropValArr[0].Name = "TokenType";
+                        pPropValArr[0].Name = u"TokenType"_ustr;
                         pPropValArr[0].Value <<= sTokenType;
-                        pPropValArr[1].Name = "CharacterStyleName";
+                        pPropValArr[1].Name = u"CharacterStyleName"_ustr;
                         pPropValArr[1].Value <<= aToken.sCharStyleName.toString();
                         if(TOKEN_TAB_STOP == aToken.eTokenType)
                         {
-                            pPropValArr[2].Name = "TabStopRightAligned";
+                            pPropValArr[2].Name = u"TabStopRightAligned"_ustr;
                             pPropValArr[2].Value <<= SvxTabAdjust::End == aToken.eTabAlign;
-                            pPropValArr[3].Name = "TabStopFillCharacter";
+                            pPropValArr[3].Name = u"TabStopFillCharacter"_ustr;
                             pPropValArr[3].Value <<= OUString(aToken.cTabFillChar);
-                            pPropValArr[4].Name = "TabStopPosition";
+                            pPropValArr[4].Name = u"TabStopPosition"_ustr;
                             SwTwips nTempPos = aToken.nTabStopPosition >= 0 ?
                                                             aToken.nTabStopPosition : 0;
                             nTempPos = convertTwipToMm100(nTempPos);
@@ -328,7 +328,7 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
                         }
                         else if(TOKEN_TEXT == aToken.eTokenType)
                         {
-                            pPropValArr[2].Name = "Text";
+                            pPropValArr[2].Name = u"Text"_ustr;
                             pPropValArr[2].Value <<= aToken.sText;
                         }
                         beans::PropertyValues* pValues = aSequPropVals.getArray();

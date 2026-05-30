@@ -188,7 +188,7 @@ SwMailMergeDlg::SwMailMergeDlg(weld::Window* pParent, SwWrtShell& rShell,
         }
         if(m_xFrame.is()) {
             URL aURL;
-            aURL.Complete = ".component:DB/DataSourceBrowser";
+            aURL.Complete = u".component:DB/DataSourceBrowser"_ustr;
             uno::Reference<XDispatch> xD = m_xFrame->queryDispatch(aURL,
                                            u""_ustr,
                                            0x0C);

@@ -500,7 +500,7 @@ bool SwGrfNode::GetFileFilterNms( OUString* pFileNm, OUString* pFilterNm ) const
                 *pFileNm = sApp + OUStringChar(sfx2::cTokenSeparator)
                          + sTopic + OUStringChar(sfx2::cTokenSeparator)
                          + sItem;
-                *pFilterNm = "DDE";
+                *pFilterNm = u"DDE"_ustr;
                 bRet = true;
             }
         }
@@ -705,7 +705,7 @@ SwContentNode* SwGrfNode::MakeCopy(SwDoc& rDoc, SwNode& rIdx, bool) const
         OUString sTmp1, sTmp2;
         sfx2::LinkManager::GetDisplayNames( mxLink.get(), &sTmp1, &sTmp2, &sFilter );
         sfx2::MakeLnkName( sFile, &sTmp1, sTmp2, sFilter );
-        sFilter = "DDE";
+        sFilter = u"DDE"_ustr;
     }
 
     SwGrfNode* pGrfNd = SwNodes::MakeGrfNode( rIdx, sFile, sFilter,

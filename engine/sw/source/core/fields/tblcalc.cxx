@@ -57,7 +57,7 @@ SwTableField::SwTableField( SwTableFieldType* pInitType, const OUString& rFormel
     : SwValueField( pInitType, nFormat ), SwTableFormula( rFormel ),
     m_nSubType(nType)
 {
-    m_sExpand = "0";
+    m_sExpand = u"0"_ustr;
 }
 
 std::unique_ptr<SwField> SwTableField::Copy() const

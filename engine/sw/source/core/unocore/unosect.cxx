@@ -288,7 +288,7 @@ SwXTextSection::attach(const uno::Reference< text::XTextRange > & xTextRange)
 
     if (m_pImpl->m_sName.isEmpty())
     {
-        m_pImpl->m_sName = "TextSection";
+        m_pImpl->m_sName = u"TextSection"_ustr;
     }
     SectionType eType(SectionType::FileLink);
     if( m_pImpl->m_pProps->m_bDDE )

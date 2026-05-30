@@ -194,7 +194,7 @@ void SwJavaEditDialog::SetField()
         m_aText = m_xEditED->get_text();
 
     if (m_aType.isEmpty())
-        m_aType = "JavaScript";
+        m_aType = u"JavaScript"_ustr;
 }
 
 bool SwJavaEditDialog::IsUpdate() const

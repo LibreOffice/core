@@ -3351,8 +3351,8 @@ uno::Sequence< OUString > SwXTextFrame::getSupportedServiceNames()
     uno::Sequence < OUString > aRet = SwXFrame::getSupportedServiceNames();
     aRet.realloc(aRet.getLength() + 2);
     OUString* pArray = aRet.getArray();
-    pArray[aRet.getLength() - 2] = "com.sun.star.text.TextFrame";
-    pArray[aRet.getLength() - 1] = "com.sun.star.text.Text";
+    pArray[aRet.getLength() - 2] = u"com.sun.star.text.TextFrame"_ustr;
+    pArray[aRet.getLength() - 1] = u"com.sun.star.text.Text"_ustr;
     return aRet;
 }
 
@@ -3421,7 +3421,7 @@ uno::Sequence< OUString > SwXTextGraphicObject::getSupportedServiceNames()
     uno::Sequence < OUString > aRet = SwXFrame::getSupportedServiceNames();
     aRet.realloc(aRet.getLength() + 1);
     OUString* pArray = aRet.getArray();
-    pArray[aRet.getLength() - 1] = "com.sun.star.text.TextGraphicObject";
+    pArray[aRet.getLength() - 1] = u"com.sun.star.text.TextGraphicObject"_ustr;
     return aRet;
 }
 
@@ -3559,7 +3559,7 @@ uno::Sequence< OUString > SwXTextEmbeddedObject::getSupportedServiceNames()
     uno::Sequence < OUString > aRet = SwXFrame::getSupportedServiceNames();
     aRet.realloc(aRet.getLength() + 1);
     OUString* pArray = aRet.getArray();
-    pArray[aRet.getLength() - 1] = "com.sun.star.text.TextEmbeddedObject";
+    pArray[aRet.getLength() - 1] = u"com.sun.star.text.TextEmbeddedObject"_ustr;
     return aRet;
 }
 

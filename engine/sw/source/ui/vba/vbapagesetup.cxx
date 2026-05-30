@@ -149,9 +149,9 @@ void SAL_CALL SwVbaPageSetup::setDifferentFirstPageHeaderFooter( sal_Bool status
 
     OUString newStyle;
     if( status )
-        newStyle = "First Page";
+        newStyle = u"First Page"_ustr;
     else
-        newStyle = "Standard";
+        newStyle = u"Standard"_ustr;
 
     rtl::Reference< SwXBaseStyle > xStyleProps( word::getCurrentPageStyle( mxModel ) );
     sal_Int32 nTopMargin = 0;

@@ -165,7 +165,7 @@ void TblStylePrHandler::lcl_sprm(Sprm & rSprm)
         {
             m_pProperties->Insert( PROP_HEADER_ROW_COUNT, uno::Any(sal_Int32(1)));
             beans::PropertyValue aValue;
-            aValue.Name = "tblHeader";
+            aValue.Name = u"tblHeader"_ustr;
             aValue.Value <<= true;
             m_aInteropGrabBag.push_back(aValue);
         }

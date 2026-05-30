@@ -175,7 +175,7 @@ DECLARE_SHELL_MAILMERGE_TEST(exportDirectToPDF_shell, "linked-with-condition.odt
     CPPUNIT_ASSERT(xDispatchProvider.is());
 
     util::URL aURL;
-    aURL.Complete = ".uno:ExportDirectToPDF";
+    aURL.Complete = u".uno:ExportDirectToPDF"_ustr;
     {
         uno::Reference<css::util::XURLTransformer> xParser(css::util::URLTransformer::create(
                                                            comphelper::getProcessComponentContext()));

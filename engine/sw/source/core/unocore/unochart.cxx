@@ -1255,25 +1255,25 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
     aResult.realloc(5);
     auto pResult = aResult.getArray();
     sal_Int32 nProps = 0;
-    pResult[nProps  ].Name = "FirstCellAsLabel";
+    pResult[nProps  ].Name = u"FirstCellAsLabel"_ustr;
     pResult[nProps++].Value <<= bFirstCellIsLabel;
-    pResult[nProps  ].Name = "CellRangeRepresentation";
+    pResult[nProps  ].Name = u"CellRangeRepresentation"_ustr;
     pResult[nProps++].Value <<= aSortedCellRanges.toString();
     if (!aBrokenCellRangeForExport.isEmpty())
     {
-        pResult[nProps  ].Name = "BrokenCellRangeForExport";
+        pResult[nProps  ].Name = u"BrokenCellRangeForExport"_ustr;
         pResult[nProps++].Value <<= aBrokenCellRangeForExport;
     }
     if (nDtaSrcIsColumns == 0 || nDtaSrcIsColumns == 1)
     {
         chart::ChartDataRowSource eDataRowSource = (nDtaSrcIsColumns == 1) ?
                     chart::ChartDataRowSource_COLUMNS : chart::ChartDataRowSource_ROWS;
-        pResult[nProps  ].Name = "DataRowSource";
+        pResult[nProps  ].Name = u"DataRowSource"_ustr;
         pResult[nProps++].Value <<= eDataRowSource;
 
         if (aSequenceMapping.hasElements())
         {
-            pResult[nProps  ].Name = "SequenceMapping";
+            pResult[nProps  ].Name = u"SequenceMapping"_ustr;
             pResult[nProps++].Value <<= aSequenceMapping;
         }
     }
@@ -1959,12 +1959,12 @@ uno::Sequence< OUString > SAL_CALL SwChartDataSequence::generateLabel(
                             std::u16string_view aNew;
                             if (bUseCol)
                             {
-                                aRplc = "%COLUMNLETTER";
+                                aRplc = u"%COLUMNLETTER"_ustr;
                                 aNew = aCellName.subView(0, pBuf - aCellName.getStr());
                             }
                             else
                             {
-                                aRplc = "%ROWNUMBER";
+                                aRplc = u"%ROWNUMBER"_ustr;
                                 aNew = std::u16string_view(pBuf, (aCellName.getStr() + nLen) - pBuf);
                             }
                             aText = aText.replaceFirst( aRplc, aNew );

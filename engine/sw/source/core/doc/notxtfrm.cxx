@@ -92,7 +92,7 @@ static bool GetRealURL( const SwGrfNode& rNd, OUString& rText )
     if( bRet )
         rText = URIHelper::removePassword( rText, INetURLObject::EncodeMechanism::WasEncoded,
                                            INetURLObject::DecodeMechanism::Unambiguous);
-    if (rText.startsWith("data:image")) rText = "inline image";
+    if (rText.startsWith("data:image")) rText = u"inline image"_ustr;
 
     return bRet;
 }

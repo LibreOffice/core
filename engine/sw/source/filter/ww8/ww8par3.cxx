@@ -2301,7 +2301,7 @@ awt::Size SwWW8ImplReader::MiserableDropDownFormHack(const OUString &rString,
         case RES_CHRATR_COLOR:
             {
                 OUString aNm;
-                if (xPropSetInfo->hasPropertyByName(aNm = "TextColor"))
+                if (xPropSetInfo->hasPropertyByName(aNm = u"TextColor"_ustr))
                 {
                     aTmp <<= static_cast<sal_Int32>(static_cast<const SvxColorItem*>(pItem)->GetValue());
                     rPropSet->setPropertyValue(aNm, aTmp);
@@ -2313,22 +2313,22 @@ awt::Size SwWW8ImplReader::MiserableDropDownFormHack(const OUString &rString,
             {
                 const SvxFontItem *pFontItem = static_cast<const SvxFontItem *>(pItem);
                 OUString aNm;
-                if (xPropSetInfo->hasPropertyByName(aNm = "FontStyleName"))
+                if (xPropSetInfo->hasPropertyByName(aNm = u"FontStyleName"_ustr))
                 {
                     aTmp <<= pFontItem->GetStyleName();
                     rPropSet->setPropertyValue( aNm, aTmp );
                 }
-                if (xPropSetInfo->hasPropertyByName(aNm = "FontFamily"))
+                if (xPropSetInfo->hasPropertyByName(aNm = u"FontFamily"_ustr))
                 {
                     aTmp <<= static_cast<sal_Int16>(pFontItem->GetFamily());
                     rPropSet->setPropertyValue( aNm, aTmp );
                 }
-                if (xPropSetInfo->hasPropertyByName(aNm = "FontCharset"))
+                if (xPropSetInfo->hasPropertyByName(aNm = u"FontCharset"_ustr))
                 {
                     aTmp <<= static_cast<sal_Int16>(pFontItem->GetCharSet());
                     rPropSet->setPropertyValue( aNm, aTmp );
                 }
-                if (xPropSetInfo->hasPropertyByName(aNm = "FontPitch"))
+                if (xPropSetInfo->hasPropertyByName(aNm = u"FontPitch"_ustr))
                 {
                     aTmp <<= static_cast<sal_Int16>(pFontItem->GetPitch());
                     rPropSet->setPropertyValue( aNm, aTmp );

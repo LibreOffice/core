@@ -268,10 +268,10 @@ uno::Reference< text::XTextRange > SwVbaView::getHFTextRange( sal_Int32 nType )
         case word::WdSeekView::wdSeekPrimaryFooter:
         case word::WdSeekView::wdSeekEvenPagesFooter:
         {
-            aPropIsOn = "FooterIsOn";
-            aPropIsShared = "FooterIsShared";
-            aPropBodyDistance = "FooterBodyDistance";
-            aPropText = "FooterText";
+            aPropIsOn = u"FooterIsOn"_ustr;
+            aPropIsShared = u"FooterIsShared"_ustr;
+            aPropBodyDistance = u"FooterBodyDistance"_ustr;
+            aPropText = u"FooterText"_ustr;
             break;
         }
         case word::WdSeekView::wdSeekCurrentPageHeader:
@@ -279,10 +279,10 @@ uno::Reference< text::XTextRange > SwVbaView::getHFTextRange( sal_Int32 nType )
         case word::WdSeekView::wdSeekPrimaryHeader:
         case word::WdSeekView::wdSeekEvenPagesHeader:
         {
-            aPropIsOn = "HeaderIsOn";
-            aPropIsShared = "HeaderIsShared";
-            aPropBodyDistance = "HeaderBodyDistance";
-            aPropText = "HeaderText";
+            aPropIsOn = u"HeaderIsOn"_ustr;
+            aPropIsShared = u"HeaderIsShared"_ustr;
+            aPropBodyDistance = u"HeaderBodyDistance"_ustr;
+            aPropText = u"HeaderText"_ustr;
             break;
         }
     }

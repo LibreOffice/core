@@ -1209,7 +1209,7 @@ OUString SwCompareLine::GetText() const
 
     case SwNodeType::Section:
         {
-            sRet = "Section - Node:";
+            sRet = u"Section - Node:"_ustr;
 
             const SwSectionNode& rSNd = static_cast<const SwSectionNode&>(*m_pNode);
             const SwSection& rSect = rSNd.GetSection();
@@ -1240,10 +1240,10 @@ OUString SwCompareLine::GetText() const
         break;
 
     case SwNodeType::Grf:
-        sRet = "Grafik - Node:";
+        sRet = u"Grafik - Node:"_ustr;
         break;
     case SwNodeType::Ole:
-        sRet = "OLE - Node:";
+        sRet = u"OLE - Node:"_ustr;
         break;
     default: break;
     }

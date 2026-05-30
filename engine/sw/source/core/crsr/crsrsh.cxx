@@ -1532,11 +1532,11 @@ namespace {
 void collectUIInformation(const OUString& aPage)
 {
     EventDescription aDescription;
-    aDescription.aAction = "GOTO";
+    aDescription.aAction = u"GOTO"_ustr;
     aDescription.aParameters = {{"PAGE", aPage}};
-    aDescription.aID = "writer_edit";
-    aDescription.aKeyWord = "SwEditWinUIObject";
-    aDescription.aParent = "MainWindow";
+    aDescription.aID = u"writer_edit"_ustr;
+    aDescription.aKeyWord = u"SwEditWinUIObject"_ustr;
+    aDescription.aParent = u"MainWindow"_ustr;
     UITestLogger::getInstance().logEvent(aDescription);
 }
 

@@ -49,11 +49,11 @@ void WriteProtection::lcl_attribute(Id nName, const Value& val)
             break;
         case NS_ooxml::LN_AG_Password_cryptAlgorithmClass: // 92026
             if (nIntValue == NS_ooxml::LN_Value_doc_ST_AlgClass_hash) // 92023
-                m_sCryptAlgorithmClass = "hash";
+                m_sCryptAlgorithmClass = u"hash"_ustr;
             break;
         case NS_ooxml::LN_AG_Password_cryptAlgorithmType: // 92027
             if (nIntValue == NS_ooxml::LN_Value_doc_ST_AlgType_typeAny) // 92024
-                m_sCryptAlgorithmType = "typeAny";
+                m_sCryptAlgorithmType = u"typeAny"_ustr;
             break;
         case NS_ooxml::LN_AG_Password_cryptAlgorithmSid: // 92028
         {
@@ -61,37 +61,37 @@ void WriteProtection::lcl_attribute(Id nName, const Value& val)
             switch (nCryptAlgorithmSid)
             {
                 case 1:
-                    m_sAlgorithmName = "MD2";
+                    m_sAlgorithmName = u"MD2"_ustr;
                     break;
                 case 2:
-                    m_sAlgorithmName = "MD4";
+                    m_sAlgorithmName = u"MD4"_ustr;
                     break;
                 case 3:
-                    m_sAlgorithmName = "MD5";
+                    m_sAlgorithmName = u"MD5"_ustr;
                     break;
                 case 4:
-                    m_sAlgorithmName = "SHA-1";
+                    m_sAlgorithmName = u"SHA-1"_ustr;
                     break;
                 case 5:
-                    m_sAlgorithmName = "MAC";
+                    m_sAlgorithmName = u"MAC"_ustr;
                     break;
                 case 6:
-                    m_sAlgorithmName = "RIPEMD";
+                    m_sAlgorithmName = u"RIPEMD"_ustr;
                     break;
                 case 7:
-                    m_sAlgorithmName = "RIPEMD-160";
+                    m_sAlgorithmName = u"RIPEMD-160"_ustr;
                     break;
                 case 9:
-                    m_sAlgorithmName = "HMAC";
+                    m_sAlgorithmName = u"HMAC"_ustr;
                     break;
                 case 12:
-                    m_sAlgorithmName = "SHA-256";
+                    m_sAlgorithmName = u"SHA-256"_ustr;
                     break;
                 case 13:
-                    m_sAlgorithmName = "SHA-384";
+                    m_sAlgorithmName = u"SHA-384"_ustr;
                     break;
                 case 14:
-                    m_sAlgorithmName = "SHA-512";
+                    m_sAlgorithmName = u"SHA-512"_ustr;
                     break;
                 default:; // 8, 10, 11, any other value: Undefined.
             }

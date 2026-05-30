@@ -1600,7 +1600,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                                 rTableCaptionsMap[pTable] = nId;
                             }
                         }
-                        aPDFType = "Standard";
+                        aPDFType = u"Standard"_ustr;
                     }
                     else // Figure caption
                     {
@@ -2145,15 +2145,15 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
                     {
                         case 0:
                             nPDFType = sal_uInt16(vcl::pdf::StructElement::Ruby);
-                            aPDFType = "Ruby";
+                            aPDFType = u"Ruby"_ustr;
                         break;
                         case 1:
                             nPDFType = sal_uInt16(vcl::pdf::StructElement::RT);
-                            aPDFType = "RT";
+                            aPDFType = u"RT"_ustr;
                         break;
                         case 2:
                             nPDFType = sal_uInt16(vcl::pdf::StructElement::RB);
-                            aPDFType = "RB";
+                            aPDFType = u"RB"_ustr;
                         break;
                     }
                 }
@@ -2164,15 +2164,15 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
                     {
                         case 0:
                             nPDFType = sal_uInt16(vcl::pdf::StructElement::Warichu);
-                            aPDFType = "Warichu";
+                            aPDFType = u"Warichu"_ustr;
                         break;
                         case 1:
                             nPDFType = sal_uInt16(vcl::pdf::StructElement::WP);
-                            aPDFType = "WP";
+                            aPDFType = u"WP"_ustr;
                         break;
                         case 2:
                             nPDFType = sal_uInt16(vcl::pdf::StructElement::WT);
-                            aPDFType = "WT";
+                            aPDFType = u"WT"_ustr;
                         break;
                     }
                 }

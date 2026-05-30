@@ -442,7 +442,7 @@ void StyleSheetTable::lcl_attribute(Id Name, const Value & val)
                 }
 
                 beans::PropertyValue aValue;
-                aValue.Name = "default";
+                aValue.Name = u"default"_ustr;
                 aValue.Value <<= m_pCurrentEntry->m_bIsDefaultStyle;
                 m_pCurrentEntry->AppendInteropGrabBag(aValue);
             }
@@ -451,7 +451,7 @@ void StyleSheetTable::lcl_attribute(Id Name, const Value & val)
             if (m_pCurrentEntry->m_nStyleTypeCode != StyleType::Unknown)
             {
                 beans::PropertyValue aValue;
-                aValue.Name = "customStyle";
+                aValue.Name = u"customStyle"_ustr;
                 aValue.Value <<= (nIntValue != 0);
                 m_pCurrentEntry->AppendInteropGrabBag(aValue);
             }
@@ -462,7 +462,7 @@ void StyleSheetTable::lcl_attribute(Id Name, const Value & val)
             {
                 TableStyleSheetEntry* pTableEntry = static_cast<TableStyleSheetEntry *>(m_pCurrentEntry.get());
                 beans::PropertyValue aValue;
-                aValue.Name = "styleId";
+                aValue.Name = u"styleId"_ustr;
                 aValue.Value <<= sValue;
                 pTableEntry->AppendInteropGrabBag(aValue);
             }
@@ -516,7 +516,7 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
             {
                 TableStyleSheetEntry* pTableEntry = static_cast<TableStyleSheetEntry *>(m_pCurrentEntry.get());
                 beans::PropertyValue aValue;
-                aValue.Name = "name";
+                aValue.Name = u"name"_ustr;
                 aValue.Value <<= sStringValue;
                 pTableEntry->AppendInteropGrabBag(aValue);
             }
@@ -527,7 +527,7 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
             {
                 TableStyleSheetEntry* pTableEntry = static_cast<TableStyleSheetEntry *>(m_pCurrentEntry.get());
                 beans::PropertyValue aValue;
-                aValue.Name = "basedOn";
+                aValue.Name = u"basedOn"_ustr;
                 aValue.Value <<= sStringValue;
                 pTableEntry->AppendInteropGrabBag(aValue);
             }
@@ -582,28 +582,28 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
                     // We want the rsid as a hex string, but always with the length of 8.
                     auto aBuf = OUString::number(nIntValue, 16);
 
-                    aValue.Name = "rsid";
+                    aValue.Name = u"rsid"_ustr;
                     aValue.Value <<= OUString(RepeatedUChar('0', 8 - aBuf.length) + aBuf);
                 }
                 break;
                 case NS_ooxml::LN_CT_Style_qFormat:
-                    aValue.Name = "qFormat";
+                    aValue.Name = u"qFormat"_ustr;
                     aValue.Value <<= nIntValue;
                 break;
                 case NS_ooxml::LN_CT_Style_semiHidden:
-                    aValue.Name = "semiHidden";
+                    aValue.Name = u"semiHidden"_ustr;
                 break;
                 case NS_ooxml::LN_CT_Style_unhideWhenUsed:
-                    aValue.Name = "unhideWhenUsed";
+                    aValue.Name = u"unhideWhenUsed"_ustr;
                 break;
                 case NS_ooxml::LN_CT_Style_uiPriority:
                 {
-                    aValue.Name = "uiPriority";
+                    aValue.Name = u"uiPriority"_ustr;
                     aValue.Value <<= OUString::number(nIntValue);
                 }
                 break;
                 case NS_ooxml::LN_CT_Style_locked:
-                    aValue.Name = "locked";
+                    aValue.Name = u"locked"_ustr;
                 break;
                 }
                 pEntry->AppendInteropGrabBag(aValue);
@@ -712,7 +712,7 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
                 tools::SvRef<LatentStyleHandler> pLatentStyleHandler(new LatentStyleHandler());
                 pProperties->resolve(*pLatentStyleHandler);
                 beans::PropertyValue aValue;
-                aValue.Name = "lsdException";
+                aValue.Name = u"lsdException"_ustr;
                 aValue.Value <<= comphelper::containerToSequence(pLatentStyleHandler->getAttributes());
                 m_pCurrentEntry->m_aLsdExceptions.push_back(aValue);
             }
@@ -791,7 +791,7 @@ void StyleSheetTable::lcl_entry(const writerfilter::Reference<Properties>::Point
         {
             std::vector<beans::PropertyValue>& rLsdExceptions = m_pCurrentEntry->m_aLsdExceptions;
             beans::PropertyValue aValue;
-            aValue.Name = "lsdExceptions";
+            aValue.Name = u"lsdExceptions"_ustr;
             aValue.Value <<= comphelper::containerToSequence(rLsdExceptions);
             rLatentStyles.push_back(aValue);
         }
@@ -803,7 +803,7 @@ void StyleSheetTable::lcl_entry(const writerfilter::Reference<Properties>::Point
         // latent style info.
         auto aGrabBag = comphelper::sequenceToContainer< std::vector<beans::PropertyValue> >(m_xTextDocument->getPropertyValue(u"InteropGrabBag"_ustr).get< uno::Sequence<beans::PropertyValue> >());
         beans::PropertyValue aValue;
-        aValue.Name = "latentStyles";
+        aValue.Name = u"latentStyles"_ustr;
         aValue.Value <<= aLatentStyles;
         aGrabBag.push_back(aValue);
         m_xTextDocument->setPropertyValue(u"InteropGrabBag"_ustr, uno::Any(comphelper::containerToSequence(aGrabBag)));
@@ -1551,7 +1551,7 @@ void StyleSheetTable::ApplyStyleSheetsImpl(const FontTablePtr& rFontTable, std::
                 uno::Any aAny = m_xTextDocument->getPropertyValue(u"InteropGrabBag"_ustr);
                 auto aGrabBag = comphelper::sequenceToContainer< std::vector<beans::PropertyValue> >(aAny.get< uno::Sequence<beans::PropertyValue> >());
                 beans::PropertyValue aValue;
-                aValue.Name = "tableStyles";
+                aValue.Name = u"tableStyles"_ustr;
                 aValue.Value <<= comphelper::containerToSequence(aTableStylesVec);
                 aGrabBag.push_back(aValue);
                 m_xTextDocument->setPropertyValue(u"InteropGrabBag"_ustr, uno::Any(comphelper::containerToSequence(aGrabBag)));

@@ -3089,9 +3089,9 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDropDownFormFieldButtonEditing)
 
     // Trigger a form field event to select a different item.
     vcl::ITiledRenderable::StringMap aArguments;
-    aArguments[u"type"_ustr] = "drop-down";
-    aArguments[u"cmd"_ustr] = "selected";
-    aArguments[u"data"_ustr] = "3";
+    aArguments[u"type"_ustr] = u"drop-down"_ustr;
+    aArguments[u"cmd"_ustr] = u"selected"_ustr;
+    aArguments[u"data"_ustr] = u"3"_ustr;
     pXTextDocument->executeFromFieldEvent(aArguments);
 
     // Do a tile rendering to trigger the button message.
@@ -3470,7 +3470,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testCondCollCopy)
     uno::Reference<datatransfer::XTransferable2> xTransferable(pXTextDocument->getSelection(),
                                                                css::uno::UNO_QUERY);
     datatransfer::DataFlavor aFlavor;
-    aFlavor.MimeType = "text/plain;charset=utf-16";
+    aFlavor.MimeType = u"text/plain;charset=utf-16"_ustr;
     aFlavor.DataType = cppu::UnoType<OUString>::get();
     CPPUNIT_ASSERT(xTransferable->isDataFlavorSupported(aFlavor));
     // Without the accompanying fix in place, this test would have crashed.

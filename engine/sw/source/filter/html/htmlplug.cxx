@@ -545,7 +545,7 @@ bool SwHTMLParser::InsertEmbed()
                     else
                     {
                         // The type is now an OLE2 container, not the original XHTML type.
-                        aType = "application/vnd.sun.star.oleobject";
+                        aType = u"application/vnd.sun.star.oleobject"_ustr;
                     }
                 }
             }
@@ -1031,9 +1031,9 @@ SwHTMLWriter& OutHTML_FrameFormatOLENodeGrf( SwHTMLWriter& rWrt, const SwFrameFo
         if (uno::Reference<lang::XServiceInfo> xServiceInfo{ xStorable, uno::UNO_QUERY })
         {
             if (xServiceInfo->supportsService(u"com.sun.star.sheet.SpreadsheetDocument"_ustr))
-                aFilter = "HTML (StarCalc)";
+                aFilter = u"HTML (StarCalc)"_ustr;
             else if (xServiceInfo->supportsService(u"com.sun.star.text.TextDocument"_ustr))
-                aFilter = "HTML (StarWriter)";
+                aFilter = u"HTML (StarWriter)"_ustr;
         }
 
         if (!aFilter.isEmpty())

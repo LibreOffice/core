@@ -477,7 +477,7 @@ uno::Reference< text::XTextField > SwVbaFields::Create_Field_DocProperty( const 
 
     if( bCustom )
     {
-        sFieldService = "com.sun.star.text.textfield.docinfo.Custom";
+        sFieldService = u"com.sun.star.text.textfield.docinfo.Custom"_ustr;
     }
     else if( sFieldService.isEmpty() )
     {

@@ -1497,7 +1497,7 @@ static void lcl_convertFormulaRanges(const rtl::Reference<SwXTextTable> & xTable
                                     // update grab bag
                                     auto aGrabBag = comphelper::sequenceToContainer< std::vector<beans::PropertyValue> >(aCellGrabBag);
                                     beans::PropertyValue aValue;
-                                    aValue.Name = "CellFormulaConverted";
+                                    aValue.Name = u"CellFormulaConverted"_ustr;
                                     aValue.Value <<= sFormula;
                                     aGrabBag.push_back(aValue);
                                     xCellProperties->setPropertyValue(u"CellInteropGrabBag"_ustr, uno::Any(comphelper::containerToSequence(aGrabBag)));
@@ -1706,14 +1706,14 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel)
             if (!bIsRelative)
             {
                 beans::PropertyValue aValue;
-                aValue.Name = "Width";
+                aValue.Name = u"Width"_ustr;
                 aValue.Value = xTable->getPropertyValue(u"Width"_ustr);
                 aFrameProperties.push_back(aValue);
             }
             else
             {
                 beans::PropertyValue aValue;
-                aValue.Name = "FrameWidthPercent";
+                aValue.Name = u"FrameWidthPercent"_ustr;
                 aValue.Value = xTable->getPropertyValue(u"RelativeWidth"_ustr);
                 aFrameProperties.push_back(aValue);
 

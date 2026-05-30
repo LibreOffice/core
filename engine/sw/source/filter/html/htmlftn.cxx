@@ -567,7 +567,7 @@ void SwHTMLWriter::OutFootEndNoteInfo()
         }
         if( rInfo.m_ePos != FTNPOS_PAGE)
         {
-            aParts[5] = "C";
+            aParts[5] = u"C"_ustr;
             nParts = 6;
         }
         if( !rInfo.m_aQuoVadis.isEmpty() )

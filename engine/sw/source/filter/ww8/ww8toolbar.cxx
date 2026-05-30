@@ -54,12 +54,12 @@ MSOWordCommandConvertor::MSOWordCommandConvertor()
 {
     // mso command id to ooo command string
     // #FIXME and *HUNDREDS* of id's to added here
-    m_MSOToOOcmd[ 0x20b ] = ".uno:CloseDoc";
-    m_MSOToOOcmd[ 0x50 ] = ".uno:Open";
+    m_MSOToOOcmd[ 0x20b ] = u".uno:CloseDoc"_ustr;
+    m_MSOToOOcmd[ 0x50 ] = u".uno:Open"_ustr;
 
     // mso tcid to ooo command string
     // #FIXME and *HUNDREDS* of id's to added here
-    m_TCIDToOOcmd[ 0x9d9 ] = ".uno:Print";
+    m_TCIDToOOcmd[ 0x9d9 ] = u".uno:Print"_ustr;
 }
 
 OUString MSOWordCommandConvertor::MSOCommandToOOCommand( sal_Int16 key )
@@ -554,7 +554,7 @@ SwTBC::ImportToolBarControl( SwCTBWrapper& rWrapper, const css::uno::Reference< 
             {
                 beans::PropertyValue aProp;
 
-                aProp.Name = "CommandURL";
+                aProp.Name = u"CommandURL"_ustr;
                 aProp.Value <<= sCommand;
                 props.push_back( aProp );
             }
@@ -584,7 +584,7 @@ SwTBC::ImportToolBarControl( SwCTBWrapper& rWrapper, const css::uno::Reference< 
                 else
                 {
                     beans::PropertyValue aProp;
-                    aProp.Name = "ItemDescriptorContainer";
+                    aProp.Name = u"ItemDescriptorContainer"_ustr;
                     aProp.Value <<= uno::Reference< container::XIndexContainer >(xMenuDesc);
                     props.push_back( aProp );
                 }

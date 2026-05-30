@@ -279,11 +279,11 @@ void SwVbaRange::GetStyleInfo(OUString& aStyleName, OUString& aStyleType )
     uno::Reference< beans::XPropertySet > xProp( mxTextCursor, uno::UNO_QUERY_THROW );
     if( ( xProp->getPropertyValue(u"CharStyleName"_ustr) >>= aStyleName ) && !aStyleName.isEmpty() )
     {
-        aStyleType = "CharacterStyles";
+        aStyleType = u"CharacterStyles"_ustr;
     }
     else if( ( xProp->getPropertyValue(u"ParaStyleName"_ustr) >>= aStyleName ) && !aStyleName.isEmpty() )
     {
-        aStyleType = "ParagraphStyles";
+        aStyleType = u"ParagraphStyles"_ustr;
     }
     if( aStyleType.isEmpty() )
     {

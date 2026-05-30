@@ -667,19 +667,19 @@ ErrCodeMsg XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, 
         OUString *pSeq = aFamiliesSeq.getArray();
         if( m_aOption.IsFrameFormats() )
             // SfxStyleFamily::Frame;
-            *pSeq++ = "FrameStyles";
+            *pSeq++ = u"FrameStyles"_ustr;
         if( m_aOption.IsPageDescs() )
             // SfxStyleFamily::Page;
-            *pSeq++ = "PageStyles";
+            *pSeq++ = u"PageStyles"_ustr;
         if( m_aOption.IsTextFormats() )
         {
             // (SfxStyleFamily::Char|SfxStyleFamily::Para);
-            *pSeq++ = "CharacterStyles";
-            *pSeq++ = "ParagraphStyles";
+            *pSeq++ = u"CharacterStyles"_ustr;
+            *pSeq++ = u"ParagraphStyles"_ustr;
         }
         if( m_aOption.IsNumRules() )
             // SfxStyleFamily::Pseudo;
-            *pSeq++ = "NumberingStyles";
+            *pSeq++ = u"NumberingStyles"_ustr;
 
         xInfoSet->setPropertyValue( u"StyleInsertModeFamilies"_ustr,
                                     Any(aFamiliesSeq) );
@@ -729,7 +729,7 @@ ErrCodeMsg XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, 
         }
         else
         {
-            StreamPath = "dummyObjectName";
+            StreamPath = u"dummyObjectName"_ustr;
         }
 
         if( !StreamPath.isEmpty() )

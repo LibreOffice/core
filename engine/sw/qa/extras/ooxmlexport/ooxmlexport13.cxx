@@ -833,14 +833,14 @@ CPPUNIT_TEST_FIXTURE(Test, testTextInput)
         switch (nElements)
         {
         case 1:
-            sContent = "content with hint";
-            sHint = "hint content";
+            sContent = u"content with hint"_ustr;
+            sHint = u"hint content"_ustr;
             break;
         case 2:
-            sHint = "hint empty";
+            sHint = u"hint empty"_ustr;
             break;
         case 3:
-            sContent = "content without hint";
+            sContent = u"content without hint"_ustr;
             break;
         }
         CPPUNIT_ASSERT_EQUAL(uno::Any(sContent), xPropertySet->getPropertyValue(u"Content"_ustr));

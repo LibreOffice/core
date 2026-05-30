@@ -573,7 +573,7 @@ void Reader::MakeHTMLDummyTemplateDoc()
     mxTemplate->getIDocumentDeviceAccess().getPrinter( true );
     mxTemplate->RemoveAllFormatLanguageDependencies();
     m_aCheckDateTime = DateTime( Date( 1, 1, 2300 ) );  // year 2300 should be sufficient
-    m_aTemplateName = "$$Dummy$$";
+    m_aTemplateName = u"$$Dummy$$"_ustr;
 }
 
 // Users that do not need to open these Streams / Storages,

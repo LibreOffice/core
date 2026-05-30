@@ -45,7 +45,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSwAttrSet)
 
     // When getting the plain text version of the selection:
     datatransfer::DataFlavor aFlavor;
-    aFlavor.MimeType = "text/plain;charset=utf-16";
+    aFlavor.MimeType = u"text/plain;charset=utf-16"_ustr;
     aFlavor.DataType = cppu::UnoType<OUString>::get();
     uno::Any aData = xTransferable->getTransferData(aFlavor);
 

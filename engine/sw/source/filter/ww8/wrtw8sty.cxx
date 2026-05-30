@@ -410,7 +410,7 @@ void MSWordStyles::BuildWwNames()
     // (It must be the English word regardless of languages and locales)
     assert(!m_aStyles.empty());
     assert(!m_aStyles[0].format || m_aStyles[0].ww_id == ww::stiNormal);
-    m_aStyles[0].ww_name = "Normal";
+    m_aStyles[0].ww_name = u"Normal"_ustr;
     aUsed.insert(u"normal"_ustr);
 
     // 1. Handle styles having special wwIds, and thus pre-defined names

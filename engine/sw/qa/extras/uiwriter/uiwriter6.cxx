@@ -960,7 +960,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf115013)
         // Insert a new field type for the mailmerge field
         SwDBData aDBData;
         aDBData.sDataSource = sDataSource;
-        aDBData.sCommand = "Sheet1";
+        aDBData.sCommand = u"Sheet1"_ustr;
         SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
         CPPUNIT_ASSERT(pWrtShell);
         SwDBFieldType* pFieldType = static_cast<SwDBFieldType*>(
@@ -2619,7 +2619,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testRedlineAutoCorrect)
 
     emulateTyping(u" ");
 
-    sReplaced = "S ";
+    sReplaced = u"S "_ustr;
     CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
 
     // show delete redlines
@@ -2627,7 +2627,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testRedlineAutoCorrect)
 
     // This still keep the tracked deletion, capitalize only the visible text "s"
     // with tracked deletion of the original character
-    sReplaced = "tsS ";
+    sReplaced = u"tsS "_ustr;
     CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
 
     // repeat it with visible redlining and word auto replacement of "tset"
@@ -2637,23 +2637,23 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testRedlineAutoCorrect)
     emulateTyping(u"et ");
     // This was "Ttest" removing the tracked deletion silently.
     // Don't replace, if a redline starts or ends within the text.
-    sReplaced = "tset ";
+    sReplaced = u"tset "_ustr;
     CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
 
     // Otherwise replace it
     emulateTyping(u"tset ");
-    sReplaced = "tset test ";
+    sReplaced = u"tset test "_ustr;
     CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
 
     // Including capitalization
     emulateTyping(u"end. word ");
-    sReplaced = "tset test end. Word ";
+    sReplaced = u"tset test end. Word "_ustr;
     CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
 
     // tracked deletions after the correction point doesn't affect autocorrect
     dispatchCommand(mxComponent, u".uno:GoToStartOfDoc"_ustr, {});
     emulateTyping(u"a ");
-    sReplaced = "A tset test end. Word ";
+    sReplaced = u"A tset test end. Word "_ustr;
     CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
 }
 

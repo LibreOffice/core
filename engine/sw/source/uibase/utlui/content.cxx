@@ -440,27 +440,27 @@ SwContentType::SwContentType(SwWrtShell* pShell, ContentTypeId nType, sal_uInt8 
     switch(m_nContentType)
     {
         case ContentTypeId::OUTLINE:
-            m_sTypeToken = "outline";
+            m_sTypeToken = u"outline"_ustr;
         break;
         case ContentTypeId::TABLE:
-            m_sTypeToken = "table";
+            m_sTypeToken = u"table"_ustr;
             m_bEdit = true;
             m_bRenamable = true;
         break;
         case ContentTypeId::FRAME:
-            m_sTypeToken = "frame";
+            m_sTypeToken = u"frame"_ustr;
             m_bEdit = true;
             m_bRenamable = true;
             m_bTextAlternative = true;
         break;
         case ContentTypeId::GRAPHIC:
-            m_sTypeToken = "graphic";
+            m_sTypeToken = u"graphic"_ustr;
             m_bEdit = true;
             m_bRenamable = true;
             m_bTextAlternative = true;
         break;
         case ContentTypeId::OLE:
-            m_sTypeToken = "ole";
+            m_sTypeToken = u"ole"_ustr;
             m_bEdit = true;
             m_bRenamable = true;
             m_bTextAlternative = true;
@@ -482,7 +482,7 @@ SwContentType::SwContentType(SwWrtShell* pShell, ContentTypeId nType, sal_uInt8 
         }
         break;
         case ContentTypeId::REGION:
-            m_sTypeToken = "region";
+            m_sTypeToken = u"region"_ustr;
             m_bEdit = true;
             m_bRenamable = true;
         break;
@@ -500,7 +500,7 @@ SwContentType::SwContentType(SwWrtShell* pShell, ContentTypeId nType, sal_uInt8 
             m_bEdit = true;
         break;
         case ContentTypeId::DRAWOBJECT:
-            m_sTypeToken = "drawingobject";
+            m_sTypeToken = u"drawingobject"_ustr;
             m_bEdit = true;
             m_bRenamable = true;
             m_bTextAlternative = true;
@@ -1993,59 +1993,59 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
         switch (nContentType)
         {
             case ContentTypeId::TABLE:
-                aIdent = "tabletracking";
+                aIdent = u"tabletracking"_ustr;
                 bRemoveTableTracking = false;
             break;
             case ContentTypeId::REGION:
-                aIdent = "sectiontracking";
+                aIdent = u"sectiontracking"_ustr;
                 bRemoveSectionTracking = false;
             break;
             case ContentTypeId::FRAME:
-                aIdent = "frametracking";
+                aIdent = u"frametracking"_ustr;
                 bRemoveFrameTracking = false;
             break;
             case ContentTypeId::GRAPHIC:
-                aIdent = "imagetracking";
+                aIdent = u"imagetracking"_ustr;
                 bRemoveImageTracking = false;
             break;
             case ContentTypeId::OLE:
-                aIdent = "oleobjecttracking";
+                aIdent = u"oleobjecttracking"_ustr;
                 bRemoveOLEobjectTracking = false;
             break;
             case ContentTypeId::BOOKMARK:
-                aIdent = "bookmarktracking";
+                aIdent = u"bookmarktracking"_ustr;
                 bRemoveBookmarkTracking = false;
             break;
             case ContentTypeId::URLFIELD:
-                aIdent = "hyperlinktracking";
+                aIdent = u"hyperlinktracking"_ustr;
                 bRemoveHyperlinkTracking = false;
             break;
             case ContentTypeId::REFERENCE:
-                aIdent = "referencetracking";
+                aIdent = u"referencetracking"_ustr;
                 bRemoveReferenceTracking = false;
             break;
             case ContentTypeId::INDEX:
-                aIdent = "indextracking";
+                aIdent = u"indextracking"_ustr;
                 bRemoveIndexTracking = false;
             break;
             case ContentTypeId::POSTIT:
-                aIdent = "commenttracking";
+                aIdent = u"commenttracking"_ustr;
                 bRemoveCommentTracking = false;
             break;
             case ContentTypeId::DRAWOBJECT:
-                aIdent = "drawingobjecttracking";
+                aIdent = u"drawingobjecttracking"_ustr;
                 bRemoveDrawingObjectTracking = false;
             break;
             case ContentTypeId::TEXTFIELD:
-                aIdent = "fieldtracking";
+                aIdent = u"fieldtracking"_ustr;
                 bRemoveFieldTracking = false;
             break;
             case ContentTypeId::FOOTNOTE:
-                aIdent = "footnotetracking";
+                aIdent = u"footnotetracking"_ustr;
                 bRemoveFootnoteTracking = false;
             break;
             case ContentTypeId::ENDNOTE:
-                aIdent = "endnotetracking";
+                aIdent = u"endnotetracking"_ustr;
                 bRemoveEndnoteTracking = false;
             break;
             default: break;
@@ -3083,11 +3083,11 @@ IMPL_LINK(SwContentTree, EditedEntryHdl, const IterString&, rIterString, bool)
     OUString sForbiddenChars;
     if (ContentTypeId::BOOKMARK == nType)
     {
-        sForbiddenChars = "/\\@:*?\";,.#";
+        sForbiddenChars = u"/\\@:*?\";,.#"_ustr;
     }
     else if (ContentTypeId::TABLE == nType)
     {
-        sForbiddenChars = " .<>";
+        sForbiddenChars = u" .<>"_ustr;
     }
 
     if (!sForbiddenChars.isEmpty())
@@ -7045,7 +7045,7 @@ void SwContentTree::GotoContent(const SwContent* pCnt)
     }
 
     m_nLastGotoContentWasOutlinePos = SwOutlineNodes::npos;
-    m_sSelectedItem = "";
+    m_sSelectedItem = u""_ustr;
 
     m_pActiveShell->AssureStdMode();
 

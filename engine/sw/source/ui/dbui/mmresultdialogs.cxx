@@ -91,11 +91,11 @@ static OUString lcl_GetExtensionForDocType(sal_uLong nDocType)
     OUString sExtension;
     switch( nDocType )
     {
-        case MM_DOCTYPE_OOO : sExtension = "odt"; break;
-        case MM_DOCTYPE_PDF : sExtension = "pdf"; break;
-        case MM_DOCTYPE_WORD: sExtension = "doc"; break;
-        case MM_DOCTYPE_HTML: sExtension = "html"; break;
-        case MM_DOCTYPE_TEXT: sExtension = "txt"; break;
+        case MM_DOCTYPE_OOO : sExtension = u"odt"_ustr; break;
+        case MM_DOCTYPE_PDF : sExtension = u"pdf"_ustr; break;
+        case MM_DOCTYPE_WORD: sExtension = u"doc"_ustr; break;
+        case MM_DOCTYPE_HTML: sExtension = u"html"_ustr; break;
+        case MM_DOCTYPE_TEXT: sExtension = u"txt"_ustr; break;
     }
     return sExtension;
 }
@@ -622,7 +622,7 @@ IMPL_LINK_NOARG(SwMMResultSaveDialog, SaveOutputHdl_Impl, weld::Button&, void)
 
         uno::Sequence< beans::PropertyValue > aValues(1);
         beans::PropertyValue* pValues = aValues.getArray();
-        pValues[0].Name = "FilterName";
+        pValues[0].Name = u"FilterName"_ustr;
         pValues[0].Value <<= pSfxFlt->GetFilterName();
 
         uno::Reference< frame::XStorable > xStore( pTargetView->GetDocShell()->GetModel(), uno::UNO_QUERY);
@@ -1096,7 +1096,7 @@ IMPL_LINK_NOARG(SwMMResultEmailDialog, SendDocumentsHdl_Impl, weld::Button&, voi
     }
     else if(MM_DOCTYPE_HTML == nDocType)
     {
-        sFilterOptions = "EmbedImages";
+        sFilterOptions = u"EmbedImages"_ustr;
     }
     OUString sTargetTempURL = URIHelper::SmartRel2Abs(
         INetURLObject(), utl::CreateTempName(),
@@ -1167,23 +1167,23 @@ IMPL_LINK_NOARG(SwMMResultEmailDialog, SendDocumentsHdl_Impl, weld::Button&, voi
             uno::Sequence< beans::PropertyValue > aFilterValues(nOptionCount);
             beans::PropertyValue* pFilterValues = aFilterValues.getArray();
 
-            pFilterValues[nOpt].Name = "FilterName";
+            pFilterValues[nOpt].Name = u"FilterName"_ustr;
             pFilterValues[nOpt].Value <<= pSfxFlt->GetFilterName();
 
             if(withFilterOptions)
             {
                 nOpt++;
-                pFilterValues[nOpt].Name = "FilterOptions";
+                pFilterValues[nOpt].Name = u"FilterOptions"_ustr;
                 pFilterValues[nOpt].Value <<= sFilterOptions;
             }
 
             if(withPasswordOptions)
             {
                 nOpt++;
-                pFilterValues[nOpt].Name = "EncryptFile";
+                pFilterValues[nOpt].Name = u"EncryptFile"_ustr;
                 pFilterValues[nOpt].Value <<= true;
                 nOpt++;
-                pFilterValues[nOpt].Name = "DocumentOpenPassword";
+                pFilterValues[nOpt].Name = u"DocumentOpenPassword"_ustr;
                 pFilterValues[nOpt].Value <<= sPassword;
             }
 
@@ -1276,7 +1276,7 @@ IMPL_LINK_NOARG(SwMMResultEmailDialog, SendDocumentsHdl_Impl, weld::Button&, voi
                 OUString::createFromAscii(rtl_getBestMimeCharsetFromTextEncoding( eEncoding ));
         }
         else
-            aDesc.sBodyMimeType = "text/plain; charset=UTF-8; format=flowed";
+            aDesc.sBodyMimeType = u"text/plain; charset=UTF-8; format=flowed"_ustr;
 
         aDesc.sSubject = m_xSubjectED->get_text();
         aDesc.sCC = m_sCC;

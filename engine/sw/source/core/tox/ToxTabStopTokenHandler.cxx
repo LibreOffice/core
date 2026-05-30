@@ -46,7 +46,7 @@ DefaultToxTabStopTokenHandler::HandleTabStopToken(
     HandledTabStopToken result;
 
     if (aToken.bWithTab) { // #i21237#
-        result.text = "\t";
+        result.text = u"\t"_ustr;
     }
 
     // check whether a tab adjustment has been specified.

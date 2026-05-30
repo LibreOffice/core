@@ -222,7 +222,7 @@ void SwChapterField::ChangeExpansion(const SwTextNode &rTextNd, bool bSrchNum,
     }
     else
     {
-        rState.sNumber = "??";
+        rState.sNumber = u"??"_ustr;
     }
 
     rState.sTitle = removeControlChars(sw::GetExpandTextMerged(pLayout,

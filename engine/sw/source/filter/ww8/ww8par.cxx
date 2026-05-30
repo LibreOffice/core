@@ -952,7 +952,7 @@ rtl::Reference<SdrObject> SwMSDffManager::ProcessObj(SvStream& rSt,
                             fExtraTextRotation /= 100.0;
                             SdrCustomShapeGeometryItem aGeometryItem( pCustomShape->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
                             css::beans::PropertyValue aPropVal;
-                            aPropVal.Name = "TextRotateAngle";
+                            aPropVal.Name = u"TextRotateAngle"_ustr;
                             aPropVal.Value <<= fExtraTextRotation;
                             aGeometryItem.SetPropertyValue( aPropVal );
                             pCustomShape->SetMergedItem( aGeometryItem );
@@ -6500,7 +6500,7 @@ bool SwMSDffManager::GetOLEStorageName(sal_uInt32 nOLEId, OUString& rStorageName
 
     if( bRet )
     {
-        rStorageName = "_";
+        rStorageName = u"_"_ustr;
         rStorageName += OUString::number(nPictureId);
         rSrcStorage = m_rReader.m_pStg->OpenSotStorage(SL::aObjectPool);
         if (!m_rReader.m_pDocShell)

@@ -282,11 +282,11 @@ static Writer& OutASC_SwTextNode( Writer& rWrt, SwContentNode& rNode )
         if (numString.isEmpty() && !bIsOutlineNumRule)
         {
             if (rNd.HasBullet() && !rNd.HasVisibleNumberingOrBullet())
-                numString = " ";
+                numString = u" "_ustr;
             else if (rNd.HasBullet())
                 numString = OUString(numfunc::GetBulletChar(rNd.GetActualListLevel()));
             else if (!rNd.HasBullet() && !rNd.HasVisibleNumberingOrBullet())
-                numString = "  ";
+                numString = u"  "_ustr;
         }
 
         if (!level.isEmpty() || !numString.isEmpty())

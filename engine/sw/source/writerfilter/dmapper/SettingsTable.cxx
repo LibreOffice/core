@@ -369,7 +369,7 @@ void SettingsTable::lcl_sprm(Sprm& rSprm)
             pProperties->resolve(*this);
 
             beans::PropertyValue aValue;
-            aValue.Name = "compatSetting";
+            aValue.Name = u"compatSetting"_ustr;
             aValue.Value <<= m_pCurrentCompatSetting;
             m_aCompatSettings.push_back(aValue);
 
@@ -638,7 +638,7 @@ uno::Sequence<beans::PropertyValue> SettingsTable::GetCompatSettings()
         }));
 
         beans::PropertyValue aValue;
-        aValue.Name = "compatSetting";
+        aValue.Name = u"compatSetting"_ustr;
         aValue.Value <<= aCompatSetting;
 
         m_aCompatSettings.push_back(aValue);

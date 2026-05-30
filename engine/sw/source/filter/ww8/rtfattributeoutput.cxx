@@ -2670,7 +2670,7 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Poi
                             m_aRun->append(OOO_STRING_SVTOOLS_RTF_FFHPS "20");
 
                             OUString aStr;
-                            sName = "Name";
+                            sName = u"Name"_ustr;
                             if (xPropSetInfo->hasPropertyByName(sName))
                             {
                                 xPropSet->getPropertyValue(sName) >>= aStr;
@@ -2682,7 +2682,7 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Poi
                                 m_aRun->append('}');
                             }
 
-                            sName = "HelpText";
+                            sName = u"HelpText"_ustr;
                             if (xPropSetInfo->hasPropertyByName(sName))
                             {
                                 xPropSet->getPropertyValue(sName) >>= aStr;
@@ -2694,7 +2694,7 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Poi
                                 m_aRun->append('}');
                             }
 
-                            sName = "HelpF1Text";
+                            sName = u"HelpF1Text"_ustr;
                             if (xPropSetInfo->hasPropertyByName(sName))
                             {
                                 xPropSet->getPropertyValue(sName) >>= aStr;
@@ -2757,7 +2757,7 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Poi
                             m_aRun->append(
                                 "{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FORMFIELD
                                 "{");
-                            sName = "HelpText";
+                            sName = u"HelpText"_ustr;
                             if (xPropSetInfo->hasPropertyByName(sName))
                             {
                                 xPropSet->getPropertyValue(sName) >>= aTmp;
@@ -2769,7 +2769,7 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Poi
                                 m_aRun->append('}');
                             }
 
-                            sName = "HelpF1Text";
+                            sName = u"HelpF1Text"_ustr;
                             if (xPropSetInfo->hasPropertyByName(sName))
                             {
                                 xPropSet->getPropertyValue(sName) >>= aTmp;
@@ -2813,7 +2813,7 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Poi
                                 m_aRun->append(static_cast<sal_Int32>(aIntSeq[0]));
                             }
 
-                            sName = "Name";
+                            sName = u"Name"_ustr;
                             if (xPropSetInfo->hasPropertyByName(sName))
                             {
                                 xPropSet->getPropertyValue(sName) >>= aStr;
@@ -2825,7 +2825,7 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Poi
                                 m_aRun->append('}');
                             }
 
-                            sName = "HelpText";
+                            sName = u"HelpText"_ustr;
                             if (xPropSetInfo->hasPropertyByName(sName))
                             {
                                 xPropSet->getPropertyValue(sName) >>= aStr;
@@ -2837,7 +2837,7 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Poi
                                 m_aRun->append('}');
                             }
 
-                            sName = "HelpF1Text";
+                            sName = u"HelpF1Text"_ustr;
                             if (xPropSetInfo->hasPropertyByName(sName))
                             {
                                 xPropSet->getPropertyValue(sName) >>= aStr;

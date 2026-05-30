@@ -544,7 +544,7 @@ SwMergeAddressItem   SwAddressIterator::Next()
             if(nReturn == 0)
             {
                 aRet.bIsReturn = true;
-                aRet.sText = "\n";
+                aRet.sText = u"\n"_ustr;
                 m_sAddress = m_sAddress.copy(1);
             }
             else if(-1 == nOpen && -1 == nReturn)

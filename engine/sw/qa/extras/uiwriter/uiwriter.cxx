@@ -2006,8 +2006,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testDefaultsOfOutlineNumbering)
 {
     uno::Reference<text::XDefaultNumberingProvider> xDefNum(m_xSFactory->createInstance(u"com.sun.star.text.DefaultNumberingProvider"_ustr), uno::UNO_QUERY);
     css::lang::Locale alocale;
-    alocale.Language = "en";
-    alocale.Country = "US";
+    alocale.Language = u"en"_ustr;
+    alocale.Country = u"US"_ustr;
     const uno::Sequence<beans::PropertyValues> aPropVal(xDefNum->getDefaultContinuousNumberingLevels(alocale));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(8), aPropVal.getLength());
     for(const auto& rPropValues : aPropVal)
@@ -2099,8 +2099,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf81995)
 {
     uno::Reference<text::XDefaultNumberingProvider> xDefNum(m_xSFactory->createInstance(u"com.sun.star.text.DefaultNumberingProvider"_ustr), uno::UNO_QUERY);
     css::lang::Locale alocale;
-    alocale.Language = "en";
-    alocale.Country = "US";
+    alocale.Language = u"en"_ustr;
+    alocale.Country = u"US"_ustr;
     const uno::Sequence<uno::Reference<container::XIndexAccess>> aIndexAccess(xDefNum->getDefaultOutlineNumberings(alocale));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(8), aIndexAccess.getLength());
     for(const auto& rIndexAccess : aIndexAccess)

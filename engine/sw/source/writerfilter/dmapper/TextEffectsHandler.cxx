@@ -38,40 +38,40 @@ OUString lclGetNameForElementId(sal_uInt32 aId)
     static std::map<sal_uInt32, OUString> aIdMap;
     if(aIdMap.empty())
     {
-        aIdMap[NS_ooxml::LN_EG_ColorChoice_srgbClr]             = "srgbClr";
-        aIdMap[NS_ooxml::LN_EG_ColorChoice_schemeClr]           = "schemeClr";
-        aIdMap[NS_ooxml::LN_EG_ColorTransform_tint]             = "tint";
-        aIdMap[NS_ooxml::LN_EG_ColorTransform_shade]            = "shade";
-        aIdMap[NS_ooxml::LN_EG_ColorTransform_alpha]            = "alpha";
-        aIdMap[NS_ooxml::LN_EG_ColorTransform_hueMod]           = "hueMod";
-        aIdMap[NS_ooxml::LN_EG_ColorTransform_sat]              = "sat";
-        aIdMap[NS_ooxml::LN_EG_ColorTransform_satOff]           = "satOff";
-        aIdMap[NS_ooxml::LN_EG_ColorTransform_satMod]           = "satMod";
-        aIdMap[NS_ooxml::LN_EG_ColorTransform_lum]              = "lum";
-        aIdMap[NS_ooxml::LN_EG_ColorTransform_lumOff]           = "lumOff";
-        aIdMap[NS_ooxml::LN_EG_ColorTransform_lumMod]           = "lumMod";
-        aIdMap[NS_ooxml::LN_EG_FillProperties_noFill]           = "noFill";
-        aIdMap[NS_ooxml::LN_EG_FillProperties_solidFill]        = "solidFill";
-        aIdMap[NS_ooxml::LN_EG_FillProperties_gradFill]         = "gradFill";
-        aIdMap[NS_ooxml::LN_CT_GradientFillProperties_gsLst]    = "gsLst";
-        aIdMap[NS_ooxml::LN_CT_GradientStopList_gs]             = "gs";
-        aIdMap[NS_ooxml::LN_CT_GradientStop_pos]                = "pos";
-        aIdMap[NS_ooxml::LN_EG_ShadeProperties_lin]             = "lin";
-        aIdMap[NS_ooxml::LN_EG_ShadeProperties_path]            = "path";
-        aIdMap[NS_ooxml::LN_CT_PathShadeProperties_fillToRect]  = "fillToRect";
-        aIdMap[NS_ooxml::LN_EG_LineDashProperties_prstDash]     = "prstDash";
-        aIdMap[NS_ooxml::LN_EG_LineJoinProperties_round]        = "round";
-        aIdMap[NS_ooxml::LN_EG_LineJoinProperties_bevel]        = "bevel";
-        aIdMap[NS_ooxml::LN_EG_LineJoinProperties_miter]        = "miter";
-        aIdMap[NS_ooxml::LN_CT_Scene3D_camera]                  = "camera";
-        aIdMap[NS_ooxml::LN_CT_Scene3D_lightRig]                = "lightRig";
-        aIdMap[NS_ooxml::LN_CT_LightRig_rot]                    = "rot";
-        aIdMap[NS_ooxml::LN_CT_Props3D_bevelT]                  = "bevelT";
-        aIdMap[NS_ooxml::LN_CT_Props3D_bevelB]                  = "bevelB";
-        aIdMap[NS_ooxml::LN_CT_Props3D_extrusionClr]            = "extrusionClr";
-        aIdMap[NS_ooxml::LN_CT_Props3D_contourClr]              = "contourClr";
-        aIdMap[NS_ooxml::LN_CT_StylisticSets_styleSet]          = "styleSet";
-        aIdMap[NS_ooxml::LN_cntxtAlts_cntxtAlts]                = "cntxtAlts";
+        aIdMap[NS_ooxml::LN_EG_ColorChoice_srgbClr]             = u"srgbClr"_ustr;
+        aIdMap[NS_ooxml::LN_EG_ColorChoice_schemeClr]           = u"schemeClr"_ustr;
+        aIdMap[NS_ooxml::LN_EG_ColorTransform_tint]             = u"tint"_ustr;
+        aIdMap[NS_ooxml::LN_EG_ColorTransform_shade]            = u"shade"_ustr;
+        aIdMap[NS_ooxml::LN_EG_ColorTransform_alpha]            = u"alpha"_ustr;
+        aIdMap[NS_ooxml::LN_EG_ColorTransform_hueMod]           = u"hueMod"_ustr;
+        aIdMap[NS_ooxml::LN_EG_ColorTransform_sat]              = u"sat"_ustr;
+        aIdMap[NS_ooxml::LN_EG_ColorTransform_satOff]           = u"satOff"_ustr;
+        aIdMap[NS_ooxml::LN_EG_ColorTransform_satMod]           = u"satMod"_ustr;
+        aIdMap[NS_ooxml::LN_EG_ColorTransform_lum]              = u"lum"_ustr;
+        aIdMap[NS_ooxml::LN_EG_ColorTransform_lumOff]           = u"lumOff"_ustr;
+        aIdMap[NS_ooxml::LN_EG_ColorTransform_lumMod]           = u"lumMod"_ustr;
+        aIdMap[NS_ooxml::LN_EG_FillProperties_noFill]           = u"noFill"_ustr;
+        aIdMap[NS_ooxml::LN_EG_FillProperties_solidFill]        = u"solidFill"_ustr;
+        aIdMap[NS_ooxml::LN_EG_FillProperties_gradFill]         = u"gradFill"_ustr;
+        aIdMap[NS_ooxml::LN_CT_GradientFillProperties_gsLst]    = u"gsLst"_ustr;
+        aIdMap[NS_ooxml::LN_CT_GradientStopList_gs]             = u"gs"_ustr;
+        aIdMap[NS_ooxml::LN_CT_GradientStop_pos]                = u"pos"_ustr;
+        aIdMap[NS_ooxml::LN_EG_ShadeProperties_lin]             = u"lin"_ustr;
+        aIdMap[NS_ooxml::LN_EG_ShadeProperties_path]            = u"path"_ustr;
+        aIdMap[NS_ooxml::LN_CT_PathShadeProperties_fillToRect]  = u"fillToRect"_ustr;
+        aIdMap[NS_ooxml::LN_EG_LineDashProperties_prstDash]     = u"prstDash"_ustr;
+        aIdMap[NS_ooxml::LN_EG_LineJoinProperties_round]        = u"round"_ustr;
+        aIdMap[NS_ooxml::LN_EG_LineJoinProperties_bevel]        = u"bevel"_ustr;
+        aIdMap[NS_ooxml::LN_EG_LineJoinProperties_miter]        = u"miter"_ustr;
+        aIdMap[NS_ooxml::LN_CT_Scene3D_camera]                  = u"camera"_ustr;
+        aIdMap[NS_ooxml::LN_CT_Scene3D_lightRig]                = u"lightRig"_ustr;
+        aIdMap[NS_ooxml::LN_CT_LightRig_rot]                    = u"rot"_ustr;
+        aIdMap[NS_ooxml::LN_CT_Props3D_bevelT]                  = u"bevelT"_ustr;
+        aIdMap[NS_ooxml::LN_CT_Props3D_bevelB]                  = u"bevelB"_ustr;
+        aIdMap[NS_ooxml::LN_CT_Props3D_extrusionClr]            = u"extrusionClr"_ustr;
+        aIdMap[NS_ooxml::LN_CT_Props3D_contourClr]              = u"contourClr"_ustr;
+        aIdMap[NS_ooxml::LN_CT_StylisticSets_styleSet]          = u"styleSet"_ustr;
+        aIdMap[NS_ooxml::LN_cntxtAlts_cntxtAlts]                = u"cntxtAlts"_ustr;
     }
     return aIdMap[aId];
 }
@@ -472,51 +472,51 @@ void TextEffectsHandler::convertElementIdToPropertyId(sal_Int32 aElementId)
     {
         case NS_ooxml::LN_glow_glow:
             maPropertyId = PROP_CHAR_GLOW_TEXT_EFFECT;
-            maElementName = "glow";
+            maElementName = u"glow"_ustr;
             break;
         case NS_ooxml::LN_shadow_shadow:
             maPropertyId = PROP_CHAR_SHADOW_TEXT_EFFECT;
-            maElementName = "shadow";
+            maElementName = u"shadow"_ustr;
             break;
         case NS_ooxml::LN_reflection_reflection:
             maPropertyId = PROP_CHAR_REFLECTION_TEXT_EFFECT;
-            maElementName = "reflection";
+            maElementName = u"reflection"_ustr;
             break;
         case NS_ooxml::LN_textOutline_textOutline:
             maPropertyId = PROP_CHAR_TEXTOUTLINE_TEXT_EFFECT;
-            maElementName = "textOutline";
+            maElementName = u"textOutline"_ustr;
             break;
         case NS_ooxml::LN_textFill_textFill:
             maPropertyId = PROP_CHAR_TEXTFILL_TEXT_EFFECT;
-            maElementName = "textFill";
+            maElementName = u"textFill"_ustr;
             break;
         case NS_ooxml::LN_scene3d_scene3d:
             maPropertyId = PROP_CHAR_SCENE3D_TEXT_EFFECT;
-            maElementName = "scene3d";
+            maElementName = u"scene3d"_ustr;
             break;
         case NS_ooxml::LN_props3d_props3d:
             maPropertyId = PROP_CHAR_PROPS3D_TEXT_EFFECT;
-            maElementName = "props3d";
+            maElementName = u"props3d"_ustr;
             break;
         case NS_ooxml::LN_ligatures_ligatures:
             maPropertyId = PROP_CHAR_LIGATURES_TEXT_EFFECT;
-            maElementName = "ligatures";
+            maElementName = u"ligatures"_ustr;
             break;
         case NS_ooxml::LN_numForm_numForm:
             maPropertyId = PROP_CHAR_NUMFORM_TEXT_EFFECT;
-            maElementName = "numForm";
+            maElementName = u"numForm"_ustr;
             break;
         case NS_ooxml::LN_numSpacing_numSpacing:
             maPropertyId = PROP_CHAR_NUMSPACING_TEXT_EFFECT;
-            maElementName = "numSpacing";
+            maElementName = u"numSpacing"_ustr;
             break;
         case NS_ooxml::LN_stylisticSets_stylisticSets:
             maPropertyId = PROP_CHAR_STYLISTICSETS_TEXT_EFFECT;
-            maElementName = "stylisticSets";
+            maElementName = u"stylisticSets"_ustr;
             break;
         case NS_ooxml::LN_cntxtAlts_cntxtAlts:
             maPropertyId = PROP_CHAR_CNTXTALTS_TEXT_EFFECT;
-            maElementName = "cntxtAlts";
+            maElementName = u"cntxtAlts"_ustr;
             break;
         default:
             break;

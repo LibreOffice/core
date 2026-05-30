@@ -76,9 +76,9 @@ OUString lclGetAnchorIdFromGrabBag(const SdrObject* pObj)
     OUString aGrabBagName;
     uno::Reference<lang::XServiceInfo> xServiceInfo(xShape, uno::UNO_QUERY);
     if (xServiceInfo->supportsService(u"com.sun.star.text.TextFrame"_ustr))
-        aGrabBagName = "FrameInteropGrabBag";
+        aGrabBagName = u"FrameInteropGrabBag"_ustr;
     else
-        aGrabBagName = "InteropGrabBag";
+        aGrabBagName = u"InteropGrabBag"_ustr;
     const uno::Sequence<beans::PropertyValue> propList = lclGetProperty(xShape, aGrabBagName);
     auto pProp
         = std::find_if(propList.begin(), propList.end(),
@@ -1491,23 +1491,23 @@ void DocxSdrExport::writeDMLDrawing(const SdrObject* pSdrObject, const SwFrameFo
         switch (pSdrObject->GetRelativeWidthRelation())
         {
             case text::RelOrientation::FRAME:
-                sValue = "margin";
+                sValue = u"margin"_ustr;
                 break;
             case text::RelOrientation::PAGE_LEFT:
                 if (pFrameFormat->GetDoc().GetPageDesc(0).GetUseOn() == UseOnPage::Mirror)
-                    sValue = "outsideMargin";
+                    sValue = u"outsideMargin"_ustr;
                 else
-                    sValue = "leftMargin";
+                    sValue = u"leftMargin"_ustr;
                 break;
             case text::RelOrientation::PAGE_RIGHT:
                 if (pFrameFormat->GetDoc().GetPageDesc(0).GetUseOn() == UseOnPage::Mirror)
-                    sValue = "insideMargin";
+                    sValue = u"insideMargin"_ustr;
                 else
-                    sValue = "rightMargin";
+                    sValue = u"rightMargin"_ustr;
                 break;
             case text::RelOrientation::PAGE_FRAME:
             default:
-                sValue = "page";
+                sValue = u"page"_ustr;
                 break;
         }
         pFS->startElementNS(XML_wp14, XML_sizeRelH, XML_relativeFrom, sValue);
@@ -1523,17 +1523,17 @@ void DocxSdrExport::writeDMLDrawing(const SdrObject* pSdrObject, const SwFrameFo
         switch (pSdrObject->GetRelativeHeightRelation())
         {
             case text::RelOrientation::FRAME:
-                sValue = "margin";
+                sValue = u"margin"_ustr;
                 break;
             case text::RelOrientation::PAGE_PRINT_AREA:
-                sValue = "topMargin";
+                sValue = u"topMargin"_ustr;
                 break;
             case text::RelOrientation::PAGE_PRINT_AREA_BOTTOM:
-                sValue = "bottomMargin";
+                sValue = u"bottomMargin"_ustr;
                 break;
             case text::RelOrientation::PAGE_FRAME:
             default:
-                sValue = "page";
+                sValue = u"page"_ustr;
                 break;
         }
         pFS->startElementNS(XML_wp14, XML_sizeRelV, XML_relativeFrom, sValue);
@@ -1917,7 +1917,7 @@ void DocxSdrExport::writeDMLTextFrame(ww8::Frame const* pParentFrame, bool bText
         }
         //Empty shapeType will lead to corruption so to avoid that shapeType is set to default i.e. "rect"
         if (shapeType.isEmpty())
-            shapeType = "rect";
+            shapeType = u"rect"_ustr;
 
         pFS->singleElementNS(XML_a, XML_prstGeom, XML_prst, shapeType);
         m_pImpl->setDMLTextFrameSyntax(true);

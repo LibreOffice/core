@@ -290,7 +290,7 @@ void SwAutoFormat::SetRedlineText_( sal_uInt16 nActionId )
     }
 #if OSL_DEBUG_LEVEL > 0
     else
-        sText = "Action text is missing";
+        sText = u"Action text is missing"_ustr;
 #endif
 
     m_pDoc->GetDocumentRedlineManager().SetAutoFormatRedlineComment( &sText, nSeqNo );

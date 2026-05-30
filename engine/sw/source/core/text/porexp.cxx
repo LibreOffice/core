@@ -316,7 +316,7 @@ bool SwPostItsPortion::Format( SwTextFormatInfo &rInf )
 bool SwPostItsPortion::GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) const
 {
     if( rInf.OnWin() && rInf.GetOpt().IsPostIts() )
-        rText = " ";
+        rText = u" "_ustr;
     else
         rText.clear();
     return true;

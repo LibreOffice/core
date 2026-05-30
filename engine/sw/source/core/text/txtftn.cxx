@@ -1461,7 +1461,7 @@ bool SwQuoVadisPortion::Format( SwTextFormatInfo &rInf )
     if( bFull )
     {
         // Second try; we make the String shorter
-        m_aExpand = "...";
+        m_aExpand = u"..."_ustr;
         bFull = SwFieldPortion::Format( rInf );
         SetLen(TextFrameIndex(0));
         if( bFull  )

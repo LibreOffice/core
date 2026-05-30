@@ -72,12 +72,12 @@ inline OUString SwRedlineTypeToOUString(RedlineType eType)
     OUString sRet;
     switch(eType)
     {
-        case RedlineType::Insert: sRet = "Insert"; break;
-        case RedlineType::Delete: sRet = "Delete"; break;
-        case RedlineType::Format: sRet = "Format"; break;
-        case RedlineType::ParagraphFormat: sRet = "ParagraphFormat"; break;
-        case RedlineType::Table:  sRet = "TextTable"; break;
-        case RedlineType::FmtColl:sRet = "Style"; break;
+        case RedlineType::Insert: sRet = u"Insert"_ustr; break;
+        case RedlineType::Delete: sRet = u"Delete"_ustr; break;
+        case RedlineType::Format: sRet = u"Format"_ustr; break;
+        case RedlineType::ParagraphFormat: sRet = u"ParagraphFormat"_ustr; break;
+        case RedlineType::Table:  sRet = u"TextTable"_ustr; break;
+        case RedlineType::FmtColl:sRet = u"Style"_ustr; break;
         default: break;
     }
     return sRet;

@@ -413,8 +413,8 @@ void WW8_WrtFactoids::Write(WW8Export& rExport)
     // Write SmartTagData.
     MSOFactoidType aFactoidType;
     aFactoidType.m_nId = 1;
-    aFactoidType.m_aUri = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
-    aFactoidType.m_aTag = "RDF";
+    aFactoidType.m_aUri = u"http://www.w3.org/1999/02/22-rdf-syntax-ns#"_ustr;
+    aFactoidType.m_aTag = u"RDF"_ustr;
     WW8SmartTagData aSmartTagData;
     aSmartTagData.m_aPropBagStore.m_aFactoidTypes.push_back(aFactoidType);
 
@@ -4564,26 +4564,26 @@ const NfKeywordTable & MSWordExportBase::GetNfKeywordTable()
     {
         m_pKeyMap = std::make_shared<NfKeywordTable>();
         NfKeywordTable & rKeywordTable = *m_pKeyMap;
-        rKeywordTable[NF_KEY_D] = "d";
-        rKeywordTable[NF_KEY_DD] = "dd";
-        rKeywordTable[NF_KEY_DDD] = "ddd";
-        rKeywordTable[NF_KEY_DDDD] = "dddd";
-        rKeywordTable[NF_KEY_M] = "M";
-        rKeywordTable[NF_KEY_MM] = "MM";
-        rKeywordTable[NF_KEY_MMM] = "MMM";
-        rKeywordTable[NF_KEY_MMMM] = "MMMM";
-        rKeywordTable[NF_KEY_NN] = "ddd";
-        rKeywordTable[NF_KEY_NNN] = "dddd";
-        rKeywordTable[NF_KEY_NNNN] = "dddd";
-        rKeywordTable[NF_KEY_YY] = "yy";
-        rKeywordTable[NF_KEY_YYYY] = "yyyy";
-        rKeywordTable[NF_KEY_H] = "H";
-        rKeywordTable[NF_KEY_HH] = "HH";
-        rKeywordTable[NF_KEY_MI] = "m";
-        rKeywordTable[NF_KEY_MMI] = "mm";
-        rKeywordTable[NF_KEY_S] = "s";
-        rKeywordTable[NF_KEY_SS] = "ss";
-        rKeywordTable[NF_KEY_AMPM] = "AM/PM";
+        rKeywordTable[NF_KEY_D] = u"d"_ustr;
+        rKeywordTable[NF_KEY_DD] = u"dd"_ustr;
+        rKeywordTable[NF_KEY_DDD] = u"ddd"_ustr;
+        rKeywordTable[NF_KEY_DDDD] = u"dddd"_ustr;
+        rKeywordTable[NF_KEY_M] = u"M"_ustr;
+        rKeywordTable[NF_KEY_MM] = u"MM"_ustr;
+        rKeywordTable[NF_KEY_MMM] = u"MMM"_ustr;
+        rKeywordTable[NF_KEY_MMMM] = u"MMMM"_ustr;
+        rKeywordTable[NF_KEY_NN] = u"ddd"_ustr;
+        rKeywordTable[NF_KEY_NNN] = u"dddd"_ustr;
+        rKeywordTable[NF_KEY_NNNN] = u"dddd"_ustr;
+        rKeywordTable[NF_KEY_YY] = u"yy"_ustr;
+        rKeywordTable[NF_KEY_YYYY] = u"yyyy"_ustr;
+        rKeywordTable[NF_KEY_H] = u"H"_ustr;
+        rKeywordTable[NF_KEY_HH] = u"HH"_ustr;
+        rKeywordTable[NF_KEY_MI] = u"m"_ustr;
+        rKeywordTable[NF_KEY_MMI] = u"mm"_ustr;
+        rKeywordTable[NF_KEY_S] = u"s"_ustr;
+        rKeywordTable[NF_KEY_SS] = u"ss"_ustr;
+        rKeywordTable[NF_KEY_AMPM] = u"AM/PM"_ustr;
     }
 
     return *m_pKeyMap;

@@ -2636,7 +2636,7 @@ uno::Sequence< OUString > SAL_CALL SwXTextField::getSupportedServiceNames()
     *pArray++ = sServiceName;
     if (nLen == 3)
         *pArray++ = sServiceNameCC;
-    *pArray++ = "com.sun.star.text.TextContent";
+    *pArray++ = u"com.sun.star.text.TextContent"_ustr;
     return aRet;
 }
 
@@ -2801,7 +2801,7 @@ bool SwXTextFieldMasters::getInstanceName(
         break;
 
     case SwFieldIds::TableOfAuthorities:
-        sField = "Bibliography";
+        sField = u"Bibliography"_ustr;
         break;
 
     default:

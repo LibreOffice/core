@@ -57,13 +57,13 @@ void lcl_FillAuthPattern(SwFormTokens &rAuthTokens, sal_uInt16 nTypeId)
     aStartToken.nAuthorityField = AUTH_FIELD_IDENTIFIER;
     rAuthTokens.push_back( aStartToken );
     SwFormToken aSeparatorToken( TOKEN_TEXT );
-    aSeparatorToken.sText = ": ";
+    aSeparatorToken.sText = u": "_ustr;
     rAuthTokens.push_back( aSeparatorToken );
 
     --nTypeId; // compensate +1 offset introduced by caller
 
     SwFormToken aTextToken( TOKEN_TEXT );
-    aTextToken.sText = ", ";
+    aTextToken.sText = u", "_ustr;
 
     const ToxAuthorityField nVals[4] = {
         AUTH_FIELD_AUTHOR,

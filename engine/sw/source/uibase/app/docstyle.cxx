@@ -2495,7 +2495,7 @@ sal_uInt32  SwDocStyleSheet::GetHelpId( OUString& rFile )
     SwPoolFormatId nPoolId = SwPoolFormatId::ZERO;
     unsigned char nFileId = UCHAR_MAX;
 
-    rFile = "swrhlppi.hlp";
+    rFile = u"swrhlppi.hlp"_ustr;
 
     const SwFormat* pTmpFormat = nullptr;
     switch( nFamily )

@@ -287,7 +287,7 @@ ErrCodeMsg SwXMLWriter::Write_(const SfxItemSet* pMediumItemSet)
     if( m_pOrigFileName )
     {
         PropertyValue *pProps = aProps.getArray();
-        pProps->Name = "FileName";
+        pProps->Name = u"FileName"_ustr;
         pProps->Value <<= *m_pOrigFileName;
     }
 
@@ -349,7 +349,7 @@ ErrCodeMsg SwXMLWriter::Write_(const SfxItemSet* pMediumItemSet)
                 aEmptyArgs, aProps ) )
         {
             bWarn = true;
-            sWarnFile = "meta.xml";
+            sWarnFile = u"meta.xml"_ustr;
         }
     }
 
@@ -364,7 +364,7 @@ ErrCodeMsg SwXMLWriter::Write_(const SfxItemSet* pMediumItemSet)
             if( !bWarn )
             {
                 bWarn = true;
-                sWarnFile = "settings.xml";
+                sWarnFile = u"settings.xml"_ustr;
             }
         }
     }
@@ -379,7 +379,7 @@ ErrCodeMsg SwXMLWriter::Write_(const SfxItemSet* pMediumItemSet)
             aFilterArgs, aProps ) )
     {
         bErr = true;
-        sErrFile = "styles.xml";
+        sErrFile = u"styles.xml"_ustr;
     }
 
     if( !m_bOrganizerMode && !bErr )
@@ -391,7 +391,7 @@ ErrCodeMsg SwXMLWriter::Write_(const SfxItemSet* pMediumItemSet)
                 aFilterArgs, aProps ) )
         {
             bErr = true;
-            sErrFile = "content.xml";
+            sErrFile = u"content.xml"_ustr;
         }
     }
 

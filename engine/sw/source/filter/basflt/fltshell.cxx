@@ -69,8 +69,8 @@ static OUString lcl_getTypePath(OUString& rType)
     OUString aRet;
     if (rType.startsWith("urn:bails"))
     {
-        rType = "urn:bails";
-        aRet = "tscp/bails.rdf";
+        rType = u"urn:bails"_ustr;
+        aRet = u"tscp/bails.rdf"_ustr;
     }
     return aRet;
 }

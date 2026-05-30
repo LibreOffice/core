@@ -82,8 +82,8 @@ void collectUIInformation( const OUString& aevent , const OUString& aID )
     aDescription.aID =  aID;
     aDescription.aParameters = {{"" ,  ""}};
     aDescription.aAction = aevent;
-    aDescription.aParent = "MainWindow";
-    aDescription.aKeyWord = "SwEditWinUIObject";
+    aDescription.aParent = u"MainWindow"_ustr;
+    aDescription.aKeyWord = u"SwEditWinUIObject"_ustr;
     UITestLogger::getInstance().logEvent(aDescription);
 }
 

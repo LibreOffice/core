@@ -65,11 +65,11 @@ uno::Reference< word::XRange > SAL_CALL SwVbaHeaderFooter::getRange()
     OUString sPropsNameText;
     if( mbHeader )
     {
-        sPropsNameText = "HeaderText";
+        sPropsNameText = u"HeaderText"_ustr;
     }
     else
     {
-        sPropsNameText = "FooterText";
+        sPropsNameText = u"FooterText"_ustr;
     }
     if( mnIndex == word::WdHeaderFooterIndex::wdHeaderFooterEvenPages )
     {

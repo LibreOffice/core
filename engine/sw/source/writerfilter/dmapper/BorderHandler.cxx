@@ -104,35 +104,35 @@ void BorderHandler::lcl_sprm(Sprm & rSprm)
     {
         case NS_ooxml::LN_CT_TblBorders_top:
             pos = BorderPosition::Top;
-            aBorderPos = "top";
+            aBorderPos = u"top"_ustr;
             break;
         case NS_ooxml::LN_CT_TblBorders_start:
             pos = rtl ? BorderPosition::Right : BorderPosition::Left;
-            aBorderPos = "start";
+            aBorderPos = u"start"_ustr;
             break;
         case NS_ooxml::LN_CT_TblBorders_left:
             pos = BorderPosition::Left;
-            aBorderPos = "left";
+            aBorderPos = u"left"_ustr;
             break;
         case NS_ooxml::LN_CT_TblBorders_bottom:
             pos = BorderPosition::Bottom;
-            aBorderPos = "bottom";
+            aBorderPos = u"bottom"_ustr;
             break;
         case NS_ooxml::LN_CT_TblBorders_end:
             pos = rtl ? BorderPosition::Left : BorderPosition::Right;
-            aBorderPos = "end";
+            aBorderPos = u"end"_ustr;
             break;
         case NS_ooxml::LN_CT_TblBorders_right:
             pos = BorderPosition::Right;
-            aBorderPos = "right";
+            aBorderPos = u"right"_ustr;
             break;
         case NS_ooxml::LN_CT_TblBorders_insideH:
             pos = BorderPosition::Horizontal;
-            aBorderPos = "insideH";
+            aBorderPos = u"insideH"_ustr;
             break;
         case NS_ooxml::LN_CT_TblBorders_insideV:
             pos = BorderPosition::Vertical;
-            aBorderPos = "insideV";
+            aBorderPos = u"insideV"_ustr;
             break;
         default:
             return;

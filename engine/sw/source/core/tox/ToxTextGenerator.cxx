@@ -252,7 +252,7 @@ ToxTextGenerator::GenerateText(SwDoc& rDoc,
 
             case TOKEN_LINK_START:
                 mLinkProcessor->StartNewLink(rText.getLength(), aToken.sCharStyleName);
-                sAltText = "";
+                sAltText = u""_ustr;
                 break;
 
             case TOKEN_LINK_END:

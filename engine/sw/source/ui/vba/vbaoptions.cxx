@@ -45,39 +45,39 @@ SwVbaOptions::DefaultFilePath( sal_Int32 _path )
     {
         case word::WdDefaultFilePath::wdDocumentsPath:
         {
-            msDefaultFilePath = "Work";
+            msDefaultFilePath = u"Work"_ustr;
             break;
         }
         case word::WdDefaultFilePath::wdPicturesPath:
         {
-            msDefaultFilePath = "Gallery";
+            msDefaultFilePath = u"Gallery"_ustr;
             break;
         }
         case word::WdDefaultFilePath::wdUserTemplatesPath:
         case word::WdDefaultFilePath::wdWorkgroupTemplatesPath:
         {
-            msDefaultFilePath = "Template";
+            msDefaultFilePath = u"Template"_ustr;
             break;
         }
         case word::WdDefaultFilePath::wdStartupPath:
         {
-            msDefaultFilePath = "Addin";
+            msDefaultFilePath = u"Addin"_ustr;
             break;
         }
         case word::WdDefaultFilePath::wdUserOptionsPath:
         {
-            msDefaultFilePath = "UserConfig";
+            msDefaultFilePath = u"UserConfig"_ustr;
             break;
         }
         case word::WdDefaultFilePath::wdToolsPath:
         case word::WdDefaultFilePath::wdProgramPath:
         {
-            msDefaultFilePath = "Module";
+            msDefaultFilePath = u"Module"_ustr;
             break;
         }
         case word::WdDefaultFilePath::wdTempFilePath:
         {
-            msDefaultFilePath = "Temp";
+            msDefaultFilePath = u"Temp"_ustr;
             break;
         }
         default:

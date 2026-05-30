@@ -199,10 +199,10 @@ std::pair<OUString, bool> SwTOXSortTabBase::GetURL(SwRootFrame const*const pLayo
     switch (rType.GetType())
     {
         case TOX_INDEX:
-            typeName = "A";
+            typeName = u"A"_ustr;
             break;
         case TOX_CONTENT:
-            typeName = "C";
+            typeName = u"C"_ustr;
             break;
         case TOX_USER:
             typeName = "U" + rType.GetTypeName();

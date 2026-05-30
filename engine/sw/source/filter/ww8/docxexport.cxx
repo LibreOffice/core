@@ -2078,11 +2078,11 @@ void DocxExport::WriteEmbeddings()
         {
             // FIXME: this .xlsm hack is silly - if anything the mime-type for an existing embedded object should be read from [Content_Types].xml
             if (embeddingPath.endsWith(".xlsm"))
-                contentType = "application/vnd.ms-excel.sheet.macroEnabled.12";
+                contentType = u"application/vnd.ms-excel.sheet.macroEnabled.12"_ustr;
             else if (embeddingPath.endsWith(".bin"))
-                contentType = "application/vnd.openxmlformats-officedocument.oleObject";
+                contentType = u"application/vnd.openxmlformats-officedocument.oleObject"_ustr;
             else
-                contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                contentType = u"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"_ustr;
         }
 
         uno::Reference< io::XOutputStream > xOutStream = GetFilter().openFragmentStream(embeddingPath,
@@ -2420,22 +2420,22 @@ DocxExport::DocxExport(DocxExportFilter& rFilter, SwDoc& rDocument,
     {
         if (m_bTemplate)
         {
-            aMediaType = "application/vnd.ms-word.template.macroEnabledTemplate.main+xml";
+            aMediaType = u"application/vnd.ms-word.template.macroEnabledTemplate.main+xml"_ustr;
         }
         else
         {
-            aMediaType = "application/vnd.ms-word.document.macroEnabled.main+xml";
+            aMediaType = u"application/vnd.ms-word.document.macroEnabled.main+xml"_ustr;
         }
     }
     else
     {
         if (m_bTemplate)
         {
-            aMediaType = "application/vnd.openxmlformats-officedocument.wordprocessingml.template.main+xml";
+            aMediaType = u"application/vnd.openxmlformats-officedocument.wordprocessingml.template.main+xml"_ustr;
         }
         else
         {
-            aMediaType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml";
+            aMediaType = u"application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"_ustr;
         }
     }
 

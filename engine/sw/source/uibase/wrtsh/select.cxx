@@ -431,10 +431,10 @@ void collectUIInformation(SwShellCursor* pCursor)
     OUString aSelEnd = OUString::number(pCursor->End()->GetContentIndex());
 
     aDescription.aParameters = {{"START_POS", aSelStart}, {"END_POS", aSelEnd}};
-    aDescription.aAction = "SELECT";
-    aDescription.aID = "writer_edit";
-    aDescription.aKeyWord = "SwEditWinUIObject";
-    aDescription.aParent = "MainWindow";
+    aDescription.aAction = u"SELECT"_ustr;
+    aDescription.aID = u"writer_edit"_ustr;
+    aDescription.aKeyWord = u"SwEditWinUIObject"_ustr;
+    aDescription.aParent = u"MainWindow"_ustr;
 
     UITestLogger::getInstance().logEvent(aDescription);
 }

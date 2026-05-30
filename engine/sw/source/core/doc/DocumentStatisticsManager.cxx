@@ -148,24 +148,24 @@ bool DocumentStatisticsManager::IncrementalDocStatCalculate(tools::Long nChars, 
     css::uno::Sequence < css::beans::NamedValue > aStat( mpDocStat->nPage ? 8 : 7);
     auto pStat = aStat.getArray();
     sal_Int32 n=0;
-    pStat[n].Name = "TableCount";
+    pStat[n].Name = u"TableCount"_ustr;
     pStat[n++].Value <<= static_cast<sal_Int32>(mpDocStat->nTable);
-    pStat[n].Name = "ImageCount";
+    pStat[n].Name = u"ImageCount"_ustr;
     pStat[n++].Value <<= static_cast<sal_Int32>(mpDocStat->nGrf);
-    pStat[n].Name = "ObjectCount";
+    pStat[n].Name = u"ObjectCount"_ustr;
     pStat[n++].Value <<= static_cast<sal_Int32>(mpDocStat->nOLE);
     if ( mpDocStat->nPage )
     {
-        pStat[n].Name = "PageCount";
+        pStat[n].Name = u"PageCount"_ustr;
         pStat[n++].Value <<= static_cast<sal_Int32>(mpDocStat->nPage);
     }
-    pStat[n].Name = "ParagraphCount";
+    pStat[n].Name = u"ParagraphCount"_ustr;
     pStat[n++].Value <<= static_cast<sal_Int32>(mpDocStat->nPara);
-    pStat[n].Name = "WordCount";
+    pStat[n].Name = u"WordCount"_ustr;
     pStat[n++].Value <<= static_cast<sal_Int32>(mpDocStat->nWord);
-    pStat[n].Name = "CharacterCount";
+    pStat[n].Name = u"CharacterCount"_ustr;
     pStat[n++].Value <<= static_cast<sal_Int32>(mpDocStat->nChar);
-    pStat[n].Name = "NonWhitespaceCharacterCount";
+    pStat[n].Name = u"NonWhitespaceCharacterCount"_ustr;
     pStat[n++].Value <<= static_cast<sal_Int32>(mpDocStat->nCharExcludingSpaces);
 
     // For e.g. autotext documents there is no pSwgInfo (#i79945)

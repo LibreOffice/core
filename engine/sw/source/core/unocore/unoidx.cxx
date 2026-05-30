@@ -442,30 +442,30 @@ SwXDocumentIndex::getSupportedServiceNames()
 
     uno::Sequence< OUString > aRet(2);
     OUString* pArray = aRet.getArray();
-    pArray[0] = "com.sun.star.text.BaseIndex";
+    pArray[0] = u"com.sun.star.text.BaseIndex"_ustr;
     switch (m_pImpl->m_eTOXType)
     {
         case TOX_INDEX:
-            pArray[1] = "com.sun.star.text.DocumentIndex";
+            pArray[1] = u"com.sun.star.text.DocumentIndex"_ustr;
         break;
         case TOX_CONTENT:
-            pArray[1] = "com.sun.star.text.ContentIndex";
+            pArray[1] = u"com.sun.star.text.ContentIndex"_ustr;
         break;
         case TOX_TABLES:
-            pArray[1] = "com.sun.star.text.TableIndex";
+            pArray[1] = u"com.sun.star.text.TableIndex"_ustr;
         break;
         case TOX_ILLUSTRATIONS:
-            pArray[1] = "com.sun.star.text.IllustrationsIndex";
+            pArray[1] = u"com.sun.star.text.IllustrationsIndex"_ustr;
         break;
         case TOX_OBJECTS:
-            pArray[1] = "com.sun.star.text.ObjectIndex";
+            pArray[1] = u"com.sun.star.text.ObjectIndex"_ustr;
         break;
         case TOX_AUTHORITIES:
-            pArray[1] = "com.sun.star.text.Bibliography";
+            pArray[1] = u"com.sun.star.text.Bibliography"_ustr;
         break;
         //case TOX_USER:
         default:
-            pArray[1] = "com.sun.star.text.UserDefinedIndex";
+            pArray[1] = u"com.sun.star.text.UserDefinedIndex"_ustr;
     }
     return aRet;
 }
@@ -1686,19 +1686,19 @@ SwXDocumentIndexMark::getSupportedServiceNames()
     const sal_Int32 nCnt = (m_pImpl->m_eTOXType == TOX_INDEX) ? 4 : 3;
     uno::Sequence< OUString > aRet(nCnt);
     OUString* pArray = aRet.getArray();
-    pArray[0] = "com.sun.star.text.BaseIndexMark";
-    pArray[1] = "com.sun.star.text.TextContent";
+    pArray[0] = u"com.sun.star.text.BaseIndexMark"_ustr;
+    pArray[1] = u"com.sun.star.text.TextContent"_ustr;
     switch (m_pImpl->m_eTOXType)
     {
         case TOX_USER:
-            pArray[2] = "com.sun.star.text.UserIndexMark";
+            pArray[2] = u"com.sun.star.text.UserIndexMark"_ustr;
         break;
         case TOX_CONTENT:
-            pArray[2] = "com.sun.star.text.ContentIndexMark";
+            pArray[2] = u"com.sun.star.text.ContentIndexMark"_ustr;
         break;
         case TOX_INDEX:
-            pArray[2] = "com.sun.star.text.DocumentIndexMark";
-            pArray[3] = "com.sun.star.text.DocumentIndexMarkAsian";
+            pArray[2] = u"com.sun.star.text.DocumentIndexMark"_ustr;
+            pArray[3] = u"com.sun.star.text.DocumentIndexMarkAsian"_ustr;
         break;
 
         default:
@@ -2883,15 +2883,15 @@ SwXDocumentIndex::TokenAccess_Impl::getByIndex(sal_Int32 nIndex)
 
                 beans::PropertyValue* pArr = rCurTokenSeq.getArray();
 
-                pArr[nCurrentElement].Name = "TokenType";
+                pArr[nCurrentElement].Name = u"TokenType"_ustr;
                 pArr[nCurrentElement++].Value <<=
                     u"TokenEntryNumber"_ustr;
 
-                pArr[nCurrentElement].Name = "CharacterStyleName";
+                pArr[nCurrentElement].Name = u"CharacterStyleName"_ustr;
                 pArr[nCurrentElement++].Value <<= aProgCharStyle.toString();
                 if( aToken.nChapterFormat != SwChapterFormat::Number )
                 {
-                    pArr[nCurrentElement].Name = "ChapterFormat";
+                    pArr[nCurrentElement].Name = u"ChapterFormat"_ustr;
                     sal_Int16 nVal;
 // the allowed values for chapter format, when used as entry number,
 // are CF_NUMBER and CF_NUM_NOPREPST_TITLE only, all else forced to
@@ -2912,7 +2912,7 @@ SwXDocumentIndex::TokenAccess_Impl::getByIndex(sal_Int32 nIndex)
                 // only  a ChapterLevel != MAXLEVEL is registered
                 if (aToken.nOutlineLevel != MAXLEVEL)
                 {
-                    pArr[nCurrentElement].Name = "ChapterLevel";
+                    pArr[nCurrentElement].Name = u"ChapterLevel"_ustr;
                     pArr[nCurrentElement].Value <<= aToken.nOutlineLevel;
                 }
             }
@@ -2923,10 +2923,10 @@ SwXDocumentIndex::TokenAccess_Impl::getByIndex(sal_Int32 nIndex)
                 rCurTokenSeq.realloc( 2 );
                 beans::PropertyValue* pArr = rCurTokenSeq.getArray();
 
-                pArr[0].Name = "TokenType";
+                pArr[0].Name = u"TokenType"_ustr;
                 pArr[0].Value <<= u"TokenEntryText"_ustr;
 
-                pArr[1].Name = "CharacterStyleName";
+                pArr[1].Name = u"CharacterStyleName"_ustr;
                 pArr[1].Value <<= aProgCharStyle.toString();
             }
             break;
@@ -2935,28 +2935,28 @@ SwXDocumentIndex::TokenAccess_Impl::getByIndex(sal_Int32 nIndex)
                 rCurTokenSeq.realloc(5); // #i21237#
                 beans::PropertyValue* pArr = rCurTokenSeq.getArray();
 
-                pArr[0].Name = "TokenType";
+                pArr[0].Name = u"TokenType"_ustr;
                 pArr[0].Value <<= u"TokenTabStop"_ustr;
 
                 if(SvxTabAdjust::End == aToken.eTabAlign)
                 {
-                    pArr[1].Name = "TabStopRightAligned";
+                    pArr[1].Name = u"TabStopRightAligned"_ustr;
                     pArr[1].Value <<= true;
                 }
                 else
                 {
-                    pArr[1].Name = "TabStopPosition";
+                    pArr[1].Name = u"TabStopPosition"_ustr;
                     sal_Int32 nPos = convertTwipToMm100(aToken.nTabStopPosition);
                     if(nPos < 0)
                         nPos = 0;
                     pArr[1].Value <<= nPos;
                 }
-                pArr[2].Name = "TabStopFillCharacter";
+                pArr[2].Name = u"TabStopFillCharacter"_ustr;
                 pArr[2].Value <<= OUString(aToken.cTabFillChar);
-                pArr[3].Name = "CharacterStyleName";
+                pArr[3].Name = u"CharacterStyleName"_ustr;
                 pArr[3].Value <<= aProgCharStyle.toString();
                 // #i21237#
-                pArr[4].Name = "WithTab";
+                pArr[4].Name = u"WithTab"_ustr;
                 pArr[4].Value <<= aToken.bWithTab;
             }
             break;
@@ -2965,13 +2965,13 @@ SwXDocumentIndex::TokenAccess_Impl::getByIndex(sal_Int32 nIndex)
                 rCurTokenSeq.realloc( 3 );
                 beans::PropertyValue* pArr = rCurTokenSeq.getArray();
 
-                pArr[0].Name = "TokenType";
+                pArr[0].Name = u"TokenType"_ustr;
                 pArr[0].Value <<= u"TokenText"_ustr;
 
-                pArr[1].Name = "CharacterStyleName";
+                pArr[1].Name = u"CharacterStyleName"_ustr;
                 pArr[1].Value <<= aProgCharStyle.toString();
 
-                pArr[2].Name = "Text";
+                pArr[2].Name = u"Text"_ustr;
                 pArr[2].Value <<= aToken.sText;
             }
             break;
@@ -2980,10 +2980,10 @@ SwXDocumentIndex::TokenAccess_Impl::getByIndex(sal_Int32 nIndex)
                 rCurTokenSeq.realloc( 2 );
                 beans::PropertyValue* pArr = rCurTokenSeq.getArray();
 
-                pArr[0].Name = "TokenType";
+                pArr[0].Name = u"TokenType"_ustr;
                 pArr[0].Value <<= u"TokenPageNumber"_ustr;
 
-                pArr[1].Name = "CharacterStyleName";
+                pArr[1].Name = u"CharacterStyleName"_ustr;
                 pArr[1].Value <<= aProgCharStyle.toString();
             }
             break;
@@ -2992,13 +2992,13 @@ SwXDocumentIndex::TokenAccess_Impl::getByIndex(sal_Int32 nIndex)
                 rCurTokenSeq.realloc( 4 );
                 beans::PropertyValue* pArr = rCurTokenSeq.getArray();
 
-                pArr[0].Name = "TokenType";
+                pArr[0].Name = u"TokenType"_ustr;
                 pArr[0].Value <<= u"TokenChapterInfo"_ustr;
 
-                pArr[1].Name = "CharacterStyleName";
+                pArr[1].Name = u"CharacterStyleName"_ustr;
                 pArr[1].Value <<= aProgCharStyle.toString();
 
-                pArr[2].Name = "ChapterFormat";
+                pArr[2].Name = u"ChapterFormat"_ustr;
                 sal_Int16 nVal = text::ChapterFormat::NUMBER;
                 switch(aToken.nChapterFormat)
                 {
@@ -3020,7 +3020,7 @@ SwXDocumentIndex::TokenAccess_Impl::getByIndex(sal_Int32 nIndex)
                 }
                 pArr[2].Value <<= nVal;
 // #i53420#
-                pArr[3].Name = "ChapterLevel";
+                pArr[3].Name = u"ChapterLevel"_ustr;
                 pArr[3].Value <<= aToken.nOutlineLevel;
             }
             break;
@@ -3029,10 +3029,10 @@ SwXDocumentIndex::TokenAccess_Impl::getByIndex(sal_Int32 nIndex)
                 rCurTokenSeq.realloc( 2 );
                 beans::PropertyValue* pArr = rCurTokenSeq.getArray();
 
-                pArr[0].Name = "TokenType";
+                pArr[0].Name = u"TokenType"_ustr;
                 pArr[0].Value <<=
                     u"TokenHyperlinkStart"_ustr;
-                pArr[1].Name = "CharacterStyleName";
+                pArr[1].Name = u"CharacterStyleName"_ustr;
                 pArr[1].Value <<= aProgCharStyle.toString();
             }
             break;
@@ -3041,7 +3041,7 @@ SwXDocumentIndex::TokenAccess_Impl::getByIndex(sal_Int32 nIndex)
                 rCurTokenSeq.realloc( 1 );
                 beans::PropertyValue* pArr = rCurTokenSeq.getArray();
 
-                pArr[0].Name = "TokenType";
+                pArr[0].Name = u"TokenType"_ustr;
                 pArr[0].Value <<=
                     u"TokenHyperlinkEnd"_ustr;
             }
@@ -3051,14 +3051,14 @@ SwXDocumentIndex::TokenAccess_Impl::getByIndex(sal_Int32 nIndex)
                 rCurTokenSeq.realloc( 3 );
                 beans::PropertyValue* pArr = rCurTokenSeq.getArray();
 
-                pArr[0].Name = "TokenType";
+                pArr[0].Name = u"TokenType"_ustr;
                 pArr[0].Value <<=
                     u"TokenBibliographyDataField"_ustr;
 
-                pArr[1].Name = "CharacterStyleName";
+                pArr[1].Name = u"CharacterStyleName"_ustr;
                 pArr[1].Value <<= aProgCharStyle.toString();
 
-                pArr[2].Name = "BibliographyDataField";
+                pArr[2].Name = u"BibliographyDataField"_ustr;
                 pArr[2].Value <<= sal_Int16(aToken.nAuthorityField);
             }
             break;

@@ -322,18 +322,18 @@ SwVbaStyles::Item( const uno::Any& Index1, const uno::Any& Index2 )
                         case word::WdStyleType::wdStyleTypeParagraph:
                         case word::WdStyleType::wdStyleTypeTable:
                         {
-                            aStyleType = "ParagraphStyles";
+                            aStyleType = u"ParagraphStyles"_ustr;
                             break;
                         }
                         case word::WdStyleType::wdStyleTypeCharacter:
                         {
-                            aStyleType = "CharacterStyles";
+                            aStyleType = u"CharacterStyles"_ustr;
                             break;
                         }
                         case word::WdStyleType::wdStyleTypeList:
                         {
                             // should use Paragraph style and set the property "NumberingStyleName"
-                            aStyleType = "ParagraphStyles";
+                            aStyleType = u"ParagraphStyles"_ustr;
                             break;
                         }
                         default:

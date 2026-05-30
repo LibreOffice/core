@@ -70,9 +70,9 @@ CPPUNIT_TEST_FIXTURE(Test, testBiblioPageNumberUpdate)
     pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
     OUString aCoreFields[AUTH_FIELD_END];
     aCoreFields[AUTH_FIELD_AUTHORITY_TYPE] = OUString::number(text::BibliographyDataType::WWW);
-    aCoreFields[AUTH_FIELD_IDENTIFIER] = "AT";
-    aCoreFields[AUTH_FIELD_AUTHOR] = "Author";
-    aCoreFields[AUTH_FIELD_TITLE] = "Title";
+    aCoreFields[AUTH_FIELD_IDENTIFIER] = u"AT"_ustr;
+    aCoreFields[AUTH_FIELD_AUTHOR] = u"Author"_ustr;
+    aCoreFields[AUTH_FIELD_TITLE] = u"Title"_ustr;
     OUString aNewUrl = u"http://www.example.com/test.pdf#page=42"_ustr;
     aCoreFields[AUTH_FIELD_URL] = aNewUrl;
     OUStringBuffer aFieldBuffer;

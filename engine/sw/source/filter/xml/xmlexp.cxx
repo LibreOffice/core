@@ -375,7 +375,7 @@ void SwXMLExport::GetViewSettings(Sequence<PropertyValue>& aProps)
     PropertyValue *pValue = aProps.getArray();
 
     rtl::Reference< comphelper::IndexedPropertyValuesContainer > xBox = new comphelper::IndexedPropertyValuesContainer();
-    pValue[0].Name = "Views";
+    pValue[0].Name = u"Views"_ustr;
     pValue[0].Value <<= uno::Reference< container::XIndexContainer >(xBox);
 
     const tools::Rectangle rRect = pShell->GetVisArea( ASPECT_CONTENT );
@@ -383,16 +383,16 @@ void SwXMLExport::GetViewSettings(Sequence<PropertyValue>& aProps)
 
     OSL_ENSURE( bTwip, "Map unit for visible area is not in TWIPS!" );
 
-    pValue[1].Name = "ViewAreaTop";
+    pValue[1].Name = u"ViewAreaTop"_ustr;
     pValue[1].Value <<= bTwip ? convertTwipToMm100 ( rRect.Top() ) : rRect.Top();
 
-    pValue[2].Name = "ViewAreaLeft";
+    pValue[2].Name = u"ViewAreaLeft"_ustr;
     pValue[2].Value <<= bTwip ? convertTwipToMm100 ( rRect.Left() ) : rRect.Left();
 
-    pValue[3].Name = "ViewAreaWidth";
+    pValue[3].Name = u"ViewAreaWidth"_ustr;
     pValue[3].Value <<= bTwip ? convertTwipToMm100 ( rRect.GetWidth() ) : rRect.GetWidth();
 
-    pValue[4].Name = "ViewAreaHeight";
+    pValue[4].Name = u"ViewAreaHeight"_ustr;
     pValue[4].Value <<= bTwip ? convertTwipToMm100 ( rRect.GetHeight() ) : rRect.GetHeight();
 
     // "show redline mode" cannot simply be read from the document
@@ -410,10 +410,10 @@ void SwXMLExport::GetViewSettings(Sequence<PropertyValue>& aProps)
         }
     }
 
-    pValue[5].Name = "ShowRedlineChanges";
+    pValue[5].Name = u"ShowRedlineChanges"_ustr;
     pValue[5].Value <<= bShowRedlineChanges;
 
-    pValue[6].Name = "InBrowseMode";
+    pValue[6].Name = u"InBrowseMode"_ustr;
     pValue[6].Value <<= pDoc->getIDocumentSettingAccess().get(DocumentSettingId::BROWSE_MODE);
 }
 

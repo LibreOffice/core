@@ -546,7 +546,7 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
         // Create the numbering style
         bool bUpdate = true;
         if (GetId() == nOutline)
-            m_StyleName = "Outline"; //SwNumRule.GetOutlineRuleName()
+            m_StyleName = u"Outline"_ustr; //SwNumRule.GetOutlineRuleName()
         else
         {
             OUString aStyleName = GetStyleName(GetId(), xStyles, rDMapper);

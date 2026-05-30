@@ -529,7 +529,7 @@ public:
     void appendDocVar(std::u16string_view aDocVar) { m_aDocVar += aDocVar; };
     const OUString& getDocVarName() { return m_aDocVarName; }
     void setDocVarName(const OUString& aDocVarName) { m_aDocVarName = aDocVarName; }
-    void clearDocVarName() { m_aDocVarName = ""; }
+    void clearDocVarName() { m_aDocVarName = u""_ustr; }
 
 private:
     RTFDocumentImpl* m_pDocumentImpl;

@@ -726,7 +726,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testSearchWithTransliterate)
     }
     i18nutil::SearchOptions2 SearchOpt;
     SearchOpt.searchFlag = css::util::SearchFlags::ALL_IGNORE_CASE;
-    SearchOpt.searchString = "other";
+    SearchOpt.searchString = u"other"_ustr;
     SearchOpt.replaceString.clear();
     SearchOpt.changedChars = 0;
     SearchOpt.deletedChars = 0;
@@ -740,7 +740,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testSearchWithTransliterate)
     SwShellCursor* pShellCursor = pWrtShell->getShellCursor(true);
     CPPUNIT_ASSERT_EQUAL(OUString(), pShellCursor->GetText());
     CPPUNIT_ASSERT_EQUAL(0, static_cast<int>(case1));
-    SearchOpt.searchString = "paragraph";
+    SearchOpt.searchString = u"paragraph"_ustr;
     SearchOpt.transliterateFlags = TransliterationFlags::IGNORE_KASHIDA_CTL;
     //transliteration option set so that all search strings are found
     sal_Int32 case2
@@ -771,27 +771,27 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf73660)
     searchOpt.searchFlag = css::util::SearchFlags::NORM_WORD_ONLY;
     searchOpt.AlgorithmType2 = css::util::SearchAlgorithms2::REGEXP;
     //case 1
-    searchOpt.searchString = "First";
+    searchOpt.searchString = u"First"_ustr;
     CPPUNIT_ASSERT_EQUAL(
         sal_Int32(1),
         pWrtShell->SearchPattern(searchOpt, true, SwDocPositions::Start, SwDocPositions::End));
     //case 2
-    searchOpt.searchString = "Second";
+    searchOpt.searchString = u"Second"_ustr;
     CPPUNIT_ASSERT_EQUAL(
         sal_Int32(1),
         pWrtShell->SearchPattern(searchOpt, true, SwDocPositions::Start, SwDocPositions::End));
     //case 3
-    searchOpt.searchString = "Third";
+    searchOpt.searchString = u"Third"_ustr;
     CPPUNIT_ASSERT_EQUAL(
         sal_Int32(1),
         pWrtShell->SearchPattern(searchOpt, true, SwDocPositions::Start, SwDocPositions::End));
     //case 4
-    searchOpt.searchString = "Fourth";
+    searchOpt.searchString = u"Fourth"_ustr;
     CPPUNIT_ASSERT_EQUAL(
         sal_Int32(1),
         pWrtShell->SearchPattern(searchOpt, true, SwDocPositions::Start, SwDocPositions::End));
     //case 5
-    searchOpt.searchString = "Fifth";
+    searchOpt.searchString = u"Fifth"_ustr;
     CPPUNIT_ASSERT_EQUAL(
         sal_Int32(1),
         pWrtShell->SearchPattern(searchOpt, true, SwDocPositions::Start, SwDocPositions::End));
@@ -1832,8 +1832,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf88899)
     uno::Reference<util::XNumberFormatTypes> xNumFormat(xNumberFormatsSupplier->getNumberFormats(),
                                                         uno::UNO_QUERY);
     css::lang::Locale alocale;
-    alocale.Language = "en";
-    alocale.Country = "US";
+    alocale.Language = u"en"_ustr;
+    alocale.Country = u"US"_ustr;
     sal_Int16 key = xNumFormat->getStandardFormat(util::NumberFormat::DATETIME, alocale);
     xPropSet->setPropertyValue(u"NumberFormat"_ustr, uno::Any(key));
     //Inserting Text Content
@@ -2381,7 +2381,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testUnicodeNotationToggle)
     CPPUNIT_ASSERT_EQUAL(u"uU+002b"_ustr, sOriginalDocString);
 
     dispatchCommand(mxComponent, u".uno:UnicodeNotationToggle"_ustr, aPropertyValues);
-    sExpectedString = "u+";
+    sExpectedString = u"u+"_ustr;
     sDocString = pWrtShell->GetCursor()->GetPointNode().GetTextNode()->GetText();
     CPPUNIT_ASSERT_EQUAL(sExpectedString, sDocString);
 

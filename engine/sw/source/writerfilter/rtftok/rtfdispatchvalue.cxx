@@ -430,10 +430,10 @@ bool RTFDocumentImpl::dispatchTableValue(RTFKeyword nKeyword, int nParam)
                 tools::SvRef<RTFValue> pAbsValue(new RTFValue(-nParam));
                 std::swap(pIntValue, pAbsValue);
 
-                hRule = "exact";
+                hRule = u"exact"_ustr;
             }
             else if (nParam > 0)
-                hRule = "atLeast";
+                hRule = u"atLeast"_ustr;
 
             putNestedAttribute(m_aStates.top().getTableRowSprms(),
                                NS_ooxml::LN_CT_TrPrBase_trHeight, NS_ooxml::LN_CT_Height_val,
@@ -1119,13 +1119,13 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             switch (nParam)
             {
                 case 0:
-                    sValue = "tab";
+                    sValue = u"tab"_ustr;
                     break;
                 case 1:
-                    sValue = "space";
+                    sValue = u"space"_ustr;
                     break;
                 case 2:
-                    sValue = "nothing";
+                    sValue = u"nothing"_ustr;
                     break;
             }
             if (!sValue.isEmpty())
@@ -1460,17 +1460,17 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 switch (nKeyword)
                 {
                     case RTFKeyword::NOFPAGES:
-                        aName = "PageCount";
+                        aName = u"PageCount"_ustr;
                         nParam = 99;
                         break;
                     case RTFKeyword::NOFWORDS:
-                        aName = "WordCount";
+                        aName = u"WordCount"_ustr;
                         break;
                     case RTFKeyword::NOFCHARS:
-                        aName = "CharacterCount";
+                        aName = u"CharacterCount"_ustr;
                         break;
                     case RTFKeyword::NOFCHARSWS:
-                        aName = "NonWhitespaceCharacterCount";
+                        aName = u"NonWhitespaceCharacterCount"_ustr;
                         break;
                     default:
                         break;

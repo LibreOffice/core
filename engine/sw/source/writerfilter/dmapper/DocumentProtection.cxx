@@ -85,11 +85,11 @@ void DocumentProtection::lcl_attribute(Id nName, const Value& val)
             break;
         case NS_ooxml::LN_AG_Password_cryptAlgorithmClass: // 92026
             if (nIntValue == NS_ooxml::LN_Value_doc_ST_AlgClass_hash) // 92023
-                m_sCryptAlgorithmClass = "hash";
+                m_sCryptAlgorithmClass = u"hash"_ustr;
             break;
         case NS_ooxml::LN_AG_Password_cryptAlgorithmType: // 92027
             if (nIntValue == NS_ooxml::LN_Value_doc_ST_AlgType_typeAny) // 92024
-                m_sCryptAlgorithmType = "typeAny";
+                m_sCryptAlgorithmType = u"typeAny"_ustr;
             break;
         case NS_ooxml::LN_AG_Password_cryptAlgorithmSid: // 92028
             m_sCryptAlgorithmSid = sStringValue;
@@ -123,7 +123,7 @@ uno::Sequence<beans::PropertyValue> DocumentProtection::toSequence() const
         // w:edit
         {
             beans::PropertyValue aValue;
-            aValue.Name = "edit";
+            aValue.Name = u"edit"_ustr;
 
             switch (m_nEdit)
             {
@@ -156,7 +156,7 @@ uno::Sequence<beans::PropertyValue> DocumentProtection::toSequence() const
         // w:enforcement
         {
             beans::PropertyValue aValue;
-            aValue.Name = "enforcement";
+            aValue.Name = u"enforcement"_ustr;
             if (m_bEnforcement)
                 aValue.Value <<= u"1"_ustr;
             else
@@ -168,7 +168,7 @@ uno::Sequence<beans::PropertyValue> DocumentProtection::toSequence() const
         if (m_bFormatting)
         {
             beans::PropertyValue aValue;
-            aValue.Name = "formatting";
+            aValue.Name = u"formatting"_ustr;
             aValue.Value <<= u"1"_ustr;
             documentProtection.push_back(aValue);
         }
@@ -176,7 +176,7 @@ uno::Sequence<beans::PropertyValue> DocumentProtection::toSequence() const
         // w:cryptProviderType
         {
             beans::PropertyValue aValue;
-            aValue.Name = "cryptProviderType";
+            aValue.Name = u"cryptProviderType"_ustr;
             if (m_nCryptProviderType == NS_ooxml::LN_Value_doc_ST_CryptProv_rsaAES)
                 aValue.Value <<= u"rsaAES"_ustr;
             else if (m_nCryptProviderType == NS_ooxml::LN_Value_doc_ST_CryptProv_rsaFull)
@@ -187,7 +187,7 @@ uno::Sequence<beans::PropertyValue> DocumentProtection::toSequence() const
         // w:cryptAlgorithmClass
         {
             beans::PropertyValue aValue;
-            aValue.Name = "cryptAlgorithmClass";
+            aValue.Name = u"cryptAlgorithmClass"_ustr;
             aValue.Value <<= m_sCryptAlgorithmClass;
             documentProtection.push_back(aValue);
         }
@@ -195,7 +195,7 @@ uno::Sequence<beans::PropertyValue> DocumentProtection::toSequence() const
         // w:cryptAlgorithmType
         {
             beans::PropertyValue aValue;
-            aValue.Name = "cryptAlgorithmType";
+            aValue.Name = u"cryptAlgorithmType"_ustr;
             aValue.Value <<= m_sCryptAlgorithmType;
             documentProtection.push_back(aValue);
         }
@@ -203,7 +203,7 @@ uno::Sequence<beans::PropertyValue> DocumentProtection::toSequence() const
         // w:cryptAlgorithmSid
         {
             beans::PropertyValue aValue;
-            aValue.Name = "cryptAlgorithmSid";
+            aValue.Name = u"cryptAlgorithmSid"_ustr;
             aValue.Value <<= m_sCryptAlgorithmSid;
             documentProtection.push_back(aValue);
         }
@@ -211,7 +211,7 @@ uno::Sequence<beans::PropertyValue> DocumentProtection::toSequence() const
         // w:cryptSpinCount
         {
             beans::PropertyValue aValue;
-            aValue.Name = "cryptSpinCount";
+            aValue.Name = u"cryptSpinCount"_ustr;
             aValue.Value <<= OUString::number(m_CryptSpinCount);
             documentProtection.push_back(aValue);
         }
@@ -219,7 +219,7 @@ uno::Sequence<beans::PropertyValue> DocumentProtection::toSequence() const
         // w:hash
         {
             beans::PropertyValue aValue;
-            aValue.Name = "hash";
+            aValue.Name = u"hash"_ustr;
             aValue.Value <<= m_sHash;
             documentProtection.push_back(aValue);
         }
@@ -227,7 +227,7 @@ uno::Sequence<beans::PropertyValue> DocumentProtection::toSequence() const
         // w:salt
         {
             beans::PropertyValue aValue;
-            aValue.Name = "salt";
+            aValue.Name = u"salt"_ustr;
             aValue.Value <<= m_sSalt;
             documentProtection.push_back(aValue);
         }

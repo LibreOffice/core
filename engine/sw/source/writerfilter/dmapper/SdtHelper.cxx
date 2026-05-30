@@ -400,17 +400,17 @@ void SdtHelper::createPlainTextControl()
     {
         OUString sPropertyName;
         if (prop.Name == "ooxml:CT_SdtPr_showingPlcHdr")
-            sPropertyName = "ShowingPlaceHolder";
+            sPropertyName = u"ShowingPlaceHolder"_ustr;
         else if (prop.Name == "ooxml:CT_SdtPr_alias")
-            sPropertyName = "Alias";
+            sPropertyName = u"Alias"_ustr;
         else if (prop.Name == "ooxml:CT_SdtPr_tag")
-            sPropertyName = "Tag";
+            sPropertyName = u"Tag"_ustr;
         else if (prop.Name == "ooxml:CT_SdtPr_id")
-            sPropertyName = "Id";
+            sPropertyName = u"Id"_ustr;
         else if (prop.Name == "ooxml:CT_SdtPr_tabIndex")
-            sPropertyName = "TabIndex";
+            sPropertyName = u"TabIndex"_ustr;
         else if (prop.Name == "ooxml:CT_SdtPr_lock")
-            sPropertyName = "Lock";
+            sPropertyName = u"Lock"_ustr;
         else if (prop.Name == "ooxml:CT_SdtPlaceholder_docPart"
                  || prop.Name == "ooxml:CT_SdtPr_dataBinding" || prop.Name == "ooxml:CT_SdtPr_color"
                  || prop.Name == "ooxml:CT_SdtPr_appearance" || prop.Name == "ooxml:CT_SdtPr_text")
@@ -420,19 +420,19 @@ void SdtHelper::createPlainTextControl()
             for (const beans::PropertyValue& internalProp : aInternalGrabBag)
             {
                 if (internalProp.Name == "ooxml:CT_SdtPlaceholder_docPart_val")
-                    sPropertyName = "PlaceholderDocPart";
+                    sPropertyName = u"PlaceholderDocPart"_ustr;
                 else if (internalProp.Name == "ooxml:CT_DataBinding_prefixMappings")
-                    sPropertyName = "DataBindingPrefixMappings";
+                    sPropertyName = u"DataBindingPrefixMappings"_ustr;
                 else if (internalProp.Name == "ooxml:CT_DataBinding_xpath")
-                    sPropertyName = "DataBindingXpath";
+                    sPropertyName = u"DataBindingXpath"_ustr;
                 else if (internalProp.Name == "ooxml:CT_DataBinding_storeItemID")
-                    sPropertyName = "DataBindingStoreItemID";
+                    sPropertyName = u"DataBindingStoreItemID"_ustr;
                 else if (internalProp.Name == "ooxml:CT_SdtAppearance_val")
-                    sPropertyName = "Appearance";
+                    sPropertyName = u"Appearance"_ustr;
                 else if (internalProp.Name == "ooxml:CT_SdtColor_val")
-                    sPropertyName = "Color";
+                    sPropertyName = u"Color"_ustr;
                 else if (internalProp.Name == "ooxml:CT_SdtText_multiLine")
-                    sPropertyName = "MultiLine";
+                    sPropertyName = u"MultiLine"_ustr;
                 if (!sPropertyName.isEmpty())
                 {
                     xContentControl->setPropertyValue(sPropertyName, internalProp.Value);

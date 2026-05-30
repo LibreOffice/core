@@ -2915,13 +2915,13 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                 switch (nSlot)
                 {
                     case FN_FORMAT_PAGE_COLUMN_DLG:
-                        sPageId = "columns";
+                        sPageId = u"columns"_ustr;
                         break;
                     case FN_FORMAT_PAGE_SETTING_DLG:
-                        sPageId = "page";
+                        sPageId = u"page"_ustr;
                         break;
                     case FN_FORMAT_PAGE_AREA_DLG:
-                        sPageId = "area";
+                        sPageId = u"area"_ustr;
                         break;
                     case FN_FORMAT_PAGE_DLG:
                         if (pItem)

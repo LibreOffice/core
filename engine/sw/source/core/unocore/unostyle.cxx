@@ -1269,26 +1269,26 @@ uno::Sequence< OUString > SwXStyle::getSupportedServiceNames()
         nCount = 3;
     uno::Sequence< OUString > aRet(nCount);
     OUString* pArray = aRet.getArray();
-    pArray[0] = "com.sun.star.style.Style";
+    pArray[0] = u"com.sun.star.style.Style"_ustr;
     switch(m_rEntry.family())
     {
         case SfxStyleFamily::Char:
-            pArray[1] = "com.sun.star.style.CharacterStyle";
-            pArray[2] = "com.sun.star.style.CharacterProperties";
-            pArray[3] = "com.sun.star.style.CharacterPropertiesAsian";
-            pArray[4] = "com.sun.star.style.CharacterPropertiesComplex";
+            pArray[1] = u"com.sun.star.style.CharacterStyle"_ustr;
+            pArray[2] = u"com.sun.star.style.CharacterProperties"_ustr;
+            pArray[3] = u"com.sun.star.style.CharacterPropertiesAsian"_ustr;
+            pArray[4] = u"com.sun.star.style.CharacterPropertiesComplex"_ustr;
         break;
         case SfxStyleFamily::Page:
-            pArray[1] = "com.sun.star.style.PageStyle";
-            pArray[2] = "com.sun.star.style.PageProperties";
+            pArray[1] = u"com.sun.star.style.PageStyle"_ustr;
+            pArray[2] = u"com.sun.star.style.PageProperties"_ustr;
         break;
         case SfxStyleFamily::Para:
-            pArray[1] = "com.sun.star.style.ParagraphStyle";
-            pArray[2] = "com.sun.star.style.ParagraphProperties";
-            pArray[3] = "com.sun.star.style.ParagraphPropertiesAsian";
-            pArray[4] = "com.sun.star.style.ParagraphPropertiesComplex";
+            pArray[1] = u"com.sun.star.style.ParagraphStyle"_ustr;
+            pArray[2] = u"com.sun.star.style.ParagraphProperties"_ustr;
+            pArray[3] = u"com.sun.star.style.ParagraphPropertiesAsian"_ustr;
+            pArray[4] = u"com.sun.star.style.ParagraphPropertiesComplex"_ustr;
         if(m_bIsConditional)
-            pArray[5] = "com.sun.star.style.ConditionalParagraphStyle";
+            pArray[5] = u"com.sun.star.style.ConditionalParagraphStyle"_ustr;
         break;
 
         default:
@@ -3611,9 +3611,9 @@ uno::Sequence< OUString > SwXAutoStyles::getElementNames()
 {
     uno::Sequence< OUString > aNames(AUTOSTYLE_FAMILY_COUNT);
     OUString* pNames = aNames.getArray();
-    pNames[0] = "CharacterStyles";
-    pNames[1] = "RubyStyles";
-    pNames[2] = "ParagraphStyles";
+    pNames[0] = u"CharacterStyles"_ustr;
+    pNames[1] = u"RubyStyles"_ustr;
+    pNames[2] = u"ParagraphStyles"_ustr;
     return aNames;
 }
 

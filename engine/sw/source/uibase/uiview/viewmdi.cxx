@@ -58,11 +58,11 @@ namespace {
 void collectUIInformation(const OUString& aFactor)
 {
     EventDescription aDescription;
-    aDescription.aID = "writer_edit";
+    aDescription.aID = u"writer_edit"_ustr;
     aDescription.aParameters = {{"ZOOM", aFactor}};
-    aDescription.aAction = "SET";
-    aDescription.aKeyWord = "SwEditWinUIObject";
-    aDescription.aParent = "MainWindow";
+    aDescription.aAction = u"SET"_ustr;
+    aDescription.aKeyWord = u"SwEditWinUIObject"_ustr;
+    aDescription.aParent = u"MainWindow"_ustr;
     UITestLogger::getInstance().logEvent(aDescription);
 }
 
@@ -716,18 +716,18 @@ IMPL_LINK( SwView, ExecRulerClick, Ruler *, pRuler, void )
     {
         case RulerType::DontKnow:
         case RulerType::Outside:
-            sDefPage="borders";
+            sDefPage=u"borders"_ustr;
             break;
         case RulerType::Indent:
-            sDefPage="indents";
+            sDefPage=u"indents"_ustr;
             break;
         case RulerType::Margin1:
         case RulerType::Margin2:
             nDefDlg= FN_FORMAT_PAGE_DLG;
-            sDefPage = "page";
+            sDefPage = u"page"_ustr;
             break;
         default:
-            sDefPage = "tabs";
+            sDefPage = u"tabs"_ustr;
 
     }
 

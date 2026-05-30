@@ -84,28 +84,28 @@ void DocumentDrawModelManager::InitDrawModel()
     mpDrawModel->EnableUndo( m_rDoc.GetIDocumentUndoRedo().DoesUndo() );
 
     OUString sLayerNm;
-    sLayerNm = "Hell";
+    sLayerNm = u"Hell"_ustr;
     mnHell   = mpDrawModel->GetLayerAdmin().NewLayer( sLayerNm )->GetID();
 
-    sLayerNm = "HeaderFooterHell";
+    sLayerNm = u"HeaderFooterHell"_ustr;
     mnHeaderFooterHell = mpDrawModel->GetLayerAdmin().NewLayer( sLayerNm )->GetID();
 
-    sLayerNm = "Heaven";
+    sLayerNm = u"Heaven"_ustr;
     mnHeaven = mpDrawModel->GetLayerAdmin().NewLayer( sLayerNm )->GetID();
 
-    sLayerNm = "Controls";
+    sLayerNm = u"Controls"_ustr;
     mnControls = mpDrawModel->GetLayerAdmin().NewLayer( sLayerNm )->GetID();
     mpDrawModel->GetLayerAdmin().SetControlLayerName(sLayerNm);
 
     // add invisible layers corresponding to the visible ones.
     {
-        sLayerNm = "InvisibleHell";
+        sLayerNm = u"InvisibleHell"_ustr;
         mnInvisibleHell   = mpDrawModel->GetLayerAdmin().NewLayer( sLayerNm )->GetID();
 
-        sLayerNm = "InvisibleHeaven";
+        sLayerNm = u"InvisibleHeaven"_ustr;
         mnInvisibleHeaven = mpDrawModel->GetLayerAdmin().NewLayer( sLayerNm )->GetID();
 
-        sLayerNm = "InvisibleControls";
+        sLayerNm = u"InvisibleControls"_ustr;
         mnInvisibleControls = mpDrawModel->GetLayerAdmin().NewLayer( sLayerNm )->GetID();
     }
 
@@ -238,13 +238,13 @@ SdrLayerID DocumentDrawModelManager::GetInvisibleControlsId() const
 void DocumentDrawModelManager::NotifyInvisibleLayers( SdrPageView& _rSdrPageView )
 {
     OUString sLayerNm;
-    sLayerNm = "InvisibleHell";
+    sLayerNm = u"InvisibleHell"_ustr;
     _rSdrPageView.SetLayerVisible( sLayerNm, false );
 
-    sLayerNm = "InvisibleHeaven";
+    sLayerNm = u"InvisibleHeaven"_ustr;
     _rSdrPageView.SetLayerVisible( sLayerNm, false );
 
-    sLayerNm = "InvisibleControls";
+    sLayerNm = u"InvisibleControls"_ustr;
     _rSdrPageView.SetLayerVisible( sLayerNm, false );
 }
 

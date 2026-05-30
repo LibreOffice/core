@@ -1683,7 +1683,7 @@ css::uno::Reference<css::uno::XInterface> SwXTextDocument::create(
     OUString aTmpServiceName(rServiceName);
     if (rServiceName == "com.sun.star.drawing.temporaryForXMLImportOLE2Shape")
     {
-        aTmpServiceName = "com.sun.star.drawing.OLE2Shape";
+        aTmpServiceName = u"com.sun.star.drawing.OLE2Shape"_ustr;
     }
     Reference<XInterface> xTmp(
         arguments == nullptr
@@ -1950,15 +1950,15 @@ Sequence< OUString > SwXTextDocument::getSupportedServiceNames()
     Sequence< OUString > aRet (3);
     OUString* pArray = aRet.getArray();
 
-    pArray[0] = "com.sun.star.document.OfficeDocument";
-    pArray[1] = "com.sun.star.text.GenericTextDocument";
+    pArray[0] = u"com.sun.star.document.OfficeDocument"_ustr;
+    pArray[1] = u"com.sun.star.text.GenericTextDocument"_ustr;
 
     if (bTextDoc)
-        pArray[2] = "com.sun.star.text.TextDocument";
+        pArray[2] = u"com.sun.star.text.TextDocument"_ustr;
     else if (bWebDoc)
-        pArray[2] = "com.sun.star.text.WebDocument";
+        pArray[2] = u"com.sun.star.text.WebDocument"_ustr;
     else if (bGlobalDoc)
-        pArray[2] = "com.sun.star.text.GlobalDocument";
+        pArray[2] = u"com.sun.star.text.GlobalDocument"_ustr;
 
     return aRet;
 }
@@ -3030,7 +3030,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
             ++nLen;
             aRenderer.realloc( nLen );
             auto pRenderer = aRenderer.getArray();
-            pRenderer[ nLen - 1 ].Name  = "PreferredPageSize";
+            pRenderer[ nLen - 1 ].Name  = u"PreferredPageSize"_ustr;
             pRenderer[ nLen - 1 ].Value <<= aPreferredPageSize;
         }
         if (nPrinterPaperTray >= 0)
@@ -3038,7 +3038,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
             ++nLen;
             aRenderer.realloc( nLen );
             auto pRenderer = aRenderer.getArray();
-            pRenderer[ nLen - 1 ].Name  = "PrinterPaperTray";
+            pRenderer[ nLen - 1 ].Name  = u"PrinterPaperTray"_ustr;
             pRenderer[ nLen - 1 ].Value <<= nPrinterPaperTray;
         }
 #ifdef MACOSX
@@ -3070,22 +3070,22 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
             auto pRenderer = aRenderer.getArray();
             // put page print settings attribute into render data
             const sal_Int32 nRow = pPagePrintSettings->GetRow();
-            pRenderer[ nRenderDataIdxStart + 0 ].Name  = "NUpRows";
+            pRenderer[ nRenderDataIdxStart + 0 ].Name  = u"NUpRows"_ustr;
             pRenderer[ nRenderDataIdxStart + 0 ].Value <<= std::max<sal_Int32>( nRow, 1);
             const sal_Int32 nCol = pPagePrintSettings->GetCol();
-            pRenderer[ nRenderDataIdxStart + 1 ].Name  = "NUpColumns";
+            pRenderer[ nRenderDataIdxStart + 1 ].Name  = u"NUpColumns"_ustr;
             pRenderer[ nRenderDataIdxStart + 1 ].Value <<= std::max<sal_Int32>( nCol, 1);
-            pRenderer[ nRenderDataIdxStart + 2 ].Name  = "NUpPageMarginLeft";
+            pRenderer[ nRenderDataIdxStart + 2 ].Name  = u"NUpPageMarginLeft"_ustr;
             pRenderer[ nRenderDataIdxStart + 2 ].Value <<= pPagePrintSettings->GetLeftSpace();
-            pRenderer[ nRenderDataIdxStart + 3 ].Name  = "NUpPageMarginRight";
+            pRenderer[ nRenderDataIdxStart + 3 ].Name  = u"NUpPageMarginRight"_ustr;
             pRenderer[ nRenderDataIdxStart + 3 ].Value <<= pPagePrintSettings->GetRightSpace();
-            pRenderer[ nRenderDataIdxStart + 4 ].Name  = "NUpPageMarginTop";
+            pRenderer[ nRenderDataIdxStart + 4 ].Name  = u"NUpPageMarginTop"_ustr;
             pRenderer[ nRenderDataIdxStart + 4 ].Value <<= pPagePrintSettings->GetTopSpace();
-            pRenderer[ nRenderDataIdxStart + 5 ].Name  = "NUpPageMarginBottom";
+            pRenderer[ nRenderDataIdxStart + 5 ].Name  = u"NUpPageMarginBottom"_ustr;
             pRenderer[ nRenderDataIdxStart + 5 ].Value <<= pPagePrintSettings->GetBottomSpace();
-            pRenderer[ nRenderDataIdxStart + 6 ].Name  = "NUpHorizontalSpacing";
+            pRenderer[ nRenderDataIdxStart + 6 ].Name  = u"NUpHorizontalSpacing"_ustr;
             pRenderer[ nRenderDataIdxStart + 6 ].Value <<= pPagePrintSettings->GetHorzSpace();
-            pRenderer[ nRenderDataIdxStart + 7 ].Name  = "NUpVerticalSpacing";
+            pRenderer[ nRenderDataIdxStart + 7 ].Name  = u"NUpVerticalSpacing"_ustr;
             pRenderer[ nRenderDataIdxStart + 7 ].Value <<= pPagePrintSettings->GetVertSpace();
             if (Printer* pPrinter = rDoc.getIDocumentDeviceAccess().getPrinter(false))
             {
@@ -3099,7 +3099,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
                 {
                     aNewPageSize = awt::Size( aPageSize.Height(), aPageSize.Width() );
                 }
-                pRenderer[ nRenderDataIdxStart + 8 ].Name  = "NUpPaperSize";
+                pRenderer[ nRenderDataIdxStart + 8 ].Name  = u"NUpPaperSize"_ustr;
                 pRenderer[ nRenderDataIdxStart + 8 ].Value <<= aNewPageSize;
             }
         }

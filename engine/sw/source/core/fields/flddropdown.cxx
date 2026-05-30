@@ -71,7 +71,7 @@ OUString SwDropDownField::ExpandImpl(SwRootFrame const*const) const
     }
     // if still no list value is available a default text of 10 spaces is to be set
     if (sSelect.isEmpty())
-        sSelect = "          ";
+        sSelect = u"          "_ustr;
     return sSelect;
 }
 

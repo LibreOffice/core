@@ -944,7 +944,7 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
 
         }
 
-        sPropName = "TextColor";
+        sPropName = u"TextColor"_ustr;
         const SvxColorItem* pColorItem = rCSS1ItemSet.GetItemIfSet( RES_CHRATR_COLOR );
         if( pColorItem && xPropSetInfo->hasPropertyByName( sPropName ) )
         {
@@ -952,7 +952,7 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
             rFCompPropSet->setPropertyValue( sPropName, aTmp );
         }
 
-        sPropName = "FontHeight";
+        sPropName = u"FontHeight"_ustr;
         const SvxFontHeightItem* pFontHeightItem = rCSS1ItemSet.GetItemIfSet( RES_CHRATR_FONTSIZE );
         if( pFontHeightItem && xPropSetInfo->hasPropertyByName( sPropName ) )
         {
@@ -963,31 +963,31 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
 
         if( const SvxFontItem* pFontItem = rCSS1ItemSet.GetItemIfSet( RES_CHRATR_FONT ) )
         {
-            sPropName = "FontName";
+            sPropName = u"FontName"_ustr;
             if( xPropSetInfo->hasPropertyByName( sPropName ) )
             {
                 aTmp <<= pFontItem->GetFamilyName();
                 rFCompPropSet->setPropertyValue( sPropName, aTmp );
             }
-            sPropName = "FontStyleName";
+            sPropName = u"FontStyleName"_ustr;
             if( xPropSetInfo->hasPropertyByName( sPropName ) )
             {
                 aTmp <<= pFontItem->GetStyleName();
                 rFCompPropSet->setPropertyValue( sPropName, aTmp );
             }
-            sPropName = "FontFamily";
+            sPropName = u"FontFamily"_ustr;
             if( xPropSetInfo->hasPropertyByName( sPropName ) )
             {
                 aTmp <<= static_cast<sal_Int16>(pFontItem->GetFamily()) ;
                 rFCompPropSet->setPropertyValue( sPropName, aTmp );
             }
-            sPropName = "FontCharset";
+            sPropName = u"FontCharset"_ustr;
             if( xPropSetInfo->hasPropertyByName( sPropName ) )
             {
                 aTmp <<= static_cast<sal_Int16>(pFontItem->GetCharSet()) ;
                 rFCompPropSet->setPropertyValue( sPropName, aTmp );
             }
-            sPropName = "FontPitch";
+            sPropName = u"FontPitch"_ustr;
             if( xPropSetInfo->hasPropertyByName( sPropName ) )
             {
                 aTmp <<= static_cast<sal_Int16>(pFontItem->GetPitch()) ;
@@ -995,7 +995,7 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
             }
         }
 
-        sPropName = "FontWeight";
+        sPropName = u"FontWeight"_ustr;
         const SvxWeightItem* pWeightItem = rCSS1ItemSet.GetItemIfSet( RES_CHRATR_WEIGHT );
         if( pWeightItem && xPropSetInfo->hasPropertyByName( sPropName ) )
         {
@@ -1005,7 +1005,7 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
             rFCompPropSet->setPropertyValue( sPropName, aTmp );
         }
 
-        sPropName = "FontSlant";
+        sPropName = u"FontSlant"_ustr;
         const SvxPostureItem* pPostureItem = rCSS1ItemSet.GetItemIfSet( RES_CHRATR_POSTURE );
         if( pPostureItem && xPropSetInfo->hasPropertyByName( sPropName ) )
         {
@@ -1013,7 +1013,7 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
             rFCompPropSet->setPropertyValue( sPropName, aTmp );
         }
 
-        sPropName = "FontUnderline";
+        sPropName = u"FontUnderline"_ustr;
         const SvxUnderlineItem* pUnderlineItem = rCSS1ItemSet.GetItemIfSet( RES_CHRATR_UNDERLINE );
         if( pUnderlineItem && xPropSetInfo->hasPropertyByName( sPropName ) )
         {
@@ -1021,7 +1021,7 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
             rFCompPropSet->setPropertyValue( sPropName, aTmp );
         }
 
-        sPropName = "FontStrikeout";
+        sPropName = u"FontStrikeout"_ustr;
         const SvxCrossedOutItem* pCrossedOutItem = rCSS1ItemSet.GetItemIfSet( RES_CHRATR_CROSSEDOUT );
         if( pCrossedOutItem && xPropSetInfo->hasPropertyByName( sPropName ) )
         {
@@ -2414,7 +2414,7 @@ void SwHTMLParser::InsertSelectOption()
         case HtmlOptionId::VALUE:
             aValue = rOption.GetString();
             if( aValue.isEmpty() )
-                aValue = "$$$empty$$$";
+                aValue = u"$$$empty$$$"_ustr;
             break;
         default: break;
         }

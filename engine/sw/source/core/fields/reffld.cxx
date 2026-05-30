@@ -339,9 +339,9 @@ static void lcl_formatReferenceLanguage( OUString& rRefText,
     OUString sArticle;
 
     if ( rReferenceLanguage == u"hu" )
-        sArticle = "a";
+        sArticle = u"a"_ustr;
     else
-        sArticle = "A";
+        sArticle = u"A"_ustr;
 
     if (bArticleAz)
         sArticle += "z";

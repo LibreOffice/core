@@ -957,7 +957,7 @@ OUString SwNumRule::MakeNumString( const SwNumberTree::tNumberVector & rNumVecto
             if (rNumVector[nReplaceLevel])
                 sReplacement = rNFormat.GetNumStr(rNumVector[nReplaceLevel], aLocale, rMyNFormat.GetIsLegal());
             else
-                sReplacement = "0";        // all 0 level are a 0
+                sReplacement = u"0"_ustr;        // all 0 level are a 0
 
             sLevelFormat = sLevelFormat.replaceAt(nPosition, nEndPosition - nPosition, sReplacement);
             nPosition += sReplacement.getLength();
@@ -1489,7 +1489,7 @@ namespace numfunc
 
     void SwDefBulletConfig::SetToDefault()
     {
-        msFontname = "OpenSymbol";
+        msFontname = u"OpenSymbol"_ustr;
         mbUserDefinedFontname = false;
         meFontWeight = WEIGHT_DONTKNOW;
         meFontItalic = ITALIC_NONE;
@@ -1510,19 +1510,19 @@ namespace numfunc
     {
         uno::Sequence<OUString> aPropNames(13);
         OUString* pNames = aPropNames.getArray();
-        pNames[0] = "BulletFont/FontFamilyname";
-        pNames[1] = "BulletFont/FontWeight";
-        pNames[2] = "BulletFont/FontItalic";
-        pNames[3] = "BulletCharLvl1";
-        pNames[4] = "BulletCharLvl2";
-        pNames[5] = "BulletCharLvl3";
-        pNames[6] = "BulletCharLvl4";
-        pNames[7] = "BulletCharLvl5";
-        pNames[8] = "BulletCharLvl6";
-        pNames[9] = "BulletCharLvl7";
-        pNames[10] = "BulletCharLvl8";
-        pNames[11] = "BulletCharLvl9";
-        pNames[12] = "BulletCharLvl10";
+        pNames[0] = u"BulletFont/FontFamilyname"_ustr;
+        pNames[1] = u"BulletFont/FontWeight"_ustr;
+        pNames[2] = u"BulletFont/FontItalic"_ustr;
+        pNames[3] = u"BulletCharLvl1"_ustr;
+        pNames[4] = u"BulletCharLvl2"_ustr;
+        pNames[5] = u"BulletCharLvl3"_ustr;
+        pNames[6] = u"BulletCharLvl4"_ustr;
+        pNames[7] = u"BulletCharLvl5"_ustr;
+        pNames[8] = u"BulletCharLvl6"_ustr;
+        pNames[9] = u"BulletCharLvl7"_ustr;
+        pNames[10] = u"BulletCharLvl8"_ustr;
+        pNames[11] = u"BulletCharLvl9"_ustr;
+        pNames[12] = u"BulletCharLvl10"_ustr;
 
         return aPropNames;
     }

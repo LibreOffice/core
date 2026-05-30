@@ -560,8 +560,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testHiddenSectionPDFExport2)
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->GetDBManager()->RegisterConnection("Bibliography");
     SwDBData data;
-    data.sDataSource = "Bibliography";
-    data.sCommand = "biblio";
+    data.sDataSource = u"Bibliography"_ustr;
+    data.sCommand = u"biblio"_ustr;
     pWrtShell->ChgDBData(data);
     // this would be called via a SwXTextView listener
     pMMConfig->updateCurrentDBDataFromDocument();

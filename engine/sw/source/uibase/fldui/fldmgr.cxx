@@ -1144,9 +1144,9 @@ bool SwFieldMgr::InsertField(
                 if (nLang == LANGUAGE_HUNGARIAN)
                 {
                     if (nFormatId >= SAL_N_ELEMENTS(FMT_REF_ARY) * 2)
-                        sReferenceLanguage = "Hu";
+                        sReferenceLanguage = u"Hu"_ustr;
                     else
-                        sReferenceLanguage = "hu";
+                        sReferenceLanguage = u"hu"_ustr;
                 }
                 nFormatId %= SAL_N_ELEMENTS(FMT_REF_ARY);
             }
@@ -1677,7 +1677,7 @@ void SwFieldMgr::UpdateCurField(sal_uInt32 nFormat,
             if( SVX_NUM_CHAR_SPECIAL == nFormat )
             {
                 static_cast<SwPageNumberField*>(m_pCurField)->SetUserString( sPar2 );
-                sPar2 = "1";
+                sPar2 = u"1"_ustr;
             }
             else
             {
@@ -1693,7 +1693,7 @@ void SwFieldMgr::UpdateCurField(sal_uInt32 nFormat,
             if( SVX_NUM_CHAR_SPECIAL == nFormat )
             {
                 static_cast<SwPageNumberField*>(m_pCurField)->SetUserString( sPar2 );
-                sPar2 = "-1";
+                sPar2 = u"-1"_ustr;
             }
             else
             {

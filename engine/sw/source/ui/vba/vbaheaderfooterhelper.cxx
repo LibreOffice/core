@@ -59,9 +59,9 @@ bool HeaderFooterHelper::isHeader( const rtl::Reference< SwXTextDocument >& xMod
     {
         uno::Reference< text::XPageCursor > xPageCursor( word::getXTextViewCursor( xModel ), uno::UNO_QUERY_THROW );
         if( 0 == xPageCursor->getPage() % 2 )
-            aPropText = "HeaderTextLeft";
+            aPropText = u"HeaderTextLeft"_ustr;
         else
-            aPropText = "HeaderTextRight";
+            aPropText = u"HeaderTextRight"_ustr;
     }
 
     uno::Reference< text::XText > xHeaderText( xPageStyle->getPropertyValue( aPropText ), uno::UNO_QUERY_THROW );
@@ -123,9 +123,9 @@ bool HeaderFooterHelper::isFooter( const rtl::Reference< SwXTextDocument >& xMod
     {
         uno::Reference< text::XPageCursor > xPageCursor( word::getXTextViewCursor( xModel ), uno::UNO_QUERY_THROW );
         if( 0 == xPageCursor->getPage() % 2 )
-            aPropText = "FooterTextLeft";
+            aPropText = u"FooterTextLeft"_ustr;
         else
-            aPropText = "FooterTextRight";
+            aPropText = u"FooterTextRight"_ustr;
     }
 
     uno::Reference< text::XText > xFooterText( xPageStyle->getPropertyValue( aPropText ), uno::UNO_QUERY_THROW );

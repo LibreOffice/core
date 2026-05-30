@@ -80,7 +80,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testStatusBarPageNumber)
         SfxSlotPool& rSlotPool = SfxSlotPool::GetSlotPool(&rFrame);
         uno::Reference<util::XURLTransformer> xParser(util::URLTransformer::create(m_xContext));
         util::URL aCommandURL;
-        aCommandURL.Complete = ".uno:StatePageNumber";
+        aCommandURL.Complete = u".uno:StatePageNumber"_ustr;
         xParser->parseStrict(aCommandURL);
         const SfxSlot* pSlot = rSlotPool.GetUnoSlot(aCommandURL.Path);
         rFrame.GetBindings().GetDispatch(pSlot, aCommandURL, false);

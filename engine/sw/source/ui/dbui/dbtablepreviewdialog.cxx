@@ -97,7 +97,7 @@ SwDBTablePreviewDialog::SwDBTablePreviewDialog(weld::Window* pParent, uno::Seque
     xFrame->addEventListener(m_xFrameListener);
 
     util::URL aURL;
-    aURL.Complete = ".component:DB/DataSourceBrowser";
+    aURL.Complete = u".component:DB/DataSourceBrowser"_ustr;
     uno::Reference<frame::XDispatch> xD = xFrame->queryDispatch(aURL, u""_ustr,
             css::frame::FrameSearchFlag::CHILDREN | css::frame::FrameSearchFlag::CREATE);
     if (xD.is())

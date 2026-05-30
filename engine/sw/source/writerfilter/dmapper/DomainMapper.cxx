@@ -3562,23 +3562,23 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
         OUString sName;
         switch (nSprmId)
         {
-            case NS_ooxml::LN_CT_SdtPr_dataBinding: sName = "ooxml:CT_SdtPr_dataBinding"; break;
-            case NS_ooxml::LN_CT_SdtPr_equation:    sName = "ooxml:CT_SdtPr_equation"; break;
-            case NS_ooxml::LN_CT_SdtPr_checkbox:    sName = "ooxml:CT_SdtPr_checkbox"; break;
-            case NS_ooxml::LN_CT_SdtPr_docPartObj:  sName = "ooxml:CT_SdtPr_docPartObj"; break;
-            case NS_ooxml::LN_CT_SdtPr_docPartList: sName = "ooxml:CT_SdtPr_docPartList"; break;
-            case NS_ooxml::LN_CT_SdtPr_picture:     sName = "ooxml:CT_SdtPr_picture"; break;
-            case NS_ooxml::LN_CT_SdtPr_citation:    sName = "ooxml:CT_SdtPr_citation"; break;
-            case NS_ooxml::LN_CT_SdtPr_group:       sName = "ooxml:CT_SdtPr_group"; break;
-            case NS_ooxml::LN_CT_SdtPr_id:          sName = "ooxml:CT_SdtPr_id"; break;
-            case NS_ooxml::LN_CT_SdtPr_alias:       sName = "ooxml:CT_SdtPr_alias"; break;
-            case NS_ooxml::LN_CT_SdtPr_tag:         sName = "ooxml:CT_SdtPr_tag"; break;
-            case NS_ooxml::LN_CT_SdtPr_tabIndex:    sName = "ooxml:CT_SdtPr_tabIndex"; break;
-            case NS_ooxml::LN_CT_SdtPr_lock:        sName = "ooxml:CT_SdtPr_lock"; break;
-            case NS_ooxml::LN_CT_SdtPlaceholder_docPart: sName = "ooxml:CT_SdtPlaceholder_docPart"; break;
-            case NS_ooxml::LN_CT_SdtPr_showingPlcHdr: sName = "ooxml:CT_SdtPr_showingPlcHdr"; break;
-            case NS_ooxml::LN_CT_SdtPr_color:       sName = "ooxml:CT_SdtPr_color"; break;
-            case NS_ooxml::LN_CT_SdtPr_appearance:  sName = "ooxml:CT_SdtPr_appearance"; break;
+            case NS_ooxml::LN_CT_SdtPr_dataBinding: sName = u"ooxml:CT_SdtPr_dataBinding"_ustr; break;
+            case NS_ooxml::LN_CT_SdtPr_equation:    sName = u"ooxml:CT_SdtPr_equation"_ustr; break;
+            case NS_ooxml::LN_CT_SdtPr_checkbox:    sName = u"ooxml:CT_SdtPr_checkbox"_ustr; break;
+            case NS_ooxml::LN_CT_SdtPr_docPartObj:  sName = u"ooxml:CT_SdtPr_docPartObj"_ustr; break;
+            case NS_ooxml::LN_CT_SdtPr_docPartList: sName = u"ooxml:CT_SdtPr_docPartList"_ustr; break;
+            case NS_ooxml::LN_CT_SdtPr_picture:     sName = u"ooxml:CT_SdtPr_picture"_ustr; break;
+            case NS_ooxml::LN_CT_SdtPr_citation:    sName = u"ooxml:CT_SdtPr_citation"_ustr; break;
+            case NS_ooxml::LN_CT_SdtPr_group:       sName = u"ooxml:CT_SdtPr_group"_ustr; break;
+            case NS_ooxml::LN_CT_SdtPr_id:          sName = u"ooxml:CT_SdtPr_id"_ustr; break;
+            case NS_ooxml::LN_CT_SdtPr_alias:       sName = u"ooxml:CT_SdtPr_alias"_ustr; break;
+            case NS_ooxml::LN_CT_SdtPr_tag:         sName = u"ooxml:CT_SdtPr_tag"_ustr; break;
+            case NS_ooxml::LN_CT_SdtPr_tabIndex:    sName = u"ooxml:CT_SdtPr_tabIndex"_ustr; break;
+            case NS_ooxml::LN_CT_SdtPr_lock:        sName = u"ooxml:CT_SdtPr_lock"_ustr; break;
+            case NS_ooxml::LN_CT_SdtPlaceholder_docPart: sName = u"ooxml:CT_SdtPlaceholder_docPart"_ustr; break;
+            case NS_ooxml::LN_CT_SdtPr_showingPlcHdr: sName = u"ooxml:CT_SdtPr_showingPlcHdr"_ustr; break;
+            case NS_ooxml::LN_CT_SdtPr_color:       sName = u"ooxml:CT_SdtPr_color"_ustr; break;
+            case NS_ooxml::LN_CT_SdtPr_appearance:  sName = u"ooxml:CT_SdtPr_appearance"_ustr; break;
             default: assert(false);
         };
         if (
@@ -5097,19 +5097,19 @@ void DomainMapper::handleParaJustification(const sal_Int32 nIntValue, const ::to
     {
     case NS_ooxml::LN_Value_ST_Jc_center:
         nAdjust = style::ParagraphAdjust_CENTER;
-        aStringValue = "center";
+        aStringValue = u"center"_ustr;
         break;
     case NS_ooxml::LN_Value_ST_Jc_right:
     case NS_ooxml::LN_Value_ST_Jc_end:
         nAdjust = bExchangeLeftRight ? style::ParagraphAdjust_LEFT : style::ParagraphAdjust_RIGHT;
-        aStringValue = "right";
+        aStringValue = u"right"_ustr;
         break;
     case NS_ooxml::LN_Value_ST_Jc_distribute:
         nLastLineAdjust = style::ParagraphAdjust_BLOCK;
         [[fallthrough]];
     case NS_ooxml::LN_Value_ST_Jc_both:
         nAdjust = style::ParagraphAdjust_BLOCK;
-        aStringValue = "both";
+        aStringValue = u"both"_ustr;
         // set default smart justify
         if ( GetSettingsTable()->GetWordCompatibilityMode() >= 15 )
         {

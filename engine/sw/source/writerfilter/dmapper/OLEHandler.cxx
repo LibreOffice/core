@@ -203,11 +203,11 @@ void OLEHandler::importStream(const uno::Reference<uno::XComponentContext>& xCom
 {
     OUString aFilterService;
     if (m_sProgId == "Word.Document.12")
-        aFilterService = "com.sun.star.comp.Writer.WriterFilter";
+        aFilterService = u"com.sun.star.comp.Writer.WriterFilter"_ustr;
     else if (m_sProgId == "Excel.Sheet.12")
-        aFilterService = "com.sun.star.comp.oox.xls.ExcelFilter";
+        aFilterService = u"com.sun.star.comp.oox.xls.ExcelFilter"_ustr;
     else if (m_sProgId == "Equation.3")
-        aFilterService = "com.sun.star.comp.Math.MathTypeFilter";
+        aFilterService = u"com.sun.star.comp.Math.MathTypeFilter"_ustr;
     else
         SAL_WARN("writerfilter", "OLEHandler::importStream: unhandled m_sProgId: " << m_sProgId);
 
@@ -246,17 +246,17 @@ OUString OLEHandler::getCLSID() const
     if (m_sProgId == "Word.Document.12")
     {
         if (officecfg::Office::Common::Filter::Microsoft::Import::WinWordToWriter::get())
-            aRet = "8BC6B165-B1B2-4EDD-aa47-dae2ee689dd6";
+            aRet = u"8BC6B165-B1B2-4EDD-aa47-dae2ee689dd6"_ustr;
     }
     else if (m_sProgId == "Excel.Sheet.12")
     {
         if (officecfg::Office::Common::Filter::Microsoft::Import::ExcelToCalc::get())
-            aRet = "47BBB4CB-CE4C-4E80-A591-42D9AE74950F";
+            aRet = u"47BBB4CB-CE4C-4E80-A591-42D9AE74950F"_ustr;
     }
     else if (m_sProgId == "Equation.3")
     {
         if (officecfg::Office::Common::Filter::Microsoft::Import::MathTypeToMath::get())
-            aRet = "078B7ABA-54FC-457F-8551-6147E776A997";
+            aRet = u"078B7ABA-54FC-457F-8551-6147E776A997"_ustr;
     }
     else
         SAL_INFO("writerfilter", "OLEHandler::getCLSID: unhandled m_sProgId: " << m_sProgId);

@@ -4411,7 +4411,7 @@ void DomainMapper_Impl::CreateRedline(uno::Reference<text::XTextRange> const& xR
             else
                 nRedlineMovedID = m_nLastRedlineMovedID;
         }
-        pRedlineProperties[3].Name = "RedlineMoved";
+        pRedlineProperties[3].Name = u"RedlineMoved"_ustr;
         pRedlineProperties[3].Value <<= nRedlineMovedID;
 
         if (!m_bIsActualParagraphFramed)
@@ -5947,8 +5947,8 @@ void DomainMapper_Impl::SetNumberFormat( const OUString& rCommand,
     // find \h - hijri/luna calendar todo: what about saka/era calendar?
     bool bHijri = 0 < rCommand.indexOf("\\h ");
     lang::Locale aUSLocale;
-    aUSLocale.Language = "en";
-    aUSLocale.Country = "US";
+    aUSLocale.Language = u"en"_ustr;
+    aUSLocale.Country = u"US"_ustr;
 
     lang::Locale aCurrentLocale;
     GetAnyProperty(PROP_CHAR_LOCALE, GetTopContext()) >>= aCurrentLocale;
@@ -9014,7 +9014,7 @@ void DomainMapper_Impl::SetFieldResult(OUString const& rResult)
                         else
                         {
                             aValues.realloc(aValues.getLength() + 1);
-                            propertyVal.Name = "Title";
+                            propertyVal.Name = u"Title"_ustr;
                             propertyVal.Value <<= rResult;
                             aValues.getArray()[aValues.getLength() - 1] = std::move(propertyVal);
                         }

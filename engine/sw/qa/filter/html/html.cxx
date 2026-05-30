@@ -264,7 +264,7 @@ CPPUNIT_TEST_FIXTURE(Test, testMailmergeCopy)
 
     // When copying that as HTML:
     datatransfer::DataFlavor aFlavor;
-    aFlavor.MimeType = "text/html";
+    aFlavor.MimeType = u"text/html"_ustr;
     aFlavor.DataType = cppu::UnoType<uno::Sequence<sal_Int8>>::get();
     uno::Any aData = xTransferable->getTransferData(aFlavor);
 

@@ -500,7 +500,7 @@ bool SwFieldPortion::GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) c
         !rInf.GetOpt().IsPagePreview() && !rInf.GetOpt().IsReadonly() &&
             rInf.GetOpt().IsFieldShadings() &&
             !HasFollow() )
-        rText = " ";
+        rText = u" "_ustr;
     return true;
 }
 

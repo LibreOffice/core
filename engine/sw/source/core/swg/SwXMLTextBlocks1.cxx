@@ -289,7 +289,7 @@ ErrCode SwXMLTextBlocks::GetBlockText( std::u16string_view rShort, OUString& rTe
         if ( !m_xRoot->hasByName( aStreamName ) || !m_xRoot->isStreamElement( aStreamName ) )
         {
             bTextOnly = false;
-            aStreamName = "content.xml";
+            aStreamName = u"content.xml"_ustr;
         }
 
         uno::Reference < io::XStream > xContents = m_xRoot->openStreamElement( aStreamName, embed::ElementModes::READ );

@@ -177,7 +177,7 @@ SwPrintUIOptions::SwPrintUIOptions(
     int nIdx = 0;
 
     // load the writer PrinterOptions into the custom tab
-    m_aUIProperties[nIdx].Name = "OptionsUIFile";
+    m_aUIProperties[nIdx].Name = u"OptionsUIFile"_ustr;
     m_aUIProperties[nIdx++].Value <<= u"modules/swriter/ui/printeroptions.ui"_ustr;
 
     // create "writer" section (new tab page in dialog)
@@ -252,7 +252,7 @@ SwPrintUIOptions::SwPrintUIOptions(
     // create a bool option for paper tray
     bDefaultVal = rDefaultPrintData.IsPaperFromSetup();
     vcl::PrinterOptionsHelper::UIControlOptions aPaperTrayOpt;
-    aPaperTrayOpt.maGroupHint = "OptionsPageOptGroup";
+    aPaperTrayOpt.maGroupHint = u"OptionsPageOptGroup"_ustr;
     m_aUIProperties[ nIdx++ ].Value = setBoolControlOpt(u"printpaperfromsetup"_ustr, SwResId( STR_PRINTOPTUI_ONLY_PAPER),
                                                         u".HelpID:vcl:PrintDialog:PrintPaperFromSetup:CheckBox"_ustr,
                                                         u"PrintPaperFromSetup"_ustr,
@@ -261,7 +261,7 @@ SwPrintUIOptions::SwPrintUIOptions(
 
     // print range selection
     vcl::PrinterOptionsHelper::UIControlOptions aPrintRangeOpt;
-    aPrintRangeOpt.maGroupHint = "PrintRange";
+    aPrintRangeOpt.maGroupHint = u"PrintRange"_ustr;
     aPrintRangeOpt.mbInternalOnly = true;
     m_aUIProperties[nIdx++].Value = setSubgroupControlOpt( u"printrange"_ustr,
                                                           SwResId( STR_PRINTOPTUI_PAGES_TEXT ),
@@ -323,7 +323,7 @@ SwPrintUIOptions::SwPrintUIOptions(
 
     // create subsection for Page settings
     vcl::PrinterOptionsHelper::UIControlOptions aPageSetOpt;
-    aPageSetOpt.maGroupHint = "LayoutPage";
+    aPageSetOpt.maGroupHint = u"LayoutPage"_ustr;
 
     // create a bool option for brochure
     bDefaultVal = rDefaultPrintData.IsPrintProspect();
@@ -341,7 +341,7 @@ SwPrintUIOptions::SwPrintUIOptions(
                                                 SwResId( STR_PRINTOPTUI_RIGHT_SCRIPT) };
         vcl::PrinterOptionsHelper::UIControlOptions aBrochureRTLOpt( aBrochurePropertyName, -1, true );
         uno::Sequence<OUString> aBRTLHelpIds { u".HelpID:vcl:PrintDialog:PrintProspectRTL:ListBox"_ustr };
-        aBrochureRTLOpt.maGroupHint = "LayoutPage";
+        aBrochureRTLOpt.maGroupHint = u"LayoutPage"_ustr;
         // RTL brochure choices
         //      0 : left-to-right
         //      1 : right-to-left

@@ -83,31 +83,31 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf159897Broken_link)
         switch (i)
         {
             case 1:
-                sText = "Zeroth link";
+                sText = u"Zeroth link"_ustr;
                 break;
             case 2:
-                sText = "First \"link\"";
+                sText = u"First \"link\""_ustr;
                 break;
             case 3:
-                sText = "Second \" link \"";
+                sText = u"Second \" link \""_ustr;
                 break;
             case 4:
-                sText = "Third \"\"\"link\"\"\"";
+                sText = u"Third \"\"\"link\"\"\""_ustr;
                 break;
             case 5:
-                sText = "\"Fourth\" link";
+                sText = u"\"Fourth\" link"_ustr;
                 break;
             case 6:
-                sText = "Fifth \"5\" link";
+                sText = u"Fifth \"5\" link"_ustr;
                 break;
             case 7:
-                sText = "Sixth \"6\" link";
+                sText = u"Sixth \"6\" link"_ustr;
                 break;
             case 8:
-                sText = "Seventh \"link\"";
+                sText = u"Seventh \"link\""_ustr;
                 break;
             case 9:
-                sText = "\"Eighth\" link";
+                sText = u"\"Eighth\" link"_ustr;
                 break;
         }
 

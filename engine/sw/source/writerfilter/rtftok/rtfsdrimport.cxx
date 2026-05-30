@@ -91,38 +91,38 @@ std::vector<beans::PropertyValue> RTFSdrImport::getTextFrameDefaults(bool bNew)
     std::vector<beans::PropertyValue> aRet;
     beans::PropertyValue aPropertyValue;
 
-    aPropertyValue.Name = "HoriOrient";
+    aPropertyValue.Name = u"HoriOrient"_ustr;
     aPropertyValue.Value <<= text::HoriOrientation::NONE;
     aRet.push_back(aPropertyValue);
-    aPropertyValue.Name = "HoriOrientRelation";
+    aPropertyValue.Name = u"HoriOrientRelation"_ustr;
     aPropertyValue.Value <<= text::RelOrientation::FRAME;
     aRet.push_back(aPropertyValue);
-    aPropertyValue.Name = "VertOrient";
+    aPropertyValue.Name = u"VertOrient"_ustr;
     aPropertyValue.Value <<= text::VertOrientation::NONE;
     aRet.push_back(aPropertyValue);
-    aPropertyValue.Name = "VertOrientRelation";
+    aPropertyValue.Name = u"VertOrientRelation"_ustr;
     aPropertyValue.Value <<= text::RelOrientation::FRAME;
     aRet.push_back(aPropertyValue);
     if (!bNew)
     {
-        aPropertyValue.Name = "BackColorTransparency";
+        aPropertyValue.Name = u"BackColorTransparency"_ustr;
         aPropertyValue.Value <<= sal_Int32(100);
         aRet.push_back(aPropertyValue);
     }
     // See the spec, new-style frame default margins are specified in EMUs.
-    aPropertyValue.Name = "LeftBorderDistance";
+    aPropertyValue.Name = u"LeftBorderDistance"_ustr;
     aPropertyValue.Value <<= sal_Int32(bNew ? (91440 / 360) : 0);
     aRet.push_back(aPropertyValue);
-    aPropertyValue.Name = "RightBorderDistance";
+    aPropertyValue.Name = u"RightBorderDistance"_ustr;
     aPropertyValue.Value <<= sal_Int32(bNew ? (91440 / 360) : 0);
     aRet.push_back(aPropertyValue);
-    aPropertyValue.Name = "TopBorderDistance";
+    aPropertyValue.Name = u"TopBorderDistance"_ustr;
     aPropertyValue.Value <<= sal_Int32(bNew ? (45720 / 360) : 0);
     aRet.push_back(aPropertyValue);
-    aPropertyValue.Name = "BottomBorderDistance";
+    aPropertyValue.Name = u"BottomBorderDistance"_ustr;
     aPropertyValue.Value <<= sal_Int32(bNew ? (45720 / 360) : 0);
     aRet.push_back(aPropertyValue);
-    aPropertyValue.Name = "SizeType";
+    aPropertyValue.Name = u"SizeType"_ustr;
     aPropertyValue.Value <<= text::SizeType::FIX;
     aRet.push_back(aPropertyValue);
     return aRet;
@@ -510,7 +510,7 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
                     aCoordinates.push_back(aPair);
                 }
             } while (nCharIndex >= 0);
-            aPropertyValue.Name = "Coordinates";
+            aPropertyValue.Name = u"Coordinates"_ustr;
             aPropertyValue.Value <<= comphelper::containerToSequence(aCoordinates);
             aPath.push_back(aPropertyValue);
         }
@@ -579,7 +579,7 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
                     }
                 }
             } while (nCharIndex >= 0);
-            aPropertyValue.Name = "Segments";
+            aPropertyValue.Name = u"Segments"_ustr;
             aPropertyValue.Value <<= comphelper::containerToSequence(aSegments);
             aPath.push_back(aPropertyValue);
         }
