@@ -300,6 +300,7 @@ parts:
       - libxslt1-dev
       - libzstd-dev
       - make
+      - meson
       - nasm
       - pkg-config
       - python3-dev
