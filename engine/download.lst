@@ -716,11 +716,6 @@ WPS_TARBALL := libwps-0.4.$(WPS_VERSION_MICRO).tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-XSLTML_SHA256SUM := 75823776fb51a9c526af904f1503a7afaaab900fba83eda64f8a41073724c870
-XSLTML_TARBALL := a7983f859eafb2677d7ff386a023bc40-xsltml_2.1.2.zip
-# three static lines
-# so that git cherry-pick
-# will not run into conflicts
 YRS_SHA256SUM := 67c02f1b74fda33bcc824a310028c100ce2a84b6e63ade46ae1a3258e867a225
 YRS_TARBALL := y-crdt-0.23.5.tar.gz
 # three static lines

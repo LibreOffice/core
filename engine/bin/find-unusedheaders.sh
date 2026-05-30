@@ -44,7 +44,6 @@ for subdir in $(ls -d */ | grep -v \
                                 -e schema/ \
                                 -e scp2/ \
                                 -e smoketest/ \
-                                -e swext/ \
                                 -e sysui/ \
                                 -e udkapi/ \
                                 -e uitest/ \

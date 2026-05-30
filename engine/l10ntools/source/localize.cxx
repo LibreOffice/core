@@ -342,7 +342,6 @@ bool includeProject(std::string_view rProject) {
         "svtools",
         "svx",
         "sw",
-        "swext",
         "sysui",
         "uui",
         "vcl",

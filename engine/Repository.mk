@@ -739,7 +739,6 @@ endif
 
 $(eval $(call gb_Helper_register_jars,OXT, \
 	active_java \
-	mediawiki \
 	passive_java \
 ))
 

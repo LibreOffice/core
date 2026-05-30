@@ -13,7 +13,7 @@ $(eval $(call gb_Package_Package,setup_native_packinfo,$(SRCDIR)))
 # gb_Package_add_empty_directory is needed to create the empty extensions directory (but if any are
 # installed, then gb_Package_add_empty_directory would cause errors during
 # CustomTarget_instsetoo_native/install, as the directory is not empty in that case):
-ifeq ($(filter DICTIONARIES,$(BUILD_TYPE))$(WITH_EXTRA_EXTENSIONS)$(ENABLE_MEDIAWIKI),)
+ifeq ($(filter DICTIONARIES,$(BUILD_TYPE))$(WITH_EXTRA_EXTENSIONS),)
 $(eval $(call gb_Package_add_empty_directory,setup_native_packinfo,$(LIBO_SHARE_FOLDER)/extensions))
 endif
 

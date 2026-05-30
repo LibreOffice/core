@@ -234,7 +234,6 @@ fetch_SRC_TARBALLS := \
 	$(call fetch_Optional,WPD,WPD_TARBALL) \
 	$(call fetch_Optional,WPG,WPG_TARBALL) \
 	$(call fetch_Optional,WPS,WPS_TARBALL) \
-	$(call fetch_Optional,XSLTML,XSLTML_TARBALL) \
 	$(call fetch_Optional,YRS,YRS_TARBALL) \
 	$(call fetch_Optional,ZLIB,ZLIB_TARBALL) \
 	$(call fetch_Optional,ZSTD,ZSTD_TARBALL) \

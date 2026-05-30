@@ -159,7 +159,6 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	svx \
 	$(if $(ENABLE_WASM_STRIP_WRITER),, \
 	sw \
-	swext \
 	) \
 	sysui \
 	test \

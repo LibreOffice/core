@@ -98,7 +98,6 @@ $(eval $(call gb_Module_add_moduledirs,external,\
 	$(call gb_Helper_optional,WPD,libwpd) \
 	$(call gb_Helper_optional,WPG,libwpg) \
 	$(call gb_Helper_optional,WPS,libwps) \
-	$(call gb_Helper_optional,XSLTML,xsltml) \
 	$(call gb_Helper_optional,YRS,y-crdt) \
 	$(call gb_Helper_optional,ZLIB,zlib) \
 	$(call gb_Helper_optional,ZSTD,zstd) \

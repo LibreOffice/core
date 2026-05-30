@@ -1632,11 +1632,6 @@ AC_ARG_ENABLE(dynamic-loading,
         [Disable any use of dynamic loading of code. Work in progress, use only if you are hacking on it.])
 )
 
-libo_FUZZ_ARG_ENABLE(ext-wiki-publisher,
-    AS_HELP_STRING([--enable-ext-wiki-publisher],
-        [Enable the Wiki Publisher extension.])
-)
-
 libo_FUZZ_ARG_ENABLE(lpsolve,
     AS_HELP_STRING([--disable-lpsolve],
         [Disable compilation of the lp solve solver ])
@@ -13000,21 +12995,6 @@ fi
 AC_SUBST(ENABLE_JAVA_WEBSOCKET)
 AC_SUBST(SYSTEM_JAVA_WEBSOCKET)
 AC_SUBST(JAVA_WEBSOCKET_JAR)
-
-AC_MSG_CHECKING([whether to build the Wiki Publisher extension])
-if test "x$enable_ext_wiki_publisher" = "xyes" -a "x$enable_extension_integration" != "xno" -a "$with_java" != "no"; then
-    AC_MSG_RESULT([yes])
-    ENABLE_MEDIAWIKI=TRUE
-    BUILD_TYPE="$BUILD_TYPE XSLTML"
-    if test  "x$with_java" = "xno"; then
-        AC_MSG_ERROR([Wiki Publisher requires Java! Enable Java if you want to build it.])
-    fi
-else
-    AC_MSG_RESULT([no])
-    ENABLE_MEDIAWIKI=
-    SCPDEFS="$SCPDEFS -DWITHOUT_EXTENSION_MEDIAWIKI"
-fi
-AC_SUBST(ENABLE_MEDIAWIKI)
 
 # scripting provider for JavaScript?
 AC_MSG_CHECKING([whether to build support for scripts in JavaScript])
