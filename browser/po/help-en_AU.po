@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-29 07:49+0200\n"
-"PO-Revision-Date: 2025-12-05 23:54+0000\n"
+"PO-Revision-Date: 2026-05-30 08:44+0000\n"
 "Last-Translator: Rob Pearson <rob.dunedin@gmail.com>\n"
 "Language-Team: English (Australia) <https://hosted.weblate.org/projects/"
 "collabora-online/help/en_AU/>\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Translate Toolkit 3.6.0\n"
+"X-Generator: Weblate 2026.6.dev0\n"
 "X-POOTLE-MTIME: 1463059002.000000\n"
 
 #: html/cool-help.html%2Bdiv.h1:9-5
@@ -1468,7 +1468,7 @@ msgstr "Text selection and navigation in a textbox"
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:241-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:306-38
 msgid "Go and select text to start of textbox"
-msgstr "Go and select text to start of textbox"
+msgstr "Go and select text to the start of the textbox"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:245-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:310-38
@@ -1752,6 +1752,8 @@ msgid ""
 "Status bar showing page number, word count, insert mode, selection mode, "
 "language, edit mode, navigation, zoom, and search"
 msgstr ""
+"Status bar showing page number, word count, insert mode, selection mode, "
+"language, edit mode, navigation, zoom, and search"
 
 #: html/cool-help.html%2Bdiv.div.div.p:393-5
 msgid ""
@@ -1766,9 +1768,8 @@ msgstr ""
 "sensitive. There are three buttons right next to the search box:"
 
 #: html/cool-help.html%2Bdiv.div.div.ul.li:395-7
-#, fuzzy
 msgid "Search backwards"
-msgstr "Search backwards>"
+msgstr "Search backwards"
 
 #: html/cool-help.html%2Bdiv.div.div.ul.li:396-7
 msgid "Search forward"
@@ -1816,6 +1817,7 @@ msgstr ""
 msgid ""
 "Information bar showing page navigation arrows, zoom controls, and zoom level"
 msgstr ""
+"Information bar showing page navigation arrows, zoom controls, and zoom level"
 
 #: html/cool-help.html%2Bdiv.div.p:412-5
 msgid ""
@@ -1961,6 +1963,8 @@ msgid ""
 "Repair Document dialog listing past document states with columns for action "
 "type, author, and timestamp"
 msgstr ""
+"Repair Document dialogue listing past document states with columns for "
+"action type, author, and timestamp"
 
 #: html/cool-help.html%2Bdiv.div.div.p:432-5
 msgid ""
@@ -1995,6 +1999,8 @@ msgid ""
 "Idle document overlay with the message: Idle document - please click to "
 "reload and resume editing"
 msgstr ""
+"Idle document overlay with the message: Idle document - please click to "
+"reload and resume editing"
 
 #: html/cool-help.html%2Bdiv.div.div.p:438-5
 msgid ""
@@ -2068,7 +2074,7 @@ msgid ""
 "visualization of charts in documents. To add a chart:"
 msgstr ""
 "<span class=\"productname\">{productname}</span> supports inserting and "
-"visualization of charts in documents. To add a chart:"
+"visualisation of charts in documents. To add a chart:"
 
 #: html/cool-help.html%2Bdiv.div.div.ol.li:455-7
 msgid ""
@@ -2091,6 +2097,8 @@ msgid ""
 "Chart Wizard dialog with chart type list on the left, chart style previews, "
 "3D and shape options"
 msgstr ""
+"Chart Wizard dialogue with chart type list on the left, chart style "
+"previews, 3D and shape options"
 
 #: html/cool-help.html%2Bdiv.div.div.ol.li:460-7
 msgid "If no table or range was selected, a prototype chart is displayed."
@@ -2101,6 +2109,8 @@ msgid ""
 "Column chart with grouped bars showing data for four rows across three "
 "columns"
 msgstr ""
+"Column chart with grouped bars showing data for four rows across three "
+"columns"
 
 #: html/cool-help.html%2Bdiv.div.div.p:464-28
 msgid ""
@@ -2191,6 +2201,8 @@ msgid ""
 "Comment box showing author name, date, and the comment text, displayed "
 "beside the document"
 msgstr ""
+"Comment box showing author name, date, and the comment text, displayed "
+"beside the document"
 
 #: html/cool-help.html%2Bdiv.div.div.p:478-5
 msgid ""
@@ -2202,7 +2214,7 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.h4:481-5
 msgid "Spellchecking"
-msgstr "Spellchecking"
+msgstr "Spell checking"
 
 #: html/cool-help.html%2Bdiv.div.div.p:482-5
 msgid ""
@@ -2218,7 +2230,7 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.img[alt]:483-29
 msgid "Text with a red wavy underline beneath a misspelled word"
-msgstr ""
+msgstr "Text with a red wavy underline beneath a misspelled word"
 
 #: html/cool-help.html%2Bdiv.div.div.p:484-5
 msgid ""
@@ -2252,7 +2264,7 @@ msgstr ""
 msgid ""
 "Formulas are entered in the formula bar. Enter '=' and insert the formula."
 msgstr ""
-"Formulas are entered in the formula bar. Enter '=' and insert the formula."
+"Formulae are entered in the formula bar. Enter '=' and insert the formula."
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:497-5
 msgid "All spreadsheets functions and mathematical rules applies."
@@ -2263,6 +2275,8 @@ msgid ""
 "Formula bar showing cell reference B1, function wizard icon, and the formula "
 "=SIN(PI()*A1/10)"
 msgstr ""
+"Formula bar showing cell reference B1, function wizard icon, and the formula "
+"=SIN(PI()*A1/10)"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:499-5
 msgid ""
@@ -2289,8 +2303,8 @@ msgstr ""
 "<span class=\"def\">Direct formatting:</span> You can format spreadsheet "
 "cells, columns, rows and sheets by formatting directly from the menus, "
 "toolbar or context menus. Direct formatting applies only to the current "
-"object selected. To format a cell either use the menu or hit <kbd>Ctrl</"
-"kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>1</kbd>. The "
+"object selected. To format a cell, either use the menu or hit <kbd>Ctrl</kbd>"
+"<span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>1</kbd>. The "
 "dialogue box allows complex and custom number formatting, as well as font, "
 "complex border, background, cell protection and other options."
 
@@ -2299,6 +2313,8 @@ msgid ""
 "Format Cells dialog on the Numbers tab with category list, format options, "
 "decimal places, and format code"
 msgstr ""
+"Format Cells dialogue on the Numbers tab with category list, format options, "
+"decimal places, and format code"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:511-30
 msgid ""
@@ -2337,6 +2353,8 @@ msgid ""
 "AutoFilter dropdown menu on a spreadsheet column with sort, filter by color, "
 "filter by condition, and checkboxes for individual values"
 msgstr ""
+"AutoFilter dropdown menu on a spreadsheet column with sort, filter by "
+"colour, filter by condition, and checkboxes for individual values"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:518-7
 msgid ""
@@ -2375,6 +2393,8 @@ msgid ""
 "Spreadsheet with row and column grouping controls showing outline level "
 "buttons and collapse/expand toggles"
 msgstr ""
+"Spreadsheet with row and column grouping controls showing outline level "
+"buttons and collapse/expand toggles"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:527-5
 msgid ""
@@ -2399,6 +2419,8 @@ msgid ""
 "Validity dialog on the Criteria tab with Allow set to List, showing options "
 "for empty cells, selection list, and entry values"
 msgstr ""
+"Validity dialogue on the Criteria tab with Allow set to List, showing "
+"options for empty cells, selection list, and entry values"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:533-7
 msgid ""
@@ -2425,6 +2447,8 @@ msgid ""
 "Cell dropdown list showing validated entries such as Apple, Pear, Banana, "
 "Kiwi, and Lemon"
 msgstr ""
+"Cell dropdown list showing validated entries such as Apple, Pear, Banana, "
+"Kiwi, and Lemon"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:538-7
 msgid ""
@@ -2453,6 +2477,8 @@ msgid ""
 "Spreadsheet cell with a comment popup showing the author, date, comment "
 "text, and Save/Cancel buttons"
 msgstr ""
+"Spreadsheet cell with a comment popup showing the author, date, comment "
+"text, and Save/Cancel buttons"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:546-5
 msgid ""
@@ -2473,6 +2499,8 @@ msgid ""
 "Conditional formatting icon set picker showing arrows, circles, traffic "
 "lights, stars, smiley faces, and bar chart symbol sets"
 msgstr ""
+"Conditional formatting icon set picker showing arrows, circles, traffic "
+"lights, stars, smiley faces, and bar chart symbol sets"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:555-30
 msgid ""
@@ -2565,6 +2593,8 @@ msgid ""
 "Paragraph dialog on the Indents and Spacing tab with settings for indent, "
 "spacing, and line spacing, and a preview on the right"
 msgstr ""
+"Paragraph dialogue on the Indents and Spacing tab with settings for indent, "
+"spacing, and line spacing, and a preview on the right"
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:576-5
 msgid "Handling Tables"
@@ -2587,6 +2617,8 @@ msgid ""
 "Insert Table picker showing a grid to select the number of rows and columns, "
 "currently showing 5 by 3"
 msgstr ""
+"Insert Table picker showing a grid to select the number of rows and columns, "
+"currently showing 5 by 3"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:581-5
 msgid ""
@@ -2618,6 +2650,8 @@ msgid ""
 "Tracked change shown as a comment box beside the document with author name, "
 "date, and change description"
 msgstr ""
+"Tracked change shown as a comment box beside the document with author name, "
+"date, and change description"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:587-5
 msgid ""
@@ -2750,6 +2784,8 @@ msgid ""
 "Slide properties panel showing format, orientation, background, and master "
 "slide settings, with a layout gallery of thumbnail options below"
 msgstr ""
+"Slide properties panel showing format, orientation, background, and master "
+"slide settings, with a layout gallery of thumbnail options below"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:626-30
 msgid ""
@@ -2934,6 +2970,8 @@ msgid ""
 "Thesaurus dialog for the word company, listing alternatives such as "
 "institution, establishment, and troupe, with a Replace with field"
 msgstr ""
+"Thesaurus dialogue for the word company, listing alternatives such as "
+"institution, establishment, and troupe, with a Replace with field"
 
 #: html/cool-help.html%2Bdiv.div.div.h4:677-5
 msgid ""
@@ -2974,6 +3012,8 @@ msgid ""
 "Word Count dialog showing word and character counts for the current "
 "selection and for the whole document"
 msgstr ""
+"Word Count dialogue showing word and character counts for the current "
+"selection and for the whole document"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:688-5
 msgid ""
@@ -3019,6 +3059,9 @@ msgid ""
 "hexadecimal and decimal code inputs, and recent and favorite characters at "
 "the bottom"
 msgstr ""
+"Special Characters dialogue with a character grid, search and font fields, "
+"hexadecimal and decimal code inputs, and recent and favourite characters at "
+"the bottom"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:699-7
 msgid ""
@@ -3070,7 +3113,7 @@ msgstr "Deletions are marked with coloured strike-through characters."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ul.li:709-7
 msgid "Additions are marked with colored underlined characters."
-msgstr "Additions are marked with colored underlined characters."
+msgstr "Additions are marked with coloured underlined characters."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ul.li:710-7
 msgid "All changes are marked with a vertical bar in the right margin."
@@ -3126,6 +3169,9 @@ msgid ""
 "Manage Changes dialog with a list of tracked changes showing action, author, "
 "date, and comment columns, and Accept, Reject, Accept All, Reject All buttons"
 msgstr ""
+"Manage Changes dialogue with a list of tracked changes showing action, "
+"author, date, and comment columns, and Accept, Reject, Accept All, Reject "
+"All buttons"
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:720-5
 msgid "How do I set the margins of the document?"
@@ -3160,6 +3206,8 @@ msgid ""
 "Page Style dialog on the Organizer tab showing style name, next style, "
 "inherit from, and category fields, with a summary of page properties"
 msgstr ""
+"Page Style dialogue on the Organiser tab showing style name, next style, "
+"inherit from, and category fields, with a summary of page properties"
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:730-5
 msgid "How do I change the page orientation to landscape inside my document?"
@@ -3319,6 +3367,8 @@ msgid ""
 "Text Import dialog with character set, locale, separator options, and a "
 "preview of the imported CSV data"
 msgstr ""
+"Text Import dialogue with character set, locale, separator options, and a "
+"preview of the imported CSV data"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:778-7
 msgid ""
@@ -3429,6 +3479,8 @@ msgid ""
 "Area dialog on the Color tab with a color palette, active and new color "
 "previews, RGB value fields, and a custom palette section"
 msgstr ""
+"Area dialogue on the Colour tab with a colour palette, active and new colour "
+"previews, RGB value fields, and a custom palette section"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:819-7
 msgid "Set the properties of the element of the object."
