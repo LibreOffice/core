@@ -250,6 +250,7 @@ parts:
       QT6_SDK=/snap/kde-qt6-core24-sdk/current
       export PATH="$QT6_SDK/usr/bin/qt6:$QT6_SDK/usr/lib/qt6/libexec:$QT6_SDK/usr/bin:$PATH"
       export PKG_CONFIG_PATH="$QT6_SDK/usr/lib/x86_64-linux-gnu/pkgconfig:$QT6_SDK/usr/share/pkgconfig${PKG_CONFIG_PATH:+:$PKG_CONFIG_PATH}"
+      export QT_LIBEXEC_DIR="$QT6_SDK/usr/lib/qt6/libexec"
       autoreconf -vfi
       ./configure \
         --prefix=/usr \
