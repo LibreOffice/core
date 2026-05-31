@@ -369,16 +369,28 @@ IMPL_LINK( ShutdownIcon, DialogClosedHdl_Impl, FileDialogHelper*, /*unused*/, vo
                     OpenURL( sFiles[0], u"_default"_ustr, aArgs );
                 else
                 {
-                    OUString    aBaseDirURL = sFiles[0];
-                    if ( !aBaseDirURL.isEmpty() && !aBaseDirURL.endsWith("/") )
-                        aBaseDirURL += "/";
-
-                    int iFiles;
-                    for ( iFiles = 1; iFiles < nFiles; iFiles++ )
-                    {
-                        OUString aURL = aBaseDirURL + sFiles[iFiles];
-                        OpenURL( aURL, u"_default"_ustr, aArgs );
-                    }
+                    // tdf#161298 handle multiple selected files as absolute file URLs
+                    // Before commit 5bbff06137a87e97260a188f6745cf2a227f15cf
+                    // if multiple files were selected in both the native and
+                    // LibreOffice Open dialogs, the first item in the
+                    // selected files list would be set to the common directory
+                    // of all the files and the remaining items in the list
+                    // would be set to the basename of each selected file.
+                    // Commit 5bbff06137a87e97260a188f6745cf2a227f15cf
+                    // removed that "first file in list is directory" code
+                    // and replaced it with a list of absolute file URLs.
+                    // However, the code below was not updated to match the
+                    // change so when the multiple files were selected and all
+                    // of the following conditions were ture, tdf#167298 would
+                    // occur:
+                    // - Running on macOS or running on Windows with the
+                    //   LibreOffice QuickStarter service also running
+                    // - Neither the Start Center or any document windows were
+                    //   open
+                    // - 2 or more different file types (e.g. Writer and Calc)
+                    //   were selected
+                    for ( int iFiles = 0; iFiles < nFiles; iFiles++ )
+                        OpenURL( sFiles[iFiles], u"_default"_ustr, aArgs );
                 }
             }
         }
