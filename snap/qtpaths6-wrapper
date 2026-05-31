@@ -1,0 +1,10 @@
+#!/bin/sh
+# qtpaths6 in kde-qt6-core24-sdk has compiled-in multiarch defaults that
+# don't match its actual filesystem layout. Intercept the two queries
+# COOL's configure makes and return the real paths; delegate the rest.
+QT6_SDK=/snap/kde-qt6-core24-sdk/current
+case "$1 $2" in
+    "--qt-query QT_INSTALL_LIBEXECS") echo "$QT6_SDK/usr/lib/qt6/libexec"; exit 0 ;;
+    "--qt-query QT_INSTALL_BINS")     echo "$QT6_SDK/usr/bin/qt6";        exit 0 ;;
+esac
+exec "$QT6_SDK/usr/bin/qt6/qtpaths6" "$@"

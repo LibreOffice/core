@@ -250,7 +250,13 @@ parts:
       QT6_SDK=/snap/kde-qt6-core24-sdk/current
       export PATH="$QT6_SDK/usr/bin/qt6:$QT6_SDK/usr/lib/qt6/libexec:$QT6_SDK/usr/bin:$PATH"
       export PKG_CONFIG_PATH="$QT6_SDK/usr/lib/x86_64-linux-gnu/pkgconfig:$QT6_SDK/usr/share/pkgconfig${PKG_CONFIG_PATH:+:$PKG_CONFIG_PATH}"
-      export QT_LIBEXEC_DIR="$QT6_SDK/usr/lib/qt6/libexec"
+      # Shadow qtpaths6 with snap/qtpaths6-wrapper so configure's
+      # QT_INSTALL_LIBEXECS / QT_INSTALL_BINS lookups get the real paths
+      # instead of qtpaths6's broken multiarch defaults.
+      mkdir -p "$CRAFT_PART_BUILD/.qt6-wrapper"
+      install -m 755 "$CRAFT_PART_BUILD/snap/qtpaths6-wrapper" \
+          "$CRAFT_PART_BUILD/.qt6-wrapper/qtpaths6"
+      export PATH="$CRAFT_PART_BUILD/.qt6-wrapper:$PATH"
       autoreconf -vfi
       ./configure \
         --prefix=/usr \
