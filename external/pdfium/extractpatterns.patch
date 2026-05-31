@@ -48,7 +48,7 @@
 +
 +  // `rect` has to use integer values. Round up as needed.
 +  const FX_RECT rect = pattern_bbox.GetOuterRect();
-+  if (rect.IsEmpty())
++  if (rect.IsEmpty() || !rect.Valid())
 +    return nullptr;
 +
 +  auto result_bitmap = pdfium::MakeRetain<CFX_DIBitmap>();
