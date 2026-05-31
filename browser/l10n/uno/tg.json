@@ -42,6 +42,8 @@
 "Ce~lls...":"~Чашмакҳо...",
 "Charcoal Sketch":"Ороиш бо ангишт",
 "Chart T~ype...":"Типи диаграмма...",
+"Chart ~Area...":"Қитъаи диаграмма...",
+"Chart ~Wall...":"Девори диаграмма...",
 "Chevron":"Чеврон",
 "Chevron Down":"Дунгӣ ба поён",
 "Chevron Up":"Дунгӣ ба боло",
@@ -162,6 +164,7 @@
 "Left and Right Arrow":"Тирча ба рост ва чап",
 "Left and Right Arrow Callout":"Аломати тирчаи рост ва чап",
 "Left-To-Right":"Аз чап ба рост",
+"Legend On/Off":"Легенда",
 "Lightning Bolt":"Чароғи равшвн",
 "Line":"Сатр",
 "Line Callout 1":"Аломати хати 1",
@@ -371,5 +374,7 @@
 "~While Typing":"~Ҳангоми навишт",
 "~Width...":"~Дарозӣ...",
 "~Wrap":"~Ғуноварӣ",
+"~X Axis...":"Меҳвари X...",
+"~Y Axis...":"Меҳвари Y...",
 "~lowercase":"~Ҳарфҳои хурд"
 }

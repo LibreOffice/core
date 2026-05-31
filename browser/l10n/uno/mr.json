@@ -42,6 +42,8 @@
 "Character Spacing":"अक्षर मोकळी जागा",
 "Charcoal Sketch":"चारकोल चित्रकला",
 "Chart T~ype...":"कोष्टक प्रकार (~y)...",
+"Chart ~Area...":"तक्ता क्षेत्र...",
+"Chart ~Wall...":"कोष्टक भिंत...",
 "Chevron":"शेवेरॉन",
 "Chevron Down":"शेवेरॉन खाली",
 "Chevron Up":"शेवेरॉन वर",
@@ -207,6 +209,7 @@
 "Left and Right Arrow":"डावा व उजवा बाण",
 "Left and Right Arrow Callout":"डावा व उजवा तीर निमंत्रण",
 "Left-To-Right":"डावा ते उजवा",
+"Legend On/Off":"लिजन्ड सुरु/बंद करा",
 "Lightning Bolt":"हलका बॉल्ट",
 "Line":"रेषा",
 "Line Callout 1":"रेषा निमंत्रण 1",
@@ -426,6 +429,7 @@
 "~Thesaurus...":"थिसॉरस्...",
 "~Time":"वेळ",
 "~Time (fixed)":"वेळ (निश्चित)",
+"~Titles...":"शीर्षक...",
 "~Tools":"उपकरणे",
 "~Top":"शीर्ष",
 "~UPPERCASE":"UPPERCASE",
@@ -437,6 +441,8 @@
 "~While Typing":"टंकलेखनाच्या वेळी",
 "~Width...":"रुंदी...",
 "~Wrap":"रचणाबध्द",
+"~X Axis...":"X अक्ष...",
+"~Y Axis...":"Y अक्ष...",
 "~lowercase":"लोवरकेस (~l)",
 "~tOGGLE cASE":"tOGGLE cASE (~t)"
 }

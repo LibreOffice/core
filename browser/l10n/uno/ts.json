@@ -33,6 +33,7 @@
 "Center":"Exikarhi",
 "Center Horizontal":"Yisa Exikarhi hi Vuandlalo",
 "Charcoal Sketch":"ChYinhla Nkhotsekooal Sketch",
+"Chart ~Wall...":"Chati ~Khumbi...",
 "Chevron":"Mfungho wa Xevhuroni",
 "Chevron Down":"Xevhuroni yo ya Ehansi",
 "Chevron Up":"Xevhuroni yo ya Ehenhla",
@@ -127,6 +128,7 @@
 "Left and Right Arrow":"Mfungho wo Komba Eximatsini ni le Xineneni",
 "Left and Right Arrow Callout":"Mfungho wo Koweta Eximatsini ni le Xineneni",
 "Left-To-Right":"Eximatsini-Ku Ya-Exineneni",
+"Legend On/Off":"Xa Khale Pfula/Pfala",
 "Lightning Bolt":"Ku Dzindza Ka Tilo",
 "Line":"Layini",
 "Line Callout 1":"Layini ya Xikoweto 1",
@@ -269,5 +271,7 @@
 "~Validity...":"~Vutirhiseki...",
 "~While Typing":"~Ri Karhi U Thayipa",
 "~Width...":"~Vuanamo...",
-"~Wrap":"~Phutsa"
+"~Wrap":"~Phutsa",
+"~X Axis...":"Khona ya ~X...",
+"~Y Axis...":"Khona ya ~Y..."
 }

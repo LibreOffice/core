@@ -42,6 +42,8 @@
 "Character Spacing":"ଅକ୍ଷର ମଧ୍ଯବର୍ତ୍ତୀ ଅନ୍ତର",
 "Charcoal Sketch":"ଅଙ୍ଗାର ରୂପରେଖା",
 "Chart T~ype...":"ଚାର୍ଟ ପ୍ରକାର (~y)...",
+"Chart ~Area...":"ଚାର୍ଟ କ୍ଷେତ୍ର...",
+"Chart ~Wall...":"ଚାର୍ଟ ପ୍ରାଚୀର...",
 "Chevron":"ଚେଭରୋନ",
 "Chevron Down":"ଚିଭରନ ତଳ",
 "Chevron Up":"ଚିଭରନ ଉପର",
@@ -211,6 +213,7 @@
 "Left and Right Arrow":"ବାମପାଖ ଏବଂ ଡାହାଣପାଖ ଶର ",
 "Left and Right Arrow Callout":"ବାମପାଖ ଏବଂ ଡାହାଣପାଖ ଶର କଲଆଉଟ",
 "Left-To-Right":"ବାମ କୁ ଡାହାଣ",
+"Legend On/Off":"ଲିଜେଣ୍ଡ ଆରମ୍ଭ/ବନ୍ଦ",
 "Lightning Bolt":"ଆଲୋକିତକରିବା ବିଦ୍ଯୁତ",
 "Line":"ରେଖା",
 "Line Callout 1":"ରେଖା କଲଆଉଟ ୧",
@@ -433,6 +436,7 @@
 "~Thesaurus...":"ଶବ୍ଦକୋଷ...",
 "~Time":"ସମୟ",
 "~Time (fixed)":"ସମଯ (ସ୍ଥିର)",
+"~Titles...":"ଶୀର୍ଷକ...",
 "~Tools":"ସାଧନଗୁଡ଼ିକ",
 "~Top":"ଉପର (~)",
 "~UPPERCASE":"ବଡ଼ ଅକ୍ଷର",
@@ -444,6 +448,8 @@
 "~While Typing":"ଟାଇପ କରିବା ସମୟରେ",
 "~Width...":"ଓସାର...",
 "~Wrap":"ଗୁଡାଇବା",
+"~X Axis...":"X ଅକ୍ଷ...",
+"~Y Axis...":"Y ଅକ୍ଷ...",
 "~lowercase":"ଛୋଟ ଅକ୍ଷର (~l)",
 "~tOGGLE cASE":"ଅକ୍ଷର ପ୍ରକାରକୁ ପରିବର୍ତ୍ତନ କରନ୍ତୁ (~t)"
 }

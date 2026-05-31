@@ -40,6 +40,7 @@
 "Center Horizontal":"क्षैतिज मध्यभागमे",
 "Centered":"केंद्रित",
 "Charcoal Sketch":"चारकोल खाका",
+"Chart ~Wall...":"चार्ट दीवाल...",
 "Chevron":"चेव्रॉन",
 "Chevron Down":"चेवरॉन नीच्चाँ",
 "Chevron Up":"चेवरॉन उप्पर",
@@ -155,6 +156,7 @@
 "Left and Right Arrow":"बामाँ आओर दहिन्ना तीर",
 "Left and Right Arrow Callout":"बामाँ आओर दहिन्ना तीर कालआउट",
 "Left-To-Right":"बामाँसँ दहिन्ना",
+"Legend On/Off":"लेजन्ड शुरु/बन्न",
 "Lightning Bolt":"बिजली बोल्ट",
 "Line":"रेखा",
 "Line Callout 1":"रेखा कालआउट 1",
@@ -357,5 +359,7 @@
 "~While Typing":"टाइपिंगक समय",
 "~Width...":"चओड़ाइ...",
 "~Wrap":"लपेटू",
+"~X Axis...":"अक्ष(~X)...",
+"~Y Axis...":" अक्ष...",
 "~lowercase":"लोअरकेस"
 }

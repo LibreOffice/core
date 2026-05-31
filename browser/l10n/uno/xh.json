@@ -33,6 +33,7 @@
 "Center":"Isizikithi",
 "Center Horizontal":"Esizikithini Ngokobubanzi",
 "Charcoal Sketch":"Isketshi Sombala o-charcoal",
+"Chart ~Wall...":"Udonga ~Lwetshati...",
 "Chevron":"Igophe Elijika Macala",
 "Chevron Down":"Igophe Eligoba Macala Ezantsi",
 "Chevron Up":"Igophe Eligoba Macala Phezulu",
@@ -130,6 +131,7 @@
 "Left and Right Arrow":"Isalathisi Sasekhohlo Nesasekunene",
 "Left and Right Arrow Callout":"Unxulumaniso Ngesalathisi Sasekhohlo Nesasekunene",
 "Left-To-Right":"Ekhohlo-Ukuya-Ekunene",
+"Legend On/Off":"Ilivo Elisebenzayo/Elingasebenziyo",
 "Lightning Bolt":"Umbane",
 "Line":"Umgca",
 "Line Callout 1":"Unxulumaniso 1 Ngomgca",
@@ -274,5 +276,7 @@
 "~Validity...":"~Ukunyaniseka...",
 "~While Typing":"~Xa Kuchwethezwa",
 "~Width...":"~Ububanzi...",
-"~Wrap":"~Ukugqithela Kumgca Ongezantsi"
+"~Wrap":"~Ukugqithela Kumgca Ongezantsi",
+"~X Axis...":"Umgca Ohamba Embindini ongu-~X...",
+"~Y Axis...":"Umgca Ohamba Embindini ongu-~Y..."
 }

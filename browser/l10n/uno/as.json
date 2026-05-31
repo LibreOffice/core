@@ -42,6 +42,8 @@
 "Character Spacing":"আখৰৰ ব্যৱধান",
 "Charcoal Sketch":"ছার্কোল ছবি",
 "Chart T~ype...":"ছার্ট ধৰণ (~y)...",
+"Chart ~Area...":"ছাৰ্ট ক্ষেত্ৰ...",
+"Chart ~Wall...":"ছার্টৱাল...",
 "Chevron":"শ্বেভৰন",
 "Chevron Down":"শ্বেভৰন তলৰ",
 "Chevron Up":"শ্বেভৰন ওপৰৰ",
@@ -211,6 +213,7 @@
 "Left and Right Arrow":"বাওঁফালৰ আৰু সোঁফালৰ কাঁড়",
 "Left and Right Arrow Callout":"বাওঁফালৰ আৰু সোঁফালৰ কাঁড় কলআউট",
 "Left-To-Right":"বাওঁফালৰ পৰা সোঁফাললৈ",
+"Legend On/Off":"লিজেণ্ড অন/অফ",
 "Lightning Bolt":"বিজুলী বল্ট",
 "Line":"ৰেখা",
 "Line Callout 1":"ৰেখা ক'ল আউট 1",
@@ -444,6 +447,7 @@
 "~Thesaurus...":"শব্দকোষ...",
 "~Time":"সময়",
 "~Time (fixed)":"সময় (নিৰ্ধাৰিত)",
+"~Titles...":"শিৰোনাম...",
 "~Tools":"সঁজুলিসমূহ",
 "~Top":"ওপৰ",
 "~UPPERCASE":"UPPERCASE",
@@ -455,6 +459,8 @@
 "~While Typing":"টাইপ কৰোঁতে",
 "~Width...":"প্ৰস্থ...",
 "~Wrap":"আবৃত কৰক",
+"~X Axis...":"X অক্ষৰেখা...",
+"~Y Axis...":"Y অক্ষৰেখা...",
 "~lowercase":"তলৰ ফলা (~l)",
 "~tOGGLE cASE":"ফলা অদল বদল কৰক (~t)"
 }

@@ -40,6 +40,8 @@
 "Centered":"केंदरत	",
 "Charcoal Sketch":" कोला- रेखाचित्र ",
 "Chart T~ype...":"चार्ट-किस्म... (~y)",
+"Chart ~Area...":"चार्ट-खित्ता...",
+"Chart ~Wall...":"चार्ट-दुआल	",
 "Chevron":"शेवरॉन	",
 "Chevron Down":"शेवरॉन ख’ल्ल	",
 "Chevron Up":" उप्पर ते खब्बै फिक्का करो	",
@@ -192,6 +194,7 @@
 "Left and Right Arrow":" खब्बा ते सज्जा तीर	",
 "Left and Right Arrow Callout":"खब्बा ते सज्जा तीर संवादी बुलबुला	",
 "Left-To-Right":"खब्बे-शा-सज्जै=",
+"Legend On/Off":" लेजंड शुरू बंद	",
 "Lightning Bolt":"बिजली दा झटका	",
 "Line":"लकीर	",
 "Line Callout 1":" लकीर संवादी बुलबुला 1	",
@@ -401,6 +404,7 @@
 "~Thesaurus...":"~शब्दकोश ",
 "~Time":"~समां ",
 "~Time (fixed)":" ~ समां (निश्चत)	",
+"~Titles...":"शीर्शक...",
 "~Tools":"~उपकरण (बहु․) ",
 "~Top":"धुर उप्पर ",
 "~UPPERCASE":"~उप्परला केस ",
@@ -412,6 +416,8 @@
 "~While Typing":"~टाइप करदे बेल्लै ",
 "~Width...":"चौड़ाई	",
 "~Wrap":"~लपेटो ",
+"~X Axis...":" ~ अक्षरेखा	",
+"~Y Axis...":" ~ अक्षरेखा	",
 "~lowercase":"~खॕलका केस ",
 "~tOGGLE cASE":"~tOGGLE cASE"
 }

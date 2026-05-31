@@ -40,6 +40,7 @@
 "Center Horizontal":"افقی مرکزی حصےمیں",
 "Centered":"مرکزی",
 "Charcoal Sketch":"چارکول خاکہ",
+"Chart ~Wall...":"چارٹ دیوار",
 "Chevron":"شیوران",
 "Chevron Down":"شیوران نیچے",
 "Chevron Up":"شیوران اوپر",
@@ -152,6 +153,7 @@
 "Left and Right Arrow":"بایاں اور دایاں  تیر",
 "Left and Right Arrow Callout":"بائیں  دائیں تیروں   کو  باہر  بھیجنا ",
 "Left-To-Right":"بائیں  سےدائیں جانب",
+"Legend On/Off":"لیجینڈجاری/ بند",
 "Lightning Bolt":"چمک والادروازہ",
 "Line":"خط",
 "Line Callout 1":"سطر  کو باہر بھیجنا1",
@@ -355,5 +357,7 @@
 "~While Typing":"ٹائپینگ کےدوران",
 "~Width...":"چوڑائی",
 "~Wrap":"لپیٹنا",
+"~X Axis...":"~X  محور",
+"~Y Axis...":"~Y ... محور",
 "~lowercase":"لوورکیس"
 }

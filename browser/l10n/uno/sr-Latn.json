@@ -35,6 +35,8 @@
 "Ce~lls...":"~Ćelije...",
 "Charcoal Sketch":"Skica ugljenom",
 "Chart T~ype...":"~Vrsta grafika",
+"Chart ~Area...":"~Oblast grafika...",
+"Chart ~Wall...":"~Zid grafika...",
 "Chevron":"Čin",
 "Chevron Down":"Čin nadole",
 "Chevron Up":"Čin nagore",
@@ -181,6 +183,7 @@
 "Left and Right Arrow":"Leva i desna strelica",
 "Left and Right Arrow Callout":"Oblačić sa strelicama ulevo i udesno",
 "Left-To-Right":"Sleva udesno",
+"Legend On/Off":"Prikaz legende",
 "Lightning Bolt":"Munja",
 "Line":"Linija",
 "Line Callout 1":"Oblačić sa linijom 1",
@@ -366,6 +369,7 @@
 "~Subject":"~Tema",
 "~Thesaurus...":"~Sinonimi...",
 "~Time (fixed)":"~Vreme (fiksirano)",
+"~Titles...":"~Naslovi...",
 "~Tools":"~Alatke",
 "~Top":"~Vrh",
 "~UPPERCASE":"~VELIKA SLOVA",
@@ -377,6 +381,8 @@
 "~While Typing":"~Tokom kucanja",
 "~Width...":"~Širina...",
 "~Wrap":"~Prelom",
+"~X Axis...":"~X osa...",
+"~Y Axis...":"~Y osa...",
 "~lowercase":"ma~la slova",
 "~tOGGLE cASE":"~oBRNI VELIČINU"
 }

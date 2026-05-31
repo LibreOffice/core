@@ -41,6 +41,8 @@
 "Centered":"Centered",
 "Charcoal Sketch":"Mchoro Mkaa",
 "Chart T~ype...":"Aina ya chati...",
+"Chart ~Area...":"Eneo la Chati...",
+"Chart ~Wall...":"Ukuta wa chati...",
 "Chevron":"Chevron",
 "Chevron Down":"Chevron Down",
 "Chevron Up":"Chevron Up",
@@ -159,6 +161,7 @@
 "Left and Right Arrow":"Left and Right Arrow",
 "Left and Right Arrow Callout":"Left and Right Arrow Callout",
 "Left-To-Right":"Kushoto-Kwenda-Kulia",
+"Legend On/Off":"Lijendi Washwe/Zimwe",
 "Lightning Bolt":"Lightning Bolt",
 "Line":"Line",
 "Line Callout 1":"Line Callout 1",
@@ -360,5 +363,7 @@
 "~While Typing":"Unapochapa",
 "~Width...":"Upana...",
 "~Wrap":"Fungasha",
+"~X Axis...":"Jira X...",
+"~Y Axis...":"Jira Y...",
 "~lowercase":"Herufi ndogo"
 }

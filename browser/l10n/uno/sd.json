@@ -41,6 +41,8 @@
 "Centered":"مرڪزي",
 "Charcoal Sketch":"چارڪول خاڪو",
 "Chart T~ype...":"چارٽ جو قسم... (~y)",
+"Chart ~Area...":"چارٽ جو کيتر...",
+"Chart ~Wall...":"چارٽ جي ديوار",
 "Chevron":"چيوران",
 "Chevron Down":"فيٿو هيٺ",
 "Chevron Up":"فيٿو مٿي",
@@ -193,6 +195,7 @@
 "Left and Right Arrow":"سڄي پاسي ۽ کاٻي پاسي تير",
 "Left and Right Arrow Callout":"کاٻو ۽ ساڄو تير ڪوٺيو",
 "Left-To-Right":"کاٻي کان ساڄي",
+"Legend On/Off":"ليجيند شروع/بند",
 "Lightning Bolt":"وڄ جو بولٽ",
 "Line":"ليڪ",
 "Line Callout 1":"ليڪ ڪوٺيو 1",
@@ -400,6 +403,7 @@
 "~Thesaurus...":"پريايہ ڪوش",
 "~Time":"وقت",
 "~Time (fixed)":"وقت (اڻ ڦرندڙ",
+"~Titles...":"عنوان...",
 "~Tools":"اوزارَ",
 "~Top":"مٿ",
 "~UPPERCASE":"اپرڪيس",
@@ -411,6 +415,8 @@
 "~While Typing":"ٽائيپ ڪرڻ دؤران",
 "~Width...":"ويڪر",
 "~Wrap":"ويڙهيو",
+"~X Axis...":"~X محور...",
+"~Y Axis...":"~Y محور...",
 "~lowercase":"لوئر ڪيس",
 "~tOGGLE cASE":"ٽوگل خانو (~t)"
 }

@@ -42,6 +42,8 @@
 "Ce~lls...":"Ce~lls...",
 "Charcoal Sketch":"Charcoal Sketch",
 "Chart T~ype...":"Chart T~ype...",
+"Chart ~Area...":"Chart ~Area...",
+"Chart ~Wall...":"Chart ~Wall...",
 "Chevron":"Chevron",
 "Chevron Down":"Chevron Down",
 "Chevron Up":"Chevron Up",
@@ -205,6 +207,7 @@
 "Left and Right Arrow":"Left and Right Arrow",
 "Left and Right Arrow Callout":"Left and Right Arrow Callout",
 "Left-To-Right":"Left-To-Right",
+"Legend On/Off":"Legend On/Off",
 "Lightning Bolt":"Lightning Bolt",
 "Line":"Line",
 "Line Callout 1":"Line Callout 1",
@@ -413,6 +416,7 @@
 "~Thesaurus...":"~Thesaurus...",
 "~Time":"~Time",
 "~Time (fixed)":"~Time (fixed)",
+"~Titles...":"~Titles...",
 "~Tools":"~Tools",
 "~Top":"~Top",
 "~UPPERCASE":"~UPPERCASE",
@@ -424,6 +428,8 @@
 "~While Typing":"~While Typing",
 "~Width...":"~Width...",
 "~Wrap":"~Wrap",
+"~X Axis...":"~X Axis...",
+"~Y Axis...":"~Y Axis...",
 "~lowercase":"~lowercase",
 "~tOGGLE cASE":"~tOGGLE cASE"
 }

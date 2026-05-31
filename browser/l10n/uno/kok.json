@@ -40,6 +40,7 @@
 "Center Horizontal":"आडवो केंद्र",
 "Centered":"केंद्रित",
 "Charcoal Sketch":"चारकोल रेखाचित्र",
+"Chart ~Wall...":"तक्त्याची वणत...",
 "Chevron":"शेवेरॉन",
 "Chevron Down":"शेवेरॉन सकयल",
 "Chevron Up":"शेवेरॉन वयर",
@@ -159,6 +160,7 @@
 "Left and Right Arrow":"दावो आनिक उजवो बाण",
 "Left and Right Arrow Callout":"दावो आनिक उजवो बाण आपोवप",
 "Left-To-Right":"दावेकडल्यान उजवेकडेन",
+"Legend On/Off":"लिजेन्ड चालू /बंद",
 "Lightning Bolt":"विजेचो बोल्ट",
 "Line":"वळ",
 "Line Callout 1":"वळ आपोवप १",
@@ -367,5 +369,7 @@
 "~While Typing":"टंकलेखन करता आस्तना",
 "~Width...":"रुंदाय",
 "~Wrap":"गुठलावप",
+"~X Axis...":"X अक्ष...",
+"~Y Axis...":"Y अक्ष...",
 "~lowercase":"लोअर केस"
 }

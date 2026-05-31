@@ -40,6 +40,7 @@
 "Center Horizontal":"মরাক ওইবা ময়াই",
 "Centered":"ময়াই ওইবা",
 "Charcoal Sketch":"চার্কোল স্কেচ্চ",
+"Chart ~Wall...":"চার্ত~ৱাল",
 "Chevron":"সেভ্রোন",
 "Chevron Down":"শেভ্রোন মখাগী",
 "Chevron Up":"শেভ্রোন মথক্কী",
@@ -152,6 +153,7 @@
 "Left and Right Arrow":"ওই অমশুং য়েতকী তেনজৈ",
 "Left and Right Arrow Callout":"ওই অমশুং য়েতকী তেনজৈ কোলআউত",
 "Left-To-Right":"ওইদগী য়েত্তা",
+"Legend On/Off":"লিজেন্দ ওন/ওফ",
 "Lightning Bolt":"ব্রজা বোল্ত",
 "Line":"পরিং",
 "Line Callout 1":"পরিং কোল আউত 1",
@@ -358,5 +360,7 @@
 "~While Typing":"~তাইপ তৌরিঙৈদা",
 "~Width...":"অপাকপা...",
 "~Wrap":"কোয়শিনবা",
+"~X Axis...":"~X ময়োত",
+"~Y Axis...":"~Y ময়োত",
 "~lowercase":"~মখাথংবা ফোল্দর"
 }

@@ -40,6 +40,7 @@
 "Center Horizontal":"समानथि बादि मिरु",
 "Centered":"गेजेराव",
 "Charcoal Sketch":"चारक'ल स्केछ",
+"Chart ~Wall...":"चार्ट ~बेरा...",
 "Chevron":"च्चेभरन",
 "Chevron Down":"च्चेभरन गाहायनि",
 "Chevron Up":"च्चेभरन सानि",
@@ -154,6 +155,7 @@
 "Left and Right Arrow":"आगसि आरो आगदा थिर",
 "Left and Right Arrow Callout":"आगसि आरो आगदा थिर कलआउट",
 "Left-To-Right":"आगसि-निफ्राय-आगदा",
+"Legend On/Off":"लिजेन्ड खेव/बन्द खालाम",
 "Lightning Bolt":"जोंनाय बल्ट",
 "Line":"सारि",
 "Line Callout 1":"सारि कलआउट 1",
@@ -357,5 +359,7 @@
 "~While Typing":"~ताइप खालामनाय समाव",
 "~Width...":"गुवारथि",
 "~Wrap":"~खोबसिननाय",
+"~X Axis...":"~X अक्ष हांखो...",
+"~Y Axis...":"~Y अक्ष हांखो...",
 "~lowercase":"~गाहायनि केस"
 }

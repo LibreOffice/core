@@ -33,6 +33,7 @@
 "Center":"Sentara",
 "Center Horizontal":"Bohare bo Rapameng",
 "Charcoal Sketch":"Setshwantsho sa Mashala",
+"Chart ~Wall...":"Lerako la ~Tjhate...",
 "Chevron":"Sheverone",
 "Chevron Down":"Sheveronela Tlase",
 "Chevron Up":"Sheveronela Hodimo",
@@ -128,6 +129,7 @@
 "Left and Right Arrow":"Motsu o shebileng ka ho le letshehadi le ka ho le letona",
 "Left and Right Arrow Callout":"Ho biletswa ha Motsu o ka ho le Letona kapa le Letshehadi",
 "Left-To-Right":"Leletshehadi-Ho-ya-ho-Leletona",
+"Legend On/Off":"Mohale Sebetsa/Timile",
 "Lightning Bolt":"Ho Otla ha lehadima",
 "Line":"Mola",
 "Line Callout 1":"Ho Biletsa ha Mola ha 1",
@@ -267,5 +269,7 @@
 "~Validity...":"~Ho Sebetsa...",
 "~While Typing":"~Ha o ntse o Tlanya",
 "~Width...":"~Bophara...",
-"~Wrap":"~Phuthela"
+"~Wrap":"~Phuthela",
+"~X Axis...":"Mola wa ~X...",
+"~Y Axis...":"Mola wa ~Y..."
 }

@@ -656,7 +656,6 @@ var unoCommandsArray = {
 	'SymbolShapes.smiley':{global:{menu:_('Smiley Face'),},},
 	'SymbolShapes.sun':{global:{menu:_('Sun'),},},
 	'TTestDialog':{spreadsheet:{menu:_('Paired ~t-test...'),},},
-	'TableCellBackgroundColor':{text:{menu:_('Table Cell Background Color'),},},
 	'TableDeleteMenu':{global:{menu:_('~Delete'),},},
 	'TableDialog':{presentation:{context:_('Ta~ble Properties...'),menu:_('~Properties...'),},text:{context:_('~Table Properties...'),menu:_('~Properties...'),},},
 	'TableInsertMenu':{global:{menu:_('~Insert'),},},

@@ -42,6 +42,8 @@
 "Ce~lls...":"Man'eewwan...",
 "Charcoal Sketch":"Charcoal Sketch",
 "Chart T~ype...":"Gosa Taattoo...",
+"Chart ~Area...":"Bal'ina Taattoo...",
+"Chart ~Wall...":"Hededa Taattoo...",
 "Chevron":"Chevron",
 "Chevron Down":"Chevron Gadi",
 "Chevron Up":"Chevron Ol",
@@ -200,6 +202,7 @@
 "Left and Right Arrow":"Bitaa fi Mirga Xiyya",
 "Left and Right Arrow Callout":"Balballoo Bitaa fi Mirga Xiyya ",
 "Left-To-Right":"Bitaa Gara Mirga",
+"Legend On/Off":"Waayoo Banaa/Dhamaa",
 "Lightning Bolt":"Ibsa Nanaa",
 "Line":"Sarara",
 "Line Callout 1":"Balballoo sarara 1",
@@ -406,6 +409,7 @@
 "~Thesaurus...":"Waa dhugoomsuu...",
 "~Time":"Sa'aati",
 "~Time (fixed)":"Sa'aati (Dhaabii)",
+"~Titles...":"Matadureewwan...",
 "~Tools":"Meeshaalee",
 "~Top":"Ol",
 "~Ungroup":"Garbaasi",
@@ -416,5 +420,7 @@
 "~While Typing":"Yeroo Mirgisu",
 "~Width...":"Yabbina...",
 "~Wrap":"Maraa",
+"~X Axis...":"Siiqqee X...",
+"~Y Axis...":"Siiqqee X...",
 "~lowercase":"Qubee Xiqqaa"
 }

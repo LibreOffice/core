@@ -43,6 +43,8 @@
 "Character Spacing":"Fikiimi Foonqe",
 "Charcoal Sketch":"Diqillote Akeeka",
 "Chart T~ype...":"Chaartete Dana...",
+"Chart ~Area...":"Chaartete Base...",
+"Chart ~Wall...":"Chaartete Gidigidda...",
 "Chevron":"Farqisa",
 "Chevron Down":"Farqisi Worora",
 "Chevron Up":"Farqisi Alira",
@@ -209,6 +211,7 @@
 "Left and Right Arrow":"Gura Worbicho",
 "Left and Right Arrow Callout":"Guranna Qiniiti Worbichi Coy'ratto balaqo",
 "Left-To-Right":"Guranni-Qiniitira",
+"Legend On/Off":"Maatto Fani/Cufi",
 "Lightning Bolt":"Ollonkete Gaxa",
 "Line":"Xuruura",
 "Line Callout 1":"Xuruuru Coy'ratto balaqa 1",
@@ -431,6 +434,7 @@
 "~Thesaurus...":"~Xaadi-gurchu borqaalla...",
 "~Time":"~Yanna",
 "~Time (fixed)":"Yanna (rosantinoha)",
+"~Titles...":"Umma...",
 "~Tools":"Uduunne",
 "~Top":"Ale",
 "~UPPERCASE":"~UPPERCASE",
@@ -442,6 +446,8 @@
 "~While Typing":"Borreessinanna",
 "~Width...":"~Baqo...",
 "~Wrap":"~Xaaxo",
+"~X Axis...":"X Daabba...",
+"~Y Axis...":"Y Daabba...",
 "~lowercase":"~shiimmaadda fidalla",
 "~tOGGLE cASE":"~tOGGLE cASE"
 }

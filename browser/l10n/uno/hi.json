@@ -43,6 +43,8 @@
 "Character Spacing":"वर्ण अंतरण",
 "Charcoal Sketch":"चारकोल स्केच",
 "Chart T~ype...":"चार्ट प्रकार (~y)...",
+"Chart ~Area...":"चार्ट क्षेत्र...",
+"Chart ~Wall...":"चार्ट दीवाल...",
 "Chevron":"चेव्रॉन",
 "Chevron Down":"चेवरॉन नीचे",
 "Chevron Up":"चेवरॉन ऊपर",
@@ -210,6 +212,7 @@
 "Left and Right Arrow":"बायाँ व दाहिना तीर",
 "Left and Right Arrow Callout":"बायाँ और दाहिना तीर कॉलआउट",
 "Left-To-Right":"बाएँ से दाएँ",
+"Legend On/Off":"लेजेन्ड चालू/बंद",
 "Lightning Bolt":"बिजली बोल्ट",
 "Line":"रेखा",
 "Line Callout 1":"रेखा कॉलआउट 1",
@@ -432,6 +435,7 @@
 "~Thesaurus...":"विश्वकोश...",
 "~Time":"समय",
 "~Time (fixed)":"समय (स्थिर)",
+"~Titles...":"शीर्षक...",
 "~Tools":"औज़ार",
 "~Top":"ऊपर",
 "~UPPERCASE":"बड़ा अक्षर",
@@ -443,6 +447,8 @@
 "~While Typing":"टाइपिंग के समय",
 "~Width...":"चौड़ाई...",
 "~Wrap":"लपेटें",
+"~X Axis...":"~X अक्ष...",
+"~Y Axis...":"~Y अक्ष...",
 "~lowercase":"छोटा अक्षर (~l)",
 "~tOGGLE cASE":"अक्षर बड़ा-छोटा करें (~t)"
 }

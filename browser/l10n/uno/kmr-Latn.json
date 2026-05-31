@@ -33,6 +33,8 @@
 "Ce~lls...":"Şa~ne...",
 "Charcoal Sketch":"Pêşnûmaya Qelezîreçê",
 "Chart T~ype...":"~Cureyê Xanxankê...",
+"Chart ~Area...":"Herêma X~anxankê...",
+"Chart ~Wall...":"~Dîwarê Xanxankê...",
 "Circle":"Xelek",
 "Circle Pie":"Pareke Daîrê",
 "Cloud":"Gewir",
@@ -138,6 +140,7 @@
 "Left Arrow":"Tîra Çep",
 "Left Arrow Callout":"Ş",
 "Left-To-Right":"Çep-Ber-Bi-Rast",
+"Legend On/Off":"Danezanî Vekirî/Girtî",
 "Line":"Rêzik",
 "Line Color":"Rengê xêza",
 "Line Spacing: 1":"Navbera Rêzikan: 1",
@@ -309,6 +312,7 @@
 "~Thesaurus...":"~Hevwate...",
 "~Time":"~Dem",
 "~Time (fixed)":"~Saet (sabît)",
+"~Titles...":"~Sernav...",
 "~Tools":"A~mûr",
 "~Top":"~Ser",
 "~Ungroup":"~Komkirinê rake",
@@ -319,5 +323,7 @@
 "~While Typing":"Di dema ~nivîsandinê de",
 "~Width...":"~Firehî...",
 "~Wrap":"~Belavbûna nivîsê",
+"~X Axis...":"Tewereya ~X...",
+"~Y Axis...":"Tewereya ~Y...",
 "~lowercase":"~tîpên hûrdek"
 }

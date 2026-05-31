@@ -42,6 +42,8 @@
 "Ce~lls...":"कक्ष...",
 "Charcoal Sketch":"कोइला रूपरेखा",
 "Chart T~ype...":"चित्रपट प्रकार...",
+"Chart ~Area...":"चित्रपट क्षेत्र...",
+"Chart ~Wall...":"चित्रपट पर्खाल...",
 "Chevron":"फीता",
 "Chevron Down":"फीता तल",
 "Chevron Up":"फीता माथि",
@@ -173,6 +175,7 @@
 "Left and Right Arrow":"बायाँ र दायाँ बाँण",
 "Left and Right Arrow Callout":"दायाँ र बायाँ बाँण कलआउट",
 "Left-To-Right":"बायाँ-देखि-दायाँ",
+"Legend On/Off":"लिजेन्ड खोल्नुहोस्/बन्द गर्नुहोस्",
 "Lightning Bolt":"चट्याङ् बोल्ट",
 "Line":"रेखा",
 "Line Callout 1":"रेखा कलआउट १",
@@ -388,5 +391,7 @@
 "~While Typing":"टाइप गर्ने क्रममा",
 "~Width...":"चौडाइ...",
 "~Wrap":"बेर्नुहोस्",
+"~X Axis...":"X अक्ष...",
+"~Y Axis...":"Y अक्ष...",
 "~lowercase":"साना अक्षर"
 }

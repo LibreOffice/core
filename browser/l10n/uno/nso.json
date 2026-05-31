@@ -42,6 +42,8 @@
 "Ce~lls...":"Dise~le...",
 "Charcoal Sketch":"Seketšhe sa tšhakhoule",
 "Chart T~ype...":"Mohu~ta wa tšhate...",
+"Chart ~Area...":"L~efelo la tšhate...",
+"Chart ~Wall...":"Le~bota la tšhate...",
 "Chevron":"Ševerone",
 "Chevron Down":"Šeferone tlase",
 "Chevron Up":"Šeferone godimo",
@@ -201,6 +203,7 @@
 "Left and Right Arrow":"Mosebe wa la nngele le la go ja",
 "Left and Right Arrow Callout":"Go ipiletša ga mosebe ga la nngele le la go ja",
 "Left-To-Right":"La nngele go ya go la go ja",
+"Legend On/Off":"Nonwane e butšwe/tswaletšwe",
 "Lightning Bolt":"Go betha ga legadima",
 "Line":"Mothaladi",
 "Line Callout 1":"Go ipiletša ga mothaladi 1",
@@ -406,6 +409,7 @@
 "~Thesaurus...":"~Polokelo ya mantšu...",
 "~Time":"~Nako",
 "~Time (fixed)":"~Nako (e beilwego)",
+"~Titles...":"~Dihlogo...",
 "~Tools":"~Dithulusi",
 "~Top":"~Godimo",
 "~Ungroup":"~Hlopholla",
@@ -415,5 +419,7 @@
 "~View":"~Tebelelo",
 "~While Typing":"~Mola o tlanya",
 "~Width...":"~Bophara...",
-"~Wrap":"~Phuthela"
+"~Wrap":"~Phuthela",
+"~X Axis...":"Makopano a ~X...",
+"~Y Axis...":"Makopano a ~Y..."
 }

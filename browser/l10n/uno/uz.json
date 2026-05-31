@@ -31,6 +31,8 @@
 "Centered":"Markazda",
 "Ce~lls...":"Ka~taklar...",
 "Chart T~ype...":"Diagramma t~uri...",
+"Chart ~Area...":"Diagramma ~hududi...",
+"Chart ~Wall...":"Diagramma yayaratish ~hududi...",
 "Circle":"Aylana",
 "Circle (Curve)":"Aylana (Egri)",
 "Close Master View":"Asosiy koʻrinishni yopish",
@@ -126,6 +128,7 @@
 "Left Brace":"Chapdagi qavs",
 "Left Bracket":"Chapdagi qavs",
 "Left-To-Right":"Chapdan oʻngga",
+"Legend On/Off":"Legendani koʻrsatish/bekitish",
 "Lightning Bolt":"Chaqmoq",
 "Line":"Chiziq",
 "Line Color":"Chiziqning rangi",
@@ -301,6 +304,7 @@
 "~Thesaurus...":"~Tezaurus...",
 "~Time":"~Vaqt",
 "~Time (fixed)":"~Vaqt (oʻrnatilgan)",
+"~Titles...":"~Sarlavha...",
 "~Tools":"~Vositalar",
 "~Top":"~Yuqori",
 "~Ungroup":"Guruhni ~ajratish",
@@ -310,5 +314,7 @@
 "~View":"~Koʻrinish",
 "~While Typing":"~Kiritishda",
 "~Width...":"~Eni",
+"~X Axis...":"~X-oʻqi...",
+"~Y Axis...":"~Y-oʻqi...",
 "~lowercase":"Ki~chik harf"
 }

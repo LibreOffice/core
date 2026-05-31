@@ -33,6 +33,7 @@
 "Center":"Phakathi",
 "Center Horizontal":"Beka phakathi Buthabalala",
 "Charcoal Sketch":"Umgwalo osa-Charcoal",
+"Chart ~Wall...":"Iboda ~Letjhati...",
 "Chevron":"Itjhevroni",
 "Chevron Down":"Tjhevroni Phasi",
 "Chevron Up":"Tjhevroni Phezulu",
@@ -126,6 +127,7 @@
 "Left and Right Arrow":"Itshwayo lekomba Langesinceleni Nangesidleni",
 "Left and Right Arrow Callout":"I-callout ebutjhobi Yangesinceleni Nangesidleni",
 "Left-To-Right":"Ukusuka Ngesinceleni ukuya Ngesidleni",
+"Legend On/Off":"Ihlathululo Iyasebenza/Ayisebenzi",
 "Lightning Bolt":"Umbani",
 "Line":"Ilayini",
 "Line Callout 1":"I-callout Eyilayini 1",
@@ -268,5 +270,7 @@
 "~Validity...":"~Ukusebenza...",
 "~While Typing":"~Ngesikhathi Uthayipha",
 "~Width...":"~Ububanzi...",
-"~Wrap":"~Dlulisa igama"
+"~Wrap":"~Dlulisa igama",
+"~X Axis...":"I-~X Eksisi...",
+"~Y Axis...":"I-~Y Eksisi..."
 }

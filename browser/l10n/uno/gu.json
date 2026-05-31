@@ -43,6 +43,8 @@
 "Character Spacing":"અક્ષરોથી અંતર",
 "Charcoal Sketch":"કોલસોનું ચિત્ર",
 "Chart T~ype...":"આલેખ પ્રકાર (~y)...",
+"Chart ~Area...":"આલેખ વિસ્તાર...",
+"Chart ~Wall...":"આલેખ દિવાલ...",
 "Chevron":"ચેવ્રોન",
 "Chevron Down":"ચેવ્રોન નીચે",
 "Chevron Up":"ચેવ્રોન ઉપર",
@@ -215,6 +217,7 @@
 "Left and Right Arrow":"ડાબું અને જમણું તીર",
 "Left and Right Arrow Callout":"ડાબું અને જમણું તીર કોલઆઉટ",
 "Left-To-Right":"ડાબી થી જમણી તરફ",
+"Legend On/Off":"ચિહ્નોને ચાલુ/બંધ કરો",
 "Lightning Bolt":"પ્રકાશિત બોલ્ટ",
 "Line":"લીટી",
 "Line Callout 1":"લીટી કોલઆઉટ ૧",
@@ -439,6 +442,7 @@
 "~Thesaurus...":"થીસોર્સ...",
 "~Time":"સમય",
 "~Time (fixed)":"સમય (નક્કી)",
+"~Titles...":"શીર્ષકો...",
 "~Tools":"સાધનો",
 "~Top":"ઉપર",
 "~UPPERCASE":"મોટા અક્ષરો",
@@ -450,6 +454,8 @@
 "~While Typing":"લખતી વખતે",
 "~Width...":"પહોળાઈ...",
 "~Wrap":"લપેટો",
+"~X Axis...":"~X અક્ષો...",
+"~Y Axis...":"~Y અક્ષો...",
 "~lowercase":"નાના અક્ષરો (~l)",
 "~tOGGLE cASE":"ટોગલ સ્થિતિ (~t)"
 }

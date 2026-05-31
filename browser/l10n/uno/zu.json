@@ -35,6 +35,7 @@
 "Center":"Phakathi nendawo",
 "Center Horizontal":"Okuvundlile Phakathi",
 "Charcoal Sketch":"Umdwebo Welahle",
+"Chart ~Wall...":"Ishadi ~Ludonga...",
 "Chevron":"Igwinci",
 "Chevron Down":"Igwinci Ukuya Phansi",
 "Chevron Up":"Igwinci Ukuya Phezulu",
@@ -133,6 +134,7 @@
 "Left and Right Arrow":"Mcibisholo Sokunxele Sokukudla",
 "Left and Right Arrow Callout":"Mcibisholo Obizela Kwesokunxele Nesokudla",
 "Left-To-Right":"Ngakwesokunxele kuya ngakwesokudla",
+"Legend On/Off":"Isiqubulo Siyakhanya/Sicimile",
 "Lightning Bolt":"Umfutho Wonyazi",
 "Line":"Ulayini",
 "Line Callout 1":"Umugqa Obizelayo 1",
@@ -283,6 +285,8 @@
 "~While Typing":"~Ngenkathi ukubhala",
 "~Width...":"~Ububanzi...",
 "~Wrap":"~Goqa",
+"~X Axis...":"Aksis ka ~X...",
+"~Y Axis...":"Aksis ka ~Y...",
 "~lowercase":"~iznhlamvu ezincane",
 "~tOGGLE cASE":"~Inhlamvu eguquguqukayo"
 }

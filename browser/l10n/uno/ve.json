@@ -33,6 +33,7 @@
 "Center":"Vhukati",
 "Center Horizontal":"Vhukati ha Horizonthaḽa",
 "Charcoal Sketch":"Tshiketshe tsha Tshakhoulu",
+"Chart ~Wall...":"~Luvhondo lwa Tshati...",
 "Chevron":"Tshevuroni",
 "Chevron Down":"Chevuroni Fhasi",
 "Chevron Up":"Chevuroni Nṱha",
@@ -126,6 +127,7 @@
 "Left and Right Arrow":"Musevhe wa tsha Monde na tsha u ḽa",
 "Left and Right Arrow Callout":"Mbidzelelo ya Musevhe wa tsha Monde na tsha u Ḽa",
 "Left-To-Right":"Tsha Monde-Uya-kha-Tsha u Ḽa",
+"Legend On/Off":"Lungano lwo Funga/Tsima",
 "Lightning Bolt":"Baudu ya Lupenyo",
 "Line":"Ḽaini",
 "Line Callout 1":"Mbidzelelo dza Ḽaini 1",
@@ -263,5 +265,7 @@
 "~Validity...":"~Vhukwae...",
 "~While Typing":"~Musi ni tshi khou Thaipha",
 "~Width...":"~Vhuphara...",
-"~Wrap":"~Putelani"
+"~Wrap":"~Putelani",
+"~X Axis...":"~X Axisi...",
+"~Y Axis...":"~Y Axisi..."
 }

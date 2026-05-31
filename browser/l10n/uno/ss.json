@@ -35,6 +35,7 @@
 "Center":"Emkhatsini",
 "Center Horizontal":"Emkhatsini wekuvundla",
 "Charcoal Sketch":"Sikeshi semalahle",
+"Chart ~Wall...":"Ishathi ~yelubondza...",
 "Chevron":"Ishevroni",
 "Chevron Down":"Ishevroni phansi",
 "Chevron Up":"Ishevroni etulu",
@@ -131,6 +132,7 @@
 "Left and Right Arrow":"Butjoki ngesekudla nesancele",
 "Left and Right Arrow Callout":"Butjoki besancele nesekudla lobumemetako",
 "Left-To-Right":"Sancele kuye ngasekudla",
+"Legend On/Off":"Ilejenti e/p",
 "Lightning Bolt":"Kuphahlaka kwembane",
 "Line":"Lilayini",
 "Line Callout 1":"Lilayini limemeta 1",
@@ -276,5 +278,7 @@
 "~Validity...":"~Buciniso...",
 "~While Typing":"~Ngesikhatsi Usathayipha",
 "~Width...":"~Bubanti...",
-"~Wrap":"~Gocotela"
+"~Wrap":"~Gocotela",
+"~X Axis...":"~X eksisi...",
+"~Y Axis...":"~Y eksisi..."
 }

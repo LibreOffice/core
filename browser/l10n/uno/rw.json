@@ -42,6 +42,8 @@
 "Ce~lls...":"Utudirishya...",
 "Charcoal Sketch":"Igishushanyo mbonera",
 "Chart T~ype...":"Ubwoko bw'imbonerahamwe",
+"Chart ~Area...":"Umwanya w'imbonerahamwe",
+"Chart ~Wall...":"Inkuta z'Igishushanyo...",
 "Chevron":"Ishevuro",
 "Chevron Down":"Ishevuro Hasi",
 "Chevron Up":"Ishevuro Hejuru",
@@ -163,6 +165,7 @@
 "Left and Right Arrow":"Akambi Ibumoso n'Iburyo",
 "Left and Right Arrow Callout":"Ihamagara ry'Akambi Ibumoso n'Iburyo",
 "Left-To-Right":"Ibumoso-Ujya-Iburyo",
+"Legend On/Off":"Ubusobanuro bikora/bidakora",
 "Lightning Bolt":"Agahuza kamurika",
 "Line":"Umurongo",
 "Line Callout 1":"Ihamagara ry'Umurongo 1",
@@ -374,5 +377,7 @@
 "~While Typing":"Igihe wandika",
 "~Width...":"Ubugari...",
 "~Wrap":"Gufunika",
+"~X Axis...":"Umurongo fatizo X...",
+"~Y Axis...":"Umurongo fatizo X...",
 "~lowercase":"Inyuguti nto"
 }

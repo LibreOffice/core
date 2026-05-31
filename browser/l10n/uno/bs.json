@@ -43,6 +43,8 @@
 "Character Spacing":"Razmak slova",
 "Charcoal Sketch":"Ugljena skica",
 "Chart T~ype...":"V~rsta grafikona...",
+"Chart ~Area...":"Površ~ina grafikona...",
+"Chart ~Wall...":"Zid gra~fikona...",
 "Chevron":"Chevron",
 "Chevron Down":"Chevron dolje",
 "Chevron Up":"Chevron gore",
@@ -214,6 +216,7 @@
 "Left and Right Arrow":"Strelica lijevo-desno",
 "Left and Right Arrow Callout":"Oblačić sa strelicama lijevo i desno",
 "Left-To-Right":"Slijeva nadesno",
+"Legend On/Off":"Legenda uključena/isključena",
 "Lightning Bolt":"Grom",
 "Line":"Linija",
 "Line Callout 1":"Linearni oblačić 1",
@@ -444,6 +447,7 @@
 "~Thesaurus...":"~Rječnik sinonima...",
 "~Time":"~Vrijeme",
 "~Time (fixed)":"~Vrijeme (fiksno)",
+"~Titles...":"~Naslovi...",
 "~Tools":"~Alati",
 "~Top":"~Vrh",
 "~UPPERCASE":"~VELIKA SLOVA",
@@ -455,6 +459,8 @@
 "~While Typing":"~Pri tipkanju",
 "~Width...":"Š~irina...",
 "~Wrap":"~Prijelom",
+"~X Axis...":"Osa ~X...",
+"~Y Axis...":"Osa ~Y...",
 "~lowercase":"~mala slova",
 "~tOGGLE cASE":"~zAMIJENI vELIKA i mALA"
 }
