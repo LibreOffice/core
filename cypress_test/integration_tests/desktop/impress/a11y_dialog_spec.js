@@ -398,7 +398,7 @@ describe(['tagdesktop'], 'Accessibility Impress Dialog Tests', { testIsolation: 
         // pushbutton inner element before clicking so the JSDialog click
         // handler fires regardless of what the kit just set.
         function clickSidebarPushButton(id) {
-            cy.cGet('#' + id).should('be.visible');
+            cy.cGet('#' + id).scrollIntoView().should('be.visible');
             cy.cGet('#' + id + ' button').then($btn => {
                 const btn = $btn[0];
                 btn.removeAttribute('disabled');
