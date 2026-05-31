@@ -309,28 +309,28 @@ SdXMLPageMasterStyleContext::SdXMLPageMasterStyleContext(
             case XML_ELEMENT(FO_COMPAT, XML_MARGIN_TOP):
             {
                 GetSdImport().GetMM100UnitConverter().convertMeasureToCore(
-                        mnBorderTop, aIter.toView());
+                        mnBorderTop, aIter.toView(), 0);
                 break;
             }
             case XML_ELEMENT(FO, XML_MARGIN_BOTTOM):
             case XML_ELEMENT(FO_COMPAT, XML_MARGIN_BOTTOM):
             {
                 GetSdImport().GetMM100UnitConverter().convertMeasureToCore(
-                        mnBorderBottom, aIter.toView());
+                        mnBorderBottom, aIter.toView(), 0);
                 break;
             }
             case XML_ELEMENT(FO, XML_MARGIN_LEFT):
             case XML_ELEMENT(FO_COMPAT, XML_MARGIN_LEFT):
             {
                 GetSdImport().GetMM100UnitConverter().convertMeasureToCore(
-                        mnBorderLeft, aIter.toView());
+                        mnBorderLeft, aIter.toView(), 0);
                 break;
             }
             case XML_ELEMENT(FO, XML_MARGIN_RIGHT):
             case XML_ELEMENT(FO_COMPAT, XML_MARGIN_RIGHT):
             {
                 GetSdImport().GetMM100UnitConverter().convertMeasureToCore(
-                        mnBorderRight, aIter.toView());
+                        mnBorderRight, aIter.toView(), 0);
                 break;
             }
             case XML_ELEMENT(FO, XML_PAGE_WIDTH):
