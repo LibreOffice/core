@@ -1568,7 +1568,7 @@ class DebugManager {
 				'Event handling delay: ' + Math.ceil(delayMs) + 'ms',
 			);
 
-			if (delayMs > very_slow_time_threshold) {
+			if (delayMs > very_slow_time_threshold && !window.L.Browser.cypressTest) {
 				const msg = _(
 					'Event handling has been delayed for an unexpectedly long time: {0}ms',
 				);
