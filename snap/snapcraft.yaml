@@ -96,6 +96,7 @@ parts:
     after: [poco]
     build-snaps:
       - kde-qt6-core24-sdk
+      - node/20/stable
     build-environment:
       # The engine's configure auto-detects ccache on PATH and wraps gcc.
       # Park the cache outside parts/<name>/ so it survives snapcraft
@@ -239,11 +240,6 @@ parts:
       cp -a engine/inst/lib/collaboraoffice "$CRAFT_PART_INSTALL/usr/lib/collaboraoffice"
 
       # 2. Build Collabora Online (the wsd/qtapp wrapper around the engine).
-      # Ubuntu 24.04 ships Node 18; COOL requires >= 20
-      if ! node --version 2>/dev/null | grep -qE '^v(2[0-9]|[3-9])'; then
-        curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
-        apt-get install -y nodejs
-      fi
       # Expose Qt6 from the kde-qt6-core24-sdk build-snap. The kde-neon-6
       # extension auto-wires this for cmake/meson plugins but not for
       # plugin: nil parts that use override-build.
