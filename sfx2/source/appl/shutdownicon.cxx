@@ -369,12 +369,23 @@ IMPL_LINK( ShutdownIcon, DialogClosedHdl_Impl, FileDialogHelper*, /*unused*/, vo
                     OpenURL( sFiles[0], u"_default"_ustr, aArgs );
                 else
                 {
+#ifdef MACOSX
+                    // tdf#161298 Do not concatenate multiple files on macOS
+                    // On macOS when there are multiple files, the first
+                    // item in the sequence is not a directory. Instead, each
+                    // file is a separate URL to open. So the base directory
+                    // is always an empty string.
+                    OUString    aBaseDirURL;
+
+                    int iFiles = 0;
+#else
                     OUString    aBaseDirURL = sFiles[0];
                     if ( !aBaseDirURL.isEmpty() && !aBaseDirURL.endsWith("/") )
                         aBaseDirURL += "/";
 
-                    int iFiles;
-                    for ( iFiles = 1; iFiles < nFiles; iFiles++ )
+                    int iFiles = 1;
+#endif
+                    for ( ; iFiles < nFiles; iFiles++ )
                     {
                         OUString aURL = aBaseDirURL + sFiles[iFiles];
                         OpenURL( aURL, u"_default"_ustr, aArgs );
