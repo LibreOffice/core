@@ -1,3 +1,9 @@
+coolwsd (26.04.1.2-1) unstable; urgency=medium
+
+  * https://github.com/CollaboraOnline/online.mirror/releases/tag/cp-26.04.1-2
+
+ -- Andras Timar <andras.timar@collabora.com>  Sun, 31 May 2026 22:20:00 +0200
+
 coolwsd (26.04.1.1-1) unstable; urgency=medium
 
   * https://github.com/CollaboraOnline/online.mirror/releases/tag/cp-26.04.1-1
