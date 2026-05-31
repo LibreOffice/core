@@ -10,7 +10,7 @@
 #include <swmodeltestbase.hxx>
 #include <docsh.hxx>
 #include <unotxdoc.hxx>
-#include <config_poppler.h>
+#include <config_pdfimport.h>
 
 namespace
 {

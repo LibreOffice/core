@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <config_poppler.h>
+#include <config_pdfimport.h>
 
 #include "sdmodeltestbase.hxx"
 #include <tools/color.hxx>

@@ -117,11 +117,6 @@
 #define HAVE_FEATURE_PDFIMPORT 0
 
 /*
- * Whether poppler is available
- */
-#define HAVE_FEATURE_POPPLER 0
-
-/*
  * Whether the automatic online updater is available
  */
 #define HAVE_FEATURE_UPDATE_MAR 0

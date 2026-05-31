@@ -20,17 +20,9 @@
 #ifndef INCLUDED_SDEXT_SOURCE_PDFIMPORT_PDFIADAPTOR_HXX
 #define INCLUDED_SDEXT_SOURCE_PDFIMPORT_PDFIADAPTOR_HXX
 
-#include <xmlemitter.hxx>
-#include <treevisitorfactory.hxx>
-
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/xml/XImportFilter.hpp>
-#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/document/XFilter.hpp>
-#include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/document/XImporter.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 
@@ -59,70 +51,6 @@ namespace pdfi
         // XFilter
         virtual sal_Bool SAL_CALL filter( const css::uno::Sequence<css::beans::PropertyValue>& rFilterData ) override;
         virtual void SAL_CALL cancel() override;
-
-        // XImporter
-        virtual void SAL_CALL setTargetDocument( const css::uno::Reference< css::lang::XComponent >& xDocument ) override;
-
-        OUString SAL_CALL getImplementationName() override;
-
-        sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override;
-
-        css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
-    };
-
-    typedef ::comphelper::WeakComponentImplHelper<
-        css::xml::XImportFilter,
-        css::document::XImporter,
-        css::lang::XServiceInfo> PDFIAdaptorBase;
-
-    /** Adapts raw pdf import to XImportFilter interface
-     */
-    class PDFIRawAdaptor : public PDFIAdaptorBase
-    {
-    private:
-        OUString const m_implementationName;
-        css::uno::Reference<
-            css::uno::XComponentContext >  m_xContext;
-        css::uno::Reference<
-            css::frame::XModel >           m_xModel;
-        TreeVisitorFactorySharedPtr                   m_pVisitorFactory;
-
-        bool parse( const css::uno::Reference<css::io::XInputStream>&       xInput,
-                    const css::uno::Reference<css::task::XInteractionHandler>& xIHdl,
-                    const OUString&                                                          rPwd,
-                    const css::uno::Reference<css::task::XStatusIndicator>& xStatus,
-                    const XmlEmitterSharedPtr&                                                    rEmitter,
-                    const OUString&                                                          rURL,
-                    const OUString&                                         rFilterOptions);
-
-    public:
-        explicit PDFIRawAdaptor( OUString const & implementationName,
-                                 const css::uno::Reference<
-                                       css::uno::XComponentContext >& xContext );
-
-        /** Set factory object used to create the tree visitors
-
-            Used for customizing the tree to the specific output
-            format (writer, draw, etc)
-         */
-        void setTreeVisitorFactory(const TreeVisitorFactorySharedPtr& rVisitorFactory);
-
-        /** Export pdf document to ODG
-
-            @param xOutput
-            Stream to write the flat xml file to
-
-            @param xStatus
-            Optional status indicator
-         */
-        bool odfConvert( const OUString&                                                          rURL,
-                         const css::uno::Reference<css::io::XOutputStream>&      xOutput,
-                         const css::uno::Reference<css::task::XStatusIndicator>& xStatus );
-
-        // XImportFilter
-        virtual sal_Bool SAL_CALL importer( const css::uno::Sequence< css::beans::PropertyValue >& rSourceData,
-                                            const css::uno::Reference< css::xml::sax::XDocumentHandler >& rHdl,
-                                            const css::uno::Sequence< OUString >& rUserData ) override;
 
         // XImporter
         virtual void SAL_CALL setTargetDocument( const css::uno::Reference< css::lang::XComponent >& xDocument ) override;

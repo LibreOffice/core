@@ -2871,62 +2871,6 @@ endef
 
 endif # ENABLE_VALGRIND
 
-ifeq ($(ENABLE_POPPLER),TRUE)
-
-ifneq ($(SYSTEM_POPPLER),)
-
-define gb_LinkTarget__use_poppler
-$(call gb_LinkTarget_set_include,$(1),\
-	$(POPPLER_CFLAGS) \
-	$$(INCLUDE) \
-)
-
-$(call gb_LinkTarget_add_libs,$(1),\
-	$(POPPLER_LIBS) \
-)
-
-endef
-
-else # !SYSTEM_POPPLER
-
-$(eval $(call gb_Helper_register_packages_for_install,pdfimport,\
-	poppler_data \
-))
-
-define gb_LinkTarget__use_poppler
-$(call gb_LinkTarget_use_external_project,$(1),poppler,full)
-$(call gb_LinkTarget_use_package,$(1),poppler_data)
-$(call gb_LinkTarget_set_include,$(1),\
-	-I$(gb_UnpackedTarball_workdir)/poppler \
-	-I$(gb_UnpackedTarball_workdir)/poppler/poppler \
-	-I$(gb_UnpackedTarball_workdir)/poppler/goo \
-	$$(INCLUDE) \
-)
-
-$(call gb_LinkTarget_use_static_libraries,$(1),poppler)
-$(call gb_LinkTarget_use_external,$(1),libjpeg)
-
-ifeq ($(OS),MACOSX)
-$(call gb_LinkTarget_add_libs,$(1),\
-	-lobjc \
-)
-else ifeq ($(OS),LINUX)
-$(call gb_LinkTarget_add_libs,$(1),\
-	-pthread \
-)
-else ifeq ($(OS),WNT)
-$(call gb_LinkTarget_use_system_win32_libs,$(1),\
-	advapi32 \
-	gdi32 \
-)
-endif
-
-endef
-
-endif # SYSTEM_POPPLER
-
-endif # ENABLE_POPPLER
-
 
 ifneq ($(SYSTEM_CLUCENE),)
 

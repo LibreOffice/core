@@ -112,10 +112,6 @@ bool TypedefParam::VisitCXXMethodDecl(CXXMethodDecl const* methodDecl)
     // seems to be using typedefs as a form of documentation for method params
     if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/sw/source/filter/ww8/ww8scan.hxx"))
         return true;
-    // necessary to work around changes in popplers API
-    if (loplugin::hasPathnamePrefix(aFileName, SRCDIR
-                                    "/sdext/source/pdfimport/xpdfwrapper/pdfioutdev_gpl.hxx"))
-        return true;
 
     for (auto superMethodIt = methodDecl->begin_overridden_methods();
          superMethodIt != methodDecl->end_overridden_methods(); ++superMethodIt)

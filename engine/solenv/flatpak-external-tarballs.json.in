@@ -413,20 +413,6 @@
         "dest-filename": "@ORCUS_TARBALL@"
     },
     {
-        "url": "https://dev-www.libreoffice.org/src/@POPPLER_TARBALL@",
-        "sha256": "@POPPLER_SHA256SUM@",
-        "type": "file",
-        "dest": "external/tarballs",
-        "dest-filename": "@POPPLER_TARBALL@"
-    },
-    {
-        "url": "https://dev-www.libreoffice.org/src/@POPPLER_DATA_TARBALL@",
-        "sha256": "@POPPLER_DATA_SHA256SUM@",
-        "type": "file",
-        "dest": "external/tarballs",
-        "dest-filename": "@POPPLER_DATA_TARBALL@"
-    },
-    {
         "url": "https://dev-www.libreoffice.org/src/@RAPTOR_TARBALL@",
         "sha256": "@RAPTOR_SHA256SUM@",
         "type": "file",

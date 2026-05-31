@@ -7,11 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-// This module is normally included unconditionally in the core installation, it
-// provides various import filters for both plain PDF and hybrid PDF/ODF.  For
-// --with-system-poppler builds it can be advantageous though to package this
-// module as an individual, optional part, so that the core installation does
-// not feature a dependency on a poppler package.
+// This module is included unconditionally in the core installation. It
+// provides PDF type detection and the hybrid PDF/ODF import filters.
 
 // The /org.openoffice.TypeDetection.Types/Types/pdf_Portable_Document_Format
 // configuration node contained in pdfimport.xcd needs to override a
@@ -32,14 +29,8 @@ Module gid_Module_Pdfimport
     PackageInfo = "packinfo_office.txt";
     ParentID = gid_Module_Root_Brand;
     Styles = (HIDDEN_ROOT);
-    Dirs = (gid_Dir_Share_Xpdfimport);
     Files = (auto_pdfimport_ALL,
         gid_File_Xcd_Pdfimport);
-End
-
-Directory gid_Dir_Share_Xpdfimport
-    ParentID = gid_Brand_Dir_Share;
-    DosName = "xpdfimport";
 End
 
 File gid_File_Xcd_Pdfimport

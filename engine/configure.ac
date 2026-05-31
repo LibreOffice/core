@@ -2516,16 +2516,6 @@ AC_ARG_WITH(system-openldap,
         [Use the OpenLDAP LDAP SDK already on system.]),,
     [with_system_openldap="$with_system_libs"])
 
-libo_FUZZ_ARG_ENABLE(poppler,
-    AS_HELP_STRING([--disable-poppler],
-        [Disable building Poppler.])
-)
-
-AC_ARG_WITH(system-poppler,
-    AS_HELP_STRING([--with-system-poppler],
-        [Use system poppler (only needed for PDF import).]),,
-    [with_system_poppler="$with_system_libs"])
-
 AC_ARG_WITH(system-abseil,
     AS_HELP_STRING([--with-system-abseil],
         [Use the abseil libraries already on system.]),,
@@ -4858,11 +4848,6 @@ if test -n "$enable_dbgutil" -a "$enable_dbgutil" != "no"; then
         AC_MSG_ERROR([--with-system-zxing conflicts with --enable-dbgutil])
     else
         with_system_zxing=no
-    fi
-    if test "$with_system_poppler" = "yes"; then
-        AC_MSG_ERROR([--with-system-poppler conflicts with --enable-dbgutil])
-    else
-        with_system_poppler=no
     fi
     # As mixing system libwps and non-system libnumbertext or vice versa likely causes trouble (see
     # 603074c5f2b84de8a24593faf807da784b040625 "Pass _GLIBCXX_DEBUG into external/libwps" and the
@@ -12509,50 +12494,20 @@ AC_SUBST(ABSEIL_CFLAGS)
 AC_SUBST(ABSEIL_LIBS)
 
 dnl ===================================================================
-dnl Check for poppler
+dnl PDF import is provided by Pdfium
 dnl ===================================================================
-ENABLE_POPPLER=
-AC_MSG_CHECKING([whether to build Poppler])
-if test \( -z "$enable_poppler" -a "$ENABLE_PDFIMPORT" = "TRUE" -a $_os != Android \) -o "$enable_poppler" = yes; then
-    AC_MSG_RESULT([yes])
-    ENABLE_POPPLER=TRUE
-    AC_DEFINE(HAVE_FEATURE_POPPLER)
-else
-    AC_MSG_RESULT([no])
-fi
-AC_SUBST(ENABLE_POPPLER)
-
-if test "$ENABLE_PDFIMPORT" = "TRUE" -a "$ENABLE_POPPLER" != "TRUE" -a "$ENABLE_PDFIUM" != "TRUE"; then
-    AC_MSG_ERROR([Cannot import PDF without either Pdfium or Poppler; please enable either of them.])
+if test "$ENABLE_PDFIMPORT" = "TRUE" -a "$ENABLE_PDFIUM" != "TRUE"; then
+    AC_MSG_ERROR([Cannot import PDF without Pdfium; please enable it.])
 fi
 
-if test "$ENABLE_PDFIMPORT" != "TRUE" -a \( "$ENABLE_POPPLER" = "TRUE" -o "$ENABLE_PDFIUM" = "TRUE" \); then
-    AC_MSG_ERROR([Cannot enable Pdfium or Poppler when PDF importing is disabled; please enable PDF import first.])
+if test "$ENABLE_PDFIMPORT" != "TRUE" -a "$ENABLE_PDFIUM" = "TRUE"; then
+    AC_MSG_ERROR([Cannot enable Pdfium when PDF importing is disabled; please enable PDF import first.])
 fi
 
-if test "$ENABLE_PDFIMPORT" = "TRUE" -a "$ENABLE_POPPLER" = "TRUE"; then
-    dnl ===================================================================
-    dnl Check for system poppler
-    dnl ===================================================================
-    AC_MSG_CHECKING([which PDF import poppler to use])
-    if test "$with_system_poppler" = "yes"; then
-        AC_MSG_RESULT([external])
-        SYSTEM_POPPLER=TRUE
-        PKG_CHECK_MODULES(POPPLER,[poppler >= 0.14 poppler-cpp])
-        POPPLER_CFLAGS=$(printf '%s' "$POPPLER_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
-        FilterLibs "${POPPLER_LIBS}"
-        POPPLER_LIBS="${filteredlibs}"
-    else
-        AC_MSG_RESULT([internal])
-        SYSTEM_POPPLER=
-        BUILD_TYPE="$BUILD_TYPE POPPLER"
-    fi
+if test "$ENABLE_PDFIMPORT" = "TRUE"; then
     AC_DEFINE([ENABLE_PDFIMPORT],1)
 fi
 AC_SUBST(ENABLE_PDFIMPORT)
-AC_SUBST(SYSTEM_POPPLER)
-AC_SUBST(POPPLER_CFLAGS)
-AC_SUBST(POPPLER_LIBS)
 
 # Skia?
 ENABLE_SKIA=
@@ -15167,11 +15122,6 @@ if test "$enable_mpl_subset" = "yes"; then
     mpl_error_string=
     newline=$'\n    *'
     warn_report=false
-    if test -n "$ENABLE_POPPLER"; then
-        if test "x$SYSTEM_POPPLER" = "x"; then
-            mpl_error_string="$mpl_error_string$newline Need to disable PDF import via poppler (--disable-poppler) or use system library."
-        fi
-    fi
     # cf. m4/libo_check_extension.m4
     if test "x$WITH_EXTRA_EXTENSIONS" != "x"; then
         mpl_error_string="$mpl_error_string$newline Need to disable extra extensions enabled using --enable-ext-XXXX."
@@ -15622,7 +15572,7 @@ AC_CONFIG_HEADERS([config_host/config_vendor.h])
 AC_CONFIG_HEADERS([config_host/config_vclplug.h])
 AC_CONFIG_HEADERS([config_host/config_version.h])
 AC_CONFIG_HEADERS([config_host/config_oauth2.h])
-AC_CONFIG_HEADERS([config_host/config_poppler.h])
+AC_CONFIG_HEADERS([config_host/config_pdfimport.h])
 AC_CONFIG_HEADERS([config_host/config_python.h])
 AC_CONFIG_HEADERS([config_host/config_writerperfect.h])
 AC_CONFIG_HEADERS([config_host/config_wasm_strip.h])

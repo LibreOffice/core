@@ -74,12 +74,16 @@ class exportToPDF(UITestCase):
                         xFileName.executeAction('TYPE', mkPropertyValues({'KEYCODE':'BACKSPACE'}))
                         xFileName.executeAction('TYPE', mkPropertyValues({'TEXT': xFilePath}))
 
+            # Pdfium opens the PDF as one image per page; break it into
+            # editable shapes and confirm the text round-tripped. Pdfium may
+            # split a line across shapes, so check the joined page text.
             with self.ui_test.load_file(systemPathToFileUrl(xFilePath)) as document:
-
-               # This test depends on the poppler pdf import
-               if os.getenv('ENABLE_POPPLER') == 'TRUE':
-                    self.assertEqual("Sheet1", document.DrawPages[0][0].String)
-                    self.assertEqual("Page 1", document.DrawPages[0][1].String)
-                    self.assertEqual("Hello World", document.DrawPages[0][2].String)
+                self.xUITest.executeCommand(".uno:SelectAll")
+                self.xUITest.executeCommand(".uno:Break")
+                page = document.DrawPages[0]
+                text = "".join(page[i].String for i in range(page.Count))
+                self.assertIn("Sheet1", text)
+                self.assertIn("Page 1", text)
+                self.assertIn("Hello World", text)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

@@ -34,21 +34,6 @@ extern "C" void* sdext_PDFIHybridAdaptor_get_implementation()
     return nullptr;
 }
 
-extern "C" void* sdext_PDFIRawAdaptor_Writer_get_implementation()
-{
-    return nullptr;
-}
-
-extern "C" void* sdext_PDFIRawAdaptor_Draw_get_implementation()
-{
-    return nullptr;
-}
-
-extern "C" void* sdext_PDFIRawAdaptor_Impress_get_implementation()
-{
-    return nullptr;
-}
-
 extern "C" void* sdext_PDFDetector_get_implementation()
 {
     return nullptr;

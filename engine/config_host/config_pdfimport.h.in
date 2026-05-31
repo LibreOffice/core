@@ -1,0 +1,10 @@
+/*
+Whether the PDF import feature is available (provided by Pdfium)
+*/
+
+#ifndef CONFIG_PDFIMPORT_H
+#define CONFIG_PDFIMPORT_H
+
+#define ENABLE_PDFIMPORT 0
+
+#endif

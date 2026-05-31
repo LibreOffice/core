@@ -24,7 +24,6 @@
 #include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 
-#include <comphelper/scopeguard.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <basegfx/vector/b2dsize.hxx>
@@ -879,20 +878,6 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testVersion20)
 // Form XObject).
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testMultiPagePDF)
 {
-// setenv only works on unix based systems
-#ifndef _WIN32
-    // We need to enable PDFium import (and make sure to disable after the test)
-    bool bResetEnvVar = false;
-    if (getenv("LO_IMPORT_USE_PDFIUM") == nullptr)
-    {
-        bResetEnvVar = true;
-        setenv("LO_IMPORT_USE_PDFIUM", "1", false);
-    }
-    comphelper::ScopeGuard aPDFiumEnvVarGuard([&]() {
-        if (bResetEnvVar)
-            unsetenv("LO_IMPORT_USE_PDFIUM");
-    });
-
     // Load the PDF and save as PDF
     vcl::filter::PDFDocument aDocument;
     loadFromFile(u"SimpleMultiPagePDF.pdf");
@@ -1028,7 +1013,6 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testMultiPagePDF)
         // Just check that the size of the page stream is what is expected.
         CPPUNIT_ASSERT_EQUAL(sal_uInt64(355), aUncompressed.Tell());
     }
-#endif
 }
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testFormFontName)
@@ -1071,20 +1055,6 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testFormFontName)
 // times or the size will exponentially increase over time.
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testReexportPDF)
 {
-// setenv only works on unix based systems
-#ifndef _WIN32
-    // We need to enable PDFium import (and make sure to disable after the test)
-    bool bResetEnvVar = false;
-    if (getenv("LO_IMPORT_USE_PDFIUM") == nullptr)
-    {
-        bResetEnvVar = true;
-        setenv("LO_IMPORT_USE_PDFIUM", "1", false);
-    }
-    comphelper::ScopeGuard aPDFiumEnvVarGuard([&]() {
-        if (bResetEnvVar)
-            unsetenv("LO_IMPORT_USE_PDFIUM");
-    });
-
     // Load the PDF and save as PDF
     vcl::filter::PDFDocument aDocument;
     loadFromFile(u"PDFWithImages.pdf");
@@ -1275,8 +1245,6 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testReexportPDF)
         CPPUNIT_ASSERT_EQUAL(aBitmapRefs1[0], aBitmapRefs2[0]);
         CPPUNIT_ASSERT_EQUAL(aBitmapRefs1[1], aBitmapRefs2[1]);
     }
-
-#endif
 }
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf160117)
@@ -1330,20 +1298,6 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf160117)
 // glyphs in recursive arrays) to the target PDF
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testReexportDocumentWithComplexResources)
 {
-// setenv only works on unix based systems
-#ifndef _WIN32
-    // We need to enable PDFium import (and make sure to disable after the test)
-    bool bResetEnvVar = false;
-    if (getenv("LO_IMPORT_USE_PDFIUM") == nullptr)
-    {
-        bResetEnvVar = true;
-        setenv("LO_IMPORT_USE_PDFIUM", "1", false);
-    }
-    comphelper::ScopeGuard aPDFiumEnvVarGuard([&]() {
-        if (bResetEnvVar)
-            unsetenv("LO_IMPORT_USE_PDFIUM");
-    });
-
     // Load the PDF and save as PDF
     vcl::filter::PDFDocument aDocument;
     loadFromFile(u"ComplexContentDictionary.pdf");
@@ -1421,7 +1375,6 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testReexportDocumentWithComplexResources)
             CPPUNIT_ASSERT_EQUAL(303.0, pNumber2->GetValue());
         }
     }
-#endif
 }
 
 // Tests that at export the PDF has the PDF/UA metadata properly set
@@ -4822,18 +4775,6 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf139627)
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testRexportRefToKids)
 {
-    // We need to enable PDFium import (and make sure to disable after the test)
-    bool bResetEnvVar = false;
-    if (getenv("LO_IMPORT_USE_PDFIUM") == nullptr)
-    {
-        bResetEnvVar = true;
-        osl_setEnvironment(u"LO_IMPORT_USE_PDFIUM"_ustr.pData, u"1"_ustr.pData);
-    }
-    comphelper::ScopeGuard aPDFiumEnvVarGuard([&]() {
-        if (bResetEnvVar)
-            osl_clearEnvironment(u"LO_IMPORT_USE_PDFIUM"_ustr.pData);
-    });
-
     // Load the PDF and save as PDF
     vcl::filter::PDFDocument aDocument;
     loadFromFile(u"ref-to-kids.pdf");
@@ -4863,18 +4804,6 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testRexportRefToKids)
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testRexportFilterSingletonArray)
 {
-    // We need to enable PDFium import (and make sure to disable after the test)
-    bool bResetEnvVar = false;
-    if (getenv("LO_IMPORT_USE_PDFIUM") == nullptr)
-    {
-        bResetEnvVar = true;
-        osl_setEnvironment(u"LO_IMPORT_USE_PDFIUM"_ustr.pData, u"1"_ustr.pData);
-    }
-    comphelper::ScopeGuard aPDFiumEnvVarGuard([&]() {
-        if (bResetEnvVar)
-            osl_clearEnvironment(u"LO_IMPORT_USE_PDFIUM"_ustr.pData);
-    });
-
     // the test fails with tagged PDF enabled
     uno::Sequence<beans::PropertyValue> aFilterData(
         comphelper::InitPropertySequence({ { "UseTaggedPDF", uno::Any(false) } }));
@@ -4924,18 +4853,6 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testRexportFilterSingletonArray)
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testRexportMediaBoxOrigin)
 {
-    // We need to enable PDFium import (and make sure to disable after the test)
-    bool bResetEnvVar = false;
-    if (getenv("LO_IMPORT_USE_PDFIUM") == nullptr)
-    {
-        bResetEnvVar = true;
-        osl_setEnvironment(u"LO_IMPORT_USE_PDFIUM"_ustr.pData, u"1"_ustr.pData);
-    }
-    comphelper::ScopeGuard aPDFiumEnvVarGuard([&]() {
-        if (bResetEnvVar)
-            osl_clearEnvironment(u"LO_IMPORT_USE_PDFIUM"_ustr.pData);
-    });
-
     // Load the PDF and save as PDF
     vcl::filter::PDFDocument aDocument;
     loadFromFile(u"ref-to-kids.pdf");
@@ -4993,18 +4910,6 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testRexportMediaBoxOrigin)
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testRexportResourceItemReference)
 {
-    // We need to enable PDFium import (and make sure to disable after the test)
-    bool bResetEnvVar = false;
-    if (getenv("LO_IMPORT_USE_PDFIUM") == nullptr)
-    {
-        bResetEnvVar = true;
-        osl_setEnvironment(u"LO_IMPORT_USE_PDFIUM"_ustr.pData, u"1"_ustr.pData);
-    }
-    comphelper::ScopeGuard aPDFiumEnvVarGuard([&]() {
-        if (bResetEnvVar)
-            osl_clearEnvironment(u"LO_IMPORT_USE_PDFIUM"_ustr.pData);
-    });
-
     // Load the PDF and save as PDF
     vcl::filter::PDFDocument aDocument;
     loadFromFile(u"ref-to-kids.pdf");
@@ -5633,18 +5538,6 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf101686)
 // tdf#162161 reexport appears to have blank image
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testRexportXnViewColorspace)
 {
-    // We need to enable PDFium import (and make sure to disable after the test)
-    bool bResetEnvVar = false;
-    if (getenv("LO_IMPORT_USE_PDFIUM") == nullptr)
-    {
-        bResetEnvVar = true;
-        osl_setEnvironment(u"LO_IMPORT_USE_PDFIUM"_ustr.pData, u"1"_ustr.pData);
-    }
-    comphelper::ScopeGuard aPDFiumEnvVarGuard([&]() {
-        if (bResetEnvVar)
-            osl_clearEnvironment(u"LO_IMPORT_USE_PDFIUM"_ustr.pData);
-    });
-
     // Load the PDF and save as PDF
     vcl::filter::PDFDocument aDocument;
     loadFromFile(u"xnview-colorspace.pdf");
@@ -6353,18 +6246,6 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf163913LeftRightMarginEm)
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testFormRoundtrip)
 {
     // Loads and saves a PDF with filled forms. This checks the forms survive the round-trip.
-
-    // We need to enable PDFium import (and make sure to disable after the test)
-    bool bResetEnvVar = false;
-    if (getenv("LO_IMPORT_USE_PDFIUM") == nullptr)
-    {
-        bResetEnvVar = true;
-        osl_setEnvironment(u"LO_IMPORT_USE_PDFIUM"_ustr.pData, u"1"_ustr.pData);
-    }
-    comphelper::ScopeGuard aPDFiumEnvVarGuard([&]() {
-        if (bResetEnvVar)
-            osl_clearEnvironment(u"LO_IMPORT_USE_PDFIUM"_ustr.pData);
-    });
 
     // Need to properly set the PDF export options
     comphelper::SequenceAsHashMap aMediaDescriptor;

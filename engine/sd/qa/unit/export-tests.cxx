@@ -1010,7 +1010,6 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdf)
     auto pPdfium = vcl::pdf::PDFiumLibrary::get();
     if (!pPdfium)
         return;
-    SdUsePdfium aGuard;
 
     loadFromFile(u"pdf/sample.pdf");
 
@@ -1033,7 +1032,6 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdfTextPos)
     auto pPdfium = vcl::pdf::PDFiumLibrary::get();
     if (!pPdfium)
         return;
-    SdUsePdfium aGuard;
 
     // Load a PDF, decompose it into Draw shapes, save as FODG and reload.
     // The key assertion is that the text stays on one line (not split into two).
@@ -1067,7 +1065,6 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdfFont)
     auto pPdfium = vcl::pdf::PDFiumLibrary::get();
     if (!pPdfium)
         return;
-    SdUsePdfium aGuard;
 
     loadFromFile(u"pdf/differentfonts.pdf");
 
@@ -1106,7 +1103,6 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdfHindi)
     auto pPdfium = vcl::pdf::PDFiumLibrary::get();
     if (!pPdfium)
         return;
-    SdUsePdfium aGuard;
 
     loadFromFile(u"pdf/BasicHindi.pdf");
 
@@ -1133,7 +1129,6 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdfGrayscaleImageUnderInvisibleTe
     auto pPdfium = vcl::pdf::PDFiumLibrary::get();
     if (!pPdfium)
         return;
-    SdUsePdfium aGuard;
 
     loadFromFile(u"pdf/GrayscaleImageUnderInvisibleTest.pdf");
 
@@ -1180,7 +1175,6 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdfClippedImages)
     auto pPdfium = vcl::pdf::PDFiumLibrary::get();
     if (!pPdfium)
         return;
-    SdUsePdfium aGuard;
 
     loadFromFile(u"pdf/ClippedImages.pdf");
 
@@ -1210,7 +1204,6 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdfMissingFontVersion)
     auto pPdfium = vcl::pdf::PDFiumLibrary::get();
     if (!pPdfium)
         return;
-    SdUsePdfium aGuard;
 
     loadFromFile(u"pdf/ErrareHumanumEst.pdf");
 
@@ -1235,7 +1228,6 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdfEmbeddedFonts)
     auto pPdfium = vcl::pdf::PDFiumLibrary::get();
     if (!pPdfium)
         return;
-    SdUsePdfium aGuard;
 
     loadFromFile(u"pdf/sciencejournalsource.pdf");
 
@@ -1256,7 +1248,6 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdfPatternStroke)
     auto pPdfium = vcl::pdf::PDFiumLibrary::get();
     if (!pPdfium)
         return;
-    SdUsePdfium aGuard;
 
     loadFromFile(u"pdf/pattern-stroke.pdf");
 
@@ -1276,7 +1267,6 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdfPatternFill)
     auto pPdfium = vcl::pdf::PDFiumLibrary::get();
     if (!pPdfium)
         return;
-    SdUsePdfium aGuard;
 
     loadFromFile(u"pdf/pattern-fill.pdf");
 
@@ -1298,7 +1288,6 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testPdfPageMasterOrientation)
     auto pPdfium = vcl::pdf::PDFiumLibrary::get();
     if (!pPdfium)
         return;
-    SdUsePdfium aGuard;
 
     loadFromFile(u"pdf/SampleSlideDeck.pdf");
 
@@ -1320,7 +1309,6 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdfTextShear)
     auto pPdfium = vcl::pdf::PDFiumLibrary::get();
     if (!pPdfium)
         return;
-    SdUsePdfium aGuard;
 
     loadFromFile(u"pdf/textshear.pdf");
 

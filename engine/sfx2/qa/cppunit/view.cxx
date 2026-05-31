@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <config_poppler.h>
+#include <config_pdfimport.h>
 #include <test/unoapi_test.hxx>
 
 #include <boost/property_tree/json_parser.hpp>

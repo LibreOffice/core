@@ -10,7 +10,7 @@
 #include <config_features.h>
 
 #include "htmlmodeltestbase.hxx"
-#include <config_poppler.h>
+#include <config_pdfimport.h>
 #include <memory>
 
 #include <com/sun/star/document/XTypeDetection.hpp>

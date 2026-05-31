@@ -729,16 +729,9 @@ bool SfxObjectShell::DoLoad( SfxMedium *pMed )
 
         if ( GetErrorIgnoreWarning() == ERRCODE_NONE )
         {
-            // Experimental PDF importing using PDFium. This is currently enabled for COKit only and
-            // we handle it not via XmlFilterAdaptor but a new SdPdfFilter.
-#if !HAVE_FEATURE_POPPLER
-            constexpr bool bUsePdfium = true;
-#else
-            const bool bUsePdfium
-                = comphelper::COKit::isActive() || getenv("LO_IMPORT_USE_PDFIUM");
-#endif
+            // PDF importing using PDFium. We handle it not via XmlFilterAdaptor but a new SdPdfFilter.
             const bool bPdfiumImport
-                = bUsePdfium && pMedium->GetFilter()
+                = pMedium->GetFilter()
                   && (pMedium->GetFilter()->GetFilterName() == "draw_pdf_import");
 
             pImpl->nLoadedFlags = SfxLoadedFlags::NONE;

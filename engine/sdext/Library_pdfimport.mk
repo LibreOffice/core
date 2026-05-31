@@ -13,26 +13,19 @@ $(eval $(call gb_Library_set_componentfile,pdfimport,sdext/source/pdfimport/pdfi
 
 $(eval $(call gb_Library_use_sdk_api,pdfimport))
 
-$(eval $(call gb_Library_use_custom_headers,pdfimport,sdext/pdfimport))
-
 $(eval $(call gb_Library_set_include,pdfimport,\
     -I$(SRCDIR)/sdext/source/pdfimport/inc \
     $$(INCLUDE) \
 ))
 
 $(eval $(call gb_Library_use_libraries,pdfimport,\
-    basegfx \
     comphelper \
-    drawinglayercore \
-    drawinglayer \
     vcl \
     cppu \
     cppuhelper \
     sal \
     salhelper \
     tl \
-    xo \
-    i18nutil \
 ))
 
 $(eval $(call gb_Library_use_externals,pdfimport,\
@@ -54,21 +47,9 @@ $(eval $(call gb_Library_add_defs,pdfimport, \
 
 $(eval $(call gb_Library_add_exception_objects,pdfimport,\
     sdext/source/pdfimport/filterdet \
-    sdext/source/pdfimport/misc/pdfihelper \
-    sdext/source/pdfimport/odf/odfemitter \
     sdext/source/pdfimport/pdfiadaptor \
     sdext/source/pdfimport/pdfparse/pdfentries \
     sdext/source/pdfimport/pdfparse/pdfparse \
-    sdext/source/pdfimport/sax/emitcontext \
-    sdext/source/pdfimport/sax/saxattrlist \
-    sdext/source/pdfimport/tree/drawtreevisiting \
-    sdext/source/pdfimport/tree/genericelements \
-    sdext/source/pdfimport/tree/imagecontainer \
-    sdext/source/pdfimport/tree/pdfiprocessor \
-    sdext/source/pdfimport/tree/style \
-    sdext/source/pdfimport/tree/treevisitorfactory \
-    sdext/source/pdfimport/tree/writertreevisiting \
-    sdext/source/pdfimport/wrapper/wrapper \
 ))
 
 # vim:set noet sw=4 ts=4:

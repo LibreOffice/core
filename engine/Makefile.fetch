@@ -219,8 +219,6 @@ fetch_SRC_TARBALLS := \
 	$(call fetch_Optional,ORCUS,ORCUS_TARBALL) \
 	$(call fetch_Optional,PAGEMAKER,PAGEMAKER_TARBALL) \
 	$(call fetch_Optional,PDFIUM,PDFIUM_TARBALL) \
-	$(call fetch_Optional,POPPLER,POPPLER_TARBALL) \
-	$(call fetch_Optional,POPPLER,POPPLER_DATA_TARBALL) \
 	$(call fetch_Optional,PYTHON,PYTHON_TARBALL) \
 	$(if $(filter WNT,$(OS)),PYTHON_BOOTSTRAP_TARBALL) \
 	$(call fetch_Optional,QXP,QXP_TARBALL) \

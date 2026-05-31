@@ -67,10 +67,6 @@ $(eval $(call gb_CppunitTest_use_rdb,xmlsecurity_signing,services))
 
 $(eval $(call gb_CppunitTest_use_configuration,xmlsecurity_signing))
 
-ifeq ($(ENABLE_POPPLER),TRUE)
-$(eval $(call gb_CppunitTest_use_executable,xmlsecurity_signing,xpdfimport))
-endif
-
 # various hacks to make unit test work on Linux more often
 ifeq ($(OS),LINUX)
 # reset the LD_LIBRARY_PATH for spawned GPG processes

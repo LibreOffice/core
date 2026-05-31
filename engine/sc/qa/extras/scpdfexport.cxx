@@ -9,7 +9,7 @@
 
 #include <sal/config.h>
 #include <config_oox.h>
-#include <config_poppler.h>
+#include <config_pdfimport.h>
 
 #include <test/unoapi_test.hxx>
 

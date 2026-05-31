@@ -86,9 +86,6 @@ CPPUNIT_TEST_FIXTURE(SdrPdfImportTest, testImportSimpleText)
         return;
     }
 
-    // We need to enable PDFium import (and make sure to disable after the test)
-    EnvVarGuard UsePDFiumGuard("LO_IMPORT_USE_PDFIUM", "1");
-
     loadFromFile(u"SimplePDF.pdf");
     auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     sd::ViewShell* pViewShell = pImpressDocument->GetDocShell()->GetViewShell();
@@ -162,9 +159,6 @@ CPPUNIT_TEST_FIXTURE(SdrPdfImportTest, testAnnotationsImportExport)
     {
         return;
     }
-
-    // We need to enable PDFium import (and make sure to disable after the test)
-    EnvVarGuard UsePDFiumGuard("LO_IMPORT_USE_PDFIUM", "1");
 
     EnvVarGuard DisablePDFCompressionGuard("VCL_DEBUG_DISABLE_PDFCOMPRESSION", "1");
 
@@ -309,8 +303,6 @@ CPPUNIT_TEST_FIXTURE(SdrPdfImportTest, testImportThreadedComments)
     if (!pPdfium)
         return;
 
-    EnvVarGuard UsePDFiumGuard("LO_IMPORT_USE_PDFIUM", "1");
-
     loadFromFile(u"pdf/threaded_comments.pdf");
     auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     sd::ViewShell* pViewShell = pImpressDocument->GetDocShell()->GetViewShell();
@@ -452,7 +444,6 @@ CPPUNIT_TEST_FIXTURE(SdrPdfImportTest, testInsertAnnotationAtPosition)
     auto pPdfium = vcl::pdf::PDFiumLibrary::get();
     if (!pPdfium)
         return;
-    EnvVarGuard UsePDFiumGuard("LO_IMPORT_USE_PDFIUM", "1");
 
     loadFromFile(u"pdf/threaded_comments.pdf");
     auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
@@ -489,7 +480,6 @@ CPPUNIT_TEST_FIXTURE(SdrPdfImportTest, testInsertAnnotationOverArea)
     auto pPdfium = vcl::pdf::PDFiumLibrary::get();
     if (!pPdfium)
         return;
-    EnvVarGuard UsePDFiumGuard("LO_IMPORT_USE_PDFIUM", "1");
 
     loadFromFile(u"pdf/threaded_comments.pdf");
     auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());

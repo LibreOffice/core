@@ -166,7 +166,6 @@ profile libreoffice-soffice @{libo_inst_dir}/program/soffice.bin flags=(complain
   @{libo_inst_dir}/**                           rw,
   @{libo_inst_dir}/**.so                        m,
   @{libo_inst_dir}/program/soffice.bin          mix,
-  @{libo_inst_dir}/program/xpdfimport           px,
   @{libo_inst_dir}/program/senddoc              px,
   /usr/bin/xdg-open                             rPUx,
 

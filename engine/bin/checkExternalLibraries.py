@@ -42,7 +42,6 @@ libraryNames = {
     "libe-book": "libe-book",
     "zxcvbn-c": "zxcvbn-c",
     "libjpeg-turbo": "libjpeg-turbo",
-    "poppler-data": "poppler-data",
     "libgpg-error": "libgpg-error",
     "mariadb-connector-c": "mariadb-connector-c",
     "tiff": "libtiff",

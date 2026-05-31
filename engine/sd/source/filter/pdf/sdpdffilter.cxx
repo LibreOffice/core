@@ -44,7 +44,6 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <basegfx/polygon/b2dpolygontools.hxx>
-#include <comphelper/scopeguard.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <tools/datetime.hxx>
@@ -399,17 +398,6 @@ bool SdPdfFilter::Export() { return false; }
 
 extern "C" SAL_DLLPUBLIC_EXPORT bool TestFODGExportPDF(SvStream& rStream)
 {
-    bool bResetEnvVar = false;
-    if (getenv("LO_IMPORT_USE_PDFIUM") == nullptr)
-    {
-        bResetEnvVar = true;
-        osl_setEnvironment(OUString("LO_IMPORT_USE_PDFIUM").pData, OUString("1").pData);
-    }
-    comphelper::ScopeGuard aPDFiumEnvVarGuard([&]() {
-        if (bResetEnvVar)
-            osl_clearEnvironment(OUString("LO_IMPORT_USE_PDFIUM").pData);
-    });
-
     const uno::Reference<uno::XComponentContext>& xContext(
         comphelper::getProcessComponentContext());
     uno::Reference<css::frame::XModel2> xModel(

@@ -244,12 +244,6 @@ $(eval $(call gb_Helper_register_executables_for_install,OOO,python, \
 	) \
 ))
 
-ifneq ($(ENABLE_POPPLER),)
-$(eval $(call gb_Helper_register_executables_for_install,OOO,pdfimport, \
-	xpdfimport \
-))
-endif
-
 $(eval $(call gb_Helper_register_executables_for_install,UREBIN,ure,\
 	$(if $(and $(ENABLE_JAVA),$(filter-out HAIKU MACOSX WNT,$(OS)),$(filter DESKTOP,$(BUILD_TYPE))),javaldx) \
     $(call gb_CondExeRegistryTools, \
@@ -970,12 +964,6 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo_images,\
 	postprocess_images \
 	$(call gb_Helper_optional,HELP,helpcontent2_helpimages) \
 ))
-
-ifneq ($(ENABLE_POPPLER),)
-$(eval $(call gb_Helper_register_packages_for_install,pdfimport, \
-	sdext_pdfimport_pdf \
-))
-endif
 
 $(eval $(call gb_Helper_register_packages_for_install,xsltfilter,\
 	filter_docbook \

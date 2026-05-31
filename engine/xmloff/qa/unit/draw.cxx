@@ -1097,18 +1097,6 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testPdfExportAsOdg)
         return;
     }
 
-    // We need to enable PDFium import (and make sure to disable after the test)
-    bool bResetEnvVar = false;
-    if (getenv("LO_IMPORT_USE_PDFIUM") == nullptr)
-    {
-        bResetEnvVar = true;
-        osl_setEnvironment(OUString("LO_IMPORT_USE_PDFIUM").pData, OUString("1").pData);
-    }
-    comphelper::ScopeGuard aPDFiumEnvVarGuard([&]() {
-        if (bResetEnvVar)
-            osl_clearEnvironment(OUString("LO_IMPORT_USE_PDFIUM").pData);
-    });
-
     loadFromFile(u"two-pages.pdf");
 
     TestFilter formats[] = { TestFilter::ODG, TestFilter::FODG };

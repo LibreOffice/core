@@ -22,18 +22,13 @@ $(eval $(call gb_Executable_set_include,pdfunzip,\
 ))
 
 $(eval $(call gb_Executable_use_libraries,pdfunzip,\
-    basegfx \
     comphelper \
     cppu \
     cppuhelper \
-    drawinglayercore \
-    drawinglayer \
     sal \
     salhelper \
     vcl \
     tl \
-    xo \
-    i18nutil \
 ))
 
 $(eval $(call gb_Executable_use_library_objects,pdfunzip,pdfimport))

@@ -1,9 +1,10 @@
 # Extensions for the Impress and Draw Applications
 
-`source/pdfimport/` - PDF import
+`source/pdfimport/` - PDF type detection and hybrid PDF/ODF import
 
-Uses an external poppler process to parse and handle PDF
-import as draw shapes.
+PDF rendering is done by Pdfium (see sd/source/filter/pdf); this
+directory holds the type detector and the hybrid-PDF handler that
+extracts an embedded original document.
 
 `source/minimizer/` - Presentation Minimizer
 

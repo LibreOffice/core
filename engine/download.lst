@@ -631,13 +631,6 @@ LIBTIFF_TARBALL := tiff-4.7.1.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-POPPLER_SHA256SUM := 8b3c5e2a9f2ab4c3ec5029f28af1b433c6b71f0d1e7b3997aa561cf1c0ca4ebe
-POPPLER_TARBALL := poppler-26.03.0.tar.xz
-POPPLER_DATA_SHA256SUM := c835b640a40ce357e1b83666aabd95edffa24ddddd49b8daff63adb851cdab74
-POPPLER_DATA_TARBALL := poppler-data-0.4.12.tar.gz
-# three static lines
-# so that git cherry-pick
-# will not run into conflicts
 PYTHON_SHA256SUM := 67ee56f36fc22e5ada84d452430362e71081804c4f85c33dc5bf4206c27f973c
 PYTHON_TARBALL := Python-3.14.5rc1.tar.xz
 # three static lines

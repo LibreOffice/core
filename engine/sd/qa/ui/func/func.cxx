@@ -148,7 +148,6 @@ CPPUNIT_TEST_FIXTURE(Test, testPDFReadKitOnlyTextEdit)
     }
 
     // Given a PDF loaded in COKit read-only mode:
-    SdUsePdfium aGuard;
     loadFromFile(u"pdf/sample.pdf");
     auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     SfxViewShell* pSfxViewShell = SfxViewShell::Current();
