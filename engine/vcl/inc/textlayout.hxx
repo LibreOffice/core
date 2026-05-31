@@ -65,7 +65,7 @@ namespace vcl
 
     private:
         SAL_DLLPRIVATE OUString GetCenterEllipsisString(std::u16string_view rOrigStr, sal_Int32 nIndex, tools::Long nMaxWidth);
-        SAL_DLLPRIVATE OUString GetEndEllipsisString(OUString const& rOrigStr, sal_Int32 nIndex, tools::Long nMaxWidth, bool bClipText);
+        SAL_DLLPRIVATE OUString GetEndEllipsisString(std::u16string_view rOrigStr, sal_Int32 nIndex, tools::Long nMaxWidth, bool bClipText);
         SAL_DLLPRIVATE OUString GetNewsEllipsisString(OUString const& rOrigStr, tools::Long nMaxWidth, DrawTextFlags nStyle);
     };
 

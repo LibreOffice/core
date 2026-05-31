@@ -84,22 +84,33 @@ namespace vcl
         return aTmpStr.makeStringAndClear();
     }
 
-    OUString TextLayoutCommon::GetEndEllipsisString(OUString const& rOrigStr, sal_Int32 nIndex, tools::Long nMaxWidth, bool bClipText)
+    OUString TextLayoutCommon::GetEndEllipsisString(std::u16string_view rOrigStr, sal_Int32 nIndex, tools::Long nMaxWidth, bool bClipText)
     {
-        OUString aStr = rOrigStr;
-        aStr = aStr.copy(0, nIndex);
+        OUString aStr;
 
         if (nIndex > 1)
         {
-            aStr += "...";
-            while (!aStr.isEmpty() && (GetTextWidth(aStr, 0, aStr.getLength()) > nMaxWidth))
+            // Binary search for the longest prefix that fits with the ellipsis
+            // appended rather than trimming a single character at a time.
+            sal_Int32 nLo = 1, nHi = nIndex;
+            while (nLo < nHi)
             {
-                if ((nIndex > 1) || (nIndex == aStr.getLength()))
-                    nIndex--;
-
-                aStr = aStr.replaceAt(nIndex, 1, u"");
+                sal_Int32 nMid = (nLo + nHi + 1) / 2;
+                OUString aCandidate = OUString::Concat(rOrigStr.substr(0, nMid)) + "...";
+                if (GetTextWidth(aCandidate, 0, aCandidate.getLength()) > nMaxWidth)
+                    nHi = nMid - 1;
+                else
+                    nLo = nMid;
             }
+            aStr = OUString::Concat(rOrigStr.substr(0, nLo)) + "...";
+
+            // The search keeps at least one character. If even that plus the
+            // ellipsis is too wide, clear it for the clip branch below.
+            if (nLo == 1 && GetTextWidth(aStr, 0, aStr.getLength()) > nMaxWidth)
+                aStr.clear();
         }
+        else
+            aStr = OUString(rOrigStr.substr(0, nIndex));
 
         if (aStr.isEmpty() && bClipText)
             aStr += OUStringChar(rOrigStr[0]);
