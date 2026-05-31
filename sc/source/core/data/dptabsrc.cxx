@@ -955,8 +955,8 @@ void ScDPSource::CreateRes_Impl()
     tools::Long nRowDimCount2 = maRowDims.size() - (nDataLayoutOrient == sheet::DataPilotFieldOrientation_ROW ? 1 : 0);
     bool bShowColGrand = mbColumnGrand && nColDimCount2 > 0;
     bool bShowRowGrand = mbRowGrand && nRowDimCount2 > 0;
-    mpColumnResultRoot.reset( new ScDPResultMember(mpResultData.get(), bShowColGrand) );
-    mpRowResultRoot.reset( new ScDPResultMember(mpResultData.get(), bShowRowGrand) );
+    mpColumnResultRoot.reset(new ScDPResultMemberFull(mpResultData.get(), bShowColGrand));
+    mpRowResultRoot.reset(new ScDPResultMemberFull(mpResultData.get(), bShowRowGrand));
 
     FillCalcInfo(false, aInfo, bHasAutoShow);
     tools::Long nColLevelCount = aInfo.aColLevels.size();
