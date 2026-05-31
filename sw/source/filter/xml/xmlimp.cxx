@@ -28,6 +28,7 @@
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
+#include <com/sun/star/text/XTextFramesSupplier.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 
 #include <o3tl/any.hxx>
@@ -1908,18 +1909,42 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestPDFExportFODT(SvStream &rStream)
 
     if (ret)
     {
-        uno::Reference<text::XTextDocument> xTextDocument(xModel, uno::UNO_QUERY);
-        uno::Reference<text::XText> xText(xTextDocument->getText());
-        uno::Reference<container::XEnumerationAccess> xParaAccess(xText, uno::UNO_QUERY);
-        uno::Reference<container::XEnumeration> xParaEnum(xParaAccess->createEnumeration());
-        while (xParaEnum->hasMoreElements())
+        // discourage very long paragraphs for fuzzing performance.
+        auto aHasOverlongPara = [](const uno::Reference<text::XText>& xText) -> bool
         {
-            uno::Reference<text::XTextRange> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
-            // discourage very long paragraphs for fuzzing performance
-            if (xPara && xPara->getString().getLength() > 4000)
+            uno::Reference<container::XEnumerationAccess> xParaAccess(xText, uno::UNO_QUERY);
+            if (!xParaAccess)
+                return false;
+            uno::Reference<container::XEnumeration> xParaEnum(xParaAccess->createEnumeration());
+            while (xParaEnum->hasMoreElements())
             {
-                ret = false;
-                break;
+                uno::Reference<text::XTextRange> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
+                if (xPara && xPara->getString().getLength() > 10000)
+                    return true;
+            }
+            return false;
+        };
+
+        uno::Reference<text::XTextDocument> xTextDocument(xModel, uno::UNO_QUERY);
+        ret = !aHasOverlongPara(xTextDocument->getText());
+
+        // the body enumeration above only sees an anchor character for text
+        // anchored in a text box, so check the text frame contents too
+        if (ret)
+        {
+            uno::Reference<text::XTextFramesSupplier> xFramesSupplier(xModel, uno::UNO_QUERY);
+            uno::Reference<container::XIndexAccess> xFrames(
+                xFramesSupplier.is() ? uno::Reference<container::XIndexAccess>(
+                                           xFramesSupplier->getTextFrames(), uno::UNO_QUERY)
+                                     : nullptr);
+            for (sal_Int32 i = 0; xFrames && i < xFrames->getCount(); ++i)
+            {
+                uno::Reference<text::XText> xFrameText(xFrames->getByIndex(i), uno::UNO_QUERY);
+                if (aHasOverlongPara(xFrameText))
+                {
+                    ret = false;
+                    break;
+                }
             }
         }
     }
