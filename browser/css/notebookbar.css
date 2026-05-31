@@ -1006,6 +1006,10 @@ label.notebookbar.ui-checkbox-label {
 	background: url('images/lc_downloadas-html.svg') center;
 }
 
+[class*='as-md-submenu-icon'] {
+	background: url('images/lc_downloadas-md.svg') center;
+}
+
 #context-toolbar {
 	position: absolute;
 	background: var(--color-background-lighter);

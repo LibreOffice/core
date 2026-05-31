@@ -105,7 +105,8 @@ class Menubar extends window.L.Control {
 				]},
 				{name: _('Export as'), id: 'exportas', type: 'menu', menu: [
 					{name: _('PDF Document (.pdf)'), id: 'exportas-pdf', type: 'action'},
-					{name: _('EPUB (.epub)'), id: 'exportas-epub', type: 'action'}
+					{name: _('EPUB (.epub)'), id: 'exportas-epub', type: 'action'},
+					{name: _('Markdown (.md)'), id: 'exportas-md', type: 'action'}
 				]},
 				{name: _('Rename Document'), id: 'renamedocument', type: 'action'},
 				{name: _('Share...'), id:'shareas', type: 'action'},
@@ -118,7 +119,8 @@ class Menubar extends window.L.Control {
 					{name: _('Word Document (.docx)'), id: 'downloadas-docx', type: 'action'},
 					{name: _('Rich Text (.rtf)'), id: 'downloadas-rtf', type: 'action'},
 					{name: _('EPUB (.epub)'), id: !window.ThisIsAMobileApp ? 'exportepub' : 'downloadas-epub', type: 'action'},
-					{name: _('HTML file (.html)'), id: 'downloadas-html', type: 'action'}]},
+					{name: _('HTML file (.html)'), id: 'downloadas-html', type: 'action'},
+					{name: _('Markdown (.md)'), id: 'downloadas-md', type: 'action'}]},
 				{name: _UNO('.uno:SetDocumentProperties', 'text'), uno: '.uno:SetDocumentProperties', id: 'properties'},
 				{name: _UNO('.uno:Signature', 'text'), uno: '.uno:Signature', id: 'signature'},
 				{name: _('Options'), id: 'settings-dialog', type: 'action', mobileapp: false},
@@ -1081,7 +1083,8 @@ class Menubar extends window.L.Control {
 				{name: _UNO('.uno:SaveAs', 'text'), unoid: '.uno:SaveAs', id: 'saveas', type: 'action'},
 				{name: _('Export as'), id: 'exportas', type: 'menu', menu: [
 					{name: _('PDF Document (.pdf)'), id: 'exportas-pdf', type: 'action'},
-					{name: _('EPUB (.epub)'), id: 'exportas-epub', type: 'action'}
+					{name: _('EPUB (.epub)'), id: 'exportas-epub', type: 'action'},
+					{name: _('Markdown (.md)'), id: 'exportas-md', type: 'action'}
 				]},
 				{name: _('Share...'), id:'shareas', type: 'action'},
 				{name: _('See revision history'), id: 'rev-history', type: 'action'},
@@ -1096,6 +1099,7 @@ class Menubar extends window.L.Control {
 				{name: _('Word Document (.docx)'), id: 'downloadas-docx', type: 'action'},
 				{name: _('Rich Text (.rtf)'), id: 'downloadas-rtf', type: 'action'},
 				{name: _('EPUB (.epub)'), id: !window.ThisIsAMobileApp ? 'exportepub' : 'downloadas-epub', type: 'action'},
+				{name: _('Markdown (.md)'), id: 'downloadas-md', type: 'action'},
 			]},
 			{name: _UNO('.uno:EditMenu', 'text'), id: 'editmenu', type: 'menu', menu: [
 				{uno: '.uno:Undo'},

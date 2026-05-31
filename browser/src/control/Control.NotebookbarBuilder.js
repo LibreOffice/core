@@ -408,6 +408,10 @@ window.L.Control.NotebookbarBuilder = window.L.Control.JSDialogBuilder.extend({
 				{
 					'action': 'downloadas-html',
 					'text': _('HTML File (.html)')
+				},
+				{
+					'action': 'downloadas-md',
+					'text': _('Markdown (.md)')
 				}
 			];
 		} else if (docType === 'spreadsheet') {
@@ -594,6 +598,10 @@ window.L.Control.NotebookbarBuilder = window.L.Control.JSDialogBuilder.extend({
 				{
 					'action': 'exportas-epub',
 					'text': _('EPUB (.epub)')
+				},
+				{
+					'action': 'exportas-md',
+					'text': _('Markdown (.md)')
 				}
 			];
 		} else if (docType === 'spreadsheet') {
