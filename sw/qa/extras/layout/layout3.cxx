@@ -1701,6 +1701,78 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf165354_long_paragraph_2)
                 u"of the Earth is space ");
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testDropFlyOverlap)
+{
+    // Load the overlapping fly frame document
+    createSwDoc("drop_fly_overlap.fodt");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // Assert that the layout engine successfully processed the Drop Portion
+    assertXPath(pXmlDoc,
+                "/root/page/body/txt[2]/SwParaPortion/SwLineLayout[1]/"
+                "SwLinePortion[@type='PortionType::Drop']",
+                1);
+
+    // Extract the calculated widths as integers
+    sal_Int32 nDropWidth = getXPath(pXmlDoc,
+                                    "/root/page/body/txt[2]/SwParaPortion/SwLineLayout[1]/"
+                                    "SwLinePortion[@type='PortionType::Drop']",
+                                    "width")
+                               .toInt32();
+    sal_Int32 nFlyWidth
+        = getXPath(pXmlDoc, "/root/page/body/txt[2]/anchored/SwAnchoredDrawObject/bounds", "width")
+              .toInt32();
+
+    // Assert that the Drop Cap calculation was safely constrained by the intersecting shape.
+    CPPUNIT_ASSERT_GREATER(sal_Int32(600), nDropWidth);
+    CPPUNIT_ASSERT_LESS(sal_Int32(700), nDropWidth);
+
+    CPPUNIT_ASSERT_GREATER(sal_Int32(600), nFlyWidth);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testDropAsianWord)
+{
+    // Trigger the ASIAN script case in GetDropLen
+    createSwDoc("drop_asian_word.fodt");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // Assert that the drop portion exists
+    assertXPath(pXmlDoc,
+                "/root/page/body/txt/SwParaPortion/SwLineLayout[1]/"
+                "SwLinePortion[@type='PortionType::Drop']",
+                1);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testDropComplexWord)
+{
+    // Trigger the COMPLEX script case in GetDropLen
+    createSwDoc("drop_complex_word.fodt");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // Assert that the drop portion exists
+    assertXPath(pXmlDoc,
+                "/root/page/body/txt/SwParaPortion/SwLineLayout[1]/"
+                "SwLinePortion[@type='PortionType::Drop']",
+                1);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testDropVertical)
+{
+    // Trigger the IsVertical() layout calculations for Top-to-Bottom typography
+    createSwDoc("drop_vertical.fodt");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // Assert the Drop Cap was calculated in the vertical layout tree
+    // (Since we put it in a frame, we search inside the //fly node)
+    assertXPath(pXmlDoc,
+                "//fly/txt/SwParaPortion/SwLineLayout[1]/SwLinePortion[@type='PortionType::Drop']",
+                1);
+}
+
 } // end of anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();
