@@ -29,6 +29,7 @@
 #include <patattr.hxx>
 #include <table.hxx>
 #include <document.hxx>
+#include <MatrixResizeGuard.hxx>
 #include <docsh.hxx>
 #include <drwlayer.hxx>
 #include <olinetab.hxx>
@@ -505,7 +506,13 @@ bool ScTable::SetOptimalHeight(
 
     mpRowHeights->enableTreeSearch(false);
 
-    GetOptimalHeightsInColumn(rCxt, aCol, nStartRow, nEndRow, pProgress, nProgressStart);
+    {
+        // Deciding a cell's script type / edit status during the per-column
+        // walk forces formula results, which can resize a dynamic-array
+        // formula and delete cells from the store being walked over.
+        sc::MatrixResizeGuard aMatrixResizeGuard(rDocument);
+        GetOptimalHeightsInColumn(rCxt, aCol, nStartRow, nEndRow, pProgress, nProgressStart);
+    }
 
     SetRowHeightRangeFunc aFunc(this, rCxt.getPPTY());
     bool bChanged = SetOptimalHeightsToRows(rCxt, aFunc, pRowFlags.get(), nStartRow, nEndRow, bApi);
