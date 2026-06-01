@@ -56,6 +56,10 @@ private:
     std::vector<Color>          m_aColumnColors;
     OUString                    aCurEntry;
     SvTabListBoxRole            m_eRole;
+    // Whether the column-title headers act as clickable buttons (sort /
+    // column-click). Defaults to true to preserve existing consumers; set
+    // false for headers that are pure labels (e.g. chart Data Table).
+    bool                        m_bHeadersSortable = true;
 
 protected:
     static std::u16string_view  GetToken( std::u16string_view sStr, sal_Int32 &nIndex );
@@ -95,6 +99,8 @@ public:
     void             SetColumnTitle( sal_uInt16 nCol, const OUString& rTitle );
     const OUString & GetColumnTitle( sal_uInt16 nCol ) const;
     bool             HasColumnTitles() const { return !m_aColumnTitles.empty(); }
+
+    void             SetHeadersSortable( bool bSortable ) { m_bHeadersSortable = bSortable; }
 
     void             SetColumnHeaderName( sal_uInt16 nCol, const OUString& rName );
 

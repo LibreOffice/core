@@ -246,6 +246,11 @@ void SvTabListBox::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
         {
             auto aNode = rJsonWriter.startStruct();
             rJsonWriter.put("text", m_aColumnTitles[i]);
+            // Pure-label headers (e.g. chart Data Table) are not clickable;
+            // emit sortable=false so the client renders a plain label rather
+            // than a focusable, do-nothing button.
+            if (!m_bHeadersSortable)
+                rJsonWriter.put("sortable", false);
             if (i < m_aColumnHeaderNames.size() && !m_aColumnHeaderNames[i].isEmpty())
             {
                 rJsonWriter.put("headerName", m_aColumnHeaderNames[i]);

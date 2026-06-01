@@ -3920,6 +3920,11 @@ void SalInstanceTreeView::set_column_header_name(int nColumn, const OUString& rN
     m_xTreeView->SetColumnHeaderName(nColumn, rName);
 }
 
+void SalInstanceTreeView::set_headers_sortable(bool bSortable)
+{
+    m_xTreeView->SetHeadersSortable(bSortable);
+}
+
 void SalInstanceTreeView::set_column_custom_renderer(int nColumn, bool bEnable)
 {
     assert(n_children() == 0 && "tree must be empty");

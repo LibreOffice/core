@@ -458,6 +458,10 @@ DataBrowser::DataBrowser(weld::TreeView& rTreeView, weld::Box* pColumns, weld::B
     m_rTreeView.connect_selection_changed(LINK(this, DataBrowser, SelectionChangedHdl));
     m_rTreeView.connect_header_name_changed(LINK(this, DataBrowser, HeaderNameChangedHdl));
     m_rTreeView.connect_key_press(LINK(this, DataBrowser, KeyPressHdl));
+    // The column headers are pure labels (series name / "Categories" /
+    // "Y-Values"); there is no sort or column-click action, so render them
+    // as labels rather than focusable do-nothing buttons.
+    m_rTreeView.set_headers_sortable(false);
     RenewTable();
 }
 

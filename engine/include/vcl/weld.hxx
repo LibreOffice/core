@@ -1615,6 +1615,10 @@ public:
     virtual void set_column_title(int nColumn, const OUString& rTitle) = 0;
     virtual void set_column_header_color(int /*nColumn*/, const Color& /*rColor*/) {}
     virtual void set_column_header_name(int /*nColumn*/, const OUString& /*rName*/) {}
+    // Mark the column-title headers as non-clickable pure labels (no sort /
+    // column-click). Default no-op; backends that render clickable headers
+    // override it.
+    virtual void set_headers_sortable(bool /*bSortable*/) {}
 
     void set_editing_column(int nCol) { m_nEditingColumn = nCol; }
     int get_editing_column() const { return m_nEditingColumn; }
