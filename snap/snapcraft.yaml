@@ -252,7 +252,7 @@ parts:
       mkdir -p "$CRAFT_PART_BUILD/.qt6-wrapper"
       install -m 755 "$CRAFT_PART_BUILD/snap/qtpaths6-wrapper" \
           "$CRAFT_PART_BUILD/.qt6-wrapper/qtpaths6"
-      export PATH="$CRAFT_PART_BUILD/.qt6-wrapper:$PATH"
+      export PATH="$CRAFT_PART_BUILD/.qt6-wrapper:/snap/node/current/bin:$PATH"
       autoreconf -vfi
       ./configure \
         --prefix=/usr \
