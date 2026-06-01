@@ -1878,9 +1878,16 @@ class TreeViewControl {
 		treeViewData: TreeWidgetJSON,
 	) {
 		parentContainer.draggable = rowShouldBeDraggable;
+		// Restore the container's no-op onFocus that build() installs (and
+		// startEditing re-set), rather than clearing it. Clearing it to
+		// undefined made a later core grab_focus (e.g. from the select sent
+		// on arrow-key navigation) fall through to control.focus() and focus
+		// the whole grid container instead of the active cell.
 		(
 			parentContainer.parentElement as HTMLElement & { onFocus?: () => void }
-		).onFocus = undefined;
+		).onFocus = () => {
+			/* no-op: focus is managed on the rows/cells, not the container */
+		};
 
 		posParent.style.position = '';
 		input.remove();

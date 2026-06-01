@@ -280,4 +280,38 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Chart Data Table dialog', 
 
 		closeDataTableDialog();
 	});
+
+	it('Arrow keys keep cell focus after cancelling edit mode', function() {
+		getEntries().first().find('[role="gridcell"]').eq(0).click();
+		cy.cGet('#ChartDataDialog #InsertTextColumn').click();
+		// Wait for the rebuilt grid that has the new (empty) category column.
+		cy.cGet('#ChartDataDialog #datagrid-cell-1-2').should('exist');
+
+		// Focus the empty category cell, enter then cancel edit mode.
+		cy.cGet('#ChartDataDialog #datagrid-cell-1-2').click();
+		cy.cGet('#ChartDataDialog #datagrid-cell-1-2')
+			.should('have.class', 'ui-treeview-cell-active');
+		cy.realPress('F2');
+		cy.cGet('#ChartDataDialog #datagrid .ui-treeview-inline-edit')
+			.should('be.visible');
+		cy.realPress('Escape');
+		cy.cGet('#ChartDataDialog #datagrid .ui-treeview-inline-edit')
+			.should('not.exist');
+
+		// Arrow right must move to the next cell AND keep DOM focus on a
+		// cell - not jump to the grid container.
+		cy.realPress('ArrowRight');
+		cy.cGet('#ChartDataDialog #datagrid-cell-1-3')
+			.should('have.class', 'ui-treeview-cell-active');
+		// The navigation also sends a select to core, which replies with a
+		// grab_focus. The regression let that grab_focus focus the whole
+		// grid container shortly after the cell was focused. Wait for that
+		// round-trip to settle so we assert the final focus, not the
+		// transient synchronous cell focus that precedes it.
+		cy.wait(1000);
+		cy.cGet('#ChartDataDialog #datagrid-cell-1-3').should('be.focused');
+		cy.cGet('#ChartDataDialog #datagrid').should('not.be.focused');
+
+		closeDataTableDialog();
+	});
 });
