@@ -6,17 +6,17 @@
     <message>
         <location filename="../DocumentOperations.cpp" line="49"/>
         <source>ODF text document (.odt)</source>
-        <translation type="unfinished"></translation>
+        <translation>Текстовый документ ODF (.odt)</translation>
     </message>
     <message>
         <location filename="../DocumentOperations.cpp" line="50"/>
         <source>Rich Text (.rtf)</source>
-        <translation type="unfinished"></translation>
+        <translation>Форматированный текст (.rtf)</translation>
     </message>
     <message>
         <location filename="../DocumentOperations.cpp" line="51"/>
         <source>Word Document (.docx)</source>
-        <translation type="unfinished"></translation>
+        <translation>Документ Word (.docx</translation>
     </message>
     <message>
         <location filename="../DocumentOperations.cpp" line="52"/>
