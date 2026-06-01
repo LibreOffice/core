@@ -15,12 +15,11 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,graphite,0))
 
 $(eval $(call gb_UnpackedTarball_add_patches,graphite, \
     external/graphite/ubsan.patch \
-    external/graphite/enumarith.patch \
 ))
 
 # cannot use post_action since $(file ..) would be run when the recipe is parsed, i.e. would always
 # happen before the tarball is unpacked
 $(gb_UnpackedTarball_workdir)/graphite/graphite2-uninstalled.pc: $(call gb_UnpackedTarball_get_target,graphite)
-	$(file >$@,$(call gb_pkgconfig_file,graphite2,1.3.14,$(GRAPHITE_CFLAGS),$(GRAPHITE_LIBS)))
+	$(file >$@,$(call gb_pkgconfig_file,graphite2,1.3.15,$(GRAPHITE_CFLAGS),$(GRAPHITE_LIBS)))
 
 # vim: set noet sw=4 ts=4:
