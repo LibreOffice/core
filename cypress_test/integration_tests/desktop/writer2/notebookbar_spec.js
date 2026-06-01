@@ -135,12 +135,12 @@ describe(['tagdesktop'], 'Notebookbar checkbox widgets', function() {
 
 		cy.cGet('#lo-fline-marker').should('exist');
 
-		// Drag the first-line indentation marker right by 100px. processToIdle
-		// between events lets the leaflet mousemove handler bound at mousedown
-		// settle under CI load before the next event fires.
+		// Drag the first-line indentation marker right by 100px.
+		var marker;
 		cy.cGet('#lo-fline-marker').then(function(items) {
 			expect(items).to.have.lengthOf(1);
-			const boundingRectangle = items[0].getBoundingClientRect();
+			marker = items[0];
+			const boundingRectangle = marker.getBoundingClientRect();
 			const x1 = boundingRectangle.left;
 			const y1 = boundingRectangle.top;
 
@@ -150,7 +150,9 @@ describe(['tagdesktop'], 'Notebookbar checkbox widgets', function() {
 		});
 		helper.processToIdle(this.win);
 		cy.get('@x1').then(function(x1) {
-			cy.cGet('#lo-fline-marker').realMouseMove(x1 + 100, 0);
+			helper.retryUntil(
+				function() { cy.cGet('#lo-fline-marker').realMouseMove(x1 + 100, 0); },
+				function() { return marker.getBoundingClientRect().left !== x1; });
 		});
 		helper.processToIdle(this.win);
 		cy.get('@x1').then(function(x1) {

@@ -1414,6 +1414,21 @@ function processToIdle(win) {
 	});
 }
 
+// Retry an action until a condition holds. Re-runs the action each poll
+// (cy.should only re-checks), so the action must be idempotent.
+function retryUntil(action, condition, options) {
+	var opts = Object.assign(
+		{ timeout: Cypress.config('defaultCommandTimeout'),
+			errorMsg: 'retryUntil: condition never met' },
+		options || {});
+	return cy.waitUntil(function() {
+		action();
+		return cy.wrap(null, { log: false }).then(function() {
+			return condition();
+		});
+	}, opts);
+}
+
 // Wait until no timers of the given tag exist.
 // If no timers with the tag exist at call time resolve immediately.
 function waitForTimers(win, tag) {
@@ -1559,6 +1574,7 @@ module.exports.getMenuEntry = getMenuEntry;
 module.exports.waitUntilCoreIsIdle = waitUntilCoreIsIdle;
 module.exports.waitUntilLayoutingIsIdle = waitUntilLayoutingIsIdle;
 module.exports.processToIdle = processToIdle;
+module.exports.retryUntil = retryUntil;
 module.exports.waitForTimers = waitForTimers;
 module.exports.waitForOnDemandRenders = waitForOnDemandRenders;
 module.exports.waitForMapState = waitForMapState;
