@@ -888,10 +888,11 @@ window.L.Map.Keyboard = window.L.Handler.extend({
 		}
 		/* Without specifying the key type, the messages are sent twice (both keydown/up) */
 
-		// Don't do this in CODA-W, there it is the sending of
-		// the PASTE message in document,onpaste() in
-		// Clipboard.js that does the paste.
-		if (e.type === 'keydown' && window.ThisIsAMobileApp && !window.ThisIsTheWindowsApp && !window.ThisIsTheQtApp) {
+		// In the desktop app variants (CODA-W, CODA-Q, CODA-M) the
+		// copy/cut/paste is driven by the document.oncopy/oncut/onpaste
+		// handlers in Clipboard.js. Sending the UNO command here as well
+		// would run the operation twice, e.g. paste the content twice.
+		if (e.type === 'keydown' && window.ThisIsAMobileApp && !window.ThisIsTheWindowsApp && !window.ThisIsTheQtApp && !window.ThisIsTheMacOSApp) {
 			if (this.keyCodes.C.includes(e.keyCode)) {
 				app.socket.sendMessage('uno .uno:Copy');
 				return true;
