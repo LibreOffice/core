@@ -317,8 +317,8 @@ GPGME_TARBALL := gpgme-1.24.3.tar.bz2
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-GRAPHITE_SHA256SUM := b8e892d8627c41888ff121e921455b9e2d26836978f2359173d19825da62b8fc
-GRAPHITE_TARBALL := graphite2-minimal-1.3.14.tgz
+GRAPHITE_SHA256SUM := 10cfc69a6f859ce875b9708d170b8222eba76cdb89b6dbb4ee1e375bc7242409
+GRAPHITE_TARBALL := graphite2-minimal-1.3.15.tgz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
