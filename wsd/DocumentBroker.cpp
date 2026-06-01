@@ -1214,6 +1214,21 @@ bool DocumentBroker::download(
                         << _storageManager.getLastModifiedServerTimeString()
                         << ", Actual: " << fileInfo.getLastModifiedServerTimeString());
             }
+#if !MOBILEAPP
+            else if (findCollabBroker(_docKey)) {
+                // A /co/collab CollabBroker is live for this docKey, meaning a peer is mid-edit and
+                // may have uploaded via /co/collab/put between the firstInstance CheckFileInfo and
+                // this one; treating that as "modified behind our back" would close the
+                // freshly-joining peer with documentconflict and tear down the kit, so accept the
+                // new value as authoritative instead:
+                LOG_INF(
+                    "Document [" << _docKey << "] timestamp moved during live /co/collab editing;"
+                    " accepting Actual: " << fileInfo.getLastModifiedServerTimeString()
+                    << " over stored " << _storageManager.getLastModifiedServerTimeString());
+                _storageManager.setLastModifiedServerTimeString(
+                    fileInfo.getLastModifiedServerTimeString());
+            }
+#endif
             else
             {
                 LOG_WRN("Document [" << _docKey << "] has been modified behind our back. "
