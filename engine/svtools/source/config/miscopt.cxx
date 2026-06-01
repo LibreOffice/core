@@ -290,7 +290,7 @@ void SvtMiscOptions_Impl::ImplCommit()
         auto seqValuesRange = asNonConstRange(seqValues);
         OUString value;
         if (m_bIconThemeWasSetAutomatically) {
-            value = "auto";
+            value = u"auto"_ustr;
         }
         else {
             value = GetIconTheme();

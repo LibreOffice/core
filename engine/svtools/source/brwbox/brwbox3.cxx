@@ -153,16 +153,16 @@ OUString BrowseBox::GetAccessibleObjectName( AccessibleBrowseBoxObjType eObjType
     switch( eObjType )
     {
         case AccessibleBrowseBoxObjType::BrowseBox:
-            aRetText = "BrowseBox";
+            aRetText = u"BrowseBox"_ustr;
             break;
         case AccessibleBrowseBoxObjType::Table:
-            aRetText = "Table";
+            aRetText = u"Table"_ustr;
             break;
         case AccessibleBrowseBoxObjType::RowHeaderBar:
-            aRetText = "RowHeaderBar";
+            aRetText = u"RowHeaderBar"_ustr;
             break;
         case AccessibleBrowseBoxObjType::ColumnHeaderBar:
-            aRetText = "ColumnHeaderBar";
+            aRetText = u"ColumnHeaderBar"_ustr;
             break;
         case AccessibleBrowseBoxObjType::TableCell:
             if( ColCount() !=0 && GetRowCount()!=0)
@@ -174,7 +174,7 @@ OUString BrowseBox::GetAccessibleObjectName( AccessibleBrowseBoxObjType eObjType
                 aRetText += OUString::number(rowId);
             }
             else
-                aRetText = "TableCell";
+                aRetText = u"TableCell"_ustr;
 #if OSL_DEBUG_LEVEL > 0
             aRetText += " ["
                         + OUString::number(GetCurRow())
@@ -219,7 +219,7 @@ OUString BrowseBox::GetAccessibleObjectDescription( AccessibleBrowseBoxObjType e
     switch( eObjType )
     {
         case AccessibleBrowseBoxObjType::BrowseBox:
-            aRetText = "BrowseBox description";
+            aRetText = u"BrowseBox description"_ustr;
             break;
         case AccessibleBrowseBoxObjType::Table:
             //  aRetText = "TABLE description";

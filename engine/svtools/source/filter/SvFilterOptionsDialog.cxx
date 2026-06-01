@@ -158,7 +158,7 @@ uno::Sequence< beans::PropertyValue > SvFilterOptionsDialog::getPropertyValues()
 
     // the "FilterData" Property is an Any that will contain our PropertySequence of Values
     auto& item = maMediaDescriptor.getArray()[ i ];
-    item.Name = "FilterData";
+    item.Name = u"FilterData"_ustr;
     item.Value <<= maFilterDataSequence;
     return maMediaDescriptor;
 }
@@ -253,16 +253,16 @@ void SvFilterOptionsDialog::setSourceDocument( const uno::Reference< lang::XComp
         return;
 
     if ( xServiceInfo->supportsService(u"com.sun.star.presentation.PresentationDocument"_ustr) )
-        aConfigPath = "Office.Impress/Layout/Other/MeasureUnit";
+        aConfigPath = u"Office.Impress/Layout/Other/MeasureUnit"_ustr;
     else if ( xServiceInfo->supportsService(u"com.sun.star.drawing.DrawingDocument"_ustr) )
-        aConfigPath = "Office.Draw/Layout/Other/MeasureUnit";
+        aConfigPath = u"Office.Draw/Layout/Other/MeasureUnit"_ustr;
     else
     {
         mbGraphicsSource = false;
         if ( xServiceInfo->supportsService(u"com.sun.star.sheet.SpreadsheetDocument"_ustr) )
-            aConfigPath = "Office.Calc/Layout/Other/MeasureUnit";
+            aConfigPath = u"Office.Calc/Layout/Other/MeasureUnit"_ustr;
         else if ( xServiceInfo->supportsService(u"com.sun.star.text.TextDocument"_ustr) )
-            aConfigPath = "Office.Writer/Layout/Other/MeasureUnit";
+            aConfigPath = u"Office.Writer/Layout/Other/MeasureUnit"_ustr;
     }
     if ( !aConfigPath.isEmpty() )
     {
@@ -270,9 +270,9 @@ void SvFilterOptionsDialog::setSourceDocument( const uno::Reference< lang::XComp
         OUString aPropertyName;
         SvtSysLocale aSysLocale;
         if ( aSysLocale.GetLocaleData().getMeasurementSystemEnum() == MeasurementSystem::Metric )
-            aPropertyName = "Metric";
+            aPropertyName = u"Metric"_ustr;
         else
-            aPropertyName = "NonMetric";
+            aPropertyName = u"NonMetric"_ustr;
         meFieldUnit = static_cast<FieldUnit>(
             aConfigItem.ReadInt32(aPropertyName, sal_Int32(FieldUnit::CM)));
     }

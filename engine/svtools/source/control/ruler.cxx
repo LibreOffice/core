@@ -554,7 +554,7 @@ void Ruler::ImplDrawTicks(vcl::RenderContext& rRenderContext, tools::Long nMin, 
                 // 0 is only painted when Margin1 is not equal to zero
                 if ((mpData->nMargin1Style & RulerMarginStyle::Invisible) || (mpData->nMargin1 != 0))
                 {
-                    aNumString = "0";
+                    aNumString = u"0"_ustr;
                     ImplVDrawText(rRenderContext, nStart, nCenter, aNumString);
                 }
             }

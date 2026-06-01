@@ -195,7 +195,7 @@ IMPL_LINK( DavDetailsContainer, ToggledDavsHdl, weld::Toggleable&, rCheckBox, vo
 
     OUString sScheme( u"http"_ustr );
     if ( bCheckedDavs )
-        sScheme = "https";
+        sScheme = u"https"_ustr;
     setScheme( sScheme );
 
     notifyChange( );

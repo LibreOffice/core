@@ -345,18 +345,18 @@ sal_Bool SAL_CALL SvUnoImageMapObject::supportsService( const  OUString& Service
 Sequence< OUString > SAL_CALL SvUnoImageMapObject::getSupportedServiceNames()
 {
     Sequence< OUString > aSNS( 2 );
-    aSNS.getArray()[0] = "com.sun.star.image.ImageMapObject";
+    aSNS.getArray()[0] = u"com.sun.star.image.ImageMapObject"_ustr;
     switch( mnType )
     {
     case IMapObjectType::Polygon:
     default:
-        aSNS.getArray()[1] = "com.sun.star.image.ImageMapPolygonObject";
+        aSNS.getArray()[1] = u"com.sun.star.image.ImageMapPolygonObject"_ustr;
         break;
     case IMapObjectType::Rectangle:
-        aSNS.getArray()[1] = "com.sun.star.image.ImageMapRectangleObject";
+        aSNS.getArray()[1] = u"com.sun.star.image.ImageMapRectangleObject"_ustr;
         break;
     case IMapObjectType::Circle:
-        aSNS.getArray()[1] = "com.sun.star.image.ImageMapCircleObject";
+        aSNS.getArray()[1] = u"com.sun.star.image.ImageMapCircleObject"_ustr;
         break;
     }
     return aSNS;

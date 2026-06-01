@@ -711,7 +711,7 @@ bool SvtURLBox_Impl::TildeParsing([[maybe_unused]] OUString& aText,
             if( aParseTilde.isEmpty() || aParseTilde == "/" )
             {
                 // "/" path should be converted to "/."
-                aParseTilde = "/.";
+                aParseTilde = u"/."_ustr;
             }
             else
             {

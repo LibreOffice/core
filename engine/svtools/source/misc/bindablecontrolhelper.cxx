@@ -93,7 +93,7 @@ BindableControlHelper::ApplyListSourceAndBindableData( const css::uno::Reference
          }
 
          beans::NamedValue aArg1;
-         aArg1.Name = "BoundCell";
+         aArg1.Name = u"BoundCell"_ustr;
          aArg1.Value <<= aAddress;
 
          uno::Sequence< uno::Any > aArgs{ uno::Any(aArg1) };
@@ -125,7 +125,7 @@ BindableControlHelper::ApplyListSourceAndBindableData( const css::uno::Reference
          }
 
          beans::NamedValue aArg1;
-         aArg1.Name = "CellRange";
+         aArg1.Name = u"CellRange"_ustr;
          aArg1.Value <<= aAddress;
 
          uno::Sequence< uno::Any > aArgs{ uno::Any(aArg1) };

@@ -235,7 +235,7 @@ void ExtendedColorConfig_Impl::Load(const OUString& rScheme)
     }
 
     if ( m_sLoadedScheme.isEmpty() )
-        m_sLoadedScheme = "default";
+        m_sLoadedScheme = u"default"_ustr;
 
     if ( sScheme != "default" )
     {

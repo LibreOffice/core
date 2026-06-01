@@ -205,7 +205,7 @@ bool SfxErrorHandler::GetErrorString(ErrCode lErrId, OUString &rStr) const
 
 {
     bool bRet = false;
-    rStr = "$(CLASS)$(ERROR)";
+    rStr = u"$(CLASS)$(ERROR)"_ustr;
 
     for (const ErrMsgCode* pItem = pIds; pItem->second; ++pItem)
     {

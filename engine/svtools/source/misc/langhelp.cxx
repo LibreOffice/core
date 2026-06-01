@@ -33,14 +33,14 @@ void localizeWebserviceURI( OUString& rURI )
     if ( aLang.equalsIgnoreAsciiCase("pt")
          && Application::GetSettings().GetUILanguageTag().getCountry().equalsIgnoreAsciiCase("br") )
     {
-        aLang = "pt-br";
+        aLang = u"pt-br"_ustr;
     }
     if ( aLang.equalsIgnoreAsciiCase("zh") )
     {
         if ( Application::GetSettings().GetUILanguageTag().getCountry().equalsIgnoreAsciiCase("cn") )
-            aLang = "zh-cn";
+            aLang = u"zh-cn"_ustr;
         if ( Application::GetSettings().GetUILanguageTag().getCountry().equalsIgnoreAsciiCase("tw") )
-            aLang = "zh-tw";
+            aLang = u"zh-tw"_ustr;
     }
 
     rURI += aLang;

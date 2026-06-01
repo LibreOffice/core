@@ -487,7 +487,7 @@ OUString makeShortRepresentativeTextForScript(UScriptCode eScript)
             break;
         }
         case USCRIPT_LATIN:
-            sSampleText = "Lorem ipsum";
+            sSampleText = u"Lorem ipsum"_ustr;
             break;
         default:
             break;

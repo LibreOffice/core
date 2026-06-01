@@ -55,8 +55,8 @@ void collectUIInformation( const OUString& aID , const OUString& aParentID , con
     EventDescription aDescription;
     aDescription.aID = aID ;
     aDescription.aParameters = {{"POS", aPos }};
-    aDescription.aAction = "SELECT";
-    aDescription.aKeyWord = "ValueSet";
+    aDescription.aAction = u"SELECT"_ustr;
+    aDescription.aKeyWord = u"ValueSet"_ustr;
     aDescription.aParent = aParentID;
     UITestLogger::getInstance().logEvent(aDescription);
 }
