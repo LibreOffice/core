@@ -106,7 +106,7 @@ class TopToolbar extends JSDialog.Toolbar {
 		else if (this.map.getDocType() === 'presentation' || this.map.getDocType() === 'drawing') {
 			var layoutId = style;
 			window.L.Styles.impressLayout.forEach(function(layout) {
-				if (_(layout.text) === style)
+				if (layout.translatedName === style)
 					layoutId = layout.id;
 			});
 			this.map.applyLayout(layoutId);
@@ -397,7 +397,7 @@ class TopToolbar extends JSDialog.Toolbar {
 				if (stylesContainer && stylesContainer.updateEntries) {
 					var layoutEntries = [];
 					window.L.Styles.impressLayout.forEach(function(layout) {
-						layoutEntries.push(_(layout.text));
+						layoutEntries.push(layout.translatedName);
 					});
 					stylesContainer.updateEntries(layoutEntries);
 				}
