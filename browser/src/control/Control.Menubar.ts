@@ -191,6 +191,7 @@ class Menubar extends window.L.Control {
 				{name: _UNO('.uno:InsertGraphic', 'text'), unoid: '.uno:InsertGraphic', id: 'insertgraphicremote', type: 'action'},
 				{name: _UNO('.uno:InsertAnnotation', 'text'), unoid: '.uno:InsertAnnotation', id: 'insertcomment', type: 'action'},
 				{uno: '.uno:InsertObjectChart'},
+				{name: _('Shapes ...'), unoid: '.uno:ShapesMenu', id: 'insertshape', type: 'action'},
 				{name: _UNO('.uno:FontworkGalleryFloater'), uno: '.uno:FontworkGalleryFloater', id: 'fontworkgalleryfloater'},
 				{name: _UNO('.uno:DrawText'), uno: '.uno:DrawText'},
 				{name: _UNO('.uno:InsertFrame', 'text'), uno: '.uno:InsertFrame'},
@@ -525,6 +526,7 @@ class Menubar extends window.L.Control {
 				{name: _UNO('.uno:SelectBackground', 'presentation'), unoid: '.uno:SelectBackground', id: 'selectbackground', type: 'action'},
 				{name: _UNO('.uno:InsertAnnotation', 'presentation'), unoid: '.uno:InsertAnnotation', id: 'insertcomment', type: 'action'},
 				{uno: '.uno:InsertObjectChart'},
+				{name: _('Shapes ...'), unoid: '.uno:ShapesMenu', id: 'insertshape', type: 'action'},
 				{name: _UNO('.uno:FontworkGalleryFloater'), uno: '.uno:FontworkGalleryFloater', id: 'fontworkgalleryfloater'},
 				{name: _UNO('.uno:Text', 'presentation'), unoid: '.uno:Text', id: 'inserttextbox', type: 'action'},
 				{name: _UNO('.uno:VerticalText'), uno: '.uno:VerticalText'},
@@ -688,6 +690,7 @@ class Menubar extends window.L.Control {
 				{name: _UNO('.uno:SelectBackground', 'presentation'), unoid: '.uno:SelectBackground', id: 'selectbackground', type: 'action'},
 				{name: _UNO('.uno:InsertAnnotation', 'presentation'), unoid: '.uno:InsertAnnotation', id: 'insertcomment', type: 'action'},
 				{uno: '.uno:InsertObjectChart'},
+				{name: _('Shapes ...'), unoid: '.uno:ShapesMenu', id: 'insertshape', type: 'action'},
 				{type: 'separator'},
 				{name: _UNO('.uno:HyperlinkDialog'), unoid: '.uno:HyperlinkDialog', id: 'inserthyperlink', type: 'action'},
 				{name: _('Smart Picker'), id: 'remotelink', type: 'action'},
@@ -851,6 +854,7 @@ class Menubar extends window.L.Control {
 				{name: _UNO('.uno:InsertSparkline', 'spreadsheet'), uno: '.uno:InsertSparkline'},
 				{name: _UNO('.uno:InsertAnnotation', 'spreadsheet'), unoid: '.uno:InsertAnnotation', id: 'insertcomment', type: 'action'},
 				{uno: '.uno:InsertObjectChart'},
+				{name: _('Shapes ...'), unoid: '.uno:ShapesMenu', id: 'insertshape', type: 'action'},
 				{name: _UNO('.uno:FontworkGalleryFloater'), uno: '.uno:FontworkGalleryFloater', id: 'fontworkgalleryfloater'},
 				{name: _UNO('.uno:DrawText'), uno: '.uno:DrawText'},
 				{name: _UNO('.uno:VerticalText'), uno: '.uno:VerticalText'},
@@ -2312,6 +2316,25 @@ class Menubar extends window.L.Control {
        * Opens the Insert Shapes wizard.
        */
 	private _openInsertShapesWizard(): void {
+		// On desktop the mobile wizard control is not instantiated, so reuse
+		// the shapes grid the notebookbar opens (the InsertShapesMenu html
+		// popup) as a JSDialog dropdown and center it on screen.
+		if (!window.mode.isSmallScreenDevice()) {
+			var menu = JSDialog.MenuDefinitions.get('InsertShapesMenu');
+			// The html shapes grid handles its own clicks (sends the uno
+			// command and closes the popup), so the dropdown callback is unused.
+			JSDialog.OpenDropdown('insertshape', null, menu, function() { return false; });
+			app.layoutingService.appendLayoutingTask(function() {
+				var popup = JSDialog.GetDropdown('insertshape') as HTMLElement;
+				if (!popup)
+					return;
+				var rect = popup.getBoundingClientRect();
+				popup.style.marginInlineStart = Math.max(0, (window.innerWidth - rect.width) / 2) + 'px';
+				popup.style.marginTop = Math.max(0, (window.innerHeight - rect.height) / 2) + 'px';
+			});
+			return;
+		}
+
 		var content = window.createShapesPanel('insertshapes');
 		var data = {
 			id: 'insertshape',
