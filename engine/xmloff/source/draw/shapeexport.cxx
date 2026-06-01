@@ -1138,7 +1138,7 @@ void XMLShapeExport::seekShapes( const uno::Reference< drawing::XShapes >& xShap
         maCurrentShapesIter = maShapesInfos.try_emplace(xShapes).first;
         assert(maCurrentShapesIter != maShapesInfos.end());
 
-        SAL_WARN_IF( (*maCurrentShapesIter).second.size() != static_cast<ShapesInfos::size_type>(xShapes->getCount()), "xmloff", "XMLShapeExport::seekShapes(): XShapes size varied between calls" );
+        SAL_WARN_IF( !(*maCurrentShapesIter).second.empty() && (*maCurrentShapesIter).second.size() != static_cast<ShapesInfos::size_type>(xShapes->getCount()), "xmloff", "XMLShapeExport::seekShapes(): XShapes size varied between calls" );
 
     }
     else
