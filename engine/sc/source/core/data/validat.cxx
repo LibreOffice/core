@@ -1141,6 +1141,11 @@ ScValidationDataList::ScValidationDataList(ScDocument& rNewDoc,
 
 ScValidationData* ScValidationDataList::GetData( sal_uInt32 nKey )
 {
+    // Key 0 is the "no validation" sentinel returned by
+    // ScDocument::AddValidationEntry for empty entries; skip the search.
+    if (!nKey)
+        return nullptr;
+
     //TODO: binary search
 
     for( iterator it = begin(); it != end(); ++it )
