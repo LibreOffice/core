@@ -159,16 +159,16 @@ window.L.Control.NotebookbarImpress = window.L.Control.NotebookbarWriter.extend(
 				'accessibility': { focusBack: false, combination: 'W', de: null }
 			},
 			{
-				'id': 'Help-tab-label',
-				'text': _('Help'),
-				'name': 'Help',
-				'accessibility': { focusBack: false, combination: 'Y', de: null }
-			},
-			{
 				'id': 'Extensions-tab-label',
 				'text': _('Extensions'),
 				'name': 'Extensions',
 				'accessibility': { focusBack: false, combination: 'X' }
+			},
+			{
+				'id': 'Help-tab-label',
+				'text': _('Help'),
+				'name': 'Help',
+				'accessibility': { focusBack: false, combination: 'Y', de: null }
 			}
 		]);
 	},
@@ -190,8 +190,8 @@ window.L.Control.NotebookbarImpress = window.L.Control.NotebookbarWriter.extend(
 			this.getChartTab(),
 			this.getMasterTab(),
 			this.getViewTab(),
-			this.getHelpTab(),
-			this.getExtensionsTab()
+			this.getExtensionsTab(),
+			this.getHelpTab()
 		]);
 	},
 

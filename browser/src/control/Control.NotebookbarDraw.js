@@ -124,16 +124,16 @@ window.L.Control.NotebookbarDraw = window.L.Control.NotebookbarImpress.extend({
 				'accessibility': { focusBack: true, combination: 'V', de: null }
 			},
 			{
-				'id': 'Help-tab-label',
-				'text': _('Help'),
-				'name': 'Help',
-				'accessibility': { focusBack: true, combination: 'Y', de: null }
-			},
-			{
 				'id': 'Extensions-tab-label',
 				'text': _('Extensions'),
 				'name': 'Extensions',
 				'accessibility': { focusBack: true, combination: 'X' }
+			},
+			{
+				'id': 'Help-tab-label',
+				'text': _('Help'),
+				'name': 'Help',
+				'accessibility': { focusBack: true, combination: 'Y', de: null }
 			}
 		]);
 	},
@@ -151,8 +151,8 @@ window.L.Control.NotebookbarDraw = window.L.Control.NotebookbarImpress.extend({
 			this.getPictureTab(),
 			this.getChartTab(),
 			this.getViewTab(),
-			this.getHelpTab(),
-			this.getExtensionsTab()
+			this.getExtensionsTab(),
+			this.getHelpTab()
 		]);
 	},
 

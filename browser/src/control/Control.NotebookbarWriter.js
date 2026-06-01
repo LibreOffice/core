@@ -113,16 +113,16 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 				'accessibility': { focusBack: true, combination: 'W', de: 'F' }
 			},
 			{
-				'text': _('Help'),
-				'id': helpTabName + '-tab-label',
-				'name': helpTabName,
-				'accessibility': { focusBack: true, combination: 'Y', de: 'E' }
-			},
-			{
 				'text': _('Extensions'),
 				'id': 'Extensions-tab-label',
 				'name': 'Extensions',
 				'accessibility': { focusBack: true, combination: 'X' }
+			},
+			{
+				'text': _('Help'),
+				'id': helpTabName + '-tab-label',
+				'name': helpTabName,
+				'accessibility': { focusBack: true, combination: 'Y', de: 'E' }
 			},
 			{
 				'text': _('Formula'),
@@ -149,8 +149,8 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 			this.getPictureTab(),
 			this.getChartTab(),
 			this.getViewTab(),
-			this.getHelpTab(),
 			this.getExtensionsTab(),
+			this.getHelpTab(),
 			this.getFormulaTab()
 		]);
 	},

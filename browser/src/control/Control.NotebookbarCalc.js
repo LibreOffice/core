@@ -109,16 +109,16 @@ window.L.Control.NotebookbarCalc = window.L.Control.NotebookbarWriter.extend({
 			},
 			JSDialog.CalcTableTab.getEntry(),
 			{
-				'id': 'Help-tab-label',
-				'text': _('Help'),
-				'name': 'Help',
-				'accessibility': { focusBack: true,	combination: 'Y', de: null }
-			},
-			{
 				'id': 'Extensions-tab-label',
 				'text': _('Extensions'),
 				'name': 'Extensions',
 				'accessibility': { focusBack: true, combination: 'X' }
+			},
+			{
+				'id': 'Help-tab-label',
+				'text': _('Help'),
+				'name': 'Help',
+				'accessibility': { focusBack: true,	combination: 'Y', de: null }
 			}
 		]);
 	},
@@ -139,8 +139,8 @@ window.L.Control.NotebookbarCalc = window.L.Control.NotebookbarWriter.extend({
 			this.getViewTab(),
 			this.getSparklineTab(),
 			this.getCalcTableTab(),
-			this.getHelpTab(),
-			this.getExtensionsTab()
+			this.getExtensionsTab(),
+			this.getHelpTab()
 		]);
 	},
 
