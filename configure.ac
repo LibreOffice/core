@@ -8,6 +8,10 @@ LT_INIT([shared, disable-static, dlopen])
 
 AM_INIT_AUTOMAKE([1.10 foreign subdir-objects tar-pax -Wno-portability])
 
+# Make silent build rules the default; pass --disable-silent-rules or
+# build with "make V=1" to get the verbose command output.
+AM_SILENT_RULES([yes])
+
 # Drop the 'u' from automake's default 'cru' to silence the warning:
 # "ar: `u' modifier ignored since `D' is the default (see `U')"
 # Don't use 'crD' as the 'D' flag is GNU-specific and unsupported on macOS/FreeBSD.
