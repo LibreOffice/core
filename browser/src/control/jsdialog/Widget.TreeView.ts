@@ -372,6 +372,9 @@ class TreeViewControl {
 			) as HTMLInputElement;
 			nameInput.type = 'text';
 			nameInput.value = header.headerName;
+			// Editable series-name box; give it an accessible name since
+			// there is no associated visible <label> element.
+			nameInput.setAttribute('aria-label', _('Series name'));
 
 			if (data && columnIndex !== undefined) {
 				const commitEdit = () => {
@@ -1711,6 +1714,29 @@ class TreeViewControl {
 		input.className = 'ui-treeview-inline-edit';
 
 		input.value = entry.columns[column].text;
+
+		// Accessible name for the cell editor: there is no visible <label>,
+		// and the grid does not expose aria-row/colindex, so name the editor
+		// after its column (series name, or role label like
+		// "Categories"/"Y-Values") and the row's category label so it is
+		// self-describing for screen readers.
+		const headerInfo = treeViewData.headers?.[column];
+		const columnLabel =
+			headerInfo?.headerName || headerInfo?.text || _('Cell value');
+		// Identify the row by its first category cell (a column with a header
+		// but no series name), read fresh so it tracks edits. Fall back to the
+		// positional row number when the row has no category text.
+		let rowLabel = _('row %1').replace('%1', String(Number(entry.row) + 1));
+		for (let c = 1; c < entry.columns.length; c++) {
+			if (!treeViewData.headers?.[c]?.headerName && entry.columns[c]?.text) {
+				rowLabel = entry.columns[c].text;
+				break;
+			}
+		}
+		input.setAttribute(
+			'aria-label',
+			_('%1, %2').replace('%1', columnLabel).replace('%2', rowLabel),
+		);
 
 		input.enterKeyHint = 'done';
 
