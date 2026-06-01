@@ -366,7 +366,7 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
                                 nSpacePortionHeight = pPos->Height();
                             }
                         }
-                        bTmpDummy &= !pPos->InTabGrp();
+                        bTmpDummy = bTmpDummy && !pPos->GetLen();
                         pPos = pPos->GetNextPortion();
                         bHasBlankPortion = true;
                         continue;
@@ -502,7 +502,7 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
                         SetContent(true);
                 }
 
-                bTmpDummy &= !HasContent() && ( !pPos->Width() || pPos->IsFlyPortion() );
+                bTmpDummy = bTmpDummy && !HasContent() && (!pPos->Width() || pPos->IsFlyPortion());
 
                 pLast = pPos;
                 pPos = pPos->GetNextPortion();
