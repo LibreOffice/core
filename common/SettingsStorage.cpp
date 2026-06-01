@@ -69,6 +69,9 @@ FileResult fetchSettingsFile(const std::string& relPath)
     Poco::Path target = getConfigPath();
     target.append(relPath);
 
+    if (!Poco::File(target).exists())
+        return {};
+
     std::ifstream in(target.toString(), std::ios::binary);
     if (!in.is_open())
     {
