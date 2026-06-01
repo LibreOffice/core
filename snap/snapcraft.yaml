@@ -49,6 +49,13 @@ apps:
     common-id: com.collaboraoffice.Office
     environment:
       LD_LIBRARY_PATH: $SNAP/usr/lib/collaboraoffice/program:$LD_LIBRARY_PATH
+      # Keep the user profile in the revision-independent common dir so
+      # settings persist across upgrades and reverts. The default $HOME
+      # inside the snap is the per-revision SNAP_USER_DATA, which snapd
+      # copies on every refresh and rolls back on revert. The engine
+      # derives its UserInstallation from XDG_CONFIG_HOME.
+      XDG_CONFIG_HOME: $SNAP_USER_COMMON/.config
+      XDG_DATA_HOME: $SNAP_USER_COMMON/.local/share
     plugs:
       - home
       - network
