@@ -84,6 +84,7 @@
 /// <reference path="../src/canvas/vector/primitive/ExclusiveEditViewPrimitive.ts" />
 /// <reference path="../src/canvas/vector/primitive/GroupPrimitive.ts" />
 /// <reference path="../src/canvas/vector/primitive/HiddenGeometryPrimitive.ts" />
+/// <reference path="../src/canvas/vector/primitive/ModifiedColorPrimitive.ts" />
 /// <reference path="../src/canvas/vector/primitive/ObjectInfoPrimitive.ts" />
 /// <reference path="../src/canvas/vector/primitive/PolygonStrokePrimitive.ts" />
 /// <reference path="../src/canvas/vector/primitive/PolyPolygonColorPrimitive.ts" />

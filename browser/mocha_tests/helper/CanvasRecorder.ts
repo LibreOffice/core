@@ -55,6 +55,7 @@ class CanvasRecorder {
 		'shadowOffsetX',
 		'shadowOffsetY',
 		'globalCompositeOperation',
+		'filter',
 	];
 
 	constructor(width: number = 100, height: number = 100) {

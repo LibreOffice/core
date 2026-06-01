@@ -298,6 +298,69 @@ describe('VectorPrimitiveRenderer', function () {
 			);
 			nodeassert.deepStrictEqual(recorder.properties, {});
 		});
+
+		it('applies grayscale filter for modifiedColor gray', function () {
+			// The gray modifier maps to canvas filter "grayscale(1)".
+			// The renderer wraps the children in save/restore so the
+			// filter does not leak.
+			const primitive =
+				loadVectorRenderingReference('testModifiedColorGray').primitives[0];
+			nodeassert.strictEqual(primitive.type, 'modifiedColor');
+			nodeassert.strictEqual(primitive.modifier, 'gray');
+
+			const recorder = new CanvasRecorder();
+			const renderer = new cool.VectorPrimitiveRenderer();
+			renderer.renderPrimitive(recorder as any, primitive);
+
+			nodeassert.strictEqual(recorder.properties.filter, 'grayscale(1)');
+			nodeassert.ok(recorder.findCall('save'), 'save not called');
+			nodeassert.ok(recorder.findCall('restore'), 'restore not called');
+			// Exactly one child render. If the switch forgot the early
+			// return, the child would draw a second time outside the
+			// filter.
+			nodeassert.strictEqual(recorder.countOf('fill'), 1);
+		});
+
+		it('applies invert filter for modifiedColor invert', function () {
+			// The invert modifier maps to canvas filter "invert(1)".
+			const primitive =
+				loadVectorRenderingReference('testModifiedColorInvert').primitives[0];
+			nodeassert.strictEqual(primitive.type, 'modifiedColor');
+			nodeassert.strictEqual(primitive.modifier, 'invert');
+
+			const recorder = new CanvasRecorder();
+			const renderer = new cool.VectorPrimitiveRenderer();
+			renderer.renderPrimitive(recorder as any, primitive);
+
+			nodeassert.strictEqual(recorder.properties.filter, 'invert(1)');
+			nodeassert.strictEqual(recorder.countOf('fill'), 1);
+		});
+
+		it('passes through modifiedColor replace without a filter', function () {
+			// The replace modifier carries a colour but the renderer
+			// has not implemented colour substitution yet. The
+			// children must still render with their original colour
+			// and no canvas filter must be set.
+			const primitive =
+				loadVectorRenderingReference('testModifiedColorReplace').primitives[0];
+			nodeassert.strictEqual(primitive.type, 'modifiedColor');
+			nodeassert.strictEqual(primitive.modifier, 'replace');
+			nodeassert.strictEqual(typeof primitive.color, 'string');
+
+			const recorder = new CanvasRecorder();
+			const renderer = new cool.VectorPrimitiveRenderer();
+			renderer.renderPrimitive(recorder as any, primitive);
+
+			nodeassert.strictEqual(recorder.properties.filter, undefined);
+			// The wrapped child is a polyPolygonColor in its own
+			// fill colour. The renderer must not override it.
+			const fill = recorder.findCall('fill');
+			nodeassert.ok(fill, 'child fill missing');
+			nodeassert.strictEqual(
+				fill?.properties.fillStyle,
+				primitive.children[0].color,
+			);
+		});
 	});
 
 	// Fixtures from documents. Each fixture is a full reply built

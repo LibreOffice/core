@@ -58,6 +58,12 @@ namespace cool {
 						primitive as UnifiedTransparencePrimitive,
 					);
 					return;
+				case ModifiedColorPrimitive.type:
+					this._renderModifiedColor(
+						context,
+						primitive as ModifiedColorPrimitive,
+					);
+					return;
 				case HiddenGeometryPrimitive.type:
 				case ExclusiveEditViewPrimitive.type:
 					// Non-painting subtree. Return so the recursion
@@ -149,6 +155,37 @@ namespace cool {
 				this._renderPrimitives(context, primitive.children);
 
 			if (hasMatrix) context.restore();
+		}
+
+		private _renderModifiedColor(
+			context: CanvasRenderingContext2D,
+			primitive: ModifiedColorPrimitive,
+		): void {
+			if (!primitive.children) return;
+
+			let filter: string | null = null;
+			switch (primitive.modifier) {
+				case 'gray':
+				case 'luminance_to_alpha':
+					filter = 'grayscale(1)';
+					break;
+				case 'invert':
+					filter = 'invert(1)';
+					break;
+				// The "replace" modifier needs every primitive that
+				// draws a colour to consult a shared colour override.
+				// That is left for a follow-up, so for now children
+				// render with their original colours.
+			}
+
+			if (filter !== null) {
+				context.save();
+				context.filter = filter;
+				this._renderPrimitives(context, primitive.children);
+				context.restore();
+			} else {
+				this._renderPrimitives(context, primitive.children);
+			}
 		}
 
 		private _renderUnifiedTransparence(

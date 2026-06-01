@@ -25,6 +25,9 @@
 #include <drawinglayer/primitive2d/exclusiveeditviewprimitive2d.hxx>
 #include <drawinglayer/primitive2d/objectinfoprimitive2d.hxx>
 #include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
+#include <drawinglayer/primitive2d/modifiedcolorprimitive2d.hxx>
+
+#include <basegfx/color/bcolormodifier.hxx>
 #include <drawinglayer/processor2d/Primitive2dJsonProcessor.hxx>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -326,6 +329,83 @@ CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testUnifiedTransparence)
     assertJsonPathExists(aJson, "/primitives/0/transparence");
     CPPUNIT_ASSERT_EQUAL(size_t(1), aJson.getSize("/primitives/0/children").value_or(0));
     assertJsonPath(aJson, "/primitives/0/children/0/type", "polyPolygonColor");
+}
+
+CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testModifiedColorGray)
+{
+    // ModifiedColorPrimitive2D with a gray modifier. The renderer
+    // turns "gray" into the canvas filter "grayscale(1)".
+    basegfx::B2DPolygon aTriangle;
+    aTriangle.append(basegfx::B2DPoint(0.0, 0.0));
+    aTriangle.append(basegfx::B2DPoint(100.0, 0.0));
+    aTriangle.append(basegfx::B2DPoint(100.0, 100.0));
+    aTriangle.setClosed(true);
+
+    Primitive2DContainer aChildren;
+    aChildren.append(new PolyPolygonColorPrimitive2D(basegfx::B2DPolyPolygon(aTriangle),
+                                                     basegfx::BColor(1.0, 0.0, 0.0)));
+
+    Primitive2DContainer aPrimitives;
+    aPrimitives.append(new ModifiedColorPrimitive2D(
+        std::move(aChildren), std::make_shared<basegfx::BColorModifier_gray>()));
+
+    auto aJson = writeReference(u"testModifiedColorGray", aPrimitives);
+
+    assertJsonPath(aJson, "/primitives/0/type", "modifiedColor");
+    assertJsonPath(aJson, "/primitives/0/modifier", "gray");
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aJson.getSize("/primitives/0/children").value_or(0));
+}
+
+CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testModifiedColorInvert)
+{
+    // ModifiedColorPrimitive2D with an invert modifier. The
+    // renderer turns "invert" into the canvas filter "invert(1)".
+    basegfx::B2DPolygon aTriangle;
+    aTriangle.append(basegfx::B2DPoint(0.0, 0.0));
+    aTriangle.append(basegfx::B2DPoint(100.0, 0.0));
+    aTriangle.append(basegfx::B2DPoint(100.0, 100.0));
+    aTriangle.setClosed(true);
+
+    Primitive2DContainer aChildren;
+    aChildren.append(new PolyPolygonColorPrimitive2D(basegfx::B2DPolyPolygon(aTriangle),
+                                                     basegfx::BColor(0.0, 1.0, 0.0)));
+
+    Primitive2DContainer aPrimitives;
+    aPrimitives.append(new ModifiedColorPrimitive2D(
+        std::move(aChildren), std::make_shared<basegfx::BColorModifier_invert>()));
+
+    auto aJson = writeReference(u"testModifiedColorInvert", aPrimitives);
+
+    assertJsonPath(aJson, "/primitives/0/type", "modifiedColor");
+    assertJsonPath(aJson, "/primitives/0/modifier", "invert");
+}
+
+CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testModifiedColorReplace)
+{
+    // ModifiedColorPrimitive2D with a replace modifier. The wire
+    // carries an extra "color" field. The renderer leaves the
+    // children rendered as-is for now, since colour substitution
+    // is not implemented yet.
+    basegfx::B2DPolygon aTriangle;
+    aTriangle.append(basegfx::B2DPoint(0.0, 0.0));
+    aTriangle.append(basegfx::B2DPoint(100.0, 0.0));
+    aTriangle.append(basegfx::B2DPoint(100.0, 100.0));
+    aTriangle.setClosed(true);
+
+    Primitive2DContainer aChildren;
+    aChildren.append(new PolyPolygonColorPrimitive2D(basegfx::B2DPolyPolygon(aTriangle),
+                                                     basegfx::BColor(0.0, 0.0, 1.0)));
+
+    Primitive2DContainer aPrimitives;
+    aPrimitives.append(new ModifiedColorPrimitive2D(
+        std::move(aChildren),
+        std::make_shared<basegfx::BColorModifier_replace>(basegfx::BColor(1.0, 0.0, 0.0))));
+
+    auto aJson = writeReference(u"testModifiedColorReplace", aPrimitives);
+
+    assertJsonPath(aJson, "/primitives/0/type", "modifiedColor");
+    assertJsonPath(aJson, "/primitives/0/modifier", "replace");
+    assertJsonPath(aJson, "/primitives/0/color", "#ff0000");
 }
 
 CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testPolygonStrokeDashed)
