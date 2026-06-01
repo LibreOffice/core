@@ -879,9 +879,22 @@ void SvXMLExportPropertyMapper::handleElementItem(
         const ::std::vector< XMLPropertyState > *pProperties,
         sal_uInt32 nIdx ) const
 {
-    OSL_ENSURE(mpImpl->mxNextMapper.is(), "element item not handled in xml export");
     if (mpImpl->mxNextMapper.is())
+    {
         mpImpl->mxNextMapper->handleElementItem(rExport, rProperty, nFlags, pProperties, nIdx);
+        return;
+    }
+    // An empty Any or a null interface (e.g. an unset complex color or a
+    // missing background graphic) means there is no child element to write.
+    // Treat that as a normal "nothing to export" state, not a missing-handler bug.
+    if (!rProperty.maValue.hasValue()
+        || rProperty.maValue.getValueTypeClass() == uno::TypeClass_INTERFACE)
+        return;
+    SAL_WARN("xmloff.style",
+             "element item not handled in xml export: index=" << rProperty.mnIndex
+             << " ns=" << mpImpl->mxPropMapper->GetEntryNameSpace(rProperty.mnIndex)
+             << " xmlName=" << mpImpl->mxPropMapper->GetEntryXMLName(rProperty.mnIndex)
+             << " apiName=" << mpImpl->mxPropMapper->GetEntryAPIName(rProperty.mnIndex));
 }
 
 // protected methods
