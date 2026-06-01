@@ -47,19 +47,19 @@ enum SvxLinkInsertMode
 
 class SVX_DLLPUBLIC SvxHyperlinkItem final : public SfxPoolItem
 {
-    OUString sName;
-    OUString sURL;
-    OUString sTarget;
-    SvxLinkInsertMode eType;
-    OUString sReplacementText;
+    OUString m_sName;
+    OUString m_sURL;
+    OUString m_sTarget;
+    SvxLinkInsertMode m_eType;
+    OUString m_sReplacementText;
 
     bool m_showName = true;
     bool m_showText = true;
 
-    OUString sIntName;
-    std::unique_ptr<SvxMacroTableDtor>  pMacroTable;
+    OUString m_sIntName;
+    std::unique_ptr<SvxMacroTableDtor>  m_pMacroTable;
 
-    HyperDialogEvent nMacroEvents;
+    HyperDialogEvent m_nMacroEvents;
 
 public:
     static SfxPoolItem* CreateDefault();
@@ -67,7 +67,7 @@ public:
     DECLARE_ITEM_TYPE_FUNCTION(SvxHyperlinkItem)
     SvxHyperlinkItem( TypedWhichId<SvxHyperlinkItem> _nWhich = SID_HYPERLINK_GETLINK ):
                 SfxPoolItem(_nWhich )
-    { eType = HLINK_DEFAULT; nMacroEvents=HyperDialogEvent::NONE; };
+    { m_eType = HLINK_DEFAULT; m_nMacroEvents=HyperDialogEvent::NONE; };
     SvxHyperlinkItem( const SvxHyperlinkItem& rHyperlinkItem );
 
     virtual bool             operator==( const SfxPoolItem& ) const override;
@@ -75,35 +75,34 @@ public:
     virtual bool             QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool             PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
-    const   OUString& GetName() const { return sName; }
-    void    SetName(const OUString& rName) { sName = rName; }
+    const   OUString& GetName() const { return m_sName; }
+    void    SetName(const OUString& rName) { m_sName = rName; }
 
-    const   OUString& GetURL() const { return sURL; }
-    void    SetURL(const OUString& rURL) { sURL = rURL; }
+    const   OUString& GetURL() const { return m_sURL; }
+    void    SetURL(const OUString& rURL) { m_sURL = rURL; }
 
-    const   OUString& GetIntName () const { return sIntName; }
-    void    SetIntName(const OUString& rIntName) { sIntName = rIntName; }
+    const   OUString& GetIntName () const { return m_sIntName; }
+    void    SetIntName(const OUString& rIntName) { m_sIntName = rIntName; }
 
-    const   OUString& GetTargetFrame() const { return sTarget; }
-    void    SetTargetFrame(const OUString& rTarget) { sTarget = rTarget; }
+    const   OUString& GetTargetFrame() const { return m_sTarget; }
+    void    SetTargetFrame(const OUString& rTarget) { m_sTarget = rTarget; }
 
     void    SetShowName(const bool show) { m_showName = show; }
 
     void    SetShowText(const bool show) { m_showText = show; }
 
-    SvxLinkInsertMode GetInsertMode() const { return eType; }
-    void    SetInsertMode( SvxLinkInsertMode eNew ) { eType = eNew; }
+    SvxLinkInsertMode GetInsertMode() const { return m_eType; }
+    void    SetInsertMode( SvxLinkInsertMode eNew ) { m_eType = eNew; }
 
     void SetMacro( HyperDialogEvent nEvent, const SvxMacro& rMacro );
 
     void SetMacroTable( const SvxMacroTableDtor& rTbl );
-    const SvxMacroTableDtor* GetMacroTable() const { return pMacroTable.get(); }
+    const SvxMacroTableDtor* GetMacroTable() const { return m_pMacroTable.get(); }
 
-    void SetMacroEvents (const HyperDialogEvent nEvents) { nMacroEvents = nEvents; }
-    HyperDialogEvent GetMacroEvents() const { return nMacroEvents; }
+    void SetMacroEvents (const HyperDialogEvent nEvents) { m_nMacroEvents = nEvents; }
+    HyperDialogEvent GetMacroEvents() const { return m_nMacroEvents; }
 
-    const OUString& GetReplacementText() const { return sReplacementText; }
-
+    const OUString& GetReplacementText() const { return m_sReplacementText; }
 };
 
 #endif
