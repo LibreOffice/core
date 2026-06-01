@@ -7026,16 +7026,6 @@ void ScCompiler::CorrectSumRange(const ScComplexRefData& rBaseRange,
     pNewSumRangeTok->IncRef();
 }
 
-// If we are loading, we might be loading each sheet in a separate thread at the same time
-// It is unsafe to use ShrinkToDataArea on a range that refers to a different sheet whose
-// columns and rows are still being added to. Even if it is the same sheet, it probably
-// doesn't make sense to ShrinkToDataArea during document load.
-static bool IsSafeToShrinkToDataArea(const ScDocument& rDoc)
-{
-    const bool bIsLoading = !rDoc.GetDocumentShell() || rDoc.GetDocumentShell()->IsLoading();
-    return !bIsLoading;
-}
-
 void ScCompiler::AnnotateTrimOnDoubleRefs()
 {
     if (!mpCode || !(*(mpCode - 1)))
@@ -7271,35 +7261,22 @@ void ScCompiler::AnnotateTrimOnDoubleRefs()
     }
     else if (eOpCode == ocSubTotal)
     {
-        // tdf#164843: Double references from relative named ranges can point to large
-        // ranges (MAXCOL/MAXROW) and because of that some function evaluation
-        // like SubTotal can be extremely slow when we call ScTable::CompileHybridFormula
-        // with these large ranges. Since all the SubTotal functions ignore empty cells
-        // its worth to optimize and trim the double references in SubTotal functions.
+        // tdf#164843: SubTotal references can span very large ranges (whole
+        // columns, or relative named ranges resolving to MAXCOL/MAXROW), which
+        // makes evaluation slow. Since SubTotal ignores empty cells, any such
+        // range can safely be trimmed to the data area before iterating.
+        // tdf#168013: only flag the references for trimming - do NOT rewrite them
+        // with SetRange(). Mutating the stored reference permanently shrinks the
+        // formula (=SUBTOTAL(9;A1:A99999) -> =SUBTOTAL(9;A2:A5)) and drops rows
+        // added later. The trim instead happens at evaluation time in
+        // ScValueIterator/ScCellIterator (gated on mnSubTotalFlags); the flag is
+        // also honoured by the matrix path in CreateMatrixFromDoubleRef.
         FormulaToken** ppTok = mpCode - 2;
         while (*ppTok)
         {
             FormulaToken* pTok = *ppTok;
             if (pTok->GetType() == svDoubleRef)
-            {
-                ScComplexRefData& rRefData = static_cast<ScDoubleRefToken*>(pTok)->GetDoubleRef();
-                // do no set pRefData->SetTrimToData(true); because we need to trim here if possible
-                ScRange rRange = rRefData.toAbs(rDoc, aPos);
-                SCCOL nTempStartCol = rRange.aStart.Col();
-                SCROW nTempStartRow = rRange.aStart.Row();
-                SCCOL nTempEndCol = rRange.aEnd.Col();
-                SCROW nTempEndRow = rRange.aEnd.Row();
-                if (IsSafeToShrinkToDataArea(rDoc))
-                    rDoc.ShrinkToDataArea(rRange.aStart.Tab(), nTempStartCol, nTempStartRow, nTempEndCol, nTempEndRow);
-                // check if range is still valid
-                if (nTempStartRow <= nTempEndRow && nTempStartCol <= nTempEndCol)
-                {
-                    rRange.aStart.Set(nTempStartCol, nTempStartRow, rRange.aStart.Tab());
-                    rRange.aEnd.Set(nTempEndCol, nTempEndRow, rRange.aEnd.Tab());
-                    if (rRange.IsValid())
-                        rRefData.SetRange(rDoc.GetSheetLimits(), rRange, aPos);
-                }
-            }
+                static_cast<ScDoubleRefToken*>(pTok)->GetDoubleRef().SetTrimToData(true);
             --ppTok;
         }
     }
