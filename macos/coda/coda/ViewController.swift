@@ -196,13 +196,10 @@ class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavig
                     return ("(internal)", nil);
 
                 case "write":
-                    guard let content = COWrapper.getClipboard(document) else {
+                    if !COWrapper.writeClipboard(for: document) {
                         COWrapper.LOG_ERR("Failed to get clipboard contents")
                         return (nil, nil)
                     }
-                    NSPasteboard.general.clearContents()
-                    NSPasteboard.general.writeObjects(content)
-                    COWrapper.noteClipboardWritten(by: document)
 
                 case let s where s.hasPrefix("sendToInternal "):
                     if !COWrapper.sendToInternalClipboard(document, content: String(s.dropFirst("sendToInternal ".count))) {

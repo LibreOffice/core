@@ -178,9 +178,40 @@ static std::thread coolwsdThread;
 }
 
 /**
- * Call the LOKit getClipboard and return it so that it can be used in Swift.
+ * Map an engine mime type to the pasteboard type other applications expect for
+ * it. The common interchange formats map to their system UTI (text/html becomes
+ * public.html, and so on). Everything else - notably the internal engine formats
+ * - keeps its raw mime string, which is exactly what desktop LibreOffice
+ * advertises and reads on the Mac pasteboard, see vcl/osx/DataFlavorMapping.cxx.
  */
-+ (NSArray<id<NSPasteboardWriting>> * _Nullable) getClipboardInternalWith:(Document *_Nonnull)document mimeTypes:(const char**)mimeTypes {
++ (NSString *)pasteboardTypeForMime:(NSString *_Nonnull)mime {
+    // Drop any parameters such as the charset in "text/plain;charset=utf-8" before
+    // the UTI lookup, which would otherwise fail to match.
+    NSString * baseMime = [[mime componentsSeparatedByString:@";"] firstObject];
+
+    if ([baseMime isEqualToString:@"text/plain"]) {
+        // Normalise to the canonical plain-text type so a single representation
+        // wins, and so that other plain-text-like flavours (such as text/markdown)
+        // do not collide with it.
+        return UTTypeUTF8PlainText.identifier;
+    }
+
+    UTType * uti = [UTType typeWithMIMEType:baseMime];
+    return (uti != nil && !uti.dynamic) ? uti.identifier : mime;
+}
+
+/**
+ * Fetch the requested flavours from the engine and put them all on the system
+ * pasteboard as raw, unaltered bytes, each under the pasteboard type other apps
+ * expect. Returns NO when there was nothing to write.
+ *
+ * We write through the declareTypes/setData API (the same one desktop LibreOffice
+ * uses, see vcl/osx/clipboard.cxx) rather than NSPasteboardItem, because the
+ * internal engine formats carry raw mime strings as their type names rather than
+ * UTIs. That API accepts them unchanged, which is what lets a paste into desktop
+ * LibreOffice keep full fidelity.
+ */
++ (BOOL)putOnPasteboard:(const char**)mimeTypes for:(Document *_Nonnull)document {
     size_t outCount = 0;
     char  **outMimeTypes = nullptr;
     size_t *outSizes = nullptr;
@@ -191,74 +222,55 @@ static std::thread coolwsdThread;
                                                                           &outSizes, &outStreams))
     {
         LOG_DBG("failed to fetch mime-types");
-        return nil;
+        return NO;
     }
 
-    if (outCount == 0)
-        return nil;
-
-    // Carry every flavour as raw, unaltered bytes on a single pasteboard item. Known mime types
-    // are mapped to their preferred UTI so other applications can consume them (text/html becomes
-    // public.html and so on), and internal engine formats keep their raw mime string so the
-    // data round-trips back to COKit unchanged on paste.
-    //
-    // Everything goes on one item on purpose. Emitting a separate string per text-like flavour
-    // would put several plain-text representations on the pasteboard at once (for example both
-    // text/plain and text/markdown, since markdown's UTI also conforms to plain text), and those
-    // would then all be inserted on paste. Keeping a single item lets the paste side pick the
-    // richest format instead.
-    NSPasteboardItem * item = [[NSPasteboardItem alloc] init];
-    size_t storedCount = 0;
+    // Collect one representation per pasteboard type, keeping the first we see.
+    NSMutableArray<NSPasteboardType> * types = [NSMutableArray array];
+    NSMutableDictionary<NSPasteboardType, NSData *> * dataByType = [NSMutableDictionary dictionary];
 
     for (size_t i = 0; i < outCount; ++i) {
         if (outStreams[i] == nullptr || outSizes[i] == 0)
             continue;
 
-        NSString * mime = [NSString stringWithUTF8String:outMimeTypes[i]];
-
-        // Drop any parameters such as the charset in "text/plain;charset=utf-8" before the UTI
-        // lookup, which would otherwise fail to match.
-        NSString * baseMime = [[mime componentsSeparatedByString:@";"] firstObject];
-
-        NSString * pasteboardType;
-        if ([baseMime isEqualToString:@"text/plain"]) {
-            // Normalise to the canonical plain-text type so a single representation wins, and so
-            // that other plain-text-like flavours (such as text/markdown) do not collide with it.
-            pasteboardType = UTTypeUTF8PlainText.identifier;
-        } else {
-            UTType * uti = [UTType typeWithMIMEType:baseMime];
-            pasteboardType = (uti != nil && !uti.dynamic) ? uti.identifier : mime;
-        }
-
-        // Keep the first representation we see for a given type.
-        if ([item dataForType:pasteboardType] != nil)
+        NSString * type = [COWrapper pasteboardTypeForMime:[NSString stringWithUTF8String:outMimeTypes[i]]];
+        if (dataByType[type] != nil)
             continue;
 
-        [item setData:[NSData dataWithBytes:outStreams[i] length:outSizes[i]] forType:pasteboardType];
-        ++storedCount;
+        dataByType[type] = [NSData dataWithBytes:outStreams[i] length:outSizes[i]];
+        [types addObject:type];
     }
 
-    if (storedCount == 0)
-        return nil;
+    if (types.count == 0)
+        return NO;
 
-    return @[item];
+    NSPasteboard * pasteboard = [NSPasteboard generalPasteboard];
+    [pasteboard declareTypes:types owner:nil];
+    for (NSPasteboardType type in types)
+        [pasteboard setData:dataByType[type] forType:type];
+
+    return YES;
 }
 
 /**
- * Get the clipboard content. Defaults to fetching text and/or html only, when a generic query fails.
+ * Put the current clipboard content on the system pasteboard. Defaults to text
+ * and/or html only when the generic query yields nothing.
  */
-+ (NSArray<id<NSPasteboardWriting>> * _Nullable) getClipboardWith:(Document *_Nonnull)document {
-    NSArray<id<NSPasteboardWriting>> * result = [COWrapper getClipboardInternalWith:document mimeTypes:nullptr];
-    if (result != nil)
-        return result;
++ (BOOL)writeClipboardFor:(Document *_Nonnull)document {
+    BOOL written = [COWrapper putOnPasteboard:nullptr for:document];
+    if (!written) {
+        const char* textMimeTypes[] = {
+            "text/plain;charset=utf-8",
+            "text/html",
+            nullptr
+        };
+        written = [COWrapper putOnPasteboard:textMimeTypes for:document];
+    }
 
-    const char* textMimeTypes[] = {
-        "text/plain;charset=utf-8",
-        "text/html",
-        nullptr
-    };
+    if (written)
+        [COWrapper noteClipboardWrittenBy:document];
 
-    return [COWrapper getClipboardInternalWith:document mimeTypes:textMimeTypes];
+    return written;
 }
 
 /**
