@@ -38,6 +38,7 @@ namespace cool {
 					);
 					break;
 				case GroupPrimitive.type:
+				case ObjectInfoPrimitive.type:
 					// Pure container - recursion into children happens
 					// below for every primitive type.
 					break;

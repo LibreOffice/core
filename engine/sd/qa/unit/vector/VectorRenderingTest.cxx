@@ -97,6 +97,26 @@ protected:
         pPage->NbcInsertObject(pRect.get());
     }
 
+    /// Add a filled rectangle with object metadata (name, title,
+    /// description) on the first slide.
+    void addRectangleWithObjectInfo(const tools::Rectangle& rRect, Color aFillColor,
+                                    const OUString& rName, const OUString& rTitle,
+                                    const OUString& rDesc)
+    {
+        SdrPage* pPage = page(1);
+        rtl::Reference<SdrRectObj> pRect = new SdrRectObj(pPage->getSdrModelFromSdrPage(), rRect);
+
+        pRect->SetMergedItem(XFillStyleItem(drawing::FillStyle_SOLID));
+        pRect->SetMergedItem(XFillColorItem(OUString(), aFillColor));
+        pRect->SetMergedItem(XLineStyleItem(drawing::LineStyle_NONE));
+
+        pRect->SetName(rName);
+        pRect->SetTitle(rTitle);
+        pRect->SetDescription(rDesc);
+
+        pPage->NbcInsertObject(pRect.get());
+    }
+
     /// Add a filled rectangle rotated by the given angle (in 1/100 of
     /// a degree) around its centre.
     void addRotatedRectangle(const tools::Rectangle& rRect, Color aFillColor, Degree100 nAngle)
@@ -215,6 +235,31 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testRotatedRectangle)
 
     assertJsonPath(aJson, "/type", "vectortile");
     CPPUNIT_ASSERT_EQUAL(size_t(1), aJson.getSize("/objects").value_or(0));
+}
+
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testObjectInfo)
+{
+    // A rectangle with a name, title and description wraps its
+    // decomposition in an ObjectInfoPrimitive2D.
+    createBlankDoc();
+    addRectangleWithObjectInfo(tools::Rectangle(Point(5000, 5000), Size(5000, 3000)),
+                               Color(0x4472c4), u"Rectangle 1"_ustr, u"My title"_ustr,
+                               u"My description"_ustr);
+
+    auto aJson = getVectorTile(u"testObjectInfo");
+
+    assertJsonPath(aJson, "/type", "vectortile");
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aJson.getSize("/objects").value_or(0));
+
+    // The object info wraps the SdrObject's primitive sequence, so it
+    // is the outermost node. The wrapping path is objectInfo -> svx:N
+    // -> group -> [fill].
+    auto oObjectInfo = aJson.at("/objects/0/primitives/0");
+    CPPUNIT_ASSERT(oObjectInfo.has_value());
+    assertJsonPath(*oObjectInfo, "type", "objectInfo");
+    assertJsonPath(*oObjectInfo, "name", "Rectangle 1");
+    assertJsonPath(*oObjectInfo, "title", "My title");
+    assertJsonPath(*oObjectInfo, "desc", "My description");
 }
 
 } // namespace

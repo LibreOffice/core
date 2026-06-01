@@ -398,6 +398,7 @@ COOL_JS_LST =\
 	src/canvas/vector/primitive/ExclusiveEditViewPrimitive.ts \
 	src/canvas/vector/primitive/GroupPrimitive.ts \
 	src/canvas/vector/primitive/HiddenGeometryPrimitive.ts \
+	src/canvas/vector/primitive/ObjectInfoPrimitive.ts \
 	src/canvas/vector/primitive/PolygonStrokePrimitive.ts \
 	src/canvas/vector/primitive/PolyPolygonColorPrimitive.ts \
 	src/canvas/vector/primitive/Primitive.ts \

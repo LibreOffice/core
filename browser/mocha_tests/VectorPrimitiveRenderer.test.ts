@@ -224,6 +224,25 @@ describe('VectorPrimitiveRenderer', function () {
 			nodeassert.deepStrictEqual(recorder.properties, {});
 		});
 
+		it('renders objectInfo\'s children while exposing its metadata', function () {
+			// objectInfo wraps a subtree with metadata: name, title and
+			// description. The metadata travels on the wire alongside
+			// the children.
+			const primitive = loadVectorRenderingReference('testObjectInfoPrimitive').primitives[0];
+			nodeassert.strictEqual(primitive.type, 'objectInfo');
+			nodeassert.strictEqual(typeof primitive.name, 'string');
+			nodeassert.strictEqual(typeof primitive.title, 'string');
+			nodeassert.strictEqual(typeof primitive.desc, 'string');
+			nodeassert.strictEqual(primitive.children.length, 1);
+
+			const recorder = new CanvasRecorder();
+			const renderer = new cool.VectorPrimitiveRenderer();
+			renderer.renderPrimitive(recorder as any, primitive);
+
+			// Exactly one child fill, matching the wrapped triangle.
+			nodeassert.strictEqual(recorder.countOf('fill'), 1);
+		});
+
 		it('skips exclusiveEditView entirely', function () {
 			// exclusiveEditView wraps content meant only for an
 			// exclusive edit view. It does not appear in the
@@ -371,5 +390,25 @@ describe('VectorPrimitiveRenderer', function () {
 			nodeassert.ok(recorder.findCall('restore'), 'restore not called');
 		});
 
+		it('renders a rectangle with object metadata', function () {
+			// A rectangle with metadata has its primitive sequence
+			// wrapped in an objectInfo node at the top of the slide
+			// object. The wire carries name, title and description
+			// alongside the rectangle's drawing primitives.
+			const primitiveTree = loadVectorRenderingReference('testObjectInfo');
+			const objectInfoNode = primitiveTree.objects[0].primitives[0];
+			nodeassert.strictEqual(objectInfoNode.type, 'objectInfo');
+			nodeassert.strictEqual(objectInfoNode.name, 'Rectangle 1');
+			nodeassert.strictEqual(objectInfoNode.title, 'My title');
+			nodeassert.strictEqual(objectInfoNode.desc, 'My description');
+
+			const recorder = new CanvasRecorder();
+			const renderer = new cool.VectorPrimitiveRenderer();
+			renderer.renderPrimitive(recorder as any, objectInfoNode);
+
+			const fill = recorder.findCall('fill');
+			nodeassert.ok(fill, 'child fill missing');
+			nodeassert.strictEqual(fill?.properties.fillStyle, '#4472c4');
+		});
 	});
 });
