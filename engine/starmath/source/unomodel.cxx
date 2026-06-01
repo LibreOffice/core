@@ -78,7 +78,7 @@ SmPrintUIOptions::SmPrintUIOptions()
     m_aUIProperties.resize( nNumProps );
 
     // load the math PrinterOptions into the custom tab
-    m_aUIProperties[nIdx].Name = "OptionsUIFile";
+    m_aUIProperties[nIdx].Name = u"OptionsUIFile"_ustr;
     m_aUIProperties[nIdx++].Value <<= u"modules/smath/ui/printeroptions.ui"_ustr;
 
     // create Section for formula (results in an extra tab page in dialog)
@@ -985,7 +985,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SmModel::getRenderer(
 
     uno::Sequence< beans::PropertyValue > aRenderer(1);
     PropertyValue  &rValue = aRenderer.getArray()[0];
-    rValue.Name  = "PageSize";
+    rValue.Name  = u"PageSize"_ustr;
     rValue.Value <<= aPageSize;
 
     if (!m_pPrintUIOptions)

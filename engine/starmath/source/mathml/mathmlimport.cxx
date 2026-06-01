@@ -1048,7 +1048,7 @@ void SmXMLFencedContext_Impl::endFastElement(sal_Int32 /*nElement*/)
 {
     SmToken aToken;
     aToken.cMathChar = u""_ustr;
-    aToken.aText = ",";
+    aToken.aText = u","_ustr;
     aToken.nLevel = 5;
 
     std::unique_ptr<SmStructureNode> pSNode(new SmBraceNode(aToken));
@@ -2192,14 +2192,14 @@ void SmXMLRowContext_Impl::endFastElement(sal_Int32)
         aToken.nLevel = 5;
         aToken.eType = TLGROUP;
         aToken.nGroup = TG::NONE;
-        aToken.aText = "{";
+        aToken.aText = u"{"_ustr;
         aRelationArray[0] = new SmLineNode(aToken);
 
         aToken.setChar(MS_RBRACE);
         aToken.nLevel = 0;
         aToken.eType = TRGROUP;
         aToken.nGroup = TG::NONE;
-        aToken.aText = "}";
+        aToken.aText = u"}"_ustr;
         aRelationArray[1] = new SmLineNode(aToken);
     }
 

@@ -532,16 +532,16 @@ void SmMLExport::GetViewSettings(Sequence<PropertyValue>& aProps)
     // The view settings are the formula display settings
     tools::Rectangle aRect(pDocShell->GetVisArea());
 
-    pValue[0].Name = "ViewAreaTop";
+    pValue[0].Name = u"ViewAreaTop"_ustr;
     pValue[0].Value <<= aRect.Top();
 
-    pValue[1].Name = "ViewAreaLeft";
+    pValue[1].Name = u"ViewAreaLeft"_ustr;
     pValue[1].Value <<= aRect.Left();
 
-    pValue[2].Name = "ViewAreaWidth";
+    pValue[2].Name = u"ViewAreaWidth"_ustr;
     pValue[2].Value <<= aRect.GetWidth();
 
-    pValue[3].Name = "ViewAreaHeight";
+    pValue[3].Name = u"ViewAreaHeight"_ustr;
     pValue[3].Value <<= aRect.GetHeight();
 }
 

@@ -580,7 +580,7 @@ void SmParser5::NextToken() //Central part of the parser
         m_aCurToken.cMathChar = u""_ustr;
         m_aCurToken.nGroup = TG::Power;
         m_aCurToken.nLevel = 0;
-        m_aCurToken.aText = "_";
+        m_aCurToken.aText = u"_"_ustr;
 
         aRes.EndPos = nRealStart + 1;
     }
@@ -600,7 +600,7 @@ void SmParser5::NextToken() //Central part of the parser
                         m_aCurToken.setChar(MS_LL);
                         m_aCurToken.nGroup = TG::Relation;
                         m_aCurToken.nLevel = 0;
-                        m_aCurToken.aText = "<<";
+                        m_aCurToken.aText = u"<<"_ustr;
 
                         rnEndPos = nRealStart + 2;
                     }
@@ -610,7 +610,7 @@ void SmParser5::NextToken() //Central part of the parser
                         m_aCurToken.setChar(MS_LE);
                         m_aCurToken.nGroup = TG::Relation;
                         m_aCurToken.nLevel = 0;
-                        m_aCurToken.aText = "<=";
+                        m_aCurToken.aText = u"<="_ustr;
 
                         rnEndPos = nRealStart + 2;
                     }
@@ -620,7 +620,7 @@ void SmParser5::NextToken() //Central part of the parser
                         m_aCurToken.setChar(MS_LEFTARROW);
                         m_aCurToken.nGroup = TG::Standalone;
                         m_aCurToken.nLevel = 5;
-                        m_aCurToken.aText = "<-";
+                        m_aCurToken.aText = u"<-"_ustr;
 
                         rnEndPos = nRealStart + 2;
                     }
@@ -630,7 +630,7 @@ void SmParser5::NextToken() //Central part of the parser
                         m_aCurToken.setChar(MS_NEQ);
                         m_aCurToken.nGroup = TG::Relation;
                         m_aCurToken.nLevel = 0;
-                        m_aCurToken.aText = "<>";
+                        m_aCurToken.aText = u"<>"_ustr;
 
                         rnEndPos = nRealStart + 2;
                     }
@@ -640,7 +640,7 @@ void SmParser5::NextToken() //Central part of the parser
                         m_aCurToken.setChar(MS_PLACE);
                         m_aCurToken.nGroup = TG::NONE;
                         m_aCurToken.nLevel = 5;
-                        m_aCurToken.aText = "<?>";
+                        m_aCurToken.aText = u"<?>"_ustr;
 
                         rnEndPos = nRealStart + 3;
                     }
@@ -650,7 +650,7 @@ void SmParser5::NextToken() //Central part of the parser
                         m_aCurToken.setChar(MS_LT);
                         m_aCurToken.nGroup = TG::Relation;
                         m_aCurToken.nLevel = 0;
-                        m_aCurToken.aText = "<";
+                        m_aCurToken.aText = u"<"_ustr;
                     }
                 }
                 break;
@@ -662,7 +662,7 @@ void SmParser5::NextToken() //Central part of the parser
                         m_aCurToken.setChar(MS_GE);
                         m_aCurToken.nGroup = TG::Relation;
                         m_aCurToken.nLevel = 0;
-                        m_aCurToken.aText = ">=";
+                        m_aCurToken.aText = u">="_ustr;
 
                         rnEndPos = nRealStart + 2;
                     }
@@ -672,7 +672,7 @@ void SmParser5::NextToken() //Central part of the parser
                         m_aCurToken.setChar(MS_GG);
                         m_aCurToken.nGroup = TG::Relation;
                         m_aCurToken.nLevel = 0;
-                        m_aCurToken.aText = ">>";
+                        m_aCurToken.aText = u">>"_ustr;
 
                         rnEndPos = nRealStart + 2;
                     }
@@ -682,7 +682,7 @@ void SmParser5::NextToken() //Central part of the parser
                         m_aCurToken.setChar(MS_GT);
                         m_aCurToken.nGroup = TG::Relation;
                         m_aCurToken.nLevel = 0;
-                        m_aCurToken.aText = ">";
+                        m_aCurToken.aText = u">"_ustr;
                     }
                 }
                 break;
@@ -720,7 +720,7 @@ void SmParser5::NextToken() //Central part of the parser
                     m_aCurToken.cMathChar = u""_ustr;
                     m_aCurToken.nGroup = TG::NONE;
                     m_aCurToken.nLevel = 5;
-                    m_aCurToken.aText = "%";
+                    m_aCurToken.aText = u"%"_ustr;
 
                     if (aTmpRes.TokenType & KParseType::IDENTNAME)
                     {
@@ -746,7 +746,7 @@ void SmParser5::NextToken() //Central part of the parser
                     m_aCurToken.setChar(MS_LBRACKET);
                     m_aCurToken.nGroup = TG::LBrace;
                     m_aCurToken.nLevel = 5;
-                    m_aCurToken.aText = "[";
+                    m_aCurToken.aText = u"["_ustr;
                 }
                 break;
                 case '\\':
@@ -755,7 +755,7 @@ void SmParser5::NextToken() //Central part of the parser
                     m_aCurToken.cMathChar = u""_ustr;
                     m_aCurToken.nGroup = TG::NONE;
                     m_aCurToken.nLevel = 5;
-                    m_aCurToken.aText = "\\";
+                    m_aCurToken.aText = u"\\"_ustr;
                 }
                 break;
                 case ']':
@@ -764,7 +764,7 @@ void SmParser5::NextToken() //Central part of the parser
                     m_aCurToken.setChar(MS_RBRACKET);
                     m_aCurToken.nGroup = TG::RBrace;
                     m_aCurToken.nLevel = 0;
-                    m_aCurToken.aText = "]";
+                    m_aCurToken.aText = u"]"_ustr;
                 }
                 break;
                 case '^':
@@ -773,7 +773,7 @@ void SmParser5::NextToken() //Central part of the parser
                     m_aCurToken.cMathChar = u""_ustr;
                     m_aCurToken.nGroup = TG::Power;
                     m_aCurToken.nLevel = 0;
-                    m_aCurToken.aText = "^";
+                    m_aCurToken.aText = u"^"_ustr;
                 }
                 break;
                 case '`':
@@ -782,7 +782,7 @@ void SmParser5::NextToken() //Central part of the parser
                     m_aCurToken.cMathChar = u""_ustr;
                     m_aCurToken.nGroup = TG::Blank;
                     m_aCurToken.nLevel = 5;
-                    m_aCurToken.aText = "`";
+                    m_aCurToken.aText = u"`"_ustr;
                 }
                 break;
                 case '{':
@@ -791,7 +791,7 @@ void SmParser5::NextToken() //Central part of the parser
                     m_aCurToken.setChar(MS_LBRACE);
                     m_aCurToken.nGroup = TG::NONE;
                     m_aCurToken.nLevel = 5;
-                    m_aCurToken.aText = "{";
+                    m_aCurToken.aText = u"{"_ustr;
                 }
                 break;
                 case '|':
@@ -800,7 +800,7 @@ void SmParser5::NextToken() //Central part of the parser
                     m_aCurToken.setChar(MS_OR);
                     m_aCurToken.nGroup = TG::Sum;
                     m_aCurToken.nLevel = 0;
-                    m_aCurToken.aText = "|";
+                    m_aCurToken.aText = u"|"_ustr;
                 }
                 break;
                 case '}':
@@ -809,7 +809,7 @@ void SmParser5::NextToken() //Central part of the parser
                     m_aCurToken.setChar(MS_RBRACE);
                     m_aCurToken.nGroup = TG::NONE;
                     m_aCurToken.nLevel = 0;
-                    m_aCurToken.aText = "}";
+                    m_aCurToken.aText = u"}"_ustr;
                 }
                 break;
                 case '~':
@@ -818,7 +818,7 @@ void SmParser5::NextToken() //Central part of the parser
                     m_aCurToken.cMathChar = u""_ustr;
                     m_aCurToken.nGroup = TG::Blank;
                     m_aCurToken.nLevel = 5;
-                    m_aCurToken.aText = "~";
+                    m_aCurToken.aText = u"~"_ustr;
                 }
                 break;
                 case '#':
@@ -829,7 +829,7 @@ void SmParser5::NextToken() //Central part of the parser
                         m_aCurToken.cMathChar = u""_ustr;
                         m_aCurToken.nGroup = TG::NONE;
                         m_aCurToken.nLevel = 0;
-                        m_aCurToken.aText = "##";
+                        m_aCurToken.aText = u"##"_ustr;
 
                         rnEndPos = nRealStart + 2;
                     }
@@ -839,7 +839,7 @@ void SmParser5::NextToken() //Central part of the parser
                         m_aCurToken.cMathChar = u""_ustr;
                         m_aCurToken.nGroup = TG::NONE;
                         m_aCurToken.nLevel = 0;
-                        m_aCurToken.aText = "#";
+                        m_aCurToken.aText = u"#"_ustr;
                     }
                 }
                 break;
@@ -849,7 +849,7 @@ void SmParser5::NextToken() //Central part of the parser
                     m_aCurToken.setChar(MS_AND);
                     m_aCurToken.nGroup = TG::Product;
                     m_aCurToken.nLevel = 0;
-                    m_aCurToken.aText = "&";
+                    m_aCurToken.aText = u"&"_ustr;
                 }
                 break;
                 case '(':
@@ -858,7 +858,7 @@ void SmParser5::NextToken() //Central part of the parser
                     m_aCurToken.setChar(MS_LPARENT);
                     m_aCurToken.nGroup = TG::LBrace;
                     m_aCurToken.nLevel = 5; //! 0 to continue expression
-                    m_aCurToken.aText = "(";
+                    m_aCurToken.aText = u"("_ustr;
                 }
                 break;
                 case ')':
@@ -867,7 +867,7 @@ void SmParser5::NextToken() //Central part of the parser
                     m_aCurToken.setChar(MS_RPARENT);
                     m_aCurToken.nGroup = TG::RBrace;
                     m_aCurToken.nLevel = 0; //! 0 to terminate expression
-                    m_aCurToken.aText = ")";
+                    m_aCurToken.aText = u")"_ustr;
                 }
                 break;
                 case '*':
@@ -876,7 +876,7 @@ void SmParser5::NextToken() //Central part of the parser
                     m_aCurToken.setChar(MS_MULTIPLY);
                     m_aCurToken.nGroup = TG::Product;
                     m_aCurToken.nLevel = 0;
-                    m_aCurToken.aText = "*";
+                    m_aCurToken.aText = u"*"_ustr;
                 }
                 break;
                 case '+':
@@ -887,7 +887,7 @@ void SmParser5::NextToken() //Central part of the parser
                         m_aCurToken.setChar(MS_PLUSMINUS);
                         m_aCurToken.nGroup = TG::UnOper | TG::Sum;
                         m_aCurToken.nLevel = 5;
-                        m_aCurToken.aText = "+-";
+                        m_aCurToken.aText = u"+-"_ustr;
 
                         rnEndPos = nRealStart + 2;
                     }
@@ -897,7 +897,7 @@ void SmParser5::NextToken() //Central part of the parser
                         m_aCurToken.setChar(MS_PLUS);
                         m_aCurToken.nGroup = TG::UnOper | TG::Sum;
                         m_aCurToken.nLevel = 5;
-                        m_aCurToken.aText = "+";
+                        m_aCurToken.aText = u"+"_ustr;
                     }
                 }
                 break;
@@ -909,7 +909,7 @@ void SmParser5::NextToken() //Central part of the parser
                         m_aCurToken.setChar(MS_MINUSPLUS);
                         m_aCurToken.nGroup = TG::UnOper | TG::Sum;
                         m_aCurToken.nLevel = 5;
-                        m_aCurToken.aText = "-+";
+                        m_aCurToken.aText = u"-+"_ustr;
 
                         rnEndPos = nRealStart + 2;
                     }
@@ -919,7 +919,7 @@ void SmParser5::NextToken() //Central part of the parser
                         m_aCurToken.setChar(MS_RIGHTARROW);
                         m_aCurToken.nGroup = TG::Standalone;
                         m_aCurToken.nLevel = 5;
-                        m_aCurToken.aText = "->";
+                        m_aCurToken.aText = u"->"_ustr;
 
                         rnEndPos = nRealStart + 2;
                     }
@@ -929,7 +929,7 @@ void SmParser5::NextToken() //Central part of the parser
                         m_aCurToken.setChar(MS_MINUS);
                         m_aCurToken.nGroup = TG::UnOper | TG::Sum;
                         m_aCurToken.nLevel = 5;
-                        m_aCurToken.aText = "-";
+                        m_aCurToken.aText = u"-"_ustr;
                     }
                 }
                 break;
@@ -969,7 +969,7 @@ void SmParser5::NextToken() //Central part of the parser
                     m_aCurToken.setChar(MS_SLASH);
                     m_aCurToken.nGroup = TG::Product;
                     m_aCurToken.nLevel = 0;
-                    m_aCurToken.aText = "/";
+                    m_aCurToken.aText = u"/"_ustr;
                 }
                 break;
                 case '=':
@@ -978,7 +978,7 @@ void SmParser5::NextToken() //Central part of the parser
                     m_aCurToken.setChar(MS_ASSIGN);
                     m_aCurToken.nGroup = TG::Relation;
                     m_aCurToken.nLevel = 0;
-                    m_aCurToken.aText = "=";
+                    m_aCurToken.aText = u"="_ustr;
                 }
                 break;
                 default:
@@ -1080,7 +1080,7 @@ void SmParser5::NextTokenColor(SmTokenType dvipload)
             m_aCurToken.cMathChar = u""_ustr;
             m_aCurToken.nGroup = TG::Color;
             m_aCurToken.nLevel = 0;
-            m_aCurToken.aText = "hex";
+            m_aCurToken.aText = u"hex"_ustr;
         }
     }
     else
@@ -1155,28 +1155,28 @@ void SmParser5::NextTokenFontSize()
                     m_aCurToken.setChar(MS_MULTIPLY);
                     m_aCurToken.nGroup = TG::Product;
                     m_aCurToken.nLevel = 0;
-                    m_aCurToken.aText = "*";
+                    m_aCurToken.aText = u"*"_ustr;
                     break;
                 case '+':
                     m_aCurToken.eType = TPLUS;
                     m_aCurToken.setChar(MS_PLUS);
                     m_aCurToken.nGroup = TG::UnOper | TG::Sum;
                     m_aCurToken.nLevel = 5;
-                    m_aCurToken.aText = "+";
+                    m_aCurToken.aText = u"+"_ustr;
                     break;
                 case '-':
                     m_aCurToken.eType = TMINUS;
                     m_aCurToken.setChar(MS_MINUS);
                     m_aCurToken.nGroup = TG::UnOper | TG::Sum;
                     m_aCurToken.nLevel = 5;
-                    m_aCurToken.aText = "-";
+                    m_aCurToken.aText = u"-"_ustr;
                     break;
                 case '/':
                     m_aCurToken.eType = TDIVIDEBY;
                     m_aCurToken.setChar(MS_SLASH);
                     m_aCurToken.nGroup = TG::Product;
                     m_aCurToken.nLevel = 0;
-                    m_aCurToken.aText = "/";
+                    m_aCurToken.aText = u"/"_ustr;
                     break;
                 default:
                     m_aCurToken.eType = TNONE;

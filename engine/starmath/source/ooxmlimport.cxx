@@ -179,62 +179,62 @@ OUString SmOoxmlImport::handleAcc()
     {
         case MS_BAR:
         case MS_COMBBAR:
-            acc = "bar";
+            acc = u"bar"_ustr;
             break;
         case MS_CHECK:
         case MS_COMBCHECK:
-            acc = "check";
+            acc = u"check"_ustr;
             break;
         case MS_ACUTE:
         case MS_COMBACUTE:
-            acc = "acute";
+            acc = u"acute"_ustr;
             break;
         case MS_COMBOVERLINE:
-            acc = "overline";
+            acc = u"overline"_ustr;
             break;
         case MS_GRAVE:
         case MS_COMBGRAVE:
-            acc = "grave";
+            acc = u"grave"_ustr;
             break;
         case MS_BREVE:
         case MS_COMBBREVE:
-            acc = "breve";
+            acc = u"breve"_ustr;
             break;
         case MS_CIRCLE:
         case MS_COMBCIRCLE:
-            acc = "circle";
+            acc = u"circle"_ustr;
             break;
         case MS_RIGHTARROW:
         case MS_VEC:
             // prefer wide variants for these 3, .docx can't seem to differentiate
             // between e.g. 'vec' and 'widevec', if whatever the accent is above is short, this
             // shouldn't matter, but short above a longer expression doesn't look right
-            acc = "widevec";
+            acc = u"widevec"_ustr;
             break;
         case MS_HARPOON:
-            acc = "wideharpoon";
+            acc = u"wideharpoon"_ustr;
             break;
         case MS_TILDE:
         case MS_COMBTILDE:
-            acc = "widetilde";
+            acc = u"widetilde"_ustr;
             break;
         case MS_HAT:
         case MS_COMBHAT:
-            acc = "widehat";
+            acc = u"widehat"_ustr;
             break;
         case MS_DOT:
         case MS_COMBDOT:
-            acc = "dot";
+            acc = u"dot"_ustr;
             break;
         case MS_DDOT:
         case MS_COMBDDOT:
-            acc = "ddot";
+            acc = u"ddot"_ustr;
             break;
         case MS_DDDOT:
-            acc = "dddot";
+            acc = u"dddot"_ustr;
             break;
         default:
-            acc = "acute";
+            acc = u"acute"_ustr;
             SAL_WARN( "starmath.ooxml", "Unknown m:chr in m:acc \'" << OUString(accChr) << "\'" );
             break;
     }
@@ -326,40 +326,40 @@ OUString SmOoxmlImport::handleD()
         m_rStream.ensureClosingTag( M_TOKEN( dPr ));
     }
     if( opening == "{" )
-        opening = "left lbrace ";
+        opening = u"left lbrace "_ustr;
     if( closing == "}" )
-        closing = " right rbrace";
+        closing = u" right rbrace"_ustr;
     if( opening == u"\u27e6" )
-        opening = "left ldbracket ";
+        opening = u"left ldbracket "_ustr;
     if( closing == u"\u27e7" )
-        closing = " right rdbracket";
+        closing = u" right rdbracket"_ustr;
     if( opening == "|" )
-        opening = "left lline ";
+        opening = u"left lline "_ustr;
     if( closing == "|" )
-        closing = " right rline";
+        closing = u" right rline"_ustr;
     if (opening == OUStringChar(MS_DLINE)
         || opening == OUStringChar(MS_DVERTLINE))
-        opening = "left ldline ";
+        opening = u"left ldline "_ustr;
     if (closing == OUStringChar(MS_DLINE)
         || closing == OUStringChar(MS_DVERTLINE))
-        closing = " right rdline";
+        closing = u" right rdline"_ustr;
     if (opening == OUStringChar(MS_LANGLE)
         || opening == OUStringChar(MS_LMATHANGLE))
-        opening = "left langle ";
+        opening = u"left langle "_ustr;
     if (closing == OUStringChar(MS_RANGLE)
         || closing == OUStringChar(MS_RMATHANGLE))
-        closing = " right rangle";
+        closing = u" right rangle"_ustr;
     // use scalable brackets (the explicit "left" or "right")
     if( opening == "(" || opening == "[" || opening == ")" || opening == "]" )
         opening = "left " + opening;
     if( closing == ")" || closing == "]" || closing == "(" || closing == "[")
         closing = " right " + closing;
     if( separator == "|" ) // plain "|" would be actually "V" (logical or)
-        separator = " mline ";
+        separator = u" mline "_ustr;
     if( opening.isEmpty())
-        opening = "left none ";
+        opening = u"left none "_ustr;
     if( closing.isEmpty())
-        closing = " right none";
+        closing = u" right none"_ustr;
     OUStringBuffer ret( opening );
     bool first = true;
     while( m_rStream.findTag( OPENING( M_TOKEN( e ))))
@@ -539,31 +539,31 @@ OUString SmOoxmlImport::handleNary()
     switch( chr )
     {
         case MS_INT:
-            ret = "int";
+            ret = u"int"_ustr;
             break;
         case MS_IINT:
-            ret = "iint";
+            ret = u"iint"_ustr;
             break;
         case MS_IIINT:
-            ret = "iiint";
+            ret = u"iiint"_ustr;
             break;
         case MS_LINT:
-            ret = "lint";
+            ret = u"lint"_ustr;
             break;
         case MS_LLINT:
-            ret = "llint";
+            ret = u"llint"_ustr;
             break;
         case MS_LLLINT:
-            ret = "lllint";
+            ret = u"lllint"_ustr;
             break;
         case MS_PROD:
-            ret = "prod";
+            ret = u"prod"_ustr;
             break;
         case MS_COPROD:
-            ret = "coprod";
+            ret = u"coprod"_ustr;
             break;
         case MS_SUM:
-            ret = "sum";
+            ret = u"sum"_ustr;
             break;
         default:
             SAL_WARN( "starmath.ooxml", "Unknown m:nary chr \'" << OUString(chr) << "\'" );

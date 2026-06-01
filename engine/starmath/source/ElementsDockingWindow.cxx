@@ -674,7 +674,7 @@ void SmElementsControl::build()
     {
         case 5:
             addElements(mnCurrentSetIndex);
-            m_sHoveredItem = "nil"; // if list is empty we must not use the previously hovered item
+            m_sHoveredItem = u"nil"_ustr; // if list is empty we must not use the previously hovered item
             break;
         case 6:
         default:

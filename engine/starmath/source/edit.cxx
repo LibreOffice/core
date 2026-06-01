@@ -389,11 +389,11 @@ bool SmEditTextWindow::KeyInput(const KeyEvent& rKEvt)
     OUString sClose;
 
     if (cCharCode == '{')
-        sClose = "  }";
+        sClose = u"  }"_ustr;
     else if (cCharCode == '[')
-        sClose = "  ]";
+        sClose = u"  ]"_ustr;
     else if (cCharCode == '(')
-        sClose = "  )";
+        sClose = u"  )"_ustr;
 
     // auto close the current character only when needed
     if (!sClose.isEmpty() && autoClose)

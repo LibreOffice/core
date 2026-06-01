@@ -912,7 +912,7 @@ void SmCursor::InsertElement(SmFormulaElement element){
             SmToken token;
             token.eType = TBLANK;
             token.nGroup = TG::Blank;
-            token.aText = "~";
+            token.aText = u"~"_ustr;
             SmBlankNode* pBlankNode = new SmBlankNode(token);
             pBlankNode->IncreaseBy(token);
             pNewNode = pBlankNode;
@@ -929,7 +929,7 @@ void SmCursor::InsertElement(SmFormulaElement element){
             token.setChar(MS_PLUS);
             token.nGroup = TG::UnOper | TG::Sum;
             token.nLevel = 5;
-            token.aText = "+";
+            token.aText = u"+"_ustr;
             pNewNode = new SmMathSymbolNode(token);
         }break;
         case MinusElement:
@@ -939,7 +939,7 @@ void SmCursor::InsertElement(SmFormulaElement element){
             token.setChar(MS_MINUS);
             token.nGroup = TG::UnOper | TG::Sum;
             token.nLevel = 5;
-            token.aText = "-";
+            token.aText = u"-"_ustr;
             pNewNode = new SmMathSymbolNode(token);
         }break;
         case CDotElement:
@@ -948,7 +948,7 @@ void SmCursor::InsertElement(SmFormulaElement element){
             token.eType = TCDOT;
             token.setChar(MS_CDOT);
             token.nGroup = TG::Product;
-            token.aText = "cdot";
+            token.aText = u"cdot"_ustr;
             pNewNode = new SmMathSymbolNode(token);
         }break;
         case EqualElement:
@@ -957,7 +957,7 @@ void SmCursor::InsertElement(SmFormulaElement element){
             token.eType = TASSIGN;
             token.setChar(MS_ASSIGN);
             token.nGroup = TG::Relation;
-            token.aText = "=";
+            token.aText = u"="_ustr;
             pNewNode = new SmMathSymbolNode(token);
         }break;
         case LessThanElement:
@@ -966,7 +966,7 @@ void SmCursor::InsertElement(SmFormulaElement element){
             token.eType = TLT;
             token.setChar(MS_LT);
             token.nGroup = TG::Relation;
-            token.aText = "<";
+            token.aText = u"<"_ustr;
             pNewNode = new SmMathSymbolNode(token);
         }break;
         case GreaterThanElement:
@@ -975,7 +975,7 @@ void SmCursor::InsertElement(SmFormulaElement element){
             token.eType = TGT;
             token.setChar(MS_GT);
             token.nGroup = TG::Relation;
-            token.aText = ">";
+            token.aText = u">"_ustr;
             pNewNode = new SmMathSymbolNode(token);
         }break;
         case PercentElement:
@@ -984,7 +984,7 @@ void SmCursor::InsertElement(SmFormulaElement element){
             token.eType = TTEXT;
             token.setChar(MS_PERCENT);
             token.nGroup = TG::NONE;
-            token.aText = "\"%\"";
+            token.aText = u"\"%\""_ustr;
             pNewNode = new SmMathSymbolNode(token);
         }break;
     }
