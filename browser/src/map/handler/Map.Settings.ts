@@ -69,16 +69,6 @@ window.L.Map.Settings = window.L.Handler.extend({
 			{ show_left_nav: true },
 		];
 
-		if (window.mode.isCODesktop())
-			window.postMobileMessage(
-				'PROCESSINTEGRATORADMINFILE ' +
-					JSON.stringify({
-						ui_theme: theme,
-						lang: window.langParam,
-						mobile: window.mode.isSmallScreenDevice(),
-					}),
-			);
-
 		const options = {
 			prefix: 'iframe-settings',
 			stylesheets: [app.LOUtil.getURL('settings.css')],

@@ -516,11 +516,6 @@ QVariant Bridge::cool(const QString& messageStr)
         });
         return {};
     }
-    else if (tokens.equals(0, "PROCESSINTEGRATORADMINFILE"))
-    {
-        Desktop::processIntegratorAdminFile(tokens.substrFromToken(1));
-        return {};
-    }
     else if (tokens.equals(0, "SETDARKMODE"))
     {
         Desktop::setDarkMode(tokens.equals(1, "true"));

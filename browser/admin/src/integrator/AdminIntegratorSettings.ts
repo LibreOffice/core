@@ -85,12 +85,21 @@ interface SectionConfig {
 
 const initTranslationStr = () => {
 	const element = document.getElementById('initial-variables');
-	document.documentElement.lang =
-		(element as HTMLInputElement).dataset.lang || 'en-US';
+	const rawLang = (element as HTMLInputElement).dataset.lang;
+	// Unsubstituted "%UI_LANG%" reaches us when the desktop loads the
+	// static template; fall back to the URL ?lang= that Map.Settings
+	// appends.
+	const urlLang = new URLSearchParams(window.location.search).get('lang');
+	const lang =
+		rawLang && !/^(?:%.+%|<!--%.+%-->)$/.test(rawLang)
+			? rawLang
+			: urlLang && urlLang !== 'undefined'
+				? urlLang
+				: 'en-US';
+	document.documentElement.lang = lang;
 
 	String.defaultLocale = 'en-US';
-	String.locale =
-		document.documentElement.getAttribute('lang') || String.defaultLocale;
+	String.locale = lang;
 };
 
 const getIntegratorOrigin = (): string => {
@@ -113,12 +122,12 @@ const onMessage = (e) => {
 	try {
 		const data = JSON.parse(e.data);
 		if (e.origin === window.origin && window.parent !== window.self) {
-			if (data.MessageId === 'settings-ready')
+			if (data.MessageId === 'settings-ready') {
 				window.parent.postMessage(
 					'{"MessageId":"settings-show"}',
 					window.origin,
 				);
-			else if (data.MessageId === 'settings-save-all') {
+			} else if (data.MessageId === 'settings-save-all') {
 				const settingIframe = (window as any).settingIframe as SettingIframe;
 				if (settingIframe) {
 					settingIframe.saveAll().then(() => {
@@ -374,6 +383,12 @@ try {
 	isCODesktop = (window as any).parent.mode.isCODesktop();
 } catch (e) {
 	isCODesktop = false;
+}
+// Cross-origin file:// access can block window.parent.mode; the iframe
+// being loaded over file:// is itself a reliable desktop signal (the
+// server path is always HTTP(S)).
+if (!isCODesktop && window.location.protocol === 'file:') {
+	isCODesktop = true;
 }
 
 // Keep in sync with the pre-canned provider map in wsd/FileServer.cpp
@@ -661,19 +676,44 @@ class SettingIframe {
 		const element = document.getElementById('initial-variables');
 		if (!element) return;
 
-		window.accessToken = element.dataset.accessToken;
-		if (!window.accessToken) {
+		// On desktop the template is loaded as-is from the install tree
+		// (no server-side render), so unsubstituted "%TOKEN%" literals
+		// reach us here. Fall back to URL query params for the values
+		// that matter — Map.Settings.ts passes them via form GET on every
+		// open, and reading them inline means populate() runs once with
+		// correct values (no postMessage round-trip gymnastics).
+		const ds = (element as HTMLInputElement).dataset;
+		const urlParams = new URLSearchParams(window.location.search);
+		const isPlaceholder = (v: string) => /^(?:%.+%|<!--%.+%-->)$/.test(v);
+		const read = (dataKey: string, urlKey: string): string => {
+			const v = ds[dataKey] ?? '';
+			if (!v || isPlaceholder(v)) {
+				// Map.Settings stringifies undefined window.* values as
+				// the literal "undefined"; filter that.
+				const u = urlParams.get(urlKey);
+				return u && u !== 'undefined' ? u : '';
+			}
+			return v;
+		};
+
+		window.accessToken = read('accessToken', 'access_token');
+		if (!window.accessToken && !isCODesktop) {
 			throw new Error('Access token is missing in initial variables.');
 		}
 
-		window.accessTokenTTL = element.dataset.accessTokenTtl;
-		window.enableDebug = element.dataset.enableDebug === 'true';
-		window.enableAccessibility = element.dataset.enableAccessibility === 'true';
-		window.disableAISettings = element.dataset.disableAiSettings === 'true';
-		window.showLeftNav = element.dataset.showLeftNav === 'true';
-		window.wopiSettingBaseUrl = element.dataset.wopiSettingBaseUrl ?? '';
-		window.iframeType = element.dataset.iframeType || 'user';
-		window.cssVars = element.dataset.cssVars || '';
+		window.accessTokenTTL = read('accessTokenTtl', 'access_token_ttl');
+		window.enableDebug = read('enableDebug', 'enable_debug') === 'true';
+		window.enableAccessibility =
+			read('enableAccessibility', 'enable_accessibility') === 'true';
+		window.disableAISettings =
+			read('disableAiSettings', 'disable_ai_settings') === 'true';
+		window.showLeftNav = read('showLeftNav', 'show_left_nav') === 'true';
+		window.wopiSettingBaseUrl = read(
+			'wopiSettingBaseUrl',
+			'wopi_setting_base_url',
+		);
+		window.iframeType = read('iframeType', 'iframe_type') || 'user';
+		window.cssVars = read('cssVars', 'css_vars');
 		if (window.cssVars) {
 			window.cssVars = atob(window.cssVars);
 			const sheet = new CSSStyleSheet();
@@ -682,8 +722,15 @@ class SettingIframe {
 				(document as any).adoptedStyleSheets.push(sheet);
 			}
 		}
-		window.serviceRoot = element.dataset.serviceRoot;
-		window.versionHash = element.dataset.versionHash;
+		window.serviceRoot = read('serviceRoot', 'service_root');
+		window.versionHash = read('versionHash', 'version_hash');
+
+		// CSS theme switching reads <html data-theme>; the template's
+		// literal "%UI_THEME%" would never match. Set it from the URL.
+		const theme = urlParams.get('ui_theme');
+		if (theme && theme !== 'undefined' && !isPlaceholder(theme)) {
+			document.documentElement.setAttribute('data-theme', theme);
+		}
 	}
 
 	private validateJsonFile(file: File): Promise<any> {

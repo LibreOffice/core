@@ -17,14 +17,9 @@
 #include <common/Util.hpp>
 
 #include <Poco/DirectoryIterator.h>
-#include <Poco/Environment.h>
 #include <Poco/File.h>
-#include <Poco/FileStream.h>
 #include <Poco/JSON/Object.h>
 #include <Poco/JSON/Parser.h>
-#include <Poco/StreamCopier.h>
-#include <Poco/String.h>
-#include <Poco/Util/Application.h>
 
 #include <exception>
 #include <fstream>
@@ -211,79 +206,6 @@ void syncSettings(const std::function<void(const std::vector<char>&)>& sendFileC
     {
         LOG_ERR("syncSettings failed: " << ex.what());
     }
-}
-
-void processIntegratorAdminFile(const std::string& payload)
-{
-    const std::string subFolder =
-#if defined(_WIN32)
-        "cool"
-#elif defined(MACOS)
-        "Resources"
-#else
-        "browser/dist"
-#endif
-        ;
-    const std::string filePath =
-        getDataDir() + "/" + subFolder + "/adminIntegratorSettings.html";
-
-    // The substitution below is destructive, so keep a pristine ".in" copy and
-    // always render from it - that lets the dialog re-bake on every open (e.g. on
-    // theme change). A freshly built file still has its placeholders: refresh the
-    // copy from it; otherwise render from the kept copy.
-    const std::string templatePath = filePath + ".in";
-
-    std::string adminFile;
-    {
-        Poco::FileInputStream fis(filePath);
-        if (!fis.good())
-            throw Poco::FileNotFoundException(filePath);
-
-        std::ostringstream oss;
-        Poco::StreamCopier::copyStream(fis, oss);
-        adminFile = oss.str();
-    }
-
-    if (adminFile.find("%UI_THEME%") != std::string::npos)
-    {
-        Poco::File(filePath).copyTo(templatePath);
-    }
-    else if (Poco::File(templatePath).exists())
-    {
-        Poco::FileInputStream tis(templatePath);
-        std::ostringstream oss;
-        Poco::StreamCopier::copyStream(tis, oss);
-        adminFile = oss.str();
-    }
-
-    Poco::JSON::Parser parser;
-    const Poco::JSON::Object::Ptr json = parser.parse(payload).extract<Poco::JSON::Object::Ptr>();
-
-    auto replaceOrEmpty = [&](const std::string& token, const std::string& jsonKey) {
-        std::string value;
-        if (json->has(jsonKey))
-            value = json->get(jsonKey).convert<std::string>();
-
-        Poco::replaceInPlace(adminFile, token, value);
-    };
-
-    replaceOrEmpty("%IFRAME_TYPE%", "iframe_type");
-    replaceOrEmpty("<!--%CSS_VARIABLES%-->", "css_variables");
-    replaceOrEmpty("%UI_THEME%", "ui_theme");
-
-    Poco::replaceInPlace(adminFile, std::string("%ENABLE_DEBUG%"),
-                         std::string(Util::isDebugEnabled() ? "true" : "false"));
-
-    const auto& config = Poco::Util::Application::instance().config();
-    std::string enableAccessibility =
-        config.getBool("accessibility.enable", false) ? "true" : "false";
-
-    Poco::replaceInPlace(adminFile, std::string("%ENABLE_ACCESSIBILITY%"), enableAccessibility);
-    Poco::replaceInPlace(adminFile, std::string("%SHOW_LEFT_NAV%"), std::string("true"));
-    std::ofstream ofs(filePath, std::ios::binary | std::ios::trunc);
-    if (!ofs.good())
-        throw Poco::FileAccessDeniedException(filePath);
-    ofs << adminFile;
 }
 
 static Poco::Path preferencesPath()

@@ -2321,10 +2321,6 @@ static void processMessage(WindowData& data, wil::unique_cotaskmem_string& messa
         {
             Desktop::setDarkMode(s.substr(strlen("SETDARKMODE ")) == L"true");
         }
-        else if (s.starts_with(L"PROCESSINTEGRATORADMINFILE "))
-        {
-            Desktop::processIntegratorAdminFile(Util::wide_string_to_string(s.substr(strlen("PROCESSINTEGRATORADMINFILE "))));
-        }
         else if (s.starts_with(L"downloadas "))
         {
             // "downloadas name=document.rtf id=export format=rtf options="
