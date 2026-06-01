@@ -178,41 +178,62 @@ static std::thread coolwsdThread;
     size_t *outSizes = nullptr;
     char  **outStreams = nullptr;
 
-    if (DocumentData::get(document.appDocId).loKitDocument->getClipboard(mimeTypes,
-                                                                         &outCount, &outMimeTypes,
-                                                                         &outSizes, &outStreams))
+    if (!DocumentData::get(document.appDocId).loKitDocument->getClipboard(mimeTypes,
+                                                                          &outCount, &outMimeTypes,
+                                                                          &outSizes, &outStreams))
     {
-        // return early
-        if (outCount == 0)
-            return nil;
+        LOG_DBG("failed to fetch mime-types");
+        return nil;
+    }
 
-        NSMutableArray<id<NSPasteboardWriting>> *result = [NSMutableArray array];
+    if (outCount == 0)
+        return nil;
 
-        for (size_t i = 0; i < outCount; ++i) {
-            NSString * identifier = [NSString stringWithUTF8String:outMimeTypes[i]];
+    // Carry every flavour as raw, unaltered bytes on a single pasteboard item. Known mime types
+    // are mapped to their preferred UTI so other applications can consume them (text/html becomes
+    // public.html and so on), and internal engine formats keep their raw mime string so the
+    // data round-trips back to COKit unchanged on paste.
+    //
+    // Everything goes on one item on purpose. Emitting a separate string per text-like flavour
+    // would put several plain-text representations on the pasteboard at once (for example both
+    // text/plain and text/markdown, since markdown's UTI also conforms to plain text), and those
+    // would then all be inserted on paste. Keeping a single item lets the paste side pick the
+    // richest format instead.
+    NSPasteboardItem * item = [[NSPasteboardItem alloc] init];
+    size_t storedCount = 0;
 
-            // For interop with other apps, if this mime-type is known we can export it
-            UTType * uti = [UTType typeWithMIMEType:identifier];
-            if (uti != nil && !uti.dynamic) {
-                if ([uti conformsToType:UTTypePlainText] && outStreams[i] != nullptr) {
-                    [result addObject:[NSString stringWithUTF8String:outStreams[i]]];
-                }
-                else if ([uti conformsToType:UTTypeImage]) {
-                    [result addObject:[[NSImage alloc] initWithData:[NSData dataWithBytes:outStreams[i] length:outSizes[i]]]];
-                }
-            }
+    for (size_t i = 0; i < outCount; ++i) {
+        if (outStreams[i] == nullptr || outSizes[i] == 0)
+            continue;
 
-            // Also preserve the data we need, we'll always also export the raw, unaltered bytes
-            NSPasteboardItem * item = [[NSPasteboardItem alloc] init];
-            [item setData:[NSData dataWithBytes:outStreams[i] length:outSizes[i]] forType:identifier];
+        NSString * mime = [NSString stringWithUTF8String:outMimeTypes[i]];
+
+        // Drop any parameters such as the charset in "text/plain;charset=utf-8" before the UTI
+        // lookup, which would otherwise fail to match.
+        NSString * baseMime = [[mime componentsSeparatedByString:@";"] firstObject];
+
+        NSString * pasteboardType;
+        if ([baseMime isEqualToString:@"text/plain"]) {
+            // Normalise to the canonical plain-text type so a single representation wins, and so
+            // that other plain-text-like flavours (such as text/markdown) do not collide with it.
+            pasteboardType = UTTypeUTF8PlainText.identifier;
+        } else {
+            UTType * uti = [UTType typeWithMIMEType:baseMime];
+            pasteboardType = (uti != nil && !uti.dynamic) ? uti.identifier : mime;
         }
 
-        return result;
-    }
-    else
-        LOG_DBG("failed to fetch mime-types");
+        // Keep the first representation we see for a given type.
+        if ([item dataForType:pasteboardType] != nil)
+            continue;
 
-    return nil;
+        [item setData:[NSData dataWithBytes:outStreams[i] length:outSizes[i]] forType:pasteboardType];
+        ++storedCount;
+    }
+
+    if (storedCount == 0)
+        return nil;
+
+    return @[item];
 }
 
 /**
