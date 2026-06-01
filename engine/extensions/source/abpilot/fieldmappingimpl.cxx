@@ -156,7 +156,7 @@ namespace abp
 
                 // create a config node for this
                 OConfigurationTreeRoot aDriverFieldAliasing = OConfigurationTreeRoot::createWithComponentContext(
-                    _rxContext, sDriverAliasesNodeName, -1, OConfigurationTreeRoot::CM_READONLY);
+                    _rxContext, sDriverAliasesNodeName, OConfigurationTreeRoot::CM_READONLY);
 
                 // loop through all programmatic pairs
                 DBG_ASSERT( 0 == std::size( pMappingProgrammatics ) % 2,

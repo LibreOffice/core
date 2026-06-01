@@ -398,7 +398,7 @@ namespace pcr
             if ( !(sConfigurationLocation.isEmpty() || sConfigurationProperty.isEmpty()) )
             {
                 ::utl::OConfigurationTreeRoot aConfigTree( ::utl::OConfigurationTreeRoot::createWithComponentContext(
-                    m_xContext, sConfigurationLocation, -1, ::utl::OConfigurationTreeRoot::CM_READONLY ) );
+                    m_xContext, sConfigurationLocation, ::utl::OConfigurationTreeRoot::CM_READONLY ) );
                 sal_Int32 nUnitAsInt = sal_Int32(FieldUnit::NONE);
                 aConfigTree.getNodeValue( sConfigurationProperty ) >>= nUnitAsInt;
 

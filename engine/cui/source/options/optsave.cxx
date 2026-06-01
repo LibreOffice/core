@@ -126,7 +126,6 @@ SvxSaveTabPage::SvxSaveTabPage(weld::Container* pPage, weld::DialogController* p
     auto aFilterClassesNode = utl::OConfigurationTreeRoot::createWithComponentContext(
             comphelper::getProcessComponentContext(),
             u"org.openoffice.Office.UI/FilterClassification/GlobalFilters/Classes"_ustr,
-            -1,
             utl::OConfigurationTreeRoot::CM_READONLY
         );
 

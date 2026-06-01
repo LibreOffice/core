@@ -81,7 +81,7 @@ SwFieldDlg::SwFieldDlg(SfxBindings* pB, SwChildWinWrapper* /*pCW*/, weld::Window
         utl::OConfigurationTreeRoot aCfgRoot
             = utl::OConfigurationTreeRoot::createWithComponentContext(
                 ::comphelper::getProcessComponentContext(),
-                u"/org.openoffice.Office.DataAccess/Policies/Features/Writer"_ustr, -1,
+                u"/org.openoffice.Office.DataAccess/Policies/Features/Writer"_ustr,
                 utl::OConfigurationTreeRoot::CM_READONLY);
 
 #if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS

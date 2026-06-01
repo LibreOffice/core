@@ -93,7 +93,7 @@ const TInstalledDrivers& DriversConfigImpl::getInstalledDrivers(const uno::Refer
         if ( !m_aInstalled.isValid() )
         {
             m_aInstalled = ::utl::OConfigurationTreeRoot::createWithComponentContext(_rxORB,
-                             u"org.openoffice.Office.DataAccess.Drivers/Installed"_ustr, -1, ::utl::OConfigurationTreeRoot::CM_READONLY);
+                             u"org.openoffice.Office.DataAccess.Drivers/Installed"_ustr, ::utl::OConfigurationTreeRoot::CM_READONLY);
         }
 
         if ( m_aInstalled.isValid() )
