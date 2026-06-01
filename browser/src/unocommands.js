@@ -181,7 +181,7 @@ var unoCommandsArray = {
 	'DeleteAuthor':{global:{menu:_('Delete All Comments by This Author'),},},
 	'DeleteAxis':{global:{menu:_('Delete Axis'),},},
 	'DeleteCell':{spreadsheet:{context:_('De~lete...'),menu:_('Delete C~ells...'),},},
-	'DeleteColumns':{global:{context:_('Delete selected columns'),menu:_('Delete ~Columns'),},text:{context:_('Delete selected columns'),menu:_('~Columns'),},},
+	'DeleteColumns':{global:{context:_('Delete selected columns'),menu:_('Delete ~Columns'),},presentation:{menu:_('Delete Column'),},text:{context:_('Delete selected columns'),menu:_('~Columns'),},},
 	'DeleteComment':{global:{menu:_('Delete Comment'),},},
 	'DeleteContentControl':{text:{context:_('Delete Content Control'),menu:_('Delete Content Control'),},},
 	'DeleteDataLabel':{global:{menu:_('Delete Single Data Label'),},},

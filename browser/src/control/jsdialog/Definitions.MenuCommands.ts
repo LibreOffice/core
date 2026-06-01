@@ -84,7 +84,9 @@ const MenuCommands: MenuCommandsInterface = {
 				  'FormatSparklineMenu', 'InsertSparkline', 'DeleteSparkline', 'DeleteSparklineGroup',
 				  'EditSparklineGroup', 'EditSparkline', 'GroupSparklines', 'UngroupSparklines', 'AutoFill'],
 
-		presentation: ['SetDefault'],
+		presentation: ['SetDefault', 'TableInsertMenu',
+				  'InsertRowsBefore', 'InsertRowsAfter', 'InsertColumnsBefore', 'InsertColumnsAfter',
+				  'TableDeleteMenu', 'DeleteRows', 'DeleteColumns', 'DeleteTable'],
 		drawing: []
 	},
 	// UNOCOMMANDS_EXTRACT_END <- don't remove this line, it's used by unocommands.py
