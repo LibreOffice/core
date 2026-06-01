@@ -280,7 +280,7 @@ const std::tuple<TranslateId, OUString, OUString, tipModule> TIPOFTHEDAY_STRINGA
 };
 
 #define STR_HELP_LINK                   NC_("STR_HELP_LINK", "%PRODUCTNAME Help")
-#define STR_MORE_LINK                   NC_("STR_MORE_LINK", "More info")
+#define STR_MORE_LINK                   NC_("STR_MORE_LINK", "Online Help")
 #define STR_UNO_LINK                    NC_("STR_UNO_LINK", "Run this action now...")
 #define STR_TITLE                       NC_("STR_TITLE", "Tip of the Day: %CURRENT/%TOTAL")
 #define STR_CMD                         NC_("STR_CMD", "⌘ Cmd") //use narrow no-break space U+202F here
