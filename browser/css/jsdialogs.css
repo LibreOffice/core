@@ -3661,7 +3661,8 @@ div [id^='themeview'].ui-iconview-entry, div [id^='themeview1col'].ui-iconview-e
 	background-color: var(--color-background-dark);
 }
 
-#ChartDataDialog .ui-treeview-header .ui-treeview-header-text {
+#ChartDataDialog .ui-treeview-header .ui-treeview-header-text,
+#ChartDataDialog .ui-treeview-header .ui-treeview-header-button {
 	margin-top: auto;
 }
 
