@@ -297,7 +297,6 @@ private:
     bool                mbMultiSel;     /// true = Multi selection in listbox.
     bool                mbScrollHor;    /// Scrollbar: true = horizontal.
     bool                mbPrint;
-    bool                mbVisible;
     bool                mbStroked;
     OUString            msCtrlName;
     OUString            msLabel;

@@ -40,9 +40,7 @@ private:
     bool                mbKbdSplitting;
     bool                mbInKeyEvent;
     tools::Long                mnKeyboardStepSize;
-    Link<Splitter*,void>   maStartSplitHdl;
     Link<Splitter*,void>   maSplitHdl;
-    Link<Splitter*,void>   maEndSplitHdl;
 
     SAL_DLLPRIVATE void      ImplDrawSplitter();
     SAL_DLLPRIVATE void      ImplSplitMousePos( Point& rPos );
@@ -65,8 +63,6 @@ public:
     virtual             ~Splitter() override;
     virtual void        dispose() override;
 
-    void                StartSplit();
-    void                EndSplit();
     void                Split();
 
     virtual void        MouseButtonDown( const MouseEvent& rMEvt ) override;

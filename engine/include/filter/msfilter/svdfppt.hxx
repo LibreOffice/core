@@ -1150,8 +1150,6 @@ class MSFILTER_DLLPUBLIC PPTParagraphObj
 
     sal_uInt32              mnCurrentObject;
     ::std::vector<std::unique_ptr<PPTPortionObj>> m_PortionList;
-    std::optional<sal_Int32> mnMetroMarginLevel;
-    std::optional<sal_Int32> mnMetroIndent;
 
 public:
     void                    UpdateBulletRelSize( sal_uInt32& nBulletRelSize ) const;

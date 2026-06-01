@@ -54,7 +54,6 @@ PaletteManager::PaletteManager() :
     mnMaxRecentColors(Application::GetSettings().GetStyleSettings().GetColorValueSetColumnCount()),
     mnNumOfPalettes(3),
     mnCurrentPalette(0),
-    mnColorCount(0),
     mpBtnUpdater(nullptr),
     maColorSelectFunction(PaletteManager::DispatchColorCommand)
 
@@ -201,7 +200,6 @@ void PaletteManager::ReloadColorSet(SvxColorValueSet &rColorSet)
         if (pObjectShell)
         {
             auto pColorSet = pObjectShell->GetThemeColors();
-            mnColorCount = 12;
             rColorSet.Clear();
             sal_uInt16 nItemId = 1;
 
@@ -230,7 +228,6 @@ void PaletteManager::ReloadColorSet(SvxColorValueSet &rColorSet)
         if (pDocSh)
         {
             std::set<Color> aColors = pDocSh->GetDocColors();
-            mnColorCount = aColors.size();
             rColorSet.Clear();
             rColorSet.addEntriesForColorSet(aColors, Concat2View(SvxResId( RID_SVXSTR_DOC_COLOR_PREFIX ) + " ") );
         }
@@ -238,7 +235,6 @@ void PaletteManager::ReloadColorSet(SvxColorValueSet &rColorSet)
     else
     {
         m_Palettes[mnCurrentPalette - 1]->LoadColorSet( rColorSet );
-        mnColorCount = rColorSet.GetItemCount();
     }
 }
 
@@ -267,7 +263,6 @@ void PaletteManager::ReloadColorSet(weld::IconView &pIconView)
         if (pObjectShell)
         {
             auto pColorSet = pObjectShell->GetThemeColors();
-            mnColorCount = 12;
             pIconView.clear();
             sal_uInt16 nItemId = 0;
 
@@ -302,7 +297,6 @@ void PaletteManager::ReloadColorSet(weld::IconView &pIconView)
         if (pDocSh)
         {
             std::set<Color> aColors = pDocSh->GetDocColors();
-            mnColorCount = aColors.size();
             pIconView.clear();
             SvxColorIconView::addEntriesForColorSet(pIconView, aColors, Concat2View(SvxResId( RID_SVXSTR_DOC_COLOR_PREFIX ) + " ") );
         }
@@ -310,7 +304,6 @@ void PaletteManager::ReloadColorSet(weld::IconView &pIconView)
     else
     {
         m_Palettes[mnCurrentPalette - 1]->LoadColorSet( pIconView );
-        mnColorCount = pIconView.n_children();
     }
 }
 

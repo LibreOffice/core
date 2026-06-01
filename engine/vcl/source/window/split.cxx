@@ -218,7 +218,6 @@ void Splitter::MouseButtonDown( const MouseEvent& rMEvt )
     {
         if ( mnLastSplitPos != mnSplitPos )
         {
-            StartSplit();
             Point aPos = rMEvt.GetPosPixel();
             if ( mbHorzSplit )
                 aPos.setX( mnLastSplitPos );
@@ -232,7 +231,6 @@ void Splitter::MouseButtonDown( const MouseEvent& rMEvt )
                 SetSplitPosPixel( aPos.Y() );
             mnLastSplitPos = nTemp;
             Split();
-            EndSplit();
         }
     }
     else
@@ -259,7 +257,6 @@ void Splitter::Tracking( const TrackingEvent& rTEvt )
                 mnLastSplitPos = 0;
                 Split();
             }
-            EndSplit();
         }
         else if ( mbDragFull )
         {
@@ -339,7 +336,6 @@ void Splitter::ImplKbdTracking( vcl::KeyCode aKeyCode )
         {
             SetSplitPosPixel( mnStartSplitPos );
             Split();
-            EndSplit();
         }
         mnStartSplitPos = 0;
     }
@@ -424,19 +420,9 @@ void Splitter::ImplKbdTracking( vcl::KeyCode aKeyCode )
     }
 }
 
-void Splitter::StartSplit()
-{
-    maStartSplitHdl.Call( this );
-}
-
 void Splitter::Split()
 {
     maSplitHdl.Call( this );
-}
-
-void Splitter::EndSplit()
-{
-    maEndSplitHdl.Call( this );
 }
 
 void Splitter::SetDragRectPixel( const tools::Rectangle& rDragRect, vcl::Window* _pRefWin )
@@ -457,8 +443,6 @@ void Splitter::StartDrag()
 {
     if ( IsTracking() )
         return;
-
-    StartSplit();
 
     // Start tracking
     StartTracking();
@@ -483,8 +467,6 @@ void Splitter::ImplStartKbdSplitting()
 
     mbKbdSplitting = true;
 
-    StartSplit();
-
     // determine start position
     // because we have no mouse position we take either the position
     // of the splitter window or the last split position
@@ -505,7 +487,6 @@ void Splitter::ImplStartKbdSplitting()
 void Splitter::ImplRestoreSplitter()
 {
     // set splitter in the center of the ref window
-    StartSplit();
     Size aSize = mpRefWin->GetOutDev()->GetOutputSize();
     Point aPos( aSize.Width()/2 , aSize.Height()/2);
     if ( mnLastSplitPos != mnSplitPos && mnLastSplitPos > 5 )
@@ -525,7 +506,6 @@ void Splitter::ImplRestoreSplitter()
         SetSplitPosPixel( aPos.Y() );
     mnLastSplitPos = nTemp;
     Split();
-    EndSplit();
 }
 
 void Splitter::GetFocus()
@@ -601,7 +581,6 @@ void Splitter::KeyInput( const KeyEvent& rKEvt )
                     ImplKbdTracking( aKey );
                 }
 
-                StartSplit();
                 Point aPos;
                 if ( mbHorzSplit )
                     aPos.setX( 0 );
@@ -615,7 +594,6 @@ void Splitter::KeyInput( const KeyEvent& rKEvt )
                     SetSplitPosPixel( aPos.Y() );
                 mnLastSplitPos = nTemp;
                 Split();
-                EndSplit();
 
                 // Shift-Del deletes both splitters
                 if( aKeyCode.IsShift() && pSibling )

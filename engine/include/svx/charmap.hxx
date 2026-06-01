@@ -113,12 +113,7 @@ private:
 protected:
     typedef std::map<sal_Int32, std::shared_ptr<svx::SvxShowCharSetItem> > ItemsMap;
     ItemsMap        m_aItems;
-    Link<SvxShowCharSet*,void>     maDoubleClkHdl;
-    Link<SvxShowCharSet*,void>     m_aReturnKeypressHdl;
-    Link<SvxShowCharSet*,void>     maSelectHdl;
-    Link<SvxShowCharSet*,void>     maFavClickHdl;
     Link<SvxShowCharSet*,void>     maHighHdl;
-    Link<SvxShowCharSet*,void>     maPreSelectHdl;
 
     std::deque<OUString>           maFavCharList;
     std::deque<OUString>           maFavCharFontList;

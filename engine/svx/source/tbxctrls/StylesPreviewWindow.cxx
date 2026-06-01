@@ -626,7 +626,6 @@ namespace
 struct StylePaneFormatFilter
 {
     bool bValid = false;
-    bool bAllStyles = false;
     bool bCustomStyles = false;
     bool bStylesInUse = false;
 };
@@ -655,9 +654,7 @@ StylePaneFormatFilter lcl_GetStylePaneFormatFilter(SfxObjectShell* pDocShell)
 
         for (const auto& rProp : aFilterProps)
         {
-            if (rProp.Name == "allStyles")
-                rProp.Value >>= aFilter.bAllStyles;
-            else if (rProp.Name == "customStyles")
+            if (rProp.Name == "customStyles")
                 rProp.Value >>= aFilter.bCustomStyles;
             else if (rProp.Name == "stylesInUse")
                 rProp.Value >>= aFilter.bStylesInUse;

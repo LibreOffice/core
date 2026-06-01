@@ -331,8 +331,6 @@ namespace
             _out_rStates.push_back( Any( *_rFeatureState.sTitle ) );
         if ( _rFeatureState.bChecked.has_value() )
             _out_rStates.push_back( Any( *_rFeatureState.bChecked ) );
-        if ( _rFeatureState.bInvisible.has_value() )
-            _out_rStates.push_back( Any( Visibility( !*_rFeatureState.bInvisible ) ) );
         if ( _rFeatureState.aValue.hasValue() )
             _out_rStates.push_back( _rFeatureState.aValue );
         if ( _out_rStates.empty() )
@@ -354,7 +352,6 @@ void OGenericUnoController::ImplBroadcastFeatureState(const OUString& _rFeature,
         if ( bAlreadyCached )
             if  (   ( rCachedState.bEnabled == aFeatState.bEnabled )
                 &&  ( rCachedState.bChecked == aFeatState.bChecked )
-                &&  ( rCachedState.bInvisible == aFeatState.bInvisible )
                 &&  ( rCachedState.sTitle == aFeatState.sTitle )
                 )
             return;

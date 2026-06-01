@@ -56,7 +56,6 @@ class ExtendedColorConfig_Impl : public utl::ConfigItem, public SfxBroadcaster
     typedef ::std::pair< TConfigValues, TMapPos > TComponentMapping;
     typedef std::map<OUString, TComponentMapping> TComponents;
     TComponents         m_aConfigValues;
-    TDisplayNames       m_aComponentDisplayNames;
     ::std::vector<TComponents::iterator> m_aConfigValuesPos;
 
     OUString        m_sLoadedScheme;
@@ -184,7 +183,6 @@ static void lcl_addString(uno::Sequence < OUString >& _rSeq,std::u16string_view 
 
 void ExtendedColorConfig_Impl::Load(const OUString& rScheme)
 {
-    m_aComponentDisplayNames.clear();
     m_aConfigValuesPos.clear();
     m_aConfigValues.clear();
 
@@ -194,13 +192,6 @@ void ExtendedColorConfig_Impl::Load(const OUString& rScheme)
     OUString sDisplayName(u"/DisplayName"_ustr);
     for(OUString & componentName : asNonConstRange(aComponentNames))
     {
-        uno::Sequence< uno::Any > aComponentDisplayNamesValue = GetProperties( { componentName + sDisplayName } );
-        OUString sComponentDisplayName;
-        if ( aComponentDisplayNamesValue.hasElements() && (aComponentDisplayNamesValue[0] >>= sComponentDisplayName) )
-        {
-            m_aComponentDisplayNames.emplace(componentName.getToken(1, '/'),sComponentDisplayName);
-        }
-
         componentName += "/Entries";
         uno::Sequence < OUString > aDisplayNames = GetPropertyNames(componentName);
         lcl_addString(aDisplayNames,sDisplayName);

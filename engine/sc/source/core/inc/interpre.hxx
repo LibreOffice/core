@@ -148,12 +148,6 @@ constexpr sal_Int32 kScInterpreterMaxStrLen = SAL_MAX_INT32 / 8;
 
 constexpr size_t MAXSTACK = 512;
 
-class ScTokenStack
-{
-public:
-    const formula::FormulaToken* pPointer[ MAXSTACK ];
-};
-
 enum ScIterFunc {
     ifSUM,                              // Add up
     ifSUMSQ,                            // Sums of squares

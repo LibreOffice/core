@@ -1783,7 +1783,6 @@ void SplitWindow::StartSplit()
 
 void SplitWindow::Split()
 {
-    maSplitHdl.Call( this );
 }
 
 void SplitWindow::SplitResize()

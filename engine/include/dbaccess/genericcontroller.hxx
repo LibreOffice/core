@@ -111,7 +111,6 @@ namespace dbaui
         bool                        bEnabled;
 
         std::optional<bool> bChecked;
-        std::optional<bool> bInvisible;
         css::uno::Any               aValue;
         std::optional<OUString> sTitle;
 

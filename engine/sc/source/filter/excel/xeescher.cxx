@@ -664,7 +664,6 @@ XclExpTbxControlObj::XclExpTbxControlObj( XclExpObjectManager& rRoot, Reference<
     mbMultiSel( false ),
     mbScrollHor( false ),
     mbPrint( false ),
-    mbVisible( false ),
     mbStroked( false ),
     mnShapeId( 0 ),
     mrRoot(rRoot)
@@ -728,8 +727,8 @@ XclExpTbxControlObj::XclExpTbxControlObj( XclExpObjectManager& rRoot, Reference<
     mrEscherEx.OpenContainer( ESCHER_SpContainer );
     mrEscherEx.AddShape( ESCHER_ShpInst_HostControl, ShapeFlag::HaveAnchor | ShapeFlag::HaveShapeProperty );
     EscherPropertyContainer aPropOpt;
-    mbVisible = aCtrlProp.GetBoolProperty( u"EnableVisible"_ustr );
-    aPropOpt.AddOpt( ESCHER_Prop_fPrint, mbVisible ? 0x00080000 : 0x00080002 ); // visible flag
+    bool bVisible = aCtrlProp.GetBoolProperty( u"EnableVisible"_ustr );
+    aPropOpt.AddOpt( ESCHER_Prop_fPrint, bVisible ? 0x00080000 : 0x00080002 ); // visible flag
 
     aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x01000100 ); // bool field
     aPropOpt.AddOpt( ESCHER_Prop_lTxid, 0 );                        // Text ID

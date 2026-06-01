@@ -362,7 +362,6 @@ private:
     std::stack< sax_fastparser::FSHelperPtr >   maStreams;
     XclExpXmlPathToStateMap                     maOpenedStreamMap;
 
-    std::unique_ptr<oox::drawingml::ShapeExport> mpShapeExport;
     sal_Int32 maDiagramId;
 
     bool mbExportVBA;

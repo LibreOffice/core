@@ -940,7 +940,6 @@ sax_fastparser::FSHelperPtr XclXmlUtils::WriteFontData( sax_fastparser::FSHelper
 XclExpXmlStream::XclExpXmlStream( const uno::Reference< XComponentContext >& rCC, bool bExportVBA, bool bExportTemplate )
     : XmlFilterBase( rCC ),
       mpRoot( nullptr ),
-      mpShapeExport(),
       maDiagramId(0),
       mbExportVBA(bExportVBA),
       mbExportTemplate(bExportTemplate)

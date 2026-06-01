@@ -135,9 +135,6 @@ bool SvxShowCharSet::MouseButtonDown(const MouseEvent& rMEvt)
             SelectIndex( nIndex, true);
         }
 
-        if ( !(rMEvt.GetClicks() % 2) )
-            maDoubleClkHdl.Call( this );
-
         return true;
     }
 
@@ -149,8 +146,6 @@ bool SvxShowCharSet::MouseButtonUp(const MouseEvent& rMEvt)
     if ( mbDrag && rMEvt.IsLeft() )
     {
         // released mouse over character map
-        if ( tools::Rectangle(Point(), GetOutputSizePixel()).Contains(rMEvt.GetPosPixel()))
-            maSelectHdl.Call( this );
         ReleaseMouse();
         mbDrag = false;
     }
@@ -263,11 +258,10 @@ void SvxShowCharSet::ContextMenuSelect(std::u16string_view rIdent)
     OUString aOUStr(&cChar, 1);
 
     if (rIdent == u"insert")
-        maDoubleClkHdl.Call(this);
+        ;
     else if (rIdent == u"add" || rIdent == u"remove")
     {
         updateFavCharacterList(aOUStr, mxVirDev->GetFont().GetFamilyName());
-        maFavClickHdl.Call(this);
     }
     else if (rIdent == u"copy")
         CopyToClipboard(aOUStr);
@@ -395,10 +389,8 @@ bool SvxShowCharSet::KeyInput(const KeyEvent& rKEvt)
     switch (aCode.GetCode())
     {
         case KEY_RETURN:
-            m_aReturnKeypressHdl.Call(this);
             return true;
         case KEY_SPACE:
-            maDoubleClkHdl.Call(this);
             return true;
         case KEY_LEFT:
             --tmpSelected;
@@ -446,7 +438,6 @@ bool SvxShowCharSet::KeyInput(const KeyEvent& rKEvt)
     if ( tmpSelected >= 0 )
     {
         SelectIndex( tmpSelected, true );
-        maPreSelectHdl.Call( this );
     }
 
     return bRet;
@@ -795,7 +786,6 @@ void SvxShowCharSet::SelectIndex(int nNewIndex, bool bFocus)
             aNewAny <<= AccessibleStateType::SELECTED;
             pItem->m_xItem->fireEvent( AccessibleEventId::STATE_CHANGED, aOldAny, aNewAny );
         }
-        maSelectHdl.Call(this);
 #endif
     }
     maHighHdl.Call( this );
@@ -804,7 +794,6 @@ void SvxShowCharSet::SelectIndex(int nNewIndex, bool bFocus)
 void SvxShowCharSet::OutputIndex( int nNewIndex )
 {
     SelectIndex( nNewIndex, true );
-    maSelectHdl.Call( this );
 }
 
 

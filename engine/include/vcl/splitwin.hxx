@@ -81,7 +81,6 @@ private:
                         mbFadeInPressed:1,
                         mbFadeOutPressed:1,
                         mbFadeNoButtonMode:1;
-    Link<SplitWindow*,void>  maSplitHdl;
 
     using Window::ImplInit;
     SAL_DLLPRIVATE void ImplInit( vcl::Window* pParent, WinBits nStyle );

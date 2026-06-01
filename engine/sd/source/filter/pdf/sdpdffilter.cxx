@@ -142,7 +142,6 @@ static bool ImportPDF(SvStream& rStream, SdDrawDocument& rDocument)
             int mnTargetPdfiumIndex;
             OUString maAuthor;
             OUString maState;
-            OUString maStateModel;
             DateTime maDateTime{ DateTime::EMPTY };
         };
         std::vector<StateChange> aStateChanges;
@@ -179,7 +178,6 @@ static bool ImportPDF(SvStream& rStream, SdDrawDocument& rDocument)
                     && rPDFAnnotation.maStateModel == u"Review")
                     aStateChanges.push_back({ rPDFAnnotation.mnParentPdfiumIndex,
                                               rPDFAnnotation.maAuthor, rPDFAnnotation.maState,
-                                              rPDFAnnotation.maStateModel,
                                               DateTime(rPDFAnnotation.maDateTime) });
                 continue;
             }
