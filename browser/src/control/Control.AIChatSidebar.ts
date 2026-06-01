@@ -2340,10 +2340,11 @@ namespace cool {
 			// Same paste mechanism - pastes at current cursor position.
 			const cleaned = this.stripCodeFences(markdownText);
 			const header = 'paste mimetype=text/markdown;charset=utf-8\n';
-			if (window.ThisIsTheQtApp || window.ThisIsTheWindowsApp) {
-				// qtwebchannel can't carry a binary payload through, so base64-
-				// encode it; the kit's ChildSession::paste decodes on CODA-Q/-W.
-				// Mirrors L.Clipboard._pasteTypedBlob in browser/src/map/Clipboard.js.
+			if (window.ThisIsAMobileApp) {
+				// The app builds talk to the native side over a string-only bridge
+				// that cannot carry a binary payload, so base64-encode it. The kit's
+				// ChildSession::paste decodes it. Mirrors L.Clipboard._pasteTypedBlob
+				// in browser/src/map/Clipboard.js.
 				const utf8 = new TextEncoder().encode(cleaned);
 				const b64 = window.btoa(
 					Array.from(utf8, (b) => String.fromCodePoint(b)).join(''),
@@ -2367,8 +2368,9 @@ namespace cool {
 
 		private insertImageAtCursor(base64Data: string): void {
 			const header = 'paste mimetype=image/png\n';
-			if (window.ThisIsTheQtApp || window.ThisIsTheWindowsApp) {
-				// The kit base64-decodes on CODA-Q/-W; the image is already base64.
+			if (window.ThisIsAMobileApp) {
+				// The kit base64-decodes on the app builds, and the image is already
+				// base64.
 				app.socket.sendMessage(header + base64Data);
 			} else {
 				const bytes = this.base64ToUint8Array(base64Data);

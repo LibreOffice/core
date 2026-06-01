@@ -1781,13 +1781,13 @@ bool ChildSession::paste(const char* buffer, int length, const StringVector& tok
     const std::string firstLine = getFirstLine(buffer, length);
     const char* data = buffer + firstLine.size() + 1;
     int size = length - firstLine.size() - 1;
-#if defined QTAPP || defined _WIN32
-    // In CODA-Q, to work around a qtwebchannel "Could not convert argument QJsonValue(object,
-    // QJsonObject()) to target type QString ." bug, _pasteTypedBlob in browser/src/map/Clipboard.js
-    // base64-encoded the payload:
-    //
-    // The same root problem in CODA-W, although there we end up with a "the server encountered a
-    // unknown error while parsing the [object command" error message.
+#if MOBILEAPP
+    // The app builds talk to the native side over a string-only bridge that cannot carry a binary
+    // payload, so _pasteTypedBlob in browser/src/map/Clipboard.js base64-encoded it. (The bridge
+    // surfaces as a qtwebchannel "Could not convert argument QJsonValue(object, QJsonObject()) to
+    // target type QString ." bug on CODA-Q, a "the server encountered a unknown error while parsing
+    // the [object command" error on CODA-W, and string-typed WebView message handlers on the Mac
+    // and iOS.) Decode it back to the raw bytes here.
     std::string dec;
     [[maybe_unused]] auto const res = macaron::Base64::Decode(std::string_view(data, size), dec);
     assert(res.empty());

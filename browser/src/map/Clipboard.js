@@ -415,11 +415,14 @@ window.L.Clipboard = window.L.Class.extend({
 	_pasteTypedBlob: function(fileType, fileBlob) {
 		var header = 'paste mimetype=' + fileType + '\n';
 		var blob;
-		if (window.ThisIsTheQtApp || window.ThisIsTheWindowsApp) {
-			// To work around a qtwebchannel "Could not convert argument
-			// QJsonValue(object, QJsonObject()) to target type QString ." bug, send the
-			// payload as a base64-encoded string rather than as an ArrayBuffer blob
-			// (and decode it in ChildSession::paste in kit/ChildSession.cpp):
+		if (window.ThisIsAMobileApp) {
+			// The app builds talk to the native side over a string-only bridge that
+			// cannot carry a binary payload (the qtwebchannel "Could not convert
+			// argument QJsonValue(object, QJsonObject()) to target type QString ."
+			// bug on CODA-Q, a "[object" parse error on CODA-W, and the WebView
+			// message handlers being string-typed on the Mac and iOS). So send the
+			// payload as a base64-encoded string rather than as an ArrayBuffer blob,
+			// and decode it in ChildSession::paste in kit/ChildSession.cpp.
 			blob = header + window.btoa(
 				Array.from(new Uint8Array(fileBlob), (b) => String.fromCodePoint(b))
 				.join(''));
