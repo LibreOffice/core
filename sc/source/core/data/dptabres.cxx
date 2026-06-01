@@ -988,6 +988,21 @@ ResultMembers& ScDPResultData::GetDimResultMembers(tools::Long nDim, const ScDPD
     return *maDimMembers[nDim];
 }
 
+ScDPResultMemberSlim::ScDPResultMemberSlim(
+        ScDPResultDimension* pRDimension,
+        const ScDPResultData* pData,
+        const ScDPParentDimData& rParentDimData) :
+    mpOurDimension(pRDimension),
+    mpMemberDesc(rParentDimData.mpMemberDesc),
+    pResultData(pData),
+    mnOrder(rParentDimData.mnOrder),
+    bmHasElements(false),
+    bmHasHiddenDetails(false),
+    bmInitialized(false),
+    bmPromoted(false)
+{
+};
+
 ScDPResultMemberFull::ScDPResultMemberFull(
     const ScDPResultData* pData, const ScDPParentDimData& rParentDimData ) :
     pResultData( pData ),

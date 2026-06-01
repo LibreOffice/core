@@ -442,6 +442,23 @@ public:
     void FillVisibilityData(ScDPResultVisibilityData& rData) const;
 };
 
+class ScDPResultMemberSlim : public ScDPResultMember
+{
+private:
+    const ScDPResultDimension* mpOurDimension;
+    const ScDPMember* mpMemberDesc;
+    const ScDPResultData* pResultData;
+    const SCROW mnOrder;
+    bool bmHasElements : 1;
+    bool bmHasHiddenDetails : 1;
+    bool bmInitialized : 1;
+    bool bmPromoted : 1;
+
+public:
+    ScDPResultMemberSlim(ScDPResultDimension* pRDimension, const ScDPResultData* pData,
+                         const ScDPParentDimData& rParentDimData);
+};
+
 class ScDPResultMemberFull : public ScDPResultMember
 {
 private:
