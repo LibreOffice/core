@@ -9,10 +9,10 @@
  */
 
 import { ChildProcess, spawn } from 'child_process';
-import { mkdirSync, mkdtempSync, rmSync, cpSync } from 'fs';
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, cpSync } from 'fs';
 import http from 'http';
-import { tmpdir } from 'os';
-import { join } from 'path';
+import { homedir, tmpdir } from 'os';
+import { basename, join } from 'path';
 import { promisify } from 'util';
 
 const sleep = promisify(setTimeout);
@@ -64,6 +64,34 @@ async function waitForHttp(
 	throw new Error(
 		`${label} not available at ${url} after ${maxAttempts} attempts`,
 	);
+}
+
+/**
+ * Read the basename of the developer's XDG documents directory from
+ * the host's user-dirs.dirs (the same file Qt's
+ * QStandardPaths::DocumentsLocation looks up).  On a non-English
+ * locale this returns the translated name, e.g. "Dokumenty".
+ * On a missing or DOCUMENTS-less config it falls back to "Documents".
+ *
+ * The test setup uses this basename when creating its own documents
+ * directory under the test HOME, so that when coda-qt runs with that
+ * HOME and reads the same user-dirs.dirs file, Qt expands the $HOME
+ * placeholder to our test dir and uses the directory we created.
+ */
+function getXdgDocumentsBasename(): string {
+	const configHome = process.env.XDG_CONFIG_HOME || join(homedir(), '.config');
+	const userDirsPath = join(configHome, 'user-dirs.dirs');
+	try {
+		const content = readFileSync(userDirsPath, 'utf8');
+		const match = content.match(/^\s*XDG_DOCUMENTS_DIR="([^"]+)"\s*$/m);
+		if (match) {
+			const name = basename(match[1]);
+			if (name && name !== '.' && name !== '$HOME') return name;
+		}
+	} catch {
+		// File missing or unreadable - fall through.
+	}
+	return 'Documents';
 }
 
 function killProcess(proc: ChildProcess | null, name: string): void {
@@ -133,14 +161,15 @@ export class CodaQtServiceLauncher {
 		]);
 
 		this.#testHomeDir = mkdtempSync(join(tmpdir(), 'coda-qt-test-'));
-		mkdirSync(join(this.#testHomeDir, 'Documents'));
-		cpSync(fixturesDir, join(this.#testHomeDir, 'Documents'), {
-			recursive: true,
-		});
-		process.env.CODA_TEST_DOCUMENTS_DIR = join(
+		// Use the developer's locale-specific name (e.g. "Dokumenty")
+		// rather than hardcoding "Documents"
+		const documentsDir = join(
 			this.#testHomeDir,
-			'Documents',
+			getXdgDocumentsBasename(),
 		);
+		mkdirSync(documentsDir);
+		cpSync(fixturesDir, documentsDir, { recursive: true });
+		process.env.CODA_TEST_DOCUMENTS_DIR = documentsDir;
 		process.env.CODA_PLATFORM = 'qt';
 
 		console.log('Starting coda-qt...');
