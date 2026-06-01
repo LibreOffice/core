@@ -4791,42 +4791,56 @@ CPPUNIT_TEST_FIXTURE(TestFormula, testFuncSUBTOTAL)
             CPPUNIT_ASSERT_EQUAL((1000.0 - (i - 999.0)), m_pDoc->GetValue(3, i, 0));
     }
 
-    ScRange aTrimedRange(2, 999, 0, 2, 1024, 0);
-    ScRange aValidRange(2, 0, 0, 2, 999, 0);
-    for (size_t i = 0; i < 1025; i++)
+    m_pDoc->DeleteTab(0);
+}
+
+// tdf#168013: SUBTOTAL over a big range must keep the stored reference intact.
+CPPUNIT_TEST_FIXTURE(TestFormula, testFuncSUBTOTALReferenceNotMutated)
+{
+    m_pDoc->InsertTab(0, u"Formula"_ustr);
+
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
+
+    // Values in B1:B4, and a SUBTOTAL over a deliberately oversized range in D1.
+    m_pDoc->SetValue(ScAddress(1, 0, 0), 10.0); // B1
+    m_pDoc->SetValue(ScAddress(1, 1, 0), 20.0); // B2
+    m_pDoc->SetValue(ScAddress(1, 2, 0), 30.0); // B3
+    m_pDoc->SetValue(ScAddress(1, 3, 0), 40.0); // B4
+
+    const SCROW nFarRow = 99998; // 0-based -> row 99999 in the UI, "far far away"
+    m_pDoc->SetString(ScAddress(3, 0, 0), u"=SUBTOTAL(9;B1:B99999)"_ustr); // D1
+
+    // Result over the existing data.
+    CPPUNIT_ASSERT_EQUAL(100.0, m_pDoc->GetValue(3, 0, 0));
+
+    // The stored reference must still span the full, untrimmed range B1:B99999.
+    auto checkRefPreserved = [this]()
     {
-        ScFormulaCell* pCell = m_pDoc->GetFormulaCell(ScAddress(3, i, 0));
+        ScFormulaCell* pCell = m_pDoc->GetFormulaCell(ScAddress(3, 0, 0));
         ScTokenArray* pCode = pCell->GetCode();
         sal_uInt16 nLen = pCode->GetCodeLen();
         FormulaToken** pRPNArray = pCode->GetCode();
-        OUString aCellName = pCell->aPos.GetColRowString();
-
+        bool bFoundDoubleRef = false;
         for (sal_uInt16 nIdx = 0; nIdx < nLen; ++nIdx)
         {
             FormulaToken* pTok = pRPNArray[nIdx];
             if (pTok && pTok->GetType() == svDoubleRef)
             {
-                ScRange aRange = static_cast<ScDoubleRefToken*>(pTok)->GetDoubleRef().toAbs(*m_pDoc, ScAddress(3, i, 0));
-                if (i < 999)
-                {
-                    CPPUNIT_ASSERT_EQUAL_MESSAGE(OUString("Double ref is incorrectly trimmed in: " + aCellName).toUtf8().getStr(),
-                        aRange, aTrimedRange);
-                    // Without the trim it would failed with
-                    // assertion failed
-                    // - Expression: aRange == aTrimedRange
-                    // - Double ref is incorrectly trimmed in : D1
-                    // ScRange aTrimmableRange(2, 999, 0, 0, 1048575, 0);
-                }
-                else
-                {
-                    CPPUNIT_ASSERT_EQUAL_MESSAGE(OUString("Double ref is incorrectly trimmed in: " + aCellName).toUtf8().getStr(),
-                        aRange, aValidRange);
-                }
+                bFoundDoubleRef = true;
+                ScRange aRange = static_cast<ScDoubleRefToken*>(pTok)->GetDoubleRef().toAbs(
+                    *m_pDoc, ScAddress(3, 0, 0));
+                CPPUNIT_ASSERT_EQUAL(ScRange(1, 0, 0, 1, nFarRow, 0), aRange);
             }
         }
-        if (i >= 999)
-            aValidRange.aStart.IncRow();
-    }
+        CPPUNIT_ASSERT(bFoundDoubleRef);
+    };
+    checkRefPreserved();
+
+    // Add a new row of data below the previous last data row: because the reference
+    // was not shrunk, it must be included on recalc.
+    m_pDoc->SetValue(ScAddress(1, 4, 0), 50.0); // B5
+    CPPUNIT_ASSERT_EQUAL(150.0, m_pDoc->GetValue(3, 0, 0));
+    checkRefPreserved();
 
     m_pDoc->DeleteTab(0);
 }

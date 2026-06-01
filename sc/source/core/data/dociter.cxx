@@ -107,6 +107,21 @@ ScValueIterator::ScValueIterator(ScInterpreterContext& rContext, const ScRange& 
     if (!mrDoc.ValidRow(maEndPos.Row())) maEndPos.SetRow(mrDoc.MaxRow());
     if (!ValidTab(maStartPos.Tab()) || maStartPos.Tab() > nDocMaxTab) maStartPos.SetTab(nDocMaxTab);
     if (!ValidTab(maEndPos.Tab()) || maEndPos.Tab() > nDocMaxTab) maEndPos.SetTab(nDocMaxTab);
+
+    // tdf#164843/tdf#168013: When iterating for SubTotal/Aggregate, clamp the area to
+    // the actual data range. SubTotal and Aggregate ignore empty cells, so trimming
+    // empty cells from the iterated range never changes the result, but it avoids
+    // walking huge ranges (e.g. relative named ranges expanded to MAXROW). The stored
+    // formula reference is left untouched - only this local iteration range is trimmed.
+    if (mnSubTotalFlags != SubtotalFlags::NONE)
+    {
+        ScRange aDataRange(maStartPos, maEndPos);
+        if (mrDoc.GetDataAreaSubrange(aDataRange))
+        {
+            maStartPos = aDataRange.aStart;
+            maEndPos = aDataRange.aEnd;
+        }
+    }
 }
 
 SCROW ScValueIterator::GetRow() const
@@ -867,6 +882,20 @@ void ScCellIterator::init()
     if (!mrDoc.ValidRow(maEndPos.Row())) maEndPos.SetRow(mrDoc.MaxRow());
     if (!ValidTab(maStartPos.Tab(), nDocMaxTab)) maStartPos.SetTab(nDocMaxTab);
     if (!ValidTab(maEndPos.Tab(), nDocMaxTab)) maEndPos.SetTab(nDocMaxTab);
+
+    // tdf#164843/tdf#168013: When iterating for SubTotal/Aggregate (e.g. COUNTA), clamp
+    // the area to the actual data range. These functions ignore empty cells, so trimming
+    // empty cells away never changes the result, but avoids walking huge ranges. Only the
+    // local iteration range is trimmed; the stored formula reference is left untouched.
+    if (mnSubTotalFlags != SubtotalFlags::NONE)
+    {
+        ScRange aDataRange(maStartPos, maEndPos);
+        if (mrDoc.GetDataAreaSubrange(aDataRange))
+        {
+            maStartPos = aDataRange.aStart;
+            maEndPos = aDataRange.aEnd;
+        }
+    }
 
     while (maEndPos.Tab() > 0 && !mrDoc.maTabs[maEndPos.Tab()])
         maEndPos.IncTab(-1); // Only the tables in use
