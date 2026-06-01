@@ -508,20 +508,22 @@ function testPDFExportWarningDialog(win) {
 		win.app.map.sendUnoCommand('.uno:ExportToPDF', args);
 	});
 
+	// The warning dialog opens at the same level (1) as the export options
+	// dialog it replaces, so to tell them apart capture the export
+	// dialog's window id and wait for that specific dialog to close after
+	// OK before handling the warning.
+	var exportDialogId;
 	getActiveDialog(1)
-		.then(() => {
+		.then(($dialog) => {
+			exportDialogId = $dialog.parents('.jsdialog-window').attr('id');
 			return helper.processToIdle(win);
 		})
 		.then(() => {
 			cy.cGet('#forms-input').check();
 			cy.cGet('#pdf_version-input').select('PDF/A-1b (PDF 1.4 base)');
 			cy.cGet('#ok-button').click();
-		})
-		.then(() => {
-			// pdf export dialog should dismiss and a warning dialog should appear
-			return helper.processToIdle(win);
-		})
-		.then(() => {
+			// pdf export dialog should dismiss
+			cy.cGet('#' + CSS.escape(exportDialogId)).should('not.exist');
 			// and the warning dialog we're interested in should appear
 			handleDialog(win, 1);
 		});
