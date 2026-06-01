@@ -101,6 +101,8 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Scroll through document', 
 			var barY = Math.floor(
 				rect.top + (scrollProps.startY + scrollProps.verticalScrollSize / 2) / dpi);
 			var sidebarX = Math.floor(rect.right + 80);
+			var startScroll = parseInt(
+				win.document.querySelector('#test-div-vertical-scrollbar').textContent);
 
 			cy.cGet('body').realMouseDown({
 				pointer: 'mouse', button: 'left',
@@ -108,7 +110,14 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Scroll through document', 
 				scrollBehavior: false
 			});
 
-			cy.cGet('body').realMouseMove(barX, barY + 30);
+			// Re-fire the in-canvas move (the sidebar moves below auto-scroll)
+			// until the drag engages and the scrollbar leaves its start.
+			helper.retryUntil(
+				function() { cy.cGet('body').realMouseMove(barX, barY + 30); },
+				function() {
+					var el = win.document.querySelector('#test-div-vertical-scrollbar');
+					return parseInt(el.textContent) !== startScroll;
+				});
 			helper.processToIdle(win);
 
 			// Drag continues while the cursor is over the sidebar.
