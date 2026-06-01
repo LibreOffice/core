@@ -50,6 +50,7 @@
 /// <reference path="../src/app/Log.ts" />
 /// <reference path="../src/app/Debug.ts" />
 /// <reference path="../src/app/A11yValidator.ts" />
+/// <reference path="../src/app/QueuedSocket.ts" />
 /// <reference path="../src/app/DelaySocket.ts" />
 /// <reference path="../src/app/Socket.ts" />
 /// <reference path="../src/app/TracingEvents.ts" />

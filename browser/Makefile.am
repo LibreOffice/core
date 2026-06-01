@@ -360,6 +360,7 @@ COOL_JS_LST =\
 	src/app/Log.ts \
 	src/app/Debug.ts \
 	src/app/A11yValidator.ts \
+	src/app/QueuedSocket.ts \
 	src/app/DelaySocket.ts \
 	src/app/Socket.ts \
 	src/app/TracingEvents.ts \
@@ -1418,6 +1419,7 @@ pot:
 		src/control/jsdialog/Widget.FixedTextControl.ts \
 		src/control/jsdialog/Widget.SidebarContainers.ts \
 		src/control/jsdialog/Widget.TreeView.ts \
+		src/app/QueuedSocket.ts \
 		src/app/DelaySocket.ts \
 		src/app/Socket.ts \
 		src/app/TracingEvents.ts \
