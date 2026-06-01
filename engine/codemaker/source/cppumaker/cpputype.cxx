@@ -381,19 +381,6 @@ void CppuType::dumpGetCppuTypePostamble(FileStream & out)
             out << "\n\n";
         }
     }
-    dumpTemplateHead(out);
-    out << ("SAL_DEPRECATED(\"use cppu::UnoType\") inline ::css::uno::Type const & SAL_CALL"
-            " getCppuType(SAL_UNUSED_PARAMETER ");
-    dumpType(out, name_);
-    dumpTemplateParameters(out);
-    out << " const *) {\n";
-    inc();
-    out << indent() << "return ::cppu::UnoType< ";
-    dumpType(out, name_);
-    dumpTemplateParameters(out);
-    out << " >::get();\n";
-    dec();
-    out << indent() << "}\n";
 }
 
 void CppuType::dump(CppuOptions const & options)
@@ -578,39 +565,12 @@ void CppuType::dumpHFileContent(
         out << "\n";
     }
     out << "\n";
-    dumpTemplateHead(out);
-    out << "SAL_DEPRECATED(\"use cppu::UnoType\") inline ::css::uno::Type const & SAL_CALL getCppuType(";
-    dumpType(out, name_, true);
-    dumpTemplateParameters(out);
-    out << " *);\n\n";
 }
 
 void CppuType::dumpGetCppuType(FileStream & out)
 {
     if (name_ == "com.sun.star.uno.XInterface") {
-        out << indent()
-            << ("SAL_DEPRECATED(\"use cppu::UnoType\") inline ::css::uno::Type const & SAL_CALL"
-                " getCppuType(SAL_UNUSED_PARAMETER ");
-        dumpType(out, name_, true);
-        out << " *) {\n";
-        inc();
-        out << indent()
-            << ("return ::cppu::UnoType< ::css::uno::XInterface"
-                " >::get();\n");
-        dec();
-        out << indent() << "}\n";
     } else if (name_ == "com.sun.star.uno.Exception") {
-        out << indent()
-            << ("SAL_DEPRECATED(\"use cppu::UnoType\") inline ::css::uno::Type const & SAL_CALL"
-                " getCppuType(SAL_UNUSED_PARAMETER ");
-        dumpType(out, name_, true);
-        out << " *) {\n";
-        inc();
-        out << indent()
-            << ("return ::cppu::UnoType< ::css::uno::Exception"
-                " >::get();\n");
-        dec();
-        out << indent() << "}\n";
     } else if (m_cppuTypeLeak) {
         dumpLightGetCppuType(out);
     } else if (m_cppuTypeDynamic) {
