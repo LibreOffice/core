@@ -21,6 +21,8 @@
 #include <drawinglayer/primitive2d/PolygonStrokePrimitive2D.hxx>
 #include <drawinglayer/primitive2d/groupprimitive2d.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
+#include <drawinglayer/primitive2d/hiddengeometryprimitive2d.hxx>
+#include <drawinglayer/primitive2d/exclusiveeditviewprimitive2d.hxx>
 #include <drawinglayer/processor2d/Primitive2dJsonProcessor.hxx>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -219,6 +221,54 @@ CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testTransform)
     CPPUNIT_ASSERT_EQUAL(size_t(6), aJson.getSize("/primitives/0/matrix").value_or(0));
     CPPUNIT_ASSERT_EQUAL(size_t(1), aJson.getSize("/primitives/0/children").value_or(0));
     assertJsonPath(aJson, "/primitives/0/children/0/type", "polyPolygonColor");
+}
+
+CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testHiddenGeometry)
+{
+    // HiddenGeometryPrimitive2D wraps content that is rendered
+    // only for hit-testing. The fixture wraps a filled triangle so
+    // there are real children present. The wire output only carries
+    // the type tag, since the JSON processor drops the children on
+    // purpose.
+    basegfx::B2DPolygon aTriangle;
+    aTriangle.append(basegfx::B2DPoint(0.0, 0.0));
+    aTriangle.append(basegfx::B2DPoint(100.0, 0.0));
+    aTriangle.append(basegfx::B2DPoint(100.0, 100.0));
+    aTriangle.setClosed(true);
+
+    Primitive2DContainer aChildren;
+    aChildren.append(new PolyPolygonColorPrimitive2D(basegfx::B2DPolyPolygon(aTriangle),
+                                                     basegfx::BColor(1.0, 0.0, 0.0)));
+
+    Primitive2DContainer aPrimitives;
+    aPrimitives.append(new HiddenGeometryPrimitive2D(std::move(aChildren)));
+
+    auto aJson = writeReference(u"testHiddenGeometry", aPrimitives);
+
+    assertJsonPath(aJson, "/primitives/0/type", "hiddenGeometry");
+}
+
+CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testExclusiveEditView)
+{
+    // ExclusiveEditViewPrimitive2D wraps content visible only in
+    // edit mode. Same shape as hiddenGeometry - real children but
+    // those get dropped on the wire.
+    basegfx::B2DPolygon aTriangle;
+    aTriangle.append(basegfx::B2DPoint(0.0, 0.0));
+    aTriangle.append(basegfx::B2DPoint(100.0, 0.0));
+    aTriangle.append(basegfx::B2DPoint(100.0, 100.0));
+    aTriangle.setClosed(true);
+
+    Primitive2DContainer aChildren;
+    aChildren.append(new PolyPolygonColorPrimitive2D(basegfx::B2DPolyPolygon(aTriangle),
+                                                     basegfx::BColor(0.0, 0.0, 1.0)));
+
+    Primitive2DContainer aPrimitives;
+    aPrimitives.append(new ExclusiveEditViewPrimitive2D(std::move(aChildren)));
+
+    auto aJson = writeReference(u"testExclusiveEditView", aPrimitives);
+
+    assertJsonPath(aJson, "/primitives/0/type", "exclusiveEditView");
 }
 
 CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testPolygonStrokeDashed)

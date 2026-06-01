@@ -48,6 +48,12 @@ namespace cool {
 					// renderPrimitive.
 					this._renderTransform(context, primitive as TransformPrimitive);
 					return;
+				case HiddenGeometryPrimitive.type:
+				case ExclusiveEditViewPrimitive.type:
+					// Non-painting subtree. Return so the recursion
+					// at the end of renderPrimitive does not descend
+					// into the children.
+					return;
 			}
 
 			if (primitive.children)

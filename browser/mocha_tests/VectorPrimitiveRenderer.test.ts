@@ -205,6 +205,44 @@ describe('VectorPrimitiveRenderer', function () {
 			// The single child renders exactly once.
 			nodeassert.strictEqual(recorder.countOf('fill'), 1);
 		});
+
+		it('skips hiddenGeometry entirely', function () {
+			// hiddenGeometry is non-painting. Nothing is drawn,
+			// even when a children array is present.
+			const primitive = loadVectorRenderingReference('testHiddenGeometry').primitives[0];
+			nodeassert.strictEqual(primitive.type, 'hiddenGeometry');
+
+			const recorder = new CanvasRecorder();
+			const renderer = new cool.VectorPrimitiveRenderer();
+			renderer.renderPrimitive(recorder as any, primitive);
+
+			nodeassert.strictEqual(
+				recorder.calls.length,
+				0,
+				'hiddenGeometry must not produce any draw calls',
+			);
+			nodeassert.deepStrictEqual(recorder.properties, {});
+		});
+
+		it('skips exclusiveEditView entirely', function () {
+			// exclusiveEditView wraps content meant only for an
+			// exclusive edit view. It does not appear in the
+			// view-only output.
+			const primitive =
+				loadVectorRenderingReference('testExclusiveEditView').primitives[0];
+			nodeassert.strictEqual(primitive.type, 'exclusiveEditView');
+
+			const recorder = new CanvasRecorder();
+			const renderer = new cool.VectorPrimitiveRenderer();
+			renderer.renderPrimitive(recorder as any, primitive);
+
+			nodeassert.strictEqual(
+				recorder.calls.length,
+				0,
+				'exclusiveEditView must not produce any draw calls',
+			);
+			nodeassert.deepStrictEqual(recorder.properties, {});
+		});
 	});
 
 	// Fixtures from documents. Each fixture is a full reply built
