@@ -19,6 +19,8 @@
 
 #include <sal/config.h>
 
+#include <atomic>
+
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
@@ -333,8 +335,21 @@ void OutputDevice::ImplClearAllFontData(bool bNewFontLists)
     }
 }
 
+namespace
+{
+// Advanced on every font-data refresh so callers can tell that a font
+// list they read earlier may no longer be complete.
+std::atomic<sal_uInt64> g_nFontDataGeneration(0);
+}
+
+sal_uInt64 OutputDevice::GetFontDataGeneration()
+{
+    return g_nFontDataGeneration.load(std::memory_order_relaxed);
+}
+
 void OutputDevice::ImplRefreshAllFontData(bool bNewFontLists)
 {
+    g_nFontDataGeneration.fetch_add(1, std::memory_order_relaxed);
     ImplUpdateFontDataForAllFrames( &OutputDevice::ImplRefreshFontData, bNewFontLists );
 }
 

@@ -61,7 +61,9 @@
 #include <algorithm>
 #include <memory>
 #include <iostream>
+#include <mutex>
 #include <string_view>
+#include <unordered_map>
 
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/algorithm/string.hpp>
@@ -6852,12 +6854,38 @@ static char* getLanguages(const char* pCommand)
 
 static char* getFonts (const char* pCommand, const bool bBloatWithRepeatedSizes)
 {
+    DBG_TESTSOLARMUTEX();
+
+    // Cache the serialised JSON per (pCommand, layout) and hand out a
+    // fresh copy on a hit. getFonts runs only from doc_getCommandValues,
+    // which holds the SolarMutex, so this static cache needs no lock of
+    // its own. The font list is not immutable: it grows when a font is
+    // added (addfont) or a document's embedded fonts are activated, both
+    // of which advance OutputDevice's font-data generation under that
+    // same mutex. Drop the cache whenever the generation moves so a stale
+    // list is never served.
+    static std::unordered_map<OString, OString> aFontsCache;
+    static sal_uInt64 nCachedFontGeneration = 0;
+
+    const sal_uInt64 nFontGeneration = OutputDevice::GetFontDataGeneration();
+    if (nCachedFontGeneration != nFontGeneration)
+    {
+        aFontsCache.clear();
+        nCachedFontGeneration = nFontGeneration;
+    }
+
+    const OString aCacheKey = OString::Concat(pCommand) + (bBloatWithRepeatedSizes ? "|b" : "|c");
+    const auto it = aFontsCache.find(aCacheKey);
+    if (it != aFontsCache.end())
+        return convertOString(it->second);
+
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
     if (!pDocSh)
         return nullptr;
     const SvxFontListItem* pFonts = pDocSh->GetItem(SID_ATTR_CHAR_FONTLIST);
     const FontList* pList = pFonts ? pFonts->GetFontList() : nullptr;
 
+    OString aResult;
     if (!bBloatWithRepeatedSizes)
     {
         tools::JsonWriter aJson;
@@ -6876,8 +6904,7 @@ static char* getFonts (const char* pCommand, const bool bBloatWithRepeatedSizes)
             for (sal_uInt16 i = 0; pAry[i]; ++i)
                 aJson.putSimpleValue(OUString::number(static_cast<float>(pAry[i]) / 10));
         }
-
-        return convertOString(aJson.finishAndGetAsOString());
+        aResult = aJson.finishAndGetAsOString();
     }
     else // FIXME: remove nonsensical legacy version
     {
@@ -6906,12 +6933,12 @@ static char* getFonts (const char* pCommand, const bool bBloatWithRepeatedSizes)
         aTree.add_child("commandValues", aValues);
         std::stringstream aStream;
         boost::property_tree::write_json(aStream, aTree, false /* pretty */);
-        char* pJson = static_cast<char*>(malloc(aStream.str().size() + 1));
-        assert(pJson); // Don't handle OOM conditions
-        strcpy(pJson, aStream.str().c_str());
-        pJson[aStream.str().size()] = '\0';
-        return pJson;
+        const auto aJsonStr = aStream.str();
+        aResult = OString(aJsonStr.data(), aJsonStr.size());
     }
+
+    aFontsCache.emplace(aCacheKey, aResult);
+    return convertOString(aResult);
 }
 
 static char* getFontSubset (std::string_view aFontName)

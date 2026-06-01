@@ -1208,6 +1208,12 @@ public:
     //If bNewFontLists is true then drop and refetch lists of system fonts
     SAL_DLLPRIVATE static void  ImplUpdateAllFontData( bool bNewFontLists );
 
+    // Monotonic counter advanced every time font data is refreshed, for
+    // example after a font is added or a document's embedded fonts are
+    // activated. A changed value means a previously read font list is
+    // stale and any cache keyed on it must be dropped.
+    static sal_uInt64 GetFontDataGeneration();
+
     LogicalFontInstance const* GetFontInstance() const;
     bool ForceFallbackFont(vcl::Font const& rFallbackFont);
 
