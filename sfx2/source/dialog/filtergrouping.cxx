@@ -316,7 +316,6 @@ namespace sfx2
         OConfigurationTreeRoot aFilterClassification = OConfigurationTreeRoot::createWithComponentContext(
             ::comphelper::getProcessComponentContext(),
             u"org.openoffice.Office.UI/FilterClassification"_ustr,
-            -1,
             OConfigurationTreeRoot::CM_READONLY
         );
 

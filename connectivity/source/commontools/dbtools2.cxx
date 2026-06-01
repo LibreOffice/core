@@ -936,7 +936,7 @@ sal_Int32 DBTypeConversion::convertUnicodeStringToLength( const OUString& _rSour
 OUString getDefaultReportEngineServiceName(const Reference< XComponentContext >& _rxORB)
 {
     ::utl::OConfigurationTreeRoot aReportEngines = ::utl::OConfigurationTreeRoot::createWithComponentContext(
-        _rxORB, u"org.openoffice.Office.DataAccess/ReportEngines"_ustr, -1, ::utl::OConfigurationTreeRoot::CM_READONLY);
+        _rxORB, u"org.openoffice.Office.DataAccess/ReportEngines"_ustr, ::utl::OConfigurationTreeRoot::CM_READONLY);
 
     if ( aReportEngines.isValid() )
     {

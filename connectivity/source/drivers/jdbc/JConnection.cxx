@@ -693,7 +693,7 @@ OUString java_sql_Connection::impl_getJavaDriverClassPath_nothrow(const OUString
     static constexpr OUStringLiteral s_sNodeName
         = u"org.openoffice.Office.DataAccess/JDBC/DriverClassPaths";
     ::utl::OConfigurationTreeRoot aNamesRoot = ::utl::OConfigurationTreeRoot::createWithComponentContext(
-        m_pDriver->getContext(), s_sNodeName, -1, ::utl::OConfigurationTreeRoot::CM_READONLY);
+        m_pDriver->getContext(), s_sNodeName, ::utl::OConfigurationTreeRoot::CM_READONLY);
     OUString sURL;
     if ( aNamesRoot.isValid() && aNamesRoot.hasByName( _sDriverClass ) )
     {

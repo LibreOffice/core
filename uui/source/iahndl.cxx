@@ -324,7 +324,6 @@ bool UUIInteractionHelper::handleTypedHandlerImplementations( Reference< XIntera
     const ::utl::OConfigurationTreeRoot aConfigRoot( ::utl::OConfigurationTreeRoot::createWithComponentContext(
         m_xContext,
         u"/org.openoffice.Interaction/InteractionHandlers"_ustr,
-        -1,
         ::utl::OConfigurationTreeRoot::CM_READONLY
     ) );
 

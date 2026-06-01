@@ -47,7 +47,7 @@ namespace offapp
     {
         // the config node where all pooling relevant info are stored under
         OConfigurationTreeRoot aConnectionPoolRoot = OConfigurationTreeRoot::createWithComponentContext(
-            ::comphelper::getProcessComponentContext(), CONNECTIONPOOL_NODENAME, -1, OConfigurationTreeRoot::CM_READONLY);
+            ::comphelper::getProcessComponentContext(), CONNECTIONPOOL_NODENAME, OConfigurationTreeRoot::CM_READONLY);
 
         // the global "enabled" flag
         Any aEnabled = aConnectionPoolRoot.getNodeValue(ENABLE_POOLING);

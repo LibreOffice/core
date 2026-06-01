@@ -406,7 +406,7 @@ sal_Int16 PropertyHandler::impl_getDocumentMeasurementUnit_throw() const
         {
             ::utl::OConfigurationTreeRoot aConfigTree(
                 ::utl::OConfigurationTreeRoot::createWithComponentContext(
-                    m_xContext, sConfigurationLocation, -1,
+                    m_xContext, sConfigurationLocation,
                     ::utl::OConfigurationTreeRoot::CM_READONLY));
             sal_Int32 nUnitAsInt = sal_Int32(FieldUnit::NONE);
             aConfigTree.getNodeValue(sConfigurationProperty) >>= nUnitAsInt;

@@ -204,26 +204,24 @@ namespace utl
 
     OConfigurationValueContainer::OConfigurationValueContainer(
             const Reference< XComponentContext >& _rxORB, std::mutex& _rAccessSafety,
-            const OUString& _rConfigLocation, const sal_Int32 _nLevels )
+            const OUString& _rConfigLocation )
         :m_pImpl( new OConfigurationValueContainerImpl( _rxORB, _rAccessSafety ) )
     {
-        implConstruct( _rConfigLocation, _nLevels );
+        implConstruct( _rConfigLocation );
     }
 
     OConfigurationValueContainer::~OConfigurationValueContainer()
     {
     }
 
-    void OConfigurationValueContainer::implConstruct( const OUString& _rConfigLocation,
-        const sal_Int32 _nLevels )
+    void OConfigurationValueContainer::implConstruct( const OUString& _rConfigLocation )
     {
         SAL_WARN_IF(m_pImpl->aConfigRoot.isValid(), "unotools.config", "OConfigurationValueContainer::implConstruct: already initialized!");
 
         // create the configuration node we're about to work with
         m_pImpl->aConfigRoot = OConfigurationTreeRoot::createWithComponentContext(
             m_pImpl->xORB,
-            _rConfigLocation,
-            _nLevels
+            _rConfigLocation
         );
         SAL_WARN_IF(!m_pImpl->aConfigRoot.isValid(), "unotools.config",
             "Could not access the configuration node located at " << _rConfigLocation);

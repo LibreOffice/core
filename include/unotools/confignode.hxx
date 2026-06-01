@@ -205,7 +205,6 @@ namespace utl
 
             @param      _rxConfProvider configuration provider to use when retrieving the node.
             @param      _rPath          path to the node the object should represent
-            @param      _nDepth         depth for node retrieval
             @param      _eMode          specifies which privileges should be applied when retrieving the node
 
             @see    createWithServiceFactory
@@ -213,7 +212,6 @@ namespace utl
         static OConfigurationTreeRoot createWithProvider(
                 const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxConfProvider,
                 const OUString& _rPath,
-                sal_Int32 _nDepth,
                 CREATION_MODE _eMode
             );
 
@@ -226,11 +224,10 @@ namespace utl
             @see    createWithProvider
             @param      _rxContext      service factory to use to create the configuration provider.
             @param      _rPath          path to the node the object should represent
-            @param      _nDepth         depth for node retrieval
             @param      _eMode          specifies which privileges should be applied when retrieving the node
         */
         static OConfigurationTreeRoot createWithComponentContext(const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
-            const OUString& _rPath, sal_Int32 _nDepth = -1, CREATION_MODE _eMode = CM_UPDATABLE);
+            const OUString& _rPath, CREATION_MODE _eMode = CM_UPDATABLE);
 
         /** tolerant version of the <member>createWithServiceFactory</member>
 
@@ -239,7 +236,7 @@ namespace utl
             given node path does not exist) are still asserted.</p>
         */
         static OConfigurationTreeRoot tryCreateWithComponentContext( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
-            const OUString& _rPath, sal_Int32 _nDepth = -1, CREATION_MODE _eMode = CM_UPDATABLE );
+            const OUString& _rPath, CREATION_MODE _eMode = CM_UPDATABLE );
 
         /** commit all changes made on the subtree the object is the root for<p/>
             All changes made on any OConfigurationNode object retrieved (maybe indirect) from this root

@@ -454,14 +454,13 @@ namespace utl
         }
 
         Reference< XInterface > lcl_createConfigurationRoot( const Reference< XMultiServiceFactory >& i_rxConfigProvider,
-            const OUString& i_rNodePath, const bool i_bUpdatable, const sal_Int32 i_nDepth )
+            const OUString& i_rNodePath, const bool i_bUpdatable )
         {
             ENSURE_OR_RETURN( i_rxConfigProvider.is(), "invalid provider", nullptr );
             try
             {
                 ::comphelper::NamedValueCollection aArgs;
                 aArgs.put( u"nodepath"_ustr, i_rNodePath );
-                aArgs.put( u"depth"_ustr, i_nDepth );
 
                 OUString sAccessService( i_bUpdatable ?
                                 u"com.sun.star.configuration.ConfigurationUpdateAccess"_ustr :
@@ -489,7 +488,7 @@ namespace utl
 
     OConfigurationTreeRoot::OConfigurationTreeRoot( const Reference<XComponentContext> & i_rContext, const OUString& i_rNodePath, const bool i_bUpdatable )
         :OConfigurationNode( lcl_createConfigurationRoot( lcl_getConfigProvider( i_rContext ),
-                                i_rNodePath, i_bUpdatable, -1 ) )
+                                i_rNodePath, i_bUpdatable ) )
         ,m_xCommitter()
     {
         if ( i_bUpdatable )
@@ -526,28 +525,28 @@ namespace utl
         return false;
     }
 
-    OConfigurationTreeRoot OConfigurationTreeRoot::createWithProvider(const Reference< XMultiServiceFactory >& _rxConfProvider, const OUString& _rPath, sal_Int32 _nDepth, CREATION_MODE _eMode)
+    OConfigurationTreeRoot OConfigurationTreeRoot::createWithProvider(const Reference< XMultiServiceFactory >& _rxConfProvider, const OUString& _rPath, CREATION_MODE _eMode)
     {
         Reference< XInterface > xRoot( lcl_createConfigurationRoot(
-            _rxConfProvider, _rPath, _eMode != CM_READONLY, _nDepth ) );
+            _rxConfProvider, _rPath, _eMode != CM_READONLY ) );
         if ( xRoot.is() )
             return OConfigurationTreeRoot( xRoot );
         return OConfigurationTreeRoot();
     }
 
-    OConfigurationTreeRoot OConfigurationTreeRoot::createWithComponentContext( const Reference< XComponentContext >& _rxContext, const OUString& _rPath, sal_Int32 _nDepth, CREATION_MODE _eMode )
+    OConfigurationTreeRoot OConfigurationTreeRoot::createWithComponentContext( const Reference< XComponentContext >& _rxContext, const OUString& _rPath, CREATION_MODE _eMode )
     {
-        return createWithProvider( lcl_getConfigProvider( _rxContext ), _rPath, _nDepth, _eMode );
+        return createWithProvider( lcl_getConfigProvider( _rxContext ), _rPath, _eMode );
     }
 
     OConfigurationTreeRoot OConfigurationTreeRoot::tryCreateWithComponentContext( const Reference< XComponentContext >& rxContext,
-        const OUString& _rPath, sal_Int32 _nDepth , CREATION_MODE _eMode )
+        const OUString& _rPath, CREATION_MODE _eMode )
     {
         OSL_ENSURE( rxContext.is(), "OConfigurationTreeRoot::tryCreateWithComponentContext: invalid XComponentContext!" );
         try
         {
             Reference< XMultiServiceFactory > xConfigFactory = theDefaultProvider::get( rxContext );
-            return createWithProvider( xConfigFactory, _rPath, _nDepth, _eMode );
+            return createWithProvider( xConfigFactory, _rPath, _eMode );
         }
         catch(const Exception&)
         {

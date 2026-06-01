@@ -78,14 +78,11 @@ namespace utl
             @param _nAccessFlags
                 specifies different aspects of the configuration aspect to be created, e.g. it's update mode etc.<br/>
                 See the CVC_xxx constants for what you can use here.
-            @param _nLevels
-                specifies the number of levels to access under the node given by <arg>_pConfigLocation</arg>
         */
         OConfigurationValueContainer(
             const css::uno::Reference< css::uno::XComponentContext >& _rxORB,
             std::mutex& _rAccessSafety,
-            const OUString& _rConfigLocation,
-            const sal_Int32 _nLevels
+            const OUString& _rConfigLocation
         );
 
         /// dtor
@@ -139,8 +136,7 @@ namespace utl
     private:
         /// implements the ctors
         void implConstruct(
-            const OUString& _rConfigLocation,
-            const sal_Int32 _nLevels
+            const OUString& _rConfigLocation
         );
 
         /// registers a value container
