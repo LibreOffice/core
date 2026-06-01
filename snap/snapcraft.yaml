@@ -463,6 +463,9 @@ parts:
       - -usr/share/doc/libuno*
       - -usr/share/doc/ure*
       - -usr/share/doc/uno*
+      # branding part overrides these with branded versions (after: collabora-office)
+      - -usr/share/coolwsd/browser/dist/welcome/welcome-slideshow.odp
+      - -usr/share/coolwsd/browser/dist/welcome/welcome.svg
   poco:
     plugin: cmake
     source: https://github.com/pocoproject/poco.git
