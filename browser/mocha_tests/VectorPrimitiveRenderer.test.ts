@@ -243,6 +243,42 @@ describe('VectorPrimitiveRenderer', function () {
 			nodeassert.strictEqual(recorder.countOf('fill'), 1);
 		});
 
+		it('applies the wire transparence to the children for unifiedTransparence', function () {
+			// unifiedTransparence carries one transparency value in
+			// [0, 1] where 0 is fully opaque. The children draw with
+			// (1 - transparence) as the canvas alpha, and the alpha
+			// does not leak past the subtree.
+			const primitive =
+				loadVectorRenderingReference('testUnifiedTransparence').primitives[0];
+			nodeassert.strictEqual(primitive.type, 'unifiedTransparence');
+			const transparence: number = parseFloat(primitive.transparence);
+			nodeassert.ok(
+				transparence > 0 && transparence < 1,
+				'fixture must be partly transparent',
+			);
+
+			const recorder = new CanvasRecorder();
+			const renderer = new cool.VectorPrimitiveRenderer();
+			renderer.renderPrimitive(recorder as any, primitive);
+
+			// Use the per-call snapshot so we see the alpha as it was
+			// when the child drew, not whatever the recorder saw last.
+			const fill = recorder.findCall('fill');
+			nodeassert.ok(fill, 'child fill missing');
+			nodeassert.ok(
+				Math.abs(fill!.properties.globalAlpha - (1 - transparence)) < 1e-9,
+				'globalAlpha at fill time does not match 1 - transparence',
+			);
+
+			// Canvas state is balanced around the children.
+			nodeassert.ok(recorder.findCall('save'), 'save not called');
+			nodeassert.ok(recorder.findCall('restore'), 'restore not called');
+
+			// The children render exactly once. A missing early return
+			// in the dispatch would draw them again after the restore.
+			nodeassert.strictEqual(recorder.countOf('fill'), 1);
+		});
+
 		it('skips exclusiveEditView entirely', function () {
 			// exclusiveEditView wraps content meant only for an
 			// exclusive edit view. It does not appear in the

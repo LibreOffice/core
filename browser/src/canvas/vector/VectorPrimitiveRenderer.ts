@@ -49,6 +49,15 @@ namespace cool {
 					// renderPrimitive.
 					this._renderTransform(context, primitive as TransformPrimitive);
 					return;
+				case UnifiedTransparencePrimitive.type:
+					// The helper sets globalAlpha and recurses on its
+					// own, so return here to skip the recursion at the
+					// end of renderPrimitive.
+					this._renderUnifiedTransparence(
+						context,
+						primitive as UnifiedTransparencePrimitive,
+					);
+					return;
 				case HiddenGeometryPrimitive.type:
 				case ExclusiveEditViewPrimitive.type:
 					// Non-painting subtree. Return so the recursion
@@ -140,6 +149,20 @@ namespace cool {
 				this._renderPrimitives(context, primitive.children);
 
 			if (hasMatrix) context.restore();
+		}
+
+		private _renderUnifiedTransparence(
+			context: CanvasRenderingContext2D,
+			primitive: UnifiedTransparencePrimitive,
+		): void {
+			context.save();
+			// Canvas globalAlpha uses the opposite convention to the
+			// wire transparence: 1 is opaque on the canvas, 0 on the
+			// wire. Invert the value to translate.
+			context.globalAlpha = 1 - (primitive.transparence ?? 0);
+			if (primitive.children)
+				this._renderPrimitives(context, primitive.children);
+			context.restore();
 		}
 
 		private _renderPrimitives(

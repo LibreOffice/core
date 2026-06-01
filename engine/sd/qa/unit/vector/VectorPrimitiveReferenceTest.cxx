@@ -24,6 +24,7 @@
 #include <drawinglayer/primitive2d/hiddengeometryprimitive2d.hxx>
 #include <drawinglayer/primitive2d/exclusiveeditviewprimitive2d.hxx>
 #include <drawinglayer/primitive2d/objectinfoprimitive2d.hxx>
+#include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <drawinglayer/processor2d/Primitive2dJsonProcessor.hxx>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -297,6 +298,32 @@ CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testObjectInfoPrimitive)
     assertJsonPath(aJson, "/primitives/0/name", "Rectangle 1");
     assertJsonPath(aJson, "/primitives/0/title", "My title");
     assertJsonPath(aJson, "/primitives/0/desc", "My description");
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aJson.getSize("/primitives/0/children").value_or(0));
+    assertJsonPath(aJson, "/primitives/0/children/0/type", "polyPolygonColor");
+}
+
+CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testUnifiedTransparence)
+{
+    // UnifiedTransparencePrimitive2D applies one alpha to the
+    // wrapped subtree. The wire carries a transparence in [0, 1]
+    // where 0 is fully opaque.
+    basegfx::B2DPolygon aTriangle;
+    aTriangle.append(basegfx::B2DPoint(0.0, 0.0));
+    aTriangle.append(basegfx::B2DPoint(100.0, 0.0));
+    aTriangle.append(basegfx::B2DPoint(100.0, 100.0));
+    aTriangle.setClosed(true);
+
+    Primitive2DContainer aChildren;
+    aChildren.append(new PolyPolygonColorPrimitive2D(basegfx::B2DPolyPolygon(aTriangle),
+                                                     basegfx::BColor(0.27, 0.45, 0.77)));
+
+    Primitive2DContainer aPrimitives;
+    aPrimitives.append(new UnifiedTransparencePrimitive2D(std::move(aChildren), 0.25));
+
+    auto aJson = writeReference(u"testUnifiedTransparence", aPrimitives);
+
+    assertJsonPath(aJson, "/primitives/0/type", "unifiedTransparence");
+    assertJsonPathExists(aJson, "/primitives/0/transparence");
     CPPUNIT_ASSERT_EQUAL(size_t(1), aJson.getSize("/primitives/0/children").value_or(0));
     assertJsonPath(aJson, "/primitives/0/children/0/type", "polyPolygonColor");
 }
