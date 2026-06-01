@@ -2418,7 +2418,7 @@ Reference< drawing::XDrawPage > SAL_CALL SdDrawPage::getNotesPage()
         SdPage* pNotesPage = GetModel()->GetDoc()->GetSdPage( (SvxDrawPage::mpPage->GetPageNum()-1)>>1, PageKind::Notes );
         if( pNotesPage )
         {
-            Reference< drawing::XDrawPage > xPage( pNotesPage->getUnoPage(), uno::UNO_QUERY );
+            Reference< drawing::XDrawPage > xPage( pNotesPage->getUnoPage() );
             return xPage;
         }
     }
@@ -3040,7 +3040,7 @@ Reference< drawing::XDrawPage > SAL_CALL SdMasterPage::getNotesPage()
         SdPage* pNotesPage = GetModel()->GetDoc()->GetMasterSdPage( (SvxDrawPage::mpPage->GetPageNum()-1)>>1, PageKind::Notes );
         if( pNotesPage )
         {
-            Reference< drawing::XDrawPage > xPage( pNotesPage->getUnoPage(), uno::UNO_QUERY );
+            Reference< drawing::XDrawPage > xPage( pNotesPage->getUnoPage() );
             return xPage;
         }
     }
@@ -3066,9 +3066,9 @@ void SAL_CALL SdMasterPage::remove( const Reference< drawing::XShape >& xShape )
     SdGenericDrawPage::remove( xShape );
 }
 
-Reference< uno::XInterface > createUnoPageImpl( SdPage* pPage )
+rtl::Reference< SvxDrawPage > createUnoPageImpl( SdPage* pPage )
 {
-    Reference< uno::XInterface > xPage;
+    rtl::Reference< SvxDrawPage > xPage;
 
     if( pPage )
     {
@@ -3077,11 +3077,11 @@ Reference< uno::XInterface > createUnoPageImpl( SdPage* pPage )
         {
             if( pPage->IsMasterPage() )
             {
-                xPage = static_cast<cppu::OWeakObject*>(new SdMasterPage( pModel, pPage ));
+                xPage = new SdMasterPage( pModel, pPage );
             }
             else
             {
-                xPage = static_cast<cppu::OWeakObject*>(new SdDrawPage( pModel, pPage ));
+                xPage = new SdDrawPage( pModel, pPage );
             }
         }
     }

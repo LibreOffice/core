@@ -34,7 +34,7 @@ public:
 
     virtual rtl::Reference<SdrPage> CloneSdrPage(SdrModel& rTargetModel) const override;
 
-    virtual css::uno::Reference<css::uno::XInterface> createUnoPage() override;
+    virtual rtl::Reference<SvxDrawPage> createUnoPage() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

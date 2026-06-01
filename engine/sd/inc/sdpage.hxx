@@ -134,7 +134,7 @@ friend class sd::UndoAttrObject;
     /** a helper class to manipulate effects inside the main sequence */
     std::shared_ptr< sd::MainSequence > mpMainSequence;
 
-    virtual css::uno::Reference< css::uno::XInterface > createUnoPage() override;
+    virtual rtl::Reference< SvxDrawPage > createUnoPage() override;
 
     std::unique_ptr<SfxItemSet> mpItems;
 

@@ -852,16 +852,16 @@ rtl::Reference<SvxShape> CreateSvxShapeByTypeAndInventor(SdrObjKind nType, SdrIn
 }
 
 /** returns a StarOffice API wrapper for the given SdrPage */
-uno::Reference< drawing::XDrawPage > GetXDrawPageForSdrPage( SdrPage* pPage ) noexcept
+css::uno::Reference< XDrawPage > GetXDrawPageForSdrPage( SdrPage* pPage ) noexcept
 {
     if(pPage)
     {
-        uno::Reference< drawing::XDrawPage > xDrawPage( pPage->getUnoPage(), uno::UNO_QUERY );
+        rtl::Reference< SvxDrawPage > xDrawPage( pPage->getUnoPage() );
 
         return xDrawPage;
     }
 
-    return uno::Reference< drawing::XDrawPage >();
+    return {};
 }
 
 /** returns the SdrObject from the given StarOffice API wrapper */

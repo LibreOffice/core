@@ -252,14 +252,9 @@ Any SAL_CALL SdUnoDrawView::getSelection()
                 if(pObj==nullptr || pObj->getSdrPageFromSdrObject() == nullptr)
                     continue;
 
-                Reference< drawing::XDrawPage > xPage( pObj->getSdrPageFromSdrObject()->getUnoPage(), UNO_QUERY);
+                rtl::Reference< SvxDrawPage > xPage( pObj->getSdrPageFromSdrObject()->getUnoPage());
 
                 if(!xPage.is())
-                    continue;
-
-                SvxDrawPage* pDrawPage = comphelper::getFromUnoTunnel<SvxDrawPage>( xPage );
-
-                if(pDrawPage==nullptr)
                     continue;
 
                 Reference< drawing::XShape > xShape( pObj->getUnoShape(), UNO_QUERY );
@@ -415,7 +410,7 @@ Reference< drawing::XDrawPage > SAL_CALL SdUnoDrawView::getCurrentPage()
     SdrPage* pPage = pPV ? pPV->GetPage() : nullptr;
 
     if(pPage)
-        xPage.set( pPage->getUnoPage(), UNO_QUERY );
+        xPage = pPage->getUnoPage().get();
 
     return xPage;
 }

@@ -35,6 +35,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <osl/diagnose.h>
+#include <svx/unopage.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -62,8 +63,7 @@ void CurrentSlideManager::NotifyCurrentSlideChange (const SdPage* pPage)
         NotifyCurrentSlideChange(
             mrSlideSorter.GetModel().GetIndex(
                 Reference<drawing::XDrawPage>(
-                    const_cast<SdPage*>(pPage)->getUnoPage(),
-                    UNO_QUERY)));
+                    const_cast<SdPage*>(pPage)->getUnoPage())));
     else
         NotifyCurrentSlideChange(-1);
 }
@@ -232,7 +232,7 @@ void CurrentSlideManager::SetCurrentSlideAtXController (const SharedPageDescript
         if (xSet.is())
         {
             Any aPage;
-            aPage <<= rpDescriptor->GetPage()->getUnoPage();
+            aPage <<= uno::Reference<XInterface>(cppu::getXWeak(rpDescriptor->GetPage()->getUnoPage().get()));
             xSet->setPropertyValue( u"CurrentPage"_ustr, aPage );
         }
     }

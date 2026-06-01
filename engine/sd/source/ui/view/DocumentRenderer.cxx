@@ -55,6 +55,7 @@
 #include <svx/svdpagv.hxx>
 #include <svx/xlineit0.hxx>
 #include <svx/xlnclit.hxx>
+#include <svx/unopage.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <utility>
@@ -1293,7 +1294,7 @@ namespace {
                 rHandoutPage.SetSize(aPageSize);
             }
 
-            Reference< css::beans::XPropertySet > xHandoutPage( rHandoutPage.getUnoPage(), UNO_QUERY );
+            Reference< css::beans::XPropertySet > xHandoutPage( cppu::getXWeak(rHandoutPage.getUnoPage().get()), UNO_QUERY );
             static constexpr OUString sPageNumber( u"Number"_ustr );
 
             // Collect the page objects of the handout master.

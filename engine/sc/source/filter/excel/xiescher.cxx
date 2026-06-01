@@ -66,6 +66,7 @@
 #include <svx/svdoole2.hxx>
 #include <svx/svdouno.hxx>
 #include <svx/svdpage.hxx>
+#include <svx/unopage.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/outliner.hxx>
 #include <editeng/outlobj.hxx>
@@ -3936,7 +3937,7 @@ void XclImpDffConverter::InitControlForm()
 
     try
     {
-        Reference< XFormsSupplier > xFormsSupplier( rConvData.mrSdrPage.getUnoPage(), UNO_QUERY_THROW );
+        rtl::Reference< SvxDrawPage > xFormsSupplier( rConvData.mrSdrPage.getUnoPage() );
         Reference< XNameContainer > xFormsNC( xFormsSupplier->getForms(), UNO_SET_THROW );
         // find or create the Standard form used to insert the imported controls
         if( xFormsNC->hasByName( gaStdFormName ) )

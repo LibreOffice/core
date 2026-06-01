@@ -35,6 +35,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <sal/log.hxx>
+#include <svx/unopage.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -154,7 +155,7 @@ uno::Any SAL_CALL ViewShellWrapper::getSelection()
     while (aSelectedPages.HasMoreElements() && nIndex<nSelectedPageCount)
     {
         slidesorter::model::SharedPageDescriptor pDescriptor (aSelectedPages.GetNextElement());
-        aPagesRange[nIndex++] = pDescriptor->GetPage()->getUnoPage();
+        aPagesRange[nIndex++] = cppu::getXWeak(pDescriptor->GetPage()->getUnoPage().get());
     }
     aResult <<= aPages;
 

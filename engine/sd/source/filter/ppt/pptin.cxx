@@ -31,6 +31,7 @@
 #include <svx/sdmetitm.hxx>
 #include <svx/sdtmfitm.hxx>
 #include <svx/sdtagitm.hxx>
+#include <svx/unopage.hxx>
 #include <svl/style.hxx>
 #include <svl/intitem.hxx>
 #include <editeng/eeitem.hxx>
@@ -870,7 +871,7 @@ bool ImplSdPPTImport::Import()
                                         {
                                             case DFF_msofbtAnimGroup :
                                             {
-                                                css::uno::Reference< css::drawing::XDrawPage > xPage( pMPage->getUnoPage(), css::uno::UNO_QUERY );
+                                                rtl::Reference< SvxDrawPage > xPage( pMPage->getUnoPage() );
                                                 ppt::AnimationImporter aImporter( this, rStCtrl );
                                                 bNewAnimationsUsed = aImporter.import( xPage, aProgTagContentHd ) > 0;
                                             }
@@ -992,7 +993,7 @@ bool ImplSdPPTImport::Import()
                                         {
                                             case DFF_msofbtAnimGroup :
                                             {
-                                                css::uno::Reference< css::drawing::XDrawPage > xPage( pPage->getUnoPage(), css::uno::UNO_QUERY );
+                                                rtl::Reference< SvxDrawPage > xPage( pPage->getUnoPage() );
                                                 ppt::AnimationImporter aImporter( this, rStCtrl );
                                                 bNewAnimationsUsed = aImporter.import( xPage, aProgTagContentHd ) > 0;
                                             }

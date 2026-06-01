@@ -187,7 +187,7 @@ uno::Any SAL_CALL SdXCustomPresentation::getByIndex( sal_Int32 Index )
 
     if( pPage )
     {
-        uno::Reference< drawing::XDrawPage > xRef( pPage->getUnoPage(), uno::UNO_QUERY );
+        uno::Reference< drawing::XDrawPage > xRef( pPage->getUnoPage() );
         aAny <<= xRef;
     }
 

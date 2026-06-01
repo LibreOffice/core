@@ -29,6 +29,7 @@
 #include <svx/svdotext.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdoole2.hxx>
+#include <svx/unopage.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <svx/sdasitm.hxx>
@@ -448,7 +449,7 @@ void XclEscherEx::ConvertTbxMacro( XclExpTbxControlObj& rTbxCtrlObj, Reference< 
 
     try
     {
-        Reference< XFormsSupplier > xFormsSupplier( pSdrPage->getUnoPage(), UNO_QUERY_THROW );
+        rtl::Reference< SvxDrawPage > xFormsSupplier( pSdrPage->getUnoPage() );
         Reference< XIndexAccess > xFormsIA( xFormsSupplier->getForms(), UNO_QUERY_THROW );
 
         // 1) try to find the index of the processed control in the form

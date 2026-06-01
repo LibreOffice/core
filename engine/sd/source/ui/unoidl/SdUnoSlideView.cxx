@@ -30,6 +30,7 @@
 #include <model/SlsPageDescriptor.hxx>
 #include <sdpage.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <svx/unopage.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -94,7 +95,7 @@ Any SAL_CALL SdUnoSlideView::getSelection()
     while (aSelectedPages.HasMoreElements() && nIndex<nSelectedPageCount)
     {
         slidesorter::model::SharedPageDescriptor pDescriptor (aSelectedPages.GetNextElement());
-        aPagesRange[nIndex++] = pDescriptor->GetPage()->getUnoPage();
+        aPagesRange[nIndex++] = cppu::getXWeak(pDescriptor->GetPage()->getUnoPage().get());
     }
     aResult <<= aPages;
 

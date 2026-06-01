@@ -20,6 +20,7 @@
 #pragma once
 
 #include <com/sun/star/uno/Reference.hxx>
+#include <rtl/ref.hxx>
 
 #include <vector>
 #include <animations.hxx>
@@ -35,6 +36,7 @@ namespace ppt { struct AnimationNode; }
 class DffRecordHeader;
 class SvStream;
 class ImplSdPPTImport;
+class SvxDrawPage;
 
 namespace ppt
 {
@@ -46,7 +48,7 @@ class AnimationImporter
 public:
     AnimationImporter( ImplSdPPTImport* pPPTImport, SvStream& rStCtrl );
 
-    int  import( const css::uno::Reference< css::drawing::XDrawPage >& xPage, const DffRecordHeader& rProgTagContentHd );
+    int  import( const rtl::Reference< SvxDrawPage >& xPage, const DffRecordHeader& rProgTagContentHd );
 
 private:
     int  importAnimationContainer( const Atom* pAtom, const css::uno::Reference< css::animations::XAnimationNode >& xParent );

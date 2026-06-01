@@ -4406,7 +4406,7 @@ uno::Reference<drawing::XDrawPage> ScDrawPagesObj::GetObjectByIndex_Impl(sal_Int
             OSL_ENSURE(pPage,"Draw-Page not found");
             if (pPage)
             {
-                return uno::Reference<drawing::XDrawPage> (pPage->getUnoPage(), uno::UNO_QUERY);
+                return uno::Reference<drawing::XDrawPage> (pPage->getUnoPage());
             }
         }
     }

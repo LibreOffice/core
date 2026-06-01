@@ -48,6 +48,7 @@ class SdrLayerAdmin;
 class SdrLayerIDSet;
 class Color;
 class SfxStyleSheet;
+class SvxDrawPage;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //
@@ -430,7 +431,7 @@ private:
 
     std::unique_ptr<SdrLayerAdmin> mpLayerAdmin;
     std::unique_ptr<SdrPageProperties> mpSdrPageProperties;
-    css::uno::Reference< css::uno::XInterface > mxUnoPage;
+    rtl::Reference< SvxDrawPage > mxUnoPage;
 
 public:
     SdrPageProperties& getSdrPageProperties();
@@ -447,7 +448,7 @@ protected:
     bool                mbInserted : 1;
     bool                mbObjectsNotPersistent : 1;
 
-    virtual css::uno::Reference< css::uno::XInterface > createUnoPage();
+    virtual rtl::Reference< SvxDrawPage > createUnoPage();
 
     // Copying of pages is split into two parts: construction and copying of page objects,
     // because the copying might need access to fully initialized page. CloneSdrPage() is responsible
@@ -518,7 +519,7 @@ public:
     /// otherwise the visible pages
     virtual const SdrPageGridFrameList* GetGridFrameList(const SdrPageView* pPV, const tools::Rectangle* pRect) const;
 
-    css::uno::Reference< css::uno::XInterface > const & getUnoPage();
+    rtl::Reference< SvxDrawPage > const & getUnoPage();
 
     virtual SfxStyleSheet* GetTextStyleSheetForObject( SdrObject* pObj ) const;
 

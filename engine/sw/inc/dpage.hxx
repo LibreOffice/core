@@ -53,7 +53,7 @@ public:
 
     bool RequestHelp( vcl::Window* pWindow, SdrView const * pView, const HelpEvent& rEvt );
 
-    virtual css::uno::Reference< css::uno::XInterface > createUnoPage() override;
+    virtual rtl::Reference< SvxDrawPage > createUnoPage() override;
 
 private:
     void lateInit(const SwDPage& rSrcPage);

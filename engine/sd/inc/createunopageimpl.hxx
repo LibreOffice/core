@@ -19,14 +19,11 @@
 
 #pragma once
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <rtl/ref.hxx>
 
-namespace com::sun::star::uno
-{
-class XInterface;
-}
 class SdPage;
+class SvxDrawPage;
 
-css::uno::Reference<css::uno::XInterface> createUnoPageImpl(SdPage* pPage);
+rtl::Reference<SvxDrawPage> createUnoPageImpl(SdPage* pPage);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

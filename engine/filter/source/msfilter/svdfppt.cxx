@@ -74,6 +74,7 @@
 #include <svx/xlineit0.hxx>
 #include <svx/xlnclit.hxx>
 #include <svx/xlnwtit.hxx>
+#include <svx/unopage.hxx>
 #include <editeng/hngpnctitem.hxx>
 #include <editeng/forbiddenruleitem.hxx>
 #include <svx/svdoashp.hxx>
@@ -2743,7 +2744,7 @@ static void ImportComment10( SvxMSDffManager const & rMan, SvStream& rStCtrl, Sd
 
     try
     {
-        uno::Reference< office::XAnnotationAccess > xAnnotationAccess( pPage->getUnoPage(), UNO_QUERY_THROW );
+        uno::Reference< office::XAnnotationAccess > xAnnotationAccess( cppu::getXWeak(pPage->getUnoPage().get()), UNO_QUERY_THROW );
         uno::Reference< office::XAnnotation > xAnnotation( xAnnotationAccess->createAndInsertAnnotation() );
         xAnnotation->setPosition( geometry::RealPoint2D( aPosition.X() / 100.0, aPosition.Y() / 100.0 ) );
         xAnnotation->setAuthor( sAuthor );

@@ -60,6 +60,7 @@
 #include <tools/debug.hxx>
 #include <osl/diagnose.h>
 #include <o3tl/string_view.hxx>
+#include <svx/unopage.hxx>
 
 #include <svx/svdotext.hxx>
 #include <editeng/outlobj.hxx>
@@ -119,7 +120,7 @@ AnimationImporter::AnimationImporter( ImplSdPPTImport* pPPTImport, SvStream& rSt
 {
 }
 
-int AnimationImporter::import( const Reference< XDrawPage >& xPage, const DffRecordHeader& rProgTagContentHd )
+int AnimationImporter::import( const rtl::Reference< SvxDrawPage >& xPage, const DffRecordHeader& rProgTagContentHd )
 {
     int nNodes = 0;
 
@@ -132,7 +133,7 @@ int AnimationImporter::import( const Reference< XDrawPage >& xPage, const DffRec
 #endif
     dump("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
 
-    Reference< XAnimationNodeSupplier > xNodeSupplier( xPage, UNO_QUERY );
+    Reference< XAnimationNodeSupplier > xNodeSupplier( cppu::getXWeak(xPage.get()), UNO_QUERY );
     if( xNodeSupplier.is() )
     {
         mxRootNode = xNodeSupplier->getAnimationNode();

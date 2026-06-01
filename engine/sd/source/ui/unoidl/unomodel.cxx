@@ -2132,8 +2132,7 @@ private:
 
         // Set up ViewInformation2D with visualized page
         drawinglayer::geometry::ViewInformation2D aViewInfo;
-        css::uno::Reference<css::drawing::XDrawPage> xDrawPage(pPage->getUnoPage(),
-                                                               css::uno::UNO_QUERY);
+        css::uno::Reference<css::drawing::XDrawPage> xDrawPage(pPage->getUnoPage());
         if (xDrawPage.is())
             aViewInfo.setVisualizedPage(xDrawPage);
         maProcessor->setViewInformation2D(aViewInfo);
@@ -2537,7 +2536,7 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdXImpressDocument::duplicate( con
         pPage = InsertSdPage( nPos, true );
         if( pPage )
         {
-            uno::Reference< drawing::XDrawPage > xDrawPage( pPage->getUnoPage(), uno::UNO_QUERY );
+            uno::Reference< drawing::XDrawPage > xDrawPage( pPage->getUnoPage() );
             return xDrawPage;
         }
     }
@@ -2654,7 +2653,7 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdXImpressDocument::getHandoutMast
     initializeDocument();
     SdPage* pPage = mpDoc->GetMasterSdPage(0, PageKind::Handout);
     if (pPage)
-        xPage.set(pPage->getUnoPage(), uno::UNO_QUERY);
+        xPage.set(pPage->getUnoPage());
     return xPage;
 }
 
@@ -3848,12 +3847,12 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
             try
             {
                 uno::Any aAny;
-                uno::Reference< drawing::XDrawPage > xPage( uno::Reference< drawing::XDrawPage >::query( pPage->getUnoPage() ) );
+                rtl::Reference< SvxDrawPage > xPage( pPage->getUnoPage() );
                 if ( xPage.is() )
                 {
                     if ( pPDFExtOutDevData->GetIsExportNotes() )
                         ImplPDFExportComments( xPage, *pPDFExtOutDevData );
-                    uno::Reference< beans::XPropertySet > xPagePropSet( xPage, uno::UNO_QUERY );
+                    uno::Reference< beans::XPropertySet > xPagePropSet( cppu::getXWeak(xPage.get()), uno::UNO_QUERY );
                     if( xPagePropSet.is() )
                     {
                         // exporting object interactions to pdf
@@ -3864,7 +3863,7 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
                             xPagePropSet->getPropertyValue( u"IsBackgroundObjectsVisible"_ustr ) >>= bIsBackgroundObjectsVisible;
                         if ( bIsBackgroundObjectsVisible && !pPDFExtOutDevData->GetIsExportNotesPages() )
                         {
-                            uno::Reference< drawing::XMasterPageTarget > xMasterPageTarget( xPage, uno::UNO_QUERY );
+                            uno::Reference< drawing::XMasterPageTarget > xMasterPageTarget( cppu::getXWeak(xPage.get()), uno::UNO_QUERY );
                             if ( xMasterPageTarget.is() )
                             {
                                 uno::Reference< drawing::XDrawPage > xMasterPage = xMasterPageTarget->getMasterPage();
@@ -4476,7 +4475,7 @@ OUString SdXImpressDocument::getPartHash(int nPart)
         return OUString();
     }
 
-    uno::Reference<drawing::XDrawPage> xDrawPage(pPage->getUnoPage(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(pPage->getUnoPage());
     return OUString::fromUtf8(GetInterfaceHash(xDrawPage));
 }
 
@@ -5630,7 +5629,7 @@ uno::Any SAL_CALL SdDrawPagesAccess::getByName( const OUString& aName )
             if( aName == SdDrawPage::getPageApiName( pPage ) )
             {
                 uno::Any aAny;
-                uno::Reference< drawing::XDrawPage >  xDrawPage( pPage->getUnoPage(), uno::UNO_QUERY );
+                uno::Reference< drawing::XDrawPage > xDrawPage( pPage->getUnoPage() );
                 aAny <<= xDrawPage;
                 return aAny;
             }
@@ -5713,7 +5712,7 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdDrawPagesAccess::insertNewByInde
         SdPage* pPage = mpModel->InsertSdPage( static_cast<sal_uInt16>(nIndex), false );
         if( pPage )
         {
-            uno::Reference< drawing::XDrawPage > xDrawPage( pPage->getUnoPage(), uno::UNO_QUERY );
+            uno::Reference< drawing::XDrawPage > xDrawPage( pPage->getUnoPage() );
             return xDrawPage;
         }
     }
@@ -5869,7 +5868,7 @@ uno::Any SAL_CALL SdMasterPagesAccess::getByIndex( sal_Int32 Index )
     SdPage* pPage = mpModel->mpDoc->GetMasterSdPage( static_cast<sal_uInt16>(Index), PageKind::Standard );
     if( pPage )
     {
-        uno::Reference< drawing::XDrawPage >  xDrawPage( pPage->getUnoPage(), uno::UNO_QUERY );
+        uno::Reference< drawing::XDrawPage > xDrawPage( pPage->getUnoPage() );
         aAny <<= xDrawPage;
     }
 
@@ -5899,14 +5898,14 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdMasterPagesAccess::insertNamedNe
     return insertNewImpl(nInsertPos, sName);
 }
 
-uno::Reference< drawing::XDrawPage > SdMasterPagesAccess::insertNewImpl( sal_Int32 nInsertPos, std::optional<OUString> oPageName )
+rtl::Reference< SvxDrawPage > SdMasterPagesAccess::insertNewImpl( sal_Int32 nInsertPos, std::optional<OUString> oPageName )
 {
     ::SolarMutexGuard aGuard;
 
     if( nullptr == mpModel )
         throw lang::DisposedException();
 
-    uno::Reference< drawing::XDrawPage > xDrawPage;
+    rtl::Reference< SvxDrawPage > xDrawPage;
 
     SdDrawDocument* pDoc = mpModel->mpDoc;
     if( pDoc )
@@ -5973,7 +5972,7 @@ uno::Reference< drawing::XDrawPage > SdMasterPagesAccess::insertNewImpl( sal_Int
             pMPage->EnsureMasterPageDefaultBackground();
         }
 
-        xDrawPage.set( pMPage->getUnoPage(), uno::UNO_QUERY );
+        xDrawPage = pMPage->getUnoPage();
 
         // create and insert new notes masterpage
         rtl::Reference<SdPage> pMNotesPage = mpModel->mpDoc->AllocSdPage(true);
@@ -6270,7 +6269,7 @@ uno::Any SAL_CALL SdDocLinkTarget::getByName(const OUString& aName)
 
     uno::Any aAny;
 
-    uno::Reference< beans::XPropertySet > xProps( pPage->getUnoPage(), uno::UNO_QUERY );
+    uno::Reference< beans::XPropertySet > xProps( cppu::getXWeak(pPage->getUnoPage().get()), uno::UNO_QUERY );
     if( xProps.is() )
         aAny <<= xProps;
 

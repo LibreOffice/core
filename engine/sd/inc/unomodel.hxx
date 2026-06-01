@@ -63,6 +63,7 @@ class SdLayerManager;
 class SdXCustomPresentationAccess;
 class SdDocLinkTargets;
 class SdGenericDrawPage;
+class SvxDrawPage;
 
 namespace sd {
 class DrawDocShell;
@@ -422,7 +423,7 @@ public:
     virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
 private:
-    css::uno::Reference< ::css::drawing::XDrawPage > insertNewImpl( sal_Int32 nIndex, std::optional<OUString> oName );
+    rtl::Reference< SvxDrawPage > insertNewImpl( sal_Int32 nIndex, std::optional<OUString> oName );
 };
 
 /***********************************************************************

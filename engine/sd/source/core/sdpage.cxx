@@ -2808,7 +2808,7 @@ OUString SdPage::GetPresObjText(PresObjKind eObjKind) const
     return aString;
 }
 
-uno::Reference< uno::XInterface > SdPage::createUnoPage()
+rtl::Reference< SvxDrawPage > SdPage::createUnoPage()
 {
     return createUnoPageImpl( this );
 }

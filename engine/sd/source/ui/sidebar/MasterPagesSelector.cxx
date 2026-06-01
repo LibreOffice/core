@@ -41,6 +41,7 @@
 #include <sfx2/sidebar/Theme.hxx>
 #include <memory>
 #include <vcl/virdev.hxx>
+#include <svx/unopage.hxx>
 
 namespace sd::sidebar {
 
@@ -237,11 +238,11 @@ void MasterPagesSelector::ExecuteCommand(const OUString &rIdent)
     else if (rIdent == "edit")
     {
         using namespace ::com::sun::star;
-        uno::Reference<drawing::XDrawPage> xSelectedMaster;
+        rtl::Reference<SvxDrawPage> xSelectedMaster;
         SdPage* pMasterPage = GetSelectedMasterPage();
         assert(pMasterPage); //rhbz#902884
         if (pMasterPage)
-            xSelectedMaster.set(pMasterPage->getUnoPage(), uno::UNO_QUERY);
+            xSelectedMaster = pMasterPage->getUnoPage();
         SfxViewFrame& rViewFrame = mrBase.GetViewFrame();
         if (xSelectedMaster.is())
         {

@@ -23,6 +23,7 @@
 #include <sfx2/sfxhelp.hxx>
 #include <vcl/help.hxx>
 #include <svx/svdview.hxx>
+#include <svx/unopage.hxx>
 #include <osl/diagnose.h>
 #include <fmturl.hxx>
 #include <frmfmt.hxx>
@@ -39,6 +40,7 @@
 #include <docsh.hxx>
 #include <flyfrm.hxx>
 #include <unotxdoc.hxx>
+#include <unodraw.hxx>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 
@@ -248,16 +250,16 @@ bool SwDPage::RequestHelp( vcl::Window* pWindow, SdrView const * pView,
     return bContinue;
 }
 
-Reference< XInterface > SwDPage::createUnoPage()
+rtl::Reference< SvxDrawPage > SwDPage::createUnoPage()
 {
     assert( m_pDoc );
 
-    Reference < XInterface > xRet;
+    rtl::Reference < SvxDrawPage > xRet;
     SwDocShell* pDocShell = m_pDoc->GetDocShell();
     if ( pDocShell )
     {
         rtl::Reference<SwXTextDocument> xModel = pDocShell->GetBaseModel();
-        xRet = xModel->getDrawPage();
+        xRet = xModel->getSwDrawPage();
     }
     return xRet;
 }

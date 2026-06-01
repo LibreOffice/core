@@ -3116,17 +3116,13 @@ css::uno::Reference< css::drawing::XShape > SdrObject::getUnoShape()
 
     if(nullptr != pPageCandidate)
     {
-        uno::Reference< uno::XInterface > xPage(pPageCandidate->getUnoPage());
+        rtl::Reference< SvxDrawPage > xPage(pPageCandidate->getUnoPage());
         if( xPage.is() )
         {
-            SvxDrawPage* pDrawPage = comphelper::getFromUnoTunnel<SvxDrawPage>(xPage);
-            if( pDrawPage )
-            {
-                // create one
-                xShape = pDrawPage->CreateShape( this );
-                assert(xShape);
-                setUnoShape( xShape );
-            }
+            // create one
+            xShape = xPage->CreateShape( this );
+            assert(xShape);
+            setUnoShape( xShape );
         }
     }
     else

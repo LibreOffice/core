@@ -82,7 +82,7 @@ Reference< drawing::XDrawPage > SAL_CALL SdUnoOutlineView::getCurrentPage()
 
     SdPage* pPage = mrOutlineViewShell.getCurrentPage();
     if (pPage != nullptr)
-        xPage.set(pPage->getUnoPage(), UNO_QUERY);
+        xPage = pPage->getUnoPage().get();
 
     return xPage;
 }
@@ -117,7 +117,7 @@ Any SAL_CALL SdUnoOutlineView::getFastPropertyValue (
         {
             SdPage* pPage = mrOutlineViewShell.GetActualPage();
             if (pPage != nullptr)
-                aValue <<= pPage->getUnoPage();
+                aValue <<= uno::Reference<XInterface>(cppu::getXWeak(pPage->getUnoPage().get()));
         }
         break;
         case DrawController::PROPERTY_VIEWOFFSET:

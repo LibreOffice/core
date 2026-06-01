@@ -43,6 +43,7 @@
 
 #include <sal/log.hxx>
 #include <svx/fmshell.hxx>
+#include <svx/unopage.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/EnumContext.hxx>
 #include <svx/sidebar/ContextChangeEventMultiplexer.hxx>
@@ -345,7 +346,7 @@ Reference< drawing::XDrawPage > SAL_CALL DrawController::getCurrentPage()
     // to the current page in mpCurrentPage.
     if ( ! xPage.is() )
         if (rtl::Reference<SdPage> pPage = mpCurrentPage.get())
-            xPage.set(pPage->getUnoPage(), UNO_QUERY);
+            xPage = pPage->getUnoPage().get();
 
     return xPage;
 }
@@ -435,13 +436,12 @@ void DrawController::FireSwitchCurrentPage (SdPage* pNewCurrentPage) noexcept
 
     try
     {
-        Any aNewValue (
-            Any(Reference<drawing::XDrawPage>(pNewCurrentPage->getUnoPage(), UNO_QUERY)));
+        Any aNewValue(Reference<drawing::XDrawPage>(pNewCurrentPage->getUnoPage()));
 
         Any aOldValue;
         if (pCurrentPage != nullptr)
         {
-            Reference<drawing::XDrawPage> xOldPage (pCurrentPage->getUnoPage(), UNO_QUERY);
+            Reference<drawing::XDrawPage> xOldPage (pCurrentPage->getUnoPage());
             aOldValue <<= xOldPage;
         }
 

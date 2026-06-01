@@ -3698,7 +3698,7 @@ uno::Reference<uno::XInterface> SAL_CALL SvxShape::getParent()
                     // we checked for getSdrObjectFromSdrObjList first,
                     // we can even say that it is directly member of that
                     // SdrPage.
-                    return pParentSdrPage->getUnoPage();
+                    return cppu::getXWeak(pParentSdrPage->getUnoPage().get());
                 }
             }
 

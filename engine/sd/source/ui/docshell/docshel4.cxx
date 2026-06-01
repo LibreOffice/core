@@ -47,6 +47,7 @@
 #include <comphelper/scopeguard.hxx>
 #include <sot/formats.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <svx/unopage.hxx>
 #include <vcl/syswin.hxx>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XDrawView.hpp>
@@ -902,7 +903,7 @@ void DrawDocShell::GotoBookmark(std::u16string_view rBookmark)
             DrawController* pDrawController = rBase.GetDrawController();
             if (pDrawController)
             {
-                Reference<drawing::XDrawPage> xDrawPage (pPage->getUnoPage(), UNO_QUERY);
+                Reference<drawing::XDrawPage> xDrawPage (pPage->getUnoPage());
                 pDrawController->setCurrentPage (xDrawPage);
             }
             else

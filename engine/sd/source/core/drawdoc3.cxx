@@ -32,6 +32,7 @@
 #include <svl/style.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdundo.hxx>
+#include <svx/unopage.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
@@ -537,7 +538,7 @@ void SdDrawDocument::transferLayoutStyles(const SlideLayoutNameList& aLayoutsToT
         sal_uInt16 nBMPage = pBookmarkDoc->GetPageByName(layoutName, bIsMasterPage);
         if (bIsMasterPage)
         {
-            uno::Reference< drawing::XDrawPage > xOldPage(pBookmarkDoc->GetMasterPage(nBMPage)->getUnoPage(), uno::UNO_QUERY_THROW);
+            uno::Reference< drawing::XDrawPage > xOldPage(pBookmarkDoc->GetMasterPage(nBMPage)->getUnoPage());
             SdrPage* pMasterPage = SdPage::getImplementation(xOldPage);
             if (pMasterPage)
             {
@@ -985,9 +986,9 @@ void SdDrawDocument::updateInsertedPages(PageInsertionParams& rParams,
             rParams.mainProps.pPage->SetBorder(rParams.mainProps.left, rParams.mainProps.upper, rParams.mainProps.right, rParams.mainProps.lower);
             rParams.mainProps.pPage->SetOrientation(rParams.mainProps.orientation);
 
-            uno::Reference<drawing::XDrawPage> xNewPage(GetMasterPage(nPage)->getUnoPage(), uno::UNO_QUERY_THROW);
+            rtl::Reference<SvxDrawPage> xNewPage(GetMasterPage(nPage)->getUnoPage());
 
-            SdrPage* pMasterPage = SdPage::getImplementation(xNewPage);
+            SdrPage* pMasterPage = xNewPage->GetSdrPage();
             if (pMasterPage)
             {
                 OUString aLayout(rParams.mainProps.pPage->GetName());
@@ -997,7 +998,7 @@ void SdDrawDocument::updateInsertedPages(PageInsertionParams& rParams,
                 }
             }
 
-            uno::Reference<beans::XPropertySet> xNewPropSet(xNewPage, uno::UNO_QUERY_THROW);
+            uno::Reference<beans::XPropertySet> xNewPropSet(cppu::getXWeak(xNewPage.get()), uno::UNO_QUERY_THROW);
             if (xNewPropSet.is())
             {
                 OUString aLayout(rParams.mainProps.pPage->GetName());

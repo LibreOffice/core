@@ -27,6 +27,7 @@
 #include <sfx2/docfilt.hxx>
 #include <sfx2/sfxuno.hxx>
 #include <svx/svdograf.hxx>
+#include <svx/unopage.hxx>
 
 #include <strings.hrc>
 #include <DrawViewShell.hxx>
@@ -251,7 +252,7 @@ bool SdGRFFilter::Export()
         pPage = mrDocument.GetSdPage( pPage->GetPageNum() ? ( pPage->GetPageNum() - 1 ) >> 1 : 0, ePageKind );
         if ( pPage )
         {
-            uno::Reference< lang::XComponent > xSource( pPage->getUnoPage(), uno::UNO_QUERY );
+            uno::Reference< lang::XComponent > xSource( pPage->getUnoPage() );
             if (xSource.is())
             {
                 SfxItemSet& rSet = mrMedium.GetItemSet();

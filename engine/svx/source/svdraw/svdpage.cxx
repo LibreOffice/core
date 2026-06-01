@@ -1374,8 +1374,7 @@ SdrPage::~SdrPage()
 {
     if( mxUnoPage.is() ) try
     {
-        uno::Reference< lang::XComponent > xPageComponent( mxUnoPage, uno::UNO_QUERY_THROW );
-        mxUnoPage.clear();
+        auto xPageComponent( std::move(mxUnoPage) );
         xPageComponent->dispose();
     }
     catch( const uno::Exception& )
@@ -1794,7 +1793,7 @@ void SdrPage::SetInserted( bool bIns )
     }
 }
 
-uno::Reference< uno::XInterface > const & SdrPage::getUnoPage()
+rtl::Reference< SvxDrawPage > const & SdrPage::getUnoPage()
 {
     if( !mxUnoPage.is() )
     {
@@ -1805,9 +1804,9 @@ uno::Reference< uno::XInterface > const & SdrPage::getUnoPage()
     return mxUnoPage;
 }
 
-uno::Reference< uno::XInterface > SdrPage::createUnoPage()
+rtl::Reference< SvxDrawPage > SdrPage::createUnoPage()
 {
-    return cppu::getXWeak(new SvxDrawPage(this));
+    return new SvxDrawPage(this);
 }
 
 SfxStyleSheet* SdrPage::GetTextStyleSheetForObject( SdrObject* pObj ) const

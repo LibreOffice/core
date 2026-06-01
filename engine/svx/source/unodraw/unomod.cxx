@@ -152,7 +152,7 @@ bool SvxUnoDrawMSFactory::createEvent( const SdrModel* pDoc, const SdrHint* pSdr
     if( pObj )
         aEvent.Source = const_cast<SdrObject*>(pObj)->getUnoShape();
     else if( pPage )
-        aEvent.Source = const_cast<SdrPage*>(pPage)->getUnoPage();
+        aEvent.Source = cppu::getXWeak(const_cast<SdrPage*>(pPage)->getUnoPage().get());
     else
         aEvent.Source = const_cast<SdrModel*>(pDoc)->getUnoModel();
 
@@ -553,15 +553,15 @@ uno::Any SAL_CALL SvxUnoDrawPagesAccess::getByIndex( sal_Int32 Index )
         SdrPage* pPage = mrModel.mpDoc->GetPage( static_cast<sal_uInt16>(Index) );
         if( pPage )
         {
-            uno::Reference< uno::XInterface > xPage( pPage->mxUnoPage );
+            rtl::Reference< SvxDrawPage > xPage( pPage->mxUnoPage );
 
             if( !xPage.is() )
             {
-                xPage = static_cast<drawing::XDrawPage*>(new SvxDrawPage( pPage ));
+                xPage = new SvxDrawPage( pPage );
                 pPage->mxUnoPage = xPage;
             }
 
-            aAny <<= xPage;
+            aAny <<= uno::Reference< uno::XInterface >(cppu::getXWeak(xPage.get()));
         }
     }
     return aAny;
@@ -598,7 +598,7 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SvxUnoDrawPagesAccess::insertNewBy
             pPage = new SdrPage(*mrModel.mpDoc);
 
         mrModel.mpDoc->InsertPage( pPage.get(), static_cast<sal_uInt16>(nIndex) );
-        xDrawPage.set( pPage->getUnoPage(), uno::UNO_QUERY );
+        xDrawPage = pPage->getUnoPage().get();
     }
 
     return xDrawPage;

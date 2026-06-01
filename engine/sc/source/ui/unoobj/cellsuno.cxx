@@ -21,6 +21,7 @@
 #include <editeng/eeitem.hxx>
 #include <o3tl/safeint.hxx>
 #include <svx/svdpool.hxx>
+#include <svx/unopage.hxx>
 
 #include <utility>
 #include <vcl/svapp.hxx>
@@ -6748,7 +6749,7 @@ uno::Reference<drawing::XDrawPage> SAL_CALL ScTableSheetObj::getDrawPage()
         SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
         OSL_ENSURE(pPage,"Draw-Page not found");
         if (pPage)
-            return uno::Reference<drawing::XDrawPage> (pPage->getUnoPage(), uno::UNO_QUERY);
+            return uno::Reference<drawing::XDrawPage> (pPage->getUnoPage());
 
         //  The DrawPage object will register itself as a Listener at SdrModel
         //  and should receive all action from there
