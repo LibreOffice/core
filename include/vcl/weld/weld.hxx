@@ -9,18 +9,15 @@
 
 #pragma once
 
-#include <basegfx/range/b2irange.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/gen.hxx>
 #include <tools/link.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/weld/Widget.hxx>
-#include <utility>
 
 #include <com/sun/star/accessibility/XAccessibleRelationSet.hpp>
 
 #include <assert.h>
-#include <vector>
 
 namespace com::sun::star::awt
 {
@@ -76,26 +73,6 @@ public:
     // causes a child of the container to have the keyboard focus
     virtual void child_grab_focus() = 0;
 };
-
-class VCL_DLLPUBLIC ScreenShotEntry
-{
-public:
-    ScreenShotEntry(OUString aHelpId, const basegfx::B2IRange& rB2IRange)
-        : msHelpId(std::move(aHelpId))
-        , maB2IRange(rB2IRange)
-    {
-    }
-
-    const basegfx::B2IRange& getB2IRange() const { return maB2IRange; }
-
-    const OUString& GetHelpId() const { return msHelpId; }
-
-private:
-    OUString msHelpId;
-    basegfx::B2IRange maB2IRange;
-};
-
-typedef std::vector<ScreenShotEntry> ScreenShotCollection;
 
 class VCL_DLLPUBLIC WaitObject
 {
