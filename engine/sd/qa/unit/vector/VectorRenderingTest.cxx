@@ -13,6 +13,7 @@
 #include <tools/JsonPath.hxx>
 #include <tools/json_writer.hxx>
 #include <tools/color.hxx>
+#include <tools/degree.hxx>
 
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
@@ -30,6 +31,7 @@
 
 #include <osl/file.hxx>
 
+#include <cmath>
 #include <fstream>
 #include <string_view>
 
@@ -91,6 +93,24 @@ protected:
         pRect->SetMergedItem(XFillStyleItem(drawing::FillStyle_NONE));
         pRect->SetMergedItem(XLineStyleItem(drawing::LineStyle_SOLID));
         pRect->SetMergedItem(XLineColorItem(OUString(), aStrokeColor));
+
+        pPage->NbcInsertObject(pRect.get());
+    }
+
+    /// Add a filled rectangle rotated by the given angle (in 1/100 of
+    /// a degree) around its centre.
+    void addRotatedRectangle(const tools::Rectangle& rRect, Color aFillColor, Degree100 nAngle)
+    {
+        SdrPage* pPage = page(1);
+        rtl::Reference<SdrRectObj> pRect = new SdrRectObj(pPage->getSdrModelFromSdrPage(), rRect);
+
+        pRect->SetMergedItem(XFillStyleItem(drawing::FillStyle_SOLID));
+        pRect->SetMergedItem(XFillColorItem(OUString(), aFillColor));
+        pRect->SetMergedItem(XLineStyleItem(drawing::LineStyle_NONE));
+
+        // Degree100 is 1/100 of a degree, so divide by 18000 for radians per pi.
+        const double fAngleRad = nAngle.get() * M_PI / 18000.0;
+        pRect->NbcRotate(rRect.Center(), nAngle, std::sin(fAngleRad), std::cos(fAngleRad));
 
         pPage->NbcInsertObject(pRect.get());
     }
@@ -181,6 +201,20 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testStrokedRectangle)
     assertJsonPath(*oStroke, "type", "polygonStroke");
     assertJsonPath(*oStroke, "line/color", "#000000");
     assertJsonPathExists(*oStroke, "path");
+}
+
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testRotatedRectangle)
+{
+    // A rotated rectangle decomposes through a TransformPrimitive2D
+    // wrapper that carries the rotation matrix.
+    createBlankDoc();
+    addRotatedRectangle(tools::Rectangle(Point(5000, 5000), Size(5000, 3000)), Color(0x4472c4),
+                        Degree100(4500));
+
+    auto aJson = getVectorTile(u"testRotatedRectangle");
+
+    assertJsonPath(aJson, "/type", "vectortile");
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aJson.getSize("/objects").value_or(0));
 }
 
 } // namespace

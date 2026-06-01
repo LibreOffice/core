@@ -20,7 +20,10 @@
 #include <drawinglayer/primitive2d/PolyPolygonColorPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolygonStrokePrimitive2D.hxx>
 #include <drawinglayer/primitive2d/groupprimitive2d.hxx>
+#include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <drawinglayer/processor2d/Primitive2dJsonProcessor.hxx>
+
+#include <basegfx/matrix/b2dhommatrix.hxx>
 #include <drawinglayer/attribute/lineattribute.hxx>
 #include <drawinglayer/attribute/strokeattribute.hxx>
 
@@ -185,6 +188,37 @@ CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testGroupEmpty)
 
     assertJsonPath(aJson, "/primitives/0/type", "group");
     CPPUNIT_ASSERT_EQUAL(size_t(0), aJson.getSize("/primitives/0/children").value_or(0));
+}
+
+CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testTransform)
+{
+    // A transform primitive wraps its children in a 2D affine
+    // matrix. The fixture rotates a green triangle by thirty
+    // degrees around the origin so the matrix entries are
+    // non-trivial.
+    basegfx::B2DPolygon aTriangle;
+    aTriangle.append(basegfx::B2DPoint(0.0, 0.0));
+    aTriangle.append(basegfx::B2DPoint(100.0, 0.0));
+    aTriangle.append(basegfx::B2DPoint(100.0, 100.0));
+    aTriangle.setClosed(true);
+
+    Primitive2DContainer aChildren;
+    aChildren.append(new PolyPolygonColorPrimitive2D(basegfx::B2DPolyPolygon(aTriangle),
+                                                     basegfx::BColor(0.0, 1.0, 0.0)));
+
+    basegfx::B2DHomMatrix aMatrix;
+    aMatrix.rotate(basegfx::deg2rad(30.0));
+
+    Primitive2DContainer aPrimitives;
+    aPrimitives.append(
+        new drawinglayer::primitive2d::TransformPrimitive2D(aMatrix, std::move(aChildren)));
+
+    auto aJson = writeReference(u"testTransform", aPrimitives);
+
+    assertJsonPath(aJson, "/primitives/0/type", "transform");
+    CPPUNIT_ASSERT_EQUAL(size_t(6), aJson.getSize("/primitives/0/matrix").value_or(0));
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aJson.getSize("/primitives/0/children").value_or(0));
+    assertJsonPath(aJson, "/primitives/0/children/0/type", "polyPolygonColor");
 }
 
 CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testPolygonStrokeDashed)

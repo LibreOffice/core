@@ -41,6 +41,13 @@ namespace cool {
 					// Pure container - recursion into children happens
 					// below for every primitive type.
 					break;
+				case TransformPrimitive.type:
+					// Children must be drawn inside the transformed
+					// coordinates. The helper recurses on its own, so
+					// return here to skip the recursion at the end of
+					// renderPrimitive.
+					this._renderTransform(context, primitive as TransformPrimitive);
+					return;
 			}
 
 			if (primitive.children)
@@ -101,6 +108,30 @@ namespace cool {
 				context.setLineDash(primitive.stroke.dotDashArray);
 			context.stroke(path);
 			context.restore();
+		}
+
+		private _renderTransform(
+			context: CanvasRenderingContext2D,
+			primitive: TransformPrimitive,
+		): void {
+			const matrix = primitive.matrix;
+			const hasMatrix = matrix !== undefined && matrix.length >= 6;
+
+			if (hasMatrix) {
+				const a = matrix[0] !== undefined ? parseFloat(matrix[0] as any) : 1;
+				const b = matrix[1] !== undefined ? parseFloat(matrix[1] as any) : 0;
+				const c = matrix[2] !== undefined ? parseFloat(matrix[2] as any) : 0;
+				const d = matrix[3] !== undefined ? parseFloat(matrix[3] as any) : 1;
+				const e = matrix[4] !== undefined ? parseFloat(matrix[4] as any) : 0;
+				const f = matrix[5] !== undefined ? parseFloat(matrix[5] as any) : 0;
+				context.save();
+				context.transform(a, b, c, d, e, f);
+			}
+
+			if (primitive.children)
+				this._renderPrimitives(context, primitive.children);
+
+			if (hasMatrix) context.restore();
 		}
 
 		private _renderPrimitives(

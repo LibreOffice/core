@@ -166,6 +166,45 @@ describe('VectorPrimitiveRenderer', function () {
 			nodeassert.strictEqual(recorder.calls.length, 0);
 			nodeassert.deepStrictEqual(recorder.properties, {});
 		});
+
+		it('renders children under the transform\'s matrix', function () {
+			// The transform primitive applies an affine matrix to its
+			// child subtree. Children render under the transformed
+			// coordinates and must not affect anything drawn after.
+			const primitive = loadVectorRenderingReference('testTransform').primitives[0];
+			nodeassert.strictEqual(primitive.type, 'transform');
+			nodeassert.strictEqual(primitive.matrix.length, 6);
+			nodeassert.strictEqual(primitive.children.length, 1);
+
+			const recorder = new CanvasRecorder();
+			const renderer = new cool.VectorPrimitiveRenderer();
+			renderer.renderPrimitive(recorder as any, primitive);
+
+			// The fixture is a 30-degree rotation around the origin.
+			const transform = recorder.findCall('transform');
+			nodeassert.ok(transform, 'transform not called');
+			nodeassert.strictEqual(recorder.countOf('transform'), 1);
+			const cos30 = Math.cos(Math.PI / 6);
+			const sin30 = Math.sin(Math.PI / 6);
+			const expected = [cos30, sin30, -sin30, cos30, 0, 0];
+			nodeassert.strictEqual(transform.args.length, expected.length);
+			// The wire ships the matrix as fixed-precision strings, so
+			// the last digit can differ from Math.cos/Math.sin by a
+			// floating-point ulp. Allow a small tolerance per element.
+			for (let i = 0; i < expected.length; i++)
+				nodeassert.ok(
+					Math.abs(transform.args[i] - expected[i]) < 1e-12,
+					`matrix[${i}] expected ~${expected[i]}, got ${transform.args[i]}`,
+				);
+
+			// Anything drawn after the transform must not carry its matrix.
+			nodeassert.ok(recorder.findCall('save'), 'save not called');
+			nodeassert.ok(recorder.findCall('restore'), 'restore not called');
+			nodeassert.strictEqual(transform.depth, 1);
+
+			// The single child renders exactly once.
+			nodeassert.strictEqual(recorder.countOf('fill'), 1);
+		});
 	});
 
 	// Fixtures from documents. Each fixture is a full reply built
@@ -293,5 +332,6 @@ describe('VectorPrimitiveRenderer', function () {
 			nodeassert.ok(recorder.findCall('save'), 'save not called');
 			nodeassert.ok(recorder.findCall('restore'), 'restore not called');
 		});
+
 	});
 });

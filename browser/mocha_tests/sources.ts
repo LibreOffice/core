@@ -84,6 +84,7 @@
 /// <reference path="../src/canvas/vector/primitive/GroupPrimitive.ts" />
 /// <reference path="../src/canvas/vector/primitive/PolygonStrokePrimitive.ts" />
 /// <reference path="../src/canvas/vector/primitive/PolyPolygonColorPrimitive.ts" />
+/// <reference path="../src/canvas/vector/primitive/TransformPrimitive.ts" />
 /// <reference path="../src/canvas/vector/VectorPrimitiveRenderer.ts" />
 /// <reference path="../src/canvas/sections/AutoFillBaseSection.ts" />
 /// <reference path="../src/canvas/sections/CellFillMarkerSection.ts" />
