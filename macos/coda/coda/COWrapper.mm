@@ -36,6 +36,14 @@
 // Declare the coolwsd pointer at global scope
 COOLWSD *coolwsd = nullptr;
 
+// Tracks the system pasteboard state right after our own copy. A later paste can
+// then tell whether the pasteboard still holds that copy, and if so reuse the
+// engine's full-fidelity in-memory transferable instead of overwriting it with a
+// serialized format read back from the pasteboard. This mirrors the ownsClipboard
+// check the Qt (Bridge.cpp) and Windows (do_paste_or_read) app variants do.
+static NSInteger sOwnedPasteboardChangeCount = -1;
+static unsigned sOwnedClipboardDocId = 0;
+
 static int closeNotificationPipeForForwardingThread[2];
 static std::thread coolwsdThread;
 
@@ -254,6 +262,25 @@ static std::thread coolwsdThread;
 }
 
 /**
+ * Remember the pasteboard state right after we wrote it ourselves.
+ */
++ (void)noteClipboardWrittenBy:(Document *_Nonnull)document {
+    sOwnedPasteboardChangeCount = [NSPasteboard generalPasteboard].changeCount;
+    sOwnedClipboardDocId = document.appDocId;
+}
+
+/**
+ * Whether the pasteboard still holds the copy this document last wrote. When it
+ * does, a paste should use the engine's own clipboard rather than reading the
+ * pasteboard back, which both preserves full fidelity and avoids the transfer.
+ */
++ (BOOL)pasteboardOwnedBy:(Document *_Nonnull)document {
+    return sOwnedPasteboardChangeCount >= 0
+        && [NSPasteboard generalPasteboard].changeCount == sOwnedPasteboardChangeCount
+        && sOwnedClipboardDocId == document.appDocId;
+}
+
+/**
  * Sets the LOKit internal clipboard with the content of NSPasteboard.
  */
 + (void)setClipboardWith:(Document *_Nonnull)document from:(NSPasteboard *_Nonnull)pasteboard {
@@ -305,6 +332,12 @@ static std::thread coolwsdThread;
  * Insert data into the internal clipboard. The content's format is mimeType\nlegth\ndata\n[...repeat for more mimetypes...].
  */
 + (bool)sendToInternalWith:(Document *_Nonnull)document content:(NSString *_Nonnull)content {
+    // If we still own the pasteboard from our own copy, the engine's in-memory
+    // transferable is the richer representation. Keep it instead of overwriting
+    // the engine clipboard with the serialized content we just got handed back.
+    if ([COWrapper pasteboardOwnedBy:document])
+        return true;
+
     std::vector<char> html;
 
     ClipboardData data;

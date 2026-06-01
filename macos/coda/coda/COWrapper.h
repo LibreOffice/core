@@ -27,6 +27,12 @@
 + (void)setClipboardWith:(Document *_Nonnull)document from:(NSPasteboard *_Nonnull)pasteboard NS_SWIFT_NAME(setClipboard(_:from:));
 + (bool)sendToInternalWith:(Document *_Nonnull)document content:(NSString *_Nonnull)content NS_SWIFT_NAME(sendToInternalClipboard(_:content:));
 
+// Record that we just wrote the system pasteboard ourselves, and ask later
+// whether that copy is still the one on the pasteboard. Lets a paste reuse the
+// engine's full-fidelity in-memory clipboard instead of a serialized round-trip.
++ (void)noteClipboardWrittenBy:(Document *_Nonnull)document NS_SWIFT_NAME(noteClipboardWritten(by:));
++ (BOOL)pasteboardOwnedBy:(Document *_Nonnull)document NS_SWIFT_NAME(pasteboardOwned(by:));
+
 + (bool)isBinaryMessage:(const char *_Nonnull)buffer length:(NSInteger)length;
 
 + (int)generateNewAppDocId;

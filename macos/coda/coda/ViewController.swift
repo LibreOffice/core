@@ -187,7 +187,12 @@ class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavig
                 switch body {
 
                 case "read":
-                    COWrapper.setClipboard(document, from: .general)
+                    // If we still own the pasteboard from our own copy, leave the
+                    // engine's in-memory clipboard untouched so the paste uses it
+                    // directly (full fidelity, no round-trip).
+                    if !COWrapper.pasteboardOwned(by: document) {
+                        COWrapper.setClipboard(document, from: .general)
+                    }
                     return ("(internal)", nil);
 
                 case "write":
@@ -197,6 +202,7 @@ class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavig
                     }
                     NSPasteboard.general.clearContents()
                     NSPasteboard.general.writeObjects(content)
+                    COWrapper.noteClipboardWritten(by: document)
 
                 case let s where s.hasPrefix("sendToInternal "):
                     if !COWrapper.sendToInternalClipboard(document, content: String(s.dropFirst("sendToInternal ".count))) {
