@@ -3891,6 +3891,15 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 			app.sectionContainer.requestReDraw();
 			this._map.fire('sizeincreased');
 		}
+
+		//Recompute the file-based layout here, after the width has settled, so the
+		//stacked pages stay centered.
+		if (
+			app.file.fileBasedView &&
+			app.activeDocument.activeLayout.type === 'ViewLayoutFileBased'
+		) {
+			app.activeDocument.activeLayout.reset();
+		}
 	},
 
 	hasSplitPanesSupport: function () {
