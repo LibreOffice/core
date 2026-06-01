@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-29 07:49+0200\n"
-"PO-Revision-Date: 2026-05-05 14:11+0000\n"
-"Last-Translator: Jérôme Herbinet <jerome@herbinet.fr>\n"
+"PO-Revision-Date: 2026-06-01 21:01+0000\n"
+"Last-Translator: \"David D.\" <dadu042@users.noreply.hosted.weblate.org>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/collabora-online/"
-"ui/fr/>\n"
-"Language: \n"
+"collabora-ui/fr/>\n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.17.1\n"
+"X-Generator: Weblate 2026.6\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -417,29 +417,27 @@ msgstr "Signature de l'Autorité de Certification (CA)"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:434
 #: admin/src/integrator/AdminIntegratorSettings.ts:438
-#, fuzzy
 msgid "Provider"
-msgstr "Fournisseur :"
+msgstr "Fournisseur"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:435
 #: admin/src/integrator/AdminIntegratorSettings.ts:439
 msgid "API Key"
-msgstr ""
+msgstr "Clé d'API"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:436
 #: admin/src/integrator/AdminIntegratorSettings.ts:441
-#, fuzzy
 msgid "Model"
-msgstr "Mode"
+msgstr "Modèle"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:437
 #: admin/src/integrator/AdminIntegratorSettings.ts:440
 msgid "Base URL"
-msgstr ""
+msgstr "URL de base"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:442
 msgid "Image Size"
-msgstr ""
+msgstr "Taille image"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:443
 msgid "Request Timeout (seconds)"
@@ -463,20 +461,19 @@ msgstr "Mode sombre"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:448
 msgid "Smart Zoom"
-msgstr ""
+msgstr "Zoom intelligent"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:449
 msgid "Default Zoom"
-msgstr ""
+msgstr "Zoom par défaut"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:450
 msgid "Compact layout"
 msgstr "Disposition compacte"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:451
-#, fuzzy
 msgid "Show status bar"
-msgstr "Afficher la barre d'état"
+msgstr "Afficher barre status"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:452
 #: src/control/Control.Menubar.ts:174 src/control/Control.Menubar.ts:503
@@ -501,9 +498,8 @@ msgid "Custom Animation"
 msgstr "Animation personnalisée"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:459
-#, fuzzy
 msgid "Style List"
-msgstr "Liste des styles"
+msgstr "Liste styles"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:462
 #: src/control/Control.NotebookbarCalc.js:1186
@@ -578,9 +574,8 @@ msgid "Fit to page"
 msgstr "Adapter à la page"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:478
-#, fuzzy
 msgid "Tile pages"
-msgstr "Pages de carreaux"
+msgstr "Pages vignettes"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:479
 msgid "Booklet"
@@ -753,17 +748,19 @@ msgstr "Envoyer Xcu"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:715
 msgid "Document themes"
-msgstr ""
+msgstr "Thèmes document"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:717
 msgid ""
 "Upload custom document themes (.theme). These define color palettes "
 "available under Format > Theme."
 msgstr ""
+"Téléverses des thèmes de documents personnalisés (.theme). Ils définissent "
+"les palettes de couleurs disponibles sous Format > Thème."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:723
 msgid "Upload Theme"
-msgstr ""
+msgstr "Téléverser thème"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:778
 msgid "Something went wrong. Please try to refresh the page."
@@ -891,68 +888,70 @@ msgid ""
 "Configure AI provider credentials and model. Models are fetched "
 "automatically when credentials change."
 msgstr ""
+"Configure les identifiants et le modèle du fournisseur d’IA. Les modèles "
+"sont récupérés automatiquement lorsque les identifiants changent."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1981
 msgid "Text Generation"
-msgstr ""
+msgstr "Génération texte"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2031
 #: admin/src/integrator/AdminIntegratorSettings.ts:2137
 msgid "e.g."
-msgstr ""
+msgstr "par ex."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2050
 #: admin/src/integrator/AdminIntegratorSettings.ts:2168
 #: admin/src/integrator/AdminIntegratorSettings.ts:2612
 #: admin/src/integrator/AdminIntegratorSettings.ts:2628
 msgid "Fetch models to select"
-msgstr ""
+msgstr "Récupérer modèles à sélectionner"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2079
 msgid "Image Generation"
-msgstr ""
+msgstr "Génération image"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2084
 msgid "Same as Text AI"
-msgstr ""
+msgstr "Identique au texte IA"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2153
 msgid "Leave empty to use Text AI key"
-msgstr ""
+msgstr "Laisser vide pour utiliser la clé Texte IA"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2415
 #: admin/src/integrator/AdminIntegratorSettings.ts:2502
 msgid "Fetching models..."
-msgstr ""
+msgstr "Récupération modèles ..."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2444
 #: admin/src/integrator/AdminIntegratorSettings.ts:2454
 #: admin/src/integrator/AdminIntegratorSettings.ts:2531
 #: admin/src/integrator/AdminIntegratorSettings.ts:2541
 msgid "No models found"
-msgstr ""
+msgstr "Pas de modèle trouvé"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2464
 #: admin/src/integrator/AdminIntegratorSettings.ts:2551
 msgid "Models fetched successfully"
-msgstr ""
+msgstr "Modèles récupérés avec succès"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2470
 #: admin/src/integrator/AdminIntegratorSettings.ts:2557
 msgid "Failed to fetch models"
-msgstr ""
+msgstr "Échec de la récupération des modèles"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2480
 msgid "Invalid provider configuration"
-msgstr ""
+msgstr "Configuration fournisseur non valide"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2592
 msgid "None (disable image generation)"
-msgstr ""
+msgstr "Aucun (désactivation génération d’images)"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2976
 msgid "Reset"
-msgstr ""
+msgstr "Réinitialiser"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3095
 #: src/control/Control.AIChatSidebar.ts:2638 src/map/handler/Map.WOPI.js:869
@@ -1108,17 +1107,17 @@ msgstr ""
 
 #: src/app/TableStylesService.ts:104
 msgid "Dark"
-msgstr ""
+msgstr "Sombre"
 
 #: src/app/TableStylesService.ts:106
 #: src/control/jsdialog/Widget.ColorPicker.ts:334
 msgid "Custom"
-msgstr ""
+msgstr "Perso"
 
 #: src/app/TableStylesService.ts:231 src/app/TableStylesService.ts:243
 #: src/app/TableStylesService.ts:245
 msgid "Table Styles"
-msgstr ""
+msgstr "Styles table"
 
 #: src/canvas/sections/CommentListSection.ts:1845
 #: src/canvas/sections/CommentListSection.ts:1858
@@ -1183,9 +1182,8 @@ msgid "Resolved"
 msgstr "Résolu"
 
 #: src/canvas/sections/CommentSection.ts:580
-#, fuzzy
 msgid "Removed"
-msgstr "Supprimer"
+msgstr "Retiré(e)"
 
 #: src/canvas/sections/CommentSection.ts:1182
 #: src/control/jsdialog/Widget.Comment.ts:177
@@ -1247,23 +1245,23 @@ msgstr "Sauvegardé"
 
 #: src/canvas/sections/CompareChangesLabelSection.ts:118
 msgid "Last edited by %1 on %2"
-msgstr ""
+msgstr "Dernière modification par %1 le %2"
 
 #: src/canvas/sections/CompareChangesLabelSection.ts:193
 msgid "%1: Initial Version"
-msgstr ""
+msgstr "%1 : version initiale"
 
 #: src/canvas/sections/CompareChangesLabelSection.ts:197
 msgid "%1: Current Version"
-msgstr ""
+msgstr "%1 : version actuelle"
 
 #: src/canvas/sections/CompareChangesLabelSection.ts:204
 msgid "Initial Version"
-msgstr ""
+msgstr "Version initiale"
 
 #: src/canvas/sections/CompareChangesLabelSection.ts:208
 msgid "Current Version"
-msgstr ""
+msgstr "Version actuelle"
 
 #: src/canvas/sections/ShapeHandlesSection.ts:489
 msgid "Document contains unsupported media"
@@ -1283,15 +1281,15 @@ msgstr "Supprimer le lien"
 
 #: src/canvas/sections/FormFieldButton.ts:106
 msgid "Unfold"
-msgstr ""
+msgstr "Déplier"
 
 #: src/canvas/sections/FormulaErrorHelpSection.ts:80
 msgid "Help on this error"
-msgstr ""
+msgstr "Aide sur cette erreur"
 
 #: src/canvas/sections/FormulaErrorHelpSection.ts:85
 msgid "Inspect with Function Wizard"
-msgstr ""
+msgstr "Inspecter avec assistant de fonction"
 
 #: src/canvas/sections/FormulaErrorHelpSection.ts:90
 msgid "Edit in Formula Bar"
@@ -1299,19 +1297,21 @@ msgstr ""
 
 #: src/canvas/sections/FormulaErrorHelpSection.ts:98
 msgid "Help fix this error with AI"
-msgstr ""
+msgstr "Aidez à corriger cette erreur avec l’IA"
 
 #: src/canvas/sections/HeaderFooterBoundarySection.ts:152
 msgid "Header"
-msgstr ""
+msgstr "En-tête"
 
 #: src/canvas/sections/HeaderFooterBoundarySection.ts:160
 msgid "Footer"
-msgstr ""
+msgstr "Pied de page"
 
 #: src/control/CalcNotifications.ts:42
 msgid "Deletion created #REF! errors in other formulas. Undo to restore."
 msgstr ""
+"La suppression a créé des erreurs #REF! dans d’autres formules. Annulez pour "
+"restaurer."
 
 #: src/control/CalcNotifications.ts:43
 msgid "Find First"
@@ -1352,7 +1352,7 @@ msgstr "Copier toutes les informations de version en anglais"
 
 #: src/control/Control.AboutDialog.ts:391
 msgid "Version information has been copied"
-msgstr ""
+msgstr "Les informations de version ont été copiées"
 
 #: src/control/Control.AboutDialog.ts:431
 msgid "COOLWSD version:"
@@ -1364,130 +1364,134 @@ msgstr "adresse de la cellule"
 
 #: src/control/Control.AIChatSidebar.ts:79
 msgid "Make the following text more concise"
-msgstr ""
+msgstr "Rendre le texte suivant plus concis"
 
 #: src/control/Control.AIChatSidebar.ts:83
 msgid "Summarize the key points of this text"
-msgstr ""
+msgstr "Résumer les points clés de ce texte"
 
 #: src/control/Control.AIChatSidebar.ts:87
 msgid "Expand and add more detail to this text"
-msgstr ""
+msgstr "Développer et ajouter plus de détails à ce texte"
 
 #: src/control/Control.AIChatSidebar.ts:91
 msgid "Fix grammar, spelling, and punctuation errors"
-msgstr ""
+msgstr "Corriger les erreurs de grammaire, d’orthographe et de ponctuation"
 
 #: src/control/Control.AIChatSidebar.ts:107
 msgid "Natural"
-msgstr ""
+msgstr "Naturel"
 
 #: src/control/Control.AIChatSidebar.ts:108
-#, fuzzy
 msgid "Formal"
-msgstr "Format"
+msgstr "Formel"
 
 #: src/control/Control.AIChatSidebar.ts:109
-#, fuzzy
 msgid "Short"
-msgstr "Trie"
+msgstr "Court"
 
 #: src/control/Control.AIChatSidebar.ts:110
 msgid "Friendly"
-msgstr ""
+msgstr "Amical"
 
 #: src/control/Control.AIChatSidebar.ts:111
 msgid "Professional"
-msgstr ""
+msgstr "Professionnel"
 
 #: src/control/Control.AIChatSidebar.ts:112
 msgid "Casual"
-msgstr ""
+msgstr "Décontracté"
 
 #: src/control/Control.AIChatSidebar.ts:338
 msgid "Unknown"
-msgstr ""
+msgstr "Inconnu(e)"
 
 #: src/control/Control.AIChatSidebar.ts:340
 msgid ""
 "Ethical AI rating: {0} ({1}). Based on open-source licensing, self-hosting, "
 "and training data."
 msgstr ""
+"Évaluation éthique de l’IA : {0} ({1}). Basée sur des données de licence "
+"open source, d’auto-hébergement et de formation."
 
 #: src/control/Control.AIChatSidebar.ts:423
 msgid "Your message"
-msgstr ""
+msgstr "Votre message"
 
 #: src/control/Control.AIChatSidebar.ts:425
 msgid "Action requiring approval"
-msgstr ""
+msgstr "Action nécessitant approbation"
 
 #: src/control/Control.AIChatSidebar.ts:427
 msgid "Error message"
-msgstr ""
+msgstr "Message d'erreur"
 
 #: src/control/Control.AIChatSidebar.ts:428
 msgid "AI response"
-msgstr ""
+msgstr "Réponse d'IA"
 
 #: src/control/Control.AIChatSidebar.ts:502
 msgid ""
 "Content generated by an external AI service ({0}). Please review before use."
 msgstr ""
+"Contenu généré par un service d’IA externe ({0}). Veuillez vérifier avant "
+"utilisation."
 
 #: src/control/Control.AIChatSidebar.ts:505
 msgid "Content generated by an external AI service. Please review before use."
 msgstr ""
+"Contenu généré par un service d’IA externe. Veuillez vérifier avant "
+"utilisation."
 
 #: src/control/Control.AIChatSidebar.ts:583
 msgid "New conversation"
-msgstr ""
+msgstr "Nouvelle conversation"
 
 #: src/control/Control.AIChatSidebar.ts:614
 msgid "Ask AI anything about your document..."
-msgstr ""
+msgstr "Demandez à l’IA quoi que ce soit au sujet de votre document ..."
 
 #: src/control/Control.AIChatSidebar.ts:672
 msgid "Loading"
-msgstr ""
+msgstr "Chargement"
 
 #: src/control/Control.AIChatSidebar.ts:685
 msgid "Chat messages"
-msgstr ""
+msgstr "Messages tchat"
 
 #: src/control/Control.AIChatSidebar.ts:711
 msgid "AI generated image"
-msgstr ""
+msgstr "image générée par IA"
 
 #: src/control/Control.AIChatSidebar.ts:746
 msgid "Retry"
-msgstr ""
+msgstr "Réessayer"
 
 #: src/control/Control.AIChatSidebar.ts:770
 #: src/control/Control.AIChatSidebar.ts:803
 msgid "Insert at cursor"
-msgstr ""
+msgstr "Insérer au curseur"
 
 #: src/control/Control.AIChatSidebar.ts:779
 #: src/control/Control.AIChatSidebar.ts:810
 msgid "Copy to clipboard"
-msgstr ""
+msgstr "Copier dans presse-papiers"
 
 #: src/control/Control.AIChatSidebar.ts:831
 msgid "Ask AI..."
-msgstr ""
+msgstr "Demander à l’IA ..."
 
 #: src/control/Control.AIChatSidebar.ts:834
 msgid "Message input"
-msgstr ""
+msgstr "Saisie message"
 
 #: src/control/Control.AIChatSidebar.ts:850
 msgid "Stop generating"
-msgstr ""
+msgstr "Stopper la génération"
 
 #: src/control/Control.AIChatSidebar.ts:851
 msgid "Send message"
-msgstr ""
+msgstr "Envoyer message"
 
 #: src/control/Control.AIChatSidebar.ts:865
 #: src/control/Control.AIChatSidebar.ts:878
