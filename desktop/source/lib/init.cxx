@@ -8329,35 +8329,6 @@ static void preloadData()
 
 namespace {
 
-static void activateNotebookbar(std::u16string_view rApp)
-{
-    OUString aPath = OUString::Concat("org.openoffice.Office.UI.ToolbarMode/Applications/") + rApp;
-
-    const utl::OConfigurationTreeRoot aAppNode(xContext, aPath, true);
-
-    if (aAppNode.isValid())
-    {
-        static constexpr OUString sNoteBookbarName(u"notebookbar_online.ui"_ustr);
-        aAppNode.setNodeValue(u"Active"_ustr, Any(sNoteBookbarName));
-
-        const utl::OConfigurationNode aImplsNode = aAppNode.openNode(u"Modes"_ustr);
-        const Sequence<OUString> aModeNodeNames( aImplsNode.getNodeNames() );
-
-        for (const auto& rModeNodeName : aModeNodeNames)
-        {
-            const utl::OConfigurationNode aImplNode(aImplsNode.openNode(rModeNodeName));
-            if (!aImplNode.isValid())
-                continue;
-
-            OUString aCommandArg = comphelper::getString(aImplNode.getNodeValue(u"CommandArg"_ustr));
-            if (aCommandArg == "notebookbar.ui")
-                aImplNode.setNodeValue(u"CommandArg"_ustr, Any(sNoteBookbarName));
-        }
-
-        aAppNode.commit();
-    }
-}
-
 void setHelpRootURL()
 {
     const char* pHelpRootURL = ::getenv("LOK_HELP_URL");
@@ -8433,7 +8404,6 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
     static bool bPreInited = false;
     static bool bUnipoll = false;
     static bool bProfileZones = false;
-    static bool bNotebookbar = false;
 
     { // cf. string lifetime for preinit
         std::vector<OUString> aOpts;
@@ -8456,8 +8426,6 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
             else if (it == "sc_print_twips_msgs")
                 comphelper::LibreOfficeKit::setCompatFlag(
                     comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs);
-            else if (it == "notebookbar")
-                bNotebookbar = true;
         }
     }
 
@@ -8792,21 +8760,6 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
     setCertificateDir();
     setDeeplConfig();
     setLanguageToolConfig();
-
-    if (bNotebookbar)
-    {
-        std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
-        officecfg::Office::UI::ToolbarMode::ActiveWriter::set(u"notebookbar_online.ui"_ustr, batch);
-        officecfg::Office::UI::ToolbarMode::ActiveCalc::set(u"notebookbar_online.ui"_ustr, batch);
-        officecfg::Office::UI::ToolbarMode::ActiveImpress::set(u"notebookbar_online.ui"_ustr, batch);
-        officecfg::Office::UI::ToolbarMode::ActiveDraw::set(u"notebookbar_online.ui"_ustr, batch);
-        batch->commit();
-
-        activateNotebookbar(u"Writer");
-        activateNotebookbar(u"Calc");
-        activateNotebookbar(u"Impress");
-        activateNotebookbar(u"Draw");
-    }
 
     // staticize all strings.
     if (eStage == PRE_INIT)

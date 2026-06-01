@@ -353,9 +353,6 @@ bool SfxNotebookBar::IsActive(bool bConsiderSingleToolbar)
     if (bConsiderSingleToolbar && aActive == "Single")
         return true;
 
-    if (comphelper::LibreOfficeKit::isActive() && aActive == "notebookbar_online.ui")
-        return true;
-
     const utl::OConfigurationNode aModesNode = aAppNode.openNode(u"Modes"_ustr);
     const Sequence<OUString> aModeNodeNames( aModesNode.getNodeNames() );
 
@@ -450,11 +447,7 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
         vcl::EnumContext::Application eApp = vcl::EnumContext::GetApplicationEnum( aModuleName );
         bool bIsLOK = comphelper::LibreOfficeKit::isActive();
 
-        OUString sFile;
-        if (bIsLOK)
-            sFile = "notebookbar_online.ui";
-        else
-            sFile = lcl_getNotebookbarFileName( eApp );
+        OUString sFile = lcl_getNotebookbarFileName( eApp );
 
         OUString sNewFile = rUIFile + sFile;
         OUString sCurrentFile;
