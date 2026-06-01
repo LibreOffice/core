@@ -28,6 +28,8 @@
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
 #include <officecfg/Office/Draw.hxx>
+#include <comphelper/kit.hxx>
+#include <sfx2/viewsh.hxx>
 
 #include <svx/svdundo.hxx>
 #include <svx/strings.hrc>
@@ -430,6 +432,16 @@ void DrawView::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
                 {
                     sal_uInt16 nPageNum = (pPage->GetPageNum() - 1) / 2; // Sdr --> Sd
                     mpDrawViewShell->SwitchPage(nPageNum);
+
+                    // The undo/redo changed an object on the slide we just
+                    // switched to, but produced no tile invalidation. Invalidate
+                    // the part so the client refetches the corrected slide.
+                    if (comphelper::COKit::isActive())
+                    {
+                        if (SfxViewShell* pCurViewShell = mpDrawViewShell->GetViewShell())
+                            pCurViewShell->viewInvalidateTilesCallback(
+                                nullptr, pCurViewShell->getPart(), pCurViewShell->getEditMode());
+                    }
                 }
             }
         }
