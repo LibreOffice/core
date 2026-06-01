@@ -27,18 +27,18 @@ SfxPoolItem* SvxHyperlinkItem::CreateDefault() { return new  SvxHyperlinkItem(Ty
 
 SvxHyperlinkItem::SvxHyperlinkItem( const SvxHyperlinkItem& rHyperlinkItem )
     : SfxPoolItem(rHyperlinkItem),
-    sName(rHyperlinkItem.sName),
-    sURL(rHyperlinkItem.sURL),
-    sTarget(rHyperlinkItem.sTarget),
-    eType(rHyperlinkItem.eType),
-    sReplacementText(rHyperlinkItem.sReplacementText),
+    m_sName(rHyperlinkItem.m_sName),
+    m_sURL(rHyperlinkItem.m_sURL),
+    m_sTarget(rHyperlinkItem.m_sTarget),
+    m_eType(rHyperlinkItem.m_eType),
+    m_sReplacementText(rHyperlinkItem.m_sReplacementText),
     m_showName(rHyperlinkItem.m_showName),
     m_showText(rHyperlinkItem.m_showText),
-    sIntName(rHyperlinkItem.sIntName),
-    nMacroEvents(rHyperlinkItem.nMacroEvents)
+    m_sIntName(rHyperlinkItem.m_sIntName),
+    m_nMacroEvents(rHyperlinkItem.m_nMacroEvents)
 {
     if( rHyperlinkItem.GetMacroTable() )
-        pMacroTable.reset( new SvxMacroTableDtor( *rHyperlinkItem.GetMacroTable() ) );
+        m_pMacroTable.reset( new SvxMacroTableDtor( *rHyperlinkItem.GetMacroTable() ) );
 
 };
 
@@ -46,18 +46,18 @@ SvxHyperlinkItem::SvxHyperlinkItem( TypedWhichId<SvxHyperlinkItem> _nWhich, OUSt
                                     OUString aTarget, OUString aIntName, SvxLinkInsertMode eTyp,
                                     HyperDialogEvent nEvents, SvxMacroTableDtor const *pMacroTbl, bool showName, bool showText, OUString aReplacementText):
     SfxPoolItem (_nWhich ),
-    sName       (std::move(aName)),
-    sURL        (std::move(aURL)),
-    sTarget     (std::move(aTarget)),
-    eType       (eTyp),
-    sReplacementText (std::move(aReplacementText)),
+    m_sName       (std::move(aName)),
+    m_sURL        (std::move(aURL)),
+    m_sTarget     (std::move(aTarget)),
+    m_eType       (eTyp),
+    m_sReplacementText (std::move(aReplacementText)),
     m_showName    (showName),
     m_showText    (showText),
-    sIntName (std::move(aIntName)),
-    nMacroEvents (nEvents)
+    m_sIntName (std::move(aIntName)),
+    m_nMacroEvents (nEvents)
 {
     if (pMacroTbl)
-        pMacroTable.reset( new SvxMacroTableDtor ( *pMacroTbl ) );
+        m_pMacroTable.reset( new SvxMacroTableDtor ( *pMacroTbl ) );
 }
 
 SvxHyperlinkItem* SvxHyperlinkItem::Clone( SfxItemPool* ) const
@@ -71,25 +71,25 @@ bool SvxHyperlinkItem::operator==( const SfxPoolItem& rAttr ) const
 
     const SvxHyperlinkItem& rItem = static_cast<const SvxHyperlinkItem&>(rAttr);
 
-    bool bRet = ( sName   == rItem.sName   &&
-                  sURL    == rItem.sURL    &&
-                  sTarget == rItem.sTarget &&
-                  eType   == rItem.eType   &&
-                  sIntName == rItem.sIntName &&
-                  nMacroEvents == rItem.nMacroEvents &&
-                  sReplacementText == rItem.sReplacementText &&
+    bool bRet = ( m_sName   == rItem.m_sName   &&
+                  m_sURL    == rItem.m_sURL    &&
+                  m_sTarget == rItem.m_sTarget &&
+                  m_eType   == rItem.m_eType   &&
+                  m_sIntName == rItem.m_sIntName &&
+                  m_nMacroEvents == rItem.m_nMacroEvents &&
+                  m_sReplacementText == rItem.m_sReplacementText &&
                   m_showText == rItem.m_showText &&
                   m_showName == rItem.m_showName);
     if (!bRet)
         return false;
 
-    const SvxMacroTableDtor* pOther = static_cast<const SvxHyperlinkItem&>(rAttr).pMacroTable.get();
-    if( !pMacroTable )
+    const SvxMacroTableDtor* pOther = static_cast<const SvxHyperlinkItem&>(rAttr).m_pMacroTable.get();
+    if( !m_pMacroTable )
         return ( !pOther || pOther->empty() );
     if( !pOther )
-        return pMacroTable->empty();
+        return m_pMacroTable->empty();
 
-    const SvxMacroTableDtor& rOwn = *pMacroTable;
+    const SvxMacroTableDtor& rOwn = *m_pMacroTable;
     const SvxMacroTableDtor& rOther = *pOther;
 
     return rOwn == rOther;
@@ -112,15 +112,15 @@ void SvxHyperlinkItem::SetMacro( HyperDialogEvent nEvent, const SvxMacro& rMacro
         default: break;
     }
 
-    if( !pMacroTable )
-        pMacroTable.reset( new SvxMacroTableDtor );
+    if( !m_pMacroTable )
+        m_pMacroTable.reset( new SvxMacroTableDtor );
 
-    pMacroTable->Insert( nSfxEvent, rMacro);
+    m_pMacroTable->Insert( nSfxEvent, rMacro);
 }
 
 void SvxHyperlinkItem::SetMacroTable( const SvxMacroTableDtor& rTbl )
 {
-    pMacroTable.reset( new SvxMacroTableDtor ( rTbl ) );
+    m_pMacroTable.reset( new SvxMacroTableDtor ( rTbl ) );
 }
 
 bool SvxHyperlinkItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) const
@@ -130,22 +130,22 @@ bool SvxHyperlinkItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) co
     switch(nMemberId)
     {
         case MID_HLINK_NAME   :
-            rVal <<= sIntName;
+            rVal <<= m_sIntName;
         break;
         case MID_HLINK_TEXT   :
-            rVal <<= sName;
+            rVal <<= m_sName;
         break;
         case MID_HLINK_URL:
-            rVal <<= sURL;
+            rVal <<= m_sURL;
         break;
         case MID_HLINK_TARGET:
-            rVal <<= sTarget;
+            rVal <<= m_sTarget;
         break;
         case MID_HLINK_TYPE:
-            rVal <<= static_cast<sal_Int32>(eType);
+            rVal <<= static_cast<sal_Int32>(m_eType);
         break;
         case MID_HLINK_REPLACEMENTTEXT:
-            rVal <<= sReplacementText;
+            rVal <<= m_sReplacementText;
         break;
         default:
             return false;
@@ -164,32 +164,32 @@ bool SvxHyperlinkItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId 
         case MID_HLINK_NAME   :
             if(!(rVal >>= aStr))
                 return false;
-            sIntName = aStr;
+            m_sIntName = aStr;
         break;
         case MID_HLINK_TEXT   :
             if(!(rVal >>= aStr))
                 return false;
-            sName = aStr;
+            m_sName = aStr;
         break;
         case MID_HLINK_URL:
             if(!(rVal >>= aStr))
                 return false;
-            sURL = aStr;
+            m_sURL = aStr;
         break;
         case MID_HLINK_TARGET:
             if(!(rVal >>= aStr))
                 return false;
-            sTarget = aStr;
+            m_sTarget = aStr;
         break;
         case MID_HLINK_TYPE:
             if(!(rVal >>= nVal))
                 return false;
-            eType = static_cast<SvxLinkInsertMode>(static_cast<sal_uInt16>(nVal));
+            m_eType = static_cast<SvxLinkInsertMode>(static_cast<sal_uInt16>(nVal));
         break;
         case MID_HLINK_REPLACEMENTTEXT:
             if(!(rVal >>= aStr))
                 return false;
-            sReplacementText = aStr;
+            m_sReplacementText = aStr;
         break;
         // Currently no way to put showName or showValue; these are set by the shell
         default:
