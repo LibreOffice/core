@@ -239,8 +239,6 @@ VclPtr<VirtualDevice> QtInstanceWindow::screenshot()
     return xOutput;
 }
 
-const vcl::ILibreOfficeKitNotifier* QtInstanceWindow::GetLOKNotifier() { return nullptr; }
-
 bool QtInstanceWindow::eventFilter(QObject* pObject, QEvent* pEvent)
 {
     SolarMutexGuard g;

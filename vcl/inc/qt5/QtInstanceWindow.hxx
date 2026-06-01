@@ -47,8 +47,6 @@ public:
 
     virtual VclPtr<VirtualDevice> screenshot() override;
 
-    virtual const vcl::ILibreOfficeKitNotifier* GetLOKNotifier() override;
-
     bool eventFilter(QObject* pObject, QEvent* pEvent) override;
 
 private:
