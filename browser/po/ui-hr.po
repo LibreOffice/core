@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-29 07:49+0200\n"
-"PO-Revision-Date: 2026-05-30 21:25+0000\n"
+"PO-Revision-Date: 2026-06-01 21:01+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: Croatian <https://hosted.weblate.org/projects/collabora-"
 "online/collabora-ui/hr/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 2026.6.dev0\n"
+"X-Generator: Weblate 2026.6\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -1365,33 +1365,31 @@ msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:107
 msgid "Natural"
-msgstr ""
+msgstr "Prirodno"
 
 #: src/control/Control.AIChatSidebar.ts:108
-#, fuzzy
 msgid "Formal"
-msgstr "Format"
+msgstr "Formalno"
 
 #: src/control/Control.AIChatSidebar.ts:109
-#, fuzzy
 msgid "Short"
-msgstr "Razvrstaj"
+msgstr "Kratko"
 
 #: src/control/Control.AIChatSidebar.ts:110
 msgid "Friendly"
-msgstr ""
+msgstr "Ljubazno"
 
 #: src/control/Control.AIChatSidebar.ts:111
 msgid "Professional"
-msgstr ""
+msgstr "Profesionalno"
 
 #: src/control/Control.AIChatSidebar.ts:112
 msgid "Casual"
-msgstr ""
+msgstr "Ležerno"
 
 #: src/control/Control.AIChatSidebar.ts:338
 msgid "Unknown"
-msgstr ""
+msgstr "Nepoznato"
 
 #: src/control/Control.AIChatSidebar.ts:340
 msgid ""
@@ -5540,9 +5538,8 @@ msgid "Color palette"
 msgstr "Paleta boja"
 
 #: src/control/jsdialog/Widget.Combobox.js:241
-#, fuzzy
 msgid "Open "
-msgstr "Otvori"
+msgstr "Otvori "
 
 #: src/control/jsdialog/Widget.Combobox.js:241
 msgid " list"
