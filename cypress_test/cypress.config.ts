@@ -13,6 +13,11 @@ export default defineConfig({
 	chromeWebSecurity: false,
 	screenshotOnRunFailure: true,
 	screenshotsFolder: './integration_tests/snapshots/actual',
+	// Parallel specs each run their own cypress process against this one
+	// screenshotsFolder. The default per-run asset trashing would wipe a
+	// concurrent spec's in-flight screenshot before its comparison reads it.
+	// The Makefile clears the folder once before the parallel run instead.
+	trashAssetsBeforeRuns: false,
 	logServerResponse: false,
 	env: {
 		USER_INTERFACE: process.env.USER_INTERFACE,
