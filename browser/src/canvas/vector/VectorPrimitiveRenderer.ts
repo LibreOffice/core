@@ -37,6 +37,10 @@ namespace cool {
 						primitive as PolygonStrokePrimitive,
 					);
 					break;
+				case GroupPrimitive.type:
+					// Pure container - recursion into children happens
+					// below for every primitive type.
+					break;
 			}
 
 			if (primitive.children)

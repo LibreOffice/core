@@ -19,6 +19,7 @@
 #include <drawinglayer/primitive2d/backgroundcolorprimitive2d.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonColorPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolygonStrokePrimitive2D.hxx>
+#include <drawinglayer/primitive2d/groupprimitive2d.hxx>
 #include <drawinglayer/processor2d/Primitive2dJsonProcessor.hxx>
 #include <drawinglayer/attribute/lineattribute.hxx>
 #include <drawinglayer/attribute/strokeattribute.hxx>
@@ -136,6 +137,54 @@ CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testPolygonStroke)
     assertJsonPath(aJson, "/primitives/0/line/linejoin", "miter");
     assertJsonPath(aJson, "/primitives/0/line/linecap", "butt");
     assertJsonPathExists(aJson, "/primitives/0/path");
+}
+
+CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testGroup)
+{
+    // A group of two child primitives, a filled triangle followed
+    // by a stroked horizontal line. Their fill and stroke must
+    // render in that order. The group carries no drawing of its own.
+    basegfx::B2DPolygon aTriangle;
+    aTriangle.append(basegfx::B2DPoint(0.0, 0.0));
+    aTriangle.append(basegfx::B2DPoint(100.0, 0.0));
+    aTriangle.append(basegfx::B2DPoint(100.0, 100.0));
+    aTriangle.setClosed(true);
+
+    basegfx::B2DPolygon aLine;
+    aLine.append(basegfx::B2DPoint(0.0, 50.0));
+    aLine.append(basegfx::B2DPoint(100.0, 50.0));
+
+    drawinglayer::attribute::LineAttribute aLineAttribute(basegfx::BColor(0.0, 0.0, 0.0), 1.0,
+                                                          basegfx::B2DLineJoin::Miter,
+                                                          css::drawing::LineCap_BUTT);
+
+    Primitive2DContainer aChildren;
+    aChildren.append(new PolyPolygonColorPrimitive2D(basegfx::B2DPolyPolygon(aTriangle),
+                                                     basegfx::BColor(0.0, 1.0, 0.0)));
+    aChildren.append(new PolygonStrokePrimitive2D(aLine, aLineAttribute));
+
+    Primitive2DContainer aPrimitives;
+    aPrimitives.append(new GroupPrimitive2D(std::move(aChildren)));
+
+    auto aJson = writeReference(u"testGroup", aPrimitives);
+
+    assertJsonPath(aJson, "/primitives/0/type", "group");
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aJson.getSize("/primitives/0/children").value_or(0));
+    assertJsonPath(aJson, "/primitives/0/children/0/type", "polyPolygonColor");
+    assertJsonPath(aJson, "/primitives/0/children/1/type", "polygonStroke");
+}
+
+CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testGroupEmpty)
+{
+    // A group with no children. The engine still writes the type
+    // and an empty children array.
+    Primitive2DContainer aPrimitives;
+    aPrimitives.append(new GroupPrimitive2D(Primitive2DContainer()));
+
+    auto aJson = writeReference(u"testGroupEmpty", aPrimitives);
+
+    assertJsonPath(aJson, "/primitives/0/type", "group");
+    CPPUNIT_ASSERT_EQUAL(size_t(0), aJson.getSize("/primitives/0/children").value_or(0));
 }
 
 CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testPolygonStrokeDashed)
