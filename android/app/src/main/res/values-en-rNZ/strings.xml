@@ -8,7 +8,7 @@
     <string name="filter_documents">Documents</string>
     <string name="remove_from_list">Remove from the list</string>
     <string name="sort">Sort by</string>
-    <string name="ext_document_provider_error">Invalid root file. Check your sd card configuration.</string>
+    <string name="ext_document_provider_error">Invalid root file. Check your SD card configuration.</string>
     <string name="owncloud_wrong_connection">Cannot connect to the cloud server. Check your configuration.</string>
     <string name="theme_light">Light</string>
     <string name="theme_dark">Dark</string>
