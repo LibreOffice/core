@@ -122,7 +122,7 @@ namespace
         CPPUNIT_ASSERT(i->second.m_bConverted);
 
         // Test extended parameters with different value charsets:
-        input = "TEST/subTST;"
+        input = u"TEST/subTST;"_ustr
                 "parm1*0*=us-ascii'en'value;PARM1*1*=1;"
                 "parm2*0*=WINDOWS-1250'en-GB'value2%20%80;"
                 "parm3*0*=UNKNOWN'EN'value3;"

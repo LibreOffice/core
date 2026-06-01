@@ -26,7 +26,7 @@ void DocumentSettings::testDocumentSettingsProperties()
     OUString propName;
     uno::Any aNewValue;
 
-    propName = "ShowZeroValues";
+    propName = u"ShowZeroValues"_ustr;
     bool aShowZeroValues = false;
     CPPUNIT_ASSERT(xDocumentSettings->getPropertyValue(propName) >>= aShowZeroValues);
     CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue ShowZeroValues", aShowZeroValues);
@@ -36,7 +36,7 @@ void DocumentSettings::testDocumentSettingsProperties()
     CPPUNIT_ASSERT(xDocumentSettings->getPropertyValue(propName) >>= aShowZeroValues);
     CPPUNIT_ASSERT_MESSAGE("Unable to set PropertyValue ShowZeroValues", !aShowZeroValues);
 
-    propName = "ShowNotes";
+    propName = u"ShowNotes"_ustr;
     bool aShowNotes = false;
     CPPUNIT_ASSERT(xDocumentSettings->getPropertyValue(propName) >>= aShowNotes);
     CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue ShowNotes", aShowNotes);
@@ -46,7 +46,7 @@ void DocumentSettings::testDocumentSettingsProperties()
     CPPUNIT_ASSERT(xDocumentSettings->getPropertyValue(propName) >>= aShowNotes);
     CPPUNIT_ASSERT_MESSAGE("Unable to set PropertyValue ShowNotes", !aShowNotes);
 
-    propName = "ShowGrid";
+    propName = u"ShowGrid"_ustr;
     bool aShowGrid = false;
     CPPUNIT_ASSERT(xDocumentSettings->getPropertyValue(propName) >>= aShowGrid);
     CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue ShowGrid", aShowGrid);
@@ -56,7 +56,7 @@ void DocumentSettings::testDocumentSettingsProperties()
     CPPUNIT_ASSERT(xDocumentSettings->getPropertyValue(propName) >>= aShowGrid);
     CPPUNIT_ASSERT_MESSAGE("Unable to set PropertyValue ShowGrid", !aShowGrid);
 
-    propName = "ShowPageBreaks";
+    propName = u"ShowPageBreaks"_ustr;
     bool aShowPageBreaks = false;
     CPPUNIT_ASSERT(xDocumentSettings->getPropertyValue(propName) >>= aShowPageBreaks);
     CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue ShowPageBreaks", aShowPageBreaks);
@@ -66,7 +66,7 @@ void DocumentSettings::testDocumentSettingsProperties()
     CPPUNIT_ASSERT(xDocumentSettings->getPropertyValue(propName) >>= aShowPageBreaks);
     CPPUNIT_ASSERT_MESSAGE("Unable to set PropertyValue ShowPageBreaks", !aShowPageBreaks);
 
-    propName = "HasColumnRowHeaders";
+    propName = u"HasColumnRowHeaders"_ustr;
     bool aHasColumnRowHeaders = false;
     CPPUNIT_ASSERT(xDocumentSettings->getPropertyValue(propName) >>= aHasColumnRowHeaders);
     CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue HasColumnRowHeaders", aHasColumnRowHeaders);
@@ -77,7 +77,7 @@ void DocumentSettings::testDocumentSettingsProperties()
     CPPUNIT_ASSERT_MESSAGE("Unable to set PropertyValue HasColumnRowHeaders",
                            !aHasColumnRowHeaders);
 
-    propName = "HasSheetTabs";
+    propName = u"HasSheetTabs"_ustr;
     bool aHasSheetTabs = false;
     CPPUNIT_ASSERT(xDocumentSettings->getPropertyValue(propName) >>= aHasSheetTabs);
     CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue HasSheetTabs", aHasSheetTabs);
@@ -87,7 +87,7 @@ void DocumentSettings::testDocumentSettingsProperties()
     CPPUNIT_ASSERT(xDocumentSettings->getPropertyValue(propName) >>= aHasSheetTabs);
     CPPUNIT_ASSERT_MESSAGE("Unable to set PropertyValue HasSheetTabs", !aHasSheetTabs);
 
-    propName = "IsOutlineSymbolsSet";
+    propName = u"IsOutlineSymbolsSet"_ustr;
     bool aIsOutlineSymbolsSet = false;
     CPPUNIT_ASSERT(xDocumentSettings->getPropertyValue(propName) >>= aIsOutlineSymbolsSet);
     CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue IsOutlineSymbolsSet", aIsOutlineSymbolsSet);
@@ -98,7 +98,7 @@ void DocumentSettings::testDocumentSettingsProperties()
     CPPUNIT_ASSERT_MESSAGE("Unable to set PropertyValue IsOutlineSymbolsSet",
                            !aIsOutlineSymbolsSet);
 
-    propName = "IsSnapToRaster";
+    propName = u"IsSnapToRaster"_ustr;
     bool aIsSnapToRaster = true;
     CPPUNIT_ASSERT(xDocumentSettings->getPropertyValue(propName) >>= aIsSnapToRaster);
     CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue IsSnapToRaster", !aIsSnapToRaster);
@@ -108,7 +108,7 @@ void DocumentSettings::testDocumentSettingsProperties()
     CPPUNIT_ASSERT(xDocumentSettings->getPropertyValue(propName) >>= aIsSnapToRaster);
     CPPUNIT_ASSERT_MESSAGE("Unable to set PropertyValue IsSnapToRaster", aIsSnapToRaster);
 
-    propName = "RasterIsVisible";
+    propName = u"RasterIsVisible"_ustr;
     bool aRasterIsVisible = true;
     CPPUNIT_ASSERT(xDocumentSettings->getPropertyValue(propName) >>= aRasterIsVisible);
     CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue RasterIsVisible", !aRasterIsVisible);
@@ -118,7 +118,7 @@ void DocumentSettings::testDocumentSettingsProperties()
     CPPUNIT_ASSERT(xDocumentSettings->getPropertyValue(propName) >>= aRasterIsVisible);
     CPPUNIT_ASSERT_MESSAGE("Unable to set PropertyValue RasterIsVisible", aRasterIsVisible);
 
-    propName = "RasterResolutionX";
+    propName = u"RasterResolutionX"_ustr;
     sal_Int32 aRasterResolutionX = 0;
     CPPUNIT_ASSERT(xDocumentSettings->getPropertyValue(propName) >>= aRasterResolutionX);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to get PropertyValue RasterResolutionX", sal_Int32(1270),
@@ -130,7 +130,7 @@ void DocumentSettings::testDocumentSettingsProperties()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to set PropertyValue RasterResolutionX", sal_Int32(42),
                                  aRasterResolutionX);
 
-    propName = "RasterResolutionY";
+    propName = u"RasterResolutionY"_ustr;
     sal_Int32 aRasterResolutionY = 0;
     CPPUNIT_ASSERT(xDocumentSettings->getPropertyValue(propName) >>= aRasterResolutionY);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to get PropertyValue RasterResolutionY", sal_Int32(1270),
@@ -142,7 +142,7 @@ void DocumentSettings::testDocumentSettingsProperties()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to set PropertyValue RasterResolutionY", sal_Int32(42),
                                  aRasterResolutionY);
 
-    propName = "RasterSubdivisionX";
+    propName = u"RasterSubdivisionX"_ustr;
     sal_Int32 aRasterSubdivisionX = 0;
     CPPUNIT_ASSERT(xDocumentSettings->getPropertyValue(propName) >>= aRasterSubdivisionX);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to get PropertyValue RasterSubdivisionX", sal_Int32(1),
@@ -154,7 +154,7 @@ void DocumentSettings::testDocumentSettingsProperties()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to set PropertyValue RasterSubdivisionX", sal_Int32(42),
                                  aRasterSubdivisionX);
 
-    propName = "RasterSubdivisionY";
+    propName = u"RasterSubdivisionY"_ustr;
     sal_Int32 aRasterSubdivisionY = 0;
     CPPUNIT_ASSERT(xDocumentSettings->getPropertyValue(propName) >>= aRasterSubdivisionY);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to get PropertyValue RasterSubdivisionY", sal_Int32(1),
@@ -166,7 +166,7 @@ void DocumentSettings::testDocumentSettingsProperties()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to set PropertyValue RasterSubdivisionY", sal_Int32(42),
                                  aRasterSubdivisionY);
 
-    propName = "IsRasterAxisSynchronized";
+    propName = u"IsRasterAxisSynchronized"_ustr;
     bool aIsRasterAxisSynchronized = false;
     CPPUNIT_ASSERT(xDocumentSettings->getPropertyValue(propName) >>= aIsRasterAxisSynchronized);
     CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue IsRasterAxisSynchronized",

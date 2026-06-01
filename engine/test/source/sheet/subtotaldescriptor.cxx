@@ -26,7 +26,7 @@ void SubTotalDescriptor::testSubTotalDescriptorProperties()
     OUString propName;
     uno::Any aNewValue;
 
-    propName = "InsertPageBreaks";
+    propName = u"InsertPageBreaks"_ustr;
     bool aInsertPageBreaks = true;
     CPPUNIT_ASSERT(xSubTotalDescriptor->getPropertyValue(propName) >>= aInsertPageBreaks);
     CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue InsertPageBreaks", !aInsertPageBreaks);
@@ -36,7 +36,7 @@ void SubTotalDescriptor::testSubTotalDescriptorProperties()
     CPPUNIT_ASSERT(xSubTotalDescriptor->getPropertyValue(propName) >>= aInsertPageBreaks);
     CPPUNIT_ASSERT_MESSAGE("Unable to set PropertyValue InsertPageBreaks", aInsertPageBreaks);
 
-    propName = "IsCaseSensitive";
+    propName = u"IsCaseSensitive"_ustr;
     bool aIsCaseSensitive = true;
     CPPUNIT_ASSERT(xSubTotalDescriptor->getPropertyValue(propName) >>= aIsCaseSensitive);
     CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue IsCaseSensitive", !aIsCaseSensitive);
@@ -46,7 +46,7 @@ void SubTotalDescriptor::testSubTotalDescriptorProperties()
     CPPUNIT_ASSERT(xSubTotalDescriptor->getPropertyValue(propName) >>= aIsCaseSensitive);
     CPPUNIT_ASSERT_MESSAGE("Unable to set PropertyValue IsCaseSensitive", aIsCaseSensitive);
 
-    propName = "EnableUserSortList";
+    propName = u"EnableUserSortList"_ustr;
     bool aEnableUserSortList = true;
     CPPUNIT_ASSERT(xSubTotalDescriptor->getPropertyValue(propName) >>= aEnableUserSortList);
     CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue EnableUserSortList", !aEnableUserSortList);
@@ -56,7 +56,7 @@ void SubTotalDescriptor::testSubTotalDescriptorProperties()
     CPPUNIT_ASSERT(xSubTotalDescriptor->getPropertyValue(propName) >>= aEnableUserSortList);
     CPPUNIT_ASSERT_MESSAGE("Unable to set PropertyValue EnableUserSortList", aEnableUserSortList);
 
-    propName = "UserSortListIndex";
+    propName = u"UserSortListIndex"_ustr;
     sal_Int32 aUserSortListIndex = 42;
     CPPUNIT_ASSERT(xSubTotalDescriptor->getPropertyValue(propName) >>= aUserSortListIndex);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to get PropertyValue UserSortListIndex", sal_Int32(0),
@@ -68,7 +68,7 @@ void SubTotalDescriptor::testSubTotalDescriptorProperties()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to set PropertyValue UserSortListIndex", sal_Int32(42),
                                  aUserSortListIndex);
 
-    propName = "BindFormatsToContent";
+    propName = u"BindFormatsToContent"_ustr;
     bool aBindFormatsToContent = true;
     CPPUNIT_ASSERT(xSubTotalDescriptor->getPropertyValue(propName) >>= aBindFormatsToContent);
     CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue BindFormatsToContent",
@@ -80,7 +80,7 @@ void SubTotalDescriptor::testSubTotalDescriptorProperties()
     CPPUNIT_ASSERT_MESSAGE("Unable to set PropertyValue BindFormatsToContent",
                            aBindFormatsToContent);
 
-    propName = "EnableSort";
+    propName = u"EnableSort"_ustr;
     bool aEnableSort = false;
     CPPUNIT_ASSERT(xSubTotalDescriptor->getPropertyValue(propName) >>= aEnableSort);
     CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue EnableSort", aEnableSort);
@@ -90,7 +90,7 @@ void SubTotalDescriptor::testSubTotalDescriptorProperties()
     CPPUNIT_ASSERT(xSubTotalDescriptor->getPropertyValue(propName) >>= aEnableSort);
     CPPUNIT_ASSERT_MESSAGE("Unable to set PropertyValue EnableSort", !aEnableSort);
 
-    propName = "SortAscending";
+    propName = u"SortAscending"_ustr;
     bool aSortAscending = false;
     CPPUNIT_ASSERT(xSubTotalDescriptor->getPropertyValue(propName) >>= aSortAscending);
     CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue SortAscending", aSortAscending);
@@ -100,7 +100,7 @@ void SubTotalDescriptor::testSubTotalDescriptorProperties()
     CPPUNIT_ASSERT(xSubTotalDescriptor->getPropertyValue(propName) >>= aSortAscending);
     CPPUNIT_ASSERT_MESSAGE("Unable to set PropertyValue SortAscending", !aSortAscending);
 
-    propName = "MaxFieldCount";
+    propName = u"MaxFieldCount"_ustr;
     sal_Int32 aMaxFieldCount = 42;
     CPPUNIT_ASSERT(xSubTotalDescriptor->getPropertyValue(propName) >>= aMaxFieldCount);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to get PropertyValue MaxFieldCount", sal_Int32(3),

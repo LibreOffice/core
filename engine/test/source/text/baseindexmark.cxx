@@ -28,7 +28,7 @@ void BaseIndexMark::testBaseIndexMarkProperties()
     OUString propName;
     uno::Any aNewValue;
 
-    propName = "AlternativeText";
+    propName = u"AlternativeText"_ustr;
     OUString aAlternativeTextGet = u""_ustr;
     CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue AlternativeText",
                            xBaseIndexMark->getPropertyValue(propName) >>= aAlternativeTextGet);

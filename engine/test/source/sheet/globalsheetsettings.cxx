@@ -83,24 +83,24 @@ void GlobalSheetSettings::testGlobalSheetSettingsProperties()
     DoCheck(u"UseTabCol"_ustr, false, true, node, u"UseTabCol"_ustr);
     DoCheck(u"ReplaceCellsWarning"_ustr, true, false, node, u"ReplaceCellsWarning"_ustr);
 
-    node = "/org.openoffice.Office.Calc/Layout/Other/MeasureUnit";
+    node = u"/org.openoffice.Office.Calc/Layout/Other/MeasureUnit"_ustr;
     DoCheck(u"Metric"_ustr, sal_Int16(8), sal_Int16(1), node,
             u"NonMetric"_ustr); // Test uses en-US locale
 
-    node = "/org.openoffice.Office.Calc/Input";
+    node = u"/org.openoffice.Office.Calc/Input"_ustr;
     DoCheck(u"DoAutoComplete"_ustr, true, false, node, u"AutoInput"_ustr);
 
-    node = "/org.openoffice.Office.Calc/Content/Update";
+    node = u"/org.openoffice.Office.Calc/Content/Update"_ustr;
     DoCheck(u"LinkUpdateMode"_ustr, sal_Int16(2), sal_Int16(1), node, u"Link"_ustr);
 
-    node = "/org.openoffice.Office.Calc/Print/";
+    node = u"/org.openoffice.Office.Calc/Print/"_ustr;
     DoCheck(u"PrintAllSheets"_ustr, false, true, node + "Other", u"AllSheets"_ustr);
     DoCheck(u"PrintEmptyPages"_ustr, false, true, node + "Page", u"EmptyPages"_ustr);
 
     OUString propName;
     uno::Any aNewValue;
 
-    propName = "Scale";
+    propName = u"Scale"_ustr;
     sal_Int16 aScale = 42;
     CPPUNIT_ASSERT(xGlobalSheetSettings->getPropertyValue(propName) >>= aScale);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to get PropertyValue Scale", sal_Int16(100), aScale);
@@ -110,7 +110,7 @@ void GlobalSheetSettings::testGlobalSheetSettingsProperties()
     CPPUNIT_ASSERT(xGlobalSheetSettings->getPropertyValue(propName) >>= aScale);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to set PropertyValue Scale", sal_Int16(-1), aScale);
 
-    propName = "StatusBarFunction";
+    propName = u"StatusBarFunction"_ustr;
     sal_Int16 aStatusBarFunction = 42;
     CPPUNIT_ASSERT(xGlobalSheetSettings->getPropertyValue(propName) >>= aStatusBarFunction);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to get PropertyValue StatusBarFunction", sal_Int16(514),
@@ -122,7 +122,7 @@ void GlobalSheetSettings::testGlobalSheetSettingsProperties()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to set PropertyValue StatusBarFunction", sal_Int16(1),
                                  aStatusBarFunction);
 
-    propName = "UserLists";
+    propName = u"UserLists"_ustr;
     uno::Sequence<OUString> aSeq{
         u"Sun,Mon,Tue,Wed,Thu,Fri,Sat"_ustr,
         u"Sunday,Monday,Tuesday,Wednesday,Thursday,Friday,Saturday"_ustr,

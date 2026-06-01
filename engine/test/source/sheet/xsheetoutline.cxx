@@ -199,7 +199,7 @@ void XSheetOutline::testGroup()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("testGroup Column still visible", getVisibleAddress(aSheet, aNewString), OUString());
 
     // Row Level 2
-    aNewString = "OutlineSheet.A50:A60";
+    aNewString = u"OutlineSheet.A50:A60"_ustr;
     aLevelRangeAddress = getAddressFromRangeString(aSheet, aNewString);
     aSheetOutline->group(aLevelRangeAddress, table::TableOrientation_ROWS);
 
@@ -228,7 +228,7 @@ void XSheetOutline::testUngroup()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("testUnGroup Column becomes visible after ungroup", getVisibleAddress(aSheet, aNewString), OUString());
 
     // New Row level
-    aNewString = "OutlineSheet.A70:A80";
+    aNewString = u"OutlineSheet.A70:A80"_ustr;
     aLevelRangeAddress = getAddressFromRangeString(aSheet, aNewString);
     aSheetOutline->group(aLevelRangeAddress, table::TableOrientation_ROWS);
     aSheetOutline->hideDetail(aLevelRangeAddress);

@@ -60,8 +60,8 @@ namespace toolkit
         auto s(UnoControlModel::getSupportedServiceNames());
         s.realloc(s.getLength() + 2);
         auto ps = s.getArray();
-        ps[s.getLength() - 2] = "com.sun.star.awt.UnoControlScrollBarModel";
-        ps[s.getLength() - 1] = "stardiv.vcl.controlmodel.ScrollBar";
+        ps[s.getLength() - 2] = u"com.sun.star.awt.UnoControlScrollBarModel"_ustr;
+        ps[s.getLength() - 1] = u"stardiv.vcl.controlmodel.ScrollBar"_ustr;
         return s;
     }
 
@@ -297,8 +297,8 @@ namespace toolkit
         auto s(UnoControlBase::getSupportedServiceNames());
         s.realloc(s.getLength() + 2);
         auto ps = s.getArray();
-        ps[s.getLength() - 2] = "com.sun.star.awt.UnoControlScrollBar";
-        ps[s.getLength() - 1] = "stardiv.vcl.control.ScrollBar";
+        ps[s.getLength() - 2] = u"com.sun.star.awt.UnoControlScrollBar"_ustr;
+        ps[s.getLength() - 1] = u"stardiv.vcl.control.ScrollBar"_ustr;
         return s;
     }
 

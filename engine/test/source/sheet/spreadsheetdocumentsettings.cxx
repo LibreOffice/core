@@ -31,19 +31,19 @@ void SpreadsheetDocumentSettings::testSpreadsheetDocumentSettingsProperties()
     OUString propName;
     uno::Any aNewValue;
 
-    propName = "IsIterationEnabled";
+    propName = u"IsIterationEnabled"_ustr;
     testBooleanProperty(xSpreadsheetDocumentSettings, propName);
 
-    propName = "IterationCount";
+    propName = u"IterationCount"_ustr;
     testLongProperty(xSpreadsheetDocumentSettings, propName);
 
-    propName = "IterationEpsilon";
+    propName = u"IterationEpsilon"_ustr;
     testDoubleProperty(xSpreadsheetDocumentSettings, propName);
 
-    propName = "StandardDecimals";
+    propName = u"StandardDecimals"_ustr;
     testShortProperty(xSpreadsheetDocumentSettings, propName);
 
-    propName = "NullDate";
+    propName = u"NullDate"_ustr;
     util::Date aNullDateGet;
     util::Date aNullDateSet;
     CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue: NullDate",
@@ -56,28 +56,28 @@ void SpreadsheetDocumentSettings::testSpreadsheetDocumentSettingsProperties()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to set PropertyValue: NullDate", sal_Int16(2000),
                                  aNullDateSet.Year);
 
-    propName = "DefaultTabStop";
+    propName = u"DefaultTabStop"_ustr;
     testShortProperty(xSpreadsheetDocumentSettings, propName);
 
-    propName = "IgnoreCase";
+    propName = u"IgnoreCase"_ustr;
     testBooleanProperty(xSpreadsheetDocumentSettings, propName);
 
-    propName = "CalcAsShown";
+    propName = u"CalcAsShown"_ustr;
     testBooleanProperty(xSpreadsheetDocumentSettings, propName);
 
-    propName = "MatchWholeCell";
+    propName = u"MatchWholeCell"_ustr;
     testBooleanProperty(xSpreadsheetDocumentSettings, propName);
 
-    propName = "SpellOnline";
+    propName = u"SpellOnline"_ustr;
     testBooleanProperty(xSpreadsheetDocumentSettings, propName);
 
-    propName = "LookUpLabels";
+    propName = u"LookUpLabels"_ustr;
     testBooleanProperty(xSpreadsheetDocumentSettings, propName);
 
-    propName = "RegularExpressions";
+    propName = u"RegularExpressions"_ustr;
     testBooleanProperty(xSpreadsheetDocumentSettings, propName);
 
-    propName = "ForbiddenCharacters";
+    propName = u"ForbiddenCharacters"_ustr;
     uno::Reference<i18n::XForbiddenCharacters> xForbiddenCharactersGet;
     uno::Reference<i18n::XForbiddenCharacters> xForbiddenCharactersSet;
     CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue: ForbiddenCharacters",
@@ -85,8 +85,8 @@ void SpreadsheetDocumentSettings::testSpreadsheetDocumentSettingsProperties()
                            >>= xForbiddenCharactersGet);
 
     lang::Locale aForbiddenCharactersLocale;
-    aForbiddenCharactersLocale.Language = "ru";
-    aForbiddenCharactersLocale.Country = "RU";
+    aForbiddenCharactersLocale.Language = u"ru"_ustr;
+    aForbiddenCharactersLocale.Country = u"RU"_ustr;
 
     uno::Reference<i18n::XForbiddenCharacters> xForbiddenCharactersNew;
     aNewValue <<= xForbiddenCharactersNew;
@@ -98,10 +98,10 @@ void SpreadsheetDocumentSettings::testSpreadsheetDocumentSettingsProperties()
         xForbiddenCharactersGet->hasForbiddenCharacters(aForbiddenCharactersLocale),
         xForbiddenCharactersSet->hasForbiddenCharacters(aForbiddenCharactersLocale));
 
-    propName = "HasDrawPages";
+    propName = u"HasDrawPages"_ustr;
     testBooleanReadonlyProperty(xSpreadsheetDocumentSettings, propName);
 
-    propName = "CharLocale";
+    propName = u"CharLocale"_ustr;
     lang::Locale aCharLocaleGet;
     lang::Locale aCharLocaleSet;
     CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue: CharLocale",
@@ -109,15 +109,15 @@ void SpreadsheetDocumentSettings::testSpreadsheetDocumentSettingsProperties()
                            >>= aCharLocaleGet);
 
     lang::Locale aCharLocaleNew;
-    aCharLocaleNew.Language = "en";
-    aCharLocaleNew.Country = "CA";
+    aCharLocaleNew.Language = u"en"_ustr;
+    aCharLocaleNew.Country = u"CA"_ustr;
     aNewValue <<= aCharLocaleNew;
     xSpreadsheetDocumentSettings->setPropertyValue(propName, aNewValue);
     CPPUNIT_ASSERT(xSpreadsheetDocumentSettings->getPropertyValue(propName) >>= aCharLocaleSet);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to set PropertyValue: CharLocale", aCharLocaleNew.Country,
                                  aCharLocaleSet.Country);
 
-    propName = "CharLocaleAsian";
+    propName = u"CharLocaleAsian"_ustr;
     lang::Locale aCharLocaleAsianGet;
     lang::Locale aCharLocaleAsianSet;
     CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue: CharLocaleAsian",
@@ -125,8 +125,8 @@ void SpreadsheetDocumentSettings::testSpreadsheetDocumentSettingsProperties()
                            >>= aCharLocaleAsianGet);
 
     lang::Locale aCharLocaleAsianNew;
-    aCharLocaleAsianNew.Language = "en";
-    aCharLocaleAsianNew.Country = "CA";
+    aCharLocaleAsianNew.Language = u"en"_ustr;
+    aCharLocaleAsianNew.Country = u"CA"_ustr;
     aNewValue <<= aCharLocaleAsianNew;
     xSpreadsheetDocumentSettings->setPropertyValue(propName, aNewValue);
     CPPUNIT_ASSERT(xSpreadsheetDocumentSettings->getPropertyValue(propName)
@@ -134,7 +134,7 @@ void SpreadsheetDocumentSettings::testSpreadsheetDocumentSettingsProperties()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to set PropertyValue: CharLocaleAsian",
                                  aCharLocaleAsianNew.Country, aCharLocaleAsianSet.Country);
 
-    propName = "CharLocaleComplex";
+    propName = u"CharLocaleComplex"_ustr;
     lang::Locale aCharLocaleComplexGet;
     lang::Locale aCharLocaleComplexSet;
     CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue: CharLocaleComplex",
@@ -142,8 +142,8 @@ void SpreadsheetDocumentSettings::testSpreadsheetDocumentSettingsProperties()
                            >>= aCharLocaleComplexGet);
 
     lang::Locale aCharLocaleComplexNew;
-    aCharLocaleComplexNew.Language = "en";
-    aCharLocaleComplexNew.Country = "CA";
+    aCharLocaleComplexNew.Language = u"en"_ustr;
+    aCharLocaleComplexNew.Country = u"CA"_ustr;
     aNewValue <<= aCharLocaleComplexNew;
     xSpreadsheetDocumentSettings->setPropertyValue(propName, aNewValue);
     CPPUNIT_ASSERT(xSpreadsheetDocumentSettings->getPropertyValue(propName)
@@ -151,19 +151,19 @@ void SpreadsheetDocumentSettings::testSpreadsheetDocumentSettingsProperties()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to set PropertyValue: CharLocaleComplex",
                                  aCharLocaleComplexNew.Country, aCharLocaleComplexSet.Country);
 
-    propName = "IsLoaded";
+    propName = u"IsLoaded"_ustr;
     testBooleanProperty(xSpreadsheetDocumentSettings, propName);
 
-    propName = "IsUndoEnabled";
+    propName = u"IsUndoEnabled"_ustr;
     testBooleanProperty(xSpreadsheetDocumentSettings, propName);
 
-    propName = "IsAdjustHeightEnabled";
+    propName = u"IsAdjustHeightEnabled"_ustr;
     testBooleanProperty(xSpreadsheetDocumentSettings, propName);
 
-    propName = "IsExecuteLinkEnabled";
+    propName = u"IsExecuteLinkEnabled"_ustr;
     testBooleanProperty(xSpreadsheetDocumentSettings, propName);
 
-    propName = "ReferenceDevice";
+    propName = u"ReferenceDevice"_ustr;
     uno::Reference<awt::XDevice> xDeviceGet;
     uno::Reference<awt::XDevice> xDeviceSet;
     CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue: ReferenceDevice",
@@ -176,13 +176,13 @@ void SpreadsheetDocumentSettings::testSpreadsheetDocumentSettingsProperties()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Able to set PropertyValue: ReferenceDevice",
                                  xDeviceSet->getInfo().Width, xDeviceGet->getInfo().Width);
 
-    propName = "RecordChanges";
+    propName = u"RecordChanges"_ustr;
     testBooleanProperty(xSpreadsheetDocumentSettings, propName);
 
-    propName = "IsRecordChangesProtected";
+    propName = u"IsRecordChangesProtected"_ustr;
     testBooleanReadonlyProperty(xSpreadsheetDocumentSettings, propName);
 
-    propName = "Wildcards";
+    propName = u"Wildcards"_ustr;
     testBooleanProperty(xSpreadsheetDocumentSettings, propName);
 }
 }

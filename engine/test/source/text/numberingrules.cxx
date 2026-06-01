@@ -29,7 +29,7 @@ void NumberingRules::testNumberingRulesProperties()
     OUString propName;
     uno::Any aNewValue;
 
-    propName = "IsAbsoluteMargins";
+    propName = u"IsAbsoluteMargins"_ustr;
     bool bIsAbsoluteMarginsGet = false;
     bool bIsAbsoluteMarginsSet = false;
     CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue IsAbsoluteMargins",
@@ -41,7 +41,7 @@ void NumberingRules::testNumberingRulesProperties()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to set PropertyValue IsAbsoluteMargins",
                                  !bIsAbsoluteMarginsGet, bIsAbsoluteMarginsSet);
 
-    propName = "IsAutomatic";
+    propName = u"IsAutomatic"_ustr;
     bool bIsAutomaticGet = false;
     bool bIsAutomaticSet = false;
     CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue IsAutomatic",
@@ -54,7 +54,7 @@ void NumberingRules::testNumberingRulesProperties()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to set PropertyValue IsAutomatic", !bIsAutomaticGet,
                                  bIsAutomaticSet);
 
-    propName = "IsContinuousNumbering";
+    propName = u"IsContinuousNumbering"_ustr;
     bool bIsContinuousNumberingGet = false;
     bool bIsContinuousNumberingSet = false;
     CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue IsContinuousNumbering",
@@ -67,7 +67,7 @@ void NumberingRules::testNumberingRulesProperties()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to set PropertyValue IsContinuousNumbering",
                                  !bIsContinuousNumberingGet, bIsContinuousNumberingSet);
 
-    propName = "Name";
+    propName = u"Name"_ustr;
     OUString aNameGet = u""_ustr;
     CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue Name",
                            xNumberingRules->getPropertyValue(propName) >>= aNameGet);

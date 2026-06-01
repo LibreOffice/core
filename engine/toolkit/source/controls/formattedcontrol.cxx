@@ -403,8 +403,8 @@ namespace toolkit
         auto s(UnoControlModel::getSupportedServiceNames());
         s.realloc(s.getLength() + 2);
         auto ps = s.getArray();
-        ps[s.getLength() - 2] = "com.sun.star.awt.UnoControlFormattedFieldModel";
-        ps[s.getLength() - 1] = "stardiv.vcl.controlmodel.FormattedField";
+        ps[s.getLength() - 2] = u"com.sun.star.awt.UnoControlFormattedFieldModel"_ustr;
+        ps[s.getLength() - 1] = u"stardiv.vcl.controlmodel.FormattedField"_ustr;
         return s;
     }
 
@@ -450,8 +450,8 @@ namespace toolkit
         auto s(UnoEditControl::getSupportedServiceNames());
         s.realloc(s.getLength() + 2);
         auto ps = s.getArray();
-        ps[s.getLength() - 2] = "com.sun.star.awt.UnoControlFormattedField";
-        ps[s.getLength() - 1] = "stardiv.vcl.control.FormattedField";
+        ps[s.getLength() - 2] = u"com.sun.star.awt.UnoControlFormattedField"_ustr;
+        ps[s.getLength() - 1] = u"stardiv.vcl.control.FormattedField"_ustr;
         return s;
     }
 }   // namespace toolkit

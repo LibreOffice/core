@@ -35,19 +35,19 @@ void XNamedRange::testSetContent()
     OUString aExpectedContent;
 
     // test a cell
-    aExpectedContent = "D1";
+    aExpectedContent = u"D1"_ustr;
     xNamedRange->setContent(aExpectedContent);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong expected content for initial1 after SetContent a cell", aExpectedContent, xNamedRange->getContent());
 
     // test a cellrange
-    aExpectedContent = "D1:D10";
+    aExpectedContent = u"D1:D10"_ustr;
     xNamedRange->setContent(aExpectedContent);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong expected content for initial1 after SetContent a cellrange", aExpectedContent, xNamedRange->getContent());
 
     // test a formula
-    aExpectedContent = "=D10";
+    aExpectedContent = u"=D10"_ustr;
     xNamedRange->setContent(aExpectedContent);
-    aExpectedContent = "D10";
+    aExpectedContent = u"D10"_ustr;
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong expected content for initial1 after SetContent a formula", aExpectedContent, xNamedRange->getContent());
 }
 

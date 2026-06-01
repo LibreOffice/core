@@ -54,8 +54,8 @@ UnoControlContainerModel::getSupportedServiceNames()
     auto s(UnoControlModel::getSupportedServiceNames());
     s.realloc(s.getLength() + 2);
     auto ps = s.getArray();
-    ps[s.getLength() - 2] = "com.sun.star.awt.UnoControlContainerModel";
-    ps[s.getLength() - 1] = "stardiv.vcl.controlmodel.ControlContainer";
+    ps[s.getLength() - 2] = u"com.sun.star.awt.UnoControlContainerModel"_ustr;
+    ps[s.getLength() - 1] = u"stardiv.vcl.controlmodel.ControlContainer"_ustr;
     return s;
 }
 

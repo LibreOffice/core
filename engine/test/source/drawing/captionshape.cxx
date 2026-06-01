@@ -28,7 +28,7 @@ void CaptionShape::testCaptionShapeProperties()
     OUString propName;
     uno::Any aNewValue;
 
-    propName = "CornerRadius";
+    propName = u"CornerRadius"_ustr;
     sal_Int32 nCornerRadiusGet = 5;
     sal_Int32 nCornerRadiusSet = 0;
     CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue CornerRadius",
@@ -40,7 +40,7 @@ void CaptionShape::testCaptionShapeProperties()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to set PropertyValue CornerRadius", nCornerRadiusGet + 5,
                                  nCornerRadiusSet);
 
-    propName = "CaptionPoint";
+    propName = u"CaptionPoint"_ustr;
     awt::Point aCaptionPointGet;
     CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue of CaptionPoint",
                            xCaptionShape->getPropertyValue(propName) >>= aCaptionPointGet);
@@ -52,7 +52,7 @@ void CaptionShape::testCaptionShapeProperties()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Able to set PropertyValue of CaptionPoint", aCaptionPointSet,
                                  awt::Point(5, 5));
 
-    propName = "CaptionType";
+    propName = u"CaptionType"_ustr;
     sal_Int16 captionTypeGet = 0;
     CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue of CaptionType",
                            xCaptionShape->getPropertyValue(propName) >>= captionTypeGet);
@@ -65,7 +65,7 @@ void CaptionShape::testCaptionShapeProperties()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to set the PropertyValue of CaptionType", FIVE,
                                  captionTypeSet);
 
-    propName = "CaptionIsFixedAngle";
+    propName = u"CaptionIsFixedAngle"_ustr;
     bool captionIsFixedAngleGet = false;
     CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue of CaptionPointIsFixedAngle",
                            xCaptionShape->getPropertyValue(propName) >>= captionIsFixedAngleGet);
@@ -77,7 +77,7 @@ void CaptionShape::testCaptionShapeProperties()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to set the PropertyValue of CaptionPointisFixedAngle",
                                  captionIsFixedAngleSet, !captionIsFixedAngleGet);
 
-    propName = "CaptionAngle";
+    propName = u"CaptionAngle"_ustr;
     sal_Int32 captionAngleGet = {};
     CPPUNIT_ASSERT_MESSAGE("Unable to get the PropertyValue of CaptionAngle",
                            xCaptionShape->getPropertyValue(propName) >>= captionAngleGet);
@@ -89,7 +89,7 @@ void CaptionShape::testCaptionShapeProperties()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to set the PropertyValue of CaptionAngle", captionAngleSet,
                                  captionAngleGet + 5);
 
-    propName = "CaptionGap";
+    propName = u"CaptionGap"_ustr;
     sal_Int32 captionGapGet = {};
     CPPUNIT_ASSERT_MESSAGE("Unable to get the PropertyValue of CaptionGap",
                            xCaptionShape->getPropertyValue(propName) >>= captionGapGet);
@@ -101,7 +101,7 @@ void CaptionShape::testCaptionShapeProperties()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to set the PropertyValue of CaptionGap", captionGapSet,
                                  captionGapGet + 5);
 
-    propName = "CaptionEscapeDirection";
+    propName = u"CaptionEscapeDirection"_ustr;
     sal_Int32 captionEscapeDirectionGet = {};
     CPPUNIT_ASSERT_MESSAGE("Unable to get the PropertyValue of CaptionEscapeDirection",
                            xCaptionShape->getPropertyValue(propName) >>= captionEscapeDirectionGet);
@@ -113,7 +113,7 @@ void CaptionShape::testCaptionShapeProperties()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to set the PropertyValue of CaptionEscapeDirection",
                                  captionEscapeDirectionSet, captionEscapeDirectionGet + 5);
 
-    propName = "CaptionIsEscapeRelative";
+    propName = u"CaptionIsEscapeRelative"_ustr;
     bool captionIsEscapeRelativeGet = false;
     CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue of CaptionIsEscapeRelative",
                            xCaptionShape->getPropertyValue(propName)
@@ -126,7 +126,7 @@ void CaptionShape::testCaptionShapeProperties()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to set the PropertyValue of CaptionIsEscapeRelative",
                                  captionIsEscapeRelativeSet, !captionIsEscapeRelativeGet);
 
-    propName = "CaptionEscapeRelative";
+    propName = u"CaptionEscapeRelative"_ustr;
     sal_Int32 captionEscapeRelativeGet = {};
     CPPUNIT_ASSERT_MESSAGE("Unable to get the PropertyValue of CaptionEscapeRelative",
                            xCaptionShape->getPropertyValue(propName) >>= captionEscapeRelativeGet);
@@ -138,7 +138,7 @@ void CaptionShape::testCaptionShapeProperties()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to set the PropertyValue of CaptionEscapeRelative",
                                  captionEscapeRelativeSet, captionEscapeRelativeGet + 5);
 
-    propName = "CaptionEscapeAbsolute";
+    propName = u"CaptionEscapeAbsolute"_ustr;
     sal_Int32 captionEscapeAbsoluteGet = {};
     CPPUNIT_ASSERT_MESSAGE("Unable to get the PropertyValue of CaptionEscapeAbsolute",
                            xCaptionShape->getPropertyValue(propName) >>= captionEscapeAbsoluteGet);
@@ -150,7 +150,7 @@ void CaptionShape::testCaptionShapeProperties()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to set the PropertyValue of CaptionEscapeAbsolute",
                                  captionEscapeAbsoluteSet, captionEscapeAbsoluteGet + 5);
 
-    propName = "CaptionLineLength";
+    propName = u"CaptionLineLength"_ustr;
     sal_Int32 captionLineLengthGet = {};
     CPPUNIT_ASSERT_MESSAGE("Unable to get the PropertyValue of CaptionLineLength",
                            xCaptionShape->getPropertyValue(propName) >>= captionLineLengthGet);
@@ -162,7 +162,7 @@ void CaptionShape::testCaptionShapeProperties()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to set the PropertyValue of CaptionEscapeAbsolute",
                                  captionLineLengthSet, captionLineLengthGet + 5);
 
-    propName = "CaptionIsFitLineLength";
+    propName = u"CaptionIsFitLineLength"_ustr;
     bool captionIsFitLineLengthGet = false;
     CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue of CaptionIsFitLineLength",
                            xCaptionShape->getPropertyValue(propName) >>= captionIsFitLineLengthGet);

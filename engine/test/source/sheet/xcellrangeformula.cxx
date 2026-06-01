@@ -26,7 +26,7 @@ void XCellRangeFormula::testGetSetFormulaArray()
 
     uno::Sequence<uno::Sequence<OUString>> aFormulaArrayOriginal = xCRF->getFormulaArray();
     uno::Sequence<uno::Sequence<OUString>> aFormulaArrayNew = xCRF->getFormulaArray();
-    aFormulaArrayNew.getArray()[0].getArray()[0] = "NewValue";
+    aFormulaArrayNew.getArray()[0].getArray()[0] = u"NewValue"_ustr;
 
     xCRF->setFormulaArray(aFormulaArrayNew);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to get new FormulaArray", u"NewValue"_ustr,

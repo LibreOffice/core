@@ -70,7 +70,7 @@ public:
     {
         auto s(UnoControlModel::getSupportedServiceNames());
         s.realloc(s.getLength() + 1);
-        s.getArray()[s.getLength() - 1] = "com.sun.star.awt.grid.UnoControlGridModel";
+        s.getArray()[s.getLength() - 1] = u"com.sun.star.awt.grid.UnoControlGridModel"_ustr;
         return s;
     }
 };
@@ -121,7 +121,7 @@ public:
     {
         auto s(UnoControlBase::getSupportedServiceNames());
         s.realloc(s.getLength() + 1);
-        s.getArray()[s.getLength() - 1] = "com.sun.star.awt.grid.UnoControlGrid";
+        s.getArray()[s.getLength() - 1] = u"com.sun.star.awt.grid.UnoControlGrid"_ustr;
         return s;
     }
 

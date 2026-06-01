@@ -3641,9 +3641,9 @@ INetURLObject::getAbbreviated(
     {
         OUString aRest;
         if (m_aQuery.isPresent())
-            aRest = "?...";
+            aRest = u"?..."_ustr;
         else if (m_aFragment.isPresent())
-            aRest = "#...";
+            aRest = u"#..."_ustr;
         OUStringBuffer aTrailer;
         sal_Unicode const * pBegin = pCoreBegin;
         sal_Unicode const * pEnd = pCoreEnd;

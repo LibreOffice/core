@@ -791,8 +791,8 @@ css::uno::Sequence<OUString> UnoControlContainer::getSupportedServiceNames()
     auto s(UnoControlBase::getSupportedServiceNames());
     s.realloc(s.getLength() + 2);
     auto ps = s.getArray();
-    ps[s.getLength() - 2] = "com.sun.star.awt.UnoControlContainer";
-    ps[s.getLength() - 1] = "stardiv.vcl.control.ControlContainer";
+    ps[s.getLength() - 2] = u"com.sun.star.awt.UnoControlContainer"_ustr;
+    ps[s.getLength() - 1] = u"stardiv.vcl.control.ControlContainer"_ustr;
     return s;
 }
 

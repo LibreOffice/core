@@ -26,7 +26,7 @@ void Scenario::testScenarioProperties()
     OUString propName;
     uno::Any aNewValue;
 
-    propName = "IsActive";
+    propName = u"IsActive"_ustr;
     bool aIsActive = false;
     CPPUNIT_ASSERT(xScenario->getPropertyValue(propName) >>= aIsActive);
     CPPUNIT_ASSERT_MESSAGE("Unable to get property value IsActive", aIsActive);
@@ -36,7 +36,7 @@ void Scenario::testScenarioProperties()
     CPPUNIT_ASSERT(xScenario->getPropertyValue(propName) >>= aIsActive);
     CPPUNIT_ASSERT_MESSAGE("Unable to set property value IsActive", !aIsActive);
 
-    propName = "BorderColor";
+    propName = u"BorderColor"_ustr;
     sal_Int32 aBorderColor = 0;
     CPPUNIT_ASSERT(xScenario->getPropertyValue(propName) >>= aBorderColor);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to get property value BorderColor", sal_Int32(12632256),
@@ -48,7 +48,7 @@ void Scenario::testScenarioProperties()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to set property value BorderColor", sal_Int32(42),
                                  aBorderColor);
 
-    propName = "Protected";
+    propName = u"Protected"_ustr;
     bool aProtected = false;
     CPPUNIT_ASSERT(xScenario->getPropertyValue(propName) >>= aProtected);
     CPPUNIT_ASSERT_MESSAGE("Unable to get property value Protected", aProtected);
@@ -58,7 +58,7 @@ void Scenario::testScenarioProperties()
     CPPUNIT_ASSERT(xScenario->getPropertyValue(propName) >>= aProtected);
     CPPUNIT_ASSERT_MESSAGE("Unable to set property value Protected", !aProtected);
 
-    propName = "ShowBorder";
+    propName = u"ShowBorder"_ustr;
     bool aShowBorder = false;
     CPPUNIT_ASSERT(xScenario->getPropertyValue(propName) >>= aShowBorder);
     CPPUNIT_ASSERT_MESSAGE("Unable to get property value ShowBorder", aShowBorder);
@@ -68,7 +68,7 @@ void Scenario::testScenarioProperties()
     CPPUNIT_ASSERT(xScenario->getPropertyValue(propName) >>= aShowBorder);
     CPPUNIT_ASSERT_MESSAGE("Unable to set property value ShowBorder", !aShowBorder);
 
-    propName = "PrintBorder";
+    propName = u"PrintBorder"_ustr;
     bool aPrintBorder = false;
     CPPUNIT_ASSERT(xScenario->getPropertyValue(propName) >>= aPrintBorder);
     CPPUNIT_ASSERT_MESSAGE("Unable to get property value PrintBorder", aPrintBorder);
@@ -78,7 +78,7 @@ void Scenario::testScenarioProperties()
     CPPUNIT_ASSERT(xScenario->getPropertyValue(propName) >>= aPrintBorder);
     CPPUNIT_ASSERT_MESSAGE("Unable to set property value PrintBorder", !aPrintBorder);
 
-    propName = "CopyBack";
+    propName = u"CopyBack"_ustr;
     bool aCopyBack = false;
     CPPUNIT_ASSERT(xScenario->getPropertyValue(propName) >>= aCopyBack);
     CPPUNIT_ASSERT_MESSAGE("Unable to get property value CopyBack", aCopyBack);
@@ -88,7 +88,7 @@ void Scenario::testScenarioProperties()
     CPPUNIT_ASSERT(xScenario->getPropertyValue(propName) >>= aCopyBack);
     CPPUNIT_ASSERT_MESSAGE("Unable to set property value CopyBack", !aCopyBack);
 
-    propName = "CopyStyles";
+    propName = u"CopyStyles"_ustr;
     bool aCopyStyles = true;
     CPPUNIT_ASSERT(xScenario->getPropertyValue(propName) >>= aCopyStyles);
     CPPUNIT_ASSERT_MESSAGE("Unable to get property value CopyStyles", !aCopyStyles);
@@ -98,7 +98,7 @@ void Scenario::testScenarioProperties()
     CPPUNIT_ASSERT(xScenario->getPropertyValue(propName) >>= aCopyStyles);
     CPPUNIT_ASSERT_MESSAGE("Unable to set property value CopyStyles", aCopyStyles);
 
-    propName = "CopyFormulas";
+    propName = u"CopyFormulas"_ustr;
     bool aCopyFormulas = false;
     CPPUNIT_ASSERT(xScenario->getPropertyValue(propName) >>= aCopyFormulas);
     CPPUNIT_ASSERT_MESSAGE("Unable to get property value CopyFormulas", aCopyFormulas);

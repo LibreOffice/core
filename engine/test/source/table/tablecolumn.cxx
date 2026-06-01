@@ -32,7 +32,7 @@ void TableColumn::testTableColumnProperties()
     testLongProperty(xPS, aPropName);
 
     // currently changing the value to false has no effect
-    aPropName = "OptimalWidth";
+    aPropName = u"OptimalWidth"_ustr;
     uno::Reference<table::XCellRange> xCR(m_xSheet, uno::UNO_QUERY_THROW);
     xCR->getCellByPosition(0, 0)->setFormula(u"That's a pretty long text."_ustr);
     const sal_Int64 nWidthBefore = ::comphelper::getINT64(xPS->getPropertyValue(u"Width"_ustr));
@@ -41,10 +41,10 @@ void TableColumn::testTableColumnProperties()
     const sal_Int64 nWidthAfter = ::comphelper::getINT64(xPS->getPropertyValue(u"Width"_ustr));
     CPPUNIT_ASSERT(nWidthBefore != nWidthAfter);
 
-    aPropName = "IsVisible";
+    aPropName = u"IsVisible"_ustr;
     testBooleanProperty(xPS, aPropName);
 
-    aPropName = "IsStartOfNewPage";
+    aPropName = u"IsStartOfNewPage"_ustr;
     testBooleanProperty(xPS, aPropName);
 }
 

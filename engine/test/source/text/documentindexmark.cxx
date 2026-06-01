@@ -28,7 +28,7 @@ void DocumentIndexMark::testDocumentIndexMarkProperties()
     OUString propName;
     uno::Any aNewValue;
 
-    propName = "PrimaryKey";
+    propName = u"PrimaryKey"_ustr;
     OUString aPrimaryKeyGet = u""_ustr;
     CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue PrimaryKey",
                            xDocumentIndexMark->getPropertyValue(propName) >>= aPrimaryKeyGet);
@@ -40,7 +40,7 @@ void DocumentIndexMark::testDocumentIndexMarkProperties()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to set PropertyValue PrimaryKey", aPrimaryKeyGet,
                                  aPrimaryKeySet);
 
-    propName = "SecondaryKey";
+    propName = u"SecondaryKey"_ustr;
     OUString aSecondaryKeyGet = u""_ustr;
     CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue SecondaryKey",
                            xDocumentIndexMark->getPropertyValue(propName) >>= aSecondaryKeyGet);
@@ -52,7 +52,7 @@ void DocumentIndexMark::testDocumentIndexMarkProperties()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to set PropertyValue SecondaryKey", aSecondaryKeyGet,
                                  aSecondaryKeySet);
 
-    propName = "IsMainEntry";
+    propName = u"IsMainEntry"_ustr;
     bool bIsMainEntryGet = false;
     bool bIsMainEntrySet = false;
     CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue IsMainEntry",

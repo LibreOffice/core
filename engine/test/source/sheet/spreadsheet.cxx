@@ -35,19 +35,19 @@ void Spreadsheet::testSpreadsheetProperties()
     OUString propName;
     uno::Any aNewValue;
 
-    propName = "IsVisible";
+    propName = u"IsVisible"_ustr;
     testBooleanProperty(xSpreadsheet, propName);
 
-    propName = "PageStyle";
+    propName = u"PageStyle"_ustr;
     testStringProperty(xSpreadsheet, propName, u"Report"_ustr);
 
-    propName = "TableLayout";
+    propName = u"TableLayout"_ustr;
     testShortProperty(xSpreadsheet, propName, text::WritingMode2::RL_TB);
 
-    propName = "AutomaticPrintArea";
+    propName = u"AutomaticPrintArea"_ustr;
     testBooleanProperty(xSpreadsheet, propName);
 
-    propName = "TabColor";
+    propName = u"TabColor"_ustr;
     util::Color aColorGet;
     util::Color aColorSet;
     CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue: TabColor",
@@ -59,7 +59,7 @@ void Spreadsheet::testSpreadsheetProperties()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to set PropertyValue: TabColor", util::Color(42),
                                  aColorSet);
 
-    propName = "ConditionalFormats";
+    propName = u"ConditionalFormats"_ustr;
     uno::Reference<sheet::XConditionalFormats> xConditionalFormatsGet;
     uno::Reference<sheet::XConditionalFormats> xConditionalFormatsSet;
     CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue: ConditionalFormats",

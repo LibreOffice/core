@@ -28,7 +28,7 @@ void TableValidation::testTableValidationProperties()
     OUString propName;
     uno::Any aNewValue;
 
-    propName = "Type";
+    propName = u"Type"_ustr;
     uno::Any aValue = xTableValidation->getPropertyValue(propName);
     sheet::ValidationType aValidationType;
     aValue >>= aValidationType;
@@ -42,7 +42,7 @@ void TableValidation::testTableValidationProperties()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to set property value Type", sheet::ValidationType_WHOLE,
                                  aValidationType);
 
-    propName = "ShowInputMessage";
+    propName = u"ShowInputMessage"_ustr;
     bool aShowInputMessage = true;
     CPPUNIT_ASSERT(xTableValidation->getPropertyValue(propName) >>= aShowInputMessage);
     CPPUNIT_ASSERT_MESSAGE("Unable to get property value ShowInputMessage", !aShowInputMessage);
@@ -53,7 +53,7 @@ void TableValidation::testTableValidationProperties()
     CPPUNIT_ASSERT_MESSAGE("Unable to set property value ShowInputMessage", aShowInputMessage);
 
     // only possible if ShowInputMessage is true
-    propName = "InputMessage";
+    propName = u"InputMessage"_ustr;
     OUString aInputMessage;
     CPPUNIT_ASSERT(xTableValidation->getPropertyValue(propName) >>= aInputMessage);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to get property value InputMessage", u""_ustr,
@@ -66,7 +66,7 @@ void TableValidation::testTableValidationProperties()
                                  u"UnitTest InputMessage"_ustr, aInputMessage);
 
     // only possible if ShowInputMessage is true
-    propName = "InputTitle";
+    propName = u"InputTitle"_ustr;
     OUString aInputTitle;
     CPPUNIT_ASSERT(xTableValidation->getPropertyValue(propName) >>= aInputTitle);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to get property value InputTitle", u""_ustr, aInputTitle);
@@ -77,7 +77,7 @@ void TableValidation::testTableValidationProperties()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to get property value InputTitle",
                                  u"UnitTest InputTitle"_ustr, aInputTitle);
 
-    propName = "ShowErrorMessage";
+    propName = u"ShowErrorMessage"_ustr;
     bool aShowErrorMessage = true;
     CPPUNIT_ASSERT(xTableValidation->getPropertyValue(propName) >>= aShowErrorMessage);
     CPPUNIT_ASSERT_MESSAGE("Unable to get property value ShowErrorMessage", !aShowErrorMessage);
@@ -88,7 +88,7 @@ void TableValidation::testTableValidationProperties()
     CPPUNIT_ASSERT_MESSAGE("Unable to set property value ShowErrorMessage", aShowErrorMessage);
 
     // only possible if ShowErrorMessage is true
-    propName = "ErrorMessage";
+    propName = u"ErrorMessage"_ustr;
     OUString aErrorMessage;
     CPPUNIT_ASSERT(xTableValidation->getPropertyValue(propName) >>= aErrorMessage);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to get property value ErrorMessage", u""_ustr,
@@ -101,7 +101,7 @@ void TableValidation::testTableValidationProperties()
                                  u"UnitTest ErrorMessage"_ustr, aErrorMessage);
 
     // only possible if ShowErrorMessage is true
-    propName = "ErrorTitle";
+    propName = u"ErrorTitle"_ustr;
     OUString aErrorTitle;
     CPPUNIT_ASSERT(xTableValidation->getPropertyValue(propName) >>= aErrorTitle);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to get property value ErrorTitle", u""_ustr, aErrorTitle);
@@ -112,7 +112,7 @@ void TableValidation::testTableValidationProperties()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to get property value ErrorTitle",
                                  u"UnitTest ErrorTitle"_ustr, aErrorTitle);
 
-    propName = "IgnoreBlankCells";
+    propName = u"IgnoreBlankCells"_ustr;
     bool aIgnoreBlankCells = false;
     CPPUNIT_ASSERT(xTableValidation->getPropertyValue(propName) >>= aIgnoreBlankCells);
     CPPUNIT_ASSERT_MESSAGE("Unable to get property value IgnoreBlankCells", aIgnoreBlankCells);
@@ -122,7 +122,7 @@ void TableValidation::testTableValidationProperties()
     CPPUNIT_ASSERT(xTableValidation->getPropertyValue(propName) >>= aIgnoreBlankCells);
     CPPUNIT_ASSERT_MESSAGE("Unable to set property value IgnoreBlankCells", !aIgnoreBlankCells);
 
-    propName = "IsCaseSensitive";
+    propName = u"IsCaseSensitive"_ustr;
     bool bCaseSensitive = false;
     CPPUNIT_ASSERT(xTableValidation->getPropertyValue(propName) >>= bCaseSensitive);
     CPPUNIT_ASSERT_MESSAGE("Unable to get property value IsCaseSensitive", !bCaseSensitive);
@@ -132,7 +132,7 @@ void TableValidation::testTableValidationProperties()
     CPPUNIT_ASSERT(xTableValidation->getPropertyValue(propName) >>= bCaseSensitive);
     CPPUNIT_ASSERT_MESSAGE("Unable to set property value IsCaseSensitive", bCaseSensitive);
 
-    propName = "ErrorAlertStyle";
+    propName = u"ErrorAlertStyle"_ustr;
     aValue = xTableValidation->getPropertyValue(propName);
     sheet::ValidationAlertStyle aValidationAlertStyle;
     aValue >>= aValidationAlertStyle;
@@ -146,7 +146,7 @@ void TableValidation::testTableValidationProperties()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to set property value ValidationAlertStyle",
                                  sheet::ValidationAlertStyle_WARNING, aValidationAlertStyle);
 
-    propName = "ShowList";
+    propName = u"ShowList"_ustr;
     sal_Int16 aShowList = 0;
     CPPUNIT_ASSERT(xTableValidation->getPropertyValue(propName) >>= aShowList);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to get property value ShowList", sal_Int16(1), aShowList);

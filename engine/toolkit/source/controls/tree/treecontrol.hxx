@@ -57,7 +57,7 @@ public:
     {
         auto s(UnoControlModel::getSupportedServiceNames());
         s.realloc(s.getLength() + 1);
-        s.getArray()[s.getLength() - 1] = "com.sun.star.awt.tree.TreeControlModel";
+        s.getArray()[s.getLength() - 1] = u"com.sun.star.awt.tree.TreeControlModel"_ustr;
         return s;
     }
 };

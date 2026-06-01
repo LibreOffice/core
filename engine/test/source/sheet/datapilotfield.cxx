@@ -31,7 +31,7 @@ void DataPilotField::testSortInfo()
     uno::Reference< beans::XPropertySet> xPropSet(init(),UNO_QUERY_THROW);
     sheet::DataPilotFieldSortInfo aSortInfoValue;
     OUString aSortInfo(u"SortInfo"_ustr);
-    aSortInfoValue.Field = "Col1";
+    aSortInfoValue.Field = u"Col1"_ustr;
     aSortInfoValue.IsAscending = false;
     aSortInfoValue.Mode = sheet::DataPilotFieldSortMode::MANUAL;
     uno::Any aValue;
@@ -98,7 +98,7 @@ void DataPilotField::testAutoShowInfo()
 {
     uno::Reference< beans::XPropertySet > xPropSet(init(),UNO_QUERY_THROW);
     sheet::DataPilotFieldAutoShowInfo aAutoShowInfoValue;
-    aAutoShowInfoValue.DataField = "Col1";
+    aAutoShowInfoValue.DataField = u"Col1"_ustr;
     aAutoShowInfoValue.IsEnabled = true;
     OUString aAutoShowInfo(u"AutoShowInfo"_ustr);
     uno::Any aValue;
@@ -131,7 +131,7 @@ void DataPilotField::testReference()
 {
     uno::Reference< beans::XPropertySet > xPropSet(init(),UNO_QUERY_THROW);
     sheet::DataPilotFieldReference aReferenceValue;
-    aReferenceValue.ReferenceField = "Col1";
+    aReferenceValue.ReferenceField = u"Col1"_ustr;
     aReferenceValue.ReferenceItemType = sheet::DataPilotFieldReferenceItemType::NAMED;
     OUString aReference(u"Reference"_ustr);
     uno::Any aValue;

@@ -26,7 +26,7 @@ void SheetLink::testSheetLinkProperties()
     OUString propName;
     uno::Any aNewValue;
 
-    propName = "Url";
+    propName = u"Url"_ustr;
     OUString aUrlGet;
     OUString aUrlSet;
     CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue Url",
@@ -38,7 +38,7 @@ void SheetLink::testSheetLinkProperties()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to set PropertyValue Url",
                                  u"file:///tmp/ScSheetLinkObj.ods"_ustr, aUrlSet);
 
-    propName = "Filter";
+    propName = u"Filter"_ustr;
     OUString aFilterGet;
     OUString aFilterSet;
     CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue Filter",
@@ -50,7 +50,7 @@ void SheetLink::testSheetLinkProperties()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to set PropertyValue Filter",
                                  u"Text - txt - csv (StarCalc)"_ustr, aFilterSet);
 
-    propName = "FilterOptions";
+    propName = u"FilterOptions"_ustr;
     OUString aFilterOptionsGet;
     OUString aFilterOptionsSet;
     CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue FilterOptions",

@@ -22,16 +22,16 @@ void TableRow::testTableRowProperties()
 
     OUString aPropName;
 
-    aPropName = "Height";
+    aPropName = u"Height"_ustr;
     testLongProperty(xPS, aPropName);
 
-    aPropName = "OptimalHeight";
+    aPropName = u"OptimalHeight"_ustr;
     testBooleanProperty(xPS, aPropName);
 
-    aPropName = "IsVisible";
+    aPropName = u"IsVisible"_ustr;
     testBooleanProperty(xPS, aPropName);
 
-    aPropName = "IsStartOfNewPage";
+    aPropName = u"IsStartOfNewPage"_ustr;
     testBooleanProperty(xPS, aPropName);
 }
 

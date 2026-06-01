@@ -75,7 +75,7 @@ void test::setUpVcl(bool const forceHeadless) {
     // Force locale (and resource files loaded):
     OUString locale = o3tl::getEnvironment(u"LO_TEST_LOCALE"_ustr);
     if (locale.isEmpty())
-        locale = "en-US";
+        locale = u"en-US"_ustr;
 
     SvtSysLocaleOptions localOptions;
     localOptions.SetLocaleConfigString(locale);

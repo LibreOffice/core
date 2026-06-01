@@ -80,8 +80,8 @@ namespace toolkit
         auto s(UnoControlRoadmapModel_Base::getSupportedServiceNames());
         s.realloc(s.getLength() + 2);
         auto ps = s.getArray();
-        ps[s.getLength() - 2] = "com.sun.star.awt.UnoControlRoadmapModel";
-        ps[s.getLength() - 1] = "stardiv.vcl.controlmodel.Roadmap";
+        ps[s.getLength() - 2] = u"com.sun.star.awt.UnoControlRoadmapModel"_ustr;
+        ps[s.getLength() - 1] = u"stardiv.vcl.controlmodel.Roadmap"_ustr;
         return s;
     }
 
@@ -476,8 +476,8 @@ css::uno::Sequence<OUString> UnoRoadmapControl::getSupportedServiceNames()
     auto s(UnoControlBase::getSupportedServiceNames());
     s.realloc(s.getLength() + 2);
     auto ps = s.getArray();
-    ps[s.getLength() - 2] = "com.sun.star.awt.UnoControlRoadmap";
-    ps[s.getLength() - 1] = "stardiv.vcl.control.Roadmap";
+    ps[s.getLength() - 2] = u"com.sun.star.awt.UnoControlRoadmap"_ustr;
+    ps[s.getLength() - 1] = u"stardiv.vcl.control.Roadmap"_ustr;
     return s;
 }
 

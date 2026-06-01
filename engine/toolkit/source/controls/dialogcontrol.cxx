@@ -159,8 +159,8 @@ public:
         auto s(ControlModelContainerBase::getSupportedServiceNames());
         s.realloc(s.getLength() + 2);
         auto ps = s.getArray();
-        ps[s.getLength() - 2] = "com.sun.star.awt.UnoControlDialogModel";
-        ps[s.getLength() - 1] = "stardiv.vcl.controlmodel.Dialog";
+        ps[s.getLength() - 2] = u"com.sun.star.awt.UnoControlDialogModel"_ustr;
+        ps[s.getLength() - 1] = u"stardiv.vcl.controlmodel.Dialog"_ustr;
         return s;
     }
 };

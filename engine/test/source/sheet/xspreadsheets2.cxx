@@ -291,7 +291,7 @@ void XSpreadsheets2::testLastAfterInsertCopy()
     // The named range 'initial2' is already present in the destination
     // document defined to $Sheet1.$B$2 and thus is not copied, pointing to
     // "content2" instead.
-    aSrcString[6] = "content2";
+    aSrcString[6] = u"content2"_ustr;
 
     xDestDoc = getDoc(gaDestFileBase);
     CPPUNIT_ASSERT(xDestDoc.is());

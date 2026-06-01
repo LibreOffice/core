@@ -90,7 +90,7 @@ void UnoApiTest::setTestInteractionHandler(const char* pPassword,
     auto& rPropertyValue = rFilterOptions.emplace_back();
     xInteractionHandler
         = rtl::Reference<TestInteractionHandler>(new TestInteractionHandler(sPassword));
-    rPropertyValue.Name = "InteractionHandler";
+    rPropertyValue.Name = u"InteractionHandler"_ustr;
     rPropertyValue.Value <<= css::uno::Reference<task::XInteractionHandler2>(xInteractionHandler);
 }
 
@@ -152,15 +152,15 @@ void UnoApiTest::validate(TestFilter eFilter)
     OUString var;
     if (eFormat == ValidationFormat::OOXML)
     {
-        var = "OFFICEOTRON";
+        var = u"OFFICEOTRON"_ustr;
     }
     else if (eFormat == ValidationFormat::ODF)
     {
-        var = "ODFVALIDATOR";
+        var = u"ODFVALIDATOR"_ustr;
     }
     else if (eFormat == ValidationFormat::PDF)
     {
-        var = "VERAPDF";
+        var = u"VERAPDF"_ustr;
     }
     else if (eFormat == ValidationFormat::MSBINARY)
     {
@@ -292,7 +292,7 @@ void UnoApiTest::loadFromURL(OUString const& rURL, const char* pPassword)
     if (!maImportFilterOptions.isEmpty())
     {
         beans::PropertyValue aValue;
-        aValue.Name = "FilterOptions";
+        aValue.Name = u"FilterOptions"_ustr;
         aValue.Value <<= maImportFilterOptions;
         aFilterOptions.push_back(aValue);
     }
@@ -300,7 +300,7 @@ void UnoApiTest::loadFromURL(OUString const& rURL, const char* pPassword)
     if (meImportFilterName != TestFilter::NONE)
     {
         beans::PropertyValue aValue;
-        aValue.Name = "FilterName";
+        aValue.Name = u"FilterName"_ustr;
         aValue.Value <<= TestFilterNames.at(meImportFilterName);
         aFilterOptions.push_back(aValue);
     }

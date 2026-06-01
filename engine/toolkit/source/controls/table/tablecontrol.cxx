@@ -324,16 +324,16 @@ namespace svt::table
         switch( eObjType )
         {
             case AccessibleTableControlObjType::GRIDCONTROL:
-                aRetText = "Grid control";
+                aRetText = u"Grid control"_ustr;
                 break;
             case AccessibleTableControlObjType::TABLE:
-                aRetText = "Grid control";
+                aRetText = u"Grid control"_ustr;
                 break;
             case AccessibleTableControlObjType::ROWHEADERBAR:
-                aRetText = "RowHeaderBar";
+                aRetText = u"RowHeaderBar"_ustr;
                 break;
             case AccessibleTableControlObjType::COLUMNHEADERBAR:
-                aRetText = "ColumnHeaderBar";
+                aRetText = u"ColumnHeaderBar"_ustr;
                 break;
             case AccessibleTableControlObjType::TABLECELL:
                 //the name of the cell consists of column name and row name if defined
@@ -367,16 +367,16 @@ namespace svt::table
         switch( eObjType )
         {
             case AccessibleTableControlObjType::GRIDCONTROL:
-                aRetText = "Grid control description";
+                aRetText = u"Grid control description"_ustr;
                 break;
             case AccessibleTableControlObjType::TABLE:
-                    aRetText = "TABLE description";
+                    aRetText = u"TABLE description"_ustr;
                 break;
             case AccessibleTableControlObjType::ROWHEADERBAR:
-                    aRetText = "ROWHEADERBAR description";
+                    aRetText = u"ROWHEADERBAR description"_ustr;
                 break;
             case AccessibleTableControlObjType::COLUMNHEADERBAR:
-                    aRetText = "COLUMNHEADERBAR description";
+                    aRetText = u"COLUMNHEADERBAR description"_ustr;
                 break;
             case AccessibleTableControlObjType::TABLECELL:
                 // the description of the cell consists of column name and row name if defined
@@ -391,10 +391,10 @@ namespace svt::table
                 }
                 break;
             case AccessibleTableControlObjType::ROWHEADERCELL:
-                    aRetText = "ROWHEADERCELL description";
+                    aRetText = u"ROWHEADERCELL description"_ustr;
                 break;
             case AccessibleTableControlObjType::COLUMNHEADERCELL:
-                    aRetText = "COLUMNHEADERCELL description";
+                    aRetText = u"COLUMNHEADERCELL description"_ustr;
                 break;
         }
         return aRetText;

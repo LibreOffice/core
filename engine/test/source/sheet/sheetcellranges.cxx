@@ -34,7 +34,7 @@ void SheetCellRanges::testSheetCellRangesProperties()
     uno::Sequence<beans::PropertyValue> aPropValue{ comphelper::makePropertyValue(
         u"StyleName"_ustr, u"Result2"_ustr) };
 
-    propName = "ConditionalFormat";
+    propName = u"ConditionalFormat"_ustr;
     uno::Reference<sheet::XSheetConditionalEntries> aConditionalFormatGet;
     uno::Reference<sheet::XSheetConditionalEntries> aConditionalFormatSet;
 
@@ -60,7 +60,7 @@ void SheetCellRanges::testSheetCellRangesProperties()
                                      xSCENew->getStyleName(), xSCESet->getStyleName());
     }
 
-    propName = "ConditionalFormatLocal";
+    propName = u"ConditionalFormatLocal"_ustr;
     uno::Reference<sheet::XSheetConditionalEntries> aConditionalFormatLocalGet;
     uno::Reference<sheet::XSheetConditionalEntries> aConditionalFormatLocalSet;
 
@@ -87,7 +87,7 @@ void SheetCellRanges::testSheetCellRangesProperties()
                                      xSCENew->getStyleName(), xSCESet->getStyleName());
     }
 
-    propName = "Validation";
+    propName = u"Validation"_ustr;
     uno::Reference<beans::XPropertySet> aValidationGet;
     uno::Reference<beans::XPropertySet> aValidationSet;
 
@@ -107,7 +107,7 @@ void SheetCellRanges::testSheetCellRangesProperties()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to set PropertyValue Validation",
                                  sheet::ValidationType_WHOLE, aType);
 
-    propName = "ValidationLocal";
+    propName = u"ValidationLocal"_ustr;
     uno::Reference<beans::XPropertySet> aValidationLocalGet;
     uno::Reference<beans::XPropertySet> aValidationLocalSet;
 
@@ -125,7 +125,7 @@ void SheetCellRanges::testSheetCellRangesProperties()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to set PropertyValue ValidationLocal",
                                  sheet::ValidationType_WHOLE, aType);
 
-    propName = "AbsoluteName";
+    propName = u"AbsoluteName"_ustr;
     OUString aAbsoluteNameGet = u""_ustr;
     CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue AbsoluteName",
                            xSheetCellRanges->getPropertyValue(propName) >>= aAbsoluteNameGet);

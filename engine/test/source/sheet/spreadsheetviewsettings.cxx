@@ -27,7 +27,7 @@ void SpreadsheetViewSettings::testSpreadsheetViewSettingsProperties()
     OUString propName;
     uno::Any aNewValue;
 
-    propName = "ShowFormulas";
+    propName = u"ShowFormulas"_ustr;
     bool aShowFormulas = true;
     CPPUNIT_ASSERT(xSpreadsheetViewSettings->getPropertyValue(propName) >>= aShowFormulas);
     CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue ShowFormulas", !aShowFormulas);
@@ -37,7 +37,7 @@ void SpreadsheetViewSettings::testSpreadsheetViewSettingsProperties()
     CPPUNIT_ASSERT(xSpreadsheetViewSettings->getPropertyValue(propName) >>= aShowFormulas);
     CPPUNIT_ASSERT_MESSAGE("Unable to set PropertyValue ShowFormulas", aShowFormulas);
 
-    propName = "ShowZeroValues";
+    propName = u"ShowZeroValues"_ustr;
     bool aShowZeroValues = false;
     CPPUNIT_ASSERT(xSpreadsheetViewSettings->getPropertyValue(propName) >>= aShowZeroValues);
     CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue ShowZeroValues", aShowZeroValues);
@@ -47,7 +47,7 @@ void SpreadsheetViewSettings::testSpreadsheetViewSettingsProperties()
     CPPUNIT_ASSERT(xSpreadsheetViewSettings->getPropertyValue(propName) >>= aShowZeroValues);
     CPPUNIT_ASSERT_MESSAGE("Unable to set PropertyValue ShowZeroValues", !aShowZeroValues);
 
-    propName = "IsValueHighlightingEnabled";
+    propName = u"IsValueHighlightingEnabled"_ustr;
     bool aIsValueHighlightingEnabled = true;
     CPPUNIT_ASSERT(xSpreadsheetViewSettings->getPropertyValue(propName)
                    >>= aIsValueHighlightingEnabled);
@@ -61,7 +61,7 @@ void SpreadsheetViewSettings::testSpreadsheetViewSettingsProperties()
     CPPUNIT_ASSERT_MESSAGE("Unable to set PropertyValue IsValueHighlightingEnabled",
                            aIsValueHighlightingEnabled);
 
-    propName = "ShowNotes";
+    propName = u"ShowNotes"_ustr;
     bool aShowNotes = false;
     CPPUNIT_ASSERT(xSpreadsheetViewSettings->getPropertyValue(propName) >>= aShowNotes);
     CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue ShowNotes", aShowNotes);
@@ -71,7 +71,7 @@ void SpreadsheetViewSettings::testSpreadsheetViewSettingsProperties()
     CPPUNIT_ASSERT(xSpreadsheetViewSettings->getPropertyValue(propName) >>= aShowNotes);
     CPPUNIT_ASSERT_MESSAGE("Unable to set PropertyValue ShowNotes", !aShowNotes);
 
-    propName = "HasVerticalScrollBar";
+    propName = u"HasVerticalScrollBar"_ustr;
     bool aHasVerticalScrollBar = false;
     CPPUNIT_ASSERT(xSpreadsheetViewSettings->getPropertyValue(propName) >>= aHasVerticalScrollBar);
     CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue HasVerticalScrollBar",
@@ -83,7 +83,7 @@ void SpreadsheetViewSettings::testSpreadsheetViewSettingsProperties()
     CPPUNIT_ASSERT_MESSAGE("Unable to set PropertyValue HasVerticalScrollBar",
                            !aHasVerticalScrollBar);
 
-    propName = "HasHorizontalScrollBar";
+    propName = u"HasHorizontalScrollBar"_ustr;
     bool aHasHorizontalScrollBar = false;
     CPPUNIT_ASSERT(xSpreadsheetViewSettings->getPropertyValue(propName)
                    >>= aHasHorizontalScrollBar);
@@ -97,7 +97,7 @@ void SpreadsheetViewSettings::testSpreadsheetViewSettingsProperties()
     CPPUNIT_ASSERT_MESSAGE("Unable to set PropertyValue HasHorizontalScrollBar",
                            !aHasHorizontalScrollBar);
 
-    propName = "HasSheetTabs";
+    propName = u"HasSheetTabs"_ustr;
     bool aHasSheetTabs = false;
     CPPUNIT_ASSERT(xSpreadsheetViewSettings->getPropertyValue(propName) >>= aHasSheetTabs);
     CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue HasSheetTabs", aHasSheetTabs);
@@ -107,7 +107,7 @@ void SpreadsheetViewSettings::testSpreadsheetViewSettingsProperties()
     CPPUNIT_ASSERT(xSpreadsheetViewSettings->getPropertyValue(propName) >>= aHasSheetTabs);
     CPPUNIT_ASSERT_MESSAGE("Unable to set PropertyValue HasSheetTabs", !aHasSheetTabs);
 
-    propName = "IsOutlineSymbolsSet";
+    propName = u"IsOutlineSymbolsSet"_ustr;
     bool aIsOutlineSymbolsSet = false;
     CPPUNIT_ASSERT(xSpreadsheetViewSettings->getPropertyValue(propName) >>= aIsOutlineSymbolsSet);
     CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue IsOutlineSymbolsSet", aIsOutlineSymbolsSet);
@@ -118,7 +118,7 @@ void SpreadsheetViewSettings::testSpreadsheetViewSettingsProperties()
     CPPUNIT_ASSERT_MESSAGE("Unable to set PropertyValue IsOutlineSymbolsSet",
                            !aIsOutlineSymbolsSet);
 
-    propName = "HasColumnRowHeaders";
+    propName = u"HasColumnRowHeaders"_ustr;
     bool aHasColumnRowHeaders = false;
     CPPUNIT_ASSERT(xSpreadsheetViewSettings->getPropertyValue(propName) >>= aHasColumnRowHeaders);
     CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue HasColumnRowHeaders", aHasColumnRowHeaders);
@@ -129,7 +129,7 @@ void SpreadsheetViewSettings::testSpreadsheetViewSettingsProperties()
     CPPUNIT_ASSERT_MESSAGE("Unable to set PropertyValue HasColumnRowHeaders",
                            !aHasColumnRowHeaders);
 
-    propName = "ShowGrid";
+    propName = u"ShowGrid"_ustr;
     bool aShowGrid = false;
     CPPUNIT_ASSERT(xSpreadsheetViewSettings->getPropertyValue(propName) >>= aShowGrid);
     CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue ShowGrid", aShowGrid);
@@ -139,7 +139,7 @@ void SpreadsheetViewSettings::testSpreadsheetViewSettingsProperties()
     CPPUNIT_ASSERT(xSpreadsheetViewSettings->getPropertyValue(propName) >>= aShowGrid);
     CPPUNIT_ASSERT_MESSAGE("Unable to set PropertyValue ShowGrid", !aShowGrid);
 
-    propName = "GridColor";
+    propName = u"GridColor"_ustr;
     util::Color aGridColor;
     xSpreadsheetViewSettings->getPropertyValue(propName) >>= aGridColor;
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to get PropertyValue GridColor", sal_Int32(12632256),
@@ -151,7 +151,7 @@ void SpreadsheetViewSettings::testSpreadsheetViewSettingsProperties()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to set PropertyValue GridColor", sal_Int32(42),
                                  aGridColor);
 
-    propName = "ShowHelpLines";
+    propName = u"ShowHelpLines"_ustr;
     bool aShowHelpLines = true;
     CPPUNIT_ASSERT(xSpreadsheetViewSettings->getPropertyValue(propName) >>= aShowHelpLines);
     CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue ShowHelpLines", !aShowHelpLines);
@@ -161,7 +161,7 @@ void SpreadsheetViewSettings::testSpreadsheetViewSettingsProperties()
     CPPUNIT_ASSERT(xSpreadsheetViewSettings->getPropertyValue(propName) >>= aShowHelpLines);
     CPPUNIT_ASSERT_MESSAGE("Unable to set PropertyValue ShowHelpLines", aShowHelpLines);
 
-    propName = "ShowAnchor";
+    propName = u"ShowAnchor"_ustr;
     bool aShowAnchor = false;
     CPPUNIT_ASSERT(xSpreadsheetViewSettings->getPropertyValue(propName) >>= aShowAnchor);
     CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue ShowAnchor", aShowAnchor);
@@ -171,7 +171,7 @@ void SpreadsheetViewSettings::testSpreadsheetViewSettingsProperties()
     CPPUNIT_ASSERT(xSpreadsheetViewSettings->getPropertyValue(propName) >>= aShowAnchor);
     CPPUNIT_ASSERT_MESSAGE("Unable to set PropertyValue ShowAnchor", !aShowAnchor);
 
-    propName = "ShowPageBreaks";
+    propName = u"ShowPageBreaks"_ustr;
     bool aShowPageBreaks = false;
     CPPUNIT_ASSERT(xSpreadsheetViewSettings->getPropertyValue(propName) >>= aShowPageBreaks);
     CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue ShowPageBreaks", aShowPageBreaks);
@@ -181,7 +181,7 @@ void SpreadsheetViewSettings::testSpreadsheetViewSettingsProperties()
     CPPUNIT_ASSERT(xSpreadsheetViewSettings->getPropertyValue(propName) >>= aShowPageBreaks);
     CPPUNIT_ASSERT_MESSAGE("Unable to set PropertyValue ShowPageBreaks", !aShowPageBreaks);
 
-    propName = "ShowObjects";
+    propName = u"ShowObjects"_ustr;
     sal_Int16 aShowObjects = 42;
     CPPUNIT_ASSERT(xSpreadsheetViewSettings->getPropertyValue(propName) >>= aShowObjects);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to get PropertyValue ShowObjects", sal_Int16(0),
@@ -193,7 +193,7 @@ void SpreadsheetViewSettings::testSpreadsheetViewSettingsProperties()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to set PropertyValue ShowObjects", sal_Int16(1),
                                  aShowObjects);
 
-    propName = "ShowCharts";
+    propName = u"ShowCharts"_ustr;
     sal_Int16 aShowCharts = 42;
     CPPUNIT_ASSERT(xSpreadsheetViewSettings->getPropertyValue(propName) >>= aShowCharts);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to get PropertyValue ShowCharts", sal_Int16(0),
@@ -205,7 +205,7 @@ void SpreadsheetViewSettings::testSpreadsheetViewSettingsProperties()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to set PropertyValue ShowCharts", sal_Int16(1),
                                  aShowCharts);
 
-    propName = "ShowDrawing";
+    propName = u"ShowDrawing"_ustr;
     sal_Int16 aShowDrawing = 42;
     CPPUNIT_ASSERT(xSpreadsheetViewSettings->getPropertyValue(propName) >>= aShowDrawing);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to get PropertyValue ShowDrawing", sal_Int16(0),
@@ -217,7 +217,7 @@ void SpreadsheetViewSettings::testSpreadsheetViewSettingsProperties()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to set PropertyValue ShowDrawing", sal_Int16(1),
                                  aShowDrawing);
 
-    propName = "ZoomType";
+    propName = u"ZoomType"_ustr;
     sal_Int16 aZoomType = 42;
     CPPUNIT_ASSERT(xSpreadsheetViewSettings->getPropertyValue(propName) >>= aZoomType);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to get PropertyValue ZoomType", sal_Int16(3), aZoomType);
@@ -227,7 +227,7 @@ void SpreadsheetViewSettings::testSpreadsheetViewSettingsProperties()
     CPPUNIT_ASSERT(xSpreadsheetViewSettings->getPropertyValue(propName) >>= aZoomType);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to set PropertyValue ZoomType", sal_Int16(1), aZoomType);
 
-    propName = "ZoomValue";
+    propName = u"ZoomValue"_ustr;
     sal_Int16 aZoomValue = 42;
     CPPUNIT_ASSERT(xSpreadsheetViewSettings->getPropertyValue(propName) >>= aZoomValue);
 
@@ -236,7 +236,7 @@ void SpreadsheetViewSettings::testSpreadsheetViewSettingsProperties()
     CPPUNIT_ASSERT(xSpreadsheetViewSettings->getPropertyValue(propName) >>= aZoomValue);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to set PropertyValue ZoomValue", sal_Int16(1), aZoomValue);
 
-    propName = "FormulaBarHeight";
+    propName = u"FormulaBarHeight"_ustr;
     sal_Int16 aFormulaBarHeight;
     CPPUNIT_ASSERT(xSpreadsheetViewSettings->getPropertyValue(propName) >>= aFormulaBarHeight);
 

@@ -24,37 +24,37 @@ void SearchDescriptor::testSearchDescriptorProperties()
 
     OUString aPropName;
 
-    aPropName = "SearchBackwards";
+    aPropName = u"SearchBackwards"_ustr;
     testBooleanProperty(xPS, aPropName);
 
-    aPropName = "SearchCaseSensitive";
+    aPropName = u"SearchCaseSensitive"_ustr;
     testBooleanProperty(xPS, aPropName);
 
-    aPropName = "SearchWords";
+    aPropName = u"SearchWords"_ustr;
     testBooleanProperty(xPS, aPropName);
 
-    aPropName = "SearchRegularExpression";
+    aPropName = u"SearchRegularExpression"_ustr;
     testBooleanProperty(xPS, aPropName);
 
-    aPropName = "SearchStyles";
+    aPropName = u"SearchStyles"_ustr;
     testBooleanProperty(xPS, aPropName);
 
-    aPropName = "SearchSimilarity";
+    aPropName = u"SearchSimilarity"_ustr;
     testBooleanProperty(xPS, aPropName);
 
-    aPropName = "SearchSimilarityRelax";
+    aPropName = u"SearchSimilarityRelax"_ustr;
     testBooleanProperty(xPS, aPropName);
 
-    aPropName = "SearchSimilarityRemove";
+    aPropName = u"SearchSimilarityRemove"_ustr;
     testShortProperty(xPS, aPropName);
 
-    aPropName = "SearchSimilarityAdd";
+    aPropName = u"SearchSimilarityAdd"_ustr;
     testShortProperty(xPS, aPropName);
 
-    aPropName = "SearchSimilarityExchange";
+    aPropName = u"SearchSimilarityExchange"_ustr;
     testShortProperty(xPS, aPropName);
 
-    aPropName = "SearchWildcard";
+    aPropName = u"SearchWildcard"_ustr;
     testBooleanOptionalProperty(xPS, aPropName);
 }
 

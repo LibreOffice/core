@@ -72,7 +72,7 @@ void XStyleLoader::testLoadStylesFromStream()
     auto nLength = aOptions.getLength();
     aOptions.realloc(nLength + 1);
     beans::PropertyValue aInputStream;
-    aInputStream.Name = "InputStream";
+    aInputStream.Name = u"InputStream"_ustr;
     aInputStream.Value <<= xInputStream;
     aOptions.getArray()[nLength] = std::move(aInputStream);
 

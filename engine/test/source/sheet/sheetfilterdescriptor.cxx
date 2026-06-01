@@ -29,7 +29,7 @@ void SheetFilterDescriptor::testSheetFilterDescriptorProperties()
     OUString propName;
     uno::Any aNewValue;
 
-    propName = "IsCaseSensitive";
+    propName = u"IsCaseSensitive"_ustr;
     bool bIsCaseSensitiveGet = false;
     bool bIsCaseSensitiveSet = false;
     CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue IsCaseSensitive",
@@ -42,7 +42,7 @@ void SheetFilterDescriptor::testSheetFilterDescriptorProperties()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to set PropertyValue IsCaseSensitive",
                                  !bIsCaseSensitiveGet, bIsCaseSensitiveSet);
 
-    propName = "SkipDuplicates";
+    propName = u"SkipDuplicates"_ustr;
     bool bSkipDuplicatesGet = false;
     bool bSkipDuplicatesSet = false;
     CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue SkipDuplicates",
@@ -55,7 +55,7 @@ void SheetFilterDescriptor::testSheetFilterDescriptorProperties()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to set PropertyValue SkipDuplicates", !bSkipDuplicatesGet,
                                  bSkipDuplicatesSet);
 
-    propName = "UseRegularExpressions";
+    propName = u"UseRegularExpressions"_ustr;
     bool bUseRegularExpressionsGet = false;
     bool bUseRegularExpressionsSet = false;
     CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue UseRegularExpressions",
@@ -69,7 +69,7 @@ void SheetFilterDescriptor::testSheetFilterDescriptorProperties()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to set PropertyValue UseRegularExpressions",
                                  !bUseRegularExpressionsGet, bUseRegularExpressionsSet);
 
-    propName = "SaveOutputPosition";
+    propName = u"SaveOutputPosition"_ustr;
     bool bSaveOutputPositionGet = false;
     bool bSaveOutputPositionSet = false;
     CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue SaveOutputPosition",
@@ -82,7 +82,7 @@ void SheetFilterDescriptor::testSheetFilterDescriptorProperties()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to set PropertyValue SaveOutputPosition",
                                  !bSaveOutputPositionGet, bSaveOutputPositionSet);
 
-    propName = "Orientation";
+    propName = u"Orientation"_ustr;
     table::TableOrientation aOrientationGet;
     table::TableOrientation aOrientationSet;
     CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue Orientation",
@@ -94,7 +94,7 @@ void SheetFilterDescriptor::testSheetFilterDescriptorProperties()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to set PropertyValue Orientation",
                                  table::TableOrientation_COLUMNS, aOrientationSet);
 
-    propName = "ContainsHeader";
+    propName = u"ContainsHeader"_ustr;
     bool bContainsHeaderGet = false;
     bool bContainsHeaderSet = false;
     CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue ContainsHeader",
@@ -107,7 +107,7 @@ void SheetFilterDescriptor::testSheetFilterDescriptorProperties()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to set PropertyValue ContainsHeader", !bContainsHeaderGet,
                                  bContainsHeaderSet);
 
-    propName = "CopyOutputData";
+    propName = u"CopyOutputData"_ustr;
     bool bCopyOutputDataGet = false;
     bool bCopyOutputDataSet = false;
     CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue CopyOutputData",
@@ -120,7 +120,7 @@ void SheetFilterDescriptor::testSheetFilterDescriptorProperties()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to set PropertyValue CopyOutputData", !bCopyOutputDataGet,
                                  bCopyOutputDataSet);
 
-    propName = "OutputPosition";
+    propName = u"OutputPosition"_ustr;
     table::CellAddress aCellAddressGet;
     table::CellAddress aCellAddressSet;
     CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue OutputPosition",
@@ -133,7 +133,7 @@ void SheetFilterDescriptor::testSheetFilterDescriptorProperties()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to set PropertyValue OutputPosition", aCellAddressGet,
                                  aCellAddressSet);
 
-    propName = "MaxFieldCount";
+    propName = u"MaxFieldCount"_ustr;
     sal_Int32 nMaxFieldCountGet = 0;
     sal_Int32 nMaxFieldCountSet = 0;
     CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue MaxFieldCount",

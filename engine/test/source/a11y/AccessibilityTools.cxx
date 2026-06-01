@@ -426,112 +426,112 @@ OUString AccessibilityTools::debugAccessibleStateSet(const sal_Int64 nCombinedSt
         switch (state)
         {
             case accessibility::AccessibleStateType::ACTIVE:
-                name = "ACTIVE";
+                name = u"ACTIVE"_ustr;
                 break;
             case accessibility::AccessibleStateType::ARMED:
-                name = "ARMED";
+                name = u"ARMED"_ustr;
                 break;
             case accessibility::AccessibleStateType::BUSY:
-                name = "BUSY";
+                name = u"BUSY"_ustr;
                 break;
             case accessibility::AccessibleStateType::CHECKABLE:
-                name = "CHECKABLE";
+                name = u"CHECKABLE"_ustr;
                 break;
             case accessibility::AccessibleStateType::CHECKED:
-                name = "CHECKED";
+                name = u"CHECKED"_ustr;
                 break;
             case accessibility::AccessibleStateType::COLLAPSE:
-                name = "COLLAPSE";
+                name = u"COLLAPSE"_ustr;
                 break;
             case accessibility::AccessibleStateType::DEFAULT:
-                name = "DEFAULT";
+                name = u"DEFAULT"_ustr;
                 break;
             case accessibility::AccessibleStateType::DEFUNC:
-                name = "DEFUNC";
+                name = u"DEFUNC"_ustr;
                 break;
             case accessibility::AccessibleStateType::EDITABLE:
-                name = "EDITABLE";
+                name = u"EDITABLE"_ustr;
                 break;
             case accessibility::AccessibleStateType::ENABLED:
-                name = "ENABLED";
+                name = u"ENABLED"_ustr;
                 break;
             case accessibility::AccessibleStateType::EXPANDABLE:
-                name = "EXPANDABLE";
+                name = u"EXPANDABLE"_ustr;
                 break;
             case accessibility::AccessibleStateType::EXPANDED:
-                name = "EXPANDED";
+                name = u"EXPANDED"_ustr;
                 break;
             case accessibility::AccessibleStateType::FOCUSABLE:
-                name = "FOCUSABLE";
+                name = u"FOCUSABLE"_ustr;
                 break;
             case accessibility::AccessibleStateType::FOCUSED:
-                name = "FOCUSED";
+                name = u"FOCUSED"_ustr;
                 break;
             case accessibility::AccessibleStateType::HORIZONTAL:
-                name = "HORIZONTAL";
+                name = u"HORIZONTAL"_ustr;
                 break;
             case accessibility::AccessibleStateType::ICONIFIED:
-                name = "ICONIFIED";
+                name = u"ICONIFIED"_ustr;
                 break;
             case accessibility::AccessibleStateType::INDETERMINATE:
-                name = "INDETERMINATE";
+                name = u"INDETERMINATE"_ustr;
                 break;
             case accessibility::AccessibleStateType::INVALID:
-                name = "INVALID";
+                name = u"INVALID"_ustr;
                 break;
             case accessibility::AccessibleStateType::MANAGES_DESCENDANTS:
-                name = "MANAGES_DESCENDANTS";
+                name = u"MANAGES_DESCENDANTS"_ustr;
                 break;
             case accessibility::AccessibleStateType::MODAL:
-                name = "MODAL";
+                name = u"MODAL"_ustr;
                 break;
             case accessibility::AccessibleStateType::MOVEABLE:
-                name = "MOVEABLE";
+                name = u"MOVEABLE"_ustr;
                 break;
             case accessibility::AccessibleStateType::MULTI_LINE:
-                name = "MULTI_LINE";
+                name = u"MULTI_LINE"_ustr;
                 break;
             case accessibility::AccessibleStateType::MULTI_SELECTABLE:
-                name = "MULTI_SELECTABLE";
+                name = u"MULTI_SELECTABLE"_ustr;
                 break;
             case accessibility::AccessibleStateType::OFFSCREEN:
-                name = "OFFSCREEN";
+                name = u"OFFSCREEN"_ustr;
                 break;
             case accessibility::AccessibleStateType::OPAQUE:
-                name = "OPAQUE";
+                name = u"OPAQUE"_ustr;
                 break;
             case accessibility::AccessibleStateType::PRESSED:
-                name = "PRESSED";
+                name = u"PRESSED"_ustr;
                 break;
             case accessibility::AccessibleStateType::RESIZABLE:
-                name = "RESIZABLE";
+                name = u"RESIZABLE"_ustr;
                 break;
             case accessibility::AccessibleStateType::SELECTABLE:
-                name = "SELECTABLE";
+                name = u"SELECTABLE"_ustr;
                 break;
             case accessibility::AccessibleStateType::SELECTED:
-                name = "SELECTED";
+                name = u"SELECTED"_ustr;
                 break;
             case accessibility::AccessibleStateType::SENSITIVE:
-                name = "SENSITIVE";
+                name = u"SENSITIVE"_ustr;
                 break;
             case accessibility::AccessibleStateType::SHOWING:
-                name = "SHOWING";
+                name = u"SHOWING"_ustr;
                 break;
             case accessibility::AccessibleStateType::SINGLE_LINE:
-                name = "SINGLE_LINE";
+                name = u"SINGLE_LINE"_ustr;
                 break;
             case accessibility::AccessibleStateType::STALE:
-                name = "STALE";
+                name = u"STALE"_ustr;
                 break;
             case accessibility::AccessibleStateType::TRANSIENT:
-                name = "TRANSIENT";
+                name = u"TRANSIENT"_ustr;
                 break;
             case accessibility::AccessibleStateType::VERTICAL:
-                name = "VERTICAL";
+                name = u"VERTICAL"_ustr;
                 break;
             case accessibility::AccessibleStateType::VISIBLE:
-                name = "VISIBLE";
+                name = u"VISIBLE"_ustr;
                 break;
             default:
                 name = unknownName(state);

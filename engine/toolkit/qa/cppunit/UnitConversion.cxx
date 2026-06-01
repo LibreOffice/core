@@ -64,7 +64,7 @@ createFloatingWindow(uno::Reference<lang::XMultiServiceFactory> const& xMSF, sal
 
     awt::WindowDescriptor descriptor;
     descriptor.Type = awt::WindowClass_TOP;
-    descriptor.WindowServiceName = "modelessdialog";
+    descriptor.WindowServiceName = u"modelessdialog"_ustr;
     descriptor.ParentIndex = -1;
     descriptor.Bounds.X = nX;
     descriptor.Bounds.Y = nY;

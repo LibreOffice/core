@@ -64,7 +64,7 @@ css::uno::Sequence< OUString > SAL_CALL UnoControlTabPageModel::getSupportedServ
 {
     css::uno::Sequence< OUString > aNames = ControlModelContainerBase::getSupportedServiceNames( );
     aNames.realloc( aNames.getLength() + 1 );
-    aNames.getArray()[ aNames.getLength() - 1 ] = "com.sun.star.awt.tab.UnoControlTabPageModel";
+    aNames.getArray()[ aNames.getLength() - 1 ] = u"com.sun.star.awt.tab.UnoControlTabPageModel"_ustr;
     return aNames;
 }
 

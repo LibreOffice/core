@@ -772,7 +772,7 @@ WindowType ImplGetComponentType( const OUString& rServiceName )
     if (!rServiceName.isEmpty())
         sSearch = rServiceName.toAsciiLowerCase();
     else
-        sSearch = "window";
+        sSearch = u"window"_ustr;
 
     auto iterator = constComponentTypeMapping.find(sSearch);
     if (iterator != constComponentTypeMapping.end())

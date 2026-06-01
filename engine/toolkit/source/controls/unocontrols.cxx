@@ -197,7 +197,7 @@ OUString UnoEditControl::GetComponentServiceName() const
     uno::Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_MULTILINE ) );
     bool b = bool();
     if ( ( aVal >>= b ) && b )
-        sName = "MultiLineEdit";
+        sName = u"MultiLineEdit"_ustr;
 
     return sName;
 }
@@ -746,11 +746,11 @@ OUString UnoButtonControl::GetComponentServiceName() const
         // Use PushButtonType later when available...
         switch ( n )
         {
-            case 1 /*PushButtonType::OK*/:      aName = "okbutton";
+            case 1 /*PushButtonType::OK*/:      aName = u"okbutton"_ustr;
                                                 break;
-            case 2 /*PushButtonType::CANCEL*/:  aName = "cancelbutton";
+            case 2 /*PushButtonType::CANCEL*/:  aName = u"cancelbutton"_ustr;
                                                 break;
-            case 3 /*PushButtonType::HELP*/:    aName = "helpbutton";
+            case 3 /*PushButtonType::HELP*/:    aName = u"helpbutton"_ustr;
                                                 break;
             default:
             {
