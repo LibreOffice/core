@@ -27,7 +27,7 @@ private:
     void run() override {}
 
     void InclusionDirective(
-        SourceLocation HashLoc, Token const & IncludeTok, StringRef,
+        SourceLocation HashLoc, Token const & IncludeTok, StringRef FileName,
         bool IsAngled, CharSourceRange FilenameRange,
         OptionalFileEntryRef File,
         StringRef SearchPath, StringRef, clang::Module const *,
@@ -76,7 +76,13 @@ private:
 #endif
             auto dir2 = std::string(file.take_front(pos));
             loplugin::normalizeDotDotInFilePath(dir2);
-            shouldUseAngles = !loplugin::isSamePathname(dir1, dir2);
+            if (loplugin::hasPathnamePrefix(file, SRCDIR "/solenv/lockfile/")
+                && FileName == "autoconf.h")
+            {
+                shouldUseAngles = false;
+            } else {
+                shouldUseAngles = !loplugin::isSamePathname(dir1, dir2);
+            }
         }
         if (shouldUseAngles == IsAngled) {
             return;
