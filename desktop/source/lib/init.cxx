@@ -8327,71 +8327,6 @@ static void preloadData()
     // see Bootstrap::reloadData for when it gets resynced
 }
 
-namespace {
-
-void setHelpRootURL()
-{
-    const char* pHelpRootURL = ::getenv("LOK_HELP_URL");
-    if (pHelpRootURL)
-    {
-        OUString aHelpRootURL = OStringToOUString(pHelpRootURL, RTL_TEXTENCODING_UTF8);
-        try
-        {
-            std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
-            officecfg::Office::Common::Help::HelpRootURL::set(aHelpRootURL, batch);
-            batch->commit();
-        }
-        catch (uno::Exception const& rException)
-        {
-            SAL_WARN("lok", "Failed to set the help root URL: " << rException.Message);
-        }
-    }
-}
-
-void setCertificateDir()
-{
-    const char* pEnvVarString = ::getenv("LO_CERTIFICATE_DATABASE_PATH");
-    if (pEnvVarString)
-    {
-        OUString aCertificateDatabasePath = OStringToOUString(pEnvVarString, RTL_TEXTENCODING_UTF8);
-        try
-        {
-            std::shared_ptr<comphelper::ConfigurationChanges> pBatch(comphelper::ConfigurationChanges::create());
-            officecfg::Office::Common::Security::Scripting::CertDir::set(aCertificateDatabasePath, pBatch);
-            officecfg::Office::Common::Security::Scripting::ManualCertDir::set(aCertificateDatabasePath, pBatch);
-            pBatch->commit();
-        }
-        catch (uno::Exception const& rException)
-        {
-            SAL_WARN("lok", "Failed to set the NSS certificate database directory: " << rException.Message);
-        }
-    }
-}
-
-void setDeeplConfig()
-{
-    const char* pAPIUrlString = ::getenv("DEEPL_API_URL");
-    const char* pAuthKeyString = ::getenv("DEEPL_AUTH_KEY");
-    if (pAPIUrlString && pAuthKeyString)
-    {
-        OUString aAPIUrl = OStringToOUString(pAPIUrlString, RTL_TEXTENCODING_UTF8);
-        OUString aAuthKey = OStringToOUString(pAuthKeyString, RTL_TEXTENCODING_UTF8);
-        try
-        {
-            std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
-            officecfg::Office::Linguistic::Translation::Deepl::ApiURL::set(aAPIUrl, batch);
-            officecfg::Office::Linguistic::Translation::Deepl::AuthKey::set(aAuthKey, batch);
-            batch->commit();
-        }
-        catch(uno::Exception const& rException)
-        {
-            SAL_WARN("lok", "Failed to set Deepl API settings: " << rException.Message);
-        }
-    }
-}
-
-}
-
 static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char* pUserProfileUrl)
 {
     enum {
@@ -8755,10 +8690,6 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
     }
 #endif
 
-
-    setHelpRootURL();
-    setCertificateDir();
-    setDeeplConfig();
     setLanguageToolConfig();
 
     // staticize all strings.
