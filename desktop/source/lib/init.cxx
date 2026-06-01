@@ -296,43 +296,6 @@ struct ExtensionMap
     OUString filterName;
 };
 
-class TraceEventDumper : public AutoTimer
-{
-    static const int dumpTimeoutMS = 5000;
-
-public:
-    TraceEventDumper() : AutoTimer( "Trace Event dumper" )
-    {
-        SetTimeout(dumpTimeoutMS);
-        Start();
-    }
-
-    virtual void Invoke() override
-    {
-        flushRecordings();
-    }
-
-    static void flushRecordings()
-    {
-        const css::uno::Sequence<OUString> aEvents =
-            comphelper::TraceEvent::getRecordingAndClear();
-        OStringBuffer aOutput;
-        for (const auto &s : aEvents)
-        {
-            aOutput.append(OUStringToOString(s, RTL_TEXTENCODING_UTF8)
-                + "\n");
-        }
-        if (aOutput.getLength() > 0)
-        {
-            OString aChunk = aOutput.makeStringAndClear();
-            if (gImpl && gImpl->mpCallback)
-                gImpl->mpCallback(LOK_CALLBACK_PROFILE_FRAME, aChunk.getStr(), gImpl->mpCallbackData);
-        }
-    }
-};
-
-TraceEventDumper *traceEventDumper = nullptr;
-
 constexpr ExtensionMap aWriterExtensionMap[] =
 {
     { "doc",   u"MS Word 97"_ustr },
@@ -5340,19 +5303,7 @@ static void lo_setOption(LibreOfficeKit* /*pThis*/, const char *pOption, const c
 {
     static char* pCurrentSalLogOverride = nullptr;
 
-    if (strcmp(pOption, "traceeventrecording") == 0)
-    {
-        if (strcmp(pValue, "start") == 0)
-        {
-            comphelper::TraceEvent::setBufferSizeAndCallback(100, TraceEventDumper::flushRecordings);
-            comphelper::TraceEvent::startRecording();
-            if (traceEventDumper == nullptr)
-                traceEventDumper = new TraceEventDumper();
-        }
-        else if (strcmp(pValue, "stop") == 0)
-            comphelper::TraceEvent::stopRecording();
-    }
-    else if (strcmp(pOption, "sallogoverride") == 0)
+    if (strcmp(pOption, "sallogoverride") == 0)
     {
         if (pCurrentSalLogOverride != nullptr)
             free(pCurrentSalLogOverride);
@@ -8338,7 +8289,6 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
     // Did we do a pre-initialize
     static bool bPreInited = false;
     static bool bUnipoll = false;
-    static bool bProfileZones = false;
 
     { // cf. string lifetime for preinit
         std::vector<OUString> aOpts;
@@ -8353,8 +8303,6 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
                 bUnipoll = true;
             if (it == "compact_fonts")
                 gUseCompactFonts = true;
-            else if (it == "profile_events")
-                bProfileZones = true;
             else if (it == "sc_no_grid_bg")
                 comphelper::LibreOfficeKit::setCompatFlag(
                     comphelper::LibreOfficeKit::Compat::scNoGridBackground);
@@ -8394,13 +8342,6 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
 
     if (bInitialized)
         return 1;
-
-    // Turn profile zones on early
-    if (bProfileZones && eStage == SECOND_INIT)
-    {
-        comphelper::TraceEvent::startRecording();
-        traceEventDumper = new TraceEventDumper();
-    }
 
     comphelper::ProfileZone aZone("lok-init");
 
