@@ -1784,9 +1784,8 @@ void SAL_CALL SvxUnoTextBase::insertString( const uno::Reference< text::XTextRan
 
     if (GetEditSource())
     {
-        ESelection aSelection;
-        ::GetSelection( aSelection, GetEditSource()->GetTextForwarder() );
-        SetSelection( aSelection );
+        // Make the selection dynamic (whole text) instead of current text range
+        maSelection = ESelection(EE_PARA_MAX, 0, 0, 0);
     }
 }
 
