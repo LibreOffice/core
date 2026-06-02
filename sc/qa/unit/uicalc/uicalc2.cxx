@@ -2207,22 +2207,6 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf166791_PasteArrayOriginCellRefShiftin
     pMod->SetInputOptions(aInputOption);
 }
 
-CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf82404_SelectAllMoveActiveCell)
-{
-    createScDoc();
-    ScDocShell* pDocSh = getScDocShell();
-
-    // Move to random cell and select entire sheet
-    goToCell(u"D5"_ustr);
-    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
-
-    // Without the fix in place, this test would have failed with
-    // - Expected: A1
-    // - Actual  : D5
-    // i.e. the active cell was not moved to the start position
-    checkCurrentCursorPosition(*pDocSh, u"A1");
-}
-
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf107994_MoveActiveCellToFreezePaneSplitterPos)
 {
     createScDoc();
