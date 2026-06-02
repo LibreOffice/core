@@ -273,7 +273,8 @@ class ContextMenuControl extends JSControl {
 	}
 
 	private _commandClass(command: string): string {
-		return command.replace(':', '').replace('.', '');
+		// allow only latin characters and numbers in a class name we generate
+		return command.replace(/[^a-zA-Z0-9]/g, '');
 	}
 
 	private _amendContextMenuData(obj: any): void {
