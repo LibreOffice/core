@@ -10,9 +10,7 @@
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <comphelper/processfactory.hxx>
-#include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
-#include <svl/zformat.hxx>
 #include <vcl/builderpage.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/commandinfoprovider.hxx>
@@ -210,58 +208,6 @@ IMPL_LINK_NOARG(EntryFormatter, FocusOutHdl, weld::Widget&, void)
     if (m_pSpinButton)
         m_pSpinButton->signal_value_changed();
     m_aFocusOutHdl.Call(m_rEntry);
-}
-
-DoubleNumericFormatter::DoubleNumericFormatter(weld::Entry& rEntry)
-    : EntryFormatter(rEntry)
-{
-    ResetConformanceTester();
-}
-
-DoubleNumericFormatter::DoubleNumericFormatter(weld::FormattedSpinButton& rSpinButton)
-    : EntryFormatter(rSpinButton)
-{
-    ResetConformanceTester();
-}
-
-DoubleNumericFormatter::~DoubleNumericFormatter() = default;
-
-void DoubleNumericFormatter::FormatChanged(FORMAT_CHANGE_TYPE nWhat)
-{
-    ResetConformanceTester();
-    EntryFormatter::FormatChanged(nWhat);
-}
-
-bool DoubleNumericFormatter::CheckText(const OUString& sText) const
-{
-    // We'd like to implement this using the NumberFormatter::IsNumberFormat, but unfortunately, this doesn't
-    // recognize fragments of numbers (like, for instance "1e", which happens during entering e.g. "1e10")
-    // Thus, the roundabout way via a regular expression
-    return m_pNumberValidator->isValidNumericFragment(sText);
-}
-
-void DoubleNumericFormatter::ResetConformanceTester()
-{
-    // the thousands and the decimal separator are language dependent
-    const SvNumberformat* pFormatEntry = GetOrCreateFormatter().GetEntry(m_nFormatKey);
-
-    sal_Unicode cSeparatorThousand = ',';
-    sal_Unicode cSeparatorDecimal = '.';
-    if (pFormatEntry)
-    {
-        LocaleDataWrapper aLocaleInfo(LanguageTag(pFormatEntry->GetLanguage()));
-
-        OUString sSeparator = aLocaleInfo.getNumThousandSep();
-        if (!sSeparator.isEmpty())
-            cSeparatorThousand = sSeparator[0];
-
-        sSeparator = aLocaleInfo.getNumDecimalSep();
-        if (!sSeparator.isEmpty())
-            cSeparatorDecimal = sSeparator[0];
-    }
-
-    m_pNumberValidator.reset(
-        new validation::NumberValidator(cSeparatorThousand, cSeparatorDecimal));
 }
 
 WidgetStatusListener::WidgetStatusListener(weld::Widget* widget, const OUString& aCommand)

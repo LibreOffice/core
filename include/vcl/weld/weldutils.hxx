@@ -273,23 +273,6 @@ private:
     SAL_DLLPRIVATE virtual void UpdateCurrentValue(double dCurrentValue) override;
 };
 
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) DoubleNumericFormatter final : public EntryFormatter
-{
-public:
-    DoubleNumericFormatter(weld::Entry& rEntry);
-    DoubleNumericFormatter(weld::FormattedSpinButton& rSpinButton);
-
-    SAL_DLLPRIVATE virtual ~DoubleNumericFormatter() override;
-
-private:
-    SAL_DLLPRIVATE virtual bool CheckText(const OUString& sText) const override;
-
-    SAL_DLLPRIVATE virtual void FormatChanged(FORMAT_CHANGE_TYPE nWhat) override;
-    SAL_DLLPRIVATE void ResetConformanceTester();
-
-    std::unique_ptr<validation::NumberValidator> m_pNumberValidator;
-};
-
 class VCL_DLLPUBLIC ButtonPressRepeater final
     : public std::enable_shared_from_this<ButtonPressRepeater>
 {
