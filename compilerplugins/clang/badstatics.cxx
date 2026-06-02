@@ -212,7 +212,6 @@ public:
                     // vcl/inc/jsdialog/jsdialogbuilder.hxx
                 || name == "m_aWidgetRegister" // LOK only, similar case as above
                     //
-                || name == "gNotebookBarManager" // LOK only case, when notebookbar is closed - VclPtr instance is removed
                 || name == "gStaticManager" // vcl/source/graphic/Manager.cxx - stores non-owning pointers
                 || name == "aThreadedInterpreterPool"    // ScInterpreterContext(Pool), not owning
                 || name == "aNonThreadedInterpreterPool" // ScInterpreterContext(Pool), not owning

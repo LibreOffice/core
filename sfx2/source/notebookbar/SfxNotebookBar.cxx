@@ -31,7 +31,6 @@
 #include <vcl/notebookbar/NotebookBarAddonsItem.hxx>
 #include <vector>
 #include <unordered_map>
-#include <vcl/WeldedTabbedNotebookbar.hxx>
 
 using namespace sfx2;
 using namespace css::uno;
@@ -44,68 +43,6 @@ const char MERGE_NOTEBOOKBAR_URL[] = "URL";
 
 bool SfxNotebookBar::m_bLock = false;
 bool SfxNotebookBar::m_bHide = false;
-
-namespace
-{
-
-/** View specific notebook bar data */
-struct NotebookBarViewData
-{
-    std::unique_ptr<WeldedTabbedNotebookbar> m_pWeldedWrapper;
-    VclPtr<NotebookBar> m_pNotebookBar;
-    std::unique_ptr<ToolbarUnoDispatcher> m_pToolbarUnoDispatcher;
-
-    ~NotebookBarViewData()
-    {
-        if (m_pNotebookBar)
-            m_pNotebookBar.disposeAndClear();
-    }
-};
-
-/** Notebookbar instance manager is a singleton that is used for track the
- *  per-view instances of view specific data contained in NotebookBarViewData
- *  class.
- **/
-class NotebookBarViewManager final
-{
-private:
-    // map contains a view data instance for a view (SfxViewShell pointer)
-    std::unordered_map<const SfxViewShell*, std::unique_ptr<NotebookBarViewData>> m_pViewDataList;
-
-    // private constructor to prevent any other instantiation outside of get() method
-    NotebookBarViewManager() = default;
-
-    // prevent class copying
-    NotebookBarViewManager(const NotebookBarViewManager&) = delete;
-    NotebookBarViewManager& operator=(const NotebookBarViewManager&) = delete;
-
-public:
-    // Singleton get method - creates an instance on first get() call
-    static NotebookBarViewManager& get()
-    {
-        static NotebookBarViewManager gNotebookBarManager;
-        return gNotebookBarManager;
-    }
-
-    NotebookBarViewData& getViewData(const SfxViewShell* pViewShell)
-    {
-        auto aFound = m_pViewDataList.find(pViewShell);
-        if (aFound != m_pViewDataList.end()) // found
-            return *aFound->second;
-
-        // Create new view data instance
-        NotebookBarViewData* pViewData = new NotebookBarViewData;
-        m_pViewDataList.emplace(pViewShell, std::unique_ptr<NotebookBarViewData>(pViewData));
-        return *pViewData;
-    }
-
-    void removeViewData(const SfxViewShell* pViewShell)
-    {
-        m_pViewDataList.erase(pViewShell);
-    }
-};
-
-} // end anonymous namespace
 
 static void NotebookbarAddonValues(
     std::vector<Image>& aImageValues,
@@ -258,19 +195,6 @@ static utl::OConfigurationNode lcl_getCurrentImplConfigNode(const Reference<css:
     return utl::OConfigurationNode();
 }
 
-void SfxNotebookBar::RemoveCurrentLOKWrapper()
-{
-    const SfxViewShell* pViewShell = SfxViewShell::Current();
-    auto& rViewData = NotebookBarViewManager::get().getViewData(pViewShell);
-
-    if (rViewData.m_pNotebookBar)
-    {
-        // Calls STATIC_LINK SfxNotebookBar -> VclDisposeHdl
-        // which clears the whole InstanceManager
-        rViewData.m_pNotebookBar.disposeAndClear();
-    }
-}
-
 void SfxNotebookBar::CloseMethod(SfxBindings& rBindings)
 {
     SfxFrame& rFrame = rBindings.GetDispatcher_Impl()->GetFrame()->GetFrame();
@@ -279,12 +203,6 @@ void SfxNotebookBar::CloseMethod(SfxBindings& rBindings)
 
 void SfxNotebookBar::CloseMethod(SystemWindow* pSysWindow)
 {
-    if (comphelper::LibreOfficeKit::isActive())
-    {
-        RemoveCurrentLOKWrapper();
-        return;
-    }
-
     if (pSysWindow)
     {
         if(pSysWindow->GetNotebookBar())
@@ -372,26 +290,6 @@ bool SfxNotebookBar::IsActive(bool bConsiderSingleToolbar)
     return false;
 }
 
-void SfxNotebookBar::ResetActiveToolbarModeToDefault(vcl::EnumContext::Application eApp)
-{
-    const OUString appName( lcl_getAppName( eApp ) );
-
-    if ( appName.isEmpty() )
-        return;
-
-    const OUString aPath = "org.openoffice.Office.UI.ToolbarMode/Applications/" + appName;
-
-    utl::OConfigurationTreeRoot aAppNode(
-                                        ::comphelper::getProcessComponentContext(),
-                                        aPath,
-                                        true);
-    if ( !aAppNode.isValid() )
-        return;
-
-    aAppNode.setNodeValue( u"Active"_ustr, Any( u"Default"_ustr ) );
-    aAppNode.commit();
-}
-
 void SfxNotebookBar::ExecMethod(SfxBindings& rBindings, const OUString& rUIName)
 {
     // Save active UI file name
@@ -435,10 +333,6 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
             return false;
     }
 
-    const SfxViewShell* pViewShell = SfxViewShell::Current();
-    auto& rViewData = NotebookBarViewManager::get().getViewData(pViewShell);
-    bool hasWeldedWrapper = bool(rViewData.m_pWeldedWrapper);
-
     if (IsActive())
     {
         const css::uno::Reference<css::uno::XComponentContext>& xContext = comphelper::getProcessComponentContext();
@@ -457,11 +351,10 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
 
         bool bChangedFile = sNewFile != sCurrentFile;
 
-        if ((!bIsLOK && (
+        if (!bIsLOK && (
                 (!sFile.isEmpty() && bChangedFile) ||
                 (!pNotebookBar || !pNotebookBar->IsVisible()) ||
-                bReloadNotebookbar)
-            ) || (bIsLOK && !hasWeldedWrapper))
+                bReloadNotebookbar))
         {
             OUString aBuf = rUIFile + sFile;
 
@@ -475,45 +368,6 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
                 NotebookbarAddonValues(aImageValues , aExtensionValues);
                 pNotebookBarAddonsItem->aAddonValues = std::move(aExtensionValues);
                 pNotebookBarAddonsItem->aImageValues = std::move(aImageValues);
-            }
-
-            if (bIsLOK)
-            {
-                if (!pViewShell)
-                    return false;
-
-                // Notebookbar was loaded too early what caused:
-                //   * in LOK: Paste Special feature was incorrectly initialized
-                // Skip first request so Notebookbar will be initialized after document was loaded
-                static std::map<const void*, bool> bSkippedFirstInit;
-                if (eApp == vcl::EnumContext::Application::Writer
-                    && bSkippedFirstInit.find(pViewShell) == bSkippedFirstInit.end())
-                {
-                    bSkippedFirstInit[pViewShell] = true;
-                    ResetActiveToolbarModeToDefault(eApp);
-                    return false;
-                }
-
-                // update the current LOK language and locale for the dialog tunneling
-                comphelper::LibreOfficeKit::setLanguageTag(pViewShell->GetLOKLanguageTag());
-                comphelper::LibreOfficeKit::setLocale(pViewShell->GetLOKLocale());
-
-                pNotebookBar = VclPtr<NotebookBar>::Create(pSysWindow, "NotebookBar", aBuf, xFrame, std::move(pNotebookBarAddonsItem));
-                rViewData.m_pNotebookBar = pNotebookBar;
-                assert(pNotebookBar->IsWelded());
-
-                sal_uInt64 nWindowId = reinterpret_cast<sal_uInt64>(pViewShell);
-                rViewData.m_pWeldedWrapper.reset(
-                        new WeldedTabbedNotebookbar(pNotebookBar->GetMainContainer(),
-                                                    pNotebookBar->GetUIFilePath(),
-                                                    xFrame, nWindowId));
-                pNotebookBar->SetDisposeCallback(LINK(nullptr, SfxNotebookBar, VclDisposeHdl), pViewShell);
-
-                rViewData.m_pToolbarUnoDispatcher.reset(
-                    new ToolbarUnoDispatcher(rViewData.m_pWeldedWrapper->getWeldedToolbar(),
-                                             rViewData.m_pWeldedWrapper->getBuilder(), xFrame));
-
-                return true;
             }
 
             // tdf#164899 don't call SystemWindow::SetNotebookBar recursively
@@ -542,11 +396,6 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
         }
 
         return true;
-    }
-    else if (comphelper::LibreOfficeKit::isActive())
-    {
-        // don't do anything to not close notebookbar of other session
-        return hasWeldedWrapper;
     }
     else if (auto pNotebookBar = pSysWindow->GetNotebookBar())
     {
@@ -685,11 +534,6 @@ void SfxNotebookBar::ReloadNotebookBar(std::u16string_view sUIPath)
     if (!pViewShell)
         return;
     sfx2::SfxNotebookBar::StateMethod(pViewShell->GetViewFrame().GetBindings(), sUIPath, true);
-}
-
-IMPL_STATIC_LINK(SfxNotebookBar, VclDisposeHdl, const SfxViewShell*, pViewShell, void)
-{
-    NotebookBarViewManager::get().removeViewData(pViewShell);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
