@@ -11,12 +11,12 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-29 07:49+0200\n"
+"POT-Creation-Date: 2026-06-02 13:03+0200\n"
 "PO-Revision-Date: 2026-05-30 09:20+0000\n"
 "Last-Translator: Arif Budiman <arifpedia@gmail.com>\n"
-"Language-Team: Indonesian <https://hosted.weblate.org/projects/collabora-"
-"online/collabora-ui/id/>\n"
-"Language: id\n"
+"Language-Team: Indonesian <https://hosted.weblate.org/projects/"
+"collabora-online/collabora-ui/id/>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -99,7 +99,7 @@ msgid "PID"
 msgstr "PID"
 
 #: admin/admin.strings.js:33 admin/src/AdminClusterOverview.js:352
-#: src/control/Control.BackstageView.ts:547
+#: src/control/Control.BackstageView.ts:556
 msgid "Document"
 msgstr "Dokumen"
 
@@ -148,19 +148,19 @@ msgid "Network Graph"
 msgstr "Grafik Jaringan"
 
 #: admin/admin.strings.js:45
-#: admin/src/integrator/AdminIntegratorSettings.ts:1126
-#: admin/src/integrator/AdminIntegratorSettings.ts:2996
+#: admin/src/integrator/AdminIntegratorSettings.ts:1210
+#: admin/src/integrator/AdminIntegratorSettings.ts:3145
 #: admin/src/integrator/WordBook.ts:394 admin/src/integrator/Xcu.ts:411
 #: src/canvas/sections/CommentListSection.ts:744
-#: src/canvas/sections/CommentSection.ts:190
-#: src/canvas/sections/CommentSection.ts:639
-#: src/canvas/sections/CommentSection.ts:1590
-#: src/control/Control.BackstageView.ts:135
+#: src/canvas/sections/CommentSection.ts:191
+#: src/canvas/sections/CommentSection.ts:640
+#: src/canvas/sections/CommentSection.ts:1611
+#: src/control/Control.BackstageView.ts:136
 #: src/control/Control.Notebookbar.js:343
 #: src/control/Control.NotebookbarDraw.js:29
 #: src/control/Control.NotebookbarDraw.js:178
 #: src/control/Control.NotebookbarImpress.js:30
-#: src/map/handler/Map.Settings.ts:94
+#: src/map/handler/Map.Settings.ts:84
 msgid "Save"
 msgstr "Simpan"
 
@@ -246,7 +246,7 @@ msgstr "Aras Log"
 #: src/control/Control.AlertDialog.js:32 src/control/Control.AlertDialog.js:38
 #: src/control/Control.AlertDialog.js:103
 #: src/control/Control.AlertDialog.js:110 src/control/Control.Zotero.js:191
-#: src/app/Socket.ts:935 src/app/Socket.ts:2326 src/app/Socket.ts:2337
+#: src/app/Socket.ts:935 src/app/Socket.ts:2335 src/app/Socket.ts:2346
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.div:51-7
 msgid "Close"
 msgstr "Tutup"
@@ -263,11 +263,11 @@ msgstr "Informasi Versi"
 msgid "License"
 msgstr "Lisensi"
 
-#: admin/admin.strings.js:68 src/control/Control.BackstageView.ts:180
-#: src/control/Control.Menubar.ts:433 src/control/Control.Menubar.ts:621
-#: src/control/Control.Menubar.ts:766 src/control/Control.Menubar.ts:1072
-#: src/control/Control.Menubar.ts:1140 src/control/Control.Menubar.ts:1205
-#: src/control/Control.Menubar.ts:1260 src/control/Control.Menubar.ts:1335
+#: admin/admin.strings.js:68 src/control/Control.BackstageView.ts:189
+#: src/control/Control.Menubar.ts:435 src/control/Control.Menubar.ts:623
+#: src/control/Control.Menubar.ts:768 src/control/Control.Menubar.ts:1074
+#: src/control/Control.Menubar.ts:1144 src/control/Control.Menubar.ts:1209
+#: src/control/Control.Menubar.ts:1264 src/control/Control.Menubar.ts:1339
 #: src/control/Control.NotebookbarWriter.js:590
 msgid "About"
 msgstr "Ihwal"
@@ -303,7 +303,7 @@ msgstr "Peringatan"
 #: admin/src/AdminClusterOverview.js:560 admin/src/AdminSocketBase.js:63
 #: admin/src/AdminSocketBase.js:74 admin/src/AdminSocketOverview.js:108
 #: admin/src/AdminSocketOverview.js:431 admin/src/AdminSocketSettings.js:47
-#: admin/src/integrator/AdminIntegratorSettings.ts:3107 src/app/Debug.ts:1580
+#: admin/src/integrator/AdminIntegratorSettings.ts:3256 src/app/Debug.ts:1580
 #: src/canvas/sections/CommentListSection.ts:1847
 #: src/control/Control.AboutDialog.ts:245
 #: src/control/Control.AlertDialog.js:56
@@ -316,16 +316,16 @@ msgstr "Peringatan"
 #: src/control/Control.Zotero.js:365 src/control/Control.Zotero.js:411
 #: src/control/Parts.js:529 src/control/Permission.js:98
 #: src/control/Permission.js:108 src/control/Permission.js:165
-#: src/control/Toolbar.js:728 src/app/Socket.ts:1001 src/app/Socket.ts:1647
-#: src/app/Socket.ts:1822 src/app/Socket.ts:2283 src/app/Socket.ts:2383
+#: src/control/Toolbar.js:728 src/app/Socket.ts:1001 src/app/Socket.ts:1656
+#: src/app/Socket.ts:1831 src/app/Socket.ts:2292 src/app/Socket.ts:2392
 #: src/docdispatcher.ts:622 src/main.js:108 src/main.js:111 src/main.js:148
 #: src/map/Clipboard.js:1470 src/map/handler/Map.Feedback.js:96
 #: src/map/handler/Map.SlideShow.js:60 src/map/handler/Map.SlideShow.js:169
 #: src/map/handler/Map.SlideShow.js:297 src/map/handler/Map.SlideShow.js:308
-#: src/map/handler/Map.WOPI.js:869 src/slideshow/SlideShowPresenter.ts:1294
-#: src/slideshow/SlideShowPresenter.ts:1309
-#: src/slideshow/SlideShowPresenter.ts:1324
-#: src/slideshow/SlideShowPresenter.ts:1347
+#: src/map/handler/Map.WOPI.js:869 src/slideshow/SlideShowPresenter.ts:1292
+#: src/slideshow/SlideShowPresenter.ts:1307
+#: src/slideshow/SlideShowPresenter.ts:1322
+#: src/slideshow/SlideShowPresenter.ts:1345
 msgid "OK"
 msgstr "OK"
 
@@ -333,10 +333,10 @@ msgstr "OK"
 #: admin/src/AdminSocketOverview.js:432 admin/src/AdminSocketSettings.js:48
 #: admin/src/integrator/WordBook.ts:386
 #: src/canvas/sections/CommentListSection.ts:739
-#: src/canvas/sections/CommentSection.ts:189
-#: src/canvas/sections/CommentSection.ts:192
-#: src/canvas/sections/CommentSection.ts:1591
-#: src/canvas/sections/CommentSection.ts:1596
+#: src/canvas/sections/CommentSection.ts:190
+#: src/canvas/sections/CommentSection.ts:193
+#: src/canvas/sections/CommentSection.ts:1612
+#: src/canvas/sections/CommentSection.ts:1617
 #: src/control/Control.AIChatSidebar.ts:1281
 #: src/control/Control.AIChatSidebar.ts:1283
 #: src/control/Control.AIChatSidebar.ts:1368
@@ -344,10 +344,10 @@ msgstr "OK"
 #: src/control/Control.DownloadProgress.js:81
 #: src/control/Control.LanguageDialog.js:114
 #: src/control/Control.MobileTopBar.ts:43
-#: src/control/Control.UIManager.ts:2108 src/control/Control.UIManager.ts:2189
-#: src/control/Control.UIManager.ts:2343 src/control/Control.UIManager.ts:2521
-#: src/control/Control.Zotero.js:360 src/app/Socket.ts:1592
-#: src/map/handler/Map.Settings.ts:89
+#: src/control/Control.UIManager.ts:2115 src/control/Control.UIManager.ts:2196
+#: src/control/Control.UIManager.ts:2350 src/control/Control.UIManager.ts:2528
+#: src/control/Control.Zotero.js:360 src/app/Socket.ts:1601
+#: src/map/handler/Map.Settings.ts:79
 msgid "Cancel"
 msgstr "Batal"
 
@@ -383,15 +383,15 @@ msgstr "Anda yakin ingin mengakhiri sesi ini?"
 msgid "Are you sure you want to shut down the server?"
 msgstr "Apakah anda yakin ingin mematikan server?"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:245
+#: admin/src/integrator/AdminIntegratorSettings.ts:265
 msgid "Shared Config URL is missing in initial variables."
 msgstr "URL Konfigurasi bersama kurang dalam variabel awal."
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:249
+#: admin/src/integrator/AdminIntegratorSettings.ts:269
 msgid "Access token is missing in initial variables."
 msgstr "Token akses kurang dalam variabel awal."
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:327
+#: admin/src/integrator/AdminIntegratorSettings.ts:347
 msgid ""
 "Something went wrong while fetching setting file. Please try to refresh the "
 "page."
@@ -399,55 +399,55 @@ msgstr ""
 "Terjadi masalah saat mengambil berkakas pengaturan. Silakan coba muat ulang "
 "halaman."
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:431
+#: admin/src/integrator/AdminIntegratorSettings.ts:488
 msgid "Signature Certificate"
 msgstr "Sertifikat Tanda Tangan"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:432
+#: admin/src/integrator/AdminIntegratorSettings.ts:489
 msgid "Signature Key"
 msgstr "Kunci Tanda tangan"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:433
+#: admin/src/integrator/AdminIntegratorSettings.ts:490
 msgid "Signature CA"
 msgstr "CA Tanda tangan"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:434
-#: admin/src/integrator/AdminIntegratorSettings.ts:438
+#: admin/src/integrator/AdminIntegratorSettings.ts:491
+#: admin/src/integrator/AdminIntegratorSettings.ts:495
 msgid "Provider"
 msgstr "Penyedia"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:435
-#: admin/src/integrator/AdminIntegratorSettings.ts:439
+#: admin/src/integrator/AdminIntegratorSettings.ts:492
+#: admin/src/integrator/AdminIntegratorSettings.ts:496
 msgid "API Key"
 msgstr "Kunci API"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:436
-#: admin/src/integrator/AdminIntegratorSettings.ts:441
+#: admin/src/integrator/AdminIntegratorSettings.ts:493
+#: admin/src/integrator/AdminIntegratorSettings.ts:498
 msgid "Model"
 msgstr "Model"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:437
-#: admin/src/integrator/AdminIntegratorSettings.ts:440
+#: admin/src/integrator/AdminIntegratorSettings.ts:494
+#: admin/src/integrator/AdminIntegratorSettings.ts:497
 msgid "Base URL"
 msgstr "URL Dasar"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:442
+#: admin/src/integrator/AdminIntegratorSettings.ts:499
 msgid "Image Size"
 msgstr "Ukuran Gambar"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:443
+#: admin/src/integrator/AdminIntegratorSettings.ts:500
 msgid "Request Timeout (seconds)"
 msgstr "Batas Waktu Permintaan (detik)"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:446
+#: admin/src/integrator/AdminIntegratorSettings.ts:503
 msgid "In-document Screen Reader"
 msgstr "Pembaca Layar dalam dokumen"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:447
-#: src/control/Control.Menubar.ts:177 src/control/Control.Menubar.ts:507
-#: src/control/Control.Menubar.ts:676 src/control/Control.Menubar.ts:829
-#: src/control/Control.Menubar.ts:1124 src/control/Control.Menubar.ts:1177
-#: src/control/Control.Menubar.ts:1238 src/control/Control.Menubar.ts:1298
+#: admin/src/integrator/AdminIntegratorSettings.ts:504
+#: src/control/Control.Menubar.ts:179 src/control/Control.Menubar.ts:509
+#: src/control/Control.Menubar.ts:678 src/control/Control.Menubar.ts:831
+#: src/control/Control.Menubar.ts:1128 src/control/Control.Menubar.ts:1181
+#: src/control/Control.Menubar.ts:1242 src/control/Control.Menubar.ts:1302
 #: src/control/Control.NotebookbarCalc.js:1659
 #: src/control/Control.NotebookbarDraw.js:571
 #: src/control/Control.NotebookbarImpress.js:738
@@ -455,162 +455,162 @@ msgstr "Pembaca Layar dalam dokumen"
 msgid "Dark Mode"
 msgstr "Modus Gelap"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:448
+#: admin/src/integrator/AdminIntegratorSettings.ts:505
 msgid "Smart Zoom"
 msgstr "Zoom Cerdas"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:449
+#: admin/src/integrator/AdminIntegratorSettings.ts:506
 msgid "Default Zoom"
 msgstr "Zoom Bawaan"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:450
+#: admin/src/integrator/AdminIntegratorSettings.ts:507
 msgid "Compact layout"
 msgstr "Tata letak ringkas"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:451
+#: admin/src/integrator/AdminIntegratorSettings.ts:508
 msgid "Show status bar"
 msgstr "Tampilkan bilah status"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:452
-#: src/control/Control.Menubar.ts:174 src/control/Control.Menubar.ts:503
+#: admin/src/integrator/AdminIntegratorSettings.ts:509
+#: src/control/Control.Menubar.ts:176 src/control/Control.Menubar.ts:505
 msgid "Show Ruler"
 msgstr "Tampilkan Penggaris"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:453
+#: admin/src/integrator/AdminIntegratorSettings.ts:510
 msgid "Accessibility Checker"
 msgstr "Pemeriksa Aksesibilitas"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:454
+#: admin/src/integrator/AdminIntegratorSettings.ts:511
 #: src/control/Control.NavigatorPanel.ts:292
 msgid "Navigator"
 msgstr "Navigator"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:455
+#: admin/src/integrator/AdminIntegratorSettings.ts:512
 msgid "Show Sidebar"
 msgstr "Tampilkan Bilah Sisi"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:456
+#: admin/src/integrator/AdminIntegratorSettings.ts:513
 msgid "Custom Animation"
 msgstr "Animasi Ubahan"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:459
+#: admin/src/integrator/AdminIntegratorSettings.ts:516
 msgid "Style List"
 msgstr "Senarai Gaya"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:462
+#: admin/src/integrator/AdminIntegratorSettings.ts:519
 #: src/control/Control.NotebookbarCalc.js:1186
 #: src/control/Control.NotebookbarDraw.js:542
 #: src/control/Control.NotebookbarImpress.js:709
 msgid "Grid"
 msgstr "Kisi"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:463
-#: src/control/Control.BackstageView.ts:151
+#: admin/src/integrator/AdminIntegratorSettings.ts:520
+#: src/control/Control.BackstageView.ts:152
 msgid "Print"
 msgstr "Cetak"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:464
+#: admin/src/integrator/AdminIntegratorSettings.ts:521
 msgid "Other"
 msgstr "Lainnya"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:465
+#: admin/src/integrator/AdminIntegratorSettings.ts:522
 #: src/control/Control.NotebookbarImpress.js:718
 msgid "Show Grid"
 msgstr "Tampilkan Kisi"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:466
+#: admin/src/integrator/AdminIntegratorSettings.ts:523
 msgid "Snap to grid"
 msgstr "Lengket ke kisi"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:467
-#: admin/src/integrator/AdminIntegratorSettings.ts:473
+#: admin/src/integrator/AdminIntegratorSettings.ts:524
+#: admin/src/integrator/AdminIntegratorSettings.ts:530
 msgid "Size to grid"
 msgstr "Ukur ke kisi"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:468
+#: admin/src/integrator/AdminIntegratorSettings.ts:525
 msgid "Synchronize axes"
 msgstr "Sinkronisasi sumbu"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:469
+#: admin/src/integrator/AdminIntegratorSettings.ts:526
 msgid "Snap grid"
 msgstr "Lengket ke kisi"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:470
+#: admin/src/integrator/AdminIntegratorSettings.ts:527
 msgid "Empty Pages"
 msgstr "Halaman Kosong"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:471
+#: admin/src/integrator/AdminIntegratorSettings.ts:528
 msgid "Force Breaks"
 msgstr "Paksakan Pemutus"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:472
-#: src/control/Control.Menubar.ts:798 src/control/Control.TopToolbar.js:139
+#: admin/src/integrator/AdminIntegratorSettings.ts:529
+#: src/control/Control.Menubar.ts:800 src/control/Control.TopToolbar.js:139
 #: src/control/jsdialog/Definitions.Menu.ts:1588
 msgid "All Sheets"
 msgstr "Semua Lembar"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:474
+#: admin/src/integrator/AdminIntegratorSettings.ts:531
 msgid "Content"
 msgstr "Kandungan"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:475
-#: src/control/Control.BackstageView.ts:543
+#: admin/src/integrator/AdminIntegratorSettings.ts:532
+#: src/control/Control.BackstageView.ts:552
 msgid "Drawing"
 msgstr "Gambar"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:476
+#: admin/src/integrator/AdminIntegratorSettings.ts:533
 #: src/control/Control.NotebookbarDraw.js:1245
 #: src/control/Control.NotebookbarDraw.js:1445
 #: src/control/Control.NotebookbarWriter.js:1242
 msgid "Page"
 msgstr "Halaman"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:477
+#: admin/src/integrator/AdminIntegratorSettings.ts:534
 msgid "Fit to page"
 msgstr "Paskan ke halaman"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:478
+#: admin/src/integrator/AdminIntegratorSettings.ts:535
 msgid "Tile pages"
 msgstr "Jajarkan halaman"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:479
+#: admin/src/integrator/AdminIntegratorSettings.ts:536
 msgid "Booklet"
 msgstr "Buku kecil"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:480
+#: admin/src/integrator/AdminIntegratorSettings.ts:537
 msgid "Booklet front"
 msgstr "Depan buku kecil"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:481
+#: admin/src/integrator/AdminIntegratorSettings.ts:538
 msgid "Booklet back"
 msgstr "Belakang buku kecil"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:482
+#: admin/src/integrator/AdminIntegratorSettings.ts:539
 msgid "Page name"
 msgstr "Nama halaman"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:483
+#: admin/src/integrator/AdminIntegratorSettings.ts:540
 #: src/control/Control.NotebookbarCalc.js:817
 #: src/control/Control.NotebookbarWriter.js:1645
-#: src/control/Control.Zotero.js:1153 src/control/Control.Zotero.js:1605
+#: src/control/Control.Zotero.js:1153 src/control/Control.Zotero.js:1614
 msgid "Date"
 msgstr "Tanggal"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:484
+#: admin/src/integrator/AdminIntegratorSettings.ts:541
 #: src/control/Control.NotebookbarCalc.js:818
 msgid "Time"
 msgstr "Waktu"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:485
+#: admin/src/integrator/AdminIntegratorSettings.ts:542
 msgid "Hidden pages"
 msgstr "Halaman tersembunyi"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:486
+#: admin/src/integrator/AdminIntegratorSettings.ts:543
 msgid "From printer setup"
 msgstr "Dari pengaturan pencetak"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:487
-#: src/control/Control.BackstageView.ts:542 templates/templates.js:80
+#: admin/src/integrator/AdminIntegratorSettings.ts:544
+#: src/control/Control.BackstageView.ts:551 templates/templates.js:80
 #: templates/templates.js:90 templates/templates.js:100
 #: templates/templates.js:110 templates/templates.js:120
 #: templates/templates.js:130 templates/templates.js:140
@@ -625,81 +625,81 @@ msgstr "Dari pengaturan pencetak"
 msgid "Presentation"
 msgstr "Presentasi"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:488
+#: admin/src/integrator/AdminIntegratorSettings.ts:545
 #: src/control/Control.Zotero.js:1341 src/slideshow/PresenterConsole.js:34
 msgid "Notes"
 msgstr "Catatan"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:489
+#: admin/src/integrator/AdminIntegratorSettings.ts:546
 msgid "Handouts"
 msgstr "Kliping"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:490
+#: admin/src/integrator/AdminIntegratorSettings.ts:547
 #: src/control/Control.NavigatorPanel.ts:213
 msgid "Outline"
 msgstr "Kerangka"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:491
+#: admin/src/integrator/AdminIntegratorSettings.ts:548
 msgid "Handout horizontal"
 msgstr "Kliping mendatar"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:492
+#: admin/src/integrator/AdminIntegratorSettings.ts:549
 msgid "Images"
 msgstr "Citra"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:493
+#: admin/src/integrator/AdminIntegratorSettings.ts:550
 msgid "Tables"
 msgstr "Tabel"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:494
+#: admin/src/integrator/AdminIntegratorSettings.ts:551
 msgid "Controls"
 msgstr "Kendali"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:495
+#: admin/src/integrator/AdminIntegratorSettings.ts:552
 msgid "Background"
 msgstr "Latar Belakang"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:496
+#: admin/src/integrator/AdminIntegratorSettings.ts:553
 msgid "Print Black"
 msgstr "Cetak Hitam"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:497
+#: admin/src/integrator/AdminIntegratorSettings.ts:554
 msgid "Hidden text"
 msgstr "Teks sembunyi"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:498
+#: admin/src/integrator/AdminIntegratorSettings.ts:555
 msgid "Placeholders"
 msgstr "Pewakil"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:499
+#: admin/src/integrator/AdminIntegratorSettings.ts:556
 msgid "Left pages"
 msgstr "Halaman kiri"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:500
+#: admin/src/integrator/AdminIntegratorSettings.ts:557
 msgid "Right pages"
 msgstr "Halaman kanan"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:501
+#: admin/src/integrator/AdminIntegratorSettings.ts:558
 msgid "Brochure"
 msgstr "Brosur"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:502
+#: admin/src/integrator/AdminIntegratorSettings.ts:559
 msgid "Brochure Right to Left"
 msgstr "Brosur Kanan ke Kiri"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:660
+#: admin/src/integrator/AdminIntegratorSettings.ts:745
 msgid "Invalid JSON file"
 msgstr "Berkas JSON tidak valid"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:664
+#: admin/src/integrator/AdminIntegratorSettings.ts:749
 msgid "Error reading file"
 msgstr "Galat saat membaca berkas"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:676
+#: admin/src/integrator/AdminIntegratorSettings.ts:761
 msgid "Autotext"
 msgstr "Teks Otomatis"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:678
+#: admin/src/integrator/AdminIntegratorSettings.ts:763
 msgid ""
 "Upload reusable text snippets (.bau). To insert the text in your document, "
 "type the shortcut for an AutoText entry and press F3."
@@ -708,15 +708,15 @@ msgstr ""
 "teks ke dalam dokumen Anda, ketikkan pintasan untuk entri Teks Otomatis dan "
 "tekan F3."
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:684
+#: admin/src/integrator/AdminIntegratorSettings.ts:769
 msgid "Upload Autotext"
 msgstr "Unggah Teks Otomatis"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:689
+#: admin/src/integrator/AdminIntegratorSettings.ts:774
 msgid "Custom dictionaries"
 msgstr "Kamus ubahan"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:691
+#: admin/src/integrator/AdminIntegratorSettings.ts:776
 msgid ""
 "Add or edit words in a spell check dictionary. Words in your wordbook (."
 "dic) will be available for spelling checks."
@@ -724,28 +724,15 @@ msgstr ""
 "Tambahkan atau sunting kata-kata dalam kamus ejaan. Kata-kata dalam buku "
 "kata Anda (.dic) akan tersedia untuk pemeriksaan ejaan."
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:697
+#: admin/src/integrator/AdminIntegratorSettings.ts:782
 msgid "Upload Wordbook"
 msgstr "Unggah Buku Kata"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:702
-msgid "Document settings"
-msgstr "Pengaturan dokumen"
-
-#: admin/src/integrator/AdminIntegratorSettings.ts:703
-#: admin/src/integrator/Xcu.ts:314
-msgid "Adjust how office documents behave."
-msgstr "Sesuaikan bagaimana dokumen kantor berperilaku."
-
-#: admin/src/integrator/AdminIntegratorSettings.ts:709
-msgid "Upload Xcu"
-msgstr "Unggah Xcu"
-
-#: admin/src/integrator/AdminIntegratorSettings.ts:715
+#: admin/src/integrator/AdminIntegratorSettings.ts:787
 msgid "Document themes"
 msgstr "Tema dokumen"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:717
+#: admin/src/integrator/AdminIntegratorSettings.ts:789
 msgid ""
 "Upload custom document themes (.theme). These define color palettes "
 "available under Format > Theme."
@@ -753,57 +740,57 @@ msgstr ""
 "Unggah tema dokumen kustom (.theme). Tema ini menentukan palet warna yang "
 "tersedia di Format > Tema."
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:723
+#: admin/src/integrator/AdminIntegratorSettings.ts:795
 msgid "Upload Theme"
 msgstr "Unggah Tema"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:778
+#: admin/src/integrator/AdminIntegratorSettings.ts:850
 msgid "Something went wrong. Please try to refresh the page."
 msgstr "Ada yang salah. Silakan coba menyegarkan halaman."
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:934
+#: admin/src/integrator/AdminIntegratorSettings.ts:1006
 msgid ""
 "Something went wrong while fetching wordbook. Please try to refresh the "
 "page."
 msgstr ""
 "Terjadi masalah saat mengambil buku kata. Silakan coba muat ulang halaman."
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:944
+#: admin/src/integrator/AdminIntegratorSettings.ts:1020
 msgid "Interface Settings"
 msgstr "Pengaturan Antarmuka"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:946
+#: admin/src/integrator/AdminIntegratorSettings.ts:1022
 msgid "Set default interface preferences."
 msgstr "Tata pengaturan antarmuka baku."
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:1093
+#: admin/src/integrator/AdminIntegratorSettings.ts:1173
 msgid "Select a tab to browser settings."
 msgstr "Pilih tab untuk pengaturan peramban."
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:1106
+#: admin/src/integrator/AdminIntegratorSettings.ts:1190
 #: admin/src/integrator/Xcu.ts:374
 msgid "Reset to default Document settings"
 msgstr "Atur ulang ke pengaturan Dokumen baku"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:1110
+#: admin/src/integrator/AdminIntegratorSettings.ts:1194
 #: admin/src/integrator/Xcu.ts:388
 msgid "Are you sure you want to reset Document settings?"
 msgstr "Apakah Anda yakin ingin mengatur ulang pengaturan Dokumen?"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:1127
+#: admin/src/integrator/AdminIntegratorSettings.ts:1211
 #: admin/src/integrator/Xcu.ts:403
 msgid "Save Document settings"
 msgstr "Simpan pengaturan dokumen"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:1404
+#: admin/src/integrator/AdminIntegratorSettings.ts:1488
 msgid "(Warning: Server accessibility must be enabled to toggle)"
 msgstr "(Peringatan: Aksesibilitas peladen harus diaktifkan untuk beralih)"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:1501
+#: admin/src/integrator/AdminIntegratorSettings.ts:1585
 msgid "Notebookbar view"
 msgstr "Tilikan bilah notebook"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:1508
+#: admin/src/integrator/AdminIntegratorSettings.ts:1592
 #: src/control/Control.NotebookbarCalc.js:1620
 #: src/control/Control.NotebookbarDraw.js:496
 #: src/control/Control.NotebookbarImpress.js:640
@@ -811,33 +798,33 @@ msgstr "Tilikan bilah notebook"
 msgid "Compact view"
 msgstr "Tilikan Ringkas"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:1614
+#: admin/src/integrator/AdminIntegratorSettings.ts:1698
 msgid "Something went wrong while uploading the file. Please try again."
 msgstr "Terjadi masalah saat mengunggah berkas. Silakan coba lagi."
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:1690
-#: src/canvas/sections/CommentSection.ts:1504
-#: src/canvas/sections/CommentSection.ts:1509
+#: admin/src/integrator/AdminIntegratorSettings.ts:1774
+#: src/canvas/sections/CommentSection.ts:1525
+#: src/canvas/sections/CommentSection.ts:1530
 #: src/control/Control.AIChatSidebar.ts:1375
-#: src/control/jsdialog/Control.ContextMenu.ts:287
+#: src/control/jsdialog/Control.ContextMenu.ts:292
 #: src/control/jsdialog/Definitions.DialogModification.ts:155
 #: src/docdispatcher.ts:619
 msgid "Delete"
 msgstr "Hapus"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:1701
+#: admin/src/integrator/AdminIntegratorSettings.ts:1785
 msgid ""
 "Something went wrong while deleting the file. Please try refreshing the "
 "page."
 msgstr ""
 "Terjadi masalah saat menghapus berkas. Silakan coba memuat ulang halaman."
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:1716
-#: src/control/Control.BackstageView.ts:559
+#: admin/src/integrator/AdminIntegratorSettings.ts:1800
+#: src/control/Control.BackstageView.ts:568
 msgid "Edit"
 msgstr "Sunting"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:1751
+#: admin/src/integrator/AdminIntegratorSettings.ts:1820
 msgid ""
 "To use Zotero specify your API key here. You can create your API key in "
 "your "
@@ -845,15 +832,15 @@ msgstr ""
 "Untuk menggunakan Zotero, tentukan kunci API Anda di sini. Anda dapat "
 "membuat kunci API Anda di "
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:1759
+#: admin/src/integrator/AdminIntegratorSettings.ts:1829
 msgid "Zotero account API settings"
 msgstr "Pengaturan API akun Zotero"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:1811
+#: admin/src/integrator/AdminIntegratorSettings.ts:1890
 msgid "Document Signing"
 msgstr "Penandatanganan Dokumen"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:1815
+#: admin/src/integrator/AdminIntegratorSettings.ts:1894
 msgid ""
 "To use document signing, specify your signing certificate, key and CA chain "
 "here."
@@ -861,10 +848,10 @@ msgstr ""
 "Untuk menggunakan penandatanganan dokumen, tentukan sertifikat "
 "penandatanganan, kunci, dan rantai CA Anda di sini."
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:1876
-#: src/control/Control.AIChatSidebar.ts:575 src/control/Control.Menubar.ts:225
-#: src/control/Control.Menubar.ts:532 src/control/Control.Menubar.ts:692
-#: src/control/Control.Menubar.ts:859
+#: admin/src/integrator/AdminIntegratorSettings.ts:1955
+#: src/control/Control.AIChatSidebar.ts:575 src/control/Control.Menubar.ts:227
+#: src/control/Control.Menubar.ts:534 src/control/Control.Menubar.ts:694
+#: src/control/Control.Menubar.ts:861
 #: src/control/Control.NotebookbarCalc.js:1687
 #: src/control/Control.NotebookbarCalc.js:1688
 #: src/control/Control.NotebookbarImpress.js:759
@@ -874,7 +861,7 @@ msgstr ""
 msgid "AI Assistant"
 msgstr "Asisten AI"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:1880
+#: admin/src/integrator/AdminIntegratorSettings.ts:1959
 msgid ""
 "Configure AI provider credentials and model. Models are fetched "
 "automatically when credentials change."
@@ -882,70 +869,74 @@ msgstr ""
 "Konfigurasikan kredensial penyedia AI dan model. Model diambil secara "
 "otomatis saat kredensial berubah."
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:1981
+#: admin/src/integrator/AdminIntegratorSettings.ts:2060
 msgid "Text Generation"
 msgstr "Pembuatan Teks"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:2031
-#: admin/src/integrator/AdminIntegratorSettings.ts:2137
+#: admin/src/integrator/AdminIntegratorSettings.ts:2110
+#: admin/src/integrator/AdminIntegratorSettings.ts:2216
 msgid "e.g."
 msgstr "mis."
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:2050
-#: admin/src/integrator/AdminIntegratorSettings.ts:2168
-#: admin/src/integrator/AdminIntegratorSettings.ts:2612
-#: admin/src/integrator/AdminIntegratorSettings.ts:2628
+#: admin/src/integrator/AdminIntegratorSettings.ts:2129
+#: admin/src/integrator/AdminIntegratorSettings.ts:2247
+#: admin/src/integrator/AdminIntegratorSettings.ts:2727
+#: admin/src/integrator/AdminIntegratorSettings.ts:2743
 msgid "Fetch models to select"
 msgstr "Ambil model untuk dipilih"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:2079
+#: admin/src/integrator/AdminIntegratorSettings.ts:2158
 msgid "Image Generation"
 msgstr "Pembuatan Gambar"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:2084
+#: admin/src/integrator/AdminIntegratorSettings.ts:2163
 msgid "Same as Text AI"
 msgstr "Sama seperti AI Teks"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:2153
+#: admin/src/integrator/AdminIntegratorSettings.ts:2232
 msgid "Leave empty to use Text AI key"
 msgstr "Biarkan kosong untuk menggunakan kunci AI Teks"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:2415
-#: admin/src/integrator/AdminIntegratorSettings.ts:2502
+#: admin/src/integrator/AdminIntegratorSettings.ts:2494
+#: admin/src/integrator/AdminIntegratorSettings.ts:2602
 msgid "Fetching models..."
 msgstr "Sedang mengambil model..."
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:2444
-#: admin/src/integrator/AdminIntegratorSettings.ts:2454
-#: admin/src/integrator/AdminIntegratorSettings.ts:2531
-#: admin/src/integrator/AdminIntegratorSettings.ts:2541
+#: admin/src/integrator/AdminIntegratorSettings.ts:2539
+#: admin/src/integrator/AdminIntegratorSettings.ts:2554
+#: admin/src/integrator/AdminIntegratorSettings.ts:2642
+#: admin/src/integrator/AdminIntegratorSettings.ts:2656
 msgid "No models found"
 msgstr "Tidak ada model ditemukan"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:2464
-#: admin/src/integrator/AdminIntegratorSettings.ts:2551
+#: admin/src/integrator/AdminIntegratorSettings.ts:2564
+#: admin/src/integrator/AdminIntegratorSettings.ts:2666
 msgid "Models fetched successfully"
 msgstr "Model berhasil diambil"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:2470
-#: admin/src/integrator/AdminIntegratorSettings.ts:2557
+#: admin/src/integrator/AdminIntegratorSettings.ts:2570
+#: admin/src/integrator/AdminIntegratorSettings.ts:2672
 msgid "Failed to fetch models"
 msgstr "Gagal mengambil model"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:2480
+#: admin/src/integrator/AdminIntegratorSettings.ts:2580
 msgid "Invalid provider configuration"
 msgstr "Konfigurasi penyedia tidak valid"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:2592
+#: admin/src/integrator/AdminIntegratorSettings.ts:2707
 msgid "None (disable image generation)"
 msgstr "Tidak ada (nonaktifkan pembuatan gambar)"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:2976
+#: admin/src/integrator/AdminIntegratorSettings.ts:2926
+msgid "Upload Xcu"
+msgstr "Unggah Xcu"
+
+#: admin/src/integrator/AdminIntegratorSettings.ts:3125
 msgid "Reset"
 msgstr "Atur Ulang"
 
-#: admin/src/integrator/AdminIntegratorSettings.ts:3095
-#: src/control/Control.AIChatSidebar.ts:2638 src/map/handler/Map.WOPI.js:869
+#: admin/src/integrator/AdminIntegratorSettings.ts:3244
+#: src/control/Control.AIChatSidebar.ts:2651 src/map/handler/Map.WOPI.js:869
 msgid "Error"
 msgstr "Galat"
 
@@ -993,6 +984,10 @@ msgstr "Terjadi masalah saat memuat pengaturan Dokumen."
 #: admin/src/integrator/Xcu.ts:310
 msgid "Document Settings"
 msgstr "Pengaturan Dokumen"
+
+#: admin/src/integrator/Xcu.ts:314
+msgid "Adjust how office documents behave."
+msgstr "Sesuaikan bagaimana dokumen kantor berperilaku."
 
 #: admin/src/integrator/Xcu.ts:361
 msgid "Select a tab to view settings."
@@ -1046,7 +1041,7 @@ msgstr " menit"
 msgid " s"
 msgstr " d"
 
-#: js/global.js:1779
+#: js/global.js:1808
 msgid ""
 "The system is currently adjusting resources. Please wait a moment while we "
 "retry your request..."
@@ -1054,11 +1049,11 @@ msgstr ""
 "Sistem sedang menyesuaikan sumber daya. Harap tunggu sebentar sementara kami "
 "mencoba kembali permintaan Anda..."
 
-#: js/global.js:1781
+#: js/global.js:1810
 msgid "The document is being migrated to a new server. Retrying shortly..."
 msgstr "Dokumen sedang dimigrasikan ke peladen baru. Segera mencoba lagi..."
 
-#: js/global.js:1783
+#: js/global.js:1812
 msgid "Failed to get RouteToken from controller"
 msgstr "Gagal mendapatkan RouteToken dari pengendali"
 
@@ -1122,7 +1117,7 @@ msgstr ""
 "Pengguna lain telah memperbarui komentar. Apakah Anda ingin menimpa "
 "perubahan tersebut?"
 
-#: src/canvas/sections/CommentListSection.ts:1860 src/app/Socket.ts:1596
+#: src/canvas/sections/CommentListSection.ts:1860 src/app/Socket.ts:1605
 msgid "Overwrite"
 msgstr "Timpa"
 
@@ -1142,89 +1137,89 @@ msgstr "Balas komentar"
 msgid "Open menu"
 msgstr "Buka Menu"
 
-#: src/canvas/sections/CommentSection.ts:193
-#: src/canvas/sections/CommentSection.ts:643
-#: src/canvas/sections/CommentSection.ts:1195
-#: src/canvas/sections/CommentSection.ts:1595
+#: src/canvas/sections/CommentSection.ts:194
+#: src/canvas/sections/CommentSection.ts:644
+#: src/canvas/sections/CommentSection.ts:1215
+#: src/canvas/sections/CommentSection.ts:1616
 msgid "Reply"
 msgstr "Balas"
 
-#: src/canvas/sections/CommentSection.ts:465
+#: src/canvas/sections/CommentSection.ts:466
 msgid "Press Ctrl + Enter to post"
 msgstr "Tekan Ctrl + Enter untuk memposting"
 
-#: src/canvas/sections/CommentSection.ts:538
 #: src/canvas/sections/CommentSection.ts:539
+#: src/canvas/sections/CommentSection.ts:540
 msgid "Accept change"
 msgstr "Terima Perubahan"
 
-#: src/canvas/sections/CommentSection.ts:545
 #: src/canvas/sections/CommentSection.ts:546
+#: src/canvas/sections/CommentSection.ts:547
 msgid "Reject change"
 msgstr "Tolak Perubahan"
 
-#: src/canvas/sections/CommentSection.ts:570
+#: src/canvas/sections/CommentSection.ts:571
 msgid "Resolved"
 msgstr "Terselesaikan"
 
-#: src/canvas/sections/CommentSection.ts:580
+#: src/canvas/sections/CommentSection.ts:581
 msgid "Removed"
 msgstr "Dihapus"
 
-#: src/canvas/sections/CommentSection.ts:1182
+#: src/canvas/sections/CommentSection.ts:1202
 #: src/control/jsdialog/Widget.Comment.ts:177
-#: src/layer/tile/CanvasTileLayer.js:3592
-#: src/layer/tile/CanvasTileLayer.js:3603
+#: src/layer/tile/CanvasTileLayer.js:3593
+#: src/layer/tile/CanvasTileLayer.js:3604
 msgid "Comment"
 msgstr "Komentar"
 
-#: src/canvas/sections/CommentSection.ts:1192
+#: src/canvas/sections/CommentSection.ts:1212
 msgid "Modify"
 msgstr "Ubah"
 
-#: src/canvas/sections/CommentSection.ts:1198
+#: src/canvas/sections/CommentSection.ts:1218
 #: src/control/Notebookbar.ImpressAnimationTab.ts:83
 msgid "Remove"
 msgstr "Buang"
 
-#: src/canvas/sections/CommentSection.ts:1202
+#: src/canvas/sections/CommentSection.ts:1222
 msgid "Remove Thread"
 msgstr "Hapus Thread"
 
-#: src/canvas/sections/CommentSection.ts:1209
+#: src/canvas/sections/CommentSection.ts:1229
 msgid "Resolve"
 msgstr "Selesaikan"
 
-#: src/canvas/sections/CommentSection.ts:1209
+#: src/canvas/sections/CommentSection.ts:1229
 msgid "Unresolve"
 msgstr "Tidak terselesaikan"
 
-#: src/canvas/sections/CommentSection.ts:1216
+#: src/canvas/sections/CommentSection.ts:1236
 msgid "Unresolve Thread"
 msgstr "Utas Belum Terselesaikan"
 
-#: src/canvas/sections/CommentSection.ts:1216
+#: src/canvas/sections/CommentSection.ts:1236
 msgid "Resolve Thread"
 msgstr "Selesaikan Thread"
 
-#: src/canvas/sections/CommentSection.ts:1222
+#: src/canvas/sections/CommentSection.ts:1242
 msgid "Promote to top comment"
 msgstr "Promosikan ke komentar puncak"
 
-#: src/canvas/sections/CommentSection.ts:1227
+#: src/canvas/sections/CommentSection.ts:1247
 msgid "Show on the side"
 msgstr "Tampilkan di sisi"
 
-#: src/canvas/sections/CommentSection.ts:1227
+#: src/canvas/sections/CommentSection.ts:1247
 msgid "Open in full view"
 msgstr "Buka dalam tampilan penuh"
 
-#: src/canvas/sections/CommentSection.ts:1234
+#: src/canvas/sections/CommentSection.ts:1254
 msgid "Show in navigator"
 msgstr "Tampilkan di navigator"
 
-#: src/canvas/sections/CommentSection.ts:1503
-#: src/canvas/sections/CommentSection.ts:1508
+#: src/canvas/sections/CommentSection.ts:1524
+#: src/canvas/sections/CommentSection.ts:1529
 #: src/control/Control.SaveState.ts:67
 msgid "Saved"
 msgstr "Tersimpan"
@@ -1293,13 +1288,17 @@ msgstr "Header"
 msgid "Footer"
 msgstr "Footer"
 
-#: src/control/CalcNotifications.ts:42
+#: src/control/CalcNotifications.ts:41
+msgid "A formula range was not extended to include the inserted cells."
+msgstr ""
+
+#: src/control/CalcNotifications.ts:50
 msgid "Deletion created #REF! errors in other formulas. Undo to restore."
 msgstr ""
 "Penghapusan menyebabkan galat #REF! pada formula lain. Batalkan untuk "
 "memulihkan."
 
-#: src/control/CalcNotifications.ts:43
+#: src/control/CalcNotifications.ts:51
 msgid "Find First"
 msgstr "Temukan yang Pertama"
 
@@ -1682,7 +1681,7 @@ msgid "Request timeout"
 msgstr "Waktu permintaan habis"
 
 #: src/control/Control.AIChatSidebar.ts:1962
-#: src/control/Control.AIChatSidebar.ts:2784
+#: src/control/Control.AIChatSidebar.ts:2797
 msgid ""
 "The selection contains images or other non-text content that cannot be sent "
 "as context."
@@ -1775,70 +1774,70 @@ msgstr "Waktu pengambilan seleksi habis"
 msgid "Failed to parse selection content"
 msgstr "Gagal mengurai konten seleksi"
 
-#: src/control/Control.AIChatSidebar.ts:2556
+#: src/control/Control.AIChatSidebar.ts:2569
 msgid "Formula analysis timeout"
 msgstr "Waktu analisis formula habis"
 
-#: src/control/Control.AIChatSidebar.ts:2575
+#: src/control/Control.AIChatSidebar.ts:2588
 msgid "Analyzing formula dependencies..."
 msgstr "Menganalisis dependensi formula..."
 
-#: src/control/Control.AIChatSidebar.ts:2583
+#: src/control/Control.AIChatSidebar.ts:2596
 msgid "Failed to analyze formula."
 msgstr "Gagal menganalisis formula."
 
-#: src/control/Control.AIChatSidebar.ts:2593
+#: src/control/Control.AIChatSidebar.ts:2606
 msgid "The selected cell does not contain a formula."
 msgstr "Sel yang dipilih tidak mengandung formula."
 
-#: src/control/Control.AIChatSidebar.ts:2595
+#: src/control/Control.AIChatSidebar.ts:2608
 msgid "The selected cell does not have a formula error."
 msgstr "Sel yang dipilih tidak memiliki galat formula."
 
-#: src/control/Control.AIChatSidebar.ts:2604
+#: src/control/Control.AIChatSidebar.ts:2617
 msgid "Diagnose formula error in"
 msgstr "Diagnosa galat formula di"
 
-#: src/control/Control.AIChatSidebar.ts:2625
+#: src/control/Control.AIChatSidebar.ts:2638
 msgid "I have a formula error in my spreadsheet."
 msgstr "Saya memiliki galat formula di spreadsheet saya."
 
-#: src/control/Control.AIChatSidebar.ts:2627
+#: src/control/Control.AIChatSidebar.ts:2640
 msgid "Cell"
 msgstr "Sel"
 
-#: src/control/Control.AIChatSidebar.ts:2631
+#: src/control/Control.AIChatSidebar.ts:2644
 msgid "Sheet"
 msgstr "Sheet"
 
-#: src/control/Control.AIChatSidebar.ts:2635
+#: src/control/Control.AIChatSidebar.ts:2648
 msgid "contains"
 msgstr "mengandung"
 
-#: src/control/Control.AIChatSidebar.ts:2637
+#: src/control/Control.AIChatSidebar.ts:2650
 #: src/control/Control.FormulaBarJSDialog.js:83
 #: src/control/Control.NotebookbarWriter.js:128
 #: src/control/Control.NotebookbarWriter.js:1585
 msgid "Formula"
 msgstr "Rumus"
 
-#: src/control/Control.AIChatSidebar.ts:2641
+#: src/control/Control.AIChatSidebar.ts:2654
 msgid "Referenced cells"
 msgstr "Sel yang direferensikan"
 
-#: src/control/Control.AIChatSidebar.ts:2647
+#: src/control/Control.AIChatSidebar.ts:2660
 msgid "Please diagnose why this formula produces the"
 msgstr "Harap diagnosa mengapa formula ini menghasilkan"
 
-#: src/control/Control.AIChatSidebar.ts:2651
+#: src/control/Control.AIChatSidebar.ts:2664
 msgid "error."
 msgstr "galat."
 
-#: src/control/Control.AIChatSidebar.ts:2653
+#: src/control/Control.AIChatSidebar.ts:2666
 msgid "Explain the root cause and suggest how to fix it."
 msgstr "Jelaskan akar penyebabnya dan sarankan cara memperbaikinya."
 
-#: src/control/Control.AIChatSidebar.ts:2657
+#: src/control/Control.AIChatSidebar.ts:2670
 msgid ""
 "When referencing specific cells, format each cell address as a clickable "
 "link: [A1](cell://A1)."
@@ -1846,59 +1845,59 @@ msgstr ""
 "Saat mereferensikan sel tertentu, format setiap alamat sel sebagai tautan "
 "yang dapat diklik: [A1](cell://A1)."
 
-#: src/control/Control.AIChatSidebar.ts:2672
+#: src/control/Control.AIChatSidebar.ts:2685
 msgid "formula"
 msgstr "formula"
 
-#: src/control/Control.AIChatSidebar.ts:2674
+#: src/control/Control.AIChatSidebar.ts:2687
 msgid "ERROR"
 msgstr "ERROR"
 
-#: src/control/Control.AIChatSidebar.ts:2688
+#: src/control/Control.AIChatSidebar.ts:2701
 msgid "value"
 msgstr "nilai"
 
-#: src/control/Control.AIChatSidebar.ts:2698
+#: src/control/Control.AIChatSidebar.ts:2711
 msgid "text"
 msgstr "teks"
 
-#: src/control/Control.AIChatSidebar.ts:2703
+#: src/control/Control.AIChatSidebar.ts:2716
 msgid "empty"
 msgstr "kosong"
 
-#: src/control/Control.AIChatSidebar.ts:2705
+#: src/control/Control.AIChatSidebar.ts:2718
 msgid "range"
 msgstr "rentang"
 
-#: src/control/Control.AIChatSidebar.ts:2707
+#: src/control/Control.AIChatSidebar.ts:2720
 msgid "errors in"
 msgstr "galat di"
 
-#: src/control/Control.AIChatSidebar.ts:2710
+#: src/control/Control.AIChatSidebar.ts:2723
 msgid "only partially scanned"
 msgstr "hanya sebagian yang dipindai"
 
-#: src/control/Control.AIChatSidebar.ts:2719
+#: src/control/Control.AIChatSidebar.ts:2732
 msgid "circular reference"
 msgstr "referensi melingkar"
 
-#: src/control/Control.AIChatSidebar.ts:2769
+#: src/control/Control.AIChatSidebar.ts:2782
 msgid "Select the data you want to sanity-check first."
 msgstr "Pilih data yang ingin Anda periksa terlebih dahulu."
 
-#: src/control/Control.AIChatSidebar.ts:2774
+#: src/control/Control.AIChatSidebar.ts:2787
 msgid "Analyzing selected data..."
 msgstr "Menganalisis data yang dipilih..."
 
-#: src/control/Control.AIChatSidebar.ts:2787
+#: src/control/Control.AIChatSidebar.ts:2800
 msgid "Failed to extract spreadsheet data."
 msgstr "Gagal mengekstrak data spreadsheet."
 
-#: src/control/Control.AIChatSidebar.ts:2796
+#: src/control/Control.AIChatSidebar.ts:2809
 msgid "No data found in selection."
 msgstr "Tidak ada data yang ditemukan dalam seleksi."
 
-#: src/control/Control.AIChatSidebar.ts:2826
+#: src/control/Control.AIChatSidebar.ts:2839
 msgid ""
 "Describe the slides you want to create. For example: \"A 5-slide overview "
 "of renewable energy\" or \"An introduction to our team\"."
@@ -1906,7 +1905,7 @@ msgstr ""
 "Jelaskan slide yang ingin Anda buat. Contohnya: \"Ikhtisar 5 slide tentang "
 "energi terbarukan\" atau \"Pengenalan tim kami\"."
 
-#: src/control/Control.AIChatSidebar.ts:2853
+#: src/control/Control.AIChatSidebar.ts:2866
 msgid ""
 "Describe what formula you need. For example: \"Calculate the average of "
 "column B\" or \"Sum all values where column A is greater than 100\"."
@@ -1914,7 +1913,7 @@ msgstr ""
 "Jelaskan formula yang Anda butuhkan. Contohnya: \"Hitung rata-rata kolom B\" "
 "atau \"Jumlahkan semua nilai di mana kolom A lebih besar dari 100\"."
 
-#: src/control/Control.AIChatSidebar.ts:2863
+#: src/control/Control.AIChatSidebar.ts:2876
 msgid ""
 "Read row numbers from the \"Row\" column — do not count or estimate row "
 "positions."
@@ -1922,7 +1921,7 @@ msgstr ""
 "Baca nomor baris dari kolom \"Row\" — jangan hitung atau perkirakan posisi "
 "baris."
 
-#: src/control/Control.AIChatSidebar.ts:2867
+#: src/control/Control.AIChatSidebar.ts:2880
 msgid ""
 "To identify a cell's column, match the value to the column letter in the "
 "header row — do not guess."
@@ -1930,7 +1929,7 @@ msgstr ""
 "Untuk mengidentifikasi kolom suatu sel, cocokkan nilai dengan huruf kolom di "
 "baris header — jangan menebak."
 
-#: src/control/Control.AIChatSidebar.ts:2871
+#: src/control/Control.AIChatSidebar.ts:2884
 msgid ""
 "Reference a cell by combining its column header with the row number (e.g., "
 "column B + row 2 = B2)."
@@ -1938,7 +1937,7 @@ msgstr ""
 "Referensikan sel dengan menggabungkan header kolom dengan nomor baris (mis., "
 "kolom B + baris 2 = B2)."
 
-#: src/control/Control.AIChatSidebar.ts:2874
+#: src/control/Control.AIChatSidebar.ts:2887
 msgid ""
 "When referencing specific cells, format each cell as a clickable link: [B2]"
 "(cell://B2)."
@@ -1946,15 +1945,15 @@ msgstr ""
 "Saat mereferensikan sel tertentu, format setiap sel sebagai tautan yang "
 "dapat diklik: [B2](cell://B2)."
 
-#: src/control/Control.AIChatSidebar.ts:2880
+#: src/control/Control.AIChatSidebar.ts:2893
 msgid "Sanity check the following spreadsheet data."
 msgstr "Periksa kewajaran data spreadsheet berikut."
 
-#: src/control/Control.AIChatSidebar.ts:2881
+#: src/control/Control.AIChatSidebar.ts:2894
 msgid "Please analyze this data for:"
 msgstr "Harap analisis data ini untuk:"
 
-#: src/control/Control.AIChatSidebar.ts:2885
+#: src/control/Control.AIChatSidebar.ts:2898
 msgid ""
 "Benford's Law violations — check if leading digit distribution of numeric "
 "values deviates significantly from the expected distribution, which may "
@@ -1964,7 +1963,7 @@ msgstr ""
 "nilai numerik menyimpang secara signifikan dari distribusi yang diharapkan, "
 "yang dapat mengindikasikan manipulasi data."
 
-#: src/control/Control.AIChatSidebar.ts:2891
+#: src/control/Control.AIChatSidebar.ts:2904
 msgid ""
 "Statistical outliers — identify values that deviate significantly from "
 "their column or group."
@@ -1972,7 +1971,7 @@ msgstr ""
 "Outlier statistik — identifikasi nilai yang menyimpang secara signifikan "
 "dari kolom atau kelompoknya."
 
-#: src/control/Control.AIChatSidebar.ts:2897
+#: src/control/Control.AIChatSidebar.ts:2910
 msgid ""
 "General anomalies — suspicious patterns, unexpected duplicates, "
 "inconsistencies, or formatting issues."
@@ -2031,8 +2030,8 @@ msgstr "Jangan tampilkan ini lagi"
 msgid "The server encountered a {0} error while parsing the {1} command."
 msgstr "Server mengalami kesalahan {0} saat menguraikan perintah {1}."
 
-#: src/control/Control.BackstageView.ts:95
-#: src/control/Control.BackstageView.ts:230
+#: src/control/Control.BackstageView.ts:96
+#: src/control/Control.BackstageView.ts:239
 #: src/control/Control.NotebookbarCalc.js:35
 #: src/control/Control.NotebookbarDraw.js:63
 #: src/control/Control.NotebookbarImpress.js:83
@@ -2040,19 +2039,19 @@ msgstr "Server mengalami kesalahan {0} saat menguraikan perintah {1}."
 msgid "Home"
 msgstr "Beranda"
 
-#: src/control/Control.BackstageView.ts:103
-#: src/control/Control.BackstageView.ts:425
+#: src/control/Control.BackstageView.ts:104
+#: src/control/Control.BackstageView.ts:434
 #: src/control/Control.NotebookbarImpress.js:873
 #: src/control/Control.NotebookbarImpress.js:1482
 msgid "New"
 msgstr "Baru"
 
-#: src/control/Control.BackstageView.ts:111
+#: src/control/Control.BackstageView.ts:112
 msgid "Open"
 msgstr "Buka"
 
-#: src/control/Control.BackstageView.ts:119
-#: src/control/Control.Notebookbar.js:706
+#: src/control/Control.BackstageView.ts:120
+#: src/control/Control.Notebookbar.js:725
 #: src/control/Control.NotebookbarCalc.js:217
 #: src/control/Control.NotebookbarCalc.js:251
 #: src/control/Control.NotebookbarDraw.js:224
@@ -2066,11 +2065,11 @@ msgstr "Buka"
 msgid "Share"
 msgstr "Bagikan"
 
-#: src/control/Control.BackstageView.ts:127
+#: src/control/Control.BackstageView.ts:128
 msgid "Info"
 msgstr "Maklumat"
 
-#: src/control/Control.BackstageView.ts:143
+#: src/control/Control.BackstageView.ts:144
 #: src/control/Control.NotebookbarCalc.js:180
 #: src/control/Control.NotebookbarCalc.js:321
 #: src/control/Control.NotebookbarImpress.js:233
@@ -2080,105 +2079,109 @@ msgstr "Maklumat"
 msgid "Save As"
 msgstr "Simpan Sebagai"
 
-#: src/control/Control.BackstageView.ts:159
+#: src/control/Control.BackstageView.ts:160
 msgid "Export"
 msgstr "Ekspor"
 
-#: src/control/Control.BackstageView.ts:173 src/control/Control.Menubar.ts:124
-#: src/control/Control.Menubar.ts:467 src/control/Control.Menubar.ts:644
-#: src/control/Control.Menubar.ts:794
+#: src/control/Control.BackstageView.ts:168
+msgid "Sign"
+msgstr "Tandatangan"
+
+#: src/control/Control.BackstageView.ts:182 src/control/Control.Menubar.ts:126
+#: src/control/Control.Menubar.ts:469 src/control/Control.Menubar.ts:646
+#: src/control/Control.Menubar.ts:796
 #: src/control/Control.NotebookbarCalc.js:398
 #: src/control/Control.NotebookbarDraw.js:421
 #: src/control/Control.NotebookbarImpress.js:455
 #: src/control/Control.NotebookbarWriter.js:431 src/control/IFrameDialog.js:35
-#: src/map/handler/Map.Settings.ts:85
+#: src/map/handler/Map.Settings.ts:75
 msgid "Options"
 msgstr "Pilihan"
 
-#: src/control/Control.BackstageView.ts:231
+#: src/control/Control.BackstageView.ts:240
 msgid "Start a new document from one of the following templates."
 msgstr "Mulai dokumen baru dari salah satu templat berikut."
 
-#: src/control/Control.BackstageView.ts:269
+#: src/control/Control.BackstageView.ts:278
 #: src/control/jsdialog/Widget.ColorPicker.ts:441
 msgid "Recent"
 msgstr "Terkini"
 
-#: src/control/Control.BackstageView.ts:484
+#: src/control/Control.BackstageView.ts:493
 msgid "Document Info"
 msgstr "Maklumat Dokumen"
 
-#: src/control/Control.BackstageView.ts:485
+#: src/control/Control.BackstageView.ts:494
 msgid "View document properties and information"
 msgstr "Tilik properti dan maklumat dokumen"
 
-#: src/control/Control.BackstageView.ts:507
+#: src/control/Control.BackstageView.ts:516
 msgid "Export Document"
 msgstr "Ekspor Dokumen"
 
-#: src/control/Control.BackstageView.ts:508
+#: src/control/Control.BackstageView.ts:517
 msgid "export your documents in different formats"
 msgstr "ekspor dokumen Anda dalam format berbeda"
 
-#: src/control/Control.BackstageView.ts:540 templates/templates.js:50
+#: src/control/Control.BackstageView.ts:549 templates/templates.js:50
 #: templates/templates.js:60 templates/templates.js:70
 msgid "Text Document"
 msgstr "Dokumen Teks"
 
-#: src/control/Control.BackstageView.ts:540
-#: src/control/Control.BackstageView.ts:543
+#: src/control/Control.BackstageView.ts:549
+#: src/control/Control.BackstageView.ts:552
 msgid "Pages"
 msgstr "Halaman"
 
-#: src/control/Control.BackstageView.ts:541
+#: src/control/Control.BackstageView.ts:550
 msgid "Spreadsheet"
 msgstr "Lembar Sebar"
 
-#: src/control/Control.BackstageView.ts:541
+#: src/control/Control.BackstageView.ts:550
 msgid "Sheets"
 msgstr "Lembar"
 
-#: src/control/Control.BackstageView.ts:542
+#: src/control/Control.BackstageView.ts:551
 #: src/control/Control.NavigatorPanel.ts:192
 #: src/control/Control.NotebookbarImpress.js:1475
 #: src/slideshow/PresenterConsole.js:35
 msgid "Slides"
 msgstr "Salindia"
 
-#: src/control/Control.BackstageView.ts:548
+#: src/control/Control.BackstageView.ts:557
 msgid "Parts"
 msgstr "Bagian"
 
-#: src/control/Control.BackstageView.ts:552
+#: src/control/Control.BackstageView.ts:561
 #: src/control/Control.DocumentRepair.js:140
 msgid "Type"
 msgstr "Tipe"
 
-#: src/control/Control.BackstageView.ts:558
+#: src/control/Control.BackstageView.ts:567
 msgid "Mode"
 msgstr "Modus"
 
-#: src/control/Control.BackstageView.ts:559
+#: src/control/Control.BackstageView.ts:568
 msgid "View Only"
 msgstr "Hanya Tilik"
 
-#: src/control/Control.BackstageView.ts:566
+#: src/control/Control.BackstageView.ts:575
 msgid "File Name"
 msgstr "Nama Berkas"
 
-#: src/control/Control.BackstageView.ts:711
+#: src/control/Control.BackstageView.ts:720
 msgid "Blank Spreadsheet"
 msgstr "Lembar Sebar Kosong"
 
-#: src/control/Control.BackstageView.ts:715
+#: src/control/Control.BackstageView.ts:724
 msgid "Blank Presentation"
 msgstr "Presentasi Kosong"
 
-#: src/control/Control.BackstageView.ts:720
+#: src/control/Control.BackstageView.ts:729
 msgid "Blank Document"
 msgstr "Dokumen Kosong"
 
-#: src/control/Control.BackstageView.ts:858
+#: src/control/Control.BackstageView.ts:872
 msgid "Untitled"
 msgstr "Tanpa judul"
 
@@ -2218,8 +2221,8 @@ msgstr "Tidak ada templat yang sesuai dengan pencarian Anda."
 msgid "Search templates"
 msgstr "Mencari templat"
 
-#: src/control/backstage/InfoView.tsx:31 src/control/Control.Menubar.ts:388
-#: src/control/Control.Menubar.ts:1385
+#: src/control/backstage/InfoView.tsx:31 src/control/Control.Menubar.ts:390
+#: src/control/Control.Menubar.ts:1389
 #: src/control/Control.NotebookbarCalc.js:351
 #: src/control/Control.NotebookbarDraw.js:371
 #: src/control/Control.NotebookbarImpress.js:408
@@ -2763,24 +2766,24 @@ msgstr "Terapkan dropdown tindakan"
 msgid "Open {name}"
 msgstr "Buka (nama)"
 
-#: src/control/Control.JSDialogBuilder.js:1887
-#: src/control/Control.Menubar.ts:960
+#: src/control/Control.JSDialogBuilder.js:1886
+#: src/control/Control.Menubar.ts:962
 msgid "Rows"
 msgstr "Baris"
 
-#: src/control/Control.JSDialogBuilder.js:1888
-#: src/control/Control.Menubar.ts:963
+#: src/control/Control.JSDialogBuilder.js:1887
+#: src/control/Control.Menubar.ts:965
 msgid "Columns"
 msgstr "Kolom"
 
-#: src/control/Control.JSDialogBuilder.js:1908
+#: src/control/Control.JSDialogBuilder.js:1907
 msgid "Insert Table"
 msgstr "Sisip Tabel"
 
-#: src/control/Control.LanguageDialog.js:64 src/control/Control.Menubar.ts:400
-#: src/control/Control.Menubar.ts:402 src/control/Control.Menubar.ts:404
-#: src/control/Control.Menubar.ts:603 src/control/Control.Menubar.ts:751
-#: src/control/Control.Menubar.ts:1053 src/control/Control.StatusBar.js:713
+#: src/control/Control.LanguageDialog.js:64 src/control/Control.Menubar.ts:402
+#: src/control/Control.Menubar.ts:404 src/control/Control.Menubar.ts:406
+#: src/control/Control.Menubar.ts:605 src/control/Control.Menubar.ts:753
+#: src/control/Control.Menubar.ts:1055 src/control/Control.StatusBar.js:713
 msgid "None (Do not check spelling)"
 msgstr "Tidak (Jangan periksa ejaan)"
 
@@ -2797,120 +2800,127 @@ msgstr "Bahasa"
 msgid "No search results found!"
 msgstr "Tidak ada hasil pencarian ditemukan!"
 
-#: src/control/Control.Menubar.ts:101 src/control/Control.Menubar.ts:116
-#: src/control/Control.Menubar.ts:1094
+#: src/control/Control.Menubar.ts:101 src/control/Control.Menubar.ts:117
+#: src/control/Control.Menubar.ts:1097
 #: src/control/Control.NotebookbarBuilder.js:379
-#: src/control/Control.NotebookbarBuilder.js:531
+#: src/control/Control.NotebookbarBuilder.js:535
 msgid "ODF text document (.odt)"
 msgstr "Dokumen teks ODF (*.odt)"
 
-#: src/control/Control.Menubar.ts:102 src/control/Control.Menubar.ts:117
-#: src/control/Control.Menubar.ts:1095
+#: src/control/Control.Menubar.ts:102 src/control/Control.Menubar.ts:118
+#: src/control/Control.Menubar.ts:1098
 #: src/control/Control.NotebookbarBuilder.js:391
-#: src/control/Control.NotebookbarBuilder.js:543
+#: src/control/Control.NotebookbarBuilder.js:547
 msgid "Word 2003 Document (.doc)"
 msgstr "Dokumen Word 2003 (.doc)"
 
-#: src/control/Control.Menubar.ts:103 src/control/Control.Menubar.ts:118
-#: src/control/Control.Menubar.ts:1096
+#: src/control/Control.Menubar.ts:103 src/control/Control.Menubar.ts:119
+#: src/control/Control.Menubar.ts:1099
 #: src/control/Control.NotebookbarBuilder.js:387
-#: src/control/Control.NotebookbarBuilder.js:539
+#: src/control/Control.NotebookbarBuilder.js:543
 msgid "Word Document (.docx)"
 msgstr "Word Dokument (.docx)"
 
-#: src/control/Control.Menubar.ts:104 src/control/Control.Menubar.ts:119
-#: src/control/Control.Menubar.ts:1097
+#: src/control/Control.Menubar.ts:104 src/control/Control.Menubar.ts:120
+#: src/control/Control.Menubar.ts:1100
 #: src/control/Control.NotebookbarBuilder.js:383
-#: src/control/Control.NotebookbarBuilder.js:535
+#: src/control/Control.NotebookbarBuilder.js:539
 msgid "Rich Text (.rtf)"
 msgstr "Teks Kaya (.rtf)"
 
-#: src/control/Control.Menubar.ts:106 src/control/Control.Menubar.ts:113
-#: src/control/Control.Menubar.ts:446 src/control/Control.Menubar.ts:452
-#: src/control/Control.Menubar.ts:630 src/control/Control.Menubar.ts:637
-#: src/control/Control.Menubar.ts:779 src/control/Control.Menubar.ts:784
-#: src/control/Control.Menubar.ts:1082 src/control/Control.Menubar.ts:1091
-#: src/control/Control.Menubar.ts:1148 src/control/Control.Menubar.ts:1156
-#: src/control/Control.Menubar.ts:1213 src/control/Control.Menubar.ts:1220
-#: src/control/Control.Menubar.ts:1268 src/control/Control.Menubar.ts:1278
+#: src/control/Control.Menubar.ts:106 src/control/Control.Menubar.ts:114
+#: src/control/Control.Menubar.ts:448 src/control/Control.Menubar.ts:454
+#: src/control/Control.Menubar.ts:632 src/control/Control.Menubar.ts:639
+#: src/control/Control.Menubar.ts:781 src/control/Control.Menubar.ts:786
+#: src/control/Control.Menubar.ts:1084 src/control/Control.Menubar.ts:1094
+#: src/control/Control.Menubar.ts:1152 src/control/Control.Menubar.ts:1160
+#: src/control/Control.Menubar.ts:1217 src/control/Control.Menubar.ts:1224
+#: src/control/Control.Menubar.ts:1272 src/control/Control.Menubar.ts:1282
 #: src/control/Control.NotebookbarCalc.js:320
 #: src/control/Control.NotebookbarImpress.js:377
 #: src/control/Control.NotebookbarWriter.js:338
 msgid "Export as"
 msgstr "Ekspor sebagai"
 
-#: src/control/Control.Menubar.ts:107 src/control/Control.Menubar.ts:114
-#: src/control/Control.Menubar.ts:447 src/control/Control.Menubar.ts:453
-#: src/control/Control.Menubar.ts:631 src/control/Control.Menubar.ts:638
-#: src/control/Control.Menubar.ts:780 src/control/Control.Menubar.ts:785
-#: src/control/Control.Menubar.ts:1083 src/control/Control.Menubar.ts:1092
-#: src/control/Control.Menubar.ts:1149 src/control/Control.Menubar.ts:1157
-#: src/control/Control.Menubar.ts:1214 src/control/Control.Menubar.ts:1221
-#: src/control/Control.Menubar.ts:1269 src/control/Control.Menubar.ts:1279
+#: src/control/Control.Menubar.ts:107 src/control/Control.Menubar.ts:115
+#: src/control/Control.Menubar.ts:449 src/control/Control.Menubar.ts:455
+#: src/control/Control.Menubar.ts:633 src/control/Control.Menubar.ts:640
+#: src/control/Control.Menubar.ts:782 src/control/Control.Menubar.ts:787
+#: src/control/Control.Menubar.ts:1085 src/control/Control.Menubar.ts:1095
+#: src/control/Control.Menubar.ts:1153 src/control/Control.Menubar.ts:1161
+#: src/control/Control.Menubar.ts:1218 src/control/Control.Menubar.ts:1225
+#: src/control/Control.Menubar.ts:1273 src/control/Control.Menubar.ts:1283
 #: src/control/Control.NotebookbarBuilder.js:400
-#: src/control/Control.NotebookbarBuilder.js:437
-#: src/control/Control.NotebookbarBuilder.js:470
-#: src/control/Control.NotebookbarBuilder.js:592
-#: src/control/Control.NotebookbarBuilder.js:603
-#: src/control/Control.NotebookbarBuilder.js:610
-#: src/control/Control.NotebookbarBuilder.js:617
+#: src/control/Control.NotebookbarBuilder.js:441
+#: src/control/Control.NotebookbarBuilder.js:474
+#: src/control/Control.NotebookbarBuilder.js:596
+#: src/control/Control.NotebookbarBuilder.js:611
+#: src/control/Control.NotebookbarBuilder.js:618
+#: src/control/Control.NotebookbarBuilder.js:625
 #: src/control/Control.NotebookbarDraw.js:327
 msgid "PDF Document (.pdf)"
 msgstr "Dokumen PDF (.pdf)"
 
-#: src/control/Control.Menubar.ts:108 src/control/Control.Menubar.ts:120
-#: src/control/Control.Menubar.ts:1084 src/control/Control.Menubar.ts:1098
+#: src/control/Control.Menubar.ts:108 src/control/Control.Menubar.ts:121
+#: src/control/Control.Menubar.ts:1086 src/control/Control.Menubar.ts:1101
 #: src/control/Control.NotebookbarBuilder.js:395
-#: src/control/Control.NotebookbarBuilder.js:596
+#: src/control/Control.NotebookbarBuilder.js:600
 msgid "EPUB (.epub)"
 msgstr "EPUB (.epub)"
 
-#: src/control/Control.Menubar.ts:110 src/control/Control.UIManager.ts:393
+#: src/control/Control.Menubar.ts:109 src/control/Control.Menubar.ts:123
+#: src/control/Control.Menubar.ts:1087 src/control/Control.Menubar.ts:1102
+#: src/control/Control.NotebookbarBuilder.js:414
+#: src/control/Control.NotebookbarBuilder.js:604
+msgid "Markdown (.md)"
+msgstr ""
+
+#: src/control/Control.Menubar.ts:111 src/control/Control.UIManager.ts:414
 msgid "Rename Document"
 msgstr "Namai Ulang Dokumen"
 
-#: src/control/Control.Menubar.ts:111 src/control/Control.Menubar.ts:450
-#: src/control/Control.Menubar.ts:634 src/control/Control.Menubar.ts:782
-#: src/control/Control.Menubar.ts:1086 src/control/Control.Menubar.ts:1151
-#: src/control/Control.Menubar.ts:1216 src/control/Control.Menubar.ts:1271
+#: src/control/Control.Menubar.ts:112 src/control/Control.Menubar.ts:452
+#: src/control/Control.Menubar.ts:636 src/control/Control.Menubar.ts:784
+#: src/control/Control.Menubar.ts:1089 src/control/Control.Menubar.ts:1155
+#: src/control/Control.Menubar.ts:1220 src/control/Control.Menubar.ts:1275
 msgid "Share..."
 msgstr "Bagikan..."
 
-#: src/control/Control.Menubar.ts:112 src/control/Control.Menubar.ts:451
-#: src/control/Control.Menubar.ts:636 src/control/Control.Menubar.ts:783
-#: src/control/Control.Menubar.ts:1087 src/control/Control.Menubar.ts:1152
-#: src/control/Control.Menubar.ts:1218 src/control/Control.Menubar.ts:1272
+#: src/control/Control.Menubar.ts:113 src/control/Control.Menubar.ts:453
+#: src/control/Control.Menubar.ts:638 src/control/Control.Menubar.ts:785
+#: src/control/Control.Menubar.ts:1090 src/control/Control.Menubar.ts:1156
+#: src/control/Control.Menubar.ts:1222 src/control/Control.Menubar.ts:1276
 msgid "See revision history"
 msgstr "Lihat histori perubahan"
 
-#: src/control/Control.Menubar.ts:113 src/control/Control.Menubar.ts:452
-#: src/control/Control.Menubar.ts:637 src/control/Control.Menubar.ts:784
-#: src/control/Control.Menubar.ts:1091 src/control/Control.Menubar.ts:1156
-#: src/control/Control.Menubar.ts:1220 src/control/Control.Menubar.ts:1278
+#: src/control/Control.Menubar.ts:114 src/control/Control.Menubar.ts:454
+#: src/control/Control.Menubar.ts:639 src/control/Control.Menubar.ts:786
+#: src/control/Control.Menubar.ts:1094 src/control/Control.Menubar.ts:1160
+#: src/control/Control.Menubar.ts:1224 src/control/Control.Menubar.ts:1282
 msgid "Download as"
 msgstr "Unduh sebagai"
 
-#: src/control/Control.Menubar.ts:115 src/control/Control.Menubar.ts:454
-#: src/control/Control.Menubar.ts:639 src/control/Control.Menubar.ts:786
-#: src/control/Control.Menubar.ts:1093 src/control/Control.Menubar.ts:1158
-#: src/control/Control.Menubar.ts:1222 src/control/Control.Menubar.ts:1280
+#: src/control/Control.Menubar.ts:116 src/control/Control.Menubar.ts:456
+#: src/control/Control.Menubar.ts:641 src/control/Control.Menubar.ts:788
+#: src/control/Control.Menubar.ts:1096 src/control/Control.Menubar.ts:1162
+#: src/control/Control.Menubar.ts:1226 src/control/Control.Menubar.ts:1284
 msgid "PDF Document (.pdf) as..."
 msgstr "Dokumen PDF (.pdf) sebagai..."
 
-#: src/control/Control.Menubar.ts:121 src/control/Control.Menubar.ts:791
+#: src/control/Control.Menubar.ts:122 src/control/Control.Menubar.ts:793
 msgid "HTML file (.html)"
 msgstr "Berkas HTML (.html)"
 
-#: src/control/Control.Menubar.ts:127 src/control/Control.Menubar.ts:473
-#: src/control/Control.Menubar.ts:646 src/control/Control.Menubar.ts:800
+#: src/control/Control.Menubar.ts:129 src/control/Control.Menubar.ts:475
+#: src/control/Control.Menubar.ts:648 src/control/Control.Menubar.ts:802
 #: src/control/Control.Toolbar.js:1176
 msgid "Close document"
 msgstr "Tutup dokumen"
 
-#: src/control/Control.Menubar.ts:132 src/control/Control.Menubar.ts:478
-#: src/control/Control.Menubar.ts:651 src/control/Control.Menubar.ts:805
-#: src/control/Control.Menubar.ts:1103 src/control/Control.Menubar.ts:1167
-#: src/control/Control.Menubar.ts:1228 src/control/Control.Menubar.ts:1288
+#: src/control/Control.Menubar.ts:134 src/control/Control.Menubar.ts:480
+#: src/control/Control.Menubar.ts:653 src/control/Control.Menubar.ts:807
+#: src/control/Control.Menubar.ts:1107 src/control/Control.Menubar.ts:1171
+#: src/control/Control.Menubar.ts:1232 src/control/Control.Menubar.ts:1292
 #: src/control/Control.NotebookbarCalc.js:336
 #: src/control/Control.NotebookbarDraw.js:357
 #: src/control/Control.NotebookbarImpress.js:393
@@ -2918,14 +2928,14 @@ msgstr "Tutup dokumen"
 msgid "Repair"
 msgstr "Perbaiki"
 
-#: src/control/Control.Menubar.ts:144
+#: src/control/Control.Menubar.ts:146
 msgid "Compare Changes"
 msgstr "Bandingkan Perubahan"
 
-#: src/control/Control.Menubar.ts:163 src/control/Control.Menubar.ts:490
-#: src/control/Control.Menubar.ts:496 src/control/Control.Menubar.ts:663
-#: src/control/Control.Menubar.ts:669 src/control/Control.Menubar.ts:817
-#: src/control/Control.Menubar.ts:823
+#: src/control/Control.Menubar.ts:165 src/control/Control.Menubar.ts:492
+#: src/control/Control.Menubar.ts:498 src/control/Control.Menubar.ts:665
+#: src/control/Control.Menubar.ts:671 src/control/Control.Menubar.ts:819
+#: src/control/Control.Menubar.ts:825
 #: src/control/Control.NotebookbarCalc.js:1580
 #: src/control/Control.NotebookbarDraw.js:456
 #: src/control/Control.NotebookbarImpress.js:600
@@ -2933,35 +2943,35 @@ msgstr "Bandingkan Perubahan"
 msgid "Reset zoom"
 msgstr "Atur ulang zum"
 
-#: src/control/Control.Menubar.ts:169
+#: src/control/Control.Menubar.ts:171
 msgid "Fit to Screen"
 msgstr "Sesuaikan dengan Layar"
 
-#: src/control/Control.Menubar.ts:172 src/control/Control.Menubar.ts:502
-#: src/control/Control.Menubar.ts:675 src/control/Control.Menubar.ts:826
+#: src/control/Control.Menubar.ts:174 src/control/Control.Menubar.ts:504
+#: src/control/Control.Menubar.ts:677 src/control/Control.Menubar.ts:828
 msgid "Toggle UI Mode"
 msgstr "Jungkit Modus UI"
 
-#: src/control/Control.Menubar.ts:173
+#: src/control/Control.Menubar.ts:175
 #: src/control/Control.NotebookbarWriter.js:1744
 #: src/control/Control.StatusBar.js:264 src/control/Control.StatusBar.js:265
 msgid "Multi Page View"
 msgstr "Tilikan Banyak Halaman"
 
-#: src/control/Control.Menubar.ts:175 src/control/Control.Menubar.ts:504
-#: src/control/Control.Menubar.ts:680 src/control/Control.Menubar.ts:827
+#: src/control/Control.Menubar.ts:177 src/control/Control.Menubar.ts:506
+#: src/control/Control.Menubar.ts:682 src/control/Control.Menubar.ts:829
 msgid "Show Status Bar"
 msgstr "Tampilkan Bilah Status"
 
-#: src/control/Control.Menubar.ts:176 src/control/Control.Menubar.ts:506
-#: src/control/Control.Menubar.ts:681 src/control/Control.Menubar.ts:828
+#: src/control/Control.Menubar.ts:178 src/control/Control.Menubar.ts:508
+#: src/control/Control.Menubar.ts:683 src/control/Control.Menubar.ts:830
 msgid "Hide Menu Bar"
 msgstr "Sembunyikan Bilah Menu"
 
-#: src/control/Control.Menubar.ts:178 src/control/Control.Menubar.ts:508
-#: src/control/Control.Menubar.ts:677 src/control/Control.Menubar.ts:830
-#: src/control/Control.Menubar.ts:1125 src/control/Control.Menubar.ts:1178
-#: src/control/Control.Menubar.ts:1239 src/control/Control.Menubar.ts:1299
+#: src/control/Control.Menubar.ts:180 src/control/Control.Menubar.ts:510
+#: src/control/Control.Menubar.ts:679 src/control/Control.Menubar.ts:832
+#: src/control/Control.Menubar.ts:1129 src/control/Control.Menubar.ts:1182
+#: src/control/Control.Menubar.ts:1243 src/control/Control.Menubar.ts:1303
 #: src/control/Control.NotebookbarCalc.js:1666
 #: src/control/Control.NotebookbarDraw.js:578
 #: src/control/Control.NotebookbarImpress.js:745
@@ -2969,26 +2979,26 @@ msgstr "Sembunyikan Bilah Menu"
 msgid "Invert Background"
 msgstr "Balikkan Latar Belakang"
 
-#: src/control/Control.Menubar.ts:180 src/control/Control.Menubar.ts:833
+#: src/control/Control.Menubar.ts:182 src/control/Control.Menubar.ts:835
 #: src/control/Control.NotebookbarCalc.js:2780
 #: src/control/Control.NotebookbarWriter.js:1109
 msgid "Style list"
 msgstr "Senarai gaya"
 
-#: src/control/Control.Menubar.ts:188 src/control/Control.Menubar.ts:520
-#: src/control/Control.Menubar.ts:684 src/control/Control.Menubar.ts:844
-#: src/control/Control.Menubar.ts:1341 src/control/Control.Menubar.ts:1391
-#: src/control/Control.Menubar.ts:1405 src/control/Control.Menubar.ts:1428
+#: src/control/Control.Menubar.ts:190 src/control/Control.Menubar.ts:522
+#: src/control/Control.Menubar.ts:686 src/control/Control.Menubar.ts:846
+#: src/control/Control.Menubar.ts:1345 src/control/Control.Menubar.ts:1395
+#: src/control/Control.Menubar.ts:1409 src/control/Control.Menubar.ts:1432
 msgid "Local Image..."
 msgstr "Gambar Lokal..."
 
-#: src/control/Control.Menubar.ts:212 src/control/Control.Menubar.ts:214
-#: src/control/Control.Menubar.ts:1358 src/control/Control.Menubar.ts:1360
+#: src/control/Control.Menubar.ts:214 src/control/Control.Menubar.ts:216
+#: src/control/Control.Menubar.ts:1362 src/control/Control.Menubar.ts:1364
 msgid "All"
 msgstr "Semua"
 
-#: src/control/Control.Menubar.ts:224 src/control/Control.Menubar.ts:531
-#: src/control/Control.Menubar.ts:691 src/control/Control.Menubar.ts:858
+#: src/control/Control.Menubar.ts:226 src/control/Control.Menubar.ts:533
+#: src/control/Control.Menubar.ts:693 src/control/Control.Menubar.ts:860
 #: src/control/Control.NotebookbarCalc.js:1924
 #: src/control/Control.NotebookbarDraw.js:1604
 #: src/control/Control.NotebookbarImpress.js:1666
@@ -2996,354 +3006,354 @@ msgstr "Semua"
 msgid "Smart Picker"
 msgstr "Pemetik Cerdas"
 
-#: src/control/Control.Menubar.ts:266
+#: src/control/Control.Menubar.ts:268
 msgid "Text orientation"
 msgstr "Orientasi Teks"
 
-#: src/control/Control.Menubar.ts:337
+#: src/control/Control.Menubar.ts:339
 #: src/control/Notebookbar.WriterReferencesTab.ts:25
 msgid "References"
 msgstr "Rujukan"
 
-#: src/control/Control.Menubar.ts:340
+#: src/control/Control.Menubar.ts:342
 #: src/control/Notebookbar.WriterReferencesTab.ts:72
 msgid "Update Index"
 msgstr "Perbarui Indeks"
 
-#: src/control/Control.Menubar.ts:349
+#: src/control/Control.Menubar.ts:351
 #: src/control/Notebookbar.WriterReferencesTab.ts:220
 msgid "Add Citation"
 msgstr "Tambah Sitasi"
 
-#: src/control/Control.Menubar.ts:350
+#: src/control/Control.Menubar.ts:352
 #: src/control/Notebookbar.WriterReferencesTab.ts:237
 msgid "Add Citation Note"
 msgstr "Tambahkan Catatan Sitasi"
 
-#: src/control/Control.Menubar.ts:351
+#: src/control/Control.Menubar.ts:353
 #: src/control/Notebookbar.WriterReferencesTab.ts:203
 msgid "Add Bibliography"
 msgstr "Tambahkan Bibliografi"
 
-#: src/control/Control.Menubar.ts:353
+#: src/control/Control.Menubar.ts:355
 #: src/control/Notebookbar.WriterReferencesTab.ts:262
 msgid "Refresh Citations"
 msgstr "Segarkan Sitasi"
 
-#: src/control/Control.Menubar.ts:354
+#: src/control/Control.Menubar.ts:356
 #: src/control/Notebookbar.WriterReferencesTab.ts:279
-#: src/control/Control.Zotero.js:1532
+#: src/control/Control.Zotero.js:1541
 msgid "Unlink Citations"
 msgstr "Lepaskan Sitasi"
 
-#: src/control/Control.Menubar.ts:355
+#: src/control/Control.Menubar.ts:357
 #: src/control/Notebookbar.WriterReferencesTab.ts:296
 msgid "Citation Preferences"
 msgstr "Preferensi Sitasi"
 
-#: src/control/Control.Menubar.ts:383 src/control/Control.Menubar.ts:1380
+#: src/control/Control.Menubar.ts:385 src/control/Control.Menubar.ts:1384
 msgid "Insert Rich Text"
 msgstr "Sisipkan Rich Text"
 
-#: src/control/Control.Menubar.ts:384 src/control/Control.Menubar.ts:1381
+#: src/control/Control.Menubar.ts:386 src/control/Control.Menubar.ts:1385
 msgid "Insert Checkbox"
 msgstr "Sisipkan Kotak Centang"
 
-#: src/control/Control.Menubar.ts:385 src/control/Control.Menubar.ts:1382
+#: src/control/Control.Menubar.ts:387 src/control/Control.Menubar.ts:1386
 msgid "Insert Dropdown"
 msgstr "Sisipkan Tarik Turun"
 
-#: src/control/Control.Menubar.ts:386 src/control/Control.Menubar.ts:1383
+#: src/control/Control.Menubar.ts:388 src/control/Control.Menubar.ts:1387
 msgid "Insert Picture"
 msgstr "Sisipkan Gambar"
 
-#: src/control/Control.Menubar.ts:387 src/control/Control.Menubar.ts:1384
+#: src/control/Control.Menubar.ts:389 src/control/Control.Menubar.ts:1388
 msgid "Insert Date"
 msgstr "Sisipkan Tanggal"
 
-#: src/control/Control.Menubar.ts:408 src/control/Control.Menubar.ts:1129
+#: src/control/Control.Menubar.ts:410 src/control/Control.Menubar.ts:1133
 #: src/control/Control.NotebookbarWriter.js:551
 msgid "Screen Reading"
 msgstr "Pembacaan Layar"
 
-#: src/control/Control.Menubar.ts:420 src/control/Control.Menubar.ts:608
-#: src/control/Control.Menubar.ts:753 src/control/Control.Menubar.ts:1059
-#: src/control/Control.NotebookbarCalc.js:119
-#: src/control/Control.NotebookbarDraw.js:134
-#: src/control/Control.NotebookbarImpress.js:169
-#: src/control/Control.NotebookbarWriter.js:122
+#: src/control/Control.Menubar.ts:422 src/control/Control.Menubar.ts:610
+#: src/control/Control.Menubar.ts:755 src/control/Control.Menubar.ts:1061
+#: src/control/Control.NotebookbarCalc.js:113
+#: src/control/Control.NotebookbarDraw.js:128
+#: src/control/Control.NotebookbarImpress.js:163
+#: src/control/Control.NotebookbarWriter.js:116
 msgid "Extensions"
 msgstr "Extensions"
 
-#: src/control/Control.Menubar.ts:422 src/control/Control.Menubar.ts:610
-#: src/control/Control.Menubar.ts:755 src/control/Control.Menubar.ts:1061
+#: src/control/Control.Menubar.ts:424 src/control/Control.Menubar.ts:612
+#: src/control/Control.Menubar.ts:757 src/control/Control.Menubar.ts:1063
 #: src/control/Control.NotebookbarWriter.js:456
 msgid "Online Help"
 msgstr "Bantuan daring"
 
-#: src/control/Control.Menubar.ts:424 src/control/Control.Menubar.ts:612
-#: src/control/Control.Menubar.ts:757 src/control/Control.Menubar.ts:1063
+#: src/control/Control.Menubar.ts:426 src/control/Control.Menubar.ts:614
+#: src/control/Control.Menubar.ts:759 src/control/Control.Menubar.ts:1065
 #: src/control/Control.NotebookbarWriter.js:469
 msgid "Keyboard shortcuts"
 msgstr "Pintasan keyboard"
 
-#: src/control/Control.Menubar.ts:426 src/control/Control.Menubar.ts:614
-#: src/control/Control.Menubar.ts:759 src/control/Control.Menubar.ts:1065
+#: src/control/Control.Menubar.ts:428 src/control/Control.Menubar.ts:616
+#: src/control/Control.Menubar.ts:761 src/control/Control.Menubar.ts:1067
 #: src/control/Control.NotebookbarWriter.js:482
 msgid "Forum"
 msgstr "Forum"
 
-#: src/control/Control.Menubar.ts:427 src/control/Control.Menubar.ts:615
-#: src/control/Control.Menubar.ts:760 src/control/Control.Menubar.ts:1066
+#: src/control/Control.Menubar.ts:429 src/control/Control.Menubar.ts:617
+#: src/control/Control.Menubar.ts:762 src/control/Control.Menubar.ts:1068
 #: src/control/Control.NotebookbarWriter.js:494
 msgid "Report an issue"
 msgstr "Laporkan isu"
 
-#: src/control/Control.Menubar.ts:428 src/control/Control.Menubar.ts:616
-#: src/control/Control.Menubar.ts:761 src/control/Control.Menubar.ts:1067
-#: src/control/Control.Menubar.ts:1138 src/control/Control.Menubar.ts:1203
-#: src/control/Control.Menubar.ts:1258 src/control/Control.Menubar.ts:1333
+#: src/control/Control.Menubar.ts:430 src/control/Control.Menubar.ts:618
+#: src/control/Control.Menubar.ts:763 src/control/Control.Menubar.ts:1069
+#: src/control/Control.Menubar.ts:1142 src/control/Control.Menubar.ts:1207
+#: src/control/Control.Menubar.ts:1262 src/control/Control.Menubar.ts:1337
 #: src/control/Control.NotebookbarWriter.js:507
 msgid "Latest Updates"
 msgstr "Pembaruan Terakhir"
 
-#: src/control/Control.Menubar.ts:429 src/control/Control.Menubar.ts:617
-#: src/control/Control.Menubar.ts:762 src/control/Control.Menubar.ts:1068
-#: src/control/Control.Menubar.ts:1139 src/control/Control.Menubar.ts:1204
-#: src/control/Control.Menubar.ts:1259 src/control/Control.Menubar.ts:1334
+#: src/control/Control.Menubar.ts:431 src/control/Control.Menubar.ts:619
+#: src/control/Control.Menubar.ts:764 src/control/Control.Menubar.ts:1070
+#: src/control/Control.Menubar.ts:1143 src/control/Control.Menubar.ts:1208
+#: src/control/Control.Menubar.ts:1263 src/control/Control.Menubar.ts:1338
 #: src/control/Control.NotebookbarWriter.js:521
 msgid "Send Feedback"
 msgstr "Kirim Umpan"
 
-#: src/control/Control.Menubar.ts:431 src/control/Control.Menubar.ts:619
-#: src/control/Control.Menubar.ts:764 src/control/Control.Menubar.ts:1070
+#: src/control/Control.Menubar.ts:433 src/control/Control.Menubar.ts:621
+#: src/control/Control.Menubar.ts:766 src/control/Control.Menubar.ts:1072
 #: src/control/Control.NotebookbarWriter.js:537
 #: src/control/Control.ServerAuditDialog.ts:299
 #: src/control/Control.ServerAuditDialog.ts:300
 msgid "Server audit"
 msgstr "Audit server"
 
-#: src/control/Control.Menubar.ts:435 src/control/Control.Menubar.ts:623
-#: src/control/Control.Menubar.ts:768 src/control/Control.Menubar.ts:1074
+#: src/control/Control.Menubar.ts:437 src/control/Control.Menubar.ts:625
+#: src/control/Control.Menubar.ts:770 src/control/Control.Menubar.ts:1076
 msgid "Last modification"
 msgstr "Modifikasi terakhir"
 
-#: src/control/Control.Menubar.ts:442 src/control/Control.Menubar.ts:455
-#: src/control/Control.Menubar.ts:1159
-#: src/control/Control.NotebookbarBuilder.js:450
-#: src/control/Control.NotebookbarBuilder.js:565
+#: src/control/Control.Menubar.ts:444 src/control/Control.Menubar.ts:457
+#: src/control/Control.Menubar.ts:1163
+#: src/control/Control.NotebookbarBuilder.js:454
+#: src/control/Control.NotebookbarBuilder.js:569
 msgid "ODF presentation (.odp)"
 msgstr "Presentasi ODF (.odp)"
 
-#: src/control/Control.Menubar.ts:443 src/control/Control.Menubar.ts:456
-#: src/control/Control.Menubar.ts:1160
-#: src/control/Control.NotebookbarBuilder.js:462
-#: src/control/Control.NotebookbarBuilder.js:573
+#: src/control/Control.Menubar.ts:445 src/control/Control.Menubar.ts:458
+#: src/control/Control.Menubar.ts:1164
+#: src/control/Control.NotebookbarBuilder.js:466
+#: src/control/Control.NotebookbarBuilder.js:577
 msgid "PowerPoint 2003 Presentation (.ppt)"
 msgstr "Presentasi PowerPoint 2003 (.ppt)"
 
-#: src/control/Control.Menubar.ts:444 src/control/Control.Menubar.ts:457
-#: src/control/Control.Menubar.ts:1161
-#: src/control/Control.NotebookbarBuilder.js:458
-#: src/control/Control.NotebookbarBuilder.js:569
+#: src/control/Control.Menubar.ts:446 src/control/Control.Menubar.ts:459
+#: src/control/Control.Menubar.ts:1165
+#: src/control/Control.NotebookbarBuilder.js:462
+#: src/control/Control.NotebookbarBuilder.js:573
 msgid "PowerPoint Presentation (.pptx)"
 msgstr "Presentasi PowerPoint (.pptx)"
 
-#: src/control/Control.Menubar.ts:449 src/control/Control.Menubar.ts:633
+#: src/control/Control.Menubar.ts:451 src/control/Control.Menubar.ts:635
 msgid "Save Comments"
 msgstr "Simpan Komentar"
 
-#: src/control/Control.Menubar.ts:458
-#: src/control/Control.NotebookbarBuilder.js:466
+#: src/control/Control.Menubar.ts:460
+#: src/control/Control.NotebookbarBuilder.js:470
 msgid "HTML Document (.html)"
 msgstr "Dokumen HTML (.html)"
 
-#: src/control/Control.Menubar.ts:459
-#: src/control/Control.NotebookbarBuilder.js:482
+#: src/control/Control.Menubar.ts:461
+#: src/control/Control.NotebookbarBuilder.js:486
 msgid "Scalable Vector Graphics (.svg)"
 msgstr "Scalable Vector Graphics (.svg)"
 
-#: src/control/Control.Menubar.ts:460
-#: src/control/Control.NotebookbarBuilder.js:487
+#: src/control/Control.Menubar.ts:462
+#: src/control/Control.NotebookbarBuilder.js:491
 msgid "Current slide as Bitmap (.bmp)"
 msgstr "Salindia kini sebagai Bitmap (.bmp)"
 
-#: src/control/Control.Menubar.ts:461
-#: src/control/Control.NotebookbarBuilder.js:492
+#: src/control/Control.Menubar.ts:463
+#: src/control/Control.NotebookbarBuilder.js:496
 msgid "Current slide as Graphics Interchange Format (.gif)"
 msgstr "Salindia kini sebagai Graphics Interchange Format (.gif)"
 
-#: src/control/Control.Menubar.ts:462
-#: src/control/Control.NotebookbarBuilder.js:497
+#: src/control/Control.Menubar.ts:464
+#: src/control/Control.NotebookbarBuilder.js:501
 msgid "Current slide as Portable Network Graphics (.png)"
 msgstr "Salindia kini sebagai Portable Network Graphics (.png)"
 
-#: src/control/Control.Menubar.ts:463
-#: src/control/Control.NotebookbarBuilder.js:502
+#: src/control/Control.Menubar.ts:465
+#: src/control/Control.NotebookbarBuilder.js:506
 msgid "Current slide as Tag Image File Format (.tiff)"
 msgstr "Salindia kini sebagai Tag Image File Format (.tiff)"
 
-#: src/control/Control.Menubar.ts:470
-#: src/control/Control.NotebookbarBuilder.js:636
+#: src/control/Control.Menubar.ts:472
+#: src/control/Control.NotebookbarBuilder.js:644
 msgid "Full Page Slides"
 msgstr "Salindia Halaman Penuh"
 
-#: src/control/Control.Menubar.ts:471
-#: src/control/Control.NotebookbarBuilder.js:640
+#: src/control/Control.Menubar.ts:473
+#: src/control/Control.NotebookbarBuilder.js:648
 msgid "Notes Pages"
 msgstr "Halaman Catatan"
 
-#: src/control/Control.Menubar.ts:505
+#: src/control/Control.Menubar.ts:507
 #: src/control/Control.NotebookbarImpress.js:693
 msgid "Notes View"
 msgstr "Tilikan Catatan"
 
-#: src/control/Control.Menubar.ts:509
+#: src/control/Control.Menubar.ts:511
 #: src/control/Control.NotebookbarImpress.js:699
 msgid "Master View"
 msgstr "Tilikan Induk"
 
-#: src/control/Control.Menubar.ts:522
+#: src/control/Control.Menubar.ts:524
 msgid "Local Multimedia..."
 msgstr "Mutimedia lokal..."
 
-#: src/control/Control.Menubar.ts:591 src/control/Control.Menubar.ts:1202
+#: src/control/Control.Menubar.ts:593 src/control/Control.Menubar.ts:1206
 #: src/control/Control.PresentationBar.js:128
 msgid "Fullscreen presentation"
 msgstr "Presentasi layar penuh"
 
-#: src/control/Control.Menubar.ts:592
+#: src/control/Control.Menubar.ts:594
 msgid "Present current slide"
 msgstr "Sajikan salindia saat ini"
 
-#: src/control/Control.Menubar.ts:593
+#: src/control/Control.Menubar.ts:595
 msgid "Present in new window"
 msgstr "Ada di jendela baru"
 
-#: src/control/Control.Menubar.ts:595 src/slideshow/PresenterConsole.js:270
+#: src/control/Control.Menubar.ts:597 src/slideshow/PresenterConsole.js:270
 msgid "Presenter Console"
 msgstr "Konsol Penyaji"
 
-#: src/control/Control.Menubar.ts:640 src/control/Control.Menubar.ts:1162
-#: src/control/Control.Menubar.ts:1223
-#: src/control/Control.NotebookbarBuilder.js:454
-#: src/control/Control.NotebookbarBuilder.js:508
+#: src/control/Control.Menubar.ts:642 src/control/Control.Menubar.ts:1166
+#: src/control/Control.Menubar.ts:1227
+#: src/control/Control.NotebookbarBuilder.js:458
+#: src/control/Control.NotebookbarBuilder.js:512
 msgid "ODF Drawing (.odg)"
 msgstr "Gambar ODF (.odg)"
 
-#: src/control/Control.Menubar.ts:775 src/control/Control.Menubar.ts:787
-#: src/control/Control.Menubar.ts:1281
-#: src/control/Control.NotebookbarBuilder.js:417
-#: src/control/Control.NotebookbarBuilder.js:550
+#: src/control/Control.Menubar.ts:777 src/control/Control.Menubar.ts:789
+#: src/control/Control.Menubar.ts:1285
+#: src/control/Control.NotebookbarBuilder.js:421
+#: src/control/Control.NotebookbarBuilder.js:554
 msgid "ODF spreadsheet (.ods)"
 msgstr "Lembar sebar ODF (.ods)"
 
-#: src/control/Control.Menubar.ts:776 src/control/Control.Menubar.ts:788
-#: src/control/Control.Menubar.ts:1282
-#: src/control/Control.NotebookbarBuilder.js:425
-#: src/control/Control.NotebookbarBuilder.js:558
+#: src/control/Control.Menubar.ts:778 src/control/Control.Menubar.ts:790
+#: src/control/Control.Menubar.ts:1286
+#: src/control/Control.NotebookbarBuilder.js:429
+#: src/control/Control.NotebookbarBuilder.js:562
 msgid "Excel 2003 Spreadsheet (.xls)"
 msgstr "Lembar Sebar Excel 2003 (.xls)"
 
-#: src/control/Control.Menubar.ts:777 src/control/Control.Menubar.ts:789
-#: src/control/Control.Menubar.ts:1283
-#: src/control/Control.NotebookbarBuilder.js:421
-#: src/control/Control.NotebookbarBuilder.js:554
+#: src/control/Control.Menubar.ts:779 src/control/Control.Menubar.ts:791
+#: src/control/Control.Menubar.ts:1287
+#: src/control/Control.NotebookbarBuilder.js:425
+#: src/control/Control.NotebookbarBuilder.js:558
 msgid "Excel Spreadsheet (.xlsx)"
 msgstr "Lembar Sebar Excel (.xlsx)"
 
-#: src/control/Control.Menubar.ts:790
+#: src/control/Control.Menubar.ts:792
 msgid "CSV file (.csv)"
 msgstr "Berkas CSV (.csv)"
 
-#: src/control/Control.Menubar.ts:797
+#: src/control/Control.Menubar.ts:799
 #: src/control/jsdialog/Definitions.Menu.ts:1587
 msgid "Active sheet"
 msgstr "Lembar aktif"
 
-#: src/control/Control.Menubar.ts:836
+#: src/control/Control.Menubar.ts:838
 #: src/control/Control.NotebookbarCalc.js:1551
 msgid "Focus Cell"
 msgstr "Sel Fokus"
 
-#: src/control/Control.Menubar.ts:932
+#: src/control/Control.Menubar.ts:934
 #: src/control/jsdialog/Definitions.Menu.ts:1877
 msgid "Highlight cells with..."
 msgstr "Soroti sel dengan..."
 
-#: src/control/Control.Menubar.ts:933
+#: src/control/Control.Menubar.ts:935
 #: src/control/jsdialog/Definitions.Menu.ts:1880
 msgid "Values greater than..."
 msgstr "Nilai yang lebih dari..."
 
-#: src/control/Control.Menubar.ts:934
+#: src/control/Control.Menubar.ts:936
 #: src/control/jsdialog/Definitions.Menu.ts:1884
 msgid "Values less than..."
 msgstr "Nilai yang kurang dari..."
 
-#: src/control/Control.Menubar.ts:935
+#: src/control/Control.Menubar.ts:937
 #: src/control/jsdialog/Definitions.Menu.ts:1888
 msgid "Values equal to..."
 msgstr "Nilai yang sama dengan..."
 
-#: src/control/Control.Menubar.ts:936
+#: src/control/Control.Menubar.ts:938
 #: src/control/jsdialog/Definitions.Menu.ts:1892
 msgid "Values between..."
 msgstr "Nilai antara..."
 
-#: src/control/Control.Menubar.ts:937
+#: src/control/Control.Menubar.ts:939
 #: src/control/jsdialog/Definitions.Menu.ts:1896
 msgid "Values duplicate..."
 msgstr "Nilai duplikat..."
 
-#: src/control/Control.Menubar.ts:938
+#: src/control/Control.Menubar.ts:940
 #: src/control/jsdialog/Definitions.Menu.ts:1900
 msgid "Containing text..."
 msgstr "Menampung teks..."
 
-#: src/control/Control.Menubar.ts:940 src/control/Control.Menubar.ts:950
+#: src/control/Control.Menubar.ts:942 src/control/Control.Menubar.ts:952
 #: src/control/jsdialog/Definitions.Menu.ts:1904
 #: src/control/jsdialog/Definitions.Menu.ts:1935
 msgid "More highlights..."
 msgstr "Lebih banyak sorotan..."
 
-#: src/control/Control.Menubar.ts:942
+#: src/control/Control.Menubar.ts:944
 #: src/control/jsdialog/Definitions.Menu.ts:1908
 msgid "Top/Bottom Rules..."
 msgstr "Aturan Puncak/Dasar..."
 
-#: src/control/Control.Menubar.ts:943
+#: src/control/Control.Menubar.ts:945
 #: src/control/jsdialog/Definitions.Menu.ts:1911
 msgid "Top N elements..."
 msgstr "Elemen N tertinggi..."
 
-#: src/control/Control.Menubar.ts:944
+#: src/control/Control.Menubar.ts:946
 #: src/control/jsdialog/Definitions.Menu.ts:1915
 msgid "Top N percent..."
 msgstr "Tertinggi N persen..."
 
-#: src/control/Control.Menubar.ts:945
+#: src/control/Control.Menubar.ts:947
 #: src/control/jsdialog/Definitions.Menu.ts:1919
 msgid "Bottom N elements..."
 msgstr "Elemen N terbawah..."
 
-#: src/control/Control.Menubar.ts:946
+#: src/control/Control.Menubar.ts:948
 #: src/control/jsdialog/Definitions.Menu.ts:1923
 msgid "Bottom N percent..."
 msgstr "Terbawah N persen..."
 
-#: src/control/Control.Menubar.ts:947
+#: src/control/Control.Menubar.ts:949
 #: src/control/jsdialog/Definitions.Menu.ts:1927
 msgid "Above Average..."
 msgstr "Di Atas Rata-rata..."
 
-#: src/control/Control.Menubar.ts:948
+#: src/control/Control.Menubar.ts:950
 #: src/control/jsdialog/Definitions.Menu.ts:1931
 msgid "Below Average..."
 msgstr "Di Bawah Rata-rata..."
 
-#: src/control/Control.Menubar.ts:1078 src/control/Control.Menubar.ts:1144
-#: src/control/Control.Menubar.ts:1209 src/control/Control.Menubar.ts:1264
+#: src/control/Control.Menubar.ts:1080 src/control/Control.Menubar.ts:1148
+#: src/control/Control.Menubar.ts:1213 src/control/Control.Menubar.ts:1268
 #: src/control/Control.MobileSearchBar.ts:30
 #: src/control/Control.NavigatorPanel.ts:532
 #: src/control/Control.NotebookbarCalc.js:1072
@@ -3358,53 +3368,53 @@ msgstr "Di Bawah Rata-rata..."
 msgid "Search"
 msgstr "Cari"
 
-#: src/control/Control.Menubar.ts:1131
+#: src/control/Control.Menubar.ts:1135
 #: src/control/Control.NotebookbarCalc.js:1137
 #: src/control/Control.NotebookbarWriter.js:1835
 msgid "Page Setup"
 msgstr "Pengaturan Halaman"
 
-#: src/control/Control.Menubar.ts:1275
+#: src/control/Control.Menubar.ts:1279
 msgid "Define print area"
 msgstr "Tentukan wilayah cetak"
 
-#: src/control/Control.Menubar.ts:1276
+#: src/control/Control.Menubar.ts:1280
 msgid "Remove print area"
 msgstr "Buang wilayah cetak"
 
-#: src/control/Control.Menubar.ts:1636 src/control/Control.StatusBar.js:712
+#: src/control/Control.Menubar.ts:1640 src/control/Control.StatusBar.js:712
 msgid "Reset to Default Language"
 msgstr "Atur Ulang ke Bahasa Baku"
 
-#: src/control/Control.Menubar.ts:1667 src/control/Control.Menubar.ts:1668
-#: src/control/Control.Menubar.ts:1669 src/control/Control.Toolbar.js:256
+#: src/control/Control.Menubar.ts:1671 src/control/Control.Menubar.ts:1672
+#: src/control/Control.Menubar.ts:1673 src/control/Control.Toolbar.js:256
 #: src/control/jsdialog/Definitions.Menu.ts:2157
 msgid "More..."
 msgstr "Lebih..."
 
-#: src/control/Control.Menubar.ts:1720
+#: src/control/Control.Menubar.ts:1724
 msgid "(No extensions installed)"
 msgstr "(Tidak ada extension yang terpasang)"
 
-#: src/control/Control.Menubar.ts:2074
+#: src/control/Control.Menubar.ts:2078
 msgid "Use Compact view"
 msgstr "Gunakan tilikan Ringkas"
 
-#: src/control/Control.Menubar.ts:2076
+#: src/control/Control.Menubar.ts:2080
 msgid "Use Tabbed view"
 msgstr "Gunakan tilikan Bertab"
 
-#: src/control/Control.Menubar.ts:2308
+#: src/control/Control.Menubar.ts:2312
 msgid "Insert Shape"
 msgstr "Sisipkan bentuk"
 
-#: src/control/Control.Menubar.ts:2393
+#: src/control/Control.Menubar.ts:2397
 msgid "The signature line can now be moved or resized as needed."
 msgstr ""
 "Baris tanda tangan sekarang dapat dipindahkan atau diubah ukuran sesuai "
 "kebutuhan."
 
-#: src/control/Control.Menubar.ts:2398
+#: src/control/Control.Menubar.ts:2402
 msgid "Finish electronic signing"
 msgstr "Selesaikan penandatanganan elektronik"
 
@@ -3457,7 +3467,7 @@ msgid "Results"
 msgstr "Hasil"
 
 #: src/control/Control.NavigatorPanel.ts:518
-#: src/control/jsdialog/Widget.Combobox.js:372
+#: src/control/jsdialog/Widget.Combobox.js:376
 #: src/control/jsdialog/Widget.TreeView.ts:2054
 msgid "Search..."
 msgstr "Cari..."
@@ -3603,21 +3613,21 @@ msgid "Tap to collapse"
 msgstr "Ketuk untuk ciutkan"
 
 #: src/control/Control.NotebookbarBuilder.js:405
-#: src/control/Control.NotebookbarBuilder.js:442
-#: src/control/Control.NotebookbarBuilder.js:475
+#: src/control/Control.NotebookbarBuilder.js:446
+#: src/control/Control.NotebookbarBuilder.js:479
 msgid "PDF Document (.pdf) with options"
 msgstr "Dokumen PDF (.pdf) dengan opsi"
 
 #: src/control/Control.NotebookbarBuilder.js:410
-#: src/control/Control.NotebookbarBuilder.js:433
+#: src/control/Control.NotebookbarBuilder.js:437
 msgid "HTML File (.html)"
 msgstr "Berkas HTML (.html)"
 
-#: src/control/Control.NotebookbarBuilder.js:429
+#: src/control/Control.NotebookbarBuilder.js:433
 msgid "CSV File (.csv)"
 msgstr "Berkas CSV (.csv)"
 
-#: src/control/Control.NotebookbarBuilder.js:512
+#: src/control/Control.NotebookbarBuilder.js:516
 msgid "Image (.png)"
 msgstr "Gambar (.png)"
 
@@ -3703,10 +3713,10 @@ msgstr "Tilikan"
 msgid "Sparkline"
 msgstr "Grafik mini"
 
-#: src/control/Control.NotebookbarCalc.js:113
-#: src/control/Control.NotebookbarDraw.js:128
-#: src/control/Control.NotebookbarImpress.js:163
-#: src/control/Control.NotebookbarWriter.js:116
+#: src/control/Control.NotebookbarCalc.js:119
+#: src/control/Control.NotebookbarDraw.js:134
+#: src/control/Control.NotebookbarImpress.js:169
+#: src/control/Control.NotebookbarWriter.js:122
 #: src/control/Control.ServerAuditDialog.ts:319
 msgid "Help"
 msgstr "Bantuan"
@@ -3740,7 +3750,7 @@ msgstr "Tanda tangan"
 #: src/control/Control.NotebookbarDraw.js:402
 #: src/control/Control.NotebookbarImpress.js:437
 #: src/control/Control.NotebookbarWriter.js:398
-#: src/control/Control.UIManager.ts:393
+#: src/control/Control.UIManager.ts:414
 msgid "Rename"
 msgstr "Namai Ulang"
 
@@ -4241,7 +4251,7 @@ msgid "Starts a slideshow on every viewer's screen"
 msgstr "Memulai pertunjukan slide di layar setiap penonton"
 
 #: src/control/Control.NotebookbarImpress.js:548
-#: src/slideshow/SlideShowPresenter.ts:1525
+#: src/slideshow/SlideShowPresenter.ts:1523
 msgid "Follow Presenter"
 msgstr "Ikuti Penyaji"
 
@@ -4745,19 +4755,19 @@ msgstr "Sisipkan bentuk"
 msgid "Insert connectors"
 msgstr "Sisip konektor"
 
-#: src/control/Control.UIManager.ts:182
+#: src/control/Control.UIManager.ts:190
 msgid "You are currently in View mode"
 msgstr "Anda saat ini berada dalam mode Tampilan"
 
-#: src/control/Control.UIManager.ts:393
+#: src/control/Control.UIManager.ts:414
 msgid "Enter new name"
 msgstr "Masukkan nama baru"
 
-#: src/control/Control.UIManager.ts:1362
+#: src/control/Control.UIManager.ts:1369
 msgid "Hide Menu"
 msgstr "Sembunyikan Menu"
 
-#: src/control/Control.UIManager.ts:1389
+#: src/control/Control.UIManager.ts:1396
 msgid "Show Menu"
 msgstr "Tampilkan Menu"
 
@@ -4830,7 +4840,7 @@ msgstr ""
 "melalui API web. Hal ini dapat menyebabkan beberapa masalah saat menyunting "
 "sitasi atau daftar pustaka."
 
-#: src/control/Control.Zotero.js:246 src/app/Socket.ts:2471
+#: src/control/Control.Zotero.js:246 src/app/Socket.ts:2480
 msgid "Loading..."
 msgstr "Memuat..."
 
@@ -4838,7 +4848,7 @@ msgstr "Memuat..."
 #: src/slideshow/engine/SlideShowHandler.ts:102
 #: src/slideshow/PresenterConsole.js:32
 #: src/slideshow/SlideShowPresenter.ts:809
-#: src/slideshow/SlideShowPresenter.ts:857
+#: src/slideshow/SlideShowPresenter.ts:855
 msgid "Previous"
 msgstr "Sebelumnya"
 
@@ -4846,7 +4856,7 @@ msgstr "Sebelumnya"
 #: src/slideshow/engine/SlideShowHandler.ts:103
 #: src/slideshow/PresenterConsole.js:33
 #: src/slideshow/SlideShowPresenter.ts:815
-#: src/slideshow/SlideShowPresenter.ts:868
+#: src/slideshow/SlideShowPresenter.ts:866
 msgid "Next"
 msgstr "Berikutnya"
 
@@ -4910,15 +4920,15 @@ msgstr "Terjadi kesalahan saat mengambil daftar gaya"
 msgid "Failed to load styles"
 msgstr "Gagal memuat gaya"
 
-#: src/control/Control.Zotero.js:1153 src/control/Control.Zotero.js:1605
+#: src/control/Control.Zotero.js:1153 src/control/Control.Zotero.js:1614
 msgid "Title"
 msgstr "Judul"
 
-#: src/control/Control.Zotero.js:1153 src/control/Control.Zotero.js:1605
+#: src/control/Control.Zotero.js:1153 src/control/Control.Zotero.js:1614
 msgid "Creator(s)"
 msgstr "Pencipta"
 
-#: src/control/Control.Zotero.js:1153 src/control/Control.Zotero.js:1605
+#: src/control/Control.Zotero.js:1153 src/control/Control.Zotero.js:1614
 msgid "Your library is empty"
 msgstr "Pustaka Anda kosong"
 
@@ -4938,7 +4948,7 @@ msgstr ""
 "Setelah sitasi dimasukkan, jenis penyimpanan dan tampilannya tidak dapat "
 "diubah."
 
-#: src/control/Control.Zotero.js:1219 src/control/Control.Zotero.js:1534
+#: src/control/Control.Zotero.js:1219 src/control/Control.Zotero.js:1543
 msgid "Confirm"
 msgstr "Konfirmasi"
 
@@ -4950,23 +4960,23 @@ msgstr "Tambahkan Catatan"
 msgid "An error occurred while fetching notes"
 msgstr "Terjadi kesalahan saat mengambil catatan"
 
-#: src/control/Control.Zotero.js:1472
+#: src/control/Control.Zotero.js:1481
 msgid "Updated citations"
 msgstr "Sitasi yang diperbarui"
 
-#: src/control/Control.Zotero.js:1474
+#: src/control/Control.Zotero.js:1483
 msgid "Citations update failed"
 msgstr "Pembaruan sitasi gagal"
 
-#: src/control/Control.Zotero.js:1478
+#: src/control/Control.Zotero.js:1487
 msgid "Updating citations"
 msgstr "Memperbarui sitasi"
 
-#: src/control/Control.Zotero.js:1528
+#: src/control/Control.Zotero.js:1537
 msgid "Unlinked citations"
 msgstr "Sitasi tidak tertaut"
 
-#: src/control/Control.Zotero.js:1533
+#: src/control/Control.Zotero.js:1542
 msgid ""
 "Unlinking citations will prevent Collabora Online from updating citations "
 "and bibliography in this document."
@@ -5109,19 +5119,19 @@ msgstr "Mode Pengeditan"
 msgid "Viewing"
 msgstr "Menampilkan"
 
-#: src/control/jsdialog/Control.ContextMenu.ts:306
+#: src/control/jsdialog/Control.ContextMenu.ts:311
 msgid "Save Image to Server"
 msgstr "Simpan Gambar ke Server"
 
-#: src/control/jsdialog/Control.ContextMenu.ts:344
+#: src/control/jsdialog/Control.ContextMenu.ts:349
 msgid "Paste Special"
 msgstr "Tempel Khusus"
 
-#: src/control/jsdialog/Control.ContextMenu.ts:355
+#: src/control/jsdialog/Control.ContextMenu.ts:360
 msgid "Copy Cells"
 msgstr "Salin Sel"
 
-#: src/control/jsdialog/Control.ContextMenu.ts:364
+#: src/control/jsdialog/Control.ContextMenu.ts:369
 msgid "Fill Series"
 msgstr "Isi Seri"
 
@@ -5557,19 +5567,19 @@ msgstr "Palet"
 msgid "Color palette"
 msgstr "Palet warna"
 
-#: src/control/jsdialog/Widget.Combobox.js:241
+#: src/control/jsdialog/Widget.Combobox.js:245
 msgid "Open "
 msgstr "Buka "
 
-#: src/control/jsdialog/Widget.Combobox.js:241
+#: src/control/jsdialog/Widget.Combobox.js:245
 msgid " list"
 msgstr " daftar"
 
-#: src/control/jsdialog/Widget.Combobox.js:242
+#: src/control/jsdialog/Widget.Combobox.js:246
 msgid "Open list"
 msgstr "Buka daftar"
 
-#: src/control/jsdialog/Widget.Combobox.js:373
+#: src/control/jsdialog/Widget.Combobox.js:377
 msgid "Filter entries"
 msgstr "Filter entri"
 
@@ -5790,19 +5800,19 @@ msgstr "Diekspor ke penyimpanan"
 msgid "Successfully exported: "
 msgstr "Berhasil diekspor: "
 
-#: src/app/Socket.ts:1595
+#: src/app/Socket.ts:1604
 msgid "Discard"
 msgstr "Buang"
 
-#: src/app/Socket.ts:1613
+#: src/app/Socket.ts:1622
 msgid "Save to new file"
 msgstr "Simpan ke berkas baru"
 
-#: src/app/Socket.ts:1626
+#: src/app/Socket.ts:1635
 msgid "Document has been changed"
 msgstr "Dokumen telah diubah"
 
-#: src/app/Socket.ts:1628
+#: src/app/Socket.ts:1637
 msgid ""
 "Document has been changed in storage. What would you like to do with your "
 "unsaved changes?"
@@ -5810,82 +5820,82 @@ msgstr ""
 "Dokumen telah diubah dalam penyimpanan. Apa yang ingin Anda lakukan dengan "
 "perubahan yang belum disimpan?"
 
-#: src/app/Socket.ts:1780
+#: src/app/Socket.ts:1789
 msgid "Server is now reachable. We have to refresh the page now."
 msgstr ""
 "Server sekarang dapat dijangkau. Kita harus me-refresh halaman sekarang."
 
-#: src/app/Socket.ts:1783
+#: src/app/Socket.ts:1792
 msgid "Server is now reachable..."
 msgstr "Server sekarang dapat dijangkau..."
 
-#: src/app/Socket.ts:1791
+#: src/app/Socket.ts:1800
 msgid "RELOAD"
 msgstr "MUAT ULANG"
 
-#: src/app/Socket.ts:1819
+#: src/app/Socket.ts:1828
 msgid "Cluster configuration warning"
 msgstr "Peringatan konfigurasi gugus"
 
-#: src/app/Socket.ts:1828
+#: src/app/Socket.ts:1837
 msgid "Wrong server, reconnecting..."
 msgstr "Peladen salah, menyambungkan kembali..."
 
-#: src/app/Socket.ts:1846
+#: src/app/Socket.ts:1855
 msgid "Unsupported server version."
 msgstr "Versi server tidak didukung."
 
-#: src/app/Socket.ts:1990
+#: src/app/Socket.ts:1999
 msgid "Document is getting migrated"
 msgstr "Dokumen sedang dimigrasikan"
 
-#: src/app/Socket.ts:2229
+#: src/app/Socket.ts:2238
 msgid "Document requires password to view."
 msgstr "Dokumen perlu sandi untuk menilik."
 
-#: src/app/Socket.ts:2231
+#: src/app/Socket.ts:2240
 msgid "Document requires password to modify."
 msgstr "Dokumen perlu sandi untuk mengubah."
 
-#: src/app/Socket.ts:2233
+#: src/app/Socket.ts:2242
 msgid "Hit Cancel to open in view-only mode."
 msgstr "Tekan Batal untuk membuka dalam modus hanya tilik."
 
-#: src/app/Socket.ts:2237
+#: src/app/Socket.ts:2246
 msgid "Wrong password provided. Please try again."
 msgstr "Sandi salah. Harap coba lagi."
 
-#: src/app/Socket.ts:2282
+#: src/app/Socket.ts:2291
 msgid "Only the document owner can change the password."
 msgstr "Hanya pemilik dokumen yang bisa mengubah sandi."
 
-#: src/app/Socket.ts:2323 src/app/Socket.ts:2334
+#: src/app/Socket.ts:2332 src/app/Socket.ts:2343
 msgid "Missing Fonts"
 msgstr "Fonta Kurang"
 
-#: src/app/Socket.ts:2372
+#: src/app/Socket.ts:2381
 msgid "Someone"
 msgstr "Seseorang"
 
-#: src/app/Socket.ts:2374
+#: src/app/Socket.ts:2383
 msgid "{username} saved this document as {filename}. Do you want to join?"
 msgstr ""
 "{username} menyimpan dokumen ini sebagai {filename}. Apakah Anda ingin "
 "bergabung?"
 
-#: src/app/Socket.ts:2397
+#: src/app/Socket.ts:2406
 msgid "The document is being renamed and will reload shortly"
 msgstr "Dokumen sedang diganti namanya dan akan segera dimuat ulang"
 
-#: src/app/Socket.ts:2400
+#: src/app/Socket.ts:2409
 msgid "The document is switching to Offline mode and will reload shortly"
 msgstr "Dokumen beralih ke mode Luring dan akan dimuat ulang sebentar lagi"
 
-#: src/app/Socket.ts:2471
+#: src/app/Socket.ts:2480
 msgid "Connecting..."
 msgstr "Menghubungkan..."
 
-#: src/app/Socket.ts:2487
+#: src/app/Socket.ts:2496
 msgid "Server is shutting down"
 msgstr "Server sedang menuju mati"
 
@@ -6237,15 +6247,15 @@ msgstr "menu Tilikan"
 msgid "Online Editor"
 msgstr "Editor Daring"
 
-#: src/layer/tile/CanvasTileLayer.js:1535
+#: src/layer/tile/CanvasTileLayer.js:1536
 msgid "Functions"
 msgstr "Fungsi"
 
-#: src/layer/tile/CanvasTileLayer.js:1812
+#: src/layer/tile/CanvasTileLayer.js:1813
 msgid "Named Range"
 msgstr "Rentang Yang Dinamai"
 
-#: src/layer/tile/CanvasTileLayer.js:3620
+#: src/layer/tile/CanvasTileLayer.js:3621
 msgid "No Comments"
 msgstr "Tidak ada komentar"
 
@@ -6366,22 +6376,22 @@ msgid "Print dialog"
 msgstr "Dialog cetak"
 
 #: src/map/handler/Map.SlideShow.js:59
-#: src/slideshow/SlideShowPresenter.ts:1291
+#: src/slideshow/SlideShowPresenter.ts:1289
 msgid "Empty Slide Show"
 msgstr "Pertunjukan Salindia Kosong"
 
 #: src/map/handler/Map.SlideShow.js:60
-#: src/slideshow/SlideShowPresenter.ts:1292
+#: src/slideshow/SlideShowPresenter.ts:1290
 msgid "All slides are hidden!"
 msgstr "Semua slide disembunyikan!"
 
 #: src/map/handler/Map.SlideShow.js:167
-#: src/slideshow/SlideShowPresenter.ts:1319
+#: src/slideshow/SlideShowPresenter.ts:1317
 msgid "Windowed Presentation Blocked"
 msgstr "Presentasi Dalam Jendela Diblokir"
 
 #: src/map/handler/Map.SlideShow.js:168
-#: src/slideshow/SlideShowPresenter.ts:1321
+#: src/slideshow/SlideShowPresenter.ts:1319
 msgid ""
 "Presentation was blocked. Please allow pop-ups in your browser. This lets "
 "slide shows to be displayed in separated windows, allowing for easy screen "
@@ -6392,17 +6402,17 @@ msgstr ""
 "berbagi layar secara mudah."
 
 #: src/map/handler/Map.SlideShow.js:172
-#: src/slideshow/SlideShowPresenter.ts:1097
+#: src/slideshow/SlideShowPresenter.ts:1095
 msgid "Windowed Presentation: "
 msgstr "Presentasi Dalam Jendela: "
 
 #: src/map/handler/Map.SlideShow.js:202
-#: src/slideshow/SlideShowPresenter.ts:1140
+#: src/slideshow/SlideShowPresenter.ts:1138
 msgid "Presenting in window"
 msgstr "Menyajikan dalam jendela"
 
 #: src/map/handler/Map.SlideShow.js:203
-#: src/slideshow/SlideShowPresenter.ts:1141
+#: src/slideshow/SlideShowPresenter.ts:1139
 msgid "Close Presentation"
 msgstr "Tutup Presentasi"
 
@@ -6415,22 +6425,22 @@ msgid "End Presentation"
 msgstr "Akhiri Presentasi"
 
 #: src/map/handler/Map.SlideShow.js:295
-#: src/slideshow/SlideShowPresenter.ts:1306
+#: src/slideshow/SlideShowPresenter.ts:1304
 msgid "Already presenting"
 msgstr "Sudah menyajikan"
 
 #: src/map/handler/Map.SlideShow.js:296
-#: src/slideshow/SlideShowPresenter.ts:1307
+#: src/slideshow/SlideShowPresenter.ts:1305
 msgid "You are already presenting this document"
 msgstr "Anda sudah mulai menyajikan dokumen ini"
 
 #: src/map/handler/Map.SlideShow.js:306
-#: src/slideshow/SlideShowPresenter.ts:1344
+#: src/slideshow/SlideShowPresenter.ts:1342
 msgid "Presentation disabled"
 msgstr "Presentasi dinonaktifkan"
 
 #: src/map/handler/Map.SlideShow.js:307
-#: src/slideshow/SlideShowPresenter.ts:1345
+#: src/slideshow/SlideShowPresenter.ts:1343
 msgid "Presentation mode has been disabled for this document"
 msgstr "Mode presentasi telah dinonaktifkan untuk dokumen ini"
 
@@ -6496,7 +6506,7 @@ msgid "Last Slide"
 msgstr "Slide Terakhir"
 
 #: src/slideshow/engine/SlideShowHandler.ts:111
-#: src/slideshow/SlideShowPresenter.ts:846
+#: src/slideshow/SlideShowPresenter.ts:845
 msgid "End Show"
 msgstr "Akhir Pertunjukan"
 
@@ -6521,7 +6531,7 @@ msgid "Current Slide"
 msgstr "Salindia Kini"
 
 #: src/slideshow/PresenterConsole.js:36
-#: src/slideshow/SlideShowPresenter.ts:912
+#: src/slideshow/SlideShowPresenter.ts:910
 msgid "Exchange"
 msgstr "Pertukaran"
 
@@ -6582,20 +6592,20 @@ msgstr "Anda berada di slide pertama"
 msgid "Waiting for presenter to advance"
 msgstr "Menunggu presenter untuk maju"
 
-#: src/slideshow/SlideShowPresenter.ts:883
-#: src/slideshow/SlideShowPresenter.ts:896
+#: src/slideshow/SlideShowPresenter.ts:881
+#: src/slideshow/SlideShowPresenter.ts:894
 msgid "Disable Animations"
 msgstr "Nonaktifkan Animasi"
 
-#: src/slideshow/SlideShowPresenter.ts:895
+#: src/slideshow/SlideShowPresenter.ts:893
 msgid "Enable Animations"
 msgstr "Aktifkan Animasi"
 
-#: src/slideshow/SlideShowPresenter.ts:1520
+#: src/slideshow/SlideShowPresenter.ts:1518
 msgid "Stop Following"
 msgstr "Hentikan Mengikuti"
 
-#: src/control/Control.Extension.ts:237
+#: src/control/Control.Extension.ts:268
 msgid "Close extension"
 msgstr "Tutup extension"
 
@@ -6782,14 +6792,13 @@ msgid ""
 "report</a> with all the essential steps on how to reproduce it."
 msgstr ""
 "Apakah Anda tertarik untuk berkontribusi tetapi tidak tahu harus mulai dari "
-"mana? Kunjungi <a target=\"_blank\" rel=\"noopener\" href=\"https://"
-"www.collaboraoffice.org/post/build-code/\">petunjuk langkah demi langkah</a> "
-"dan bangun CODE dari awal. Anda juga dapat membantu dengan <a "
-"target=\"_blank\" rel=\"noopener\" href=\"https://www.collaboraoffice.org/"
-"post/translate/\">terjemahan</a> atau dengan <a target=\"_blank\" "
-"rel=\"noopener\" href=\"https://www.collaboraoffice.org/post/filebugs/\">"
-"mengajukan laporan bug</a> beserta semua langkah penting untuk "
-"mereproduksinya."
+"mana? Kunjungi <a target=\"_blank\" rel=\"noopener\" href=\"https://www."
+"collaboraoffice.org/post/build-code/\">petunjuk langkah demi langkah</a> dan "
+"bangun CODE dari awal. Anda juga dapat membantu dengan <a target=\"_blank\" "
+"rel=\"noopener\" href=\"https://www.collaboraoffice.org/post/translate/\""
+">terjemahan</a> atau dengan <a target=\"_blank\" rel=\"noopener\" href="
+"\"https://www.collaboraoffice.org/post/filebugs/\">mengajukan laporan bug</"
+"a> beserta semua langkah penting untuk mereproduksinya."
 
 #: welcome/welcome.html%2Bhtml.body.div.div:55-5
 msgid ""
@@ -6802,6 +6811,9 @@ msgstr ""
 "translate=\"true\">1</a> <a id=\"slide-2-indicator\" href=\"#slide-2\" data-"
 "translate=\"true\">2 </a> <a id=\"slide-3-indicator\" href=\"#slide-3\" data-"
 "translate=\"true\">3 </a>"
+
+#~ msgid "Document settings"
+#~ msgstr "Pengaturan dokumen"
 
 #~ msgid "Images and Objects"
 #~ msgstr "Citra dan Obyek"
@@ -7215,9 +7227,6 @@ msgstr ""
 
 #~ msgid "Passport: N/A"
 #~ msgstr "Paspor: T/T"
-
-#~ msgid "Sign"
-#~ msgstr "Tandatangan"
 
 #~ msgid "N/A"
 #~ msgstr "N/A"
