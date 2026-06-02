@@ -24,7 +24,6 @@
 #include <utility>
 
 using namespace dbaui;
-using namespace ::com::sun::star::accessibility;
 
 namespace dbaui
 {
