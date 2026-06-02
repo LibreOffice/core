@@ -27,6 +27,7 @@
 #include <rtl/ref.hxx>
 #include <vcl/vclptr.hxx>
 #include <vcl/weld/ComboBox.hxx>
+#include <vcl/weld/Container.hxx>
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/Label.hxx>
 #include <vcl/weld/SpinButton.hxx>

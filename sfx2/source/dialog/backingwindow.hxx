@@ -24,6 +24,7 @@
 
 #include <vcl/InterimItemWindow.hxx>
 #include <vcl/weld/ComboBox.hxx>
+#include <vcl/weld/Container.hxx>
 #include <vcl/weld/Image.hxx>
 #include <vcl/weld/Label.hxx>
 #include <vcl/weld/LinkButton.hxx>

@@ -10,7 +10,8 @@
 #pragma once
 
 #include <sfx2/dllapi.h>
-#include <vcl/weld/weld.hxx>
+#include <vcl/weld/Container.hxx>
+#include <vcl/weld/Widget.hxx>
 
 class DataChangedEvent;
 class VclSimpleEvent;

@@ -10,8 +10,8 @@
 #pragma once
 
 #include <vcl/dllapi.h>
+#include <vcl/weld/Container.hxx>
 #include <vcl/weld/ScreenshotEntry.hxx>
-#include <vcl/weld/weld.hxx>
 
 struct SystemEnvData;
 

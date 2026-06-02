@@ -28,6 +28,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <vcl/weld/Builder.hxx>
+#include <vcl/weld/weld.hxx>
 
 #include "SmPropertiesPanel.hxx"
 

@@ -30,6 +30,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/uitest/logger.hxx>
 #include <vcl/uitest/eventdescription.hxx>
+#include <vcl/weld/Container.hxx>
 
 #include <svl/undo.hxx>
 #include <svtools/svparser.hxx>

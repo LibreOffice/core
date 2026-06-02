@@ -30,6 +30,7 @@
 #include <vcl/toolbox.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Container.hxx>
 #include <vcl/weld/Toolbar.hxx>
 #include <vcl/weld/weldutils.hxx>
 

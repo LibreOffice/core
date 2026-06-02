@@ -21,6 +21,7 @@
 
 #include <com/sun/star/inspection/XPropertyControl.hpp>
 #include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Container.hxx>
 #include <vcl/weld/Grid.hxx>
 #include <vcl/weld/Label.hxx>
 #include <vcl/weld/weld.hxx>

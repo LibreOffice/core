@@ -25,6 +25,7 @@
 #include <sfx2/ctrlitem.hxx>
 #include <sfx2/dockwin.hxx>
 #include <vcl/weld/ComboBox.hxx>
+#include <vcl/weld/Container.hxx>
 #include <vcl/weld/Label.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
 #include <vcl/weld/Scale.hxx>

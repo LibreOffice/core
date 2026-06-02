@@ -24,6 +24,7 @@
 #include <tools/debug.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <vcl/toolbox.hxx>
+#include <vcl/weld/Container.hxx>
 
 #include <comphelper/propertysequence.hxx>
 

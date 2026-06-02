@@ -24,6 +24,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/configuration/XReadWriteAccess.hpp>
 #include <vcl/weld/Box.hxx>
+#include <vcl/weld/Container.hxx>
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/Label.hxx>
 #include <vcl/weld/LinkButton.hxx>

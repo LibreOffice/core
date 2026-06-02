@@ -10,7 +10,7 @@
 #pragma once
 
 #include <vcl/weld/Builder.hxx>
-#include <vcl/weld/weld.hxx>
+#include <vcl/weld/Container.hxx>
 
 namespace dbaui
 {

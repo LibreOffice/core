@@ -22,8 +22,10 @@
 #include "configurationaccess.hxx"
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/weld.hxx>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/implbase.hxx>
+
+#include <com/sun/star/awt/XWindow.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 class InformationDialog : public weld::MessageDialogController, public ConfigurationAccess
 {

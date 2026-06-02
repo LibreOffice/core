@@ -28,6 +28,7 @@
 #include <svx/svxdllapi.h>
 #include <vcl/timer.hxx>
 #include <vcl/weld/ComboBox.hxx>
+#include <vcl/weld/Container.hxx>
 #include <vcl/weld/Expander.hxx>
 #include <vcl/weld/Frame.hxx>
 #include <vcl/weld/Image.hxx>

@@ -13,6 +13,7 @@
 #include <vcl/weld/Label.hxx>
 #include <vcl/weld/LinkButton.hxx>
 #include <vcl/weld/Window.hxx>
+#include <vcl/weld/weld.hxx>
 
 class CrashReportDialog : public weld::GenericDialogController
 {

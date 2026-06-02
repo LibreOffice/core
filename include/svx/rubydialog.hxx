@@ -26,6 +26,7 @@
 #include <svx/svxdllapi.h>
 #include <rtl/ref.hxx>
 #include <vcl/weld/ComboBox.hxx>
+#include <vcl/weld/Container.hxx>
 #include <vcl/weld/Entry.hxx>
 #include <vcl/weld/Label.hxx>
 #include <vcl/weld/ScrolledWindow.hxx>

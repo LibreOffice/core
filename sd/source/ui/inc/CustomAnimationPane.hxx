@@ -23,6 +23,7 @@
 #include <sfx2/sidebar/PanelLayout.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/weld/ComboBox.hxx>
+#include <vcl/weld/Container.hxx>
 #include <vcl/weld/Label.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
 #include "CustomAnimationList.hxx"

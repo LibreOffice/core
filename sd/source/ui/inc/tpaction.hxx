@@ -25,6 +25,7 @@
 #include <svx/xtable.hxx>
 #include <unotools/resmgr.hxx>
 #include <vcl/weld/ComboBox.hxx>
+#include <vcl/weld/Container.hxx>
 #include <vcl/weld/Entry.hxx>
 #include <vcl/weld/Frame.hxx>
 #include <vcl/weld/Label.hxx>

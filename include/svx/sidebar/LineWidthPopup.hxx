@@ -20,6 +20,7 @@
 
 #include <tools/mapunit.hxx>
 #include <vcl/image.hxx>
+#include <vcl/weld/Container.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
 #include <vcl/weld/customweld.hxx>
 #include <vcl/weld/weld.hxx>

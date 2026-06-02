@@ -29,6 +29,7 @@
 #include "fpsmartcontent.hxx"
 #include "fpdialogbase.hxx"
 #include <vcl/weld/ComboBox.hxx>
+#include <vcl/weld/Container.hxx>
 #include <vcl/weld/Image.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <vcl/timer.hxx>
