@@ -47,9 +47,10 @@ bool WinSalGraphics::supportsOperation( OutDevSupportType eType ) const
     return mpImpl->supportsOperation(eType);
 }
 
-void WinSalGraphics::copyBits( const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics )
+void WinSalGraphics::copyBits(const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics,
+                              bool bAlphaBlend)
 {
-    mpImpl->copyBits( rPosAry, pSrcGraphics );
+    mpImpl->copyBits(rPosAry, pSrcGraphics, bAlphaBlend);
 }
 
 void WinSalGraphics::copyArea( tools::Long nDestX, tools::Long nDestY,

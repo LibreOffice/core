@@ -1252,7 +1252,8 @@ void SkiaSalGraphicsImpl::copyArea(tools::Long nDestX, tools::Long nDestY, tools
     postDraw();
 }
 
-void SkiaSalGraphicsImpl::copyBits(const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics)
+void SkiaSalGraphicsImpl::copyBits(const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics,
+                                   bool /*bAlphaBlend*/)
 {
     preDraw();
     SkiaSalGraphicsImpl* src;

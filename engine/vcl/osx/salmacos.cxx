@@ -97,7 +97,8 @@ bool QuartzSalBitmap::Create(CGLayerHolder const & rLayerHolder, int nBitmapBits
 
 // From salgdicommon.cxx
 
-void AquaGraphicsBackend::copyBits(const SalTwoRect &rPosAry, SalGraphics *pSrcGraphics)
+void AquaGraphicsBackend::copyBits(const SalTwoRect &rPosAry, SalGraphics *pSrcGraphics,
+                                   bool /*bAlphaBlend*/)
 {
     AquaSharedAttributes* pSrcShared = nullptr;
 

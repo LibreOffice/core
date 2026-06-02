@@ -1545,7 +1545,7 @@ void CairoCommon::copySource(const SalTwoRect& rTR, cairo_surface_t* source, boo
 }
 
 void CairoCommon::copyBitsCairo(const SalTwoRect& rTR, cairo_surface_t* pSourceSurface,
-                                bool bAntiAlias)
+                                bool bAntiAlias, bool bAlphaBlend)
 {
     SalTwoRect aTR(rTR);
 
@@ -1570,7 +1570,10 @@ void CairoCommon::copyBitsCairo(const SalTwoRect& rTR, cairo_surface_t* pSourceS
         aTR.mnSrcY = 0;
     }
 
-    copySource(aTR, pSourceSurface, bAntiAlias);
+    if (bAlphaBlend)
+        copyWithOperator(aTR, pSourceSurface, CAIRO_OPERATOR_OVER, bAntiAlias);
+    else
+        copySource(aTR, pSourceSurface, bAntiAlias);
 
     if (pCopy)
         cairo_surface_destroy(pCopy);

@@ -489,7 +489,6 @@ void OutputDevice::DrawOutDev( const Point& rDestPt, const Size& rDestSize,
                              ImplLogicWidthToDevicePixel(rDestSize.Width()),
                              ImplLogicHeightToDevicePixel(rDestSize.Height()));
 
-    // if we have alpha, this will blend source over destination
     drawOutDevDirect(rOutDev, aPosAry);
 }
 
@@ -582,17 +581,18 @@ const OutputDevice* OutputDevice::DrawOutDevDirectCheck(const OutputDevice& rSrc
 
 void OutputDevice::DrawOutDevDirectProcess(const OutputDevice& rSrcDev, SalTwoRect& rPosAry, SalGraphics* pSrcGraphics)
 {
+    const bool bAlphaBlend = rSrcDev.HasAlpha();
     if( pSrcGraphics && (pSrcGraphics->GetLayout() & SalLayoutFlags::BiDiRtl) )
     {
         SalTwoRect aPosAry2 = rPosAry;
         pSrcGraphics->mirror( aPosAry2.mnSrcX, aPosAry2.mnSrcWidth, rSrcDev );
-        mpGraphics->CopyBits( aPosAry2, *pSrcGraphics, *this, rSrcDev );
+        mpGraphics->CopyBits( aPosAry2, *pSrcGraphics, *this, rSrcDev, bAlphaBlend );
         return;
     }
     if (pSrcGraphics)
-        mpGraphics->CopyBits( rPosAry, *pSrcGraphics, *this, rSrcDev );
+        mpGraphics->CopyBits( rPosAry, *pSrcGraphics, *this, rSrcDev, bAlphaBlend );
     else
-        mpGraphics->CopyBits( rPosAry, *this );
+        mpGraphics->CopyBits( rPosAry, *this, bAlphaBlend );
 }
 
 tools::Rectangle OutputDevice::GetBackgroundComponentBounds() const

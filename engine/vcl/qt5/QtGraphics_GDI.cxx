@@ -463,7 +463,8 @@ void QtGraphicsBackend::copyArea(tools::Long nDestX, tools::Long nDestY, tools::
     drawScaledImage(aTR, *pImage);
 }
 
-void QtGraphicsBackend::copyBits(const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics)
+void QtGraphicsBackend::copyBits(const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics,
+                                 bool /*bAlphaBlend*/)
 {
     if (rPosAry.mnSrcWidth <= 0 || rPosAry.mnSrcHeight <= 0 || rPosAry.mnDestWidth <= 0
         || rPosAry.mnDestHeight <= 0)

@@ -122,7 +122,8 @@ public:
                           tools::Long nSrcY, tools::Long nSrcWidth, tools::Long nSrcHeight,
                           bool bWindowInvalidate) override;
 
-    virtual void copyBits(const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics) override;
+    virtual void copyBits(const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics,
+                          bool bAlphaBlend = false) override;
 
     virtual void drawBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap) override;
 

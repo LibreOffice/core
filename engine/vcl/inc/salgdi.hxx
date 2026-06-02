@@ -253,7 +253,8 @@ public:
     // CopyBits() CopyBits on same Graphics
     SAL_DLLPRIVATE void                        CopyBits(
                                     const SalTwoRect& rPosAry,
-                                    const OutputDevice& rOutDev);
+                                    const OutputDevice& rOutDev,
+                                    bool bAlphaBlend = false );
 
     // CopyBits --> RasterOp and ClipRegion
     // CopyBits() CopyBits on different Graphics
@@ -261,7 +262,8 @@ public:
                                     const SalTwoRect& rPosAry,
                                     SalGraphics& rSrcGraphics,
                                     const OutputDevice& rOutDev,
-                                    const OutputDevice& rSrcOutDev );
+                                    const OutputDevice& rSrcOutDev,
+                                    bool bAlphaBlend = false );
 
 
     SAL_DLLPRIVATE void                        DrawBitmap(
@@ -480,7 +482,8 @@ protected:
 
     // CopyBits and DrawBitmap --> RasterOp and ClipRegion
     // CopyBits() --> pSrcGraphics == NULL, then CopyBits on same Graphics
-    virtual void                copyBits( const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics ) = 0;
+    virtual void                copyBits( const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics,
+                                          bool bAlphaBlend = false ) = 0;
 
     virtual void                drawBitmap( const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap ) = 0;
 
@@ -756,9 +759,10 @@ public:
         return GetImpl()->drawEPS(nX, nY, nWidth, nHeight, pPtr, nSize);
     }
 
-    void copyBits(const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics) override
+    void copyBits(const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics,
+                  bool bAlphaBlend = false) override
     {
-        GetImpl()->copyBits(rPosAry, pSrcGraphics);
+        GetImpl()->copyBits(rPosAry, pSrcGraphics, bAlphaBlend);
     }
 
     void copyArea (tools::Long nDestX, tools::Long nDestY, tools::Long nSrcX,

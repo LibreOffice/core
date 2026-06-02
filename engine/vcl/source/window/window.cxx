@@ -1262,12 +1262,14 @@ const OutputDevice* WindowOutputDevice::DrawOutDevDirectCheck(const OutputDevice
     return pSrcDevChecked;
 }
 
-void WindowOutputDevice::DrawOutDevDirectProcess( const OutputDevice& rSrcDev, SalTwoRect& rPosAry, SalGraphics* pSrcGraphics )
+void WindowOutputDevice::DrawOutDevDirectProcess(const OutputDevice& rSrcDev, SalTwoRect& rPosAry,
+                                                 SalGraphics* pSrcGraphics)
 {
+    const bool bAlphaBlend = rSrcDev.HasAlpha();
     if (pSrcGraphics)
-        mpGraphics->CopyBits(rPosAry, *pSrcGraphics, *this, rSrcDev);
+        mpGraphics->CopyBits(rPosAry, *pSrcGraphics, *this, rSrcDev, bAlphaBlend);
     else
-        mpGraphics->CopyBits(rPosAry, *this);
+        mpGraphics->CopyBits(rPosAry, *this, bAlphaBlend);
 }
 
 SalGraphics* Window::ImplGetFrameGraphics() const

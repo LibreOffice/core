@@ -204,7 +204,8 @@ struct VCL_DLLPUBLIC CairoCommon
     static basegfx::B2DRange renderSource(cairo_t* cr, const SalTwoRect& rTR,
                                           cairo_surface_t* source);
 
-    void copyBitsCairo(const SalTwoRect& rTR, cairo_surface_t* pSourceSurface, bool bAntiAlias);
+    void copyBitsCairo(const SalTwoRect& rTR, cairo_surface_t* pSourceSurface, bool bAntiAlias,
+                       bool bAlphaBlend = false);
 
     void invert(const basegfx::B2DPolygon& rPoly, SalInvert nFlags, bool bAntiAlias);
 

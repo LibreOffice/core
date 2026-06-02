@@ -143,7 +143,8 @@ void X11CairoSalGraphicsImpl::copyArea(tools::Long nDestX, tools::Long nDestY, t
     mrCairoCommon.copyBitsCairo(aTR, source, getAntiAlias());
 }
 
-void X11CairoSalGraphicsImpl::copyBits(const SalTwoRect& rTR, SalGraphics* pSrcGraphics)
+void X11CairoSalGraphicsImpl::copyBits(const SalTwoRect& rTR, SalGraphics* pSrcGraphics,
+                                       bool bAlphaBlend)
 {
     cairo_surface_t* source = nullptr;
 
@@ -158,7 +159,7 @@ void X11CairoSalGraphicsImpl::copyBits(const SalTwoRect& rTR, SalGraphics* pSrcG
         source = mrCairoCommon.m_pSurface;
     }
 
-    mrCairoCommon.copyBitsCairo(rTR, source, getAntiAlias());
+    mrCairoCommon.copyBitsCairo(rTR, source, getAntiAlias(), bAlphaBlend);
 }
 
 void X11CairoSalGraphicsImpl::drawBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap)

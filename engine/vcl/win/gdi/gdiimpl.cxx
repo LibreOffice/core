@@ -179,7 +179,8 @@ WinSalGraphicsImpl::~WinSalGraphicsImpl()
     }
 }
 
-void WinSalGraphicsImpl::copyBits( const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics )
+void WinSalGraphicsImpl::copyBits( const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics,
+                                   bool /*bAlphaBlend*/ )
 {
     HDC     hSrcDC;
     DWORD   nRop;

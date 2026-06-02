@@ -147,7 +147,8 @@ void SvpGraphicsBackend::copyArea(tools::Long nDestX, tools::Long nDestY, tools:
     m_rCairoCommon.copyBitsCairo(aTR, source, getAntiAlias());
 }
 
-void SvpGraphicsBackend::copyBits(const SalTwoRect& rTR, SalGraphics* pSrcGraphics)
+void SvpGraphicsBackend::copyBits(const SalTwoRect& rTR, SalGraphics* pSrcGraphics,
+                                  bool bAlphaBlend)
 {
     cairo_surface_t* source = nullptr;
 
@@ -161,7 +162,7 @@ void SvpGraphicsBackend::copyBits(const SalTwoRect& rTR, SalGraphics* pSrcGraphi
         source = m_rCairoCommon.m_pSurface;
     }
 
-    m_rCairoCommon.copyBitsCairo(rTR, source, getAntiAlias());
+    m_rCairoCommon.copyBitsCairo(rTR, source, getAntiAlias(), bAlphaBlend);
 }
 
 void SvpGraphicsBackend::drawBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap)

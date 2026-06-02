@@ -111,7 +111,8 @@ public:
     void copyArea(tools::Long nDestX, tools::Long nDestY, tools::Long nSrcX, tools::Long nSrcY,
                   tools::Long nSrcWidth, tools::Long nSrcHeight, bool bWindowInvalidate) override;
 
-    void copyBits(const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics) override;
+    void copyBits(const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics,
+                  bool bAlphaBlend = false) override;
 
     void drawBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap) override;
 

@@ -89,7 +89,8 @@ bool QuartzSalBitmap::Create(CGLayerHolder const & rLayerHolder, int nBitmapBits
 
 // From salgdicommon.cxx
 
-void AquaGraphicsBackend::copyBits(const SalTwoRect& rPosAry, SalGraphics *pSrcGraphics)
+void AquaGraphicsBackend::copyBits(const SalTwoRect& rPosAry, SalGraphics *pSrcGraphics,
+                                   bool /*bAlphaBlend*/)
 {
     //from unix salgdi2.cxx
     //[FIXME] find a better way to prevent calc from crashing when width and height are negative

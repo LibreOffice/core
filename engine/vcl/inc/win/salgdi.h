@@ -242,7 +242,8 @@ protected:
 
     // CopyBits and DrawBitmap --> RasterOp and ClipRegion
     // CopyBits() --> pSrcGraphics == NULL, then CopyBits on same Graphics
-    virtual void        copyBits( const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics ) override;
+    virtual void        copyBits( const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics,
+                                  bool bAlphaBlend = false ) override;
     virtual void        drawBitmap( const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap ) override;
     virtual void        drawMask( const SalTwoRect& rPosAry,
                                   const SalBitmap& rSalBitmap,

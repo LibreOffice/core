@@ -150,7 +150,8 @@ public:
                 tools::Long nSrcWidth, tools::Long nSrcHeight,
                 bool bWindowInvalidate ) = 0;
 
-    virtual void copyBits( const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics ) = 0;
+    virtual void copyBits( const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics,
+                           bool bAlphaBlend = false ) = 0;
 
     virtual void drawBitmap( const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap ) = 0;
 
