@@ -263,13 +263,18 @@ window.L.Control.Notebookbar = window.L.Control.extend({
 	},
 
 	// Shared filter used by each doc-type notebookbar's getTabs/getTabsJSON
-	// to drop the Extensions entries when the COOL-side extension support is
-	// disabled by runtime config; nulls in the array (e.g. a stubbed-out
-	// getExtensionsTab) are dropped too:
+	// to drop the Extensions entries.  The tab strip (getTabs labels) and the
+	// tab pages (getTabsJSON) are zipped by index in NotebookbarBuilder, so the
+	// label and its page must be dropped together or every following tab shifts
+	// by one.  Drop the Extensions label when extension support is disabled by
+	// runtime config, or when no extension is installed; the matching page is a
+	// null from getExtensionsTab in those cases and is dropped by the !t guard.
 	_filterExtensionsTab: function(arr) {
+		var noExtensions = Object.keys(app.map._extensions || {}).length === 0;
 		return arr.filter(function(t) {
 			if (!t) return false;
-			if (!window.enableExperimentalFeatures && t.name === 'Extensions') return false;
+			if (t.name === 'Extensions' && (!window.enableExperimentalFeatures || noExtensions))
+				return false;
 			return true;
 		});
 	},
@@ -284,33 +289,31 @@ window.L.Control.Notebookbar = window.L.Control.extend({
 	getExtensionsTab: function() {
 		var exts = app.map._extensions || {};
 		var ids = Object.keys(exts).sort();
+		// Drop the Extensions tab entirely when no extension is installed:
+		// returning null here lets _filterExtensionsTab strip it.  refresh()
+		// (called once Control.Extension.loadExtensions resolves) rebuilds
+		// the notebookbar, so the tab appears as soon as discovery populates
+		// app.map._extensions.
+		if (ids.length === 0)
+			return null;
 		var content = [];
-		if (ids.length === 0) {
+		for (var i = 0; i < ids.length; i++) {
+			var id = ids[i];
+			var manifest = exts[id].options.manifest;
+			var baseUrl = exts[id].options.baseUrl;
 			content.push({
-				'id': 'extensions-empty',
-				'type': 'fixedtext',
-				'text': _('No extensions are installed.'),
+				'id': 'extension-toggle-' + id,
+				'type': 'bigcustomtoolitem',
+				'text': manifest.name,
+				'icon': manifest.icon ? baseUrl + manifest.icon : undefined,
+				'command': 'extension-toggle-' + id,
 			});
-		} else {
-			for (var i = 0; i < ids.length; i++) {
-				var id = ids[i];
-				var manifest = exts[id].options.manifest;
-				var baseUrl = exts[id].options.baseUrl;
-				content.push({
-					'id': 'extension-toggle-' + id,
-					'type': 'bigcustomtoolitem',
-					'text': manifest.name,
-					'icon': manifest.icon ? baseUrl + manifest.icon : undefined,
-					'command': 'extension-toggle-' + id,
-				});
-			}
 		}
 		//HACK: Control.JSDialogBuilder.build's "hasManyChildren && isContainer" path only
 		// emits the <div id="Extensions-container"> wrapper when the inner overflowmanager
-		// has more than one child; so pin a trailing dummy spacer so the 0-extensions
-		// placeholder case and the 1-extension case still produce the wrapper that
-		// A11yValidator's checkTabContainerConsistency (and any future selector wanting
-		// #Extensions-container) expects:
+		// has more than one child; so pin a trailing dummy spacer so the 1-extension case
+		// still produces the wrapper that A11yValidator's checkTabContainerConsistency
+		// (and any future selector wanting #Extensions-container) expects:
 		content.push({
 			'id': 'extensions-tail-pin',
 			'type': 'spacer',

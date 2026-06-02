@@ -1720,19 +1720,20 @@ class Menubar extends window.L.Control {
 		const exts = (this._map._extensions || {}) as { [id: string]: any };
 		const ids = Object.keys(exts).sort();
 		if (ids.length === 0) {
-			target.menu = [{
-				name: _('(No extensions installed)'),
-				id: 'extensions-empty',
-				type: 'action',
-				disabled: true,
-			}];
-		} else {
-			target.menu = ids.map((id) => ({
-				name: exts[id].options.manifest.name as string,
-				id: 'extension-toggle-' + id,
-				type: 'action',
-			}));
+			// Hide the whole Extensions submenu when nothing is installed.
+			// Use the `hidden` flag rather than splicing the entry out, so a
+			// later refresh (once discovery populates app.map._extensions) can
+			// reveal it again — a spliced-out entry would never be found again.
+			target.hidden = true;
+			target.menu = [];
+			return;
 		}
+		target.hidden = false;
+		target.menu = ids.map((id) => ({
+			name: exts[id].options.manifest.name as string,
+			id: 'extension-toggle-' + id,
+			type: 'action',
+		}));
 	}
 
 	// Public entry point for external callers to ask for a menubar rebuild
