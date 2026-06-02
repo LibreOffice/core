@@ -27,6 +27,7 @@ class SwarmSolverTest : public UnoApiTest
     void testVariableConstrained();
     void testTwoVariables();
     void testMultipleVariables();
+    void testInfeasibleConstraints();
 
 public:
     SwarmSolverTest()
@@ -40,6 +41,7 @@ public:
     CPPUNIT_TEST(testVariableConstrained);
     CPPUNIT_TEST(testMultipleVariables);
     CPPUNIT_TEST(testTwoVariables);
+    CPPUNIT_TEST(testInfeasibleConstraints);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -315,6 +317,57 @@ void SwarmSolverTest::testMultipleVariables()
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, aSolution[2], 1E-5);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, aSolution[3], 1E-5);
 #endif
+}
+
+void SwarmSolverTest::testInfeasibleConstraints()
+{
+    // Regression: the solver used to report success even when no point satisfies
+    // the model.
+
+    // Run both algorithms: Differential Evolution returns no candidate at all,
+    // Particle Swarm Optimization returns its starting point. Either way the
+    // result is infeasible and getSuccess must be false.
+    for (sal_Int32 nAlgorithm : { sal_Int32(0), sal_Int32(1) })
+    {
+        loadFromFile(u"Simple.ods");
+
+        uno::Reference<sheet::XSpreadsheetDocument> xDocument(mxComponent, uno::UNO_QUERY_THROW);
+
+        uno::Reference<sheet::XSolver> xSolver;
+        xSolver.set(m_xContext->getServiceManager()->createInstanceWithContext(
+                        u"com.sun.star.comp.Calc.SwarmSolver"_ustr, m_xContext),
+                    uno::UNO_QUERY_THROW);
+
+        uno::Reference<beans::XPropertySet> xPropSet(xSolver, uno::UNO_QUERY_THROW);
+        xPropSet->setPropertyValue(u"Algorithm"_ustr, uno::Any(nAlgorithm));
+
+        table::CellAddress aObjective(0, 1, 1);
+        uno::Sequence<table::CellAddress> aVariables{ { 0, 1, 0 } };
+
+        uno::Sequence<sheet::SolverConstraint> aConstraints{
+            { /* [0] Left     */ table::CellAddress(0, 1, 0),
+              /*     Operator */ sheet::SolverConstraintOperator_GREATER_EQUAL,
+              /*     Right    */ uno::Any(-100.0) },
+            { /* [1] Left     */ table::CellAddress(0, 1, 0),
+              /*     Operator */ sheet::SolverConstraintOperator_LESS_EQUAL,
+              /*     Right    */ uno::Any(100.0) },
+            // The objective B2 is 10*B1^2 - 60*B1 - 40, whose lowest value is
+            // -130 at B1 = 3, so forcing it below -1000 can never be met.
+            { /* [2] Left     */ table::CellAddress(0, 1, 1),
+              /*     Operator */ sheet::SolverConstraintOperator_LESS_EQUAL,
+              /*     Right    */ uno::Any(-1000.0) }
+        };
+
+        xSolver->setDocument(xDocument);
+        xSolver->setObjective(aObjective);
+        xSolver->setVariables(aVariables);
+        xSolver->setConstraints(aConstraints);
+        xSolver->setMaximize(false);
+
+        xSolver->solve();
+
+        CPPUNIT_ASSERT_MESSAGE("Infeasible model must not report success", !xSolver->getSuccess());
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwarmSolverTest);

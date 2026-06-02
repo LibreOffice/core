@@ -272,6 +272,7 @@ public:
 private:
     void applyVariables(std::vector<double> const& rVariables);
     bool doesViolateConstraints();
+    bool isSolutionFeasible(std::vector<double> const& rSolution);
 
 public:
     double calculateFitness(std::vector<double> const& rVariables);
@@ -463,6 +464,25 @@ bool SwarmSolver::doesViolateConstraints()
     return false;
 }
 
+bool SwarmSolver::isSolutionFeasible(std::vector<double> const& rSolution)
+{
+    // The search must have produced a value for every variable.
+    if (sal_Int32(rSolution.size()) != maVariables.getLength())
+        return false;
+
+    // A value outside the variable's bound is not a valid solution.
+    for (size_t i = 0; i < rSolution.size(); ++i)
+    {
+        Bound const& rBound = maBounds[i];
+        if (rSolution[i] < rBound.lower || rSolution[i] > rBound.upper)
+            return false;
+    }
+
+    // Put the candidate into the document and check the remaining constraints.
+    applyVariables(rSolution);
+    return !doesViolateConstraints();
+}
+
 namespace
 {
 template <typename SwarmAlgorithm> class SwarmRunner
@@ -588,12 +608,25 @@ void SAL_CALL SwarmSolver::solve()
         aSolution = aSwarmSolver.solve();
     }
 
+    // Only report success when the returned values actually satisfy the
+    // model. The search can run out of generations or time without ever
+    // reaching a feasible point.
+    bool bFeasible = isSolutionFeasible(aSolution);
+
     xModel->unlockControllers();
 
-    mbSuccess = true;
+    mbSuccess = bFeasible;
 
-    maSolution.realloc(aSolution.size());
-    std::copy(aSolution.begin(), aSolution.end(), maSolution.getArray());
+    if (bFeasible)
+    {
+        maSolution.realloc(aSolution.size());
+        std::copy(aSolution.begin(), aSolution.end(), maSolution.getArray());
+    }
+    else
+    {
+        maSolution.realloc(0);
+        maStatus = getResourceString(RID_ERROR_INFEASIBLE);
+    }
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
