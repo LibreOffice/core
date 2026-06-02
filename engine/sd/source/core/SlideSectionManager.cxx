@@ -17,6 +17,8 @@
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 
+#include <numeric>
+
 #include <COKit/COKitEnums.h>
 #include <comphelper/kit.hxx>
 #include <comphelper/propertyvalue.hxx>
@@ -306,8 +308,15 @@ void SlideSectionManager::MoveSection(sal_Int32 nOldIndex, sal_Int32 nNewIndex)
     maSections.insert(maSections.begin() + nInsertAt, aMovedSection);
     aSlideCounts.insert(aSlideCounts.begin() + nInsertAt, nMovedCount);
 
-    // 7. Recalculate start indices from the (now correctly ordered) slide counts
-    sal_Int32 nCurrentIdx = 0;
+    // 7. Recalculate start indices from the (now correctly ordered) slide
+    //    counts. Slides before the first section ("leading" slides that belong
+    //    to no section) keep their place at the top of the deck, so the first
+    //    section does not start at slide 0. Offset every recomputed start by
+    //    that leading count. sum(aSlideCounts) is invariant across the reorder,
+    //    so nPageCount - sum gives the leading-orphan count.
+    sal_Int32 nSectionedSlides
+        = std::accumulate(aSlideCounts.begin(), aSlideCounts.end(), sal_Int32(0));
+    sal_Int32 nCurrentIdx = static_cast<sal_Int32>(nPageCount) - nSectionedSlides;
     for (size_t i = 0; i < maSections.size(); ++i)
     {
         maSections[i].mnStartIndex = nCurrentIdx;

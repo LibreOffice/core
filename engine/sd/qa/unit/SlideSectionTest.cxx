@@ -325,6 +325,54 @@ CPPUNIT_TEST_FIXTURE(SlideSectionTest, testMoveSectionDownODP)
     assertXPath(pXmlDoc, sPath + "/loext:section[3]/loext:section-slide", 2);
 }
 
+// Moving a section must respect slides that belong to no section. Slides
+// before the first section ("leading" slides) stay at the top of the deck and
+// the moved sections keep their own slides. Regression: MoveSection used to
+// recompute section start indices from 0, ignoring the leading slides, so the
+// section headers landed on the wrong slides and a slide was orphaned at the
+// end.
+CPPUNIT_TEST_FIXTURE(SlideSectionTest, testMoveSectionWithLeadingNonSectionSlides)
+{
+    createSdImpressDoc("pptx/slide-section-test.pptx");
+
+    SdDrawDocument* pDoc = getDoc();
+    sd::SlideSectionManager& rMgr = getSectionManager();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), rMgr.GetSectionCount());
+
+    // Capture the pages that will become leading (section-less) slides. The
+    // fixture's Section-1 spans indices 0..3; dropping it un-owns those four.
+    std::vector<SdPage*> aLeadingPages;
+    for (sal_uInt16 i = 0; i < 4; ++i)
+        aLeadingPages.push_back(pDoc->GetSdPage(i, PageKind::Standard));
+
+    // Drop Section-1's metadata. Slides 0..3 are now leading orphans; the
+    // remaining sections are Section-2 (start 4) and Section-3 (start 11).
+    rMgr.RemoveSection(0);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), rMgr.GetSectionCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), rMgr.GetSection(0).mnStartIndex);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(11), rMgr.GetSection(1).mnStartIndex);
+
+    const auto aSection2Before = getSectionSlides(0);
+    const auto aSection3Before = getSectionSlides(1);
+
+    // Move Section-3 above Section-2.
+    rMgr.MoveSection(1, 0);
+
+    // Section-3 now sits at index 0 but must start at 4 (right after the four
+    // leading slides), and Section-2 at index 1 must start at 6. The unfixed
+    // code produced 0 and 2 here.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), rMgr.GetSection(0).mnStartIndex);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(6), rMgr.GetSection(1).mnStartIndex);
+
+    // The same slides travel with each section.
+    assertSameSlides(aSection3Before, getSectionSlides(0));
+    assertSameSlides(aSection2Before, getSectionSlides(1));
+
+    // The leading slides did not move: indices 0..3 are still the same pages.
+    for (sal_uInt16 i = 0; i < 4; ++i)
+        CPPUNIT_ASSERT_EQUAL(aLeadingPages[i], pDoc->GetSdPage(i, PageKind::Standard));
+}
+
 // Undo/redo of AddSection restores the original section layout.
 CPPUNIT_TEST_FIXTURE(SlideSectionTest, testUndoRedoAddSection)
 {
