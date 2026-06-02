@@ -264,40 +264,6 @@ void DoubleNumericFormatter::ResetConformanceTester()
         new validation::NumberValidator(cSeparatorThousand, cSeparatorDecimal));
 }
 
-LongCurrencyFormatter::LongCurrencyFormatter(weld::Entry& rEntry)
-    : EntryFormatter(rEntry)
-    , m_bThousandSep(true)
-{
-    Init();
-}
-
-LongCurrencyFormatter::LongCurrencyFormatter(weld::FormattedSpinButton& rSpinButton)
-    : EntryFormatter(rSpinButton)
-    , m_bThousandSep(true)
-{
-    Init();
-}
-
-void LongCurrencyFormatter::Init()
-{
-    SetFormatValueHdl(LINK(this, LongCurrencyFormatter, FormatOutputHdl));
-    SetParseTextHdl(LINK(this, LongCurrencyFormatter, ParseInputHdl));
-}
-
-void LongCurrencyFormatter::SetUseThousandSep(bool b)
-{
-    m_bThousandSep = b;
-    ReFormat();
-}
-
-void LongCurrencyFormatter::SetCurrencySymbol(const OUString& rStr)
-{
-    m_aCurrencySymbol = rStr;
-    ReFormat();
-}
-
-LongCurrencyFormatter::~LongCurrencyFormatter() = default;
-
 WidgetStatusListener::WidgetStatusListener(weld::Widget* widget, const OUString& aCommand)
     : mWidget(widget)
 {

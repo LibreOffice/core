@@ -290,27 +290,6 @@ private:
     std::unique_ptr<validation::NumberValidator> m_pNumberValidator;
 };
 
-class VCL_DLLPUBLIC LongCurrencyFormatter final : public EntryFormatter
-{
-public:
-    LongCurrencyFormatter(weld::Entry& rEntry);
-    LongCurrencyFormatter(weld::FormattedSpinButton& rSpinButton);
-
-    void SetUseThousandSep(bool b);
-    void SetCurrencySymbol(const OUString& rStr);
-
-    SAL_DLLPRIVATE virtual ~LongCurrencyFormatter() override;
-
-private:
-    DECL_DLLPRIVATE_LINK(FormatOutputHdl, double, std::optional<OUString>);
-    DECL_DLLPRIVATE_LINK(ParseInputHdl, const OUString&, Formatter::ParseResult);
-
-    SAL_DLLPRIVATE void Init();
-
-    OUString m_aCurrencySymbol;
-    bool m_bThousandSep;
-};
-
 class VCL_DLLPUBLIC ButtonPressRepeater final
     : public std::enable_shared_from_this<ButtonPressRepeater>
 {

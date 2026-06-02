@@ -609,6 +609,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/weld/EntryTreeView \
     vcl/source/weld/IconView \
     vcl/source/weld/ItemView \
+    vcl/source/weld/LongCurrencyFormatter \
     vcl/source/weld/MetricSpinButton \
     vcl/source/weld/PatternFormatter \
     vcl/source/weld/ScrolledWindow \
