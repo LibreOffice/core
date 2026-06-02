@@ -29,6 +29,7 @@
 #include <vcl/keycod.hxx>
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/Entry.hxx>
+#include <vcl/weld/RadioButton.hxx>
 #include <i18nutil/searchopt.hxx>
 #include <config_features.h>
 #include "cfgutil.hxx"

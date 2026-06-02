@@ -33,6 +33,7 @@
 #include <vcl/weld/IconView.hxx>
 #include <vcl/weld/Label.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
+#include <vcl/weld/RadioButton.hxx>
 #include <vcl/weld/Scale.hxx>
 #include <vcl/weld/SpinButton.hxx>
 

@@ -29,6 +29,7 @@
 #include <vcl/weld/Label.hxx>
 #include <vcl/weld/MenuButton.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
+#include <vcl/weld/RadioButton.hxx>
 #include <vcl/weld/ScrolledWindow.hxx>
 #include <vcl/weld/customweld.hxx>
 #include "symbol.hxx"

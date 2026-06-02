@@ -32,6 +32,7 @@
 #include <vcl/weld/ScrolledWindow.hxx>
 #include <vcl/weld/Dialog.hxx>
 #include <vcl/weld/Image.hxx>
+#include <vcl/weld/RadioButton.hxx>
 #include <vcl/weld/weldutils.hxx>
 #include <unotools/lingucfg.hxx>
 #include <unotools/linguprops.hxx>

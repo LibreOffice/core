@@ -45,6 +45,7 @@
 #include <vcl/mnemonic.hxx>
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/Dialog.hxx>
+#include <vcl/weld/RadioButton.hxx>
 #include <svl/style.hxx>
 #include <svl/zformat.hxx>
 #include <sfx2/htmlmode.hxx>

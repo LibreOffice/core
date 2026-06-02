@@ -20,6 +20,7 @@
 
 #include <sfx2/tabdlg.hxx>
 #include <vcl/weld/Label.hxx>
+#include <vcl/weld/RadioButton.hxx>
 #include <vcl/weld/SpinButton.hxx>
 
 #include <label.hxx>

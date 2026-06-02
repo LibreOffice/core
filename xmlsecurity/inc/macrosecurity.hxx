@@ -25,6 +25,7 @@
 #include <vcl/weld/Image.hxx>
 #include <vcl/weld/Label.hxx>
 #include <vcl/weld/Notebook.hxx>
+#include <vcl/weld/RadioButton.hxx>
 #include <vcl/weld/TreeView.hxx>
 #include <vcl/weld/weld.hxx>
 #include <unotools/securityoptions.hxx>

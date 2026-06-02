@@ -34,6 +34,7 @@
 #include <vcl/weld/Container.hxx>
 #include <vcl/weld/Expander.hxx>
 #include <vcl/weld/Label.hxx>
+#include <vcl/weld/RadioButton.hxx>
 #include <vcl/weld/TextView.hxx>
 #include <vcl/weld/weld.hxx>
 #include <PostItMgr.hxx>

@@ -23,6 +23,7 @@
 #include <svx/colorbox.hxx>
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
+#include <vcl/weld/RadioButton.hxx>
 
 class ScViewOptions;
 

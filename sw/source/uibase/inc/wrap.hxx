@@ -24,6 +24,7 @@
 #include <svx/swframetypes.hxx>
 #include <vcl/weld/Image.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
+#include <vcl/weld/RadioButton.hxx>
 #include <vcl/weld/Window.hxx>
 
 class SwWrtShell;

@@ -20,6 +20,7 @@
 
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/Frame.hxx>
+#include <vcl/weld/RadioButton.hxx>
 
 class ScItemValue final
 {

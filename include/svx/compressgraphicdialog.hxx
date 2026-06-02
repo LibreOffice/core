@@ -26,6 +26,7 @@
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/Label.hxx>
+#include <vcl/weld/RadioButton.hxx>
 #include <vcl/weld/Scale.hxx>
 #include <vcl/weld/SpinButton.hxx>
 #include <vcl/weld/Window.hxx>

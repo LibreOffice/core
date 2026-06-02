@@ -24,6 +24,7 @@
 #include <vcl/weld/Frame.hxx>
 #include <vcl/weld/Label.hxx>
 #include <vcl/weld/LinkButton.hxx>
+#include <vcl/weld/RadioButton.hxx>
 
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <com/sun/star/configuration/XReadWriteAccess.hpp>

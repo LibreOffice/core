@@ -13,6 +13,8 @@
 
 #include "QtInstanceWidget.hxx"
 
+#include <vcl/weld/RadioButton.hxx>
+
 #include <QtCore/QObject>
 #include <QtWidgets/QRadioButton>
 

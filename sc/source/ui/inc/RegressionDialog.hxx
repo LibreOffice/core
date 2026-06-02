@@ -14,6 +14,7 @@
 #include "TableFillingAndNavigationTools.hxx"
 
 #include <vcl/weld/Label.hxx>
+#include <vcl/weld/RadioButton.hxx>
 #include <vcl/weld/SpinButton.hxx>
 
 class ScRegressionDialog : public ScStatisticsTwoVariableDialog

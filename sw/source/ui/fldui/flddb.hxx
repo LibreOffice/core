@@ -25,6 +25,7 @@
 #include "fldpage.hxx"
 
 #include <vcl/weld/Entry.hxx>
+#include <vcl/weld/RadioButton.hxx>
 
 class SwFieldDBPage : public SwFieldPage
 {

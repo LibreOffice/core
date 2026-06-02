@@ -23,6 +23,7 @@
 #include <svx/langbox.hxx>
 #include <tools/lineend.hxx>
 #include <vcl/weld/Label.hxx>
+#include <vcl/weld/RadioButton.hxx>
 
 class SwAsciiOptions;
 class SvStream;

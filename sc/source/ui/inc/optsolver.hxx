@@ -28,6 +28,7 @@
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/Entry.hxx>
 #include <vcl/weld/Label.hxx>
+#include <vcl/weld/RadioButton.hxx>
 #include <vcl/weld/ScrolledWindow.hxx>
 
 #include <string_view>

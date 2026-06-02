@@ -22,6 +22,8 @@
 #include "anyrefdg.hxx"
 #include <rangelst.hxx>
 
+#include <vcl/weld/RadioButton.hxx>
+
 #include <unordered_map>
 
 class ScViewData;

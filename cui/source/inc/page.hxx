@@ -28,6 +28,7 @@
 #include <vcl/print.hxx>
 #include <vcl/weld/Label.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
+#include <vcl/weld/RadioButton.hxx>
 
 // class SvxPageDescPage -------------------------------------------------
 /*

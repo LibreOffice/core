@@ -22,6 +22,7 @@
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/FormattedSpinButton.hxx>
 #include <vcl/weld/Frame.hxx>
+#include <vcl/weld/RadioButton.hxx>
 
 class SvNumberFormatter;
 

@@ -21,6 +21,8 @@
 
 #include "abspage.hxx"
 #include "addresssettings.hxx"
+
+#include <vcl/weld/RadioButton.hxx>
 #include <vcl/weld/weld.hxx>
 
 namespace abp

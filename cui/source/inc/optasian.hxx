@@ -23,6 +23,7 @@
 #include <svx/langbox.hxx>
 #include <vcl/weld/Entry.hxx>
 #include <vcl/weld/Label.hxx>
+#include <vcl/weld/RadioButton.hxx>
 
 struct SvxAsianLayoutPage_Impl;
 class SvxAsianLayoutPage : public SfxTabPage

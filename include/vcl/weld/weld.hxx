@@ -131,14 +131,6 @@ public:
     virtual void set_label_wrap(bool wrap) = 0;
 };
 
-class VCL_DLLPUBLIC RadioButton : virtual public Toggleable
-{
-public:
-    virtual void set_label(const OUString& rText) = 0;
-    virtual OUString get_label() const = 0;
-    virtual void set_label_wrap(bool wrap) = 0;
-};
-
 enum class Placement
 {
     Under,

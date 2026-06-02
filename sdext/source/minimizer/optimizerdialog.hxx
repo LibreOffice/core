@@ -30,6 +30,7 @@
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/Label.hxx>
 #include <vcl/weld/ProgressBar.hxx>
+#include <vcl/weld/RadioButton.hxx>
 #include <vcl/weld/SpinButton.hxx>
 
 #define ITEM_ID_INTRODUCTION            0

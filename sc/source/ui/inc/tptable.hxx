@@ -22,6 +22,7 @@
 #include <sfx2/tabdlg.hxx>
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/Image.hxx>
+#include <vcl/weld/RadioButton.hxx>
 #include <vcl/weld/SpinButton.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
 

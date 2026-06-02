@@ -32,6 +32,7 @@
 #include <vcl/weld/Image.hxx>
 #include <vcl/weld/Label.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
+#include <vcl/weld/RadioButton.hxx>
 #include <vcl/weld/TextView.hxx>
 #include <swtypes.hxx>
 #include "bmpwin.hxx"

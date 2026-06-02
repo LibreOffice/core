@@ -22,6 +22,8 @@
 #include "adminpages.hxx"
 #include <opendoccontrols.hxx>
 
+#include <vcl/weld/RadioButton.hxx>
+
 namespace dbaui
 {
     class ODbTypeWizDialogSetup;

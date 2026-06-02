@@ -15,6 +15,7 @@
 
 #include "StatisticsInputOutputDialog.hxx"
 
+#include <vcl/weld/RadioButton.hxx>
 #include <vcl/weld/SpinButton.hxx>
 
 class FormulaTemplate;

@@ -21,6 +21,7 @@
 #include <sal/config.h>
 
 #include <vcl/weld/DialogController.hxx>
+#include <vcl/weld/RadioButton.hxx>
 #include <vcl/weld/SpinButton.hxx>
 #include <vcl/weld/Window.hxx>
 
