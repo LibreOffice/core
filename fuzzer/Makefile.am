@@ -141,12 +141,6 @@ noinst_PROGRAMS = \
                   httpresponse_fuzzer \
                   httpecho_fuzzer
 
-# Serialize fuzzer link steps. Each link is LTO + CFI and easily peaks at
-# several GB of RSS; running them concurrently with -j swamps memory and
-# slows the build. Object compilation upstream still runs in parallel.
-# NB: .NOTPARALLEL with prerequisites requires GNU make 4.4+.
-.NOTPARALLEL: $(noinst_PROGRAMS)
-
 # CFI for the libFuzzer build (see comment near ENV_san for details).
 LIBFUZZER_CFI_FLAGS = -fsanitize=cfi -fno-sanitize=cfi-derived-cast,cfi-unrelated-cast \
                       -flto -fvisibility=hidden -fno-sanitize-trap=cfi
@@ -272,13 +266,6 @@ AFL_FUZZER_NAMES = $(foreach f,$(AFL_FUZZERS),$(word 1,$(subst =, ,$f)))
 # Generate all target names: <name>_fuzzer_<variant>.afl
 AFL_FUZZER_TARGETS = $(foreach v,$(AFL_VARIANTS),$(foreach n,$(AFL_FUZZER_NAMES),$(n)_fuzzer_$(v).afl))
 
-# Serialize AFL fuzzer link steps for the same reason as the libFuzzer ones
-# above: LTO + (variant-dependent) CFI/ASan/UBSan links are RAM-heavy.
-# 5 fuzzers x 4 variants = 20 link steps; left to run in parallel under -j
-# they will OOM most workstations. Variant object compilation upstream is
-# unaffected and still runs in parallel.
-.NOTPARALLEL: $(AFL_FUZZER_TARGETS)
-
 all-local: $(AFL_FUZZER_TARGETS)
 
 clean-fuzzers:
@@ -334,6 +321,18 @@ else # !ENABLE_AFL (libFuzzer-only build)
 clean-fuzzers: ;
 
 endif # !ENABLE_AFL
+
+# Serialize all fuzzer link steps. Each link is LTO + (variant-dependent)
+# CFI/ASan/UBSan and easily peaks at several GB of RSS; running them
+# concurrently under -j swamps memory and slows the build. Object
+# compilation upstream still runs in parallel.
+#  - $(noinst_PROGRAMS): the libFuzzer programs (always built).
+#  - $(AFL_FUZZER_TARGETS): 5 fuzzers x 4 variants = 20 AFL link steps;
+#    empty when !ENABLE_AFL.
+# A single .NOTPARALLEL rule (rather than one per condition) avoids automake's
+# "already defined in condition ..." warning for overlapping conditions.
+# NB: .NOTPARALLEL with prerequisites requires GNU make 4.4+.
+.NOTPARALLEL: $(noinst_PROGRAMS) $(AFL_FUZZER_TARGETS)
 
 else # !ENABLE_FUZZERS
 
