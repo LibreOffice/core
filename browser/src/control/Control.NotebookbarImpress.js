@@ -1542,7 +1542,7 @@ window.L.Control.NotebookbarImpress = window.L.Control.NotebookbarWriter.extend(
 							{
 								'type': 'toolbox',
 								'children': [
-								(!window.ThisIsAMobileApp || window.ThisIsTheWindowsApp) ?
+								(!window.ThisIsAMobileApp || window.ThisIsTheWindowsApp || window.ThisIsTheQtApp) ?
 									{
 										'id': 'insert-insert-multimedia:InsertMultimediaMenu',
 										'type': 'menubutton',
