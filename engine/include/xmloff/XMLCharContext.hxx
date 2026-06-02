@@ -25,7 +25,7 @@
 
 namespace com::sun::star::uno { template <typename > class Reference; }
 
-class UNLESS_MERGELIBS_MORE(XMLOFF_DLLPUBLIC) XMLCharContext : public SvXMLImportContext
+class UNLESS_MERGELIBS(XMLOFF_DLLPUBLIC) XMLCharContext : public SvXMLImportContext
 {
     XMLCharContext(const XMLCharContext&) = delete;
     void operator =(const XMLCharContext&) = delete;

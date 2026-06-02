@@ -110,7 +110,7 @@ namespace framework
         the dreaded SolarMutex being locked when they're called, the above behavior is a compromise between "how it should
         be" and "how it can realistically be".
     */
-    class UNLESS_MERGELIBS_MORE(FWK_DLLPUBLIC) UndoManagerHelper
+    class UNLESS_MERGELIBS(FWK_DLLPUBLIC) UndoManagerHelper
     {
     public:
         UndoManagerHelper( IUndoManagerImplementation& i_undoManagerImpl );

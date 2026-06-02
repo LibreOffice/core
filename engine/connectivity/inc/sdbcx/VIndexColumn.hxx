@@ -28,7 +28,7 @@ namespace connectivity::sdbcx
     class OIndexColumn;
     typedef ::comphelper::OIdPropertyArrayUsageHelper<OIndexColumn> OIndexColumn_PROP;
 
-    class UNLESS_MERGELIBS_MORE(OOO_DLLPUBLIC_DBTOOLS) OIndexColumn :
+    class UNLESS_MERGELIBS(OOO_DLLPUBLIC_DBTOOLS) OIndexColumn :
         public OColumn, public OIndexColumn_PROP
     {
         bool    m_IsAscending;

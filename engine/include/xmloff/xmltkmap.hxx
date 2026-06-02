@@ -48,7 +48,7 @@ struct SvXMLTokenMapEntry
     }
 };
 
-class UNLESS_MERGELIBS_MORE(XMLOFF_DLLPUBLIC) SvXMLTokenMap
+class UNLESS_MERGELIBS(XMLOFF_DLLPUBLIC) SvXMLTokenMap
 {
 private:
     std::unique_ptr<SvXMLTokenMap_Impl>  m_pImpl;

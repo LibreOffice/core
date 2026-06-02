@@ -514,7 +514,7 @@ public:
 /***********************************************************************
 *                                                                      *
 ***********************************************************************/
-class UNLESS_MERGELIBS_MORE(SVXCORE_DLLPUBLIC) SvxShapeControl final : public css::drawing::XControlShape, public SvxShapeText
+class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) SvxShapeControl final : public css::drawing::XControlShape, public SvxShapeText
 {
 protected:
     using SvxUnoTextRangeBase::setPropertyValue;
@@ -584,7 +584,7 @@ public:
 ***********************************************************************/
 
 // #i118485# changed parent to SvxShapeText to allow Text handling over UNO API
-class UNLESS_MERGELIBS_MORE(SVXCORE_DLLPUBLIC) SvxOle2Shape : public SvxShapeText
+class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) SvxOle2Shape : public SvxShapeText
 {
 private:
     OUString m_referer;

@@ -128,7 +128,7 @@ namespace dbtools::param
                                                >   ParameterWrapperContainer_Base;
 
     /// class for the parameter event @see approveParameter
-    class UNLESS_MERGELIBS_MORE(OOO_DLLPUBLIC_DBTOOLS) ParameterWrapperContainer final :
+    class UNLESS_MERGELIBS(OOO_DLLPUBLIC_DBTOOLS) ParameterWrapperContainer final :
         public ParameterWrapperContainer_Base
     {
     private:

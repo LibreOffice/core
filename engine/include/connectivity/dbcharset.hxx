@@ -50,7 +50,7 @@ namespace dbtools
         </ul>
         </p>
     */
-    class UNLESS_MERGELIBS_MORE(OOO_DLLPUBLIC_DBTOOLS) OCharsetMap
+    class UNLESS_MERGELIBS(OOO_DLLPUBLIC_DBTOOLS) OCharsetMap
     {
     protected:
         typedef std::set<rtl_TextEncoding> TextEncBag;
@@ -91,7 +91,7 @@ namespace dbtools
 
     //- CharsetIteratorDerefHelper
 
-    class UNLESS_MERGELIBS_MORE(OOO_DLLPUBLIC_DBTOOLS) CharsetIteratorDerefHelper
+    class UNLESS_MERGELIBS(OOO_DLLPUBLIC_DBTOOLS) CharsetIteratorDerefHelper
     {
         friend class OCharsetMap::CharsetIterator;
 
@@ -112,7 +112,7 @@ namespace dbtools
 
     //- OCharsetMap::CharsetIterator
 
-    class UNLESS_MERGELIBS_MORE(OOO_DLLPUBLIC_DBTOOLS) OCharsetMap::CharsetIterator
+    class UNLESS_MERGELIBS(OOO_DLLPUBLIC_DBTOOLS) OCharsetMap::CharsetIterator
     {
         friend class OCharsetMap;
 

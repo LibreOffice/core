@@ -80,7 +80,7 @@ namespace a11y
     class AccFrameSelector;
 }
 
-class SAL_WARN_UNUSED UNLESS_MERGELIBS_MORE(SVX_DLLPUBLIC) FrameSelector final : public weld::CustomWidgetController
+class SAL_WARN_UNUSED UNLESS_MERGELIBS(SVX_DLLPUBLIC) FrameSelector final : public weld::CustomWidgetController
 {
 public:
     FrameSelector();

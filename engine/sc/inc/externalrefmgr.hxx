@@ -370,7 +370,7 @@ private:
     const ScDocument& mrDoc;
 };
 
-class UNLESS_MERGELIBS_MORE(SAL_DLLPUBLIC_RTTI) ScExternalRefManager final : public formula::ExternalReferenceHelper, public SfxListener
+class UNLESS_MERGELIBS(SAL_DLLPUBLIC_RTTI) ScExternalRefManager final : public formula::ExternalReferenceHelper, public SfxListener
 {
 public:
 

@@ -48,7 +48,7 @@ namespace dbaui
 
     struct UndoManager_Impl;
     typedef ::cppu::ImplHelper1< css::document::XUndoManager > UndoManager_Base;
-    class UNLESS_MERGELIBS_MORE(DBACCESS_DLLPUBLIC) UndoManager final : public UndoManager_Base
+    class UNLESS_MERGELIBS(DBACCESS_DLLPUBLIC) UndoManager final : public UndoManager_Base
     {
     public:
         UndoManager( ::cppu::OWeakObject& i_parent, ::osl::Mutex& i_mutex );

@@ -34,7 +34,7 @@ class FontMetric;
 
 
 
-class UNLESS_MERGELIBS_MORE(TOOLKIT_DLLPUBLIC) VCLXFont final :
+class UNLESS_MERGELIBS(TOOLKIT_DLLPUBLIC) VCLXFont final :
                         public cppu::WeakImplHelper<
                             css::awt::XFont2>
 {

@@ -33,7 +33,7 @@ enum QueryDeleteResult_Impl
     QUERYDELETE_ALL = 101
 };
 
-class UNLESS_MERGELIBS_MORE(SVT_DLLPUBLIC) QueryDeleteDlg_Impl final
+class UNLESS_MERGELIBS(SVT_DLLPUBLIC) QueryDeleteDlg_Impl final
     : public weld::MessageDialogController
 {
 private:

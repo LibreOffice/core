@@ -38,7 +38,7 @@ namespace dbtools
     /** helper class for implementing XWarningsSupplier, which mixes own warnings with
         warnings obtained from an external instance
     */
-    class UNLESS_MERGELIBS_MORE(OOO_DLLPUBLIC_DBTOOLS) WarningsContainer
+    class UNLESS_MERGELIBS(OOO_DLLPUBLIC_DBTOOLS) WarningsContainer
     {
     private:
         css::uno::Reference< css::sdbc::XWarningsSupplier >   m_xExternalWarnings;

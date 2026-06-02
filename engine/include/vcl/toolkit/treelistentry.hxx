@@ -53,7 +53,7 @@ namespace o3tl
     template<> struct typed_flags<SvTLEntryFlags> : is_typed_flags<SvTLEntryFlags, 0x801f> {};
 }
 
-class UNLESS_MERGELIBS_MORE(VCL_DLLPUBLIC) SvTreeListEntry
+class UNLESS_MERGELIBS(VCL_DLLPUBLIC) SvTreeListEntry
 {
     friend class SvTreeList;
     friend class SvListView;

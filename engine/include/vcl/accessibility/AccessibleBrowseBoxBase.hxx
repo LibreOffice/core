@@ -42,7 +42,7 @@ namespace vcl {
 
 /** The BrowseBox accessible objects inherit from this base class. It
     implements basic functionality for various Accessibility interfaces. */
-class UNLESS_MERGELIBS_MORE(VCL_DLLPUBLIC) AccessibleBrowseBoxBase
+class UNLESS_MERGELIBS(VCL_DLLPUBLIC) AccessibleBrowseBoxBase
     : public cppu::ImplInheritanceHelper<comphelper::OAccessible, css::awt::XFocusListener,
                                          css::lang::XServiceInfo>
 {

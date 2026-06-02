@@ -128,7 +128,7 @@ inline void ScCsvCmd::Set( ScCsvCmdType eType, sal_Int32 nParam1, sal_Int32 nPar
 }
 
 /** Base class for the CSV grid control. Implements command handling. */
-class UNLESS_MERGELIBS_MORE(SAL_DLLPUBLIC_RTTI) ScCsvControl : public weld::CustomClientWidgetController
+class UNLESS_MERGELIBS(SAL_DLLPUBLIC_RTTI) ScCsvControl : public weld::CustomClientWidgetController
 {
 private:
     Link<ScCsvControl&,void>    maCmdHdl;           /// External command handler.

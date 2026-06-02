@@ -55,7 +55,7 @@ namespace dbaui
                                          >   DBSubComponentController_Base;
 
     struct DBSubComponentController_Impl;
-    class UNLESS_MERGELIBS_MORE(DBACCESS_DLLPUBLIC) DBSubComponentController : public DBSubComponentController_Base
+    class UNLESS_MERGELIBS(DBACCESS_DLLPUBLIC) DBSubComponentController : public DBSubComponentController_Base
     {
     private:
         ::std::unique_ptr<DBSubComponentController_Impl> m_pImpl;

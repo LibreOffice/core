@@ -28,7 +28,7 @@
 /**
     PropertyHandler for a named xml bool type:
 */
-class UNLESS_MERGELIBS_MORE(XMLOFF_DLLPUBLIC) XMLNamedBoolPropertyHdl final : public XMLPropertyHandler
+class UNLESS_MERGELIBS(XMLOFF_DLLPUBLIC) XMLNamedBoolPropertyHdl final : public XMLPropertyHandler
 {
 private:
     const OUString maTrueStr;

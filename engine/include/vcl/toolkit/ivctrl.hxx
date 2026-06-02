@@ -72,7 +72,7 @@ public:
     const Image&            GetImage () const { return aImage; }
     void                    SetText ( const OUString& rText ) { aText = rText; }
     const OUString&         GetText () const { return aText; }
-    OUString UNLESS_MERGELIBS_MORE(VCL_DLLPUBLIC)  GetDisplayText() const;
+    OUString UNLESS_MERGELIBS(VCL_DLLPUBLIC)  GetDisplayText() const;
     void                    SetQuickHelpText( const OUString& rText ) { aQuickHelpText = rText; }
     const OUString&         GetQuickHelpText() const { return aQuickHelpText; }
 
@@ -106,7 +106,7 @@ public:
 
 class MnemonicGenerator;
 
-class UNLESS_MERGELIBS_MORE(VCL_DLLPUBLIC) SvtIconChoiceCtrl final : public Control
+class UNLESS_MERGELIBS(VCL_DLLPUBLIC) SvtIconChoiceCtrl final : public Control
 {
     friend class SvxIconChoiceCtrl_Impl;
 

@@ -62,7 +62,7 @@ namespace connectivity
 
         @see css::sdb::ErrorCondition
     */
-    class UNLESS_MERGELIBS_MORE(OOO_DLLPUBLIC_DBTOOLS) SQLError
+    class UNLESS_MERGELIBS(OOO_DLLPUBLIC_DBTOOLS) SQLError
     {
     public:
                         SQLError();

@@ -40,7 +40,7 @@ typedef comphelper::WeakComponentImplHelper <
 /** Simple collection of colors, gradients, fonts that define the
     look of the sidebar and its controls.
 */
-class UNLESS_MERGELIBS_MORE(SFX2_DLLPUBLIC) Theme final
+class UNLESS_MERGELIBS(SFX2_DLLPUBLIC) Theme final
     : public ThemeInterfaceBase
 {
 public:

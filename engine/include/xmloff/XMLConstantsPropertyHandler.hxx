@@ -33,7 +33,7 @@ struct SvXMLEnumMapEntry;
 /** Abstract base-class for different XML-types. Derivations of this class
     knows how to compare, im/export a special XML-type
 */
-class UNLESS_MERGELIBS_MORE(XMLOFF_DLLPUBLIC) XMLConstantsPropertyHandler: public XMLPropertyHandler
+class UNLESS_MERGELIBS(XMLOFF_DLLPUBLIC) XMLConstantsPropertyHandler: public XMLPropertyHandler
 {
     const SvXMLEnumMapEntry<sal_uInt16> *m_pMap;
     const enum ::xmloff::token::XMLTokenEnum m_eDefault;

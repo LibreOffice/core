@@ -75,7 +75,7 @@ namespace utl
         You'll usually never use this class directly, but only as parameter for a
         ->SharedUNOComponent class.
     */
-    class UNLESS_MERGELIBS_MORE(UNOTOOLS_DLLPUBLIC) CloseableComponent
+    class UNLESS_MERGELIBS(UNOTOOLS_DLLPUBLIC) CloseableComponent
     {
     private:
         /** Our IMPL class.

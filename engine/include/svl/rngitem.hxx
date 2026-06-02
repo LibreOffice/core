@@ -25,7 +25,7 @@
 #include <svl/poolitem.hxx>
 
 
-class UNLESS_MERGELIBS_MORE(SVL_DLLPUBLIC) SfxRangeItem final : public SfxPoolItem
+class UNLESS_MERGELIBS(SVL_DLLPUBLIC) SfxRangeItem final : public SfxPoolItem
 {
 private:
     sal_uInt16                  nFrom;

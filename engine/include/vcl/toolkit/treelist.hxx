@@ -62,7 +62,7 @@ struct SvSortData
     const SvTreeListEntry* pRight;
 };
 
-class UNLESS_MERGELIBS_MORE(VCL_DLLPUBLIC) SvTreeList final
+class UNLESS_MERGELIBS(VCL_DLLPUBLIC) SvTreeList final
 {
     friend class        SvListView;
 
@@ -200,7 +200,7 @@ public:
     void                Resort();
 };
 
-class UNLESS_MERGELIBS_MORE(VCL_DLLPUBLIC) SvListView
+class UNLESS_MERGELIBS(VCL_DLLPUBLIC) SvListView
 {
     friend class SvTreeList;
 

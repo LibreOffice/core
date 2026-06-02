@@ -49,7 +49,7 @@ namespace sw {
     class RepeatContext;
 }
 
-class UNLESS_MERGELIBS_MORE(SW_DLLPUBLIC) SwUndo
+class UNLESS_MERGELIBS(SW_DLLPUBLIC) SwUndo
     : public SfxUndoAction
 {
     SwUndoId const m_nId;

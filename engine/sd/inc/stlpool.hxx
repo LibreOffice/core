@@ -47,7 +47,7 @@ typedef ::cppu::ImplInheritanceHelper< SfxStyleSheetPool,
                                         css::container::XNameAccess,
                                         css::lang::XComponent > SdStyleSheetPoolBase;
 
-class UNLESS_MERGELIBS_MORE(SAL_DLLPUBLIC_RTTI) SdStyleSheetPool final : public SdStyleSheetPoolBase, public SfxListener
+class UNLESS_MERGELIBS(SAL_DLLPUBLIC_RTTI) SdStyleSheetPool final : public SdStyleSheetPoolBase, public SfxListener
 {
     friend class SdDrawDocument;
 public:

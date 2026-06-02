@@ -9,7 +9,17 @@
 
 # we link all object files from these libraries into one, merged library
 gb_MERGE_LIBRARY_LIST := \
+	$(if $(filter $(OS),WNT), \
+		$(call gb_Helper_optional,DBCONNECTIVITY,ado) \
+	) \
+	analysis \
+	animcore \
 	avmedia \
+	$(call gb_Helper_optional,AVMEDIA, \
+		$(if $(filter MACOSX,$(OS)),\
+			avmediaMacAVF \
+		) \
+	) \
 	$(call gb_Helper_optional,AVMEDIA, \
 		$(if $(filter WNT,$(OS)),avmediawin) \
 	) \
@@ -18,6 +28,9 @@ gb_MERGE_LIBRARY_LIST := \
 		basprov \
 	) \
 	basegfx \
+	bib \
+	cached1 \
+	$(if $(ENABLE_CAIRO_CANVAS),cairocanvas) \
 	canvasfactory \
 	canvastools \
 	chart2 \
@@ -27,6 +40,15 @@ gb_MERGE_LIBRARY_LIST := \
 	cppcanvas \
 	$(call gb_Helper_optional,BREAKPAD,crashreport) \
 	ctl \
+	cui \
+	date \
+	$(call gb_Helper_optional,DBCONNECTIVITY, \
+		dba \
+		dbase \
+		dbaxml \
+		dbpool2 \
+		dbu) \
+	$(call gb_Helper_optional,SCRIPTING,dlgprov) \
 	dbtools \
 	deployment \
 	deploymentmisc \
@@ -40,17 +62,29 @@ gb_MERGE_LIBRARY_LIST := \
 	emboleobj \
 	emfio \
 	$(if $(filter WNT,$(OS)),emser) \
+	$(if $(ENABLE_EVOAB2),evoab) \
 	evtatt \
 	filterconfig \
+	$(call gb_Helper_optional,DBCONNECTIVITY, \
+		flat \
+		file) \
 	for \
 	forui \
+	$(if $(filter WNT,$(OS)), \
+		fps \
+	) \
+	$(if $(filter MACOSX,$(OS)),\
+		fps_aqua \
+	) \
 	fps_office \
 	$(call gb_Helper_optional,DBCONNECTIVITY,frm) \
 	fsstorage \
 	fwk \
 	$(if $(filter WNT,$(OS)),gdipluscanvas) \
 	guesslang \
+	graphicfilter \
 	$(call gb_Helper_optionals_and,DESKTOP XMLHELP,helplinker) \
+	hwp \
 	hyphen \
 	i18nsearch \
 	i18npool \
@@ -60,19 +94,41 @@ gb_MERGE_LIBRARY_LIST := \
 	lng \
 	lnth \
 	localebe1 \
+	log \
+	$(if $(filter $(OS),MACOSX), \
+		macab1 \
+	) \
 	$(if $(filter iOS MACOSX,$(OS)),MacOSXSpell) \
+	$(call gb_Helper_optional,DBCONNECTIVITY,mozbootstrap) \
+	$(call gb_Helper_optional,SCRIPTING,msforms) \
 	msfilter \
 	mtfrenderer \
+	$(call gb_Helper_optional,DBCONNECTIVITY,mysql_jdbc) \
+	$(call gb_Helper_optional,MARIADBC,$(call gb_Helper_optional,DBCONNECTIVITY,mysqlc)) \
 	numbertext \
+	$(call gb_Helper_optional,DBCONNECTIVITY,odbc) \
 	odfflatxml \
 	offacc \
 	oox \
 	$(if $(filter OPENCL,$(BUILD_TYPE)),opencl) \
 	package2 \
 	passwordcontainer \
+	pdffilter \
+	pricing \
+	$(call gb_Helper_optional,SCRIPTING,protocolhandler) \
 	sax \
 	sb \
+	$(call gb_Helper_optional,SCRIPTING,scriptframe) \
+	$(call gb_Helper_optional,DBCONNECTIVITY,sdbc2) \
+	$(call gb_Helper_optional,DBCONNECTIVITY,sdbt) \
 	simplecanvas \
+	slideshow \
+	$(if $(filter WNT,$(OS)), \
+		smplmail \
+	) \
+	solver \
+	storagefd \
+	svgfilter \
 	sfx \
 	sofficeapp \
 	sot \
@@ -86,11 +142,17 @@ gb_MERGE_LIBRARY_LIST := \
 	svx \
 	svxcore \
 	syssh \
+	t602filter \
+	textconversiondlgs \
 	textfd \
 	tk \
 	tl \
 	ucb1 \
 	ucbhelper \
+	$(call gb_Helper_optional,XMLHELP,ucpchelp1) \
+	$(if $(ENABLE_LIBCMIS),ucpcmis1) \
+	$(if $(WITH_WEBDAV),ucpdav1) \
+	ucppkg1 \
 	ucpexpand1 \
 	ucpext \
 	ucphier1 \
@@ -108,82 +170,6 @@ gb_MERGE_LIBRARY_LIST := \
 	) \
 	vcl \
 	vclcanvas \
-	xsec_xmlsec \
-	xmlfa \
-	xmlfd \
-	xmlscript \
-	xo \
-	xof \
-	xsltdlg \
-	xsltfilter \
-	xstor \
-
-# if we have --enable-mergelibs=more
-ifneq ($(MERGELIBS_MORE),)
-
-gb_MERGE_LIBRARY_LIST += \
-	$(if $(filter $(OS),WNT), \
-		$(call gb_Helper_optional,DBCONNECTIVITY,ado) \
-	) \
-	analysis \
-	animcore \
-	$(call gb_Helper_optional,AVMEDIA, \
-		$(if $(filter MACOSX,$(OS)),\
-			avmediaMacAVF \
-		) \
-	) \
-	bib \
-	cached1 \
-	$(if $(ENABLE_CAIRO_CANVAS),cairocanvas) \
-	cui \
-	date \
-	$(call gb_Helper_optional,DBCONNECTIVITY, \
-		dba \
-		dbase \
-		dbaxml \
-		dbpool2 \
-		dbu) \
-	$(call gb_Helper_optional,SCRIPTING,dlgprov) \
-	$(if $(ENABLE_EVOAB2),evoab) \
-	$(call gb_Helper_optional,DBCONNECTIVITY, \
-		flat \
-		file) \
-	$(if $(filter WNT,$(OS)), \
-		fps \
-	) \
-	$(if $(filter MACOSX,$(OS)),\
-		fps_aqua \
-	) \
-	graphicfilter \
-	hwp \
-	log \
-	$(if $(filter $(OS),MACOSX), \
-		macab1 \
-	) \
-	$(call gb_Helper_optional,DBCONNECTIVITY,mozbootstrap) \
-	$(call gb_Helper_optional,SCRIPTING,msforms) \
-	$(call gb_Helper_optional,DBCONNECTIVITY,mysql_jdbc) \
-	$(call gb_Helper_optional,MARIADBC,$(call gb_Helper_optional,DBCONNECTIVITY,mysqlc)) \
-	$(call gb_Helper_optional,DBCONNECTIVITY,odbc) \
-	pdffilter \
-	pricing \
-	$(call gb_Helper_optional,SCRIPTING,protocolhandler) \
-	$(call gb_Helper_optional,SCRIPTING,scriptframe) \
-	$(call gb_Helper_optional,DBCONNECTIVITY,sdbc2) \
-	$(call gb_Helper_optional,DBCONNECTIVITY,sdbt) \
-	slideshow \
-	$(if $(filter WNT,$(OS)), \
-		smplmail \
-	) \
-	solver \
-	storagefd \
-	svgfilter \
-	t602filter \
-	textconversiondlgs \
-	$(call gb_Helper_optional,XMLHELP,ucpchelp1) \
-	$(if $(ENABLE_LIBCMIS),ucpcmis1) \
-	$(if $(WITH_WEBDAV),ucpdav1) \
-	ucppkg1 \
 	wpftcalc \
 	wpftdraw \
 	wpftimpress \
@@ -192,9 +178,17 @@ gb_MERGE_LIBRARY_LIST += \
 		wininetbe1 \
 	) \
 	writerperfect \
+	xsec_xmlsec \
+	xmlfa \
+	xmlfd \
 	xmlsecurity \
+	xmlscript \
+	xo \
+	xof \
+	xsltdlg \
+	xsltfilter \
+	xstor \
 
-endif
 
 # allow module-deps.pl to color based on this.
 ifneq ($(ENABLE_PRINT_DEPS),)

@@ -181,7 +181,7 @@ enum class StructElement
     Figure, Formula, Form
 };
 
-class IF_MERGELIBS_MORE(SAL_DLLPRIVATE) PDFWriter
+class IF_MERGELIBS(SAL_DLLPRIVATE) PDFWriter
 {
     ScopedVclPtr<PDFWriterImpl> xImplementation;
 

@@ -234,7 +234,7 @@ public:
     SearchWordsNext(std::u16string_view rTxt, sal_Int32& rStt, sal_Int32 nEndPos, WordSearchStatus& rStatus) const;
 };
 
-class UNLESS_MERGELIBS_MORE(EDITENG_DLLPUBLIC) SvxAutoCorrectLanguageLists
+class UNLESS_MERGELIBS(EDITENG_DLLPUBLIC) SvxAutoCorrectLanguageLists
 {
     OUString sShareAutoCorrFile, sUserAutoCorrFile;
     // If the AutoCorr file is newer

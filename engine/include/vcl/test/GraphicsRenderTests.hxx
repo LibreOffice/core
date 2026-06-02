@@ -37,7 +37,7 @@ public:
     const Bitmap& getBitmap() const { return m_aResultantBitmap; }
 };
 
-class UNLESS_MERGELIBS_MORE(SAL_DLLPUBLIC_RTTI) GraphicsRenderTests
+class UNLESS_MERGELIBS(SAL_DLLPUBLIC_RTTI) GraphicsRenderTests
 {
     bool m_aStoreResultantBitmap;
 

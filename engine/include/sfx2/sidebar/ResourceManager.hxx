@@ -40,7 +40,7 @@ class ContextList;
     methods so that the sidebar can easily decide which content panels
     to display for a certain context.
 */
-class UNLESS_MERGELIBS_MORE(SFX2_DLLPUBLIC) ResourceManager
+class UNLESS_MERGELIBS(SFX2_DLLPUBLIC) ResourceManager
 {
 public:
 

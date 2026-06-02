@@ -49,7 +49,7 @@ namespace framework{
 
     @threadsafe
  */
-class UNLESS_MERGELIBS_MORE(FWK_DLLPUBLIC) TitleHelper final :
+class UNLESS_MERGELIBS(FWK_DLLPUBLIC) TitleHelper final :
                   public  ::comphelper::WeakImplHelper< css::frame::XTitle                 ,
                                                      css::frame::XTitleChangeBroadcaster,
                                                      css::frame::XTitleChangeListener   ,

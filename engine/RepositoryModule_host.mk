@@ -221,11 +221,10 @@ $(eval $(call repositorymodule_serialize,\
 	sc msword \
 	$(call gb_Helper_optional,DESKTOP,swui) \
 	sw \
-	$(if $(MERGELIBS_MORE),, \
+	$(if $(MERGELIBS), merged, \
 		sd \
 		$(call gb_Helper_optional,DBCONNECTIVITY,dbu) \
-		cui) \
-	$(if $(MERGELIBS), merged, \
+		cui \
 		chart2 oox svx svxcore xo sfx fwk svt vcl) \
 ))
 endif

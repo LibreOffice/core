@@ -43,7 +43,7 @@ namespace comphelper
 
         @see com.sun.star.beans.XPropertyState
     */
-    class UNLESS_MERGELIBS_MORE(COMPHELPER_DLLPUBLIC) OPropertyStateContainer
+    class UNLESS_MERGELIBS(COMPHELPER_DLLPUBLIC) OPropertyStateContainer
                 :public  OPropertyContainer
                 ,public  OPropertyStateContainer_TBase
     {

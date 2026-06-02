@@ -30,7 +30,7 @@ namespace com::sun::star::ucb { class XContent; }
 namespace svx
 {
     //= OComponentTransferable
-    class SAL_WARN_UNUSED UNLESS_MERGELIBS_MORE(SVX_DLLPUBLIC) OComponentTransferable final : public TransferDataContainer
+    class SAL_WARN_UNUSED UNLESS_MERGELIBS(SVX_DLLPUBLIC) OComponentTransferable final : public TransferDataContainer
     {
     public:
         OComponentTransferable();

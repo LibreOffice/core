@@ -45,7 +45,7 @@ namespace comphelper{
 
     @threadsafe
  */
-class UNLESS_MERGELIBS_MORE(COMPHELPER_DLLPUBLIC) NumberedCollection final :
+class UNLESS_MERGELIBS(COMPHELPER_DLLPUBLIC) NumberedCollection final :
                                               public  ::cppu::WeakImplHelper< css::frame::XUntitledNumbers >
 {
 

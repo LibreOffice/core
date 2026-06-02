@@ -38,7 +38,7 @@ namespace comphelper
     //= OSelectionChangeListener
 
     /// simple listener adapter for selections
-    class UNLESS_MERGELIBS_MORE(COMPHELPER_DLLPUBLIC) OSelectionChangeListener
+    class UNLESS_MERGELIBS(COMPHELPER_DLLPUBLIC) OSelectionChangeListener
     {
         friend class OSelectionChangeMultiplexer;
 

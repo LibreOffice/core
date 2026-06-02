@@ -223,7 +223,7 @@ private:
     void PositionDataSource(sal_Int32 nRecord);
 };
 
-class UNLESS_MERGELIBS_MORE(SVXCORE_DLLPUBLIC) DbGridControl : public svt::EditBrowseBox
+class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) DbGridControl : public svt::EditBrowseBox
 {
     friend class FmXGridSourcePropListener;
     friend class GridFieldValueListener;

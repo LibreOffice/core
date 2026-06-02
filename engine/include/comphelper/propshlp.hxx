@@ -48,7 +48,7 @@ namespace comphelper
    This is a modified copy of the cppuhelper::OPropertySetHelper class, except
    that is uses std::mutex instead of osl::Mutex.
  */
-class UNLESS_MERGELIBS_MORE(COMPHELPER_DLLPUBLIC) OPropertySetHelper
+class UNLESS_MERGELIBS(COMPHELPER_DLLPUBLIC) OPropertySetHelper
     : public virtual comphelper::UnoImplBase,
       public css::beans::XMultiPropertySet,
       public css::beans::XFastPropertySet,

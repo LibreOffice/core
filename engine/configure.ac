@@ -1666,11 +1666,8 @@ libo_FUZZ_ARG_ENABLE(skia-vulkan-validation,
 dnl ---------- *** ----------
 
 libo_FUZZ_ARG_ENABLE(mergelibs,
-    AS_HELP_STRING([--enable-mergelibs=yes/no/more],
-        [Merge several of the smaller libraries into one big "merged" library.
-         The "more" option will link even more of the smaller libraries.
-         "more" not appropriate for distros which split up LibreOffice into multiple packages.
-         It is only appropriate for situations where all of LO is delivered in a single install/package. ])
+    AS_HELP_STRING([--enable-mergelibs=yes/no],
+        [Merge several of the smaller libraries into one big "merged" library.])
 )
 
 libo_FUZZ_ARG_ENABLE(breakpad,
@@ -14891,7 +14888,6 @@ AC_LANG_POP([C++])
 # ===================================================================
 AC_MSG_CHECKING([whether to create huge library])
 MERGELIBS=
-MERGELIBS_MORE=
 
 if test $_os = iOS -o $_os = Android; then
     # Never any point in mergelibs for these as we build just static
@@ -14902,12 +14898,6 @@ fi
 if test -n "$enable_mergelibs" -a "$enable_mergelibs" != "no"; then
     if test "$enable_compiler_plugins" = yes; then
         AC_MSG_ERROR([--enable-mergelibs and --enable-compiler-plugins is an untested and unchecked combination, will most likely not work])
-    elif test "$enable_mergelibs" = "more"; then
-        MERGELIBS="TRUE"
-        MERGELIBS_MORE="TRUE"
-        AC_MSG_RESULT([yes (more)])
-        AC_DEFINE(ENABLE_MERGELIBS)
-        AC_DEFINE(ENABLE_MERGELIBS_MORE)
     elif test "$enable_mergelibs" = "yes" -o "$enable_mergelibs" = ""; then
         MERGELIBS="TRUE"
         AC_MSG_RESULT([yes])
@@ -14919,7 +14909,6 @@ else
     AC_MSG_RESULT([no])
 fi
 AC_SUBST([MERGELIBS])
-AC_SUBST([MERGELIBS_MORE])
 
 dnl ===================================================================
 dnl icerun is a wrapper that stops us spawning tens of processes

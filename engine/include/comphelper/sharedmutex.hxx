@@ -32,7 +32,7 @@ namespace comphelper
 
     //= SharedMutex
 
-    class UNLESS_MERGELIBS_MORE(COMPHELPER_DLLPUBLIC) SharedMutex
+    class UNLESS_MERGELIBS(COMPHELPER_DLLPUBLIC) SharedMutex
     {
     public:
         SharedMutex();

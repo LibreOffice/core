@@ -46,7 +46,7 @@ enum class SignatureState
 namespace DocumentSignatures
 {
 /** Get document signature state */
-UNLESS_MERGELIBS_MORE(SFX2_DLLPUBLIC)
+UNLESS_MERGELIBS(SFX2_DLLPUBLIC)
 SignatureState
 getSignatureState(const css::uno::Sequence<css::security::DocumentSignatureInformation>& aInfos);
 }

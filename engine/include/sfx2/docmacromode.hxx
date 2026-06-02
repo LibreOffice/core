@@ -179,7 +179,7 @@ namespace sfx2
 
         @see css::document::MacroExecMode
     */
-    class UNLESS_MERGELIBS_MORE(SFX2_DLLPUBLIC) DocumentMacroMode
+    class UNLESS_MERGELIBS(SFX2_DLLPUBLIC) DocumentMacroMode
     {
     public:
         /** creates an instance

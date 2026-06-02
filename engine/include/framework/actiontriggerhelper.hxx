@@ -28,7 +28,7 @@ namespace com::sun::star::container { class XIndexContainer; }
 
 namespace framework
 {
-    class UNLESS_MERGELIBS_MORE(FWK_DLLPUBLIC) ActionTriggerHelper
+    class UNLESS_MERGELIBS(FWK_DLLPUBLIC) ActionTriggerHelper
     {
         public:
             // Fills the submitted menu with the structure contained in the second

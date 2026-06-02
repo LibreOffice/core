@@ -48,7 +48,7 @@ typedef ::cppu::WeakImplHelper<
     RegressionCurveModel_Base;
 }
 
-class UNLESS_MERGELIBS_MORE(SAL_DLLPUBLIC_RTTI) RegressionCurveModel :
+class UNLESS_MERGELIBS(SAL_DLLPUBLIC_RTTI) RegressionCurveModel :
         public impl::RegressionCurveModel_Base,
         public ::property::OPropertySet
 {

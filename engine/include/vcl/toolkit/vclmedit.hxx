@@ -77,7 +77,7 @@ public:
     void            DisableSelectionOnFocus() { mbSelectOnTab = false; }
 };
 
-class UNLESS_MERGELIBS_MORE(VCL_DLLPUBLIC) VclMultiLineEdit : public Edit
+class UNLESS_MERGELIBS(VCL_DLLPUBLIC) VclMultiLineEdit : public Edit
 {
     friend class VCLXAccessibleEdit;
 

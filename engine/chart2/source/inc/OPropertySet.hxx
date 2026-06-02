@@ -35,7 +35,7 @@
 namespace property
 {
 
-class UNLESS_MERGELIBS_MORE(SAL_DLLPUBLIC_RTTI) OPropertySet :
+class UNLESS_MERGELIBS(SAL_DLLPUBLIC_RTTI) OPropertySet :
     protected cppu::BaseMutex,
     public ::cppu::OBroadcastHelper,
     // includes beans::XPropertySet, XMultiPropertySet and XFastPropertySet

@@ -55,7 +55,7 @@ namespace dbtools
         controls which act as live filter, which could be implemented with a third component), but
         at the moment there are only these two.
     */
-    class UNLESS_MERGELIBS_MORE(OOO_DLLPUBLIC_DBTOOLS) FilterManager
+    class UNLESS_MERGELIBS(OOO_DLLPUBLIC_DBTOOLS) FilterManager
     {
     public:
         enum class FilterComponent

@@ -25,7 +25,7 @@
 
 namespace connectivity
 {
-    class UNLESS_MERGELIBS_MORE(OOO_DLLPUBLIC_DBTOOLS) BlobHelper final : public ::cppu::WeakImplHelper< css::sdbc::XBlob >
+    class UNLESS_MERGELIBS(OOO_DLLPUBLIC_DBTOOLS) BlobHelper final : public ::cppu::WeakImplHelper< css::sdbc::XBlob >
     {
         css::uno::Sequence< sal_Int8 > m_aValue;
     public:

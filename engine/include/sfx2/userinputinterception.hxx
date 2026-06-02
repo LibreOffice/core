@@ -45,7 +45,7 @@ namespace sfx2
     /** helper class for implementing the XUserInputInterception interface
         for a controller implementation
     */
-    class UNLESS_MERGELIBS_MORE(SFX2_DLLPUBLIC) UserInputInterception
+    class UNLESS_MERGELIBS(SFX2_DLLPUBLIC) UserInputInterception
     {
     public:
         UserInputInterception( ::cppu::OWeakObject& _rControllerImpl, ::osl::Mutex& _rMutex );

@@ -95,7 +95,7 @@ namespace o3tl {
 Eg. the Insert() method will take the current cursor position, insert the
 string, and take care of undo etc.
 */
-class UNLESS_MERGELIBS_MORE(SAL_DLLPUBLIC_RTTI) SwWrtShell final : public SwFEShell
+class UNLESS_MERGELIBS(SAL_DLLPUBLIC_RTTI) SwWrtShell final : public SwFEShell
 {
 private:
     using SwCursorShell::Left;

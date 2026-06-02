@@ -186,7 +186,7 @@ namespace dbaui
                                            ,   css::awt::XUserInputInterception
                                            >   OGenericUnoController_Base;
 
-    class UNLESS_MERGELIBS_MORE(DBACCESS_DLLPUBLIC) OGenericUnoController
+    class UNLESS_MERGELIBS(DBACCESS_DLLPUBLIC) OGenericUnoController
                                 :public OGenericUnoController_MBASE
                                 ,public OGenericUnoController_Base
                                 ,public IController

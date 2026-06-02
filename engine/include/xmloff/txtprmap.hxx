@@ -220,7 +220,7 @@ enum class TextPropMap {
     CELL = 11
 };
 
-class UNLESS_MERGELIBS_MORE(XMLOFF_DLLPUBLIC) XMLTextPropertySetMapper final : public XMLPropertySetMapper
+class UNLESS_MERGELIBS(XMLOFF_DLLPUBLIC) XMLTextPropertySetMapper final : public XMLPropertySetMapper
 {
 public:
     XMLTextPropertySetMapper( TextPropMap nType, bool bForExport );

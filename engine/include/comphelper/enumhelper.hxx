@@ -38,7 +38,7 @@ namespace comphelper
 /** provides a com.sun.star.container::XEnumeration access based
     on an object implementing the com.sun.star.container::XNameAccess interface
 */
-class UNLESS_MERGELIBS_MORE(COMPHELPER_DLLPUBLIC) OEnumerationByName final :
+class UNLESS_MERGELIBS(COMPHELPER_DLLPUBLIC) OEnumerationByName final :
                          public ::cppu::WeakImplHelper< css::container::XEnumeration ,
                                                           css::lang::XEventListener    >
 {
@@ -100,7 +100,7 @@ class SAL_DLLPUBLIC_TEMPLATE OAnyEnumeration_BASE
     for an outside set vector of Any's.
 
 */
-class UNLESS_MERGELIBS_MORE(COMPHELPER_DLLPUBLIC) OAnyEnumeration final :
+class UNLESS_MERGELIBS(COMPHELPER_DLLPUBLIC) OAnyEnumeration final :
                                            public OAnyEnumeration_BASE
 {
     sal_Int32                         m_nPos;

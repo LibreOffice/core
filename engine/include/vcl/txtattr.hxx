@@ -74,7 +74,7 @@ public:
 
 };
 
-class UNLESS_MERGELIBS_MORE(VCL_DLLPUBLIC) TextAttribFontWeight final : public TextAttrib
+class UNLESS_MERGELIBS(VCL_DLLPUBLIC) TextAttribFontWeight final : public TextAttrib
 {
 private:
     FontWeight  meWeight;

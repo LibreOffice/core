@@ -61,7 +61,7 @@ namespace accessibility {
                                 >   AccessibleControlShape_Base;
 /** @descr
 */
-class UNLESS_MERGELIBS_MORE(SAL_DLLPUBLIC_RTTI) AccessibleControlShape final
+class UNLESS_MERGELIBS(SAL_DLLPUBLIC_RTTI) AccessibleControlShape final
         :public AccessibleShape
         ,public AccessibleControlShape_Base
 {

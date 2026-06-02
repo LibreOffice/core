@@ -47,7 +47,7 @@ enum class SvTabListBoxRole
     Grid        // flat, multi-column
 };
 
-class UNLESS_MERGELIBS_MORE(VCL_DLLPUBLIC) SvTabListBox : public SvTreeListBox
+class UNLESS_MERGELIBS(VCL_DLLPUBLIC) SvTabListBox : public SvTreeListBox
 {
 private:
     std::vector<SvLBoxTab>      mvTabList;
@@ -121,7 +121,7 @@ namespace vcl {
 }
 class AccessibleBrowseBoxHeaderCell;
 
-class UNLESS_MERGELIBS_MORE(VCL_DLLPUBLIC) SvHeaderTabListBox final : public SvTabListBox, public vcl::IAccessibleTableProvider
+class UNLESS_MERGELIBS(VCL_DLLPUBLIC) SvHeaderTabListBox final : public SvTabListBox, public vcl::IAccessibleTableProvider
 {
 private:
     bool                            m_bFirstPaint;

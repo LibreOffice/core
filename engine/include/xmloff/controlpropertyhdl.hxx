@@ -94,7 +94,7 @@ namespace xmloff
 
     //= ImageScaleModeHandler
 
-    class UNLESS_MERGELIBS_MORE(XMLOFF_DLLPUBLIC) ImageScaleModeHandler final : public XMLConstantsPropertyHandler
+    class UNLESS_MERGELIBS(XMLOFF_DLLPUBLIC) ImageScaleModeHandler final : public XMLConstantsPropertyHandler
     {
     public:
         ImageScaleModeHandler();
@@ -103,7 +103,7 @@ namespace xmloff
 
     //= OControlPropertyHandlerFactory
 
-    class UNLESS_MERGELIBS_MORE(XMLOFF_DLLPUBLIC) OControlPropertyHandlerFactory : public XMLPropertyHandlerFactory
+    class UNLESS_MERGELIBS(XMLOFF_DLLPUBLIC) OControlPropertyHandlerFactory : public XMLPropertyHandlerFactory
     {
         mutable std::unique_ptr<XMLConstantsPropertyHandler>    m_pTextAlignHandler;
         mutable std::unique_ptr<OControlBorderHandler>          m_pControlBorderStyleHandler;

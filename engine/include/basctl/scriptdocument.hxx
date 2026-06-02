@@ -68,7 +68,7 @@ namespace basctl
 
     /** encapsulates a document which contains Basic scripts and dialogs
     */
-    class UNLESS_MERGELIBS_MORE(BASCTL_DLLPUBLIC) ScriptDocument
+    class UNLESS_MERGELIBS(BASCTL_DLLPUBLIC) ScriptDocument
     {
     private:
         class Impl;

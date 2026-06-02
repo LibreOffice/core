@@ -50,7 +50,7 @@ typedef ::std::vector< ScCsvColState > ScCsvColStateVec;
     for the CSV preview. Rendering is performed on the client side: this
     class serialises its state via DumpWidgetData() and receives user
     interactions via HandleCustomEvent(). No VCL drawing is done here. */
-class UNLESS_MERGELIBS_MORE(SAL_DLLPUBLIC_RTTI) ScCsvGrid : public ScCsvControl
+class UNLESS_MERGELIBS(SAL_DLLPUBLIC_RTTI) ScCsvGrid : public ScCsvControl
 {
 private:
     ScCsvTableBox*              mpTableBox;         /// Grid Parent

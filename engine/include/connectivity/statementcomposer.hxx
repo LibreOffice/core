@@ -40,7 +40,7 @@ namespace dbtools
     struct StatementComposer_Data;
     /** a class which is able to compose queries (SELECT statements) from a command and a command type
     */
-    class UNLESS_MERGELIBS_MORE(OOO_DLLPUBLIC_DBTOOLS) StatementComposer
+    class UNLESS_MERGELIBS(OOO_DLLPUBLIC_DBTOOLS) StatementComposer
     {
         ::std::unique_ptr< StatementComposer_Data >   m_pData;
 

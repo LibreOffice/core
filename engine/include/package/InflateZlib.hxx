@@ -16,7 +16,7 @@
 
 namespace ZipUtils
 {
-class UNLESS_MERGELIBS_MORE(DLLPUBLIC_PACKAGE) InflateZlib : public Inflater
+class UNLESS_MERGELIBS(DLLPUBLIC_PACKAGE) InflateZlib : public Inflater
 {
 private:
     bool bFinished;

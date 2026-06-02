@@ -62,7 +62,7 @@ struct ThumbnailItemAttributes
     drawinglayer::attribute::FontAttribute aFontAttr;
 };
 
-class UNLESS_MERGELIBS_MORE(SFX2_DLLPUBLIC) ThumbnailViewItem
+class UNLESS_MERGELIBS(SFX2_DLLPUBLIC) ThumbnailViewItem
 {
 public:
 

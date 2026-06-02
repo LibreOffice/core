@@ -27,7 +27,7 @@
 
 namespace utl
 {
-    class UNLESS_MERGELIBS_MORE(UNOTOOLS_DLLPUBLIC) LocalFileHelper
+    class UNLESS_MERGELIBS(UNOTOOLS_DLLPUBLIC) LocalFileHelper
     {
     public:
         static          css::uno::Sequence< OUString >

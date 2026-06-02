@@ -167,7 +167,7 @@ namespace comphelper
     /** This is a hack (when proper joining is not possible), use of which
         should be avoided by good design.
      */
-    class UNLESS_MERGELIBS_MORE(COMPHELPER_DLLPUBLIC) AsyncEventNotifierAutoJoin final
+    class UNLESS_MERGELIBS(COMPHELPER_DLLPUBLIC) AsyncEventNotifierAutoJoin final
         : public AsyncEventNotifierBase
         , private osl::Thread
     {

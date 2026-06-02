@@ -132,7 +132,7 @@ public:
 
 //  class VCLXCheckBox
 
-class UNLESS_MERGELIBS_MORE(TOOLKIT_DLLPUBLIC) VCLXCheckBox final : public cppu::ImplInheritanceHelper<
+class UNLESS_MERGELIBS(TOOLKIT_DLLPUBLIC) VCLXCheckBox final : public cppu::ImplInheritanceHelper<
                         VCLXGraphicControl,
                         css::awt::XCheckBox,
                         css::awt::XButton>
@@ -180,7 +180,7 @@ public:
 
 //  class VCLXRadioButton
 
-class UNLESS_MERGELIBS_MORE(TOOLKIT_DLLPUBLIC) VCLXRadioButton final : public cppu::ImplInheritanceHelper<
+class UNLESS_MERGELIBS(TOOLKIT_DLLPUBLIC) VCLXRadioButton final : public cppu::ImplInheritanceHelper<
                         VCLXGraphicControl,
                         css::awt::XRadioButton,
                         css::awt::XButton>
@@ -291,7 +291,7 @@ public:
 
 //  class VCLXScrollBar
 
-class UNLESS_MERGELIBS_MORE(TOOLKIT_DLLPUBLIC) VCLXScrollBar final :
+class UNLESS_MERGELIBS(TOOLKIT_DLLPUBLIC) VCLXScrollBar final :
                         public cppu::ImplInheritanceHelper<VCLXWindow, css::awt::XScrollBar>
 {
 private:
@@ -345,7 +345,7 @@ public:
 
 //  class VCLXEdit
 
-class UNLESS_MERGELIBS_MORE(SAL_DLLPUBLIC_RTTI) VCLXEdit :  public cppu::ImplInheritanceHelper<
+class UNLESS_MERGELIBS(SAL_DLLPUBLIC_RTTI) VCLXEdit :  public cppu::ImplInheritanceHelper<
                     VCLXWindow,
                     css::awt::XTextComponent,
                     css::awt::XTextEditField,
@@ -522,7 +522,7 @@ protected:
     virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
 };
 
-class UNLESS_MERGELIBS_MORE(TOOLKIT_DLLPUBLIC) SVTXNumericField final : public cppu::ImplInheritanceHelper<SVTXFormattedField, css::awt::XNumericField>
+class UNLESS_MERGELIBS(TOOLKIT_DLLPUBLIC) SVTXNumericField final : public cppu::ImplInheritanceHelper<SVTXFormattedField, css::awt::XNumericField>
 {
 public:
                     SVTXNumericField();

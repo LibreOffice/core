@@ -71,7 +71,7 @@ namespace svxform
     /** helper class which needs access to a (shared and ref-counted) OSystemParseContext
         instance.
     */
-    class UNLESS_MERGELIBS_MORE(SVXCORE_DLLPUBLIC) OParseContextClient
+    class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) OParseContextClient
     {
     protected:
         OParseContextClient();

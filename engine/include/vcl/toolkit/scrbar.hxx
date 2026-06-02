@@ -31,7 +31,7 @@
 
 struct ImplScrollBarData;
 
-class UNLESS_MERGELIBS_MORE(VCL_DLLPUBLIC) ScrollBar final : public Control
+class UNLESS_MERGELIBS(VCL_DLLPUBLIC) ScrollBar final : public Control
                               , public Scrollable
 {
 private:

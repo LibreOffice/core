@@ -54,7 +54,7 @@ protected:
 
 typedef ::comphelper::WeakComponentImplHelper< css::table::XTable, css::util::XBroadcaster > TableModelBase;
 
-class UNLESS_MERGELIBS_MORE(SVXCORE_DLLPUBLIC) TableModel final :
+class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) TableModel final :
                    public TableModelBase,
                    public ICellRange
 {

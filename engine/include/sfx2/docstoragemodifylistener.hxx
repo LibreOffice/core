@@ -51,7 +51,7 @@ namespace sfx2
 
     //= DocumentStorageModifyListener
 
-    class UNLESS_MERGELIBS_MORE(SFX2_DLLPUBLIC) DocumentStorageModifyListener final : public cppu::WeakImplHelper<css::util::XModifyListener>
+    class UNLESS_MERGELIBS(SFX2_DLLPUBLIC) DocumentStorageModifyListener final : public cppu::WeakImplHelper<css::util::XModifyListener>
     {
         IModifiableDocument*    m_pDocument;
         comphelper::SolarMutex& m_rMutex;

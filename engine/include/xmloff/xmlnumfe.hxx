@@ -44,7 +44,7 @@ class SvXMLNumUsedList_Impl;
 
 class SvXMLEmbeddedTextEntryArr;
 
-class UNLESS_MERGELIBS_MORE(XMLOFF_DLLPUBLIC) SvXMLNumFmtExport final
+class UNLESS_MERGELIBS(XMLOFF_DLLPUBLIC) SvXMLNumFmtExport final
 {
 private:
     SvXMLExport&                m_rExport;

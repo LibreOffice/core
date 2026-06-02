@@ -56,7 +56,7 @@ namespace connectivity
 
     // Allows to access all driver which are located in the configuration
 
-    class UNLESS_MERGELIBS_MORE(OOO_DLLPUBLIC_DBTOOLS) DriversConfig
+    class UNLESS_MERGELIBS(OOO_DLLPUBLIC_DBTOOLS) DriversConfig
     {
         typedef comphelper::SingletonRef<DriversConfigImpl> OSharedConfigNode;
 

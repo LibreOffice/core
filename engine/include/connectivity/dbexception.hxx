@@ -146,7 +146,7 @@ private:
 //= SQLExceptionIteratorHelper - iterating through an SQLException chain
 
 
-class UNLESS_MERGELIBS_MORE(OOO_DLLPUBLIC_DBTOOLS) SQLExceptionIteratorHelper final
+class UNLESS_MERGELIBS(OOO_DLLPUBLIC_DBTOOLS) SQLExceptionIteratorHelper final
 {
     const css::sdbc::SQLException* m_pCurrent;
     SQLExceptionInfo::TYPE                      m_eCurrentType;

@@ -59,7 +59,7 @@ enum SvxNumberFormatCategory
 #define NUMBERFORMAT_ENTRY_NEW_CURRENCY     NUMBERFORMAT_ENTRY_NOT_FOUND-1
 
 
-class UNLESS_MERGELIBS_MORE(SVX_DLLPUBLIC) SvxNumberFormatShell
+class UNLESS_MERGELIBS(SVX_DLLPUBLIC) SvxNumberFormatShell
 {
 public:
                         SvxNumberFormatShell( SvNumberFormatter* pNumFormatter,

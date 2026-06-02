@@ -18,7 +18,7 @@
 
 namespace writerperfect
 {
-class UNLESS_MERGELIBS_MORE(WRITERPERFECT_DLLPUBLIC) WPFTEncodingDialog final
+class UNLESS_MERGELIBS(WRITERPERFECT_DLLPUBLIC) WPFTEncodingDialog final
     : public weld::GenericDialogController
 {
 public:

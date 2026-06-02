@@ -47,7 +47,7 @@ namespace xmloff
     class XMLSettingsExportContext;
 }
 
-class UNLESS_MERGELIBS_MORE(XMLOFF_DLLPUBLIC) XMLSettingsExportHelper
+class UNLESS_MERGELIBS(XMLOFF_DLLPUBLIC) XMLSettingsExportHelper
 {
     ::xmloff::XMLSettingsExportContext& m_rContext;
 

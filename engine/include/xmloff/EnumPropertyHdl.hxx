@@ -29,7 +29,7 @@ template <typename EnumT> struct SvXMLEnumMapEntry;
 /**
     PropertyHandler for a generic xml enumeration type:
 */
-class UNLESS_MERGELIBS_MORE(XMLOFF_DLLPUBLIC) XMLEnumPropertyHdl : public XMLPropertyHandler
+class UNLESS_MERGELIBS(XMLOFF_DLLPUBLIC) XMLEnumPropertyHdl : public XMLPropertyHandler
 {
 private:
     const SvXMLEnumMapEntry<sal_uInt16>* mpEnumMap;

@@ -61,7 +61,7 @@ namespace basic
 
     //= BasicManagerRepository
 
-    class UNLESS_MERGELIBS_MORE(BASIC_DLLPUBLIC) BasicManagerRepository
+    class UNLESS_MERGELIBS(BASIC_DLLPUBLIC) BasicManagerRepository
     {
     public:
         /** returns the BasicManager belonging to the given document
