@@ -18,22 +18,3 @@
 
 #include "macros.inc"
 
-/* *** Additional Extensions *** */
-
-#ifdef WITH_EXTENSION_INTEGRATION
-
-
-/* ** Script provider for JavaScript ** */
-
-#if defined ENABLE_JAVA && !defined WITHOUT_SCRIPTING_JAVASCRIPT
-
-File gid_File_Rdb_Scriptproviderforjavascript
-    TXT_FILE_BODY;
-    Name = "scriptproviderforjavascript.rdb";
-    Dir = gid_Brand_Dir_Program_Services;
-    Styles = (PACKED);
-End
-
-#endif
-
-#endif

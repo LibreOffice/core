@@ -18,13 +18,8 @@ $(eval $(call gb_Module_add_targets,scripting,\
 		Jar_MemoryUsage \
 		Jar_ScriptFramework \
 		Jar_ScriptProviderForJava \
-		$(if $(ENABLE_SCRIPTING_JAVASCRIPT),\
-			Jar_ScriptProviderForJavaScript \
-			Rdb_scriptproviderforjavascript \
-		) \
 		Package_java \
 		Package_java_jars \
-		$(if $(ENABLE_SCRIPTING_JAVASCRIPT),Package_ScriptsJavaScript) \
 	) \
 	Package_scriptbindinglib \
 	$(if $(DISABLE_PYTHON),,\

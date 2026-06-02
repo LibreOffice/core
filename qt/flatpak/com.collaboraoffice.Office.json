@@ -1000,7 +1000,6 @@
         "--disable-qt5",
         "--disable-randr",
         "--disable-sal-log",
-        "--disable-scripting-javascript",
         "--disable-sdremote",
         "--disable-sdremote-bluetooth",
         "--enable-cairo-rgba",

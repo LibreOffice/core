@@ -1047,7 +1047,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/script/provide
 	ScriptProvider \
 	ScriptProviderForBasic \
 	ScriptProviderForJava \
-	ScriptProviderForJavaScript \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/script/vba,\
 	VBASpreadsheetEventProcessor \

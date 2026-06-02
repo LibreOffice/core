@@ -2544,22 +2544,6 @@ AC_ARG_WITH(hsqldb-jar,
         [Specify path to jarfile manually.]),
     HSQLDB_JAR=$withval)
 
-libo_FUZZ_ARG_ENABLE(scripting-javascript,
-    AS_HELP_STRING([--disable-scripting-javascript],
-        [Disable support for scripts in JavaScript.]),
-,
-)
-
-AC_ARG_WITH(system-rhino,
-    AS_HELP_STRING([--with-system-rhino],
-        [Use rhino already on system.]),,
-    [with_system_rhino="$with_system_jars"])
-
-AC_ARG_WITH(rhino-jar,
-    AS_HELP_STRING([--with-rhino-jar=JARFILE],
-        [Specify path to jarfile manually.]),
-    RHINO_JAR=$withval)
-
 AC_ARG_WITH(system-jfreereport,
     AS_HELP_STRING([--with-system-jfreereport],
         [Use JFreeReport already on system.]),,
@@ -12995,40 +12979,6 @@ fi
 AC_SUBST(ENABLE_JAVA_WEBSOCKET)
 AC_SUBST(SYSTEM_JAVA_WEBSOCKET)
 AC_SUBST(JAVA_WEBSOCKET_JAR)
-
-# scripting provider for JavaScript?
-AC_MSG_CHECKING([whether to build support for scripts in JavaScript])
-if test "${enable_scripting_javascript}" != "no" -a "x$with_java" != "xno"; then
-    AC_MSG_RESULT([yes])
-    ENABLE_SCRIPTING_JAVASCRIPT=TRUE
-
-    dnl ===================================================================
-    dnl Check for system rhino
-    dnl ===================================================================
-    AC_MSG_CHECKING([which rhino to use])
-    if test "$with_system_rhino" = "yes"; then
-        AC_MSG_RESULT([external])
-        SYSTEM_RHINO=TRUE
-        if test -z $RHINO_JAR; then
-            RHINO_JAR=/usr/share/java/js.jar
-        fi
-        if ! test -f $RHINO_JAR; then
-            AC_MSG_ERROR(js.jar not found.)
-        fi
-    else
-        AC_MSG_RESULT([internal])
-        SYSTEM_RHINO=
-        BUILD_TYPE="$BUILD_TYPE RHINO"
-        NEED_ANT=TRUE
-    fi
-else
-    AC_MSG_RESULT([no])
-    ENABLE_SCRIPTING_JAVASCRIPT=
-    SCPDEFS="$SCPDEFS -DWITHOUT_SCRIPTING_JAVASCRIPT"
-fi
-AC_SUBST(ENABLE_SCRIPTING_JAVASCRIPT)
-AC_SUBST(SYSTEM_RHINO)
-AC_SUBST(RHINO_JAR)
 
 # This is only used in Qt5/Qt6/KF5/KF6 checks to determine if /usr/lib64
 # paths should be added to library search path. So let's put all 64-bit

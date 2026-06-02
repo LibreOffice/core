@@ -3606,31 +3606,6 @@ endef
 
 endif # SYSTEM_HSQLDB
 
-
-ifeq ($(ENABLE_SCRIPTING_JAVASCRIPT),TRUE)
-
-ifneq ($(SYSTEM_RHINO),)
-
-define gb_Jar__use_rhino
-$(call gb_Jar_use_system_jar,$(1),$(RHINO_JAR))
-endef
-
-else # !SYSTEM_RHINO
-
-ifeq ($(ENABLE_JAVA),TRUE)
-$(eval $(call gb_Helper_register_jars_for_install,OOO,extensions_rhino, \
-	js \
-))
-endif
-
-define gb_Jar__use_rhino
-$(call gb_Jar_use_jar,$(1),js)
-endef
-
-endif # SYSTEM_RHINO
-
-endif
-
 # As a guide, Java-Websocket was packaged for Fedora 35
 # https://src.fedoraproject.org/rpms/Java-WebSocket/tree/f35
 ifneq ($(SYSTEM_JAVA_WEBSOCKET),)

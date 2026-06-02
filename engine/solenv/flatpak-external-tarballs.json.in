@@ -616,13 +616,6 @@
         "dest-filename": "@JFREEREPORT_LIBXML_TARBALL@"
     },
     {
-        "url": "https://dev-www.libreoffice.org/src/@RHINO_TARBALL@",
-        "sha256": "@RHINO_SHA256SUM@",
-        "type": "file",
-        "dest": "external/tarballs",
-        "dest-filename": "@RHINO_TARBALL@"
-    },
-    {
         "url": "https://dev-www.libreoffice.org/src/@JFREEREPORT_SAC_TARBALL@",
         "sha256": "@JFREEREPORT_SAC_SHA256SUM@",
         "type": "file",
