@@ -131,7 +131,17 @@ void SdPage::onParagraphRemoving( const ::Outliner* pOutliner, Paragraph const *
          * paragraphs at a shape are unlikely... */
         aTarget.Paragraph = static_cast<sal_Int16>(pOutliner->GetAbsPos( pPara ));
 
-        getMainSequence()->disposeTextRange( Any( aTarget ) );
+        // Whether the paragraph before the removed one is empty, read from the
+        // editing outliner that holds the live text.
+        bool bPreviousParagraphEmpty = false;
+        if( aTarget.Paragraph > 0 )
+        {
+            Paragraph* pPrevPara = pOutliner->GetParagraph( aTarget.Paragraph - 1 );
+            if( pPrevPara )
+                bPreviousParagraphEmpty = pOutliner->GetText( pPrevPara ).isEmpty();
+        }
+
+        getMainSequence()->disposeTextRange( Any( aTarget ), bPreviousParagraphEmpty );
     }
 }
 
