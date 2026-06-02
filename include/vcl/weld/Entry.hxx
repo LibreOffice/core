@@ -10,6 +10,7 @@
 #pragma once
 
 #include <vcl/dllapi.h>
+#include <vcl/weld/EntryMessageType.hxx>
 #include <vcl/weld/TextWidget.hxx>
 
 enum class TxtAlign;

@@ -42,13 +42,6 @@ template <typename T> T fromId(const OUString& rValue)
     return reinterpret_cast<T>(rValue.toUInt64());
 }
 
-enum class EntryMessageType
-{
-    Normal,
-    Warning,
-    Error,
-};
-
 class VCL_DLLPUBLIC Button : virtual public Widget
 {
     friend class ::LOKTrigger;
