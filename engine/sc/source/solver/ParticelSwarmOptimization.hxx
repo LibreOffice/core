@@ -19,9 +19,9 @@ struct Particle
     Particle(size_t nDimensionality)
         : mVelocity(nDimensionality)
         , mPosition(nDimensionality)
-        , mCurrentFitness(std::numeric_limits<float>::lowest())
+        , mCurrentFitness(std::numeric_limits<double>::lowest())
         , mBestPosition(nDimensionality)
-        , mBestFitness(std::numeric_limits<float>::lowest())
+        , mBestFitness(std::numeric_limits<double>::lowest())
     {
     }
 
@@ -71,7 +71,7 @@ public:
         , mnDimensionality(mrDataProvider.getDimensionality())
         , maRandom01(0.0, 1.0)
         , maBestPosition(mnDimensionality)
-        , mfBestFitness(std::numeric_limits<float>::lowest())
+        , mfBestFitness(std::numeric_limits<double>::lowest())
         , mnGeneration(0)
         , mnLastChange(0)
     {
@@ -89,7 +89,7 @@ public:
         mnLastChange = 0;
         maSwarm.clear();
 
-        mfBestFitness = std::numeric_limits<float>::lowest();
+        mfBestFitness = std::numeric_limits<double>::lowest();
 
         maSwarm.reserve(mnNumOfParticles);
         for (size_t i = 0; i < mnNumOfParticles; i++)

@@ -336,8 +336,12 @@ double SwarmSolver::calculateFitness(std::vector<double> const& rVariables)
 {
     applyVariables(rVariables);
 
+    // An infeasible candidate must rank below every feasible one, including a
+    // feasible point whose objective is more negative than the float range can
+    // represent. Use the lowest double so the search is never drawn towards a
+    // point that breaks the constraints.
     if (doesViolateConstraints())
-        return std::numeric_limits<float>::lowest();
+        return std::numeric_limits<double>::lowest();
 
     double x = getValue(maObjective);
 

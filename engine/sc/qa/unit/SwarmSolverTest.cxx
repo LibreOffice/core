@@ -28,6 +28,7 @@ class SwarmSolverTest : public UnoApiTest
     void testTwoVariables();
     void testMultipleVariables();
     void testInfeasibleConstraints();
+    void testLargeObjectiveStillSolvable();
 
 public:
     SwarmSolverTest()
@@ -42,6 +43,7 @@ public:
     CPPUNIT_TEST(testMultipleVariables);
     CPPUNIT_TEST(testTwoVariables);
     CPPUNIT_TEST(testInfeasibleConstraints);
+    CPPUNIT_TEST(testLargeObjectiveStillSolvable);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -368,6 +370,58 @@ void SwarmSolverTest::testInfeasibleConstraints()
 
         CPPUNIT_ASSERT_MESSAGE("Infeasible model must not report success", !xSolver->getSuccess());
     }
+}
+
+void SwarmSolverTest::testLargeObjectiveStillSolvable()
+{
+    // Regression: a feasible objective below the float range used to lose to the
+    // infeasible penalty, so the search gave up on a solvable model. Differential
+    // Evolution only, until Particle Swarm Optimization's result handling is fixed.
+
+    loadFromFile(u"Simple.ods");
+
+    uno::Reference<sheet::XSpreadsheetDocument> xDocument(mxComponent, uno::UNO_QUERY_THROW);
+
+    uno::Reference<sheet::XSolver> xSolver;
+    xSolver.set(m_xContext->getServiceManager()->createInstanceWithContext(
+                    u"com.sun.star.comp.Calc.SwarmSolver"_ustr, m_xContext),
+                uno::UNO_QUERY_THROW);
+
+    table::CellAddress aObjective(0, 1, 1);
+    uno::Sequence<table::CellAddress> aVariables{ { 0, 1, 0 } };
+
+    // The variable is pushed far enough out that the objective
+    // 10*B1^2 - 60*B1 - 40 reaches the 1e39 range, beyond what a float can
+    // hold. Minimizing turns that into a fitness near -1e39. The objective cap
+    // is a non-bounded constraint, so the upper part of the box is infeasible
+    // while the lower end stays feasible.
+    uno::Sequence<sheet::SolverConstraint> aConstraints{
+        { /* [0] Left     */ table::CellAddress(0, 1, 0),
+          /*     Operator */ sheet::SolverConstraintOperator_GREATER_EQUAL,
+          /*     Right    */ uno::Any(1.0e19) },
+        { /* [1] Left     */ table::CellAddress(0, 1, 0),
+          /*     Operator */ sheet::SolverConstraintOperator_LESS_EQUAL,
+          /*     Right    */ uno::Any(2.0e19) },
+        { /* [2] Left     */ table::CellAddress(0, 1, 1),
+          /*     Operator */ sheet::SolverConstraintOperator_LESS_EQUAL,
+          /*     Right    */ uno::Any(2.0e39) }
+    };
+
+    xSolver->setDocument(xDocument);
+    xSolver->setObjective(aObjective);
+    xSolver->setVariables(aVariables);
+    xSolver->setConstraints(aConstraints);
+    xSolver->setMaximize(false);
+
+    xSolver->solve();
+
+    CPPUNIT_ASSERT_MESSAGE("Solvable model must report success", xSolver->getSuccess());
+
+    uno::Sequence<double> aSolution = xSolver->getSolution();
+    CPPUNIT_ASSERT_EQUAL(aVariables.getLength(), aSolution.getLength());
+    // the returned point must lie in the feasible part of the box
+    CPPUNIT_ASSERT(aSolution[0] >= 1.0e19);
+    CPPUNIT_ASSERT(aSolution[0] <= 2.0e19);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwarmSolverTest);
