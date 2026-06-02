@@ -426,8 +426,11 @@ void DocumentBroker::pollThread()
         {
             lastStaleRenderCheck = now;
             auto stale = _tileCache->takeStaleRendersForReissue(now);
-            if (!stale.empty())
-                sendTileCombine(TileCombined::create(stale));
+            // stale spans the whole render map, which is keyed including
+            // canonicalViewId, so it can mix tiles from several views. Bucket
+            // by tilecombine params before sending.
+            for (const auto& combine : TileCombined::createGroups(stale))
+                sendTileCombine(combine);
         }
 
         if (isInteractive())
@@ -5184,33 +5187,8 @@ void DocumentBroker::sendRequestedTiles(const std::shared_ptr<ClientSession>& se
             {
                 // but if not, split them by matching groups of requests to send a separate
                 // tilecombine for each group
-                std::vector<std::vector<TileDesc>> groupsNeedsRendering(1);
-                auto it = tilesNeedsRendering.begin();
-                // start off with one group bucket
-                groupsNeedsRendering[0].push_back(*it++);
-                while (it != tilesNeedsRendering.end())
-                {
-                    bool inserted = false;
-                    // check if tile should go into an existing group bucket
-                    for (size_t i = 0; i < groupsNeedsRendering.size(); ++i)
-                    {
-                        if (it->sameTileCombineParams(groupsNeedsRendering[i][0]))
-                        {
-                            groupsNeedsRendering[i].push_back(*it);
-                            inserted = true;
-                            break;
-                        }
-                    }
-                    // if not, add another and put it there
-                    if (!inserted)
-                    {
-                        groupsNeedsRendering.emplace_back();
-                        groupsNeedsRendering.back().push_back(*it);
-                    }
-                    ++it;
-                }
-                for (const auto& group : groupsNeedsRendering)
-                    sendTileCombine(TileCombined::create(group));
+                for (const auto& combine : TileCombined::createGroups(tilesNeedsRendering))
+                    sendTileCombine(combine);
             }
         }
     }
