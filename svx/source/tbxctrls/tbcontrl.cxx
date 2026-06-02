@@ -37,10 +37,10 @@
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/Menu.hxx>
 #include <vcl/weld/ScrolledWindow.hxx>
+#include <vcl/weld/TransportAsXWindow.hxx>
 #include <vcl/weld/TreeView.hxx>
 #include <vcl/weld/Window.hxx>
 #include <vcl/weld/customweld.hxx>
-#include <vcl/weld/weldutils.hxx>
 #include <svtools/valueset.hxx>
 #include <svtools/ctrlbox.hxx>
 #include <svl/style.hxx>

@@ -37,7 +37,7 @@
 
 #include <utility>
 #include <vcl/svapp.hxx>
-#include <vcl/weld/weldutils.hxx>
+#include <vcl/weld/TransportAsXWindow.hxx>
 
 using namespace css;
 using namespace css::uno;

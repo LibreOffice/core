@@ -29,7 +29,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/weld/Container.hxx>
-#include <vcl/weld/weldutils.hxx>
+#include <vcl/weld/TransportAsXWindow.hxx>
 #include <vcl/wintypes.hxx>
 
 using namespace com::sun::star;

@@ -15,7 +15,7 @@
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/weld/Toolbar.hxx>
-#include <vcl/weld/weldutils.hxx>
+#include <vcl/weld/TransportAsXWindow.hxx>
 
 namespace
 {

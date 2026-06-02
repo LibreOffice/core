@@ -9,11 +9,9 @@
 
 #pragma once
 
-#include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <comphelper/interfacecontainer4.hxx>
-#include <comphelper/compbase.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/timer.hxx>
 #include <vcl/transfer.hxx>
@@ -42,148 +40,10 @@ class Window;
 
 namespace weld
 {
-class Builder;
 class TextWidget;
 class TreeIter;
 class TreeView;
 class Window;
-
-typedef comphelper::WeakComponentImplHelper<css::awt::XWindow> TransportAsXWindow_Base;
-
-class VCL_DLLPUBLIC TransportAsXWindow : public TransportAsXWindow_Base
-{
-private:
-    weld::Widget* m_pWeldWidget;
-    weld::Builder* m_pWeldWidgetBuilder;
-
-    comphelper::OInterfaceContainerHelper4<css::awt::XWindowListener> m_aWindowListeners;
-    comphelper::OInterfaceContainerHelper4<css::awt::XKeyListener> m_aKeyListeners;
-    comphelper::OInterfaceContainerHelper4<css::awt::XFocusListener> m_aFocusListeners;
-    comphelper::OInterfaceContainerHelper4<css::awt::XMouseListener> m_aMouseListeners;
-    comphelper::OInterfaceContainerHelper4<css::awt::XMouseMotionListener> m_aMotionListeners;
-    comphelper::OInterfaceContainerHelper4<css::awt::XPaintListener> m_aPaintListeners;
-
-public:
-    TransportAsXWindow(weld::Widget* pWeldWidget, weld::Builder* pWeldWidgetBuilder = nullptr)
-        : m_pWeldWidget(pWeldWidget)
-        , m_pWeldWidgetBuilder(pWeldWidgetBuilder)
-    {
-    }
-
-    weld::Widget* getWidget() const { return m_pWeldWidget; }
-
-    weld::Builder* getBuilder() const { return m_pWeldWidgetBuilder; }
-
-    virtual void clear()
-    {
-        m_pWeldWidget = nullptr;
-        m_pWeldWidgetBuilder = nullptr;
-    }
-
-    // css::awt::XWindow
-    void SAL_CALL setPosSize(sal_Int32, sal_Int32, sal_Int32, sal_Int32, sal_Int16) override
-    {
-        throw css::uno::RuntimeException(u"not implemented"_ustr);
-    }
-
-    css::awt::Rectangle SAL_CALL getPosSize() override
-    {
-        throw css::uno::RuntimeException(u"not implemented"_ustr);
-    }
-
-    void SAL_CALL setVisible(sal_Bool bVisible) override { m_pWeldWidget->set_visible(bVisible); }
-
-    void SAL_CALL setEnable(sal_Bool bSensitive) override
-    {
-        m_pWeldWidget->set_sensitive(bSensitive);
-    }
-
-    void SAL_CALL setFocus() override { m_pWeldWidget->grab_focus(); }
-
-    void SAL_CALL
-    addWindowListener(const css::uno::Reference<css::awt::XWindowListener>& rListener) override
-    {
-        std::unique_lock g(m_aMutex);
-        m_aWindowListeners.addInterface(g, rListener);
-    }
-
-    void SAL_CALL
-    removeWindowListener(const css::uno::Reference<css::awt::XWindowListener>& rListener) override
-    {
-        std::unique_lock g(m_aMutex);
-        m_aWindowListeners.removeInterface(g, rListener);
-    }
-
-    void SAL_CALL
-    addFocusListener(const css::uno::Reference<css::awt::XFocusListener>& rListener) override
-    {
-        std::unique_lock g(m_aMutex);
-        m_aFocusListeners.addInterface(g, rListener);
-    }
-
-    void SAL_CALL
-    removeFocusListener(const css::uno::Reference<css::awt::XFocusListener>& rListener) override
-    {
-        std::unique_lock g(m_aMutex);
-        m_aFocusListeners.removeInterface(g, rListener);
-    }
-
-    void SAL_CALL
-    addKeyListener(const css::uno::Reference<css::awt::XKeyListener>& rListener) override
-    {
-        std::unique_lock g(m_aMutex);
-        m_aKeyListeners.addInterface(g, rListener);
-    }
-
-    void SAL_CALL
-    removeKeyListener(const css::uno::Reference<css::awt::XKeyListener>& rListener) override
-    {
-        std::unique_lock g(m_aMutex);
-        m_aKeyListeners.removeInterface(g, rListener);
-    }
-
-    void SAL_CALL
-    addMouseListener(const css::uno::Reference<css::awt::XMouseListener>& rListener) override
-    {
-        std::unique_lock g(m_aMutex);
-        m_aMouseListeners.addInterface(g, rListener);
-    }
-
-    void SAL_CALL
-    removeMouseListener(const css::uno::Reference<css::awt::XMouseListener>& rListener) override
-    {
-        std::unique_lock g(m_aMutex);
-        m_aMouseListeners.removeInterface(g, rListener);
-    }
-
-    void SAL_CALL addMouseMotionListener(
-        const css::uno::Reference<css::awt::XMouseMotionListener>& rListener) override
-    {
-        std::unique_lock g(m_aMutex);
-        m_aMotionListeners.addInterface(g, rListener);
-    }
-
-    void SAL_CALL removeMouseMotionListener(
-        const css::uno::Reference<css::awt::XMouseMotionListener>& rListener) override
-    {
-        std::unique_lock g(m_aMutex);
-        m_aMotionListeners.removeInterface(g, rListener);
-    }
-
-    void SAL_CALL
-    addPaintListener(const css::uno::Reference<css::awt::XPaintListener>& rListener) override
-    {
-        std::unique_lock g(m_aMutex);
-        m_aPaintListeners.addInterface(g, rListener);
-    }
-
-    void SAL_CALL
-    removePaintListener(const css::uno::Reference<css::awt::XPaintListener>& rListener) override
-    {
-        std::unique_lock g(m_aMutex);
-        m_aPaintListeners.removeInterface(g, rListener);
-    }
-};
 
 // don't export to avoid duplicate WeakImplHelper definitions with MSVC
 class SAL_DLLPUBLIC_TEMPLATE WidgetStatusListener_Base

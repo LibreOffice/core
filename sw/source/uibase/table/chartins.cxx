@@ -21,8 +21,8 @@
 #include <sfx2/dispatch.hxx>
 #include <IDocumentChartDataProviderAccess.hxx>
 #include <osl/diagnose.h>
+#include <vcl/weld/TransportAsXWindow.hxx>
 #include <vcl/weld/Window.hxx>
-#include <vcl/weld/weldutils.hxx>
 
 #include <swmodule.hxx>
 #include <wrtsh.hxx>

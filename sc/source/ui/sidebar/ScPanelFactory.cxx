@@ -27,7 +27,7 @@
 #include <dwfunctr.hxx>
 
 #include <sfx2/sidebar/SidebarPanelBase.hxx>
-#include <vcl/weld/weldutils.hxx>
+#include <vcl/weld/TransportAsXWindow.hxx>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <comphelper/namedvaluecollection.hxx>
 #include <cppuhelper/exc_hlp.hxx>

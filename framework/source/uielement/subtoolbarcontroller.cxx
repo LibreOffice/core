@@ -32,7 +32,7 @@
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/Container.hxx>
 #include <vcl/weld/Toolbar.hxx>
-#include <vcl/weld/weldutils.hxx>
+#include <vcl/weld/TransportAsXWindow.hxx>
 
 #include <com/sun/star/awt/XDockableWindow.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>

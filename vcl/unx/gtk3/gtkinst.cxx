@@ -72,6 +72,7 @@
 #include <vcl/weld/TextView.hxx>
 #include <vcl/weld/ToggleButton.hxx>
 #include <vcl/weld/Toolbar.hxx>
+#include <vcl/weld/weldutils.hxx>
 #include <unx/genpspgraphics.h>
 #include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
