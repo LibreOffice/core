@@ -90,6 +90,8 @@ private:
     SVX_DLLPRIVATE Bitmap&          GetRectBitmap();
     SVX_DLLPRIVATE void             Resize_Impl(const Size& rSize);
 
+    DECL_LINK(DumpAsPropertyTreeHdl, tools::JsonWriter&, void);
+
     SvxRectCtl(const SvxRectCtl&) = delete;
     SvxRectCtl& operator=(const SvxRectCtl&) = delete;
 

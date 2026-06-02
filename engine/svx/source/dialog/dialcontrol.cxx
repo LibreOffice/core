@@ -26,6 +26,7 @@
 #include <vcl/event.hxx>
 #include <vcl/settings.hxx>
 #include <i18nlangtag/languagetag.hxx>
+#include <tools/json_writer.hxx>
 
 namespace svx {
 
@@ -257,6 +258,7 @@ void DialControl::DialControl_Impl::SetSize( const Size& rWinSize )
 void DialControl::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 {
     CustomWidgetController::SetDrawingArea(pDrawingArea);
+    pDrawingArea->connect_get_property_tree(LINK(this, DialControl, DumpAsPropertyTreeHdl));
     //use same logic as DialControl_Impl::SetSize
     int nDim = (std::min<int>(pDrawingArea->get_approximate_digit_width() * 12,
                               pDrawingArea->get_text_height() * 6) - 1) | 1;
@@ -407,6 +409,12 @@ void DialControl::SetLinkedField(weld::MetricSpinButton* pField, sal_Int32 nDeci
 IMPL_LINK_NOARG(DialControl, LinkedFieldModifyHdl, weld::MetricSpinButton&, void)
 {
     SetRotation(Degree100(mpImpl->mpLinkField->get_value(FieldUnit::DEGREE) * mpImpl->mnLinkedFieldValueMultiplyer), true);
+}
+
+IMPL_LINK(DialControl, DumpAsPropertyTreeHdl, tools::JsonWriter&, rJsonWriter, void)
+{
+    sal_Int32 nDegrees = GetRotation().get() / 100;
+    rJsonWriter.put("currentAngle", OUString::number(nDegrees));
 }
 
 void DialControl::SaveValue()

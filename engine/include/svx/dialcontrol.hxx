@@ -159,6 +159,7 @@ private:
     void                InvalidateControl();
 
     DECL_DLLPRIVATE_LINK(LinkedFieldModifyHdl, weld::MetricSpinButton&, void);
+    DECL_DLLPRIVATE_LINK(DumpAsPropertyTreeHdl, tools::JsonWriter&, void);
 };
 
 }

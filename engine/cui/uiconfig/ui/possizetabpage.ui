@@ -396,7 +396,7 @@
                             <property name="can-focus">True</property>
                             <property name="events">GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
                             <accessibility>
-                              <relation type="labelled-by" target="label2"/>
+                              <relation type="labelled-by" target="size_label"/>
                             </accessibility>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="CTL_SIZERECT-atkobject">
@@ -424,10 +424,10 @@
           </object>
         </child>
         <child type="label">
-          <object class="GtkLabel" id="label2">
+          <object class="GtkLabel" id="size_label">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="label" translatable="yes" context="possizetabpage|label2">Size</property>
+            <property name="label" translatable="yes" context="possizetabpage|size_label">Size</property>
             <property name="xalign">0</property>
             <attributes>
               <attribute name="weight" value="bold"/>

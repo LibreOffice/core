@@ -21,6 +21,8 @@
 
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <svx/strings.hrc>
+#include <svx/dialmgr.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/event.hxx>
 #include <sfx2/dialoghelper.hxx>
@@ -31,6 +33,7 @@
 #include <bitmaps.hlst>
 #include <svx/dlgctrl.hxx>
 #include <tools/debug.hxx>
+#include <tools/json_writer.hxx>
 #include <svxpixelctlaccessiblecontext.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svxrectctaccessiblecontext.hxx>
@@ -74,10 +77,34 @@ SvxRectCtl::SvxRectCtl(SvxTabPage* pPage)
 void SvxRectCtl::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 {
     CustomWidgetController::SetDrawingArea(pDrawingArea);
+    pDrawingArea->connect_get_property_tree(LINK(this, SvxRectCtl, DumpAsPropertyTreeHdl));
     Size aSize(pDrawingArea->get_approximate_digit_width() * 25,
                pDrawingArea->get_text_height() * 5);
     pDrawingArea->set_size_request(aSize.Width(), aSize.Height());
     Resize_Impl(aSize);
+}
+
+IMPL_LINK(SvxRectCtl, DumpAsPropertyTreeHdl, tools::JsonWriter&, rJsonWriter, void)
+{
+    static const TranslateId pNames[] = {
+        RID_SVXSTR_RECTCTL_ACC_CHLD_LT,
+        RID_SVXSTR_RECTCTL_ACC_CHLD_MT,
+        RID_SVXSTR_RECTCTL_ACC_CHLD_RT,
+        RID_SVXSTR_RECTCTL_ACC_CHLD_LM,
+        RID_SVXSTR_RECTCTL_ACC_CHLD_MM,
+        RID_SVXSTR_RECTCTL_ACC_CHLD_RM,
+        RID_SVXSTR_RECTCTL_ACC_CHLD_LB,
+        RID_SVXSTR_RECTCTL_ACC_CHLD_MB,
+        RID_SVXSTR_RECTCTL_ACC_CHLD_RB,
+    };
+
+    OUString sSelectedPointName = SvxResId(pNames[static_cast<int>(m_eRP)]);
+    rJsonWriter.put("selectedPoint", sSelectedPointName);
+    rJsonWriter.put("selectedIndex", static_cast<int>(m_eRP));
+
+    auto pointsNode = rJsonWriter.startArray("pointNames");
+    for (int i = 0; i < 9; i++)
+        rJsonWriter.putSimpleValue(SvxResId(pNames[i]));
 }
 
 void SvxRectCtl::SetControlSettings(RectPoint eRpt, sal_uInt16 nBorder)

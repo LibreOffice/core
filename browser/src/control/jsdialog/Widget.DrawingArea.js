@@ -45,31 +45,15 @@ function _drawingAreaControl (parentContainer, data, builder) {
 	if (isTextbox) {
 		// Editable drawing areas (e.g. spell check sentence box) use a
 		// div with role="textbox" wrapping the visual image.
-		var wrapper = window.L.DomUtil.create('div', builder.options.cssClass + ' ui-drawing-area', container);
-		wrapper.id = imageId;
-		wrapper.tabIndex = 0;
+		var wrapper = _createDrawingAreaWrapper(container, data, builder, imageId, false);
 		wrapper.setAttribute('role', 'textbox');
 		wrapper.setAttribute('aria-multiline', 'true');
+
+		_setDescription(wrapper, data, imageId);
 
 		if (data.editText) {
 			wrapper.setAttribute('aria-label', data.editText);
 		}
-
-		if (data.aria.description) {
-			var descSpan = window.L.DomUtil.create('span', 'visuallyhidden', wrapper);
-			descSpan.id = imageId + '-desc';
-			descSpan.textContent = data.aria.description;
-			wrapper.setAttribute('aria-describedby', descSpan.id);
-		}
-
-		var img = window.L.DomUtil.create('img', '', wrapper);
-		img.src = data.image.replace(/\\/g, '');
-		img.style.display = 'block';
-		img.draggable = false;
-		img.ondragstart = function() { return false; };
-		img.alt = '';
-		img.setAttribute('aria-hidden', 'true');
-		img.addEventListener('mousedown', function() { wrapper.focus(); });
 
 		if (data.text) {
 			wrapper.setAttribute('data-cooltip', data.text);
@@ -77,9 +61,46 @@ function _drawingAreaControl (parentContainer, data, builder) {
 				window.L.control.attachTooltipEventListener(wrapper, builder.map);
 			}
 		}
+	} else if (data.selectedPoint) {
+		var selectedIndex = data.selectedIndex !== undefined ? data.selectedIndex : 0;
 
-		_setupDrawingAreaMouseEvents(img, container, builder);
-		_setupDrawingAreaKeyboardEvents(wrapper, container, builder);
+		var wrapper = _createDrawingAreaWrapper(container, data, builder, imageId, true);
+		wrapper.setAttribute('role', 'radiogroup');
+		wrapper.setAttribute('aria-activedescendant', container.id + '-point-' + selectedIndex);
+
+		var previousWrapper = document.getElementById(imageId);
+		var isNavigating = previousWrapper && previousWrapper === document.activeElement;
+		if (!isNavigating) {
+			if (data.labelledBy) {
+				wrapper.setAttribute('aria-labelledby', data.labelledBy);
+			}
+			_setDescription(wrapper, data, imageId);
+		}
+
+		// Create 9 radio elements
+		for (var i = 0; i < data.pointNames.length; i++) {
+			var radio = window.L.DomUtil.create('span', 'visuallyhidden', wrapper);
+			radio.id = container.id + '-point-' + i;
+			radio.setAttribute('role', 'radio');
+			radio.setAttribute('aria-checked', i === selectedIndex ? 'true' : 'false');
+			radio.textContent = data.pointNames[i];
+		}
+	} else if (data.currentAngle !== undefined) {
+		var wrapper = _createDrawingAreaWrapper(container, data, builder, imageId, true);
+		wrapper.setAttribute('role', 'slider');
+		wrapper.setAttribute('aria-valuemin', '0');
+		wrapper.setAttribute('aria-valuemax', '359');
+		wrapper.setAttribute('aria-valuenow', data.currentAngle);
+		wrapper.setAttribute('aria-valuetext', data.currentAngle + '°');
+
+		var previousWrapper = document.getElementById(imageId);
+		var isNavigating = previousWrapper && previousWrapper === document.activeElement;
+		if (!isNavigating) {
+			if (data.labelledBy) {
+				wrapper.setAttribute('aria-labelledby', data.labelledBy);
+			}
+			_setDescription(wrapper, data, imageId);
+		}
 	} else {
 		var image = window.L.DomUtil.create('img', builder.options.cssClass + ' ui-drawing-area', container);
 		image.id = imageId;
@@ -129,6 +150,39 @@ function _drawingAreaControl (parentContainer, data, builder) {
 	}
 
 	return false;
+}
+
+function _setDescription(wrapper, data, imageId) {
+	if (data.aria && data.aria.description) {
+		var descSpan = window.L.DomUtil.create('span', 'visuallyhidden', wrapper);
+		descSpan.id = imageId + '-desc';
+		descSpan.textContent = data.aria.description;
+		wrapper.setAttribute('aria-describedby', descSpan.id);
+	}
+}
+
+function _createDrawingAreaWrapper(container, data, builder, imageId, isDecorative) {
+	var wrapper = window.L.DomUtil.create('div', builder.options.cssClass + ' ui-drawing-area', container);
+	wrapper.id = imageId;
+	wrapper.tabIndex = 0;
+
+	var img = window.L.DomUtil.create('img', '', wrapper);
+	img.src = data.image.replace(/\\/g, '');
+	img.style.display = 'block';
+	img.draggable = false;
+	img.ondragstart = function() { return false; };
+	img.alt = '';
+	img.setAttribute('aria-hidden', 'true');
+	img.addEventListener('mousedown', function() { wrapper.focus(); });
+
+	if (isDecorative) {
+		img.classList.add('ui-decorative-image');
+	}
+
+	_setupDrawingAreaMouseEvents(img, container, builder);
+	_setupDrawingAreaKeyboardEvents(wrapper, container, builder);
+
+	return wrapper;
 }
 
 function _setupDrawingAreaMouseEvents (imageElement, container, builder) {
