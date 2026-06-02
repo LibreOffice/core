@@ -371,12 +371,16 @@ class NavigatorPanel extends SidebarBase {
 	}
 
 	onJSUpdate(e: FireEvent) {
-		const hadFocus = this.navigationPanel.contains(document.activeElement);
+		// Only restore focus to a tree row if focus was actually inside the
+		// content tree. Checking the whole panel would also match the search
+		// box, stealing focus from it after the first typed character.
+		const treeHadFocus =
+			this.container && this.container.contains(document.activeElement);
 		if (this.highlightTerm && this.highlightTerm.trim().length > 0) {
 			e.data.control.highlightTerm = this.highlightTerm;
 		}
 		const retval = super.onJSUpdate(e);
-		if (hadFocus) {
+		if (treeHadFocus) {
 			this.focusNavigationItem();
 		}
 		return retval;

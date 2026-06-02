@@ -76,6 +76,25 @@ describe(['tagdesktop'], 'Scroll through document, modify heading', function() {
 		desktopHelper.assertVisiblePage(5, 5, 8);
 	});
 
+	it('Search box keeps focus while typing in the Outline tab', function() {
+		// Regression test: typing in the Navigator search box must not lose
+		// focus to the Outline tree after the first character. The Outline tab
+		// is selected by default when the Navigator is opened.
+		cy.cGet('#tab-navigator.selected').should('exist');
+
+		cy.cGet('input#navigator-search-input').focus();
+		helper.assertFocus('id', 'navigator-search-input');
+
+		// Type into whatever currently has focus (not directly into the input)
+		// so that focus being stolen mid-typing is detectable.
+		cy.cGet('body').type('Feedback');
+		cy.wait(1000);
+
+		// Focus must remain in the search input and the whole word present.
+		helper.assertFocus('id', 'navigator-search-input');
+		cy.cGet('input#navigator-search-input').should('have.value', 'Feedback');
+	});
+
 	it('Jump to element even when cursor not visible', function() {
 		// Expand Tables, Frames, Images
 		// Note click()/dblclick() scrolls the contenttree even if it would be not needed to click
