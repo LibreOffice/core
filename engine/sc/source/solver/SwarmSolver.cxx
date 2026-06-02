@@ -437,7 +437,10 @@ bool SwarmSolver::doesViolateConstraints()
         }
         else
         {
-            return false;
+            // The right hand side is neither a cell nor a number, so this
+            // constraint cannot be evaluated. Skip it and carry on checking the
+            // rest of the constraints.
+            continue;
         }
 
         sheet::SolverConstraintOperator eOp = rConstraint.Operator;

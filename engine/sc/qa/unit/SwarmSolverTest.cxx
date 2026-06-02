@@ -70,6 +70,7 @@ class SwarmSolverTest : public UnoApiTest
     void testLargeObjectiveStillSolvable();
     void testParticleSwarmResultLength();
     void testParticleSwarmVelocityNotInitializedAsPosition();
+    void testUnreadableConstraintStillChecksOthers();
 
 public:
     SwarmSolverTest()
@@ -87,6 +88,7 @@ public:
     CPPUNIT_TEST(testLargeObjectiveStillSolvable);
     CPPUNIT_TEST(testParticleSwarmResultLength);
     CPPUNIT_TEST(testParticleSwarmVelocityNotInitializedAsPosition);
+    CPPUNIT_TEST(testUnreadableConstraintStillChecksOthers);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -502,6 +504,51 @@ void SwarmSolverTest::testParticleSwarmVelocityNotInitializedAsPosition()
     aAlgorithm.initialize();
 
     CPPUNIT_ASSERT_EQUAL(8, aProvider.mnInitCalls);
+}
+
+void SwarmSolverTest::testUnreadableConstraintStillChecksOthers()
+{
+    // Regression: a constraint whose right hand side could not be read as a cell
+    // or a number used to make the feasibility check return "satisfied" for the
+    // whole point, hiding every later constraint. Here an unreadable constraint
+    // comes before an impossible one, so the model must still be reported as not
+    // solved.
+    loadFromFile(u"Simple.ods");
+
+    uno::Reference<sheet::XSpreadsheetDocument> xDocument(mxComponent, uno::UNO_QUERY_THROW);
+
+    uno::Reference<sheet::XSolver> xSolver;
+    xSolver.set(m_xContext->getServiceManager()->createInstanceWithContext(
+                    u"com.sun.star.comp.Calc.SwarmSolver"_ustr, m_xContext),
+                uno::UNO_QUERY_THROW);
+
+    table::CellAddress aObjective(0, 1, 1);
+    uno::Sequence<table::CellAddress> aVariables{ { 0, 1, 0 } };
+
+    // Both constraints act on the objective cell, not the variable, so they end
+    // up as non-bounded constraints in the order given here.
+    uno::Sequence<sheet::SolverConstraint> aConstraints{
+        // right hand side is a string, so it reads as neither a cell nor a
+        // number
+        { /* [0] Left     */ table::CellAddress(0, 1, 1),
+          /*     Operator */ sheet::SolverConstraintOperator_LESS_EQUAL,
+          /*     Right    */ uno::Any(u"not a number"_ustr) },
+        // forced below the objective's global minimum of -130, so impossible
+        { /* [1] Left     */ table::CellAddress(0, 1, 1),
+          /*     Operator */ sheet::SolverConstraintOperator_LESS_EQUAL,
+          /*     Right    */ uno::Any(-1000.0) }
+    };
+
+    xSolver->setDocument(xDocument);
+    xSolver->setObjective(aObjective);
+    xSolver->setVariables(aVariables);
+    xSolver->setConstraints(aConstraints);
+    xSolver->setMaximize(false);
+
+    xSolver->solve();
+
+    CPPUNIT_ASSERT_MESSAGE("an unreadable constraint must not hide a later one",
+                           !xSolver->getSuccess());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwarmSolverTest);
