@@ -32,6 +32,7 @@
 #include <vcl/toolkit/field.hxx>
 #include <vcl/unohelp.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/weld/DateFormatter.hxx>
 #include <vcl/weld/Entry.hxx>
 #include <vcl/weld/weldutils.hxx>
 

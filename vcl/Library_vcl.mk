@@ -602,6 +602,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/weld/AssistantController \
     vcl/source/weld/Builder \
     vcl/source/weld/ComboBox \
+    vcl/source/weld/DateFormatter \
     vcl/source/weld/Dialog \
     vcl/source/weld/DialogController \
     vcl/source/weld/Entry \

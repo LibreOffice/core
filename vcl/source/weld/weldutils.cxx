@@ -395,30 +395,6 @@ void TimeFormatter::SetTimeFormat(TimeFieldFormat eTimeFormat)
 
 TimeFormatter::~TimeFormatter() = default;
 
-DateFormatter::DateFormatter(weld::Entry& rEntry)
-    : EntryFormatter(rEntry)
-    , m_eFormat(ExtDateFieldFormat::SystemShort)
-{
-    Init();
-}
-
-void DateFormatter::Init()
-{
-    SetFormatValueHdl(LINK(this, DateFormatter, FormatOutputHdl));
-    SetParseTextHdl(LINK(this, DateFormatter, ParseInputHdl));
-
-    SetMin(Date(1, 1, 1900));
-    SetMax(Date(31, 12, 2200));
-}
-
-void DateFormatter::SetExtDateFormat(ExtDateFieldFormat eFormat)
-{
-    m_eFormat = eFormat;
-    ReFormat();
-}
-
-DateFormatter::~DateFormatter() = default;
-
 PatternFormatter::PatternFormatter(weld::Entry& rEntry)
     : m_rEntry(rEntry)
     , m_bStrictFormat(false)

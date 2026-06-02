@@ -20,10 +20,6 @@
 #include <vcl/transfer.hxx>
 #include <vcl/weld/weld.hxx>
 
-class CalendarWrapper;
-class Date;
-
-enum class ExtDateFieldFormat;
 enum class ExtTimeFieldFormat;
 enum class SelectionOptions;
 enum class TimeFieldFormat : sal_Int32;
@@ -351,36 +347,6 @@ private:
     TimeFieldFormat m_eFormat;
     TimeFormat m_eTimeFormat;
     bool m_bDuration;
-};
-
-class VCL_DLLPUBLIC DateFormatter final : public EntryFormatter
-{
-public:
-    DateFormatter(weld::Entry& rEntry);
-
-    void SetMin(const Date& rNewMin);
-    void SetMax(const Date& rNewMax);
-
-    void SetDate(const Date& rNewDate);
-    Date GetDate();
-
-    void SetExtDateFormat(ExtDateFieldFormat eFormat);
-    void SetShowDateCentury(bool bShowCentury);
-
-    virtual ~DateFormatter() override;
-
-private:
-    DECL_DLLPRIVATE_LINK(FormatOutputHdl, double, std::optional<OUString>);
-    DECL_DLLPRIVATE_LINK(ParseInputHdl, const OUString&, Formatter::ParseResult);
-    DECL_DLLPRIVATE_LINK(CursorChangedHdl, weld::Entry&, void);
-
-    SAL_DLLPRIVATE void Init();
-    SAL_DLLPRIVATE CalendarWrapper& GetCalendarWrapper() const;
-
-    SAL_DLLPRIVATE OUString FormatNumber(int nValue) const;
-
-    ExtDateFieldFormat m_eFormat;
-    mutable std::unique_ptr<CalendarWrapper> m_xCalendarWrapper;
 };
 
 class VCL_DLLPUBLIC PatternFormatter final
