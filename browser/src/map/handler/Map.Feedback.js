@@ -104,8 +104,12 @@ window.L.Map.Feedback = window.L.Handler.extend({
 		var proxyPrefixEnabled = window.socketProxy ? "True" : "False";
 
 		var cssVar = getComputedStyle(document.documentElement).getPropertyValue('--co-primary-element');
+		var doctypeColor = getComputedStyle(document.body).getPropertyValue('--doc-type');
+
+
 		var params = [{ mobile : window.mode.isSmallScreenDevice() },
 			      { cssvar : cssVar},
+			      { doctypecolor : doctypeColor },
 			      { wsdhash : window.app.socket.WSDServer.Hash },
 			      { 'version_number' : window.app.socket.WSDServer.Version },
 			      { 'wopi_host_id' : window.wopiHostId },
