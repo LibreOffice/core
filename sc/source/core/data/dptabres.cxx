@@ -4288,7 +4288,7 @@ SCROW ScDPResultMember::GetDataId() const
 
 ScDPResultMember* ScDPResultDimension::AddMember(const ScDPParentDimData &aData )
 {
-    ScDPResultMember* pMember = new ScDPResultMemberFull(pResultData, aData);
+    ScDPResultMember* pMember = new ScDPResultMemberSlim(this, pResultData, aData);
     maMemberArray.emplace_back( pMember );
 
     return pMember;
