@@ -32,6 +32,7 @@
 #include <vcl/weld/CheckButton.hxx>
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/Entry.hxx>
+#include <vcl/weld/EntryFormatter.hxx>
 #include <vcl/weld/FormattedSpinButton.hxx>
 #include <vcl/weld/MenuButton.hxx>
 #include <vcl/weld/PatternFormatter.hxx>

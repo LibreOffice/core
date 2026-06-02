@@ -45,6 +45,7 @@
 #include <vcl/weld/CheckButton.hxx>
 #include <vcl/weld/Dialog.hxx>
 #include <vcl/weld/DrawingArea.hxx>
+#include <vcl/weld/EntryFormatter.hxx>
 #include <vcl/weld/Expander.hxx>
 #include <vcl/weld/FormattedSpinButton.hxx>
 #include <vcl/weld/Frame.hxx>

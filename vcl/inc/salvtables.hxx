@@ -21,6 +21,7 @@
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/DrawingArea.hxx>
 #include <vcl/weld/Entry.hxx>
+#include <vcl/weld/EntryFormatter.hxx>
 #include <vcl/weld/EntryTreeView.hxx>
 #include <vcl/weld/Expander.hxx>
 #include <vcl/weld/FormattedSpinButton.hxx>

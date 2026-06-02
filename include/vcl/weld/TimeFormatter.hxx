@@ -12,7 +12,7 @@
 #include <tools/time.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/weld/Entry.hxx>
-#include <vcl/weld/weldutils.hxx>
+#include <vcl/weld/EntryFormatter.hxx>
 
 #include <optional>
 

@@ -10,7 +10,7 @@
 #pragma once
 
 #include <vcl/dllapi.h>
-#include <vcl/weld/weldutils.hxx>
+#include <vcl/weld/EntryFormatter.hxx>
 
 #include <optional>
 

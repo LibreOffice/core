@@ -21,6 +21,7 @@
 
 #include <sal/config.h>
 
+#include <map>
 #include <stack>
 
 #include <DropTarget.hxx>
