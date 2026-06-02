@@ -32,18 +32,16 @@ msgid ""
 "and now it's on Android, enhancing your possibilities to work on mobile and "
 "for collaboration."
 msgstr ""
-"Collabora Office ແມ່ນໂປຣແກຣມແກ້ໄຂຂໍ້ຄວາມ, ສະເປຣດຊີດ ແລະ ນຳສະເໜີ ທີ່ອີງໃສ່ "
-"LibreOffice ເຊິ່ງເປັນຊຸດໂປຣແກຣມຫ້ອງການແບບໂອເພັນຊອດ (Open Source) "
-"ທີ່ໄດ້ຮັບຄວາມນິຍົມທີ່ສຸດໃນໂລກ - ແລະ ຕອນນີ້ມີໃຫ້ໃຊ້ໃນ Android ແລ້ວ, "
-"ເພີ່ມຂີດຄວາມສາມາດໃນການເຮັດວຽກຜ່ານມືຖື ແລະ ການເຮັດວຽກຮ່ວມກັນ."
+"Collabora Office ແມ່ນໂປຣແກຣມແກ້ໄຂຂໍ້ຄວາມ, ສະເປຣດຊີດ ແລະ ນຳສະເໜີ ທີ່ອີງໃສ່ LibreOffice "
+"ເຊິ່ງເປັນຊຸດໂປຣແກຣມຫ້ອງການແບບໂອເພັນຊອດ (Open Source) ທີ່ໄດ້ຮັບຄວາມນິຍົມທີ່ສຸດໃນໂລກ - ແລະ "
+"ຕອນນີ້ມີໃຫ້ໃຊ້ໃນ Android ແລ້ວ, ເພີ່ມຂີດຄວາມສາມາດໃນການເຮັດວຽກຜ່ານມືຖື ແລະ ການເຮັດວຽກຮ່ວມກັນ."
 
 #. Long description
 #: descriptions/google-play.html%2Bhtml.body.p:17-1
 msgid ""
 "This app is in active development, feedback and bug reports are very welcome."
 msgstr ""
-"ແອັບນີ້ກຳລັງຢູ່ໃນຊ່ວງການພັດທະນາຢ່າງຕໍ່ເນື່ອງ, ພວກເຮົາຍິນດີຮັບຄຳຄິດເຫັນ ແລະ "
-"ການລາຍງານຂໍ້ຜິດພາດຕ່າງໆ."
+"ແອັບນີ້ກຳລັງຢູ່ໃນຊ່ວງການພັດທະນາຢ່າງຕໍ່ເນື່ອງ, ພວກເຮົາຍິນດີຮັບຄຳຄິດເຫັນ ແລະ ການລາຍງານຂໍ້ຜິດພາດຕ່າງໆ."
 
 #. Long description
 #: descriptions/google-play.html%2Bhtml.body.p:21-1
@@ -56,11 +54,11 @@ msgstr "ຮູບແບບເອກະສານເປີດ (.odt, .odp, .ods, .
 
 #: descriptions/google-play.html%2Bhtml.body.ul.li:27-5
 msgid ""
-"Microsoft Office 2007/2010/2013/2016/2019 (.docx, .pptx, .xlsx, .dotx, ."
-"xltx, .ppsx)"
+"Microsoft Office 2007/2010/2013/2016/2019 "
+"(.docx, .pptx, .xlsx, .dotx, .xltx, .ppsx)"
 msgstr ""
-"Microsoft Office 2007/2010/2013/2016/2019 (.docx, .pptx, .xlsx, .dotx, ."
-"xltx, .ppsx)"
+"Microsoft Office 2007/2010/2013/2016/2019 "
+"(.docx, .pptx, .xlsx, .dotx, .xltx, .ppsx)"
 
 #: descriptions/google-play.html%2Bhtml.body.ul.li:28-5
 msgid "Microsoft Office 97/2000/XP/2003 (.doc, .ppt, .xls, .dot, .xlt, .pps)"
@@ -74,13 +72,13 @@ msgstr "ລາຍງານບັນຫາ:"
 #. Long description
 #: descriptions/google-play.html%2Bhtml.body.p:35-1
 msgid ""
-"Use the bugtracker and attach any files that caused problems via <a href="
-"\"https://col.la/android\"> https://col.la/android</a>. Please note that "
-"anything you enter in the bugtracker will be public."
+"Use the bugtracker and attach any files that caused problems via <a "
+"href=\"https://col.la/android\"> https://col.la/android</a>. Please note "
+"that anything you enter in the bugtracker will be public."
 msgstr ""
-"ໃຊ້ລະບົບຕິດຕາມຂໍ້ຜິດພາດ (bugtracker) ແລະ ຄັດຕິດໄຟລ໌ທີ່ມີບັນຫາຜ່ານ <a href="
-"\"https://col.la/android\"> https://col.la/android</a>. ກະລຸນາຮັບຊາບວ່າທຸກຢ່າ"
-"ງທີ່ທ່ານປ້ອນເຂົ້າໃນລະບົບຕິດຕາມຂໍ້ຜິດພາດຈະຖືກເຜີຍແຜ່ເປັນສາທາລະນະ."
+"ໃຊ້ລະບົບຕິດຕາມຂໍ້ຜິດພາດ (bugtracker) ແລະ ຄັດຕິດໄຟລ໌ທີ່ມີບັນຫາຜ່ານ <a href=\"https://col.la/"
+"android\"> https://col.la/android</a>. "
+"ກະລຸນາຮັບຊາບວ່າທຸກຢ່າງທີ່ທ່ານປ້ອນເຂົ້າໃນລະບົບຕິດຕາມຂໍ້ຜິດພາດຈະຖືກເຜີຍແຜ່ເປັນສາທາລະນະ."
 
 #. Long description
 #: descriptions/google-play.html%2Bhtml.body.p:40-1
@@ -94,10 +92,9 @@ msgid ""
 "Windows, Mac, and Linux. This, combined with a new front-end based on "
 "Collabora Online, reads and saves documents similarly to LibreOffice desktop."
 msgstr ""
-"Collabora Office ສຳລັບ Android ແມ່ນໃຊ້ກົນໄກດຽວກັນກັບ LibreOffice ສຳລັບ "
-"Windows, Mac, ແລະ Linux. ສິ່ງນີ້, "
-"ເມື່ອລວມເຂົ້າກັບສ່ວນຕິດຕໍ່ຜູ້ໃຊ້ໃໝ່ທີ່ອີງໃສ່ Collabora Online, ຈະເຮັດໃຫ້ການອ່"
-"ານ ແລະ ບັນທຶກເອກະສານຄ້າຍຄືກັບ LibreOffice ເວີຊັນເດັສທັອບ."
+"Collabora Office ສຳລັບ Android ແມ່ນໃຊ້ກົນໄກດຽວກັນກັບ LibreOffice ສຳລັບ Windows, "
+"Mac, ແລະ Linux. ສິ່ງນີ້, ເມື່ອລວມເຂົ້າກັບສ່ວນຕິດຕໍ່ຜູ້ໃຊ້ໃໝ່ທີ່ອີງໃສ່ Collabora Online, "
+"ຈະເຮັດໃຫ້ການອ່ານ ແລະ ບັນທຶກເອກະສານຄ້າຍຄືກັບ LibreOffice ເວີຊັນເດັສທັອບ."
 
 #. Long description
 #: descriptions/google-play.html%2Bhtml.body.p:48-1
@@ -109,9 +106,8 @@ msgid ""
 msgstr ""
 "ວິສະວະກອນຂອງ Collabora ປະກອບມີ Tor Lillqvist, Tomaž Vajngerl, Michael Meeks, "
 "Miklos Vajna, Jan Holešovský, Mert Tümer, Rashesh Padia ແລະ Skyler Grey "
-"ໄດ້ພັດທະນາການຮອງຮັບ Android ມາຕັ້ງແຕ່ປີ 2012, ໂດຍໄດ້ຮັບການຊ່ວຍເຫຼືອຈາກນັກສຶ"
-"ກສາໃນໂຄງການ Google Summer of Code ຄື Andrzej Hunt, Iain Billet ແລະ Kaishu "
-"Sahu."
+"ໄດ້ພັດທະນາການຮອງຮັບ Android ມາຕັ້ງແຕ່ປີ 2012, ໂດຍໄດ້ຮັບການຊ່ວຍເຫຼືອຈາກນັກສຶກສາໃນໂຄງການ "
+"Google Summer of Code ຄື Andrzej Hunt, Iain Billet ແລະ Kaishu Sahu."
 
 #. Long description
 #: descriptions/google-play.html%2Bhtml.body.p:52-1

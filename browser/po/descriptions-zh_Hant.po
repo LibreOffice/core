@@ -38,8 +38,8 @@ msgid ""
 "for collaboration."
 msgstr ""
 "Collabora Office 是以 LibreOffice 為基礎開發的文字編輯器、試算表與簡報程式，"
-"LibreOffice 是全球最受歡迎的開放原始碼辦公室套裝軟體，現在可在 Android "
-"上使用了，提升您在行動裝置上工作與協作的可能性。"
+"LibreOffice 是全球最受歡迎的開放原始碼辦公室套裝軟體，現在可在 Android 上使用"
+"了，提升您在行動裝置上工作與協作的可能性。"
 
 #. Long description
 #: descriptions/google-play.html%2Bhtml.body.p:17-1
@@ -58,11 +58,11 @@ msgstr "開放文件格式 (.odt, .odp, .ods, .ots, .ott, .otp)"
 
 #: descriptions/google-play.html%2Bhtml.body.ul.li:27-5
 msgid ""
-"Microsoft Office 2007/2010/2013/2016/2019 (.docx, .pptx, .xlsx, .dotx, ."
-"xltx, .ppsx)"
+"Microsoft Office 2007/2010/2013/2016/2019 "
+"(.docx, .pptx, .xlsx, .dotx, .xltx, .ppsx)"
 msgstr ""
-"Microsoft Office 2007/2010/2013/2016/2019 (.docx, .pptx, .xlsx, .dotx, ."
-"xltx, .ppsx)"
+"Microsoft Office 2007/2010/2013/2016/2019 "
+"(.docx, .pptx, .xlsx, .dotx, .xltx, .ppsx)"
 
 #: descriptions/google-play.html%2Bhtml.body.ul.li:28-5
 msgid "Microsoft Office 97/2000/XP/2003 (.doc, .ppt, .xls, .dot, .xlt, .pps)"
@@ -76,13 +76,13 @@ msgstr "回報問題："
 #. Long description
 #: descriptions/google-play.html%2Bhtml.body.p:35-1
 msgid ""
-"Use the bugtracker and attach any files that caused problems via <a href="
-"\"https://col.la/android\"> https://col.la/android</a>. Please note that "
-"anything you enter in the bugtracker will be public."
+"Use the bugtracker and attach any files that caused problems via <a "
+"href=\"https://col.la/android\"> https://col.la/android</a>. Please note "
+"that anything you enter in the bugtracker will be public."
 msgstr ""
-"使用程式缺陷追蹤程式，並透過 <a href=\"https://col.la/android\">https://col."
-"la/android</a> 附上任何可能造成問題的檔案。請注意，您在程式缺陷追蹤程式中輸入"
-"的任何內容都將公開。"
+"使用程式缺陷追蹤程式，並透過 <a href=\"https://col.la/android\">https://"
+"col.la/android</a> 附上任何可能造成問題的檔案。請注意，您在程式缺陷追蹤程式中"
+"輸入的任何內容都將公開。"
 
 #. Long description
 #: descriptions/google-play.html%2Bhtml.body.p:40-1
@@ -96,8 +96,8 @@ msgid ""
 "Windows, Mac, and Linux. This, combined with a new front-end based on "
 "Collabora Online, reads and saves documents similarly to LibreOffice desktop."
 msgstr ""
-"Android 版 Collabora Office 使用與 Windows、Mac 與 Linux 版 LibreOffice "
-"相同的引擎。結合以 Collabora Online 為基礎的全新前端，讀取與儲存文件的方式與 "
+"Android 版 Collabora Office 使用與 Windows、Mac 與 Linux 版 LibreOffice 相同"
+"的引擎。結合以 Collabora Online 為基礎的全新前端，讀取與儲存文件的方式與 "
 "LibreOffice 桌面版類似。"
 
 #. Long description
