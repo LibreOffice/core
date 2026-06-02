@@ -170,19 +170,9 @@ BEGIN
     $installer::globals::helppack = 0;
     $installer::globals::refresh_includepaths = 0;
     $installer::globals::include_paths_read = 0;
-    @installer::globals::userregistrycollector = ();
-    $installer::globals::addeduserregitrykeys = 0;
-    $installer::globals::desktoplinkexists = 0;
     $installer::globals::analyze_spellcheckerlanguage = 0;
     %installer::globals::spellcheckerlanguagehash = ();
     %installer::globals::spellcheckerfilehash = ();
-    $installer::globals::registryrootcomponent = "";
-    %installer::globals::allcomponents = ();
-    %installer::globals::allcomponents_in_this_database = ();
-    %installer::globals::allshortcomponents = ();
-    %installer::globals::allregistrycomponents_ = ();
-    %installer::globals::allregistrycomponents_in_this_database_ = ();
-    %installer::globals::allshortregistrycomponents = ();
 
     $installer::globals::installlocationdirectory = "";
     $installer::globals::installlocationdirectoryset = 0;

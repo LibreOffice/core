@@ -144,31 +144,6 @@ sub resolve_all_directory_names
     }
 }
 
-#############################################################################
-# Registryitems for Uninstall have to be removed
-#############################################################################
-
-sub remove_uninstall_regitems_from_script
-{
-    my ($registryarrayref) = @_;
-
-    my @newitems = ();
-
-    for ( my $i = 0; $i <= $#{$registryarrayref}; $i++ )
-    {
-        my $oneitem = ${$registryarrayref}[$i];
-        my $subkey = "";
-
-        if ( $oneitem->{'Subkey'} ) { $subkey = $oneitem->{'Subkey'}; }
-
-        if ( $subkey =~ /Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall/ ) { next; }
-
-        push(@newitems, $oneitem);
-    }
-
-    return \@newitems;
-}
-
 ##############################################################################
 # Searching the language module for a specified language
 ##############################################################################

@@ -24,7 +24,6 @@ use warnings;
 use base 'Exporter';
 
 use Cwd;
-use Data::Dumper;
 use File::Copy;
 use List::Util qw(shuffle);
 use installer::control;
@@ -306,13 +305,6 @@ sub run {
     installer::logger::print_message( "... analyzing profileitems ... \n" );
 
     my $profileitemsinproductarrayref = installer::setupscript::get_all_items_from_script($setupscriptref, "ProfileItem");
-
-    my $folderinproductarrayref;
-    my $folderitemsinproductarrayref;
-    my $folderitempropertiesinproductarrayref;
-    my $registryitemsinproductarrayref;
-    my $windowscustomactionsarrayref;
-    my $mergemodulesarrayref;
 
     my $modulesinproductarrayref;
 
@@ -1121,20 +1113,6 @@ sub run {
                 installer::worker::analyze_and_save_logfile($loggingdir, $downloaddir, $installlogdir, $allsettingsarrayref, $languagestringref, $current_install_number);
             }
         }
-        #################################################
-        # Part 2b: The Windows platform
-        #################################################
-
-        #####################################################################
-        # ... creating idt files ...
-        # Only for Windows builds
-        #####################################################################
-
-        # saving file_info file for later analysis
-        my $speciallogfilename = $loggingdir . "fileinfo_" . $installer::globals::product . "\.log";
-        open my $log_fh, '>', $speciallogfilename
-            or die "Could not open $speciallogfilename for writing: $!";
-        print $log_fh Dumper($filesinproductlanguageresolvedarrayref);
 
     }   # end of iteration for one language group
 }
