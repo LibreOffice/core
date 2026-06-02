@@ -1532,7 +1532,7 @@ void ScModelObj::getCommandValues(tools::JsonWriter& rJsonWriter, std::string_vi
         }
 
         ScSimpleFormulaCalculator aCalc(rDoc, aAddr, formulaStr, false,
-            formula::FormulaGrammar::GRAM_ENGLISH);
+                                        formula::FormulaGrammar::GRAM_ENGLISH_XL_A1);
         aCalc.SetLimitString(true);
 
         FormulaError nErr = aCalc.GetErrCode();
