@@ -188,7 +188,7 @@ enum_ui_lang_proc (LPTSTR language, LONG_PTR /* unused_lParam */)
 static bool
 present_in_ui_langs(const char *lang)
 {
-    for (int i = 0; i < num_ui_langs; i++)
+    for (size_t i = 0; i < num_ui_langs; i++)
     {
         if (strchr (lang, '_') != nullptr)
             if (memcmp (ui_langs[i], lang, std::min(strlen(ui_langs[i]), strlen(lang))) == 0)
