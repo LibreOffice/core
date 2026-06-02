@@ -1,3 +1,4 @@
+
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
@@ -33,6 +34,9 @@
 #include <vcl/weld/Dialog.hxx>
 #include <rtl/strbuf.hxx>
 #include <utility>
+
+#include <com/sun/star/uno/Exception.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
 
 namespace dbaui
 {

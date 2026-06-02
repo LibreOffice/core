@@ -26,6 +26,7 @@
 #include <vcl/weld/Label.hxx>
 #include <vcl/weld/MenuButton.hxx>
 #include <vcl/weld/SpinButton.hxx>
+#include <vcl/weld/TreeView.hxx>
 #include <swtypes.hxx>
 #include "numprevw.hxx"
 #include "numberingtypelistbox.hxx"

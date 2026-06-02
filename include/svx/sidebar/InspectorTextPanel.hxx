@@ -24,6 +24,8 @@
 #include <vcl/weld/Toolbar.hxx>
 #include <vcl/weld/TreeView.hxx>
 
+#include <com/sun/star/uno/Any.hxx>
+
 namespace svx::sidebar
 {
 struct TreeNode

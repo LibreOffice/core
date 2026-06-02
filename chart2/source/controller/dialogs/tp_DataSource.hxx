@@ -30,6 +30,11 @@
 
 namespace chart { class TabPageNotifiable; }
 
+namespace weld
+{
+class TreeView;
+}
+
 namespace chart
 {
 class ChartTypeTemplateProvider;

@@ -24,6 +24,8 @@
 #include <vcl/weld/Frame.hxx>
 #include <vcl/weld/RadioButton.hxx>
 
+#include <com/sun/star/uno/Sequence.hxx>
+
 class SvNumberFormatter;
 
 namespace chart

@@ -24,6 +24,7 @@
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/TextView.hxx>
 #include <vcl/weld/TreeIter.hxx>
+#include <vcl/weld/TreeView.hxx>
 
 #include "viewdata.hxx"
 #include <dpobject.hxx>

@@ -16,10 +16,6 @@
 #include <vcl/weld/Toggleable.hxx>
 #include <vcl/weld/Widget.hxx>
 
-#include <com/sun/star/accessibility/XAccessibleRelationSet.hpp>
-
-#include <assert.h>
-
 namespace com::sun::star::graphic
 {
 class XGraphic;
@@ -32,21 +28,10 @@ namespace vcl
 class Font;
 }
 
-namespace tools
-{
-class JsonWriter;
-}
-
 class LOKTrigger;
 
 namespace weld
 {
-class DialogController;
-class EntryTreeView;
-class IconView;
-class MetricSpinButton;
-class TreeView;
-
 inline OUString toId(const void* pValue)
 {
     return OUString::number(reinterpret_cast<sal_uIntPtr>(pValue));

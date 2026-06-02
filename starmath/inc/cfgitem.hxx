@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include "types.hxx"
 #include "utility.hxx"
 
 #include <string_view>
@@ -26,7 +27,7 @@
 #include <svl/SfxBroadcaster.hxx>
 #include <unotools/configitem.hxx>
 
-#include "types.hxx"
+#include <com/sun/star/uno/Sequence.hxx>
 
 class SmSym;
 class SmSymbolManager;

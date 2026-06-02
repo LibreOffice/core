@@ -12,6 +12,8 @@
 #include <vcl/dllapi.h>
 #include <vcl/weld/weld.hxx>
 
+#include <com/sun/star/accessibility/XAccessibleRelationSet.hpp>
+
 class InputContext;
 class OutputDevice;
 enum class PointerStyle;

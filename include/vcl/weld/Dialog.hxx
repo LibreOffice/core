@@ -15,6 +15,8 @@
 
 namespace weld
 {
+class DialogController;
+
 class VCL_DLLPUBLIC Dialog : virtual public Window
 {
 private:

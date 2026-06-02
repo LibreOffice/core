@@ -24,6 +24,7 @@
 #include <comphelper/diagnose_ex.hxx>
 
 #include <com/sun/star/ui/dialogs/WizardTravelType.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
 
 using vcl::RoadmapWizardTypes::WizardPath;
 using vcl::RoadmapWizardTypes::PathId;
