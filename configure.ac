@@ -6041,11 +6041,11 @@ msi - Windows .msi
     # fakeroot is needed to ensure correct file ownerships/permissions
     # inside deb packages and tar archives created on Linux and Solaris.
     if test "$OS" = "LINUX" || test "$OS" = "SOLARIS"; then
-        AC_PATH_PROG(FAKEROOT, fakeroot, no)
-        if test "$FAKEROOT" = "no"; then
+        # prefer fakeroot-sysv since faked-tcp can cause port collisions when packaging in parallel
+        AC_PATH_PROG(FAKEROOT, [fakeroot-sysv fakeroot-tcp fakeroot],
             AC_MSG_ERROR(
                 [--with-package-format='$with_package_format' requires fakeroot. Install fakeroot.])
-        fi
+        )
     fi
     PKGFORMAT="$with_package_format"
     AC_MSG_RESULT([$PKGFORMAT])
@@ -6054,6 +6054,7 @@ else
     AC_MSG_RESULT([none])
 fi
 AC_SUBST(PKGFORMAT)
+AC_SUBST(FAKEROOT)
 
 dnl ===================================================================
 dnl handle help related options

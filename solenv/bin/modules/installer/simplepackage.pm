@@ -488,7 +488,7 @@ sub create_package
         my $fakerootstring = "";
         if (( $installer::globals::issolarisbuild ) || ( $installer::globals::islinuxbuild ))
         {
-            $fakerootstring = "fakeroot";
+            $fakerootstring = $ENV{'FAKEROOT'};
         }
 
         $systemcall = "cd $tempdir; $fakerootstring tar -cf - . | $installer::globals::packertool > $archive";
