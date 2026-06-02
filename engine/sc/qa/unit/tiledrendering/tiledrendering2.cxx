@@ -22,6 +22,7 @@
 #include <sctestviewcallback.hxx>
 #include <docuno.hxx>
 #include <scmod.hxx>
+#include <sfx2/linkmgr.hxx>
 #include <tabvwsh.hxx>
 #include <postit.hxx>
 
@@ -421,6 +422,15 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testShapeBackgroundRemoteNotFetched)
     loadWithParams(createFileURL(u"shape-background-link.fods"), aParams);
     ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     CPPUNIT_ASSERT(pModelObj);
+
+    // The shape's deferred remote fill bitmap is registered as an external
+    // link as the shape is imported, so it appears in Edit, Links to External
+    // Files and can be updated or broken.
+    const sfx2::LinkManager* pLinkMgr = pModelObj->GetDocument()->GetLinkManager();
+    CPPUNIT_ASSERT(pLinkMgr);
+    CPPUNIT_ASSERT_MESSAGE("shape fill bitmap link should be registered",
+                           !pLinkMgr->GetLinks().empty());
+
     pModelObj->initializeForTiledRendering({});
 
     ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::WITHOUT_ALPHA);

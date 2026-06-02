@@ -99,7 +99,7 @@ public:
         aSet.Put(XFillBitmapItem(aName, aGrf));
         m_rTracker.setUpdatingHost(m_pObj);
         m_pObj->SetMergedItemSetAndBroadcast(aSet);
-        m_rTracker.setUpdatingHost(nullptr);
+        m_rTracker.clearUpdatingHost();
         return SUCCESS;
     }
 
@@ -158,7 +158,7 @@ public:
             aName = pItem->GetName();
         m_rTracker.setUpdatingHost(m_pPage);
         rProps.PutItem(XFillBitmapItem(aName, aGrf));
-        m_rTracker.setUpdatingHost(nullptr);
+        m_rTracker.clearUpdatingHost();
         return SUCCESS;
     }
 
@@ -256,7 +256,7 @@ void FillBitmapLinkTracker::onURLChangedImpl(std::map<Host*, tools::SvRef<sfx2::
                                              Host& rHost, std::u16string_view rNewURL)
 {
     // ignore the write-back of a graphic this tracker just resolved for rHost
-    if (static_cast<const void*>(&rHost) == m_pUpdatingHost)
+    if (isUpdatingHost(&rHost))
         return;
 
     sfx2::LinkManager* pLinkMgr = m_rModel.GetLinkManager();

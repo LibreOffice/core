@@ -1112,7 +1112,9 @@ void SdrOle2Obj::SyncObjVisualArea(const uno::Reference<embed::XEmbeddedObject>&
             aRect.SetSize(Size(aSz.Width, aSz.Height));
         }
         catch (const uno::Exception&)
-        {}
+        {
+            TOOLS_WARN_EXCEPTION("svx.svdraw", "");
+        }
         SetLogicRect(aRect);
     }
     else
@@ -1124,7 +1126,9 @@ void SdrOle2Obj::SyncObjVisualArea(const uno::Reference<embed::XEmbeddedObject>&
             xObj->setVisualAreaSize(GetAspect(), aSz);
         }
         catch (const uno::Exception&)
-        {}
+        {
+            TOOLS_WARN_EXCEPTION("svx.svdraw", "");
+        }
     }
 }
 

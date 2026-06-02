@@ -16,11 +16,13 @@
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <svl/cryptosign.hxx>
+#include <sfx2/linkmgr.hxx>
 
 #include <vcl/virdev.hxx>
 
 #include <DrawDocShell.hxx>
 #include <ViewShell.hxx>
+#include <drawdoc.hxx>
 #include <unomodel.hxx>
 
 using namespace css;
@@ -189,6 +191,42 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideBackgroundRemoteNotFetched)
     loadWithParams(createFileURL(u"slide-background-link.fodp"), aParams);
     SdXImpressDocument* pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pImpressDocument);
+
+    // The slide's deferred remote background fill bitmap is registered as an
+    // external link as the page is imported, so it appears in Edit, Links to
+    // External Files and can be updated or broken.
+    sfx2::LinkManager* pLinkMgr = pImpressDocument->GetDoc()->GetLinkManager();
+    CPPUNIT_ASSERT(pLinkMgr);
+    CPPUNIT_ASSERT_MESSAGE("slide background fill bitmap link should be registered",
+                           !pLinkMgr->GetLinks().empty());
+
+    pImpressDocument->initializeForTiledRendering({});
+
+    ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::WITHOUT_ALPHA);
+    pDevice->SetOutputSizePixel(Size(1024, 768));
+    pImpressDocument->paintTile(*pDevice, 1024, 768, 0, 0, 15360, 7680);
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testMasterPageBackgroundRemoteNotFetched)
+{
+    // A master page background fill image with a remote URL must not fetch
+    // the URL during paint when link updates are not allowed. The master
+    // background lands on the master's presentation style sheet, not on the
+    // page item set, so the link is registered through the SfxStyleSheet path
+    // rather than the SdrPage one.
+    uno::Sequence<beans::PropertyValue> aParams = {
+        comphelper::makePropertyValue(u"UpdateDocMode"_ustr,
+                                      sal_Int16(css::document::UpdateDocMode::NO_UPDATE)),
+    };
+    loadWithParams(createFileURL(u"master-page-background-link.fodp"), aParams);
+    SdXImpressDocument* pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pImpressDocument);
+
+    sfx2::LinkManager* pLinkMgr = pImpressDocument->GetDoc()->GetLinkManager();
+    CPPUNIT_ASSERT(pLinkMgr);
+    CPPUNIT_ASSERT_MESSAGE("master page background fill bitmap link should be registered",
+                           !pLinkMgr->GetLinks().empty());
+
     pImpressDocument->initializeForTiledRendering({});
 
     ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::WITHOUT_ALPHA);

@@ -18,6 +18,7 @@
 #include <tools/ref.hxx>
 #include <map>
 #include <string_view>
+#include <variant>
 #include <vector>
 
 class SdrModel;
@@ -72,16 +73,25 @@ public:
     void onFillBitmapURLChanged(SfxStyleSheet& rStyle, std::u16string_view rNewURL);
 
     // Suppress the onFillBitmapURLChanged that a link's own write-back of the
-    // resolved graphic would otherwise raise for its host.
-    void setUpdatingHost(const void* pHost) { m_pUpdatingHost = pHost; }
+    // resolved graphic would otherwise raise for its host. The host is held by
+    // its own type so a write-back is matched only against the same host type.
+    template <typename Host> void setUpdatingHost(Host* pHost) { m_aUpdatingHost = pHost; }
+    void clearUpdatingHost() { m_aUpdatingHost = std::monostate{}; }
 
 private:
     template <typename Host, typename Link>
     void onURLChangedImpl(std::map<Host*, tools::SvRef<sfx2::SvBaseLink>>& rMap, Host& rHost,
                           std::u16string_view rNewURL);
 
+    template <typename Host> bool isUpdatingHost(Host* pHost) const
+    {
+        auto const* ppHost = std::get_if<Host*>(&m_aUpdatingHost);
+        return ppHost && *ppHost == pHost;
+    }
+
     SdrModel& m_rModel;
-    const void* m_pUpdatingHost = nullptr;
+    /// std::monostate is there to indicate no host is being updated
+    std::variant<std::monostate, SdrObject*, SdrPage*, SfxStyleSheet*> m_aUpdatingHost;
     std::map<SdrObject*, tools::SvRef<sfx2::SvBaseLink>> m_aObjLinks;
     std::map<SdrPage*, tools::SvRef<sfx2::SvBaseLink>> m_aPageLinks;
     std::map<SfxStyleSheet*, tools::SvRef<sfx2::SvBaseLink>> m_aStyleLinks;
