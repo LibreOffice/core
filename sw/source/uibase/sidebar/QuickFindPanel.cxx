@@ -23,7 +23,6 @@
 #include <cntfrm.hxx>
 #include <strings.hrc>
 #include <vcl/event.hxx>
-#include <vcl/jsdialog/executor.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/weld/Builder.hxx>
@@ -150,15 +149,6 @@ QuickFindPanel::QuickFindPanel(weld::Widget* pParent, const uno::Reference<frame
     m_xAcceleratorExecute->init(comphelper::getProcessComponentContext(), rxFrame);
 
     m_xSearchComboBox->set_entry_completion(false);
-    if (comphelper::LibreOfficeKit::isActive())
-    {
-        sal_uInt64 nShellId = reinterpret_cast<sal_uInt64>(SfxViewShell::Current());
-        jsdialog::SendQuickFindForView(nShellId);
-
-        // disable search options for online as still tunneled dialog
-        m_xSearchOptionsToolbar->set_visible(false);
-        m_xTopbar->set_visible(false);
-    }
     m_nMinimumPanelWidth
         = m_xBuilder->weld_widget(u"box"_ustr)->get_preferred_size().getWidth() + (6 * 2) + 6;
     m_xContainer->set_size_request(m_nMinimumPanelWidth, 1);

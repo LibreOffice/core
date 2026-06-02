@@ -25,7 +25,6 @@
 #include <vcl/accessibility/vclxaccessiblecomponent.hxx>
 #include <vcl/vclevent.hxx>
 #include <vcl/wrkwin.hxx>
-#include <comphelper/lok.hxx>
 
 #include <accessibility/floatingwindowaccessible.hxx>
 #include <accessibility/vclxaccessiblefixedtext.hxx>
@@ -634,8 +633,7 @@ vcl::Window* Window::GetAccessibleRelationLabelFor() const
     if (pWindow)
         return pWindow;
 
-    // Avoid searching when using LOKit (jsdialog) - it can slow down dumping to json when we have a huge hierarchy
-    if (!comphelper::LibreOfficeKit::isActive() && !isContainerWindow(this) && !isContainerWindow(GetParent()))
+    if (!isContainerWindow(this) && !isContainerWindow(GetParent()))
         return getLegacyNonLayoutAccessibleRelationLabelFor();
 
     return nullptr;
@@ -658,8 +656,7 @@ vcl::Window* Window::GetAccessibleRelationLabeledBy() const
         return aMnemonicLabels[0];
     }
 
-    // Avoid searching when using LOKit (jsdialog) - it can slow down dumping to json when we have a huge hierarchy
-    if (!comphelper::LibreOfficeKit::isActive() && !isContainerWindow(this) && !isContainerWindow(GetParent()))
+    if (!isContainerWindow(this) && !isContainerWindow(GetParent()))
         return getLegacyNonLayoutAccessibleRelationLabeledBy();
 
     return nullptr;

@@ -37,12 +37,11 @@ namespace sm::sidebar
 class SmElementsPanel : public PanelLayout, public SfxListener
 {
 public:
-    static std::unique_ptr<PanelLayout> Create(weld::Widget& rParent, const SfxBindings& rBindings,
-                                               sal_uInt64 nWindowId);
+    static std::unique_ptr<PanelLayout> Create(weld::Widget& rParent, const SfxBindings& rBindings);
 
     void Notify(SfxBroadcaster& rBC, const SfxHint& rHint);
 
-    SmElementsPanel(weld::Widget& rParent, const SfxBindings& rBindings, sal_uInt64 nWindowId);
+    SmElementsPanel(weld::Widget& rParent, const SfxBindings& rBindings);
     ~SmElementsPanel();
 
 private:

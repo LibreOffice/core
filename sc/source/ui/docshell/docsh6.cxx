@@ -506,7 +506,7 @@ void ScDocShell::CheckConfigOptions()
         {
             std::shared_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pViewShell->GetFrameWeld(),
                                                           VclMessageType::Info, VclButtonsType::Ok,
-                                                          ScResId(STR_OPTIONS_WARN_SEPARATORS), pViewShell));
+                                                          ScResId(STR_OPTIONS_WARN_SEPARATORS)));
             xInfoBox->runAsync(xInfoBox, [] (int) {});
         }
 

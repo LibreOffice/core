@@ -63,8 +63,6 @@ void StringLoop::run()
         return;
     if (loplugin::isSamePathname(fn, SRCDIR "/vcl/source/pdf/pdfwriter_impl.cxx"))
         return;
-    if (loplugin::isSamePathname(fn, SRCDIR "/vcl/jsdialog/jsdialogregister.cxx"))
-        return;
     if (loplugin::hasPathnamePrefix(fn, SRCDIR "/idl/source/prj/command.cxx"))
         return;
     if (loplugin::hasPathnamePrefix(fn, SRCDIR "/framework/source/accelerators/storageholder.cxx"))

@@ -92,9 +92,7 @@ css::uno::Reference<css::ui::XUIElement> SAL_CALL SmPanelFactory::createUIElemen
         }
         else if (ResourceURL.endsWith("/MathElementsPanel"))
         {
-            SfxViewShell* pViewShell = SfxViewShell::Get(xFrame->getController());
-            pPanel = sm::sidebar::SmElementsPanel::Create(*pParent, *pBindings,
-                                                          reinterpret_cast<sal_uInt64>(pViewShell));
+            pPanel = sm::sidebar::SmElementsPanel::Create(*pParent, *pBindings);
             aLayoutSize = { 300, -1, -1 };
         }
 

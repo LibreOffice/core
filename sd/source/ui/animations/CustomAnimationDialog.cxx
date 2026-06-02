@@ -89,8 +89,7 @@ using ::com::sun::star::beans::XPropertySet;
 namespace sd {
 
 SdPropertySubControl::SdPropertySubControl(weld::Container* pParent)
-    : mxBuilder(Application::CreateBuilder(pParent, u"modules/simpress/ui/customanimationfragment.ui"_ustr,
-        reinterpret_cast<sal_uInt64>(SfxViewShell::Current())))
+    : mxBuilder(Application::CreateBuilder(pParent, u"modules/simpress/ui/customanimationfragment.ui"_ustr))
     , mxContainer(mxBuilder->weld_container(u"EffectFragment"_ustr))
     , mpParent(pParent)
 {

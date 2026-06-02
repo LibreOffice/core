@@ -55,7 +55,6 @@
 #include <unotools/charclass.hxx>
 #include <utility>
 #include <vcl/help.hxx>
-#include <vcl/jsdialog/executor.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/cursor.hxx>
 #include <vcl/settings.hxx>
@@ -1876,19 +1875,6 @@ void ScTabViewShell::LOKSendFormulabarUpdate(const EditView* pActiveView,
         sal_uInt32 nFormat = pPattern->GetNumberFormat( pFormatter );
         maSendFormulabarUpdate.m_separator = pFormatter->GetFormatDecimalSep(nFormat);
     }
-
-    maSendFormulabarUpdate.Send();
-}
-
-void ScTabViewShell::SendFormulabarUpdate::Send()
-{
-    std::unique_ptr<jsdialog::ActionDataMap> pData = std::make_unique<jsdialog::ActionDataMap>();
-    (*pData)["action_type"_ostr] = "setText";
-    (*pData)["text"_ostr] = m_aText;
-    (*pData)["selection"_ostr] = m_aSelection;
-    (*pData)["separator"_ostr] = m_separator;
-    OUString sWindowId = OUString::number(m_nShellId) + "formulabar";
-    jsdialog::SendAction(sWindowId, u"sc_input_window"_ustr, std::move(pData));
 }
 
 // Calculate selection and display as tip help

@@ -21,14 +21,7 @@ using namespace sfx2::sidebar;
 
 PanelLayout::PanelLayout(weld::Widget* pParent, const OUString& rID,
                          const OUString& rUIXMLDescription)
-    : PanelLayout(pParent, rID, rUIXMLDescription,
-                  reinterpret_cast<sal_uInt64>(SfxViewShell::Current()))
-{
-}
-
-PanelLayout::PanelLayout(weld::Widget* pParent, const OUString& rID,
-                         const OUString& rUIXMLDescription, sal_uInt64 nWindowId)
-    : m_xBuilder(Application::CreateBuilder(pParent, rUIXMLDescription, nWindowId))
+    : m_xBuilder(Application::CreateBuilder(pParent, rUIXMLDescription))
     , m_xContainer(m_xBuilder->weld_container(rID))
     , m_pPanel(nullptr)
 {

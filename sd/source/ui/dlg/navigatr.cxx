@@ -49,11 +49,12 @@
 #include <DrawViewShell.hxx>
 #include <utility>
 
-#include <vcl/jsdialog/executor.hxx>
-
 #include <vcl/commandevent.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld/Builder.hxx>
+#include <vcl/weld/ComboBox.hxx>
+#include <vcl/weld/Menu.hxx>
+#include <vcl/weld/Toolbar.hxx>
 #include <comphelper/lok.hxx>
 
 #include <sdpage.hxx>
@@ -77,12 +78,6 @@ SdNavigatorWin::SdNavigatorWin(weld::Widget* pParent, SfxBindings* pInBindings, 
     , meDragType ( NAVIGATOR_DRAGTYPE_EMBEDDED )
     , mpBindings ( pInBindings )
 {
-    if (comphelper::LibreOfficeKit::isActive())
-    {
-        sal_uInt64 nShellId = reinterpret_cast<sal_uInt64>(SfxViewShell::Current());
-        jsdialog::SendNavigatorForView(nShellId);
-    }
-
     mxTlbObjects->SetViewFrame( mpBindings->GetDispatcher()->GetFrame() );
 
     mxTlbObjects->connect_item_activated(LINK(this, SdNavigatorWin, ClickObjectHdl));

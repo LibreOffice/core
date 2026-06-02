@@ -78,19 +78,19 @@ executeErrorDialog(
     {
         case task::InteractionClassification_ERROR:
             xBox.reset(Application::CreateMessageDialog(pParent,
-                        VclMessageType::Error, VclButtonsType::NONE, aText.makeStringAndClear(), GetpApp()));
+                        VclMessageType::Error, VclButtonsType::NONE, aText.makeStringAndClear()));
             break;
         case task::InteractionClassification_WARNING:
             xBox.reset(Application::CreateMessageDialog(pParent,
-                        VclMessageType::Warning, VclButtonsType::NONE, aText.makeStringAndClear(), GetpApp()));
+                        VclMessageType::Warning, VclButtonsType::NONE, aText.makeStringAndClear()));
             break;
         case task::InteractionClassification_INFO:
             xBox.reset(Application::CreateMessageDialog(pParent,
-                        VclMessageType::Info, VclButtonsType::NONE, aText.makeStringAndClear(), GetpApp()));
+                        VclMessageType::Info, VclButtonsType::NONE, aText.makeStringAndClear()));
             break;
         case task::InteractionClassification_QUERY:
             xBox.reset(Application::CreateMessageDialog(pParent,
-                        VclMessageType::Question, VclButtonsType::NONE, aText.makeStringAndClear(), GetpApp()));
+                        VclMessageType::Question, VclButtonsType::NONE, aText.makeStringAndClear()));
             break;
         default:
             assert(false);
@@ -325,8 +325,7 @@ UUIInteractionHelper::handleLoadReadOnlyRequest(
         Application::CreateMessageDialog(Application::GetFrameWeld(xParent),
                                          VclMessageType::Question,
                                          VclButtonsType::YesNo,
-                                         aMessage,
-                                         GetpApp()));
+                                         aMessage));
 
     if (xBox->run() == RET_YES)
     {

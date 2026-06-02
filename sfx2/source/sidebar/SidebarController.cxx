@@ -727,7 +727,6 @@ void SidebarController::SwitchToDeck (
         if (xDeckDescriptor)
         {
             SwitchToDeck(*xDeckDescriptor, maCurrentContext);
-            Deck::LOKSendSidebarFullUpdate();
         }
     }
 }
@@ -1224,19 +1223,6 @@ IMPL_LINK(SidebarController, OnSubMenuItemSelected, const OUString&, rCurItemId,
 
 void SidebarController::RequestCloseDeck()
 {
-    if (comphelper::LibreOfficeKit::isActive() && mpCurrentDeck)
-    {
-        const SfxViewShell* pViewShell = SfxViewShell::Current();
-        if (pViewShell)
-        {
-            tools::JsonWriter aJsonWriter;
-            aJsonWriter.put("id", mpParentWindow->get_id());
-            aJsonWriter.put("action", "close");
-            aJsonWriter.put("jsontype", "sidebar");
-            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_JSDIALOG, aJsonWriter.finishAndGetAsOString());
-        }
-    }
-
     mbIsDeckRequestedOpen = false;
     UpdateDeckOpenState();
 

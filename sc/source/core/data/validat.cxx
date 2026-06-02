@@ -420,7 +420,7 @@ void ScValidationData::DoError(weld::Window* pParent, const OUString& rInput, co
     }
 
     std::shared_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pParent, eType,
-                                              eStyle, aMessage, SfxViewShell::Current()));
+                                              eStyle, aMessage));
     xBox->set_title(aTitle);
     xBox->SetInstallLOKNotifierHdl(LINK(nullptr, ScValidationData, InstallLOKNotifierHdl));
 

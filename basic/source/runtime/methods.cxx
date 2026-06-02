@@ -4120,7 +4120,7 @@ void SbRtl_MsgBox(StarBASIC *, SbxArray & rPar, bool)
     }
 
     std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pParent,
-                eType, VclButtonsType::NONE, aMsg, GetpApp()));
+                eType, VclButtonsType::NONE, aMsg));
 
     std::vector<std::pair<StandardButtonType, sal_Int16>> buttons;
     switch (nType & 0x0F) // delete bits 4-16

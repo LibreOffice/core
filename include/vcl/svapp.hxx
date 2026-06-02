@@ -1246,13 +1246,6 @@ public:
     /** Collect what .ui files are used*/
     static void                 EnableUICoverage(bool bEnable);
 
-    /** Report on what .ui files were used*/
-    static void UICoverageReport(tools::JsonWriter& rJson,
-            /*LibreOfficeKitDocumentType*/ int eDocType,
-            bool linguisticDataAvailable);
-
-    ///@}
-
     /** Get the desktop environment the process is currently running in
 
      @returns The desktop environment
@@ -1333,13 +1326,12 @@ public:
     // For vclbootstrapprotector:
     static void setDeInitHook(Link<LinkParamNone*,void> const & hook);
 
-    static std::unique_ptr<weld::Builder> CreateBuilder(weld::Widget* pParent, const OUString &rUIFile, sal_uInt64 nLOKWindowId = 0);
+    static std::unique_ptr<weld::Builder> CreateBuilder(weld::Widget* pParent, const OUString &rUIFile);
     // For the duration of vcl parent windows
     static std::unique_ptr<weld::Builder> CreateInterimBuilder(vcl::Window* pParent, const OUString &rUIFile, bool bAllowCycleFocusOut, sal_uInt64 nLOKWindowId = 0);
 
     static weld::MessageDialog* CreateMessageDialog(weld::Widget* pParent, VclMessageType eMessageType,
-                                                    VclButtonsType eButtonType, const OUString& rPrimaryMessage,
-                                                    const ILibreOfficeKitNotifier* pNotifier = nullptr);
+                                                    VclButtonsType eButtonType, const OUString& rPrimaryMessage);
 
     static weld::Window* GetFrameWeld(const css::uno::Reference<css::awt::XWindow>& rWindow);
 

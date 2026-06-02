@@ -4414,46 +4414,6 @@ vcl/inc/impgraph.hxx:169
     void ImpGraphic::ImpGraphic(_Bool)
     _Bool bDefault
     0
-vcl/inc/jsdialog/jsdialogbuilder.hxx:286
-    void JSWidget::JSWidget<BaseInstanceClass, VclClass>(class JSDialogSender *,type-parameter-?-? *,class SalInstanceBuilder *,const class com::sun::star::uno::Reference<class com::sun::star::accessibility::XAccessible> &,class std::function<class std::unique_ptr<class UIObject> (class vcl::Window *)>,void *,_Bool)
-    _Bool bTakeOwnership
-    0
-vcl/inc/jsdialog/jsdialogbuilder.hxx:413
-    void JSDialog::JSDialog(class JSDialogSender *,class Dialog *,class SalInstanceBuilder *,_Bool)
-    _Bool bTakeOwnership
-    0
-vcl/inc/jsdialog/jsdialogbuilder.hxx:430
-    void JSAssistant::JSAssistant(class JSDialogSender *,class vcl::RoadmapWizard *,class SalInstanceBuilder *,_Bool)
-    _Bool bTakeOwnership
-    0
-vcl/inc/jsdialog/jsdialogbuilder.hxx:485
-    void JSButton::JSButton(class JSDialogSender *,class Button *,class SalInstanceBuilder *,_Bool)
-    class SalInstanceBuilder * pBuilder
-    0
-vcl/inc/jsdialog/jsdialogbuilder.hxx:485
-    void JSButton::JSButton(class JSDialogSender *,class Button *,class SalInstanceBuilder *,_Bool)
-    _Bool bTakeOwnership
-    0
-vcl/inc/jsdialog/jsdialogbuilder.hxx:599
-    void JSMessageDialog::JSMessageDialog(class JSDialogSender *,class MessageDialog *,class SalInstanceBuilder *,_Bool)
-    _Bool bTakeOwnership
-    0
-vcl/inc/jsdialog/jsdialogbuilder.hxx:601
-    void JSMessageDialog::JSMessageDialog(class MessageDialog *,class SalInstanceBuilder *,_Bool)
-    class SalInstanceBuilder * pBuilder
-    0
-vcl/inc/jsdialog/jsdialogbuilder.hxx:601
-    void JSMessageDialog::JSMessageDialog(class MessageDialog *,class SalInstanceBuilder *,_Bool)
-    _Bool bTakeOwnership
-    1
-vcl/inc/jsdialog/jsdialogbuilder.hxx:777
-    void JSMenu::JSMenu(class JSDialogSender *,class PopupMenu *,class SalInstanceBuilder *,_Bool)
-    _Bool bTakeOwnership
-    0
-vcl/inc/jsdialog/jsdialogbuilder.hxx:789
-    void JSPopover::JSPopover(class JSDialogSender *,class DockingWindow *,class SalInstanceBuilder *,_Bool)
-    _Bool bTakeOwnership
-    0
 vcl/inc/listbox.hxx:145
     class rtl::OUString ImplEntryList::GetSelectedEntry(int) const
     int nIndex

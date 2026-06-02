@@ -873,7 +873,7 @@ executeMessageBox(
     SolarMutexGuard aGuard;
 
     std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pParent, eMessageType,
-        eMessageType == VclMessageType::Question ? VclButtonsType::YesNo : VclButtonsType::Ok, rMessage, GetpApp()));
+        eMessageType == VclMessageType::Question ? VclButtonsType::YesNo : VclButtonsType::Ok, rMessage));
     xBox->set_title(rTitle);
 
     short nMessResult = xBox->run();

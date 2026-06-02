@@ -149,9 +149,6 @@ public:
     void testGetFilterTypes();
     void testGetPartPageRectangles();
     void testSearchCalc();
-    void testPropertySettingOnFormulaBar();
-    void testSearchTermReset();
-    void testFormulaBarAcceptButton();
     void testSearchAllNotificationsCalc();
     void testPaintTile();
     void testSaveAs();
@@ -194,7 +191,6 @@ public:
     void testCommentsAddEditDeleteDraw();
     void testCommentsInReadOnlyMode();
     void testRedlinesInReadOnlyMode();
-    void testCalcValidityDropdown();
     void testCalcValidityDropdownInReadonlyMode();
     void testRunMacro();
     void testExtractParameter();
@@ -228,9 +224,6 @@ public:
     CPPUNIT_TEST(testGetFilterTypes);
     CPPUNIT_TEST(testGetPartPageRectangles);
     CPPUNIT_TEST(testSearchCalc);
-    CPPUNIT_TEST(testPropertySettingOnFormulaBar);
-    CPPUNIT_TEST(testSearchTermReset);
-    CPPUNIT_TEST(testFormulaBarAcceptButton);
     CPPUNIT_TEST(testSearchAllNotificationsCalc);
     CPPUNIT_TEST(testPaintTile);
     CPPUNIT_TEST(testSaveAs);
@@ -273,7 +266,6 @@ public:
     CPPUNIT_TEST(testCommentsAddEditDeleteDraw);
     CPPUNIT_TEST(testCommentsInReadOnlyMode);
     CPPUNIT_TEST(testRedlinesInReadOnlyMode);
-    CPPUNIT_TEST(testCalcValidityDropdown);
     CPPUNIT_TEST(testCalcValidityDropdownInReadonlyMode);
     CPPUNIT_TEST(testRunMacro);
     CPPUNIT_TEST(testExtractParameter);
@@ -2288,8 +2280,6 @@ public:
     boost::property_tree::ptree m_aCommentCallbackResult;
     boost::property_tree::ptree m_aColorPaletteCallbackResult;
     RedlineInfo m_aLastRedlineInfo;
-    std::string m_searchTerm;
-    int m_findReplaceDialogId;
 
     ViewCallback(LibLODocument_Impl* pDocument)
         : mpDocument(pDocument),
@@ -2365,44 +2355,6 @@ public:
             std::stringstream aStream(pPayload);
             boost::property_tree::read_json(aStream, m_aColorPaletteCallbackResult);
             ++m_nColorPaletteCallbackCount;
-        }
-        break;
-        case LOK_CALLBACK_WINDOW:
-        {
-            m_JSONDialog.clear();
-            std::stringstream aStream(pPayload);
-            boost::property_tree::read_json(aStream, m_JSONDialog);
-
-            if (m_JSONDialog.find("title") != m_JSONDialog.not_found() && m_JSONDialog.get_child("title").get_value<std::string>() == "Find and Replace")
-            {
-                m_findReplaceDialogId = std::atoi(m_JSONDialog.get_child("id").get_value<std::string>().c_str());
-                // Set search term to something random and make sure it is read from incoming JSON (LOK_CALLBACK_JSDIALOG).
-                m_searchTerm = "something random";
-            }
-        }
-        break;
-        case LOK_CALLBACK_JSDIALOG:
-        {
-            m_JSONDialog.clear();
-            std::stringstream aStream(pPayload);
-            boost::property_tree::read_json(aStream, m_JSONDialog);
-
-            if (m_JSONDialog.find("jsontype") != m_JSONDialog.not_found() && m_JSONDialog.get_child("jsontype").get_value<std::string>() == "dialog")
-            {
-                if (m_JSONDialog.find("data") != m_JSONDialog.not_found())
-                {
-                    if (m_JSONDialog.get_child("data").find("control_id") != m_JSONDialog.get_child("data").not_found())
-                    {
-                        if (m_JSONDialog.get_child("data").get_child("control_id").get_value<std::string>() == "searchterm")
-                        {
-                            if (m_JSONDialog.get_child("data").find("text") != m_JSONDialog.get_child("data").not_found())
-                            {
-                                m_searchTerm = m_JSONDialog.get_child("data").get_child("text").get_value<std::string>();
-                            }
-                        }
-                    }
-                }
-            }
         }
         break;
         case LOK_CALLBACK_REDLINE_TABLE_SIZE_CHANGED:
@@ -3120,42 +3072,6 @@ void DesktopLOKTest::testRedlinesInReadOnlyMode()
     CPPUNIT_ASSERT(!aCallback.m_aCommentCallbackResult.empty());
 }
 
-void DesktopLOKTest::testCalcValidityDropdown()
-{
-    LibLODocument_Impl* pDocument = loadDoc("validity.ods");
-    Scheduler::ProcessEventsToIdle();
-    pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
-    Scheduler::ProcessEventsToIdle();
-
-    ViewCallback aView(pDocument);
-    Scheduler::ProcessEventsToIdle();
-
-    // Select row 1 from column 1.
-    pDocument->pClass->postMouseEvent(pDocument, LOK_MOUSEEVENT_MOUSEBUTTONDOWN, 1000, 150, 1, 1, 0);
-    Scheduler::ProcessEventsToIdle();
-    pDocument->pClass->postMouseEvent(pDocument, LOK_MOUSEEVENT_MOUSEBUTTONUP, 1000, 150, 1, 1, 0);
-    Scheduler::ProcessEventsToIdle();
-
-    // Open dropdown.
-    pDocument->pClass->postMouseEvent(pDocument, LOK_MOUSEEVENT_MOUSEBUTTONDOWN, 1380, 150, 1, 1, 0);
-    Scheduler::ProcessEventsToIdle();
-    pDocument->pClass->postMouseEvent(pDocument, LOK_MOUSEEVENT_MOUSEBUTTONUP, 1380, 150, 1, 1, 0);
-    Scheduler::ProcessEventsToIdle();
-
-    // Select some value from dropdown.
-    pDocument->pClass->sendDialogEvent(pDocument, aView.m_JSONDialog.get_child("id").get_value<int>(), "{\"id\":\"list\", \"cmd\": \"select\", \"data\": \"3\", \"type\": \"treeview\"}");
-    Scheduler::ProcessEventsToIdle();
-
-    // Activate the selected value.
-    pDocument->pClass->sendDialogEvent(pDocument, aView.m_JSONDialog.get_child("id").get_value<int>(), "{\"id\":\"list\", \"cmd\": \"activate\", \"data\": \"3\", \"type\": \"treeview\"}");
-    Scheduler::ProcessEventsToIdle();
-
-    // Check the content of the current cell. The selected value of the dropdown was 1. It should be 4 now.
-    char* pCellContent = pDocument->pClass->getTextSelection(pDocument, "text/plain;charset=utf-8", nullptr);
-    CPPUNIT_ASSERT_EQUAL("4"_ostr, OString(pCellContent));
-    free(pCellContent);
-}
-
 void DesktopLOKTest::testCalcValidityDropdownInReadonlyMode()
 {
     LibLODocument_Impl* pDocument = loadDoc("validity.ods");
@@ -3184,128 +3100,6 @@ void DesktopLOKTest::testCalcValidityDropdownInReadonlyMode()
 
     // Dropdown should not open in readonly mode.
     CPPUNIT_ASSERT_EQUAL(true, aView.m_JSONDialog.empty());
-}
-
-void DesktopLOKTest::testPropertySettingOnFormulaBar()
-{
-    LibLibreOffice_Impl aOffice;
-    LibLODocument_Impl* pDocument = loadDoc("formulabar.ods");
-    Scheduler::ProcessEventsToIdle();
-
-    pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
-    Scheduler::ProcessEventsToIdle();
-
-    ViewCallback aView(pDocument);
-    Scheduler::ProcessEventsToIdle();
-
-    // Go to A1. There are 2 words in the cell.
-    pDocument->pClass->postMouseEvent(pDocument, LOK_MOUSEEVENT_MOUSEBUTTONDOWN, 1000, 150, 1, 1, 0);
-    pDocument->pClass->postMouseEvent(pDocument, LOK_MOUSEEVENT_MOUSEBUTTONUP, 1000, 150, 1, 1, 0);
-    Scheduler::ProcessEventsToIdle();
-
-    // Set the focus to formulabar.
-    pDocument->pClass->sendDialogEvent(pDocument, 0, "{\"id\":\"sc_input_window\", \"cmd\": \"grab_focus\", \"data\": \"null\", \"type\": \"drawingarea\"}");
-    Scheduler::ProcessEventsToIdle();
-
-    // Select the first word.
-    pDocument->pClass->sendDialogEvent(pDocument, 0, "{\"id\":\"sc_input_window\", \"cmd\": \"textselection\", \"data\": \"0;3;0;0\", \"type\": \"drawingarea\"}");
-    Scheduler::ProcessEventsToIdle();
-
-    // Set bold property for the selected word.
-    pDocument->pClass->postUnoCommand(pDocument, ".uno:Bold", nullptr, false);
-    Scheduler::ProcessEventsToIdle();
-
-    CPPUNIT_ASSERT_EQUAL(true, aView.m_stateBold);
-
-    // Select the second word. Without the fix, this selection removes the "bold" attribute.
-    pDocument->pClass->sendDialogEvent(pDocument, 0, "{\"id\":\"sc_input_window\", \"cmd\": \"textselection\", \"data\": \"4;9;0;0\", \"type\": \"drawingarea\"}");
-    Scheduler::ProcessEventsToIdle();
-
-    // Select the first word again.
-    pDocument->pClass->sendDialogEvent(pDocument, 0, "{\"id\":\"sc_input_window\", \"cmd\": \"textselection\", \"data\": \"0;3;0;0\", \"type\": \"drawingarea\"}");
-    Scheduler::ProcessEventsToIdle();
-
-    // Unset bold property for the selected word.
-    pDocument->pClass->postUnoCommand(pDocument, ".uno:Bold", nullptr, false);
-    Scheduler::ProcessEventsToIdle();
-
-    CPPUNIT_ASSERT_EQUAL(false, aView.m_stateBold); // This line doesn't pass without the fix in this commit.
-}
-
-void DesktopLOKTest::testSearchTermReset()
-{
-    LibLibreOffice_Impl aOffice;
-    LibLODocument_Impl* pDocument = loadDoc("empty.ods");
-    Scheduler::ProcessEventsToIdle();
-
-    pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
-    Scheduler::ProcessEventsToIdle();
-
-    ViewCallback aView(pDocument);
-    Scheduler::ProcessEventsToIdle();
-
-    pDocument->pClass->postUnoCommand(pDocument, ".uno:SearchDialog", nullptr, false);
-    Scheduler::ProcessEventsToIdle();
-
-    // Send "something" as current search string (searchterm).
-    pDocument->pClass->sendDialogEvent(pDocument, aView.m_findReplaceDialogId, "{\"id\":\"searchterm\", \"cmd\": \"change\", \"data\": \"something\", \"type\": \"combobox\"}");
-    Scheduler::ProcessEventsToIdle();
-
-    // Press search button.
-    pDocument->pClass->sendDialogEvent(pDocument, aView.m_findReplaceDialogId, "{\"id\":\"search\", \"cmd\": \"click\", \"data\": \"undefined\", \"type\": \"pushbutton\"}");
-    Scheduler::ProcessEventsToIdle();
-
-    // Close the dialog.
-    pDocument->pClass->sendDialogEvent(pDocument, aView.m_findReplaceDialogId, "{\"id\":\"__DIALOG__\", \"cmd\": \"close\", \"data\": \"null\", \"type\": \"dialog\"}");
-    Scheduler::ProcessEventsToIdle();
-
-    // Reopen search dialog.
-    pDocument->pClass->postUnoCommand(pDocument, ".uno:SearchDialog", nullptr, false);
-    Scheduler::ProcessEventsToIdle();
-
-    // We should have got the "searchterm" again. It should be empty. Below line doesn't pass without the changes in this commit.
-    CPPUNIT_ASSERT_EQUAL(std::string(""), aView.m_searchTerm);
-}
-
-void DesktopLOKTest::testFormulaBarAcceptButton()
-{
-    LibLibreOffice_Impl aOffice;
-    LibLODocument_Impl* pDocument = loadDoc("empty.ods");
-    Scheduler::ProcessEventsToIdle();
-
-    pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
-    Scheduler::ProcessEventsToIdle();
-
-    ViewCallback aView(pDocument);
-    Scheduler::ProcessEventsToIdle();
-
-    // Go to A1.
-    pDocument->pClass->postMouseEvent(pDocument, LOK_MOUSEEVENT_MOUSEBUTTONDOWN, 1000, 150, 1, 1, 0);
-    pDocument->pClass->postMouseEvent(pDocument, LOK_MOUSEEVENT_MOUSEBUTTONUP, 1000, 150, 1, 1, 0);
-    Scheduler::ProcessEventsToIdle();
-
-    // Set the focus to formulabar.
-    pDocument->pClass->sendDialogEvent(pDocument, 0, "{\"id\":\"sc_input_window\", \"cmd\": \"grab_focus\", \"data\": \"null\", \"type\": \"drawingarea\"}");
-    Scheduler::ProcessEventsToIdle();
-
-    // Set selection (nothing selected).
-    pDocument->pClass->sendDialogEvent(pDocument, 0, "{\"id\":\"sc_input_window\", \"cmd\": \"textselection\", \"data\": \"0;0;0;0\", \"type\": \"drawingarea\"}");
-    Scheduler::ProcessEventsToIdle();
-
-    // Set text.
-    pDocument->pClass->postWindowExtTextInputEvent(pDocument, 0, LOK_EXT_TEXTINPUT, "H");
-    pDocument->pClass->postWindowExtTextInputEvent(pDocument, 0, LOK_EXT_TEXTINPUT_END, "H");
-    Scheduler::ProcessEventsToIdle();
-
-    aView.m_JSONDialog.clear();
-    pDocument->pClass->postUnoCommand(pDocument, ".uno:AcceptFormula", nullptr, false);
-    Scheduler::ProcessEventsToIdle();
-    // Client should have receive a JSDialog event for formulabar by now.
-
-    // These lines don't pass without the fix in this commit.
-    CPPUNIT_ASSERT_EQUAL(std::string("formulabar"), aView.m_JSONDialog.get_child("jsontype").get_value<std::string>());
-    CPPUNIT_ASSERT_EQUAL(std::string("setText"), aView.m_JSONDialog.get_child("data").get_child("action_type").get_value<std::string>());
-    CPPUNIT_ASSERT_EQUAL(std::string("sc_input_window"), aView.m_JSONDialog.get_child("data").get_child("control_id").get_value<std::string>());
 }
 
 void DesktopLOKTest::testRunMacro()

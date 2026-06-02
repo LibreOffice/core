@@ -594,8 +594,6 @@ vcl/inc/font/TTFStructure.hxx:114
     font::HeadTable nGlyphDataFormat o3tl::sal_uInt16_BE
 vcl/inc/font/TTFStructure.hxx:126
     font::NameTable nVersion o3tl::sal_uInt16_BE
-vcl/inc/jsdialog/jsdialogbuilder.hxx:652
-    JSToolbar m_pPopovers std::map<sal_uInt16, weld::Widget *>
 vcl/inc/pdf/pdfbuildin_fonts.hxx:34
     vcl::pdf::BuildinFont m_nAscent const int
 vcl/inc/pdf/pdfbuildin_fonts.hxx:35

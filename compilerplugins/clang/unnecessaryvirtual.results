@@ -410,22 +410,6 @@ toolkit/inc/controls/geometrycontrolmodel.hxx:185
     void OGeometryControlModel::fillProperties(class com::sun::star::uno::Sequence<struct com::sun::star::beans::Property> &,class com::sun::star::uno::Sequence<struct com::sun::star::beans::Property> &,)const
 vcl/inc/font/LogicalFontInstance.hxx:128
     void LogicalFontInstance::ImplInitHbFont(struct hb_font_t *,)
-vcl/inc/jsdialog/jsdialogbuilder.hxx:322
-    void JSWidget::show()
-vcl/inc/jsdialog/jsdialogbuilder.hxx:335
-    void JSWidget::hide()
-vcl/inc/jsdialog/jsdialogbuilder.hxx:349
-    void JSWidget::set_sensitive(_Bool,)
-vcl/inc/jsdialog/jsdialogbuilder.hxx:362
-    class com::sun::star::uno::Reference<class com::sun::star::datatransfer::dnd::XDropTarget> JSWidget::get_drop_target()
-vcl/inc/jsdialog/jsdialogbuilder.hxx:370
-    void JSWidget::freeze()
-vcl/inc/jsdialog/jsdialogbuilder.hxx:376
-    void JSWidget::thaw()
-vcl/inc/jsdialog/jsdialogbuilder.hxx:385
-    void JSWidget::grab_focus()
-vcl/inc/jsdialog/jsdialogbuilder.hxx:430
-    void JSWidget::set_buildable_name(const class rtl::OUString &,)
 vcl/inc/salframe.hxx:146
     void SalFrame::SetRepresentedURL(const class rtl::OUString &,)
 vcl/inc/salframe.hxx:198

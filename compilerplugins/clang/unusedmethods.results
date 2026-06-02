@@ -1088,8 +1088,6 @@ include/vcl/inputctx.hxx:62
     _Bool InputContext::operator!=(const InputContext &) const
 include/vcl/ITiledRenderable.hxx:238
     enum PointerStyle vcl::ITiledRenderable::getPointer()
-include/vcl/jsdialog/executor.hxx:67
-    void LOKTrigger::trigger_clicked(weld::Button &)
 include/vcl/lok.hxx:23
     void vcl::lok::unregisterPollCallbacks()
 include/vcl/metric.hxx:52
@@ -2024,10 +2022,6 @@ vcl/inc/impfont.hxx:94
     unsigned long ImplFont::GetHashValue() const
 vcl/inc/ImplLayoutArgs.hxx:78
     std::basic_ostream<char> & operator<<(std::basic_ostream<char> &,const vcl::text::ImplLayoutArgs &)
-vcl/inc/jsdialog/jsdialogbuilder.hxx:70
-    void JSDropTarget::fire_dragEnter(const struct com::sun::star::datatransfer::dnd::DropTargetDragEnterEvent &)
-vcl/inc/jsdialog/jsdialogbuilder.hxx:592
-    void JSFormattedSpinButton::set_text_without_notify(const rtl::OUString &)
 vcl/inc/opengl/zone.hxx:24
     void OpenGLZone::relaxWatchdogTimings()
 vcl/inc/ppdparser.hxx:166

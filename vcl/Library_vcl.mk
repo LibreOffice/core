@@ -631,11 +631,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/backendtest/outputdevice/text \
     vcl/backendtest/outputdevice/rectangle \
     vcl/backendtest/GraphicsRenderTests \
-    vcl/jsdialog/enabled \
-    vcl/jsdialog/jsdialogbuilder \
-    vcl/jsdialog/jsdialogregister \
-    vcl/jsdialog/jsdialogsender \
-    vcl/jsdialog/executor \
 ))
 
 $(eval $(call gb_Library_add_cobjects,vcl,\

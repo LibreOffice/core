@@ -30,22 +30,13 @@
 #include <sfx2/viewsh.hxx>
 
 #include <vcl/event.hxx>
+#include <vcl/weld/ScrolledWindow.hxx>
 #include <comphelper/lok.hxx>
-#include <vcl/jsdialog/executor.hxx>
 #include <tools/json_writer.hxx>
 
 using namespace css;
 
 namespace sfx2::sidebar {
-
-void Deck::LOKSendSidebarFullUpdate()
-{
-    if (comphelper::LibreOfficeKit::isActive())
-    {
-        sal_uInt64 nShellId = reinterpret_cast<sal_uInt64>(SfxViewShell::Current());
-        jsdialog::SendSidebarForView(nShellId);
-    }
-}
 
 Deck::Deck(const DeckDescriptor& rDeckDescriptor, SidebarDockingWindow* pParentWindow,
            const std::function<void()>& rCloserAction)
@@ -129,7 +120,6 @@ void Deck::DataChanged(const DataChangedEvent&)
         rpPanel->DataChanged();
 
     RequestLayoutInternal();
-    Deck::LOKSendSidebarFullUpdate();
 }
 
 /*
@@ -196,16 +186,12 @@ void Deck::ResetPanels(SharedPanelContainer&& rPanelContainer)
         }
     }
 
-    bool bDifferent = maPanels.size() != rPanelContainer.size() || aHiddens.size();
     maPanels = std::move(rPanelContainer);
 
     // Hidden ones always at the end
     maPanels.insert(std::end(maPanels), std::begin(aHiddens), std::end(aHiddens));
 
     RequestLayoutInternal();
-
-    if (bDifferent)
-        Deck::LOKSendSidebarFullUpdate();
 }
 
 void Deck::RequestLayoutInternal()

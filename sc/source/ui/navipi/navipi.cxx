@@ -40,8 +40,7 @@
 #include <navipi.hxx>
 #include <navsett.hxx>
 #include <markdata.hxx>
-
-#include <vcl/jsdialog/executor.hxx>
+#include <vcl/weld/Menu.hxx>
 
 #include <com/sun/star/uno/Reference.hxx>
 
@@ -317,13 +316,6 @@ ScNavigatorDlg::ScNavigatorDlg(SfxBindings* pB, weld::Widget* pParent, SfxNaviga
     , nCurRow(0)
     , nCurTab(0)
 {
-
-    if (comphelper::LibreOfficeKit::isActive())
-    {
-        sal_uInt64 nShellId = reinterpret_cast<sal_uInt64>(SfxViewShell::Current());
-        jsdialog::SendNavigatorForView(nShellId);
-    }
-
     UpdateInitShow();
 
     UpdateSheetLimits();

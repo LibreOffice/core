@@ -1838,20 +1838,13 @@ bool ScTextWnd::Command( const CommandEvent& rCEvt )
         StartEditEngine(ScInputHandler::ErrorMessage);
         TextGrabFocus();
 
-        // information about paragraph is in additional data
-        // information about position in a paragraph in a Mouse Pos
-        // see vcl/jsdialog/executor.cxx "textselection" event
-        const Point* pParaPoint = static_cast<const Point*>(rCEvt.GetEventData());
         Point aSelectionStartEnd = rCEvt.GetMousePosPixel();
 
-        sal_Int32 nParaStart, nParaEnd, nPosStart, nPosEnd;
+        sal_Int32 nPosStart, nPosEnd;
+        nPosStart = m_xEditView->GetPosNoField(0, aSelectionStartEnd.X());
+        nPosEnd = m_xEditView->GetPosNoField(0, aSelectionStartEnd.Y());
 
-        nParaStart = pParaPoint ? pParaPoint->X() : 0;
-        nParaEnd = pParaPoint ? pParaPoint->Y() : 0;
-        nPosStart = m_xEditView->GetPosNoField(nParaStart, aSelectionStartEnd.X());
-        nPosEnd = m_xEditView->GetPosNoField(nParaEnd, aSelectionStartEnd.Y());
-
-        m_xEditView->SetSelection(ESelection(nParaStart, nPosStart, nParaEnd, nPosEnd));
+        m_xEditView->SetSelection(ESelection(0, nPosStart, 0, nPosEnd));
         pScMod->InputSelection(m_xEditView.get());
 
         bConsumed = true;

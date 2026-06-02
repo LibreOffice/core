@@ -710,12 +710,6 @@ typedef enum
     LOK_CALLBACK_REFERENCE_MARKS = 45,
 
     /**
-     * Callback related to native dialogs generated in JavaScript from
-     * the description.
-     */
-    LOK_CALLBACK_JSDIALOG = 46,
-
-    /**
      * Send the list of functions whose name starts with the characters entered
      * by the user in the formula input bar.
      */
@@ -1193,8 +1187,6 @@ static inline const char* lokCallbackTypeToString(int nType)
         return "LOK_CALLBACK_TABLE_SELECTED";
     case LOK_CALLBACK_REFERENCE_MARKS:
         return "LOK_CALLBACK_REFERENCE_MARKS";
-    case LOK_CALLBACK_JSDIALOG:
-        return "LOK_CALLBACK_JSDIALOG";
     case LOK_CALLBACK_CALC_FUNCTION_LIST:
         return "LOK_CALLBACK_CALC_FUNCTION_LIST";
     case LOK_CALLBACK_TAB_STOP_LIST:

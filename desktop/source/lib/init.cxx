@@ -209,7 +209,6 @@
 #include <vcl/abstdlg.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <vcl/uitest/uiobject.hxx>
-#include <vcl/jsdialog/executor.hxx>
 #include <vcl/scheduler.hxx>
 
 // Needed for getUndoManager()
@@ -5130,93 +5129,14 @@ public:
 
 } // anonymous namespace
 
-
-static void lcl_sendDialogEvent(unsigned long long int nWindowId, const char* pArguments)
+static void doc_sendDialogEvent(LibreOfficeKitDocument* /*pThis*/, unsigned long long int /*nWindowId*/, const char* /*pArguments*/)
 {
-    SolarMutexGuard aGuard;
-
-    const StringMap aMap(jsdialog::jsonToStringMap(pArguments));
-    auto aIdIter = aMap.find(u"id"_ustr);
-
-    if (aIdIter == aMap.end() || aIdIter->second.isEmpty())
-    {
-        SAL_WARN("lok", "sendDialogEvent: no widget id set");
-        assert(false);
-        return;
-    }
-
-    const sal_uInt64 nCurrentShellId = reinterpret_cast<sal_uInt64>(SfxViewShell::Current());
-
-    try
-    {
-        const OUString sControlId = aIdIter->second;
-        OUString sWindowId = OUString::number(nWindowId);
-        const OUString sCurrentShellId = OUString::number(nCurrentShellId);
-
-        // special values for window id
-        if (nWindowId == static_cast<unsigned long long int>(-1))
-        {
-            sWindowId = sCurrentShellId + "sidebar";
-
-            // force sidebar resend - for legacy mobile-wizard: {"id":"-1"}
-            if (aMap.size() == 1)
-            {
-                // force resend - used in mobile-wizard
-                jsdialog::SendFullUpdate(sCurrentShellId + "sidebar", u"Panel"_ustr);
-                return;
-            }
-        }
-        if (nWindowId == static_cast<unsigned long long int>(-2))
-            sWindowId = sCurrentShellId + "notebookbar";
-        if (nWindowId == static_cast<unsigned long long int>(-3))
-            sWindowId = sCurrentShellId + "formulabar";
-        if (nWindowId == static_cast<unsigned long long int>(-4))
-            sWindowId = sCurrentShellId + "addressinputfield";
-        if (nWindowId == static_cast<unsigned long long int>(-5))
-            sWindowId = sCurrentShellId + "quickfind";
-
-        // dialogs send own id but notebookbar and sidebar controls are remembered by SfxViewShell id
-        if (jsdialog::ExecuteAction(sWindowId, sControlId, aMap))
-            return;
-
-        if (jsdialog::ExecuteAction(sCurrentShellId + "sidebar", sControlId, aMap))
-            return;
-        if (jsdialog::ExecuteAction(sCurrentShellId + "navigator", sControlId, aMap))
-            return;
-        if (jsdialog::ExecuteAction(sCurrentShellId + "quickfind", sControlId, aMap))
-            return;
-        if (jsdialog::ExecuteAction(sCurrentShellId + "notebookbar", sControlId, aMap))
-            return;
-        if (jsdialog::ExecuteAction(sCurrentShellId + "formulabar", sControlId, aMap))
-            return;
-        if (jsdialog::ExecuteAction(sCurrentShellId + "addressinputfield", sControlId, aMap))
-            return;
-        // this is needed for dialogs shown before document is loaded: MacroWarning dialog, etc...
-        // these dialogs are created with WindowId "0"
-        if (!SfxViewShell::Current() && jsdialog::ExecuteAction(u"0"_ustr, sControlId, aMap))
-            return;
-
-        // force resend - used in mobile-wizard
-        jsdialog::SendSidebarForView(nCurrentShellId);
-    }
-    catch (std::out_of_range& e)
-    {
-        SAL_WARN("lok", "jsdialog::ExecuteAction syntax error - field not found in '" << e.what() << "'");
-        assert(false);
-    }
-    catch (...) {}
-
+    return;
 }
 
-
-static void doc_sendDialogEvent(LibreOfficeKitDocument* /*pThis*/, unsigned long long int nWindowId, const char* pArguments)
+static void lo_sendDialogEvent(LibreOfficeKit* /*pThis*/, unsigned long long int /*nWindowId*/, const char* /*pArguments*/)
 {
-    lcl_sendDialogEvent(nWindowId, pArguments);
-}
-
-static void lo_sendDialogEvent(LibreOfficeKit* /*pThis*/, unsigned long long int nWindowId, const char* pArguments)
-{
-    lcl_sendDialogEvent(nWindowId, pArguments);
+    return;
 }
 
 static void reInitDictionaryList()
@@ -5615,7 +5535,6 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
             tools::JsonWriter aJson;
             aJson.put("commandName", aCommand);
             aJson.put("success", true);
-            Application::UICoverageReport(aJson, getDocumentType(pThis), linguisticDataAvailable);
             pDocument->mpCallbackFlushHandlers[nView]->queue(LOK_CALLBACK_UNO_COMMAND_RESULT, aJson.finishAndGetAsOString());
         }
 
@@ -7586,31 +7505,9 @@ static void doc_completeFunction(LibreOfficeKitDocument* pThis, const char* pFun
     pDoc->completeFunction(OUString::fromUtf8(pFunctionName));
 }
 
-
-static void doc_sendFormFieldEvent(LibreOfficeKitDocument* pThis, const char* pArguments)
+static void doc_sendFormFieldEvent(LibreOfficeKitDocument* /*pThis*/, const char* /*pArguments*/)
 {
-    SolarMutexGuard aGuard;
-
-    // Supported in Writer only
-    if (doc_getDocumentType(pThis) != LOK_DOCTYPE_TEXT)
-            return;
-
-    StringMap aMap(jsdialog::jsonToStringMap(pArguments));
-    ITiledRenderable* pDoc = getTiledRenderable(pThis);
-    if (!pDoc)
-    {
-        SetLastExceptionMsg(u"Document doesn't support tiled rendering!"_ustr);
-        return;
-    }
-
-    // Sanity check
-    if (!aMap.contains(u"type"_ustr) || !aMap.contains(u"cmd"_ustr))
-    {
-        SetLastExceptionMsg(u"Wrong arguments for sendFormFieldEvent!"_ustr);
-        return;
-    }
-
-    pDoc->executeFromFieldEvent(aMap);
+    return;
 }
 
 static bool doc_renderSearchResult(LibreOfficeKitDocument* pThis,
@@ -7663,35 +7560,9 @@ static bool doc_renderSearchResult(LibreOfficeKitDocument* pThis,
     return true;
 }
 
-static void doc_sendContentControlEvent(LibreOfficeKitDocument* pThis, const char* pArguments)
+static void doc_sendContentControlEvent(LibreOfficeKitDocument* /*pThis*/, const char* /*pArguments*/)
 {
-    SolarMutexGuard aGuard;
-
-    // Supported in Writer only
-    if (doc_getDocumentType(pThis) != LOK_DOCTYPE_TEXT)
-    {
-        return;
-    }
-
-    if (SfxViewShell::IsCurrentLokViewReadOnly())
-        return;
-
-    StringMap aMap(jsdialog::jsonToStringMap(pArguments));
-    ITiledRenderable* pDoc = getTiledRenderable(pThis);
-    if (!pDoc)
-    {
-        SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
-        return;
-    }
-
-    // Sanity check
-    if (!aMap.contains(u"type"_ustr))
-    {
-        SetLastExceptionMsg(u"Missing 'type' argument for sendContentControlEvent"_ustr);
-        return;
-    }
-
-    pDoc->executeContentControlEvent(aMap);
+    return;
 }
 
 static void doc_setViewTimezone(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*/, int nId,

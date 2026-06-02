@@ -29,6 +29,7 @@
 #include <tools/urlobj.hxx>
 #include <osl/diagnose.h>
 #include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Menu.hxx>
 #include <swtypes.hxx>
 #include <swmodule.hxx>
 #include <view.hxx>
@@ -54,7 +55,6 @@
 
 #include <swcont.hxx>
 #include <content.hxx>
-#include <vcl/jsdialog/executor.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
@@ -452,11 +452,6 @@ SwNavigationPI::SwNavigationPI(weld::Widget* pParent,
     , m_bGlobalMode(false)
 {
     InitContentFunctionsToolbar();
-    if (comphelper::LibreOfficeKit::isActive())
-    {
-        sal_uInt64 nShellId = reinterpret_cast<sal_uInt64>(SfxViewShell::Current());
-        jsdialog::SendNavigatorForView(nShellId);
-    }
 
     m_xContainer->connect_container_focus_changed(LINK(this, SwNavigationPI, SetFocusChildHdl));
 

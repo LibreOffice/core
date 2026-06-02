@@ -19,7 +19,6 @@
 #include <frozen/unordered_map.h>
 
 #include <comphelper/lok.hxx>
-#include <jsdialog/enabled.hxx>
 #include <o3tl/string_view.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <osl/module.hxx>
@@ -56,6 +55,7 @@
 #include <vcl/toolkit/vclmedit.hxx>
 #include <vcl/settings.hxx>
 #include <slider.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <vcl/weld/weld.hxx>
 #include <vcl/weld/weldutils.hxx>
 #include <vcl/commandinfoprovider.hxx>
@@ -83,7 +83,6 @@
 #include <verticaltabctrl.hxx>
 #include <wizdlg.hxx>
 #include <tools/svlibrary.h>
-#include <jsdialog/jsdialogbuilder.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 #if defined(DISABLE_DYNLOADING) || defined(LINUX)
@@ -195,101 +194,12 @@ void Application::EnableUICoverage(bool bEnable)
         GetSalInstance()->getUsedUIList().clear();
 }
 
-void Application::UICoverageReport(tools::JsonWriter& rJson,
-        /*LibreOfficeKitDocumentType*/ int docType,
-        bool linguisticDataAvailable)
-{
-    auto resultNode = rJson.startNode("result");
-
-    const auto& entries = GetSalInstance()->getUsedUIList();
-    if (!entries.empty())
-    {
-        auto childrenNode = rJson.startArray("used");
-        for (const auto& entry : entries)
-            rJson.putSimpleValue(entry);
-    }
-
-    std::string sAppName;
-    std::vector<OUString> missingAppDialogUIs, missingAppSidebarUIs;
-    switch (docType)
-    {
-        case LOK_DOCTYPE_TEXT:
-            sAppName = "Writer";
-            missingAppDialogUIs = jsdialog::completeWriterDialogList(entries);
-            missingAppSidebarUIs = jsdialog::completeWriterSidebarList(entries);
-            break;
-        case LOK_DOCTYPE_SPREADSHEET:
-            sAppName = "Calc";
-            missingAppDialogUIs = jsdialog::completeCalcDialogList(entries);
-            missingAppSidebarUIs = jsdialog::completeCalcSidebarList(entries);
-            break;
-        default:
-            sAppName = "Unknown";
-            SAL_WARN("vcl", "Impress coverage not implemented");
-            break;
-    }
-
-    rJson.put("Complete" + sAppName + "DialogCoverage", missingAppDialogUIs.empty());
-    if (!missingAppDialogUIs.empty())
-    {
-        auto childrenNode = rJson.startArray("Missing" + sAppName + "DialogCoverage");
-        for (const auto& entry : missingAppDialogUIs)
-            rJson.putSimpleValue(entry);
-    }
-
-    rJson.put("Complete" + sAppName + "SidebarCoverage", missingAppSidebarUIs.empty());
-    if (!missingAppSidebarUIs.empty())
-    {
-        auto childrenNode = rJson.startArray("Missing" + sAppName + "SidebarCoverage");
-        for (const auto& entry : missingAppSidebarUIs)
-            rJson.putSimpleValue(entry);
-    }
-
-    std::vector<OUString> missingCommonDialogUIs = jsdialog::completeCommonDialogList(entries,
-            docType, linguisticDataAvailable);
-    rJson.put("CompleteCommonDialogCoverage", missingCommonDialogUIs.empty());
-    if (!missingCommonDialogUIs.empty())
-    {
-        auto childrenNode = rJson.startArray("MissingCommonDialogCoverage");
-        for (const auto& entry : missingCommonDialogUIs)
-            rJson.putSimpleValue(entry);
-    }
-
-    std::vector<OUString> missingCommonSidebarUIs = jsdialog::completeCommonSidebarList(entries,
-            docType);
-    rJson.put("CompleteCommonSidebarCoverage", missingCommonSidebarUIs.empty());
-    if (!missingCommonSidebarUIs.empty())
-    {
-        auto childrenNode = rJson.startArray("MissingCommonSidebarCoverage");
-        for (const auto& entry : missingCommonSidebarUIs)
-            rJson.putSimpleValue(entry);
-    }
-}
-
-std::unique_ptr<weld::Builder> Application::CreateBuilder(weld::Widget* pParent, const OUString &rUIFile, sal_uInt64 nLOKWindowId)
+std::unique_ptr<weld::Builder> Application::CreateBuilder(weld::Widget* pParent, const OUString &rUIFile)
 {
     SalInstance* pSalInstance = GetSalInstance();
 
     if (bEnableUICoverage)
         pSalInstance->getUsedUIList().insert(rUIFile);
-
-    if (comphelper::LibreOfficeKit::isActive() && !jsdialog::isIgnored(rUIFile))
-    {
-        if (jsdialog::isBuilderEnabledForSidebar(rUIFile))
-            return JSInstanceBuilder::CreateSidebarBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile, "sidebar", nLOKWindowId);
-        else if (jsdialog::isBuilderEnabledForPopup(rUIFile))
-            return JSInstanceBuilder::CreatePopupBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile);
-        else if (jsdialog::isBuilderEnabledForMenu(rUIFile))
-            return JSInstanceBuilder::CreateMenuBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile);
-        else if (jsdialog::isBuilderEnabledForNavigator(rUIFile))
-            return JSInstanceBuilder::CreateSidebarBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile, "navigator", nLOKWindowId);
-        else if (jsdialog::isBuilderEnabledForQuickFind(rUIFile))
-            return JSInstanceBuilder::CreateSidebarBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile, "quickfind", nLOKWindowId);
-        else if (jsdialog::isBuilderEnabled(rUIFile))
-            return JSInstanceBuilder::CreateDialogBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile);
-        else
-            SAL_WARN("vcl", "UI file not enabled for JSDialogs: " << rUIFile);
-    }
 
     return pSalInstance->CreateBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile);
 }
@@ -301,32 +211,13 @@ std::unique_ptr<weld::Builder> Application::CreateInterimBuilder(vcl::Window* pP
     if (bEnableUICoverage)
         pSalInstance->getUsedUIList().insert(rUIFile);
 
-    if (comphelper::LibreOfficeKit::isActive() && !jsdialog::isIgnored(rUIFile))
-    {
-        // Notebookbar sub controls
-        if (jsdialog::isInterimBuilderEnabledForNotebookbar(rUIFile))
-            return JSInstanceBuilder::CreateNotebookbarBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile, css::uno::Reference<css::frame::XFrame>(), nLOKWindowId);
-        else if (jsdialog::isBuilderEnabledForFormulabar(rUIFile))
-            return JSInstanceBuilder::CreateFormulabarBuilder(pParent, AllSettings::GetUIRootDir(),
-                                                              rUIFile, nLOKWindowId);
-        else if (jsdialog::isBuilderEnabledForAddressInput(rUIFile))
-            return JSInstanceBuilder::CreateAddressInputBuilder(
-                pParent, AllSettings::GetUIRootDir(), rUIFile, nLOKWindowId);
-        else
-            SAL_WARN("vcl", "UI file not enabled for JSDialogs: " << rUIFile);
-    }
-
     return pSalInstance->CreateInterimBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile, bAllowCycleFocusOut, nLOKWindowId);
 }
 
 weld::MessageDialog* Application::CreateMessageDialog(weld::Widget* pParent, VclMessageType eMessageType,
-                                                      VclButtonsType eButtonType, const OUString& rPrimaryMessage,
-                                                      const ILibreOfficeKitNotifier* pNotifier)
+                                                      VclButtonsType eButtonType, const OUString& rPrimaryMessage)
 {
-    if (comphelper::LibreOfficeKit::isActive())
-        return JSInstanceBuilder::CreateMessageDialog(pParent, eMessageType, eButtonType, rPrimaryMessage, pNotifier);
-    else
-        return GetSalInstance()->CreateMessageDialog(pParent, eMessageType, eButtonType, rPrimaryMessage);
+    return GetSalInstance()->CreateMessageDialog(pParent, eMessageType, eButtonType, rPrimaryMessage);
 }
 
 weld::Window* Application::GetFrameWeld(const css::uno::Reference<css::awt::XWindow>& rWindow)

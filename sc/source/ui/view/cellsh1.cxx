@@ -2557,7 +2557,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 {
                     std::shared_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(pTabViewShell->GetFrameWeld(),
                                                                    VclMessageType::Question, VclButtonsType::YesNo,
-                                                                   ScResId(STR_EDIT_EXISTING_COND_FORMATS), pTabViewShell));
+                                                                   ScResId(STR_EDIT_EXISTING_COND_FORMATS)));
                     xQueryBox->set_default_response(RET_YES);
                     xQueryBox->runAsync(xQueryBox, [this, nIndex, nSlot, aPos, pTabViewShell] (int nResult) {
                         sal_uInt32 nNewIndex = nIndex;
