@@ -900,6 +900,58 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testNewSheetViewKeepsOthersUnchanged)
     CPPUNIT_ASSERT_EQUAL(SCTAB(3), pTabView2->GetViewData().GetTabNumber());
 }
 
+CPPUNIT_TEST_FIXTURE(SheetViewTest, testRedoNewSheetViewKeepsOthersUnchanged)
+{
+    // After a sheet view insert is undone and then redone, passive views
+    // that were following the source sheet must end up on the same tab
+    // they did after the original insert. Without this they stay on the
+    // old tab number and silently desync from the document.
+
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    ScDocument& rDocument = *pModelObj->GetDocument();
+
+    ScTestViewCallback aView1;
+    ScTabViewShell* pTabView1 = aView1.getTabViewShell();
+
+    insertSheet(u"Sheet2"_ustr, 2);
+    insertSheet(u"Sheet3"_ustr, 3);
+    insertSheet(u"Sheet4"_ustr, 4);
+    CPPUNIT_ASSERT_EQUAL(SCTAB(4), rDocument.GetTableCount());
+    pTabView1->SetTabNo(0);
+
+    // Setup View #2 on Sheet3.
+    KitHelper::createView();
+    Scheduler::ProcessEventsToIdle();
+    ScTestViewCallback aView2;
+    ScTabViewShell* pTabView2 = aView2.getTabViewShell();
+    KitHelper::setView(aView2.getViewID());
+    Scheduler::ProcessEventsToIdle();
+    pTabView2->SetTabNo(2);
+
+    // View #1 creates a new sheet view of Sheet1. View #2 follows to tab 3.
+    KitHelper::setView(aView1.getViewID());
+    Scheduler::ProcessEventsToIdle();
+    createNewSheetViewInCurrentView();
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(SCTAB(5), rDocument.GetTableCount());
+    CPPUNIT_ASSERT_EQUAL(SCTAB(3), pTabView2->GetViewData().GetTabNumber());
+
+    // Undo removes the sheet view tab. View #2 shifts back from tab 3
+    // to tab 2 to follow Sheet3.
+    undo();
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(SCTAB(4), rDocument.GetTableCount());
+    CPPUNIT_ASSERT_EQUAL(SCTAB(2), pTabView2->GetViewData().GetTabNumber());
+
+    // Redo re-inserts the sheet view. View #2 must follow Sheet3 from
+    // tab 2 to tab 3 just like the original insert did.
+    redo();
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(SCTAB(5), rDocument.GetTableCount());
+    CPPUNIT_ASSERT_EQUAL(SCTAB(3), pTabView2->GetViewData().GetTabNumber());
+}
+
 CPPUNIT_TEST_FIXTURE(SheetViewTest, testRemoveSheetViewHolderTable)
 {
     // Delete the sheet view holder table directly

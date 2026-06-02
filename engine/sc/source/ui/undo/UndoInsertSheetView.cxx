@@ -10,8 +10,8 @@
 #include <undo/UndoInsertSheetView.hxx>
 #include <globstr.hrc>
 #include <scresid.hxx>
-#include <document.hxx>
 #include <docsh.hxx>
+#include <operation/InsertSheetViewOperation.hxx>
 #include <tabvwsh.hxx>
 #include <undoolk.hxx>
 
@@ -62,12 +62,11 @@ void UndoInsertSheetView::Redo()
     rDocShell.SetInUndo(true);
     bDrawIsInUndo = true;
 
-    ScDocument& rDoc = rDocShell.GetDocument();
-    auto[nNewID, nNewTab] = rDoc.CreateNewSheetView(mnTab);
-    if (nNewID != InvalidSheetViewID)
+    InsertSheetViewOperation aOperation(rDocShell, mnTab, false);
+    if (aOperation.run())
     {
-        mnSheetViewID = nNewID;
-        mnSheetViewTab = nNewTab;
+        mnSheetViewID = aOperation.getSheetViewID();
+        mnSheetViewTab = aOperation.getSheetViewTab();
         pViewShell->SetTabNo(mnSheetViewTab);
     }
 
