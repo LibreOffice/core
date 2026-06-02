@@ -471,6 +471,34 @@ private:
 public:
     ScDPResultMemberSlim(ScDPResultDimension* pRDimension, const ScDPResultData* pData,
                          const ScDPParentDimData& rParentDimData);
+
+    bool GetHasElements() const override
+    {
+        if (bmPromoted)
+            return GetPromote()->GetHasElements();
+        return bmHasElements;
+    };
+
+    bool HasHiddenDetails() const override
+    {
+        if (bmPromoted)
+            return GetPromote()->HasHiddenDetails();
+        return bmHasHiddenDetails;
+    }
+
+    const ScDPMember* GetDPMember() const override
+    {
+        if (bmPromoted)
+            return GetPromote()->GetDPMember();
+        return mpMemberDesc;
+    }
+
+    bool IsInitialized() const override
+    {
+        if (bmPromoted)
+            return GetPromote()->IsInitialized();
+        return bmInitialized;
+    };
 };
 
 class ScDPResultMemberFull : public ScDPResultMember
