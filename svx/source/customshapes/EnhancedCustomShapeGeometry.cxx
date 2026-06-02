@@ -5578,7 +5578,7 @@ const SvxMSDffVertPair mso_sptFlowChartMagneticDiskVert[] =
 const sal_uInt16 mso_sptFlowChartMagneticDiskSegm[] =
 {
     0x4000, 0xa802, 0x0001, 0xa802, 0x6000, 0x8000,
-    0x4000, 0xa802, 0x8000
+    0x4000, 0xa802, 0xaa00, 0x8000
 };
 const SvxMSDffTextRectangles mso_sptFlowChartMagneticDiskTextRect[] =
 {
