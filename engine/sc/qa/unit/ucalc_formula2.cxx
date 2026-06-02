@@ -5765,6 +5765,149 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testDynamicArrayFlagCopy)
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(TestFormula2, testDynamicArrayResizeDuringCopyToClip)
+{
+    // A dynamic-array resize queued during CopyToClip must run after the clipboard clone is made.
+
+    m_pDoc->SetAutoCalc(false);
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+
+    m_pDoc->SetValue(ScAddress(1, 0, 0), 10.0);
+    m_pDoc->SetValue(ScAddress(1, 1, 0), 20.0);
+    m_pDoc->SetValue(ScAddress(1, 2, 0), 30.0);
+    m_pDoc->SetValue(ScAddress(1, 3, 0), 40.0);
+
+    // 1x1 master whose actual result wants 1x4, so Interpret will queue an expand.
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
+    aMark.SelectOneTable(0);
+    m_pDoc->InsertMatrixFormula(0, 0, 0, 0, aMark, u"=UNIQUE(B1:B4)"_ustr, nullptr,
+                                formula::FormulaGrammar::GRAM_DEFAULT, true);
+
+    ScFormulaCell* pMaster = m_pDoc->GetFormulaCell(ScAddress(0, 0, 0));
+    CPPUNIT_ASSERT(pMaster);
+    CPPUNIT_ASSERT(pMaster->GetDirty());
+    SCCOL nDeclCols = 0;
+    SCROW nDeclRows = 0;
+    pMaster->GetMatColsRows(nDeclCols, nDeclRows);
+    CPPUNIT_ASSERT_EQUAL(SCCOL(1), nDeclCols);
+    CPPUNIT_ASSERT_EQUAL(SCROW(1), nDeclRows);
+
+    // AutoCalc on so the handler's Interpret call actually runs.
+    m_pDoc->SetAutoCalc(true);
+
+    ScDocument aClipDoc(SCDOCMODE_CLIP);
+    ScRange aRange(0, 0, 0, 0, 0, 0);
+    ScClipParam aClipParam(aRange, false);
+    m_pDoc->CopyToClip(aClipParam, &aClipDoc, &aMark, false, false);
+
+    // Clipboard reflects the 1x1 visible at copy time, not the post-resize 1x4.
+    ScFormulaCell* pClipMaster = aClipDoc.GetFormulaCell(ScAddress(0, 0, 0));
+    CPPUNIT_ASSERT(pClipMaster);
+    SCCOL nClipCols = 0;
+    SCROW nClipRows = 0;
+    pClipMaster->GetMatColsRows(nClipCols, nClipRows);
+    CPPUNIT_ASSERT_EQUAL(SCCOL(1), nClipCols);
+    CPPUNIT_ASSERT_EQUAL(SCROW(1), nClipRows);
+
+    // The deferred expand should have run by now, so the source is 1x4.
+    pMaster->GetMatColsRows(nDeclCols, nDeclRows);
+    CPPUNIT_ASSERT_EQUAL(SCCOL(1), nDeclCols);
+    CPPUNIT_ASSERT_EQUAL(SCROW(4), nDeclRows);
+    CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(20.0, m_pDoc->GetValue(ScAddress(0, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(30.0, m_pDoc->GetValue(ScAddress(0, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(40.0, m_pDoc->GetValue(ScAddress(0, 3, 0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TestFormula2, testDynamicArrayResizeDuringCopyStaticToDocument)
+{
+    // A dynamic-array resize must not run mid-walk. The hand-rolled loop tracks rows itself and drifts.
+
+    m_pDoc->SetAutoCalc(false);
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+
+    m_pDoc->SetValue(ScAddress(1, 0, 0), 10.0);
+    m_pDoc->SetValue(ScAddress(1, 1, 0), 20.0);
+    m_pDoc->SetValue(ScAddress(1, 2, 0), 30.0);
+    m_pDoc->SetValue(ScAddress(1, 3, 0), 40.0);
+
+    // 1x1 master whose actual result wants 1x4.
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
+    aMark.SelectOneTable(0);
+    m_pDoc->InsertMatrixFormula(0, 0, 0, 0, aMark, u"=UNIQUE(B1:B4)"_ustr, nullptr,
+                                formula::FormulaGrammar::GRAM_DEFAULT, true);
+
+    // Static cell past the spill range. Iterator drift would misplace it.
+    m_pDoc->SetValue(ScAddress(0, 5, 0), 999.0);
+
+    m_pDoc->SetAutoCalc(true);
+
+    ScDocShellRef xDestSh
+        = new ScDocShell(SfxModelFlags::EMBEDDED_OBJECT | SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS
+                         | SfxModelFlags::DISABLE_DOCUMENT_RECOVERY);
+    xDestSh->DoInitUnitTest();
+    ScDocument* pDestDoc = &xDestSh->GetDocument();
+    pDestDoc->InsertTab(0, u"Sheet1"_ustr);
+
+    m_pDoc->CopyStaticToDocument(ScRange(0, 0, 0, 0, 5, 0), 0, *pDestDoc);
+
+    // A6 in src must reach A6 in dest, not a row the iterator drifted onto.
+    CPPUNIT_ASSERT_EQUAL(999.0, pDestDoc->GetValue(ScAddress(0, 5, 0)));
+
+    pDestDoc->DeleteTab(0);
+    xDestSh->DoClose();
+    xDestSh.clear();
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TestFormula2, testDynamicArrayResizeDuringCopyUpdated)
+{
+    // CopyUpdated reuses CopyToClipHandler, so it shares the same mid-walk-resize hazard.
+
+    m_pDoc->SetAutoCalc(false);
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+
+    m_pDoc->SetValue(ScAddress(1, 0, 0), 10.0);
+    m_pDoc->SetValue(ScAddress(1, 1, 0), 20.0);
+    m_pDoc->SetValue(ScAddress(1, 2, 0), 30.0);
+    m_pDoc->SetValue(ScAddress(1, 3, 0), 40.0);
+
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
+    aMark.SelectOneTable(0);
+    m_pDoc->InsertMatrixFormula(0, 0, 0, 0, aMark, u"=UNIQUE(B1:B4)"_ustr, nullptr,
+                                formula::FormulaGrammar::GRAM_DEFAULT, true);
+
+    ScFormulaCell* pMaster = m_pDoc->GetFormulaCell(ScAddress(0, 0, 0));
+    CPPUNIT_ASSERT(pMaster);
+    CPPUNIT_ASSERT(pMaster->GetDirty());
+
+    m_pDoc->SetAutoCalc(true);
+
+    // Position doc selects A1. Dest doc collects clones.
+    ScDocument aPosDoc(SCDOCMODE_UNDO);
+    aPosDoc.InitUndo(*m_pDoc, 0, 0, true, true);
+    aPosDoc.SetValue(ScAddress(0, 0, 0), 1.0);
+
+    ScDocument aDestDoc(SCDOCMODE_UNDO);
+    aDestDoc.InitUndo(*m_pDoc, 0, 0, false, false);
+    aDestDoc.AddUndoTab(0, 0);
+
+    m_pDoc->CopyUpdated(&aPosDoc, &aDestDoc);
+
+    // Dest clone reflects the pre-resize 1x1, not the post-resize 1x4.
+    ScFormulaCell* pDestMaster = aDestDoc.GetFormulaCell(ScAddress(0, 0, 0));
+    CPPUNIT_ASSERT(pDestMaster);
+    SCCOL nClipCols = 0;
+    SCROW nClipRows = 0;
+    pDestMaster->GetMatColsRows(nClipCols, nClipRows);
+    CPPUNIT_ASSERT_EQUAL(SCCOL(1), nClipCols);
+    CPPUNIT_ASSERT_EQUAL(SCROW(1), nClipRows);
+
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
