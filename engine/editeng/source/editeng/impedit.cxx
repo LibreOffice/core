@@ -1338,11 +1338,18 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
     if (getImpEditEngine().IsInUndo())
         return;
 
-    // In multi-view LOK sessions a secondary view's window can be disposed
-    // while the EditView is still registered in the EditEngine.  Without
-    // EditViewCallbacks the rest of this function relies on GetOutputDevice()
-    // which dereferences the window's mpWindowImpl — null after dispose.
-    if (!getEditViewCallbacks() && (!mpOutputWindow || mpOutputWindow->isDisposed()))
+    // In multi-view COKit sessions a secondary view's window can be disposed
+    // while the EditView is still registered in the EditEngine, so iterating
+    // all views (e.g. from SetUpdateLayout in ImpMakeOutlinerView) calls
+    // ShowCursor on a stale view.  A disposed window must never be used: the
+    // code below dereferences mpOutputWindow directly (SetCursor, chart offset)
+    // and Window::dispose() resets mpWindowImpl to null.  This holds even with
+    // EditViewCallbacks set, which is always the case in COKit.
+    if (mpOutputWindow && mpOutputWindow->isDisposed())
+        return;
+    // Without EditViewCallbacks the cursor positioning further relies on
+    // GetOutputDevice()/*mpOutputWindow, so a null window can't proceed either.
+    if (!getEditViewCallbacks() && !mpOutputWindow)
         return;
 
     if (mpOutputWindow && !mpOutputWindow->isDisposed()
