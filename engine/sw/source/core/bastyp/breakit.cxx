@@ -173,8 +173,11 @@ sal_Int32 SwBreakIt::getGraphemeCount(const OUString& rText,
         else
         {
             sal_Int32 nCount2 = 1;
-            nCurPos = m_xBreak->nextCharacters(rText, nCurPos, lang::Locale(),
-                i18n::CharacterIteratorMode::SKIPCELL, nCount2, nCount2);
+            const sal_Int32 nNext
+                = m_xBreak->nextCharacters(rText, nCurPos, lang::Locale(),
+                                           i18n::CharacterIteratorMode::SKIPCELL, nCount2, nCount2);
+            // Guard against making no forward progress.
+            nCurPos = (nNext > nCurPos) ? nNext : nCurPos + 1;
         }
         ++nGraphemeCount;
     }
