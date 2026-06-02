@@ -12,6 +12,7 @@
 #define INCLUDED_SVX_FILLBITMAPLINK_HXX
 
 #include <svx/svxdllapi.h>
+#include <sfx2/lnkbase.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <tools/ref.hxx>
@@ -33,7 +34,6 @@ class XPropertySet;
 namespace sfx2
 {
 class LinkManager;
-class SvBaseLink;
 }
 
 // Returns the origin URL if rItem carries a deferred graphic
