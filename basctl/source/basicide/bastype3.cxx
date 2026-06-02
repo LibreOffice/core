@@ -31,6 +31,7 @@
 #include <osl/diagnose.h>
 #include <tools/debug.hxx>
 #include <vcl/weld/WaitObject.hxx>
+#include <vcl/weld/weldutils.hxx>
 
 namespace basctl
 {

@@ -75,6 +75,7 @@
 
 #include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>
+#include <vcl/weld/weldutils.hxx>
 
 #include <algorithm>
 #include <memory>

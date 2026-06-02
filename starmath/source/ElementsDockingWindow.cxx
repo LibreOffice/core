@@ -42,6 +42,7 @@
 #include <vcl/uitest/logger.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/weld/Menu.hxx>
+#include <vcl/weld/weldutils.hxx>
 
 #include <span>
 #include <unordered_map>

@@ -27,6 +27,7 @@
 #include <unotools/textsearch.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/help.hxx>
+#include <vcl/weld/weldutils.hxx>
 
 #include <global.hxx>
 #include <scmod.hxx>

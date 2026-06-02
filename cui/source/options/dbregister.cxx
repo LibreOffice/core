@@ -36,7 +36,7 @@
 #include <vcl/weld/Dialog.hxx>
 #include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/TreeView.hxx>
-#include <vcl/weld/weld.hxx>
+#include <vcl/weld/weldutils.hxx>
 #include <svl/itemset.hxx>
 #include "doclinkdialog.hxx"
 #include <dialmgr.hxx>

@@ -37,6 +37,7 @@
 #include <vcl/vclenum.hxx>
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/Dialog.hxx>
+#include <vcl/weld/weldutils.hxx>
 #include <tools/datetime.hxx>
 
 #include <versdlg.hxx>

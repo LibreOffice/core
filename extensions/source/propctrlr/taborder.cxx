@@ -33,6 +33,7 @@
 #include <vcl/vclenum.hxx>
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/Dialog.hxx>
+#include <vcl/weld/weldutils.hxx>
 
 namespace pcr
 {

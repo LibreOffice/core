@@ -120,6 +120,16 @@ public:
     ReorderingDropTarget(weld::TreeView& rTreeView);
 };
 
+inline OUString toId(const void* pValue)
+{
+    return OUString::number(reinterpret_cast<sal_uIntPtr>(pValue));
+}
+
+template <typename T> T fromId(const OUString& rValue)
+{
+    return reinterpret_cast<T>(rValue.toUInt64());
+}
+
 // get the row the iterator is on
 VCL_DLLPUBLIC size_t GetAbsPos(const weld::TreeView& rTreeView, const weld::TreeIter& rIter);
 

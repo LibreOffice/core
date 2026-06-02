@@ -20,6 +20,7 @@
 #include <WColumnSelect.hxx>
 #include <strings.hrc>
 #include <osl/diagnose.h>
+#include <vcl/weld/weldutils.hxx>
 #include <WCopyTable.hxx>
 #include <core_resource.hxx>
 #include <com/sun/star/sdb/application/CopyTableOperation.hpp>

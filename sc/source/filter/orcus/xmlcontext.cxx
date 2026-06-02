@@ -16,7 +16,7 @@
 
 #include <utility>
 #include <vcl/weld/TreeView.hxx>
-#include <vcl/weld/weld.hxx>
+#include <vcl/weld/weldutils.hxx>
 #include <ucbhelper/content.hxx>
 #include <sal/log.hxx>
 #include <osl/file.hxx>

@@ -30,6 +30,7 @@
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
 #include <vcl/weld/TreeView.hxx>
+#include <vcl/weld/weldutils.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewsh.hxx>

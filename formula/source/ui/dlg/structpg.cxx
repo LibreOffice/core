@@ -18,6 +18,7 @@
  */
 
 #include <vcl/svapp.hxx>
+#include <vcl/weld/weldutils.hxx>
 
 #include "structpg.hxx"
 #include <formula/formula.hxx>

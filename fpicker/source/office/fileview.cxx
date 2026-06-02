@@ -64,6 +64,7 @@
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/Menu.hxx>
 #include <vcl/weld/WaitObject.hxx>
+#include <vcl/weld/weldutils.hxx>
 #include <memory>
 #include "fileview.hxx"
 

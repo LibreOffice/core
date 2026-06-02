@@ -43,7 +43,7 @@
 #include <vcl/weld/Dialog.hxx>
 #include <vcl/weld/Menu.hxx>
 #include <vcl/weld/TreeView.hxx>
-#include <vcl/weld/weld.hxx>
+#include <vcl/weld/weldutils.hxx>
 #include <vcl/commandevent.hxx>
 #include <ReportVisitor.hxx>
 #include <core_resource.hxx>

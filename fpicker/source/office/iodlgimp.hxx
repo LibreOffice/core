@@ -26,6 +26,7 @@
 #include <vcl/weld/Label.hxx>
 #include <vcl/weld/Menu.hxx>
 #include <vcl/weld/Toolbar.hxx>
+#include <vcl/weld/weldutils.hxx>
 
 #include <deque>
 #include <memory>

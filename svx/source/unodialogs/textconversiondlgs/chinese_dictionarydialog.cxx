@@ -32,6 +32,7 @@
 #include <unotools/linguprops.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/weld/Builder.hxx>
+#include <vcl/weld/weldutils.hxx>
 #include <utility>
 #include <osl/diagnose.h>
 

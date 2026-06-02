@@ -30,6 +30,7 @@
 #include <osl/diagnose.h>
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/Menu.hxx>
+#include <vcl/weld/weldutils.hxx>
 #include <swtypes.hxx>
 #include <swmodule.hxx>
 #include <view.hxx>

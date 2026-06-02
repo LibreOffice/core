@@ -18,12 +18,15 @@
  */
 
 #include <WNameMatch.hxx>
-#include <osl/diagnose.h>
 #include <FieldDescriptions.hxx>
 #include <WCopyTable.hxx>
 #include <core_resource.hxx>
 #include <strings.hrc>
 #include <bitmaps.hlst>
+
+#include <osl/diagnose.h>
+#include <vcl/weld/weldutils.hxx>
+
 #include <com/sun/star/sdbc/DataType.hpp>
 
 using namespace ::dbaui;

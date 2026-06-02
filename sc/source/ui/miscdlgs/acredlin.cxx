@@ -26,6 +26,7 @@
 #include <vcl/commandevent.hxx>
 #include <vcl/weld/Dialog.hxx>
 #include <vcl/weld/Menu.hxx>
+#include <vcl/weld/weldutils.hxx>
 #include <o3tl/string_view.hxx>
 
 #include <acredlin.hxx>

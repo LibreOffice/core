@@ -59,6 +59,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/weld/Frame.hxx>
 #include <vcl/weld/MessageDialog.hxx>
+#include <vcl/weld/weldutils.hxx>
 #include <sal/log.hxx>
 
 #include <svx/svxdlg.hxx>

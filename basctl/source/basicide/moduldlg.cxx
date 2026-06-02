@@ -45,7 +45,7 @@
 #include <vcl/transfer.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld/MessageDialog.hxx>
-#include <vcl/weld/weld.hxx>
+#include <vcl/weld/weldutils.hxx>
 #include <tools/debug.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <xmlscript/xmldlg_imexp.hxx>

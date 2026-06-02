@@ -36,6 +36,7 @@
 #include <com/sun/star/chart2/data/XDataProvider.hpp>
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/TreeView.hxx>
+#include <vcl/weld/weldutils.hxx>
 
 #include <comphelper/diagnose_ex.hxx>
 

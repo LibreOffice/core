@@ -20,6 +20,7 @@
 #include <comphelper/string.hxx>
 #include <osl/diagnose.h>
 #include <vcl/weld/Dialog.hxx>
+#include <vcl/weld/weldutils.hxx>
 
 #include <conflictsdlg.hxx>
 #include <o3tl/safeint.hxx>

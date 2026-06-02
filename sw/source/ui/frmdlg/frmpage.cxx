@@ -74,6 +74,7 @@
 #include <vcl/graphicfilter.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld/Builder.hxx>
+#include <vcl/weld/weldutils.hxx>
 #include <svtools/embedhlp.hxx>
 #include <comphelper/lok.hxx>
 #include <memory>

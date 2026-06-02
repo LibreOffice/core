@@ -38,6 +38,7 @@
 #include <osl/diagnose.h>
 #include <svl/grabbagitem.hxx>
 #include <vcl/weld/Builder.hxx>
+#include <vcl/weld/weldutils.hxx>
 
 #include <bitmaps.hlst>
 

@@ -29,6 +29,7 @@
 #include <tabvwsh.hxx>
 
 #include <vcl/weld/Dialog.hxx>
+#include <vcl/weld/weldutils.hxx>
 
 ScMoveTableDlg::ScMoveTableDlg(weld::Window* pParent, OUString aDefault)
     : GenericDialogController(pParent, u"modules/scalc/ui/movecopysheet.ui"_ustr,

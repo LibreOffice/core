@@ -11,7 +11,7 @@
 
 #include <utility>
 #include <vcl/weld/TreeView.hxx>
-#include <vcl/weld/weld.hxx>
+#include <vcl/weld/weldutils.hxx>
 
 ScOrcusXMLTreeParam::EntryData::EntryData(EntryType eType)
     : mnNamespaceID(0)

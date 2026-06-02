@@ -30,6 +30,7 @@
 #include <com/sun/star/util/URL.hpp>
 #include <core_resource.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/weldutils.hxx>
 #include "AppDetailPageHelper.hxx"
 #include <dbaccess/IController.hxx>
 #include <algorithm>

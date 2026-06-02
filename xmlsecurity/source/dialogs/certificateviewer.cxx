@@ -42,6 +42,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/weld/Dialog.hxx>
+#include <vcl/weld/weldutils.hxx>
 
 using namespace comphelper;
 using namespace ::com::sun::star;

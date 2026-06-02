@@ -24,7 +24,7 @@
 #include <unotools/viewoptions.hxx>
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/Dialog.hxx>
-#include <vcl/weld/weld.hxx>
+#include <vcl/weld/weldutils.hxx>
 #include <vcl/windowstate.hxx>
 #include <o3tl/string_view.hxx>
 #include <com/sun/star/frame/XModel.hpp>

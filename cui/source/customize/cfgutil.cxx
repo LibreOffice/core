@@ -56,6 +56,7 @@
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/Dialog.hxx>
 #include <vcl/weld/Menu.hxx>
+#include <vcl/weld/weldutils.hxx>
 
 #include <sfx2/sidebar/ResourceManager.hxx>
 #include <sfx2/sidebar/Context.hxx>

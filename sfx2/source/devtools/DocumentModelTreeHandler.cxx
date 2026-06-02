@@ -15,6 +15,7 @@
 #include <sfx2/sfxresid.hxx>
 #include "DevToolsStrings.hrc"
 #include <vcl/weld/TreeView.hxx>
+#include <vcl/weld/weldutils.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XNamed.hpp>

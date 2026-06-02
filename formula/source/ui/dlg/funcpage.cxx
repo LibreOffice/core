@@ -20,6 +20,7 @@
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/help.hxx>
+#include <vcl/weld/weldutils.hxx>
 #include <formula/IFunctionDescription.hxx>
 
 #include "funcpage.hxx"

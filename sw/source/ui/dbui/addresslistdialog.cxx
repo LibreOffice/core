@@ -33,6 +33,7 @@
 #include <vcl/weld/Dialog.hxx>
 #include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/WaitObject.hxx>
+#include <vcl/weld/weldutils.hxx>
 #include <tools/urlobj.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/types.hxx>

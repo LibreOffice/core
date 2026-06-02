@@ -31,7 +31,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/weld/Dialog.hxx>
 #include <vcl/weld/WaitObject.hxx>
-#include <vcl/weld/weld.hxx>
+#include <vcl/weld/weldutils.hxx>
 #include <svtools/ctrltool.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/wall.hxx>

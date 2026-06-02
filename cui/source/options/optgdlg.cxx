@@ -86,6 +86,7 @@
 #include <svtools/optionsdrawinglayer.hxx>
 #include <svtools/restartdialog.hxx>
 #include <vcl/unohelp2.hxx>
+#include <vcl/weld/weldutils.hxx>
 
 #if defined(_WIN32)
 #include <systools/win32/winstoreutil.hxx>

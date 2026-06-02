@@ -23,6 +23,7 @@
 
 #include <officecfg/Office/Common.hxx>
 #include <vcl/weld/Dialog.hxx>
+#include <vcl/weld/weldutils.hxx>
 
 using namespace psp;
 

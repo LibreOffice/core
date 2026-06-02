@@ -31,16 +31,6 @@ class LOKTrigger;
 
 namespace weld
 {
-inline OUString toId(const void* pValue)
-{
-    return OUString::number(reinterpret_cast<sal_uIntPtr>(pValue));
-}
-
-template <typename T> T fromId(const OUString& rValue)
-{
-    return reinterpret_cast<T>(rValue.toUInt64());
-}
-
 class VCL_DLLPUBLIC Button : virtual public Widget
 {
     friend class ::LOKTrigger;

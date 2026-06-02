@@ -31,6 +31,7 @@
 #include "TableFieldInfo.hxx"
 #include <comphelper/stl_types.hxx>
 #include <comphelper/types.hxx>
+#include <vcl/weld/weldutils.hxx>
 
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::uno;

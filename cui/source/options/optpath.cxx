@@ -27,6 +27,7 @@
 #include <vcl/vclenum.hxx>
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/Label.hxx>
+#include <vcl/weld/weldutils.hxx>
 
 #include <bitmaps.hlst>
 #include <dialmgr.hxx>

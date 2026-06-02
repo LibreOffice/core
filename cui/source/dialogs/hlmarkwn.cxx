@@ -28,6 +28,7 @@
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/Dialog.hxx>
 #include <vcl/weld/WaitObject.hxx>
+#include <vcl/weld/weldutils.hxx>
 
 // UNO-Stuff
 #include <comphelper/processfactory.hxx>

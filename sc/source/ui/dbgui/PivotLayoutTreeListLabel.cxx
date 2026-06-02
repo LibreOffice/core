@@ -13,8 +13,10 @@
 #include <PivotLayoutTreeListLabel.hxx>
 #include <PivotLayoutDialog.hxx>
 
-#include <vcl/event.hxx>
 #include <pivot.hxx>
+
+#include <vcl/event.hxx>
+#include <vcl/weld/weldutils.hxx>
 
 ScPivotLayoutTreeListLabel::ScPivotLayoutTreeListLabel(std::unique_ptr<weld::TreeView> xControl)
     : ScPivotLayoutTreeListBase(std::move(xControl), LABEL_LIST)

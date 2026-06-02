@@ -16,6 +16,7 @@
 #include <PivotLayoutDialog.hxx>
 
 #include <vcl/event.hxx>
+#include <vcl/weld/weldutils.hxx>
 #include <pivot.hxx>
 #include <globstr.hrc>
 #include <scresid.hxx>

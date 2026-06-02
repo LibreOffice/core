@@ -49,7 +49,7 @@
 #include <vcl/weld/Dialog.hxx>
 #include <vcl/weld/Menu.hxx>
 #include <vcl/weld/MessageDialog.hxx>
-#include <vcl/weld/weld.hxx>
+#include <vcl/weld/weldutils.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/container/XSet.hpp>
 #include <com/sun/star/frame/XController.hpp>

@@ -109,6 +109,7 @@
 #include <vcl/weld/Dialog.hxx>
 #include <vcl/window.hxx>
 #include <vcl/weld/Builder.hxx>
+#include <vcl/weld/weldutils.hxx>
 #include <sal/log.hxx>
 
 using namespace ::com::sun::star;

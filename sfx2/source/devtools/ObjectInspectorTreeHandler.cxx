@@ -56,6 +56,7 @@
 #include <vcl/weld/TextView.hxx>
 #include <vcl/weld/Toolbar.hxx>
 #include <vcl/weld/TreeView.hxx>
+#include <vcl/weld/weldutils.hxx>
 #include <i18nlangtag/languagetag.hxx>
 
 using namespace css;
