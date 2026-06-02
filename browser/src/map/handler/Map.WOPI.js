@@ -764,6 +764,10 @@ window.L.Map.WOPI = window.L.Handler.extend({
 					'Hyperlink.URL': {
 						type: 'string',
 						value: link
+					},
+					'Hyperlink.TextIsHint': {
+						type: 'boolean',
+						value: true,
 					}
 				};
 				this._map.sendUnoCommand('.uno:SetHyperlink', command);

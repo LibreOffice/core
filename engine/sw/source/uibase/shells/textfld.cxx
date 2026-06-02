@@ -1882,7 +1882,18 @@ void SwTextShell::InsertHyperlink(const SvxHyperlinkItem& rHlnkItem)
             }
             else
             {
-                rSh.InsertURL( aINetFormat, rName, true );
+                OUString aLinkText;
+                // When the provided text is just a hint, prefer the selection
+                // over it; otherwise the provided text wins even if there's a
+                // selection. Falls back to the URL if neither is available.
+                if (!rHlnkItem.GetTextIsHint() || !rSh.HasSelection())
+                {
+                    if (!rName.isEmpty())
+                        aLinkText = rName;
+                    else
+                        aLinkText = rURL;
+                }
+                rSh.InsertURL(aINetFormat, aLinkText, true);
             }
             rSh.EndSelect();
         }

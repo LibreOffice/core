@@ -61,6 +61,9 @@ class SVX_DLLPUBLIC SvxHyperlinkItem final : public SfxPoolItem
 
     HyperDialogEvent m_nMacroEvents;
 
+    /// When turning selected text into a hyperlink, ignore m_sName, it's only a hint.
+    bool m_bTextIsHint = false;
+
 public:
     static SfxPoolItem* CreateDefault();
 
@@ -75,7 +78,8 @@ public:
                                     HyperDialogEvent nEvents,
                                     SvxMacroTableDtor const *pMacroTbl,
                                     bool showName = true, bool showText = true,
-                                    OUString aReplacementText = OUString());
+                                    OUString aReplacementText = OUString(),
+                                    bool bTextIsHint = false);
 
     virtual bool             operator==( const SfxPoolItem& ) const override;
     virtual SvxHyperlinkItem* Clone( SfxItemPool *pPool = nullptr ) const override;
@@ -113,6 +117,9 @@ public:
 
     const OUString& GetReplacementText() const { return m_sReplacementText; }
     void    SetReplacementText(const OUString& rReplacementText) { m_sReplacementText = rReplacementText; }
+
+    void SetTextIsHint(bool bTextIsHint) { m_bTextIsHint = bTextIsHint; }
+    bool GetTextIsHint() const { return m_bTextIsHint; }
 
 };
 

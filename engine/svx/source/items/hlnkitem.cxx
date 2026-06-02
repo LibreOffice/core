@@ -35,7 +35,8 @@ SvxHyperlinkItem::SvxHyperlinkItem( const SvxHyperlinkItem& rHyperlinkItem )
     m_showName(rHyperlinkItem.m_showName),
     m_showText(rHyperlinkItem.m_showText),
     m_sIntName(rHyperlinkItem.m_sIntName),
-    m_nMacroEvents(rHyperlinkItem.m_nMacroEvents)
+    m_nMacroEvents(rHyperlinkItem.m_nMacroEvents),
+    m_bTextIsHint(rHyperlinkItem.m_bTextIsHint)
 {
     if( rHyperlinkItem.GetMacroTable() )
         m_pMacroTable.reset( new SvxMacroTableDtor( *rHyperlinkItem.GetMacroTable() ) );
@@ -44,7 +45,7 @@ SvxHyperlinkItem::SvxHyperlinkItem( const SvxHyperlinkItem& rHyperlinkItem )
 
 SvxHyperlinkItem::SvxHyperlinkItem( TypedWhichId<SvxHyperlinkItem> _nWhich, OUString aName, OUString aURL,
                                     OUString aTarget, OUString aIntName, SvxLinkInsertMode eTyp,
-                                    HyperDialogEvent nEvents, SvxMacroTableDtor const *pMacroTbl, bool showName, bool showText, OUString aReplacementText):
+                                    HyperDialogEvent nEvents, SvxMacroTableDtor const *pMacroTbl, bool showName, bool showText, OUString aReplacementText, bool bTextIsHint):
     SfxPoolItem (_nWhich ),
     m_sName       (std::move(aName)),
     m_sURL        (std::move(aURL)),
@@ -54,7 +55,8 @@ SvxHyperlinkItem::SvxHyperlinkItem( TypedWhichId<SvxHyperlinkItem> _nWhich, OUSt
     m_showName    (showName),
     m_showText    (showText),
     m_sIntName (std::move(aIntName)),
-    m_nMacroEvents (nEvents)
+    m_nMacroEvents (nEvents),
+    m_bTextIsHint(bTextIsHint)
 {
     if (pMacroTbl)
         m_pMacroTable.reset( new SvxMacroTableDtor ( *pMacroTbl ) );
@@ -79,7 +81,8 @@ bool SvxHyperlinkItem::operator==( const SfxPoolItem& rAttr ) const
                   m_nMacroEvents == rItem.m_nMacroEvents &&
                   m_sReplacementText == rItem.m_sReplacementText &&
                   m_showText == rItem.m_showText &&
-                  m_showName == rItem.m_showName);
+                  m_showName == rItem.m_showName &&
+                  m_bTextIsHint == rItem.m_bTextIsHint);
     if (!bRet)
         return false;
 
@@ -147,6 +150,9 @@ bool SvxHyperlinkItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) co
         case MID_HLINK_REPLACEMENTTEXT:
             rVal <<= m_sReplacementText;
         break;
+        case MID_HLINK_TEXTISHINT:
+            rVal <<= m_bTextIsHint;
+        break;
         default:
             return false;
     }
@@ -190,6 +196,14 @@ bool SvxHyperlinkItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId 
             if(!(rVal >>= aStr))
                 return false;
             m_sReplacementText = aStr;
+        break;
+        case MID_HLINK_TEXTISHINT:
+        {
+            bool bTextIsHint = false;
+            if(!(rVal >>= bTextIsHint))
+                return false;
+            m_bTextIsHint = bTextIsHint;
+        }
         break;
         // Currently no way to put showName or showValue; these are set by the shell
         default:
