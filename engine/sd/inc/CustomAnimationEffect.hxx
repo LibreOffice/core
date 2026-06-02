@@ -290,7 +290,7 @@ public:
 
     SAL_DLLPRIVATE virtual bool disposeShape( const css::uno::Reference< css::drawing::XShape >& xShape );
     SAL_DLLPRIVATE virtual void insertTextRange( const css::uno::Any& aTarget );
-    SAL_DLLPRIVATE virtual void disposeTextRange( const css::uno::Any& aTarget );
+    SAL_DLLPRIVATE virtual void disposeTextRange( const css::uno::Any& aTarget, bool bPreviousParagraphEmpty );
     SAL_DLLPRIVATE virtual bool hasEffect( const css::uno::Reference< css::drawing::XShape >& xShape );
     SAL_DLLPRIVATE virtual void onTextChanged( const css::uno::Reference< css::drawing::XShape >& xShape );
 
@@ -389,7 +389,7 @@ public:
 
     virtual bool disposeShape( const css::uno::Reference< css::drawing::XShape >& xShape ) override;
     virtual void insertTextRange( const css::uno::Any& aTarget ) override;
-    virtual void disposeTextRange( const css::uno::Any& aTarget ) override;
+    virtual void disposeTextRange( const css::uno::Any& aTarget, bool bPreviousParagraphEmpty ) override;
     virtual bool hasEffect( const css::uno::Reference< css::drawing::XShape >& xShape ) override;
     virtual void onTextChanged( const css::uno::Reference< css::drawing::XShape >& xShape ) override;
 

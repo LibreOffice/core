@@ -2228,40 +2228,7 @@ void EffectSequenceHelper::insertTextRange( const css::uno::Any& aTarget )
         rebuild();
 }
 
-static bool isParagraphTargetTextEmpty( ParagraphTarget aParaTarget )
-{
-    // get paragraph
-    Reference< XText > xText ( aParaTarget.Shape, UNO_QUERY );
-    if( xText.is() )
-    {
-        Reference< XEnumerationAccess > xEA( xText, UNO_QUERY );
-        if( xEA.is() )
-        {
-            Reference< XEnumeration > xEnumeration = xEA->createEnumeration();
-            if( xEnumeration.is() )
-            {
-                // advance to the Nth paragraph
-                sal_Int32 nPara = aParaTarget.Paragraph;
-                while( xEnumeration->hasMoreElements() && nPara-- )
-                    xEnumeration->nextElement();
-
-                // get Nth paragraph's text and check if it's empty
-                if( xEnumeration->hasMoreElements() )
-                {
-                    Reference< XTextRange > xRange( xEnumeration->nextElement(), UNO_QUERY );
-                    if( xRange.is() )
-                    {
-                        OUString text = xRange->getString();
-                        return text.isEmpty();
-                    }
-                }
-            }
-        }
-    }
-    return false;
-}
-
-void EffectSequenceHelper::disposeTextRange( const css::uno::Any& aTarget )
+void EffectSequenceHelper::disposeTextRange( const css::uno::Any& aTarget, bool bPreviousParagraphEmpty )
 {
     ParagraphTarget aParaTarget;
     if( !(aTarget >>= aParaTarget ) )
@@ -2289,11 +2256,10 @@ void EffectSequenceHelper::disposeTextRange( const css::uno::Any& aTarget )
     }
 
     // select effect to delete:
-    // if paragraph before target is blank, then delete its animation effect (if any) instead
-    ParagraphTarget aPreviousParagraph = aParaTarget;
-    --aPreviousParagraph.Paragraph;
-    bool bIsPreviousParagraphEmpty = isParagraphTargetTextEmpty( aPreviousParagraph );
-    sal_Int16 anParaNumToDelete = bIsPreviousParagraphEmpty ? aPreviousParagraph.Paragraph : aParaTarget.Paragraph;
+    // if the paragraph before the target is blank, delete its animation effect (if any) instead.
+    sal_Int16 anParaNumToDelete = aParaTarget.Paragraph;
+    if( bPreviousParagraphEmpty )
+        --anParaNumToDelete;
 
     // update effects
     for( const auto &pEffect : aTargetParagraphEffects )
@@ -3322,13 +3288,13 @@ void MainSequence::insertTextRange( const css::uno::Any& aTarget )
     }
 }
 
-void MainSequence::disposeTextRange( const css::uno::Any& aTarget )
+void MainSequence::disposeTextRange( const css::uno::Any& aTarget, bool bPreviousParagraphEmpty )
 {
-    EffectSequenceHelper::disposeTextRange( aTarget );
+    EffectSequenceHelper::disposeTextRange( aTarget, bPreviousParagraphEmpty );
 
     for (auto const& iterativeSequence : maInteractiveSequenceVector)
     {
-        iterativeSequence->disposeTextRange( aTarget );
+        iterativeSequence->disposeTextRange( aTarget, bPreviousParagraphEmpty );
     }
 }
 

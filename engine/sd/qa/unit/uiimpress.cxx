@@ -11,6 +11,7 @@
 
 #include <COKit/COKitEnums.h>
 
+#include <com/sun/star/animations/XAnimationNodeSupplier.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/uno/Reference.hxx>
@@ -27,7 +28,9 @@
 #include <comphelper/propertysequence.hxx>
 #include <editeng/adjustitem.hxx>
 #include <editeng/editobj.hxx>
+#include <editeng/editview.hxx>
 #include <editeng/eeitem.hxx>
+#include <editeng/outliner.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -2431,6 +2434,41 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testBulletOffOn)
     // - Actual  : 0
     // i.e. the indent was 0cm, even if Level1 and Level2 had other values.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(300), nLeftMargin + nFirstLineOffset);
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testPasteInTextEditWithAnimationNode)
+{
+    createSdImpressDoc();
+
+    // Give the slide an (empty) animation node, so the paragraph removal that the
+    // paste below performs is reported to the animation sequence.
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawView> xDrawView(xModel->getCurrentController(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawView->getCurrentPage(), uno::UNO_SET_THROW);
+    uno::Reference<animations::XAnimationNodeSupplier> xAnimNodeSupplier(xDrawPage,
+                                                                         uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(xAnimNodeSupplier->getAnimationNode().is());
+
+    // Type a word into the title placeholder, staying in text edit.
+    insertStringToObject(0, u"blah", /*bUseEscape*/ false);
+
+    // Select and copy it, then put the caret at the end so the paste appends.
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
+    typeKey(pImpressDocument, KEY_END);
+
+    // Without the accompanying fix, this paste asserts in a dbgutil build: the
+    // paragraph removal probes the shape text through the UNO forwarder, forcing
+    // a text frame layout recompute while the EditEngine layout is suspended.
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
+
+    // The word got appended to itself.
+    sd::ViewShell* pViewShell = pImpressDocument->GetDocShell()->GetViewShell();
+    SdrView* pView = pViewShell->GetView();
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
+    EditView& rEditView = pView->GetTextEditOutlinerView()->GetEditView();
+    CPPUNIT_ASSERT_EQUAL(u"blahblah"_ustr, rEditView.GetSelected());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
