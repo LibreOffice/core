@@ -42,9 +42,102 @@ class DocumentViewBase {
 		return this._selectionSection;
 	}
 
+	private splitGroupsBySplitLines(groups: number[][][], splitLine: string) {
+		Util.ensureValue(app.calc.splitCoordinate);
+		Util.ensureValue(app.activeDocument);
+
+		// We will divide the groups if they fall into frozen-non frozen areas at the same time.
+		// Check the rectangles in each group.
+		for (let i = 0; i < groups.length; i++) {
+			const frozenSide: number[][] = [];
+			const movingSide: number[][] = [];
+			let intersectionFound = false;
+
+			// Check the rectangles of the group against split line.
+			for (let j = 0; j < groups[i].length; j++) {
+				const rectangle = groups[i][j];
+				let intersetingRectangle = false;
+
+				const start = splitLine === 'x' ? rectangle[0] : rectangle[1];
+				const end =
+					splitLine === 'x'
+						? rectangle[0] + rectangle[2]
+						: rectangle[1] + rectangle[3];
+				const splitCoord =
+					splitLine === 'x'
+						? app.calc.splitCoordinate.x
+						: app.calc.splitCoordinate.y;
+
+				// Check if the rectangle intersects the split line.
+				if (start < splitCoord && end > splitCoord) {
+					intersectionFound = true;
+					intersetingRectangle = true;
+				}
+
+				if (intersectionFound === true) {
+					// We have found at least one intersection, there is no going back now, we will fill the left and right sides.
+					// Only one intersection is enough to cut the group into 2.
+					if (intersetingRectangle === true) {
+						// This is a rectangle that intersects the split line.
+						let frozenRectangle;
+						let movingRectangle;
+
+						if (splitLine === 'x') {
+							frozenRectangle = [
+								rectangle[0],
+								rectangle[1],
+								splitCoord - rectangle[0],
+								rectangle[3],
+							];
+							movingRectangle = [
+								splitCoord,
+								rectangle[1],
+								rectangle[0] + rectangle[2] - splitCoord,
+								rectangle[3],
+							];
+						} else {
+							frozenRectangle = [
+								rectangle[0],
+								rectangle[1],
+								rectangle[2],
+								splitCoord - rectangle[1],
+							];
+							movingRectangle = [
+								rectangle[0],
+								splitCoord,
+								rectangle[2],
+								rectangle[1] + rectangle[3] - splitCoord,
+							];
+						}
+
+						frozenSide.push(frozenRectangle);
+						movingSide.push(movingRectangle);
+					}
+					// Now we know it doesn't  intersect the split line, check only one coordinate.
+					else if (start < splitCoord) {
+						frozenSide.push(rectangle);
+					}
+					// There is only one option left.
+					else {
+						movingSide.push(rectangle);
+					}
+				}
+			}
+
+			if (intersectionFound === true) {
+				// There are rectangle(s) in this group that intersects the split line.
+				// We will cut the group into 2 pieces, so they (different groups) won't be merged in the next function (rectanglesToPolygon).
+				// Create additional group.
+				groups.push(frozenSide);
+				groups[i] = movingSide;
+				i = -1; // Go back.
+			}
+		}
+	}
+
 	private getSeparatePolygonsFromGroupOfRectangles(
-		rectangles: Array<number[]>,
-	) {
+		rectangles: number[][],
+	): number[][][] {
 		const groups: any = [];
 		groups.length = 0;
 
@@ -81,6 +174,15 @@ class DocumentViewBase {
 					group.push(rectangles.splice(0, 1)[0]);
 				else groups.push([rectangles.splice(0, 1)[0]]);
 			}
+		}
+
+		if (app.map._docLayer.isCalc()) {
+			Util.ensureValue(app.calc.splitCoordinate);
+			if (app.calc.splitCoordinate.x !== 0)
+				this.splitGroupsBySplitLines(groups, 'x');
+
+			if (app.calc.splitCoordinate.y !== 0)
+				this.splitGroupsBySplitLines(groups, 'y');
 		}
 
 		return groups;
