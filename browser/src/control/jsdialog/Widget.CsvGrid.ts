@@ -37,6 +37,35 @@ const HDR_WIDTH = 40;
 const RULER_HEIGHT = 24;
 const ROW_HEIGHT = 18;
 
+const csvRulerCursors = new Map<string, number>();
+
+function getRulerCursor(id: string): number {
+	const pos = csvRulerCursors.get(id);
+	return pos === undefined ? 1 : pos;
+}
+
+function setRulerCursor(id: string, pos: number): void {
+	csvRulerCursors.set(id, pos);
+}
+
+function clampCursor(pos: number, posCount: number): number {
+	const maxPos = Math.max(posCount - 1, 1);
+	return Math.max(1, Math.min(pos, maxPos));
+}
+
+function updateRulerAria(
+	canvas: HTMLCanvasElement,
+	cursorPos: number,
+	splits: number[],
+): void {
+	canvas.setAttribute('aria-valuenow', String(cursorPos));
+	const text =
+		splits.indexOf(cursorPos) >= 0
+			? _('Position {n}, split set').replace('{n}', String(cursorPos))
+			: _('Position {n}, no split').replace('{n}', String(cursorPos));
+	canvas.setAttribute('aria-valuetext', text);
+}
+
 interface CsvColumn {
 	index: number;
 	type: number;
@@ -125,6 +154,10 @@ function _csvGridControl(
 	container.style.setProperty('--csv-row-height', ROW_HEIGHT + 'px');
 	if (widgetData.isFixedMode) container.classList.add('fixed-mode');
 
+	container.addEventListener('keydown', (e: KeyboardEvent) => {
+		handleCsvKeydown(container, e);
+	});
+
 	if (container.parentNode) {
 		const observer = new MutationObserver(() => {
 			if (!document.body.contains(container)) {
@@ -171,6 +204,9 @@ function createRuler(
 	const splits = data.splits || [];
 	const isFixedMode = !!data.isFixedMode;
 
+	const cursorPos = clampCursor(getRulerCursor(container.id), posCount);
+	setRulerCursor(container.id, cursorPos);
+
 	const wrapper = document.createElement('div');
 	wrapper.className = 'ui-csv-ruler-wrapper';
 	if (isFixedMode) wrapper.classList.add('fixed-mode');
@@ -178,13 +214,21 @@ function createRuler(
 
 	const canvas = document.createElement('canvas');
 	canvas.className = 'ui-csv-ruler-canvas';
+	canvas.id = container.id + '-ruler';
 	canvas.width = totalWidth;
 	canvas.height = RULER_HEIGHT;
-	canvas.setAttribute('role', 'img');
+	canvas.tabIndex = 0;
+	canvas.setAttribute('role', 'slider');
+	canvas.setAttribute('aria-orientation', 'horizontal');
+	canvas.setAttribute('aria-valuemin', '1');
+	canvas.setAttribute('aria-valuemax', String(Math.max(posCount - 1, 1)));
 	canvas.setAttribute(
 		'aria-label',
-		_('CSV column ruler: click to toggle a column split'),
+		_(
+			'Column split ruler. Use the arrow keys to move the cursor and Space to toggle a split.',
+		),
 	);
+	updateRulerAria(canvas, cursorPos, splits);
 	wrapper.appendChild(canvas);
 
 	drawRuler(
@@ -194,6 +238,7 @@ function createRuler(
 		posCount,
 		splits,
 		isFixedMode,
+		cursorPos,
 		readPalette(),
 	);
 
@@ -204,6 +249,7 @@ function createRuler(
 		if (xPos < 0) return;
 		const pos = Math.round(xPos / charWidth);
 		if (pos <= 0 || pos >= posCount) return;
+		setRulerCursor(container.id, pos);
 		sendAction(container, 'togglesplit', pos.toString());
 	});
 
@@ -221,6 +267,7 @@ function drawRuler(
 	posCount: number,
 	splits: number[],
 	isFixedMode: boolean,
+	cursorPos: number,
 	palette: Palette,
 ): void {
 	const ctx = canvas.getContext('2d');
@@ -270,6 +317,10 @@ function drawRuler(
 		const sx = hdrWidth + splitPos * charWidth;
 		drawSplitMarker(ctx, sx, height, palette);
 	});
+
+	if (isFixedMode && cursorPos > 0 && cursorPos < posCount) {
+		drawRulerCursor(ctx, hdrWidth + cursorPos * charWidth, height, palette);
+	}
 }
 
 function drawSplitMarker(
@@ -294,6 +345,54 @@ function drawSplitMarker(
 	ctx.lineTo(x + size, height - size);
 	ctx.closePath();
 	ctx.fill();
+}
+
+/* The keyboard cursor: a vertical line with a downward caret at the top, drawn
+   in the accent colour so it stays distinct from the (red) split markers. */
+function drawRulerCursor(
+	ctx: CanvasRenderingContext2D,
+	x: number,
+	height: number,
+	palette: Palette,
+): void {
+	const size = 4;
+	ctx.save();
+	ctx.strokeStyle = palette.accent;
+	ctx.fillStyle = palette.accent;
+	ctx.lineWidth = 1;
+	ctx.beginPath();
+	ctx.moveTo(x + 0.5, 0);
+	ctx.lineTo(x + 0.5, height - 1);
+	ctx.stroke();
+	ctx.beginPath();
+	ctx.moveTo(x - size + 0.5, 0);
+	ctx.lineTo(x + size + 0.5, 0);
+	ctx.lineTo(x + 0.5, size + 1);
+	ctx.closePath();
+	ctx.fill();
+	ctx.restore();
+}
+
+function redrawRuler(container: CsvGridContainer): void {
+	const canvas = container.querySelector(
+		'.ui-csv-ruler-canvas',
+	) as HTMLCanvasElement | null;
+	if (!canvas) return;
+	const data = container.gridData;
+	const posCount = data.posCount || 1;
+	const splits = data.splits || [];
+	const cursorPos = getRulerCursor(container.id);
+	drawRuler(
+		canvas,
+		CHAR_WIDTH,
+		HDR_WIDTH,
+		posCount,
+		splits,
+		!!data.isFixedMode,
+		cursorPos,
+		readPalette(),
+	);
+	updateRulerAria(canvas, cursorPos, splits);
 }
 
 function createGridTable(
@@ -341,10 +440,13 @@ function createGridTable(
 	columns.forEach((col: CsvColumn) => {
 		const th = document.createElement('th');
 		th.className = 'ui-csv-grid-col-header';
+		th.id = container.id + '-colhdr-' + col.index;
+		th.tabIndex = 0;
 		th.setAttribute('role', 'columnheader');
+		th.setAttribute('aria-selected', col.selected ? 'true' : 'false');
+		th.setAttribute('aria-keyshortcuts', 'Space');
 		if (col.selected) {
 			th.classList.add('selected');
-			th.setAttribute('aria-selected', 'true');
 		}
 		const fallbackLabel = _('Column {index}').replace(
 			'{index}',
@@ -436,6 +538,116 @@ function handleSelect(
 			shift: !!mouseEvent.shiftKey,
 		}),
 	);
+}
+
+// keyboard navigation
+
+function handleCsvKeydown(container: CsvGridContainer, e: KeyboardEvent): void {
+	const target = e.target as HTMLElement | null;
+	if (!target) return;
+	if (target.closest('.ui-csv-ruler-canvas')) {
+		handleRulerKey(container, e);
+		return;
+	}
+	const header = target.closest(
+		'.ui-csv-grid-col-header',
+	) as HTMLElement | null;
+	if (header) handleHeaderKey(container, header, e);
+}
+
+function focusHeader(container: CsvGridContainer, colIndex: number): void {
+	const headers = Array.from(
+		container.querySelectorAll('.ui-csv-grid-col-header'),
+	) as HTMLElement[];
+	if (headers.length === 0) return;
+	const clamped = Math.max(0, Math.min(colIndex, headers.length - 1));
+	const next = headers[clamped];
+	next.focus();
+	next.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+}
+
+function handleHeaderKey(
+	container: CsvGridContainer,
+	header: HTMLElement,
+	e: KeyboardEvent,
+): void {
+	const col = parseInt(header.dataset.colIndex || '-1', 10);
+	if (col < 0) return;
+	let handled = true;
+
+	switch (e.key) {
+		case ' ':
+			sendAction(
+				container,
+				'selectcolumn',
+				JSON.stringify({
+					column: col,
+					ctrl: !!(e.ctrlKey || e.metaKey),
+					shift: !!e.shiftKey,
+				}),
+			);
+			break;
+		case 'ArrowRight':
+			focusHeader(container, col + 1);
+			break;
+		case 'ArrowLeft':
+			focusHeader(container, col - 1);
+			break;
+		case 'Home':
+			focusHeader(container, 0);
+			break;
+		case 'End':
+			focusHeader(container, Number.MAX_SAFE_INTEGER);
+			break;
+		default:
+			handled = false;
+			break;
+	}
+
+	if (handled) {
+		e.preventDefault();
+		e.stopPropagation();
+	}
+}
+
+function handleRulerKey(container: CsvGridContainer, e: KeyboardEvent): void {
+	const posCount = container.gridData.posCount || 1;
+	const id = container.id;
+	let handled = true;
+
+	switch (e.key) {
+		case 'ArrowRight':
+			setRulerCursor(id, clampCursor(getRulerCursor(id) + 1, posCount));
+			redrawRuler(container);
+			break;
+		case 'ArrowLeft':
+			setRulerCursor(id, clampCursor(getRulerCursor(id) - 1, posCount));
+			redrawRuler(container);
+			break;
+		case 'Home':
+			setRulerCursor(id, 1);
+			redrawRuler(container);
+			break;
+		case 'End':
+			setRulerCursor(id, clampCursor(posCount - 1, posCount));
+			redrawRuler(container);
+			break;
+		case ' ': {
+			const cursorPos = getRulerCursor(id);
+			if (cursorPos >= 1 && cursorPos < posCount) {
+				sendAction(container, 'togglesplit', String(cursorPos));
+			}
+			break;
+		}
+		default:
+			handled = false;
+			break;
+	}
+
+	if (handled) {
+		e.preventDefault();
+		e.stopPropagation();
+	}
 }
 
 function showColumnTypeMenu(
