@@ -23,6 +23,7 @@
 #include <vcl/transfer.hxx>
 #include <vcl/weld/Entry.hxx>
 #include <vcl/weld/Label.hxx>
+#include <vcl/weld/ToggleButton.hxx>
 #include <vcl/weld/TreeView.hxx>
 #include <vcl/weld/customweld.hxx>
 #include <vcl/weld/weld.hxx>

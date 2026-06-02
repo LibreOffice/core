@@ -9,26 +9,16 @@
 
 #pragma once
 
-#include <sal/config.h>
+#include <vcl/dllapi.h>
+#include <vcl/weld/Toggleable.hxx>
+#include <vcl/weld/weld.hxx>
 
-#include "QtInstanceButton.hxx"
-
-#include <vcl/weld/ToggleButton.hxx>
-
-#include <QtWidgets/QAbstractButton>
-
-class QtInstanceToggleButton : public QtInstanceButton, public virtual weld::ToggleButton
+namespace weld
 {
-    Q_OBJECT
-
-public:
-    QtInstanceToggleButton(QAbstractButton* pButton);
-
-    virtual void do_set_active(bool bActive) override;
-    virtual bool get_active() const override;
-
-private Q_SLOTS:
-    void signalToggled();
+class VCL_DLLPUBLIC ToggleButton : virtual public Button, virtual public Toggleable
+{
+    friend class ::LOKTrigger;
 };
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

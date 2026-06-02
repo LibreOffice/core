@@ -43,6 +43,7 @@
 #include <vcl/weld/SpinButton.hxx>
 #include <vcl/weld/Spinner.hxx>
 #include <vcl/weld/TextView.hxx>
+#include <vcl/weld/ToggleButton.hxx>
 #include <vcl/weld/Toolbar.hxx>
 #include <vcl/weld/TreeView.hxx>
 #include <vcl/weld/weld.hxx>

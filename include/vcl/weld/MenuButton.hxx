@@ -10,7 +10,7 @@
 #pragma once
 
 #include <vcl/dllapi.h>
-#include <vcl/weld/weld.hxx>
+#include <vcl/weld/ToggleButton.hxx>
 
 namespace weld
 {

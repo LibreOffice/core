@@ -98,11 +98,6 @@ public:
     virtual void connect_clicked(const Link<Button&, void>& rLink) { m_aClickHdl = rLink; }
 };
 
-class VCL_DLLPUBLIC ToggleButton : virtual public Button, virtual public Toggleable
-{
-    friend class ::LOKTrigger;
-};
-
 class VCL_DLLPUBLIC CheckButton : virtual public Toggleable
 {
 protected:

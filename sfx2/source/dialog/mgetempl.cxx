@@ -27,6 +27,7 @@
 #include <vcl/weld/Entry.hxx>
 #include <vcl/weld/Label.hxx>
 #include <vcl/weld/MessageDialog.hxx>
+#include <vcl/weld/ToggleButton.hxx>
 #include <vcl/weld/weld.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>

@@ -30,6 +30,7 @@
 #include <vcl/weld/MetricSpinButton.hxx>
 #include <vcl/weld/Scale.hxx>
 #include <vcl/weld/SpinButton.hxx>
+#include <vcl/weld/ToggleButton.hxx>
 #include <vcl/weld/weld.hxx>
 #include <svl/eitem.hxx>
 #include <svx/e3ditem.hxx>
