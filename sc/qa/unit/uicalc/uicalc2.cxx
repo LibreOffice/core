@@ -2235,6 +2235,66 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf107994_MoveActiveCellToFreezePaneSpli
     checkCurrentCursorPosition(*pDocSh, u"A1");
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testSpillMatrixContractionOnPaste)
+{
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+
+    // B2:B15: four distinct values -> UNIQUE() fills the 4-row matrix below.
+    const double aB[] = { 1, 1, 1, 1, 1, 2, 2, 2, 2, 3, 4, 4, 4, 4 };
+    for (size_t i = 0; i < SAL_N_ELEMENTS(aB); ++i)
+        pDoc->SetValue(1, 1 + static_cast<SCROW>(i), 0, aB[i]); // B2..B15
+
+    // D2:D15: only two distinct values - the shifted reference lands here.
+    for (SCROW nR = 1; nR <= 14; ++nR)
+        pDoc->SetValue(3, nR, 0, nR <= 7 ? 7.0 : 8.0); // D2..D15
+
+    insertArrayToCell(u"E2:E5"_ustr, u"=UNIQUE(B$2:B$15)");
+    CPPUNIT_ASSERT_EQUAL(u"{=UNIQUE(B$2:B$15)}"_ustr, pDoc->GetFormula(4, 1, 0)); // E2
+    CPPUNIT_ASSERT_EQUAL(1.0, pDoc->GetValue(ScAddress(4, 1, 0))); // E2
+    CPPUNIT_ASSERT_EQUAL(4.0, pDoc->GetValue(ScAddress(4, 4, 0))); // E5
+
+    // Paste origin E2 to G2: the reference shifts B -> D, UNIQUE(D$2:D$15) has
+    // two results, so the 4-row matrix contracts to 2 rows.
+    goToCell(u"E2"_ustr);
+    dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
+    goToCell(u"G2"_ustr);
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
+
+    CPPUNIT_ASSERT_EQUAL(u"{=UNIQUE(D$2:D$15)}"_ustr, pDoc->GetFormula(6, 1, 0)); // G2
+    CPPUNIT_ASSERT_EQUAL(7.0, pDoc->GetValue(ScAddress(6, 1, 0))); // G2
+    CPPUNIT_ASSERT_EQUAL(8.0, pDoc->GetValue(ScAddress(6, 2, 0))); // G3
+    // G4:G5 are outside the now 2-row matrix, so they are empty.
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_NONE, pDoc->GetCellType(ScAddress(6, 3, 0))); // G4
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_NONE, pDoc->GetCellType(ScAddress(6, 4, 0))); // G5
+}
+
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testSpillMatrixContractionOnEdit)
+{
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+
+    // B2:B15: four distinct values {1,2,3,4}; the only '3' sits in B11.
+    const double aB[] = { 1, 1, 1, 1, 1, 2, 2, 2, 2, 3, 4, 4, 4, 4 };
+    for (size_t i = 0; i < SAL_N_ELEMENTS(aB); ++i)
+        pDoc->SetValue(1, 1 + static_cast<SCROW>(i), 0, aB[i]); // B2..B15
+
+    insertArrayToCell(u"D2:D5"_ustr, u"=UNIQUE(B$2:B$15)");
+    CPPUNIT_ASSERT_EQUAL(u"{=UNIQUE(B$2:B$15)}"_ustr, pDoc->GetFormula(3, 1, 0)); // D2
+    CPPUNIT_ASSERT_EQUAL(1.0, pDoc->GetValue(ScAddress(3, 1, 0))); // D2
+    CPPUNIT_ASSERT_EQUAL(2.0, pDoc->GetValue(ScAddress(3, 2, 0))); // D3
+    CPPUNIT_ASSERT_EQUAL(3.0, pDoc->GetValue(ScAddress(3, 3, 0))); // D4
+    CPPUNIT_ASSERT_EQUAL(4.0, pDoc->GetValue(ScAddress(3, 4, 0))); // D5
+
+    // Type '2' over B11: UNIQUE now has {1,2,4}, so the matrix shrinks 4 -> 3.
+    insertStringToCell(u"B11"_ustr, u"2");
+
+    CPPUNIT_ASSERT_EQUAL(1.0, pDoc->GetValue(ScAddress(3, 1, 0))); // D2
+    CPPUNIT_ASSERT_EQUAL(2.0, pDoc->GetValue(ScAddress(3, 2, 0))); // D3
+    CPPUNIT_ASSERT_EQUAL(4.0, pDoc->GetValue(ScAddress(3, 3, 0))); // D4
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_NONE, pDoc->GetCellType(ScAddress(3, 4, 0))); // D5 cleared
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

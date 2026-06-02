@@ -2375,7 +2375,8 @@ void ScFormulaCell::InterpretTail( ScInterpreterContext& rContext, ScInterpretTa
                         || o3tl::make_unsigned(nDeclRows) > nResRows)
                     {
                         // Contract inline: removing cells can't recurse into
-                        // Interpret.
+                        // Interpret. ResizeMatrixFormula itself defers while a
+                        // cell-store iteration is live, so the call stays safe.
                         rDocument.ResizeMatrixFormula(aPos, SCCOL(nResCols), SCROW(nResRows));
                     }
                     else if (o3tl::make_unsigned(nDeclCols) < nResCols
