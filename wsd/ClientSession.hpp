@@ -423,6 +423,12 @@ private:
 
     bool handleUpdateViewSettings(const std::string& firstLine);
 
+    /// Persist the last-used Impress view mode (Normal/Notes) for the current
+    /// document, keyed by docKey, inside the per-user viewsetting.json. The
+    /// per-user dimension is implicit in where that file lives; we only add the
+    /// per-document key here.
+    bool handleUpdateViewMode(const StringVector& tokens);
+
     bool loadDocument(const char* buffer, int length, const StringVector& tokens,
                       const std::shared_ptr<DocumentBroker>& docBroker);
     bool getStatus(const char* buffer, int length,

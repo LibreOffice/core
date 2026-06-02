@@ -52,7 +52,10 @@
 #include <Poco/MemoryStream.h>
 #include <Poco/Net/HTTPResponse.h>
 #include <Poco/StreamCopier.h>
+#include <Poco/Timestamp.h>
 #include <Poco/URI.h>
+
+#include <limits>
 
 #include <cctype>
 #include <chrono>
@@ -1532,6 +1535,10 @@ bool ClientSession::_handleInput(const char *buffer, int length)
     {
         Admin::instance().routeTokenSanityCheck();
     }
+    else if (tokens.equals(0, "updateviewmode") && tokens.size() >= 2)
+    {
+        return handleUpdateViewMode(tokens);
+    }
     else if (tokens.equals(0, "browsersetting") && tokens.size() >= 3)
     {
         std::string action;
@@ -1892,6 +1899,84 @@ bool ClientSession::handleUpdateViewSettings(const std::string& firstLine)
 }
 
 #if !MOBILEAPP
+bool ClientSession::handleUpdateViewMode(const StringVector& tokens)
+{
+    std::string mode;
+    if (!getTokenString(tokens[1], "mode", mode) ||
+        (mode != "normal" && mode != "notes" && mode != "master"))
+    {
+        LOG_WRN("Ignoring updateviewmode with invalid payload [" << tokens[1] << ']');
+        return true;
+    }
+
+    const std::shared_ptr<DocumentBroker> docBroker = getDocumentBroker();
+    if (!docBroker)
+        return true;
+
+    // The per-user dimension is implicit in where viewsetting.json lives, so we
+    // only key by document here. docKey is path-based (token/host stripped), so
+    // it is stable across reopens of the same document.
+    const std::string& docKey = docBroker->getDocKey();
+
+    // Bound the growth of viewsetting.json: keep at most this many documents,
+    // evicting the least-recently-updated entry when over the cap.
+    constexpr std::size_t MaxRememberedDocs = 100;
+
+    if (!_viewSettingsJSON)
+        _viewSettingsJSON = new Poco::JSON::Object();
+
+    Poco::JSON::Object::Ptr modes;
+    if (_viewSettingsJSON->has("presentationViewModes"))
+        modes = _viewSettingsJSON->getObject("presentationViewModes");
+    if (!modes)
+    {
+        modes = new Poco::JSON::Object();
+        _viewSettingsJSON->set("presentationViewModes", modes);
+    }
+
+    // Nothing changed: don't generate a redundant WOPI upload.
+    if (modes->has(docKey))
+    {
+        const Poco::JSON::Object::Ptr existing = modes->getObject(docKey);
+        std::string existingMode;
+        if (existing)
+            JsonUtil::findJSONValue(existing, "mode", existingMode);
+        if (existingMode == mode)
+            return true;
+    }
+
+    Poco::JSON::Object::Ptr entry = new Poco::JSON::Object();
+    entry->set("mode", mode);
+    entry->set("updatedAt", static_cast<Poco::Int64>(Poco::Timestamp().epochTime()));
+    modes->set(docKey, entry);
+
+    // Timestamped LRU eviction: while over the cap, drop the oldest updatedAt.
+    while (modes->size() > MaxRememberedDocs)
+    {
+        std::string oldestKey;
+        Poco::Int64 oldestTs = std::numeric_limits<Poco::Int64>::max();
+        for (const auto& name : modes->getNames())
+        {
+            const Poco::JSON::Object::Ptr e = modes->getObject(name);
+            const Poco::Int64 ts = e ? e->optValue<Poco::Int64>("updatedAt", 0) : 0;
+            if (ts < oldestTs)
+            {
+                oldestTs = ts;
+                oldestKey = name;
+            }
+        }
+        if (oldestKey.empty())
+            break;
+        modes->remove(oldestKey);
+    }
+
+    uploadViewSettingsToWopiHost();
+
+    LOG_DBG("Stored presentation view mode [" << mode << "] for docKey [" << docKey
+            << "], remembered docs=" << modes->size());
+    return true;
+}
+
 void ClientSession::updateBrowserSettingsJSON(const std::string& json)
 {
     Poco::JSON::Parser parser;

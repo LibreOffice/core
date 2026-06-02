@@ -1828,6 +1828,7 @@ void PresetsInstallTask::install(const Poco::JSON::Object::Ptr& settings,
 
 static std::string extractViewSettings(const std::string& viewSettingsPath,
                                        const std::shared_ptr<ClientSession>& session,
+                                       const std::string& docKey,
                                        bool& _isViewSettingsUpdated)
 {
     std::string viewSettingsString;
@@ -1901,28 +1902,63 @@ static std::string extractViewSettings(const std::string& viewSettingsPath,
         session->resolveAndApplyAIImageCredentials(viewSettings, userPrivateInfoObj,
                                                    viewSettingsNeedUpdate);
 
+        // Resolve the remembered Impress view mode for this document. The full
+        // per-document map stays server-side; only this document's mode is sent
+        // to the client (see the sanitized copy below).
+        std::string presentationViewMode;
+        if (viewSettings->has("presentationViewModes"))
+        {
+            const Object::Ptr modes = viewSettings->getObject("presentationViewModes");
+            if (modes && modes->has(docKey))
+            {
+                const Object::Ptr entry = modes->getObject(docKey);
+                if (entry)
+                    JsonUtil::findJSONValue(entry, "mode", presentationViewMode);
+            }
+        }
+
+        // Keep the full settings (AI keys, signature material and the complete
+        // per-document view-mode map) as the authoritative in-memory copy that
+        // later uploads merge into; stripping happens only on the client copy.
+        session->setViewSettingsJSON(viewSettings);
+
         if (viewSettingsNeedUpdate)
         {
             LOG_INF("View settings updated with migrated fields, uploading to WOPI host");
-            session->setViewSettingsJSON(viewSettings);
             session->uploadViewSettingsToWopiHost();
+        }
+
+        // Build a sanitized copy for the client by round-tripping through JSON
+        // (a deep copy, so the strips below don't mutate the authoritative
+        // object stored above).
+        Object::Ptr clientView;
+        {
+            std::ostringstream full;
+            viewSettings->stringify(full);
+            Poco::JSON::Parser clientParser;
+            clientView = clientParser.parse(full.str()).extract<Object::Ptr>();
         }
 
         // remove API key from view settings before sending to client, client doesn't need to know about it
         // and it will be set in session for later use when calling AI provider,
         // also it is safer to not expose it to client side
-        viewSettings->remove("aiProviderAPIKey");
-        viewSettings->remove("aiProviderModel");
-        viewSettings->remove("aiProviderURL");
-        viewSettings->remove("aiImageProviderAPIKey");
-        viewSettings->remove("aiImageProviderURL");
-        viewSettings->remove("aiImageModel");
+        clientView->remove("aiProviderAPIKey");
+        clientView->remove("aiProviderModel");
+        clientView->remove("aiProviderURL");
+        clientView->remove("aiImageProviderAPIKey");
+        clientView->remove("aiImageProviderURL");
+        clientView->remove("aiImageModel");
+        // The client never sees other documents' keys; it only gets the
+        // resolved mode for the document it is opening.
+        clientView->remove("presentationViewModes");
 
-        viewSettings->set("aiConfigured", aiConfigured);
+        clientView->set("aiConfigured", aiConfigured);
         if (aiConfigured)
-            viewSettings->set("aiModelName", resolvedAIModel);
-        viewSettings->set("aiEthicalRating", resolvedAIRating);
-        viewSettingsString = JsonUtil::jsonToString(viewSettings);
+            clientView->set("aiModelName", resolvedAIModel);
+        clientView->set("aiEthicalRating", resolvedAIRating);
+        if (!presentationViewMode.empty())
+            clientView->set("presentationViewMode", presentationViewMode);
+        viewSettingsString = JsonUtil::jsonToString(clientView);
     }
     catch (const std::exception& exc)
     {
@@ -1979,7 +2015,7 @@ void DocumentBroker::asyncInstallPresets(const std::shared_ptr<ClientSession>& s
             const std::string viewSettings = presetsPath + "viewsetting/viewsetting.json";
             if (FileUtil::Stat(viewSettings).exists())
             {
-                const std::string settings = extractViewSettings(viewSettings, session, _isViewSettingsUpdated);
+                const std::string settings = extractViewSettings(viewSettings, session, getDocKey(), _isViewSettingsUpdated);
                 session->sendTextFrame("viewsetting: " + settings);
             }
             forwardToChild(session, "addconfig");
