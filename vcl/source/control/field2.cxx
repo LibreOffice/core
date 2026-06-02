@@ -34,6 +34,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/weld/DateFormatter.hxx>
 #include <vcl/weld/Entry.hxx>
+#include <vcl/weld/PatternFormatter.hxx>
 #include <vcl/weld/weldutils.hxx>
 
 #include <svdata.hxx>

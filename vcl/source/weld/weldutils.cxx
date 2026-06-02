@@ -395,39 +395,6 @@ void TimeFormatter::SetTimeFormat(TimeFieldFormat eTimeFormat)
 
 TimeFormatter::~TimeFormatter() = default;
 
-PatternFormatter::PatternFormatter(weld::Entry& rEntry)
-    : m_rEntry(rEntry)
-    , m_bStrictFormat(false)
-    , m_bSameMask(true)
-    , m_bReformat(false)
-    , m_bInPattKeyInput(false)
-{
-    m_rEntry.connect_changed(LINK(this, PatternFormatter, ModifyHdl));
-    m_rEntry.connect_focus_in(LINK(this, PatternFormatter, FocusInHdl));
-    m_rEntry.connect_focus_out(LINK(this, PatternFormatter, FocusOutHdl));
-    m_rEntry.connect_key_press(LINK(this, PatternFormatter, KeyInputHdl));
-}
-
-IMPL_LINK_NOARG(PatternFormatter, ModifyHdl, weld::Entry&, void) { Modify(); }
-
-IMPL_LINK_NOARG(PatternFormatter, FocusOutHdl, weld::Widget&, void)
-{
-    EntryLostFocus();
-    m_aFocusOutHdl.Call(m_rEntry);
-}
-
-IMPL_LINK_NOARG(PatternFormatter, FocusInHdl, weld::Widget&, void)
-{
-    EntryGainFocus();
-    m_aFocusInHdl.Call(m_rEntry);
-}
-
-PatternFormatter::~PatternFormatter()
-{
-    m_rEntry.connect_changed(Link<weld::Entry&, void>());
-    m_rEntry.connect_focus_out(Link<weld::Widget&, void>());
-}
-
 WidgetStatusListener::WidgetStatusListener(weld::Widget* widget, const OUString& aCommand)
     : mWidget(widget)
 {

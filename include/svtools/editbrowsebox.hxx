@@ -34,6 +34,7 @@
 #include <vcl/weld/Entry.hxx>
 #include <vcl/weld/FormattedSpinButton.hxx>
 #include <vcl/weld/MenuButton.hxx>
+#include <vcl/weld/PatternFormatter.hxx>
 #include <vcl/weld/TextView.hxx>
 #include <vcl/weld/TriStateEnabled.hxx>
 #include <vcl/weld/weldutils.hxx>
