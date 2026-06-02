@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include <vcl/weld/CheckButton.hxx>
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/TextView.hxx>
 #include <vcl/weld/Window.hxx>

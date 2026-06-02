@@ -21,6 +21,7 @@
 
 #include <sfx2/tabdlg.hxx>
 
+#include <vcl/weld/CheckButton.hxx>
 #include <vcl/weld/Frame.hxx>
 #include <vcl/weld/Label.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>

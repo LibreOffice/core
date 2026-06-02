@@ -21,11 +21,13 @@
 #include <sfx2/tabdlg.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
 
-namespace weld {
-    class CheckButton;
-    class MetricSpinButton;
-    class RadioButton;
-    class Widget;
+namespace weld
+{
+class CheckButton;
+class MetricSpinButton;
+class RadioButton;
+class Toggleable;
+class Widget;
 }
 
 namespace chart

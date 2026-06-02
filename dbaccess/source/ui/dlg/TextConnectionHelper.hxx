@@ -22,6 +22,7 @@
 #include "adminpages.hxx"
 #include <charsetlistbox.hxx>
 #include <rtl/ustring.hxx>
+#include <vcl/weld/CheckButton.hxx>
 #include <vcl/weld/RadioButton.hxx>
 
 namespace dbaui

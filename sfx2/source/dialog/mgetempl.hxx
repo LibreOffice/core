@@ -28,15 +28,18 @@
 #include <map>
 #include <set>
 
-namespace weld { class Button; }
-namespace weld { class CheckButton; }
-namespace weld { class ComboBox; }
-namespace weld { class Entry; }
-namespace weld { class Label; }
-namespace weld { class Widget; }
-
-namespace weld { class Container; }
-namespace weld { class Box; }
+namespace weld
+{
+class Box;
+class Button;
+class CheckButton;
+class ComboBox;
+class Container;
+class Entry;
+class Label;
+class Toggleable;
+class Widget;
+}
 
 class SfxManageStyleSheetPage;
 

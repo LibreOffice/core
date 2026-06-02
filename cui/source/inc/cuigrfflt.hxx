@@ -22,6 +22,7 @@
 #include <vcl/timer.hxx>
 #include <svx/dlgctrl.hxx>
 #include <svx/rectenum.hxx>
+#include <vcl/weld/CheckButton.hxx>
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/DrawingArea.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>

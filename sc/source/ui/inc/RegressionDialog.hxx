@@ -13,6 +13,7 @@
 #include "StatisticsTwoVariableDialog.hxx"
 #include "TableFillingAndNavigationTools.hxx"
 
+#include <vcl/weld/CheckButton.hxx>
 #include <vcl/weld/Label.hxx>
 #include <vcl/weld/RadioButton.hxx>
 #include <vcl/weld/SpinButton.hxx>

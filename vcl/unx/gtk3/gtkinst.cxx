@@ -42,6 +42,7 @@
 #include <vcl/weld/Box.hxx>
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/Calendar.hxx>
+#include <vcl/weld/CheckButton.hxx>
 #include <vcl/weld/Dialog.hxx>
 #include <vcl/weld/DrawingArea.hxx>
 #include <vcl/weld/Expander.hxx>

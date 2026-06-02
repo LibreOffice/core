@@ -52,6 +52,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/MenuButton.hxx>
+#include <vcl/weld/Toggleable.hxx>
 #include <memory>
 
 #define BUTTON_WIDTH 30

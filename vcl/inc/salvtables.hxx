@@ -13,6 +13,7 @@
 #include <vcl/weld/Assistant.hxx>
 #include <vcl/weld/Box.hxx>
 #include <vcl/weld/Builder.hxx>
+#include <vcl/weld/CheckButton.hxx>
 #include <vcl/weld/Calendar.hxx>
 #include <vcl/weld/ColorChooserDialog.hxx>
 #include <vcl/weld/ComboBox.hxx>

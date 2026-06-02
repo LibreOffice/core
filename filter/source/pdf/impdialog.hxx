@@ -24,6 +24,7 @@
 
 #include <vcl/pdfwriter.hxx>
 #include <vcl/FilterConfigItem.hxx>
+#include <vcl/weld/CheckButton.hxx>
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/Entry.hxx>

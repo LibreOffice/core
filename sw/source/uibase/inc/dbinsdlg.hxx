@@ -21,6 +21,7 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_DBINSDLG_HXX
 
 #include <utility>
+#include <vcl/weld/CheckButton.hxx>
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/Frame.hxx>
 #include <vcl/weld/Label.hxx>

@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include <vcl/weld/CheckButton.hxx>
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/RadioButton.hxx>
 #include <vcl/weld/weld.hxx>

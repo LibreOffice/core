@@ -26,6 +26,7 @@
 #include <svx/papersizelistbox.hxx>
 #include <sfx2/sidebar/IContextChangeReceiver.hxx>
 #include <vcl/EnumContext.hxx>
+#include <vcl/weld/CheckButton.hxx>
 #include <vcl/weld/Label.hxx>
 
 #include <com/sun/star/frame/XFrame.hpp>

@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <vcl/weld/CheckButton.hxx>
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/EntryTreeView.hxx>
 #include <vcl/weld/SpinButton.hxx>

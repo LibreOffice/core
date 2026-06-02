@@ -22,6 +22,7 @@
 #include "adminpages.hxx"
 #include <dsmeta.hxx>
 
+#include <vcl/weld/CheckButton.hxx>
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/Entry.hxx>
 #include <vcl/weld/Label.hxx>

@@ -24,6 +24,7 @@
 
 #include <svx/databaselocationinput.hxx>
 #include <vcl/vclptr.hxx>
+#include <vcl/weld/CheckButton.hxx>
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/Entry.hxx>
 #include <vcl/weld/Label.hxx>

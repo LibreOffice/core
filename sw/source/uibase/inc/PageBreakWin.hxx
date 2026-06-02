@@ -18,6 +18,7 @@
 namespace weld
 {
 class MenuButton;
+class Toggleable;
 }
 
 class SwPageBreakWin;

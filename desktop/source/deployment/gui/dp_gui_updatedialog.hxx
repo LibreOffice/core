@@ -27,6 +27,7 @@
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/link.hxx>
+#include <vcl/weld/CheckButton.hxx>
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/Label.hxx>
 #include <vcl/weld/LinkButton.hxx>

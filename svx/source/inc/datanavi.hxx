@@ -24,6 +24,7 @@
 #include <vcl/builderpage.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/transfer.hxx>
+#include <vcl/weld/CheckButton.hxx>
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/Entry.hxx>

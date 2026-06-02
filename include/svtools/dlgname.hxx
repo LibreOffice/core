@@ -20,6 +20,7 @@
 
 #include <svtools/svtdllapi.h>
 #include <vcl/formatter.hxx>
+#include <vcl/weld/CheckButton.hxx>
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/Entry.hxx>
 #include <vcl/weld/FormattedSpinButton.hxx>

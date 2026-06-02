@@ -10,6 +10,7 @@
 #pragma once
 
 #include <comphelper/backupfilehelper.hxx>
+#include <vcl/weld/CheckButton.hxx>
 #include <vcl/weld/Container.hxx>
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/LinkButton.hxx>

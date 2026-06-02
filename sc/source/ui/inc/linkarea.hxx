@@ -20,6 +20,7 @@
 #pragma once
 
 #include <sfx2/objsh.hxx>
+#include <vcl/weld/CheckButton.hxx>
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/Label.hxx>
 #include <vcl/weld/SpinButton.hxx>

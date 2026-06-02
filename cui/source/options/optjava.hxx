@@ -25,6 +25,7 @@
 #include <vector>
 #include <vcl/timer.hxx>
 #include <vcl/idle.hxx>
+#include <vcl/weld/CheckButton.hxx>
 #include <vcl/weld/Entry.hxx>
 #include <vcl/weld/Label.hxx>
 #include <vcl/weld/weld.hxx>

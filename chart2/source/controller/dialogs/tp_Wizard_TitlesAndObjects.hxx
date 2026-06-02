@@ -24,6 +24,7 @@
 #include <vcl/wizardmachine.hxx>
 #include <rtl/ref.hxx>
 #include <vcl/weld/Builder.hxx>
+#include <vcl/weld/CheckButton.hxx>
 
 #include <memory>
 

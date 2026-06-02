@@ -26,6 +26,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/weld/Builder.hxx>
+#include <vcl/weld/CheckButton.hxx>
 #include <vcl/weld/Entry.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>

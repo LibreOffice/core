@@ -20,6 +20,7 @@
 #define INCLUDED_SW_SOURCE_UI_DBUI_CREATEADDRESSLISTDIALOG_HXX
 
 #include <sfx2/basedlgs.hxx>
+#include <vcl/weld/CheckButton.hxx>
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/Dialog.hxx>
 #include <vcl/weld/DialogController.hxx>

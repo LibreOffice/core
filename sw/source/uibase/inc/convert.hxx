@@ -23,6 +23,7 @@
 #include <sfx2/basedlgs.hxx>
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
+#include <vcl/weld/CheckButton.hxx>
 #include <vcl/weld/Container.hxx>
 #include <vcl/weld/Entry.hxx>
 #include <vcl/weld/RadioButton.hxx>

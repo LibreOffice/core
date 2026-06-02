@@ -14,6 +14,7 @@
 
 #include <officecfg/Office/Writer.hxx>
 #include <svl/eitem.hxx>
+#include <vcl/weld/CheckButton.hxx>
 
 SwGridTabPage::SwGridTabPage(weld::Container* pPage, weld::DialogController* pController,
                              const SfxItemSet& rItemSet)

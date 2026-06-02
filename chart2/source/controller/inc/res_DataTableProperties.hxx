@@ -11,7 +11,7 @@
 
 #include <svl/itemset.hxx>
 #include <vcl/weld/Builder.hxx>
-#include <vcl/weld/weld.hxx>
+#include <vcl/weld/CheckButton.hxx>
 
 namespace chart
 {

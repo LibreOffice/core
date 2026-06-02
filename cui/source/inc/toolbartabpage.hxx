@@ -13,7 +13,7 @@
 #include <framework/layoutmanager.hxx>
 
 #include <sfx2/tabdlg.hxx>
-#include <vcl/weld/weld.hxx>
+#include <vcl/weld/CheckButton.hxx>
 #include <vcl/weld/Label.hxx>
 #include <vcl/weld/TreeView.hxx>
 

@@ -30,6 +30,7 @@
 #include <tools/urlobj.hxx>
 #include <tools/debug.hxx>
 #include <vcl/weld/Label.hxx>
+#include <vcl/weld/Toggleable.hxx>
 
 #include <algorithm>
 #include <utility>

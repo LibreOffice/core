@@ -13,7 +13,6 @@
 #include <tools/gen.hxx>
 #include <tools/link.hxx>
 #include <vcl/dllapi.h>
-#include <vcl/weld/Toggleable.hxx>
 #include <vcl/weld/Widget.hxx>
 
 namespace com::sun::star::graphic
@@ -74,34 +73,6 @@ public:
     virtual void set_custom_button(VirtualDevice* pDevice) = 0;
 
     virtual void connect_clicked(const Link<Button&, void>& rLink) { m_aClickHdl = rLink; }
-};
-
-class VCL_DLLPUBLIC CheckButton : virtual public Toggleable
-{
-protected:
-    virtual void do_set_state(TriState eState) = 0;
-
-public:
-    // must override Toggleable::get_state to support TRISTATE_INDET
-    virtual TriState get_state() const override = 0;
-
-    void set_state(TriState eState)
-    {
-        disable_notify_events();
-        do_set_state(eState);
-        enable_notify_events();
-    }
-
-    virtual void do_set_active(bool bActive) override final
-    {
-        do_set_state(bActive ? TRISTATE_TRUE : TRISTATE_FALSE);
-    }
-
-    virtual bool get_active() const override final { return get_state() == TRISTATE_TRUE; }
-
-    virtual void set_label(const OUString& rText) = 0;
-    virtual OUString get_label() const = 0;
-    virtual void set_label_wrap(bool wrap) = 0;
 };
 }
 

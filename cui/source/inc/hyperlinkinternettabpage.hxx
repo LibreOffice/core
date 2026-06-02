@@ -9,9 +9,10 @@
 
 #pragma once
 
-#include <vcl/weld/weld.hxx>
-#include <vcl/timer.hxx>
 #include "hyperlinktabpagebase.hxx"
+
+#include <vcl/timer.hxx>
+#include <vcl/weld/CheckButton.hxx>
 
 class HyperlinkInternetTP final : public HyperlinkTabPageBase
 {

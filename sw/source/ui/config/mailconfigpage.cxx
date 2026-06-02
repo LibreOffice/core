@@ -26,6 +26,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/weld/Builder.hxx>
+#include <vcl/weld/CheckButton.hxx>
 #include <vcl/weld/Dialog.hxx>
 #include <vcl/weld/Image.hxx>
 #include <vcl/weld/RadioButton.hxx>

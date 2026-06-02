@@ -22,6 +22,7 @@
 #include <svx/langbox.hxx>
 #include <tools/solar.h>
 #include <tools/stream.hxx>
+#include <vcl/weld/CheckButton.hxx>
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/Entry.hxx>
 #include <vcl/weld/Label.hxx>

@@ -23,10 +23,12 @@
 #include <vcl/weld/MetricSpinButton.hxx>
 #include <TextDirectionListBox.hxx>
 
-namespace weld {
-    class CheckButton;
-    class CustomWeld;
-    class Label;
+namespace weld
+{
+class CheckButton;
+class CustomWeld;
+class Label;
+class Toggleable;
 }
 
 namespace chart

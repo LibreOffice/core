@@ -24,6 +24,8 @@
 #include "ChartTypeDialogController.hxx"
 #include "ChartResourceGroupDlgs.hxx"
 
+#include <vcl/weld/CheckButton.hxx>
+
 namespace chart
 {
 class SplinePropertiesDialog;

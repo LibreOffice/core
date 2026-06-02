@@ -40,6 +40,7 @@
 #include <vcl/metric.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/stdtext.hxx>
+#include <vcl/weld/CheckButton.hxx>
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/MenuButton.hxx>
 #include <vcl/weld/MessageDialog.hxx>

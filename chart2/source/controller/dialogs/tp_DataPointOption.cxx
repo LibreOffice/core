@@ -22,6 +22,7 @@
 #include <chartview/ChartSfxItemIds.hxx>
 #include <svl/eitem.hxx>
 #include <vcl/weld/Builder.hxx>
+#include <vcl/weld/CheckButton.hxx>
 
 namespace chart
 {

@@ -22,6 +22,7 @@
 #include <com/sun/star/sheet/DataPilotFieldReference.hpp>
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 
+#include <vcl/weld/CheckButton.hxx>
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/Expander.hxx>
 #include <vcl/weld/DialogController.hxx>

@@ -23,10 +23,14 @@
 #include <sfx2/htmlmode.hxx>
 #include <svx/svxdllapi.h>
 
-namespace weld { class CheckButton; }
-namespace weld { class MetricSpinButton; }
-namespace weld { class SpinButton; }
-namespace weld { class Widget; }
+namespace weld
+{
+class CheckButton;
+class MetricSpinButton;
+class SpinButton;
+class Toggleable;
+class Widget;
+}
 
 class SVX_DLLPUBLIC SvxOptionsGrid
 {

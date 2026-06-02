@@ -20,6 +20,7 @@
 #pragma once
 
 #include <sfx2/tabdlg.hxx>
+#include <vcl/weld/CheckButton.hxx>
 #include <vcl/weld/TriStateEnabled.hxx>
 
 class ScTabPageProtection : public SfxTabPage

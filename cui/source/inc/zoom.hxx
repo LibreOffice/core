@@ -22,6 +22,7 @@
 #include <sfx2/basedlgs.hxx>
 #include <svl/itemset.hxx>
 #include <svx/zoom_def.hxx>
+#include <vcl/weld/CheckButton.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
 #include <vcl/weld/RadioButton.hxx>
 #include <vcl/weld/SpinButton.hxx>

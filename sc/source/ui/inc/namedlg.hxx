@@ -22,6 +22,7 @@
 #include "anyrefdg.hxx"
 #include "namemgrtable.hxx"
 
+#include <vcl/weld/CheckButton.hxx>
 #include <vcl/weld/Expander.hxx>
 #include <vcl/weld/Label.hxx>
 

@@ -26,6 +26,7 @@
 #include <svx/frmdirlbox.hxx>
 #include <svx/swframeexample.hxx>
 #include <fmtanchr.hxx>
+#include <vcl/weld/CheckButton.hxx>
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/Entry.hxx>
 #include <vcl/weld/Frame.hxx>

@@ -27,6 +27,7 @@
 #include <svx/sdangitm.hxx>
 #include <tools/fldunit.hxx>
 #include <vcl/weld/Builder.hxx>
+#include <vcl/weld/CheckButton.hxx>
 #include <vcl/weld/Label.hxx>
 
 namespace chart

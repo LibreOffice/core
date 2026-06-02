@@ -28,6 +28,7 @@
 #include <svl/stritem.hxx>
 #include <vcl/formatter.hxx>
 #include <vcl/weld/Builder.hxx>
+#include <vcl/weld/CheckButton.hxx>
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/FormattedSpinButton.hxx>
 #include <vcl/weld/Image.hxx>

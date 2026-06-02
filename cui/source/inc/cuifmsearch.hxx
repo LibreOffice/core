@@ -22,6 +22,7 @@
 #include <com/sun/star/sdbc/XResultSet.hpp>
 
 #include <svx/fmsearch.hxx>
+#include <vcl/weld/CheckButton.hxx>
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/Label.hxx>

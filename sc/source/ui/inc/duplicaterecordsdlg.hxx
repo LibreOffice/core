@@ -20,6 +20,8 @@
 #pragma once
 
 #include "viewdata.hxx"
+
+#include <vcl/weld/CheckButton.hxx>
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/RadioButton.hxx>
 #include <vcl/weld/TreeView.hxx>

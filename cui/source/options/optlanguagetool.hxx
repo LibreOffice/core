@@ -20,6 +20,7 @@
 
 #include <sfx2/tabdlg.hxx>
 #include <rtl/ustring.hxx>
+#include <vcl/weld/CheckButton.hxx>
 #include <vcl/weld/Entry.hxx>
 #include <vcl/weld/Frame.hxx>
 

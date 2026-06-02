@@ -27,6 +27,7 @@
 #include <svx/PaletteManager.hxx>
 #include <svx/svdview.hxx>
 #include <vcl/hexcolorcontrol.hxx>
+#include <vcl/weld/CheckButton.hxx>
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/DrawingArea.hxx>
 #include <vcl/weld/Entry.hxx>

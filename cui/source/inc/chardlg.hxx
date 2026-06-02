@@ -23,6 +23,7 @@
 #include <svx/fntctrl.hxx>
 #include <svx/colorbox.hxx>
 #include <svx/langbox.hxx>
+#include <vcl/weld/CheckButton.hxx>
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/EntryTreeView.hxx>

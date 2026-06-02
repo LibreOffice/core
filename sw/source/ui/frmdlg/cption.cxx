@@ -38,6 +38,7 @@
 #include <com/sun/star/text/XTextFramesSupplier.hpp>
 #include <comphelper/string.hxx>
 #include <vcl/weld/Builder.hxx>
+#include <vcl/weld/CheckButton.hxx>
 #include <vcl/weld/Dialog.hxx>
 #include <vcl/weld/weld.hxx>
 #include <strings.hrc>

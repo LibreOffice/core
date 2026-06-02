@@ -13,6 +13,7 @@
 
 #include <i18nutil/searchopt.hxx>
 #include <svtools/dlgname.hxx>
+#include <vcl/weld/CheckButton.hxx>
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/Entry.hxx>
 #include <vcl/weld/TreeView.hxx>

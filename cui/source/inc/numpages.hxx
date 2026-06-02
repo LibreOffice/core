@@ -26,6 +26,7 @@
 #include <editeng/svxenum.hxx>
 #include <svtools/ctrlbox.hxx>
 #include <svx/numberingpreview.hxx>
+#include <vcl/weld/CheckButton.hxx>
 #include <vcl/weld/Entry.hxx>
 #include <vcl/weld/Image.hxx>
 #include <vcl/weld/Label.hxx>

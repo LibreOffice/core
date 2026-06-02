@@ -10,6 +10,7 @@
 #pragma once
 
 #include <sfx2/tabdlg.hxx>
+#include <vcl/weld/CheckButton.hxx>
 
 class WelcomeDialog : public SfxTabDialogController
 {

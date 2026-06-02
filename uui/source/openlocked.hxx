@@ -18,6 +18,7 @@
  */
 #pragma once
 
+#include <vcl/weld/CheckButton.hxx>
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/Image.hxx>
 #include <vcl/weld/Label.hxx>

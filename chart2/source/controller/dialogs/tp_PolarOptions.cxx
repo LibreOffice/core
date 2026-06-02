@@ -25,6 +25,7 @@
 #include <tools/fldunit.hxx>
 #include <officecfg/Office/Compatibility.hxx>
 #include <vcl/weld/Builder.hxx>
+#include <vcl/weld/CheckButton.hxx>
 
 namespace chart
 {

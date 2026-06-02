@@ -20,8 +20,9 @@
 #pragma once
 
 #include "configurationaccess.hxx"
+
+#include <vcl/weld/CheckButton.hxx>
 #include <vcl/weld/DialogController.hxx>
-#include <vcl/weld/weld.hxx>
 #include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/awt/XWindow.hpp>

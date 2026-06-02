@@ -24,6 +24,7 @@
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/childwin.hxx>
 #include <vcl/weld/Builder.hxx>
+#include <vcl/weld/CheckButton.hxx>
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/Dialog.hxx>
 #include <vcl/weld/Entry.hxx>

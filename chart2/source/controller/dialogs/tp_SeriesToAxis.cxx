@@ -26,6 +26,7 @@
 #include <svl/ilstitem.hxx>
 #include <tools/fldunit.hxx>
 #include <vcl/weld/Builder.hxx>
+#include <vcl/weld/CheckButton.hxx>
 #include <vcl/weld/RadioButton.hxx>
 
 #include <com/sun/star/chart/MissingValueTreatment.hpp>

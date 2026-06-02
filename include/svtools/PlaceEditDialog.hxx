@@ -11,6 +11,7 @@
 
 #include <config_options.h>
 #include <svtools/svtdllapi.h>
+#include <vcl/weld/CheckButton.hxx>
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/Entry.hxx>
 #include <vcl/weld/Label.hxx>
