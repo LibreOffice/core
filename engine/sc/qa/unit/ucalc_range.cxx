@@ -18,6 +18,8 @@
 #include <rangeutl.hxx>
 #include <refupdatecontext.hxx>
 
+#include <unordered_set>
+
 class ScRangeTest : public ScUcalcTestBase
 {
 };
@@ -69,6 +71,29 @@ CPPUNIT_TEST_FIXTURE(ScRangeTest, testTdf147451)
     // "Sheet1" is technically a valid address like "XF1", but it should overflow.
     ScRefFlags nRes = aAddr.Parse(u"Sheet1"_ustr, *m_pDoc, formula::FormulaGrammar::CONV_OOO);
     CPPUNIT_ASSERT_MESSAGE("Should fail to parse.", !(nRes & ScRefFlags::VALID));
+}
+
+CPPUNIT_TEST_FIXTURE(ScRangeTest, testHashDistribution)
+{
+    // tdf#164843: ranges sharing an end corner but differing only in the start
+    // corner must spread across hash buckets. The broken hash put all of them in
+    // a single bucket (distinct buckets == 1); a good hash spreads ~1000 ranges
+    // across most of the 1024 buckets.
+    constexpr size_t nCount = 1000;
+    constexpr size_t nBuckets = 1024;
+
+    std::unordered_set<size_t> aAreaBuckets;
+    std::unordered_set<size_t> aStartColBuckets;
+    for (size_t i = 0; i < nCount; ++i)
+    {
+        // varying start row, shared end row (near MAXROW)
+        const ScRange aRange(28, static_cast<SCROW>(2000 + i), 0, 28, 1048575, 0);
+        aAreaBuckets.insert(aRange.hashArea() % nBuckets);
+        aStartColBuckets.insert(aRange.hashStartColumn() % nBuckets);
+    }
+
+    CPPUNIT_ASSERT_GREATER(nCount / 2, aAreaBuckets.size());
+    CPPUNIT_ASSERT_GREATER(nCount / 2, aStartColBuckets.size());
 }
 
 class ScRangeUpdaterTest : public CppUnit::TestFixture

@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <o3tl/hash_combine.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/strbuf.hxx>
 
@@ -728,46 +729,35 @@ inline bool ScRange::Intersects( const ScRange& rRange ) const
 
 inline size_t ScRange::hashArea() const
 {
-#if SAL_TYPES_SIZEOFPOINTER == 8
-    // 12 bits for the columns and 20 bits for the rows
-    return
-        (static_cast<size_t>(aStart.Row()) << 44) ^
-        (static_cast<size_t>(aStart.Col()) << 32) ^
-        (static_cast<size_t>(aEnd.Col())   << 20) ^
-         static_cast<size_t>(aEnd.Row());
-#else
-    // Assume that there are not that many ranges with identical corners so we
-    // won't have too many collisions. Also assume that more lower row and
-    // column numbers are used so that there are not too many conflicts with
-    // the columns hashed into the values, and that start row and column
-    // usually don't exceed certain values. High bits are not masked off and
-    // may overlap with lower bits of other values, e.g. if start column is
-    // greater than assumed.
-    return
-        (static_cast<size_t>(aStart.Row()) << 26) ^ // start row <= 2^6
-        (static_cast<size_t>(aStart.Col()) << 21) ^ // start column <= 2^5
-        (static_cast<size_t>(aEnd.Col())   << 15) ^ // end column <= 2^6
-         static_cast<size_t>(aEnd.Row());           // end row <= 2^15
-#endif
+    // Mix all four corners into the hash so each one affects its low-order bits,
+    // which are what determine the bucket index in a hash table. The previous
+    // shift+xor parked the start column/row in high bits, so ranges that share
+    // the same end corner but differ only in the start corner - e.g. a relative
+    // named range resolving to A1:X, A2:X, A3:X, ... or repeated large LOOKUP()
+    // areas - all hashed to a single bucket, turning unordered_set insert/find
+    // into O(n). tdf#164843
+    size_t h = 0;
+    o3tl::hash_combine(h, aStart.Row());
+    o3tl::hash_combine(h, aStart.Col());
+    o3tl::hash_combine(h, aEnd.Col());
+    o3tl::hash_combine(h, aEnd.Row());
+    return h;
 }
 
 inline size_t ScRange::hashStartColumn() const
 {
-#if SAL_TYPES_SIZEOFPOINTER == 8
-    // 20 bits for the rows
-    return
-        (static_cast<size_t>(aStart.Col()) << 40) ^
-        (static_cast<size_t>(aStart.Row()) << 20) ^
-         static_cast<size_t>(aEnd.Row());
-#else
-    // Assume that for the start row more lower row numbers are used so that
-    // there are not too many conflicts with the column hashed into the higher
-    // values.
-    return
-        (static_cast<size_t>(aStart.Col()) << 24) ^ // start column <= 2^8
-        (static_cast<size_t>(aStart.Row()) << 16) ^ // start row <= 2^8
-         static_cast<size_t>(aEnd.Row());
-#endif
+    // As in hashArea(): mix the fields so each one affects the low-order bits
+    // that determine the bucket index. The previous shift+xor parked the start
+    // column/row in high bits, so ranges that share the same end row but differ
+    // only in the start corner hashed to a single bucket and made the lookup and
+    // range caches O(n) per probe. Keyed on the start column and the row span
+    // (end column intentionally omitted - lookups are on the first column).
+    // tdf#164843
+    size_t h = 0;
+    o3tl::hash_combine(h, aStart.Col());
+    o3tl::hash_combine(h, aStart.Row());
+    o3tl::hash_combine(h, aEnd.Row());
+    return h;
 }
 
 [[nodiscard]] inline bool ValidRange( const ScRange& rRange, SCCOL nMaxCol, SCROW nMaxRow )
