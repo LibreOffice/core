@@ -25,6 +25,7 @@
 #include <vcl/weld/Label.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
 #include <vcl/weld/SpinButton.hxx>
+#include <vcl/weld/TriStateEnabled.hxx>
 
 class SvxLineSpacingItem;
 

@@ -17,6 +17,7 @@
 #include <vcl/weld/Grid.hxx>
 #include <vcl/weld/Label.hxx>
 #include <vcl/weld/ScrolledWindow.hxx>
+#include <vcl/weld/TriStateEnabled.hxx>
 #include <vcl/weld/Window.hxx>
 #include <vcl/weld/weld.hxx>
 #include <vcl/font/Feature.hxx>

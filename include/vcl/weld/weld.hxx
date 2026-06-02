@@ -131,18 +131,6 @@ public:
     virtual void set_label_wrap(bool wrap) = 0;
 };
 
-struct VCL_DLLPUBLIC TriStateEnabled
-{
-    TriState eState;
-    bool bTriStateEnabled;
-    TriStateEnabled()
-        : eState(TRISTATE_INDET)
-        , bTriStateEnabled(true)
-    {
-    }
-    void CheckButtonToggled(CheckButton& rToggle);
-};
-
 class VCL_DLLPUBLIC RadioButton : virtual public Toggleable
 {
 public:

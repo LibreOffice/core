@@ -24,6 +24,7 @@
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/Label.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
+#include <vcl/weld/TriStateEnabled.hxx>
 #include <TextDirectionListBox.hxx>
 
 #include <map>

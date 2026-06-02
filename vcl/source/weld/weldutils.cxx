@@ -41,26 +41,6 @@ BuilderPage::~BuilderPage() {}
 
 namespace weld
 {
-void TriStateEnabled::CheckButtonToggled(weld::CheckButton& rToggle)
-{
-    if (bTriStateEnabled)
-    {
-        switch (eState)
-        {
-            case TRISTATE_INDET:
-                rToggle.set_state(TRISTATE_FALSE);
-                break;
-            case TRISTATE_TRUE:
-                rToggle.set_state(TRISTATE_INDET);
-                break;
-            case TRISTATE_FALSE:
-                rToggle.set_state(TRISTATE_TRUE);
-                break;
-        }
-    }
-    eState = rToggle.get_state();
-}
-
 size_t GetAbsPos(const weld::TreeView& rTreeView, const weld::TreeIter& rIter)
 {
     size_t nAbsPos = 0;
