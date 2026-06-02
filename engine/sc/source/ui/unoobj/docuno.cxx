@@ -1522,7 +1522,11 @@ void ScModelObj::getCommandValues(tools::JsonWriter& rJsonWriter, std::string_vi
         rJsonWriter.put("cell", cellStr);
         rJsonWriter.put("formula", formulaStr);
 
+        ScTabViewShell* pViewShell = pDocShell->GetBestViewShell(false);
+        const SCTAB nActiveTab = pViewShell ? pViewShell->GetViewData().GetTabNumber() : SCTAB(0);
+
         ScAddress aAddr;
+        aAddr.SetTab(nActiveTab);
         ScRefFlags nRes = aAddr.Parse(cellStr, rDoc);
         if (!(nRes & ScRefFlags::VALID))
         {
