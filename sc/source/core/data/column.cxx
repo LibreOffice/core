@@ -28,6 +28,7 @@
 #include <compiler.hxx>
 #include <brdcst.hxx>
 #include <markdata.hxx>
+#include <MatrixResizeGuard.hxx>
 #include <postit.hxx>
 #include <cellvalue.hxx>
 #include <tokenarray.hxx>
@@ -877,6 +878,8 @@ void ScColumn::CopyToClip(
                               rCxt.isKeepScenarioFlags() ? (ScMF::All & ~ScMF::Scenario) : ScMF::All );
 
     {
+        // Defer dynamic-array resizes so an Interpret in the walk cannot mutate maCells under the iterator.
+        sc::MatrixResizeGuard aMatrixResizeGuard(GetDoc());
         CopyToClipHandler aFunc(GetDoc(), *this, rColumn, rCxt.getBlockPosition(rColumn.nTab, rColumn.nCol));
         sc::ParseBlock(maCells.begin(), maCells, aFunc, nRow1, nRow2);
     }
@@ -906,6 +909,8 @@ void ScColumn::CopyStaticToDocument(
     aDestPos.miCellPos = rDestCol.maCells.begin();
 
     ScDocument& rDocument = GetDoc();
+    // Defer dynamic-array resizes so the block layout does not shift while the loop is walking it.
+    sc::MatrixResizeGuard aMatrixResizeGuard(rDocument);
     std::pair<sc::CellStoreType::const_iterator,size_t> aPos = maCells.position(nRow1);
     sc::CellStoreType::const_iterator it = aPos.first;
     size_t nOffset = aPos.second;
@@ -1614,6 +1619,8 @@ void ScColumn::CopyUpdated( const ScColumn* pPosCol, ScColumn& rDestCol ) const
     sc::SingleColumnSpanSet::SpansType aRanges;
     aRangeSet.getSpans(aRanges);
 
+    // Defer dynamic-array resizes so an Interpret in the walk cannot mutate maCells under the iterator.
+    sc::MatrixResizeGuard aMatrixResizeGuard(GetDoc());
     CopyToClipHandler aFunc(GetDoc(), *this, rDestCol, nullptr);
     sc::CellStoreType::const_iterator itPos = maCells.begin();
     for (const auto& rRange : aRanges)

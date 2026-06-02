@@ -29,6 +29,7 @@
 #include <editutil.hxx>
 #include <subtotal.hxx>
 #include <markdata.hxx>
+#include <MatrixResizeGuard.hxx>
 #include <fillinfo.hxx>
 #include <segmenttree.hxx>
 #include <docparam.hxx>
@@ -2701,6 +2702,8 @@ public:
 
 void ScColumn::FillMatrix( ScMatrix& rMat, size_t nMatCol, SCROW nRow1, SCROW nRow2, svl::SharedStringPool* pPool ) const
 {
+    // Defer dynamic-array resizes so an Interpret in the walk cannot mutate maCells under the iterator.
+    sc::MatrixResizeGuard aMatrixResizeGuard(GetDoc());
     FillMatrixHandler aFunc(rMat, nMatCol, nRow1, GetDoc(), pPool);
     sc::ParseBlock(maCells.begin(), maCells, aFunc, nRow1, nRow2);
 }
