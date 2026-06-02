@@ -482,6 +482,16 @@ void ScDocument::ResizeMatrixFormula(const ScAddress& rOrigin, SCCOL nNewCols, S
     if (nNewCols == nOldCols && nNewRows == nOldRows)
         return; // nothing to do
 
+    // A caller may be iterating the cell store (reached here from a row-height
+    // or interpret walk via InterpretTail). Inserting or removing cells now
+    // would invalidate that iterator - queue the resize and run it once the
+    // guard is popped.
+    if (IsMatrixResizeGuarded())
+    {
+        MarkPendingMatrixResize(rOrigin);
+        return;
+    }
+
     SCTAB nTab = rOrigin.Tab();
     SCCOL nOriginColumn = rOrigin.Col();
     SCROW nOriginRow = rOrigin.Row();
