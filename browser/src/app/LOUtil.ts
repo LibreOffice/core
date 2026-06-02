@@ -923,12 +923,6 @@ class LOUtil {
 				return DOMPurify.sanitize(html, {
 					// Enable both SVG and HTML profiles to support HTML content inside foreignObject
 					USE_PROFILES: { svg: true, svgFilters: true, html: true },
-					// DOMPurify's default allowed-URI regex does not include
-					// cool:, so <source src="cool:..."> would get its src
-					// attribute stripped, leaving <video> with nothing to
-					// fetch. Extend the default to permit cool: here.
-					ALLOWED_URI_REGEXP:
-						/^(?:(?:(?:f|ht)tps?|mailto|tel|callto|sms|cid|xmpp|cool):|[^a-z]|[a-z+.-]+(?:[^a-z+.:-]|$))/i,
 					ADD_TAGS: ['foreignObject'],
 					// Allow ODF namespaced attributes used by LibreOffice SVG export.
 					// See: core/filter/source/svg/svgexport.cxx for the full list.
