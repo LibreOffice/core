@@ -86,6 +86,16 @@ DECLARE_OOXMLEXPORT_TEST(testTdf172113_linespacingNumbering, "tdf172113_linespac
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf172113_linespacingLineBreaks, "tdf172113_linespacingLineBreaks.odt")
+{
+    // This is a pre-emptive test: I'm not aware of it not working before, but I almost broke it...
+    // given a 2 page, double spaced document containing a page full of empty line breaks
+    auto pXmlDoc = parseLayoutDump();
+
+    OUString sText = getXPathContent(pXmlDoc, "//page[2]/body/txt");
+    CPPUNIT_ASSERT(sText.startsWith("Line breaks need to also be double spaced."));
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf172169_linespacingFootnote, "tdf172169_linespacingFootnote.odt")
 {
     // given what should be a single page, double spaced document

@@ -229,7 +229,7 @@ void SwLineLayout::CreateSpaceAdd( const tools::Long nInit )
 // #i3952# Returns true if there are only blanks in [nStt, nEnd[
 // Used to implement IgnoreTabsAndBlanksForLineCalculation compat flag
 static bool lcl_HasOnlyBlanks(std::u16string_view rText, TextFrameIndex nStt, TextFrameIndex nEnd,
-    bool isFieldMarkPortion)
+    bool isFieldMarkText)
 {
     while ( nStt < nEnd )
     {
@@ -241,7 +241,7 @@ static bool lcl_HasOnlyBlanks(std::u16string_view rText, TextFrameIndex nStt, Te
         case 0x3000: // IDEOGRAPHIC SPACE
             continue;
         case 0x2002: // EN SPACE :
-            if (isFieldMarkPortion)
+            if (isFieldMarkText)
                 return false;
             else
                 continue;
