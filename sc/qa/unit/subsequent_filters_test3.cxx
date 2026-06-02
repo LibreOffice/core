@@ -1350,6 +1350,17 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testAutofilterNamedRangesXLSX)
     CPPUNIT_ASSERT_EQUAL(OUString(), aPosStr);
 }
 
+CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf113596PrintRangeNameXLSX)
+{
+    createScDoc("xlsx/built-in_ranges.xlsx");
+    ScDocument* pDoc = getScDoc();
+
+    ScRangeName* pNames = pDoc->GetRangeName(0);
+    CPPUNIT_ASSERT_MESSAGE("There should be named ranges in the sheet", pNames);
+    CPPUNIT_ASSERT_MESSAGE("Range name Excel_BuiltIn_Print_Area not found after XLSX import",
+                           pNames->findByUpperName(u"EXCEL_BUILTIN_PRINT_AREA"_ustr));
+}
+
 CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testInvalidBareBiff5)
 {
     createScDoc("xls/tdf144732.xls");

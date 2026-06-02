@@ -56,6 +56,7 @@ const sal_uInt32 BIFF12_DEFNAME_MACRO       = 0x00000008;
 const sal_uInt32 BIFF12_DEFNAME_BUILTIN     = 0x00000020;
 
 constexpr OUString spcOoxPrefix(u"_xlnm."_ustr);
+constexpr OUString spcDefNamePrefix(u"Excel_BuiltIn_"_ustr);
 
 const char* const sppcBaseNames[] =
 {
@@ -88,7 +89,8 @@ OUString lclGetBaseName( sal_Unicode cBuiltinId )
 
 OUString lclGetPrefixedName( sal_Unicode cBuiltinId )
 {
-    return spcOoxPrefix + lclGetBaseName( cBuiltinId );
+    // tdf#113596 - retrieve the same prefix as for the XLS import in XclTools::GetBuiltInDefName
+    return spcDefNamePrefix + lclGetBaseName(cBuiltinId);
 }
 
 /** returns the built-in name identifier from a prefixed built-in name, e.g. '_xlnm.Print_Area'. */
