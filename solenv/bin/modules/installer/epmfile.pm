@@ -824,7 +824,7 @@ sub call_epm
 
     my $fakerootstring = "";
 
-    if ( $installer::globals::debian ) { $fakerootstring = "fakeroot "; }
+    if ( $installer::globals::debian ) { $fakerootstring = "$ENV{'FAKEROOT'} "; }
 
     my $extraflags = "";
         if ($ENV{'EPM_FLAGS'}) { $extraflags = $ENV{'EPM_FLAGS'}; }

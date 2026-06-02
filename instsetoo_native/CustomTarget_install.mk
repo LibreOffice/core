@@ -108,6 +108,7 @@ $(gb_Make_JobLimiter): $(SRCDIR)/solenv/bin/job-limiter.cpp
 # packaging (since packaging the main installer takes longer than packaging sdk and all helppacks
 # even with the reduced parallelism (the higher the parallelism, the higher the chance for random
 # failures during the cscript call to WiLangId.vbs)
+$(instsetoo_installer_targets): export FAKEROOT:=$(FAKEROOT)
 $(instsetoo_installer_targets): $(SRCDIR)/solenv/bin/make_installer.pl \
         $(foreach ulf,$(instsetoo_ULFLIST),$(gb_CustomTarget_workdir)/instsetoo_native/install/win_ulffiles/$(ulf).ulf) \
         $(if $(filter-out WNT,$(OS)),\

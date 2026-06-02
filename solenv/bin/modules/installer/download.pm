@@ -222,7 +222,7 @@ sub tar_package
     my ( $installdir, $tarfilename, $usefakeroot) = @_;
 
     my $fakerootstring = "";
-    if ( $usefakeroot ) { $fakerootstring = "fakeroot"; }
+    if ( $usefakeroot ) { $fakerootstring = $ENV{'FAKEROOT'}; }
 
     my $systemcall = "cd $installdir; $fakerootstring tar -cf - * > $tarfilename";
 
@@ -497,7 +497,7 @@ sub create_tar_gz_file_from_directory
     installer::pathanalyzer::get_path_from_fullqualifiedname(\$changedir);
 
     my $fakerootstring = "";
-    if ( $usefakeroot ) { $fakerootstring = "fakeroot"; }
+    if ( $usefakeroot ) { $fakerootstring = $ENV{'FAKEROOT'}; }
 
     $installer::globals::downloadfileextension = ".tar.gz";
     $installer::globals::downloadfilename = $downloadfilename . $installer::globals::downloadfileextension;

@@ -25,7 +25,7 @@ $(foreach product,$(PRODUCTLIST),\
 ))
 
 $(deb_WORKDIR)/%-desktop-integration.tar.gz: $(deb_WORKDIR)/%$(PKGVERSIONSHORT)-debian-menus_$(PKGVERSION)-$(LIBO_VERSION_PATCH)_all.deb
-	fakeroot $(GNUTAR) -C $(deb_WORKDIR) -cf - $(notdir $<) | gzip > $@
+	$(FAKEROOT) $(GNUTAR) -C $(deb_WORKDIR) -cf - $(notdir $<) | gzip > $@
 
 $(deb_WORKDIR)/%/DEBIAN/postrm: $(deb_SRCDIR)/postrm
 	cat $< | tr -d "\015" | \
@@ -65,6 +65,6 @@ $(deb_WORKDIR)/%$(PKGVERSIONSHORT)-debian-menus_$(PKGVERSION)-$(LIBO_VERSION_PAT
 	chmod a+rx $(deb_WORKDIR)/$*/DEBIAN \
 		$(deb_WORKDIR)/$*/DEBIAN/pre* $(deb_WORKDIR)/$*/DEBIAN/post*
 	chmod g-s $(deb_WORKDIR)/$*/DEBIAN
-	fakeroot dpkg-deb --build $(deb_WORKDIR)/$* $@
+	$(FAKEROOT) dpkg-deb --build $(deb_WORKDIR)/$* $@
 
 # vim: set noet sw=4 ts=4:

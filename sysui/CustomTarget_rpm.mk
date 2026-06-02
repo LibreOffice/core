@@ -55,6 +55,6 @@ $(foreach product,$(PRODUCTLIST),\
 ))
 
 $(rpm_WORKDIR)/%-desktop-integration.tar.gz:
-	fakeroot $(GNUTAR) -C $(rpm_WORKDIR)/$* -cf - $(foreach distro,$(RPMDISTROS),$*$(PKGVERSIONSHORT)-$(distro)-menus-$(PKGVERSION)-$(LIBO_VERSION_PATCH).noarch.rpm) | gzip > $@
+	$(FAKEROOT) $(GNUTAR) -C $(rpm_WORKDIR)/$* -cf - $(foreach distro,$(RPMDISTROS),$*$(PKGVERSIONSHORT)-$(distro)-menus-$(PKGVERSION)-$(LIBO_VERSION_PATCH).noarch.rpm) | gzip > $@
 
 # vim: set noet sw=4 ts=4:
