@@ -531,10 +531,12 @@ window.L.Control.Notebookbar = window.L.Control.extend({
 		// Currently selected tab name, part of the element's ID.
 		let currentlySelectedTabName = null;
 
-		if (requestedContext && requestedContext.includes('MasterPage'))
-			this._isMasterView = true;
-		else if (requestedContext && requestedContext.includes('DrawPage'))
-			this._isMasterView = false;
+		if (requestedContext)
+			if (requestedContext.includes('MasterPage'))
+				this._isMasterView = true;
+			else if (requestedContext.includes('DrawPage') ||
+				requestedContext.includes('NotesPage'))
+				this._isMasterView = false;
 
 		for (var tab in tabs) {
 			var tabElement = $('#' + tabs[tab].name + '-tab-label');
