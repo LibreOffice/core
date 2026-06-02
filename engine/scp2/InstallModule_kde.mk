@@ -11,7 +11,7 @@ $(eval $(call gb_InstallModule_InstallModule,scp2/kde))
 
 $(eval $(call gb_InstallModule_use_auto_install_libs,scp2/kde,kde))
 
-$(eval $(call gb_InstallModule_add_localized_scpfiles,scp2/kde,\
+$(eval $(call gb_InstallModule_add_scpfiles,scp2/kde,\
     scp2/source/kde/module_kde \
 ))
 

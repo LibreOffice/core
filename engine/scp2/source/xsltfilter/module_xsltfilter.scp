@@ -22,7 +22,6 @@
 
 Module gid_Module_Optional_Xsltfiltersamples
     PackageInfo = "packinfo_office.txt";
-    MOD_NAME_DESC(MODULE_OPTIONAL_XSLTFILTERSAMPLES);
     Sortkey = "700";
     ParentID = gid_Module_Optional;
     Files = (auto_xsltfilter_ALL,

@@ -24,7 +24,6 @@ Module gid_Module_Optional_Kde
     ParentID = gid_Module_Optional;
     Default = YES;
     PackageInfo = "packinfo_office.txt";
-    MOD_NAME_DESC(MODULE_OPTIONAL_KDE);
     Styles = ();
     Files = (auto_kde_ALL);
 End

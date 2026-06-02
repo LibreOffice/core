@@ -20,7 +20,6 @@ Module gid_Module_Helppack_Root_<LANGUAGE_>
     ParentID = gid_Module_Helppack_Helproot;
     Sortkey = "<SORTKEY>";
     Language = "<LANGUAGE>";
-    MOD_NAME_DESC(MODULE_HELPPACK_<LANGUAGEBIG_>);
 #ifdef WITH_HELPPACK_INTEGRATION
     Styles =(FORCEHELPPACK, SHOW_MULTILINGUAL_ONLY, USELANGUAGENAME, LANGUAGEMODULE);
 #else

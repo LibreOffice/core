@@ -15,9 +15,6 @@ $(eval $(call gb_InstallModule_use_auto_install_libs,scp2/xsltfilter,\
 
 $(eval $(call gb_InstallModule_add_scpfiles,scp2/xsltfilter,\
     scp2/source/xsltfilter/file_xsltfilter \
-))
-
-$(eval $(call gb_InstallModule_add_localized_scpfiles,scp2/xsltfilter,\
     scp2/source/xsltfilter/module_xsltfilter \
 ))
 

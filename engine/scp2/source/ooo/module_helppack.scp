@@ -22,7 +22,6 @@ Module gid_Module_Helppack_Helproot
     ParentID = gid_Module_Root;
     XPDParentID = "root";
     Sortkey = "300";
-    MOD_NAME_DESC(MODULE_ROOT_HELPPACK);
 #ifdef WITH_HELPPACK_INTEGRATION
     Styles = (SHOW_MULTILINGUAL_ONLY);
 #else

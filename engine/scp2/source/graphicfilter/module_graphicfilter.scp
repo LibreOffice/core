@@ -22,7 +22,6 @@
 
 Module gid_Module_Optional_Grfflt
     PackageInfo = "packinfo_office.txt";
-    MOD_NAME_DESC ( MODULE_OPTIONAL_GRFFLT );
     Sortkey = "600";
     ParentID = gid_Module_Optional;
     Default = YES;

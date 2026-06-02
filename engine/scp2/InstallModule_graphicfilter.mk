@@ -17,9 +17,6 @@ $(eval $(call gb_InstallModule_define_if_set,scp2/graphicfilter,\
 
 $(eval $(call gb_InstallModule_add_scpfiles,scp2/graphicfilter,\
 	scp2/source/graphicfilter/file_graphicfilter \
-))
-
-$(eval $(call gb_InstallModule_add_localized_scpfiles,scp2/graphicfilter,\
     scp2/source/graphicfilter/module_graphicfilter \
 ))
 

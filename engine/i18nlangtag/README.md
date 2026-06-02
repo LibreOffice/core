@@ -90,21 +90,10 @@ If dictionary is to be renamed, for example `ku-TR` to `kmr-Latn`:
 * `scp2/source/ooo/module_ooo.scp`
     * Module `gid_Module_Root_Extension_Dictionary_Ku_Tr`
         * change to `gid_Module_Root_Extension_Dictionary_Kmr_Latn`
-    * `MOD_NAME_DESC` ( `MODULE_EXTENSION_DICTIONARY_KU_TR` );
-        * change to `MODULE_EXTENSION_DICTIONARY_KMR_LATN`
     * `Files = (gid_File_Extension_Dictionary_Ku_Tr);`
         * change to `gid_File_Extension_Dictionary_Kmr_Latn`
     * `Spellcheckerlanguage = "ku-TR";`
         * change to `"kmr-Latn"`
-* `scp2/source/ooo/module_ooo.ulf`
-    * [`STR_NAME_MODULE_EXTENSION_DICTIONARY_KU_TR`]
-        * change to `STR_NAME_MODULE_EXTENSION_DICTIONARY_KMR_LATN`
-    * `en-US = "Kurdish (Turkey)"`
-        * change to `"Kurdish, Northern, Latin script"`
-    * [`STR_DESC_MODULE_EXTENSION_DICTIONARY_KU_TR`]
-        * change to `STR_DESC_MODULE_EXTENSION_DICTIONARY_KMR_LATN`
-    * `en-US = "Kurdish (Turkey)` spelling dictionary"
-        * change to `"Kurdish, Northern, Latin script spelling dictionary"`
 * `setup_native/source/packinfo/packinfo_office.txt`
     * `module = "gid_Module_Root_Extension_Dictionary_Ku_Tr"`
         * change to `"gid_Module_Root_Extension_Dictionary_Kmr_Latn"`

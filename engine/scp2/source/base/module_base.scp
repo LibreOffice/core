@@ -22,7 +22,6 @@
 #include "AutoInstall/base_brand"
 
 Module gid_Module_Prg_Base
-    MOD_NAME_DESC(MODULE_PRG_BASE);
     ParentID = gid_Module_Prg;
     Sortkey = "500";
     Styles =(APPLICATIONMODULE);
@@ -30,7 +29,6 @@ End
 
 Module gid_Module_Prg_Base_Bin
     PackageInfo = "packinfo_office.txt";
-    MOD_NAME_DESC ( MODULE_PRG_BASE_BIN );
     ParentID = gid_Module_Prg_Base;
     Sortkey = "100";
     Default = YES;

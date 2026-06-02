@@ -25,9 +25,6 @@ $(eval $(call gb_InstallModule_add_templates,scp2/impress,\
 
 $(eval $(call gb_InstallModule_add_scpfiles,scp2/impress,\
     scp2/source/impress/file_impress \
-))
-
-$(eval $(call gb_InstallModule_add_localized_scpfiles,scp2/impress,\
     scp2/source/impress/module_impress \
 ))
 

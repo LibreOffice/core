@@ -25,7 +25,6 @@ Module gid_Module_Optional_Systemintegration
     ParentID = gid_Module_Optional;
   #endif
     Sortkey = "800";
-    MOD_NAME_DESC(MODULE_OPTIONAL_SYSTEMINTEGRATION);
   #ifdef WNT
     Styles = (HIDDEN_ROOT);
   #else

@@ -24,9 +24,6 @@ $(eval $(call gb_InstallModule_add_templates,scp2/writer,\
 
 $(eval $(call gb_InstallModule_add_scpfiles,scp2/writer,\
     scp2/source/writer/file_writer \
-))
-
-$(eval $(call gb_InstallModule_add_localized_scpfiles,scp2/writer,\
     scp2/source/writer/module_writer \
 ))
 

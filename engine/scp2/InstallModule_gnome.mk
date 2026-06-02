@@ -13,9 +13,6 @@ $(eval $(call gb_InstallModule_use_auto_install_libs,scp2/gnome,gnome))
 
 $(eval $(call gb_InstallModule_add_scpfiles,scp2/gnome,\
     scp2/source/gnome/file_gnome \
-))
-
-$(eval $(call gb_InstallModule_add_localized_scpfiles,scp2/gnome,\
     scp2/source/gnome/module_gnome \
 ))
 

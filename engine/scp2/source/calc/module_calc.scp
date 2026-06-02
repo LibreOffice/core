@@ -22,7 +22,6 @@
 #include "AutoInstall/calc_brand"
 
 Module gid_Module_Prg_Calc
-    MOD_NAME_DESC ( MODULE_PRG_CALC );
     ParentID = gid_Module_Prg;
     Sortkey = "200";
     Styles =(APPLICATIONMODULE);
@@ -30,7 +29,6 @@ End
 
 Module gid_Module_Prg_Calc_Bin
     PackageInfo = "packinfo_office.txt";
-    MOD_NAME_DESC ( MODULE_PRG_CALC_BIN );
     ParentID = gid_Module_Prg_Calc;
     Sortkey = "100";
     Default = YES;
@@ -41,7 +39,6 @@ Module gid_Module_Prg_Calc_Bin
 End
 
 Module gid_Module_Prg_Calc_Addins
-    MOD_NAME_DESC ( MODULE_OPTIONAL_ADDINS );
     Styles = (HIDDEN_ROOT);
     ParentID = gid_Module_Prg_Calc_Bin;
     Sortkey = "700";

@@ -22,7 +22,6 @@
 #include "AutoInstall/math_brand"
 
 Module gid_Module_Prg_Math
-    MOD_NAME_DESC ( MODULE_PRG_MATH );
     ParentID = gid_Module_Prg;
     Sortkey = "600";
     Styles =(APPLICATIONMODULE);
@@ -30,7 +29,6 @@ End
 
 Module gid_Module_Prg_Math_Bin
     PackageInfo = "packinfo_office.txt";
-    MOD_NAME_DESC ( MODULE_PRG_MATH_BIN );
     ParentID = gid_Module_Prg_Math;
     Sortkey = "100";
     Default = YES;

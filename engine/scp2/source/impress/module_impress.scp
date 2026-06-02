@@ -22,7 +22,6 @@
 #include "AutoInstall/impress_brand"
 
 Module gid_Module_Prg_Impress
-    MOD_NAME_DESC ( MODULE_PRG_IMPRESS );
     ParentID = gid_Module_Prg;
     Sortkey = "400";
     Styles =(APPLICATIONMODULE);
@@ -30,7 +29,6 @@ End
 
 Module gid_Module_Prg_Impress_Bin
     PackageInfo = "packinfo_office.txt";
-    MOD_NAME_DESC ( MODULE_PRG_IMPRESS_BIN );
     ParentID = gid_Module_Prg_Impress;
     Sortkey = "100";
     Default = YES;

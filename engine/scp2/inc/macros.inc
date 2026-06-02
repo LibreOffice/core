@@ -41,10 +41,6 @@
 #define DOCONCAT9( x, y, z, a, b, c, u, v, w)   x##y##z##a##b##c##u##v##w
 #define CONCAT9( x, y, z, a, b, c, u, v, w)     DOCONCAT9(x,y,z,a,b,c,u,v,w)
 
-#define MOD_NAME_DESC(id) \
-        ALL_LANG(Name,STR_NAME_##id); \
-        ALL_LANG(Description,STR_DESC_##id)
-
 #define REG_VALUE_LNG(id) \
         ALL_LANG(Value,STR_REG_VAL_##id);
 

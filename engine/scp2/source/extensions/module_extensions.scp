@@ -20,10 +20,8 @@
 
 
 Module gid_Module_Optional_Extensions
-    MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS);
     ParentID = gid_Module_Optional;
     Files = ( );
     Default = YES;
     Styles = ( );
 End
-

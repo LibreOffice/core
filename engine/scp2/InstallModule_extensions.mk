@@ -11,9 +11,6 @@ $(eval $(call gb_InstallModule_InstallModule,scp2/extensions))
 
 $(eval $(call gb_InstallModule_add_scpfiles,scp2/extensions,\
     scp2/source/extensions/file_extensions \
-))
-
-$(eval $(call gb_InstallModule_add_localized_scpfiles,scp2/extensions,\
     scp2/source/extensions/module_extensions \
 ))
 

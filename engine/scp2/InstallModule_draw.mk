@@ -23,9 +23,6 @@ $(eval $(call gb_InstallModule_add_templates,scp2/draw,\
 
 $(eval $(call gb_InstallModule_add_scpfiles,scp2/draw,\
     scp2/source/draw/file_draw \
-))
-
-$(eval $(call gb_InstallModule_add_localized_scpfiles,scp2/draw,\
     scp2/source/draw/module_draw \
 ))
 

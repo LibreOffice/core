@@ -21,7 +21,6 @@
 #include "AutoInstall/draw_brand"
 
 Module gid_Module_Prg_Draw
-    MOD_NAME_DESC ( MODULE_PRG_DRAW );
     ParentID = gid_Module_Prg;
     Sortkey = "300";
     Styles =(APPLICATIONMODULE);
@@ -29,7 +28,6 @@ End
 
 Module gid_Module_Prg_Draw_Bin
     PackageInfo = "packinfo_office.txt";
-    MOD_NAME_DESC ( MODULE_PRG_DRAW_BIN );
     ParentID = gid_Module_Prg_Draw;
     Sortkey = "100";
     Default = YES;

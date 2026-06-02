@@ -22,6 +22,5 @@ Module gid_Module_Optional_Accessories_Tem_Root_<LANGUAGE_>
     ParentID = gid_Module_Optional_Accessories_Templates;
     Sortkey = "<SORTKEY>";
     Language = "<LANGUAGE>";
-    MOD_NAME_DESC(MODULE_LANGPACK_<LANGUAGEBIG_>);
     Styles =(LANGUAGEMODULE, SHOW_MULTILINGUAL_ONLY, USELANGUAGENAME);
 End

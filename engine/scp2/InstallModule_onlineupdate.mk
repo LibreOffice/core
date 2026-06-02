@@ -13,9 +13,6 @@ $(eval $(call gb_InstallModule_use_auto_install_libs,scp2/onlineupdate,onlineupd
 
 $(eval $(call gb_InstallModule_add_scpfiles,scp2/onlineupdate,\
     scp2/source/onlineupdate/file_onlineupdate \
-))
-
-$(eval $(call gb_InstallModule_add_localized_scpfiles,scp2/onlineupdate,\
     scp2/source/onlineupdate/module_onlineupdate \
 ))
 

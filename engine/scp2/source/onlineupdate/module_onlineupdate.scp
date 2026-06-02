@@ -22,7 +22,6 @@
 
 Module gid_Module_Optional_Onlineupdate
     PackageInfo = "packinfo_office.txt";
-    MOD_NAME_DESC(MODULE_OPT_ONLINEUPDATE);
     Sortkey = "800";
     ParentID = gid_Module_Optional;
     Default = YES;

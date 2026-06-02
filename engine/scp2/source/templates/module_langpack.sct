@@ -20,6 +20,5 @@ Module gid_Module_Langpack_Root_<LANGUAGE_>
     ParentID = gid_Module_Langpack_Languageroot;
     Sortkey = "<SORTKEY>";
     Language = "<LANGUAGE>";
-    MOD_NAME_DESC(MODULE_LANGPACK_<LANGUAGEBIG_>);
     Styles =(LANGUAGEMODULE, SHOW_MULTILINGUAL_ONLY, USELANGUAGENAME);
 End

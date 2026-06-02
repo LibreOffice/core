@@ -22,7 +22,6 @@ Module gid_Module_Optional_Accessories_Adv_Root_<LANGUAGE_>
     ParentID = gid_Module_Optional_Accessories_Advertisement;
     Sortkey = "<SORTKEY>";
     Language = "<LANGUAGE>";
-    MOD_NAME_DESC(MODULE_LANGPACK_<LANGUAGEBIG_>);
     Styles =(LANGUAGEMODULE, SHOW_MULTILINGUAL_ONLY, USELANGUAGENAME);
 End
 
@@ -30,7 +29,6 @@ Module gid_Module_Optional_Accessories_Doc_Root_<LANGUAGE_>
     ParentID = gid_Module_Optional_Accessories_Documentations;
     Sortkey = "<SORTKEY>";
     Language = "<LANGUAGE>";
-    MOD_NAME_DESC(MODULE_LANGPACK_<LANGUAGEBIG_>);
     Styles =(LANGUAGEMODULE, SHOW_MULTILINGUAL_ONLY, USELANGUAGENAME);
 End
 
@@ -38,6 +36,5 @@ Module gid_Module_Optional_Accessories_Sam_Root_<LANGUAGE_>
     ParentID = gid_Module_Optional_Accessories_Samples;
     Sortkey = "<SORTKEY>";
     Language = "<LANGUAGE>";
-    MOD_NAME_DESC(MODULE_LANGPACK_<LANGUAGEBIG_>);
     Styles =(LANGUAGEMODULE, SHOW_MULTILINGUAL_ONLY, USELANGUAGENAME);
 End

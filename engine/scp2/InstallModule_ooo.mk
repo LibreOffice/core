@@ -72,9 +72,6 @@ $(eval $(call gb_InstallModule_add_scpfiles,scp2/ooo,\
     $(if $(filter-out MACOSX WNT,$(OS)), \
 		scp2/source/ooo/module_kit \
 	) \
-))
-
-$(eval $(call gb_InstallModule_add_localized_scpfiles,scp2/ooo,\
     scp2/source/ooo/module_helppack \
     scp2/source/ooo/module_langpack \
     scp2/source/ooo/module_ooo \

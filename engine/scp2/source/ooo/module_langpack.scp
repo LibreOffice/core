@@ -22,7 +22,6 @@ Module gid_Module_Langpack_Languageroot
     ParentID = gid_Module_Root;
     XPDParentID = "root";
     Sortkey = "300";
-    MOD_NAME_DESC(MODULE_ROOT_LANGPACK);
     Styles = (SHOW_MULTILINGUAL_ONLY);
 End
 

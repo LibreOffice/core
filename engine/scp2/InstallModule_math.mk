@@ -24,9 +24,6 @@ $(eval $(call gb_InstallModule_add_templates,scp2/math,\
 
 $(eval $(call gb_InstallModule_add_scpfiles,scp2/math,\
     scp2/source/math/file_math \
-))
-
-$(eval $(call gb_InstallModule_add_localized_scpfiles,scp2/math,\
     scp2/source/math/module_math \
 ))
 
