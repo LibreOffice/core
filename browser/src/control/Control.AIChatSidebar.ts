@@ -1866,11 +1866,16 @@ namespace cool {
 					handler: (idx) => {
 						const userMsg = this.findPrecedingUserMessage(idx);
 						if (userMsg) {
-							this.messages.splice(idx, 1);
 							const userIdx = this.messages.indexOf(userMsg);
-							if (userIdx >= 0) this.messages.splice(userIdx, 1);
-							this.inputText = userMsg.displayContent || userMsg.content;
-							this.sendMessage();
+							if (userIdx >= 0) {
+								this.inputText = userMsg.displayContent || userMsg.content;
+								// Remove the whole failed turn in one contiguous
+								this.messages.splice(userIdx, idx - userIdx + 1);
+								// Rebuild the list so index-keyed DOM elements match
+								// the spliced array.
+								this.updateMessagesArea();
+								app.layoutingService.onDrain(() => this.sendMessage());
+							}
 						}
 					},
 				},

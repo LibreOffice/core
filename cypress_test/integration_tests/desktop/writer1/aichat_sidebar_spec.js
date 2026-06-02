@@ -238,6 +238,76 @@ describe(['tagdesktop'], 'AI Chat Sidebar', function() {
 			cy.cGet('#aichat-msg-1').should('exist');
 			cy.cGet('#aichat-retry-1').should('exist');
 		});
+
+		it('Retry does not duplicate or unstyle the re-sent message', function() {
+			aichatHelper.enableAIAndStubSocket(this.win, { success: false, error: 'boom' });
+			aichatHelper.openAIChat();
+			// Two failing sends so the prior [user, error] pair survives the
+			// splice and the incremental render path runs (length stays > 0).
+			aichatHelper.typeIntoAIInput('First');
+			aichatHelper.clickSend();
+			helper.waitUntilLayoutingIsIdle(this.win);
+			aichatHelper.typeIntoAIInput('Second');
+			aichatHelper.clickSend();
+			helper.waitUntilLayoutingIsIdle(this.win);
+			// messages: user0, error1, user2, error3
+			cy.cGet('#aichat-retry-3 button').click();
+			helper.waitUntilLayoutingIsIdle(this.win);
+			// After retry the failed turn (user2, error3) is removed and 'Second'
+			// is re-sent, landing at index 2 as a styled user bubble.
+			cy.cGet('[id="aichat-msg-2"]').should('have.length', 1);
+			cy.cGet('#aichat-msg-2').should('have.class', 'aichat-msg-user');
+		});
+
+		it('Retry after an approval failure clears the approval bubble and re-sends', function() {
+			var win = this.win;
+			win.app.map.isAIConfigured = true;
+			var original = win.app.socket.sendMessage.bind(win.app.socket);
+			cy.stub(win.app.socket, 'sendMessage').callsFake(function(msg) {
+				if (typeof msg === 'string' && msg.startsWith('aichat: ')) {
+					// First leg: the model asks for approval to read the document.
+					var p = JSON.parse(msg.substring('aichat: '.length));
+					win.app.layoutingService.onDrain(function() {
+						win.app.map.fire('aichatapproval', {
+							requestId: p.requestId,
+							toolName: 'extract_document_structure',
+							summary: 'Read the full text of your document',
+						});
+					});
+				} else if (typeof msg === 'string' && msg.startsWith('aichatapprove: ')) {
+					// After approval the run fails.
+					var a = JSON.parse(msg.substring('aichatapprove: '.length));
+					win.app.layoutingService.onDrain(function() {
+						win.app.map.fire('aichatresult', {
+							requestId: a.requestId,
+							success: false,
+							error: 'boom',
+						});
+					});
+				} else if (typeof msg === 'string' && msg.startsWith('aichatcancel: ')) {
+					// swallow cancel messages
+				} else {
+					original(msg);
+				}
+			});
+			aichatHelper.openAIChat();
+			aichatHelper.typeIntoAIInput('Summarize');
+			aichatHelper.clickSend();
+			// messages: user0, approval1
+			cy.cGet('#aichat-msg-1').should('have.class', 'aichat-msg-approval');
+			cy.cGet('.aichat-approve-btn').click();
+			// messages: user0, approval1, error2
+			cy.cGet('#aichat-msg-2').should('have.class', 'aichat-msg-error');
+			cy.cGet('#aichat-retry-2 button').click();
+			// Retry removes the whole failed turn and re-sends, which triggers a
+			// fresh approval. The list should hold exactly the re-rendered user
+			// prompt and approval - no orphaned approval, no leftover error, no
+			// duplicate bubbles.
+			cy.cGet('#aichat-msg-1').should('have.class', 'aichat-msg-approval');
+			cy.cGet('#aichat-msg-0').should('have.class', 'aichat-msg-user');
+			cy.cGet('#aichat-messages-list > [id^="aichat-msg-"]').should('have.length', 2);
+			cy.cGet('.aichat-msg-error').should('not.exist');
+		});
 	});
 
 	describe('See More/Less', function() {
