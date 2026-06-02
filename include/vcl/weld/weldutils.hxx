@@ -20,10 +20,7 @@
 #include <vcl/transfer.hxx>
 #include <vcl/weld/weld.hxx>
 
-enum class ExtTimeFieldFormat;
 enum class SelectionOptions;
-enum class TimeFieldFormat : sal_Int32;
-enum class TimeFormat;
 
 namespace com::sun::star::frame
 {
@@ -312,41 +309,6 @@ private:
 
     OUString m_aCurrencySymbol;
     bool m_bThousandSep;
-};
-
-class VCL_DLLPUBLIC TimeFormatter final : public EntryFormatter
-{
-public:
-    TimeFormatter(weld::Entry& rEntry);
-    TimeFormatter(weld::FormattedSpinButton& rSpinButton);
-
-    void SetExtFormat(ExtTimeFieldFormat eFormat);
-    void SetDuration(bool bDuration);
-    void SetTimeFormat(TimeFieldFormat eTimeFormat);
-
-    void SetMin(const tools::Time& rNewMin);
-    void SetMax(const tools::Time& rNewMax);
-
-    void SetTime(const tools::Time& rNewTime);
-    tools::Time GetTime();
-
-    virtual ~TimeFormatter() override;
-
-private:
-    DECL_DLLPRIVATE_LINK(FormatOutputHdl, double, std::optional<OUString>);
-    DECL_DLLPRIVATE_LINK(ParseInputHdl, const OUString&, Formatter::ParseResult);
-    DECL_DLLPRIVATE_LINK(CursorChangedHdl, weld::TextWidget&, void);
-
-    SAL_DLLPRIVATE void Init();
-
-    SAL_DLLPRIVATE static tools::Time ConvertValue(int nValue);
-    SAL_DLLPRIVATE static int ConvertValue(const tools::Time& rTime);
-
-    SAL_DLLPRIVATE OUString FormatNumber(int nValue) const;
-
-    TimeFieldFormat m_eFormat;
-    TimeFormat m_eTimeFormat;
-    bool m_bDuration;
 };
 
 class VCL_DLLPUBLIC ButtonPressRepeater final

@@ -23,6 +23,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/DateFormatter.hxx>
+#include <vcl/weld/TimeFormatter.hxx>
 
 namespace svt
 {

@@ -68,6 +68,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/DateFormatter.hxx>
+#include <vcl/weld/TimeFormatter.hxx>
 #include <connectivity/CommonTools.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbconversion.hxx>

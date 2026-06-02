@@ -32,6 +32,7 @@
 #include <vcl/toolkit/fmtfield.hxx>
 #include <vcl/uitest/formattedfielduiobject.hxx>
 #include <vcl/weld/SpinButton.hxx>
+#include <vcl/weld/TimeFormatter.hxx>
 #include <vcl/weld/weldutils.hxx>
 
 #include "FieldFormatter.hxx"

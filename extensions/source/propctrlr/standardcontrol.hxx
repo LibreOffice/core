@@ -35,6 +35,7 @@
 #include <vcl/weld/MenuButton.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
 #include <vcl/weld/TextView.hxx>
+#include <vcl/weld/TimeFormatter.hxx>
 
 namespace pcr
 {

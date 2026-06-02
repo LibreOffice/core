@@ -44,6 +44,7 @@
 #include <vcl/weld/RadioButton.hxx>
 #include <vcl/weld/ScrolledWindow.hxx>
 #include <vcl/weld/SpinButton.hxx>
+#include <vcl/weld/TimeFormatter.hxx>
 #include <vcl/weld/weldutils.hxx>
 
 #include <sfx2/tabdlg.hxx>

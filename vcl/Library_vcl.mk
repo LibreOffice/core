@@ -615,6 +615,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/weld/SpinButton \
     vcl/source/weld/TextView \
     vcl/source/weld/TextWidget \
+    vcl/source/weld/TimeFormatter \
     vcl/source/weld/TreeView \
     vcl/source/weld/TriStateEnabled \
     vcl/source/weld/WaitObject \
