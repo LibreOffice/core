@@ -381,6 +381,7 @@ struct SvxHyperlink
     String  Target             MID_HLINK_TARGET;
     String  Name               MID_HLINK_NAME;
     INT32   Type               MID_HLINK_TYPE;
+    BOOL    TextIsHint         MID_HLINK_TEXTISHINT;
     String  ReplacementText    MID_HLINK_REPLACEMENTTEXT
 };
 item SvxHyperlink SvxHyperlinkItem;

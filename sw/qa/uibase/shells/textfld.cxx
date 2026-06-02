@@ -58,6 +58,31 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertRefmarkFootnote)
     CPPUNIT_ASSERT_EQUAL(u"content"_ustr, rFormatNote.GetFootnoteText(*pWrtShell->GetLayout()));
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testInsertHyperlinkKeepSelection)
+{
+    // Given a document with "foo" selected:
+    createSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->Insert2(u"foo"_ustr);
+    pWrtShell->SelAll();
+
+    // When inserting a hyperlink whose Hyperlink.Text differs from the selection:
+    uno::Sequence<css::beans::PropertyValue> aArgs = {
+        comphelper::makePropertyValue(u"Hyperlink.Text"_ustr, uno::Any(u"mytext"_ustr)),
+        comphelper::makePropertyValue(u"Hyperlink.TextIsHint"_ustr, uno::Any(true)),
+        comphelper::makePropertyValue(u"Hyperlink.URL"_ustr,
+                                      uno::Any(u"http://www.example.com"_ustr)),
+    };
+    dispatchCommand(mxComponent, u".uno:SetHyperlink"_ustr, aArgs);
+
+    // Then make sure the selected text is preserved as the hyperlink text:
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: foo
+    // - Actual  : mytext
+    // i.e. the selected text was lost, the provided text hint was used, which is not wanted.
+    CPPUNIT_ASSERT_EQUAL(u"foo"_ustr, pWrtShell->GetSelText());
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testInsertRefmarkEndnote)
 {
     // Given an empty document:

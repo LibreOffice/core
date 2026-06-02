@@ -61,6 +61,9 @@ class SVX_DLLPUBLIC SvxHyperlinkItem final : public SfxPoolItem
 
     HyperDialogEvent m_nMacroEvents;
 
+    /// When turning selected text into a hyperlink, ignore m_sName, it's only a hint.
+    bool m_bTextIsHint = false;
+
 public:
     static SfxPoolItem* CreateDefault();
 
@@ -103,6 +106,9 @@ public:
     HyperDialogEvent GetMacroEvents() const { return m_nMacroEvents; }
 
     const OUString& GetReplacementText() const { return m_sReplacementText; }
+
+    void SetTextIsHint(bool bTextIsHint) { m_bTextIsHint = bTextIsHint; }
+    bool GetTextIsHint() const { return m_bTextIsHint; }
 };
 
 #endif
