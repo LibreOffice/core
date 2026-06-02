@@ -11,7 +11,7 @@
 
 #include <vcl/dllapi.h>
 #include <vcl/weld/Container.hxx>
-#include <vcl/weld/weld.hxx>
+#include <vcl/weld/Placement.hxx>
 
 namespace weld
 {

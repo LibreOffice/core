@@ -103,12 +103,6 @@ public:
     virtual OUString get_label() const = 0;
     virtual void set_label_wrap(bool wrap) = 0;
 };
-
-enum class Placement
-{
-    Under,
-    End
-};
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

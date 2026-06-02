@@ -10,7 +10,13 @@
 #pragma once
 
 #include <vcl/dllapi.h>
-#include <vcl/weld/weld.hxx>
+#include <vcl/weld/Placement.hxx>
+#include <vcl/weld/Widget.hxx>
+
+namespace com::sun::star::graphic
+{
+class XGraphic;
+}
 
 namespace weld
 {
