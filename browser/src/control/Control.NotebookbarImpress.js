@@ -1839,9 +1839,9 @@ window.L.Control.NotebookbarImpress = window.L.Control.NotebookbarWriter.extend(
 							{
 								'id': 'CharmapControl',
 								'class': 'unoCharmapControl',
-								'type': 'customtoolitem',
+								'type': 'toolitem',
 								'text': _UNO('.uno:CharmapControl'),
-								'command': 'charmapcontrol',
+								'command': '.uno:InsertSymbol',
 								'accessibility': { focusBack: true, combination: 'IM', de: null }
 							}
 						]

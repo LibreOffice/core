@@ -145,9 +145,6 @@ class Dispatcher {
 			});
 		};
 
-		this.actionsMap['charmapcontrol'] = function () {
-			app.map.sendUnoCommand('.uno:InsertSymbol');
-		};
 		this.actionsMap['closetablet'] = function () {
 			app.map.uiManager.enterReadonlyOrClose();
 		};

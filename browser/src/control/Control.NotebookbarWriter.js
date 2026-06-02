@@ -1020,9 +1020,9 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 							{
 								'id': 'CharmapControl',
 								'class': 'unoCharmapControl',
-								'type': 'customtoolitem',
+								'type': 'toolitem',
 								'text': _UNO('.uno:CharmapControl'),
-								'command': 'charmapcontrol',
+								'command': '.uno:InsertSymbol',
 								'accessibility': { focusBack: false,	combination: 'IS',	de:	null }
 							}
 						]
@@ -1569,9 +1569,9 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 									{
 										'id': 'insert-insert-char',
 										'class': 'unoCharmapControl',
-										'type': 'customtoolitem',
+										'type': 'toolitem',
 										'text': _UNO('.uno:CharmapControl'),
-										'command': 'charmapcontrol',
+										'command': '.uno:InsertSymbol',
 										'accessibility': { focusBack: false,	combination: 'ZS',	de: null }
 									}
 								]

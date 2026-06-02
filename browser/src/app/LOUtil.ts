@@ -492,7 +492,6 @@ class LOUtil {
 			alignmentpropertypanel: 'alignvcenter',
 			cellvertcenter: 'alignvcenter',
 			charbackcolor: 'backcolor',
-			charmapcontrol: 'insertsymbol',
 			insertrowsafter: 'insertrowsmenu',
 			insertobjectchart: 'drawchart',
 			textpropertypanel: 'sidebartextpanel',

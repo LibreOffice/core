@@ -11,6 +11,16 @@ describe(['tagdesktop'], 'Notebookbar tests', function() {
 		desktopHelper.switchUIToNotebookbar();
 	});
 
+	it('Symbol button reflects disabled state outside text edit mode', function() {
+		// In Impress, core disables .uno:InsertSymbol (SID_CHARMAP) when there
+		// is no active text edit (sd/source/ui/func/fubullet.cxx). Before the
+		// fix the notebookbar button dispatched via a 'charmapcontrol' alias
+		// whose state never matched the .uno: command, so it stayed enabled.
+		// It should now reflect the disabled state.
+		cy.cGet('#Insert-tab-label').click();
+		cy.cGet('#Insert-container .unoCharmapControl').should('have.attr', 'disabled');
+	});
+
 	it('Ruler visible after reload', function() {
 		// Visible check and enable if needed
 		cy.cGet('#View-tab-label').click();
