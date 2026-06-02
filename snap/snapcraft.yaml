@@ -134,7 +134,6 @@ parts:
         --disable-dconf \
         --disable-epm \
         --disable-evolution2 \
-        --disable-ext-nlpsolver \
         --disable-ext-wiki-publisher \
         --disable-gio \
         --disable-gstreamer-1-0 \
@@ -145,11 +144,9 @@ parts:
         --disable-lpsolve \
         --disable-noto-font \
         --disable-online-update \
-        --disable-poppler \
         --disable-qt5 \
         --disable-randr \
         --disable-sal-log \
-        --disable-scripting-beanshell \
         --disable-scripting-javascript \
         --disable-sdremote \
         --disable-sdremote-bluetooth \
