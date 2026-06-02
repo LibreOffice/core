@@ -23,6 +23,7 @@ interface ViewSetting {
 	aiRequestTimeout?: string;
 	aiModelName?: string;
 	aiEthicalRating?: string;
+	presentationViewMode?: string;
 }
 
 class ServerConnectionService {
@@ -62,6 +63,10 @@ class ServerConnectionService {
 			app.console.error('ServerConnectionService: missing map reference');
 			return;
 		}
+
+		// Remember the view mode the user last used for this document. Only
+		// ImpressTileLayer acts on this, so it is harmless for other doc types.
+		app.impress.savedViewMode = viewSetting.presentationViewMode ?? null;
 
 		app.map.isAIConfigured = !!viewSetting.aiConfigured;
 		app.map.aiRequestTimeout = viewSetting.aiRequestTimeout

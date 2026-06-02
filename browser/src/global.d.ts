@@ -163,6 +163,7 @@ interface AppInterface {
 	impress: {
 		partList: any; // Info for parts.
 		notesMode: boolean;
+		savedViewMode: string | null; // 'normal' | 'notes' | 'master' | null
 		twipsCorrection: number;
 		getIndexFromSlideHash(hash: number): number;
 		isSlideHidden(partNo: number): boolean;

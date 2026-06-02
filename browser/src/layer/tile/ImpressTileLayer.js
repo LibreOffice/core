@@ -14,6 +14,17 @@
 
 /* global app $ cool TileManager ViewLayoutBase ViewLayoutFileBased */
 
+// Single source of truth for Impress view modes. Keyed by the core
+// 'contextchange' context. 'mode' is the persisted string, 'uno' enters the
+// mode, 'activeMode' is the app.activeDocument.activeModes number. Note: the
+// Master activeMode (1) is applied from the .uno:SlideMasterPage state change
+// in Map.StateChanges.js, not here.
+const IMPRESS_VIEW_MODES = {
+	DrawPage:   { mode: 'normal', uno: '.uno:NormalMultiPaneGUI', activeMode: 0 },
+	NotesPage:  { mode: 'notes',  uno: '.uno:NotesMode',          activeMode: 2 },
+	MasterPage: { mode: 'master', uno: '.uno:SlideMasterPage',    activeMode: 1 },
+};
+
 window.L.ImpressTileLayer = window.L.CanvasTileLayer.extend({
 
 	initialize: function (options) {
@@ -56,6 +67,11 @@ window.L.ImpressTileLayer = window.L.CanvasTileLayer.extend({
 		this._partDimensions = []; // Width & Height of all the parts
 		this._fbCachedFileSize = null; // Cached filebased fileSize from the last status that carried partdimensions; used to prevent shrinking when a later message omits the field.
 
+		// View-mode persistence state machine (see _handleViewModeState).
+		this._viewModeRestored = false;
+		this._restoringViewMode = false;
+		this._lastReportedViewMode = null;
+
 		app.events.on('contextchange', this._onContextChange.bind(this));
 	},
 
@@ -69,24 +85,22 @@ window.L.ImpressTileLayer = window.L.CanvasTileLayer.extend({
 
 		const newContext = e.detail.context;
 		const oldContext = e.detail.oldContext;
-		const isDrawOrNotesPage = ['DrawPage', 'NotesPage'].includes(newContext);
+		const viewMode = IMPRESS_VIEW_MODES[newContext];
+		const isDrawOrNotesPage = newContext === 'DrawPage' || newContext === 'NotesPage';
 
 		if (isDrawOrNotesPage)
 			app.impress.notesMode = newContext === 'NotesPage';
 
 		if (app.map.uiManager.getCurrentMode() === 'notebookbar' && isDrawOrNotesPage) {
 			const targetElement = document.getElementById('notesmode');
-			if (!targetElement) return;
-
-			if (newContext === 'NotesPage')
-				targetElement.classList.add('selected');
-			else
-				targetElement.classList.remove('selected');
+			// Guard rather than return: a missing button must not skip the
+			// activeModes update, master handling or view-mode persistence below.
+			if (targetElement)
+				targetElement.classList.toggle('selected', newContext === 'NotesPage');
 		}
 
 		if (isDrawOrNotesPage) {
-			const mode = newContext === 'NotesPage' ? 2 : 0;
-			app.activeDocument.activeModes = [mode];
+			app.activeDocument.activeModes = [viewMode.activeMode];
 			TileManager.refreshTilesInBackground();
 			TileManager.update();
 		}
@@ -94,6 +108,49 @@ window.L.ImpressTileLayer = window.L.CanvasTileLayer.extend({
 		if (newContext === 'MasterPage' || oldContext === 'MasterPage') {
 			app.socket.sendMessage('status');
 			this.invalidatePreviewsUponContextChange = true;
+		}
+
+		// Persist/restore the view mode for all three view contexts. Master
+		// view's activeModes=[1] is set from the .uno:SlideMasterPage state
+		// change (Map.StateChanges.js), so we don't touch activeModes here.
+		if (viewMode)
+			this._handleViewModeState(viewMode.mode);
+	},
+
+	// Restore the remembered view mode on first load, then report later user
+	// switches so they are persisted per user per document. We key off the
+	// first authoritative view context change ('normal'|'notes'|'master'),
+	// which means the view is live and a UNO mode command will take effect.
+	_handleViewModeState: function(mode) {
+		if (!this._viewModeRestored) {
+			this._viewModeRestored = true;
+			this._lastReportedViewMode = mode;
+
+			const saved = app.impress.savedViewMode;
+			// Documents always open in Normal, so restoring only ever enters a
+			// mode. Master view is an editing context, so skip restoring it on
+			// read-only documents - the UNO command would no-op, no echo would
+			// arrive, and the restore guard would stay stuck.
+			const canRestore = saved !== 'master' || !app.file.readOnly;
+			const target = Object.values(IMPRESS_VIEW_MODES).find((v) => v.mode === saved);
+			if (target && saved !== mode && canRestore) {
+				// Apply once; the resulting context change is our own echo and
+				// must not be reported back as a user action.
+				this._restoringViewMode = true;
+				this._lastReportedViewMode = saved;
+				app.map.sendUnoCommand(target.uno);
+			}
+			return;
+		}
+
+		if (this._restoringViewMode) {
+			this._restoringViewMode = false;
+			return;
+		}
+
+		if (mode !== this._lastReportedViewMode) {
+			this._lastReportedViewMode = mode;
+			app.socket.sendMessage('updateviewmode mode=' + mode);
 		}
 	},
 
