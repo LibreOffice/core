@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-29 07:49+0200\n"
-"PO-Revision-Date: 2026-05-29 21:05+0000\n"
+"PO-Revision-Date: 2026-06-02 10:30+0000\n"
 "Last-Translator: Adolfo Jayme Barrientos <fitojb@ubuntu.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/ca/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.6.dev0\n"
+"X-Generator: Weblate 2026.6\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -457,11 +457,11 @@ msgstr "Mode nocturn"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:448
 msgid "Smart Zoom"
-msgstr ""
+msgstr "Escala intel·ligent"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:449
 msgid "Default Zoom"
-msgstr ""
+msgstr "Escala per defecte"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:450
 msgid "Compact layout"
@@ -876,12 +876,12 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1981
 msgid "Text Generation"
-msgstr ""
+msgstr "Generació de text"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2031
 #: admin/src/integrator/AdminIntegratorSettings.ts:2137
 msgid "e.g."
-msgstr ""
+msgstr "p. ex."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2050
 #: admin/src/integrator/AdminIntegratorSettings.ts:2168
@@ -892,7 +892,7 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2079
 msgid "Image Generation"
-msgstr ""
+msgstr "Generació d'imatges"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2084
 msgid "Same as Text AI"
@@ -912,7 +912,7 @@ msgstr ""
 #: admin/src/integrator/AdminIntegratorSettings.ts:2531
 #: admin/src/integrator/AdminIntegratorSettings.ts:2541
 msgid "No models found"
-msgstr ""
+msgstr "No s'ha trobat cap model"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2464
 #: admin/src/integrator/AdminIntegratorSettings.ts:2551
@@ -930,11 +930,11 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2592
 msgid "None (disable image generation)"
-msgstr ""
+msgstr "Cap (desactiva la generació d'imatges)"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2976
 msgid "Reset"
-msgstr ""
+msgstr "Reinicialitza"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3095
 #: src/control/Control.AIChatSidebar.ts:2638 src/map/handler/Map.WOPI.js:869
@@ -1077,27 +1077,26 @@ msgid "file type icon"
 msgstr "icona del tipus de fitxer"
 
 #: src/app/TableStylesService.ts:100
-#, fuzzy
 msgid "Light"
-msgstr "Estret"
+msgstr "Clar"
 
 #: src/app/TableStylesService.ts:102
 msgid "Medium"
-msgstr ""
+msgstr "Mitjà"
 
 #: src/app/TableStylesService.ts:104
 msgid "Dark"
-msgstr ""
+msgstr "Fosc"
 
 #: src/app/TableStylesService.ts:106
 #: src/control/jsdialog/Widget.ColorPicker.ts:334
 msgid "Custom"
-msgstr ""
+msgstr "Personalitzat"
 
 #: src/app/TableStylesService.ts:231 src/app/TableStylesService.ts:243
 #: src/app/TableStylesService.ts:245
 msgid "Table Styles"
-msgstr ""
+msgstr "Estils de taula"
 
 #: src/canvas/sections/CommentListSection.ts:1845
 #: src/canvas/sections/CommentListSection.ts:1858
@@ -1216,7 +1215,7 @@ msgstr "Obri en vista completa"
 
 #: src/canvas/sections/CommentSection.ts:1234
 msgid "Show in navigator"
-msgstr ""
+msgstr "Mostra al navegador"
 
 #: src/canvas/sections/CommentSection.ts:1503
 #: src/canvas/sections/CommentSection.ts:1508
@@ -1363,14 +1362,12 @@ msgid "Natural"
 msgstr "Natural"
 
 #: src/control/Control.AIChatSidebar.ts:108
-#, fuzzy
 msgid "Formal"
-msgstr "Format"
+msgstr "Formal"
 
 #: src/control/Control.AIChatSidebar.ts:109
-#, fuzzy
 msgid "Short"
-msgstr "Ordena"
+msgstr "Breu"
 
 #: src/control/Control.AIChatSidebar.ts:110
 msgid "Friendly"
@@ -1463,7 +1460,7 @@ msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:850
 msgid "Stop generating"
-msgstr ""
+msgstr "Deixa de generar"
 
 #: src/control/Control.AIChatSidebar.ts:851
 msgid "Send message"
@@ -1484,7 +1481,7 @@ msgstr "To de veu: {0}{1}"
 
 #: src/control/Control.AIChatSidebar.ts:892
 msgid "with emoji"
-msgstr ""
+msgstr "amb emoji"
 
 #: src/control/Control.AIChatSidebar.ts:934
 #: src/control/Control.AIChatSidebar.ts:984
@@ -1519,7 +1516,7 @@ msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:1008
 msgid "Add a custom tone of voice"
-msgstr ""
+msgstr "Afegeix un to de veu personalitzat"
 
 #: src/control/Control.AIChatSidebar.ts:1019
 msgid "Emojify"
@@ -1528,13 +1525,13 @@ msgstr "Emojifica"
 #: src/control/Control.AIChatSidebar.ts:1025
 #: src/control/Control.StatusBar.js:162
 msgid "On"
-msgstr ""
+msgstr "Activat"
 
 #: src/control/Control.AIChatSidebar.ts:1025
 #: src/control/Control.StatusBar.js:164
 #: src/control/jsdialog/Definitions.Menu.ts:1824
 msgid "Off"
-msgstr ""
+msgstr "Desactivat"
 
 #: src/control/Control.AIChatSidebar.ts:1028
 msgid "Toggle emojify"
@@ -1566,7 +1563,7 @@ msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:1247
 msgid "Tone name"
-msgstr ""
+msgstr "Nom del to"
 
 #: src/control/Control.AIChatSidebar.ts:1252
 msgid "Describe how AI should write"
@@ -1579,13 +1576,13 @@ msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:1264
 msgid "Tone description"
-msgstr ""
+msgstr "Descripció del to"
 
 #: src/control/Control.AIChatSidebar.ts:1273
 #: src/control/Control.AIChatSidebar.ts:1335
 #: src/control/Control.AIChatSidebar.ts:1377
 msgid "Delete tone"
-msgstr ""
+msgstr "Suprimeix el to"
 
 #: src/control/Control.AIChatSidebar.ts:1275
 msgid "Delete this tone"
@@ -1593,7 +1590,7 @@ msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:1288
 msgid "Save voice"
-msgstr ""
+msgstr "Desa la veu"
 
 #: src/control/Control.AIChatSidebar.ts:1290
 msgid "Save tone of voice"
@@ -1602,16 +1599,16 @@ msgstr ""
 #: src/control/Control.AIChatSidebar.ts:1305
 #: src/control/jsdialog/Widget.EmojiPicker.ts:410
 msgid "Search emojis"
-msgstr ""
+msgstr "Cerca emojis"
 
 #: src/control/Control.AIChatSidebar.ts:1306
 #: src/control/jsdialog/Widget.EmojiPicker.ts:401
 msgid "Choose an emoji"
-msgstr ""
+msgstr "Trieu un emoji"
 
 #: src/control/Control.AIChatSidebar.ts:1330
 msgid "Delete tone confirmation"
-msgstr ""
+msgstr "Confirmeu la supressió del to"
 
 #: src/control/Control.AIChatSidebar.ts:1341
 msgid "This tone of voice will be deleted"
@@ -1619,7 +1616,7 @@ msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:1370
 msgid "Cancel delete"
-msgstr ""
+msgstr "Cancel·la la supressió"
 
 #: src/control/Control.AIChatSidebar.ts:1397
 #: src/control/Control.AIChatSidebar.ts:1457
@@ -1644,15 +1641,15 @@ msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:1658
 msgid "Create slides"
-msgstr ""
+msgstr "Crea diapositives"
 
 #: src/control/Control.AIChatSidebar.ts:1690
 msgid "See less"
-msgstr ""
+msgstr "Mostra'n menys"
 
 #: src/control/Control.AIChatSidebar.ts:1690
 msgid "See more"
-msgstr ""
+msgstr "Mostra'n més"
 
 #: src/control/Control.AIChatSidebar.ts:1800
 msgid "Image inserted at cursor"
@@ -1676,6 +1673,8 @@ msgid ""
 "The selection contains images or other non-text content that cannot be sent "
 "as context."
 msgstr ""
+"La selecció conté imatges o altres continguts no textuals que no es poden "
+"enviar com a context."
 
 #: src/control/Control.AIChatSidebar.ts:2049
 msgid "Message is too long. Please shorten it and try again."
@@ -1687,7 +1686,7 @@ msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:2126
 msgid "Generated image"
-msgstr ""
+msgstr "Imatge generada"
 
 #: src/control/Control.AIChatSidebar.ts:2137
 msgid "AI request failed"
@@ -1711,12 +1710,12 @@ msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:2176
 msgid "%1 wants to modify your document:"
-msgstr ""
+msgstr "%1 vol modificar el vostre document:"
 
 #: src/control/Control.AIChatSidebar.ts:2180
 #: src/control/Control.AIChatSidebar.ts:2191
 msgid "Do you want to apply this change?"
-msgstr ""
+msgstr "Voleu aplicar aquest canvi?"
 
 #: src/control/Control.AIChatSidebar.ts:2182
 msgid "Set cell formula"
@@ -1732,11 +1731,11 @@ msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:2225
 msgid "Approve"
-msgstr ""
+msgstr "Aprova"
 
 #: src/control/Control.AIChatSidebar.ts:2227
 msgid "Approve action"
-msgstr ""
+msgstr "Aprova l'acció"
 
 #: src/control/Control.AIChatSidebar.ts:2234
 msgid "Reject"
@@ -1744,11 +1743,11 @@ msgstr "Rebutja"
 
 #: src/control/Control.AIChatSidebar.ts:2236
 msgid "Reject action"
-msgstr ""
+msgstr "Rebutja l'acció"
 
 #: src/control/Control.AIChatSidebar.ts:2255
 msgid "Applying changes..."
-msgstr ""
+msgstr "S'estan aplicant els canvis…"
 
 #: src/control/Control.AIChatSidebar.ts:2258
 msgid "Change rejected"
@@ -1772,15 +1771,15 @@ msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:2583
 msgid "Failed to analyze formula."
-msgstr ""
+msgstr "No s'ha pogut analitzar la fórmula."
 
 #: src/control/Control.AIChatSidebar.ts:2593
 msgid "The selected cell does not contain a formula."
-msgstr ""
+msgstr "La cel·la seleccionada no conté una fórmula."
 
 #: src/control/Control.AIChatSidebar.ts:2595
 msgid "The selected cell does not have a formula error."
-msgstr ""
+msgstr "La cel·la seleccionada no conté un error de fórmula."
 
 #: src/control/Control.AIChatSidebar.ts:2604
 msgid "Diagnose formula error in"
@@ -1888,12 +1887,17 @@ msgid ""
 "Describe the slides you want to create. For example: \"A 5-slide overview "
 "of renewable energy\" or \"An introduction to our team\"."
 msgstr ""
+"Descriviu les diapositives que voleu crear. Per exemple: «Una visió general "
+"de cinc diapositives sobre energies renovables» o «Una introducció al nostre "
+"equip»."
 
 #: src/control/Control.AIChatSidebar.ts:2853
 msgid ""
 "Describe what formula you need. For example: \"Calculate the average of "
 "column B\" or \"Sum all values where column A is greater than 100\"."
 msgstr ""
+"Descriviu quina fórmula necessiteu. Per exemple: «Calcula la mitjana de la "
+"columna B» o «Suma tots els valors on la columna A sigui superior a 100»."
 
 #: src/control/Control.AIChatSidebar.ts:2863
 msgid ""
@@ -2062,7 +2066,7 @@ msgstr "Opcions"
 
 #: src/control/Control.BackstageView.ts:231
 msgid "Start a new document from one of the following templates."
-msgstr ""
+msgstr "Inicieu un document nou a partir d'una d'aquestes plantilles."
 
 #: src/control/Control.BackstageView.ts:269
 #: src/control/jsdialog/Widget.ColorPicker.ts:441
@@ -2133,7 +2137,7 @@ msgstr "Nom del fitxer"
 
 #: src/control/Control.BackstageView.ts:711
 msgid "Blank Spreadsheet"
-msgstr ""
+msgstr "Full de càlcul buit"
 
 #: src/control/Control.BackstageView.ts:715
 msgid "Blank Presentation"
@@ -2141,7 +2145,7 @@ msgstr "Presentació buida"
 
 #: src/control/Control.BackstageView.ts:720
 msgid "Blank Document"
-msgstr ""
+msgstr "Document buit"
 
 #: src/control/Control.BackstageView.ts:858
 msgid "Untitled"
@@ -3436,7 +3440,7 @@ msgstr "Disseny de la taula"
 
 #: src/control/Notebookbar.CalcTableTab.ts:72
 msgid "Table Options"
-msgstr ""
+msgstr "Opcions de la taula"
 
 #: src/control/Notebookbar.CalcTableTab.ts:86
 msgid "Header Row"
@@ -3895,7 +3899,7 @@ msgstr ""
 #: src/control/Control.NotebookbarWriter.js:3132
 #: src/control/Control.NotebookbarWriter.js:3455
 msgid "Arrange"
-msgstr ""
+msgstr "Organitza"
 
 #: src/control/Control.NotebookbarCalc.js:1438
 msgid "Sheet View"
@@ -3985,7 +3989,7 @@ msgstr "Taula"
 #: src/control/Control.NotebookbarCalc.js:1811
 #: src/control/Control.NotebookbarCalc.js:1814
 msgid "Table styles are only available in .xlsx files"
-msgstr ""
+msgstr "Els estils de taula només estan disponibles en fitxers .xlsx"
 
 #: src/control/Control.NotebookbarCalc.js:1812
 msgid "Insert a styled table"
@@ -4332,7 +4336,7 @@ msgstr "Casella de selecció"
 
 #: src/control/Control.NotebookbarWriter.js:1697
 msgid "Page Width"
-msgstr ""
+msgstr "Amplada de la pàgina"
 
 #: src/control/Control.NotebookbarWriter.js:2246
 msgid "Spellcheck"
@@ -4340,7 +4344,7 @@ msgstr ""
 
 #: src/control/Control.NotebookbarWriter.js:2259
 msgid "Spelling Options"
-msgstr ""
+msgstr "Opcions d'ortografia"
 
 #: src/control/Control.NotebookbarWriter.js:2299
 #: src/control/Control.NotebookbarWriter.js:2315
@@ -4358,7 +4362,7 @@ msgstr ""
 
 #: src/control/Control.NotebookbarWriter.js:2777
 msgid "Cell Background"
-msgstr ""
+msgstr "Fons de la cel·la"
 
 #: src/control/Control.NotebookbarWriter.js:2860
 msgid "Protect"
@@ -4379,7 +4383,7 @@ msgstr "Enganxa"
 
 #: src/control/Control.PartsPreview.js:423
 msgid "Add Section"
-msgstr ""
+msgstr "Afegeix una secció"
 
 #: src/control/Control.PartsPreview.js:598
 msgid "Toggle section %1"
@@ -4388,19 +4392,19 @@ msgstr ""
 #: src/control/Control.PartsPreview.js:789
 #: src/control/Control.PartsPreview.js:890
 msgid "Rename Section"
-msgstr ""
+msgstr "Canvia el nom de la secció"
 
 #: src/control/Control.PartsPreview.js:796
 msgid "Remove Section"
-msgstr ""
+msgstr "Elimina la secció"
 
 #: src/control/Control.PartsPreview.js:804
 msgid "Move Section Up"
-msgstr ""
+msgstr "Apuja la secció"
 
 #: src/control/Control.PartsPreview.js:813
 msgid "Move Section Down"
-msgstr ""
+msgstr "Abaixa la secció"
 
 #: src/control/Control.PartsPreview.js:822
 msgid "Collapse All Sections"
@@ -4412,7 +4416,7 @@ msgstr ""
 
 #: src/control/Control.PartsPreview.js:891
 msgid "Enter new section name:"
-msgstr ""
+msgstr "Introduïu el nom de la secció nova:"
 
 #: src/control/Control.SaveState.ts:49
 msgid "Saving"
@@ -5057,11 +5061,11 @@ msgstr "Només de lectura"
 
 #: src/control/PermissionMode.ts:125
 msgid "Viewing Mode"
-msgstr ""
+msgstr "Mode de visualització"
 
 #: src/control/PermissionMode.ts:131
 msgid "Editing Mode"
-msgstr ""
+msgstr "Mode d'edició"
 
 #: src/control/PermissionMode.ts:141 src/control/PermissionMode.ts:215
 #: src/control/PermissionMode.ts:221 src/control/PermissionMode.ts:227
@@ -5688,7 +5692,7 @@ msgstr ""
 
 #: src/control/jsdialog/Widget.NotebookbarIconView.ts:222
 msgid "More options"
-msgstr ""
+msgstr "Més opcions"
 
 #: src/control/jsdialog/Widget.PushButton.ts:19
 msgid "Select range"
@@ -6155,7 +6159,7 @@ msgstr ""
 
 #: src/layer/marker/TextInput.js:431
 msgid "Clipboard area"
-msgstr ""
+msgstr "Àrea del porta-retalls"
 
 #: src/layer/marker/TextInput.js:481
 msgid "Screen reader support for text content is disabled. "
@@ -6229,6 +6233,8 @@ msgid ""
 "Your browser has very limited access to the clipboard, so use these "
 "keyboard shortcuts:"
 msgstr ""
+"El vostre navegador té un accés molt limitat al porta-retalls, així que "
+"utilitzeu aquestes combinacions de tecles:"
 
 #: src/map/Clipboard.js:1532
 msgid "Cut"
@@ -6331,6 +6337,9 @@ msgid ""
 "slide shows to be displayed in separated windows, allowing for easy screen "
 "sharing."
 msgstr ""
+"La presentació ha quedat blocada. Permeteu les finestres emergents al vostre "
+"navegador. Això permet que les presentacions de diapositives es mostrin en "
+"finestres separades, facilitant la compartició de la pantalla."
 
 #: src/map/handler/Map.SlideShow.js:172
 #: src/slideshow/SlideShowPresenter.ts:1097
@@ -6381,7 +6390,7 @@ msgstr ""
 
 #: src/map/handler/Map.StateChanges.js:132
 msgid "Update Slides"
-msgstr ""
+msgstr "Actualitza les diapositives"
 
 #: src/map/handler/Map.VersionBar.js:50
 msgid "Your Collabora Online server needs updating. Version {0} is available."
@@ -6538,7 +6547,7 @@ msgstr "Deixa de seguir"
 
 #: src/control/Control.Extension.ts:237
 msgid "Close extension"
-msgstr ""
+msgstr "Tanca l'extensió"
 
 #: templates/templates.js:6
 msgid "Modern Business Letter (sans-serif)"
@@ -6613,9 +6622,8 @@ msgid "Inspiration"
 msgstr "Inspiració"
 
 #: templates/templates.js:186
-#, fuzzy
 msgid "Lights"
-msgstr "Estret"
+msgstr "Llums"
 
 #: templates/templates.js:196
 msgid "Metropolis"
