@@ -16,10 +16,49 @@
 
 #include <test/unoapi_test.hxx>
 
+#include <ParticelSwarmOptimization.hxx>
+
 using namespace css;
 
 namespace
 {
+// Minimal data provider that drives the algorithm template without a document.
+class MockProvider
+{
+    size_t mnDimensionality;
+
+public:
+    int mnInitCalls = 0;
+
+    explicit MockProvider(size_t nDimensionality)
+        : mnDimensionality(nDimensionality)
+    {
+    }
+
+    size_t getDimensionality() const { return mnDimensionality; }
+
+    void initializeVariables(std::vector<double>& rVariables, std::mt19937& rGenerator)
+    {
+        std::uniform_real_distribution<double> aRandom(-10.0, 10.0);
+        rVariables.resize(mnDimensionality);
+        for (double& rValue : rVariables)
+            rValue = aRandom(rGenerator);
+        mnInitCalls++;
+    }
+
+    // Separable, with its maximum where every variable is zero, so the swarm
+    // always has somewhere to move towards and improvements actually happen.
+    static double calculateFitness(std::vector<double> const& rVariables)
+    {
+        double fFitness = 0.0;
+        for (double fValue : rVariables)
+            fFitness -= fValue * fValue;
+        return fFitness;
+    }
+
+    static double clampVariable(size_t, double fValue) { return fValue; }
+};
+
 class SwarmSolverTest : public UnoApiTest
 {
     void testUnconstrained();
@@ -29,6 +68,8 @@ class SwarmSolverTest : public UnoApiTest
     void testMultipleVariables();
     void testInfeasibleConstraints();
     void testLargeObjectiveStillSolvable();
+    void testParticleSwarmResultLength();
+    void testParticleSwarmVelocityNotInitializedAsPosition();
 
 public:
     SwarmSolverTest()
@@ -44,6 +85,8 @@ public:
     CPPUNIT_TEST(testTwoVariables);
     CPPUNIT_TEST(testInfeasibleConstraints);
     CPPUNIT_TEST(testLargeObjectiveStillSolvable);
+    CPPUNIT_TEST(testParticleSwarmResultLength);
+    CPPUNIT_TEST(testParticleSwarmVelocityNotInitializedAsPosition);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -375,53 +418,90 @@ void SwarmSolverTest::testInfeasibleConstraints()
 void SwarmSolverTest::testLargeObjectiveStillSolvable()
 {
     // Regression: a feasible objective below the float range used to lose to the
-    // infeasible penalty, so the search gave up on a solvable model. Differential
-    // Evolution only, until Particle Swarm Optimization's result handling is fixed.
+    // infeasible penalty, so the search gave up on a solvable model. The Particle
+    // Swarm result also used to grow past the variable count, which the length
+    // check below guards.
 
-    loadFromFile(u"Simple.ods");
+    for (sal_Int32 nAlgorithm : { sal_Int32(0), sal_Int32(1) })
+    {
+        loadFromFile(u"Simple.ods");
 
-    uno::Reference<sheet::XSpreadsheetDocument> xDocument(mxComponent, uno::UNO_QUERY_THROW);
+        uno::Reference<sheet::XSpreadsheetDocument> xDocument(mxComponent, uno::UNO_QUERY_THROW);
 
-    uno::Reference<sheet::XSolver> xSolver;
-    xSolver.set(m_xContext->getServiceManager()->createInstanceWithContext(
-                    u"com.sun.star.comp.Calc.SwarmSolver"_ustr, m_xContext),
-                uno::UNO_QUERY_THROW);
+        uno::Reference<sheet::XSolver> xSolver;
+        xSolver.set(m_xContext->getServiceManager()->createInstanceWithContext(
+                        u"com.sun.star.comp.Calc.SwarmSolver"_ustr, m_xContext),
+                    uno::UNO_QUERY_THROW);
 
-    table::CellAddress aObjective(0, 1, 1);
-    uno::Sequence<table::CellAddress> aVariables{ { 0, 1, 0 } };
+        uno::Reference<beans::XPropertySet> xPropSet(xSolver, uno::UNO_QUERY_THROW);
+        xPropSet->setPropertyValue(u"Algorithm"_ustr, uno::Any(nAlgorithm));
 
-    // The variable is pushed far enough out that the objective
-    // 10*B1^2 - 60*B1 - 40 reaches the 1e39 range, beyond what a float can
-    // hold. Minimizing turns that into a fitness near -1e39. The objective cap
-    // is a non-bounded constraint, so the upper part of the box is infeasible
-    // while the lower end stays feasible.
-    uno::Sequence<sheet::SolverConstraint> aConstraints{
-        { /* [0] Left     */ table::CellAddress(0, 1, 0),
-          /*     Operator */ sheet::SolverConstraintOperator_GREATER_EQUAL,
-          /*     Right    */ uno::Any(1.0e19) },
-        { /* [1] Left     */ table::CellAddress(0, 1, 0),
-          /*     Operator */ sheet::SolverConstraintOperator_LESS_EQUAL,
-          /*     Right    */ uno::Any(2.0e19) },
-        { /* [2] Left     */ table::CellAddress(0, 1, 1),
-          /*     Operator */ sheet::SolverConstraintOperator_LESS_EQUAL,
-          /*     Right    */ uno::Any(2.0e39) }
-    };
+        table::CellAddress aObjective(0, 1, 1);
+        uno::Sequence<table::CellAddress> aVariables{ { 0, 1, 0 } };
 
-    xSolver->setDocument(xDocument);
-    xSolver->setObjective(aObjective);
-    xSolver->setVariables(aVariables);
-    xSolver->setConstraints(aConstraints);
-    xSolver->setMaximize(false);
+        // The variable is pushed far enough out that the objective
+        // 10*B1^2 - 60*B1 - 40 reaches the 1e39 range, beyond what a float can
+        // hold. Minimizing turns that into a fitness near -1e39. The objective
+        // cap is a non-bounded constraint, so the upper part of the box is
+        // infeasible while the lower end stays feasible.
+        uno::Sequence<sheet::SolverConstraint> aConstraints{
+            { /* [0] Left     */ table::CellAddress(0, 1, 0),
+              /*     Operator */ sheet::SolverConstraintOperator_GREATER_EQUAL,
+              /*     Right    */ uno::Any(1.0e19) },
+            { /* [1] Left     */ table::CellAddress(0, 1, 0),
+              /*     Operator */ sheet::SolverConstraintOperator_LESS_EQUAL,
+              /*     Right    */ uno::Any(2.0e19) },
+            { /* [2] Left     */ table::CellAddress(0, 1, 1),
+              /*     Operator */ sheet::SolverConstraintOperator_LESS_EQUAL,
+              /*     Right    */ uno::Any(2.0e39) }
+        };
 
-    xSolver->solve();
+        xSolver->setDocument(xDocument);
+        xSolver->setObjective(aObjective);
+        xSolver->setVariables(aVariables);
+        xSolver->setConstraints(aConstraints);
+        xSolver->setMaximize(false);
 
-    CPPUNIT_ASSERT_MESSAGE("Solvable model must report success", xSolver->getSuccess());
+        xSolver->solve();
 
-    uno::Sequence<double> aSolution = xSolver->getSolution();
-    CPPUNIT_ASSERT_EQUAL(aVariables.getLength(), aSolution.getLength());
-    // the returned point must lie in the feasible part of the box
-    CPPUNIT_ASSERT(aSolution[0] >= 1.0e19);
-    CPPUNIT_ASSERT(aSolution[0] <= 2.0e19);
+        CPPUNIT_ASSERT_MESSAGE("Solvable model must report success", xSolver->getSuccess());
+
+        uno::Sequence<double> aSolution = xSolver->getSolution();
+        CPPUNIT_ASSERT_EQUAL(aVariables.getLength(), aSolution.getLength());
+        // the returned point must lie in the feasible part of the box
+        CPPUNIT_ASSERT(aSolution[0] >= 1.0e19);
+        CPPUNIT_ASSERT(aSolution[0] <= 2.0e19);
+    }
+}
+
+void SwarmSolverTest::testParticleSwarmResultLength()
+{
+    // Regression: the best-position vectors were updated with insert at the front
+    // instead of assign, so every improvement prepended another copy and the result
+    // grew past the variable count.
+
+    MockProvider aProvider(3);
+    ParticleSwarmOptimizationAlgorithm<MockProvider> aAlgorithm(aProvider, 8);
+
+    aAlgorithm.initialize();
+    for (int i = 0; i < 20; ++i)
+        aAlgorithm.next();
+
+    CPPUNIT_ASSERT_EQUAL(size_t(3), aAlgorithm.getResult().size());
+}
+
+void SwarmSolverTest::testParticleSwarmVelocityNotInitializedAsPosition()
+{
+    // Regression: the velocity was seeded by initializeVariables, which fills it
+    // with a random position. Setup must call initializeVariables once per particle
+    // (for the position only), not twice.
+
+    MockProvider aProvider(3);
+    ParticleSwarmOptimizationAlgorithm<MockProvider> aAlgorithm(aProvider, 8);
+
+    aAlgorithm.initialize();
+
+    CPPUNIT_ASSERT_EQUAL(8, aProvider.mnInitCalls);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwarmSolverTest);

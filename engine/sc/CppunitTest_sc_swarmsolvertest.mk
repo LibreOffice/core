@@ -53,6 +53,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_swarmsolvertest,\
 
 $(eval $(call gb_CppunitTest_set_include,sc_swarmsolvertest,\
 	-I$(SRCDIR)/sc/inc \
+	-I$(SRCDIR)/sc/source/solver \
 	$$(INCLUDE) \
 ))
 
