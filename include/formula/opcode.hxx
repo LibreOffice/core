@@ -113,7 +113,9 @@ enum OpCode : sal_uInt16
     // Unary operators
         ocStartUnaryOperators = 70,
         ocNegSub            = 70,
-        ocStopUnaryOperators = 71,
+        // The @ single-value prefix operator (implicit intersection).
+        ocSingleValue       = 71,
+        ocStopUnaryOperators = 72,
 
         ocStartFunction     = 75,
 
@@ -646,6 +648,7 @@ inline std::string OpCodeEnumToString(OpCode eCode)
     case ocNot: return "Not";
     case ocNeg: return "Neg";
     case ocNegSub: return "NegSub";
+    case ocSingleValue: return "SingleValue";
     case ocPi: return "Pi";
     case ocRandom: return "Random";
     case ocRandomNV: return "RandomNV";

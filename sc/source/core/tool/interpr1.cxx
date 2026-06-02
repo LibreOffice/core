@@ -1543,6 +1543,29 @@ void ScInterpreter::ScNeg()
     }
 }
 
+void ScInterpreter::ScSingleValue()
+{
+    // The @ operator collapses an array operand to a single value. It is
+    // the implicit-intersection prefix that opts a formula out of the
+    // dynamic-array spill behaviour.
+    nFuncFmtType = nCurFmtType;
+    if (GetStackType() == svMatrix)
+    {
+        ScMatrixRef pMat = GetMatrix();
+        if (!pMat)
+        {
+            PushIllegalParameter();
+            return;
+        }
+        ScMatrixValue aVal = pMat->Get(0, 0);
+        if (aVal.nType == ScMatValType::String || aVal.nType == ScMatValType::Empty)
+            PushString(aVal.aStr);
+        else
+            PushDouble(aVal.fVal);
+    }
+    // Non-matrix operand passes through unchanged.
+}
+
 void ScInterpreter::ScPercentSign()
 {
     nFuncFmtType = SvNumFormatType::PERCENT;
