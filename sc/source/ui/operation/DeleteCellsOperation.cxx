@@ -28,6 +28,7 @@
 #include <SheetViewManager.hxx>
 
 #include <sfx2/app.hxx>
+#include <vcl/weld/WaitObject.hxx>
 #include <vcl/weld/Window.hxx>
 #include <osl/diagnose.h>
 

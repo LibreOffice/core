@@ -46,25 +46,6 @@ class IconView;
 class MetricSpinButton;
 class TreeView;
 
-class VCL_DLLPUBLIC WaitObject
-{
-private:
-    weld::Widget* m_pWindow;
-
-public:
-    WaitObject(weld::Widget* pWindow)
-        : m_pWindow(pWindow)
-    {
-        if (m_pWindow)
-            m_pWindow->set_busy_cursor(true);
-    }
-    ~WaitObject()
-    {
-        if (m_pWindow)
-            m_pWindow->set_busy_cursor(false);
-    }
-};
-
 inline OUString toId(const void* pValue)
 {
     return OUString::number(reinterpret_cast<sal_uIntPtr>(pValue));

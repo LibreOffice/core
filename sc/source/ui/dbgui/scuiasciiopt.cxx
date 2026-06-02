@@ -48,6 +48,7 @@
 #include <unotools/viewoptions.hxx>
 #include <vcl/weld/Dialog.hxx>
 #include <vcl/weld/Frame.hxx>
+#include <vcl/weld/WaitObject.hxx>
 #include <vcl/windowstate.hxx>
 
 //! TODO make dynamic

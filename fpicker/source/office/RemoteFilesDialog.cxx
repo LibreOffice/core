@@ -27,6 +27,7 @@
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/MenuButton.hxx>
 #include <vcl/weld/MessageDialog.hxx>
+#include <vcl/weld/WaitObject.hxx>
 #include <officecfg/Office/Common.hxx>
 
 using namespace ::svt;

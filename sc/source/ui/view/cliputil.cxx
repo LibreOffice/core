@@ -28,6 +28,7 @@
 #include <formulacell.hxx>
 
 #include <sfx2/classificationhelper.hxx>
+#include <vcl/weld/WaitObject.hxx>
 #include <comphelper/lok.hxx>
 #include <inputopt.hxx>
 #include <scmod.hxx>

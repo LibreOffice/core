@@ -24,6 +24,7 @@
 #include <SheetViewOperationsTester.hxx>
 
 #include <osl/diagnose.h>
+#include <vcl/weld/WaitObject.hxx>
 #include <vcl/weld/Window.hxx>
 
 namespace sc

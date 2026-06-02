@@ -47,6 +47,7 @@
 #include <osl/diagnose.h>
 #include <o3tl/string_view.hxx>
 #include <vcl/weld/Builder.hxx>
+#include <vcl/weld/WaitObject.hxx>
 #include <View.hxx>
 #include <sdresid.hxx>
 #include <tpaction.hxx>

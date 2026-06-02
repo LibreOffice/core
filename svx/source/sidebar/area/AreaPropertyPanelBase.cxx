@@ -34,6 +34,7 @@
 #include <bitmaps.hlst>
 #include <comphelper/lok.hxx>
 #include <vcl/weld/Builder.hxx>
+#include <vcl/weld/WaitObject.hxx>
 
 using namespace css;
 using namespace css::uno;

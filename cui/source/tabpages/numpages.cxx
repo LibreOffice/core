@@ -76,6 +76,7 @@
 #include <vcl/cvtgrf.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/weld/Builder.hxx>
+#include <vcl/weld/WaitObject.hxx>
 #include <svx/SvxNumOptionsTabPageHelper.hxx>
 #include <tools/urlobj.hxx>
 #include <o3tl/temporary.hxx>

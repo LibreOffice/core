@@ -34,6 +34,7 @@
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
 #include <vcl/weld/MessageDialog.hxx>
+#include <vcl/weld/WaitObject.hxx>
 #include <vcl/weld/weld.hxx>
 #include <vcl/virdev.hxx>
 #include <stdlib.h>

@@ -106,6 +106,7 @@
 #include <sal/macros.h>
 #include <sal/log.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/WaitObject.hxx>
 
 #include <limits>
 #include <memory>

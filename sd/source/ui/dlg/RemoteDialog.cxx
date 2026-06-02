@@ -12,6 +12,7 @@
 
 #include <vcl/vclenum.hxx>
 #include <vcl/weld/Dialog.hxx>
+#include <vcl/weld/WaitObject.hxx>
 
 using namespace ::sd;
 

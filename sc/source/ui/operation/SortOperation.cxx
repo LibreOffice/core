@@ -25,6 +25,7 @@
 #include <dociter.hxx>
 #include <queryentry.hxx>
 #include <inputopt.hxx>
+#include <vcl/weld/WaitObject.hxx>
 #include <vcl/weld/Window.hxx>
 
 #include <memory>

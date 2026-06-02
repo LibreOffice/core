@@ -106,6 +106,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/unohelp2.hxx>
 #include <vcl/weld/MessageDialog.hxx>
+#include <vcl/weld/WaitObject.hxx>
 #include <vcl/weld/weld.hxx>
 
 #include <editeng/cmapitem.hxx>

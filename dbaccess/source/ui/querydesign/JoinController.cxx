@@ -25,6 +25,7 @@
 #include <TableConnectionData.hxx>
 #include <adtabdlg.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/WaitObject.hxx>
 #include <osl/mutex.hxx>
 #include <osl/diagnose.h>
 

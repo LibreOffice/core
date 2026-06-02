@@ -44,6 +44,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/Menu.hxx>
+#include <vcl/weld/WaitObject.hxx>
 #include <svx/SvxNumOptionsTabPageHelper.hxx>
 #include <View.hxx>
 #include <drawdoc.hxx>

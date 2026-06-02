@@ -18,6 +18,7 @@
 #include <scresid.hxx>
 #include <undoblk.hxx>
 
+#include <vcl/weld/WaitObject.hxx>
 #include <vcl/weld/Window.hxx>
 #include <vcl/weld/weld.hxx>
 

@@ -13,6 +13,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/weld/MessageDialog.hxx>
+#include <vcl/weld/WaitObject.hxx>
 #include <vcl/weld/Window.hxx>
 #include <osl/diagnose.h>
 

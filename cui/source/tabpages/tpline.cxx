@@ -68,6 +68,7 @@
 #include <comphelper/lok.hxx>
 #include <o3tl/string_view.hxx>
 #include <vcl/weld/Builder.hxx>
+#include <vcl/weld/WaitObject.hxx>
 
 #define MAX_BMP_WIDTH   16
 #define MAX_BMP_HEIGHT  16

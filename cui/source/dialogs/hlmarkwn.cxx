@@ -27,6 +27,7 @@
 #include <vcl/windowstate.hxx>
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/Dialog.hxx>
+#include <vcl/weld/WaitObject.hxx>
 
 // UNO-Stuff
 #include <comphelper/processfactory.hxx>

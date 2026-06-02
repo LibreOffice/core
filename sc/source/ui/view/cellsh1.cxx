@@ -44,6 +44,7 @@
 #include <vcl/rendercontext/GetDefaultFontFlags.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld/MessageDialog.hxx>
+#include <vcl/weld/WaitObject.hxx>
 #include <vcl/weld/weld.hxx>
 #include <svx/svxdlg.hxx>
 #include <svx/chinese_translation_unodialog.hxx>

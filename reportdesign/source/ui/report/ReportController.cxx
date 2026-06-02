@@ -69,6 +69,7 @@
 
 #include <vcl/svapp.hxx>
 #include <vcl/unohelp.hxx>
+#include <vcl/weld/WaitObject.hxx>
 
 #include <i18nutil/paper.hxx>
 #include <svx/fmview.hxx>

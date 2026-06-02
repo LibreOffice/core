@@ -52,6 +52,7 @@
 #include <o3tl/safeint.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
+#include <vcl/weld/WaitObject.hxx>
 #include <comphelper/diagnose_ex.hxx>
 
 #include <algorithm>

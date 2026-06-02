@@ -42,6 +42,7 @@
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/Dialog.hxx>
 #include <vcl/weld/MessageDialog.hxx>
+#include <vcl/weld/WaitObject.hxx>
 #include <vcl/weld/weld.hxx>
 
 SFX_IMPL_MODELESSDIALOGCONTOLLER_WITHID(SvxContourDlgChildWindow, SID_CONTOUR_DLG);

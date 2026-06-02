@@ -30,6 +30,7 @@
 #include <string_view>
 #include <osl/diagnose.h>
 #include <tools/debug.hxx>
+#include <vcl/weld/WaitObject.hxx>
 
 namespace basctl
 {

@@ -27,6 +27,7 @@
 #include <svl/macitem.hxx>
 #include <tools/debug.hxx>
 #include <vcl/weld/Builder.hxx>
+#include <vcl/weld/WaitObject.hxx>
 #include <sfx2/evntconf.hxx>
 
 using ::com::sun::star::uno::Reference;

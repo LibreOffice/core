@@ -10,6 +10,7 @@
 #include <comphelper/processfactory.hxx>
 #include <tools/urlobj.hxx>
 #include <ucbhelper/commandenvironment.hxx>
+#include <vcl/weld/WaitObject.hxx>
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include "contentenumeration.hxx"
 #include "foldertree.hxx"

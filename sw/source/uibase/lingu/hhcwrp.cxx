@@ -29,6 +29,7 @@
 #include <com/sun/star/text/RubyAdjust.hpp>
 #include <i18npool/breakiterator.hxx>
 #include <osl/diagnose.h>
+#include <vcl/weld/WaitObject.hxx>
 #include <vcl/weld/Window.hxx>
 #include <hhcwrp.hxx>
 #include "sdrhhcwrap.hxx"

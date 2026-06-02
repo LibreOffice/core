@@ -25,6 +25,7 @@
 #include <editeng/fontitem.hxx>
 #include "textconv.hxx"
 #include <osl/diagnose.h>
+#include <vcl/weld/WaitObject.hxx>
 #include <vcl/weld/weld.hxx>
 
 using namespace com::sun::star;

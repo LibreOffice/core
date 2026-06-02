@@ -63,6 +63,7 @@
 #include <vcl/timer.hxx>
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/Menu.hxx>
+#include <vcl/weld/WaitObject.hxx>
 #include <memory>
 #include "fileview.hxx"
 

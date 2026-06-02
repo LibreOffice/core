@@ -46,6 +46,7 @@
 #include <strings.hrc>
 #include <vcl/svapp.hxx>
 #include <vcl/weld/MessageDialog.hxx>
+#include <vcl/weld/WaitObject.hxx>
 #include <linkeddocuments.hxx>
 #include <connectivity/dbtools.hxx>
 #include <dbexchange.hxx>

@@ -10,6 +10,7 @@
 #include <hyperlinkinternettabpage.hxx>
 #include <tools/urlobj.hxx>
 #include <o3tl/string_view.hxx>
+#include <vcl/weld/WaitObject.hxx>
 #include <com/sun/star/datatransfer/UnsupportedFlavorException.hpp>
 #include <sot/exchange.hxx>
 #include <hlmarkwn_def.hxx>

@@ -32,6 +32,7 @@
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/Dialog.hxx>
 #include <vcl/weld/MessageDialog.hxx>
+#include <vcl/weld/WaitObject.hxx>
 #include <tools/urlobj.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/types.hxx>

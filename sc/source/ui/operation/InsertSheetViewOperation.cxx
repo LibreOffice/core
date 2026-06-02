@@ -17,6 +17,7 @@
 #include <SheetViewTypes.hxx>
 
 #include <sfx2/app.hxx>
+#include <vcl/weld/WaitObject.hxx>
 #include <vcl/weld/Window.hxx>
 
 #include <memory>

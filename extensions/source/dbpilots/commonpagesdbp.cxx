@@ -40,6 +40,7 @@
 #include <svl/filenotation.hxx>
 #include <osl/diagnose.h>
 #include <vcl/weld/Builder.hxx>
+#include <vcl/weld/WaitObject.hxx>
 
 namespace dbp
 {

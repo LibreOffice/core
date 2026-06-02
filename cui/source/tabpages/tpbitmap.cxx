@@ -55,6 +55,7 @@
 #include <tools/debug.hxx>
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/ScrolledWindow.hxx>
+#include <vcl/weld/WaitObject.hxx>
 
 using namespace com::sun::star;
 

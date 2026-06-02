@@ -12,6 +12,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <osl/file.hxx>
+#include <vcl/weld/WaitObject.hxx>
 #include <comphelper/lok.hxx>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <hlmarkwn_def.hxx>

@@ -58,6 +58,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/syswin.hxx>
 #include <vcl/weld/MessageDialog.hxx>
+#include <vcl/weld/WaitObject.hxx>
 #include <vcl/weld/weld.hxx>
 #include <osl/mutex.hxx>
 

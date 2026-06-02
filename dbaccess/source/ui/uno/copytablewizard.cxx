@@ -68,6 +68,7 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <unotools/sharedunocomponent.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/WaitObject.hxx>
 
 namespace dbaui
 {

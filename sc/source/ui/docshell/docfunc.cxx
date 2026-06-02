@@ -30,6 +30,7 @@
 #include <sfx2/bindings.hxx>
 #include <utility>
 #include <vcl/weld/MessageDialog.hxx>
+#include <vcl/weld/WaitObject.hxx>
 #include <vcl/weld/weld.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/svapp.hxx>
