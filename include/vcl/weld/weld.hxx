@@ -13,6 +13,7 @@
 #include <tools/gen.hxx>
 #include <tools/link.hxx>
 #include <vcl/dllapi.h>
+#include <vcl/weld/Toggleable.hxx>
 #include <vcl/weld/Widget.hxx>
 
 #include <com/sun/star/accessibility/XAccessibleRelationSet.hpp>
@@ -95,47 +96,6 @@ public:
     virtual void set_custom_button(VirtualDevice* pDevice) = 0;
 
     virtual void connect_clicked(const Link<Button&, void>& rLink) { m_aClickHdl = rLink; }
-};
-
-class VCL_DLLPUBLIC Toggleable : virtual public Widget
-{
-    friend class ::LOKTrigger;
-
-protected:
-    Link<Toggleable&, void> m_aToggleHdl;
-    TriState m_eSavedValue = TRISTATE_FALSE;
-
-    void signal_toggled()
-    {
-        if (notify_events_disabled())
-            return;
-        m_aToggleHdl.Call(*this);
-    }
-
-    virtual void do_set_active(bool active) = 0;
-
-public:
-    void set_active(bool active)
-    {
-        disable_notify_events();
-        do_set_active(active);
-        enable_notify_events();
-    }
-
-    virtual bool get_active() const = 0;
-
-    virtual TriState get_state() const
-    {
-        if (get_active())
-            return TRISTATE_TRUE;
-        return TRISTATE_FALSE;
-    }
-
-    void save_state() { m_eSavedValue = get_state(); }
-    TriState get_saved_state() const { return m_eSavedValue; }
-    bool get_state_changed_from_saved() const { return m_eSavedValue != get_state(); }
-
-    virtual void connect_toggled(const Link<Toggleable&, void>& rLink) { m_aToggleHdl = rLink; }
 };
 
 class VCL_DLLPUBLIC ToggleButton : virtual public Button, virtual public Toggleable
