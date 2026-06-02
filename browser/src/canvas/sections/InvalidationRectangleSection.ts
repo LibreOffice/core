@@ -74,7 +74,9 @@ class InvalidationRectangleSection extends CanvasSectionObject {
 				this.checkDeletion();
 			}, 1000);
 		} else {
-			app.sectionContainer.removeSection(this.name);
+			app.layoutingService.appendLayoutingTask(() => {
+				app.sectionContainer.removeSection(this.name);
+			});
 		}
 	}
 
