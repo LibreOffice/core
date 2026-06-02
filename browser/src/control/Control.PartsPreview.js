@@ -276,7 +276,11 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 			img.focus();
 
 			var entries = [];
-			if (window.L.Browser.clipboardApiAvailable) {
+			// Offer Paste whenever we can read the clipboard: the browser Clipboard
+			// API, or the Mac app's native clipboard bridge. (The other apps drive
+			// slide copy/paste through their own native clipboard, which is not
+			// wired up for slides yet, so leave them on the Clipboard-API check.)
+			if (window.L.Browser.clipboardApiAvailable || window.ThisIsTheMacOSApp) {
 				entries.push({
 					id: 'paste',
 					type: 'comboboxentry',
@@ -996,7 +1000,12 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 
 			const clip = this._map._clip;
 
-			if (window.L.Browser.clipboardApiAvailable) {
+			// In the browser, read the system clipboard directly so a copy from
+			// another tab/document wins over a stale local copy. The Mac app skips
+			// this: its native clipboard bridge does the read (and going through
+			// navigator.clipboard.read() would pop up the WebView's system "Paste"
+			// confirmation), so it falls through to filterExecCopyPaste below.
+			if (window.L.Browser.clipboardApiAvailable && !window.ThisIsTheMacOSApp) {
 				let html = '';
 				try {
 					let foundItem = null;
@@ -1023,8 +1032,8 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 				}
 			}
 
-			// Fallback when the Clipboard API is unavailable: let the
-			// browser's paste event drive things.
+			// The Clipboard API is unavailable, or this is the Mac app: let the
+			// paste event / native clipboard bridge drive things.
 			clip.filterExecCopyPaste('.uno:Paste');
 		} finally {
 			this._pastePending = false;
