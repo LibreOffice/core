@@ -2160,6 +2160,7 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 		}
 
 		var scrollTop = control.scrollTop;
+		var scrollLeft = control.scrollLeft;
 		var userHidden = control.classList.contains('user-hidden');
 		var focusedElement = document.activeElement;
 		var focusedElementInDialog = focusedElement ? container.querySelector('[id=\'' + focusedElement.id + '\']') : null;
@@ -2188,6 +2189,7 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 		var newControl = container.querySelector('[id=\'' + elementId + '\']');
 		if (newControl) {
 			newControl.scrollTop = scrollTop;
+			newControl.scrollLeft = scrollLeft;
 			newControl.style.gridColumn = backupGridColSpan;
 			newControl.style.gridRow = backupGridRowSpan;
 			newControl.style.width = backupWidth;
