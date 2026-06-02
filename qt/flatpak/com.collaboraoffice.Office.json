@@ -988,7 +988,6 @@
         "--disable-dconf",
         "--disable-epm",
         "--disable-evolution2",
-        "--disable-ext-wiki-publisher",
         "--disable-gio",
         "--disable-gstreamer-1-0",
         "--disable-gtk3",
