@@ -4156,6 +4156,7 @@ StackVar ScInterpreter::Interpret()
                     case ocNot              : ScNot();                      break;
                     case ocNegSub           :
                     case ocNeg              : ScNeg();                      break;
+                    case ocSingleValue      : ScSingleValue();              break;
                     case ocPercentSign      : ScPercentSign();              break;
                     case ocPi               : ScPi();                       break;
                     case ocRandom           : ScRandom();                   break;

@@ -604,6 +604,7 @@ private:
     void ScXor();
     void ScNot();
     void ScNeg();
+    void ScSingleValue();
     void ScPercentSign();
     void ScIntersect();
     void ScRangeFunc();

@@ -5765,6 +5765,23 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testDynamicArrayFlagCopy)
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(TestFormula2, testSingleValueOperator)
+{
+    // The @ prefix collapses an array-returning function to its upper-left
+    // value, opting the formula out of auto-spill.
+
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+
+    m_pDoc->SetFormula(ScAddress(0, 0, 0), u"=@SEQUENCE(4)"_ustr,
+                       formula::FormulaGrammar::GRAM_NATIVE);
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(0, 0, 0)));
+    // No spill into the row below.
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_NONE, m_pDoc->GetCellType(ScAddress(0, 1, 0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_TEST_FIXTURE(TestFormula2, testDynamicArrayResizeDuringCopyToClip)
 {
     // A dynamic-array resize queued during CopyToClip must run after the clipboard clone is made.

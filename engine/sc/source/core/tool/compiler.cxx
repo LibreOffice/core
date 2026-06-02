@@ -141,7 +141,8 @@ constexpr std::array<ScCharFlags, 128> makeCommonCharTable()
     a['='] = ScCharFlags::Char | ScCharFlags::Bool | ScCharFlags::WordSep | ScCharFlags::ValueSep;
     a['>'] = ScCharFlags::CharBool | ScCharFlags::Bool | ScCharFlags::WordSep | ScCharFlags::ValueSep;
     a['?'] = ScCharFlags::CharWord | ScCharFlags::Word | ScCharFlags::Name;
-    /* @ */ // FREE
+    // @ is the prefix operator that opts a formula out of auto-spill.
+    a['@'] = ScCharFlags::Char | ScCharFlags::WordSep | ScCharFlags::ValueSep;
 
     for (int i = 'A'; i <= 'Z'; i++)
         a[i] = ScCharFlags::CharWord | ScCharFlags::Word | ScCharFlags::CharIdent | ScCharFlags::Ident | ScCharFlags::CharName | ScCharFlags::Name;
@@ -211,7 +212,8 @@ constexpr std::array<ScCharFlags, 128> makeCharTable_XL()
     a['='] |= ScCharFlags::Word;
     a['>'] |= ScCharFlags::Word;
     /* ? */ // question really is not permitted in sheet name
-    a['@'] |= ScCharFlags::Word;
+    // @ stays an operator in the XL grammar too. Sheet names that contain
+    // @ have to be quoted.
     a['['] = ScCharFlags::Word;
     a[']'] = ScCharFlags::Word;
     a['{'] |= ScCharFlags::Word;
