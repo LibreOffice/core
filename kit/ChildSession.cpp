@@ -2057,7 +2057,10 @@ bool ChildSession::insertFile(const StringVector& tokens)
 
         LOG_TRC("Inserting " << type << ": " << command << ' ' << arguments.c_str());
 
-        getLOKitDocument()->postUnoCommand(command.c_str(), arguments.c_str(), false);
+        // Inserting a remote multimedia URL downloads the file here and can
+        // block for a while, so ask to be told when the command finishes.
+        const bool notifyWhenFinished = (type == "multimediaurl");
+        getLOKitDocument()->postUnoCommand(command.c_str(), arguments.c_str(), notifyWhenFinished);
     }
 
     return true;

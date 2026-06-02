@@ -307,6 +307,11 @@ window.L.Map.FileInserter = window.L.Handler.extend({
 			// The order argument is important
 			app.socket.sendMessage('contentcontrolevent type=pictureurl name=' + encodeURIComponent(e.url));
 		} else {
+			// URL media is fetched by the kit, with no browser upload
+			// step, so show the progress indicator from here.
+			if (e.urltype === 'multimediaurl') {
+				this._map.showBusy(_('Uploading...'), false);
+			}
 			app.socket.sendMessage('insertfile name=' + encodeURIComponent(e.url) + ' type=' + e.urltype);
 		}
 	}

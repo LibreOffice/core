@@ -47,6 +47,33 @@ describe(['tagdesktop'], 'Image Operation Tests', function() {
 		});
 	});
 
+	it('Insert multimedia from WOPI URL shows progress feedback', function () {
+		// Inserting a remote video shows a busy popup while the kit
+		// downloads it, and the popup is cleared once the insert finishes.
+		helper.processToIdle(this.win);
+
+		cy.getFrameWindow().then(function (win) {
+			cy.stub(win.app.socket, 'sendMessage').as('insertMessage');
+			// Skip the getchildid round-trip so _sendURL runs synchronously.
+			win.app.map.fileInserter._childId = 'cypress-child';
+			win.app.map.insertURL('http://example.invalid/video.mp4', 'multimediaurl');
+		});
+
+		cy.get('@insertMessage').should('have.been.calledWithMatch', 'type=multimediaurl');
+
+		const BUSY_POPUP_DELAY_MS = 1500;
+		cy.cGet('#busypopup', { timeout: BUSY_POPUP_DELAY_MS }).should('exist');
+
+		// The kit reports the insert finished.
+		cy.getFrameWindow().then(function (win) {
+			win.app.socket._onMessage({
+				textMsg: 'unocommandresult: {"commandName":".uno:InsertAVMedia","success":"true"}',
+			});
+		});
+
+		cy.cGet('#busypopup').should('not.exist');
+	});
+
 	it.skip('Crop Image', function () {
 		desktopHelper.insertImage();
 		helper.assertImageSize(438, 111);
