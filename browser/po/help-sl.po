@@ -5,18 +5,18 @@ msgstr ""
 "Project-Id-Version: Collabora Online - Help\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-02 13:03+0200\n"
-"PO-Revision-Date: 2026-05-20 09:11+0000\n"
+"PO-Revision-Date: 2026-06-02 19:55+0000\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
-"Language-Team: Slovenian <https://hosted.weblate.org/projects/"
-"collabora-online/help/sl/>\n"
+"Language-Team: Slovenian <https://hosted.weblate.org/projects/collabora-"
+"online/help/sl/>\n"
 "Language: sl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n"
-"%100==4 ? 2 : 3;\n"
+"Plural-Forms: nplurals=4; plural=n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || "
+"n%100==4 ? 2 : 3;\n"
 "X-Accelerator-Marker: ~\n"
-"X-Generator: Translate Toolkit 3.6.0\n"
+"X-Generator: Weblate 2026.6\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
 #: html/cool-help.html%2Bdiv.h1:9-5
@@ -1967,6 +1967,8 @@ msgid ""
 "Repair Document dialog listing past document states with columns for action "
 "type, author, and timestamp"
 msgstr ""
+"Pogovorno okno Popravi dokument izpiše pretekla stanja dokumenta s stolpci "
+"za vrsto dejanja, avtorja in časovni žig"
 
 #: html/cool-help.html%2Bdiv.div.div.p:432-5
 msgid ""
@@ -2097,6 +2099,8 @@ msgid ""
 "Chart Wizard dialog with chart type list on the left, chart style previews, "
 "3D and shape options"
 msgstr ""
+"Pogovorno okno Čarovnik za grafikone s seznamom vrste grafikona na levi, "
+"predogledi sloga grafikona ter možnostmi 3D in oblike"
 
 #: html/cool-help.html%2Bdiv.div.div.ol.li:460-7
 msgid "If no table or range was selected, a prototype chart is displayed."
@@ -2107,6 +2111,8 @@ msgid ""
 "Column chart with grouped bars showing data for four rows across three "
 "columns"
 msgstr ""
+"Stolpčni grafikon s stolpci v skupinah, ki prikazujejo podatke za štiri "
+"vrstice prek treh stolpcev"
 
 #: html/cool-help.html%2Bdiv.div.div.p:464-28
 msgid ""
@@ -2226,7 +2232,7 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.img[alt]:483-29
 msgid "Text with a red wavy underline beneath a misspelled word"
-msgstr ""
+msgstr "Besedilo z rdečo valovito podčrtavo pod napačno črkovano besedo"
 
 #: html/cool-help.html%2Bdiv.div.div.p:484-5
 msgid ""
@@ -3342,6 +3348,8 @@ msgid ""
 "Text Import dialog with character set, locale, separator options, and a "
 "preview of the imported CSV data"
 msgstr ""
+"Pogovorno okno Uvozi besedilo z naborom znakov, področno nastavitvijo, "
+"možnostmi ločil ter predogledom uvoženih podatkov CSV"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:778-7
 msgid ""
