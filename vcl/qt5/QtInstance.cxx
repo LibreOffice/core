@@ -914,12 +914,10 @@ QtInstance::CreateBuilder(weld::Widget* pParent, const OUString& rUIRoot, const 
 std::unique_ptr<weld::Builder> QtInstance::CreateInterimBuilder(vcl::Window* pParent,
                                                                 const OUString& rUIRoot,
                                                                 const OUString& rUIFile,
-                                                                bool bAllowCycleFocusOut,
-                                                                sal_uInt64 nLOKWindowId)
+                                                                bool bAllowCycleFocusOut)
 {
     if (!isQtWeldingEnabled() || !QtInstanceBuilder::IsInterimUIFileSupported(rUIFile))
-        return SalInstance::CreateInterimBuilder(pParent, rUIRoot, rUIFile, bAllowCycleFocusOut,
-                                                 nLOKWindowId);
+        return SalInstance::CreateInterimBuilder(pParent, rUIRoot, rUIFile, bAllowCycleFocusOut);
 
     VclPtr<SystemChildWindow> pEmbedWindow = VclPtr<SystemChildWindow>::Create(pParent, 0);
     pEmbedWindow->Show(true, ShowFlags::NoActivate);

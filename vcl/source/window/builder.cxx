@@ -190,10 +190,14 @@ std::unique_ptr<weld::Builder> Application::CreateBuilder(weld::Widget* pParent,
     return pSalInstance->CreateBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile);
 }
 
-std::unique_ptr<weld::Builder> Application::CreateInterimBuilder(vcl::Window* pParent, const OUString &rUIFile, bool bAllowCycleFocusOut, sal_uInt64 nLOKWindowId)
+std::unique_ptr<weld::Builder> Application::CreateInterimBuilder(vcl::Window* pParent,
+                                                                 const OUString& rUIFile,
+                                                                 bool bAllowCycleFocusOut,
+                                                                 sal_uInt64)
 {
     SalInstance* pSalInstance = GetSalInstance();
-    return pSalInstance->CreateInterimBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile, bAllowCycleFocusOut, nLOKWindowId);
+    return pSalInstance->CreateInterimBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile,
+                                              bAllowCycleFocusOut);
 }
 
 weld::MessageDialog* Application::CreateMessageDialog(weld::Widget* pParent, VclMessageType eMessageType,

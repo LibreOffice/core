@@ -24324,8 +24324,10 @@ gboolean GtkSalFrame::NativeWidgetHelpPressed(GtkAccelGroup*, GObject*, guint, G
 }
 #endif
 
-std::unique_ptr<weld::Builder> GtkInstance::CreateInterimBuilder(vcl::Window* pParent, const OUString& rUIRoot, const OUString& rUIFile,
-                                                 bool bAllowCycleFocusOut, sal_uInt64)
+std::unique_ptr<weld::Builder> GtkInstance::CreateInterimBuilder(vcl::Window* pParent,
+                                                                 const OUString& rUIRoot,
+                                                                 const OUString& rUIFile,
+                                                                 bool bAllowCycleFocusOut)
 {
     // Create a foreign window which we know is a GtkGrid and make the native widgets a child of that, so we can
     // support GtkWidgets within a vcl::Window

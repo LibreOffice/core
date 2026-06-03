@@ -87,8 +87,7 @@ SalInstance::CreateBuilder(weld::Widget* pParent, const OUString& rUIRoot, const
 
 std::unique_ptr<weld::Builder> SalInstance::CreateInterimBuilder(vcl::Window* pParent,
                                                                  const OUString& rUIRoot,
-                                                                 const OUString& rUIFile, bool,
-                                                                 sal_uInt64)
+                                                                 const OUString& rUIFile, bool)
 {
     return std::make_unique<SalInstanceBuilder>(pParent, rUIRoot, rUIFile);
 }

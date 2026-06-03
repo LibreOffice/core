@@ -185,8 +185,10 @@ public:
     virtual OpenGLContext*  CreateOpenGLContext();
 
     virtual std::unique_ptr<weld::Builder> CreateBuilder(weld::Widget* pParent, const OUString& rUIRoot, const OUString& rUIFile);
-    virtual std::unique_ptr<weld::Builder> CreateInterimBuilder(vcl::Window* pParent, const OUString& rUIRoot, const OUString& rUIFile,
-                                                bool bAllowCycleFocusOut, sal_uInt64 nLOKWindowId = 0);
+    virtual std::unique_ptr<weld::Builder> CreateInterimBuilder(vcl::Window* pParent,
+                                                                const OUString& rUIRoot,
+                                                                const OUString& rUIFile,
+                                                                bool bAllowCycleFocusOut);
     virtual weld::MessageDialog* CreateMessageDialog(weld::Widget* pParent, VclMessageType eMessageType,
                                                      VclButtonsType eButtonType, const OUString& rPrimaryMessage);
     virtual std::unique_ptr<weld::ColorChooserDialog>

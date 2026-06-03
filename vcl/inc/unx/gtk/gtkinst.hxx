@@ -281,8 +281,10 @@ public:
     ImplCreateDropTarget(const SystemEnvData& rSysEnv) override;
     virtual OpenGLContext* CreateOpenGLContext() override;
     virtual std::unique_ptr<weld::Builder> CreateBuilder(weld::Widget* pParent, const OUString& rUIRoot, const OUString& rUIFile) override;
-    virtual std::unique_ptr<weld::Builder> CreateInterimBuilder(vcl::Window* pParent, const OUString& rUIRoot, const OUString& rUIFile,
-                                                bool bAllowCycleFocusOut, sal_uInt64 nLOKWindowId = 0) override;
+    virtual std::unique_ptr<weld::Builder> CreateInterimBuilder(vcl::Window* pParent,
+                                                                const OUString& rUIRoot,
+                                                                const OUString& rUIFile,
+                                                                bool bAllowCycleFocusOut) override;
     virtual weld::MessageDialog* CreateMessageDialog(weld::Widget* pParent, VclMessageType eMessageType, VclButtonsType eButtonType, const OUString &rPrimaryMessage) override;
     std::unique_ptr<weld::ColorChooserDialog>
     CreateColorChooserDialog(weld::Window* pParent, vcl::ColorPickerMode eMode) override;
