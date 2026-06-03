@@ -173,6 +173,12 @@ window.L.Control.JSDialog = window.L.Control.extend({
 		var builder = this.dialogs[id].builder;
 
 		if (sendCloseEvent) {
+			// clickToClose may still be the raw string from the JSON (e.g. '_POPOVER_')
+			// when the popup is closed before the layouting task in onJSDialog
+			// resolved it to an element via addHandlers
+			if (typeof clickToClose === 'string')
+				clickToClose = null;
+
 			// first try to close the dropdown if exists
 			if (clickToClose && typeof clickToClose.closeDropdown === 'function')
 				clickToClose.closeDropdown();
