@@ -13,6 +13,7 @@
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 
 #include <test/unoapi_test.hxx>
 
@@ -76,6 +77,7 @@ class SwarmSolverTest : public UnoApiTest
     void testContradictoryBoundsTerminate();
     void testUnboundedIntegerVariable();
     void testRepeatedSolveResetsState();
+    void testControllersUnlockedAfterError();
 
 public:
     SwarmSolverTest()
@@ -97,6 +99,7 @@ public:
     CPPUNIT_TEST(testContradictoryBoundsTerminate);
     CPPUNIT_TEST(testUnboundedIntegerVariable);
     CPPUNIT_TEST(testRepeatedSolveResetsState);
+    CPPUNIT_TEST(testControllersUnlockedAfterError);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -694,6 +697,48 @@ void SwarmSolverTest::testRepeatedSolveResetsState()
     uno::Sequence<double> aSolution = xSolver->getSolution();
     CPPUNIT_ASSERT_EQUAL(aVariables.getLength(), aSolution.getLength());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(3.0, aSolution[0], 1E-5);
+}
+
+void SwarmSolverTest::testControllersUnlockedAfterError()
+{
+    // Regression: solve locked the document controllers and only unlocked them at
+    // the end. A cell access in between could throw, leaving the document locked
+    // for good. Point a variable at a sheet that does not exist so a cell access
+    // throws, then check the controllers are unlocked again.
+
+    loadFromFile(u"Simple.ods");
+
+    uno::Reference<sheet::XSpreadsheetDocument> xDocument(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<frame::XModel> xModel(xDocument, uno::UNO_QUERY_THROW);
+
+    uno::Reference<sheet::XSolver> xSolver;
+    xSolver.set(m_xContext->getServiceManager()->createInstanceWithContext(
+                    u"com.sun.star.comp.Calc.SwarmSolver"_ustr, m_xContext),
+                uno::UNO_QUERY_THROW);
+
+    table::CellAddress aObjective(0, 1, 1);
+    // sheet index 99 does not exist, so reading or writing this cell throws
+    uno::Sequence<table::CellAddress> aVariables{ { 99, 1, 0 } };
+
+    xSolver->setDocument(xDocument);
+    xSolver->setObjective(aObjective);
+    xSolver->setVariables(aVariables);
+    xSolver->setConstraints({});
+    xSolver->setMaximize(false);
+
+    bool bThrew = false;
+    try
+    {
+        xSolver->solve();
+    }
+    catch (const uno::Exception&)
+    {
+        bThrew = true;
+    }
+
+    CPPUNIT_ASSERT(bThrew);
+    CPPUNIT_ASSERT_MESSAGE("Controllers must be unlocked after a failed solve",
+                           !xModel->hasControllersLocked());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwarmSolverTest);

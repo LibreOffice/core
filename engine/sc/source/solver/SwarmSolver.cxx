@@ -27,6 +27,7 @@
 #include <cppuhelper/supportsservice.hxx>
 
 #include <comphelper/propcontainerimplhelper.hxx>
+#include <comphelper/scopeguard.hxx>
 
 #include <cmath>
 #include <vector>
@@ -586,6 +587,10 @@ void SAL_CALL SwarmSolver::solve()
 
     xModel->lockControllers();
 
+    // Unlock again on any exit from here on, including an exception thrown by
+    // one of the cell accesses below, so the document is always left usable.
+    comphelper::ScopeGuard aUnlockGuard([&xModel] { xModel->unlockControllers(); });
+
     if (mbNonNegative)
     {
         for (Bound& rBound : maBounds)
@@ -652,8 +657,6 @@ void SAL_CALL SwarmSolver::solve()
     // model. The search can run out of generations or time without ever
     // reaching a feasible point.
     bool bFeasible = isSolutionFeasible(aSolution);
-
-    xModel->unlockControllers();
 
     mbSuccess = bFeasible;
 
