@@ -95,6 +95,21 @@ describe(['tagdesktop'], 'Scroll through document, modify heading', function() {
 		cy.cGet('input#navigator-search-input').should('have.value', 'Feedback');
 	});
 
+	it('Clearing the search field removes the Outline highlight', function() {
+		// Regression test: after searching, matching Outline entries get a
+		// yellow highlight; clearing the search field must remove it (and not
+		// leave it to be re-applied on later navigator updates).
+		cy.cGet('#tab-navigator.selected').should('exist');
+
+		// Search for a heading and activate; this highlights matching entries.
+		cy.cGet('input#navigator-search-input').type('Feedback{enter}');
+		cy.cGet('#contenttree .ui-treeview-entry.highlighted').should('exist');
+
+		// Clearing the field must remove the Outline highlight.
+		cy.cGet('input#navigator-search-input').type('{selectall}{backspace}');
+		cy.cGet('#contenttree .ui-treeview-entry.highlighted').should('not.exist');
+	});
+
 	it('Jump to element even when cursor not visible', function() {
 		// Expand Tables, Frames, Images
 		// Note click()/dblclick() scrolls the contenttree even if it would be not needed to click

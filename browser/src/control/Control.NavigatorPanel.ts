@@ -594,7 +594,19 @@ class NavigatorPanel extends SidebarBase {
 			nextButton && (nextButton as any).checkVisibility();
 		const searchTerm = this.getSearchTerm();
 
-		if (!searchTerm) return; // There is something wrong. If search input doesn't exist, nothing to do below.
+		// Search input doesn't exist, nothing to do below.
+		if (searchTerm === null) return;
+
+		// Field cleared: forget the stored term and remove the Outline
+		// highlighting. Without this the yellow highlight stays and is
+		// re-applied on the next navigator update via onJSUpdate (which
+		// reuses highlightTerm).
+		if (searchTerm.trim() === '') {
+			this.highlightTerm = '';
+			const treeContainer = document.getElementById('contenttree') as any;
+			if (treeContainer) treeContainer.highlightEntries('');
+			return;
+		}
 
 		const termChanged = searchTerm !== this.highlightTerm;
 		this.highlightTerm = searchTerm;
