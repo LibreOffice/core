@@ -318,6 +318,8 @@ ScCondFormatsObj::ScCondFormatsObj(ScDocShell* pDocShell, SCTAB nTab):
 
 ScCondFormatsObj::~ScCondFormatsObj()
 {
+    SolarMutexGuard aGuard;
+
     if (mpDocShell)
         mpDocShell->GetDocument().RemoveUnoObject(*this);
 }
