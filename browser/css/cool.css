@@ -779,8 +779,8 @@ body {
 
 .cool-dont-break {
 	/* These are technically the same, but use both */
-	overflow-wrap: break-word;
-	word-wrap: break-word;
+	overflow-wrap: anywhere;
+	word-wrap: anywhere;
 
 	/* Don't eat new lines  */
 	white-space: pre-wrap;
@@ -831,6 +831,8 @@ body {
 	scrollbar-width: var(--scrollbar-width);
 	scrollbar-color: var(--scrollbar-color);
 	outline: none !important;
+	overflow-wrap: anywhere;
+	word-wrap: anywhere;
 }
 
 .cool-annotation-textarea a:link,
