@@ -1341,9 +1341,9 @@ msgstr "Tüm sürüm bilgilerini İngilizce olarak kopyalayın"
 msgid "Version information has been copied"
 msgstr ""
 
-#: src/control/Control.AboutDialog.ts:431
-msgid "COOLWSD version:"
-msgstr "COOLWSD sürümü:"
+#: src/control/Control.AboutDialog.ts:433
+msgid "Version:"
+msgstr "Sürüm:"
 
 #: src/control/Control.AddressInputField.ts:68
 msgid "cell address"

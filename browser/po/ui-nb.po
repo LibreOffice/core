@@ -1316,8 +1316,8 @@ msgstr ""
 msgid "Version information has been copied"
 msgstr ""
 
-#: src/control/Control.AboutDialog.ts:431
-msgid "COOLWSD version:"
+#: src/control/Control.AboutDialog.ts:433
+msgid "Version:"
 msgstr ""
 
 #: src/control/Control.AddressInputField.ts:68
@@ -6290,7 +6290,7 @@ msgstr ""
 #, javascript-format
 msgid ""
 "The file of type: {0} cannot be uploaded to server since the file is empty"
-msgstr "Filen av typen:% 0 kan ikke lastes opp til serveren siden filen er tom"
+msgstr "Filen av typen: {0} kan ikke lastes opp til serveren siden filen er tom"
 
 #: src/map/handler/Map.FileInserter.js:229
 msgid "Uploading..."

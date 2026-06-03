@@ -1342,9 +1342,9 @@ msgstr "Cóipeáil gach eolas faoin leagan i mBéarla"
 msgid "Version information has been copied"
 msgstr "Tá faisnéis an leagain cóipeáilte"
 
-#: src/control/Control.AboutDialog.ts:431
-msgid "COOLWSD version:"
-msgstr "Leagan COOLWSD:"
+#: src/control/Control.AboutDialog.ts:433
+msgid "Version:"
+msgstr "Leagan:"
 
 #: src/control/Control.AddressInputField.ts:68
 msgid "cell address"

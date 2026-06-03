@@ -1332,9 +1332,9 @@ msgstr "Kopioi kaikki versiotiedot englanniksi"
 msgid "Version information has been copied"
 msgstr "Versiotiedot on kopioitu"
 
-#: src/control/Control.AboutDialog.ts:431
-msgid "COOLWSD version:"
-msgstr "COOLWSD-versio:"
+#: src/control/Control.AboutDialog.ts:433
+msgid "Version:"
+msgstr "Versio:"
 
 #: src/control/Control.AddressInputField.ts:68
 msgid "cell address"

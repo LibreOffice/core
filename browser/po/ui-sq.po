@@ -1342,9 +1342,9 @@ msgstr "Kopjo krejt hollësitë e versionit në anglisht"
 msgid "Version information has been copied"
 msgstr "Hollësitë e versionit u kopjuan"
 
-#: src/control/Control.AboutDialog.ts:431
-msgid "COOLWSD version:"
-msgstr "Version COOLWSD:"
+#: src/control/Control.AboutDialog.ts:433
+msgid "Version:"
+msgstr "Version:"
 
 #: src/control/Control.AddressInputField.ts:68
 msgid "cell address"

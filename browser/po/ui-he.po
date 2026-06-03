@@ -1323,9 +1323,9 @@ msgstr "העתקת כל פרטי הגרסה באנגלית"
 msgid "Version information has been copied"
 msgstr ""
 
-#: src/control/Control.AboutDialog.ts:431
-msgid "COOLWSD version:"
-msgstr "גרסת COOLWSD:"
+#: src/control/Control.AboutDialog.ts:433
+msgid "Version:"
+msgstr "גרסה:"
 
 #: src/control/Control.AddressInputField.ts:68
 msgid "cell address"

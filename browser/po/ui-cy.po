@@ -1334,9 +1334,9 @@ msgstr "Copïo'r holl wybodaeth fersiwn yn Saesneg"
 msgid "Version information has been copied"
 msgstr "Mae manylion y fersiwn wedi'i chopïo"
 
-#: src/control/Control.AboutDialog.ts:431
-msgid "COOLWSD version:"
-msgstr "Fersiwn COOLWSD:"
+#: src/control/Control.AboutDialog.ts:433
+msgid "Version:"
+msgstr "Fersiwn:"
 
 #: src/control/Control.AddressInputField.ts:68
 msgid "cell address"

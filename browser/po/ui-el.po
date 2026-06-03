@@ -1328,9 +1328,9 @@ msgstr "Αντιγράψτε όλες τις πληροφορίες έκδοση
 msgid "Version information has been copied"
 msgstr ""
 
-#: src/control/Control.AboutDialog.ts:431
-msgid "COOLWSD version:"
-msgstr "Έκδοση COOLWSD:"
+#: src/control/Control.AboutDialog.ts:433
+msgid "Version:"
+msgstr "Έκδοση:"
 
 #: src/control/Control.AddressInputField.ts:68
 msgid "cell address"

@@ -1329,9 +1329,9 @@ msgstr "Sao chép toàn bộ thông tin phiên bản bằng Tiếng Anh"
 msgid "Version information has been copied"
 msgstr "Thông tin phiên bản đã được sao chép"
 
-#: src/control/Control.AboutDialog.ts:431
-msgid "COOLWSD version:"
-msgstr "Phiên bản COOLWSD:"
+#: src/control/Control.AboutDialog.ts:433
+msgid "Version:"
+msgstr "Phiên bản:"
 
 #: src/control/Control.AddressInputField.ts:68
 msgid "cell address"

@@ -1338,9 +1338,9 @@ msgstr "Összes verzióinformáció másolása angolul"
 msgid "Version information has been copied"
 msgstr "A verzióinformáció másolva"
 
-#: src/control/Control.AboutDialog.ts:431
-msgid "COOLWSD version:"
-msgstr "COOLWSD verzió:"
+#: src/control/Control.AboutDialog.ts:433
+msgid "Version:"
+msgstr "Verzió:"
 
 #: src/control/Control.AddressInputField.ts:68
 msgid "cell address"

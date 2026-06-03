@@ -1328,9 +1328,9 @@ msgstr "Nukopijuokite visą versijos informaciją anglų kalba"
 msgid "Version information has been copied"
 msgstr "Versijos informacija nukopijuota"
 
-#: src/control/Control.AboutDialog.ts:431
-msgid "COOLWSD version:"
-msgstr "COOLWSD versija:"
+#: src/control/Control.AboutDialog.ts:433
+msgid "Version:"
+msgstr "Versija:"
 
 #: src/control/Control.AddressInputField.ts:68
 msgid "cell address"

@@ -1332,9 +1332,9 @@ msgstr "إنسَخ جميع معلومات الإصدار"
 msgid "Version information has been copied"
 msgstr ""
 
-#: src/control/Control.AboutDialog.ts:431
-msgid "COOLWSD version:"
-msgstr "إصدار COOLWSD:"
+#: src/control/Control.AboutDialog.ts:433
+msgid "Version:"
+msgstr "إصدار:"
 
 #: src/control/Control.AddressInputField.ts:68
 msgid "cell address"

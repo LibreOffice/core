@@ -1353,9 +1353,9 @@ msgstr "Alle Versionsinformationen auf Englisch kopieren"
 msgid "Version information has been copied"
 msgstr "Versionsinformationen wurden kopiert"
 
-#: src/control/Control.AboutDialog.ts:431
-msgid "COOLWSD version:"
-msgstr "COOLWSD-Version:"
+#: src/control/Control.AboutDialog.ts:433
+msgid "Version:"
+msgstr "Version:"
 
 #: src/control/Control.AddressInputField.ts:68
 msgid "cell address"

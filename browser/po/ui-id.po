@@ -1339,9 +1339,9 @@ msgstr "Salin semua informasi versi dalam bahasa Inggris"
 msgid "Version information has been copied"
 msgstr "Informasi versi telah disalin"
 
-#: src/control/Control.AboutDialog.ts:431
-msgid "COOLWSD version:"
-msgstr "Versi COOLWSD:"
+#: src/control/Control.AboutDialog.ts:433
+msgid "Version:"
+msgstr "Versi:"
 
 #: src/control/Control.AddressInputField.ts:68
 msgid "cell address"

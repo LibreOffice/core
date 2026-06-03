@@ -1331,9 +1331,9 @@ msgstr "Zkopírovat informace o verzi v angličtině"
 msgid "Version information has been copied"
 msgstr "Informace o verzi byly zkopírovány"
 
-#: src/control/Control.AboutDialog.ts:431
-msgid "COOLWSD version:"
-msgstr "Verze COOLWSD:"
+#: src/control/Control.AboutDialog.ts:433
+msgid "Version:"
+msgstr "Verze:"
 
 #: src/control/Control.AddressInputField.ts:68
 msgid "cell address"

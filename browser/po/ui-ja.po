@@ -1320,9 +1320,9 @@ msgstr "すべてのバージョン情報を英語でコピーします"
 msgid "Version information has been copied"
 msgstr ""
 
-#: src/control/Control.AboutDialog.ts:431
-msgid "COOLWSD version:"
-msgstr "COOLWSDバージョン:"
+#: src/control/Control.AboutDialog.ts:433
+msgid "Version:"
+msgstr "バージョン:"
 
 #: src/control/Control.AddressInputField.ts:68
 msgid "cell address"

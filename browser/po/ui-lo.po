@@ -1321,9 +1321,9 @@ msgstr "ສຳເນົາຂໍ້ມູນເວີຊັນທັງໝົດ
 msgid "Version information has been copied"
 msgstr "ສຳເນົາຂໍ້ມູນເວີຊັນແລ້ວ"
 
-#: src/control/Control.AboutDialog.ts:431
-msgid "COOLWSD version:"
-msgstr "ເວີຊັນ COOLWSD:"
+#: src/control/Control.AboutDialog.ts:433
+msgid "Version:"
+msgstr "ເວີຊັນ:"
 
 #: src/control/Control.AddressInputField.ts:68
 msgid "cell address"
