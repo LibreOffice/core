@@ -52,6 +52,7 @@ $(eval $(call gb_Library_add_exception_objects,solver,\
 	sc/source/solver/SwarmSolver \
 	sc/source/solver/SolverComponent \
 	$(if $(ENABLE_COINMP), sc/source/solver/CoinMPSolver) \
+	$(if $(ENABLE_COINMP), sc/source/solver/CoinMPModel) \
 ))
 
 # vim: set noet sw=4 ts=4:
