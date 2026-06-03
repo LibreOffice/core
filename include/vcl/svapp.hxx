@@ -1243,9 +1243,6 @@ public:
     /** Determines if troubleshoot mode is enabled */
     static bool                 IsSafeModeEnabled();
 
-    /** Collect what .ui files are used*/
-    static void                 EnableUICoverage(bool bEnable);
-
     /** Get the desktop environment the process is currently running in
 
      @returns The desktop environment

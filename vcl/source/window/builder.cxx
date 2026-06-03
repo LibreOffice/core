@@ -184,32 +184,15 @@ namespace
 
 }
 
-static bool bEnableUICoverage = false;
-
-void Application::EnableUICoverage(bool bEnable)
-{
-    bEnableUICoverage = bEnable;
-    if (!bEnableUICoverage)
-        GetSalInstance()->getUsedUIList().clear();
-}
-
 std::unique_ptr<weld::Builder> Application::CreateBuilder(weld::Widget* pParent, const OUString &rUIFile)
 {
     SalInstance* pSalInstance = GetSalInstance();
-
-    if (bEnableUICoverage)
-        pSalInstance->getUsedUIList().insert(rUIFile);
-
     return pSalInstance->CreateBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile);
 }
 
 std::unique_ptr<weld::Builder> Application::CreateInterimBuilder(vcl::Window* pParent, const OUString &rUIFile, bool bAllowCycleFocusOut, sal_uInt64 nLOKWindowId)
 {
     SalInstance* pSalInstance = GetSalInstance();
-
-    if (bEnableUICoverage)
-        pSalInstance->getUsedUIList().insert(rUIFile);
-
     return pSalInstance->CreateInterimBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile, bAllowCycleFocusOut, nLOKWindowId);
 }
 
