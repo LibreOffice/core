@@ -248,7 +248,14 @@ class AutoFillBaseSection extends CanvasSectionObject {
 
 		const p2 = this.getDocumentPositionFromLocal(point);
 		this.adjustForMobileCenterOffset(p2);
-		app.map._docLayer._postMouseEvent('move', p2.x, p2.y, 1, 1, 0);
+		app.map._docLayer._postMouseEvent(
+			'move',
+			p2.x,
+			p2.y,
+			1,
+			1,
+			MouseControl.readModifier(e),
+		);
 
 		if (
 			!this.containerObject.isMouseInside() &&
@@ -260,7 +267,14 @@ class AutoFillBaseSection extends CanvasSectionObject {
 	public onMouseUp(point: cool.SimplePoint, e: MouseEvent) {
 		const p2 = this.getDocumentPositionFromLocal(point);
 		this.adjustForMobileCenterOffset(p2);
-		app.map._docLayer._postMouseEvent('buttonup', p2.x, p2.y, 1, 1, 0);
+		app.map._docLayer._postMouseEvent(
+			'buttonup',
+			p2.x,
+			p2.y,
+			1,
+			1,
+			MouseControl.readModifier(e),
+		);
 	}
 
 	public onMouseDown(point: cool.SimplePoint, e: MouseEvent) {
@@ -269,7 +283,14 @@ class AutoFillBaseSection extends CanvasSectionObject {
 		const p2 = this.getCenterRegardingDocument();
 		this.adjustForMobileCenterOffset(p2);
 
-		app.map._docLayer._postMouseEvent('buttondown', p2.x, p2.y, 1, 1, 0);
+		app.map._docLayer._postMouseEvent(
+			'buttondown',
+			p2.x,
+			p2.y,
+			1,
+			1,
+			MouseControl.readModifier(e),
+		);
 	}
 
 	public onMouseEnter() {
