@@ -50,7 +50,7 @@ $(call gb_ExternalProject_get_state_target,fontconfig,build) :
 			    --with-cache-dir=/instdir/share/fontconfig/cache \
 			    --with-add-fonts=/instdir/share/fonts \
 			    --enable-libxml2 \
-			    ac_cv_func_fstatfs=no ac_cv_func_fstatvfs=no \
+			    ac_cv_func_fstatfs=no ac_cv_func_fstatvfs=no ac_cv_va_copy=no \
 			) \
 			$(if $(filter FUZZERS,$(BUILD_TYPE)), \
 				--disable-shared, \
