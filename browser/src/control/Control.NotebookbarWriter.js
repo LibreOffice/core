@@ -1745,6 +1745,21 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 				'accessibility': { focusBack: true, combination: 'MV', de: null }
 			},
 			{
+				'id': 'collapsenotebookbar',
+				'class': 'unocollapsenotebookbar',
+				'type': 'bigcustomtoolitem',
+				'text': _('Collapse Tabs'),
+				'accessibility': { focusBack: true, combination: 'CT', de: null }
+			},
+			{ type: 'separator', id: 'view-collapsenotebookbar-break', orientation: 'vertical' },
+			{
+				'id': 'view-navigator',
+				'type': 'bigtoolitem',
+				'text': _UNO('.uno:Navigator'),
+				'command': '.uno:Navigator',
+				'accessibility': { focusBack: true, combination: 'K', de: 'V' }
+			},
+			{
 				'type': 'container',
 				'children': [
 					{
@@ -1777,13 +1792,22 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 				'vertical': 'true'
 			},
 			{
-				'id': 'collapsenotebookbar',
-				'class': 'unocollapsenotebookbar',
-				'type': 'bigcustomtoolitem',
-				'text': _('Collapse Tabs'),
-				'accessibility': { focusBack: true, combination: 'CT', de: null }
+				'id': 'view-sidebar-property-deck',
+				'type': 'bigtoolitem',
+				'text': _UNO('.uno:Sidebar'),
+				'command': '.uno:SidebarDeck.PropertyDeck',
+				'accessibility': { focusBack: true, combination: 'SB', de: null }
 			},
-			{ type: 'separator', id: 'view-collapsenotebookbar-break', orientation: 'vertical' },
+			!this.map['wopi'].DisableAISettings ? {
+				'id': 'view-ai-sidebar',
+				'type': 'bigcustomtoolitem',
+				'text': _('AI Assistant'),
+				'tooltip': _('AI Assistant'),
+				'icon': 'lc_ai_sidebar.svg',
+				'command': 'aichat',
+				'accessibility': { focusBack: true, combination: 'AI', de: null }
+			} : {},
+			{ type: 'separator', id: 'view-sidebar-break', orientation: 'vertical' },
 			{
 				'id':'toggledarktheme',
 				'class': 'unotoggledarktheme',
@@ -1798,30 +1822,6 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 			    'text': _('Invert Background'),
 			    'accessibility': { focusBack: true, combination: 'BG', de: null }
 			},
-			{ type: 'separator', id: 'view-invertbackground-break', orientation: 'vertical' },
-			{
-				'id': 'view-sidebar-property-deck',
-				'type': 'bigtoolitem',
-				'text': _UNO('.uno:Sidebar'),
-				'command': '.uno:SidebarDeck.PropertyDeck',
-				'accessibility': { focusBack: true, combination: 'SB', de: null }
-			},
-			{
-				'id': 'view-navigator',
-				'type': 'bigtoolitem',
-				'text': _UNO('.uno:Navigator'),
-				'command': '.uno:Navigator',
-				'accessibility': { focusBack: true, combination: 'K', de: 'V' }
-			},
-			!this.map['wopi'].DisableAISettings ? {
-				'id': 'view-ai-sidebar',
-				'type': 'bigcustomtoolitem',
-				'text': _('AI Assistant'),
-				'tooltip': _('AI Assistant'),
-				'icon': 'lc_ai_sidebar.svg',
-				'command': 'aichat',
-				'accessibility': { focusBack: true, combination: 'AI', de: null }
-			} : {},
 		];
 
 		return this.getTabPage(viewTabName, content);
