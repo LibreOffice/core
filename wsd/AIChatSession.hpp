@@ -75,8 +75,14 @@ struct AIToolLoopState
     std::string requestUrl;
     std::string apiKey;
     std::string docType;             // text|spreadsheet|presentation|drawing, or empty
-    int toolRoundsRemaining = 5;     // max rounds to prevent infinite loops
+    // Read-verify-insert tasks (e.g. "add a formula for each record") legitimately
+    // need several rounds: read the sheet, check functions, evaluate, then insert.
+    // Keep a ceiling to prevent runaway loops, but high enough to finish the work.
+    static constexpr int InitialToolRounds = 12;
+    int toolRoundsRemaining = InitialToolRounds; // max rounds to prevent infinite loops
     int validationRetriesRemaining = 3; // silent re-prompts for malformed payloads
+    int reasoningOnlyRetriesRemaining =
+        1; // nudges when a turn ends with reasoning and no answer/tool call
     bool awaitingKitResponse = false;
     bool awaitingApproval = false;
     std::string pendingToolCallId;

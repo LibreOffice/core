@@ -807,9 +807,10 @@ void AIChatSession::callLLMAPI()
     std::string authHeader = "Bearer ";
     authHeader.append(_toolLoop->apiKey);
 
-    LOG_DBG("AIToolLoop: sending request [" << _toolLoop->requestId
-            << "] round " << (6 - _toolLoop->toolRoundsRemaining)
-            << " to " << _toolLoop->requestUrl);
+    LOG_DBG("AIToolLoop: sending request ["
+            << _toolLoop->requestId << "] round "
+            << (AIToolLoopState::InitialToolRounds + 1 - _toolLoop->toolRoundsRemaining) << " to "
+            << _toolLoop->requestUrl);
 
     std::shared_ptr<DocumentBroker> docBroker = _session.getDocumentBroker();
 
@@ -976,9 +977,36 @@ void AIChatSession::handleLLMResponse(const std::string& responseBody)
     {
         if (!reasoning.empty())
         {
-            sendChatResult(false,
-                "This model returned only internal reasoning and no output. Try a "
-                "different model or shorter input.", requestId);
+            // Reasoning models (e.g. gpt-oss) sometimes end a turn in their
+            // analysis channel with no tool call and no final answer, so content
+            // is empty while reasoning is full. This is an unfinished turn, not a
+            // finished one: the model may still owe an action (e.g. actually
+            // inserting the formula it just verified). Nudge it to continue with
+            // tools still available so it can finish the work or answer. Only if
+            // it stalls again do we surface the reasoning, and even then we do
+            // not claim the task succeeded.
+            if (_toolLoop->reasoningOnlyRetriesRemaining > 0)
+            {
+                --_toolLoop->reasoningOnlyRetriesRemaining;
+                Poco::JSON::Object::Ptr nudge = new Poco::JSON::Object();
+                nudge->set("role", "user");
+                nudge->set("content",
+                           "You have not replied yet. If the task still requires changes "
+                           "to the document, call the appropriate tool now to make them. "
+                           "If everything is already done, reply with your final answer in "
+                           "plain text. Do not respond with only internal reasoning, and "
+                           "do not claim a change was made unless you actually called the "
+                           "tool to make it.");
+                _toolLoop->messages->add(nudge);
+                LOG_DBG("AIToolLoop: reasoning-only turn [" << requestId
+                                                            << "], nudging the model to continue");
+                callLLMAPI();
+                return;
+            }
+
+            LOG_WRN("AIToolLoop: model still produced only reasoning after a nudge ["
+                    << requestId << "], surfacing reasoning as the answer");
+            sendChatResult(true, reasoning, requestId);
         }
         else if (finishReason == "length")
         {
