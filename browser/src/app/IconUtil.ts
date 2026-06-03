@@ -88,6 +88,7 @@ class IconUtil {
 		'FreezePanes',
 		'InsertSheetBefore',
 		'InsertSheetAfter',
+		'DuplicateSheet',
 		'Remove',
 		'Protect',
 		'SetTabBgColor',

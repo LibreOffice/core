@@ -216,6 +216,7 @@ var unoCommandsArray = {
 	'DownSearch':{global:{menu:_('Find Next'),},},
 	'DrawText':{global:{context:_('Insert Text Box'),menu:_('~Text Box'),},},
 	'DuplicatePage':{presentation:{menu:_('Duplicate Page'),},},
+	'DuplicateSheet':{spreadsheet:{menu:_('Duplicate Sheet'),},},
 	'DuplicateSlide':{presentation:{menu:_('Duplicate ~Slide'),},},
 	'EditCurIndex':{text:{menu:_('Edit index'),},},
 	'EditCurrentRegion':{text:{menu:_('Edit Section...'),},},

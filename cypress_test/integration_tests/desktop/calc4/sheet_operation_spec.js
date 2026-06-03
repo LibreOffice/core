@@ -47,6 +47,15 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Sheet Operations.', functi
 		cy.cGet('#spreadsheet-tab1').should('have.text', 'Sheet2');
 	});
 
+	it('Duplicate sheet', function () {
+		calcHelper.assertNumberofSheets(1);
+		cy.cGet('#spreadsheet-tab0').should('have.text', 'Sheet1');
+		calcHelper.selectOptionFromContextMenu('Duplicate Sheet');
+		calcHelper.assertNumberofSheets(2);
+		cy.cGet('#spreadsheet-tab0').should('have.text', 'Sheet1');
+		cy.cGet('#spreadsheet-tab1').should('have.text', 'Sheet1_2');
+	});
+
 	it('Delete sheet', function () {
 		calcHelper.assertNumberofSheets(1);
 		cy.cGet('#spreadsheet-toolbar #insertsheet').click();

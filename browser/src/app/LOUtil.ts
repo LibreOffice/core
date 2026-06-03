@@ -462,6 +462,7 @@ class LOUtil {
 			defineprintarea: 'menuprintranges',
 			deleteprintarea: 'delete',
 			sheetrighttoleft: 'pararighttoleft',
+			duplicatesheet: 'duplicatepage',
 			alignleft: 'leftpara',
 			alignright: 'rightpara',
 			alignhorizontalcenter: 'centerpara',

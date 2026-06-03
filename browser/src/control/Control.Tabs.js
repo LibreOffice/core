@@ -81,6 +81,12 @@ window.L.Control.Tabs = window.L.Control.extend({
 				_uno: '.uno:RenameTable',
 				_image: 'Name',
 			},
+			'.uno:DuplicateSheet': {
+				name: app.IconUtil.createMenuItemLink(_UNO('.uno:DuplicateSheet', 'spreadsheet', true), 'DuplicateSheet'),
+				isHtmlName: true,
+				callback: (this._duplicateSheet).bind(this),
+				_image: 'DuplicateSheet',
+			},
 			'.uno:Protect': {
 				name: app.IconUtil.createMenuItemLink(_UNO('.uno:Protect', 'spreadsheet', true), 'Protect'),
 				isHtmlName: true,
@@ -162,6 +168,7 @@ window.L.Control.Tabs = window.L.Control.extend({
 			'insertsheetafter': this._insertSheetAfter.bind(this),
 			'.uno:Remove': this._deleteSheet.bind(this),
 			'.uno:RenameTable': this._renameSheet.bind(this),
+			'.uno:DuplicateSheet': this._duplicateSheet.bind(this),
 			'.uno:Protect': this._protectSheet.bind(this),
 			'.uno:Show': this._showSheet.bind(this),
 			'.uno:Hide': this._hideSheet.bind(this),
@@ -213,6 +220,7 @@ window.L.Control.Tabs = window.L.Control.extend({
 						'insertsheetbefore' : this._menuItem['insertsheetbefore'],
 						'insertsheetafter'  :   this._menuItem['insertsheetafter'],
 						'Name' : this._menuItem['.uno:Name'],
+						'DuplicateSheet' : this._menuItem['.uno:DuplicateSheet'],
 					}
 				);
 				if (app.calc.isAnyPartHidden()) {
@@ -557,6 +565,13 @@ window.L.Control.Tabs = window.L.Control.extend({
 			function (value) {
 				map.renamePage(value, nPos);
 			});
+	},
+
+	// Engine duplicates the current tab, so switch to the context-menu tab first.
+	_duplicateSheet: function() {
+		if (!this._setPartIndex(this._tabForContextMenu)) {
+			this._map.sendUnoCommand('.uno:DuplicateSheet');
+		}
 	},
 
 	// Trigger sheet protection. It seems that it does it for the current sheet
