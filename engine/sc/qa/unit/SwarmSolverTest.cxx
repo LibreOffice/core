@@ -71,6 +71,7 @@ class SwarmSolverTest : public UnoApiTest
     void testParticleSwarmResultLength();
     void testParticleSwarmVelocityNotInitializedAsPosition();
     void testUnreadableConstraintStillChecksOthers();
+    void testContradictoryBoundsTerminate();
 
 public:
     SwarmSolverTest()
@@ -89,6 +90,7 @@ public:
     CPPUNIT_TEST(testParticleSwarmResultLength);
     CPPUNIT_TEST(testParticleSwarmVelocityNotInitializedAsPosition);
     CPPUNIT_TEST(testUnreadableConstraintStillChecksOthers);
+    CPPUNIT_TEST(testContradictoryBoundsTerminate);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -548,6 +550,48 @@ void SwarmSolverTest::testUnreadableConstraintStillChecksOthers()
     xSolver->solve();
 
     CPPUNIT_ASSERT_MESSAGE("an unreadable constraint must not hide a later one",
+                           !xSolver->getSuccess());
+}
+
+void SwarmSolverTest::testContradictoryBoundsTerminate()
+{
+    // Regression: a variable bounded below 5 and above 10 has an empty, reversed
+    // range. The reflection in boundVariable used to keep wrapping such a value
+    // without ever landing inside the range, so solve never returned. It must now
+    // finish and report the model as not solved.
+
+    loadFromFile(u"Simple.ods");
+
+    uno::Reference<sheet::XSpreadsheetDocument> xDocument(mxComponent, uno::UNO_QUERY_THROW);
+
+    uno::Reference<sheet::XSolver> xSolver;
+    xSolver.set(m_xContext->getServiceManager()->createInstanceWithContext(
+                    u"com.sun.star.comp.Calc.SwarmSolver"_ustr, m_xContext),
+                uno::UNO_QUERY_THROW);
+
+    table::CellAddress aObjective(0, 1, 1);
+    uno::Sequence<table::CellAddress> aVariables{ { 0, 1, 0 } };
+
+    // Both act on the variable, so they fold into its bounds: lower 10, upper 5
+    uno::Sequence<sheet::SolverConstraint> aConstraints{
+        { /* [0] Left     */ table::CellAddress(0, 1, 0),
+          /*     Operator */ sheet::SolverConstraintOperator_GREATER_EQUAL,
+          /*     Right    */ uno::Any(10.0) },
+        { /* [1] Left     */ table::CellAddress(0, 1, 0),
+          /*     Operator */ sheet::SolverConstraintOperator_LESS_EQUAL,
+          /*     Right    */ uno::Any(5.0) }
+    };
+
+    xSolver->setDocument(xDocument);
+    xSolver->setObjective(aObjective);
+    xSolver->setVariables(aVariables);
+    xSolver->setConstraints(aConstraints);
+    xSolver->setMaximize(false);
+
+    // The guarantee here is that solve returns at all.
+    xSolver->solve();
+
+    CPPUNIT_ASSERT_MESSAGE("A model with contradictory bounds is not solvable",
                            !xSolver->getSuccess());
 }
 

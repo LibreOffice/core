@@ -365,7 +365,14 @@ void SwarmSolver::initializeVariables(std::vector<double>& rVariables, std::mt19
         for (size_t i = 0; i < noVariables; ++i)
         {
             Bound const& rBound = maBounds[i];
-            if (mbInteger)
+            if (rBound.lower >= rBound.upper)
+            {
+                // An empty or reversed range has nothing to draw from. The
+                // random distributions are undefined when the lower bound is
+                // not below the upper one, so take the lower bound directly.
+                rVariables[i] = rBound.lower;
+            }
+            else if (mbInteger)
             {
                 sal_Int64 intLower(rBound.lower);
                 sal_Int64 intUpper(rBound.upper);
@@ -389,6 +396,12 @@ void SwarmSolver::initializeVariables(std::vector<double>& rVariables, std::mt19
 double SwarmSolver::clampVariable(size_t nVarIndex, double fValue)
 {
     Bound const& rBound = maBounds[nVarIndex];
+
+    // An empty or reversed range has no room to clamp into. std::clamp with a
+    // lower bound above the upper bound is undefined, so return the lower bound.
+    if (rBound.lower >= rBound.upper)
+        return mbInteger ? std::trunc(rBound.lower) : rBound.lower;
+
     double fResult = std::clamp(fValue, rBound.lower, rBound.upper);
 
     if (mbInteger)
@@ -400,14 +413,24 @@ double SwarmSolver::clampVariable(size_t nVarIndex, double fValue)
 double SwarmSolver::boundVariable(size_t nVarIndex, double fValue)
 {
     Bound const& rBound = maBounds[nVarIndex];
-    // double fResult = std::max(std::min(fValue, rBound.upper), rBound.lower);
+
     double fResult = fValue;
-    while (fResult < rBound.lower || fResult > rBound.upper)
+    double const fRange = rBound.upper - rBound.lower;
+    if (fRange <= 0.0)
     {
-        if (fResult < rBound.lower)
-            fResult = rBound.upper - (rBound.lower - fResult);
-        if (fResult > rBound.upper)
-            fResult = (fResult - rBound.upper) + rBound.lower;
+        // An empty range, where the lower and upper bound are equal, or a
+        // reversed range from contradictory constraints, holds a single
+        // value. Return the lower bound.
+        fResult = rBound.lower;
+    }
+    else if (fResult < rBound.lower || fResult > rBound.upper)
+    {
+        // Wrap an out of range value back into the range, keeping its offset
+        // from the lower bound.
+        double fOffset = std::fmod(fResult - rBound.lower, fRange);
+        if (fOffset < 0.0)
+            fOffset += fRange;
+        fResult = rBound.lower + fOffset;
     }
 
     if (mbInteger)
