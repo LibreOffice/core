@@ -46,16 +46,12 @@ namespace tools
 class JsonWriter;
 }
 
-class LOKTrigger;
-
 namespace weld
 {
 class Container;
 
 class VCL_DLLPUBLIC Widget
 {
-    friend class ::LOKTrigger;
-
     int m_nBlockNotify = 0;
 
     Link<const CommandEvent&, bool> m_aCommandHdl;

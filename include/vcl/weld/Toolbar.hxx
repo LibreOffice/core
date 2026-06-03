@@ -32,8 +32,6 @@ class VCL_DLLPUBLIC Toolbar : virtual public Widget
     Link<const OUString&, void> m_aToggleMenuHdl;
 
 protected:
-    friend class ::LOKTrigger;
-
     void signal_clicked(const OUString& rIdent) { m_aClickHdl.Call(rIdent); }
     void signal_toggle_menu(const OUString& rIdent) { m_aToggleMenuHdl.Call(rIdent); }
 

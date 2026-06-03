@@ -41,8 +41,6 @@ enum class ColumnToggleType
 */
 class VCL_DLLPUBLIC TreeView : virtual public ItemView
 {
-    friend class ::LOKTrigger;
-
 public:
     typedef std::pair<const TreeIter&, int> iter_col;
 

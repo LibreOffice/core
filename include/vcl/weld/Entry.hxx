@@ -24,8 +24,6 @@ protected:
     Link<OUString&, bool> m_aInsertTextHdl;
     Link<Entry&, bool> m_aActivateHdl;
 
-    friend class ::LOKTrigger;
-
     void signal_changed();
 
 public:

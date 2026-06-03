@@ -22,8 +22,6 @@ namespace weld
 {
 class VCL_DLLPUBLIC Menu
 {
-    friend class ::LOKTrigger;
-
     Link<const OUString&, void> m_aActivateHdl;
 
 protected:

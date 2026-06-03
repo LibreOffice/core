@@ -18,8 +18,6 @@ namespace weld
 {
 class VCL_DLLPUBLIC Calendar : virtual public Widget
 {
-    friend class ::LOKTrigger;
-
     Link<Calendar&, void> m_aSelectedHdl;
     Link<Calendar&, void> m_aActivatedHdl;
 

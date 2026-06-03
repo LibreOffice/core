@@ -18,8 +18,6 @@ namespace weld
 {
 class VCL_DLLPUBLIC TextView : virtual public TextWidget
 {
-    friend class ::LOKTrigger;
-
 protected:
     Link<TextView&, void> m_aChangeHdl;
     Link<TextView&, void> m_aVValueChangeHdl;

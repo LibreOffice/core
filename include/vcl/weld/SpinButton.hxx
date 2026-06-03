@@ -18,8 +18,6 @@ namespace weld
 {
 class VCL_DLLPUBLIC SpinButton : virtual public Entry
 {
-    friend class ::LOKTrigger;
-
     Link<SpinButton&, void> m_aValueChangedHdl;
     Link<sal_Int64, OUString> m_aFormatValueHdl;
     Link<const OUString&, std::optional<int>> m_aParseTextHdl;

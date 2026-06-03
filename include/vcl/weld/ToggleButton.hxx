@@ -17,7 +17,6 @@ namespace weld
 {
 class VCL_DLLPUBLIC ToggleButton : virtual public Button, virtual public Toggleable
 {
-    friend class ::LOKTrigger;
 };
 }
 

@@ -27,14 +27,10 @@ namespace vcl
 class Font;
 }
 
-class LOKTrigger;
-
 namespace weld
 {
 class VCL_DLLPUBLIC Button : virtual public Widget
 {
-    friend class ::LOKTrigger;
-
 protected:
     Link<Button&, void> m_aClickHdl;
 

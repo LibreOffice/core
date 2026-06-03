@@ -64,8 +64,6 @@ protected:
     Link<ComboBox&, bool> m_aEntryActivateHdl;
     Link<OUString&, bool> m_aEntryInsertTextHdl;
 
-    friend class ::LOKTrigger;
-
     void signal_changed()
     {
         if (notify_events_disabled())

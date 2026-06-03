@@ -16,8 +16,6 @@ namespace weld
 {
 class VCL_DLLPUBLIC Toggleable : virtual public Widget
 {
-    friend class ::LOKTrigger;
-
 protected:
     Link<Toggleable&, void> m_aToggleHdl;
     TriState m_eSavedValue = TRISTATE_FALSE;

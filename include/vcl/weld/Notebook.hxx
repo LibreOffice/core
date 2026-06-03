@@ -16,8 +16,6 @@ namespace weld
 {
 class VCL_DLLPUBLIC Notebook : virtual public Widget
 {
-    friend class ::LOKTrigger;
-
 protected:
     Link<const OUString&, bool> m_aLeavePageHdl;
     Link<const OUString&, void> m_aEnterPageHdl;
