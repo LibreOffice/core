@@ -8,17 +8,17 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-02 13:03+0200\n"
-"PO-Revision-Date: 2026-05-05 14:11+0000\n"
+"PO-Revision-Date: 2026-06-03 14:43+0000\n"
 "Last-Translator: Rhoslyn Prys <rprys@posteo.net>\n"
 "Language-Team: Welsh <https://hosted.weblate.org/projects/collabora-online/"
-"ui/cy/>\n"
-"Language: \n"
+"collabora-ui/cy/>\n"
+"Language: cy\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=(n==0) ? 0 : (n==1) ? 1 : (n==2) ? 2 : "
 "(n==3) ? 3 :(n==6) ? 4 : 5;\n"
-"X-Generator: Weblate 5.17.1\n"
+"X-Generator: Weblate 2026.6\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -199,7 +199,7 @@ msgstr "Dogfennau:"
 
 #: admin/admin.strings.js:55
 msgid "Expired:"
-msgstr "Dod i Ben:"
+msgstr "Wedi Dod i Ben:"
 
 #: admin/admin.strings.js:56 admin/src/AdminSocketBase.js:61
 #: src/control/Control.Zotero.js:211
@@ -281,7 +281,7 @@ msgstr "Cof"
 
 #: admin/src/AdminClusterOverview.js:540
 msgid "Please wait kubernetes cluster is scaling..."
-msgstr "Arhoswch os gwelwch yn dda, mae clwstwr kubernetes yn cynyddu..."
+msgstr "Arhoswch, mae clwstwr kubernetes yn cynyddu..."
 
 #: admin/src/AdminClusterOverview.js:550 admin/src/AdminSocketOverview.js:420
 msgid "Failed to set jwt authentication cookie over insecure connection"
@@ -408,33 +408,31 @@ msgstr "CA Llofnod"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:491
 #: admin/src/integrator/AdminIntegratorSettings.ts:495
-#, fuzzy
 msgid "Provider"
-msgstr "Darparwr:"
+msgstr "Darparwr"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:492
 #: admin/src/integrator/AdminIntegratorSettings.ts:496
 msgid "API Key"
-msgstr ""
+msgstr "Allwedd API"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:493
 #: admin/src/integrator/AdminIntegratorSettings.ts:498
-#, fuzzy
 msgid "Model"
-msgstr "Modd"
+msgstr "Model"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:494
 #: admin/src/integrator/AdminIntegratorSettings.ts:497
 msgid "Base URL"
-msgstr ""
+msgstr "URL Sylfaenol"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:499
 msgid "Image Size"
-msgstr ""
+msgstr "Maint Delwedd"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:500
 msgid "Request Timeout (seconds)"
-msgstr ""
+msgstr "Goramser Cais (eiliad)"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:503
 msgid "In-document Screen Reader"
@@ -454,11 +452,11 @@ msgstr "Modd Tywyll"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:505
 msgid "Smart Zoom"
-msgstr ""
+msgstr "Chwyddo Clyfar"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:506
 msgid "Default Zoom"
-msgstr ""
+msgstr "Chwyddo Rhagosodedig"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:507
 msgid "Compact layout"
@@ -727,17 +725,19 @@ msgstr "Llwytho Llyfr Geiriau i Fyny"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:787
 msgid "Document themes"
-msgstr ""
+msgstr "Themâu'r ddogfen"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:789
 msgid ""
 "Upload custom document themes (.theme). These define color palettes "
 "available under Format > Theme."
 msgstr ""
+"Llwytho themâu dogfen cyfaddas (.theme). Mae'r rhain yn diffinio paletau "
+"lliw sydd ar gael o dan Fformat > Thema."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:795
 msgid "Upload Theme"
-msgstr ""
+msgstr "Llwytho eich Thema i Fyny"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:850
 msgid "Something went wrong. Please try to refresh the page."
@@ -863,64 +863,66 @@ msgid ""
 "Configure AI provider credentials and model. Models are fetched "
 "automatically when credentials change."
 msgstr ""
+"Ffurfweddu cymwysterau a model y darparwr AI. Mae modelau yn cael eu tynnu'n "
+"awtomatig pan fydd cymwysterau yn newid."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2060
 msgid "Text Generation"
-msgstr ""
+msgstr "Cynhyrchu Testun"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2110
 #: admin/src/integrator/AdminIntegratorSettings.ts:2216
 msgid "e.g."
-msgstr ""
+msgstr "e.e."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2129
 #: admin/src/integrator/AdminIntegratorSettings.ts:2247
 #: admin/src/integrator/AdminIntegratorSettings.ts:2727
 #: admin/src/integrator/AdminIntegratorSettings.ts:2743
 msgid "Fetch models to select"
-msgstr ""
+msgstr "Nôl modelau i'w dewis"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2158
 msgid "Image Generation"
-msgstr ""
+msgstr "Cynhyrchu Delweddau"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2163
 msgid "Same as Text AI"
-msgstr ""
+msgstr "Yr un peth â AI Testun"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2232
 msgid "Leave empty to use Text AI key"
-msgstr ""
+msgstr "Gadael yn wag i ddefnyddio allwedd A! Testun"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2494
 #: admin/src/integrator/AdminIntegratorSettings.ts:2602
 msgid "Fetching models..."
-msgstr ""
+msgstr "Yn cyrchu modelau..."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2539
 #: admin/src/integrator/AdminIntegratorSettings.ts:2554
 #: admin/src/integrator/AdminIntegratorSettings.ts:2642
 #: admin/src/integrator/AdminIntegratorSettings.ts:2656
 msgid "No models found"
-msgstr ""
+msgstr "Heb ganfod unrhyw fodelau"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2564
 #: admin/src/integrator/AdminIntegratorSettings.ts:2666
 msgid "Models fetched successfully"
-msgstr ""
+msgstr "Modelau wedi eu cyrchu'n llwyddiannus"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2570
 #: admin/src/integrator/AdminIntegratorSettings.ts:2672
 msgid "Failed to fetch models"
-msgstr ""
+msgstr "Methwyd cyrchu modelau"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2580
 msgid "Invalid provider configuration"
-msgstr ""
+msgstr "Ffurfweddiad darparwr annilys"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2707
 msgid "None (disable image generation)"
-msgstr ""
+msgstr "Dim (analluogi cynhyrchu delweddau)"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2926
 msgid "Upload Xcu"
@@ -928,7 +930,7 @@ msgstr "Llwytho Xcu i Fyny"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3125
 msgid "Reset"
-msgstr ""
+msgstr "Ailosod"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3244
 #: src/control/Control.AIChatSidebar.ts:2651 src/map/handler/Map.WOPI.js:869
@@ -1067,29 +1069,28 @@ msgstr "Bu oedi wrth drin y digwyddiad am gyfnod annisgwyl o hir: {0}ms"
 
 #: src/app/LOUtil.ts:981
 msgid "{0} website, opens in new tab"
-msgstr ""
+msgstr "Gwefan {0}, yn agor mewn tab newydd"
 
 #: src/app/LOUtil.ts:984
 msgid "file type icon"
 msgstr "eicon math ffeil"
 
 #: src/app/TableStylesService.ts:100
-#, fuzzy
 msgid "Light"
-msgstr "Goleuadau"
+msgstr "Golau"
 
 #: src/app/TableStylesService.ts:102
 msgid "Medium"
-msgstr ""
+msgstr "Canolig"
 
 #: src/app/TableStylesService.ts:104
 msgid "Dark"
-msgstr ""
+msgstr "Tywyll"
 
 #: src/app/TableStylesService.ts:106
 #: src/control/jsdialog/Widget.ColorPicker.ts:334
 msgid "Custom"
-msgstr ""
+msgstr "Cyfaddas"
 
 #: src/app/TableStylesService.ts:231 src/app/TableStylesService.ts:243
 #: src/app/TableStylesService.ts:245
@@ -1159,9 +1160,8 @@ msgid "Resolved"
 msgstr "Datryswyd"
 
 #: src/canvas/sections/CommentSection.ts:581
-#, fuzzy
 msgid "Removed"
-msgstr "Tynnu"
+msgstr "Tynnwyd"
 
 #: src/canvas/sections/CommentSection.ts:1202
 #: src/control/jsdialog/Widget.Comment.ts:177
@@ -1259,43 +1259,46 @@ msgstr "Tynnu dolen"
 
 #: src/canvas/sections/FormFieldButton.ts:106
 msgid "Unfold"
-msgstr ""
+msgstr "Dad - blygu"
 
 #: src/canvas/sections/FormulaErrorHelpSection.ts:80
 msgid "Help on this error"
-msgstr ""
+msgstr "Cymorth ar y gwall hwn"
 
 #: src/canvas/sections/FormulaErrorHelpSection.ts:85
 msgid "Inspect with Function Wizard"
-msgstr ""
+msgstr "Archwilio gyda Dewin Swyddogaeth"
 
 #: src/canvas/sections/FormulaErrorHelpSection.ts:90
 msgid "Edit in Formula Bar"
-msgstr ""
+msgstr "Golygu yn y Bar Fformiwla"
 
 #: src/canvas/sections/FormulaErrorHelpSection.ts:98
 msgid "Help fix this error with AI"
-msgstr ""
+msgstr "Helpu i ddatrys y gwall hwn gydag AI"
 
 #: src/canvas/sections/HeaderFooterBoundarySection.ts:152
 msgid "Header"
-msgstr ""
+msgstr "Pennyn"
 
 #: src/canvas/sections/HeaderFooterBoundarySection.ts:160
 msgid "Footer"
-msgstr ""
+msgstr "Troedyn"
 
 #: src/control/CalcNotifications.ts:41
 msgid "A formula range was not extended to include the inserted cells."
 msgstr ""
+"Cafodd ystod y fformiwla ddim ei estyn i gynnwys y celloedd wedi'u mewnosod."
 
 #: src/control/CalcNotifications.ts:50
 msgid "Deletion created #REF! errors in other formulas. Undo to restore."
 msgstr ""
+"Mae dileu wedi creu gwallau # REF! mewn fformiwlâu eraill. Dadwneud i'w "
+"adfer."
 
 #: src/control/CalcNotifications.ts:51
 msgid "Find First"
-msgstr ""
+msgstr "Canfod yn Gyntaf"
 
 #: src/control/ColorPicker.ts:269
 msgid "No color"
@@ -1308,7 +1311,7 @@ msgstr "Lliw awtomatig"
 #: src/control/Control.AboutDialog.ts:89
 #: src/control/jsdialog/Widget.TreeView.ts:786
 msgid "(opens in new tab)"
-msgstr ""
+msgstr "(yn agor mewn tab newydd)"
 
 #: src/control/Control.AboutDialog.ts:155
 msgid "Served by: "
@@ -1344,188 +1347,190 @@ msgstr "cyfeiriad cell"
 
 #: src/control/Control.AIChatSidebar.ts:79
 msgid "Make the following text more concise"
-msgstr ""
+msgstr "Gwneud y testun canlynol yn fwy cryno"
 
 #: src/control/Control.AIChatSidebar.ts:83
 msgid "Summarize the key points of this text"
-msgstr ""
+msgstr "Crynhoi pwyntiau allweddol y testun hwn"
 
 #: src/control/Control.AIChatSidebar.ts:87
 msgid "Expand and add more detail to this text"
-msgstr ""
+msgstr "Ehangu ac ychwanegu mwy o fanylion at y testun hwn"
 
 #: src/control/Control.AIChatSidebar.ts:91
 msgid "Fix grammar, spelling, and punctuation errors"
-msgstr ""
+msgstr "Cywiro gwallau gramadeg, sillafu ac atalnodi"
 
 #: src/control/Control.AIChatSidebar.ts:107
 msgid "Natural"
-msgstr ""
+msgstr "Naturiol"
 
 #: src/control/Control.AIChatSidebar.ts:108
-#, fuzzy
 msgid "Formal"
-msgstr "Fformat"
+msgstr "Ffurfiol"
 
 #: src/control/Control.AIChatSidebar.ts:109
-#, fuzzy
 msgid "Short"
-msgstr "Trefnu"
+msgstr "Byr"
 
 #: src/control/Control.AIChatSidebar.ts:110
 msgid "Friendly"
-msgstr ""
+msgstr "Cyfeillgar"
 
 #: src/control/Control.AIChatSidebar.ts:111
 msgid "Professional"
-msgstr ""
+msgstr "Proffesiynol"
 
 #: src/control/Control.AIChatSidebar.ts:112
 msgid "Casual"
-msgstr ""
+msgstr "Hamddenol"
 
 #: src/control/Control.AIChatSidebar.ts:338
 msgid "Unknown"
-msgstr ""
+msgstr "Anhysbys"
 
 #: src/control/Control.AIChatSidebar.ts:340
 msgid ""
 "Ethical AI rating: {0} ({1}). Based on open-source licensing, self-hosting, "
 "and training data."
 msgstr ""
+"Sgôr deallusrwydd artiffisial moesegol: {0} ({1}). Yn seiliedig ar drwyddedu "
+"cod agored, hunan-westeio, a data hyfforddi."
 
 #: src/control/Control.AIChatSidebar.ts:423
 msgid "Your message"
-msgstr ""
+msgstr "Eich neges"
 
 #: src/control/Control.AIChatSidebar.ts:425
 msgid "Action requiring approval"
-msgstr ""
+msgstr "Gweithred sy'n gofyn am gymeradwyaeth"
 
 #: src/control/Control.AIChatSidebar.ts:427
 msgid "Error message"
-msgstr ""
+msgstr "Neges gwall"
 
 #: src/control/Control.AIChatSidebar.ts:428
 msgid "AI response"
-msgstr ""
+msgstr "Ateb AI"
 
 #: src/control/Control.AIChatSidebar.ts:502
 msgid ""
 "Content generated by an external AI service ({0}). Please review before use."
 msgstr ""
+"Cynnwys wedi'i gynhyrchu gan wasanaeth AI allanol ({0}). Adolygwch cyn ei "
+"ddefnyddio."
 
 #: src/control/Control.AIChatSidebar.ts:505
 msgid "Content generated by an external AI service. Please review before use."
 msgstr ""
+"Cynnwys wedi'i gynhyrchu gan wasanaeth AI allanol ({0}). Adolygwch cyn ei "
+"ddefnyddio."
 
 #: src/control/Control.AIChatSidebar.ts:583
 msgid "New conversation"
-msgstr ""
+msgstr "Sgwrs newydd"
 
 #: src/control/Control.AIChatSidebar.ts:614
 msgid "Ask AI anything about your document..."
-msgstr ""
+msgstr "Gofynnwch i AL unrhywbeth am eich dogfen..."
 
 #: src/control/Control.AIChatSidebar.ts:672
 msgid "Loading"
-msgstr ""
+msgstr "Yn llwytho"
 
 #: src/control/Control.AIChatSidebar.ts:685
 msgid "Chat messages"
-msgstr ""
+msgstr "Negeseuon sgwrsio"
 
 #: src/control/Control.AIChatSidebar.ts:711
 msgid "AI generated image"
-msgstr ""
+msgstr "Delwedd a gynhyrchwyd gan AI"
 
 #: src/control/Control.AIChatSidebar.ts:746
 msgid "Retry"
-msgstr ""
+msgstr "Ceisio eto"
 
 #: src/control/Control.AIChatSidebar.ts:770
 #: src/control/Control.AIChatSidebar.ts:803
 msgid "Insert at cursor"
-msgstr ""
+msgstr "Mewnosod wrth y cyrchydd"
 
 #: src/control/Control.AIChatSidebar.ts:779
 #: src/control/Control.AIChatSidebar.ts:810
 msgid "Copy to clipboard"
-msgstr ""
+msgstr "Copïo i'r clipfwrdd"
 
 #: src/control/Control.AIChatSidebar.ts:831
 msgid "Ask AI..."
-msgstr ""
+msgstr "Gofyn i AI..."
 
 #: src/control/Control.AIChatSidebar.ts:834
 msgid "Message input"
-msgstr ""
+msgstr "Mewnbwn neges"
 
 #: src/control/Control.AIChatSidebar.ts:850
 msgid "Stop generating"
-msgstr ""
+msgstr "Peidio cynhyrchu"
 
 #: src/control/Control.AIChatSidebar.ts:851
 msgid "Send message"
-msgstr ""
+msgstr "Anfon neges"
 
 #: src/control/Control.AIChatSidebar.ts:865
 #: src/control/Control.AIChatSidebar.ts:878
 msgid "Set tone"
-msgstr ""
+msgstr "Gosod tôn"
 
 #: src/control/Control.AIChatSidebar.ts:889
 msgid "Set tone of voice"
-msgstr ""
+msgstr "Gosod tôn llais"
 
 #: src/control/Control.AIChatSidebar.ts:890
 msgid "Tone of voice: {0}{1}"
-msgstr ""
+msgstr "Tôn y llais: {0}{1}"
 
 #: src/control/Control.AIChatSidebar.ts:892
 msgid "with emoji"
-msgstr ""
+msgstr "gyda emoji"
 
 #: src/control/Control.AIChatSidebar.ts:934
 #: src/control/Control.AIChatSidebar.ts:984
 #: src/control/Control.AIChatSidebar.ts:1356
-#, fuzzy
 msgid "tone"
-msgstr "Dim"
+msgstr "tôn"
 
 #: src/control/Control.AIChatSidebar.ts:947
 #: src/control/Control.AIChatSidebar.ts:1218
 msgid "Tone of voice"
-msgstr ""
+msgstr "Tôn y llais"
 
 #: src/control/Control.AIChatSidebar.ts:953
 msgid "Reset voice"
-msgstr ""
+msgstr "Ailosod llais"
 
 #: src/control/Control.AIChatSidebar.ts:956
 msgid "Reset tone of voice"
-msgstr ""
+msgstr "Ailosod tôn y llais"
 
 #: src/control/Control.AIChatSidebar.ts:972
 msgid "Your tones"
-msgstr ""
+msgstr "Eich tonau"
 
 #: src/control/Control.AIChatSidebar.ts:989
-#, fuzzy
 msgid "Edit tone"
-msgstr "Modd golygu"
+msgstr "Golygu tôn"
 
 #: src/control/Control.AIChatSidebar.ts:1006
 msgid "+ Add my own voice"
-msgstr ""
+msgstr "+ Ychwanegu fy llais fy hun"
 
 #: src/control/Control.AIChatSidebar.ts:1008
 msgid "Add a custom tone of voice"
-msgstr ""
+msgstr "Ychwanegu tôn llais cyfaddas"
 
 #: src/control/Control.AIChatSidebar.ts:1019
 msgid "Emojify"
-msgstr ""
+msgstr "Emojieiddio"
 
 #: src/control/Control.AIChatSidebar.ts:1025
 #: src/control/Control.StatusBar.js:162
@@ -1540,137 +1545,139 @@ msgstr "Diffodd"
 
 #: src/control/Control.AIChatSidebar.ts:1028
 msgid "Toggle emojify"
-msgstr ""
+msgstr "Toglo emojieiddio"
 
 #: src/control/Control.AIChatSidebar.ts:1189
 msgid "Use icon"
-msgstr ""
+msgstr "Defnyddio eicon"
 
 #: src/control/Control.AIChatSidebar.ts:1199
 msgid "Pick another emoji"
-msgstr ""
+msgstr "Dewis emoji arall"
 
 #: src/control/Control.AIChatSidebar.ts:1213
 msgid "Back to tones"
-msgstr ""
+msgstr "Yn ôl i tonau"
 
 #: src/control/Control.AIChatSidebar.ts:1226
 msgid "Icon"
-msgstr ""
+msgstr "Eicon"
 
 #: src/control/Control.AIChatSidebar.ts:1238
 msgid "Name your tone"
-msgstr ""
+msgstr "Enwch eich tôn"
 
 #: src/control/Control.AIChatSidebar.ts:1245
 msgid "e.g. Quick reply"
-msgstr ""
+msgstr "e.e. Ateb cyflym"
 
 #: src/control/Control.AIChatSidebar.ts:1247
 msgid "Tone name"
-msgstr ""
+msgstr "Enw tôn"
 
 #: src/control/Control.AIChatSidebar.ts:1252
 msgid "Describe how AI should write"
-msgstr ""
+msgstr "Disgrifiwch sut y dylai AI ysgrifennu"
 
 #: src/control/Control.AIChatSidebar.ts:1260
 msgid ""
 "Write short, direct sentences. Use plain language and skip the small talk."
 msgstr ""
+"Ysgrifennwch frawddegau byr, uniongyrchol. Defnyddiwch iaith glir a hepgor "
+"mân siarad."
 
 #: src/control/Control.AIChatSidebar.ts:1264
 msgid "Tone description"
-msgstr ""
+msgstr "Disgrifiad tôn"
 
 #: src/control/Control.AIChatSidebar.ts:1273
 #: src/control/Control.AIChatSidebar.ts:1335
 #: src/control/Control.AIChatSidebar.ts:1377
 msgid "Delete tone"
-msgstr ""
+msgstr "Dileu tôn"
 
 #: src/control/Control.AIChatSidebar.ts:1275
 msgid "Delete this tone"
-msgstr ""
+msgstr "Dileu'r tôn hwn"
 
 #: src/control/Control.AIChatSidebar.ts:1288
 msgid "Save voice"
-msgstr ""
+msgstr "Cadw llais"
 
 #: src/control/Control.AIChatSidebar.ts:1290
 msgid "Save tone of voice"
-msgstr ""
+msgstr "Cadw tôn y llais"
 
 #: src/control/Control.AIChatSidebar.ts:1305
 #: src/control/jsdialog/Widget.EmojiPicker.ts:410
 msgid "Search emojis"
-msgstr ""
+msgstr "Chwilio emojis"
 
 #: src/control/Control.AIChatSidebar.ts:1306
 #: src/control/jsdialog/Widget.EmojiPicker.ts:401
 msgid "Choose an emoji"
-msgstr ""
+msgstr "Dewiswch emoji"
 
 #: src/control/Control.AIChatSidebar.ts:1330
 msgid "Delete tone confirmation"
-msgstr ""
+msgstr "Dileu cadarnhad tôn"
 
 #: src/control/Control.AIChatSidebar.ts:1341
 msgid "This tone of voice will be deleted"
-msgstr ""
+msgstr "Bydd y tôn llais hwn yn cael ei ddileu"
 
 #: src/control/Control.AIChatSidebar.ts:1370
 msgid "Cancel delete"
-msgstr ""
+msgstr "Diddymu dileu"
 
 #: src/control/Control.AIChatSidebar.ts:1397
 #: src/control/Control.AIChatSidebar.ts:1457
 msgid "You have reached the maximum of {0} custom tones."
-msgstr ""
+msgstr "Rydych wedi cyrraedd yr uchafswm o {0} tôn cyfaddas."
 
 #: src/control/Control.AIChatSidebar.ts:1631
 msgid "Using selected text as context"
-msgstr ""
+msgstr "Defnyddio'r testun a ddewiswyd fel cyd-destun"
 
 #: src/control/Control.AIChatSidebar.ts:1639
 msgid "Diagnose formula error"
-msgstr ""
+msgstr "Gwall wrth ddiagnosio fformiwla"
 
 #: src/control/Control.AIChatSidebar.ts:1645
 msgid "Sanity check data"
-msgstr ""
+msgstr "Archwilio data'r cyfrif"
 
 #: src/control/Control.AIChatSidebar.ts:1651
 msgid "Create a formula"
-msgstr ""
+msgstr "Creu fformiwla"
 
 #: src/control/Control.AIChatSidebar.ts:1658
 msgid "Create slides"
-msgstr ""
+msgstr "Creu sleidiau"
 
 #: src/control/Control.AIChatSidebar.ts:1690
 msgid "See less"
-msgstr ""
+msgstr "Gweld llai"
 
 #: src/control/Control.AIChatSidebar.ts:1690
 msgid "See more"
-msgstr ""
+msgstr "Gweld mwy"
 
 #: src/control/Control.AIChatSidebar.ts:1800
 msgid "Image inserted at cursor"
-msgstr ""
+msgstr "Mewnosod delwedd wrth y cyrchydd"
 
 #: src/control/Control.AIChatSidebar.ts:1819
 msgid "Text inserted at cursor"
-msgstr ""
+msgstr "Mewnosod testun wrth y cyrchwr"
 
 #: src/control/Control.AIChatSidebar.ts:1893
 msgid "Approaching message length limit"
-msgstr ""
+msgstr "Yn agosáu at gyfyngiad hyd neges"
 
 #: src/control/Control.AIChatSidebar.ts:1947
 msgid "Request timeout"
-msgstr ""
+msgstr "Terfyn amser allan"
 
 #: src/control/Control.AIChatSidebar.ts:1962
 #: src/control/Control.AIChatSidebar.ts:2797
@@ -1678,133 +1685,133 @@ msgid ""
 "The selection contains images or other non-text content that cannot be sent "
 "as context."
 msgstr ""
+"Mae'r dewis yn cynnwys delweddau neu gynnwys arall nad yw'n destun nad oes "
+"modd ei anfon fel cyd-destun."
 
 #: src/control/Control.AIChatSidebar.ts:2049
 msgid "Message is too long. Please shorten it and try again."
-msgstr ""
+msgstr "Mae'r neges yn rhy hir. Gwnewch e'n fyrach a cheisio eto."
 
 #: src/control/Control.AIChatSidebar.ts:2104
 msgid "Error: "
-msgstr ""
+msgstr "Gwall: "
 
 #: src/control/Control.AIChatSidebar.ts:2126
 msgid "Generated image"
-msgstr ""
+msgstr "Delwedd gynhyrchwyd"
 
 #: src/control/Control.AIChatSidebar.ts:2137
 msgid "AI request failed"
-msgstr ""
+msgstr "Methodd y cais AI"
 
 #: src/control/Control.AIChatSidebar.ts:2154
 msgid "The AI assistant"
-msgstr ""
+msgstr "Y cynorthwyydd AI"
 
 #: src/control/Control.AIChatSidebar.ts:2167
 msgid "Do you want to proceed?"
-msgstr ""
+msgstr "Ydych chi am barhau?"
 
 #: src/control/Control.AIChatSidebar.ts:2170
 msgid "%1 wants to inspect your document. Do you want to proceed?"
-msgstr ""
+msgstr "Mae %1 eisiau archwilio eich dogfen. Ydych chi eisiau mynd ymlaen?"
 
 #: src/control/Control.AIChatSidebar.ts:2174
 msgid "Modify document structure"
-msgstr ""
+msgstr "Addasu strwythur y ddogfen"
 
 #: src/control/Control.AIChatSidebar.ts:2176
 msgid "%1 wants to modify your document:"
-msgstr ""
+msgstr "Mae %1 am newid eich dogfen:"
 
 #: src/control/Control.AIChatSidebar.ts:2180
 #: src/control/Control.AIChatSidebar.ts:2191
 msgid "Do you want to apply this change?"
-msgstr ""
+msgstr "Ydych chi am roi'r newid hwn ar waith?"
 
 #: src/control/Control.AIChatSidebar.ts:2182
 msgid "Set cell formula"
-msgstr ""
+msgstr "Gosod fformiwla celloedd"
 
 #: src/control/Control.AIChatSidebar.ts:2184
 msgid "%1 wants to set a formula in your spreadsheet:"
-msgstr ""
+msgstr "Mae %1 am osod fformiwla yn eich taenlen:"
 
 #: src/control/Control.AIChatSidebar.ts:2194
 msgid "%1 wants to perform an action. Do you want to proceed?"
-msgstr ""
+msgstr "Mae %1 am gyflawni gweithred. Ydych chi eisiau symud ymlaen?"
 
 #: src/control/Control.AIChatSidebar.ts:2225
 msgid "Approve"
-msgstr ""
+msgstr "Cymeradwyo"
 
 #: src/control/Control.AIChatSidebar.ts:2227
 msgid "Approve action"
-msgstr ""
+msgstr "Cymeradwyo gweithred"
 
 #: src/control/Control.AIChatSidebar.ts:2234
 msgid "Reject"
-msgstr ""
+msgstr "Gwrthod"
 
 #: src/control/Control.AIChatSidebar.ts:2236
 msgid "Reject action"
-msgstr ""
+msgstr "Gwrthod gweithred"
 
 #: src/control/Control.AIChatSidebar.ts:2255
 msgid "Applying changes..."
-msgstr ""
+msgstr "Yn gosod y newidiadau..."
 
 #: src/control/Control.AIChatSidebar.ts:2258
 msgid "Change rejected"
-msgstr ""
+msgstr "Gwrthodwyd y newid"
 
 #: src/control/Control.AIChatSidebar.ts:2304
 msgid "Selection fetch timeout"
-msgstr ""
+msgstr "Terfyn amser nôl dewis"
 
 #: src/control/Control.AIChatSidebar.ts:2323
 msgid "Failed to parse selection content"
-msgstr ""
+msgstr "Methwyd didoli cynnwys dewis"
 
 #: src/control/Control.AIChatSidebar.ts:2569
 msgid "Formula analysis timeout"
-msgstr ""
+msgstr "Terfyn amser dadansoddi fformiwla"
 
 #: src/control/Control.AIChatSidebar.ts:2588
 msgid "Analyzing formula dependencies..."
-msgstr ""
+msgstr "Dadansoddi dibyniaethau fformiwla..."
 
 #: src/control/Control.AIChatSidebar.ts:2596
 msgid "Failed to analyze formula."
-msgstr ""
+msgstr "Methwyd dadansoddi'r fformiwla."
 
 #: src/control/Control.AIChatSidebar.ts:2606
 msgid "The selected cell does not contain a formula."
-msgstr ""
+msgstr "Nid yw'r gell ddewiswyd yn cynnwys fformiwla."
 
 #: src/control/Control.AIChatSidebar.ts:2608
 msgid "The selected cell does not have a formula error."
-msgstr ""
+msgstr "Nid oes gan y gell ddewiswyd wall fformiwla."
 
 #: src/control/Control.AIChatSidebar.ts:2617
 msgid "Diagnose formula error in"
-msgstr ""
+msgstr "Diagnosio gwall fformiwla yn"
 
 #: src/control/Control.AIChatSidebar.ts:2638
 msgid "I have a formula error in my spreadsheet."
-msgstr ""
+msgstr "Mae gen i gamgymeriad fformiwla yn fy taenlen."
 
 #: src/control/Control.AIChatSidebar.ts:2640
-#, fuzzy
 msgid "Cell"
-msgstr "Celloedd"
+msgstr "Cell"
 
 #: src/control/Control.AIChatSidebar.ts:2644
-#, fuzzy
 msgid "Sheet"
-msgstr "Taenlenni"
+msgstr "Dalen"
 
 #: src/control/Control.AIChatSidebar.ts:2648
 msgid "contains"
-msgstr ""
+msgstr "yn cynnwys"
 
 #: src/control/Control.AIChatSidebar.ts:2650
 #: src/control/Control.FormulaBarJSDialog.js:83
@@ -1815,124 +1822,136 @@ msgstr "Fformiwla"
 
 #: src/control/Control.AIChatSidebar.ts:2654
 msgid "Referenced cells"
-msgstr ""
+msgstr "Celloedd cyfeiriedig"
 
 #: src/control/Control.AIChatSidebar.ts:2660
 msgid "Please diagnose why this formula produces the"
-msgstr ""
+msgstr "Mae angen deiagnosio pam fod y fformiwla'n cynhyrchu"
 
 #: src/control/Control.AIChatSidebar.ts:2664
 msgid "error."
-msgstr ""
+msgstr "gwall."
 
 #: src/control/Control.AIChatSidebar.ts:2666
 msgid "Explain the root cause and suggest how to fix it."
-msgstr ""
+msgstr "Esboniwch yr achos sylfaenol ac awgrymwch sut i'w drwsio."
 
 #: src/control/Control.AIChatSidebar.ts:2670
 msgid ""
 "When referencing specific cells, format each cell address as a clickable "
 "link: [A1](cell://A1)."
 msgstr ""
+"Wrth gyfeirio at gelloedd penodol, fformatiwch bob cyfeiriad cell fel dolen "
+"y mae modd ei chlicio: [A1](cell: // A1)."
 
 #: src/control/Control.AIChatSidebar.ts:2685
-#, fuzzy
 msgid "formula"
-msgstr "Fformiwla"
+msgstr "fformiwla"
 
 #: src/control/Control.AIChatSidebar.ts:2687
 msgid "ERROR"
-msgstr ""
+msgstr "GWALL"
 
 #: src/control/Control.AIChatSidebar.ts:2701
 msgid "value"
-msgstr ""
+msgstr "gwerth"
 
 #: src/control/Control.AIChatSidebar.ts:2711
-#, fuzzy
 msgid "text"
-msgstr "Testun"
+msgstr "testun"
 
 #: src/control/Control.AIChatSidebar.ts:2716
 msgid "empty"
-msgstr ""
+msgstr "gwag"
 
 #: src/control/Control.AIChatSidebar.ts:2718
-#, fuzzy
 msgid "range"
-msgstr "Ystod"
+msgstr "ystod"
 
 #: src/control/Control.AIChatSidebar.ts:2720
 msgid "errors in"
-msgstr ""
+msgstr "gwallau yn"
 
 #: src/control/Control.AIChatSidebar.ts:2723
 msgid "only partially scanned"
-msgstr ""
+msgstr "dim ond wedi ei sganio'n rhannol"
 
 #: src/control/Control.AIChatSidebar.ts:2732
 msgid "circular reference"
-msgstr ""
+msgstr "cyfeirnod cylchol"
 
 #: src/control/Control.AIChatSidebar.ts:2782
 msgid "Select the data you want to sanity-check first."
-msgstr ""
+msgstr "Dewiswch y data rydych chi am ei wirio yn gyntaf."
 
 #: src/control/Control.AIChatSidebar.ts:2787
 msgid "Analyzing selected data..."
-msgstr ""
+msgstr "Yn dadansoddi'r data ddewiswyd..."
 
 #: src/control/Control.AIChatSidebar.ts:2800
 msgid "Failed to extract spreadsheet data."
-msgstr ""
+msgstr "Methwyd tynnu data taenlen."
 
 #: src/control/Control.AIChatSidebar.ts:2809
 msgid "No data found in selection."
-msgstr ""
+msgstr "Heb ganfod unrhyw ddata yn y dewis."
 
 #: src/control/Control.AIChatSidebar.ts:2839
 msgid ""
 "Describe the slides you want to create. For example: \"A 5-slide overview "
 "of renewable energy\" or \"An introduction to our team\"."
 msgstr ""
+"Disgrifiwch y sleidiau rydych chi am eu creu. Er enghraifft: \"Trosolwg 5 "
+"sleid o ynni adnewyddadwy\" neu \"Cyflwyniad i'n tîm \"."
 
 #: src/control/Control.AIChatSidebar.ts:2866
 msgid ""
 "Describe what formula you need. For example: \"Calculate the average of "
 "column B\" or \"Sum all values where column A is greater than 100\"."
 msgstr ""
+"Disgrifiwch pa fformat sydd ei angen arnoch. Er enghraifft: \"Cyfrifwch "
+"gyfartaledd colofn B\" neu \"Swmwch yr holl werthoedd lle mae colofn A yn "
+"fwy na 100 \"."
 
 #: src/control/Control.AIChatSidebar.ts:2876
 msgid ""
 "Read row numbers from the \"Row\" column — do not count or estimate row "
 "positions."
 msgstr ""
+"Darllenwch rifau rhes o'r golofn \"Rhes\" — peidiwch â chyfrif nac "
+"amcangyfrif safleoedd rhesi."
 
 #: src/control/Control.AIChatSidebar.ts:2880
 msgid ""
 "To identify a cell's column, match the value to the column letter in the "
 "header row — do not guess."
 msgstr ""
+"I adnabod colofn cell, parwch y gwerth â llythyren y golofn yn y rhes pennyn "
+"— peidiwch â dyfalu."
 
 #: src/control/Control.AIChatSidebar.ts:2884
 msgid ""
 "Reference a cell by combining its column header with the row number (e.g., "
 "column B + row 2 = B2)."
 msgstr ""
+"Cyfeiriwch gell drwy gyfuno ei phennyn colofn â rhif y rhes (e.e. colofn B + "
+"rhes 2 = B2)."
 
 #: src/control/Control.AIChatSidebar.ts:2887
 msgid ""
 "When referencing specific cells, format each cell as a clickable link: [B2]"
 "(cell://B2)."
 msgstr ""
+"Wrth gyfeirio at gelloedd penodol, fformatiwch bob cell fel dolen y mae modd "
+"ei chlicio: [B2](cell :// B2)."
 
 #: src/control/Control.AIChatSidebar.ts:2893
 msgid "Sanity check the following spreadsheet data."
-msgstr ""
+msgstr "Mae Cywirdeb yn gwirio'r data taenlen canlynol."
 
 #: src/control/Control.AIChatSidebar.ts:2894
 msgid "Please analyze this data for:"
-msgstr ""
+msgstr "Dadansoddwch y data hwn ar gyfer:"
 
 #: src/control/Control.AIChatSidebar.ts:2898
 msgid ""
@@ -1940,18 +1959,25 @@ msgid ""
 "values deviates significantly from the expected distribution, which may "
 "suggest data manipulation."
 msgstr ""
+"Troseddau Cyfraith Benford — gwiriwch a yw dosbarthiad digid cyntaf o "
+"werthoedd rhifol yn gwyro'n sylweddol o'r dosbarthiad disgwyliedig, a allai "
+"awgrymu trin data."
 
 #: src/control/Control.AIChatSidebar.ts:2904
 msgid ""
 "Statistical outliers — identify values that deviate significantly from "
 "their column or group."
 msgstr ""
+"Allanolion ystadegol — adnabod gwerthoedd sy'n gwyro'n sylweddol o'u colofn "
+"neu grŵp."
 
 #: src/control/Control.AIChatSidebar.ts:2910
 msgid ""
 "General anomalies — suspicious patterns, unexpected duplicates, "
 "inconsistencies, or formatting issues."
 msgstr ""
+"Anomaleddau cyffredinol — patrymau amheus, dyblygu annisgwyl, anghysondebau, "
+"neu faterion fformatio."
 
 #: src/control/Control.AlertDialog.js:55
 msgid "External link"
@@ -2845,7 +2871,7 @@ msgstr "EPUB (.epub)"
 #: src/control/Control.NotebookbarBuilder.js:414
 #: src/control/Control.NotebookbarBuilder.js:604
 msgid "Markdown (.md)"
-msgstr ""
+msgstr "Markdown (.md)"
 
 #: src/control/Control.Menubar.ts:111 src/control/Control.UIManager.ts:414
 msgid "Rename Document"
@@ -3055,7 +3081,7 @@ msgstr "Darllen Sgrin"
 #: src/control/Control.NotebookbarImpress.js:163
 #: src/control/Control.NotebookbarWriter.js:116
 msgid "Extensions"
-msgstr ""
+msgstr "Estyniadau"
 
 #: src/control/Control.Menubar.ts:424 src/control/Control.Menubar.ts:612
 #: src/control/Control.Menubar.ts:757 src/control/Control.Menubar.ts:1063
@@ -3366,7 +3392,7 @@ msgstr "Rhagor..."
 
 #: src/control/Control.Menubar.ts:1724
 msgid "(No extensions installed)"
-msgstr ""
+msgstr "(Dim estyniadau wedi'u gosod)"
 
 #: src/control/Control.Menubar.ts:2078
 msgid "Use Compact view"
@@ -3453,7 +3479,7 @@ msgstr "Cynllun Tabl"
 
 #: src/control/Notebookbar.CalcTableTab.ts:72
 msgid "Table Options"
-msgstr ""
+msgstr "Dewisiadau Tablau"
 
 #: src/control/Notebookbar.CalcTableTab.ts:86
 msgid "Header Row"
@@ -3560,11 +3586,11 @@ msgstr "Animeiddiadau"
 
 #: src/control/Control.Notebookbar.js:292
 msgid "No extensions are installed."
-msgstr ""
+msgstr "Dim estyniadau wedi'u gosod."
 
 #: src/control/Control.NotebookbarBase.ts:149
 msgid "Outline %OutlineLevel%"
-msgstr ""
+msgstr "Amlinelliad %OutlineLevel%"
 
 #: src/control/Control.NotebookbarBuilder.js:238
 msgid "Click to expand"
@@ -3669,7 +3695,7 @@ msgstr "Llun"
 #: src/control/Control.NotebookbarImpress.js:143
 #: src/control/Control.NotebookbarWriter.js:103
 msgid "Chart"
-msgstr ""
+msgstr "Siart"
 
 #: src/control/Control.NotebookbarCalc.js:99
 #: src/control/Control.NotebookbarDraw.js:122
@@ -3738,13 +3764,15 @@ msgstr "Clipfwrdd"
 #: src/control/Control.NotebookbarWriter.js:655
 #: src/control/Control.TopToolbar.js:148
 msgid "Clone Formatting (double click to keep active)"
-msgstr ""
+msgstr "Fformatio Clôn (clic dwbl i gadw'n weithredol)"
 
 #: src/control/Control.NotebookbarCalc.js:463
 msgid ""
 "Clone Formatting is active (press Enter on a cell to apply, click again or "
 "press Esc to exit)"
 msgstr ""
+"Mae Fformatio Clôn yn weithredol (pwyswch Enter ar gell i'w osod, cliciwch "
+"eto neu pwyswch Esc i adael)"
 
 #: src/control/Control.NotebookbarCalc.js:499
 #: src/control/Control.NotebookbarDraw.js:692
@@ -4088,7 +4116,7 @@ msgstr "Hidl"
 
 #: src/control/Control.NotebookbarCalc.js:2616
 msgid "Proofing"
-msgstr ""
+msgstr "Profi"
 
 #: src/control/Control.NotebookbarCalc.js:2644
 #: src/control/Control.NotebookbarImpress.js:2049
@@ -4104,7 +4132,7 @@ msgstr "Sylwadau"
 
 #: src/control/Control.NotebookbarCalc.js:2727
 msgid "Protection"
-msgstr ""
+msgstr "Diogelwch"
 
 #: src/control/Control.NotebookbarCalc.js:2790
 msgid "Format Cells"
@@ -4149,7 +4177,7 @@ msgstr "Mesurydd"
 #: src/control/Control.NotebookbarWriter.js:656
 #: src/control/Control.TopToolbar.js:148
 msgid "Clone Formatting is active (click again or press Esc to exit)"
-msgstr ""
+msgstr "Mae Fformatio Clôn yn weithredol (cliciwch eto neu pwyswch Esc i adael)"
 
 #: src/control/Control.NotebookbarDraw.js:920
 #: src/control/Control.NotebookbarImpress.js:1056
@@ -4173,7 +4201,7 @@ msgstr "Prif"
 
 #: src/control/Control.NotebookbarImpress.js:486
 msgid "Start Slide Show"
-msgstr ""
+msgstr "Cychwyn Sioe Sleidiau"
 
 #: src/control/Control.NotebookbarImpress.js:491
 msgid "From Beginning"
@@ -4193,7 +4221,7 @@ msgstr "Sgrin lawn, cychwyn gyda'r sleid yma"
 
 #: src/control/Control.NotebookbarImpress.js:515
 msgid "Present"
-msgstr ""
+msgstr "Y Presennol"
 
 #: src/control/Control.NotebookbarImpress.js:521
 msgid "Present in Window"
@@ -4230,7 +4258,7 @@ msgstr "Gweld sleidiau wrth i'r cyflwynydd eu symud ymlaen"
 
 #: src/control/Control.NotebookbarImpress.js:559
 msgid "Set Up"
-msgstr ""
+msgstr "Gosod"
 
 #: src/control/Control.NotebookbarImpress.js:686
 msgid "Slide Views"
@@ -4375,11 +4403,11 @@ msgstr "Gweld y Newidiadau"
 
 #: src/control/Control.NotebookbarWriter.js:2777
 msgid "Cell Background"
-msgstr ""
+msgstr "Cefndir Cell"
 
 #: src/control/Control.NotebookbarWriter.js:2860
 msgid "Protect"
-msgstr ""
+msgstr "Diogelu"
 
 #: src/control/Control.PartsPreview.js:209
 msgid "preview of page %1"
@@ -4396,40 +4424,40 @@ msgstr "Gludo"
 
 #: src/control/Control.PartsPreview.js:423
 msgid "Add Section"
-msgstr ""
+msgstr "Ychwanegu Adran"
 
 #: src/control/Control.PartsPreview.js:598
 msgid "Toggle section %1"
-msgstr ""
+msgstr "Toglu adran %1"
 
 #: src/control/Control.PartsPreview.js:789
 #: src/control/Control.PartsPreview.js:890
 msgid "Rename Section"
-msgstr ""
+msgstr "Ailenwi Adran"
 
 #: src/control/Control.PartsPreview.js:796
 msgid "Remove Section"
-msgstr ""
+msgstr "Tynnu Adran"
 
 #: src/control/Control.PartsPreview.js:804
 msgid "Move Section Up"
-msgstr ""
+msgstr "Symud Adran i Fyny"
 
 #: src/control/Control.PartsPreview.js:813
 msgid "Move Section Down"
-msgstr ""
+msgstr "Symud Adran i Lawr"
 
 #: src/control/Control.PartsPreview.js:822
 msgid "Collapse All Sections"
-msgstr ""
+msgstr "Lleihau Pob Adran"
 
 #: src/control/Control.PartsPreview.js:830
 msgid "Expand All Sections"
-msgstr ""
+msgstr "Ehangu Pob Adran"
 
 #: src/control/Control.PartsPreview.js:891
 msgid "Enter new section name:"
-msgstr ""
+msgstr "Rhowch enw adran newydd:"
 
 #: src/control/Control.SaveState.ts:49
 msgid "Saving"
@@ -4619,7 +4647,7 @@ msgstr "Cyfrif y dewis"
 
 #: src/control/Control.StatusBar.js:274
 msgid "Zoom to Fit Slide"
-msgstr ""
+msgstr "Chwyddo i Ffitio Sleid"
 
 #: src/control/Control.StatusBar.js:275
 msgid "Zoom to Fit Page Width"
@@ -4627,7 +4655,7 @@ msgstr "Chwyddo i Ffitio Lled Tudalen"
 
 #: src/control/Control.StatusBar.js:280
 msgid "Status Bar Menu"
-msgstr ""
+msgstr "Dewislen Bar Statws"
 
 #: src/control/Control.StatusBar.js:557
 msgid "The document is probably locked and has been opened as view-only"
@@ -4672,7 +4700,7 @@ msgstr "Mewnosod dalen ar ôl hon"
 
 #: src/control/Control.Tabs.js:100 src/control/Control.Tabs.js:107
 msgid "Reset Tab Color"
-msgstr ""
+msgstr "Ailosod Lliw Tab"
 
 #: src/control/Control.Tabs.js:127 src/control/Control.Tabs.js:131
 msgid "Move Sheet Left"
@@ -5093,7 +5121,7 @@ msgstr "Golwg"
 
 #: src/control/jsdialog/Control.ContextMenu.ts:311
 msgid "Save Image to Server"
-msgstr ""
+msgstr "Cadw Delwedd i'r Gweinydd"
 
 #: src/control/jsdialog/Control.ContextMenu.ts:349
 msgid "Paste Special"
@@ -5302,7 +5330,7 @@ msgstr "Ochr yn Ochr"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1815
 msgid "Hidden"
-msgstr ""
+msgstr "Cudd"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1829
 msgid "All users"
@@ -5511,9 +5539,8 @@ msgid "Insert Comment"
 msgstr "Mewnosod Sylw"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2401
-#, fuzzy
 msgid "Insert Note"
-msgstr "Mewnosod Dyddiad"
+msgstr "Mewnosod Nodyn"
 
 #: src/control/jsdialog/Util.SnackbarController.ts:122
 msgid "Dismiss"
@@ -5534,69 +5561,67 @@ msgstr "Awtomatig"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:253
 msgid "Palette"
-msgstr ""
+msgstr "Palet"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:268
 msgid "Color palette"
 msgstr "Palet lliw"
 
 #: src/control/jsdialog/Widget.Combobox.js:245
-#, fuzzy
 msgid "Open "
-msgstr "Open"
+msgstr "Agor "
 
 #: src/control/jsdialog/Widget.Combobox.js:245
 msgid " list"
-msgstr ""
+msgstr " rhestr"
 
 #: src/control/jsdialog/Widget.Combobox.js:246
-#, fuzzy
 msgid "Open list"
-msgstr "Agor dolen"
+msgstr "Agor rhestr"
 
 #: src/control/jsdialog/Widget.Combobox.js:377
 msgid "Filter entries"
-msgstr ""
+msgstr "Hidlo cofnodion"
 
 #: src/control/jsdialog/Widget.CsvGrid.ts:186
 msgid "CSV column ruler: click to toggle a column split"
-msgstr ""
+msgstr "Mesurydd colofn CSV: cliciwch i doglo rhaniad colofn"
 
 #: src/control/jsdialog/Widget.CsvGrid.ts:315
 msgid "CSV import preview"
-msgstr ""
+msgstr "Rhagolwg mewnforio CSV"
 
 #: src/control/jsdialog/Widget.CsvGrid.ts:337
 msgid "Line number"
-msgstr ""
+msgstr "Rhif llinell"
 
 #: src/control/jsdialog/Widget.CsvGrid.ts:349
 msgid "Column {index}"
-msgstr ""
+msgstr "Colofn {index}"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:54
 msgid "Smileys"
-msgstr ""
+msgstr "Gwenoglun"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:100
 msgid "People & gestures"
-msgstr ""
+msgstr "Pobl ac ystumiau"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:136
 msgid "Objects"
-msgstr ""
+msgstr "Gwrthrychau"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:218
 msgid "Nature & food"
-msgstr ""
+msgstr "Natur a bwyd"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:364
 msgid "Recently used"
-msgstr ""
+msgstr "Defnyddiwyd yn ddiweddar"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:384
 msgid "No emojis match \"{0}\""
-msgstr ""
+msgstr "Dim emojis yn cydweddu â \"{0}\""
 
 #: src/control/jsdialog/Widget.PageMarginEntry.ts:139
 msgid "Top: {top}"
@@ -5647,16 +5672,15 @@ msgstr "Ystod y celloedd wedi eu dewis"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:44
 msgid "Cell Selection"
-msgstr ""
+msgstr "Dewis Celloedd"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:48
 msgid "Entering text mode"
 msgstr "Mynd i'r modd testun"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:49
-#, fuzzy
 msgid "Insert Mode"
-msgstr "Mewnosod Dyddiad"
+msgstr "Modd Mewnosod"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:54
 msgid "Selection Mode"
@@ -5673,22 +5697,19 @@ msgstr "Y dewis o swyddogaethau"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:68
 msgid "Table Cell Functions"
-msgstr ""
+msgstr "Ffwythiannau Cell Tabl"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:74
-#, fuzzy
 msgid "Sheet Navigation"
-msgstr "Cau'r Llywio"
+msgstr "Llywio Dalennau"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:76
-#, fuzzy
 msgid "Slide Navigation"
-msgstr "Cau'r Llywio"
+msgstr "Llywio Sleidiau"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:77
-#, fuzzy
 msgid "Page Navigation"
-msgstr "Cau'r Llywio"
+msgstr "Llywio Tudalen"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:83
 msgid "Your changes have been saved"
@@ -5704,7 +5725,7 @@ msgstr "Borderi celloedd"
 
 #: src/control/jsdialog/Widget.NotebookbarIconView.ts:98
 msgid "Open Styles Sidebar"
-msgstr ""
+msgstr "Agor Bar Ochr Arddulliau"
 
 #: src/control/jsdialog/Widget.NotebookbarIconView.ts:202
 msgid "Scroll up"
@@ -5716,7 +5737,7 @@ msgstr "Sgrolio i lawr"
 
 #: src/control/jsdialog/Widget.NotebookbarIconView.ts:222
 msgid "More options"
-msgstr ""
+msgstr "Rhagor o ddewisiadau"
 
 #: src/control/jsdialog/Widget.PushButton.ts:19
 msgid "Select range"
@@ -5882,6 +5903,8 @@ msgstr "Mae'r gweinydd yn cau"
 msgid ""
 "AI is not configured. Go to File > Options > View Settings to set it up."
 msgstr ""
+"Nid yw AI wedi'i ffurfweddu. Ewch i Ffeil > Dewisiadau > Gweld Gosodiadau "
+"i'w osod."
 
 #: src/docdispatcher.ts:612
 msgid "Are you sure you want to delete this slide?"
@@ -6429,11 +6452,11 @@ msgstr "Mae'r modd cyflwyno wedi'i analluogi ar gyfer y ddogfen hon"
 
 #: src/map/handler/Map.StateChanges.js:132
 msgid "Apply this order to your presentation?"
-msgstr ""
+msgstr "Gosod y gorchymyn hwn i'ch cyflwyniad?"
 
 #: src/map/handler/Map.StateChanges.js:132
 msgid "Update Slides"
-msgstr ""
+msgstr "Diweddaru Sleidiau"
 
 #: src/map/handler/Map.VersionBar.js:50
 msgid "Your Collabora Online server needs updating. Version {0} is available."
@@ -6462,19 +6485,19 @@ msgstr "Deialog Croeso"
 
 #: src/slideshow/engine/SlideShowHandler.ts:104
 msgid "Skip"
-msgstr ""
+msgstr "Hepgor"
 
 #: src/slideshow/engine/SlideShowHandler.ts:105
 msgid "First"
-msgstr ""
+msgstr "Cyntaf"
 
 #: src/slideshow/engine/SlideShowHandler.ts:106
 msgid "Skip All"
-msgstr ""
+msgstr "Hepgor y Cyfan"
 
 #: src/slideshow/engine/SlideShowHandler.ts:107
 msgid "First Slide"
-msgstr ""
+msgstr "Sleid Gyntaf"
 
 #: src/slideshow/engine/SlideShowHandler.ts:108
 #: src/slideshow/PresenterConsole.js:31
@@ -6482,14 +6505,12 @@ msgid "Next Slide"
 msgstr "Sleid Nesaf"
 
 #: src/slideshow/engine/SlideShowHandler.ts:109
-#, fuzzy
 msgid "Previous Slide"
-msgstr "Sleid flaenorol"
+msgstr "Sleid Flaenorol"
 
 #: src/slideshow/engine/SlideShowHandler.ts:110
-#, fuzzy
 msgid "Last Slide"
-msgstr "Gludo Sleid"
+msgstr "Sleid Olaf"
 
 #: src/slideshow/engine/SlideShowHandler.ts:111
 #: src/slideshow/SlideShowPresenter.ts:845
@@ -6498,15 +6519,15 @@ msgstr "Diwedd y Sioe"
 
 #: src/slideshow/engine/SlideShowHandler.ts:318
 msgid "Animation Start: "
-msgstr ""
+msgstr "Dechrau Animeiddiad: "
 
 #: src/slideshow/engine/SlideShowHandler.ts:420
 msgid "Transition Start: "
-msgstr ""
+msgstr "Dechrau'r Trawsnewid: "
 
 #: src/slideshow/engine/SlideShowHandler.ts:439
 msgid "Transition End: "
-msgstr ""
+msgstr "Diwedd y Trawsnewid: "
 
 #: src/slideshow/PauseTimer.ts:141
 msgid "Pause... ( %SECONDS% )"
@@ -6593,7 +6614,7 @@ msgstr "Peidio Dilyn"
 
 #: src/control/Control.Extension.ts:268
 msgid "Close extension"
-msgstr ""
+msgstr "Cau estyniad"
 
 #: templates/templates.js:6
 msgid "Modern Business Letter (sans-serif)"
@@ -6763,12 +6784,10 @@ msgid "Get Involved"
 msgstr "Ymunwch â ni"
 
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.h2:49-7
-#, fuzzy
 msgid "https://www.collaboraoffice.org/"
-msgstr "https://www.collaboraonline.org/"
+msgstr "https://www.collaboraoffice.org/"
 
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.p:50-7
-#, fuzzy
 msgid ""
 "Are you interested in contributing but don’t know where to start? Head over "
 "to the <a target=\"_blank\" rel=\"noopener\" href=\"https://www."
@@ -6780,13 +6799,13 @@ msgid ""
 "report</a> with all the essential steps on how to reproduce it."
 msgstr ""
 "Oes gennych chi ddiddordeb mewn cyfrannu ond ddim yn gwybod ble i ddechrau? "
-"Ewch draw i'r <a target=\"_blank\" rel=\"noopener\" href=\"https://www."
-"collaboraonline.org/post/build-code/\">cyfarwyddiadau cam wrth gam</a> ac "
-"adeiladu CODE o'r dechrau. Gallwch hefyd helpu gyda <a target=\"_blank\" rel="
-"\"noopener\" href=\"https://www.collaboraonline.org/post/translate/\""
-">chyfieithiadau</a> neu drwy <a target=\"_blank\" rel=\"noopener\" href="
-"\"https://www.collaboraonline.org/post/filebugs/\">ffeilio adroddiad gwall</"
-"a> gyda'r holl gamau hanfodol ar sut i'w atgynhyrchu."
+"Ewch draw i'r <a target=\"_blank\" rel=\"noopener\" href=\"https://"
+"www.collaboraoffice.org/post/build-code/\">cyfarwyddiadau cam wrth gam</a> "
+"ac adeiladu CODE o'r dechrau. Gallwch hefyd helpu gyda <a target=\"_blank\" "
+"rel=\"noopener\" href=\"https://www.collaboraoffice.org/post/translate/\">"
+"chyfieithiadau</a> neu drwy <a target=\"_blank\" rel=\"noopener\" "
+"href=\"https://www.collaboraoffice.org/post/filebugs/\">ffeilio adroddiad "
+"gwall</a> gyda'r holl gamau hanfodol ar sut i'w atgynhyrchu."
 
 #: welcome/welcome.html%2Bhtml.body.div.div:55-5
 msgid ""
