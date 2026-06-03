@@ -14,6 +14,7 @@
 
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/kit.hxx>
 #include <sfx2/kit/helper.hxx>
 #include <vcl/BitmapReadAccess.hxx>
 #include <vcl/scheduler.hxx>
@@ -24,7 +25,11 @@
 #include <scmod.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <tabvwsh.hxx>
+#include <viewdata.hxx>
 #include <postit.hxx>
+#include <editeng/editview.hxx>
+#include <o3tl/unit_conversion.hxx>
+#include <vcl/virdev.hxx>
 
 using namespace com::sun::star;
 
@@ -475,6 +480,41 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testFormImageRemoteNotFetched)
     ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::WITHOUT_ALPHA);
     pDevice->SetOutputSizePixel(Size(1024, 768));
     pModelObj->paintTile(*pDevice, 1024, 768, 0, 0, 15360, 7680);
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testEditTextPaintStartInTiledMode)
+{
+    // A short right-aligned number in a cell far from the left of the sheet is
+    // edited in place. It fits its column, so the in-edit text stays right
+    // anchored and the edit view's visible-document left is large. In tiled
+    // rendering the paint must subtract that offset so the right-anchored text
+    // lands on the cell's own tile. Skipping the subtraction (an earlier broad
+    // fix did that for every kit edit) draws the text off the tile, so the cell
+    // rendered blank while typing.
+    comphelper::COKit::setCompatFlag(comphelper::COKit::Compat::scPrintTwipsMsgs);
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    CPPUNIT_ASSERT(pModelObj);
+    ScTabViewShell* pView = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    CPPUNIT_ASSERT(pView);
+
+    // a short number in a cell far to the right (column AI, row 736)
+    typeCharsInCell("12345", 34, 735, pView, pModelObj, /*bInEdit*/ false, /*bCommit*/ false);
+    Scheduler::ProcessEventsToIdle();
+
+    ScViewData& rVD = pView->GetViewData();
+    EditView* pEditView = rVD.GetEditView(rVD.GetEditActivePart());
+    CPPUNIT_ASSERT(pEditView);
+
+    // a right-anchored cell this far right has a large visible-document left
+    const tools::Long nVisDocLeft = pEditView->GetVisArea().Left();
+    CPPUNIT_ASSERT_MESSAGE("precondition: far right-aligned cell has a non-zero "
+                           "visible-document left",
+                           nVisDocLeft > 0);
+
+    // the paint start subtracts that offset, mapping the right-anchored text onto
+    // the cell, rather than staying at the output area top-left
+    const Point aStartPos = pEditView->CalculateTextPaintStartPosition();
+    CPPUNIT_ASSERT_EQUAL(pEditView->GetOutputArea().Left() - nVisDocLeft, aStartPos.X());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

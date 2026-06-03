@@ -1849,14 +1849,23 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
 
         tools::Long nDiff = aVis.Right() - aVis.Left();
         tools::Long nDiffPTwips = bLOKPrintTwips ? (aVisPTwips.Right() - aVisPTwips.Left()) : 0;
-        if ( GetEditAdjust() == SvxAdjust::Right )
+        // On re-entry take the alignment from the engine's current paragraph
+        // adjustment rather than the cell's committed one. EditGrowX may have
+        // originally re-anchored the in-edit text (a typed number shows left
+        // aligned but commits right aligned), and the visible area must follow it.
+        SvxAdjust eVisAdjust = GetEditAdjust();
+        if (bWasThere)
+        {
+            eVisAdjust = rNewEngine.GetDefaults().Get(EE_PARA_JUST).GetAdjust();
+        }
+        if ( eVisAdjust == SvxAdjust::Right )
         {
             aVis.SetRight( aPaper.Width() - 1 );
             if (bLOKPrintTwips)
                 aVisPTwips.SetRight( aPaperSizePTwips.Width() - 1 );
             bMoveArea = !bLayoutRTL;
         }
-        else if ( GetEditAdjust() == SvxAdjust::Center )
+        else if ( eVisAdjust == SvxAdjust::Center )
         {
             aVis.SetRight( ( aPaper.Width() - 1 + nDiff ) / 2 );
             if (bLOKPrintTwips)
