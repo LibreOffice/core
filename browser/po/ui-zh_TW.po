@@ -6627,12 +6627,12 @@ msgstr "探索所有變更"
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.p:39-7
 msgid ""
 "Check the <a target=\"_blank\" rel=\"noopener\" href=\"https://www."
-"collaboraonline.com/code-25-04-release-notes/\">release notes</a> and learn "
+"collaboraonline.com/code-26-04-release-notes/\">release notes</a> and learn "
 "all about: The latest Collabora Online Development Edition, aimed at home "
 "users and small teams."
 msgstr ""
 "檢查<a target=\"_blank\" rel=\"noopener\" href=\"https://www.collaboraonline."
-"com/code-25-04-release-notes/\">發行說明</a>並了解關於："
+"com/code-26-04-release-notes/\">發行說明</a>並了解關於："
 "針對家庭使用者與小型團隊的最新 Collabora Online 開發版。"
 
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.h1:48-7
