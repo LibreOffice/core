@@ -1441,8 +1441,8 @@ uno::Reference< text::XTextAppend > const &  DomainMapper_Impl::GetTopTextAppend
 
 FieldContextPtr const &  DomainMapper_Impl::GetTopFieldContext()
 {
-    SAL_WARN_IF(m_aFieldStack.empty(), "writerfilter.dmapper", "Field stack is empty");
-    return m_aFieldStack.back();
+    SAL_WARN_IF(m_StreamStateStack.top().m_aFieldStack.empty(), "writerfilter.dmapper", "Field stack is empty");
+    return m_StreamStateStack.top().m_aFieldStack.back();
 }
 
 bool DomainMapper_Impl::HasTopAnchoredObjects() const
@@ -2235,9 +2235,9 @@ void DomainMapper_Impl::finishParagraph( const ParagraphPropertyMapPtr& pParaCon
     if (m_bDiscardHeaderFooter)
         return;
 
-    if (!m_aFieldStack.empty())
+    if (IsOpenField())
     {
-        FieldContextPtr pFieldContext = m_aFieldStack.back();
+        FieldContextPtr pFieldContext = GetTopFieldContext();
         if (pFieldContext && !pFieldContext->IsCommandCompleted())
         {
             std::vector<OUString> aCommandParts = pFieldContext->GetCommandParts();
@@ -6394,28 +6394,29 @@ void DomainMapper_Impl::PushFieldContext()
     uno::Reference< text::XTextRange > xStart;
     if (xCrsr.is())
         xStart = xCrsr->getStart();
-    m_aFieldStack.push_back(new FieldContext(xStart, m_StreamStateStack.top().nTableDepth));
+    m_StreamStateStack.top().m_aFieldStack.push_back(
+        new FieldContext(xStart, m_StreamStateStack.top().nTableDepth));
 }
 /*-------------------------------------------------------------------------
 //the current field context waits for the completion of the command
   -----------------------------------------------------------------------*/
 bool DomainMapper_Impl::IsOpenFieldCommand() const
 {
-    return !m_aFieldStack.empty() && !m_aFieldStack.back()->IsCommandCompleted();
+    return IsOpenField() && !m_StreamStateStack.top().m_aFieldStack.back()->IsCommandCompleted();
 }
 /*-------------------------------------------------------------------------
 //the current field context waits for the completion of the command
   -----------------------------------------------------------------------*/
 bool DomainMapper_Impl::IsOpenField() const
 {
-    return !m_aFieldStack.empty();
+    return !m_StreamStateStack.top().m_aFieldStack.empty();
 }
 
 // Mark top field context as containing a fixed field
 void DomainMapper_Impl::SetFieldLocked()
 {
     if (IsOpenField())
-        m_aFieldStack.back()->SetFieldLocked();
+        GetTopFieldContext()->SetFieldLocked();
 }
 
 
@@ -6554,7 +6555,7 @@ void DomainMapper_Impl::AppendFieldCommand(OUString const & rPartOfCommand)
     TagLogger::getInstance().endElement();
 #endif
 
-    FieldContextPtr pContext = m_aFieldStack.back();
+    FieldContextPtr pContext = GetTopFieldContext();
     OSL_ENSURE( pContext, "no field context available");
     if( pContext )
     {
@@ -7921,8 +7922,8 @@ void DomainMapper_Impl::CloseFieldCommand()
 #endif
 
     FieldContextPtr pContext;
-    if(!m_aFieldStack.empty())
-        pContext = m_aFieldStack.back();
+    if(IsOpenField())
+        pContext = GetTopFieldContext();
     OSL_ENSURE( pContext, "no field context available");
     if( !pContext )
         return;
@@ -8015,10 +8016,10 @@ void DomainMapper_Impl::CloseFieldCommand()
             }
             default:
             {
-                FieldContextPtr pOuter = GetParentFieldContext(m_aFieldStack);
+                FieldContextPtr pOuter = GetParentFieldContext(m_StreamStateStack.top().m_aFieldStack);
                 if (pOuter)
                 {
-                    if (!IsFieldNestingAllowed(pOuter, m_aFieldStack.back()))
+                    if (!IsFieldNestingAllowed(pOuter, GetTopFieldContext()))
                     {
                         // Parent field can't host this child field: don't create a child field
                         // in this case.
@@ -8136,8 +8137,8 @@ void DomainMapper_Impl::CloseFieldCommand()
                 break;
                 case FIELD_DOCPROPERTY :
                 {
-                    FieldContextPtr pOuter = GetParentFieldContext(m_aFieldStack);
-                    if (!pOuter || IsFieldNestingAllowed(pOuter, m_aFieldStack.back()))
+                    FieldContextPtr pOuter = GetParentFieldContext(m_StreamStateStack.top().m_aFieldStack);
+                    if (!pOuter || IsFieldNestingAllowed(pOuter, GetTopFieldContext()))
                         handleDocProperty(pContext, sFirstParam, xFieldInterface);
                 }
                 break;
@@ -8619,9 +8620,9 @@ void DomainMapper_Impl::CloseFieldCommand()
                 case FIELD_SKIPIF       : break;
                 case FIELD_SYMBOL:
                 {
-                    FieldContextPtr pOuter = GetParentFieldContext(m_aFieldStack);
+                    FieldContextPtr pOuter = GetParentFieldContext(m_StreamStateStack.top().m_aFieldStack);
                     OUString sSymbol( sal_Unicode( sFirstParam.startsWithIgnoreAsciiCase("0x") ?  o3tl::toUInt32(sFirstParam.subView(2),16) : sFirstParam.toUInt32() ) );
-                    if (!pOuter || IsFieldNestingAllowed(pOuter, m_aFieldStack.back()))
+                    if (!pOuter || IsFieldNestingAllowed(pOuter, GetTopFieldContext()))
                     {
                         uno::Reference< text::XTextAppend > xTextAppend = m_aTextAppendStack.top().xTextAppend;
                         OUString sFont;
@@ -8768,7 +8769,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                     }
 
                     const std::vector<beans::PropertyValue>& rValues
-                        = m_aFieldStack.back()->getProperties()->GetPropertyValues();
+                        = GetTopFieldContext()->getProperties()->GetPropertyValues();
                     appendTextContent(xFieldInterface, comphelper::containerToSequence(rValues));
                     pContext->m_bSetCitation = true;
                 }
@@ -8869,8 +8870,8 @@ void DomainMapper_Impl::CloseFieldCommand()
 bool DomainMapper_Impl::IsFieldResultAsString()
 {
     bool bRet = false;
-    OSL_ENSURE( !m_aFieldStack.empty(), "field stack empty?");
-    FieldContextPtr pContext = m_aFieldStack.back();
+    OSL_ENSURE(IsOpenField(), "field stack empty?");
+    FieldContextPtr pContext = GetTopFieldContext();
     OSL_ENSURE( pContext, "no field context available");
     if( pContext )
     {
@@ -8885,10 +8886,10 @@ bool DomainMapper_Impl::IsFieldResultAsString()
 
     if (!bRet)
     {
-        FieldContextPtr pOuter = GetParentFieldContext(m_aFieldStack);
+        FieldContextPtr pOuter = GetParentFieldContext(m_StreamStateStack.top().m_aFieldStack);
         if (pOuter)
         {
-            if (!IsFieldNestingAllowed(pOuter, m_aFieldStack.back()))
+            if (!IsFieldNestingAllowed(pOuter, GetTopFieldContext()))
             {
                 // If nesting is not allowed, then the result can only be a string.
                 bRet = true;
@@ -8900,13 +8901,13 @@ bool DomainMapper_Impl::IsFieldResultAsString()
 
 void DomainMapper_Impl::AppendFieldResult(std::u16string_view rString)
 {
-    assert(!m_aFieldStack.empty());
-    FieldContextPtr pContext = m_aFieldStack.back();
+    assert(IsOpenField());
+    FieldContextPtr pContext = GetTopFieldContext();
     SAL_WARN_IF(!pContext, "writerfilter.dmapper", "no field context");
     if (!pContext)
         return;
 
-    FieldContextPtr pOuter = GetParentFieldContext(m_aFieldStack);
+    FieldContextPtr pOuter = GetParentFieldContext(m_StreamStateStack.top().m_aFieldStack);
     if (pOuter)
     {
         if (!IsFieldNestingAllowed(pOuter, pContext))
@@ -8938,21 +8939,18 @@ void DomainMapper_Impl::SetFieldResult(OUString const& rResult)
     TagLogger::getInstance().chars(rResult);
 #endif
 
-    FieldContextPtr pContext = m_aFieldStack.back();
+    FieldContextPtr pContext = GetTopFieldContext();
     OSL_ENSURE( pContext, "no field context available");
 
-    if (m_aFieldStack.size() > 1)
+    // If this is a nested field, see if the parent supports nesting on the Writer side.
+    FieldContextPtr pParentContext = GetParentFieldContext(m_StreamStateStack.top().m_aFieldStack);
+    if (pParentContext)
     {
-        // This is a nested field. See if the parent supports nesting on the Writer side.
-        FieldContextPtr pParentContext = m_aFieldStack[m_aFieldStack.size() - 2];
-        if (pParentContext)
+        std::vector<OUString> aParentParts = pParentContext->GetCommandParts();
+        // Conditional text fields don't support nesting in Writer.
+        if (!aParentParts.empty() && aParentParts[0] == "IF")
         {
-            std::vector<OUString> aParentParts = pParentContext->GetCommandParts();
-            // Conditional text fields don't support nesting in Writer.
-            if (!aParentParts.empty() && aParentParts[0] == "IF")
-            {
-                return;
-            }
+            return;
         }
     }
 
@@ -9104,9 +9102,9 @@ void DomainMapper_Impl::SetFieldFFData(const FFDataHandler::Pointer_t& pFFDataHa
     TagLogger::getInstance().startElement("setFieldFFData");
 #endif
 
-    if (!m_aFieldStack.empty())
+    if (IsOpenField())
     {
-        FieldContextPtr pContext = m_aFieldStack.back();
+        FieldContextPtr pContext = GetTopFieldContext();
         if (pContext)
         {
             pContext->setFFDataHandler(pFFDataHandler);
@@ -9126,10 +9124,10 @@ void DomainMapper_Impl::PopFieldContext()
     TagLogger::getInstance().element("popFieldContext");
 #endif
 
-    if (m_aFieldStack.empty())
+    if (!IsOpenField())
         return;
 
-    FieldContextPtr pContext = m_aFieldStack.back();
+    FieldContextPtr pContext = GetTopFieldContext();
     OSL_ENSURE( pContext, "no field context available");
     if( pContext )
     {
@@ -9206,7 +9204,7 @@ void DomainMapper_Impl::PopFieldContext()
                         // e.g. SdtEndBefore.
                         if (m_pLastCharacterContext && IsRTFImport())
                             aMap.InsertProps(m_pLastCharacterContext);
-                        aMap.InsertProps(m_aFieldStack.back()->getProperties());
+                        aMap.InsertProps(GetTopFieldContext()->getProperties());
                         appendTextContent(xToInsert, comphelper::containerToSequence(aMap.GetPropertyValues()));
                         CheckRedline( xToInsert->getAnchor( ) );
                     }
@@ -9332,7 +9330,7 @@ void DomainMapper_Impl::PopFieldContext()
     }
 
     //remove the field context
-    m_aFieldStack.pop_back();
+    m_StreamStateStack.top().m_aFieldStack.pop_back();
 
     // Finish the paragraph(s) now that the field is closed.
     for (const auto& rFinish : aParagraphsToFinish)
