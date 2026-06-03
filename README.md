@@ -1,10 +1,17 @@
 <p align="right"><a href="#gitpod"><img alt="Open in Gitpod" src="https://gitpod.io/button/open-in-gitpod.svg"></a></p>
 
 # Collabora Online
-<!--
-[![Main: Pull request policy](https://img.shields.io/badge/Main-PRs%20can%20be%20merge%20without%20approval-42BC00?logoColor=42BC00&logo=git "Main release is still distant. Thanks for your support and contributions! :)")](https://github.com/CollaboraOnline/online/blob/main/CONTRIBUTING.md#contributing-to-source-code)
--->
-[![Main: Pull request policy](https://img.shields.io/badge/Main-protected%2C%20PRs%20need%20approval-red?logoColor=lightred&logo=git "Collabora Team is preparing for the next release, therefore 'main' branch is protected now, PRs need 1 review before merging. Thanks for your support and contributions! :)")](https://github.com/CollaboraOnline/online/blob/main/CONTRIBUTING.md#contributing-to-source-code)
+
+> [!IMPORTANT]
+> **This repository is a read-only mirror.** Collabora Online is developed on our Gerrit
+> instance at **https://gerrit.collaboraoffice.com**; this GitHub repository only mirrors that
+> source code.
+>
+> - **Code contributions** go through Gerrit, not GitHub. Pull requests are disabled here; see
+>   [CONTRIBUTING.md](CONTRIBUTING.md#contributing-to-source-code) for how to submit a patch.
+> - **Report issues** at the [CollaboraOnline/online issue tracker](https://github.com/CollaboraOnline/online/issues/new/choose).
+
+[![Development: Gerrit](https://img.shields.io/badge/Development-Gerrit-orange?logo=git "Code development and review happen on Gerrit. GitHub pull requests are disabled.")](https://gerrit.collaboraoffice.com)
 
 
 [![Matrix](https://img.shields.io/badge/Matrix-%23cool--dev-turquoise.svg)](https://matrix.to/#/#cool-dev:matrix.org)
