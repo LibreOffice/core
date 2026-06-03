@@ -403,6 +403,7 @@ COOL_JS_LST =\
 	src/canvas/vector/primitive/LineRectanglePrimitive.ts \
 	src/canvas/vector/primitive/ModifiedColorPrimitive.ts \
 	src/canvas/vector/primitive/ObjectInfoPrimitive.ts \
+	src/canvas/vector/primitive/PointArrayPrimitive.ts \
 	src/canvas/vector/primitive/PolygonHairlinePrimitive.ts \
 	src/canvas/vector/primitive/PolygonStrokePrimitive.ts \
 	src/canvas/vector/primitive/PolyPolygonColorPrimitive.ts \

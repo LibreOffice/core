@@ -185,6 +185,31 @@ describe('VectorPrimitiveRenderer', function () {
 			nodeassert.ok(recorder.findCall('restore'), 'restore not called');
 		});
 
+		it('paints each point of a pointArray', function () {
+			// pointArray lays down a single-pixel mark at every point,
+			// all in the same colour.
+			const primitive = loadVectorRenderingReference('testPointArray').primitives[0];
+			nodeassert.strictEqual(primitive.type, 'pointArray');
+			nodeassert.strictEqual(typeof primitive.color, 'string');
+			nodeassert.ok(Array.isArray(primitive.points));
+
+			const recorder = new CanvasRecorder();
+			const renderer = new cool.VectorPrimitiveRenderer();
+			renderer.renderPrimitive(recorder as any, primitive);
+
+			const fills = recorder.callsOf('fillRect');
+			nodeassert.strictEqual(fills.length, primitive.points.length);
+			for (let i = 0; i < primitive.points.length; i++) {
+				nodeassert.deepStrictEqual(fills[i].args, [
+					primitive.points[i].x,
+					primitive.points[i].y,
+					1,
+					1,
+				]);
+				nodeassert.strictEqual(fills[i].properties.fillStyle, primitive.color);
+			}
+		});
+
 		it('renders a group\'s children in order', function () {
 			// A group node carries no drawing of its own. The renderer
 			// must descend into the children in order.

@@ -89,6 +89,7 @@
 /// <reference path="../src/canvas/vector/primitive/LineRectanglePrimitive.ts" />
 /// <reference path="../src/canvas/vector/primitive/ModifiedColorPrimitive.ts" />
 /// <reference path="../src/canvas/vector/primitive/ObjectInfoPrimitive.ts" />
+/// <reference path="../src/canvas/vector/primitive/PointArrayPrimitive.ts" />
 /// <reference path="../src/canvas/vector/primitive/PolygonHairlinePrimitive.ts" />
 /// <reference path="../src/canvas/vector/primitive/PolygonStrokePrimitive.ts" />
 /// <reference path="../src/canvas/vector/primitive/PolyPolygonColorPrimitive.ts" />

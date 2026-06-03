@@ -24,6 +24,7 @@
 #include <drawinglayer/primitive2d/PolyPolygonStrokePrimitive2D.hxx>
 #include <drawinglayer/primitive2d/groupprimitive2d.hxx>
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
+#include <drawinglayer/primitive2d/pointarrayprimitive2d.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <drawinglayer/primitive2d/hiddengeometryprimitive2d.hxx>
 #include <drawinglayer/primitive2d/exclusiveeditviewprimitive2d.hxx>
@@ -481,6 +482,29 @@ CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testPolygonStrokeDashed)
     assertJsonPath(aJson, "/primitives/0/type", "polygonStroke");
     assertJsonPathExists(aJson, "/primitives/0/stroke/dotDashArray");
     CPPUNIT_ASSERT_EQUAL(size_t(2), aJson.getSize("/primitives/0/stroke/dotDashArray").value_or(0));
+}
+
+CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testPointArray)
+{
+    // pointArray carries a colour and a list of points.
+    std::vector<basegfx::B2DPoint> aPoints{
+        basegfx::B2DPoint(10.0, 10.0),
+        basegfx::B2DPoint(20.0, 10.0),
+        basegfx::B2DPoint(30.0, 10.0),
+    };
+
+    Primitive2DContainer aPrimitives;
+    aPrimitives.append(
+        new PointArrayPrimitive2D(std::move(aPoints), basegfx::BColor(1.0, 0.0, 0.0)));
+
+    auto aJson = writeReference(u"testPointArray", aPrimitives);
+
+    assertJsonPath(aJson, "/primitives/0/type", "pointArray");
+    assertJsonPath(aJson, "/primitives/0/color", "#ff0000");
+    CPPUNIT_ASSERT_EQUAL(size_t(3), aJson.getSize("/primitives/0/points").value_or(0));
+    assertJsonPathDouble(aJson, "/primitives/0/points/0/x", 10.0, 1e-9);
+    assertJsonPathDouble(aJson, "/primitives/0/points/0/y", 10.0, 1e-9);
+    assertJsonPathDouble(aJson, "/primitives/0/points/2/x", 30.0, 1e-9);
 }
 
 CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testMask)

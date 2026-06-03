@@ -59,6 +59,9 @@ namespace cool {
 				case SingleLinePrimitive.type:
 					this._renderSingleLine(context, primitive as SingleLinePrimitive);
 					break;
+				case PointArrayPrimitive.type:
+					this._renderPointArray(context, primitive as PointArrayPrimitive);
+					break;
 				case GroupPrimitive.type:
 				case ObjectInfoPrimitive.type:
 					// Pure container - recursion into children happens
@@ -217,6 +220,19 @@ namespace cool {
 			context.moveTo(startX, startY);
 			context.lineTo(endX, endY);
 			context.stroke();
+			context.restore();
+		}
+
+		private _renderPointArray(
+			context: CanvasRenderingContext2D,
+			primitive: PointArrayPrimitive,
+		): void {
+			if (!primitive.points?.length) return;
+
+			context.save();
+			context.fillStyle = primitive.color ?? '#000000';
+			for (const point of primitive.points)
+				context.fillRect(point.x, point.y, 1, 1);
 			context.restore();
 		}
 
