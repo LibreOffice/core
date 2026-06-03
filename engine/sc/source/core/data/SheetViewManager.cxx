@@ -53,7 +53,7 @@ SheetViewID SheetViewManager::createAt(SheetViewID nID, ScTable* pSheetViewTable
 
 bool SheetViewManager::remove(SheetViewID nID)
 {
-    if (!isValidSheetViewID(nID))
+    if (!isInVectorRange(nID))
         return false;
 
     // It's probably a bug if we want to remove a non-existent sheet view.
@@ -78,7 +78,7 @@ void SheetViewManager::removeAll()
 
 std::shared_ptr<SheetView> SheetViewManager::get(SheetViewID nID) const
 {
-    if (isValidSheetViewID(nID))
+    if (isInVectorRange(nID))
     {
         return maViews[nID];
     }
@@ -198,12 +198,8 @@ void SheetViewManager::restoreSortData(std::shared_ptr<DefaultViewSortData> cons
 
     for (auto const & [ nID, pSortData ] : pData->maSheetViewSortData)
     {
-        if (isValidSheetViewID(nID))
-        {
-            auto pSheetView = get(nID);
-            if (pSheetView)
-                pSheetView->restoreSortData(pSortData);
-        }
+        if (auto pSheetView = get(nID))
+            pSheetView->restoreSortData(pSortData);
     }
 }
 

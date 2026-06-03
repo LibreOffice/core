@@ -44,7 +44,10 @@ private:
     /** Ensure sort data is allocated. */
     DefaultViewSortData& ensureSortData();
 
-    bool isValidSheetViewID(SheetViewID nID) const
+    /** True when the ID is in range of the vector. The slot may still
+     *  hold a null shared_ptr.
+     */
+    bool isInVectorRange(SheetViewID nID) const
     {
         return nID >= 0 && o3tl::make_unsigned(nID) < maViews.size();
     }
