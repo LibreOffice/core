@@ -44,14 +44,14 @@ using namespace COOLProtocol;
 namespace
 {
     /// Upper bound on how many stalled tiles a single stale-render sweep
-    /// will reissue.
-    constexpr size_t MAX_STALE_REISSUE_PER_SWEEP = 64;
+    /// will reissue. Unused unless ENABLE_STALE_TILE_REISSUE is on.
+    [[maybe_unused]] constexpr size_t MAX_STALE_REISSUE_PER_SWEEP = 64;
 
     /// Reissue count at which log line is promoted for a tile
-    constexpr int STALE_REISSUE_WARN_AT = 3;
+    [[maybe_unused]] constexpr int STALE_REISSUE_WARN_AT = 3;
 
     /// Cancel a stuck tile after this many reissues.
-    constexpr int MAX_STALE_REISSUE_TOTAL = 8;
+    [[maybe_unused]] constexpr int MAX_STALE_REISSUE_TOTAL = 8;
 }
 
 TileCache::TileCache(std::string docURL, const std::chrono::system_clock::time_point& modifiedTime,
@@ -205,8 +205,10 @@ TileCache::takeStaleRendersForReissue(std::chrono::steady_clock::time_point now)
 {
     ASSERT_CORRECT_THREAD_OWNER(_owner);
 
-    // First pass: collect stale entries with live subscribers, dropping
-    // entries whose subscribers have all gone away.
+    // This first pass always runs: it finds stale entries and drops the ones
+    // whose subscribers have all gone away. The reissue mechanics below (start
+    // time reset, reissue counting, abandoning, building the list) run only
+    // when ENABLE_STALE_TILE_REISSUE is on.
     using MapIter = std::unordered_map<TileDesc, std::shared_ptr<TileBeingRendered>,
                        TileDescCacheHasher,
                        TileDescCacheCompareEq>::iterator;
@@ -240,13 +242,15 @@ TileCache::takeStaleRendersForReissue(std::chrono::steady_clock::time_point now)
         ++it;
     }
 
+    std::vector<TileDesc> reissue;
+
+#if ENABLE_STALE_TILE_REISSUE
     // oldest first
     std::sort(candidates.begin(), candidates.end(),
               [](const MapIter& a, const MapIter& b)
               { return a->second->getStartTime() < b->second->getStartTime(); });
 
     const size_t take = std::min(candidates.size(), MAX_STALE_REISSUE_PER_SWEEP);
-    std::vector<TileDesc> reissue;
     reissue.reserve(take);
 
     // reissue up to MAX_STALE_REISSUE_PER_SWEEP
@@ -284,6 +288,7 @@ TileCache::takeStaleRendersForReissue(std::chrono::steady_clock::time_point now)
         LOG_INF("Deferred " << (candidates.size() - take)
                 << " stale tile(s) to next sweep; per-sweep cap is "
                 << MAX_STALE_REISSUE_PER_SWEEP);
+#endif
 
     return reissue;
 }

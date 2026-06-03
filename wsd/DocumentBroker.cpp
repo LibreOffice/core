@@ -416,11 +416,10 @@ void DocumentBroker::pollThread()
         if (_tileCache)
             _tileCache->setMaxCacheSize(8 * 1024 * 256 * 2 * _sessions.size());
 
-        // Recover from kit hangs / very slow renders. If a tile render has
-        // been pending longer than COMMAND_TIMEOUT_MS, re-issue it. Client-side
-        // per-tile rate limits (5s) plus the same timeout server-side can
-        // otherwise leave a tile permanently lost when the client lacks a
-        // trigger to retry.
+        // The stale-render sweep runs every COMMAND_TIMEOUT_MS. It always drops
+        // entries whose subscribers are gone; re-issuing the remaining stale
+        // tiles to the kit is compiled in only when ENABLE_STALE_TILE_REISSUE is
+        // on, so the returned list is empty by default.
         if (_tileCache &&
             (now - lastStaleRenderCheck) >= std::chrono::milliseconds(COMMAND_TIMEOUT_MS))
         {

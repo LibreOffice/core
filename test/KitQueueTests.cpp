@@ -48,9 +48,11 @@ class KitQueueTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testSenderQueueTileDeduplication);
     CPPUNIT_TEST(testSenderQueueTileDedupReportsDroppedWireId);
     CPPUNIT_TEST(testTileCacheKitHangBecomesStale);
+#if ENABLE_STALE_TILE_REISSUE
     CPPUNIT_TEST(testTileCacheStaleRenderIsReissued);
     CPPUNIT_TEST(testTileCacheStaleRenderAbandonAfterMaxReissues);
     CPPUNIT_TEST(testTileCacheReissueCountResetsOnNewVersion);
+#endif
     CPPUNIT_TEST(testInvalidateViewCursorDeduplication);
     CPPUNIT_TEST(testCallbackModifiedStatusIsSkipped);
     CPPUNIT_TEST(testCallbackInvalidation);
@@ -98,9 +100,11 @@ class KitQueueTests : public CPPUNIT_NS::TestFixture
     void testSenderQueueTileDeduplication();
     void testSenderQueueTileDedupReportsDroppedWireId();
     void testTileCacheKitHangBecomesStale();
+#if ENABLE_STALE_TILE_REISSUE
     void testTileCacheStaleRenderIsReissued();
     void testTileCacheStaleRenderAbandonAfterMaxReissues();
     void testTileCacheReissueCountResetsOnNewVersion();
+#endif
     void testInvalidateViewCursorDeduplication();
     void testCallbackModifiedStatusIsSkipped();
     void testCallbackInvalidation();
@@ -736,12 +740,14 @@ void KitQueueTests::testSenderQueueTileDedupReportsDroppedWireId()
     LOK_ASSERT_EQUAL(static_cast<size_t>(1), q3.size());
 }
 
-// Reproduces the kit-hang scenario for an in-flight tile render.
+// Reproduces a slow render of a low priority in-flight tile.
 //
 // When a client sends a tilecombine, the server calls
 // requestTileRendering → subscribeToTileRendering, which inserts a
 // TileBeingRendered into _tilesBeingRendered with a start timestamp.
-// If the kit doesn't reply in time (hang), no path removes the entry.
+// A low priority tile (a preview, another part, or an area outside the
+// visible one) can wait a long time when the kit is busy with more
+// important tiles, so the reply is slow and no path removes the entry.
 // Once the entry's age exceeds COMMAND_TIMEOUT_MS, isStale() flips
 // and hasTileBeingRendered returns false. The next call to
 // requestTileRendering sees "no in-progress render" and re-issues to
@@ -799,6 +805,7 @@ void KitQueueTests::testTileCacheKitHangBecomesStale()
     }
 }
 
+#if ENABLE_STALE_TILE_REISSUE
 // Verifies the periodic stale-render sweep:
 //   - returns stale entries for re-issue when live subscribers remain,
 //   - resets the start time so the next sweep does not re-flag them,
@@ -997,6 +1004,7 @@ void KitQueueTests::testTileCacheReissueCountResetsOnNewVersion()
         LOK_ASSERT_EQUAL_STR(false, cache.hasTileBeingRendered(tile));
     }
 }
+#endif // ENABLE_STALE_TILE_REISSUE
 
 void KitQueueTests::testInvalidateViewCursorDeduplication()
 {

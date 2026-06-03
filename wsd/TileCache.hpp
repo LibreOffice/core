@@ -30,6 +30,13 @@
 
 class ClientSession;
 
+/// The stale-render sweep (TileCache::takeStaleRendersForReissue, called
+/// from DocumentBroker::pollThread) always runs and cleans up stale entries.
+/// This flag controls only whether the swept tiles are actually re-sent to
+/// the kit, which is off by default because re-issuing can waste renders on
+/// areas the user has scrolled past.
+#define ENABLE_STALE_TILE_REISSUE 0
+
 // The cache cares about only some properties.
 struct TileDescCacheCompareEq final
 {

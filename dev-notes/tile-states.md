@@ -27,16 +27,19 @@ rendered" map is *not* touched by invalidation.
 
 ### Stale
 A "being rendered" entry is older than `COMMAND_TIMEOUT_MS` (5 s).
-The kit is slow or hung. Nothing has been re-sent yet.
+Usually the tile is low priority (a preview, another part, or an area
+outside the visible one) and the kit is busy with more important tiles,
+so the reply is slow. Nothing has been re-sent yet.
 
 ### Reissued
-The periodic sweep picked the stale entry and sent the request to the
-kit again. The start time is reset.
+The sweep picked the stale entry, reset its start time and sent the
+request to the kit again. This whole step is gated by
+`ENABLE_STALE_TILE_REISSUE` and is off by default.
 
 ### Abandoned
 The entry has been reissued too many times. It is removed from the
 "being rendered" map. If the client still wants the tile, it must ask
-again, which creates a fresh entry.
+again, which creates a fresh entry. Only happens when reissuing is on.
 
 ### Dropped
 All sessions that wanted this tile are gone. The sweep removes the
@@ -68,12 +71,13 @@ not tracked ──► requested ────────────────
 ## When transitions happen
 
 The wsd document loop calls the stale sweep every `COMMAND_TIMEOUT_MS`.
-The sweep does, in order:
-1. Drops entries with no live subscribers.
-2. Sorts the rest, oldest first.
-3. For up to `MAX_STALE_REISSUE_PER_SWEEP` entries: abandons if the
-   reissue count is at the limit, otherwise reissues and bumps the
-   count.
+It always drops entries with no live subscribers.
+
+The rest is gated by `ENABLE_STALE_TILE_REISSUE` and is off by default.
+When on, for the remaining stale entries, oldest first, up to
+`MAX_STALE_REISSUE_PER_SWEEP`: it abandons the entry if the reissue count
+is at the limit, otherwise re-sends it to the kit, bumps the count and
+resets the start time.
 
 A new client request for the same tile slot at a newer wireId resets
 the reissue count, because earlier reissues were tracking older
@@ -89,5 +93,6 @@ See `wsd/TileCache.cpp` and `common/Common.hpp`.
 | `MAX_STALE_REISSUE_PER_SWEEP` | Most tiles reissued in one sweep.                                         |
 | `MAX_STALE_REISSUE_TOTAL`     | Reissues for one tile before it is abandoned (~40 s of futile retries).   |
 | `STALE_REISSUE_WARN_AT`       | Reissue count at which the log line is promoted from INF to WRN.          |
+| `ENABLE_STALE_TILE_REISSUE`   | Off by default. Re-sends swept stale tiles to the kit. In `wsd/TileCache.hpp`. |
 
 `TRACE_MULTIPLIER` (in `common/Common.hpp`) scales `COMMAND_TIMEOUT_MS` under valgrind or coverage builds.
