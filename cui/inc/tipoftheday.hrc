@@ -224,7 +224,7 @@ const std::tuple<TranslateId, OUString, OUString, tipModule> TIPOFTHEDAY_STRINGA
      { NC_("RID_CUI_TIPOFTHEDAY", "Use font embedding for greater interoperability with other office suites at File ▸ Properties ▸ Font."), "", "", swriter},
      { NC_("RID_CUI_TIPOFTHEDAY", "To convert a formula into static values you do not need to copy/paste; use Data ▸ Calculate ▸ Formula to Value."), "", "", scalc},
      { NC_("RID_CUI_TIPOFTHEDAY", "You can reformat all comments in a document by clicking the down arrow in a comment and choose “Format all Comments”."), "", "", swriter},
-     { NC_("RID_CUI_TIPOFTHEDAY", "Writer helps you to make backups: with File ▸ Save a Copy you create a new document continuing to work on the original."), "", "", swriter},
+     { NC_("RID_CUI_TIPOFTHEDAY", "Create a backup of your document in Writer by selecting File ▸ Save a Copy while continuing to work on the original."), "", "", swriter},
      { NC_("RID_CUI_TIPOFTHEDAY", "When you have created a Style based on another, you can enter a percentage value or a point value (e.g. 110% or −2pt or +5pt)."), "", "", swriter},
      { NC_("RID_CUI_TIPOFTHEDAY", "To copy a comment without losing the content of the target cell you should use Paste Special and uncheck everything except “Comments” in dialog. Use Operations “Add” to not override existing content."), "", "", scalc},
      { NC_("RID_CUI_TIPOFTHEDAY", "Batch-convert your Microsoft Office documents to the OpenDocument format by using the Document Converter wizard in menu File ▸ Wizards ▸ Document Converter."), "", "", soffice},
