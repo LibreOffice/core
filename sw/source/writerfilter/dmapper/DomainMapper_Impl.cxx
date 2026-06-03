@@ -5395,6 +5395,13 @@ void DomainMapper_Impl::ClearPreviousParagraph()
 
     // next table paragraph will be first paragraph in a cell
     m_StreamStateStack.top().bFirstParagraphInCell = true;
+
+    // if there are any broken fields (opened in a cell, but not closed), then close them now...
+    while (IsOpenField()
+           && GetTopFieldContext()->GetTableDepth() == m_StreamStateStack.top().nTableDepth)
+    {
+        m_StreamStateStack.top().m_aFieldStack.pop_back();
+    }
 }
 
 void DomainMapper_Impl::HandleAltChunk(const OUString& rStreamName)
