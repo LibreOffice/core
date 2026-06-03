@@ -24,11 +24,9 @@
 
 #include <cassert>
 #include <cstddef>
-#if defined LIBO_INTERNAL_ONLY
 # include <type_traits>
 # include <ostream>
 # include <utility>
-#endif
 
 #include "osl/interlck.h"
 #include "com/sun/star/uno/Sequence.h"
@@ -100,7 +98,6 @@ inline Sequence< E >::Sequence( sal_Int32 len )
         throw ::std::bad_alloc();
 }
 
-#if defined LIBO_INTERNAL_ONLY
 template<typename E> Sequence<E>::Sequence(std::initializer_list<E> init) {
     if (!uno_type_sequence_construct(
             &_pSequence, cppu::getTypeFavourUnsigned(static_cast<Sequence const *>(NULL)).getTypeLibType(),
@@ -109,7 +106,6 @@ template<typename E> Sequence<E>::Sequence(std::initializer_list<E> init) {
         throw std::bad_alloc();
     }
 }
-#endif
 
 template< class E >
 inline Sequence< E >::~Sequence()
@@ -131,12 +127,10 @@ inline Sequence< E > & Sequence< E >::operator = ( const Sequence & rSeq )
     return *this;
 }
 
-#if defined LIBO_INTERNAL_ONLY
 template<typename E> Sequence<E> & Sequence<E>::operator =(Sequence && other) {
     std::swap(_pSequence, other._pSequence);
     return *this;
 }
-#endif
 
 template< class E >
 inline bool Sequence< E >::operator == ( const Sequence & rSeq ) const
@@ -172,29 +166,11 @@ inline E * Sequence< E >::getArray()
     return reinterpret_cast< E * >( _pSequence->elements );
 }
 
-#if !defined LIBO_INTERNAL_ONLY
-template<class E> E * Sequence<E>::begin() { return getArray(); }
-#endif
-
 template<class E> E const * Sequence<E>::begin() const
 { return getConstArray(); }
 
-#if !defined LIBO_INTERNAL_ONLY
-template<class E> E * Sequence<E>::end() { return begin() + getLength(); }
-#endif
-
 template<class E> E const * Sequence<E>::end() const
 { return begin() + getLength(); }
-
-#if !defined LIBO_INTERNAL_ONLY
-template< class E >
-inline E & Sequence< E >::operator [] ( sal_Int32 nIndex )
-{
-    // silence spurious -Werror=strict-overflow warnings from GCC 4.8.2
-    assert(nIndex >= 0 && static_cast<sal_uInt32>(nIndex) < static_cast<sal_uInt32>(getLength()));
-    return getArray()[ nIndex ];
-}
-#endif
 
 template< class E >
 inline const E & Sequence< E >::operator [] ( sal_Int32 nIndex ) const
@@ -216,20 +192,16 @@ inline void Sequence< E >::realloc( sal_Int32 nSize )
         throw ::std::bad_alloc();
 }
 
-#if defined LIBO_INTERNAL_ONLY
 template <class E> inline void Sequence<E>::swap(Sequence& other)
 {
     std::swap(_pSequence, other._pSequence);
 }
-#endif
 
 inline ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL toUnoSequence(
     const ::rtl::ByteSequence & rByteSequence )
 {
     return * reinterpret_cast< const ::com::sun::star::uno::Sequence< sal_Int8 > * >( &rByteSequence );
 }
-
-#if defined LIBO_INTERNAL_ONLY
 
 /// @cond INTERNAL
 
@@ -307,8 +279,6 @@ template <class E> inline auto asNonConstRange(css::uno::Sequence<E>& s)
 };
 
 /// @endcond
-
-#endif
 
 }
 }

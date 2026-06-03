@@ -23,6 +23,7 @@
 #include "sal/config.h"
 
 #include <cstddef>
+#include <type_traits>
 
 #include "rtl/ustring.hxx"
 #include "uno/any2.h"
@@ -31,9 +32,6 @@
 #include "com/sun/star/uno/TypeClass.hdl"
 #include "rtl/alloc.h"
 
-#if defined LIBO_INTERNAL_ONLY
-#include <type_traits>
-#endif
 
 namespace com
 {
@@ -67,17 +65,14 @@ public:
         @param value value of the Any
     */
     template <typename T>
-#if defined LIBO_INTERNAL_ONLY
         // Disallow things like
         // Reference<XInterface> x(...);
         // Any a(*x);
         requires (!std::is_base_of_v<XInterface, T>)
-#endif
     explicit inline Any( T const & value );
     /// Ctor support for C++ bool.
     explicit inline Any( bool value );
 
-#if defined LIBO_INTERNAL_ONLY
     template<typename T1, typename T2>
     explicit inline Any(rtl::OUStringConcat<T1, T2> && value);
     template<typename T1, typename T2>
@@ -85,7 +80,6 @@ public:
     template<std::size_t nBufSize> explicit inline Any(rtl::StringNumber<sal_Unicode, nBufSize> && value);
     template<std::size_t nBufSize> explicit Any(rtl::StringNumber<sal_Unicode, nBufSize> const &) = delete;
     template <std::size_t N> explicit inline Any(const rtl::OUStringLiteral<N>& value);
-#endif
 
     /** Copy constructor: Sets value of the given any.
 
@@ -114,7 +108,6 @@ public:
     */
     inline Any( const void * pData_, typelib_TypeDescriptionReference * pType_ );
 
-#if defined LIBO_INTERNAL_ONLY
     Any(bool const *, Type const &) = delete;
     Any(bool const *, typelib_TypeDescription *) = delete;
     Any(bool const *, typelib_TypeDescriptionReference *) = delete;
@@ -127,7 +120,6 @@ public:
         Any(static_cast<void *>(nullptr), type) {}
     Any(std::nullptr_t, typelib_TypeDescriptionReference * type):
         Any(static_cast<void *>(nullptr), type) {}
-#endif
 
     /** Destructor: Destructs any content and frees memory.
     */
@@ -140,12 +132,10 @@ public:
     */
     inline Any & SAL_CALL operator = ( const Any & rAny );
 
-#if defined LIBO_INTERNAL_ONLY
 #if !defined(__COVERITY__) // suppress COPY_INSTEAD_OF_MOVE suggestions
     inline Any(Any && other) noexcept;
 #endif
     inline Any & operator =(Any && other) noexcept;
-#endif
 
     /** Gets the type of the set value.
 
@@ -232,7 +222,6 @@ public:
     */
     inline void SAL_CALL setValue( const void * pData_, typelib_TypeDescription * pTypeDescr );
 
-#if defined LIBO_INTERNAL_ONLY
     void setValue(bool const *, Type const &) = delete;
     void setValue(bool const *, typelib_TypeDescriptionReference *) = delete;
     void setValue(bool const *, typelib_TypeDescription *) = delete;
@@ -246,7 +235,6 @@ public:
     { setValue(static_cast<void *>(nullptr), type); }
     void setValue(std::nullptr_t, typelib_TypeDescription * type)
     { setValue(static_cast<void *>(nullptr), type); }
-#endif
 
     /** Clears this any. If the any already contains a value, that value will be destructed
         and its memory freed. After this has been called, the any does not contain a value.
@@ -285,50 +273,12 @@ public:
     */
     inline bool SAL_CALL operator != ( const Any & rAny ) const;
 
-#if defined LIBO_INTERNAL_ONLY
     // Similar to Reference::query/queryThrow, these allow to simplify calling constructors of
     // Reference taking Any. queryThrow is functionally similar to get(), but doesn't require
     // to specify the full Reference type explicitly, only the interface type.
     template<class interface_type> inline Reference<interface_type> query() const;
     template<class interface_type> inline Reference<interface_type> queryThrow() const;
-#endif
-
-private:
-#if !defined LIBO_INTERNAL_ONLY
-    /// @cond INTERNAL
-    // Forbid use with ambiguous type (sal_Unicode, sal_uInt16):
-    explicit Any(sal_uInt16) SAL_DELETED_FUNCTION;
-    /// @endcond
-#endif
 };
-
-#if !defined LIBO_INTERNAL_ONLY
-/// @cond INTERNAL
-// Forbid use with ambiguous type (sal_Unicode, sal_uInt16):
-template<> sal_uInt16 Any::get<sal_uInt16>() const SAL_DELETED_FUNCTION;
-template<> bool Any::has<sal_uInt16>() const SAL_DELETED_FUNCTION;
-/// @endcond
-#endif
-
-#if !defined LIBO_INTERNAL_ONLY
-/** Template function to generically construct an any from a C++ value.
-
-    @deprecated Just use an Any constructor with an appropriately typed argument.  (When the
-    (UNO) type recorded in the Any instance shall be different from what would
-    be deduced from the (C++) type of the argument, cast the argument to the appropriate type
-    first.)
-
-    @tparam C value type
-    @param value a value
-    @return an any
-*/
-template< class C >
-inline Any SAL_CALL makeAny( const C & value );
-
-template<> inline Any SAL_CALL makeAny(sal_uInt16 const & value);
-
-template<> Any SAL_CALL makeAny(Any const &) SAL_DELETED_FUNCTION;
-#endif
 
 /** Wrap a value in an Any, if necessary.
 
@@ -339,12 +289,10 @@ template<typename T> inline Any toAny(T const & value);
 
 template<> inline Any toAny(Any const & value);
 
-#if defined LIBO_INTERNAL_ONLY
-
 /** Extract a value from an Any, if necessary.
 
     The difference to operator >>= is that operator >>= cannot be called with an
-    Any as right-hand side (in LIBO_INTERNAL_ONLY), while fromAny just passes on
+    Any as right-hand side, while fromAny just passes on
     the given Any (and always succeeds) in the specialization for T = Any.
 
     @tparam T  any type representing a UNO type
@@ -359,8 +307,6 @@ template<> inline Any toAny(Any const & value);
 template<typename T> inline bool fromAny(Any const & any, T * value);
 
 template<> inline bool fromAny(Any const & any, Any * value);
-
-#endif
 
 class BaseReference;
 
@@ -453,20 +399,13 @@ template<>
 inline bool SAL_CALL operator >>= ( const Any & rAny, ::rtl::OUString & value );
 template<>
 inline bool SAL_CALL operator == ( const Any & rAny, const ::rtl::OUString & value );
-#if defined LIBO_INTERNAL_ONLY
 template<std::size_t N>
 inline bool SAL_CALL operator == (const Any& rAny, const rtl::OUStringLiteral<N>& value);
-#endif
 // type
 template<>
 inline bool SAL_CALL operator >>= ( const Any & rAny, Type & value );
 template<>
 inline bool SAL_CALL operator == ( const Any & rAny, const Type & value );
-// any
-#if !defined LIBO_INTERNAL_ONLY
-template<>
-inline bool SAL_CALL operator >>= ( const Any & rAny, Any & value );
-#endif
 // interface
 template<>
 inline bool SAL_CALL operator == ( const Any & rAny, const BaseReference & value );

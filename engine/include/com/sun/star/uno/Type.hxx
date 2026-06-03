@@ -90,19 +90,16 @@ inline Type & Type::operator = ( const Type & rType )
     return *this;
 }
 
-#if defined LIBO_INTERNAL_ONLY
 inline Type & Type::operator = ( Type && rType )
 {
     std::swap(_pType, rType._pType);
     return *this;
 }
-#endif
 
 
 template< class T >
 typelib_TypeDescriptionReference * Array< T >::s_pType = NULL;
 
-#if defined LIBO_INTERNAL_ONLY
 /**
    Support for Type in std::ostream (and thus in CPPUNIT_ASSERT or SAL_INFO
    macros, for example).
@@ -110,7 +107,6 @@ typelib_TypeDescriptionReference * Array< T >::s_pType = NULL;
 template<typename charT, typename traits> std::basic_ostream<charT, traits> &
 operator <<(std::basic_ostream<charT, traits> & stream, Type const & type)
 { return stream << type.getTypeName(); }
-#endif
 
 }
 }

@@ -60,12 +60,10 @@ inline Any::Any()
 
 
 template <typename T>
-#if defined LIBO_INTERNAL_ONLY
     // Disallow things like
     // Reference<XInterface> x(...);
     // Any a(*x);
     requires(!std::is_base_of_v<XInterface, T>)
-#endif
 inline Any::Any( T const & value )
 {
     ::uno_type_any_construct(
@@ -82,7 +80,6 @@ inline Any::Any( bool value )
         cpp_acquire );
 }
 
-#if defined LIBO_INTERNAL_ONLY
 template<typename T1, typename T2>
 Any::Any(rtl::OUStringConcat<T1, T2> && value):
     Any(rtl::OUString(std::move(value)))
@@ -91,7 +88,6 @@ template<std::size_t nBufSize>
 Any::Any(rtl::StringNumber<sal_Unicode, nBufSize> && value): Any(rtl::OUString(std::move(value))) {}
 template <std::size_t N>
 Any::Any(const rtl::OUStringLiteral<N>& value): Any(rtl::OUString(value)) {}
-#endif
 
 inline Any::Any( const Any & rAny )
 {
@@ -132,8 +128,6 @@ inline Any & Any::operator = ( const Any & rAny )
     return *this;
 }
 
-#if defined LIBO_INTERNAL_ONLY
-
 #if !defined(__COVERITY__) // suppress COPY_INSTEAD_OF_MOVE suggestions
 Any::Any(Any && other) noexcept {
     uno_any_construct(this, nullptr, nullptr, &cpp_acquire);
@@ -162,8 +156,6 @@ Any & Any::operator =(Any && other) noexcept {
     }
     return *this;
 }
-
-#endif
 
 inline ::rtl::OUString Any::getValueTypeName() const
 {
@@ -209,9 +201,7 @@ inline bool Any::has() const
     return isExtractableTo(::cppu::getTypeFavourUnsigned(static_cast< T * >(NULL)));
 }
 
-#if defined LIBO_INTERNAL_ONLY
 template<> bool Any::has<Any>() const = delete;
-#endif
 
 inline bool Any::operator == ( const Any & rAny ) const
 {
@@ -225,25 +215,11 @@ inline bool Any::operator != ( const Any & rAny ) const
     return (! operator==(rAny));
 }
 
-
-#if !defined LIBO_INTERNAL_ONLY
-template< class C >
-inline Any SAL_CALL makeAny( const C & value )
-{
-    return Any(value);
-}
-
-template<> Any makeAny(sal_uInt16 const & value)
-{ return Any(&value, cppu::UnoType<cppu::UnoUnsignedShortType>::get()); }
-#endif
-
 template<typename T> Any toAny(T const & value) {
     return Any(value);
 }
 
 template<> Any toAny(Any const & value) { return value; }
-
-#if defined LIBO_INTERNAL_ONLY
 
 inline Any toAny(Any&& value) { return std::move(value); }
 
@@ -266,8 +242,6 @@ template<> bool fromAny(Any const & any, Any * value) {
     return true;
 }
 
-#endif
-
 template< class C >
 inline void SAL_CALL operator <<= ( Any & rAny, const C & value )
 {
@@ -285,7 +259,6 @@ inline void SAL_CALL operator <<= ( Any & rAny, bool const & value )
 }
 
 
-#ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
 template< class C1, class C2 >
 inline void operator <<= ( Any & rAny, rtl::OUStringConcat< C1, C2 >&& value )
 {
@@ -300,11 +273,8 @@ inline void operator <<= ( Any & rAny, rtl::StringNumber< sal_Unicode, nBufSize 
 }
 template<std::size_t nBufSize>
 void operator <<=(Any &, rtl::StringNumber<sal_Unicode, nBufSize> const &) = delete;
-#endif
 
-#if defined LIBO_INTERNAL_ONLY
 template<> void SAL_CALL operator <<=(Any &, Any const &) = delete;
-#endif
 
 template< class C >
 inline bool SAL_CALL operator >>= ( const Any & rAny, C & value )
@@ -585,13 +555,11 @@ inline bool SAL_CALL operator == ( const Any & rAny, const ::rtl::OUString & val
             value == * static_cast< const ::rtl::OUString * >( rAny.pData ) );
 }
 
-#if defined LIBO_INTERNAL_ONLY
 template<std::size_t N>
 inline bool SAL_CALL operator == (const Any& rAny, const rtl::OUStringLiteral<N>& value)
 {
     return operator ==(rAny, rtl::OUString(value));
 }
-#endif
 // type
 
 template<>
@@ -613,21 +581,7 @@ inline bool SAL_CALL operator == ( const Any & rAny, const Type & value )
 }
 // any
 
-#if defined LIBO_INTERNAL_ONLY
 template<> bool SAL_CALL operator >>=(Any const &, Any &) = delete;
-#else
-template<>
-inline bool SAL_CALL operator >>= ( const Any & rAny, Any & value )
-{
-    if (&rAny != &value)
-    {
-        ::uno_type_any_assign(
-            &value, rAny.pData, rAny.pType,
-            cpp_acquire, cpp_release );
-    }
-    return true;
-}
-#endif
 // interface
 
 template<>
@@ -674,9 +628,7 @@ T Any::get() const
     return value;
 }
 
-#if defined LIBO_INTERNAL_ONLY
 template<> Any Any::get() const = delete;
-#endif
 
 /**
    Support for Any in std::ostream (and thus in CPPUNIT_ASSERT or SAL_INFO

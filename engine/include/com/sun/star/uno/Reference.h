@@ -24,10 +24,7 @@
 
 #include <cassert>
 #include <cstddef>
-
-#if defined LIBO_INTERNAL_ONLY
 #include <type_traits>
-#endif
 
 #include "rtl/alloc.h"
 
@@ -98,14 +95,12 @@ public:
     bool SAL_CALL is() const
         { return (NULL != _pInterface); }
 
-#if defined LIBO_INTERNAL_ONLY
     /** Checks if reference is null.
 
         @return true if reference acquires an interface, i.e. true if it is not null
     */
     explicit operator bool() const
         { return is(); }
-#endif
 
     /** Equality operator: compares two interfaces
         Checks if both references are null or refer to the same object.
@@ -242,7 +237,6 @@ public:
     */
     inline Reference( const Reference< interface_type > & rRef );
 
-#if defined LIBO_INTERNAL_ONLY
     /** Move constructor
 
         @param rRef another reference
@@ -265,7 +259,6 @@ public:
         std::enable_if_t<
             std::is_base_of_v<interface_type, derived_type>
             && !std::is_same_v<interface_type, XInterface>, void *> = nullptr);
-#endif
 
     /** Constructor: Sets given interface pointer.
 
@@ -306,12 +299,10 @@ public:
                      to other constructors
     */
     inline Reference( const BaseReference & rRef, UnoReference_QueryThrow dummy );
-#ifdef LIBO_INTERNAL_ONLY
     /**
         Prevent code from calling the QUERY_THROW constructor, when they meant to use the SET_THROW constructor.
     */
     Reference( const Reference< interface_type > & rRef, UnoReference_QueryThrow dummy ) = delete;
-#endif
     /** Constructor: Queries given interface for reference interface type (interface_type).
         Throws a RuntimeException if the demanded interface cannot be queried.
 
@@ -448,12 +439,10 @@ public:
                to set methods
     */
     inline void SAL_CALL set( const BaseReference & rRef, UnoReference_QueryThrow dummy );
-#ifdef LIBO_INTERNAL_ONLY
     /**
         Prevent code from calling the QUERY_THROW version, when they meant to use the SET_THROW version.
     */
     void set( const Reference< interface_type > & rRef, UnoReference_QueryThrow dummy ) = delete;
-#endif
 
     /** Queries given any for reference interface type (interface_type) and
         sets it.  An interface already set will be released.
@@ -497,7 +486,6 @@ public:
         @return this reference
     */
     inline Reference< interface_type > & SAL_CALL operator = ( const Reference< interface_type > & rRef );
-#if defined LIBO_INTERNAL_ONLY
     /** Assignment move operator: Acquires given interface reference and sets reference.
         An interface already set will be released.
 
@@ -505,7 +493,6 @@ public:
         @return this reference
     */
     inline Reference< interface_type > & operator = ( Reference< interface_type > && rRef ) noexcept;
-#endif
     /** Queries given interface reference for type interface_type.
 
         @param rRef interface reference
@@ -518,7 +505,6 @@ public:
         @return interface reference of demanded type (may be null)
     */
     SAL_WARN_UNUSED_RESULT inline static Reference< interface_type > SAL_CALL query( XInterface * pInterface );
-#if defined LIBO_INTERNAL_ONLY
     /** Queries this for the required interface, and returns the requested reference, possibly empty.
         A syntactic sugar for 'Reference< other_type > xOther(xThis, UNO_QUERY)' that avoids some
         verbocity.
@@ -533,7 +519,6 @@ public:
         @return new reference
     */
     template< class other_type > inline Reference< other_type > queryThrow() const;
-#endif
 };
 
 }

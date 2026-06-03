@@ -25,12 +25,9 @@
 #include "com/sun/star/uno/Type.h"
 #include "rtl/alloc.h"
 
-#include <new>
-
-#if defined LIBO_INTERNAL_ONLY
 #include <cassert>
 #include <initializer_list>
-#endif
+#include <new>
 
 namespace rtl
 {
@@ -105,13 +102,11 @@ public:
     */
     inline explicit Sequence( sal_Int32 len );
 
-#if defined LIBO_INTERNAL_ONLY
     /** Create a sequence with the given elements.
 
         @param init an initializer_list
      */
     inline Sequence(std::initializer_list<E> init);
-#endif
 
     /** Destructor: Releases sequence handle. Last handle will destruct
         elements and free memory.
@@ -126,9 +121,7 @@ public:
     */
     inline Sequence & SAL_CALL operator = ( const Sequence & rSeq );
 
-#if defined LIBO_INTERNAL_ONLY
     inline Sequence & operator =(Sequence && other);
-#endif
 
     /** Gets length of the sequence.
 
@@ -145,12 +138,10 @@ public:
     bool SAL_CALL hasElements() const
         { return (_pSequence->nElements > 0); }
 
-#if defined LIBO_INTERNAL_ONLY
     /** This function allows to use Sequence in cases where  std::size is needed, and the like.
     */
     sal_uInt32 size() const
         { assert(getLength() >= 0); return static_cast<sal_uInt32>(getLength()); }
-#endif
 
     /** Gets a pointer to elements array for reading.
         If the sequence has a length of 0, then the returned pointer is
@@ -172,45 +163,15 @@ public:
     */
     inline E * SAL_CALL getArray();
 
-#if !defined LIBO_INTERNAL_ONLY
-    /** This function allows to use Sequence in standard algorithms, like std::find
-        and others.
-    */
-    inline E * begin();
-#endif
-
     /** This function allows to use Sequence in standard algorithms, like std::find
         and others.
     */
     inline E const * begin() const;
 
-#if !defined LIBO_INTERNAL_ONLY
-    /** This function allows to use Sequence in standard algorithms, like std::find
-        and others.
-    */
-    inline E * end();
-#endif
-
     /** This function allows to use Sequence in standard algorithms, like std::find
         and others.
     */
     inline E const * end() const;
-
-// Non-const operator[] is not available in internal code. Consider explicit use
-// of getArray(), out of tight loops if possible to avoid unneeded COW overhead.
-#if !defined LIBO_INTERNAL_ONLY
-    /** Non-const index operator: Obtains a reference to element indexed at
-        given position.
-        The implementation does not check for array bounds!
-        In general if the sequence has a handle acquired by other sequences
-        (reference count > 1), then a new sequence is created copy constructing
-        all elements to keep value semantics!
-
-        @param nIndex index
-        @return non-const C++ reference to element
-    */
-    inline E & SAL_CALL operator [] ( sal_Int32 nIndex );
-#endif
 
     /** Const index operator: Obtains a reference to element indexed at
         given position.  The implementation does not check for array bounds!
@@ -253,13 +214,11 @@ public:
     uno_Sequence * SAL_CALL get() const
         { return _pSequence; }
 
-#if defined LIBO_INTERNAL_ONLY
     /** Swaps sequences efficiently exchanging their underlying representations.
 
         @param other another sequence of same type
     */
     inline void swap(Sequence& other);
-#endif
 };
 
 // Find uses of illegal Sequence<bool> (instead of Sequence<sal_Bool>) during

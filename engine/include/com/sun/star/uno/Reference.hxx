@@ -125,8 +125,6 @@ inline Reference< interface_type >::Reference( const Reference< interface_type >
         _pInterface->acquire();
 }
 
-#if defined LIBO_INTERNAL_ONLY
-
 #if !defined(__COVERITY__)
 template< class interface_type >
 inline Reference< interface_type >::Reference( Reference< interface_type > && rRef ) noexcept
@@ -148,7 +146,6 @@ inline Reference< interface_type >::Reference(
     if (_pInterface)
         _pInterface->acquire();
 }
-#endif
 
 template< class interface_type >
 inline Reference< interface_type >::Reference( interface_type * pInterface )
@@ -342,7 +339,6 @@ inline Reference< interface_type > & Reference< interface_type >::operator = (
     return *this;
 }
 
-#if defined LIBO_INTERNAL_ONLY
 template< class interface_type >
 inline Reference< interface_type > & Reference< interface_type >::operator = (
      Reference< interface_type > && rRef ) noexcept
@@ -353,7 +349,6 @@ inline Reference< interface_type > & Reference< interface_type >::operator = (
     rRef._pInterface = nullptr;
     return *this;
 }
-#endif
 
 template< class interface_type >
 inline Reference< interface_type > Reference< interface_type >::query(
@@ -371,7 +366,6 @@ inline Reference< interface_type > Reference< interface_type >::query(
         castFromXInterface(iquery( pInterface )), SAL_NO_ACQUIRE );
 }
 
-#if defined LIBO_INTERNAL_ONLY
 template< class interface_type > template< class other_type >
 inline Reference< other_type > Reference< interface_type >::query() const
 {
@@ -395,7 +389,6 @@ inline Reference< interface_type > Any::queryThrow() const
 {
     return Reference< interface_type >(*this, UNO_QUERY_THROW);
 }
-#endif
 
 
 inline bool BaseReference::operator == ( XInterface * pInterface ) const
@@ -450,7 +443,6 @@ inline bool BaseReference::operator != ( const BaseReference & rRef ) const
     return (! operator == ( rRef._pInterface ));
 }
 
-#if defined LIBO_INTERNAL_ONLY
 /**
    Support for BaseReference in std::ostream (and thus in CPPUNIT_ASSERT or
    SAL_INFO macros, for example).
@@ -459,14 +451,12 @@ template<typename charT, typename traits> std::basic_ostream<charT, traits> &
 operator <<(
     std::basic_ostream<charT, traits> & stream, BaseReference const & ref)
 { return stream << ref.get(); }
-#endif
 
 }
 }
 }
 }
 
-#if defined LIBO_INTERNAL_ONLY
 namespace std
 {
 
@@ -481,8 +471,6 @@ struct hash<::css::uno::Reference<T>>
 };
 
 }
-
-#endif
 
 #endif
 

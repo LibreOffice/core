@@ -116,9 +116,7 @@ public:
     */
     inline Type & SAL_CALL operator = ( const Type & rType );
 
-#if defined LIBO_INTERNAL_ONLY
     inline Type & SAL_CALL operator = ( Type && );
-#endif
 
     /** Gets the type class of set type.
 
