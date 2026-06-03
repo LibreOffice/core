@@ -19,6 +19,7 @@
 #include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
 #include <drawinglayer/primitive2d/backgroundcolorprimitive2d.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonColorPrimitive2D.hxx>
+#include <drawinglayer/primitive2d/PolyPolygonRGBAPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolygonStrokePrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolygonHairlinePrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonStrokePrimitive2D.hxx>
@@ -127,6 +128,29 @@ CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testPolyPolygonColor)
 
     assertJsonPath(aJson, "/primitives/0/type", "polyPolygonColor");
     assertJsonPath(aJson, "/primitives/0/color", "#00ff00");
+    assertJsonPathExists(aJson, "/primitives/0/path");
+}
+
+CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testPolyPolygonRGBAPrimitive)
+{
+    // polyPolygonRGBA fills a polygon with one colour and an optional
+    // transparency in [0, 1]. The fixture uses 25 percent transparency
+    // so the wire carries the value alongside the colour.
+    basegfx::B2DPolygon aTriangle;
+    aTriangle.append(basegfx::B2DPoint(0.0, 0.0));
+    aTriangle.append(basegfx::B2DPoint(100.0, 0.0));
+    aTriangle.append(basegfx::B2DPoint(100.0, 100.0));
+    aTriangle.setClosed(true);
+
+    Primitive2DContainer aPrimitives;
+    aPrimitives.append(new PolyPolygonRGBAPrimitive2D(basegfx::B2DPolyPolygon(aTriangle),
+                                                      basegfx::BColor(0.0, 0.0, 1.0), 0.25));
+
+    auto aJson = writeReference(u"testPolyPolygonRGBAPrimitive", aPrimitives);
+
+    assertJsonPath(aJson, "/primitives/0/type", "polyPolygonRGBA");
+    assertJsonPath(aJson, "/primitives/0/color", "#0000ff");
+    assertJsonPathDouble(aJson, "/primitives/0/transparency", 0.25, 1e-9);
     assertJsonPathExists(aJson, "/primitives/0/path");
 }
 

@@ -23,6 +23,7 @@
 #include <svx/svdorect.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
+#include <svx/xfltrit.hxx>
 #include <svx/xlineit0.hxx>
 #include <svx/xlnclit.hxx>
 
@@ -106,6 +107,22 @@ protected:
         pRect->SetMergedItem(XFillStyleItem(drawing::FillStyle_NONE));
         pRect->SetMergedItem(XLineStyleItem(drawing::LineStyle_SOLID));
         pRect->SetMergedItem(XLineColorItem(OUString(), aStrokeColor));
+
+        pPage->NbcInsertObject(pRect.get());
+    }
+
+    /// Add a filled rectangle with a non-zero fill transparency
+    /// (0..100 percent).
+    void addTransparentRectangle(const tools::Rectangle& rRect, Color aFillColor,
+                                 sal_uInt16 nTransparencePercent)
+    {
+        SdrPage* pPage = page(1);
+        rtl::Reference<SdrRectObj> pRect = new SdrRectObj(pPage->getSdrModelFromSdrPage(), rRect);
+
+        pRect->SetMergedItem(XFillStyleItem(drawing::FillStyle_SOLID));
+        pRect->SetMergedItem(XFillColorItem(OUString(), aFillColor));
+        pRect->SetMergedItem(XFillTransparenceItem(nTransparencePercent));
+        pRect->SetMergedItem(XLineStyleItem(drawing::LineStyle_NONE));
 
         pPage->NbcInsertObject(pRect.get());
     }
@@ -273,6 +290,31 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testObjectInfo)
     assertJsonPath(*oObjectInfo, "name", "Rectangle 1");
     assertJsonPath(*oObjectInfo, "title", "My title");
     assertJsonPath(*oObjectInfo, "desc", "My description");
+}
+
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testPolyPolygonRGBA)
+{
+    // A solid-fill rectangle with a non-zero fill transparency
+    // decomposes directly to a PolyPolygonRGBAPrimitive2D that
+    // carries both the colour and the transparency, instead of
+    // wrapping a PolyPolygonColorPrimitive2D in a transparency
+    // wrapper. The reference JSON captures that wire shape.
+    createBlankDoc();
+    // 25 percent transparency.
+    addTransparentRectangle(tools::Rectangle(Point(5000, 5000), Size(5000, 3000)), Color(0x4472c4),
+                            25);
+
+    auto aJson = getVectorTile(u"testPolyPolygonRGBA");
+
+    assertJsonPath(aJson, "/type", "vectortile");
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aJson.getSize("/objects").value_or(0));
+
+    // The wrapping path is svx:N -> group -> polyPolygonRGBA.
+    auto oRGBA = aJson.at("/objects/0/primitives/0/children/0/children/0");
+    CPPUNIT_ASSERT(oRGBA.has_value());
+    assertJsonPath(*oRGBA, "type", "polyPolygonRGBA");
+    assertJsonPath(*oRGBA, "color", "#4472c4");
+    assertJsonPathExists(*oRGBA, "transparency");
 }
 
 CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testPolygonHairline)

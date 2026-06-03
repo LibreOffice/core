@@ -84,6 +84,37 @@ describe('VectorPrimitiveRenderer', function () {
 			);
 		});
 
+		it('applies transparency to polyPolygonRGBA at fill time', function () {
+			// polyPolygonRGBA paints with its colour and respects the
+			// optional transparency. The alpha must apply only to this
+			// primitive and not leak to anything drawn after.
+			const primitive = loadVectorRenderingReference(
+				'testPolyPolygonRGBAPrimitive',
+			).primitives[0];
+			nodeassert.strictEqual(primitive.type, 'polyPolygonRGBA');
+			nodeassert.strictEqual(typeof primitive.color, 'string');
+			nodeassert.strictEqual(typeof primitive.transparency, 'number');
+			nodeassert.ok(primitive.transparency > 0, 'fixture must be partly transparent');
+
+			const recorder = new CanvasRecorder();
+			const renderer = new cool.VectorPrimitiveRenderer();
+			renderer.renderPrimitive(recorder as any, primitive);
+
+			const fill = recorder.findCall('fill');
+			nodeassert.ok(fill, 'fill not called');
+			nodeassert.strictEqual(fill?.properties.fillStyle, primitive.color);
+			nodeassert.strictEqual(
+				fill?.properties.globalAlpha,
+				1 - primitive.transparency,
+			);
+			nodeassert.strictEqual(
+				(fill?.args[0] as Path2DRecorder).path,
+				primitive.path,
+			);
+			nodeassert.ok(recorder.findCall('save'), 'save not called');
+			nodeassert.ok(recorder.findCall('restore'), 'restore not called');
+		});
+
 		it('strokes a Path2D for polygonStroke', function () {
 			const primitive = loadVectorRenderingReference('testPolygonStroke').primitives[0];
 			nodeassert.strictEqual(primitive.type, 'polygonStroke');
@@ -664,6 +695,37 @@ describe('VectorPrimitiveRenderer', function () {
 			const fill = recorder.findCall('fill');
 			nodeassert.ok(fill, 'child fill missing');
 			nodeassert.strictEqual(fill?.properties.fillStyle, '#4472c4');
+		});
+
+		it('renders a transparent rectangle from a polyPolygonRGBA node', function () {
+			// A solid-fill rectangle with a non-zero fill transparency
+			// arrives as a polyPolygonRGBA node carrying the colour and
+			// the transparency, nested under the slide object's svx and
+			// group wrappers.
+			const primitiveTree = loadVectorRenderingReference('testPolyPolygonRGBA');
+			const rgbaNode =
+				primitiveTree.objects[0].primitives[0].children[0].children[0];
+			nodeassert.strictEqual(rgbaNode.type, 'polyPolygonRGBA');
+			nodeassert.strictEqual(typeof rgbaNode.color, 'string');
+			const transparency: number = parseFloat(rgbaNode.transparency);
+			nodeassert.ok(
+				transparency > 0 && transparency < 1,
+				'expected non-zero transparency less than 1',
+			);
+
+			const recorder = new CanvasRecorder();
+			const renderer = new cool.VectorPrimitiveRenderer();
+			renderer.renderPrimitive(recorder as any, rgbaNode);
+
+			const fill = recorder.findCall('fill');
+			nodeassert.ok(fill, 'fill not called');
+			nodeassert.strictEqual(fill?.properties.fillStyle, rgbaNode.color);
+			nodeassert.ok(
+				Math.abs(fill!.properties.globalAlpha - (1 - transparency)) < 1e-9,
+				'globalAlpha at fill time does not match 1 - transparency',
+			);
+			nodeassert.ok(recorder.findCall('save'), 'save not called');
+			nodeassert.ok(recorder.findCall('restore'), 'restore not called');
 		});
 	});
 

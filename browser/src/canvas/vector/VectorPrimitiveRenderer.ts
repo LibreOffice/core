@@ -26,9 +26,10 @@ namespace cool {
 					);
 					break;
 				case PolyPolygonColorPrimitive.type:
+				case PolyPolygonRGBAPrimitive.type:
 					this._renderPolyPolygonColor(
 						context,
-						primitive as PolyPolygonColorPrimitive,
+						primitive as PolyPolygonRGBAPrimitive,
 					);
 					break;
 				case PolygonStrokePrimitive.type:
@@ -121,13 +122,22 @@ namespace cool {
 
 		private _renderPolyPolygonColor(
 			context: CanvasRenderingContext2D,
-			primitive: PolyPolygonColorPrimitive,
+			primitive: PolyPolygonColorPrimitive | PolyPolygonRGBAPrimitive,
 		): void {
 			if (!primitive.path || !primitive.color) return;
 
 			const path = new Path2D(primitive.path);
+			const transparency =
+				(primitive as PolyPolygonRGBAPrimitive).transparency ?? 0;
+			const needsAlphaBracket = transparency > 0;
+
+			if (needsAlphaBracket) {
+				context.save();
+				context.globalAlpha = 1 - transparency;
+			}
 			context.fillStyle = primitive.color;
 			context.fill(path);
+			if (needsAlphaBracket) context.restore();
 		}
 
 		private _renderPolygonStroke(
