@@ -540,6 +540,17 @@ public:
         return 1;
     }
 
+    void SetMemberStep(sal_uInt16 nStep) override
+    {
+        if (bmPromoted)
+            return GetPromote()->SetMemberStep(nStep);
+        // We don't actually store this in the slim version, we just
+        // promote if it's ever non-1
+        if (nStep != 1)
+            return Promote("SetMemberStep")->SetMemberStep(nStep);
+        // OK, it is 1 - do nothing
+    }
+
     const ScDPResultDimension* GetChildDimension() const override
     {
         if (bmPromoted)
