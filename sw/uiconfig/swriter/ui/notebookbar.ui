@@ -4,14 +4,6 @@
   <requires lib="gtk+" version="3.24"/>
   <requires lib="LibreOffice" version="1.0"/>
   <!-- interface-local-resource-path ../../../icon-themes/colibre/cmd/ -->
-  <object class="GtkSizeGroup" id="1stRow">
-    <property name="mode">vertical</property>
-    <property name="ignore-hidden">True</property>
-  </object>
-  <object class="GtkSizeGroup" id="2ndRow">
-    <property name="mode">vertical</property>
-    <property name="ignore-hidden">True</property>
-  </object>
   <object class="GtkMenu" id="Menu Addons">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
@@ -2539,7 +2531,7 @@
                       </packing>
                     </child>
                     <child>
-                      <!-- n-columns=6 n-rows=3 -->
+                      <!-- n-columns=5 n-rows=3 -->
                       <object class="GtkGrid" id="gdFileFile">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
@@ -2567,7 +2559,7 @@
                           <packing>
                             <property name="left-attach">0</property>
                             <property name="top-attach">2</property>
-                            <property name="width">5</property>
+                            <property name="width">4</property>
                           </packing>
                         </child>
                         <child>
@@ -2631,6 +2623,7 @@
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <property name="valign">center</property>
+                            <property name="margin-start">3</property>
                             <property name="vexpand">True</property>
                             <property name="toolbar-style">both</property>
                             <property name="show-arrow">False</property>
@@ -2649,7 +2642,7 @@
                             </child>
                           </object>
                           <packing>
-                            <property name="left-attach">3</property>
+                            <property name="left-attach">2</property>
                             <property name="top-attach">0</property>
                             <property name="height">2</property>
                           </packing>
@@ -2685,7 +2678,7 @@
                             </child>
                           </object>
                           <packing>
-                            <property name="left-attach">4</property>
+                            <property name="left-attach">3</property>
                             <property name="top-attach">0</property>
                           </packing>
                         </child>
@@ -2720,7 +2713,7 @@
                             </child>
                           </object>
                           <packing>
-                            <property name="left-attach">4</property>
+                            <property name="left-attach">3</property>
                             <property name="top-attach">1</property>
                           </packing>
                         </child>
@@ -2731,21 +2724,9 @@
                             <property name="orientation">vertical</property>
                           </object>
                           <packing>
-                            <property name="left-attach">5</property>
+                            <property name="left-attach">4</property>
                             <property name="top-attach">0</property>
                             <property name="height">3</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkSeparator">
-                            <property name="visible">True</property>
-                            <property name="can-focus">False</property>
-                            <property name="orientation">vertical</property>
-                          </object>
-                          <packing>
-                            <property name="left-attach">2</property>
-                            <property name="top-attach">0</property>
-                            <property name="height">2</property>
                           </packing>
                         </child>
                         <accessibility>
@@ -2875,7 +2856,7 @@
                           <packing>
                             <property name="left-attach">2</property>
                             <property name="top-attach">0</property>
-                            <property name="height">2</property>
+                            <property name="height">3</property>
                           </packing>
                         </child>
                         <accessibility>
@@ -2984,7 +2965,7 @@
                           <packing>
                             <property name="left-attach">2</property>
                             <property name="top-attach">0</property>
-                            <property name="height">2</property>
+                            <property name="height">3</property>
                           </packing>
                         </child>
                         <child>
