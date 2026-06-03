@@ -239,9 +239,10 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testSPARQL)
     CPPUNIT_ASSERT(!aResult->hasMoreElements());
 
     // 2. query: contentfile
-    sQuery = "SELECT ?part ?path FROM <manifest:manifest> WHERE { ?pkg rdf:type pkg:Package . ?pkg "
-             "pkg:hasPart ?part . ?part "
-             "pkg:path ?path . ?part rdf:type odf:ContentFile. }";
+    sQuery
+        = u"SELECT ?part ?path FROM <manifest:manifest> WHERE { ?pkg rdf:type pkg:Package . ?pkg "_ustr
+          "pkg:hasPart ?part . ?part "
+          "pkg:path ?path . ?part rdf:type odf:ContentFile. }";
     aResult = xDocRepo->querySelect(sNss + sQuery);
     aBindings = aResult->getBindingNames();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aBindings.getLength());
@@ -256,8 +257,9 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testSPARQL)
     CPPUNIT_ASSERT(!aResult->hasMoreElements());
 
     // 3. query: contentfile
-    sQuery = "SELECT ?pkg ?path FROM <manifest:manifest> WHERE { ?pkg rdf:type pkg:Package . ?pkg "
-             "pkg:hasPart ?part . ?part pkg:path ?path . ?part rdf:type odf:ContentFile. }";
+    sQuery
+        = u"SELECT ?pkg ?path FROM <manifest:manifest> WHERE { ?pkg rdf:type pkg:Package . ?pkg "_ustr
+          "pkg:hasPart ?part . ?part pkg:path ?path . ?part rdf:type odf:ContentFile. }";
     aResult = xDocRepo->querySelect(sNss + sQuery);
     aBindings = aResult->getBindingNames();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aBindings.getLength());
@@ -273,8 +275,9 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testSPARQL)
     CPPUNIT_ASSERT(!aResult->hasMoreElements());
 
     // 4. query: stylesfile
-    sQuery = "SELECT ?part ?path FROM <manifest:manifest> WHERE { ?pkg rdf:type pkg:Package . ?pkg "
-             "pkg:hasPart ?part . ?part pkg:path ?path . ?part rdf:type odf:StylesFile. }";
+    sQuery
+        = u"SELECT ?part ?path FROM <manifest:manifest> WHERE { ?pkg rdf:type pkg:Package . ?pkg "_ustr
+          "pkg:hasPart ?part . ?part pkg:path ?path . ?part rdf:type odf:StylesFile. }";
     aResult = xDocRepo->querySelect(sNss + sQuery);
     aBindings = aResult->getBindingNames();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aBindings.getLength());
@@ -282,8 +285,9 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testSPARQL)
     CPPUNIT_ASSERT(!aResult->hasMoreElements());
 
     // 5. query: metadatafile
-    sQuery = "SELECT ?part ?path FROM <manifest:manifest> WHERE { ?pkg rdf:type pkg:Package . ?pkg "
-             "pkg:hasPart ?part . ?part pkg:path ?path . ?part rdf:type odf:MetadataFile. }";
+    sQuery
+        = u"SELECT ?part ?path FROM <manifest:manifest> WHERE { ?pkg rdf:type pkg:Package . ?pkg "_ustr
+          "pkg:hasPart ?part . ?part pkg:path ?path . ?part rdf:type odf:MetadataFile. }";
     aResult = xDocRepo->querySelect(sNss + sQuery);
     aBindings = aResult->getBindingNames();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aBindings.getLength());
@@ -299,7 +303,7 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testSPARQL)
 
     //FIXME redland BUG
     // 6. query: metadatafile
-    sQuery = "SELECT ?path ?idref FROM <manifest:manifest> WHERE { "
+    sQuery = u"SELECT ?path ?idref FROM <manifest:manifest> WHERE { "_ustr
              "<urn:uuid:224ab023-77b8-4396-a75a-8cecd85b81e3> pkg:hasPart ?part . ?part pkg:path "
              "?path ;  rdf:type ?type ;  pkg:hasPart <uri:example-element-2> . "
              "<uri:example-element-2>  pkg:idref ?idref .  FILTER (?type = odf:ContentFile || "
@@ -318,8 +322,9 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testSPARQL)
     CPPUNIT_ASSERT(!aResult->hasMoreElements());
 
     // 7. query: construct
-    sQuery = "CONSTRUCT { ?pkg <uri:foo> \"I am the literal\" } FROM <manifest:manifest> WHERE { "
-             "?pkg rdf:type pkg:Package . } ";
+    sQuery
+        = u"CONSTRUCT { ?pkg <uri:foo> \"I am the literal\" } FROM <manifest:manifest> WHERE { "_ustr
+          "?pkg rdf:type pkg:Package . } ";
     uno::Reference<container::XEnumeration> aResultEnum = xDocRepo->queryConstruct(sNss + sQuery);
 
     uno::Reference<css::rdf::XURI> xUuid
@@ -331,7 +336,7 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testSPARQL)
     CPPUNIT_ASSERT(!aResultEnum->hasMoreElements());
 
     // 8. query: ask
-    sQuery = "ASK { ?pkg rdf:type pkg:Package . }";
+    sQuery = u"ASK { ?pkg rdf:type pkg:Package . }"_ustr;
     CPPUNIT_ASSERT(xDocRepo->queryAsk(sNss + sQuery));
 }
 

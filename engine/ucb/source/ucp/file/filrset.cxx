@@ -125,7 +125,7 @@ void XResultSet_impl::rowCountChanged(std::unique_lock<std::mutex>& rGuard)
     sal_Int32 aNewValue = m_aItems.size();
     sal_Int32 aOldValue = aNewValue-1;
     beans::PropertyChangeEvent aEv;
-    aEv.PropertyName = "RowCount";
+    aEv.PropertyName = u"RowCount"_ustr;
     aEv.Further = false;
     aEv.PropertyHandle = -1;
     aEv.OldValue <<= aOldValue;
@@ -138,7 +138,7 @@ void XResultSet_impl::isFinalChanged(std::unique_lock<std::mutex>& rGuard)
 {
     m_bRowCountFinal = true;
     beans::PropertyChangeEvent aEv;
-    aEv.PropertyName = "IsRowCountFinal";
+    aEv.PropertyName = u"IsRowCountFinal"_ustr;
     aEv.Further = false;
     aEv.PropertyHandle = -1;
     aEv.OldValue <<= false;

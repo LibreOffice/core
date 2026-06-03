@@ -1121,7 +1121,7 @@ uno::Reference< util::XChangesBatch > const & SvtLinguConfig::GetMainUpdateAcces
 
         // get configuration update access
         beans::PropertyValue aValue;
-        aValue.Name  = "nodepath";
+        aValue.Name  = u"nodepath"_ustr;
         aValue.Value <<= u"org.openoffice.Office.Linguistic"_ustr;
         uno::Sequence< uno::Any > aProps{ uno::Any(aValue) };
         m_xMainUpdateAccess.set(

@@ -1288,7 +1288,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
 
     if ( !aNewTitle.isEmpty() )
     {
-        aEvent.PropertyName = "Title";
+        aEvent.PropertyName = u"Title"_ustr;
         aEvent.OldValue     <<= m_aProps.aTitle;
         aEvent.NewValue     <<= aNewTitle;
 

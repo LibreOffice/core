@@ -733,7 +733,7 @@ css::uno::Sequence< css::uno::Any > Content::setPropertyValues(
             {
                 SAL_INFO("ucb.ucp.gio", "Set new name to '" << newName << "'");
 
-                aEvent.PropertyName = "Title";
+                aEvent.PropertyName = u"Title"_ustr;
                 if (oldName)
                     aEvent.OldValue <<= OUString(oldName, strlen(oldName), RTL_TEXTENCODING_UTF8);
                 aEvent.NewValue <<= aNewTitle;

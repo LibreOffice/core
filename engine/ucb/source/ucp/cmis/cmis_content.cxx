@@ -597,7 +597,7 @@ namespace cmis
             else
             {
                 m_pObject = getSession( xEnv )->getRootFolder( );
-                m_sObjectPath = "/";
+                m_sObjectPath = u"/"_ustr;
                 m_sObjectId = OUString( );
             }
         }

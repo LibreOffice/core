@@ -62,7 +62,7 @@ XInteractionRequestImpl::XInteractionRequestImpl(
     else if(nErrorCode == TaskHandlerErr::INVALID_NAME_MKDIR)
     {
         PropertyValue prop;
-        prop.Name = "ResourceName";
+        prop.Name = u"ResourceName"_ustr;
         prop.Handle = -1;
         prop.Value <<= aClashingName;
         InteractiveAugmentedIOException excep(u"the name contained invalid characters"_ustr, m_xOrigin,

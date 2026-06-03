@@ -768,7 +768,7 @@ void transferProperties(
     // Title needed, but not set yet?
     if ( !bHasTitle && !rContext.aArg.NewTitle.isEmpty() )
     {
-        pPropValues[ nWritePos ].Name = "Title";
+        pPropValues[ nWritePos ].Name = u"Title"_ustr;
         pPropValues[ nWritePos ].Handle = -1;
         pPropValues[ nWritePos ].Value <<= rContext.aArg.NewTitle;
 
@@ -779,7 +779,7 @@ void transferProperties(
     if ( !bHasTargetURL && ( rContext.aArg.Operation
                                 == ucb::TransferCommandOperation_LINK ) )
     {
-        pPropValues[ nWritePos ].Name = "TargetURL";
+        pPropValues[ nWritePos ].Name = u"TargetURL"_ustr;
         pPropValues[ nWritePos ].Handle = -1;
         pPropValues[ nWritePos ].Value <<= rContext.aArg.SourceURL;
 

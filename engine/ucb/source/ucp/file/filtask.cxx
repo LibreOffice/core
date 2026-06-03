@@ -1955,7 +1955,7 @@ bool TaskManager::getUnqFromUrl( const OUString& Url, OUString& Unq )
 {
     if ( Url == "file:///" || Url == "file://localhost/" || Url == "file://127.0.0.1/" )
     {
-        Unq = "file:///";
+        Unq = u"file:///"_ustr;
         return false;
     }
 
@@ -2924,7 +2924,7 @@ uno::Sequence< ucb::ContentInfo > TaskManager::queryCreatableContentsInfo()
 void
 TaskManager::getScheme( OUString& Scheme )
 {
-  Scheme = "file";
+  Scheme = u"file"_ustr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

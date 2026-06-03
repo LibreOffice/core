@@ -300,7 +300,7 @@ bool impl_openStreamWithPostData(comphelper::SequenceAsHashMap& rMediaDescriptor
     OUString sMediaType = rMediaDescriptor.getUnpackedValueOrDefault(PROP_MEDIATYPE, OUString());
     if (sMediaType.isEmpty())
     {
-        sMediaType = "application/x-www-form-urlencoded";
+        sMediaType = u"application/x-www-form-urlencoded"_ustr;
         rMediaDescriptor[PROP_MEDIATYPE] <<= sMediaType;
     }
 

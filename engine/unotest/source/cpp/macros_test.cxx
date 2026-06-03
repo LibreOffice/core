@@ -53,7 +53,7 @@ MacrosTest::loadFromDesktop(const OUString& rURL, const OUString& rDocService,
     CPPUNIT_ASSERT_MESSAGE("no desktop", mxDesktop.is());
     std::vector<beans::PropertyValue> args;
     beans::PropertyValue aMacroValue;
-    aMacroValue.Name = "MacroExecutionMode";
+    aMacroValue.Name = u"MacroExecutionMode"_ustr;
     aMacroValue.Handle = -1;
     aMacroValue.Value <<= document::MacroExecMode::ALWAYS_EXECUTE_NO_WARN;
     aMacroValue.State = beans::PropertyState_DIRECT_VALUE;
@@ -62,7 +62,7 @@ MacrosTest::loadFromDesktop(const OUString& rURL, const OUString& rDocService,
     if (!rDocService.isEmpty())
     {
         beans::PropertyValue aValue;
-        aValue.Name = "DocumentService";
+        aValue.Name = u"DocumentService"_ustr;
         aValue.Handle = -1;
         aValue.Value <<= rDocService;
         aValue.State = beans::PropertyState_DIRECT_VALUE;

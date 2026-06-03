@@ -2100,7 +2100,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
     {
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
-        aEvent.PropertyName = "Title";
+        aEvent.PropertyName = u"Title"_ustr;
         aEvent.OldValue     <<= aOldTitle;
         aEvent.NewValue     <<= aNewTitle;
 
@@ -3520,7 +3520,7 @@ bool Content::isFolder(
 
     uno::Sequence< beans::Property > aProperties( 1 );
     auto pProperties = aProperties.getArray();
-    pProperties[ 0 ].Name   = "IsFolder";
+    pProperties[ 0 ].Name   = u"IsFolder"_ustr;
     pProperties[ 0 ].Handle = -1;
     uno::Reference< sdbc::XRow > xRow( getPropertyValues( aProperties, xEnv ) );
     if ( xRow.is() )
@@ -3797,10 +3797,10 @@ Content::ResourceType Content::getResourceType(
                 std::vector< OUString > aPropNames;
                 uno::Sequence< beans::Property > aProperties( 5 );
                 auto pProperties = aProperties.getArray();
-                pProperties[ 0 ].Name = "IsFolder";
-                pProperties[ 1 ].Name = "IsDocument";
-                pProperties[ 2 ].Name = "IsReadOnly";
-                pProperties[ 3 ].Name = "MediaType";
+                pProperties[ 0 ].Name = u"IsFolder"_ustr;
+                pProperties[ 1 ].Name = u"IsDocument"_ustr;
+                pProperties[ 2 ].Name = u"IsReadOnly"_ustr;
+                pProperties[ 3 ].Name = u"MediaType"_ustr;
                 pProperties[ 4 ].Name = DAVProperties::SUPPORTEDLOCK;
 
                 ContentProperties::UCBNamesToDAVNames( aProperties, aPropNames );

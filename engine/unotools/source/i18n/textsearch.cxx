@@ -160,7 +160,7 @@ void TextSearch::Init( const SearchParam & rParam,
         for (;;) std::abort();
     }
     aSOpt.searchString = rParam.GetSrchStr();
-    aSOpt.replaceString = "";
+    aSOpt.replaceString = u""_ustr;
     aSOpt.Locale = rLocale;
     aSOpt.transliterateFlags = TransliterationFlags::NONE;
     if( !rParam.IsCaseSensitive() )

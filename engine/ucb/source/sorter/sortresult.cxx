@@ -1263,7 +1263,7 @@ void SortedResultSet::CheckProperties( sal_Int32 nOldCount, bool bWasFinal )
             bool bIsFinal = false;
             PropertyChangeEvent aEvt;
 
-            aEvt.PropertyName = "RowCount";
+            aEvt.PropertyName = u"RowCount"_ustr;
             aEvt.Further = false;
             aEvt.PropertyHandle = -1;
             aEvt.OldValue <<= nOldCount;
@@ -1707,12 +1707,12 @@ sal_Int32 SortedEntryList::operator [] ( sal_Int32 nPos ) const
 
 SRSPropertySetInfo::SRSPropertySetInfo()
 {
-    maProps[0].Name = "RowCount";
+    maProps[0].Name = u"RowCount"_ustr;
     maProps[0].Handle = -1;
     maProps[0].Type = cppu::UnoType<OUString>::get();
     maProps[0].Attributes = -1;
 
-    maProps[1].Name = "IsRowCountFinal";
+    maProps[1].Name = u"IsRowCountFinal"_ustr;
     maProps[1].Handle = -1;
     maProps[1].Type = cppu::UnoType<bool>::get();
     maProps[1].Attributes = -1;

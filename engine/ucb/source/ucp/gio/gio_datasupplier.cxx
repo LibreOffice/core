@@ -221,7 +221,7 @@ css::uno::Reference< css::sdbc::XRow > DataSupplier::queryPropertyValues( std::u
             return {};
         sal_Int32 nCmdId( xCmdProc->createCommandIdentifier() );
         css::ucb::Command aCmd;
-        aCmd.Name = "getPropertyValues";
+        aCmd.Name = u"getPropertyValues"_ustr;
         aCmd.Handle = -1;
         aCmd.Argument <<= getResultSet()->getProperties();
         css::uno::Any aResult( xCmdProc->execute(

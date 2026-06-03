@@ -154,7 +154,7 @@ namespace
         CPPUNIT_ASSERT_EQUAL( true, aDavOpt.getHttpResponseStatusText().isEmpty() );
 
         //example of allowed method for a WebDAV resource supporting LOCK
-        aAllowedMethods = "OPTIONS,GET,HEAD,POST,DELETE,TRACE,PROPFIND,PROPPATCH,COPY,MOVE,PUT,LOCK,UNLOCK";
+        aAllowedMethods = u"OPTIONS,GET,HEAD,POST,DELETE,TRACE,PROPFIND,PROPPATCH,COPY,MOVE,PUT,LOCK,UNLOCK"_ustr;
         aDavOpt.setAllowedMethods( aAllowedMethods );
         // now check...
         CPPUNIT_ASSERT_EQUAL( false, aDavOpt.isClass1() );
@@ -240,7 +240,7 @@ namespace
 
         aURL.clear();
         aDavOpt.setURL( aURL );
-        aURL = "http://my.server.org/a%20fake%20url/to%20test/another-url";
+        aURL = u"http://my.server.org/a%20fake%20url/to%20test/another-url"_ustr;
         aDavOpt.setRedirectedURL( aURL );
         CPPUNIT_ASSERT_EQUAL( false, aDavOpt.isClass1() );
         CPPUNIT_ASSERT_EQUAL( false, aDavOpt.isClass2() );
@@ -256,9 +256,9 @@ namespace
         CPPUNIT_ASSERT_EQUAL( true, aDavOpt.getHttpResponseStatusText().isEmpty() );
 
         //check the init() function
-        aAllowedMethods = "OPTIONS,GET,HEAD,POST,DELETE,TRACE,PROPFIND,PROPPATCH,COPY,MOVE,PUT,LOCK,UNLOCK";
-        aURL = "http://my.server.org/a%20fake%20url/to%20test/another-url";
-        aHTTPResponseStatusText = "404 Not Found";
+        aAllowedMethods = u"OPTIONS,GET,HEAD,POST,DELETE,TRACE,PROPFIND,PROPPATCH,COPY,MOVE,PUT,LOCK,UNLOCK"_ustr;
+        aURL = u"http://my.server.org/a%20fake%20url/to%20test/another-url"_ustr;
+        aHTTPResponseStatusText = u"404 Not Found"_ustr;
         aDavOpt.setClass1();
         aDavOpt.setClass2();
         aDavOpt.setClass3();

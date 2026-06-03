@@ -131,7 +131,7 @@ void LocaleDataWrapper::loadData()
         {
             if (areChecksEnabled())
                 outputCheckMessage("LocaleDataWrapper::getCurrSymbolsImpl: no currency at all, using ShellsAndPebbles");
-            aCurrSymbol = "ShellsAndPebbles";
+            aCurrSymbol = u"ShellsAndPebbles"_ustr;
             aCurrBankSymbol = aCurrSymbol;
             nCurrPositiveFormat = nCurrNegativeFormat = nCurrFormatDefault;
             nCurrDigits = 2;

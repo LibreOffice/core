@@ -449,27 +449,27 @@ OUString SvtModuleOptions::GetFactoryShortName(SvtModuleOptions::EFactory eFacto
     OUString sShortName;
     switch( eFactory )
     {
-        case SvtModuleOptions::EFactory::WRITER   :  sShortName = "swriter";
+        case SvtModuleOptions::EFactory::WRITER   :  sShortName = u"swriter"_ustr;
                                                        break;
-        case SvtModuleOptions::EFactory::WRITERWEB:  sShortName = "swriter/web";
+        case SvtModuleOptions::EFactory::WRITERWEB:  sShortName = u"swriter/web"_ustr;
                                                        break;
-        case SvtModuleOptions::EFactory::WRITERGLOBAL:  sShortName = "swriter/GlobalDocument";
+        case SvtModuleOptions::EFactory::WRITERGLOBAL:  sShortName = u"swriter/GlobalDocument"_ustr;
                                                        break;
-        case SvtModuleOptions::EFactory::CALC     :  sShortName = "scalc";
+        case SvtModuleOptions::EFactory::CALC     :  sShortName = u"scalc"_ustr;
                                                        break;
-        case SvtModuleOptions::EFactory::DRAW     :  sShortName = "sdraw";
+        case SvtModuleOptions::EFactory::DRAW     :  sShortName = u"sdraw"_ustr;
                                                        break;
-        case SvtModuleOptions::EFactory::IMPRESS  :  sShortName = "simpress";
+        case SvtModuleOptions::EFactory::IMPRESS  :  sShortName = u"simpress"_ustr;
                                                        break;
-        case SvtModuleOptions::EFactory::MATH     :  sShortName = "smath";
+        case SvtModuleOptions::EFactory::MATH     :  sShortName = u"smath"_ustr;
                                                        break;
-        case SvtModuleOptions::EFactory::CHART    :  sShortName = "schart";
+        case SvtModuleOptions::EFactory::CHART    :  sShortName = u"schart"_ustr;
                                                        break;
-        case SvtModuleOptions::EFactory::BASIC    :  sShortName = "sbasic";
+        case SvtModuleOptions::EFactory::BASIC    :  sShortName = u"sbasic"_ustr;
                                                        break;
-        case SvtModuleOptions::EFactory::DATABASE :  sShortName = "sdatabase";
+        case SvtModuleOptions::EFactory::DATABASE :  sShortName = u"sdatabase"_ustr;
                                                        break;
-        case SvtModuleOptions::EFactory::STARTMODULE :  sShortName = "startmodule";
+        case SvtModuleOptions::EFactory::STARTMODULE :  sShortName = u"startmodule"_ustr;
                                                        break;
         default:
             OSL_FAIL( "unknown factory" );
@@ -494,25 +494,25 @@ OUString SvtModuleOptions_Impl::GetFactoryEmptyDocumentURL( SvtModuleOptions::EF
     OUString sURL;
     switch( eFactory )
     {
-        case SvtModuleOptions::EFactory::WRITER        :  sURL = "private:factory/swriter";
+        case SvtModuleOptions::EFactory::WRITER        :  sURL = u"private:factory/swriter"_ustr;
                                                   break;
-        case SvtModuleOptions::EFactory::WRITERWEB     :  sURL = "private:factory/swriter/web";
+        case SvtModuleOptions::EFactory::WRITERWEB     :  sURL = u"private:factory/swriter/web"_ustr;
                                                   break;
-        case SvtModuleOptions::EFactory::WRITERGLOBAL  :  sURL = "private:factory/swriter/GlobalDocument";
+        case SvtModuleOptions::EFactory::WRITERGLOBAL  :  sURL = u"private:factory/swriter/GlobalDocument"_ustr;
                                                   break;
-        case SvtModuleOptions::EFactory::CALC          :  sURL = "private:factory/scalc";
+        case SvtModuleOptions::EFactory::CALC          :  sURL = u"private:factory/scalc"_ustr;
                                                   break;
-        case SvtModuleOptions::EFactory::DRAW          :  sURL = "private:factory/sdraw";
+        case SvtModuleOptions::EFactory::DRAW          :  sURL = u"private:factory/sdraw"_ustr;
                                                   break;
-        case SvtModuleOptions::EFactory::IMPRESS       :  sURL = "private:factory/simpress?slot=6686";
+        case SvtModuleOptions::EFactory::IMPRESS       :  sURL = u"private:factory/simpress?slot=6686"_ustr;
                                                   break;
-        case SvtModuleOptions::EFactory::MATH          :  sURL = "private:factory/smath";
+        case SvtModuleOptions::EFactory::MATH          :  sURL = u"private:factory/smath"_ustr;
                                                   break;
-        case SvtModuleOptions::EFactory::CHART         :  sURL = "private:factory/schart";
+        case SvtModuleOptions::EFactory::CHART         :  sURL = u"private:factory/schart"_ustr;
                                                   break;
-        case SvtModuleOptions::EFactory::BASIC         :  sURL = "private:factory/sbasic";
+        case SvtModuleOptions::EFactory::BASIC         :  sURL = u"private:factory/sbasic"_ustr;
                                                   break;
-        case SvtModuleOptions::EFactory::DATABASE     :  sURL = "private:factory/sdatabase?Interactive";
+        case SvtModuleOptions::EFactory::DATABASE     :  sURL = u"private:factory/sdatabase?Interactive"_ustr;
                                                   break;
         default:
             OSL_FAIL( "unknown factory" );

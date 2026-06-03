@@ -120,7 +120,7 @@ namespace cmis
                 return {};
             sal_Int32 nCmdId( xCmdProc->createCommandIdentifier() );
             ucb::Command aCmd;
-            aCmd.Name = "getPropertyValues";
+            aCmd.Name = u"getPropertyValues"_ustr;
             aCmd.Handle = -1;
             aCmd.Argument <<= getResultSet()->getProperties();
             uno::Any aResult( xCmdProc->execute(

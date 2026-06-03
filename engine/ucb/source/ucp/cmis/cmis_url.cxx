@@ -52,7 +52,7 @@ namespace cmis
         m_sId = aUrl.GetMark( INetURLObject::DecodeMechanism::WithCharset );
 
         if ( m_sPath == "/" && m_sBindingUrl.indexOf( "google" ) != -1 )
-            m_sId = "root";
+            m_sId = u"root"_ustr;
     }
 
 

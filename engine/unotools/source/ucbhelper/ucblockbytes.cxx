@@ -1296,7 +1296,7 @@ UcbLockBytesRef UcbLockBytes::CreateLockBytes( const Reference < XContent >& xCo
     {
         Reference < XCommandProcessor > xProcessor( xContent, UNO_QUERY );
         Command aCommand;
-        aCommand.Name     = "setPropertyValues";
+        aCommand.Name     = u"setPropertyValues"_ustr;
         aCommand.Handle   = -1; /* unknown */
         aCommand.Argument <<= rProps;
         xProcessor->execute( aCommand, 0, Reference < XCommandEnvironment >() );
@@ -1307,7 +1307,7 @@ UcbLockBytesRef UcbLockBytes::CreateLockBytes( const Reference < XContent >& xCo
     aArgument.Mode = OpenMode::DOCUMENT;
 
     Command aCommand;
-    aCommand.Name = "open";
+    aCommand.Name = u"open"_ustr;
     aCommand.Argument <<= aArgument;
 
     bool bError = UCBOpenContentSync( xLockBytes,

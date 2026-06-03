@@ -46,10 +46,10 @@ SvtViewOptions::SvtViewOptions( EViewType eType, OUString sViewName )
     // we must know, which view type we must support
     switch( eType )
     {
-        case EViewType::Dialog: m_sListName = "Dialogs"; break;
-        case EViewType::TabDialog: m_sListName = "TabDialogs"; break;
-        case EViewType::TabPage: m_sListName = "TabPages"; break;
-        case EViewType::Window: m_sListName = "Windows"; break;
+        case EViewType::Dialog: m_sListName = u"Dialogs"_ustr; break;
+        case EViewType::TabDialog: m_sListName = u"TabDialogs"_ustr; break;
+        case EViewType::TabPage: m_sListName = u"TabPages"_ustr; break;
+        case EViewType::Window: m_sListName = u"Windows"_ustr; break;
         default: assert(false);
     }
     if (comphelper::IsFuzzing())

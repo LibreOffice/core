@@ -50,7 +50,7 @@ void HierarchyUri::init() const
     if ( m_aUri.getLength() < HIERARCHY_URL_SCHEME.getLength() + 1 )
     {
         // error, but remember that we did an init().
-        m_aPath = "/";
+        m_aPath = u"/"_ustr;
         return;
     }
 
@@ -110,7 +110,7 @@ void HierarchyUri::init() const
             if ( nStart == m_aUri.getLength() )
             {
                 // error, but remember that we did an init().
-                m_aPath = "/";
+                m_aPath = u"/"_ustr;
                 return;
             }
 
@@ -118,7 +118,7 @@ void HierarchyUri::init() const
             if ( m_aUri.indexOf("//", nStart) != -1 )
             {
                 // error, but remember that we did an init().
-                m_aPath = "/";
+                m_aPath = u"/"_ustr;
                 return;
             }
 
@@ -128,7 +128,7 @@ void HierarchyUri::init() const
             if ( nEnd == nStart )
             {
                 // error, but remember that we did an init().
-                m_aPath = "/";
+                m_aPath = u"/"_ustr;
                 return;
             }
 
@@ -171,7 +171,7 @@ void HierarchyUri::init() const
     else
     {
         // error, but remember that we did an init().
-        m_aPath = "/";
+        m_aPath = u"/"_ustr;
     }
 }
 

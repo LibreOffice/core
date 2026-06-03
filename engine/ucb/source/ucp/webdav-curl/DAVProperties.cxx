@@ -115,7 +115,7 @@ void DAVProperties::createUCBPropName( const char * nspace,
             o3tl::equalsIgnoreAsciiCase(aName, std::u16string_view(DAVProperties::GETETAG).substr(4)) ||
             o3tl::equalsIgnoreAsciiCase(aName, std::u16string_view(DAVProperties::GETLASTMODIFIED).substr(4)))
         {
-            aNameSpace = "DAV:";
+            aNameSpace = u"DAV:"_ustr;
         }
     }
 
@@ -142,7 +142,7 @@ void DAVProperties::createUCBPropName( const char * nspace,
     else
     {
         // Create property name that encodes, namespace and name ( XML ).
-        rFullName  = "<prop:";
+        rFullName  = u"<prop:"_ustr;
         rFullName += aName;
         rFullName += " xmlns:prop=\"";
         rFullName += aNameSpace;

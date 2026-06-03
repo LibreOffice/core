@@ -592,7 +592,7 @@ namespace
                                 {
                                     http_dav_ucp::DAVPropertyValue aDAVPropertyValue;
 
-                                    aDAVPropertyValue.Name = "DAV:getlastmodified";
+                                    aDAVPropertyValue.Name = u"DAV:getlastmodified"_ustr;
                                     aDAVPropertyValue.Value <<= mpContext->getWhiteSpace();
                                     maPropStatProperties.push_back(aDAVPropertyValue);
                                 }
@@ -605,7 +605,7 @@ namespace
                                 {
                                     http_dav_ucp::DAVPropertyValue aDAVPropertyValue;
 
-                                    aDAVPropertyValue.Name = "DAV:creationdate";
+                                    aDAVPropertyValue.Name = u"DAV:creationdate"_ustr;
                                     aDAVPropertyValue.Value <<= mpContext->getWhiteSpace();
                                     maPropStatProperties.push_back(aDAVPropertyValue);
                                 }
@@ -627,7 +627,7 @@ namespace
                                 {
                                     http_dav_ucp::DAVPropertyValue aDAVPropertyValue;
 
-                                    aDAVPropertyValue.Name = "DAV:resourcetype";
+                                    aDAVPropertyValue.Name = u"DAV:resourcetype"_ustr;
                                     aDAVPropertyValue.Value <<= (mbResourceTypeCollection ? u"collection"_ustr : OUString());
                                     maPropStatProperties.push_back(aDAVPropertyValue);
                                 }
@@ -640,7 +640,7 @@ namespace
                                 {
                                     http_dav_ucp::DAVPropertyValue aDAVPropertyValue;
 
-                                    aDAVPropertyValue.Name = "DAV:getcontentlength";
+                                    aDAVPropertyValue.Name = u"DAV:getcontentlength"_ustr;
                                     aDAVPropertyValue.Value <<= mpContext->getWhiteSpace();
                                     maPropStatProperties.push_back(aDAVPropertyValue);
                                 }
@@ -653,7 +653,7 @@ namespace
                                 {
                                     http_dav_ucp::DAVPropertyValue aDAVPropertyValue;
 
-                                    aDAVPropertyValue.Name = "DAV:getcontenttype";
+                                    aDAVPropertyValue.Name = u"DAV:getcontenttype"_ustr;
                                     aDAVPropertyValue.Value <<= mpContext->getWhiteSpace();
                                     maPropStatProperties.push_back(aDAVPropertyValue);
                                 }
@@ -666,7 +666,7 @@ namespace
                                 {
                                     http_dav_ucp::DAVPropertyValue aDAVPropertyValue;
 
-                                    aDAVPropertyValue.Name = "DAV:supportedlock";
+                                    aDAVPropertyValue.Name = u"DAV:supportedlock"_ustr;
                                     aDAVPropertyValue.Value <<= maLockEntries;
                                     maPropStatProperties.push_back(aDAVPropertyValue);
                                 }
@@ -773,7 +773,7 @@ namespace
                                 {
                                     http_dav_ucp::DAVPropertyValue aDAVPropertyValue;
 
-                                    aDAVPropertyValue.Name = "DAV:lockdiscovery";
+                                    aDAVPropertyValue.Name = u"DAV:lockdiscovery"_ustr;
                                     aDAVPropertyValue.Value <<= ::comphelper::containerToSequence(maResult_Lock);
                                     maPropStatProperties.push_back(aDAVPropertyValue);
                                 }

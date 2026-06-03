@@ -276,13 +276,13 @@ uno::Sequence< OUString > SAL_CALL Content::getSupportedServiceNames()
     uno::Sequence< OUString > aSNS( 1 );
 
     if ( m_aProps.getType() == STREAM )
-        aSNS.getArray()[ 0 ] = "com.sun.star.ucb.TransientDocumentsStreamContent";
+        aSNS.getArray()[ 0 ] = u"com.sun.star.ucb.TransientDocumentsStreamContent"_ustr;
     else if ( m_aProps.getType() == FOLDER )
-        aSNS.getArray()[ 0 ] = "com.sun.star.ucb.TransientDocumentsFolderContent";
+        aSNS.getArray()[ 0 ] = u"com.sun.star.ucb.TransientDocumentsFolderContent"_ustr;
     else if ( m_aProps.getType() == DOCUMENT )
-        aSNS.getArray()[ 0 ] = "com.sun.star.ucb.TransientDocumentsDocumentContent";
+        aSNS.getArray()[ 0 ] = u"com.sun.star.ucb.TransientDocumentsDocumentContent"_ustr;
     else
-        aSNS.getArray()[ 0 ] = "com.sun.star.ucb.TransientDocumentsRootContent";
+        aSNS.getArray()[ 0 ] = u"com.sun.star.ucb.TransientDocumentsRootContent"_ustr;
 
     return aSNS;
 }
@@ -1290,7 +1290,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
 
     if ( !aOldTitle.isEmpty() )
     {
-        aEvent.PropertyName = "Title";
+        aEvent.PropertyName = u"Title"_ustr;
         aEvent.OldValue     <<= aOldTitle;
         aEvent.NewValue     <<= m_aProps.getTitle();
 

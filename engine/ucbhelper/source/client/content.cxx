@@ -402,7 +402,7 @@ void Content::setCommandEnvironment(
 Reference< XCommandInfo > Content::getCommands()
 {
     Command aCommand;
-    aCommand.Name     = "getCommandInfo";
+    aCommand.Name     = u"getCommandInfo"_ustr;
     aCommand.Handle   = -1; // n/a
     aCommand.Argument = Any();
 
@@ -539,7 +539,7 @@ Sequence< Any > Content::setPropertyValues(
     }
 
     Command aCommand;
-    aCommand.Name     = "setPropertyValues";
+    aCommand.Name     = u"setPropertyValues"_ustr;
     aCommand.Handle   = -1; // n/a
     aCommand.Argument <<= aProps;
 
@@ -587,7 +587,7 @@ Any Content::createCursorAny( const Sequence< OUString >& rPropertyNames,
     aArg.Properties = std::move(aProps);
 
     Command aCommand;
-    aCommand.Name     = "open";
+    aCommand.Name     = u"open"_ustr;
     aCommand.Handle   = -1; // n/a
     aCommand.Argument <<= aArg;
 
@@ -702,7 +702,7 @@ Reference< XInputStream > Content::openStream()
     aArg.Properties = Sequence< Property >( 0 ); // unused
 
     Command aCommand;
-    aCommand.Name     = "open";
+    aCommand.Name     = u"open"_ustr;
     aCommand.Handle   = -1; // n/a
     aCommand.Argument <<= aArg;
 
@@ -726,7 +726,7 @@ Reference< XInputStream > Content::openStreamNoLock()
     aArg.Properties = Sequence< Property >( 0 ); // unused
 
     Command aCommand;
-    aCommand.Name     = "open";
+    aCommand.Name     = u"open"_ustr;
     aCommand.Handle   = -1; // n/a
     aCommand.Argument <<= aArg;
 
@@ -750,7 +750,7 @@ Reference< XStream > Content::openWriteableStream()
     aArg.Properties = Sequence< Property >( 0 ); // unused
 
     Command aCommand;
-    aCommand.Name     = "open";
+    aCommand.Name     = u"open"_ustr;
     aCommand.Handle   = -1; // n/a
     aCommand.Argument <<= aArg;
 
@@ -774,7 +774,7 @@ Reference< XStream > Content::openWriteableStreamNoLock()
     aArg.Properties = Sequence< Property >( 0 ); // unused
 
     Command aCommand;
-    aCommand.Name     = "open";
+    aCommand.Name     = u"open"_ustr;
     aCommand.Handle   = -1; // n/a
     aCommand.Argument <<= aArg;
 
@@ -796,7 +796,7 @@ bool Content::openStream( const Reference< XActiveDataSink >& rSink )
     aArg.Properties = Sequence< Property >( 0 ); // unused
 
     Command aCommand;
-    aCommand.Name     = "open";
+    aCommand.Name     = u"open"_ustr;
     aCommand.Handle   = -1; // n/a
     aCommand.Argument <<= aArg;
 
@@ -818,7 +818,7 @@ bool Content::openStream( const Reference< XOutputStream >& rStream )
     aArg.Properties = Sequence< Property >( 0 ); // unused
 
     Command aCommand;
-    aCommand.Name     = "open";
+    aCommand.Name     = u"open"_ustr;
     aCommand.Handle   = -1; // n/a
     aCommand.Argument <<= aArg;
 
@@ -836,7 +836,7 @@ void Content::writeStream( const Reference< XInputStream >& rStream,
     aArg.ReplaceExisting = bReplaceExisting;
 
     Command aCommand;
-    aCommand.Name     = "insert";
+    aCommand.Name     = u"insert"_ustr;
     aCommand.Handle   = -1; // n/a
     aCommand.Argument <<= aArg;
 
@@ -895,7 +895,7 @@ bool Content::insertNewContent( const OUString& rContentType,
     aInfo.Attributes = 0;
 
     Command aCommand;
-    aCommand.Name     = "createNewContent";
+    aCommand.Name     = u"createNewContent"_ustr;
     aCommand.Handle   = -1; // n/a
     aCommand.Argument <<= aInfo;
 
@@ -971,7 +971,7 @@ void Content::transferContent( const Content& rSourceContent,
 
         case InsertOperation::Checkin:
             eTransOp = TransferCommandOperation_COPY;
-            sCommand = "checkin";
+            sCommand = u"checkin"_ustr;
             bCheckIn = true;
             break;
     }
@@ -1040,7 +1040,7 @@ bool Content::isDocument()
 void Content::lock()
 {
     Command aCommand;
-    aCommand.Name     = "lock";
+    aCommand.Name     = u"lock"_ustr;
     aCommand.Handle   = -1; // n/a
 
     m_xImpl->executeCommand( aCommand );
@@ -1051,7 +1051,7 @@ void Content::unlock()
 {
 
     Command aCommand;
-    aCommand.Name     = "unlock";
+    aCommand.Name     = u"unlock"_ustr;
     aCommand.Handle   = -1; // n/a
 
     m_xImpl->executeCommand( aCommand );

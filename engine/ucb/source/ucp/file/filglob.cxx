@@ -86,13 +86,13 @@ namespace {
                 switch (aStatus.getFileType())
                 {
                     case osl::FileStatus::Directory:
-                        aResourceType = "folder";
+                        aResourceType = u"folder"_ustr;
                         bResourceType = true;
                         break;
 
                     case osl::FileStatus::Volume:
                     {
-                        aResourceType = "volume";
+                        aResourceType = u"volume"_ustr;
                         bResourceType = true;
                         osl::VolumeInfo aVolumeInfo(
                             osl_VolumeInfo_Mask_Attributes );
@@ -201,7 +201,7 @@ namespace fileaccess {
             aParent += "/";
 
         if ( aParent == "file://" )
-            aParent = "file:///";
+            aParent = u"file:///"_ustr;
 
         return aParent;
     }
@@ -548,7 +548,7 @@ namespace fileaccess {
         else if( errorCode == TaskHandlerErr::INVALID_NAME_MKDIR )
         {
             PropertyValue prop;
-            prop.Name = "ResourceName";
+            prop.Name = u"ResourceName"_ustr;
             prop.Handle = -1;
             OUString aClashingName(
                 rtl::Uri::decode(
@@ -726,18 +726,18 @@ namespace fileaccess {
                          errorCode == TaskHandlerErr::TRANSFER_BY_MOVE_SOURCESTAT )
                     {
                         ioErrorCode = IOErrorCode_NOT_EXISTING;
-                        aMsg = "source file/folder does not exist";
+                        aMsg = u"source file/folder does not exist"_ustr;
                         break;
                     }
                     else
                     {
                         ioErrorCode = IOErrorCode_GENERAL;
-                        aMsg = "a general error during transfer command";
+                        aMsg = u"a general error during transfer command"_ustr;
                         break;
                     }
                 default:
                     ioErrorCode = IOErrorCode_GENERAL;
-                    aMsg = "a general error during transfer command";
+                    aMsg = u"a general error during transfer command"_ustr;
                     break;
             }
             cancelCommandExecution(
@@ -790,7 +790,7 @@ namespace fileaccess {
                     break;
                 case FileBase::E_NOENT:         // No such file or directory
                     ioErrorCode = IOErrorCode_NOT_EXISTING;
-                    aMsg = "file/folder does not exist";
+                    aMsg = u"file/folder does not exist"_ustr;
                     break;
                 case FileBase::E_ROFS:          // Read-only file system<p>
                     ioErrorCode = IOErrorCode_NOT_EXISTING;

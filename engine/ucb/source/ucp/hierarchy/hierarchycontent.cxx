@@ -254,11 +254,11 @@ HierarchyContent::getSupportedServiceNames()
     uno::Sequence< OUString > aSNS( 1 );
 
     if ( m_eKind == LINK )
-        aSNS.getArray()[ 0 ] = "com.sun.star.ucb.HierarchyLinkContent";
+        aSNS.getArray()[ 0 ] = u"com.sun.star.ucb.HierarchyLinkContent"_ustr;
     else if ( m_eKind == FOLDER )
-        aSNS.getArray()[ 0 ] = "com.sun.star.ucb.HierarchyFolderContent";
+        aSNS.getArray()[ 0 ] = u"com.sun.star.ucb.HierarchyFolderContent"_ustr;
     else
-        aSNS.getArray()[ 0 ] = "com.sun.star.ucb.HierarchyRootFolderContent";
+        aSNS.getArray()[ 0 ] = u"com.sun.star.ucb.HierarchyRootFolderContent"_ustr;
 
     return aSNS;
 }
@@ -1242,7 +1242,7 @@ uno::Sequence< uno::Any > HierarchyContent::setPropertyValues(
 
     if ( !aOldTitle.isEmpty() )
     {
-        aEvent.PropertyName = "Title";
+        aEvent.PropertyName = u"Title"_ustr;
         aEvent.OldValue     <<= aOldTitle;
         aEvent.NewValue     <<= m_aProps.getTitle();
 

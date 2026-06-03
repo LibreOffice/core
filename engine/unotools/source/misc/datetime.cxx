@@ -177,7 +177,7 @@ namespace
         if (i_str[io_index] == 'Z') // UTC timezone indicator
         {
             ++io_index;
-            o_strInt = "Z";
+            o_strInt = u"Z"_ustr;
             return true;
         }
         else if (i_str[io_index] == '+' || i_str[io_index] == '-') // other timezones indicator
