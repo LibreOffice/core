@@ -1809,6 +1809,12 @@ export class CommentSection extends CanvasSectionObject {
 				if (possibleChild.sectionProperties.possibleParentCommentId === comment.sectionProperties.data.id) {
 					if (!comment.sectionProperties.children.includes(possibleChild))
 						comment.sectionProperties.children.push(possibleChild);
+
+					possibleChild.sectionProperties.data.parent = comment.sectionProperties.data.id;
+					if (app.map._docLayer._docType === 'text')
+						possibleChild.sectionProperties.data.parentId = comment.sectionProperties.data.id;
+
+					possibleChild.sectionProperties.possibleParentCommentId = null;
 				}
 			}
 		}
