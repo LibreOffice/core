@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-02 13:03+0200\n"
-"PO-Revision-Date: 2026-05-05 14:11+0000\n"
+"PO-Revision-Date: 2026-06-03 14:43+0000\n"
 "Last-Translator: Rhoslyn Prys <rprys@posteo.net>\n"
 "Language-Team: Welsh <https://hosted.weblate.org/projects/collabora-online/"
 "help/cy/>\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=(n==0) ? 0 : (n==1) ? 1 : (n==2) ? 2 : "
 "(n==3) ? 3 :(n==6) ? 4 : 5;\n"
-"X-Generator: Translate Toolkit 3.6.0\n"
+"X-Generator: Weblate 2026.6\n"
 
 #: html/cool-help.html%2Bdiv.h1:9-5
 msgid "Keyboard Shortcuts"
@@ -1754,6 +1754,8 @@ msgid ""
 "Status bar showing page number, word count, insert mode, selection mode, "
 "language, edit mode, navigation, zoom, and search"
 msgstr ""
+"Bar statws yn dangos rhif tudalen, cyfrif geiriau, mewnosod modd, modd "
+"dewis, iaith, modd golygu, llywio, chwyddo, a chwilio"
 
 #: html/cool-help.html%2Bdiv.div.div.p:393-5
 msgid ""
@@ -1768,9 +1770,8 @@ msgstr ""
 "chwilio yn sensitif i bach/mawr. Mae tri botwm wrth ymyl y blwch chwilio:"
 
 #: html/cool-help.html%2Bdiv.div.div.ul.li:395-7
-#, fuzzy
 msgid "Search backwards"
-msgstr "Chwilio yn ôl>"
+msgstr "Chwilio nôl"
 
 #: html/cool-help.html%2Bdiv.div.div.ul.li:396-7
 msgid "Search forward"
@@ -1823,6 +1824,8 @@ msgstr ""
 msgid ""
 "Information bar showing page navigation arrows, zoom controls, and zoom level"
 msgstr ""
+"Bar gwybodaeth yn dangos saethau llywio tudalennau, rheolyddion chwyddo, a "
+"lefel chwyddo"
 
 #: html/cool-help.html%2Bdiv.div.p:412-5
 msgid ""
@@ -1971,6 +1974,8 @@ msgid ""
 "Repair Document dialog listing past document states with columns for action "
 "type, author, and timestamp"
 msgstr ""
+"Trwsio deialog y Ddogfen yn rhestru cyn - ddogfennau yn datgan gyda "
+"cholofnau ar gyfer y math o weithred, awdur, a stamp amser"
 
 #: html/cool-help.html%2Bdiv.div.div.p:432-5
 msgid ""
@@ -2005,6 +2010,8 @@ msgid ""
 "Idle document overlay with the message: Idle document - please click to "
 "reload and resume editing"
 msgstr ""
+"Troshaen dogfen segur gyda'r neges: Dogfen segur - cliciwch i ail-lwytho ac "
+"ailddechrau golygu"
 
 #: html/cool-help.html%2Bdiv.div.div.p:438-5
 msgid ""
@@ -2102,6 +2109,8 @@ msgid ""
 "Chart Wizard dialog with chart type list on the left, chart style previews, "
 "3D and shape options"
 msgstr ""
+"Deialog Dewin Siart gyda rhestr math siart ar y chwith, rhagolygon arddull "
+"siart, opsiynau 3D a siâp"
 
 #: html/cool-help.html%2Bdiv.div.div.ol.li:460-7
 msgid "If no table or range was selected, a prototype chart is displayed."
@@ -2114,6 +2123,8 @@ msgid ""
 "Column chart with grouped bars showing data for four rows across three "
 "columns"
 msgstr ""
+"Siart colofn gyda bariau wedi'u grwpio yn dangos data ar gyfer pedair rhes "
+"ar draws tair colofn"
 
 #: html/cool-help.html%2Bdiv.div.div.p:464-28
 msgid ""
@@ -2205,6 +2216,8 @@ msgid ""
 "Comment box showing author name, date, and the comment text, displayed "
 "beside the document"
 msgstr ""
+"Blwch sylwadau yn dangos enw, dyddiad a thestun y sylw, sy'n cael ei ddangos "
+"wrth ymyl y ddogfen"
 
 #: html/cool-help.html%2Bdiv.div.div.p:478-5
 msgid ""
@@ -2232,7 +2245,7 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.img[alt]:483-29
 msgid "Text with a red wavy underline beneath a misspelled word"
-msgstr ""
+msgstr "Testun gyda thanlinelliad tonnog coch o dan air wedi'i gamsillafu"
 
 #: html/cool-help.html%2Bdiv.div.div.p:484-5
 msgid ""
@@ -2278,6 +2291,8 @@ msgid ""
 "Formula bar showing cell reference B1, function wizard icon, and the formula "
 "=SIN(PI()*A1/10)"
 msgstr ""
+"Bar fformiwla yn dangos cyfeirnod celloedd B1, eicon dewin swyddogaeth, a'r "
+"fformiwla = SIN (PI ()*A1/10)"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:499-5
 msgid ""
@@ -2316,6 +2331,8 @@ msgid ""
 "Format Cells dialog on the Numbers tab with category list, format options, "
 "decimal places, and format code"
 msgstr ""
+"Fformatio Celloedd deialog ar y tab Rhifau gyda rhestr categori, opsiynau "
+"fformat, lleoedd degol, a chod fformat"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:511-30
 msgid ""
@@ -2355,6 +2372,8 @@ msgid ""
 "AutoFilter dropdown menu on a spreadsheet column with sort, filter by color, "
 "filter by condition, and checkboxes for individual values"
 msgstr ""
+"Cwymplen AwtoHidl ar golofn taenlen gyda didoli, hidlo yn ôl lliw, hidlo yn "
+"ôl cyflwr, a blychau gwirio ar gyfer gwerthoedd unigol"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:518-7
 msgid ""
@@ -2393,6 +2412,8 @@ msgid ""
 "Spreadsheet with row and column grouping controls showing outline level "
 "buttons and collapse/expand toggles"
 msgstr ""
+"Taenlen gyda rheolaethau grwpio rhesi a cholofnau yn dangos botymau lefel "
+"amlinellol a cau/ehangu toglau"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:527-5
 msgid ""
@@ -2417,6 +2438,8 @@ msgid ""
 "Validity dialog on the Criteria tab with Allow set to List, showing options "
 "for empty cells, selection list, and entry values"
 msgstr ""
+"Deialog dilysrwydd ar y tab Meini Prawf gyda Chaniatáu gosod i'r Rhestr, yn "
+"dangos opsiynau ar gyfer celloedd gwag, rhestr ddethol, a gwerthoedd cofnod"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:533-7
 msgid ""
@@ -2443,6 +2466,8 @@ msgid ""
 "Cell dropdown list showing validated entries such as Apple, Pear, Banana, "
 "Kiwi, and Lemon"
 msgstr ""
+"Rhestr cwymplen celloedd sy'n dangos cofnodion wedi'u dilysu fel Afal, "
+"Gellyg, Banana, Kiwi, a Lemwn"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:538-7
 msgid ""
@@ -2471,6 +2496,8 @@ msgid ""
 "Spreadsheet cell with a comment popup showing the author, date, comment "
 "text, and Save/Cancel buttons"
 msgstr ""
+"Cell taenlen gyda llamlen sylwadau yn dangos yr awdur, dyddiad, testun "
+"sylwadau, a botymau Cadw/Diddymu"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:546-5
 msgid ""
@@ -2491,6 +2518,8 @@ msgid ""
 "Conditional formatting icon set picker showing arrows, circles, traffic "
 "lights, stars, smiley faces, and bar chart symbol sets"
 msgstr ""
+"Dewisydd set eicon fformatio amodol sy'n dangos saethau, cylchoedd, "
+"goleuadau traffig, sêr, wynebau gwenu, a setiau symbolau siart bar"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:555-30
 msgid ""
@@ -2587,6 +2616,8 @@ msgid ""
 "Paragraph dialog on the Indents and Spacing tab with settings for indent, "
 "spacing, and line spacing, and a preview on the right"
 msgstr ""
+"Deialog paragraff ar y tab Mewnoliad a Bylchu gyda gosodiadau ar gyfer "
+"mewnoliad, bylchau a bylchau llinell, a rhagolwg ar y dde"
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:576-5
 msgid "Handling Tables"
@@ -2610,6 +2641,8 @@ msgid ""
 "Insert Table picker showing a grid to select the number of rows and columns, "
 "currently showing 5 by 3"
 msgstr ""
+"Dewisydd mewnosod Tabl yn dangos grid i ddewis nifer y rhesi a cholofnau, "
+"sy'n dangos 5 wrth 3 ar hyn o bryd"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:581-5
 msgid ""
@@ -2642,6 +2675,8 @@ msgid ""
 "Tracked change shown as a comment box beside the document with author name, "
 "date, and change description"
 msgstr ""
+"Newid wedi'i dracio sy'n cael ei ddangos fel blwch sylwadau wrth ymyl y "
+"ddogfen gydag enw awdur, dyddiad a disgrifiad newid"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:587-5
 msgid ""
@@ -2775,6 +2810,8 @@ msgid ""
 "Slide properties panel showing format, orientation, background, and master "
 "slide settings, with a layout gallery of thumbnail options below"
 msgstr ""
+"Panel priodweddau sleidiau yn dangos fformat, cyfeiriadedd, cefndir a "
+"gosodiadau prif sleidiau, gydag oriel cynllun o ddewisiadau mân - luniau isod"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:626-30
 msgid ""
@@ -2965,6 +3002,8 @@ msgid ""
 "Thesaurus dialog for the word company, listing alternatives such as "
 "institution, establishment, and troupe, with a Replace with field"
 msgstr ""
+"Deialog thesawrws ar gyfer y cwmni geiriau, gan restru dewisiadau eraill fel "
+"sefydliad, sefydliad, a chwmni, gyda maes Amnewid"
 
 #: html/cool-help.html%2Bdiv.div.div.h4:677-5
 msgid ""
@@ -3005,6 +3044,8 @@ msgid ""
 "Word Count dialog showing word and character counts for the current "
 "selection and for the whole document"
 msgstr ""
+"Deialog Cyfrif Geiriau yn dangos cyfrif geiriau a nodau ar gyfer y dewis "
+"cyfredol ac ar gyfer y ddogfen gyfan"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:688-5
 msgid ""
@@ -3051,6 +3092,8 @@ msgid ""
 "hexadecimal and decimal code inputs, and recent and favorite characters at "
 "the bottom"
 msgstr ""
+"Deialog Nodau Arbennig gyda grid nodau, meysydd chwilio a ffont, mewnbynnau "
+"codau hecsadegol a degol, a nodau diweddar a hoff ar y gwaelod"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:699-7
 msgid ""
@@ -3161,6 +3204,9 @@ msgid ""
 "Manage Changes dialog with a list of tracked changes showing action, author, "
 "date, and comment columns, and Accept, Reject, Accept All, Reject All buttons"
 msgstr ""
+"Rheoli deialog Newidiadau gyda rhestr o newidiadau wedi 'u tracio sy' n "
+"dangos gweithred, awdur, dyddiad, a cholofnau sylwadau, a Derbyn, Gwrthod, "
+"Derbyn Popeth, Gwrthod Pob Botwm"
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:720-5
 msgid "How do I set the margins of the document?"
@@ -3195,6 +3241,9 @@ msgid ""
 "Page Style dialog on the Organizer tab showing style name, next style, "
 "inherit from, and category fields, with a summary of page properties"
 msgstr ""
+"Deialog Arddull Tudalen ar dab y Trefnydd sy'n dangos enw arddull, arddull "
+"nesaf, etifeddu o feysydd, a chategori, gyda chrynodeb o briodweddau'r "
+"dudalen"
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:730-5
 msgid "How do I change the page orientation to landscape inside my document?"
@@ -3357,6 +3406,8 @@ msgid ""
 "Text Import dialog with character set, locale, separator options, and a "
 "preview of the imported CSV data"
 msgstr ""
+"Deialog Mewnforio Testun gyda set nodau, locale, opsiynau gwahanydd, a "
+"rhagolwg o'r data CSV a fewnforiwyd"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:778-7
 msgid ""
@@ -3470,6 +3521,8 @@ msgid ""
 "Area dialog on the Color tab with a color palette, active and new color "
 "previews, RGB value fields, and a custom palette section"
 msgstr ""
+"Deialog ardal ar y tab Lliw gyda palet lliw, rhagolygon lliw gweithredol a "
+"newydd, meysydd gwerth RGB, ac adran palet cyfaddas"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:819-7
 msgid "Set the properties of the element of the object."
