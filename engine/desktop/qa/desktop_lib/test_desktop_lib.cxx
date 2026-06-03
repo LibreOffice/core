@@ -39,6 +39,8 @@
 #include <svl/srchitem.hxx>
 #include <COKit/COKitEnums.h>
 #include <unotools/tempfile.hxx>
+#include <tools/urlobj.hxx>
+#include <osl/file.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
@@ -155,6 +157,7 @@ public:
     void testSearchAllNotificationsCalc();
     void testPaintTile();
     void testSaveAs();
+    void testExportDirectToPdfDottedName();
     void testSaveAsJsonOptions();
     void testSaveAsCalc();
     void testPasteWriter();
@@ -237,6 +240,7 @@ public:
     CPPUNIT_TEST(testSearchAllNotificationsCalc);
     CPPUNIT_TEST(testPaintTile);
     CPPUNIT_TEST(testSaveAs);
+    CPPUNIT_TEST(testExportDirectToPdfDottedName);
     CPPUNIT_TEST(testSaveAsJsonOptions);
     CPPUNIT_TEST(testSaveAsCalc);
     CPPUNIT_TEST(testPasteWriter);
@@ -691,6 +695,49 @@ void DesktopKitTest::testSaveAs()
 {
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
     CPPUNIT_ASSERT(pDocument->pClass->saveAs(pDocument, maTempFile.GetURL().toUtf8().getStr(), "png", nullptr));
+}
+
+void DesktopKitTest::testExportDirectToPdfDottedName()
+{
+    // Regression test: a document whose base name contains a dot (here a
+    // "26.04"-style version number) must keep its full name when exported to
+    // PDF. The COKit export path used to re-apply the extension with
+    // INetURLObject::SetExtension(), which regards everything after the last
+    // dot as the extension. For "CODE 26.04 Release Blog" that overwrote
+    // " Release Blog" after the dot in "26.04", suggesting "CODE 26.pdf".
+
+    // Host a document under a temp directory using the problematic name.
+    const OUString aTempDir = utl::CreateTempURL(nullptr, /*bDirectory*/ true);
+    INetURLObject aDocObj(aTempDir);
+    aDocObj.insertName(u"CODE 26.04 Release Blog.odt", false, INetURLObject::LAST_SEGMENT,
+                       INetURLObject::EncodeMechanism::All);
+    const OUString aDocUrl = aDocObj.GetMainURL(INetURLObject::DecodeMechanism::NONE);
+    CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None,
+                         osl::File::copy(createFileURL(u"blank_text.odt"), aDocUrl));
+
+    // Capture the URI the engine suggests to the file-save dialog callback,
+    // then abort the actual save by handing back an empty result.
+    OUString aSuggestedUri;
+    comphelper::COKit::setFileSaveDialogCallback(
+        [&aSuggestedUri](const char* pSuggestedUri, char* pResult, size_t nResultLen)
+        {
+            aSuggestedUri = OUString::fromUtf8(pSuggestedUri);
+            if (nResultLen)
+                pResult[0] = '\0';
+        });
+    comphelper::ScopeGuard aResetCallback(
+        []() { comphelper::COKit::setFileSaveDialogCallback({}); });
+
+    LibLODocument_Impl* pDocument = loadDocUrl(aDocUrl, KIT_DOCTYPE_TEXT);
+    pDocument->pClass->postUnoCommand(pDocument, ".uno:ExportDirectToPDF", nullptr, false);
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_MESSAGE("file-save dialog callback was not invoked", !aSuggestedUri.isEmpty());
+    const INetURLObject aSuggested(aSuggestedUri);
+    CPPUNIT_ASSERT_EQUAL(u"CODE 26.04 Release Blog.pdf"_ustr,
+                         aSuggested.GetLastName(INetURLObject::DecodeMechanism::WithCharset));
+
+    osl::File::remove(aDocUrl);
 }
 
 void DesktopKitTest::testSaveAsJsonOptions()

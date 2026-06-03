@@ -1173,12 +1173,19 @@ bool ModelData_Impl::OutputFileDialog( sal_Int16 nStoreMode,
         else
         {
 #endif
-            // keep name with extension
+            // The picker's auto-extension handling may have stripped the
+            // extension off aURL, leaving for example "annual report v1.2".
+            // We need to put the extension back. Do not use
+            // INetURLObject::SetExtension() for that: it regards everything
+            // after the last dot as the extension, so for "annual report v1.2"
+            // it would overwrite the "2" and produce "annual report v1.pdf".
+            // Replace the whole final path segment with the recommended name,
+            // which already carries the correct extension.
             aSuggestedName = aRecommendedName;
-            OUString aExtension;
-            if (size_t nPos = aSuggestedName.lastIndexOf('.') + 1)
-                aExtension = aSuggestedName.copy(nPos, aSuggestedName.getLength() - nPos);
-            aURL.SetExtension(aExtension);
+            const bool bHadFinalSlash = aURL.hasFinalSlash();
+            aURL.removeSegment();
+            aURL.insertName(aRecommendedName, bHadFinalSlash, INetURLObject::LAST_SEGMENT,
+                            INetURLObject::EncodeMechanism::All);
 #ifdef IOS
         }
 #endif
