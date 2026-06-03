@@ -3278,7 +3278,7 @@ bool ScCompiler::ParseOpCode( const OUString& rName, bool bInArray )
 bool ScCompiler::ParseOpCode2( std::u16string_view rName )
 {
     // If we have Pivot Table field names, means we are parsing a pivot table
-    // calculation field, which are not support any OpCode2 tokens, only there
+    // calculation field, which do not support any OpCode2 tokens, only their
     // own field names.
     if (!maPivotFieldNames.empty())
         return false;
@@ -3829,7 +3829,7 @@ bool ScCompiler::ParseNamedRange( const OUString& rUpperName, bool onlyCheck )
 {
     // ParseNamedRange is called only from NextNewToken, with an upper-case string
     // If we have Pivot Table field names, means we are parsing a pivot table
-    // calculation field, which are not support any name based tokens, only there
+    // calculation field, which do not support any name-based tokens, only their
     // own field names.
     if (!maPivotFieldNames.empty())
         return false;
@@ -3897,7 +3897,7 @@ bool ScCompiler::ParseExternalNamedRange( const OUString& rSymbol, bool& rbInval
     rbInvalidExternalNameRange = false;
 
     // If we have Pivot Table field names, means we are parsing a pivot table
-    // calculation field, which are not support any name based tokens, only there
+    // calculation field, which do not support any name-based tokens, only their
     // own field names.
     if (!maPivotFieldNames.empty())
         return false;
@@ -3935,7 +3935,7 @@ bool ScCompiler::ParseExternalNamedRange( const OUString& rSymbol, bool& rbInval
 bool ScCompiler::ParseDBRange( const OUString& rName )
 {
     // If we have Pivot Table field names, means we are parsing a pivot table
-    // calculation field, which are not support any name based tokens, only there
+    // calculation field, which do not support any name-based tokens, only their
     // own field names.
     if (!maPivotFieldNames.empty())
         return false;
@@ -3994,7 +3994,7 @@ bool ScCompiler::ParseDPFieldName( const OUString& rName )
 bool ScCompiler::ParseColRowName( const OUString& rName )
 {
     // If we have Pivot Table field names, means we are parsing a pivot table
-    // calculation field, which are not support any name based tokens, only there
+    // calculation field, which do not support any name-based tokens, only their
     // own field names.
     if (!maPivotFieldNames.empty())
         return false;
@@ -5336,10 +5336,10 @@ std::unique_ptr<ScTokenArray> ScCompiler::CompileString( const OUString& rFormul
     if (pFunctionStack != &aFuncs[0])
         delete [] pFunctionStack;
 
-    // remember pArr, in case a subsequent CompileTokenArray() is executed.
+    // remember mpArr, in case a subsequent CompileTokenArray() is executed.
     std::unique_ptr<ScTokenArray> pNew(new ScTokenArray( std::move(aArr) ));
     pNew->GenHash();
-    // coverity[escape : FALSE] - ownership of pNew is retained by caller, so pArr remains valid
+    // coverity[escape : FALSE] - ownership of pNew is retained by caller, so mpArr remains valid
     mpArr = pNew.get();
     maArrIterator = FormulaTokenArrayPlainIterator(*mpArr);
 
@@ -5369,9 +5369,9 @@ std::unique_ptr<ScTokenArray> ScCompiler::CompileString( const OUString& rFormul
         ScTokenArray aTokenArray(rDoc);
         if( ScTokenConversion::ConvertToTokenArray( rDoc, aTokenArray, aTokenSeq ) )
         {
-            // remember pArr, in case a subsequent CompileTokenArray() is executed.
+            // remember mpArr, in case a subsequent CompileTokenArray() is executed.
             std::unique_ptr<ScTokenArray> pNew(new ScTokenArray( std::move(aTokenArray) ));
-            // coverity[escape : FALSE] - ownership of pNew is retained by caller, so pArr remains valid
+            // coverity[escape : FALSE] - ownership of pNew is retained by caller, so mpArr remains valid
             mpArr = pNew.get();
             maArrIterator = FormulaTokenArrayPlainIterator(*mpArr);
             return pNew;

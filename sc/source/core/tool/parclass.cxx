@@ -59,7 +59,7 @@ const ScParameterClassification::RawData ScParameterClassification::pRawData[] =
     { ocChoose,          {{ Array, Reference                                     }, 1, Value }},
     { ocChooseCols,      {{ ReferenceOrRefArray, ReferenceOrRefArray             }, 1, ForceArrayReturn }},
     { ocChooseRows,      {{ ReferenceOrRefArray, ReferenceOrRefArray             }, 1, ForceArrayReturn }},
-    { ocLet,             {{ Value, ReferenceOrRefArray, ReferenceOrRefArray, }, 2, ForceArrayReturn } },
+    { ocLet,             {{ Value, ReferenceOrRefArray, ReferenceOrRefArray      }, 2, Value }},
     // Other specials.
     { ocArrayClose,      {{ Bounds                                               }, 0, Bounds }},
     { ocArrayColSep,     {{ Bounds                                               }, 0, Bounds }},
