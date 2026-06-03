@@ -578,7 +578,11 @@ void SAL_CALL SwarmSolver::solve()
     if (!maVariables.getLength())
         return;
 
-    maBounds.resize(maVariables.getLength());
+    // Start each solve from fresh state. assign refills every bound with a
+    // default, and clearing drops the constraints from the previous run, which
+    // are only ever appended.
+    maBounds.assign(maVariables.getLength(), Bound());
+    maNonBoundedConstraints.clear();
 
     xModel->lockControllers();
 

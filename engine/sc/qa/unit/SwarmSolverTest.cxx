@@ -75,6 +75,7 @@ class SwarmSolverTest : public UnoApiTest
     void testUnreadableConstraintStillChecksOthers();
     void testContradictoryBoundsTerminate();
     void testUnboundedIntegerVariable();
+    void testRepeatedSolveResetsState();
 
 public:
     SwarmSolverTest()
@@ -95,6 +96,7 @@ public:
     CPPUNIT_TEST(testUnreadableConstraintStillChecksOthers);
     CPPUNIT_TEST(testContradictoryBoundsTerminate);
     CPPUNIT_TEST(testUnboundedIntegerVariable);
+    CPPUNIT_TEST(testRepeatedSolveResetsState);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -640,6 +642,58 @@ void SwarmSolverTest::testUnboundedIntegerVariable()
     CPPUNIT_ASSERT_EQUAL(aVariables.getLength(), aSolution.getLength());
     CPPUNIT_ASSERT(std::isfinite(aSolution[0]));
     CPPUNIT_ASSERT_EQUAL(aSolution[0], std::trunc(aSolution[0]));
+}
+
+void SwarmSolverTest::testRepeatedSolveResetsState()
+{
+    // Regression: solving twice with the same solver kept state from the first
+    // run. The collected constraints only ever grew and the bounds were not reset,
+    // so the second solve saw a leftover impossible constraint and stale bounds and
+    // failed on a model it should solve.
+
+    loadFromFile(u"Simple.ods");
+
+    uno::Reference<sheet::XSpreadsheetDocument> xDocument(mxComponent, uno::UNO_QUERY_THROW);
+
+    uno::Reference<sheet::XSolver> xSolver;
+    xSolver.set(m_xContext->getServiceManager()->createInstanceWithContext(
+                    u"com.sun.star.comp.Calc.SwarmSolver"_ustr, m_xContext),
+                uno::UNO_QUERY_THROW);
+
+    table::CellAddress aObjective(0, 1, 1);
+    uno::Sequence<table::CellAddress> aVariables{ { 0, 1, 0 } };
+
+    xSolver->setDocument(xDocument);
+    xSolver->setObjective(aObjective);
+    xSolver->setVariables(aVariables);
+    xSolver->setMaximize(false);
+
+    // First run: a bound on the variable plus an impossible constraint on the
+    // objective, so it cannot be solved.
+    xSolver->setConstraints({ { /* Left */ table::CellAddress(0, 1, 0),
+                                /* Op   */ sheet::SolverConstraintOperator_LESS_EQUAL,
+                                /* Right*/ uno::Any(0.0) },
+                              { /* Left */ table::CellAddress(0, 1, 1),
+                                /* Op   */ sheet::SolverConstraintOperator_LESS_EQUAL,
+                                /* Right*/ uno::Any(-1000.0) } });
+    xSolver->solve();
+    CPPUNIT_ASSERT(!xSolver->getSuccess());
+
+    // Second run on the same solver: a plain bounded model with minimum at 3.
+    // It is bounded only by its own constraints.
+    xSolver->setConstraints({ { /* Left */ table::CellAddress(0, 1, 0),
+                                /* Op   */ sheet::SolverConstraintOperator_GREATER_EQUAL,
+                                /* Right*/ uno::Any(-100.0) },
+                              { /* Left */ table::CellAddress(0, 1, 0),
+                                /* Op   */ sheet::SolverConstraintOperator_LESS_EQUAL,
+                                /* Right*/ uno::Any(100.0) } });
+    xSolver->solve();
+    CPPUNIT_ASSERT_MESSAGE("The second solve must not inherit the first run's state",
+                           xSolver->getSuccess());
+
+    uno::Sequence<double> aSolution = xSolver->getSolution();
+    CPPUNIT_ASSERT_EQUAL(aVariables.getLength(), aSolution.getLength());
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(3.0, aSolution[0], 1E-5);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwarmSolverTest);
