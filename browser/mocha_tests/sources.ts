@@ -85,6 +85,7 @@
 /// <reference path="../src/canvas/vector/primitive/FilledRectanglePrimitive.ts" />
 /// <reference path="../src/canvas/vector/primitive/GroupPrimitive.ts" />
 /// <reference path="../src/canvas/vector/primitive/HiddenGeometryPrimitive.ts" />
+/// <reference path="../src/canvas/vector/primitive/MaskPrimitive.ts" />
 /// <reference path="../src/canvas/vector/primitive/LineRectanglePrimitive.ts" />
 /// <reference path="../src/canvas/vector/primitive/ModifiedColorPrimitive.ts" />
 /// <reference path="../src/canvas/vector/primitive/ObjectInfoPrimitive.ts" />

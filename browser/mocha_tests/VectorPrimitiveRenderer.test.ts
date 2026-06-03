@@ -155,6 +155,36 @@ describe('VectorPrimitiveRenderer', function () {
 			);
 		});
 
+		it('clips a mask\'s children to its path', function () {
+			// mask carries a clip path and a child subtree.
+			const primitive = loadVectorRenderingReference('testMask').primitives[0];
+			nodeassert.strictEqual(primitive.type, 'mask');
+			nodeassert.strictEqual(typeof primitive.clip, 'string');
+			nodeassert.strictEqual(primitive.children.length, 1);
+
+			const recorder = new CanvasRecorder();
+			const renderer = new cool.VectorPrimitiveRenderer();
+			renderer.renderPrimitive(recorder as any, primitive);
+
+			// The clip is applied once with the wire path.
+			const clip = recorder.findCall('clip');
+			nodeassert.ok(clip, 'clip not called');
+			nodeassert.strictEqual(recorder.countOf('clip'), 1);
+			nodeassert.strictEqual(
+				(clip?.args[0] as Path2DRecorder).path,
+				primitive.clip,
+			);
+			// Even-odd, so disjoint subpaths in the clip behave the
+			// same way as in the source path.
+			nodeassert.strictEqual(clip?.args[1], 'evenodd');
+
+			// The single child draws once and the canvas state is
+			// balanced around it.
+			nodeassert.strictEqual(recorder.countOf('fill'), 1);
+			nodeassert.ok(recorder.findCall('save'), 'save not called');
+			nodeassert.ok(recorder.findCall('restore'), 'restore not called');
+		});
+
 		it('renders a group\'s children in order', function () {
 			// A group node carries no drawing of its own. The renderer
 			// must descend into the children in order.

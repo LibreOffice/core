@@ -23,6 +23,7 @@
 #include <drawinglayer/primitive2d/PolygonHairlinePrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonStrokePrimitive2D.hxx>
 #include <drawinglayer/primitive2d/groupprimitive2d.hxx>
+#include <drawinglayer/primitive2d/maskprimitive2d.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <drawinglayer/primitive2d/hiddengeometryprimitive2d.hxx>
 #include <drawinglayer/primitive2d/exclusiveeditviewprimitive2d.hxx>
@@ -480,6 +481,38 @@ CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testPolygonStrokeDashed)
     assertJsonPath(aJson, "/primitives/0/type", "polygonStroke");
     assertJsonPathExists(aJson, "/primitives/0/stroke/dotDashArray");
     CPPUNIT_ASSERT_EQUAL(size_t(2), aJson.getSize("/primitives/0/stroke/dotDashArray").value_or(0));
+}
+
+CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testMask)
+{
+    // mask carries a clip path and a child subtree on the wire.
+    basegfx::B2DPolygon aClipRect;
+    aClipRect.append(basegfx::B2DPoint(0.0, 0.0));
+    aClipRect.append(basegfx::B2DPoint(50.0, 0.0));
+    aClipRect.append(basegfx::B2DPoint(50.0, 50.0));
+    aClipRect.append(basegfx::B2DPoint(0.0, 50.0));
+    aClipRect.setClosed(true);
+
+    basegfx::B2DPolygon aTriangle;
+    aTriangle.append(basegfx::B2DPoint(0.0, 0.0));
+    aTriangle.append(basegfx::B2DPoint(100.0, 0.0));
+    aTriangle.append(basegfx::B2DPoint(100.0, 100.0));
+    aTriangle.setClosed(true);
+
+    Primitive2DContainer aChildren;
+    aChildren.append(new PolyPolygonColorPrimitive2D(basegfx::B2DPolyPolygon(aTriangle),
+                                                     basegfx::BColor(0.0, 1.0, 0.0)));
+
+    Primitive2DContainer aPrimitives;
+    aPrimitives.append(
+        new MaskPrimitive2D(basegfx::B2DPolyPolygon(aClipRect), std::move(aChildren)));
+
+    auto aJson = writeReference(u"testMask", aPrimitives);
+
+    assertJsonPath(aJson, "/primitives/0/type", "mask");
+    assertJsonPathExists(aJson, "/primitives/0/clip");
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aJson.getSize("/primitives/0/children").value_or(0));
+    assertJsonPath(aJson, "/primitives/0/children/0/type", "polyPolygonColor");
 }
 
 CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testPolyPolygonStroke)

@@ -86,6 +86,9 @@ namespace cool {
 						primitive as ModifiedColorPrimitive,
 					);
 					return;
+				case MaskPrimitive.type:
+					this._renderMask(context, primitive as MaskPrimitive);
+					return;
 				case HiddenGeometryPrimitive.type:
 				case ExclusiveEditViewPrimitive.type:
 					// Non-painting subtree. Return so the recursion
@@ -282,6 +285,17 @@ namespace cool {
 			// wire transparence: 1 is opaque on the canvas, 0 on the
 			// wire. Invert the value to translate.
 			context.globalAlpha = 1 - (primitive.transparence ?? 0);
+			if (primitive.children)
+				this._renderPrimitives(context, primitive.children);
+			context.restore();
+		}
+
+		private _renderMask(
+			context: CanvasRenderingContext2D,
+			primitive: MaskPrimitive,
+		): void {
+			context.save();
+			if (primitive.clip) context.clip(new Path2D(primitive.clip), 'evenodd');
 			if (primitive.children)
 				this._renderPrimitives(context, primitive.children);
 			context.restore();
