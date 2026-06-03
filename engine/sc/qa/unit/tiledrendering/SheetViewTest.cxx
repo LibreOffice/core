@@ -1053,6 +1053,58 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testDeleteDefaultTabViaDocFuncRemovesSheetVi
     CPPUNIT_ASSERT_EQUAL(SCTAB(1), rDocument.GetTableCount());
 }
 
+CPPUNIT_TEST_FIXTURE(SheetViewTest, testRemoveSheetViewFallsBackToSourceSheet)
+{
+    // When one view removes a sheet view, other views that were also
+    // viewing that sheet view must fall back to the default view of
+    // the sheet, not end up on whatever tab now occupies the deleted
+    // index. Otherwise users get silently teleported to an unrelated
+    // sheet.
+
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    ScDocument& rDocument = *pModelObj->GetDocument();
+
+    ScTestViewCallback aView1;
+    ScTabViewShell* pTabView1 = aView1.getTabViewShell();
+
+    insertSheet(u"Sheet2"_ustr, 2);
+    insertSheet(u"Sheet3"_ustr, 3);
+    CPPUNIT_ASSERT_EQUAL(SCTAB(3), rDocument.GetTableCount());
+
+    // View #1 creates a sheet view of Sheet2. The new sheet view tab
+    // lands at index 2 (between Sheet2 and Sheet3).
+    pTabView1->SetTabNo(1);
+    createNewSheetViewInCurrentView();
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(SCTAB(4), rDocument.GetTableCount());
+    CPPUNIT_ASSERT_EQUAL(SCTAB(2), pTabView1->GetViewData().GetTabNumber());
+
+    // Setup View #2 on the same sheet view tab.
+    KitHelper::createView();
+    Scheduler::ProcessEventsToIdle();
+    ScTestViewCallback aView2;
+    ScTabViewShell* pTabView2 = aView2.getTabViewShell();
+    KitHelper::setView(aView2.getViewID());
+    Scheduler::ProcessEventsToIdle();
+    pTabView2->SetTabNo(2);
+    CPPUNIT_ASSERT_EQUAL(SCTAB(2), pTabView2->GetViewData().GetTabNumber());
+
+    // View #1 removes its sheet view.
+    KitHelper::setView(aView1.getViewID());
+    Scheduler::ProcessEventsToIdle();
+    removeSheetViewInCurrentView();
+    Scheduler::ProcessEventsToIdle();
+
+    // Layout is now [Sheet1, Sheet2, Sheet3]. View #1 is on Sheet2
+    // (the default view of the sheet whose sheet view was just removed).
+    // View #2 must follow Sheet2 down to tab 1, not be left at tab 2
+    // which is now Sheet3.
+    CPPUNIT_ASSERT_EQUAL(SCTAB(3), rDocument.GetTableCount());
+    CPPUNIT_ASSERT_EQUAL(SCTAB(1), pTabView1->GetViewData().GetTabNumber());
+    CPPUNIT_ASSERT_EQUAL(SCTAB(1), pTabView2->GetViewData().GetTabNumber());
+}
+
 CPPUNIT_TEST_FIXTURE(SheetViewTest, testRemoveSheetViewHolderTable)
 {
     // Delete the sheet view holder table directly

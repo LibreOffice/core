@@ -2342,6 +2342,28 @@ void ScViewFunc::RemoveCurrentSheetView()
     // Last sheet view tab is the deleted one, so reset
     GetViewData().ClearLastSheetViewTab(nDefaultTab);
 
+    // Other views that were on the same sheet view tab must also fall
+    // back to the default view of the sheet. Without this loop they
+    // would be left on whatever tab now sits at the deleted index,
+    // instead of the source sheet they were filtering.
+    ScTabViewShell* pThisViewShell = GetViewData().GetViewShell();
+    if (pThisViewShell)
+    {
+        ViewShellDocId nDocID = pThisViewShell->GetDocId();
+        SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+        while (pViewShell)
+        {
+            auto* pTabViewShell = dynamic_cast<ScTabViewShell*>(pViewShell);
+            if (pTabViewShell && pTabViewShell != pThisViewShell
+                && pTabViewShell->GetDocId() == nDocID
+                && pTabViewShell->GetViewData().GetTabNumber() == nSheetViewTab)
+            {
+                pTabViewShell->SetTabNo(nDefaultTab);
+            }
+            pViewShell = SfxViewShell::GetNext(*pViewShell);
+        }
+    }
+
     // DeleteTable also removes the sheet view from the manager
     GetViewData().GetDocFunc().DeleteTable(nSheetViewTab, true);
 
